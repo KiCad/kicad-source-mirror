@@ -149,13 +149,13 @@ bool SCH_EDIT_TOOL::Init()
     wxASSERT_MSG( drawingTools, "eeshema.InteractiveDrawing tool is not available" );
 
     auto hasElements =
-            [ this ] ( const SELECTION& aSel )
+            [this]( const SELECTION& aSel )
             {
                 return !m_frame->GetScreen()->Items().empty();
             };
 
     auto sheetHasUndefinedPins =
-            [ this ] ( const SELECTION& aSel )
+            []( const SELECTION& aSel )
             {
                 if( aSel.Size() != 1 )
                     return false;
@@ -175,7 +175,7 @@ bool SCH_EDIT_TOOL::Init()
             };
 
     auto anyTextTool =
-            [ this ] ( const SELECTION& aSel )
+            [this]( const SELECTION& aSel )
             {
                 return ( m_frame->IsCurrentTool( EE_ACTIONS::placeLabel )
                       || m_frame->IsCurrentTool( EE_ACTIONS::placeGlobalLabel )
@@ -184,7 +184,7 @@ bool SCH_EDIT_TOOL::Init()
             };
 
     auto duplicateCondition =
-            [] ( const SELECTION& aSel )
+            []( const SELECTION& aSel )
             {
                 if( SCH_LINE_WIRE_BUS_TOOL::IsDrawingLineWireOrBus( aSel ) )
                     return false;
@@ -193,7 +193,7 @@ bool SCH_EDIT_TOOL::Init()
             };
 
     auto orientCondition =
-            [] ( const SELECTION& aSel )
+            []( const SELECTION& aSel )
             {
                 if( aSel.Empty() )
                     return false;
@@ -269,7 +269,7 @@ bool SCH_EDIT_TOOL::Init()
             };
 
     auto autoplaceCondition =
-            [] ( const SELECTION& aSel )
+            []( const SELECTION& aSel )
             {
                 for( const EDA_ITEM* item : aSel )
                 {

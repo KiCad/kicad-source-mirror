@@ -898,7 +898,7 @@ void DIALOG_PLOT_SCHEMATIC::plotOneSheetPDF( PLOTTER* aPlotter, SCH_SCREEN* aScr
         aPlotter->SetColor( aPlotter->RenderSettings()->GetBackgroundColor() );
         wxPoint end( aPlotter->PageSettings().GetWidthIU(),
                      aPlotter->PageSettings().GetHeightIU() );
-        aPlotter->Rect( wxPoint( 0, 0 ), end, FILL_TYPE::FILLED_SHAPE, 1.0 );
+        aPlotter->Rect( wxPoint( 0, 0 ), end, FILL_T::FILLED_SHAPE, 1.0 );
     }
 
     if( aPlotDrawingSheet )
@@ -1088,7 +1088,7 @@ bool DIALOG_PLOT_SCHEMATIC::plotOneSheetPS( const wxString&     aFileName,
     {
         plotter->SetColor( plotter->RenderSettings()->GetLayerColor( LAYER_SCHEMATIC_BACKGROUND ) );
         wxPoint end( plotter->PageSettings().GetWidthIU(), plotter->PageSettings().GetHeightIU() );
-        plotter->Rect( wxPoint( 0, 0 ), end, FILL_TYPE::FILLED_SHAPE, 1.0 );
+        plotter->Rect( wxPoint( 0, 0 ), end, FILL_T::FILLED_SHAPE, 1.0 );
     }
 
     if( aPlotFrameRef )
@@ -1218,7 +1218,7 @@ bool DIALOG_PLOT_SCHEMATIC::plotOneSheetSVG( const wxString&  aFileName,
         plotter->SetColor( plotter->RenderSettings()->GetLayerColor( LAYER_SCHEMATIC_BACKGROUND ) );
         wxPoint end( plotter->PageSettings().GetWidthIU(),
                      plotter->PageSettings().GetHeightIU() );
-        plotter->Rect( wxPoint( 0, 0 ), end, FILL_TYPE::FILLED_SHAPE, 1.0 );
+        plotter->Rect( wxPoint( 0, 0 ), end, FILL_T::FILLED_SHAPE, 1.0 );
     }
 
     if( aPlotFrameRef )

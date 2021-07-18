@@ -172,12 +172,6 @@ void FP_SHAPE::SetCenter0( const wxPoint& aCenter )
 }
 
 
-void FP_SHAPE::SetArcAngle( double aAngle )
-{
-    PCB_SHAPE::SetArcAngle( aAngle );
-}
-
-
 void FP_SHAPE::SetArcAngleAndEnd0( double aAngle )
 {
     PCB_SHAPE::SetArcAngle( aAngle );
@@ -195,13 +189,9 @@ void FP_SHAPE::Flip( const wxPoint& aCentre, bool aFlipLeftRight )
     switch( GetShape() )
     {
     case SHAPE_T::ARC:
-        // Update arc angle but do not yet update m_arcCenter0 and m_arcCenter,
-        // arc center and start point must be updated before calculation arc end.
-        SetArcAngle( -GetArcAngle() );
-        KI_FALLTHROUGH;
-
-    default:
     case SHAPE_T::SEGMENT:
+    case SHAPE_T::RECT:
+    case SHAPE_T::CIRCLE:
     case SHAPE_T::BEZIER:
         // If Start0 and Start are equal (ie: Footprint Editor), then flip both sets around the
         // centre point.
@@ -235,13 +225,18 @@ void FP_SHAPE::Flip( const wxPoint& aCentre, bool aFlipLeftRight )
             MIRROR( m_bezierC2_0.y, pt.y );
         }
 
-        RebuildBezierToSegmentsPointsList( m_width );
+        if( GetShape() == SHAPE_T::BEZIER )
+            RebuildBezierToSegmentsPointsList( m_width );
+
         break;
 
     case SHAPE_T::POLY:
         // polygon corners coordinates are relative to the footprint position, orientation 0
         m_poly.Mirror( aFlipLeftRight, !aFlipLeftRight );
         break;
+
+    default:
+        UNIMPLEMENTED_FOR( SHAPE_T_asString() );
     }
 
     SetLayer( FlipLayer( GetLayer(), GetBoard()->GetCopperLayerCount() ) );
@@ -262,14 +257,10 @@ void FP_SHAPE::Mirror( const wxPoint& aCentre, bool aMirrorAroundXAxis )
     switch( GetShape() )
     {
     case SHAPE_T::ARC:
-        // Update arc angle but do not yet update m_arcCenter0 and m_arcCenter,
-        // arc center and start point must be updated before calculation arc end.
-        SetArcAngle( -GetArcAngle() );
-        KI_FALLTHROUGH;
-
-    default:
-    case SHAPE_T::BEZIER:
     case SHAPE_T::SEGMENT:
+    case SHAPE_T::RECT:
+    case SHAPE_T::CIRCLE:
+    case SHAPE_T::BEZIER:
         if( aMirrorAroundXAxis )
         {
             MIRROR( m_start0.y, aCentre.y );
@@ -287,13 +278,8 @@ void FP_SHAPE::Mirror( const wxPoint& aCentre, bool aMirrorAroundXAxis )
             MIRROR( m_bezierC2_0.x, aCentre.x );
         }
 
-        for( unsigned ii = 0; ii < m_bezierPoints.size(); ii++ )
-        {
-            if( aMirrorAroundXAxis )
-                MIRROR( m_bezierPoints[ii].y, aCentre.y );
-            else
-                MIRROR( m_bezierPoints[ii].x, aCentre.x );
-        }
+        if( GetShape() == SHAPE_T::BEZIER )
+            RebuildBezierToSegmentsPointsList( m_width );
 
         break;
 
@@ -302,6 +288,9 @@ void FP_SHAPE::Mirror( const wxPoint& aCentre, bool aMirrorAroundXAxis )
         // footprint position, orientation 0
         m_poly.Mirror( !aMirrorAroundXAxis, aMirrorAroundXAxis );
         break;
+
+    default:
+        UNIMPLEMENTED_FOR( SHAPE_T_asString() );
     }
 
     SetDrawCoord();
@@ -323,15 +312,19 @@ void FP_SHAPE::Move( const wxPoint& aMoveVector )
 {
     // Move an edge of the footprint.
     // This is a footprint shape modification.
-    m_start0      += aMoveVector;
-    m_end0        += aMoveVector;
-    m_arcCenter0 += aMoveVector;
-    m_bezierC1_0  += aMoveVector;
-    m_bezierC2_0  += aMoveVector;
 
     switch( GetShape() )
     {
-    default:
+    case SHAPE_T::ARC:
+    case SHAPE_T::SEGMENT:
+    case SHAPE_T::RECT:
+    case SHAPE_T::CIRCLE:
+    case SHAPE_T::BEZIER:
+        m_start0     += aMoveVector;
+        m_end0       += aMoveVector;
+        m_arcCenter0 += aMoveVector;
+        m_bezierC1_0 += aMoveVector;
+        m_bezierC2_0 += aMoveVector;
         break;
 
     case SHAPE_T::POLY:
@@ -340,6 +333,9 @@ void FP_SHAPE::Move( const wxPoint& aMoveVector )
         m_poly.Move( VECTOR2I( aMoveVector ) );
 
         break;
+
+    default:
+        UNIMPLEMENTED_FOR( SHAPE_T_asString() );
     }
 
     SetDrawCoord();

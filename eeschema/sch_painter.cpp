@@ -34,14 +34,10 @@
 #include <geometry/geometry_utils.h>
 #include <geometry/shape_line_chain.h>
 #include <gr_text.h>
-#include <lib_arc.h>
-#include <lib_bezier.h>
-#include <lib_circle.h>
+#include <lib_shape.h>
 #include <lib_field.h>
 #include <lib_item.h>
 #include <lib_pin.h>
-#include <lib_polyline.h>
-#include <lib_rectangle.h>
 #include <lib_text.h>
 #include <math/util.h>
 #include <plotters/plotter.h>
@@ -142,10 +138,10 @@ static LIB_SYMBOL* dummy()
     {
         symbol = new LIB_SYMBOL( wxEmptyString );
 
-        LIB_RECTANGLE* square = new LIB_RECTANGLE( symbol );
+        LIB_SHAPE* square = new LIB_SHAPE( symbol, SHAPE_T::RECT );
 
         square->MoveTo( wxPoint( Mils2iu( -200 ), Mils2iu( 200 ) ) );
-        square->SetEndPosition( wxPoint( Mils2iu( 200 ), Mils2iu( -200 ) ) );
+        square->SetEnd( wxPoint( Mils2iu( 200 ), Mils2iu( -200 ) ) );
 
         LIB_TEXT* text = new LIB_TEXT( symbol );
 
@@ -215,14 +211,10 @@ bool SCH_PAINTER::Draw( const VIEW_ITEM *aItem, int aLayer )
     switch( item->Type() )
     {
     HANDLE_ITEM( LIB_SYMBOL_T, LIB_SYMBOL );
-    HANDLE_ITEM( LIB_RECTANGLE_T, LIB_RECTANGLE );
-    HANDLE_ITEM( LIB_POLYLINE_T, LIB_POLYLINE );
-    HANDLE_ITEM( LIB_CIRCLE_T, LIB_CIRCLE );
+    HANDLE_ITEM( LIB_SHAPE_T, LIB_SHAPE );
     HANDLE_ITEM( LIB_PIN_T, LIB_PIN );
-    HANDLE_ITEM( LIB_ARC_T, LIB_ARC );
     HANDLE_ITEM( LIB_FIELD_T, LIB_FIELD );
     HANDLE_ITEM( LIB_TEXT_T, LIB_TEXT );
-    HANDLE_ITEM( LIB_BEZIER_T, LIB_BEZIER );
     HANDLE_ITEM( SCH_SYMBOL_T, SCH_SYMBOL );
     HANDLE_ITEM( SCH_JUNCTION_T, SCH_JUNCTION );
     HANDLE_ITEM( SCH_LINE_T, SCH_LINE );
@@ -488,6 +480,8 @@ void SCH_PAINTER::draw( const LIB_SYMBOL *aSymbol, int aLayer, bool aDrawFields,
 
 bool SCH_PAINTER::setDeviceColors( const LIB_ITEM* aItem, int aLayer )
 {
+    const EDA_SHAPE* shape = dynamic_cast<const EDA_SHAPE*>( aItem );
+
     switch( aLayer )
     {
     case LAYER_SELECTION_SHADOWS:
@@ -504,11 +498,11 @@ bool SCH_PAINTER::setDeviceColors( const LIB_ITEM* aItem, int aLayer )
         return false;
 
     case LAYER_DEVICE_BACKGROUND:
-        if( aItem->GetFillMode() == FILL_TYPE::FILLED_WITH_BG_BODYCOLOR )
+        if( shape && shape->GetFillType() == FILL_T::FILLED_WITH_BG_BODYCOLOR )
         {
             COLOR4D fillColor = getRenderColor( aItem, LAYER_DEVICE_BACKGROUND, false );
 
-            m_gal->SetIsFill( aItem->GetFillMode() == FILL_TYPE::FILLED_WITH_BG_BODYCOLOR );
+            m_gal->SetIsFill( shape->GetFillType() == FILL_T::FILLED_WITH_BG_BODYCOLOR );
             m_gal->SetFillColor( fillColor );
             m_gal->SetIsStroke( false );
             return true;
@@ -517,10 +511,10 @@ bool SCH_PAINTER::setDeviceColors( const LIB_ITEM* aItem, int aLayer )
         return false;
 
     case LAYER_DEVICE:
-        m_gal->SetIsFill( aItem->GetFillMode() == FILL_TYPE::FILLED_SHAPE );
+        m_gal->SetIsFill( shape && shape->GetFillType() == FILL_T::FILLED_SHAPE );
         m_gal->SetFillColor( getRenderColor( aItem, LAYER_DEVICE, false ) );
 
-        if( aItem->GetPenWidth() >= 0 || aItem->GetFillMode() == FILL_TYPE::NO_FILL )
+        if( aItem->GetPenWidth() >= 0 || !shape || !shape->IsFilled() )
         {
             m_gal->SetIsStroke( true );
             m_gal->SetLineWidth( getLineWidth( aItem, false ) );
@@ -546,66 +540,66 @@ void SCH_PAINTER::fillIfSelection( int aLayer )
 }
 
 
-void SCH_PAINTER::draw( const LIB_RECTANGLE *aRect, int aLayer )
+void SCH_PAINTER::draw( const LIB_SHAPE *aShape, int aLayer )
 {
-    if( !isUnitAndConversionShown( aRect ) )
+    if( !isUnitAndConversionShown( aShape ) )
         return;
 
-    if( setDeviceColors( aRect, aLayer ) )
+    if( setDeviceColors( aShape, aLayer ) )
     {
         fillIfSelection( aLayer );
-        m_gal->DrawRectangle( mapCoords( aRect->GetPosition() ), mapCoords( aRect->GetEnd() ) );
-    }
-}
 
+        switch( aShape->GetShape() )
+        {
+        case SHAPE_T::ARC:
+        {
+           int startAngle;
+           int endAngle;
+            aShape->CalcArcAngles( startAngle, endAngle );
 
-void SCH_PAINTER::draw( const LIB_CIRCLE *aCircle, int aLayer )
-{
-    if( !isUnitAndConversionShown( aCircle ) )
-        return;
+           TRANSFORM().MapAngles( &startAngle, &endAngle );
 
-    if( setDeviceColors( aCircle, aLayer ) )
-    {
-        fillIfSelection( aLayer );
-        m_gal->DrawCircle( mapCoords( aCircle->GetPosition() ), aCircle->GetRadius() );
-    }
-}
+            m_gal->DrawArc( mapCoords( aShape->GetCenter() ), aShape->GetRadius(),
+                            DECIDEG2RAD( startAngle ), DECIDEG2RAD( endAngle ) );
+        }
+            break;
 
+        case SHAPE_T::CIRCLE:
+            m_gal->DrawCircle( mapCoords( aShape->GetPosition() ), aShape->GetRadius() );
+            break;
 
-void SCH_PAINTER::draw( const LIB_ARC *aArc, int aLayer )
-{
-    if( !isUnitAndConversionShown( aArc ) )
-        return;
+        case SHAPE_T::RECT:
+            m_gal->DrawRectangle( mapCoords( aShape->GetPosition() ),
+                                  mapCoords( aShape->GetEnd() ) );
+            break;
 
-    if( setDeviceColors( aArc, aLayer ) )
-    {
-        int startAngle;
-        int endAngle;
-        aArc->CalcAngles( startAngle, endAngle );
+        case SHAPE_T::POLY:
+        {
+            const SHAPE_LINE_CHAIN poly = aShape->GetPolyShape().Outline( 0 );
+            std::deque<VECTOR2D>   mappedPts;
 
-        TRANSFORM().MapAngles( &startAngle, &endAngle );
+            for( const VECTOR2I& pt : poly.CPoints() )
+                mappedPts.push_back( mapCoords( (wxPoint) pt ) );
 
-        m_gal->DrawArc( mapCoords( aArc->GetCenter() ), aArc->GetRadius(),
-                        DECIDEG2RAD( startAngle ), DECIDEG2RAD( endAngle ) );
-    }
-}
+            fillIfSelection( aLayer );
+            m_gal->DrawPolygon( mappedPts );
+        }
+            break;
 
+        case SHAPE_T::BEZIER:
+        {
+            std::deque<VECTOR2D> mappedPts;
 
-void SCH_PAINTER::draw( const LIB_POLYLINE *aLine, int aLayer )
-{
-    if( !isUnitAndConversionShown( aLine ) )
-        return;
+            for( const VECTOR2I &p : aShape->GetPolyShape().Outline( 0 ).CPoints() )
+                mappedPts.push_back( mapCoords( (wxPoint) p ) );
 
-    if( setDeviceColors( aLine, aLayer ) )
-    {
-        const std::vector<wxPoint>& pts = aLine->GetPolyPoints();
-        std::deque<VECTOR2D> vtx;
+            m_gal->DrawPolygon( mappedPts );
+        }
+            break;
 
-        for( auto p : pts )
-            vtx.push_back( mapCoords( p ) );
-
-        fillIfSelection( aLayer );
-        m_gal->DrawPolygon( vtx );
+        default:
+            wxFAIL_MSG( "SCH_PAINTER::draw not implemented for " + aShape->SHAPE_T_asString() );
+        }
     }
 }
 
@@ -1191,26 +1185,6 @@ void SCH_PAINTER::draw( LIB_PIN *aPin, int aLayer )
 
     default:
         wxFAIL_MSG( "Unknown pin orientation" );
-    }
-}
-
-
-void SCH_PAINTER::draw( const LIB_BEZIER *aCurve, int aLayer )
-{
-    if( !isUnitAndConversionShown( aCurve ) )
-        return;
-
-    if( setDeviceColors( aCurve, aLayer ) )
-    {
-        BEZIER_POLY poly ( aCurve->GetPoints() );
-        std::vector<wxPoint> pts;
-        std::deque<VECTOR2D> pts_xformed;
-        poly.GetPoly( pts );
-
-        for( const wxPoint &p : pts )
-            pts_xformed.push_back( mapCoords( p ) );
-
-        m_gal->DrawPolygon( pts_xformed );
     }
 }
 

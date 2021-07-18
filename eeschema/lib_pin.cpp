@@ -571,7 +571,7 @@ void LIB_PIN::PlotSymbol( PLOTTER* aPlotter, const wxPoint& aPosition, int aOrie
     {
         const int radius = externalPinDecoSize( aPlotter->RenderSettings(), *this );
         aPlotter->Circle( wxPoint( MapX1 * radius + x1, MapY1 * radius + y1 ), radius * 2,
-                          FILL_TYPE::NO_FILL, penWidth );
+                          FILL_T::NO_FILL, penWidth );
 
         aPlotter->MoveTo( wxPoint( MapX1 * radius * 2 + x1, MapY1 * radius * 2 + y1 ) );
         aPlotter->FinishTo( aPosition );

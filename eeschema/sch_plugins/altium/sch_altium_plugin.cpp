@@ -31,14 +31,10 @@
 
 #include <schematic.h>
 
-#include <lib_arc.h>
-#include <lib_bezier.h>
-#include <lib_circle.h>
+#include <lib_shape.h>
 #include <lib_id.h>
 #include <lib_item.h>
 #include <lib_pin.h>
-#include <lib_polyline.h>
-#include <lib_rectangle.h>
 #include <lib_text.h>
 
 #include <sch_bitmap.h>
@@ -1050,7 +1046,7 @@ void SCH_ALTIUM_PLUGIN::ParseBezier( const std::map<wxString, wxString>& aProper
             if( i + 2 == elem.points.size() )
             {
                 // special case: single line
-                LIB_POLYLINE* line = new LIB_POLYLINE( libSymbolIt->second );
+                LIB_SHAPE* line = new LIB_SHAPE( libSymbolIt->second, SHAPE_T::POLY );
                 libSymbolIt->second->AddDrawItem( line );
 
                 line->SetUnit( elem.ownerpartid );
@@ -1069,7 +1065,7 @@ void SCH_ALTIUM_PLUGIN::ParseBezier( const std::map<wxString, wxString>& aProper
                 // I haven't a clue what this is all about, but the sample document we have in
                 // https://gitlab.com/kicad/code/kicad/-/issues/8974 responds best by treating it
                 // as another single line special case.
-                LIB_POLYLINE* line = new LIB_POLYLINE( libSymbolIt->second );
+                LIB_SHAPE* line = new LIB_SHAPE( libSymbolIt->second, SHAPE_T::POLY );
                 libSymbolIt->second->AddDrawItem( line );
 
                 line->SetUnit( elem.ownerpartid );
@@ -1084,8 +1080,8 @@ void SCH_ALTIUM_PLUGIN::ParseBezier( const std::map<wxString, wxString>& aProper
             }
             else
             {
-                // Bezier must have exactly 4 control points
-                LIB_BEZIER* bezier = new LIB_BEZIER( libSymbolIt->second );
+                // Bezier always has exactly 4 control points
+                LIB_SHAPE* bezier = new LIB_SHAPE( libSymbolIt->second, SHAPE_T::BEZIER );
                 libSymbolIt->second->AddDrawItem( bezier );
 
                 bezier->SetUnit( elem.ownerpartid );
@@ -1148,8 +1144,8 @@ void SCH_ALTIUM_PLUGIN::ParsePolyline( const std::map<wxString, wxString>& aProp
         if( !IsComponentPartVisible( elem.ownerindex, elem.ownerpartdisplaymode ) )
             return;
 
-        SCH_SYMBOL*   symbol = m_symbols.at( libSymbolIt->first );
-        LIB_POLYLINE* line = new LIB_POLYLINE( libSymbolIt->second );
+        SCH_SYMBOL* symbol = m_symbols.at( libSymbolIt->first );
+        LIB_SHAPE*  line = new LIB_SHAPE( libSymbolIt->second, SHAPE_T::POLY );
         libSymbolIt->second->AddDrawItem( line );
 
         line->SetUnit( elem.ownerpartid );
@@ -1207,8 +1203,8 @@ void SCH_ALTIUM_PLUGIN::ParsePolygon( const std::map<wxString, wxString>& aPrope
         if( !IsComponentPartVisible( elem.ownerindex, elem.ownerpartdisplaymode ) )
             return;
 
-        SCH_SYMBOL*   symbol = m_symbols.at( libSymbolIt->first );
-        LIB_POLYLINE* line = new LIB_POLYLINE( libSymbolIt->second );
+        SCH_SYMBOL* symbol = m_symbols.at( libSymbolIt->first );
+        LIB_SHAPE*  line = new LIB_SHAPE( libSymbolIt->second, SHAPE_T::POLY );
         libSymbolIt->second->AddDrawItem( line );
 
         line->SetUnit( elem.ownerpartid );
@@ -1221,11 +1217,11 @@ void SCH_ALTIUM_PLUGIN::ParsePolygon( const std::map<wxString, wxString>& aPrope
         line->SetWidth( elem.lineWidth );
 
         if( !elem.isSolid )
-            line->SetFillMode( FILL_TYPE::NO_FILL );
+            line->SetFillMode( FILL_T::NO_FILL );
         else if( elem.color == elem.areacolor )
-            line->SetFillMode( FILL_TYPE::FILLED_SHAPE );
+            line->SetFillMode( FILL_T::FILLED_SHAPE );
         else
-            line->SetFillMode( FILL_TYPE::FILLED_WITH_BG_BODYCOLOR );
+            line->SetFillMode( FILL_T::FILLED_WITH_BG_BODYCOLOR );
     }
 }
 
@@ -1288,10 +1284,9 @@ void SCH_ALTIUM_PLUGIN::ParseRoundRectangle( const std::map<wxString, wxString>&
         if( !IsComponentPartVisible( elem.ownerindex, elem.ownerpartdisplaymode ) )
             return;
 
-        SCH_SYMBOL*    symbol = m_symbols.at( libSymbolIt->first );
-
+        SCH_SYMBOL* symbol = m_symbols.at( libSymbolIt->first );
         // TODO: misses rounded edges
-        LIB_RECTANGLE* rect = new LIB_RECTANGLE( libSymbolIt->second );
+        LIB_SHAPE*  rect = new LIB_SHAPE( libSymbolIt->second, SHAPE_T::RECT );
         libSymbolIt->second->AddDrawItem( rect );
 
         rect->SetUnit( elem.ownerpartid );
@@ -1301,11 +1296,11 @@ void SCH_ALTIUM_PLUGIN::ParseRoundRectangle( const std::map<wxString, wxString>&
         rect->SetWidth( elem.lineWidth );
 
         if( !elem.isSolid )
-            rect->SetFillMode( FILL_TYPE::NO_FILL );
+            rect->SetFillMode( FILL_T::NO_FILL );
         else if( elem.color == elem.areacolor )
-            rect->SetFillMode( FILL_TYPE::FILLED_SHAPE );
+            rect->SetFillMode( FILL_T::FILLED_SHAPE );
         else
-            rect->SetFillMode( FILL_TYPE::FILLED_WITH_BG_BODYCOLOR );
+            rect->SetFillMode( FILL_T::FILLED_WITH_BG_BODYCOLOR );
     }
 }
 
@@ -1339,18 +1334,18 @@ void SCH_ALTIUM_PLUGIN::ParseArc( const std::map<wxString, wxString>& aPropertie
 
         if( elem.startAngle == 0 && ( elem.endAngle == 0 || elem.endAngle == 360 ) )
         {
-            LIB_CIRCLE* circle = new LIB_CIRCLE( libSymbolIt->second );
+            LIB_SHAPE* circle = new LIB_SHAPE( libSymbolIt->second, SHAPE_T::CIRCLE );
             libSymbolIt->second->AddDrawItem( circle );
 
             circle->SetUnit( elem.ownerpartid );
 
             circle->SetPosition( GetRelativePosition( elem.center + m_sheetOffset, symbol ) );
-            circle->SetRadius( elem.radius );
+            circle->SetEnd( circle->GetPosition() + wxPoint( elem.radius, 0 ) );
             circle->SetWidth( elem.lineWidth );
         }
         else
         {
-            LIB_ARC* arc = new LIB_ARC( libSymbolIt->second );
+            LIB_SHAPE* arc = new LIB_SHAPE( libSymbolIt->second, SHAPE_T::ARC );
             libSymbolIt->second->AddDrawItem( arc );
             arc->SetUnit( elem.ownerpartid );
 
@@ -1403,8 +1398,8 @@ void SCH_ALTIUM_PLUGIN::ParseLine( const std::map<wxString, wxString>& aProperti
         if( !IsComponentPartVisible( elem.ownerindex, elem.ownerpartdisplaymode ) )
             return;
 
-        SCH_SYMBOL*   symbol = m_symbols.at( libSymbolIt->first );
-        LIB_POLYLINE* line = new LIB_POLYLINE( libSymbolIt->second );
+        SCH_SYMBOL* symbol = m_symbols.at( libSymbolIt->first );
+        LIB_SHAPE*  line = new LIB_SHAPE( libSymbolIt->second, SHAPE_T::POLY );
         libSymbolIt->second->AddDrawItem( line );
 
         line->SetUnit( elem.ownerpartid );
@@ -1474,8 +1469,8 @@ void SCH_ALTIUM_PLUGIN::ParseRectangle( const std::map<wxString, wxString>& aPro
         if( !IsComponentPartVisible( elem.ownerindex, elem.ownerpartdisplaymode ) )
             return;
 
-        SCH_SYMBOL*    symbol = m_symbols.at( libSymbolIt->first );
-        LIB_RECTANGLE* rect = new LIB_RECTANGLE( libSymbolIt->second );
+        SCH_SYMBOL* symbol = m_symbols.at( libSymbolIt->first );
+        LIB_SHAPE*  rect = new LIB_SHAPE( libSymbolIt->second, SHAPE_T::RECT );
         libSymbolIt->second->AddDrawItem( rect );
 
         rect->SetUnit( elem.ownerpartid );
@@ -1485,11 +1480,11 @@ void SCH_ALTIUM_PLUGIN::ParseRectangle( const std::map<wxString, wxString>& aPro
         rect->SetWidth( elem.lineWidth );
 
         if( !elem.isSolid )
-            rect->SetFillMode( FILL_TYPE::NO_FILL );
+            rect->SetFillMode( FILL_T::NO_FILL );
         else if( elem.color == elem.areacolor )
-            rect->SetFillMode( FILL_TYPE::FILLED_SHAPE );
+            rect->SetFillMode( FILL_T::FILLED_SHAPE );
         else
-            rect->SetFillMode( FILL_TYPE::FILLED_WITH_BG_BODYCOLOR );
+            rect->SetFillMode( FILL_T::FILLED_WITH_BG_BODYCOLOR );
     }
 }
 
@@ -1599,7 +1594,7 @@ wxPoint HelperGeneratePowerPortGraphics( LIB_SYMBOL* aKsymbol, ASCH_POWER_PORT_S
 {
     if( aStyle == ASCH_POWER_PORT_STYLE::CIRCLE || aStyle == ASCH_POWER_PORT_STYLE::ARROW )
     {
-        LIB_POLYLINE* line1 = new LIB_POLYLINE( aKsymbol );
+        LIB_SHAPE* line1 = new LIB_SHAPE( aKsymbol, SHAPE_T::POLY );
         aKsymbol->AddDrawItem( line1 );
         line1->SetWidth( Mils2iu( 10 ) );
         line1->AddPoint( { 0, 0 } );
@@ -1607,15 +1602,15 @@ wxPoint HelperGeneratePowerPortGraphics( LIB_SYMBOL* aKsymbol, ASCH_POWER_PORT_S
 
         if( aStyle == ASCH_POWER_PORT_STYLE::CIRCLE )
         {
-            LIB_CIRCLE* circle = new LIB_CIRCLE( aKsymbol );
+            LIB_SHAPE* circle = new LIB_SHAPE( aKsymbol, SHAPE_T::CIRCLE );
             aKsymbol->AddDrawItem( circle );
             circle->SetWidth( Mils2iu( 5 ) );
-            circle->SetRadius( Mils2iu( 25 ) );
             circle->SetPosition( { Mils2iu( 0 ), Mils2iu( -75 ) } );
+            circle->SetEnd( circle->GetPosition() + wxPoint( Mils2iu( 25 ), 0 ) );
         }
         else
         {
-            LIB_POLYLINE* line2 = new LIB_POLYLINE( aKsymbol );
+            LIB_SHAPE* line2 = new LIB_SHAPE( aKsymbol, SHAPE_T::POLY );
             aKsymbol->AddDrawItem( line2 );
             line2->SetWidth( Mils2iu( 10 ) );
             line2->AddPoint( { Mils2iu( -25 ), Mils2iu( -50 ) } );
@@ -1628,13 +1623,13 @@ wxPoint HelperGeneratePowerPortGraphics( LIB_SYMBOL* aKsymbol, ASCH_POWER_PORT_S
     }
     else if( aStyle == ASCH_POWER_PORT_STYLE::WAVE )
     {
-        LIB_POLYLINE* line = new LIB_POLYLINE( aKsymbol );
+        LIB_SHAPE* line = new LIB_SHAPE( aKsymbol, SHAPE_T::POLY );
         aKsymbol->AddDrawItem( line );
         line->SetWidth( Mils2iu( 10 ) );
         line->AddPoint( { 0, 0 } );
         line->AddPoint( { 0, Mils2iu( -72 ) } );
 
-        LIB_BEZIER* bezier = new LIB_BEZIER( aKsymbol );
+        LIB_SHAPE* bezier = new LIB_SHAPE( aKsymbol, SHAPE_T::BEZIER );
         aKsymbol->AddDrawItem( bezier );
         bezier->SetWidth( Mils2iu( 5 ) );
         bezier->AddPoint( { Mils2iu( 30 ), Mils2iu( -50 ) } );
@@ -1649,7 +1644,7 @@ wxPoint HelperGeneratePowerPortGraphics( LIB_SYMBOL* aKsymbol, ASCH_POWER_PORT_S
              || aStyle == ASCH_POWER_PORT_STYLE::EARTH
              || aStyle == ASCH_POWER_PORT_STYLE::GOST_ARROW )
     {
-        LIB_POLYLINE* line1 = new LIB_POLYLINE( aKsymbol );
+        LIB_SHAPE* line1 = new LIB_SHAPE( aKsymbol, SHAPE_T::POLY );
         aKsymbol->AddDrawItem( line1 );
         line1->SetWidth( Mils2iu( 10 ) );
         line1->AddPoint( { 0, 0 } );
@@ -1657,25 +1652,25 @@ wxPoint HelperGeneratePowerPortGraphics( LIB_SYMBOL* aKsymbol, ASCH_POWER_PORT_S
 
         if( aStyle == ASCH_POWER_PORT_STYLE::POWER_GROUND )
         {
-            LIB_POLYLINE* line2 = new LIB_POLYLINE( aKsymbol );
+            LIB_SHAPE* line2 = new LIB_SHAPE( aKsymbol, SHAPE_T::POLY );
             aKsymbol->AddDrawItem( line2 );
             line2->SetWidth( Mils2iu( 10 ) );
             line2->AddPoint( { Mils2iu( -100 ), Mils2iu( -100 ) } );
             line2->AddPoint( { Mils2iu( 100 ), Mils2iu( -100 ) } );
 
-            LIB_POLYLINE* line3 = new LIB_POLYLINE( aKsymbol );
+            LIB_SHAPE* line3 = new LIB_SHAPE( aKsymbol, SHAPE_T::POLY );
             aKsymbol->AddDrawItem( line3 );
             line3->SetWidth( Mils2iu( 10 ) );
             line3->AddPoint( { Mils2iu( -70 ), Mils2iu( -130 ) } );
             line3->AddPoint( { Mils2iu( 70 ), Mils2iu( -130 ) } );
 
-            LIB_POLYLINE* line4 = new LIB_POLYLINE( aKsymbol );
+            LIB_SHAPE* line4 = new LIB_SHAPE( aKsymbol, SHAPE_T::POLY );
             aKsymbol->AddDrawItem( line4 );
             line4->SetWidth( Mils2iu( 10 ) );
             line4->AddPoint( { Mils2iu( -40 ), Mils2iu( -160 ) } );
             line4->AddPoint( { Mils2iu( 40 ), Mils2iu( -160 ) } );
 
-            LIB_POLYLINE* line5 = new LIB_POLYLINE( aKsymbol );
+            LIB_SHAPE* line5 = new LIB_SHAPE( aKsymbol, SHAPE_T::POLY );
             aKsymbol->AddDrawItem( line5 );
             line5->SetWidth( Mils2iu( 10 ) );
             line5->AddPoint( { Mils2iu( -10 ), Mils2iu( -190 ) } );
@@ -1683,7 +1678,7 @@ wxPoint HelperGeneratePowerPortGraphics( LIB_SYMBOL* aKsymbol, ASCH_POWER_PORT_S
         }
         else if( aStyle == ASCH_POWER_PORT_STYLE::SIGNAL_GROUND )
         {
-            LIB_POLYLINE* line2 = new LIB_POLYLINE( aKsymbol );
+            LIB_SHAPE* line2 = new LIB_SHAPE( aKsymbol, SHAPE_T::POLY );
             aKsymbol->AddDrawItem( line2 );
             line2->SetWidth( Mils2iu( 10 ) );
             line2->AddPoint( { Mils2iu( -100 ), Mils2iu( -100 ) } );
@@ -1693,7 +1688,7 @@ wxPoint HelperGeneratePowerPortGraphics( LIB_SYMBOL* aKsymbol, ASCH_POWER_PORT_S
         }
         else if( aStyle == ASCH_POWER_PORT_STYLE::EARTH )
         {
-            LIB_POLYLINE* line2 = new LIB_POLYLINE( aKsymbol );
+            LIB_SHAPE* line2 = new LIB_SHAPE( aKsymbol, SHAPE_T::POLY );
             aKsymbol->AddDrawItem( line2 );
             line2->SetWidth( Mils2iu( 10 ) );
             line2->AddPoint( { Mils2iu( -150 ), Mils2iu( -200 ) } );
@@ -1701,7 +1696,7 @@ wxPoint HelperGeneratePowerPortGraphics( LIB_SYMBOL* aKsymbol, ASCH_POWER_PORT_S
             line2->AddPoint( { Mils2iu( 100 ), Mils2iu( -100 ) } );
             line2->AddPoint( { Mils2iu( 50 ), Mils2iu( -200 ) } );
 
-            LIB_POLYLINE* line3 = new LIB_POLYLINE( aKsymbol );
+            LIB_SHAPE* line3 = new LIB_SHAPE( aKsymbol, SHAPE_T::POLY );
             aKsymbol->AddDrawItem( line3 );
             line3->SetWidth( Mils2iu( 10 ) );
             line3->AddPoint( { Mils2iu( 0 ), Mils2iu( -100 ) } );
@@ -1709,7 +1704,7 @@ wxPoint HelperGeneratePowerPortGraphics( LIB_SYMBOL* aKsymbol, ASCH_POWER_PORT_S
         }
         else // ASCH_POWER_PORT_STYLE::GOST_ARROW
         {
-            LIB_POLYLINE* line2 = new LIB_POLYLINE( aKsymbol );
+            LIB_SHAPE* line2 = new LIB_SHAPE( aKsymbol, SHAPE_T::POLY );
             aKsymbol->AddDrawItem( line2 );
             line2->SetWidth( Mils2iu( 10 ) );
             line2->AddPoint( { Mils2iu( -25 ), Mils2iu( -50 ) } );
@@ -1724,25 +1719,25 @@ wxPoint HelperGeneratePowerPortGraphics( LIB_SYMBOL* aKsymbol, ASCH_POWER_PORT_S
     else if( aStyle == ASCH_POWER_PORT_STYLE::GOST_POWER_GROUND
              || aStyle == ASCH_POWER_PORT_STYLE::GOST_EARTH )
     {
-        LIB_POLYLINE* line1 = new LIB_POLYLINE( aKsymbol );
+        LIB_SHAPE* line1 = new LIB_SHAPE( aKsymbol, SHAPE_T::POLY );
         aKsymbol->AddDrawItem( line1 );
         line1->SetWidth( Mils2iu( 10 ) );
         line1->AddPoint( { 0, 0 } );
         line1->AddPoint( { 0, Mils2iu( -160 ) } );
 
-        LIB_POLYLINE* line2 = new LIB_POLYLINE( aKsymbol );
+        LIB_SHAPE* line2 = new LIB_SHAPE( aKsymbol, SHAPE_T::POLY );
         aKsymbol->AddDrawItem( line2 );
         line2->SetWidth( Mils2iu( 10 ) );
         line2->AddPoint( { Mils2iu( -100 ), Mils2iu( -160 ) } );
         line2->AddPoint( { Mils2iu( 100 ), Mils2iu( -160 ) } );
 
-        LIB_POLYLINE* line3 = new LIB_POLYLINE( aKsymbol );
+        LIB_SHAPE* line3 = new LIB_SHAPE( aKsymbol, SHAPE_T::POLY );
         aKsymbol->AddDrawItem( line3 );
         line3->SetWidth( Mils2iu( 10 ) );
         line3->AddPoint( { Mils2iu( -60 ), Mils2iu( -200 ) } );
         line3->AddPoint( { Mils2iu( 60 ), Mils2iu( -200 ) } );
 
-        LIB_POLYLINE* line4 = new LIB_POLYLINE( aKsymbol );
+        LIB_SHAPE* line4 = new LIB_SHAPE( aKsymbol, SHAPE_T::POLY );
         aKsymbol->AddDrawItem( line4 );
         line4->SetWidth( Mils2iu( 10 ) );
         line4->AddPoint( { Mils2iu( -20 ), Mils2iu( -240 ) } );
@@ -1751,23 +1746,23 @@ wxPoint HelperGeneratePowerPortGraphics( LIB_SYMBOL* aKsymbol, ASCH_POWER_PORT_S
         if( aStyle == ASCH_POWER_PORT_STYLE::GOST_POWER_GROUND )
             return { 0, Mils2iu( 300 ) };
 
-        LIB_CIRCLE* circle = new LIB_CIRCLE( aKsymbol );
+        LIB_SHAPE* circle = new LIB_SHAPE( aKsymbol, SHAPE_T::CIRCLE );
         aKsymbol->AddDrawItem( circle );
         circle->SetWidth( Mils2iu( 10 ) );
-        circle->SetRadius( Mils2iu( 120 ) );
         circle->SetPosition( { Mils2iu( 0 ), Mils2iu( -160 ) } );
+        circle->SetEnd( circle->GetPosition() + wxPoint( Mils2iu( 120 ), 0 ) );
 
         return { 0, Mils2iu( 350 ) };
     }
     else if( aStyle == ASCH_POWER_PORT_STYLE::GOST_BAR )
     {
-        LIB_POLYLINE* line1 = new LIB_POLYLINE( aKsymbol );
+        LIB_SHAPE* line1 = new LIB_SHAPE( aKsymbol, SHAPE_T::POLY );
         aKsymbol->AddDrawItem( line1 );
         line1->SetWidth( Mils2iu( 10 ) );
         line1->AddPoint( { 0, 0 } );
         line1->AddPoint( { 0, Mils2iu( -200 ) } );
 
-        LIB_POLYLINE* line2 = new LIB_POLYLINE( aKsymbol );
+        LIB_SHAPE* line2 = new LIB_SHAPE( aKsymbol, SHAPE_T::POLY );
         aKsymbol->AddDrawItem( line2 );
         line2->SetWidth( Mils2iu( 10 ) );
         line2->AddPoint( { Mils2iu( -100 ), Mils2iu( -200 ) } );
@@ -1783,13 +1778,13 @@ wxPoint HelperGeneratePowerPortGraphics( LIB_SYMBOL* aKsymbol, ASCH_POWER_PORT_S
                                RPT_SEVERITY_WARNING );
         }
 
-        LIB_POLYLINE* line1 = new LIB_POLYLINE( aKsymbol );
+        LIB_SHAPE* line1 = new LIB_SHAPE( aKsymbol, SHAPE_T::POLY );
         aKsymbol->AddDrawItem( line1 );
         line1->SetWidth( Mils2iu( 10 ) );
         line1->AddPoint( { 0, 0 } );
         line1->AddPoint( { 0, Mils2iu( -100 ) } );
 
-        LIB_POLYLINE* line2 = new LIB_POLYLINE( aKsymbol );
+        LIB_SHAPE* line2 = new LIB_SHAPE( aKsymbol, SHAPE_T::POLY );
         aKsymbol->AddDrawItem( line2 );
         line2->SetWidth( Mils2iu( 10 ) );
         line2->AddPoint( { Mils2iu( -50 ), Mils2iu( -100 ) } );
@@ -1837,8 +1832,7 @@ void SCH_ALTIUM_PLUGIN::ParsePowerPort( const std::map<wxString, wxString>& aPro
         pin->SetType( ELECTRICAL_PINTYPE::PT_POWER_IN );
         pin->SetVisible( false );
 
-        wxPoint valueFieldPos = HelperGeneratePowerPortGraphics( libSymbol, elem.style,
-                                                                 m_reporter );
+        wxPoint valueFieldPos = HelperGeneratePowerPortGraphics( libSymbol, elem.style, m_reporter );
 
         libSymbol->GetValueField().SetPosition( valueFieldPos );
 

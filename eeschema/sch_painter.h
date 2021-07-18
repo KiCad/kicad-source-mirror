@@ -32,16 +32,12 @@
 #include <painter.h>
 
 
-class LIB_RECTANGLE;
 class LIB_PIN;
-class LIB_CIRCLE;
+class LIB_SHAPE;
 class LIB_ITEM;
 class LIB_SYMBOL;
-class LIB_POLYLINE;
-class LIB_ARC;
 class LIB_FIELD;
 class LIB_TEXT;
-class LIB_BEZIER;
 class SCH_SYMBOL;
 class SCH_FIELD;
 class SCH_JUNCTION;
@@ -153,16 +149,12 @@ public:
     }
 
 private:
-    void draw( const LIB_RECTANGLE* aRect, int aLayer );
     void draw( LIB_PIN* aPin, int aLayer );
-    void draw( const LIB_CIRCLE* aCircle, int aLayer );
+    void draw( const LIB_SHAPE* aCircle, int aLayer );
     void draw( const LIB_SYMBOL* aSymbol, int, bool aDrawFields = true, int aUnit = 0,
                int aConvert = 0 );
-    void draw( const LIB_ARC* aArc, int aLayer );
-    void draw( const LIB_POLYLINE* aLine, int aLayer );
     void draw( const LIB_FIELD* aField, int aLayer );
     void draw( const LIB_TEXT* aText, int aLayer );
-    void draw( const LIB_BEZIER* aCurve, int aLayer );
     void draw( SCH_SYMBOL* aSymbol, int aLayer );
     void draw( const SCH_JUNCTION* aJct, int aLayer );
     void draw( const SCH_FIELD* aField, int aLayer );

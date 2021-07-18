@@ -409,7 +409,7 @@ void DXF_PLOTTER::SetColor( const COLOR4D& color )
 }
 
 
-void DXF_PLOTTER::Rect( const wxPoint& p1, const wxPoint& p2, FILL_TYPE fill, int width )
+void DXF_PLOTTER::Rect( const wxPoint& p1, const wxPoint& p2, FILL_T fill, int width )
 {
     wxASSERT( m_outputFile );
     MoveTo( p1 );
@@ -420,7 +420,7 @@ void DXF_PLOTTER::Rect( const wxPoint& p1, const wxPoint& p2, FILL_TYPE fill, in
 }
 
 
-void DXF_PLOTTER::Circle( const wxPoint& centre, int diameter, FILL_TYPE fill, int width )
+void DXF_PLOTTER::Circle( const wxPoint& centre, int diameter, FILL_T fill, int width )
 {
     wxASSERT( m_outputFile );
     double radius = userToDeviceSize( diameter / 2 );
@@ -430,14 +430,13 @@ void DXF_PLOTTER::Circle( const wxPoint& centre, int diameter, FILL_TYPE fill, i
     {
         wxString cname = getDXFColorName( m_currentColor );
 
-        if( fill == FILL_TYPE::NO_FILL )
+        if( fill == FILL_T::NO_FILL )
         {
             fprintf( m_outputFile, "0\nCIRCLE\n8\n%s\n10\n%g\n20\n%g\n40\n%g\n",
                      TO_UTF8( cname ),
                      centre_dev.x, centre_dev.y, radius );
         }
-
-        if( fill == FILL_TYPE::FILLED_SHAPE )
+        else if( fill == FILL_T::FILLED_SHAPE )
         {
             double r = radius*0.5;
             fprintf( m_outputFile, "0\nPOLYLINE\n" );
@@ -455,8 +454,8 @@ void DXF_PLOTTER::Circle( const wxPoint& centre, int diameter, FILL_TYPE fill, i
 }
 
 
-void DXF_PLOTTER::PlotPoly( const std::vector<wxPoint>& aCornerList,
-                            FILL_TYPE aFill, int aWidth, void* aData )
+void DXF_PLOTTER::PlotPoly( const std::vector<wxPoint>& aCornerList, FILL_T aFill, int aWidth,
+                            void* aData )
 {
     if( aCornerList.size() <= 1 )
         return;
@@ -472,7 +471,7 @@ void DXF_PLOTTER::PlotPoly( const std::vector<wxPoint>& aCornerList,
             LineTo( aCornerList[ii] );
 
         // Close polygon if 'fill' requested
-        if( aFill != FILL_TYPE::NO_FILL )
+        if( aFill != FILL_T::NO_FILL )
         {
             if( aCornerList[last] != aCornerList[0] )
                 LineTo( aCornerList[0] );
@@ -485,7 +484,7 @@ void DXF_PLOTTER::PlotPoly( const std::vector<wxPoint>& aCornerList,
 
     // if the polygon outline has thickness, and is not filled
     // (i.e. is a polyline) plot outlines with thick segments
-    if( aWidth > 0 && aFill == FILL_TYPE::NO_FILL )
+    if( aWidth > 0 && aFill == FILL_T::NO_FILL )
     {
         MoveTo( aCornerList[0] );
 
@@ -610,7 +609,7 @@ void DXF_PLOTTER::ThickSegment( const wxPoint& aStart, const wxPoint& aEnd, int 
         if( cornerList[0] != cornerList[cornerList.size() - 1] )
             cornerList.push_back( cornerList[0] );
 
-        PlotPoly( cornerList, FILL_TYPE::NO_FILL );
+        PlotPoly( cornerList, FILL_T::NO_FILL );
     }
     else
     {
@@ -621,7 +620,7 @@ void DXF_PLOTTER::ThickSegment( const wxPoint& aStart, const wxPoint& aEnd, int 
 
 
 void DXF_PLOTTER::Arc( const wxPoint& centre, double StAngle, double EndAngle, int radius,
-                       FILL_TYPE fill, int width )
+                       FILL_T fill, int width )
 {
     wxASSERT( m_outputFile );
 
@@ -671,7 +670,7 @@ void DXF_PLOTTER::FlashPadCircle( const wxPoint& pos, int diametre,
                                   OUTLINE_MODE trace_mode, void* aData )
 {
     wxASSERT( m_outputFile );
-    Circle( pos, diametre, FILL_TYPE::NO_FILL );
+    Circle( pos, diametre, FILL_T::NO_FILL );
 }
 
 

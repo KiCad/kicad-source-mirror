@@ -54,6 +54,19 @@ public:
 
     int GetPenWidth() const override;
 
+    int GetEffectivePenWidth( const RENDER_SETTINGS* aSettings ) const override
+    {
+        // For historical reasons, a stored value of 0 means "default width" and negative
+        // numbers meant "don't stroke".
+
+        if( GetPenWidth() < 0 && GetFillType() != FILL_T::NO_FILL )
+            return 0;
+        else if( GetPenWidth() == 0 )
+            return aSettings->GetDefaultPenWidth();
+        else
+            return std::max( GetPenWidth(), aSettings->GetMinPenWidth() );
+    }
+
     const EDA_RECT GetBoundingBox() const override;
 
     void GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList ) override;
@@ -71,6 +84,12 @@ public:
 
     wxPoint GetPosition() const override { return getPosition(); }
     void SetPosition( const wxPoint& aPosition ) override { setPosition( aPosition ); }
+
+    wxPoint GetCenter() const { return getCenter(); }
+
+    double GetArcAngleStart() const override;
+    double GetArcAngleEnd() const override;
+    void CalcArcAngles( int& aStartAngle, int& aEndAngle ) const;
 
     void MirrorHorizontal( const wxPoint& aCenter ) override;
     void MirrorVertical( const wxPoint& aCenter ) override;

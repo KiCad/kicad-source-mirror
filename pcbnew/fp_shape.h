@@ -71,7 +71,6 @@ public:
      * Sets the angle for arcs, and normalizes it within the range 0 - 360 degrees.
      * @param aAngle is tenths of degrees, but will soon be degrees.
      */
-    void SetArcAngle( double aAngle ) override;
     void SetArcAngleAndEnd0( double aAngle );
 
     /**

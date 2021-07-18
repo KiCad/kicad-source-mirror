@@ -38,13 +38,10 @@
 #include <symbol_library.h>
 #include <plugins/eagle/eagle_parser.h>
 #include <string_utils.h>
-#include <lib_arc.h>
-#include <lib_circle.h>
+#include <lib_shape.h>
 #include <lib_id.h>
 #include <lib_item.h>
 #include <lib_pin.h>
-#include <lib_polyline.h>
-#include <lib_rectangle.h>
 #include <lib_text.h>
 #include <project.h>
 #include <sch_bus_entry.h>
@@ -1730,29 +1727,28 @@ bool SCH_EAGLE_PLUGIN::loadSymbol( wxXmlNode* aSymbolNode, std::unique_ptr<LIB_S
 }
 
 
-LIB_CIRCLE* SCH_EAGLE_PLUGIN::loadSymbolCircle( std::unique_ptr<LIB_SYMBOL>& aSymbol,
-                                                wxXmlNode* aCircleNode, int aGateNumber )
+LIB_SHAPE* SCH_EAGLE_PLUGIN::loadSymbolCircle( std::unique_ptr<LIB_SYMBOL>& aSymbol,
+                                               wxXmlNode* aCircleNode, int aGateNumber )
 {
     // Parse the circle properties
-    ECIRCLE c( aCircleNode );
+    ECIRCLE    c( aCircleNode );
+    LIB_SHAPE* circle = new LIB_SHAPE( aSymbol.get(), SHAPE_T::CIRCLE );
+    wxPoint    center( c.x.ToSchUnits(), c.y.ToSchUnits() );
 
-    unique_ptr<LIB_CIRCLE> circle( new LIB_CIRCLE( aSymbol.get() ) );
-
-    circle->SetPosition( wxPoint( c.x.ToSchUnits(), c.y.ToSchUnits() ) );
-    circle->SetRadius( c.radius.ToSchUnits() );
+    circle->SetPosition( center );
+    circle->SetEnd( wxPoint( center.x + c.radius.ToSchUnits(), center.y ) );
     circle->SetWidth( c.width.ToSchUnits() );
     circle->SetUnit( aGateNumber );
 
-    return circle.release();
+    return circle;
 }
 
 
-LIB_RECTANGLE* SCH_EAGLE_PLUGIN::loadSymbolRectangle( std::unique_ptr<LIB_SYMBOL>& aSymbol,
-                                                      wxXmlNode* aRectNode, int aGateNumber )
+LIB_SHAPE* SCH_EAGLE_PLUGIN::loadSymbolRectangle( std::unique_ptr<LIB_SYMBOL>& aSymbol,
+                                                  wxXmlNode* aRectNode, int aGateNumber )
 {
-    ERECT rect( aRectNode );
-
-    unique_ptr<LIB_RECTANGLE> rectangle( new LIB_RECTANGLE( aSymbol.get() ) );
+    ERECT      rect( aRectNode );
+    LIB_SHAPE* rectangle = new LIB_SHAPE( aSymbol.get(), SHAPE_T::RECT );
 
     rectangle->SetPosition( wxPoint( rect.x1.ToSchUnits(), rect.y1.ToSchUnits() ) );
     rectangle->SetEnd( wxPoint( rect.x2.ToSchUnits(), rect.y2.ToSchUnits() ) );
@@ -1760,9 +1756,9 @@ LIB_RECTANGLE* SCH_EAGLE_PLUGIN::loadSymbolRectangle( std::unique_ptr<LIB_SYMBOL
     rectangle->SetUnit( aGateNumber );
 
     // Eagle rectangles are filled by definition.
-    rectangle->SetFillMode( FILL_TYPE::FILLED_SHAPE );
+    rectangle->SetFillMode( FILL_T::FILLED_SHAPE );
 
-    return rectangle.release();
+    return rectangle;
 }
 
 
@@ -1784,12 +1780,11 @@ LIB_ITEM* SCH_EAGLE_PLUGIN::loadSymbolWire( std::unique_ptr<LIB_SYMBOL>& aSymbol
     // if the wire is an arc
     if( ewire.curve )
     {
-        std::unique_ptr<LIB_ARC> arc    = std::make_unique<LIB_ARC>( aSymbol.get() );
-        wxPoint                  center = ConvertArcCenter( begin, end, *ewire.curve * -1 );
-
-        double radius = sqrt( abs( ( ( center.x - begin.x ) * ( center.x - begin.x ) )
-                                   + ( ( center.y - begin.y ) * ( center.y - begin.y ) ) ) )
-                        * 2;
+        LIB_SHAPE* arc = new LIB_SHAPE( aSymbol.get(), SHAPE_T::ARC );
+        wxPoint    center = ConvertArcCenter( begin, end, *ewire.curve * -1 );
+        double     radius = sqrt( abs( ( ( center.x - begin.x ) * ( center.x - begin.x ) )
+                                     + ( ( center.y - begin.y ) * ( center.y - begin.y ) ) ) )
+                            * 2;
 
         // this emulates the filled semicircles created by a thick arc with flat ends caps.
         if( ewire.width.ToSchUnits() * 2 > radius )
@@ -1811,49 +1806,39 @@ LIB_ITEM* SCH_EAGLE_PLUGIN::loadSymbolWire( std::unique_ptr<LIB_SYMBOL>& aSymbol
                      * 2;
 
             arc->SetWidth( 1 );
-            arc->SetFillMode( FILL_TYPE::FILLED_SHAPE );
+            arc->SetFillMode( FILL_T::FILLED_SHAPE );
         }
         else
         {
             arc->SetWidth( ewire.width.ToSchUnits() );
         }
 
-        arc->SetPosition( center );
+        if( *ewire.curve <= 0 )
+            std::swap( begin, end );
 
-        if( *ewire.curve > 0 )
-        {
-            arc->SetStart( begin );
-            arc->SetEnd( end );
-        }
-        else
-        {
-            arc->SetStart( end );
-            arc->SetEnd( begin );
-        }
-
+        arc->SetArcGeometry( begin, (wxPoint) CalcArcMid( begin, end, center ), end );
         arc->SetUnit( aGateNumber );
 
-        return (LIB_ITEM*) arc.release();
+        return arc;
     }
     else
     {
-        std::unique_ptr<LIB_POLYLINE> polyLine = std::make_unique<LIB_POLYLINE>( aSymbol.get() );
+        LIB_SHAPE* poly = new LIB_SHAPE( aSymbol.get(), SHAPE_T::POLY );
 
-        polyLine->AddPoint( begin );
-        polyLine->AddPoint( end );
-        polyLine->SetUnit( aGateNumber );
-        polyLine->SetWidth( ewire.width.ToSchUnits() );
+        poly->AddPoint( begin );
+        poly->AddPoint( end );
+        poly->SetUnit( aGateNumber );
+        poly->SetWidth( ewire.width.ToSchUnits() );
 
-        return (LIB_ITEM*) polyLine.release();
+        return poly;
     }
 }
 
 
-LIB_POLYLINE* SCH_EAGLE_PLUGIN::loadSymbolPolyLine( std::unique_ptr<LIB_SYMBOL>& aSymbol,
-                                                    wxXmlNode* aPolygonNode, int aGateNumber )
+LIB_SHAPE* SCH_EAGLE_PLUGIN::loadSymbolPolyLine( std::unique_ptr<LIB_SYMBOL>& aSymbol,
+                                                 wxXmlNode* aPolygonNode, int aGateNumber )
 {
-    std::unique_ptr<LIB_POLYLINE> polyLine = std::make_unique<LIB_POLYLINE>( aSymbol.get() );
-
+    LIB_SHAPE* poly = new LIB_SHAPE( aSymbol.get(), SHAPE_T::POLY );
     EPOLYGON   epoly( aPolygonNode );
     wxXmlNode* vertex = aPolygonNode->GetChildren();
     wxPoint    pt;
@@ -1864,16 +1849,16 @@ LIB_POLYLINE* SCH_EAGLE_PLUGIN::loadSymbolPolyLine( std::unique_ptr<LIB_SYMBOL>&
         {
             EVERTEX evertex( vertex );
             pt = wxPoint( evertex.x.ToSchUnits(), evertex.y.ToSchUnits() );
-            polyLine->AddPoint( pt );
+            poly->AddPoint( pt );
         }
 
         vertex = vertex->GetNext();
     }
 
-    polyLine->SetFillMode( FILL_TYPE::FILLED_SHAPE );
-    polyLine->SetUnit( aGateNumber );
+    poly->SetFillMode( FILL_T::FILLED_SHAPE );
+    poly->SetUnit( aGateNumber );
 
-    return polyLine.release();
+    return poly;
 }
 
 
@@ -1994,7 +1979,7 @@ void SCH_EAGLE_PLUGIN::loadFrame( wxXmlNode* aFrameNode, std::vector<LIB_ITEM*>&
     if( yMin > yMax )
         std::swap( yMin, yMax );
 
-    LIB_POLYLINE* lines = new LIB_POLYLINE( nullptr );
+    LIB_SHAPE* lines = new LIB_SHAPE( nullptr, SHAPE_T::POLY );
     lines->AddPoint( wxPoint( xMin, yMin ) );
     lines->AddPoint( wxPoint( xMax, yMin ) );
     lines->AddPoint( wxPoint( xMax, yMax ) );
@@ -2004,7 +1989,7 @@ void SCH_EAGLE_PLUGIN::loadFrame( wxXmlNode* aFrameNode, std::vector<LIB_ITEM*>&
 
     if( !eframe.border_left )
     {
-        lines = new LIB_POLYLINE( nullptr );
+        lines = new LIB_SHAPE( nullptr, SHAPE_T::POLY );
         lines->AddPoint( wxPoint( xMin + Mils2iu( 150 ), yMin + Mils2iu( 150 ) ) );
         lines->AddPoint( wxPoint( xMin + Mils2iu( 150 ), yMax - Mils2iu( 150 ) ) );
         aItems.push_back( lines );
@@ -2020,7 +2005,7 @@ void SCH_EAGLE_PLUGIN::loadFrame( wxXmlNode* aFrameNode, std::vector<LIB_ITEM*>&
         for( i = 1; i < eframe.rows; i++ )
         {
             int newY = KiROUND( yMin + ( rowSpacing * (double) i ) );
-            lines = new LIB_POLYLINE( nullptr );
+            lines = new LIB_SHAPE( nullptr, SHAPE_T::POLY );
             lines->AddPoint( wxPoint( x1, newY ) );
             lines->AddPoint( wxPoint( x2, newY ) );
             aItems.push_back( lines );
@@ -2042,7 +2027,7 @@ void SCH_EAGLE_PLUGIN::loadFrame( wxXmlNode* aFrameNode, std::vector<LIB_ITEM*>&
 
     if( !eframe.border_right )
     {
-        lines = new LIB_POLYLINE( nullptr );
+        lines = new LIB_SHAPE( nullptr, SHAPE_T::POLY );
         lines->AddPoint( wxPoint( xMax - Mils2iu( 150 ), yMin + Mils2iu( 150 ) ) );
         lines->AddPoint( wxPoint( xMax - Mils2iu( 150 ), yMax - Mils2iu( 150 ) ) );
         aItems.push_back( lines );
@@ -2058,7 +2043,7 @@ void SCH_EAGLE_PLUGIN::loadFrame( wxXmlNode* aFrameNode, std::vector<LIB_ITEM*>&
         for( i = 1; i < eframe.rows; i++ )
         {
             int newY = KiROUND( yMin + ( rowSpacing * (double) i ) );
-            lines = new LIB_POLYLINE( nullptr );
+            lines = new LIB_SHAPE( nullptr, SHAPE_T::POLY );
             lines->AddPoint( wxPoint( x1, newY ) );
             lines->AddPoint( wxPoint( x2, newY ) );
             aItems.push_back( lines );
@@ -2080,7 +2065,7 @@ void SCH_EAGLE_PLUGIN::loadFrame( wxXmlNode* aFrameNode, std::vector<LIB_ITEM*>&
 
     if( !eframe.border_top )
     {
-        lines = new LIB_POLYLINE( nullptr );
+        lines = new LIB_SHAPE( nullptr, SHAPE_T::POLY );
         lines->AddPoint( wxPoint( xMax - Mils2iu( 150 ), yMax - Mils2iu( 150 ) ) );
         lines->AddPoint( wxPoint( xMin + Mils2iu( 150 ), yMax - Mils2iu( 150 ) ) );
         aItems.push_back( lines );
@@ -2096,7 +2081,7 @@ void SCH_EAGLE_PLUGIN::loadFrame( wxXmlNode* aFrameNode, std::vector<LIB_ITEM*>&
         for( i = 1; i < eframe.columns; i++ )
         {
             int newX = KiROUND( xMin + ( columnSpacing * (double) i ) );
-            lines = new LIB_POLYLINE( nullptr );
+            lines = new LIB_SHAPE( nullptr, SHAPE_T::POLY );
             lines->AddPoint( wxPoint( newX, y1 ) );
             lines->AddPoint( wxPoint( newX, y2 ) );
             aItems.push_back( lines );
@@ -2118,7 +2103,7 @@ void SCH_EAGLE_PLUGIN::loadFrame( wxXmlNode* aFrameNode, std::vector<LIB_ITEM*>&
 
     if( !eframe.border_bottom )
     {
-        lines = new LIB_POLYLINE( nullptr );
+        lines = new LIB_SHAPE( nullptr, SHAPE_T::POLY );
         lines->AddPoint( wxPoint( xMax - Mils2iu( 150 ), yMin + Mils2iu( 150 ) ) );
         lines->AddPoint( wxPoint( xMin + Mils2iu( 150 ), yMin + Mils2iu( 150 ) ) );
         aItems.push_back( lines );
@@ -2134,7 +2119,7 @@ void SCH_EAGLE_PLUGIN::loadFrame( wxXmlNode* aFrameNode, std::vector<LIB_ITEM*>&
         for( i = 1; i < eframe.columns; i++ )
         {
             int newX = KiROUND( xMin + ( columnSpacing * (double) i ) );
-            lines = new LIB_POLYLINE( nullptr );
+            lines = new LIB_SHAPE( nullptr, SHAPE_T::POLY );
             lines->AddPoint( wxPoint( newX, y1 ) );
             lines->AddPoint( wxPoint( newX, y2 ) );
             aItems.push_back( lines );

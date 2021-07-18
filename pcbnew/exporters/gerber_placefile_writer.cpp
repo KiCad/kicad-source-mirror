@@ -195,8 +195,7 @@ int PLACEFILE_GERBER_WRITER::CreatePlaceFile( wxString& aFullFilename, PCB_LAYER
                     continue;
 
                 useFpPadsBbox = false;
-                plotter.PLOTTER::PlotPoly( poly, FILL_TYPE::NO_FILL, line_thickness,
-                                           &gbr_metadata );
+                plotter.PLOTTER::PlotPoly( poly, FILL_T::NO_FILL, line_thickness, &gbr_metadata );
             }
         }
 
@@ -221,7 +220,7 @@ int PLACEFILE_GERBER_WRITER::CreatePlaceFile( wxString& aFullFilename, PCB_LAYER
 
             poly.Rotate( -footprint->GetOrientationRadians(), VECTOR2I( 0, 0 ) );
             poly.Move( footprint->GetPosition() );
-            plotter.PLOTTER::PlotPoly( poly, FILL_TYPE::NO_FILL, line_thickness, &gbr_metadata );
+            plotter.PLOTTER::PlotPoly( poly, FILL_T::NO_FILL, line_thickness, &gbr_metadata );
         }
 
         std::vector<PAD*>pad_key_list;

@@ -24,7 +24,7 @@
 #include <eeschema_settings.h>
 #include <gal/gal_display_options.h>
 #include <layer_ids.h>
-#include <lib_polyline.h>
+#include <lib_shape.h>
 #include <page_info.h>
 #include <panel_eeschema_color_settings.h>
 #include <pgm_base.h>
@@ -347,12 +347,12 @@ void PANEL_EESCHEMA_COLOR_SETTINGS::createPreviewItems()
         symbol->SetShowPinNumbers( true );
         symbol->SetPinNameOffset( 0 );
 
-        LIB_POLYLINE* comp_body = new LIB_POLYLINE( symbol );
+        LIB_SHAPE* comp_body = new LIB_SHAPE( symbol, SHAPE_T::POLY );
 
         comp_body->SetUnit( 0 );
         comp_body->SetConvert( 0 );
         comp_body->SetWidth( Mils2iu( 10 ) );
-        comp_body->SetFillMode( FILL_TYPE::FILLED_WITH_BG_BODYCOLOR );
+        comp_body->SetFillMode( FILL_T::FILLED_WITH_BG_BODYCOLOR );
         comp_body->AddPoint( MILS_POINT( p.x - 200, p.y + 200 ) );
         comp_body->AddPoint( MILS_POINT( p.x + 200, p.y ) );
         comp_body->AddPoint( MILS_POINT( p.x - 200, p.y - 200 ) );

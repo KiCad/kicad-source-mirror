@@ -651,7 +651,7 @@ double EDA_TEXT::GetDrawRotation() const
 
 int EDA_TEXT::Compare( const EDA_TEXT* aOther ) const
 {
-#define TEST( a, b ) { if( a != b ) return a < b; }
+#define TEST( a, b ) { if( a != b ) return a - b; }
 #define TEST_PT( a, b ) { TEST( a.x, b.x ); TEST( a.y, b.y ); }
 
     TEST_PT( m_e.pos, aOther->m_e.pos );

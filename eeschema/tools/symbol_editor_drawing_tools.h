@@ -66,7 +66,7 @@ private:
 
 private:
     double    m_lastTextAngle;
-    FILL_TYPE m_lastFillStyle;
+    FILL_T    m_lastFillStyle;
     bool      m_drawSpecificConvert;
     bool      m_drawSpecificUnit;
 };

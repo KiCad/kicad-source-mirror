@@ -63,8 +63,11 @@ bool DIALOG_LIB_SHAPE_PROPERTIES::TransferDataToWindow()
         return false;
 
     LIB_SYMBOL* symbol = m_item->GetParent();
+    EDA_SHAPE*  shape = dynamic_cast<EDA_SHAPE*>( m_item );
 
-    m_lineWidth.SetValue( m_item->GetWidth() );
+    if( shape )
+        m_lineWidth.SetValue( shape->GetWidth() );
+
     m_checkApplyToAllUnits->SetValue( m_item->GetUnit() == 0 );
     m_checkApplyToAllUnits->Enable( symbol && symbol->GetUnitCount() > 1 );
     m_checkApplyToAllConversions->SetValue( m_item->GetConvert() == 0 );
@@ -80,8 +83,10 @@ bool DIALOG_LIB_SHAPE_PROPERTIES::TransferDataToWindow()
 
     m_checkApplyToAllConversions->Enable( enblConvOptStyle );
 
-    m_fillCtrl->SetSelection( static_cast<int>( m_item->GetFillMode() ) );
-    m_fillCtrl->Enable( m_item->IsFillable() );
+    if( shape )
+        m_fillCtrl->SetSelection( static_cast<int>( shape->GetFillType() ) );
+
+    m_fillCtrl->Enable( shape != nullptr );
 
     return true;
 }
@@ -92,10 +97,13 @@ bool DIALOG_LIB_SHAPE_PROPERTIES::TransferDataFromWindow()
     if( !wxDialog::TransferDataFromWindow() )
         return false;
 
-    if( m_item->IsFillable() )
-        m_item->SetFillMode( (FILL_TYPE) std::max( m_fillCtrl->GetSelection(), 0 ) );
+    EDA_SHAPE*  shape = dynamic_cast<EDA_SHAPE*>( m_item );
 
-    m_item->SetWidth( m_lineWidth.GetValue() );
+    if( shape )
+        shape->SetFillMode((FILL_T) std::max( m_fillCtrl->GetSelection(), 0 ));
+
+    if( shape )
+        shape->SetWidth( m_lineWidth.GetValue() );
 
     if( GetApplyToAllConversions() )
         m_item->SetConvert( 0 );

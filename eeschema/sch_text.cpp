@@ -732,7 +732,7 @@ void SCH_TEXT::Plot( PLOTTER* aPlotter ) const
     CreateGraphicShape( aPlotter->RenderSettings(), s_poly, GetTextPos() );
 
     if( s_poly.size() )
-        aPlotter->PlotPoly( s_poly, FILL_TYPE::NO_FILL, penWidth );
+        aPlotter->PlotPoly( s_poly, FILL_T::NO_FILL, penWidth );
 }
 
 

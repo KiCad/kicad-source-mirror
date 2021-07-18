@@ -29,8 +29,7 @@
 #include <qa_utils/wx_utils/unit_test_utils.h>
 
 // Code under test
-#include <lib_rectangle.h>
-#include <lib_arc.h>
+#include <lib_shape.h>
 #include <lib_pin.h>
 
 #include "lib_field_test_utils.h"
@@ -266,25 +265,25 @@ BOOST_AUTO_TEST_CASE( Compare )
     m_part_no_data.SetNormal();
 
     // Draw item list size comparison tests.
-    testPart.AddDrawItem( new LIB_RECTANGLE( &testPart ) );
-    m_part_no_data.AddDrawItem( new LIB_RECTANGLE( &m_part_no_data ) );
+    testPart.AddDrawItem( new LIB_SHAPE( &testPart, SHAPE_T::RECT ) );
+    m_part_no_data.AddDrawItem( new LIB_SHAPE( &m_part_no_data, SHAPE_T::RECT ) );
     BOOST_CHECK_EQUAL( m_part_no_data.Compare( testPart ), 0 );
-    m_part_no_data.RemoveDrawItem( m_part_no_data.GetNextDrawItem( nullptr, LIB_RECTANGLE_T ) );
+    m_part_no_data.RemoveDrawItem( m_part_no_data.GetNextDrawItem( nullptr, LIB_SHAPE_T ) );
     BOOST_CHECK( m_part_no_data.Compare( testPart ) < 0 );
-    testPart.RemoveDrawItem( testPart.GetNextDrawItem( nullptr, LIB_RECTANGLE_T ) );
-    m_part_no_data.AddDrawItem( new LIB_RECTANGLE( &m_part_no_data ) );
+    testPart.RemoveDrawItem( testPart.GetNextDrawItem( nullptr, LIB_SHAPE_T ) );
+    m_part_no_data.AddDrawItem( new LIB_SHAPE( &m_part_no_data, SHAPE_T::RECT ) );
     BOOST_CHECK( m_part_no_data.Compare( testPart ) > 0 );
-    m_part_no_data.RemoveDrawItem( m_part_no_data.GetNextDrawItem( nullptr, LIB_RECTANGLE_T ) );
+    m_part_no_data.RemoveDrawItem( m_part_no_data.GetNextDrawItem( nullptr, LIB_SHAPE_T ) );
 
     // Draw item list contents comparison tests.
-    testPart.AddDrawItem( new LIB_RECTANGLE( &testPart ) );
-    m_part_no_data.AddDrawItem( new LIB_ARC( &m_part_no_data ) );
+    testPart.AddDrawItem( new LIB_SHAPE( &testPart, SHAPE_T::RECT ) );
+    m_part_no_data.AddDrawItem( new LIB_SHAPE( &m_part_no_data, SHAPE_T::ARC ) );
     BOOST_CHECK( m_part_no_data.Compare( testPart ) < 0 );
-    m_part_no_data.RemoveDrawItem( m_part_no_data.GetNextDrawItem( nullptr, LIB_ARC_T ) );
+    m_part_no_data.RemoveDrawItem( m_part_no_data.GetNextDrawItem( nullptr, LIB_SHAPE_T ) );
     m_part_no_data.AddDrawItem( new LIB_PIN( &m_part_no_data ) );
     BOOST_CHECK( m_part_no_data.Compare( testPart ) > 0 );
     m_part_no_data.RemoveDrawItem( m_part_no_data.GetNextDrawItem( nullptr, LIB_PIN_T ) );
-    testPart.RemoveDrawItem( testPart.GetNextDrawItem( nullptr, LIB_RECTANGLE_T ) );
+    testPart.RemoveDrawItem( testPart.GetNextDrawItem( nullptr, LIB_SHAPE_T ) );
 
     // Footprint filter array comparison tests.
     wxArrayString footPrintFilters;

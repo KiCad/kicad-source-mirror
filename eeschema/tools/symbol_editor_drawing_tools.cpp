@@ -29,10 +29,7 @@
 #include <bitmaps.h>
 #include <lib_text.h>
 #include <dialogs/dialog_lib_text_properties.h>
-#include <lib_arc.h>
-#include <lib_circle.h>
-#include <lib_polyline.h>
-#include <lib_rectangle.h>
+#include <lib_shape.h>
 #include <pgm_base.h>
 #include <symbol_editor/symbol_editor_settings.h>
 #include <settings/settings_manager.h>
@@ -44,7 +41,7 @@ static void* g_lastPinWeakPtr;
 SYMBOL_EDITOR_DRAWING_TOOLS::SYMBOL_EDITOR_DRAWING_TOOLS() :
         EE_TOOL_BASE<SYMBOL_EDIT_FRAME>( "eeschema.SymbolDrawing" ),
         m_lastTextAngle( 0.0 ),
-        m_lastFillStyle( FILL_TYPE::NO_FILL ),
+        m_lastFillStyle( FILL_T::NO_FILL ),
         m_drawSpecificConvert( true ),
         m_drawSpecificUnit( false )
 {
@@ -265,7 +262,7 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
 {
     SETTINGS_MANAGER&       settingsMgr = Pgm().GetSettingsManager();
     SYMBOL_EDITOR_SETTINGS* settings = settingsMgr.GetAppSettings<SYMBOL_EDITOR_SETTINGS>();
-    KICAD_T                 type = aEvent.Parameter<KICAD_T>();
+    SHAPE_T                 type = aEvent.Parameter<SHAPE_T>();
     LIB_SYMBOL*             symbol = m_frame->GetCurSymbol();
     LIB_ITEM*               item = nullptr;
 
@@ -347,19 +344,9 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
 
             m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
 
-            switch( type )
-            {
-            case LIB_ARC_T:       item = new LIB_ARC( symbol );       break;
-            case LIB_CIRCLE_T:    item = new LIB_CIRCLE( symbol );    break;
-            case LIB_POLYLINE_T:  item = new LIB_POLYLINE( symbol );  break;
-            case LIB_RECTANGLE_T: item = new LIB_RECTANGLE( symbol ); break;
-            default: break;     // keep compiler quiet
-            }
+            int lineWidth = Mils2iu( settings->m_Defaults.line_width );
 
-            wxCHECK( item, 0 );
-
-            item->SetWidth( Mils2iu( settings->m_Defaults.line_width ) );
-            item->SetFillMode( m_lastFillStyle );
+            item = new LIB_SHAPE( symbol, type, lineWidth, m_lastFillStyle );
             item->SetFlags( IS_NEW );
             item->BeginEdit( wxPoint( cursorPos.x, -cursorPos.y ) );
 

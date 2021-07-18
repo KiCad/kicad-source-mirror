@@ -56,13 +56,9 @@
 #include <sch_screen.h>
 #include <schematic.h>
 #include <symbol_library.h>
-#include <lib_arc.h>
-#include <lib_bezier.h>
-#include <lib_circle.h>
+#include <lib_shape.h>
 #include <lib_field.h>
 #include <lib_pin.h>
-#include <lib_polyline.h>
-#include <lib_rectangle.h>
 #include <lib_text.h>
 #include <eeschema_id.h>       // for MAX_UNIT_COUNT_PER_PACKAGE definition
 #include <tool/selection.h>
@@ -482,40 +478,28 @@ class SCH_LEGACY_PLUGIN_CACHE
     int             m_versionMinor;
     SCH_LIB_TYPE    m_libType;      // Is this cache a symbol or symbol library.
 
-    void                  loadHeader( FILE_LINE_READER& aReader );
-    static void           loadAliases( std::unique_ptr<LIB_SYMBOL>& aSymbol, LINE_READER& aReader,
-                                       LIB_SYMBOL_MAP* aMap = nullptr );
-    static void           loadField( std::unique_ptr<LIB_SYMBOL>& aSymbol, LINE_READER& aReader );
-    static void           loadDrawEntries( std::unique_ptr<LIB_SYMBOL>& aSymbol,
-                                           LINE_READER& aReader,
-                                           int aMajorVersion, int aMinorVersion );
-    static void           loadFootprintFilters( std::unique_ptr<LIB_SYMBOL>& aSymbol,
-                                                LINE_READER& aReader );
-    void                  loadDocs();
-    static LIB_ARC*       loadArc( std::unique_ptr<LIB_SYMBOL>& aSymbol, LINE_READER& aReader );
-    static LIB_CIRCLE*    loadCircle( std::unique_ptr<LIB_SYMBOL>& aSymbol, LINE_READER& aReader );
-    static LIB_TEXT*      loadText( std::unique_ptr<LIB_SYMBOL>& aSymbol, LINE_READER& aReader,
-                                    int aMajorVersion, int aMinorVersion );
-    static LIB_RECTANGLE* loadRectangle( std::unique_ptr<LIB_SYMBOL>& aSymbol,
-                                         LINE_READER& aReader );
-    static LIB_PIN*       loadPin( std::unique_ptr<LIB_SYMBOL>& aSymbol, LINE_READER& aReader );
-    static LIB_POLYLINE*  loadPolyLine( std::unique_ptr<LIB_SYMBOL>& aSymbol,
-                                        LINE_READER& aReader );
-    static LIB_BEZIER*    loadBezier( std::unique_ptr<LIB_SYMBOL>& aSymbol, LINE_READER& aReader );
+    void              loadHeader( FILE_LINE_READER& aReader );
+    static void       loadAliases( std::unique_ptr<LIB_SYMBOL>& aSymbol, LINE_READER& aReader,
+                                   LIB_SYMBOL_MAP* aMap = nullptr );
+    static void       loadField( std::unique_ptr<LIB_SYMBOL>& aSymbol, LINE_READER& aReader );
+    static void       loadDrawEntries( std::unique_ptr<LIB_SYMBOL>& aSymbol, LINE_READER& aReader,
+                                       int aMajorVersion, int aMinorVersion );
+    static void       loadFootprintFilters( std::unique_ptr<LIB_SYMBOL>& aSymbol,
+                                            LINE_READER& aReader );
+    void              loadDocs();
+    static LIB_SHAPE* loadArc( std::unique_ptr<LIB_SYMBOL>& aSymbol, LINE_READER& aReader );
+    static LIB_SHAPE* loadCircle( std::unique_ptr<LIB_SYMBOL>& aSymbol, LINE_READER& aReader );
+    static LIB_TEXT*  loadText( std::unique_ptr<LIB_SYMBOL>& aSymbol, LINE_READER& aReader,
+                                int aMajorVersion, int aMinorVersion );
+    static LIB_SHAPE* loadRect( std::unique_ptr<LIB_SYMBOL>& aSymbol, LINE_READER& aReader );
+    static LIB_PIN*   loadPin( std::unique_ptr<LIB_SYMBOL>& aSymbol, LINE_READER& aReader );
+    static LIB_SHAPE* loadPolyLine( std::unique_ptr<LIB_SYMBOL>& aSymbol, LINE_READER& aReader );
+    static LIB_SHAPE* loadBezier( std::unique_ptr<LIB_SYMBOL>& aSymbol, LINE_READER& aReader );
 
-    static FILL_TYPE   parseFillMode( LINE_READER& aReader, const char* aLine,
-                                      const char** aOutput );
-    LIB_SYMBOL*       removeSymbol( LIB_SYMBOL* aAlias );
+    static FILL_T   parseFillMode( LINE_READER& aReader, const char* aLine, const char** aOutput );
+    LIB_SYMBOL*     removeSymbol( LIB_SYMBOL* aAlias );
 
     void            saveDocFile();
-    static void     saveArc( LIB_ARC* aArc, OUTPUTFORMATTER& aFormatter );
-    static void     saveBezier( LIB_BEZIER* aBezier, OUTPUTFORMATTER& aFormatter );
-    static void     saveCircle( LIB_CIRCLE* aCircle, OUTPUTFORMATTER& aFormatter );
-    static void     saveField( const LIB_FIELD* aField, OUTPUTFORMATTER& aFormatter );
-    static void     savePin( const LIB_PIN* aPin, OUTPUTFORMATTER& aFormatter );
-    static void     savePolyLine( LIB_POLYLINE* aPolyLine, OUTPUTFORMATTER& aFormatter );
-    static void     saveRectangle( LIB_RECTANGLE* aRectangle, OUTPUTFORMATTER& aFormatter );
-    static void     saveText( const LIB_TEXT* aText, OUTPUTFORMATTER& aFormatter );
 
     friend SCH_LEGACY_PLUGIN;
 
@@ -3217,7 +3201,7 @@ void SCH_LEGACY_PLUGIN_CACHE::loadDrawEntries( std::unique_ptr<LIB_SYMBOL>& aSym
             break;
 
         case 'S':    // Square
-            aSymbol->AddDrawItem( loadRectangle( aSymbol, aReader ), false );
+            aSymbol->AddDrawItem( loadRect( aSymbol, aReader ), false );
             break;
 
         case 'X':    // Pin Description
@@ -3249,30 +3233,30 @@ void SCH_LEGACY_PLUGIN_CACHE::loadDrawEntries( std::unique_ptr<LIB_SYMBOL>& aSym
 }
 
 
-FILL_TYPE SCH_LEGACY_PLUGIN_CACHE::parseFillMode( LINE_READER& aReader, const char* aLine,
+FILL_T SCH_LEGACY_PLUGIN_CACHE::parseFillMode( LINE_READER& aReader, const char* aLine,
                                                const char** aOutput )
 {
     switch ( parseChar( aReader, aLine, aOutput ) )
     {
-    case 'F': return FILL_TYPE::FILLED_SHAPE;
-    case 'f': return FILL_TYPE::FILLED_WITH_BG_BODYCOLOR;
-    case 'N': return FILL_TYPE::NO_FILL;
+    case 'F': return FILL_T::FILLED_SHAPE;
+    case 'f': return FILL_T::FILLED_WITH_BG_BODYCOLOR;
+    case 'N': return FILL_T::NO_FILL;
     default:  SCH_PARSE_ERROR( "invalid fill type, expected f, F, or N", aReader, aLine );
     }
 
     // This will never be reached but quiets the compiler warnings
-    return FILL_TYPE::NO_FILL;
+    return FILL_T::NO_FILL;
 }
 
 
-LIB_ARC* SCH_LEGACY_PLUGIN_CACHE::loadArc( std::unique_ptr<LIB_SYMBOL>& aSymbol,
-                                           LINE_READER&                 aReader )
+LIB_SHAPE* SCH_LEGACY_PLUGIN_CACHE::loadArc( std::unique_ptr<LIB_SYMBOL>& aSymbol,
+                                             LINE_READER&                 aReader )
 {
     const char* line = aReader.Line();
 
-    wxCHECK_MSG( strCompare( "A", line, &line ), nullptr, "Invalid LIB_ARC definition" );
+    wxCHECK_MSG( strCompare( "A", line, &line ), nullptr, "Invalid arc definition" );
 
-    LIB_ARC* arc = new LIB_ARC( aSymbol.get() );
+    LIB_SHAPE* arc = new LIB_SHAPE( aSymbol.get(), SHAPE_T::ARC );
 
     wxPoint center;
 
@@ -3343,22 +3327,24 @@ LIB_ARC* SCH_LEGACY_PLUGIN_CACHE::loadArc( std::unique_ptr<LIB_SYMBOL>& aSymbol,
 }
 
 
-LIB_CIRCLE* SCH_LEGACY_PLUGIN_CACHE::loadCircle( std::unique_ptr<LIB_SYMBOL>& aSymbol,
-                                                 LINE_READER&                 aReader )
+LIB_SHAPE* SCH_LEGACY_PLUGIN_CACHE::loadCircle( std::unique_ptr<LIB_SYMBOL>& aSymbol,
+                                                LINE_READER&                 aReader )
 {
     const char* line = aReader.Line();
 
-    wxCHECK_MSG( strCompare( "C", line, &line ), nullptr, "Invalid LIB_CIRCLE definition" );
+    wxCHECK_MSG( strCompare( "C", line, &line ), nullptr, "Invalid circle definition" );
 
-    LIB_CIRCLE* circle = new LIB_CIRCLE( aSymbol.get() );
+    LIB_SHAPE* circle = new LIB_SHAPE( aSymbol.get(), SHAPE_T::CIRCLE );
 
     wxPoint center;
 
     center.x = Mils2Iu( parseInt( aReader, line, &line ) );
     center.y = Mils2Iu( parseInt( aReader, line, &line ) );
 
-    circle->SetPosition( center );
-    circle->SetRadius( Mils2Iu( parseInt( aReader, line, &line ) ) );
+    int radius = Mils2Iu( parseInt( aReader, line, &line ) );
+
+    circle->SetStart( center );
+    circle->SetEnd( wxPoint( center.x + radius, center.y ) );
     circle->SetUnit( parseInt( aReader, line, &line ) );
     circle->SetConvert( parseInt( aReader, line, &line ) );
     circle->SetWidth( Mils2Iu( parseInt( aReader, line, &line ) ) );
@@ -3467,14 +3453,14 @@ LIB_TEXT* SCH_LEGACY_PLUGIN_CACHE::loadText( std::unique_ptr<LIB_SYMBOL>& aSymbo
 }
 
 
-LIB_RECTANGLE* SCH_LEGACY_PLUGIN_CACHE::loadRectangle( std::unique_ptr<LIB_SYMBOL>& aSymbol,
-                                                       LINE_READER&                 aReader )
+LIB_SHAPE* SCH_LEGACY_PLUGIN_CACHE::loadRect( std::unique_ptr<LIB_SYMBOL>& aSymbol,
+                                              LINE_READER&                 aReader )
 {
     const char* line = aReader.Line();
 
-    wxCHECK_MSG( strCompare( "S", line, &line ), nullptr, "Invalid LIB_RECTANGLE definition" );
+    wxCHECK_MSG( strCompare( "S", line, &line ), nullptr, "Invalid rectangle definition" );
 
-    LIB_RECTANGLE* rectangle = new LIB_RECTANGLE( aSymbol.get() );
+    LIB_SHAPE* rectangle = new LIB_SHAPE( aSymbol.get(), SHAPE_T::RECT );
 
     wxPoint pos;
 
@@ -3698,20 +3684,19 @@ LIB_PIN* SCH_LEGACY_PLUGIN_CACHE::loadPin( std::unique_ptr<LIB_SYMBOL>& aSymbol,
 }
 
 
-LIB_POLYLINE* SCH_LEGACY_PLUGIN_CACHE::loadPolyLine( std::unique_ptr<LIB_SYMBOL>& aSymbol,
-                                                     LINE_READER&                 aReader )
+LIB_SHAPE* SCH_LEGACY_PLUGIN_CACHE::loadPolyLine( std::unique_ptr<LIB_SYMBOL>& aSymbol,
+                                                   LINE_READER&                 aReader )
 {
     const char* line = aReader.Line();
 
-    wxCHECK_MSG( strCompare( "P", line, &line ), nullptr, "Invalid LIB_POLYLINE definition" );
+    wxCHECK_MSG( strCompare( "P", line, &line ), nullptr, "Invalid poly definition" );
 
-    LIB_POLYLINE* polyLine = new LIB_POLYLINE( aSymbol.get() );
+    LIB_SHAPE* polyLine = new LIB_SHAPE( aSymbol.get(), SHAPE_T::POLY );
 
     int points = parseInt( aReader, line, &line );
     polyLine->SetUnit( parseInt( aReader, line, &line ) );
     polyLine->SetConvert( parseInt( aReader, line, &line ) );
     polyLine->SetWidth( Mils2Iu( parseInt( aReader, line, &line ) ) );
-    polyLine->Reserve( points );
 
     wxPoint pt;
 
@@ -3729,29 +3714,36 @@ LIB_POLYLINE* SCH_LEGACY_PLUGIN_CACHE::loadPolyLine( std::unique_ptr<LIB_SYMBOL>
 }
 
 
-LIB_BEZIER* SCH_LEGACY_PLUGIN_CACHE::loadBezier( std::unique_ptr<LIB_SYMBOL>& aSymbol,
-                                                 LINE_READER&                 aReader )
+LIB_SHAPE* SCH_LEGACY_PLUGIN_CACHE::loadBezier( std::unique_ptr<LIB_SYMBOL>& aSymbol,
+                                                LINE_READER&                 aReader )
 {
     const char* line = aReader.Line();
 
-    wxCHECK_MSG( strCompare( "B", line, &line ), nullptr, "Invalid LIB_BEZIER definition" );
-
-    LIB_BEZIER* bezier = new LIB_BEZIER( aSymbol.get() );
+    wxCHECK_MSG( strCompare( "B", line, &line ), nullptr, "Invalid Bezier definition" );
 
     int points = parseInt( aReader, line, &line );
+
+    wxCHECK_MSG( points == 4, NULL, "Invalid Bezier curve definition" );
+
+    LIB_SHAPE* bezier = new LIB_SHAPE( aSymbol.get(), SHAPE_T::BEZIER );
+
     bezier->SetUnit( parseInt( aReader, line, &line ) );
     bezier->SetConvert( parseInt( aReader, line, &line ) );
     bezier->SetWidth( Mils2Iu( parseInt( aReader, line, &line ) ) );
 
-    wxPoint pt;
-    bezier->Reserve( points );
+    bezier->SetStart( wxPoint( Mils2Iu( parseInt( aReader, line, &line ) ),
+                               Mils2Iu( parseInt( aReader, line, &line ) ) ) );
 
-    for( int i = 0; i < points; i++ )
-    {
-        pt.x = Mils2Iu( parseInt( aReader, line, &line ) );
-        pt.y = Mils2Iu( parseInt( aReader, line, &line ) );
-        bezier->AddPoint( pt );
-    }
+    bezier->SetBezierC1( wxPoint( Mils2Iu( parseInt( aReader, line, &line ) ),
+                                  Mils2Iu( parseInt( aReader, line, &line ) ) ) );
+
+    bezier->SetBezierC2( wxPoint( Mils2Iu( parseInt( aReader, line, &line ) ),
+                                  Mils2Iu( parseInt( aReader, line, &line ) ) ) );
+
+    bezier->SetEnd( wxPoint( Mils2Iu( parseInt( aReader, line, &line ) ),
+                             Mils2Iu( parseInt( aReader, line, &line ) ) ) );
+
+    bezier->RebuildBezierToSegmentsPointsList( bezier->GetWidth() );
 
     if( *line != 0 )
         bezier->SetFillMode( parseFillMode( aReader, line, &line ) );
@@ -3824,408 +3816,13 @@ void SCH_LEGACY_PLUGIN_CACHE::Save( bool aSaveDocFile )
 void SCH_LEGACY_PLUGIN_CACHE::SaveSymbol( LIB_SYMBOL* aSymbol, OUTPUTFORMATTER& aFormatter,
                                           LIB_SYMBOL_MAP* aMap )
 {
-    wxCHECK_RET( aSymbol && aSymbol->IsRoot(), "Invalid LIB_SYMBOL pointer." );
-
-    // LIB_ALIAS objects are deprecated but we still need to gather up the derived symbols
-    // and save their names for the old file format.
-    wxArrayString aliasNames;
-
-    if( aMap )
-    {
-        for( auto entry : *aMap )
-        {
-            LIB_SYMBOL* symbol = entry.second;
-
-            if( symbol->IsAlias() && symbol->GetParent().lock() == aSymbol->SharedPtr() )
-                aliasNames.Add( symbol->GetName() );
-        }
-    }
-
-    LIB_FIELD&  value = aSymbol->GetValueField();
-
-    // First line: it s a comment (symbol name for readers)
-    aFormatter.Print( 0, "#\n# %s\n#\n", TO_UTF8( value.GetText() ) );
-
-    // Save data
-    aFormatter.Print( 0, "DEF" );
-    aFormatter.Print( 0, " %s", TO_UTF8( value.GetText() ) );
-
-    LIB_FIELD& reference = aSymbol->GetReferenceField();
-
-    if( !reference.GetText().IsEmpty() )
-    {
-        aFormatter.Print( 0, " %s", TO_UTF8( reference.GetText() ) );
-    }
-    else
-    {
-        aFormatter.Print( 0, " ~" );
-    }
-
-    aFormatter.Print( 0, " %d %d %c %c %d %c %c\n",
-                      0, Iu2Mils( aSymbol->GetPinNameOffset() ),
-                      aSymbol->ShowPinNumbers() ? 'Y' : 'N',
-                      aSymbol->ShowPinNames() ? 'Y' : 'N',
-                      aSymbol->GetUnitCount(), aSymbol->UnitsLocked() ? 'L' : 'F',
-                      aSymbol->IsPower() ? 'P' : 'N' );
-
-    timestamp_t dateModified = aSymbol->GetLastModDate();
-
-    if( dateModified != 0 )
-    {
-        int sec  = dateModified & 63;
-        int min  = ( dateModified >> 6 ) & 63;
-        int hour = ( dateModified >> 12 ) & 31;
-        int day  = ( dateModified >> 17 ) & 31;
-        int mon  = ( dateModified >> 22 ) & 15;
-        int year = ( dateModified >> 26 ) + 1990;
-
-        aFormatter.Print( 0, "Ti %d/%d/%d %d:%d:%d\n", year, mon, day, hour, min, sec );
-    }
-
-    std::vector<LIB_FIELD*> fields;
-    aSymbol->GetFields( fields );
-
-    // Mandatory fields:
-    // may have their own save policy so there is a separate loop for them.
-    // Empty fields are saved, because the user may have set visibility,
-    // size and orientation
-    for( int i = 0; i < MANDATORY_FIELDS; ++i )
-        saveField( fields[i], aFormatter );
-
-    // User defined fields:
-    // may have their own save policy so there is a separate loop for them.
-    int fieldId = MANDATORY_FIELDS;     // really wish this would go away.
-
-    for( unsigned i = MANDATORY_FIELDS; i < fields.size(); ++i )
-    {
-        // There is no need to save empty fields, i.e. no reason to preserve field
-        // names now that fields names come in dynamically through the template
-        // fieldnames.
-        if( !fields[i]->GetText().IsEmpty() )
-        {
-            fields[i]->SetId( fieldId++ );
-            saveField( fields[i], aFormatter );
-        }
-    }
-
-    // Save the alias list: a line starting by "ALIAS".
-    if( !aliasNames.IsEmpty() )
-    {
-        aFormatter.Print( 0, "ALIAS" );
-
-        for( unsigned i = 0; i < aliasNames.GetCount(); i++ )
-            aFormatter.Print( 0, " %s", TO_UTF8( aliasNames[i] ) );
-
-        aFormatter.Print( 0, "\n" );
-    }
-
-    wxArrayString footprints = aSymbol->GetFPFilters();
-
-    // Write the footprint filter list
-    if( footprints.GetCount() != 0 )
-    {
-        aFormatter.Print( 0, "$FPLIST\n" );
-
-        for( unsigned i = 0; i < footprints.GetCount(); i++ )
-            aFormatter.Print( 0, " %s\n", TO_UTF8( footprints[i] ) );
-
-        aFormatter.Print( 0, "$ENDFPLIST\n" );
-    }
-
-    // Save graphics items (including pins)
-    if( !aSymbol->GetDrawItems().empty() )
-    {
-        // Sort the draw items in order to editing a file editing by hand.
-        aSymbol->GetDrawItems().sort();
-
-        aFormatter.Print( 0, "DRAW\n" );
-
-        for( LIB_ITEM& item : aSymbol->GetDrawItems() )
-        {
-            switch( item.Type() )
-            {
-            default:
-            case LIB_FIELD_T:     /* Fields have already been saved above. */            break;
-            case LIB_ARC_T:       saveArc( (LIB_ARC*) &item, aFormatter );               break;
-            case LIB_BEZIER_T:    saveBezier( (LIB_BEZIER*) &item, aFormatter );         break;
-            case LIB_CIRCLE_T:    saveCircle( ( LIB_CIRCLE* ) &item, aFormatter );       break;
-            case LIB_PIN_T:       savePin( (LIB_PIN* ) &item, aFormatter );              break;
-            case LIB_POLYLINE_T:  savePolyLine( ( LIB_POLYLINE* ) &item, aFormatter );   break;
-            case LIB_RECTANGLE_T: saveRectangle( ( LIB_RECTANGLE* ) &item, aFormatter ); break;
-            case LIB_TEXT_T:      saveText( ( LIB_TEXT* ) &item, aFormatter );           break;
-            }
-        }
-
-        aFormatter.Print( 0, "ENDDRAW\n" );
-    }
-
-    aFormatter.Print( 0, "ENDDEF\n" );
-}
-
-
-void SCH_LEGACY_PLUGIN_CACHE::saveArc( LIB_ARC* aArc, OUTPUTFORMATTER& aFormatter )
-{
-    wxCHECK_RET( aArc && aArc->Type() == LIB_ARC_T, "Invalid LIB_ARC object." );
-
-    int x1;
-    int x2;
-
-    aArc->CalcAngles( x1, x2 );
-
-    if( x1 > 1800 )
-        x1 -= 3600;
-
-    if( x2 > 1800 )
-        x2 -= 3600;
-
-    aFormatter.Print( 0, "A %d %d %d %d %d %d %d %d %c %d %d %d %d\n",
-                      Iu2Mils( aArc->GetPosition().x ), Iu2Mils( aArc->GetPosition().y ),
-                      Iu2Mils( aArc->GetRadius() ), x1, x2, aArc->GetUnit(), aArc->GetConvert(),
-                      Iu2Mils( aArc->GetWidth() ), fill_tab[ (int) aArc->GetFillMode() ],
-                      Iu2Mils( aArc->GetStart().x ), Iu2Mils( aArc->GetStart().y ),
-                      Iu2Mils( aArc->GetEnd().x ), Iu2Mils( aArc->GetEnd().y ) );
-}
-
-
-void SCH_LEGACY_PLUGIN_CACHE::saveBezier( LIB_BEZIER* aBezier, OUTPUTFORMATTER& aFormatter )
-{
-    wxCHECK_RET( aBezier && aBezier->Type() == LIB_BEZIER_T, "Invalid LIB_BEZIER object." );
-
-    aFormatter.Print( 0, "B %u %d %d %d", (unsigned)aBezier->GetPoints().size(),
-                      aBezier->GetUnit(), aBezier->GetConvert(), Iu2Mils( aBezier->GetWidth() ) );
-
-    for( const wxPoint& pt : aBezier->GetPoints() )
-        aFormatter.Print( 0, " %d %d", Iu2Mils( pt.x ), Iu2Mils( pt.y ) );
-
-    aFormatter.Print( 0, " %c\n", fill_tab[static_cast<int>( aBezier->GetFillMode() )] );
-}
-
-
-void SCH_LEGACY_PLUGIN_CACHE::saveCircle( LIB_CIRCLE* aCircle, OUTPUTFORMATTER& aFormatter )
-{
-    wxCHECK_RET( aCircle && aCircle->Type() == LIB_CIRCLE_T, "Invalid LIB_CIRCLE object." );
-
-    aFormatter.Print( 0, "C %d %d %d %d %d %d %c\n",
-                      Iu2Mils( aCircle->GetPosition().x ), Iu2Mils( aCircle->GetPosition().y ),
-                      Iu2Mils( aCircle->GetRadius() ), aCircle->GetUnit(), aCircle->GetConvert(),
-                      Iu2Mils( aCircle->GetWidth() ),
-                               fill_tab[static_cast<int>( aCircle->GetFillMode() )] );
-}
-
-
-void SCH_LEGACY_PLUGIN_CACHE::saveField( const LIB_FIELD* aField, OUTPUTFORMATTER& aFormatter )
-{
-    wxCHECK_RET( aField && aField->Type() == LIB_FIELD_T, "Invalid LIB_FIELD object." );
-
-    int      hjustify, vjustify;
-    int      id = aField->GetId();
-    wxString text = aField->GetText();
-
-    hjustify = 'C';
-
-    if( aField->GetHorizJustify() == GR_TEXT_HJUSTIFY_LEFT )
-        hjustify = 'L';
-    else if( aField->GetHorizJustify() == GR_TEXT_HJUSTIFY_RIGHT )
-        hjustify = 'R';
-
-    vjustify = 'C';
-
-    if( aField->GetVertJustify() == GR_TEXT_VJUSTIFY_BOTTOM )
-        vjustify = 'B';
-    else if( aField->GetVertJustify() == GR_TEXT_VJUSTIFY_TOP )
-        vjustify = 'T';
-
-    aFormatter.Print( 0, "F%d %s %d %d %d %c %c %c %c%c%c",
-                      id,
-                      EscapedUTF8( text ).c_str(),       // wraps in quotes
-                      Iu2Mils( aField->GetTextPos().x ), Iu2Mils( aField->GetTextPos().y ),
-                      Iu2Mils( aField->GetTextWidth() ),
-                      aField->GetTextAngle() == 0 ? 'H' : 'V',
-                      aField->IsVisible() ? 'V' : 'I',
-                      hjustify, vjustify,
-                      aField->IsItalic() ? 'I' : 'N',
-                      aField->IsBold() ? 'B' : 'N' );
-
-    /* Save field name, if necessary
-     * Field name is saved only if it is not the default name.
-     * Just because default name depends on the language and can change from
-     * a country to another
-     */
-    wxString defName = TEMPLATE_FIELDNAME::GetDefaultFieldName( id );
-
-    if( id >= MANDATORY_FIELDS && !aField->m_name.IsEmpty() && aField->m_name != defName )
-        aFormatter.Print( 0, " %s", EscapedUTF8( aField->m_name ).c_str() );
-
-    aFormatter.Print( 0, "\n" );
-}
-
-
-void SCH_LEGACY_PLUGIN_CACHE::savePin( const LIB_PIN* aPin, OUTPUTFORMATTER& aFormatter )
-{
-    wxCHECK_RET( aPin && aPin->Type() == LIB_PIN_T, "Invalid LIB_PIN object." );
-
-    int      Etype;
-
-    switch( aPin->GetType() )
-    {
-    default:
-    case ELECTRICAL_PINTYPE::PT_INPUT:         Etype = 'I'; break;
-    case ELECTRICAL_PINTYPE::PT_OUTPUT:        Etype = 'O'; break;
-    case ELECTRICAL_PINTYPE::PT_BIDI:          Etype = 'B'; break;
-    case ELECTRICAL_PINTYPE::PT_TRISTATE:      Etype = 'T'; break;
-    case ELECTRICAL_PINTYPE::PT_PASSIVE:       Etype = 'P'; break;
-    case ELECTRICAL_PINTYPE::PT_UNSPECIFIED:   Etype = 'U'; break;
-    case ELECTRICAL_PINTYPE::PT_POWER_IN:      Etype = 'W'; break;
-    case ELECTRICAL_PINTYPE::PT_POWER_OUT:     Etype = 'w'; break;
-    case ELECTRICAL_PINTYPE::PT_OPENCOLLECTOR: Etype = 'C'; break;
-    case ELECTRICAL_PINTYPE::PT_OPENEMITTER:   Etype = 'E'; break;
-    case ELECTRICAL_PINTYPE::PT_NC:            Etype = 'N'; break;
-    }
-
-    if( !aPin->GetName().IsEmpty() )
-        aFormatter.Print( 0, "X %s", TO_UTF8( aPin->GetName() ) );
-    else
-        aFormatter.Print( 0, "X ~" );
-
-    aFormatter.Print( 0, " %s %d %d %d %c %d %d %d %d %c",
-                      aPin->GetNumber().IsEmpty() ? "~" : TO_UTF8( aPin->GetNumber() ),
-                      Iu2Mils( aPin->GetPosition().x ), Iu2Mils( aPin->GetPosition().y ),
-                      Iu2Mils( (int) aPin->GetLength() ), (int) aPin->GetOrientation(),
-                      Iu2Mils( aPin->GetNumberTextSize() ), Iu2Mils( aPin->GetNameTextSize() ),
-                      aPin->GetUnit(), aPin->GetConvert(), Etype );
-
-    if( aPin->GetShape() != GRAPHIC_PINSHAPE::LINE || !aPin->IsVisible() )
-        aFormatter.Print( 0, " " );
-
-    if( !aPin->IsVisible() )
-        aFormatter.Print( 0, "N" );
-
-    switch( aPin->GetShape() )
-    {
-    case GRAPHIC_PINSHAPE::LINE:                                            break;
-    case GRAPHIC_PINSHAPE::INVERTED:           aFormatter.Print( 0, "I" );  break;
-    case GRAPHIC_PINSHAPE::CLOCK:              aFormatter.Print( 0, "C" );  break;
-    case GRAPHIC_PINSHAPE::INVERTED_CLOCK:     aFormatter.Print( 0, "IC" ); break;
-    case GRAPHIC_PINSHAPE::INPUT_LOW:          aFormatter.Print( 0, "L" );  break;
-    case GRAPHIC_PINSHAPE::CLOCK_LOW:          aFormatter.Print( 0, "CL" ); break;
-    case GRAPHIC_PINSHAPE::OUTPUT_LOW:         aFormatter.Print( 0, "V" );  break;
-    case GRAPHIC_PINSHAPE::FALLING_EDGE_CLOCK: aFormatter.Print( 0, "F" );  break;
-    case GRAPHIC_PINSHAPE::NONLOGIC:           aFormatter.Print( 0, "X" );  break;
-    default:                                   wxFAIL_MSG( "Invalid pin shape" );
-    }
-
-    aFormatter.Print( 0, "\n" );
-
-    const_cast<LIB_PIN*>( aPin )->ClearFlags( IS_CHANGED );
-}
-
-
-void SCH_LEGACY_PLUGIN_CACHE::savePolyLine( LIB_POLYLINE* aPolyLine,
-                                            OUTPUTFORMATTER& aFormatter )
-{
-    wxCHECK_RET( aPolyLine && aPolyLine->Type() == LIB_POLYLINE_T, "Invalid LIB_POLYLINE object." );
-
-    int ccount = aPolyLine->GetCornerCount();
-
-    aFormatter.Print( 0, "P %d %d %d %d", ccount, aPolyLine->GetUnit(), aPolyLine->GetConvert(),
-                      Iu2Mils( aPolyLine->GetWidth() ) );
-
-    for( const auto& pt : aPolyLine->GetPolyPoints() )
-    {
-        aFormatter.Print( 0, " %d %d", Iu2Mils( pt.x ), Iu2Mils( pt.y ) );
-    }
-
-    aFormatter.Print( 0, " %c\n", fill_tab[static_cast<int>( aPolyLine->GetFillMode() )] );
-}
-
-
-void SCH_LEGACY_PLUGIN_CACHE::saveRectangle( LIB_RECTANGLE* aRectangle,
-                                             OUTPUTFORMATTER& aFormatter )
-{
-    wxCHECK_RET( aRectangle && aRectangle->Type() == LIB_RECTANGLE_T,
-                 "Invalid LIB_RECTANGLE object." );
-
-    aFormatter.Print( 0, "S %d %d %d %d %d %d %d %c\n",
-                      Iu2Mils( aRectangle->GetPosition().x ),
-                      Iu2Mils( aRectangle->GetPosition().y ),
-                      Iu2Mils( aRectangle->GetEnd().x ), Iu2Mils( aRectangle->GetEnd().y ),
-                      aRectangle->GetUnit(), aRectangle->GetConvert(),
-                      Iu2Mils( aRectangle->GetWidth() ),
-                      fill_tab[static_cast<int>( aRectangle->GetFillMode() )] );
-}
-
-
-void SCH_LEGACY_PLUGIN_CACHE::saveText( const LIB_TEXT* aText, OUTPUTFORMATTER& aFormatter )
-{
-    wxCHECK_RET( aText && aText->Type() == LIB_TEXT_T, "Invalid LIB_TEXT object." );
-
-    wxString text = aText->GetText();
-
-    if( text.Contains( wxT( " " ) ) || text.Contains( wxT( "~" ) ) || text.Contains( wxT( "\"" ) ) )
-    {
-        // convert double quote to similar-looking two apostrophes
-        text.Replace( wxT( "\"" ), wxT( "''" ) );
-        text = wxT( "\"" ) + text + wxT( "\"" );
-    }
-
-    aFormatter.Print( 0, "T %g %d %d %d %d %d %d %s", aText->GetTextAngle(),
-                      Iu2Mils( aText->GetTextPos().x ), Iu2Mils( aText->GetTextPos().y ),
-                      Iu2Mils( aText->GetTextWidth() ), !aText->IsVisible(),
-                      aText->GetUnit(), aText->GetConvert(), TO_UTF8( text ) );
-
-    aFormatter.Print( 0, " %s %d", aText->IsItalic() ? "Italic" : "Normal", aText->IsBold() );
-
-    char hjustify = 'C';
-
-    if( aText->GetHorizJustify() == GR_TEXT_HJUSTIFY_LEFT )
-        hjustify = 'L';
-    else if( aText->GetHorizJustify() == GR_TEXT_HJUSTIFY_RIGHT )
-        hjustify = 'R';
-
-    char vjustify = 'C';
-
-    if( aText->GetVertJustify() == GR_TEXT_VJUSTIFY_BOTTOM )
-        vjustify = 'B';
-    else if( aText->GetVertJustify() == GR_TEXT_VJUSTIFY_TOP )
-        vjustify = 'T';
-
-    aFormatter.Print( 0, " %c %c\n", hjustify, vjustify );
+    wxFAIL_MSG( "Writing of legacy format no longer supported." );
 }
 
 
 void SCH_LEGACY_PLUGIN_CACHE::saveDocFile()
 {
-    wxFileName fileName = m_libFileName;
-
-    fileName.SetExt( DOC_EXT );
-    FILE_OUTPUTFORMATTER formatter( fileName.GetFullPath() );
-
-    formatter.Print( 0, "%s\n", DOCFILE_IDENT );
-
-    for( LIB_SYMBOL_MAP::iterator it = m_symbols.begin();  it != m_symbols.end();  ++it )
-    {
-        wxString description =  it->second->GetDescription();
-        wxString keyWords = it->second->GetKeyWords();
-        wxString docFileName = it->second->GetDatasheetField().GetText();
-
-        if( description.IsEmpty() && keyWords.IsEmpty() && docFileName.IsEmpty() )
-            continue;
-
-        formatter.Print( 0, "#\n$CMP %s\n", TO_UTF8( it->second->GetName() ) );
-
-        if( !description.IsEmpty() )
-            formatter.Print( 0, "D %s\n", TO_UTF8( description ) );
-
-        if( !keyWords.IsEmpty() )
-            formatter.Print( 0, "K %s\n", TO_UTF8( keyWords ) );
-
-        if( !docFileName.IsEmpty() )
-            formatter.Print( 0, "F %s\n", TO_UTF8( docFileName ) );
-
-        formatter.Print( 0, "$ENDCMP\n" );
-    }
-
-    formatter.Print( 0, "#\n#End Doc Library\n" );
+    wxFAIL_MSG( "Writing of legacy format no longer supported." );
 }
 
 

@@ -32,9 +32,8 @@
 #include <transform.h>
 #include <symbol_library.h>
 #include <lib_pin.h>
-#include <lib_arc.h>
 #include <settings/color_settings.h>
-
+#include <lib_shape.h>
 
 // the separator char between the subpart id and the reference
 // 0 (no separator) or '.' or some other character
@@ -475,7 +474,7 @@ wxString LIB_SYMBOL::SubReference( int aUnit, bool aAddSeparator )
 
 
 void LIB_SYMBOL::Print( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset,
-                        int aMulti, int aConvert, const LIB_SYMBOL_OPTIONS& aOpts )
+                        int aUnit, int aConvert, const LIB_SYMBOL_OPTIONS& aOpts )
 {
     /* draw background for filled items using background option
      * Solid lines will be drawn after the background
@@ -483,39 +482,37 @@ void LIB_SYMBOL::Print( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset
      */
     if( !GetGRForceBlackPenState() )
     {
-        for( LIB_ITEM& drawItem : m_drawings )
+        for( LIB_ITEM& item : m_drawings )
         {
-            if( drawItem.m_fill != FILL_TYPE::FILLED_WITH_BG_BODYCOLOR )
-                continue;
+            if( item.Type() == LIB_SHAPE_T )
+            {
+                LIB_SHAPE& shape = static_cast<LIB_SHAPE&>( item );
 
-            // Do not draw items not attached to the current part
-            if( aMulti && drawItem.m_unit && ( drawItem.m_unit != aMulti ) )
-                continue;
+                // Do not draw items not attached to the current part
+                if( aUnit && shape.m_unit && ( shape.m_unit != aUnit ) )
+                    continue;
 
-            if( aConvert && drawItem.m_convert && ( drawItem.m_convert != aConvert ) )
-                continue;
+                if( aConvert && shape.m_convert && ( shape.m_convert != aConvert ) )
+                    continue;
 
-            if( drawItem.Type() == LIB_FIELD_T )
-                continue;
-
-            // Now, draw only the background for items with
-            // m_fill == FILLED_WITH_BG_BODYCOLOR:
-            drawItem.Print( aSettings, aOffset, (void*) false, aOpts.transform );
+                if( shape.GetFillType() == FILL_T::FILLED_WITH_BG_BODYCOLOR )
+                    shape.Print( aSettings, aOffset, (void*) false, aOpts.transform );
+            }
         }
     }
 
-    for( LIB_ITEM& drawItem : m_drawings )
+    for( LIB_ITEM& item : m_drawings )
     {
         // Do not draw items not attached to the current part
-        if( aMulti && drawItem.m_unit && ( drawItem.m_unit != aMulti ) )
+        if( aUnit && item.m_unit && ( item.m_unit != aUnit ) )
             continue;
 
-        if( aConvert && drawItem.m_convert && ( drawItem.m_convert != aConvert ) )
+        if( aConvert && item.m_convert && ( item.m_convert != aConvert ) )
             continue;
 
-        if( drawItem.Type() == LIB_FIELD_T )
+        if( item.Type() == LIB_FIELD_T )
         {
-            LIB_FIELD& field = static_cast<LIB_FIELD&>( drawItem );
+            LIB_FIELD& field = static_cast<LIB_FIELD&>( item );
 
             if( field.IsVisible() && !aOpts.draw_visible_fields )
                 continue;
@@ -524,18 +521,24 @@ void LIB_SYMBOL::Print( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset
                 continue;
         }
 
-        if( drawItem.Type() == LIB_PIN_T )
+        if( item.Type() == LIB_PIN_T )
         {
-            drawItem.Print( aSettings, aOffset, (void*) &aOpts, aOpts.transform );
+            item.Print( aSettings, aOffset, (void*) &aOpts, aOpts.transform );
         }
-        else if( drawItem.Type() == LIB_FIELD_T )
+        else if( item.Type() == LIB_FIELD_T )
         {
-            drawItem.Print( aSettings, aOffset, (void*) nullptr, aOpts.transform );
+            item.Print( aSettings, aOffset, (void*) NULL, aOpts.transform );
+        }
+        else if( item.Type() == LIB_SHAPE_T )
+        {
+            LIB_SHAPE& shape = static_cast<LIB_SHAPE&>( item );
+            bool       forceNoFill = shape.GetFillType() == FILL_T::FILLED_WITH_BG_BODYCOLOR;
+
+            shape.Print( aSettings, aOffset, (void*) forceNoFill, aOpts.transform );
         }
         else
         {
-            bool forceNoFill = drawItem.m_fill == FILL_TYPE::FILLED_WITH_BG_BODYCOLOR;
-            drawItem.Print( aSettings, aOffset, (void*) forceNoFill, aOpts.transform );
+            item.Print( aSettings, aOffset, (void*) false, aOpts.transform );
         }
     }
 }
@@ -553,6 +556,26 @@ void LIB_SYMBOL::Plot( PLOTTER* aPlotter, int aUnit, int aConvert, const wxPoint
     // Solid lines will be drawn after the background
     for( const LIB_ITEM& item : m_drawings )
     {
+        if( item.Type() == LIB_SHAPE_T )
+        {
+            const LIB_SHAPE& shape = static_cast<const LIB_SHAPE&>( item );
+
+            // Do not draw items not attached to the current part
+            if( aUnit && shape.m_unit && ( shape.m_unit != aUnit ) )
+                continue;
+
+            if( aConvert && shape.m_convert && ( shape.m_convert != aConvert ) )
+                continue;
+
+            if( shape.GetFillType() == FILL_T::FILLED_WITH_BG_BODYCOLOR )
+                shape.Plot( aPlotter, aOffset, fill, aTransform );
+        }
+    }
+
+    // Not filled items and filled shapes are now plotted
+    // Items that have BG fills only get re-stroked to ensure the edges are in the foreground
+    for( const LIB_ITEM& item : m_drawings )
+    {
         // Lib Fields are not plotted here, because this plot function
         // is used to plot schematic items, which have they own fields
         if( item.Type() == LIB_FIELD_T )
@@ -564,25 +587,15 @@ void LIB_SYMBOL::Plot( PLOTTER* aPlotter, int aUnit, int aConvert, const wxPoint
         if( aConvert && item.m_convert && ( item.m_convert != aConvert ) )
             continue;
 
-        if( item.m_fill == FILL_TYPE::FILLED_WITH_BG_BODYCOLOR )
-            item.Plot( aPlotter, aOffset, fill, aTransform );
-    }
+        bool forceNoFill = false;
 
-    // Not filled items and filled shapes are now plotted
-    // Items that have BG fills only get re-stroked to ensure the edges are in the foreground
-    for( const LIB_ITEM& item : m_drawings )
-    {
-        if( item.Type() == LIB_FIELD_T )
-            continue;
+        if( item.Type() == LIB_SHAPE_T )
+        {
+            const LIB_SHAPE& shape = static_cast<const LIB_SHAPE&>( item );
+            forceNoFill = shape.GetFillType() == FILL_T::FILLED_WITH_BG_BODYCOLOR;
+        }
 
-        if( aUnit && item.m_unit && ( item.m_unit != aUnit ) )
-            continue;
-
-        if( aConvert && item.m_convert && ( item.m_convert != aConvert ) )
-            continue;
-
-        item.Plot( aPlotter, aOffset,
-                   fill && ( item.m_fill != FILL_TYPE::FILLED_WITH_BG_BODYCOLOR ), aTransform );
+        item.Plot( aPlotter, aOffset, fill && !forceNoFill, aTransform );
     }
 }
 

@@ -177,14 +177,10 @@ set( EESCHEMA_SRCS
     generate_alias_info.cpp
     getpart.cpp
     hierarch.cpp
-    lib_arc.cpp
-    lib_bezier.cpp
-    lib_circle.cpp
+    lib_shape.cpp
     lib_item.cpp
     lib_field.cpp
     lib_pin.cpp
-    lib_polyline.cpp
-    lib_rectangle.cpp
     lib_symbol.cpp
     lib_text.cpp
     symbol_viewer_frame.cpp
@@ -274,6 +270,7 @@ set( EESCHEMA_COMMON_SRCS
     ${CMAKE_SOURCE_DIR}/common/base_screen.cpp
     ${CMAKE_SOURCE_DIR}/common/base_units.cpp
     ${CMAKE_SOURCE_DIR}/common/eda_text.cpp
+    ${CMAKE_SOURCE_DIR}/common/eda_shape.cpp
     ${CMAKE_SOURCE_DIR}/common/page_info.cpp
     )
 

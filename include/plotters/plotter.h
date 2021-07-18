@@ -31,7 +31,7 @@
 #ifndef PLOT_COMMON_H_
 #define PLOT_COMMON_H_
 
-#include <fill_type.h>
+#include <eda_shape.h>
 #include <vector>
 #include <math/box2.h>
 #include <gr_text.h>
@@ -228,16 +228,16 @@ public:
     int GetPlotterArcHighDef() const { return m_IUsPerDecimil * 2; }
 
     // Low level primitives
-    virtual void Rect( const wxPoint& p1, const wxPoint& p2, FILL_TYPE fill,
+    virtual void Rect( const wxPoint& p1, const wxPoint& p2, FILL_T fill,
                        int width = USE_DEFAULT_LINE_WIDTH ) = 0;
-    virtual void Circle( const wxPoint& pos, int diametre, FILL_TYPE fill,
+    virtual void Circle( const wxPoint& pos, int diametre, FILL_T fill,
                          int width = USE_DEFAULT_LINE_WIDTH ) = 0;
 
     /**
      * Generic fallback: arc rendered as a polyline.
      */
-    virtual void Arc( const wxPoint& centre, double StAngle, double EndAngle,
-                      int rayon, FILL_TYPE fill, int width = USE_DEFAULT_LINE_WIDTH );
+    virtual void Arc( const wxPoint& centre, double StAngle, double EndAngle, int rayon,
+                      FILL_T fill, int width = USE_DEFAULT_LINE_WIDTH );
     virtual void Arc(  const SHAPE_ARC& aArc );
 
     /**
@@ -290,7 +290,7 @@ public:
      * @param aWidth is the line width.
      * @param aData is an auxiliary info (mainly for gerber format).
      */
-    virtual void PlotPoly( const std::vector< wxPoint >& aCornerList, FILL_TYPE aFill,
+    virtual void PlotPoly( const std::vector< wxPoint >& aCornerList, FILL_T aFill,
                            int aWidth = USE_DEFAULT_LINE_WIDTH, void* aData = nullptr ) = 0;
 
     /**
@@ -301,7 +301,7 @@ public:
      * @param aWidth is the line width.
      * @param aData is an auxiliary info (mainly for gerber format).
      */
-    virtual void PlotPoly( const SHAPE_LINE_CHAIN& aCornerList, FILL_TYPE aFill,
+    virtual void PlotPoly( const SHAPE_LINE_CHAIN& aCornerList, FILL_T aFill,
                            int aWidth = USE_DEFAULT_LINE_WIDTH, void* aData = nullptr );
 
     /**

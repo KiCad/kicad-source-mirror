@@ -22,6 +22,7 @@
  */
 
 #include <common.h>
+#include <math_for_graphics.h>
 #include <board_design_settings.h>
 #include <footprint.h>
 #include <pcb_shape.h>

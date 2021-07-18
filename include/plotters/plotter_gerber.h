@@ -65,12 +65,12 @@ public:
                               double aScale, bool aMirror ) override;
 
     // Basic plot primitives
-    virtual void Rect( const wxPoint& p1, const wxPoint& p2, FILL_TYPE fill,
+    virtual void Rect( const wxPoint& p1, const wxPoint& p2, FILL_T fill,
                        int width = USE_DEFAULT_LINE_WIDTH ) override;
-    virtual void Circle( const wxPoint& pos, int diametre, FILL_TYPE fill,
+    virtual void Circle( const wxPoint& pos, int diametre, FILL_T fill,
                          int width = USE_DEFAULT_LINE_WIDTH ) override;
-    virtual void Arc( const wxPoint& aCenter, double aStAngle, double aEndAngle,
-                      int aRadius, FILL_TYPE aFill, int aWidth = USE_DEFAULT_LINE_WIDTH ) override;
+    virtual void Arc( const wxPoint& aCenter, double aStAngle, double aEndAngle, int aRadius,
+                      FILL_T aFill, int aWidth = USE_DEFAULT_LINE_WIDTH ) override;
 
     virtual void Arc( const SHAPE_ARC& aArc ) override;
 
@@ -91,10 +91,10 @@ public:
      * Gerber polygon: they can (and *should*) be filled with the
      * appropriate G36/G37 sequence
      */
-    virtual void PlotPoly( const std::vector< wxPoint >& aCornerList, FILL_TYPE aFill,
+    virtual void PlotPoly( const std::vector< wxPoint >& aCornerList, FILL_T aFill,
                            int aWidth = USE_DEFAULT_LINE_WIDTH, void* aData = nullptr ) override;
 
-    virtual void PlotPoly( const SHAPE_LINE_CHAIN& aCornerList, FILL_TYPE aFill,
+    virtual void PlotPoly( const SHAPE_LINE_CHAIN& aCornerList, FILL_T aFill,
                            int aWidth = USE_DEFAULT_LINE_WIDTH, void* aData = nullptr ) override;
 
     virtual void PenTo( const wxPoint& pos, char plume ) override;

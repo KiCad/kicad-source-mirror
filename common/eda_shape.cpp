@@ -35,12 +35,11 @@
 #include <eda_shape.h>
 
 
-EDA_SHAPE::EDA_SHAPE( SHAPE_T aType, int aDefaultLineWidth ) :
+EDA_SHAPE::EDA_SHAPE( SHAPE_T aType, int aLineWidth, FILL_T aFill ) :
     m_shape( aType ),
-    m_width( aDefaultLineWidth )
+    m_width( aLineWidth ),
+    m_fill( aFill )
 {
-    m_arcAngle = 0;
-    m_filled = false;
 }
 
 
@@ -173,9 +172,6 @@ void EDA_SHAPE::scale( double aScale )
                        pt.y = KiROUND( pt.y * aScale );
                    };
 
-    int radius = GetRadius();
-
-    // specific parameters:
     switch( m_shape )
     {
     case SHAPE_T::ARC:
@@ -188,7 +184,7 @@ void EDA_SHAPE::scale( double aScale )
 
     case SHAPE_T::CIRCLE: //  ring or circle
         scalePt( m_start );
-        m_end.x = m_start.x + KiROUND( radius * aScale );
+        m_end.x = m_start.x + KiROUND( GetRadius() * aScale );
         m_end.y = m_start.y;
         break;
 
@@ -224,10 +220,13 @@ void EDA_SHAPE::rotate( const wxPoint& aRotCentre, double aAngle )
 {
     switch( m_shape )
     {
-    case SHAPE_T::ARC:
     case SHAPE_T::SEGMENT:
     case SHAPE_T::CIRCLE:
-        // these can all be done by just rotating the constituent points
+        RotatePoint( &m_start, aRotCentre, aAngle );
+        RotatePoint( &m_end, aRotCentre, aAngle );
+        break;
+
+    case SHAPE_T::ARC:
         RotatePoint( &m_start, aRotCentre, aAngle );
         RotatePoint( &m_end, aRotCentre, aAngle );
         RotatePoint( &m_arcCenter, aRotCentre, aAngle );
@@ -280,20 +279,48 @@ void EDA_SHAPE::flip( const wxPoint& aCentre, bool aFlipLeftRight )
     {
     case SHAPE_T::SEGMENT:
     case SHAPE_T::RECT:
+        if( aFlipLeftRight )
+        {
+            m_start.x = aCentre.x - ( m_start.x - aCentre.x );
+            m_end.x   = aCentre.x - ( m_end.x - aCentre.x );
+        }
+        else
+        {
+            m_start.y = aCentre.y - ( m_start.y - aCentre.y );
+            m_end.y   = aCentre.y - ( m_end.y - aCentre.y );
+        }
+
+        std::swap( m_start, m_end );
+        break;
+
     case SHAPE_T::CIRCLE:
+        if( aFlipLeftRight )
+        {
+            m_start.x = aCentre.x - ( m_start.x - aCentre.x );
+            m_end.x   = aCentre.x - ( m_end.x - aCentre.x );
+        }
+        else
+        {
+            m_start.y = aCentre.y - ( m_start.y - aCentre.y );
+            m_end.y   = aCentre.y - ( m_end.y - aCentre.y );
+        }
+        break;
+
     case SHAPE_T::ARC:
         if( aFlipLeftRight )
         {
-            m_start.x      = aCentre.x - ( m_start.x - aCentre.x );
-            m_end.x        = aCentre.x - ( m_end.x - aCentre.x );
+            m_start.x     = aCentre.x - ( m_start.x - aCentre.x );
+            m_end.x       = aCentre.x - ( m_end.x - aCentre.x );
             m_arcCenter.x = aCentre.x - ( m_arcCenter.x - aCentre.x );
         }
         else
         {
-            m_start.y      = aCentre.y - ( m_start.y - aCentre.y );
-            m_end.y        = aCentre.y - ( m_end.y - aCentre.y );
+            m_start.y     = aCentre.y - ( m_start.y - aCentre.y );
+            m_end.y       = aCentre.y - ( m_end.y - aCentre.y );
             m_arcCenter.y = aCentre.y - ( m_arcCenter.y - aCentre.y );
         }
+
+        std::swap( m_start, m_end );
         break;
 
     case SHAPE_T::POLY:
@@ -301,7 +328,6 @@ void EDA_SHAPE::flip( const wxPoint& aCentre, bool aFlipLeftRight )
         break;
 
     case SHAPE_T::BEZIER:
-    {
         if( aFlipLeftRight )
         {
             m_start.x    = aCentre.x - ( m_start.x - aCentre.x );
@@ -318,10 +344,11 @@ void EDA_SHAPE::flip( const wxPoint& aCentre, bool aFlipLeftRight )
         }
 
         // Rebuild the poly points shape
-        std::vector<wxPoint> ctrlPoints = { m_start, m_bezierC1, m_bezierC2, m_end };
-        BEZIER_POLY converter( ctrlPoints );
-        converter.GetPoly( m_bezierPoints, m_width );
-    }
+        {
+            std::vector<wxPoint> ctrlPoints = { m_start, m_bezierC1, m_bezierC2, m_end };
+            BEZIER_POLY converter( ctrlPoints );
+            converter.GetPoly( m_bezierPoints, m_width );
+        }
         break;
 
     default:
@@ -512,17 +539,17 @@ void EDA_SHAPE::ShapeGetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PA
     case SHAPE_T::CIRCLE:
         aList.emplace_back( shape, _( "Circle" ) );
 
-        msg = MessageTextFromValue( units, GetLineLength( GetStart(), GetEnd() ) );
+        msg = MessageTextFromValue( units, GetRadius() );
         aList.emplace_back( _( "Radius" ), msg );
         break;
 
     case SHAPE_T::ARC:
         aList.emplace_back( shape, _( "Arc" ) );
 
-        msg.Printf( wxT( "%.1f" ), m_arcAngle / 10.0 );
+        msg.Printf( wxT( "%.1f" ), GetArcAngle() / 10.0 );
         aList.emplace_back( _( "Angle" ), msg );
 
-        msg = MessageTextFromValue( units, GetLineLength( getCenter(), GetStart() ) );
+        msg = MessageTextFromValue( units, GetRadius() );
         aList.emplace_back( _( "Radius" ), msg );
         break;
 
@@ -636,7 +663,10 @@ const EDA_RECT EDA_SHAPE::getBoundingBox() const
 
 bool EDA_SHAPE::hitTest( const wxPoint& aPosition, int aAccuracy ) const
 {
-    int maxdist = aAccuracy + ( m_width / 2 );
+    int maxdist = aAccuracy;
+
+    if( m_width > 0 )
+        maxdist += m_width / 2;
 
     switch( m_shape )
     {
@@ -666,6 +696,7 @@ bool EDA_SHAPE::hitTest( const wxPoint& aPosition, int aAccuracy ) const
             // this relative arc should be < arc angle if arc angle > 0 (CW arc)
             // and > arc angle if arc angle < 0 (CCW arc)
             double arc_angle_start = GetArcAngleStart();    // Always 0.0 ... 360 deg, in 0.1 deg
+            double arc_swept_angle = GetArcAngleEnd() - arc_angle_start;
 
             double arc_hittest = ArcTangente( relPos.y, relPos.x );
 
@@ -677,10 +708,10 @@ bool EDA_SHAPE::hitTest( const wxPoint& aPosition, int aAccuracy ) const
 
             // Check angle: inside the arc angle when it is > 0 and outside the not drawn arc when
             // it is < 0
-            if( GetArcAngle() >= 0.0 )
-                return arc_hittest <= GetArcAngle();
+            if( arc_swept_angle >= 0.0 )
+                return arc_hittest <= arc_swept_angle;
             else
-                return arc_hittest >= ( 3600.0 + GetArcAngle() );
+                return arc_hittest >= ( 3600.0 + arc_swept_angle );
         }
         else
         {
@@ -735,7 +766,7 @@ bool EDA_SHAPE::hitTest( const wxPoint& aPosition, int aAccuracy ) const
         }
 
     default:
-        wxFAIL_MSG( "EDA_SHAPE::hitTest(point) not implemented for " + SHAPE_T_asString() );
+        UNIMPLEMENTED_FOR( SHAPE_T_asString() );
         return false;
     }
 }
@@ -841,24 +872,36 @@ bool EDA_SHAPE::hitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy )
             if( getParentOrientation() )
                 orientation = -DECIDEG2RAD( getParentOrientation() );
 
-            SHAPE_POLY_SET poly{ m_poly };
+            SHAPE_LINE_CHAIN poly = m_poly.Outline( 0 );
             poly.Rotate( orientation );
             poly.Move( offset );
 
-            int count = poly.TotalVertices();
+            int count = poly.GetPointCount();
 
             for( int ii = 0; ii < count; ii++ )
             {
-                VECTOR2I vertex = poly.CVertex( ii );
-                VECTOR2I vertexNext = poly.CVertex( ( ii + 1 ) % count );
+                VECTOR2I vertex = poly.GetPoint( ii );
 
                 // Test if the point is within aRect
                 if( arect.Contains( ( wxPoint ) vertex ) )
                     return true;
 
-                // Test if this edge intersects aRect
-                if( arect.Intersects( ( wxPoint ) vertex, ( wxPoint ) vertexNext ) )
-                    return true;
+                if( ii + 1 < count )
+                {
+                    VECTOR2I vertexNext = poly.GetPoint( ii + 1 );
+
+                    // Test if this edge intersects aRect
+                    if( arect.Intersects( ( wxPoint ) vertex, ( wxPoint ) vertexNext ) )
+                        return true;
+                }
+                else if( poly.IsClosed() )
+                {
+                    VECTOR2I vertexNext = poly.GetPoint( 0 );
+
+                    // Test if this edge intersects aRect
+                    if( arect.Intersects( ( wxPoint ) vertex, ( wxPoint ) vertexNext ) )
+                        return true;
+                }
             }
 
             return false;
@@ -1170,13 +1213,13 @@ void EDA_SHAPE::SwapShape( EDA_SHAPE* aImage )
 
 int EDA_SHAPE::Compare( const EDA_SHAPE* aOther ) const
 {
-#define TEST( a, b ) { if( a != b ) return a < b; }
+#define TEST( a, b ) { if( a != b ) return a - b; }
 #define TEST_PT( a, b ) { TEST( a.x, b.x ); TEST( a.y, b.y ); }
 
     TEST_PT( m_start, aOther->m_start );
     TEST_PT( m_end, aOther->m_end );
 
-    TEST( m_shape, aOther->m_shape );
+    TEST( (int) m_shape, (int) aOther->m_shape );
 
     if( m_shape == SHAPE_T::ARC )
     {
@@ -1190,15 +1233,13 @@ int EDA_SHAPE::Compare( const EDA_SHAPE* aOther ) const
     else if( m_shape == SHAPE_T::POLY )
     {
         TEST( m_poly.TotalVertices(), aOther->m_poly.TotalVertices() );
+
+        for( int ii = 0; ii < m_poly.TotalVertices(); ++ii )
+            TEST_PT( m_poly.CVertex( ii ), aOther->m_poly.CVertex( ii ) );
     }
 
-    for( size_t ii = 0; ii < m_bezierPoints.size(); ++ii )
-        TEST_PT( m_bezierPoints[ii], aOther->m_bezierPoints[ii] );
-
-    for( int ii = 0; ii < m_poly.TotalVertices(); ++ii )
-        TEST_PT( m_poly.CVertex( ii ), aOther->m_poly.CVertex( ii ) );
-
     TEST( m_width, aOther->m_width );
+    TEST( (int) m_fill, (int) aOther->m_fill );
 
     return 0;
 }

@@ -235,7 +235,7 @@ void SCH_JUNCTION::Plot( PLOTTER* aPlotter ) const
 
     aPlotter->SetColor( color );
 
-    aPlotter->Circle( m_pos, GetEffectiveDiameter(), FILL_TYPE::FILLED_SHAPE );
+    aPlotter->Circle( m_pos, GetEffectiveDiameter(), FILL_T::FILLED_SHAPE );
 }
 
 

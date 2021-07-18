@@ -228,22 +228,22 @@ TOOL_ACTION EE_ACTIONS::placeSymbolText( "eeschema.SymbolDrawing.placeSymbolText
 TOOL_ACTION EE_ACTIONS::drawSymbolRectangle( "eeschema.SymbolDrawing.drawSymbolRectangle",
         AS_GLOBAL, 0, "",
         _( "Add Rectangle" ), _( "Add a rectangle" ),
-        BITMAPS::add_rectangle, AF_ACTIVATE, (void*) LIB_RECTANGLE_T );
+        BITMAPS::add_rectangle, AF_ACTIVATE, (void*) SHAPE_T::RECT );
 
 TOOL_ACTION EE_ACTIONS::drawSymbolCircle( "eeschema.SymbolDrawing.drawSymbolCircle",
         AS_GLOBAL, 0, "",
         _( "Add Circle" ), _( "Add a circle" ),
-        BITMAPS::add_circle, AF_ACTIVATE, (void*) LIB_CIRCLE_T );
+        BITMAPS::add_circle, AF_ACTIVATE, (void*) SHAPE_T::CIRCLE );
 
 TOOL_ACTION EE_ACTIONS::drawSymbolArc( "eeschema.SymbolDrawing.drawSymbolArc",
         AS_GLOBAL, 0, "",
         _( "Add Arc" ), _( "Add an arc" ),
-        BITMAPS::add_arc, AF_ACTIVATE, (void*) LIB_ARC_T );
+        BITMAPS::add_arc, AF_ACTIVATE, (void*) SHAPE_T::ARC );
 
 TOOL_ACTION EE_ACTIONS::drawSymbolLines( "eeschema.SymbolDrawing.drawSymbolLines",
         AS_GLOBAL, 0, "",
         _( "Add Lines" ), _( "Add connected graphic lines" ),
-        BITMAPS::add_graphical_segments, AF_ACTIVATE, (void*) LIB_POLYLINE_T );
+        BITMAPS::add_graphical_segments, AF_ACTIVATE, (void*) SHAPE_T::POLY );
 
 TOOL_ACTION EE_ACTIONS::placeSymbolAnchor( "eeschema.SymbolDrawing.placeSymbolAnchor",
         AS_GLOBAL, 0, "",

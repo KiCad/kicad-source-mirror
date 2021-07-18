@@ -985,13 +985,13 @@ void SCH_SHEET::Plot( PLOTTER* aPlotter ) const
     if( fill )
     {
         aPlotter->SetColor( backgroundColor );
-        aPlotter->Rect( m_pos, m_pos + m_size, FILL_TYPE::FILLED_SHAPE, 1 );
+        aPlotter->Rect( m_pos, m_pos + m_size, FILL_T::FILLED_SHAPE, 1 );
     }
 
     aPlotter->SetColor( borderColor );
 
     int penWidth = std::max( GetPenWidth(), aPlotter->RenderSettings()->GetMinPenWidth() );
-    aPlotter->Rect( m_pos, m_pos + m_size, FILL_TYPE::NO_FILL, penWidth );
+    aPlotter->Rect( m_pos, m_pos + m_size, FILL_T::NO_FILL, penWidth );
 
     // Plot sheet pins
     for( SCH_SHEET_PIN* sheetPin : m_pins )

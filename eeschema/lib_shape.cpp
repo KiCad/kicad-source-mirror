@@ -23,7 +23,8 @@
  */
 
 #include <sch_draw_panel.h>
-#include <plotter.h>
+#include <plotters/plotter.h>
+#include <macros.h>
 #include <base_units.h>
 #include <widgets/msgpanel.h>
 #include <bitmaps.h>
@@ -37,6 +38,7 @@ LIB_SHAPE::LIB_SHAPE( LIB_SYMBOL* aParent, SHAPE_T aShape, int aDefaultLineWidth
     LIB_ITEM( LIB_SHAPE_T, aParent ),
     EDA_SHAPE( aShape, aDefaultLineWidth, aFillType )
 {
+    m_editState = 0;
 }
 
 
@@ -54,7 +56,7 @@ bool LIB_SHAPE::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy )
     if( m_flags & (STRUCT_DELETED | SKIP_STRUCT ) )
         return false;
 
-    return hitTest( aRect, aContained, aAccuracy );
+    return hitTest( DefaultTransform.TransformCoordinate( aRect ), aContained, aAccuracy );
 }
 
 
@@ -115,19 +117,20 @@ void LIB_SHAPE::Plot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
     wxPoint center;
     int     startAngle;
     int     endAngle;
-    int     pen_size = GetPenWidth();
-    FILL_T fill = aFill ? m_fill : FILL_TYPE::NO_FILL;
+    int     pen_size = GetEffectivePenWidth( aPlotter->RenderSettings() );
+    FILL_T fill = aFill ? m_fill : FILL_T::NO_FILL;
 
     static std::vector<wxPoint> cornerList;
 
-    if( GetShape() == SHAPE_T::POLYGON )
+    if( GetShape() == SHAPE_T::POLY )
     {
+        const SHAPE_LINE_CHAIN& poly = m_poly.Outline( 0 );
         cornerList.clear();
 
-        for( const VECTOR2I& pt : m_poly.Outline( 0 ).CPoints() )
+        for( const VECTOR2I& pt : poly.CPoints() )
             cornerList.push_back( aTransform.TransformCoordinate( (wxPoint) pt ) + aOffset );
     }
-    else if( GetShape() == SHAPE_T::CURVE )
+    else if( GetShape() == SHAPE_T::BEZIER )
     {
         cornerList.clear();
 
@@ -137,8 +140,8 @@ void LIB_SHAPE::Plot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
     else if( GetShape() == SHAPE_T::ARC )
     {
         center = aTransform.TransformCoordinate( getCenter() ) + aOffset;
-        startAngle = GetArcAngleStart();
-        endAngle = GetArcAngleEnd();
+
+        CalcArcAngles( startAngle, endAngle );
         aTransform.MapAngles( &startAngle, &endAngle );
     }
 
@@ -160,13 +163,13 @@ void LIB_SHAPE::Plot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
             aPlotter->Rect( start, end, fill, 0 );
             break;
 
-        case SHAPE_T::POLYGON:
-        case SHAPE_T::CURVE:
+        case SHAPE_T::POLY:
+        case SHAPE_T::BEZIER:
             aPlotter->PlotPoly( cornerList, fill, 0 );
             break;
 
         default:
-            wxFAIL_MSG( "LIB_SHAPE::Plot not implemented for " + SHAPE_T_asString() );
+            UNIMPLEMENTED_FOR( SHAPE_T_asString() );
         }
 
         if( pen_size <= 0 )
@@ -174,8 +177,6 @@ void LIB_SHAPE::Plot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
         else
             fill = FILL_T::NO_FILL;
     }
-
-    pen_size = std::max( pen_size, aPlotter->RenderSettings()->GetMinPenWidth() );
 
     aPlotter->SetColor( aPlotter->RenderSettings()->GetLayerColor( LAYER_DEVICE ) );
 
@@ -193,24 +194,20 @@ void LIB_SHAPE::Plot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
         aPlotter->Rect( start, end, fill, pen_size );
         break;
 
-    case SHAPE_T::POLYGON:
-    case SHAPE_T::CURVE:
+    case SHAPE_T::POLY:
+    case SHAPE_T::BEZIER:
         aPlotter->PlotPoly( cornerList, fill, pen_size );
         break;
 
     default:
-        wxFAIL_MSG( "LIB_SHAPE::Plot not implemented for " + SHAPE_T_asString() );
+        UNIMPLEMENTED_FOR( SHAPE_T_asString() );
     }
 }
 
 
 int LIB_SHAPE::GetPenWidth() const
 {
-    // Historically 0 meant "default width" and negative numbers meant "don't stroke".
-    if( GetWidth() < 0 && GetFillType() != FILL_T::NO_FILL )
-        return 0;
-    else
-        return std::max( GetWidth(), 1 );
+    return GetWidth();
 }
 
 
@@ -234,9 +231,9 @@ void LIB_SHAPE::print( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset,
     unsigned ptCount = 0;
     wxPoint* buffer = nullptr;
 
-    if( GetShape() == SHAPE_T::POLYGON )
+    if( GetShape() == SHAPE_T::POLY )
     {
-        SHAPE_LINE_CHAIN poly = m_poly.Outline( 0 );
+        const SHAPE_LINE_CHAIN& poly = m_poly.Outline( 0 );
 
         ptCount = poly.GetPointCount();
         buffer = new wxPoint[ ptCount ];
@@ -244,7 +241,7 @@ void LIB_SHAPE::print( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset,
         for( unsigned ii = 0; ii < ptCount; ++ii )
             buffer[ii] = aTransform.TransformCoordinate( (wxPoint) poly.CPoint( ii ) ) + aOffset;
     }
-    else if( GetShape() == SHAPE_T::CURVE )
+    else if( GetShape() == SHAPE_T::BEZIER )
     {
         ptCount = m_bezierPoints.size();
         buffer = new wxPoint[ ptCount ];
@@ -255,8 +252,8 @@ void LIB_SHAPE::print( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset,
     else if( GetShape() == SHAPE_T::ARC )
     {
         c = aTransform.TransformCoordinate( getCenter() ) + aOffset;
-        t1 = GetArcAngleStart();
-        t2 = GetArcAngleEnd();
+
+        CalcArcAngles( t1, t2 );
         aTransform.MapAngles( &t1, &t2 );
     }
 
@@ -278,16 +275,16 @@ void LIB_SHAPE::print( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset,
             GRRect( nullptr, DC, pt1.x, pt1.y, pt2.x, pt2.y, penWidth, color );
             break;
 
-        case SHAPE_T::POLYGON:
+        case SHAPE_T::POLY:
             GRPoly( nullptr, DC, ptCount, buffer, false, penWidth, color, color );
             break;
 
-        case SHAPE_T::CURVE:
+        case SHAPE_T::BEZIER:
             GRPoly( nullptr, DC, ptCount, buffer, false, penWidth, color, color );
             break;
 
         default:
-            wxFAIL_MSG( "LIB_SHAPE::print not implemented for " + SHAPE_T_asString() );
+            UNIMPLEMENTED_FOR( SHAPE_T_asString() );
         }
     }
     else
@@ -309,16 +306,16 @@ void LIB_SHAPE::print( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset,
             GRFilledRect( nullptr, DC, pt1.x, pt1.y, pt2.x, pt2.y, penWidth, color, color );
             break;
 
-        case SHAPE_T::POLYGON:
+        case SHAPE_T::POLY:
             GRPoly( nullptr, DC, ptCount, buffer, true, penWidth, color, color );
             break;
 
-        case SHAPE_T::CURVE:
+        case SHAPE_T::BEZIER:
             GRPoly( nullptr, DC, ptCount, buffer, true, penWidth, color, color );
             break;
 
         default:
-            wxFAIL_MSG( "LIB_SHAPE::print not implemented for " + SHAPE_T_asString() );
+            UNIMPLEMENTED_FOR( SHAPE_T_asString() );
         }
     }
 
@@ -361,16 +358,16 @@ wxString LIB_SHAPE::GetSelectMenuText( EDA_UNITS aUnits ) const
                                  MessageTextFromValue( aUnits, std::abs( m_start.x - m_end.x ) ),
                                  MessageTextFromValue( aUnits, std::abs( m_start.y - m_end.y ) ) );
 
-    case SHAPE_T::POLYGON:
+    case SHAPE_T::POLY:
         return wxString::Format( _( "Polyline, %d points" ),
                                  int( m_poly.Outline( 0 ).GetPointCount() ) );
 
-    case SHAPE_T::CURVE:
+    case SHAPE_T::BEZIER:
         return wxString::Format( _( "Bezier Curve, %d points" ),
                                  int( m_bezierPoints.size() ) );
 
     default:
-        wxFAIL_MSG( "LIB_SHAPE::GetSelectMenuText unimplemented for " + SHAPE_T_asString() );
+        UNIMPLEMENTED_FOR( SHAPE_T_asString() );
         return wxEmptyString;
     }
 }
@@ -380,14 +377,14 @@ BITMAPS LIB_SHAPE::GetMenuImage() const
 {
     switch( GetShape() )
     {
-    case SHAPE_T::SEGMENT:  return BITMAPS::add_line;
-    case SHAPE_T::ARC:      return BITMAPS::add_arc;
-    case SHAPE_T::CIRCLE:   return BITMAPS::add_circle;
-    case SHAPE_T::RECT:     return BITMAPS::add_rectangle;
-    case SHAPE_T::POLYGON:  return BITMAPS::add_graphical_segments;
+    case SHAPE_T::SEGMENT: return BITMAPS::add_line;
+    case SHAPE_T::ARC:     return BITMAPS::add_arc;
+    case SHAPE_T::CIRCLE:  return BITMAPS::add_circle;
+    case SHAPE_T::RECT:    return BITMAPS::add_rectangle;
+    case SHAPE_T::POLY:    return BITMAPS::add_graphical_segments;
 
     default:
-        wxFAIL_MSG( "LIB_SHAPE::GetMenuImage unimplemented for " + SHAPE_T_asString() );
+        UNIMPLEMENTED_FOR( SHAPE_T_asString() );
         return BITMAPS::question_mark;
     }
 }
@@ -405,19 +402,21 @@ void LIB_SHAPE::BeginEdit( const wxPoint& aPosition )
         break;
 
     case SHAPE_T::ARC:
-        SetStart( aPosition );
-        SetEnd( aPosition );
+        SetArcGeometry( aPosition, aPosition, aPosition );
         SetEditState( 1 );
         break;
 
-    case SHAPE_T::POLYGON:
+    case SHAPE_T::POLY:
+        m_poly.NewOutline();
+        m_poly.Outline( 0 ).SetClosed( false );
+
         // Start and end of the first segment (co-located for now)
         m_poly.Outline( 0 ).Append( aPosition );
         m_poly.Outline( 0 ).Append( aPosition, true );
         break;
 
     default:
-        wxFAIL_MSG( "LIB_SHAPE::BeginEdit not implemented for " + SHAPE_T_asString() );
+        UNIMPLEMENTED_FOR( SHAPE_T_asString() );
     }
 }
 
@@ -426,23 +425,24 @@ bool LIB_SHAPE::ContinueEdit( const wxPoint& aPosition )
 {
     switch( GetShape() )
     {
+    case SHAPE_T::ARC:
     case SHAPE_T::SEGMENT:
     case SHAPE_T::CIRCLE:
     case SHAPE_T::RECT:
         return false;
 
-    case SHAPE_T::POLYGON:
+    case SHAPE_T::POLY:
     {
         SHAPE_LINE_CHAIN& poly = m_poly.Outline( 0 );
 
         // do not add zero-length segments
         if( poly.CPoint( poly.GetPointCount() - 2 ) != poly.CLastPoint() )
-            poly.Append( aPosition );
+            poly.Append( aPosition, true );
     }
         return true;
 
     default:
-        wxFAIL_MSG( "LIB_SHAPE::ContinueEdit not implemented for " + SHAPE_T_asString() );
+        UNIMPLEMENTED_FOR( SHAPE_T_asString() );
         return false;
     }
 }
@@ -460,11 +460,10 @@ void LIB_SHAPE::CalcEdit( const wxPoint& aPosition )
         SetEnd( aPosition );
         break;
 
-    case SHAPE_T::POLYGON:
-        m_poly.Outline( 0 ).SetPoint( m_poly.Outline( 0 ).GetPointCount() - 1, aPosition );
-        break;
-
     case SHAPE_T::ARC:
+    {
+        int radius = GetRadius();
+
         // Edit state 0: drawing: place start
         // Edit state 1: drawing: place end (center calculated for 90-degree subtended angle)
         // Edit state 2: point edit: move start (center calculated for invariant subtended angle)
@@ -479,46 +478,98 @@ void LIB_SHAPE::CalcEdit( const wxPoint& aPosition )
             return;
 
         case 1:
-        {
-            wxPoint start = GetStart();
-            wxPoint end = aPosition;
-            wxPoint center = CalcArcCenter( start, end, 90.0 );
-            wxPoint mid = (wxPoint) CalcArcMid( start, end, center, true );
-
-            SetArcGeometry( start, mid, aPosition );
-        }
+            m_end = aPosition;
+            radius = KiROUND( sqrt( sq( GetLineLength( m_start, m_end ) ) / 2.0 ) );
+            break;
             break;
 
         case 2:
-        {
-            wxPoint delta = aPosition - GetStart();
-
-            SetArcGeometry( aPosition, GetArcMid() + delta/2, GetEnd() );
-        }
-            break;
-
         case 3:
         {
-            wxPoint delta = aPosition - GetEnd();
+            wxPoint v = m_start - m_end;
+            double chordBefore = sq( v.x ) + sq( v.y );
 
-            SetArcGeometry( GetStart(), GetArcMid() + delta/2, aPosition );
+            if( m_editState == 2 )
+                m_start = aPosition;
+            else
+                m_end = aPosition;
+
+            v = m_start - m_end;
+            double chordAfter = sq( v.x ) + sq( v.y );
+            double ratio = chordAfter / chordBefore;
+
+            if( ratio != 0 )
+            {
+                radius = std::max( int( sqrt( sq( radius ) * ratio ) ) + 1,
+                                   int( sqrt( chordAfter ) / 2 ) + 1 );
+            }
         }
             break;
 
         case 4:
-            MoveTo( aPosition );
+        {
+            double chordA = GetLineLength( m_start, aPosition );
+            double chordB = GetLineLength( m_end, aPosition );
+            radius = int( ( chordA + chordB ) / 2.0 ) + 1;
+        }
             break;
 
         case 5:
             SetArcGeometry( GetStart(), aPosition, GetEnd() );
-            break;
-
+            return;
         }
 
+        // Calculate center based on start, end, and radius
+        //
+        // Let 'l' be the length of the chord and 'm' the middle point of the chord
+        double  l = GetLineLength( m_start, m_end );
+        wxPoint m = ( m_start + m_end ) / 2;
+
+        // Calculate 'd', the vector from the chord midpoint to the center
+        wxPoint d;
+        d.x = KiROUND( sqrt( sq( radius ) - sq( l/2 ) ) * ( m_start.y - m_end.y ) / l );
+        d.y = KiROUND( sqrt( sq( radius ) - sq( l/2 ) ) * ( m_end.x - m_start.x ) / l );
+
+        wxPoint c1 = m + d;
+        wxPoint c2 = m - d;
+
+        // Solution gives us 2 centers; we need to pick one:
+        switch( m_editState )
+        {
+        case 1:
+        {
+            // Keep center clockwise from chord while drawing
+            wxPoint chordVector = m_end - m_start;
+            double  chordAngle = ArcTangente( chordVector.y, chordVector.x );
+            NORMALIZE_ANGLE_POS( chordAngle );
+
+            wxPoint c1Test = c1;
+            RotatePoint( &c1Test, m_start, -chordAngle );
+
+            m_arcCenter = c1Test.x > 0 ? c2 : c1;
+        }
+            break;
+
+        case 2:
+        case 3:
+            // Pick the one closer to the old center
+            m_arcCenter = GetLineLength( c1, m_arcCenter ) < GetLineLength( c2, m_arcCenter ) ? c1 : c2;
+            break;
+
+        case 4:
+            // Pick the one closer to the mouse position
+            m_arcCenter = GetLineLength( c1, aPosition ) < GetLineLength( c2, aPosition ) ? c1 : c2;
+            break;
+        }
+    }
+        break;
+
+    case SHAPE_T::POLY:
+        m_poly.Outline( 0 ).SetPoint( m_poly.Outline( 0 ).GetPointCount() - 1, aPosition );
         break;
 
     default:
-        wxFAIL_MSG( "LIB_SHAPE::CalcEdit not implemented for " + SHAPE_T_asString() );
+        UNIMPLEMENTED_FOR( SHAPE_T_asString() );
     }
 }
 
@@ -533,15 +584,21 @@ void LIB_SHAPE::EndEdit()
     case SHAPE_T::RECT:
         break;
 
-    case SHAPE_T::POLYGON:
+    case SHAPE_T::POLY:
     {
         SHAPE_LINE_CHAIN& poly = m_poly.Outline( 0 );
 
-        // do not include last point twice
         if( poly.GetPointCount() > 2 )
         {
             if( poly.CPoint( poly.GetPointCount() - 2 ) == poly.CLastPoint() )
+            {
+                poly.SetClosed( true );
                 poly.Remove( poly.GetPointCount() - 1 );
+            }
+            else
+            {
+                poly.SetClosed( false );
+            }
         }
     }
         break;
@@ -554,7 +611,7 @@ void LIB_SHAPE::EndEdit()
 
 void LIB_SHAPE::AddPoint( const wxPoint& aPosition )
 {
-    if( GetShape() == SHAPE_T::POLYGON )
+    if( GetShape() == SHAPE_T::POLY )
     {
         if( m_poly.IsEmpty() )
             m_poly.NewOutline();
@@ -565,6 +622,68 @@ void LIB_SHAPE::AddPoint( const wxPoint& aPosition )
     {
         wxFAIL_MSG( "LIB_SHAPE::AddPoint not implemented for " + SHAPE_T_asString() );
     }
+}
+
+
+double LIB_SHAPE::GetArcAngleStart() const
+{
+    int startAngle, endAngle;
+    CalcArcAngles( startAngle, endAngle );
+
+    if( startAngle > endAngle )
+        TRANSFORM().MapAngles( &startAngle, &endAngle );
+
+    return startAngle;
+}
+
+
+double LIB_SHAPE::GetArcAngleEnd() const
+{
+    int startAngle, endAngle;
+    CalcArcAngles( startAngle, endAngle );
+
+    if( startAngle > endAngle )
+        TRANSFORM().MapAngles( &startAngle, &endAngle );
+
+    return endAngle;
+}
+
+
+void LIB_SHAPE::CalcArcAngles( int& aStartAngle, int& aEndAngle ) const
+{
+    wxPoint centerStartVector = GetStart() - GetCenter();
+    wxPoint centerEndVector   = GetEnd() - GetCenter();
+
+    // Angles in Eeschema are still integers
+    aStartAngle = KiROUND( ArcTangente( centerStartVector.y, centerStartVector.x ) );
+    aEndAngle = KiROUND( ArcTangente( centerEndVector.y, centerEndVector.x ) );
+
+    NORMALIZE_ANGLE_POS( aStartAngle );
+    NORMALIZE_ANGLE_POS( aEndAngle );  // angles = 0 .. 3600
+
+    // Restrict angle to less than 180 to avoid PBS display mirror Trace because it is
+    // assumed that the arc is less than 180 deg to find orientation after rotate or mirror.
+    if( ( aEndAngle - aStartAngle ) > 1800 )
+        aEndAngle -= 3600;
+    else if( ( aEndAngle - aStartAngle ) <= -1800 )
+        aEndAngle += 3600;
+
+    while( ( aEndAngle - aStartAngle ) >= 1800 )
+    {
+        aEndAngle--;
+        aStartAngle++;
+    }
+
+    while( ( aStartAngle - aEndAngle ) >= 1800 )
+    {
+        aEndAngle++;
+        aStartAngle--;
+    }
+
+    NORMALIZE_ANGLE_POS( aStartAngle );
+
+    if( !IsMoving() )
+        NORMALIZE_ANGLE_POS( aEndAngle );
 }
 
 

@@ -383,7 +383,7 @@ void HPGL_PLOTTER::SetPenDiameter( double diameter )
 }
 
 
-void HPGL_PLOTTER::Rect( const wxPoint& p1, const wxPoint& p2, FILL_TYPE fill, int width )
+void HPGL_PLOTTER::Rect( const wxPoint& p1, const wxPoint& p2, FILL_T fill, int width )
 {
     wxASSERT( m_outputFile );
 
@@ -392,7 +392,7 @@ void HPGL_PLOTTER::Rect( const wxPoint& p1, const wxPoint& p2, FILL_TYPE fill, i
 
     MoveTo( p1 );
 
-    if( fill == FILL_TYPE::FILLED_SHAPE )
+    if( fill == FILL_T::FILLED_SHAPE )
     {
         startOrAppendItem( p1dev, wxString::Format( "RA %.0f,%.0f;", p2dev.x, p2dev.y ) );
     }
@@ -405,7 +405,7 @@ void HPGL_PLOTTER::Rect( const wxPoint& p1, const wxPoint& p2, FILL_TYPE fill, i
 }
 
 
-void HPGL_PLOTTER::Circle( const wxPoint& centre, int diameter, FILL_TYPE fill, int width )
+void HPGL_PLOTTER::Circle( const wxPoint& centre, int diameter, FILL_T fill, int width )
 {
     wxASSERT( m_outputFile );
     double radius = userToDeviceSize( diameter / 2 );
@@ -425,7 +425,7 @@ void HPGL_PLOTTER::Circle( const wxPoint& centre, int diameter, FILL_TYPE fill, 
         chord_degrees = 45;
     }
 
-    if( fill == FILL_TYPE::FILLED_SHAPE )
+    if( fill == FILL_T::FILLED_SHAPE )
     {
         // Draw the filled area
         MoveTo( centre );
@@ -451,8 +451,8 @@ void HPGL_PLOTTER::Circle( const wxPoint& centre, int diameter, FILL_TYPE fill, 
 }
 
 
-void HPGL_PLOTTER::PlotPoly( const std::vector<wxPoint>& aCornerList, FILL_TYPE aFill,
-                             int aWidth, void* aData )
+void HPGL_PLOTTER::PlotPoly( const std::vector<wxPoint>& aCornerList, FILL_T aFill, int aWidth,
+                             void* aData )
 {
     if( aCornerList.size() <= 1 )
         return;
@@ -468,7 +468,7 @@ void HPGL_PLOTTER::PlotPoly( const std::vector<wxPoint>& aCornerList, FILL_TYPE 
     MoveTo( aCornerList[0] );
     startItem( userToDeviceCoordinates( aCornerList[0] ) );
 
-    if( aFill == FILL_TYPE::FILLED_SHAPE )
+    if( aFill == FILL_T::FILLED_SHAPE )
     {
         // Draw the filled area
         SetCurrentLineWidth( USE_DEFAULT_LINE_WIDTH );
@@ -493,7 +493,7 @@ void HPGL_PLOTTER::PlotPoly( const std::vector<wxPoint>& aCornerList, FILL_TYPE 
             LineTo( aCornerList[ii] );
 
         // Always close polygon if filled.
-        if( aFill != FILL_TYPE::NO_FILL )
+        if( aFill != FILL_T::NO_FILL )
         {
             int ii = aCornerList.size() - 1;
 
@@ -563,7 +563,7 @@ void HPGL_PLOTTER::ThickSegment( const wxPoint& start, const wxPoint& end,
 
 
 void HPGL_PLOTTER::Arc( const wxPoint& centre, double StAngle, double EndAngle, int radius,
-                        FILL_TYPE fill, int width )
+                        FILL_T fill, int width )
 {
     wxASSERT( m_outputFile );
     double angle;
@@ -725,7 +725,7 @@ void HPGL_PLOTTER::FlashPadRect( const wxPoint& pos, const wxSize& padsize,
         corners[ii] += pos;
     }
 
-    PlotPoly( corners, trace_mode == FILLED ? FILL_TYPE::FILLED_SHAPE : FILL_TYPE::NO_FILL );
+    PlotPoly( corners, trace_mode == FILLED ? FILL_T::FILLED_SHAPE : FILL_T::NO_FILL );
 }
 
 
@@ -763,7 +763,7 @@ void HPGL_PLOTTER::FlashPadRoundRect( const wxPoint& aPadPos, const wxSize& aSiz
     if( cornerList.back() != cornerList.front() )
         cornerList.push_back( cornerList.front() );
 
-    PlotPoly( cornerList, aTraceMode == FILLED ? FILL_TYPE::FILLED_SHAPE : FILL_TYPE::NO_FILL );
+    PlotPoly( cornerList, aTraceMode == FILLED ? FILL_T::FILLED_SHAPE : FILL_T::NO_FILL );
 }
 
 
@@ -785,7 +785,7 @@ void HPGL_PLOTTER::FlashPadCustom( const wxPoint& aPadPos, const wxSize& aSize, 
         if( cornerList.back() != cornerList.front() )
             cornerList.push_back( cornerList.front() );
 
-        PlotPoly( cornerList, aTraceMode == FILLED ? FILL_TYPE::FILLED_SHAPE : FILL_TYPE::NO_FILL );
+        PlotPoly( cornerList, aTraceMode == FILLED ? FILL_T::FILLED_SHAPE : FILL_T::NO_FILL );
     }
 }
 
@@ -807,7 +807,7 @@ void HPGL_PLOTTER::FlashPadTrapez( const wxPoint& aPadPos, const wxPoint* aCorne
     // Close polygon
     cornerList.push_back( cornerList.front() );
 
-    PlotPoly( cornerList, aTraceMode == FILLED ? FILL_TYPE::FILLED_SHAPE : FILL_TYPE::NO_FILL );
+    PlotPoly( cornerList, aTraceMode == FILLED ? FILL_T::FILLED_SHAPE : FILL_T::NO_FILL );
 }
 
 

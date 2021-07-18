@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2015 Jean-Pierre Charras, jaen-pierre.charras at wanadoo.fr
  * Copyright (C) 2015 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 2004-2019 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2004-2021 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,25 +25,19 @@
 
 #include <sch_draw_panel.h>
 #include <widgets/msgpanel.h>
-
+#include <lib_symbol.h>
 #include <general.h>
 #include <lib_item.h>
 
 const int fill_tab[3] = { 'N', 'F', 'f' };
 
 
-LIB_ITEM::LIB_ITEM( KICAD_T        aType,
-                    LIB_SYMBOL*    aSymbol,
-                    int            aUnit,
-                    int            aConvert,
-                    FILL_TYPE      aFillType ) :
-    EDA_ITEM( aType )
+LIB_ITEM::LIB_ITEM( KICAD_T aType, LIB_SYMBOL* aSymbol, int aUnit, int aConvert ) :
+    EDA_ITEM( aSymbol, aType ),
+    m_unit( aUnit ),
+    m_convert( aConvert ),
+    m_editState( 0 )
 {
-    m_unit              = aUnit;
-    m_convert           = aConvert;
-    m_fill              = aFillType;
-    m_parent            = (EDA_ITEM*) aSymbol;
-    m_isFillable        = false;
 }
 
 
@@ -82,9 +76,6 @@ int LIB_ITEM::compare( const LIB_ITEM& aOther, LIB_ITEM::COMPARE_FLAGS aCompareF
 
     if( !( aCompareFlags & COMPARE_FLAGS::UNIT ) && m_convert != aOther.m_convert )
         return m_convert - aOther.m_convert;
-
-    if( m_fill != aOther.m_fill )
-        return static_cast<int>( m_fill ) - static_cast<int>( aOther.m_fill );
 
     return 0;
 }

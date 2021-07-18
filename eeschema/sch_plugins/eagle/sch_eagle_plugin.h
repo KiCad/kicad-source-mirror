@@ -51,7 +51,7 @@ class PROPERTIES;
 class SCH_EAGLE_PLUGIN_CACHE;
 class LIB_SYMBOL;
 class SYMBOL_LIB;
-class LIB_CIRCLE;
+class LIB_SHAPE;
 class LIB_FIELD;
 class LIB_RECTANGLE;
 class LIB_POLYLINE;
@@ -128,32 +128,32 @@ private:
     std::pair<VECTOR2I, const SEG*> findNearestLinePoint( const wxPoint& aPoint,
                                                           const std::vector<SEG>& aLines ) const;
 
-    void            loadSegments( wxXmlNode* aSegmentsNode, const wxString& aNetName,
-                                  const wxString& aNetClass );
-    SCH_LINE*       loadWire( wxXmlNode* aWireNode );
-    SCH_TEXT*       loadLabel( wxXmlNode* aLabelNode, const wxString& aNetName );
-    SCH_JUNCTION*   loadJunction( wxXmlNode* aJunction );
-    SCH_TEXT*       loadPlainText( wxXmlNode* aSchText );
-    void            loadFrame( wxXmlNode* aFrameNode, std::vector<SCH_LINE*>& aLines );
+    void          loadSegments( wxXmlNode* aSegmentsNode, const wxString& aNetName,
+                                const wxString& aNetClass );
+    SCH_LINE*     loadWire( wxXmlNode* aWireNode );
+    SCH_TEXT*     loadLabel( wxXmlNode* aLabelNode, const wxString& aNetName );
+    SCH_JUNCTION* loadJunction( wxXmlNode* aJunction );
+    SCH_TEXT*     loadPlainText( wxXmlNode* aSchText );
+    void          loadFrame( wxXmlNode* aFrameNode, std::vector<SCH_LINE*>& aLines );
 
-    bool            loadSymbol( wxXmlNode* aSymbolNode, std::unique_ptr<LIB_SYMBOL>& aSymbol,
-                                EDEVICE* aDevice, int aGateNumber, const wxString& aGateName );
-    LIB_CIRCLE*     loadSymbolCircle( std::unique_ptr<LIB_SYMBOL>& aSymbol, wxXmlNode* aCircleNode,
-                                      int aGateNumber );
-    LIB_RECTANGLE*  loadSymbolRectangle( std::unique_ptr<LIB_SYMBOL>& aSymbol, wxXmlNode* aRectNode,
-                                         int aGateNumber );
-    LIB_POLYLINE*   loadSymbolPolyLine( std::unique_ptr<LIB_SYMBOL>& aSymbol,
-                                        wxXmlNode* aPolygonNode, int aGateNumber );
-    LIB_ITEM*       loadSymbolWire( std::unique_ptr<LIB_SYMBOL>& aSymbol, wxXmlNode* aWireNode,
+    bool          loadSymbol( wxXmlNode* aSymbolNode, std::unique_ptr<LIB_SYMBOL>& aSymbol,
+                              EDEVICE* aDevice, int aGateNumber, const wxString& aGateName );
+    LIB_SHAPE*    loadSymbolCircle( std::unique_ptr<LIB_SYMBOL>& aSymbol, wxXmlNode* aCircleNode,
                                     int aGateNumber );
-    LIB_PIN*        loadPin( std::unique_ptr<LIB_SYMBOL>& aSymbol, wxXmlNode*, EPIN* epin,
-                             int aGateNumber );
-    LIB_TEXT*       loadSymbolText( std::unique_ptr<LIB_SYMBOL>& aSymbol, wxXmlNode* aLibText,
-                                    int aGateNumber );
-    void            loadFrame( wxXmlNode* aFrameNode, std::vector<LIB_ITEM*>& aLines );
+    LIB_SHAPE*    loadSymbolRectangle( std::unique_ptr<LIB_SYMBOL>& aSymbol, wxXmlNode* aRectNode,
+                                       int aGateNumber );
+    LIB_SHAPE*    loadSymbolPolyLine( std::unique_ptr<LIB_SYMBOL>& aSymbol,
+                                      wxXmlNode* aPolygonNode, int aGateNumber );
+    LIB_ITEM*     loadSymbolWire( std::unique_ptr<LIB_SYMBOL>& aSymbol, wxXmlNode* aWireNode,
+                                  int aGateNumber );
+    LIB_PIN*      loadPin( std::unique_ptr<LIB_SYMBOL>& aSymbol, wxXmlNode*, EPIN* epin,
+                           int aGateNumber );
+    LIB_TEXT*     loadSymbolText( std::unique_ptr<LIB_SYMBOL>& aSymbol, wxXmlNode* aLibText,
+                                  int aGateNumber );
+    void          loadFrame( wxXmlNode* aFrameNode, std::vector<LIB_ITEM*>& aLines );
 
-    void            loadTextAttributes( EDA_TEXT* aText, const ETEXT& aAttribs ) const;
-    void            loadFieldAttributes( LIB_FIELD* aField, const LIB_TEXT* aText ) const;
+    void          loadTextAttributes( EDA_TEXT* aText, const ETEXT& aAttribs ) const;
+    void          loadFieldAttributes( LIB_FIELD* aField, const LIB_TEXT* aText ) const;
 
     ///< Move net labels that are detached from any wire to the nearest wire
     void adjustNetLabels();

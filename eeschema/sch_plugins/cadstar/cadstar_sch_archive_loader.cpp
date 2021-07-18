@@ -28,8 +28,7 @@
 #include <bus_alias.h>
 #include <core/mirror.h>
 #include <eda_text.h>
-#include <lib_arc.h>
-#include <lib_polyline.h>
+#include <lib_shape.h>
 #include <lib_text.h>
 #include <macros.h>
 #include <progress_reporter.h>
@@ -1605,11 +1604,11 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadLibrarySymbolShapeVertices( const std::vect
     {
         cur = &aCadstarVertices.at( i );
 
-        LIB_ITEM* segment    = nullptr;
-        bool      cw         = false;
-        wxPoint   startPoint = getKiCadLibraryPoint( prev->End, aSymbolOrigin );
-        wxPoint   endPoint   = getKiCadLibraryPoint( cur->End, aSymbolOrigin );
-        wxPoint   centerPoint;
+        LIB_SHAPE* shape      = nullptr;
+        bool       cw         = false;
+        wxPoint    startPoint = getKiCadLibraryPoint( prev->End, aSymbolOrigin );
+        wxPoint    endPoint   = getKiCadLibraryPoint( cur->End, aSymbolOrigin );
+        wxPoint    centerPoint;
 
         if( cur->Type == VERTEX_TYPE::ANTICLOCKWISE_SEMICIRCLE
                 || cur->Type == VERTEX_TYPE::CLOCKWISE_SEMICIRCLE )
@@ -1625,9 +1624,9 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadLibrarySymbolShapeVertices( const std::vect
         switch( cur->Type )
         {
         case VERTEX_TYPE::POINT:
-            segment = new LIB_POLYLINE( aSymbol );
-            ( (LIB_POLYLINE*) segment )->AddPoint( startPoint );
-            ( (LIB_POLYLINE*) segment )->AddPoint( endPoint );
+            shape = new LIB_SHAPE( aSymbol, SHAPE_T::POLY );
+            shape->AddPoint( startPoint );
+            shape->AddPoint( endPoint );
             break;
 
         case VERTEX_TYPE::CLOCKWISE_SEMICIRCLE:
@@ -1637,27 +1636,27 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadLibrarySymbolShapeVertices( const std::vect
 
         case VERTEX_TYPE::ANTICLOCKWISE_SEMICIRCLE:
         case VERTEX_TYPE::ANTICLOCKWISE_ARC:
-            segment = new LIB_ARC( aSymbol );
+            shape = new LIB_SHAPE( aSymbol, SHAPE_T::ARC );
 
-            ( (LIB_ARC*) segment )->SetPosition( centerPoint );
+            shape->SetPosition( centerPoint );
 
             if( cw )
             {
-                ( (LIB_ARC*) segment )->SetStart( endPoint );
-                ( (LIB_ARC*) segment )->SetEnd( startPoint );
+                shape->SetStart( endPoint );
+                shape->SetEnd( startPoint );
             }
             else
             {
-                ( (LIB_ARC*) segment )->SetStart( startPoint );
-                ( (LIB_ARC*) segment )->SetEnd( endPoint );
+                shape->SetStart( startPoint );
+                shape->SetEnd( endPoint );
             }
 
             break;
         }
 
-        segment->SetUnit( aGateNumber );
-        segment->SetWidth( aLineThickness );
-        aSymbol->AddDrawItem( segment );
+        shape->SetUnit( aGateNumber );
+        shape->SetWidth( aLineThickness );
+        aSymbol->AddDrawItem( shape );
 
         prev = cur;
     }
@@ -2043,8 +2042,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadShapeVertices( const std::vector<VERTEX>& a
             else
                 arcAngleDeciDeg = NormalizeAngleNeg( arcAngleDeciDeg );
 
-            SHAPE_ARC tempArc( VECTOR2I(centerPoint), VECTOR2I(startPoint),
-                               arcAngleDeciDeg / 10.0 );
+            SHAPE_ARC tempArc( centerPoint, startPoint, arcAngleDeciDeg / 10.0 );
             SHAPE_LINE_CHAIN arcSegments = tempArc.ConvertToPolyline( Millimeter2iu( 0.1 ) );
 
             // Load the arc as a series of piece-wise segments
@@ -2768,30 +2766,29 @@ LIB_SYMBOL* CADSTAR_SCH_ARCHIVE_LOADER::getScaledLibPart( const LIB_SYMBOL* aSym
 
     LIB_ITEMS_CONTAINER& items = retval->GetDrawItems();
 
-    for( auto& item : items )
+    for( LIB_ITEM& item : items )
     {
         switch( item.Type() )
         {
-        case KICAD_T::LIB_ARC_T:
+        case KICAD_T::LIB_SHAPE_T:
         {
-            LIB_ARC& arc = static_cast<LIB_ARC&>( item );
-            arc.SetPosition( scalePt( arc.GetPosition() ) );
-            arc.SetStart( scalePt( arc.GetStart() ) );
-            arc.SetEnd( scalePt( arc.GetEnd() ) );
+            LIB_SHAPE& shape = static_cast<LIB_SHAPE&>( item );
+
+            if( shape.GetShape() == SHAPE_T::ARC )
+            {
+                shape.SetPosition( scalePt( shape.GetPosition() ) );
+                shape.SetStart( scalePt( shape.GetStart() ) );
+                shape.SetEnd( scalePt( shape.GetEnd() ) );
+            }
+            else if( shape.GetShape() == SHAPE_T::POLY )
+            {
+                SHAPE_LINE_CHAIN& poly = shape.GetPolyShape().Outline( 0 );
+
+                for( size_t ii = 0; ii < poly.GetPointCount(); ++ii )
+                    poly.SetPoint( ii, scalePt( (wxPoint) poly.CPoint( ii ) ) );
+            }
         }
-        break;
-
-        case KICAD_T::LIB_POLYLINE_T:
-        {
-            LIB_POLYLINE& poly = static_cast<LIB_POLYLINE&>( item );
-
-            std::vector<wxPoint> originalPts = poly.GetPolyPoints();
-            poly.ClearPoints();
-
-            for( wxPoint& pt : originalPts )
-                poly.AddPoint( scalePt( pt ) );
-        }
-        break;
+            break;
 
         case KICAD_T::LIB_PIN_T:
         {
@@ -2800,7 +2797,7 @@ LIB_SYMBOL* CADSTAR_SCH_ARCHIVE_LOADER::getScaledLibPart( const LIB_SYMBOL* aSym
             pin.SetPosition( scalePt( pin.GetPosition() ) );
             pin.SetLength( scaleLen( pin.GetLength() ) );
         }
-        break;
+            break;
 
         case KICAD_T::LIB_TEXT_T:
         {
@@ -2809,9 +2806,10 @@ LIB_SYMBOL* CADSTAR_SCH_ARCHIVE_LOADER::getScaledLibPart( const LIB_SYMBOL* aSym
             txt.SetPosition( scalePt( txt.GetPosition() ) );
             txt.SetTextSize( scaleSize( txt.GetTextSize() ) );
         }
-        break;
+            break;
 
-        default: break;
+        default:
+            break;
         }
 
     }
@@ -2824,47 +2822,48 @@ void CADSTAR_SCH_ARCHIVE_LOADER::fixUpLibraryPins( LIB_SYMBOL* aSymbolToFix, int
 {
     // Store a list of segments that are not connected to other segments and are vertical or
     // horizontal.
-    std::map<wxPoint, LIB_POLYLINE*> twoPointUniqueSegments;
+    std::map<VECTOR2I, SHAPE_LINE_CHAIN> uniqueSegments;
 
-    LIB_ITEMS_CONTAINER::ITERATOR polylineiter =
-            aSymbolToFix->GetDrawItems().begin( LIB_POLYLINE_T );
+    LIB_ITEMS_CONTAINER::ITERATOR shapeIt = aSymbolToFix->GetDrawItems().begin( LIB_SHAPE_T );
 
-    for( ; polylineiter != aSymbolToFix->GetDrawItems().end( LIB_POLYLINE_T ); ++polylineiter )
+    for( ; shapeIt != aSymbolToFix->GetDrawItems().end( LIB_SHAPE_T ); ++shapeIt )
     {
-        LIB_POLYLINE& polyline = static_cast<LIB_POLYLINE&>( *polylineiter );
+        LIB_SHAPE& shape = static_cast<LIB_SHAPE&>( *shapeIt );
 
-        if( aGateNumber > 0 && polyline.GetUnit() != aGateNumber )
+        if( aGateNumber > 0 && shape.GetUnit() != aGateNumber )
             continue;
 
-        const std::vector<wxPoint>& pts = polyline.GetPolyPoints();
+        if( shape.GetShape() != SHAPE_T::POLY )
+            continue;
 
-        bool isUnique = true;
+        SHAPE_LINE_CHAIN& poly = shape.GetPolyShape().Outline( 0 );
+        bool              isUnique = true;
 
         auto removeSegment =
-            [&]( LIB_POLYLINE* aLineToRemove )
-            {
-                twoPointUniqueSegments.erase( aLineToRemove->GetPolyPoints().at( 0 ) );
-                twoPointUniqueSegments.erase( aLineToRemove->GetPolyPoints().at( 1 ) );
-                isUnique = false;
-            };
+                [&]( SHAPE_LINE_CHAIN& aLineToRemove )
+                {
+                    uniqueSegments.erase( aLineToRemove.CPoint( 0 ) );
+                    uniqueSegments.erase( aLineToRemove.CPoint( 1 ) );
+                    isUnique = false;
+                };
 
-        if( pts.size() == 2 )
+        if( poly.GetPointCount() == 2 )
         {
-            const wxPoint& pt0 = pts.at( 0 );
-            const wxPoint& pt1 = pts.at( 1 );
+            const VECTOR2I& pt0 = poly.CPoint( 0 );
+            const VECTOR2I& pt1 = poly.CPoint( 1 );
 
-            if( twoPointUniqueSegments.count( pt0 ) )
-                removeSegment( twoPointUniqueSegments.at( pt0 ) );
+            if( uniqueSegments.count( pt0 ) )
+                removeSegment( uniqueSegments.at( pt0 ) );
 
-            if( twoPointUniqueSegments.count( pt1 ) )
-                removeSegment( twoPointUniqueSegments.at( pt1 ) );
+            if( uniqueSegments.count( pt1 ) )
+                removeSegment( uniqueSegments.at( pt1 ) );
 
             if( isUnique && pt0 != pt1 )
             {
                 if( pt0.x == pt1.x || pt0.y == pt1.y )
                 {
-                    twoPointUniqueSegments.insert( { pts.at( 0 ), &polyline } );
-                    twoPointUniqueSegments.insert( { pts.at( 1 ), &polyline } );
+                    uniqueSegments.insert( { poly.CPoint( 0 ), poly } );
+                    uniqueSegments.insert( { poly.CPoint( 1 ), poly } );
                 }
             }
         }
@@ -2890,14 +2889,14 @@ void CADSTAR_SCH_ARCHIVE_LOADER::fixUpLibraryPins( LIB_SYMBOL* aSymbolToFix, int
                     pin->SetOrientation( 'D' ); // -90 degrees
             };
 
-        if( twoPointUniqueSegments.count( pin->GetPosition() ) )
+        if( uniqueSegments.count( pin->GetPosition() ) )
         {
-            LIB_POLYLINE* poly = twoPointUniqueSegments.at( pin->GetPosition() );
+            SHAPE_LINE_CHAIN& poly = uniqueSegments.at( pin->GetPosition() );
 
-            wxPoint otherPt = poly->GetPolyPoints().at( 0 );
+            VECTOR2I otherPt = poly.CPoint( 0 );
 
             if( otherPt == pin->GetPosition() )
-                otherPt = poly->GetPolyPoints().at( 1 );
+                otherPt = poly.CPoint( 1 );
 
             VECTOR2I vec( otherPt - pin->GetPosition() );
 

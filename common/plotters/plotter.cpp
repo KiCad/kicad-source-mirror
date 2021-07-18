@@ -157,12 +157,12 @@ double PLOTTER::GetDashGapLenIU() const
 void PLOTTER::Arc( const SHAPE_ARC& aArc )
 {
     Arc( wxPoint( aArc.GetCenter() ), aArc.GetStartAngle(), aArc.GetEndAngle(), aArc.GetRadius(),
-         FILL_TYPE::NO_FILL, aArc.GetWidth() );
+         FILL_T::NO_FILL, aArc.GetWidth() );
 }
 
 
 void PLOTTER::Arc( const wxPoint& centre, double StAngle, double EndAngle, int radius,
-                   FILL_TYPE fill, int width )
+                   FILL_T fill, int width )
 {
     wxPoint   start, end;
     const int delta = 50;   // increment (in 0.1 degrees) to draw circles
@@ -176,7 +176,7 @@ void PLOTTER::Arc( const wxPoint& centre, double StAngle, double EndAngle, int r
     start.x = centre.x + KiROUND( cosdecideg( radius, -StAngle ) );
     start.y = centre.y + KiROUND( sindecideg( radius, -StAngle ) );
 
-    if( fill != FILL_TYPE::NO_FILL )
+    if( fill != FILL_T::NO_FILL )
     {
         MoveTo( centre );
         LineTo( start );
@@ -196,7 +196,7 @@ void PLOTTER::Arc( const wxPoint& centre, double StAngle, double EndAngle, int r
     end.x = centre.x + KiROUND( cosdecideg( radius, -EndAngle ) );
     end.y = centre.y + KiROUND( sindecideg( radius, -EndAngle ) );
 
-    if( fill != FILL_TYPE::NO_FILL )
+    if( fill != FILL_T::NO_FILL )
     {
         LineTo( end );
         FinishTo( centre );
@@ -248,7 +248,7 @@ void PLOTTER::PlotImage(const wxImage& aImage, const wxPoint& aPos, double aScal
     end.x += size.x;
     end.y += size.y;
 
-    Rect( start, end, FILL_TYPE::NO_FILL );
+    Rect( start, end, FILL_T::NO_FILL );
 }
 
 
@@ -273,13 +273,13 @@ void PLOTTER::markerSquare( const wxPoint& position, int radius )
     corner.y = position.y + r;
     corner_list.push_back( corner );
 
-    PlotPoly( corner_list, FILL_TYPE::NO_FILL, GetCurrentLineWidth() );
+    PlotPoly( corner_list, FILL_T::NO_FILL, GetCurrentLineWidth() );
 }
 
 
 void PLOTTER::markerCircle( const wxPoint& position, int radius )
 {
-    Circle( position, radius * 2, FILL_TYPE::NO_FILL, GetCurrentLineWidth() );
+    Circle( position, radius * 2, FILL_T::NO_FILL, GetCurrentLineWidth() );
 }
 
 
@@ -303,7 +303,7 @@ void PLOTTER::markerLozenge( const wxPoint& position, int radius )
     corner.y = position.y + radius;
     corner_list.push_back( corner );
 
-    PlotPoly( corner_list, FILL_TYPE::NO_FILL, GetCurrentLineWidth() );
+    PlotPoly( corner_list, FILL_T::NO_FILL, GetCurrentLineWidth() );
 }
 
 
@@ -514,15 +514,11 @@ void PLOTTER::sketchOval( const wxPoint& pos, const wxSize& aSize, double orient
     cx = 0;
     cy = deltaxy / 2;
     RotatePoint( &cx, &cy, orient );
-    Arc( wxPoint( cx + pos.x, cy + pos.y ),
-         orient + 1800, orient + 3600,
-         radius, FILL_TYPE::NO_FILL );
+    Arc( wxPoint( cx + pos.x, cy + pos.y ), orient + 1800, orient + 3600, radius, FILL_T::NO_FILL );
     cx = 0;
     cy = -deltaxy / 2;
     RotatePoint( &cx, &cy, orient );
-    Arc( wxPoint( cx + pos.x, cy + pos.y ),
-         orient, orient + 1800,
-         radius, FILL_TYPE::NO_FILL );
+    Arc( wxPoint( cx + pos.x, cy + pos.y ), orient, orient + 1800, radius, FILL_T::NO_FILL );
 }
 
 
@@ -533,7 +529,7 @@ void PLOTTER::ThickSegment( const wxPoint& start, const wxPoint& end, int width,
     {
         if( start == end )
         {
-            Circle( start, width, FILL_TYPE::FILLED_SHAPE, 0 );
+            Circle( start, width, FILL_T::FILLED_SHAPE, 0 );
         }
         else
         {
@@ -555,15 +551,15 @@ void PLOTTER::ThickArc( const wxPoint& centre, double StAngle, double EndAngle,
 {
     if( tracemode == FILLED )
     {
-        Arc( centre, StAngle, EndAngle, radius, FILL_TYPE::NO_FILL, width );
+        Arc( centre, StAngle, EndAngle, radius, FILL_T::NO_FILL, width );
     }
     else
     {
         SetCurrentLineWidth( -1 );
-        Arc( centre, StAngle, EndAngle,
-             radius - ( width - m_currentPenWidth ) / 2, FILL_TYPE::NO_FILL, -1 );
-        Arc( centre, StAngle, EndAngle,
-             radius + ( width - m_currentPenWidth ) / 2, FILL_TYPE::NO_FILL, -1 );
+        Arc( centre, StAngle, EndAngle, radius - ( width - m_currentPenWidth ) / 2,
+             FILL_T::NO_FILL, -1 );
+        Arc( centre, StAngle, EndAngle, radius + ( width - m_currentPenWidth ) / 2,
+             FILL_T::NO_FILL, -1 );
     }
 }
 
@@ -573,7 +569,7 @@ void PLOTTER::ThickRect( const wxPoint& p1, const wxPoint& p2, int width,
 {
     if( tracemode == FILLED )
     {
-        Rect( p1, p2, FILL_TYPE::NO_FILL, width );
+        Rect( p1, p2, FILL_T::NO_FILL, width );
     }
     else
     {
@@ -582,12 +578,12 @@ void PLOTTER::ThickRect( const wxPoint& p1, const wxPoint& p2, int width,
                           p1.y - (width - m_currentPenWidth) / 2 );
         wxPoint offsetp2( p2.x + (width - m_currentPenWidth) / 2,
                           p2.y + (width - m_currentPenWidth) / 2 );
-        Rect( offsetp1, offsetp2, FILL_TYPE::NO_FILL, -1 );
+        Rect( offsetp1, offsetp2, FILL_T::NO_FILL, -1 );
         offsetp1.x += ( width - m_currentPenWidth );
         offsetp1.y += ( width - m_currentPenWidth );
         offsetp2.x -= ( width - m_currentPenWidth );
         offsetp2.y -= ( width - m_currentPenWidth );
-        Rect( offsetp1, offsetp2, FILL_TYPE::NO_FILL, -1 );
+        Rect( offsetp1, offsetp2, FILL_T::NO_FILL, -1 );
     }
 }
 
@@ -597,13 +593,13 @@ void PLOTTER::ThickCircle( const wxPoint& pos, int diametre, int width, OUTLINE_
 {
     if( tracemode == FILLED )
     {
-        Circle( pos, diametre, FILL_TYPE::NO_FILL, width );
+        Circle( pos, diametre, FILL_T::NO_FILL, width );
     }
     else
     {
         SetCurrentLineWidth( -1 );
-        Circle( pos, diametre - width + m_currentPenWidth, FILL_TYPE::NO_FILL, -1 );
-        Circle( pos, diametre + width - m_currentPenWidth, FILL_TYPE::NO_FILL, -1 );
+        Circle( pos, diametre - width + m_currentPenWidth, FILL_T::NO_FILL, -1 );
+        Circle( pos, diametre + width - m_currentPenWidth, FILL_T::NO_FILL, -1 );
     }
 }
 
@@ -612,18 +608,17 @@ void PLOTTER::FilledCircle( const wxPoint& pos, int diametre, OUTLINE_MODE trace
 {
     if( tracemode == FILLED )
     {
-        Circle( pos, diametre, FILL_TYPE::FILLED_SHAPE, 0 );
+        Circle( pos, diametre, FILL_T::FILLED_SHAPE, 0 );
     }
     else
     {
         SetCurrentLineWidth( -1 );
-        Circle( pos, diametre, FILL_TYPE::NO_FILL, -1 );
+        Circle( pos, diametre, FILL_T::NO_FILL, -1 );
     }
 }
 
 
-void PLOTTER::PlotPoly( const SHAPE_LINE_CHAIN& aCornerList, FILL_TYPE aFill,
-                        int aWidth, void* aData )
+void PLOTTER::PlotPoly( const SHAPE_LINE_CHAIN& aCornerList, FILL_T aFill, int aWidth, void* aData )
 {
     std::vector<wxPoint> cornerList;
     cornerList.reserve( aCornerList.PointCount() );

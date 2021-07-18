@@ -26,9 +26,9 @@
 #include <widgets/msgpanel.h>
 #include <bitmaps.h>
 #include <core/mirror.h>
-#include <lib_rectangle.h>
 #include <lib_pin.h>
 #include <lib_text.h>
+#include <lib_shape.h>
 #include <sch_symbol.h>
 #include <sch_sheet_path.h>
 #include <schematic.h>
@@ -77,10 +77,10 @@ static LIB_SYMBOL* dummy()
     {
         symbol = new LIB_SYMBOL( wxEmptyString );
 
-        LIB_RECTANGLE* square = new LIB_RECTANGLE( symbol );
+        LIB_SHAPE* square = new LIB_SHAPE( symbol, SHAPE_T::RECT );
 
         square->MoveTo( wxPoint( Mils2iu( -200 ), Mils2iu( 200 ) ) );
-        square->SetEndPosition( wxPoint( Mils2iu( 200 ), Mils2iu( -200 ) ) );
+        square->SetEnd( wxPoint( Mils2iu( 200 ), Mils2iu( -200 ) ) );
 
         LIB_TEXT* text = new LIB_TEXT( symbol );
 

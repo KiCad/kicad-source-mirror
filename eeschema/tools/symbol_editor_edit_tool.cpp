@@ -240,12 +240,8 @@ int SYMBOL_EDITOR_EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
 static KICAD_T nonFields[] =
 {
         LIB_SYMBOL_T,
-        LIB_ARC_T,
-        LIB_CIRCLE_T,
+        LIB_SHAPE_T,
         LIB_TEXT_T,
-        LIB_RECTANGLE_T,
-        LIB_POLYLINE_T,
-        LIB_BEZIER_T,
         LIB_PIN_T,
         EOT
 };
@@ -433,14 +429,11 @@ int SYMBOL_EDITOR_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
 
             if( pinTool )
                 pinTool->EditPinProperties( (LIB_PIN*) item );
-
-            break;
         }
-        case LIB_ARC_T:
-        case LIB_CIRCLE_T:
-        case LIB_RECTANGLE_T:
-        case LIB_POLYLINE_T:
-            editGraphicProperties( item );
+            break;
+
+        case LIB_SHAPE_T:
+            editShapeProperties( item );
             break;
 
         case LIB_TEXT_T:
@@ -466,7 +459,7 @@ int SYMBOL_EDITOR_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
 }
 
 
-void SYMBOL_EDITOR_EDIT_TOOL::editGraphicProperties( LIB_ITEM* aItem )
+void SYMBOL_EDITOR_EDIT_TOOL::editShapeProperties( LIB_ITEM* aItem )
 {
     DIALOG_LIB_SHAPE_PROPERTIES dlg( m_frame, aItem );
 

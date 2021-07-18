@@ -47,12 +47,12 @@ const double PSLIKE_PLOTTER::postscriptTextAscent = 0.718;
 
 // return a id used to select a ps macro (see StartPlot() ) from a FILL_TYPE
 // fill mode, for arc, rect, circle and poly draw primitives
-static int getFillId( FILL_TYPE aFill )
+static int getFillId( FILL_T aFill )
 {
-    if( aFill == FILL_TYPE::NO_FILL )
+    if( aFill == FILL_T::NO_FILL )
         return 0;
 
-    if( aFill == FILL_TYPE::FILLED_SHAPE )
+    if( aFill == FILL_T::FILLED_SHAPE )
         return 1;
 
     return 2;
@@ -122,7 +122,7 @@ void PSLIKE_PLOTTER::FlashPadCircle( const wxPoint& aPadPos, int aDiameter,
 {
     if( aTraceMode == FILLED )
     {
-        Circle( aPadPos, aDiameter, FILL_TYPE::FILLED_SHAPE, 0 );
+        Circle( aPadPos, aDiameter, FILL_T::FILLED_SHAPE, 0 );
     }
     else    // Plot a ring:
     {
@@ -133,7 +133,7 @@ void PSLIKE_PLOTTER::FlashPadCircle( const wxPoint& aPadPos, int aDiameter,
         if( linewidth > aDiameter-2 )
             linewidth = aDiameter-2;
 
-        Circle( aPadPos, aDiameter - linewidth, FILL_TYPE::NO_FILL, linewidth );
+        Circle( aPadPos, aDiameter - linewidth, FILL_T::NO_FILL, linewidth );
     }
 
     SetCurrentLineWidth( USE_DEFAULT_LINE_WIDTH );
@@ -185,7 +185,7 @@ void PSLIKE_PLOTTER::FlashPadRect( const wxPoint& aPadPos, const wxSize& aSize,
 
     cornerList.push_back( cornerList[0] );
 
-    PlotPoly( cornerList, ( aTraceMode == FILLED ) ? FILL_TYPE::FILLED_SHAPE : FILL_TYPE::NO_FILL,
+    PlotPoly( cornerList, ( aTraceMode == FILLED ) ? FILL_T::FILLED_SHAPE : FILL_T::NO_FILL,
               GetCurrentLineWidth() );
 }
 
@@ -225,7 +225,7 @@ void PSLIKE_PLOTTER::FlashPadRoundRect( const wxPoint& aPadPos, const wxSize& aS
     // Close polygon
     cornerList.push_back( cornerList[0] );
 
-    PlotPoly( cornerList, ( aTraceMode == FILLED ) ? FILL_TYPE::FILLED_SHAPE : FILL_TYPE::NO_FILL,
+    PlotPoly( cornerList, ( aTraceMode == FILLED ) ? FILL_T::FILLED_SHAPE : FILL_T::NO_FILL,
               GetCurrentLineWidth() );
 }
 
@@ -261,7 +261,7 @@ void PSLIKE_PLOTTER::FlashPadCustom( const wxPoint& aPadPos, const wxSize& aSize
         // Close polygon
         cornerList.push_back( cornerList[0] );
 
-        PlotPoly( cornerList, ( aTraceMode == FILLED ) ? FILL_TYPE::FILLED_SHAPE : FILL_TYPE::NO_FILL,
+        PlotPoly( cornerList, ( aTraceMode == FILLED ) ? FILL_T::FILLED_SHAPE : FILL_T::NO_FILL,
                   GetCurrentLineWidth() );
     }
 }
@@ -309,7 +309,7 @@ void PSLIKE_PLOTTER::FlashPadTrapez( const wxPoint& aPadPos, const wxPoint *aCor
     }
 
     cornerList.push_back( cornerList[0] );
-    PlotPoly( cornerList, ( aTraceMode == FILLED ) ? FILL_TYPE::FILLED_SHAPE : FILL_TYPE::NO_FILL,
+    PlotPoly( cornerList, ( aTraceMode == FILLED ) ? FILL_T::FILLED_SHAPE : FILL_T::NO_FILL,
               GetCurrentLineWidth() );
 }
 
@@ -577,7 +577,7 @@ void PS_PLOTTER::SetDash( PLOT_DASH_TYPE dashed )
 }
 
 
-void PS_PLOTTER::Rect( const wxPoint& p1, const wxPoint& p2, FILL_TYPE fill, int width )
+void PS_PLOTTER::Rect( const wxPoint& p1, const wxPoint& p2, FILL_T fill, int width )
 {
     DPOINT p1_dev = userToDeviceCoordinates( p1 );
     DPOINT p2_dev = userToDeviceCoordinates( p2 );
@@ -588,7 +588,7 @@ void PS_PLOTTER::Rect( const wxPoint& p1, const wxPoint& p2, FILL_TYPE fill, int
 }
 
 
-void PS_PLOTTER::Circle( const wxPoint& pos, int diametre, FILL_TYPE fill, int width )
+void PS_PLOTTER::Circle( const wxPoint& pos, int diametre, FILL_T fill, int width )
 {
     wxASSERT( m_outputFile );
     DPOINT pos_dev = userToDeviceCoordinates( pos );
@@ -599,8 +599,8 @@ void PS_PLOTTER::Circle( const wxPoint& pos, int diametre, FILL_TYPE fill, int w
 }
 
 
-void PS_PLOTTER::Arc( const wxPoint& centre, double StAngle, double EndAngle,
-                      int radius, FILL_TYPE fill, int width )
+void PS_PLOTTER::Arc( const wxPoint& centre, double StAngle, double EndAngle, int radius,
+                      FILL_T fill, int width )
 {
     wxASSERT( m_outputFile );
 
@@ -636,8 +636,8 @@ void PS_PLOTTER::Arc( const wxPoint& centre, double StAngle, double EndAngle,
 }
 
 
-void PS_PLOTTER::PlotPoly( const std::vector< wxPoint >& aCornerList,
-                           FILL_TYPE aFill, int aWidth, void * aData )
+void PS_PLOTTER::PlotPoly( const std::vector< wxPoint >& aCornerList, FILL_T aFill,
+                           int aWidth, void * aData )
 {
     if( aCornerList.size() <= 1 )
         return;

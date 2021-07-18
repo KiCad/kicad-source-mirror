@@ -219,10 +219,6 @@ public:
     void Plot( PLOTTER* aPlotter, const wxPoint& aPffset, bool aFill,
                const TRANSFORM& aTransform ) const override;
 
-    // Get/SetWidth() not used for pins.  Use GetPenWidth() for drawing.
-    int GetWidth() const override { return 1; }
-    void SetWidth( int aWidth ) override { };
-
     BITMAPS GetMenuImage() const override;
 
     wxString GetSelectMenuText( EDA_UNITS aUnits ) const override;
