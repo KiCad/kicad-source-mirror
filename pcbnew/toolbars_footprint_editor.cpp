@@ -3,8 +3,8 @@
  *
  * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2012 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2012 Wayne Stambaugh <stambaughw@gmail.com>
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -32,6 +32,7 @@
 #include <pcb_layer_box_selector.h>
 #include <wx/choice.h>
 
+
 void FOOTPRINT_EDIT_FRAME::ReCreateHToolbar()
 {
     // Note:
@@ -48,7 +49,8 @@ void FOOTPRINT_EDIT_FRAME::ReCreateHToolbar()
     else
     {
         m_mainToolBar = new ACTION_TOOLBAR( this, ID_H_TOOLBAR, wxDefaultPosition, wxDefaultSize,
-                                            KICAD_AUI_TB_STYLE | wxAUI_TB_HORZ_LAYOUT | wxAUI_TB_HORIZONTAL);
+                                            KICAD_AUI_TB_STYLE | wxAUI_TB_HORZ_LAYOUT |
+                                            wxAUI_TB_HORIZONTAL );
         m_mainToolBar->SetAuiManager( &m_auimgr );
     }
 
@@ -99,7 +101,7 @@ void FOOTPRINT_EDIT_FRAME::ReCreateHToolbar()
     // Grid selection choice box.
     if( m_gridSelectBox == nullptr )
         m_gridSelectBox = new wxChoice( m_mainToolBar, ID_ON_GRID_SELECT,
-                                    wxDefaultPosition, wxDefaultSize, 0, NULL );
+                                        wxDefaultPosition, wxDefaultSize, 0, nullptr );
 
     UpdateGridSelectBox();
     m_mainToolBar->AddControl( m_gridSelectBox );
@@ -109,7 +111,7 @@ void FOOTPRINT_EDIT_FRAME::ReCreateHToolbar()
     // Zoom selection choice box.
     if( m_zoomSelectBox == nullptr )
         m_zoomSelectBox = new wxChoice( m_mainToolBar, ID_ON_ZOOM_SELECT,
-                                    wxDefaultPosition, wxDefaultSize, 0, NULL );
+                                        wxDefaultPosition, wxDefaultSize, 0, nullptr );
 
     UpdateZoomSelectBox();
     m_mainToolBar->AddControl( m_zoomSelectBox );
@@ -122,7 +124,7 @@ void FOOTPRINT_EDIT_FRAME::ReCreateHToolbar()
         m_selLayerBox = new PCB_LAYER_BOX_SELECTOR( m_mainToolBar, ID_TOOLBARH_PCB_SELECT_LAYER );
         m_selLayerBox->SetBoardFrame( this );
 
-        // Some layers cannot be seclect (they are shown in the layer manager
+        // Some layers cannot be select (they are shown in the layer manager
         // only to set the color and visibility, but not for selection)
         // Disable them in layer box
         m_selLayerBox->SetNotAllowedLayerSet( LSET::ForbiddenFootprintLayers() );
@@ -186,7 +188,8 @@ void FOOTPRINT_EDIT_FRAME::ReCreateOptToolbar()
     }
     else
     {
-        m_optionsToolBar = new ACTION_TOOLBAR( this, ID_OPT_TOOLBAR, wxDefaultPosition, wxDefaultSize,
+        m_optionsToolBar = new ACTION_TOOLBAR( this, ID_OPT_TOOLBAR, wxDefaultPosition,
+                                               wxDefaultSize,
                                                KICAD_AUI_TB_STYLE | wxAUI_TB_VERTICAL );
         m_optionsToolBar->SetAuiManager( &m_auimgr );
     }
@@ -230,7 +233,7 @@ void FOOTPRINT_EDIT_FRAME::UpdateToolbarControlSizes()
 
 void FOOTPRINT_EDIT_FRAME::ReCreateLayerBox( bool aForceResizeToolbar )
 {
-    if( m_selLayerBox == NULL || m_mainToolBar == NULL )
+    if( m_selLayerBox == nullptr || m_mainToolBar == nullptr )
         return;
 
     m_selLayerBox->SetToolTip( _( "+/- to switch" ) );

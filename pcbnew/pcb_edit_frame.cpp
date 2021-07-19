@@ -176,9 +176,9 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 {
     m_maximizeByDefault = true;
     m_showBorderAndTitleBlock = true;   // true to display sheet references
-    m_SelTrackWidthBox = NULL;
-    m_SelViaSizeBox = NULL;
-    m_SelLayerBox = NULL;
+    m_SelTrackWidthBox = nullptr;
+    m_SelViaSizeBox = nullptr;
+    m_SelLayerBox = nullptr;
     m_show_layer_manager_tools = true;
     m_hasAutoSave = true;
 
@@ -429,7 +429,7 @@ void PCB_EDIT_FRAME::SetPageSettings( const PAGE_INFO& aPageSettings )
 
     BASE_SCREEN* screen = GetScreen();
 
-    if( screen != NULL )
+    if( screen != nullptr )
     {
         drawingSheet->SetPageNumber(TO_UTF8( screen->GetPageNumber() ) );
         drawingSheet->SetSheetCount( screen->GetPageCount() );
@@ -553,7 +553,7 @@ void PCB_EDIT_FRAME::setupUIConditions()
 
     if( SCRIPTING::IsWxAvailable() )
         mgr->SetConditions( PCB_ACTIONS::showPythonConsole, CHECK( cond.ScriptingConsoleVisible() ) );
-    
+
     auto enableZoneControlConition =
         [this] ( const SELECTION& )
         {
@@ -1279,6 +1279,7 @@ void PCB_EDIT_FRAME::UpdateUserInterface()
     {
         // Canonical name
         layerEnum.Map( *seq, LSET::Name( *seq ) );
+
         // User name
         layerEnum.Map( *seq, GetBoard()->GetLayerName( *seq ) );
     }
@@ -1511,7 +1512,7 @@ void PCB_EDIT_FRAME::PythonSyncEnvironmentVariables()
     for( auto& var : vars )
         UpdatePythonEnvVar( var.first, var.second.GetValue() );
 
-    // Because the env vars can de modified by the python scripts (rewritten in UTF8),
+    // Because the env vars can be modified by the python scripts (rewritten in UTF8),
     // regenerate them (in Unicode) for our normal environment
     for( auto& var : vars )
         wxSetEnv( var.first, var.second.GetValue() );
@@ -1532,7 +1533,7 @@ void PCB_EDIT_FRAME::PythonSyncProjectName()
 
 void PCB_EDIT_FRAME::ShowFootprintPropertiesDialog( FOOTPRINT* aFootprint )
 {
-    if( aFootprint == NULL )
+    if( aFootprint == nullptr )
         return;
 
     DIALOG_FOOTPRINT_PROPERTIES dlg( this, aFootprint );

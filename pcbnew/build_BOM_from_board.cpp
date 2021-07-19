@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2009-2014 Jean-Pierre Charras, jean-pierre.charras@ujf-grenoble.fr
- * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -64,6 +64,7 @@ public:
     int      m_Id;
     int      m_Count;
 };
+
 WX_DECLARE_LIST( BOM_ENTRY, BOM_ENTRY_LIST );
 
 WX_DEFINE_LIST( BOM_ENTRY_LIST )
@@ -97,7 +98,7 @@ void PCB_EDIT_FRAME::RecreateBOMFileFromBoard( wxCommandEvent& aEvent )
 
     fp_bom = wxFopen( fn.GetFullPath(), wxT( "wt" ) );
 
-    if( fp_bom == NULL )
+    if( fp_bom == nullptr )
     {
         msg.Printf( _( "Failed to create file '%s'." ), fn.GetFullPath() );
         DisplayError( this, msg );
@@ -169,7 +170,7 @@ void PCB_EDIT_FRAME::RecreateBOMFileFromBoard( wxCommandEvent& aEvent )
 
         // We do not need this object, now: remove it from list and delete it
         list.DeleteObject( curEntry );
-        delete (curEntry);
+        delete curEntry;
     }
 
     fclose( fp_bom );

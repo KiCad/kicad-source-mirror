@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2020 BeagleBoard Foundation
- * Copyright (C) 2020 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2020-2021 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -36,8 +36,8 @@
 
 FABMASTER_PLUGIN::FABMASTER_PLUGIN()
 {
-    m_board = NULL;
-    m_props = NULL;
+    m_board = nullptr;
+    m_props = nullptr;
 }
 
 

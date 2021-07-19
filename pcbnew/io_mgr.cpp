@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2011-2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2016-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -111,7 +111,7 @@ const wxString IO_MGR::GetFileExtension( PCB_FILE_T aFileType )
     wxString ext = wxEmptyString;
     PLUGIN* plugin = PluginFind( aFileType );
 
-    if( plugin != NULL )
+    if( plugin != nullptr )
     {
         ext = plugin->GetFileExtension();
         PluginRelease( plugin );

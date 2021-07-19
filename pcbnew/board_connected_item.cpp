@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -60,14 +60,10 @@ bool BOARD_CONNECTED_ITEM::SetNetCode( int aNetCode, bool aNoAssert )
     if( !aNoAssert )
         wxASSERT( m_netinfo );
 
-    return ( m_netinfo != NULL );
+    return ( m_netinfo != nullptr );
 }
 
 
-/*
- * This method returns the Default netclass for nets which don't have their own, and the
- * Orphaned netclass for unassigned nets (netCode == 0)
- */
 NETCLASS* BOARD_CONNECTED_ITEM::GetEffectiveNetclass() const
 {
     // NB: we must check the net first, as when it is 0 GetNetClass() will return the
@@ -79,9 +75,6 @@ NETCLASS* BOARD_CONNECTED_ITEM::GetEffectiveNetclass() const
 }
 
 
-/*
- * Returns the item's "own" clearance (ie: that not affected by other items).
- */
 int BOARD_CONNECTED_ITEM::GetOwnClearance( PCB_LAYER_ID aLayer, wxString* aSource ) const
 {
     DRC_CONSTRAINT constraint;

@@ -47,7 +47,7 @@ void FOOTPRINT_INFO_IMPL::load()
 
     const FOOTPRINT* footprint = fptable->GetEnumeratedFootprint( m_nickname, m_fpname );
 
-    if( footprint == NULL ) // Should happen only with malformed/broken libraries
+    if( footprint == nullptr ) // Should happen only with malformed/broken libraries
     {
         m_pad_count = 0;
         m_unique_pad_count = 0;
@@ -87,6 +87,7 @@ bool FOOTPRINT_LIST_IMPL::CatchErrors( const std::function<void()>& aFunc )
         {
             m_errors.move_push( std::make_unique<IO_ERROR>( ioe ) );
         }
+
         return false;
     }
 
@@ -137,7 +138,6 @@ bool FOOTPRINT_LIST_IMPL::ReadFootprintFiles( FP_LIB_TABLE* aTable, const wxStri
     loader.SetList( this );
     loader.Start( aTable, aNickname );
 
-
     while( !m_cancelled && (int)m_count_finished.load() < m_loader->m_total_libs )
     {
         if( m_progress_reporter && !m_progress_reporter->KeepRefreshing() )
@@ -166,7 +166,7 @@ bool FOOTPRINT_LIST_IMPL::ReadFootprintFiles( FP_LIB_TABLE* aTable, const wxStri
     }
 
     if( m_cancelled )
-        m_list_timestamp = 0;       // God knows what we got before we were cancelled
+        m_list_timestamp = 0;       // God knows what we got before we were canceled
     else
         m_list_timestamp = generatedTimestamp;
 
@@ -189,7 +189,9 @@ void FOOTPRINT_LIST_IMPL::startWorkers( FP_LIB_TABLE* aTable, wxString const* aN
     m_queue_out.clear();
 
     if( aNickname )
+    {
         m_queue_in.push( *aNickname );
+    }
     else
     {
         for( auto const& nickname : aTable->GetLogicalLibs() )
@@ -203,6 +205,7 @@ void FOOTPRINT_LIST_IMPL::startWorkers( FP_LIB_TABLE* aTable, wxString const* aN
         m_threads.emplace_back( &FOOTPRINT_LIST_IMPL::loader_job, this );
     }
 }
+
 
 void FOOTPRINT_LIST_IMPL::stopWorkers()
 {
@@ -219,10 +222,11 @@ void FOOTPRINT_LIST_IMPL::stopWorkers()
     m_queue_in.clear();
     m_count_finished.store( 0 );
 
-    // If we have cancelled in the middle of a load, clear our timestamp to re-load next time
+    // If we have canceled in the middle of a load, clear our timestamp to re-load next time
     if( m_cancelled )
         m_list_timestamp = 0;
 }
+
 
 bool FOOTPRINT_LIST_IMPL::joinWorkers()
 {
@@ -242,7 +246,7 @@ bool FOOTPRINT_LIST_IMPL::joinWorkers()
     LOCALE_IO toggle_locale;
 
     // Parse the footprints in parallel. WARNING! This requires changing the locale, which is
-    // GLOBAL. It is only threadsafe to construct the LOCALE_IO before the threads are created,
+    // GLOBAL. It is only thread safe to construct the LOCALE_IO before the threads are created,
     // destroy it after they finish, and block the main (GUI) thread while they work. Any deviation
     // from this will cause nasal demons.
     //
@@ -313,11 +317,12 @@ bool FOOTPRINT_LIST_IMPL::joinWorkers()
     while( queue_parsed.pop( fpi ) )
         m_list.push_back( std::move( fpi ) );
 
-    std::sort( m_list.begin(), m_list.end(), []( std::unique_ptr<FOOTPRINT_INFO> const& lhs,
-                                                 std::unique_ptr<FOOTPRINT_INFO> const& rhs ) -> bool
-                                             {
-                                                 return *lhs < *rhs;
-                                             } );
+    std::sort( m_list.begin(), m_list.end(),
+               []( std::unique_ptr<FOOTPRINT_INFO> const& lhs,
+                   std::unique_ptr<FOOTPRINT_INFO> const& rhs ) -> bool
+               {
+                   return *lhs < *rhs;
+               } );
 
     return m_errors.empty();
 }

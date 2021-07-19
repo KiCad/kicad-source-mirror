@@ -2,7 +2,7 @@
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
  * Copyright (C) 2013-2017 CERN
- * Copyright (C) 2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2021 KiCad Developers, see AUTHORS.txt for contributors.
  * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -81,7 +81,7 @@ static TOOL_ACTION ACT_AmplDecrease( "pcbnew.LengthTuner.AmplDecrease",
 LENGTH_TUNER_TOOL::LENGTH_TUNER_TOOL() :
     TOOL_BASE( "pcbnew.LengthTuner" )
 {
-    // set the initial tune mode for the settings dialog, 
+    // set the initial tune mode for the settings dialog,
     // in case the dialog is opened before the tool is activated the first time
     m_lastTuneMode = PNS::ROUTER_MODE::PNS_MODE_TUNE_SINGLE;
 }
@@ -112,6 +112,7 @@ bool LENGTH_TUNER_TOOL::Init()
 
     return true;
 }
+
 
 void LENGTH_TUNER_TOOL::Reset( RESET_REASON aReason )
 {
@@ -166,12 +167,12 @@ void LENGTH_TUNER_TOOL::performTuning()
     PNS_TUNE_STATUS_POPUP statusPopup( frame() );
     statusPopup.Popup();
 
-    m_router->Move( end, NULL );
+    m_router->Move( end, nullptr );
     updateStatusPopup( statusPopup );
 
-    auto setCursor = 
-            [&]() 
-            { 
+    auto setCursor =
+            [&]()
+            {
                 frame()->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
             };
 
@@ -189,12 +190,12 @@ void LENGTH_TUNER_TOOL::performTuning()
         else if( evt->IsMotion() )
         {
             end = evt->Position();
-            m_router->Move( end, NULL );
+            m_router->Move( end, nullptr );
             updateStatusPopup( statusPopup );
         }
         else if( evt->IsClick( BUT_LEFT ) )
         {
-            if( m_router->FixRoute( evt->Position(), NULL ) )
+            if( m_router->FixRoute( evt->Position(), nullptr ) )
                 break;
         }
         else if( evt->IsClick( BUT_RIGHT ) )
@@ -203,31 +204,31 @@ void LENGTH_TUNER_TOOL::performTuning()
         }
         else if( evt->IsAction( &ACT_EndTuning ) )
         {
-            if( m_router->FixRoute( end, NULL ) )
+            if( m_router->FixRoute( end, nullptr ) )
                 break;
         }
         else if( evt->IsAction( &ACT_AmplDecrease ) )
         {
             placer->AmplitudeStep( -1 );
-            m_router->Move( end, NULL );
+            m_router->Move( end, nullptr );
             updateStatusPopup( statusPopup );
         }
         else if( evt->IsAction( &ACT_AmplIncrease ) )
         {
             placer->AmplitudeStep( 1 );
-            m_router->Move( end, NULL );
+            m_router->Move( end, nullptr );
             updateStatusPopup( statusPopup );
         }
         else if(evt->IsAction( &ACT_SpacingDecrease ) )
         {
             placer->SpacingStep( -1 );
-            m_router->Move( end, NULL );
+            m_router->Move( end, nullptr );
             updateStatusPopup( statusPopup );
         }
         else if( evt->IsAction( &ACT_SpacingIncrease ) )
         {
             placer->SpacingStep( 1 );
-            m_router->Move( end, NULL );
+            m_router->Move( end, nullptr );
             updateStatusPopup( statusPopup );
         }
         else if( evt->IsAction( &PCB_ACTIONS::lengthTunerSettingsDialog ) )
@@ -253,10 +254,12 @@ void LENGTH_TUNER_TOOL::setTransitions()
 {
     Go( &LENGTH_TUNER_TOOL::MainLoop,              PCB_ACTIONS::routerTuneSingleTrace.MakeEvent() );
     Go( &LENGTH_TUNER_TOOL::MainLoop,              PCB_ACTIONS::routerTuneDiffPair.MakeEvent() );
-    Go( &LENGTH_TUNER_TOOL::MainLoop,              PCB_ACTIONS::routerTuneDiffPairSkew.MakeEvent() );
+    Go( &LENGTH_TUNER_TOOL::MainLoop,
+        PCB_ACTIONS::routerTuneDiffPairSkew.MakeEvent() );
 
     // in case tool is inactive, otherwise the event is handled in the tool loop
-    Go( &LENGTH_TUNER_TOOL::meanderSettingsDialog, PCB_ACTIONS::lengthTunerSettingsDialog.MakeEvent() );
+    Go( &LENGTH_TUNER_TOOL::meanderSettingsDialog,
+        PCB_ACTIONS::lengthTunerSettingsDialog.MakeEvent() );
 }
 
 
@@ -274,9 +277,9 @@ int LENGTH_TUNER_TOOL::MainLoop( const TOOL_EVENT& aEvent )
 
     controls()->ShowCursor( true );
 
-    auto setCursor = 
-            [&]() 
-            { 
+    auto setCursor =
+            [&]()
+            {
                 frame()->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
             };
 
@@ -331,6 +334,7 @@ int LENGTH_TUNER_TOOL::MainLoop( const TOOL_EVENT& aEvent )
     frame()->PopTool( tool );
     return 0;
 }
+
 
 int LENGTH_TUNER_TOOL::meanderSettingsDialog( const TOOL_EVENT& aEvent )
 {

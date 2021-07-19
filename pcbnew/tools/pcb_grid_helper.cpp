@@ -157,7 +157,7 @@ VECTOR2I PCB_GRID_HELPER::BestDragOrigin( const VECTOR2I &aMousePos,
     ANCHOR* nearestOutline = nearestAnchor( aMousePos, OUTLINE, LSET::AllLayersMask() );
     ANCHOR* nearestCorner = nearestAnchor( aMousePos, CORNER, LSET::AllLayersMask() );
     ANCHOR* nearestOrigin = nearestAnchor( aMousePos, ORIGIN, LSET::AllLayersMask() );
-    ANCHOR* best = NULL;
+    ANCHOR* best = nullptr;
     double minDist = std::numeric_limits<double>::max();
 
     if( nearestOrigin )
@@ -703,7 +703,7 @@ PCB_GRID_HELPER::ANCHOR* PCB_GRID_HELPER::nearestAnchor( const VECTOR2I& aPos, i
                                                          LSET aMatchLayers )
 {
     double  minDist = std::numeric_limits<double>::max();
-    ANCHOR* best = NULL;
+    ANCHOR* best = nullptr;
 
     for( ANCHOR& a : m_anchors )
     {

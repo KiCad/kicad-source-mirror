@@ -85,9 +85,9 @@ void PCB_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
     line[sizeof(line) - 1] = 0;
 
     idcmd = strtok( line, " \n\r" );
-    text  = strtok( NULL, "\"\n\r" );
+    text  = strtok( nullptr, "\"\n\r" );
 
-    if( idcmd == NULL )
+    if( idcmd == nullptr )
         return;
 
     if( strcmp( idcmd, "$NET:" ) == 0 )
@@ -108,6 +108,7 @@ void PCB_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
             SetMsgPanel( items );
         }
     }
+
     if( strcmp( idcmd, "$NETS:" ) == 0 )
     {
         if( !crossProbingSettings.auto_highlight )
@@ -148,10 +149,10 @@ void PCB_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
     {
         wxString pinName = FROM_UTF8( text );
 
-        text = strtok( NULL, " \n\r" );
+        text = strtok( nullptr, " \n\r" );
 
         if( text && strcmp( text, "$PART:" ) == 0 )
-            text = strtok( NULL, "\"\n\r" );
+            text = strtok( nullptr, "\"\n\r" );
 
         modName = FROM_UTF8( text );
 
@@ -163,9 +164,9 @@ void PCB_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
         if( pad )
             netcode = pad->GetNetCode();
 
-        if( footprint == NULL )
+        if( footprint == nullptr )
             msg.Printf( _( "%s not found" ), modName );
-        else if( pad == NULL )
+        else if( pad == nullptr )
             msg.Printf( _( "%s pin %s not found" ), modName, pinName );
         else
             msg.Printf( _( "%s pin %s found" ), modName, pinName );
@@ -284,7 +285,8 @@ void PCB_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
             // The "fabs" on x ensures the right answer when the view is flipped
             screenSize.x = std::max( 10.0, fabs( screenSize.x ) );
             screenSize.y = std::max( 10.0, screenSize.y );
-            double ratio = std::max( fabs( bbSize.x / screenSize.x ), fabs( bbSize.y / screenSize.y ) );
+            double ratio = std::max( fabs( bbSize.x / screenSize.x ),
+                                     fabs( bbSize.y / screenSize.y ) );
 
             // Try not to zoom on every cross-probe; it gets very noisy
             if( crossProbingSettings.zoom_to_fit && ( ratio < 0.5 || ratio > 1.0 ) )
@@ -309,19 +311,23 @@ void PCB_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
             double currTextHeight = Millimeter2iu( DEFAULT_TEXT_SIZE );
 
             double compRatio     = bbSize.y / currTextHeight; // Ratio of component to text height
-            double compRatioBent = 1.0; // This will end up as the scaling factor we apply to "ratio"
 
-            // This is similar to the original KiCad code that scaled the zoom to make sure components
-            // were visible on screen.  It's simply a ratio of screen size to component size, and its
-            // job is to zoom in to make the component fullscreen.  Earlier in the code the
-            // component BBox is given a 20% margin to add some breathing room. We compare
-            // the height of this enlarged component bbox to the default text height.  If a component
-            // will end up with the sides clipped, we adjust later to make sure it fits on screen.
+            // This will end up as the scaling factor we apply to "ratio".
+            double compRatioBent = 1.0;
+
+            // This is similar to the original KiCad code that scaled the zoom to make sure
+            // components were visible on screen.  It's simply a ratio of screen size to
+            // component size, and its job is to zoom in to make the component fullscreen.
+            // Earlier in the code the component BBox is given a 20% margin to add some
+            // breathing room. We compare the height of this enlarged component bbox to the
+            // default text height.  If a component will end up with the sides clipped, we
+            // adjust later to make sure it fits on screen.
             //
             // The "fabs" on x ensures the right answer when the view is flipped
             screenSize.x = std::max( 10.0, fabs( screenSize.x ) );
             screenSize.y = std::max( 10.0, screenSize.y );
             double ratio = std::max( -1.0, fabs( bbSize.y / screenSize.y ) );
+
             // Original KiCad code for how much to scale the zoom
             double kicadRatio = std::max( fabs( bbSize.x / screenSize.x ),
                                           fabs( bbSize.y / screenSize.y ) );
@@ -369,19 +375,23 @@ void PCB_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
                 }
             }
             else
+            {
                 compRatioBent = lut.front().second; // Small component default
+            }
 
             // If the width of the part we're probing is bigger than what the screen width will be
             // after the zoom, then punt and use the KiCad zoom algorithm since it guarantees the
-            // part's width will be encompassed within the screen.  This will apply to parts that are
-            // much wider than they are tall.
+            // part's width will be encompassed within the screen.  This will apply to parts that
+            // are much wider than they are tall.
 
             if( bbSize.x > screenSize.x * ratio * compRatioBent )
             {
-                ratio = kicadRatio; // Use standard KiCad zoom algorithm for parts too wide to fit screen
+                // Use standard KiCad zoom algorithm for parts too wide to fit screen/
+                ratio = kicadRatio;
                 compRatioBent = 1.0; // Reset so we don't modify the "KiCad" ratio
                 wxLogTrace( "CROSS_PROBE_SCALE",
-                        "Part TOO WIDE for screen.  Using normal KiCad zoom ratio: %1.5f", ratio );
+                            "Part TOO WIDE for screen.  Using normal KiCad zoom ratio: %1.5f",
+                            ratio );
             }
 
             // Now that "compRatioBent" holds our final scaling factor we apply it to the original
@@ -389,15 +399,18 @@ void PCB_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
             ratio *= compRatioBent;
 
             bool alwaysZoom = false; // DEBUG - allows us to minimize zooming or not
+
             // Try not to zoom on every cross-probe; it gets very noisy
             if( ( ratio < 0.5 || ratio > 1.0 ) || alwaysZoom )
                 view->SetScale( view->GetScale() / ratio );
 #endif // ifndef DEFAULT_PCBNEW_CODE
         }
+
         view->SetCenter( bbox.Centre() );
     }
 
     view->UpdateAllLayersColor();
+
     // Ensure the display is refreshed, because in some installs the refresh is done only
     // when the gal canvas has the focus, and that is not the case when crossprobing from
     // Eeschema:
@@ -419,36 +432,33 @@ std::string FormatProbeItem( BOARD_ITEM* aItem )
         return StrPrintf( "$PART: \"%s\"", TO_UTF8( footprint->GetReference() ) );
 
     case PCB_PAD_T:
-        {
-            footprint = static_cast<FOOTPRINT*>( aItem->GetParent() );
-            wxString pad = static_cast<PAD*>( aItem )->GetName();
+    {
+        footprint = static_cast<FOOTPRINT*>( aItem->GetParent() );
+        wxString pad = static_cast<PAD*>( aItem )->GetName();
 
-            return StrPrintf( "$PART: \"%s\" $PAD: \"%s\"",
-                              TO_UTF8( footprint->GetReference() ),
-                              TO_UTF8( pad ) );
-        }
+        return StrPrintf( "$PART: \"%s\" $PAD: \"%s\"", TO_UTF8( footprint->GetReference() ),
+                          TO_UTF8( pad ) );
+    }
 
     case PCB_FP_TEXT_T:
-        {
-            footprint = static_cast<FOOTPRINT*>( aItem->GetParent() );
+    {
+        footprint = static_cast<FOOTPRINT*>( aItem->GetParent() );
 
-            FP_TEXT*    text = static_cast<FP_TEXT*>( aItem );
-            const char* text_key;
+        FP_TEXT*    text = static_cast<FP_TEXT*>( aItem );
+        const char* text_key;
 
-            /* This can't be a switch since the break need to pull out
-             * from the outer switch! */
-            if( text->GetType() == FP_TEXT::TEXT_is_REFERENCE )
-                text_key = "$REF:";
-            else if( text->GetType() == FP_TEXT::TEXT_is_VALUE )
-                text_key = "$VAL:";
-            else
-                break;
+        /* This can't be a switch since the break need to pull out
+         * from the outer switch! */
+        if( text->GetType() == FP_TEXT::TEXT_is_REFERENCE )
+            text_key = "$REF:";
+        else if( text->GetType() == FP_TEXT::TEXT_is_VALUE )
+            text_key = "$VAL:";
+        else
+            break;
 
-            return StrPrintf( "$PART: \"%s\" %s \"%s\"",
-                              TO_UTF8( footprint->GetReference() ),
-                              text_key,
-                              TO_UTF8( text->GetText() ) );
-        }
+        return StrPrintf( "$PART: \"%s\" %s \"%s\"", TO_UTF8( footprint->GetReference() ), text_key,
+                          TO_UTF8( text->GetText() ) );
+    }
 
     default:
         break;
@@ -458,14 +468,6 @@ std::string FormatProbeItem( BOARD_ITEM* aItem )
 }
 
 
-/* Send a remote command to Eeschema via a socket,
- * aSyncItem = item to be located on schematic (footprint, pin or text)
- * Commands are
- * $PART: "reference"   put cursor on component anchor
- * $PART: "reference" $PAD: "pad number" put cursor on the component pin
- * $PART: "reference" $REF: "reference" put cursor on the component ref
- * $PART: "reference" $VAL: "value" put cursor on the component value
- */
 void PCB_EDIT_FRAME::SendMessageToEESCHEMA( BOARD_ITEM* aSyncItem )
 {
     std::string packet = FormatProbeItem( aSyncItem );
@@ -473,7 +475,9 @@ void PCB_EDIT_FRAME::SendMessageToEESCHEMA( BOARD_ITEM* aSyncItem )
     if( !packet.empty() )
     {
         if( Kiface().IsSingle() )
+        {
             SendCommand( MSG_TO_SCH, packet );
+        }
         else
         {
             // Typically ExpressMail is going to be s-expression packets, but since
@@ -492,7 +496,9 @@ void PCB_EDIT_FRAME::SendCrossProbeNetName( const wxString& aNetName )
     if( !packet.empty() )
     {
         if( Kiface().IsSingle() )
+        {
             SendCommand( MSG_TO_SCH, packet );
+        }
         else
         {
             // Typically ExpressMail is going to be s-expression packets, but since
@@ -539,8 +545,8 @@ void PCB_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
 
         netlist.Format( "pcb_netlist", &sf, 0, CTL_OMIT_FILTERS );
         payload = sf.GetString();
-    }
         break;
+    }
 
     case MAIL_PCB_UPDATE_LINKS:
         try
@@ -564,6 +570,7 @@ void PCB_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
             assert( false ); // should never happen
             return;
         }
+
         break;
 
     case MAIL_CROSS_PROBE:
@@ -596,8 +603,9 @@ void PCB_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
 
         if( importFormat >= 0 )
             importFile( path, importFormat );
-    }
+
         break;
+    }
 
     // many many others.
     default:

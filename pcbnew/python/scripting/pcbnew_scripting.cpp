@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012 NBEE Embedded Systems, Miguel Angel Ajo <miguelangel@nbee.es>
- * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -52,8 +52,8 @@
 /**
  * Run a python method from the pcbnew module.
  *
- * @param aMethodName is the name of the method (like "pcbnew.myfunction" )
- * @param aNames will contain the returned string
+ * @param aMethodName is the name of the method (like "pcbnew.myfunction" ).
+ * @param aNames will contain the returned string.
  */
 static void pcbnewRunPythonMethodWithReturnedString( const char* aMethodName, wxString& aNames )
 {
@@ -84,13 +84,13 @@ static void pcbnewRunPythonMethodWithReturnedString( const char* aMethodName, wx
     if( pobj )
     {
         PyObject* str = PyDict_GetItemString(localDict, "result" );
-        const char* str_res = NULL;
+        const char* str_res = nullptr;
 
         if(str)
         {
             PyObject* temp_bytes = PyUnicode_AsEncodedString( str, "UTF-8", "strict" );
 
-            if( temp_bytes != NULL )
+            if( temp_bytes != nullptr )
             {
                 str_res = PyBytes_AS_STRING( temp_bytes );
                 aNames = FROM_UTF8( str_res );
@@ -98,7 +98,7 @@ static void pcbnewRunPythonMethodWithReturnedString( const char* aMethodName, wx
             }
             else
             {
-                wxLogMessage( "cannot encode unicode python string" );
+                wxLogMessage( "cannot encode Unicode python string" );
             }
         }
         else
@@ -151,6 +151,8 @@ void pcbnewGetWizardsBackTrace( wxString& aTrace )
                 aTrace << "\n**********************************\n";
         }
         else
+        {
             aTrace += traces[ii] + "\n";
+        }
     }
 }

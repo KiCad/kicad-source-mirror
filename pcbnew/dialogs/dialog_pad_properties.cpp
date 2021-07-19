@@ -3,8 +3,8 @@
  *
  * Copyright (C) 2019 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2013 Dick Hollenbeck, dick@softplc.com
- * Copyright (C) 2008-2013 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2008-2013 Wayne Stambaugh <stambaughw@gmail.com>
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -66,6 +66,7 @@ static PAD_SHAPE code_shape[] =
     PAD_SHAPE::CUSTOM           // choice = PAD_SHAPE::CUSTOM_RECT_ANCHOR
 };
 
+
 // the ordered index of the pad shape wxChoice in dialog.
 // keep it consistent with code_shape[] and dialog strings
 enum CODE_CHOICE
@@ -81,6 +82,7 @@ enum CODE_CHOICE
     CHOICE_SHAPE_CUSTOM_RECT_ANCHOR
 };
 
+
 static PAD_ATTRIB code_type[] =
 {
     PAD_ATTRIB::PTH,
@@ -91,12 +93,14 @@ static PAD_ATTRIB code_type[] =
                                     // only on tech layers (usually only on paste layer
 };
 
-// Thse define have the same value as the m_PadType wxChoice GetSelected() return value
+
+// These define have the same value as the m_PadType wxChoice GetSelected() return value
 #define PTH_DLG_TYPE 0
 #define SMD_DLG_TYPE 1
 #define CONN_DLG_TYPE 2
 #define NPTH_DLG_TYPE 3
 #define APERTURE_DLG_TYPE 4
+
 
 void PCB_BASE_FRAME::ShowPadPropertiesDialog( PAD* aPad )
 {
@@ -164,7 +168,7 @@ DIALOG_PAD_PROPERTIES::DIALOG_PAD_PROPERTIES( PCB_BASE_FRAME* aParent, PAD* aPad
     m_nonCopperWarningIcon->SetBitmap( KiBitmap( BITMAPS::dialog_warning ) );
 
     m_padMaster  = m_parent->GetDesignSettings().m_Pad_Master.get();
-    m_dummyPad   = new PAD( (FOOTPRINT*) NULL );
+    m_dummyPad   = new PAD( (FOOTPRINT*) nullptr );
 
     if( aPad )
     {
@@ -209,7 +213,9 @@ DIALOG_PAD_PROPERTIES::DIALOG_PAD_PROPERTIES( PCB_BASE_FRAME* aParent, PAD* aPad
     m_sdbSizerOK->SetDefault();
     m_canUpdate = true;
 
-    m_PadNetSelector->Connect( NET_SELECTED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES::OnValuesChanged ), NULL, this );
+    m_PadNetSelector->Connect( NET_SELECTED,
+                               wxCommandEventHandler( DIALOG_PAD_PROPERTIES::OnValuesChanged ),
+                               nullptr, this );
 
     // Now all widgets have the size fixed, call FinishDialogSettings
     finishDialogSettings();
@@ -221,14 +227,17 @@ DIALOG_PAD_PROPERTIES::DIALOG_PAD_PROPERTIES( PCB_BASE_FRAME* aParent, PAD* aPad
 
 DIALOG_PAD_PROPERTIES::~DIALOG_PAD_PROPERTIES()
 {
-    m_PadNetSelector->Disconnect( NET_SELECTED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES::OnValuesChanged ), NULL, this );
+    m_PadNetSelector->Disconnect( NET_SELECTED,
+                                  wxCommandEventHandler( DIALOG_PAD_PROPERTIES::OnValuesChanged ),
+                                  nullptr, this );
 
     delete m_dummyPad;
     delete m_axisOrigin;
 }
 
 
-bool DIALOG_PAD_PROPERTIES::m_sketchPreview = false;   // Stores the pad draw option during a session
+// Store the pad draw option during a session.
+bool DIALOG_PAD_PROPERTIES::m_sketchPreview = false;
 
 
 void DIALOG_PAD_PROPERTIES::OnInitDialog( wxInitDialogEvent& event )
@@ -308,6 +317,7 @@ void DIALOG_PAD_PROPERTIES::prepareCanvas()
     // gives a non null grid size (0.001mm) because GAL layer does not like a 0 size grid:
     double gridsize = 0.001 * IU_PER_MM;
     view->GetGAL()->SetGridSize( VECTOR2D( gridsize, gridsize ) );
+
     // And do not show the grid:
     view->GetGAL()->SetGridVisibility( false );
     view->Add( m_dummyPad );
@@ -691,7 +701,8 @@ void DIALOG_PAD_PROPERTIES::displayPrimitivesList()
         for( wxString& s : bs_info )
             s.Empty();
 
-        bs_info[4] = _( "width" ) + wxS( " " )+ MessageTextFromValue( m_units, primitive->GetWidth() );
+        bs_info[4] = _( "width" ) + wxS( " " )+ MessageTextFromValue( m_units,
+                                                                      primitive->GetWidth() );
 
         switch( primitive->GetShape() )
         {
@@ -710,7 +721,8 @@ void DIALOG_PAD_PROPERTIES::displayPrimitivesList()
         case PCB_SHAPE_TYPE::ARC: // Arc with rounded ends
             bs_info[0] = _( "Arc" );
             bs_info[1] = _( "center" ) + wxS( " " )+ formatCoord( m_units, primitive->GetCenter() );
-            bs_info[2] = _( "start" ) + wxS( " " )+ formatCoord( m_units, primitive->GetArcStart() );
+            bs_info[2] = _( "start" ) + wxS( " " )+ formatCoord( m_units,
+                                                                 primitive->GetArcStart() );
             bs_info[3] = _( "angle" ) + wxS( " " )+ FormatAngle( primitive->GetAngle() );
             break;
 
@@ -721,7 +733,8 @@ void DIALOG_PAD_PROPERTIES::displayPrimitivesList()
                 bs_info[0] = _( "circle" );
 
             bs_info[1] = formatCoord( m_units, primitive->GetStart() );
-            bs_info[2] = _( "radius" ) + wxS( " " )+ MessageTextFromValue( m_units, primitive->GetRadius() );
+            bs_info[2] = _( "radius" ) + wxS( " " )+ MessageTextFromValue( m_units,
+                                                                           primitive->GetRadius() );
             break;
 
         case PCB_SHAPE_TYPE::POLYGON: // polygon
@@ -746,6 +759,7 @@ void DIALOG_PAD_PROPERTIES::displayPrimitivesList()
     for( unsigned ii = 0; ii < 5; ++ii )
         m_listCtrlPrimitives->SetColumnWidth( ii, wxLIST_AUTOSIZE );
 }
+
 
 void DIALOG_PAD_PROPERTIES::OnResize( wxSizeEvent& event )
 {
@@ -776,7 +790,6 @@ void DIALOG_PAD_PROPERTIES::onChangePadMode( wxCommandEvent& event )
 }
 
 
-
 void DIALOG_PAD_PROPERTIES::OnPadShapeSelection( wxCommandEvent& event )
 {
     switch( m_PadShapeSelector->GetSelection() )
@@ -798,8 +811,9 @@ void DIALOG_PAD_PROPERTIES::OnPadShapeSelection( wxCommandEvent& event )
         // A reasonable default (from  IPC-7351C)
         if( m_dummyPad->GetRoundRectRadiusRatio() == 0.0 )
             m_tcCornerSizeRatio->ChangeValue( "25" );
-    }
+
         break;
+    }
 
     case CHOICE_SHAPE_CHAMFERED_RECT:
         m_shapePropsBook->SetSelection( 3 );
@@ -820,8 +834,8 @@ void DIALOG_PAD_PROPERTIES::OnPadShapeSelection( wxCommandEvent& event )
             m_cbTopRight->SetValue( false );
             m_cbBottomLeft->SetValue( false );
             m_cbBottomRight->SetValue( false );
+            break;
         }
-        break;
 
     case CHOICE_SHAPE_CHAMFERED_ROUNDED_RECT:
         m_shapePropsBook->SetSelection( 4 );
@@ -1197,7 +1211,6 @@ void DIALOG_PAD_PROPERTIES::OnSetCopperLayers( wxCommandEvent& event )
 }
 
 
-// Called when select/deselect a layer.
 void DIALOG_PAD_PROPERTIES::OnSetLayers( wxCommandEvent& event )
 {
     transferDataToPad( m_dummyPad );
@@ -1205,7 +1218,6 @@ void DIALOG_PAD_PROPERTIES::OnSetLayers( wxCommandEvent& event )
 }
 
 
-// test if all values are acceptable for the pad
 bool DIALOG_PAD_PROPERTIES::padValuesOK()
 {
     bool error = transferDataToPad( m_dummyPad );
@@ -1292,7 +1304,7 @@ bool DIALOG_PAD_PROPERTIES::padValuesOK()
 
     // Some pads need a positive solder paste clearance (mainly for BGA with small pads)
     // However, a positive value can create issues if the resulting shape is too big.
-    // (like a solder paste creating a solder paste area on a neighbour pad or on the solder mask)
+    // (like a solder paste creating a solder paste area on a neighbor pad or on the solder mask)
     // So we could ask for user to confirm the choice
     // For now we just check for disappearing paste
     wxSize paste_size;
@@ -1541,6 +1553,7 @@ bool DIALOG_PAD_PROPERTIES::TransferDataFromWindow()
         return false;
 
     transferDataToPad( m_padMaster );
+
     // m_padMaster is a pattern: ensure there is no net for this pad:
     m_padMaster->SetNetCode( NETINFO_LIST::UNCONNECTED );
 
@@ -2035,8 +2048,8 @@ void DIALOG_PAD_PROPERTIES::OnValuesChanged( wxCommandEvent& event )
     if( m_canUpdate )
     {
         transferDataToPad( m_dummyPad );
-        // If the pad size has changed, update the displayed values
-        // for rounded rect pads
+
+        // If the pad size has changed, update the displayed values for rounded rect pads.
         updateRoundRectCornerValues();
 
         redraw();
@@ -2093,20 +2106,18 @@ void DIALOG_PAD_PROPERTIES::OnPrimitiveSelection( wxListEvent& event )
 }
 
 
-/// Called on a double click on the basic shapes list
 void DIALOG_PAD_PROPERTIES::onPrimitiveDClick( wxMouseEvent& event )
 {
     editPrimitive();
 }
 
 
-// Called on a click on basic shapes list panel button
 void DIALOG_PAD_PROPERTIES::onEditPrimitive( wxCommandEvent& event )
 {
     editPrimitive();
 }
 
-// Called on a click on basic shapes list panel button
+
 void DIALOG_PAD_PROPERTIES::onDeletePrimitive( wxCommandEvent& event )
 {
     long select = m_listCtrlPrimitives->GetFirstSelected();

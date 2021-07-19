@@ -2,7 +2,7 @@
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
  * Copyright (C) 2013  CERN
- * Copyright (C) 2016-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2021 KiCad Developers, see AUTHORS.txt for contributors.
  * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -37,8 +37,8 @@ class SOLID : public ITEM
 public:
     SOLID() :
         ITEM( SOLID_T ),
-        m_shape( NULL ),
-        m_hole( NULL )
+        m_shape( nullptr ),
+        m_hole( nullptr )
     {
         m_movable = false;
         m_padToDie = 0;

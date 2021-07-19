@@ -412,7 +412,7 @@ public:
      *                 \a aStoreInNewLib as true.
      */
     void ExportFootprintsToLibrary( bool aStoreInNewLib, const wxString& aLibName = wxEmptyString,
-                                    wxString* aLibPath = NULL );
+                                    wxString* aLibPath = nullptr );
 
     /**
      * Create a BOM file from the current loaded board.

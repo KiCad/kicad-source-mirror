@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013 NBEE Embedded Systems SL, Miguel Angel Ajo <miguelangel@ajo.es>
- * Copyright (C) 2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -40,11 +40,6 @@
 
 class PYTHON_FOOTPRINT_WIZARD : public FOOTPRINT_WIZARD
 {
-    PyObject* m_PyWizard;
-    PyObject*       CallMethod( const char* aMethod, PyObject* aArglist = NULL );
-    wxString        CallRetStrMethod( const char* aMethod, PyObject* aArglist = NULL );
-    wxArrayString   CallRetArrayStrMethod( const char*  aMethod, PyObject* aArglist = NULL );
-
 public:
     PYTHON_FOOTPRINT_WIZARD( PyObject* wizard );
     ~PYTHON_FOOTPRINT_WIZARD();
@@ -58,14 +53,22 @@ public:
     wxArrayString   GetParameterTypes( int aPage ) override;
     wxArrayString   GetParameterValues( int aPage ) override;
     wxArrayString   GetParameterErrors( int aPage ) override;
+
     // must return an empty string or an error description:
     wxString        SetParameterValues( int aPage, wxArrayString& aValues ) override;
     FOOTPRINT*      GetFootprint( wxString * aMessages ) override;
     void*           GetObject() override;
     wxArrayString   GetParameterHints( int aPage ) override;
-    wxArrayString   GetParameterDesignators( int aPage = 0) override;
+    wxArrayString   GetParameterDesignators( int aPage = 0 ) override;
 
     void            ResetParameters() override;
+
+private:
+    PyObject*       CallMethod( const char* aMethod, PyObject* aArglist = nullptr );
+    wxString        CallRetStrMethod( const char* aMethod, PyObject* aArglist = nullptr );
+    wxArrayString   CallRetArrayStrMethod( const char* aMethod, PyObject* aArglist = nullptr );
+
+    PyObject* m_PyWizard;
 };
 
 

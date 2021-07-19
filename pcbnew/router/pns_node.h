@@ -118,7 +118,7 @@ public:
     {
     }
 
-    void SetWorld( const NODE* aNode, const NODE* aOverride = NULL );
+    void SetWorld( const NODE* aNode, const NODE* aOverride = nullptr );
 
     virtual bool operator()( ITEM* aCandidate ) = 0;
 
@@ -215,7 +215,7 @@ public:
      * @return the obstacle, if found, otherwise empty.
      */
     OPT_OBSTACLE NearestObstacle( const LINE* aLine, int aKindMask = ITEM::ANY_T,
-                                  const std::set<ITEM*>* aRestrictedSet = NULL );
+                                  const std::set<ITEM*>* aRestrictedSet = nullptr );
 
     /**
      * Check if the item collides with anything else in the world, and if found, returns the
@@ -304,7 +304,7 @@ public:
      * @param aOriginSegmentIndex index of aSeg in the resulting line.
      * @return the line
      */
-    const LINE AssembleLine( LINKED_ITEM* aSeg, int* aOriginSegmentIndex = NULL,
+    const LINE AssembleLine( LINKED_ITEM* aSeg, int* aOriginSegmentIndex = nullptr,
                              bool aStopAtLockedJoints = false );
 
     ///< Print the contents and joints structure.
@@ -417,7 +417,7 @@ private:
 
     bool isRoot() const
     {
-        return m_parent == NULL;
+        return m_parent == nullptr;
     }
 
     SEGMENT* findRedundantSegment( const VECTOR2I& A, const VECTOR2I& B, const LAYER_RANGE& lr,

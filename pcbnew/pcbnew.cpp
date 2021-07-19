@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2016 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -74,7 +74,8 @@ static struct IFACE : public KIFACE_I
 
     void OnKifaceEnd() override;
 
-    wxWindow* CreateWindow( wxWindow* aParent, int aClassId, KIWAY* aKiway, int aCtlBits = 0 ) override
+    wxWindow* CreateWindow( wxWindow* aParent, int aClassId, KIWAY* aKiway,
+                            int aCtlBits = 0 ) override
     {
         switch( aClassId )
         {
@@ -136,12 +137,14 @@ static struct IFACE : public KIFACE_I
     }
 
     /**
-     * Function IfaceOrAddress
-     * return a pointer to the requested object.  The safest way to use this is to retrieve
-     * a pointer to a static instance of an interface, similar to how the KIFACE interface
-     * is exported.  But if you know what you are doing use it to retrieve anything you want.
+     * Return a pointer to the requested object.
+     *
+     * The safest way to use this is to retrieve a pointer to a static instance of an interface,
+     * similar to how the KIFACE interface is exported.  But if you know what you are doing use
+     * it to retrieve anything you want.
+     *
      * @param aDataId identifies which object you want the address of.
-     * @return void* - and must be cast into the know type.
+     * @return the object which must be cast into the know type.
      */
     void* IfaceOrAddress( int aDataId ) override
     {
@@ -168,7 +171,6 @@ static struct IFACE : public KIFACE_I
     }
 
     /**
-     * Function SaveFileAs
      * Saving a file under a different name is delegated to the various KIFACEs because
      * the project doesn't know the internal format of the various files (which may have
      * paths in them that need updating).
@@ -180,6 +182,7 @@ static struct IFACE : public KIFACE_I
 } kiface( "pcbnew", KIWAY::FACE_PCB );
 
 } // namespace
+
 
 using namespace PCB;
 
@@ -198,6 +201,7 @@ MY_API( KIFACE* ) KIFACE_GETTER( int* aKIFACEversion, int aKiwayVersion, PGM_BAS
     return &kiface;
 }
 
+
 #if defined( BUILD_KIWAY_DLL )
 PGM_BASE& Pgm()
 {
@@ -205,12 +209,14 @@ PGM_BASE& Pgm()
     return *process;
 }
 
+
 // Similar to PGM_BASE& Pgm(), but return nullptr when a *.ki_face is run from a python script.
 PGM_BASE* PgmOrNull()
 {
     return process;
 }
 #endif
+
 
 /// The global footprint library table.  This is not dynamically allocated because
 /// in a multiple project environment we must keep its address constant (since it is
@@ -221,7 +227,6 @@ FP_LIB_TABLE          GFootprintTable;
 /// keep a hash-stamped global version.  Any deviation from the request vs. stored
 /// hash will result in it being rebuilt.
 FOOTPRINT_LIST_IMPL   GFootprintList;
-
 
 
 bool IFACE::OnKifaceStart( PGM_BASE* aProgram, int aCtlBits )
@@ -237,7 +242,7 @@ bool IFACE::OnKifaceStart( PGM_BASE* aProgram, int aCtlBits )
 
     if( !fn.FileExists() )
     {
-        DIALOG_GLOBAL_FP_LIB_TABLE_CONFIG fpDialog( NULL );
+        DIALOG_GLOBAL_FP_LIB_TABLE_CONFIG fpDialog( nullptr );
 
         fpDialog.ShowModal();
     }
@@ -261,7 +266,7 @@ bool IFACE::OnKifaceStart( PGM_BASE* aProgram, int aCtlBits )
                 "Please edit this global footprint library table in Preferences menu."
                 );
 
-            DisplayErrorMessage( NULL, msg, ioe.What() );
+            DisplayErrorMessage( nullptr, msg, ioe.What() );
         }
     }
 

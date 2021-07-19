@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012 NBEE Embedded Systems, Miguel Angel Ajo <miguelangel@nbee.es>
- * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -139,21 +139,22 @@
 
 %{
 
+
 // called from pcbnew/swig/pcbnew_footprint_wizards.cpp
-FOOTPRINT* PyFootprint_to_FOOTPRINT(PyObject *obj0)
+FOOTPRINT* PyFootprint_to_FOOTPRINT( PyObject *obj0 )
 {
     void* argp;
-    int res1 = SWIG_ConvertPtr(obj0, &argp,SWIGTYPE_p_FOOTPRINT, 0 |  0 );
+    int res1 = SWIG_ConvertPtr( obj0, &argp,SWIGTYPE_p_FOOTPRINT, 0 |  0 );
 
-    if (!SWIG_IsOK(res1))
+    if( !SWIG_IsOK( res1 ) )
     {
-        SWIG_exception_fail(SWIG_ArgError(res1), "Converting object to FOOTPRINT*");
+        SWIG_exception_fail( SWIG_ArgError( res1 ), "Converting object to FOOTPRINT*" );
     }
 
     return ( FOOTPRINT *) argp;
 
 fail:
-    return NULL;
+    return nullptr;
 }
 
 %}

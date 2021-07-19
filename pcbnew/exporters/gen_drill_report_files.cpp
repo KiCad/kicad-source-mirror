@@ -7,7 +7,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 1992-2017 Jean_Pierre Charras <jp.charras at wanadoo.fr>
- * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -44,6 +44,7 @@
 #include <gendrill_file_writer_base.h>
 #include <pcb_painter.h>
 
+
 /* Conversion utilities - these will be used often in there... */
 inline double diameter_in_inches( double ius )
 {
@@ -72,7 +73,7 @@ bool GENDRILL_WRITER_BASE::genDrillMapFile( const wxString& aFullFileName, PLOT_
 
     double    scale = 1.0;
     wxPoint   offset = GetOffset();
-    PLOTTER*  plotter = NULL;
+    PLOTTER*  plotter = nullptr;
     PAGE_INFO dummy( PAGE_INFO::A4, false );
     int       bottom_limit = 0;        // Y coord limit of page. 0 mean do not use
 
@@ -157,8 +158,8 @@ bool GENDRILL_WRITER_BASE::genDrillMapFile( const wxString& aFullFileName, PLOT_
 
         plotter->SetPageSettings( pageA4 );
         plotter->SetViewport( offset, IU_PER_MILS / 10, scale, false );
+        break;
     }
-    break;
 
     case PLOT_FORMAT::DXF:
     {
@@ -172,8 +173,8 @@ bool GENDRILL_WRITER_BASE::genDrillMapFile( const wxString& aFullFileName, PLOT_
         plotter = dxf_plotter;
         plotter->SetPageSettings( page_info );
         plotter->SetViewport( offset, IU_PER_MILS / 10, scale, false );
+        break;
     }
-    break;
     }
 
     plotter->SetCreator( wxT( "PCBNEW" ) );
@@ -233,6 +234,7 @@ bool GENDRILL_WRITER_BASE::genDrillMapFile( const wxString& aFullFileName, PLOT_
 
     // Print a list of symbols used.
     int    charSize = Millimeter2iu( 2 );  // text size in IUs
+
     // real char scale will be 1/scale, because the global plot scale is scale
     // for scale < 1.0 ( plot bigger actual size)
     // Therefore charScale = 1.0 / scale keep the initial charSize
@@ -276,6 +278,7 @@ bool GENDRILL_WRITER_BASE::genDrillMapFile( const wxString& aFullFileName, PLOT_
         }
 
         int plot_diam = KiROUND( tool.m_Diameter );
+
         // For markers plotted with the comment, keep marker size <= text height
         plot_diam = std::min( plot_diam, KiROUND( charSize * charScale ) );
         int x = KiROUND( plotX - textmarginaftersymbol * charScale - plot_diam / 2.0 );
@@ -302,7 +305,7 @@ bool GENDRILL_WRITER_BASE::genDrillMapFile( const wxString& aFullFileName, PLOT_
             sprintf( line, "(%d holes + 1 slot)", tool.m_TotalCount - 1 );
         else // if ( toolm_OvalCount > 1 )
             sprintf( line, "(%d holes + %d slots)", tool.m_TotalCount - tool.m_OvalCount,
-                    tool.m_OvalCount );
+                     tool.m_OvalCount );
 
         msg += FROM_UTF8( line );
 
@@ -452,7 +455,7 @@ bool GENDRILL_WRITER_BASE::plotDrillMarks( PLOTTER* aPlotter )
         if( hole.m_Hole_Shape != 0 )
         {
             wxSize oblong_size = hole.m_Hole_Size;
-            aPlotter->FlashPadOval( pos, oblong_size, hole.m_Hole_Orient, SKETCH, NULL );
+            aPlotter->FlashPadOval( pos, oblong_size, hole.m_Hole_Orient, SKETCH, nullptr );
         }
     }
 

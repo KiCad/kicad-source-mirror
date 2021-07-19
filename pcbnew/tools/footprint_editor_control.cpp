@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014-2019 CERN
- * Copyright (C) 2019-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2021 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -80,6 +80,7 @@ bool FOOTPRINT_EDITOR_CONTROL::Init()
                 LIB_ID sel = m_frame->GetTreeFPID();
                 return !sel.GetLibNickname().empty() && sel.GetLibItemName().empty();
             };
+
     // The libInferredCondition allows you to do things like New Symbol and Paste with a
     // symbol selected (in other words, when we know the library context even if the library
     // itself isn't selected.
@@ -199,7 +200,7 @@ int FOOTPRINT_EDITOR_CONTROL::CreateFootprint( const TOOL_EVENT& aEvent )
     auto* wizard = (FOOTPRINT_WIZARD_FRAME*) m_frame->Kiway().Player( FRAME_FOOTPRINT_WIZARD,
                                                                       true, m_frame );
 
-    if( wizard->ShowModal( NULL, m_frame ) )
+    if( wizard->ShowModal( nullptr, m_frame ) )
     {
         // Creates the new footprint from python script wizard
         FOOTPRINT* newFootprint = wizard->GetBuiltFootprint();
@@ -517,10 +518,7 @@ int FOOTPRINT_EDITOR_CONTROL::RepairFootprint( const TOOL_EVENT& aEvent )
     int        errors = 0;
     wxString   details;
 
-    /*******************************
-     * Repair duplicate IDs and missing nets
-     */
-
+    // Repair duplicate IDs and missing nets.
     std::set<KIID> ids;
     int            duplicates = 0;
 
@@ -615,8 +613,12 @@ void FOOTPRINT_EDITOR_CONTROL::setTransitions()
 
     Go( &FOOTPRINT_EDITOR_CONTROL::PinLibrary,           ACTIONS::pinLibrary.MakeEvent() );
     Go( &FOOTPRINT_EDITOR_CONTROL::UnpinLibrary,         ACTIONS::unpinLibrary.MakeEvent() );
-    Go( &FOOTPRINT_EDITOR_CONTROL::ToggleFootprintTree,  PCB_ACTIONS::showFootprintTree.MakeEvent() );
-    Go( &FOOTPRINT_EDITOR_CONTROL::ToggleFootprintTree,  PCB_ACTIONS::hideFootprintTree.MakeEvent() );
-    Go( &FOOTPRINT_EDITOR_CONTROL::Properties,           PCB_ACTIONS::footprintProperties.MakeEvent() );
-    Go( &FOOTPRINT_EDITOR_CONTROL::DefaultPadProperties, PCB_ACTIONS::defaultPadProperties.MakeEvent() );
+    Go( &FOOTPRINT_EDITOR_CONTROL::ToggleFootprintTree,
+        PCB_ACTIONS::showFootprintTree.MakeEvent() );
+    Go( &FOOTPRINT_EDITOR_CONTROL::ToggleFootprintTree,
+        PCB_ACTIONS::hideFootprintTree.MakeEvent() );
+    Go( &FOOTPRINT_EDITOR_CONTROL::Properties,
+        PCB_ACTIONS::footprintProperties.MakeEvent() );
+    Go( &FOOTPRINT_EDITOR_CONTROL::DefaultPadProperties,
+        PCB_ACTIONS::defaultPadProperties.MakeEvent() );
 }

@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2012 Lorenzo Marcantonio, <l.marcantonio@logossrl.com>
  * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -39,8 +39,7 @@ class BOARD;
 
 /**
  * Batch plotter state object. Keeps the plot options and handles multiple
- * plot requests
- * Especially useful in Python scripts
+ * plot requests.  Useful in Python scripts.
  */
 class PLOT_CONTROLLER
 {
@@ -48,7 +47,8 @@ public:
     /** Batch plotter constructor, nothing interesting here */
     PLOT_CONTROLLER( BOARD *aBoard );
 
-    /** Batch plotter destructor, ensures that the last plot is closed
+    /**
+     * Ensure that the last plot is closed.
      */
     ~PLOT_CONTROLLER();
 
@@ -62,24 +62,25 @@ public:
 
 
     /**
-     * @return true if a plotter is initialized and can be used
+     * @return true if a plotter is initialized and can be used.
      */
-    bool IsPlotOpen() const { return m_plotter != NULL; }
+    bool IsPlotOpen() const { return m_plotter != nullptr; }
 
-    /** Close the current plot, nothing happens if it isn't open
+    /**
+     * Close the current plot, nothing happens if it isn't open.
      */
     void ClosePlot();
 
-    /** Open a new plotfile; works as a factory for plotter objects
+    /** Open a new plotfile; works as a factory for plotter objects/
+     *
      * @param aSuffix is a string added to the base filename (derived from
-     * the board filename) to identify the plot file
-     * @param aFormat is the plot file format identifier
-     * @param aSheetDesc
+     *                the board filename) to identify the plot file.
+     * @param aFormat is the plot file format identifier.
      */
     bool OpenPlotfile( const wxString& aSuffix, PLOT_FORMAT aFormat, const wxString& aSheetDesc );
 
-    /** Plot a single layer on the current plotfile
-     * m_plotLayer is the layer to plot
+    /**
+     * Plot a single layer on the current plotfile m_plotLayer is the layer to plot.
      */
     bool PlotLayer();
 
@@ -94,15 +95,15 @@ public:
     const wxString GetPlotDirName() { return m_plotFile.GetPathWithSep(); }
 
     /**
-     * Plotters can plot in Black and White mode or Color mode
-     * SetColorMode activate/de-actiavte the Color mode.
-     * @param aColorMode = true to activate the plot color mode
+     * Choose color or bland and white plot mode.
+     *
+     * @param aColorMode set to true to activate the plot color mode or false for black and white.
      */
-    void SetColorMode( bool  );
+    void SetColorMode( bool aColorMode );
 
     /**
-     * @return  true if the current plot color mode is Color,
-     *   false if the current plot color mode is Black and White
+     * @return true if the current plot color mode is color or false if the current plot color
+     *         mode is black and white.
      */
     bool GetColorMode();
 

@@ -74,22 +74,31 @@ public:
 
     ///< Minimum meandering amplitude.
     int m_minAmplitude;
+
     ///< Maximum meandering amplitude.
     int m_maxAmplitude;
+
     ///< Meandering period/spacing (see dialog picture for explanation).
     int m_spacing;
+
     ///< Amplitude/spacing adjustment step.
     int m_step;
+
     ///< Length PadToDie.
     int m_lenPadToDie;
+
     ///< Desired length of the tuned line/diff pair (this is in nm, so allow more than board width).
     long long int m_targetLength;
+
     ///< Type of corners for the meandered line.
     MEANDER_STYLE m_cornerStyle;
+
     ///< Rounding percentage (0 - 100).
     int m_cornerRadiusPercentage;
+
     ///< Allowable tuning error.
     int m_lengthTolerance;
+
     ///< Target skew value for diff pair de-skewing.
     int m_targetSkew;
 };
@@ -117,7 +126,7 @@ public:
         m_amplitude = 0;
         m_side = false;
         m_baseIndex = 0;
-        m_currentTarget = NULL;
+        m_currentTarget = nullptr;
         m_meanCornerRadius = 0;
     }
 
@@ -369,7 +378,7 @@ public:
     MEANDERED_LINE()
     {
         // Do not leave uninitialized members, and keep static analyzer quiet:
-        m_placer = NULL;
+        m_placer = nullptr;
         m_dual = false;
         m_width = 0;
         m_baselineOffset = 0;

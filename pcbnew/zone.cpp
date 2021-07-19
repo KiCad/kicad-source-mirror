@@ -668,8 +668,6 @@ void ZONE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>&
 }
 
 
-/* Geometric transforms: */
-
 void ZONE::Move( const wxPoint& offset )
 {
     /* move outlines */
@@ -775,7 +773,7 @@ void ZONE::Mirror( const wxPoint& aMirrorRef, bool aMirrorLeftRight )
 
 ZONE_CONNECTION ZONE::GetPadConnection( PAD* aPad, wxString* aSource ) const
 {
-    if( aPad == NULL || aPad->GetEffectiveZoneConnection() == ZONE_CONNECTION::INHERITED )
+    if( aPad == nullptr || aPad->GetEffectiveZoneConnection() == ZONE_CONNECTION::INHERITED )
     {
         if( aSource )
             *aSource = _( "zone" );
@@ -1014,27 +1012,25 @@ void ZONE::HatchBorder()
         // Iterate through all vertices
         for( auto iterator = m_Poly->IterateSegmentsWithHoles(); iterator; iterator++ )
         {
-            double  x, y;
-            bool    ok;
+            double x, y;
+            bool   ok;
 
             SEG segment = *iterator;
 
-            ok = FindLineSegmentIntersection( a, slope,
-                                              segment.A.x, segment.A.y,
-                                              segment.B.x, segment.B.y,
-                                              x, y );
+            ok = FindLineSegmentIntersection( a, slope, segment.A.x, segment.A.y, segment.B.x,
+                                              segment.B.y, x, y );
 
-              if( ok )
-              {
-                  VECTOR2I point( KiROUND( x ), KiROUND( y ) );
-                  pointbuffer.push_back( point );
-              }
+            if( ok )
+            {
+                VECTOR2I point( KiROUND( x ), KiROUND( y ) );
+                pointbuffer.push_back( point );
+            }
 
-              if( pointbuffer.size() >= MAXPTS )    // overflow
-              {
-                  wxASSERT( 0 );
-                  break;
-              }
+            if( pointbuffer.size() >= MAXPTS ) // overflow
+            {
+                wxASSERT( 0 );
+                break;
+            }
         }
 
         // ensure we have found an even intersection points count
@@ -1318,9 +1314,6 @@ bool ZONE::KeepoutAll() const
 }
 
 
-//
-/********* FP_ZONE **************/
-//
 FP_ZONE::FP_ZONE( BOARD_ITEM_CONTAINER* aParent ) :
         ZONE( aParent, true )
 {

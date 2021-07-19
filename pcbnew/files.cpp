@@ -197,7 +197,9 @@ bool AskLoadBoardFileName( PCB_EDIT_FRAME* aParent, int* aCtl, wxString* aFileNa
         return true;
     }
     else
+    {
         return false;
+    }
 }
 
 
@@ -694,7 +696,7 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
             unsigned startTime = GetRunningMicroSecs();
 #endif
 
-            loadedBoard = pi->Load( fullFileName, NULL, &props, &Prj(), &progressReporter );
+            loadedBoard = pi->Load( fullFileName, nullptr, &props, &Prj(), &progressReporter );
 
 #if USE_INSTRUMENTATION
             unsigned stopTime = GetRunningMicroSecs();
@@ -1007,7 +1009,7 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName, bool addToHistory,
 
         wxASSERT( tempFile.IsAbsolute() );
 
-        pi->Save( tempFile.GetFullPath(), GetBoard(), NULL );
+        pi->Save( tempFile.GetFullPath(), GetBoard(), nullptr );
     }
     catch( const IO_ERROR& ioe )
     {
@@ -1108,7 +1110,7 @@ bool PCB_EDIT_FRAME::SavePcbCopy( const wxString& aFileName, bool aCreateProject
 
         wxASSERT( pcbFileName.IsAbsolute() );
 
-        pi->Save( pcbFileName.GetFullPath(), GetBoard(), NULL );
+        pi->Save( pcbFileName.GetFullPath(), GetBoard(), nullptr );
     }
     catch( const IO_ERROR& ioe )
     {

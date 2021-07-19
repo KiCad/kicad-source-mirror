@@ -7,7 +7,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 1992-2017 Jean_Pierre Charras <jp.charras at wanadoo.fr>
- * Copyright (C) 1992-2017 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -47,17 +47,18 @@ public:
     }
 
     /**
-     * Function SetFormat
-     * Initialize internal parameters to match the given format
-     * @param aRightDigits = number of digits for mantissa part of coordinates (5 or 6)
+     * Initialize internal parameters to match the given format.
+     *
+     * @param aRightDigits is the number of digits for mantissa part of coordinates (5 or 6).
      */
     void SetFormat( int aRightDigits = 6 );
 
     /**
-     * Function SetOptions
-     * Initialize internal parameters to match drill options
-     * note: PTH and NPTH are always separate files in Gerber format
-     * @param aOffset = drill coordinates offset
+     * Initialize internal parameters to match drill options.
+     *
+     * @note PTH and NPTH are always separate files in Gerber format.
+     *
+     * @param aOffset is the drill coordinates offset.
      */
     void SetOptions( wxPoint aOffset )
     {
@@ -66,38 +67,38 @@ public:
     }
 
     /**
-     * Function CreateDrillandMapFilesSet
-     * Creates the full set of Excellon drill file for the board
-     * filenames are computed from the board name, and layers id
-     * @param aPlotDirectory = the output folder
-     * @param aGenDrill = true to generate the EXCELLON drill file
-     * @param aGenMap = true to generate a drill map file
-     * @param aReporter = a REPORTER to return activity or any message (can be NULL)
+     * Create the full set of Excellon drill file for the board filenames are computed from
+     * the board name, and layers id.
+     *
+     * @param aPlotDirectory is the output folder.
+     * @param aGenDrill set to true to generate the EXCELLON drill file.
+     * @param aGenMap set to true to generate a drill map file.
+     * @param aReporter is a #REPORTER to return activity or any message (can be NULL).
      */
     void CreateDrillandMapFilesSet( const wxString& aPlotDirectory,
                                     bool aGenDrill, bool aGenMap,
-                                    REPORTER * aReporter = NULL );
+                                    REPORTER * aReporter = nullptr );
 
 private:
     /**
-     * Function createDrillFile
-     * Creates an Excellon drill file
-     * @param aFullFilename = the full filename
-     * @param aIsNpth = true for a NPTH file, false for a PTH file
-     * @param aLayerPair = first board layer and the last board layer for this drill file
-     * for blind buried vias, they are not always top and bottom layers
-     * @return hole count, or -1 if the file cannot be created
+     * Create an Excellon drill file.
+     *
+     * @param aFullFilename is the full file name.
+     * @param aIsNpth set to true for a NPTH file or false for a PTH file.
+     * @param aLayerPair is the first board layer and the last board layer for this drill file
+     *                   for blind buried vias, they are not always top and bottom layers/
+     * @return hole count or -1 if the file cannot be created.
      */
-    int  createDrillFile( wxString& aFullFilename, bool aIsNpth, DRILL_LAYER_PAIR aLayerPair );
+    int createDrillFile( wxString& aFullFilename, bool aIsNpth, DRILL_LAYER_PAIR aLayerPair );
 
     /**
-     * @return a filename which identify the drill file function.
-     * it is the board name with the layer pair names added, and for separate
-     * (PTH and NPTH) files, "-NPH" or "-NPTH" added
-     * @param aPair = the layer pair
-     * @param aNPTH = true to generate the filename of NPTH holes
-     * @param aMerge_PTH_NPTH = true to generate the filename of a file which containd both
-     * NPH and NPTH holes
+     * @param aPair is the layer pair.
+     * @param aNPTH set to true to generate the filename of NPTH holes.
+     * @param aMerge_PTH_NPTH set to true to generate the filename of a file which contains both
+     *                        NPH and NPTH holes
+     * @return a filename which identify the drill file function.  It is the board name with the
+     *         layer pair names added, and for separate (PTH and NPTH) files, "-NPH" or "-NPTH"
+     *         added.
      */
     virtual const wxString getDrillFileName( DRILL_LAYER_PAIR aPair, bool aNPTH,
                                              bool aMerge_PTH_NPTH ) const override;

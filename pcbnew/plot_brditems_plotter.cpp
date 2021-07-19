@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -69,10 +69,6 @@
 #include <wx/gdicmn.h>
 
 
-/* class BRDITEMS_PLOTTER is a helper class to plot board items
- * and a group of board items
- */
-
 COLOR4D BRDITEMS_PLOTTER::getColor( LAYER_NUM aLayer ) const
 {
     COLOR4D color = ColorSettings()->GetColor( aLayer );
@@ -105,6 +101,7 @@ void BRDITEMS_PLOTTER::PlotPad( const PAD* aPad, COLOR4D aColor, OUTLINE_MODE aP
     {
         gbr_metadata.SetNetAttribType( GBR_NETINFO_ALL );
         gbr_metadata.SetCopper( true );
+
         // Gives a default attribute, for instance for pads used as tracks in net ties:
         // Connector pads and SMD pads are on external layers
         // if on internal layers, they are certainly used as net tie
@@ -160,7 +157,7 @@ void BRDITEMS_PLOTTER::PlotPad( const PAD* aPad, COLOR4D aColor, OUTLINE_MODE aP
             break;
 
         case PAD_ATTRIB::SMD:        // SMD pads (on external copper layer only)
-                                    // with solder paste and mask
+                                     // with solder paste and mask
             if( plotOnExternalCopperLayer )
                 gbr_metadata.SetApertureAttrib( GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_SMDPAD_CUDEF );
             break;
@@ -336,7 +333,6 @@ void BRDITEMS_PLOTTER::PlotFootprintTextItems( const FOOTPRINT* aFootprint )
 }
 
 
-// plot items like text and graphics, but not tracks and footprints
 void BRDITEMS_PLOTTER::PlotBoardGraphicItems()
 {
     for( BOARD_ITEM* item : m_board->Drawings() )
@@ -516,7 +512,6 @@ void BRDITEMS_PLOTTER::PlotPcbTarget( const PCB_TARGET* aMire )
 }
 
 
-// Plot footprints graphic items (outlines)
 void BRDITEMS_PLOTTER::PlotFootprintGraphicItems( const FOOTPRINT* aFootprint )
 {
     for( const BOARD_ITEM* item : aFootprint->GraphicalItems() )
@@ -529,7 +524,6 @@ void BRDITEMS_PLOTTER::PlotFootprintGraphicItems( const FOOTPRINT* aFootprint )
 }
 
 
-//* Plot a graphic item (outline) relative to a footprint
 void BRDITEMS_PLOTTER::PlotFootprintGraphicItem( const FP_SHAPE* aShape )
 {
     if( aShape->Type() != PCB_FP_SHAPE_T )
@@ -676,6 +670,7 @@ void BRDITEMS_PLOTTER::PlotFootprintGraphicItem( const FP_SHAPE* aShape )
                 }
             }
         }
+
         break;
 
     case PCB_SHAPE_TYPE::CURVE:
@@ -690,7 +685,6 @@ void BRDITEMS_PLOTTER::PlotFootprintGraphicItem( const FP_SHAPE* aShape )
 }
 
 
-// Plot a PCB Text, i.e. a text found on a copper or technical layer
 void BRDITEMS_PLOTTER::PlotPcbText( const PCB_TEXT* aText )
 {
     wxString shownText( aText->GetShownText() );
@@ -818,8 +812,8 @@ void BRDITEMS_PLOTTER::PlotFilledAreas( const ZONE* aZone, const SHAPE_POLY_SET&
                     }
                 }
 
-                static_cast<GERBER_PLOTTER*>( m_plotter )->PlotGerberRegion(
-                                                    outline, &gbr_metadata );
+                static_cast<GERBER_PLOTTER*>( m_plotter )->PlotGerberRegion( outline,
+                                                                             &gbr_metadata );
             }
             else
             {
@@ -859,8 +853,6 @@ void BRDITEMS_PLOTTER::PlotFilledAreas( const ZONE* aZone, const SHAPE_POLY_SET&
 }
 
 
-/* Plot items type PCB_SHAPE on layers allowed by aLayerMask
- */
 void BRDITEMS_PLOTTER::PlotPcbShape( const PCB_SHAPE* aShape )
 {
     if( !m_layerMask[aShape->GetLayer()] )
@@ -941,6 +933,7 @@ void BRDITEMS_PLOTTER::PlotPcbShape( const PCB_SHAPE* aShape )
             if( !sketch && aShape->IsFilled() )
             {
                 m_plotter->SetCurrentLineWidth( thickness, &gbr_metadata );
+
                 // Draw the polygon: only one polygon is expected
                 // However we provide a multi polygon shape drawing
                 // ( for the future or to show a non expected shape )
@@ -979,8 +972,9 @@ void BRDITEMS_PLOTTER::PlotPcbShape( const PCB_SHAPE* aShape )
 
             m_plotter->PlotPoly( poly, FILL_TYPE::FILLED_SHAPE, -1, &gbr_metadata );
         }
-    }
+
         break;
+    }
 
     default:
         wxASSERT_MSG( false, "Unhandled PCB_SHAPE shape" );
@@ -989,9 +983,6 @@ void BRDITEMS_PLOTTER::PlotPcbShape( const PCB_SHAPE* aShape )
 }
 
 
-/** Helper function to plot a single drill mark. It compensate and clamp
- *   the drill mark size depending on the current plot options
- */
 void BRDITEMS_PLOTTER::plotOneDrillMark( PAD_DRILL_SHAPE_T aDrillShape, const wxPoint &aDrillPos,
                                          wxSize aDrillSize, const wxSize &aPadSize,
                                          double aOrientation, int aSmallDrill )
@@ -1008,11 +999,11 @@ void BRDITEMS_PLOTTER::plotOneDrillMark( PAD_DRILL_SHAPE_T aDrillShape, const wx
     {
         aDrillSize.y -= getFineWidthAdj();
         aDrillSize.y = Clamp( 1, aDrillSize.y, aPadSize.y - 1 );
-        m_plotter->FlashPadOval( aDrillPos, aDrillSize, aOrientation, GetPlotMode(), NULL );
+        m_plotter->FlashPadOval( aDrillPos, aDrillSize, aOrientation, GetPlotMode(), nullptr );
     }
     else
     {
-        m_plotter->FlashPadCircle( aDrillPos, aDrillSize.x, GetPlotMode(), NULL );
+        m_plotter->FlashPadCircle( aDrillPos, aDrillSize.x, GetPlotMode(), nullptr );
     }
 }
 

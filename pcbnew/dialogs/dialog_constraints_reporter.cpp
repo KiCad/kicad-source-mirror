@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -65,15 +65,17 @@ WX_HTML_REPORT_BOX* DIALOG_CONSTRAINTS_REPORTER::AddPage( const wxString& aTitle
 
     WX_HTML_REPORT_BOX* reporter = new WX_HTML_REPORT_BOX( panel, wxID_ANY, wxDefaultPosition,
                                                            wxDefaultSize,
-                                                           wxHW_SCROLLBAR_AUTO|wxBORDER_SIMPLE );
+                                                           wxHW_SCROLLBAR_AUTO | wxBORDER_SIMPLE );
 
-   	sizer->Add( reporter, 1, wxEXPAND|wxALL, 5 );
+   	sizer->Add( reporter, 1, wxEXPAND | wxALL, 5 );
    	panel->SetSizer( sizer );
    	panel->Layout();
     m_notebook->AddPage( panel, aTitle );
 
     reporter->SetUnits( m_frame->GetUserUnits() );
-    reporter->Connect( wxEVT_COMMAND_HTML_LINK_CLICKED, wxHtmlLinkEventHandler( DIALOG_CONSTRAINTS_REPORTER::OnErrorLinkClicked ), NULL, this );
+    reporter->Connect( wxEVT_COMMAND_HTML_LINK_CLICKED,
+                       wxHtmlLinkEventHandler( DIALOG_CONSTRAINTS_REPORTER::OnErrorLinkClicked ),
+                       nullptr, this );
 
     return reporter;
 }

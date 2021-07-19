@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014-2016 CERN
+ * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -39,8 +40,10 @@
 
 
 ALIGN_DISTRIBUTE_TOOL::ALIGN_DISTRIBUTE_TOOL() :
-    TOOL_INTERACTIVE( "pcbnew.Placement" ), m_selectionTool( NULL ), m_placementMenu( NULL ),
-    m_frame( NULL )
+    TOOL_INTERACTIVE( "pcbnew.Placement" ),
+    m_selectionTool( nullptr ),
+    m_placementMenu( nullptr ),
+    m_frame( nullptr )
 {
 }
 
@@ -751,6 +754,8 @@ void ALIGN_DISTRIBUTE_TOOL::setTransitions()
     Go( &ALIGN_DISTRIBUTE_TOOL::AlignCenterX,           PCB_ACTIONS::alignCenterX.MakeEvent() );
     Go( &ALIGN_DISTRIBUTE_TOOL::AlignCenterY,           PCB_ACTIONS::alignCenterY.MakeEvent() );
 
-    Go( &ALIGN_DISTRIBUTE_TOOL::DistributeHorizontally, PCB_ACTIONS::distributeHorizontally.MakeEvent() );
-    Go( &ALIGN_DISTRIBUTE_TOOL::DistributeVertically,   PCB_ACTIONS::distributeVertically.MakeEvent() );
+    Go( &ALIGN_DISTRIBUTE_TOOL::DistributeHorizontally,
+        PCB_ACTIONS::distributeHorizontally.MakeEvent() );
+    Go( &ALIGN_DISTRIBUTE_TOOL::DistributeVertically,
+        PCB_ACTIONS::distributeVertically.MakeEvent() );
 }

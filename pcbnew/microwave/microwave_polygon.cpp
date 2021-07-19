@@ -4,7 +4,7 @@
  * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2015-2016 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -57,22 +57,13 @@ static int     PolyShapeType;
 
 
 
-/**************** Polygon Shapes ***********************/
-
 enum id_mw_cmd {
     ID_READ_SHAPE_FILE = 1000
 };
 
 
-/* Setting polynomial form parameters
- */
 class MWAVE_POLYGONAL_SHAPE_DLG : public wxDialog
 {
-private:
-    PCB_EDIT_FRAME*  m_Parent;
-    wxRadioBox*      m_ShapeOptionCtrl;
-    EDA_SIZE_CTRL*   m_SizeCtrl;
-
 public:
     MWAVE_POLYGONAL_SHAPE_DLG( PCB_EDIT_FRAME* parent, const wxPoint& pos );
     ~MWAVE_POLYGONAL_SHAPE_DLG() { };
@@ -82,8 +73,8 @@ private:
     void OnCancelClick( wxCommandEvent& event );
 
     /**
-     * Function ReadDataShapeDescr
-     * read a description shape file
+     * Read a description shape file.
+     *
      *  File format is
      *  Unit=MM
      *  XScale=271.501
@@ -100,6 +91,10 @@ private:
     void ReadDataShapeDescr( wxCommandEvent& event );
 
     DECLARE_EVENT_TABLE()
+
+    PCB_EDIT_FRAME*  m_Parent;
+    wxRadioBox*      m_ShapeOptionCtrl;
+    EDA_SIZE_CTRL*   m_SizeCtrl;
 };
 
 
@@ -172,7 +167,7 @@ void MWAVE_POLYGONAL_SHAPE_DLG::ReadDataShapeDescr( wxCommandEvent& event )
     wxString fullFileName;
     wxString mask = wxFileSelectorDefaultWildcardStr;
 
-    fullFileName = EDA_FILE_SELECTOR( _( "Read descr shape file" ), lastpath,
+    fullFileName = EDA_FILE_SELECTOR( _( "Read Shape Description File" ), lastpath,
                                       fullFileName, wxEmptyString, mask, this,
                                       wxFD_OPEN, true );
 
@@ -185,7 +180,7 @@ void MWAVE_POLYGONAL_SHAPE_DLG::ReadDataShapeDescr( wxCommandEvent& event )
 
     FILE* File = wxFopen( fullFileName, wxT( "rt" ) );
 
-    if( File == NULL )
+    if( File == nullptr )
     {
         DisplayError( this, _( "File not found" ) );
         return;
@@ -203,7 +198,7 @@ void MWAVE_POLYGONAL_SHAPE_DLG::ReadDataShapeDescr( wxCommandEvent& event )
     {
         char* Line = reader.Line();
         char* param1 = strtok( Line, " =\n\r" );
-        char* param2 = strtok( NULL, " \t\n\r" );
+        char* param2 = strtok( nullptr, " \t\n\r" );
 
         if( strncasecmp( param1, "Unit", 4 ) == 0 )
         {
@@ -223,7 +218,7 @@ void MWAVE_POLYGONAL_SHAPE_DLG::ReadDataShapeDescr( wxCommandEvent& event )
             {
                 Line = reader.Line();
                 param1 = strtok( Line, " \t\n\r" );
-                param2 = strtok( NULL, " \t\n\r" );
+                param2 = strtok( nullptr, " \t\n\r" );
 
                 if( strncasecmp( param1, "$ENDCOORD", 8 ) == 0 )
                     break;
@@ -265,7 +260,7 @@ FOOTPRINT* MICROWAVE_TOOL::createPolygonShape()
     if( ret != wxID_OK )
     {
         PolyEdges.clear();
-        return NULL;
+        return nullptr;
     }
 
     if( PolyShapeType == 2 )  // mirrored
@@ -277,13 +272,13 @@ FOOTPRINT* MICROWAVE_TOOL::createPolygonShape()
     if( ( ShapeSize.x ) == 0 || ( ShapeSize.y == 0 ) )
     {
         editFrame.ShowInfoBarError( _( "Shape has a null size." ) );
-        return NULL;
+        return nullptr;
     }
 
     if( PolyEdges.size() == 0 )
     {
         editFrame.ShowInfoBarError( _( "Shape has no points." ) );
-        return NULL;
+        return nullptr;
     }
 
     cmp_name = wxT( "muwave_polygon" );
@@ -351,8 +346,9 @@ FOOTPRINT* MICROWAVE_TOOL::createPolygonShape()
     }
 
     shape->SetPolyPoints( polyPoints );
+
     // Set the polygon outline thickness to 0, only the polygonal shape is filled
-    // without extra thickness
+    // without extra thickness.
     shape->SetWidth( 0 );
     PolyEdges.clear();
 

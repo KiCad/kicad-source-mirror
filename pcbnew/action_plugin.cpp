@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -67,7 +67,7 @@ ACTION_PLUGIN* ACTION_PLUGINS::GetActionByMenu( int aMenu )
             return m_actionsList[i];
     }
 
-    return NULL;
+    return nullptr;
 }
 
 
@@ -87,7 +87,7 @@ ACTION_PLUGIN* ACTION_PLUGINS::GetActionByButton( int aButton )
             return m_actionsList[i];
     }
 
-    return NULL;
+    return nullptr;
 }
 
 
@@ -107,7 +107,7 @@ ACTION_PLUGIN* ACTION_PLUGINS::GetActionByPath(const wxString& aPath)
         }
     }
 
-    return NULL;
+    return nullptr;
 }
 
 
@@ -125,7 +125,7 @@ ACTION_PLUGIN* ACTION_PLUGINS::GetAction( const wxString& aName )
             return action;
     }
 
-    return NULL;
+    return nullptr;
 }
 
 
@@ -190,6 +190,7 @@ bool ACTION_PLUGINS::deregister_object( void* aObject )
         if( action->GetObject() == aObject )
         {
             m_actionsList.erase( m_actionsList.begin() + i );
+
             //m_actionsListMenu.erase( m_actionsListMenu.begin() + i );
             delete action;
             return true;

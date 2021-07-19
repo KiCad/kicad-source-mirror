@@ -612,7 +612,8 @@ bool FOOTPRINT_EDIT_FRAME::canCloseWindow( wxCloseEvent& aEvent )
     if( IsContentModified() )
     {
         // Shutdown blocks must be determined and vetoed as early as possible
-        if( KIPLATFORM::APP::SupportsShutdownBlockReason() && aEvent.GetId() == wxEVT_QUERY_END_SESSION )
+        if( KIPLATFORM::APP::SupportsShutdownBlockReason() &&
+            aEvent.GetId() == wxEVT_QUERY_END_SESSION )
         {
             aEvent.Veto();
             return false;
@@ -639,7 +640,7 @@ bool FOOTPRINT_EDIT_FRAME::canCloseWindow( wxCloseEvent& aEvent )
 void FOOTPRINT_EDIT_FRAME::doCloseWindow()
 {
     // No more vetos
-    GetCanvas()->SetEventDispatcher( NULL );
+    GetCanvas()->SetEventDispatcher( nullptr );
     GetCanvas()->StopDrawing();
 
     // Do not show the layer manager during closing to avoid flicker
@@ -677,7 +678,7 @@ void FOOTPRINT_EDIT_FRAME::OnUpdateLoadFootprintFromBoard( wxUpdateUIEvent& aEve
 {
     PCB_EDIT_FRAME* frame = (PCB_EDIT_FRAME*) Kiway().Player( FRAME_PCB_EDITOR, false );
 
-    aEvent.Enable( frame && frame->GetBoard()->GetFirstFootprint() != NULL );
+    aEvent.Enable( frame && frame->GetBoard()->GetFirstFootprint() != nullptr );
 }
 
 
@@ -827,7 +828,7 @@ void FOOTPRINT_EDIT_FRAME::initLibraryTree()
     if( GFootprintList.GetCount() == 0 )
         GFootprintList.ReadCacheFromFile( Prj().GetProjectPath() + "fp-info-cache" );
 
-    GFootprintList.ReadFootprintFiles( fpTable, NULL, &progressReporter );
+    GFootprintList.ReadFootprintFiles( fpTable, nullptr, &progressReporter );
     progressReporter.Show( false );
 
     if( GFootprintList.GetErrorCount() )
@@ -851,12 +852,12 @@ void FOOTPRINT_EDIT_FRAME::SyncLibraryTree( bool aProgress )
     if( aProgress )
     {
         WX_PROGRESS_REPORTER progressReporter( this, _( "Updating Footprint Libraries" ), 2 );
-        GFootprintList.ReadFootprintFiles( fpTable, NULL, &progressReporter );
+        GFootprintList.ReadFootprintFiles( fpTable, nullptr, &progressReporter );
         progressReporter.Show( false );
     }
     else
     {
-        GFootprintList.ReadFootprintFiles( fpTable, NULL, NULL );
+        GFootprintList.ReadFootprintFiles( fpTable, nullptr, nullptr );
     }
 
     // Sync the LIB_TREE to the FOOTPRINT_INFO list

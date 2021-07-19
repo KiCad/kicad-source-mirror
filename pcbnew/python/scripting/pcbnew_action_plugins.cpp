@@ -57,6 +57,7 @@ PyObject* PYTHON_ACTION_PLUGIN::CallMethod( const char* aMethod, PyObject* aArgl
     PyLOCK lock;
 
     PyErr_Clear();
+
     // pFunc is a new reference to the desired method
     PyObject* pFunc = PyObject_GetAttrString( m_PyAction, aMethod );
 
@@ -67,8 +68,8 @@ PyObject* PYTHON_ACTION_PLUGIN::CallMethod( const char* aMethod, PyObject* aArgl
         if( PyErr_Occurred() )
         {
             wxMessageBox( PyErrStringWithTraceback(),
-                    _( "Exception on python action plugin code" ),
-                    wxICON_ERROR | wxOK );
+                          _( "Exception on python action plugin code" ),
+                          wxICON_ERROR | wxOK );
         }
 
         if( result )
@@ -88,7 +89,7 @@ PyObject* PYTHON_ACTION_PLUGIN::CallMethod( const char* aMethod, PyObject* aArgl
         Py_XDECREF( pFunc );
     }
 
-    return NULL;
+    return nullptr;
 }
 
 
@@ -258,7 +259,7 @@ void PCB_EDIT_FRAME::RunActionPlugin( ACTION_PLUGIN* aActionPlugin )
     ACTION_PLUGINS::SetActionRunning( false );
 
     // Get back the undo buffer to fix some modifications
-    PICKED_ITEMS_LIST* oldBuffer = NULL;
+    PICKED_ITEMS_LIST* oldBuffer = nullptr;
 
     if( fromEmpty )
     {
@@ -313,6 +314,7 @@ void PCB_EDIT_FRAME::RunActionPlugin( ACTION_PLUGIN* aActionPlugin )
     {
         oldBuffer->PushItem( deletedItemsList.GetItemWrapper( i ) );
     }
+
     // Find new footprints
     for( FOOTPRINT* item : currentPcb->Footprints() )
     {
@@ -379,12 +381,13 @@ void PCB_EDIT_FRAME::buildActionPluginMenus( ACTION_MENU* actionMenu )
     {
         wxMenuItem* item;
         ACTION_PLUGIN* ap = ACTION_PLUGINS::GetAction( ii );
-        const wxBitmap& bitmap = ap->iconBitmap.IsOk() ? ap->iconBitmap : KiBitmap( BITMAPS::puzzle_piece );
+        const wxBitmap& bitmap = ap->iconBitmap.IsOk() ? ap->iconBitmap :
+                                                         KiBitmap( BITMAPS::puzzle_piece );
 
         item = AddMenuItem( actionMenu, wxID_ANY,  ap->GetName(), ap->GetDescription(), bitmap );
 
         Connect( item->GetId(), wxEVT_COMMAND_MENU_SELECTED,
-                wxCommandEventHandler( PCB_EDIT_FRAME::OnActionPluginMenu ) );
+                 wxCommandEventHandler( PCB_EDIT_FRAME::OnActionPluginMenu ) );
 
         ACTION_PLUGINS::SetActionMenu( ii, item->GetId() );
     }
@@ -414,11 +417,11 @@ void PCB_EDIT_FRAME::AddActionPluginTools()
             else
                 bitmap = KiScaledBitmap( BITMAPS::puzzle_piece, this );
 
-            wxAuiToolBarItem* button = m_mainToolBar->AddTool(
-                    wxID_ANY, wxEmptyString, bitmap, ap->GetName() );
+            wxAuiToolBarItem* button = m_mainToolBar->AddTool( wxID_ANY, wxEmptyString,
+                                                               bitmap, ap->GetName() );
 
             Connect( button->GetId(), wxEVT_COMMAND_MENU_SELECTED,
-                    wxCommandEventHandler( PCB_EDIT_FRAME::OnActionPluginButton ) );
+                     wxCommandEventHandler( PCB_EDIT_FRAME::OnActionPluginButton ) );
 
             // Link action plugin to button
             ACTION_PLUGINS::SetActionButton( ap, button->GetId() );
@@ -459,7 +462,8 @@ std::vector<ACTION_PLUGIN*> PCB_EDIT_FRAME::GetOrderedActionPlugins()
 }
 
 
-bool PCB_EDIT_FRAME::GetActionPluginButtonVisible( const wxString& aPluginPath, bool aPluginDefault )
+bool PCB_EDIT_FRAME::GetActionPluginButtonVisible( const wxString& aPluginPath,
+                                                   bool aPluginDefault )
 {
     auto& settings = m_settings->m_VisibleActionPlugins;
 

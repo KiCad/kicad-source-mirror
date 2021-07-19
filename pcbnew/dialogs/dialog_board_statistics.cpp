@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019 Alexander Shuklin, jasuramme@gmail.com
- * Copyright (C) 2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -45,8 +45,9 @@
 #define ROW_BOARD_HEIGHT 1
 #define ROW_BOARD_AREA 2
 
+
 /**
- * Struct containing the dialog last saved state
+ * The dialog last saved state.
  */
 struct DIALOG_BOARD_STATISTICS_SAVED_STATE
 {
@@ -69,6 +70,7 @@ struct DIALOG_BOARD_STATISTICS_SAVED_STATE
                                     // used to reinit last state after a project change
 };
 
+
 static DIALOG_BOARD_STATISTICS_SAVED_STATE s_savedDialogState;
 
 DIALOG_BOARD_STATISTICS::DIALOG_BOARD_STATISTICS( PCB_EDIT_FRAME* aParentFrame ) :
@@ -81,7 +83,9 @@ DIALOG_BOARD_STATISTICS::DIALOG_BOARD_STATISTICS( PCB_EDIT_FRAME* aParentFrame )
     m_parentFrame = aParentFrame;
 
     m_gridDrills->UseNativeColHeader();
-    m_gridDrills->Connect( wxEVT_GRID_COL_SORT, wxGridEventHandler( DIALOG_BOARD_STATISTICS::drillGridSort ), NULL, this );
+    m_gridDrills->Connect( wxEVT_GRID_COL_SORT,
+                           wxGridEventHandler( DIALOG_BOARD_STATISTICS::drillGridSort ),
+                           nullptr, this );
 
     m_checkBoxExcludeComponentsNoPins->SetValue( s_savedDialogState.excludeNoPins );
     m_checkBoxSubtractHoles->SetValue( s_savedDialogState.subtractHoles );
@@ -103,6 +107,7 @@ DIALOG_BOARD_STATISTICS::DIALOG_BOARD_STATISTICS( PCB_EDIT_FRAME* aParentFrame )
     m_gridBoard->SetCellAlignment( 2, 0, wxALIGN_LEFT, wxALIGN_CENTRE );
 
     wxGrid* grids[] = { m_gridComponents, m_gridPads, m_gridVias, m_gridBoard };
+
     for( auto& grid : grids )
     {
         // Remove wxgrid's selection boxes
@@ -129,6 +134,7 @@ DIALOG_BOARD_STATISTICS::DIALOG_BOARD_STATISTICS( PCB_EDIT_FRAME* aParentFrame )
     // Nothing to cancel:
     m_sdbControlSizerCancel->SetLabel( _( "Close" ) );
 }
+
 
 void DIALOG_BOARD_STATISTICS::refreshItemsTypes()
 {
@@ -167,6 +173,7 @@ void DIALOG_BOARD_STATISTICS::refreshItemsTypes()
         m_gridVias->AppendRows( appendRows );
 }
 
+
 bool DIALOG_BOARD_STATISTICS::TransferDataToWindow()
 {
     refreshItemsTypes();
@@ -177,6 +184,7 @@ bool DIALOG_BOARD_STATISTICS::TransferDataToWindow()
     finishDialogSettings();
     return true;
 }
+
 
 void DIALOG_BOARD_STATISTICS::getDataFromPCB()
 {
@@ -348,6 +356,7 @@ void DIALOG_BOARD_STATISTICS::getDataFromPCB()
     }
 }
 
+
 void DIALOG_BOARD_STATISTICS::updateWidets()
 {
     int totalPads  = 0;
@@ -356,8 +365,8 @@ void DIALOG_BOARD_STATISTICS::updateWidets()
     for( const auto& type : m_padsTypes )
     {
         m_gridPads->SetCellValue( currentRow, COL_LABEL, type.title );
-        m_gridPads->SetCellValue(
-                currentRow, COL_AMOUNT, wxString::Format( wxT( "%i " ), type.qty ) );
+        m_gridPads->SetCellValue( currentRow, COL_AMOUNT,
+                                  wxString::Format( wxT( "%i " ), type.qty ) );
         totalPads += type.qty;
         currentRow++;
     }
@@ -371,8 +380,7 @@ void DIALOG_BOARD_STATISTICS::updateWidets()
     for( const auto& type : m_viasTypes )
     {
         m_gridVias->SetCellValue( currentRow, COL_LABEL, type.title );
-        m_gridVias->SetCellValue(
-                currentRow, COL_AMOUNT, wxString::Format( "%i ", type.qty ) );
+        m_gridVias->SetCellValue( currentRow, COL_AMOUNT, wxString::Format( "%i ", type.qty ) );
         totalVias += type.qty;
         currentRow++;
     }
@@ -416,7 +424,8 @@ void DIALOG_BOARD_STATISTICS::updateWidets()
         m_gridBoard->SetCellValue( ROW_BOARD_HEIGHT, COL_AMOUNT,
                                    MessageTextFromValue( GetUserUnits(), m_boardHeight ) + " " );
         m_gridBoard->SetCellValue( ROW_BOARD_AREA, COL_AMOUNT,
-                                   MessageTextFromValue( GetUserUnits(), m_boardArea, true, EDA_DATA_TYPE::AREA ) );
+                                   MessageTextFromValue( GetUserUnits(), m_boardArea, true,
+                                                         EDA_DATA_TYPE::AREA ) );
     }
     else
     {
@@ -435,6 +444,7 @@ void DIALOG_BOARD_STATISTICS::updateWidets()
 
     adjustDrillGridColumns();
 }
+
 
 void DIALOG_BOARD_STATISTICS::updateDrillGrid()
 {
@@ -488,8 +498,10 @@ void DIALOG_BOARD_STATISTICS::updateDrillGrid()
     }
 }
 
+
 void DIALOG_BOARD_STATISTICS::printGridToStringAsTable( wxGrid* aGrid, wxString& aStr,
-        bool aUseRowLabels, bool aUseColLabels, bool aUseFirstColAsLabel )
+                                                        bool aUseRowLabels, bool aUseColLabels,
+                                                        bool aUseFirstColAsLabel )
 {
     std::vector<int> widths( aGrid->GetNumberCols(), 0 );
     int              rowLabelsWidth = 0;
@@ -530,6 +542,7 @@ void DIALOG_BOARD_STATISTICS::printGridToStringAsTable( wxGrid* aGrid, wxString&
             tmp.Printf( " %*s |", widths[col], aGrid->GetColLabelValue( col ) );
         else
             tmp.Printf( " %*s |", widths[col], aGrid->GetCellValue( 0, col ) );
+
         aStr << tmp;
     }
 
@@ -572,6 +585,7 @@ void DIALOG_BOARD_STATISTICS::printGridToStringAsTable( wxGrid* aGrid, wxString&
             tmp.Printf( "|%-*s  |", widths[0], aGrid->GetCellValue( row, 0 ) );
         else
             tmp.Printf( "|" );
+
         aStr << tmp;
 
         for( int col = firstCol; col < aGrid->GetNumberCols(); col++ )
@@ -579,9 +593,11 @@ void DIALOG_BOARD_STATISTICS::printGridToStringAsTable( wxGrid* aGrid, wxString&
             tmp.Printf( " %*s |", widths[col], aGrid->GetCellValue( row, col ) );
             aStr << tmp;
         }
+
         aStr << "\n";
     }
 }
+
 
 void DIALOG_BOARD_STATISTICS::adjustDrillGridColumns()
 {
@@ -605,7 +621,7 @@ void DIALOG_BOARD_STATISTICS::adjustDrillGridColumns()
     m_gridDrills->Refresh();
 }
 
-// If any checkbox clicked, we have to refresh dialog data
+
 void DIALOG_BOARD_STATISTICS::checkboxClicked( wxCommandEvent& aEvent )
 {
     s_savedDialogState.excludeNoPins = m_checkBoxExcludeComponentsNoPins->GetValue();
@@ -616,6 +632,7 @@ void DIALOG_BOARD_STATISTICS::checkboxClicked( wxCommandEvent& aEvent )
     Layout();
     drillsPanel->Layout();
 }
+
 
 void DIALOG_BOARD_STATISTICS::saveReportClicked( wxCommandEvent& aEvent )
 {
@@ -639,7 +656,7 @@ void DIALOG_BOARD_STATISTICS::saveReportClicked( wxCommandEvent& aEvent )
 
     outFile = wxFopen( saveFileDialog.GetPath(), "wt" );
 
-    if( outFile == NULL )
+    if( outFile == nullptr )
     {
         msg.Printf( _( "Failed to create file '%s'." ), saveFileDialog.GetPath() );
         DisplayErrorMessage( this, msg );
@@ -656,9 +673,12 @@ void DIALOG_BOARD_STATISTICS::saveReportClicked( wxCommandEvent& aEvent )
 
     if( m_hasOutline )
     {
-        msg << wxS( "- " ) << _( "Width" ) << wxS( ": " ) << MessageTextFromValue( GetUserUnits(), m_boardWidth ) << "\n";
-        msg << wxS( "- " ) << _( "Height" ) << wxS( ": " )<< MessageTextFromValue( GetUserUnits(), m_boardHeight ) << "\n";
-        msg << wxS( "- " ) << _( "Area" ) + wxS( ": " )  << MessageTextFromValue( GetUserUnits(), m_boardArea, true, EDA_DATA_TYPE::AREA );
+        msg << wxS( "- " ) << _( "Width" ) << wxS( ": " ) <<
+               MessageTextFromValue( GetUserUnits(), m_boardWidth ) << "\n";
+        msg << wxS( "- " ) << _( "Height" ) << wxS( ": " ) <<
+               MessageTextFromValue( GetUserUnits(), m_boardHeight ) << "\n";
+        msg << wxS( "- " ) << _( "Area" ) + wxS( ": " ) <<
+               MessageTextFromValue( GetUserUnits(), m_boardArea, true, EDA_DATA_TYPE::AREA );
         msg << "\n";
     }
     else
@@ -687,6 +707,7 @@ void DIALOG_BOARD_STATISTICS::saveReportClicked( wxCommandEvent& aEvent )
     wxString tmp;
 
     widths.reserve( labels.size() );
+
     for( const auto& label : labels )
         widths.push_back( label.size() );
 
@@ -731,6 +752,7 @@ void DIALOG_BOARD_STATISTICS::saveReportClicked( wxCommandEvent& aEvent )
     fclose( outFile );
 }
 
+
 void DIALOG_BOARD_STATISTICS::drillGridSize( wxSizeEvent& aEvent )
 {
     aEvent.Skip();
@@ -747,6 +769,7 @@ void DIALOG_BOARD_STATISTICS::drillGridSort( wxGridEvent& aEvent )
 
     updateDrillGrid();
 }
+
 
 DIALOG_BOARD_STATISTICS::~DIALOG_BOARD_STATISTICS()
 {

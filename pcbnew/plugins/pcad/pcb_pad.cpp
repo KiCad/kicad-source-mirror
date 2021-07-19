@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2007, 2008 Lubo Racko <developer@lura.sk>
  * Copyright (C) 2007, 2008, 2012-2013 Alexander Lunev <al.lunev@yahoo.com>
- * Copyright (C) 2012-2020 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2012-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -37,6 +37,7 @@
 #include <wx/string.h>
 
 namespace PCAD2KICAD {
+
 
 PCB_PAD::PCB_PAD( PCB_CALLBACKS* aCallbacks, BOARD* aBoard ) :
         PCB_COMPONENT( aCallbacks, aBoard )
@@ -118,6 +119,7 @@ void PCB_PAD::Parse( XNODE* aNode, const wxString& aDefaultUnits,
     if( lNode )
     {
         lNode->GetAttribute( wxT( "Name" ), &propValue );
+
         //propValue.Trim( false );
         m_defaultPinDes = propValue;
     }
@@ -245,6 +247,7 @@ void PCB_PAD::AddToFootprint( FOOTPRINT* aFootprint, int aRotation, bool aEncaps
                         pad->SetLayerSet( LSET( 3, F_Cu, F_Paste, F_Mask ) );
                     else
                         pad->SetLayerSet( LSET( 3, B_Cu, B_Paste, B_Mask ) );
+
                     break;
                 }
             }
@@ -272,11 +275,17 @@ void PCB_PAD::AddToFootprint( FOOTPRINT* aFootprint, int aRotation, bool aEncaps
                 pad->SetShape( PAD_SHAPE::CIRCLE );
         }
         else if( padShapeName == wxT( "Rect" ) )
+        {
             pad->SetShape( PAD_SHAPE::RECT );
+        }
         else if(  padShapeName == wxT( "RndRect" ) )
+        {
             pad->SetShape( PAD_SHAPE::ROUNDRECT );
+        }
         else if( padShapeName == wxT( "Polygon" ) )
+        {
             pad->SetShape( PAD_SHAPE::RECT ); // approximation
+        }
 
         pad->SetSize( wxSize( width, height ) );
         pad->SetDelta( wxSize( 0, 0 ) );
@@ -291,7 +300,7 @@ void PCB_PAD::AddToFootprint( FOOTPRINT* aFootprint, int aRotation, bool aEncaps
         // Set the proper net code
         NETINFO_ITEM* netinfo = m_board->FindNet( m_net );
 
-        if( netinfo == NULL )   // I believe this should not happen, but just in case
+        if( netinfo == nullptr )   // I believe this should not happen, but just in case
         {
             // It is a new net
             netinfo = new NETINFO_ITEM( m_board, m_net );

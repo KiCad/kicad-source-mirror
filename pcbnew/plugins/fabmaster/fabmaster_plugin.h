@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2020 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2020-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -36,16 +36,11 @@
 class FABMASTER_PLUGIN : public PLUGIN
 {
 public:
+    const wxString PluginName() const override;
 
-    // -----<PUBLIC PLUGIN API>--------------------------------------------------
-
-    const wxString  PluginName() const override;
-
-    BOARD*          Load( const wxString&    aFileName,
-                          BOARD*             aAppendToMe,
-                          const PROPERTIES*  aProperties = NULL,
-                          PROJECT*           aProject = nullptr,
-                          PROGRESS_REPORTER* aProgressReporter = nullptr ) override;
+    BOARD* Load( const wxString& aFileName, BOARD* aAppendToMe,
+                 const PROPERTIES* aProperties = nullptr, PROJECT* aProject = nullptr,
+                 PROGRESS_REPORTER* aProgressReporter = nullptr ) override;
 
     const wxString  GetFileExtension() const override;
 
@@ -54,8 +49,6 @@ public:
         // No support for libraries....
         return 0;
     }
-
-    // -----</PUBLIC PLUGIN API>-------------------------------------------------
 
     FABMASTER_PLUGIN();
     ~FABMASTER_PLUGIN();
@@ -67,4 +60,4 @@ private:
     FABMASTER           m_fabmaster;
 };
 
-#endif    // PCAD_PLUGIN_H_
+#endif    // FABMASTER_PLUGIN_H_

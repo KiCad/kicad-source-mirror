@@ -183,7 +183,7 @@ class NETINFO_MAPPING
 public:
     NETINFO_MAPPING()
     {
-        m_board = NULL;
+        m_board = nullptr;
     }
 
 

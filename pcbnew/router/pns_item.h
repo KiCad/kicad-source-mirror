@@ -75,8 +75,8 @@ public:
         m_net = UnusedNet;
         m_movable = true;
         m_kind = aKind;
-        m_parent = NULL;
-        m_owner = NULL;
+        m_parent = nullptr;
+        m_owner = nullptr;
         m_marker = 0;
         m_rank = -1;
         m_routable = true;

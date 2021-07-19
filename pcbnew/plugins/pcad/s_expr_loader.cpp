@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012-2013 Alexander Lunev <al.lunev@yahoo.com>
- * Copyright (C) 2012 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2012-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -36,11 +36,12 @@ namespace PCAD2KICAD {
 static KEYWORD empty_keywords[1] = {};
 static const char ACCEL_ASCII_KEYWORD[] = "ACCEL_ASCII";
 
-void LoadInputFile( const wxString& aFileName, wxXmlDocument* aXmlDoc )
+
+    void LoadInputFile( const wxString& aFileName, wxXmlDocument* aXmlDoc )
 {
     char      line[sizeof( ACCEL_ASCII_KEYWORD )];
     int       tok;
-    XNODE*    iNode = NULL, *cNode = NULL;
+    XNODE*    iNode = nullptr, *cNode = nullptr;
     wxString  str, propValue, content;
     wxCSConv  conv( wxT( "windows-1251" ) );
 
@@ -80,6 +81,7 @@ void LoadInputFile( const wxString& aFileName, wxXmlDocument* aXmlDoc )
         else if( cNode )
         {
             str = wxString( lexer.CurText(), conv );
+
             if( tok == DSN_STRING )
             {
                 // update attribute
@@ -89,7 +91,9 @@ void LoadInputFile( const wxString& aFileName, wxXmlDocument* aXmlDoc )
                     iNode->AddAttribute( wxT( "Name" ), propValue + wxT( ' ' ) + str );
                 }
                 else
+                {
                     iNode->AddAttribute( wxT( "Name" ), str );
+                }
             }
             else if( str != wxEmptyString )
             {
@@ -99,9 +103,7 @@ void LoadInputFile( const wxString& aFileName, wxXmlDocument* aXmlDoc )
                 if( cNode->GetChildren() )
                     cNode->GetChildren()->SetContent( content );
                 else
-                    cNode->AddChild( new wxXmlNode( wxXML_TEXT_NODE,
-                                                    wxEmptyString,
-                                                    content ) );
+                    cNode->AddChild( new wxXmlNode( wxXML_TEXT_NODE, wxEmptyString, content ) );
             }
         }
     }

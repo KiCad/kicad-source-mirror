@@ -102,7 +102,7 @@ public:
 
 PCB_SELECTION_TOOL::PCB_SELECTION_TOOL() :
         PCB_TOOL_BASE( "pcbnew.InteractiveSelection" ),
-        m_frame( NULL ),
+        m_frame( nullptr ),
         m_additive( false ),
         m_subtractive( false ),
         m_exclusive_or( false ),
@@ -484,7 +484,7 @@ void PCB_SELECTION_TOOL::EnterGroup()
                  "EnterGroup called when selection is not a single group" );
     PCB_GROUP* aGroup = static_cast<PCB_GROUP*>( m_selection[0] );
 
-    if( m_enteredGroup != NULL )
+    if( m_enteredGroup != nullptr )
         ExitGroup();
 
     ClearSelection();
@@ -780,7 +780,7 @@ bool PCB_SELECTION_TOOL::selectCursor( bool aForceSelect, CLIENT_SELECTION_FILTE
     if( aForceSelect || m_selection.Empty() )
     {
         ClearSelection( true /*quiet mode*/ );
-        selectPoint( getViewControls()->GetCursorPosition( false ), false, NULL, aClientFilter );
+        selectPoint( getViewControls()->GetCursorPosition( false ), false, nullptr, aClientFilter );
     }
 
     return !m_selection.Empty();
@@ -1145,22 +1145,22 @@ void PCB_SELECTION_TOOL::selectConnectedTracks( BOARD_CONNECTED_ITEM& aStartItem
             PCB_TRACK* track = static_cast<PCB_TRACK*>( item );
             trackMap[ track->GetStart() ].push_back( track );
             trackMap[ track->GetEnd() ].push_back( track );
-        }
             break;
+        }
 
         case PCB_VIA_T:
         {
             PCB_VIA* via = static_cast<PCB_VIA*>( item );
             viaMap[ via->GetStart() ] = via;
-        }
             break;
+        }
 
         case PCB_PAD_T:
         {
             PAD* pad = static_cast<PAD*>( item );
             padMap[ pad->GetPosition() ] = pad;
-        }
             break;
+        }
 
         default:
             break;
@@ -1248,8 +1248,10 @@ void PCB_SELECTION_TOOL::selectAllItemsOnNet( int aNetCode, bool aSelect )
     auto connectivity = board()->GetConnectivity();
 
     for( BOARD_CONNECTED_ITEM* item : connectivity->GetNetItems( aNetCode, types ) )
+    {
         if( itemPassesFilter( item ) )
             aSelect ? select( item ) : unselect( item );
+    }
 }
 
 
@@ -1307,7 +1309,7 @@ void PCB_SELECTION_TOOL::selectAllItemsOnSheet( wxString& aSheetPath )
             footprintList.push_back( footprint );
     }
 
-    //Generate a list of all pads, and of all nets they belong to.
+    // Generate a list of all pads, and of all nets they belong to.
     std::list<int>  netcodeList;
     std::list<PAD*> padList;
 
@@ -1322,6 +1324,7 @@ void PCB_SELECTION_TOOL::selectAllItemsOnSheet( wxString& aSheetPath )
             }
         }
     }
+
     // remove all duplicates
     netcodeList.sort();
     netcodeList.unique();
@@ -1371,13 +1374,13 @@ void PCB_SELECTION_TOOL::selectAllItemsOnSheet( wxString& aSheetPath )
 
     for( BOARD_ITEM* i : footprintList )
     {
-        if( i != NULL )
+        if( i != nullptr )
             select( i );
     }
 
     for( BOARD_CONNECTED_ITEM* i : localConnectionList )
     {
-        if( i != NULL )
+        if( i != nullptr )
             select( i );
     }
 }
@@ -1385,7 +1388,7 @@ void PCB_SELECTION_TOOL::selectAllItemsOnSheet( wxString& aSheetPath )
 
 void PCB_SELECTION_TOOL::zoomFitSelection()
 {
-    //Should recalculate the view to zoom in on the selection
+    // Should recalculate the view to zoom in on the selection.
     auto selectionBox = m_selection.GetBoundingBox();
     auto view = getView();
 
@@ -1428,8 +1431,7 @@ int PCB_SELECTION_TOOL::selectSameSheet( const TOOL_EVENT& aEvent )
     if( !selectCursor( true ) )
         return 0;
 
-    // this function currently only supports footprints since they are only
-    // on one sheet.
+    // this function currently only supports footprints since they are only on one sheet.
     auto item = m_selection.Front();
 
     if( !item )
@@ -1662,8 +1664,9 @@ bool PCB_SELECTION_TOOL::itemPassesFilter( BOARD_ITEM* aItem )
         {
             return false;
         }
-    }
+
         break;
+    }
 
     case PCB_FP_SHAPE_T:
     case PCB_SHAPE_T:
@@ -1834,7 +1837,9 @@ bool PCB_SELECTION_TOOL::doSelectionMenu( GENERAL_COLLECTOR* aCollector )
                         unhighlight( ( *aCollector )[i], BRIGHTENED, &highlightGroup );
                 }
                 else if( current )
+                {
                     unhighlight( current, BRIGHTENED, &highlightGroup );
+                }
 
                 int id = *evt->GetCommandId();
 
@@ -1845,7 +1850,9 @@ bool PCB_SELECTION_TOOL::doSelectionMenu( GENERAL_COLLECTOR* aCollector )
                     highlight( current, BRIGHTENED, &highlightGroup );
                 }
                 else
+                {
                     current = nullptr;
+                }
 
                 // User has pointed on the "Select All" option
                 if( id == limit + 1 )
@@ -1855,7 +1862,9 @@ bool PCB_SELECTION_TOOL::doSelectionMenu( GENERAL_COLLECTOR* aCollector )
                     selectAll = true;
                 }
                 else
+                {
                     selectAll = false;
+                }
             }
             else if( evt->Action() == TA_CHOICE_MENU_CHOICE )
             {
@@ -1865,7 +1874,9 @@ bool PCB_SELECTION_TOOL::doSelectionMenu( GENERAL_COLLECTOR* aCollector )
                         unhighlight( ( *aCollector )[i], BRIGHTENED, &highlightGroup );
                 }
                 else if( current )
+                {
                     unhighlight( current, BRIGHTENED, &highlightGroup );
+                }
 
                 OPT<int> id = evt->GetCommandId();
 
@@ -1903,7 +1914,9 @@ bool PCB_SELECTION_TOOL::doSelectionMenu( GENERAL_COLLECTOR* aCollector )
     getView()->Remove( &highlightGroup );
 
     if( selectAll )
+    {
         return true;
+    }
     else if( current )
     {
         aCollector->Empty();
@@ -2209,8 +2222,7 @@ void PCB_SELECTION_TOOL::unhighlight( BOARD_ITEM* aItem, int aMode, PCB_SELECTIO
     unhighlightInternal( aItem, aMode, aGroup != nullptr );
     view()->Update( aItem, KIGFX::REPAINT );
 
-    // Many selections are very temporal and updating the display each time just
-    // creates noise.
+    // Many selections are very temporal and updating the display each time just creates noise.
     if( aMode == BRIGHTENED )
         getView()->MarkTargetDirty( KIGFX::TARGET_OVERLAY );
 }
@@ -2285,15 +2297,15 @@ int PCB_SELECTION_TOOL::hitTestDistance( const wxPoint& aWhere, BOARD_ITEM* aIte
     {
         PCB_TEXT* text = static_cast<PCB_TEXT*>( aItem );
         text->GetEffectiveTextShape()->Collide( loc, aMaxDistance, &distance );
-    }
         break;
+    }
 
     case PCB_FP_TEXT_T:
     {
         FP_TEXT* text = static_cast<FP_TEXT*>( aItem );
         text->GetEffectiveTextShape()->Collide( loc, aMaxDistance, &distance );
-    }
         break;
+    }
 
     case PCB_ZONE_T:
     {
@@ -2306,8 +2318,9 @@ int PCB_SELECTION_TOOL::hitTestDistance( const wxPoint& aWhere, BOARD_ITEM* aIte
             distance = aMaxDistance / 2;
         else
             aItem->GetEffectiveShape()->Collide( loc, aMaxDistance, &distance );
-    }
+
         break;
+    }
 
     case PCB_FOOTPRINT_T:
     {
@@ -2319,8 +2332,9 @@ int PCB_SELECTION_TOOL::hitTestDistance( const wxPoint& aWhere, BOARD_ITEM* aIte
         // Consider footprints larger than the viewport only as a last resort
         if( bbox.GetHeight() > viewport.GetHeight() || bbox.GetWidth() > viewport.GetWidth() )
             distance = INT_MAX / 2;
-    }
+
         break;
+    }
 
     case PCB_MARKER_T:
     {
@@ -2330,8 +2344,8 @@ int PCB_SELECTION_TOOL::hitTestDistance( const wxPoint& aWhere, BOARD_ITEM* aIte
         marker->ShapeToPolygon( polygon );
         polygon.Move( marker->GetPos() );
         polygon.Collide( loc, aMaxDistance, &distance );
-    }
         break;
+    }
 
     case PCB_GROUP_T:
     {
@@ -2339,8 +2353,9 @@ int PCB_SELECTION_TOOL::hitTestDistance( const wxPoint& aWhere, BOARD_ITEM* aIte
 
         for( BOARD_ITEM* member : group->GetItems() )
             distance = std::min( distance, hitTestDistance( aWhere, member, aMaxDistance ) );
-    }
+
         break;
+    }
 
     default:
         aItem->GetEffectiveShape()->Collide( loc, aMaxDistance, &distance );
@@ -2643,7 +2658,8 @@ void PCB_SELECTION_TOOL::setTransitions()
     Go( &PCB_SELECTION_TOOL::selectNet,           PCB_ACTIONS::selectNet.MakeEvent() );
     Go( &PCB_SELECTION_TOOL::selectNet,           PCB_ACTIONS::deselectNet.MakeEvent() );
     Go( &PCB_SELECTION_TOOL::selectSameSheet,     PCB_ACTIONS::selectSameSheet.MakeEvent() );
-    Go( &PCB_SELECTION_TOOL::selectSheetContents, PCB_ACTIONS::selectOnSheetFromEeschema.MakeEvent() );
+    Go( &PCB_SELECTION_TOOL::selectSheetContents,
+        PCB_ACTIONS::selectOnSheetFromEeschema.MakeEvent() );
     Go( &PCB_SELECTION_TOOL::updateSelection,     EVENTS::SelectedItemsModified );
     Go( &PCB_SELECTION_TOOL::updateSelection,     EVENTS::SelectedItemsMoved );
 

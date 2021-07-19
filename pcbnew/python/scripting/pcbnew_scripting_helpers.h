@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013 NBEE Embedded Systems SL, Miguel Angel Ajo <miguelangel@ajo.es>
- * Copyright (C) 2013-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2013-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -48,73 +48,73 @@ BOARD*  LoadBoard( wxString& aFileName );
 SETTINGS_MANAGER* GetSettingsManager();
 
 /**
- * Constructs a default BOARD with a tempoary (no filename) project
- * @return the created board
+ * Construct a default BOARD with a temporary (no filename) project.
+ *
+ * @return the created board.
  */
 BOARD* CreateEmptyBoard();
 
 // Boards can be saved only as .kicad_pcb file format,
 // so no option to choose the file format.
-bool    SaveBoard( wxString& aFileName, BOARD* aBoard );
+bool SaveBoard( wxString& aFileName, BOARD* aBoard );
 
 /**
- * will get the nicknames of all of the footprint libraries configured in
- * pcbnew in both the project and global library tables
- * @return the list of footprint library nicknames, empty on error
+ * Get the nicknames of all of the footprint libraries configured in
+ * pcbnew in both the project and global library tables.
+ *
+ * @return the list of footprint library nicknames, empty on error.
  */
 wxArrayString GetFootprintLibraries();
 
 /**
- * will get the names of all of the footprints available in a footprint library
- * @param aNickName is the nickname specifying which footprint library to fetch
- * from
- * @return the list of footprint names, empty on error
+ * Get the names of all of the footprints available in a footprint library.
+ *
+ * @param aNickName is the nickname specifying which footprint library to fetch from.
+ * @return the list of footprint names, empty on error.
  */
 wxArrayString GetFootprints( const wxString& aNickName );
 
 /**
- * will export the current BOARD to a specctra dsn file.
- * See http://www.autotraxeda.com/docs/SPECCTRA/SPECCTRA.pdf for the
- * specification.
+ * Will export the current BOARD to a specctra dsn file.
+ *
+ * See http://www.autotraxeda.com/docs/SPECCTRA/SPECCTRA.pdf for the specification.
+ *
  * @return true if OK
  */
 bool ExportSpecctraDSN( wxString& aFullFilename );
 
 /**
- * will export the current BOARD to a VRML (wrl) file.
+ * Export the current BOARD to a VRML (wrl) file.
+ *
  * See ExportVRML_File in pcb_edit_frame.h for detailed documentation.
- * @return true if OK
+ * @return true if OK.
  */
-bool ExportVRML( const wxString& aFullFileName, double aMMtoWRMLunit,
-                 bool aExport3DFiles, bool aUseRelativePaths,
-                 const wxString& a3D_Subdir,
-                 double aXRef, double aYRef );
+bool ExportVRML( const wxString& aFullFileName, double aMMtoWRMLunit, bool aExport3DFiles,
+                 bool aUseRelativePaths, const wxString& a3D_Subdir, double aXRef, double aYRef );
 
 /**
- * will import a specctra *.ses file and use it to relocate MODULEs and
- * to replace all vias and tracks in an existing and loaded BOARD.
- * See http://www.autotraxeda.com/docs/SPECCTRA/SPECCTRA.pdf for the
- * specification.
+ * Import a specctra *.ses file and use it to relocate MODULEs and to replace all vias and
+ * tracks in an existing and loaded #BOARD.
+ *
+ * See http://www.autotraxeda.com/docs/SPECCTRA/SPECCTRA.pdf for the specification.
+ *
  * @return true if OK
  */
 bool ImportSpecctraSES( wxString& aFullFilename );
 
 /**
- * Function ExportFootprintsToLibrary
  * Save footprints in a library:
- * @param aStoreInNewLib:
- *              true : save footprints in a existing lib. Existing footprints will be kept
- *              or updated.
- *              This lib should be in fp lib table, and is type is .pretty
- *              false: save footprints in a new lib. It it is an existing lib,
- *              previous footprints will be removed
  *
- * @param aLibName:
- *              optional library name to create, stops dialog call.
- *              must be called with aStoreInNewLib as true
+ * @param aStoreInNewLib set to true to save footprints in a existing lib. Existing footprints
+ *                       will be kept or updated.  This lib should be in fp lib table, and is
+ *                       type is .pretty.  Set to false to save footprints in a new lib.  If it
+ *                       is an existing lib, previous footprints will be removed.
+ *
+ * @param aLibName is the optional library name to create, stops dialog call.  Must be called
+ *                 with \a aStoreInNewLib as true.
  */
 bool ExportFootprintsToLibrary( bool aStoreInNewLib, const wxString& aLibName = wxEmptyString,
-                                wxString* aLibPath = NULL );
+                                wxString* aLibPath = nullptr );
 
 /**
  * Update the board display after modifying it by a python script
@@ -124,7 +124,7 @@ bool ExportFootprintsToLibrary( bool aStoreInNewLib, const wxString& aLibName = 
  * Could be deprecated because modifying a board (especially deleting items) outside
  * a action plugin can crash Pcbnew.
  */
-void    Refresh();
+void Refresh();
 
 /**
  * Update the layer manager and other widgets from the board setup
@@ -135,7 +135,8 @@ void    Refresh();
 void UpdateUserInterface();
 
 /**
- * Returns the currently selected user unit value for the interface
+ * Return the currently selected user unit value for the interface.
+ *
  * @return 0 = Inches, 1=mm, -1 if the frame isn't set
  */
 int GetUserUnits();
@@ -146,16 +147,16 @@ int GetUserUnits();
 bool IsActionRunning();
 
 /**
- * Runs the DRC check on the given board and writes the results to a report file.
+ * Run the DRC check on the given board and writes the results to a report file.
  * Requires that the project for the board be loaded, and note that unlike the DRC dialog
  * this does not attempt to fill zones, so zones must be valid before calling.
  *
- * @param aBoard is a valid loaded board
- * @param aFileName is the full path and name of the report file to write
- * @param aUnits is the units to use in the report
+ * @param aBoard is a valid loaded board.
+ * @param aFileName is the full path and name of the report file to write.
+ * @param aUnits is the units to use in the report.
  * @param aReportAllTrackErrors controls whether all errors or just the first error is reported
- *                              for each track
- * @return true if successful, false if not
+ *                              for each track.
+ * @return true if successful, false if not.
  */
 bool WriteDRCReport( BOARD* aBoard, const wxString& aFileName, EDA_UNITS aUnits,
                      bool aReportAllTrackErrors );

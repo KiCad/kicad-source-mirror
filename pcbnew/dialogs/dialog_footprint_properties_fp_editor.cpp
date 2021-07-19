@@ -4,7 +4,7 @@
  * Copyright (C) 2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2015 Dick Hollenbeck, dick@softplc.com
  * Copyright (C) 2008 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2004-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -49,15 +49,19 @@
 #include <fp_lib_table.h>
 
 
-int DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::m_page = 0;     // remember the last open page during session
+// Remember the last open page during session.
+int DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::m_page = 0;
 
 
-DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR( FOOTPRINT_EDIT_FRAME* aParent,
-                                                                              FOOTPRINT* aFootprint ) :
+DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR(
+        FOOTPRINT_EDIT_FRAME* aParent,
+        FOOTPRINT* aFootprint ) :
     DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE( aParent ),
     m_netClearance( aParent, m_NetClearanceLabel, m_NetClearanceCtrl, m_NetClearanceUnits ),
-    m_solderMask( aParent, m_SolderMaskMarginLabel, m_SolderMaskMarginCtrl, m_SolderMaskMarginUnits ),
-    m_solderPaste( aParent, m_SolderPasteMarginLabel, m_SolderPasteMarginCtrl, m_SolderPasteMarginUnits ),
+    m_solderMask( aParent, m_SolderMaskMarginLabel, m_SolderMaskMarginCtrl,
+                  m_SolderMaskMarginUnits ),
+    m_solderPaste( aParent, m_SolderPasteMarginLabel, m_SolderPasteMarginCtrl,
+                   m_SolderPasteMarginUnits ),
     m_inSelect( false )
 {
     m_frame = aParent;
@@ -89,6 +93,7 @@ DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR( FO
     m_itemsGrid->ShowHideColumns( m_frame->GetSettings()->m_FootprintTextShownColumns );
 
     PCBNEW_SETTINGS* cfg = Pgm().GetSettingsManager().GetAppSettings<PCBNEW_SETTINGS>();
+
     if( cfg->m_lastFootprint3dDir.IsEmpty() )
     {
         wxGetEnv( KICAD6_3DMODEL_DIR, &cfg->m_lastFootprint3dDir );
@@ -158,7 +163,9 @@ DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR( FO
     m_button3DShapeRemove->SetBitmap( KiBitmap( BITMAPS::small_trash ) );
 
     // wxFormBuilder doesn't include this event...
-    m_itemsGrid->Connect( wxEVT_GRID_CELL_CHANGING, wxGridEventHandler( DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::OnGridCellChanging ), NULL, this );
+    m_itemsGrid->Connect( wxEVT_GRID_CELL_CHANGING,
+                          wxGridEventHandler( DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::OnGridCellChanging ),
+                          nullptr, this );
 
     finishDialogSettings();
 }
@@ -172,7 +179,9 @@ DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::~DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR()
     // Prevents crash bug in wxGrid's d'tor
     m_itemsGrid->DestroyTable( m_texts );
 
-    m_itemsGrid->Disconnect( wxEVT_GRID_CELL_CHANGING, wxGridEventHandler( DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::OnGridCellChanging ), NULL, this );
+    m_itemsGrid->Disconnect( wxEVT_GRID_CELL_CHANGING,
+                             wxGridEventHandler( DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::OnGridCellChanging ),
+                             nullptr, this );
 
     // Delete the GRID_TRICKS.
     m_itemsGrid->PopEventHandler( true );
@@ -283,6 +292,7 @@ bool DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::TransferDataToWindow()
 
     wxString default_path;
     wxGetEnv( KICAD6_3DMODEL_DIR, &default_path );
+
 #ifdef __WINDOWS__
     default_path.Replace( wxT( "/" ), wxT( "\\" ) );
 #endif
@@ -396,7 +406,7 @@ void DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::On3DModelCellChanged( wxGridEvent& a
             filename.insert( 0, wxT( ":" ) );
 
 #ifdef __WINDOWS__
-        // In Kicad files, filenames and paths are stored using Unix notation
+        // In KiCad files, filenames and paths are stored using Unix notation
         filename.Replace( wxT( "\\" ), wxT( "/" ) );
 #endif
 
@@ -482,7 +492,7 @@ void DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::OnAdd3DModel( wxCommandEvent&  )
         filename = alias + wxT( ":" ) + shortPath;
 
 #ifdef __WINDOWS__
-    // In Kicad files, filenames and paths are stored using Unix notation
+    // In KiCad files, filenames and paths are stored using Unix notation
     model.m_Filename.Replace( "\\", "/" );
 #endif
 
@@ -690,6 +700,7 @@ bool DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::TransferDataFromWindow()
     // A -50% margin ratio means no paste on a pad, the ratio must be >= -50%
     if( dtmp < -50.0 )
         dtmp = -50.0;
+
     // A margin ratio is always <= 0
     // 0 means use full pad copper area
     if( dtmp > 0.0 )
@@ -832,7 +843,7 @@ void DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::OnUpdateUI( wxUpdateUIEvent& event )
 
     if( m_itemsGrid->IsCellEditControlShown() )
     {
-        // Currently: nonthing to do
+        // Currently: nothing to do
     }
 
     // Handle a delayed focus.  The delay allows us to:

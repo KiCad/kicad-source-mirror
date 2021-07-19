@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014-2017 CERN
+ * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -51,6 +52,7 @@
 #include <thread>
 
 using namespace std::placeholders;
+
 
 const LAYER_NUM GAL_LAYER_ORDER[] =
 {
@@ -147,6 +149,7 @@ PCB_DRAW_PANEL_GAL::PCB_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWin
 
     m_painter = std::make_unique<KIGFX::PCB_PAINTER>( m_gal );
     m_view->SetPainter( m_painter.get() );
+
     // This fixes the zoom in and zoom out limits:
     m_view->SetScaleLimits( ZOOM_MAX_LIMIT_PCBNEW, ZOOM_MIN_LIMIT_PCBNEW );
 
@@ -291,7 +294,8 @@ void PCB_DRAW_PANEL_GAL::SetHighContrastLayer( PCB_LAYER_ID aLayer )
                 LAYER_PAD_FR_NETNAMES, LAYER_PAD_BK_NETNAMES, LAYER_PAD_NETNAMES,
                 ZONE_LAYER_FOR( aLayer ),
                 LAYER_PADS_TH, LAYER_PAD_PLATEDHOLES, LAYER_PAD_HOLEWALLS, LAYER_NON_PLATEDHOLES,
-                LAYER_VIA_THROUGH, LAYER_VIA_BBLIND, LAYER_VIA_MICROVIA, LAYER_VIA_HOLES, LAYER_VIA_HOLEWALLS,
+                LAYER_VIA_THROUGH, LAYER_VIA_BBLIND, LAYER_VIA_MICROVIA, LAYER_VIA_HOLES,
+                LAYER_VIA_HOLEWALLS,
                 LAYER_DRC_ERROR, LAYER_DRC_WARNING, LAYER_DRC_EXCLUSION, LAYER_MARKER_SHADOWS,
                 LAYER_SELECT_OVERLAY, LAYER_GP_OVERLAY,
                 LAYER_RATSNEST, LAYER_CURSOR, LAYER_ANCHOR
@@ -325,7 +329,8 @@ void PCB_DRAW_PANEL_GAL::SetTopLayer( PCB_LAYER_ID aLayer )
 
     // Layers that should always have on-top attribute enabled
     const std::vector<LAYER_NUM> layers = {
-            LAYER_VIA_THROUGH, LAYER_VIA_BBLIND, LAYER_VIA_MICROVIA, LAYER_VIA_HOLES, LAYER_VIA_HOLEWALLS,
+            LAYER_VIA_THROUGH, LAYER_VIA_BBLIND, LAYER_VIA_MICROVIA, LAYER_VIA_HOLES,
+            LAYER_VIA_HOLEWALLS,
             LAYER_VIA_NETNAMES,
             LAYER_PADS_TH, LAYER_PAD_PLATEDHOLES, LAYER_PAD_HOLEWALLS, LAYER_NON_PLATEDHOLES,
             LAYER_PAD_NETNAMES,
@@ -348,7 +353,7 @@ void PCB_DRAW_PANEL_GAL::SetTopLayer( PCB_LAYER_ID aLayer )
         LAYER_PAD_BK_NETNAMES, NETNAMES_LAYER_INDEX( B_Cu )
     };
 
-    const std::vector<LAYER_NUM>* extraLayers = NULL;
+    const std::vector<LAYER_NUM>* extraLayers = nullptr;
 
     // Bring a few more extra layers to the top depending on the selected board side
     if( IsFrontLayer( aLayer ) )
@@ -479,7 +484,7 @@ void PCB_DRAW_PANEL_GAL::OnShow()
 
     try
     {
-        // Check if the current rendering backend can be properly initialized
+        // Check if the current rendering back end can be properly initialized
         m_view->UpdateItems();
     }
     catch( const std::runtime_error& e )
@@ -563,9 +568,13 @@ void PCB_DRAW_PANEL_GAL::setDefaultLayerDeps()
             m_view->SetRequired( GetNetnameLayer( layer ), layer );
         }
         else if( IsNonCopperLayer( layer ) )
+        {
             m_view->SetRequired( ZONE_LAYER_FOR( layer ), layer );
+        }
         else if( IsNetnameLayer( layer ) )
+        {
             m_view->SetLayerDisplayOnly( layer );
+        }
     }
 
     m_view->SetLayerTarget( LAYER_ANCHOR, KIGFX::TARGET_NONCACHED );

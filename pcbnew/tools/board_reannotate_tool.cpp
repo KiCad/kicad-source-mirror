@@ -31,7 +31,7 @@
 
 BOARD_REANNOTATE_TOOL::BOARD_REANNOTATE_TOOL() :
      PCB_TOOL_BASE( "pcbnew.ReannotateTool" ),
-     m_selectionTool( NULL ),
+     m_selectionTool( nullptr ),
      m_frame( nullptr )
 {
 }

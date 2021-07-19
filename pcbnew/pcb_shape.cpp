@@ -3,8 +3,8 @@
  *
  * Copyright (C) 2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2011 Wayne Stambaugh <stambaughw@gmail.com>
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -104,7 +104,7 @@ double PCB_SHAPE::GetLength() const
 
     default:
         wxASSERT_MSG( false, "PCB_SHAPE::GetLength not implemented for shape"
-                + ShowShape( GetShape() ) );
+                    + ShowShape( GetShape() ) );
         break;
     }
 
@@ -188,8 +188,8 @@ void PCB_SHAPE::Scale( double aScale )
         }
 
         SetPolyPoints( pts );
-    }
         break;
+    }
 
     default:
         break;
@@ -400,7 +400,7 @@ wxPoint PCB_SHAPE::GetArcMid() const
     case PCB_SHAPE_TYPE::ARC:
         // rotate the starting point of the arc, given by m_End, through half
         // the angle m_Angle to get the middle of the arc.
-        // m_Start is the arc centre
+        // m_Start is the arc center
         endPoint  = m_end;         // m_End = start point of arc
         RotatePoint( &endPoint, m_start, -m_angle / 2.0 );
         break;
@@ -420,12 +420,13 @@ double PCB_SHAPE::GetArcAngleStart() const
                                      GetArcStart().x - GetCenter().x );
 
     // Normalize it to 0 ... 360 deg, to avoid discontinuity for angles near 180 deg
-    // because 180 deg and -180 are very near angles when ampping betewwen -180 ... 180 deg.
+    // because 180 deg and -180 are very near angles when mapping between -180 ... 180 deg.
     // and this is not easy to handle in calculations
     NORMALIZE_ANGLE_POS( angleStart );
 
     return angleStart;
 }
+
 
 double PCB_SHAPE::GetArcAngleEnd() const
 {
@@ -434,7 +435,7 @@ double PCB_SHAPE::GetArcAngleEnd() const
                                      GetArcEnd().x - GetCenter().x );
 
     // Normalize it to 0 ... 360 deg, to avoid discontinuity for angles near 180 deg
-    // because 180 deg and -180 are very near angles when ampping betewwen -180 ... 180 deg.
+    // because 180 deg and -180 are very near angles when mapping between -180 ... 180 deg.
     // and this is not easy to handle in calculations
     NORMALIZE_ANGLE_POS( angleStart );
 
@@ -490,7 +491,7 @@ void PCB_SHAPE::SetAngle( double aAngle, bool aUpdateEnd )
 FOOTPRINT* PCB_SHAPE::GetParentFootprint() const
 {
     if( !m_parent || m_parent->Type() != PCB_FOOTPRINT_T )
-        return NULL;
+        return nullptr;
 
     return (FOOTPRINT*) m_parent;
 }
@@ -593,8 +594,9 @@ const EDA_RECT PCB_SHAPE::GetBoundingBox() const
 
         for( wxPoint& pt : pts )
             bbox.Merge( pt );
-    }
+
         break;
+    }
 
     case PCB_SHAPE_TYPE::SEGMENT:
         bbox.SetEnd( m_end );
@@ -628,8 +630,9 @@ const EDA_RECT PCB_SHAPE::GetBoundingBox() const
 
             bbox.Merge( pt );
         }
-    }
+
         break;
+    }
 
     case PCB_SHAPE_TYPE::CURVE:
         bbox.Merge( m_bezierC1 );
@@ -671,8 +674,9 @@ bool PCB_SHAPE::HitTest( const wxPoint& aPosition, int aAccuracy ) const
             if( abs( radius - dist ) <= maxdist )
                 return true;
         }
-    }
+
         break;
+    }
 
     case PCB_SHAPE_TYPE::ARC:
     {
@@ -685,7 +689,7 @@ bool PCB_SHAPE::HitTest( const wxPoint& aPosition, int aAccuracy ) const
             // For arcs, the test point angle must be >= arc angle start
             // and <= arc angle end
             // However angle values > 360 deg are not easy to handle
-            // so we calculate the relative angle between arc start point and teast point
+            // so we calculate the relative angle between arc start point and test point
             // this relative arc should be < arc angle if arc angle > 0 (CW arc)
             // and > arc angle if arc angle < 0 (CCW arc)
             double arc_angle_start = GetArcAngleStart();    // Always 0.0 ... 360 deg, in 0.1 deg
@@ -695,7 +699,7 @@ bool PCB_SHAPE::HitTest( const wxPoint& aPosition, int aAccuracy ) const
             // Calculate relative angle between the starting point of the arc, and the test point
             arc_hittest -= arc_angle_start;
 
-            // Normalise arc_hittest between 0 ... 360 deg
+            // Normalize arc_hittest between 0 ... 360 deg
             NORMALIZE_ANGLE_POS( arc_hittest );
 
             // Check angle: inside the arc angle when it is > 0
@@ -711,8 +715,9 @@ bool PCB_SHAPE::HitTest( const wxPoint& aPosition, int aAccuracy ) const
                     return true;
             }
         }
-    }
+
         break;
+    }
 
     case PCB_SHAPE_TYPE::CURVE:
         const_cast<PCB_SHAPE*>( this )->RebuildBezierToSegmentsPointsList( m_width );
@@ -756,8 +761,9 @@ bool PCB_SHAPE::HitTest( const wxPoint& aPosition, int aAccuracy ) const
                 return true;
             }
         }
-    }
+
         break;
+    }
 
     case PCB_SHAPE_TYPE::POLYGON:
         if( IsFilled() )
@@ -796,7 +802,9 @@ bool PCB_SHAPE::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy )
     case PCB_SHAPE_TYPE::CIRCLE:
         // Test if area intersects or contains the circle:
         if( aContained )
+        {
             return arect.Contains( bb );
+        }
         else
         {
             // If the rectangle does not intersect the bounding box, this is a much quicker test
@@ -809,6 +817,7 @@ bool PCB_SHAPE::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy )
                 return arect.IntersectsCircleEdge( GetCenter(), GetRadius(), GetWidth() );
             }
         }
+
         break;
 
     case PCB_SHAPE_TYPE::ARC:
@@ -817,9 +826,9 @@ bool PCB_SHAPE::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy )
         {
             return arect.Contains( bb );
         }
-        // Test if the rect crosses the arc
         else
         {
+            // Test if the rect crosses the arc
             arcRect = bb.Common( arect );
 
             /* All following tests must pass:
@@ -829,6 +838,7 @@ bool PCB_SHAPE::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy )
             return arcRect.Intersects( arect ) &&
                    arcRect.IntersectsCircleEdge( GetCenter(), GetRadius(), GetWidth() );
         }
+
         break;
 
     case PCB_SHAPE_TYPE::RECT:
@@ -910,6 +920,7 @@ bool PCB_SHAPE::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy )
                     return true;
             }
         }
+
         break;
 
     case PCB_SHAPE_TYPE::CURVE:
@@ -942,8 +953,8 @@ bool PCB_SHAPE::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy )
                     return true;
             }
         }
-        break;
 
+        break;
 
     default:
         wxFAIL_MSG( "PCB_SHAPE::HitTest (rect) not implemented for "
@@ -957,9 +968,7 @@ bool PCB_SHAPE::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy )
 
 wxString PCB_SHAPE::GetSelectMenuText( EDA_UNITS aUnits ) const
 {
-    return wxString::Format( _( "%s on %s" ),
-                             ShowShape( m_shape ),
-                             GetLayerName() );
+    return wxString::Format( _( "%s on %s" ), ShowShape( m_shape ), GetLayerName() );
 }
 
 
@@ -1141,8 +1150,9 @@ std::vector<SHAPE*> PCB_SHAPE::MakeEffectiveShapes() const
             effectiveShapes.emplace_back( new SHAPE_SEGMENT( pts[2], pts[3], m_width ) );
             effectiveShapes.emplace_back( new SHAPE_SEGMENT( pts[3], pts[0], m_width ) );
         }
-    }
+
         break;
+    }
 
     case PCB_SHAPE_TYPE::CIRCLE:
     {
@@ -1203,8 +1213,9 @@ std::vector<SHAPE*> PCB_SHAPE::MakeEffectiveShapes() const
             for( int i = 0; i < l.SegmentCount(); i++ )
                 effectiveShapes.emplace_back( new SHAPE_SEGMENT( l.Segment( i ), m_width ) );
         }
-    }
+
         break;
+    }
 
     default:
         wxFAIL_MSG( "PCB_SHAPE::MakeEffectiveShapes unsupported PCB_SHAPE shape: "
@@ -1285,7 +1296,8 @@ void PCB_SHAPE::SwapData( BOARD_ITEM* aImage )
 }
 
 
-bool PCB_SHAPE::cmp_drawings::operator()( const BOARD_ITEM* aFirst, const BOARD_ITEM* aSecond ) const
+bool PCB_SHAPE::cmp_drawings::operator()( const BOARD_ITEM* aFirst,
+                                          const BOARD_ITEM* aSecond ) const
 {
     if( aFirst->Type() != aSecond->Type() )
         return aFirst->Type() < aSecond->Type();

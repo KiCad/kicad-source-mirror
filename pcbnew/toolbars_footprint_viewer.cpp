@@ -4,7 +4,7 @@
  * Copyright (C) 2014 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2012 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -50,7 +50,8 @@ void FOOTPRINT_VIEWER_FRAME::ReCreateHToolbar()
     else
     {
         m_mainToolBar = new ACTION_TOOLBAR( this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
-                                            KICAD_AUI_TB_STYLE | wxAUI_TB_HORZ_LAYOUT | wxAUI_TB_HORIZONTAL );
+                                            KICAD_AUI_TB_STYLE | wxAUI_TB_HORZ_LAYOUT |
+                                            wxAUI_TB_HORIZONTAL );
         m_mainToolBar->SetAuiManager( &m_auimgr );
     }
 
@@ -67,7 +68,8 @@ void FOOTPRINT_VIEWER_FRAME::ReCreateHToolbar()
     m_mainToolBar->Add( ACTIONS::zoomInCenter );
     m_mainToolBar->Add( ACTIONS::zoomOutCenter );
     m_mainToolBar->Add( ACTIONS::zoomFitScreen );
-    m_mainToolBar->Add( ACTIONS::zoomTool,                       ACTION_TOOLBAR::TOGGLE, ACTION_TOOLBAR::CANCEL );
+    m_mainToolBar->Add( ACTIONS::zoomTool,
+                        ACTION_TOOLBAR::TOGGLE, ACTION_TOOLBAR::CANCEL );
     m_mainToolBar->Add( PCB_ACTIONS::zoomFootprintAutomatically, ACTION_TOOLBAR::TOGGLE );
 
     m_mainToolBar->AddScaledSeparator( this );
@@ -81,7 +83,7 @@ void FOOTPRINT_VIEWER_FRAME::ReCreateHToolbar()
     // Grid selection choice box.
     if( m_gridSelectBox == nullptr )
         m_gridSelectBox = new wxChoice( m_mainToolBar, ID_ON_GRID_SELECT,
-                                    wxDefaultPosition, wxDefaultSize, 0, NULL );
+                                        wxDefaultPosition, wxDefaultSize, 0, nullptr );
 
     UpdateGridSelectBox();
     m_mainToolBar->AddControl( m_gridSelectBox );
@@ -91,7 +93,7 @@ void FOOTPRINT_VIEWER_FRAME::ReCreateHToolbar()
     // Zoom selection choice box.
     if( m_zoomSelectBox == nullptr )
         m_zoomSelectBox = new wxChoice( m_mainToolBar, ID_ON_ZOOM_SELECT,
-                                    wxDefaultPosition, wxDefaultSize, 0, NULL );
+                                        wxDefaultPosition, wxDefaultSize, 0, nullptr );
 
     UpdateZoomSelectBox();
     m_mainToolBar->AddControl( m_zoomSelectBox );
@@ -110,7 +112,8 @@ void FOOTPRINT_VIEWER_FRAME::ReCreateOptToolbar()
     }
     else
     {
-        m_optionsToolBar = new ACTION_TOOLBAR( this, ID_OPT_TOOLBAR, wxDefaultPosition, wxDefaultSize,
+        m_optionsToolBar = new ACTION_TOOLBAR( this, ID_OPT_TOOLBAR, wxDefaultPosition,
+                                               wxDefaultSize,
                                                KICAD_AUI_TB_STYLE | wxAUI_TB_VERTICAL );
         m_optionsToolBar->SetAuiManager( &m_auimgr );
     }
@@ -145,6 +148,7 @@ void FOOTPRINT_VIEWER_FRAME::ReCreateVToolbar()
 void FOOTPRINT_VIEWER_FRAME::ReCreateMenuBar()
 {
     PCB_SELECTION_TOOL* selTool = m_toolManager->GetTool<PCB_SELECTION_TOOL>();
+
     // wxWidgets handles the Mac Application menu behind the scenes, but that means
     // we always have to start from scratch with a new wxMenuBar.
     wxMenuBar*  oldMenuBar = GetMenuBar();
@@ -156,7 +160,6 @@ void FOOTPRINT_VIEWER_FRAME::ReCreateMenuBar()
     ACTION_MENU* fileMenu = new ACTION_MENU( false, selTool );
 
     fileMenu->AddClose( _( "Footprint Viewer" ) );
-
 
     //----- View menu -----------------------------------------------------------
     //
@@ -170,7 +173,6 @@ void FOOTPRINT_VIEWER_FRAME::ReCreateMenuBar()
 
     viewMenu->AppendSeparator();
     viewMenu->Add( ACTIONS::show3DViewer );
-
 
     //----- Menubar -------------------------------------------------------------
     //

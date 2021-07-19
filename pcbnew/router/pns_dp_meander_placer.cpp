@@ -2,7 +2,7 @@
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
  * Copyright (C) 2013-2014 CERN
- * Copyright (C) 2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2021 KiCad Developers, see AUTHORS.txt for contributors.
  * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -36,14 +36,14 @@ namespace PNS {
 DP_MEANDER_PLACER::DP_MEANDER_PLACER( ROUTER* aRouter ) :
     MEANDER_PLACER_BASE( aRouter )
 {
-    m_world       = NULL;
-    m_currentNode = NULL;
+    m_world       = nullptr;
+    m_currentNode = nullptr;
 
     m_padToDieP = 0;
     m_padToDieN = 0;
 
     // Init temporary variables (do not leave uninitialized members)
-    m_initialSegment = NULL;
+    m_initialSegment = nullptr;
     m_lastLength     = 0;
     m_lastStatus     = TOO_SHORT;
 }
@@ -88,16 +88,16 @@ bool DP_MEANDER_PLACER::Start( const VECTOR2I& aP, ITEM* aStartItem )
     if( !topo.AssembleDiffPair( m_initialSegment, m_originPair ) )
     {
         Router()->SetFailureReason( _( "Unable to find complementary differential pair "
-                                       "net for length tuning. Make sure the names of the nets belonging "
-                                       "to a differential pair end with either _N/_P or +/-." ) );
+                                       "net for length tuning. Make sure the names of the nets "
+                                       "belonging to a differential pair end with either _N/_P "
+                                       "or +/-." ) );
         return false;
     }
 
     if( m_originPair.Gap() < 0 )
         m_originPair.SetGap( Router()->Sizes().DiffPairGap() );
 
-    if( !m_originPair.PLine().SegmentCount() ||
-        !m_originPair.NLine().SegmentCount() )
+    if( !m_originPair.PLine().SegmentCount() || !m_originPair.NLine().SegmentCount() )
         return false;
 
     SOLID* padA = nullptr;
@@ -274,7 +274,8 @@ bool DP_MEANDER_PLACER::Move( const VECTOR2I& aP, ITEM* aEndItem )
 
         m_lastLength += std::max( tunedP.Length(), tunedN.Length() );
 
-        int comp = compareWithTolerance( m_lastLength - m_settings.m_targetLength, 0, m_settings.m_lengthTolerance );
+        int comp = compareWithTolerance( m_lastLength - m_settings.m_targetLength, 0,
+                                         m_settings.m_lengthTolerance );
 
         if( comp > 0 )
             m_lastStatus = TOO_LONG;
@@ -323,8 +324,7 @@ bool DP_MEANDER_PLACER::AbortPlacement()
 
 bool DP_MEANDER_PLACER::HasPlacedAnything() const
 {
-     return m_originPair.CP().SegmentCount() > 0 ||
-             m_originPair.CN().SegmentCount() > 0;
+     return m_originPair.CP().SegmentCount() > 0 || m_originPair.CN().SegmentCount() > 0;
 }
 
 
@@ -333,7 +333,7 @@ bool DP_MEANDER_PLACER::CommitPlacement()
     if( m_currentNode )
         Router()->CommitRouting( m_currentNode );
 
-    m_currentNode = NULL;
+    m_currentNode = nullptr;
     return true;
 }
 

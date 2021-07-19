@@ -5,8 +5,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 1992-2011 Jean-Pierre Charras.
- * Copyright (C) 2013-2016 Wayne Stambaugh <stambaughw@verizon.net>.
- * Copyright (C) 1992-2016 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2013-2016 Wayne Stambaugh <stambaughw@gmail.com>.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -51,9 +51,11 @@ NETLIST_READER::NETLIST_FILE_T NETLIST_READER::GuessNetlistFileType( LINE_READER
     // depending on the tool which created the file
     wxRegEx reOrcad( wxT( "(?i)[ ]*\\([ \t]+{+" ), wxRE_ADVANCED );
     wxASSERT( reOrcad.IsValid() );
+
     // Our legacy netlist format starts by "# EESchema Netlist "
     wxRegEx reLegacy( wxT( "(?i)#[ \t]+EESchema[ \t]+Netlist[ \t]+" ), wxRE_ADVANCED );
     wxASSERT( reLegacy.IsValid() );
+
     // Our new netlist format starts by "(export (version "
     wxRegEx reKicad( wxT( "[ ]*\\(export[ ]+" ), wxRE_ADVANCED );
     wxASSERT( reKicad.IsValid() );
@@ -80,16 +82,17 @@ NETLIST_READER* NETLIST_READER::GetNetlistReader( NETLIST*        aNetlist,
                                                   const wxString& aNetlistFileName,
                                                   const wxString& aCompFootprintFileName )
 {
-    wxASSERT( aNetlist != NULL );
+    wxASSERT( aNetlist != nullptr );
 
-    std::unique_ptr<FILE_LINE_READER> file_rdr = std::make_unique<FILE_LINE_READER>( aNetlistFileName );
+    std::unique_ptr<FILE_LINE_READER> file_rdr =
+            std::make_unique<FILE_LINE_READER>( aNetlistFileName );
 
     NETLIST_FILE_T type = GuessNetlistFileType( file_rdr.get() );
     file_rdr->Rewind();
 
     // The component footprint link reader is NULL if no file name was specified.
     std::unique_ptr<CMP_READER>  cmp_rdr( aCompFootprintFileName.IsEmpty() ?
-            NULL :
+            nullptr :
             new CMP_READER( new FILE_LINE_READER( aCompFootprintFileName ) ) );
 
     switch( type )
@@ -105,13 +108,13 @@ NETLIST_READER* NETLIST_READER::GetNetlistReader( NETLIST*        aNetlist,
         break;
     }
 
-    return NULL;
+    return nullptr;
 }
 
 
 bool CMP_READER::Load( NETLIST* aNetlist )
 {
-    wxCHECK_MSG( aNetlist != NULL,true, wxT( "No netlist passed to CMP_READER::Load()" ) );
+    wxCHECK_MSG( aNetlist != nullptr, true, wxT( "No netlist passed to CMP_READER::Load()" ) );
 
     wxString reference;    // Stores value read from line like Reference = BUS1;
     wxString timestamp;    // Stores value read from line like TimeStamp = /32307DE2/AA450F67;

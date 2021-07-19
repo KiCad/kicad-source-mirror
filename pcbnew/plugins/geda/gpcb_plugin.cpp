@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -98,8 +98,7 @@ static inline long parseInt( const wxString& aValue, double aScalar )
 
 
 /**
- * GPCB_FPL_CACHE_ITEM
- * is helper class for creating a footprint library cache.
+ * helper class for creating a footprint library cache.
  *
  * The new footprint library design is a file path of individual footprint files
  * that contain a single footprint per file.  This class is a helper only for the
@@ -108,14 +107,15 @@ static inline long parseInt( const wxString& aValue, double aScalar )
  */
 class GPCB_FPL_CACHE_ITEM
 {
-    WX_FILENAME m_filename; ///< The full file name and path of the footprint to cache.
-    std::unique_ptr<FOOTPRINT> m_footprint;
-
 public:
     GPCB_FPL_CACHE_ITEM( FOOTPRINT* aFootprint, const WX_FILENAME& aFileName );
 
     WX_FILENAME  GetFileName() const  { return m_filename; }
     FOOTPRINT*      GetFootprint() const { return m_footprint.get(); }
+
+private:
+    WX_FILENAME m_filename;       ///< The full file name and path of the footprint to cache.
+    std::unique_ptr<FOOTPRINT> m_footprint;
 };
 
 
@@ -131,47 +131,6 @@ typedef boost::ptr_map< std::string, GPCB_FPL_CACHE_ITEM >  FOOTPRINT_MAP;
 
 class GPCB_FPL_CACHE
 {
-    GPCB_PLUGIN*    m_owner;            ///< Plugin object that owns the cache.
-    wxFileName      m_lib_path;         ///< The path of the library.
-    FOOTPRINT_MAP   m_footprints;       ///< Map of footprint file name to FOOTPRINT*.
-
-    bool            m_cache_dirty;      ///< Stored separately because it's expensive to check
-                                        ///< m_cache_timestamp against all the files.
-    long long       m_cache_timestamp;  ///< A hash of the timestamps for all the footprint
-                                        ///< files.
-
-    FOOTPRINT* parseFOOTPRINT( LINE_READER* aLineReader );
-
-    /**
-     * Function testFlags
-     * tests \a aFlag for \a aMask or \a aName.
-     * @param aFlag = List of flags to test against: can be a bit field flag or a list name flag
-     * a bit field flag is an hexadecimal value: Ox00020000
-     * a list name flag is a string list of flags, comma separated like square,option1
-     * @param aMask = flag list to test
-     * @param aName = flag name to find in list
-     * @return true if found
-     */
-    bool testFlags( const wxString& aFlag, long aMask, const wxChar* aName );
-
-    /**
-     * Function parseParameters
-     * extracts parameters and tokens from \a aLineReader and adds them to \a aParameterList.
-     *
-     * Delimiter characters are:
-     * [ ] ( )  Begin and end of parameter list and units indicator
-     * " is a string delimiter
-     * space is the param separator
-     * The first word is the keyword
-     * the second item is one of ( or [
-     * other are parameters (number or delimited string)
-     * last parameter is ) or ]
-     *
-     * @param aParameterList This list of parameters parsed.
-     * @param aLineReader    The line reader object to parse.
-     */
-    void parseParameters( wxArrayString& aParameterList, LINE_READER* aLineReader );
-
 public:
     GPCB_FPL_CACHE( GPCB_PLUGIN* aOwner, const wxString& aLibraryPath );
 
@@ -190,18 +149,58 @@ public:
     void Remove( const wxString& aFootprintName );
 
     /**
-     * Function GetTimestamp
      * Generate a timestamp representing all source files in the cache (including the
      * parent directory).
+     *
      * Timestamps should not be considered ordered.  They either match or they don't.
      */
     static long long GetTimestamp( const wxString& aLibPath );
 
     /**
-     * Function IsModified
      * Return true if the cache is not up-to-date.
      */
     bool IsModified();
+
+private:
+    FOOTPRINT* parseFOOTPRINT( LINE_READER* aLineReader );
+
+    /**
+     * Test \a aFlag for \a aMask or \a aName.
+     *
+     * @param aFlag is a list of flags to test against: can be a bit field flag or a list name flag
+     *              a bit field flag is an hexadecimal value: Ox00020000 a list name flag is a
+     *              string list of flags, comma separated like square,option1.
+     * @param aMask is the flag list to test.
+     * @param aName is the flag name to find in list.
+     * @return true if found.
+     */
+    bool testFlags( const wxString& aFlag, long aMask, const wxChar* aName );
+
+    /**
+     * Extract parameters and tokens from \a aLineReader and adds them to \a aParameterList.
+     *
+     * Delimiter characters are:
+     * [ ] ( )  Begin and end of parameter list and units indicator
+     * " is a string delimiter
+     * space is the param separator
+     * The first word is the keyword
+     * the second item is one of ( or [
+     * other are parameters (number or delimited string)
+     * last parameter is ) or ]
+     *
+     * @param aParameterList This list of parameters parsed.
+     * @param aLineReader The line reader object to parse.
+     */
+    void parseParameters( wxArrayString& aParameterList, LINE_READER* aLineReader );
+
+    GPCB_PLUGIN*    m_owner;            ///< Plugin object that owns the cache.
+    wxFileName      m_lib_path;         ///< The path of the library.
+    FOOTPRINT_MAP   m_footprints;       ///< Map of footprint file name to FOOTPRINT*.
+
+    bool            m_cache_dirty;      ///< Stored separately because it's expensive to check
+                                        ///< m_cache_timestamp against all the files.
+    long long       m_cache_timestamp;  ///< A hash of the timestamps for all the footprint
+                                        ///< files.
 };
 
 
@@ -317,14 +316,15 @@ FOOTPRINT* GPCB_FPL_CACHE::parseFOOTPRINT( LINE_READER* aLineReader )
     #define NEW_GPCB_UNIT_CONV ( 0.01*IU_PER_MILS )
 
     int                        paramCnt;
-    double                     conv_unit = NEW_GPCB_UNIT_CONV; // GPCB unit = 0.01 mils and Pcbnew 0.1
+
+    // GPCB unit = 0.01 mils and Pcbnew 0.1.
+    double                     conv_unit = NEW_GPCB_UNIT_CONV;
     wxPoint                    textPos;
     wxString                   msg;
     wxArrayString              parameters;
     std::unique_ptr<FOOTPRINT> footprint = std::make_unique<FOOTPRINT>( nullptr );
 
-
-    if( aLineReader->ReadLine() == NULL )
+    if( aLineReader->ReadLine() == nullptr )
     {
         msg = aLineReader->GetSource() + ": empty file";
         THROW_IO_ERROR( msg );
@@ -374,6 +374,7 @@ FOOTPRINT* GPCB_FPL_CACHE::parseFOOTPRINT( LINE_READER* aLineReader )
     // Read value
     if( paramCnt > 10 )
         footprint->SetValue( parameters[5] );
+
     // With gEDA/pcb, value is meaningful after instantiation, only, so it's
     // often empty in bare footprints.
     if( footprint->Value().GetText().IsEmpty() )
@@ -449,8 +450,8 @@ FOOTPRINT* GPCB_FPL_CACHE::parseFOOTPRINT( LINE_READER* aLineReader )
                 conv_unit = NEW_GPCB_UNIT_CONV;
         }
 
-        wxLogTrace(
-                traceGedaPcbPlugin, wxT( "%s parameter count = %d." ), parameters[0], paramCnt );
+        wxLogTrace( traceGedaPcbPlugin, wxT( "%s parameter count = %d." ),
+                    parameters[0], paramCnt );
 
         // Parse a line with format: ElementLine [X1 Y1 X2 Y2 Thickness]
         if( parameters[0].CmpNoCase( wxT( "ElementLine" ) ) == 0 )
@@ -590,8 +591,7 @@ FOOTPRINT* GPCB_FPL_CACHE::parseFOOTPRINT( LINE_READER* aLineReader )
 
             wxPoint padPos( (x1 + x2) / 2, (y1 + y2) / 2 );
 
-            pad->SetSize( wxSize( KiROUND( EuclideanNorm( delta ) ) + width,
-                                  width ) );
+            pad->SetSize( wxSize( KiROUND( EuclideanNorm( delta ) ) + width, width ) );
 
             // Set the relative position before adjusting the absolute position
             pad->SetPos0( padPos );

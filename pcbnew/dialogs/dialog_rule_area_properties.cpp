@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2014 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2014 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -35,6 +35,7 @@
 #define LAYER_LIST_COLUMN_ICON 1
 #define LAYER_LIST_COLUMN_NAME 2
 #define LAYER_LIST_ROW_ALL_INNER_LAYERS 1
+
 
 class DIALOG_RULE_AREA_PROPERTIES : public DIALOG_RULE_AREA_PROPERTIES_BASE
 {
@@ -150,15 +151,21 @@ bool DIALOG_RULE_AREA_PROPERTIES::TransferDataFromWindow()
 
     if( m_zonesettings.m_Layers.count() == 0 )
     {
-        DisplayError( NULL, _( "No layers selected." ) );
+        DisplayError( this, _( "No layers selected." ) );
         return false;
     }
 
     switch( m_OutlineDisplayCtrl->GetSelection() )
     {
-    case 0: m_zonesettings.m_ZoneBorderDisplayStyle = ZONE_BORDER_DISPLAY_STYLE::NO_HATCH;      break;
-    case 1: m_zonesettings.m_ZoneBorderDisplayStyle = ZONE_BORDER_DISPLAY_STYLE::DIAGONAL_EDGE; break;
-    case 2: m_zonesettings.m_ZoneBorderDisplayStyle = ZONE_BORDER_DISPLAY_STYLE::DIAGONAL_FULL; break;
+    case 0:
+        m_zonesettings.m_ZoneBorderDisplayStyle = ZONE_BORDER_DISPLAY_STYLE::NO_HATCH;
+        break;
+    case 1:
+        m_zonesettings.m_ZoneBorderDisplayStyle = ZONE_BORDER_DISPLAY_STYLE::DIAGONAL_EDGE;
+        break;
+    case 2:
+        m_zonesettings.m_ZoneBorderDisplayStyle = ZONE_BORDER_DISPLAY_STYLE::DIAGONAL_FULL;
+        break;
     }
 
     auto cfg = m_parent->GetPcbNewSettings();

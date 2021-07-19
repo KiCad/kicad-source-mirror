@@ -2,8 +2,8 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 2016 CERN
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Janito V. Ferreira Filho
- * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -72,12 +72,13 @@ bool SVG_IMPORT_PLUGIN::Load( const wxString& aFileName )
 
 bool SVG_IMPORT_PLUGIN::Import()
 {
-    for( NSVGshape* shape = m_parsedImage->shapes; shape != NULL; shape = shape->next )
+    for( NSVGshape* shape = m_parsedImage->shapes; shape != nullptr; shape = shape->next )
     {
         double lineWidth = shape->strokeWidth;
 
-        for( NSVGpath* path = shape->paths; path != NULL; path = path->next )
-            DrawPath( path->pts, path->npts, path->closed, shape->fill.type == NSVG_PAINT_COLOR, lineWidth );
+        for( NSVGpath* path = shape->paths; path != nullptr; path = path->next )
+            DrawPath( path->pts, path->npts, path->closed, shape->fill.type == NSVG_PAINT_COLOR,
+                      lineWidth );
     }
 
     return true;
@@ -108,7 +109,8 @@ double SVG_IMPORT_PLUGIN::GetImageWidth() const
 }
 
 
-void SVG_IMPORT_PLUGIN::DrawPath( const float* aPoints, int aNumPoints, bool aClosedPath, bool aFilled, double aLineWidth )
+void SVG_IMPORT_PLUGIN::DrawPath( const float* aPoints, int aNumPoints, bool aClosedPath,
+                                  bool aFilled, double aLineWidth )
 {
     std::vector< VECTOR2D > collectedPathPoints;
 
@@ -123,7 +125,7 @@ void SVG_IMPORT_PLUGIN::DrawPath( const float* aPoints, int aNumPoints, bool aCl
 
 
 void SVG_IMPORT_PLUGIN::DrawCubicBezierPath( const float* aPoints, int aNumPoints,
-        std::vector< VECTOR2D >& aGeneratedPoints )
+                                             std::vector< VECTOR2D >& aGeneratedPoints )
 {
     const int pointsPerSegment = 4;
     const int curveSpecificPointsPerSegment = 3;
@@ -141,7 +143,7 @@ void SVG_IMPORT_PLUGIN::DrawCubicBezierPath( const float* aPoints, int aNumPoint
 
 
 void SVG_IMPORT_PLUGIN::DrawCubicBezierCurve( const float* aPoints,
-        std::vector< VECTOR2D >& aGeneratedPoints )
+                                              std::vector< VECTOR2D >& aGeneratedPoints )
 {
     auto start = getBezierPoint( aPoints, 0.0f );
     auto end = getBezierPoint( aPoints, 1.0f );
@@ -195,7 +197,7 @@ static VECTOR2D getBezierPoint( const float* aPoints, float aStep )
 
 
 static VECTOR2D getPointInLine( const VECTOR2D& aLineStart, const VECTOR2D& aLineEnd,
-        float aDistance )
+                                float aDistance )
 {
     return aLineStart + ( aLineEnd - aLineStart ) * aDistance;
 }
@@ -233,8 +235,9 @@ static VECTOR2D calculateBezierBoundingBoxExtremity( const float* aCurvePoints,
 
 
 static void segmentBezierCurve( const VECTOR2D& aStart, const VECTOR2D& aEnd, float aOffset,
-        float aStep, const float* aCurvePoints, float aSegmentationThreshold,
-        std::vector< VECTOR2D >& aGeneratedPoints )
+                                float aStep, const float* aCurvePoints,
+                                float aSegmentationThreshold,
+                                std::vector< VECTOR2D >& aGeneratedPoints )
 {
     VECTOR2D middle = getBezierPoint( aCurvePoints, aOffset + aStep );
     float distanceToPreviousSegment = distanceFromPointToLine( middle, aStart, aEnd );
@@ -242,30 +245,31 @@ static void segmentBezierCurve( const VECTOR2D& aStart, const VECTOR2D& aEnd, fl
     if( distanceToPreviousSegment > aSegmentationThreshold )
     {
         createNewBezierCurveSegments( aStart, middle, aEnd, aOffset, aStep, aCurvePoints,
-                aSegmentationThreshold, aGeneratedPoints );
+                                      aSegmentationThreshold, aGeneratedPoints );
     }
 }
 
 
 static void createNewBezierCurveSegments( const VECTOR2D& aStart, const VECTOR2D& aMiddle,
-        const VECTOR2D& aEnd, float aOffset, float aStep, const float* aCurvePoints,
-        float aSegmentationThreshold, std::vector< VECTOR2D >& aGeneratedPoints )
+                                          const VECTOR2D& aEnd, float aOffset, float aStep,
+                                          const float* aCurvePoints, float aSegmentationThreshold,
+                                          std::vector< VECTOR2D >& aGeneratedPoints )
 {
     float newStep = aStep / 2.f;
     float offsetAfterMiddle = aOffset + aStep;
 
     segmentBezierCurve( aStart, aMiddle, aOffset, newStep, aCurvePoints, aSegmentationThreshold,
-            aGeneratedPoints );
+                        aGeneratedPoints );
 
     aGeneratedPoints.push_back( aMiddle );
 
     segmentBezierCurve( aMiddle, aEnd, offsetAfterMiddle, newStep, aCurvePoints,
-            aSegmentationThreshold, aGeneratedPoints );
+                        aSegmentationThreshold, aGeneratedPoints );
 }
 
 
 static float distanceFromPointToLine( const VECTOR2D& aPoint, const VECTOR2D& aLineStart,
-        const VECTOR2D& aLineEnd )
+                                      const VECTOR2D& aLineEnd )
 {
     auto lineDirection = aLineEnd - aLineStart;
     auto lineNormal = lineDirection.Perpendicular().Resize( 1.f );

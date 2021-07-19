@@ -46,9 +46,11 @@
 
 using SCOPED_DRAW_MODE = SCOPED_SET_RESET<DRAWING_TOOL::MODE>;
 
+
 static std::vector<BOARD_ITEM*> initTextTable( std::vector<std::vector<PCB_TEXT*>> aContent,
-                                        wxPoint origin, PCB_LAYER_ID aLayer, wxPoint* aTableSize,
-                                        bool aDrawFrame = true )
+                                               wxPoint origin, PCB_LAYER_ID aLayer,
+                                               wxPoint* aTableSize,
+                                               bool aDrawFrame = true )
 {
     int i;
     int j;
@@ -172,6 +174,7 @@ static std::vector<BOARD_ITEM*> initTextTable( std::vector<std::vector<PCB_TEXT*
         line->SetEndY( origin.y + height );
         table.push_back( line );
     }
+
     //Now add the text
     i           = 0;
     wxPoint pos = wxPoint( origin.x + xmargin, origin.y + ymargin );
@@ -354,6 +357,7 @@ std::vector<BOARD_ITEM*> DRAWING_TOOL::DrawSpecificationStackup(
     return table;
 }
 
+
 std::vector<BOARD_ITEM*> DRAWING_TOOL::DrawBoardCharacteristics(
         wxPoint aOrigin, PCB_LAYER_ID aLayer, bool aDrawNow, wxPoint* tableSize )
 {
@@ -530,8 +534,8 @@ int DRAWING_TOOL::InteractivePlaceWithPreview( const TOOL_EVENT& aEvent,
 
     m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
     m_controls->ShowCursor( true );
-    // do not capture or auto-pan until we start placing the table
 
+    // do not capture or auto-pan until we start placing the table
     SCOPED_DRAW_MODE scopedDrawMode( m_mode, MODE::TEXT );
 
     std::string tool = aEvent.GetCommandStr().get();
@@ -606,7 +610,7 @@ int DRAWING_TOOL::InteractivePlaceWithPreview( const TOOL_EVENT& aEvent,
         }
         else if( evt->IsClick( BUT_LEFT ) )
         {
-            if( aLayers != NULL )
+            if( aLayers != nullptr )
             {
                 PCB_LAYER_ID targetLayer = frame()->SelectOneLayer(
                                             PCB_LAYER_ID::PCB_LAYER_ID_COUNT,
@@ -652,9 +656,10 @@ int DRAWING_TOOL::InteractivePlaceWithPreview( const TOOL_EVENT& aEvent,
 
             break;
         }
-
         else
+        {
             evt->SetPassEvent();
+        }
     }
 
     view()->ClearPreview();

@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2007, 2008 Lubo Racko <developer@lura.sk>
  * Copyright (C) 2007, 2008, 2012-2013 Alexander Lunev <al.lunev@yahoo.com>
- * Copyright (C) 2012-2020 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2012-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -42,6 +42,7 @@
 
 namespace PCAD2KICAD {
 
+
 PCB_LAYER_ID PCB::GetKiCadLayer( int aPCadLayer ) const
 {
     auto it = m_LayersMap.find( aPCadLayer );
@@ -51,6 +52,7 @@ PCB_LAYER_ID PCB::GetKiCadLayer( int aPCadLayer ) const
 
     return it->second.KiCadLayer;
 }
+
 
 LAYER_TYPE_T PCB::GetLayerType( int aPCadLayer ) const
 {
@@ -62,6 +64,7 @@ LAYER_TYPE_T PCB::GetLayerType( int aPCadLayer ) const
     return it->second.layerType;
 }
 
+
 wxString PCB::GetLayerNetNameRef( int aPCadLayer ) const
 {
     auto it = m_LayersMap.find( aPCadLayer );
@@ -71,6 +74,7 @@ wxString PCB::GetLayerNetNameRef( int aPCadLayer ) const
 
     return it->second.netNameRef;
 }
+
 
 PCB::PCB( BOARD* aBoard ) :
         PCB_FOOTPRINT( this, aBoard )
@@ -137,7 +141,7 @@ int PCB::GetNetCode( const wxString& aNetName ) const
 
 XNODE* PCB::FindCompDefName( XNODE* aNode, const wxString& aName ) const
 {
-    XNODE*      result = NULL, * lNode;
+    XNODE*      result = nullptr, * lNode;
     wxString    propValue;
 
     lNode = FindNode( aNode, wxT( "compDef" ) );
@@ -151,7 +155,7 @@ XNODE* PCB::FindCompDefName( XNODE* aNode, const wxString& aName ) const
             if( propValue == aName )
             {
                 result  = lNode;
-                lNode   = NULL;
+                lNode   = nullptr;
             }
         }
 
@@ -163,10 +167,8 @@ XNODE* PCB::FindCompDefName( XNODE* aNode, const wxString& aName ) const
 }
 
 
-void PCB::SetTextProperty( XNODE*   aNode, TTEXTVALUE* aTextValue,
-                           const wxString& aPatGraphRefName,
-                           const wxString& aXmlName,
-                           const wxString& aActualConversion )
+void PCB::SetTextProperty( XNODE* aNode, TTEXTVALUE* aTextValue, const wxString& aPatGraphRefName,
+                           const wxString& aXmlName, const wxString& aActualConversion )
 {
     XNODE*      tNode, * t1Node;
     wxString    n, nnew, pn, propValue, str;
@@ -204,7 +206,7 @@ void PCB::SetTextProperty( XNODE*   aNode, TTEXTVALUE* aTextValue,
                         str.Trim( true );
                         nnew    = n; // new file version
                         n       = n + wxT( ' ' ) + str; // old file version
-                        tNode   = NULL;
+                        tNode   = nullptr;
                     }
                 }
             }
@@ -234,10 +236,8 @@ void PCB::SetTextProperty( XNODE*   aNode, TTEXTVALUE* aTextValue,
 }
 
 
-void PCB::DoPCBComponents( XNODE*           aNode,
-                           wxXmlDocument*   aXmlDoc,
-                           const wxString&  aActualConversion,
-                           wxStatusBar*     aStatusBar )
+void PCB::DoPCBComponents( XNODE* aNode, wxXmlDocument* aXmlDoc, const wxString& aActualConversion,
+                           wxStatusBar* aStatusBar )
 {
     XNODE*         lNode, * tNode, * mNode;
     PCB_FOOTPRINT* fp;
@@ -250,7 +250,7 @@ void PCB::DoPCBComponents( XNODE*           aNode,
 
     while( lNode )
     {
-        fp = NULL;
+        fp = nullptr;
 
         if( lNode->GetName() == wxT( "pattern" ) )
         {
@@ -268,6 +268,7 @@ void PCB::DoPCBComponents( XNODE*           aNode,
                     fp = new PCB_FOOTPRINT( this, m_board );
 
                     mNode = FindNode( lNode, wxT( "patternGraphicsNameRef" ) );
+
                     if( mNode )
                         mNode->GetAttribute( wxT( "Name" ), &fp->m_patGraphRefName );
 
@@ -346,10 +347,12 @@ void PCB::DoPCBComponents( XNODE*           aNode,
                                 fp->m_compRef.Trim( true );
                             }
 
-                            tNode = NULL;
+                            tNode = nullptr;
                         }
                         else
+                        {
                             tNode = tNode->GetNext();
+                        }
                     }
                 }
 
@@ -462,24 +465,6 @@ int PCB::FindLayer( const wxString& aLayerName ) const
 }
 
 
-/* KiCad layers
- *  0 Copper layer
- *  1 to 14   Inner layers
- *  15 Component layer
- *  16 Copper side adhesive layer    Technical layers
- *  17 Component side adhesive layer
- *  18 Copper side Solder paste layer
- *  19 Component Solder paste layer
- *  20 Copper side Silk screen layer
- *  21 Component Silk screen layer
- *  22 Copper side Solder mask layer
- *  23 Component Solder mask layer
- *  24 Draw layer (Used for general drawings)
- *  25 Comment layer (Other layer used for general drawings)
- *  26 ECO1 layer (Other layer used for general drawings)       // BUG
- *  26 ECO2 layer (Other layer used for general drawings)       // BUG      27
- *  27 Edge layer. Items on Edge layer are seen on all layers   // BUG     28
- */
 void PCB::MapLayer( XNODE* aNode )
 {
     wxString     lName, layerType;
@@ -490,27 +475,49 @@ void PCB::MapLayer( XNODE* aNode )
     lName = lName.MakeUpper();
 
     if( lName == wxT( "TOP ASSY" ) )
+    {
         KiCadLayer = F_Fab;
+    }
     else if( lName == wxT( "TOP SILK" ) )
+    {
         KiCadLayer = F_SilkS;
+    }
     else if( lName == wxT( "TOP PASTE" ) )
+    {
         KiCadLayer = F_Paste;
+    }
     else if( lName == wxT( "TOP MASK" ) )
+    {
         KiCadLayer = F_Mask;
+    }
     else if( lName == wxT( "TOP" ) )
+    {
         KiCadLayer = F_Cu;
+    }
     else if( lName == wxT( "BOTTOM" ) )
+    {
         KiCadLayer = B_Cu;
+    }
     else if( lName == wxT( "BOT MASK" ) )
+    {
         KiCadLayer = B_Mask;
+    }
     else if( lName == wxT( "BOT PASTE" ) )
+    {
         KiCadLayer = B_Paste;
+    }
     else if( lName == wxT( "BOT SILK" ) )
+    {
         KiCadLayer = B_SilkS;
+    }
     else if( lName == wxT( "BOT ASSY" ) )
+    {
         KiCadLayer = B_Fab;
+    }
     else if( lName == wxT( "BOARD" ) )
+    {
         KiCadLayer = Edge_Cuts;
+    }
     else
     {
         int layernum = FindLayer( lName );
@@ -540,8 +547,10 @@ void PCB::MapLayer( XNODE* aNode )
 
         if( layerType == wxT( "NonSignal" ) )
             newlayer.layerType = LAYER_TYPE_NONSIGNAL;
+
         if( layerType == wxT( "Signal" ) )
             newlayer.layerType = LAYER_TYPE_SIGNAL;
+
         if( layerType == wxT( "Plane" ) )
             newlayer.layerType = LAYER_TYPE_PLANE;
     }
@@ -560,11 +569,14 @@ int PCB::FindOutlinePoint( const VERTICES_ARRAY* aOutline, wxRealPoint aPoint ) 
     int i;
 
     for( i = 0; i < (int) aOutline->GetCount(); i++ )
+    {
         if( *((*aOutline)[i]) == aPoint )
             return i;
+    }
 
     return -1;
 }
+
 
 /*int cmpFunc( wxRealPoint **first, wxRealPoint **second )
 {
@@ -573,12 +585,12 @@ int PCB::FindOutlinePoint( const VERTICES_ARRAY* aOutline, wxRealPoint aPoint ) 
 
     return 0;
 }*/
+
+
 double PCB::GetDistance( const wxRealPoint* aPoint1, const wxRealPoint* aPoint2 ) const
 {
-    return sqrt(  ( aPoint1->x - aPoint2->x ) *
-                  ( aPoint1->x - aPoint2->x ) +
-                  ( aPoint1->y - aPoint2->y ) *
-                  ( aPoint1->y - aPoint2->y ) );
+    return sqrt(  ( aPoint1->x - aPoint2->x ) * ( aPoint1->x - aPoint2->x ) +
+                  ( aPoint1->y - aPoint2->y ) * ( aPoint1->y - aPoint2->y ) );
 }
 
 void PCB::GetBoardOutline( wxXmlDocument* aXmlDoc, const wxString& aActualConversion )
@@ -607,6 +619,7 @@ void PCB::GetBoardOutline( wxXmlDocument* aXmlDoc, const wxString& aActualConver
                 if( GetKiCadLayer( PCadLayer ) == Edge_Cuts )
                 {
                     lNode = iNode->GetChildren();
+
                     while( lNode )
                     {
                         if( lNode->GetName() == wxT( "line" ) )
@@ -650,6 +663,7 @@ void PCB::GetBoardOutline( wxXmlDocument* aXmlDoc, const wxString& aActualConver
                             for( j = i + 2; j < (int) m_BoardOutline.GetCount(); j++ )
                             {
                                 distance = GetDistance( m_BoardOutline[i], m_BoardOutline[j] );
+
                                 if( distance < minDistance )
                                 {
                                     minDistance = distance;
@@ -672,7 +686,9 @@ void PCB::GetBoardOutline( wxXmlDocument* aXmlDoc, const wxString& aActualConver
     }
 }
 
-void PCB::ParseBoard( wxStatusBar* aStatusBar, wxXmlDocument* aXmlDoc, const wxString& aActualConversion )
+
+void PCB::ParseBoard( wxStatusBar* aStatusBar, wxXmlDocument* aXmlDoc,
+                      const wxString& aActualConversion )
 {
     XNODE*          aNode;//, *aaNode;
     PCB_NET*        net;
@@ -811,7 +827,7 @@ void PCB::ParseBoard( wxStatusBar* aStatusBar, wxXmlDocument* aXmlDoc, const wxS
 
             // objects
             if( aNode->GetName() == wxT( "layerContents" ) )
-                DoLayerContentsObjects( aNode, NULL, &m_PcbComponents, aStatusBar,
+                DoLayerContentsObjects( aNode, nullptr, &m_PcbComponents, aStatusBar,
                                         m_DefaultMeasurementUnit, aActualConversion );
 
             aNode = aNode->GetNext();

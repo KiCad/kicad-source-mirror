@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2007-2008 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2004-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -231,7 +231,6 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
 
 #endif
 
-
     switch( item->Type() )
     {
     case PCB_PAD_T:
@@ -243,8 +242,8 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
         // for through pads: pads on Front or Back board sides must be visible
         pad = static_cast<PAD*>( item );
 
-        if( (pad->GetAttribute() != PAD_ATTRIB::SMD) &&
-            (pad->GetAttribute() != PAD_ATTRIB::CONN) )   // a hole is present, so multiple layers
+        if( ( pad->GetAttribute() != PAD_ATTRIB::SMD ) &&
+            ( pad->GetAttribute() != PAD_ATTRIB::CONN ) )  // a hole is present, so multiple layers
         {
             // proceed to the common tests below, but without the parent footprint test,
             // by leaving footprint==NULL, but having pad != null
@@ -265,6 +264,7 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
     case PCB_ARC_T:
         if( m_Guide->IgnoreTracks() )
             goto exit;
+
         break;
 
     case PCB_FP_ZONE_T:
@@ -295,46 +295,50 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
         break;
 
     case PCB_FP_TEXT_T:
+    {
+        FP_TEXT *text = static_cast<FP_TEXT*>( item );
+
+        if( m_Guide->IgnoreHiddenFPText() && !text->IsVisible() )
+            goto exit;
+
+        if( m_Guide->IgnoreFPTextOnBack() && IsBackLayer( text->GetLayer() ) )
+            goto exit;
+
+        if( m_Guide->IgnoreFPTextOnFront() && IsFrontLayer( text->GetLayer() ) )
+            goto exit;
+
+        /* The three text types have different criteria: reference
+         * and value have their own ignore flags; user text instead
+         * follows their layer visibility. Checking this here is
+         * simpler than later (when layer visibility is checked for
+         * other entities) */
+
+        switch( text->GetType() )
         {
-            FP_TEXT *text = static_cast<FP_TEXT*>( item );
-            if( m_Guide->IgnoreHiddenFPText() && !text->IsVisible() )
+        case FP_TEXT::TEXT_is_REFERENCE:
+            if( m_Guide->IgnoreFPReferences() )
                 goto exit;
 
-            if( m_Guide->IgnoreFPTextOnBack() && IsBackLayer( text->GetLayer() ) )
+            break;
+
+        case FP_TEXT::TEXT_is_VALUE:
+            if( m_Guide->IgnoreFPValues() )
                 goto exit;
 
-            if( m_Guide->IgnoreFPTextOnFront() && IsFrontLayer( text->GetLayer() ) )
+            break;
+
+        case FP_TEXT::TEXT_is_DIVERS:
+            if( !m_Guide->IsLayerVisible( text->GetLayer() )
+              && m_Guide->IgnoreNonVisibleLayers() )
                 goto exit;
 
-            /* The three text types have different criteria: reference
-             * and value have their own ignore flags; user text instead
-             * follows their layer visibility. Checking this here is
-             * simpler than later (when layer visibility is checked for
-             * other entities) */
-
-            switch( text->GetType() )
-            {
-            case FP_TEXT::TEXT_is_REFERENCE:
-                if( m_Guide->IgnoreFPReferences() )
-                    goto exit;
-                break;
-
-            case FP_TEXT::TEXT_is_VALUE:
-                if( m_Guide->IgnoreFPValues() )
-                    goto exit;
-                break;
-
-            case FP_TEXT::TEXT_is_DIVERS:
-                if( !m_Guide->IsLayerVisible( text->GetLayer() )
-                        && m_Guide->IgnoreNonVisibleLayers() )
-                    goto exit;
-                break;
-            }
-
-            // Extract the footprint since it could be hidden
-            footprint = static_cast<FOOTPRINT*>( item->GetParent() );
+            break;
         }
+
+        // Extract the footprint since it could be hidden
+        footprint = static_cast<FOOTPRINT*>( item->GetParent() );
         break;
+    }
 
     case PCB_FP_SHAPE_T:
         shape = static_cast<FP_SHAPE*>( item );
@@ -360,10 +364,10 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
 
     if( footprint )    // true from case PCB_PAD_T, PCB_FP_TEXT_T, or PCB_FOOTPRINT_T
     {
-        if( m_Guide->IgnoreFootprintsOnBack() && ( footprint->GetLayer() == B_Cu) )
+        if( m_Guide->IgnoreFootprintsOnBack() && ( footprint->GetLayer() == B_Cu ) )
             goto exit;
 
-        if( m_Guide->IgnoreFootprintsOnFront() && ( footprint->GetLayer() == F_Cu) )
+        if( m_Guide->IgnoreFootprintsOnFront() && ( footprint->GetLayer() == F_Cu ) )
             goto exit;
     }
 
@@ -579,7 +583,7 @@ void GENERAL_COLLECTOR::Collect( BOARD_ITEM* aItem, const KICAD_T aScanList[],
     // the Inspect() function.
     SetRefPos( aRefPos );
 
-    aItem->Visit( m_inspector, NULL, m_scanTypes );
+    aItem->Visit( m_inspector, nullptr, m_scanTypes );
 
     // record the length of the primary list before concatenating on to it.
     m_PrimaryLength = m_list.size();
@@ -606,7 +610,7 @@ void PCB_TYPE_COLLECTOR::Collect( BOARD_ITEM* aBoard, const KICAD_T aScanList[] 
 {
     Empty();        // empty any existing collection
 
-    aBoard->Visit( m_inspector, NULL, aScanList );
+    aBoard->Visit( m_inspector, nullptr, aScanList );
 }
 
 
@@ -625,5 +629,5 @@ void PCB_LAYER_COLLECTOR::Collect( BOARD_ITEM* aBoard, const KICAD_T aScanList[]
 {
     Empty();
 
-    aBoard->Visit( m_inspector, NULL, aScanList );
+    aBoard->Visit( m_inspector, nullptr, aScanList );
 }

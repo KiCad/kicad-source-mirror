@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013-2021 CERN
+ * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -46,31 +47,37 @@ using namespace std::placeholders;
 #include <connectivity/connectivity_data.h>
 #include <widgets/progress_reporter.h>
 
+
 // Few constants to avoid using bare numbers for point indices
 enum SEG_POINTS
 {
     SEG_START, SEG_END
 };
 
+
 enum RECT_POINTS
 {
     RECT_TOP_LEFT, RECT_TOP_RIGHT, RECT_BOT_RIGHT, RECT_BOT_LEFT
 };
+
 
 enum RECT_LINES
 {
     RECT_TOP, RECT_RIGHT, RECT_BOT, RECT_LEFT
 };
 
+
 enum ARC_POINTS
 {
     ARC_CENTER, ARC_START, ARC_MID, ARC_END
 };
 
+
 enum CIRCLE_POINTS
 {
     CIRC_CENTER, CIRC_END
 };
+
 
 enum BEZIER_CURVE_POINTS
 {
@@ -80,6 +87,7 @@ enum BEZIER_CURVE_POINTS
     BEZIER_CURVE_END
 };
 
+
 enum DIMENSION_POINTS
 {
     DIM_START,
@@ -88,6 +96,7 @@ enum DIMENSION_POINTS
     DIM_CROSSBARSTART,
     DIM_CROSSBAREND,
 };
+
 
 PCB_POINT_EDITOR::PCB_POINT_EDITOR() :
     PCB_TOOL_BASE( "pcbnew.PointEditor" ),
@@ -502,8 +511,8 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
                 }
 
                 m_editedPoint->SetPosition( pos );
-            }
                 break;
+            }
             }
 
             // The alternative constraint limits to 45 degrees
@@ -546,7 +555,6 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
 
             m_refill = true;
         }
-
         else if( evt->IsCancelInteractive() || evt->IsActivate() )
         {
             if( inDrag )      // Restore the last change
@@ -562,7 +570,6 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
             if( evt->IsActivate() && !evt->IsMoveTool() )
                 break;
         }
-
         else if( evt->Action() == TA_UNDO_REDO_POST )
         {
             break;
@@ -668,30 +675,30 @@ void PCB_POINT_EDITOR::editArcEndpointKeepTangent( PCB_SHAPE* aArc, VECTOR2I aCe
     double R               = v1.EuclideanNorm();
     bool   transformCircle = false;
 
-    /*                    p2
-        *                     X***
-        *                         **  <---- This is the arc
-        *            y ^            **
-        *              |      R       *
-        *              | <-----------> *
-        *       x------x------>--------x p1
-        *     C' <----> C      x
-        *         delta
-        *
-        * p1 does not move, and the tangent at p1 remains the same.
-        *  => The new center, C', will be on the C-p1 axis.
-        * p2 moves
-        *
-        * The radius of the new circle is delta + R
-        *
-        * || C' p2 || = || C' P1 ||
-        * is the same as :
-        * ( delta + p2.x ) ^ 2 + p2.y ^ 2 = ( R + delta ) ^ 2
-        *
-        * delta = ( R^2  - p2.x ^ 2 - p2.y ^2 ) / ( 2 * p2.x - 2 * R )
-        *
-        * We can use this equation for any point p2 with p2.x < R
-        */
+    /*                 p2
+     *                     X***
+     *                         **  <---- This is the arc
+     *            y ^            **
+     *              |      R       *
+     *              | <-----------> *
+     *       x------x------>--------x p1
+     *     C' <----> C      x
+     *         delta
+     *
+     * p1 does not move, and the tangent at p1 remains the same.
+     *  => The new center, C', will be on the C-p1 axis.
+     * p2 moves
+     *
+     * The radius of the new circle is delta + R
+     *
+     * || C' p2 || = || C' P1 ||
+     * is the same as :
+     * ( delta + p2.x ) ^ 2 + p2.y ^ 2 = ( R + delta ) ^ 2
+     *
+     * delta = ( R^2  - p2.x ^ 2 - p2.y ^2 ) / ( 2 * p2.x - 2 * R )
+     *
+     * We can use this equation for any point p2 with p2.x < R
+     */
 
     if( v2.x == R )
     {
@@ -706,6 +713,7 @@ void PCB_POINT_EDITOR::editArcEndpointKeepTangent( PCB_SHAPE* aArc, VECTOR2I aCe
             transformCircle = true;
             v2.x            = 2 * R - v2.x;
         }
+
         // We can keep the tangent constraint.
         double delta = ( R * R - v2.x * v2.x - v2.y * v2.y ) / ( 2 * v2.x - 2 * R );
 
@@ -714,11 +722,13 @@ void PCB_POINT_EDITOR::editArcEndpointKeepTangent( PCB_SHAPE* aArc, VECTOR2I aCe
         {
             arcValid = false;
         }
+
         // Never recorded a problem, but still checking.
         if( !std::isfinite( delta ) )
         {
             arcValid = false;
         }
+
         // v4 is the new center
         v4 = ( !transformCircle ) ? VECTOR2D( -delta, 0 ) : VECTOR2D( 2 * R + delta, 0 );
 
@@ -904,8 +914,10 @@ void PCB_POINT_EDITOR::editArcEndpointKeepCenter( PCB_SHAPE* aArc, VECTOR2I aCen
     else
     {
         double tan = target.y / static_cast<double>( target.x );
+
         // The divider is always greater than 1 ( cannot be 0 )
         double tmp = sqrt( sqRadius / ( 1.0 + tan * tan ) );
+
         // Move to the correct quadrant
         tmp   = target.x > 0 ? tmp : -tmp;
         p2->y = target.y / static_cast<double>( target.x ) * tmp;
@@ -941,7 +953,7 @@ void PCB_POINT_EDITOR::editArcMidKeepCenter( PCB_SHAPE* aArc, VECTOR2I aCenter, 
                                              const VECTOR2I aCursor ) const
 {
     // Now, update the edit point position
-    // Express the point in a cercle-centered coordinate system.
+    // Express the point in a circle-centered coordinate system.
     aStart = aStart - aCenter;
     aEnd   = aEnd - aCenter;
 
@@ -961,6 +973,7 @@ void PCB_POINT_EDITOR::editArcMidKeepCenter( PCB_SHAPE* aArc, VECTOR2I aCenter, 
 
         double tan = aStart.y / static_cast<double>( aStart.x );
         double tmp = sqrt( sqRadius / ( 1.0 + tan * tan ) );
+
         // Move to the correct quadrant
         tmp      = aStart.x > 0 ? tmp : -tmp;
         aStart.y = aStart.y / static_cast<double>( aStart.x ) * tmp;
@@ -981,6 +994,7 @@ void PCB_POINT_EDITOR::editArcMidKeepCenter( PCB_SHAPE* aArc, VECTOR2I aCenter, 
 
         double tan = aEnd.y / static_cast<double>( aEnd.x );
         double tmp = sqrt( sqRadius / ( 1.0 + tan * tan ) );
+
         // Move to the correct quadrant
         tmp    = aEnd.x > 0 ? tmp : -tmp;
         aEnd.y = aEnd.y / static_cast<double>( aEnd.x ) * tmp;
@@ -1076,7 +1090,8 @@ void PCB_POINT_EDITOR::updateItem() const
             for( unsigned i = 0; i < m_editPoints->LinesSize(); ++i )
             {
                 if( !isModified( m_editPoints->Line( i ) ) )
-                    m_editPoints->Line( i ).SetConstraint( new EC_PERPLINE( m_editPoints->Line( i ) ) );
+                    m_editPoints->Line( i ).SetConstraint(
+                            new EC_PERPLINE( m_editPoints->Line( i ) ) );
             }
         }
             break;
@@ -1142,7 +1157,8 @@ void PCB_POINT_EDITOR::updateItem() const
             for( unsigned i = 0; i < m_editPoints->LinesSize(); ++i )
             {
                 if( !isModified( m_editPoints->Line( i ) ) )
-                    m_editPoints->Line( i ).SetConstraint( new EC_PERPLINE( m_editPoints->Line( i ) ) );
+                    m_editPoints->Line( i ).SetConstraint(
+                            new EC_PERPLINE( m_editPoints->Line( i ) ) );
             }
 
             validatePolygon( outline );
@@ -1151,11 +1167,14 @@ void PCB_POINT_EDITOR::updateItem() const
 
         case PCB_SHAPE_TYPE::CURVE:
             if( isModified( m_editPoints->Point( BEZIER_CURVE_START ) ) )
-                shape->SetStart( (wxPoint) m_editPoints->Point( BEZIER_CURVE_START ).GetPosition() );
+                shape->SetStart( (wxPoint) m_editPoints->Point( BEZIER_CURVE_START ).
+                                 GetPosition() );
             else if( isModified( m_editPoints->Point( BEZIER_CURVE_CONTROL_POINT1 ) ) )
-                shape->SetBezierC1((wxPoint) m_editPoints->Point( BEZIER_CURVE_CONTROL_POINT1 ).GetPosition());
+                shape->SetBezierC1( (wxPoint) m_editPoints->Point( BEZIER_CURVE_CONTROL_POINT1 ).
+                                    GetPosition() );
             else if( isModified( m_editPoints->Point( BEZIER_CURVE_CONTROL_POINT2 ) ) )
-                shape->SetBezierC2((wxPoint) m_editPoints->Point( BEZIER_CURVE_CONTROL_POINT2 ).GetPosition());
+                shape->SetBezierC2( (wxPoint) m_editPoints->Point( BEZIER_CURVE_CONTROL_POINT2 ).
+                                    GetPosition() );
             else if( isModified( m_editPoints->Point( BEZIER_CURVE_END ) ) )
                 shape->SetEnd( (wxPoint) m_editPoints->Point( BEZIER_CURVE_END ).GetPosition() );
 
@@ -1282,8 +1301,9 @@ void PCB_POINT_EDITOR::updateItem() const
         default:        // suppress warnings
             break;
         }
-    }
+
         break;
+    }
 
     case PCB_FP_ZONE_T:
     case PCB_ZONE_T:
@@ -1346,20 +1366,24 @@ void PCB_POINT_EDITOR::updateItem() const
             dimension->SetStart( (wxPoint) m_editedPoint->GetPosition() );
             dimension->Update();
 
-            m_editPoints->Point( DIM_CROSSBARSTART ).SetConstraint( new EC_LINE( m_editPoints->Point( DIM_CROSSBARSTART ),
-                                                                                 m_editPoints->Point( DIM_START ) ) );
-            m_editPoints->Point( DIM_CROSSBAREND ).SetConstraint( new EC_LINE( m_editPoints->Point( DIM_CROSSBAREND ),
-                                                                             m_editPoints->Point( DIM_END ) ) );
+            m_editPoints->Point( DIM_CROSSBARSTART ).
+                    SetConstraint( new EC_LINE( m_editPoints->Point( DIM_CROSSBARSTART ),
+                                                m_editPoints->Point( DIM_START ) ) );
+            m_editPoints->Point( DIM_CROSSBAREND ).
+                    SetConstraint( new EC_LINE( m_editPoints->Point( DIM_CROSSBAREND ),
+                                                m_editPoints->Point( DIM_END ) ) );
         }
         else if( isModified( m_editPoints->Point( DIM_END ) ) )
         {
             dimension->SetEnd( (wxPoint) m_editedPoint->GetPosition() );
             dimension->Update();
 
-            m_editPoints->Point( DIM_CROSSBARSTART ).SetConstraint( new EC_LINE( m_editPoints->Point( DIM_CROSSBARSTART ),
-                                                                             m_editPoints->Point( DIM_START ) ) );
-            m_editPoints->Point( DIM_CROSSBAREND ).SetConstraint( new EC_LINE( m_editPoints->Point( DIM_CROSSBAREND ),
-                                                                             m_editPoints->Point( DIM_END ) ) );
+            m_editPoints->Point( DIM_CROSSBARSTART ).
+                    SetConstraint( new EC_LINE( m_editPoints->Point( DIM_CROSSBARSTART ),
+                                                m_editPoints->Point( DIM_START ) ) );
+            m_editPoints->Point( DIM_CROSSBAREND ).
+                    SetConstraint( new EC_LINE( m_editPoints->Point( DIM_CROSSBAREND ),
+                                                m_editPoints->Point( DIM_END ) ) );
         }
         else if( isModified( m_editPoints->Point(DIM_TEXT ) ) )
         {
@@ -1666,8 +1690,9 @@ void PCB_POINT_EDITOR::updatePoints()
                 m_editPoints->Point( RECT_BOT_LEFT ).SetPosition( wxPoint( shapePos.x - halfSize.x,
                                                                            shapePos.y + halfSize.y ) );
             }
-        }
+
             break;
+        }
 
         default:        // suppress warnings
             break;
@@ -1949,14 +1974,15 @@ bool PCB_POINT_EDITOR::removeCornerCondition( const SELECTION& )
     // degenerating the polygon.
     // The first condition allows one to remove all corners from holes (when
     // there are only 2 vertices left, a hole is removed).
-    if( vertexIdx.m_contour == 0 && polyset->Polygon( vertexIdx.m_polygon )[vertexIdx.m_contour].PointCount() <= 3 )
+    if( vertexIdx.m_contour == 0 &&
+        polyset->Polygon( vertexIdx.m_polygon )[vertexIdx.m_contour].PointCount() <= 3 )
         return false;
 
     // Remove corner does not work with lines
     if( dynamic_cast<EDIT_LINE*>( m_editedPoint ) )
         return false;
 
-    return m_editedPoint != NULL;
+    return m_editedPoint != nullptr;
 }
 
 
@@ -2047,7 +2073,6 @@ int PCB_POINT_EDITOR::addCorner( const TOOL_EVENT& aEvent )
 
         commit.Push( _( "Add a zone corner" ) );
     }
-
     else if( graphicItem && graphicItem->GetShape() == PCB_SHAPE_TYPE::SEGMENT )
     {
         commit.Modify( graphicItem );

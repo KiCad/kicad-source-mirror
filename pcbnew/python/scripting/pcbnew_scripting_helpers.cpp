@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012 NBEE Embedded Systems, Miguel Angel Ajo <miguelangel@nbee.es>
- * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -52,8 +52,7 @@
 #include <wx/app.h>
 
 
-static PCB_EDIT_FRAME* s_PcbEditFrame = NULL;
-
+static PCB_EDIT_FRAME* s_PcbEditFrame = nullptr;
 static SETTINGS_MANAGER* s_SettingsManager = nullptr;
 
 
@@ -62,7 +61,7 @@ BOARD* GetBoard()
     if( s_PcbEditFrame )
         return s_PcbEditFrame->GetBoard();
     else
-        return NULL;
+        return nullptr;
 }
 
 
@@ -188,7 +187,7 @@ bool SaveBoard( wxString& aFileName, BOARD* aBoard, IO_MGR::PCB_FILE_T aFormat )
     aBoard->BuildConnectivity();
     aBoard->SynchronizeNetsAndNetClasses();
 
-    IO_MGR::Save( aFormat, aFileName, aBoard, NULL );
+    IO_MGR::Save( aFormat, aFileName, aBoard, nullptr );
 
     wxFileName pro = aFileName;
     pro.SetExt( ProjectFileExtension );
@@ -267,10 +266,8 @@ bool ExportSpecctraDSN( wxString& aFullFilename )
     }
 }
 
-bool ExportVRML( const wxString& aFullFileName, double aMMtoWRMLunit,
-                 bool aExport3DFiles, bool aUseRelativePaths,
-                 const wxString& a3D_Subdir,
-                 double aXRef, double aYRef )
+bool ExportVRML( const wxString& aFullFileName, double aMMtoWRMLunit, bool aExport3DFiles,
+                 bool aUseRelativePaths, const wxString& a3D_Subdir, double aXRef, double aYRef )
 {
     if( s_PcbEditFrame )
     {

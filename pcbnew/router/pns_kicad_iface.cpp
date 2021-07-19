@@ -2,7 +2,7 @@
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
  * Copyright (C) 2013-2016 CERN
- * Copyright (C) 2016-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2021 KiCad Developers, see AUTHORS.txt for contributors.
  * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -64,6 +64,7 @@
 #include "router_preview_item.h"
 
 typedef VECTOR2I::extended_type ecoord;
+
 
 class PNS_PCBNEW_RULE_RESOLVER : public PNS::RULE_RESOLVER
 {
@@ -155,6 +156,7 @@ bool PNS_PCBNEW_RULE_RESOLVER::IsDiffPair( const PNS::ITEM* aA, const PNS::ITEM*
 
     if( aA->Net() == net_p && aB->Net() == net_n )
         return true;
+
     if( aB->Net() == net_p && aA->Net() == net_n )
         return true;
 
@@ -278,7 +280,7 @@ bool PNS_PCBNEW_RULE_RESOLVER::QueryConstraint( PNS::CONSTRAINT_TYPE aType,
 
         default:
             return false;
-       }
+    }
 }
 
 
@@ -373,7 +375,7 @@ bool PNS_KICAD_IFACE_BASE::inheritTrackWidth( PNS::ITEM* aItem, int* aInheritedW
 {
     VECTOR2I p;
 
-    assert( aItem->Owner() != NULL );
+    assert( aItem->Owner() != nullptr );
 
     auto tryGetTrackWidth =
         []( PNS::ITEM* aPnsItem ) -> int
@@ -410,7 +412,7 @@ bool PNS_KICAD_IFACE_BASE::inheritTrackWidth( PNS::ITEM* aItem, int* aInheritedW
 
     PNS::JOINT* jt = static_cast<PNS::NODE*>( aItem->Owner() )->FindJoint( p, aItem );
 
-    assert( jt != NULL );
+    assert( jt != nullptr );
 
     int mval = INT_MAX;
 
@@ -432,7 +434,8 @@ bool PNS_KICAD_IFACE_BASE::inheritTrackWidth( PNS::ITEM* aItem, int* aInheritedW
 }
 
 
-bool PNS_KICAD_IFACE_BASE::ImportSizes( PNS::SIZES_SETTINGS& aSizes, PNS::ITEM* aStartItem, int aNet )
+bool PNS_KICAD_IFACE_BASE::ImportSizes( PNS::SIZES_SETTINGS& aSizes, PNS::ITEM* aStartItem,
+                                        int aNet )
 {
     BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
     PNS::CONSTRAINT        constraint;
@@ -539,8 +542,6 @@ bool PNS_KICAD_IFACE_BASE::ImportSizes( PNS::SIZES_SETTINGS& aSizes, PNS::ITEM* 
         diffPairViaGap = bds.GetCurrentDiffPairViaGap();
     }
 
-    //printf( "DPWidth: %d gap %d\n", diffPairWidth, diffPairGap );
-
     aSizes.SetDiffPairWidth( diffPairWidth );
     aSizes.SetDiffPairGap( diffPairGap );
     aSizes.SetDiffPairViaGap( diffPairViaGap );
@@ -598,30 +599,31 @@ int PNS_PCBNEW_RULE_RESOLVER::matchDpSuffix( const wxString& aNetName, wxString&
         aComplementNet = "P";
         rv = -1;
     }
-    // Match P followed by 2 digits
     else if( aNetName.Right( 2 ).IsNumber() && aNetName.Right( 3 ).Left( 1 ) == "P" )
     {
+        // Match P followed by 2 digits
         aComplementNet = "N" + aNetName.Right( 2 );
         rv = 1;
     }
-    // Match P followed by 1 digit
     else if( aNetName.Right( 1 ).IsNumber() && aNetName.Right( 2 ).Left( 1 ) == "P" )
     {
+        // Match P followed by 1 digit
         aComplementNet = "N" + aNetName.Right( 1 );
         rv = 1;
     }
-    // Match N followed by 2 digits
     else if( aNetName.Right( 2 ).IsNumber() && aNetName.Right( 3 ).Left( 1 ) == "N" )
     {
+        // Match N followed by 2 digits
         aComplementNet = "P" + aNetName.Right( 2 );
         rv = -1;
     }
-    // Match N followed by 1 digit
     else if( aNetName.Right( 1 ).IsNumber() && aNetName.Right( 2 ).Left( 1 ) == "N" )
     {
+        // Match N followed by 1 digit
         aComplementNet = "P" + aNetName.Right( 1 );
         rv = -1;
     }
+
     if( rv != 0 )
     {
         aBaseDpName = aNetName.Left( aNetName.Length() - aComplementNet.Length() );
@@ -696,12 +698,8 @@ bool PNS_PCBNEW_RULE_RESOLVER::DpNetPair( const PNS::ITEM* aItem, int& aNetP, in
         netNameP = netNameCoupled;
     }
 
-//    wxLogTrace( "PNS","p %s n %s base %s\n", (const char *)netNameP.c_str(), (const char *)netNameN.c_str(), (const char *)netNameBase.c_str() );
-
     NETINFO_ITEM* netInfoP = m_board->FindNet( netNameP );
     NETINFO_ITEM* netInfoN = m_board->FindNet( netNameN );
-
-    //wxLogTrace( "PNS","ip %p in %p\n", netInfoP, netInfoN);
 
     if( !netInfoP || !netInfoN )
         return false;
@@ -716,10 +714,10 @@ bool PNS_PCBNEW_RULE_RESOLVER::DpNetPair( const PNS::ITEM* aItem, int& aNetP, in
 class PNS_PCBNEW_DEBUG_DECORATOR: public PNS::DEBUG_DECORATOR
 {
 public:
-    PNS_PCBNEW_DEBUG_DECORATOR( KIGFX::VIEW* aView = NULL ) :
+    PNS_PCBNEW_DEBUG_DECORATOR( KIGFX::VIEW* aView = nullptr ) :
             PNS::DEBUG_DECORATOR(),
-            m_view( NULL ),
-            m_items( NULL )
+            m_view( nullptr ),
+            m_items( nullptr )
     {
         SetView( aView );
     }
@@ -734,10 +732,10 @@ public:
     {
         Clear();
         delete m_items;
-        m_items = NULL;
+        m_items = nullptr;
         m_view = aView;
 
-        if( m_view == NULL )
+        if( m_view == nullptr )
             return;
 
         m_items = new KIGFX::VIEW_GROUP( m_view );
@@ -745,10 +743,9 @@ public:
         m_view->Add( m_items );
     }
 
-    virtual void AddPoint( VECTOR2I aP, const COLOR4D& aColor, int aSize,
-                           const std::string        aName,
+    virtual void AddPoint( VECTOR2I aP, const COLOR4D& aColor, int aSize, const std::string aName,
                            const SRC_LOCATION_INFO& aSrcLoc = SRC_LOCATION_INFO() ) override
-        {
+    {
         SHAPE_LINE_CHAIN l;
 
         l.Append( aP - VECTOR2I( -aSize, -aSize ) );
@@ -763,8 +760,7 @@ public:
         AddLine( l, aColor, 10000, aName );
     }
 
-    virtual void AddBox( BOX2I aB, const COLOR4D& aColor,
-                         const std::string        aName,
+    virtual void AddBox( BOX2I aB, const COLOR4D& aColor, const std::string aName,
                          const SRC_LOCATION_INFO& aSrcLoc = SRC_LOCATION_INFO() ) override
     {
         SHAPE_LINE_CHAIN l;
@@ -781,8 +777,7 @@ public:
         AddLine( l, aColor, 10000, aName, aSrcLoc );
     }
 
-    virtual void AddSegment( SEG aS, const COLOR4D& aColor,
-                             const std::string        aName,
+    virtual void AddSegment( SEG aS, const COLOR4D& aColor, const std::string aName,
                              const SRC_LOCATION_INFO& aSrcLoc = SRC_LOCATION_INFO() ) override
     {
         SHAPE_LINE_CHAIN l;
@@ -801,11 +796,13 @@ public:
         if( !m_view )
             return;
 
-        ROUTER_PREVIEW_ITEM* pitem = new ROUTER_PREVIEW_ITEM( NULL, m_view );
+        ROUTER_PREVIEW_ITEM* pitem = new ROUTER_PREVIEW_ITEM( nullptr, m_view );
 
         pitem->SetColor( aColor );
         pitem->Line( aLine, aWidth );
-        m_items->Add( pitem ); // Should not be needed, as m_items has been passed as a parent group in alloc;
+
+        // Should not be needed, as m_items has been passed as a parent group in alloc;
+        m_items->Add( pitem );
         m_view->Update( m_items );
     }
 
@@ -872,7 +869,7 @@ std::unique_ptr<PNS::SOLID> PNS_KICAD_IFACE_BASE::syncPad( PAD* aPad )
 
     // ignore non-copper pads except for those with holes
     if( ( aPad->GetLayerSet() & LSET::AllCuMask() ).none() && aPad->GetDrillSize().x == 0 )
-        return NULL;
+        return nullptr;
 
     switch( aPad->GetAttribute() )
     {
@@ -882,31 +879,32 @@ std::unique_ptr<PNS::SOLID> PNS_KICAD_IFACE_BASE::syncPad( PAD* aPad )
 
     case PAD_ATTRIB::CONN:
     case PAD_ATTRIB::SMD:
+    {
+        LSET lmsk = aPad->GetLayerSet();
+        bool is_copper = false;
+
+        for( int i = 0; i < MAX_CU_LAYERS; i++ )
         {
-            LSET lmsk = aPad->GetLayerSet();
-            bool is_copper = false;
-
-            for( int i = 0; i < MAX_CU_LAYERS; i++ )
+            if( lmsk[i] )
             {
-                if( lmsk[i] )
-                {
-                    is_copper = true;
+                is_copper = true;
 
-                    if( aPad->GetAttribute() != PAD_ATTRIB::NPTH )
-                        layers = LAYER_RANGE( i );
+                if( aPad->GetAttribute() != PAD_ATTRIB::NPTH )
+                    layers = LAYER_RANGE( i );
 
-                    break;
-                }
+                break;
             }
-
-            if( !is_copper )
-                return NULL;
         }
+
+        if( !is_copper )
+            return nullptr;
+
         break;
+    }
 
     default:
         wxLogTrace( "PNS", "unsupported pad type 0x%x", aPad->GetAttribute() );
-        return NULL;
+        return nullptr;
     }
 
     std::unique_ptr<PNS::SOLID> solid = std::make_unique<PNS::SOLID>();
@@ -954,10 +952,12 @@ std::unique_ptr<PNS::SOLID> PNS_KICAD_IFACE_BASE::syncPad( PAD* aPad )
     {
         // Fixme (but not urgent). For complex pad shapes, we pass a single simple polygon to the
         // router, otherwise it won't know how to correctly build walkaround 'hulls' for the pad
-        // primitives - it can recognize only simple shapes, but not COMPOUNDs made of multiple shapes.
-        // The proper way to fix this would be to implement SHAPE_COMPOUND::ConvertToSimplePolygon(),
-        // but the complexity of pad polygonization code (see PAD::GetEffectivePolygon), including
-        // approximation error handling makes me slightly scared to do it right now.
+        // primitives - it can recognize only simple shapes, but not COMPOUNDs made of multiple
+        // shapes.
+        // The proper way to fix this would be to implement
+        // SHAPE_COMPOUND::ConvertToSimplePolygon(), but the complexity of pad polygonization code
+        // (see PAD::GetEffectivePolygon), including approximation error handling makes me
+        // slightly scared to do it right now.
 
         // NOTE: PAD::GetEffectivePolygon puts the error on the inside, but we want the error on
         // the outside so that the collision hull is larger than the pad
@@ -996,9 +996,9 @@ std::unique_ptr<PNS::SEGMENT> PNS_KICAD_IFACE_BASE::syncTrack( PCB_TRACK* aTrack
 
 std::unique_ptr<PNS::ARC> PNS_KICAD_IFACE_BASE::syncArc( PCB_ARC* aArc )
 {
-    auto arc = std::make_unique<PNS::ARC>( SHAPE_ARC( aArc->GetStart(), aArc->GetMid(), aArc->GetEnd(),
-                                                      aArc->GetWidth() ),
-                                           aArc->GetNetCode() );
+    auto arc = std::make_unique<PNS::ARC>(
+            SHAPE_ARC( aArc->GetStart(), aArc->GetMid(), aArc->GetEnd(), aArc->GetWidth() ),
+            aArc->GetNetCode() );
 
     arc->SetLayers( LAYER_RANGE( aArc->GetLayer() ) );
     arc->SetParent( aArc );
@@ -1216,8 +1216,10 @@ bool PNS_KICAD_IFACE::IsAnyLayerVisible( const LAYER_RANGE& aLayer ) const
         return false;
 
     for( int i = aLayer.Start(); i <= aLayer.End(); i++ )
+    {
         if( m_view->IsLayerVisible( i ) )
             return true;
+    }
 
     return false;
 }
@@ -1399,10 +1401,12 @@ void PNS_KICAD_IFACE::EraseView()
         m_debugDecorator->Clear();
 }
 
+
 void PNS_KICAD_IFACE_BASE::SetDebugDecorator( PNS::DEBUG_DECORATOR *aDec )
 {
     m_debugDecorator = aDec;
 }
+
 
 void PNS_KICAD_IFACE::DisplayItem( const PNS::ITEM* aItem, int aClearance, bool aEdit )
 {
@@ -1439,7 +1443,6 @@ void PNS_KICAD_IFACE::DisplayItem( const PNS::ITEM* aItem, int aClearance, bool 
         }
     }
 
-
     m_previewItems->Add( pitem );
     m_view->Update( m_previewItems );
 }
@@ -1471,7 +1474,6 @@ void PNS_KICAD_IFACE::HideItem( PNS::ITEM* aItem )
 
 void PNS_KICAD_IFACE_BASE::RemoveItem( PNS::ITEM* aItem )
 {
-
 }
 
 
@@ -1497,7 +1499,6 @@ void PNS_KICAD_IFACE::RemoveItem( PNS::ITEM* aItem )
 
 void PNS_KICAD_IFACE_BASE::UpdateItem( PNS::ITEM* aItem )
 {
-
 }
 
 
@@ -1571,7 +1572,7 @@ void PNS_KICAD_IFACE_BASE::AddItem( PNS::ITEM* aItem )
 
 void PNS_KICAD_IFACE::AddItem( PNS::ITEM* aItem )
 {
-    BOARD_CONNECTED_ITEM* newBI = NULL;
+    BOARD_CONNECTED_ITEM* newBI = nullptr;
 
     switch( aItem->Kind() )
     {
@@ -1704,6 +1705,7 @@ void PNS_KICAD_IFACE::UpdateNet( int aNetCode )
 
 }
 
+
 PNS::RULE_RESOLVER* PNS_KICAD_IFACE_BASE::GetRuleResolver()
 {
     return m_ruleResolver;
@@ -1715,6 +1717,7 @@ void PNS_KICAD_IFACE::SetHostTool( PCB_TOOL_BASE* aTool )
     m_tool = aTool;
     m_commit = std::make_unique<BOARD_COMMIT>( m_tool );
 }
+
 
 void PNS_KICAD_IFACE::SetDisplayOptions( const PCB_DISPLAY_OPTIONS* aDispOptions )
 {

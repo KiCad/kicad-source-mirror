@@ -56,7 +56,7 @@
 
 
 EXPORTER_PCB_VRML::EXPORTER_PCB_VRML() :
-        m_OutputPCB( (SGNODE*) NULL )
+        m_OutputPCB( nullptr )
 {
     m_ReuseDef = true;
     m_precision = 6;
@@ -101,10 +101,10 @@ EXPORTER_PCB_VRML::~EXPORTER_PCB_VRML()
     // destroy any unassociated material appearances
     for( int j = 0; j < VRML_COLOR_LAST; ++j )
     {
-        if( m_sgmaterial[j] && NULL == S3D::GetSGNodeParent( m_sgmaterial[j] ) )
+        if( m_sgmaterial[j] && nullptr == S3D::GetSGNodeParent( m_sgmaterial[j] ) )
             S3D::DestroyNode( m_sgmaterial[j] );
 
-        m_sgmaterial[j] = NULL;
+        m_sgmaterial[j] = nullptr;
     }
 
     if( !m_components.empty() )
@@ -114,7 +114,7 @@ EXPORTER_PCB_VRML::~EXPORTER_PCB_VRML()
         for( auto i : m_components )
         {
             tmp.Attach( i );
-            tmp.SetParent( NULL );
+            tmp.SetParent( nullptr );
         }
 
         m_components.clear();
@@ -176,6 +176,7 @@ bool EXPORTER_PCB_VRML::GetLayer3D( LAYER_NUM layer, VRML_LAYER** vlayer )
 void EXPORTER_PCB_VRML::ExportVrmlSolderMask()
 {
     SHAPE_POLY_SET holes, outlines = m_pcbOutlines;
+
     // holes is the solder mask opening.
     // the actual shape is the negative shape of mask opening.
     PCB_LAYER_ID pcb_layer = F_Mask;
@@ -198,7 +199,6 @@ void EXPORTER_PCB_VRML::ExportVrmlSolderMask()
 }
 
 
-// Build and export the 4 layers F_Cu, B_Cu, F_silk, B_Silk
 void EXPORTER_PCB_VRML::ExportStandardLayers()
 {
     SHAPE_POLY_SET outlines;
@@ -227,16 +227,15 @@ void EXPORTER_PCB_VRML::ExportStandardLayers()
     }
 }
 
-// static var. for dealing with text
+
 static EXPORTER_PCB_VRML* model_vrml;
 
 
 void EXPORTER_PCB_VRML::write_triangle_bag( std::ostream& aOut_file, const VRML_COLOR& aColor,
-                                VRML_LAYER* aLayer, bool aPlane, bool aTop,
-                                double aTop_z, double aBottom_z )
+                                            VRML_LAYER* aLayer, bool aPlane, bool aTop,
+                                            double aTop_z, double aBottom_z )
 {
-    /* A lot of nodes are not required, but blender sometimes chokes
-     * without them */
+    // A lot of nodes are not required, but blender sometimes chokes without them.
     static const char* shape_boiler[] =
     {
         "Transform {\n",
@@ -273,7 +272,9 @@ void EXPORTER_PCB_VRML::write_triangle_bag( std::ostream& aOut_file, const VRML_
     while( marker_found < 4 )
     {
         if( shape_boiler[lineno] )
+        {
             aOut_file << shape_boiler[lineno];
+        }
         else
         {
             marker_found++;
@@ -335,8 +336,7 @@ void EXPORTER_PCB_VRML::write_triangle_bag( std::ostream& aOut_file, const VRML_
 }
 
 
-void EXPORTER_PCB_VRML::writeLayers( const char* aFileName,
-                              OSTREAM* aOutputFile )
+void EXPORTER_PCB_VRML::writeLayers( const char* aFileName, OSTREAM* aOutputFile )
 {
     // VRML_LAYER board;
     m_3D_board.Tesselate( &m_holes );
@@ -374,13 +374,15 @@ void EXPORTER_PCB_VRML::writeLayers( const char* aFileName,
     {
         write_triangle_bag( *aOutputFile, GetColor( VRML_COLOR_PASTE ),
                             &m_top_paste, true, true,
-                            GetLayerZ( F_Cu ) + Millimeter2iu( ART_OFFSET / 2.0 ) * m_BoardToVrmlScale,
+                            GetLayerZ( F_Cu ) + Millimeter2iu( ART_OFFSET / 2.0 ) *
+                            m_BoardToVrmlScale,
                             0 );
     }
     else
     {
         create_vrml_plane( m_OutputPCB, VRML_COLOR_PASTE, &m_top_paste,
-                           GetLayerZ( F_Cu ) + Millimeter2iu( ART_OFFSET / 2.0 ) * m_BoardToVrmlScale,
+                           GetLayerZ( F_Cu ) + Millimeter2iu( ART_OFFSET / 2.0 ) *
+                           m_BoardToVrmlScale,
                            true );
     }
 
@@ -391,13 +393,15 @@ void EXPORTER_PCB_VRML::writeLayers( const char* aFileName,
     {
         write_triangle_bag( *aOutputFile, GetColor( VRML_COLOR_SOLDMASK ),
                             &m_top_soldermask, true, true,
-                            GetLayerZ( F_Cu ) + Millimeter2iu( ART_OFFSET / 2.0 ) * m_BoardToVrmlScale,
+                            GetLayerZ( F_Cu ) + Millimeter2iu( ART_OFFSET / 2.0 ) *
+                            m_BoardToVrmlScale,
                             0 );
     }
     else
     {
         create_vrml_plane( m_OutputPCB, VRML_COLOR_SOLDMASK, &m_top_soldermask,
-                           GetLayerZ( F_Cu ) + Millimeter2iu( ART_OFFSET / 2.0 ) * m_BoardToVrmlScale,
+                           GetLayerZ( F_Cu ) + Millimeter2iu( ART_OFFSET / 2.0 ) *
+                           m_BoardToVrmlScale,
                            true );
     }
 
@@ -429,7 +433,8 @@ void EXPORTER_PCB_VRML::writeLayers( const char* aFileName,
     else
     {
         create_vrml_plane( m_OutputPCB, VRML_COLOR_PASTE, &m_bot_paste,
-                           GetLayerZ( B_Cu ) - Millimeter2iu( ART_OFFSET / 2.0 ) * m_BoardToVrmlScale,
+                           GetLayerZ( B_Cu ) - Millimeter2iu( ART_OFFSET / 2.0 ) *
+                           m_BoardToVrmlScale,
                            false );
     }
 
@@ -440,31 +445,37 @@ void EXPORTER_PCB_VRML::writeLayers( const char* aFileName,
     {
         write_triangle_bag( *aOutputFile, GetColor( VRML_COLOR_SOLDMASK ),
                             &m_bot_soldermask, true, false,
-                            GetLayerZ( B_Cu ) - Millimeter2iu( ART_OFFSET / 2.0 ) * m_BoardToVrmlScale,
+                            GetLayerZ( B_Cu ) - Millimeter2iu( ART_OFFSET / 2.0 ) *
+                            m_BoardToVrmlScale,
                             0 );
     }
     else
     {
         create_vrml_plane( m_OutputPCB, VRML_COLOR_SOLDMASK, &m_bot_soldermask,
-                           GetLayerZ( B_Cu ) - Millimeter2iu( ART_OFFSET / 2.0 ) * m_BoardToVrmlScale,
+                           GetLayerZ( B_Cu ) - Millimeter2iu( ART_OFFSET / 2.0 ) *
+                           m_BoardToVrmlScale,
                            false );
     }
 
     // VRML_LAYER PTH;
-    m_plated_holes.Tesselate( NULL, true );
+    m_plated_holes.Tesselate( nullptr, true );
 
     if( m_UseInlineModelsInBrdfile )
     {
         write_triangle_bag( *aOutputFile, GetColor( VRML_COLOR_PASTE ),
                             &m_plated_holes, false, false,
-                            GetLayerZ( F_Cu ) + Millimeter2iu( ART_OFFSET / 2.0 ) * m_BoardToVrmlScale,
-                            GetLayerZ( B_Cu ) - Millimeter2iu( ART_OFFSET / 2.0 ) * m_BoardToVrmlScale );
+                            GetLayerZ( F_Cu ) + Millimeter2iu( ART_OFFSET / 2.0 ) *
+                            m_BoardToVrmlScale,
+                            GetLayerZ( B_Cu ) - Millimeter2iu( ART_OFFSET / 2.0 ) *
+                            m_BoardToVrmlScale );
     }
     else
     {
         create_vrml_shell( m_OutputPCB, VRML_COLOR_PASTE, &m_plated_holes,
-                           GetLayerZ( F_Cu ) + Millimeter2iu( ART_OFFSET / 2.0 ) * m_BoardToVrmlScale,
-                           GetLayerZ( B_Cu ) - Millimeter2iu( ART_OFFSET / 2.0 ) * m_BoardToVrmlScale );
+                           GetLayerZ( F_Cu ) + Millimeter2iu( ART_OFFSET / 2.0 ) *
+                           m_BoardToVrmlScale,
+                           GetLayerZ( B_Cu ) - Millimeter2iu( ART_OFFSET / 2.0 ) *
+                           m_BoardToVrmlScale );
     }
 
     // VRML_LAYER m_top_silk;
@@ -559,7 +570,6 @@ void EXPORTER_PCB_VRML::ExportVrmlPolygonSet( VRML_LAYER* aVlayer, const SHAPE_P
 }
 
 
-// board edges and cutouts
 void EXPORTER_PCB_VRML::ExportVrmlBoard()
 {
     if( !m_Pcb->GetBoardPolygonOutlines( m_pcbOutlines ) )
@@ -578,7 +588,7 @@ void EXPORTER_PCB_VRML::ExportVrmlBoard()
         for( int j = 0; j < outline.PointCount(); j++ )
         {
             m_3D_board.AddVertex( seg, (double)outline.CPoint(j).x * m_BoardToVrmlScale,
-                                    -((double)outline.CPoint(j).y * m_BoardToVrmlScale ) );
+                                  -((double)outline.CPoint(j).y * m_BoardToVrmlScale ) );
 
         }
 
@@ -600,7 +610,7 @@ void EXPORTER_PCB_VRML::ExportVrmlBoard()
             for( int j = 0; j < hole.PointCount(); j++ )
             {
                 m_holes.AddVertex( seg, (double) hole.CPoint(j).x * m_BoardToVrmlScale,
-                                          -( (double) hole.CPoint(j).y * m_BoardToVrmlScale ) );
+                                   -( (double) hole.CPoint(j).y * m_BoardToVrmlScale ) );
             }
 
             m_holes.EnsureWinding( seg, true );
@@ -608,8 +618,9 @@ void EXPORTER_PCB_VRML::ExportVrmlBoard()
     }
 }
 
-// Max error allowed to approximate a circle by segments, in mm
+
 static const double err_approx_max = 0.005;
+
 
 void EXPORTER_PCB_VRML::ExportVrmlViaHoles()
 {
@@ -784,7 +795,7 @@ void EXPORTER_PCB_VRML::ExportVrmlFootprint( FOOTPRINT* aFootprint, std::ostream
     {
         SGNODE* mod3d = (SGNODE*) m_Cache3Dmodels->Load( sM->m_Filename );
 
-        if( NULL == mod3d )
+        if( nullptr == mod3d )
         {
             ++sM;
             continue;
@@ -830,8 +841,8 @@ void EXPORTER_PCB_VRML::ExportVrmlFootprint( FOOTPRINT* aFootprint, std::ostream
 
         if( isFlipped )
             offsetz = -offsetz;
-        else // In normal mode, Y axis is reversed in Pcbnew.
-            offsety = -offsety;
+        else
+            offsety = -offsety;  // In normal mode, Y axis is reversed in Pcbnew.
 
         RotatePoint( &offsetx, &offsety, aFootprint->GetOrientation() );
 
@@ -923,7 +934,7 @@ void EXPORTER_PCB_VRML::ExportVrmlFootprint( FOOTPRINT* aFootprint, std::ostream
             modelShape->SetTranslation( trans );
             modelShape->SetScale( SGPOINT( sM->m_Scale.x, sM->m_Scale.y, sM->m_Scale.z ) );
 
-            if( NULL == S3D::GetSGNodeParent( mod3d ) )
+            if( nullptr == S3D::GetSGNodeParent( mod3d ) )
             {
                 m_components.push_back( mod3d );
                 modelShape->AddChildNode( mod3d );
@@ -1003,10 +1014,10 @@ bool PCB_EDIT_FRAME::ExportVRML_File( const wxString& aFullFileName, double aMMt
         {
             // merge footprints in the .vrml board file
             for( FOOTPRINT* footprint : pcb->Footprints() )
-                model3d.ExportVrmlFootprint( footprint, NULL );
+                model3d.ExportVrmlFootprint( footprint, nullptr );
 
             // write out the board and all layers
-            model3d.writeLayers( TO_UTF8( aFullFileName ), NULL );
+            model3d.writeLayers( TO_UTF8( aFullFileName ), nullptr );
         }
     }
     catch( const std::exception& e )
@@ -1075,12 +1086,12 @@ SGNODE* EXPORTER_PCB_VRML::getSGColor( VRML_COLOR_INDEX colorIdx )
     if( colorIdx == -1 )
         colorIdx = VRML_COLOR_PCB;
     else if( colorIdx == VRML_COLOR_LAST )
-        return NULL;
+        return nullptr;
 
     if( m_sgmaterial[colorIdx] )
         return m_sgmaterial[colorIdx];
 
-    IFSG_APPEARANCE vcolor( (SGNODE*) NULL );
+    IFSG_APPEARANCE vcolor( (SGNODE*) nullptr );
     VRML_COLOR* cp = &vrml_colors_list[colorIdx];
 
     vcolor.SetSpecular( cp->spec_red, cp->spec_grn, cp->spec_blu );
@@ -1098,7 +1109,7 @@ SGNODE* EXPORTER_PCB_VRML::getSGColor( VRML_COLOR_INDEX colorIdx )
 
 
 void EXPORTER_PCB_VRML::create_vrml_plane( IFSG_TRANSFORM& PcbOutput, VRML_COLOR_INDEX colorID,
-                                    VRML_LAYER* layer, double top_z, bool aTopPlane )
+                                           VRML_LAYER* layer, double top_z, bool aTopPlane )
 {
     std::vector< double > vertices;
     std::vector< int > idxPlane;
@@ -1110,7 +1121,8 @@ void EXPORTER_PCB_VRML::create_vrml_plane( IFSG_TRANSFORM& PcbOutput, VRML_COLOR
 
     if( ( idxPlane.size() % 3 ) )
     {
-        throw( std::runtime_error( "[BUG] index lists are not a multiple of 3 (not a triangle list)" ) );
+        throw( std::runtime_error( "[BUG] index lists are not a multiple of 3 (not a triangle "
+                                   "list)" ) );
     }
 
     std::vector< SGPOINT > vlist;
@@ -1122,7 +1134,7 @@ void EXPORTER_PCB_VRML::create_vrml_plane( IFSG_TRANSFORM& PcbOutput, VRML_COLOR
 
     // create the intermediate scenegraph
     IFSG_TRANSFORM tx0( PcbOutput.GetRawPtr() );    // tx0 = Transform for this outline
-    IFSG_SHAPE shape( tx0 );            // shape will hold (a) all vertices and (b) a local list of normals
+    IFSG_SHAPE shape( tx0 );    // shape will hold (a) all vertices and (b) a local list of normals
     IFSG_FACESET face( shape );         // this face shall represent the top and bottom planes
     IFSG_COORDS cp( face );             // coordinates for all faces
     cp.SetCoordsList( nvert, &vlist[0] );
@@ -1145,9 +1157,9 @@ void EXPORTER_PCB_VRML::create_vrml_plane( IFSG_TRANSFORM& PcbOutput, VRML_COLOR
     // assign a color from the palette
     SGNODE* modelColor = getSGColor( colorID );
 
-    if( NULL != modelColor )
+    if( nullptr != modelColor )
     {
-        if( NULL == S3D::GetSGNodeParent( modelColor ) )
+        if( nullptr == S3D::GetSGNodeParent( modelColor ) )
             shape.AddChildNode( modelColor );
         else
             shape.AddRefNode( modelColor );
@@ -1156,7 +1168,7 @@ void EXPORTER_PCB_VRML::create_vrml_plane( IFSG_TRANSFORM& PcbOutput, VRML_COLOR
 
 
 void EXPORTER_PCB_VRML::create_vrml_shell( IFSG_TRANSFORM& PcbOutput, VRML_COLOR_INDEX colorID,
-                                    VRML_LAYER* layer, double top_z, double bottom_z )
+                                           VRML_LAYER* layer, double top_z, double bottom_z )
 {
     std::vector< double > vertices;
     std::vector< int > idxPlane;
@@ -1190,7 +1202,7 @@ void EXPORTER_PCB_VRML::create_vrml_shell( IFSG_TRANSFORM& PcbOutput, VRML_COLOR
 
     // create the intermediate scenegraph
     IFSG_TRANSFORM tx0( PcbOutput.GetRawPtr() );    // tx0 = Transform for this outline
-    IFSG_SHAPE shape( tx0 );            // shape will hold (a) all vertices and (b) a local list of normals
+    IFSG_SHAPE shape( tx0 );    // shape will hold (a) all vertices and (b) a local list of normals
     IFSG_FACESET face( shape );         // this face shall represent the top and bottom planes
     IFSG_COORDS cp( face );             // coordinates for all faces
     cp.SetCoordsList( nvert, &vlist[0] );
@@ -1212,9 +1224,9 @@ void EXPORTER_PCB_VRML::create_vrml_shell( IFSG_TRANSFORM& PcbOutput, VRML_COLOR
     // assign a color from the palette
     SGNODE* modelColor = getSGColor( colorID );
 
-    if( NULL != modelColor )
+    if( nullptr != modelColor )
     {
-        if( NULL == S3D::GetSGNodeParent( modelColor ) )
+        if( nullptr == S3D::GetSGNodeParent( modelColor ) )
             shape.AddChildNode( modelColor );
         else
             shape.AddRefNode( modelColor );

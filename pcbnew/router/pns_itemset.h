@@ -2,7 +2,7 @@
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
  * Copyright (C) 2013-2014 CERN
- * Copyright (C) 2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2021 KiCad Developers, see AUTHORS.txt for contributors.
  * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -29,11 +29,8 @@
 namespace PNS {
 
 /**
- * ITEM_SET
- *
- * Holds a list of board items, that can be filtered against net, kinds,
- * layers, etc.
- **/
+ * Hold a list of board items, that can be filtered against net, kinds, layers, etc.
+ */
 class LINE;
 
 class ITEM_SET
@@ -95,7 +92,7 @@ public:
 
     typedef std::vector<ENTRY> ENTRIES;
 
-    ITEM_SET( ITEM* aInitialItem = NULL, bool aBecomeOwner = false )
+    ITEM_SET( ITEM* aInitialItem = nullptr, bool aBecomeOwner = false )
     {
         if( aInitialItem )
             m_items.emplace_back( ENTRY( aInitialItem, aBecomeOwner ) );
@@ -224,7 +221,7 @@ public:
             }
         }
 
-        return NULL;
+        return nullptr;
     }
 
 private:

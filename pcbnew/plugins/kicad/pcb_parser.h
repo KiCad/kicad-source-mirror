@@ -211,7 +211,7 @@ private:
 
     FP_TEXT*            parseFP_TEXT();
     FP_SHAPE*           parseFP_SHAPE();
-    PAD*                parsePAD( FOOTPRINT* aParent = NULL );
+    PAD*                parsePAD( FOOTPRINT* aParent = nullptr );
 
     // Parse only the (option ...) inside a pad description
     bool                parsePAD_option( PAD* aPad );
@@ -322,7 +322,7 @@ private:
 
     inline int parseInt()
     {
-        return (int)strtol( CurText(), NULL, 10 );
+        return (int)strtol( CurText(), nullptr, 10 );
     }
 
     inline int parseInt( const char* aExpected )
@@ -334,7 +334,7 @@ private:
     inline long parseHex()
     {
         NextTok();
-        return strtol( CurText(), NULL, 16 );
+        return strtol( CurText(), nullptr, 16 );
     }
 
     bool parseBool();

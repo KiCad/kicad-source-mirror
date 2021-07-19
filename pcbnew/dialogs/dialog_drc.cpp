@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2009-2016 Dick Hollenbeck, dick@softplc.com
- * Copyright (C) 2004-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -152,8 +152,6 @@ void DIALOG_DRC::initValues()
     SetFocus();
 }
 
-
-// PROGRESS_REPORTER calls
 
 bool DIALOG_DRC::updateUI()
 {
@@ -502,8 +500,9 @@ void DIALOG_DRC::OnDRCItemRClick( wxDataViewEvent& aEvent )
             static_cast<RC_TREE_MODEL*>( aEvent.GetModel() )->ValueChanged( node );
             modified = true;
         }
-    }
+
         break;
+    }
 
     case 2:
     {
@@ -522,8 +521,9 @@ void DIALOG_DRC::OnDRCItemRClick( wxDataViewEvent& aEvent )
 
             modified = true;
         }
-    }
+
         break;
+    }
 
     case 3:
     {
@@ -531,8 +531,8 @@ void DIALOG_DRC::OnDRCItemRClick( wxDataViewEvent& aEvent )
         BOARD_INSPECTION_TOOL* inspectionTool = toolMgr->GetTool<BOARD_INSPECTION_TOOL>();
 
         inspectionTool->InspectDRCError( node->m_RcItem );
-    }
         break;
+    }
 
     case 4:
         bds().m_DRCSeverities[ rcItem->GetErrorCode() ] = RPT_SEVERITY_ERROR;
@@ -582,8 +582,8 @@ void DIALOG_DRC::OnDRCItemRClick( wxDataViewEvent& aEvent )
         // Rebuild model and view
         static_cast<RC_TREE_MODEL*>( aEvent.GetModel() )->SetProvider( m_markersProvider );
         modified = true;
-    }
         break;
+    }
 
     case 7:
         m_frame->ShowBoardSetupDialog( _( "Violation Severity" ) );
@@ -786,7 +786,7 @@ bool DIALOG_DRC::writeReport( const wxString& aFullFileName )
 {
     FILE* fp = wxFopen( aFullFileName, wxT( "w" ) );
 
-    if( fp == NULL )
+    if( fp == nullptr )
         return false;
 
     std::map<KIID, EDA_ITEM*> itemMap;
@@ -959,7 +959,9 @@ void DIALOG_DRC::updateDisplayedCounts()
         m_Notebook->SetPageText( 1, msg );
 
         if( m_footprintTestsRun )
+        {
             msg.sprintf( m_footprintsTitleTemplate, numFootprints );
+        }
         else
         {
             msg = m_footprintsTitleTemplate;

@@ -48,6 +48,7 @@
 
 using std::placeholders::_1;
 
+
 DIALOG_BOARD_SETUP::DIALOG_BOARD_SETUP( PCB_EDIT_FRAME* aFrame ) :
         PAGED_DIALOG( aFrame, _( "Board Setup" ), false,
                       _( "Import Settings from Another Board..." ) ),
@@ -88,6 +89,7 @@ DIALOG_BOARD_SETUP::DIALOG_BOARD_SETUP( PCB_EDIT_FRAME* aFrame ) :
     m_treebook->AddSubPage( m_layers,  _( "Board Editor Layers" ) );
     m_layerSetupPage = 1;
     m_treebook->AddSubPage( m_physicalStackup,  _( "Physical Stackup" ) );
+
     // Change this value if m_physicalStackup is not the page 2 of m_treebook
     m_physicalStackupPage = 2;  // The page number (from 0) to select the m_physicalStackup panel
     m_treebook->AddSubPage( m_boardFinish, _( "Board Finish" ) );
@@ -111,7 +113,8 @@ DIALOG_BOARD_SETUP::DIALOG_BOARD_SETUP( PCB_EDIT_FRAME* aFrame ) :
 
 	// Connect Events
 	m_treebook->Connect( wxEVT_TREEBOOK_PAGE_CHANGED,
-                         wxBookCtrlEventHandler( DIALOG_BOARD_SETUP::OnPageChange ), NULL, this );
+                         wxBookCtrlEventHandler( DIALOG_BOARD_SETUP::OnPageChange ),
+                         nullptr, this );
 
     finishDialogSettings();
 }
@@ -120,7 +123,8 @@ DIALOG_BOARD_SETUP::DIALOG_BOARD_SETUP( PCB_EDIT_FRAME* aFrame ) :
 DIALOG_BOARD_SETUP::~DIALOG_BOARD_SETUP()
 {
 	m_treebook->Disconnect( wxEVT_TREEBOOK_PAGE_CHANGED,
-                         wxBookCtrlEventHandler( DIALOG_BOARD_SETUP::OnPageChange ), NULL, this );
+                            wxBookCtrlEventHandler( DIALOG_BOARD_SETUP::OnPageChange ),
+                            nullptr, this );
 }
 
 
@@ -160,7 +164,6 @@ void DIALOG_BOARD_SETUP::OnPageChange( wxBookCtrlEvent& event )
 }
 
 
-// Run Import Settings... action
 void DIALOG_BOARD_SETUP::OnAuxiliaryAction( wxCommandEvent& event )
 {
     DIALOG_IMPORT_SETTINGS importDlg( this, m_frame );

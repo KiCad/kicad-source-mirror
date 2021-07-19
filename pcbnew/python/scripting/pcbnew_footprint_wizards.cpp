@@ -89,7 +89,7 @@ PyObject* PYTHON_FOOTPRINT_WIZARD::CallMethod( const char* aMethod, PyObject* aA
         Py_XDECREF( pFunc );
     }
 
-    return NULL;
+    return nullptr;
 }
 
 
@@ -127,8 +127,7 @@ wxArrayString PYTHON_FOOTPRINT_WIZARD::CallRetArrayStrMethod( const char*   aMet
         if( !PyList_Check( result ) )
         {
             Py_DECREF( result );
-            ret.Add( wxT(
-                         "PYTHON_FOOTPRINT_WIZARD::CallRetArrayStrMethod, result is not a list" ),
+            ret.Add( wxT( "PYTHON_FOOTPRINT_WIZARD::CallRetArrayStrMethod, result is not a list" ),
                      1 );
             return ret;
         }
@@ -172,7 +171,7 @@ int PYTHON_FOOTPRINT_WIZARD::GetNumParameterPages()
     PyLOCK      lock;
 
     // Time to call the callback
-    PyObject*   result = CallMethod( "GetNumParameterPages", NULL );
+    PyObject*   result = CallMethod( "GetNumParameterPages", nullptr );
 
     if( result )
     {
@@ -327,7 +326,7 @@ void PYTHON_FOOTPRINT_WIZARD::ResetParameters()
 {
     PyLOCK     lock;
 
-    CallMethod( "ResetWizard", NULL );
+    CallMethod( "ResetWizard", nullptr );
 }
 
 
@@ -339,13 +338,13 @@ FOOTPRINT* PYTHON_FOOTPRINT_WIZARD::GetFootprint( wxString * aMessages )
 {
     PyLOCK      lock;
 
-    PyObject*   result = CallMethod( "GetFootprint", NULL );
+    PyObject*   result = CallMethod( "GetFootprint", nullptr );
 
     if( aMessages )
-        *aMessages = CallRetStrMethod( "GetBuildMessages", NULL );
+        *aMessages = CallRetStrMethod( "GetBuildMessages", nullptr );
 
     if( !result )
-        return NULL;
+        return nullptr;
 
     PyObject* obj = PyObject_GetAttrString( result, "this" );
 

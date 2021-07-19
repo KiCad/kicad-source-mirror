@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -39,12 +39,6 @@
 
 class PYTHON_ACTION_PLUGIN : public ACTION_PLUGIN
 {
-    PyObject* m_PyAction;
-    PyObject* CallMethod( const char* aMethod,
-            PyObject* aArglist = NULL );
-    wxString CallRetStrMethod( const char* aMethod,
-            PyObject* aArglist = NULL );
-
 public:
     PYTHON_ACTION_PLUGIN( PyObject* action );
     ~PYTHON_ACTION_PLUGIN();
@@ -56,6 +50,11 @@ public:
     wxString    GetPluginPath() override;
     void        Run() override;
     void*       GetObject() override;
+
+private:
+    PyObject* m_PyAction;
+    PyObject* CallMethod( const char* aMethod, PyObject* aArglist = nullptr );
+    wxString CallRetStrMethod( const char* aMethod, PyObject* aArglist = nullptr );
 };
 
 

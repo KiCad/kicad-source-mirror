@@ -2,8 +2,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012-2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2008-2016 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 2004-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2008-2016 Wayne Stambaugh <stambaughw@gmail.com>
+ * Copyright (C) 2004-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -144,7 +144,7 @@ FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent
     libSizer->Add( m_libFilter, 0, wxEXPAND, 5 );
 
     m_libList = new wxListBox( libPanel, ID_MODVIEW_LIB_LIST, wxDefaultPosition, wxDefaultSize,
-                               0, NULL, wxLB_HSCROLL | wxNO_BORDER );
+                               0, nullptr, wxLB_HSCROLL | wxNO_BORDER );
     libSizer->Add( m_libList, 1, wxEXPAND, 5 );
 
     libPanel->SetSizer( libSizer );
@@ -163,7 +163,7 @@ FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent
     fpSizer->Add( m_fpFilter, 0, wxEXPAND, 5 );
 
     m_fpList = new wxListBox( fpPanel, ID_MODVIEW_FOOTPRINT_LIST, wxDefaultPosition, wxDefaultSize,
-                              0, NULL, wxLB_HSCROLL | wxNO_BORDER );
+                              0, nullptr, wxLB_HSCROLL | wxNO_BORDER );
     fpSizer->Add( m_fpList, 1, wxEXPAND, 5 );
 
     fpPanel->SetSizer( fpSizer );
@@ -312,14 +312,18 @@ void FOOTPRINT_VIEWER_FRAME::setupUIConditions()
 
     mgr->SetConditions( ACTIONS::toggleGrid,             CHECK( cond.GridVisible() ) );
     mgr->SetConditions( ACTIONS::toggleCursorStyle,      CHECK( cond.FullscreenCursor() ) );
-    mgr->SetConditions( ACTIONS::millimetersUnits,       CHECK( cond.Units( EDA_UNITS::MILLIMETRES ) ) );
+    mgr->SetConditions( ACTIONS::millimetersUnits,
+                        CHECK( cond.Units( EDA_UNITS::MILLIMETRES ) ) );
     mgr->SetConditions( ACTIONS::inchesUnits,            CHECK( cond.Units( EDA_UNITS::INCHES ) ) );
     mgr->SetConditions( ACTIONS::milsUnits,              CHECK( cond.Units( EDA_UNITS::MILS ) ) );
 
 
-    mgr->SetConditions( ACTIONS::zoomTool,               CHECK( cond.CurrentTool( ACTIONS::zoomTool ) ) );
-    mgr->SetConditions( ACTIONS::measureTool,            CHECK( cond.CurrentTool( ACTIONS::measureTool ) ) );
-    mgr->SetConditions( ACTIONS::selectionTool,          CHECK( cond.CurrentTool( ACTIONS::selectionTool ) ) );
+    mgr->SetConditions( ACTIONS::zoomTool,
+                        CHECK( cond.CurrentTool( ACTIONS::zoomTool ) ) );
+    mgr->SetConditions( ACTIONS::measureTool,
+                        CHECK( cond.CurrentTool( ACTIONS::measureTool ) ) );
+    mgr->SetConditions( ACTIONS::selectionTool,
+                        CHECK( cond.CurrentTool( ACTIONS::selectionTool ) ) );
 
     mgr->SetConditions( PCB_ACTIONS::showPadNumbers,     CHECK( cond.PadNumbersDisplay() ) );
     mgr->SetConditions( PCB_ACTIONS::padDisplayMode,     CHECK( !cond.PadFillDisplay() ) );
@@ -358,7 +362,9 @@ void FOOTPRINT_VIEWER_FRAME::doCloseWindow()
         // window to be destroyed by the caller of KIWAY_PLAYER::ShowModal()
     }
     else
+    {
         Destroy();
+    }
 }
 
 
@@ -441,7 +447,7 @@ void FOOTPRINT_VIEWER_FRAME::ReCreateFootprintList()
 
     wxString nickname = getCurNickname();
 
-    fp_info_list->ReadFootprintFiles( Prj().PcbFootprintLibs(), !nickname ? NULL : &nickname );
+    fp_info_list->ReadFootprintFiles( Prj().PcbFootprintLibs(), !nickname ? nullptr : &nickname );
 
     if( fp_info_list->GetErrorCount() )
     {
@@ -498,7 +504,9 @@ void FOOTPRINT_VIEWER_FRAME::ReCreateFootprintList()
             ClickOnFootprintList( dummy );
         }
         else
+        {
             setCurFootprintName( wxEmptyString );
+        }
     }
     else
     {
@@ -564,7 +572,9 @@ void FOOTPRINT_VIEWER_FRAME::OnCharHook( wxKeyEvent& aEvent )
         AddFootprintToPCB( dummy );
     }
     else
+    {
         aEvent.Skip();
+    }
 }
 
 
@@ -656,11 +666,10 @@ void FOOTPRINT_VIEWER_FRAME::ClickOnFootprintList( wxCommandEvent& aEvent )
         }
         catch( const IO_ERROR& ioe )
         {
-            wxString msg = wxString::Format( _( "Could not load footprint '%s' from library '%s'."
-                                                "\n\n%s" ),
-                                             getCurFootprintName(),
-                                             getCurNickname(),
-                                             ioe.Problem() );
+            wxString msg =
+                    wxString::Format( _( "Could not load footprint '%s' from library '%s'."
+                                         "\n\n%s" ),
+                                      getCurFootprintName(), getCurNickname(), ioe.Problem() );
             DisplayError( this, msg );
         }
 
@@ -698,7 +707,7 @@ void FOOTPRINT_VIEWER_FRAME::AddFootprintToPCB( wxCommandEvent& aEvent )
     {
         PCB_EDIT_FRAME* pcbframe = (PCB_EDIT_FRAME*) Kiway().Player( FRAME_PCB_EDITOR, false );
 
-        if( pcbframe == NULL )      // happens when the board editor is not active (or closed)
+        if( pcbframe == nullptr )      // happens when the board editor is not active (or closed)
         {
             DisplayErrorMessage( this, _( "No board currently open." ) );
             return;
@@ -726,7 +735,7 @@ void FOOTPRINT_VIEWER_FRAME::AddFootprintToPCB( wxCommandEvent& aEvent )
         // (Can be stored flipped if the lib is an archive built from a board)
         if( newFootprint->IsFlipped() )
             newFootprint->Flip( newFootprint->GetPosition(),
-                    pcbframe->Settings().m_FlipLeftRight );
+                                pcbframe->Settings().m_FlipLeftRight );
 
         KIGFX::VIEW_CONTROLS* viewControls = pcbframe->GetCanvas()->GetViewControls();
         VECTOR2D              cursorPos = viewControls->GetCursorPosition();

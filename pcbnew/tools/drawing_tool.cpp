@@ -455,7 +455,7 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
     else
         m_inDrawingTool = true;
 
-    BOARD_ITEM*                  text = NULL;
+    BOARD_ITEM*                  text = nullptr;
     const BOARD_DESIGN_SETTINGS& dsnSettings = m_frame->GetDesignSettings();
     BOARD_COMMIT                 commit( m_frame );
     SCOPED_DRAW_MODE             scopedDrawMode( m_mode, MODE::TEXT );
@@ -469,7 +469,7 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
                 m_controls->SetAutoPan( false );
                 m_controls->CaptureCursor( false );
                 delete text;
-                text = NULL;
+                text = nullptr;
             };
 
     auto setCursor =
@@ -582,7 +582,8 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
                 else
                 {
                     PCB_TEXT* pcbText = new PCB_TEXT( m_frame->GetModel() );
-                    // TODO we have to set IS_NEW, otherwise InstallTextPCB.. creates an undo entry :| LEGACY_CLEANUP
+                    // TODO we have to set IS_NEW, otherwise InstallTextPCB.. creates an
+                    // undo entry :| LEGACY_CLEANUP
                     pcbText->SetFlags( IS_NEW );
 
                     pcbText->SetLayer( layer );
@@ -893,8 +894,8 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
 
                 m_controls->SetAutoPan( true );
                 m_controls->CaptureCursor( true );
-            }
                 break;
+            }
 
             case SET_END:
             {
@@ -1378,14 +1379,15 @@ int DRAWING_TOOL::SetAnchor( const TOOL_EVENT& aEvent )
 
 int DRAWING_TOOL::ToggleLine45degMode( const TOOL_EVENT& toolEvent )
 {
-    m_frame->Settings().m_Use45DegreeGraphicSegments = !m_frame->Settings().m_Use45DegreeGraphicSegments;
+    m_frame->Settings().m_Use45DegreeGraphicSegments =
+            !m_frame->Settings().m_Use45DegreeGraphicSegments;
 
     return 0;
 }
 
 
 /**
- * Update an PCB_SHAPE from the current state of a TWO_POINT_GEOMETRY_MANAGER
+ * Update a #PCB_SHAPE from the current state of a #TWO_POINT_GEOMETRY_MANAGER.
  */
 static void updateSegmentFromGeometryMgr( const KIGFX::PREVIEW::TWO_POINT_GEOMETRY_MANAGER& aMgr,
                                           PCB_SHAPE* aGraphic )
@@ -1402,6 +1404,7 @@ bool DRAWING_TOOL::drawSegment( const std::string& aTool, PCB_SHAPE** aGraphic,
                                 OPT<VECTOR2D> aStartingPoint )
 {
     PCB_SHAPE_TYPE shape = ( *aGraphic )->GetShape();
+
     // Only three shapes are currently supported
     wxASSERT( shape == PCB_SHAPE_TYPE::SEGMENT || shape == PCB_SHAPE_TYPE::CIRCLE
               || shape == PCB_SHAPE_TYPE::RECT );
@@ -1717,8 +1720,7 @@ bool DRAWING_TOOL::drawSegment( const std::string& aTool, PCB_SHAPE** aGraphic,
 
 
 /**
- * Update an arc PCB_SHAPE from the current state
- * of an Arc Geometry Manager
+ * Update an arc PCB_SHAPE from the current state of an Arc Geometry Manager.
  */
 static void updateArcFromConstructionMgr( const KIGFX::PREVIEW::ARC_GEOM_MANAGER& aMgr,
                                           PCB_SHAPE& aArc )

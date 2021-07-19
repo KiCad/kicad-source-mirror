@@ -2,7 +2,7 @@
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
  * Copyright (C) 2013-2015 CERN
- * Copyright (C) 2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2021 KiCad Developers, see AUTHORS.txt for contributors.
  * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -40,10 +40,10 @@ DIFF_PAIR_PLACER::DIFF_PAIR_PLACER( ROUTER* aRouter ) :
     m_netP = 0;
     m_netN = 0;
     m_iteration = 0;
-    m_world = NULL;
-    m_shove = NULL;
-    m_currentNode = NULL;
-    m_lastNode = NULL;
+    m_world = nullptr;
+    m_shove = nullptr;
+    m_currentNode = nullptr;
+    m_lastNode = nullptr;
     m_placingVia = false;
     m_viaDiameter = 0;
     m_viaDrill = 0;
@@ -53,7 +53,7 @@ DIFF_PAIR_PLACER::DIFF_PAIR_PLACER( ROUTER* aRouter ) :
     m_startsOnVia = false;
     m_orthoMode = false;
     m_snapOnTarget = false;
-    m_currentEndItem = NULL;
+    m_currentEndItem = nullptr;
     m_currentMode = RM_MarkObstacles;
     m_currentTraceOk = false;
     m_idle = true;
@@ -71,6 +71,7 @@ void DIFF_PAIR_PLACER::setWorld( NODE* aWorld )
     m_world = aWorld;
 }
 
+
 const VIA DIFF_PAIR_PLACER::makeVia( const VECTOR2I& aP, int aNet )
 {
     const LAYER_RANGE layers( m_sizes.GetLayerTop(), m_sizes.GetLayerBottom() );
@@ -87,7 +88,7 @@ void DIFF_PAIR_PLACER::SetOrthoMode ( bool aOrthoMode )
     m_orthoMode = aOrthoMode;
 
     if( !m_idle )
-        Move( m_currentEnd, NULL );
+        Move( m_currentEnd, nullptr );
 }
 
 
@@ -96,7 +97,7 @@ bool DIFF_PAIR_PLACER::ToggleVia( bool aEnabled )
     m_placingVia = aEnabled;
 
     if( !m_idle )
-        Move( m_currentEnd, NULL );
+        Move( m_currentEnd, nullptr );
 
     return true;
 }
@@ -121,7 +122,9 @@ bool DIFF_PAIR_PLACER::propagateDpHeadForces ( const VECTOR2I& aP, VECTOR2I& aNe
     VIA virtHead = makeVia( aP, -1 );
 
     if( m_placingVia )
+    {
         virtHead.SetDiameter( viaGap() + 2 * virtHead.Diameter() );
+    }
     else
     {
         virtHead.SetLayer( m_currentLayer );
@@ -186,8 +189,8 @@ bool DIFF_PAIR_PLACER::propagateDpHeadForces ( const VECTOR2I& aP, VECTOR2I& aNe
 }
 
 
-bool DIFF_PAIR_PLACER::attemptWalk( NODE* aNode, DIFF_PAIR* aCurrent,
-        DIFF_PAIR& aWalk, bool aPFirst, bool aWindCw, bool aSolidsOnly )
+bool DIFF_PAIR_PLACER::attemptWalk( NODE* aNode, DIFF_PAIR* aCurrent, DIFF_PAIR& aWalk,
+                                    bool aPFirst, bool aWindCw, bool aSolidsOnly )
 {
     WALKAROUND walkaround( aNode, Router() );
     WALKAROUND::WALKAROUND_STATUS wf1;
@@ -393,7 +396,7 @@ void DIFF_PAIR_PLACER::FlipPosture()
     m_startDiagonal = !m_startDiagonal;
 
     if( !m_idle )
-        Move( m_currentEnd, NULL );
+        Move( m_currentEnd, nullptr );
 }
 
 
@@ -423,7 +426,7 @@ bool DIFF_PAIR_PLACER::SetLayer( int aLayer )
         m_currentLayer = aLayer;
         m_start = *m_prevPair;
         initPlacement();
-        Move( m_currentEnd, NULL );
+        Move( m_currentEnd, nullptr );
         return true;
     }
 
@@ -494,6 +497,7 @@ bool DIFF_PAIR_PLACER::FindDpPrimitivePair( NODE* aWorld, const VECTOR2I& aP, IT
                             "from an existing differential pair make sure you are "
                             "at the end." );
         }
+
         return false;
     }
 
@@ -508,6 +512,7 @@ bool DIFF_PAIR_PLACER::FindDpPrimitivePair( NODE* aWorld, const VECTOR2I& aP, IT
         if( item->Kind() == aItem->Kind() )
         {
             OPT_VECTOR2I anchor = getDanglingAnchor( aWorld, item );
+
             if( !anchor )
                 continue;
 
@@ -547,6 +552,7 @@ bool DIFF_PAIR_PLACER::FindDpPrimitivePair( NODE* aWorld, const VECTOR2I& aP, IT
                                               "for coupled net \"%s\"." ),
                                            aWorld->GetRuleResolver()->NetName( coupledNet ) );
         }
+
         return false;
     }
 
@@ -598,7 +604,7 @@ void DIFF_PAIR_PLACER::initPlacement()
 {
     m_idle = false;
     m_orthoMode = false;
-    m_currentEndItem = NULL;
+    m_currentEndItem = nullptr;
     m_startDiagonal = m_initialDiagonal;
 
     NODE* world = Router()->GetWorld();
@@ -608,14 +614,14 @@ void DIFF_PAIR_PLACER::initPlacement()
 
     setWorld( rootNode );
 
-    m_lastNode = NULL;
+    m_lastNode = nullptr;
     m_currentNode = rootNode;
     m_currentMode = Settings().Mode();
 
     if( m_shove )
         delete m_shove;
 
-    m_shove = NULL;
+    m_shove = nullptr;
 
     if( m_currentMode == RM_Shove || m_currentMode == RM_Smart )
     {
@@ -666,10 +672,10 @@ bool DIFF_PAIR_PLACER::routeHead( const VECTOR2I& aP )
         {
             gwsTarget.BuildForCursor( fp );
         }
-        // close to the initial segment extension line -> keep straight part only, project as close
-        // as possible to the cursor
         else
         {
+            // close to the initial segment extension line -> keep straight part only, project
+            // as close as possible to the cursor.
             gwsTarget.BuildForCursor( fpProj );
             gwsTarget.FilterByOrientation( DIRECTION_45::ANG_STRAIGHT | DIRECTION_45::ANG_HALF_FULL,
                                            DIRECTION_45( dirV ) );
@@ -709,14 +715,14 @@ bool DIFF_PAIR_PLACER::Move( const VECTOR2I& aP , ITEM* aEndItem )
     m_fitOk = false;
 
     delete m_lastNode;
-    m_lastNode = NULL;
+    m_lastNode = nullptr;
 
     bool retval = route( aP );
 
     NODE* latestNode = m_currentNode;
     m_lastNode = latestNode->Branch();
 
-    assert( m_lastNode != NULL );
+    assert( m_lastNode != nullptr );
     m_currentEnd = aP;
 
     updateLeadingRatLine();
@@ -818,8 +824,7 @@ bool DIFF_PAIR_PLACER::AbortPlacement()
 
 bool DIFF_PAIR_PLACER::HasPlacedAnything() const
 {
-     return m_currentTrace.CP().SegmentCount() > 0 ||
-             m_currentTrace.CN().SegmentCount() > 0;
+     return m_currentTrace.CP().SegmentCount() > 0 || m_currentTrace.CN().SegmentCount() > 0;
 }
 
 
@@ -828,8 +833,8 @@ bool DIFF_PAIR_PLACER::CommitPlacement()
     if( m_lastNode )
         Router()->CommitRouting( m_lastNode );
 
-    m_lastNode = NULL;
-    m_currentNode = NULL;
+    m_lastNode = nullptr;
+    m_currentNode = nullptr;
     return true;
 }
 

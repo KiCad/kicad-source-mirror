@@ -503,10 +503,7 @@ int BOARD_EDITOR_CONTROL::RepairBoard( const TOOL_EVENT& aEvent )
     wxString details;
     bool     quiet = aEvent.Parameter<bool>();
 
-    /*******************************
-     * Repair duplicate IDs and missing nets
-     */
-
+    // Repair duplicate IDs and missing nets.
     std::set<KIID> ids;
     int            duplicates = 0;
 
@@ -985,7 +982,7 @@ int BOARD_EDITOR_CONTROL::PlaceFootprint( const TOOL_EVENT& aEvent )
                         }
                     }
 
-                    fp = NULL;
+                    fp = nullptr;
                 };
 
         if( evt->IsCancelInteractive() )
@@ -1021,7 +1018,7 @@ int BOARD_EDITOR_CONTROL::PlaceFootprint( const TOOL_EVENT& aEvent )
                 // Pick the footprint to be placed
                 fp = m_frame->SelectFootprintFromLibTree();
 
-                if( fp == NULL )
+                if( fp == nullptr )
                     continue;
 
                 fp->SetLink( niluuid );
@@ -1055,7 +1052,7 @@ int BOARD_EDITOR_CONTROL::PlaceFootprint( const TOOL_EVENT& aEvent )
             {
                 m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
                 commit.Push( _( "Place a footprint" ) );
-                fp = NULL;  // to indicate that there is no footprint that we currently modify
+                fp = nullptr;  // to indicate that there is no footprint that we currently modify
             }
         }
         else if( evt->IsClick( BUT_RIGHT ) )
@@ -1509,17 +1506,20 @@ void BOARD_EDITOR_CONTROL::setTransitions()
 
     Go( &BOARD_EDITOR_CONTROL::BoardSetup,             PCB_ACTIONS::boardSetup.MakeEvent() );
     Go( &BOARD_EDITOR_CONTROL::ImportNetlist,          PCB_ACTIONS::importNetlist.MakeEvent() );
-    Go( &BOARD_EDITOR_CONTROL::ImportSpecctraSession,  PCB_ACTIONS::importSpecctraSession.MakeEvent() );
+    Go( &BOARD_EDITOR_CONTROL::ImportSpecctraSession,
+        PCB_ACTIONS::importSpecctraSession.MakeEvent() );
     Go( &BOARD_EDITOR_CONTROL::ExportSpecctraDSN,      PCB_ACTIONS::exportSpecctraDSN.MakeEvent() );
 
     if( ADVANCED_CFG::GetCfg().m_ShowPcbnewExportNetlist && m_frame &&
         m_frame->GetExportNetlistAction() )
         Go( &BOARD_EDITOR_CONTROL::ExportNetlist, m_frame->GetExportNetlistAction()->MakeEvent() );
 
-    Go( &BOARD_EDITOR_CONTROL::GenerateDrillFiles,     PCB_ACTIONS::generateDrillFiles.MakeEvent() );
+    Go( &BOARD_EDITOR_CONTROL::GenerateDrillFiles,
+        PCB_ACTIONS::generateDrillFiles.MakeEvent() );
     Go( &BOARD_EDITOR_CONTROL::GenerateFabFiles,       PCB_ACTIONS::generateGerbers.MakeEvent() );
     Go( &BOARD_EDITOR_CONTROL::GeneratePosFile,        PCB_ACTIONS::generatePosFile.MakeEvent() );
-    Go( &BOARD_EDITOR_CONTROL::GenerateFabFiles,       PCB_ACTIONS::generateReportFile.MakeEvent() );
+    Go( &BOARD_EDITOR_CONTROL::GenerateFabFiles,
+        PCB_ACTIONS::generateReportFile.MakeEvent() );
     Go( &BOARD_EDITOR_CONTROL::GenerateFabFiles,       PCB_ACTIONS::generateD356File.MakeEvent() );
     Go( &BOARD_EDITOR_CONTROL::GenerateFabFiles,       PCB_ACTIONS::generateBOM.MakeEvent() );
 
@@ -1545,8 +1545,10 @@ void BOARD_EDITOR_CONTROL::setTransitions()
     Go( &BOARD_EDITOR_CONTROL::LockSelected,           PCB_ACTIONS::lock.MakeEvent() );
     Go( &BOARD_EDITOR_CONTROL::UnlockSelected,         PCB_ACTIONS::unlock.MakeEvent() );
 
-    Go( &BOARD_EDITOR_CONTROL::UpdatePCBFromSchematic, ACTIONS::updatePcbFromSchematic.MakeEvent() );
-    Go( &BOARD_EDITOR_CONTROL::UpdateSchematicFromPCB, ACTIONS::updateSchematicFromPcb.MakeEvent() );
+    Go( &BOARD_EDITOR_CONTROL::UpdatePCBFromSchematic,
+        ACTIONS::updatePcbFromSchematic.MakeEvent() );
+    Go( &BOARD_EDITOR_CONTROL::UpdateSchematicFromPCB,
+        ACTIONS::updateSchematicFromPcb.MakeEvent() );
     Go( &BOARD_EDITOR_CONTROL::ShowEeschema,           PCB_ACTIONS::showEeschema.MakeEvent() );
     Go( &BOARD_EDITOR_CONTROL::ToggleLayersManager,    PCB_ACTIONS::showLayersManager.MakeEvent() );
     Go( &BOARD_EDITOR_CONTROL::TogglePythonConsole,    PCB_ACTIONS::showPythonConsole.MakeEvent() );

@@ -7,7 +7,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2017 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -67,9 +67,10 @@ DIALOG_PAD_PRIMITIVES_PROPERTIES::DIALOG_PAD_PRIMITIVES_PROPERTIES( wxWindow* aP
     finishDialogSettings();
 }
 
+
 bool DIALOG_PAD_PRIMITIVES_PROPERTIES::TransferDataToWindow()
 {
-    if( m_shape == NULL )
+    if( m_shape == nullptr )
         return false;
 
     m_thickness.SetValue( m_shape->GetWidth() );
@@ -169,6 +170,7 @@ bool DIALOG_PAD_PRIMITIVES_PROPERTIES::TransferDataToWindow()
     return true;
 }
 
+
 bool DIALOG_PAD_PRIMITIVES_PROPERTIES::TransferDataFromWindow()
 {
     if( m_thickness.GetValue() == 0 && !m_filledCtrl->GetValue() )
@@ -201,6 +203,7 @@ bool DIALOG_PAD_PRIMITIVES_PROPERTIES::TransferDataFromWindow()
         // the start point in m_End
         m_shape->SetStart( wxPoint( m_endX.GetValue(), m_endY.GetValue() ) );
         m_shape->SetEnd( wxPoint( m_startX.GetValue(), m_startY.GetValue() ) );
+
         // arc angle
         m_shape->SetAngle( m_radius.GetValue() );
         break;
@@ -249,7 +252,9 @@ DIALOG_PAD_PRIMITIVE_POLY_PROPS::DIALOG_PAD_PRIMITIVE_POLY_PROPS( wxWindow* aPar
     m_sdbSizerOK->SetDefault();
     GetSizer()->SetSizeHints( this );
 
-	m_gridCornersList->Connect( wxEVT_GRID_CELL_CHANGING, wxGridEventHandler( DIALOG_PAD_PRIMITIVE_POLY_PROPS::onCellChanging ), NULL, this );
+	m_gridCornersList->Connect( wxEVT_GRID_CELL_CHANGING,
+                                wxGridEventHandler( DIALOG_PAD_PRIMITIVE_POLY_PROPS::onCellChanging ),
+                                nullptr, this );
 
     // Now all widgets have the size fixed, call FinishDialogSettings
     finishDialogSettings();
@@ -258,13 +263,15 @@ DIALOG_PAD_PRIMITIVE_POLY_PROPS::DIALOG_PAD_PRIMITIVE_POLY_PROPS( wxWindow* aPar
 
 DIALOG_PAD_PRIMITIVE_POLY_PROPS::~DIALOG_PAD_PRIMITIVE_POLY_PROPS()
 {
-	m_gridCornersList->Disconnect( wxEVT_GRID_CELL_CHANGING, wxGridEventHandler( DIALOG_PAD_PRIMITIVE_POLY_PROPS::onCellChanging ), NULL, this );
+	m_gridCornersList->Disconnect( wxEVT_GRID_CELL_CHANGING,
+                                   wxGridEventHandler( DIALOG_PAD_PRIMITIVE_POLY_PROPS::onCellChanging ),
+                                   nullptr, this );
 }
 
 
 bool DIALOG_PAD_PRIMITIVE_POLY_PROPS::TransferDataToWindow()
 {
-    if( m_shape == NULL )
+    if( m_shape == nullptr )
         return false;
 
     m_thickness.SetValue( m_shape->GetWidth() );
@@ -285,6 +292,7 @@ bool DIALOG_PAD_PRIMITIVE_POLY_PROPS::TransferDataToWindow()
 
     // enter others corner coordinates
     wxString msg;
+
     for( unsigned row = 0; row < m_currPoints.size(); ++row )
     {
         // Row label is "Corner x"
@@ -321,7 +329,6 @@ bool DIALOG_PAD_PRIMITIVE_POLY_PROPS::Validate()
 }
 
 
-// test for a valid polygon (a not self intersectiong polygon)
 bool DIALOG_PAD_PRIMITIVE_POLY_PROPS::doValidate( bool aRemoveRedundantCorners )
 {
     if( !m_gridCornersList->CommitPendingChanges() )
@@ -413,6 +420,7 @@ void DIALOG_PAD_PRIMITIVE_POLY_PROPS::OnButtonAdd( wxCommandEvent& event )
     m_panelPoly->Refresh();
 }
 
+
 void DIALOG_PAD_PRIMITIVE_POLY_PROPS::OnButtonDelete( wxCommandEvent& event )
 {
     if( !m_gridCornersList->CommitPendingChanges() )
@@ -442,11 +450,13 @@ void DIALOG_PAD_PRIMITIVE_POLY_PROPS::OnButtonDelete( wxCommandEvent& event )
     TransferDataToWindow();
 
     m_gridCornersList->ForceRefresh();
+
     // select the row previous to the last deleted row
     m_gridCornersList->SelectRow( std::max( 0, selections[ 0 ] - 1 ) );
 
     m_panelPoly->Refresh();
 }
+
 
 void DIALOG_PAD_PRIMITIVE_POLY_PROPS::onPaintPolyPanel( wxPaintEvent& event )
 {
@@ -476,8 +486,8 @@ void DIALOG_PAD_PRIMITIVE_POLY_PROPS::onPaintPolyPanel( wxPaintEvent& event )
     // Draw X and Y axis. This is particularly useful to show the
     // reference position of basic shape
     // Axis are drawn before the polygon to avoid masking segments on axis
-    GRLine( NULL, &dc, -dc_size.x, 0, dc_size.x, 0, 0, LIGHTBLUE );   // X axis
-    GRLine( NULL, &dc, 0, -dc_size.y, 0, dc_size.y, 0, LIGHTBLUE );   // Y axis
+    GRLine( nullptr, &dc, -dc_size.x, 0, dc_size.x, 0, 0, LIGHTBLUE );   // X axis
+    GRLine( nullptr, &dc, 0, -dc_size.y, 0, dc_size.y, 0, LIGHTBLUE );   // Y axis
 
     // Draw polygon.
     // The selected edge(s) are shown in selectcolor, the others in normalcolor.
@@ -498,11 +508,13 @@ void DIALOG_PAD_PRIMITIVE_POLY_PROPS::onPaintPolyPanel( wxPaintEvent& event )
         if( jj >= m_currPoints.size() )
             jj = 0;
 
-        GRLine( NULL, &dc, m_currPoints[ii] * scale, m_currPoints[jj] * scale, m_thickness.GetValue() * scale, color );
+        GRLine( nullptr, &dc, m_currPoints[ii] * scale, m_currPoints[jj] * scale,
+                m_thickness.GetValue() * scale, color );
     }
 
     event.Skip();
 }
+
 
 void DIALOG_PAD_PRIMITIVE_POLY_PROPS::onPolyPanelResize( wxSizeEvent& event )
 {
@@ -510,10 +522,12 @@ void DIALOG_PAD_PRIMITIVE_POLY_PROPS::onPolyPanelResize( wxSizeEvent& event )
     event.Skip();
 }
 
+
 void DIALOG_PAD_PRIMITIVE_POLY_PROPS::onGridSelect( wxGridRangeSelectEvent& event )
 {
     m_panelPoly->Refresh();
 }
+
 
 void DIALOG_PAD_PRIMITIVE_POLY_PROPS::onCellChanging( wxGridEvent& event )
 {
@@ -535,8 +549,6 @@ void DIALOG_PAD_PRIMITIVE_POLY_PROPS::onCellChanging( wxGridEvent& event )
 }
 
 
-// A dialog to apply geometry transforms to a shape or set of shapes
-// (move, rotate around origin, scaling factor, duplication).
 DIALOG_PAD_PRIMITIVES_TRANSFORM::DIALOG_PAD_PRIMITIVES_TRANSFORM( wxWindow* aParent,
                                                                   PCB_BASE_FRAME* aFrame,
                                                                   std::vector<std::shared_ptr<PCB_SHAPE>>& aList,
@@ -597,8 +609,10 @@ void DIALOG_PAD_PRIMITIVES_TRANSFORM::Transform( std::vector<std::shared_ptr<PCB
         {
             std::shared_ptr<PCB_SHAPE> shape;
 
-            if( aList == NULL )
+            if( aList == nullptr )
+            {
                 shape = m_list[idx];
+            }
             else
             {
                 aList->emplace_back( std::make_shared<PCB_SHAPE>( *m_list[idx] ) );

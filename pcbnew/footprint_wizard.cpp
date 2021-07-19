@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013 NBEE Embedded Systems SL, Miguel Angel Ajo <miguelangel@ajo.es>
- * Copyright (C) 2013 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2013-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -64,7 +64,7 @@ FOOTPRINT_WIZARD* FOOTPRINT_WIZARD_LIST::GetWizard( const wxString& aName )
             return wizard;
     }
 
-    return NULL;
+    return nullptr;
 }
 
 

@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2020 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2020-2021 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -57,19 +57,14 @@ void DRC_RULES_PARSER::reportError( const wxString& aMessage )
 
     if( m_reporter )
     {
-        wxString msg = wxString::Format( _( "ERROR: <a href='%d:%d'>%s</a>%s" ),
-                                         CurLineNumber(),
-                                         CurOffset(),
-                                         first,
-                                         rest );
+        wxString msg = wxString::Format( _( "ERROR: <a href='%d:%d'>%s</a>%s" ), CurLineNumber(),
+                                         CurOffset(), first, rest );
 
         m_reporter->Report( msg, RPT_SEVERITY_ERROR );
     }
     else
     {
-        wxString msg = wxString::Format( _( "ERROR: %s%s" ),
-                                         first,
-                                         rest );
+        wxString msg = wxString::Format( _( "ERROR: %s%s" ), first, rest );
 
         THROW_PARSE_ERROR( msg, CurSource(), CurLine(), CurLineNumber(), CurOffset() );
     }
@@ -128,7 +123,7 @@ void DRC_RULES_PARSER::Parse( std::vector<DRC_RULE*>& aRules, REPORTER* aReporte
 
             if( (int) token == DSN_NUMBER )
             {
-                m_requiredVersion = (int)strtol( CurText(), NULL, 10 );
+                m_requiredVersion = (int)strtol( CurText(), nullptr, 10 );
                 m_tooRecent = ( m_requiredVersion > DRC_RULE_FILE_VERSION );
                 token = NextTok();
             }
@@ -158,8 +153,7 @@ void DRC_RULES_PARSER::Parse( std::vector<DRC_RULE*>& aRules, REPORTER* aReporte
             break;
 
         default:
-            msg.Printf( _( "Unrecognized item '%s'.| Expected %s." ),
-                        FromUTF8(),
+            msg.Printf( _( "Unrecognized item '%s'.| Expected %s." ), FromUTF8(),
                         "'rule', 'version'" );
             reportError( msg );
             parseUnknown();
@@ -220,8 +214,7 @@ DRC_RULE* DRC_RULES_PARSER::parseDRC_RULE()
 
             if( (int) NextTok() != DSN_RIGHT )
             {
-                reportError( wxString::Format( _( "Unrecognized item '%s'." ),
-                                               FromUTF8() ) );
+                reportError( wxString::Format( _( "Unrecognized item '%s'." ), FromUTF8() ) );
                 parseUnknown();
             }
 
@@ -237,8 +230,7 @@ DRC_RULE* DRC_RULES_PARSER::parseDRC_RULE()
             return rule;
 
         default:
-            msg.Printf( _( "Unrecognized item '%s'.| Expected %s." ),
-                           FromUTF8(),
+            msg.Printf( _( "Unrecognized item '%s'.| Expected %s." ), FromUTF8(),
                            "'constraint', 'condition', 'disallow'" );
             reportError( msg );
             parseUnknown();
@@ -264,10 +256,10 @@ void DRC_RULES_PARSER::parseConstraint( DRC_RULE* aRule )
     if( (int) token == DSN_RIGHT || token == T_EOF )
     {
         msg.Printf( _( "Missing constraint type.|  Expected %s." ),
-                        "'clearance', 'hole_clearance', 'edge_clearance', 'hole', 'hole_to_hole', "
-                        "'courtyard_clearance', 'silk_clearance', 'track_width', 'annular_width', "
-                        "'disallow', 'length', 'skew', 'via_count', 'diff_pair_gap' or "
-                        "'diff_pair_uncoupled'" );
+                    "'clearance', 'hole_clearance', 'edge_clearance', 'hole', 'hole_to_hole', "
+                    "'courtyard_clearance', 'silk_clearance', 'track_width', 'annular_width', "
+                    "'disallow', 'length', 'skew', 'via_count', 'diff_pair_gap' or "
+                    "'diff_pair_uncoupled'" );
         reportError( msg );
         return;
     }
@@ -290,8 +282,7 @@ void DRC_RULES_PARSER::parseConstraint( DRC_RULE* aRule )
     case T_diff_pair_gap:       constraint.m_Type = DIFF_PAIR_GAP_CONSTRAINT;            break;
     case T_diff_pair_uncoupled: constraint.m_Type = DIFF_PAIR_MAX_UNCOUPLED_CONSTRAINT;  break;
     default:
-        msg.Printf( _( "Unrecognized item '%s'.| Expected %s." ),
-                    FromUTF8(),
+        msg.Printf( _( "Unrecognized item '%s'.| Expected %s." ), FromUTF8(),
                     "'clearance', 'hole_clearance', 'edge_clearance', 'hole', hole_to_hole',"
                     "'courtyard_clearance', 'silk_clearance', 'track_width', 'annular_width', "
                     "'disallow', 'length', 'skew', 'diff_pair_gap' or 'diff_pair_uncoupled'." );
@@ -323,8 +314,7 @@ void DRC_RULES_PARSER::parseConstraint( DRC_RULE* aRule )
                 return;
 
             default:
-                msg.Printf( _( "Unrecognized item '%s'.| Expected %s." ),
-                            FromUTF8(),
+                msg.Printf( _( "Unrecognized item '%s'.| Expected %s." ), FromUTF8(),
                             "'track', 'via', 'micro_via', 'buried_via', 'pad', 'zone', 'text', "
                             "'graphic', 'hole' or 'footprint'." );
                 reportError( msg );
@@ -441,18 +431,13 @@ void DRC_RULES_PARSER::parseValueWithUnits( const wxString& aExpr, int& aResult 
         if( m_reporter )
         {
             wxString msg = wxString::Format( _( "ERROR: <a href='%d:%d'>%s</a>%s" ),
-                                             CurLineNumber(),
-                                             CurOffset() + aOffset,
-                                             first,
-                                             rest );
+                                             CurLineNumber(), CurOffset() + aOffset, first, rest );
 
             m_reporter->Report( msg, RPT_SEVERITY_ERROR );
         }
         else
         {
-            wxString msg = wxString::Format( _( "ERROR: %s%s" ),
-                                             first,
-                                             rest );
+            wxString msg = wxString::Format( _( "ERROR: %s%s" ), first, rest );
 
             THROW_PARSE_ERROR( msg, CurSource(), CurLine(), CurLineNumber(),
                                CurOffset() + aOffset );
@@ -508,8 +493,7 @@ LSET DRC_RULES_PARSER::parseLayer()
 
     if( (int) NextTok() != DSN_RIGHT )
     {
-        reportError( wxString::Format( _( "Unrecognized item '%s'." ),
-                                       FromUTF8() ) );
+        reportError( wxString::Format( _( "Unrecognized item '%s'." ), FromUTF8() ) );
         parseUnknown();
     }
 

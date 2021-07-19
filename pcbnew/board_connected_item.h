@@ -46,7 +46,7 @@ public:
 
     static inline bool ClassOf( const EDA_ITEM* aItem )
     {
-        if( aItem == NULL )
+        if( aItem == nullptr )
             return false;
 
         switch( aItem->Type() )

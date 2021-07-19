@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2017-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -80,7 +80,7 @@ FOOTPRINT* MICROWAVE_TOOL::createFootprint( MICROWAVE_FOOTPRINT_SHAPE aFootprint
     WX_TEXT_ENTRY_DIALOG dlg( &editFrame, msg, _( "Create microwave footprint" ), value );
 
     if( dlg.ShowQuasiModal() != wxID_OK )
-        return NULL; // cancelled by user
+        return nullptr; // cancelled by user
 
     value    = dlg.GetValue();
     gap_size = ValueFromString( editFrame.GetUserUnits(), value );
@@ -95,7 +95,7 @@ FOOTPRINT* MICROWAVE_TOOL::createFootprint( MICROWAVE_FOOTPRINT_SHAPE aFootprint
                                        _( "Create microwave footprint" ), msg );
 
         if( angledlg.ShowQuasiModal() != wxID_OK )
-            return NULL; // cancelled by user
+            return nullptr; // cancelled by user
 
         msg = angledlg.GetValue();
 
@@ -112,7 +112,7 @@ FOOTPRINT* MICROWAVE_TOOL::createFootprint( MICROWAVE_FOOTPRINT_SHAPE aFootprint
     }
 
     if( abort )
-        return NULL;
+        return nullptr;
 
     footprint = createBaseFootprint( cmp_name, text_size, pad_count );
     auto it = footprint->Pads().begin();
@@ -145,7 +145,7 @@ FOOTPRINT* MICROWAVE_TOOL::createFootprint( MICROWAVE_FOOTPRINT_SHAPE aFootprint
         pad->SetShape( PAD_SHAPE::CUSTOM );
         pad->SetAnchorPadShape( PAD_SHAPE::RECT );
 
-        int numPoints = (angle / 50) + 3;     // Note: angles are in 0.1 degrees
+        int numPoints = ( angle / 50 ) + 3;       // Note: angles are in 0.1 degrees
         std::vector<wxPoint> polyPoints;
         polyPoints.reserve( numPoints );
 
@@ -169,8 +169,8 @@ FOOTPRINT* MICROWAVE_TOOL::createFootprint( MICROWAVE_FOOTPRINT_SHAPE aFootprint
         polyPoints.push_back( polyPoints[0] );
 
         pad->AddPrimitivePoly( polyPoints, 0, true ); // add a polygonal basic shape
-    }
         break;
+    }
 
     default:
         break;

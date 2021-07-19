@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014-2016 CERN
- * Copyright (C) 2019-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2021 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -263,10 +263,9 @@ int PCB_CONTROL::HighContrastModeCycle( const TOOL_EVENT& aEvent )
 }
 
 
-// Layer control
 int PCB_CONTROL::LayerSwitch( const TOOL_EVENT& aEvent )
 {
-    m_frame->SwitchLayer( NULL, aEvent.Parameter<PCB_LAYER_ID>() );
+    m_frame->SwitchLayer( nullptr, aEvent.Parameter<PCB_LAYER_ID>() );
 
     return 0;
 }
@@ -292,7 +291,7 @@ int PCB_CONTROL::LayerNext( const TOOL_EVENT& aEvent )
     }
 
     wxCHECK( IsCopperLayer( layer ), 0 );
-    editFrame->SwitchLayer( NULL, ToLAYER_ID( layer ) );
+    editFrame->SwitchLayer( nullptr, ToLAYER_ID( layer ) );
 
     return 0;
 }
@@ -320,7 +319,7 @@ int PCB_CONTROL::LayerPrev( const TOOL_EVENT& aEvent )
 
 
     wxCHECK( IsCopperLayer( layer ), 0 );
-    editFrame->SwitchLayer( NULL, ToLAYER_ID( layer ) );
+    editFrame->SwitchLayer( nullptr, ToLAYER_ID( layer ) );
 
     return 0;
 }
@@ -332,9 +331,9 @@ int PCB_CONTROL::LayerToggle( const TOOL_EVENT& aEvent )
     PCB_SCREEN* screen = m_frame->GetScreen();
 
     if( currentLayer == screen->m_Route_Layer_TOP )
-        m_frame->SwitchLayer( NULL, screen->m_Route_Layer_BOTTOM );
+        m_frame->SwitchLayer( nullptr, screen->m_Route_Layer_BOTTOM );
     else
-        m_frame->SwitchLayer( NULL, screen->m_Route_Layer_TOP );
+        m_frame->SwitchLayer( nullptr, screen->m_Route_Layer_TOP );
 
     return 0;
 }
@@ -345,6 +344,7 @@ int PCB_CONTROL::LayerToggle( const TOOL_EVENT& aEvent )
 #define ALPHA_MIN 0.20
 #define ALPHA_MAX 1.00
 #define ALPHA_STEP 0.05
+
 
 int PCB_CONTROL::LayerAlphaInc( const TOOL_EVENT& aEvent )
 {
@@ -398,13 +398,14 @@ int PCB_CONTROL::LayerAlphaDec( const TOOL_EVENT& aEvent )
         static_cast<PCB_BASE_EDIT_FRAME*>( m_frame )->OnLayerAlphaChanged();
     }
     else
+    {
         wxBell();
+    }
 
     return 0;
 }
 
 
-// Grid control
 void PCB_CONTROL::DoSetGridOrigin( KIGFX::VIEW* aView, PCB_BASE_FRAME* aFrame,
                                    EDA_ITEM* originViewItem, const VECTOR2D& aPoint )
 {
@@ -516,9 +517,11 @@ int PCB_CONTROL::DeleteItemCursor( const TOOL_EVENT& aEvent )
             collector.m_Threshold = KiROUND( getView()->ToWorld( HITTEST_THRESHOLD_PIXELS ) );
 
             if( m_isFootprintEditor )
-                collector.Collect( board, GENERAL_COLLECTOR::FootprintItems, (wxPoint) aPos, guide );
+                collector.Collect( board, GENERAL_COLLECTOR::FootprintItems,
+                                   (wxPoint) aPos, guide );
             else
-                collector.Collect( board, GENERAL_COLLECTOR::BoardLevelItems, (wxPoint) aPos, guide );
+                collector.Collect( board, GENERAL_COLLECTOR::BoardLevelItems,
+                                   (wxPoint) aPos, guide );
 
             // Remove unselectable items
             for( int i = collector.GetCount() - 1; i >= 0; --i )
@@ -865,7 +868,7 @@ int PCB_CONTROL::placeBoardItems( BOARD* aBoard, bool aAnchorAtOrigin, bool aRea
     // PCB_SELECTION_TOOL::highlightInternal runs, which does a SetSelected() on all
     // descendants. In PCB_CONTROL::placeBoardItems, below, we skip that and
     // mark items non-recursively.  That works because the saving of the
-    // selection created aBoard that has the group and all descendents in it.
+    // selection created aBoard that has the group and all descendants in it.
     moveUnflaggedItems( aBoard->Groups(), items, isNew );
 
     return placeBoardItems( items, isNew, aAnchorAtOrigin, aReannotateDuplicates );
@@ -901,7 +904,7 @@ int PCB_CONTROL::placeBoardItems( std::vector<BOARD_ITEM*>& aItems, bool aIsNew,
         case PCB_DIM_CENTER_T:
         case PCB_DIM_ORTHOGONAL_T:
         case PCB_DIM_LEADER_T:
-            {
+        {
             // Dimensions need to have their units updated if they are automatic
             PCB_DIMENSION_BASE* dim = static_cast<PCB_DIMENSION_BASE*>( item );
 
@@ -909,7 +912,7 @@ int PCB_CONTROL::placeBoardItems( std::vector<BOARD_ITEM*>& aItems, bool aIsNew,
                 dim->SetUnits( frame()->GetUserUnits() );
 
             break;
-            }
+        }
 
         case PCB_FOOTPRINT_T:
             // Update the footprint path with the new KIID path if the footprint is new

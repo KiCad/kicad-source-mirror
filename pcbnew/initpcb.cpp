@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2007-2014 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2012 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -42,7 +42,7 @@
 
 bool PCB_EDIT_FRAME::Clear_Pcb( bool aQuery, bool aFinal )
 {
-    if( GetBoard() == NULL )
+    if( GetBoard() == nullptr )
         return false;
 
     if( aQuery && !GetBoard()->IsEmpty() )
@@ -96,7 +96,7 @@ bool PCB_EDIT_FRAME::Clear_Pcb( bool aQuery, bool aFinal )
 
 bool FOOTPRINT_EDIT_FRAME::Clear_Pcb( bool aQuery )
 {
-    if( GetBoard() == NULL )
+    if( GetBoard() == nullptr )
         return false;
 
     bool is_last_fp_from_brd = IsCurrentFPFromBoard();

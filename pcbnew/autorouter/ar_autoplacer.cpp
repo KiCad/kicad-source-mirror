@@ -3,9 +3,9 @@
  *
  * Copyright (C) 2012 Jean-Pierre Charras, jean-pierre.charras@ujf-grenoble.fr
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 2011 Wayne Stambaugh <stambaughw@gmail.com>
  *
- * Copyright (C) 1992-2020 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -139,6 +139,7 @@ int AR_AUTOPLACER::genPlacementRoutingMatrix()
                 m_matrix.TraceSegmentPcb( (PCB_SHAPE*) drawing, CELL_IS_HOLE | CELL_IS_EDGE,
                                           m_matrix.m_GridRouting, AR_MATRIX::WRITE_CELL );
             }
+
             break;
 
         default:
@@ -272,7 +273,7 @@ bool AR_AUTOPLACER::fillMatrix()
 
 void AR_AUTOPLACER::rotateFootprint( FOOTPRINT* aFootprint, double angle, bool incremental )
 {
-    if( aFootprint == NULL )
+    if( aFootprint == nullptr )
         return;
 
     if( incremental )
@@ -296,6 +297,7 @@ void AR_AUTOPLACER::addFpBody( wxPoint aStart, wxPoint aEnd, LSET aLayerMask )
         m_fpAreaTop.Append( aEnd.x, aEnd.y );
         m_fpAreaTop.Append( aStart.x, aEnd.y );
     }
+
     if( aLayerMask[ B_Cu ] )
     {
         m_fpAreaBottom.NewOutline();
@@ -320,6 +322,7 @@ void AR_AUTOPLACER::addPad( PAD* aPad, int aClearance )
         m_fpAreaTop.Append( bbox.GetRight(), bbox.GetBottom() );
         m_fpAreaTop.Append( bbox.GetLeft(), bbox.GetBottom() );
     }
+
     if( aPad->IsOnLayer( B_Cu ) )
     {
         m_fpAreaBottom.NewOutline();
@@ -407,7 +410,7 @@ void AR_AUTOPLACER::genModuleOnRoutingMatrix( FOOTPRINT* Module )
         layerMask.set( B_Cu );
 
     m_matrix.TraceFilledRectangle( ox, oy, fx, fy, layerMask,
-                          CELL_IS_MODULE, AR_MATRIX::WRITE_OR_CELL );
+                                   CELL_IS_MODULE, AR_MATRIX::WRITE_OR_CELL );
 
     // Trace pads + clearance areas.
     for( PAD* pad : Module->Pads() )
@@ -429,12 +432,6 @@ void AR_AUTOPLACER::genModuleOnRoutingMatrix( FOOTPRINT* Module )
 }
 
 
-/* Test if the rectangular area (ux, ux .. y0, y1):
- * - is a free zone (except OCCUPED_By_MODULE returns)
- * - is on the working surface of the board (otherwise returns OUT_OF_BOARD)
- *
- * Returns OUT_OF_BOARD, or OCCUPED_By_MODULE or FREE_CELL if OK
- */
 int AR_AUTOPLACER::testRectangle( const EDA_RECT& aRect, int side )
 {
     EDA_RECT rect = aRect;
@@ -488,10 +485,6 @@ int AR_AUTOPLACER::testRectangle( const EDA_RECT& aRect, int side )
 }
 
 
-/* Calculates and returns the clearance area of the rectangular surface
- * aRect):
- * (Sum of cells in terms of distance)
- */
 unsigned int AR_AUTOPLACER::calculateKeepOutArea( const EDA_RECT& aRect, int side )
 {
     wxPoint start   = aRect.GetOrigin();
@@ -541,10 +534,6 @@ unsigned int AR_AUTOPLACER::calculateKeepOutArea( const EDA_RECT& aRect, int sid
 }
 
 
-/* Test if the footprint can be placed on the board.
- * Returns the value TstRectangle().
- * Module is known by its bounding box
- */
 int AR_AUTOPLACER::testFootprintOnBoard( FOOTPRINT* aFootprint, bool TstOtherSide,
                                          const wxPoint& aOffset )
 {
@@ -693,7 +682,8 @@ const PAD* AR_AUTOPLACER::nearestPad( FOOTPRINT *aRefFP, PAD* aRefPad, const wxP
             if( pad->GetNetCode() != aRefPad->GetNetCode() || pad->GetNetCode() <= 0 )
                 continue;
 
-            auto dist = (VECTOR2I( aRefPad->GetPosition() - aOffset ) - VECTOR2I( pad->GetPosition() ) ).EuclideanNorm();
+            auto dist = ( VECTOR2I( aRefPad->GetPosition() - aOffset ) -
+                          VECTOR2I( pad->GetPosition() ) ).EuclideanNorm();
 
             if ( dist < nearestDist )
             {
@@ -737,7 +727,7 @@ double AR_AUTOPLACER::computePlacementRatsnestCost( FOOTPRINT *aFootprint, const
         dx  = abs( dx );
         dy  = abs( dy );
 
-        // ttry to have always dx >= dy to calculate the cost of the rastsnet
+        // ttry to have always dx >= dy to calculate the cost of the ratsnest
         if( dx < dy )
             std::swap( dx, dy );
 
@@ -776,7 +766,7 @@ static bool sortFootprintsByRatsnestSize( FOOTPRINT* ref, FOOTPRINT* compare )
 }
 
 
-FOOTPRINT* AR_AUTOPLACER::pickFootprint( )
+FOOTPRINT* AR_AUTOPLACER::pickFootprint()
 {
     std::vector<FOOTPRINT*> fpList;
 
@@ -947,8 +937,8 @@ AR_RESULT AR_AUTOPLACER::AutoplaceFootprints( std::vector<FOOTPRINT*>& aFootprin
         //m_frame->SetStatusText( msg );
 
         if( m_progressReporter )
-            m_progressReporter->SetTitle( wxString::Format(
-                    _( "Autoplacing %s" ), footprint->GetReference() ) );
+            m_progressReporter->SetTitle( wxString::Format( _( "Autoplacing %s" ),
+                                                            footprint->GetReference() ) );
 
         double initialOrient = footprint->GetOrientation();
 
@@ -1061,6 +1051,7 @@ end_of_tst:
                 break;
             }
         }
+
         cnt++;
     }
 

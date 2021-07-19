@@ -2,7 +2,7 @@
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
  * Copyright (C) 2013-2015 CERN
- * Copyright (C) 2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2021 KiCad Developers, see AUTHORS.txt for contributors.
  * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -151,7 +151,7 @@ ITEM* TOPOLOGY::NearestUnconnectedItem( JOINT* aStart, int* aAnchor, int aKindMa
     }
 
     int best_dist = INT_MAX;
-    ITEM* best = NULL;
+    ITEM* best = nullptr;
 
     for( ITEM* item : disconnected )
     {
@@ -187,14 +187,14 @@ bool TOPOLOGY::followTrivialPath( LINE* aLine, bool aLeft, ITEM_SET& aSet,
     LINKED_ITEM* last   = aLeft ? aLine->Links().front() : aLine->Links().back();
     JOINT*       jt     = m_world->FindJoint( anchor, aLine );
 
-    assert( jt != NULL );
+    assert( jt != nullptr );
 
     aVisited.insert( last );
 
     if( jt->IsNonFanoutVia() || jt->IsTraceWidthChange() )
     {
-        ITEM* via = NULL;
-        SEGMENT* next_seg = NULL;
+        ITEM* via = nullptr;
+        SEGMENT* next_seg = nullptr;
 
         for( ITEM* link : jt->Links().Items() )
         {
@@ -450,22 +450,24 @@ bool TOPOLOGY::AssembleDiffPair( ITEM* aStart, DIFF_PAIR& aPair )
 
     m_world->AllItemsInNet( coupledNet, coupledItems );
 
-    SEGMENT* coupledSeg = NULL, *refSeg;
+    SEGMENT* coupledSeg = nullptr, *refSeg;
     int minDist = std::numeric_limits<int>::max();
 
-    if( ( refSeg = dyn_cast<SEGMENT*>( aStart ) ) != NULL )
+    if( ( refSeg = dyn_cast<SEGMENT*>( aStart ) ) != nullptr )
     {
         for( ITEM* item : coupledItems )
         {
             if( SEGMENT* s = dyn_cast<SEGMENT*>( item ) )
             {
-                if( s->Layers().Start() == refSeg->Layers().Start() && s->Width() == refSeg->Width() )
+                if( s->Layers().Start() == refSeg->Layers().Start() &&
+                    s->Width() == refSeg->Width() )
                 {
                     int dist = s->Seg().Distance( refSeg->Seg() );
                     bool isParallel = refSeg->Seg().ApproxParallel( s->Seg() );
                     SEG p_clip, n_clip;
 
-                    bool isCoupled = commonParallelProjection( refSeg->Seg(), s->Seg(), p_clip, n_clip );
+                    bool isCoupled = commonParallelProjection( refSeg->Seg(), s->Seg(), p_clip,
+                                                               n_clip );
 
                     if( isParallel && isCoupled && dist < minDist )
                     {
@@ -530,7 +532,8 @@ const std::set<ITEM*> TOPOLOGY::AssembleCluster( ITEM* aStart, int aLayer )
 
         for( OBSTACLE& obs : obstacles )
         {
-            if( visited.find( obs.m_item ) == visited.end() && obs.m_item->Layers().Overlaps( aLayer ) && !( obs.m_item->Marker() & MK_HEAD ) )
+            if( visited.find( obs.m_item ) == visited.end() &&
+                obs.m_item->Layers().Overlaps( aLayer ) && !( obs.m_item->Marker() & MK_HEAD ) )
             {
                 visited.insert( obs.m_item );
                 pending.push_back( obs.m_item );

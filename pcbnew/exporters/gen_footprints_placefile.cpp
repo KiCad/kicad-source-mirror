@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2015-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2015-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,7 +22,7 @@
  */
 
 /*
- *  1 - create ascii files for automatic placement of smd components
+ *  1 - create ASCII files for automatic placement of smd components
  *  2 - create a footprint report (pos and footprint descr) (ascii file)
  */
 
@@ -75,15 +75,6 @@ public:
     }
 
 private:
-    PCB_EDIT_FRAME* m_parent;
-    PCB_PLOT_PARAMS m_plotOpts;
-    REPORTER* m_reporter;
-
-    static int m_unitsOpt;
-    static int m_fileOpt;
-    static int m_fileFormat;
-    static bool m_includeBoardEdge;
-
     void initDialog();
     void OnOutputDirectoryBrowseClicked( wxCommandEvent& event ) override;
     void OnGenerate( wxCommandEvent& event ) override;
@@ -116,11 +107,13 @@ private:
         m_cbIncludeBoardEdge->Enable( m_rbFormat->GetSelection() == 2 );
     }
 
-    /** Creates files in text or csv format
+    /**
+     * Creates files in text or csv format
      */
     bool CreateAsciiFiles();
 
-    /** Creates placement files in gerber format
+    /**
+     * Creates placement files in gerber format
      */
     bool CreateGerberFiles();
 
@@ -139,6 +132,15 @@ private:
     {
         return m_excludeTH->GetValue();
     }
+
+    PCB_EDIT_FRAME* m_parent;
+    PCB_PLOT_PARAMS m_plotOpts;
+    REPORTER* m_reporter;
+
+    static int m_unitsOpt;
+    static int m_fileOpt;
+    static int m_fileFormat;
+    static bool m_includeBoardEdge;
 };
 
 
@@ -146,7 +148,6 @@ private:
 int DIALOG_GEN_FOOTPRINT_POSITION::m_fileOpt = 0;
 int DIALOG_GEN_FOOTPRINT_POSITION::m_fileFormat = 0;
 bool DIALOG_GEN_FOOTPRINT_POSITION::m_includeBoardEdge = false;
-
 
 
 void DIALOG_GEN_FOOTPRINT_POSITION::initDialog()
@@ -197,12 +198,14 @@ void DIALOG_GEN_FOOTPRINT_POSITION::OnOutputDirectoryBrowseClicked( wxCommandEve
         wxString boardFilePath = ( (wxFileName) m_parent->GetBoard()->GetFileName() ).GetPath();
 
         if( !dirName.MakeRelativeTo( boardFilePath ) )
-            wxMessageBox( _( "Cannot make path relative (target volume different from board file volume)!" ),
+            wxMessageBox( _( "Cannot make path relative (target volume different from board "
+                             "file volume)!" ),
                           _( "Plot Output Directory" ), wxOK | wxICON_ERROR );
     }
 
     m_outputDirectoryName->SetValue( dirName.GetFullPath() );
 }
+
 
 void DIALOG_GEN_FOOTPRINT_POSITION::OnGenerate( wxCommandEvent& event )
 {
@@ -233,6 +236,7 @@ void DIALOG_GEN_FOOTPRINT_POSITION::OnGenerate( wxCommandEvent& event )
     else
         CreateAsciiFiles();
 }
+
 
 bool DIALOG_GEN_FOOTPRINT_POSITION::CreateGerberFiles()
 {
@@ -364,10 +368,12 @@ bool DIALOG_GEN_FOOTPRINT_POSITION::CreateAsciiFiles()
     if( singleFile )
     {
         bottomSide = true;
-        fn.SetName( fn.GetName() + wxT( "-" ) + wxT("all") );
+        fn.SetName( fn.GetName() + wxT( "-" ) + wxT( "all" ) );
     }
     else
+    {
         fn.SetName( fn.GetName() + wxT( "-" ) + PLACE_FILE_EXPORTER::GetFrontSideName().c_str() );
+    }
 
 
     if( useCSVfmt )
@@ -376,7 +382,9 @@ bool DIALOG_GEN_FOOTPRINT_POSITION::CreateAsciiFiles()
         fn.SetExt( wxT( "csv" ) );
     }
     else
+    {
         fn.SetExt( FootprintPlaceFileExtension );
+    }
 
     int fpcount = m_parent->DoGenFootprintsPositionFile( fn.GetFullPath(), UnitsMM(),
                                                          ExcludeAllTH(), topSide, bottomSide,
@@ -419,7 +427,9 @@ bool DIALOG_GEN_FOOTPRINT_POSITION::CreateAsciiFiles()
         fn.SetExt( wxT( "csv" ) );
     }
     else
+    {
         fn.SetExt( FootprintPlaceFileExtension );
+    }
 
     fpcount = m_parent->DoGenFootprintsPositionFile( fn.GetFullPath(), UnitsMM(), ExcludeAllTH(),
                                                      topSide, bottomSide, useCSVfmt, useAuxOrigin );
@@ -470,13 +480,13 @@ int PCB_EDIT_FRAME::DoGenFootprintsPositionFile( const wxString& aFullFileName, 
                                                  bool aBottomSide, bool aFormatCSV,
                                                  bool aUseAuxOrigin )
 {
-    FILE * file = NULL;
+    FILE * file = nullptr;
 
     if( !aFullFileName.IsEmpty() )
     {
         file = wxFopen( aFullFileName, wxT( "wt" ) );
 
-        if( file == NULL )
+        if( file == nullptr )
             return -1;
     }
 
@@ -519,6 +529,7 @@ void PCB_EDIT_FRAME::GenFootprintsReport( wxCommandEvent& event )
     bool success = DoGenFootprintsReport( fn.GetFullPath(), unitMM );
 
     wxString msg;
+
     if( success )
     {
         msg.Printf( _( "Footprint report file created:\n'%s'." ), fn.GetFullPath() );
@@ -532,13 +543,12 @@ void PCB_EDIT_FRAME::GenFootprintsReport( wxCommandEvent& event )
     }
 }
 
-/* Print a footprint report.
- */
+
 bool PCB_EDIT_FRAME::DoGenFootprintsReport( const wxString& aFullFilename, bool aUnitsMM )
 {
     FILE* rptfile = wxFopen( aFullFilename, wxT( "wt" ) );
 
-    if( rptfile == NULL )
+    if( rptfile == nullptr )
         return false;
 
     std::string data;

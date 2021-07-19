@@ -280,7 +280,6 @@ void DIALOG_PRINT_PCBNEW::createLeftPanel()
     sizerLeft->Add( copperLabel, 0, wxRIGHT, 5 );
     sizerLeft->Add( m_listCopperLayers, 1, wxEXPAND | wxBOTTOM | wxRIGHT, 5 );
 
-
     // Technical layer list
     auto technicalLabel = new wxStaticText( sbLayersSizer->GetStaticBox(), wxID_ANY,
                                             _( "Technical layers:" ) );
@@ -290,12 +289,10 @@ void DIALOG_PRINT_PCBNEW::createLeftPanel()
     sizerRight->Add( technicalLabel, 0, wxLEFT, 5 );
     sizerRight->Add( m_listTechLayers, 1, wxEXPAND | wxBOTTOM | wxLEFT, 5 );
 
-
     // Layer list layout
     wxBoxSizer* bLayerListsSizer = new wxBoxSizer( wxHORIZONTAL );
     bLayerListsSizer->Add( sizerLeft, 1, wxEXPAND, 5 );
     bLayerListsSizer->Add( sizerRight, 1, wxEXPAND, 5 );
-
 
     // Select/Unselect all buttons
     m_buttonSelectAll = new wxButton( sbLayersSizer->GetStaticBox(), wxID_ANY, _( "Select all" ) );
@@ -303,9 +300,11 @@ void DIALOG_PRINT_PCBNEW::createLeftPanel()
                                         _( "Deselect all" ) );
 
     m_buttonSelectAll->Connect( wxEVT_COMMAND_BUTTON_CLICKED,
-            wxCommandEventHandler( DIALOG_PRINT_PCBNEW::onSelectAllClick ), NULL, this );
+                                wxCommandEventHandler( DIALOG_PRINT_PCBNEW::onSelectAllClick ),
+                                nullptr, this );
     m_buttonDeselectAll->Connect( wxEVT_COMMAND_BUTTON_CLICKED,
-            wxCommandEventHandler( DIALOG_PRINT_PCBNEW::onDeselectAllClick ), NULL, this );
+                                  wxCommandEventHandler( DIALOG_PRINT_PCBNEW::onDeselectAllClick ),
+                                  nullptr, this );
 
     wxBoxSizer* buttonSizer = new wxBoxSizer( wxHORIZONTAL );
     buttonSizer->Add( m_buttonSelectAll, 1, wxRIGHT | wxTOP | wxBOTTOM, 5 );

@@ -4,7 +4,7 @@
  * Copyright (C) 2012 Jean-Pierre Charras, jean-pierre.charras@ujf-grenoble.fr
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2012 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -211,11 +211,12 @@ void PCB_EDIT_FRAME::ReCreateHToolbar()
     else
     {
         m_mainToolBar = new ACTION_TOOLBAR( this, ID_H_TOOLBAR, wxDefaultPosition, wxDefaultSize,
-                                            KICAD_AUI_TB_STYLE | wxAUI_TB_HORZ_LAYOUT | wxAUI_TB_HORIZONTAL );
+                                            KICAD_AUI_TB_STYLE | wxAUI_TB_HORZ_LAYOUT |
+                                            wxAUI_TB_HORIZONTAL );
         m_mainToolBar->SetAuiManager( &m_auimgr );
 
-        // The layer indicator is special, so we register a callback directly that will regenerate the
-        // bitmap instead of using the conditions system
+        // The layer indicator is special, so we register a callback directly that will
+        // regenerate the bitmap instead of using the conditions system.
         auto layerIndicatorUpdate =
             [this] ( wxUpdateUIEvent& )
             {
@@ -508,7 +509,8 @@ void PCB_EDIT_FRAME::ReCreateAuxiliaryToolbar()
     }
     else
     {
-        m_auxiliaryToolBar = new ACTION_TOOLBAR( this, ID_AUX_TOOLBAR, wxDefaultPosition, wxDefaultSize,
+        m_auxiliaryToolBar = new ACTION_TOOLBAR( this, ID_AUX_TOOLBAR, wxDefaultPosition,
+                                                 wxDefaultSize,
                                                  KICAD_AUI_TB_STYLE | wxAUI_TB_HORZ_LAYOUT );
         m_auxiliaryToolBar->SetAuiManager( &m_auimgr );
     }
@@ -518,7 +520,7 @@ void PCB_EDIT_FRAME::ReCreateAuxiliaryToolbar()
     // Creates box to display and choose tracks widths:
     if( m_SelTrackWidthBox == nullptr )
         m_SelTrackWidthBox = new wxChoice( m_auxiliaryToolBar, ID_AUX_TOOLBAR_PCB_TRACK_WIDTH,
-                                           wxDefaultPosition, wxDefaultSize, 0, NULL );
+                                           wxDefaultPosition, wxDefaultSize, 0, nullptr );
 
     UpdateTrackWidthSelectBox( m_SelTrackWidthBox );
     m_auxiliaryToolBar->AddControl( m_SelTrackWidthBox );
@@ -539,7 +541,7 @@ void PCB_EDIT_FRAME::ReCreateAuxiliaryToolbar()
 
     if( m_SelViaSizeBox == nullptr )
         m_SelViaSizeBox = new wxChoice( m_auxiliaryToolBar, ID_AUX_TOOLBAR_PCB_VIA_SIZE,
-                                        wxDefaultPosition, wxDefaultSize, 0, NULL );
+                                        wxDefaultPosition, wxDefaultSize, 0, nullptr );
 
     UpdateViaSizeSelectBox( m_SelViaSizeBox );
     m_auxiliaryToolBar->AddControl( m_SelViaSizeBox );
@@ -549,7 +551,7 @@ void PCB_EDIT_FRAME::ReCreateAuxiliaryToolbar()
 
     if( m_gridSelectBox == nullptr )
         m_gridSelectBox = new wxChoice( m_auxiliaryToolBar, ID_ON_GRID_SELECT,
-                                        wxDefaultPosition, wxDefaultSize, 0, NULL );
+                                        wxDefaultPosition, wxDefaultSize, 0, nullptr );
 
     UpdateGridSelectBox();
 
@@ -560,7 +562,7 @@ void PCB_EDIT_FRAME::ReCreateAuxiliaryToolbar()
 
     if( m_zoomSelectBox == nullptr )
         m_zoomSelectBox = new wxChoice( m_auxiliaryToolBar, ID_ON_ZOOM_SELECT,
-                                        wxDefaultPosition, wxDefaultSize, 0, NULL );
+                                        wxDefaultPosition, wxDefaultSize, 0, nullptr );
 
     UpdateZoomSelectBox();
     m_auxiliaryToolBar->AddControl( m_zoomSelectBox );
@@ -624,7 +626,7 @@ static wxString ComboBoxUnits( EDA_UNITS aUnits, double aValue, bool aIncludeLab
 
 void PCB_EDIT_FRAME::UpdateTrackWidthSelectBox( wxChoice* aTrackWidthSelectBox, bool aEdit )
 {
-    if( aTrackWidthSelectBox == NULL )
+    if( aTrackWidthSelectBox == nullptr )
         return;
 
     EDA_UNITS primaryUnit;
@@ -663,7 +665,7 @@ void PCB_EDIT_FRAME::UpdateTrackWidthSelectBox( wxChoice* aTrackWidthSelectBox, 
 
 void PCB_EDIT_FRAME::UpdateViaSizeSelectBox( wxChoice* aViaSizeSelectBox, bool aEdit )
 {
-    if( aViaSizeSelectBox == NULL )
+    if( aViaSizeSelectBox == nullptr )
         return;
 
     aViaSizeSelectBox->Clear();
@@ -731,7 +733,7 @@ void PCB_EDIT_FRAME::UpdateViaSizeSelectBox( wxChoice* aViaSizeSelectBox, bool a
 
 void PCB_EDIT_FRAME::ReCreateLayerBox( bool aForceResizeToolbar )
 {
-    if( m_SelLayerBox == NULL || m_mainToolBar == NULL )
+    if( m_SelLayerBox == nullptr || m_mainToolBar == nullptr )
         return;
 
     m_SelLayerBox->SetToolTip( _( "+/- to switch" ) );

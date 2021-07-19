@@ -51,16 +51,18 @@
 #include <reporter.h>
 #include <gbr_metadata.h>
 
+
 // Oblong holes can be drilled by a "canned slot" command (G85) or a routing command
 // a linear routing command (G01) is perhaps more usual for drill files
 //
 // set m_useRouteModeForOval to false to use a canned slot hole (old way)
 // set m_useRouteModeForOval to true (preferred mode) to use a linear routed hole (new way)
 
+
 EXCELLON_WRITER::EXCELLON_WRITER( BOARD* aPcb )
     : GENDRILL_WRITER_BASE( aPcb )
 {
-    m_file = NULL;
+    m_file = nullptr;
     m_zeroFormat      = DECIMAL_FORMAT;
     m_conversionUnits = 0.0001;
     m_mirror = false;
@@ -108,13 +110,14 @@ void EXCELLON_WRITER::CreateDrillandMapFilesSet( const wxString& aPlotDirectory,
 
                 FILE* file = wxFopen( fullFilename, wxT( "w" ) );
 
-                if( file == NULL )
+                if( file == nullptr )
                 {
                     if( aReporter )
                     {
                         msg.Printf( _( "Failed to create file '%s'." ), fullFilename );
                         aReporter->Report( msg, RPT_SEVERITY_ERROR );
                     }
+
                     break;
                 }
                 else
@@ -205,6 +208,7 @@ int EXCELLON_WRITER::createDrillFile( FILE* aFile, DRILL_LAYER_PAIR aLayerPair,
 #if USE_ATTRIB_FOR_HOLES
         writeHoleAttribute( tool_descr.m_HoleAttribute );
 #endif
+
         // if units are mm, the resolution is 0.001 mm (3 digits in mantissa)
         // if units are inches, the resolution is 0.1 mil (4 digits in mantissa)
         if( m_unitsMetric )
@@ -344,10 +348,8 @@ int EXCELLON_WRITER::createDrillFile( FILE* aFile, DRILL_LAYER_PAIR aLayerPair,
 }
 
 
-void EXCELLON_WRITER::SetFormat( bool      aMetric,
-                                 ZEROS_FMT aZerosFmt,
-                                 int       aLeftDigits,
-                                 int       aRightDigits )
+void EXCELLON_WRITER::SetFormat( bool aMetric, ZEROS_FMT aZerosFmt, int aLeftDigits,
+                                 int aRightDigits )
 {
     m_unitsMetric = aMetric;
     m_zeroFormat   = aZerosFmt;
@@ -477,8 +479,7 @@ void EXCELLON_WRITER::writeCoordinates( char* aLine, double aCoordX, double aCoo
 }
 
 
-void EXCELLON_WRITER::writeEXCELLONHeader( DRILL_LAYER_PAIR aLayerPair,
-                                           TYPE_FILE aHolesType )
+void EXCELLON_WRITER::writeEXCELLONHeader( DRILL_LAYER_PAIR aLayerPair, TYPE_FILE aHolesType )
 {
     fputs( "M48\n", m_file );    // The beginning of a header
 
@@ -567,7 +568,7 @@ void EXCELLON_WRITER::writeEXCELLONHeader( DRILL_LAYER_PAIR aLayerPair,
 
 void EXCELLON_WRITER::writeEXCELLONEndOfFile()
 {
-    //add if minimal here
+    // add if minimal here
     fputs( "T0\nM30\n", m_file );
     fclose( m_file );
 }

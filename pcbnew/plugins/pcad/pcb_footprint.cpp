@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2007, 2008 Lubo Racko <developer@lura.sk>
  * Copyright (C) 2007, 2008, 2012-2013 Alexander Lunev <al.lunev@yahoo.com>
- * Copyright (C) 2012-2020 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2012-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -44,6 +44,7 @@
 
 namespace PCAD2KICAD {
 
+
 PCB_FOOTPRINT::PCB_FOOTPRINT( PCB_CALLBACKS* aCallbacks, BOARD* aBoard ) :
         PCB_COMPONENT( aCallbacks, aBoard )
 {
@@ -70,7 +71,7 @@ XNODE* PCB_FOOTPRINT::FindModulePatternDefName( XNODE* aNode, const wxString& aN
     XNODE*      result, * lNode;
     wxString    propValue1, propValue2;
 
-    result  = NULL;
+    result  = nullptr;
     lNode   = FindNode( aNode, wxT( "patternDef" ) );
 
     while( lNode )
@@ -81,11 +82,10 @@ XNODE* PCB_FOOTPRINT::FindModulePatternDefName( XNODE* aNode, const wxString& aN
             FindNode( lNode,
                       wxT( "originalName" ) )->GetAttribute( wxT( "Name" ), &propValue2 );
 
-            if( ValidateName( propValue1 ) == aName
-                || ValidateName( propValue2 ) == aName )
+            if( ValidateName( propValue1 ) == aName || ValidateName( propValue2 ) == aName )
             {
                 result  = lNode;
-                lNode   = NULL;
+                lNode   = nullptr;
             }
         }
 
@@ -93,7 +93,7 @@ XNODE* PCB_FOOTPRINT::FindModulePatternDefName( XNODE* aNode, const wxString& aN
             lNode = lNode->GetNext();
     }
 
-    if( result == NULL )
+    if( result == nullptr )
     {
         lNode = FindNode( aNode, wxT( "patternDefExtended" ) );  // New file format
 
@@ -106,7 +106,7 @@ XNODE* PCB_FOOTPRINT::FindModulePatternDefName( XNODE* aNode, const wxString& aN
                 if( ValidateName( propValue1 ) == aName )
                 {
                     result  = lNode;
-                    lNode   = NULL;
+                    lNode   = nullptr;
                 }
             }
 
@@ -124,7 +124,7 @@ XNODE* PCB_FOOTPRINT::FindPatternMultilayerSection( XNODE* aNode, wxString* aPat
     XNODE*      result, * pNode, * lNode;
     wxString    propValue, patName;
 
-    result  = NULL;
+    result  = nullptr;
     pNode   = aNode; // pattern;
     lNode   = aNode;
 
@@ -148,7 +148,7 @@ XNODE* PCB_FOOTPRINT::FindPatternMultilayerSection( XNODE* aNode, wxString* aPat
         pNode   = lNode; // pattern;
     }
 
-    lNode = NULL;
+    lNode = nullptr;
 
     if( pNode )
         lNode = FindNode( pNode, wxT( "multiLayer" ) );  // Old file format
@@ -182,7 +182,7 @@ XNODE* PCB_FOOTPRINT::FindPatternMultilayerSection( XNODE* aNode, wxString* aPat
             if( lNode )
             {
                 result  = FindNode( lNode, wxT( "multiLayer" ) );
-                lNode   = NULL;
+                lNode   = nullptr;
             }
         }
 
@@ -197,13 +197,17 @@ XNODE* PCB_FOOTPRINT::FindPatternMultilayerSection( XNODE* aNode, wxString* aPat
                 if( propValue == *aPatGraphRefName )
                 {
                     result  = FindNode( lNode, wxT( "multiLayer" ) );
-                    lNode   = NULL;
+                    lNode   = nullptr;
                 }
                 else
+                {
                     lNode = lNode->GetNext();
+                }
             }
             else
+            {
                 lNode = lNode->GetNext();
+            }
         }
     }
 
@@ -211,16 +215,14 @@ XNODE* PCB_FOOTPRINT::FindPatternMultilayerSection( XNODE* aNode, wxString* aPat
 }
 
 
-void PCB_FOOTPRINT::DoLayerContentsObjects( XNODE*                 aNode,
-                                            PCB_FOOTPRINT*            aFootprint,
-                                            PCB_COMPONENTS_ARRAY*  aList,
-                                            wxStatusBar*           aStatusBar,
-                                            const wxString&        aDefaultMeasurementUnit,
-                                            const wxString&        aActualConversion )
+void PCB_FOOTPRINT::DoLayerContentsObjects( XNODE* aNode, PCB_FOOTPRINT* aFootprint,
+                                            PCB_COMPONENTS_ARRAY* aList, wxStatusBar* aStatusBar,
+                                            const wxString& aDefaultMeasurementUnit,
+                                            const wxString& aActualConversion )
 {
     PCB_ARC*            arc;
     PCB_POLYGON*        polygon;
-    PCB_POLYGON         *plane_layer = NULL;
+    PCB_POLYGON         *plane_layer = nullptr;
     PCB_COPPER_POUR*    copperPour;
     PCB_CUTOUT*         cutout;
     PCB_PLANE*          plane;
@@ -234,6 +236,7 @@ void PCB_FOOTPRINT::DoLayerContentsObjects( XNODE*                 aNode,
     long                num = 0;
 
     i = 0;
+
     // aStatusBar->SetStatusText( wxT( "Processing LAYER CONTENT OBJECTS " ) );
     if( FindNode( aNode, wxT( "layerNumRef" ) ) )
         FindNode( aNode, wxT( "layerNumRef" ) )->GetNodeContent().ToLong( &num );
@@ -294,9 +297,7 @@ void PCB_FOOTPRINT::DoLayerContentsObjects( XNODE*                 aNode,
                     // function CreatePCBModule(). However it is not clear whether the access is
                     // required when the function DoLayerContentsObjects() is called from
                     // function ProcessXMLtoPCBLib().
-                    SetFontProperty( tNode,
-                                     &aFootprint->m_name,
-                                     aDefaultMeasurementUnit,
+                    SetFontProperty( tNode, &aFootprint->m_name, aDefaultMeasurementUnit,
                                      aActualConversion );
                 }
             }
@@ -316,15 +317,15 @@ void PCB_FOOTPRINT::DoLayerContentsObjects( XNODE*                 aNode,
             {
                 plane_layer_polygon = new VERTICES_ARRAY;
                 wxASSERT( plane_layer );
-                plane_layer->FormPolygon( lNode, plane_layer_polygon, aDefaultMeasurementUnit, aActualConversion );
+                plane_layer->FormPolygon( lNode, plane_layer_polygon, aDefaultMeasurementUnit,
+                                          aActualConversion );
                 plane_layer->m_cutouts.Add( plane_layer_polygon );
             }
             else
             {
                 polygon = new PCB_POLYGON( m_callbacks, m_board, PCadLayer );
-                if( polygon->Parse( lNode,
-                                    aDefaultMeasurementUnit,
-                                    aActualConversion ) )
+
+                if( polygon->Parse( lNode, aDefaultMeasurementUnit, aActualConversion ) )
                     aList->Add( polygon );
                 else
                     delete polygon;
@@ -376,15 +377,15 @@ void PCB_FOOTPRINT::SetName( const wxString& aPin, const wxString& aName )
     for( i = 0; i < (int) m_FootprintItems.GetCount(); i++ )
     {
         if( m_FootprintItems[i]->m_objType == wxT( 'P' ) )
-            if(( (PCB_PAD*) m_FootprintItems[i] )->m_Number == num )
+        {
+            if( ( (PCB_PAD*) m_FootprintItems[i] )->m_Number == num )
                 ( (PCB_PAD*) m_FootprintItems[i] )->m_name.text = aName;
-
-
+        }
     }
 }
 
 
-void PCB_FOOTPRINT::Parse( XNODE*   aNode, wxStatusBar* aStatusBar,
+void PCB_FOOTPRINT::Parse( XNODE* aNode, wxStatusBar* aStatusBar,
                            const wxString& aDefaultMeasurementUnit,
                            const wxString& aActualConversion )
 {
@@ -393,8 +394,7 @@ void PCB_FOOTPRINT::Parse( XNODE*   aNode, wxStatusBar* aStatusBar,
     PCB_VIA*    via;
     wxString    propValue, str;
 
-    FindNode( aNode, wxT( "originalName" ) )->GetAttribute( wxT( "Name" ),
-                                                            &propValue );
+    FindNode( aNode, wxT( "originalName" ) )->GetAttribute( wxT( "Name" ), &propValue );
     propValue.Trim( false );
     m_name.text = propValue;
 
@@ -524,6 +524,7 @@ void PCB_FOOTPRINT::AddToBoard()
     ref_text->SetType( FP_TEXT::TEXT_is_REFERENCE );
 
     ref_text->SetPos0( wxPoint( m_name.correctedPositionX, m_name.correctedPositionY ) );
+
     if( m_name.isTrueType )
         SetTextSizeFromTrueTypeFontHeight( ref_text, m_name.textHeight );
     else
@@ -551,6 +552,7 @@ void PCB_FOOTPRINT::AddToBoard()
     val_text->SetType( FP_TEXT::TEXT_is_VALUE );
 
     val_text->SetPos0( wxPoint( m_Value.correctedPositionX, m_Value.correctedPositionY ) );
+
     if( m_Value.isTrueType )
         SetTextSizeFromTrueTypeFontHeight( val_text, m_Value.textHeight );
     else

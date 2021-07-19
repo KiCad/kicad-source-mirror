@@ -4,8 +4,8 @@
  * Copyright (C) 2012 Jean-Pierre Charras, jean-pierre.charras@ujf-grenoble.fr
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2016 CERN
+ * Copyright (C) 2012-2021 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Maciej Suminski <maciej.suminski@cern.ch>
- * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -98,19 +98,18 @@ using namespace std::placeholders;
 
 
 /**
- * Function TestForExistingItem
  * Test if aItem exists somewhere in undo/redo lists of items.  Used by PutDataInPreviousState
  * to be sure an item was not deleted since an undo or redo.
+ *
  * This could be possible:
  *   - if a call to SaveCopyInUndoList was forgotten in Pcbnew
  *   - in zones outlines, when a change in one zone merges this zone with an other
  * Before using this function to test existence of items, it must be called with aItem = NULL to
- * prepare the list
- * @param aPcb = board to test
- * @param aItem = item to find
- *              = NULL to build the list of existing items
+ * prepare the list.
+ *
+ * @param aPcb is the board to test.
+ * @param aItem is the item to find or NULL to build the list of existing items.
  */
-
 static bool TestForExistingItem( BOARD* aPcb, BOARD_ITEM* aItem )
 {
     for( PCB_TRACK* item : aPcb->Tracks() )
@@ -157,7 +156,7 @@ static bool TestForExistingItem( BOARD* aPcb, BOARD_ITEM* aItem )
 
 static void SwapItemData( BOARD_ITEM* aItem, BOARD_ITEM* aImage )
 {
-    if( aImage == NULL )
+    if( aImage == nullptr )
         return;
 
     wxASSERT( aItem->Type() == aImage->Type() );
@@ -274,11 +273,12 @@ void PCB_BASE_EDIT_FRAME::SaveCopyInUndoList( const PICKED_ITEMS_LIST& aItemsLis
              * in the picker, as link
              * If this link is not null, the copy is already done
              */
-            if( commandToUndo->GetPickedItemLink( ii ) == NULL )
+            if( commandToUndo->GetPickedItemLink( ii ) == nullptr )
             {
                 EDA_ITEM* cloned = item->Clone();
                 commandToUndo->SetPickedItemLink( cloned, ii );
             }
+
             break;
 
         case UNDO_REDO::NEWITEM:
@@ -289,12 +289,9 @@ void PCB_BASE_EDIT_FRAME::SaveCopyInUndoList( const PICKED_ITEMS_LIST& aItemsLis
             break;
 
         default:
-        {
             wxFAIL_MSG( wxString::Format( "SaveCopyInUndoList() error (unknown code %X)",
-                   command ) );
-        }
-        break;
-
+                                          command ) );
+            break;
         }
     }
 
@@ -468,8 +465,8 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
             view->Hide( item, false );
             connectivity->Add( item );
             item->GetBoard()->OnItemChanged( item );
+            break;
         }
-        break;
 
         case UNDO_REDO::NEWITEM:        /* new items are deleted */
             aList->SetPickedItemStatus( UNDO_REDO::DELETED, ii );
@@ -517,8 +514,9 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
                 BOARD_EDITOR_CONTROL::DoSetDrillOrigin( view, this, item, origin );
             else
                 PCB_CONTROL::DoSetGridOrigin( view, this, item, origin );
+
+            break;
         }
-        break;
 
         case UNDO_REDO::PAGESETTINGS:
         {
@@ -527,12 +525,12 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
             DS_PROXY_UNDO_ITEM* item = static_cast<DS_PROXY_UNDO_ITEM*>( eda_item );
             item->Restore( this );
             *item = alt_item;
+            break;
         }
-        break;
 
         default:
             wxFAIL_MSG( wxString::Format( "PutDataInPreviousState() error (unknown code %X)",
-                    aList->GetPickedItemStatus( ii ) ) );
+                                          aList->GetPickedItemStatus( ii ) ) );
             break;
         }
     }

@@ -2,7 +2,7 @@
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
  * Copyright (C) 2013-2014 CERN
- * Copyright (C) 2016-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2021 KiCad Developers, see AUTHORS.txt for contributors.
  * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -34,8 +34,8 @@ DRAGGER::DRAGGER( ROUTER* aRouter ) :
     m_initialVia( {} ),
     m_draggedVia( {} )
 {
-    m_world = NULL;
-    m_lastNode = NULL;
+    m_world = nullptr;
+    m_lastNode = nullptr;
     m_mode = DM_SEGMENT;
     m_draggedSegmentIndex = 0;
     m_dragStatus = false;
@@ -211,7 +211,7 @@ bool DRAGGER::Start( const VECTOR2I& aP, ITEM_SET& aPrimitives )
 
     ITEM* startItem = aPrimitives[0];
 
-    m_lastNode = NULL;
+    m_lastNode = nullptr;
     m_draggedItems.Clear();
     m_currentMode = Settings().Mode();
     m_freeAngleMode = (m_mode & DM_FREE_ANGLE);
@@ -229,7 +229,8 @@ bool DRAGGER::Start( const VECTOR2I& aP, ITEM_SET& aPrimitives )
 
     startItem->Unmark( MK_LOCKED );
 
-    PNS_DBG( Dbg(), Message, wxString::Format( "StartDragging: item %p [kind %d]", startItem, (int) startItem->Kind() ) );
+    PNS_DBG( Dbg(), Message, wxString::Format( "StartDragging: item %p [kind %d]",
+                                               startItem, (int) startItem->Kind() ) );
 
     switch( startItem->Kind() )
     {
@@ -411,7 +412,8 @@ bool DRAGGER::dragViaWalkaround( const VIA_HANDLE& aHandle, NODE* aNode, const V
             LINE draggedLine( *l );
             LINE walkLine( *l );
 
-            draggedLine.DragCorner( viaTargetPos, origLine.CLine().Find( aHandle.pos ), m_freeAngleMode );
+            draggedLine.DragCorner( viaTargetPos, origLine.CLine().Find( aHandle.pos ),
+                                    m_freeAngleMode );
             draggedLine.ClearLinks();
 
             if ( m_world->CheckColliding( &draggedLine ) )
@@ -526,7 +528,8 @@ bool DRAGGER::tryWalkaround( NODE* aNode, LINE& aOrig, LINE& aWalk )
 bool DRAGGER::dragWalkaround( const VECTOR2I& aP )
 {
     bool ok = false;
-// fixme: rewrite using shared_ptr...
+
+    // fixme: rewrite using shared_ptr...
     if( m_lastNode )
     {
         delete m_lastNode;
@@ -569,7 +572,8 @@ bool DRAGGER::dragWalkaround( const VECTOR2I& aP )
             m_lastNode->Remove( origLine );
             optimizeAndUpdateDraggedLine( draggedWalk, origLine, aP );
         }
-    break;
+
+        break;
     }
     case DM_VIA: // fixme...
     {
@@ -591,7 +595,7 @@ bool DRAGGER::dragShove( const VECTOR2I& aP )
     if( m_lastNode )
     {
         delete m_lastNode;
-        m_lastNode = NULL;
+        m_lastNode = nullptr;
     }
 
     switch( m_mode )
@@ -614,7 +618,9 @@ bool DRAGGER::dragShove( const VECTOR2I& aP )
         SHOVE::SHOVE_STATUS st = m_shove->ShoveLines( dragged );
 
         if( st == SHOVE::SH_OK )
+        {
             ok = true;
+        }
         else if( st == SHOVE::SH_HEAD_MODIFIED )
         {
             dragged = m_shove->NewHead();

@@ -3,8 +3,8 @@
  *
  * Copyright (C) 2012 Jean-Pierre Charras, jean-pierre.charras@ujf-grenoble.fr
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2012 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2012 Wayne Stambaugh <stambaughw@gmail.com>
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -289,12 +289,13 @@ void PCB_DIMENSION_BASE::Mirror( const wxPoint& axis_pos, bool aMirrorLeftRight 
 }
 
 
-void PCB_DIMENSION_BASE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList )
+void PCB_DIMENSION_BASE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame,
+                                          std::vector<MSG_PANEL_ITEM>& aList )
 {
     // for now, display only the text within the DIMENSION using class PCB_TEXT.
     wxString    msg;
 
-    wxCHECK_RET( m_parent != NULL, wxT( "PCB_TEXT::GetMsgPanelInfo() m_Parent is NULL." ) );
+    wxCHECK_RET( m_parent != nullptr, wxT( "PCB_TEXT::GetMsgPanelInfo() m_Parent is NULL." ) );
 
     aList.emplace_back( _( "Dimension" ), m_text.GetShownText() );
 
@@ -436,9 +437,7 @@ const EDA_RECT PCB_DIMENSION_BASE::GetBoundingBox() const
 
 wxString PCB_DIMENSION_BASE::GetSelectMenuText( EDA_UNITS aUnits ) const
 {
-    return wxString::Format( _( "Dimension '%s' on %s" ),
-                             GetText(),
-                             GetLayerName() );
+    return wxString::Format( _( "Dimension '%s' on %s" ), GetText(), GetLayerName() );
 }
 
 
@@ -471,6 +470,7 @@ OPT_VECTOR2I PCB_DIMENSION_BASE::segPolyIntersection( const SHAPE_POLY_SET& aPol
                 endpoint = *intersection;
         }
     }
+
     if( start == endpoint )
         return NULLOPT;
 
@@ -528,6 +528,7 @@ void PCB_DIM_ALIGNED::SwapData( BOARD_ITEM* aImage )
 
     Update();
 }
+
 
 BITMAPS PCB_DIM_ALIGNED::GetMenuImage() const
 {
@@ -830,6 +831,7 @@ void PCB_DIM_ORTHOGONAL::updateText()
         int textOffsetDistance = m_text.GetEffectiveTextPenWidth() + m_text.GetTextHeight();
 
         VECTOR2I textOffset;
+
         if( m_orientation == DIR::HORIZONTAL )
             textOffset.y = -textOffsetDistance;
         else
@@ -847,6 +849,7 @@ void PCB_DIM_ORTHOGONAL::updateText()
     if( m_keepTextAligned )
     {
         double textAngle;
+
         if( abs( crossbarCenter.x ) > abs( crossbarCenter.y ) )
             textAngle = 0;
         else

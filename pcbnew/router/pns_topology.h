@@ -2,7 +2,7 @@
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
  * Copyright (C) 2013-2015 CERN
- * Copyright (C) 2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2021 KiCad Developers, see AUTHORS.txt for contributors.
  * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -47,7 +47,8 @@ public:
     ~TOPOLOGY() {};
 
     bool SimplifyLine( LINE *aLine );
-    ITEM* NearestUnconnectedItem( JOINT* aStart, int* aAnchor = NULL, int aKindMask = ITEM::ANY_T );
+    ITEM* NearestUnconnectedItem( JOINT* aStart, int* aAnchor = nullptr,
+                                  int aKindMask = ITEM::ANY_T );
     bool LeadingRatLine( const LINE* aTrack, SHAPE_LINE_CHAIN& aRatLine );
 
     const JOINT_SET ConnectedJoints( JOINT* aStart );
@@ -56,10 +57,11 @@ public:
     int64_t ShortestConnectionLength( ITEM* aFrom, ITEM* aTo );
 
     /**
-     * Assembles a trivial path between two joints given a starting item
-     * @param aStart is the item to assemble from
-     * @param aTerminalJoints will be filled with the start and end points of the assembled path
-     * @return a set of items in the path
+     * Assemble a trivial path between two joints given a starting item.
+     *
+     * @param aStart is the item to assemble from.
+     * @param aTerminalJoints will be filled with the start and end points of the assembled path.
+     * @return a set of items in the path.
      */
     const ITEM_SET AssembleTrivialPath( ITEM* aStart,
                                         std::pair<JOINT*, JOINT*>* aTerminalJoints = nullptr );
@@ -69,12 +71,12 @@ public:
      * that are fully inside pads, and truncates segments that cross into a pad (adding a straight-
      * line segment from the intersection to the pad anchor).
      *
-     * NOTE: When changing this, sync with BOARD::GetTrackLength()
+     * @note When changing this, sync with BOARD::GetTrackLength()
      *
-     * @param aStart is the item to assemble a path from
-     * @param aStartPad will be filled with the starting pad of the path, if found
-     * @param aEndPad will be filled with the ending pad of the path, if found
-     * @return an item set containing all the items in the path
+     * @param aStart is the item to assemble a path from.
+     * @param aStartPad will be filled with the starting pad of the path, if found.
+     * @param aEndPad will be filled with the ending pad of the path, if found.
+     * @return an item set containing all the items in the path.
      */
     const ITEM_SET AssembleTuningPath( ITEM* aStart, SOLID** aStartPad = nullptr,
                                        SOLID** aEndPad = nullptr );

@@ -34,11 +34,11 @@
 namespace PNS {
 
 /**
- * Represents a 2D point on a given set of layers and belonging to a certain net, that links
+ * A 2D point on a given set of layers and belonging to a certain net, that links
  * together a number of board items.
  *
  * A hash table of joints is used by the router to follow connectivity between the items.
- **/
+ */
 class JOINT : public ITEM
 {
 public:
@@ -92,7 +92,7 @@ public:
     ITEM* Clone( ) const override
     {
         assert( false );
-        return NULL;
+        return nullptr;
     }
 
     ///< Return true if the joint is a trivial line corner, connecting two
@@ -159,7 +159,7 @@ public:
     LINKED_ITEM* NextSegment( ITEM* aCurrent ) const
     {
         if( !IsLineCorner() )
-            return NULL;
+            return nullptr;
 
         return static_cast<LINKED_ITEM*>( m_linkedItems[m_linkedItems[0] == aCurrent ? 1 : 0] );
     }
@@ -172,7 +172,7 @@ public:
                 return static_cast<VIA*>( item );
         }
 
-        return NULL;
+        return nullptr;
     }
 
 

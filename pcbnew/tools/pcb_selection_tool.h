@@ -220,8 +220,8 @@ private:
      * @return True if an item was selected, false otherwise.
      */
     bool selectPoint( const VECTOR2I& aWhere, bool aOnDrag = false,
-                      bool* aSelectionCancelledFlag = NULL,
-                      CLIENT_SELECTION_FILTER aClientFilter = NULL );
+                      bool* aSelectionCancelledFlag = nullptr,
+                      CLIENT_SELECTION_FILTER aClientFilter = nullptr );
 
     /**
      * Select an item under the cursor unless there is something already selected or
@@ -232,7 +232,7 @@ private:
      * @return true if eventually there is an item selected, false otherwise.
      */
     bool selectCursor( bool aForceSelect = false,
-                       CLIENT_SELECTION_FILTER aClientFilter = NULL );
+                       CLIENT_SELECTION_FILTER aClientFilter = nullptr );
 
     /**
      * Handle drawing a selection box that allows one to select many items at the same time.

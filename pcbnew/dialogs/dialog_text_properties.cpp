@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2004-2018 Jean-Pierre Charras jp.charras at wanadoo.fr
- * Copyright (C) 2010-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2010-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -37,6 +37,7 @@
 #include <wx/valnum.h>
 #include <math/util.h>      // for KiROUND
 #include <scintilla_tricks.h>
+
 
 DIALOG_TEXT_PROPERTIES::DIALOG_TEXT_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, BOARD_ITEM* aItem ) :
     DIALOG_TEXT_PROPERTIES_BASE( aParent ),
@@ -158,7 +159,8 @@ DIALOG_TEXT_PROPERTIES::DIALOG_TEXT_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, BO
 
     // wxTextCtrls fail to generate wxEVT_CHAR events when the wxTE_MULTILINE flag is set,
     // so we have to listen to wxEVT_CHAR_HOOK events instead.
-    Connect( wxEVT_CHAR_HOOK, wxKeyEventHandler( DIALOG_TEXT_PROPERTIES::OnCharHook ), NULL, this );
+    Connect( wxEVT_CHAR_HOOK, wxKeyEventHandler( DIALOG_TEXT_PROPERTIES::OnCharHook ),
+             nullptr, this );
 
     finishDialogSettings();
 }
@@ -166,13 +168,13 @@ DIALOG_TEXT_PROPERTIES::DIALOG_TEXT_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, BO
 
 DIALOG_TEXT_PROPERTIES::~DIALOG_TEXT_PROPERTIES()
 {
-    Disconnect( wxEVT_CHAR_HOOK, wxKeyEventHandler( DIALOG_TEXT_PROPERTIES::OnCharHook ), NULL, this );
+    Disconnect( wxEVT_CHAR_HOOK, wxKeyEventHandler( DIALOG_TEXT_PROPERTIES::OnCharHook ),
+                nullptr, this );
 
     delete m_scintillaTricks;
 }
 
 
-// Launch the text properties dialog in quasi modal mode.
 void PCB_BASE_EDIT_FRAME::ShowTextPropertiesDialog( BOARD_ITEM* aText )
 {
     DIALOG_TEXT_PROPERTIES dlg( this, aText );

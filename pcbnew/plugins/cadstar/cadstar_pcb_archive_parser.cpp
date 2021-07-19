@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2020 Roberto Fernandez Bautista <roberto.fer.bau@gmail.com>
- * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -141,7 +141,7 @@ void CADSTAR_PCB_ARCHIVE_PARSER::LAYERDEFS::Parse( XNODE* aNode, PARSER_CONTEXT*
 {
     wxASSERT( aNode->GetName() == wxT( "LAYERDEFS" ) );
 
-    wxXmlAttribute* xmlAttribute = NULL;
+    wxXmlAttribute* xmlAttribute = nullptr;
 
     XNODE* cNode = aNode->GetChildren();
 
@@ -592,7 +592,8 @@ void CADSTAR_PCB_ARCHIVE_PARSER::COPPERCODE::Parse( XNODE* aNode, PARSER_CONTEXT
 }
 
 
-void CADSTAR_PCB_ARCHIVE_PARSER::SPACINGCODE::REASSIGN::Parse( XNODE* aNode, PARSER_CONTEXT* aContext )
+void CADSTAR_PCB_ARCHIVE_PARSER::SPACINGCODE::REASSIGN::Parse( XNODE* aNode,
+                                                               PARSER_CONTEXT* aContext )
 {
     wxASSERT( aNode->GetName() == wxT( "SPACEREASSIGN" ) );
 
@@ -976,6 +977,7 @@ void CADSTAR_PCB_ARCHIVE_PARSER::TECHNOLOGY_SECTION::Parse( XNODE* aNode, PARSER
     }
 }
 
+
 CADSTAR_PCB_ARCHIVE_PARSER::PAD_SIDE CADSTAR_PCB_ARCHIVE_PARSER::GetPadSide(
         const wxString& aPadSideString )
 {
@@ -1231,7 +1233,8 @@ void CADSTAR_PCB_ARCHIVE_PARSER::DIMENSION::ARROW::Parse( XNODE* aNode, PARSER_C
 }
 
 
-void CADSTAR_PCB_ARCHIVE_PARSER::DIMENSION::TEXTFORMAT::Parse( XNODE* aNode, PARSER_CONTEXT* aContext )
+void CADSTAR_PCB_ARCHIVE_PARSER::DIMENSION::TEXTFORMAT::Parse( XNODE* aNode,
+                                                               PARSER_CONTEXT* aContext )
 {
     wxASSERT( aNode->GetName() == wxT( "DIMTEXT" ) );
 
@@ -1256,7 +1259,8 @@ void CADSTAR_PCB_ARCHIVE_PARSER::DIMENSION::TEXTFORMAT::Parse( XNODE* aNode, PAR
 }
 
 
-void CADSTAR_PCB_ARCHIVE_PARSER::DIMENSION::EXTENSION_LINE::Parse( XNODE* aNode, PARSER_CONTEXT* aContext )
+void CADSTAR_PCB_ARCHIVE_PARSER::DIMENSION::EXTENSION_LINE::Parse( XNODE* aNode,
+                                                                   PARSER_CONTEXT* aContext )
 {
     wxASSERT( aNode->GetName() == wxT( "EXTLINE" ) );
 
@@ -1931,7 +1935,8 @@ void CADSTAR_PCB_ARCHIVE_PARSER::NET_PCB::PIN::Parse( XNODE* aNode, PARSER_CONTE
 }
 
 
-void CADSTAR_PCB_ARCHIVE_PARSER::NET_PCB::JUNCTION_PCB::Parse( XNODE* aNode, PARSER_CONTEXT* aContext )
+void CADSTAR_PCB_ARCHIVE_PARSER::NET_PCB::JUNCTION_PCB::Parse( XNODE* aNode,
+                                                               PARSER_CONTEXT* aContext )
 {
     ParseIdentifiers( aNode, aContext );
     XNODE* cNode = aNode->GetChildren();
@@ -1980,7 +1985,8 @@ void CADSTAR_PCB_ARCHIVE_PARSER::NET_PCB::VIA::Parse( XNODE* aNode, PARSER_CONTE
 }
 
 
-void CADSTAR_PCB_ARCHIVE_PARSER::NET_PCB::COPPER_TERMINAL::Parse( XNODE* aNode, PARSER_CONTEXT* aContext )
+void CADSTAR_PCB_ARCHIVE_PARSER::NET_PCB::COPPER_TERMINAL::Parse( XNODE* aNode,
+                                                                  PARSER_CONTEXT* aContext )
 {
     wxASSERT( aNode->GetName() == wxT( "COPTERM" ) );
 
@@ -1990,7 +1996,8 @@ void CADSTAR_PCB_ARCHIVE_PARSER::NET_PCB::COPPER_TERMINAL::Parse( XNODE* aNode, 
 }
 
 
-XNODE* CADSTAR_PCB_ARCHIVE_PARSER::NET_PCB::ROUTE_VERTEX::Parse( XNODE* aNode, PARSER_CONTEXT* aContext )
+XNODE* CADSTAR_PCB_ARCHIVE_PARSER::NET_PCB::ROUTE_VERTEX::Parse( XNODE* aNode,
+                                                                 PARSER_CONTEXT* aContext )
 {
     wxASSERT( aNode->GetName() == wxT( "ROUTEWIDTH" ) );
 
@@ -2045,7 +2052,8 @@ void CADSTAR_PCB_ARCHIVE_PARSER::NET_PCB::ROUTE::Parse( XNODE* aNode, PARSER_CON
 }
 
 
-void CADSTAR_PCB_ARCHIVE_PARSER::NET_PCB::CONNECTION_PCB::Parse( XNODE* aNode, PARSER_CONTEXT* aContext )
+void CADSTAR_PCB_ARCHIVE_PARSER::NET_PCB::CONNECTION_PCB::Parse( XNODE* aNode,
+                                                                 PARSER_CONTEXT* aContext )
 {
     ParseIdentifiers( aNode, aContext );
 
@@ -2267,7 +2275,8 @@ void CADSTAR_PCB_ARCHIVE_PARSER::TEMPLATE::Parse( XNODE* aNode, PARSER_CONTEXT* 
 }
 
 
-void CADSTAR_PCB_ARCHIVE_PARSER::COPPER::NETREF::COPPER_TERM::Parse( XNODE* aNode, PARSER_CONTEXT* aContext )
+void CADSTAR_PCB_ARCHIVE_PARSER::COPPER::NETREF::COPPER_TERM::Parse( XNODE* aNode,
+                                                                     PARSER_CONTEXT* aContext )
 {
     wxASSERT( aNode->GetName() == wxT( "TERM" ) );
 

@@ -2,7 +2,7 @@
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
  * Copyright (C) 2013-2014 CERN
- * Copyright (C) 2016-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2021 KiCad Developers, see AUTHORS.txt for contributors.
  * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -71,7 +71,7 @@ void INDEX::Replace( ITEM* aOldItem, ITEM* aNewItem )
 INDEX::NET_ITEMS_LIST* INDEX::GetItemsForNet( int aNet )
 {
     if( m_netMap.find( aNet ) == m_netMap.end() )
-        return NULL;
+        return nullptr;
 
     return &m_netMap[aNet];
 }

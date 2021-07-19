@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -67,7 +67,7 @@ NETINFO_ITEM* NETINFO_LIST::GetNetItem( int aNetCode ) const
     if( result != m_netCodes.end() )
         return (*result).second;
 
-    return NULL;
+    return nullptr;
 }
 
 
@@ -78,7 +78,7 @@ NETINFO_ITEM* NETINFO_LIST::GetNetItem( const wxString& aNetName ) const
     if( result != m_netNames.end() )
         return (*result).second;
 
-    return NULL;
+    return nullptr;
 }
 
 
@@ -135,22 +135,22 @@ void NETINFO_LIST::AppendNet( NETINFO_ITEM* aNewElement )
     // if there is a net with such name then just assign the correct number
     NETINFO_ITEM* sameName = GetNetItem( aNewElement->GetNetname() );
 
-    if( sameName != NULL )
+    if( sameName != nullptr )
     {
         aNewElement->m_netCode = sameName->GetNetCode();
 
         return;
     }
-    // be sure that net codes are consecutive
-    // negative net code means that it has to be auto assigned
     else if( aNewElement->m_netCode != (int) m_netCodes.size() || aNewElement->m_netCode < 0 )
     {
+        // be sure that net codes are consecutive
+        // negative net code means that it has to be auto assigned
         aNewElement->m_netCode = getFreeNetCode();
     }
 
     // net names & codes are supposed to be unique
-    assert( GetNetItem( aNewElement->GetNetname() ) == NULL );
-    assert( GetNetItem( aNewElement->GetNetCode() ) == NULL );
+    assert( GetNetItem( aNewElement->GetNetname() ) == nullptr );
+    assert( GetNetItem( aNewElement->GetNetCode() ) == nullptr );
 
     // add an entry for fast look up by a net name using a map
     m_netNames.insert( std::make_pair( aNewElement->GetNetname(), aNewElement ) );

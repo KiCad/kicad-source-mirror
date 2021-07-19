@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -37,7 +37,7 @@ bool RecreateCmpFile( BOARD * aBrd, const wxString& aFullCmpFileName )
 {
     FILE* cmpFile = wxFopen( aFullCmpFileName, wxT( "wt" ) );
 
-    if( cmpFile == NULL )
+    if( cmpFile == nullptr )
         return false;
 
     fprintf( cmpFile, "Cmp-Mod V01 Created by PcbNew   date = %s\n", TO_UTF8( DateAndTime() ) );

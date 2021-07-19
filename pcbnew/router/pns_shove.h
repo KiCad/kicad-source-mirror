@@ -2,7 +2,7 @@
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
  * Copyright (C) 2013-2014 CERN
- * Copyright (C) 2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2021 KiCad Developers, see AUTHORS.txt for contributors.
  * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -40,11 +40,8 @@ class NODE;
 class ROUTER;
 
 /**
- * SHOVE
- *
  * The actual Push and Shove algorithm.
  */
-
 class SHOVE : public ALGO_BASE
 {
 public:
@@ -69,8 +66,10 @@ public:
     SHOVE_STATUS ShoveLines( const LINE& aCurrentHead );
     SHOVE_STATUS ShoveMultiLines( const ITEM_SET& aHeadSet );
 
-    SHOVE_STATUS ShoveDraggingVia( const VIA_HANDLE aOldVia, const VECTOR2I& aWhere, VIA_HANDLE& aNewVia );
-    SHOVE_STATUS ShoveObstacleLine( const LINE& aCurLine, const LINE& aObstacleLine, LINE& aResultLine );
+    SHOVE_STATUS ShoveDraggingVia( const VIA_HANDLE aOldVia, const VECTOR2I& aWhere,
+                                   VIA_HANDLE& aNewVia );
+    SHOVE_STATUS ShoveObstacleLine( const LINE& aCurLine, const LINE& aObstacleLine,
+                                    LINE& aResultLine );
 
     void ForceClearance ( bool aEnabled, int aClearance )
     {
@@ -145,10 +144,11 @@ private:
     bool pushLineStack( const LINE& aL, bool aKeepCurrentOnTop = false );
     void popLineStack();
 
-    LINE assembleLine( const LINKED_ITEM* aSeg, int* aIndex = NULL );
+    LINE assembleLine( const LINKED_ITEM* aSeg, int* aIndex = nullptr );
 
     void replaceItems( ITEM* aOld, std::unique_ptr< ITEM > aNew );
-    void replaceLine( LINE& aOld, LINE& aNew, bool aIncludeInChangedArea = true, NODE *aNode = nullptr );
+    void replaceLine( LINE& aOld, LINE& aNew, bool aIncludeInChangedArea = true,
+                      NODE *aNode = nullptr );
 
     LINE* findRootLine( LINE *aLine );
 
@@ -159,6 +159,8 @@ private:
 
     int getClearance( const ITEM* aA, const ITEM* aB ) const;
     int getHoleClearance( const ITEM* aA, const ITEM* aB ) const;
+
+    void sanityCheck( LINE* aOld, LINE* aNew );
 
     std::vector<SPRINGBACK_TAG> m_nodeStack;
     std::vector<LINE>           m_lineStack;
@@ -177,7 +179,6 @@ private:
     int                         m_iter;
     int m_forceClearance;
     bool m_multiLineMode;
-    void sanityCheck( LINE* aOld, LINE* aNew );
 };
 
 }

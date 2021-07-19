@@ -6,6 +6,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013  Cirilo Bernardo
+ * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -48,16 +49,17 @@
 #endif
 #include <convert_to_biu.h>     // to define Millimeter2iu(x)
 
+
 // assumed default graphical line thickness: == 0.1mm
 #define LINE_WIDTH (Millimeter2iu( 0.1 ))
 
+
 static FILENAME_RESOLVER* resolver;
 
+
 /**
- * Function idf_export_outline
- * retrieves line segment information from the edge layer and compiles
- * the data into a form which can be output as an IDFv3 compliant
- * BOARD_OUTLINE section.
+ * Retrieve line segment information from the edge layer and compiles the data into a form
+ * which can be output as an IDFv3 compliant #BOARD_OUTLINE section.
  */
 static void idf_export_outline( BOARD* aPcb, IDF3_BOARD& aIDFBoard )
 {
@@ -67,7 +69,7 @@ static void idf_export_outline( BOARD* aPcb, IDF3_BOARD& aIDFBoard )
     IDF_POINT sp, ep;                   // start and end points from KiCad item
 
     std::list< IDF_SEGMENT* > lines;    // IDF intermediate form of KiCad graphical item
-    IDF_OUTLINE* outline = NULL;        // graphical items forming an outline or cutout
+    IDF_OUTLINE* outline = nullptr;        // graphical items forming an outline or cutout
 
     // NOTE: IMPLEMENTATION
     // If/when component cutouts are allowed, we must implement them separately. Cutouts
@@ -88,86 +90,90 @@ static void idf_export_outline( BOARD* aPcb, IDF3_BOARD& aIDFBoard )
         switch( graphic->GetShape() )
         {
         case PCB_SHAPE_TYPE::SEGMENT:
+        {
+            if( ( graphic->GetStart().x == graphic->GetEnd().x )
+                && ( graphic->GetStart().y == graphic->GetEnd().y ) )
             {
-                if( ( graphic->GetStart().x == graphic->GetEnd().x )
-                    && ( graphic->GetStart().y == graphic->GetEnd().y ) )
-                {
-                    break;
-                }
-
-                sp.x    = graphic->GetStart().x * scale + offX;
-                sp.y    = -graphic->GetStart().y * scale + offY;
-                ep.x    = graphic->GetEnd().x * scale + offX;
-                ep.y    = -graphic->GetEnd().y * scale + offY;
-                IDF_SEGMENT* seg = new IDF_SEGMENT( sp, ep );
-
-                if( seg )
-                    lines.push_back( seg );
+                break;
             }
+
+            sp.x = graphic->GetStart().x * scale + offX;
+            sp.y = -graphic->GetStart().y * scale + offY;
+            ep.x = graphic->GetEnd().x * scale + offX;
+            ep.y = -graphic->GetEnd().y * scale + offY;
+            IDF_SEGMENT* seg = new IDF_SEGMENT( sp, ep );
+
+            if( seg )
+                lines.push_back( seg );
+
             break;
+        }
 
         case PCB_SHAPE_TYPE::RECT:
+        {
+            if( ( graphic->GetStart().x == graphic->GetEnd().x )
+                && ( graphic->GetStart().y == graphic->GetEnd().y ) )
             {
-                if( ( graphic->GetStart().x == graphic->GetEnd().x )
-                    && ( graphic->GetStart().y == graphic->GetEnd().y ) )
-                {
-                    break;
-                }
-
-                double top = graphic->GetStart().y * scale + offY;
-                double left = graphic->GetStart().x * scale + offX;
-                double bottom = graphic->GetEnd().y * scale + offY;
-                double right = graphic->GetEnd().x * scale + offX;
-
-                IDF_POINT corners[4];
-                corners[0] = IDF_POINT( left, top );
-                corners[1] = IDF_POINT( right, top );
-                corners[2] = IDF_POINT( right, bottom );
-                corners[3] = IDF_POINT( left, bottom );
-
-                lines.push_back( new IDF_SEGMENT( corners[0], corners[1] ) );
-                lines.push_back( new IDF_SEGMENT( corners[1], corners[2] ) );
-                lines.push_back( new IDF_SEGMENT( corners[2], corners[3] ) );
-                lines.push_back( new IDF_SEGMENT( corners[3], corners[0] ) );
+                break;
             }
+
+            double top = graphic->GetStart().y * scale + offY;
+            double left = graphic->GetStart().x * scale + offX;
+            double bottom = graphic->GetEnd().y * scale + offY;
+            double right = graphic->GetEnd().x * scale + offX;
+
+            IDF_POINT corners[4];
+            corners[0] = IDF_POINT( left, top );
+            corners[1] = IDF_POINT( right, top );
+            corners[2] = IDF_POINT( right, bottom );
+            corners[3] = IDF_POINT( left, bottom );
+
+            lines.push_back( new IDF_SEGMENT( corners[0], corners[1] ) );
+            lines.push_back( new IDF_SEGMENT( corners[1], corners[2] ) );
+            lines.push_back( new IDF_SEGMENT( corners[2], corners[3] ) );
+            lines.push_back( new IDF_SEGMENT( corners[3], corners[0] ) );
             break;
+        }
 
         case PCB_SHAPE_TYPE::ARC:
+        {
+            if( ( graphic->GetCenter().x == graphic->GetArcStart().x )
+                && ( graphic->GetCenter().y == graphic->GetArcStart().y ) )
             {
-                if( ( graphic->GetCenter().x == graphic->GetArcStart().x )
-                    && ( graphic->GetCenter().y == graphic->GetArcStart().y ) )
-                {
-                    break;
-                }
-
-                sp.x = graphic->GetCenter().x * scale + offX;
-                sp.y = -graphic->GetCenter().y * scale + offY;
-                ep.x = graphic->GetArcStart().x * scale + offX;
-                ep.y = -graphic->GetArcStart().y * scale + offY;
-                IDF_SEGMENT* seg = new IDF_SEGMENT( sp, ep, -graphic->GetAngle() / 10.0, true );
-
-                if( seg )
-                    lines.push_back( seg );
+                break;
             }
+
+            sp.x = graphic->GetCenter().x * scale + offX;
+            sp.y = -graphic->GetCenter().y * scale + offY;
+            ep.x = graphic->GetArcStart().x * scale + offX;
+            ep.y = -graphic->GetArcStart().y * scale + offY;
+            IDF_SEGMENT* seg = new IDF_SEGMENT( sp, ep, -graphic->GetAngle() / 10.0, true );
+
+            if( seg )
+                lines.push_back( seg );
+
             break;
+        }
 
         case PCB_SHAPE_TYPE::CIRCLE:
-            {
-                if( graphic->GetRadius() == 0 )
-                    break;
+        {
+            if( graphic->GetRadius() == 0 )
+                break;
 
-                sp.x = graphic->GetCenter().x * scale + offX;
-                sp.y = -graphic->GetCenter().y * scale + offY;
-                ep.x = sp.x - graphic->GetRadius() * scale;
-                ep.y = sp.y;
-                // Circles must always have an angle of +360 deg. to appease
-                // quirky MCAD implementations of IDF.
-                IDF_SEGMENT* seg = new IDF_SEGMENT( sp, ep, 360.0, true );
+            sp.x = graphic->GetCenter().x * scale + offX;
+            sp.y = -graphic->GetCenter().y * scale + offY;
+            ep.x = sp.x - graphic->GetRadius() * scale;
+            ep.y = sp.y;
 
-                if( seg )
-                    lines.push_back( seg );
-            }
+            // Circles must always have an angle of +360 deg. to appease
+            // quirky MCAD implementations of IDF.
+            IDF_SEGMENT* seg = new IDF_SEGMENT( sp, ep, 360.0, true );
+
+            if( seg )
+                lines.push_back( seg );
+
             break;
+        }
 
         default:
             break;
@@ -191,7 +197,7 @@ static void idf_export_outline( BOARD* aPcb, IDF3_BOARD& aIDFBoard )
         goto UseBoundingBox;
 
     aIDFBoard.AddBoardOutline( outline );
-    outline = NULL;
+    outline = nullptr;
 
     // get all cutouts and write them out
     while( !lines.empty() )
@@ -208,7 +214,7 @@ static void idf_export_outline( BOARD* aPcb, IDF3_BOARD& aIDFBoard )
         }
 
         aIDFBoard.AddBoardOutline( outline );
-        outline = NULL;
+        outline = nullptr;
     }
 
     return;
@@ -275,11 +281,9 @@ UseBoundingBox:
 
 
 /**
- * Function idf_export_footprint
- * retrieves information from all board footprints, adds drill holes to
- * the DRILLED_HOLES or BOARD_OUTLINE section as appropriate,
- * compiles data for the PLACEMENT section and compiles data for
- * the library ELECTRICAL section.
+ * Retrieve information from all board footprints, adds drill holes to the DRILLED_HOLES or
+ * BOARD_OUTLINE section as appropriate,  Compiles data for the PLACEMENT section and compiles
+ * data for the library ELECTRICAL section.
  */
 static void idf_export_footprint( BOARD* aPcb, FOOTPRINT* aFootprint, IDF3_BOARD& aIDFBoard )
 {
@@ -407,7 +411,7 @@ static void idf_export_footprint( BOARD* aPcb, FOOTPRINT* aFootprint, IDF3_BOARD
     // add any valid models to the library item list
     std::string refdes;
 
-    IDF3_COMPONENT* comp = NULL;
+    IDF3_COMPONENT* comp = nullptr;
 
     auto sM = aFootprint->Models().begin();
     auto eM = aFootprint->Models().end();
@@ -474,14 +478,14 @@ static void idf_export_footprint( BOARD* aPcb, FOOTPRINT* aFootprint, IDF3_BOARD
                 while( rotz <= -360.0 ) rotz += 360.0;
         }
 
-        if( comp == NULL )
+        if( comp == nullptr )
             comp = aIDFBoard.FindComponent( refdes );
 
-        if( comp == NULL )
+        if( comp == nullptr )
         {
             comp = new IDF3_COMPONENT( &aIDFBoard );
 
-            if( comp == NULL )
+            if( comp == nullptr )
                 throw( std::runtime_error( aIDFBoard.GetError() ) );
 
             comp->SetRefDes( refdes );
@@ -570,7 +574,6 @@ static void idf_export_footprint( BOARD* aPcb, FOOTPRINT* aFootprint, IDF3_BOARD
             }
         }
 
-
         // create the local data ...
         IDF3_COMP_OUTLINE_DATA* data = new IDF3_COMP_OUTLINE_DATA( comp, outline );
 
@@ -582,9 +585,8 @@ static void idf_export_footprint( BOARD* aPcb, FOOTPRINT* aFootprint, IDF3_BOARD
 
 
 /**
- * Function Export_IDF3
- * generates IDFv3 compliant board (*.emn) and library (*.emp)
- * files representing the user's PCB design.
+ * Generate IDFv3 compliant board (*.emn) and library (*.emp) files representing the user's
+ * PCB design.
  */
 bool PCB_EDIT_FRAME::Export_IDF3( BOARD* aPcb, const wxString& aFullFileName,
                                   bool aUseThou, double aXRef, double aYRef )

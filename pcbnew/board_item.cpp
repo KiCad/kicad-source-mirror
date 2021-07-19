@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2012 Jean-Pierre Charras, jean-pierre.charras@ujf-grenoble.fr
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -57,7 +57,7 @@ BOARD* BOARD_ITEM::GetBoard() const
     if( parent )
         return parent->GetBoard();
 
-    return NULL;
+    return nullptr;
 }
 
 
@@ -135,7 +135,8 @@ void BOARD_ITEM::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBu
                                                        int aError, ERROR_LOC aErrorLoc,
                                                        bool ignoreLineWidth ) const
 {
-    wxASSERT_MSG( false, "Called TransformShapeWithClearanceToPolygon() on unsupported BOARD_ITEM." );
+    wxASSERT_MSG( false,
+                  "Called TransformShapeWithClearanceToPolygon() on unsupported BOARD_ITEM." );
 };
 
 
@@ -147,7 +148,7 @@ bool BOARD_ITEM::ptr_cmp::operator() ( const BOARD_ITEM* a, const BOARD_ITEM* b 
     if( a->GetLayer() != b->GetLayer() )
         return a->GetLayer() < b->GetLayer();
 
-    if( a->m_Uuid != b->m_Uuid )    // shopuld be always the case foer valid boards
+    if( a->m_Uuid != b->m_Uuid )    // should be always the case for valid boards
         return a->m_Uuid < b->m_Uuid;
 
     return a < b;

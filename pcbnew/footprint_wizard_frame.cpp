@@ -3,8 +3,8 @@
  *
  * Copyright (C) 2012-2015 Miguel Angel Ajo Pelayo <miguelangel@nbee.es>
  * Copyright (C) 2012-2019 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2008-2015 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 2004-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2008 Wayne Stambaugh <stambaughw@gmail.com>
+ * Copyright (C) 2004-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -79,10 +79,10 @@ END_EVENT_TABLE()
 FOOTPRINT_WIZARD_FRAME::FOOTPRINT_WIZARD_FRAME( KIWAY* aKiway, wxWindow* aParent,
                                                 FRAME_T aFrameType ) :
         PCB_BASE_EDIT_FRAME( aKiway, aParent, aFrameType, _( "Footprint Wizard" ),
-                        wxDefaultPosition, wxDefaultSize,
-                        aParent ? KICAD_DEFAULT_DRAWFRAME_STYLE | wxFRAME_FLOAT_ON_PARENT
-                                : KICAD_DEFAULT_DRAWFRAME_STYLE | wxSTAY_ON_TOP,
-                        FOOTPRINT_WIZARD_FRAME_NAME ),
+                             wxDefaultPosition, wxDefaultSize,
+                             aParent ? KICAD_DEFAULT_DRAWFRAME_STYLE | wxFRAME_FLOAT_ON_PARENT
+                             : KICAD_DEFAULT_DRAWFRAME_STYLE | wxSTAY_ON_TOP,
+                             FOOTPRINT_WIZARD_FRAME_NAME ),
         m_wizardListShown( false )
 {
     wxASSERT( aFrameType == FRAME_FOOTPRINT_WIZARD );
@@ -162,7 +162,7 @@ FOOTPRINT_WIZARD_FRAME::FOOTPRINT_WIZARD_FRAME( KIWAY* aKiway, wxWindow* aParent
     m_parametersPanel = new wxPanel( this, wxID_ANY );
 
     m_pageList = new wxListBox( m_parametersPanel, ID_FOOTPRINT_WIZARD_PAGE_LIST,
-                                wxDefaultPosition, wxDefaultSize, 0, NULL,
+                                wxDefaultPosition, wxDefaultSize, 0, nullptr,
                                 wxLB_HSCROLL | wxNO_BORDER );
 
     auto divider = new wxStaticLine( m_parametersPanel, wxID_ANY,
@@ -254,7 +254,6 @@ void FOOTPRINT_WIZARD_FRAME::doCloseWindow()
         if( !IsDismissed() )
             DismissModal( false );
     }
-    // else do nothing
 }
 
 
@@ -313,7 +312,9 @@ void FOOTPRINT_WIZARD_FRAME::UpdateMsgPanel()
         SetMsgPanel( items );
     }
     else
+    {
         ClearMsgPanel();
+    }
 }
 
 
@@ -341,13 +342,13 @@ void  FOOTPRINT_WIZARD_FRAME::initParameterGrid()
 
     m_parameterGrid->Connect( wxEVT_SIZE,
                               wxSizeEventHandler( FOOTPRINT_WIZARD_FRAME::OnGridSize ),
-                              NULL, this );
+                              nullptr, this );
 }
 
 
 void FOOTPRINT_WIZARD_FRAME::ReCreatePageList()
 {
-    if( m_pageList == NULL )
+    if( m_pageList == nullptr )
         return;
 
     FOOTPRINT_WIZARD* footprintWizard = GetMyWizard();
@@ -358,7 +359,7 @@ void FOOTPRINT_WIZARD_FRAME::ReCreatePageList()
     m_pageList->Clear();
     int max_page = footprintWizard->GetNumParameterPages();
 
-    for( int i = 0; i<max_page; i++ )
+    for( int i = 0; i < max_page; i++ )
     {
         wxString name = footprintWizard->GetParameterPageName( i );
         m_pageList->Append( name );
@@ -375,12 +376,12 @@ void FOOTPRINT_WIZARD_FRAME::ReCreatePageList()
 
 void FOOTPRINT_WIZARD_FRAME::ReCreateParameterList()
 {
-    if( m_parameterGrid == NULL )
+    if( m_parameterGrid == nullptr )
         return;
 
     FOOTPRINT_WIZARD* footprintWizard = GetMyWizard();
 
-    if( footprintWizard == NULL )
+    if( footprintWizard == nullptr )
         return;
 
     m_parameterGrid->Freeze();
@@ -406,7 +407,7 @@ void FOOTPRINT_WIZARD_FRAME::ReCreateParameterList()
 
     wxString designator, name, value, units, hint;
 
-    for( unsigned int i = 0; i< namesList.size(); i++ )
+    for( unsigned int i = 0; i < namesList.size(); i++ )
     {
         designator  = designatorsList[i];
         name        = namesList[i];
@@ -438,16 +439,15 @@ void FOOTPRINT_WIZARD_FRAME::ReCreateParameterList()
                 options.Add( tokenizer.GetNextToken() );
             }
 
-            m_parameterGrid->SetCellEditor( i, WIZ_COL_VALUE, new wxGridCellChoiceEditor( options ) );
+            m_parameterGrid->SetCellEditor( i, WIZ_COL_VALUE,
+                                            new wxGridCellChoiceEditor( options ) );
 
             units = wxT( "" );
         }
-        // Integer parameters
-        else if( units == WIZARD_PARAM_UNITS_INTEGER )
+        else if( units == WIZARD_PARAM_UNITS_INTEGER )    // Integer parameters
         {
             m_parameterGrid->SetCellEditor( i, WIZ_COL_VALUE, new wxGridCellNumberEditor );
         }
-        // Non-integer numerical parameters
         else if( ( units == WIZARD_PARAM_UNITS_MM )      ||
                  ( units == WIZARD_PARAM_UNITS_MILS )    ||
                  ( units == WIZARD_PARAM_UNITS_FLOAT )   ||
@@ -455,6 +455,7 @@ void FOOTPRINT_WIZARD_FRAME::ReCreateParameterList()
                  ( units == WIZARD_PARAM_UNITS_DEGREES ) ||
                  ( units == WIZARD_PARAM_UNITS_PERCENT ) )
         {
+            // Non-integer numerical parameters
             m_parameterGrid->SetCellEditor( i, WIZ_COL_VALUE, new wxGridCellFloatEditor );
 
             // Convert separators to the locale-specific character
@@ -478,7 +479,7 @@ void FOOTPRINT_WIZARD_FRAME::ReCreateParameterList()
 void FOOTPRINT_WIZARD_FRAME::ResizeParamColumns()
 {
     // Parameter grid is not yet configured
-    if( ( m_parameterGrid == NULL ) || ( m_parameterGrid->GetNumberCols() == 0 ) )
+    if( ( m_parameterGrid == nullptr ) || ( m_parameterGrid->GetNumberCols() == 0 ) )
         return;
 
     // first auto-size the columns to ensure enough space around text

@@ -43,7 +43,7 @@ using namespace std::placeholders;
 
 void FOOTPRINT_EDIT_FRAME::LoadFootprintFromBoard( wxCommandEvent& event )
 {
-    LoadFootprintFromBoard( NULL );
+    LoadFootprintFromBoard( nullptr );
 }
 
 
@@ -209,8 +209,9 @@ void FOOTPRINT_EDIT_FRAME::OnEditItemRequest( BOARD_ITEM* aItem )
             commit.Push( _( "Edit Zone" ) );
             zoneSettings.ExportSetting( *static_cast<ZONE*>( aItem ) );
         }
+
+        break;
     }
-    break;
 
     case PCB_GROUP_T:
         m_toolManager->RunAction( PCB_ACTIONS::groupProperties, true, aItem );
@@ -282,7 +283,8 @@ void FOOTPRINT_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
                 msg.Printf( _( "The current configuration does not include a library named '%s'.\n"
                                "Use Manage Footprint Libraries to edit the configuration." ),
                             fpFileName.GetPath() );
-                DisplayErrorMessage( this, _( "Library not found in footprint library table." ), msg );
+                DisplayErrorMessage( this, _( "Library not found in footprint library table." ),
+                                     msg );
                 break;
             }
 

@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Jon Evans <jon@craftyjon.com>
  *
  * This program is free software; you can redistribute it and/or
@@ -48,11 +48,12 @@
 
 CONVERT_TOOL::CONVERT_TOOL() :
     TOOL_INTERACTIVE( "pcbnew.Convert" ),
-    m_selectionTool( NULL ),
-    m_menu( NULL ),
-    m_frame( NULL )
+    m_selectionTool( nullptr ),
+    m_menu( nullptr ),
+    m_frame( nullptr )
 {
 }
+
 
 CONVERT_TOOL::~CONVERT_TOOL()
 {
@@ -601,7 +602,7 @@ int CONVERT_TOOL::PolyToLines( const TOOL_EVENT& aEvent )
                 if( copperLayer == UNSELECTED_LAYER )
                     copperLayer = frame->SelectOneLayer( F_Cu, LSET::AllNonCuMask() );
 
-                if( copperLayer == UNDEFINED_LAYER )    // User cancelled
+                if( copperLayer == UNDEFINED_LAYER )    // User canceled
                     continue;
 
                 layer = copperLayer;
