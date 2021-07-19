@@ -13,7 +13,7 @@
 #  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 #  MA 02110-1301, USA.
 
-#  last change: 2017, Jan 4.
+#  last change: 2021, Jul 19.
 
 import pcbnew
 import FootprintWizardBase
@@ -66,23 +66,25 @@ class QRCodeWizard(FootprintWizardBase.FootprintWizard):
         self.qr.make()
 
     def drawPixelSquareArea( self, layer, size, xposition, yposition):
-        # creates a FP_SHAPE of polygon type. The polygon is a square
-        polygon = pcbnew.FP_SHAPE(self.module)
-        polygon.SetShape(pcbnew.S_POLYGON)
-        polygon.SetWidth( 0 )
-        polygon.SetLayer(layer)
+        # creates a FP_SHAPE of rectangle type. The rectangle is square
+        rectangle = pcbnew.FP_SHAPE(self.module)
+        rectangle.SetShape(pcbnew.PCB_SHAPE_TYPE_RECT)
+        rectangle.SetWidth( 0 )
+        rectangle.SetFilled( True )
+        rectangle.SetLayer(layer)
         halfsize = int(size/2)
-        polygon.GetPolyShape().NewOutline();
-        polygon.GetPolyShape().Append( halfsize+xposition, halfsize+yposition )
-        polygon.GetPolyShape().Append( halfsize+xposition, -halfsize+yposition )
-        polygon.GetPolyShape().Append( -halfsize+xposition, -halfsize+yposition )
-        polygon.GetPolyShape().Append( -halfsize+xposition, halfsize+yposition )
-        return polygon
+        rectangle.SetStartX( -halfsize+xposition )
+        rectangle.SetStartY( -halfsize+yposition )
+        rectangle.SetEndX( halfsize+xposition )
+        rectangle.SetEndY( halfsize+yposition )
+        rectangle.SetStart0( rectangle.GetStart() )
+        rectangle.SetEnd0( rectangle.GetEnd() )
+        return rectangle
 
 
     def _drawQrPixel(self, xposition, yposition):
         # build a rectangular pad as a dot on copper layer,
-        # and a polygon (a square) on silkscreen
+        # and a rectangle (a square) on silkscreen
         if self.UseCu:
             pad = pcbnew.PAD(self.module)
             pad.SetSize(pcbnew.wxSize(self.X, self.X))
@@ -97,8 +99,8 @@ class QRCodeWizard(FootprintWizardBase.FootprintWizard):
             pad.SetLayerSet( layerset )
             self.module.Add(pad)
         if self.UseSilkS:
-            polygon=self.drawPixelSquareArea(pcbnew.F_SilkS, self.X, xposition, yposition)
-            self.module.Add(polygon)
+            rectangle=self.drawPixelSquareArea(pcbnew.F_SilkS, self.X, xposition, yposition)
+            self.module.Add(rectangle)
 
 
     def BuildThisFootprint(self):
@@ -123,11 +125,11 @@ class QRCodeWizard(FootprintWizardBase.FootprintWizard):
         area_width =  arrayToDraw.__len__()*self.X + self.border*2
 
         # Center position of QrCode
-        yposition = - int(half_number_of_elements * self.X)
+        yposition = - int(half_number_of_elements * self.X) + int(self.X/2)
         area_height =  arrayToDraw.__len__()*self.X + self.border*2
 
         for line in arrayToDraw:
-            xposition = - int(half_number_of_elements * self.X)
+            xposition = - int(half_number_of_elements * self.X) + int(self.X/2)
             for pixel in line:
                 # Trust table for drawing a pixel
                 # Negative is a boolean;
@@ -171,8 +173,8 @@ class QRCodeWizard(FootprintWizardBase.FootprintWizard):
         if self.UseCu:
             self.draw.SetLineThickness( 0 )
             sm_margin = pcbnew.FromMM( 0.05 )
-            polygon=self.drawPixelSquareArea(pcbnew.F_Mask, area_width + sm_margin*2, 0, 0)
-            self.module.Add(polygon)
+            rectangle=self.drawPixelSquareArea(pcbnew.F_Mask, area_width + sm_margin*2, 0, 0)
+            self.module.Add(rectangle)
 
 
 QRCodeWizard().register()
