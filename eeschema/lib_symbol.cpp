@@ -640,7 +640,7 @@ void LIB_SYMBOL::RemoveDrawItem( LIB_ITEM* aItem )
 
     for( LIB_ITEMS::iterator i = items.begin(); i != items.end(); i++ )
     {
-        if( *i == aItem )
+        if( &*i == aItem )
         {
             items.erase( i );
             SetModified();
