@@ -33,7 +33,6 @@
 #include <router/pns_router.h>
 #include <router/pns_routing_settings.h>
 
-
 // Actions, being statically-defined, require specialized I18N handling.  We continue to
 // use the _() macro so that string harvesting by the I18N framework doesn't have to be
 // specialized, but we don't translate on initialization and instead do it in the getters.
@@ -46,32 +45,32 @@
 //
 TOOL_ACTION PCB_ACTIONS::convertToPoly( "pcbnew.Convert.convertToPoly",
         AS_GLOBAL, 0, "",
-        _( "Convert to Polygon" ), _( "Creates a graphic polygon from the selection" ),
+        _( "Create Polygon from Selection" ), _( "Creates a graphic polygon from the selection" ),
         BITMAPS::add_graphical_polygon );
 
 TOOL_ACTION PCB_ACTIONS::convertToZone( "pcbnew.Convert.convertToZone",
         AS_GLOBAL, 0, "",
-        _( "Convert to Zone" ), _( "Creates a copper zone from the selection" ),
+        _( "Create Zone from Selection" ), _( "Creates a copper zone from the selection" ),
         BITMAPS::add_zone );
 
 TOOL_ACTION PCB_ACTIONS::convertToKeepout( "pcbnew.Convert.convertToKeepout",
         AS_GLOBAL, 0, "",
-        _( "Convert to Rule Area" ), _( "Creates a rule area from the selection" ),
+        _( "Create Rule Area from Selection" ), _( "Creates a rule area from the selection" ),
         BITMAPS::add_keepout_area );
 
 TOOL_ACTION PCB_ACTIONS::convertToLines( "pcbnew.Convert.convertToLines",
         AS_GLOBAL, 0, "",
-        _( "Convert to Lines" ), _( "Creates graphic lines from the selection" ),
+        _( "Create Lines from Selection" ), _( "Creates graphic lines from the selection" ),
         BITMAPS::add_line );
 
 TOOL_ACTION PCB_ACTIONS::convertToArc( "pcbnew.Convert.convertToArc",
         AS_GLOBAL, 0, "",
-        _( "Convert to Arc" ), _( "Converts selected line segment to an arc" ),
+        _( "Create Arc from Selection" ), _( "Creates an arc from the selected line segment" ),
         BITMAPS::add_arc );
 
 TOOL_ACTION PCB_ACTIONS::convertToTracks( "pcbnew.Convert.convertToTracks",
         AS_GLOBAL, 0, "",
-        _( "Convert to Tracks" ), _( "Converts selected graphic lines to tracks" ),
+        _( "Create Tracks from Selection" ), _( "Creates tracks from the selected graphic lines" ),
         BITMAPS::add_tracks );
 
 

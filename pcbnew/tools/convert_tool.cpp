@@ -72,7 +72,7 @@ bool CONVERT_TOOL::Init()
     // Create a context menu and make it available through selection tool
     m_menu = new CONDITIONAL_MENU( this );
     m_menu->SetIcon( BITMAPS::convert );
-    m_menu->SetTitle( _( "Convert" ) );
+    m_menu->SetTitle( _( "Create from Selection" ) );
 
     static KICAD_T convertibleTracks[] = { PCB_TRACE_T, PCB_ARC_T, EOT };
     static KICAD_T zones[]  = { PCB_ZONE_T, PCB_FP_ZONE_T, EOT };
