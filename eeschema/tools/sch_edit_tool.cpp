@@ -1073,9 +1073,18 @@ void SCH_EDIT_TOOL::editFieldText( SCH_FIELD* aField )
     if( aField->GetEditFlags() == 0 )    // i.e. not edited, or moved
         saveCopyInUndoList( aField, UNDO_REDO::CHANGED );
 
-    wxString title = wxString::Format( _( "Edit %s Field" ), TitleCaps( aField->GetName() ) );
+    KICAD_T  parentType = aField->GetParent() ? aField->GetParent()->Type() : SCHEMATIC_T;
+    wxString caption;
 
-    DIALOG_SCH_EDIT_ONE_FIELD dlg( m_frame, title, aField );
+    // Use title caps for mandatory fields.  "Edit Sheet name Field" looks dorky.
+    if( parentType == SCH_SYMBOL_T && aField->GetId() < MANDATORY_FIELDS )
+        caption.Printf( _( "Edit %s Field" ), TitleCaps( aField->GetName() ) );
+    else if( parentType == SCH_SHEET_T && aField->GetId() < SHEET_MANDATORY_FIELDS )
+        caption.Printf( _( "Edit %s Field" ), TitleCaps( aField->GetName() ) );
+    else
+        caption.Printf( _( "Edit '%s' Field" ), aField->GetName() );
+
+    DIALOG_SCH_EDIT_ONE_FIELD dlg( m_frame, caption, aField );
 
     // The footprint field dialog can invoke a KIWAY_PLAYER so we must use a quasi-modal
     if( dlg.ShowQuasiModal() != wxID_OK )
@@ -1083,7 +1092,7 @@ void SCH_EDIT_TOOL::editFieldText( SCH_FIELD* aField )
 
     dlg.UpdateField( aField, &m_frame->GetCurrentSheet() );
 
-    if( m_frame->eeconfig()->m_AutoplaceFields.enable || aField->GetParent()->Type() == SCH_SHEET_T )
+    if( m_frame->eeconfig()->m_AutoplaceFields.enable || parentType == SCH_SHEET_T )
         static_cast<SCH_ITEM*>( aField->GetParent() )->AutoAutoplaceFields( m_frame->GetScreen() );
 
     m_frame->UpdateItem( aField );
