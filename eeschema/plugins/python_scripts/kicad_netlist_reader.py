@@ -459,7 +459,7 @@ class netlist():
 
     def addElement(self, name):
         """Add a new kicad generic element to the list"""
-        if self._curr_element == None:
+        if self._curr_element is None:
             self.tree = xmlElement(name)
             self._curr_element = self.tree
         else:

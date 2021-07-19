@@ -131,7 +131,7 @@ class QRCode:
             rows.reverse()
             for row in rows:
                 for c in range(2):
-                    if self.modules[row][col - c] == None:
+                    if self.modules[row][col - c] is None:
 
                         dark = False
                         if byteIndex < len(data):
