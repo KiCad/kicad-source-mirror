@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-07-01 09:21-0700\n"
+"POT-Creation-Date: 2021-07-19 08:40-0700\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -86,6 +86,16 @@ msgstr "Create zones"
 msgid "Simplifying copper layers polygons"
 msgstr "Simplifying copper layers polygons"
 
+msgid "Simplifying polygons on F_Cu"
+msgstr "Simplifying polygons on F_Cu"
+
+msgid "Simplifying polygons on B_Cu"
+msgstr "Simplifying polygons on B_Cu"
+
+#, c-format
+msgid "Simplifying %d copper layers"
+msgstr "Simplifying %d copper layers"
+
 msgid "Simplify holes contours"
 msgstr "Simplify holes contours"
 
@@ -95,8 +105,8 @@ msgstr "Build Tech layers"
 msgid "Build BVH for holes and vias"
 msgstr "Build BVH for holes and vias"
 
-msgid "Your OpenGL version is not supported. Minimum required is 1.5"
-msgstr "Your OpenGL version is not supported. Minimum required is 1.5"
+msgid "Your OpenGL version is not supported. Minimum required is 1.5."
+msgstr "Your OpenGL version is not supported. Minimum required is 1.5."
 
 #, c-format
 msgid "Last render time %.0f ms"
@@ -855,12 +865,12 @@ msgid "Cannot make path '%s' absolute with respect to '%s'."
 msgstr "Cannot make path '%s' absolute with respect to '%s'."
 
 #, c-format
-msgid "Output directory '%s' created.\n"
-msgstr "Output directory '%s' created.\n"
+msgid "Output directory '%s' created."
+msgstr "Output directory '%s' created."
 
 #, c-format
-msgid "Cannot create output directory '%s'.\n"
-msgstr "Cannot create output directory '%s'.\n"
+msgid "Cannot create output directory '%s'."
+msgstr "Cannot create output directory '%s'."
 
 msgid "This operating system is not supported by KiCad and its dependencies."
 msgstr "This operating system is not supported by KiCad and its dependencies."
@@ -2278,8 +2288,16 @@ msgid "Could not use OpenGL"
 msgstr "Could not use OpenGL"
 
 #, c-format
-msgid "The file '%s' was not fully read."
-msgstr "The file '%s' was not fully read."
+msgid "Drawing sheet '%s' not found."
+msgstr "Drawing sheet '%s' not found."
+
+#, c-format
+msgid "Drawing sheet '%s' could not be opened."
+msgstr "Drawing sheet '%s' could not be opened."
+
+#, c-format
+msgid "Drawing sheet '%s' was not fully read."
+msgstr "Drawing sheet '%s' was not fully read."
 
 msgid "Text"
 msgstr "Text"
@@ -3246,11 +3264,11 @@ msgstr "Footprint text back"
 msgid "Hidden text"
 msgstr "Hidden text"
 
-msgid "Pads front"
-msgstr "Pads front"
+msgid "SMD pads front"
+msgstr "SMD pads front"
 
-msgid "Pads back"
-msgstr "Pads back"
+msgid "SMD pads back"
+msgstr "SMD pads back"
 
 msgid "Through-hole pads"
 msgstr "Through-hole pads"
@@ -3371,13 +3389,11 @@ msgid "The KiCad language file for this language is not installed."
 msgstr "The KiCad language file for this language is not installed."
 
 msgid ""
-"For Altium import, we assumes a null byte at the end of a list of "
-"properties. Because this is missing, imported data might be malformed or "
-"missing."
+"Missing null byte at end of property list. Imported data might be malformed "
+"or missing."
 msgstr ""
-"For Altium import, we assumes a null byte at the end of a list of "
-"properties. Because this is missing, imported data might be malformed or "
-"missing."
+"Missing null byte at end of property list. Imported data might be malformed "
+"or missing."
 
 #, c-format
 msgid "Unit '%s' does not end with 'mil'."
@@ -3432,34 +3448,34 @@ msgstr "Error loading project footprint library table."
 msgid "Failed to output data."
 msgstr "Failed to output data."
 
-msgid "Could not open archive file\n"
-msgstr "Could not open archive file\n"
+msgid "Could not open archive file."
+msgstr "Could not open archive file."
 
-msgid "Invalid archive file format\n"
-msgstr "Invalid archive file format\n"
-
-#, c-format
-msgid "Extracting file '%s'.\n"
-msgstr "Extracting file '%s'.\n"
-
-msgid "Error extracting file!\n"
-msgstr "Error extracting file!\n"
+msgid "Invalid archive file format."
+msgstr "Invalid archive file format."
 
 #, c-format
-msgid "Unable to create archive file '%s'.\n"
-msgstr "Unable to create archive file '%s'.\n"
+msgid "Extracting file '%s'."
+msgstr "Extracting file '%s'."
+
+msgid "Error extracting file!"
+msgstr "Error extracting file!"
 
 #, c-format
-msgid "Archived file '%s'.\n"
-msgstr "Archived file '%s'.\n"
+msgid "Failed to create file '%s'."
+msgstr "Failed to create file '%s'."
 
 #, c-format
-msgid "Failed to archive file '%s'.\n"
-msgstr "Failed to archive file '%s'.\n"
+msgid "Archived file '%s'."
+msgstr "Archived file '%s'."
 
 #, c-format
-msgid "Zip archive '%s' created (%s uncompressed, %s compressed).\n"
-msgstr "Zip archive '%s' created (%s uncompressed, %s compressed).\n"
+msgid "Failed to archive file '%s'."
+msgstr "Failed to archive file '%s'."
+
+#, c-format
+msgid "Zip archive '%s' created (%s uncompressed, %s compressed)."
+msgstr "Zip archive '%s' created (%s uncompressed, %s compressed)."
 
 msgid "Excluded "
 msgstr "Excluded "
@@ -4712,20 +4728,20 @@ msgid "%d duplicate time stamps were found and replaced."
 msgstr "%d duplicate time stamps were found and replaced."
 
 #, c-format
-msgid "Updated %s (unit %s) from %s to %s"
-msgstr "Updated %s (unit %s) from %s to %s"
+msgid "Updated %s (unit %s) from %s to %s."
+msgstr "Updated %s (unit %s) from %s to %s."
 
 #, c-format
-msgid "Updated %s from %s to %s"
-msgstr "Updated %s from %s to %s"
+msgid "Updated %s from %s to %s."
+msgstr "Updated %s from %s to %s."
 
 #, c-format
-msgid "Annotated %s (unit %s) as %s"
-msgstr "Annotated %s (unit %s) as %s"
+msgid "Annotated %s (unit %s) as %s."
+msgstr "Annotated %s (unit %s) as %s."
 
 #, c-format
-msgid "Annotated %s as %s"
-msgstr "Annotated %s as %s"
+msgid "Annotated %s as %s."
+msgstr "Annotated %s as %s."
 
 msgid "Annotation complete."
 msgstr "Annotation complete."
@@ -5569,24 +5585,6 @@ msgstr "Shape"
 msgid "Text Editor"
 msgstr "Text Editor"
 
-msgid "Leave unchanged"
-msgstr "Leave unchanged"
-
-msgid "Color:"
-msgstr "Color:"
-
-msgid "Style:"
-msgstr "Style:"
-
-msgid "Combo!"
-msgstr "Combo!"
-
-msgid "Set width to 0 to use Schematic Editor line widths."
-msgstr "Set width to 0 to use Schematic Editor line widths."
-
-msgid "Set color to transparent to use Schematic Editor colors."
-msgstr "Set color to transparent to use Schematic Editor colors."
-
 msgid "Illegal reference designator value!"
 msgstr "Illegal reference designator value!"
 
@@ -5775,12 +5773,8 @@ msgid "Violation Severity"
 msgstr "Violation Severity"
 
 #, c-format
-msgid "Report file '%s' created\n"
-msgstr "Report file '%s' created\n"
-
-#, c-format
-msgid "Unable to create report file '%s'"
-msgstr "Unable to create report file '%s'"
+msgid "Report file '%s' created."
+msgstr "Report file '%s' created."
 
 #, c-format
 msgid "ERC report (%s, Encoding UTF8)\n"
@@ -5819,67 +5813,6 @@ msgstr "Delete Markers"
 
 msgid "Electrical Rules Checker"
 msgstr "Electrical Rules Checker"
-
-msgid "Select Footprint..."
-msgstr "Select Footprint…"
-
-msgid "Browse for footprint"
-msgstr "Browse for footprint"
-
-msgid "Show Datasheet"
-msgstr "Show Datasheet"
-
-msgid "Show datasheet in browser"
-msgstr "Show datasheet in browser"
-
-msgid "The Reference column cannot be hidden."
-msgstr "The Reference column cannot be hidden."
-
-msgid "Qty"
-msgstr "Qty"
-
-msgid "Field"
-msgstr "Field"
-
-msgid "Show"
-msgstr "Show"
-
-msgid "Group By"
-msgstr "Group By"
-
-msgid "Reference"
-msgstr "Reference"
-
-msgid "Datasheet"
-msgstr "Datasheet"
-
-msgid "New field name:"
-msgstr "New field name:"
-
-msgid "Add Field"
-msgstr "Add Field"
-
-msgid "Field must have a name."
-msgstr "Field must have a name."
-
-#, c-format
-msgid "Field name \"%s\" already in use."
-msgstr "Field name “%s” already in use."
-
-msgid "Save changes?"
-msgstr "Save changes?"
-
-msgid "Group symbols"
-msgstr "Group symbols"
-
-msgid "Group symbols together based on common properties"
-msgstr "Group symbols together based on common properties"
-
-msgid "Add Field..."
-msgstr "Add Field…"
-
-msgid "Symbol Fields"
-msgstr "Symbol Fields"
 
 msgid "Other symbol fields"
 msgstr "Other symbol fields"
@@ -6015,16 +5948,14 @@ msgstr ""
 msgid "Diameter:"
 msgstr "Diameter:"
 
+msgid "Color:"
+msgstr "Color:"
+
 msgid "Junction Properties"
 msgstr "Junction Properties"
 
 msgid "Read Only"
 msgstr "Read Only"
-
-msgid ""
-"Line width may not be 0 for shapes other than filled with body outline color."
-msgstr ""
-"Line width may not be 0 for shapes other than filled with body outline color."
 
 msgid "Do not fill"
 msgstr "Do not fill"
@@ -6073,6 +6004,9 @@ msgstr "X Position"
 
 msgid "Y Position"
 msgstr "Y Position"
+
+msgid "Save changes?"
+msgstr "Save changes?"
 
 msgid "Group by name"
 msgstr "Group by name"
@@ -6128,6 +6062,9 @@ msgstr ""
 
 msgid "Derive from existing symbol:"
 msgstr "Derive from existing symbol:"
+
+msgid "Combo!"
+msgstr "Combo!"
 
 msgid ""
 "Select symbol in the current library as parent symbol.\n"
@@ -6226,6 +6163,9 @@ msgstr "Edit Footprint Filter"
 
 msgid "Fields"
 msgstr "Fields"
+
+msgid "Show"
+msgstr "Show"
 
 msgid "H Align"
 msgstr "H Align"
@@ -6381,6 +6321,21 @@ msgstr "Edit Spice Model…"
 
 msgid "Library Symbol Properties"
 msgstr "Library Symbol Properties"
+
+msgid "Leave unchanged"
+msgstr "Leave unchanged"
+
+msgid "Style:"
+msgstr "Style:"
+
+msgid "Set width to 0 to use Schematic Editor line widths."
+msgstr "Set width to 0 to use Schematic Editor line widths."
+
+msgid "Set color to transparent to use Schematic Editor colors."
+msgstr "Set color to transparent to use Schematic Editor colors."
+
+msgid "Line, Wire & Bus Properties"
+msgstr "Line, Wire & Bus Properties"
 
 msgid "Conflicting Labels"
 msgstr "Conflicting Labels"
@@ -6619,10 +6574,6 @@ msgid "Plotted to '%s'."
 msgstr "Plotted to '%s'."
 
 #, c-format
-msgid "Failed to create file '%s'."
-msgstr "Failed to create file '%s'."
-
-#, c-format
 msgid "Plotted to '%s'.\n"
 msgstr "Plotted to '%s'.\n"
 
@@ -6768,6 +6719,9 @@ msgstr "Symbol Name"
 
 msgid "Action Taken"
 msgstr "Action Taken"
+
+msgid "Reference"
+msgstr "Reference"
 
 #, c-format
 msgid "Instances of this symbol (%d items):"
@@ -7530,6 +7484,58 @@ msgstr "Alternate node sequence:"
 
 msgid "Spice Model Editor"
 msgstr "Spice Model Editor"
+
+msgid "Select Footprint..."
+msgstr "Select Footprint…"
+
+msgid "Browse for footprint"
+msgstr "Browse for footprint"
+
+msgid "Show Datasheet"
+msgstr "Show Datasheet"
+
+msgid "Show datasheet in browser"
+msgstr "Show datasheet in browser"
+
+msgid "The Reference column cannot be hidden."
+msgstr "The Reference column cannot be hidden."
+
+msgid "Qty"
+msgstr "Qty"
+
+msgid "Field"
+msgstr "Field"
+
+msgid "Group By"
+msgstr "Group By"
+
+msgid "Datasheet"
+msgstr "Datasheet"
+
+msgid "New field name:"
+msgstr "New field name:"
+
+msgid "Add Field"
+msgstr "Add Field"
+
+msgid "Field must have a name."
+msgstr "Field must have a name."
+
+#, c-format
+msgid "Field name \"%s\" already in use."
+msgstr "Field name “%s” already in use."
+
+msgid "Group symbols"
+msgstr "Group symbols"
+
+msgid "Group symbols together based on common properties"
+msgstr "Group symbols together based on common properties"
+
+msgid "Add Field..."
+msgstr "Add Field…"
+
+msgid "Symbol Fields Table"
+msgstr "Symbol Fields Table"
 
 msgid "Base Name"
 msgstr "Base Name"
@@ -8771,21 +8777,12 @@ msgstr ""
 "Multiple symbols have the same reference designator.\n"
 "Annotation must be corrected before simulating."
 
-msgid "Run command:"
-msgstr "Run command:"
-
 #, c-format
 msgid "Command error. Return code %d."
 msgstr "Command error. Return code %d."
 
 msgid "Success."
 msgstr "Success."
-
-msgid "Info messages:"
-msgstr "Info messages:"
-
-msgid "Error messages:"
-msgstr "Error messages:"
 
 msgid "Error: duplicate sheet names. Continue?"
 msgstr "Error: duplicate sheet names. Continue?"
@@ -9080,16 +9077,16 @@ msgid "Cannot open file '%s'."
 msgstr "Cannot open file '%s'."
 
 #, c-format
-msgid "Storage file was not fully parsed as %d bytes are remaining."
-msgstr "Storage file was not fully parsed as %d bytes are remaining."
+msgid "Storage file not fully parsed (%d bytes remaining)."
+msgstr "Storage file not fully parsed (%d bytes remaining)."
 
 #, c-format
 msgid "Unknown Record id: %d."
 msgstr "Unknown Record id: %d."
 
 #, c-format
-msgid "Pin has non-existent ownerindex %d."
-msgstr "Pin has non-existent ownerindex %d."
+msgid "Pin's owner (%d) not found."
+msgstr "Pin's owner (%d) not found."
 
 msgid "Pin has unexpected orientation."
 msgstr "Pin has unexpected orientation."
@@ -9104,43 +9101,43 @@ msgid "Pin has unexpected inner edge type."
 msgstr "Pin has unexpected inner edge type."
 
 #, c-format
-msgid "Label has non-existent ownerindex %d."
-msgstr "Label has non-existent ownerindex %d."
+msgid "Label's owner (%d) not found."
+msgstr "Label's owner (%d) not found."
 
 #, c-format
 msgid "Bezier has %d control points. At least 2 are expected."
 msgstr "Bezier has %d control points. At least 2 are expected."
 
 #, c-format
-msgid "Bezier has non-existent ownerindex %d."
-msgstr "Bezier has non-existent ownerindex %d."
+msgid "Bezier's owner (%d) not found."
+msgstr "Bezier's owner (%d) not found."
 
 #, c-format
-msgid "Polyline has non-existent ownerindex %d."
-msgstr "Polyline has non-existent ownerindex %d."
+msgid "Polyline's owner (%d) not found."
+msgstr "Polyline's owner (%d) not found."
 
 #, c-format
-msgid "Polygon has non-existent ownerindex %d."
-msgstr "Polygon has non-existent ownerindex %d."
+msgid "Polygon's owner (%d) not found."
+msgstr "Polygon's owner (%d) not found."
 
 #, c-format
-msgid "Rounded rectangle has non-existent ownerindex %d."
-msgstr "Rounded rectangle has non-existent ownerindex %d."
+msgid "Rounded rectangle's owner (%d) not found."
+msgstr "Rounded rectangle's owner (%d) not found."
 
-msgid "Arc drawing is not possible for now on schematic."
-msgstr "Arc drawing is not possible for now on schematic."
-
-#, c-format
-msgid "Arc has non-existent ownerindex %d."
-msgstr "Arc has non-existent ownerindex %d."
+msgid "Arc drawing on schematic not currently supported."
+msgstr "Arc drawing on schematic not currently supported."
 
 #, c-format
-msgid "Line has non-existent ownerindex %d."
-msgstr "Line has non-existent ownerindex %d."
+msgid "Arc's owner (%d) not found."
+msgstr "Arc's owner (%d) not found."
 
 #, c-format
-msgid "Rectangle has non-existent ownerindex %d."
-msgstr "Rectangle has non-existent ownerindex %d."
+msgid "Line's owner (%d) not found."
+msgstr "Line's owner (%d) not found."
+
+#, c-format
+msgid "Rectangle's owner (%d) not found."
+msgstr "Rectangle's owner (%d) not found."
 
 #, c-format
 msgid "Sheet entry's owner (%d) not found."
@@ -9154,8 +9151,8 @@ msgid "Power symbol creates a global label with name '%s'"
 msgstr "Power symbol creates a global label with name '%s'"
 
 #, c-format
-msgid "There is a port for '%s', but no connections to it."
-msgstr "There is a port for '%s', but no connections to it."
+msgid "Port %s has no connections."
+msgstr "Port %s has no connections."
 
 #, c-format
 msgid "Embedded file %s not found in storage."
@@ -9170,16 +9167,24 @@ msgid "File not found %s."
 msgstr "File not found %s."
 
 #, c-format
-msgid "Sheet name's owner (%d) not found."
-msgstr "Sheet name's owner (%d) not found."
+msgid "Sheetname's owner (%d) not found."
+msgstr "Sheetname's owner (%d) not found."
 
 #, c-format
-msgid "File name's owner (%d) not found."
-msgstr "File name's owner (%d) not found."
+msgid "Filename's owner (%d) not found."
+msgstr "Filename's owner (%d) not found."
 
 #, c-format
-msgid "Designator has non-existent ownerindex %d."
-msgstr "Designator has non-existent ownerindex %d."
+msgid "Designator's owner (%d) not found."
+msgstr "Designator's owner (%d) not found."
+
+#, c-format
+msgid "Implementation's owner (%d) not found."
+msgstr "Implementation's owner (%d) not found."
+
+#, c-format
+msgid "Footprint's owner (%d) not found."
+msgstr "Footprint's owner (%d) not found."
 
 #, c-format
 msgid ""
@@ -9737,7 +9742,14 @@ msgid ""
 "&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> <samp>MEM.D<sub>1</"
 "sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
 "    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
 "</table>\n"
+"<p></p>\n"
+"<p></p>\n"
+"<i>Note that markup has precedence over bus definitions.</i>\n"
+"\n"
 msgstr ""
 "<table>\n"
 "    <tr>\n"
@@ -9870,7 +9882,14 @@ msgstr ""
 "&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> <samp>MEM.D<sub>1</"
 "sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
 "    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
 "</table>\n"
+"<p></p>\n"
+"<p></p>\n"
+"<i>Note that markup has precedence over bus definitions.</i>\n"
+"\n"
 
 #, c-format
 msgid "The reference designator cannot contain %s character(s)."
@@ -9930,8 +9949,11 @@ msgstr "The reference designator cannot contain text variable references"
 msgid "Field Validation Error"
 msgstr "Field Validation Error"
 
-msgid "Signal name contains '[' or ']' but is not a valid vector bus name"
-msgstr "Signal name contains '[' or ']' but is not a valid vector bus name"
+msgid "Signal name contains '[' or ']' but is not a valid vector bus name."
+msgstr "Signal name contains '[' or ']' but is not a valid vector bus name."
+
+msgid "Signal name contains '{' and '}' but is not a valid group bus name"
+msgstr "Signal name contains '{' and '}' but is not a valid group bus name"
 
 #, c-format
 msgid ""
@@ -9945,11 +9967,11 @@ msgstr ""
 
 #, c-format
 msgid ""
-"The schematic '%s' has not had it's symbol library links remapped to the "
+"The schematic '%s' has not had its symbol library links remapped to the "
 "symbol library table.  The project this schematic belongs to must first be "
 "remapped before it can be imported into the current project."
 msgstr ""
-"The schematic '%s' has not had it's symbol library links remapped to the "
+"The schematic '%s' has not had its symbol library links remapped to the "
 "symbol library table.  The project this schematic belongs to must first be "
 "remapped before it can be imported into the current project."
 
@@ -10078,9 +10100,6 @@ msgstr "Spice Simulator"
 msgid "There were errors during netlist export, aborted."
 msgstr "There were errors during netlist export, aborted."
 
-msgid "You need to select the simulation settings first."
-msgstr "You need to select the simulation settings first."
-
 #, c-format
 msgid "Plot%u - "
 msgstr "Plot%u - "
@@ -10097,11 +10116,8 @@ msgstr "Signal"
 msgid "Open simulation workbook"
 msgstr "Open simulation workbook"
 
-msgid "There was an error while opening the workbook file"
-msgstr "There was an error while opening the workbook file"
-
-msgid "There was an error while saving the workbook file"
-msgstr "There was an error while saving the workbook file"
+msgid "noname"
+msgstr "noname"
 
 msgid "Save Simulation Workbook As"
 msgstr "Save Simulation Workbook As"
@@ -10111,9 +10127,6 @@ msgstr "Save Plot as Image"
 
 msgid "Save Plot Data"
 msgstr "Save Plot Data"
-
-msgid "Simulator is running. Try later"
-msgstr "Simulator is running. Try later"
 
 msgid "You need to run plot-providing simulation first."
 msgstr "You need to run plot-providing simulation first."
@@ -11557,6 +11570,10 @@ msgstr "Label value cannot go below zero"
 msgid "Edit %s Field"
 msgstr "Edit %s Field"
 
+#, c-format
+msgid "Edit '%s' Field"
+msgstr "Edit '%s' Field"
+
 msgid "There are no unreferenced pins in this sheet to remove."
 msgstr "There are no unreferenced pins in this sheet to remove."
 
@@ -12493,9 +12510,6 @@ msgstr "Load File to Edit"
 msgid "[no project loaded]"
 msgstr "[no project loaded]"
 
-msgid "KiCad "
-msgstr "KiCad "
-
 #, c-format
 msgid "Project: %s"
 msgstr "Project: %s"
@@ -13026,10 +13040,6 @@ msgstr "Unable to write '%s'."
 
 msgid "Save As"
 msgstr "Save As"
-
-#, c-format
-msgid "Unable to create \"%s\""
-msgstr "Unable to create “%s”"
 
 msgid "Error reading drawing sheet"
 msgstr "Error reading drawing sheet"
@@ -14329,6 +14339,24 @@ msgid "PrePreg"
 msgstr "PrePreg"
 
 #, c-format
+msgid "Enter board thickness in %s"
+msgstr "Enter board thickness in %s"
+
+#, c-format
+msgid "Enter expected board thickness in %s (min value %s)"
+msgstr "Enter expected board thickness in %s (min value %s)"
+
+msgid "Adjust not locked dielectric thickness layers"
+msgstr "Adjust not locked dielectric thickness layers"
+
+#, c-format
+msgid "Too small value (min value %s %s). Aborted"
+msgstr "Too small value (min value %s %s). Aborted"
+
+msgid "All dielectric  thickness layers are locked"
+msgstr "All dielectric  thickness layers are locked"
+
+#, c-format
 msgid "Layer '%s' (sublayer %d/%d)"
 msgstr "Layer '%s' (sublayer %d/%d)"
 
@@ -14445,6 +14473,9 @@ msgstr "Id"
 
 msgid "Board thickness from stackup:"
 msgstr "Board thickness from stackup:"
+
+msgid "Adjust Dielectric Thickness"
+msgstr "Adjust Dielectric Thickness"
 
 msgid "ENIG"
 msgstr "ENIG"
@@ -15228,21 +15259,8 @@ msgstr "Thermal spoke width cannot be smaller than the minimum width."
 msgid "No layer selected."
 msgstr "No layer selected."
 
-msgid "Hide nets matching:"
-msgstr "Hide nets matching:"
-
-msgid ""
-"Pattern to filter net names in filtered list.\n"
-"Net names matching this pattern are not displayed."
-msgstr ""
-"Pattern to filter net names in filtered list.\n"
-"Net names matching this pattern are not displayed."
-
-msgid "Show nets matching:"
-msgstr "Show nets matching:"
-
-msgid "*"
-msgstr "*"
+msgid "Selecting <no net> will create an isolated copper island."
+msgstr "Selecting <no net> will create an isolated copper island."
 
 msgid ""
 "Pattern to filter net names in filtered list.\n"
@@ -15251,20 +15269,11 @@ msgstr ""
 "Pattern to filter net names in filtered list.\n"
 "Only net names matching this pattern are displayed."
 
-msgid "Show all nets"
-msgstr "Show all nets"
+msgid "Hide auto-generated net names"
+msgstr "Hide auto-generated net names"
 
 msgid "Sort nets by pad count"
 msgstr "Sort nets by pad count"
-
-msgid ""
-"No net will result\n"
-"in an unconnected \n"
-"copper island."
-msgstr ""
-"No net will result\n"
-"in an unconnected \n"
-"copper island."
 
 msgid "Zone name:"
 msgstr "Zone name:"
@@ -15802,10 +15811,6 @@ msgstr "Open the Board Setup... dialog"
 msgid "Report file '%s' created<br>"
 msgstr "Report file '%s' created<br>"
 
-#, c-format
-msgid "Unable to create report file '%s'<br>"
-msgstr "Unable to create report file '%s'<br>"
-
 msgid "Do you wish to delete excluded markers as well?"
 msgstr "Do you wish to delete excluded markers as well?"
 
@@ -15962,10 +15967,6 @@ msgstr "Update Footprints from Library"
 msgid "File %s already exists."
 msgstr "File %s already exists."
 
-#, c-format
-msgid "Unable to create %s"
-msgstr "Unable to create %s"
-
 msgid "File name:"
 msgstr "File name:"
 
@@ -16092,10 +16093,6 @@ msgstr "Could not write plot files to folder '%s'."
 #, c-format
 msgid "Exported '%s'."
 msgstr "Exported '%s'."
-
-#, c-format
-msgid "Unable to create '%s'."
-msgstr "Unable to create '%s'."
 
 msgid ""
 "Enter a filename if you do not want to use default file names\n"
@@ -16688,14 +16685,6 @@ msgstr "Could not write drill and/or map files to folder '%s'."
 
 msgid "Save Drill Report File"
 msgstr "Save Drill Report File"
-
-#, c-format
-msgid "** Unable to create %s **\n"
-msgstr "** Unable to create %s **\n"
-
-#, c-format
-msgid "Report file %s created\n"
-msgstr "Report file %s created\n"
 
 msgid "Output folder:"
 msgstr "Output folder:"
@@ -19072,6 +19061,15 @@ msgstr ""
 "approximate it.\n"
 "The error max defines the number of segments of this polygon."
 
+msgid ""
+"The maximum allowed deviation between a true arc or circle and segments used "
+"to approximate it.  Smaller values produce smoother graphics at the expense "
+"of performance."
+msgstr ""
+"The maximum allowed deviation between a true arc or circle and segments used "
+"to approximate it.  Smaller values produce smoother graphics at the expense "
+"of performance."
+
 #, c-format
 msgid "Note: zone filling can be slow when < %s."
 msgstr "Note: zone filling can be slow when < %s."
@@ -19120,20 +19118,68 @@ msgstr ""
 msgid "Minimum clearance:"
 msgstr "Minimum clearance:"
 
+msgid ""
+"The minimum clearance between copper items which do not belong to the same "
+"net.  If set, this is an absolute minimum which cannot be reduced by "
+"netclasses, custom rules, or other settings."
+msgstr ""
+"The minimum clearance between copper items which do not belong to the same "
+"net.  If set, this is an absolute minimum which cannot be reduced by "
+"netclasses, custom rules, or other settings."
+
 msgid "Minimum track width:"
 msgstr "Minimum track width:"
+
+msgid ""
+"The minimum track width.  If set, this is an absolute minimum and cannot be "
+"reduced by netclasses, custom rules, or other settings."
+msgstr ""
+"The minimum track width.  If set, this is an absolute minimum and cannot be "
+"reduced by netclasses, custom rules, or other settings."
 
 msgid "Minimum annular width:"
 msgstr "Minimum annular width:"
 
+msgid ""
+"The minimum annular ring width.  If set, this is an absolute minimum and "
+"cannot be reduced by netclasses, custom rules, or other settings."
+msgstr ""
+"The minimum annular ring width.  If set, this is an absolute minimum and "
+"cannot be reduced by netclasses, custom rules, or other settings."
+
 msgid "Minimum via diameter:"
 msgstr "Minimum via diameter:"
+
+msgid ""
+"The minimum via diameter.  If set, this is an absolute minimum and cannot be "
+"reduced by netclasses, custom rules, or other settings."
+msgstr ""
+"The minimum via diameter.  If set, this is an absolute minimum and cannot be "
+"reduced by netclasses, custom rules, or other settings."
 
 msgid "Copper hole clearance:"
 msgstr "Copper hole clearance:"
 
+msgid ""
+"The minimum clearance between a hole and an unassociated copper item.  If "
+"set, this is an absolute minimum and cannot be reduced by custom rules or "
+"other settings."
+msgstr ""
+"The minimum clearance between a hole and an unassociated copper item.  If "
+"set, this is an absolute minimum and cannot be reduced by custom rules or "
+"other settings."
+
 msgid "Copper edge clearance:"
 msgstr "Copper edge clearance:"
+
+msgid ""
+"The minimum clearance between the board edge and any copper item.  If set, "
+"this is an absolute minimum and cannot be reduced by custom rules or other "
+"settings."
+msgstr ""
+"The minimum clearance between the board edge and any copper item.  If set, "
+"this is an absolute minimum and cannot be reduced by custom rules or other "
+"settings."
 
 msgid "Holes"
 msgstr "Holes"
@@ -19141,8 +19187,24 @@ msgstr "Holes"
 msgid "Minimum through hole:"
 msgstr "Minimum through hole:"
 
+msgid ""
+"The minimum through-hole size.  If set, this is an absolute minimum and "
+"cannot be reduced by netclasses, custom rules or other settings."
+msgstr ""
+"The minimum through-hole size.  If set, this is an absolute minimum and "
+"cannot be reduced by netclasses, custom rules or other settings."
+
 msgid "Hole to hole clearance:"
 msgstr "Hole to hole clearance:"
+
+msgid ""
+"The minimum clearance between two drilled holes.   If set, this is an "
+"absolute minimum and cannot be reduced by custom rules or other settings. "
+"(Note: does not apply to milled holes.)"
+msgstr ""
+"The minimum clearance between two drilled holes.   If set, this is an "
+"absolute minimum and cannot be reduced by custom rules or other settings. "
+"(Note: does not apply to milled holes.)"
 
 msgid "uVias"
 msgstr "uVias"
@@ -19150,14 +19212,37 @@ msgstr "uVias"
 msgid "Minimum uVia diameter:"
 msgstr "Minimum uVia diameter:"
 
+msgid ""
+"The minimum diameter for micro-vias.  If set, this is an absolute minimum "
+"and cannot be reduced by netclasses, custom rules, or other settings."
+msgstr ""
+"The minimum diameter for micro-vias.  If set, this is an absolute minimum "
+"and cannot be reduced by netclasses, custom rules, or other settings."
+
 msgid "Minimum uVia hole:"
 msgstr "Minimum uVia hole:"
+
+msgid ""
+"The minimum micro-via hole size.  If set, this is an absolute minimum and "
+"cannot be reduced by netclasses, custom rules, or other settings."
+msgstr ""
+"The minimum micro-via hole size.  If set, this is an absolute minimum and "
+"cannot be reduced by netclasses, custom rules, or other settings."
 
 msgid "Silkscreen"
 msgstr "Silkscreen"
 
 msgid "Minimum item clearance:"
 msgstr "Minimum item clearance:"
+
+msgid ""
+"Minimum clearance between two items on the same silkscreen layer.  If set "
+"this can improve legibility.  (Note: does not apply to multiple shapes "
+"within a single footprint.)"
+msgstr ""
+"Minimum clearance between two items on the same silkscreen layer.  If set "
+"this can improve legibility.  (Note: does not apply to multiple shapes "
+"within a single footprint.)"
 
 msgid "Use the Physical Stackup page to change the number of copper layers."
 msgstr "Use the Physical Stackup page to change the number of copper layers."
@@ -20577,13 +20662,14 @@ msgid "Save Footprint Association File"
 msgstr "Save Footprint Association File"
 
 msgid ""
-"File contains pad shapes that are not supported by the Hyperlynx exporter\n"
-"(Supported shapes are oval, rectangle, circle.)\n"
-"They have been exported as oval pads."
+"File contains pad shapes that are not supported by the Hyperlynx exporter "
+"(supported shapes are oval, rectangle and circle)."
 msgstr ""
-"File contains pad shapes that are not supported by the Hyperlynx exporter\n"
-"(Supported shapes are oval, rectangle, circle.)\n"
-"They have been exported as oval pads."
+"File contains pad shapes that are not supported by the Hyperlynx exporter "
+"(supported shapes are oval, rectangle and circle)."
+
+msgid "They have been exported as oval pads."
+msgstr "They have been exported as oval pads."
 
 msgid "Board outline is malformed. Run DRC for a full analysis."
 msgstr "Board outline is malformed. Run DRC for a full analysis."
@@ -20610,8 +20696,8 @@ msgid "Back (bottom side) placement file: '%s'."
 msgstr "Back (bottom side) placement file: '%s'."
 
 #, c-format
-msgid "Full component count: %d.\n"
-msgstr "Full component count: %d.\n"
+msgid "Full component count: %d."
+msgstr "Full component count: %d."
 
 msgid "File generation successful."
 msgstr "File generation successful."
@@ -20643,19 +20729,11 @@ msgid "Created file '%s'."
 msgstr "Created file '%s'."
 
 #, c-format
-msgid "Unable to create job file '%s'."
-msgstr "Unable to create job file '%s'."
+msgid "Created Gerber job file '%s'."
+msgstr "Created Gerber job file '%s'."
 
-#, c-format
-msgid "Create Gerber job file '%s'."
-msgstr "Create Gerber job file '%s'."
-
-msgid ""
-"Board stackup settings not up to date\n"
-"Please fix the stackup"
-msgstr ""
-"Board stackup settings not up to date\n"
-"Please fix the stackup"
+msgid "Board stackup settings not up to date."
+msgstr "Board stackup settings not up to date."
 
 msgid "All KiCad Board Files"
 msgstr "All KiCad Board Files"
@@ -21665,8 +21743,8 @@ msgid "Netlist Load Error"
 msgstr "Netlist Load Error"
 
 #, c-format
-msgid "No footprint defined for symbol %s.\n"
-msgstr "No footprint defined for symbol %s.\n"
+msgid "No footprint defined for symbol %s."
+msgstr "No footprint defined for symbol %s."
 
 #, c-format
 msgid "Footprint of %s changed: board footprint '%s', netlist footprint '%s'."
@@ -21678,11 +21756,9 @@ msgstr "%s footprint ID '%s' is not valid."
 
 #, c-format
 msgid ""
-"%s footprint '%s' not found in any libraries in the footprint library "
-"table.\n"
+"%s footprint '%s' not found in any libraries in the footprint library table."
 msgstr ""
-"%s footprint '%s' not found in any libraries in the footprint library "
-"table.\n"
+"%s footprint '%s' not found in any libraries in the footprint library table."
 
 #, c-format
 msgid ""
@@ -22122,14 +22198,6 @@ msgstr ""
 "Polygon found on an Altium layer (%d) with no KiCad equivalent. It has been "
 "moved to KiCad layer Eco1_User."
 
-#, c-format
-msgid ""
-"Polygon has only %d point extracted from %ld vertices. At least 2 points are "
-"required."
-msgstr ""
-"Polygon has only %d point extracted from %ld vertices. At least 2 points are "
-"required."
-
 msgid "Loading rules..."
 msgstr "Loading rules..."
 
@@ -22138,14 +22206,6 @@ msgstr "Loading board regions..."
 
 msgid "Loading zones..."
 msgstr "Loading zones..."
-
-#, c-format
-msgid ""
-"ShapeBasedRegion has only %d point extracted from %ld vertices. At least 2 "
-"points are required."
-msgstr ""
-"ShapeBasedRegion has only %d point extracted from %ld vertices. At least 2 "
-"points are required."
 
 #, c-format
 msgid ""
@@ -23179,6 +23239,18 @@ msgstr "Tuned: "
 msgid "?"
 msgstr "?"
 
+msgid "existing track"
+msgstr "existing track"
+
+msgid "board minimum width"
+msgstr "board minimum width"
+
+msgid "netclass 'Default'"
+msgstr "netclass 'Default'"
+
+msgid "user choice"
+msgstr "user choice"
+
 #, c-format
 msgid "%s is malformed."
 msgstr "%s is malformed."
@@ -23424,6 +23496,31 @@ msgstr "Drag Anyway"
 msgid "Break Track"
 msgstr "Break Track"
 
+#, c-format
+msgid "Routing Diff Pair: %s"
+msgstr "Routing Diff Pair: %s"
+
+#, c-format
+msgid "Routing Track: %s"
+msgstr "Routing Track: %s"
+
+#, c-format
+msgid "Net Class: %s"
+msgstr "Net Class: %s"
+
+msgid "Routing Track"
+msgstr "Routing Track"
+
+msgid "(no net)"
+msgstr "(no net)"
+
+#, c-format
+msgid "Track Width: %s"
+msgstr "Track Width: %s"
+
+msgid "Diff Pair Gap"
+msgstr "Diff Pair Gap"
+
 msgid "Warning: top and bottom layers are same."
 msgstr "Warning: top and bottom layers are same."
 
@@ -23504,6 +23601,15 @@ msgstr "Display next footprint"
 
 msgid "Insert footprint in board"
 msgstr "Insert footprint in board"
+
+msgid ""
+"Select the default width for new tracks. Note that this width can be "
+"overridden by the board minimum width, or by the width of an existing track "
+"if the 'Use Existing Track Width' feature is enabled."
+msgstr ""
+"Select the default width for new tracks. Note that this width can be "
+"overridden by the board minimum width, or by the width of an existing track "
+"if the 'Use Existing Track Width' feature is enabled."
 
 msgid ""
 "When routing from an existing track use its width instead of the current "
@@ -24951,26 +25057,29 @@ msgstr "Filter Selected Items..."
 msgid "Remove items from the selection by type"
 msgstr "Remove items from the selection by type"
 
-msgid "Fill zone(s)"
-msgstr "Fill zone(s)"
+msgid "Fill Zone"
+msgstr "Fill Zone"
 
-msgid "Fill All"
-msgstr "Fill All"
+msgid "Update copper fill of selected zone(s)"
+msgstr "Update copper fill of selected zone(s)"
 
-msgid "Fill all zones"
-msgstr "Fill all zones"
+msgid "Fill All Zones"
+msgstr "Fill All Zones"
 
-msgid "Unfill"
-msgstr "Unfill"
+msgid "Update copper fill of all zones"
+msgstr "Update copper fill of all zones"
 
-msgid "Unfill zone(s)"
-msgstr "Unfill zone(s)"
+msgid "Unfill Zone"
+msgstr "Unfill Zone"
 
-msgid "Unfill All"
-msgstr "Unfill All"
+msgid "Remove copper fill from selected zone(s)"
+msgstr "Remove copper fill from selected zone(s)"
 
-msgid "Unfill all zones"
-msgstr "Unfill all zones"
+msgid "Unfill All Zones"
+msgstr "Unfill All Zones"
+
+msgid "Remove copper fill from all zones"
+msgstr "Remove copper fill from all zones"
 
 msgid "Place Selected Footprints"
 msgstr "Place Selected Footprints"
@@ -25149,18 +25258,6 @@ msgstr "Show DRC rules"
 
 msgid "Zone fills may be inaccurate.  DRC rules contain errors."
 msgstr "Zone fills may be inaccurate.  DRC rules contain errors."
-
-msgid "Fill All Zones"
-msgstr "Fill All Zones"
-
-msgid "Fill Zone"
-msgstr "Fill Zone"
-
-msgid "Unfill Zone"
-msgstr "Unfill Zone"
-
-msgid "Unfill All Zones"
-msgstr "Unfill All Zones"
 
 msgid "Incomplete undo/redo operation: some items not found"
 msgstr "Incomplete undo/redo operation: some items not found"
@@ -25773,6 +25870,595 @@ msgstr "KiCad Schematic"
 
 msgid "KiCad Printed Circuit Board"
 msgstr "KiCad Printed Circuit Board"
+
+#~ msgid "Your OpenGL version is not supported. Minimum required is 1.5"
+#~ msgstr "Your OpenGL version is not supported. Minimum required is 1.5"
+
+#, c-format
+#~ msgid "Output directory '%s' created.\n"
+#~ msgstr "Output directory '%s' created.\n"
+
+#, c-format
+#~ msgid "Cannot create output directory '%s'.\n"
+#~ msgstr "Cannot create output directory '%s'.\n"
+
+#, c-format
+#~ msgid "The file '%s' was not fully read."
+#~ msgstr "The file '%s' was not fully read."
+
+#~ msgid "Pads front"
+#~ msgstr "Pads front"
+
+#~ msgid "Pads back"
+#~ msgstr "Pads back"
+
+#~ msgid ""
+#~ "For Altium import, we assumes a null byte at the end of a list of "
+#~ "properties. Because this is missing, imported data might be malformed or "
+#~ "missing."
+#~ msgstr ""
+#~ "For Altium import, we assumes a null byte at the end of a list of "
+#~ "properties. Because this is missing, imported data might be malformed or "
+#~ "missing."
+
+#~ msgid "Could not open archive file\n"
+#~ msgstr "Could not open archive file\n"
+
+#~ msgid "Invalid archive file format\n"
+#~ msgstr "Invalid archive file format\n"
+
+#, c-format
+#~ msgid "Extracting file '%s'.\n"
+#~ msgstr "Extracting file '%s'.\n"
+
+#~ msgid "Error extracting file!\n"
+#~ msgstr "Error extracting file!\n"
+
+#, c-format
+#~ msgid "Unable to create archive file '%s'.\n"
+#~ msgstr "Unable to create archive file '%s'.\n"
+
+#, c-format
+#~ msgid "Archived file '%s'.\n"
+#~ msgstr "Archived file '%s'.\n"
+
+#, c-format
+#~ msgid "Failed to archive file '%s'.\n"
+#~ msgstr "Failed to archive file '%s'.\n"
+
+#, c-format
+#~ msgid "Zip archive '%s' created (%s uncompressed, %s compressed).\n"
+#~ msgstr "Zip archive '%s' created (%s uncompressed, %s compressed).\n"
+
+#, c-format
+#~ msgid "Updated %s (unit %s) from %s to %s"
+#~ msgstr "Updated %s (unit %s) from %s to %s"
+
+#, c-format
+#~ msgid "Updated %s from %s to %s"
+#~ msgstr "Updated %s from %s to %s"
+
+#, c-format
+#~ msgid "Annotated %s (unit %s) as %s"
+#~ msgstr "Annotated %s (unit %s) as %s"
+
+#, c-format
+#~ msgid "Annotated %s as %s"
+#~ msgstr "Annotated %s as %s"
+
+#, c-format
+#~ msgid "Report file '%s' created\n"
+#~ msgstr "Report file '%s' created\n"
+
+#, c-format
+#~ msgid "Unable to create report file '%s'"
+#~ msgstr "Unable to create report file '%s'"
+
+#~ msgid "Symbol Fields"
+#~ msgstr "Symbol Fields"
+
+#~ msgid ""
+#~ "Line width may not be 0 for shapes other than filled with body outline "
+#~ "color."
+#~ msgstr ""
+#~ "Line width may not be 0 for shapes other than filled with body outline "
+#~ "color."
+
+#~ msgid "Run command:"
+#~ msgstr "Run command:"
+
+#~ msgid "Info messages:"
+#~ msgstr "Info messages:"
+
+#~ msgid "Error messages:"
+#~ msgstr "Error messages:"
+
+#, c-format
+#~ msgid "Storage file was not fully parsed as %d bytes are remaining."
+#~ msgstr "Storage file was not fully parsed as %d bytes are remaining."
+
+#, c-format
+#~ msgid "Pin has non-existent ownerindex %d."
+#~ msgstr "Pin has non-existent ownerindex %d."
+
+#, c-format
+#~ msgid "Label has non-existent ownerindex %d."
+#~ msgstr "Label has non-existent ownerindex %d."
+
+#, c-format
+#~ msgid "Bezier has non-existent ownerindex %d."
+#~ msgstr "Bezier has non-existent ownerindex %d."
+
+#, c-format
+#~ msgid "Polyline has non-existent ownerindex %d."
+#~ msgstr "Polyline has non-existent ownerindex %d."
+
+#, c-format
+#~ msgid "Polygon has non-existent ownerindex %d."
+#~ msgstr "Polygon has non-existent ownerindex %d."
+
+#, c-format
+#~ msgid "Rounded rectangle has non-existent ownerindex %d."
+#~ msgstr "Rounded rectangle has non-existent ownerindex %d."
+
+#~ msgid "Arc drawing is not possible for now on schematic."
+#~ msgstr "Arc drawing is not possible for now on schematic."
+
+#, c-format
+#~ msgid "Arc has non-existent ownerindex %d."
+#~ msgstr "Arc has non-existent ownerindex %d."
+
+#, c-format
+#~ msgid "Line has non-existent ownerindex %d."
+#~ msgstr "Line has non-existent ownerindex %d."
+
+#, c-format
+#~ msgid "Rectangle has non-existent ownerindex %d."
+#~ msgstr "Rectangle has non-existent ownerindex %d."
+
+#, c-format
+#~ msgid "There is a port for '%s', but no connections to it."
+#~ msgstr "There is a port for '%s', but no connections to it."
+
+#, c-format
+#~ msgid "Sheet name's owner (%d) not found."
+#~ msgstr "Sheet name's owner (%d) not found."
+
+#, c-format
+#~ msgid "File name's owner (%d) not found."
+#~ msgstr "File name's owner (%d) not found."
+
+#, c-format
+#~ msgid "Designator has non-existent ownerindex %d."
+#~ msgstr "Designator has non-existent ownerindex %d."
+
+#~ msgid ""
+#~ "<table>\n"
+#~ "    <tr>\n"
+#~ "        <th>Markup</th>\n"
+#~ "        <th></th>\n"
+#~ "        <th>Result</th>\n"
+#~ "    </tr>\n"
+#~ "    <tr>\n"
+#~ "        <td>&nbsp;<br><samp>^{superscript}</samp></td>\n"
+#~ "        <td></td>\n"
+#~ "        <td>&nbsp;<br><samp><sup>superscript</sup>&nbsp;</samp></td>\n"
+#~ "    </tr>\n"
+#~ "    <tr>\n"
+#~ "        <td>&nbsp;<br><samp>Driver Board^{Rev A}</samp></td>\n"
+#~ "        <td></td>\n"
+#~ "        <td>&nbsp;<br><samp>Driver Board<sup>Rev A</sup></samp></td>\n"
+#~ "    </tr>\n"
+#~ "    <tr>\n"
+#~ "        <td><br></td>\n"
+#~ "    </tr>\n"
+#~ "    <tr>\n"
+#~ "        <td>&nbsp;<br><samp>_{subscript}</samp></td>\n"
+#~ "        <td></td>\n"
+#~ "        <td>&nbsp;<br><samp><sub>subscript</sub>&nbsp;</samp></td>\n"
+#~ "    </tr>\n"
+#~ "    <tr>\n"
+#~ "        <td>&nbsp;<br><samp>D_{0} - D_{15}</samp></td>\n"
+#~ "        <td></td>\n"
+#~ "        <td>&nbsp;<br><samp>D<sub>0</sub> - D<sub>15</sub></samp></td>\n"
+#~ "    </tr>\n"
+#~ "    <tr>\n"
+#~ "        <td></td>\n"
+#~ "    </tr>\n"
+#~ "    <tr>\n"
+#~ "        <td> &nbsp;<br><samp>~{overbar}</samp><br> &nbsp;<br><samp>~{CLK}"
+#~ "</samp><br> &nbsp;<br><samp>~~</samp> </td>\n"
+#~ "        <td></td>\n"
+#~ "        <td> <samp><u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></"
+#~ "samp><br> <samp>overbar</samp><br> <samp><u>&nbsp;&nbsp;&nbsp;</u></"
+#~ "samp><br> <samp>CLK</samp><br> <samp>&nbsp;</samp><br> <samp>~</samp> </"
+#~ "td>\n"
+#~ "    </tr>\n"
+#~ "    <tr>\n"
+#~ "        <td><br></td>\n"
+#~ "    </tr>\n"
+#~ "    <tr>\n"
+#~ "        <td>&nbsp;<br><samp>${variable}</samp></td>\n"
+#~ "        <td></td>\n"
+#~ "        <td>&nbsp;<br><samp><i>variable_value</i></samp></td>\n"
+#~ "    </tr>\n"
+#~ "    <tr>\n"
+#~ "        <td>&nbsp;<br><samp>${REVISION}</samp></td>\n"
+#~ "        <td></td>\n"
+#~ "        <td>&nbsp;<br><samp>2020.1</samp></td>\n"
+#~ "    </tr>\n"
+#~ "    <tr>\n"
+#~ "        <td><br></td>\n"
+#~ "    </tr>\n"
+#~ "    <tr>\n"
+#~ "        <td>&nbsp;<br><samp>${refdes:field}</samp></td>\n"
+#~ "        <td></td>\n"
+#~ "        <td>&nbsp;<br><samp><i>field_value</i> of symbol <i>refdes</i></"
+#~ "samp></td>\n"
+#~ "    </tr>\n"
+#~ "    <tr>\n"
+#~ "        <td>&nbsp;<br><samp>${R3:VALUE}</samp></td>\n"
+#~ "        <td></td>\n"
+#~ "        <td>&nbsp;<br><samp>150K</samp></td>\n"
+#~ "    </tr>\n"
+#~ "    <tr>\n"
+#~ "        <td><br></td>\n"
+#~ "    </tr>\n"
+#~ "    <tr>\n"
+#~ "        <td><br></td>\n"
+#~ "    </tr>\n"
+#~ "    <tr>\n"
+#~ "        <th>Bus Definition</th>\n"
+#~ "        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+#~ "&nbsp;&nbsp;&nbsp;</th>\n"
+#~ "        <th>Resultant Nets</th>\n"
+#~ "    </tr>\n"
+#~ "    <tr>\n"
+#~ "        <td>&nbsp;<br><samp>prefix[m..n]</samp></td>\n"
+#~ "        <td></td>\n"
+#~ "        <td>&nbsp;<br><samp>prefixm to prefixn</samp></td>\n"
+#~ "    </tr>\n"
+#~ "    <tr>\n"
+#~ "        <td>&nbsp;<br><samp>D[0..7]</samp></td>\n"
+#~ "        <td></td>\n"
+#~ "        <td>&nbsp;<br><samp>D0, D1, D2, D3, D4, D5, D6, D7</samp></td>\n"
+#~ "    </tr>\n"
+#~ "    <tr>\n"
+#~ "        <td><br></td>\n"
+#~ "    </tr>\n"
+#~ "    <tr>\n"
+#~ "        <td>&nbsp;<br><samp>{net1 net2 ...}</samp></td>\n"
+#~ "        <td></td>\n"
+#~ "        <td>&nbsp;<br><samp>net1, net2, ...</samp></td>\n"
+#~ "    </tr>\n"
+#~ "    <tr>\n"
+#~ "        <td>&nbsp;<br><samp>{SCL SDA}</samp></td>\n"
+#~ "        <td></td>\n"
+#~ "        <td>&nbsp;<br><samp>SCL, SDA</samp></td>\n"
+#~ "    </tr>\n"
+#~ "    <tr>\n"
+#~ "        <td><br></td>\n"
+#~ "    </tr>\n"
+#~ "    <tr>\n"
+#~ "        <td>&nbsp;<br><samp>prefix{net1 net2 ...}</samp></td>\n"
+#~ "        <td></td>\n"
+#~ "        <td>&nbsp;<br><samp>prefix.net1, prefix.net2, ...</samp></td>\n"
+#~ "    </tr>\n"
+#~ "    <tr>\n"
+#~ "        <td>&nbsp;<br><samp>USB1{D+ D-}</samp></td>\n"
+#~ "        <td></td>\n"
+#~ "        <td>&nbsp;<br><samp>USB1.D+, USB1.D-</samp></td>\n"
+#~ "    </tr>\n"
+#~ "    <tr>\n"
+#~ "        <td><br></td>\n"
+#~ "    </tr>\n"
+#~ "    <tr>\n"
+#~ "        <td>&nbsp;<br><samp>MEM{D[1..2] LATCH}</samp></td>\n"
+#~ "        <td></td>\n"
+#~ "        <td>&nbsp;<br> <samp>MEM.D1, MEM.D2, MEM.LATCH</samp> </td>\n"
+#~ "    </tr>\n"
+#~ "    <tr>\n"
+#~ "        <td>&nbsp;<br><samp>MEM{D_{[1..2]} ~LATCH}</samp></td>\n"
+#~ "        <td></td>\n"
+#~ "        <td> <samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
+#~ "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; &nbsp;&nbsp;&nbsp;"
+#~ "&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> <samp>MEM.D<sub>1</"
+#~ "sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
+#~ "    </tr>\n"
+#~ "</table>\n"
+#~ msgstr ""
+#~ "<table>\n"
+#~ "    <tr>\n"
+#~ "        <th>Markup</th>\n"
+#~ "        <th></th>\n"
+#~ "        <th>Result</th>\n"
+#~ "    </tr>\n"
+#~ "    <tr>\n"
+#~ "        <td>&nbsp;<br><samp>^{superscript}</samp></td>\n"
+#~ "        <td></td>\n"
+#~ "        <td>&nbsp;<br><samp><sup>superscript</sup>&nbsp;</samp></td>\n"
+#~ "    </tr>\n"
+#~ "    <tr>\n"
+#~ "        <td>&nbsp;<br><samp>Driver Board^{Rev A}</samp></td>\n"
+#~ "        <td></td>\n"
+#~ "        <td>&nbsp;<br><samp>Driver Board<sup>Rev A</sup></samp></td>\n"
+#~ "    </tr>\n"
+#~ "    <tr>\n"
+#~ "        <td><br></td>\n"
+#~ "    </tr>\n"
+#~ "    <tr>\n"
+#~ "        <td>&nbsp;<br><samp>_{subscript}</samp></td>\n"
+#~ "        <td></td>\n"
+#~ "        <td>&nbsp;<br><samp><sub>subscript</sub>&nbsp;</samp></td>\n"
+#~ "    </tr>\n"
+#~ "    <tr>\n"
+#~ "        <td>&nbsp;<br><samp>D_{0} - D_{15}</samp></td>\n"
+#~ "        <td></td>\n"
+#~ "        <td>&nbsp;<br><samp>D<sub>0</sub> - D<sub>15</sub></samp></td>\n"
+#~ "    </tr>\n"
+#~ "    <tr>\n"
+#~ "        <td></td>\n"
+#~ "    </tr>\n"
+#~ "    <tr>\n"
+#~ "        <td> &nbsp;<br><samp>~{overbar}</samp><br> &nbsp;<br><samp>~{CLK}"
+#~ "</samp><br> &nbsp;<br><samp>~~</samp> </td>\n"
+#~ "        <td></td>\n"
+#~ "        <td> <samp><u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></"
+#~ "samp><br> <samp>overbar</samp><br> <samp><u>&nbsp;&nbsp;&nbsp;</u></"
+#~ "samp><br> <samp>CLK</samp><br> <samp>&nbsp;</samp><br> <samp>~</samp> </"
+#~ "td>\n"
+#~ "    </tr>\n"
+#~ "    <tr>\n"
+#~ "        <td><br></td>\n"
+#~ "    </tr>\n"
+#~ "    <tr>\n"
+#~ "        <td>&nbsp;<br><samp>${variable}</samp></td>\n"
+#~ "        <td></td>\n"
+#~ "        <td>&nbsp;<br><samp><i>variable_value</i></samp></td>\n"
+#~ "    </tr>\n"
+#~ "    <tr>\n"
+#~ "        <td>&nbsp;<br><samp>${REVISION}</samp></td>\n"
+#~ "        <td></td>\n"
+#~ "        <td>&nbsp;<br><samp>2020.1</samp></td>\n"
+#~ "    </tr>\n"
+#~ "    <tr>\n"
+#~ "        <td><br></td>\n"
+#~ "    </tr>\n"
+#~ "    <tr>\n"
+#~ "        <td>&nbsp;<br><samp>${refdes:field}</samp></td>\n"
+#~ "        <td></td>\n"
+#~ "        <td>&nbsp;<br><samp><i>field_value</i> of symbol <i>refdes</i></"
+#~ "samp></td>\n"
+#~ "    </tr>\n"
+#~ "    <tr>\n"
+#~ "        <td>&nbsp;<br><samp>${R3:VALUE}</samp></td>\n"
+#~ "        <td></td>\n"
+#~ "        <td>&nbsp;<br><samp>150K</samp></td>\n"
+#~ "    </tr>\n"
+#~ "    <tr>\n"
+#~ "        <td><br></td>\n"
+#~ "    </tr>\n"
+#~ "    <tr>\n"
+#~ "        <td><br></td>\n"
+#~ "    </tr>\n"
+#~ "    <tr>\n"
+#~ "        <th>Bus Definition</th>\n"
+#~ "        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+#~ "&nbsp;&nbsp;&nbsp;</th>\n"
+#~ "        <th>Resultant Nets</th>\n"
+#~ "    </tr>\n"
+#~ "    <tr>\n"
+#~ "        <td>&nbsp;<br><samp>prefix[m..n]</samp></td>\n"
+#~ "        <td></td>\n"
+#~ "        <td>&nbsp;<br><samp>prefixm to prefixn</samp></td>\n"
+#~ "    </tr>\n"
+#~ "    <tr>\n"
+#~ "        <td>&nbsp;<br><samp>D[0..7]</samp></td>\n"
+#~ "        <td></td>\n"
+#~ "        <td>&nbsp;<br><samp>D0, D1, D2, D3, D4, D5, D6, D7</samp></td>\n"
+#~ "    </tr>\n"
+#~ "    <tr>\n"
+#~ "        <td><br></td>\n"
+#~ "    </tr>\n"
+#~ "    <tr>\n"
+#~ "        <td>&nbsp;<br><samp>{net1 net2 ...}</samp></td>\n"
+#~ "        <td></td>\n"
+#~ "        <td>&nbsp;<br><samp>net1, net2, ...</samp></td>\n"
+#~ "    </tr>\n"
+#~ "    <tr>\n"
+#~ "        <td>&nbsp;<br><samp>{SCL SDA}</samp></td>\n"
+#~ "        <td></td>\n"
+#~ "        <td>&nbsp;<br><samp>SCL, SDA</samp></td>\n"
+#~ "    </tr>\n"
+#~ "    <tr>\n"
+#~ "        <td><br></td>\n"
+#~ "    </tr>\n"
+#~ "    <tr>\n"
+#~ "        <td>&nbsp;<br><samp>prefix{net1 net2 ...}</samp></td>\n"
+#~ "        <td></td>\n"
+#~ "        <td>&nbsp;<br><samp>prefix.net1, prefix.net2, ...</samp></td>\n"
+#~ "    </tr>\n"
+#~ "    <tr>\n"
+#~ "        <td>&nbsp;<br><samp>USB1{D+ D-}</samp></td>\n"
+#~ "        <td></td>\n"
+#~ "        <td>&nbsp;<br><samp>USB1.D+, USB1.D-</samp></td>\n"
+#~ "    </tr>\n"
+#~ "    <tr>\n"
+#~ "        <td><br></td>\n"
+#~ "    </tr>\n"
+#~ "    <tr>\n"
+#~ "        <td>&nbsp;<br><samp>MEM{D[1..2] LATCH}</samp></td>\n"
+#~ "        <td></td>\n"
+#~ "        <td>&nbsp;<br> <samp>MEM.D1, MEM.D2, MEM.LATCH</samp> </td>\n"
+#~ "    </tr>\n"
+#~ "    <tr>\n"
+#~ "        <td>&nbsp;<br><samp>MEM{D_{[1..2]} ~LATCH}</samp></td>\n"
+#~ "        <td></td>\n"
+#~ "        <td> <samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
+#~ "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; &nbsp;&nbsp;&nbsp;"
+#~ "&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> <samp>MEM.D<sub>1</"
+#~ "sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
+#~ "    </tr>\n"
+#~ "</table>\n"
+
+#~ msgid "Signal name contains '[' or ']' but is not a valid vector bus name"
+#~ msgstr "Signal name contains '[' or ']' but is not a valid vector bus name"
+
+#, c-format
+#~ msgid ""
+#~ "The schematic '%s' has not had it's symbol library links remapped to the "
+#~ "symbol library table.  The project this schematic belongs to must first "
+#~ "be remapped before it can be imported into the current project."
+#~ msgstr ""
+#~ "The schematic '%s' has not had it's symbol library links remapped to the "
+#~ "symbol library table.  The project this schematic belongs to must first "
+#~ "be remapped before it can be imported into the current project."
+
+#~ msgid "You need to select the simulation settings first."
+#~ msgstr "You need to select the simulation settings first."
+
+#~ msgid "There was an error while opening the workbook file"
+#~ msgstr "There was an error while opening the workbook file"
+
+#~ msgid "There was an error while saving the workbook file"
+#~ msgstr "There was an error while saving the workbook file"
+
+#~ msgid "Simulator is running. Try later"
+#~ msgstr "Simulator is running. Try later"
+
+#~ msgid "KiCad "
+#~ msgstr "KiCad "
+
+#, c-format
+#~ msgid "Unable to create \"%s\""
+#~ msgstr "Unable to create “%s”"
+
+#~ msgid "Hide nets matching:"
+#~ msgstr "Hide nets matching:"
+
+#~ msgid ""
+#~ "Pattern to filter net names in filtered list.\n"
+#~ "Net names matching this pattern are not displayed."
+#~ msgstr ""
+#~ "Pattern to filter net names in filtered list.\n"
+#~ "Net names matching this pattern are not displayed."
+
+#~ msgid "Show nets matching:"
+#~ msgstr "Show nets matching:"
+
+#~ msgid "*"
+#~ msgstr "*"
+
+#~ msgid "Show all nets"
+#~ msgstr "Show all nets"
+
+#~ msgid ""
+#~ "No net will result\n"
+#~ "in an unconnected \n"
+#~ "copper island."
+#~ msgstr ""
+#~ "No net will result\n"
+#~ "in an unconnected \n"
+#~ "copper island."
+
+#, c-format
+#~ msgid "Unable to create report file '%s'<br>"
+#~ msgstr "Unable to create report file '%s'<br>"
+
+#, c-format
+#~ msgid "Unable to create %s"
+#~ msgstr "Unable to create %s"
+
+#, c-format
+#~ msgid "Unable to create '%s'."
+#~ msgstr "Unable to create '%s'."
+
+#, c-format
+#~ msgid "** Unable to create %s **\n"
+#~ msgstr "** Unable to create %s **\n"
+
+#, c-format
+#~ msgid "Report file %s created\n"
+#~ msgstr "Report file %s created\n"
+
+#~ msgid ""
+#~ "File contains pad shapes that are not supported by the Hyperlynx "
+#~ "exporter\n"
+#~ "(Supported shapes are oval, rectangle, circle.)\n"
+#~ "They have been exported as oval pads."
+#~ msgstr ""
+#~ "File contains pad shapes that are not supported by the Hyperlynx "
+#~ "exporter\n"
+#~ "(Supported shapes are oval, rectangle, circle.)\n"
+#~ "They have been exported as oval pads."
+
+#, c-format
+#~ msgid "Full component count: %d.\n"
+#~ msgstr "Full component count: %d.\n"
+
+#, c-format
+#~ msgid "Unable to create job file '%s'."
+#~ msgstr "Unable to create job file '%s'."
+
+#, c-format
+#~ msgid "Create Gerber job file '%s'."
+#~ msgstr "Create Gerber job file '%s'."
+
+#~ msgid ""
+#~ "Board stackup settings not up to date\n"
+#~ "Please fix the stackup"
+#~ msgstr ""
+#~ "Board stackup settings not up to date\n"
+#~ "Please fix the stackup"
+
+#, c-format
+#~ msgid "No footprint defined for symbol %s.\n"
+#~ msgstr "No footprint defined for symbol %s.\n"
+
+#, c-format
+#~ msgid ""
+#~ "%s footprint '%s' not found in any libraries in the footprint library "
+#~ "table.\n"
+#~ msgstr ""
+#~ "%s footprint '%s' not found in any libraries in the footprint library "
+#~ "table.\n"
+
+#, c-format
+#~ msgid ""
+#~ "Polygon has only %d point extracted from %ld vertices. At least 2 points "
+#~ "are required."
+#~ msgstr ""
+#~ "Polygon has only %d point extracted from %ld vertices. At least 2 points "
+#~ "are required."
+
+#, c-format
+#~ msgid ""
+#~ "ShapeBasedRegion has only %d point extracted from %ld vertices. At least "
+#~ "2 points are required."
+#~ msgstr ""
+#~ "ShapeBasedRegion has only %d point extracted from %ld vertices. At least "
+#~ "2 points are required."
+
+#~ msgid "Fill zone(s)"
+#~ msgstr "Fill zone(s)"
+
+#~ msgid "Fill All"
+#~ msgstr "Fill All"
+
+#~ msgid "Fill all zones"
+#~ msgstr "Fill all zones"
+
+#~ msgid "Unfill"
+#~ msgstr "Unfill"
+
+#~ msgid "Unfill zone(s)"
+#~ msgstr "Unfill zone(s)"
+
+#~ msgid "Unfill All"
+#~ msgstr "Unfill All"
+
+#~ msgid "Unfill all zones"
+#~ msgstr "Unfill all zones"
 
 #~ msgid "Loading 3D models"
 #~ msgstr "Loading 3D models"
@@ -28483,9 +29169,6 @@ msgstr "KiCad Printed Circuit Board"
 #, c-format
 #~ msgid "Unrecognized item '%s'.| Expected version number"
 #~ msgstr "Unrecognized item '%s'.| Expected version number"
-
-#~ msgid "noname"
-#~ msgstr "noname"
 
 #~ msgid "Local Clearance"
 #~ msgstr "Local Clearance"

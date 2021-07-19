@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-07-18 18:09+0200\n"
+"POT-Creation-Date: 2021-07-19 08:40-0700\n"
 "PO-Revision-Date: 2021-07-18 18:08+0200\n"
 "Last-Translator: \n"
 "Language-Team: jp-charras\n"
@@ -142,20 +142,20 @@ msgstr "Changement en perspective isométrique"
 msgid "Reload board and 3D models"
 msgstr "Rechargement circuit et modèles 3D"
 
-#: 3d-viewer/3d_canvas/board_adapter.cpp:281
+#: 3d-viewer/3d_canvas/board_adapter.cpp:282
 msgid "Build board outline"
 msgstr "Construction du contour du circuit"
 
-#: 3d-viewer/3d_canvas/board_adapter.cpp:456
+#: 3d-viewer/3d_canvas/board_adapter.cpp:457
 msgid "Create layers"
 msgstr "Création des couches"
 
-#: 3d-viewer/3d_canvas/board_adapter.cpp:481
+#: 3d-viewer/3d_canvas/board_adapter.cpp:482
 #: pcbnew/dialogs/dialog_footprint_checker.cpp:104
 msgid "No footprint loaded."
 msgstr "Aucune empreinte chargée."
 
-#: 3d-viewer/3d_canvas/board_adapter.cpp:497
+#: 3d-viewer/3d_canvas/board_adapter.cpp:498
 msgid ""
 "Footprint outline is missing or malformed. Run Footprint Checker for a full "
 "analysis."
@@ -163,7 +163,7 @@ msgstr ""
 "Le contour de l'empreinte est absent ou mal formé. Exécuter le Contrôle "
 "d'Empreinte pour une analyse complète."
 
-#: 3d-viewer/3d_canvas/board_adapter.cpp:506
+#: 3d-viewer/3d_canvas/board_adapter.cpp:507
 msgid "Board outline is missing or malformed. Run DRC for a full analysis."
 msgstr ""
 "Le contour du PCB est absent ou mal formé. Exécuter DRC pour une analyse "
@@ -181,15 +181,30 @@ msgstr "Création des zones"
 msgid "Simplifying copper layers polygons"
 msgstr "Simplification des polygones sur couche cuivre"
 
-#: 3d-viewer/3d_canvas/create_layer_items.cpp:836
+#: 3d-viewer/3d_canvas/create_layer_items.cpp:767
+#, fuzzy
+msgid "Simplifying polygons on F_Cu"
+msgstr "Simplification des polygones sur couche cuivre"
+
+#: 3d-viewer/3d_canvas/create_layer_items.cpp:778
+#, fuzzy
+msgid "Simplifying polygons on B_Cu"
+msgstr "Simplification des polygones sur couche cuivre"
+
+#: 3d-viewer/3d_canvas/create_layer_items.cpp:808
+#, fuzzy, c-format
+msgid "Simplifying %d copper layers"
+msgstr "Simplification des polygones sur couche cuivre"
+
+#: 3d-viewer/3d_canvas/create_layer_items.cpp:847
 msgid "Simplify holes contours"
 msgstr "Simplification des contours de trous"
 
-#: 3d-viewer/3d_canvas/create_layer_items.cpp:865
+#: 3d-viewer/3d_canvas/create_layer_items.cpp:876
 msgid "Build Tech layers"
 msgstr "Construction des couches Tech"
 
-#: 3d-viewer/3d_canvas/create_layer_items.cpp:1040
+#: 3d-viewer/3d_canvas/create_layer_items.cpp:1051
 msgid "Build BVH for holes and vias"
 msgstr "Construit BVH pour les trous et les vias"
 
@@ -198,18 +213,18 @@ msgid "Your OpenGL version is not supported. Minimum required is 1.5."
 msgstr ""
 "Votre version OpenGL n’est pas prise en charge. Le minimum requis est de 1,5."
 
-#: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:530
+#: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:531
 #, c-format
 msgid "Last render time %.0f ms"
 msgstr "Dernier temps de rendu %.0f ms"
 
-#: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:720
+#: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:721
 #, c-format
 msgid "Net %s\tNetClass %s\tPadName %s"
 msgstr "Net %s\tNetClasse %s\tNom Pad %s"
 
-#: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:745
-#: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:758
+#: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:746
+#: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:759
 #, c-format
 msgid "Net %s\tNetClass %s"
 msgstr "Net %s\tNetClasse %s"
@@ -14837,7 +14852,7 @@ msgid "Cursors"
 msgstr "Curseurs"
 
 #: eeschema/sim/sim_plot_panel.cpp:324 eeschema/sim/sim_plot_panel.cpp:336
-#: pcb_calculator/transline_ident.cpp:126
+#: pcb_calculator/transline_ident.cpp:108
 msgid "Frequency"
 msgstr "Fréquence"
 
@@ -16677,27 +16692,33 @@ msgstr "le symbole n'est pas multi-unité"
 msgid "Label value cannot go below zero"
 msgstr "La valeur du label ne peut pas descendre en dessous de zéro"
 
-#: eeschema/tools/sch_edit_tool.cpp:1076
+#: eeschema/tools/sch_edit_tool.cpp:1081 eeschema/tools/sch_edit_tool.cpp:1083
 #: eeschema/tools/symbol_editor_edit_tool.cpp:523
 #, c-format
 msgid "Edit %s Field"
 msgstr "Édition Champ %s"
 
-#: eeschema/tools/sch_edit_tool.cpp:1631
+#: eeschema/tools/sch_edit_tool.cpp:1085
+#: eeschema/tools/symbol_editor_edit_tool.cpp:525
+#, fuzzy, c-format
+msgid "Edit '%s' Field"
+msgstr "Édition Champ %s"
+
+#: eeschema/tools/sch_edit_tool.cpp:1640
 msgid "There are no unreferenced pins in this sheet to remove."
 msgstr "Il n'y a pas de pins non référencées à supprimer dans cette feuille."
 
-#: eeschema/tools/sch_edit_tool.cpp:1635
+#: eeschema/tools/sch_edit_tool.cpp:1644
 msgid "Do you wish to delete the unreferenced pins from this sheet?"
 msgstr ""
 "Souhaitez-vous supprimer les pin de feuille non référencées de cette feuille?"
 
-#: eeschema/tools/sch_edit_tool.cpp:1695
+#: eeschema/tools/sch_edit_tool.cpp:1704
 #, c-format
 msgid "Enter page number for sheet path%s"
 msgstr "Entrez le numéro de page pour le chemin hiérarchique de la feuille %s"
 
-#: eeschema/tools/sch_edit_tool.cpp:1698
+#: eeschema/tools/sch_edit_tool.cpp:1707
 msgid "Edit Sheet Page Number"
 msgstr "Editer Numéro de Page de la Feuille"
 
@@ -16791,7 +16812,7 @@ msgstr "Nom Fichier:"
 msgid "Edit Symbol Name"
 msgstr "Éditer Nom du Symbole"
 
-#: eeschema/tools/symbol_editor_edit_tool.cpp:626
+#: eeschema/tools/symbol_editor_edit_tool.cpp:628
 msgid "Symbol is not derived from another symbol."
 msgstr "Le symbole n’est pas dérivé d’un autre symbole."
 
@@ -18976,7 +18997,7 @@ msgid "Data file error."
 msgstr "Erreur en fichier de données."
 
 #: pcb_calculator/dialogs/dialog_regulator_form.cpp:35
-#: pcb_calculator/regulators_funct.cpp:177
+#: pcb_calculator/regulators_funct.cpp:176
 msgid "Bad or missing parameters!"
 msgstr "Paramètres mauvais ou manquants!"
 
@@ -19108,7 +19129,7 @@ msgstr ""
 "Entrer un nouvel élément dans la liste actuelle des régulateurs disponibles"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:235
-#: pcb_calculator/regulators_funct.cpp:226
+#: pcb_calculator/regulators_funct.cpp:227
 msgid "Remove Regulator"
 msgstr "Supprimer Régulateur"
 
@@ -19861,11 +19882,11 @@ msgstr ""
 "\tR1 | R2 |... | Rn \trésistances en parallèle\n"
 "\tR1 + (R2| R3)...\ttoute combinaison de ce qui précède\n"
 
-#: pcb_calculator/pcb_calculator_frame.cpp:250
+#: pcb_calculator/pcb_calculator_frame.cpp:251
 msgid "Write Data Failed"
 msgstr "Erreur d'Écriture des Données"
 
-#: pcb_calculator/pcb_calculator_frame.cpp:254
+#: pcb_calculator/pcb_calculator_frame.cpp:255
 msgid ""
 "No data filename to save modifications.\n"
 "Do you want to exit and abandon your changes?"
@@ -19873,7 +19894,7 @@ msgstr ""
 "Pas de nom de fichier de données pour sauver les modifications.\n"
 "Voulez vous sortir et abandonner vos changements?"
 
-#: pcb_calculator/pcb_calculator_frame.cpp:264
+#: pcb_calculator/pcb_calculator_frame.cpp:265
 #, c-format
 msgid ""
 "Unable to write file '%s'\n"
@@ -19882,39 +19903,39 @@ msgstr ""
 "Impossible d'écrire le fichier \"%s\"\n"
 "Voulez vous sortir et abandonner vos changements?"
 
-#: pcb_calculator/regulators_funct.cpp:129
+#: pcb_calculator/regulators_funct.cpp:127
 #, c-format
 msgid "PCB Calculator data file (*.%s)|*.%s"
 msgstr "Fichier de données PCB Calculator (*.%s)|*.%s"
 
-#: pcb_calculator/regulators_funct.cpp:133
+#: pcb_calculator/regulators_funct.cpp:131
 msgid "Select PCB Calculator Data File"
 msgstr "Sélection Fichier de Données PCB Calculator"
 
-#: pcb_calculator/regulators_funct.cpp:148
+#: pcb_calculator/regulators_funct.cpp:147
 msgid "Do you want to load this file and replace current regulator list?"
 msgstr ""
 "Voulez vous charger ce fichier et remplacer la liste actuelle des "
 "régulateurs?"
 
-#: pcb_calculator/regulators_funct.cpp:164
+#: pcb_calculator/regulators_funct.cpp:162
 #, c-format
 msgid "Unable to read data file '%s'."
 msgstr "Impossible de lire le fichier de données '%s'."
 
-#: pcb_calculator/regulators_funct.cpp:196
+#: pcb_calculator/regulators_funct.cpp:195
 msgid "This regulator is already in list. Aborted"
 msgstr "Ce régulateur existe déjà en liste. Abandon"
 
-#: pcb_calculator/regulators_funct.cpp:304
+#: pcb_calculator/regulators_funct.cpp:312
 msgid "Vout must be greater than vref"
 msgstr "Vout doit être plus grande que vref"
 
-#: pcb_calculator/regulators_funct.cpp:310
+#: pcb_calculator/regulators_funct.cpp:318
 msgid "Vref set to 0 !"
 msgstr "Vref réglé à 0 !"
 
-#: pcb_calculator/regulators_funct.cpp:316
+#: pcb_calculator/regulators_funct.cpp:324
 msgid "Incorrect value for R1 R2"
 msgstr "Valeur incorrecte pour R1 R2"
 
@@ -19962,29 +19983,29 @@ msgstr ""
 "__W,H__ = largeur et épaisseur en mils  \n"
 "__K__ = 0,024 pour les piste internes ou 0,048 pour les pistes externes  \n"
 
-#: pcb_calculator/transline_dlg_funct.cpp:126 pcb_calculator/via.cpp:68
+#: pcb_calculator/transline_dlg_funct.cpp:121 pcb_calculator/via.cpp:68
 msgid "Relative Dielectric Constants"
 msgstr "Constantes Diélectriques Relatives"
 
-#: pcb_calculator/transline_dlg_funct.cpp:149
+#: pcb_calculator/transline_dlg_funct.cpp:139
 msgid "Dielectric Loss Factor"
 msgstr "Facteur de Pertes Diélectriques"
 
-#: pcb_calculator/transline_dlg_funct.cpp:172
+#: pcb_calculator/transline_dlg_funct.cpp:157
 msgid "Specific Resistance"
 msgstr "Résistance Spécifique"
 
-#: pcb_calculator/transline_ident.cpp:111
+#: pcb_calculator/transline_ident.cpp:92
 msgid "Substrate relative permittivity (dielectric constant)"
 msgstr ""
 "Epsilon R: constante diélectrique relative du substrat (constante "
 "diélectrique)"
 
-#: pcb_calculator/transline_ident.cpp:115
+#: pcb_calculator/transline_ident.cpp:96
 msgid "Dielectric loss (dissipation factor)"
 msgstr "Perte diélectrique (facteur de dissipation)"
 
-#: pcb_calculator/transline_ident.cpp:121
+#: pcb_calculator/transline_ident.cpp:102
 msgid ""
 "Electrical resistivity or specific electrical resistance of conductor "
 "(ohm*meter)"
@@ -19992,276 +20013,276 @@ msgstr ""
 "Résistivité électrique ou la résistance électrique  specifique du conducteur "
 "(Ohm*metre)"
 
-#: pcb_calculator/transline_ident.cpp:127
+#: pcb_calculator/transline_ident.cpp:109
 msgid "Frequency of the input signal"
 msgstr "Frequence du signal d'entrée"
 
-#: pcb_calculator/transline_ident.cpp:136
-#: pcb_calculator/transline_ident.cpp:176
-#: pcb_calculator/transline_ident.cpp:209
-#: pcb_calculator/transline_ident.cpp:244
-#: pcb_calculator/transline_ident.cpp:277
-#: pcb_calculator/transline_ident.cpp:356
-#: pcb_calculator/transline_ident.cpp:389
+#: pcb_calculator/transline_ident.cpp:118
+#: pcb_calculator/transline_ident.cpp:160
+#: pcb_calculator/transline_ident.cpp:194
+#: pcb_calculator/transline_ident.cpp:230
+#: pcb_calculator/transline_ident.cpp:265
+#: pcb_calculator/transline_ident.cpp:349
+#: pcb_calculator/transline_ident.cpp:383
 #, c-format
 msgid "Effective %s:"
 msgstr "%s effectif:"
 
-#: pcb_calculator/transline_ident.cpp:137
-#: pcb_calculator/transline_ident.cpp:177
-#: pcb_calculator/transline_ident.cpp:210
-#: pcb_calculator/transline_ident.cpp:245
-#: pcb_calculator/transline_ident.cpp:278
-#: pcb_calculator/transline_ident.cpp:357
-#: pcb_calculator/transline_ident.cpp:390
+#: pcb_calculator/transline_ident.cpp:119
+#: pcb_calculator/transline_ident.cpp:161
+#: pcb_calculator/transline_ident.cpp:195
+#: pcb_calculator/transline_ident.cpp:231
+#: pcb_calculator/transline_ident.cpp:266
+#: pcb_calculator/transline_ident.cpp:350
+#: pcb_calculator/transline_ident.cpp:384
 msgid "Conductor losses:"
 msgstr "Pertes du conducteur:"
 
-#: pcb_calculator/transline_ident.cpp:138
-#: pcb_calculator/transline_ident.cpp:178
-#: pcb_calculator/transline_ident.cpp:211
-#: pcb_calculator/transline_ident.cpp:246
-#: pcb_calculator/transline_ident.cpp:279
-#: pcb_calculator/transline_ident.cpp:358
-#: pcb_calculator/transline_ident.cpp:391
+#: pcb_calculator/transline_ident.cpp:120
+#: pcb_calculator/transline_ident.cpp:162
+#: pcb_calculator/transline_ident.cpp:196
+#: pcb_calculator/transline_ident.cpp:232
+#: pcb_calculator/transline_ident.cpp:267
+#: pcb_calculator/transline_ident.cpp:351
+#: pcb_calculator/transline_ident.cpp:385
 msgid "Dielectric losses:"
 msgstr "Pertes diélectriques:"
 
-#: pcb_calculator/transline_ident.cpp:139
-#: pcb_calculator/transline_ident.cpp:179
-#: pcb_calculator/transline_ident.cpp:212
-#: pcb_calculator/transline_ident.cpp:318
-#: pcb_calculator/transline_ident.cpp:359
-#: pcb_calculator/transline_ident.cpp:392
+#: pcb_calculator/transline_ident.cpp:121
+#: pcb_calculator/transline_ident.cpp:163
+#: pcb_calculator/transline_ident.cpp:197
+#: pcb_calculator/transline_ident.cpp:308
+#: pcb_calculator/transline_ident.cpp:352
+#: pcb_calculator/transline_ident.cpp:386
 msgid "Skin depth:"
 msgstr "Épaisseur de peau:"
 
-#: pcb_calculator/transline_ident.cpp:142
-#: pcb_calculator/transline_ident.cpp:182
-#: pcb_calculator/transline_ident.cpp:215
-#: pcb_calculator/transline_ident.cpp:321
-#: pcb_calculator/transline_ident.cpp:362
+#: pcb_calculator/transline_ident.cpp:124
+#: pcb_calculator/transline_ident.cpp:166
+#: pcb_calculator/transline_ident.cpp:200
+#: pcb_calculator/transline_ident.cpp:311
+#: pcb_calculator/transline_ident.cpp:355
 msgid "Height of substrate"
 msgstr "Hauteur du substrat"
 
-#: pcb_calculator/transline_ident.cpp:144
-#: pcb_calculator/transline_ident.cpp:323
+#: pcb_calculator/transline_ident.cpp:126
+#: pcb_calculator/transline_ident.cpp:313
 msgid "Height of box top"
 msgstr "Distance vers haut de la boite"
 
-#: pcb_calculator/transline_ident.cpp:147
-#: pcb_calculator/transline_ident.cpp:184
-#: pcb_calculator/transline_ident.cpp:217
-#: pcb_calculator/transline_ident.cpp:325
-#: pcb_calculator/transline_ident.cpp:367
+#: pcb_calculator/transline_ident.cpp:129
+#: pcb_calculator/transline_ident.cpp:168
+#: pcb_calculator/transline_ident.cpp:202
+#: pcb_calculator/transline_ident.cpp:315
+#: pcb_calculator/transline_ident.cpp:360
 msgid "Strip thickness"
 msgstr "Épaisseur du ruban"
 
-#: pcb_calculator/transline_ident.cpp:149
-#: pcb_calculator/transline_ident.cpp:327
+#: pcb_calculator/transline_ident.cpp:131
+#: pcb_calculator/transline_ident.cpp:317
 msgid "Roughness"
 msgstr "Rugosité"
 
-#: pcb_calculator/transline_ident.cpp:150
-#: pcb_calculator/transline_ident.cpp:328
+#: pcb_calculator/transline_ident.cpp:132
+#: pcb_calculator/transline_ident.cpp:318
 msgid "Conductor roughness"
 msgstr "Rugosité du conducteur"
 
-#: pcb_calculator/transline_ident.cpp:152
+#: pcb_calculator/transline_ident.cpp:135
 msgid "substrate"
 msgstr "substrat"
 
-#: pcb_calculator/transline_ident.cpp:153
+#: pcb_calculator/transline_ident.cpp:136
 msgid "Relative permeability (mu) of substrate"
 msgstr "Perméabilité relative (mu) du substrat"
 
-#: pcb_calculator/transline_ident.cpp:155
-#: pcb_calculator/transline_ident.cpp:186
-#: pcb_calculator/transline_ident.cpp:219
-#: pcb_calculator/transline_ident.cpp:254
-#: pcb_calculator/transline_ident.cpp:287
-#: pcb_calculator/transline_ident.cpp:330
-#: pcb_calculator/transline_ident.cpp:369
-#: pcb_calculator/transline_ident.cpp:398
+#: pcb_calculator/transline_ident.cpp:139
+#: pcb_calculator/transline_ident.cpp:171
+#: pcb_calculator/transline_ident.cpp:205
+#: pcb_calculator/transline_ident.cpp:242
+#: pcb_calculator/transline_ident.cpp:277
+#: pcb_calculator/transline_ident.cpp:321
+#: pcb_calculator/transline_ident.cpp:363
+#: pcb_calculator/transline_ident.cpp:393
 msgid "conductor"
 msgstr "conducteur"
 
-#: pcb_calculator/transline_ident.cpp:156
-#: pcb_calculator/transline_ident.cpp:187
-#: pcb_calculator/transline_ident.cpp:220
-#: pcb_calculator/transline_ident.cpp:255
-#: pcb_calculator/transline_ident.cpp:288
-#: pcb_calculator/transline_ident.cpp:331
-#: pcb_calculator/transline_ident.cpp:370
-#: pcb_calculator/transline_ident.cpp:399
+#: pcb_calculator/transline_ident.cpp:140
+#: pcb_calculator/transline_ident.cpp:172
+#: pcb_calculator/transline_ident.cpp:206
+#: pcb_calculator/transline_ident.cpp:243
+#: pcb_calculator/transline_ident.cpp:278
+#: pcb_calculator/transline_ident.cpp:322
+#: pcb_calculator/transline_ident.cpp:364
+#: pcb_calculator/transline_ident.cpp:394
 msgid "Relative permeability (mu) of conductor"
 msgstr "Perméabilité relative (mu)  du conducteur"
 
-#: pcb_calculator/transline_ident.cpp:160
-#: pcb_calculator/transline_ident.cpp:191
-#: pcb_calculator/transline_ident.cpp:224
-#: pcb_calculator/transline_ident.cpp:335
-#: pcb_calculator/transline_ident.cpp:373 pcbnew/pcb_shape.cpp:576
+#: pcb_calculator/transline_ident.cpp:144
+#: pcb_calculator/transline_ident.cpp:176
+#: pcb_calculator/transline_ident.cpp:210
+#: pcb_calculator/transline_ident.cpp:326
+#: pcb_calculator/transline_ident.cpp:367 pcbnew/pcb_shape.cpp:576
 msgid "Line width"
 msgstr "Largeur de ligne"
 
-#: pcb_calculator/transline_ident.cpp:162
-#: pcb_calculator/transline_ident.cpp:195
-#: pcb_calculator/transline_ident.cpp:228
-#: pcb_calculator/transline_ident.cpp:298
-#: pcb_calculator/transline_ident.cpp:339
-#: pcb_calculator/transline_ident.cpp:375
+#: pcb_calculator/transline_ident.cpp:146
+#: pcb_calculator/transline_ident.cpp:180
+#: pcb_calculator/transline_ident.cpp:214
+#: pcb_calculator/transline_ident.cpp:288
+#: pcb_calculator/transline_ident.cpp:330
+#: pcb_calculator/transline_ident.cpp:369
 msgid "Line length"
 msgstr "Longueur de ligne"
 
-#: pcb_calculator/transline_ident.cpp:165
-#: pcb_calculator/transline_ident.cpp:198
-#: pcb_calculator/transline_ident.cpp:231
-#: pcb_calculator/transline_ident.cpp:266
-#: pcb_calculator/transline_ident.cpp:301
-#: pcb_calculator/transline_ident.cpp:378
-#: pcb_calculator/transline_ident.cpp:415
+#: pcb_calculator/transline_ident.cpp:149
+#: pcb_calculator/transline_ident.cpp:183
+#: pcb_calculator/transline_ident.cpp:217
+#: pcb_calculator/transline_ident.cpp:254
+#: pcb_calculator/transline_ident.cpp:291
+#: pcb_calculator/transline_ident.cpp:372
+#: pcb_calculator/transline_ident.cpp:411
 msgid "Characteristic impedance"
 msgstr "Impédance caractéristique"
 
-#: pcb_calculator/transline_ident.cpp:168
-#: pcb_calculator/transline_ident.cpp:201
-#: pcb_calculator/transline_ident.cpp:234
-#: pcb_calculator/transline_ident.cpp:269
-#: pcb_calculator/transline_ident.cpp:304
-#: pcb_calculator/transline_ident.cpp:349
-#: pcb_calculator/transline_ident.cpp:381
-#: pcb_calculator/transline_ident.cpp:418
+#: pcb_calculator/transline_ident.cpp:152
+#: pcb_calculator/transline_ident.cpp:186
+#: pcb_calculator/transline_ident.cpp:220
+#: pcb_calculator/transline_ident.cpp:257
+#: pcb_calculator/transline_ident.cpp:294
+#: pcb_calculator/transline_ident.cpp:342
+#: pcb_calculator/transline_ident.cpp:375
+#: pcb_calculator/transline_ident.cpp:414
 msgid "Electrical length"
 msgstr "Longueur électrique"
 
-#: pcb_calculator/transline_ident.cpp:193
-#: pcb_calculator/transline_ident.cpp:226
-#: pcb_calculator/transline_ident.cpp:337
+#: pcb_calculator/transline_ident.cpp:178
+#: pcb_calculator/transline_ident.cpp:212
+#: pcb_calculator/transline_ident.cpp:328
 msgid "Gap width"
 msgstr "Largeur de gap"
 
-#: pcb_calculator/transline_ident.cpp:243
+#: pcb_calculator/transline_ident.cpp:229
 msgid "ZF(H10) = Ey / Hx:"
 msgstr "ZF(H10) = Ey / Hx:"
 
-#: pcb_calculator/transline_ident.cpp:247
-#: pcb_calculator/transline_ident.cpp:280
+#: pcb_calculator/transline_ident.cpp:233
+#: pcb_calculator/transline_ident.cpp:268
 msgid "TE-modes:"
 msgstr "TE-modes:"
 
-#: pcb_calculator/transline_ident.cpp:248
-#: pcb_calculator/transline_ident.cpp:281
+#: pcb_calculator/transline_ident.cpp:234
+#: pcb_calculator/transline_ident.cpp:269
 msgid "TM-modes:"
 msgstr "TM-modes:"
 
-#: pcb_calculator/transline_ident.cpp:251
-#: pcb_calculator/transline_ident.cpp:284
+#: pcb_calculator/transline_ident.cpp:238
+#: pcb_calculator/transline_ident.cpp:273
 msgid "insulator"
 msgstr "isolant"
 
-#: pcb_calculator/transline_ident.cpp:252
-#: pcb_calculator/transline_ident.cpp:285
+#: pcb_calculator/transline_ident.cpp:239
+#: pcb_calculator/transline_ident.cpp:274
 msgid "Relative permeability (mu) of insulator"
 msgstr "Perméabilité relative (mu) de l'isolant"
 
-#: pcb_calculator/transline_ident.cpp:259
+#: pcb_calculator/transline_ident.cpp:247
 msgid "Width of waveguide"
 msgstr "Largeur du guide d'onde"
 
-#: pcb_calculator/transline_ident.cpp:261
+#: pcb_calculator/transline_ident.cpp:249
 msgid "Height of waveguide"
 msgstr "Hauteur du guide d'onde"
 
-#: pcb_calculator/transline_ident.cpp:263
+#: pcb_calculator/transline_ident.cpp:251
 msgid "Waveguide length"
 msgstr "Longueur du guide d'onde"
 
-#: pcb_calculator/transline_ident.cpp:292
-#: pcb_calculator/transline_ident.cpp:406
+#: pcb_calculator/transline_ident.cpp:282
+#: pcb_calculator/transline_ident.cpp:402
 msgid "Din"
 msgstr "Din"
 
-#: pcb_calculator/transline_ident.cpp:293
-#: pcb_calculator/transline_ident.cpp:407
+#: pcb_calculator/transline_ident.cpp:283
+#: pcb_calculator/transline_ident.cpp:403
 msgid "Inner diameter (conductor)"
 msgstr "Diamètre intérieur (conducteur)"
 
-#: pcb_calculator/transline_ident.cpp:295
-#: pcb_calculator/transline_ident.cpp:409
+#: pcb_calculator/transline_ident.cpp:285
+#: pcb_calculator/transline_ident.cpp:405
 msgid "Dout"
 msgstr "Dout"
 
-#: pcb_calculator/transline_ident.cpp:296
-#: pcb_calculator/transline_ident.cpp:410
+#: pcb_calculator/transline_ident.cpp:286
+#: pcb_calculator/transline_ident.cpp:406
 msgid "Outer diameter (insulator)"
 msgstr "Diamètre extérieur (isolant)"
 
-#: pcb_calculator/transline_ident.cpp:312
+#: pcb_calculator/transline_ident.cpp:302
 #, c-format
 msgid "Effective %s (even):"
 msgstr "%s effectif (mode pair):"
 
-#: pcb_calculator/transline_ident.cpp:313
+#: pcb_calculator/transline_ident.cpp:303
 #, c-format
 msgid "Effective %s (odd):"
 msgstr "%s effectif (mode impair):"
 
-#: pcb_calculator/transline_ident.cpp:314
+#: pcb_calculator/transline_ident.cpp:304
 msgid "Conductor losses (even):"
 msgstr "Pertes du conducteur (mode pair):"
 
-#: pcb_calculator/transline_ident.cpp:315
+#: pcb_calculator/transline_ident.cpp:305
 msgid "Conductor losses (odd):"
 msgstr "Pertes du conducteur (mode impair):"
 
-#: pcb_calculator/transline_ident.cpp:316
+#: pcb_calculator/transline_ident.cpp:306
 msgid "Dielectric losses (even):"
 msgstr "Pertes diélectriques (mode pair):"
 
-#: pcb_calculator/transline_ident.cpp:317
+#: pcb_calculator/transline_ident.cpp:307
 msgid "Dielectric losses (odd):"
 msgstr "Pertes diélectriques (mode impair):"
 
-#: pcb_calculator/transline_ident.cpp:342
+#: pcb_calculator/transline_ident.cpp:333
 msgid "Zeven"
 msgstr "Zpair"
 
-#: pcb_calculator/transline_ident.cpp:343
+#: pcb_calculator/transline_ident.cpp:334
 msgid "Even mode impedance (lines driven by common voltages)"
 msgstr "Impédance en mode pair (lignes soumises à des tensions communes)"
 
-#: pcb_calculator/transline_ident.cpp:345
+#: pcb_calculator/transline_ident.cpp:337
 msgid "Zodd"
 msgstr "Zimpair"
 
-#: pcb_calculator/transline_ident.cpp:346
+#: pcb_calculator/transline_ident.cpp:338
 msgid "Odd mode impedance (lines driven by opposite (differential) voltages)"
 msgstr ""
 "Impédance en mode impair (lignes soumises à des tensions opposées (mode "
 "différentiel) )"
 
-#: pcb_calculator/transline_ident.cpp:364
+#: pcb_calculator/transline_ident.cpp:357
 msgid "Distance between strip and top metal"
 msgstr "Distance entre la bande et la couche métallique au dessus du PCB"
 
-#: pcb_calculator/transline_ident.cpp:395
+#: pcb_calculator/transline_ident.cpp:389
 msgid "Twists"
 msgstr "Torsades"
 
-#: pcb_calculator/transline_ident.cpp:396
+#: pcb_calculator/transline_ident.cpp:390
 msgid "Number of twists per length"
 msgstr "Nombre de torsades par longueur"
 
-#: pcb_calculator/transline_ident.cpp:402
+#: pcb_calculator/transline_ident.cpp:398
 msgid "environment"
 msgstr "environnement"
 
-#: pcb_calculator/transline_ident.cpp:403
+#: pcb_calculator/transline_ident.cpp:399
 msgid "Relative permittivity of environment"
 msgstr "Perméabilité relative de l'environnement"
 
-#: pcb_calculator/transline_ident.cpp:412
+#: pcb_calculator/transline_ident.cpp:408
 msgid "Cable length"
 msgstr "Longueur câble"
 
@@ -31738,7 +31759,7 @@ msgstr ""
 "sont solides ou avec hachures, ou sous forme de piste KiCad si la forme "
 "était un contour non rempli (ouvert ou fermé)."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2127
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2125
 #, c-format
 msgid ""
 "The net '%s' references component ID '%s' which does not exist. This has "
@@ -31747,7 +31768,7 @@ msgstr ""
 "Le net '%s' fait référence à l’ID de composant '%s ' qui n’existe pas. Cela "
 "a été ignoré."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2133
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2131
 #, c-format
 msgid ""
 "The net '%s' references non-existent pad index '%d' in component '%s'. This "
@@ -31756,13 +31777,13 @@ msgstr ""
 "Le net '%s' fait référence à l’indice de pad inexistant '%d' dans le "
 "composant '%s'. Cela a été ignoré."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2283
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2281
 msgid "Text Variables could not be set as there is no project loaded."
 msgstr ""
 "Les variables texte n’ont pas pu être définies car il n’y a pas de projet "
 "chargé."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2390
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2388
 #, c-format
 msgid ""
 "The CADSTAR via code '%s' has different shape from a circle defined. KiCad "
@@ -31773,7 +31794,7 @@ msgstr ""
 "en charge que les vias circulaires de sorte que ce type via a été changé "
 "pour être une via circulaire de %.2f mm de diamètre."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2607
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2605
 #, c-format
 msgid ""
 "The shape for '%s' is Hatch filled in CADSTAR, which has no KiCad "
@@ -31782,7 +31803,7 @@ msgstr ""
 "La forme pour '%s' est hachurée dans CADSTAR, et n’a pas d’équivalent KiCad. "
 "Remplissage solide à la place."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3429
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3436
 #, c-format
 msgid ""
 "The CADSTAR Hatching code '%s' has %d hatches defined. KiCad only supports 2 "
@@ -31793,7 +31814,7 @@ msgstr ""
 "que 2 hachures (hachure en croix) à 90 degrés l’une de l’autre. La hachure "
 "importée est en croix."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3439
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3446
 #, c-format
 msgid ""
 "The CADSTAR Hatching code '%s' has different line widths for each hatch. "
@@ -31804,7 +31825,7 @@ msgstr ""
 "hachure. KiCad ne prend en charge qu’une largeur. Les hachures importée "
 "utilise la largeur définie la première, c’est-à-dire %.2f mm."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3451
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3458
 #, c-format
 msgid ""
 "The CADSTAR Hatching code '%s' has different step sizes for each hatch. "
@@ -31815,7 +31836,7 @@ msgstr ""
 "hachure. KiCad ne prend en charge qu’une taille pour les hachures. Les "
 "hachures importée utilisent la première taille définie, c’est-à-dire %.2f mm."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3464
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3471
 #, c-format
 msgid ""
 "The hatches in CADSTAR Hatching code '%s' have an angle  difference of %.1f "
@@ -31828,7 +31849,7 @@ msgstr ""
 "importée a deux hachures à 90 degrés l’une de l’autre, tournées de %.1f "
 "degrés de l’horizontale."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3537
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3544
 #, c-format
 msgid ""
 "Dimension ID %s uses a type of unit that is not supported in KiCad. "
@@ -31837,7 +31858,7 @@ msgstr ""
 "La cote type %s utilise un type d’unité qui n’est pas pris en charge dans "
 "KiCad. Des millimètres ont été utilisés à la place."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3752
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3759
 msgid ""
 "The CADSTAR design contains nets with a 'Net Class' assigned. KiCad does not "
 "have an equivalent to CADSTAR's Net Class so these elements were not "
@@ -31850,7 +31871,7 @@ msgstr ""
 "plus proche du \"Net Route Code\" de CADSTAR (qui a été importé pour tous "
 "les nets)."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3762
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3769
 msgid ""
 "The CADSTAR design contains nets with a 'Spacing Class' assigned. KiCad does "
 "not have an equivalent to CADSTAR's Spacing Class so these elements were not "
@@ -32426,11 +32447,11 @@ msgstr "Couche PCad inconnue %u"
 msgid "KiCad only supports 32 signal layers."
 msgstr "KiCad ne prend en charge que 32 couches de signal."
 
-#: pcbnew/plugins/pcad/pcb_via.cpp:91
+#: pcbnew/plugins/pcad/pcb_via.cpp:93
 msgid "Unable to find library section."
 msgstr "Impossible de trouver la section de librairie."
 
-#: pcbnew/plugins/pcad/pcb_via.cpp:106
+#: pcbnew/plugins/pcad/pcb_via.cpp:108
 #, c-format
 msgid "Unable to find viaStyleDef %s."
 msgstr "Impossible de trouver viaStyleDef '%s'."
@@ -32951,12 +32972,12 @@ msgstr "PCB exporté Ok."
 msgid "Unable to export, please fix and try again"
 msgstr "Impossible d'exporter, fixer le problème et recommencer"
 
-#: pcbnew/specctra_import_export/specctra_export.cpp:1115
+#: pcbnew/specctra_import_export/specctra_export.cpp:1114
 #, c-format
 msgid "Symbol with value of '%s' has empty reference id."
 msgstr "Le symbole de valeur '%s' a une référence vide."
 
-#: pcbnew/specctra_import_export/specctra_export.cpp:1125
+#: pcbnew/specctra_import_export/specctra_export.cpp:1124
 #, c-format
 msgid "Multiple symbols have identical reference IDs of '%s'."
 msgstr "De multiple composants ont une référence identique  '%s'."
@@ -35992,11 +36013,6 @@ msgstr "Exécution de remplissage des polygones..."
 msgid "[INFO] load failed: input line too long\n"
 msgstr "[INFO] chargement échouée: ligne d’entrée trop longue\n"
 
-#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:5
-#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:12
-msgid "bitmap2component"
-msgstr "bitmap2component"
-
 #: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:9
 msgid "KiCad Image Converter"
 msgstr "Convertisseur d'Image KiCad"
@@ -36007,10 +36023,9 @@ msgstr ""
 "Créer un composant à partir d’une image bitmap pour une utilisation avec "
 "KiCad"
 
-#: resources/linux/launchers/org.kicad.eeschema.desktop.in:5
-#: resources/linux/launchers/org.kicad.eeschema.desktop.in:13
-msgid "eeschema"
-msgstr "eeschema"
+#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:12
+msgid "bitmap2component"
+msgstr "bitmap2component"
 
 #: resources/linux/launchers/org.kicad.eeschema.desktop.in:10
 msgid "KiCad Schematic Editor (Standalone)"
@@ -36024,10 +36039,9 @@ msgstr "Outil de Capture Schématique"
 msgid "Standalone schematic editor for KiCad schematics"
 msgstr "Editeur de schématique indépendant pour les schémas KiCad"
 
-#: resources/linux/launchers/org.kicad.gerbview.desktop.in:5
-#: resources/linux/launchers/org.kicad.gerbview.desktop.in:13
-msgid "gerbview"
-msgstr "gerbview"
+#: resources/linux/launchers/org.kicad.eeschema.desktop.in:13
+msgid "eeschema"
+msgstr "eeschema"
 
 #: resources/linux/launchers/org.kicad.gerbview.desktop.in:11
 msgid "Gerber File Viewer"
@@ -36037,9 +36051,9 @@ msgstr "Visionneuse de fichiers Gerber"
 msgid "View Gerber files"
 msgstr "Visualiser fichiers Gerber"
 
-#: resources/linux/launchers/org.kicad.kicad.desktop.in:5
-msgid "kicad"
-msgstr "kicad"
+#: resources/linux/launchers/org.kicad.gerbview.desktop.in:13
+msgid "gerbview"
+msgstr "gerbview"
 
 #: resources/linux/launchers/org.kicad.kicad.desktop.in:10
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:6
@@ -36054,10 +36068,6 @@ msgstr "Suite CAO Electronique"
 msgid "Suite of tools for schematic design and circuit board layout"
 msgstr "Suite d’outils pour la conception schématique et des circuits imprimés"
 
-#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:5
-msgid "pcbcalculator"
-msgstr "pcbcalculator"
-
 #: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:9
 msgid "KiCad PCB Calculator"
 msgstr "Calculateur pour PCB KiCad"
@@ -36065,11 +36075,6 @@ msgstr "Calculateur pour PCB KiCad"
 #: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:11
 msgid "Calculator for various electronics-related computations"
 msgstr "Calculatrice pour divers calculs liés à l’électronique"
-
-#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:5
-#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:13
-msgid "pcbnew"
-msgstr "pcbnew"
 
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:10
 msgid "KiCad PCB Editor (Standalone)"
@@ -36082,6 +36087,10 @@ msgstr "Éditeur de circuit imprimé"
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:12
 msgid "Standalone circuit board editor for KiCad boards"
 msgstr "Éditeur indépendant de circuits imprimés pour les C.I. KiCad"
+
+#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:13
+msgid "pcbnew"
+msgstr "pcbnew"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:13
 msgid "An EDA suite for schematic and circuit board design"
@@ -36135,6 +36144,12 @@ msgstr "Schématique KiCad"
 #: resources/linux/mime/kicad-kicad.xml.in:25
 msgid "KiCad Printed Circuit Board"
 msgstr "Fichier Circuit Imprimé KiCad"
+
+#~ msgid "kicad"
+#~ msgstr "kicad"
+
+#~ msgid "pcbcalculator"
+#~ msgstr "pcbcalculator"
 
 #~ msgid "KiCad "
 #~ msgstr "KiCad "
