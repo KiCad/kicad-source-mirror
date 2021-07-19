@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-01 09:21-0700\n"
-"PO-Revision-Date: 2021-07-18 15:48+0000\n"
+"PO-Revision-Date: 2021-07-19 15:37+0000\n"
 "Last-Translator: VicSanRoPe <vicsanrope@protonmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/kicad/"
 "master-source/es/>\n"
@@ -2323,15 +2323,15 @@ msgstr "E 34x44in"
 
 #: common/dialogs/dialog_page_settings.cpp:65
 msgid "USLetter 8.5x11in"
-msgstr "USLetter 8.5x11in"
+msgstr "Carta USA 8.5x11in"
 
 #: common/dialogs/dialog_page_settings.cpp:66
 msgid "USLegal 8.5x14in"
-msgstr "USLegal 8.5x14in"
+msgstr "Legal USA 8.5x14in"
 
 #: common/dialogs/dialog_page_settings.cpp:67
 msgid "USLedger 11x17in"
-msgstr "USLedger 11x17in"
+msgstr "Tabloide USA 11x17in"
 
 # Tamaño de papel para imprimir
 #: common/dialogs/dialog_page_settings.cpp:68
@@ -21139,13 +21139,17 @@ msgid ""
 "PCB annotation changes should be synchronized with schematic using the "
 "\"Update Schematic from PCB\" tool."
 msgstr ""
+"Los cambios de anotación en la placa deberían ser sincronizados con el "
+"esquema usando la herramienta \"Actualizar esquema desde placa...\"."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:285
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "\n"
 "%s footprints will be reannotated."
-msgstr "%s huellas con identificador:"
+msgstr ""
+"\n"
+"%s huellas serán reanotadas."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:290
 #, c-format
@@ -21157,30 +21161,34 @@ msgstr ""
 "No se anotarán los tipos de referencia %s."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:295
-#, fuzzy
 msgid ""
 "\n"
 "Locked footprints will not be annotated"
-msgstr "Forzar la modificación de huellas bloqueadas"
+msgstr ""
+"\n"
+"Las huellas bloqueadas no serán reanotadas"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:299
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "\n"
 "Front footprints will start at %s"
-msgstr "%s huellas con valor coincidente (%s)"
+msgstr ""
+"\n"
+"Las huellas frontales empiezan en %s"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:308
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "\n"
 "Back footprints will start at %s."
-msgstr "%s huellas con valor coincidente (%s)"
+msgstr ""
+"\n"
+"Las huellas traseras empiezan en %s."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:309
-#, fuzzy
 msgid "the last front footprint + 1"
-msgstr "Imprimir huella activa"
+msgstr "la última huella + 1"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:317
 #, c-format
@@ -21227,16 +21235,17 @@ msgid ""
 "Prior to sorting by %s, the coordinates of which will be rounded to a %s, %s "
 "grid."
 msgstr ""
+"\n"
+"Antes de ordenar por %s, las coordenadas serán redondeadas a una regilla %s, "
+"%s."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:349
-#, fuzzy
 msgid "footprint location"
-msgstr "Selección de huellas"
+msgstr "ubicación de huella"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:350
-#, fuzzy
 msgid "reference designator location"
-msgstr "indicador de referencia"
+msgstr "ubicación del indicador de referencia"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:492
 #, c-format
@@ -21246,14 +21255,21 @@ msgid ""
 "There are %i types of reference designations\n"
 "**********************************************************\n"
 msgstr ""
+"\n"
+"\n"
+"Hay %i tipos de indicadores de referencia\n"
+"**********************************************************\n"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:506
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "\n"
 "Excluding: %s from reannotation\n"
 "\n"
-msgstr "Cualquier orientación"
+msgstr ""
+"\n"
+"Excluyendo: %s de la reanotación\n"
+"\n"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:509
 msgid ""
@@ -21261,17 +21277,21 @@ msgid ""
 "    Change Array\n"
 "***********************\n"
 msgstr ""
+"\n"
+"    Cambiar arreglo\n"
+"***********************\n"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:516
 msgid " will be ignored"
-msgstr ""
+msgstr " será ignorado"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:529
-#, fuzzy
 msgid ""
 "\n"
 "No footprints"
-msgstr "No hay huellas"
+msgstr ""
+"\n"
+"No hay huellas"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:535
 #, c-format
@@ -21279,23 +21299,25 @@ msgid ""
 "\n"
 "*********** Sort on %s ***********"
 msgstr ""
+"\n"
+"*********** Ordenar en %s ***********"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:536
-#, fuzzy
 msgid "Footprint Coordinates"
-msgstr "Nombre de huella:"
+msgstr "Coordenadas de huella"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:537
-#, fuzzy
 msgid "Reference Designator Coordinates"
-msgstr "indicador de referencia"
+msgstr "Coordenadas del indicador de referencia"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:539
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "\n"
 "Sort Code %d"
-msgstr "D Code %d"
+msgstr ""
+"\n"
+"Código de ordenado %d"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:543
 #, c-format
@@ -21303,6 +21325,8 @@ msgid ""
 "\n"
 "%d %s UUID: [%s], X, Y: %s, Rounded X, Y, %s"
 msgstr ""
+"\n"
+"%d %s UUID: [%s], X, Y: %s, Redondeado X, Y, %s"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:574
 #, c-format
@@ -21311,6 +21335,10 @@ msgid ""
 "PCB has %d empty or invalid reference designations.\n"
 "Recommend running DRC with 'Test footprints against schematic' checked.\n"
 msgstr ""
+"\n"
+"La placa tiene %d indicadores de referencia vacíos o inválidos.\n"
+"Se recomienda ejecutar el DRC con la opción 'Comprobar la paridad entre la "
+"placa y el esquema' marcada.\n"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:580
 #, c-format
@@ -21318,41 +21346,44 @@ msgid ""
 "\n"
 "RefDes: %s Footprint: %s:%s at %s on PCB."
 msgstr ""
+"\n"
+"Indicador de Referencia: %s Huella: %s:%s en %s en placa."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:588
 msgid "Reannotate anyway?"
-msgstr ""
+msgstr "¿Reanotar de todas formas?"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:777
-#, fuzzy
 msgid "Aborted: too many errors"
-msgstr "Cancelado por el usuario"
+msgstr "Cancelado: demasiados errores"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:810
-#, fuzzy
 msgid ""
 "\n"
 "\n"
 "Front Footprints"
-msgstr "Imprimir huella"
+msgstr ""
+"\n"
+"\n"
+"Huellas frontales"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:811
-#, fuzzy
 msgid ""
 "\n"
 "\n"
 "Back Footprints"
-msgstr "Bloquear huella"
+msgstr ""
+"\n"
+"\n"
+"Huellas traseras"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:882
-#, fuzzy
 msgid "Footprint not found in changelist"
-msgstr "Módulo %s no encontrado"
+msgstr "Huella no encontrada en la lista de cambios"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:30
-#, fuzzy
 msgid "Footprint Order"
-msgstr "Capa de huellas"
+msgstr "Orden de huellas"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:45
 msgid "Horizontally: top left to bottom right"
@@ -21387,19 +21418,16 @@ msgid "Vertically: bottom right to top left"
 msgstr "Verticalmente: de abajo a la derecha a arriba a la izquierda"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:132
-#, fuzzy
 msgid "Based on location of:"
-msgstr "Conexión pads:"
+msgstr "Basado en la ubicación de:"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:136
-#, fuzzy
 msgid "Reference Designator"
-msgstr "indicador de referencia"
+msgstr "Indicador de referencia"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:142
-#, fuzzy
 msgid "Round locations to:"
-msgstr "Opciones de representación:"
+msgstr "Redondear ubicaciones a:"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:144
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:151
@@ -21413,14 +21441,12 @@ msgstr ""
 "Esto ayuda con los componentes desalineados."
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:163
-#, fuzzy
 msgid "Reannotation Scope"
-msgstr "Anotación completada."
+msgstr "Alcance de la reanotación"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:170
-#, fuzzy
 msgid "Reannotate:"
-msgstr "Rotar:"
+msgstr "Reanotar:"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:178
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:140
@@ -21432,17 +21458,15 @@ msgstr "Lado Frontal"
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:140
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:562
 msgid "Back"
-msgstr "Trasera"
+msgstr "Lado trasero"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:208
-#, fuzzy
 msgid "Front reference start:"
-msgstr "Trazar referencias de las huellas"
+msgstr "Inicio de las referencias frontales:"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:210
-#, fuzzy
 msgid "Starting reference designation for front."
-msgstr "Referencia por defecto:"
+msgstr "Referencia inicial para el frente."
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:214
 #: pcbnew/dialogs/dialog_create_array_base.cpp:93
@@ -21460,14 +21484,12 @@ msgid "1"
 msgstr "1"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:215
-#, fuzzy
 msgid "Default is 1"
-msgstr "Defecto"
+msgstr "Por defecto es 1"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:220
-#, fuzzy
 msgid "Back reference start:"
-msgstr "referencia %s"
+msgstr "Inicio de las referencias traseras:"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:222
 msgid ""
@@ -21486,9 +21508,8 @@ msgstr ""
 "referencia más alta en el frontal."
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:232
-#, fuzzy
 msgid "Remove front prefix"
-msgstr "Eliminar prefijo de ruta seleccionado"
+msgstr "Eliminar prefijo frontal"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:233
 msgid ""
@@ -21499,56 +21520,46 @@ msgstr ""
 "en el cuadro de prefijo frontal si está presente"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:237
-#, fuzzy
 msgid "Remove back prefix"
-msgstr "Eliminar prefijo de ruta seleccionado"
+msgstr "Eliminar prefijo trasero"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:238
-#, fuzzy
 msgid ""
 "If checked will remove the Back side prefix\n"
 "in the back prefix box if present"
 msgstr ""
-"Si está marcado, eliminará el prefijo del lado posterior\n"
-"en el cuadro de prefijo posterior si está presente"
+"Si está marcado, eliminará el prefijo del lado trasero\n"
+"en el cuadro de prefijo trasero si está presente"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:242
-#, fuzzy
 msgid "Front prefix:"
-msgstr "Prefijo del nombre del pad:"
+msgstr "Prefijo frontal:"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:244
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:249
-#, fuzzy
 msgid "Optional prefix for component side reference designations (e.g. F_)"
-msgstr "Reemplazar las referencias de los componen&tes"
+msgstr "Prefijo opcional para referencias del lado de los componentes (ej. F_)"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:253
-#, fuzzy
 msgid "Back prefix:"
-msgstr "Prefijo del nombre del pad:"
+msgstr "Prefijo trasero:"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:255
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:260
-#, fuzzy
 msgid "Optional prefix for solder side reference designations (e.g. B_)"
-msgstr ""
-"Prefijo opcional para referencias del lado de la soldadura (es decir, B_)"
+msgstr "Prefijo opcional para referencias del lado de la soldadura (ej. B_)"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:264
-#, fuzzy
 msgid "Exclude locked footprints"
-msgstr "Incluir huellas b&loqueadas"
+msgstr "Excluir huellas bloqueadas"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:265
-#, fuzzy
 msgid "Locked footprints will not be reannotated"
-msgstr "Forzar la modificación de huellas bloqueadas"
+msgstr "Las huellas bloqueadas no serán reanotadas"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:269
-#, fuzzy
 msgid "Exclude references:"
-msgstr "Guardar Preferencias"
+msgstr "Excluir referencias:"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:271
 msgid ""
@@ -21563,38 +21574,32 @@ msgid "Reference Designators"
 msgstr "Indicadores de referencia"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.h:106
-#, fuzzy
 msgid "Geographical Reannotation"
-msgstr "Numerar componentes"
+msgstr "Reanotación geográfica"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:52
 msgid "Board Setup"
 msgstr "Configuración de la placa"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:53
-#, fuzzy
 msgid "Import Settings from Another Board..."
-msgstr "Exportar ajustes a otras zonas"
+msgstr "Importar configuración de otra placa..."
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:80
-#, fuzzy
 msgid "Board Stackup"
-msgstr "Configuración de la placa"
+msgstr "Apilato de la placa"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:88
-#, fuzzy
 msgid "Board Editor Layers"
-msgstr "Editor de placa"
+msgstr "Capas del editor de placas"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:90
-#, fuzzy
 msgid "Physical Stackup"
-msgstr "Configuración de la placa"
+msgstr "Apilado físico"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:93
-#, fuzzy
 msgid "Board Finish"
-msgstr "Contorno de la placa"
+msgstr "Terminación de la placa"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:94 pcbnew/dialogs/dialog_plot.cpp:957
 msgid "Solder Mask/Paste"
@@ -21680,9 +21685,8 @@ msgid "SMD:"
 msgstr "SMD:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:143
-#, fuzzy
 msgid "Through hole:"
-msgstr "Agujero pasante"
+msgstr "Agujero pasante:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:145
 msgid "Connector:"
@@ -21763,14 +21767,12 @@ msgid "Date"
 msgstr "Fecha"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:652
-#, fuzzy
 msgid "Board name"
-msgstr "Ext Cir. Imp.: "
+msgstr "Nombre de placa"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:655
-#, fuzzy
 msgid "Board"
-msgstr "En placa"
+msgstr "Placa"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:661
 #: pcbnew/dialogs/dialog_board_statistics.cpp:668
@@ -21783,9 +21785,8 @@ msgid "Components"
 msgstr "Componentes"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:720
-#, fuzzy
 msgid "Drill holes"
-msgstr "Archivos de taladros"
+msgstr "Agujeros de taladros"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:727
 #, c-format
@@ -21793,89 +21794,75 @@ msgid "Error writing file '%s'."
 msgstr "Error al escribir el archivo '%s'."
 
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:117
-#, fuzzy
 msgid "Board Size"
-msgstr "Lado de la placa"
+msgstr "Tamaño de la placa"
 
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:198
-#, fuzzy
 msgid "Subtract holes from board area"
-msgstr "Restar la máscara de soldadura de la serigrafía"
+msgstr "Restar agujeros del área de la placa"
 
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:201
-#, fuzzy
 msgid "Exclude components with no pins"
-msgstr "Editar propiedades del componente"
+msgstr "Excluir componentes sin pines"
 
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:232
-#, fuzzy
 msgid "X Size"
-msgstr "Anchura"
+msgstr "Tamaño X"
 
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:233
-#, fuzzy
 msgid "Y Size"
-msgstr "Anchura"
+msgstr "Tamaño Y"
 
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:234
-#, fuzzy
 msgid "Plated"
-msgstr "No plateado"
+msgstr "Revestido"
 
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:235
 msgid "Via/Pad"
 msgstr "Vía/Pad"
 
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:236
-#, fuzzy
 msgid "Start Layer"
-msgstr "Capa de inicio:"
+msgstr "Capa inicial"
 
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:237
-#, fuzzy
 msgid "Stop Layer"
-msgstr "Capa Superior"
+msgstr "Capa final"
 
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:258
-#, fuzzy
 msgid "Drill Holes"
-msgstr "Archivos de taladros"
+msgstr "Agujeros de taladros"
 
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:265
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:214
-#, fuzzy
 msgid "Generate Report File..."
-msgstr "Crear informe"
+msgstr "Generar archivo de informe..."
 
 #: pcbnew/dialogs/dialog_board_statistics_base.h:66
-#, fuzzy
 msgid "Board Statistics"
-msgstr "Clases de placas"
+msgstr "Estadísticas de placa"
 
 #: pcbnew/dialogs/dialog_choose_footprint.cpp:229
 msgid "No footprint selected"
 msgstr "No se ha seleccionado huella"
 
 #: pcbnew/dialogs/dialog_cleanup_graphics.cpp:46
-#, fuzzy
 msgid "Update Footprint"
-msgstr "Actualizar huella..."
+msgstr "Actualizar huella"
 
 #: pcbnew/dialogs/dialog_cleanup_graphics.cpp:46
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:55
 #: pcbnew/dialogs/dialog_netlist.cpp:88 pcbnew/dialogs/dialog_update_pcb.cpp:65
 msgid "Update PCB"
-msgstr "Actualizar PCB"
+msgstr "Actualizar placa"
 
 #: pcbnew/dialogs/dialog_cleanup_graphics.cpp:116
-#, fuzzy
 msgid "Graphics cleanup"
-msgstr "Estilo gráfico"
+msgstr "Limpieza de gráficos"
 
 #: pcbnew/dialogs/dialog_cleanup_graphics_base.cpp:22
-#, fuzzy
 msgid "Merge lines into rectangles"
-msgstr "Vía cerca de pista"
+msgstr "Unir líneas en rectángulos"
 
 #: pcbnew/dialogs/dialog_cleanup_graphics_base.cpp:23
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:23
@@ -21887,29 +21874,25 @@ msgstr ""
 "redes (cortocircuito)"
 
 #: pcbnew/dialogs/dialog_cleanup_graphics_base.cpp:27
-#, fuzzy
 msgid "Delete redundant graphics"
-msgstr "Borrar Vias Redundantes"
+msgstr "Eliminar gráficos redundantes"
 
 #: pcbnew/dialogs/dialog_cleanup_graphics_base.cpp:37
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:57
-#, fuzzy
 msgid "Changes To Be Applied:"
-msgstr "Cambios a aplicar"
+msgstr "Cambios a aplicar:"
 
 #: pcbnew/dialogs/dialog_cleanup_graphics_base.h:53
-#, fuzzy
 msgid "Cleanup Graphics"
-msgstr "Gráfico&s tradicionales"
+msgstr "Limpiar gráficos"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:150
 msgid "Board cleanup"
 msgstr "Optimización de placa"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:22
-#, fuzzy
 msgid "Delete &tracks connecting different nets"
-msgstr "Eliminar los segmentos de pis&ta que conectan redes diferentes"
+msgstr "Eliminar pis&tas que conectan redes diferentes"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:27
 msgid "&Delete redundant vias"
@@ -21924,27 +21907,24 @@ msgid "Delete vias connected on only one layer"
 msgstr "Eliminar vías conectadas en una sola capa"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:35
-#, fuzzy
 msgid "&Merge co-linear tracks"
-msgstr "Eliminar las pistas no conecta&das"
+msgstr "U&nir pistas colineales"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:36
 msgid "merge aligned track segments, and remove null segments"
 msgstr "fusionar segmentos de pista alineados, y eliminar segmentos nulos"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:40
-#, fuzzy
 msgid "Delete tracks unconnected at one end"
-msgstr "Eliminar las pistas no conecta&das"
+msgstr "Eliminar pistas desconectadas en un lado"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:41
 msgid "delete tracks having at least one dangling end"
 msgstr "eliminar pistas con al menos un extremo sin conectar"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:45
-#, fuzzy
 msgid "Delete tracks fully inside pads"
-msgstr "Pistas conectando múltiples redes:"
+msgstr "Eliminar pistas completamente dentro de pads"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:46
 msgid "Delete tracks that have both start and end positions inside of a pad"
@@ -21952,9 +21932,8 @@ msgstr ""
 "Eliminar pistas que tengan la posición inicial y final dentro de un pad"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.h:57
-#, fuzzy
 msgid "Cleanup Tracks and Vias"
-msgstr "&Optimizar pistas y vías..."
+msgstr "Limpiar pistas y vías"
 
 #: pcbnew/dialogs/dialog_constraints_reporter_base.h:45
 msgid "Constraints Resolution Report"
@@ -21973,9 +21952,8 @@ msgid "Fillet radius:"
 msgstr "Radio de redondeo:"
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:394
-#, fuzzy
 msgid "Thermal spoke width cannot be smaller than the minimum width."
-msgstr "El radio del alivio térmico debe ser mayor que el ancho mínimo."
+msgstr "El ancho del alivio térmico no puede ser menor que el ancho mínimo."
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:422
 #: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:256
@@ -22029,9 +22007,8 @@ msgstr ""
 "sin conectar."
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:111
-#, fuzzy
 msgid "Zone name:"
-msgstr "Nombre de red:"
+msgstr "Nombre de zona:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:113
 msgid "A unique name for this zone to identify it for DRC"
@@ -22092,9 +22069,8 @@ msgid "Fillet"
 msgstr "Redondeado"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:196
-#, fuzzy
 msgid "Electrical Properties"
-msgstr "Propiedades del material"
+msgstr "Propiedades eléctricas"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:203
 msgid "Clearance:"
@@ -22103,6 +22079,8 @@ msgstr "Margen:"
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:205
 msgid "Copper clearance for this zone (set to 0 to use the netclass clearance)"
 msgstr ""
+"Margen del cobre para esta zona (fijar a 0 para usar el margen de la clase "
+"de red)"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:216
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:67
@@ -22118,13 +22096,12 @@ msgid "Pad connections:"
 msgstr "Conexiones de pad:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:240
-#, fuzzy
 msgid ""
 "Default pad connection type to zone.\n"
 "This setting can be overridden by local  pad settings"
 msgstr ""
 "Tipo de conexión por defecto entre pads y zonas.\n"
-"Esta opción puede ser modificada por las opciones locales de pad"
+"Las opciones locales de pad tienen precedencia frente a estas opciones"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:244 pcbnew/zone.cpp:1401
 msgid "Thermal reliefs"
@@ -22145,15 +22122,15 @@ msgid ""
 "The distance that will be kept clear between the filled area of the zone and "
 "a pad connected by thermal relief spokes."
 msgstr ""
+"El espacio que se mantendrá limpio entre el área rellena de la zona y un pad "
+"conectado por alivios térmicos."
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:257
-#, fuzzy
 msgid "Clearance between pads in the same net and filled areas."
 msgstr "Margen entre pads de la misma red y áreas rellenas."
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:265
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:739
-#, fuzzy
 msgid "Thermal relief spoke width:"
 msgstr "Ancho del alivio térmico:"
 
@@ -22169,37 +22146,31 @@ msgstr "Rellenar"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:294
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:116
-#, fuzzy
 msgid "Fill type:"
-msgstr "Estilo de relleno"
+msgstr "Typo de relleno:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:298
-#, fuzzy
 msgid "Solid fill"
-msgstr "Sólida"
+msgstr "Relleno sólido"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:298
-#, fuzzy
 msgid "Hatch pattern"
-msgstr "Rayado"
+msgstr "Patrón rayado"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:315
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:140
-#, fuzzy
 msgid "Hatch width:"
-msgstr "Ancho de pista:"
+msgstr "Ancho del rayado:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:326
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:151
-#, fuzzy
 msgid "Hatch gap:"
-msgstr "Espaciado de pista:"
+msgstr "Espaciado del rayado:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:337
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:162
-#, fuzzy
 msgid "Smoothing effort:"
-msgstr "Ordenar Redes"
+msgstr "Esfuerzo de suavizado:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:339
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:164
@@ -22217,9 +22188,8 @@ msgstr ""
 "3 = esquinas redondeadas (forma más fina)"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:346
-#, fuzzy
 msgid "Smoothing amount:"
-msgstr "No se ha encontrado nada"
+msgstr "Cantidad de redondeado:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:348
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:176
@@ -22234,27 +22204,20 @@ msgstr ""
 "1.0 = radio máximo / tamaño de chaflán (valor de mitad del espacio)"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:356
-#, fuzzy
 msgid "Remove islands:"
-msgstr "Eliminar campos"
+msgstr "Eliminar islas:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:358
-#, fuzzy
 msgid "Choose what to do with unconnected copper islands"
-msgstr ""
-"Sin red conllevará\n"
-"a una isla de cobre\n"
-"sin conectar."
+msgstr "Elegir que hacer con islas de cobre sin conectar"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:362
-#, fuzzy
 msgid "Below area limit"
-msgstr "Mostrar límites de hoja"
+msgstr "Por debajo del límite de área"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:368
-#, fuzzy
 msgid "Minimum island size:"
-msgstr "Tamaño mínimo de vía:"
+msgstr "Tamaño mínimo de isla:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:371
 msgid "Isolated islands smaller than this will be removed"
@@ -22308,9 +22271,8 @@ msgstr ""
 "valor consistente con el alfabeto '%s'."
 
 #: pcbnew/dialogs/dialog_create_array.cpp:307
-#, fuzzy
 msgid "step value"
-msgstr "Valor pulsado:"
+msgstr "valor de paso"
 
 #: pcbnew/dialogs/dialog_create_array.cpp:329
 msgid "horizontal count"
@@ -22380,9 +22342,8 @@ msgid "Columns"
 msgstr "Columnas"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:98
-#, fuzzy
 msgid "Stagger Type"
-msgstr "Tipo de escalonado:"
+msgstr "Tipo de escalonado"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:110
 msgid "Horizontal, then vertical"
@@ -22393,9 +22354,8 @@ msgid "Vertical, then horizontal"
 msgstr "Vertical, luego horizontal"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:112
-#, fuzzy
 msgid "Numbering Direction"
-msgstr "DIrección de la numeración"
+msgstr "Dirección de la numeración"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:116
 msgid "Reverse numbering on alternate rows/columns"
@@ -22412,9 +22372,8 @@ msgid "From start value"
 msgstr "A partir del valor inicial"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:121
-#, fuzzy
 msgid "Initial Pad Number"
-msgstr "Número de pad inicial:"
+msgstr "Número de pad inicial"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:125
 msgid "Continuous (1, 2, 3...)"
@@ -22425,9 +22384,8 @@ msgid "Coordinate (A1, A2, ... B1, ...)"
 msgstr "Coordenadas (A1, A2, ... B1, ...)"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:127
-#, fuzzy
 msgid "Pad Numbering Scheme"
-msgstr "Esquema de numeración de pads:"
+msgstr "Esquema de numeración de pads"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:131
 msgid "Primary axis numbering:"
@@ -22444,9 +22402,8 @@ msgstr "Inicio de numeración de pads:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:173
 #: pcbnew/dialogs/dialog_create_array_base.cpp:309
-#, fuzzy
 msgid "Pad numbering skip:"
-msgstr "Inicio de numeración de pads:"
+msgstr "Salteo de numeración de pads:"
 
 # A la espera de confirmar en KiCad
 #: pcbnew/dialogs/dialog_create_array_base.cpp:197
@@ -22490,18 +22447,16 @@ msgid ""
 msgstr "Rotar y mover el elemento - las secciones múltiples se moveran juntas"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:279
-#, fuzzy
 msgid "Numbering Options"
-msgstr "Opciones de numeración de pads:"
+msgstr "Opciones de numeración"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:283
 msgid "Initial Pad Number:"
 msgstr "Número de pad inicial:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:287
-#, fuzzy
 msgid "Pad Numbering:"
-msgstr "Numeración:"
+msgstr "Numeración de pads:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:326
 msgid "Circular Array"
@@ -22512,7 +22467,6 @@ msgid "Create Array"
 msgstr "Crear matriz"
 
 #: pcbnew/dialogs/dialog_dimension_properties.cpp:199
-#, fuzzy
 msgid ""
 "This item was on a non-existing or forbidden layer.\n"
 "It has been moved to the first allowed layer."
@@ -22521,9 +22475,8 @@ msgstr ""
 "Se ha movido a la primera capa permitida."
 
 #: pcbnew/dialogs/dialog_dimension_properties.cpp:280
-#, fuzzy
 msgid "Change dimension properties"
-msgstr "Dimensiones"
+msgstr "Cambiar propiedades de dimensiones"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:20
 #, fuzzy
@@ -22531,9 +22484,8 @@ msgid "Leader Format"
 msgstr "Formato de los ceros:"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:37
-#, fuzzy
 msgid "Text frame:"
-msgstr "Nombre de red:"
+msgstr "Marco de texto:"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:39
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:47
@@ -22554,15 +22506,13 @@ msgstr "Capa:"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:67
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:87
-#, fuzzy
 msgid "Dimension Format"
-msgstr "Dimensiones"
+msgstr "Formato de dimensiones"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:96
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:102
-#, fuzzy
 msgid "Measured value of this dimension"
-msgstr "Valor erróneo para la orientación de las huellas"
+msgstr "Valor medido para esta dimensión"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:106
 #, fuzzy
@@ -22597,39 +22547,37 @@ msgstr ""
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:130
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:135
 msgid "Text to print before the dimension value"
-msgstr ""
+msgstr "Texto a imprimir antes del valor de dimensión"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:139
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:108
-#, fuzzy
 msgid "Units format:"
-msgstr "Formato de trazado:"
+msgstr "Formato de unidades:"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:141
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:149
 msgid "Choose how to display the units"
-msgstr ""
+msgstr "Elegir como mostrar las unidades"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:145
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:112
 msgid "1234"
-msgstr ""
+msgstr "1234"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:145
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:112
 msgid "1234 mm"
-msgstr ""
+msgstr "1234 mm"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:145
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:112
-#, fuzzy
 msgid "1234 (mm)"
-msgstr " (mm):"
+msgstr "1234 (mm)"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:155
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:160
 msgid "Text to print after the dimension value"
-msgstr ""
+msgstr "Texto a imprimir después del valor de dimensión"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:164
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:124
@@ -22641,7 +22589,7 @@ msgstr "Precisión:"
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:166
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:174
 msgid "Choose how many digits of precision to display"
-msgstr ""
+msgstr "Elegir cuantos dígitos de precisión mostrar"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:170
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:292
@@ -22653,30 +22601,26 @@ msgstr "0,0"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:170
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:127
-#, fuzzy
 msgid "0.00"
-msgstr "0.00000"
+msgstr "0,00"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:170
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:127
-#, fuzzy
 msgid "0.000"
-msgstr "0.00000"
+msgstr "0,000"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:170
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:127
-#, fuzzy
 msgid "0.0000"
-msgstr "0.00000"
+msgstr "0,0000"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:170
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:127
 msgid "0.00000"
-msgstr "0.00000"
+msgstr "0,00000"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:178
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:146
-#, fuzzy
 msgid "Suppress trailing zeroes"
 msgstr "Eliminar ceros a la derecha"
 
@@ -22685,11 +22629,12 @@ msgid ""
 "When checked, \"0.100\" will be shown as \"0.1\" even if the precision "
 "setting is higher"
 msgstr ""
+"Cuando está marcado, \"0,100\" será mostrado como \"0,1\" incluso si una "
+"precisión más alta está configurada"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:210
-#, fuzzy
 msgid "Dimension Text"
-msgstr "Mover texto de dimensión"
+msgstr "Texto de dimensión"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:219
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:110
@@ -22698,9 +22643,8 @@ msgstr "Ancho del texto"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:235
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:178
-#, fuzzy
 msgid "Text pos X"
-msgstr "Posición X del texto:"
+msgstr "Posición X del texto"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:248
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:129
@@ -22709,9 +22653,8 @@ msgstr "Alto del texto"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:261
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:199
-#, fuzzy
 msgid "Text pos Y"
-msgstr "Posición Y del texto:"
+msgstr "Posición Y del texto"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:272
 #: pcbnew/dialogs/dialog_target_properties_base.cpp:39
@@ -22726,9 +22669,8 @@ msgstr "Grosor del texto"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:287
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:165
-#, fuzzy
 msgid "Text orientation"
-msgstr "Cualquier orientación"
+msgstr "Orientación del texto"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:293
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:166
@@ -22749,19 +22691,19 @@ msgid "180.0"
 msgstr "180,0"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:301
-#, fuzzy
 msgid "Keep aligned with dimension"
-msgstr "Eliminar dimensión"
+msgstr "Mantener alineado con la dimensión"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:302
 msgid "Automatically set the text orientation to match the dimension lines"
 msgstr ""
+"Fija automáticamente la orientación del texto para que coincida con las "
+"lineas de dimensión"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:307
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:190
-#, fuzzy
 msgid "Mirror text"
-msgstr "Invertir X"
+msgstr "Espejar el texto"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:311
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:140
@@ -22769,9 +22711,8 @@ msgid "Justification:"
 msgstr "Justificado:"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:321
-#, fuzzy
 msgid "Position mode:"
-msgstr "Desplazamiento de la posición del texto:"
+msgstr "Modo de posición:"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:325
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:100
@@ -22780,9 +22721,8 @@ msgstr "Exterior"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:325
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:100
-#, fuzzy
 msgid "Inline"
-msgstr "Línea"
+msgstr "En línea"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:325
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:68
@@ -22790,40 +22730,35 @@ msgid "Manual"
 msgstr "Manual"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:329
-#, fuzzy
 msgid "Choose how to position the text relative to the dimension line"
-msgstr "La coordenada X del texto con respecto al componente"
+msgstr "Elegir como colocar el texto con respecto a la línea de dimensión"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:344
-#, fuzzy
 msgid "Dimension Line"
-msgstr "Dimensión"
+msgstr "Línea de dimensión"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:353
 msgid "Thickness of the dimension lines"
-msgstr ""
+msgstr "Ancho de las líneas de dimensión"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:367
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:135
-#, fuzzy
 msgid "Arrow length:"
-msgstr "Longitud de Pin:"
+msgstr "Longitud de la flecha:"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:378
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:151
-#, fuzzy
 msgid "Extension line offset:"
-msgstr "Desplazamiento de la posición del texto:"
+msgstr "Desfase de línea de extensión:"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:380
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:385
 msgid "Gap between the measured points and the start of the extension lines"
-msgstr ""
+msgstr "Espacio entre los puntos medidos y el inicio de las líneas de extensión"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.h:120
-#, fuzzy
 msgid "Dimension Properties"
-msgstr "Dimensiones"
+msgstr "Propiedades de dimensiones"
 
 #: pcbnew/dialogs/dialog_drc.cpp:85
 msgid "Run DRC"
@@ -22831,13 +22766,14 @@ msgstr "Ejecutar DRC"
 
 #: pcbnew/dialogs/dialog_drc.cpp:194 pcbnew/tools/board_inspection_tool.cpp:47
 #: pcbnew/tools/zone_filler_tool.cpp:131
-#, fuzzy
 msgid "Rules"
-msgstr "Módulos"
+msgstr "Reglas"
 
 #: pcbnew/dialogs/dialog_drc.cpp:227
 msgid "DRC incomplete: could not compile custom design rules.  "
 msgstr ""
+"DRC incompleto: no se pudieron compilar las reglas de diseño "
+"personalizadas.  "
 
 #: pcbnew/dialogs/dialog_drc.cpp:229 pcbnew/tools/board_inspection_tool.cpp:233
 #: pcbnew/tools/board_inspection_tool.cpp:617
@@ -22845,9 +22781,8 @@ msgstr ""
 #: pcbnew/tools/board_inspection_tool.cpp:689
 #: pcbnew/tools/board_inspection_tool.cpp:728
 #: pcbnew/tools/board_inspection_tool.cpp:758
-#, fuzzy
 msgid "Show design rules."
-msgstr "Reglas de &diseño"
+msgstr "Mostrar las reglas de diseño."
 
 #: pcbnew/dialogs/dialog_drc.cpp:262
 msgid "-------- DRC cancelled by user.<br><br>"
@@ -22858,47 +22793,42 @@ msgid "Done.<br><br>"
 msgstr "Terminado.<br><br>"
 
 #: pcbnew/dialogs/dialog_drc.cpp:459
-#, fuzzy
 msgid "Run clearance resolution tool..."
-msgstr "Perímetros de margen:"
+msgstr "Abrir la herramienta de resolución de márgenes..."
 
 #: pcbnew/dialogs/dialog_drc.cpp:486
-#, fuzzy
 msgid "Open the Board Setup... dialog"
-msgstr "Configuración de placa..."
+msgstr "Abrir la configuración de placa... diálogo"
 
 #: pcbnew/dialogs/dialog_drc.cpp:661
-#, fuzzy, c-format
+#, c-format
 msgid "Report file '%s' created<br>"
-msgstr "Se ha creado el archivo de informe %s\n"
+msgstr "Se ha creado el archivo de informe '%s'<br>"
 
 #: pcbnew/dialogs/dialog_drc.cpp:666
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to create report file '%s'<br>"
-msgstr "No puede crearse el archivo de informe \"%s\""
+msgstr "No puede crearse el archivo de informe '%s'<br>"
 
 #: pcbnew/dialogs/dialog_drc.cpp:892
 msgid "Do you wish to delete excluded markers as well?"
-msgstr ""
+msgstr "¿Desea eliminar también los marcadores excluidos?"
 
 #: pcbnew/dialogs/dialog_drc.cpp:895
-#, fuzzy
 msgid "Delete exclusions"
-msgstr "Eliminar selección"
+msgstr "Eliminar exclusiones"
 
 #: pcbnew/dialogs/dialog_drc.cpp:966
-#, fuzzy
 msgid "not run"
-msgstr " no encontrado"
+msgstr "no ejecutado"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:27
 msgid "Refill all zones before performing DRC"
 msgstr "Rellenar todas las zonas antes de ejecutar DRC"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:30
-#, fuzzy
 msgid "Report all errors for each track"
-msgstr "Mostrar todos los errores en pistas (lento)"
+msgstr "Mostrar todos los errores para cada pista"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:31
 msgid ""
@@ -22916,17 +22846,16 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:41
 msgid "Test for parity between PCB and schematic"
-msgstr ""
+msgstr "Comprobar la paridad entre la placa y el esquema"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:77
-#, fuzzy
 msgid "Tests Running..."
-msgstr "Comprobar zonas...\n"
+msgstr "Pruebas ejecutándose..."
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:105
-#, fuzzy, c-format
+#, c-format
 msgid "Violations (%d)"
-msgstr "Rotación (grados)"
+msgstr "Infracciones (%d)"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:117
 #, c-format
@@ -22934,9 +22863,9 @@ msgid "Unconnected Items (%d)"
 msgstr "Elementos no conectados (%d)"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:129
-#, fuzzy, c-format
+#, c-format
 msgid "Schematic Parity (%d)"
-msgstr "Se ha guardado el esquema"
+msgstr "Paridad del esquema (%d)"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:192
 #: pcbnew/dialogs/dialog_footprint_checker_base.cpp:79
@@ -22970,48 +22899,40 @@ msgid "Change Footprints"
 msgstr "Cambiar huellas"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:75
-#, fuzzy
 msgid "Change all footprints on board"
-msgstr "%s todas las huellas de la placa"
+msgstr "Cambiar todas las huellas de la placa"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:76
 msgid "Change selected footprint(s)"
 msgstr "Cambiar huella(s) seleccionada(s)"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:77
-#, fuzzy
 msgid "Change footprints matching reference designator:"
-msgstr "%s huella con referencia:"
+msgstr "Cambiar huellas que coincidan con el indicador de referencia:"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:78
-#, fuzzy
 msgid "Change footprints matching value:"
-msgstr "%s huellas con valor:"
+msgstr "Cambiar huellas que coincidan con el valor:"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:79
-#, fuzzy
 msgid "Change footprints with library id:"
-msgstr "%s huellas con identificador:"
+msgstr "Cambiar huellas con ID de librería:"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:80
-#, fuzzy
 msgid "Update text layers and visibilities"
-msgstr "Hacer el campo seleccionado visible"
+msgstr "Actualizar las capas de texto y visibilidades"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:81
-#, fuzzy
 msgid "Update text sizes, styles and positions"
-msgstr "Reiniciar anotación"
+msgstr "Actualizar tamaños, estilos, y posiciones de textos"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:82
-#, fuzzy
 msgid "Update fabrication attributes"
-msgstr "Archivos de &fabricación"
+msgstr "Actualizar atributos de fabricación"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:83
-#, fuzzy
 msgid "Update 3D models"
-msgstr "Modelos 3D por"
+msgstr "Actualizar modelos 3D"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:87
 msgid ""
@@ -23020,11 +22941,15 @@ msgid ""
 "or the user made changes to the library footprint and wants to propagate "
 "them back to the PCB."
 msgstr ""
+"Actualizar/Reiniciar cadenas: hay dos casos que las descripciones tienen que "
+"cubrir: las modificaciones que un usuario hizo a una huella en la placa y "
+"quiere eliminar, o los cambios que un usuario hizo a la huella de la "
+"librería y quiere propagarlos a la placa."
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:374
-#, fuzzy, c-format
+#, c-format
 msgid "Update footprint %s from '%s' to '%s'"
-msgstr "Actualizado %s de %s a %s"
+msgstr "Actualizar la huella %s de '%s' a '%s'"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:381
 #, c-format
@@ -23036,34 +22961,28 @@ msgid "*** footprint not found ***"
 msgstr "*** no se ha encontrado la huella ***"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:24
-#, fuzzy
 msgid "Update all footprints on board"
-msgstr "Actualizar huella en placa"
+msgstr "Actualizar todas las huella en la placa"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:27
-#, fuzzy
 msgid "Update selected footprint(s)"
-msgstr "Mostrar huella seleccionada"
+msgstr "Actualizar la(s) huella(s) seleccionada(s)"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:30
-#, fuzzy
 msgid "Update footprints matching reference designator:"
-msgstr "%s huella con referencia:"
+msgstr "Actualizar huellas que coincidan con el indicador de referencia:"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:38
-#, fuzzy
 msgid "Update footprints matching value:"
-msgstr "%s huellas con valor:"
+msgstr "Actualizar huellas que coincidan con el valor:"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:44
-#, fuzzy
 msgid "Update footprints with library id:"
-msgstr "%s huellas con identificador:"
+msgstr "Actualizar huellas con ID de librería:"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:73
-#, fuzzy
 msgid "New footprint library id:"
-msgstr "Archivos de huellas obsoletos"
+msgstr "Nueva ID de librería de huella:"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:96
 msgid "Remove text items which are not in library footprint"
@@ -23072,24 +22991,20 @@ msgstr ""
 "huellas"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:101
-#, fuzzy
 msgid "Update/reset text layers and visibilities"
-msgstr "Hacer el campo seleccionado visible"
+msgstr "Actualizar/Reiniciar las capas de texto y visibilidades"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:104
-#, fuzzy
 msgid "Update/reset text sizes, styles and positions"
-msgstr "Reiniciar anotación"
+msgstr "Actualizar/Reiniciar tamaños, estilos, y posiciones de texto"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:107
-#, fuzzy
 msgid "Update/reset fabrication attributes"
-msgstr "Archivos de &fabricación"
+msgstr "Actualizar/Reiniciar atributos de fabricación"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:110
-#, fuzzy
 msgid "Update/reset 3D models"
-msgstr "Modelos 3D por"
+msgstr "Actualizar/Reiniciar modelos 3D"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.h:86
 msgid "Update Footprints from Library"
@@ -23213,7 +23128,6 @@ msgid "Board center origin"
 msgstr "Origen en el centro de la placa"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:56
-#, fuzzy
 msgid "User Defined Origin"
 msgstr "Origen definido por el usuario"
 
@@ -23227,16 +23141,15 @@ msgstr "Ignorar componentes virtuales"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:115
 msgid "Substitute similarly named models"
-msgstr ""
+msgstr "Sustituir modelos de nombres similares"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:116
 msgid "Replace VRML models with STEP models of the same name"
-msgstr ""
+msgstr "Reemplazar modelos VRML con modelos STEP del mismo nombre"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:120
-#, fuzzy
 msgid "Overwrite old file"
-msgstr "sobrescribir archivo de salida"
+msgstr "Sobrescribir archivo antiguo"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:123
 #, fuzzy
@@ -23246,21 +23159,23 @@ msgstr "Contorno de la placa"
 #: pcbnew/dialogs/dialog_export_step_base.cpp:127
 #, fuzzy
 msgid "Tight (0.001 mm)"
-msgstr "Alto de texto (mm)"
+msgstr "Estrecha (0,001 mm)"
+
+#: pcbnew/dialogs/dialog_export_step_base.cpp:127
+msgid "Standard (0.01 mm)"
+msgstr "Estándar (0,01 mm)"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:127
 #, fuzzy
-msgid "Standard (0.01 mm)"
-msgstr "Estándar (1,2,3)"
-
-#: pcbnew/dialogs/dialog_export_step_base.cpp:127
 msgid "Loose (0.1 mm)"
-msgstr ""
+msgstr "Suelto (0,1 mm)"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:131
 msgid ""
 "Tolerance sets the distance between two points that are considered joined."
 msgstr ""
+"La tolerancia fija la distancia entre dos puntos para que se consideren "
+"unidos."
 
 #: pcbnew/dialogs/dialog_export_step_base.h:75
 msgid "Export STEP"
@@ -23319,7 +23234,7 @@ msgstr "Modo de impresión"
 
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:84
 msgid "Export as black elements on a white background"
-msgstr ""
+msgstr "Exportar como elementos negros en un fondo blanco"
 
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:88
 msgid "Page with frame and title block"
@@ -23343,15 +23258,13 @@ msgstr "Imprimir las capas invertidas horizontalmente"
 
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:99
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:254
-#, fuzzy
 msgid "Print one page per layer"
-msgstr "Un archivo por capa"
+msgstr "Imprimir una página por capa"
 
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:105
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:260
-#, fuzzy
 msgid "Print board edges on all pages"
-msgstr "Imprimir bordes de la placa"
+msgstr "Imprimir bordes de la placa en todas las páginas"
 
 #: pcbnew/dialogs/dialog_export_svg_base.h:71
 msgid "Export SVG File"
@@ -23363,9 +23276,9 @@ msgstr "¿Está seguro de que desea sobreescribir el archivo existente?"
 
 #: pcbnew/dialogs/dialog_export_vrml.cpp:254
 #: pcbnew/plugins/altium/altium_pcb.cpp:1284
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to create folder '%s'."
-msgstr "No puede crearse el archivo \"%s\""
+msgstr "Fallo al crear el archivo '%s'."
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:26
 msgid "Save VRML Board File"
@@ -23397,7 +23310,7 @@ msgstr "0,1 pulgadas"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:111
 msgid "VRML Units for Output Files"
-msgstr ""
+msgstr "Unidades VRML para los archivos de salida"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:124
 msgid "Copy 3D model files to 3D model path"
@@ -23408,6 +23321,8 @@ msgid ""
 "If checked: copy 3D models to the destination folder\n"
 "If not checked: Embed 3D models in the VRML board file"
 msgstr ""
+"Si está marcado: copiar los modelos 3D a la carpeta destino\n"
+"Si no está marcado: Incluir los modelos 3D en el archivo de placa VRML"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:129
 msgid "Use relative paths to model files in board VRML file"
@@ -23461,33 +23376,31 @@ msgid "Filter Selected Items"
 msgstr "Filtrar elementos seleccionados"
 
 #: pcbnew/dialogs/dialog_find.cpp:221
-#, fuzzy
 msgid "Searching..."
-msgstr "Buscar"
+msgstr "Buscando..."
 
 #: pcbnew/dialogs/dialog_find.cpp:337
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' not found"
-msgstr "%s no encontrado"
+msgstr "'%s' no encontrado"
 
 #: pcbnew/dialogs/dialog_find.cpp:345
-#, fuzzy
 msgid "No more items to show"
-msgstr "Ningún elemento que pegar."
+msgstr "No hay más elementos que mostrar"
 
 #: pcbnew/dialogs/dialog_find.cpp:347
 msgid "No hits"
-msgstr ""
+msgstr "No hay coincidencias"
 
 #: pcbnew/dialogs/dialog_find.cpp:354
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' found"
-msgstr "%s encontrado"
+msgstr "'%s' encontrado"
 
 #: pcbnew/dialogs/dialog_find.cpp:357
 #, c-format
 msgid "Hit(s): %ld / %lu"
-msgstr ""
+msgstr "Coincidencia(s): %ld / %lu"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:28
 msgid "Search for:"
@@ -24341,9 +24254,8 @@ msgstr ""
 "sucesiva)"
 
 #: pcbnew/dialogs/dialog_get_footprint_by_name_base.cpp:39
-#, fuzzy
 msgid "Available footprints:"
-msgstr "Rutas disponibles:"
+msgstr "Huellas disponibles:"
 
 #: pcbnew/dialogs/dialog_get_footprint_by_name_base.h:56
 #: pcbnew/tools/pcb_actions.cpp:246
@@ -24359,9 +24271,8 @@ msgid "Are you sure you want to delete the selected items?"
 msgstr "¿Está seguro de que quiere eliminar los elementos seleccionados?"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:23
-#, fuzzy
 msgid "Items to Delete"
-msgstr "Elementos a eliminar:"
+msgstr "Elementos a eliminar"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:25
 #: pcbnew/tools/board_editor_control.cpp:83
@@ -24376,9 +24287,8 @@ msgstr "Contorno de la placa"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:34
 #: pcbnew/widgets/panel_selection_filter_base.cpp:51
-#, fuzzy
 msgid "Graphics"
-msgstr "Gráficos..."
+msgstr "Gráficos"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:37
 #: pcbnew/widgets/panel_selection_filter_base.cpp:31
@@ -24386,9 +24296,8 @@ msgid "Footprints"
 msgstr "Huellas"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:40
-#, fuzzy
 msgid "Tracks && vias"
-msgstr "Pistas y Vias"
+msgstr "Pistas y vías"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:43
 msgid "Markers"
@@ -24399,19 +24308,16 @@ msgid "Clear board"
 msgstr "Vaciar placa"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:55
-#, fuzzy
 msgid "Filter Settings"
-msgstr "Opciones de filtrado:"
+msgstr "Filtrar opciones"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:57
-#, fuzzy
 msgid "Locked graphics"
-msgstr "Pistas bloqueadas"
+msgstr "Gráficos bloqueados"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:60
-#, fuzzy
 msgid "Unlocked graphics"
-msgstr "Pistas desbloqueadas"
+msgstr "Gráficos desbloqueados"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:63
 msgid "Locked footprints"
@@ -24465,16 +24371,14 @@ msgstr "Capas de cobre"
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:215
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:137
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:57
-#, fuzzy
 msgid "Edge Cuts"
-msgstr "Dordes y áreas"
+msgstr "Cortes de bordes"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:216
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:138
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:58
-#, fuzzy
 msgid "Courtyards"
-msgstr "Dordes y áreas"
+msgstr ""
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:217
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:139
@@ -24517,21 +24421,20 @@ msgid "Upright"
 msgstr "Hacia arriba"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:33
-#, fuzzy
 msgid "Other footprint text items"
-msgstr "Otros campos de la huella"
+msgstr "Otros elementos de texto de la huella"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:36
 msgid "Footprint graphic items"
-msgstr "Elementos gráficos de laHhella"
+msgstr "Elementos gráficos de la huella"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:42
 msgid "PCB graphic items"
-msgstr "Elementos gráficos de la PCB"
+msgstr "Elementos gráficos de la placa"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:45
 msgid "PCB text items"
-msgstr "Elementos de texto de la PCB"
+msgstr "Elementos de texto de la placa"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:60
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:71
@@ -24539,9 +24442,8 @@ msgid "Filter items by layer:"
 msgstr "Filtrar elementos por capa:"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:78
-#, fuzzy
 msgid "Filter items by parent footprint library id:"
-msgstr "Filtrar elementos por huella origen:"
+msgstr "Filtrar elementos por id de librería de huella padre:"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:103
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:90
@@ -24592,52 +24494,40 @@ msgid "footprint"
 msgstr "huella"
 
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:59
-#, fuzzy, c-format
+#, c-format
 msgid "Error occurred writing empty footprint library table '%s'."
-msgstr ""
-"Ha ocurrido un error al intentar escribir una tabla de librerías de símbolos "
-"vacía.\n"
-"\n"
-"%s"
+msgstr "Error al escribir una tabla de librerías de huellas vacía '%s'."
 
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:73
-#, fuzzy
 msgid "Please select a footprint library table file."
-msgstr "Seleccione un archivo de tabla de librería de símbolos."
+msgstr "Seleccione un archivo de tabla de librería de huellas."
 
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:95
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' is not a valid footprint library table."
-msgstr ""
-"\"%s\" no es un archivo válido de tabla de librerías de símbolos.\n"
-"\n"
-"%s"
+msgstr "'%s' no es una tabla de librerías de huellas válida."
 
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:106
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot create library table path '%s'."
-msgstr "No se puede crear la ruta \"%s\" de la tabla global de librerías."
+msgstr "No se puede crear la ruta '%s' de la tabla librerías."
 
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:114
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Cannot copy footprint library table from:\n"
 "%s\n"
 "to:\n"
 "%s."
 msgstr ""
-"No puede copiarse el archivo de tabla de librerías globales de símbolos:\n"
-"\n"
-" \"%s\"\n"
-"\n"
-":a:\n"
-"\n"
-"\"%s\"."
+"No se puede copiar la tabla de librerías de huellas de:\n"
+"%s\n"
+"a:\n"
+"%s."
 
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:133
-#, fuzzy
 msgid "Error loading footprint library table."
-msgstr "Error al cargar la tabla de librerías de huellas del proyecto"
+msgstr "Error al cargar la tabla de librerías de huellas."
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:178
 msgid "Circle Properties"
@@ -24673,14 +24563,12 @@ msgid "The arc angle cannot be zero."
 msgstr "El ángulo del arco no puede ser cero."
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:396
-#, fuzzy
 msgid "The radius cannot be zero."
-msgstr "El ángulo del arco no puede ser cero."
+msgstr "El radio no puede ser cero."
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:402
-#, fuzzy
 msgid "The rectangle cannot be empty."
-msgstr "El ángulo del arco no puede ser cero."
+msgstr "El rectángulo no puede estar vacío."
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:418
 msgid "Error List"
@@ -24715,129 +24603,117 @@ msgstr "Propiedades de elemento gráfico"
 
 #: pcbnew/dialogs/dialog_group_properties.cpp:115
 msgid "Modified group"
-msgstr ""
+msgstr "Grupo modificado"
 
 #: pcbnew/dialogs/dialog_group_properties_base.cpp:28
 msgid "Group name:"
 msgstr "Nombre de grupo:"
 
 #: pcbnew/dialogs/dialog_group_properties_base.cpp:38
-#, fuzzy
 msgid "Group members:"
-msgstr "Agrupar símbolos"
+msgstr "Miembros del grupo:"
 
 #: pcbnew/dialogs/dialog_group_properties_base.h:62
-#, fuzzy
 msgid "Group Properties"
-msgstr "Propiedades de cuadrícula"
+msgstr "Propiedades del grupo"
 
 #: pcbnew/dialogs/dialog_import_settings.cpp:52
 #: pcbnew/dialogs/dialog_import_settings.cpp:101
-#, fuzzy
 msgid "Deselect All"
-msgstr "No seleccionar ninguna"
+msgstr "Deseleccionar todo"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:49
 msgid "Layers setup"
 msgstr "Configuración de capas"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:52
-#, fuzzy
 msgid "Text and graphics default properties"
 msgstr "Propiedades por defecto de texto y gráficos"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:55
-#, fuzzy
 msgid "Design rules"
-msgstr "Reglas de diseño de vías:"
+msgstr "Reglas de diseño"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:58
-#, fuzzy
 msgid "Predefined track and via dimensions"
-msgstr "Crear pistas y vías"
+msgstr "Dimensiones por defecto de pistas y vías"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:61
-#, fuzzy
 msgid "Solder mask/paste defaults"
 msgstr "Ajustes por defecto de máscara y pasta de soldadura"
 
 #: pcbnew/dialogs/dialog_imported_layers.cpp:237
 #: pcbnew/dialogs/dialog_imported_layers.cpp:245
-#, fuzzy
 msgid "Imported Layer"
-msgstr "Capa Mod."
+msgstr "Capa importada"
 
 #: pcbnew/dialogs/dialog_imported_layers.cpp:253
-#, fuzzy
 msgid "KiCad Layer"
-msgstr "Capa Mod."
+msgstr "Capa de KiCad"
 
 #: pcbnew/dialogs/dialog_imported_layers.cpp:328
 msgid ""
 "All required layers (marked with '*') must be matched. Please click on 'Auto-"
 "Match Layers' to automatically match the remaining layers"
 msgstr ""
+"Todas las capas requeridas (marcadas con '*') deben coincidir. Por favor "
+"cliquee en 'Auto-coincidir capas' para que automáticamente coincidan las "
+"capas restantes"
 
 #: pcbnew/dialogs/dialog_imported_layers.cpp:331
 #: pcbnew/dialogs/dialog_imported_layers_base.cpp:22
-#, fuzzy
 msgid "Unmatched Layers"
-msgstr "Otras páginas"
+msgstr "Capas no coincidentes"
 
 #: pcbnew/dialogs/dialog_imported_layers_base.cpp:32
-#, fuzzy
 msgid "Imported Layers"
-msgstr "Importar formas"
+msgstr "Capas importadas"
 
 #: pcbnew/dialogs/dialog_imported_layers_base.cpp:36
-#, fuzzy
 msgid "KiCad Layers"
-msgstr "2 capas"
+msgstr "Capas de KiCad"
 
 #: pcbnew/dialogs/dialog_imported_layers_base.cpp:59
 msgid ">"
-msgstr ""
+msgstr ">"
 
 #: pcbnew/dialogs/dialog_imported_layers_base.cpp:61
 msgid "Add selected layers to matched layers list."
-msgstr ""
+msgstr "Agregar las capas seleccionadas a la lista de capas coincidentes."
 
 #: pcbnew/dialogs/dialog_imported_layers_base.cpp:65
 msgid "<"
-msgstr ""
+msgstr "<"
 
 #: pcbnew/dialogs/dialog_imported_layers_base.cpp:67
-#, fuzzy
 msgid "Remove selected layers from matched layers list."
-msgstr "Eliminar entrada seleccionada de la table."
+msgstr "Eliminar las capas seleccionadas a la lista de capas coincidentes."
 
 #: pcbnew/dialogs/dialog_imported_layers_base.cpp:71
-#, fuzzy
 msgid "<<"
-msgstr "<<<"
+msgstr "<<"
 
 #: pcbnew/dialogs/dialog_imported_layers_base.cpp:73
-#, fuzzy
 msgid "Remove all matched layers."
-msgstr "Borrar todas las capas y crear una nueva"
+msgstr "Borrar todas las capas coincidentes."
 
 #: pcbnew/dialogs/dialog_imported_layers_base.cpp:81
-#, fuzzy
 msgid "Matched Layers"
-msgstr "Otras páginas"
+msgstr "Capas coincidentes"
 
 #: pcbnew/dialogs/dialog_imported_layers_base.cpp:97
-#, fuzzy
 msgid "Auto-Match Layers"
-msgstr "Capas Técnicas"
+msgstr "Auto-coincidir capas"
 
 #: pcbnew/dialogs/dialog_imported_layers_base.cpp:98
 msgid "Automatically match any unmatched layers to their KiCad equivalent."
 msgstr ""
+"Automáticamente coincidir las capas no coincididas a sus equivalentes de "
+"KiCad."
 
 #: pcbnew/dialogs/dialog_imported_layers_base.h:65
 msgid "Edit Mapping of Imported Layers"
-msgstr ""
+msgstr "Editar mapeado de capas importadas"
 
 #: pcbnew/dialogs/dialog_layer_selection_base.cpp:120
 msgid "Top/Front layer:"
@@ -24865,9 +24741,8 @@ msgstr "Rotar alrededor del centro de la selección"
 
 #: pcbnew/dialogs/dialog_move_exact.cpp:106
 #: pcbnew/dialogs/dialog_move_exact_base.cpp:69
-#, fuzzy
 msgid "Rotate around local coordinates origin"
-msgstr "Rotar alrededor del origen de taladrado/emplazamiento"
+msgstr "Rotar alrededor del origen de coordenadas locales"
 
 #: pcbnew/dialogs/dialog_move_exact.cpp:109
 #: pcbnew/dialogs/dialog_move_exact_base.cpp:69
@@ -24894,6 +24769,8 @@ msgid ""
 "Invalid movement values.  Movement would place selection outside of the "
 "maximum board area."
 msgstr ""
+"Valores de movimiento inválidos. El movimiento colocaría la selección afuera "
+"del área máxima de la placa."
 
 #: pcbnew/dialogs/dialog_move_exact_base.cpp:69
 msgid "Rotate around center of selection"
@@ -24913,23 +24790,20 @@ msgid "Net Name"
 msgstr "Nombre red"
 
 #: pcbnew/dialogs/dialog_net_inspector.cpp:78
-#, fuzzy
 msgid "Pad Count"
-msgstr "Isleta Cu"
+msgstr "Cantidad de pads"
 
 #: pcbnew/dialogs/dialog_net_inspector.cpp:79
-#, fuzzy
 msgid "Via Count"
-msgstr "Isleta Cu"
+msgstr "Cantidad de vías"
 
 #: pcbnew/dialogs/dialog_net_inspector.cpp:80
 msgid "Via Length"
 msgstr "Longitud de vía"
 
 #: pcbnew/dialogs/dialog_net_inspector.cpp:81
-#, fuzzy
 msgid "Track Length"
-msgstr "Long pista"
+msgstr "Longitud de pista"
 
 #: pcbnew/dialogs/dialog_net_inspector.cpp:82
 #, fuzzy
@@ -25001,24 +24875,21 @@ msgid "RegEx"
 msgstr "Expresión regular"
 
 #: pcbnew/dialogs/dialog_net_inspector_base.cpp:57
-#, fuzzy
 msgid "Wildcard Substr"
-msgstr "Comodines"
+msgstr "Comodín subcadena"
 
 #: pcbnew/dialogs/dialog_net_inspector_base.cpp:58
 msgid "RegEx Substr"
-msgstr ""
+msgstr "Expresión regular subcadena"
 
 #: pcbnew/dialogs/dialog_net_inspector_base.cpp:97
-#, fuzzy
 msgid "Create Report..."
-msgstr "Actualizar huella..."
+msgstr "Crear informe..."
 
 #: pcbnew/dialogs/dialog_net_inspector_base.h:72
 #: pcbnew/tools/pcb_actions.cpp:768
-#, fuzzy
 msgid "Net Inspector"
-msgstr "&Inspeccionar"
+msgstr "Inspector de red"
 
 #: pcbnew/dialogs/dialog_netlist.cpp:134
 msgid "Select Netlist"
@@ -25034,43 +24905,39 @@ msgstr "No existe el archivo de lista de redes."
 
 #: pcbnew/dialogs/dialog_netlist.cpp:160
 #: pcbnew/dialogs/dialog_update_pcb.cpp:141
-#, fuzzy
 msgid "Changes Applied to PCB"
 msgstr "Cambios aplicados a la placa"
 
 #: pcbnew/dialogs/dialog_netlist.cpp:226
-#, fuzzy, c-format
+#, c-format
 msgid "Reading netlist file '%s'.\n"
-msgstr "Leyendo el archivo de lista de redes \"%s\".\n"
+msgstr "Leyendo el archivo de lista de redes '%s'.\n"
 
 #: pcbnew/dialogs/dialog_netlist.cpp:230
-#, fuzzy
 msgid "Using reference designators to match symbols and footprints.\n"
-msgstr "Utilizando referencias para combinar componentes y huellas.\n"
+msgstr "Utilizando referencias para combinar símbolos y huellas.\n"
 
 #: pcbnew/dialogs/dialog_netlist.cpp:232
-#, fuzzy
 msgid "Using tstamps (unique IDs) to match symbols and footprints.\n"
-msgstr "Utilizando marcas de tiempo para combinar componentes y huellas.\n"
+msgstr ""
+"Utilizando marcas de tiempo (IDs únicas) para combinar símbolos y huellas.\n"
 
 #: pcbnew/dialogs/dialog_netlist_base.cpp:25
 msgid "Netlist file:"
 msgstr "Archivo de lista de redes:"
 
 #: pcbnew/dialogs/dialog_netlist_base.cpp:43
-#, fuzzy
 msgid "Link footprints using component tstamps (unique ids)"
-msgstr "Asociar huellas por referencia"
+msgstr ""
+"Enlazar huellas usando las marcas de tiempo de los componentes (IDs únicas)"
 
 #: pcbnew/dialogs/dialog_netlist_base.cpp:43
-#, fuzzy
 msgid "Link footprints using reference designators"
-msgstr "Cambiando la referencia de la huella %s a %s."
+msgstr "Enlazar huellas usando los indicadores de referencia"
 
 #: pcbnew/dialogs/dialog_netlist_base.cpp:45
-#, fuzzy
 msgid "Link Method"
-msgstr "Método desconocido"
+msgstr "Método de enlazado"
 
 #: pcbnew/dialogs/dialog_netlist_base.cpp:47
 msgid ""
@@ -25083,14 +24950,12 @@ msgstr ""
 "para que coincidan sus referencias."
 
 #: pcbnew/dialogs/dialog_netlist_base.cpp:54
-#, fuzzy
 msgid "Replace footprints with those specified in netlist"
-msgstr "Eliminar todas las asociaciones de huellas"
+msgstr "Remplazar huellas con las especificadas en la lista de redes"
 
 #: pcbnew/dialogs/dialog_netlist_base.cpp:57
-#, fuzzy
 msgid "Delete footprints with no components in netlist"
-msgstr "¿Borrar módulos que no están en la netlist?"
+msgstr "Eliminar huellas sin componentes en la lista de redes"
 
 #: pcbnew/dialogs/dialog_netlist_base.cpp:60
 msgid "Delete tracks shorting multiple nets"
@@ -25099,12 +24964,11 @@ msgstr "Eliminar pistas que conectan múltiples redes"
 #: pcbnew/dialogs/dialog_netlist_base.cpp:63
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:46
 msgid "Delete nets containing only a single pad"
-msgstr ""
+msgstr "Eliminar redes que contienen un solo pad"
 
 #: pcbnew/dialogs/dialog_netlist_base.cpp:66
-#, fuzzy
 msgid "Generate warnings for pads with no net"
-msgstr "Generar Gerbers para fabricación"
+msgstr "Generar advertencias para pads sin una red"
 
 #: pcbnew/dialogs/dialog_netlist_base.cpp:67
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:53
@@ -25112,30 +24976,30 @@ msgid ""
 "Display a warning if a pad in a footprint does not appear in netlist.\n"
 "Only pads on a copper layer and having a name are tested."
 msgstr ""
+"Mostrar una advertencia si un pad en una huella no aparece en la lista de "
+"redes.\n"
+"Solo se comprueban pads con nombre y en una capa de cobre."
 
 #: pcbnew/dialogs/dialog_netlist_base.h:69
-#, fuzzy
 msgid "Import Netlist"
-msgstr "Importar ajustes"
+msgstr "Importar lista de redes"
 
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:57
 msgid "Outline style:"
 msgstr "Estilo del perímetro:"
 
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:78
-#, fuzzy
 msgid "Outline smooth:"
-msgstr "Estilo del perímetro:"
+msgstr "Suavizado del perímetro:"
 
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:120
-#, fuzzy
 msgid "Solid shape"
-msgstr "Forma del orificio:"
+msgstr "Forma sólida"
 
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:120
 #, fuzzy
 msgid "HatchBorder pattern"
-msgstr "Pasta de soldadura trasera"
+msgstr "Patrón de borde rayado"
 
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:136
 msgid "degree"
