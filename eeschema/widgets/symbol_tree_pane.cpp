@@ -79,6 +79,9 @@ void SYMBOL_TREE_PANE::onUpdateUI( wxUpdateUIEvent& aEvent )
     {
         // Don't allow a selected item in the tree when the canvas has focus: it's too easy
         // to confuse the selected-highlighting with the being-edited-on-canvas-highlighting.
-        m_tree->Unselect();
+        if( m_symbolEditFrame->GetCurSymbol() != nullptr )
+        {
+            m_tree->Unselect();
+        }
     }
 }
