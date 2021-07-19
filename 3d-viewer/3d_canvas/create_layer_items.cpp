@@ -763,14 +763,20 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
         {
             if( m_frontPlatedPadPolys && ( m_layers_poly.find( F_Cu ) != m_layers_poly.end() ) )
             {
+                if( aStatusReporter )
+                    aStatusReporter->Report( _( "Simplifying polygons on F_Cu" ) );
+
                 SHAPE_POLY_SET *layerPoly_F_Cu = m_layers_poly[F_Cu];
                 layerPoly_F_Cu->BooleanSubtract( *m_frontPlatedPadPolys, SHAPE_POLY_SET::PM_FAST );
 
-                m_frontPlatedPadPolys->Simplify( SHAPE_POLY_SET::PM_FAST );
+                 m_frontPlatedPadPolys->Simplify( SHAPE_POLY_SET::PM_FAST );
             }
 
             if( m_backPlatedPadPolys && ( m_layers_poly.find( B_Cu ) != m_layers_poly.end() ) )
             {
+                if( aStatusReporter )
+                    aStatusReporter->Report( _( "Simplifying polygons on B_Cu" ) );
+
                 SHAPE_POLY_SET *layerPoly_B_Cu = m_layers_poly[B_Cu];
                 layerPoly_B_Cu->BooleanSubtract( *m_backPlatedPadPolys, SHAPE_POLY_SET::PM_FAST );
 
@@ -797,6 +803,11 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
 
         if( selected_layer_id.size() > 0 )
         {
+            if( aStatusReporter )
+                aStatusReporter->Report( wxString::Format(
+                                         _( "Simplifying %d copper layers" ),
+                                         (int)selected_layer_id.size() ) );
+
             std::atomic<size_t> nextItem( 0 );
             std::atomic<size_t> threadsFinished( 0 );
 
