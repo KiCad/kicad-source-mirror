@@ -68,11 +68,13 @@ int PCB_VIEWER_TOOLS::Show3DViewer( const TOOL_EVENT& aEvent )
      || frame()->IsType( FRAME_FOOTPRINT_VIEWER_MODAL )
      || frame()->IsType( FRAME_FOOTPRINT_WIZARD ) )
     {
-        frame()->Update3DView( true, true );
-
         // A stronger version of Raise() which promotes the window to its parent's level.
         KIPLATFORM::UI::ReparentQuasiModal( draw3DFrame );
     }
+
+    // And load or update the current board
+    frame()->Update3DView( true, true );
+
     return 0;
 }
 

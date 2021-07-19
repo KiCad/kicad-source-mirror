@@ -453,9 +453,13 @@ EDA_3D_VIEWER_FRAME* PCB_BASE_FRAME::CreateAndShow3D_Frame()
         draw3DFrame->SetFocus();
 
     // Allocate a slice of time to display the 3D frame
-    wxSafeYield();
-    // And show the current board
-    Update3DView( true, true );
+    // a call to wxSafeYield() should be enough (and better), but on Linux we need
+    // to call wxYield()
+    // otherwise the activity messages are not displayed during the first board loading
+    wxYield();
+
+    // Note, the caller is responsible to load/update the board 3D view.
+    // after frame creation the board is not automatically created.
 
     return draw3DFrame;
 }
