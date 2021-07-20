@@ -13,7 +13,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
 "PO-Revision-Date: 2021-07-21 08:50+0000\n"
-"Last-Translator: taotieren <admin@taotieren.com>\n"
+"Last-Translator: Eric <spice2wolf@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -176,19 +176,17 @@ msgid "Simplifying copper layers polygons"
 msgstr "简化铜层多边形"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:767
-#, fuzzy
 msgid "Simplifying polygons on F_Cu"
-msgstr "简化铜层多边形"
+msgstr "简化 F_Cu 上的多边形"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:778
-#, fuzzy
 msgid "Simplifying polygons on B_Cu"
-msgstr "简化铜层多边形"
+msgstr "简化 B_Cu 上的多边形"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:808
-#, fuzzy, c-format
+#, c-format
 msgid "Simplifying %d copper layers"
-msgstr "简化铜层多边形"
+msgstr "简化 %d 铜层"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:847
 msgid "Simplify holes contours"
@@ -203,9 +201,8 @@ msgid "Build BVH for holes and vias"
 msgstr "为通孔和过孔构造 BVH (盲埋孔)"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:410
-#, fuzzy
 msgid "Your OpenGL version is not supported. Minimum required is 1.5."
-msgstr "不支持您的 OpenGL 版本。最低要求为 1.5"
+msgstr "不支持您的 OpenGL 版本。最低要求版本为 1.5。"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:531
 #, c-format
@@ -1408,14 +1405,14 @@ msgid "Cannot make path '%s' absolute with respect to '%s'."
 msgstr "不能使路径 '%s' 相对 '%s' 绝对。"
 
 #: common/common.cpp:339
-#, fuzzy, c-format
+#, c-format
 msgid "Output directory '%s' created."
-msgstr "已创建输出目录 \"%s\" 。\n"
+msgstr "已创建输出目录 \"%s\" 。"
 
 #: common/common.cpp:348
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot create output directory '%s'."
-msgstr "无法创建输出目录 \"%s\"。\n"
+msgstr "无法创建输出目录 \"%s\"。"
 
 #: common/common.cpp:620
 msgid "This operating system is not supported by KiCad and its dependencies."
@@ -3630,19 +3627,19 @@ msgid "Could not use OpenGL"
 msgstr "无法使用 OpenGL"
 
 #: common/drawing_sheet/drawing_sheet_reader.cpp:890
-#, fuzzy, c-format
+#, c-format
 msgid "Drawing sheet '%s' not found."
-msgstr "未找到图纸文件 \"%s\"。"
+msgstr "未找到图纸 \"%s\"。"
 
 #: common/drawing_sheet/drawing_sheet_reader.cpp:900
-#, fuzzy, c-format
+#, c-format
 msgid "Drawing sheet '%s' could not be opened."
-msgstr "未找到图纸文件 \"%s\"。"
+msgstr "无法打开图纸 \"%s\"。"
 
 #: common/drawing_sheet/drawing_sheet_reader.cpp:913
-#, fuzzy, c-format
+#, c-format
 msgid "Drawing sheet '%s' was not fully read."
-msgstr "文件 '%s' 没有被完全读取。"
+msgstr "图纸 '%s' 没有被完全读取。"
 
 #: common/drawing_sheet/ds_data_item.cpp:370
 #: common/drawing_sheet/ds_draw_item.cpp:122 common/eda_text.cpp:667
@@ -5081,14 +5078,12 @@ msgid "Hidden text"
 msgstr "隐藏文本"
 
 #: common/layer_id.cpp:149
-#, fuzzy
 msgid "SMD pads front"
-msgstr "焊盘正面"
+msgstr "SMD 焊盘正面"
 
 #: common/layer_id.cpp:150
-#, fuzzy
 msgid "SMD pads back"
-msgstr "焊盘背面"
+msgstr "SMD 焊盘背面"
 
 #: common/layer_id.cpp:151
 msgid "Through-hole pads"
@@ -5269,13 +5264,10 @@ msgid "The KiCad language file for this language is not installed."
 msgstr "未安装此语言的 KiCad 语言文件。"
 
 #: common/plugins/altium/altium_parser.cpp:116
-#, fuzzy
 msgid ""
 "Missing null byte at end of property list. Imported data might be malformed "
 "or missing."
-msgstr ""
-"对于Altium导入，我们假设在属性列表的末尾有一个空字节。因为丢失了这个，导入的"
-"数据可能是畸形的或丢失的。"
+msgstr "属性列表末尾缺少空字节。导入的数据可能格式不正确或缺失。"
 
 #: common/plugins/altium/altium_parser.cpp:243
 #, c-format
@@ -5349,24 +5341,21 @@ msgid "Failed to output data."
 msgstr "未能输出数据。"
 
 #: common/project/project_archiver.cpp:91
-#, fuzzy
 msgid "Could not open archive file."
-msgstr "无法打开压缩文件\n"
+msgstr "无法打开归档文件。"
 
 #: common/project/project_archiver.cpp:100
-#, fuzzy
 msgid "Invalid archive file format."
-msgstr "无效的压缩文件格式\n"
+msgstr "无效的压缩文件格式。"
 
 #: common/project/project_archiver.cpp:111
-#, fuzzy, c-format
+#, c-format
 msgid "Extracting file '%s'."
-msgstr "正在提取文件 \"%s\"。\n"
+msgstr "正在提取文件 \"%s\"。"
 
 #: common/project/project_archiver.cpp:151
-#, fuzzy
 msgid "Error extracting file!"
-msgstr "解压文件时出错！\n"
+msgstr "解压文件时出错！"
 
 #: common/project/project_archiver.cpp:208 eeschema/dialogs/dialog_erc.cpp:760
 #: eeschema/dialogs/dialog_plot_schematic.cpp:518
@@ -5399,19 +5388,19 @@ msgid "Failed to create file '%s'."
 msgstr "创建文件 \"%s\" 失败。"
 
 #: common/project/project_archiver.cpp:254
-#, fuzzy, c-format
+#, c-format
 msgid "Archived file '%s'."
-msgstr "已存档文件 \"%s\"。\n"
+msgstr "已存档文件 \"%s\"。"
 
 #: common/project/project_archiver.cpp:264
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to archive file '%s'."
-msgstr "未能存档文件 \"%s\"。\n"
+msgstr "未能存档文件 \"%s\"。"
 
 #: common/project/project_archiver.cpp:290
-#, fuzzy, c-format
+#, c-format
 msgid "Zip archive '%s' created (%s uncompressed, %s compressed)."
-msgstr "已创建 Zip 压缩包 \"%s\" (%s 未压缩，%s 已压缩)。\n"
+msgstr "已创建 Zip 压缩包 \"%s\" (%s 未压缩，%s 已压缩)。"
 
 #: common/rc_item.cpp:350
 msgid "Excluded "
@@ -7101,24 +7090,24 @@ msgid "%d duplicate time stamps were found and replaced."
 msgstr "找到并替换 %d 个重复的时间戳。"
 
 #: eeschema/annotate.cpp:284
-#, fuzzy, c-format
+#, c-format
 msgid "Updated %s (unit %s) from %s to %s."
-msgstr "更新 %s， (单元 %s) 从 %s 到 %s"
+msgstr "将 %s (单元 %s) 从 %s 更新到了 %s。"
 
 #: eeschema/annotate.cpp:292
-#, fuzzy, c-format
+#, c-format
 msgid "Updated %s from %s to %s."
-msgstr "更新 %s， 从 %s 到 %s"
+msgstr "已将 %s 从 %s 更新至 %s。"
 
 #: eeschema/annotate.cpp:302
-#, fuzzy, c-format
+#, c-format
 msgid "Annotated %s (unit %s) as %s."
-msgstr "批注 %s (单元 %s)为 %s"
+msgstr "已将 %s (单元 %s) 批注为 %s。"
 
 #: eeschema/annotate.cpp:309
-#, fuzzy, c-format
+#, c-format
 msgid "Annotated %s as %s."
-msgstr "批注 %s 为 %s"
+msgstr "已将 %s 批注为 %s。"
 
 #: eeschema/annotate.cpp:326
 msgid "Annotation complete."
@@ -8379,9 +8368,9 @@ msgid "Violation Severity"
 msgstr "违规严重程度"
 
 #: eeschema/dialogs/dialog_erc.cpp:755 pcbnew/dialogs/dialog_gendrill.cpp:471
-#, fuzzy, c-format
+#, c-format
 msgid "Report file '%s' created."
-msgstr "创建报告文件 \"%s\"\n"
+msgstr "已创建报告文件 \"%s\"。"
 
 #: eeschema/dialogs/dialog_erc.cpp:773
 #, c-format
@@ -9281,9 +9270,8 @@ msgid "Set color to transparent to use Schematic Editor colors."
 msgstr "将颜色设为透明以使用原理图编辑器颜色。"
 
 #: eeschema/dialogs/dialog_line_wire_bus_properties_base.h:67
-#, fuzzy
 msgid "Line, Wire & Bus Properties"
-msgstr "线段属性"
+msgstr "线、连线 & 总线属性"
 
 #: eeschema/dialogs/dialog_migrate_buses.cpp:102
 msgid "Conflicting Labels"
@@ -11014,9 +11002,8 @@ msgid "Add Field..."
 msgstr "添加字段..."
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.h:76
-#, fuzzy
 msgid "Symbol Fields Table"
-msgstr "符号字段"
+msgstr "符号字段表"
 
 #: eeschema/dialogs/dialog_symbol_properties.cpp:139
 msgid "Base Name"
@@ -13112,9 +13099,9 @@ msgid "Cannot open file '%s'."
 msgstr "无法打开文件 '%s'。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:315
-#, fuzzy, c-format
+#, c-format
 msgid "Storage file not fully parsed (%d bytes remaining)."
-msgstr "存储文件没有被完全解析，因 %d 字节剩余。"
+msgstr "存储文件没有被完全解析 （%d 字节剩余）。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:487
 #, c-format
@@ -13122,9 +13109,9 @@ msgid "Unknown Record id: %d."
 msgstr "未知的记录编号： %d。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:604
-#, fuzzy, c-format
+#, c-format
 msgid "Pin's owner (%d) not found."
-msgstr "找不到文件名的所有者（%d）。"
+msgstr "找不到引脚的所有者（%d）。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:649
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1833
@@ -13144,9 +13131,9 @@ msgid "Pin has unexpected inner edge type."
 msgstr "引脚的内边缘类型出乎意料。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:831
-#, fuzzy, c-format
+#, c-format
 msgid "Label's owner (%d) not found."
-msgstr "找不到文件名的所有者（%d）。"
+msgstr "找不到标签的所有者（%d）。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:948
 #, c-format
@@ -13154,44 +13141,43 @@ msgid "Bezier has %d control points. At least 2 are expected."
 msgstr "贝塞尔曲线有 %d 个控制点。预期至少2 个。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1005
-#, fuzzy, c-format
+#, c-format
 msgid "Bezier's owner (%d) not found."
-msgstr "找不到 Altium 原理图子图端口 \"%d\"。"
+msgstr "找不到贝塞尔曲线的所有者 (%d)。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1091
-#, fuzzy, c-format
+#, c-format
 msgid "Polyline's owner (%d) not found."
-msgstr "找不到文件名的所有者（%d）。"
+msgstr "找不到多段线的所有者（%d）。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1150
-#, fuzzy, c-format
+#, c-format
 msgid "Polygon's owner (%d) not found."
-msgstr "找不到文件名的所有者（%d）。"
+msgstr "找不到多边形的所有者（%d）。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1231
-#, fuzzy, c-format
+#, c-format
 msgid "Rounded rectangle's owner (%d) not found."
-msgstr "找不到 Altium 原理图子图名称的所有者（%d）。"
+msgstr "找不到圆角矩形的所有者（%d）。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1268
-#, fuzzy
 msgid "Arc drawing on schematic not currently supported."
-msgstr "当前没有打开原理图。"
+msgstr "尚不支持在原理图上绘制圆弧。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1278
-#, fuzzy, c-format
+#, c-format
 msgid "Arc's owner (%d) not found."
-msgstr "找不到 Altium 原理图子图端口 \"%d\"。"
+msgstr "找不到圆弧所有者 (%d)。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1339
-#, fuzzy, c-format
+#, c-format
 msgid "Line's owner (%d) not found."
-msgstr "找不到文件名的所有者（%d）。"
+msgstr "找不到线的所有者（%d）。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1410
-#, fuzzy, c-format
+#, c-format
 msgid "Rectangle's owner (%d) not found."
-msgstr "找不到 Altium 原理图子图名称的所有者（%d）。"
+msgstr "找不到矩形的所有者（%d）。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1478
 #, c-format
@@ -13208,9 +13194,9 @@ msgid "Power symbol creates a global label with name '%s'"
 msgstr "电源符号创建名为 '%s' 的全局标签"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1882
-#, fuzzy, c-format
+#, c-format
 msgid "Port %s has no connections."
-msgstr "焊盘连接："
+msgstr "端口 %s 无连接。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2073
 #, c-format
@@ -13229,29 +13215,29 @@ msgid "File not found %s."
 msgstr "找不到文件“%s”。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2185
-#, fuzzy, c-format
+#, c-format
 msgid "Sheetname's owner (%d) not found."
-msgstr "找不到 Altium 原理图子图名称的所有者（%d）。"
+msgstr "找不到大料名称的所有者（%d）。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2212
-#, fuzzy, c-format
+#, c-format
 msgid "Filename's owner (%d) not found."
 msgstr "找不到文件名的所有者（%d）。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2250
-#, fuzzy, c-format
+#, c-format
 msgid "Designator's owner (%d) not found."
-msgstr "找不到 Altium 原理图子图端口 \"%d\"。"
+msgstr "找不到指示符所有者 (%d)。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2405
-#, fuzzy, c-format
+#, c-format
 msgid "Implementation's owner (%d) not found."
-msgstr "找不到文件名的所有者（%d）。"
+msgstr "找不到实现的所有者（%d）。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2415
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint's owner (%d) not found."
-msgstr "找不到文件名的所有者（%d）。"
+msgstr "找不到封装的所有者（%d）。"
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:71
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:69
@@ -14129,12 +14115,10 @@ msgid "Field Validation Error"
 msgstr "字段验证错误"
 
 #: eeschema/sch_validators.cpp:218
-#, fuzzy
 msgid "Signal name contains '[' or ']' but is not a valid vector bus name."
-msgstr "信号名称包含 \"[\" 或 \"]\", 但不是有效的矢量总线名称"
+msgstr "信号名称包含 \"[\" 或 \"]\", 但不是有效的矢量总线名。"
 
 #: eeschema/sch_validators.cpp:227
-#, fuzzy
 msgid "Signal name contains '{' and '}' but is not a valid group bus name"
 msgstr "信号名称包含 \"{\" 或 \"}\", 但不是有效的组总线名称"
 
@@ -14149,14 +14133,12 @@ msgstr ""
 "中某处的父级图页。"
 
 #: eeschema/sheet.cpp:84
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The schematic '%s' has not had its symbol library links remapped to the "
 "symbol library table.  The project this schematic belongs to must first be "
 "remapped before it can be imported into the current project."
-msgstr ""
-"原理图 \"%s\" 的符号库链接尚未被重新映射到符号库表。 这个原理图所属的项目必须"
-"先被重新映射，然后才能导入到当前项目中。"
+msgstr "原理图 \"%s\" 的符号库链接尚未被重新映射到符号库表。 这个原理图所属的项目必须先被重新映射，然后才能导入到当前项目。"
 
 #: eeschema/sheet.cpp:147
 msgid ""
@@ -16249,9 +16231,9 @@ msgstr "编辑 %s 字段"
 
 #: eeschema/tools/sch_edit_tool.cpp:1085
 #: eeschema/tools/symbol_editor_edit_tool.cpp:525
-#, fuzzy, c-format
+#, c-format
 msgid "Edit '%s' Field"
-msgstr "编辑 %s 字段"
+msgstr "编辑 '%s' 字段"
 
 #: eeschema/tools/sch_edit_tool.cpp:1640
 msgid "There are no unreferenced pins in this sheet to remove."
@@ -20047,29 +20029,27 @@ msgid "PrePreg"
 msgstr "预浸料"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:175
-#, fuzzy, c-format
+#, c-format
 msgid "Enter board thickness in %s"
-msgstr "宽度和厚度 (mil)"
+msgstr "输入板厚度，单位为 %s"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:178
 #, c-format
 msgid "Enter expected board thickness in %s (min value %s)"
-msgstr ""
+msgstr "输入预期的板厚度，单位 %s (最小值 %s)"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:182
-#, fuzzy
 msgid "Adjust not locked dielectric thickness layers"
-msgstr "根据电路板厚度更新介质厚度"
+msgstr "调整未锁定的介电层厚度"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:193
 #, c-format
 msgid "Too small value (min value %s %s). Aborted"
-msgstr ""
+msgstr "值过小 (最小值 %s %s)。已终止"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:213
-#, fuzzy
 msgid "All dielectric  thickness layers are locked"
-msgstr "根据电路板厚度更新介质厚度"
+msgstr "所有介质厚度层都被锁定"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:279
 #, c-format
@@ -20246,9 +20226,8 @@ msgid "Board thickness from stackup:"
 msgstr "电路板压层厚度:"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:139
-#, fuzzy
 msgid "Adjust Dielectric Thickness"
-msgstr "设置电介质厚度"
+msgstr "调整电介质厚度"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:46
 msgid "ENIG"
@@ -21284,12 +21263,8 @@ msgid "No layer selected."
 msgstr "没有图层被选择。"
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:868
-#, fuzzy
 msgid "Selecting <no net> will create an isolated copper island."
-msgstr ""
-"没有网络的铺铜将\n"
-"形成一片无任何电\n"
-"气连接的孤铜。"
+msgstr "选中 <no net> 将创建一个隔绝的铜岛。"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:47
 msgid ""
@@ -21300,9 +21275,8 @@ msgstr ""
 "仅显示与此模式匹配的网络名称。"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:51
-#, fuzzy
 msgid "Hide auto-generated net names"
-msgstr "更新网络名称"
+msgstr "隐藏自动生成的网络名称"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:55
 msgid "Sort nets by pad count"
@@ -26354,7 +26328,7 @@ msgid ""
 "The maximum allowed deviation between a true arc or circle and segments used "
 "to approximate it.  Smaller values produce smoother graphics at the expense "
 "of performance."
-msgstr ""
+msgstr "真圆弧或圆与用来近似它的段之间的最大允许偏差。较小的值会以牺牲性能为代价产生更平滑的图形。"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:86
 #, c-format
@@ -26417,7 +26391,7 @@ msgid ""
 "The minimum clearance between copper items which do not belong to the same "
 "net.  If set, this is an absolute minimum which cannot be reduced by "
 "netclasses, custom rules, or other settings."
-msgstr ""
+msgstr "不属于同一网络的铜件之间的最小间隙。一旦设置，这是一个绝对的最小值，不能通过网络类、自定义规则或其他设置减少。"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:207
 msgid "Minimum track width:"
@@ -26427,7 +26401,7 @@ msgstr "最小布线宽度："
 msgid ""
 "The minimum track width.  If set, this is an absolute minimum and cannot be "
 "reduced by netclasses, custom rules, or other settings."
-msgstr ""
+msgstr "最小线路宽度。一旦设置，这是一个绝对的最小值，不能通过网络类、自定义规则或其他设置减少。"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:224
 msgid "Minimum annular width:"
@@ -26437,7 +26411,7 @@ msgstr "最小环形宽度："
 msgid ""
 "The minimum annular ring width.  If set, this is an absolute minimum and "
 "cannot be reduced by netclasses, custom rules, or other settings."
-msgstr ""
+msgstr "最小环圈宽度。一旦设置，这是一个绝对的最小值，不能通过网络类、自定义规则或其他设置减少。"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:240
 msgid "Minimum via diameter:"
@@ -26447,7 +26421,7 @@ msgstr "最小过孔外径："
 msgid ""
 "The minimum via diameter.  If set, this is an absolute minimum and cannot be "
 "reduced by netclasses, custom rules, or other settings."
-msgstr ""
+msgstr "最小过孔直径。一旦设置，这是一个绝对的最小值，不能通过网络类、自定义规则或其他设置减少。"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:256
 msgid "Copper hole clearance:"
@@ -26458,7 +26432,7 @@ msgid ""
 "The minimum clearance between a hole and an unassociated copper item.  If "
 "set, this is an absolute minimum and cannot be reduced by custom rules or "
 "other settings."
-msgstr ""
+msgstr "孔与不相关铜件之间的最小间隙。一旦设置，这是一个绝对的最小值，不能通过自定义规则或其他设置减少。"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:272
 msgid "Copper edge clearance:"
@@ -26469,7 +26443,7 @@ msgid ""
 "The minimum clearance between the board edge and any copper item.  If set, "
 "this is an absolute minimum and cannot be reduced by custom rules or other "
 "settings."
-msgstr ""
+msgstr "板边与任意铜件之间的最小间隙。一旦设置，这是一个绝对的最小值，不能通过自定义规则或其他设置减少。"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:297
 msgid "Holes"
@@ -26483,7 +26457,7 @@ msgstr "最小通孔："
 msgid ""
 "The minimum through-hole size.  If set, this is an absolute minimum and "
 "cannot be reduced by netclasses, custom rules or other settings."
-msgstr ""
+msgstr "最小的通孔尺寸。一旦设置，这是一个绝对的最小值，不能通过网络类、自定义规则或其他设置减少。"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:329
 msgid "Hole to hole clearance:"
@@ -26494,7 +26468,7 @@ msgid ""
 "The minimum clearance between two drilled holes.   If set, this is an "
 "absolute minimum and cannot be reduced by custom rules or other settings. "
 "(Note: does not apply to milled holes.)"
-msgstr ""
+msgstr "两个钻孔间的最小间隙。一旦设置，这是一个绝对的最小值，不能通过自定义规则或其他设置减少。(注：不适用于铣孔。)"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:354
 msgid "uVias"
@@ -26508,7 +26482,7 @@ msgstr "最小微孔外径："
 msgid ""
 "The minimum diameter for micro-vias.  If set, this is an absolute minimum "
 "and cannot be reduced by netclasses, custom rules, or other settings."
-msgstr ""
+msgstr "微过孔的最小直径。一旦设置，这是一个绝对的最小值，不能通过网络类、自定义规则或其他设置减少。"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:386
 msgid "Minimum uVia hole:"
@@ -26518,7 +26492,7 @@ msgstr "最小 U 形导通孔："
 msgid ""
 "The minimum micro-via hole size.  If set, this is an absolute minimum and "
 "cannot be reduced by netclasses, custom rules, or other settings."
-msgstr ""
+msgstr "最下微过孔尺寸。一旦设置，这是一个绝对的最小值，不能通过网络类、自定义规则或其他设置减少。"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:411
 msgid "Silkscreen"
@@ -26533,7 +26507,7 @@ msgid ""
 "Minimum clearance between two items on the same silkscreen layer.  If set "
 "this can improve legibility.  (Note: does not apply to multiple shapes "
 "within a single footprint.)"
-msgstr ""
+msgstr "同一丝印层上两个项目间的最小间隙。设置此值可提高辩认度。(注：不适用于单个封装中的多个形状。)"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:421
 msgid "Use the Physical Stackup page to change the number of copper layers."
@@ -28436,18 +28410,14 @@ msgid "Save Footprint Association File"
 msgstr "保存封装关联文件"
 
 #: pcbnew/exporters/export_hyperlynx.cpp:190
-#, fuzzy
 msgid ""
 "File contains pad shapes that are not supported by the Hyperlynx exporter "
 "(supported shapes are oval, rectangle and circle)."
-msgstr ""
-"文件包含 Hyperynx 导出器不支持的焊盘形状\n"
-"(支持的形状为椭圆形、矩形、圆形。）\n"
-"它们已作为椭圆形焊盘导出器。"
+msgstr "文件包含 Hyperynx 导出器不支持的焊盘形状 (支持的形状为椭圆形、矩形和圆形）。"
 
 #: pcbnew/exporters/export_hyperlynx.cpp:194
 msgid "They have been exported as oval pads."
-msgstr ""
+msgstr "它们已被导出为椭圆焊盘。"
 
 #: pcbnew/exporters/export_hyperlynx.cpp:307
 #: pcbnew/exporters/export_vrml.cpp:567
@@ -28490,9 +28460,9 @@ msgstr "背面 (底部) 放置文件：\"%s\"。"
 
 #: pcbnew/exporters/gen_footprints_placefile.cpp:307
 #: pcbnew/exporters/gen_footprints_placefile.cpp:448
-#, fuzzy, c-format
+#, c-format
 msgid "Full component count: %d."
-msgstr "全部元件数量：%d。\n"
+msgstr "全部元件数量：%d。"
 
 #: pcbnew/exporters/gen_footprints_placefile.cpp:310
 #: pcbnew/exporters/gen_footprints_placefile.cpp:404
@@ -28534,16 +28504,13 @@ msgid "Created file '%s'."
 msgstr "创建文件 '%s'。"
 
 #: pcbnew/exporters/gerber_jobfile_writer.cpp:158
-#, fuzzy, c-format
+#, c-format
 msgid "Created Gerber job file '%s'."
 msgstr "已创建 Gerber 作业文件 \"%s\"。"
 
 #: pcbnew/exporters/gerber_jobfile_writer.cpp:575
-#, fuzzy
 msgid "Board stackup settings not up to date."
-msgstr ""
-"电路板压层设置不是最新的\n"
-"请修复压层"
+msgstr "电路板压层设置不是最新的。"
 
 #: pcbnew/files.cpp:144
 msgid "All KiCad Board Files"
@@ -29827,9 +29794,9 @@ msgid "Netlist Load Error"
 msgstr "网表载入错误"
 
 #: pcbnew/netlist_reader/netlist.cpp:155
-#, fuzzy, c-format
+#, c-format
 msgid "No footprint defined for symbol %s."
-msgstr "没有为符号 %s 定义封装。\n"
+msgstr "没有为符号 %s 定义封装。"
 
 #: pcbnew/netlist_reader/netlist.cpp:182
 #, c-format
@@ -29842,10 +29809,10 @@ msgid "%s footprint ID '%s' is not valid."
 msgstr "%s 封装 ID \"%s\" 无效。"
 
 #: pcbnew/netlist_reader/netlist.cpp:222
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s footprint '%s' not found in any libraries in the footprint library table."
-msgstr "在封装库表的任何库中都没找到 %s 封装 '%s'。\n"
+msgstr "在封装库表的任何库中都没找到 %s 封装 '%s'。"
 
 #: pcbnew/netlist_reader/netlist_reader.cpp:181
 #, c-format
@@ -31650,24 +31617,20 @@ msgid "?"
 msgstr "？"
 
 #: pcbnew/router/pns_kicad_iface.cpp:450
-#, fuzzy
 msgid "existing track"
-msgstr "当创建新布线时"
+msgstr "现存线路"
 
 #: pcbnew/router/pns_kicad_iface.cpp:464 pcbnew/router/pns_kicad_iface.cpp:477
-#, fuzzy
 msgid "board minimum width"
-msgstr "电路板最小值"
+msgstr "电路板最小宽度"
 
 #: pcbnew/router/pns_kicad_iface.cpp:473
-#, fuzzy
 msgid "netclass 'Default'"
-msgstr "网络类 '%s'"
+msgstr "网络类 '默认'"
 
 #: pcbnew/router/pns_kicad_iface.cpp:475
-#, fuzzy
 msgid "user choice"
-msgstr "存储选项"
+msgstr "用户选择"
 
 #: pcbnew/router/pns_kicad_iface.cpp:1063
 #, c-format
@@ -31976,39 +31939,36 @@ msgid "Break Track"
 msgstr "分割布线"
 
 #: pcbnew/router/router_tool.cpp:1895
-#, fuzzy, c-format
+#, c-format
 msgid "Routing Diff Pair: %s"
-msgstr "调整差分对歪斜"
+msgstr "给差分对布线：%s"
 
 #: pcbnew/router/router_tool.cpp:1895
-#, fuzzy, c-format
+#, c-format
 msgid "Routing Track: %s"
-msgstr "单轨交互式布线"
+msgstr "给单轨布线：%s"
 
 #: pcbnew/router/router_tool.cpp:1901
-#, fuzzy, c-format
+#, c-format
 msgid "Net Class: %s"
-msgstr "网络类表"
+msgstr "网络类：%s"
 
 #: pcbnew/router/router_tool.cpp:1905
-#, fuzzy
 msgid "Routing Track"
-msgstr "单轨交互式布线"
+msgstr "线路布线"
 
 #: pcbnew/router/router_tool.cpp:1905
-#, fuzzy
 msgid "(no net)"
-msgstr "<无网络>"
+msgstr "(无网络)"
 
 #: pcbnew/router/router_tool.cpp:1911
-#, fuzzy, c-format
+#, c-format
 msgid "Track Width: %s"
-msgstr "布线宽度"
+msgstr "线路宽度：%s"
 
 #: pcbnew/router/router_tool.cpp:1933
-#, fuzzy
 msgid "Diff Pair Gap"
-msgstr "差分对间隙"
+msgstr "差分对间距"
 
 #: pcbnew/sel_layer.cpp:294
 msgid "Warning: top and bottom layers are same."
@@ -32122,7 +32082,7 @@ msgid ""
 "Select the default width for new tracks. Note that this width can be "
 "overridden by the board minimum width, or by the width of an existing track "
 "if the 'Use Existing Track Width' feature is enabled."
-msgstr ""
+msgstr "选择新线路的默认宽度。请注意，这个宽度可以被板的最小宽度，或者被现有轨道的宽度覆盖，前提是启用了 '使用现有线路宽度' 功能。"
 
 #: pcbnew/toolbars_pcb_editor.cpp:532
 msgid ""
@@ -34051,36 +34011,32 @@ msgid "Fill Zone"
 msgstr "填充覆铜"
 
 #: pcbnew/tools/pcb_actions.cpp:1248
-#, fuzzy
 msgid "Update copper fill of selected zone(s)"
-msgstr "更新选择的封装"
+msgstr "更新所选区域的铜填充"
 
 #: pcbnew/tools/pcb_actions.cpp:1254 pcbnew/tools/zone_filler_tool.cpp:144
 msgid "Fill All Zones"
 msgstr "填充所有覆铜"
 
 #: pcbnew/tools/pcb_actions.cpp:1254
-#, fuzzy
 msgid "Update copper fill of all zones"
-msgstr "取消填充所有覆铜"
+msgstr "取消所有区域的覆铜"
 
 #: pcbnew/tools/pcb_actions.cpp:1259 pcbnew/tools/zone_filler_tool.cpp:235
 msgid "Unfill Zone"
 msgstr "取消填充覆铜"
 
 #: pcbnew/tools/pcb_actions.cpp:1259
-#, fuzzy
 msgid "Remove copper fill from selected zone(s)"
-msgstr "从选区删除项目。"
+msgstr "从选区(s) 删除铜填充"
 
 #: pcbnew/tools/pcb_actions.cpp:1265 pcbnew/tools/zone_filler_tool.cpp:253
 msgid "Unfill All Zones"
-msgstr "取消填充所有覆铜"
+msgstr "取消填充所有区域"
 
 #: pcbnew/tools/pcb_actions.cpp:1265
-#, fuzzy
 msgid "Remove copper fill from all zones"
-msgstr "从电路板上的所有敷铜区移除填充"
+msgstr "从所有区域移除覆铜"
 
 #: pcbnew/tools/pcb_actions.cpp:1273
 msgid "Place Selected Footprints"
