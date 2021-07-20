@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2019 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2019-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -34,6 +34,7 @@
 // a transform matrix, to display components in lib editor
 TRANSFORM DefaultTransform = TRANSFORM( 1, 0, 0, -1 );
 
+
 static struct IFACE : public KIFACE_I
 {
     // Of course all are overloads, implementations of the KIFACE.
@@ -59,21 +60,21 @@ static struct IFACE : public KIFACE_I
     }
 
     /**
-     * Function IfaceOrAddress
-     * return a pointer to the requested object.  The safest way to use this
-     * is to retrieve a pointer to a static instance of an interface, similar to
-     * how the KIFACE interface is exported.  But if you know what you are doing
+     * Return a pointer to the requested object.
+     *
+     * The safest way to use this is to retrieve a pointer to a static instance of an interface,
+     * similar to how the KIFACE interface is exported.  But if you know what you are doing
      * use it to retrieve anything you want.
      *
      * @param aDataId identifies which object you want the address of.
-     *
-     * @return void* - and must be cast into the know type.
+     * @return requested object which must be cast into the know type.
      */
     void* IfaceOrAddress( int aDataId ) override
     {
-        return NULL;
+        return nullptr;
     }
 } kiface( "mock_eeschema", KIWAY::FACE_SCH );
+
 
 static struct PGM_MOCK_EESCHEMA_FRAME : public PGM_BASE
 {
@@ -108,10 +109,12 @@ static struct PGM_MOCK_EESCHEMA_FRAME : public PGM_BASE
     }
 } program;
 
+
 PGM_BASE& Pgm()
 {
     return program;
 }
+
 
 // Similar to PGM_BASE& Pgm(), but return nullptr when a *.ki_face is run from
 // a python script or something else.

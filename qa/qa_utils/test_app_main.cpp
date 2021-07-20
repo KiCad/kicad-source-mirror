@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2014 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2014-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,14 +24,12 @@
 
 
 /*
-
-    This is a program launcher for a single KIFACE DSO. It only mimics a KIWAY,
-    not actually implements one, since only a single DSO is supported by it.
-
-    It is compiled multiple times, once for each standalone program and as such
-    gets different compiler command line supplied #defines from CMake.
-
-*/
+ * This is a program launcher for a single KIFACE DSO. It only mimics a KIWAY,
+ * not actually implements one, since only a single DSO is supported by it.
+ *
+ * It is compiled multiple times, once for each standalone program and as such
+ * gets different compiler command line supplied #defines from CMake.
+ */
 
 
 #include <typeinfo>
@@ -66,31 +64,33 @@ static struct IFACE : public KIFACE_I
 
     void OnKifaceEnd() override {}
 
-    wxWindow* CreateWindow( wxWindow* aParent, int aClassId, KIWAY* aKiway, int aCtlBits = 0 ) override
+    wxWindow* CreateWindow( wxWindow* aParent, int aClassId, KIWAY* aKiway,
+                            int aCtlBits = 0 ) override
     {
         assert( false );
         return nullptr;
     }
 
     /**
-     * Function IfaceOrAddress
-     * return a pointer to the requested object.  The safest way to use this
-     * is to retrieve a pointer to a static instance of an interface, similar to
-     * how the KIFACE interface is exported.  But if you know what you are doing
+     * Return a pointer to the requested object.
+     *
+     * The safest way to use this is to retrieve a pointer to a static instance of an interface,
+     * similar to how the KIFACE interface is exported.  But if you know what you are doing
      * use it to retrieve anything you want.
      *
      * @param aDataId identifies which object you want the address of.
-     *
-     * @return void* - and must be cast into the know type.
+     * @return the requested object which must be cast into the know type.
      */
     void* IfaceOrAddress( int aDataId ) override
     {
-        return NULL;
+        return nullptr;
     }
 }
 kiface( "pcb_test_frame", KIWAY::FACE_PCB );
 
+
 KIWAY    Kiway( &Pgm(), KFCTL_STANDALONE );
+
 
 static struct PGM_TEST_FRAME : public PGM_BASE
 {
@@ -128,6 +128,7 @@ static struct PGM_TEST_FRAME : public PGM_BASE
 }
 program;
 
+
 PGM_BASE& Pgm()
 {
     return program;
@@ -147,10 +148,10 @@ KIFACE_I& Kiface()
     return kiface;
 }
 
+
 /**
- * Struct APP_SINGLE_TOP
- * implements a bare naked wxApp (so that we don't become dependent on
- * functionality in a wxApp derivative that we cannot deliver under wxPython).
+ * Implement a bare naked wxApp (so that we don't become dependent on functionality in a wxApp
+ * derivative that we cannot deliver under wxPython).
  */
 struct APP_TEST : public wxApp
 {
@@ -181,8 +182,7 @@ struct APP_TEST : public wxApp
         catch( const std::exception& e )
         {
             wxLogError( wxT( "Unhandled exception class: %s  what: %s" ),
-                FROM_UTF8( typeid(e).name() ),
-                FROM_UTF8( e.what() ) );
+                        FROM_UTF8( typeid(e).name() ), FROM_UTF8( e.what() ) );
         }
         catch( const IO_ERROR& ioe )
         {
@@ -194,8 +194,6 @@ struct APP_TEST : public wxApp
         }
 
         program.OnPgmExit();
-
-
 
         return false;
     }
@@ -240,13 +238,16 @@ bool PGM_TEST_FRAME::OnPgmInit()
     return true;
 }
 
+
 void SetTopFrame ( wxFrame* aFrame )
 {
     Pgm().App().SetTopWindow( aFrame );      // wxApp gets a face.
     aFrame->Show();
 }
 
+
 IMPLEMENT_APP_NO_MAIN(APP_TEST);
+
 
 #ifndef TEST_APP_NO_MAIN
 

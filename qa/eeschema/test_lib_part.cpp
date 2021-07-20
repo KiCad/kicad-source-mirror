@@ -86,7 +86,7 @@ BOOST_AUTO_TEST_CASE( DefaultDrawings )
 {
     // default drawings exist
     BOOST_CHECK_EQUAL( m_part_no_data.GetDrawItems().size(), 4 );
-    BOOST_CHECK_EQUAL( m_part_no_data.GetNextDrawItem( NULL, LIB_PIN_T ), (LIB_ITEM*)NULL );
+    BOOST_CHECK_EQUAL( m_part_no_data.GetNextDrawItem( nullptr, LIB_PIN_T ), nullptr );
 }
 
 

@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2020 KiCad Developers.
+ * Copyright (C) 2020-2021 KiCad Developers.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -50,6 +50,7 @@ LABEL_MANAGER::LABEL_MANAGER( KIGFX::GAL* aGal ) : m_gal( aGal )
 
 };
 
+
 LABEL_MANAGER::~LABEL_MANAGER()
 {
 }
@@ -71,6 +72,7 @@ void LABEL_MANAGER::Add( VECTOR2I target, std::string msg, COLOR4D color )
     m_labels.push_back( lbl );
 }
 
+
 void LABEL_MANAGER::Add( const SHAPE_LINE_CHAIN& aL, COLOR4D color )
 {
     for( int i = 0; i < aL.PointCount(); i++ )
@@ -84,9 +86,9 @@ void LABEL_MANAGER::Add( const SHAPE_LINE_CHAIN& aL, COLOR4D color )
 void LABEL_MANAGER::Redraw( KIGFX::VIEW_OVERLAY* aOvl )
 {
     recalculate();
+
     for( auto& lbl : m_labels )
     {
-        //printf("Draw lbl %d %d '%s'\n", lbl.m_bbox.GetOrigin().x, lbl.m_bbox.GetOrigin().y, lbl.m_msg.c_str() );
         aOvl->SetIsFill( false );
         aOvl->SetIsStroke( true );
         aOvl->SetLineWidth( 10000 );
@@ -111,6 +113,7 @@ VECTOR2I LABEL_MANAGER::nearestBoxCorner( BOX2I b, VECTOR2I p )
     for( int i = 0; i < 4; i++ )
     {
         int dist = ( ptest[i] - p ).EuclideanNorm();
+
         if( dist < bestDist )
         {
             bestDist = dist;
@@ -120,6 +123,7 @@ VECTOR2I LABEL_MANAGER::nearestBoxCorner( BOX2I b, VECTOR2I p )
 
     return rv;
 }
+
 
 VECTOR2I LABEL_MANAGER::boxMtv( BOX2I b1, BOX2I b2 )
 {
@@ -151,9 +155,11 @@ VECTOR2I LABEL_MANAGER::boxMtv( BOX2I b1, BOX2I b2 )
             {
                 BOX2I btest( b2 );
                 btest.Move( dp[j] );
+
                 if( !b1.Intersects( btest ) )
                 {
                     int dist = dp[j].EuclideanNorm();
+
                     if( dist < bestDist )
                     {
                         bestDist = dist;
@@ -167,20 +173,22 @@ VECTOR2I LABEL_MANAGER::boxMtv( BOX2I b1, BOX2I b2 )
     return rv;
 }
 
+
 void LABEL_MANAGER::recalculate()
 {
     int iterLimit = 5;
+
     while( iterLimit > 0 )
     {
         printf( "Iter %d\n", iterLimit );
         bool collisionsFound = false;
+
         for( int i = 0; i < m_labels.size(); i++ )
         {
             for( int j = 0; j < m_labels.size(); j++ )
             {
                 if( i == j )
                     continue;
-
 
                 auto bb_i = m_labels[i].m_bbox;
                 auto bb_j = m_labels[j].m_bbox;
@@ -189,11 +197,8 @@ void LABEL_MANAGER::recalculate()
                 bb_j.Inflate( 100000 );
                 VECTOR2I mtv = boxMtv( bb_i, bb_j );
 
-
                 if( mtv.x || mtv.y )
                 {
-                    //                        printf("%d %d mtv %d %d\n", i, j, mtv.x, mtv.y );
-
                     m_labels[i].m_bbox.Move( -mtv );
                     collisionsFound = true;
                 }
@@ -222,9 +227,12 @@ PNS_LOG_VIEWER_OVERLAY::PNS_LOG_VIEWER_OVERLAY( KIGFX::GAL* aGal )
     m_labelMgr.reset( new LABEL_MANAGER( aGal ) );
 }
 
-void PNS_LOG_VIEWER_OVERLAY::AnnotatedPolyline( const SHAPE_LINE_CHAIN& aL, std::string name, bool aShowVertexNumbers )
+
+void PNS_LOG_VIEWER_OVERLAY::AnnotatedPolyline( const SHAPE_LINE_CHAIN& aL, std::string name,
+                                                bool aShowVertexNumbers )
 {
     Polyline( aL );
+
     if( aShowVertexNumbers)
         m_labelMgr->Add( aL, GetStrokeColor() );
 }
@@ -261,13 +269,15 @@ PNS_LOG_VIEWER_FRAME::PNS_LOG_VIEWER_FRAME( wxFrame* frame ) : PNS_LOG_VIEWER_FR
     m_listPopupMenu->Append( ID_LIST_SHOW_NONE, wxT( "Show none" ), wxT( "" ), wxITEM_NORMAL );
 
     m_itemList->Connect( m_itemList->GetId(), wxEVT_TREELIST_ITEM_CONTEXT_MENU,
-                         wxMouseEventHandler( PNS_LOG_VIEWER_FRAME::onListRightClick ), NULL,
+                         wxMouseEventHandler( PNS_LOG_VIEWER_FRAME::onListRightClick ), nullptr,
                          this );
-    //m_itemList->Connect(m_itemList->GetId(),wxEVT_LISTBOX,wxCommandEventHandler(PNS_LOG_VIEWER_FRAME::onListSelect),NULL,this);
+    //m_itemList->Connect(m_itemList->GetId(),wxEVT_LISTBOX,wxCommandEventHandler(PNS_LOG_VIEWER_FRAME::onListSelect),nullptr,this);
     m_itemList->Connect( m_itemList->GetId(), wxEVT_TREELIST_SELECTION_CHANGED,
-                         wxCommandEventHandler( PNS_LOG_VIEWER_FRAME::onListSelect ), NULL, this );
+                         wxCommandEventHandler( PNS_LOG_VIEWER_FRAME::onListSelect ),
+                         nullptr, this );
     m_itemList->Connect( m_itemList->GetId(), wxEVT_TREELIST_ITEM_CHECKED,
-                         wxCommandEventHandler( PNS_LOG_VIEWER_FRAME::onListChecked ), NULL, this );
+                         wxCommandEventHandler( PNS_LOG_VIEWER_FRAME::onListChecked ),
+                         nullptr, this );
 
     m_itemList->AppendColumn( "Type" );
     m_itemList->AppendColumn( "Value" );
@@ -278,6 +288,7 @@ PNS_LOG_VIEWER_FRAME::PNS_LOG_VIEWER_FRAME( wxFrame* frame ) : PNS_LOG_VIEWER_FR
     m_overlay.reset( new PNS_LOG_VIEWER_OVERLAY ( m_galPanel->GetGAL() ) );
     m_galPanel->GetView()->Add( m_overlay.get() );
 }
+
 
 PNS_LOG_VIEWER_FRAME::~PNS_LOG_VIEWER_FRAME()
 {
@@ -310,6 +321,7 @@ PNS_TEST_DEBUG_DECORATOR::STAGE* PNS_LOG_VIEWER_FRAME::getCurrentStage()
     return dbgd->GetStage( iter );
 }
 
+
 void PNS_LOG_VIEWER_FRAME::drawLoggedItems( int iter )
 {
     if( !m_env )
@@ -319,15 +331,15 @@ void PNS_LOG_VIEWER_FRAME::drawLoggedItems( int iter )
 
     if( !st )
         return;
-    
+
     m_overlay.reset( new PNS_LOG_VIEWER_OVERLAY ( m_galPanel->GetGAL() ) );
     m_galPanel->GetView()->Add( m_overlay.get() );
-//  
-    printf("draw %d\n", iter);
 
-    auto drawShapes = [&]( PNS_TEST_DEBUG_DECORATOR::DEBUG_ENT* ent ) -> bool {
+    auto drawShapes = [&]( PNS_TEST_DEBUG_DECORATOR::DEBUG_ENT* ent ) -> bool
+    {
         bool isEnabled = ent->IsVisible();
         bool isSelected = false;
+
         if( !isEnabled )
             return true;
 
@@ -366,15 +378,15 @@ void PNS_LOG_VIEWER_FRAME::drawLoggedItems( int iter )
             case SH_LINE_CHAIN:
             {
                 auto lc = static_cast<SHAPE_LINE_CHAIN*>( sh );
-            m_overlay->AnnotatedPolyline( *lc, ent->m_name, ent->m_hasLabels && isSelected );
+                m_overlay->AnnotatedPolyline( *lc, ent->m_name, ent->m_hasLabels && isSelected );
 
                 break;
 
             }
-            default: break;
+            default:
+                break;
             }
         }
-
 
         return true;
     };
@@ -395,11 +407,10 @@ static BOARD* loadBoard( const std::string& filename )
 
     try
     {
-        brd = pi->Load( wxString( filename.c_str() ), NULL, NULL );
+        brd = pi->Load( wxString( filename.c_str() ), nullptr, nullptr );
     }
     catch( const IO_ERROR& ioe )
     {
-        printf( "Board Loading Error: '%s'\n", ioe.Problem() );
         return nullptr;
     }
 
@@ -439,6 +450,7 @@ void PNS_LOG_VIEWER_FRAME::SetLogFile( PNS_LOG_FILE* aLog )
     updateDumpPanel( m_rewindIter );
 }
 
+
 void PNS_LOG_VIEWER_FRAME::onReload( wxCommandEvent& event )
 {
     event.Skip();
@@ -448,6 +460,7 @@ void PNS_LOG_VIEWER_FRAME::onExit( wxCommandEvent& event )
 {
     event.Skip();
 }
+
 
 void PNS_LOG_VIEWER_FRAME::onListChecked( wxCommandEvent& event )
 {
@@ -467,6 +480,7 @@ void PNS_LOG_VIEWER_FRAME::onRewindScroll( wxScrollEvent& event )
     event.Skip();
 }
 
+
 void PNS_LOG_VIEWER_FRAME::onBtnRewindLeft( wxCommandEvent& event )
 {
     if( m_rewindIter > 0 )
@@ -479,6 +493,7 @@ void PNS_LOG_VIEWER_FRAME::onBtnRewindLeft( wxCommandEvent& event )
         m_rewindPos->SetValue( str );
     }
 }
+
 
 void PNS_LOG_VIEWER_FRAME::onBtnRewindRight( wxCommandEvent& event )
 {
@@ -495,6 +510,7 @@ void PNS_LOG_VIEWER_FRAME::onBtnRewindRight( wxCommandEvent& event )
         m_rewindPos->SetValue( str );
     }
 }
+
 
 void PNS_LOG_VIEWER_FRAME::onRewindCountText( wxCommandEvent& event )
 {
@@ -520,6 +536,7 @@ void PNS_LOG_VIEWER_FRAME::onRewindCountText( wxCommandEvent& event )
     event.Skip();
 }
 
+
 void PNS_LOG_VIEWER_FRAME::syncModel()
 {
     for( wxTreeListItem item = m_itemList->GetFirstItem(); item.IsOk();
@@ -527,6 +544,7 @@ void PNS_LOG_VIEWER_FRAME::syncModel()
     {
         WX_SHAPE_TREE_ITEM_DATA* idata =
                 static_cast<WX_SHAPE_TREE_ITEM_DATA*>( m_itemList->GetItemData( item ) );
+
         if( idata )
         {
             bool checked = m_itemList->GetCheckedState( item ) == wxCHK_CHECKED;
@@ -535,8 +553,8 @@ void PNS_LOG_VIEWER_FRAME::syncModel()
             idata->m_item->m_selected = selected;
         }
     }
-
 }
+
 
 void PNS_LOG_VIEWER_FRAME::onListRightClick( wxMouseEvent& event )
 {
@@ -563,17 +581,16 @@ void PNS_LOG_VIEWER_FRAME::onListRightClick( wxMouseEvent& event )
         if( !st )
             return;
 
-        auto formatShapes = [&]( PNS_TEST_DEBUG_DECORATOR::DEBUG_ENT* ent ) -> bool {
+        auto formatShapes = [&]( PNS_TEST_DEBUG_DECORATOR::DEBUG_ENT* ent ) -> bool
+        {
             if( ent->m_selected )
             {
-                //printf("Ent %p\n", ent );
                 for( auto sh : ent->m_shapes )
                 {
-                    //printf("sh %p\n", sh );
-                    //printf("%s\n", sh->Format().c_str() );
                     s += "// " + ent->m_name + "\n " + sh->Format() + "; \n";
                 }
             }
+
             return true;
         };
 
@@ -587,10 +604,12 @@ void PNS_LOG_VIEWER_FRAME::onListRightClick( wxMouseEvent& event )
             wxTheClipboard->Flush(); // Allow data to be available after closing KiCad
             wxTheClipboard->Close();
         }
+
         return;
     }
     }
 }
+
 
 void PNS_LOG_VIEWER_FRAME::onListSelect( wxCommandEvent& event )
 {
@@ -599,7 +618,7 @@ void PNS_LOG_VIEWER_FRAME::onListSelect( wxCommandEvent& event )
 }
 
 
-void PNS_LOG_VIEWER_FRAME::buildListTree( wxTreeListItem                       item,
+void PNS_LOG_VIEWER_FRAME::buildListTree( wxTreeListItem item,
                                           PNS_TEST_DEBUG_DECORATOR::DEBUG_ENT* ent, int depth )
 {
 #ifdef EXTRA_VERBOSE
@@ -648,12 +667,14 @@ void PNS_LOG_VIEWER_FRAME::buildListTree( wxTreeListItem                       i
 static void expandAllChildren( wxTreeListCtrl* tree )
 {
     wxTreeListItem child = tree->GetFirstItem ();
-    while (child.IsOk())
+
+    while( child.IsOk() )
     {
         tree->Expand ( child );
         child = tree->GetNextItem( child );
     }
 }
+
 
 void PNS_LOG_VIEWER_FRAME::updateDumpPanel( int iter )
 {
@@ -674,7 +695,6 @@ void PNS_LOG_VIEWER_FRAME::updateDumpPanel( int iter )
     if( iter >= count )
         iter = count - 1;
 
-
     auto st = dbgd->GetStage( iter );
     auto rootItem = m_itemList->GetRootItem();
 
@@ -693,13 +713,12 @@ int replay_main_func( int argc, char* argv[] )
     auto frame = new PNS_LOG_VIEWER_FRAME( nullptr );
 
     //  drcCreateTestsProviderClearance();
-    //    drcCreateTestsProviderEdgeClearance();
-
+    //  drcCreateTestsProviderEdgeClearance();
 
     if( argc >= 2 && std::string( argv[1] ) == "-h" )
     {
         printf( "PNS Log (Re)player. Allows to step through the log written by the ROUTER_TOOL "
-                "in debug Kicad builds. " );
+                "in debug KiCad builds. " );
         printf( "Requires a board file with UUIDs and a matching log file. Both are written to "
                 "/tmp when you press '0' during routing." );
         return 0;
@@ -720,9 +739,9 @@ int replay_main_func( int argc, char* argv[] )
     return 0;
 }
 
+
 static bool registered2 = UTILITY_REGISTRY::Register( {
         "replay",
         "PNS Log Player",
         replay_main_func,
 } );
-
