@@ -834,8 +834,9 @@ void DIALOG_PAD_PROPERTIES::OnPadShapeSelection( wxCommandEvent& event )
             m_cbTopRight->SetValue( false );
             m_cbBottomLeft->SetValue( false );
             m_cbBottomRight->SetValue( false );
-            break;
         }
+
+        break;
 
     case CHOICE_SHAPE_CHAMFERED_ROUNDED_RECT:
         m_shapePropsBook->SetSelection( 4 );
