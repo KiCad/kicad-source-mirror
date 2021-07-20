@@ -55,14 +55,16 @@ public:
     /** Create a PLACE_FILE_EXPORTER
      * @param aBoard is the board
      * @param aUnitsMM is the unit option: true foo mm, false for inches
-     * @param aForceSmdItems true to force not virtual and not flagged smd footprints
-     * but having only smd pads to be in list
+     * @param aOnlySMD true to force only footprints flagged smd to be in the list
+     * @param aExcludeAllTH true to include only footprints with no TH pads no matter
+     *                      the footprint flag
      * @param aTopSide true to generate top side info
      * @param aBottomSide true to generate bottom side info
      * @param aFormatCSV true to generate a csv format info, false to generate a ascii info
+     * @param aUseAuxOrigin true to use auxiliary axis as an origin for the position data
      */
-    PLACE_FILE_EXPORTER( BOARD* aBoard,  bool aUnitsMM, bool aForceSmdItems, bool aTopSide,
-                         bool aBottomSide, bool aFormatCSV, bool useAuxOrigin );
+    PLACE_FILE_EXPORTER( BOARD* aBoard, bool aUnitsMM, bool aOnlySMD, bool aExcludeAllTH,
+                         bool aTopSide, bool aBottomSide, bool aFormatCSV, bool aUseAuxOrigin );
 
     /**
      * build a string filled with the position data
@@ -90,6 +92,7 @@ public:
 private:
     BOARD*  m_board;
     bool    m_unitsMM;        // true for mm, false for inches
+    bool    m_onlySMD;        // Include only SMD components
     bool    m_excludeAllTH;   // Exclude any footprints with through-hole pads
     int     m_side;           // PCB_BACK_SIDE, PCB_FRONT_SIDE, PCB_BOTH_SIDES
     bool    m_formatCSV;      // true for csv format, false for ascii (utf8) format

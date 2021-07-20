@@ -49,6 +49,7 @@ class DIALOG_GEN_FOOTPRINT_POSITION_BASE : public DIALOG_SHIM
 		wxRadioBox* m_rbFormat;
 		wxRadioBox* m_radioBoxUnits;
 		wxRadioBox* m_radioBoxFilesCount;
+		wxCheckBox* m_onlySMD;
 		wxCheckBox* m_excludeTH;
 		wxCheckBox* m_cbIncludeBoardEdge;
 		wxCheckBox* m_useDrillPlaceOrigin;
@@ -63,6 +64,7 @@ class DIALOG_GEN_FOOTPRINT_POSITION_BASE : public DIALOG_SHIM
 		virtual void onSelectFormat( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onUpdateUIUnits( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void onUpdateUIFileOpt( wxUpdateUIEvent& event ) { event.Skip(); }
+		virtual void onUpdateUIOnlySMD( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void onUpdateUIExcludeTH( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void onUpdateUIincludeBoardEdge( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void OnGenerate( wxCommandEvent& event ) { event.Skip(); }

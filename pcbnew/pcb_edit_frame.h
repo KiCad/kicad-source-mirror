@@ -282,16 +282,18 @@ public:
      *
      * @param aFullFileName the full file name of the file to create.
      * @param aUnitsMM false to use inches, true to use mm in coordinates.
-     * @param aForceSmdItems true to force all footprints with smd pads in list,
-     *                       false to put only footprints with option "INSERT" in list
+     * @param aOnlySMD true to force only footprints flagged smd to be in the list
+     * @param aNoTHItems true to include only footprints with no TH pads no matter
+     *                   the footprint flag
      * @param aTopSide true to list footprints on front (top) side.
      * @param aBottomSide true to list footprints on back (bottom) side, if \a aTopSide and
      *                    \a aTopSide are true, list footprints on both sides.
      * @param aFormatCSV true to use a comma separated file (CSV) format; default = false
+     * @param aUseAuxOrigin true to use auxiliary axis as an origin for the position data
      * @return the number of footprints found on aSide side or -1 if the file could not be created.
      */
-    int DoGenFootprintsPositionFile( const wxString& aFullFileName, bool aUnitsMM,
-                                     bool aForceSmdItems, bool aTopSide, bool aBottomSide,
+    int DoGenFootprintsPositionFile( const wxString& aFullFileName, bool aUnitsMM, bool aOnlySMD,
+                                     bool aNoTHItems, bool aTopSide, bool aBottomSide,
                                      bool aFormatCSV, bool aUseAuxOrigin );
 
     /**

@@ -89,6 +89,19 @@ private:
         m_radioBoxFilesCount->Enable( m_rbFormat->GetSelection() != 2 );
     }
 
+	void onUpdateUIOnlySMD( wxUpdateUIEvent& event ) override
+    {
+        if( m_rbFormat->GetSelection() == 2 )
+        {
+            m_onlySMD->SetValue( false );
+            m_onlySMD->Enable( false );
+        }
+        else
+        {
+            m_onlySMD->Enable( true );
+        }
+    }
+
 	void onUpdateUIExcludeTH( wxUpdateUIEvent& event ) override
     {
         if( m_rbFormat->GetSelection() == 2 )
@@ -126,6 +139,11 @@ private:
     bool OneFileOnly()
     {
         return m_radioBoxFilesCount->GetSelection() == 1;
+    }
+
+    bool OnlySMD()
+    {
+        return m_onlySMD->GetValue();
     }
 
     bool ExcludeAllTH()
@@ -331,8 +349,8 @@ bool DIALOG_GEN_FOOTPRINT_POSITION::CreateAsciiFiles()
 
     // Test for any footprint candidate in list.
     {
-        PLACE_FILE_EXPORTER exporter( brd, UnitsMM(), ExcludeAllTH(), topSide, bottomSide,
-                                      useCSVfmt, useAuxOrigin );
+        PLACE_FILE_EXPORTER exporter( brd, UnitsMM(), OnlySMD(), ExcludeAllTH(), topSide,
+                                      bottomSide, useCSVfmt, useAuxOrigin );
         exporter.GenPositionData();
 
         if( exporter.GetFootprintCount() == 0 )
@@ -386,7 +404,7 @@ bool DIALOG_GEN_FOOTPRINT_POSITION::CreateAsciiFiles()
         fn.SetExt( FootprintPlaceFileExtension );
     }
 
-    int fpcount = m_parent->DoGenFootprintsPositionFile( fn.GetFullPath(), UnitsMM(),
+    int fpcount = m_parent->DoGenFootprintsPositionFile( fn.GetFullPath(), UnitsMM(), OnlySMD(),
                                                          ExcludeAllTH(), topSide, bottomSide,
                                                          useCSVfmt, useAuxOrigin );
     if( fpcount < 0 )
@@ -431,8 +449,9 @@ bool DIALOG_GEN_FOOTPRINT_POSITION::CreateAsciiFiles()
         fn.SetExt( FootprintPlaceFileExtension );
     }
 
-    fpcount = m_parent->DoGenFootprintsPositionFile( fn.GetFullPath(), UnitsMM(), ExcludeAllTH(),
-                                                     topSide, bottomSide, useCSVfmt, useAuxOrigin );
+    fpcount = m_parent->DoGenFootprintsPositionFile( fn.GetFullPath(), UnitsMM(), OnlySMD(),
+                                                     ExcludeAllTH(), topSide, bottomSide, useCSVfmt,
+                                                     useAuxOrigin );
 
     if( fpcount < 0 )
     {
@@ -476,7 +495,7 @@ int BOARD_EDITOR_CONTROL::GeneratePosFile( const TOOL_EVENT& aEvent )
 
 
 int PCB_EDIT_FRAME::DoGenFootprintsPositionFile( const wxString& aFullFileName, bool aUnitsMM,
-                                                 bool aForceSmdItems, bool aTopSide,
+                                                 bool aOnlySMD, bool aNoTHItems, bool aTopSide,
                                                  bool aBottomSide, bool aFormatCSV,
                                                  bool aUseAuxOrigin )
 {
@@ -491,7 +510,7 @@ int PCB_EDIT_FRAME::DoGenFootprintsPositionFile( const wxString& aFullFileName, 
     }
 
     std::string data;
-    PLACE_FILE_EXPORTER exporter( GetBoard(), aUnitsMM, aForceSmdItems, aTopSide, aBottomSide,
+    PLACE_FILE_EXPORTER exporter( GetBoard(), aUnitsMM, aOnlySMD, aNoTHItems, aTopSide, aBottomSide,
                                   aFormatCSV, aUseAuxOrigin );
     data = exporter.GenPositionData();
 
@@ -552,7 +571,7 @@ bool PCB_EDIT_FRAME::DoGenFootprintsReport( const wxString& aFullFilename, bool 
         return false;
 
     std::string data;
-    PLACE_FILE_EXPORTER exporter( GetBoard(), aUnitsMM, false, true, true, false, true );
+    PLACE_FILE_EXPORTER exporter( GetBoard(), aUnitsMM, false, false, true, true, false, true );
     data = exporter.GenReportData();
 
     fputs( data.c_str(), rptfile );
