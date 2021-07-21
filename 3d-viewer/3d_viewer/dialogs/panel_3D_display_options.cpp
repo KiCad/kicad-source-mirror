@@ -129,8 +129,7 @@ bool PANEL_3D_DISPLAY_OPTIONS::TransferDataFromWindow()
     EDA_3D_CONTROLLER* ctrlTool = m_frame->GetToolManager()->GetTool<EDA_3D_CONTROLLER>();
     ctrlTool->SetRotationIncrement( m_spinCtrlRotationAngle->GetValue() );
 
-    m_frame->NewDisplay();
-    m_canvas->Request_refresh();
+    // The 3D scene will be rebuilt by the caller
 
     return true;
 }

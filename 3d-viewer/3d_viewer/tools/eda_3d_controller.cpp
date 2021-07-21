@@ -206,18 +206,22 @@ int EDA_3D_CONTROLLER::ToggleVisibility( const TOOL_EVENT& aEvent )
 
     switch( flag )
     {
+    // These commands do not request a 3D scene rebuild:
     case FL_RENDER_OPENGL_SHOW_MODEL_BBOX:
     case FL_RENDER_RAYTRACING_SHADOWS:
     case FL_RENDER_RAYTRACING_REFRACTIONS:
     case FL_RENDER_RAYTRACING_REFLECTIONS:
     case FL_RENDER_RAYTRACING_ANTI_ALIASING:
     case FL_AXIS:
+    case FL_FP_ATTRIBUTES_NORMAL:
+    case FL_FP_ATTRIBUTES_NORMAL_INSERT:
+    case FL_FP_ATTRIBUTES_VIRTUAL:
         m_canvas->Request_refresh();
         break;
 
     default:
     {
-        if( auto* viewer = dynamic_cast<EDA_3D_VIEWER_FRAME*>( m_toolMgr->GetToolHolder() ) )
+        if( auto viewer = dynamic_cast<EDA_3D_VIEWER_FRAME*>( m_toolMgr->GetToolHolder() ) )
             viewer->NewDisplay( true );
         else
             m_canvas->Request_refresh();
