@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 Chris Pavlina <pavlina.chris@gmail.com>
- * Copyright (C) 2016-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -69,8 +69,6 @@ public:
  */
 class HK_PROMPT_DIALOG : public DIALOG_SHIM
 {
-    wxKeyEvent m_event;
-
 public:
     HK_PROMPT_DIALOG( wxWindow* aParent, wxWindowID aId, const wxString& aTitle,
                       const wxString& aName, const wxString& aCurrentKey ) :
@@ -136,17 +134,6 @@ public:
         SetInitialFocus( panel );
     }
 
-    /**
-     * End the dialog whether modal or quasimodal
-     */
-    void EndFlexible( int aRtnCode )
-    {
-        if( IsQuasiModal() )
-            EndQuasiModal( aRtnCode );
-        else
-            EndModal( aRtnCode );
-    }
-
     static wxKeyEvent PromptForKey( wxWindow* aParent, const wxString& aName,
                                     const wxString& aCurrentKey )
     {
@@ -203,13 +190,16 @@ protected:
     void OnChar( wxKeyEvent& aEvent )
     {
         m_event = aEvent;
-        EndFlexible( wxID_OK );
+        wxPostEvent( this, wxCommandEvent( wxEVT_COMMAND_BUTTON_CLICKED, wxID_OK ) );
     }
+
+private:
+    wxKeyEvent m_event;
 };
 
 
 /**
- * Class to manage logic for filtering hotkeys based on user input
+ * Manage logic for filtering hotkeys based on user input.
  */
 class HOTKEY_FILTER
 {

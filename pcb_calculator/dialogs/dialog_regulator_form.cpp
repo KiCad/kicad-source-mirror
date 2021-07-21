@@ -2,7 +2,7 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 1992-2011 jean-pierre.charras
- * Copyright (C) 1992-2020 Kicad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 Kicad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,32 +28,30 @@
 extern double DoubleFromString( const wxString& TextValue );
 
 
-void DIALOG_REGULATOR_FORM::OnOKClick( wxCommandEvent& event )
+bool DIALOG_REGULATOR_FORM::TransferDataFromWindow()
 {
-    if( !IsOK() )
-    {
-        wxMessageBox( _( "Bad or missing parameters!" ) );
-        return;
-    }
+    if( !wxDialog::TransferDataFromWindow() )
+        return false;
 
-    EndModal( wxID_OK );
-}
-
-
-bool DIALOG_REGULATOR_FORM::IsOK()
-{
     bool success = true;
 
     if( m_textCtrlName->GetValue().IsEmpty() )
+    {
         success = false;
+    }
+
     if( m_textCtrlVref->GetValue().IsEmpty() )
+    {
         success = false;
+    }
     else
     {
         double vref = DoubleFromString( m_textCtrlVref->GetValue() );
+
         if( fabs( vref ) < 0.01 )
             success = false;
     }
+
     if( m_choiceRegType->GetSelection() == 1 )
     {
         if( m_RegulIadjValue->GetValue().IsEmpty() )

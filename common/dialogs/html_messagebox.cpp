@@ -53,19 +53,6 @@ HTML_MESSAGE_BOX::~HTML_MESSAGE_BOX()
 }
 
 
-void HTML_MESSAGE_BOX::OnOKButtonClick( wxCommandEvent& event )
-{
-    // the dialog can be shown quasi-model, modal, or not modeless.
-    // therefore, use the right way to close it.
-    if( IsQuasiModal() )
-        EndQuasiModal( wxID_OK );
-    else if( IsModal() )
-        EndModal( wxID_OK );
-    else
-        Destroy();
-}
-
-
 void HTML_MESSAGE_BOX::ListClear()
 {
     m_htmlWindow->SetPage( wxEmptyString );

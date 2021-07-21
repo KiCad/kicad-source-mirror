@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2011-2014 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2020 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -29,17 +29,8 @@
 #include <../common/dialogs/dialog_display_info_HTML_base.h>
 
 
-/**
- * HTML_MESSAGE_BOX
- */
 class HTML_MESSAGE_BOX : public DIALOG_DISPLAY_HTML_TEXT_BASE
 {
-protected:
-    // Handlers for HTML_MESSAGE_BOX_BASE events.
-    void OnOKButtonClick( wxCommandEvent& event ) override;
-
-    virtual void OnCharHook( wxKeyEvent& aEvt ) override;
-
 public:
     HTML_MESSAGE_BOX( wxWindow* aParent, const wxString& aTitle = wxEmptyString,
                       const wxPoint& aPosition = wxDefaultPosition,
@@ -47,9 +38,11 @@ public:
     ~HTML_MESSAGE_BOX() override;
 
     /**
-     * set the dialog size, using a "logical" value.
-     * the physical size in pixel will depend on the display definition
-     * so a value used here shoul be OK with any display (HDPI for instance)
+     * Set the dialog size, using a "logical" value.
+     *
+     * The physical size in pixel will depend on the display definition so a value used here
+     * should be OK with any display (HDPI for instance).
+     *
      * @param aWidth is a "logical" value of the dialog width.
      * @param aHeight is a "logical" value of the dialog height.
      */
@@ -62,14 +55,14 @@ public:
     /**
      * Add a list of items.
      *
-     * @param aList = a string containing items. Items are separated by '\n'
+     * @param aList is a string containing HTML items. Items are separated by '\n'
      */
     void ListSet( const wxString& aList );
 
     /**
      * Add a list of items.
      *
-     * @param aList = a wxArrayString containing items.
+     * @param aList is the list of HTML strings to display.
      */
     void ListSet( const wxArrayString& aList );
 
@@ -90,6 +83,8 @@ public:
      */
     void ShowModeless();
 
+protected:
+    virtual void OnCharHook( wxKeyEvent& aEvt ) override;
 };
 
 #endif // _html_messagebox_

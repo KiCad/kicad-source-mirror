@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012-2014 Jean-Pierre Charras  jp.charras at wanadoo.fr
- * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -49,68 +49,47 @@ enum layer_sel_id {
 
 class SELECT_LAYER_DIALOG : public DIALOG_SHIM
 {
-private:
-    int               m_PassedDefaultLayer; // Remember this in case user hits Cancel
-    wxRadioBox*       m_layerRadioBox;
-    std::vector <int> m_layerId;
-
 public:
-    // Constructor and destructor
     SELECT_LAYER_DIALOG( GERBVIEW_FRAME* parent, int aDefaultLayer, int aCopperLayerCount,
-            wxString aGerberName );
+                         wxString aGerberName );
     ~SELECT_LAYER_DIALOG() { };
+
+    int GetSelectedLayer() { return m_selectedLayer; }
+
+protected:
+    bool TransferDataFromWindow() override;
 
 private:
     void OnLayerSelected( wxCommandEvent& event );
-    void OnCancelClick( wxCommandEvent& event );
 
     DECLARE_EVENT_TABLE()
+
+    int               m_selectedLayer;
+    wxRadioBox*       m_layerRadioBox;
+    std::vector <int> m_layerId;
 };
 
 
 BEGIN_EVENT_TABLE( SELECT_LAYER_DIALOG, wxDialog )
-    EVT_BUTTON( wxID_OK, SELECT_LAYER_DIALOG::OnLayerSelected )
-    EVT_BUTTON( wxID_CANCEL, SELECT_LAYER_DIALOG::OnCancelClick )
     EVT_RADIOBOX( ID_LAYER_SELECT, SELECT_LAYER_DIALOG::OnLayerSelected )
 END_EVENT_TABLE()
 
 
-/** Install the dialog box for layer selection
- * @param aDefaultLayer = Preselection (GERBER_DRAWLAYERS_COUNT for "(Deselect)" layer)
- * @param aCopperLayerCount = number of copper layers
- * @param aShowDeselectOption = display a "(Deselect)" radiobutton (when set to true)
- * @return new layer value (GERBER_DRAWLAYERS_COUNT when "(Deselect)" radiobutton selected),
- *                         or -1 if canceled
- *
- * Providing the option to also display a "(Deselect)" radiobutton makes the
- *  GerbView's "Export to Pcbnew" command) more "user friendly",
- * by permitting any layer to be "deselected" immediately after its
- * corresponding radiobutton has been clicked on. (It would otherwise be
- * necessary to first cancel the "Select Layer:" dialog box (invoked after a
- * different radiobutton is clicked on) prior to then clicking on the "Deselect"
- * button provided within the "Layer selection:" dialog box).
- */
 int GERBVIEW_FRAME::SelectPCBLayer( int aDefaultLayer, int aCopperLayerCount, wxString aGerberName )
 {
     SELECT_LAYER_DIALOG* frame =
             new SELECT_LAYER_DIALOG( this, aDefaultLayer, aCopperLayerCount, aGerberName );
 
-    int layer = frame->ShowModal();
+    frame->ShowModal();
     frame->Destroy();
-    return layer;
+    return frame->GetSelectedLayer();
 }
 
 
-/*
- * The "OK" and "Cancel" buttons are positioned (in a horizontal line)
- * beneath the "Layer" radiobox, unless that contains only one column of
- * radiobuttons, in which case they are positioned (in a vertical line)
- * to the right of that radiobox.
- */
-SELECT_LAYER_DIALOG::SELECT_LAYER_DIALOG(
-        GERBVIEW_FRAME* parent, int aDefaultLayer, int aCopperLayerCount, wxString aGerberName )
-        : DIALOG_SHIM( parent, -1, wxString::Format( _( "Select Layer: %s" ), aGerberName ),
-                wxDefaultPosition, wxDefaultSize, wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER )
+SELECT_LAYER_DIALOG::SELECT_LAYER_DIALOG( GERBVIEW_FRAME* parent, int aDefaultLayer,
+                                          int aCopperLayerCount, wxString aGerberName )
+    : DIALOG_SHIM( parent, -1, wxString::Format( _( "Select Layer: %s" ), aGerberName ),
+                   wxDefaultPosition, wxDefaultSize, wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER )
 {
     wxButton* button;
     int ii;
@@ -118,7 +97,7 @@ SELECT_LAYER_DIALOG::SELECT_LAYER_DIALOG(
     int selected = -1;
 
     // Store the passed default layer in case the user hits Cancel
-    m_PassedDefaultLayer = aDefaultLayer;
+    m_selectedLayer = aDefaultLayer;
 
     // Build the layer list; first build copper layers list
     int layerCount = 0;
@@ -202,16 +181,19 @@ SELECT_LAYER_DIALOG::SELECT_LAYER_DIALOG(
 
 void SELECT_LAYER_DIALOG::OnLayerSelected( wxCommandEvent& event )
 {
-    int ii = m_layerId[m_layerRadioBox->GetSelection()];
-
-    EndModal( ii );
+    wxPostEvent( this, wxCommandEvent( wxEVT_COMMAND_BUTTON_CLICKED, wxID_OK ) );
 }
 
 
-void SELECT_LAYER_DIALOG::OnCancelClick( wxCommandEvent& event )
+bool SELECT_LAYER_DIALOG::TransferDataFromWindow()
 {
-    EndModal( m_PassedDefaultLayer );
+    if( !wxDialog::TransferDataFromWindow() )
+        return false;
+
+    m_selectedLayer = m_layerId[m_layerRadioBox->GetSelection()];
+    return true;
 }
+
 
 // This function is a duplicate of
 // const wxChar* LSET::Name( PCB_LAYER_ID aLayerId )

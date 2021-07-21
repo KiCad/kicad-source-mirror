@@ -32,19 +32,10 @@ public:
     DIALOG_GLOBAL_DELETION( PCB_EDIT_FRAME* parent );
     void SetCurrentLayer( LAYER_NUM aLayer );
 
+    ///< @todo Move this back into the tool rather than having the dialog do the deleting.
+    void DoGlobalDeletions();
+
 private:
-    void onOkClick( wxCommandEvent& event ) override
-    {
-        doGlobalDeletions();
-        EndModal( wxID_OK );
-    }
-
-    void onCancelClick( wxCommandEvent& event ) override
-    {
-        EndModal( wxID_CANCEL );
-    }
-
-    void doGlobalDeletions();
     void onCheckDeleteTracks( wxCommandEvent& event ) override;
     void onCheckDeleteFootprints( wxCommandEvent& event ) override;
     void onCheckDeleteDrawings( wxCommandEvent& event ) override;

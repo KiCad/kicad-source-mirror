@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -47,23 +47,26 @@ public:
         bool includePcbTexts          = true;
     };
 
+    /**
+     * Create the filter selection dialog.
+     *
+     * @param[in] aParent is the parent window that called the dialog.
+     * @param[in,out] aOptions is the options to populate the dialog with and contains the
+     *                         changes made by the dialog on exit.
+     */
     DIALOG_FILTER_SELECTION( PCB_BASE_FRAME* aParent, OPTIONS& aOptions );
 
     ~DIALOG_FILTER_SELECTION()
     {
     }
 
+protected:
+    bool TransferDataFromWindow() override;
+
 private:
-    void ExecuteCommand( wxCommandEvent& event ) override;
-
-    void OnCancel( wxCommandEvent& event ) override
-    {
-        EndModal( wxID_CANCEL );
-    }
-
     void checkBoxClicked( wxCommandEvent& aEvent ) override;
 
-    ///< Reference to the options struct to fill
+    ///< Reference to the options struct to fill.
     OPTIONS& m_options;
 };
 

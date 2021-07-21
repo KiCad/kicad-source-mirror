@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -131,7 +131,7 @@ bool EDA_VIEW_SWITCHER::TryBefore( wxEvent& aEvent )
     // Check for control key trailing edge
     if( !wxGetKeyState( WXK_RAW_CONTROL ) )
     {
-        EndModal( wxID_OK );
+        wxPostEvent( this, wxCommandEvent( wxEVT_COMMAND_BUTTON_CLICKED, wxID_OK ) );
     }
 
     return DIALOG_SHIM::TryBefore( aEvent );

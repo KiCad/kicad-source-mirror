@@ -33,9 +33,8 @@
 
 class GERBVIEW_FRAME;
 
-/*
- * This dialog shows the gerber files loaded, and allows user to choose
- * equivalence between gerber layers and pcb layers
+/**
+ * Show the Gerber files loaded and allow the user to choose between Gerber layers and pcb layers.
  */
 class LAYERS_MAP_DIALOG : public LAYERS_MAP_DIALOG_BASE
 {
@@ -45,19 +44,21 @@ public: LAYERS_MAP_DIALOG( GERBVIEW_FRAME* parent );
     LAYER_NUM * GetLayersLookUpTable() { return m_layersLookUpTable; }
     static int GetCopperLayersCount() { return m_exportBoardCopperLayersCount; }
 
+protected:
+    bool TransferDataFromWindow() override;
+
 private:
     void initDialog();
     void normalizeBrdLayersCount();
     void OnBrdLayersCountSelection( wxCommandEvent& event ) override;
     void OnSelectLayer( wxCommandEvent& event );
-    void OnOkClick( wxCommandEvent& event ) override;
 
     void OnStoreSetup( wxCommandEvent& event ) override;
     void OnGetSetup( wxCommandEvent& event ) override;
     void OnResetClick( wxCommandEvent& event ) override;
 
     /**
-     * Finds number of loaded Gerbers where the matching KiCad layer can be identified
+     * Find number of loaded Gerbers where the matching KiCad layer can be identified.
      *
      * The passed vector<int> will be returned with the same number of elements
      * as there are Gerber files.  The indices into it are 1:1 with the loaded Gerber
@@ -72,7 +73,7 @@ private:
     int findKnownGerbersLoaded( std::vector<int>& aGerber2KicadMapping );
 
     /**
-     * Finds number of loaded Gerbers using Altium file extensions
+     * Find number of loaded Gerbers using Altium file extensions.
      *
      * The passed vector<int> will be returned with the same number of elements
      * as there are Gerber files.  The indices into it are 1:1 with the loaded Gerber
@@ -87,7 +88,7 @@ private:
     int findNumAltiumGerbersLoaded( std::vector<int>& aGerber2KicadMapping );
 
     /**
-     * Finds number of loaded Gerbers using KiCad naming convention
+     * Find number of loaded Gerbers using KiCad naming convention.
      *
      * The passed vector<int> will be returned with the same number of elements
      * as there are Gerber files.  The indices into it are 1:1 with the loaded Gerber
@@ -102,7 +103,7 @@ private:
     int findNumKiCadGerbersLoaded( std::vector<int>& aGerber2KicadMapping );
 
     /**
-     * Finds number of loaded Gerbers using X2 File Functions to define layers
+     * Find number of loaded Gerbers using X2 File Functions to define layers.
      *
      * The passed vector<int> will be returned with the same number of elements
      * as there are Gerber files.  The indices into it are 1:1 with the loaded Gerber
@@ -120,7 +121,7 @@ private:
 
 private:
     GERBVIEW_FRAME* m_Parent;
-    int m_gerberActiveLayersCount;                  // Number of initialized gerber layers
+    int m_gerberActiveLayersCount;                  // Number of initialized Gerber layers
     static int m_exportBoardCopperLayersCount;
 
     // Indexes Gerber layers to PCB file layers the last value in table is the number of

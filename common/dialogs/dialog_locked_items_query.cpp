@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,6 +23,7 @@
 
 #include <dialogs/dialog_locked_items_query.h>
 #include <bitmaps.h>
+
 
 DIALOG_LOCKED_ITEMS_QUERY::DIALOG_LOCKED_ITEMS_QUERY( wxWindow* aParent, int aLockedItemCount ) :
     DIALOG_LOCKED_ITEMS_QUERY_BASE( aParent )
@@ -46,19 +47,8 @@ DIALOG_LOCKED_ITEMS_QUERY::DIALOG_LOCKED_ITEMS_QUERY( wxWindow* aParent, int aLo
 
 void DIALOG_LOCKED_ITEMS_QUERY::onOverrideLocks( wxCommandEvent& event )
 {
-    EndModal( wxID_APPLY );
-}
-
-
-void DIALOG_LOCKED_ITEMS_QUERY::onOkClick( wxCommandEvent& event )
-{
-    EndModal( wxID_OK );
-}
-
-
-void DIALOG_LOCKED_ITEMS_QUERY::onCancelClick( wxCommandEvent& event )
-{
-    EndModal( wxID_CANCEL );
+    // This will choose the correct way to end the dialog no matter how is was shown.
+    EndDialog( wxID_APPLY );
 }
 
 

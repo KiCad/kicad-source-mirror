@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2018 CERN
+ * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
  * Author: Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -66,12 +67,14 @@ protected:
 
     /**
      * Return scale value selected in the dialog.
-     * if this value is outside limits, it will be clamped
+     *
+     * If this value is outside limits, it will be clamped.
      */
     double getScaleValue();
 
     /**
     * Select a corresponding scale radio button and update custom scale value if needed.
+    *
     * @param aValue is the scale value to be selected (0 stands for fit-to-page).
     */
     void setScaleValue( double aValue );
@@ -80,24 +83,26 @@ protected:
     // even if the dialog is closed without printing
     bool TransferDataToWindow() override;
 
-    APP_SETTINGS_BASE* m_config;
-
-    PRINTOUT_SETTINGS* m_settings;
-
 private:
     void onPageSetup( wxCommandEvent& event ) override;
     void onPrintPreview( wxCommandEvent& event ) override;
     void onPrintButtonClick( wxCommandEvent& event ) override;
+    void onCancelButtonClick( wxCommandEvent& aEvent ) override;
 
-    // onClose* handlers are needed to save the dialogs settings as TransferDataFromWindow()
-    // is not called for 'Cancel' button that closes the window
-    void onCloseButton( wxCommandEvent& event ) override;
+    // Needed to save the dialogs settings as TransferDataFromWindow()
+    // is not called for 'Cancel' button that closes the window.
     void onClose( wxCloseEvent& event ) override;
 
     void onSetCustomScale( wxCommandEvent& event ) override;
 
     void initPrintData();
 
+protected:
+    APP_SETTINGS_BASE* m_config;
+
+    PRINTOUT_SETTINGS* m_settings;
+
+private:
     wxFloatingPointValidator<double> m_scaleValidator;
 
     static wxPrintData* s_PrintData;

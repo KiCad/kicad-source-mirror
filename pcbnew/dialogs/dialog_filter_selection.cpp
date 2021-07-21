@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2017-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -60,8 +60,11 @@ void DIALOG_FILTER_SELECTION::checkBoxClicked( wxCommandEvent& aEvent )
 }
 
 
-void DIALOG_FILTER_SELECTION::ExecuteCommand( wxCommandEvent& event )
+bool DIALOG_FILTER_SELECTION::TransferDataFromWindow()
 {
+    if( !wxDialog::TransferDataFromWindow() )
+        return false;
+
     m_options.includeModules           = m_Include_Modules->GetValue();
     m_options.includeLockedModules     = m_IncludeLockedModules->GetValue();
     m_options.includeTracks            = m_Include_Tracks->GetValue();
@@ -71,5 +74,5 @@ void DIALOG_FILTER_SELECTION::ExecuteCommand( wxCommandEvent& event )
     m_options.includeBoardOutlineLayer = m_Include_Edges_Items->GetValue();
     m_options.includePcbTexts          = m_Include_PcbTextes->GetValue();
 
-    EndModal( wxID_OK );
+    return true;
 }

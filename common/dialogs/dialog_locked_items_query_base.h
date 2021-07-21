@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.9.0 Jun  3 2020)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -49,8 +49,6 @@ class DIALOG_LOCKED_ITEMS_QUERY_BASE : public DIALOG_SHIM
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnInitDlg( wxInitDialogEvent& event ) { event.Skip(); }
 		virtual void onOverrideLocks( wxCommandEvent& event ) { event.Skip(); }
-		virtual void onCancelClick( wxCommandEvent& event ) { event.Skip(); }
-		virtual void onOkClick( wxCommandEvent& event ) { event.Skip(); }
 
 
 	public:

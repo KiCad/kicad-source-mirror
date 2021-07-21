@@ -37,8 +37,6 @@ public:
 
 private:
     void onOverrideLocks( wxCommandEvent& event ) override;
-    void onCancelClick( wxCommandEvent& event ) override;
-    void onOkClick( wxCommandEvent& event ) override;
 };
 
 #endif // DIALOG_LOCKED_ITEMS_QUERY_H

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.9.0 Jun 18 2020)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -96,13 +96,11 @@ DIALOG_REGULATOR_FORM_BASE::DIALOG_REGULATOR_FORM_BASE( wxWindow* parent, wxWind
 
 	// Connect Events
 	m_choiceRegType->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_REGULATOR_FORM_BASE::OnRegTypeSelection ), NULL, this );
-	m_sdbSizerOK->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_REGULATOR_FORM_BASE::OnOKClick ), NULL, this );
 }
 
 DIALOG_REGULATOR_FORM_BASE::~DIALOG_REGULATOR_FORM_BASE()
 {
 	// Disconnect Events
 	m_choiceRegType->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_REGULATOR_FORM_BASE::OnRegTypeSelection ), NULL, this );
-	m_sdbSizerOK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_REGULATOR_FORM_BASE::OnOKClick ), NULL, this );
 
 }

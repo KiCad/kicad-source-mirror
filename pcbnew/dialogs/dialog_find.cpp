@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2012 Marco Mattila <marcom99@gmail.com>
  * Copyright (C) 2018 Jean-Pierre Charras jp.charras at wanadoo.fr
- * Copyright (C) 1992-2018 Kicad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 Kicad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -36,6 +36,7 @@
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>
 #include <wx/fdrepdlg.h>
+
 
 //Defined as global because these values have to survive the destructor
 
@@ -91,26 +92,31 @@ DIALOG_FIND::DIALOG_FIND( PCB_BASE_FRAME* aFrame ) : DIALOG_FIND_BASE( aFrame )
     Center();
 }
 
+
 void DIALOG_FIND::onTextEnter( wxCommandEvent& aEvent )
 {
     search( true );
 }
+
 
 void DIALOG_FIND::onFindNextClick( wxCommandEvent& aEvent )
 {
     search( true );
 }
 
+
 void DIALOG_FIND::onFindPreviousClick( wxCommandEvent& aEvent )
 {
     search( false );
 }
+
 
 void DIALOG_FIND::onSearchAgainClick( wxCommandEvent& aEvent )
 {
     m_upToDate = false;
     search( true );
 }
+
 
 void DIALOG_FIND::search( bool aDirection )
 {
@@ -239,7 +245,8 @@ void DIALOG_FIND::search( bool aDirection )
                     {
                         FP_TEXT* textItem = dynamic_cast<FP_TEXT*>( item );
 
-                        if( textItem && textItem->Matches( m_frame->GetFindReplaceData(), nullptr ) )
+                        if( textItem && textItem->Matches( m_frame->GetFindReplaceData(),
+                                                           nullptr ) )
                         {
                             m_hitList.push_back( fp );
                         }
@@ -262,6 +269,7 @@ void DIALOG_FIND::search( bool aDirection )
                 for( BOARD_ITEM* item : m_frame->GetBoard()->Zones() )
                 {
                     ZONE* zoneItem = dynamic_cast<ZONE*>( item );
+
                     if( zoneItem && zoneItem->Matches( m_frame->GetFindReplaceData(), nullptr ) )
                     {
                         m_hitList.push_back( zoneItem );
@@ -364,7 +372,18 @@ void DIALOG_FIND::search( bool aDirection )
         m_highlightCallback( GetItem() );
 }
 
-void DIALOG_FIND::onClose( wxCommandEvent& aEvent )
+
+void DIALOG_FIND::OnCloseButtonClick( wxCommandEvent& aEvent )
+{
+    wxCloseEvent tmp;
+
+    OnClose( tmp );
+
+    aEvent.Skip();
+}
+
+
+void DIALOG_FIND::OnClose( wxCloseEvent& aEvent )
 {
     FindOptionCase = m_matchCase->GetValue();
     FindOptionWords = m_matchWords->GetValue();
@@ -376,5 +395,5 @@ void DIALOG_FIND::onClose( wxCommandEvent& aEvent )
     FindIncludeMarkers = m_includeMarkers->GetValue();
     FindIncludeReferences = m_includeReferences->GetValue();
 
-    EndModal( 1 );
+    aEvent.Skip();
 }

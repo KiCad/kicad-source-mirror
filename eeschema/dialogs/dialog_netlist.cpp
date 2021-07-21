@@ -181,12 +181,9 @@ public:
     const wxString GetGeneratorTitle()  { return m_textCtrlName->GetValue(); }
     const wxString GetGeneratorTCommandLine() { return m_textCtrlCommand->GetValue(); }
 
-private:
-    /**
-     * Validate info relative to a new netlist plugin
-     */
-    void OnOKClick( wxCommandEvent& event ) override;
+    bool TransferDataFromWindow() override;
 
+private:
     /*
      * Browse plugin files, and set m_CommandStringCtrl field
      */
@@ -208,7 +205,6 @@ BEGIN_EVENT_TABLE( NETLIST_DIALOG, NETLIST_DIALOG_BASE )
     EVT_BUTTON( ID_RUN_SIMULATOR, NETLIST_DIALOG::OnRunExternSpiceCommand )
     EVT_UPDATE_UI( ID_RUN_SIMULATOR, NETLIST_DIALOG::OnRunSpiceButtUI )
 END_EVENT_TABLE()
-
 
 
 NETLIST_PAGE_DIALOG::NETLIST_PAGE_DIALOG( wxNotebook* parent, const wxString& title,
@@ -241,7 +237,6 @@ NETLIST_PAGE_DIALOG::NETLIST_PAGE_DIALOG( wxNotebook* parent, const wxString& ti
     UpperBoxSizer->Add( m_RightBoxSizer, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5 );
     UpperBoxSizer->Add( m_RightOptionsBoxSizer, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5 );
 }
-
 
 
 NETLIST_DIALOG::NETLIST_DIALOG( SCH_EDIT_FRAME* parent ) :
@@ -483,8 +478,8 @@ bool NETLIST_DIALOG::TransferDataFromWindow()
             fileExt = extRE.GetMatch( command, 1 );
 
         title.Printf( _( "%s Export" ), currPage->m_TitleStringCtrl->GetValue().GetData() );
-    }
         break;
+    }
     }
 
     fn.SetExt( fileExt );
@@ -603,7 +598,11 @@ void NETLIST_DIALOG::OnDelGenerator( wxCommandEvent& event )
     m_DefaultNetFmtName = m_PanelNetType[PANELPCBNEW]->GetPageNetFmtName();
 
     WriteCurrentNetlistSetup();
-    EndModal( NET_PLUGIN_CHANGE );
+
+    if( IsQuasiModal() )
+        EndQuasiModal( NET_PLUGIN_CHANGE );
+    else
+        EndDialog( NET_PLUGIN_CHANGE );
 }
 
 
@@ -641,8 +640,10 @@ void NETLIST_DIALOG::OnAddGenerator( wxCommandEvent& event )
     m_PanelNetType[netTypeId] = currPage;
     WriteCurrentNetlistSetup();
 
-    // Close and reopen dialog to rebuild the dialog after changes
-    EndModal( NET_PLUGIN_CHANGE );
+    if( IsQuasiModal() )
+        EndQuasiModal( NET_PLUGIN_CHANGE );
+    else
+        EndDialog( NET_PLUGIN_CHANGE );
 }
 
 
@@ -655,21 +656,24 @@ NETLIST_DIALOG_ADD_GENERATOR::NETLIST_DIALOG_ADD_GENERATOR( NETLIST_DIALOG* pare
 }
 
 
-void NETLIST_DIALOG_ADD_GENERATOR::OnOKClick( wxCommandEvent& event )
+bool NETLIST_DIALOG_ADD_GENERATOR::TransferDataFromWindow()
 {
+    if( !wxDialog::TransferDataFromWindow() )
+        return false;
+
     if( m_textCtrlCommand->GetValue() == wxEmptyString )
     {
-        wxMessageBox( _( "Error. You must provide a command String" ) );
-        return;
+        wxMessageBox( _( "You must provide a netlist generator command string" ) );
+        return false;
     }
 
     if( m_textCtrlName->GetValue() == wxEmptyString )
     {
-        wxMessageBox( _( "Error. You must provide a Title" ) );
-        return;
+        wxMessageBox( _( "You must provide a netlist generator title" ) );
+        return false;
     }
 
-    EndModal( wxID_OK );
+    return true;
 }
 
 
@@ -694,14 +698,14 @@ void NETLIST_DIALOG_ADD_GENERATOR::OnBrowseGenerators( wxCommandEvent& event )
     wxFileName fn( FullFileName );
     wxString ext = fn.GetExt();
 
-    if( ext == wxT("xsl" ) )
-        cmdLine.Printf(wxT("xsltproc -o \"%%O\" \"%s\" \"%%I\""), FullFileName );
-    else if( ext == wxT("exe" ) || ext.IsEmpty() )
-        cmdLine.Printf(wxT("\"%s\" > \"%%O\" < \"%%I\""), FullFileName );
-    else if( ext == wxT("py" ) || ext.IsEmpty() )
-        cmdLine.Printf(wxT("python \"%s\" \"%%I\" \"%%O\""), FullFileName );
+    if( ext == wxT( "xsl" ) )
+        cmdLine.Printf( wxT( "xsltproc -o \"%%O\" \"%s\" \"%%I\"" ), FullFileName );
+    else if( ext == wxT( "exe" ) || ext.IsEmpty() )
+        cmdLine.Printf( wxT( "\"%s\" > \"%%O\" < \"%%I\"" ), FullFileName );
+    else if( ext == wxT( "py" ) || ext.IsEmpty() )
+        cmdLine.Printf( wxT( "python \"%s\" \"%%I\" \"%%O\"" ), FullFileName );
     else
-        cmdLine.Printf(wxT("\"%s\""), FullFileName );
+        cmdLine.Printf( wxT( "\"%s\"" ), FullFileName );
 
     m_textCtrlCommand->SetValue( cmdLine );
 

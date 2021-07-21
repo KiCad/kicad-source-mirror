@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.9.0 Jun  3 2020)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -25,10 +25,10 @@
 #include <wx/radiobut.h>
 #include <wx/textctrl.h>
 #include <wx/statline.h>
+#include <wx/button.h>
 #include <wx/bitmap.h>
 #include <wx/image.h>
 #include <wx/icon.h>
-#include <wx/button.h>
 #include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -69,13 +69,13 @@ class DIALOG_PRINT_GENERIC_BASE : public DIALOG_SHIM
 		virtual void onSetCustomScale( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onPageSetup( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onPrintPreview( wxCommandEvent& event ) { event.Skip(); }
-		virtual void onCloseButton( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onCancelButtonClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onPrintButtonClick( wxCommandEvent& event ) { event.Skip(); }
 
 
 	public:
 
-		DIALOG_PRINT_GENERIC_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Print"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 410,476 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		DIALOG_PRINT_GENERIC_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Print"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 		~DIALOG_PRINT_GENERIC_BASE();
 
 };

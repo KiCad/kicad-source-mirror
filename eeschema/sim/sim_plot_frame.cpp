@@ -221,7 +221,7 @@ SIM_PLOT_FRAME::SIM_PLOT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_toolBar->Realize();
 
 #ifndef wxHAS_NATIVE_TABART
-    // Non-native default tab art has ulgy gradients we don't want
+    // Non-native default tab art has ugly gradients we don't want
     m_workbook->SetArtProvider( new wxAuiSimpleTabArt() );
 #endif
 
@@ -368,7 +368,7 @@ void SIM_PLOT_FRAME::updateTitle()
 }
 
 
-// A small helper struct to handle bitmaps initialisation in menus
+// A small helper struct to handle bitmaps initialization in menus
 struct BM_MENU_INIT_ITEM
 {
     int m_MenuId;
@@ -895,7 +895,7 @@ void SIM_PLOT_FRAME::applyTuners()
 {
     for( auto& tuner : m_tuners )
     {
-        /// @todo no ngspice hardcoding
+        /// @todo no ngspice hard coding
         std::string command( "alter @" + tuner->GetSpiceName()
                 + "=" + tuner->GetValue().ToSpiceString() );
 
@@ -997,7 +997,7 @@ bool SIM_PLOT_FRAME::loadWorkbook( const wxString& aPath )
 
     file.Close();
 
-    // Successfully loading a workbook does not count as modyfying it.
+    // Successfully loading a workbook does not count as modifying it.
     m_workbook->ClrModified();
     return true;
 }
@@ -1512,7 +1512,7 @@ void SIM_PLOT_FRAME::onShowNetlist( wxCommandEvent& event )
 
         void onClose( wxCloseEvent& evt )
         {
-            EndModal( GetReturnCode() );
+            wxPostEvent( this, wxCommandEvent( wxEVT_COMMAND_BUTTON_CLICKED, wxID_CANCEL ) );
         }
 
         NETLIST_VIEW_DIALOG( wxWindow* parent, wxString source) :

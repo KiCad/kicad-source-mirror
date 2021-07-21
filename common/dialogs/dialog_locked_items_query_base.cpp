@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.9.0 Jun  3 2020)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -55,7 +55,7 @@ DIALOG_LOCKED_ITEMS_QUERY_BASE::DIALOG_LOCKED_ITEMS_QUERY_BASE( wxWindow* parent
 	m_overrideBtn = new wxButton( this, wxID_ANY, _("Override Locks"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_overrideBtn->SetToolTip( _("Override locks and apply the operation on all the items selected.\nAny locked items will remain locked after the operation is complete.") );
 
-	bButtonSizer->Add( m_overrideBtn, 0, wxALL, 10 );
+	bButtonSizer->Add( m_overrideBtn, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 10 );
 
 	m_sdbSizer = new wxStdDialogButtonSizer();
 	m_sdbSizerOK = new wxButton( this, wxID_OK );
@@ -64,10 +64,10 @@ DIALOG_LOCKED_ITEMS_QUERY_BASE::DIALOG_LOCKED_ITEMS_QUERY_BASE( wxWindow* parent
 	m_sdbSizer->AddButton( m_sdbSizerCancel );
 	m_sdbSizer->Realize();
 
-	bButtonSizer->Add( m_sdbSizer, 1, wxALL, 5 );
+	bButtonSizer->Add( m_sdbSizer, 1, wxBOTTOM|wxTOP, 5 );
 
 
-	bSizerMain->Add( bButtonSizer, 0, wxEXPAND|wxALL, 5 );
+	bSizerMain->Add( bButtonSizer, 0, wxEXPAND, 5 );
 
 
 	this->SetSizer( bSizerMain );
@@ -77,8 +77,6 @@ DIALOG_LOCKED_ITEMS_QUERY_BASE::DIALOG_LOCKED_ITEMS_QUERY_BASE( wxWindow* parent
 	// Connect Events
 	this->Connect( wxEVT_INIT_DIALOG, wxInitDialogEventHandler( DIALOG_LOCKED_ITEMS_QUERY_BASE::OnInitDlg ) );
 	m_overrideBtn->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_LOCKED_ITEMS_QUERY_BASE::onOverrideLocks ), NULL, this );
-	m_sdbSizerCancel->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_LOCKED_ITEMS_QUERY_BASE::onCancelClick ), NULL, this );
-	m_sdbSizerOK->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_LOCKED_ITEMS_QUERY_BASE::onOkClick ), NULL, this );
 }
 
 DIALOG_LOCKED_ITEMS_QUERY_BASE::~DIALOG_LOCKED_ITEMS_QUERY_BASE()
@@ -86,7 +84,5 @@ DIALOG_LOCKED_ITEMS_QUERY_BASE::~DIALOG_LOCKED_ITEMS_QUERY_BASE()
 	// Disconnect Events
 	this->Disconnect( wxEVT_INIT_DIALOG, wxInitDialogEventHandler( DIALOG_LOCKED_ITEMS_QUERY_BASE::OnInitDlg ) );
 	m_overrideBtn->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_LOCKED_ITEMS_QUERY_BASE::onOverrideLocks ), NULL, this );
-	m_sdbSizerCancel->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_LOCKED_ITEMS_QUERY_BASE::onCancelClick ), NULL, this );
-	m_sdbSizerOK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_LOCKED_ITEMS_QUERY_BASE::onOkClick ), NULL, this );
 
 }

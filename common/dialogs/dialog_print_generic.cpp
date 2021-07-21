@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2018 CERN
- * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2021 KiCad Developers, see AUTHORS.txt for contributors.
  * Author: Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -127,6 +127,7 @@ double DIALOG_PRINT_GENERIC::getScaleValue()
                 wxString::Format( _( "Warning: Scale option set to a very small value.\n"
                                      " Clamped to %f" ), scale ) );
         }
+
         return scale;
     }
 
@@ -268,17 +269,11 @@ void DIALOG_PRINT_GENERIC::onPrintButtonClick( wxCommandEvent& event )
 }
 
 
-void DIALOG_PRINT_GENERIC::onCloseButton( wxCommandEvent& event )
+void DIALOG_PRINT_GENERIC::onCancelButtonClick( wxCommandEvent& event )
 {
     saveSettings();
 
-    if( IsQuasiModal() )
-        EndQuasiModal( wxID_CANCEL );
-
-    if( IsModal() )
-        EndModal( wxID_CANCEL );
-
-    Close();
+    wxPostEvent( this, wxCommandEvent( wxEVT_COMMAND_BUTTON_CLICKED, wxID_CANCEL ) );
 }
 
 

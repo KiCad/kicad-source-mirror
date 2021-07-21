@@ -63,13 +63,15 @@ public:
         m_highlightCallback = aCallback;
     }
 
+protected:
+    void OnClose( wxCloseEvent& event ) override;
+    void OnCloseButtonClick( wxCommandEvent& aEvent ) override;
 
 private:
     void onTextEnter( wxCommandEvent& event ) override;
     void onFindNextClick( wxCommandEvent& event ) override;
     void onFindPreviousClick( wxCommandEvent& event ) override;
     void onSearchAgainClick( wxCommandEvent& event ) override;
-    void onClose( wxCommandEvent& event ) override;
     void search( bool direction );
 
     PCB_BASE_FRAME*                     m_frame;

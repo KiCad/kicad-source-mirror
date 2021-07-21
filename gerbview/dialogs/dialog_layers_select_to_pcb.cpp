@@ -209,7 +209,6 @@ void LAYERS_MAP_DIALOG::initDialog()
     if( config->m_GerberToPcbLayerMapping.size() == 0 )
         m_buttonRetrieve->Enable( false );
 
-
     std::vector<int> gerber2KicadMapping;
 
     // See how many of the loaded Gerbers can be mapped to KiCad layers automatically
@@ -269,7 +268,7 @@ void LAYERS_MAP_DIALOG::normalizeBrdLayersCount()
 void LAYERS_MAP_DIALOG::OnBrdLayersCountSelection( wxCommandEvent& event )
 {
     int id = event.GetSelection();
-    m_exportBoardCopperLayersCount = (id+1) * 2;
+    m_exportBoardCopperLayersCount = ( id + 1 ) * 2;
 }
 
 
@@ -278,6 +277,7 @@ void LAYERS_MAP_DIALOG::OnResetClick( wxCommandEvent& event )
     wxString  msg;
     int       ii;
     LAYER_NUM layer;
+
     for( ii = 0, layer = 0; ii < m_gerberActiveLayersCount; ii++, ++layer )
     {
         m_layersLookUpTable[ii] = UNSELECTED_LAYER;
@@ -347,6 +347,7 @@ void LAYERS_MAP_DIALOG::OnGetSetup( wxCommandEvent& event )
     }
 }
 
+
 void LAYERS_MAP_DIALOG::OnSelectLayer( wxCommandEvent& event )
 {
     int ii;
@@ -408,35 +409,35 @@ void LAYERS_MAP_DIALOG::OnSelectLayer( wxCommandEvent& event )
 }
 
 
-void LAYERS_MAP_DIALOG::OnOkClick( wxCommandEvent& event )
+bool LAYERS_MAP_DIALOG::TransferDataFromWindow()
 {
-    /* Make some test about copper layers:
-     * Board must have enough copper layers to handle selected internal layers
-     */
+    if( !wxDialog::TransferDataFromWindow() )
+        return false;
+
+    // Board must have enough copper layers to handle selected internal layers.
     normalizeBrdLayersCount();
 
     int inner_layer_max = 0;
 
     for( int ii = 0; ii < GERBER_DRAWLAYERS_COUNT; ++ii )
     {
-            if( m_layersLookUpTable[ii] < F_Cu )
-            {
-                if( m_layersLookUpTable[ii ] > inner_layer_max )
-                    inner_layer_max = m_layersLookUpTable[ii];
-            }
+        if( m_layersLookUpTable[ii] < F_Cu )
+        {
+            if( m_layersLookUpTable[ii ] > inner_layer_max )
+                inner_layer_max = m_layersLookUpTable[ii];
+        }
     }
 
-    // inner_layer_max must be less than  (or equal to) the number of
-    // internal copper layers
+    // inner_layer_max must be less than (or equal to the number of internal copper layers
     // internal copper layers = m_exportBoardCopperLayersCount-2
     if( inner_layer_max > m_exportBoardCopperLayersCount-2 )
     {
         wxMessageBox( _("Exported board does not have enough copper layers to handle selected "
                         "inner layers") );
-        return;
+        return false;
     }
 
-    EndModal( wxID_OK );
+    return true;
 }
 
 
@@ -568,6 +569,7 @@ int LAYERS_MAP_DIALOG::findNumAltiumGerbersLoaded( std::vector<int>& aGerber2Kic
     return numAltiumMatches;
 }
 
+
 int LAYERS_MAP_DIALOG::findNumKiCadGerbersLoaded( std::vector<int>& aGerber2KicadMapping )
 {
     // The next comment preserves initializer formatting below it
@@ -688,6 +690,7 @@ int LAYERS_MAP_DIALOG::findNumKiCadGerbersLoaded( std::vector<int>& aGerber2Kica
     // KiCad layer for KiCad Gerbers, or "UNSELECTED_LAYER" for the rest.
     return numKicadMatches;
 }
+
 
 int LAYERS_MAP_DIALOG::findNumX2GerbersLoaded( std::vector<int>& aGerber2KicadMapping )
 {

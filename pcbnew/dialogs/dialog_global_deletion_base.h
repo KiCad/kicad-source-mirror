@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.9.0 Jun 18 2020)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -65,8 +65,6 @@ class DIALOG_GLOBAL_DELETION_BASE : public DIALOG_SHIM
 		virtual void onCheckDeleteDrawings( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onCheckDeleteFootprints( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onCheckDeleteTracks( wxCommandEvent& event ) { event.Skip(); }
-		virtual void onCancelClick( wxCommandEvent& event ) { event.Skip(); }
-		virtual void onOkClick( wxCommandEvent& event ) { event.Skip(); }
 
 
 	public:

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012-2014 Miguel Angel Ajo <miguelangel@nbee.es>
- * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -37,6 +37,7 @@
 #include <footprint_wizard_frame.h>
 
 #include <python/scripting/pcbnew_scripting.h>
+
 
 enum FPGeneratorRowNames
 {
@@ -134,7 +135,8 @@ void DIALOG_FOOTPRINT_WIZARD_LIST::initLists()
     wxString message;
     pcbnewGetScriptsSearchPaths( message );
     m_tcSearchPaths->SetValue( message );
-    // Display info about scripts: unloadable scripts (due to syntax errors is python source)
+
+    // Display info about scripts: unloadable scripts (due to syntax errors is python source).
     pcbnewGetUnloadableScriptNames( message );
 
     if( message.IsEmpty() )
@@ -161,6 +163,7 @@ void DIALOG_FOOTPRINT_WIZARD_LIST::OnCellFpGeneratorClick( wxGridEvent& event )
     int click_row = event.GetRow();
     m_footprintWizard = FOOTPRINT_WIZARD_LIST::GetWizard( click_row );
     m_footprintGeneratorsGrid->SelectRow( event.GetRow(), false );
+
     // Move the grid cursor to the active line, mainly for aesthetic reasons:
     m_footprintGeneratorsGrid->GoToCell( event.GetRow(), FP_GEN_ROW_NUMBER );
 }
@@ -168,8 +171,9 @@ void DIALOG_FOOTPRINT_WIZARD_LIST::OnCellFpGeneratorClick( wxGridEvent& event )
 
 void DIALOG_FOOTPRINT_WIZARD_LIST::OnCellFpGeneratorDoubleClick( wxGridEvent& event )
 {
-    EndModal( wxID_OK );
+    wxPostEvent( this, wxCommandEvent( wxEVT_COMMAND_BUTTON_CLICKED, wxID_OK ) );
 }
+
 
 void DIALOG_FOOTPRINT_WIZARD_LIST::onShowTrace( wxCommandEvent& event )
 {

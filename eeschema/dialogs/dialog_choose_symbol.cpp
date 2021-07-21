@@ -357,12 +357,7 @@ void DIALOG_CHOOSE_SYMBOL::OnUseBrowser( wxCommandEvent& aEvent )
 {
     m_external_browser_requested = true;
 
-    if( IsQuasiModal() )
-        EndQuasiModal( wxID_OK );
-    else if( IsModal() )
-        EndModal( wxID_OK );
-    else
-        wxFAIL_MSG( "Dialog called with neither Modal nor QuasiModal" );
+    wxPostEvent( this, wxCommandEvent( wxEVT_COMMAND_BUTTON_CLICKED, wxID_OK ) );
 }
 
 
@@ -382,12 +377,7 @@ void DIALOG_CHOOSE_SYMBOL::OnCloseTimer( wxTimerEvent& aEvent )
     }
     else
     {
-        if( IsQuasiModal() )
-            EndQuasiModal( wxID_OK );
-        else if( IsModal() )
-            EndModal( wxID_OK );
-        else
-            wxFAIL_MSG( "Dialog called with neither Modal nor QuasiModal" );
+        wxPostEvent( this, wxCommandEvent( wxEVT_COMMAND_BUTTON_CLICKED, wxID_OK ) );
     }
 }
 

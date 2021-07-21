@@ -30,6 +30,7 @@
 #include <gestfich.h>
 #include <pcb_edit_frame.h>
 #include <dialog_helpers.h>
+#include <dialog_shim.h>
 #include <locale_io.h>
 #include <richio.h>
 #include <filter_reader.h>
@@ -62,14 +63,15 @@ enum id_mw_cmd {
 };
 
 
-class MWAVE_POLYGONAL_SHAPE_DLG : public wxDialog
+class MWAVE_POLYGONAL_SHAPE_DLG : public DIALOG_SHIM
 {
 public:
     MWAVE_POLYGONAL_SHAPE_DLG( PCB_EDIT_FRAME* parent, const wxPoint& pos );
     ~MWAVE_POLYGONAL_SHAPE_DLG() { };
 
+    bool TransferDataFromWindow() override;
+
 private:
-    void OnOkClick( wxCommandEvent& event );
     void OnCancelClick( wxCommandEvent& event );
 
     /**
@@ -99,7 +101,6 @@ private:
 
 
 BEGIN_EVENT_TABLE( MWAVE_POLYGONAL_SHAPE_DLG, wxDialog )
-    EVT_BUTTON( wxID_OK, MWAVE_POLYGONAL_SHAPE_DLG::OnOkClick )
     EVT_BUTTON( wxID_CANCEL, MWAVE_POLYGONAL_SHAPE_DLG::OnCancelClick )
     EVT_BUTTON( ID_READ_SHAPE_FILE, MWAVE_POLYGONAL_SHAPE_DLG::ReadDataShapeDescr )
 END_EVENT_TABLE()
@@ -107,8 +108,8 @@ END_EVENT_TABLE()
 
 MWAVE_POLYGONAL_SHAPE_DLG::MWAVE_POLYGONAL_SHAPE_DLG( PCB_EDIT_FRAME* parent,
                                                       const wxPoint&  framepos ) :
-    wxDialog( parent, -1, _( "Complex shape" ), framepos, wxSize( 350, 280 ),
-              wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER )
+    DIALOG_SHIM( parent, -1, _( "Complex shape" ), framepos, wxDefaultSize,
+                 wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER )
 {
     m_Parent = parent;
 
@@ -149,15 +150,19 @@ MWAVE_POLYGONAL_SHAPE_DLG::MWAVE_POLYGONAL_SHAPE_DLG( PCB_EDIT_FRAME* parent,
 void MWAVE_POLYGONAL_SHAPE_DLG::OnCancelClick( wxCommandEvent& event )
 {
     PolyEdges.clear();
-    EndModal( wxID_CANCEL );
+    event.Skip();
 }
 
 
-void MWAVE_POLYGONAL_SHAPE_DLG::OnOkClick( wxCommandEvent& event )
+bool MWAVE_POLYGONAL_SHAPE_DLG::TransferDataFromWindow()
 {
+    if( !wxDialog::TransferDataFromWindow() )
+        return false;
+
     ShapeSize     = m_SizeCtrl->GetValue();
     PolyShapeType = m_ShapeOptionCtrl->GetSelection();
-    EndModal( wxID_OK );
+
+    return true;
 }
 
 
@@ -342,6 +347,7 @@ FOOTPRINT* MICROWAVE_TOOL::createPolygonShape()
             pt.y = -pt.y;   // mirror about X axis
             polyPoints.push_back( pt );
         }
+
         break;
     }
 

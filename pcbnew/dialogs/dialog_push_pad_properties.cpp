@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -63,8 +63,6 @@ DIALOG_PUSH_PAD_PROPERTIES::DIALOG_PUSH_PAD_PROPERTIES( PCB_BASE_FRAME* aParent 
 }
 
 
-/* Update the parameters for the component being edited.
- */
 void DIALOG_PUSH_PAD_PROPERTIES::PadPropertiesAccept( wxCommandEvent& event )
 {
     int returncode = 0;
@@ -80,7 +78,12 @@ void DIALOG_PUSH_PAD_PROPERTIES::PadPropertiesAccept( wxCommandEvent& event )
         m_Pad_Layer_Filter  = m_Pad_Layer_Filter_CB->GetValue();
         m_Pad_Orient_Filter = m_Pad_Orient_Filter_CB->GetValue();
         m_Pad_Type_Filter   = m_Pad_Type_Filter_CB->GetValue();
-        EndModal( returncode );
+
+        if( IsQuasiModal() )
+            EndQuasiModal( returncode );
+        else
+            EndDialog( returncode );
+
         break;
     }
 

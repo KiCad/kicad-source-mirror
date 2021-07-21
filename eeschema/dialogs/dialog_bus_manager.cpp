@@ -33,22 +33,17 @@
 
 
 
-BEGIN_EVENT_TABLE( DIALOG_BUS_MANAGER, DIALOG_SHIM )
-    EVT_BUTTON( wxID_OK, DIALOG_BUS_MANAGER::OnOkClick )
-    EVT_BUTTON( wxID_CANCEL, DIALOG_BUS_MANAGER::OnCancelClick )
-END_EVENT_TABLE()
-
-
 DIALOG_BUS_MANAGER::DIALOG_BUS_MANAGER( SCH_EDIT_FRAME* aParent )
         : DIALOG_SHIM( aParent, wxID_ANY, _( "Bus Definitions" ),
-                       wxDefaultPosition, wxSize( 640, 480 ),
+                       wxDefaultPosition, wxDefaultSize,
                        wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER ),
           m_parent( aParent )
 {
     auto sizer = new wxBoxSizer( wxVERTICAL );
     auto buttons = new wxStdDialogButtonSizer();
+    wxButton* okButton = new wxButton( this, wxID_OK );
 
-    buttons->AddButton( new wxButton( this, wxID_OK ) );
+    buttons->AddButton( okButton );
     buttons->AddButton( new wxButton( this, wxID_CANCEL ) );
     buttons->Realize();
 
@@ -186,6 +181,7 @@ DIALOG_BUS_MANAGER::DIALOG_BUS_MANAGER( SCH_EDIT_FRAME* aParent )
     m_signal_edit->SetHint( _( "Net or Bus Name" ) );
 
     finishDialogSettings();
+    okButton->SetDefault();
 }
 
 
@@ -235,22 +231,6 @@ bool DIALOG_BUS_MANAGER::TransferDataToWindow()
 }
 
 
-void DIALOG_BUS_MANAGER::OnOkClick( wxCommandEvent& aEvent )
-{
-    if( TransferDataFromWindow() )
-    {
-        ( ( SCH_EDIT_FRAME* )GetParent() )->OnModify();
-        EndModal( wxID_OK );
-    }
-}
-
-
-void DIALOG_BUS_MANAGER::OnCancelClick( wxCommandEvent& aEvent )
-{
-    EndModal( wxID_CANCEL );
-}
-
-
 bool DIALOG_BUS_MANAGER::TransferDataFromWindow()
 {
     for( SCH_SCREEN* screen : m_screens )
@@ -259,6 +239,7 @@ bool DIALOG_BUS_MANAGER::TransferDataFromWindow()
     for( const std::shared_ptr<BUS_ALIAS>& alias : m_aliases )
         alias->GetParent()->AddBusAlias( alias );
 
+    ( ( SCH_EDIT_FRAME* )GetParent() )->OnModify();
     return true;
 }
 

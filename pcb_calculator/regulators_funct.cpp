@@ -52,9 +52,9 @@ void PCB_CALCULATOR_FRAME::OnRegulatorResetButtonClick( wxCommandEvent& event )
     m_RegulVrefValue->SetValue( wxT( "3" ) );
     m_RegulVoutValue->SetValue( wxT( "12" ) );
     m_choiceRegType->SetSelection( 0 );
-    m_rbRegulR1->SetValue(1);
-    m_rbRegulR2->SetValue(0);
-    m_rbRegulVout->SetValue(0);
+    m_rbRegulR1->SetValue( 1 );
+    m_rbRegulR2->SetValue( 0 );
+    m_rbRegulVout->SetValue( 0 );
     RegulatorPageUpdate();
 }
 
@@ -107,9 +107,9 @@ void PCB_CALCULATOR_FRAME::OnRegulatorSelection( wxCommandEvent& event )
         m_lastSelectedRegulatorName = item->m_Name;
         m_choiceRegType->SetSelection( item->m_Type );
         wxString value;
-        value.Printf( wxT("%g"), item->m_Vref );
+        value.Printf( wxT( "%g" ), item->m_Vref );
         m_RegulVrefValue->SetValue( value );
-        value.Printf( wxT("%g"), item->m_Iadj );
+        value.Printf( wxT( "%g" ), item->m_Iadj );
         m_RegulIadjValue->SetValue( value );
     }
 
@@ -127,10 +127,8 @@ void PCB_CALCULATOR_FRAME::OnDataFileSelection( wxCommandEvent& event )
     wildcard.Printf( _("PCB Calculator data file (*.%s)|*.%s"),
                      DataFileNameExt, DataFileNameExt );
 
-    wxFileDialog dlg( m_panelRegulators,
-                      _("Select PCB Calculator Data File"),
-                      wxEmptyString, fullfilename,
-                      wildcard, wxFD_OPEN );
+    wxFileDialog dlg( m_panelRegulators, _("Select PCB Calculator Data File"),
+                      wxEmptyString, fullfilename, wildcard, wxFD_OPEN );
 
     if (dlg.ShowModal() == wxID_CANCEL)
         return;
@@ -144,8 +142,8 @@ void PCB_CALCULATOR_FRAME::OnDataFileSelection( wxCommandEvent& event )
 
     if( wxFileExists( fullfilename ) && m_RegulatorList.GetCount() > 0 )  // Read file
     {
-        if( wxMessageBox( _("Do you want to load this file and replace current regulator list?" ) )
-                         != wxID_OK )
+        if( wxMessageBox( _( "Do you want to load this file and replace current regulator list?" ) )
+            != wxID_OK )
             return;
     }
 
@@ -168,16 +166,11 @@ void PCB_CALCULATOR_FRAME::OnDataFileSelection( wxCommandEvent& event )
 void PCB_CALCULATOR_FRAME::OnAddRegulator( wxCommandEvent& event )
 {
     DIALOG_REGULATOR_FORM dlg( this, wxEmptyString );
+
     if( dlg.ShowModal() != wxID_OK )
         return;
 
-    if( !dlg.IsOK() )
-    {
-        wxMessageBox( _("Bad or missing parameters!") );
-        return;
-    }
-
-    REGULATOR_DATA * new_item = dlg.BuildRegulatorFromData();
+    REGULATOR_DATA* new_item = dlg.BuildRegulatorFromData();
 
     // Add new item, if not existing
     if( m_RegulatorList.GetReg( new_item->m_Name ) == nullptr )
@@ -398,5 +391,4 @@ void PCB_CALCULATOR_FRAME::Regulators_WriteConfig( PCB_CALCULATOR_SETTINGS* aCfg
             break;
         }
     }
-
 }

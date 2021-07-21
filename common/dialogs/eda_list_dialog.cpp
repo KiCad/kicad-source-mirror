@@ -29,7 +29,7 @@
 #include <macros.h>
 
 
-// wxWidgets spends *far* too long calcuating column widths (most of it, believe it or
+// wxWidgets spends *far* too long calculating column widths (most of it, believe it or
 // not, in repeatedly creating/destroying a wxDC to do the measurement in).
 // Use default column widths instead.
 static int DEFAULT_SINGLE_COL_WIDTH = 260;
@@ -215,11 +215,12 @@ void EDA_LIST_DIALOG::InsertItems( const std::vector< wxArrayString >& itemList,
 
 void EDA_LIST_DIALOG::onListItemActivated( wxListEvent& event )
 {
-    EndModal( wxID_OK );
+    wxPostEvent( this, wxCommandEvent( wxEVT_COMMAND_BUTTON_CLICKED, wxID_OK ) );
 }
 
 
-/* Sort alphabetically, case insensitive.
+/*
+ * Sort alphabetically, case insensitive.
  */
 static int wxCALLBACK myCompareFunction( wxIntPtr aItem1, wxIntPtr aItem2,
                                          wxIntPtr WXUNUSED( aSortData ) )

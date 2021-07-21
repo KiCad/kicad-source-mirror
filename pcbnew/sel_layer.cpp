@@ -6,7 +6,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -38,7 +38,8 @@
 #define LAYERNAME_COLNUM    2
 
 
-/* classes to display a layer list using a wxGrid.
+/*
+ * Display a layer list using a wxGrid.
  */
 class PCB_LAYER_SELECTOR: public LAYER_SELECTOR
 {
@@ -52,20 +53,19 @@ public:
 protected:
     PCB_BASE_FRAME*  m_frame;
 
-    // Returns true if the layer id is enabled (i.e. is it should be displayed)
+    ///< @return true if the layer id is enabled (i.e. is it should be displayed).
     bool isLayerEnabled( LAYER_NUM aLayer ) const override
     {
         return m_frame->GetBoard()->IsLayerEnabled( PCB_LAYER_ID( aLayer ) );
     }
 
-    // Returns a color index from the layer id
-    // Virtual function
+    // Return the color index from the layer ID.
     COLOR4D getLayerColor( LAYER_NUM aLayer ) const override
     {
         return m_frame->GetColorSettings()->GetColor( aLayer );
     }
 
-    // Returns the name of the layer id
+    // Return the name of the layer ID.
     wxString getLayerName( LAYER_NUM aLayer ) const override
     {
         return m_frame->GetBoard()->GetLayerName( ToLAYER_ID( aLayer ) );
@@ -73,19 +73,11 @@ protected:
 };
 
 
-/*
- * This class display a pcb layers list in a dialog,
- * to select one layer from this list
+/**
+ * Display a PCB layers list in a dialog to select one layer from this list.
  */
-class PCB_ONE_LAYER_SELECTOR : public PCB_LAYER_SELECTOR,
-                               public DIALOG_LAYER_SELECTION_BASE
+class PCB_ONE_LAYER_SELECTOR : public PCB_LAYER_SELECTOR, public DIALOG_LAYER_SELECTION_BASE
 {
-    PCB_LAYER_ID              m_layerSelected;
-    LSET                      m_notAllowedLayersMask;
-    BOARD*                    m_brd;
-    std::vector<PCB_LAYER_ID> m_layersIdLeftColumn;
-    std::vector<PCB_LAYER_ID> m_layersIdRightColumn;
-
 public:
     PCB_ONE_LAYER_SELECTOR( PCB_BASE_FRAME* aParent, BOARD * aBrd, PCB_LAYER_ID aDefaultLayer,
                             LSET aNotAllowedLayersMask );
@@ -102,6 +94,12 @@ private:
     void onCharHook( wxKeyEvent& event );
 
     void buildList();
+
+    PCB_LAYER_ID              m_layerSelected;
+    LSET                      m_notAllowedLayersMask;
+    BOARD*                    m_brd;
+    std::vector<PCB_LAYER_ID> m_layersIdLeftColumn;
+    std::vector<PCB_LAYER_ID> m_layersIdRightColumn;
 };
 
 
@@ -211,14 +209,22 @@ void PCB_ONE_LAYER_SELECTOR::buildList()
 void PCB_ONE_LAYER_SELECTOR::OnLeftGridCellClick( wxGridEvent& event )
 {
     m_layerSelected = m_layersIdLeftColumn[ event.GetRow() ];
-    EndModal( 1 );
+
+    if( IsQuasiModal() )
+        EndQuasiModal( 1 );
+    else
+        EndDialog( 1 );
 }
 
 
 void PCB_ONE_LAYER_SELECTOR::OnRightGridCellClick( wxGridEvent& event )
 {
     m_layerSelected = m_layersIdRightColumn[ event.GetRow() ];
-    EndModal( 2 );
+
+    if( IsQuasiModal() )
+        EndQuasiModal( 2 );
+    else
+        EndDialog( 2 );
 }
 
 
@@ -243,22 +249,11 @@ PCB_LAYER_ID PCB_BASE_FRAME::SelectOneLayer( PCB_LAYER_ID aDefaultLayer, LSET aN
 
 
 /**
- * SELECT_COPPER_LAYERS_PAIR_DIALOG
- * displays a double pcb copper layers list in a dialog,
- * to select a layer pair from these lists
+ * Display a pair PCB copper layers list in a dialog to select a layer pair from these lists.
  */
 class SELECT_COPPER_LAYERS_PAIR_DIALOG: public PCB_LAYER_SELECTOR,
                                         public DIALOG_COPPER_LAYER_PAIR_SELECTION_BASE
 {
-private:
-    BOARD*       m_brd;
-    PCB_LAYER_ID m_frontLayer;
-    PCB_LAYER_ID m_backLayer;
-    int          m_leftRowSelected;
-    int          m_rightRowSelected;
-
-    std::vector<PCB_LAYER_ID> m_layersId;
-
 public:
     SELECT_COPPER_LAYERS_PAIR_DIALOG( PCB_BASE_FRAME* aParent, BOARD* aPcb,
                                       PCB_LAYER_ID aFrontLayer, PCB_LAYER_ID aBackLayer );
@@ -274,6 +269,14 @@ private:
     void OnRightGridCellClick( wxGridEvent& event ) override;
 
     void buildList();
+
+    BOARD*       m_brd;
+    PCB_LAYER_ID m_frontLayer;
+    PCB_LAYER_ID m_backLayer;
+    int          m_leftRowSelected;
+    int          m_rightRowSelected;
+
+    std::vector<PCB_LAYER_ID> m_layersId;
 };
 
 

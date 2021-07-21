@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.9.0 Jun 18 2020)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -20,10 +20,10 @@
 #include <wx/combobox.h>
 #include <wx/sizer.h>
 #include <wx/checkbox.h>
+#include <wx/button.h>
 #include <wx/bitmap.h>
 #include <wx/image.h>
 #include <wx/icon.h>
-#include <wx/button.h>
 #include <wx/statline.h>
 #include <wx/dialog.h>
 
@@ -56,11 +56,12 @@ class DIALOG_FIND_BASE : public DIALOG_SHIM
 		wxStaticText* m_status;
 
 		// Virtual event handlers, overide them in your derived class
+		virtual void OnClose( wxCloseEvent& event ) { event.Skip(); }
 		virtual void onTextEnter( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onFindNextClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onFindPreviousClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onSearchAgainClick( wxCommandEvent& event ) { event.Skip(); }
-		virtual void onClose( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnCloseButtonClick( wxCommandEvent& event ) { event.Skip(); }
 
 
 	public:

@@ -766,7 +766,7 @@ void DIALOG_LIB_EDIT_PIN_TABLE::OnClose( wxCloseEvent& event )
             if( IsQuasiModal() )
                 EndQuasiModal( retval );
             else
-                EndModal( retval );
+                EndDialog( retval );
 
             return;
         }
@@ -781,7 +781,7 @@ void DIALOG_LIB_EDIT_PIN_TABLE::OnClose( wxCloseEvent& event )
     if( IsQuasiModal() )
         EndQuasiModal( retval );
     else
-        EndModal( retval );
+        EndDialog( retval );
 
     return;
 }

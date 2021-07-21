@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.9.0 Jun 18 2020)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -20,10 +20,10 @@
 #include <wx/sizer.h>
 #include <wx/statline.h>
 #include <wx/combobox.h>
+#include <wx/button.h>
 #include <wx/bitmap.h>
 #include <wx/image.h>
 #include <wx/icon.h>
-#include <wx/button.h>
 #include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -49,7 +49,6 @@ class LAYERS_MAP_DIALOG_BASE : public DIALOG_SHIM
 		void _wxFB_OnStoreSetup( wxCommandEvent& event ){ OnStoreSetup( event ); }
 		void _wxFB_OnGetSetup( wxCommandEvent& event ){ OnGetSetup( event ); }
 		void _wxFB_OnResetClick( wxCommandEvent& event ){ OnResetClick( event ); }
-		void _wxFB_OnOkClick( wxCommandEvent& event ){ OnOkClick( event ); }
 
 
 	protected:
@@ -73,7 +72,6 @@ class LAYERS_MAP_DIALOG_BASE : public DIALOG_SHIM
 		virtual void OnStoreSetup( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnGetSetup( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnResetClick( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnOkClick( wxCommandEvent& event ) { event.Skip(); }
 
 
 	public:

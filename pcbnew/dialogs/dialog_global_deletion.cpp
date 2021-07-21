@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -62,7 +62,10 @@ int GLOBAL_EDIT_TOOL::GlobalDeletions( const TOOL_EVENT& aEvent )
     DIALOG_GLOBAL_DELETION dlg( editFrame );
 
     dlg.SetCurrentLayer( frame()->GetActiveLayer() );
-    dlg.ShowModal();
+
+    if( dlg.ShowModal() == wxID_OK )
+        dlg.DoGlobalDeletions();
+
     return 0;
 }
 
@@ -96,7 +99,7 @@ void DIALOG_GLOBAL_DELETION::onCheckDeleteDrawings( wxCommandEvent& event )
 }
 
 
-void DIALOG_GLOBAL_DELETION::doGlobalDeletions()
+void DIALOG_GLOBAL_DELETION::DoGlobalDeletions()
 {
     bool gen_rastnest = false;
 
@@ -107,12 +110,12 @@ void DIALOG_GLOBAL_DELETION::doGlobalDeletions()
 
     if( m_delAll->GetValue() )
     {
-        if( !IsOK( this, _( "Are you sure you want to delete the entire board?" ) ) )
+        if( !IsOK( GetParent(), _( "Are you sure you want to delete the entire board?" ) ) )
             return;
 
         delete_all = true;
     }
-    else if( !IsOK( this, _( "Are you sure you want to delete the selected items?" ) ) )
+    else if( !IsOK( GetParent(), _( "Are you sure you want to delete the selected items?" ) ) )
     {
         return;
     }
@@ -246,6 +249,7 @@ void DIALOG_GLOBAL_DELETION::doGlobalDeletions()
     if( gen_rastnest )
         m_Parent->Compile_Ratsnest( true );
 
-    // There is a chance that some of tracks have changed their nets, so rebuild ratsnest from scratch
+    // There is a chance that some of tracks have changed their nets, so rebuild ratsnest
+    // from scratch.
     m_Parent->GetCanvas()->Refresh();
 }
