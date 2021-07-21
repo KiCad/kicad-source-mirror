@@ -35,13 +35,12 @@
 #include "../3d_rendering/raytracing/shapes2D/round_segment_2d.h"
 #include "../3d_rendering/raytracing/shapes2D/triangle_2d.h"
 #include <board_adapter.h>
-#include <board.h>
 #include <footprint.h>
 #include <pad.h>
 #include <pcb_text.h>
 #include <fp_shape.h>
+#include <board_design_settings.h>
 #include <zone.h>
-#include <string_utils.h>
 #include <fp_text.h>
 #include <convert_basic_shapes_to_polygon.h>
 #include <trigo.h>
@@ -54,7 +53,7 @@
 #include <utility>
 #include <vector>
 #include <wx/log.h>
-
+#include <macros.h>
 
 // These variables are parameters used in addTextSegmToContainer.
 // But addTextSegmToContainer is a call-back function,
@@ -310,7 +309,8 @@ void BOARD_ADAPTER::createPadWithClearance( const PAD* aPad, CONTAINER_2D_BASE* 
                                             const wxSize& aClearanceValue ) const
 {
     SHAPE_POLY_SET poly;
-    wxSize clearance = aClearanceValue;
+    int            maxError = GetBoard()->GetDesignSettings().m_MaxError;
+    wxSize         clearance = aClearanceValue;
 
     // Our shape-based builder can't handle negative or differing x:y clearance values (the
     // former are common for solder paste while the later get generated when a relative paste
@@ -329,7 +329,7 @@ void BOARD_ADAPTER::createPadWithClearance( const PAD* aPad, CONTAINER_2D_BASE* 
 
         PAD dummy( *aPad );
         dummy.SetSize( dummySize );
-        dummy.TransformShapeWithClearanceToPolygon( poly, aLayer, 0, ARC_HIGH_DEF, ERROR_INSIDE );
+        dummy.TransformShapeWithClearanceToPolygon( poly, aLayer, 0, maxError, ERROR_INSIDE );
         clearance = { 0, 0 };
     }
     else
@@ -400,7 +400,7 @@ void BOARD_ADAPTER::createPadWithClearance( const PAD* aPad, CONTAINER_2D_BASE* 
             case SH_ARC:
             {
                 SHAPE_ARC* arc = (SHAPE_ARC*) shape;
-                SHAPE_LINE_CHAIN l = arc->ConvertToPolyline();
+                SHAPE_LINE_CHAIN l = arc->ConvertToPolyline( maxError );
 
                 for( int i = 0; i < l.SegmentCount(); i++ )
                 {
@@ -429,8 +429,7 @@ void BOARD_ADAPTER::createPadWithClearance( const PAD* aPad, CONTAINER_2D_BASE* 
                 break;
 
             default:
-                wxFAIL_MSG( "BOARD_ADAPTER::createPadWithClearance no implementation for "
-                            + SHAPE_TYPE_asString( shape->Type() ) );
+                UNIMPLEMENTED_FOR( SHAPE_TYPE_asString( shape->Type() ) );
                 break;
             }
         }

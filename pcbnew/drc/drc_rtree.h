@@ -93,7 +93,7 @@ public:
             return;
 
         std::vector<SHAPE*> subshapes;
-        std::shared_ptr<SHAPE> shape = aItem->GetEffectiveShape( ToLAYER_ID( aLayer ) );
+        std::shared_ptr<SHAPE> shape = aItem->GetEffectiveShape( aLayer );
         subshapes.clear();
 
         if( shape->HasIndexableSubshapes() )

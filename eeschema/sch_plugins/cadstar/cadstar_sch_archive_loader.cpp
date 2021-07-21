@@ -2064,6 +2064,8 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadShapeVertices( const std::vector<VERTEX>& a
             else
                 arcAngleDeciDeg = NormalizeAngleNeg( arcAngleDeciDeg );
 
+            // JEY TODO: Load as arc...
+
             SHAPE_ARC tempArc( centerPoint, startPoint, arcAngleDeciDeg / 10.0 );
             SHAPE_LINE_CHAIN arcSegments = tempArc.ConvertToPolyline( Millimeter2iu( 0.1 ) );
 
