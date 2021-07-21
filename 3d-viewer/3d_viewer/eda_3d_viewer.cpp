@@ -202,6 +202,13 @@ void EDA_3D_VIEWER_FRAME::setupUIConditions()
     RegisterUIUpdateHandler( ID_RENDER_CURRENT_VIEW,
                              ACTION_CONDITIONS().Check( raytracingCondition ) );
 
+    mgr->SetConditions( EDA_3D_ACTIONS::attributesTHT,
+                        FlagCheck( FL_FP_ATTRIBUTES_NORMAL ) );
+    mgr->SetConditions( EDA_3D_ACTIONS::attributesSMD,
+                        FlagCheck( FL_FP_ATTRIBUTES_NORMAL_INSERT ) );
+    mgr->SetConditions( EDA_3D_ACTIONS::attributesVirtual,
+                        FlagCheck( FL_FP_ATTRIBUTES_VIRTUAL ) );
+
     mgr->SetConditions( EDA_3D_ACTIONS::showBoundingBoxes,
                         FlagCheck( FL_RENDER_OPENGL_SHOW_MODEL_BBOX ) );
     mgr->SetConditions( EDA_3D_ACTIONS::showAxis,

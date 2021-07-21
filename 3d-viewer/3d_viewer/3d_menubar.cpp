@@ -118,7 +118,14 @@ void EDA_3D_VIEWER_FRAME::CreateMenuBar()
 
     prefsMenu->AppendSeparator();
 
+    prefsMenu->Add( EDA_3D_ACTIONS::attributesTHT, ACTION_MENU::CHECK );
+    prefsMenu->Add( EDA_3D_ACTIONS::attributesSMD, ACTION_MENU::CHECK );
+    prefsMenu->Add( EDA_3D_ACTIONS::attributesVirtual, ACTION_MENU::CHECK );
+
+    prefsMenu->AppendSeparator();
+
     prefsMenu->Add( EDA_3D_ACTIONS::showAxis, ACTION_MENU::CHECK );
+    prefsMenu->Add( EDA_3D_ACTIONS::showBoundingBoxes, ACTION_MENU::CHECK );
 
     // Grid submenu
     ACTION_MENU* gridSubmenu = new ACTION_MENU( false, tool );
