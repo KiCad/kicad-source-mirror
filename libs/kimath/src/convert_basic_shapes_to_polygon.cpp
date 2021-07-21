@@ -254,78 +254,91 @@ void CornerListToPolygon( SHAPE_POLY_SET& outline, std::vector<ROUNDED_CORNER>& 
             outline.Append( cur.m_position );
         else
         {
-            VECTOR2I position = cur.m_position;
-            int      radius = cur.m_radius;
-            double   cosNum = (double) incoming.x * outgoing.x + (double) incoming.y * outgoing.y;
-            double   cosDen = (double) incoming.EuclideanNorm() * outgoing.EuclideanNorm();
-            double   angle = acos( cosNum / cosDen );
-            double   tanAngle2 = tan( ( M_PI - angle ) / 2 );
+            VECTOR2I cornerPosition = cur.m_position;
+            int      endAngle, radius = cur.m_radius;
+            double   tanAngle2;
+
+            if( incoming.x == 0 && outgoing.y == 0 || incoming.y == 0 && outgoing.x == 0 )
+            {
+                endAngle = 900;
+                tanAngle2 = 1.0;
+            }
+            else
+            {
+                double cosNum = (double) incoming.x * outgoing.x + (double) incoming.y * outgoing.y;
+                double cosDen = (double) incoming.EuclideanNorm() * outgoing.EuclideanNorm();
+                double angle = acos( cosNum / cosDen );
+                tanAngle2 = tan( ( M_PI - angle ) / 2 );
+                endAngle = RAD2DECIDEG( angle );
+            }
 
             if( aInflate )
             {
                 radius += aInflate;
-                position += incoming.Resize( aInflate / tanAngle2 )
-                          + incoming.Perpendicular().Resize( -aInflate );
+                cornerPosition += incoming.Resize( aInflate / tanAngle2 )
+                                + incoming.Perpendicular().Resize( -aInflate );
             }
 
-            // Ensure 16+ segments per 360° and ensure first & last segment are the same size
-            int    numSegs = std::max( 16, GetArcToSegmentCount( radius, aError, 360.0 ) );
-            int    angDelta = 3600 / numSegs;
-            int    targetAngle = RAD2DECIDEG( angle );
-            int    angPos = ( angDelta + ( targetAngle % angDelta ) ) / 2;
+            // Ensure 16+ segments per 360deg and ensure first & last segment are the same size
+            int numSegs = std::max( 16, GetArcToSegmentCount( radius, aError, 360.0 ) );
+            int angDelta = 3600 / numSegs;
+            int lastSegLen = endAngle % angDelta; // or 0 if last seg length is angDelta
+            int angPos = lastSegLen ? ( angDelta + lastSegLen ) / 2 : angDelta;
 
-            double   centerProjection = radius / tanAngle2;
-            VECTOR2I arcStart = position - incoming.Resize( centerProjection );
-            VECTOR2I arcEnd = position + outgoing.Resize( centerProjection );
+            double   arcTransitionDistance = radius / tanAngle2;
+            VECTOR2I arcStart = cornerPosition - incoming.Resize( arcTransitionDistance );
             VECTOR2I arcCenter = arcStart + incoming.Perpendicular().Resize( radius );
+            VECTOR2I arcEnd, arcStartOrigin;
 
             if( aErrorLoc == ERROR_INSIDE )
             {
+                arcEnd = SEG( cornerPosition, arcCenter ).ReflectPoint( arcStart );
+                arcStartOrigin = arcStart - arcCenter;
                 outline.Append( arcStart );
-                VECTOR2I zeroRef = arcStart - arcCenter;
-
-                for( ; angPos < targetAngle; angPos += angDelta )
-                {
-                    VECTOR2I pt = zeroRef;
-                    RotatePoint( pt, -angPos );
-                    outline.Append( pt + arcCenter );
-                }
-
-                outline.Append( arcEnd );
             }
             else
             {
                 // The outer radius should be radius+aError, recalculate because numSegs is clamped
-                int      actualDeltaRadius = CircleToEndSegmentDeltaRadius( radius, numSegs );
-                int      radiusExtend = GetCircleToPolyCorrection( actualDeltaRadius );
-                VECTOR2I arcExStart = arcStart + incoming.Perpendicular().Resize( -radiusExtend );
-                VECTOR2I arcExEnd = arcEnd + outgoing.Perpendicular().Resize( -radiusExtend );
+                int actualDeltaRadius = CircleToEndSegmentDeltaRadius( radius, numSegs );
+                int radiusExtend = GetCircleToPolyCorrection( actualDeltaRadius );
+                arcStart += incoming.Perpendicular().Resize( -radiusExtend );
+                arcStartOrigin = arcStart - arcCenter;
 
-                // A larger radius will create "ears", so we intersect the first and last segment
-                // of the rounded corner with the non-rounded outline
-                SEG      inSeg( position - incoming, position );
-                SEG      outSeg( position, position + outgoing );
-                VECTOR2I zeroRef = arcExStart - arcCenter;
-                VECTOR2I pt = zeroRef;
+                // To avoid "ears", we only add segments crossing/within the non-rounded outline
+                // Note: outlineIn is short and must be treated as defining an infinite line
+                SEG      outlineIn( cornerPosition - incoming, cornerPosition );
+                VECTOR2I prevPt = arcStart;
+                arcEnd = cornerPosition; // default if no points within the outline are found
 
-                RotatePoint( pt, -angPos );
-                pt += arcCenter;
-                OPT<VECTOR2I> intersect = inSeg.Intersect( SEG( arcExStart, pt ) );
-                outline.Append( intersect.is_initialized() ? intersect.get() : arcStart );
-                outline.Append( pt );
-                angPos += angDelta;
-
-                for( ; angPos < targetAngle; angPos += angDelta )
+                while( angPos < endAngle )
                 {
-                    pt = zeroRef;
+                    VECTOR2I pt = arcStartOrigin;
                     RotatePoint( pt, -angPos );
                     pt += arcCenter;
-                    outline.Append( pt );
-                }
+                    angPos += angDelta;
 
-                intersect = outSeg.Intersect( SEG( pt, arcExEnd ) );
-                outline.Append( intersect.is_initialized() ? intersect.get() : arcEnd );
+                    if( outlineIn.Side( pt ) > 0 )
+                    {
+                        VECTOR2I intersect = outlineIn.IntersectLines( SEG( prevPt, pt ) ).get();
+                        outline.Append( intersect );
+                        outline.Append( pt );
+                        arcEnd = SEG( cornerPosition, arcCenter ).ReflectPoint( intersect );
+                        break;
+                    }
+
+                    endAngle -= angDelta; // if skipping first, also skip last
+                    prevPt = pt;
+                }
             }
+
+            for( ; angPos < endAngle; angPos += angDelta )
+            {
+                VECTOR2I pt = arcStartOrigin;
+                RotatePoint( pt, -angPos );
+                outline.Append( pt + arcCenter );
+            }
+
+            outline.Append( arcEnd );
         }
 
         incoming = outgoing;
