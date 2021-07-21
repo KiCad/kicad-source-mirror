@@ -6,17 +6,17 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
-"PO-Revision-Date: 2021-07-10 17:36+0000\n"
+"PO-Revision-Date: 2021-07-23 08:32+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
-"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/master-"
-"source/pl/>\n"
+"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/"
+"master-source/pl/>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.8-dev\n"
+"X-Generator: Weblate 4.7.2-dev\n"
 "X-Poedit-Basepath: ../../../kicad-source-mirror\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SearchPath-0: .\n"
@@ -175,19 +175,17 @@ msgid "Simplifying copper layers polygons"
 msgstr "Upraszczanie poligonów na warstwach miedzi"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:767
-#, fuzzy
 msgid "Simplifying polygons on F_Cu"
-msgstr "Upraszczanie poligonów na warstwach miedzi"
+msgstr "Upraszczanie poligonów na warstwie górnej"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:778
-#, fuzzy
 msgid "Simplifying polygons on B_Cu"
-msgstr "Upraszczanie poligonów na warstwach miedzi"
+msgstr "Upraszczanie poligonów na warstwie dolnej"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:808
-#, fuzzy, c-format
+#, c-format
 msgid "Simplifying %d copper layers"
-msgstr "Upraszczanie poligonów na warstwach miedzi"
+msgstr "Upraszczanie %d poligonów na warstwach miedzi"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:847
 msgid "Simplify holes contours"
@@ -202,9 +200,8 @@ msgid "Build BVH for holes and vias"
 msgstr "Tworzenie BVH dla otworów i przelotek"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:410
-#, fuzzy
 msgid "Your OpenGL version is not supported. Minimum required is 1.5."
-msgstr "Twoja wersja OpenGL nie jest obsługiwana. Wymagane minimum to 1.5"
+msgstr "Twoja wersja OpenGL nie jest obsługiwana. Wymagane minimum to 1.5."
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:531
 #, c-format
@@ -1418,14 +1415,14 @@ msgid "Cannot make path '%s' absolute with respect to '%s'."
 msgstr "Nie można określić ścieżki '%s' jako bezwzględnej wobec '%s'."
 
 #: common/common.cpp:339
-#, fuzzy, c-format
+#, c-format
 msgid "Output directory '%s' created."
-msgstr "Folder wyjściowy '%s' został utworzony.\n"
+msgstr "Folder wyjściowy '%s' został utworzony."
 
 #: common/common.cpp:348
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot create output directory '%s'."
-msgstr "Nie można utworzyć folderu wyjściowego '%s'.\n"
+msgstr "Nie można utworzyć folderu wyjściowego '%s'."
 
 #: common/common.cpp:620
 msgid "This operating system is not supported by KiCad and its dependencies."
@@ -3696,19 +3693,19 @@ msgid "Could not use OpenGL"
 msgstr "Nie można wykorzystać OpenGL"
 
 #: common/drawing_sheet/drawing_sheet_reader.cpp:890
-#, fuzzy, c-format
+#, c-format
 msgid "Drawing sheet '%s' not found."
-msgstr "Plik z rysunkiem '%s' nie został znaleziony."
+msgstr "Arkusz z rysunkiem '%s' nie został znaleziony."
 
 #: common/drawing_sheet/drawing_sheet_reader.cpp:900
-#, fuzzy, c-format
+#, c-format
 msgid "Drawing sheet '%s' could not be opened."
-msgstr "Plik z rysunkiem '%s' nie został znaleziony."
+msgstr "Arkusz z rysunkiem '%s' nie mógł zostać otwarty."
 
 #: common/drawing_sheet/drawing_sheet_reader.cpp:913
-#, fuzzy, c-format
+#, c-format
 msgid "Drawing sheet '%s' was not fully read."
-msgstr "Plik '%s' nie został w pełni odczytany."
+msgstr "Arkusz z rysunkiem '%s' nie został w pełni odczytany."
 
 #: common/drawing_sheet/ds_data_item.cpp:370
 #: common/drawing_sheet/ds_draw_item.cpp:122 common/eda_text.cpp:667
@@ -5165,14 +5162,12 @@ msgid "Hidden text"
 msgstr "Tekst ukryty"
 
 #: common/layer_id.cpp:149
-#, fuzzy
 msgid "SMD pads front"
-msgstr "Pola lutownicze na stronie górnej"
+msgstr "Pola SMD na stronie górnej"
 
 #: common/layer_id.cpp:150
-#, fuzzy
 msgid "SMD pads back"
-msgstr "Pole lutownicze na stronie dolnej"
+msgstr "Pola SMD na stronie dolnej"
 
 #: common/layer_id.cpp:151
 msgid "Through-hole pads"
@@ -5353,14 +5348,12 @@ msgid "The KiCad language file for this language is not installed."
 msgstr "Plik z tłumaczeniem dla tego języka nie jest zainstalowany."
 
 #: common/plugins/altium/altium_parser.cpp:116
-#, fuzzy
 msgid ""
 "Missing null byte at end of property list. Imported data might be malformed "
 "or missing."
 msgstr ""
-"W przypadku importu Altium zakłada się, iż na końcu listy właściwości jest "
-"pusty bajt. Z uwagi na jego brak, importowane dane mogą być zniekształcone "
-"lub wystąpić ich braki."
+"Brak znacznika NULL na końcu listy właściwości. Zaimportowane dane mogą być "
+"zniekształcone lub może ich brakować."
 
 #: common/plugins/altium/altium_parser.cpp:243
 #, c-format
@@ -5435,24 +5428,21 @@ msgid "Failed to output data."
 msgstr "Nie udało się wygenerować danych."
 
 #: common/project/project_archiver.cpp:91
-#, fuzzy
 msgid "Could not open archive file."
-msgstr "Nie można otworzyć pliku archiwum\n"
+msgstr "Nie można otworzyć pliku archiwum."
 
 #: common/project/project_archiver.cpp:100
-#, fuzzy
 msgid "Invalid archive file format."
-msgstr "Nieprawidłowy format pliku archiwum\n"
+msgstr "Nieprawidłowy format pliku archiwum."
 
 #: common/project/project_archiver.cpp:111
-#, fuzzy, c-format
+#, c-format
 msgid "Extracting file '%s'."
-msgstr "Rozpakowywanie pliku '%s'.\n"
+msgstr "Rozpakowywanie pliku '%s'."
 
 #: common/project/project_archiver.cpp:151
-#, fuzzy
 msgid "Error extracting file!"
-msgstr "Błąd podczas rozpakowywania pliku!\n"
+msgstr "Błąd podczas rozpakowywania pliku!"
 
 #: common/project/project_archiver.cpp:208 eeschema/dialogs/dialog_erc.cpp:760
 #: eeschema/dialogs/dialog_plot_schematic.cpp:518
@@ -5485,21 +5475,20 @@ msgid "Failed to create file '%s'."
 msgstr "Nie można było utworzyć pliku '%s'."
 
 #: common/project/project_archiver.cpp:254
-#, fuzzy, c-format
+#, c-format
 msgid "Archived file '%s'."
-msgstr "Plik archiwum '%s'.\n"
+msgstr "Plik archiwum '%s'."
 
 #: common/project/project_archiver.cpp:264
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to archive file '%s'."
-msgstr "Nie można zarchiwizować pliku '%s'.\n"
+msgstr "Nie można zarchiwizować pliku '%s'."
 
 #: common/project/project_archiver.cpp:290
-#, fuzzy, c-format
+#, c-format
 msgid "Zip archive '%s' created (%s uncompressed, %s compressed)."
 msgstr ""
-"Archiwum ZIP '%s' zostało utworzone (%s nieskompresowane, %s "
-"skompresowane).\n"
+"Archiwum ZIP '%s' zostało utworzone (%s nieskompresowane, %s skompresowane)."
 
 #: common/rc_item.cpp:350
 msgid "Excluded "
@@ -7226,24 +7215,24 @@ msgid "%d duplicate time stamps were found and replaced."
 msgstr "Zostało znalezionych i zamienionych %d powielonych odcisków czasowych."
 
 #: eeschema/annotate.cpp:284
-#, fuzzy, c-format
+#, c-format
 msgid "Updated %s (unit %s) from %s to %s."
-msgstr "Uaktualniono %s (część %s) z %s do %s"
+msgstr "Uaktualniono %s (część %s) z %s do %s."
 
 #: eeschema/annotate.cpp:292
-#, fuzzy, c-format
+#, c-format
 msgid "Updated %s from %s to %s."
-msgstr "Uaktualnione %s z %s do %s"
+msgstr "Uaktualnione %s z %s do %s."
 
 #: eeschema/annotate.cpp:302
-#, fuzzy, c-format
+#, c-format
 msgid "Annotated %s (unit %s) as %s."
-msgstr "Ponumerowano %s (część %s) jako %s"
+msgstr "Ponumerowano %s (część %s) jako %s."
 
 #: eeschema/annotate.cpp:309
-#, fuzzy, c-format
+#, c-format
 msgid "Annotated %s as %s."
-msgstr "Ponumerowane %s jako %s"
+msgstr "Ponumerowane %s jako %s."
 
 #: eeschema/annotate.cpp:326
 msgid "Annotation complete."
@@ -8553,9 +8542,9 @@ msgid "Violation Severity"
 msgstr "Poziom naruszenia"
 
 #: eeschema/dialogs/dialog_erc.cpp:755 pcbnew/dialogs/dialog_gendrill.cpp:471
-#, fuzzy, c-format
+#, c-format
 msgid "Report file '%s' created."
-msgstr "Plik raportu '%s' został utworzony\n"
+msgstr "Plik raportu '%s' został utworzony."
 
 #: eeschema/dialogs/dialog_erc.cpp:773
 #, c-format
@@ -9467,9 +9456,8 @@ msgid "Set color to transparent to use Schematic Editor colors."
 msgstr "Ustaw kolor przeźroczysty by użyć kolorów edytora schematów."
 
 #: eeschema/dialogs/dialog_line_wire_bus_properties_base.h:67
-#, fuzzy
 msgid "Line, Wire & Bus Properties"
-msgstr "Właściwości Segmentów"
+msgstr "Właściwości linii, połączeń i magistral"
 
 #: eeschema/dialogs/dialog_migrate_buses.cpp:102
 msgid "Conflicting Labels"
@@ -11222,9 +11210,8 @@ msgid "Add Field..."
 msgstr "Dodaj pole..."
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.h:76
-#, fuzzy
 msgid "Symbol Fields Table"
-msgstr "Pola symbolu"
+msgstr "Tabela z polami symbolu"
 
 #: eeschema/dialogs/dialog_symbol_properties.cpp:139
 msgid "Base Name"
@@ -13394,10 +13381,9 @@ msgid "Cannot open file '%s'."
 msgstr "Nie można otworzyć pliku '%s'."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:315
-#, fuzzy, c-format
+#, c-format
 msgid "Storage file not fully parsed (%d bytes remaining)."
-msgstr ""
-"Zapisany plik nie został przetworzony w pełni ponieważ pozostało %d bajtów."
+msgstr "Zapisany plik nie został przetworzony w pełni (pozostało %d bajtów)."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:487
 #, c-format
@@ -13405,9 +13391,9 @@ msgid "Unknown Record id: %d."
 msgstr "Nieznany rekord id: %d."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:604
-#, fuzzy, c-format
+#, c-format
 msgid "Pin's owner (%d) not found."
-msgstr "Nazwa pliku właściciela (%d) nie została znaleziona."
+msgstr "Właściciel pinu (%d) nie został znaleziony."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:649
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1833
@@ -13427,9 +13413,9 @@ msgid "Pin has unexpected inner edge type."
 msgstr "Pin ma nieoczekiwany typ krawędzi wewnętrznej."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:831
-#, fuzzy, c-format
+#, c-format
 msgid "Label's owner (%d) not found."
-msgstr "Nazwa pliku właściciela (%d) nie została znaleziona."
+msgstr "Właściciel etykiety (%d) nie został znaleziony."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:948
 #, c-format
@@ -13439,44 +13425,43 @@ msgstr ""
 "punktów."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1005
-#, fuzzy, c-format
+#, c-format
 msgid "Bezier's owner (%d) not found."
-msgstr "Właściciel arkusza (%d) nie został znaleziony."
+msgstr "Właściciel krzywej Bezier-a (%d) nie został znaleziony."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1091
-#, fuzzy, c-format
+#, c-format
 msgid "Polyline's owner (%d) not found."
-msgstr "Nazwa pliku właściciela (%d) nie została znaleziona."
+msgstr "Właściciel lini łamanej (%d) nie został znaleziony."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1150
-#, fuzzy, c-format
+#, c-format
 msgid "Polygon's owner (%d) not found."
-msgstr "Nazwa pliku właściciela (%d) nie została znaleziona."
+msgstr "Właściciel polygonu (%d) nie został znaleziony."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1231
-#, fuzzy, c-format
+#, c-format
 msgid "Rounded rectangle's owner (%d) not found."
-msgstr "Właściciel arkusza (%d) nie został znaleziony."
+msgstr "Właściciel zaokrąglonego prostokąta (%d) nie został znaleziony."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1268
-#, fuzzy
 msgid "Arc drawing on schematic not currently supported."
-msgstr "Żaden schemat nie jest obecnie edytowany."
+msgstr "Rysowanie łuków na schemacie nie jest obecnie obsługiwane."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1278
-#, fuzzy, c-format
+#, c-format
 msgid "Arc's owner (%d) not found."
-msgstr "Właściciel arkusza (%d) nie został znaleziony."
+msgstr "Właściciel łuku (%d) nie został znaleziony."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1339
-#, fuzzy, c-format
+#, c-format
 msgid "Line's owner (%d) not found."
-msgstr "Nazwa pliku właściciela (%d) nie została znaleziona."
+msgstr "Właściciel linii (%d) nie został znaleziony."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1410
-#, fuzzy, c-format
+#, c-format
 msgid "Rectangle's owner (%d) not found."
-msgstr "Właściciel arkusza (%d) nie został znaleziony."
+msgstr "Właściciel prostokąta (%d) nie został znaleziony."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1478
 #, c-format
@@ -13493,9 +13478,9 @@ msgid "Power symbol creates a global label with name '%s'"
 msgstr "Symbol zasilania tworzy globalną etykietę z nazwą '%s'"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1882
-#, fuzzy, c-format
+#, c-format
 msgid "Port %s has no connections."
-msgstr "Połączenia pól lutowniczych:"
+msgstr "Port %s nie ma połączeń."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2073
 #, c-format
@@ -13514,29 +13499,29 @@ msgid "File not found %s."
 msgstr "Nie znaleziono pliku %s."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2185
-#, fuzzy, c-format
+#, c-format
 msgid "Sheetname's owner (%d) not found."
-msgstr "Właściciel arkusza (%d) nie został znaleziony."
+msgstr "Właściciel nazwy arkusza (%d) nie został znaleziony."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2212
-#, fuzzy, c-format
+#, c-format
 msgid "Filename's owner (%d) not found."
-msgstr "Nazwa pliku właściciela (%d) nie została znaleziona."
+msgstr "Właściciel nazwy pliku (%d) nie został znaleziony."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2250
-#, fuzzy, c-format
+#, c-format
 msgid "Designator's owner (%d) not found."
-msgstr "Właściciel arkusza (%d) nie został znaleziony."
+msgstr "Właściciel oznaczenia (%d) nie został znaleziony."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2405
-#, fuzzy, c-format
+#, c-format
 msgid "Implementation's owner (%d) not found."
-msgstr "Nazwa pliku właściciela (%d) nie została znaleziona."
+msgstr "Nie znaleziono właściciela implementacji (%d)."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2415
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint's owner (%d) not found."
-msgstr "Nazwa pliku właściciela (%d) nie została znaleziona."
+msgstr "Właściciel footprintu (%d) nie został znaleziony."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:71
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:69
@@ -14095,7 +14080,6 @@ msgid "Syntax Help"
 msgstr "Pomoc dotycząca składni"
 
 #: eeschema/sch_text_help_md.h:2
-#, fuzzy
 msgid ""
 "<table>\n"
 "    <tr>\n"
@@ -14296,8 +14280,8 @@ msgstr ""
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>${oznaczenie:pole}</samp></td>\n"
 "        <td></td>\n"
-"        <td>&nbsp;<br><samp><i>wartość pola</i> of symbol <i>oznaczenie</i></"
-"samp></td>\n"
+"        <td>&nbsp;<br><samp><i>wartość pola</i> of symbol "
+"<i>oznaczenie</i></samp></td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>${R3:VALUE}</samp></td>\n"
@@ -14312,8 +14296,8 @@ msgstr ""
 "    </tr>\n"
 "    <tr>\n"
 "        <th>Definicja Magistrali</th>\n"
-"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
-"&nbsp;&nbsp;&nbsp;</th>\n"
+"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp"
+";&nbsp;&nbsp;</th>\n"
 "        <th>Wynikowe sieci</th>\n"
 "    </tr>\n"
 "    <tr>\n"
@@ -14330,9 +14314,9 @@ msgstr ""
 "        <td><br></td>\n"
 "    </tr>\n"
 "    <tr>\n"
-"\t\t<td>&nbsp;<br><samp>{sieć1 sieć2 ...}</samp></td>\n"
-"\t\t<td></td>\n"
-"\t\t<td>&nbsp;<br><samp>sieć1, sieć2, ...</samp></td>\n"
+"        <td>&nbsp;<br><samp>{sieć1 sieć2 ...}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>sieć1, sieć2, ...</samp></td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>{SCL SDA}</samp></td>\n"
@@ -14364,11 +14348,16 @@ msgstr ""
 "        <td>&nbsp;<br><samp>MEM{D_{[1..2]} ~LATCH}</samp></td>\n"
 "        <td></td>\n"
 "        <td> <samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
-"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; &nbsp;&nbsp;&nbsp;"
-"&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> <samp>MEM.D<sub>1</"
-"sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
+"&nbsp;&nbsp;&nbsp;&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> "
+"<samp>MEM.D<sub>1</sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
 "    </tr>\n"
 "</table>\n"
+"<p></p>\n"
+"<p></p>\n"
+"<i>Należy mieć na uwadze, iż znaczniki mają pierwszeństwo przed definicjami "
+"magistrali.</i>\n"
+"\n"
 
 #: eeschema/sch_validators.cpp:102
 #, c-format
@@ -14446,17 +14435,16 @@ msgid "Field Validation Error"
 msgstr "Błąd walidacji zawartości pola"
 
 #: eeschema/sch_validators.cpp:218
-#, fuzzy
 msgid "Signal name contains '[' or ']' but is not a valid vector bus name."
 msgstr ""
 "Nazwa sygnału zawiera znaki '[' lub ']' ale nie jest prawidłową nazwą "
-"magistrali"
+"magistrali."
 
 #: eeschema/sch_validators.cpp:227
-#, fuzzy
 msgid "Signal name contains '{' and '}' but is not a valid group bus name"
 msgstr ""
-"Nazwa sygnału zawiera znaki '{' lub '}' ale nie jest prawidłową nazwą grupy"
+"Nazwa sygnału zawiera znaki '{' lub '}' ale nie jest prawidłową nazwą grupy "
+"magistrali"
 
 #: eeschema/sheet.cpp:63
 #, c-format
@@ -14470,7 +14458,7 @@ msgstr ""
 "innym miejscu hierarchii."
 
 #: eeschema/sheet.cpp:84
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The schematic '%s' has not had its symbol library links remapped to the "
 "symbol library table.  The project this schematic belongs to must first be "
@@ -16618,9 +16606,9 @@ msgstr "Edytuj pole %s"
 
 #: eeschema/tools/sch_edit_tool.cpp:1085
 #: eeschema/tools/symbol_editor_edit_tool.cpp:525
-#, fuzzy, c-format
+#, c-format
 msgid "Edit '%s' Field"
-msgstr "Edytuj pole %s"
+msgstr "Edytuj pole '%s'"
 
 #: eeschema/tools/sch_edit_tool.cpp:1640
 msgid "There are no unreferenced pins in this sheet to remove."
@@ -20460,29 +20448,27 @@ msgid "PrePreg"
 msgstr "Przekładka"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:175
-#, fuzzy, c-format
+#, c-format
 msgid "Enter board thickness in %s"
-msgstr "szerokość i grubość w milsach"
+msgstr "Wpisz grubość płytki w %s"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:178
 #, c-format
 msgid "Enter expected board thickness in %s (min value %s)"
-msgstr ""
+msgstr "Wpisz spodziewaną grubość płytki w %s (min wartość %s)"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:182
-#, fuzzy
 msgid "Adjust not locked dielectric thickness layers"
-msgstr "Zaktualizuj grubość dielektryka z na podstawie grubości płytki"
+msgstr "Dostosuj niezablokowane grubości warstw dielektryka"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:193
 #, c-format
 msgid "Too small value (min value %s %s). Aborted"
-msgstr ""
+msgstr "Za mała wartość (min wartość %s %s). Przerwano"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:213
-#, fuzzy
 msgid "All dielectric  thickness layers are locked"
-msgstr "Zaktualizuj grubość dielektryka z na podstawie grubości płytki"
+msgstr "Wszystkie grubości warstw dielektryka są zablokowane"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:279
 #, c-format
@@ -20661,9 +20647,8 @@ msgid "Board thickness from stackup:"
 msgstr "Bieżąca grubość ze stosu warstw:"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:139
-#, fuzzy
 msgid "Adjust Dielectric Thickness"
-msgstr "Ustawia grubość dielektryka"
+msgstr "Dostosuj grubość dielektryka"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:46
 msgid "ENIG"
@@ -21716,12 +21701,8 @@ msgid "No layer selected."
 msgstr "Nie wybrano warstwy."
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:868
-#, fuzzy
 msgid "Selecting <no net> will create an isolated copper island."
-msgstr ""
-"Brak podłączonej sieci\n"
-"spowoduje, że powstaną\n"
-"izolowane strefy."
+msgstr "Wybór <brak sieci> spowoduje, że powstaną izolowane strefy."
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:47
 msgid ""
@@ -21732,9 +21713,8 @@ msgstr ""
 "Tylko nazwy sieci odpowiadające masce są wyświetlane."
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:51
-#, fuzzy
 msgid "Hide auto-generated net names"
-msgstr "Nieprawidłowa alternatywna nazwa pinu"
+msgstr "Ukryj automatycznie wygenerowane nazwy sieci"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:55
 msgid "Sort nets by pad count"
@@ -26969,6 +26949,9 @@ msgid ""
 "to approximate it.  Smaller values produce smoother graphics at the expense "
 "of performance."
 msgstr ""
+"Maksymalne dozwolone odchylenie między prawdziwym łukiem lub okręgiem a "
+"segmentami używanymi do jego aproksymacji.  Mniejsze wartości zapewniają "
+"płynniejszą grafikę kosztem wydajności."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:86
 #, c-format
@@ -27036,6 +27019,9 @@ msgid ""
 "net.  If set, this is an absolute minimum which cannot be reduced by "
 "netclasses, custom rules, or other settings."
 msgstr ""
+"Minimalny odstęp między elementami z miedzi, które nie należą do tej samej "
+"sieci.  Jeśli jest ustawione, jest to absolutne minimum, którego nie można "
+"zmniejszyć za pomocą klas sieci, reguł niestandardowych lub innych ustawień."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:207
 msgid "Minimum track width:"
@@ -27046,6 +27032,9 @@ msgid ""
 "The minimum track width.  If set, this is an absolute minimum and cannot be "
 "reduced by netclasses, custom rules, or other settings."
 msgstr ""
+"Minimalna szerokość ścieżki.  Jeśli jest ustawiona, jest to absolutne "
+"minimum i nie może być redukowane przez klasy sieci, reguły niestandardowe "
+"lub inne ustawienia."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:224
 msgid "Minimum annular width:"
@@ -27056,6 +27045,9 @@ msgid ""
 "The minimum annular ring width.  If set, this is an absolute minimum and "
 "cannot be reduced by netclasses, custom rules, or other settings."
 msgstr ""
+"Minimalna szerokość pierścienia.  Jeśli jest ustawiona, jest to absolutne "
+"minimum i nie może być redukowane przez klasy sieci, reguły niestandardowe "
+"lub inne ustawienia."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:240
 msgid "Minimum via diameter:"
@@ -27066,6 +27058,9 @@ msgid ""
 "The minimum via diameter.  If set, this is an absolute minimum and cannot be "
 "reduced by netclasses, custom rules, or other settings."
 msgstr ""
+"Minimalna średnica przelotki.  Jeśli jest ustawiona, jest to absolutne "
+"minimum i nie może być redukowane przez klasy sieci, reguły niestandardowe "
+"lub inne ustawienia."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:256
 msgid "Copper hole clearance:"
@@ -27077,6 +27072,9 @@ msgid ""
 "set, this is an absolute minimum and cannot be reduced by custom rules or "
 "other settings."
 msgstr ""
+"Minimalny prześwit między otworem a niepowiązanym elementem z miedzi.  Jeśli "
+"jest ustawione, jest to absolutne minimum i nie można go zmniejszyć za "
+"pomocą reguł niestandardowych lub innych ustawień."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:272
 msgid "Copper edge clearance:"
@@ -27088,6 +27086,9 @@ msgid ""
 "this is an absolute minimum and cannot be reduced by custom rules or other "
 "settings."
 msgstr ""
+"Minimalny odstęp między krawędzią płyty a dowolnym elementem z miedzi.  "
+"Jeśli jest ustawione, jest to absolutne minimum i nie można go zmniejszyć za "
+"pomocą reguł niestandardowych lub innych ustawień."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:297
 msgid "Holes"
@@ -27102,6 +27103,9 @@ msgid ""
 "The minimum through-hole size.  If set, this is an absolute minimum and "
 "cannot be reduced by netclasses, custom rules or other settings."
 msgstr ""
+"Minimalny rozmiar otworu przelotowego.  Jeśli jest ustawiona, jest to "
+"absolutne minimum i nie może być redukowane przez klasy sieci, reguły "
+"niestandardowe lub inne ustawienia."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:329
 msgid "Hole to hole clearance:"
@@ -27113,6 +27117,10 @@ msgid ""
 "absolute minimum and cannot be reduced by custom rules or other settings. "
 "(Note: does not apply to milled holes.)"
 msgstr ""
+"Minimalny prześwit między dwoma wywierconymi otworami.  Jeśli jest "
+"ustawione, jest to absolutne minimum i nie można go zmniejszyć za pomocą "
+"reguł niestandardowych lub innych ustawień. (Uwaga: Nie dotyczy otworów "
+"frezowanych.)"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:354
 msgid "uVias"
@@ -27127,6 +27135,9 @@ msgid ""
 "The minimum diameter for micro-vias.  If set, this is an absolute minimum "
 "and cannot be reduced by netclasses, custom rules, or other settings."
 msgstr ""
+"Minimalna średnica mikroprzelotek.  Jeśli jest ustawiona, jest to absolutne "
+"minimum i nie może być redukowane przez klasy sieci, reguły niestandardowe "
+"lub inne ustawienia."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:386
 msgid "Minimum uVia hole:"
@@ -27137,6 +27148,9 @@ msgid ""
 "The minimum micro-via hole size.  If set, this is an absolute minimum and "
 "cannot be reduced by netclasses, custom rules, or other settings."
 msgstr ""
+"Minimalny rozmiar otworu mikroprzelotki.  Jeśli jest ustawiona, jest to "
+"absolutne minimum i nie może być redukowane przez klasy sieci, reguły "
+"niestandardowe lub inne ustawienia."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:411
 msgid "Silkscreen"
@@ -27152,6 +27166,9 @@ msgid ""
 "this can improve legibility.  (Note: does not apply to multiple shapes "
 "within a single footprint.)"
 msgstr ""
+"Minimalny odstęp między dwoma przedmiotami na tej samej warstwie opisowej.  "
+"Jeśli jest ustawiony, może to poprawić czytelność. (Uwaga: Nie dotyczy wielu "
+"kształtów w jednym footprincie.)"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:421
 msgid "Use the Physical Stackup page to change the number of copper layers."
@@ -29095,19 +29112,16 @@ msgid "Save Footprint Association File"
 msgstr "Zapisz plik z przydziałem footprintów do komponentów"
 
 #: pcbnew/exporters/export_hyperlynx.cpp:190
-#, fuzzy
 msgid ""
 "File contains pad shapes that are not supported by the Hyperlynx exporter "
 "(supported shapes are oval, rectangle and circle)."
 msgstr ""
 "Plik zawiera kształty pól, które nie są obsługiwane przez eksporter "
-"Hyperlynx.\n"
-"(Dopuszczalne są wyłącznie pola owalne, prostokątne i okrągłe.)\n"
-"Podczas eksportu nieobsługiwane kształty zostaną zapisane jako owalne."
+"Hyperlynx (Dopuszczalne są wyłącznie pola owalne, prostokątne i okrągłe)."
 
 #: pcbnew/exporters/export_hyperlynx.cpp:194
 msgid "They have been exported as oval pads."
-msgstr ""
+msgstr "Będą one wyeksportowane jako owalne pola."
 
 #: pcbnew/exporters/export_hyperlynx.cpp:307
 #: pcbnew/exporters/export_vrml.cpp:567
@@ -29151,9 +29165,9 @@ msgstr "Plik położeń (na stronie dolnej): '%s'."
 
 #: pcbnew/exporters/gen_footprints_placefile.cpp:307
 #: pcbnew/exporters/gen_footprints_placefile.cpp:448
-#, fuzzy, c-format
+#, c-format
 msgid "Full component count: %d."
-msgstr "Liczba komponentów w sumie: %d.\n"
+msgstr "Liczba komponentów w sumie: %d."
 
 #: pcbnew/exporters/gen_footprints_placefile.cpp:310
 #: pcbnew/exporters/gen_footprints_placefile.cpp:404
@@ -29195,16 +29209,13 @@ msgid "Created file '%s'."
 msgstr "Utworzono plik '%s'."
 
 #: pcbnew/exporters/gerber_jobfile_writer.cpp:158
-#, fuzzy, c-format
+#, c-format
 msgid "Created Gerber job file '%s'."
-msgstr "Tworzenie pliku zadań Gerber '%s'."
+msgstr "Utworzono plik zadań Gerber '%s'."
 
 #: pcbnew/exporters/gerber_jobfile_writer.cpp:575
-#, fuzzy
 msgid "Board stackup settings not up to date."
-msgstr ""
-"Ustawienia stosu warstw nie są aktualne\n"
-"Proszę poprawić"
+msgstr "Ustawienia stosu warstw nie są aktualne."
 
 #: pcbnew/files.cpp:144
 msgid "All KiCad Board Files"
@@ -30514,9 +30525,9 @@ msgid "Netlist Load Error"
 msgstr "Błąd odczytu listy sieci"
 
 #: pcbnew/netlist_reader/netlist.cpp:155
-#, fuzzy, c-format
+#, c-format
 msgid "No footprint defined for symbol %s."
-msgstr "Nie ma zdefiniowanego footprintu dla symbolu %s.\n"
+msgstr "Nie ma zdefiniowanego footprintu dla symbolu %s."
 
 #: pcbnew/netlist_reader/netlist.cpp:182
 #, c-format
@@ -30530,12 +30541,12 @@ msgid "%s footprint ID '%s' is not valid."
 msgstr "%s ID footprintu '%s' nie jest prawidłowy."
 
 #: pcbnew/netlist_reader/netlist.cpp:222
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s footprint '%s' not found in any libraries in the footprint library table."
 msgstr ""
 "%s footprint '%s' nie został znaleziony w żadnej z bibliotek znajdującej się "
-"w tabeli bibliotek.\n"
+"w tabeli bibliotek."
 
 #: pcbnew/netlist_reader/netlist_reader.cpp:181
 #, c-format
@@ -32436,24 +32447,20 @@ msgid "?"
 msgstr "?"
 
 #: pcbnew/router/pns_kicad_iface.cpp:450
-#, fuzzy
 msgid "existing track"
-msgstr "W trakcie tworzenia ścieżek"
+msgstr "istniejąca ścieżka"
 
 #: pcbnew/router/pns_kicad_iface.cpp:464 pcbnew/router/pns_kicad_iface.cpp:477
-#, fuzzy
 msgid "board minimum width"
-msgstr "Szerokość minimalna:"
+msgstr "minimalna szerokość płytki"
 
 #: pcbnew/router/pns_kicad_iface.cpp:473
-#, fuzzy
 msgid "netclass 'Default'"
-msgstr "klasa sieci '%s'"
+msgstr "klasa sieci 'Domyślna'"
 
 #: pcbnew/router/pns_kicad_iface.cpp:475
-#, fuzzy
 msgid "user choice"
-msgstr "Zapamiętaj wybór"
+msgstr "wybrane przez użytkownika"
 
 #: pcbnew/router/pns_kicad_iface.cpp:1063
 #, c-format
@@ -32777,37 +32784,34 @@ msgid "Break Track"
 msgstr "Przerwij ścieżkę"
 
 #: pcbnew/router/router_tool.cpp:1895
-#, fuzzy, c-format
+#, c-format
 msgid "Routing Diff Pair: %s"
-msgstr "Dostrajanie odchyłek par różnicowych"
+msgstr "Trasowanie pary różnicowej: %s"
 
 #: pcbnew/router/router_tool.cpp:1895
-#, fuzzy, c-format
+#, c-format
 msgid "Routing Track: %s"
-msgstr "Trasowanie pojedynczej ścieżki"
+msgstr "Trasowanie pojedynczej ścieżki: %s"
 
 #: pcbnew/router/router_tool.cpp:1901
-#, fuzzy, c-format
+#, c-format
 msgid "Net Class: %s"
-msgstr "Klasy sieci"
+msgstr "Klasa sieci: %s"
 
 #: pcbnew/router/router_tool.cpp:1905
-#, fuzzy
 msgid "Routing Track"
 msgstr "Trasowanie pojedynczej ścieżki"
 
 #: pcbnew/router/router_tool.cpp:1905
-#, fuzzy
 msgid "(no net)"
-msgstr "<brak sieci>"
+msgstr "(brak sieci)"
 
 #: pcbnew/router/router_tool.cpp:1911
-#, fuzzy, c-format
+#, c-format
 msgid "Track Width: %s"
-msgstr "Szerokość ścieżki"
+msgstr "Szerokość ścieżki: %s"
 
 #: pcbnew/router/router_tool.cpp:1933
-#, fuzzy
 msgid "Diff Pair Gap"
 msgstr "Prześwit między ścieżkami pary różnicowej"
 
@@ -32922,6 +32926,9 @@ msgid ""
 "overridden by the board minimum width, or by the width of an existing track "
 "if the 'Use Existing Track Width' feature is enabled."
 msgstr ""
+"Wybierz domyślną szerokość dla nowych ścieżek. Pamiętaj, że tę szerokość "
+"można zastąpić minimalną szerokością dla płytki lub szerokością istniejącej "
+"ścieżki, jeśli włączona jest funkcja 'Użyj istniejącej szerokości ścieżki'."
 
 #: pcbnew/toolbars_pcb_editor.cpp:532
 msgid ""
@@ -34878,36 +34885,32 @@ msgid "Fill Zone"
 msgstr "Wypełniam strefę"
 
 #: pcbnew/tools/pcb_actions.cpp:1248
-#, fuzzy
 msgid "Update copper fill of selected zone(s)"
-msgstr "Uaktualnij zaznaczony(-e) footprint(-y)"
+msgstr "Uaktualnij zaznaczony(-e) strefy miedzi"
 
 #: pcbnew/tools/pcb_actions.cpp:1254 pcbnew/tools/zone_filler_tool.cpp:144
 msgid "Fill All Zones"
 msgstr "Wypełniam wszystkie strefy"
 
 #: pcbnew/tools/pcb_actions.cpp:1254
-#, fuzzy
 msgid "Update copper fill of all zones"
-msgstr "Usuwa wypełnienia ze wszystkich stref"
+msgstr "Uaktualnij wszystkie wypełnienia ze wszystkich stref"
 
 #: pcbnew/tools/pcb_actions.cpp:1259 pcbnew/tools/zone_filler_tool.cpp:235
 msgid "Unfill Zone"
 msgstr "Usuwam wypełnienia strefy"
 
 #: pcbnew/tools/pcb_actions.cpp:1259
-#, fuzzy
 msgid "Remove copper fill from selected zone(s)"
-msgstr "Usuń element(y) z zaznaczenia."
+msgstr "Usuń wypełnienie z zaznaczonych stref"
 
 #: pcbnew/tools/pcb_actions.cpp:1265 pcbnew/tools/zone_filler_tool.cpp:253
 msgid "Unfill All Zones"
 msgstr "Usuwam wypełnienia wszystkich stref"
 
 #: pcbnew/tools/pcb_actions.cpp:1265
-#, fuzzy
 msgid "Remove copper fill from all zones"
-msgstr "Ponowne łączenie strefy z %s do %s."
+msgstr "Usuń wypełnienie z wszystkich stref"
 
 #: pcbnew/tools/pcb_actions.cpp:1273
 msgid "Place Selected Footprints"
