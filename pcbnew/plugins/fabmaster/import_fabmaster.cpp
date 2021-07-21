@@ -2091,7 +2091,7 @@ bool FABMASTER::loadFootprints( BOARD* aBoard )
                     {
                         const GRAPHIC_LINE* lsrc = static_cast<const GRAPHIC_LINE*>( seg.get() );
 
-                        FP_SHAPE* line = new FP_SHAPE( fp, PCB_SHAPE_TYPE::SEGMENT );
+                        FP_SHAPE* line = new FP_SHAPE( fp, SHAPE_T::SEGMENT );
 
                         if( src->mirror )
                         {
@@ -2119,7 +2119,7 @@ bool FABMASTER::loadFootprints( BOARD* aBoard )
                     {
                         const GRAPHIC_ARC* lsrc = static_cast<const GRAPHIC_ARC*>( seg.get() );
 
-                        FP_SHAPE* arc = new FP_SHAPE( fp, PCB_SHAPE_TYPE::ARC );
+                        FP_SHAPE* arc = new FP_SHAPE( fp, SHAPE_T::ARC );
 
                         if( src->mirror )
                         {
@@ -2150,7 +2150,7 @@ bool FABMASTER::loadFootprints( BOARD* aBoard )
                         const GRAPHIC_RECTANGLE *lsrc =
                                 static_cast<const GRAPHIC_RECTANGLE*>( seg.get() );
 
-                        FP_SHAPE* rect = new FP_SHAPE( fp, PCB_SHAPE_TYPE::RECT );
+                        FP_SHAPE* rect = new FP_SHAPE( fp, SHAPE_T::RECT );
 
                         if( src->mirror )
                         {
@@ -2616,7 +2616,7 @@ bool FABMASTER::loadPolygon( BOARD* aBoard, const std::unique_ptr<FABMASTER::TRA
 
     PCB_SHAPE* new_poly = new PCB_SHAPE( aBoard );
 
-    new_poly->SetShape( PCB_SHAPE_TYPE::POLYGON );
+    new_poly->SetShape( SHAPE_T::POLY );
     new_poly->SetLayer( layer );
 
     // Polygons on the silk layer are filled but other layers are not/fill doesn't make sense
@@ -2760,7 +2760,7 @@ bool FABMASTER::loadOutline( BOARD* aBoard, const std::unique_ptr<FABMASTER::TRA
             const GRAPHIC_LINE* src = static_cast<const GRAPHIC_LINE*>( seg.get() );
 
             PCB_SHAPE*     line = new PCB_SHAPE( aBoard );
-            line->SetShape( PCB_SHAPE_TYPE::SEGMENT );
+            line->SetShape( SHAPE_T::SEGMENT );
             line->SetLayer( layer );
             line->SetStart( wxPoint( src->start_x, src->start_y ) );
             line->SetEnd( wxPoint( src->end_x, src->end_y ) );
@@ -2777,7 +2777,7 @@ bool FABMASTER::loadOutline( BOARD* aBoard, const std::unique_ptr<FABMASTER::TRA
             const GRAPHIC_ARC* src = static_cast<const GRAPHIC_ARC*>( seg.get() );
 
             PCB_SHAPE* arc = new PCB_SHAPE( aBoard );
-            arc->SetShape( PCB_SHAPE_TYPE::ARC );
+            arc->SetShape( SHAPE_T::ARC );
             arc->SetLayer( layer );
             arc->SetCenter( wxPoint( src->center_x, src->center_y ) );
             arc->SetArcStart( wxPoint( src->start_x, src->start_y ) );
@@ -2796,7 +2796,7 @@ bool FABMASTER::loadOutline( BOARD* aBoard, const std::unique_ptr<FABMASTER::TRA
                     static_cast<const GRAPHIC_RECTANGLE*>( seg.get() );
 
             PCB_SHAPE* rect = new PCB_SHAPE( aBoard );
-            rect->SetShape( PCB_SHAPE_TYPE::RECT );
+            rect->SetShape( SHAPE_T::RECT );
             rect->SetLayer( layer );
             rect->SetStart( wxPoint( src->start_x, src->start_y ) );
             rect->SetEnd( wxPoint( src->end_x, src->end_y ) );
@@ -2862,7 +2862,7 @@ bool FABMASTER::loadGraphics( BOARD* aBoard )
 
                 PCB_SHAPE* new_poly = new PCB_SHAPE( aBoard );
 
-                new_poly->SetShape( PCB_SHAPE_TYPE::POLYGON );
+                new_poly->SetShape( SHAPE_T::POLY );
                 new_poly->SetLayer( layer );
                 new_poly->SetPolyShape( poly_outline );
                 new_poly->SetWidth( 0 );
@@ -2884,7 +2884,7 @@ bool FABMASTER::loadGraphics( BOARD* aBoard )
                 const GRAPHIC_LINE* src = static_cast<const GRAPHIC_LINE*>( seg.get() );
 
                 PCB_SHAPE*     line = new PCB_SHAPE( aBoard );
-                line->SetShape( PCB_SHAPE_TYPE::SEGMENT );
+                line->SetShape( SHAPE_T::SEGMENT );
                 line->SetLayer( layer );
                 line->SetStart( wxPoint( src->start_x, src->start_y ) );
                 line->SetEnd( wxPoint( src->end_x, src->end_y ) );
@@ -2898,7 +2898,7 @@ bool FABMASTER::loadGraphics( BOARD* aBoard )
                 const GRAPHIC_ARC* src = static_cast<const GRAPHIC_ARC*>( seg.get() );
 
                 PCB_SHAPE* arc = new PCB_SHAPE( aBoard );
-                arc->SetShape( PCB_SHAPE_TYPE::ARC );
+                arc->SetShape( SHAPE_T::ARC );
                 arc->SetLayer( layer );
                 arc->SetCenter( wxPoint( src->center_x, src->center_y ) );
                 arc->SetArcStart( wxPoint( src->start_x, src->start_y ) );
@@ -2914,7 +2914,7 @@ bool FABMASTER::loadGraphics( BOARD* aBoard )
                         static_cast<const GRAPHIC_RECTANGLE*>( seg.get() );
 
                 PCB_SHAPE* rect = new PCB_SHAPE( aBoard );
-                rect->SetShape( PCB_SHAPE_TYPE::RECT );
+                rect->SetShape( SHAPE_T::RECT );
                 rect->SetLayer( layer );
                 rect->SetStart( wxPoint( src->start_x, src->start_y ) );
                 rect->SetEnd( wxPoint( src->end_x, src->end_y ) );

@@ -34,7 +34,7 @@ namespace KI_TEST
 
 void DrawSegment( FOOTPRINT& aFootprint, const SEG& aSeg, int aWidth, PCB_LAYER_ID aLayer )
 {
-    auto seg = std::make_unique<FP_SHAPE>( &aFootprint, PCB_SHAPE_TYPE::SEGMENT );
+    auto seg = std::make_unique<FP_SHAPE>( &aFootprint, SHAPE_T::SEGMENT );
 
     seg->SetStart0( (wxPoint) aSeg.A );
     seg->SetEnd0( (wxPoint) aSeg.B );
@@ -59,7 +59,7 @@ void DrawPolyline( FOOTPRINT& aFootprint, const std::vector<VECTOR2I>& aPts, int
 void DrawArc( FOOTPRINT& aFootprint, const VECTOR2I& aCentre, const VECTOR2I& aStart,
               double aAngle, int aWidth, PCB_LAYER_ID aLayer )
 {
-    auto seg = std::make_unique<FP_SHAPE>( &aFootprint, PCB_SHAPE_TYPE::ARC );
+    auto seg = std::make_unique<FP_SHAPE>( &aFootprint, SHAPE_T::ARC );
 
     seg->SetStart0( (wxPoint) aCentre );
     seg->SetEnd0( (wxPoint) aStart );

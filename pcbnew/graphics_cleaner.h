@@ -46,7 +46,7 @@ public:
                        bool aMergeRects, bool aDeleteRedundant );
 
 private:
-    bool isNullSegment( PCB_SHAPE* aShape );
+    bool isNullShape( PCB_SHAPE* aShape );
     bool areEquivalent( PCB_SHAPE* aShape1, PCB_SHAPE* aShape2 );
 
     void cleanupSegments();

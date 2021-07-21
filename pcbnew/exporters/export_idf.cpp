@@ -89,7 +89,7 @@ static void idf_export_outline( BOARD* aPcb, IDF3_BOARD& aIDFBoard )
 
         switch( graphic->GetShape() )
         {
-        case PCB_SHAPE_TYPE::SEGMENT:
+        case SHAPE_T::SEGMENT:
         {
             if( ( graphic->GetStart().x == graphic->GetEnd().x )
                 && ( graphic->GetStart().y == graphic->GetEnd().y ) )
@@ -109,7 +109,7 @@ static void idf_export_outline( BOARD* aPcb, IDF3_BOARD& aIDFBoard )
             break;
         }
 
-        case PCB_SHAPE_TYPE::RECT:
+        case SHAPE_T::RECT:
         {
             if( ( graphic->GetStart().x == graphic->GetEnd().x )
                 && ( graphic->GetStart().y == graphic->GetEnd().y ) )
@@ -135,7 +135,7 @@ static void idf_export_outline( BOARD* aPcb, IDF3_BOARD& aIDFBoard )
             break;
         }
 
-        case PCB_SHAPE_TYPE::ARC:
+        case SHAPE_T::ARC:
         {
             if( ( graphic->GetCenter().x == graphic->GetArcStart().x )
                 && ( graphic->GetCenter().y == graphic->GetArcStart().y ) )
@@ -155,7 +155,7 @@ static void idf_export_outline( BOARD* aPcb, IDF3_BOARD& aIDFBoard )
             break;
         }
 
-        case PCB_SHAPE_TYPE::CIRCLE:
+        case SHAPE_T::CIRCLE:
         {
             if( graphic->GetRadius() == 0 )
                 break;

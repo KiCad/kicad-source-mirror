@@ -258,7 +258,7 @@ int DRAWING_TOOL::DrawLine( const TOOL_EVENT& aEvent )
     SCOPED_DRAW_MODE scopedDrawMode( m_mode, MODE::LINE );
     OPT<VECTOR2D>    startingPoint = boost::make_optional<VECTOR2D>( false, VECTOR2D( 0, 0 ) );
 
-    line->SetShape( PCB_SHAPE_TYPE::SEGMENT );
+    line->SetShape( SHAPE_T::SEGMENT );
     line->SetFlags( IS_NEW );
 
     if( aEvent.HasPosition() )
@@ -285,7 +285,7 @@ int DRAWING_TOOL::DrawLine( const TOOL_EVENT& aEvent )
         }
 
         line = m_isFootprintEditor ? new FP_SHAPE( parentFootprint ) : new PCB_SHAPE;
-        line->SetShape( PCB_SHAPE_TYPE::SEGMENT );
+        line->SetShape( SHAPE_T::SEGMENT );
         line->SetFlags( IS_NEW );
     }
 
@@ -310,7 +310,7 @@ int DRAWING_TOOL::DrawRectangle( const TOOL_EVENT& aEvent )
     SCOPED_DRAW_MODE scopedDrawMode( m_mode, MODE::RECTANGLE );
     OPT<VECTOR2D>    startingPoint = boost::make_optional<VECTOR2D>( false, VECTOR2D( 0, 0 ) );
 
-    rect->SetShape( PCB_SHAPE_TYPE::RECT );
+    rect->SetShape( SHAPE_T::RECT );
     rect->SetFilled( false );
     rect->SetFlags(IS_NEW );
 
@@ -335,7 +335,7 @@ int DRAWING_TOOL::DrawRectangle( const TOOL_EVENT& aEvent )
         }
 
         rect = m_isFootprintEditor ? new FP_SHAPE( parentFootprint ) : new PCB_SHAPE;
-        rect->SetShape( PCB_SHAPE_TYPE::RECT );
+        rect->SetShape( SHAPE_T::RECT );
         rect->SetFilled( false );
         rect->SetFlags(IS_NEW );
         startingPoint = NULLOPT;
@@ -362,7 +362,7 @@ int DRAWING_TOOL::DrawCircle( const TOOL_EVENT& aEvent )
     SCOPED_DRAW_MODE scopedDrawMode( m_mode, MODE::CIRCLE );
     OPT<VECTOR2D>    startingPoint = boost::make_optional<VECTOR2D>( false, VECTOR2D( 0, 0 ) );
 
-    circle->SetShape( PCB_SHAPE_TYPE::CIRCLE );
+    circle->SetShape( SHAPE_T::CIRCLE );
     circle->SetFilled( false );
     circle->SetFlags( IS_NEW );
 
@@ -387,7 +387,7 @@ int DRAWING_TOOL::DrawCircle( const TOOL_EVENT& aEvent )
         }
 
         circle = m_isFootprintEditor ? new FP_SHAPE( parentFootprint ) : new PCB_SHAPE;
-        circle->SetShape( PCB_SHAPE_TYPE::CIRCLE );
+        circle->SetShape( SHAPE_T::CIRCLE );
         circle->SetFilled( false );
         circle->SetFlags( IS_NEW );
         startingPoint = NULLOPT;
@@ -414,7 +414,7 @@ int DRAWING_TOOL::DrawArc( const TOOL_EVENT& aEvent )
     SCOPED_DRAW_MODE scopedDrawMode( m_mode, MODE::ARC );
     bool             immediateMode = aEvent.HasPosition();
 
-    arc->SetShape( PCB_SHAPE_TYPE::ARC );
+    arc->SetShape( SHAPE_T::ARC );
     arc->SetFlags( IS_NEW );
 
     std::string tool = aEvent.GetCommandStr().get();
@@ -435,7 +435,7 @@ int DRAWING_TOOL::DrawArc( const TOOL_EVENT& aEvent )
         }
 
         arc = m_isFootprintEditor ? new FP_SHAPE( parentFootprint ) : new PCB_SHAPE;
-        arc->SetShape( PCB_SHAPE_TYPE::ARC );
+        arc->SetShape( SHAPE_T::ARC );
         arc->SetFlags( IS_NEW );
         immediateMode = false;
     }
@@ -1403,11 +1403,10 @@ static void updateSegmentFromGeometryMgr( const KIGFX::PREVIEW::TWO_POINT_GEOMET
 bool DRAWING_TOOL::drawSegment( const std::string& aTool, PCB_SHAPE** aGraphic,
                                 OPT<VECTOR2D> aStartingPoint )
 {
-    PCB_SHAPE_TYPE shape = ( *aGraphic )->GetShape();
+    SHAPE_T shape = ( *aGraphic )->GetShape();
 
     // Only three shapes are currently supported
-    wxASSERT( shape == PCB_SHAPE_TYPE::SEGMENT || shape == PCB_SHAPE_TYPE::CIRCLE
-              || shape == PCB_SHAPE_TYPE::RECT );
+    wxASSERT( shape == SHAPE_T::SEGMENT || shape == SHAPE_T::CIRCLE || shape == SHAPE_T::RECT );
 
     EDA_UNITS        userUnits = m_frame->GetUserUnits();
     PCB_GRID_HELPER  grid( m_toolMgr, m_frame->GetMagneticItemsSettings() );
@@ -1573,7 +1572,7 @@ bool DRAWING_TOOL::drawSegment( const std::string& aTool, PCB_SHAPE** aGraphic,
                 m_lineWidth = getSegmentWidth( drawingLayer );
 
                 // Init the new item attributes
-                graphic->SetShape( static_cast<PCB_SHAPE_TYPE>( shape ) );
+                graphic->SetShape( static_cast<SHAPE_T>( shape ) );
                 graphic->SetFilled( false );
                 graphic->SetWidth( m_lineWidth );
                 graphic->SetLayer( drawingLayer );
@@ -1600,7 +1599,7 @@ bool DRAWING_TOOL::drawSegment( const std::string& aTool, PCB_SHAPE** aGraphic,
 
                 started = true;
             }
-            else if( shape == PCB_SHAPE_TYPE::CIRCLE )
+            else if( shape == SHAPE_T::CIRCLE )
             {
                 // No clever logic if drawing a circle
                 preview.Clear();
@@ -1612,7 +1611,7 @@ bool DRAWING_TOOL::drawSegment( const std::string& aTool, PCB_SHAPE** aGraphic,
                 PCB_SHAPE* snapItem = dyn_cast<PCB_SHAPE*>( grid.GetSnapped() );
 
                 if( twoPointManager.GetOrigin() == twoPointManager.GetEnd()
-                    || ( evt->IsDblClick( BUT_LEFT ) && shape == PCB_SHAPE_TYPE::SEGMENT )
+                    || ( evt->IsDblClick( BUT_LEFT ) && shape == SHAPE_T::SEGMENT )
                     || snapItem )
                 // User has clicked twice in the same spot
                 //  or clicked on the end of an existing segment (closing a path)
@@ -1622,7 +1621,7 @@ bool DRAWING_TOOL::drawSegment( const std::string& aTool, PCB_SHAPE** aGraphic,
                     // If the user clicks on an existing snap point from a drawsegment
                     //  we finish the segment as they are likely closing a path
                     if( snapItem
-                        && ( shape == PCB_SHAPE_TYPE::RECT || graphic->GetLength() > 0.0 ) )
+                        && ( shape == SHAPE_T::RECT || graphic->GetLength() > 0.0 ) )
                     {
                         commit.Add( graphic );
                         commit.Push( _( "Draw a line segment" ) );
@@ -1647,13 +1646,13 @@ bool DRAWING_TOOL::drawSegment( const std::string& aTool, PCB_SHAPE** aGraphic,
         {
             // 45 degree lines
             if( started
-                && ( ( limit45 && shape == PCB_SHAPE_TYPE::SEGMENT )
-                     || ( evt->Modifier( MD_SHIFT ) && shape == PCB_SHAPE_TYPE::RECT ) ) )
+                && ( ( limit45 && shape == SHAPE_T::SEGMENT )
+                     || ( evt->Modifier( MD_SHIFT ) && shape == SHAPE_T::RECT ) ) )
             {
                 const VECTOR2I lineVector( cursorPos - VECTOR2I( twoPointManager.GetOrigin() ) );
 
                 // get a restricted 45/H/V line from the last fixed point to the cursor
-                auto newEnd = GetVectorSnapped45( lineVector, ( shape == PCB_SHAPE_TYPE::RECT ) );
+                auto newEnd = GetVectorSnapped45( lineVector, ( shape == SHAPE_T::RECT ) );
                 m_controls->ForceCursorPosition( true, VECTOR2I( twoPointManager.GetEnd() ) );
                 twoPointManager.SetEnd( twoPointManager.GetOrigin() + (wxPoint) newEnd );
                 twoPointManager.SetAngleSnap( true );
@@ -1850,7 +1849,7 @@ bool DRAWING_TOOL::drawArc( const std::string& aTool, PCB_SHAPE** aGraphic, bool
 
                 // Init the new item attributes
                 // (non-geometric, those are handled by the manager)
-                graphic->SetShape( PCB_SHAPE_TYPE::ARC );
+                graphic->SetShape( SHAPE_T::ARC );
                 graphic->SetWidth( m_lineWidth );
 
                 if( !m_view->IsLayerVisible( drawingLayer ) )

@@ -430,7 +430,7 @@ FOOTPRINT* MICROWAVE_TOOL::createMicrowaveInductor( MICROWAVE_INDUCTOR_PATTERN& 
         seg->SetEnd( buffer[jj] );
         seg->SetWidth( aInductorPattern.m_Width );
         seg->SetLayer( footprint->GetLayer() );
-        seg->SetShape( PCB_SHAPE_TYPE::SEGMENT );
+        seg->SetShape( SHAPE_T::SEGMENT );
         seg->SetStart0( seg->GetStart() - footprint->GetPosition() );
         seg->SetEnd0( seg->GetEnd() - footprint->GetPosition() );
         footprint->Add( seg );

@@ -43,28 +43,28 @@ class PCB_GROUP;
 /**
  * The set of shapes for PCB graphics and tracks and footprint graphics in the .m_Shape member
  */
-enum class PCB_SHAPE_TYPE : int
+enum class SHAPE_T : int
 {
     SEGMENT = 0,  ///< usual segment : line with rounded ends
     RECT,         ///< segment with non rounded ends
     ARC,          ///< Arcs (with rounded ends)
     CIRCLE,       ///< ring
-    POLYGON,      ///< polygon (not yet used for tracks, but could be in microwave apps)
-    CURVE,        ///< Bezier Curve
+    POLY,         ///< polygon (not yet used for tracks, but could be in microwave apps)
+    BEZIER,       ///< Bezier Curve
     LAST          ///< last value for this list
 };
 
-static inline wxString PCB_SHAPE_TYPE_T_asString( PCB_SHAPE_TYPE a )
+static inline wxString SHAPE_T_asString( SHAPE_T a )
 {
     switch( a )
     {
-    case PCB_SHAPE_TYPE::SEGMENT: return "S_SEGMENT";
-    case PCB_SHAPE_TYPE::RECT:    return "S_RECT";
-    case PCB_SHAPE_TYPE::ARC:     return "S_ARC";
-    case PCB_SHAPE_TYPE::CIRCLE:  return "S_CIRCLE";
-    case PCB_SHAPE_TYPE::POLYGON: return "S_POLYGON";
-    case PCB_SHAPE_TYPE::CURVE:   return "S_CURVE";
-    case PCB_SHAPE_TYPE::LAST:    return "S_LAST";    // Synthetic value, but if we come across it we're
+    case SHAPE_T::SEGMENT: return "S_SEGMENT";
+    case SHAPE_T::RECT:    return "S_RECT";
+    case SHAPE_T::ARC:     return "S_ARC";
+    case SHAPE_T::CIRCLE:  return "S_CIRCLE";
+    case SHAPE_T::POLY:    return "S_POLYGON";
+    case SHAPE_T::BEZIER:  return "S_CURVE";
+    case SHAPE_T::LAST:    return "S_LAST";    // Synthetic value, but if we come across it we're
                                                       // going to want to know.
     }
 
@@ -265,7 +265,7 @@ public:
     /**
      * Convert the enum #PCB_SHAPE_TYPE_T integer value to a wxString.
      */
-    static wxString ShowShape( PCB_SHAPE_TYPE aShape );
+    static wxString ShowShape( SHAPE_T aShape );
 
     /**
      * Move this object.

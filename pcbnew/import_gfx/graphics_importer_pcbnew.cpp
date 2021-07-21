@@ -62,7 +62,7 @@ int GRAPHICS_IMPORTER_PCBNEW::MapLineWidth( double aLineWidth )
 void GRAPHICS_IMPORTER_PCBNEW::AddLine( const VECTOR2D& aOrigin, const VECTOR2D& aEnd, double aWidth )
 {
     std::unique_ptr<PCB_SHAPE> line( createDrawing() );
-    line->SetShape( PCB_SHAPE_TYPE::SEGMENT );
+    line->SetShape( SHAPE_T::SEGMENT );
     line->SetLayer( GetLayer() );
     line->SetWidth( MapLineWidth( aWidth ) );
     line->SetStart( MapCoordinate( aOrigin ) );
@@ -78,7 +78,7 @@ void GRAPHICS_IMPORTER_PCBNEW::AddLine( const VECTOR2D& aOrigin, const VECTOR2D&
 void GRAPHICS_IMPORTER_PCBNEW::AddCircle( const VECTOR2D& aCenter, double aRadius, double aWidth, bool aFilled )
 {
     std::unique_ptr<PCB_SHAPE> circle( createDrawing() );
-    circle->SetShape( PCB_SHAPE_TYPE::CIRCLE );
+    circle->SetShape( SHAPE_T::CIRCLE );
     circle->SetFilled( aFilled );
     circle->SetLayer( GetLayer() );
     circle->SetWidth( MapLineWidth( aWidth ) );
@@ -96,7 +96,7 @@ void GRAPHICS_IMPORTER_PCBNEW::AddArc( const VECTOR2D& aCenter, const VECTOR2D& 
                                        double aAngle, double aWidth )
 {
     std::unique_ptr<PCB_SHAPE> arc( createDrawing() );
-    arc->SetShape( PCB_SHAPE_TYPE::ARC );
+    arc->SetShape( SHAPE_T::ARC );
     arc->SetLayer( GetLayer() );
     arc->SetWidth( MapLineWidth( aWidth ) );
     arc->SetCenter( MapCoordinate( aCenter) );
@@ -119,7 +119,7 @@ void GRAPHICS_IMPORTER_PCBNEW::AddPolygon( const std::vector< VECTOR2D >& aVerti
         convertedPoints.emplace_back( MapCoordinate( precisePoint ) );
 
     std::unique_ptr<PCB_SHAPE> polygon( createDrawing() );
-    polygon->SetShape( PCB_SHAPE_TYPE::POLYGON );
+    polygon->SetShape( SHAPE_T::POLY );
     polygon->SetFilled( GetLayer() != Edge_Cuts );
     polygon->SetLayer( GetLayer() );
     polygon->SetPolyPoints( convertedPoints );
@@ -160,7 +160,7 @@ void GRAPHICS_IMPORTER_PCBNEW::AddSpline( const VECTOR2D& aStart, const VECTOR2D
                 const VECTOR2D& BezierControl2, const VECTOR2D& aEnd, double aWidth )
 {
     std::unique_ptr<PCB_SHAPE> spline( createDrawing() );
-    spline->SetShape( PCB_SHAPE_TYPE::CURVE );
+    spline->SetShape( SHAPE_T::BEZIER );
     spline->SetLayer( GetLayer() );
     spline->SetWidth( MapLineWidth( aWidth ) );
     spline->SetStart( MapCoordinate( aStart ) );

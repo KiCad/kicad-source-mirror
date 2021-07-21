@@ -69,10 +69,10 @@ public:
      *
      * This implicitly includes an OnlyType( PCB_SHAPE_T ) as part of the test.
      *
-     * @param aTypes is a list of allowed PCB_SHAPE shapes (@see PCB_SHAPE_TYPE)
+     * @param aTypes is a list of allowed PCB_SHAPE shapes (@see SHAPE_T)
      * @return functor testing if selected items match the given list of allowed shapes
      */
-    static SELECTION_CONDITION OnlyGraphicShapeTypes( const std::set<PCB_SHAPE_TYPE> aTypes );
+    static SELECTION_CONDITION OnlyGraphicShapeTypes( const std::set<SHAPE_T> aTypes );
 
 
 private:
@@ -84,7 +84,7 @@ private:
 
     ///< Helper function used by OnlyGraphicShapeTypes()
     static bool onlyGraphicShapeTypesFunc( const SELECTION& aSelection,
-                                           const std::set<PCB_SHAPE_TYPE> aTypes );
+                                           const std::set<SHAPE_T> aTypes );
 };
 
 #endif /* PCB_SELECTION_CONDITIONS_H_ */

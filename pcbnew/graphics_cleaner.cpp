@@ -65,31 +65,30 @@ void GRAPHICS_CLEANER::CleanupBoard( bool aDryRun,
 }
 
 
-bool GRAPHICS_CLEANER::isNullSegment( PCB_SHAPE* aSegment )
+bool GRAPHICS_CLEANER::isNullShape( PCB_SHAPE* aShape )
 {
-    switch( aSegment->GetShape() )
+    switch( aShape->GetShape() )
     {
-    case PCB_SHAPE_TYPE::SEGMENT:
-    case PCB_SHAPE_TYPE::RECT:
-        return aSegment->GetStart() == aSegment->GetEnd();
+    case SHAPE_T::SEGMENT:
+    case SHAPE_T::RECT:
+        return aShape->GetStart() == aShape->GetEnd();
 
-    case PCB_SHAPE_TYPE::CIRCLE:
-        return aSegment->GetRadius() == 0;
+    case SHAPE_T::CIRCLE:
+        return aShape->GetRadius() == 0;
 
-    case PCB_SHAPE_TYPE::ARC:
-        return aSegment->GetCenter().x == aSegment->GetArcStart().x
-                   && aSegment->GetCenter().y == aSegment->GetArcStart().y;
+    case SHAPE_T::ARC:
+        return aShape->GetCenter() == aShape->GetArcStart();
 
-    case PCB_SHAPE_TYPE::POLYGON:
-        return aSegment->GetPointCount() == 0;
+    case SHAPE_T::POLY:
+        return aShape->GetPointCount() == 0;
 
-    case PCB_SHAPE_TYPE::CURVE:
-        aSegment->RebuildBezierToSegmentsPointsList( aSegment->GetWidth() );
-        return aSegment->GetBezierPoints().empty();
+    case SHAPE_T::BEZIER:
+        aShape->RebuildBezierToSegmentsPointsList( aShape->GetWidth() );
+        return aShape->GetBezierPoints().empty();
 
     default:
         wxFAIL_MSG( "GRAPHICS_CLEANER::isNullSegment unsupported PCB_SHAPE shape: "
-                    + PCB_SHAPE_TYPE_T_asString( aSegment->GetShape() ) );
+                    + SHAPE_T_asString( aShape->GetShape()) );
         return false;
     }
 }
@@ -106,29 +105,29 @@ bool GRAPHICS_CLEANER::areEquivalent( PCB_SHAPE* aShape1, PCB_SHAPE* aShape2 )
 
     switch( aShape1->GetShape() )
     {
-    case PCB_SHAPE_TYPE::SEGMENT:
-    case PCB_SHAPE_TYPE::RECT:
-    case PCB_SHAPE_TYPE::CIRCLE:
+    case SHAPE_T::SEGMENT:
+    case SHAPE_T::RECT:
+    case SHAPE_T::CIRCLE:
         return aShape1->GetStart() == aShape2->GetStart()
                 && aShape1->GetEnd() == aShape2->GetEnd();
 
-    case PCB_SHAPE_TYPE::ARC:
+    case SHAPE_T::ARC:
         return aShape1->GetCenter() == aShape2->GetCenter()
                 && aShape1->GetArcStart() == aShape2->GetArcStart()
                 && aShape1->GetAngle() == aShape2->GetAngle();
 
-    case PCB_SHAPE_TYPE::POLYGON:
+    case SHAPE_T::POLY:
         // TODO
         return false;
 
-    case PCB_SHAPE_TYPE::CURVE:
+    case SHAPE_T::BEZIER:
         return aShape1->GetBezierC1() == aShape2->GetBezierC1()
                 && aShape1->GetBezierC2() == aShape2->GetBezierC2()
                 && aShape1->GetBezierPoints() == aShape2->GetBezierPoints();
 
     default:
         wxFAIL_MSG( "GRAPHICS_CLEANER::areEquivalent unsupported PCB_SHAPE shape: "
-                    + PCB_SHAPE_TYPE_T_asString( aShape1->GetShape() ) );
+                    + SHAPE_T_asString( aShape1->GetShape()) );
         return false;
     }
 }
@@ -141,11 +140,10 @@ void GRAPHICS_CLEANER::cleanupSegments()
     {
         PCB_SHAPE* segment = dynamic_cast<PCB_SHAPE*>( *it );
 
-        if( !segment || segment->GetShape() != PCB_SHAPE_TYPE::SEGMENT
-            || segment->HasFlag( IS_DELETED ) )
+        if( !segment || segment->GetShape() != SHAPE_T::SEGMENT || segment->HasFlag( IS_DELETED ) )
             continue;
 
-        if( isNullSegment( segment ) )
+        if( isNullShape( segment ) )
         {
             std::shared_ptr<CLEANUP_ITEM> item = std::make_shared<CLEANUP_ITEM>( CLEANUP_NULL_GRAPHIC );
             item->SetItems( segment );
@@ -206,7 +204,7 @@ void GRAPHICS_CLEANER::mergeRects()
     {
         PCB_SHAPE* shape = dynamic_cast<PCB_SHAPE*>( item );
 
-        if( !shape || shape->GetShape() != PCB_SHAPE_TYPE::SEGMENT )
+        if( !shape || shape->GetShape() != SHAPE_T::SEGMENT )
             continue;
 
         if( shape->GetStart().x == shape->GetEnd().x || shape->GetStart().y == shape->GetEnd().y )
@@ -307,7 +305,7 @@ void GRAPHICS_CLEANER::mergeRects()
                     else
                         rect = new PCB_SHAPE();
 
-                    rect->SetShape( PCB_SHAPE_TYPE::RECT );
+                    rect->SetShape( SHAPE_T::RECT );
                     rect->SetFilled( false );
                     rect->SetStart( top->start );
                     rect->SetEnd( bottom->end );

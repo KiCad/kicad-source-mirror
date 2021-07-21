@@ -163,7 +163,7 @@ void PCB_POLYGON::AddToFootprint( FOOTPRINT* aFootprint )
 {
     if( IsNonCopperLayer( m_KiCadLayer ) )
     {
-        FP_SHAPE* dwg = new FP_SHAPE( aFootprint, PCB_SHAPE_TYPE::POLYGON );
+        FP_SHAPE* dwg = new FP_SHAPE( aFootprint, SHAPE_T::POLY );
         aFootprint->Add( dwg );
 
         dwg->SetWidth( 0 );

@@ -62,7 +62,7 @@ S_C PCB_SELECTION_CONDITIONS::SameLayer()
 }
 
 
-S_C PCB_SELECTION_CONDITIONS::OnlyGraphicShapeTypes( const std::set<PCB_SHAPE_TYPE> aTypes )
+S_C PCB_SELECTION_CONDITIONS::OnlyGraphicShapeTypes( const std::set<SHAPE_T> aTypes )
 {
     return std::bind( &PCB_SELECTION_CONDITIONS::onlyGraphicShapeTypesFunc, _1, aTypes );
 }
@@ -137,7 +137,7 @@ bool PCB_SELECTION_CONDITIONS::sameLayerFunc( const SELECTION& aSelection )
 
 
 bool PCB_SELECTION_CONDITIONS::onlyGraphicShapeTypesFunc( const SELECTION& aSelection,
-                                                          const std::set<PCB_SHAPE_TYPE> aTypes )
+                                                          const std::set<SHAPE_T> aTypes )
 {
     if( aSelection.Empty() )
         return false;
@@ -147,7 +147,7 @@ bool PCB_SELECTION_CONDITIONS::onlyGraphicShapeTypesFunc( const SELECTION& aSele
         if( item->Type() != PCB_SHAPE_T && item->Type() != PCB_FP_SHAPE_T )
             return false;
 
-        PCB_SHAPE_TYPE shape = static_cast<const PCB_SHAPE*>( item )->GetShape();
+        SHAPE_T shape = static_cast<const PCB_SHAPE*>( item )->GetShape();
 
         if( !aTypes.count( shape ) )
             return false;

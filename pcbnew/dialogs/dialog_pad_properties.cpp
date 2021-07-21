@@ -706,19 +706,19 @@ void DIALOG_PAD_PROPERTIES::displayPrimitivesList()
 
         switch( primitive->GetShape() )
         {
-        case PCB_SHAPE_TYPE::SEGMENT: // usual segment : line with rounded ends
+        case SHAPE_T::SEGMENT:
             bs_info[0] = _( "Segment" );
             bs_info[1] = _( "from" ) + wxS( " " )+ formatCoord( m_units, primitive->GetStart() );
             bs_info[2] = _( "to" ) + wxS( " " )+  formatCoord( m_units, primitive->GetEnd() );
             break;
 
-        case PCB_SHAPE_TYPE::CURVE: // Bezier segment
+        case SHAPE_T::BEZIER:
             bs_info[0] = _( "Bezier" );
             bs_info[1] = _( "from" ) + wxS( " " )+ formatCoord( m_units, primitive->GetStart() );
             bs_info[2] = _( "to" ) + wxS( " " )+  formatCoord( m_units, primitive->GetEnd() );
             break;
 
-        case PCB_SHAPE_TYPE::ARC: // Arc with rounded ends
+        case SHAPE_T::ARC:
             bs_info[0] = _( "Arc" );
             bs_info[1] = _( "center" ) + wxS( " " )+ formatCoord( m_units, primitive->GetCenter() );
             bs_info[2] = _( "start" ) + wxS( " " )+ formatCoord( m_units,
@@ -726,7 +726,7 @@ void DIALOG_PAD_PROPERTIES::displayPrimitivesList()
             bs_info[3] = _( "angle" ) + wxS( " " )+ FormatAngle( primitive->GetAngle() );
             break;
 
-        case PCB_SHAPE_TYPE::CIRCLE: //  ring or circle
+        case SHAPE_T::CIRCLE:
             if( primitive->GetWidth() )
                 bs_info[0] = _( "ring" );
             else
@@ -737,7 +737,7 @@ void DIALOG_PAD_PROPERTIES::displayPrimitivesList()
                                                                            primitive->GetRadius() );
             break;
 
-        case PCB_SHAPE_TYPE::POLYGON: // polygon
+        case SHAPE_T::POLY:
             bs_info[0] = "Polygon";
             bs_info[1] = wxString::Format( _( "corners count %d" ),
                                            (int) primitive->GetPolyShape().Outline( 0 ).PointCount() );
@@ -2069,7 +2069,7 @@ void DIALOG_PAD_PROPERTIES::editPrimitive()
 
     std::shared_ptr<PCB_SHAPE>& shape = m_primitives[select];
 
-    if( shape->GetShape() == PCB_SHAPE_TYPE::POLYGON )
+    if( shape->GetShape() == SHAPE_T::POLY )
     {
         DIALOG_PAD_PRIMITIVE_POLY_PROPS dlg( this, m_parent, shape.get() );
 
@@ -2165,16 +2165,15 @@ void DIALOG_PAD_PROPERTIES::onAddPrimitive( wxCommandEvent& event )
     if( type == -1 )
         return;
 
-    PCB_SHAPE_TYPE listtype[] = { PCB_SHAPE_TYPE::SEGMENT, PCB_SHAPE_TYPE::ARC,
-                                  PCB_SHAPE_TYPE::CURVE, PCB_SHAPE_TYPE::CIRCLE,
-                                  PCB_SHAPE_TYPE::POLYGON };
+    SHAPE_T listtype[] = { SHAPE_T::SEGMENT, SHAPE_T::ARC, SHAPE_T::BEZIER, SHAPE_T::CIRCLE,
+                           SHAPE_T::POLY };
 
     PCB_SHAPE* primitive = new PCB_SHAPE();
     primitive->SetShape( listtype[type] );
     primitive->SetWidth( m_board->GetDesignSettings().GetLineThickness( F_Cu ) );
     primitive->SetFilled( true );
 
-    if( listtype[type] == PCB_SHAPE_TYPE::POLYGON )
+    if( listtype[type] == SHAPE_T::POLY )
     {
         DIALOG_PAD_PRIMITIVE_POLY_PROPS dlg( this, m_parent, primitive );
 

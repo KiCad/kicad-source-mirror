@@ -191,12 +191,12 @@ std::shared_ptr<EDIT_POINTS> PCB_POINT_EDITOR::makePoints( EDA_ITEM* aItem )
 
         switch( shape->GetShape() )
         {
-        case PCB_SHAPE_TYPE::SEGMENT:
+        case SHAPE_T::SEGMENT:
             points->AddPoint( shape->GetStart() );
             points->AddPoint( shape->GetEnd() );
             break;
 
-        case PCB_SHAPE_TYPE::RECT:
+        case SHAPE_T::RECT:
             points->AddPoint( shape->GetStart() );
             points->AddPoint( wxPoint( shape->GetEnd().x, shape->GetStart().y ) );
             points->AddPoint( shape->GetEnd() );
@@ -213,7 +213,7 @@ std::shared_ptr<EDIT_POINTS> PCB_POINT_EDITOR::makePoints( EDA_ITEM* aItem )
 
             break;
 
-        case PCB_SHAPE_TYPE::ARC:
+        case SHAPE_T::ARC:
             points->AddPoint( shape->GetCenter() );
             points->AddPoint( shape->GetArcStart() );
             points->AddPoint( shape->GetArcMid() );
@@ -225,16 +225,16 @@ std::shared_ptr<EDIT_POINTS> PCB_POINT_EDITOR::makePoints( EDA_ITEM* aItem )
             points->Point( ARC_END ).SetGridConstraint( SNAP_TO_GRID );
             break;
 
-        case PCB_SHAPE_TYPE::CIRCLE:
+        case SHAPE_T::CIRCLE:
             points->AddPoint( shape->GetCenter() );
             points->AddPoint( shape->GetEnd() );
             break;
 
-        case PCB_SHAPE_TYPE::POLYGON:
+        case SHAPE_T::POLY:
             buildForPolyOutline( points, &shape->GetPolyShape() );
             break;
 
-        case PCB_SHAPE_TYPE::CURVE:
+        case SHAPE_T::BEZIER:
             points->AddPoint( shape->GetStart() );
             points->AddPoint( shape->GetBezierC1() );
             points->AddPoint( shape->GetBezierC2() );
@@ -1042,7 +1042,7 @@ void PCB_POINT_EDITOR::updateItem() const
 
         switch( shape->GetShape() )
         {
-        case PCB_SHAPE_TYPE::SEGMENT:
+        case SHAPE_T::SEGMENT:
             if( isModified( m_editPoints->Point( SEG_START ) ) )
                 shape->SetStart( (wxPoint) m_editPoints->Point( SEG_START ).GetPosition() );
             else if( isModified( m_editPoints->Point( SEG_END ) ) )
@@ -1050,7 +1050,7 @@ void PCB_POINT_EDITOR::updateItem() const
 
             break;
 
-        case PCB_SHAPE_TYPE::RECT:
+        case SHAPE_T::RECT:
         {
             if( isModified( m_editPoints->Point( RECT_TOP_LEFT ) ) )
             {
@@ -1096,7 +1096,7 @@ void PCB_POINT_EDITOR::updateItem() const
         }
             break;
 
-        case PCB_SHAPE_TYPE::ARC:
+        case SHAPE_T::ARC:
         {
             VECTOR2I center = m_editPoints->Point( ARC_CENTER ).GetPosition();
             VECTOR2I mid = m_editPoints->Point( ARC_MID ).GetPosition();
@@ -1130,7 +1130,7 @@ void PCB_POINT_EDITOR::updateItem() const
         }
             break;
 
-        case PCB_SHAPE_TYPE::CIRCLE:
+        case SHAPE_T::CIRCLE:
         {
             const VECTOR2I& center = m_editPoints->Point( CIRC_CENTER ).GetPosition();
             const VECTOR2I& end = m_editPoints->Point( CIRC_END ).GetPosition();
@@ -1147,7 +1147,7 @@ void PCB_POINT_EDITOR::updateItem() const
         }
             break;
 
-        case PCB_SHAPE_TYPE::POLYGON:
+        case SHAPE_T::POLY:
         {
             SHAPE_POLY_SET& outline = shape->GetPolyShape();
 
@@ -1165,7 +1165,7 @@ void PCB_POINT_EDITOR::updateItem() const
         }
             break;
 
-        case PCB_SHAPE_TYPE::CURVE:
+        case SHAPE_T::BEZIER:
             if( isModified( m_editPoints->Point( BEZIER_CURVE_START ) ) )
                 shape->SetStart( (wxPoint) m_editPoints->Point( BEZIER_CURVE_START ).
                                  GetPosition() );
@@ -1561,12 +1561,12 @@ void PCB_POINT_EDITOR::updatePoints()
 
         switch( shape->GetShape() )
         {
-        case PCB_SHAPE_TYPE::SEGMENT:
+        case SHAPE_T::SEGMENT:
             m_editPoints->Point( SEG_START ).SetPosition( shape->GetStart() );
             m_editPoints->Point( SEG_END ).SetPosition( shape->GetEnd() );
             break;
 
-        case PCB_SHAPE_TYPE::RECT:
+        case SHAPE_T::RECT:
             m_editPoints->Point( RECT_TOP_LEFT ).SetPosition( shape->GetStart() );
             m_editPoints->Point( RECT_TOP_RIGHT ).SetPosition( shape->GetEnd().x,
                                                                shape->GetStart().y );
@@ -1575,19 +1575,19 @@ void PCB_POINT_EDITOR::updatePoints()
                                                               shape->GetEnd().y );
             break;
 
-        case PCB_SHAPE_TYPE::ARC:
+        case SHAPE_T::ARC:
             m_editPoints->Point( ARC_CENTER ).SetPosition( shape->GetCenter() );
             m_editPoints->Point( ARC_START ).SetPosition( shape->GetArcStart() );
             m_editPoints->Point( ARC_MID ).SetPosition( shape->GetArcMid() );
             m_editPoints->Point( ARC_END ).SetPosition( shape->GetArcEnd() );
             break;
 
-        case PCB_SHAPE_TYPE::CIRCLE:
+        case SHAPE_T::CIRCLE:
             m_editPoints->Point( CIRC_CENTER ).SetPosition( shape->GetCenter() );
             m_editPoints->Point( CIRC_END ).SetPosition( shape->GetEnd() );
             break;
 
-        case PCB_SHAPE_TYPE::POLYGON:
+        case SHAPE_T::POLY:
         {
             const auto& points = shape->BuildPolyPointsList();
 
@@ -1609,7 +1609,7 @@ void PCB_POINT_EDITOR::updatePoints()
             break;
         }
 
-        case PCB_SHAPE_TYPE::CURVE:
+        case SHAPE_T::BEZIER:
             m_editPoints->Point( BEZIER_CURVE_START ).SetPosition( shape->GetStart() );
             m_editPoints->Point( BEZIER_CURVE_CONTROL_POINT1 ).SetPosition( shape->GetBezierC1() );
             m_editPoints->Point( BEZIER_CURVE_CONTROL_POINT2 ).SetPosition( shape->GetBezierC2() );
@@ -1791,10 +1791,11 @@ void PCB_POINT_EDITOR::setAltConstraint( bool aEnabled )
 {
     if( aEnabled )
     {
+        EDA_ITEM*  parent = m_editPoints->GetParent();
         EDIT_LINE* line = dynamic_cast<EDIT_LINE*>( m_editedPoint );
         bool       isPoly;
 
-        switch( m_editPoints->GetParent()->Type() )
+        switch( parent->Type() )
         {
         case PCB_ZONE_T:
         case PCB_FP_ZONE_T:
@@ -1803,8 +1804,7 @@ void PCB_POINT_EDITOR::setAltConstraint( bool aEnabled )
 
         case PCB_SHAPE_T:
         case PCB_FP_SHAPE_T:
-            isPoly = static_cast<PCB_SHAPE*>( m_editPoints->GetParent() )->GetShape()
-                     == PCB_SHAPE_TYPE::POLYGON;
+            isPoly = static_cast<PCB_SHAPE*>( parent )->GetShape() == SHAPE_T::POLY;
             break;
 
         default:
@@ -1841,11 +1841,11 @@ EDIT_POINT PCB_POINT_EDITOR::get45DegConstrainer() const
     case PCB_FP_SHAPE_T:
         switch( static_cast<const PCB_SHAPE*>( item )->GetShape() )
         {
-        case PCB_SHAPE_TYPE::SEGMENT:
+        case SHAPE_T::SEGMENT:
             return *( m_editPoints->Next( *m_editedPoint ) );     // select the other end of line
 
-        case PCB_SHAPE_TYPE::ARC:
-        case PCB_SHAPE_TYPE::CIRCLE:
+        case SHAPE_T::ARC:
+        case SHAPE_T::CIRCLE:
             return m_editPoints->Point( CIRC_CENTER );
 
         default:        // suppress warnings
@@ -1897,8 +1897,7 @@ bool PCB_POINT_EDITOR::canAddCorner( const EDA_ITEM& aItem )
     if( type == PCB_SHAPE_T || type == PCB_FP_SHAPE_T )
     {
         const PCB_SHAPE& shape = static_cast<const PCB_SHAPE&>( aItem );
-        return shape.GetShape() == PCB_SHAPE_TYPE::SEGMENT
-               || shape.GetShape() == PCB_SHAPE_TYPE::POLYGON;
+        return shape.GetShape() == SHAPE_T::SEGMENT || shape.GetShape() == SHAPE_T::POLY;
     }
 
     return false;
@@ -1952,7 +1951,7 @@ bool PCB_POINT_EDITOR::removeCornerCondition( const SELECTION& )
 
     case PCB_SHAPE_T:
     case PCB_FP_SHAPE_T:
-        if( static_cast<PCB_SHAPE*>( item )->GetShape() == PCB_SHAPE_TYPE::POLYGON )
+        if( static_cast<PCB_SHAPE*>( item )->GetShape() == SHAPE_T::POLY )
             polyset = &static_cast<PCB_SHAPE*>( item )->GetPolyShape();
         else
             return false;
@@ -2003,7 +2002,7 @@ int PCB_POINT_EDITOR::addCorner( const TOOL_EVENT& aEvent )
     BOARD_COMMIT commit( frame );
 
     if( item->Type() == PCB_ZONE_T || item->Type() == PCB_FP_ZONE_T
-        || ( graphicItem && graphicItem->GetShape() == PCB_SHAPE_TYPE::POLYGON ) )
+        || ( graphicItem && graphicItem->GetShape() == SHAPE_T::POLY ) )
     {
         unsigned int nearestIdx = 0;
         unsigned int nextNearestIdx = 0;
@@ -2073,7 +2072,7 @@ int PCB_POINT_EDITOR::addCorner( const TOOL_EVENT& aEvent )
 
         commit.Push( _( "Add a zone corner" ) );
     }
-    else if( graphicItem && graphicItem->GetShape() == PCB_SHAPE_TYPE::SEGMENT )
+    else if( graphicItem && graphicItem->GetShape() == SHAPE_T::SEGMENT )
     {
         commit.Modify( graphicItem );
 
@@ -2138,7 +2137,7 @@ int PCB_POINT_EDITOR::removeCorner( const TOOL_EVENT& aEvent )
     {
         PCB_SHAPE* shape = static_cast<PCB_SHAPE*>( item );
 
-        if( shape->GetShape() == PCB_SHAPE_TYPE::POLYGON )
+        if( shape->GetShape() == SHAPE_T::POLY )
             polygon = &shape->GetPolyShape();
     }
 

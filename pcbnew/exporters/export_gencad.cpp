@@ -1210,7 +1210,7 @@ static void FootprintWriteShape( FILE* aFile, FOOTPRINT* aFootprint, const wxStr
             {
                 switch( shape->GetShape() )
                 {
-                case PCB_SHAPE_TYPE::SEGMENT:
+                case SHAPE_T::SEGMENT:
                     fprintf( aFile, "LINE %g %g %g %g\n",
                              shape->GetStart0().x / SCALE_FACTOR,
                              -shape->GetStart0().y / SCALE_FACTOR,
@@ -1218,7 +1218,7 @@ static void FootprintWriteShape( FILE* aFile, FOOTPRINT* aFootprint, const wxStr
                              -shape->GetEnd0().y / SCALE_FACTOR );
                     break;
 
-                case PCB_SHAPE_TYPE::RECT:
+                case SHAPE_T::RECT:
                 {
                     fprintf( aFile, "LINE %g %g %g %g\n",
                              shape->GetStart0().x / SCALE_FACTOR,
@@ -1243,7 +1243,7 @@ static void FootprintWriteShape( FILE* aFile, FOOTPRINT* aFootprint, const wxStr
                 }
                     break;
 
-                case PCB_SHAPE_TYPE::CIRCLE:
+                case SHAPE_T::CIRCLE:
                 {
                     int radius = KiROUND( GetLineLength( shape->GetEnd0(), shape->GetStart0() ) );
 
@@ -1254,7 +1254,7 @@ static void FootprintWriteShape( FILE* aFile, FOOTPRINT* aFootprint, const wxStr
                     break;
                 }
 
-                case PCB_SHAPE_TYPE::ARC:
+                case SHAPE_T::ARC:
                 {
                     int arcendx, arcendy;
                     arcendx = shape->GetEnd0().x - shape->GetStart0().x;
@@ -1273,7 +1273,7 @@ static void FootprintWriteShape( FILE* aFile, FOOTPRINT* aFootprint, const wxStr
                     break;
                 }
 
-                case PCB_SHAPE_TYPE::POLYGON:
+                case SHAPE_T::POLY:
                     // Not exported (TODO)
                     break;
 
