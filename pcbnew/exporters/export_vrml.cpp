@@ -155,7 +155,7 @@ void EXPORTER_PCB_VRML::SetOffset( double aXoff, double aYoff )
 }
 
 
-bool EXPORTER_PCB_VRML::GetLayer3D( LAYER_NUM layer, VRML_LAYER** vlayer )
+bool EXPORTER_PCB_VRML::GetLayer3D( int layer, VRML_LAYER** vlayer )
 {
     // select the VRML layer object to draw on; return true if
     // a layer has been selected.

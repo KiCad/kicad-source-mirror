@@ -1369,7 +1369,7 @@ void PCB_PLUGIN::formatLayers( LSET aLayerMask, int aNestLevel ) const
     // output any individual layers not handled in wildcard combos above
     wxString layerName;
 
-    for( LAYER_NUM layer = 0; layer < PCB_LAYER_ID_COUNT; ++layer )
+    for( int layer = 0; layer < PCB_LAYER_ID_COUNT; ++layer )
     {
         if( aLayerMask[layer] )
         {

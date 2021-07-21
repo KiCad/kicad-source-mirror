@@ -490,28 +490,26 @@ struct EROT
 /// Eagle wire
 struct EWIRE
 {
-    ECOORD     x1;
-    ECOORD     y1;
-    ECOORD     x2;
-    ECOORD     y2;
-    ECOORD     width;
-    LAYER_NUM  layer;
+    ECOORD x1;
+    ECOORD y1;
+    ECOORD x2;
+    ECOORD y2;
+    ECOORD width;
+    int    layer;
 
     // for style: (continuous | longdash | shortdash | dashdot)
-    enum {
-        CONTINUOUS,
-        LONGDASH,
-        SHORTDASH,
-        DASHDOT,
-    };
+    enum { CONTINUOUS,
+           LONGDASH,
+           SHORTDASH,
+           DASHDOT };
+
     opt_int     style;
     opt_double  curve;      ///< range is -359.9..359.9
 
     // for cap: (flat | round)
-    enum {
-        FLAT,
-        ROUND,
-    };
+    enum { FLAT,
+           ROUND };
+
     opt_int     cap;
 
     EWIRE( wxXmlNode* aWire );
@@ -531,13 +529,13 @@ struct EJUNCTION
 /// Eagle label
 struct ELABEL
 {
-    ECOORD     x;
-    ECOORD     y;
-    ECOORD     size;
-    LAYER_NUM  layer;
-    opt_erot rot;
+    ECOORD       x;
+    ECOORD       y;
+    ECOORD       size;
+    int          layer;
+    opt_erot     rot;
     opt_wxString xref;
-    wxString netname;
+    wxString     netname;
 
     ELABEL( wxXmlNode* aLabel, const wxString& aNetName );
 };
@@ -546,12 +544,12 @@ struct ELABEL
 /// Eagle via
 struct EVIA
 {
-    ECOORD     x;
-    ECOORD     y;
-    int        layer_front_most;   /// < extent
-    int        layer_back_most;    /// < inclusive
-    ECOORD     drill;
-    opt_ecoord diam;
+    ECOORD       x;
+    ECOORD       y;
+    int          layer_front_most;   /// < extent
+    int          layer_back_most;    /// < inclusive
+    ECOORD       drill;
+    opt_ecoord   diam;
     opt_wxString shape;
 
     EVIA( wxXmlNode* aVia );
@@ -561,11 +559,11 @@ struct EVIA
 /// Eagle circle
 struct ECIRCLE
 {
-    ECOORD    x;
-    ECOORD    y;
-    ECOORD    radius;
-    ECOORD    width;
-    LAYER_NUM layer;
+    ECOORD x;
+    ECOORD y;
+    ECOORD radius;
+    ECOORD width;
+    int    layer;
 
     ECIRCLE( wxXmlNode* aCircle );
 };

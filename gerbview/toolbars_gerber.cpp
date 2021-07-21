@@ -85,8 +85,10 @@ void GERBVIEW_FRAME::ReCreateHToolbar()
     m_mainToolBar->AddControl( m_SelLayerBox );
 
     if( !m_TextInfo )
-        m_TextInfo = new wxTextCtrl( m_mainToolBar, ID_TOOLBARH_GERBER_DATA_TEXT_BOX, wxEmptyString, wxDefaultPosition,
-                                     wxDefaultSize, wxTE_READONLY );
+    {
+        m_TextInfo = new wxTextCtrl( m_mainToolBar, ID_TOOLBARH_GERBER_DATA_TEXT_BOX, wxEmptyString,
+                                     wxDefaultPosition, wxDefaultSize, wxTE_READONLY );
+    }
 
     m_mainToolBar->AddControl( m_TextInfo );
 
@@ -108,8 +110,8 @@ void GERBVIEW_FRAME::ReCreateAuxiliaryToolbar()
     }
     else
     {
-        m_auxiliaryToolBar = new ACTION_TOOLBAR( this, ID_AUX_TOOLBAR,
-                                                 wxDefaultPosition, wxDefaultSize,
+        m_auxiliaryToolBar = new ACTION_TOOLBAR( this, ID_AUX_TOOLBAR, wxDefaultPosition,
+                                                 wxDefaultSize,
                                                  KICAD_AUI_TB_STYLE | wxAUI_TB_HORZ_LAYOUT );
         m_auxiliaryToolBar->SetAuiManager( &m_auimgr );
     }
@@ -118,8 +120,7 @@ void GERBVIEW_FRAME::ReCreateAuxiliaryToolbar()
     // (note, when the m_auxiliaryToolBar is recreated, tools are deleted, but controls
     // are not deleted: they are just no longer managed by the toolbar
     if( !m_SelComponentBox )
-        m_SelComponentBox = new wxChoice( m_auxiliaryToolBar,
-                                          ID_GBR_AUX_TOOLBAR_PCB_CMP_CHOICE );
+        m_SelComponentBox = new wxChoice( m_auxiliaryToolBar, ID_GBR_AUX_TOOLBAR_PCB_CMP_CHOICE );
 
     if( !m_cmpText )
         m_cmpText = new wxStaticText( m_auxiliaryToolBar, wxID_ANY, _( "Cmp:" ) + wxS( " " ) );
@@ -132,8 +133,7 @@ void GERBVIEW_FRAME::ReCreateAuxiliaryToolbar()
 
     // Creates choice box to display net names and highlight selected:
     if( !m_SelNetnameBox )
-        m_SelNetnameBox = new wxChoice( m_auxiliaryToolBar,
-                                        ID_GBR_AUX_TOOLBAR_PCB_NET_CHOICE );
+        m_SelNetnameBox = new wxChoice( m_auxiliaryToolBar, ID_GBR_AUX_TOOLBAR_PCB_NET_CHOICE );
 
     if( !m_netText )
         m_netText = new wxStaticText( m_auxiliaryToolBar, wxID_ANY, _( "Net:" ) );
@@ -146,8 +146,10 @@ void GERBVIEW_FRAME::ReCreateAuxiliaryToolbar()
 
     // Creates choice box to display aperture attributes and highlight selected:
     if( !m_SelAperAttributesBox )
+    {
         m_SelAperAttributesBox = new wxChoice( m_auxiliaryToolBar,
                                                ID_GBR_AUX_TOOLBAR_PCB_APERATTRIBUTES_CHOICE );
+    }
 
     if( !m_apertText )
         m_apertText = new wxStaticText( m_auxiliaryToolBar, wxID_ANY, _( "Attr:" ) );
@@ -159,9 +161,11 @@ void GERBVIEW_FRAME::ReCreateAuxiliaryToolbar()
     m_auxiliaryToolBar->AddSpacer( 5 );
 
     if( !m_DCodeSelector )
+    {
         m_DCodeSelector = new DCODE_SELECTION_BOX( m_auxiliaryToolBar,
                                                    ID_TOOLBARH_GERBER_SELECT_ACTIVE_DCODE,
                                                    wxDefaultPosition, wxSize( 150, -1 ) );
+    }
 
     if( !m_dcodeText )
         m_dcodeText = new wxStaticText( m_auxiliaryToolBar, wxID_ANY, _( "DCode:" ) );
@@ -172,8 +176,8 @@ void GERBVIEW_FRAME::ReCreateAuxiliaryToolbar()
 
     if( !m_gridSelectBox )
     {
-        m_gridSelectBox = new wxChoice( m_auxiliaryToolBar, ID_ON_GRID_SELECT,
-                                        wxDefaultPosition, wxDefaultSize, 0, nullptr );
+        m_gridSelectBox = new wxChoice( m_auxiliaryToolBar, ID_ON_GRID_SELECT, wxDefaultPosition,
+                                        wxDefaultSize, 0, nullptr );
     }
 
     m_auxiliaryToolBar->AddScaledSeparator( this );
@@ -181,8 +185,8 @@ void GERBVIEW_FRAME::ReCreateAuxiliaryToolbar()
 
     if( !m_zoomSelectBox )
     {
-        m_zoomSelectBox = new wxChoice( m_auxiliaryToolBar, ID_ON_ZOOM_SELECT,
-                                        wxDefaultPosition, wxDefaultSize, 0, nullptr );
+        m_zoomSelectBox = new wxChoice( m_auxiliaryToolBar, ID_ON_ZOOM_SELECT, wxDefaultPosition,
+                                        wxDefaultSize, 0, nullptr );
     }
 
     m_auxiliaryToolBar->AddScaledSeparator( this );
@@ -343,8 +347,8 @@ void GERBVIEW_FRAME::updateDCodeSelectBox()
                     dcode->m_Num_Dcode,
                     dcode->m_Size.x / scale, dcode->m_Size.y / scale,
                     units,
-                    D_CODE::ShowApertureType( dcode->m_Shape )
-                    );
+                    D_CODE::ShowApertureType( dcode->m_Shape ) );
+
         if( !dcode->m_AperFunction.IsEmpty() )
             msg << ", " << dcode->m_AperFunction;
 
@@ -384,8 +388,8 @@ void GERBVIEW_FRAME::updateComponentListSelectBox()
     m_SelComponentBox->Append( NO_SELECTION_STRING );
 
     // Now copy the list to the choice box
-    for( auto& ii : full_list )
-        m_SelComponentBox->Append( ii.first );
+    for( const std::pair<const wxString, int>& entry : full_list )
+        m_SelComponentBox->Append( entry.first );
 
     m_SelComponentBox->SetSelection( 0 );
 }
@@ -412,8 +416,8 @@ void GERBVIEW_FRAME::updateNetnameListSelectBox()
     m_SelNetnameBox->Append( NO_SELECTION_STRING );
 
     // Now copy the list to the choice box
-    for( auto& ii : full_list )
-        m_SelNetnameBox->Append( UnescapeString( ii.first ) );
+    for( const std::pair<const wxString, int>& entry : full_list )
+        m_SelNetnameBox->Append( UnescapeString( entry.first ) );
 
     m_SelNetnameBox->SetSelection( 0 );
 }
@@ -455,10 +459,8 @@ void GERBVIEW_FRAME::updateAperAttributesSelectBox()
     m_SelAperAttributesBox->Append( NO_SELECTION_STRING );
 
     // Now copy the list to the choice box
-    for( auto ii = full_list.begin(); ii != full_list.end(); ++ii )
-    {
-        m_SelAperAttributesBox->Append( ii->first );
-    }
+    for( const std::pair<const wxString, int>& entry : full_list )
+        m_SelAperAttributesBox->Append( entry.first );
 
     m_SelAperAttributesBox->SetSelection( 0 );
 }
@@ -468,20 +470,10 @@ void GERBVIEW_FRAME::OnUpdateDrawMode( wxUpdateUIEvent& aEvent )
 {
     switch( aEvent.GetId() )
     {
-    case ID_TB_OPTIONS_SHOW_GBR_MODE_0:
-        aEvent.Check( GetDisplayMode() == 0 );
-        break;
-
-    case ID_TB_OPTIONS_SHOW_GBR_MODE_1:
-        aEvent.Check( GetDisplayMode() == 1 );
-        break;
-
-    case ID_TB_OPTIONS_SHOW_GBR_MODE_2:
-        aEvent.Check( GetDisplayMode() == 2 );
-        break;
-
-    default:
-        break;
+    case ID_TB_OPTIONS_SHOW_GBR_MODE_0: aEvent.Check( GetDisplayMode() == 0 ); break;
+    case ID_TB_OPTIONS_SHOW_GBR_MODE_1: aEvent.Check( GetDisplayMode() == 1 ); break;
+    case ID_TB_OPTIONS_SHOW_GBR_MODE_2: aEvent.Check( GetDisplayMode() == 2 ); break;
+    default:                                                                   break;
     }
 }
 
@@ -491,9 +483,9 @@ void GERBVIEW_FRAME::OnUpdateSelectDCode( wxUpdateUIEvent& aEvent )
     if( !m_DCodeSelector )
         return;
 
-    int layer = GetActiveLayer();
+    int                layer = GetActiveLayer();
     GERBER_FILE_IMAGE* gerber = GetGbrImage( layer );
-    int selected = ( gerber ) ? gerber->m_Selected_Tool : 0;
+    int                selected = gerber ? gerber->m_Selected_Tool : 0;
 
     aEvent.Enable( gerber != nullptr );
 

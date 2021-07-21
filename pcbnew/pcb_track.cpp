@@ -384,10 +384,8 @@ LSET PCB_VIA::GetLayerSet() const
     wxASSERT( m_layer <= m_bottomLayer );
 
     // PCB_LAYER_IDs are numbered from front to back, this is top to bottom.
-    for( LAYER_NUM id = m_layer; id <= m_bottomLayer; ++id )
-    {
+    for( int id = m_layer; id <= m_bottomLayer; ++id )
         layermask.set( id );
-    }
 
     return layermask;
 }

@@ -34,13 +34,6 @@
 
 
 /**
- * This can be replaced with int and removed.  Until then, it is something you can increment,
- * and its meaning is only advisory but can extend beyond PCB layers into view layers
- * and gerber layers.
- */
-typedef int     LAYER_NUM;
-
-/**
  * A quick note on layer IDs:
  *
  * The layers are stored in separate enums so that certain functions can
@@ -773,7 +766,7 @@ private:
  * @param aLayerId = Layer index to test. It can be an int, so its useful during I/O
  * @return true if aLayerIndex is a valid layer index
  */
-inline bool IsValidLayer( LAYER_NUM aLayerId )
+inline bool IsValidLayer( int aLayerId )
 {
     return unsigned( aLayerId ) < PCB_LAYER_ID_COUNT;
 }
@@ -784,7 +777,7 @@ inline bool IsValidLayer( LAYER_NUM aLayerId )
  * @param aLayer = Layer to test
  * @return true if aLayer is a layer valid in Pcbnew
  */
-inline bool IsPcbLayer( LAYER_NUM aLayer )
+inline bool IsPcbLayer( int aLayer )
 {
     return aLayer >= F_Cu && aLayer < PCB_LAYER_ID_COUNT;
 }
@@ -795,7 +788,7 @@ inline bool IsPcbLayer( LAYER_NUM aLayer )
  * @param aLayerId = Layer  to test
  * @return true if aLayer is a valid copper layer
  */
-inline bool IsCopperLayer( LAYER_NUM aLayerId )
+inline bool IsCopperLayer( int aLayerId )
 {
     return aLayerId >= F_Cu && aLayerId <= B_Cu;
 }
@@ -806,7 +799,7 @@ inline bool IsCopperLayer( LAYER_NUM aLayerId )
  * @param aLayerId = Layer to test
  * @return true if aLayer is a non copper layer
  */
-inline bool IsNonCopperLayer( LAYER_NUM aLayerId )
+inline bool IsNonCopperLayer( int aLayerId )
 {
     return aLayerId > B_Cu && aLayerId <= PCB_LAYER_ID_COUNT;
 }
@@ -819,7 +812,7 @@ inline bool IsNonCopperLayer( LAYER_NUM aLayerId )
  * @param aIncludeSyntheticCopperLayers
  * @return
  */
-inline bool IsCopperLayer( LAYER_NUM aLayerId, bool aIncludeSyntheticCopperLayers )
+inline bool IsCopperLayer( int aLayerId, bool aIncludeSyntheticCopperLayers )
 {
     if( aIncludeSyntheticCopperLayers )
         return !IsNonCopperLayer( aLayerId );
@@ -827,14 +820,14 @@ inline bool IsCopperLayer( LAYER_NUM aLayerId, bool aIncludeSyntheticCopperLayer
         return IsCopperLayer( aLayerId );
 }
 
-inline bool IsViaPadLayer( LAYER_NUM aLayer )
+inline bool IsViaPadLayer( int aLayer )
 {
     return aLayer == LAYER_VIA_THROUGH
             || aLayer == LAYER_VIA_MICROVIA
             || aLayer == LAYER_VIA_BBLIND;
 }
 
-inline bool IsHoleLayer( LAYER_NUM aLayer )
+inline bool IsHoleLayer( int aLayer )
 {
     return aLayer == LAYER_VIA_HOLES
             || aLayer == LAYER_VIA_HOLEWALLS
@@ -854,19 +847,17 @@ inline bool IsUserLayer( PCB_LAYER_ID aLayerId )
     return aLayerId >= Dwgs_User && aLayerId <= Eco2_User;
 }
 
+
 /*
-   @todo Where does this comment actually belong?
-
-   IMPORTANT: If a layer is not a front layer not necessarily is true
-   the converse. The same hold for a back layer.
-   So a layer can be:
-   - Front
-   - Back
-   - Neither (internal or auxiliary)
-
-   The check most frequent is for back layers, since it involves flips
-*/
-
+ * IMPORTANT: If a layer is not a front layer that doesn't necessarily mean it's a back layer.
+ *
+ * So a layer can be:
+ *   - Front
+ *   - Back
+ *   - Neither (internal or auxiliary)
+ *
+ * The check most frequent is for back layers, since it involves flips.
+ */
 
 /**
  * Layer classification: check if it's a front layer
@@ -963,14 +954,13 @@ inline int GetNetnameLayer( int aLayer )
  * @param aLayer = Layer to test
  * @return true if aLayer is a valid netname layer
  */
-inline bool IsNetnameLayer( LAYER_NUM aLayer )
+inline bool IsNetnameLayer( int aLayer )
 {
-    return aLayer >= NETNAMES_LAYER_INDEX( F_Cu ) &&
-           aLayer < NETNAMES_LAYER_ID_END;
+    return aLayer >= NETNAMES_LAYER_INDEX( F_Cu ) && aLayer < NETNAMES_LAYER_ID_END;
 }
 
 
-inline bool IsZoneLayer( LAYER_NUM aLayer )
+inline bool IsZoneLayer( int aLayer )
 {
     return aLayer >= LAYER_ZONE_START && aLayer <= LAYER_ZONE_END;
 }
@@ -978,8 +968,8 @@ inline bool IsZoneLayer( LAYER_NUM aLayer )
 
 inline bool IsDCodeLayer( int aLayer )
 {
-    return aLayer >= (GERBVIEW_LAYER_ID_START + GERBER_DRAWLAYERS_COUNT) &&
-           aLayer < (GERBVIEW_LAYER_ID_START + (2 * GERBER_DRAWLAYERS_COUNT));
+    return aLayer >= ( GERBVIEW_LAYER_ID_START + GERBER_DRAWLAYERS_COUNT )
+            && aLayer < ( GERBVIEW_LAYER_ID_START + ( 2 * GERBER_DRAWLAYERS_COUNT ) );
 }
 
 
@@ -989,18 +979,18 @@ inline bool IsDCodeLayer( int aLayer )
  * @param aLayer is the layer to test
  * @return true if the layer is one that participates in net coloring
  */
-inline bool IsNetCopperLayer( LAYER_NUM aLayer )
+inline bool IsNetCopperLayer( int aLayer )
 {
-    static std::set<LAYER_NUM> netCopperLayers =
+    static std::set<int> netCopperLayers =
             {
-                    LAYER_PAD_FR,
-                    LAYER_PAD_BK,
-                    LAYER_PADS_TH,
-                    LAYER_PAD_HOLEWALLS,
-                    LAYER_VIA_THROUGH,
-                    LAYER_VIA_BBLIND,
-                    LAYER_VIA_MICROVIA,
-                    LAYER_VIA_HOLEWALLS
+                LAYER_PAD_FR,
+                LAYER_PAD_BK,
+                LAYER_PADS_TH,
+                LAYER_PAD_HOLEWALLS,
+                LAYER_VIA_THROUGH,
+                LAYER_VIA_BBLIND,
+                LAYER_VIA_MICROVIA,
+                LAYER_VIA_HOLEWALLS
             };
 
     return IsCopperLayer( aLayer ) || netCopperLayers.count( aLayer );

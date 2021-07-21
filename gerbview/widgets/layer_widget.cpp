@@ -66,7 +66,7 @@ int LAYER_WIDGET::encodeId( int aColumn, int aId )
 }
 
 
-LAYER_NUM LAYER_WIDGET::getDecodedId( int aControlId )
+int LAYER_WIDGET::getDecodedId( int aControlId )
 {
     int id = aControlId / LYR_COLUMN_COUNT;    // rounding is OK.
     return id;
@@ -76,7 +76,7 @@ LAYER_NUM LAYER_WIDGET::getDecodedId( int aControlId )
 void LAYER_WIDGET::OnLeftDownLayers( wxMouseEvent& event )
 {
     int row;
-    LAYER_NUM layer;
+    int layer;
 
     wxWindow* eventSource = (wxWindow*) event.GetEventObject();
 
@@ -154,7 +154,7 @@ void LAYER_WIDGET::OnLayerSwatchChanged( wxCommandEvent& aEvent )
 {
     COLOR_SWATCH* eventSource = static_cast<COLOR_SWATCH*>( aEvent.GetEventObject() );
     COLOR4D       newColor = eventSource->GetSwatchColor();
-    LAYER_NUM     layer = getDecodedId( eventSource->GetId() );
+    int           layer = getDecodedId( eventSource->GetId() );
 
     // tell the client code.
     OnLayerColorChange( layer, newColor );
@@ -170,7 +170,8 @@ void LAYER_WIDGET::OnLayerSwatchChanged( wxCommandEvent& aEvent )
 void LAYER_WIDGET::OnLayerCheckBox( wxCommandEvent& event )
 {
     wxCheckBox* eventSource = (wxCheckBox*) event.GetEventObject();
-    LAYER_NUM layer = getDecodedId( eventSource->GetId() );
+    int         layer = getDecodedId( eventSource->GetId() );
+
     OnLayerVisible( layer, eventSource->IsChecked() );
     passOnFocus();
 }
@@ -201,20 +202,16 @@ void LAYER_WIDGET::OnRightDownRender( wxMouseEvent& aEvent, COLOR_SWATCH* aColor
 
 void LAYER_WIDGET::OnRenderSwatchChanged( wxCommandEvent& aEvent )
 {
-    auto eventSource = static_cast<COLOR_SWATCH*>( aEvent.GetEventObject() );
-
-    COLOR4D newColor = eventSource->GetSwatchColor();
-
-    LAYER_NUM id = getDecodedId( eventSource->GetId() );
+    COLOR_SWATCH* eventSource = static_cast<COLOR_SWATCH*>( aEvent.GetEventObject() );
+    COLOR4D       newColor = eventSource->GetSwatchColor();
+    int           id = getDecodedId( eventSource->GetId() );
 
     if( id == LAYER_PCB_BACKGROUND )
     {
         // Update all swatch backgrounds
-        int count = GetLayerRowCount();
-        int row;
         int col = 1;    // bitmap button is column 1 in layers tab
 
-        for( row = 0; row < count; ++row )
+        for( int row = 0; row < GetLayerRowCount(); ++row )
         {
             COLOR_SWATCH* swatch = dynamic_cast<COLOR_SWATCH*>( getLayerComp( row, col ) );
 
@@ -222,10 +219,9 @@ void LAYER_WIDGET::OnRenderSwatchChanged( wxCommandEvent& aEvent )
                 swatch->SetSwatchBackground( newColor );
         }
 
-        count = GetRenderRowCount();
         col = 0;    // bitmap button is column 0 in render tab
 
-        for( row = 0; row < count; ++row )
+        for( int row = 0; row < GetRenderRowCount(); ++row )
         {
             COLOR_SWATCH* swatch = dynamic_cast<COLOR_SWATCH*>( getRenderComp( row, col ) );
 
@@ -244,7 +240,8 @@ void LAYER_WIDGET::OnRenderSwatchChanged( wxCommandEvent& aEvent )
 void LAYER_WIDGET::OnRenderCheckBox( wxCommandEvent& event )
 {
     wxCheckBox* eventSource = (wxCheckBox*) event.GetEventObject();
-    LAYER_NUM id = getDecodedId( eventSource->GetId() );
+    int         id = getDecodedId( eventSource->GetId() );
+
     OnRenderEnable( id, eventSource->IsChecked() );
     passOnFocus();
 }
@@ -271,7 +268,7 @@ wxWindow* LAYER_WIDGET::getLayerComp( int aRow, int aColumn ) const
 }
 
 
-int LAYER_WIDGET::findLayerRow( LAYER_NUM aLayer ) const
+int LAYER_WIDGET::findLayerRow( int aLayer ) const
 {
     int count = GetLayerRowCount();
 
@@ -710,14 +707,14 @@ void LAYER_WIDGET::SelectLayerRow( int aRow )
 }
 
 
-void LAYER_WIDGET::SelectLayer( LAYER_NUM aLayer )
+void LAYER_WIDGET::SelectLayer( int aLayer )
 {
     int row = findLayerRow( aLayer );
     SelectLayerRow( row );
 }
 
 
-LAYER_NUM LAYER_WIDGET::GetSelectedLayer()
+int LAYER_WIDGET::GetSelectedLayer()
 {
     wxWindow* w = getLayerComp( m_CurrentRow, 0 );
 
@@ -728,14 +725,14 @@ LAYER_NUM LAYER_WIDGET::GetSelectedLayer()
 }
 
 
-void LAYER_WIDGET::SetLayerVisible( LAYER_NUM aLayer, bool isVisible )
+void LAYER_WIDGET::SetLayerVisible( int aLayer, bool isVisible )
 {
     setLayerCheckbox( aLayer, isVisible );
     OnLayerVisible( aLayer, isVisible );
 }
 
 
-void LAYER_WIDGET::setLayerCheckbox( LAYER_NUM aLayer, bool isVisible )
+void LAYER_WIDGET::setLayerCheckbox( int aLayer, bool isVisible )
 {
     int row = findLayerRow( aLayer );
 
@@ -748,7 +745,7 @@ void LAYER_WIDGET::setLayerCheckbox( LAYER_NUM aLayer, bool isVisible )
 }
 
 
-bool LAYER_WIDGET::IsLayerVisible( LAYER_NUM aLayer )
+bool LAYER_WIDGET::IsLayerVisible( int aLayer )
 {
     int row = findLayerRow( aLayer );
 
@@ -763,7 +760,7 @@ bool LAYER_WIDGET::IsLayerVisible( LAYER_NUM aLayer )
 }
 
 
-void LAYER_WIDGET::SetLayerColor( LAYER_NUM aLayer, const COLOR4D& aColor )
+void LAYER_WIDGET::SetLayerColor( int aLayer, const COLOR4D& aColor )
 {
     int row = findLayerRow( aLayer );
 
@@ -778,7 +775,7 @@ void LAYER_WIDGET::SetLayerColor( LAYER_NUM aLayer, const COLOR4D& aColor )
 }
 
 
-COLOR4D LAYER_WIDGET::GetLayerColor( LAYER_NUM aLayer ) const
+COLOR4D LAYER_WIDGET::GetLayerColor( int aLayer ) const
 {
     int row = findLayerRow( aLayer );
 

@@ -70,7 +70,7 @@ int GLOBAL_EDIT_TOOL::GlobalDeletions( const TOOL_EVENT& aEvent )
 }
 
 
-void DIALOG_GLOBAL_DELETION::SetCurrentLayer( LAYER_NUM aLayer )
+void DIALOG_GLOBAL_DELETION::SetCurrentLayer( int aLayer )
 {
     m_currentLayer = aLayer;
     m_textCtrlCurrLayer->SetValue( m_Parent->GetBoard()->GetLayerName( ToLAYER_ID( aLayer ) ) );
@@ -177,8 +177,8 @@ void DIALOG_GLOBAL_DELETION::DoGlobalDeletions()
 
         for( BOARD_ITEM* item : board->Drawings() )
         {
-            KICAD_T   type = item->Type();
-            LAYER_NUM layer = item->GetLayer();
+            KICAD_T type = item->Type();
+            int     layer = item->GetLayer();
 
             if( !delete_all )
             {

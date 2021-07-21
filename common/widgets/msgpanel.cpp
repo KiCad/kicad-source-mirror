@@ -38,9 +38,8 @@ BEGIN_EVENT_TABLE( EDA_MSG_PANEL, wxPanel )
 END_EVENT_TABLE()
 
 
-EDA_MSG_PANEL::EDA_MSG_PANEL( wxWindow* aParent, int aId,
-                              const wxPoint& aPosition, const wxSize& aSize,
-                              long style, const wxString &name ) :
+EDA_MSG_PANEL::EDA_MSG_PANEL( wxWindow* aParent, int aId, const wxPoint& aPosition,
+                              const wxSize& aSize, long style, const wxString &name ) :
     wxPanel( aParent, aId, aPosition, aSize, style, name )
 {
     SetFont( KIUI::GetStatusFont( this ) );
@@ -150,7 +149,7 @@ void EDA_MSG_PANEL::SetMessage( int aXPosition, const wxString& aUpperText,
     // update the vector, which is sorted by m_X
     int limit = m_Items.size();
 
-    for( ndx=0;  ndx<limit;  ++ndx )
+    for( ndx = 0;  ndx < limit;  ++ndx )
     {
         // replace any item with same X
         if( m_Items[ndx].m_X == item.m_X )

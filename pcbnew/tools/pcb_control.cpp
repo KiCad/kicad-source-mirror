@@ -364,8 +364,8 @@ int PCB_CONTROL::LayerNext( const TOOL_EVENT& aEvent )
 {
     PCB_BASE_FRAME* editFrame  = m_frame;
     BOARD*          brd        = board();
-    LAYER_NUM       layer      = editFrame->GetActiveLayer();
-    LAYER_NUM       startLayer = layer;
+    int             layer      = editFrame->GetActiveLayer();
+    int             startLayer = layer;
 
     if( layer < F_Cu || layer > B_Cu )
         return 0;
@@ -390,8 +390,8 @@ int PCB_CONTROL::LayerPrev( const TOOL_EVENT& aEvent )
 {
     PCB_BASE_FRAME* editFrame  = m_frame;
     BOARD*          brd        = board();
-    LAYER_NUM       layer      = editFrame->GetActiveLayer();
-    LAYER_NUM       startLayer = layer;
+    int             layer      = editFrame->GetActiveLayer();
+    int             startLayer = layer;
 
     if( layer < F_Cu || layer > B_Cu )
         return 0;
@@ -418,7 +418,7 @@ int PCB_CONTROL::LayerPrev( const TOOL_EVENT& aEvent )
 
 int PCB_CONTROL::LayerToggle( const TOOL_EVENT& aEvent )
 {
-    LAYER_NUM currentLayer = m_frame->GetActiveLayer();
+    int         currentLayer = m_frame->GetActiveLayer();
     PCB_SCREEN* screen = m_frame->GetScreen();
 
     if( currentLayer == screen->m_Route_Layer_TOP )
@@ -440,7 +440,7 @@ int PCB_CONTROL::LayerToggle( const TOOL_EVENT& aEvent )
 int PCB_CONTROL::LayerAlphaInc( const TOOL_EVENT& aEvent )
 {
     COLOR_SETTINGS* settings = m_frame->GetColorSettings();
-    LAYER_NUM       currentLayer = m_frame->GetActiveLayer();
+    int             currentLayer = m_frame->GetActiveLayer();
     KIGFX::COLOR4D  currentColor = settings->GetColor( currentLayer );
 
     if( currentColor.a <= ALPHA_MAX - ALPHA_STEP )
@@ -470,7 +470,7 @@ int PCB_CONTROL::LayerAlphaInc( const TOOL_EVENT& aEvent )
 int PCB_CONTROL::LayerAlphaDec( const TOOL_EVENT& aEvent )
 {
     COLOR_SETTINGS* settings = m_frame->GetColorSettings();
-    LAYER_NUM       currentLayer = m_frame->GetActiveLayer();
+    int             currentLayer = m_frame->GetActiveLayer();
     KIGFX::COLOR4D  currentColor = settings->GetColor( currentLayer );
 
     if( currentColor.a >= ALPHA_MIN + ALPHA_STEP )

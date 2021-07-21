@@ -228,7 +228,7 @@ public:
     void OnNetVisibilityChanged( int aNetCode, bool aVisibility );
 
     ///< Manually update visibility for a given layer
-    void SetLayerVisible( LAYER_NUM aLayer, bool isVisible );
+    void SetLayerVisible( int aLayer, bool isVisible );
 
     void SetObjectVisible( GAL_LAYER_ID aLayer, bool isVisible = true );
 

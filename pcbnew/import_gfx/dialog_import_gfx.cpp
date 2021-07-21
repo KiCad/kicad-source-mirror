@@ -42,7 +42,7 @@
 wxString DIALOG_IMPORT_GFX::m_filename;
 bool DIALOG_IMPORT_GFX::m_placementInteractive = true;
 bool DIALOG_IMPORT_GFX::m_shouldGroupItems = true;
-LAYER_NUM DIALOG_IMPORT_GFX::m_layer = Dwgs_User;
+int DIALOG_IMPORT_GFX::m_layer = Dwgs_User;
 double DIALOG_IMPORT_GFX::m_scaleImport = 1.0;     // Do not change the imported items size
 int DIALOG_IMPORT_GFX::m_originUnits = 0;          // millimeter
 int DIALOG_IMPORT_GFX::m_lineWidthUnits = 0;       // millimeter

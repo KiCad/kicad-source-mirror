@@ -101,7 +101,7 @@ int GERBVIEW_CONTROL::ExportToPcbnew( const TOOL_EVENT& aEvent )
     GERBER_FILE_IMAGE_LIST* images = m_frame->GetGerberLayout()->GetImagesList();
 
     // Count the Gerber layers which are actually currently used
-    for( LAYER_NUM ii = 0; ii < (LAYER_NUM)images->ImagesMaxCount(); ++ii )
+    for( int ii = 0; ii < (int) images->ImagesMaxCount(); ++ii )
     {
         if( images->GetGbrImage( ii ) )
             layercount++;

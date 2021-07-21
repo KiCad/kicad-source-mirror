@@ -1664,7 +1664,7 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
 
         int old_netcode = -1;
         int old_width = -1;
-        LAYER_NUM old_layer = UNDEFINED_LAYER;
+        int old_layer = UNDEFINED_LAYER;
 
         for( int i = 0; i < items.GetCount(); ++i )
         {
@@ -1696,7 +1696,7 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
 
                 wire->wire_type = T_protect;    // @todo, this should be configurable
 
-                LAYER_NUM kiLayer  = track->GetLayer();
+                int kiLayer  = track->GetLayer();
                 int pcbLayer = m_kicadLayer2pcb[kiLayer];
 
                 path = new PATH( wire );

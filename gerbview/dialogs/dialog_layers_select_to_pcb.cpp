@@ -39,9 +39,9 @@
 #include <dialogs/dialog_layers_select_to_pcb.h>
 
 #include <wx/msgdlg.h>
+#include <gestfich.h>
 
-
-extern const wxString GetPCBDefaultLayerName( LAYER_NUM aLayerNumber );
+extern const wxString GetPCBDefaultLayerName( int aLayerNumber );
 
 
 enum swap_layer_id {
@@ -188,7 +188,7 @@ void LAYERS_MAP_DIALOG::initDialog()
         {
             goodSize = text->GetSize();
 
-            for( LAYER_NUM jj = 0; jj < GERBER_DRAWLAYERS_COUNT; ++jj )
+            for( int jj = 0; jj < GERBER_DRAWLAYERS_COUNT; ++jj )
             {
                 text->SetLabel( GetPCBDefaultLayerName( jj ) );
 
@@ -274,11 +274,7 @@ void LAYERS_MAP_DIALOG::OnBrdLayersCountSelection( wxCommandEvent& event )
 
 void LAYERS_MAP_DIALOG::OnResetClick( wxCommandEvent& event )
 {
-    wxString  msg;
-    int       ii;
-    LAYER_NUM layer;
-
-    for( ii = 0, layer = 0; ii < m_gerberActiveLayersCount; ii++, ++layer )
+    for( int ii = 0; ii < m_gerberActiveLayersCount; ++ii )
     {
         m_layersLookUpTable[ii] = UNSELECTED_LAYER;
         m_layersList[ii]->SetLabel( _( "Do not export" ) );
@@ -290,15 +286,13 @@ void LAYERS_MAP_DIALOG::OnResetClick( wxCommandEvent& event )
 
 void LAYERS_MAP_DIALOG::OnStoreSetup( wxCommandEvent& event )
 {
-    auto config = static_cast<GERBVIEW_SETTINGS*>( Kiface().KifaceSettings() );
+    GERBVIEW_SETTINGS* config = static_cast<GERBVIEW_SETTINGS*>( Kiface().KifaceSettings() );
     config->m_BoardLayersCount = m_exportBoardCopperLayersCount;
 
     config->m_GerberToPcbLayerMapping.clear();
 
     for( int ii = 0; ii < GERBER_DRAWLAYERS_COUNT; ++ii )
-    {
         config->m_GerberToPcbLayerMapping.push_back( m_layersLookUpTable[ii] );
-    }
 
     // Enable the "Get Stored Choice" button in case it was disabled in "initDialog()"
     // due to no previously stored choices.
@@ -327,7 +321,7 @@ void LAYERS_MAP_DIALOG::OnGetSetup( wxCommandEvent& event )
 
     for( int ii = 0; ii < m_gerberActiveLayersCount; ii++ )
     {
-        LAYER_NUM layer = m_layersLookUpTable[ii];
+        int layer = m_layersLookUpTable[ii];
 
         if( layer == UNSELECTED_LAYER )
         {
@@ -350,17 +344,15 @@ void LAYERS_MAP_DIALOG::OnGetSetup( wxCommandEvent& event )
 
 void LAYERS_MAP_DIALOG::OnSelectLayer( wxCommandEvent& event )
 {
-    int ii;
+    int ii = event.GetId() - ID_BUTTON_0;
 
-    ii = event.GetId() - ID_BUTTON_0;
-
-    if( (ii < 0) || (ii >= GERBER_DRAWLAYERS_COUNT) )
+    if( ii < 0 || ii >= GERBER_DRAWLAYERS_COUNT )
     {
         wxFAIL_MSG( wxT( "Bad layer id" ) );
         return;
     }
 
-    LAYER_NUM jj = m_layersLookUpTable[m_buttonTable[ii]];
+    int jj = m_layersLookUpTable[ m_buttonTable[ii] ];
 
     if( jj != UNSELECTED_LAYER && jj != UNDEFINED_LAYER && !IsValidLayer( jj ) )
         jj = B_Cu;  // (Defaults to "Copper" layer.)

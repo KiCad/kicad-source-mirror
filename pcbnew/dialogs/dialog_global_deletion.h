@@ -30,7 +30,7 @@ class DIALOG_GLOBAL_DELETION: public DIALOG_GLOBAL_DELETION_BASE
 {
 public:
     DIALOG_GLOBAL_DELETION( PCB_EDIT_FRAME* parent );
-    void SetCurrentLayer( LAYER_NUM aLayer );
+    void SetCurrentLayer( int aLayer );
 
     ///< @todo Move this back into the tool rather than having the dialog do the deleting.
     void DoGlobalDeletions();
@@ -42,7 +42,7 @@ private:
     void onCheckDeleteBoardOutlines( wxCommandEvent& event ) override;
 
     PCB_EDIT_FRAME* m_Parent;
-    LAYER_NUM m_currentLayer;
+    int             m_currentLayer;
 };
 
 #endif  // _DIALOG_GLOBAL_DELETION_H_

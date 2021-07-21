@@ -25,13 +25,11 @@
 #include <widgets/lib_tree.h>
 #include <macros.h>
 #include <wxdataviewctrl_helpers.h>
-#include <wx/artprov.h>
 #include <wx/sizer.h>
 #include <tool/tool_interactive.h>
 #include <tool/tool_manager.h>
 #include <wx/srchctrl.h>
 #include <wx/settings.h>
-#include <wx/statbmp.h>
 #include <wx/timer.h>
 
 
@@ -50,8 +48,7 @@ LIB_TREE::LIB_TREE( wxWindow* aParent, LIB_TABLE* aLibTable,
     {
         wxBoxSizer* search_sizer = new wxBoxSizer( wxHORIZONTAL );
 
-        m_query_ctrl = new wxSearchCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition,
-                                         wxDefaultSize );
+        m_query_ctrl = new wxSearchCtrl( this, wxID_ANY );
 
         m_query_ctrl->ShowCancelButton( true );
 
@@ -78,7 +75,6 @@ LIB_TREE::LIB_TREE( wxWindow* aParent, LIB_TABLE* aLibTable,
 #endif
         m_query_ctrl->Bind( wxEVT_CHAR_HOOK, &LIB_TREE::onQueryCharHook, this );
         m_query_ctrl->Bind( wxEVT_MOTION, &LIB_TREE::onQueryMouseMoved, this );
-
 
         Bind( wxEVT_TIMER, &LIB_TREE::onDebounceTimer, this, m_debounceTimer->GetId() );
     }
@@ -203,6 +199,7 @@ void LIB_TREE::Unselect()
 {
     m_tree_ctrl->UnselectAll();
 }
+
 
 void LIB_TREE::ExpandLibId( const LIB_ID& aLibId )
 {
@@ -394,8 +391,8 @@ void LIB_TREE::onDebounceTimer( wxTimerEvent& aEvent )
 
 void LIB_TREE::onQueryCharHook( wxKeyEvent& aKeyStroke )
 {
-    auto const sel = m_tree_ctrl->GetSelection();
-    auto type = sel.IsOk() ? m_adapter->GetTypeFor( sel ) : LIB_TREE_NODE::INVALID;
+    const wxDataViewItem sel = m_tree_ctrl->GetSelection();
+    LIB_TREE_NODE::TYPE  type = sel.IsOk() ? m_adapter->GetTypeFor( sel ) : LIB_TREE_NODE::INVALID;
 
     switch( aKeyStroke.GetKeyCode() )
     {
@@ -421,15 +418,14 @@ void LIB_TREE::onQueryCharHook( wxKeyEvent& aKeyStroke )
 
     case WXK_RETURN:
         if( type == LIB_TREE_NODE::LIB )
-        {
             toggleExpand( sel );
-            break;
-        }
-        // Intentionally fall through, so the selected symbol will be treated as the selected one
-        KI_FALLTHROUGH;
+        else
+            aKeyStroke.Skip();  // pass on to search box to select node
+
+        break;
 
     default:
-        aKeyStroke.Skip(); // Any other key: pass on to search box directly.
+        aKeyStroke.Skip();      // Any other key: pass on to search box directly.
         break;
     }
 }
@@ -460,14 +456,9 @@ void LIB_TREE::onTreeSelect( wxDataViewEvent& aEvent )
 void LIB_TREE::onTreeActivate( wxDataViewEvent& aEvent )
 {
     if( !GetSelectedLibId().IsValid() )
-    {
-        // Expand library/part units subtree
-        toggleExpand( m_tree_ctrl->GetSelection() );
-    }
+        toggleExpand( m_tree_ctrl->GetSelection() );    // Expand library/part units subtree
     else
-    {
-        postSelectEvent();
-    }
+        postSelectEvent();                              // Open symbol/footprint
 }
 
 

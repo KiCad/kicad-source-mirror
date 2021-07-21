@@ -39,10 +39,10 @@
 class LIST_MOD      // An helper class used to build a list of useful footprints.
 {
 public:
-    FOOTPRINT*    m_Footprint;      // Link to the actual footprint
-    wxString      m_Reference;      // Its schematic reference
-    wxString      m_Value;          // Its schematic value
-    LAYER_NUM     m_Layer;          // its side (B_Cu, or F_Cu)
+    FOOTPRINT*  m_Footprint;      // Link to the actual footprint
+    wxString    m_Reference;      // Its schematic reference
+    wxString    m_Value;          // Its schematic value
+    int         m_Layer;          // its side (B_Cu, or F_Cu)
 };
 
 
@@ -177,7 +177,7 @@ std::string PLACE_FILE_EXPORTER::GenPositionData()
             footprint_pos  = list[ii].m_Footprint->GetPosition();
             footprint_pos -= m_place_Offset;
 
-            LAYER_NUM layer = list[ii].m_Footprint->GetLayer();
+            int layer = list[ii].m_Footprint->GetLayer();
             wxASSERT( layer == F_Cu || layer == B_Cu );
 
             if( layer == B_Cu )
@@ -243,7 +243,7 @@ std::string PLACE_FILE_EXPORTER::GenPositionData()
             footprint_pos  = list[ii].m_Footprint->GetPosition();
             footprint_pos -= m_place_Offset;
 
-            LAYER_NUM layer = list[ii].m_Footprint->GetLayer();
+            int layer = list[ii].m_Footprint->GetLayer();
             wxASSERT( layer == F_Cu || layer == B_Cu );
 
             if( layer == B_Cu )

@@ -97,7 +97,7 @@ public:
     void SetReader( LINE_READER* aReader )      { m_reader = aReader; }
 
     // return the new .kicad_pcb layer id from the old (legacy) layer id
-    static PCB_LAYER_ID leg_layer2new( int cu_count, LAYER_NUM aLayerNum );
+    static PCB_LAYER_ID leg_layer2new( int cu_count, int aLayerNum );
 
     static LSET leg_mask2new( int cu_count, unsigned aMask );
 

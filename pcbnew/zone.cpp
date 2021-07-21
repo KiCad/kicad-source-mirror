@@ -82,8 +82,8 @@ ZONE::ZONE( BOARD_ITEM_CONTAINER* aParent, bool aInFP ) :
 }
 
 
-ZONE::ZONE( const ZONE& aZone )
-        : BOARD_CONNECTED_ITEM( aZone ),
+ZONE::ZONE( const ZONE& aZone ) :
+        BOARD_CONNECTED_ITEM( aZone ),
         m_Poly( nullptr ),
         m_CornerSelection( nullptr )
 {
@@ -344,7 +344,6 @@ int ZONE::GetThermalReliefGap( PAD* aPad, wxString* aSource ) const
     }
 
     return aPad->GetEffectiveThermalGap( aSource );
-
 }
 
 
@@ -982,7 +981,7 @@ void ZONE::HatchBorder()
     int  hatch_line_len = m_borderHatchPitch;
 
     // To have a better look, give a slope depending on the layer
-    LAYER_NUM layer = GetLayer();
+    int     layer = GetLayer();
     int     slope_flag = (layer & 1) ? 1 : -1;  // 1 or -1
     double  slope = 0.707106 * slope_flag;      // 45 degrees slope
     int     max_a, min_a;

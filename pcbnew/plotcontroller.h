@@ -57,8 +57,8 @@ public:
      */
     PCB_PLOT_PARAMS& GetPlotOptions() { return m_plotOptions; }
 
-    void SetLayer( LAYER_NUM aLayer ) { m_plotLayer = aLayer; }
-    LAYER_NUM GetLayer() { return m_plotLayer; }
+    void SetLayer( int aLayer ) { m_plotLayer = aLayer; }
+    int GetLayer() { return m_plotLayer; }
 
 
     /**
@@ -108,21 +108,15 @@ public:
     bool GetColorMode();
 
 private:
-    /// the layer to plot
-    LAYER_NUM m_plotLayer;
-
-    /// Option bank
+    int             m_plotLayer;
     PCB_PLOT_PARAMS m_plotOptions;
 
-    /// This is the plotter object; it starts NULL and become instantiated
-    /// when a plotfile is requested
-    PLOTTER* m_plotter;
+    /// This is the plotter object; it starts NULL and become instantiated when a plotfile is
+    // requested
+    PLOTTER*        m_plotter;
 
-    /// The board we're plotting
-    BOARD* m_board;
-
-    /// The current plot filename, set by OpenPlotfile
-    wxFileName m_plotFile;
+    BOARD*          m_board;
+    wxFileName      m_plotFile;
 };
 
 #endif

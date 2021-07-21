@@ -1133,7 +1133,7 @@ void APPEARANCE_CONTROLS::OnLayerChanged()
 }
 
 
-void APPEARANCE_CONTROLS::SetLayerVisible( LAYER_NUM aLayer, bool isVisible )
+void APPEARANCE_CONTROLS::SetLayerVisible( int aLayer, bool isVisible )
 {
     LSET         visible = getVisibleLayers();
     PCB_LAYER_ID layer   = ToLAYER_ID( aLayer );
@@ -1828,7 +1828,7 @@ void APPEARANCE_CONTROLS::syncColorsAndVisibility()
 
     for( std::unique_ptr<APPEARANCE_SETTING>& setting : m_layerSettings )
     {
-        LAYER_NUM layer = setting->id;
+        int layer = setting->id;
 
         if( setting->ctl_visibility )
             setting->ctl_visibility->SetValue( visible[layer] );
@@ -2545,7 +2545,7 @@ void APPEARANCE_CONTROLS::OnColorSwatchChanged( wxCommandEvent& aEvent )
 {
     COLOR_SWATCH* swatch   = static_cast<COLOR_SWATCH*>( aEvent.GetEventObject() );
     COLOR4D       newColor = swatch->GetSwatchColor();
-    LAYER_NUM     layer    = swatch->GetId();
+    int           layer    = swatch->GetId();
 
     COLOR_SETTINGS* cs = m_frame->GetColorSettings();
     cs->SetColor( layer, newColor );

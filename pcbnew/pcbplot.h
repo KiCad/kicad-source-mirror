@@ -21,16 +21,10 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file pcbnew/pcbplot.h
- * @brief Board plot function definition file.
- */
-
 #ifndef PCBPLOT_H_
 #define PCBPLOT_H_
 
-#include <layer_ids.h>
-#include <pad_shapes.h>
+#include <pad_shapes.h>         // for PAD_DRILL_SHAPE_T
 #include <pcb_plot_params.h>
 #include <settings/color_settings.h>
 #include <settings/settings_manager.h>
@@ -46,6 +40,7 @@ class PCB_TARGET;
 class FP_TEXT;
 class ZONE;
 class BOARD;
+class BOARD_ITEM;
 class REPORTER;
 class wxFileName;
 
@@ -127,7 +122,7 @@ public:
      * @param aLayer is the layer id.
      * @return the layer color.
      */
-    COLOR4D getColor( LAYER_NUM aLayer ) const;
+    COLOR4D getColor( int aLayer ) const;
 
 private:
     /**
@@ -136,19 +131,16 @@ private:
      * It compensate and clamp the drill mark size depending on the current plot options.
      */
     void plotOneDrillMark( PAD_DRILL_SHAPE_T aDrillShape, const wxPoint& aDrillPos,
-                           const wxSize& aDrillSize, const wxSize& aPadSize,
-                           double aOrientation, int aSmallDrill );
+                           const wxSize& aDrillSize, const wxSize& aPadSize, double aOrientation,
+                           int aSmallDrill );
 
     PLOTTER*    m_plotter;
     BOARD*      m_board;
     LSET        m_layerMask;
 };
 
-PLOTTER* StartPlotBoard( BOARD* aBoard,
-                         const PCB_PLOT_PARAMS* aPlotOpts,
-                         int aLayer,
-                         const wxString& aFullFileName,
-                         const wxString& aSheetDesc );
+PLOTTER* StartPlotBoard( BOARD* aBoard, const PCB_PLOT_PARAMS* aPlotOpts, int aLayer,
+                         const wxString& aFullFileName, const wxString& aSheetDesc );
 
 /**
  * Plot one copper or technical layer.
@@ -174,16 +166,14 @@ void PlotOneBoardLayer( BOARD* aBoard, PLOTTER* aPlotter, PCB_LAYER_ID aLayer,
  * @param aLayerMask is the mask to define the layers to plot.
  * @param aPlotOpt is the plot options (files, sketch). Has meaning for some formats only.
  *
- * aPlotOpt has 3 important options to control this plot,
- * which are set, depending on the layer type to plot
- *      SetEnablePlotVia( bool aEnable )
- *          aEnable = true to plot vias, false to skip vias (has meaning
- *                      only for solder mask layers).
- *      SetSkipPlotNPTH_Pads( bool aSkip )
- *          aSkip = true to skip NPTH Pads, when the pad size and the pad hole
- *                  have the same size. Used in GERBER format only.
- *      SetDrillMarksType( DrillMarksType aVal ) control the actual hole:
- *              no hole, small hole, actual hole
+ * aPlotOpt has 3 important options which are set depending on the layer type to plot:
+ *    SetEnablePlotVia( bool aEnable )
+ *        aEnable = true to plot vias, false to skip vias (has meaning only for solder mask layers)
+ *    SetSkipPlotNPTH_Pads( bool aSkip )
+ *        aSkip = true to skip NPTH Pads, when the pad size and the pad hole have the same size.
+ *        Used in GERBER format only.
+ *    SetDrillMarksType( DrillMarksType aVal )
+ *        aVal = no hole, small hole, actual hole size
  */
 void PlotStandardLayer( BOARD* aBoard, PLOTTER* aPlotter, LSET aLayerMask,
                         const PCB_PLOT_PARAMS& aPlotOpt );
@@ -196,8 +186,8 @@ void PlotStandardLayer( BOARD* aBoard, PLOTTER* aPlotter, LSET aLayerMask,
  * @param aLayerMask is the mask to define the layers to plot.
  * @param aPlotOpt is the plot options. Has meaning for some formats only.
  */
-void PlotLayerOutlines( BOARD* aBoard, PLOTTER* aPlotter,
-                        LSET aLayerMask, const PCB_PLOT_PARAMS& aPlotOpt );
+void PlotLayerOutlines( BOARD* aBoard, PLOTTER* aPlotter, LSET aLayerMask,
+                        const PCB_PLOT_PARAMS& aPlotOpt );
 
 /**
  * Complete a plot filename.
@@ -211,16 +201,14 @@ void PlotLayerOutlines( BOARD* aBoard, PLOTTER* aPlotter,
  * @param aSuffix is the suffix to add to the base filename.
  * @param aExtension is the file extension.
  */
-void BuildPlotFileName( wxFileName*     aFilename,
-                        const wxString& aOutputDir,
-                        const wxString& aSuffix,
+void BuildPlotFileName( wxFileName* aFilename, const wxString& aOutputDir, const wxString& aSuffix,
                         const wxString& aExtension );
 
 
 /**
  * @return the appropriate Gerber file extension for \a aLayer
  */
-const wxString GetGerberProtelExtension( LAYER_NUM aLayer );
+const wxString GetGerberProtelExtension( int aLayer );
 
 /**
  * Return the "file function" attribute for \a aLayer, as defined in the
@@ -232,7 +220,7 @@ const wxString GetGerberProtelExtension( LAYER_NUM aLayer );
  * @param aLayer is the layer number to create the attribute for.
  * @return The attribute, as a text string
  */
-const wxString GetGerberFileFunctionAttribute( const BOARD* aBoard, LAYER_NUM aLayer );
+const wxString GetGerberFileFunctionAttribute( const BOARD* aBoard, int aLayer );
 
 /**
  * Calculate some X2 attributes as defined in the Gerber file format specification J4
@@ -269,7 +257,7 @@ void AddGerberX2Header( PLOTTER* aPlotter, const BOARD* aBoard,
  *        compatibility (X2 attributes added as structured comments, starting by "G04 #@! "
  *        followed by the X2 attribute.
  */
-void AddGerberX2Attribute( PLOTTER* aPlotter, const BOARD* aBoard,
-                           LAYER_NUM aLayer, bool aUseX1CompatibilityMode );
+void AddGerberX2Attribute( PLOTTER* aPlotter, const BOARD* aBoard, int aLayer,
+                           bool aUseX1CompatibilityMode );
 
 #endif // PCBPLOT_H_

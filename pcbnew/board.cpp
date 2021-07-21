@@ -75,7 +75,7 @@ BOARD::BOARD() :
     // we have not loaded a board yet, assume latest until then.
     m_fileFormatVersionAtLoad = LEGACY_BOARD_FILE_VERSION;
 
-    for( LAYER_NUM layer = 0; layer < PCB_LAYER_ID_COUNT; ++layer )
+    for( int layer = 0; layer < PCB_LAYER_ID_COUNT; ++layer )
     {
         m_layers[layer].m_name = GetStandardLayerName( ToLAYER_ID( layer ) );
 
@@ -340,17 +340,15 @@ bool BOARD::SetLayerDescr( PCB_LAYER_ID aIndex, const LAYER& aLayer )
 
 const PCB_LAYER_ID BOARD::GetLayerID( const wxString& aLayerName ) const
 {
-
     // Check the BOARD physical layer names.
-    for( LAYER_NUM layer = 0; layer < PCB_LAYER_ID_COUNT; ++layer )
+    for( int layer = 0; layer < PCB_LAYER_ID_COUNT; ++layer )
     {
-        if ( ( m_layers[ layer ].m_name == aLayerName )
-                || ( m_layers[ layer ].m_userName == aLayerName ) )
+        if ( m_layers[ layer ].m_name == aLayerName || m_layers[ layer ].m_userName == aLayerName )
             return ToLAYER_ID( layer );
     }
 
     // Otherwise fall back to the system standard layer names for virtual layers.
-    for( LAYER_NUM layer = 0; layer < PCB_LAYER_ID_COUNT; ++layer )
+    for( int layer = 0; layer < PCB_LAYER_ID_COUNT; ++layer )
     {
         if( GetStandardLayerName( ToLAYER_ID( layer ) ) == aLayerName )
             return ToLAYER_ID( layer );
@@ -399,8 +397,6 @@ LAYER_T BOARD::GetLayerType( PCB_LAYER_ID aLayer ) const
     if( !IsCopperLayer( aLayer ) )
         return LT_SIGNAL;
 
-    //@@IMB: The original test was broken due to the discontinuity
-    // in the layer sequence.
     if( IsLayerEnabled( aLayer ) )
         return m_layers[aLayer].m_type;
 
@@ -413,8 +409,6 @@ bool BOARD::SetLayerType( PCB_LAYER_ID aLayer, LAYER_T aLayerType )
     if( !IsCopperLayer( aLayer ) )
         return false;
 
-    //@@IMB: The original test was broken due to the discontinuity
-    // in the layer sequence.
     if( IsLayerEnabled( aLayer ) )
     {
         m_layers[aLayer].m_type = aLayerType;
@@ -574,15 +568,9 @@ bool BOARD::IsFootprintLayerVisible( PCB_LAYER_ID aLayer ) const
 {
     switch( aLayer )
     {
-    case F_Cu:
-        return IsElementVisible( LAYER_MOD_FR );
-
-    case B_Cu:
-        return IsElementVisible( LAYER_MOD_BK );
-
-    default:
-        wxFAIL_MSG( wxT( "BOARD::IsModuleLayerVisible() param error: bad layer" ) );
-        return true;
+    case F_Cu: return IsElementVisible( LAYER_MOD_FR );
+    case B_Cu: return IsElementVisible( LAYER_MOD_BK );
+    default:   wxFAIL_MSG( wxT( "BOARD::IsModuleLayerVisible(): bad layer" ) ); return true;
     }
 }
 

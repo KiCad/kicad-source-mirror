@@ -720,7 +720,7 @@ public:
 
     struct cmp_drawings
     {
-        bool operator()( const BOARD_ITEM* aFirst, const BOARD_ITEM* aSecond ) const;
+        bool operator()( const BOARD_ITEM* itemA, const BOARD_ITEM* itemB ) const;
     };
 
     struct cmp_pads

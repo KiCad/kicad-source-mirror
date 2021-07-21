@@ -113,7 +113,7 @@ public:
 
     void SetOffset( double aXoff, double aYoff );
 
-    double GetLayerZ( LAYER_NUM aLayer )
+    double GetLayerZ( int aLayer )
     {
         if( unsigned( aLayer ) >= arrayDim( m_layer_z ) )
             return 0;
@@ -121,7 +121,7 @@ public:
         return m_layer_z[ aLayer ];
     }
 
-    void SetLayerZ( LAYER_NUM aLayer, double aValue )
+    void SetLayerZ( int aLayer, double aValue )
     {
         m_layer_z[aLayer] = aValue;
     }
@@ -158,21 +158,20 @@ public:
 
     // select the VRML layer object to draw on
     // return true if a layer has been selected.
-    bool GetLayer3D( LAYER_NUM layer, VRML_LAYER** vlayer );
+    bool GetLayer3D( int layer, VRML_LAYER** vlayer );
 
     // Build the Z position of 3D layers
     void ComputeLayer3D_Zpos();
 
 private:
-    void write_triangle_bag( std::ostream& aOut_file, const VRML_COLOR& aColor,
-                             VRML_LAYER* aLayer, bool aPlane, bool aTop,
-                             double aTop_z, double aBottom_z );
+    void write_triangle_bag( std::ostream& aOut_file, const VRML_COLOR& aColor, VRML_LAYER* aLayer,
+                             bool aPlane, bool aTop, double aTop_z, double aBottom_z );
 
-    void create_vrml_shell( IFSG_TRANSFORM& PcbOutput, VRML_COLOR_INDEX colorID,
-                               VRML_LAYER* layer, double top_z, double bottom_z );
+    void create_vrml_shell( IFSG_TRANSFORM& PcbOutput, VRML_COLOR_INDEX colorID, VRML_LAYER* layer,
+                            double top_z, double bottom_z );
 
-    void create_vrml_plane( IFSG_TRANSFORM& PcbOutput, VRML_COLOR_INDEX colorID,
-                               VRML_LAYER* layer, double aHeight, bool aTopPlane );
+    void create_vrml_plane( IFSG_TRANSFORM& PcbOutput, VRML_COLOR_INDEX colorID, VRML_LAYER* layer,
+                            double aHeight, bool aTopPlane );
 
     SGNODE* getSGColor( VRML_COLOR_INDEX colorIdx );
 

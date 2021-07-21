@@ -51,13 +51,13 @@ public:
 
 protected:
     // Return a color index from the layer id
-    virtual COLOR4D getLayerColor( LAYER_NUM aLayer ) const = 0;
+    virtual COLOR4D getLayerColor( int aLayer ) const = 0;
 
     // Return the name of the layer id
-    virtual wxString getLayerName( LAYER_NUM aLayer ) const = 0;
+    virtual wxString getLayerName( int aLayer ) const = 0;
 
     // Return true if the layer id is enabled (i.e. is it should be displayed)
-    virtual bool isLayerEnabled( LAYER_NUM aLayer ) const = 0;
+    virtual bool isLayerEnabled( int aLayer ) const = 0;
 
     bool m_layerhotkeys;
 };
@@ -69,25 +69,18 @@ protected:
 class LAYER_BOX_SELECTOR : public wxBitmapComboBox, public LAYER_SELECTOR
 {
 public:
-    LAYER_BOX_SELECTOR( wxWindow* parent, wxWindowID id,
-                        const wxPoint& pos = wxDefaultPosition,
-                        const wxSize& size = wxDefaultSize,
-                        int n = 0, const wxString choices[] = nullptr );
+    LAYER_BOX_SELECTOR( wxWindow* parent, wxWindowID id, const wxPoint& pos = wxDefaultPosition,
+                        const wxSize& size = wxDefaultSize, int n = 0,
+                        const wxString choices[] = nullptr );
 
-    LAYER_BOX_SELECTOR( wxWindow* parent, wxWindowID id,
-                        const wxPoint& pos, const wxSize& size,
+    LAYER_BOX_SELECTOR( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size,
                         const wxArrayString& choices );
 
     ~LAYER_BOX_SELECTOR() override;
 
-    // Get Current Item #
-    int GetChoice();
+    int GetLayerSelection() const;
 
-    // Get Current Layer
-    LAYER_NUM GetLayerSelection() const;
-
-    // Set Layer #
-    int SetLayerSelection( LAYER_NUM layer );
+    int SetLayerSelection( int layer );
 
     // Reload the Layers
     // Virtual pure function because GerbView uses its own functions in a derived class

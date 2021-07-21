@@ -179,7 +179,7 @@ static wxString interpret_text( const wxString& aText )
 }
 
 
-static void setKeepoutSettingsToZone( ZONE* aZone, LAYER_NUM aLayer )
+static void setKeepoutSettingsToZone( ZONE* aZone, int aLayer )
 {
     if( aLayer == EAGLE_LAYER::TRESTRICT || aLayer == EAGLE_LAYER::BRESTRICT )
     {

@@ -49,7 +49,7 @@
 static LSEQ dlg_layers()
 {
     // Layers that are put out into the dialog UI, coordinate with wxformbuilder and
-    // getCTLs( LAYER_NUM aLayerNumber )
+    // getCTLs( int aLayerNumber )
     static const PCB_LAYER_ID layers[] = {
         F_CrtYd,
         F_Fab,
@@ -131,7 +131,7 @@ PANEL_SETUP_LAYERS::PANEL_SETUP_LAYERS( PAGED_DIALOG* aParent, PCB_EDIT_FRAME* a
 }
 
 
-PANEL_SETUP_LAYERS_CTLs PANEL_SETUP_LAYERS::getCTLs( LAYER_NUM aLayerNumber )
+PANEL_SETUP_LAYERS_CTLs PANEL_SETUP_LAYERS::getCTLs( int aLayerNumber )
 {
 #define RETURN_COPPER( x )    return PANEL_SETUP_LAYERS_CTLs( x##Name, x##CheckBox, x##Choice )
 #define RETURN_AUX( x )       return PANEL_SETUP_LAYERS_CTLs( x##Name, x##CheckBox, x##StaticText )
@@ -139,70 +139,70 @@ PANEL_SETUP_LAYERS_CTLs PANEL_SETUP_LAYERS::getCTLs( LAYER_NUM aLayerNumber )
 
     switch( aLayerNumber )
     {
-    case F_CrtYd:               RETURN_MANDATORY( m_CrtYdFront );
-    case F_Fab:                 RETURN_AUX( m_FabFront );
-    case F_Adhes:               RETURN_AUX( m_AdhesFront );
-    case F_Paste:               RETURN_AUX( m_SoldPFront );
-    case F_SilkS:               RETURN_AUX( m_SilkSFront );
-    case F_Mask:                RETURN_AUX( m_MaskFront );
-    case F_Cu:                  RETURN_COPPER( m_Front );
+    case F_CrtYd:      RETURN_MANDATORY( m_CrtYdFront );
+    case F_Fab:        RETURN_AUX( m_FabFront );
+    case F_Adhes:      RETURN_AUX( m_AdhesFront );
+    case F_Paste:      RETURN_AUX( m_SoldPFront );
+    case F_SilkS:      RETURN_AUX( m_SilkSFront );
+    case F_Mask:       RETURN_AUX( m_MaskFront );
+    case F_Cu:         RETURN_COPPER( m_Front );
 
-    case In1_Cu:                RETURN_COPPER( m_In1 );
-    case In2_Cu:                RETURN_COPPER( m_In2 );
-    case In3_Cu:                RETURN_COPPER( m_In3 );
-    case In4_Cu:                RETURN_COPPER( m_In4 );
-    case In5_Cu:                RETURN_COPPER( m_In5 );
-    case In6_Cu:                RETURN_COPPER( m_In6 );
-    case In7_Cu:                RETURN_COPPER( m_In7 );
-    case In8_Cu:                RETURN_COPPER( m_In8 );
-    case In9_Cu:                RETURN_COPPER( m_In9 );
-    case In10_Cu:               RETURN_COPPER( m_In10 );
-    case In11_Cu:               RETURN_COPPER( m_In11 );
-    case In12_Cu:               RETURN_COPPER( m_In12 );
-    case In13_Cu:               RETURN_COPPER( m_In13 );
-    case In14_Cu:               RETURN_COPPER( m_In14 );
-    case In15_Cu:               RETURN_COPPER( m_In15 );
+    case In1_Cu:       RETURN_COPPER( m_In1 );
+    case In2_Cu:       RETURN_COPPER( m_In2 );
+    case In3_Cu:       RETURN_COPPER( m_In3 );
+    case In4_Cu:       RETURN_COPPER( m_In4 );
+    case In5_Cu:       RETURN_COPPER( m_In5 );
+    case In6_Cu:       RETURN_COPPER( m_In6 );
+    case In7_Cu:       RETURN_COPPER( m_In7 );
+    case In8_Cu:       RETURN_COPPER( m_In8 );
+    case In9_Cu:       RETURN_COPPER( m_In9 );
+    case In10_Cu:      RETURN_COPPER( m_In10 );
+    case In11_Cu:      RETURN_COPPER( m_In11 );
+    case In12_Cu:      RETURN_COPPER( m_In12 );
+    case In13_Cu:      RETURN_COPPER( m_In13 );
+    case In14_Cu:      RETURN_COPPER( m_In14 );
+    case In15_Cu:      RETURN_COPPER( m_In15 );
 
-    case In16_Cu:               RETURN_COPPER( m_In16 );
-    case In17_Cu:               RETURN_COPPER( m_In17 );
-    case In18_Cu:               RETURN_COPPER( m_In18 );
-    case In19_Cu:               RETURN_COPPER( m_In19 );
-    case In20_Cu:               RETURN_COPPER( m_In20 );
-    case In21_Cu:               RETURN_COPPER( m_In21 );
-    case In22_Cu:               RETURN_COPPER( m_In22 );
-    case In23_Cu:               RETURN_COPPER( m_In23 );
-    case In24_Cu:               RETURN_COPPER( m_In24 );
-    case In25_Cu:               RETURN_COPPER( m_In25 );
-    case In26_Cu:               RETURN_COPPER( m_In26 );
-    case In27_Cu:               RETURN_COPPER( m_In27 );
-    case In28_Cu:               RETURN_COPPER( m_In28 );
-    case In29_Cu:               RETURN_COPPER( m_In29 );
-    case In30_Cu:               RETURN_COPPER( m_In30 );
+    case In16_Cu:      RETURN_COPPER( m_In16 );
+    case In17_Cu:      RETURN_COPPER( m_In17 );
+    case In18_Cu:      RETURN_COPPER( m_In18 );
+    case In19_Cu:      RETURN_COPPER( m_In19 );
+    case In20_Cu:      RETURN_COPPER( m_In20 );
+    case In21_Cu:      RETURN_COPPER( m_In21 );
+    case In22_Cu:      RETURN_COPPER( m_In22 );
+    case In23_Cu:      RETURN_COPPER( m_In23 );
+    case In24_Cu:      RETURN_COPPER( m_In24 );
+    case In25_Cu:      RETURN_COPPER( m_In25 );
+    case In26_Cu:      RETURN_COPPER( m_In26 );
+    case In27_Cu:      RETURN_COPPER( m_In27 );
+    case In28_Cu:      RETURN_COPPER( m_In28 );
+    case In29_Cu:      RETURN_COPPER( m_In29 );
+    case In30_Cu:      RETURN_COPPER( m_In30 );
 
-    case B_Cu:                  RETURN_COPPER( m_Back );
-    case B_Mask:                RETURN_AUX( m_MaskBack );
-    case B_SilkS:               RETURN_AUX( m_SilkSBack );
-    case B_Paste:               RETURN_AUX( m_SoldPBack );
-    case B_Adhes:               RETURN_AUX( m_AdhesBack );
-    case B_Fab:                 RETURN_AUX( m_FabBack );
-    case B_CrtYd:               RETURN_MANDATORY( m_CrtYdBack );
+    case B_Cu:         RETURN_COPPER( m_Back );
+    case B_Mask:       RETURN_AUX( m_MaskBack );
+    case B_SilkS:      RETURN_AUX( m_SilkSBack );
+    case B_Paste:      RETURN_AUX( m_SoldPBack );
+    case B_Adhes:      RETURN_AUX( m_AdhesBack );
+    case B_Fab:        RETURN_AUX( m_FabBack );
+    case B_CrtYd:      RETURN_MANDATORY( m_CrtYdBack );
 
-    case Edge_Cuts:             RETURN_MANDATORY( m_PCBEdges );
-    case Margin:                RETURN_MANDATORY( m_Margin );
-    case Eco2_User:             RETURN_AUX( m_Eco2 );
-    case Eco1_User:             RETURN_AUX( m_Eco1 );
-    case Cmts_User:             RETURN_AUX( m_Comments );
-    case Dwgs_User:             RETURN_AUX( m_Drawings );
+    case Edge_Cuts:    RETURN_MANDATORY( m_PCBEdges );
+    case Margin:       RETURN_MANDATORY( m_Margin );
+    case Eco2_User:    RETURN_AUX( m_Eco2 );
+    case Eco1_User:    RETURN_AUX( m_Eco1 );
+    case Cmts_User:    RETURN_AUX( m_Comments );
+    case Dwgs_User:    RETURN_AUX( m_Drawings );
 
-    case User_1:                RETURN_AUX( m_User1 );
-    case User_2:                RETURN_AUX( m_User2 );
-    case User_3:                RETURN_AUX( m_User3 );
-    case User_4:                RETURN_AUX( m_User4 );
-    case User_5:                RETURN_AUX( m_User5 );
-    case User_6:                RETURN_AUX( m_User6 );
-    case User_7:                RETURN_AUX( m_User7 );
-    case User_8:                RETURN_AUX( m_User8 );
-    case User_9:                RETURN_AUX( m_User9 );
+    case User_1:       RETURN_AUX( m_User1 );
+    case User_2:       RETURN_AUX( m_User2 );
+    case User_3:       RETURN_AUX( m_User3 );
+    case User_4:       RETURN_AUX( m_User4 );
+    case User_5:       RETURN_AUX( m_User5 );
+    case User_6:       RETURN_AUX( m_User6 );
+    case User_7:       RETURN_AUX( m_User7 );
+    case User_8:       RETURN_AUX( m_User8 );
+    case User_9:       RETURN_AUX( m_User9 );
 
     default:
         wxASSERT_MSG( 0, wxT( "bad layer id" ) );
@@ -211,19 +211,19 @@ PANEL_SETUP_LAYERS_CTLs PANEL_SETUP_LAYERS::getCTLs( LAYER_NUM aLayerNumber )
 }
 
 
-wxControl* PANEL_SETUP_LAYERS::getName( LAYER_NUM aLayer )
+wxControl* PANEL_SETUP_LAYERS::getName( int aLayer )
 {
     return getCTLs( aLayer ).name;
 }
 
 
-wxCheckBox* PANEL_SETUP_LAYERS::getCheckBox( LAYER_NUM aLayer )
+wxCheckBox* PANEL_SETUP_LAYERS::getCheckBox( int aLayer )
 {
     return getCTLs( aLayer ).checkbox;
 }
 
 
-wxChoice* PANEL_SETUP_LAYERS::getChoice( LAYER_NUM aLayer )
+wxChoice* PANEL_SETUP_LAYERS::getChoice( int aLayer )
 {
     return (wxChoice*) getCTLs( aLayer ).choice;
 }
@@ -267,7 +267,7 @@ void PANEL_SETUP_LAYERS::setUserDefinedLayerCheckBoxes()
     for( LSEQ seq = LSET::UserDefinedLayers().Seq();  seq;  ++seq )
     {
         PCB_LAYER_ID layer = *seq;
-        bool     state = m_pcb->IsLayerEnabled( layer );
+        bool         state = m_pcb->IsLayerEnabled( layer );
 
 #ifdef HIDE_INACTIVE_LAYERS
         // This code hides inactive copper layers, or redisplays hidden layers which are now needed.
@@ -356,7 +356,7 @@ LSET PANEL_SETUP_LAYERS::GetUILayerMask()
 }
 
 
-void PANEL_SETUP_LAYERS::setLayerCheckBox( LAYER_NUM aLayer, bool isChecked )
+void PANEL_SETUP_LAYERS::setLayerCheckBox( int aLayer, bool isChecked )
 {
     PANEL_SETUP_LAYERS_CTLs ctl = getCTLs( aLayer );
 
@@ -427,8 +427,8 @@ void PANEL_SETUP_LAYERS::DenyChangeCheckBox( wxCommandEvent& event )
 
         if( source == copper )
         {
-            DisplayError( this,
-                    _( "Use the Physical Stackup page to change the number of copper layers." ) );
+            DisplayError( this, _( "Use the Physical Stackup page to change the number of "
+                                   "copper layers." ) );
 
             copper->SetValue( true );
             return;
@@ -585,7 +585,7 @@ bool PANEL_SETUP_LAYERS::TransferDataFromWindow()
 }
 
 
-int PANEL_SETUP_LAYERS::getLayerTypeIndex( LAYER_NUM aLayer )
+int PANEL_SETUP_LAYERS::getLayerTypeIndex( int aLayer )
 {
     wxChoice* ctl = getChoice( aLayer );
     int ret = ctl->GetCurrentSelection(); // Indices must have same sequence as LAYER_T
@@ -593,7 +593,7 @@ int PANEL_SETUP_LAYERS::getLayerTypeIndex( LAYER_NUM aLayer )
 }
 
 
-wxString PANEL_SETUP_LAYERS::GetLayerName( LAYER_NUM aLayer )
+wxString PANEL_SETUP_LAYERS::GetLayerName( int aLayer )
 {
     wxControl* control = getName( aLayer );
 

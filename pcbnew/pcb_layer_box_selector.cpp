@@ -134,7 +134,7 @@ void PCB_LAYER_BOX_SELECTOR::Resync()
 
 
 // Returns true if the layer id is enabled (i.e. is it should be displayed)
-bool PCB_LAYER_BOX_SELECTOR::isLayerEnabled( LAYER_NUM aLayer ) const
+bool PCB_LAYER_BOX_SELECTOR::isLayerEnabled( int aLayer ) const
 {
     BOARD* board = m_boardFrame->GetBoard();
 
@@ -151,7 +151,7 @@ LSET PCB_LAYER_BOX_SELECTOR::getEnabledLayers() const
 
 
 // Returns a color index from the layer id
-COLOR4D PCB_LAYER_BOX_SELECTOR::getLayerColor( LAYER_NUM aLayer ) const
+COLOR4D PCB_LAYER_BOX_SELECTOR::getLayerColor( int aLayer ) const
 {
     wxASSERT( m_boardFrame );
 
@@ -160,7 +160,7 @@ COLOR4D PCB_LAYER_BOX_SELECTOR::getLayerColor( LAYER_NUM aLayer ) const
 
 
 // Returns the name of the layer id
-wxString PCB_LAYER_BOX_SELECTOR::getLayerName( LAYER_NUM aLayer ) const
+wxString PCB_LAYER_BOX_SELECTOR::getLayerName( int aLayer ) const
 {
     BOARD* board = m_boardFrame->GetBoard();
 

@@ -70,13 +70,13 @@ public:
 
 private:
     // Returns a color index from the layer id
-    COLOR4D getLayerColor( LAYER_NUM aLayer ) const override;
+    COLOR4D getLayerColor( int aLayer ) const override;
 
     // Returns true if the layer id is enabled (i.e. if it should be displayed)
-    bool isLayerEnabled( LAYER_NUM aLayer ) const override;
+    bool isLayerEnabled( int aLayer ) const override;
 
     // Returns the name of the layer id
-    wxString getLayerName( LAYER_NUM aLayer ) const override;
+    wxString getLayerName( int aLayer ) const override;
 
     LSET getEnabledLayers() const;
 

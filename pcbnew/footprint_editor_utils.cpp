@@ -29,7 +29,6 @@
 #include <fp_lib_table.h>
 #include <functional>
 #include <kiway_express.h>
-#include <pcb_layer_box_selector.h>
 #include <pcbnew_id.h>
 #include <ratsnest/ratsnest_data.h>
 #include <settings/color_settings.h>
@@ -37,6 +36,7 @@
 #include <tools/pcb_actions.h>
 #include <widgets/appearance_controls.h>
 #include <widgets/lib_tree.h>
+#include <pcb_layer_box_selector.h>
 
 using namespace std::placeholders;
 

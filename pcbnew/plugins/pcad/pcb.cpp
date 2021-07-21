@@ -455,7 +455,7 @@ void PCB::ConnectPinToNet( const wxString& aCompRef, const wxString& aPinRef,
 
 int PCB::FindLayer( const wxString& aLayerName ) const
 {
-    for( LAYER_NUM i = 0; i < (int)m_layersStackup.GetCount(); ++i )
+    for( int i = 0; i < (int) m_layersStackup.GetCount(); ++i )
     {
         if( m_layersStackup[i] == aLayerName )
             return i;

@@ -71,7 +71,7 @@ static bool       g_modifyFootprintGraphics;
 static bool       g_modifyBoardText;
 static bool       g_modifyBoardGraphics;
 static bool       g_filterByLayer;
-static LAYER_NUM  g_layerFilter;
+static int        g_layerFilter;
 static bool       g_filterByReference;
 static wxString   g_referenceFilter;
 static bool       g_filterByFootprint;

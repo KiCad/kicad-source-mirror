@@ -73,7 +73,7 @@ static int compute_pad_access_code( BOARD *aPcb, LSET aLayerMask )
     // OK, we have an inner-layer only pad (and I have no idea about
     // what could be used for); anyway, find the first copper layer
     // it's on
-    for( LAYER_NUM layer = In1_Cu; layer < B_Cu; ++layer )
+    for( int layer = In1_Cu; layer < B_Cu; ++layer )
     {
         if( aLayerMask[layer] )
             return layer + 1;

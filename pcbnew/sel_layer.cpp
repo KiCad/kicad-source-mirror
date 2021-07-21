@@ -54,19 +54,19 @@ protected:
     PCB_BASE_FRAME*  m_frame;
 
     ///< @return true if the layer id is enabled (i.e. is it should be displayed).
-    bool isLayerEnabled( LAYER_NUM aLayer ) const override
+    bool isLayerEnabled( int aLayer ) const override
     {
         return m_frame->GetBoard()->IsLayerEnabled( PCB_LAYER_ID( aLayer ) );
     }
 
     // Return the color index from the layer ID.
-    COLOR4D getLayerColor( LAYER_NUM aLayer ) const override
+    COLOR4D getLayerColor( int aLayer ) const override
     {
         return m_frame->GetColorSettings()->GetColor( aLayer );
     }
 
     // Return the name of the layer ID.
-    wxString getLayerName( LAYER_NUM aLayer ) const override
+    wxString getLayerName( int aLayer ) const override
     {
         return m_frame->GetBoard()->GetLayerName( ToLAYER_ID( aLayer ) );
     }
@@ -83,7 +83,7 @@ public:
                             LSET aNotAllowedLayersMask, bool aHideCheckBoxes = false );
     ~PCB_ONE_LAYER_SELECTOR();
 
-    LAYER_NUM GetLayerSelection()   { return m_layerSelected; }
+    int GetLayerSelection()   { return m_layerSelected; }
 
 private:
     // Event handlers

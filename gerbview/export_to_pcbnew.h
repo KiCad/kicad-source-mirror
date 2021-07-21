@@ -57,7 +57,7 @@ public:
     /**
      * Save a board from a set of Gerber images.
      */
-    bool    ExportPcb( const LAYER_NUM* aLayerLookUpTable, int aCopperLayers );
+    bool ExportPcb( const int* aLayerLookUpTable, int aCopperLayers );
 
 private:
     /**
@@ -70,7 +70,7 @@ private:
      * than the hole.  We'll leave it this way if the pad gets drawn as a copper polygon, or
      * increase it to the proper size if it has a circular, concentric copper flashing.
      */
-    void    collect_hole( const GERBER_DRAW_ITEM* aGbrItem );
+    void collect_hole( const GERBER_DRAW_ITEM* aGbrItem );
 
     /**
      * Write a via to the board file.
@@ -79,7 +79,7 @@ private:
      * holes in pads.  (We can't generate actual pads because the Gerbers don't contain
      * info on how to group them into footprints.)
      */
-    void    export_via( const EXPORT_VIA& aVia );
+    void export_via( const EXPORT_VIA& aVia );
 
     /**
      * Write a non copper line or arc to the board file.
@@ -87,15 +87,15 @@ private:
      * @param aGbrItem is the Gerber item (line, arc) to export.
      * @param aLayer is the technical layer to use.
      */
-    void    export_non_copper_item( const GERBER_DRAW_ITEM* aGbrItem, LAYER_NUM aLayer );
+    void export_non_copper_item( const GERBER_DRAW_ITEM* aGbrItem, int aLayer );
 
     /**
      * Write a non-copper polygon to the board file.
      *
      * @param aLayer is the technical layer to use.
      */
-    void    writePcbPolygon( const SHAPE_POLY_SET& aPolys, LAYER_NUM aLayer,
-                             const wxPoint& aOffset = { 0, 0 } );
+    void writePcbPolygon( const SHAPE_POLY_SET& aPolys, int aLayer,
+                          const wxPoint& aOffset = { 0, 0 } );
 
     /**
      * Write a filled circle to the board file (with line thickness = 0).
@@ -105,8 +105,7 @@ private:
      * @param aRadius is the circle radius.
      * @param aLayer is the layer to use.
      */
-    void    writePcbFilledCircle( const VECTOR2I& aCenterPosition, int aRadius,
-                                  LAYER_NUM aLayer );
+    void writePcbFilledCircle( const VECTOR2I& aCenterPosition, int aRadius, int aLayer );
 
     /**
      * Write a zone item to the board file.
@@ -116,7 +115,7 @@ private:
      * @param aGbrItem is the Gerber item (line, arc) to export.
      * @param aLayer is the technical layer to use.
      */
-    void    writePcbZoneItem( const GERBER_DRAW_ITEM* aGbrItem, LAYER_NUM aLayer );
+    void writePcbZoneItem( const GERBER_DRAW_ITEM* aGbrItem, int aLayer );
 
     /**
      * Write a track (or via) to the board file.
@@ -124,7 +123,7 @@ private:
      * @param aGbrItem is the Gerber item (line, arc, flashed) to export.
      * @param aLayer is the copper layer to use.
      */
-    void    export_copper_item( const GERBER_DRAW_ITEM* aGbrItem, LAYER_NUM aLayer );
+    void export_copper_item( const GERBER_DRAW_ITEM* aGbrItem, int aLayer );
 
     /**
      * Write a synthetic pad to the board file.
@@ -135,7 +134,7 @@ private:
      *
      * @param aGbrItem is the flashed Gerber item to export.
      */
-    void    export_flashed_copper_item( const GERBER_DRAW_ITEM* aGbrItem, LAYER_NUM aLayer );
+    void export_flashed_copper_item( const GERBER_DRAW_ITEM* aGbrItem, int aLayer );
 
     /**
      * Write a track (not via) to the board file.
@@ -143,7 +142,7 @@ private:
      * @param aGbrItem is the Gerber item (line only) to export.
      * @param aLayer is the copper layer to use.
      */
-    void    export_segline_copper_item( const GERBER_DRAW_ITEM* aGbrItem, LAYER_NUM aLayer );
+    void export_segline_copper_item( const GERBER_DRAW_ITEM* aGbrItem, int aLayer );
 
     /**
      * Write a set of tracks (arcs are approximated by track segments) to the board file.
@@ -151,18 +150,17 @@ private:
      * @param aGbrItem is the Gerber item (arc only) to export.
      * @param aLayer is the copper layer to use
      */
-    void    export_segarc_copper_item( const GERBER_DRAW_ITEM* aGbrItem, LAYER_NUM aLayer );
+    void export_segarc_copper_item( const GERBER_DRAW_ITEM* aGbrItem, int aLayer );
 
     /**
      * Basic write function to write a a #PCB_TRACK to the board file from a non flashed item.
      */
-    void    writeCopperLineItem( const wxPoint& aStart, const wxPoint& aEnd,
-                                 int aWidth, LAYER_NUM aLayer );
+    void writeCopperLineItem( const wxPoint& aStart, const wxPoint& aEnd, int aWidth, int aLayer );
 
     /**
      * Write a very basic header to the board file.
      */
-    void    writePcbHeader( const LAYER_NUM* aLayerLookUpTable );
+    void writePcbHeader( const int* aLayerLookUpTable );
 
     /**
      * Map GerbView internal units to millimeters for Pcbnew board files.

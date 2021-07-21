@@ -76,7 +76,7 @@ PCB_LAYER_ID DIALOG_IMPORTED_LAYERS::GetSelectedLayerID()
                                                       wxLIST_STATE_SELECTED ) ) == wxNOT_FOUND,
                   "There are more than one KiCad layer selected (unexpected)" );
 
-    for( LAYER_NUM layer = 0; layer < PCB_LAYER_ID_COUNT; ++layer )
+    for( int layer = 0; layer < PCB_LAYER_ID_COUNT; ++layer )
     {
         if( LayerName( ToLAYER_ID( layer ) ) == selectedKiCadLayerName )
             return ToLAYER_ID( layer );

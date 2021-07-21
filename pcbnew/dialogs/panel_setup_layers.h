@@ -77,7 +77,7 @@ public:
     LSET GetUILayerMask();
 
     ///< @return the layer name within the UI wxTextCtrl
-    wxString GetLayerName( LAYER_NUM layer );
+    wxString GetLayerName( int layer );
 
     /**
      * Called when switching to this tab to make sure that any changes to the copper layer count
@@ -93,7 +93,7 @@ public:
 
 private:
 
-    void setLayerCheckBox( LAYER_NUM layer, bool isChecked );
+    void setLayerCheckBox( int layer, bool isChecked );
     void setCopperLayerCheckBoxes( int copperCount );
     void setMandatoryLayerCheckBoxes();
     void setUserDefinedLayerCheckBoxes();
@@ -102,7 +102,7 @@ private:
     void showSelectedLayerCheckBoxes( LSET enableLayerMask );
     void showLayerTypes();
 
-    int getLayerTypeIndex( LAYER_NUM layer );
+    int getLayerTypeIndex( int layer );
 
     void OnCheckBox( wxCommandEvent& event ) override;
     void DenyChangeCheckBox( wxCommandEvent& event ) override;
@@ -122,10 +122,10 @@ private:
      */
     LSEQ getNonRemovableLayers();
 
-    PANEL_SETUP_LAYERS_CTLs getCTLs( LAYER_NUM aLayerNumber );
-    wxControl*  getName( LAYER_NUM aLayer );
-    wxCheckBox* getCheckBox( LAYER_NUM aLayer );
-    wxChoice*   getChoice( LAYER_NUM aLayer );
+    PANEL_SETUP_LAYERS_CTLs getCTLs( int aLayerNumber );
+    wxControl* getName( int aLayer );
+    wxCheckBox* getCheckBox( int aLayer );
+    wxChoice* getChoice( int aLayer );
 
     PAGED_DIALOG*              m_parentDialog;
     PCB_EDIT_FRAME*            m_frame;

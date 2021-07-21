@@ -218,32 +218,32 @@ public:
     /**
      * Change the row selection in the layer list to \a aLayer provided.
      */
-    void SelectLayer( LAYER_NUM aLayer );
+    void SelectLayer( int aLayer );
 
     /**
      * Return the selected layer or -1 if none.
      */
-    LAYER_NUM GetSelectedLayer();
+    int GetSelectedLayer();
 
     /**
      * Set \a aLayer visible or not.  This does not invoke OnLayerVisible().
      */
-    void SetLayerVisible( LAYER_NUM aLayer, bool isVisible );
+    void SetLayerVisible( int aLayer, bool isVisible );
 
     /**
      * Return the visible state of the layer ROW associated with \a aLayer id.
      */
-    bool IsLayerVisible( LAYER_NUM aLayer );
+    bool IsLayerVisible( int aLayer );
 
     /**
      * Change the color of \a aLayer
      */
-    void SetLayerColor( LAYER_NUM aLayer, const COLOR4D& aColor );
+    void SetLayerColor( int aLayer, const COLOR4D& aColor );
 
     /**
      * Return the color of the layer ROW associated with \a aLayer id.
      */
-    COLOR4D GetLayerColor( LAYER_NUM aLayer ) const;
+    COLOR4D GetLayerColor( int aLayer ) const;
 
     /**
      * Set the state of the checkbox associated with \a aId within the Render tab group of the
@@ -319,7 +319,7 @@ public:
      *                be used to decide when to update the screen only one time instead of
      *                several times in the midst of a multiple layer change.
      */
-    virtual void OnLayerVisible( LAYER_NUM aLayer, bool isVisible, bool isFinal = true ) = 0;
+    virtual void OnLayerVisible( int aLayer, bool isVisible, bool isFinal = true ) = 0;
 
     /**
      * Notify client code about a layer being right-clicked.
@@ -376,10 +376,10 @@ protected:
     /**
      * Decode \a aControlId to original un-encoded value.
      *
-     * This holds if encodedId was called with a LAYER_NUM (this box is used for other things
+     * This holds if encodedId was called with a layer (this box is used for other things
      * than layers, too).
      */
-    static LAYER_NUM getDecodedId( int aControlId );
+    static int getDecodedId( int aControlId );
 
     void OnLeftDownLayers( wxMouseEvent& event );
 
@@ -430,7 +430,7 @@ protected:
     /**
      * Return the row index that \a aLayer resides in, or -1 if not found.
      */
-    int findLayerRow( LAYER_NUM aLayer ) const;
+    int findLayerRow( int aLayer ) const;
     int findRenderRow( int aId ) const;
 
     /**
@@ -440,7 +440,7 @@ protected:
 
     void insertRenderRow( int aRow, const ROW& aSpec );
 
-    void setLayerCheckbox( LAYER_NUM aLayer, bool isVisible );
+    void setLayerCheckbox( int aLayer, bool isVisible );
 
     void updateLayerRow( int aRow, const wxString& aName );
 

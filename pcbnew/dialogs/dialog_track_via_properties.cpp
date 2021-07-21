@@ -544,7 +544,7 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataFromWindow()
                 else if( !m_trackWidth.IsIndeterminate() )
                     t->SetWidth( m_trackWidth.GetValue() );
 
-                LAYER_NUM layer = m_TrackLayerCtrl->GetLayerSelection();
+                int layer = m_TrackLayerCtrl->GetLayerSelection();
 
                 if( layer != UNDEFINED_LAYER )
                     t->SetLayer( (PCB_LAYER_ID) layer );

@@ -761,10 +761,8 @@ LSET LSET::AllCuMask( int aCuLayerCount )
 
     clear_count = Clamp( 0, clear_count, MAX_CU_LAYERS - 2 );
 
-    for( LAYER_NUM elem=In30_Cu;  clear_count; --elem, --clear_count )
-    {
+    for( int elem = In30_Cu;  clear_count; --elem, --clear_count )
         ret.set( elem, false );
-    }
 
     return ret;
 }

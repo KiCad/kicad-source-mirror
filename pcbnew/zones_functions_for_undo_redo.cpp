@@ -142,7 +142,7 @@ bool ZONE::IsSame( const ZONE& aZoneToCompare )
  * @param aLayer = the layer of zones. if aLayer < 0, all layers are used
  * @return the count of saved copies
  */
-int SaveCopyOfZones( PICKED_ITEMS_LIST& aPickList, BOARD* aPcb, int aNetCode, LAYER_NUM aLayer )
+int SaveCopyOfZones( PICKED_ITEMS_LIST& aPickList, BOARD* aPcb, int aNetCode, int aLayer )
 {
     int copyCount = 0;
 

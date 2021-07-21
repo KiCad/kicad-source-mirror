@@ -282,8 +282,8 @@ void AR_MATRIX::SetDist( int aRow, int aCol, int aSide, DIST_CELL x )
  * half-width = lg, org = ux0,uy0 end = ux1,uy1
  * coordinates are in PCB units
  */
-void AR_MATRIX::drawSegmentQcq( int ux0, int uy0, int ux1, int uy1, int lg, LAYER_NUM layer,
-        int color, AR_MATRIX::CELL_OP op_logic )
+void AR_MATRIX::drawSegmentQcq( int ux0, int uy0, int ux1, int uy1, int lg, int layer, int color,
+                                AR_MATRIX::CELL_OP op_logic )
 {
     int64_t row, col;
     int64_t inc;
@@ -408,8 +408,8 @@ void AR_MATRIX::drawSegmentQcq( int ux0, int uy0, int ux1, int uy1, int lg, LAYE
  * half-width = lg, center = ux0, uy0, ux1,uy1 is a point on the circle.
  * coord are in PCB units.
  */
-void AR_MATRIX::traceCircle( int ux0, int uy0, int ux1, int uy1, int lg, LAYER_NUM layer, int color,
-        AR_MATRIX::CELL_OP op_logic )
+void AR_MATRIX::traceCircle( int ux0, int uy0, int ux1, int uy1, int lg, int layer, int color,
+                             AR_MATRIX::CELL_OP op_logic )
 {
     int radius, nb_segm;
     int x0, y0,     // Starting point of the current segment trace.
@@ -568,8 +568,8 @@ void AR_MATRIX::traceFilledCircle(
  * center = ux0,uy0, starting at ux1, uy1.  Coordinates are in
  * PCB units.
  */
-void AR_MATRIX::traceArc( int ux0, int uy0, int ux1, int uy1, double ArcAngle, int lg,
-        LAYER_NUM layer, int color, AR_MATRIX::CELL_OP op_logic )
+void AR_MATRIX::traceArc( int ux0, int uy0, int ux1, int uy1, double ArcAngle, int lg, int layer,
+                          int color, AR_MATRIX::CELL_OP op_logic )
 {
     int radius, nb_segm;
     int x0, y0,     // Starting point of the current segment trace
@@ -768,7 +768,7 @@ void AR_MATRIX::TraceSegmentPcb( PCB_SHAPE* aShape, int aColor, int aMargin,
     int half_width = ( aShape->GetWidth() / 2 ) + aMargin;
 
     // Calculate the bounding rectangle of the segment (if H, V or Via)
-    LAYER_NUM layer = UNDEFINED_LAYER;    // Draw on all layers
+    int layer = UNDEFINED_LAYER;    // Draw on all layers
 
     if( aShape->GetShape() == SHAPE_T::CIRCLE || aShape->GetShape() == SHAPE_T::SEGMENT )
     {

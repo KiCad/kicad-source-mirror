@@ -55,7 +55,7 @@
 using namespace std::placeholders;
 
 
-const LAYER_NUM GAL_LAYER_ORDER[] =
+const int GAL_LAYER_ORDER[] =
 {
     LAYER_GP_OVERLAY,
     LAYER_SELECT_OVERLAY,
@@ -292,7 +292,7 @@ void PCB_DRAW_PANEL_GAL::SetHighContrastLayer( PCB_LAYER_ID aLayer )
         // Bring some other layers to the front in case of copper layers and make them colored
         // fixme do not like the idea of storing the list of layers here,
         // should be done in some other way I guess..
-        LAYER_NUM layers[] = {
+        int layers[] = {
                 GetNetnameLayer( aLayer ), LAYER_VIA_NETNAMES,
                 LAYER_PAD_FR_NETNAMES, LAYER_PAD_BK_NETNAMES, LAYER_PAD_NETNAMES,
                 ZONE_LAYER_FOR( aLayer ),
@@ -331,7 +331,7 @@ void PCB_DRAW_PANEL_GAL::SetTopLayer( PCB_LAYER_ID aLayer )
     m_view->SetTopLayer( aLayer );
 
     // Layers that should always have on-top attribute enabled
-    const std::vector<LAYER_NUM> layers = {
+    const std::vector<int> layers = {
             LAYER_VIA_THROUGH, LAYER_VIA_BBLIND, LAYER_VIA_MICROVIA, LAYER_VIA_HOLES,
             LAYER_VIA_HOLEWALLS,
             LAYER_VIA_NETNAMES,
@@ -346,17 +346,17 @@ void PCB_DRAW_PANEL_GAL::SetTopLayer( PCB_LAYER_ID aLayer )
         m_view->SetTopLayer( layer );
 
     // Extra layers that are brought to the top if a F.* or B.* is selected
-    const std::vector<LAYER_NUM> frontLayers = {
+    const std::vector<int> frontLayers = {
         F_Cu, F_Adhes, F_Paste, F_SilkS, F_Mask, F_Fab, F_CrtYd, LAYER_PAD_FR,
         LAYER_PAD_FR_NETNAMES, NETNAMES_LAYER_INDEX( F_Cu )
     };
 
-    const std::vector<LAYER_NUM> backLayers = {
+    const std::vector<int> backLayers = {
         B_Cu, B_Adhes, B_Paste, B_SilkS, B_Mask, B_Fab, B_CrtYd, LAYER_PAD_BK,
         LAYER_PAD_BK_NETNAMES, NETNAMES_LAYER_INDEX( B_Cu )
     };
 
-    const std::vector<LAYER_NUM>* extraLayers = nullptr;
+    const std::vector<int>* extraLayers = nullptr;
 
     // Bring a few more extra layers to the top depending on the selected board side
     if( IsFrontLayer( aLayer ) )
@@ -408,7 +408,7 @@ void PCB_DRAW_PANEL_GAL::SetTopLayer( PCB_LAYER_ID aLayer )
 void PCB_DRAW_PANEL_GAL::SyncLayersVisibility( const BOARD* aBoard )
 {
     // Load layer & elements visibility settings
-    for( LAYER_NUM i = 0; i < PCB_LAYER_ID_COUNT; ++i )
+    for( int i = 0; i < PCB_LAYER_ID_COUNT; ++i )
         m_view->SetLayerVisible( i, aBoard->IsLayerVisible( PCB_LAYER_ID( i ) ) );
 
     for( GAL_LAYER_ID i = GAL_LAYER_ID_START; i < GAL_LAYER_ID_END; ++i )
@@ -424,10 +424,10 @@ void PCB_DRAW_PANEL_GAL::SyncLayersVisibility( const BOARD* aBoard )
     m_view->SetLayerVisible( LAYER_PAD_BK, true );
 
     // Always enable netname layers, as their visibility is controlled by layer dependencies
-    for( LAYER_NUM i = NETNAMES_LAYER_ID_START; i < NETNAMES_LAYER_ID_END; ++i )
+    for( int i = NETNAMES_LAYER_ID_START; i < NETNAMES_LAYER_ID_END; ++i )
         m_view->SetLayerVisible( i, true );
 
-    for( LAYER_NUM i = LAYER_ZONE_START; i < LAYER_ZONE_END; i++ )
+    for( int i = LAYER_ZONE_START; i < LAYER_ZONE_END; i++ )
         m_view->SetLayerVisible( i, true );
 
     // Enable some layers that are GAL specific
@@ -520,9 +520,9 @@ void PCB_DRAW_PANEL_GAL::OnShow()
 
 void PCB_DRAW_PANEL_GAL::setDefaultLayerOrder()
 {
-    for( LAYER_NUM i = 0; (unsigned) i < sizeof( GAL_LAYER_ORDER ) / sizeof( LAYER_NUM ); ++i )
+    for( int i = 0; (unsigned) i < sizeof( GAL_LAYER_ORDER ) / sizeof( int ); ++i )
     {
-        LAYER_NUM layer = GAL_LAYER_ORDER[i];
+        int layer = GAL_LAYER_ORDER[i];
         wxASSERT( layer < KIGFX::VIEW::VIEW_MAX_LAYERS );
 
         m_view->SetLayerOrder( layer, i );
@@ -563,9 +563,9 @@ void PCB_DRAW_PANEL_GAL::setDefaultLayerDeps()
     for( int i = 0; i < KIGFX::VIEW::VIEW_MAX_LAYERS; i++ )
         m_view->SetLayerTarget( i, target );
 
-    for( LAYER_NUM i = 0; (unsigned) i < sizeof( GAL_LAYER_ORDER ) / sizeof( LAYER_NUM ); ++i )
+    for( int i = 0; (unsigned) i < sizeof( GAL_LAYER_ORDER ) / sizeof( int ); ++i )
     {
-        LAYER_NUM layer = GAL_LAYER_ORDER[i];
+        int layer = GAL_LAYER_ORDER[i];
         wxASSERT( layer < KIGFX::VIEW::VIEW_MAX_LAYERS );
 
         // Set layer display dependencies & targets

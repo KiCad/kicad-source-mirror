@@ -103,7 +103,7 @@ private:
     static wxString      m_filename;
     static bool          m_shouldGroupItems;
     static bool          m_placementInteractive;
-    static LAYER_NUM     m_layer;
+    static int           m_layer;
     double               m_lineWidth;           // always in mm: line width when a line width
                                                 // is not specified
     static int           m_lineWidthUnits;

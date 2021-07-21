@@ -318,7 +318,7 @@ void PANEL_COLOR_SETTINGS::OnColorChanged( wxCommandEvent& aEvent )
 {
     COLOR_SWATCH* swatch = static_cast<COLOR_SWATCH*>( aEvent.GetEventObject() );
     COLOR4D       newColor = swatch->GetSwatchColor();
-    LAYER_NUM     layer = static_cast<SCH_LAYER_ID>( swatch->GetId() - FIRST_BUTTON_ID );
+    int           layer = static_cast<SCH_LAYER_ID>( swatch->GetId() - FIRST_BUTTON_ID );
 
     updateColor( layer, newColor );
 }

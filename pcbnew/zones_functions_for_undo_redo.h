@@ -55,7 +55,7 @@
  * @param aLayer = the layer of zones. if aLayer < 0, all layers are used
  * @return the count of saved copies
  */
-int SaveCopyOfZones(PICKED_ITEMS_LIST & aPickList, BOARD* aPcb, int aNetCode, LAYER_NUM aLayer );
+int SaveCopyOfZones(PICKED_ITEMS_LIST & aPickList, BOARD* aPcb, int aNetCode, int aLayer );
 
 
 /**
@@ -66,6 +66,7 @@ int SaveCopyOfZones(PICKED_ITEMS_LIST & aPickList, BOARD* aPcb, int aNetCode, LA
  * @param aAuxiliaryList = the list of deleted or added (new created) items after calculations
  * @param aPcb = the Board
  */
-void UpdateCopyOfZonesList( PICKED_ITEMS_LIST& aPickList, PICKED_ITEMS_LIST& aAuxiliaryList, BOARD* aPcb );
+void UpdateCopyOfZonesList( PICKED_ITEMS_LIST& aPickList, PICKED_ITEMS_LIST& aAuxiliaryList,
+                            BOARD* aPcb );
 
 #endif      // ZONES_FUNCTIONS_TO_UNDO_REDO_H

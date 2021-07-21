@@ -41,7 +41,7 @@ class LAYERS_MAP_DIALOG : public LAYERS_MAP_DIALOG_BASE
 public: LAYERS_MAP_DIALOG( GERBVIEW_FRAME* parent );
     ~LAYERS_MAP_DIALOG() {};
 
-    LAYER_NUM * GetLayersLookUpTable() { return m_layersLookUpTable; }
+    int* GetLayersLookUpTable() { return m_layersLookUpTable; }
     static int GetCopperLayersCount() { return m_exportBoardCopperLayersCount; }
 
 protected:
@@ -121,14 +121,14 @@ private:
 
 private:
     GERBVIEW_FRAME* m_Parent;
-    int m_gerberActiveLayersCount;                  // Number of initialized Gerber layers
-    static int m_exportBoardCopperLayersCount;
+    int             m_gerberActiveLayersCount;             // Number of initialized Gerber layers
+    static int      m_exportBoardCopperLayersCount;
 
-    // Indexes Gerber layers to PCB file layers the last value in table is the number of
+    // Indexes Gerber layers to PCB file layers; the last value in table is the number of
     // copper layers.
-    LAYER_NUM m_layersLookUpTable[GERBER_DRAWLAYERS_COUNT];
-    int    m_buttonTable[int(GERBER_DRAWLAYERS_COUNT)+1];       // Indexes buttons to Gerber layers
-    wxStaticText* m_layersList[int(GERBER_DRAWLAYERS_COUNT)+1]; // Indexes text strings to buttons
+    int             m_layersLookUpTable[ GERBER_DRAWLAYERS_COUNT ];
+    int             m_buttonTable[ int(GERBER_DRAWLAYERS_COUNT) + 1 ];
+    wxStaticText*   m_layersList[ int(GERBER_DRAWLAYERS_COUNT) + 1 ];
 };
 
 #endif      // DIALOG_LAYERS_SELECT_TO_PCB_H_

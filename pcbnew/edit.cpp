@@ -35,13 +35,13 @@
 #include <zone.h>
 #include <pcb_target.h>
 #include <pcb_dimension.h>
-#include <pcb_layer_box_selector.h>
 #include <dialog_drc.h>
 #include <connectivity/connectivity_data.h>
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>
 #include <tools/drc_tool.h>
 #include <dialogs/dialog_dimension_properties.h>
+#include <pcb_layer_box_selector.h>
 
 // Handles the selection of command events.
 void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )

@@ -65,7 +65,7 @@
 #include <wx/gdicmn.h>
 
 
-COLOR4D BRDITEMS_PLOTTER::getColor( LAYER_NUM aLayer ) const
+COLOR4D BRDITEMS_PLOTTER::getColor( int aLayer ) const
 {
     COLOR4D color = ColorSettings()->GetColor( aLayer );
 
@@ -293,7 +293,7 @@ void BRDITEMS_PLOTTER::PlotPad( const PAD* aPad, const COLOR4D& aColor, OUTLINE_
 void BRDITEMS_PLOTTER::PlotFootprintTextItems( const FOOTPRINT* aFootprint )
 {
     const FP_TEXT* textItem = &aFootprint->Reference();
-    LAYER_NUM textLayer = textItem->GetLayer();
+    int            textLayer = textItem->GetLayer();
 
     // Reference and value are specific items, not in graphic items list
     if( GetPlotReference() && m_layerMask[textLayer]

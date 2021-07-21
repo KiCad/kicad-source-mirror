@@ -57,7 +57,7 @@ static wxString     g_netclassFilter;
 static bool         g_filterByNet;
 static wxString     g_netFilter;
 static bool         g_filterByLayer;
-static LAYER_NUM    g_layerFilter;
+static int          g_layerFilter;
 static bool         g_filterSelected = false;
 
 

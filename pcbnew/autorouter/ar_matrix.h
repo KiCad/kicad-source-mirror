@@ -122,16 +122,16 @@ public:
                                AR_MATRIX::CELL_OP op_logic );
 
 private:
-    void drawSegmentQcq( int ux0, int uy0, int ux1, int uy1, int lg, LAYER_NUM layer, int color,
-            CELL_OP op_logic );
+    void drawSegmentQcq( int ux0, int uy0, int ux1, int uy1, int lg, int layer, int color,
+                         CELL_OP op_logic );
 
-    void traceCircle( int ux0, int uy0, int ux1, int uy1, int lg, LAYER_NUM layer, int color,
+    void traceCircle( int ux0, int uy0, int ux1, int uy1, int lg, int layer, int color,
                       AR_MATRIX::CELL_OP op_logic );
 
     void traceFilledCircle( int cx, int cy, int radius, LSET aLayerMask, int color,
                             AR_MATRIX::CELL_OP op_logic );
 
-    void traceArc( int ux0, int uy0, int ux1, int uy1, double ArcAngle, int lg, LAYER_NUM layer,
+    void traceArc( int ux0, int uy0, int ux1, int uy1, double ArcAngle, int lg, int layer,
                    int color, AR_MATRIX::CELL_OP op_logic );
 
 public:

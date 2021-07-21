@@ -43,7 +43,7 @@
 #include <render_settings.h>
 
 
-const wxString GetGerberProtelExtension( LAYER_NUM aLayer )
+const wxString GetGerberProtelExtension( int aLayer )
 {
     if( IsCopperLayer( aLayer ) )
     {
@@ -84,7 +84,7 @@ const wxString GetGerberProtelExtension( LAYER_NUM aLayer )
 }
 
 
-const wxString GetGerberFileFunctionAttribute( const BOARD* aBoard, LAYER_NUM aLayer )
+const wxString GetGerberFileFunctionAttribute( const BOARD* aBoard, int aLayer )
 {
     wxString attrib;
 
@@ -206,7 +206,7 @@ const wxString GetGerberFileFunctionAttribute( const BOARD* aBoard, LAYER_NUM aL
 }
 
 
-static const wxString GetGerberFilePolarityAttribute( LAYER_NUM aLayer )
+static const wxString GetGerberFilePolarityAttribute( int aLayer )
 {
     /* build the string %TF.FilePolarity,Positive*%
      * or  %TF.FilePolarity,Negative*%
@@ -350,7 +350,7 @@ void AddGerberX2Header( PLOTTER* aPlotter, const BOARD* aBoard, bool aUseX1Compa
 }
 
 
-void AddGerberX2Attribute( PLOTTER* aPlotter, const BOARD* aBoard, LAYER_NUM aLayer,
+void AddGerberX2Attribute( PLOTTER* aPlotter, const BOARD* aBoard, int aLayer,
                            bool aUseX1CompatibilityMode )
 {
     AddGerberX2Header( aPlotter, aBoard, aUseX1CompatibilityMode );

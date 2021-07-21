@@ -76,7 +76,7 @@ void PCB_PARSER::init()
     // Add untranslated default (i.e. English) layernames.
     // Some may be overridden later if parsing a board rather than a footprint.
     // The English name will survive if parsing only a footprint.
-    for( LAYER_NUM layer = 0;  layer < PCB_LAYER_ID_COUNT;  ++layer )
+    for( int layer = 0;  layer < PCB_LAYER_ID_COUNT;  ++layer )
     {
         std::string untranslated = TO_UTF8( wxString( LSET::Name( PCB_LAYER_ID( layer ) ) ) );
 
@@ -1269,7 +1269,7 @@ void PCB_PARSER::parseLayer( LAYER* aLayer )
         Expecting( T_LEFT );
 
     // this layer_num is not used, we DO depend on LAYER_T however.
-    LAYER_NUM layer_num = parseInt( "layer index" );
+    int layer_num = parseInt( "layer index" );
 
     NeedSYMBOLorNUMBER();
     name = CurText();

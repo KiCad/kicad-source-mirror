@@ -27,7 +27,6 @@
 #include <pcb_edit_frame.h>
 #include <pcb_layer_box_selector.h>
 #include <settings/color_settings.h>
-#include <widgets/layer_box_selector.h>
 #include <wx/textctrl.h>
 
 
@@ -48,7 +47,7 @@ GRID_CELL_LAYER_RENDERER::~GRID_CELL_LAYER_RENDERER()
 void GRID_CELL_LAYER_RENDERER::Draw( wxGrid& aGrid, wxGridCellAttr& aAttr, wxDC& aDC,
                                      const wxRect& aRect, int aRow, int aCol, bool isSelected )
 {
-    LAYER_NUM value = aGrid.GetTable()->GetValueAsLong( aRow, aCol );
+    int value = aGrid.GetTable()->GetValueAsLong( aRow, aCol );
 
     wxRect rect = aRect;
     rect.Inflate( -1 );
@@ -142,7 +141,7 @@ void GRID_CELL_LAYER_SELECTOR::BeginEdit( int aRow, int aCol, wxGrid* aGrid )
     m_control->Bind(wxEVT_COMBOBOX_DROPDOWN, &GRID_CELL_LAYER_SELECTOR::onComboDropDown, this);
     m_control->Bind(wxEVT_COMBOBOX_CLOSEUP,  &GRID_CELL_LAYER_SELECTOR::onComboCloseUp,  this);
 
-    m_value = (LAYER_NUM) aGrid->GetTable()->GetValueAsLong( aRow, aCol );
+    m_value = aGrid->GetTable()->GetValueAsLong( aRow, aCol );
 
     // Footprints are defined in a global context and may contain layers not enabled
     // on the current board.  Check and display all layers if so.
@@ -173,7 +172,7 @@ void GRID_CELL_LAYER_SELECTOR::BeginEdit( int aRow, int aCol, wxGrid* aGrid )
 bool GRID_CELL_LAYER_SELECTOR::EndEdit( int , int , const wxGrid* , const wxString& ,
                                         wxString *newval )
 {
-    const LAYER_NUM value = LayerBox()->GetLayerSelection();
+    const int value = LayerBox()->GetLayerSelection();
 
     if ( value == m_value )
         return false;

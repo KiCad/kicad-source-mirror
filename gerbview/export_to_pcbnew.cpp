@@ -39,7 +39,7 @@
 #include "excellon_image.h"
 
 // Imported function
-extern const wxString GetPCBDefaultLayerName( LAYER_NUM aLayerNumber );
+extern const wxString GetPCBDefaultLayerName( int aLayerNumber );
 
 
 GBR_TO_PCB_EXPORTER::GBR_TO_PCB_EXPORTER( GERBVIEW_FRAME* aFrame, const wxString& aFileName )
@@ -56,7 +56,7 @@ GBR_TO_PCB_EXPORTER::~GBR_TO_PCB_EXPORTER()
 }
 
 
-bool GBR_TO_PCB_EXPORTER::ExportPcb( const LAYER_NUM* aLayerLookUpTable, int aCopperLayers )
+bool GBR_TO_PCB_EXPORTER::ExportPcb( const int* aLayerLookUpTable, int aCopperLayers )
 {
     LOCALE_IO   toggle;     // toggles on, then off, the C locale.
 
@@ -98,7 +98,7 @@ bool GBR_TO_PCB_EXPORTER::ExportPcb( const LAYER_NUM* aLayerLookUpTable, int aCo
         if( gerber == nullptr )    // Graphic layer not yet used
             continue;
 
-        LAYER_NUM pcb_layer_number = aLayerLookUpTable[layer];
+        int pcb_layer_number = aLayerLookUpTable[layer];
 
         if( !IsPcbLayer( pcb_layer_number ) )
             continue;
@@ -106,7 +106,7 @@ bool GBR_TO_PCB_EXPORTER::ExportPcb( const LAYER_NUM* aLayerLookUpTable, int aCo
         if( pcb_layer_number <= pcbCopperLayerMax ) // copper layer
             continue;
 
-        for(  GERBER_DRAW_ITEM* gerb_item : gerber->GetItems() )
+        for( GERBER_DRAW_ITEM* gerb_item : gerber->GetItems() )
             export_non_copper_item( gerb_item, pcb_layer_number );
     }
 
@@ -118,7 +118,7 @@ bool GBR_TO_PCB_EXPORTER::ExportPcb( const LAYER_NUM* aLayerLookUpTable, int aCo
         if( gerber == nullptr )    // Graphic layer not yet used
             continue;
 
-        LAYER_NUM pcb_layer_number = aLayerLookUpTable[layer];
+        int pcb_layer_number = aLayerLookUpTable[layer];
 
         if( pcb_layer_number < 0 || pcb_layer_number > pcbCopperLayerMax )
             continue;
@@ -139,8 +139,7 @@ bool GBR_TO_PCB_EXPORTER::ExportPcb( const LAYER_NUM* aLayerLookUpTable, int aCo
 }
 
 
-void GBR_TO_PCB_EXPORTER::export_non_copper_item( const GERBER_DRAW_ITEM* aGbrItem,
-                                                  LAYER_NUM aLayer )
+void GBR_TO_PCB_EXPORTER::export_non_copper_item( const GERBER_DRAW_ITEM* aGbrItem, int aLayer )
 {
     // used when a D_CODE is not found. default D_CODE to draw a flashed item
     static D_CODE  dummyD_CODE( 0 );
@@ -277,7 +276,7 @@ void GBR_TO_PCB_EXPORTER::export_via( const EXPORT_VIA& aVia )
 }
 
 
-void GBR_TO_PCB_EXPORTER::export_copper_item( const GERBER_DRAW_ITEM* aGbrItem, LAYER_NUM aLayer )
+void GBR_TO_PCB_EXPORTER::export_copper_item( const GERBER_DRAW_ITEM* aGbrItem, int aLayer )
 {
     switch( aGbrItem->m_Shape )
     {
@@ -311,8 +310,7 @@ void GBR_TO_PCB_EXPORTER::export_copper_item( const GERBER_DRAW_ITEM* aGbrItem, 
 }
 
 
-void GBR_TO_PCB_EXPORTER::export_segline_copper_item( const GERBER_DRAW_ITEM* aGbrItem,
-                                                      LAYER_NUM aLayer )
+void GBR_TO_PCB_EXPORTER::export_segline_copper_item( const GERBER_DRAW_ITEM* aGbrItem, int aLayer )
 {
     wxPoint seg_start, seg_end;
 
@@ -327,9 +325,8 @@ void GBR_TO_PCB_EXPORTER::export_segline_copper_item( const GERBER_DRAW_ITEM* aG
 }
 
 
-void GBR_TO_PCB_EXPORTER::writeCopperLineItem( const wxPoint& aStart,
-                                               const wxPoint& aEnd,
-                                               int aWidth, LAYER_NUM aLayer )
+void GBR_TO_PCB_EXPORTER::writeCopperLineItem( const wxPoint& aStart, const wxPoint& aEnd,
+                                               int aWidth, int aLayer )
 {
   fprintf( m_fp, "(segment (start %s %s) (end %s %s) (width %s) (layer %s) (net 0))\n",
                   Double2Str( MapToPcbUnits(aStart.x) ).c_str(),
@@ -341,8 +338,7 @@ void GBR_TO_PCB_EXPORTER::writeCopperLineItem( const wxPoint& aStart,
 }
 
 
-void GBR_TO_PCB_EXPORTER::export_segarc_copper_item( const GERBER_DRAW_ITEM* aGbrItem,
-                                                     LAYER_NUM aLayer )
+void GBR_TO_PCB_EXPORTER::export_segarc_copper_item( const GERBER_DRAW_ITEM* aGbrItem, int aLayer )
 {
     double  a = atan2( (double) ( aGbrItem->m_Start.y - aGbrItem->m_ArcCentre.y ),
                        (double) ( aGbrItem->m_Start.x - aGbrItem->m_ArcCentre.x ) );
@@ -397,8 +393,7 @@ void GBR_TO_PCB_EXPORTER::export_segarc_copper_item( const GERBER_DRAW_ITEM* aGb
 }
 
 
-void GBR_TO_PCB_EXPORTER::export_flashed_copper_item( const GERBER_DRAW_ITEM* aGbrItem,
-                                                      LAYER_NUM aLayer )
+void GBR_TO_PCB_EXPORTER::export_flashed_copper_item( const GERBER_DRAW_ITEM* aGbrItem, int aLayer )
 {
     static D_CODE  flashed_item_D_CODE( 0 );
 
@@ -437,7 +432,7 @@ void GBR_TO_PCB_EXPORTER::export_flashed_copper_item( const GERBER_DRAW_ITEM* aG
 
 
 void GBR_TO_PCB_EXPORTER::writePcbFilledCircle( const VECTOR2I& aCenterPosition, int aRadius,
-                                                LAYER_NUM aLayer )
+                                                int aLayer )
 {
 
     fprintf( m_fp, "(gr_circle (center %s %s) (end %s %s)",
@@ -452,7 +447,7 @@ void GBR_TO_PCB_EXPORTER::writePcbFilledCircle( const VECTOR2I& aCenterPosition,
 }
 
 
-void GBR_TO_PCB_EXPORTER::writePcbHeader( const LAYER_NUM* aLayerLookUpTable )
+void GBR_TO_PCB_EXPORTER::writePcbHeader( const int* aLayerLookUpTable )
 {
     fprintf( m_fp, "(kicad_pcb (version 4) (generator gerbview)\n\n" );
 
@@ -481,7 +476,7 @@ void GBR_TO_PCB_EXPORTER::writePcbHeader( const LAYER_NUM* aLayerLookUpTable )
 }
 
 
-void GBR_TO_PCB_EXPORTER::writePcbPolygon( const SHAPE_POLY_SET& aPolys, LAYER_NUM aLayer,
+void GBR_TO_PCB_EXPORTER::writePcbPolygon( const SHAPE_POLY_SET& aPolys, int aLayer,
                                            const wxPoint& aOffset )
 {
     SHAPE_POLY_SET polys = aPolys;
@@ -529,7 +524,7 @@ void GBR_TO_PCB_EXPORTER::writePcbPolygon( const SHAPE_POLY_SET& aPolys, LAYER_N
 }
 
 
-void GBR_TO_PCB_EXPORTER::writePcbZoneItem( const GERBER_DRAW_ITEM* aGbrItem, LAYER_NUM aLayer )
+void GBR_TO_PCB_EXPORTER::writePcbZoneItem( const GERBER_DRAW_ITEM* aGbrItem, int aLayer )
 {
     SHAPE_POLY_SET polys = aGbrItem->m_Polygon;
     polys.Simplify( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );

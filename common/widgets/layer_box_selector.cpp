@@ -22,13 +22,12 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <layer_ids.h>
-#include <bitmaps.h>
 
 #include <wx/dcmemory.h>
 #include <wx/odcombo.h>
 #include <wx/menuitem.h>
 
+#include <layer_ids.h>
 #include <widgets/layer_box_selector.h>
 
 
@@ -73,11 +72,10 @@ void LAYER_SELECTOR::DrawColorSwatch( wxBitmap& aLayerbmp, const COLOR4D& aBackg
 }
 
 
-LAYER_BOX_SELECTOR::LAYER_BOX_SELECTOR( wxWindow* parent, wxWindowID id,
-                                        const wxPoint& pos, const wxSize& size,
-                                        int n, const wxString choices[] ) :
-    wxBitmapComboBox( parent, id, wxEmptyString, pos, size, n, choices, wxCB_READONLY ),
-    LAYER_SELECTOR()
+LAYER_BOX_SELECTOR::LAYER_BOX_SELECTOR( wxWindow* parent, wxWindowID id, const wxPoint& pos,
+                                        const wxSize& size, int n, const wxString choices[] ) :
+        wxBitmapComboBox( parent, id, wxEmptyString, pos, size, n, choices, wxCB_READONLY ),
+        LAYER_SELECTOR()
 {
     if( choices != nullptr )
         ResyncBitmapOnly();
@@ -87,9 +85,8 @@ LAYER_BOX_SELECTOR::LAYER_BOX_SELECTOR( wxWindow* parent, wxWindowID id,
 }
 
 
-LAYER_BOX_SELECTOR::LAYER_BOX_SELECTOR( wxWindow* parent, wxWindowID id,
-                                        const wxPoint& pos, const wxSize& size,
-                                        const wxArrayString& choices ) :
+LAYER_BOX_SELECTOR::LAYER_BOX_SELECTOR( wxWindow* parent, wxWindowID id, const wxPoint& pos,
+                                        const wxSize& size, const wxArrayString& choices ) :
     wxBitmapComboBox( parent, id, wxEmptyString, pos, size, choices, wxCB_READONLY ),
     LAYER_SELECTOR()
 {
@@ -108,26 +105,18 @@ LAYER_BOX_SELECTOR::~LAYER_BOX_SELECTOR()
 }
 
 
-int LAYER_BOX_SELECTOR::GetChoice()
-{
-    return GetSelection();
-}
-
-
-LAYER_NUM LAYER_BOX_SELECTOR::GetLayerSelection() const
+int LAYER_BOX_SELECTOR::GetLayerSelection() const
 {
     if( GetSelection() < 0 )
         return UNDEFINED_LAYER;
 
-    return (LAYER_NUM)(intptr_t) GetClientData( GetSelection() );
+    return (int)(intptr_t) GetClientData( GetSelection() );
 }
 
 
-int LAYER_BOX_SELECTOR::SetLayerSelection( LAYER_NUM layer )
+int LAYER_BOX_SELECTOR::SetLayerSelection( int layer )
 {
-    int elements = GetCount();
-
-    for( int i = 0; i < elements; i++ )
+    for( int i = 0; i < (int) GetCount(); i++ )
     {
         if( GetClientData( (unsigned) i ) == (void*)(intptr_t) layer )
         {
@@ -137,7 +126,9 @@ int LAYER_BOX_SELECTOR::SetLayerSelection( LAYER_NUM layer )
                 return i;
             }
             else
-                return i;               //If element already selected; do nothing
+            {
+                return i;               // If element already selected; do nothing
+            }
         }
     }
 
@@ -149,9 +140,7 @@ int LAYER_BOX_SELECTOR::SetLayerSelection( LAYER_NUM layer )
 
 void LAYER_BOX_SELECTOR::ResyncBitmapOnly()
 {
-    int elements = GetCount();
-
-    for( LAYER_NUM i = 0; i < elements; ++i )
+    for( int i = 0; i < (int) GetCount(); ++i )
     {
         wxBitmap layerbmp( 14, 14 );
         DrawColorSwatch( layerbmp, getLayerColor( LAYER_PCB_BACKGROUND ), getLayerColor( i ) );

@@ -294,13 +294,13 @@ inline int layerMaskCountSet( LEG_MASK aMask )
 
 // return true if aLegacyLayerNum is a valid copper layer legacy id, therefore
 // top, bottom or inner activated layer
-inline bool is_leg_copperlayer_valid( int aCu_Count, LAYER_NUM aLegacyLayerNum )
+inline bool is_leg_copperlayer_valid( int aCu_Count, int aLegacyLayerNum )
 {
-    return ( aLegacyLayerNum == LAYER_N_FRONT ) || ( aLegacyLayerNum < aCu_Count );
+    return aLegacyLayerNum == LAYER_N_FRONT || aLegacyLayerNum < aCu_Count;
 }
 
 
-PCB_LAYER_ID LEGACY_PLUGIN::leg_layer2new( int cu_count, LAYER_NUM aLayerNum )
+PCB_LAYER_ID LEGACY_PLUGIN::leg_layer2new( int cu_count, int aLayerNum )
 {
     int         newid;
     unsigned    old = aLayerNum;
@@ -387,15 +387,6 @@ static inline int intParse( const char* next, const char** out = nullptr )
 {
     // please just compile this and be quiet, hide casting ugliness:
     return (int) strtol( next, (char**) out, 10 );
-}
-
-
-/**
- * Like #intParse but returns a LAYER_NUM.
- */
-static inline LAYER_NUM layerParse( const char* next, const char** out = nullptr )
-{
-    return intParse( next, out );
 }
 
 
@@ -884,7 +875,7 @@ void LEGACY_PLUGIN::loadSETUP()
         {
             // eg: "Layer[n]  <a_Layer_name_with_no_spaces> <LAYER_T>"
 
-            LAYER_NUM    layer_num = layerParse( line + SZ( "Layer[" ), &data );
+            int          layer_num = intParse( line + SZ( "Layer[" ), &data );
             PCB_LAYER_ID layer_id  = leg_layer2new( m_cu_count, layer_num );
 
             data = strtok_r( (char*) data+1, delims, &saveptr );    // +1 for ']'
@@ -1186,7 +1177,7 @@ void LEGACY_PLUGIN::loadFOOTPRINT( FOOTPRINT* aFootprint )
             BIU          pos_x     = biuParse( line + SZ( "Po" ), &data );
             BIU          pos_y     = biuParse( data, &data );
             int          orient    = intParse( data, &data );
-            LAYER_NUM    layer_num = layerParse( data, &data );
+            int          layer_num = intParse( data, &data );
             PCB_LAYER_ID layer_id  = leg_layer2new( m_cu_count,  layer_num );
             long         edittime  = hexParse( data, &data );
             char*        uuid      = strtok_r( (char*) data, delims, (char**) &data );
@@ -1575,8 +1566,8 @@ void LEGACY_PLUGIN::loadFP_SHAPE( FOOTPRINT* aFootprint )
     const char* data;
 
     // common to all cases, and we have to check their values uniformly at end
-    BIU         width = 1;
-    LAYER_NUM   layer = FIRST_NON_COPPER_LAYER;
+    BIU width = 1;
+    int layer = FIRST_NON_COPPER_LAYER;
 
     switch( shape )
     {
@@ -1589,7 +1580,7 @@ void LEGACY_PLUGIN::loadFP_SHAPE( FOOTPRINT* aFootprint )
         double  angle = degParse( data, &data );
 
         width = biuParse( data, &data );
-        layer = layerParse( data );
+        layer = intParse( data );
 
         dwg->SetCenter0( wxPoint( center0_x, center0_y ) );
         dwg->SetStart0( wxPoint( start0_x, start0_y ) );
@@ -1607,7 +1598,7 @@ void LEGACY_PLUGIN::loadFP_SHAPE( FOOTPRINT* aFootprint )
         BIU end0_y = biuParse( data, &data );
 
         width = biuParse( data, &data );
-        layer = layerParse( data );
+        layer = intParse( data );
 
         dwg->SetStart0( wxPoint( start0_x, start0_y ) );
         dwg->SetEnd0( wxPoint( end0_x, end0_y ) );
@@ -1624,7 +1615,7 @@ void LEGACY_PLUGIN::loadFP_SHAPE( FOOTPRINT* aFootprint )
         int ptCount = intParse( data, &data );
 
         width = biuParse( data, &data );
-        layer = layerParse( data );
+        layer = intParse( data );
 
         dwg->SetStart0( wxPoint( start0_x, start0_y ) );
         dwg->SetEnd0( wxPoint( end0_x, end0_y ) );
@@ -1722,7 +1713,7 @@ void LEGACY_PLUGIN::loadMODULE_TEXT( FP_TEXT* aText )
     char*   hide    = strtok_r( nullptr, delims, (char**) &data );
     char*   tmp     = strtok_r( nullptr, delims, (char**) &data );
 
-    LAYER_NUM layer_num = tmp ? layerParse( tmp ) : SILKSCREEN_N_FRONT;
+    int     layer_num = tmp ? intParse( tmp ) : SILKSCREEN_N_FRONT;
 
     char*   italic  = strtok_r( nullptr, delims, (char**) &data );
 
@@ -1863,8 +1854,8 @@ void LEGACY_PLUGIN::loadPCB_LINE()
                 switch( i )
                 {
                 case 0:
-                    LAYER_NUM layer;
-                    layer = layerParse( data );
+                    int layer;
+                    layer = intParse( data );
 
                     if( layer < FIRST_NON_COPPER_LAYER )
                         layer = FIRST_NON_COPPER_LAYER;
@@ -2057,12 +2048,12 @@ void LEGACY_PLUGIN::loadPCB_TEXT()
         else if( TESTLINE( "De" ) )
         {
             // e.g. "De 21 1 68183921-93a5-49ac-91b0-49d05a0e1647 Normal C\r\n"
-            LAYER_NUM layer_num    = layerParse( line + SZ( "De" ), &data );
-            int     notMirrored    = intParse( data, &data );
-            char*   uuid           = strtok_r( (char*) data, delims, (char**) &data );
-            char*   style          = strtok_r( nullptr, delims, (char**) &data );
-            char*   hJustify       = strtok_r( nullptr, delims, (char**) &data );
-            char*   vJustify       = strtok_r( nullptr, delims, (char**) &data );
+            int   layer_num   = intParse( line + SZ( "De" ), &data );
+            int   notMirrored = intParse( data, &data );
+            char* uuid        = strtok_r( (char*) data, delims, (char**) &data );
+            char* style       = strtok_r( nullptr, delims, (char**) &data );
+            char* hJustify    = strtok_r( nullptr, delims, (char**) &data );
+            char* vJustify    = strtok_r( nullptr, delims, (char**) &data );
 
             pcbtxt->SetMirrored( !notMirrored );
             const_cast<KIID&>( pcbtxt->m_Uuid ) = KIID( uuid );
@@ -2159,11 +2150,11 @@ void LEGACY_PLUGIN::loadTrackList( int aStructType )
 
         // parse the 2nd line to determine the type of object
         // e.g. "De 15 1 7 68183921-93a5-49ac-91b0-49d05a0e1647 0" for a via
-        LAYER_NUM layer_num    = layerParse( line + SZ( "De" ), &data );
-        int     type           = intParse( data, &data );
-        int     net_code       = intParse( data, &data );
-        char*   uuid           = strtok_r( (char*) data, delims, (char**) &data );
-        int     flags_int      = intParse( data, (const char**) &data );
+        int   layer_num = intParse( line + SZ( "De" ), &data );
+        int   type      = intParse( data, &data );
+        int   net_code  = intParse( data, &data );
+        char* uuid      = strtok_r( (char*) data, delims, (char**) &data );
+        int   flags_int = intParse( data, (const char**) &data );
 
         EDA_ITEM_FLAGS flags = static_cast<EDA_ITEM_FLAGS>( flags_int );
 
@@ -2392,7 +2383,7 @@ void LEGACY_PLUGIN::loadZONE_CONTAINER()
         }
         else if( TESTLINE( "ZLayer" ) )     // layer found
         {
-            LAYER_NUM layer_num = layerParse( line + SZ( "ZLayer" ) );
+            int layer_num = intParse( line + SZ( "ZLayer" ) );
             zc->SetLayer( leg_layer2new( m_cu_count,  layer_num ) );
         }
         else if( TESTLINE( "ZAux" ) )       // aux info found
@@ -2651,11 +2642,11 @@ void LEGACY_PLUGIN::loadDIMENSION()
         else if( TESTLINE( "Ge" ) )
         {
             // e.g. "Ge 1 21 68183921-93a5-49ac-91b0-49d05a0e1647\r\n"
-            int       shape      = intParse( line + SZ( "De" ), (const char**) &data );
-            LAYER_NUM layer_num  = layerParse( data, &data );
-            char*     uuid       = strtok_r( (char*) data, delims, (char**) &data );
+            int   shape     = intParse( line + SZ( "De" ), (const char**) &data );
+            int   layer_num = intParse( data, &data );
+            char* uuid      = strtok_r( (char*) data, delims, (char**) &data );
 
-            dim->SetLayer( leg_layer2new( m_cu_count,  layer_num ) );
+            dim->SetLayer( leg_layer2new( m_cu_count, layer_num ) );
             const_cast<KIID&>( dim->m_Uuid ) = KIID( uuid );
 
             // not used
@@ -2774,13 +2765,13 @@ void LEGACY_PLUGIN::loadPCB_TARGET()
         }
         else if( TESTLINE( "Po" ) )
         {
-            int       shape     = intParse( line + SZ( "Po" ), &data );
-            LAYER_NUM layer_num = layerParse( data, &data );
-            BIU       pos_x     = biuParse( data, &data );
-            BIU       pos_y     = biuParse( data, &data );
-            BIU       size      = biuParse( data, &data );
-            BIU       width     = biuParse( data, &data );
-            char*     uuid      = strtok_r( (char*) data, delims, (char**) &data  );
+            int   shape     = intParse( line + SZ( "Po" ), &data );
+            int   layer_num = intParse( data, &data );
+            BIU   pos_x     = biuParse( data, &data );
+            BIU   pos_y     = biuParse( data, &data );
+            BIU   size      = biuParse( data, &data );
+            BIU   width     = biuParse( data, &data );
+            char* uuid      = strtok_r( (char*) data, delims, (char**) &data  );
 
             if( layer_num < FIRST_NON_COPPER_LAYER )
                 layer_num = FIRST_NON_COPPER_LAYER;

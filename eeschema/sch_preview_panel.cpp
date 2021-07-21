@@ -99,9 +99,9 @@ void SCH_PREVIEW_PANEL::OnShow()
 
 void SCH_PREVIEW_PANEL::setDefaultLayerOrder()
 {
-    for( LAYER_NUM i = 0; (unsigned) i < sizeof( SCH_LAYER_ORDER ) / sizeof( LAYER_NUM ); ++i )
+    for( int i = 0; (unsigned) i < sizeof( SCH_LAYER_ORDER ) / sizeof( int ); ++i )
     {
-        LAYER_NUM layer = SCH_LAYER_ORDER[i];
+        int layer = SCH_LAYER_ORDER[i];
         wxASSERT( layer < KIGFX::VIEW::VIEW_MAX_LAYERS );
 
         m_view->SetLayerOrder( layer, i );

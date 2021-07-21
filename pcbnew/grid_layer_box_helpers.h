@@ -81,7 +81,7 @@ protected:
 
     PCB_BASE_FRAME* m_frame;
     LSET            m_mask;
-    LAYER_NUM       m_value;
+    int             m_value;
 
     wxDECLARE_NO_COPY_CLASS( GRID_CELL_LAYER_SELECTOR );
 };
