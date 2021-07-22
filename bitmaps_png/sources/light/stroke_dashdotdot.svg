@@ -14,11 +14,11 @@
    xml:space="preserve"
    style="fill-rule:evenodd;clip-rule:evenodd;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:1.5;"
    id="svg840"
-   sodipodi:docname="stroke_dashdot.svg"
+   sodipodi:docname="stroke_dashdotdot.svg"
    inkscape:version="1.0.2 (e86c8708, 2021-01-15)"
-   inkscape:export-filename="/Users/jeff/kicad_dev/kicad/bitmaps_png/png/stroke_dashdot_dark.png"
-   inkscape:export-xdpi="96"
-   inkscape:export-ydpi="96"><defs
+   inkscape:export-filename="/Users/jeff/kicad_dev/kicad/bitmaps_png/png/stroke_dashdotdot.png"
+   inkscape:export-xdpi="96.000008"
+   inkscape:export-ydpi="96.000008"><defs
    id="defs844" /><sodipodi:namedview
    pagecolor="#ffffff"
    bordercolor="#666666"
@@ -32,9 +32,9 @@
    inkscape:window-height="800"
    id="namedview842"
    showgrid="false"
-   inkscape:zoom="10.679189"
-   inkscape:cx="31.43816"
-   inkscape:cy="9.4982411"
+   inkscape:zoom="16.183779"
+   inkscape:cx="30.972869"
+   inkscape:cy="8.7951986"
    inkscape:window-x="0"
    inkscape:window-y="23"
    inkscape:window-maximized="1"
@@ -63,18 +63,22 @@
      rdf:resource="http://creativecommons.org/ns#ShareAlike" /></cc:License></rdf:RDF>
      </metadata>
      <path
-   d="m 35.735,8 c 0,-1.656 -1.344,-3 -3,-3 h -1 c -1.656,0 -3,1.344 -3,3 0,1.656 1.344,3 3,3 h 1 c 1.656,0 3,-1.344 3,-3 z"
-   style="fill:#ded3dd;fill-opacity:1;stroke:#000000;stroke-width:0.09px"
+   d="m 30.135,8 c 0,-1.656 -1.344,-3 -3,-3 h -1 c -1.656,0 -3,1.344 -3,3 0,1.656 1.344,3 3,3 h 1 c 1.656,0 3,-1.344 3,-3 z"
+   style="fill:#545454;fill-opacity:1;stroke:#000000;stroke-width:0.09px"
    id="path834"
    sodipodi:nodetypes="sssssss" />
      <path
-   d="m 19.5,8 c 0,-1.656 -1.344,-3 -3,-3 H 4 C 2.344,5 1,6.344 1,8 c 0,1.656 1.344,3 3,3 h 12.5 c 1.656,0 3,-1.344 3,-3 z"
-   style="fill:#ded3dd;fill-opacity:1;stroke:#000000;stroke-width:0.09px"
+   d="M 17,8 C 17,6.344 15.656,5 14,5 H 4 C 2.344,5 1,6.344 1,8 c 0,1.656 1.344,3 3,3 h 10 c 1.656,0 3,-1.344 3,-3 z"
+   style="fill:#545454;fill-opacity:1;stroke:#000000;stroke-width:0.09px"
    id="path836"
    sodipodi:nodetypes="sssssss" />
      <path
-   d="M 63,8 C 63,6.344 61.656,5 60,5 H 47.5 c -1.656,0 -3,1.344 -3,3 0,1.656 1.344,3 3,3 H 60 c 1.656,0 3,-1.344 3,-3 z"
-   style="fill:#ded3dd;fill-opacity:1;stroke:#000000;stroke-width:0.09px"
+   d="M 63,8 C 63,6.344 61.656,5 60,5 H 50 c -1.656,0 -3,1.344 -3,3 0,1.656 1.344,3 3,3 h 10 c 1.656,0 3,-1.344 3,-3 z"
+   style="fill:#545454;fill-opacity:1;stroke:#000000;stroke-width:0.09px"
    id="path838"
    sodipodi:nodetypes="sssssss" />
-</svg>
+<path
+   d="m 41.935,8 c 0,-1.656 -1.344,-3 -3,-3 h -1 c -1.656,0 -3,1.344 -3,3 0,1.656 1.344,3 3,3 h 1 c 1.656,0 3,-1.344 3,-3 z"
+   style="fill:#545454;fill-opacity:1;stroke:#000000;stroke-width:0.09px"
+   id="path840"
+   sodipodi:nodetypes="sssssss" /></svg>

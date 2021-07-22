@@ -61,6 +61,9 @@ public:
     wxString  m_IntersheetRefsPrefix;
     wxString  m_IntersheetRefsSuffix;
 
+    double    m_DashedLineDashRatio;        // Dash length as ratio of the lineWidth
+    double    m_DashedLineGapRatio;         // Gap length as ratio of the lineWidth
+
     wxString  m_PlotDirectoryName;
 
     wxString  m_NetFormatName;

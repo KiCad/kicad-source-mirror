@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -41,9 +41,12 @@ PANEL_SETUP_FORMATTING::PANEL_SETUP_FORMATTING( wxWindow* aWindow, SCH_EDIT_FRAM
 {
 }
 
+
 void PANEL_SETUP_FORMATTING::onCheckBoxIref( wxCommandEvent& event )
 {
     bool enabled = m_showIntersheetsReferences->GetValue();
+
+    m_dashedLineHelp->SetFont( KIUI::GetInfoFont( this ) );
 
     m_radioFormatStandard->Enable( enabled );
     m_radioFormatAbbreviated->Enable( enabled );
@@ -94,11 +97,17 @@ bool PANEL_SETUP_FORMATTING::TransferDataToWindow()
     m_suffixCtrl->ChangeValue( settings.m_IntersheetRefsSuffix );
     m_listOwnPage->SetValue( settings.m_IntersheetRefsListOwnPage );
 
-    wxString offsetRatio = wxString::Format( "%f", settings.m_TextOffsetRatio * 100.0 );
-    m_textOffsetRatioCtrl->SetValue( offsetRatio );
+    m_textOffsetRatioCtrl->SetValue( StringFromValue( EDA_UNITS::PERCENT,
+                                                      settings.m_TextOffsetRatio * 100.0 ) );
 
-    wxString labelSizeRatio = wxString::Format( "%f", settings.m_LabelSizeRatio * 100.0 );
-    m_labelSizeRatioCtrl->SetValue( labelSizeRatio );
+    m_dashLengthCtrl->SetValue( StringFromValue( EDA_UNITS::UNSCALED,
+                                                 settings.m_DashedLineDashRatio ) );
+
+    m_gapLengthCtrl->SetValue( StringFromValue( EDA_UNITS::UNSCALED,
+                                                settings.m_DashedLineGapRatio ) );
+
+    m_labelSizeRatioCtrl->SetValue( StringFromValue( EDA_UNITS::PERCENT,
+                                                     settings.m_LabelSizeRatio * 100.0 ) );
 
     return true;
 }
@@ -142,13 +151,17 @@ bool PANEL_SETUP_FORMATTING::TransferDataFromWindow()
     settings.m_IntersheetRefsSuffix      = m_suffixCtrl->GetValue();
     settings.m_IntersheetRefsListOwnPage = m_listOwnPage->GetValue();
 
-    double dtmp = DEFAULT_TEXT_OFFSET_RATIO;
-    m_textOffsetRatioCtrl->GetValue().ToDouble( &dtmp );
-    settings.m_TextOffsetRatio = dtmp / 100.0;
+    settings.m_TextOffsetRatio = DoubleValueFromString( EDA_UNITS::PERCENT,
+                                                        m_textOffsetRatioCtrl->GetValue() ) / 100.0;
 
-    dtmp = DEFAULT_LABEL_SIZE_RATIO;
-    m_labelSizeRatioCtrl->GetValue().ToDouble( &dtmp );
-    settings.m_LabelSizeRatio = dtmp / 100.0;
+    settings.m_DashedLineDashRatio = DoubleValueFromString( EDA_UNITS::UNSCALED,
+                                                            m_dashLengthCtrl->GetValue() );
+
+    settings.m_DashedLineGapRatio = DoubleValueFromString( EDA_UNITS::UNSCALED,
+                                                           m_gapLengthCtrl->GetValue() );
+
+    settings.m_LabelSizeRatio = DoubleValueFromString( EDA_UNITS::PERCENT,
+                                                       m_labelSizeRatioCtrl->GetValue() ) / 100.0;
 
     return true;
 }

@@ -257,14 +257,22 @@ void SVG_PLOTTER::setSVGPlotStyle( bool aIsGroup, const std::string& aExtraStyle
     switch( m_dashed )
     {
     case PLOT_DASH_TYPE::DASH:
-        fprintf( m_outputFile, "stroke-dasharray:%f,%f;", GetDashMarkLenIU(), GetDashGapLenIU() );
+        fprintf( m_outputFile, "stroke-dasharray:%f,%f;",
+                 GetDashMarkLenIU(), GetDashGapLenIU() );
         break;
     case PLOT_DASH_TYPE::DOT:
-        fprintf( m_outputFile, "stroke-dasharray:%f,%f;", GetDotMarkLenIU(), GetDashGapLenIU() );
+        fprintf( m_outputFile, "stroke-dasharray:%f,%f;",
+                 GetDotMarkLenIU(), GetDashGapLenIU() );
         break;
     case PLOT_DASH_TYPE::DASHDOT:
         fprintf( m_outputFile, "stroke-dasharray:%f,%f,%f,%f;",
                  GetDashMarkLenIU(), GetDashGapLenIU(),
+                 GetDotMarkLenIU(), GetDashGapLenIU() );
+        break;
+    case PLOT_DASH_TYPE::DASHDOTDOT:
+        fprintf( m_outputFile, "stroke-dasharray:%f,%f,%f,%f,%f,%f;",
+                 GetDashMarkLenIU(), GetDashGapLenIU(),
+                 GetDotMarkLenIU(), GetDashGapLenIU(),
                  GetDotMarkLenIU(), GetDashGapLenIU() );
         break;
     case PLOT_DASH_TYPE::DEFAULT:

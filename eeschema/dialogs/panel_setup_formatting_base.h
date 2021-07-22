@@ -66,6 +66,11 @@ class PANEL_SETUP_FORMATTING_BASE : public wxPanel
 		wxTextCtrl* m_prefixCtrl;
 		wxStaticText* m_suffixLabel;
 		wxTextCtrl* m_suffixCtrl;
+		wxStaticText* dashLengthLabel;
+		wxTextCtrl* m_dashLengthCtrl;
+		wxStaticText* gapLengthLabel;
+		wxTextCtrl* m_gapLengthCtrl;
+		wxStaticText* m_dashedLineHelp;
 
 		// Virtual event handlers, overide them in your derived class
 		virtual void onCheckBoxIref( wxCommandEvent& event ) { event.Skip(); }

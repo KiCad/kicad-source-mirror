@@ -93,6 +93,8 @@ PANEL_SETUP_NETCLASSES::PANEL_SETUP_NETCLASSES( PAGED_DIALOG* aParent, EDA_DRAW_
     g_lineStyleNames.push_back( _( "Dotted" ) );
     g_lineStyleIcons.push_back( BITMAPS::stroke_dashdot );
     g_lineStyleNames.push_back( _( "Dash-Dot" ) );
+    g_lineStyleIcons.push_back( BITMAPS::stroke_dashdotdot );
+    g_lineStyleNames.push_back( _( "Dash-Dot-Dot" ) );
 
     m_netclassesDirty = true;
 

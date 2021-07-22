@@ -93,7 +93,7 @@ PANEL_SETUP_FORMATTING_BASE::PANEL_SETUP_FORMATTING_BASE( wxWindow* parent, wxWi
 	sbSizer4->Add( fgSizer2, 1, wxALL|wxEXPAND, 5 );
 
 
-	bLeftColumn->Add( sbSizer4, 1, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
+	bLeftColumn->Add( sbSizer4, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 
 	wxStaticBoxSizer* sbSizer41;
 	sbSizer41 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Symbols") ), wxVERTICAL );
@@ -149,13 +149,13 @@ PANEL_SETUP_FORMATTING_BASE::PANEL_SETUP_FORMATTING_BASE( wxWindow* parent, wxWi
 	bSizer61->Add( m_choiceJunctionDotSize, 1, wxEXPAND|wxRIGHT, 5 );
 
 
-	sbSizer2->Add( bSizer61, 1, wxBOTTOM|wxEXPAND, 5 );
+	sbSizer2->Add( bSizer61, 0, wxBOTTOM|wxEXPAND, 5 );
 
 
-	bLeftColumn->Add( sbSizer2, 0, wxEXPAND|wxALL, 5 );
+	bLeftColumn->Add( sbSizer2, 1, wxEXPAND|wxALL, 5 );
 
 
-	bPanelSizer->Add( bLeftColumn, 1, 0, 10 );
+	bPanelSizer->Add( bLeftColumn, 1, wxEXPAND, 10 );
 
 	wxBoxSizer* bRightColumn;
 	bRightColumn = new wxBoxSizer( wxVERTICAL );
@@ -209,11 +209,40 @@ PANEL_SETUP_FORMATTING_BASE::PANEL_SETUP_FORMATTING_BASE( wxWindow* parent, wxWi
 
 	bRightColumn->Add( sbSizerIREf, 0, wxALL|wxEXPAND, 5 );
 
+	wxStaticBoxSizer* sbSizer6;
+	sbSizer6 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Dashed Lines") ), wxVERTICAL );
 
-	bRightColumn->Add( 0, 0, 0, wxEXPAND, 5 );
+	wxFlexGridSizer* fgSizer41;
+	fgSizer41 = new wxFlexGridSizer( 0, 2, 5, 0 );
+	fgSizer41->SetFlexibleDirection( wxBOTH );
+	fgSizer41->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+
+	dashLengthLabel = new wxStaticText( sbSizer6->GetStaticBox(), wxID_ANY, _("Dash length:"), wxDefaultPosition, wxDefaultSize, 0 );
+	dashLengthLabel->Wrap( -1 );
+	fgSizer41->Add( dashLengthLabel, 0, wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
+
+	m_dashLengthCtrl = new wxTextCtrl( sbSizer6->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer41->Add( m_dashLengthCtrl, 0, wxALIGN_CENTER_VERTICAL, 5 );
+
+	gapLengthLabel = new wxStaticText( sbSizer6->GetStaticBox(), wxID_ANY, _("Gap length:"), wxDefaultPosition, wxDefaultSize, 0 );
+	gapLengthLabel->Wrap( -1 );
+	fgSizer41->Add( gapLengthLabel, 0, wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
+
+	m_gapLengthCtrl = new wxTextCtrl( sbSizer6->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer41->Add( m_gapLengthCtrl, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 
-	bPanelSizer->Add( bRightColumn, 1, wxRIGHT|wxLEFT, 10 );
+	sbSizer6->Add( fgSizer41, 0, wxEXPAND|wxBOTTOM, 5 );
+
+	m_dashedLineHelp = new wxStaticText( sbSizer6->GetStaticBox(), wxID_ANY, _("Dash and dot lengths are ratios of the line width."), wxDefaultPosition, wxDefaultSize, 0 );
+	m_dashedLineHelp->Wrap( -1 );
+	sbSizer6->Add( m_dashedLineHelp, 0, wxALL, 5 );
+
+
+	bRightColumn->Add( sbSizer6, 1, wxEXPAND|wxBOTTOM, 5 );
+
+
+	bPanelSizer->Add( bRightColumn, 1, wxRIGHT|wxLEFT|wxEXPAND, 10 );
 
 
 	this->SetSizer( bPanelSizer );

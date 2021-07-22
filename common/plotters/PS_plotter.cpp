@@ -571,6 +571,12 @@ void PS_PLOTTER::SetDash( PLOT_DASH_TYPE dashed )
                  (int) GetDashMarkLenIU(), (int) GetDashGapLenIU(),
                  (int) GetDotMarkLenIU(), (int) GetDashGapLenIU() );
         break;
+    case PLOT_DASH_TYPE::DASHDOTDOT:
+        fprintf( m_outputFile, "[%d %d %d %d %d %d] 0 setdash\n",
+                 (int) GetDashMarkLenIU(), (int) GetDashGapLenIU(),
+                 (int) GetDotMarkLenIU(), (int) GetDashGapLenIU(),
+                 (int) GetDotMarkLenIU(), (int) GetDashGapLenIU() );
+        break;
     default:
         fputs( "solidline\n", m_outputFile );
     }

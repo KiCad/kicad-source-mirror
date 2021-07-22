@@ -603,6 +603,7 @@ set( BMAPS_OTHER
     stripline
     stroke_dash
     stroke_dashdot
+    stroke_dashdotdot
     stroke_dot
     stroke_solid
     tune_diff_pair_length_legend

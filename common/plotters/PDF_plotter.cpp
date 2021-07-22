@@ -184,6 +184,12 @@ void PDF_PLOTTER::SetDash( PLOT_DASH_TYPE dashed )
                 (int) GetDashMarkLenIU(), (int) GetDashGapLenIU(),
                 (int) GetDotMarkLenIU(), (int) GetDashGapLenIU() );
         break;
+    case PLOT_DASH_TYPE::DASHDOTDOT:
+        fprintf( workFile, "[%d %d %d %d %d %d] 0 d\n",
+                (int) GetDashMarkLenIU(), (int) GetDashGapLenIU(),
+                (int) GetDotMarkLenIU(), (int) GetDashGapLenIU(),
+                (int) GetDotMarkLenIU(), (int) GetDashGapLenIU() );
+        break;
     default:
         fputs( "[] 0 d\n", workFile );
     }

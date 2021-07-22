@@ -58,6 +58,15 @@ void STROKE_PARAMS::Stroke( const SHAPE* aShape, PLOT_DASH_TYPE aLineStyle, int 
         strokes[3] = aRenderSettings->GetGapLength( aWidth );
         wrapAround = 4;
         break;
+    case PLOT_DASH_TYPE::DASHDOTDOT:
+        strokes[0] = aRenderSettings->GetDashLength( aWidth );
+        strokes[1] = aRenderSettings->GetGapLength( aWidth );
+        strokes[2] = aRenderSettings->GetDotLength( aWidth );
+        strokes[3] = aRenderSettings->GetGapLength( aWidth );
+        strokes[4] = aRenderSettings->GetDotLength( aWidth );
+        strokes[5] = aRenderSettings->GetGapLength( aWidth );
+        wrapAround = 6;
+        break;
     default:
         UNIMPLEMENTED_FOR( lineTypeNames.at( aLineStyle ).name );
     }
@@ -171,11 +180,12 @@ static wxString getLineStyleToken( PLOT_DASH_TYPE aStyle )
 
     switch( aStyle )
     {
-    case PLOT_DASH_TYPE::DASH:     token = "dash";      break;
-    case PLOT_DASH_TYPE::DOT:      token = "dot";       break;
-    case PLOT_DASH_TYPE::DASHDOT:  token = "dash_dot";  break;
-    case PLOT_DASH_TYPE::SOLID:    token = "solid";     break;
-    case PLOT_DASH_TYPE::DEFAULT:  token = "default";   break;
+    case PLOT_DASH_TYPE::DASH:       token = "dash";         break;
+    case PLOT_DASH_TYPE::DOT:        token = "dot";          break;
+    case PLOT_DASH_TYPE::DASHDOT:    token = "dash_dot";     break;
+    case PLOT_DASH_TYPE::DASHDOTDOT: token = "dash_dot_dot"; break;
+    case PLOT_DASH_TYPE::SOLID:      token = "solid";        break;
+    case PLOT_DASH_TYPE::DEFAULT:    token = "default";      break;
     }
 
     return token;
@@ -186,13 +196,22 @@ void STROKE_PARAMS::Format( OUTPUTFORMATTER* aFormatter, int aNestLevel ) const
 {
     wxASSERT( aFormatter != nullptr );
 
-    aFormatter->Print( aNestLevel, "(stroke (width %s) (type %s) (color %d %d %d %s))",
-                       FormatInternalUnits(GetWidth() ).c_str(),
-                       TO_UTF8( getLineStyleToken( GetPlotStyle() ) ),
-                       KiROUND( GetColor().r * 255.0 ),
-                       KiROUND( GetColor().g * 255.0 ),
-                       KiROUND( GetColor().b * 255.0 ),
-                       Double2Str( GetColor().a ).c_str() );
+    if( GetColor() == KIGFX::COLOR4D::UNSPECIFIED )
+    {
+        aFormatter->Print( aNestLevel, "(stroke (width %s) (type %s))",
+                           FormatInternalUnits(GetWidth() ).c_str(),
+                           TO_UTF8( getLineStyleToken( GetPlotStyle() ) ) );
+    }
+    else
+    {
+        aFormatter->Print( aNestLevel, "(stroke (width %s) (type %s) (color %d %d %d %s))",
+                           FormatInternalUnits(GetWidth() ).c_str(),
+                           TO_UTF8( getLineStyleToken( GetPlotStyle() ) ),
+                           KiROUND( GetColor().r * 255.0 ),
+                           KiROUND( GetColor().g * 255.0 ),
+                           KiROUND( GetColor().b * 255.0 ),
+                           Double2Str( GetColor().a ).c_str() );
+    }
 }
 
 
@@ -218,13 +237,14 @@ void STROKE_PARAMS_PARSER::ParseStroke( STROKE_PARAMS& aStroke )
 
             switch( token )
             {
-            case T_dash:      aStroke.SetPlotStyle( PLOT_DASH_TYPE::DASH );      break;
-            case T_dot:       aStroke.SetPlotStyle( PLOT_DASH_TYPE::DOT );       break;
-            case T_dash_dot:  aStroke.SetPlotStyle( PLOT_DASH_TYPE::DASHDOT );   break;
-            case T_solid:     aStroke.SetPlotStyle( PLOT_DASH_TYPE::SOLID );     break;
-            case T_default:   aStroke.SetPlotStyle( PLOT_DASH_TYPE::DEFAULT );   break;
+            case T_dash:         aStroke.SetPlotStyle( PLOT_DASH_TYPE::DASH );       break;
+            case T_dot:          aStroke.SetPlotStyle( PLOT_DASH_TYPE::DOT );        break;
+            case T_dash_dot:     aStroke.SetPlotStyle( PLOT_DASH_TYPE::DASHDOT );    break;
+            case T_dash_dot_dot: aStroke.SetPlotStyle( PLOT_DASH_TYPE::DASHDOTDOT ); break;
+            case T_solid:        aStroke.SetPlotStyle( PLOT_DASH_TYPE::SOLID );      break;
+            case T_default:      aStroke.SetPlotStyle( PLOT_DASH_TYPE::DEFAULT );    break;
             default:
-                Expecting( "solid, dash, dash_dot, dot or default" );
+                Expecting( "solid, dash, dash_dot, dash_dot_dot, dot or default" );
             }
 
             NeedRIGHT();

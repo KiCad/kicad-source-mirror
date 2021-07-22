@@ -15,7 +15,10 @@
    style="fill-rule:evenodd;clip-rule:evenodd;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:1.5;"
    id="svg844"
    sodipodi:docname="stroke_dot.svg"
-   inkscape:version="1.0.1 (c497b03c, 2020-09-10)"><defs
+   inkscape:version="1.0.2 (e86c8708, 2021-01-15)"
+   inkscape:export-filename="/Users/jeff/kicad_dev/kicad/bitmaps_png/png/stroke_dot_dark.png"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96"><defs
    id="defs848" /><sodipodi:namedview
    pagecolor="#ffffff"
    bordercolor="#666666"
@@ -25,8 +28,8 @@
    guidetolerance="10"
    inkscape:pageopacity="0"
    inkscape:pageshadow="2"
-   inkscape:window-width="1280"
-   inkscape:window-height="715"
+   inkscape:window-width="1440"
+   inkscape:window-height="800"
    id="namedview846"
    showgrid="false"
    inkscape:zoom="10.679189"
@@ -35,7 +38,8 @@
    inkscape:window-x="0"
    inkscape:window-y="23"
    inkscape:window-maximized="1"
-   inkscape:current-layer="svg844" />
+   inkscape:current-layer="svg844"
+   inkscape:document-rotation="0" />
      <metadata
    id="metadata43">
           <rdf:RDF>
@@ -44,7 +48,7 @@
                     <dc:format>image/svg+xml</dc:format>
                     <dc:type
    rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-                    <dc:title></dc:title>
+                    <dc:title />
                     <cc:license
    rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" />
                </cc:Work>
@@ -59,23 +63,28 @@
      rdf:resource="http://creativecommons.org/ns#ShareAlike" /></cc:License></rdf:RDF>
      </metadata>
      <path
-   d="M36.5,8c0,-1.656 -1.344,-3 -3,-3l-3,0c-1.656,0 -3,1.344 -3,3c0,1.656 1.344,3 3,3l3,0c1.656,0 3,-1.344 3,-3Z"
-   style="fill:#DED3DD;stroke:#000;stroke-width:0.09000000000000000px;fill-opacity:1"
-   id="path834" />
+   d="m 35.1,8 c 0,-1.656 -1.344,-3 -3,-3 h -1 c -1.656,0 -3,1.344 -3,3 0,1.656 1.344,3 3,3 h 1 c 1.656,0 3,-1.344 3,-3 z"
+   style="fill:#ded3dd;fill-opacity:1;stroke:#000000;stroke-width:0.09px"
+   id="path834"
+   sodipodi:nodetypes="sssssss" />
      <path
-   d="M10,8c0,-1.656 -1.344,-3 -3,-3l-3,0c-1.656,0 -3,1.344 -3,3c0,1.656 1.344,3 3,3l3,0c1.656,0 3,-1.344 3,-3Z"
-   style="fill:#DED3DD;stroke:#000;stroke-width:0.09000000000000000px;fill-opacity:1"
-   id="path836" />
+   d="M 8,8 C 8,6.344 6.656,5 5,5 H 4 C 2.344,5 1,6.344 1,8 1,9.656 2.344,11 4,11 H 5 C 6.656,11 8,9.656 8,8 Z"
+   style="fill:#ded3dd;fill-opacity:1;stroke:#000000;stroke-width:0.09px"
+   id="path836"
+   sodipodi:nodetypes="sssssss" />
      <path
-   d="M50,8c0,-1.656 -1.344,-3 -3,-3l-3,0c-1.656,0 -3,1.344 -3,3c0,1.656 1.344,3 3,3l3,0c1.656,0 3,-1.344 3,-3Z"
-   style="fill:#DED3DD;stroke:#000;stroke-width:0.09000000000000000px;fill-opacity:1"
-   id="path838" />
+   d="m 48.9,8 c 0,-1.656 -1.344,-3 -3,-3 h -1 c -1.656,0 -3,1.344 -3,3 0,1.656 1.344,3 3,3 h 1 c 1.656,0 3,-1.344 3,-3 z"
+   style="fill:#ded3dd;fill-opacity:1;stroke:#000000;stroke-width:0.09px"
+   id="path838"
+   sodipodi:nodetypes="sssssss" />
      <path
-   d="M23,8c0,-1.656 -1.344,-3 -3,-3l-3,0c-1.656,0 -3,1.344 -3,3c0,1.656 1.344,3 3,3l3,0c1.656,0 3,-1.344 3,-3Z"
-   style="fill:#DED3DD;stroke:#000;stroke-width:0.09000000000000000px;fill-opacity:1"
-   id="path840" />
+   d="m 21.3,8 c 0,-1.656 -1.344,-3 -3,-3 h -1 c -1.656,0 -3,1.344 -3,3 0,1.656 1.344,3 3,3 h 1 c 1.656,0 3,-1.344 3,-3 z"
+   style="fill:#ded3dd;fill-opacity:1;stroke:#000000;stroke-width:0.09px"
+   id="path840"
+   sodipodi:nodetypes="sssssss" />
      <path
-   d="M63,8c0,-1.656 -1.344,-3 -3,-3l-3,0c-1.656,0 -3,1.344 -3,3c0,1.656 1.344,3 3,3l3,0c1.656,0 3,-1.344 3,-3Z"
-   style="fill:#DED3DD;stroke:#000;stroke-width:0.09000000000000000px;fill-opacity:1"
-   id="path842" />
+   d="M 63,8 C 63,6.344 61.656,5 60,5 h -1 c -1.656,0 -3,1.344 -3,3 0,1.656 1.344,3 3,3 h 1 c 1.656,0 3,-1.344 3,-3 z"
+   style="fill:#ded3dd;fill-opacity:1;stroke:#000000;stroke-width:0.09px"
+   id="path842"
+   sodipodi:nodetypes="sssssss" />
 </svg>
