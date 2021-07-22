@@ -1329,7 +1329,10 @@ const EDA_RECT SCH_SYMBOL::GetBoundingBox() const
     EDA_RECT bbox = GetBodyBoundingBox();
 
     for( const SCH_FIELD& field : m_fields )
-        bbox.Merge( field.GetBoundingBox() );
+    {
+        if( field.IsVisible() )
+            bbox.Merge( field.GetBoundingBox() );
+    }
 
     return bbox;
 }
