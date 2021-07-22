@@ -691,13 +691,15 @@ void PAD_TOOL::recombinePad( PAD* aPad )
                                                         ERROR_INSIDE );
 
             aPad->SetAnchorPadShape( PAD_SHAPE::CIRCLE );
-            wxSize minAnnularRingWidth( Millimeter2iu( 0.2 ), Millimeter2iu( 0.2 ) );
-            aPad->SetSize( aPad->GetDrillSize() + minAnnularRingWidth );
+            if( aPad->GetSizeX() > aPad->GetSizeY() )
+                aPad->SetSizeX( aPad->GetSizeY() );
+
             aPad->SetOffset( wxPoint( 0, 0 ) );
 
             PCB_SHAPE* shape = new PCB_SHAPE;
             shape->SetShape( SHAPE_T::POLY );
             shape->SetFilled( true );
+            shape->SetWidth( 0 );
             shape->SetPolyShape( existingOutline );
             shape->Move( - aPad->GetPosition() );
             shape->Rotate( wxPoint( 0, 0 ), - aPad->GetOrientation() );
