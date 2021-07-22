@@ -100,7 +100,7 @@ BOARD* PCB_TEST_FRAME_BASE::LoadAndDisplayBoard( const std::string& filename )
     }
     catch( const IO_ERROR& ioe )
     {
-        wxPrintf( "Board Loading Error: '%s'\n", ioe.Problem().c_str() );
+        wxPrintf( "Board Loading Error: '%s'\n", ioe.Problem() );
         return nullptr;
     }
 
