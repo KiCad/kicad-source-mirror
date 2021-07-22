@@ -164,7 +164,11 @@ void DIALOG_FIND::onTextEnter( wxCommandEvent& event )
 {
 }
 
-void DIALOG_FIND::onClose( wxCommandEvent& aEvent )
+void DIALOG_FIND::OnCloseButtonClick( wxCommandEvent& aEvent )
+{
+}
+
+void DIALOG_FIND::OnClose( wxCloseEvent& aEvent )
 {
 }
 
