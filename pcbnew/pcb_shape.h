@@ -205,10 +205,12 @@ public:
      */
     void SetArcGeometry( const wxPoint& aStart, const wxPoint& aMid, const wxPoint& aEnd );
 
-    const wxPoint GetFocusPosition() const override
-    {
-        return GetCenter();
-    }
+    /**
+     * Allows items to return their visual center rather than their anchor.
+     * For some shapes this is similar to GetPosition, but for polygonal shapes,
+     * the anchor is not suitable (shows nothing): a point on the outline is better
+     */
+    const wxPoint GetFocusPosition() const override;
 
     /**
      * Return the parent footprint or NULL if PCB_SHAPE does not belong to a footprint.

@@ -76,6 +76,47 @@ wxPoint PCB_SHAPE::GetPosition() const
 }
 
 
+const wxPoint PCB_SHAPE::GetFocusPosition() const
+{
+    // For some shapes return the visual center, but for not filled polygonal shapes,
+    // the center is usually far from the shape: a point on the outline is better
+
+    switch( m_shape )
+    {
+    case SHAPE_T::CIRCLE:
+        if( !IsFilled() )
+            return wxPoint( GetCenter().x + GetRadius(), GetCenter().y );
+        break;
+
+    case SHAPE_T::RECT:
+        if( !IsFilled() )
+            return GetStart();
+        break;
+
+    case SHAPE_T::POLY:
+        if( !IsFilled() )
+        {
+            VECTOR2I pos = GetPolyShape().Outline(0).CPoint(0);
+            return wxPoint( pos.x, pos.y );
+        }
+        break;
+
+    case SHAPE_T::ARC:
+        return GetArcMid();
+        break;
+
+    case SHAPE_T::BEZIER:
+        return GetStart();
+        break;
+
+    default:
+        break;
+    }
+
+    return GetCenter();
+}
+
+
 double PCB_SHAPE::GetLength() const
 {
     double length = 0.0;
