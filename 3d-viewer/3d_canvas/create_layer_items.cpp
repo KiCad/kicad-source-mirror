@@ -905,6 +905,10 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
         if( !Is3dLayerEnabled( curr_layer_id ) )
             continue;
 
+        if( aStatusReporter )
+            aStatusReporter->Report( wxString::Format(
+                                     _( "Build Tech layer %d" ), (int)curr_layer_id ) );
+
         BVH_CONTAINER_2D *layerContainer = new BVH_CONTAINER_2D;
         m_layerMap[curr_layer_id] = layerContainer;
 

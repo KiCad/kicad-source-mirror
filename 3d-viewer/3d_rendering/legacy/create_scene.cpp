@@ -555,6 +555,10 @@ void RENDER_3D_LEGACY::reload( REPORTER* aStatusReporter, REPORTER* aWarningRepo
         if( !m_boardAdapter.Is3dLayerEnabled( layer_id ) )
             continue;
 
+        if( aStatusReporter )
+            aStatusReporter->Report( wxString::Format(
+                                     _( "Load OpenGL layer %d" ), (int)layer_id ) );
+
         const BVH_CONTAINER_2D* container2d = ii.second;
 
         SHAPE_POLY_SET polyListSubtracted;
