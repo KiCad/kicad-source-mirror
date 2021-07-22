@@ -33,7 +33,12 @@ DIALOG_GROUP_PROPERTIES_BASE::DIALOG_GROUP_PROPERTIES_BASE( wxWindow* parent, wx
 	fgSizer1->Add( m_nameCtrl, 0, wxALL|wxEXPAND|wxALIGN_CENTER_VERTICAL, 5 );
 
 
-	bSizerUpper->Add( fgSizer1, 0, wxEXPAND|wxBOTTOM, 5 );
+	bSizerUpper->Add( fgSizer1, 0, wxEXPAND, 5 );
+
+	m_locked = new wxCheckBox( this, wxID_ANY, _("Locked"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_locked->SetToolTip( _("Prevents group from being moved on canvas") );
+
+	bSizerUpper->Add( m_locked, 0, wxALL, 5 );
 
 	m_membersLabel = new wxStaticText( this, wxID_ANY, _("Group members:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_membersLabel->Wrap( -1 );

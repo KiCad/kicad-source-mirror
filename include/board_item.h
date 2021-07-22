@@ -244,10 +244,7 @@ public:
     /**
      * @return true if the object is locked, else false.
      */
-    virtual bool IsLocked() const
-    {
-        return GetState( LOCKED );
-    }
+    virtual bool IsLocked() const;
 
     /**
      * Modify the 'lock' status for of the item.

@@ -381,6 +381,7 @@ private:
     {
         BOARD_ITEM*       parent;
         wxString          name;
+        bool              locked;
         KIID              uuid;
         std::vector<KIID> memberUuids;
     };

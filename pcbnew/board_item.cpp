@@ -28,6 +28,7 @@
 #include <wx/debug.h>
 #include <i18n_utility.h>
 #include <board.h>
+#include <pcb_group.h>
 #include <string>
 #include <wx/msgdlg.h>
 
@@ -58,6 +59,15 @@ BOARD* BOARD_ITEM::GetBoard() const
         return parent->GetBoard();
 
     return nullptr;
+}
+
+
+bool BOARD_ITEM::IsLocked() const
+{
+    if( GetParentGroup() )
+        return GetParentGroup()->IsLocked();
+
+    return GetState( LOCKED );
 }
 
 

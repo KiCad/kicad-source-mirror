@@ -964,6 +964,9 @@ void PCB_PARSER::resolveGroups( BOARD_ITEM* aParent )
         group->SetName( aGrp.name );
         const_cast<KIID&>( group->m_Uuid ) = aGrp.uuid;
 
+        if( aGrp.locked )
+            group->SetLocked( true );
+
         if( aGrp.parent->Type() == PCB_FOOTPRINT_T )
             static_cast<FOOTPRINT*>( aGrp.parent )->Add( group );
         else
@@ -4472,23 +4475,20 @@ void PCB_PARSER::parseGROUP( BOARD_ITEM* aParent )
 
     token = NextTok();
 
-    if( token != T_LEFT )
+    while( ( token = NextTok() ) != T_LEFT )
     {
-        // Optional group name present.
-
-        if( !IsSymbol( token ) )
-            Expecting( DSN_SYMBOL );
-
-        groupInfo.name = FromUTF8();
+        if( token == T_STRING )
+            groupInfo.name = FromUTF8();
+        else if( token == T_locked )
+            groupInfo.locked = true;
+        else
+            Expecting( "group name or locked" );
     }
 
-    NeedLEFT();
     token = NextTok();
 
     if( token != T_id )
-    {
         Expecting( T_id );
-    }
 
     NextTok();
     groupInfo.uuid = CurStrToKIID();
@@ -4498,9 +4498,7 @@ void PCB_PARSER::parseGROUP( BOARD_ITEM* aParent )
     token = NextTok();
 
     if( token != T_members )
-    {
         Expecting( T_members );
-    }
 
     while( ( token = NextTok() ) != T_RIGHT )
     {

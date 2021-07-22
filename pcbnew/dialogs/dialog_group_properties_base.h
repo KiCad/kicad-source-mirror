@@ -19,6 +19,7 @@
 #include <wx/settings.h>
 #include <wx/textctrl.h>
 #include <wx/sizer.h>
+#include <wx/checkbox.h>
 #include <wx/listbox.h>
 #include <wx/bmpbuttn.h>
 #include <wx/bitmap.h>
@@ -41,6 +42,7 @@ class DIALOG_GROUP_PROPERTIES_BASE : public DIALOG_SHIM
 	protected:
 		wxStaticText* m_nameLabel;
 		wxTextCtrl* m_nameCtrl;
+		wxCheckBox* m_locked;
 		wxStaticText* m_membersLabel;
 		wxListBox* m_membersList;
 		wxBitmapButton* m_bpAddMember;

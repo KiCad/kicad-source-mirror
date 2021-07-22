@@ -1728,8 +1728,9 @@ void PCB_IO::format( const PCB_GROUP* aGroup, int aNestLevel ) const
     if( aGroup->GetItems().empty() )
         return;
 
-    m_out->Print( aNestLevel, "(group %s (id %s)\n",
+    m_out->Print( aNestLevel, "(group %s%s (id %s)\n",
                               m_out->Quotew( aGroup->GetName() ).c_str(),
+                              aGroup->IsLocked() ? " locked" : "",
                               TO_UTF8( aGroup->m_Uuid.AsString() ) );
 
     m_out->Print( aNestLevel + 1, "(members\n" );
