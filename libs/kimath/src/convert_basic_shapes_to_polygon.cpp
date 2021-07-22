@@ -258,7 +258,7 @@ void CornerListToPolygon( SHAPE_POLY_SET& outline, std::vector<ROUNDED_CORNER>& 
             int      endAngle, radius = cur.m_radius;
             double   tanAngle2;
 
-            if( incoming.x == 0 && outgoing.y == 0 || incoming.y == 0 && outgoing.x == 0 )
+            if( ( incoming.x == 0 && outgoing.y == 0 ) || ( incoming.y == 0 && outgoing.x == 0 ) )
             {
                 endAngle = 900;
                 tanAngle2 = 1.0;
