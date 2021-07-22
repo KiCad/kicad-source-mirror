@@ -251,8 +251,9 @@ void DIALOG_FILTER_SELECTION::checkBoxClicked( wxCommandEvent& aEvent )
 }
 
 
-void DIALOG_FILTER_SELECTION::ExecuteCommand( wxCommandEvent& event )
+bool DIALOG_FILTER_SELECTION::TransferDataFromWindow()
 {
+    return true;
 }
 
 

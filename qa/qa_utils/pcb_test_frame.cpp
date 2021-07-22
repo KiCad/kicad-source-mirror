@@ -100,7 +100,7 @@ BOARD* PCB_TEST_FRAME_BASE::LoadAndDisplayBoard( const std::string& filename )
     }
     catch( const IO_ERROR& ioe )
     {
-        printf( "Board Loading Error: '%s'\n", ioe.Problem() );
+        printf( "Board Loading Error: '%s'\n", static_cast<const char*>( ioe.Problem() ) );
         return nullptr;
     }
 

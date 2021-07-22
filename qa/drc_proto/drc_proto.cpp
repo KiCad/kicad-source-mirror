@@ -36,6 +36,7 @@
 #include <pcbnew/drc/drc_rule_parser.h>
 #include <pcbnew/drc/drc_test_provider.h>
 #include <pcbnew/pcb_expr_evaluator.h>
+#include <board_design_settings.h>
 
 #include <kicad_string.h>
 
