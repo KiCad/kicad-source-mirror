@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
-"PO-Revision-Date: 2021-07-23 01:21+0000\n"
+"PO-Revision-Date: 2021-07-23 01:46+0000\n"
 "Last-Translator: VicSanRoPe <vicsanrope@protonmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/kicad/"
 "master-source/es/>\n"
@@ -16750,9 +16750,9 @@ msgstr "Editar el campo %s"
 
 #: eeschema/tools/sch_edit_tool.cpp:1085
 #: eeschema/tools/symbol_editor_edit_tool.cpp:525
-#, fuzzy, c-format
+#, c-format
 msgid "Edit '%s' Field"
-msgstr "Editar el campo %s"
+msgstr "Editar el campo '%s'"
 
 #: eeschema/tools/sch_edit_tool.cpp:1640
 msgid "There are no unreferenced pins in this sheet to remove."
@@ -16784,11 +16784,9 @@ msgid "Find again to wrap around to the start."
 msgstr "Buscar de nuevo para empezar desde el principio."
 
 #: eeschema/tools/sch_editor_control.cpp:839
-#, fuzzy
 msgid "Error: duplicate sub-sheet names found in current sheet."
 msgstr ""
-"Error: se han encontrado nombres de hojas secundarias duplicados. Corrija el "
-"error"
+"Error: se han encontrado nombres de subhojas duplicados en la hoja actual."
 
 #: eeschema/tools/sch_editor_control.cpp:928
 msgid "Net must be labeled to assign a netclass."
@@ -21962,12 +21960,8 @@ msgid "No layer selected."
 msgstr "No se ha seleccionado ninguna capa."
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:868
-#, fuzzy
 msgid "Selecting <no net> will create an isolated copper island."
-msgstr ""
-"Sin red conllevará\n"
-"a una isla de cobre\n"
-"sin conectar."
+msgstr "Seleccionar <sin red> creará una isla de cobre aislada."
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:47
 msgid ""
@@ -21978,9 +21972,8 @@ msgstr ""
 "Los nombres de red coincidentes no se mostrarán."
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:51
-#, fuzzy
 msgid "Hide auto-generated net names"
-msgstr "Nombre de pin alternativo inválido"
+msgstr "Ocultar nombres de red auto-generados"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:55
 msgid "Sort nets by pad count"
@@ -23374,52 +23367,41 @@ msgid "Wrap"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_find_base.cpp:62
-#, fuzzy
 msgid "Search footprint reference designators"
-msgstr "Cambiando la referencia de la huella %s a %s."
+msgstr "Buscar indicadores de referencia de huellas"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:66
-#, fuzzy
 msgid "Search footprint values"
-msgstr "Mostrar valores de las huellas"
+msgstr "Buscar valores de huellas"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:70
-#, fuzzy
 msgid "Search other text items"
-msgstr "Otros campos de la huella"
+msgstr "Buscar otros elementos de texto"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:74
-#, fuzzy
 msgid "Search DRC markers"
-msgstr "Ocultar DCodes"
+msgstr "Buscar marcadores DRC"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:98
-#, fuzzy
 msgid "Find Previous"
-msgstr "Buscar Marcadores"
+msgstr "Buscar anterior"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:101
-#, fuzzy
 msgid "Restart Search"
-msgstr "Reiniciar numeración"
+msgstr "Reiniciar búsqueda"
 
 #: pcbnew/dialogs/dialog_footprint_checker.cpp:50
-#, fuzzy
 msgid "Run Checks"
-msgstr "Chequear Módulo"
+msgstr "Ejecutar verificaciones"
 
 #: pcbnew/dialogs/dialog_footprint_checker_base.h:71
 #: pcbnew/tools/pcb_actions.cpp:396
-#, fuzzy
 msgid "Footprint Checker"
-msgstr "Visor de huellas"
+msgstr "Verificador de huellas"
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:333
-#, fuzzy
 msgid "Footprint can be freely moved and oriented on the canvas."
-msgstr ""
-"El componente puede moverse libremente y ser colocado automáticamente, pero "
-"sus pads no pueden ser seleccionados o editados."
+msgstr "La huella puede moverse y orientarse libremente en el lienzo."
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:335
 msgid ""
@@ -23444,14 +23426,13 @@ msgstr "Los elementos de texto deben tener contenido."
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:783
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:713
-#, fuzzy
 msgid "Modify footprint properties"
-msgstr "Editar las propiedades de la huella"
+msgstr "Modificar propiedades de huellas"
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:835
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:784
 msgid "Reference and value are mandatory."
-msgstr "Referencia y Valor son obligatorios."
+msgstr "Referencia y valor son obligatorios."
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:53
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:53
@@ -23484,17 +23465,14 @@ msgstr "Desplazamiento Y"
 #: pcbnew/dialogs/panel_fp_editor_defaults.cpp:62
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:53
 #: pcbnew/fp_text_grid_table.cpp:109
-#, fuzzy
 msgid "Reference designator"
-msgstr "indicador de referencia"
+msgstr "Indicador de referencia"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:136
-#, fuzzy
 msgid "Side:"
-msgstr "Lado de la placa:"
+msgstr "Lado:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:195
-#, fuzzy
 msgid "Unlock footprint"
 msgstr "Desbloquear huella"
 
@@ -23540,9 +23518,8 @@ msgid "Fabrication Attributes"
 msgstr "Atributos fabricación"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:276
-#, fuzzy
 msgid "Component:"
-msgstr "Componente"
+msgstr "Componente:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:280
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:184
@@ -23563,20 +23540,18 @@ msgstr "Otros"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:289
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:193
-#, fuzzy
 msgid "Not in schematic"
-msgstr "Trazar esquema"
+msgstr "No está en el esquema"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:292
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:196
-#, fuzzy
 msgid "Exclude from position files"
-msgstr "Excluir pads de la serigrafía"
+msgstr "Excluir de los archivos de posición"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:295
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:199
 msgid "Exclude from BOM"
-msgstr ""
+msgstr "Excluir del BOM"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:317
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:218
@@ -23646,9 +23621,8 @@ msgstr ""
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:270
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:638
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:95
-#, fuzzy
 msgid "Solder paste absolute clearance:"
-msgstr "Proporción de margen de la pasta de soldadura:"
+msgstr "Margen absoluto de la pasta de soldadura:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:371
 msgid ""
@@ -23670,9 +23644,8 @@ msgstr ""
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:283
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:651
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:110
-#, fuzzy
 msgid "Solder paste relative clearance:"
-msgstr "Proporción de margen de la pasta de soldadura:"
+msgstr "Margen relativo de la pasta de soldadura:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:384
 msgid ""
@@ -23707,6 +23680,8 @@ msgid ""
 "Note: solder paste clearances (absolute and relative) are added to determine "
 "the final clearance."
 msgstr ""
+"Nota: los márgenes de pasta de soldadura (absoluto y relativo) son añadidos "
+"para determinar el margen final."
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:414
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:315
@@ -23744,9 +23719,8 @@ msgstr "Modelo(s) 3D"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:508
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:407
-#, fuzzy
 msgid "3D Models"
-msgstr "Modelo(s) 3D"
+msgstr "Modelos 3D"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:529
 msgid ""
