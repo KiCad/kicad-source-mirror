@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
-"PO-Revision-Date: 2021-07-23 01:46+0000\n"
+"PO-Revision-Date: 2021-07-23 08:32+0000\n"
 "Last-Translator: VicSanRoPe <vicsanrope@protonmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/kicad/"
 "master-source/es/>\n"
@@ -23708,9 +23708,8 @@ msgstr "Alivio térmico"
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:433
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:334
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:784
-#, fuzzy
 msgid "Clearance Overrides and Settings"
-msgstr "Margen local y ajustes"
+msgstr "Márgenes prioritarios y ajustes"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:455
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:356
@@ -23727,6 +23726,8 @@ msgid ""
 "The library ID and footprint ID currently assigned.  Use “Change Footprint…” "
 "to assign a different footprint."
 msgstr ""
+"Los ID de librería y de huella ya están asignados. Use 'Cambiar huella…' "
+"para asignar una huella diferente."
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.h:149
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.h:122
@@ -23738,9 +23739,9 @@ msgid "Footprint must have a name."
 msgstr "La huella debe tener un nombre."
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:536
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint name may not contain '%s'."
-msgstr "El nombre de huella no debe contener \"%s\"."
+msgstr "El nombre de huella no debe contener '%s'."
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:61
 msgid "Unconstrained"
@@ -23751,16 +23752,14 @@ msgid "Footprint name:"
 msgstr "Nombre de huella:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:180
-#, fuzzy
 msgid "Component type:"
-msgstr "Nombre del componente:"
+msgstr "Tipo de componente:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:220
 msgid "Set values to 0 to use netclass values."
 msgstr "Ajustar márgenes a 0 para utilizar valores de clase de red."
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:246
-#, fuzzy
 msgid ""
 "This is the local net clearance for all pads of this footprint.\n"
 "If 0, the Netclass values are used.\n"
@@ -23769,10 +23768,10 @@ msgid ""
 msgstr ""
 "Este es el margen de la red local para todos los pads de esta huella.\n"
 "Si es 0, se utilizan los valores de la clase de red.\n"
-"Este valor puede ser sustituido por el valor local del pad."
+"Este valor puede ser sustituido individualmente por cada pad en\n"
+"la pestaña de márgenes y ajustes locales de las propiedades del pad."
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:259
-#, fuzzy
 msgid ""
 "This is the local clearance between pads and the solder mask for \n"
 "this footprint.\n"
@@ -23780,13 +23779,13 @@ msgid ""
 "This value can be overridden on a pad-by-pad basis in the Local\n"
 "Clearance and Settings tab of Pad Properties."
 msgstr ""
-"Este es el margen local entre los pads y la máscara de soldadura para esta "
-"huella.\n"
-"Este valor puede ser sustituido por el valor local del pad.\n"
-"Si es 0, se utiliza el valor global."
+"Este es el margen local entre los pads y la máscara de soldadura\n"
+"para esta huella.\n"
+"Si es 0, se utiliza el valor global.\n"
+"Este valor puede ser sustituido individualmente por cada pad en\n"
+"la pestaña de márgenes y ajustes locales de las propiedades del pad."
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:272
-#, fuzzy
 msgid ""
 "This is the local clearance between pads and the solder paste for\n"
 "this footprint.\n"
@@ -23798,13 +23797,13 @@ msgid ""
 msgstr ""
 "Este es el margen local entre los pads y la pasta de soldadura para esta "
 "huella.\n"
-"Este valor puede ser sustituido por el valor local del pad.\n"
-"El valor final del margen es la suma de este valor y la proporción de "
-"margen.\n"
-"Un valor negativo significa un tamaño de máscara menor que el del pad."
+"El valor final del margen es la suma de este valor y la proporción de margen."
+"\n"
+"Un valor negativo significa un tamaño de máscara menor que el del pad.\n"
+"Este valor puede ser sustituido individualmente por cada pad en\n"
+"la pestaña de márgenes y ajustes locales de las propiedades del pad."
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:285
-#, fuzzy
 msgid ""
 "This is the local clearance ratio in percent between pads and the\n"
 "solder paste for this footprint.\n"
@@ -23814,12 +23813,13 @@ msgid ""
 "This value can be overridden on a pad-by-pad basis in the Local\n"
 "Clearance and Settings tab of Pad Properties."
 msgstr ""
-"Esta es la proporción en % del margen local entre los pads y la pasta para "
-"esta huella.\n"
+"Esta es la proporción en porcentaje del margen local entre los pads y\n"
+"la pasta de soldadura para esta huella.\n"
 "Un valor de 10 significa que el margen en un 10% del tamaño del pad.\n"
-"Este valor puede ser sustituido por el valor local del pad.\n"
 "El valor final del margen es la suma de este valor y el valor del margen.\n"
-"Un valor negativo significa un tamaño de máscara menor que el del pad."
+"Un valor negativo significa un tamaño de máscara menor que el del pad.\n"
+"Este valor puede ser sustituido individualmente por cada pad en\n"
+"la pestaña de márgenes y ajustes locales de las propiedades del pad."
 
 #: pcbnew/dialogs/dialog_footprint_wizard_list.cpp:142
 msgid "All footprint generator scripts were loaded"
@@ -23932,14 +23932,12 @@ msgstr "Incluir capa de contorno de placa"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:80
 #: pcbnew/dialogs/dialog_plot_base.cpp:108
-#, fuzzy
 msgid "Use drill/place file origin"
-msgstr "Origen de taladrado"
+msgstr "Usar el origen del archivo de taladrado/colocación"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.h:73
-#, fuzzy
 msgid "Generate Placement Files"
-msgstr "Generar archivo Map"
+msgstr "Generar archivos de colocación"
 
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:41
 msgid "Export to GenCAD settings"
@@ -23964,9 +23962,8 @@ msgstr ""
 "formas)"
 
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:139
-#, fuzzy
 msgid "Use drill/place file origin as origin"
-msgstr "Origen de taladrado"
+msgstr "Usar el origen del archivo de taladrado/colocación como el origen"
 
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:140
 msgid "Save the origin coordinates in the file"
@@ -24101,13 +24098,12 @@ msgid "Drill Origin"
 msgstr "Origen de taladrado"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:100
-#, fuzzy
 msgid ""
 "Choose the coordinate origin: absolute or relative to the drill/place file "
 "origin"
 msgstr ""
-"Seleccione el origen de coordenadas: absoluto o relativo a los ejes "
-"auxiliares"
+"Elija el origen de coordenadas: absoluto o relativo al origen del archivo de "
+"taladrado/colocación"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:106
 msgid "Drill Units"
