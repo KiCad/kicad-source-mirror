@@ -1,39 +1,46 @@
+# boonchai k. <kicadthai@gmail.com>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-01 11:31-0700\n"
+"PO-Revision-Date: 2021-07-23 08:32+0000\n"
+"Last-Translator: boonchai k. <kicadthai@gmail.com>\n"
+"Language-Team: Thai <https://hosted.weblate.org/projects/kicad/master-source/"
+"th/>\n"
 "Language: th\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 4.7.2-dev\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
 msgid "All Files (*.*)|*.*"
-msgstr ""
+msgstr "ไฟล์ทั้งหมด (*.*)|*.*"
 
 #: 3d-viewer/3d_cache/dialogs/dialog_select_3d_model.cpp:94
 #, c-format
 msgid "All supported files (%s)"
-msgstr ""
+msgstr "ไฟล์สนับสนุนทั้งหมด (%s)"
 
 #: 3d-viewer/3d_cache/dialogs/dialog_select_3d_model_base.cpp:58
 msgid "Available paths:"
-msgstr ""
+msgstr "เส้นทางที่มี:"
 
 #: 3d-viewer/3d_cache/dialogs/dialog_select_3d_model_base.cpp:67
 #: common/dialogs/dialog_configure_paths_base.h:72
 msgid "Configure Paths"
-msgstr ""
+msgstr "เส้นทางตั้งค่า"
 
 #: 3d-viewer/3d_cache/dialogs/dialog_select_3d_model_base.h:63
 msgid "Select 3D Model"
-msgstr ""
+msgstr "เลือกโมเดล 3D"
 
 #: 3d-viewer/3d_cache/dialogs/panel_preview_3d_model_base.cpp:21
 #: common/dialogs/dialog_print_generic_base.cpp:56
 msgid "Scale"
-msgstr ""
+msgstr "สเกล"
 
 #: 3d-viewer/3d_cache/dialogs/panel_preview_3d_model_base.cpp:29
 #: 3d-viewer/3d_cache/dialogs/panel_preview_3d_model_base.cpp:74
@@ -55,7 +62,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1332
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:61
 msgid "X:"
-msgstr ""
+msgstr "X:"
 
 #: 3d-viewer/3d_cache/dialogs/panel_preview_3d_model_base.cpp:39
 #: 3d-viewer/3d_cache/dialogs/panel_preview_3d_model_base.cpp:84
@@ -80,7 +87,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1343
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:78
 msgid "Y:"
-msgstr ""
+msgstr "Y:"
 
 #: 3d-viewer/3d_cache/dialogs/panel_preview_3d_model_base.cpp:49
 #: 3d-viewer/3d_cache/dialogs/panel_preview_3d_model_base.cpp:94
@@ -88,21 +95,21 @@ msgstr ""
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1012
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1024
 msgid "Z:"
-msgstr ""
+msgstr "Z:"
 
 #: 3d-viewer/3d_cache/dialogs/panel_preview_3d_model_base.cpp:66
 #: gerbview/gerber_draw_item.cpp:701 pcbnew/footprint.cpp:876
 #: pcbnew/pad.cpp:919
 msgid "Rotation"
-msgstr ""
+msgstr "การหมุน"
 
 #: 3d-viewer/3d_cache/dialogs/panel_preview_3d_model_base.cpp:111
 msgid "Offset"
-msgstr ""
+msgstr "ระยะเลื่อน"
 
 #: 3d-viewer/3d_cache/dialogs/panel_preview_3d_model_base.cpp:156
 msgid "Opacity"
-msgstr ""
+msgstr "ความโปร่ง"
 
 #: 3d-viewer/3d_cache/dialogs/panel_preview_3d_model_base.cpp:171
 #: common/dialogs/dialog_page_settings_base.cpp:118
@@ -110,132 +117,134 @@ msgstr ""
 #: eeschema/dialogs/dialog_print_using_printer.cpp:273
 #: pagelayout_editor/dialogs/dialogs_for_printing.cpp:255
 msgid "Preview"
-msgstr ""
+msgstr "พรีวิว"
 
 #: 3d-viewer/3d_cache/dialogs/panel_preview_3d_model_base.cpp:192
 msgid "Change to isometric perspective"
-msgstr ""
+msgstr "เปลี่ยนเป็นมุมมองไอโซเมตริก"
 
 #: 3d-viewer/3d_cache/dialogs/panel_preview_3d_model_base.cpp:221
 msgid "Reload board and 3D models"
-msgstr ""
+msgstr "อ่านบอร์ดและโมเดล 3D อีกครั้ง"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:280
 msgid "Build board outline"
-msgstr ""
+msgstr "สร้างขอบบอร์ด"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:451
 msgid "Create layers"
-msgstr ""
+msgstr "สร้างเลเยอร์"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:473
 #: pcbnew/dialogs/dialog_footprint_checker.cpp:104
 msgid "No footprint loaded."
-msgstr ""
+msgstr "ไม่มีฟุ้ทพรินท์"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:489
 msgid ""
 "Footprint outline is missing or malformed. Run Footprint Checker for a full "
 "analysis."
 msgstr ""
+"ขาดรูปร่างฟุ้ทพริ้นท์หรือบิดเบี้ยว. "
+"สั่งงานตรวจสอบฟุ้ทพริ้นท์เพื่อวิเคราะห์ละเอียด."
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:498
 msgid "Board outline is missing or malformed. Run DRC for a full analysis."
-msgstr ""
+msgstr "ขาดรูปร่างขอบบอร์ดหรือบิดเบี้ยว. สั่งทำงาน DRC เพื่อวิเคราะห์ละเอียด."
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:224
 msgid "Create tracks and vias"
-msgstr ""
+msgstr "สร้างแทร็คและเวีย"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:684
 msgid "Create zones"
-msgstr ""
+msgstr "สร้างโซน"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:754
 msgid "Simplifying copper layers polygons"
-msgstr ""
+msgstr "กำลังทำรูปหลายเหลี่ยมในชั้นทองแดงให้ง่าย"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:833
 msgid "Simplify holes contours"
-msgstr ""
+msgstr "ทำเส้นรอบโฮลให้ง่าย"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:862
 msgid "Build Tech layers"
-msgstr ""
+msgstr "สร้างเทคเลเยอร์"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1037
 msgid "Build BVH for holes and vias"
-msgstr ""
+msgstr "สร้าง BVH สำหรับโฮลและเวีย"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:413
 msgid "Your OpenGL version is not supported. Minimum required is 1.5"
-msgstr ""
+msgstr "เราไม่สนับสนุน OpenGL ของคุณ. อย่างต่ำรุ่น 1.5"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:534
 #, c-format
 msgid "Last render time %.0f ms"
-msgstr ""
+msgstr "เวลาเรนเดอร์ล่าสุด %.0f ms"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:724
 #, c-format
 msgid "Net %s\tNetClass %s\tPadName %s"
-msgstr ""
+msgstr "เน็ท %s เน็ทคลาส %s ชื่อแพ็ด %s"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:749
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:762
 #, c-format
 msgid "Net %s\tNetClass %s"
-msgstr ""
+msgstr "เน็ท %s เน็ทคลาส %s"
 
 #: 3d-viewer/3d_rendering/3d_render_raytracing/create_scene.cpp:439
 msgid "Load Raytracing: board"
-msgstr ""
+msgstr "อ่านเรย์เทรสซิ่ง: บอร์ด"
 
 #: 3d-viewer/3d_rendering/3d_render_raytracing/create_scene.cpp:638
 msgid "Load Raytracing: layers"
-msgstr ""
+msgstr "อ่านเรย์เทรสซิ่ง: เลเยอร์"
 
 #: 3d-viewer/3d_rendering/3d_render_raytracing/create_scene.cpp:881
 #: 3d-viewer/3d_rendering/legacy/create_scene.cpp:644
 msgid "Loading 3D models..."
-msgstr ""
+msgstr "กำลังอ่านโมเดล 3D…"
 
 #: 3d-viewer/3d_rendering/3d_render_raytracing/create_scene.cpp:1021
 #: 3d-viewer/3d_rendering/legacy/create_scene.cpp:654
 #, c-format
 msgid "Reload time %.3f s"
-msgstr ""
+msgstr "เวลาอ่านอีกครั้ง %.3f s"
 
 #: 3d-viewer/3d_rendering/3d_render_raytracing/render_3d_raytrace.cpp:179
 #: 3d-viewer/3d_rendering/legacy/render_3d_legacy.cpp:560
 msgid "Loading..."
-msgstr ""
+msgstr "กำลังอ่าน…"
 
 #: 3d-viewer/3d_rendering/3d_render_raytracing/render_3d_raytrace.cpp:344
 #, c-format
 msgid "Rendering time %.3f s"
-msgstr ""
+msgstr "เวลาเรนเดอร์ %.3f s"
 
 #: 3d-viewer/3d_rendering/3d_render_raytracing/render_3d_raytrace.cpp:398
 #, c-format
 msgid "Rendering: %.0f %%"
-msgstr ""
+msgstr "กำลังเรนเดอร์: %.0f %%"
 
 #: 3d-viewer/3d_rendering/3d_render_raytracing/render_3d_raytrace.cpp:849
 msgid "Rendering: Post processing shader"
-msgstr ""
+msgstr "กำลังเรนเดอร์: Post processing shader"
 
 #: 3d-viewer/3d_rendering/legacy/create_scene.cpp:448
 msgid "Load OpenGL: board"
-msgstr ""
+msgstr "อ่าน OpenGL: บอร์ด"
 
 #: 3d-viewer/3d_rendering/legacy/create_scene.cpp:481
 msgid "Load OpenGL: holes and vias"
-msgstr ""
+msgstr "อ่าน OpenGL: โฮลและเวีย"
 
 #: 3d-viewer/3d_rendering/legacy/create_scene.cpp:547
 msgid "Load OpenGL: layers"
-msgstr ""
+msgstr "อ่าน OpenGL: เลเยอร์"
 
 #: 3d-viewer/3d_rendering/legacy/create_scene.cpp:884
 #: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:430
@@ -247,31 +256,31 @@ msgstr ""
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:439
 #, c-format
 msgid "Loading %s..."
-msgstr ""
+msgstr "กำลังอ่าน %s…"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:50
 msgid "Export Current View as PNG..."
-msgstr ""
+msgstr "ส่งออกมุมมองนี้เป็น PNG…"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:55
 msgid "Export Current View as JPEG..."
-msgstr ""
+msgstr "ส่งออกมุมมองนี้เป็น JPEG…"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:61
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:235 common/hotkey_store.cpp:83
 #: common/tool/actions.cpp:555 pcbnew/footprint_viewer_frame.cpp:980
 #: pcbnew/pcb_base_frame.cpp:441
 msgid "3D Viewer"
-msgstr ""
+msgstr "มองภาพ 3D"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:69
 msgid "Copy 3D Image"
-msgstr ""
+msgstr "ก้อปปี้ภาพ 3D"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:107
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:238
 msgid "Raytracing"
-msgstr ""
+msgstr "เรย์เทรสซิ่ง"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:112 common/tool/actions.cpp:591
 #: cvpcb/menubar.cpp:74 eeschema/menubar.cpp:272
@@ -280,7 +289,7 @@ msgstr ""
 #: pagelayout_editor/menubar.cpp:156 pcbnew/menubar_footprint_editor.cpp:231
 #: pcbnew/menubar_pcb_editor.cpp:440
 msgid "Preferences..."
-msgstr ""
+msgstr "การตั้งค่า…"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:113 common/tool/actions.cpp:591
 #: cvpcb/menubar.cpp:75 eeschema/menubar.cpp:273
@@ -289,15 +298,15 @@ msgstr ""
 #: pagelayout_editor/menubar.cpp:157 pcbnew/menubar_footprint_editor.cpp:232
 #: pcbnew/menubar_pcb_editor.cpp:441
 msgid "Show preferences for all open tools"
-msgstr ""
+msgstr "แสดงการตั้งค่าเครื่องมือทั้งหมด"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:117
 msgid "Reset to Default Settings"
-msgstr ""
+msgstr "ล้างตั้งค่าไปเป็นตั้งต้น"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:125
 msgid "3D Grid"
-msgstr ""
+msgstr "กริด 3D"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:138 cvpcb/menubar.cpp:87
 #: eeschema/menubar.cpp:283
@@ -307,7 +316,7 @@ msgstr ""
 #: pcbnew/menubar_footprint_editor.cpp:241 pcbnew/menubar_pcb_editor.cpp:451
 #: pcbnew/toolbars_footprint_viewer.cpp:177
 msgid "&File"
-msgstr ""
+msgstr "&ไฟล์"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:139 cvpcb/menubar.cpp:88
 #: eeschema/menubar.cpp:284
@@ -315,7 +324,7 @@ msgstr ""
 #: pagelayout_editor/menubar.cpp:167 pcbnew/menubar_footprint_editor.cpp:242
 #: pcbnew/menubar_pcb_editor.cpp:452
 msgid "&Edit"
-msgstr ""
+msgstr "&แก้ไข"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:140 eeschema/menubar.cpp:285
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:178
@@ -324,169 +333,169 @@ msgstr ""
 #: pcbnew/menubar_footprint_editor.cpp:243 pcbnew/menubar_pcb_editor.cpp:453
 #: pcbnew/toolbars_footprint_viewer.cpp:178
 msgid "&View"
-msgstr ""
+msgstr "&มอง"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:141 cvpcb/menubar.cpp:89
 #: gerbview/menubar.cpp:226 kicad/menubar.cpp:183
 msgid "&Preferences"
-msgstr ""
+msgstr "&การตั้งค่า"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:55
 msgid "Reload board"
-msgstr ""
+msgstr "อ่านบอร์ดอีกครั้ง"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:60
 msgid "Copy 3D image to clipboard"
-msgstr ""
+msgstr "ก้อปปี้ภาพ 3D ใส่คลิปบอร์ด"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:65
 msgid "Render current view using Raytracing"
-msgstr ""
+msgstr "เรนเดอร์มุมมองปัจจุบันใช้เรย์เทรสซิ่ง"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:27
 msgid "Background top:"
-msgstr ""
+msgstr "พื้นหลังบนสุด:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:34
 msgid "Background bottom:"
-msgstr ""
+msgstr "พื้นหลังล่างสุด:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:47
 msgid "Silkscreen top:"
-msgstr ""
+msgstr "ซิลค์สกรีนด้านบน:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:54
 msgid "Silkscreen bottom:"
-msgstr ""
+msgstr "ซิลค์สกรีนด้านล่าง:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:67
 msgid "Solder mask top:"
-msgstr ""
+msgstr "โซลเดอร์มาสค์ด้านบน:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:74
 msgid "Solder mask bottom:"
-msgstr ""
+msgstr "โซลเดอร์มาสค์ด้านล่าง:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:87
 msgid "Solder paste:"
-msgstr ""
+msgstr "โซลเดอร์เพสท์:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:100
 msgid "Copper/surface finish:"
-msgstr ""
+msgstr "ทองแดง/ผิวหน้า สำเร็จ:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:113
 msgid "Board body:"
-msgstr ""
+msgstr "ตัวบอร์ด:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:126
 msgid "Load Colors from Board Stackup"
-msgstr ""
+msgstr "อ่านค่าสีจากชั้นเรียงของบอร์ด"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_display_options_base.cpp:21
 msgid "3D Model Visibility"
-msgstr ""
+msgstr "การมองเห็นโมเดล 3D"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_display_options_base.cpp:23
 msgid "Show 3D through hole models"
-msgstr ""
+msgstr "แสดงโมเดล 3D ของรูเจาะทะลุ"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_display_options_base.cpp:26
 msgid "Show 3D SMD models"
-msgstr ""
+msgstr "แสดงโมเดล SMD 3D"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_display_options_base.cpp:29
 msgid "Show 3D virtual models"
-msgstr ""
+msgstr "แสดงโมเดล 3D เสมือน"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_display_options_base.cpp:36
 msgid "Board Layers"
-msgstr ""
+msgstr "ชั้นของบอร์ด"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_display_options_base.cpp:38
 msgid "Show silkscreen layers"
-msgstr ""
+msgstr "แสดงชั้นซิลค์สกรีน"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_display_options_base.cpp:41
 msgid "Show solder mask layers"
-msgstr ""
+msgstr "แสดงชั้นโซลเดอร์มาสค์"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_display_options_base.cpp:44
 msgid "Show solder paste layers"
-msgstr ""
+msgstr "แสดงชั้นโซลเดอร์เพสท์"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_display_options_base.cpp:47
 msgid "Show adhesive layers"
-msgstr ""
+msgstr "แสดงชั้นกาว"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_display_options_base.cpp:54
 msgid "User Layers (not shown in realistic mode)"
-msgstr ""
+msgstr "เลเยอร์ผู้ใช้กำหนด (ไม่แสดงในแบบเหมือนจริง)"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_display_options_base.cpp:56
 msgid "Show comments and drawings layers"
-msgstr ""
+msgstr "แสดงคอมเมนต์และชั้นวาดเขียน"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_display_options_base.cpp:59
 msgid "Show ECO layers"
-msgstr ""
+msgstr "แสดงเลเยอร์ ECO"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_display_options_base.cpp:72
 msgid "Render Options"
-msgstr ""
+msgstr "ทางเลือกเรนเดอร์"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_display_options_base.cpp:74
 msgid "Realistic mode"
-msgstr ""
+msgstr "รูปแบบเสมือนจริง"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_display_options_base.cpp:77
 msgid "Show board body"
-msgstr ""
+msgstr "แสดงบอร์ด"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_display_options_base.cpp:80
 msgid "Show filled areas in zones"
-msgstr ""
+msgstr "แสดงบริเวณใส่เต็มในโซน"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_display_options_base.cpp:83
 #: pcbnew/dialogs/dialog_plot_base.cpp:216
 msgid "Subtract soldermask from silkscreen"
-msgstr ""
+msgstr "ลบโซลเดอร์มาสค์จากซิลค์สกรีน"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_display_options_base.cpp:86
 msgid "Clip silkscreen at via annuli"
-msgstr ""
+msgstr "ตัดซิลค์สกรีนที่เวียอนูลี"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_display_options_base.cpp:89
 msgid "Use bare copper color for unplated copper"
-msgstr ""
+msgstr "ใช้สีทองแดงเปลือยสำหรับทองแดงไม่เคลือบ"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_display_options_base.cpp:90
 msgid "Use different colors for plated and unplated copper. (Slow)"
-msgstr ""
+msgstr "ใช้สีต่างกันระหว่างทองแดงเคลือบและไม่เคลือบ.(ช้า)"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_display_options_base.cpp:97
 msgid "Material properties:"
-msgstr ""
+msgstr "คุณสมบัติวัสดุ:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_display_options_base.cpp:101
 msgid "Realistic"
-msgstr ""
+msgstr "เหมือนจริง"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_display_options_base.cpp:101
 msgid "Solid colors"
-msgstr ""
+msgstr "สีทึบ"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_display_options_base.cpp:101
 msgid "CAD colors"
-msgstr ""
+msgstr "สี CAD"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_display_options_base.cpp:114
 msgid "Camera Options"
-msgstr ""
+msgstr "ทางเลือกกล้อง"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_display_options_base.cpp:119
 msgid "Rotation Increment:"
-msgstr ""
+msgstr "เพิ่มมุมหมุน:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_display_options_base.cpp:127
 #: common/base_units.cpp:476 pcb_calculator/widgets/unit_selector.cpp:130
@@ -498,241 +507,244 @@ msgstr ""
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1364
 #: pcbnew/dialogs/panel_edit_options_base.cpp:68
 msgid "deg"
-msgstr ""
+msgstr "องศา"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_display_options_base.cpp:137
 msgid "Enable animation"
-msgstr ""
+msgstr "เปิดการเคลื่อนไหว"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_display_options_base.cpp:144
 msgid "Animation speed:"
-msgstr ""
+msgstr "ความเร็วเคลื่อนไหว:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_opengl_options_base.cpp:23
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_raytracing_options_base.cpp:21
 msgid "Rendering Options"
-msgstr ""
+msgstr "ทางเลือกการเรนเดอร์"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_opengl_options_base.cpp:25
 msgid "Show model bounding boxes"
-msgstr ""
+msgstr "แสดงกรอบนอกโมเดล"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_opengl_options_base.cpp:28
 msgid "Show copper thickness"
-msgstr ""
+msgstr "แสดงความหนาทองแดง"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_opengl_options_base.cpp:31
 msgid "Highlight items on rollover"
-msgstr ""
+msgstr "เน้นสิ่งที่ข้ามเหนือ"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_opengl_options_base.cpp:37
 msgid "Anti-aliasing:"
-msgstr ""
+msgstr "ต้านความไม่เรียบ:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_opengl_options_base.cpp:41
 msgid "Disabled"
-msgstr ""
+msgstr "ไม่ใช้"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_opengl_options_base.cpp:41
 msgid "2x"
-msgstr ""
+msgstr "2x"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_opengl_options_base.cpp:41
 msgid "4x"
-msgstr ""
+msgstr "4x"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_opengl_options_base.cpp:41
 msgid "8x"
-msgstr ""
+msgstr "8x"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_opengl_options_base.cpp:45
 msgid "3D-Viewer must be closed and re-opened to apply this setting"
-msgstr ""
+msgstr "ต้องปิดและเปิดมอง 3D อีกครั้งเพื่อให้การตั้งค่ามีผล"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_opengl_options_base.cpp:49
 msgid "Selection color:"
-msgstr ""
+msgstr "เลือกสี:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_opengl_options_base.cpp:63
 msgid "While Moving"
-msgstr ""
+msgstr "ระหว่างย้าย"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_opengl_options_base.cpp:65
 msgid "Disable anti-aliasing"
-msgstr ""
+msgstr "ไม่ใช้การต้านความไม่เรียบ"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_opengl_options_base.cpp:68
 msgid "Disable thickness"
-msgstr ""
+msgstr "ไม่ใช้ความหนา"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_opengl_options_base.cpp:71
 msgid "Disable vias"
-msgstr ""
+msgstr "ไม่ใช้เวีย"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_opengl_options_base.cpp:74
 msgid "Disable holes"
-msgstr ""
+msgstr "ไม่ใช้โฮล"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_raytracing_options_base.cpp:27
 msgid "Procedural textures (slow)"
-msgstr ""
+msgstr "พื้นผิวชนิดเป็นขั้นตอน(ช้า)"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_raytracing_options_base.cpp:31
 msgid "Add floor (slow)"
-msgstr ""
+msgstr "เพิ่มพื้น (ช้า)"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_raytracing_options_base.cpp:35
 msgid "Anti-aliasing (slow)"
-msgstr ""
+msgstr "การต้านความไม่เรียบ (ช้า)"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_raytracing_options_base.cpp:39
 msgid ""
 "Screen space ambient occlusions and global illumination reflections (slow)"
 msgstr ""
+"Screen space ambient occlusions and global illumination reflections (ช้า)"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_raytracing_options_base.cpp:54
 msgid "Number of Samples"
-msgstr ""
+msgstr "จำนวนตัวอย่าง"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_raytracing_options_base.cpp:58
 msgid "Spread Factor %"
-msgstr ""
+msgstr "ปัจจัยการกระจาย %"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_raytracing_options_base.cpp:62
 msgid "Recursion Level"
-msgstr ""
+msgstr "ระดับการวนซ้ำ"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_raytracing_options_base.cpp:66
 msgid "Shadows:"
-msgstr ""
+msgstr "เงา:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_raytracing_options_base.cpp:71
 msgid ""
 "Number of rays that will be cast, into light direction, to evaluate a shadow "
 "point"
-msgstr ""
+msgstr "จำนวนลำแสงตามทิศทางเพื่อประเมินจุดเงา"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_raytracing_options_base.cpp:77
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_raytracing_options_base.cpp:95
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_raytracing_options_base.cpp:115
 msgid "Random direction factor of the cast rays"
-msgstr ""
+msgstr "สุ่มทิศทางของแนวเส้นแสง"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_raytracing_options_base.cpp:84
 msgid "Reflections:"
-msgstr ""
+msgstr "การสะท้อน:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_raytracing_options_base.cpp:89
 msgid "Number of rays that will be cast to evaluate a reflection point"
-msgstr ""
+msgstr "จำนวนเส้นแสงกระทบเพื่อประเมินจุดสะท้อน"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_raytracing_options_base.cpp:100
 msgid ""
 "Interactions number that a ray can travel through objects. (higher number of "
 "levels improve results, specially on very transparent boards)"
 msgstr ""
+"Interactions number that a ray can travel through objects. (ตัวเลขสูง "
+"จะได้ผลดีขึ้น, โดยเฉพาะอย่างยิ่งบอร์ดที่มีความใส)"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_raytracing_options_base.cpp:104
 msgid "Refractions:"
-msgstr ""
+msgstr "การหักเห:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_raytracing_options_base.cpp:109
 msgid "Number of rays that will be cast to evaluate a refraction point"
-msgstr ""
+msgstr "จำนวนเส้นแสงที่กระทบเพื่อประเมินจุดกระจาย"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_raytracing_options_base.cpp:120
 msgid "Number of bounces that a ray can hit reflective objects"
-msgstr ""
+msgstr "จำนวนฟุ้งกระจายที่เส้นแสงกระทบวัตถุสะท้อน"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_raytracing_options_base.cpp:134
 msgid "Lights Configuration"
-msgstr ""
+msgstr "การกำหนดค่าแสง"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_raytracing_options_base.cpp:139
 msgid "Ambient camera light:"
-msgstr ""
+msgstr "แสงรอบๆกล้อง:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_raytracing_options_base.cpp:149
 msgid "Top light:"
-msgstr ""
+msgstr "แสงด้านบน:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_raytracing_options_base.cpp:159
 msgid "Bottom light:"
-msgstr ""
+msgstr "แสงด้านล่าง:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_raytracing_options_base.cpp:181
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_raytracing_options_base.cpp:198
 msgid "Elevation (deg)"
-msgstr ""
+msgstr "มุมเงย (องศา)"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_raytracing_options_base.cpp:185
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_raytracing_options_base.cpp:202
 msgid "Azimuth (deg)"
-msgstr ""
+msgstr "มุมตามระนาบ (องศา)"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_raytracing_options_base.cpp:206
 msgid "Light 1:"
-msgstr ""
+msgstr "แสง 1:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_raytracing_options_base.cpp:222
 msgid "Light 5:"
-msgstr ""
+msgstr "แสง 5:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_raytracing_options_base.cpp:235
 msgid "Light 2:"
-msgstr ""
+msgstr "แสง 2:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_raytracing_options_base.cpp:251
 msgid "Light 6:"
-msgstr ""
+msgstr "แสง 6:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_raytracing_options_base.cpp:264
 msgid "Light 3:"
-msgstr ""
+msgstr "แสง 3:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_raytracing_options_base.cpp:280
 msgid "Light 7:"
-msgstr ""
+msgstr "แสง 7:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_raytracing_options_base.cpp:293
 msgid "Light 4:"
-msgstr ""
+msgstr "แสง 4:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_raytracing_options_base.cpp:309
 msgid "Light 8:"
-msgstr ""
+msgstr "แสง 8:"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:100
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:72
 msgid "KiCad 3D Viewer"
-msgstr ""
+msgstr "เครื่องมือแสดง 3D ของคีแคด"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:236 eeschema/eeschema_config.cpp:68
 #: eeschema/eeschema_config.cpp:225 gerbview/gerbview_frame.cpp:1015
 #: pagelayout_editor/pl_editor_frame.cpp:482
 #: pcbnew/footprint_edit_frame.cpp:922 pcbnew/pcbnew_config.cpp:58
 msgid "Display Options"
-msgstr ""
+msgstr "ทางเลือกแสดงผล"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:237
 msgid "OpenGL"
-msgstr ""
+msgstr "OpenGL"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:239 eeschema/eeschema_config.cpp:70
 #: eeschema/eeschema_config.cpp:227 pagelayout_editor/pl_editor_frame.cpp:484
 #: pcbnew/footprint_edit_frame.cpp:924 pcbnew/pcbnew_config.cpp:60
 msgid "Colors"
-msgstr ""
+msgstr "สี"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:717
 msgid "3D Image File Name"
-msgstr ""
+msgstr "ชื่อไฟล์ภาพ 3D"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:738 common/eda_base_frame.cpp:1043
 #: common/eda_base_frame.cpp:1048 pcbnew/plugins/altium/altium_pcb.cpp:1315
 #, c-format
 msgid "Insufficient permissions to save file '%s'."
-msgstr ""
+msgstr "ไม่มีสิทธิเพียงพอเพื่อบันทึกไฟล์ '%s'."
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:739 common/confirm.cpp:130
 #: common/confirm.cpp:269 common/dialogs/panel_setup_severities.cpp:43
@@ -743,247 +755,247 @@ msgstr ""
 #: kicad/tools/kicad_manager_control.cpp:229
 #: kicad/tools/kicad_manager_control.cpp:273
 msgid "Error"
-msgstr ""
+msgstr "ผิดพลาด"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:772
 msgid "Failed to copy image to clipboard"
-msgstr ""
+msgstr "ก้อปปี้ภาพไปคลิปบอร์ดล้มเหลว"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:783
 msgid "Can't save file"
-msgstr ""
+msgstr "ไม่สามารถบันทึกไฟล์"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:43
 msgid "Center pivot rotation"
-msgstr ""
+msgstr "จุดศูนย์กลางหมุน"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:43
 msgid "Center pivot rotation (middle mouse click)"
-msgstr ""
+msgstr "จุดศูนย์กลางหมุน (คลิกเมาส์กลาง)"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:48
 msgid "Rotate X Clockwise"
-msgstr ""
+msgstr "หมุน X ตามเข็มนาฬิกา"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:53
 msgid "Rotate X Counterclockwise"
-msgstr ""
+msgstr "หมุน X ทวนเข็มนาฬิกา"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:58
 msgid "Rotate Y Clockwise"
-msgstr ""
+msgstr "หมุน Y ตามเข็มนาฬิกา"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:63
 msgid "Rotate Y Counterclockwise"
-msgstr ""
+msgstr "หมุน Y ทวนเข็มนาฬิกา"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:68
 msgid "Rotate Z Clockwise"
-msgstr ""
+msgstr "หมุน Z ตามเข็ม"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:73
 msgid "Rotate Z Counterclockwise"
-msgstr ""
+msgstr "หมุน Z ทวนเข็ม"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:79
 msgid "Move board Left"
-msgstr ""
+msgstr "เลื่อนบอร์ดไปทางซ้าย"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:85
 msgid "Move board Right"
-msgstr ""
+msgstr "เลื่อนบอร์ดไปทางขวา"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:91
 msgid "Move board Up"
-msgstr ""
+msgstr "เลื่อนบอร์ดขึ้น"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:97
 msgid "Move board Down"
-msgstr ""
+msgstr "เลื่อนบอร์ดลง"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:103
 msgid "Home view"
-msgstr ""
+msgstr "มุมมองเริ่มต้น"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:109
 msgid "Reset view"
-msgstr ""
+msgstr "ล้างมุมมอง"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:115
 msgid "Flip Board"
-msgstr ""
+msgstr "ผลิกบอร์ด"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:115
 msgid "Flip the board view"
-msgstr ""
+msgstr "มุมมองผลิกบอร์ด"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:120
 msgid "Toggle orthographic projection"
-msgstr ""
+msgstr "เปิดปิด orthographic projection"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:120
 msgid "Enable/disable orthographic projection"
-msgstr ""
+msgstr "ใช้/ไม่ใช้ orthographic projection"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:126
 msgid "View Front"
-msgstr ""
+msgstr "มุมมองด้านหน้า"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:132
 msgid "View Back"
-msgstr ""
+msgstr "มุมมองด้านหลัง"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:138
 msgid "View Left"
-msgstr ""
+msgstr "มุมมองด้านซ้าย"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:144
 msgid "View Right"
-msgstr ""
+msgstr "มุมมองด้านขวา"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:150
 msgid "View Top"
-msgstr ""
+msgstr "มุมมองด้านบน"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:156
 msgid "View Bottom"
-msgstr ""
+msgstr "มุมมองด้านล่าง"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:161
 msgid "No 3D Grid"
-msgstr ""
+msgstr "ไม่มีกริด 3D"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:166
 msgid "3D Grid 10mm"
-msgstr ""
+msgstr "กริด 3D ขนาด 10มม."
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:171
 msgid "3D Grid 5mm"
-msgstr ""
+msgstr "กริด 3D ขนาด 5มม."
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:176
 msgid "3D Grid 2.5mm"
-msgstr ""
+msgstr "กริด 3D ขนาด 2.5มม."
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:181
 msgid "3D Grid 1mm"
-msgstr ""
+msgstr "กริด 3D ขนาด 1มม."
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:187
 msgid "Render Realistic Materials"
-msgstr ""
+msgstr "เรนเดอร์วัสดุเหมือนจริง"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:188
 msgid "Use all material properties from each 3D model file"
-msgstr ""
+msgstr "ใช้คุณสมบัติวัสดุทั้งหมดจากแต่ละโมเดล 3D"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:194
 msgid "Render Solid Colors"
-msgstr ""
+msgstr "เรนเดอร์สีทึบ"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:195
 msgid "Use only the diffuse color property from model 3D model file"
-msgstr ""
+msgstr "ใช้แต่คุณสมบัติสีกระจายจากโมเดล 3D"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:201
 msgid "Render CAD Colors"
-msgstr ""
+msgstr "เรนเดอร์สีจาก CAD"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:202
 msgid "Use a CAD color style based on the diffuse color of the material"
-msgstr ""
+msgstr "ใช้สไตล์สีของ CAD บนฐานของสีกระจายของวัสดุ"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:213
 msgid "Toggle Through Hole 3D models"
-msgstr ""
+msgstr "สลับเปิดปิดโมเดล 3D ของรูเจาะทะลุ"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:213
 msgid "Toggle 3D models with 'Through hole' attribute"
-msgstr ""
+msgstr "เปิดปิดโมเดล 3D ซึ่งมีคุณลักษณะ 'Through hole'"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:219
 msgid "Toggle SMD 3D models"
-msgstr ""
+msgstr "เปิดปิดโมเดล 3D SMD"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:219
 msgid "Toggle 3D models with 'Surface mount' attribute"
-msgstr ""
+msgstr "เปิดปิดโมเดล 3D ที่มี 'Surface mount'"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:225
 msgid "Toggle Virtual 3D models"
-msgstr ""
+msgstr "เปิดปิดโมเดล 3D เสมือน"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:225
 msgid "Toggle 3D models with 'Virtual' attribute"
-msgstr ""
+msgstr "เปิดปิดโมเดล 3D ที่มีคำว่า 'Virtual'"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:230
 msgid "Show Model Bounding Boxes"
-msgstr ""
+msgstr "แสดงกรอบรอบรูปโมเดล"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:235
 msgid "Toggle realistic mode"
-msgstr ""
+msgstr "เปิดปิดเหมือนจริง"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:240
 msgid "Toggle board body display"
-msgstr ""
+msgstr "เปิดปิดการแสดงบอร์ด"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:245
 msgid "Show 3D Axis"
-msgstr ""
+msgstr "แสดงแกน 3D"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:250
 msgid "Toggle zone display"
-msgstr ""
+msgstr "เปิดปิดการแสดงโซน"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:255
 msgid "Toggle adhesive display"
-msgstr ""
+msgstr "เปิดปิดการแสดงกาว"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:255
 msgid "Toggle display of adhesive layers"
-msgstr ""
+msgstr "เปิดปิดการแสดงเลเยอร์กาว"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:260
 msgid "Toggle silkscreen display"
-msgstr ""
+msgstr "เปิดปิดการแสดงซิลค์สกรีน"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:260
 msgid "Toggle display of silkscreen layers"
-msgstr ""
+msgstr "เปิดปิดการแสดงเลเยอร์ซิลค์สกรีน"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:265
 msgid "Toggle solder mask display"
-msgstr ""
+msgstr "เปิดปิดการแสดงโซลเดอร์มาสค์"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:265
 msgid "Toggle display of solder mask layers"
-msgstr ""
+msgstr "เปิดปิดการแสดงเลเยอร์โซลเดอร์มาสค์"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:270
 msgid "Toggle solder paste display"
-msgstr ""
+msgstr "เปิดปิดการแสดงโซลเดอร์เพสท์"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:270
 msgid "Toggle display of solder paste layers"
-msgstr ""
+msgstr "เปิดปิดการแสดงเลเยอร์โซลเดอร์เพสท์"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:275
 msgid "Toggle comments display"
-msgstr ""
+msgstr "เปิดปิดการแสดงคอมเมนต์"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:275
 msgid "Toggle display of comments and drawings layers"
-msgstr ""
+msgstr "เปิดปิดการแสดงเลเยอร์คอมเมนต์และเขียนแบบ"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:280
 msgid "Toggle ECO display"
-msgstr ""
+msgstr "เปิดปิดการแสดง ECO"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:280
 msgid "Toggle display of ECO layers"
-msgstr ""
+msgstr "เปิดปิดการแสดงเลเยอร์ ECO"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:159 common/base_units.cpp:434
 #: common/dialogs/dialog_grid_settings_base.cpp:41
@@ -1066,7 +1078,7 @@ msgstr ""
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:99
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:193
 msgid "mm"
-msgstr ""
+msgstr "มม."
 
 #: bitmap2component/bitmap2cmp_gui.cpp:159
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:109
@@ -1077,31 +1089,31 @@ msgstr ""
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:757
 #: pcbnew/dialogs/dialog_plot_base.cpp:378
 msgid "Inch"
-msgstr ""
+msgstr "นิ้ว"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:159
 msgid "DPI"
-msgstr ""
+msgstr "DPI"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:343
 #: eeschema/tools/sch_drawing_tools.cpp:489
 #: pagelayout_editor/pl_editor_frame.cpp:844
 msgid "Choose Image"
-msgstr ""
+msgstr "เลือกภาพ"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:344
 #: eeschema/tools/sch_drawing_tools.cpp:490
 #: pagelayout_editor/pl_editor_frame.cpp:845
 msgid "Image Files"
-msgstr ""
+msgstr "เลือกไฟล์"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:703
 msgid "Unable to export to the Clipboard"
-msgstr ""
+msgstr "ไม่สามารถส่งออกไปคลิปบอร์ด"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:738
 msgid "Create Logo File"
-msgstr ""
+msgstr "สร้างไฟล์โลโก้"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:755
 #: bitmap2component/bitmap2cmp_gui.cpp:795
@@ -1109,23 +1121,23 @@ msgstr ""
 #: bitmap2component/bitmap2cmp_gui.cpp:873
 #, c-format
 msgid "File '%s' could not be created."
-msgstr ""
+msgstr "ไม่สามารถสร้างไฟล์ '%s'"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:775
 msgid "Create PostScript File"
-msgstr ""
+msgstr "สร้างไฟล์ PostScript"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:815
 msgid "Create Symbol Library"
-msgstr ""
+msgstr "สร้างไลบรารีสัญลักษณ์"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:854
 msgid "Create Footprint Library"
-msgstr ""
+msgstr "สร้างไลบรารีฟุ้ทพริ้นท์"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:896
 msgid "Error allocating memory for potrace bitmap"
-msgstr ""
+msgstr "มีความผิดพลาดจัดสรรหน่วยความจำ สำหรับ potrace bitmap"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:923
 #: common/dialogs/wx_html_report_panel_base.cpp:42
@@ -1135,27 +1147,27 @@ msgstr ""
 #: pcbnew/dialogs/dialog_drc_base.cpp:157
 #: pcbnew/dialogs/dialog_footprint_checker_base.cpp:43
 msgid "Errors"
-msgstr ""
+msgstr "ผิดพลาด"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:24
 msgid "Original Picture"
-msgstr ""
+msgstr "ภาพต้นฉบับ"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:29
 msgid "Greyscale Picture"
-msgstr ""
+msgstr "ภาพสีเทา"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:32
 msgid "Black&&White Picture"
-msgstr ""
+msgstr "ภาพขาวดำ"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:41
 msgid "Bitmap Information"
-msgstr ""
+msgstr "ข้อมูลบิทแมบ"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:50
 msgid "Bitmap size:"
-msgstr ""
+msgstr "ขนาดบิทแมบ:"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:54
 #: bitmap2component/bitmap2cmp_gui_base.cpp:58
@@ -1163,121 +1175,121 @@ msgstr ""
 #: bitmap2component/bitmap2cmp_gui_base.cpp:74
 #: bitmap2component/bitmap2cmp_gui_base.cpp:86
 msgid "0000"
-msgstr ""
+msgstr "0000"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:62
 msgid "pixels"
-msgstr ""
+msgstr "พิกเซล"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:66
 msgid "Bitmap PPI:"
-msgstr ""
+msgstr "บิทแมบ PPI:"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:78
 msgid "PPI"
-msgstr ""
+msgstr "PPI"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:82
 msgid "BPP:"
-msgstr ""
+msgstr "BPP:"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:90
 msgid "bits"
-msgstr ""
+msgstr "บิท"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:104
 msgid "Output Parameters"
-msgstr ""
+msgstr "พารามิเตอร์ทางออก"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:109
 msgid "Lock height/width ratio"
-msgstr ""
+msgstr "ล็อคอัตราส่วน สูง/กว้าง"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:122
 #: common/dialogs/dialog_page_settings_base.cpp:32
 #: pcbnew/dialogs/dialog_target_properties_base.cpp:28
 msgid "Size:"
-msgstr ""
+msgstr "ขนาด:"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:126
 #: bitmap2component/bitmap2cmp_gui_base.cpp:131
 msgid "300"
-msgstr ""
+msgstr "300"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:149
 msgid "Load Bitmap"
-msgstr ""
+msgstr "อ่านบิทแมบ"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:152
 msgid "Export to File"
-msgstr ""
+msgstr "ส่งออกเป็นไฟล์"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:155
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:142
 msgid "Export to Clipboard"
-msgstr ""
+msgstr "ส่งออกไปคลิบบอร์ด"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:158
 msgid "Symbol (.lib file)"
-msgstr ""
+msgstr "สัญลักษณ์ (ไฟล์ .lib)"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:158
 msgid "Footprint (.kicad_mod file)"
-msgstr ""
+msgstr "ฟุ้ทพรินท์ (ไฟล์ .kicad_mod)"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:158
 msgid "Postscript (.ps file)"
-msgstr ""
+msgstr "โพสคริบส์ (ไฟล์ .ps)"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:158
 msgid "Drawing Sheet (.kicad_wks file)"
-msgstr ""
+msgstr "กระดาษเขียนแบบ (ไฟล์ .kicad_wks)"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:160
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:43
 msgid "Output Format"
-msgstr ""
+msgstr "รูปแบบทางออก"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:165
 msgid "Image Options"
-msgstr ""
+msgstr "ทางเลือกภาพ"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:167
 msgid "Black / White Threshold:"
-msgstr ""
+msgstr "ระดับตัดสิน ดำ/ขาว:"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:172
 msgid ""
 "Adjust the level to convert the greyscale picture to a black and white "
 "picture."
-msgstr ""
+msgstr "ปรับระดับเพื่อเปลี่ยนภาพสีเทาเป็นภาพขาวดำ"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:176
 #: gerbview/gerber_file_image.cpp:352
 msgid "Negative"
-msgstr ""
+msgstr "กลับลบ"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:182
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:530
 msgid "Front silk screen"
-msgstr ""
+msgstr "ซิลค์สกรีนด้านหน้า"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:182
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:536
 msgid "Front solder mask"
-msgstr ""
+msgstr "โซลเดอร์มาสก์ด้านหน้า"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:182
 msgid "User layer Eco1"
-msgstr ""
+msgstr "เลเยอร์ผู้ใช้ Eco1"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:182
 msgid "User layer Eco2"
-msgstr ""
+msgstr "เลเยอร์ผู้ใช้ Eco2"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:184
 msgid "Board Layer for Outline"
-msgstr ""
+msgstr "เลเยอร์บอร์ดสำหรับเส้นร่าง"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:186
 msgid ""
@@ -1285,19 +1297,21 @@ msgid ""
 "The reference designator and value are always placed on the silk screen "
 "layer (but will be marked invisible)."
 msgstr ""
+"เลือกเลเยอร์เพื่อวางเส้นร่าง\n"
+"ตัวอักษรอ้างอิงและค่าอุปกรณ์จะอยู่บนเลเยอร์ซิลค์สกรีนเสมอ (แต่ปิดการมองเห็น)"
 
 #: bitmap2component/bitmap2cmp_gui_base.h:100
 #: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:10
 msgid "Bitmap to Component Converter"
-msgstr ""
+msgstr "ผู้เปลี่ยนบิทแมบเป็นอุปกรณ์"
 
 #: common/base_units.cpp:436
 msgid "sq. mm"
-msgstr ""
+msgstr "ตร.มม."
 
 #: common/base_units.cpp:438
 msgid "cu. mm"
-msgstr ""
+msgstr "cu. mm"
 
 #: common/base_units.cpp:448 common/eda_draw_frame.cpp:532
 #: eeschema/dialogs/dialog_junction_props_base.cpp:34
@@ -1318,27 +1332,27 @@ msgstr ""
 #: pagelayout_editor/pl_editor_frame.cpp:735
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:193
 msgid "mils"
-msgstr ""
+msgstr "มิล"
 
 #: common/base_units.cpp:450
 msgid "sq. mils"
-msgstr ""
+msgstr "ตร.มิล"
 
 #: common/base_units.cpp:452
 msgid "cu. mils"
-msgstr ""
+msgstr "cu. มิล"
 
 #: common/base_units.cpp:462
 msgid "in"
-msgstr ""
+msgstr "นิ้ว"
 
 #: common/base_units.cpp:464
 msgid "sq. in"
-msgstr ""
+msgstr "ตร.นิ้ว"
 
 #: common/base_units.cpp:466
 msgid "cu. in"
-msgstr ""
+msgstr "cu.นิ้ว"
 
 #: common/base_units.cpp:470
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:75
@@ -1355,54 +1369,56 @@ msgstr ""
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:164
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:121
 msgid "%"
-msgstr ""
+msgstr "%"
 
 #: common/common.cpp:234
 #, c-format
 msgid ""
 "Environment variables expansion failed: missing '%c' at position %u in '%s'."
-msgstr ""
+msgstr "ตัวแปรใน Environment ผิดพลาด: ไม่พบ '%c' ที่ตำแหน่ง '%u' ใน '%s'"
 
 #: common/common.cpp:320
 #, c-format
 msgid "Cannot make path '%s' absolute with respect to '%s'."
-msgstr ""
+msgstr "ไม่สามารถสร้างเส้นทางสมบูรณ์ '%s' เทียบกับ '%s'"
 
 #: common/common.cpp:339
 #, c-format
 msgid "Output directory '%s' created.\n"
-msgstr ""
+msgstr "สร้างไดเรคตอรีทางออก '%s' สำเร็จ\n"
 
 #: common/common.cpp:348
 #, c-format
 msgid "Cannot create output directory '%s'.\n"
-msgstr ""
+msgstr "ไม่สามารถสร้างไดเร็คตอรีทางออก '%s'\n"
 
 #: common/common.cpp:615
 msgid "This operating system is not supported by KiCad and its dependencies."
-msgstr ""
+msgstr "KiCad ไม่สนับสนุนระบบปฏิบัติการนี้"
 
 #: common/common.cpp:617
 msgid "Unsupported Operating System"
-msgstr ""
+msgstr "ไม่สนับสนุนระบบปฏิบัติการ"
 
 #: common/common.cpp:620
 msgid ""
 "Any issues with KiCad on this system cannot be reported to the official "
 "bugtracker."
 msgstr ""
+"ประเด็นใดๆของ KiCad ในระบบนี้ "
+"ไม่สามารถรายงานไปยังระบบติดตามผิดพลาดอย่างทางการ"
 
 #: common/confirm.cpp:57
 msgid "Do not show again"
-msgstr ""
+msgstr "ไม่แสดงอีกต่อไป"
 
 #: common/confirm.cpp:127
 msgid "Message"
-msgstr ""
+msgstr "ข้อความ"
 
 #: common/confirm.cpp:128
 msgid "Question"
-msgstr ""
+msgstr "คำถาม"
 
 #: common/confirm.cpp:129 common/confirm.cpp:257
 #: common/dialogs/panel_setup_severities.cpp:43
@@ -1419,15 +1435,15 @@ msgstr ""
 #: pcbnew/import_gfx/dialog_import_gfx.cpp:336
 #: pcbnew/plugins/kicad/pcb_parser.cpp:760
 msgid "Warning"
-msgstr ""
+msgstr "ระวัง"
 
 #: common/confirm.cpp:158 common/confirm.cpp:185
 msgid "Save Changes?"
-msgstr ""
+msgstr "บันทึกเปลี่ยนแปลงหรือไม่?"
 
 #: common/confirm.cpp:160 common/confirm.cpp:187
 msgid "If you don't save, all your changes will be permanently lost."
-msgstr ""
+msgstr "ถ้าคุณไม่บันทึก,การแก้ไขทั้งหมดจะสูญหายถาวร"
 
 #: common/confirm.cpp:161 common/confirm.cpp:188 common/tool/actions.cpp:67
 #: eeschema/sim/sim_plot_frame_base.cpp:29
@@ -1435,23 +1451,23 @@ msgstr ""
 #: eeschema/widgets/tuner_slider_base.cpp:66
 #: pcbnew/footprint_libraries_utils.cpp:964
 msgid "Save"
-msgstr ""
+msgstr "บันทึก"
 
 #: common/confirm.cpp:161 common/confirm.cpp:188
 msgid "Discard Changes"
-msgstr ""
+msgstr "ล้างทิ้งการแก้ไข"
 
 #: common/confirm.cpp:164 common/confirm.cpp:239
 msgid "Apply to all"
-msgstr ""
+msgstr "นำไปใช้กับทั้งหมด"
 
 #: common/confirm.cpp:200
 msgid "Your current changes will be permanently lost."
-msgstr ""
+msgstr "การแก้ไขของคุณจะสูญหายถาวร"
 
 #: common/confirm.cpp:201 common/tool/actions.cpp:91
 msgid "Revert"
-msgstr ""
+msgstr "ย้อนกลับ"
 
 #: common/confirm.cpp:201 common/confirm.cpp:231 common/tool/actions.cpp:122
 #: eeschema/dialogs/dialog_erc.cpp:277
@@ -1459,16 +1475,16 @@ msgstr ""
 #: pcbnew/dialogs/dialog_drc.cpp:253 pcbnew/microwave/microwave_polygon.cpp:132
 #: pcbnew/plugins/kicad/pcb_parser.cpp:763 pcbnew/router/router_tool.cpp:521
 msgid "Cancel"
-msgstr ""
+msgstr "ยกเลิก"
 
 #: common/confirm.cpp:228 gerbview/dialogs/dialog_select_one_pcb_layer.cpp:184
 #: pcbnew/microwave/microwave_polygon.cpp:129 pcbnew/router/router_tool.cpp:521
 msgid "OK"
-msgstr ""
+msgstr "OK"
 
 #: common/confirm.cpp:285
 msgid "Info"
-msgstr ""
+msgstr "ข้อความ"
 
 #: common/confirm.cpp:298
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:156
@@ -1481,7 +1497,7 @@ msgstr ""
 #: pcbnew/footprint_libraries_utils.cpp:1036 pcbnew/router/router_tool.cpp:1399
 #: pcbnew/router/router_tool.cpp:1821 pcbnew/zone_filler.cpp:427
 msgid "Confirmation"
-msgstr ""
+msgstr "คำยืนยัน"
 
 #: common/dialog_about/AboutDialog_main.cpp:122
 #: common/dialogs/dialog_configure_paths_base.cpp:94
@@ -1495,215 +1511,217 @@ msgstr ""
 #: pcbnew/footprint_libraries_utils.cpp:952
 #: pcbnew/footprint_libraries_utils.cpp:1188
 msgid "Description"
-msgstr ""
+msgstr "คำอธิบาย"
 
 #: common/dialog_about/AboutDialog_main.cpp:126
 msgid ""
 "The KiCad EDA Suite is a set of open source applications for the creation of "
 "electronic schematics and printed circuit boards."
 msgstr ""
+"KiCad คือกลุ่มซอฟต์แวร์เปิดเผยรหัส "
+"สำหรับสร้างวงจรอิเล็กทรอนิกส์และแผ่นวงจรพิมพ์"
 
 #: common/dialog_about/AboutDialog_main.cpp:134
 msgid "KiCad on the web"
-msgstr ""
+msgstr "KiCad บนเว็บ"
 
 #: common/dialog_about/AboutDialog_main.cpp:140
 msgid "The official KiCad website - "
-msgstr ""
+msgstr "เว็บทางการ KiCad - "
 
 #: common/dialog_about/AboutDialog_main.cpp:144
 msgid "Developer website - "
-msgstr ""
+msgstr "เว็บของนักพัฒนา - "
 
 #: common/dialog_about/AboutDialog_main.cpp:149
 msgid "Official KiCad library repositories - "
-msgstr ""
+msgstr "คลังเก็บไลบรารี KiCad เป็นทางการ - "
 
 #: common/dialog_about/AboutDialog_main.cpp:156
 msgid "Bug tracker"
-msgstr ""
+msgstr "ผู้ดักจับความผิดพลาด"
 
 #: common/dialog_about/AboutDialog_main.cpp:162
 msgid "Report or examine bugs - "
-msgstr ""
+msgstr "รายงานหรือตรวจสอบข้อผิดพลาด - "
 
 #: common/dialog_about/AboutDialog_main.cpp:168
 msgid "KiCad users group and community"
-msgstr ""
+msgstr "กลุ่มผู้ใช้ KiCad หรือชุมชน"
 
 #: common/dialog_about/AboutDialog_main.cpp:173
 msgid "KiCad forum - "
-msgstr ""
+msgstr "ฟอรัม KiCad - "
 
 #: common/dialog_about/AboutDialog_main.cpp:187
 msgid "The complete KiCad EDA Suite is released under the"
-msgstr ""
+msgstr "ชุดโปรแกรม KiCad EDA ที่สมบูรณ์ ประกาศเผยแพร่ภายใต้"
 
 #: common/dialog_about/AboutDialog_main.cpp:189
 msgid "GNU General Public License (GPL) version 3 or any later version"
-msgstr ""
+msgstr "GNU General Public License (GPL) รุ่น 3 หรือหลังจากนั้น"
 
 #: common/dialog_about/AboutDialog_main.cpp:208
 msgid "Lead Development Team"
-msgstr ""
+msgstr "ผู้นำทีมพัฒนา"
 
 #: common/dialog_about/AboutDialog_main.cpp:209
 msgid "Lead Development Alumni"
-msgstr ""
+msgstr "ผู้นำทีมพัฒนารุ่นเก่า"
 
 #: common/dialog_about/AboutDialog_main.cpp:210
 msgid "Additional Contributions By"
-msgstr ""
+msgstr "เพิ่มเติมการมีส่วนร่วมโดย"
 
 #: common/dialog_about/AboutDialog_main.cpp:624
 msgid "Others"
-msgstr ""
+msgstr "อื่นๆ"
 
 #: common/dialog_about/AboutDialog_main.cpp:644
 msgid "KiCad Librarian Team"
-msgstr ""
+msgstr "ทีมพัฒนาไลบรารี KiCad"
 
 #: common/dialog_about/AboutDialog_main.cpp:659
 msgid "3D models by"
-msgstr ""
+msgstr "โมเดล 3D โดย"
 
 #: common/dialog_about/AboutDialog_main.cpp:671
 msgid "Symbols by"
-msgstr ""
+msgstr "สัญลักษณ์โดย"
 
 #: common/dialog_about/AboutDialog_main.cpp:678
 msgid "Footprints by"
-msgstr ""
+msgstr "ฟุ้ทพริ้นท์โดย"
 
 #: common/dialog_about/AboutDialog_main.cpp:691
 msgid "Icons by"
-msgstr ""
+msgstr "ไอคอนโดย"
 
 #: common/dialog_about/dialog_about.cpp:90
 #, c-format
 msgid "About %s"
-msgstr ""
+msgstr "ประมาณ %s"
 
 #: common/dialog_about/dialog_about.cpp:118
 #: common/dialog_about/dialog_about_base.h:56
 msgid "About"
-msgstr ""
+msgstr "เกี่ยวกับ"
 
 #: common/dialog_about/dialog_about.cpp:123
 msgid "Version"
-msgstr ""
+msgstr "รุ่น"
 
 #: common/dialog_about/dialog_about.cpp:125
 msgid "Developers"
-msgstr ""
+msgstr "นักพัฒนา"
 
 #: common/dialog_about/dialog_about.cpp:127
 msgid "Doc Writers"
-msgstr ""
+msgstr "นักเขียนคู่มือ"
 
 #: common/dialog_about/dialog_about.cpp:130
 msgid "Librarians"
-msgstr ""
+msgstr "ผู้สร้างไลบรารี"
 
 #: common/dialog_about/dialog_about.cpp:133
 msgid "Artists"
-msgstr ""
+msgstr "ศิลปิน"
 
 #: common/dialog_about/dialog_about.cpp:135
 msgid "Translators"
-msgstr ""
+msgstr "ผู้แปล"
 
 #: common/dialog_about/dialog_about.cpp:137
 msgid "Packagers"
-msgstr ""
+msgstr "ผู้รวบรวม"
 
 #: common/dialog_about/dialog_about.cpp:140
 msgid "License"
-msgstr ""
+msgstr "ไลเซ็นส์"
 
 #: common/dialog_about/dialog_about.cpp:478
 msgid "Could not open clipboard to write version information."
-msgstr ""
+msgstr "ไม่สามารถเปิดคลิบบอร์ดสำหรับเขียนข้อมูลรุ่นใช้งาน"
 
 #: common/dialog_about/dialog_about.cpp:479
 msgid "Clipboard Error"
-msgstr ""
+msgstr "ผิดพลาดในคลิปบอร์ด"
 
 #: common/dialog_about/dialog_about.cpp:488
 msgid "Copied..."
-msgstr ""
+msgstr "ทำซ้ำ…"
 
 #: common/dialog_about/dialog_about_base.cpp:31
 msgid "App Title"
-msgstr ""
+msgstr "App Title."
 
 #: common/dialog_about/dialog_about_base.cpp:37
 msgid "Copyright Info"
-msgstr ""
+msgstr "ข้อมูลสงวนสิทธิ์"
 
 #: common/dialog_about/dialog_about_base.cpp:41
 msgid "Build Version Info"
-msgstr ""
+msgstr "ข้อมูลเลขรุ่น"
 
 #: common/dialog_about/dialog_about_base.cpp:45
 msgid "Lib Version Info"
-msgstr ""
+msgstr "ข้อมูลเลขรุ่น"
 
 #: common/dialog_about/dialog_about_base.cpp:58
 msgid "&Copy Version Info"
-msgstr ""
+msgstr "&ก้อปปี้ข้อมูลเลขรุ่น"
 
 #: common/dialog_about/dialog_about_base.cpp:59
 msgid "Copy KiCad version info to the clipboard"
-msgstr ""
+msgstr "ทำซ้ำเลขรุ่น KiCad เข้าคลิปบอร์ด"
 
 #: common/dialog_about/dialog_about_base.cpp:63
 msgid "&Report Bug"
-msgstr ""
+msgstr "&รายงานบัก"
 
 #: common/dialog_about/dialog_about_base.cpp:64 common/tool/actions.cpp:644
 msgid "Report a problem with KiCad"
-msgstr ""
+msgstr "รายงานปัญหากับ KiCad"
 
 #: common/dialog_about/dialog_about_base.cpp:89
 msgid "&OK"
-msgstr ""
+msgstr "&OK"
 
 #: common/dialogs/dialog_HTML_reporter_base.h:48
 msgid "Report"
-msgstr ""
+msgstr "รายงาน"
 
 #: common/dialogs/dialog_color_picker.cpp:94
 msgid "Clear Color"
-msgstr ""
+msgstr "ล้างสี"
 
 #: common/dialogs/dialog_color_picker_base.cpp:31
 msgid "RGB"
-msgstr ""
+msgstr "RGB"
 
 #: common/dialogs/dialog_color_picker_base.cpp:46
 msgid "Red:"
-msgstr ""
+msgstr "แดง:"
 
 #: common/dialogs/dialog_color_picker_base.cpp:50
 msgid "Green:"
-msgstr ""
+msgstr "เขียว:"
 
 #: common/dialogs/dialog_color_picker_base.cpp:54
 msgid "Blue:"
-msgstr ""
+msgstr "น้ำเงิน:"
 
 #: common/dialogs/dialog_color_picker_base.cpp:74
 msgid "HSV"
-msgstr ""
+msgstr "HSV"
 
 #: common/dialogs/dialog_color_picker_base.cpp:91
 msgid "Hue:"
-msgstr ""
+msgstr "สี:"
 
 #: common/dialogs/dialog_color_picker_base.cpp:95
 msgid "Saturation:"
-msgstr ""
+msgstr "ความอิ่มสี:"
 
 #: common/dialogs/dialog_color_picker_base.cpp:114
 #: eeschema/dialogs/dialog_spice_model_base.cpp:45
@@ -1712,54 +1730,56 @@ msgstr ""
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:94
 #: pcbnew/dialogs/dialog_text_properties.cpp:84
 msgid "Value:"
-msgstr ""
+msgstr "ค่าสี:"
 
 #: common/dialogs/dialog_color_picker_base.cpp:134
 #: common/dialogs/dialog_color_picker_base.h:96
 msgid "Color Picker"
-msgstr ""
+msgstr "ตัวเลือกสี"
 
 #: common/dialogs/dialog_color_picker_base.cpp:154
 msgid "Defined Colors"
-msgstr ""
+msgstr "กำหนดสี"
 
 #: common/dialogs/dialog_color_picker_base.cpp:163
 msgid "Opacity:"
-msgstr ""
+msgstr "ความทึบแสง:"
 
 #: common/dialogs/dialog_color_picker_base.cpp:185
 msgid "Preview (old/new):"
-msgstr ""
+msgstr "ภาพร่าง (เก่า/ใหม่):"
 
 #: common/dialogs/dialog_color_picker_base.cpp:210
 msgid "Reset to Default"
-msgstr ""
+msgstr "ล้างเป็นค่าตั้งต้น"
 
 #: common/dialogs/dialog_configure_paths.cpp:249
 #: common/dialogs/dialog_configure_paths.cpp:322
 msgid "Environment variable name cannot be empty."
-msgstr ""
+msgstr "ชื่อตัวแปร Environment ว่างไม่ได้"
 
 #: common/dialogs/dialog_configure_paths.cpp:257
 #: common/dialogs/dialog_configure_paths.cpp:324
 msgid "Environment variable path cannot be empty."
-msgstr ""
+msgstr "เส้นทางตัวแปร Environment ว่างไม่ได้"
 
 #: common/dialogs/dialog_configure_paths.cpp:287
 #: common/dialogs/dialog_configure_paths.cpp:329
 msgid "3D search path alias cannot be empty."
-msgstr ""
+msgstr "เส้นทางค้นหา 3D เสมือน ว่างไม่ได้"
 
 #: common/dialogs/dialog_configure_paths.cpp:295
 #: common/dialogs/dialog_configure_paths.cpp:331
 msgid "3D search path cannot be empty."
-msgstr ""
+msgstr "เส้นทางค้นหา 3D ว่างไม่ได้"
 
 #: common/dialogs/dialog_configure_paths.cpp:344
 msgid ""
 "This path was defined  externally to the running process and\n"
 "will only be temporarily overwritten."
 msgstr ""
+"เส้นทางนี้กำหนดจาก-กระบวนการภายนอกและ\n"
+"จะถูกเขียนทับชั่วคราว"
 
 #: common/dialogs/dialog_configure_paths.cpp:346
 msgid ""
@@ -1769,20 +1789,25 @@ msgid ""
 "this behavior, either rename any conflicting entries or remove\n"
 "the external environment variable(s) from your system."
 msgstr ""
+"เมื่อเรียกใช้งาน KiCad ครั้งถัดไป เส้นทางไดเร็คตอรีที่ได้กำหนดไว้\n"
+"จะยังคงอยู่ และเส้นทางไดเร็คตอรีกำหนดจากหน้าต่างกำหนดเส้นทาง\n"
+"จะถูกยกเลิก ถ้าคุณไม่ตั้งให้เกิดพฤติกรรมแบบนี้ ต้องเปลี่ยนชื่อ\n"
+"ที่ซ้ำซ้อน หรือล้างออกตัวแปร Environment\n"
+" จากระบบของคุณ"
 
 #: common/dialogs/dialog_configure_paths.cpp:361
 #, c-format
 msgid "The name %s is reserved, and cannot be used here"
-msgstr ""
+msgstr "ชื่อ %s ถูกสงวนไว้ ไม่สามารถใช้ที่นี่"
 
 #: common/dialogs/dialog_configure_paths.cpp:497
 msgid "File Browser..."
-msgstr ""
+msgstr "ไฟล์เบราเซอร์…"
 
 #: common/dialogs/dialog_configure_paths.cpp:500
 #: common/widgets/grid_text_button_helpers.cpp:401
 msgid "Select Path"
-msgstr ""
+msgstr "เลือกเส้นทางไดเร็คตอรี"
 
 #: common/dialogs/dialog_configure_paths.cpp:579
 msgid ""
@@ -1802,11 +1827,11 @@ msgstr ""
 
 #: common/dialogs/dialog_configure_paths.cpp:600
 msgid "Environment Variable Help"
-msgstr ""
+msgstr "ช่วยเหลือเรื่องตัวแปร Environment"
 
 #: common/dialogs/dialog_configure_paths_base.cpp:22
 msgid "Environment Variables"
-msgstr ""
+msgstr "ตัวแปร Environment"
 
 #: common/dialogs/dialog_configure_paths_base.cpp:39
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:80
@@ -1829,26 +1854,26 @@ msgstr ""
 #: pcbnew/dialogs/panel_pcbnew_action_plugins_base.cpp:38 pcbnew/zone.cpp:617
 #: pcbnew/zone.cpp:1412
 msgid "Name"
-msgstr ""
+msgstr "ชื่อ"
 
 #: common/dialogs/dialog_configure_paths_base.cpp:40
 #: common/dialogs/dialog_configure_paths_base.cpp:93
 #: pcbnew/dialogs/panel_pcbnew_action_plugins_base.cpp:41
 msgid "Path"
-msgstr ""
+msgstr "เส้นทาง"
 
 #: common/dialogs/dialog_configure_paths_base.cpp:74
 msgid "3D Search Paths"
-msgstr ""
+msgstr "เส้นทางค้นหา 3D"
 
 #: common/dialogs/dialog_configure_paths_base.cpp:92 common/eda_item.cpp:295
 msgid "Alias"
-msgstr ""
+msgstr "ชื่อแฝง"
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:39
 #, c-format
 msgid "Configure Global %s Library Table"
-msgstr ""
+msgstr "ปรับตั้ง %s ตารางไลบรารี"
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:42
 #, c-format
@@ -1863,41 +1888,41 @@ msgstr ""
 #: common/dialogs/dialog_global_lib_table_config.cpp:49
 #, c-format
 msgid "Copy default global %s library table (recommended)"
-msgstr ""
+msgstr "ก้อปปี้ %s ตารางไลบรารีส่วนกลาง (แนะนำ)"
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:51
 #, c-format
 msgid ""
 "Select this option if you not sure about configuring the global %s library "
 "table"
-msgstr ""
+msgstr "เลือกทางนี้ หากคุณไม่แน่ใจเกี่ยวกับการกำหนด %s ตารางไลบรารีส่วนกลาง"
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:55
 #, c-format
 msgid "Copy custom global %s library table"
-msgstr ""
+msgstr "ก้อปปี้ ผู้ใช้กำหนด %s ตารางไลบารีส่วนกลาง"
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:57
 #, c-format
 msgid ""
 "Select this option to copy a %s library table file other than the default"
-msgstr ""
+msgstr "เลือกทางเลือกนี้เพื่อก้อปปี้ไฟล์ตารางไลบรารี %s แทนชื่อตั้งต้น"
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:61
 #, c-format
 msgid "Create an empty global %s library table"
-msgstr ""
+msgstr "สร้างตารางไลบรารี %s"
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:63
 #, c-format
 msgid ""
 "Select this option to define %s libraries in project specific library tables"
-msgstr ""
+msgstr "เลือกทางเลือกนี้เพื่อกำหนดไลบรารี %s ในตารางไลบรารีเฉพาะโปรเจ็ค"
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:67
 #, c-format
 msgid "Select global %s library table file:"
-msgstr ""
+msgstr "เลือกไฟล์ตารางไลบรารี %s จากส่วนกลาง:"
 
 #: common/dialogs/dialog_global_lib_table_config_base.cpp:21
 #: common/dialogs/dialog_global_lib_table_config_base.cpp:28
@@ -1969,19 +1994,19 @@ msgstr ""
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1738
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1750
 msgid "dummy"
-msgstr ""
+msgstr "หุ่นจำลอง"
 
 #: common/dialogs/dialog_global_lib_table_config_base.cpp:51
 msgid "Select a file"
-msgstr ""
+msgstr "เลือกไฟล์"
 
 #: common/dialogs/dialog_global_lib_table_config_base.h:56
 msgid "Configure Global Library Table"
-msgstr ""
+msgstr "ปรับตั้งตารางไลบรารีส่วนรวม"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:26 common/tool/actions.cpp:461
 msgid "Grid Origin"
-msgstr ""
+msgstr "จุดกำเนิดกริด"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:63
 #: common/dialogs/dialog_grid_settings_base.cpp:78
@@ -2008,294 +2033,302 @@ msgstr ""
 #: pcbnew/dialogs/panel_edit_options_base.cpp:254
 #: pcbnew/dialogs/panel_edit_options_base.cpp:383
 msgid "a page"
-msgstr ""
+msgstr "หน้า"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:67
 msgid "Current Grid"
-msgstr ""
+msgstr "กริดปัจจุบัน"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:83
 msgid "User Defined Grid"
-msgstr ""
+msgstr "ผู้ใช้กำหนดกริด"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:91
 msgid "Size X:"
-msgstr ""
+msgstr "ขนาด X:"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:102
 msgid "Size Y:"
-msgstr ""
+msgstr "ขนาด Y:"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:123
 msgid "Fast Switching"
-msgstr ""
+msgstr "สับเปลี่ยนอย่างเร็ว"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:131
 msgid "Grid 1:"
-msgstr ""
+msgstr "กริด 1:"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:142
 #: common/dialogs/dialog_grid_settings_base.cpp:157
 msgid "(hotkey)"
-msgstr ""
+msgstr "(คีย์ย่อ)"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:146
 msgid "Grid 2:"
-msgstr ""
+msgstr "กริด 2:"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:173 common/tool/actions.cpp:467
 msgid "Reset Grid Origin"
-msgstr ""
+msgstr "ล้างจุดกำเนิดกริด"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:176
 msgid "Reset Grid Sizes"
-msgstr ""
+msgstr "ล้างขนาดกริด"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:178
 msgid "Resets the list of grid sizes to default values"
-msgstr ""
+msgstr "ล้างรายการขนาดของกริดไปเป็นค่าตั้งต้น"
 
 #: common/dialogs/dialog_grid_settings_base.h:80
 msgid "Grid Settings"
-msgstr ""
+msgstr "กำหนดค่ากริด"
 
 #: common/dialogs/dialog_hotkey_list.cpp:34
 msgid "Hotkey List"
-msgstr ""
+msgstr "รายการคีย์ย่อ"
 
 #: common/dialogs/dialog_image_editor.cpp:72
 msgid "Incorrect scale number"
-msgstr ""
+msgstr "เลขสเกลไม่ถูกต้อง"
 
 #: common/dialogs/dialog_image_editor.cpp:82
 #, c-format
 msgid ""
 "This scale results in an image which is too small (%.2f mm or %.1f mil)."
-msgstr ""
+msgstr "สเกลภาพมีขนาดเล็กเกินไป (%.2fมม. หรือ %.1fมิล)"
 
 #: common/dialogs/dialog_image_editor.cpp:93
 #, c-format
 msgid ""
 "This scale results in an image which is very large (%.1f mm or %.2f in). Are "
 "you sure?"
-msgstr ""
+msgstr "สเกลภาพใหญ่เกินไป (%.1fมม. หรือ %.2f) คุณแน่ใจ?"
 
 #: common/dialogs/dialog_image_editor_base.cpp:33
 msgid "Grey"
-msgstr ""
+msgstr "สีเทา"
 
 #: common/dialogs/dialog_image_editor_base.cpp:39
 msgid "Image Scale:"
-msgstr ""
+msgstr "สเกลภาพ:"
 
 #: common/dialogs/dialog_image_editor_base.h:53
 msgid "Image Editor"
-msgstr ""
+msgstr "เครื่องมือแก้ไขภาพ"
 
 #: common/dialogs/dialog_locked_items_query.cpp:34
 msgid "Skip Locked Items"
-msgstr ""
+msgstr "ข้ามสิ่งที่ถูกล็อก"
 
 #: common/dialogs/dialog_locked_items_query.cpp:35
 msgid ""
 "Remove locked items from the selection and only apply the operation to the "
 "unlocked items (if any)."
 msgstr ""
+"นำสิ่งที่ถูกล็อกออกจากการเลือก และนำกระบวนการไปใช้กับสิ่งที่ไม่ล็อกเท่านั้น "
+"(ถ้าทำได้)"
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:30
 #, c-format
 msgid "The selection contains %d locked items."
-msgstr ""
+msgstr "การเลือกมีสิ่งที่ล็อค %d ชิ้น"
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:34
 msgid "These items will be skipped unless you override the locks."
-msgstr ""
+msgstr "สิ่งเหล่านี้จะถูกข้ามเว้นแต่คุณละเลยการล็อก"
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:44
 msgid "Remember decision for this session."
-msgstr ""
+msgstr "จำการตัดสินใจสำหรับช่วงเวลานี้"
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:45
 msgid ""
 "Remember the option selected for the remainder of this session.\n"
 "This dialog will not be shown again until KiCad is restarted."
 msgstr ""
+"จำการเลือกไว้สำหรับช่วงเวลานี้\n"
+"หน้าต่างนี้จะไม่ปรากฏอีก จนกว่าจะเริ่ม KiCad ใหม่"
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:55
 msgid "Override Locks"
-msgstr ""
+msgstr "ละเลยการล็อก"
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:56
 msgid ""
 "Override locks and apply the operation on all the items selected.\n"
 "Any locked items will remain locked after the operation is complete."
 msgstr ""
+"ละเลยการล็อกและนำกระบวนการไปใช้กับสิ่งที่เลือกทั้งหมด\n"
+"สิ่งที่ล็อกไว้ ยังคงถูกล็อก ภายหลังกระบวนการเสร็จสิ้น"
 
 #: common/dialogs/dialog_locked_items_query_base.h:58
 msgid "Locked Items"
-msgstr ""
+msgstr "สิ่งที่ถูกล็อก"
 
 #: common/dialogs/dialog_migrate_settings.cpp:31
 msgid "Quit KiCad"
-msgstr ""
+msgstr "ออกจาก KiCad"
 
 #: common/dialogs/dialog_migrate_settings.cpp:51
 #: common/dialogs/dialog_migrate_settings_base.cpp:21
 #, c-format
 msgid "Welcome to KiCad %s!"
-msgstr ""
+msgstr "ยินดีต้อนรับสู่ KiCad %s!"
 
 #: common/dialogs/dialog_migrate_settings.cpp:61
 msgid "Import settings from a previous version (none found)"
-msgstr ""
+msgstr "นำเข้าการตั้งค่าจากรุ่นเก่า (ไม่พบอะไร)"
 
 #: common/dialogs/dialog_migrate_settings.cpp:123
 msgid "Select Settings Path"
-msgstr ""
+msgstr "เลือกการตั้งค่าเส้นทาง"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:30
 msgid "How would you like to configure KiCad?"
-msgstr ""
+msgstr "คุณต้องการกำหนด KiCad อย่างไร?"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:34
 msgid "Import settings from a previous version at:"
-msgstr ""
+msgstr "นำเข้าการตั้งค่าจากรุ่นเก่าที่:"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:49
 msgid "Choose a different path"
-msgstr ""
+msgstr "เลือกเส้นทางที่แตกต่าง"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:56
 msgid "The selected path does not contain valid KiCad settings!"
-msgstr ""
+msgstr "เส้นทางที่เลือกไม่ปรากฏการตั้งค่า KiCad ที่ถูกต้อง!"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:63
 msgid "Import library configuration from previous version"
-msgstr ""
+msgstr "นำเข้าการปรับตั้งไลบรารีจากรุ่นก่อน"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:65
 msgid ""
 "When checked, the symbol and footprint library tables from the previous "
 "version will be imported into this version"
 msgstr ""
+"เมื่อเลือก ตารางไลบรารีสัญลักษณ์และฟุ้ทพรินท์ จากรุ่นก่อนหน้า "
+"จะนำเข้ามาเป็นรุ่นนี้"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:69
 msgid "Start with default settings"
-msgstr ""
+msgstr "เริ่มด้วยค่าตั้งต้น"
 
 #: common/dialogs/dialog_migrate_settings_base.h:67
 msgid "Configure KiCad Settings Path"
-msgstr ""
+msgstr "ตั้งค่าเส้นทางกำหนดค่า KiCad"
 
 #: common/dialogs/dialog_page_settings.cpp:54
 msgid "A5 148x210mm"
-msgstr ""
+msgstr "A5 148x210มม."
 
 #: common/dialogs/dialog_page_settings.cpp:55
 msgid "A4 210x297mm"
-msgstr ""
+msgstr "A4 210x297มม."
 
 #: common/dialogs/dialog_page_settings.cpp:56
 msgid "A3 297x420mm"
-msgstr ""
+msgstr "A3 297x420มม."
 
 #: common/dialogs/dialog_page_settings.cpp:57
 msgid "A2 420x594mm"
-msgstr ""
+msgstr "A2 420x594มม."
 
 #: common/dialogs/dialog_page_settings.cpp:58
 msgid "A1 594x841mm"
-msgstr ""
+msgstr "A1 594x841มม."
 
 #: common/dialogs/dialog_page_settings.cpp:59
 msgid "A0 841x1189mm"
-msgstr ""
+msgstr "A0 841x1189มม."
 
 #: common/dialogs/dialog_page_settings.cpp:60
 msgid "A 8.5x11in"
-msgstr ""
+msgstr "A 8.5x11นิ้ว"
 
 #: common/dialogs/dialog_page_settings.cpp:61
 msgid "B 11x17in"
-msgstr ""
+msgstr "B 11x17นิ้ว"
 
 #: common/dialogs/dialog_page_settings.cpp:62
 msgid "C 17x22in"
-msgstr ""
+msgstr "C 17x22นิ้ว"
 
 #: common/dialogs/dialog_page_settings.cpp:63
 msgid "D 22x34in"
-msgstr ""
+msgstr "D 22x34นิ้ว"
 
 #: common/dialogs/dialog_page_settings.cpp:64
 msgid "E 34x44in"
-msgstr ""
+msgstr "E 34x44นิ้ว"
 
 #: common/dialogs/dialog_page_settings.cpp:65
 msgid "USLetter 8.5x11in"
-msgstr ""
+msgstr "USLetter 8.5x11นิ้ว"
 
 #: common/dialogs/dialog_page_settings.cpp:66
 msgid "USLegal 8.5x14in"
-msgstr ""
+msgstr "USLegal 8.5x14นิ้ว"
 
 #: common/dialogs/dialog_page_settings.cpp:67
 msgid "USLedger 11x17in"
-msgstr ""
+msgstr "USLedger 11x17นิ้ว"
 
 #: common/dialogs/dialog_page_settings.cpp:68
 msgid "User (Custom)"
-msgstr ""
+msgstr "ผู้ใช้ (กำหนดเอง)"
 
 #: common/dialogs/dialog_page_settings.cpp:98
 msgid "Preview Settings"
-msgstr ""
+msgstr "ภาพตัวอย่างการตั้งค่า"
 
 #: common/dialogs/dialog_page_settings.cpp:99
 msgid "Preview Paper"
-msgstr ""
+msgstr "ภาพตัวอย่างกระดาษ"
 
 #: common/dialogs/dialog_page_settings.cpp:100
 msgid "Preview Title Block Data"
-msgstr ""
+msgstr "ภาพตัวอย่างข้อมูลไตเติ้ล"
 
 #: common/dialogs/dialog_page_settings.cpp:104
 #: common/dialogs/dialog_page_settings_base.h:141
 msgid "Page Settings"
-msgstr ""
+msgstr "ตั้งค่ากระดาษ"
 
 #: common/dialogs/dialog_page_settings.cpp:105
 #: common/dialogs/dialog_page_settings_base.cpp:25
 msgid "Paper"
-msgstr ""
+msgstr "กระดาษ"
 
 #: common/dialogs/dialog_page_settings.cpp:106
 msgid "Title Block"
-msgstr ""
+msgstr "ไตเติ้ล"
 
 #: common/dialogs/dialog_page_settings.cpp:251
 #: common/dialogs/dialog_page_settings.cpp:698
 #: common/dialogs/dialog_page_settings_base.cpp:49
 msgid "Portrait"
-msgstr ""
+msgstr "แนวตั้ง"
 
 #: common/dialogs/dialog_page_settings.cpp:466
 #, c-format
 msgid "Drawing sheet file '%s' not found."
-msgstr ""
+msgstr "ไฟล์กระดาษเขียนแบบ '%s' ไม่พบ"
 
 #: common/dialogs/dialog_page_settings.cpp:537
 msgid "the translation for paper size must preserve original spellings"
-msgstr ""
+msgstr "การแปลขนาดกระดาษต้องรักษาคำสะกดดั้งเดิม"
 
 #: common/dialogs/dialog_page_settings.cpp:700
 #: common/dialogs/dialog_page_settings_base.cpp:49
 msgid "Landscape"
-msgstr ""
+msgstr "แนวนอน"
 
 #: common/dialogs/dialog_page_settings.cpp:781
 msgid "Select Drawing Sheet File"
-msgstr ""
+msgstr "เลือกไฟล์กระดาษเขียนแบบ"
 
 #: common/dialogs/dialog_page_settings.cpp:797
 #, c-format
@@ -2309,7 +2342,7 @@ msgstr ""
 
 #: common/dialogs/dialog_page_settings_base.cpp:36
 msgid "dummy text"
-msgstr ""
+msgstr "ข้อความหุ่นจำลอง"
 
 #: common/dialogs/dialog_page_settings_base.cpp:45
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:189
@@ -2320,22 +2353,22 @@ msgstr ""
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:129
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:163
 msgid "Orientation:"
-msgstr ""
+msgstr "การหันทิศทาง:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:55
 msgid "Custom paper size:"
-msgstr ""
+msgstr "ผู้ใช้กำหนดขนาดกระดาษ:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:67
 #: pcbnew/dialogs/dialog_board_statistics.cpp:100
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:246
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:127
 msgid "Height:"
-msgstr ""
+msgstr "ความสูง:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:80
 msgid "Custom paper height."
-msgstr ""
+msgstr "ผู้ใช้กำหนดความสูงกระดาษ"
 
 #: common/dialogs/dialog_page_settings_base.cpp:84
 #: common/dialogs/dialog_page_settings_base.cpp:105
@@ -2405,7 +2438,7 @@ msgstr ""
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:142
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:158
 msgid "unit"
-msgstr ""
+msgstr "หน่วย"
 
 #: common/dialogs/dialog_page_settings_base.cpp:88
 #: eeschema/dialogs/dialog_edit_line_style_base.cpp:31
@@ -2414,11 +2447,11 @@ msgstr ""
 #: pcbnew/dialogs/dialog_pns_diff_pair_dimensions_base.cpp:25
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:108
 msgid "Width:"
-msgstr ""
+msgstr "ความกว้าง:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:101
 msgid "Custom paper width."
-msgstr ""
+msgstr "ผู้ใช้กำหนดความกว้างกระดาษ"
 
 #: common/dialogs/dialog_page_settings_base.cpp:112
 #: common/dialogs/dialog_page_settings_base.cpp:185
@@ -2435,86 +2468,86 @@ msgstr ""
 #: common/dialogs/dialog_page_settings_base.cpp:317
 #: common/dialogs/dialog_page_settings_base.cpp:329
 msgid "Export to other sheets"
-msgstr ""
+msgstr "ส่งออกไปหน้ากระดาษอื่น"
 
 #: common/dialogs/dialog_page_settings_base.cpp:134
 msgid "Title Block Parameters"
-msgstr ""
+msgstr "พารามิเตอร์ไตเติ้ล"
 
 #: common/dialogs/dialog_page_settings_base.cpp:144
 #, c-format
 msgid "Number of sheets: %d"
-msgstr ""
+msgstr "จำนวนแผ่น:%d"
 
 #: common/dialogs/dialog_page_settings_base.cpp:151
 #, c-format
 msgid "Sheet number: %d"
-msgstr ""
+msgstr "หมายเลขแผ่น:%d"
 
 #: common/dialogs/dialog_page_settings_base.cpp:164
 msgid "Issue Date:"
-msgstr ""
+msgstr "วันที่ออก:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:176
 msgid "<<<"
-msgstr ""
+msgstr "<<<"
 
 #: common/dialogs/dialog_page_settings_base.cpp:188
 msgid "Revision:"
-msgstr ""
+msgstr "รุ่นแก้ไขที่:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:200
 #: eeschema/dialogs/dialog_netlist.cpp:390
 msgid "Title:"
-msgstr ""
+msgstr "ไตเติ้ล:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:212
 msgid "Company:"
-msgstr ""
+msgstr "บริษัท:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:224
 msgid "Comment1:"
-msgstr ""
+msgstr "คอมเมนต์ 1:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:236
 msgid "Comment2:"
-msgstr ""
+msgstr "คอมเมนต์ 2:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:248
 msgid "Comment3:"
-msgstr ""
+msgstr "คอมเมนต์ 3:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:260
 msgid "Comment4:"
-msgstr ""
+msgstr "คอมเมนต์ 4:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:272
 msgid "Comment5:"
-msgstr ""
+msgstr "คอมเมนต์ 5:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:284
 msgid "Comment6:"
-msgstr ""
+msgstr "คอมเมนต์ 6:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:296
 msgid "Comment7:"
-msgstr ""
+msgstr "คอมเมนต์ 7:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:308
 msgid "Comment8:"
-msgstr ""
+msgstr "คอมเมนต์ 8:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:320
 msgid "Comment9:"
-msgstr ""
+msgstr "คอมเมนต์ 9:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:338
 msgid "Drawing sheet file"
-msgstr ""
+msgstr "ไฟล์กระดาษเขียนแบบ"
 
 #: common/dialogs/dialog_page_settings_base.cpp:348
 msgid "Browse..."
-msgstr ""
+msgstr "บราวซ์…"
 
 #: common/dialogs/dialog_paste_special.cpp:37
 msgid ""
@@ -2559,7 +2592,7 @@ msgstr ""
 #: common/dialogs/dialog_print_generic.cpp:48
 #: common/dialogs/dialog_print_generic.cpp:201
 msgid "Print Preview"
-msgstr ""
+msgstr "ภาพร่างก่อนพิมพ์"
 
 #: common/dialogs/dialog_print_generic.cpp:49 common/hotkey_store.cpp:63
 #: common/tool/action_menu.cpp:211 eeschema/dialogs/dialog_annotate.cpp:93
@@ -2585,11 +2618,11 @@ msgstr ""
 #: pcbnew/dialogs/dialog_plot.cpp:70 pcbnew/dialogs/dialog_update_pcb.cpp:66
 #: pcbnew/exporters/gen_footprints_placefile.cpp:68
 msgid "Close"
-msgstr ""
+msgstr "ปิด"
 
 #: common/dialogs/dialog_print_generic.cpp:110
 msgid "Warning: Bad scale number"
-msgstr ""
+msgstr "ระวัง:ตัวเลขสเกลไม่ถูกต้อง"
 
 #: common/dialogs/dialog_print_generic.cpp:119
 #, c-format
@@ -2597,6 +2630,8 @@ msgid ""
 "Warning: Scale option set to a very large value.\n"
 " Clamped to %f"
 msgstr ""
+"ระวัง: เลือกตัวเลขสเกลใหญ่มาก\n"
+"จำกัดที่ %f"
 
 #: common/dialogs/dialog_print_generic.cpp:127
 #, c-format
@@ -2604,24 +2639,26 @@ msgid ""
 "Warning: Scale option set to a very small value.\n"
 " Clamped to %f"
 msgstr ""
+"ระวัง: เลือกตัวเลขสเกลเล็กมาก\n"
+"จำกัดที่ %f"
 
 #: common/dialogs/dialog_print_generic.cpp:196
 #: common/dialogs/dialog_print_generic.cpp:243
 msgid "Nothing to print"
-msgstr ""
+msgstr "ไม่มีอะไรพิมพ์"
 
 #: common/dialogs/dialog_print_generic.cpp:234
 #: eeschema/dialogs/dialog_print_using_printer.cpp:310
 msgid "Previous print job not yet complete."
-msgstr ""
+msgstr "งานพิมพ์ครั้งก่อนยังไม่เสร็จ"
 
 #: common/dialogs/dialog_print_generic.cpp:259
 msgid "There was a problem printing."
-msgstr ""
+msgstr "มีปัญหาการพิมพ์"
 
 #: common/dialogs/dialog_print_generic.cpp:307
 msgid "An error occurred initializing the printer information."
-msgstr ""
+msgstr "มีความผิดพลาดระหว่างเริ่มต้นสั่งเครื่องพิมพ์"
 
 #: common/dialogs/dialog_print_generic_base.cpp:24
 #: eeschema/dialogs/dialog_annotate_base.cpp:86
@@ -2635,12 +2672,12 @@ msgstr ""
 #: pcbnew/dialogs/dialog_push_pad_properties_base.cpp:23
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:25
 msgid "Options"
-msgstr ""
+msgstr "ทางเลือก"
 
 #: common/dialogs/dialog_print_generic_base.cpp:31
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:72
 msgid "Output mode:"
-msgstr ""
+msgstr "รูปแบบทางออก:"
 
 #: common/dialogs/dialog_print_generic_base.cpp:35
 #: common/dialogs/panel_setup_netclasses_base.cpp:53
@@ -2649,33 +2686,33 @@ msgstr ""
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:80
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:275
 msgid "Color"
-msgstr ""
+msgstr "สี"
 
 #: common/dialogs/dialog_print_generic_base.cpp:35
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:80
 msgid "Black and white"
-msgstr ""
+msgstr "ขาวดำ"
 
 #: common/dialogs/dialog_print_generic_base.cpp:41
 msgid "Print border and title block"
-msgstr ""
+msgstr "พิมพ์ขอบกระดาษและไตเติ้ล"
 
 #: common/dialogs/dialog_print_generic_base.cpp:43
 msgid "Print Frame references."
-msgstr ""
+msgstr "พิมพ์กรอบอ้างอิง"
 
 #: common/dialogs/dialog_print_generic_base.cpp:58
 #: pcbnew/dialogs/dialog_plot_base.cpp:127
 msgid "1:1"
-msgstr ""
+msgstr "1:1"
 
 #: common/dialogs/dialog_print_generic_base.cpp:64
 msgid "Fit to page"
-msgstr ""
+msgstr "ขนาดเท่าหน้ากระดาษ"
 
 #: common/dialogs/dialog_print_generic_base.cpp:73
 msgid "Custom:"
-msgstr ""
+msgstr "กำหนดเอง:"
 
 #: common/dialogs/dialog_print_generic_base.cpp:77
 msgid "Set X scale adjust for exact scale plotting"
@@ -2684,74 +2721,74 @@ msgstr ""
 #: common/dialogs/dialog_print_generic_base.cpp:99
 #: eeschema/dialogs/dialog_print_using_printer_base.cpp:62
 msgid "Page Setup..."
-msgstr ""
+msgstr "ตั้งค่าหน้ากระดาษ…"
 
 #: common/dialogs/dialog_text_entry_base.cpp:22
 #: common/dialogs/dialog_unit_entry_base.cpp:22
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1545
 msgid "MyLabel"
-msgstr ""
+msgstr "ป้ายของฉัน"
 
 #: common/dialogs/eda_list_dialog.cpp:48 common/widgets/lib_tree.cpp:115
 #: pcbnew/footprint_viewer_frame.cpp:142 pcbnew/footprint_viewer_frame.cpp:157
 msgid "Filter"
-msgstr ""
+msgstr "กรอง"
 
 #: common/dialogs/eda_list_dialog_base.cpp:22
 msgid "Items:"
-msgstr ""
+msgstr "สิ่งของ:"
 
 #: common/dialogs/eda_view_switcher_base.cpp:19
 #: common/dialogs/eda_view_switcher_base.h:40
 msgid "View Preset Switcher"
-msgstr ""
+msgstr "ผู้สลับมุมมอง"
 
 #: common/dialogs/panel_color_settings.cpp:51
 msgid "Reveal Themes in Finder"
-msgstr ""
+msgstr "เปิดเผยธีมในไฟนเดอร์"
 
 #: common/dialogs/panel_color_settings.cpp:131
 msgid "New theme name:"
-msgstr ""
+msgstr "ชื่อธีมใหม่:"
 
 #: common/dialogs/panel_color_settings.cpp:131
 msgid "Add Color Theme"
-msgstr ""
+msgstr "เพิ่มสีธีม"
 
 #: common/dialogs/panel_color_settings.cpp:143
 msgid "Theme already exists!"
-msgstr ""
+msgstr "ธีมมีอยูแล้ว!"
 
 #: common/dialogs/panel_color_settings.cpp:204
 #: common/dialogs/panel_color_settings.cpp:226
 msgid "New Theme..."
-msgstr ""
+msgstr "ธีมใหม่…"
 
 #: common/dialogs/panel_color_settings.cpp:214
 msgid "(read-only)"
-msgstr ""
+msgstr "(อ่านอย่างเดียว)"
 
 #: common/dialogs/panel_color_settings.cpp:283
 msgid "Copy color"
-msgstr ""
+msgstr "ก้อปปี้สี"
 
 #: common/dialogs/panel_color_settings.cpp:286
 msgid "Paste color"
-msgstr ""
+msgstr "วางสี"
 
 #: common/dialogs/panel_color_settings.cpp:289
 msgid "Revert to saved color"
-msgstr ""
+msgstr "ย้อนกลับเป็นสีบันทึกไว้"
 
 #: common/dialogs/panel_color_settings_base.cpp:19
 #: eeschema/dialogs/panel_sym_color_settings_base.cpp:29
 #: pagelayout_editor/dialogs/panel_pl_editor_color_settings_base.cpp:21
 msgid "Theme:"
-msgstr ""
+msgstr "ธีม:"
 
 #: common/dialogs/panel_color_settings_base.cpp:33
 msgid "Override individual item colors"
-msgstr ""
+msgstr "ทับค่าสีในแต่ละสิ่ง"
 
 #: common/dialogs/panel_color_settings_base.cpp:34
 msgid ""
@@ -2761,11 +2798,11 @@ msgstr ""
 
 #: common/dialogs/panel_color_settings_base.cpp:41
 msgid "Open Theme Folder"
-msgstr ""
+msgstr "เปิดโฟลเดอร์ธีม"
 
 #: common/dialogs/panel_color_settings_base.cpp:42
 msgid "Open the folder containing color themes"
-msgstr ""
+msgstr "เปิดโฟลเดอร์บรรจุธีมสี"
 
 #: common/dialogs/panel_common_settings.cpp:54
 msgid ""
@@ -2789,15 +2826,15 @@ msgstr ""
 
 #: common/dialogs/panel_common_settings.cpp:299
 msgid "Executable files ("
-msgstr ""
+msgstr "ไฟล์ทำงานได้ ("
 
 #: common/dialogs/panel_common_settings.cpp:304
 msgid "Select Preferred PDF Viewer"
-msgstr ""
+msgstr "เลือกโปรแกรมดู PDF ที่ชอบ"
 
 #: common/dialogs/panel_common_settings_base.cpp:26
 msgid "&Auto save:"
-msgstr ""
+msgstr "&บันทึกอัตโนมัติ:"
 
 #: common/dialogs/panel_common_settings_base.cpp:34
 msgid ""
@@ -2808,73 +2845,75 @@ msgstr ""
 #: common/dialogs/panel_common_settings_base.cpp:39
 #: common/dialogs/panel_common_settings_base.cpp:280
 msgid "minutes"
-msgstr ""
+msgstr "นาที"
 
 #: common/dialogs/panel_common_settings_base.cpp:46
 msgid "File history size:"
-msgstr ""
+msgstr "จำนวนไฟล์ในประวัติ:"
 
 #: common/dialogs/panel_common_settings_base.cpp:53
 msgid "3D cache file duration:"
-msgstr ""
+msgstr "ระยะเวลาไฟล์แคช 3D:"
 
 #: common/dialogs/panel_common_settings_base.cpp:61
 msgid ""
 "3D cache files older than this are deleted.\n"
 "If set to 0, cache clearing is disabled"
 msgstr ""
+"ไฟล์แคช 3D ที่เก่ากว่าจะถูกลบ\n"
+"ถ้ากำหนดเป็น 0 จะไม่มีการลบไฟล์แคช"
 
 #: common/dialogs/panel_common_settings_base.cpp:65
 msgid "Days"
-msgstr ""
+msgstr "วัน"
 
 #: common/dialogs/panel_common_settings_base.cpp:73
 msgid "Accelerated graphics:"
-msgstr ""
+msgstr "เร่งกราฟิก:"
 
 #: common/dialogs/panel_common_settings_base.cpp:77
 #: common/dialogs/panel_common_settings_base.cpp:87
 msgid "No Antialiasing"
-msgstr ""
+msgstr "ไม่ใช้ ลบรอยหยัก"
 
 #: common/dialogs/panel_common_settings_base.cpp:77
 #: common/dialogs/panel_common_settings_base.cpp:87
 msgid "Fast Antialiasing"
-msgstr ""
+msgstr "ลบรอยหยักแบบเร็ว"
 
 #: common/dialogs/panel_common_settings_base.cpp:77
 #: common/dialogs/panel_common_settings_base.cpp:87
 msgid "High Quality Antialiasing"
-msgstr ""
+msgstr "ลบรอยหยักคุณภาพสูง"
 
 #: common/dialogs/panel_common_settings_base.cpp:83
 msgid "Fallback graphics:"
-msgstr ""
+msgstr "ย้อนกลับกราฟิก:"
 
 #: common/dialogs/panel_common_settings_base.cpp:99
 msgid "Helper Applications"
-msgstr ""
+msgstr "โปรแกรมผู้ช่วยเหลือ"
 
 #: common/dialogs/panel_common_settings_base.cpp:105
 msgid "Text editor:"
-msgstr ""
+msgstr "เครื่องมือแก้ไขข้อความ:"
 
 #: common/dialogs/panel_common_settings_base.cpp:126
 msgid "System default PDF viewer"
-msgstr ""
+msgstr "โปรแกรมดู PDF กำหนดจากระบบ"
 
 #: common/dialogs/panel_common_settings_base.cpp:135
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:175
 msgid "Other:"
-msgstr ""
+msgstr "อื่นๆ:"
 
 #: common/dialogs/panel_common_settings_base.cpp:153
 msgid "User Interface"
-msgstr ""
+msgstr "เชื่อมต่อผู้ใช้"
 
 #: common/dialogs/panel_common_settings_base.cpp:160
 msgid "Icon scale:"
-msgstr ""
+msgstr "สเกลไอคอน:"
 
 #: common/dialogs/panel_common_settings_base.cpp:169
 #: common/dialogs/panel_common_settings_base.cpp:180
@@ -2883,261 +2922,270 @@ msgstr ""
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:120
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:85
 msgid "Automatic"
-msgstr ""
+msgstr "อัตโนมัติ"
 
 #: common/dialogs/panel_common_settings_base.cpp:172
 msgid "Canvas scale:"
-msgstr ""
+msgstr "สเกลแคนวาส:"
 
 #: common/dialogs/panel_common_settings_base.cpp:183
 msgid "Show icons in menus"
-msgstr ""
+msgstr "แสดงไอคอนในเมนู"
 
 #: common/dialogs/panel_common_settings_base.cpp:186
 msgid "Icon theme:"
-msgstr ""
+msgstr "ธีมไอคอน:"
 
 #: common/dialogs/panel_common_settings_base.cpp:190
 msgid "Light"
-msgstr ""
+msgstr "แสง"
 
 #: common/dialogs/panel_common_settings_base.cpp:191
 msgid "Use icons designed for light window backgrounds"
-msgstr ""
+msgstr "ใช้ไอคอนออกแบบสำหรับพื้นหลังชนิดบางเบา"
 
 #: common/dialogs/panel_common_settings_base.cpp:195
 #: gerbview/gerber_draw_item.cpp:704
 msgid "Dark"
-msgstr ""
+msgstr "มืด"
 
 #: common/dialogs/panel_common_settings_base.cpp:196
 msgid "Use icons designed for dark window backgrounds"
-msgstr ""
+msgstr "ใช้ไอคอนออกแบบสำหรับพื้นหลังแบบมืด"
 
 #: common/dialogs/panel_common_settings_base.cpp:202
 msgid ""
 "Automatically choose light or dark icons based on the system color theme"
-msgstr ""
+msgstr "เลือกไอคอนแบบเบาหรือแบบมืดอัตโนมัติ ตามสีธีมระบบ"
 
 #: common/dialogs/panel_common_settings_base.cpp:222
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:21
 msgid "Editing"
-msgstr ""
+msgstr "กำลังแก้ไข"
 
 #: common/dialogs/panel_common_settings_base.cpp:224
 msgid "Warp mouse to origin of moved object"
-msgstr ""
+msgstr "เลื่อนเมาส์ไปจุดกำเนิดของวัตถุที่ถูกเลื่อน"
 
 #: common/dialogs/panel_common_settings_base.cpp:227
 msgid "First hotkey selects tool"
-msgstr ""
+msgstr "คีย์ด่วนแรกเลือกเครื่องมือ"
 
 #: common/dialogs/panel_common_settings_base.cpp:228
 msgid ""
 "If not checked, hotkeys will immediately perform an action even if the "
 "relevant tool was not previously selected."
 msgstr ""
+"ถ้าไม่เลือก คีย์ด่วนจะทำงานทันที ถึงแม้ว่าคำสั่งที่เกี่ยวข้อง "
+"ไม่ถูกเลือกมาก่อน"
 
 #: common/dialogs/panel_common_settings_base.cpp:236
 msgid "Project Backup"
-msgstr ""
+msgstr "แบ็คอัพโครงการ"
 
 #: common/dialogs/panel_common_settings_base.cpp:243
 msgid "Automatically backup projects"
-msgstr ""
+msgstr "แบ็คอัพโครงการอัตโนมัติ"
 
 #: common/dialogs/panel_common_settings_base.cpp:244
 msgid ""
 "Automatically create backup archives of the current project when saving files"
-msgstr ""
+msgstr "สร้างไฟล์แบ็คอัพโครงการอัตโนมัติ เมื่อสั่งบันทึกไฟล์"
 
 #: common/dialogs/panel_common_settings_base.cpp:248
 msgid "Create backups when auto save occurs"
-msgstr ""
+msgstr "สร้างแบ็คอัพเมื่อเริ่มบันทึกอัตโนมัติ"
 
 #: common/dialogs/panel_common_settings_base.cpp:249
 msgid ""
 "Create backups when the auto save feature is enabled.  If not checked, "
 "backups will only be created when you manually save a file."
 msgstr ""
+"สร้างแบ็คอัพเมื่อเปิดใช้บันทึกอัตโนมัติ\tถ้าไม่เลือก "
+"แบ็คอัพจะสร้างเมื่อคุณสั่งบันทึกด้วยตนเอง"
 
 #: common/dialogs/panel_common_settings_base.cpp:253
 msgid "Maximum backups to keep:"
-msgstr ""
+msgstr "จำนวนแบ็คอัพสูงสุดที่ต้องการเก็บ:"
 
 #: common/dialogs/panel_common_settings_base.cpp:255
 msgid "How many backup files total to keep (set to 0 for no limit)"
-msgstr ""
+msgstr "ต้องการเก็บไฟล์แบ็คอัพจำนวนเท่าใด (ตั้งเป็น 0 ไม่จำกัด)"
 
 #: common/dialogs/panel_common_settings_base.cpp:262
 msgid "Maximum backups per day:"
-msgstr ""
+msgstr "จำนวนแบ็คอัพต่อวัน:"
 
 #: common/dialogs/panel_common_settings_base.cpp:264
 msgid "How many backup files to keep each day (set to 0 for no limit)"
-msgstr ""
+msgstr "ต้องการเก็บจำนวนไฟล์แบ็คอัพต่อวันเท่าใด (ตั้งเป็น 0 ไม่จำกัด)"
 
 #: common/dialogs/panel_common_settings_base.cpp:271
 msgid "Minimum time between backups:"
-msgstr ""
+msgstr "ระยะเวลาอย่างน้อย ระหว่างแบ็คอัพ:"
 
 #: common/dialogs/panel_common_settings_base.cpp:273
 msgid ""
 "Number of minutes since the last backup before another will be created the "
 "next time you save (set to 0 for no minimum)"
 msgstr ""
+"จำนวนนาที จากแบ็คอัพครั้งสุดท้าย ก่อนสร้างใหม่เมื่อบันทึกครั้งถัดไป (ตั้งเป็"
+"น 0 ไม่มีค่าอย่างต่ำ)"
 
 #: common/dialogs/panel_common_settings_base.cpp:284
 msgid "Maximum total backup size:"
-msgstr ""
+msgstr "ขนาดแบ็คอัพรวมสูงสุด:"
 
 #: common/dialogs/panel_common_settings_base.cpp:286
 msgid ""
 "If the total size of backup files grows above this limit, old backups will "
 "be deleted (set to 0 for no limit)"
 msgstr ""
+"ถ้าจำนวนไฟล์แบ็คอัพรวมเกินจำนวนนี้ ไฟล์เก่าจะถูกลบ (ตั้งเป็น 0 ไม่จำกัด)"
 
 #: common/dialogs/panel_common_settings_base.cpp:293
 msgid "MB"
-msgstr ""
+msgstr "MB"
 
 #: common/dialogs/panel_common_settings_base.cpp:304
 msgid "Session"
-msgstr ""
+msgstr "วาระ"
 
 #: common/dialogs/panel_common_settings_base.cpp:306
 msgid "Remember open files for next project launch"
-msgstr ""
+msgstr "จำไฟล์เปิดไว้ สำหรับเรียกโปรเจ็คครั้งหน้า"
 
 #: common/dialogs/panel_common_settings_base.cpp:308
 msgid ""
 "If checked, launching a project will also launch tools such as eeschema and "
 "pcbnew with previously open files"
 msgstr ""
+"ถ้าเลือก เมื่อเปิดโปรเจ็ค จะเปิดเครื่องมือเช่น eeschema และ pcbnew "
+"พร้อมไฟล์เก่าที่ค้างไว้"
 
 #: common/dialogs/panel_hotkeys_editor.cpp:77
 msgid "Type filter text"
-msgstr ""
+msgstr "พิมพ์ข้อความกรอง"
 
 #: common/dialogs/panel_hotkeys_editor.cpp:119
 msgid "Undo All Changes"
-msgstr ""
+msgstr "ย้อนกลับทั้งหมด"
 
 #: common/dialogs/panel_hotkeys_editor.cpp:120
 msgid "Undo all changes made so far in this dialog"
-msgstr ""
+msgstr "ย้อนกลับทั้งหมดในไดอะล็อกนี้"
 
 #: common/dialogs/panel_hotkeys_editor.cpp:128
 msgid "Import Hotkeys..."
-msgstr ""
+msgstr "นำเข้าคีย์ด่วน…"
 
 #: common/dialogs/panel_hotkeys_editor.cpp:129
 msgid ""
 "Import hotkey definitions from an external file, replacing the current values"
-msgstr ""
+msgstr "นำเข้าการกำหนดคีย์ด่วนจากไฟล์ภายนอก แทนค่าปัจจุบัน"
 
 #: common/dialogs/panel_hotkeys_editor.cpp:193
 msgid "Import Hotkeys File:"
-msgstr ""
+msgstr "นำเข้าไฟล์คีย์ด่วน:"
 
 #: common/dialogs/panel_hotkeys_editor.cpp:240
 msgid "| Action | Default Hotkey | Description"
-msgstr ""
+msgstr "| พฤติกรรม | คีย์ด่วน | อธิบาย"
 
 #: common/dialogs/panel_mouse_settings.cpp:47
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:162
 #: pcbnew/dialogs/panel_edit_options_base.cpp:213
 msgid "Cmd"
-msgstr ""
+msgstr "Cmd"
 
 #: common/dialogs/panel_mouse_settings.cpp:84
 msgid "Only one action can be assigned to each vertical scroll setting"
-msgstr ""
+msgstr "กำหนดได้เพียงพฤติกรรมเดียว สำหรับการเลื่อนแนวตั้ง"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:18
 msgid "Pan and Zoom"
-msgstr ""
+msgstr "เลื่อนและขยาย"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:25
 msgid "Center and warp cursor on zoom"
-msgstr ""
+msgstr "ตั้งเคอร์เซอร์ที่ศูนย์กลางเมื่อขยาย"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:26
 msgid "Center the cursor on screen when zooming."
-msgstr ""
+msgstr "ตั้งเคอร์เซอร์ศูนย์กลางจอภาพเมื่อขยาย"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:33
 msgid "Automatically pan while moving object"
-msgstr ""
+msgstr "เลื่อนจอภาพอัตโนมัติระหว่างย้ายวัตถุ"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:34
 msgid ""
 "When drawing a track or moving an item, pan when approaching the edge of the "
 "display."
-msgstr ""
+msgstr "ระหว่างวาดเส้นทองแดง หรือย้ายสิ่งของ จะเลื่อนจอภาพเมื่อเข้าใกล้ขอบจอภาพ"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:38
 msgid "Use zoom acceleration"
-msgstr ""
+msgstr "ใช้ขยายแบบเร่ง"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:39
 msgid "Zoom faster when scrolling quickly"
-msgstr ""
+msgstr "ขยายเร็วขึ้นเมื่อหมุนอย่างเร็ว"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:45
 msgid "Zoom speed:"
-msgstr ""
+msgstr "ความเร็วขยาย:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:51
 msgid "How far to zoom in for each rotation of the mouse wheel"
-msgstr ""
+msgstr "ซูมเข้าใกล้เท่าใด สำหรับแต่ละการหมุนของล้อเมาส์"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:58
 msgid "Pick the zoom speed automatically"
-msgstr ""
+msgstr "เลือกความเร็วซูมอัตโนมัติ"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:67
 msgid "Auto pan speed:"
-msgstr ""
+msgstr "ความเร็วเลื่อนอัตโนมัติ:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:72
 msgid "How fast to pan when moving an object off the edge of the screen"
-msgstr ""
+msgstr "เลื่อนจอภาพเร็วเท่าใด เมื่อย้ายวัตถุ ออกจากขอบจอภาพ"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:91
 msgid "Drag Gestures"
-msgstr ""
+msgstr "ท่าทางการลาก"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:99
 msgid "Left button drag:"
-msgstr ""
+msgstr "ปุ่มซ้ายลาก:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:103
 msgid "Draw selection rectangle"
-msgstr ""
+msgstr "วาดกรอบสี่เหลี่ยมเพื่อเลือก"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:103
 msgid "Drag selected objects; otherwise draw selection rectangle"
-msgstr ""
+msgstr "ลากวัตถุที่ถูกเลือก ไม่อย่างนั้นวาดสี่เหลี่ยมเพื่อเลือก"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:103
 msgid "Drag any object (selected or not)"
-msgstr ""
+msgstr "ลากวัตถุใดๆ (เลือกก่อนหรือไม่ก็ตาม)"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:112
 msgid "Middle button drag:"
-msgstr ""
+msgstr "เมาส์ปุ่มกลางลาก:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:116
 #: common/dialogs/panel_mouse_settings_base.cpp:129
 msgid "Pan"
-msgstr ""
+msgstr "เลื่อน"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:116
 #: common/dialogs/panel_mouse_settings_base.cpp:129
 #: common/tool/zoom_menu.cpp:43
 msgid "Zoom"
-msgstr ""
+msgstr "ขยาย"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:116
 #: common/dialogs/panel_mouse_settings_base.cpp:129
@@ -3158,15 +3206,15 @@ msgstr ""
 #: pcbnew/dialogs/dialog_plot_base.cpp:117 pcbnew/pad.cpp:1459
 #: pcbnew/widgets/appearance_controls.cpp:672 pcbnew/zone.cpp:1400
 msgid "None"
-msgstr ""
+msgstr "ไม่มี"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:125
 msgid "Right button drag:"
-msgstr ""
+msgstr "เมาส์ปุ่มขวาลาก:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:145
 msgid "Scroll Gestures"
-msgstr ""
+msgstr "ท่าทางการเลื่อน"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:153
 msgid "Vertical touchpad or scroll wheel movement:"
@@ -3174,17 +3222,17 @@ msgstr ""
 
 #: common/dialogs/panel_mouse_settings_base.cpp:158
 msgid "Only one action can be assigned to each column"
-msgstr ""
+msgstr "เพียงพฤติกรรมเดียวเท่านั้น สามารถกำหนดในแต่ละคอลัมน์"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:175
 msgid "--"
-msgstr ""
+msgstr "--"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:179
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:122
 #: pcbnew/dialogs/panel_edit_options_base.cpp:142
 msgid "Ctrl"
-msgstr ""
+msgstr "Ctrl"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:183
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:98
@@ -3192,7 +3240,7 @@ msgstr ""
 #: pcbnew/dialogs/panel_edit_options_base.cpp:112
 #: pcbnew/dialogs/panel_edit_options_base.cpp:193
 msgid "Shift"
-msgstr ""
+msgstr "Shift"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:187
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:106
@@ -3200,23 +3248,23 @@ msgstr ""
 #: pcbnew/dialogs/panel_edit_options_base.cpp:132
 #: pcbnew/dialogs/panel_edit_options_base.cpp:223
 msgid "Alt"
-msgstr ""
+msgstr "Alt"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:191
 msgid "Zoom:"
-msgstr ""
+msgstr "ขยาย:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:207
 msgid "Pan up/down:"
-msgstr ""
+msgstr "เลื่อน ขึ้นบน/ลงล่าง:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:223
 msgid "Pan left/right:"
-msgstr ""
+msgstr "เลื่อน ซ้าย/ขวา:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:257
 msgid "Pan left/right with horizontal movement"
-msgstr ""
+msgstr "เลื่อน ซ้าย/ขวา เมื่อมีการเคลื่อนไหวแนวนอน"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:258
 msgid ""
@@ -3225,11 +3273,11 @@ msgstr ""
 
 #: common/dialogs/panel_mouse_settings_base.cpp:268
 msgid "Reset to Mouse Defaults"
-msgstr ""
+msgstr "ล้างค่าเมาส์ไปเป็นตั้งต้น"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:271
 msgid "Reset to Trackpad Defaults"
-msgstr ""
+msgstr "ล้างค่าแทร็คแพ็ดไปเป็นตั้งต้น"
 
 #: common/dialogs/panel_setup_netclasses.cpp:85
 #: eeschema/dialogs/dialog_edit_line_style.cpp:45
@@ -3240,141 +3288,141 @@ msgstr ""
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:730 pcbnew/zone.cpp:621
 #: pcbnew/zone.cpp:1402
 msgid "Solid"
-msgstr ""
+msgstr "เส้นทึบ"
 
 #: common/dialogs/panel_setup_netclasses.cpp:87
 #: eeschema/dialogs/dialog_edit_line_style.cpp:46
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:318
 msgid "Dashed"
-msgstr ""
+msgstr "เส้นประ"
 
 #: common/dialogs/panel_setup_netclasses.cpp:89
 #: eeschema/dialogs/dialog_edit_line_style.cpp:47
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:318
 msgid "Dotted"
-msgstr ""
+msgstr "เส้นจุด"
 
 #: common/dialogs/panel_setup_netclasses.cpp:91
 #: eeschema/dialogs/dialog_edit_line_style.cpp:48
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:318
 msgid "Dash-Dot"
-msgstr ""
+msgstr "เส้นประ-จุด"
 
 #: common/dialogs/panel_setup_netclasses.cpp:408
 msgid "Netclass must have a name."
-msgstr ""
+msgstr "เน็ทคลาสต้องมีชื่อ"
 
 #: common/dialogs/panel_setup_netclasses.cpp:417
 msgid "Netclass name already in use."
-msgstr ""
+msgstr "ชื่อเน็ทคลาสใช้ไปแล้ว"
 
 #: common/dialogs/panel_setup_netclasses.cpp:478
 msgid "Minimum copper clearance"
-msgstr ""
+msgstr "ระยะห่างอย่างน้อยระหว่างทองแดง"
 
 #: common/dialogs/panel_setup_netclasses.cpp:479
 msgid "Minimum track width"
-msgstr ""
+msgstr "ขนาดแทร็คอย่างน้อย"
 
 #: common/dialogs/panel_setup_netclasses.cpp:480
 msgid "Via pad diameter"
-msgstr ""
+msgstr "เส้นผ่าศูนย์กลางแพ็ดของเวีย"
 
 #: common/dialogs/panel_setup_netclasses.cpp:481
 msgid "Via plated hole diameter"
-msgstr ""
+msgstr "เส้นผ่าศูนย์กลางรูเจาะของเวียแบบเคลือบ"
 
 #: common/dialogs/panel_setup_netclasses.cpp:482
 msgid "Microvia pad diameter"
-msgstr ""
+msgstr "เส้นผ่าศูนย์กลางแพ็ดของไมโครเวีย"
 
 #: common/dialogs/panel_setup_netclasses.cpp:483
 msgid "Microvia plated hole diameter"
-msgstr ""
+msgstr "เส้นผ่าศูนย์กลางรูเจาะไมโครเวียแบบเคลือบ"
 
 #: common/dialogs/panel_setup_netclasses.cpp:484
 msgid "Differential pair track width"
-msgstr ""
+msgstr "ขนาดแทร็คชนิดคู่ดิฟเฟอร์เรนเชียล"
 
 #: common/dialogs/panel_setup_netclasses.cpp:485
 msgid "Differential pair gap"
-msgstr ""
+msgstr "ช่องว่างระหว่างคู่ดิฟเฟอร์เรนเชียล"
 
 #: common/dialogs/panel_setup_netclasses.cpp:486
 msgid "Schematic wire thickness"
-msgstr ""
+msgstr "ความหนาเส้นลวดในวงจร"
 
 #: common/dialogs/panel_setup_netclasses.cpp:487
 msgid "Bus wire thickness"
-msgstr ""
+msgstr "ความหนาเส้นบัส"
 
 #: common/dialogs/panel_setup_netclasses.cpp:488
 msgid "Schematic wire color"
-msgstr ""
+msgstr "สีเส้นลวดในวงจร"
 
 #: common/dialogs/panel_setup_netclasses.cpp:489
 msgid "Schematic wire line style"
-msgstr ""
+msgstr "สไตล์เส้นลวดในวงจร"
 
 #: common/dialogs/panel_setup_netclasses.cpp:540
 msgid "The default net class is required."
-msgstr ""
+msgstr "ต้องกำหนดค่าตั้งต้นเน็ทคลาส"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:42
 #: common/dialogs/panel_setup_netclasses_base.cpp:213
 msgid "Net Class"
-msgstr ""
+msgstr "เน็ทคลาส"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:43
 msgid "Clearance"
-msgstr ""
+msgstr "ระยะห่าง"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:44
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1774
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:195
 #: pcbnew/tools/board_inspection_tool.cpp:607
 msgid "Track Width"
-msgstr ""
+msgstr "ขนาดแทร็ค"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:45
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1491
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:196
 msgid "Via Size"
-msgstr ""
+msgstr "ขนาดเวีย"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:46
 msgid "Via Hole"
-msgstr ""
+msgstr "ขนาดรูเจาะเวีย"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:47
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:198
 msgid "uVia Size"
-msgstr ""
+msgstr "ขนาดไมโครเวีย"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:48
 msgid "uVia Hole"
-msgstr ""
+msgstr "ขนาดรูเจาะไมโครเวีย"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:49
 msgid "DP Width"
-msgstr ""
+msgstr "ความกว้าง DP"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:50
 msgid "DP Gap"
-msgstr ""
+msgstr "ช่องว่าง DP"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:51
 msgid "Wire Thickness"
-msgstr ""
+msgstr "ความหนาเส้นลวด"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:52
 msgid "Bus Thickness"
-msgstr ""
+msgstr "ความหนาบัส"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:54
 #: eeschema/dialogs/dialog_edit_line_style_base.h:67 eeschema/sch_line.cpp:893
 msgid "Line Style"
-msgstr ""
+msgstr "สไตล์เส้น"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:60 common/pgm_base.cpp:72
 #: common/widgets/footprint_select_widget.cpp:145
@@ -3385,50 +3433,50 @@ msgstr ""
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:132
 #: eeschema/tools/sch_editor_control.cpp:944
 msgid "Default"
-msgstr ""
+msgstr "ค่าตั้งต้น"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:84
 msgid "Set color to transparent to use Kicad default color."
-msgstr ""
+msgstr "เลือกสีโปร่งแสงเพื่อใช้สีตั้งต้น KiCad"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:103
 msgid "Filter Nets"
-msgstr ""
+msgstr "กรองชื่อเน็ท"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:108
 msgid "Net class filter:"
-msgstr ""
+msgstr "กรองเน็ทคลาส:"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:125
 #: pcbnew/dialogs/dialog_net_inspector_base.cpp:28
 msgid "Net name filter:"
-msgstr ""
+msgstr "กรองชื่อเน็ท:"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:140
 #: pcbnew/widgets/appearance_controls.cpp:855
 msgid "Show All Nets"
-msgstr ""
+msgstr "แสดงเน็ททั้งหมด"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:146
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:60
 msgid "Apply Filters"
-msgstr ""
+msgstr "ประยุกต์ใช้การกรอง"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:156
 msgid "Assign Net Class"
-msgstr ""
+msgstr "กำหนดเน็ทคลาส"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:161
 msgid "New net class:"
-msgstr ""
+msgstr "เน็ทคลาสใหม่:"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:178
 msgid "Assign To All Listed Nets"
-msgstr ""
+msgstr "กำหนดเข้ากับรายชื่อเน็ททั้งหมด"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:184
 msgid "Assign To Selected Nets"
-msgstr ""
+msgstr "กำหนดเข้ากับเน็ทที่เลือก"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:212
 #: pcbnew/board_connected_item.cpp:184
@@ -3436,29 +3484,29 @@ msgstr ""
 #: pcbnew/dialogs/dialog_net_inspector.cpp:76 pcbnew/pad.cpp:871
 #: pcbnew/pcb_track.cpp:787 pcbnew/zone.cpp:589
 msgid "Net"
-msgstr ""
+msgstr "เน็ท"
 
 #: common/dialogs/panel_setup_severities.cpp:43
 #: common/dialogs/panel_setup_severities.cpp:108
 msgid "Ignore"
-msgstr ""
+msgstr "ละเลย"
 
 #: common/dialogs/panel_setup_severities.cpp:108
 msgid "From Pin Conflicts Map"
-msgstr ""
+msgstr "จากแผนที่ขัดแย้งของพิน"
 
 #: common/dialogs/panel_text_variables.cpp:114
 #: common/dialogs/panel_text_variables.cpp:142
 msgid "Variable name cannot be empty."
-msgstr ""
+msgstr "ชื่อตัวแปรว่างไม่ได้"
 
 #: common/dialogs/panel_text_variables_base.cpp:37
 msgid "Variable Name"
-msgstr ""
+msgstr "ชื่อตัวแปร"
 
 #: common/dialogs/panel_text_variables_base.cpp:38
 msgid "Text Substitution"
-msgstr ""
+msgstr "ทดแทนข้อความ"
 
 #: common/dialogs/wx_html_report_panel.cpp:188
 #: common/dialogs/wx_html_report_panel.cpp:213
@@ -3466,41 +3514,41 @@ msgstr ""
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:542
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:562
 msgid "Error:"
-msgstr ""
+msgstr "ผิดพลาด:"
 
 #: common/dialogs/wx_html_report_panel.cpp:192
 #: common/dialogs/wx_html_report_panel.cpp:215
 msgid "Warning:"
-msgstr ""
+msgstr "ระวัง:"
 
 #: common/dialogs/wx_html_report_panel.cpp:217
 msgid "Info:"
-msgstr ""
+msgstr "ข้อมูล:"
 
 #: common/dialogs/wx_html_report_panel.cpp:334
 #: eeschema/dialogs/dialog_erc.cpp:736 pcbnew/dialogs/dialog_drc.cpp:642
 msgid "Save Report to File"
-msgstr ""
+msgstr "บันทึกรายงานลงไฟล์"
 
 #: common/dialogs/wx_html_report_panel.cpp:351
 #, c-format
 msgid "Cannot write report to file '%s'."
-msgstr ""
+msgstr "ไม่สามารถบันทึกรายงานในไฟล์ '%s'"
 
 #: common/dialogs/wx_html_report_panel.cpp:353
 msgid "File save error"
-msgstr ""
+msgstr "บันทึกไฟล์ผิดพลาด"
 
 #: common/dialogs/wx_html_report_panel_base.cpp:14
 msgid "Output Messages"
-msgstr ""
+msgstr "ข้อความส่งออก"
 
 #: common/dialogs/wx_html_report_panel_base.cpp:31
 #: eeschema/dialogs/dialog_erc_base.cpp:66
 #: pcbnew/dialogs/dialog_drc_base.cpp:147
 #: pcbnew/dialogs/dialog_footprint_checker_base.cpp:32
 msgid "Show:"
-msgstr ""
+msgstr "แสดง:"
 
 #: common/dialogs/wx_html_report_panel_base.cpp:35
 #: eeschema/dialogs/dialog_erc_base.cpp:70 eeschema/lib_item.cpp:57
@@ -3510,41 +3558,41 @@ msgstr ""
 #: pcbnew/dialogs/dialog_footprint_checker_base.cpp:36
 #: pcbnew/widgets/appearance_controls.cpp:659
 msgid "All"
-msgstr ""
+msgstr "ทั้งหมด"
 
 #: common/dialogs/wx_html_report_panel_base.cpp:48
 #: eeschema/dialogs/dialog_erc_base.cpp:82
 #: pcbnew/dialogs/dialog_drc_base.cpp:163
 #: pcbnew/dialogs/dialog_footprint_checker_base.cpp:49
 msgid "Warnings"
-msgstr ""
+msgstr "ระวัง"
 
 #: common/dialogs/wx_html_report_panel_base.cpp:54
 msgid "Actions"
-msgstr ""
+msgstr "การกระทำ"
 
 #: common/dialogs/wx_html_report_panel_base.cpp:60
 msgid "Infos"
-msgstr ""
+msgstr "ข้อมูล"
 
 #: common/dialogs/wx_html_report_panel_base.cpp:66
 #: eeschema/dialogs/dialog_erc_base.cpp:97
 #: pcbnew/dialogs/dialog_drc_base.cpp:178
 msgid "Save..."
-msgstr ""
+msgstr "บันทึก…"
 
 #: common/draw_panel_gal.cpp:249 common/draw_panel_gal.cpp:411
 msgid "Could not use OpenGL, falling back to software rendering"
-msgstr ""
+msgstr "ไม่สามารถใช้ OpenGL, กลับไปใช้เรนเดอร์ด้วยซอฟต์แวร์"
 
 #: common/draw_panel_gal.cpp:255 common/draw_panel_gal.cpp:418
 msgid "Could not use OpenGL"
-msgstr ""
+msgstr "ไม่สามารถใช้ OpenGL"
 
 #: common/drawing_sheet/drawing_sheet_reader.cpp:914
 #, c-format
 msgid "The file '%s' was not fully read."
-msgstr ""
+msgstr "ไม่สามารถอ่านไฟล์ '%s' ทั้งหมด"
 
 #: common/drawing_sheet/ds_data_item.cpp:370
 #: common/drawing_sheet/ds_draw_item.cpp:122 common/eda_text.cpp:667
@@ -3554,7 +3602,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:28 pcbnew/fp_text.cpp:272
 #: pcbnew/fp_text.cpp:278 pcbnew/widgets/panel_selection_filter_base.cpp:35
 msgid "Text"
-msgstr ""
+msgstr "ข้อความ"
 
 #: common/drawing_sheet/ds_data_item.cpp:371
 #: common/drawing_sheet/ds_draw_item.cpp:113 eeschema/pin_type.cpp:76
@@ -3563,7 +3611,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:61
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:111
 msgid "Line"
-msgstr ""
+msgstr "เส้นตรง"
 
 #: common/drawing_sheet/ds_data_item.cpp:372
 #: common/drawing_sheet/ds_draw_item.cpp:117 common/eda_item.cpp:299
@@ -3571,154 +3619,154 @@ msgstr ""
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:43 pcbnew/pad.cpp:1451
 #: pcbnew/pcb_shape.cpp:546
 msgid "Rectangle"
-msgstr ""
+msgstr "สี่เหลี่ยม"
 
 #: common/drawing_sheet/ds_data_item.cpp:373
 #: common/drawing_sheet/ds_draw_item.cpp:126
 #: common/drawing_sheet/ds_draw_item.cpp:298
 msgid "Imported Shape"
-msgstr ""
+msgstr "นำเข้ารูปร่าง"
 
 #: common/drawing_sheet/ds_data_item.cpp:374
 #: common/drawing_sheet/ds_draw_item.cpp:130
 #: common/drawing_sheet/ds_draw_item.cpp:476 common/eda_item.cpp:307
 #: eeschema/sch_bitmap.h:129
 msgid "Image"
-msgstr ""
+msgstr "ภาพ"
 
 #: common/drawing_sheet/ds_data_model_io.cpp:92
 #: common/drawing_sheet/ds_data_model_io.cpp:121
 msgid "Error writing drawing sheet file"
-msgstr ""
+msgstr "ผิดพลาดระหว่างเขียนไฟล์กระดาษเขียนแบบ"
 
 #: common/drawing_sheet/ds_draw_item.cpp:136
 msgid "First Page Only"
-msgstr ""
+msgstr "หน้าแรกเท่านั้น"
 
 #: common/drawing_sheet/ds_draw_item.cpp:137
 msgid "Subsequent Pages"
-msgstr ""
+msgstr "หน้าถัดไป"
 
 #: common/drawing_sheet/ds_draw_item.cpp:138
 msgid "All Pages"
-msgstr ""
+msgstr "ทุกหน้า"
 
 #: common/drawing_sheet/ds_draw_item.cpp:141
 msgid "First Page Option"
-msgstr ""
+msgstr "ทางเลือกหน้าแรก"
 
 #: common/drawing_sheet/ds_draw_item.cpp:144
 msgid "Repeat Count"
-msgstr ""
+msgstr "ทำซ้ำการนับ"
 
 #: common/drawing_sheet/ds_draw_item.cpp:147
 msgid "Repeat Label Increment"
-msgstr ""
+msgstr "ทำซ้ำป้ายชื่อเพิ่มขึ้น"
 
 #: common/drawing_sheet/ds_draw_item.cpp:153
 msgid "Repeat Position Increment"
-msgstr ""
+msgstr "ทำซ้ำตำแหน่งเพิ่มขึ้น"
 
 #: common/drawing_sheet/ds_draw_item.cpp:155
 #: pagelayout_editor/dialogs/dialog_design_inspector_base.cpp:39
 msgid "Comment"
-msgstr ""
+msgstr "คอมเมนต์"
 
 #: common/drawing_sheet/ds_draw_item.cpp:187
 #, c-format
 msgid "Text '%s'"
-msgstr ""
+msgstr "ข้อความ '%s'"
 
 #: common/drawing_sheet/ds_draw_item.cpp:395 eeschema/lib_rectangle.cpp:279
 #, c-format
 msgid "Rectangle, width %s height %s"
-msgstr ""
+msgstr "สี่เหลี่ยม, กว้าง %s สูง %s"
 
 #: common/drawing_sheet/ds_draw_item.cpp:428
 #, c-format
 msgid "Line, length %s"
-msgstr ""
+msgstr "เส้นตรง,ยาว %s"
 
 #: common/drawing_sheet/ds_draw_item.cpp:482
 msgid "Page Limits"
-msgstr ""
+msgstr "สิ้นสุดหน้า"
 
 #: common/dsnlexer.cpp:35
 msgid "clipboard"
-msgstr ""
+msgstr "คลิปบอร์ด"
 
 #: common/dsnlexer.cpp:325
 #, c-format
 msgid "Expecting %s"
-msgstr ""
+msgstr "คาดหวัง %s"
 
 #: common/dsnlexer.cpp:333
 #, c-format
 msgid "Expecting '%s'"
-msgstr ""
+msgstr "คาดหวัง '%s'"
 
 #: common/dsnlexer.cpp:341
 #, c-format
 msgid "Unexpected %s"
-msgstr ""
+msgstr "ไม่คาดหวัง %s"
 
 #: common/dsnlexer.cpp:349
 #, c-format
 msgid "%s is a duplicate"
-msgstr ""
+msgstr "ค่า %s ซ้ำ"
 
 #: common/dsnlexer.cpp:357
 #, c-format
 msgid "Unexpected '%s'"
-msgstr ""
+msgstr "ไม่คาดหวัง '%s'"
 
 #: common/dsnlexer.cpp:402
 #, c-format
 msgid "need a number for '%s'"
-msgstr ""
+msgstr "ต้องการตัวเลขสำหรับ '%s'"
 
 #: common/dsnlexer.cpp:674 common/dsnlexer.cpp:735
 msgid "Un-terminated delimited string"
-msgstr ""
+msgstr "ไม่พบจุดหยุด ตัวขั้นข้อความ"
 
 #: common/dsnlexer.cpp:697
 msgid "String delimiter must be a single character of ', \", or $"
-msgstr ""
+msgstr "ตัวขั้นข้อความจะต้องเป็น ',\", หรือ $"
 
 #: common/eda_base_frame.cpp:450
 msgid "&About KiCad"
-msgstr ""
+msgstr "&เกี่ยวกับ KiCad"
 
 #: common/eda_base_frame.cpp:452
 msgid "&Help"
-msgstr ""
+msgstr "&ช่วยเหลือ"
 
 #: common/eda_base_frame.cpp:933
 #, c-format
 msgid "File '%s' was not found."
-msgstr ""
+msgstr "หาไฟล์ '%s' ไม่พบ"
 
 #: common/eda_base_frame.cpp:976
 msgid "Preferences"
-msgstr ""
+msgstr "ตั้งความชอบ"
 
 #: common/eda_base_frame.cpp:979 common/hotkey_store.cpp:78
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:20
 msgid "Common"
-msgstr ""
+msgstr "สามัญ"
 
 #: common/eda_base_frame.cpp:981
 msgid "Mouse and Touchpad"
-msgstr ""
+msgstr "เมาส์และทัชแพ็ด"
 
 #: common/eda_base_frame.cpp:984
 msgid "Hotkeys"
-msgstr ""
+msgstr "คีย์ย่อ"
 
 #: common/eda_base_frame.cpp:1038
 #, c-format
 msgid "Insufficient permissions to folder '%s'."
-msgstr ""
+msgstr "มีสิทธิไม่เพียงพอในโฟลเดอร์ '%s'"
 
 #: common/eda_base_frame.cpp:1078
 #, c-format
@@ -3729,24 +3777,28 @@ msgid ""
 "it was not saved properly.  Do you wish to restore the last saved edits you "
 "made?"
 msgstr ""
+"นี่ช่างน่าขายหน้า!\n"
+"ปรากฏว่าครั้งล่าสุดที่คุณแก้ไขไฟล์\n"
+"\"%s\"\n"
+"ไม่ได้บันทึกอย่างถูกต้อง\tคุณต้องการย้อนกลับไปใช้บันทึกครั้งก่อนหน้าหรือไม่?"
 
 #: common/eda_base_frame.cpp:1094
 msgid "The auto save file could not be renamed to the board file name."
-msgstr ""
+msgstr "ไม่สามารถเปลี่ยนชื่อไฟล์บันทึกอัตโนมัติ เป็นชื่อเดียวกับไฟล์บอร์ด"
 
 #: common/eda_doc.cpp:143
 msgid "Doc Files"
-msgstr ""
+msgstr "ไฟล์เอกสาร"
 
 #: common/eda_doc.cpp:158
 #, c-format
 msgid "Doc File '%s' not found"
-msgstr ""
+msgstr "ไม่พบไฟล์เอกสาร '%s'"
 
 #: common/eda_doc.cpp:201
 #, c-format
 msgid "Unknown MIME type for doc file '%s'"
-msgstr ""
+msgstr "ไม่รู้จักชนิด MIME ของไฟล์เอกสาร '%s'"
 
 #: common/eda_draw_frame.cpp:141 common/tool/actions.cpp:484
 #: pagelayout_editor/pl_editor_frame.cpp:158
@@ -3757,41 +3809,41 @@ msgstr ""
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:85
 #: pcbnew/import_gfx/dialog_import_gfx.cpp:52
 msgid "Inches"
-msgstr ""
+msgstr "นิ้ว"
 
 #: common/eda_draw_frame.cpp:302
 msgid "Edit User Grid..."
-msgstr ""
+msgstr "แก้ไขกริดผู้ใช้กำหนด…"
 
 #: common/eda_draw_frame.cpp:414
 msgid "Zoom Auto"
-msgstr ""
+msgstr "ซูมอัตโนมัติ"
 
 #: common/eda_draw_frame.cpp:421
 #, c-format
 msgid "Zoom %.2f"
-msgstr ""
+msgstr "ซูม %.2f"
 
 #: common/eda_draw_frame.cpp:531 pagelayout_editor/pl_editor_frame.cpp:734
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:193
 msgid "inches"
-msgstr ""
+msgstr "นิ้ว"
 
 #: common/eda_draw_frame.cpp:534
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:56
 #: pcbnew/footprint_wizard_frame.cpp:330
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:95 pcbnew/pcb_dimension.cpp:320
 msgid "Units"
-msgstr ""
+msgstr "หน่วย"
 
 #: common/eda_draw_frame.cpp:951 eeschema/dialogs/panel_sym_lib_table.cpp:475
 #: pcbnew/footprint_libraries_utils.cpp:1205
 msgid "Select Library"
-msgstr ""
+msgstr "เลือกไลบรารี"
 
 #: common/eda_draw_frame.cpp:951
 msgid "New Library"
-msgstr ""
+msgstr "ไลบรารีใหม่"
 
 #: common/eda_draw_frame.cpp:1085
 msgid ""
@@ -3804,22 +3856,29 @@ msgid ""
 "If you'd like to choose later, select Accelerated Graphics in the "
 "Preferences menu."
 msgstr ""
+"KiCad ใช้ความสามารถกราฟิกการ์ดเพื่อให้คุณได้รับประสบการณ์ที่ราบเรียบและลื่"
+"นไหล แต่ทางเลือกนี้ปิดไว้ในตอนต้น เนื่องจากไม่สามารถใช้งานได้บนทุกคอมพิวเตอร์"
+"\n"
+"\n"
+"คุณต้องการทดลองความเร่งบนกราฟิกการ์ด?\n"
+"\n"
+"หากคุณต้องการเลือกภายหลัง เลือกเร่งกราฟิกในเมนูตั้งความชอบ"
 
 #: common/eda_draw_frame.cpp:1092
 msgid "Enable Graphics Acceleration"
-msgstr ""
+msgstr "ใช้งานเร่งความเร็วกราฟิก"
 
 #: common/eda_draw_frame.cpp:1094
 msgid "&Enable Acceleration"
-msgstr ""
+msgstr "&ใช้งานความเร่ง"
 
 #: common/eda_draw_frame.cpp:1094
 msgid "&No Thanks"
-msgstr ""
+msgstr "&ไม่ ขอบคุณ"
 
 #: common/eda_item.cpp:249
 msgid "Screen"
-msgstr ""
+msgstr "จอภาพ"
 
 #: common/eda_item.cpp:251 eeschema/dialogs/dialog_fields_editor_global.cpp:961
 #: eeschema/sch_symbol.cpp:1411
@@ -3827,145 +3886,145 @@ msgstr ""
 #: pcbnew/fp_text.cpp:275 pcbnew/load_select_footprint.cpp:371
 #: pcbnew/pad.cpp:861
 msgid "Footprint"
-msgstr ""
+msgstr "ฟุ้ทพรินท์"
 
 #: common/eda_item.cpp:252 pcbnew/dialogs/dialog_board_statistics.cpp:483
 #: pcbnew/pad.cpp:863
 msgid "Pad"
-msgstr ""
+msgstr "แพ็ด"
 
 #: common/eda_item.cpp:253 common/eda_item.cpp:256
 msgid "Graphic Shape"
-msgstr ""
+msgstr "รูปร่างกราฟิก"
 
 #: common/eda_item.cpp:254
 msgid "Board Text"
-msgstr ""
+msgstr "ข้อความบนบอร์ด"
 
 #: common/eda_item.cpp:255 pcbnew/widgets/appearance_controls.cpp:350
 msgid "Footprint Text"
-msgstr ""
+msgstr "ข้อความบนฟุ้ทพรินท์"
 
 #: common/eda_item.cpp:257 common/eda_item.cpp:266
 msgid "Zone"
-msgstr ""
+msgstr "โซน"
 
 #: common/eda_item.cpp:258 pcbnew/pcb_track.cpp:686
 msgid "Track"
-msgstr ""
+msgstr "แทร็ค"
 
 #: common/eda_item.cpp:259 pcbnew/dialogs/dialog_board_statistics.cpp:483
 #: pcbnew/pcb_track.cpp:750
 msgid "Via"
-msgstr ""
+msgstr "เวีย"
 
 #: common/eda_item.cpp:260
 msgid "Board Marker"
-msgstr ""
+msgstr "มาร์คเกอร์บนบอร์ด"
 
 #: common/eda_item.cpp:261
 msgid "Aligned Dimension"
-msgstr ""
+msgstr "ระบุขนาดจัดเรียงแล้ว"
 
 #: common/eda_item.cpp:262
 msgid "Orthogonal Dimension"
-msgstr ""
+msgstr "ระบุขนาดแนวทแยง"
 
 #: common/eda_item.cpp:263
 msgid "Center Dimension"
-msgstr ""
+msgstr "ระบุขนาดกึ่งกลาง"
 
 #: common/eda_item.cpp:264 pcbnew/pcb_dimension.cpp:1041
 msgid "Leader"
-msgstr ""
+msgstr "ตัวนำ"
 
 #: common/eda_item.cpp:265 pcbnew/pcb_target.cpp:124
 msgid "Target"
-msgstr ""
+msgstr "เป้า"
 
 #: common/eda_item.cpp:267
 msgid "Item List"
-msgstr ""
+msgstr "รายการสิ่งของ"
 
 #: common/eda_item.cpp:268
 msgid "Net Info"
-msgstr ""
+msgstr "ข้อมูลเน็ท"
 
 #: common/eda_item.cpp:269 pcbnew/pcb_group.cpp:322
 #: pcbnew/tools/pcb_actions.cpp:683
 msgid "Group"
-msgstr ""
+msgstr "กลุ่ม"
 
 #: common/eda_item.cpp:271
 msgid "Schematic Marker"
-msgstr ""
+msgstr "มาร์คเกอร์ในวงจร"
 
 #: common/eda_item.cpp:272 eeschema/sch_junction.h:87
 msgid "Junction"
-msgstr ""
+msgstr "จุดร่วม"
 
 #: common/eda_item.cpp:273
 msgid "No-Connect Flag"
-msgstr ""
+msgstr "ธงแจ้งไม่เชื่อมต่อ"
 
 #: common/eda_item.cpp:274
 msgid "Wire Entry"
-msgstr ""
+msgstr "ทางเข้าเส้นลวด"
 
 #: common/eda_item.cpp:275
 msgid "Bus Entry"
-msgstr ""
+msgstr "ทางเข้าบัส"
 
 #: common/eda_item.cpp:276
 msgid "Graphic Line"
-msgstr ""
+msgstr "เส้นตรงกราฟิก"
 
 #: common/eda_item.cpp:277 eeschema/sch_bitmap.cpp:201
 msgid "Bitmap"
-msgstr ""
+msgstr "บิทแม็พ"
 
 #: common/eda_item.cpp:278
 msgid "Schematic Text"
-msgstr ""
+msgstr "ข้อความในวงจร"
 
 #: common/eda_item.cpp:279
 msgid "Net Label"
-msgstr ""
+msgstr "ป้ายชื่อเน็ท"
 
 #: common/eda_item.cpp:280 eeschema/sch_text.cpp:727
 msgid "Global Label"
-msgstr ""
+msgstr "ป้ายชื่อโกลบอล"
 
 #: common/eda_item.cpp:281 eeschema/sch_text.cpp:728
 msgid "Hierarchical Label"
-msgstr ""
+msgstr "ป้ายชื่อลำดับชั้น"
 
 #: common/eda_item.cpp:282
 msgid "Schematic Field"
-msgstr ""
+msgstr "ช่องวงจร"
 
 #: common/eda_item.cpp:283
 msgid "Schematic Symbol"
-msgstr ""
+msgstr "สัญลักษณ์ในวงจร"
 
 #: common/eda_item.cpp:284
 msgid "Sheet Pin"
-msgstr ""
+msgstr "ขาในแผ่นวงจร"
 
 #: common/eda_item.cpp:285 eeschema/dialogs/dialog_migrate_buses.cpp:101
 #: pcbnew/tools/pcb_actions.cpp:1228
 msgid "Sheet"
-msgstr ""
+msgstr "แผ่นกระดาษ"
 
 #: common/eda_item.cpp:292
 msgid "SCH Screen"
-msgstr ""
+msgstr "จอภาพวงจร"
 
 #: common/eda_item.cpp:294
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:166
 #: eeschema/symbol_editor/symbol_editor.cpp:1211
 msgid "Symbol"
-msgstr ""
+msgstr "สัญลักษณ์"
 
 #: common/eda_item.cpp:296 eeschema/lib_arc.h:51
 #: gerbview/gerber_draw_item.cpp:233 pcbnew/board_item.cpp:41
@@ -3973,7 +4032,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_pad_properties.cpp:711
 #: pcbnew/dialogs/dialog_pad_properties.cpp:2143 pcbnew/pcb_shape.cpp:522
 msgid "Arc"
-msgstr ""
+msgstr "โค้ง"
 
 #: common/eda_item.cpp:297 eeschema/lib_circle.h:47
 #: gerbview/gerber_draw_item.cpp:236 pcbnew/board_item.cpp:42
@@ -3981,38 +4040,38 @@ msgstr ""
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:137 pcbnew/pad.cpp:1083
 #: pcbnew/pad.cpp:1450 pcbnew/pcb_shape.cpp:515
 msgid "Circle"
-msgstr ""
+msgstr "วงกลม"
 
 #: common/eda_item.cpp:298
 msgid "Symbol Text"
-msgstr ""
+msgstr "สัญลักษณ์ข้อความ"
 
 #: common/eda_item.cpp:300
 msgid "Polyline"
-msgstr ""
+msgstr "เส้นหลายเหลี่ยม"
 
 #: common/eda_item.cpp:301 eeschema/lib_bezier.h:50
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:99
 #: pcbnew/dialogs/dialog_pad_properties.cpp:705
 #: pcbnew/dialogs/dialog_pad_properties.cpp:2144
 msgid "Bezier"
-msgstr ""
+msgstr "เบซิเยร์"
 
 #: common/eda_item.cpp:302 eeschema/lib_pin.h:72 eeschema/sch_pin.cpp:182
 msgid "Pin"
-msgstr ""
+msgstr "ขา"
 
 #: common/eda_item.cpp:303
 msgid "Symbol Field"
-msgstr ""
+msgstr "ช่องสัญลักษณ์"
 
 #: common/eda_item.cpp:305
 msgid "Gerber Layout"
-msgstr ""
+msgstr "เลเอาท์เกอร์เบอร์"
 
 #: common/eda_item.cpp:306
 msgid "Draw Item"
-msgstr ""
+msgstr "วาดสิ่งของ"
 
 #: common/eda_text.cpp:502 eeschema/dialogs/dialog_edit_label_base.cpp:126
 #: eeschema/sch_text.cpp:747 eeschema/symbol_editor/symbol_editor.cpp:1204
@@ -4021,7 +4080,7 @@ msgstr ""
 #: pcbnew/microwave/microwave_polygon.cpp:139
 #: pcbnew/widgets/appearance_controls.cpp:594
 msgid "Normal"
-msgstr ""
+msgstr "ปกติ"
 
 #: common/eda_text.cpp:503 common/eda_text.cpp:673
 #: eeschema/dialogs/dialog_edit_label_base.cpp:126
@@ -4042,7 +4101,7 @@ msgstr ""
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:48
 #: pcbnew/fp_text_grid_table.cpp:94
 msgid "Italic"
-msgstr ""
+msgstr "เอียง"
 
 #: common/eda_text.cpp:504 common/eda_text.cpp:675
 #: eeschema/dialogs/dialog_edit_label_base.cpp:126
@@ -4054,11 +4113,11 @@ msgstr ""
 #: eeschema/fields_grid_table.cpp:203 eeschema/sch_text.cpp:747
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:94
 msgid "Bold"
-msgstr ""
+msgstr "หนา"
 
 #: common/eda_text.cpp:505
 msgid "Bold+Italic"
-msgstr ""
+msgstr "หนา+เอียง"
 
 #: common/eda_text.cpp:657
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:193
@@ -4070,7 +4129,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:315
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:144
 msgid "Left"
-msgstr ""
+msgstr "ซ้าย"
 
 #: common/eda_text.cpp:658 common/eda_text.cpp:662 common/tool/actions.cpp:327
 #: common/widgets/mathplot.cpp:1759
@@ -4089,7 +4148,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:116
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:144
 msgid "Center"
-msgstr ""
+msgstr "กลาง"
 
 #: common/eda_text.cpp:659
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:193
@@ -4101,7 +4160,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:315
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:144
 msgid "Right"
-msgstr ""
+msgstr "ขวา"
 
 #: common/eda_text.cpp:661
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:255
@@ -4110,7 +4169,7 @@ msgstr ""
 #: eeschema/fields_grid_table.cpp:516
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:101
 msgid "Top"
-msgstr ""
+msgstr "บน"
 
 #: common/eda_text.cpp:663
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:255
@@ -4119,7 +4178,7 @@ msgstr ""
 #: eeschema/fields_grid_table.cpp:520
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:101
 msgid "Bottom"
-msgstr ""
+msgstr "ล่าง"
 
 #: common/eda_text.cpp:669
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:90
@@ -4128,14 +4187,14 @@ msgstr ""
 #: pcbnew/fp_text.cpp:297 pcbnew/fp_text_grid_table.cpp:93
 #: pcbnew/pcb_shape.cpp:1317 pcbnew/pcb_text.cpp:126
 msgid "Thickness"
-msgstr ""
+msgstr "ความหนา"
 
 #: common/eda_text.cpp:677
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:306
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:189
 #: pcbnew/microwave/microwave_polygon.cpp:139
 msgid "Mirrored"
-msgstr ""
+msgstr "กลับกระจก"
 
 #: common/eda_text.cpp:679 eeschema/dialogs/dialog_lib_edit_pin_table.cpp:61
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:55
@@ -4145,7 +4204,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:133
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:102
 msgid "Visible"
-msgstr ""
+msgstr "มองเห็น"
 
 #: common/eda_text.cpp:681 eeschema/lib_field.cpp:434
 #: eeschema/sch_bitmap.cpp:203 pcbnew/dialogs/dialog_board_statistics.cpp:659
@@ -4159,7 +4218,7 @@ msgstr ""
 #: pcbnew/pcb_text.cpp:127 pcbnew/pcb_track.cpp:693 pcbnew/pcb_track.cpp:1109
 #: pcbnew/pcb_track.cpp:1126 pcbnew/pcb_track.cpp:1145
 msgid "Width"
-msgstr ""
+msgstr "ความหนา"
 
 #: common/eda_text.cpp:685 eeschema/lib_field.cpp:437
 #: eeschema/sch_bitmap.cpp:205 pcbnew/dialogs/dialog_board_statistics.cpp:660
@@ -4170,15 +4229,15 @@ msgstr ""
 #: pcbnew/pcb_dimension.cpp:684 pcbnew/pcb_shape.cpp:552
 #: pcbnew/pcb_text.cpp:128
 msgid "Height"
-msgstr ""
+msgstr "ความสูง"
 
 #: common/eda_text.cpp:690
 msgid "Horizontal Justification"
-msgstr ""
+msgstr "ปรับตำแหน่งตามแนวนอน"
 
 #: common/eda_text.cpp:694
 msgid "Vertical Justification"
-msgstr ""
+msgstr "ปรับตำแหน่งตามแนวตั้ง"
 
 #: common/env_vars.cpp:70
 msgid ""
@@ -4263,86 +4322,86 @@ msgstr ""
 
 #: common/exceptions.cpp:126
 msgid "Full error text:"
-msgstr ""
+msgstr "ข้อความผิดพลาด:"
 
 #: common/filehistory.cpp:155
 msgid "No Files"
-msgstr ""
+msgstr "ไม่มีไฟล์"
 
 #: common/filename_resolver.cpp:451
 msgid "The given path does not exist"
-msgstr ""
+msgstr "เส้นทางที่ให้มาไม่มี"
 
 #: common/filename_resolver.cpp:454
 msgid "3D model search path"
-msgstr ""
+msgstr "เส้นทางค้นหาโมเดล 3D"
 
 #: common/filename_resolver.cpp:479
 msgid "Alias: "
-msgstr ""
+msgstr "แฝง: "
 
 #: common/filename_resolver.cpp:482
 msgid "This path:"
-msgstr ""
+msgstr "เส้นทางนี้:"
 
 #: common/filename_resolver.cpp:485
 msgid "Existing path:"
-msgstr ""
+msgstr "เส้นทางที่มีอยู่:"
 
 #: common/filename_resolver.cpp:487
 msgid "Bad alias (duplicate name)"
-msgstr ""
+msgstr "ชื่อแฝงไม่ดี (ชื่อซ้ำ)"
 
 #: common/filename_resolver.cpp:610
 msgid "3D configuration directory is unknown"
-msgstr ""
+msgstr "ไม่รู้จัดไดเร็คตอรีตั้งค่า 3D"
 
 #: common/filename_resolver.cpp:613 common/filename_resolver.cpp:643
 #: common/filename_resolver.cpp:668
 msgid "Write 3D search path list"
-msgstr ""
+msgstr "เขียนรายชื่อเส้นทางค้นหา 3D"
 
 #: common/filename_resolver.cpp:640
 msgid "Could not open configuration file"
-msgstr ""
+msgstr "ไม่สามารถเปิดไฟล์ตั้งค่า"
 
 #: common/filename_resolver.cpp:667
 msgid "Problems writing configuration file"
-msgstr ""
+msgstr "เกิดปัญหาเขียนไฟล์ตั้งค่า"
 
 #: common/footprint_info.cpp:99 cvpcb/cvpcb_mainframe.cpp:858
 #: eeschema/symbol_editor/symbol_library_manager.cpp:104
 #: eeschema/symbol_tree_model_adapter.cpp:103
 msgid "Load Error"
-msgstr ""
+msgstr "ผิดพลาดในการอ่าน"
 
 #: common/footprint_info.cpp:101
 msgid "Errors were encountered loading footprints:"
-msgstr ""
+msgstr "พบความผิดพลาด การอ่านฟุ้ทพรินท์:"
 
 #: common/fp_lib_table.cpp:200
 #, c-format
 msgid ""
 "Duplicate library nickname '%s' found in footprint library table file line "
 "%d."
-msgstr ""
+msgstr "พบชื่อเล่นไลบรารีซ้ำ '%s' ในไฟล์ตารางไลบรารีฟุ้ทพรินท์ ที่บรรทัด %d"
 
 #: common/fp_lib_table.cpp:300
 #, c-format
 msgid "fp-lib-table files contain no library named '%s'."
-msgstr ""
+msgstr "ไฟล์ fp-lib-table ไม่มีไลบรารีชื่อ '%s'"
 
 #: common/fp_lib_table.cpp:492
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:107
 #: eeschema/symbol_lib_table.cpp:507
 #, c-format
 msgid "Cannot create global library table path '%s'."
-msgstr ""
+msgstr "ไม่สามารถสร้างเส้นทาง ตารางไลบรารีโกลบอล '%s'"
 
 #: common/gestfich.cpp:190
 #, c-format
 msgid "Command '%s' could not be found."
-msgstr ""
+msgstr "คำสั่ง '%s' หาไม่พบ"
 
 #: common/gestfich.cpp:248
 #, c-format
@@ -4350,11 +4409,13 @@ msgid ""
 "Problem while running the PDF viewer.\n"
 "Command is '%s'."
 msgstr ""
+"เกิดปัญหาระหว่างเรียกใช้งานโปรแกรมดู PDF\n"
+"คำสั่งคือ '%s'"
 
 #: common/gestfich.cpp:255
 #, c-format
 msgid "Unable to find a PDF viewer for '%s'."
-msgstr ""
+msgstr "ไม่สามารถหาโปรแกรมดูสำหรับ PDF '%s'"
 
 #: common/gestfich.cpp:349
 #, c-format
@@ -4363,49 +4424,52 @@ msgid ""
 "\n"
 "Unknown file type."
 msgstr ""
+"ไม่สามารถพิมพ์ '%s'\n"
+"\n"
+"ไม่รู้จักประเภทไฟล์"
 
 #: common/gestfich.cpp:378 eeschema/eeschema.cpp:404 eeschema/eeschema.cpp:436
 #: gerbview/gerbview.cpp:231 kicad/project_template.cpp:257
 #: pcbnew/pcbnew.cpp:354
 #, c-format
 msgid "Cannot copy file '%s'."
-msgstr ""
+msgstr "ไม่สามารถก้อปปี้ไฟล์ '%s'"
 
 #: common/grid_tricks.cpp:241 common/tool/actions.cpp:154
 #: eeschema/tools/ee_actions.cpp:148 pcbnew/tools/edit_tool.cpp:1890
 msgid "Cut"
-msgstr ""
+msgstr "ตัด"
 
 #: common/grid_tricks.cpp:241
 msgid "Clear selected cells placing original contents on clipboard"
-msgstr ""
+msgstr "ล้างเซลส์ที่เลือก วางเนื้อหาเริ่มต้น ในคลิปบอร์ด"
 
 #: common/grid_tricks.cpp:242 common/tool/actions.cpp:160
 #: eeschema/tools/ee_actions.cpp:153
 msgid "Copy"
-msgstr ""
+msgstr "ก้อปปี้"
 
 #: common/grid_tricks.cpp:242
 msgid "Copy selected cells to clipboard"
-msgstr ""
+msgstr "ก้อปปี้เซลส์ที่เลือกไปคลิปบอร์ด"
 
 #: common/grid_tricks.cpp:243 common/tool/actions.cpp:166
 msgid "Paste"
-msgstr ""
+msgstr "วาง"
 
 #: common/grid_tricks.cpp:243
 msgid "Paste clipboard cells to matrix at current cell"
-msgstr ""
+msgstr "วางจากเซลส์คลิปบอร์ด ไปยังเมทริกซ์เซลส์ปัจจุบัน"
 
 #: common/grid_tricks.cpp:244 common/tool/actions.cpp:192
 #: kicad/project_tree_pane.cpp:790 pcbnew/plugins/kicad/pcb_parser.cpp:763
 #: pcbnew/tools/edit_tool.cpp:1892
 msgid "Delete"
-msgstr ""
+msgstr "ลบ"
 
 #: common/grid_tricks.cpp:244
 msgid "Delete selected cells"
-msgstr ""
+msgstr "ลบเซลส์ที่ถูกเลือก"
 
 #: common/grid_tricks.cpp:245 common/tool/actions.cpp:172
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:105
@@ -4415,92 +4479,92 @@ msgstr ""
 #: pcbnew/dialogs/dialog_import_settings.cpp:99
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:76
 msgid "Select All"
-msgstr ""
+msgstr "เลือกทั้งหมด"
 
 #: common/grid_tricks.cpp:245
 msgid "Select all cells"
-msgstr ""
+msgstr "เลือกเซลส์ทั้งหมด"
 
 #: common/hotkey_store.cpp:43
 msgid "Pan Left/Right"
-msgstr ""
+msgstr "เลื่อน ซ้าย/ขวา"
 
 #: common/hotkey_store.cpp:44
 msgid "Pan Up/Down"
-msgstr ""
+msgstr "เลื่อน ขึ้น/ลง"
 
 #: common/hotkey_store.cpp:45 eeschema/tools/ee_actions.cpp:255
 msgid "Finish Drawing"
-msgstr ""
+msgstr "เสร็จสิ้นการเขียนแบบ"
 
 #: common/hotkey_store.cpp:47 common/hotkey_store.cpp:52
 msgid "Show Clarify Selection Menu"
-msgstr ""
+msgstr "แสดงเมนูยืนยันการเลือก"
 
 #: common/hotkey_store.cpp:48 common/hotkey_store.cpp:53
 msgid "Add to Selection"
-msgstr ""
+msgstr "เพิ่มเข้าไปในทางเลือก"
 
 #: common/hotkey_store.cpp:49 common/hotkey_store.cpp:54
 msgid "Toggle Selection State"
-msgstr ""
+msgstr "เปิดปิดสถานะการเลือก"
 
 #: common/hotkey_store.cpp:50 common/hotkey_store.cpp:55
 msgid "Remove from Selection"
-msgstr ""
+msgstr "นำออกจากการเลือก"
 
 #: common/hotkey_store.cpp:57
 msgid "Ignore Grid Snaps"
-msgstr ""
+msgstr "ละเลยการเข้าหากริด"
 
 #: common/hotkey_store.cpp:58
 msgid "Ignore Other Snaps"
-msgstr ""
+msgstr "ละเลยการเข้าหาอื่นๆ"
 
 #: common/hotkey_store.cpp:59
 msgid "Ignore H/V/45 Constraints"
-msgstr ""
+msgstr "ละเลยข้อจำกัด H/V/45"
 
 #: common/hotkey_store.cpp:64 common/tool/action_menu.cpp:224
 #: common/tool/actions.cpp:115
 msgid "Quit"
-msgstr ""
+msgstr "ออก"
 
 #: common/hotkey_store.cpp:79
 msgid "Project Manager"
-msgstr ""
+msgstr "ผู้จัดการโครงการ"
 
 #: common/hotkey_store.cpp:80 eeschema/eeschema_config.cpp:67
 #: eeschema/menubar.cpp:125 eeschema/sch_edit_frame.cpp:1285
 #: kicad/tools/kicad_manager_actions.cpp:64
 msgid "Schematic Editor"
-msgstr ""
+msgstr "เครื่องมือแก้ไขวงจร"
 
 #: common/hotkey_store.cpp:81 kicad/tools/kicad_manager_actions.cpp:76
 #: pcbnew/menubar_pcb_editor.cpp:184 pcbnew/pcb_edit_frame.cpp:1259
 #: pcbnew/pcbnew_config.cpp:57
 msgid "PCB Editor"
-msgstr ""
+msgstr "เครื่องมือแก้ไขพีซีบอร์ด"
 
 #: common/hotkey_store.cpp:82 kicad/tools/kicad_manager_actions.cpp:105
 #: pagelayout_editor/menubar.cpp:86 pagelayout_editor/pl_editor_frame.cpp:481
 #: pagelayout_editor/pl_editor_frame.cpp:555
 msgid "Drawing Sheet Editor"
-msgstr ""
+msgstr "เครื่องมือแก้ไขกระดาษเขียนแบบ"
 
 #: common/hotkey_store.cpp:154
 msgid "Gestures"
-msgstr ""
+msgstr "ท่าทาง"
 
 #: common/kiway.cpp:253
 #, c-format
 msgid "Failed to load kiface library '%s'."
-msgstr ""
+msgstr "ล้มเหลว การอ่านไลบรารี kiface ชื่อ '%s'"
 
 #: common/kiway.cpp:261
 #, c-format
 msgid "Could not read instance name and version from kiface library '%s'."
-msgstr ""
+msgstr "ไม่สามารถอ่านชื่อและรุ่นจากไลบรารี kiface '%s'"
 
 #: common/kiway.cpp:295
 #, c-format
@@ -4509,177 +4573,182 @@ msgid ""
 "\"%s\"\n"
 "could not be loaded\n"
 msgstr ""
+"ล้มเหลวสิ้นเชิง ไฟล์:\n"
+"\"%s\"\n"
+"ไม่สามารถอ่าน\n"
 
 #: common/kiway.cpp:299
 msgid "It is missing.\n"
-msgstr ""
+msgstr "มันไม่มี\n"
 
 #: common/kiway.cpp:301
 msgid "Perhaps a shared library (.dll or .so) file is missing.\n"
-msgstr ""
+msgstr "บางทีไฟล์ไลบรารีร่วม (.dll หรือ .so) หายไป\n"
 
 #: common/kiway.cpp:303
 msgid ""
 "From command line: argv[0]:\n"
 "'"
 msgstr ""
+"จากบรรทัดคำสั่ง: argv[0]:\n"
+"'"
 
 #: common/kiway.cpp:411 common/kiway.cpp:415 common/kiway.cpp:419
 msgid "Error loading editor."
-msgstr ""
+msgstr "ผิดพลาดอ่านเครื่องมือแก้ไข"
 
 #: common/kiway.cpp:504
 #, c-format
 msgid "Unable to switch language to %s"
-msgstr ""
+msgstr "ไม่สามารถเปลี่ยนภาษาเป็น %s"
 
 #: common/languages_menu.cpp:48
 msgid "Set Language"
-msgstr ""
+msgstr "ตั้งภาษา"
 
 #: common/layer_id.cpp:32
 msgid "F.Cu"
-msgstr ""
+msgstr "F.Cu"
 
 #: common/layer_id.cpp:33
 msgid "In1.Cu"
-msgstr ""
+msgstr "In1.Cu"
 
 #: common/layer_id.cpp:34
 msgid "In2.Cu"
-msgstr ""
+msgstr "In2.Cu"
 
 #: common/layer_id.cpp:35
 msgid "In3.Cu"
-msgstr ""
+msgstr "In3.Cu"
 
 #: common/layer_id.cpp:36
 msgid "In4.Cu"
-msgstr ""
+msgstr "In4.Cu"
 
 #: common/layer_id.cpp:37
 msgid "In5.Cu"
-msgstr ""
+msgstr "In5.Cu"
 
 #: common/layer_id.cpp:38
 msgid "In6.Cu"
-msgstr ""
+msgstr "In6.Cu"
 
 #: common/layer_id.cpp:39
 msgid "In7.Cu"
-msgstr ""
+msgstr "In7.Cu"
 
 #: common/layer_id.cpp:40
 msgid "In8.Cu"
-msgstr ""
+msgstr "In8.Cu"
 
 #: common/layer_id.cpp:41
 msgid "In9.Cu"
-msgstr ""
+msgstr "In9.Cu"
 
 #: common/layer_id.cpp:42
 msgid "In10.Cu"
-msgstr ""
+msgstr "In10.Cu"
 
 #: common/layer_id.cpp:43
 msgid "In11.Cu"
-msgstr ""
+msgstr "In11.Cu"
 
 #: common/layer_id.cpp:44
 msgid "In12.Cu"
-msgstr ""
+msgstr "In12.Cu"
 
 #: common/layer_id.cpp:45
 msgid "In13.Cu"
-msgstr ""
+msgstr "In13.Cu"
 
 #: common/layer_id.cpp:46
 msgid "In14.Cu"
-msgstr ""
+msgstr "In14.Cu"
 
 #: common/layer_id.cpp:47
 msgid "In15.Cu"
-msgstr ""
+msgstr "In15.Cu"
 
 #: common/layer_id.cpp:48
 msgid "In16.Cu"
-msgstr ""
+msgstr "In16.Cu"
 
 #: common/layer_id.cpp:49
 msgid "In17.Cu"
-msgstr ""
+msgstr "In17.Cu"
 
 #: common/layer_id.cpp:50
 msgid "In18.Cu"
-msgstr ""
+msgstr "In18.Cu"
 
 #: common/layer_id.cpp:51
 msgid "In19.Cu"
-msgstr ""
+msgstr "In19.Cu"
 
 #: common/layer_id.cpp:52
 msgid "In20.Cu"
-msgstr ""
+msgstr "In20.Cu"
 
 #: common/layer_id.cpp:53
 msgid "In21.Cu"
-msgstr ""
+msgstr "In21.Cu"
 
 #: common/layer_id.cpp:54
 msgid "In22.Cu"
-msgstr ""
+msgstr "In22.Cu"
 
 #: common/layer_id.cpp:55
 msgid "In23.Cu"
-msgstr ""
+msgstr "In23.Cu"
 
 #: common/layer_id.cpp:56
 msgid "In24.Cu"
-msgstr ""
+msgstr "In24.Cu"
 
 #: common/layer_id.cpp:57
 msgid "In25.Cu"
-msgstr ""
+msgstr "In25.Cu"
 
 #: common/layer_id.cpp:58
 msgid "In26.Cu"
-msgstr ""
+msgstr "In26.Cu"
 
 #: common/layer_id.cpp:59
 msgid "In27.Cu"
-msgstr ""
+msgstr "In27.Cu"
 
 #: common/layer_id.cpp:60
 msgid "In28.Cu"
-msgstr ""
+msgstr "In28.Cu"
 
 #: common/layer_id.cpp:61
 msgid "In29.Cu"
-msgstr ""
+msgstr "In29.Cu"
 
 #: common/layer_id.cpp:62
 msgid "In30.Cu"
-msgstr ""
+msgstr "In30.Cu"
 
 #: common/layer_id.cpp:63
 msgid "B.Cu"
-msgstr ""
+msgstr "B.Cu"
 
 #: common/layer_id.cpp:66
 msgid "B.Adhesive"
-msgstr ""
+msgstr "B.Adhesive"
 
 #: common/layer_id.cpp:67
 msgid "F.Adhesive"
-msgstr ""
+msgstr "F.Adhesive"
 
 #: common/layer_id.cpp:68
 msgid "B.Paste"
-msgstr ""
+msgstr "B.Paste"
 
 #: common/layer_id.cpp:69
 msgid "F.Paste"
-msgstr ""
+msgstr "F.Paste"
 
 #: common/layer_id.cpp:70
 msgid "B.Silkscreen"
@@ -4691,35 +4760,35 @@ msgstr ""
 
 #: common/layer_id.cpp:72
 msgid "B.Mask"
-msgstr ""
+msgstr "B.Mask"
 
 #: common/layer_id.cpp:73
 msgid "F.Mask"
-msgstr ""
+msgstr "F.Mask"
 
 #: common/layer_id.cpp:76
 msgid "User.Drawings"
-msgstr ""
+msgstr "User.Drawings"
 
 #: common/layer_id.cpp:77
 msgid "User.Comments"
-msgstr ""
+msgstr "User.Comments"
 
 #: common/layer_id.cpp:78
 msgid "User.Eco1"
-msgstr ""
+msgstr "User.Eco1"
 
 #: common/layer_id.cpp:79
 msgid "User.Eco2"
-msgstr ""
+msgstr "User.Eco2"
 
 #: common/layer_id.cpp:80
 msgid "Edge.Cuts"
-msgstr ""
+msgstr "Edge.Cuts"
 
 #: common/layer_id.cpp:81 pcbnew/dialogs/panel_setup_layers_base.cpp:662
 msgid "Margin"
-msgstr ""
+msgstr "ส่วนต่าง"
 
 #: common/layer_id.cpp:84
 msgid "F.Courtyard"
@@ -4731,201 +4800,201 @@ msgstr ""
 
 #: common/layer_id.cpp:86
 msgid "F.Fab"
-msgstr ""
+msgstr "F.Fab"
 
 #: common/layer_id.cpp:87
 msgid "B.Fab"
-msgstr ""
+msgstr "B.Fab"
 
 #: common/layer_id.cpp:90
 msgid "User.1"
-msgstr ""
+msgstr "User.1"
 
 #: common/layer_id.cpp:91
 msgid "User.2"
-msgstr ""
+msgstr "User.2"
 
 #: common/layer_id.cpp:92
 msgid "User.3"
-msgstr ""
+msgstr "User.3"
 
 #: common/layer_id.cpp:93
 msgid "User.4"
-msgstr ""
+msgstr "User.4"
 
 #: common/layer_id.cpp:94
 msgid "User.5"
-msgstr ""
+msgstr "User.5"
 
 #: common/layer_id.cpp:95
 msgid "User.6"
-msgstr ""
+msgstr "User.6"
 
 #: common/layer_id.cpp:96
 msgid "User.7"
-msgstr ""
+msgstr "User.7"
 
 #: common/layer_id.cpp:97
 msgid "User.8"
-msgstr ""
+msgstr "User.8"
 
 #: common/layer_id.cpp:98
 msgid "User.9"
-msgstr ""
+msgstr "User.9"
 
 #: common/layer_id.cpp:101 pcbnew/plugins/kicad/pcb_parser.cpp:763
 msgid "Rescue"
-msgstr ""
+msgstr "กู้ภัย"
 
 #: common/layer_id.cpp:105
 msgid "Wires"
-msgstr ""
+msgstr "เส้นลวด"
 
 #: common/layer_id.cpp:106
 msgid "Buses"
-msgstr ""
+msgstr "บัส"
 
 #: common/layer_id.cpp:107
 msgid "Bus junctions"
-msgstr ""
+msgstr "จุดเชื่อมต่อบัส"
 
 #: common/layer_id.cpp:108
 msgid "Junctions"
-msgstr ""
+msgstr "จุดเชื่อมต่อ"
 
 #: common/layer_id.cpp:109
 msgid "Labels"
-msgstr ""
+msgstr "ป้ายชื่อ"
 
 #: common/layer_id.cpp:110
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:43
 msgid "Global labels"
-msgstr ""
+msgstr "ป้ายชื่อโกลบอล"
 
 #: common/layer_id.cpp:111
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:46
 msgid "Hierarchical labels"
-msgstr ""
+msgstr "ป้ายชื่อลำดับชั้น"
 
 #: common/layer_id.cpp:112
 msgid "Pin numbers"
-msgstr ""
+msgstr "หมายเลขขา"
 
 #: common/layer_id.cpp:113
 msgid "Pin names"
-msgstr ""
+msgstr "ชื่อขา"
 
 #: common/layer_id.cpp:114
 msgid "Symbol references"
-msgstr ""
+msgstr "สัญลักษณ์อ้างอิง"
 
 #: common/layer_id.cpp:115
 msgid "Symbol values"
-msgstr ""
+msgstr "ค่าของสัญลักษณ์"
 
 #: common/layer_id.cpp:116
 msgid "Symbol fields"
-msgstr ""
+msgstr "ช่องสัญลักษณ์"
 
 #: common/layer_id.cpp:117
 msgid "Symbol body outlines"
-msgstr ""
+msgstr "เส้นรอบรูปสัญลักษณ์"
 
 #: common/layer_id.cpp:118
 msgid "Symbol body fills"
-msgstr ""
+msgstr "ระบายทึบในสัญลักษณ์"
 
 #: common/layer_id.cpp:119
 msgid "Notes"
-msgstr ""
+msgstr "หมายเหตุ"
 
 #: common/layer_id.cpp:120
 msgid "Pins"
-msgstr ""
+msgstr "ขา"
 
 #: common/layer_id.cpp:121
 msgid "Sheet borders"
-msgstr ""
+msgstr "กรอบกระดาษ"
 
 #: common/layer_id.cpp:122
 msgid "Sheet backgrounds"
-msgstr ""
+msgstr "พื้นหลังกระดาษ"
 
 #: common/layer_id.cpp:123
 msgid "Sheet names"
-msgstr ""
+msgstr "ชื่อกระดาษ"
 
 #: common/layer_id.cpp:124
 msgid "Sheet fields"
-msgstr ""
+msgstr "ช่องกระดาษ"
 
 #: common/layer_id.cpp:125
 msgid "Sheet file names"
-msgstr ""
+msgstr "ชื่อไฟล์กระดาษ"
 
 #: common/layer_id.cpp:126
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:58
 msgid "Sheet pins"
-msgstr ""
+msgstr "ขาชีต"
 
 #: common/layer_id.cpp:127
 msgid "No-connect symbols"
-msgstr ""
+msgstr "สัญลักษณ์ไม่เชื่อมต่อ"
 
 #: common/layer_id.cpp:128
 msgid "ERC warnings"
-msgstr ""
+msgstr "ระวัง ERC"
 
 #: common/layer_id.cpp:129
 msgid "ERC errors"
-msgstr ""
+msgstr "ผิดพลาด ERC"
 
 #: common/layer_id.cpp:130 common/layer_id.cpp:170
 msgid "Helper items"
-msgstr ""
+msgstr "ตัวช่วย"
 
 #: common/layer_id.cpp:131 common/layer_id.cpp:171 common/tool/grid_menu.cpp:40
 #: gerbview/widgets/gerbview_layer_widget.cpp:108
 #: pcbnew/widgets/appearance_controls.cpp:361
 msgid "Grid"
-msgstr ""
+msgstr "กริด"
 
 #: common/layer_id.cpp:132
 msgid "Axes"
-msgstr ""
+msgstr "แกน"
 
 #: common/layer_id.cpp:133 common/layer_id.cpp:173
 #: gerbview/widgets/gerbview_layer_widget.cpp:110
 msgid "Background"
-msgstr ""
+msgstr "พื้นหลัง"
 
 #: common/layer_id.cpp:134 common/layer_id.cpp:169
 msgid "Cursor"
-msgstr ""
+msgstr "เคอร์เซอร์"
 
 #: common/layer_id.cpp:135
 msgid "Highlighted items"
-msgstr ""
+msgstr "สิ่งของแสดงสีเน้น"
 
 #: common/layer_id.cpp:136
 msgid "Hidden items"
-msgstr ""
+msgstr "สิ่งที่ถูกซ่อน"
 
 #: common/layer_id.cpp:137 common/layer_id.cpp:174
 msgid "Selection highlight"
-msgstr ""
+msgstr "สีเน้นการเลือก"
 
 #: common/layer_id.cpp:138 common/layer_id.cpp:168
 msgid "Drawing sheet"
-msgstr ""
+msgstr "กระดาษเขียนแบบ"
 
 #: common/layer_id.cpp:142
 msgid "Footprints front"
-msgstr ""
+msgstr "ฟุ้ทพรินท์ด้านหน้า"
 
 #: common/layer_id.cpp:143
 msgid "Footprints back"
-msgstr ""
+msgstr "ฟุ้ทพรินท์ด้านหลัง"
 
 #: common/layer_id.cpp:144
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:28
@@ -4934,38 +5003,38 @@ msgstr ""
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:30
 #: pcbnew/widgets/appearance_controls.cpp:348
 msgid "Values"
-msgstr ""
+msgstr "ค่า"
 
 #: common/layer_id.cpp:145
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:25
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:53
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:27
 msgid "Reference designators"
-msgstr ""
+msgstr "อักษรอ้างอิง"
 
 #: common/layer_id.cpp:146
 msgid "Footprint text front"
-msgstr ""
+msgstr "ข้อความฟุ้ทพรินท์ด้านหน้า"
 
 #: common/layer_id.cpp:147
 msgid "Footprint text back"
-msgstr ""
+msgstr "ข้อความฟุ้ทพรินท์ด้านหลัง"
 
 #: common/layer_id.cpp:148
 msgid "Hidden text"
-msgstr ""
+msgstr "ข้อความถูกซ่อน"
 
 #: common/layer_id.cpp:149
 msgid "Pads front"
-msgstr ""
+msgstr "แพ็ดด้านหน้า"
 
 #: common/layer_id.cpp:150
 msgid "Pads back"
-msgstr ""
+msgstr "แพ็ดด้านหลัง"
 
 #: common/layer_id.cpp:151
 msgid "Through-hole pads"
-msgstr ""
+msgstr "แพ็ดเจาะทะลุ"
 
 #: common/layer_id.cpp:152
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:27
@@ -4974,77 +5043,77 @@ msgstr ""
 #: pcbnew/widgets/appearance_controls.cpp:340
 #: pcbnew/widgets/panel_selection_filter_base.cpp:39
 msgid "Tracks"
-msgstr ""
+msgstr "แทร็ค"
 
 #: common/layer_id.cpp:153
 msgid "Through vias"
-msgstr ""
+msgstr "เวียเจาะทะลุ"
 
 #: common/layer_id.cpp:154
 msgid "Bl/Buried vias"
-msgstr ""
+msgstr "Bl/Buried เวีย"
 
 #: common/layer_id.cpp:155
 msgid "Micro-vias"
-msgstr ""
+msgstr "ไมโครเวีย"
 
 #: common/layer_id.cpp:156
 msgid "Via holes"
-msgstr ""
+msgstr "รูเจาะในเวีย"
 
 #: common/layer_id.cpp:157
 msgid "Via hole walls"
-msgstr ""
+msgstr "ผนังรูเจาะเวีย"
 
 #: common/layer_id.cpp:158
 msgid "Plated holes"
-msgstr ""
+msgstr "รูเจาะเคลือบ"
 
 #: common/layer_id.cpp:159
 msgid "Plated hole walls"
-msgstr ""
+msgstr "ผนังรูเจาะเคลือบ"
 
 #: common/layer_id.cpp:160
 msgid "Non-plated holes"
-msgstr ""
+msgstr "รูเจาะไม่เคลือบ"
 
 #: common/layer_id.cpp:161 pcbnew/dialogs/panel_edit_options_base.cpp:317
 #: pcbnew/widgets/appearance_controls.cpp:354
 #: pcbnew/widgets/appearance_controls.cpp:665
 msgid "Ratsnest"
-msgstr ""
+msgstr "รังหนู"
 
 #: common/layer_id.cpp:162
 msgid "No-connects"
-msgstr ""
+msgstr "ไม่เชื่อมต่อ"
 
 #: common/layer_id.cpp:163
 msgid "DRC warnings"
-msgstr ""
+msgstr "ระวัง DRC"
 
 #: common/layer_id.cpp:164
 msgid "DRC errors"
-msgstr ""
+msgstr "ผิดพลาด DRC"
 
 #: common/layer_id.cpp:165
 msgid "DRC exclusions"
-msgstr ""
+msgstr "ยกเว้น DRC"
 
 #: common/layer_id.cpp:166
 msgid "DRC marker shadows"
-msgstr ""
+msgstr "แสดงเงามาร์คเกอร์ DRC"
 
 #: common/layer_id.cpp:167 pcbnew/widgets/appearance_controls.cpp:359
 msgid "Anchors"
-msgstr ""
+msgstr "สมอ"
 
 #: common/layer_id.cpp:172
 msgid "Grid axes"
-msgstr ""
+msgstr "แกนกริด"
 
 #: common/lib_id.cpp:143
 msgid "Illegal character found in logical library name"
-msgstr ""
+msgstr "ตั้งชื่อไลบรารีด้วยตัวอักษรผิดกฎ"
 
 #: common/lib_tree_model.cpp:139 eeschema/lib_item.cpp:61
 #: eeschema/sch_pin.cpp:189 eeschema/symbol_editor/symbol_editor.cpp:1199
@@ -5060,24 +5129,24 @@ msgstr ""
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:212
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:223
 msgid "Unit"
-msgstr ""
+msgstr "หน่วย"
 
 #: common/lib_tree_model_adapter.cpp:272
 msgid "Item"
-msgstr ""
+msgstr "สิ่งของ"
 
 #: common/libeval_compiler/libeval_compiler.cpp:566
 #, c-format
 msgid "Unrecognized character '%c'"
-msgstr ""
+msgstr "ไม่รู้จักอักษร '%c'"
 
 #: common/libeval_compiler/libeval_compiler.cpp:826
 msgid "Unknown parent of function parameters"
-msgstr ""
+msgstr "ไม่รู้จักฟังก์ชั่นพารามิเตอร์"
 
 #: common/libeval_compiler/libeval_compiler.cpp:845
 msgid "Unknown parent of property"
-msgstr ""
+msgstr "ไม่รู้จักต้นกำเนิดของคุณสมบัติ"
 
 #: common/libeval_compiler/libeval_compiler.cpp:868
 #: common/libeval_compiler/libeval_compiler.cpp:896
@@ -5085,61 +5154,61 @@ msgstr ""
 #: common/libeval_compiler/libeval_compiler.cpp:1031
 #, c-format
 msgid "Unrecognized item '%s'"
-msgstr ""
+msgstr "ไม่รู้จักสิ่งนี้ '%s'"
 
 #: common/libeval_compiler/libeval_compiler.cpp:873
 #: common/libeval_compiler/libeval_compiler.cpp:973
 #, c-format
 msgid "Unrecognized property '%s'"
-msgstr ""
+msgstr "ไม่รู้จักคุณสมบัติ '%s'"
 
 #: common/libeval_compiler/libeval_compiler.cpp:908
 #, c-format
 msgid "Unrecognized function '%s'"
-msgstr ""
+msgstr "ไม่รู้จักฟังก์ชั่น '%s'"
 
 #: common/libeval_compiler/libeval_compiler.cpp:1003
 #, c-format
 msgid "Missing units for '%s'| (%s)"
-msgstr ""
+msgstr "ไม่พบหน่วยสำหรับ '%s'|(%s)"
 
 #: common/libeval_compiler/libeval_compiler.cpp:1120
 #, c-format
 msgid "Type mismatch between '%s' and %lf"
-msgstr ""
+msgstr "ประเภทไม่เหมือนกันระหว่าง '%s' และ %lf"
 
 #: common/libeval_compiler/libeval_compiler.cpp:1126
 #, c-format
 msgid "Type mismatch between %lf and '%s'"
-msgstr ""
+msgstr "ประเภทไม่เหมือนกันระหว่าง %lf และ '%s'"
 
 #: common/pgm_base.cpp:166
 msgid "No default editor found, you must choose it"
-msgstr ""
+msgstr "ไม่พบเครื่องมือแก้ไขตั้งต้น คุณต้องเลือก"
 
 #: common/pgm_base.cpp:186
 msgid "Executable file (*.exe)|*.exe"
-msgstr ""
+msgstr "ไฟล์สั่งทำงาน (*.exe)|*.exe"
 
 #: common/pgm_base.cpp:188
 msgid "Executable file (*)|*"
-msgstr ""
+msgstr "ไฟล์สั่งทำงาน (*)|*"
 
 #: common/pgm_base.cpp:198
 msgid "Select Preferred Editor"
-msgstr ""
+msgstr "เลือกเครื่องมือแก้ไขที่ชอบ"
 
 #: common/pgm_base.cpp:212
 msgid "Environment variable HOME is empty.  Unable to continue."
-msgstr ""
+msgstr "ตัวแปร Environment ชื่อ HOME ว่างเปล่า\tไม่สามารถทำงานต่อ"
 
 #: common/pgm_base.cpp:421
 msgid "This language is not supported by the operating system."
-msgstr ""
+msgstr "ระบบปฏิบัติการไม่สนับสนุนภาษานี้"
 
 #: common/pgm_base.cpp:472 common/pgm_base.cpp:510
 msgid "The KiCad language file for this language is not installed."
-msgstr ""
+msgstr "ไฟล์ภาษาของ KiCad ไม่ได้ติดตั้ง"
 
 #: common/plugins/altium/altium_parser.cpp:112
 msgid ""
@@ -5151,17 +5220,17 @@ msgstr ""
 #: common/plugins/altium/altium_parser.cpp:228
 #, c-format
 msgid "Unit '%s' does not end with 'mil'."
-msgstr ""
+msgstr "หน่วย '%s' ไม่สิ้นสุดด้วย 'มิล'"
 
 #: common/plugins/altium/altium_parser.cpp:236
 #, c-format
 msgid "Cannot convert '%s' to double."
-msgstr ""
+msgstr "ไม่สามารถเปลี่ยน '%s' เป็น double"
 
 #: common/plugins/cadstar/cadstar_archive_parser.cpp:2319
 #, c-format
 msgid "Cannot open file '%s'"
-msgstr ""
+msgstr "ไม่สามารถเปิดไฟล์ '%s'"
 
 #: common/plugins/cadstar/cadstar_archive_parser.cpp:2335
 #: common/plugins/cadstar/cadstar_archive_parser.cpp:2353
@@ -5169,541 +5238,541 @@ msgstr ""
 #: common/plugins/cadstar/cadstar_archive_parser.cpp:2375
 #: common/plugins/cadstar/cadstar_archive_parser.cpp:2381
 msgid "The selected file is not valid or might be corrupt!"
-msgstr ""
+msgstr "ไฟล์ที่เลือกไม่สมบูรณ์หรืออาจจะมีข้อมูลเสีย!"
 
 #: common/plugins/cadstar/cadstar_archive_parser.cpp:2480
 #, c-format
 msgid "Unexpected number of points in '%s'. Found %d but expected %d."
-msgstr ""
+msgstr "จำนวนจุดที่ไม่คาดหวังใน '%s' พบ %d แต่คาดหวัง %d"
 
 #: common/plugins/cadstar/cadstar_archive_parser.h:39
 #, c-format
 msgid "Missing node '%s' in '%s'"
-msgstr ""
+msgstr "ไม่พบโหนด '%s' ใน '%s'"
 
 #: common/plugins/cadstar/cadstar_archive_parser.h:42
 #, c-format
 msgid "Unknown node '%s' in '%s'"
-msgstr ""
+msgstr "ไม่รู้จักโหนด '%s' ใน '%s'"
 
 #: common/plugins/cadstar/cadstar_archive_parser.h:45
 #, c-format
 msgid "Missing Parameter '%s' in '%s'"
-msgstr ""
+msgstr "ไม่พบพารามิเตอร์ '%s' ใน '%s'"
 
 #: common/plugins/cadstar/cadstar_archive_parser.h:48
 #, c-format
 msgid "Unknown Parameter '%s' in '%s'"
-msgstr ""
+msgstr "ไม่รู้จักพารามิเตอร์ '%s' ใน '%s'"
 
 #: common/plugins/cadstar/cadstar_archive_parser.h:51
 #, c-format
 msgid "Unable to parse '%s' in '%s'"
-msgstr ""
+msgstr "ไม่สามารถตีความ '%s' ใน '%s'"
 
 #: common/plugins/eagle/eagle_parser.cpp:121
 #, c-format
 msgid "Invalid size %lld: too large"
-msgstr ""
+msgstr "ขนาดไม่ถูก %lld: ใหญ่เกินไป"
 
 #: common/plugins/eagle/eagle_parser.cpp:283
 #, c-format
 msgid "Invalid Arc with radius %f and angle %f"
-msgstr ""
+msgstr "เส้นโค้งไม่ถูกต้อง รัศมี %f และมุม %f"
 
 #: common/project.cpp:311 common/project.cpp:316 pcbnew/pcb_base_frame.cpp:156
 msgid "Error loading project footprint library table."
-msgstr ""
+msgstr "ผิดพลาด ไม่สามารถอ่านตารางไลบรารีฟุ้ทพรินท์"
 
 #: common/project/project_archiver.cpp:63
 msgid "Failed to output data."
-msgstr ""
+msgstr "ข้อมูลส่งออกผิดพลาด"
 
 #: common/project/project_archiver.cpp:91
 msgid "Could not open archive file\n"
-msgstr ""
+msgstr "ไม่สามารถเปิดไฟล์ในคลัง\n"
 
 #: common/project/project_archiver.cpp:100
 msgid "Invalid archive file format\n"
-msgstr ""
+msgstr "รูปแบบไฟล์ในคลังไม่ถูกต้อง\n"
 
 #: common/project/project_archiver.cpp:111
 #, c-format
 msgid "Extracting file '%s'.\n"
-msgstr ""
+msgstr "กำลังแตกไฟล์ '%s'\n"
 
 #: common/project/project_archiver.cpp:151
 msgid "Error extracting file!\n"
-msgstr ""
+msgstr "ผิดพลาด การแตกไฟล์!\n"
 
 #: common/project/project_archiver.cpp:208
 #, c-format
 msgid "Unable to create archive file '%s'.\n"
-msgstr ""
+msgstr "ไม่สามารถสร้างไฟล์คลัง '%s'\n"
 
 #: common/project/project_archiver.cpp:254
 #, c-format
 msgid "Archived file '%s'.\n"
-msgstr ""
+msgstr "กำลังเก็บไฟล์ '%s' เข้าคลัง\n"
 
 #: common/project/project_archiver.cpp:264
 #, c-format
 msgid "Failed to archive file '%s'.\n"
-msgstr ""
+msgstr "ล้มเหลวที่จะเก็บไฟล์ '%s' เข้าคลัง\n"
 
 #: common/project/project_archiver.cpp:290
 #, c-format
 msgid "Zip archive '%s' created (%s uncompressed, %s compressed).\n"
-msgstr ""
+msgstr "บีบอัดไฟล์ '%s' สำเร็จ (%s ไม่บีบ, %s บีบอัด)\n"
 
 #: common/rc_item.cpp:353
 msgid "Excluded "
-msgstr ""
+msgstr "ไม่รวม "
 
 #: common/rc_item.cpp:357
 msgid "Error: "
-msgstr ""
+msgstr "ผิดพลาด: "
 
 #: common/rc_item.cpp:358
 msgid "Warning: "
-msgstr ""
+msgstr "ระวัง: "
 
 #: common/richio.cpp:170
 #, c-format
 msgid "Unable to open %s for reading."
-msgstr ""
+msgstr "ไม่เปิดไฟล์ %s สำหรับอ่าน"
 
 #: common/richio.cpp:221 common/richio.cpp:316
 msgid "Maximum line length exceeded"
-msgstr ""
+msgstr "ความยาวบรรทัดเกินค่าสูงสุด"
 
 #: common/richio.cpp:283
 msgid "Line length exceeded"
-msgstr ""
+msgstr "ความยาวบรรทัดเกิน"
 
 #: common/richio.cpp:567
 msgid "OUTPUTSTREAM_OUTPUTFORMATTER write error"
-msgstr ""
+msgstr "OUTPUTSTREAM_OUTPUTFORMATTER เขียนผิดพลาด"
 
 #: common/settings/color_settings.cpp:308
 msgid "(Footprints)"
-msgstr ""
+msgstr "(ฟุ้ทพรินท์)"
 
 #: common/settings/color_settings.cpp:360
 msgid "KiCad Default"
-msgstr ""
+msgstr "ค่าตั้งต้น KiCad"
 
 #: common/settings/color_settings.cpp:365
 msgid "KiCad Classic"
-msgstr ""
+msgstr "KiCad ดั่งเดิม"
 
 #: common/template_fieldnames.cpp:72 eeschema/sch_sheet.cpp:60
 #, c-format
 msgid "Field%d"
-msgstr ""
+msgstr "ช่อง%d"
 
 #: common/tool/action_menu.cpp:212
 #, c-format
 msgid "Close %s"
-msgstr ""
+msgstr "ปิด %s"
 
 #: common/tool/action_menu.cpp:225
 #, c-format
 msgid "Quit %s"
-msgstr ""
+msgstr "ออก %s"
 
 #: common/tool/actions.cpp:43
 msgid "New..."
-msgstr ""
+msgstr "ใหม่…"
 
 #: common/tool/actions.cpp:43
 msgid "Create a new document in the editor"
-msgstr ""
+msgstr "สร้างเอกสารใหม่ในเครื่องมือแก้ไข"
 
 #: common/tool/actions.cpp:49
 msgid "New Library..."
-msgstr ""
+msgstr "ไลบรารีใหม่…"
 
 #: common/tool/actions.cpp:49
 msgid "Create a new library folder"
-msgstr ""
+msgstr "สร้างโฟลเดอร์ไลบรารีใหม่"
 
 #: common/tool/actions.cpp:55
 msgid "Add Library..."
-msgstr ""
+msgstr "เพิ่มไลบรารี…"
 
 #: common/tool/actions.cpp:55
 msgid "Add an existing library folder"
-msgstr ""
+msgstr "เพิ่มไลบรารีโฟลเดอร์มีอยู่แล้ว"
 
 #: common/tool/actions.cpp:61 eeschema/sim/sim_plot_frame_base.cpp:25
 msgid "Open..."
-msgstr ""
+msgstr "เปิด…"
 
 #: common/tool/actions.cpp:61
 msgid "Open existing document"
-msgstr ""
+msgstr "เปิดเอกสารที่มีอยู่"
 
 #: common/tool/actions.cpp:67
 msgid "Save changes"
-msgstr ""
+msgstr "บันทึกการเปลี่ยนแปลง"
 
 #: common/tool/actions.cpp:73 eeschema/sim/sim_plot_frame_base.cpp:33
 #: eeschema/tools/ee_actions.cpp:138
 msgid "Save As..."
-msgstr ""
+msgstr "บันทึกเป็น…"
 
 #: common/tool/actions.cpp:73
 msgid "Save current document to another location"
-msgstr ""
+msgstr "บันทึกเอกสารปัจจุบันไปที่ตำแหน่งอื่น"
 
 #: common/tool/actions.cpp:79
 msgid "Save Copy As..."
-msgstr ""
+msgstr "บันทึกสำเนาเป็น…"
 
 #: common/tool/actions.cpp:79
 msgid "Save a copy of the current document to another location"
-msgstr ""
+msgstr "บันทึกสำเนาเอกสารปัจจุบันไปที่ตำแหน่งอื่น"
 
 #: common/tool/actions.cpp:85
 msgid "Save All"
-msgstr ""
+msgstr "บันทึกทั้งหมด"
 
 #: common/tool/actions.cpp:85
 msgid "Save all changes"
-msgstr ""
+msgstr "บันทึกการเปลี่ยนแปลงทั้งหมด"
 
 #: common/tool/actions.cpp:91
 msgid "Throw away changes"
-msgstr ""
+msgstr "คว้างทิ้งการเปลี่ยนแปลง"
 
 #: common/tool/actions.cpp:97
 msgid "Page Settings..."
-msgstr ""
+msgstr "ตั้งค่าหน้ากระดาษ…"
 
 #: common/tool/actions.cpp:97
 msgid "Settings for paper size and title block info"
-msgstr ""
+msgstr "ตั้งค่าขนาดกระดาษและไตเติ้ล"
 
 #: common/tool/actions.cpp:103 kicad/project_tree_pane.cpp:803
 msgid "Print..."
-msgstr ""
+msgstr "พิมพ์…"
 
 #: common/tool/actions.cpp:109
 msgid "Plot..."
-msgstr ""
+msgstr "พล็อต…"
 
 #: common/tool/actions.cpp:109 pcbnew/dialogs/dialog_plot.cpp:68
 #: pcbnew/dialogs/dialog_plot_base.h:153
 msgid "Plot"
-msgstr ""
+msgstr "พล็อต"
 
 #: common/tool/actions.cpp:115
 msgid "Close the current editor"
-msgstr ""
+msgstr "ปิดเครื่องมือแก้ไขที่กำลังใช้"
 
 #: common/tool/actions.cpp:122
 msgid "Cancel current tool"
-msgstr ""
+msgstr "ยกเลิกเครื่องมือปัจจุบัน"
 
 #: common/tool/actions.cpp:128
 msgid "Show Context Menu"
-msgstr ""
+msgstr "แสดงเมนูขวา"
 
 #: common/tool/actions.cpp:128
 msgid "Perform the right-mouse-button action"
-msgstr ""
+msgstr "ปฏิบัติกิจกรรมเมื่อคลิกเมาส์ปุ่มขวา"
 
 #: common/tool/actions.cpp:137
 msgid "Undo"
-msgstr ""
+msgstr "ย้อนทำ"
 
 #: common/tool/actions.cpp:137
 msgid "Undo last edit"
-msgstr ""
+msgstr "ย้อนทำแก้ไขหลังสุด"
 
 #: common/tool/actions.cpp:148
 msgid "Redo"
-msgstr ""
+msgstr "ทำอีกครั้ง"
 
 #: common/tool/actions.cpp:148
 msgid "Redo last edit"
-msgstr ""
+msgstr "ทำการแก้ไขล่าสุดอีกครั้ง"
 
 #: common/tool/actions.cpp:154
 msgid "Cut selected item(s) to clipboard"
-msgstr ""
+msgstr "ตัดสิ่งที่ถูกเลือกเข้าคลิปบอร์ด"
 
 #: common/tool/actions.cpp:160
 msgid "Copy selected item(s) to clipboard"
-msgstr ""
+msgstr "ก้อปปี้สิ่งที่ถูกเลือกเข้าคลิปบอร์ด"
 
 #: common/tool/actions.cpp:166
 msgid "Paste items(s) from clipboard"
-msgstr ""
+msgstr "วางสิ่งของจากคลิปบอร์ด"
 
 #: common/tool/actions.cpp:172
 msgid "Select all items on screen"
-msgstr ""
+msgstr "เลือกทุกอย่างบนจอภาพ"
 
 #: common/tool/actions.cpp:176
 msgid "Paste Special..."
-msgstr ""
+msgstr "วางแบบพิเศษ…"
 
 #: common/tool/actions.cpp:176
 msgid "Paste item(s) from clipboard with options"
-msgstr ""
+msgstr "วางสิ่งของจากคลิปบอร์ดแบบมีทางเลือก"
 
 #: common/tool/actions.cpp:181
 msgid "Duplicate"
-msgstr ""
+msgstr "ทำซ้ำ"
 
 #: common/tool/actions.cpp:181
 msgid "Duplicates the selected item(s)"
-msgstr ""
+msgstr "ทำซ้ำสิ่งที่เลือก"
 
 #: common/tool/actions.cpp:192
 msgid "Deletes selected item(s)"
-msgstr ""
+msgstr "ลบสิ่งที่เลือก"
 
 #: common/tool/actions.cpp:197
 msgid "Interactive Delete Tool"
-msgstr ""
+msgstr "เครื่องมือลบแบบโต้ตอบ"
 
 #: common/tool/actions.cpp:197
 msgid "Delete clicked items"
-msgstr ""
+msgstr "ลบสิ่งที่ถูกคลิก"
 
 #: common/tool/actions.cpp:204
 msgid "Change Edit Method"
-msgstr ""
+msgstr "เปลี่ยนวิธีแก้ไข"
 
 #: common/tool/actions.cpp:204
 msgid "Change edit method constraints"
-msgstr ""
+msgstr "เปลี่ยนข้อจำกัดวิธีแก้ไข"
 
 #: common/tool/actions.cpp:209 eeschema/dialogs/dialog_schematic_find.cpp:33
 #: eeschema/dialogs/dialog_schematic_find_base.h:81
 msgid "Find"
-msgstr ""
+msgstr "ค้นหา"
 
 #: common/tool/actions.cpp:209
 msgid "Find text"
-msgstr ""
+msgstr "ค้นหาข้อความ"
 
 #: common/tool/actions.cpp:215 eeschema/dialogs/dialog_schematic_find.cpp:44
 msgid "Find and Replace"
-msgstr ""
+msgstr "ค้นหาและทดแทน"
 
 #: common/tool/actions.cpp:215
 msgid "Find and replace text"
-msgstr ""
+msgstr "ค้นหาและทดแทนข้อความ"
 
 #: common/tool/actions.cpp:221 pcbnew/dialogs/dialog_find_base.cpp:93
 msgid "Find Next"
-msgstr ""
+msgstr "ค้นหาข้อความ"
 
 #: common/tool/actions.cpp:221
 msgid "Find next match"
-msgstr ""
+msgstr "ค้นหาคำต่อไป"
 
 #: common/tool/actions.cpp:227
 msgid "Find Next Marker"
-msgstr ""
+msgstr "ค้นหามาร์คเกอร์ถัดไป"
 
 #: common/tool/actions.cpp:233
 msgid "Replace and Find Next"
-msgstr ""
+msgstr "ทดแทนและค้นหาต่อ"
 
 #: common/tool/actions.cpp:233
 msgid "Replace current match and find next"
-msgstr ""
+msgstr "ทดแทนคำที่ตรงและค้นหาต่อ"
 
 #: common/tool/actions.cpp:239
 msgid "Replace All"
-msgstr ""
+msgstr "ทดแทนทั้งหมด"
 
 #: common/tool/actions.cpp:239
 msgid "Replace all matches"
-msgstr ""
+msgstr "ทดแทนคำตรงทั้งหมด"
 
 #: common/tool/actions.cpp:250
 msgid "Previous Marker"
-msgstr ""
+msgstr "มาร์คเกอร์ก่อนหน้า"
 
 #: common/tool/actions.cpp:250
 msgid "Go to previous marker in Checker window"
-msgstr ""
+msgstr "ไปที่มาร์คเกอร์ก่อนหน้าในหน้าต่างตรวจสอบ"
 
 #: common/tool/actions.cpp:255
 msgid "Next Marker"
-msgstr ""
+msgstr "มาร์คเกอร์ต่อไป"
 
 #: common/tool/actions.cpp:255
 msgid "Go to next marker in Checker window"
-msgstr ""
+msgstr "ไปที่มาร์คเกอร์ต่อไปในหน้าต่างตรวจสอบ"
 
 #: common/tool/actions.cpp:260
 msgid "Exclude Marker"
-msgstr ""
+msgstr "ไม่รวมมาร์คเกอร์"
 
 #: common/tool/actions.cpp:260
 msgid "Mark current violation in Checker window as an exclusion"
-msgstr ""
+msgstr "กำหนดตำแหน่งละเมิดในหน้าต่างตรวจสอบเป็นไม่รวม"
 
 #: common/tool/actions.cpp:271
 msgid "Refresh"
-msgstr ""
+msgstr "รีเฟรช"
 
 #: common/tool/actions.cpp:282
 msgid "Zoom to Fit"
-msgstr ""
+msgstr "ซูมให้เต็ม"
 
 #: common/tool/actions.cpp:287
 msgid "Zoom to Objects"
-msgstr ""
+msgstr "ซูมครอบคลุมวัตถุ"
 
 #: common/tool/actions.cpp:298
 msgid "Zoom In at Cursor"
-msgstr ""
+msgstr "ซูมที่ตำแหน่งเคอร์เซอร์"
 
 #: common/tool/actions.cpp:309
 msgid "Zoom Out at Cursor"
-msgstr ""
+msgstr "ซูมที่ตำแหน่งเคอร์เซอร์"
 
 #: common/tool/actions.cpp:315 common/widgets/mathplot.cpp:1761
 #: eeschema/sim/sim_plot_frame_base.cpp:83
 msgid "Zoom In"
-msgstr ""
+msgstr "ขยายเข้า"
 
 #: common/tool/actions.cpp:321 common/widgets/mathplot.cpp:1762
 #: eeschema/sim/sim_plot_frame_base.cpp:87
 msgid "Zoom Out"
-msgstr ""
+msgstr "ย่อออก"
 
 #: common/tool/actions.cpp:333
 msgid "Zoom to Selection"
-msgstr ""
+msgstr "ซูมไปที่เลือก"
 
 #: common/tool/actions.cpp:346
 msgid "Cursor Up"
-msgstr ""
+msgstr "เลื่อนเคอร์เซอร์ขึ้น"
 
 #: common/tool/actions.cpp:352
 msgid "Cursor Down"
-msgstr ""
+msgstr "เลื่อนเคอร์เซอร์ลง"
 
 #: common/tool/actions.cpp:358
 msgid "Cursor Left"
-msgstr ""
+msgstr "เลื่อนเคอร์เซอร์ซ้าย"
 
 #: common/tool/actions.cpp:364
 msgid "Cursor Right"
-msgstr ""
+msgstr "เลื่อนเคอร์เซอร์ขวา"
 
 #: common/tool/actions.cpp:371
 msgid "Cursor Up Fast"
-msgstr ""
+msgstr "เลื่อนเคอร์เซอร์ขึ้นเร็ว"
 
 #: common/tool/actions.cpp:377
 msgid "Cursor Down Fast"
-msgstr ""
+msgstr "เลื่อนเคอร์เซอร์ลงเร็ว"
 
 #: common/tool/actions.cpp:383
 msgid "Cursor Left Fast"
-msgstr ""
+msgstr "เลื่อนเคอร์เซอร์ซ้ายเร็ว"
 
 #: common/tool/actions.cpp:389
 msgid "Cursor Right Fast"
-msgstr ""
+msgstr "เลื่อนเคอร์เซอร์ขวาเร็ว"
 
 #: common/tool/actions.cpp:395
 msgid "Click"
-msgstr ""
+msgstr "คลิก"
 
 #: common/tool/actions.cpp:395
 msgid "Performs left mouse button click"
-msgstr ""
+msgstr "ดำเนินการตามคลิกเมาส์ซ้าย"
 
 #: common/tool/actions.cpp:401
 msgid "Double-click"
-msgstr ""
+msgstr "ดับเบิ้ลคลิก"
 
 #: common/tool/actions.cpp:401
 msgid "Performs left mouse button double-click"
-msgstr ""
+msgstr "ดำเนินการดับเบิ้ลคลิกเมาส์ซ้าย"
 
 #: common/tool/actions.cpp:407
 msgid "Pin Library"
-msgstr ""
+msgstr "ไลบรารีขา"
 
 #: common/tool/actions.cpp:408
 msgid "Keep the library at the top of the list"
-msgstr ""
+msgstr "ให้ไลบรารีอยู่บนสุดของรายการ"
 
 #: common/tool/actions.cpp:411
 msgid "Unpin Library"
-msgstr ""
+msgstr "ไลบรารีอันพิน"
 
 #: common/tool/actions.cpp:412
 msgid "No longer keep the library at the top of the list"
-msgstr ""
+msgstr "ไม่ต้องวางไลบรารีบนสุดของรายการ"
 
 #: common/tool/actions.cpp:417
 msgid "Pan Up"
-msgstr ""
+msgstr "เลื่อนขึ้น"
 
 #: common/tool/actions.cpp:423
 msgid "Pan Down"
-msgstr ""
+msgstr "เลื่อนลง"
 
 #: common/tool/actions.cpp:429
 msgid "Pan Left"
-msgstr ""
+msgstr "เลื่อนซ้าย"
 
 #: common/tool/actions.cpp:435
 msgid "Pan Right"
-msgstr ""
+msgstr "เลื่อนขวา"
 
 #: common/tool/actions.cpp:442
 msgid "Switch to Fast Grid 1"
-msgstr ""
+msgstr "เปลี่ยนไปที่กริดเร็ว 1"
 
 #: common/tool/actions.cpp:447
 msgid "Switch to Fast Grid 2"
-msgstr ""
+msgstr "เปลี่ยนไปที่กริดเร็ว 2"
 
 #: common/tool/actions.cpp:452
 msgid "Switch to Next Grid"
-msgstr ""
+msgstr "เปลี่ยนไปกริดถัดไป"
 
 #: common/tool/actions.cpp:456
 msgid "Switch to Previous Grid"
-msgstr ""
+msgstr "เปลี่ยนกลับไปกริดก่อนหน้า"
 
 #: common/tool/actions.cpp:461
 msgid "Set the grid origin point"
-msgstr ""
+msgstr "ตั้งจุดกำเนิดของกริด"
 
 #: common/tool/actions.cpp:474
 msgid "Show Grid"
-msgstr ""
+msgstr "แสดงกริด"
 
 #: common/tool/actions.cpp:474
 msgid "Display grid dots or lines in the edit window"
-msgstr ""
+msgstr "แสดงกริดจุดหรือกริดเส้นในหน้าต่างแก้ไข"
 
 #: common/tool/actions.cpp:479
 msgid "Grid Properties..."
-msgstr ""
+msgstr "คุณสมบัติกริด…"
 
 #: common/tool/actions.cpp:479
 msgid "Set grid dimensions"
-msgstr ""
+msgstr "ตั้งขนาดกริด"
 
 #: common/tool/actions.cpp:484
 msgid "Use inches"
-msgstr ""
+msgstr "ใช้หน่วยนิ้ว"
 
 #: common/tool/actions.cpp:489
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:120
@@ -5711,11 +5780,11 @@ msgstr ""
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:85
 #: pcbnew/import_gfx/dialog_import_gfx.cpp:54
 msgid "Mils"
-msgstr ""
+msgstr "มิล"
 
 #: common/tool/actions.cpp:489
 msgid "Use mils"
-msgstr ""
+msgstr "ใช้หน่วยมิล"
 
 #: common/tool/actions.cpp:494
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:120
@@ -5726,180 +5795,180 @@ msgstr ""
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:85
 #: pcbnew/import_gfx/dialog_import_gfx.cpp:53
 msgid "Millimeters"
-msgstr ""
+msgstr "มิลลิเมตร"
 
 #: common/tool/actions.cpp:494
 msgid "Use millimeters"
-msgstr ""
+msgstr "ใช้หน่วยมิลลิเมตร"
 
 #: common/tool/actions.cpp:503
 msgid "Switch units"
-msgstr ""
+msgstr "สลับหน่วย"
 
 #: common/tool/actions.cpp:503
 msgid "Switch between imperial and metric units"
-msgstr ""
+msgstr "สลับหน่วยระหว่างอิมพีเรียลและเมตริก"
 
 #: common/tool/actions.cpp:508
 msgid "Polar Coordinates"
-msgstr ""
+msgstr "พิกัดเชิงมุม"
 
 #: common/tool/actions.cpp:508
 msgid "Switch between polar and cartesian coordinate systems"
-msgstr ""
+msgstr "สลับระหว่างพิกัดเชิงมุมและพิกัดเชิงเส้น"
 
 #: common/tool/actions.cpp:514
 msgid "Reset Local Coordinates"
-msgstr ""
+msgstr "ล้างค่าพิกัด"
 
 #: common/tool/actions.cpp:520
 msgid "Always Show Cursor"
-msgstr ""
+msgstr "แสดงเคอร์เซอร์เสมอ"
 
 #: common/tool/actions.cpp:520
 msgid "Display crosshairs even in selection tool"
-msgstr ""
+msgstr "แสดงเส้นกากบาทแม้อยู่ในเครื่องมือเลือก"
 
 #: common/tool/actions.cpp:525
 msgid "Full-Window Crosshairs"
-msgstr ""
+msgstr "กากบาทเต็มหน้าต่าง"
 
 #: common/tool/actions.cpp:525
 msgid "Switch display of full-window crosshairs"
-msgstr ""
+msgstr "สลับการแสดงกากบาทเต็มหน้าต่าง"
 
 #: common/tool/actions.cpp:530
 msgid "Single Layer View Mode"
-msgstr ""
+msgstr "แสดงมุมมองเลเยอร์เดียว"
 
 #: common/tool/actions.cpp:530
 msgid "Toggle inactive layers between normal and dimmed"
-msgstr ""
+msgstr "เปิดปิดเลเยอร์ไม่ใช้ระหว่างปกติและจาง"
 
 #: common/tool/actions.cpp:534
 msgid "Single Layer View Mode (3-state)"
-msgstr ""
+msgstr "รูปแบบแสดงเลเยอร์เดียว (3 สถานะ)"
 
 #: common/tool/actions.cpp:535
 msgid "Toggle inactive layers between normal, dimmed, and hidden"
-msgstr ""
+msgstr "เปิดปิดเลเยอร์ไม่ใช้ระหว่างปกติ,จากและซ่อน"
 
 #: common/tool/actions.cpp:539
 msgid "Select item(s)"
-msgstr ""
+msgstr "เลือกสิ่ง"
 
 #: common/tool/actions.cpp:546
 msgid "Measure Tool"
-msgstr ""
+msgstr "เครื่องมือวัด"
 
 #: common/tool/actions.cpp:546
 msgid "Interactively measure distance between points"
-msgstr ""
+msgstr "วัดระยะระหว่างจุดแบบโต้ตอบ"
 
 #: common/tool/actions.cpp:555
 msgid "Show 3D viewer window"
-msgstr ""
+msgstr "แสดงหน้าต่าง 3D"
 
 #: common/tool/actions.cpp:560 eeschema/symbol_viewer_frame.cpp:102
 #: eeschema/symbol_viewer_frame.cpp:907
 msgid "Symbol Library Browser"
-msgstr ""
+msgstr "แสดงไลบรารีสัญลักษณ์"
 
 #: common/tool/actions.cpp:560
 msgid "Browse symbol libraries"
-msgstr ""
+msgstr "บราวซ์ไลบรารีสัญลักษณ์"
 
 #: common/tool/actions.cpp:565 eeschema/eeschema_config.cpp:224
 #: eeschema/symbol_editor/symbol_editor.cpp:163
 #: kicad/tools/kicad_manager_actions.cpp:70
 msgid "Symbol Editor"
-msgstr ""
+msgstr "เครื่องมือแก้ไขสัญลักษณ์"
 
 #: common/tool/actions.cpp:565
 msgid "Create, delete and edit symbols"
-msgstr ""
+msgstr "สร้าง,ลบและแก้ไขสัญลักษณ์"
 
 #: common/tool/actions.cpp:570 pcbnew/footprint_viewer_frame.cpp:108
 #: pcbnew/footprint_viewer_frame.cpp:1030
 msgid "Footprint Library Browser"
-msgstr ""
+msgstr "เลือกไลบรารีฟุ้ทพรินท์"
 
 #: common/tool/actions.cpp:570
 msgid "Browse footprint libraries"
-msgstr ""
+msgstr "บราวซ์ไลบรารีฟุ้ทพรินท์"
 
 #: common/tool/actions.cpp:575 kicad/tools/kicad_manager_actions.cpp:82
 #: pcbnew/footprint_edit_frame.cpp:800 pcbnew/footprint_edit_frame.cpp:921
 #: pcbnew/menubar_footprint_editor.cpp:89
 msgid "Footprint Editor"
-msgstr ""
+msgstr "เครื่องมือแก้ไขฟุ้ทพรินท์"
 
 #: common/tool/actions.cpp:575
 msgid "Create, delete and edit footprints"
-msgstr ""
+msgstr "สร้าง,ลบ และแก้ไข ฟุ้ทพรินท์"
 
 #: common/tool/actions.cpp:581
 msgid "Update PCB from Schematic..."
-msgstr ""
+msgstr "ปรับปรุงพีซีบีจากวงจร…"
 
 #: common/tool/actions.cpp:581
 msgid "Update PCB with changes made to schematic"
-msgstr ""
+msgstr "ปรับปรุงพีซีบีด้วยการเปลี่ยนแปลงจากวงจร"
 
 #: common/tool/actions.cpp:586
 msgid "Update Schematic from PCB..."
-msgstr ""
+msgstr "ปรับปรุงวงจรจากพีซีบี…"
 
 #: common/tool/actions.cpp:586
 msgid "Update schematic with changes made to PCB"
-msgstr ""
+msgstr "ปรับปรุงวงจรด้วยการเปลี่ยนแปลงที่พีซีบี"
 
 #: common/tool/actions.cpp:596
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:490
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:389
 msgid "Configure Paths..."
-msgstr ""
+msgstr "ปรับแต่งเส้นทาง…"
 
 #: common/tool/actions.cpp:596
 msgid "Edit path configuration environment variables"
-msgstr ""
+msgstr "แก้ไขเส้นทางตัวแปร environment"
 
 #: common/tool/actions.cpp:601
 msgid "Manage Symbol Libraries..."
-msgstr ""
+msgstr "จัดการไลบรารีสัญลักษณ์…"
 
 #: common/tool/actions.cpp:602
 msgid "Edit the global and project symbol library lists"
-msgstr ""
+msgstr "แก้ไขไลบรารีสัญลักษณ์ทั้งระดับโกลบอลและโปรเจ็ค"
 
 #: common/tool/actions.cpp:607
 msgid "Manage Footprint Libraries..."
-msgstr ""
+msgstr "จัดการไลบรารีฟุ้ทพรินท์…"
 
 #: common/tool/actions.cpp:608
 msgid "Edit the global and project footprint library lists"
-msgstr ""
+msgstr "แก้ไขรายการไลบรารีฟุ้ทพรินท์ทั้งระดับโกลบอลและระดับโปรเจ็ก"
 
 #: common/tool/actions.cpp:613
 msgid "Getting Started with KiCad"
-msgstr ""
+msgstr "เริ่มต้นกับ KiCad"
 
 #: common/tool/actions.cpp:614
 msgid "Open \"Getting Started in KiCad\" guide for beginners"
-msgstr ""
+msgstr "เปิดคู่มือสำหรับผู้เริ่มต้น \"เริ่มต้นกับ KiCad\""
 
 #: common/tool/actions.cpp:619
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:598
 msgid "Help"
-msgstr ""
+msgstr "ช่วยเหลือ"
 
 #: common/tool/actions.cpp:620
 msgid "Open product documentation in a web browser"
-msgstr ""
+msgstr "เปิดเอกสารผลิตภัณฑ์ในเว็บบราวซ์เซอร์"
 
 #: common/tool/actions.cpp:626
 msgid "List Hotkeys..."
-msgstr ""
+msgstr "รายการคีย์ด่วน…"
 
 #: common/tool/actions.cpp:627
 msgid "Displays current hotkeys table and corresponding commands"
@@ -5907,23 +5976,23 @@ msgstr ""
 
 #: common/tool/actions.cpp:632
 msgid "Get Involved"
-msgstr ""
+msgstr "ต้องการมีส่วนร่วม"
 
 #: common/tool/actions.cpp:633
 msgid "Open \"Contribute to KiCad\" in a web browser"
-msgstr ""
+msgstr "เปิดหน้า \"Contribute to KiCad\" ในเว็บบราวส์เซอร์"
 
 #: common/tool/actions.cpp:638
 msgid "Donate"
-msgstr ""
+msgstr "บริจาค"
 
 #: common/tool/actions.cpp:639
 msgid "Open \"Donate to KiCad\" in a web browser"
-msgstr ""
+msgstr "เปิดหน้า \"Donate to KiCad\" ให้เว็บบราวส์เซอร์"
 
 #: common/tool/actions.cpp:643
 msgid "Report Bug"
-msgstr ""
+msgstr "รายงานซอฟต์แวร์ผิดพลาด"
 
 #: common/tool/common_control.cpp:216
 #, c-format
@@ -5932,10 +6001,13 @@ msgid ""
 "'%s' could not be found.\n"
 "Do you want to access the KiCad online help?"
 msgstr ""
+"ไฟล์ช่วยเหลือ '%s' หรือ\n"
+"'%s' หาไม่พบ\n"
+"คุณต้องการใช้ความช่วยเหลือออนไลน์?"
 
 #: common/tool/common_control.cpp:219 common/tool/common_control.cpp:239
 msgid "File Not Found"
-msgstr ""
+msgstr "ไม่พบไฟล์"
 
 #: common/tool/common_control.cpp:236
 #, c-format
@@ -5943,6 +6015,8 @@ msgid ""
 "Help file '%s' could not be found.\n"
 "Do you want to access the KiCad online help?"
 msgstr ""
+"หาไฟล์ช่วยเหลือ '%s' ไม่พบ\n"
+"คุณต้องการใช้ความช่วยเหลือออนไลน์?"
 
 #: common/tool/common_control.cpp:266
 #, c-format
@@ -5950,10 +6024,12 @@ msgid ""
 "Could not launch the default browser.\n"
 "For information on how to help the KiCad project, visit %s"
 msgstr ""
+"ไม่สามารถเรียกใช้บราวส์เซอร์ที่กำหนดไว้\n"
+"สำหรับความช่วยเหลือ ใช้งานโปรเจ็กใน KiCad, ไปดูที่ %s"
 
 #: common/tool/common_control.cpp:269
 msgid "Get involved with KiCad"
-msgstr ""
+msgstr "ต้องการเข้ามามีส่วนร่วมใน KiCad"
 
 #: common/tool/common_control.cpp:280
 #, c-format
@@ -5961,131 +6037,135 @@ msgid ""
 "Could not launch the default browser.\n"
 "To donate to the KiCad project, visit %s"
 msgstr ""
+"ไม่สามารถเรียกใช้บราวส์เซอร์ที่กำหนดไว้\n"
+"ต้องการบริจาคเงินให้โครงการ KiCad, ไปที่ %s"
 
 #: common/tool/common_control.cpp:283
 msgid "Donate to KiCad"
-msgstr ""
+msgstr "บริจาคเงินให้ KiCad"
 
 #: common/tool/grid_menu.cpp:93
 #, c-format
 msgid "Grid: %s (%s)"
-msgstr ""
+msgstr "กริด:%s (%s)"
 
 #: common/tool/grid_menu.cpp:104
 #, c-format
 msgid "User grid: %s (%s)"
-msgstr ""
+msgstr "กริดผู้ใช้: %s (%s)"
 
 #: common/tool/zoom_menu.cpp:49
 #, c-format
 msgid "Zoom: %.2f"
-msgstr ""
+msgstr "ซูม:%.2f"
 
 #: common/validators.cpp:250
 #, c-format
 msgid "Incorrect value: %s"
-msgstr ""
+msgstr "ค่าไม่ถูกต้อง:%s"
 
 #: common/validators.cpp:294
 msgid "Entry contains trailing white space."
-msgstr ""
+msgstr "ค่าที่ใส่มีช่องว่างตามท้าย"
 
 #: common/validators.cpp:298
 msgid "Entry contains leading white space."
-msgstr ""
+msgstr "ค่าที่ใส่มีช่องว่างด้านหน้า"
 
 #: common/validators.cpp:302
 #, c-format
 msgid "'%s' is not a valid library identifier format."
-msgstr ""
+msgstr "'%s' ไม่ใช่ตัวระบุไลบรารีที่ถูกต้อง"
 
 #: common/validators.cpp:309
 msgid "Library Identifier Validation Error"
-msgstr ""
+msgstr "การตรวจสอบตัวระบุไลบรารีพบความผิดพลาด"
 
 #: common/validators.cpp:356
 msgid "Invalid signal name"
-msgstr ""
+msgstr "ชื่อสัญญาณไม่ถูกต้อง"
 
 #: common/validators.cpp:367
 msgid "Signal names cannot contain CR or LF characters"
-msgstr ""
+msgstr "ชื่อสัญญาณมีตัวอักษร CR หรือ LF ไม่ได้"
 
 #: common/validators.cpp:370
 msgid "Signal names cannot contain spaces"
-msgstr ""
+msgstr "ชื่อสัญญาณมีช่องว่างไม่ได้"
 
 #: common/view/view.cpp:542
 msgid "Mirroring for Y axis is not supported yet"
-msgstr ""
+msgstr "กลับกระจกบนแกน Y ไม่สนับสนุน"
 
 #: common/widgets/footprint_preview_widget.cpp:103
 msgid "Footprint not found."
-msgstr ""
+msgstr "ไม่พบฟุ้ทพรินท์"
 
 #: common/widgets/footprint_select_widget.cpp:144
 msgid "No default footprint"
-msgstr ""
+msgstr "ไม่มีฟุ้ทพรินท์ตั้งต้น"
 
 #: common/widgets/gal_options_panel.cpp:82
 msgid "Accelerated graphics"
-msgstr ""
+msgstr "ตัวเร่งกราฟิก"
 
 #: common/widgets/gal_options_panel.cpp:82
 msgid "Fallback graphics"
-msgstr ""
+msgstr "ย้อนกลับกราฟิก"
 
 #: common/widgets/gal_options_panel.cpp:83
 msgid "Rendering Engine"
-msgstr ""
+msgstr "เครื่องจักรเรนเดอร์"
 
 #: common/widgets/gal_options_panel.cpp:87
 msgid "Hardware-accelerated graphics (recommended)"
-msgstr ""
+msgstr "ตัวเร่งกราฟิกในฮาร์ดแวร์ (แนะนำ)"
 
 #: common/widgets/gal_options_panel.cpp:88
 msgid ""
 "Software graphics (for computers which do not support KiCad's hardware "
 "acceleration requirements)"
 msgstr ""
+"ซอฟต์แวร์กราฟิก (สำหรับคอมพิวเตอร์ที่ไม่สนับสนุน ตัวเร่งกราฟิกในฮาร์ดแวร์ "
+"ตามแบบ KiCad)"
 
 #: common/widgets/gal_options_panel.cpp:100
 msgid "Grid Options"
-msgstr ""
+msgstr "ทางเลือกกริด"
 
 #: common/widgets/gal_options_panel.cpp:105
 msgid "Dots"
-msgstr ""
+msgstr "จุด"
 
 #: common/widgets/gal_options_panel.cpp:106
 msgid "Lines"
-msgstr ""
+msgstr "เส้นตรง"
 
 #: common/widgets/gal_options_panel.cpp:107
 msgid "Small crosses"
-msgstr ""
+msgstr "กากบาทเล็ก"
 
 #: common/widgets/gal_options_panel.cpp:110
 msgid "Grid Style"
-msgstr ""
+msgstr "ลักษณะกริด"
 
 #: common/widgets/gal_options_panel.cpp:122
 msgid "Grid thickness:"
-msgstr ""
+msgstr "ความหนากริด:"
 
 #: common/widgets/gal_options_panel.cpp:133
 #: common/widgets/gal_options_panel.cpp:149
 #: common/widgets/gal_options_panel.cpp:167
 msgid "px"
-msgstr ""
+msgstr "px"
 
 #: common/widgets/gal_options_panel.cpp:138
 msgid "Min grid spacing:"
-msgstr ""
+msgstr "ระยะกริดอย่างต่ำ:"
 
 #: common/widgets/gal_options_panel.cpp:154
 msgid "Snap to Grid:"
-msgstr ""
+msgstr "วิ่งเข้าหากริด:"
 
 #: common/widgets/gal_options_panel.cpp:158
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:362
@@ -6093,11 +6173,11 @@ msgstr ""
 #: pcbnew/dialogs/panel_edit_options_base.cpp:288
 #: pcbnew/dialogs/panel_edit_options_base.cpp:302
 msgid "Always"
-msgstr ""
+msgstr "เสมอ"
 
 #: common/widgets/gal_options_panel.cpp:158
 msgid "When grid shown"
-msgstr ""
+msgstr "เมื่อแสดงกริด"
 
 #: common/widgets/gal_options_panel.cpp:158
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:362
@@ -6105,69 +6185,69 @@ msgstr ""
 #: pcbnew/dialogs/panel_edit_options_base.cpp:288
 #: pcbnew/dialogs/panel_edit_options_base.cpp:302
 msgid "Never"
-msgstr ""
+msgstr "ไม่เคย"
 
 #: common/widgets/gal_options_panel.cpp:184
 msgid "Cursor Options"
-msgstr ""
+msgstr "ทางเลือกเคอร์เซอร์"
 
 #: common/widgets/gal_options_panel.cpp:190
 msgid "Small crosshair"
-msgstr ""
+msgstr "กากบาทเล็ก"
 
 #: common/widgets/gal_options_panel.cpp:191
 msgid "Full window crosshair"
-msgstr ""
+msgstr "กากบาทเต็มหน้าต่าง"
 
 #: common/widgets/gal_options_panel.cpp:196
 msgid "Cursor Shape"
-msgstr ""
+msgstr "รูปร่างเคอร์เซอร์"
 
 #: common/widgets/gal_options_panel.cpp:201
 msgid "Cursor shape for drawing, placement and movement tools"
-msgstr ""
+msgstr "รูปร่างเคอร์เซอร์สำหรับเครื่องมือ เขียนแบบ, จัดวาง และ เคลื่อนย้าย"
 
 #: common/widgets/gal_options_panel.cpp:204
 msgid "Always show crosshairs"
-msgstr ""
+msgstr "แสดงกากบาทเสมอ"
 
 #: common/widgets/grid_text_button_helpers.cpp:370
 msgid "Select a File"
-msgstr ""
+msgstr "เลือกไฟล์"
 
 #: common/widgets/mathplot.cpp:1759
 msgid "Center plot view to this position"
-msgstr ""
+msgstr "วางกึ่งกลางภาพพล็อตที่ตำแหน่งนี้"
 
 #: common/widgets/mathplot.cpp:1760 eeschema/sim/sim_plot_frame_base.cpp:91
 msgid "Fit on Screen"
-msgstr ""
+msgstr "เต็มจอภาพ"
 
 #: common/widgets/mathplot.cpp:1760
 msgid "Set plot view to show all items"
-msgstr ""
+msgstr "ตั้งภาพพล็อตแสดงทุกสิ่ง"
 
 #: common/widgets/mathplot.cpp:1761
 msgid "Zoom in plot view."
-msgstr ""
+msgstr "ขยายเข้าในมุมมองพล็อต"
 
 #: common/widgets/mathplot.cpp:1762
 msgid "Zoom out plot view."
-msgstr ""
+msgstr "ขยายออกในมุมมองพล็อต"
 
 #: common/widgets/net_selector.cpp:58
 msgid "<no net>"
-msgstr ""
+msgstr "<ไม่มีเน็ท>"
 
 #: common/widgets/net_selector.cpp:59
 msgid "<create net>"
-msgstr ""
+msgstr "<สร้างเน็ท>"
 
 #: common/widgets/net_selector.cpp:84
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:622
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:661
 msgid "Filter:"
-msgstr ""
+msgstr "กรอง:"
 
 #: common/widgets/paged_dialog.cpp:71 eeschema/dialogs/dialog_bom_base.cpp:115
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:183
@@ -6175,336 +6255,336 @@ msgstr ""
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1481
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1764
 msgid "Reset to Defaults"
-msgstr ""
+msgstr "ล้างเป็นค่าตั้งต้น"
 
 #: common/widgets/unit_binder.cpp:206
 #, c-format
 msgid "%s must be at least %s."
-msgstr ""
+msgstr "%s ต้องอย่างน้อยที่ %s"
 
 #: common/widgets/unit_binder.cpp:220
 #, c-format
 msgid "%s must be less than %s."
-msgstr ""
+msgstr "%s ต้องน้อยกว่า %s"
 
 #: common/widgets/widget_hotkey_list.cpp:96
 msgid "Press a new hotkey, or press Esc to cancel..."
-msgstr ""
+msgstr "กดคีย์ด่วนใหม่, หรือกด ESC เพื่อยกเลิก…"
 
 #: common/widgets/widget_hotkey_list.cpp:103
 msgid "Command:"
-msgstr ""
+msgstr "คำสั่ง:"
 
 #: common/widgets/widget_hotkey_list.cpp:111
 msgid "Current key:"
-msgstr ""
+msgstr "คีย์ขณะนี้:"
 
 #: common/widgets/widget_hotkey_list.cpp:153
 msgid "Set Hotkey"
-msgstr ""
+msgstr "ตั้งคีย์ด่วน"
 
 #: common/widgets/widget_hotkey_list.cpp:380
 msgid "Edit..."
-msgstr ""
+msgstr "แก้ไข…"
 
 #: common/widgets/widget_hotkey_list.cpp:381
 msgid "Undo Changes"
-msgstr ""
+msgstr "ย้อนกลับเปลี่ยนแปลง"
 
 #: common/widgets/widget_hotkey_list.cpp:382
 msgid "Clear Assigned Hotkey"
-msgstr ""
+msgstr "ล้างคีย์ด่วน"
 
 #: common/widgets/widget_hotkey_list.cpp:383
 msgid "Restore Default"
-msgstr ""
+msgstr "ดึงค่าตั้งต้นคืน"
 
 #: common/widgets/widget_hotkey_list.cpp:419
 #, c-format
 msgid ""
 "'%s' is already assigned to '%s' in section '%s'. Are you sure you want to "
 "change its assignment?"
-msgstr ""
+msgstr "'%s' กำหนดให้ '%s' ในส่วน '%s' คุณแน่ใจว่าต้องการเปลี่ยน?"
 
 #: common/widgets/widget_hotkey_list.cpp:425
 msgid "Confirm change"
-msgstr ""
+msgstr "ยืนยันการเปลี่ยน"
 
 #: common/widgets/widget_hotkey_list.cpp:445
 msgid "Command"
-msgstr ""
+msgstr "คำสั่ง"
 
 #: common/widgets/widget_hotkey_list.cpp:448
 msgid "(double-click to edit)"
-msgstr ""
+msgstr "(ดับเบิ้ลคลิกเพื่อแก้ไข)"
 
 #: common/widgets/widget_hotkey_list.cpp:451
 msgid "Hotkey"
-msgstr ""
+msgstr "คีย์ด่วน"
 
 #: common/wildcards_and_files_ext.cpp:179
 msgid "All files"
-msgstr ""
+msgstr "ไฟล์ทั้งหมด"
 
 #: common/wildcards_and_files_ext.cpp:185
 msgid "KiCad drawing symbol files"
-msgstr ""
+msgstr "ไฟล์สัญลักษณ์สำหรับเขียนแบบ KiCad"
 
 #: common/wildcards_and_files_ext.cpp:191
 msgid "KiCad symbol library files"
-msgstr ""
+msgstr "ไฟล์ไลบรารีสัญลักษณ์ KiCad"
 
 #: common/wildcards_and_files_ext.cpp:197
 msgid "KiCad legacy symbol library files"
-msgstr ""
+msgstr "ไฟล์ไลบรารีสัญลักษณ์ KiCad รุ่นเก่า"
 
 #: common/wildcards_and_files_ext.cpp:203
 msgid "All KiCad symbol library files"
-msgstr ""
+msgstr "ไฟล์ไลบรารีสัญลักษณ์ KiCad ทั้งหมด"
 
 #: common/wildcards_and_files_ext.cpp:209
 msgid "KiCad project files"
-msgstr ""
+msgstr "ไฟล์โปรเจ็ค KiCad"
 
 #: common/wildcards_and_files_ext.cpp:215
 msgid "KiCad legacy project files"
-msgstr ""
+msgstr "ไฟล์โปรเจ็ค KiCad รุ่นเก่า"
 
 #: common/wildcards_and_files_ext.cpp:221
 msgid "All KiCad project files"
-msgstr ""
+msgstr "ไฟล์โปรเจ็ค KiCad ทั้งหมด"
 
 #: common/wildcards_and_files_ext.cpp:227
 msgid "KiCad legacy schematic files"
-msgstr ""
+msgstr "ไฟล์วงจรไฟฟ้า KiCad รุ่นเก่า"
 
 #: common/wildcards_and_files_ext.cpp:233
 msgid "KiCad s-expression schematic files"
-msgstr ""
+msgstr "ไฟล์วงจรไฟฟ้า KiCad s-expression"
 
 #: common/wildcards_and_files_ext.cpp:239
 msgid "Altium schematic files"
-msgstr ""
+msgstr "ไฟล์วงจรไฟฟ้า Altium"
 
 #: common/wildcards_and_files_ext.cpp:245
 msgid "CADSTAR Schematic Archive files"
-msgstr ""
+msgstr "คลังไฟล์วงจรไฟฟ้า CADSTAR"
 
 #: common/wildcards_and_files_ext.cpp:251
 msgid "CADSTAR Archive files"
-msgstr ""
+msgstr "คลังไฟล์ CADSTAR"
 
 #: common/wildcards_and_files_ext.cpp:257
 msgid "Eagle XML schematic files"
-msgstr ""
+msgstr "ไฟล์วงจรไฟฟ้า Eagle XML"
 
 #: common/wildcards_and_files_ext.cpp:263
 msgid "Eagle XML files"
-msgstr ""
+msgstr "ไฟล์ Eagle XML"
 
 #: common/wildcards_and_files_ext.cpp:269
 msgid "KiCad netlist files"
-msgstr ""
+msgstr "ไฟล์รายชื่อเน็ท KiCad"
 
 #: common/wildcards_and_files_ext.cpp:275 gerbview/files.cpp:49
 msgid "Gerber files"
-msgstr ""
+msgstr "ไฟล์เกอร์เบอร์"
 
 #: common/wildcards_and_files_ext.cpp:281
 #: common/wildcards_and_files_ext.cpp:322
 msgid "KiCad printed circuit board files"
-msgstr ""
+msgstr "ไฟล์แผ่นวงจรพิมพ์ KiCad"
 
 #: common/wildcards_and_files_ext.cpp:287
 msgid "Eagle ver. 6.x XML PCB files"
-msgstr ""
+msgstr "ไฟล์พีซีบี Eagle ver.6.x XML"
 
 #: common/wildcards_and_files_ext.cpp:292
 msgid "CADSTAR PCB Archive files"
-msgstr ""
+msgstr "คลังไฟล์พีซีบี CADSTAR"
 
 #: common/wildcards_and_files_ext.cpp:297
 msgid "P-Cad 200x ASCII PCB files"
-msgstr ""
+msgstr "ไฟล์พีซีบี P-Cad 200x ASCII"
 
 #: common/wildcards_and_files_ext.cpp:302
 msgid "Altium Designer PCB files"
-msgstr ""
+msgstr "ไฟล์พีซีบี Altium Designer"
 
 #: common/wildcards_and_files_ext.cpp:307
 msgid "Altium Circuit Studio PCB files"
-msgstr ""
+msgstr "ไฟล์พีซีบี Circuit Studio"
 
 #: common/wildcards_and_files_ext.cpp:312
 msgid "Altium Circuit Maker PCB files"
-msgstr ""
+msgstr "ไฟล์พีซีบี Circuit Maker"
 
 #: common/wildcards_and_files_ext.cpp:317
 msgid "Fabmaster PCB files"
-msgstr ""
+msgstr "ไฟล์พีซีบี Fabmaster"
 
 #: common/wildcards_and_files_ext.cpp:328
 msgid "KiCad footprint files"
-msgstr ""
+msgstr "ไฟล์ฟุ้ทพรินท์ KiCad"
 
 #: common/wildcards_and_files_ext.cpp:334
 msgid "KiCad footprint library paths"
-msgstr ""
+msgstr "เส้นทางไลบรารีฟุ้ทพรินท์ KiCad"
 
 #: common/wildcards_and_files_ext.cpp:340
 msgid "Legacy footprint library files"
-msgstr ""
+msgstr "ไฟล์ไลบรารีฟุ้ทพรินท์ รุ่นเก่า"
 
 #: common/wildcards_and_files_ext.cpp:346
 msgid "Eagle ver. 6.x XML library files"
-msgstr ""
+msgstr "ไฟล์ไลบรารี Eagle Ver. 6.x XML"
 
 #: common/wildcards_and_files_ext.cpp:352
 msgid "Geda PCB footprint library files"
-msgstr ""
+msgstr "ไฟล์ไลบรารีพีซีบีฟุ้ทพรินท์ gEDA"
 
 #: common/wildcards_and_files_ext.cpp:358
 msgid "Drawing sheet files"
-msgstr ""
+msgstr "ไฟล์กระดาษเขียนแบบ"
 
 #: common/wildcards_and_files_ext.cpp:365
 msgid "KiCad symbol footprint link files"
-msgstr ""
+msgstr "ไฟล์เชื่อมโยงสัญลักษณ์และฟุ้ทพรินท์ KiCad"
 
 #: common/wildcards_and_files_ext.cpp:372 gerbview/files.cpp:68
 msgid "Drill files"
-msgstr ""
+msgstr "ไฟล์เจาะ"
 
 #: common/wildcards_and_files_ext.cpp:378
 msgid "SVG files"
-msgstr ""
+msgstr "ไฟล์ SVG"
 
 #: common/wildcards_and_files_ext.cpp:384
 msgid "HTML files"
-msgstr ""
+msgstr "ไฟล์ HTML"
 
 #: common/wildcards_and_files_ext.cpp:390
 msgid "CSV Files"
-msgstr ""
+msgstr "ไฟล์ CSV"
 
 #: common/wildcards_and_files_ext.cpp:396
 msgid "Portable document format files"
-msgstr ""
+msgstr "ไฟล์รูปแบบ Portable Document"
 
 #: common/wildcards_and_files_ext.cpp:402
 msgid "PostScript files"
-msgstr ""
+msgstr "ไฟล์โพสต์สคริปต์"
 
 #: common/wildcards_and_files_ext.cpp:408
 msgid "Report files"
-msgstr ""
+msgstr "ไฟล์รายงาน"
 
 #: common/wildcards_and_files_ext.cpp:414
 msgid "Component placement files"
-msgstr ""
+msgstr "ไฟล์ตำแหน่งอุปกรณ์"
 
 #: common/wildcards_and_files_ext.cpp:420
 msgid "VRML and X3D files"
-msgstr ""
+msgstr "ไฟล์ VRML และ X3D"
 
 #: common/wildcards_and_files_ext.cpp:426
 msgid "IDFv3 footprint files"
-msgstr ""
+msgstr "ไฟล์ฟุ้ทพรินท์ IDFv3"
 
 #: common/wildcards_and_files_ext.cpp:432
 msgid "Text files"
-msgstr ""
+msgstr "ไฟล์ข้อความ"
 
 #: common/wildcards_and_files_ext.cpp:438
 msgid "Legacy footprint export files"
-msgstr ""
+msgstr "ไฟล์ส่งออกฟุ้ทพรินท์ รุ่นเก่า"
 
 #: common/wildcards_and_files_ext.cpp:444
 msgid "Electrical rule check file"
-msgstr ""
+msgstr "ไฟล์ตรวจสอบกฏทางไฟฟ้า"
 
 #: common/wildcards_and_files_ext.cpp:450
 msgid "Spice library file"
-msgstr ""
+msgstr "ไฟล์ไลบรารี Spice"
 
 #: common/wildcards_and_files_ext.cpp:456
 msgid "SPICE netlist file"
-msgstr ""
+msgstr "ไฟล์รายชื่อเน็ท SPICE"
 
 #: common/wildcards_and_files_ext.cpp:462
 msgid "CadStar netlist file"
-msgstr ""
+msgstr "ไฟล์รายชื่อเน็ท CadStar"
 
 #: common/wildcards_and_files_ext.cpp:468
 msgid "Symbol footprint association files"
-msgstr ""
+msgstr "ไฟล์ความสัมพันธ์สัญลักษณ์และฟุ้ทพรินท์"
 
 #: common/wildcards_and_files_ext.cpp:474
 msgid "Zip file"
-msgstr ""
+msgstr "ไฟล์บีบอัด"
 
 #: common/wildcards_and_files_ext.cpp:480
 msgid "GenCAD 1.4 board files"
-msgstr ""
+msgstr "ไฟล์บอร์ด GenCAD 1.4"
 
 #: common/wildcards_and_files_ext.cpp:486
 msgid "DXF Files"
-msgstr ""
+msgstr "ไฟล์ DXF"
 
 #: common/wildcards_and_files_ext.cpp:492
 #: resources/linux/mime/kicad-gerbers.xml.in:21
 msgid "Gerber job file"
-msgstr ""
+msgstr "ไฟล์จ็อบเกอร์เบอร์"
 
 #: common/wildcards_and_files_ext.cpp:498
 msgid "Specctra DSN file"
-msgstr ""
+msgstr "ไฟล์ Specctra DSN"
 
 #: common/wildcards_and_files_ext.cpp:504
 msgid "IPC-D-356 Test Files"
-msgstr ""
+msgstr "ไฟล์ทดสอบ IPC-D-356"
 
 #: common/wildcards_and_files_ext.cpp:510
 msgid "Workbook file"
-msgstr ""
+msgstr "ไฟล์ Workbook"
 
 #: common/wildcards_and_files_ext.cpp:516
 msgid "PNG file"
-msgstr ""
+msgstr "ไฟล์ PNG"
 
 #: common/wildcards_and_files_ext.cpp:522
 msgid "Jpeg file"
-msgstr ""
+msgstr "ไฟล์ Jpeg"
 
 #: cvpcb/auto_associate.cpp:106
 #, c-format
 msgid "Equivalence file '%s' could not be found in the default search paths."
-msgstr ""
+msgstr "ไฟล์เท่าเทียม '%s' หาไม่พบ ในเส้นทางค้นหาตั้งต้น"
 
 #: cvpcb/auto_associate.cpp:127
 #, c-format
 msgid "Error opening equivalence file '%s'."
-msgstr ""
+msgstr "เปิดไฟล์เท่าเทียม '%s' ผิดพลาด"
 
 #: cvpcb/auto_associate.cpp:179
 msgid "Equivalence File Load Error"
-msgstr ""
+msgstr "ผิดพลาด อ่านไฟล์เท่าเทียม"
 
 #: cvpcb/auto_associate.cpp:186
 #, c-format
 msgid "%lu footprint/symbol equivalences found."
-msgstr ""
+msgstr "%lu ฟุ้ทพรินท์/สัญลักษณ์ ค้นพบ"
 
 #: cvpcb/auto_associate.cpp:262
 #, c-format
 msgid ""
 "Component %s: footprint %s not found in any of the project footprint "
 "libraries."
-msgstr ""
+msgstr "อุปกรณ์ %s:ฟุ้ทพรินท์ %s ไม่พบในไลบรารีฟุ้ทพรินท์ของโครงการ"
 
 #: cvpcb/auto_associate.cpp:307
 msgid "CvPcb Warning"
-msgstr ""
+msgstr "คำเตือนจาก CvPcb"
 
 #: cvpcb/cvpcb.cpp:174
 msgid ""
@@ -6517,103 +6597,107 @@ msgid ""
 "See the \"Footprint Library Table\" section of the CvPcb documentation for "
 "more information."
 msgstr ""
+"คุณใช้งาน CvPcb ครั้งแรก โดยใช้วิธีใหม่สำหรับหาฟุ้ทพรินท์ ผ่านตารางจับคู่\n"
+"CvPcb ได้ก้อปปี้ตารางตั้งต้น หรือสร้างตารางว่างเปล่า ในโฟลเดอร์ทำงานของท่าน\n"
+"คุณต้องกำหนดให้ตารางไลบรารี รวมไลบรารีฟุ้ทพรินท์ทั้งหมด ที่ไม่มีใน KiCad\n"
+"กรุณาดูในส่วน \"Footprint Library Table\" ในเอกสาร CvPcb เพิ่มเติม"
 
 #: cvpcb/cvpcb.cpp:187
 msgid ""
 "An error occurred attempting to load the global footprint library table."
-msgstr ""
+msgstr "เกิดความผิดพลาดระหว่างอ่านตารางโกลบอลไลบรารีฟุ้ทพรินท์"
 
 #: cvpcb/cvpcb_mainframe.cpp:64 cvpcb/menubar.cpp:51
 msgid "Assign Footprints"
-msgstr ""
+msgstr "กำหนดฟุ้ทพรินท์"
 
 #: cvpcb/cvpcb_mainframe.cpp:103 pcbnew/dialogs/panel_fp_lib_table.cpp:1082
 msgid "Footprint Libraries"
-msgstr ""
+msgstr "ไลบรารีฟุ้ทพรินท์"
 
 #: cvpcb/cvpcb_mainframe.cpp:107
 msgid "Symbol : Footprint Assignments"
-msgstr ""
+msgstr "การกำหนด สัญลักษณ์:ฟุ้ทพรินท์"
 
 #: cvpcb/cvpcb_mainframe.cpp:110
 msgid "Filtered Footprints"
-msgstr ""
+msgstr "กรองฟุ้ทพรินท์"
 
 #: cvpcb/cvpcb_mainframe.cpp:144
 #: eeschema/dialogs/dialog_fields_editor_global_base.cpp:105
 msgid "Apply, Save Schematic && Continue"
-msgstr ""
+msgstr "นำไปใช้, บันทึกวงจร && ทำต่อไป"
 
 #: cvpcb/cvpcb_mainframe.cpp:212
 msgid "Symbol to footprint changes are unsaved"
-msgstr ""
+msgstr "การเปลี่ยนสัญลักษณ์เป็นฟุ้ทพรินท์ ไม่ได้บันทึก"
 
 #: cvpcb/cvpcb_mainframe.cpp:386
 msgid "Symbol to Footprint links have been modified. Save changes?"
-msgstr ""
+msgstr "เชื่อมโยงสัญลักษณ์ไปฟุ้ทพรินท์ได้มีการแก้ไข ต้องการบันทึก?"
 
 #: cvpcb/cvpcb_mainframe.cpp:524 cvpcb/tools/cvpcb_association_tool.cpp:207
 #, c-format
 msgid "'%s' is not a valid footprint."
-msgstr ""
+msgstr "ฟุ้ทพรินท์ '%s' ไม่ถูกต้อง"
 
 #: cvpcb/cvpcb_mainframe.cpp:679 eeschema/generate_alias_info.cpp:39
 #: eeschema/sch_symbol.cpp:1416 eeschema/symbol_editor/symbol_editor.cpp:1215
 #: eeschema/symbol_viewer_frame.cpp:368 pcbnew/generate_footprint_info.cpp:37
 msgid "Keywords"
-msgstr ""
+msgstr "คำหลัก"
 
 #: cvpcb/cvpcb_mainframe.cpp:695
 msgid "Pin Count"
-msgstr ""
+msgstr "จำนวนขา"
 
 #: cvpcb/cvpcb_mainframe.cpp:708 eeschema/sch_symbol.cpp:1398
 #: eeschema/sch_symbol.cpp:1402 eeschema/sch_symbol.cpp:1430
 #: eeschema/sch_symbol.cpp:1435 eeschema/symbol_editor/symbol_editor.cpp:194
 #: pcbnew/tools/pcb_control.cpp:1120
 msgid "Library"
-msgstr ""
+msgstr "ไลบรารี"
 
 #: cvpcb/cvpcb_mainframe.cpp:721
 msgid "Search Text"
-msgstr ""
+msgstr "ค้นหาข้อความ"
 
 #: cvpcb/cvpcb_mainframe.cpp:725
 msgid "No Filtering"
-msgstr ""
+msgstr "ไม่กรอง"
 
 #: cvpcb/cvpcb_mainframe.cpp:727
 #, c-format
 msgid "Filtered by %s"
-msgstr ""
+msgstr "กรองโดย %s"
 
 #: cvpcb/cvpcb_mainframe.cpp:741
 #, c-format
 msgid "Description: %s;  Keywords: %s"
-msgstr ""
+msgstr "คำอธิบาย: %s;\tคำหลัก:%s"
 
 #: cvpcb/cvpcb_mainframe.cpp:773
 #, c-format
 msgid "Library location: %s"
-msgstr ""
+msgstr "ตำแหน่งไลบรารี:%s"
 
 #: cvpcb/cvpcb_mainframe.cpp:775
 msgid "Library location: unknown"
-msgstr ""
+msgstr "ตำแหน่งไลบรารี:ไม่ทราบ"
 
 #: cvpcb/cvpcb_mainframe.cpp:788
 msgid ""
 "No PCB footprint libraries are listed in the current footprint library table."
-msgstr ""
+msgstr "ไม่มีชื่อไลบรารีพีซีบีฟุ้ทพรินท์ ในตารางไลบรารีฟุ้ทพรินท์ปัจจุบัน"
 
 #: cvpcb/cvpcb_mainframe.cpp:789
 msgid "Configuration Error"
-msgstr ""
+msgstr "การปรับตั้งผิดพลาด"
 
 #: cvpcb/cvpcb_mainframe.cpp:793 pcbnew/footprint_edit_frame.cpp:825
 #: pcbnew/load_select_footprint.cpp:224
 msgid "Loading Footprint Libraries"
-msgstr ""
+msgstr "กำลังอ่านไลบรารีฟุ้ทพรินท์"
 
 #: cvpcb/cvpcb_mainframe.cpp:856
 #, c-format
@@ -6621,28 +6705,30 @@ msgid ""
 "Error loading schematic.\n"
 "%s"
 msgstr ""
+"ผิดพลาดระหว่างอ่านวงจร\n"
+"%s"
 
 #: cvpcb/dialogs/dialog_config_equfiles.cpp:51
 #, c-format
 msgid "Project file: '%s'"
-msgstr ""
+msgstr "ไฟล์โปรเจ็ก:'%s'"
 
 #: cvpcb/dialogs/dialog_config_equfiles.cpp:103
 msgid "No editor defined in KiCad. Please choose it."
-msgstr ""
+msgstr "ไม่เคยกำหนดเครื่องมือแก้ไขใน KiCad กรุณาเลือก"
 
 #: cvpcb/dialogs/dialog_config_equfiles.cpp:249
 msgid "Footprint Association File"
-msgstr ""
+msgstr "ไฟล์เชื่อมสัมพันธ์ฟุ้ทพรินท์"
 
 #: cvpcb/dialogs/dialog_config_equfiles.cpp:293
 #, c-format
 msgid "File '%s' already exists in list."
-msgstr ""
+msgstr "ไฟล์ '%s' มีอยู่ในรายการแล้ว"
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:20
 msgid "Symbol Footprint Association Files (.equ)"
-msgstr ""
+msgstr "ไฟล์สัมพันธ์ระหว่างสัญลักษณ์และฟุ้ทพรินท์ (.equ)"
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:36
 #: eeschema/dialogs/dialog_bus_manager.cpp:78
@@ -6651,32 +6737,32 @@ msgstr ""
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1008
 #: pcbnew/footprint_libraries_utils.cpp:524
 msgid "Add"
-msgstr ""
+msgstr "บวก"
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:39
 #: eeschema/dialogs/dialog_bus_manager.cpp:80
 #: eeschema/dialogs/dialog_bus_manager.cpp:114
 #: eeschema/dialogs/dialog_spice_model_base.cpp:659
 msgid "Remove"
-msgstr ""
+msgstr "นำออก"
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:42
 #: pcbnew/dialogs/panel_pcbnew_action_plugins_base.cpp:62
 msgid "Move Up"
-msgstr ""
+msgstr "เลื่อนขึ้น"
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:45
 #: pcbnew/dialogs/panel_pcbnew_action_plugins_base.cpp:67
 msgid "Move Down"
-msgstr ""
+msgstr "เลื่อนลง"
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:48
 msgid "Edit File"
-msgstr ""
+msgstr "แก้ไขไฟล์"
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:63
 msgid "Available environment variables for relative paths:"
-msgstr ""
+msgstr "ตัวแปร Environment สำหรับเส้นทางสัมพันธ์:"
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:81
 #: eeschema/dialogs/dialog_fields_editor_global.cpp:960
@@ -6696,32 +6782,32 @@ msgstr ""
 #: pcbnew/footprint_wizard_frame.cpp:329 pcbnew/fp_text.cpp:272
 #: pcbnew/fp_text_grid_table.cpp:110 pcbnew/pcb_dimension.cpp:309
 msgid "Value"
-msgstr ""
+msgstr "มูลค่า"
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:99
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:96
 msgid "Absolute"
-msgstr ""
+msgstr "สัมบูรณ์"
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:99
 msgid "Relative"
-msgstr ""
+msgstr "สัมพัทธ์"
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:101
 msgid "Path Type"
-msgstr ""
+msgstr "ชนิดเส้นทาง"
 
 #: cvpcb/dialogs/fp_conflict_assignment_selector.cpp:37
 msgid "Ref"
-msgstr ""
+msgstr "Ref"
 
 #: cvpcb/dialogs/fp_conflict_assignment_selector.cpp:38
 msgid "Schematic assignment"
-msgstr ""
+msgstr "มอบหมายให้วงจร"
 
 #: cvpcb/dialogs/fp_conflict_assignment_selector.cpp:41
 msgid "Cmp file assignment"
-msgstr ""
+msgstr "มอบหมายไฟล์ CMP"
 
 #: cvpcb/dialogs/fp_conflict_assignment_selector_base.cpp:19
 msgid ""
@@ -6730,20 +6816,24 @@ msgid ""
 "\n"
 "Please choose the assignment."
 msgstr ""
+"การมอบหมายฟุ้ทพรินท์จากรายชื่อวงจร "
+"และไฟล์เชื่อมสัมพันธ์สัญลักษณ์กับฟุ้ทพรินท์ (.cmp) ขัดแย้งกัน\n"
+"\n"
+"กรุณาเลือกที่ต้องการ"
 
 #: cvpcb/dialogs/fp_conflict_assignment_selector_base.h:53
 msgid "Footprint Assignment Conflicts"
-msgstr ""
+msgstr "การมอบหมายฟุ้ทพรินท์ขัดแย้ง"
 
 #: cvpcb/display_footprints_frame.cpp:69
 #: pcbnew/toolbars_footprint_viewer.cpp:158
 msgid "Footprint Viewer"
-msgstr ""
+msgstr "ผู้ดูฟุ้ทพรินท์"
 
 #: cvpcb/display_footprints_frame.cpp:400
 #, c-format
 msgid "Footprint ID '%s' is not valid."
-msgstr ""
+msgstr "ค่าฟุ้ทพรินท์ ID '%s' ไม่ถูกต้อง"
 
 #: cvpcb/display_footprints_frame.cpp:415
 #, c-format
@@ -33425,7 +33515,7 @@ msgstr ""
 #: resources/linux/launchers/org.kicad.kicad.desktop.in:10
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:6
 msgid "KiCad"
-msgstr ""
+msgstr "คีแคด"
 
 #: resources/linux/launchers/org.kicad.kicad.desktop.in:11
 msgid "EDA Suite"
@@ -33503,4 +33593,4 @@ msgstr ""
 
 #: resources/linux/mime/kicad-kicad.xml.in:25
 msgid "KiCad Printed Circuit Board"
-msgstr ""
+msgstr "แผ่นวงจรพิมพ์คีแคด"
