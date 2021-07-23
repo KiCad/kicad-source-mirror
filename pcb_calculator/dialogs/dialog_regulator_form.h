@@ -57,7 +57,7 @@ public:
     /**
      * @return true if regulator parameters are acceptable.
      */
-    bool TransferDataFromWindow();
+    bool TransferDataFromWindow() override;
 
     /**
      * Transfer data from dialog to aItem.

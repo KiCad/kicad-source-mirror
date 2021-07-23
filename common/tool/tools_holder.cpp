@@ -115,6 +115,16 @@ bool TOOLS_HOLDER::IsCurrentTool( const TOOL_ACTION& aAction ) const
 }
 
 
+void TOOLS_HOLDER::ShowChangedLanguage()
+{
+    std::string  actionName = CurrentToolName();
+    TOOL_ACTION* action = m_toolManager->GetActionManager()->FindAction( actionName );
+
+    if( action )
+        DisplayToolMsg( action->GetLabel() );
+}
+
+
 void TOOLS_HOLDER::CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVarsChanged )
 {
     if( GetToolManager() )

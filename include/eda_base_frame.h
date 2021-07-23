@@ -491,7 +491,7 @@ public:
     /**
      * Redraw the menus and what not in current language.
      */
-    virtual void ShowChangedLanguage();
+    void ShowChangedLanguage() override;
 
     /**
      * Notification event that some of the common (suite-wide) settings have changed.

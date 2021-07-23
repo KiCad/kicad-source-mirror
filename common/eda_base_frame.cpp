@@ -458,6 +458,8 @@ void EDA_BASE_FRAME::AddStandardHelpMenu( wxMenuBar* aMenuBar )
 
 void EDA_BASE_FRAME::ShowChangedLanguage()
 {
+    TOOLS_HOLDER::ShowChangedLanguage();
+
     if( GetMenuBar() )
     {
         ReCreateMenuBar();

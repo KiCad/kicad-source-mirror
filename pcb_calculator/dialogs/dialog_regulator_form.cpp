@@ -36,9 +36,7 @@ bool DIALOG_REGULATOR_FORM::TransferDataFromWindow()
     bool success = true;
 
     if( m_textCtrlName->GetValue().IsEmpty() )
-    {
         success = false;
-    }
 
     if( m_textCtrlVref->GetValue().IsEmpty() )
     {

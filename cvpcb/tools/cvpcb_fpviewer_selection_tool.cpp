@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2018-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -54,19 +54,14 @@ int CVPCB_FOOTPRINT_VIEWER_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
         if( m_frame->ToolStackIsEmpty() )
             m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
 
-        // single click? Select single object
         if( evt->IsClick( BUT_LEFT ) )
         {
             clearSelection();
         }
-
-        // right click? if there is any object - show the context menu
         else if( evt->IsClick( BUT_RIGHT ) )
         {
             m_menu.ShowContextMenu( m_selection );
         }
-
-        // Middle double click?  Do zoom to fit or zoom to objects
         else if( evt->IsDblClick( BUT_MIDDLE ) )
         {
             m_toolMgr->RunAction( ACTIONS::zoomFitScreen, true );
@@ -75,9 +70,10 @@ int CVPCB_FOOTPRINT_VIEWER_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
         {
             clearSelection();
         }
-
         else
+        {
             evt->SetPassEvent();
+        }
     }
 
     return 0;

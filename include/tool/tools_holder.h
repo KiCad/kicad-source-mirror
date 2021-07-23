@@ -120,6 +120,8 @@ public:
 
     virtual void DisplayToolMsg( const wxString& msg ) {};
 
+    virtual void ShowChangedLanguage();
+
     /**
      * Indicate that hotkeys should perform an immediate action even if another tool is
      * currently active.  If false, the first hotkey should select the relevant tool.
