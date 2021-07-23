@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
-"PO-Revision-Date: 2021-07-22 06:48+0000\n"
+"PO-Revision-Date: 2021-07-23 08:32+0000\n"
 "Last-Translator: Tokita, Hiroshi <tokita.hiroshi@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -2611,7 +2611,7 @@ msgstr "リファレンス指定子を '%s' に置き換えます。"
 
 #: common/dialogs/dialog_paste_special_base.cpp:22
 msgid "Assign unique reference designators to pasted symbols"
-msgstr "ユニークなリファレンス指定子を貼り付けられたシンボルに割り当てます"
+msgstr "貼り付けるシンボルに一意のリファレンス指定子を割り当てる"
 
 #: common/dialogs/dialog_paste_special_base.cpp:22
 msgid "Keep existing reference designators, even if they are duplicated"
@@ -2619,7 +2619,7 @@ msgstr "重複があっても、既存のリファレンス指定子を保持す
 
 #: common/dialogs/dialog_paste_special_base.cpp:22
 msgid "Clear reference designators on all pasted symbols"
-msgstr "貼り付けられたシンボルのリファレンス指定子をクリアします"
+msgstr "貼り付けるシンボルのリファレンス指定子をクリアする"
 
 #: common/dialogs/dialog_paste_special_base.cpp:24
 msgid "Paste Options"
@@ -9938,10 +9938,9 @@ msgid ""
 "\n"
 "The following changes are recommended to update the project."
 msgstr ""
-"この回路図は図面を壊す可能性がある古いシンボル ライブラリーを使用して作成され"
-"ています。いくつかのシンボルは別のシンボル名にリンクされる必要があるでしょ"
-"う。これらのシンボルは新しいライブラリーへと \"レスキュー\"(コピーとリネー"
-"ム) する必要があります。\n"
+"この回路図は図面を壊す可能性がある古いシンボル ライブラリーを使用して作成されています。  "
+"いくつかのシンボルは別のシンボル名にリンクされる必要があるでしょう。  これらのシンボルは新しいライブラリーへと \"レスキュー\"(コピーとリネーム) "
+"する必要があります。\n"
 "\n"
 "以下の変更はプロジェクトを更新するために推奨されるものです。"
 
@@ -11437,7 +11436,7 @@ msgstr "回路図を更新"
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:27
 msgid ""
 "Re-link footprints to schematic symbols based on their reference designators"
-msgstr "リファレンス指定子に基づいた回路図シンボルへフットプリントを再リンク"
+msgstr "リファレンス指定子に基づいて回路図のシンボルとフットプリントを再リンク"
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:33
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:28
@@ -32402,6 +32401,8 @@ msgid ""
 "overridden by the board minimum width, or by the width of an existing track "
 "if the 'Use Existing Track Width' feature is enabled."
 msgstr ""
+"新しい配線のデフォルトの幅を選択します。基板の最小幅の設定もしくは'既存の配線幅を使う'機能が有効になっている場合には既存の配線幅が使われることに注意して"
+"ください。"
 
 #: pcbnew/toolbars_pcb_editor.cpp:532
 msgid ""
