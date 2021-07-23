@@ -793,26 +793,6 @@ void SCH_EDIT_FRAME::OnModify()
     if( ADVANCED_CFG::GetCfg().m_RealTimeConnectivity && CONNECTION_GRAPH::m_allowRealTime )
         RecalculateConnections( NO_CLEANUP );
 
-    GetCanvas()->GetView()->UpdateAllItemsConditionally( KIGFX::REPAINT,
-            []( KIGFX::VIEW_ITEM* aItem )
-            {
-                SCH_ITEM* item = dynamic_cast<SCH_ITEM*>( aItem );
-                SCH_CONNECTION* connection = item ? item->Connection() : nullptr;
-
-                if( connection && connection->HasDriverChanged() )
-                {
-                    connection->ClearDriverChanged();
-                    return true;
-                }
-
-                EDA_TEXT* text = dynamic_cast<EDA_TEXT*>( aItem );
-
-                if( text && text->HasTextVars() )
-                    return true;
-
-                return false;
-            } );
-
     GetCanvas()->Refresh();
     UpdateHierarchyNavigator();
 
@@ -1341,6 +1321,26 @@ void SCH_EDIT_FRAME::RecalculateConnections( SCH_CLEANUP_FLAGS aCleanupFlags )
             };
 
     Schematic().ConnectionGraph()->Recalculate( list, true, &changeHandler );
+
+    GetCanvas()->GetView()->UpdateAllItemsConditionally( KIGFX::REPAINT,
+            []( KIGFX::VIEW_ITEM* aItem )
+            {
+                SCH_ITEM* item = dynamic_cast<SCH_ITEM*>( aItem );
+                SCH_CONNECTION* connection = item ? item->Connection() : nullptr;
+
+                if( connection && connection->HasDriverChanged() )
+                {
+                    connection->ClearDriverChanged();
+                    return true;
+                }
+
+                EDA_TEXT* text = dynamic_cast<EDA_TEXT*>( aItem );
+
+                if( text && text->HasTextVars() )
+                    return true;
+
+                return false;
+            } );
 
     if( highlightedItem )
         SetHighlightedConnection( highlightedItem->Connection( &highlightPath ) );
