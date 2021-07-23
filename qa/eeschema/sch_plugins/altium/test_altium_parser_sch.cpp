@@ -31,8 +31,8 @@
 #include <eeschema/sch_plugins/altium/altium_parser_sch.h>
 
 // Function declarations of private methods to test
-int PropertiesReadKiCadUnitFrac( const std::map<wxString, wxString>& aProperties,
-                                 const wxString&                     aKey );
+int ReadKiCadUnitFrac( const std::map<wxString, wxString>& aProps,
+                       const wxString&                     aKey );
 
 
 struct ALTIUM_PARSER_SCH_FIXTURE
@@ -95,7 +95,7 @@ BOOST_AUTO_TEST_CASE( PropertiesReadKiCadUnitFracConversation )
             std::map<wxString, wxString> properties = { { "TEST", c.input },
                                                         { "TEST_FRAC", c.input_frac } };
 
-            int result = PropertiesReadKiCadUnitFrac( properties, "TEST" );
+            int result = ReadKiCadUnitFrac( properties, "TEST" );
 
             // These are all valid
             BOOST_CHECK_EQUAL( result, c.exp_result );

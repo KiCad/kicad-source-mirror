@@ -207,7 +207,7 @@ BOOST_AUTO_TEST_CASE( PropertiesReadKicadUnit )
         {
             std::map<wxString, wxString> properties = { { "TEST", c.input } };
 
-            int result = ALTIUM_PARSER::PropertiesReadKicadUnit( properties, "TEST", "0mil" );
+            int result = ALTIUM_PARSER::ReadKicadUnit( properties, "TEST", "0mil" );
 
             // These are all valid
             BOOST_CHECK_EQUAL( result, c.exp_result );

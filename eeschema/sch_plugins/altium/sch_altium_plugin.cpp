@@ -294,8 +294,8 @@ void SCH_ALTIUM_PLUGIN::ParseStorage( const CFB::CompoundFileReader& aReader )
     ALTIUM_PARSER reader( aReader, file );
 
     std::map<wxString, wxString> properties = reader.ReadProperties();
-    wxString header = ALTIUM_PARSER::PropertiesReadString( properties, "HEADER", "" );
-    int      weight = ALTIUM_PARSER::PropertiesReadInt( properties, "WEIGHT", 0 );
+    wxString header = ALTIUM_PARSER::ReadString( properties, "HEADER", "" );
+    int      weight = ALTIUM_PARSER::ReadInt( properties, "WEIGHT", 0 );
 
     if( weight < 0 )
         THROW_IO_ERROR( "Storage weight is negative!" );
@@ -337,7 +337,7 @@ void SCH_ALTIUM_PLUGIN::ParseFileHeader( const CFB::CompoundFileReader& aReader 
     {
         std::map<wxString, wxString> properties = reader.ReadProperties();
 
-        int               recordId = ALTIUM_PARSER::PropertiesReadInt( properties, "RECORD", 0 );
+        int               recordId = ALTIUM_PARSER::ReadInt( properties, "RECORD", 0 );
         ALTIUM_SCH_RECORD record   = static_cast<ALTIUM_SCH_RECORD>( recordId );
 
         if( record != ALTIUM_SCH_RECORD::HEADER )
@@ -355,7 +355,7 @@ void SCH_ALTIUM_PLUGIN::ParseFileHeader( const CFB::CompoundFileReader& aReader 
     {
         std::map<wxString, wxString> properties = reader.ReadProperties();
 
-        int               recordId = ALTIUM_PARSER::PropertiesReadInt( properties, "RECORD", 0 );
+        int               recordId = ALTIUM_PARSER::ReadInt( properties, "RECORD", 0 );
         ALTIUM_SCH_RECORD record   = static_cast<ALTIUM_SCH_RECORD>( recordId );
 
         // see: https://github.com/vadmium/python-altium/blob/master/format.md

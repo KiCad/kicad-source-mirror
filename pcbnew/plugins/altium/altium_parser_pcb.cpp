@@ -140,8 +140,8 @@ ALTIUM_LAYER altium_layer_from_name( const wxString& aName )
     }
 }
 
-void altium_parse_polygons(
-        std::map<wxString, wxString>& aProperties, std::vector<ALTIUM_VERTICE>& aVertices )
+void altium_parse_polygons( std::map<wxString, wxString>& aProps,
+                            std::vector<ALTIUM_VERTICE>& aVertices )
 {
     for( size_t i = 0; i < std::numeric_limits<size_t>::max(); i++ )
     {
@@ -150,23 +150,17 @@ void altium_parse_polygons(
         const wxString vxi = "VX" + si;
         const wxString vyi = "VY" + si;
 
-        if( aProperties.find( vxi ) == aProperties.end()
-                || aProperties.find( vyi ) == aProperties.end() )
-        {
+        if( aProps.find( vxi ) == aProps.end() || aProps.find( vyi ) == aProps.end() )
             break; // it doesn't seem like we know beforehand how many vertices are inside a polygon
-        }
 
-        const bool isRound = ALTIUM_PARSER::PropertiesReadInt( aProperties, "KIND" + si, 0 ) != 0;
-        const int32_t radius =
-                ALTIUM_PARSER::PropertiesReadKicadUnit( aProperties, "R" + si, "0mil" );
-        const double  sa = ALTIUM_PARSER::PropertiesReadDouble( aProperties, "SA" + si, 0. );
-        const double  ea = ALTIUM_PARSER::PropertiesReadDouble( aProperties, "EA" + si, 0. );
-        const wxPoint vp =
-                wxPoint( ALTIUM_PARSER::PropertiesReadKicadUnit( aProperties, vxi, "0mil" ),
-                        -ALTIUM_PARSER::PropertiesReadKicadUnit( aProperties, vyi, "0mil" ) );
-        const wxPoint cp =
-                wxPoint( ALTIUM_PARSER::PropertiesReadKicadUnit( aProperties, "CX" + si, "0mil" ),
-                        -ALTIUM_PARSER::PropertiesReadKicadUnit( aProperties, "CY" + si, "0mil" ) );
+        const bool isRound = ALTIUM_PARSER::ReadInt( aProps, "KIND" + si, 0 ) != 0;
+        const int32_t radius = ALTIUM_PARSER::ReadKicadUnit( aProps, "R" + si, "0mil" );
+        const double  sa = ALTIUM_PARSER::ReadDouble( aProps, "SA" + si, 0. );
+        const double  ea = ALTIUM_PARSER::ReadDouble( aProps, "EA" + si, 0. );
+        const wxPoint vp = wxPoint( ALTIUM_PARSER::ReadKicadUnit( aProps, vxi, "0mil" ),
+                                    -ALTIUM_PARSER::ReadKicadUnit( aProps, vyi, "0mil" ) );
+        const wxPoint cp = wxPoint( ALTIUM_PARSER::ReadKicadUnit( aProps, "CX" + si, "0mil" ),
+                                    -ALTIUM_PARSER::ReadKicadUnit( aProps, "CY" + si, "0mil" ) );
 
         aVertices.emplace_back( isRound, radius, sa, ea, vp, cp );
     }
@@ -174,165 +168,139 @@ void altium_parse_polygons(
 
 ABOARD6::ABOARD6( ALTIUM_PARSER& aReader )
 {
-    std::map<wxString, wxString> properties = aReader.ReadProperties();
-    if( properties.empty() )
-    {
-        THROW_IO_ERROR( "Board6 stream has no properties!" );
-    }
+    std::map<wxString, wxString> props = aReader.ReadProperties();
 
-    /*for (auto & property : properties) {
-        std::cout << "  * '" << property.first << "' = '" << property.second << "'" << std::endl;
-    }*/
+    if( props.empty() )
+        THROW_IO_ERROR( "Board6 stream has no props!" );
 
-    sheetpos  = wxPoint( ALTIUM_PARSER::PropertiesReadKicadUnit( properties, "SHEETX", "0mil" ),
-            -ALTIUM_PARSER::PropertiesReadKicadUnit( properties, "SHEETY", "0mil" ) );
-    sheetsize = wxSize( ALTIUM_PARSER::PropertiesReadKicadUnit( properties, "SHEETWIDTH", "0mil" ),
-            ALTIUM_PARSER::PropertiesReadKicadUnit( properties, "SHEETHEIGHT", "0mil" ) );
+    sheetpos  = wxPoint( ALTIUM_PARSER::ReadKicadUnit( props, "SHEETX", "0mil" ),
+                         -ALTIUM_PARSER::ReadKicadUnit( props, "SHEETY", "0mil" ) );
+    sheetsize = wxSize( ALTIUM_PARSER::ReadKicadUnit( props, "SHEETWIDTH", "0mil" ),
+                        ALTIUM_PARSER::ReadKicadUnit( props, "SHEETHEIGHT", "0mil" ) );
 
-    layercount = ALTIUM_PARSER::PropertiesReadInt( properties, "LAYERSETSCOUNT", 1 ) + 1;
+    layercount = ALTIUM_PARSER::ReadInt( props, "LAYERSETSCOUNT", 1 ) + 1;
 
     for( size_t i = 1; i < std::numeric_limits<size_t>::max(); i++ )
     {
         const wxString layeri    = "LAYER" + std::to_string( i );
         const wxString layername = layeri + "NAME";
 
-        auto layernameit = properties.find( layername );
-        if( layernameit == properties.end() )
-        {
+        auto layernameit = props.find( layername );
+
+        if( layernameit == props.end() )
             break; // it doesn't seem like we know beforehand how many vertices are inside a polygon
-        }
 
-        ABOARD6_LAYER_STACKUP curlayer;
+        ABOARD6_LAYER_STACKUP l;
 
-        curlayer.name   = ALTIUM_PARSER::PropertiesReadString( properties, layername, "" );
-        curlayer.nextId = ALTIUM_PARSER::PropertiesReadInt( properties, layeri + "NEXT", 0 );
-        curlayer.prevId = ALTIUM_PARSER::PropertiesReadInt( properties, layeri + "PREV", 0 );
-        curlayer.copperthick =
-                ALTIUM_PARSER::PropertiesReadKicadUnit( properties, layeri + "COPTHICK", "1.4mil" );
+        l.name   = ALTIUM_PARSER::ReadString( props, layername, "" );
+        l.nextId = ALTIUM_PARSER::ReadInt( props, layeri + "NEXT", 0 );
+        l.prevId = ALTIUM_PARSER::ReadInt( props, layeri + "PREV", 0 );
+        l.copperthick = ALTIUM_PARSER::ReadKicadUnit( props, layeri + "COPTHICK", "1.4mil" );
 
-        curlayer.dielectricconst =
-                ALTIUM_PARSER::PropertiesReadDouble( properties, layeri + "DIELCONST", 0. );
-        curlayer.dielectricthick = ALTIUM_PARSER::PropertiesReadKicadUnit(
-                properties, layeri + "DIELHEIGHT", "60mil" );
-        curlayer.dielectricmaterial =
-                ALTIUM_PARSER::PropertiesReadString( properties, layeri + "DIELMATERIAL", "FR-4" );
+        l.dielectricconst = ALTIUM_PARSER::ReadDouble( props, layeri + "DIELCONST", 0. );
+        l.dielectricthick = ALTIUM_PARSER::ReadKicadUnit( props, layeri + "DIELHEIGHT",  "60mil" );
+        l.dielectricmaterial = ALTIUM_PARSER::ReadString( props, layeri + "DIELMATERIAL", "FR-4" );
 
-        stackup.push_back( curlayer );
+        stackup.push_back( l );
     }
 
-    altium_parse_polygons( properties, board_vertices );
+    altium_parse_polygons( props, board_vertices );
 
     if( aReader.HasParsingError() )
-    {
         THROW_IO_ERROR( "Board6 stream was not parsed correctly!" );
-    }
 }
 
 ACLASS6::ACLASS6( ALTIUM_PARSER& aReader )
 {
     std::map<wxString, wxString> properties = aReader.ReadProperties();
-    if( properties.empty() )
-    {
-        THROW_IO_ERROR( "Classes6 stream has no properties!" );
-    }
 
-    name     = ALTIUM_PARSER::PropertiesReadString( properties, "NAME", "" );
-    uniqueid = ALTIUM_PARSER::PropertiesReadString( properties, "UNIQUEID", "" );
-    kind     = static_cast<ALTIUM_CLASS_KIND>(
-            ALTIUM_PARSER::PropertiesReadInt( properties, "KIND", -1 ) );
+    if( properties.empty() )
+        THROW_IO_ERROR( "Classes6 stream has no properties!" );
+
+    name     = ALTIUM_PARSER::ReadString( properties, "NAME", "" );
+    uniqueid = ALTIUM_PARSER::ReadString( properties, "UNIQUEID", "" );
+    kind     = static_cast<ALTIUM_CLASS_KIND>( ALTIUM_PARSER::ReadInt( properties, "KIND", -1 ) );
 
     for( size_t i = 0; i < std::numeric_limits<size_t>::max(); i++ )
     {
         auto mit = properties.find( "M" + std::to_string( i ) );
+
         if( mit == properties.end() )
-        {
             break; // it doesn't seem like we know beforehand how many components are in the netclass
-        }
+
         names.push_back( mit->second );
     }
 
     if( aReader.HasParsingError() )
-    {
         THROW_IO_ERROR( "Classes6 stream was not parsed correctly" );
-    }
 }
 
 ACOMPONENT6::ACOMPONENT6( ALTIUM_PARSER& aReader )
 {
-    std::map<wxString, wxString> properties = aReader.ReadProperties();
-    if( properties.empty() )
-    {
-        THROW_IO_ERROR( "Components6 stream has no properties" );
-    }
+    std::map<wxString, wxString> props = aReader.ReadProperties();
 
-    layer = altium_layer_from_name(
-            ALTIUM_PARSER::PropertiesReadString( properties, "LAYER", "" ) );
-    position         = wxPoint( ALTIUM_PARSER::PropertiesReadKicadUnit( properties, "X", "0mil" ),
-            -ALTIUM_PARSER::PropertiesReadKicadUnit( properties, "Y", "0mil" ) );
-    rotation         = ALTIUM_PARSER::PropertiesReadDouble( properties, "ROTATION", 0. );
-    locked           = ALTIUM_PARSER::PropertiesReadBool( properties, "LOCKED", false );
-    nameon           = ALTIUM_PARSER::PropertiesReadBool( properties, "NAMEON", true );
-    commenton        = ALTIUM_PARSER::PropertiesReadBool( properties, "COMMENTON", false );
-    sourcedesignator = ALTIUM_PARSER::PropertiesReadString( properties, "SOURCEDESIGNATOR", "" );
-    sourcefootprintlibrary =
-            ALTIUM_PARSER::PropertiesReadString( properties, "SOURCEFOOTPRINTLIBRARY", "" );
-    pattern = ALTIUM_PARSER::PropertiesReadString( properties, "PATTERN", "" );
+    if( props.empty() )
+        THROW_IO_ERROR( "Components6 stream has no props" );
 
-    sourcecomponentlibrary =
-            ALTIUM_PARSER::PropertiesReadString( properties, "SOURCECOMPONENTLIBRARY", "" );
-    sourcelibreference =
-            ALTIUM_PARSER::PropertiesReadString( properties, "SOURCELIBREFERENCE", "" );
+    layer = altium_layer_from_name( ALTIUM_PARSER::ReadString( props, "LAYER", "" ) );
+    position         = wxPoint( ALTIUM_PARSER::ReadKicadUnit( props, "X", "0mil" ),
+                                -ALTIUM_PARSER::ReadKicadUnit( props, "Y", "0mil" ) );
+    rotation         = ALTIUM_PARSER::ReadDouble( props, "ROTATION", 0. );
+    locked           = ALTIUM_PARSER::ReadBool( props, "LOCKED", false );
+    nameon           = ALTIUM_PARSER::ReadBool( props, "NAMEON", true );
+    commenton        = ALTIUM_PARSER::ReadBool( props, "COMMENTON", false );
+    sourcedesignator = ALTIUM_PARSER::ReadString( props, "SOURCEDESIGNATOR", "" );
+    sourcefootprintlibrary = ALTIUM_PARSER::ReadString( props, "SOURCEFOOTPRINTLIBRARY", "" );
+    pattern = ALTIUM_PARSER::ReadString( props, "PATTERN", "" );
+
+    sourcecomponentlibrary = ALTIUM_PARSER::ReadString( props, "SOURCECOMPONENTLIBRARY", "" );
+    sourcelibreference = ALTIUM_PARSER::ReadString( props, "SOURCELIBREFERENCE", "" );
 
     nameautoposition = static_cast<ALTIUM_TEXT_POSITION>(
-            ALTIUM_PARSER::PropertiesReadInt( properties, "NAMEAUTOPOSITION", 0 ) );
+                                        ALTIUM_PARSER::ReadInt( props, "NAMEAUTOPOSITION", 0 ) );
     commentautoposition = static_cast<ALTIUM_TEXT_POSITION>(
-            ALTIUM_PARSER::PropertiesReadInt( properties, "COMMENTAUTOPOSITION", 0 ) );
+                                        ALTIUM_PARSER::ReadInt( props, "COMMENTAUTOPOSITION", 0 ) );
 
     if( aReader.HasParsingError() )
-    {
         THROW_IO_ERROR( "Components6 stream was not parsed correctly" );
-    }
 }
 
 ADIMENSION6::ADIMENSION6( ALTIUM_PARSER& aReader )
 {
     aReader.Skip( 2 );
 
-    std::map<wxString, wxString> properties = aReader.ReadProperties();
-    if( properties.empty() )
-    {
-        THROW_IO_ERROR( "Dimensions6 stream has no properties" );
-    }
+    std::map<wxString, wxString> props = aReader.ReadProperties();
 
-    layer = altium_layer_from_name(
-            ALTIUM_PARSER::PropertiesReadString( properties, "LAYER", "" ) );
-    kind = static_cast<ALTIUM_DIMENSION_KIND>(
-            ALTIUM_PARSER::PropertiesReadInt( properties, "DIMENSIONKIND", 0 ) );
+    if( props.empty() )
+        THROW_IO_ERROR( "Dimensions6 stream has no props" );
 
-    textformat = ALTIUM_PARSER::PropertiesReadString( properties, "TEXTFORMAT", "" );
+    layer = altium_layer_from_name( ALTIUM_PARSER::ReadString( props, "LAYER", "" ) );
+    kind = static_cast<ALTIUM_DIMENSION_KIND>( ALTIUM_PARSER::ReadInt( props, "DIMENSIONKIND", 0 ) );
 
-    height = ALTIUM_PARSER::PropertiesReadKicadUnit( properties, "HEIGHT", "0mil" );
-    angle  = ALTIUM_PARSER::PropertiesReadDouble( properties, "ANGLE", 0. );
+    textformat = ALTIUM_PARSER::ReadString( props, "TEXTFORMAT", "" );
 
-    linewidth      = ALTIUM_PARSER::PropertiesReadKicadUnit( properties, "LINEWIDTH", "10mil" );
-    textheight     = ALTIUM_PARSER::PropertiesReadKicadUnit( properties, "TEXTHEIGHT", "10mil" );
-    textlinewidth  = ALTIUM_PARSER::PropertiesReadKicadUnit( properties, "TEXTLINEWIDTH", "6mil" );
-    textprecision  = ALTIUM_PARSER::PropertiesReadInt( properties, "TEXTPRECISION", 2 );
-    textbold       = ALTIUM_PARSER::PropertiesReadBool( properties, "TEXTLINEWIDTH", false );
-    textitalic     = ALTIUM_PARSER::PropertiesReadBool( properties, "ITALIC", false );
+    height = ALTIUM_PARSER::ReadKicadUnit( props, "HEIGHT", "0mil" );
+    angle  = ALTIUM_PARSER::ReadDouble( props, "ANGLE", 0. );
 
-    arrowsize = ALTIUM_PARSER::PropertiesReadKicadUnit( properties, "ARROWSIZE", "60mil" );
+    linewidth      = ALTIUM_PARSER::ReadKicadUnit( props, "LINEWIDTH", "10mil" );
+    textheight     = ALTIUM_PARSER::ReadKicadUnit( props, "TEXTHEIGHT", "10mil" );
+    textlinewidth  = ALTIUM_PARSER::ReadKicadUnit( props, "TEXTLINEWIDTH", "6mil" );
+    textprecision  = ALTIUM_PARSER::ReadInt( props, "TEXTPRECISION", 2 );
+    textbold       = ALTIUM_PARSER::ReadBool( props, "TEXTLINEWIDTH", false );
+    textitalic     = ALTIUM_PARSER::ReadBool( props, "ITALIC", false );
 
-    xy1 = wxPoint( ALTIUM_PARSER::PropertiesReadKicadUnit( properties, "X1", "0mil" ),
-            -ALTIUM_PARSER::PropertiesReadKicadUnit( properties, "Y1", "0mil" ) );
+    arrowsize = ALTIUM_PARSER::ReadKicadUnit( props, "ARROWSIZE", "60mil" );
 
-    int refcount = ALTIUM_PARSER::PropertiesReadInt( properties, "REFERENCES_COUNT", 0 );
+    xy1 = wxPoint( ALTIUM_PARSER::ReadKicadUnit( props, "X1", "0mil" ),
+                   -ALTIUM_PARSER::ReadKicadUnit( props, "Y1", "0mil" ) );
+
+    int refcount = ALTIUM_PARSER::ReadInt( props, "REFERENCES_COUNT", 0 );
+
     for( int i = 0; i < refcount; i++ )
     {
-        const std::string refi = "REFERENCE" + std::to_string( i );
-        referencePoint.emplace_back(
-                ALTIUM_PARSER::PropertiesReadKicadUnit( properties, refi + "POINTX", "0mil" ),
-                -ALTIUM_PARSER::PropertiesReadKicadUnit( properties, refi + "POINTY", "0mil" ) );
+        const std::string refi = "REFERENCE" + std::to_string( i ) + "POINT";
+        referencePoint.emplace_back( ALTIUM_PARSER::ReadKicadUnit( props, refi + "X", "0mil" ),
+                                     -ALTIUM_PARSER::ReadKicadUnit( props, refi + "Y", "0mil" ) );
     }
 
     for( size_t i = 1; i < std::numeric_limits<size_t>::max(); i++ )
@@ -341,143 +309,91 @@ ADIMENSION6::ADIMENSION6( ALTIUM_PARSER& aReader )
         const std::string textix = texti + "X";
         const std::string textiy = texti + "Y";
 
-        if( properties.find( textix ) == properties.end()
-                || properties.find( textiy ) == properties.end() )
-        {
+        if( props.find( textix ) == props.end() || props.find( textiy ) == props.end() )
             break; // it doesn't seem like we know beforehand how many vertices are inside a polygon
-        }
 
-        textPoint.emplace_back(
-                ALTIUM_PARSER::PropertiesReadKicadUnit( properties, textix, "0mil" ),
-                -ALTIUM_PARSER::PropertiesReadKicadUnit( properties, textiy, "0mil" ) );
+        textPoint.emplace_back( ALTIUM_PARSER::ReadKicadUnit( props, textix, "0mil" ),
+                                -ALTIUM_PARSER::ReadKicadUnit( props, textiy, "0mil" ) );
     }
 
-    wxString dimensionunit =
-            ALTIUM_PARSER::PropertiesReadString( properties, "TEXTDIMENSIONUNIT", "Millimeters" );
-    if( dimensionunit == "Inches" )
-    {
-        textunit = ALTIUM_UNIT::INCHES;
-    }
-    else if( dimensionunit == "Mils" )
-    {
-        textunit = ALTIUM_UNIT::MILS;
-    }
-    else if( dimensionunit == "Millimeters" )
-    {
-        textunit = ALTIUM_UNIT::MILLIMETERS;
-    }
-    else if( dimensionunit == "Centimeters" )
-    {
-        textunit = ALTIUM_UNIT::CENTIMETER;
-    }
-    else
-    {
-        textunit = ALTIUM_UNIT::UNKNOWN;
-    }
+    wxString dimensionunit = ALTIUM_PARSER::ReadString( props, "TEXTDIMENSIONUNIT", "Millimeters" );
+
+    if(      dimensionunit == "Inches" )      textunit = ALTIUM_UNIT::INCHES;
+    else if( dimensionunit == "Mils" )        textunit = ALTIUM_UNIT::MILS;
+    else if( dimensionunit == "Millimeters" ) textunit = ALTIUM_UNIT::MILLIMETERS;
+    else if( dimensionunit == "Centimeters" ) textunit = ALTIUM_UNIT::CENTIMETER;
+    else                                      textunit = ALTIUM_UNIT::UNKNOWN;
 
     if( aReader.HasParsingError() )
-    {
         THROW_IO_ERROR( "Dimensions6 stream was not parsed correctly" );
-    }
 }
 
 AMODEL::AMODEL( ALTIUM_PARSER& aReader )
 {
     std::map<wxString, wxString> properties = aReader.ReadProperties();
+
     if( properties.empty() )
-    {
         THROW_IO_ERROR( "Classes6 stream has no properties!" );
-    }
 
-    name       = ALTIUM_PARSER::PropertiesReadString( properties, "NAME", "" );
-    id         = ALTIUM_PARSER::PropertiesReadString( properties, "ID", "" );
-    isEmbedded = ALTIUM_PARSER::PropertiesReadBool( properties, "EMBED", false );
+    name       = ALTIUM_PARSER::ReadString( properties, "NAME", "" );
+    id         = ALTIUM_PARSER::ReadString( properties, "ID", "" );
+    isEmbedded = ALTIUM_PARSER::ReadBool( properties, "EMBED", false );
 
-    rotation.x = ALTIUM_PARSER::PropertiesReadDouble( properties, "ROTX", 0. );
-    rotation.y = ALTIUM_PARSER::PropertiesReadDouble( properties, "ROTY", 0. );
-    rotation.z = ALTIUM_PARSER::PropertiesReadDouble( properties, "ROTZ", 0. );
+    rotation.x = ALTIUM_PARSER::ReadDouble( properties, "ROTX", 0. );
+    rotation.y = ALTIUM_PARSER::ReadDouble( properties, "ROTY", 0. );
+    rotation.z = ALTIUM_PARSER::ReadDouble( properties, "ROTZ", 0. );
 
     if( aReader.HasParsingError() )
-    {
         THROW_IO_ERROR( "Classes6 stream was not parsed correctly" );
-    }
 }
 
 ANET6::ANET6( ALTIUM_PARSER& aReader )
 {
     std::map<wxString, wxString> properties = aReader.ReadProperties();
-    if( properties.empty() )
-    {
-        THROW_IO_ERROR( "Nets6 stream has no properties" );
-    }
 
-    name = ALTIUM_PARSER::PropertiesReadString( properties, "NAME", "" );
+    if( properties.empty() )
+        THROW_IO_ERROR( "Nets6 stream has no properties" );
+
+    name = ALTIUM_PARSER::ReadString( properties, "NAME", "" );
 
     if( aReader.HasParsingError() )
-    {
         THROW_IO_ERROR( "Nets6 stream was not parsed correctly" );
-    }
 }
 
 APOLYGON6::APOLYGON6( ALTIUM_PARSER& aReader )
 {
     std::map<wxString, wxString> properties = aReader.ReadProperties();
-    if( properties.empty() )
-    {
-        THROW_IO_ERROR( "Polygons6 stream has no properties" );
-    }
 
-    layer = altium_layer_from_name(
-            ALTIUM_PARSER::PropertiesReadString( properties, "LAYER", "" ) );
-    net    = ALTIUM_PARSER::PropertiesReadInt( properties, "NET", ALTIUM_NET_UNCONNECTED );
-    locked = ALTIUM_PARSER::PropertiesReadBool( properties, "LOCKED", false );
+    if( properties.empty() )
+        THROW_IO_ERROR( "Polygons6 stream has no properties" );
+
+    layer  = altium_layer_from_name( ALTIUM_PARSER::ReadString( properties, "LAYER", "" ) );
+    net    = ALTIUM_PARSER::ReadInt( properties, "NET", ALTIUM_NET_UNCONNECTED );
+    locked = ALTIUM_PARSER::ReadBool( properties, "LOCKED", false );
 
     // TODO: kind
 
-    gridsize      = ALTIUM_PARSER::PropertiesReadKicadUnit( properties, "GRIDSIZE", "0mil" );
-    trackwidth    = ALTIUM_PARSER::PropertiesReadKicadUnit( properties, "TRACKWIDTH", "0mil" );
-    minprimlength = ALTIUM_PARSER::PropertiesReadKicadUnit( properties, "MINPRIMLENGTH", "0mil" );
-    useoctagons   = ALTIUM_PARSER::PropertiesReadBool( properties, "USEOCTAGONS", false );
+    gridsize      = ALTIUM_PARSER::ReadKicadUnit( properties, "GRIDSIZE", "0mil" );
+    trackwidth    = ALTIUM_PARSER::ReadKicadUnit( properties, "TRACKWIDTH", "0mil" );
+    minprimlength = ALTIUM_PARSER::ReadKicadUnit( properties, "MINPRIMLENGTH", "0mil" );
+    useoctagons   = ALTIUM_PARSER::ReadBool( properties, "USEOCTAGONS", false );
 
-    pourindex = ALTIUM_PARSER::PropertiesReadInt( properties, "POURINDEX", 0 );
+    pourindex = ALTIUM_PARSER::ReadInt( properties, "POURINDEX", 0 );
 
-    wxString hatchstyleraw = ALTIUM_PARSER::PropertiesReadString( properties, "HATCHSTYLE", "" );
+    wxString hatchstyleraw = ALTIUM_PARSER::ReadString( properties, "HATCHSTYLE", "" );
 
-    if( hatchstyleraw == "Solid" )
-    {
-        hatchstyle = ALTIUM_POLYGON_HATCHSTYLE::SOLID;
-    }
-    else if( hatchstyleraw == "45Degree" )
-    {
-        hatchstyle = ALTIUM_POLYGON_HATCHSTYLE::DEGREE_45;
-    }
-    else if( hatchstyleraw == "90Degree" )
-    {
-        hatchstyle = ALTIUM_POLYGON_HATCHSTYLE::DEGREE_90;
-    }
-    else if( hatchstyleraw == "Horizontal" )
-    {
-        hatchstyle = ALTIUM_POLYGON_HATCHSTYLE::HORIZONTAL;
-    }
-    else if( hatchstyleraw == "Vertical" )
-    {
-        hatchstyle = ALTIUM_POLYGON_HATCHSTYLE::VERTICAL;
-    }
-    else if( hatchstyleraw == "None" )
-    {
-        hatchstyle = ALTIUM_POLYGON_HATCHSTYLE::NONE;
-    }
-    else
-    {
-        hatchstyle = ALTIUM_POLYGON_HATCHSTYLE::UNKNOWN;
-    }
+    if(      hatchstyleraw == "Solid" )      hatchstyle = ALTIUM_POLYGON_HATCHSTYLE::SOLID;
+    else if( hatchstyleraw == "45Degree" )   hatchstyle = ALTIUM_POLYGON_HATCHSTYLE::DEGREE_45;
+    else if( hatchstyleraw == "90Degree" )   hatchstyle = ALTIUM_POLYGON_HATCHSTYLE::DEGREE_90;
+    else if( hatchstyleraw == "Horizontal" ) hatchstyle = ALTIUM_POLYGON_HATCHSTYLE::HORIZONTAL;
+    else if( hatchstyleraw == "Vertical" )   hatchstyle = ALTIUM_POLYGON_HATCHSTYLE::VERTICAL;
+    else if( hatchstyleraw == "None" )       hatchstyle = ALTIUM_POLYGON_HATCHSTYLE::NONE;
+    else                                     hatchstyle = ALTIUM_POLYGON_HATCHSTYLE::UNKNOWN;
 
     altium_parse_polygons( properties, vertices );
 
     if( aReader.HasParsingError() )
-    {
         THROW_IO_ERROR( "Polygons6 stream was not parsed correctly" );
-    }
 }
 
 ARULE6::ARULE6( ALTIUM_PARSER& aReader )
@@ -492,23 +408,22 @@ ARULE6::ARULE6( ALTIUM_PARSER& aReader )
 
     aReader.Skip( 2 );
 
-    std::map<wxString, wxString> properties = aReader.ReadProperties();
-    if( properties.empty() )
-    {
-        THROW_IO_ERROR( "Rules6 stream has no properties" );
-    }
+    std::map<wxString, wxString> props = aReader.ReadProperties();
 
-    name     = ALTIUM_PARSER::PropertiesReadString( properties, "NAME", "" );
-    priority = ALTIUM_PARSER::PropertiesReadInt( properties, "PRIORITY", 1 );
+    if( props.empty() )
+        THROW_IO_ERROR( "Rules6 stream has no props" );
 
-    scope1expr = ALTIUM_PARSER::PropertiesReadString( properties, "SCOPE1EXPRESSION", "" );
-    scope2expr = ALTIUM_PARSER::PropertiesReadString( properties, "SCOPE2EXPRESSION", "" );
+    name     = ALTIUM_PARSER::ReadString( props, "NAME", "" );
+    priority = ALTIUM_PARSER::ReadInt( props, "PRIORITY", 1 );
 
-    wxString rulekind = ALTIUM_PARSER::PropertiesReadString( properties, "RULEKIND", "" );
+    scope1expr = ALTIUM_PARSER::ReadString( props, "SCOPE1EXPRESSION", "" );
+    scope2expr = ALTIUM_PARSER::ReadString( props, "SCOPE2EXPRESSION", "" );
+
+    wxString rulekind = ALTIUM_PARSER::ReadString( props, "RULEKIND", "" );
     if( rulekind == "Clearance" )
     {
         kind         = ALTIUM_RULE_KIND::CLEARANCE;
-        clearanceGap = ALTIUM_PARSER::PropertiesReadKicadUnit( properties, "GAP", "10mil" );
+        clearanceGap = ALTIUM_PARSER::ReadKicadUnit( props, "GAP", "10mil" );
     }
     else if( rulekind == "DiffPairsRouting" )
     {
@@ -537,29 +452,21 @@ ARULE6::ARULE6( ALTIUM_PARSER& aReader )
     else if( rulekind == "PlaneClearance" )
     {
         kind = ALTIUM_RULE_KIND::PLANE_CLEARANCE;
-        planeclearanceClearance =
-                ALTIUM_PARSER::PropertiesReadKicadUnit( properties, "CLEARANCE", "10mil" );
+        planeclearanceClearance = ALTIUM_PARSER::ReadKicadUnit( props, "CLEARANCE", "10mil" );
     }
     else if( rulekind == "PolygonConnect" )
     {
         kind = ALTIUM_RULE_KIND::POLYGON_CONNECT;
-        polygonconnectAirgapwidth =
-                ALTIUM_PARSER::PropertiesReadKicadUnit( properties, "AIRGAPWIDTH", "10mil" );
-        polygonconnectReliefconductorwidth = ALTIUM_PARSER::PropertiesReadKicadUnit(
-                properties, "RELIEFCONDUCTORWIDTH", "10mil" );
-        polygonconnectReliefentries =
-                ALTIUM_PARSER::PropertiesReadInt( properties, "RELIEFENTRIES", 4 );
+        polygonconnectAirgapwidth = ALTIUM_PARSER::ReadKicadUnit( props, "AIRGAPWIDTH", "10mil" );
+        polygonconnectReliefconductorwidth = ALTIUM_PARSER::ReadKicadUnit( props, "RELIEFCONDUCTORWIDTH", "10mil" );
+        polygonconnectReliefentries = ALTIUM_PARSER::ReadInt( props, "RELIEFENTRIES", 4 );
 
-        wxString style = ALTIUM_PARSER::PropertiesReadString( properties, "CONNECTSTYLE", "" );
+        wxString style = ALTIUM_PARSER::ReadString( props, "CONNECTSTYLE", "" );
 
-        if( style == "Direct" )
-            polygonconnectStyle = ALTIUM_CONNECT_STYLE::DIRECT;
-        else if( style == "Relief" )
-            polygonconnectStyle = ALTIUM_CONNECT_STYLE::RELIEF;
-        else if( style == "NoConnect" )
-            polygonconnectStyle = ALTIUM_CONNECT_STYLE::NONE;
-        else
-            polygonconnectStyle = ALTIUM_CONNECT_STYLE::UNKNOWN;
+        if(      style == "Direct" )    polygonconnectStyle = ALTIUM_CONNECT_STYLE::DIRECT;
+        else if( style == "Relief" )    polygonconnectStyle = ALTIUM_CONNECT_STYLE::RELIEF;
+        else if( style == "NoConnect" ) polygonconnectStyle = ALTIUM_CONNECT_STYLE::NONE;
+        else                            polygonconnectStyle = ALTIUM_CONNECT_STYLE::UNKNOWN;
     }
     else
     {
@@ -567,9 +474,7 @@ ARULE6::ARULE6( ALTIUM_PARSER& aReader )
     }
 
     if( aReader.HasParsingError() )
-    {
         THROW_IO_ERROR( "Rules6 stream was not parsed correctly" );
-    }
 }
 
 AARC6::AARC6( ALTIUM_PARSER& aReader )
@@ -613,10 +518,9 @@ AARC6::AARC6( ALTIUM_PARSER& aReader )
 ACOMPONENTBODY6::ACOMPONENTBODY6( ALTIUM_PARSER& aReader )
 {
     ALTIUM_RECORD recordtype = static_cast<ALTIUM_RECORD>( aReader.Read<uint8_t>() );
+
     if( recordtype != ALTIUM_RECORD::MODEL )
-    {
         THROW_IO_ERROR( "ComponentsBodies6 stream has invalid recordtype" );
-    }
 
     aReader.ReadAndSetSubrecordLength();
 
@@ -625,33 +529,30 @@ ACOMPONENTBODY6::ACOMPONENTBODY6( ALTIUM_PARSER& aReader )
     aReader.Skip( 9 );
 
     std::map<wxString, wxString> properties = aReader.ReadProperties();
+
     if( properties.empty() )
-    {
         THROW_IO_ERROR( "ComponentsBodies6 stream has no properties" );
-    }
 
-    modelName       = ALTIUM_PARSER::PropertiesReadString( properties, "MODEL.NAME", "" );
-    modelId         = ALTIUM_PARSER::PropertiesReadString( properties, "MODELID", "" );
-    modelIsEmbedded = ALTIUM_PARSER::PropertiesReadBool( properties, "MODEL.EMBED", false );
+    modelName       = ALTIUM_PARSER::ReadString( properties, "MODEL.NAME", "" );
+    modelId         = ALTIUM_PARSER::ReadString( properties, "MODELID", "" );
+    modelIsEmbedded = ALTIUM_PARSER::ReadBool( properties, "MODEL.EMBED", false );
 
-    modelPosition.x = ALTIUM_PARSER::PropertiesReadKicadUnit( properties, "MODEL.2D.X", "0mil" );
-    modelPosition.y = -ALTIUM_PARSER::PropertiesReadKicadUnit( properties, "MODEL.2D.Y", "0mil" );
-    modelPosition.z = ALTIUM_PARSER::PropertiesReadKicadUnit( properties, "MODEL.3D.DZ", "0mil" );
+    modelPosition.x = ALTIUM_PARSER::ReadKicadUnit( properties, "MODEL.2D.X", "0mil" );
+    modelPosition.y = -ALTIUM_PARSER::ReadKicadUnit( properties, "MODEL.2D.Y", "0mil" );
+    modelPosition.z = ALTIUM_PARSER::ReadKicadUnit( properties, "MODEL.3D.DZ", "0mil" );
 
-    modelRotation.x = ALTIUM_PARSER::PropertiesReadDouble( properties, "MODEL.3D.ROTX", 0. );
-    modelRotation.y = ALTIUM_PARSER::PropertiesReadDouble( properties, "MODEL.3D.ROTY", 0. );
-    modelRotation.z = ALTIUM_PARSER::PropertiesReadDouble( properties, "MODEL.3D.ROTZ", 0. );
+    modelRotation.x = ALTIUM_PARSER::ReadDouble( properties, "MODEL.3D.ROTX", 0. );
+    modelRotation.y = ALTIUM_PARSER::ReadDouble( properties, "MODEL.3D.ROTY", 0. );
+    modelRotation.z = ALTIUM_PARSER::ReadDouble( properties, "MODEL.3D.ROTZ", 0. );
 
-    rotation = ALTIUM_PARSER::PropertiesReadDouble( properties, "MODEL.2D.ROTATION", 0. );
+    rotation = ALTIUM_PARSER::ReadDouble( properties, "MODEL.2D.ROTATION", 0. );
 
-    bodyOpacity = ALTIUM_PARSER::PropertiesReadDouble( properties, "BODYOPACITY3D", 1. );
+    bodyOpacity = ALTIUM_PARSER::ReadDouble( properties, "BODYOPACITY3D", 1. );
 
     aReader.SkipSubrecord();
 
     if( aReader.HasParsingError() )
-    {
         THROW_IO_ERROR( "Components6 stream was not parsed correctly" );
-    }
 }
 
 APAD6::APAD6( ALTIUM_PARSER& aReader )
@@ -797,10 +698,9 @@ APAD6::APAD6( ALTIUM_PARSER& aReader )
 AVIA6::AVIA6( ALTIUM_PARSER& aReader )
 {
     ALTIUM_RECORD recordtype = static_cast<ALTIUM_RECORD>( aReader.Read<uint8_t>() );
+
     if( recordtype != ALTIUM_RECORD::VIA )
-    {
         THROW_IO_ERROR( "Vias6 stream has invalid recordtype" );
-    }
 
     // Subrecord 1
     size_t subrecord1 = aReader.ReadAndSetSubrecordLength();
@@ -838,18 +738,15 @@ AVIA6::AVIA6( ALTIUM_PARSER& aReader )
     aReader.SkipSubrecord();
 
     if( aReader.HasParsingError() )
-    {
         THROW_IO_ERROR( "Vias6 stream was not parsed correctly" );
-    }
 }
 
 ATRACK6::ATRACK6( ALTIUM_PARSER& aReader )
 {
     ALTIUM_RECORD recordtype = static_cast<ALTIUM_RECORD>( aReader.Read<uint8_t>() );
+
     if( recordtype != ALTIUM_RECORD::TRACK )
-    {
         THROW_IO_ERROR( "Tracks6 stream has invalid recordtype" );
-    }
 
     // Subrecord 1
     aReader.ReadAndSetSubrecordLength();
@@ -874,18 +771,15 @@ ATRACK6::ATRACK6( ALTIUM_PARSER& aReader )
     aReader.SkipSubrecord();
 
     if( aReader.HasParsingError() )
-    {
         THROW_IO_ERROR( "Tracks6 stream was not parsed correctly" );
-    }
 }
 
 ATEXT6::ATEXT6( ALTIUM_PARSER& aReader )
 {
     ALTIUM_RECORD recordtype = static_cast<ALTIUM_RECORD>( aReader.Read<uint8_t>() );
+
     if( recordtype != ALTIUM_RECORD::TEXT )
-    {
         THROW_IO_ERROR( "Texts6 stream has invalid recordtype" );
-    }
 
     // Subrecord 1 - Properties
     size_t subrecord1 = aReader.ReadAndSetSubrecordLength();
@@ -914,9 +808,8 @@ ATEXT6::ATEXT6( ALTIUM_PARSER& aReader )
      * https://gitlab.com/kicad/code/kicad/merge_requests/60#note_274913397
      */
     if( subrecord1 <= 230 )
-    {
         textposition = ALTIUM_TEXT_POSITION::LEFT_BOTTOM;
-    }
+
     aReader.Skip( 27 );
     fonttype = static_cast<ALTIUM_TEXT_TYPE>( aReader.Read<uint8_t>() );
 
@@ -933,18 +826,15 @@ ATEXT6::ATEXT6( ALTIUM_PARSER& aReader )
     aReader.SkipSubrecord();
 
     if( aReader.HasParsingError() )
-    {
         THROW_IO_ERROR( "Texts6 stream was not parsed correctly" );
-    }
 }
 
 AFILL6::AFILL6( ALTIUM_PARSER& aReader )
 {
     ALTIUM_RECORD recordtype = static_cast<ALTIUM_RECORD>( aReader.Read<uint8_t>() );
+
     if( recordtype != ALTIUM_RECORD::FILL )
-    {
         THROW_IO_ERROR( "Fills6 stream has invalid recordtype" );
-    }
 
     // Subrecord 1
     aReader.ReadAndSetSubrecordLength();
@@ -968,18 +858,15 @@ AFILL6::AFILL6( ALTIUM_PARSER& aReader )
     aReader.SkipSubrecord();
 
     if( aReader.HasParsingError() )
-    {
         THROW_IO_ERROR( "Fills6 stream was not parsed correctly" );
-    }
 }
 
 AREGION6::AREGION6( ALTIUM_PARSER& aReader, bool aExtendedVertices )
 {
     ALTIUM_RECORD recordtype = static_cast<ALTIUM_RECORD>( aReader.Read<uint8_t>() );
+
     if( recordtype != ALTIUM_RECORD::REGION )
-    {
         THROW_IO_ERROR( "Regions6 stream has invalid recordtype" );
-    }
 
     // Subrecord 1
     aReader.ReadAndSetSubrecordLength();
@@ -1000,19 +887,18 @@ AREGION6::AREGION6( ALTIUM_PARSER& aReader, bool aExtendedVertices )
     aReader.Skip( 2 );
 
     std::map<wxString, wxString> properties = aReader.ReadProperties();
+
     if( properties.empty() )
-    {
         THROW_IO_ERROR( "Regions6 stream has empty properties" );
-    }
 
-    int  pkind     = ALTIUM_PARSER::PropertiesReadInt( properties, "KIND", 0 );
-    bool is_cutout = ALTIUM_PARSER::PropertiesReadBool( properties, "ISBOARDCUTOUT", false );
+    int  pkind     = ALTIUM_PARSER::ReadInt( properties, "KIND", 0 );
+    bool is_cutout = ALTIUM_PARSER::ReadBool( properties, "ISBOARDCUTOUT", false );
 
-    is_shapebased = ALTIUM_PARSER::PropertiesReadBool( properties, "ISSHAPEBASED", false );
+    is_shapebased = ALTIUM_PARSER::ReadBool( properties, "ISSHAPEBASED", false );
 
     // TODO: this can differ from the other subpolyindex?!
     //subpolyindex = static_cast<uint16_t>(
-    //        ALTIUM_PARSER::PropertiesReadInt( properties, "SUBPOLYINDEX", ALTIUM_POLYGON_NONE ) );
+    //        ALTIUM_PARSER::ReadInt( properties, "SUBPOLYINDEX", ALTIUM_POLYGON_NONE ) );
 
     switch( pkind )
     {
@@ -1087,7 +973,5 @@ AREGION6::AREGION6( ALTIUM_PARSER& aReader, bool aExtendedVertices )
     aReader.SkipSubrecord();
 
     if( aReader.HasParsingError() )
-    {
         THROW_IO_ERROR( "Regions6 stream was not parsed correctly" );
-    }
 }
