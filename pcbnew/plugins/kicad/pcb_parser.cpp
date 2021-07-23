@@ -4473,8 +4473,6 @@ void PCB_PARSER::parseGROUP( BOARD_ITEM* aParent )
     GROUP_INFO& groupInfo = m_groupInfos.back();
     groupInfo.parent = aParent;
 
-    token = NextTok();
-
     while( ( token = NextTok() ) != T_LEFT )
     {
         if( token == T_STRING )
