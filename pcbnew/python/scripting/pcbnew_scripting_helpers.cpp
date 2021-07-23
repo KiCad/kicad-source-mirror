@@ -98,6 +98,10 @@ SETTINGS_MANAGER* GetSettingsManager()
 
 PROJECT* GetDefaultProject()
 {
+    // For some reasons, LoadProject() needs a C locale, so ensure we have the right locale
+    // This is mainly when running QA Python tests
+    LOCALE_IO dummy;
+
     PROJECT* project = GetSettingsManager()->GetProject( "" );
 
     if( !project )
