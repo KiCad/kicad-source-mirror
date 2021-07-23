@@ -11,10 +11,10 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
-"PO-Revision-Date: 2021-07-19 15:37+0000\n"
+"PO-Revision-Date: 2021-07-23 01:21+0000\n"
 "Last-Translator: VicSanRoPe <vicsanrope@protonmail.com>\n"
-"Language-Team: Spanish <https://hosted.weblate.org/projects/kicad/master-"
-"source/es/>\n"
+"Language-Team: Spanish <https://hosted.weblate.org/projects/kicad/"
+"master-source/es/>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -3566,7 +3566,7 @@ msgstr "Filtrar redes"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:108
 msgid "Net class filter:"
-msgstr "Filtro de clase de red"
+msgstr "Filtro de clase de red:"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:125
 #: pcbnew/dialogs/dialog_net_inspector_base.cpp:28
@@ -3711,19 +3711,19 @@ msgid "Could not use OpenGL"
 msgstr "No puede utilizarse OpenGL"
 
 #: common/drawing_sheet/drawing_sheet_reader.cpp:890
-#, fuzzy, c-format
+#, c-format
 msgid "Drawing sheet '%s' not found."
 msgstr "No se ha encontrado la hoja de dibujo '%s'."
 
 #: common/drawing_sheet/drawing_sheet_reader.cpp:900
-#, fuzzy, c-format
+#, c-format
 msgid "Drawing sheet '%s' could not be opened."
-msgstr "No se ha encontrado la hoja de dibujo '%s'."
+msgstr "No se pudo abrir la hoja de dibujo '%s'."
 
 #: common/drawing_sheet/drawing_sheet_reader.cpp:913
-#, fuzzy, c-format
+#, c-format
 msgid "Drawing sheet '%s' was not fully read."
-msgstr "El archivo '%s' no fue leído completamente."
+msgstr "No se leyó completamente la hoja de dibujo '%s'."
 
 #: common/drawing_sheet/ds_data_item.cpp:370
 #: common/drawing_sheet/ds_draw_item.cpp:122 common/eda_text.cpp:667
@@ -4051,7 +4051,7 @@ msgstr "Pista"
 #: common/eda_item.cpp:260 pcbnew/dialogs/dialog_board_statistics.cpp:483
 #: pcbnew/pcb_track.cpp:750
 msgid "Via"
-msgstr "Via"
+msgstr "Vía"
 
 #: common/eda_item.cpp:261
 msgid "Board Marker"
@@ -4535,8 +4535,8 @@ msgid ""
 "Duplicate library nickname '%s' found in footprint library table file line "
 "%d."
 msgstr ""
-"Se ha encontrado un nombre de librería duplicado '%s' en la línea %d de la "
-"tabla de librerías de huellas"
+"Se ha encontrado un apodo de librería duplicado '%s' en la línea %d del "
+"archivo de la tabla de librerías de huellas."
 
 #: common/fp_lib_table.cpp:300
 #, c-format
@@ -6131,7 +6131,7 @@ msgstr "Editar las variables de entorno de configuración rutas"
 
 #: common/tool/actions.cpp:601
 msgid "Manage Symbol Libraries..."
-msgstr "Gestionar bibliotecas de símbolos..."
+msgstr "Gestionar librerías de símbolos..."
 
 #: common/tool/actions.cpp:602
 msgid "Edit the global and project symbol library lists"
@@ -13422,11 +13422,11 @@ msgid "Cannot open file '%s'."
 msgstr "No puede abrirse el archivo '%s'."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:315
-#, fuzzy, c-format
+#, c-format
 msgid "Storage file not fully parsed (%d bytes remaining)."
 msgstr ""
-"El archivo de almacenamiento no fue completamente analizado ya que quedan %d "
-"bytes."
+"El archivo de almacenamiento no fue completamente analizado (quedan %d "
+"bytes)."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:487
 #, c-format
@@ -13434,9 +13434,9 @@ msgid "Unknown Record id: %d."
 msgstr "ID de registro desconocido: %d."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:604
-#, fuzzy, c-format
+#, c-format
 msgid "Pin's owner (%d) not found."
-msgstr "No se encontró el propietario del nombre de archivo (%d)."
+msgstr "No se encontró el dueño del pin (%d)."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:649
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1833
@@ -13456,9 +13456,9 @@ msgid "Pin has unexpected inner edge type."
 msgstr "El pin tiene un tipo de borde interior inesperado."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:831
-#, fuzzy, c-format
+#, c-format
 msgid "Label's owner (%d) not found."
-msgstr "No se encontró el propietario del nombre de archivo (%d)."
+msgstr "No se encontró el dueño de la etiqueta (%d)."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:948
 #, c-format
@@ -13466,44 +13466,43 @@ msgid "Bezier has %d control points. At least 2 are expected."
 msgstr "El bezier tiene %d puntos de control. Se esperan al menos 2."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1005
-#, fuzzy, c-format
+#, c-format
 msgid "Bezier's owner (%d) not found."
-msgstr "No se encontró el propietario de la entrada de hoja (%d)."
+msgstr "No se encontró el dueño del bezier (%d)."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1091
-#, fuzzy, c-format
+#, c-format
 msgid "Polyline's owner (%d) not found."
-msgstr "No se encontró el propietario del nombre de archivo (%d)."
+msgstr "No se encontró el dueño de la polilínea (%d)."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1150
-#, fuzzy, c-format
+#, c-format
 msgid "Polygon's owner (%d) not found."
-msgstr "No se encontró el propietario del nombre de archivo (%d)."
+msgstr "No se encontró el dueño del polígono (%d)."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1231
-#, fuzzy, c-format
+#, c-format
 msgid "Rounded rectangle's owner (%d) not found."
-msgstr "No se encontró el propietario del nombre de hoja (%d)."
+msgstr "No se encontró el dueño del rectángulo redondeado (%d)."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1268
-#, fuzzy
 msgid "Arc drawing on schematic not currently supported."
-msgstr "No hay ninguna placa abierta."
+msgstr "Actualmente no se soporta el dibujo de arcos en el esquema."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1278
-#, fuzzy, c-format
+#, c-format
 msgid "Arc's owner (%d) not found."
-msgstr "No se encontró el propietario de la entrada de hoja (%d)."
+msgstr "No se encontró el dueño del arco (%d)."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1339
-#, fuzzy, c-format
+#, c-format
 msgid "Line's owner (%d) not found."
-msgstr "No se encontró el propietario del nombre de archivo (%d)."
+msgstr "No se encontró el dueño de la línea (%d)."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1410
-#, fuzzy, c-format
+#, c-format
 msgid "Rectangle's owner (%d) not found."
-msgstr "No se encontró el propietario del nombre de hoja (%d)."
+msgstr "No se encontró el dueño del rectángulo (%d)."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1478
 #, c-format
@@ -13520,9 +13519,9 @@ msgid "Power symbol creates a global label with name '%s'"
 msgstr "El símbolo de potencia crea una etiqueta global con el nombre '%s'"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1882
-#, fuzzy, c-format
+#, c-format
 msgid "Port %s has no connections."
-msgstr "Conexiones de pad:"
+msgstr "El puerto %s no tiene conexiones."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2073
 #, c-format
@@ -13541,29 +13540,29 @@ msgid "File not found %s."
 msgstr "Archivo no encontrado %s."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2185
-#, fuzzy, c-format
+#, c-format
 msgid "Sheetname's owner (%d) not found."
-msgstr "No se encontró el propietario del nombre de hoja (%d)."
+msgstr "No se encontró el dueño del nombre de hoja (%d)."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2212
-#, fuzzy, c-format
+#, c-format
 msgid "Filename's owner (%d) not found."
-msgstr "No se encontró el propietario del nombre de archivo (%d)."
+msgstr "No se encontró el dueño del nombre de archivo (%d)."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2250
-#, fuzzy, c-format
+#, c-format
 msgid "Designator's owner (%d) not found."
-msgstr "No se encontró el propietario de la entrada de hoja (%d)."
+msgstr "No se encontró el dueño de la referencia (%d)."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2405
-#, fuzzy, c-format
+#, c-format
 msgid "Implementation's owner (%d) not found."
-msgstr "No se encontró el propietario del nombre de archivo (%d)."
+msgstr "No se encontró el dueño de la implementación (%d)."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2415
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint's owner (%d) not found."
-msgstr "No se encontró el propietario del nombre de archivo (%d)."
+msgstr "No se encontró el dueño de la huella (%d)."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:71
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:69
@@ -13802,7 +13801,7 @@ msgid "Invalid symbol unit number %s"
 msgstr "Número de unidad de símbolo inválido %s"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:307
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid symbol convert number %s"
 msgstr "Número de conversión de símbolo inválido %s"
 
@@ -14104,19 +14103,19 @@ msgid "Size"
 msgstr "Tamaño"
 
 #: eeschema/sch_text.cpp:902
-#, fuzzy, c-format
+#, c-format
 msgid "Label '%s'"
-msgstr "Etiqueta %s"
+msgstr "Etiqueta '%s'"
 
 #: eeschema/sch_text.cpp:1452
-#, fuzzy, c-format
+#, c-format
 msgid "Global Label '%s'"
-msgstr "Etiqueta global %s"
+msgstr "Etiqueta global '%s'"
 
 #: eeschema/sch_text.cpp:1645
-#, fuzzy, c-format
+#, c-format
 msgid "Hierarchical Label '%s'"
-msgstr "Etiqueta jerárquica %s"
+msgstr "Etiqueta jerárquica '%s'"
 
 #: eeschema/sch_text.cpp:1661 pcbnew/dialogs/panel_setup_rules.cpp:471
 msgid "Syntax Help"
@@ -14400,9 +14399,9 @@ msgstr ""
 "</table>\n"
 
 #: eeschema/sch_validators.cpp:102
-#, fuzzy, c-format
+#, c-format
 msgid "The reference designator cannot contain %s character(s)."
-msgstr "El campo de referencia no puede contener %s caracteres."
+msgstr "El indicador de referencia no puede contener %s caracteres."
 
 #: eeschema/sch_validators.cpp:106
 #, c-format
@@ -14420,14 +14419,14 @@ msgid "The datasheet field cannot contain %s character(s)."
 msgstr "El campo de la hoja de datos no puede contener %s caracteres."
 
 #: eeschema/sch_validators.cpp:118
-#, fuzzy, c-format
+#, c-format
 msgid "The sheet name cannot contain %s character(s)."
-msgstr "El campo de la hoja de datos no puede contener %s caracteres."
+msgstr "El nombre de hoja no puede contener %s caracteres."
 
 #: eeschema/sch_validators.cpp:122
-#, fuzzy, c-format
+#, c-format
 msgid "The sheet filename cannot contain %s character(s)."
-msgstr "El campo de la hoja de datos no puede contener %s caracteres."
+msgstr "El nombre de archivo de la hoja no puede contener %s caracteres."
 
 #: eeschema/sch_validators.cpp:126
 #, c-format
@@ -14459,57 +14458,53 @@ msgid "space"
 msgstr "espacio"
 
 #: eeschema/sch_validators.cpp:171
-#, fuzzy
 msgid " or "
-msgstr "%s o %s"
+msgstr " o "
 
 #: eeschema/sch_validators.cpp:176
-#, fuzzy
 msgid ", or "
-msgstr "%s o %s"
+msgstr ", o "
 
 #: eeschema/sch_validators.cpp:189
 msgid "The reference designator cannot contain text variable references"
-msgstr "El campo de referencia no puede contener variables de texto"
+msgstr "El indicador de referencia no puede contener variables de texto"
 
 #: eeschema/sch_validators.cpp:196
 msgid "Field Validation Error"
 msgstr "Error de validación de campo"
 
 #: eeschema/sch_validators.cpp:218
-#, fuzzy
 msgid "Signal name contains '[' or ']' but is not a valid vector bus name."
 msgstr ""
 "El nombre de la señal contiene '[' o ']' pero no es un nombre de vector de "
-"BUS válido"
+"bus válido."
 
 #: eeschema/sch_validators.cpp:227
-#, fuzzy
 msgid "Signal name contains '{' and '}' but is not a valid group bus name"
 msgstr ""
-"El nombre de la señal contiene '[' o ']' pero no es un nombre de vector de "
-"BUS válido"
+"El nombre de la señal contiene '{' y '}' pero no es un nombre de grupo de "
+"bus válido"
 
 #: eeschema/sheet.cpp:63
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The sheet changes cannot be made because the destination sheet already has "
 "the sheet '%s' or one of its subsheets as a parent somewhere in the "
 "schematic hierarchy."
 msgstr ""
-"No pueden aplicarse los cambios ya que la hoja de destino ya tiene la hoja "
-"\"%s\" o una de sus hojas hijas como madre en algún lugar de la jerarquía "
+"No pueden aplicarse los cambios a la hoja ya que la hoja de destino ya tiene "
+"la hoja '%s' o una de sus subhojas como padre en algún lugar de la jerarquía "
 "del esquema."
 
 #: eeschema/sheet.cpp:84
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The schematic '%s' has not had its symbol library links remapped to the "
 "symbol library table.  The project this schematic belongs to must first be "
 "remapped before it can be imported into the current project."
 msgstr ""
-"El esquema \"%s\" no ha tenido sus enlaces de biblioteca de símbolos "
-"reasignados a la tabla de biblioteca de símbolos. El proyecto al que "
+"El esquema '%s' no ha tenido sus enlaces de librerías de símbolos "
+"reasignados a la tabla de librerías de símbolos. El proyecto al que "
 "pertenece este esquema primero debe reasignarse antes de que pueda "
 "importarse al proyecto actual."
 
@@ -14553,12 +14548,12 @@ msgid "Continue Load Schematic"
 msgstr "Continuar carga de esquema"
 
 #: eeschema/sheet.cpp:264
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The project library table '%s' does not exist or cannot be read.  This may "
 "result in broken symbol links for the schematic.  Do you wish to continue?"
 msgstr ""
-"La tabla de librerías del proyecto \"%s\" no existe o no se puede leer. Esto "
+"La tabla de librerías del proyecto '%s' no existe o no se puede leer. Esto "
 "puede provocar enlaces de símbolos inválidos para el esquema. ¿Desea "
 "continuar?"
 
@@ -14584,7 +14579,7 @@ msgstr ""
 "inválidos para el esquema. ¿Desea continuar?"
 
 #: eeschema/sheet.cpp:561
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The file name '%s' can cause issues with an existing file name\n"
 "already defined in the schematic on systems that support case\n"
@@ -14594,14 +14589,11 @@ msgid ""
 "\n"
 "Do you wish to continue?"
 msgstr ""
-"El nombre de archivo \"%s\" puede causar problemas con un nombre de archivo "
-"existente\n"
-"ya definido en el esquema en los sistemas que admiten nombres de archivo que "
-"no distinguen\n"
-"entre mayúsculas y minúsculas. Esto causará problemas si copia este "
-"proyecto\n"
-"a un sistema operativo que admita nombres de archivo sin distinción\n"
-"entre mayúsculas y minúsculas.\n"
+"El nombre de archivo '%s' puede causar problemas con un nombre de\n"
+"archivo existente ya definido en el esquema en los sistemas que admiten\n"
+"nombres de archivo que no distinguen entre mayúsculas y minúsculas.\n"
+"Esto causará problemas si copia este proyecto a un sistema operativo que\n"
+"admita nombres de archivo sin distinción entre mayúsculas y minúsculas.\n"
 "\n"
 "¿Desea continuar?"
 
@@ -14657,14 +14649,12 @@ msgid "Tune component values"
 msgstr "Ajustar valores de componentes"
 
 #: eeschema/sim/sim_plot_frame.cpp:184
-#, fuzzy
 msgid "Sim Parameters"
-msgstr "Parámetros"
+msgstr "Parámetros de simulación"
 
 #: eeschema/sim/sim_plot_frame.cpp:185
-#, fuzzy
 msgid "Simulation parameters and settings"
-msgstr "Ajustes de simulación"
+msgstr "Ajustes y parámetros de la simulación"
 
 #: eeschema/sim/sim_plot_frame.cpp:365 eeschema/sim/sim_plot_frame_base.h:127
 msgid "Spice Simulator"
@@ -14675,9 +14665,9 @@ msgid "There were errors during netlist export, aborted."
 msgstr "Ha habido errores al exportar la lista de redes, cancelado."
 
 #: eeschema/sim/sim_plot_frame.cpp:522
-#, fuzzy, c-format
+#, c-format
 msgid "Plot%u - "
-msgstr "Trazar%u"
+msgstr "Trazar%u - "
 
 #: eeschema/sim/sim_plot_frame.cpp:623
 msgid "Error: simulation type not defined!\n"
@@ -14700,9 +14690,8 @@ msgid "noname"
 msgstr "sin nombre"
 
 #: eeschema/sim/sim_plot_frame.cpp:1143
-#, fuzzy
 msgid "Save Simulation Workbook As"
-msgstr "Guardar libro de trabajo de simulación"
+msgstr "Guardar libro de trabajo de simulación como"
 
 #: eeschema/sim/sim_plot_frame.cpp:1161
 msgid "Save Plot as Image"
@@ -14713,9 +14702,8 @@ msgid "Save Plot Data"
 msgstr "Guardar datos de trazado"
 
 #: eeschema/sim/sim_plot_frame.cpp:1470
-#, fuzzy
 msgid "You need to run plot-providing simulation first."
-msgstr "Debe ejecutar la simulación primero."
+msgstr "Primero debe ejecutar una simulación que genere una gráfica."
 
 #: eeschema/sim/sim_plot_frame.cpp:1714
 msgid ""
@@ -14846,43 +14834,36 @@ msgid "Voltage (swept)"
 msgstr "Voltaje (barrido)"
 
 #: eeschema/sim/sim_plot_panel.cpp:407
-#, fuzzy
 msgid "Current (swept)"
-msgstr "Red actual:"
+msgstr "Corriente (barrido)"
 
 #: eeschema/sim/sim_plot_panel.cpp:410
-#, fuzzy
 msgid "Resistance (swept)"
-msgstr "Resistencia:"
+msgstr "Resistencia (barrido)"
 
 #: eeschema/sim/sim_plot_panel.cpp:414
-#, fuzzy
 msgid "Temperature (swept)"
-msgstr "Aumento de temperatura:"
+msgstr "Temperatura (barrido)"
 
 #: eeschema/sim/sim_plot_panel.cpp:419
 msgid "Voltage (measured)"
 msgstr "Voltaje (medido)"
 
 #: eeschema/sim/spice_simulator.cpp:61
-#, fuzzy
 msgid "DC Sweep"
-msgstr "Dulce"
+msgstr "Barrido DC"
 
 #: eeschema/sim/spice_simulator.cpp:73
-#, fuzzy
 msgid "Pole-zero"
 msgstr "Polo-Cero"
 
 #: eeschema/sim/spice_simulator.cpp:79
-#, fuzzy
 msgid "Transfer function"
 msgstr "Función de transferencia"
 
 #: eeschema/sim/spice_simulator.cpp:83
-#, fuzzy
 msgid "UNKNOWN!"
-msgstr "DESCONOCIDO"
+msgstr "¡DESCONOCIDO!"
 
 #: eeschema/sim/spice_value.cpp:42
 msgid "Spice value cannot be empty"
@@ -14901,25 +14882,25 @@ msgid "Please, fill required fields"
 msgstr "Por favor, complete los campos requeridos"
 
 #: eeschema/sim/spice_value.cpp:277
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' is not a valid Spice value."
-msgstr "\"%s\" no es un valor Spice válido"
+msgstr "'%s' no es un valor Spice válido."
 
 #: eeschema/symbol_async_loader.cpp:126
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error loading symbol library %s.\n"
 "\n"
 "%s\n"
 msgstr ""
-"Ha ocurrido un error al cargar la librería de símbolos %s.\n"
+"Error al cargar la librería de símbolos %s.\n"
 "\n"
-"%s"
+"%s\n"
 
 #: eeschema/symbol_async_loader.cpp:134
-#, fuzzy, c-format
+#, c-format
 msgid "Loading library %s..."
-msgstr "Cargando biblioteca «%s»"
+msgstr "Cargando librería %s..."
 
 #: eeschema/symbol_editor/lib_logger.cpp:64
 msgid ""
@@ -14931,19 +14912,16 @@ msgstr ""
 "para corregir la ruta y añadir o eliminar la librerías."
 
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:70
-#, fuzzy
 msgid "Symbol..."
-msgstr "Nuevo símbolo..."
+msgstr "Símbolo..."
 
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:71
-#, fuzzy
 msgid "View as PNG..."
-msgstr "Exportar vista como PNG..."
+msgstr "Ver como PNG..."
 
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:72
-#, fuzzy
 msgid "Symbol as SVG..."
-msgstr "Exportar símbolo como SVG..."
+msgstr "Símbolo como SVG..."
 
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:76
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:98
@@ -14951,9 +14929,8 @@ msgid "Library Editor"
 msgstr "Editor de librerías"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:112
-#, fuzzy
 msgid "KiCad Symbol Editor"
-msgstr "Editor de símbolos"
+msgstr "Editor de símbolos de KiCad"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:148
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:908
@@ -15012,18 +14989,18 @@ msgid "Open %s"
 msgstr "Abrir %s"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:826
-#, fuzzy, c-format
+#, c-format
 msgid "Library '%s' already exists."
-msgstr "La librería \"%s\" ya existe"
+msgstr "La librería '%s' ya existe."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:834
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Could not create the library file '%s'.\n"
 "Make sure you have write permissions and try again."
 msgstr ""
-"No se pudo crear el archivo de biblioteca «%s».\n"
-"Compruebe el permiso de escritura."
+"No se pudo crear el archivo de librería '%s'.\n"
+"Compruebe que tiene permisos de escritura e intente de nuevo."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:844
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:206
@@ -15031,9 +15008,9 @@ msgid "Could not open the library file."
 msgstr "No puede abrirse el archivo de biblioteca."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:914
-#, fuzzy, c-format
+#, c-format
 msgid "Loading library '%s'..."
-msgstr "Cargando biblioteca «%s»"
+msgstr "Cargando la librería '%s'..."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:988
 #: pcbnew/footprint_libraries_utils.cpp:504
@@ -15061,20 +15038,19 @@ msgid "Add To Library Table"
 msgstr "Añadir a la aabla de librerías"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1035
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to save backup to '%s'."
-msgstr "Error al guardar la copia de seguridad en \"%s\""
+msgstr "Error al guardar la copia de seguridad en '%s'."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1181
 #: eeschema/symbol_viewer_frame.cpp:393
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The current configuration does not include the library '%s'.\n"
 "Use Manage Symbol Libraries to edit the configuration."
 msgstr ""
-"La configuración actual no incluye la librería se símbolos\n"
-"\"%s\".\n"
-"Utilice el Editor de librerías de símbolos para editar la configuración."
+"La configuración actual no incluye la librería de símbolos '%s'.\n"
+"Utilice 'Gestionar librerías de símbolos' para editar la configuración."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1184
 #: eeschema/symbol_viewer_frame.cpp:396
@@ -15083,14 +15059,13 @@ msgstr "No se ha encontrado la librería la tabla de librerías de símbolos."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1192
 #: eeschema/symbol_viewer_frame.cpp:400
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The library '%s' is not enabled in the current configuration.\n"
 "Use Manage Symbol Libraries to edit the configuration."
 msgstr ""
-"No se ha activado la librería \"%s\"\n"
-"en la configuración actual. Utilice el Editor de librerías de símbolos\n"
-"para editar la configuración."
+"No se ha activado la librería '%s' en la configuración actual.\n"
+"Utilice 'Gestionar librerías de símbolos' para editar la configuración."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1195
 #: eeschema/symbol_viewer_frame.cpp:403
@@ -15099,21 +15074,13 @@ msgstr "No se activó la biblioteca de símbolos."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1383
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1438
-#, fuzzy
 msgid "Error saving global library table."
-msgstr ""
-"Error al guardar la tabla global de librerías:\n"
-"\n"
-"%s"
+msgstr "Error al guardar la tabla global de librerías."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1384
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1439
-#, fuzzy
 msgid "Error saving project library table."
-msgstr ""
-"Error al guardar la tabla de librerías específica del proyecto:\n"
-"\n"
-"%s"
+msgstr "Error al guardar la tabla de librerías del proyecto."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:58
 msgid "Normal save as operation"
@@ -15125,9 +15092,8 @@ msgstr ""
 "No realice ninguna operación adicional después de guardar la biblioteca."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:63
-#, fuzzy
 msgid "Replace library table entry"
-msgstr "Eliminar librería de la tabla"
+msgstr "Remplazar entrada de la tabla de librerías"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:64
 msgid ""
@@ -15141,9 +15107,8 @@ msgstr ""
 "La librería original no estará disponible para su uso."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:68
-#, fuzzy
 msgid "Add new global library table entry"
-msgstr "Añadir a la tabla global de librerías"
+msgstr "Agregar entrada a la tabla global de librerías"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:69
 msgid ""
@@ -15158,9 +15123,8 @@ msgstr ""
 "sufijo para garantizar que no hallan entradas de tabla duplicadas."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:74
-#, fuzzy
 msgid "Add new project library table entry"
-msgstr "Se ha creado la tabla de librerías de símbolos del proyecto.\n"
+msgstr "Agregar una entrada a la tabla de librerías del proyecto"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:75
 msgid ""
@@ -15175,18 +15139,16 @@ msgstr ""
 "sufijo para garantizar que no hallan entradas de tabla duplicadas."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:146
-#, fuzzy
 msgid "[from schematic]"
-msgstr "%s desde el esquema"
+msgstr "[desde el esquema]"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:156
 msgid "[Read Only Library]"
 msgstr "[Librería de solo lectura]"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:160
-#, fuzzy
 msgid "[no symbol loaded]"
-msgstr "No se ha seleccionado ningún símbolo"
+msgstr "[no hay símbolos cargado]"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:188
 msgid "No symbol libraries are loaded."
@@ -15205,30 +15167,28 @@ msgid "This new symbol has no name and cannot be created."
 msgstr "El nuevo símbolo no tiene nombre y no puede crearse."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:421
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol '%s' already exists in library '%s'."
-msgstr "El símbolo \"%s\" ya existe en la librería \"%s\""
+msgstr "El símbolo '%s' ya existe en la librería '%s'."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:527
 #: eeschema/tools/symbol_editor_control.cpp:506
-#, fuzzy
 msgid "No schematic currently open."
-msgstr "No hay ninguna placa abierta."
+msgstr "No hay un esquema actualmente abierto."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:547
 #: eeschema/symbol_editor/symbol_editor.cpp:1141
 #: eeschema/tools/symbol_editor_control.cpp:170
 #: eeschema/tools/symbol_editor_control.cpp:240
 #: eeschema/tools/symbol_editor_control.cpp:265
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol library '%s' is not writeable."
-msgstr "Librería de símbolos no activada."
+msgstr "La librería de símbolos '%s' no es escribible."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:549
 #: eeschema/symbol_editor/symbol_editor.cpp:1142
-#, fuzzy
 msgid "You must save to a different location."
-msgstr "Afinar desvío de un par diferencial"
+msgstr "Debe guardar en una ubicación distinta."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:601 include/lib_table_grid.h:183
 #: pcbnew/footprint_libraries_utils.cpp:951
@@ -15237,9 +15197,8 @@ msgid "Nickname"
 msgstr "Apodo"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:612
-#, fuzzy
 msgid "Save Symbol As"
-msgstr "Guardar símbolo"
+msgstr "Guardar símbolo como"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:613
 #: pcbnew/footprint_libraries_utils.cpp:963
@@ -15251,42 +15210,40 @@ msgid "No library specified.  Symbol could not be saved."
 msgstr "No se ha especificado librería. No puede guardarse el símbolo."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:654
-#, fuzzy
 msgid ""
 "Derived symbols must be saved in the same library as their parent symbol."
 msgstr ""
-"Los símbolos derivados deben guardarse en la misma librería\n"
-"que el símbolo principal existe."
+"Los símbolos derivados deben guardarse en la misma librería que su símbolo "
+"padre."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:673
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol '%s' already exists in library '%s'"
-msgstr "El símbolo \"%s\" ya existe en la librería \"%s\""
+msgstr "El símbolo '%s' ya existe en la librería '%s'"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:702
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol name '%s' already in use."
-msgstr "El nombre '%s' ya está en uso."
+msgstr "El nombre de símbolo '%s' ya está en uso."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:732
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The symbol '%s' has been modified.\n"
 "Do you want to remove it from the library?"
 msgstr ""
-"El archivo '%s' ya existe.\n"
-"\n"
-"¿Desea reemplazarlo?"
+"El símbolo '%s' ya sido modificado.\n"
+"¿Desea eliminarlo de la librería?"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:743
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The symbol %s is used to derive other symbols.\n"
 "Deleting this symbol will delete all of the symbols derived from it.\n"
 "\n"
 "Do you wish to delete this symbol and all of its derivatives?"
 msgstr ""
-"El símbolo \"%s\" se utiliza para derivar otros símbolos.\n"
+"El símbolo %s se utiliza para derivar otros símbolos.\n"
 "Al eliminar este símbolo, se eliminarán todos los símbolos derivados de él.\n"
 "\n"
 "¿Desea eliminar este símbolo y todos sus derivados?"
@@ -15302,40 +15259,37 @@ msgstr "Mantener símbolo"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:892
 #: pcbnew/footprint_libraries_utils.cpp:1065
-#, fuzzy, c-format
+#, c-format
 msgid "Revert '%s' to last version saved?"
-msgstr "¿Revertir \"%s\" a la última versión guardada?"
+msgstr "¿Revertir '%s' a la última versión guardada?"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:960
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol %s not found in library '%s'."
-msgstr "No se ha encontrado el símbolo \"%s\" en la librería \"%s\""
+msgstr "No se ha encontrado el símbolo '%s' en la librería '%s'."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:989
 msgid "No library specified."
 msgstr "No se ha especificado una librería."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1008
-#, fuzzy, c-format
+#, c-format
 msgid "Save Library '%s' As..."
-msgstr "Guardar librería \"%s\" como..."
+msgstr "Guardar librería '%s' como..."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1047
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to save changes to symbol library file '%s'."
-msgstr ""
-"No han podido guardarse los cambios del archivo de librería de símbolos \"%s"
-"\""
+msgstr "Fallo al guardar los cambios al archivo de librería de símbolos '%s'."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1049
-#, fuzzy
 msgid "Error Saving Library"
 msgstr "Error al guardar la librería"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1092
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol library file '%s' saved."
-msgstr "Se ha guardado al archivo de librería de símbolos \"%s\""
+msgstr "Se ha guardado al archivo de librería de símbolos '%s'."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1192
 msgid "Undefined!"
@@ -15365,20 +15319,20 @@ msgid "Import Symbol"
 msgstr "Importar símbolo"
 
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:79
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot import symbol library '%s'."
-msgstr "No puede importarse la librería de símbolos \"%s\"."
+msgstr "No puede importarse la librería de símbolos '%s'."
 
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:86
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol library file '%s' is empty."
-msgstr "El archivo de librería de símbolos \"%s\" está vacío."
+msgstr "El archivo de librería de símbolos '%s' está vacío."
 
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:96
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:152
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol %s already exists in library '%s'."
-msgstr "El símbolo \"%s\" ya existe en la librería \"%s\""
+msgstr "El símbolo '%s' ya existe en la librería '%s'."
 
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:114
 msgid "There is no symbol selected to save."
@@ -15389,11 +15343,9 @@ msgid "Export Symbol"
 msgstr "Exportar símbolo"
 
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:144
-#, fuzzy, c-format
+#, c-format
 msgid "Error occurred attempting to load symbol library file '%s'."
-msgstr ""
-"Se ha producido un error al intentar cargar el archivo de librería de "
-"símbolos \"%s\""
+msgstr "Error al intentar cargar el archivo de librería de símbolos '%s'."
 
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:157
 #: kicad/tools/kicad_manager_control.cpp:257
@@ -15405,84 +15357,75 @@ msgid "Overwrite"
 msgstr "Sobreescribir"
 
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:167
-#, fuzzy, c-format
+#, c-format
 msgid "Insufficient permissions to save library '%s'."
-msgstr ""
-"Permisos insuficientes para guardar el archivo\n"
-"%s"
+msgstr "Permisos insuficientes para guardar la librería '%s'."
 
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:187
-#, fuzzy, c-format
+#, c-format
 msgid "Error creating symbol library '%s'."
-msgstr "Error al crear la librería de símbolos \"%s\""
+msgstr "Error al crear la librería de símbolos '%s'."
 
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:194
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol %s saved to library '%s'."
-msgstr "El símbolo \"%s\" ha sido guardado en la librería \"%s\""
+msgstr "El símbolo '%s' ha sido guardado en la librería '%s'."
 
 #: eeschema/symbol_editor/symbol_library_manager.cpp:106
 #: eeschema/symbol_tree_model_adapter.cpp:105
-#, fuzzy
 msgid "Errors loading symbols:"
-msgstr ""
-"Error al cargar la placa.\n"
-"%s"
+msgstr "Error al cargar los símbolos:"
 
 #: eeschema/symbol_editor/symbol_library_manager.cpp:176
-#, fuzzy, c-format
+#, c-format
 msgid "Library '%s' not found in the Symbol Library Table."
-msgstr "No se ha encontrado la librería la tabla de librerías de símbolos."
+msgstr ""
+"No se ha encontrado la librería '%s' en la tabla de librerías de símbolos."
 
 #: eeschema/symbol_editor/symbol_library_manager.cpp:402
 msgid "Symbol not found."
 msgstr "No se ha encontrado el símbolo."
 
 #: eeschema/symbol_editor/symbol_library_manager.cpp:433
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading symbol %s from library '%s'. (%s)"
-msgstr "Error al cargar el símbolo \"%s\" desde la librería \"%s\". (%s)"
+msgstr "Error al cargar el símbolo %s desde la librería '%s'. (%s)"
 
 #: eeschema/symbol_editor/symbol_library_manager.cpp:619
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot load symbol '%s' from library '%s'."
-msgstr "Ha ocurrido un error al cargar el símbolo '%s' desde la librería '%s'."
+msgstr "No se puede cargar el símbolo '%s' desde la librería '%s'."
 
 #: eeschema/symbol_editor/symbol_library_manager.cpp:775
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot enumerate library '%s'."
-msgstr "No puede enumerarse la librería \"%s\" (%s)"
+msgstr "No se puede enumerar la librería '%s'."
 
 #: eeschema/symbol_editor/symbol_library_manager.cpp:1053
-#, fuzzy, c-format
+#, c-format
 msgid "Error saving symbol %s to library '%s'."
-msgstr "Ha ocurrido un error al cargar el símbolo '%s' desde la librería '%s'."
+msgstr "Error al guardar el símbolo %s a la librería '%s'."
 
 #: eeschema/symbol_lib_table.cpp:229
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Duplicate library nickname '%s' found in symbol library table file line %d"
 msgstr ""
-"El nombre de librería \"%s\" aparece  duplicado en la línea %d de la tabla "
-"de librerías de símbolos"
+"Apodo de librería '%s' duplicado en la línea %d de la tabla de librerías de "
+"símbolos"
 
 #: eeschema/symbol_library.cpp:572 eeschema/symbol_tree_model_adapter.cpp:153
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading symbol library '%s'."
-msgstr ""
-"Ha ocurrido un error al cargar la librería de símbolos %s.\n"
-"\n"
-"%s"
+msgstr "Error al cargar la librería de símbolos '%s'."
 
 #: eeschema/symbol_tree_synchronizing_adapter.cpp:259
-#, fuzzy
 msgid "(failed to load)"
-msgstr "No ha podido cargarse \"%s\""
+msgstr "(fallo al cargarse)"
 
 #: eeschema/symbol_viewer_frame.cpp:116
-#, fuzzy
 msgid "KiCad Symbol Library Viewer"
-msgstr "Archivos de librería de símbolos de kiCad"
+msgstr "Visor de librerías de símbolos de KiCad"
 
 #: eeschema/symbol_viewer_frame.cpp:463
 #, c-format
@@ -15490,14 +15433,12 @@ msgid "Unit %c"
 msgstr "Unidad %c"
 
 #: eeschema/symbol_viewer_frame.cpp:919 pcbnew/footprint_viewer_frame.cpp:990
-#, fuzzy
 msgid "[no library selected]"
-msgstr "no se ha seleccionado una librería"
+msgstr "[librería no seleccionada]"
 
 #: eeschema/toolbars_symbol_viewer.cpp:51
-#, fuzzy
 msgid "Choose symbol"
-msgstr "Símbolo de alimentación"
+msgstr "Elegir símbolo"
 
 #: eeschema/toolbars_symbol_viewer.cpp:55
 msgid "Display previous symbol"
@@ -15508,9 +15449,8 @@ msgid "Display next symbol"
 msgstr "Mostrar el símbolo siguiente"
 
 #: eeschema/toolbars_symbol_viewer.cpp:108
-#, fuzzy
 msgid "Symbol Viewer"
-msgstr "Referencia de símbolo"
+msgstr "Visor de símbolos"
 
 #: eeschema/tools/assign_footprints.cpp:207
 msgid "Load Symbol Footprint Link File"
@@ -20769,34 +20709,31 @@ msgid "Core"
 msgstr "Núcleo"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:117
-#, fuzzy
 msgid "PrePreg"
 msgstr "PrePreg"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:175
-#, fuzzy, c-format
+#, c-format
 msgid "Enter board thickness in %s"
-msgstr "ancho y grosor en mils"
+msgstr "Ingrese el ancho de la placa en %s"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:178
 #, c-format
 msgid "Enter expected board thickness in %s (min value %s)"
-msgstr ""
+msgstr "Ingrese el ancho esperado de la placa en %s (valor mínimo %s)"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:182
-#, fuzzy
 msgid "Adjust not locked dielectric thickness layers"
-msgstr "Actualizar el grosor dieléctrico a partir del grosor de la placa"
+msgstr "Ajustar los grosores de las capas dieléctricas desbloqueadas"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:193
 #, c-format
 msgid "Too small value (min value %s %s). Aborted"
-msgstr ""
+msgstr "Valor demasiado pequeño (valor mínimo %s %s). Cancelado"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:213
-#, fuzzy
 msgid "All dielectric  thickness layers are locked"
-msgstr "Actualizar el grosor dieléctrico a partir del grosor de la placa"
+msgstr "Todas los grosores de las capas dieléctricas están bloqueadas"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:279
 #, c-format
@@ -20975,9 +20912,8 @@ msgid "Board thickness from stackup:"
 msgstr "Grosor de la placa por el apilado:"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:139
-#, fuzzy
 msgid "Adjust Dielectric Thickness"
-msgstr "Establecer el Grosor del Dieléctrico"
+msgstr "Ajustar el grosor del dieléctrico"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:46
 msgid "ENIG"
@@ -23096,17 +23032,18 @@ msgstr "Exportar IDFv3"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:187
 msgid "Non-unity scaled models:"
-msgstr ""
+msgstr "Modelos de escala no unitaria:"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:189
 msgid ""
 "Scaled models detected.  Model scaling is not reliable for mechanical export."
 msgstr ""
+"Se han detectado modelos escalados. El escalado de modelos no es confiable "
+"para la exportación mecánica."
 
 #: pcbnew/dialogs/dialog_export_step.cpp:191
-#, fuzzy
 msgid "Model Scale Warning"
-msgstr "Advertencia de guardado del proyecto"
+msgstr "Advertencia de escalado de modelo"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:250
 msgid "STEP export failed!  Please save the PCB and try again"
@@ -23115,13 +23052,13 @@ msgstr ""
 "nuevo"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:315
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Board outline is missing or not closed using %.3f mm tolerance.\n"
 "Run DRC for a full analysis."
 msgstr ""
-"El contorno de la placa está mal formado. Ejecute DRC para un análisis "
-"completo."
+"Contorno de la placa faltante o no cerrado con tolerancia de %.3f mm.\n"
+"Ejecute el DRC para un análisis completo."
 
 #: pcbnew/dialogs/dialog_export_step.cpp:327
 msgid "STEP Export"
@@ -23186,12 +23123,10 @@ msgid "Overwrite old file"
 msgstr "Sobrescribir archivo antiguo"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:123
-#, fuzzy
 msgid "Board outline chaining tolerance:"
-msgstr "Contorno de la placa"
+msgstr "Tolerancia del encadenado del contorno de la placa:"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:127
-#, fuzzy
 msgid "Tight (0.001 mm)"
 msgstr "Estrecha (0,001 mm)"
 
@@ -23200,9 +23135,8 @@ msgid "Standard (0.01 mm)"
 msgstr "Estándar (0,01 mm)"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:127
-#, fuzzy
 msgid "Loose (0.1 mm)"
-msgstr "Suelto (0,1 mm)"
+msgstr "Suelta (0,1 mm)"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:131
 msgid ""
@@ -23236,9 +23170,9 @@ msgid "Could not write plot files to folder '%s'."
 msgstr "No pueden guardarse los archivos de trazado en la carpeta '%s'."
 
 #: pcbnew/dialogs/dialog_export_svg.cpp:291
-#, fuzzy, c-format
+#, c-format
 msgid "Exported '%s'."
-msgstr "Exportado \"%s\"."
+msgstr "Exportado '%s'."
 
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:29
 msgid ""
@@ -23355,11 +23289,10 @@ msgid "Use relative paths to model files in board VRML file"
 msgstr "Utilizar rutas relativas a los modelos en el archivo VRML de la placa"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:130
-#, fuzzy
 msgid "Use paths for model files in board VRML file relative to the VRML file"
 msgstr ""
-"Utilizar rutas de los archivos de los modelos en el archivo VRML de la placa "
-"relativas al archivo VRML"
+"Utilizar rutas relativas al archivo VRML para los archivos de modelos en el "
+"archivo VRML de la placa"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.h:67
 msgid "VRML Export Options"
@@ -23433,9 +23366,8 @@ msgid "Search for:"
 msgstr "Buscar:"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:43
-#, fuzzy
 msgid "Match case"
-msgstr "Diferenciar &Mayúsculas/Minúsculas"
+msgstr "Diferenciar may./min."
 
 #: pcbnew/dialogs/dialog_find_base.cpp:52
 msgid "Wrap"
