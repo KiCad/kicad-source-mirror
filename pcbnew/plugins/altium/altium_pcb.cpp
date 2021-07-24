@@ -55,6 +55,9 @@
 #include <progress_reporter.h>
 
 
+constexpr double BOLD_FACTOR = 1.75;    // CSS font-weight-normal is 400; bold is 700
+
+
 void ParseAltiumPcb( BOARD* aBoard, const wxString& aFileName, PROGRESS_REPORTER* aProgressReporter,
                      const std::map<ALTIUM_PCB_DIR, std::string>& aFileMapping )
 {
@@ -1127,8 +1130,14 @@ void ALTIUM_PCB::HelperParseDimensions6Linear( const ADIMENSION6& aElem )
 
     dimension->Text().SetTextThickness( aElem.textlinewidth );
     dimension->Text().SetTextSize( wxSize( aElem.textheight, aElem.textheight ) );
-    dimension->Text().SetBold( aElem.textbold );
     dimension->Text().SetItalic( aElem.textitalic );
+
+#if 0  // we don't currently support bold; map to thicker text
+    dimension->Text().SetBold( aElem.textbold );
+#else
+    if( aElem.textbold )
+        dimension->Text().SetTextThickness( dimension->Text().GetTextThickness() * BOLD_FACTOR );
+#endif
 
     switch( aElem.textunit )
     {
@@ -1208,8 +1217,17 @@ void ALTIUM_PCB::HelperParseDimensions6Radial(const ADIMENSION6 &aElem)
     dimension->Text().SetPosition( aElem.textPoint.at( 0 ) );
     dimension->Text().SetTextThickness( aElem.textlinewidth );
     dimension->Text().SetTextSize( wxSize( aElem.textheight, aElem.textheight ) );
-    dimension->Text().SetBold( aElem.textbold );
     dimension->Text().SetItalic( aElem.textitalic );
+
+#if 0  // we don't currently support bold; map to thicker text
+    dimension->Text().SetBold( aElem.textbold );
+#else
+    if( aElem.textbold )
+        dimension->Text().SetTextThickness( dimension->Text().GetTextThickness() * BOLD_FACTOR );
+#endif
+
+    // It's unclear exactly how Altium figures it's text positioning, but this gets us reasonably
+    // close.
     dimension->Text().SetVertJustify( EDA_TEXT_VJUSTIFY_T::GR_TEXT_VJUSTIFY_BOTTOM );
     dimension->Text().SetHorizJustify( EDA_TEXT_HJUSTIFY_T::GR_TEXT_HJUSTIFY_LEFT );
 
