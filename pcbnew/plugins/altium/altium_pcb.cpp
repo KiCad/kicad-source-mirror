@@ -165,8 +165,8 @@ void ALTIUM_PCB::HelperDrawsegmentSetLocalCoord( PCB_SHAPE* aShape, uint16_t aCo
 }
 
 
-void HelperShapeLineChainFromAltiumVertices(
-        SHAPE_LINE_CHAIN& aLine, const std::vector<ALTIUM_VERTICE>& aVertices )
+void HelperShapeLineChainFromAltiumVertices( SHAPE_LINE_CHAIN& aLine,
+                                             const std::vector<ALTIUM_VERTICE>& aVertices )
 {
     for( auto& vertice : aVertices )
     {
@@ -350,80 +350,99 @@ void ALTIUM_PCB::Parse( const CFB::CompoundFileReader& aReader,
     // this vector simply declares in which order which functions to call.
     const std::vector<std::tuple<bool, ALTIUM_PCB_DIR, PARSE_FUNCTION_POINTER_fp>> parserOrder = {
         { true, ALTIUM_PCB_DIR::FILE_HEADER,
-                [this]( auto aReader, auto fileHeader ) {
+                [this]( auto aReader, auto fileHeader )
+                {
                     this->ParseFileHeader( aReader, fileHeader );
                 } },
         { true, ALTIUM_PCB_DIR::BOARD6,
-                [this]( auto aReader, auto fileHeader ) {
+                [this]( auto aReader, auto fileHeader )
+                {
                     this->ParseBoard6Data( aReader, fileHeader );
                 } },
         { true, ALTIUM_PCB_DIR::COMPONENTS6,
-                [this]( auto aReader, auto fileHeader ) {
+                [this]( auto aReader, auto fileHeader )
+                {
                     this->ParseComponents6Data( aReader, fileHeader );
                 } },
         { true, ALTIUM_PCB_DIR::MODELS,
-                [this, aFileMapping]( auto aReader, auto fileHeader ) {
+                [this, aFileMapping]( auto aReader, auto fileHeader )
+                {
                     wxString dir( aFileMapping.at( ALTIUM_PCB_DIR::MODELS ) );
                     this->ParseModelsData( aReader, fileHeader, dir );
                 } },
         { true, ALTIUM_PCB_DIR::COMPONENTBODIES6,
-                [this]( auto aReader, auto fileHeader ) {
+                [this]( auto aReader, auto fileHeader )
+                {
                     this->ParseComponentsBodies6Data( aReader, fileHeader );
                 } },
         { true, ALTIUM_PCB_DIR::NETS6,
-                [this]( auto aReader, auto fileHeader ) {
+                [this]( auto aReader, auto fileHeader )
+                {
                     this->ParseNets6Data( aReader, fileHeader );
                 } },
         { true, ALTIUM_PCB_DIR::CLASSES6,
-                [this]( auto aReader, auto fileHeader ) {
+                [this]( auto aReader, auto fileHeader )
+                {
                     this->ParseClasses6Data( aReader, fileHeader );
                 } },
         { true, ALTIUM_PCB_DIR::RULES6,
-                [this]( auto aReader, auto fileHeader ) {
+                [this]( auto aReader, auto fileHeader )
+                {
                     this->ParseRules6Data( aReader, fileHeader );
                 } },
         { true, ALTIUM_PCB_DIR::DIMENSIONS6,
-                [this]( auto aReader, auto fileHeader ) {
+                [this]( auto aReader, auto fileHeader )
+                {
                     this->ParseDimensions6Data( aReader, fileHeader );
                 } },
         { true, ALTIUM_PCB_DIR::POLYGONS6,
-                [this]( auto aReader, auto fileHeader ) {
+                [this]( auto aReader, auto fileHeader )
+                {
                     this->ParsePolygons6Data( aReader, fileHeader );
                 } },
         { true, ALTIUM_PCB_DIR::ARCS6,
-                [this]( auto aReader, auto fileHeader ) {
+                [this]( auto aReader, auto fileHeader )
+                {
                     this->ParseArcs6Data( aReader, fileHeader );
                 } },
         { true, ALTIUM_PCB_DIR::PADS6,
-                [this]( auto aReader, auto fileHeader ) {
+                [this]( auto aReader, auto fileHeader )
+                {
                     this->ParsePads6Data( aReader, fileHeader );
                 } },
         { true, ALTIUM_PCB_DIR::VIAS6,
-                [this]( auto aReader, auto fileHeader ) {
+                [this]( auto aReader, auto fileHeader )
+                {
                     this->ParseVias6Data( aReader, fileHeader );
                 } },
         { true, ALTIUM_PCB_DIR::TRACKS6,
-                [this]( auto aReader, auto fileHeader ) {
+                [this]( auto aReader, auto fileHeader )
+                {
                     this->ParseTracks6Data( aReader, fileHeader );
                 } },
         { true, ALTIUM_PCB_DIR::TEXTS6,
-                [this]( auto aReader, auto fileHeader ) {
+                [this]( auto aReader, auto fileHeader )
+                {
                     this->ParseTexts6Data( aReader, fileHeader );
                 } },
         { true, ALTIUM_PCB_DIR::FILLS6,
-                [this]( auto aReader, auto fileHeader ) {
+                [this]( auto aReader, auto fileHeader )
+                {
                     this->ParseFills6Data( aReader, fileHeader );
                 } },
         { false, ALTIUM_PCB_DIR::BOARDREGIONS,
-                [this]( auto aReader, auto fileHeader ) {
+                [this]( auto aReader, auto fileHeader )
+                {
                     this->ParseBoardRegionsData( aReader, fileHeader );
                 } },
         { true, ALTIUM_PCB_DIR::SHAPEBASEDREGIONS6,
-                [this]( auto aReader, auto fileHeader ) {
+                [this]( auto aReader, auto fileHeader )
+                {
                     this->ParseShapeBasedRegions6Data( aReader, fileHeader );
                 } },
         { true, ALTIUM_PCB_DIR::REGIONS6,
-                [this]( auto aReader, auto fileHeader ) {
+                [this]( auto aReader, auto fileHeader )
+                {
                     this->ParseRegions6Data( aReader, fileHeader );
                 } }
     };
@@ -485,6 +504,7 @@ void ALTIUM_PCB::Parse( const CFB::CompoundFileReader& aReader,
         std::tie( isRequired, directory, fp ) = cur;
 
         const auto& mappedDirectory = aFileMapping.find( directory );
+
         if( mappedDirectory == aFileMapping.end() )
         {
             wxASSERT_MSG( !isRequired, wxString::Format( "Altium Directory of kind %d was expected, "
@@ -494,24 +514,20 @@ void ALTIUM_PCB::Parse( const CFB::CompoundFileReader& aReader,
         }
 
         std::string mappedFile = mappedDirectory->second;
+
         if( directory != ALTIUM_PCB_DIR::FILE_HEADER )
-        {
             mappedFile += "Data";
-        }
 
         const CFB::COMPOUND_FILE_ENTRY* file = FindStream( aReader, mappedFile.c_str() );
+
         if( file != nullptr )
-        {
             fp( aReader, file );
-        }
         else if( isRequired )
-        {
             wxLogError( _( "File not found: '%s'." ), mappedFile );
-        }
     }
 
     // fixup zone priorities since Altium stores them in the opposite order
-    for( auto& zone : m_polygons )
+    for( ZONE* zone : m_polygons )
     {
         if( !zone )
             continue;
@@ -532,9 +548,62 @@ void ALTIUM_PCB::Parse( const CFB::CompoundFileReader& aReader,
     }
 
     // change priority of outer zone to zero
-    for( auto& zone : m_outer_plane )
-    {
+    for( std::pair<const ALTIUM_LAYER, ZONE*>& zone : m_outer_plane )
         zone.second->SetPriority( 0 );
+
+    // Altium doesn't appear to store either the dimension value nor the dimensioned object in
+    // the dimension record.  (Yes, there is a REFERENCE0OBJECTID, but it doesn't point to the
+    // dimensioned object.)  We attempt to plug this gap by finding a colocated arc or circle
+    // and using its radius.  If there are more than one such arcs/circles, well, :shrug:.
+    for( PCB_DIMENSION_BASE* dim : m_radialDimensions )
+    {
+        int radius = 0;
+
+        for( BOARD_ITEM* item : m_board->Drawings() )
+        {
+            if( item->Type() != PCB_SHAPE_T )
+                continue;
+
+            PCB_SHAPE* shape = static_cast<PCB_SHAPE*>( item );
+
+            if( shape->GetShape() != SHAPE_T::ARC && shape->GetShape() != SHAPE_T::CIRCLE )
+                continue;
+
+            if( shape->GetPosition() == dim->GetPosition() )
+            {
+                radius = shape->GetRadius();
+                break;
+            }
+        }
+
+        if( radius == 0 )
+        {
+            for( PCB_TRACK* track : m_board->Tracks() )
+            {
+                if( track->Type() != PCB_ARC_T )
+                    continue;
+
+                PCB_ARC* arc = static_cast<PCB_ARC*>( track );
+
+                if( arc->GetCenter() == dim->GetPosition() )
+                {
+                    radius = arc->GetRadius();
+                    break;
+                }
+            }
+        }
+
+        // Force a measured value, calculate the value text, and then stick it into the override
+        // text (since leaders don't have calculated text).
+        dim->SetMeasuredValue( radius );
+        dim->SetText( dim->GetPrefix() + dim->GetValueText() + dim->GetSuffix() );
+        dim->SetPrefix( wxEmptyString );
+        dim->SetSuffix( wxEmptyString );
+
+        // Move the leader line start to the radius point
+        VECTOR2I radialLine = dim->GetEnd() - dim->GetStart();
+        radialLine = radialLine.Resize( radius );
+        dim->SetStart( dim->GetStart() + (wxPoint) radialLine );
     }
 
     // center board
@@ -934,9 +1003,7 @@ void ALTIUM_PCB::ParseComponentsBodies6Data( const CFB::CompoundFileReader& aRea
         ACOMPONENTBODY6 elem( reader ); // TODO: implement
 
         if( elem.component == ALTIUM_COMPONENT_NONE )
-        {
             continue; // TODO: we do not support components for the board yet
-        }
 
         if( m_components.size() <= elem.component )
         {
@@ -946,11 +1013,10 @@ void ALTIUM_PCB::ParseComponentsBodies6Data( const CFB::CompoundFileReader& aRea
         }
 
         if( !elem.modelIsEmbedded )
-        {
             continue;
-        }
 
         auto modelTuple = m_models.find( elem.modelId );
+
         if( modelTuple == m_models.end() )
         {
             THROW_IO_ERROR( wxString::Format(
@@ -981,27 +1047,23 @@ void ALTIUM_PCB::ParseComponentsBodies6Data( const CFB::CompoundFileReader& aRea
 
         modelSettings.m_Rotation.x = NormalizeAngleDegrees( -elem.modelRotation.x, -180, 180 );
         modelSettings.m_Rotation.y = NormalizeAngleDegrees( -elem.modelRotation.y, -180, 180 );
-        modelSettings.m_Rotation.z = NormalizeAngleDegrees(
-                -elem.modelRotation.z + elem.rotation + orientation / 10, -180, 180 );
-
+        modelSettings.m_Rotation.z = NormalizeAngleDegrees( -elem.modelRotation.z
+                                                                + elem.rotation
+                                                                + orientation / 10, -180, 180 );
         modelSettings.m_Opacity = elem.bodyOpacity;
 
         footprint->Models().push_back( modelSettings );
     }
 
     if( reader.GetRemainingBytes() != 0 )
-    {
         THROW_IO_ERROR( "ComponentsBodies6 stream is not fully parsed" );
-    }
 }
 
 
 void ALTIUM_PCB::HelperParseDimensions6Linear( const ADIMENSION6& aElem )
 {
     if( aElem.referencePoint.size() != 2 )
-    {
         THROW_IO_ERROR( "Incorrect number of reference points for linear dimension object" );
-    }
 
     PCB_LAYER_ID klayer = GetKicadLayer( aElem.layer );
 
@@ -1027,12 +1089,12 @@ void ALTIUM_PCB::HelperParseDimensions6Linear( const ADIMENSION6& aElem )
     {
         /**
          * Basically REFERENCE0POINT and REFERENCE1POINT are the two end points of the dimension.
-         * XY1 is the position of the arrow above REFERENCE0POINT. those three points are not necessarily
-         * in 90degree angle, but KiCad requires this to show the correct measurements.
+         * XY1 is the position of the arrow above REFERENCE0POINT. those three points are not
+         * necessarily in 90degree angle, but KiCad requires this to show the correct measurements.
          *
-         * Therefore, we take the vector of REFERENCE0POINT -> XY1, calculate the normal, and intersect it with
-         * REFERENCE1POINT pointing the same direction as REFERENCE0POINT -> XY1. This should give us a valid
-         * measurement point where we can place the drawsegment.
+         * Therefore, we take the vector of REFERENCE0POINT -> XY1, calculate the normal, and
+         * intersect it with REFERENCE1POINT pointing the same direction as REFERENCE0POINT -> XY1.
+         * This should give us a valid measurement point where we can place the drawsegment.
          */
         wxPoint direction             = aElem.xy1 - referencePoint0;
         wxPoint directionNormalVector = wxPoint( -direction.y, direction.x );
@@ -1044,9 +1106,7 @@ void ALTIUM_PCB::HelperParseDimensions6Linear( const ADIMENSION6& aElem )
         int height = static_cast<int>( EuclideanNorm( direction ) );
 
         if( direction.x <= 0 && direction.y <= 0 ) // TODO: I suspect this is not always correct
-        {
             height = -height;
-        }
 
         dimension->SetHeight( height );
     }
@@ -1056,6 +1116,12 @@ void ALTIUM_PCB::HelperParseDimensions6Linear( const ADIMENSION6& aElem )
     }
 
     dimension->SetLineThickness( aElem.linewidth );
+
+    dimension->SetPrefix( aElem.textprefix );
+
+    // Suffix normally holds the units
+    dimension->SetUnitsFormat( aElem.textsuffix.IsEmpty() ? DIM_UNITS_FORMAT::NO_SUFFIX
+                                                          : DIM_UNITS_FORMAT::BARE_SUFFIX );
 
     dimension->Text().SetTextThickness( aElem.textlinewidth );
     dimension->Text().SetTextSize( wxSize( aElem.textheight, aElem.textheight ) );
@@ -1078,6 +1144,80 @@ void ALTIUM_PCB::HelperParseDimensions6Linear( const ADIMENSION6& aElem )
         break;
     }
 }
+
+
+void ALTIUM_PCB::HelperParseDimensions6Radial(const ADIMENSION6 &aElem)
+{
+    if( aElem.referencePoint.size() < 2 )
+        THROW_IO_ERROR( "Not enough reference points for radial dimension object" );
+
+    PCB_LAYER_ID klayer = GetKicadLayer( aElem.layer );
+
+    if( klayer == UNDEFINED_LAYER )
+    {
+        wxLogWarning( _( "Dimension found on an Altium layer (%d) with no KiCad equivalent. "
+                         "It has been moved to KiCad layer Eco1_User." ),
+                      aElem.layer );
+        klayer = Eco1_User;
+    }
+
+    wxPoint referencePoint0 = aElem.referencePoint.at( 0 );
+    wxPoint referencePoint1 = aElem.referencePoint.at( 1 );
+
+    //
+    // We don't have radial dimensions yet so fake it with a leader:
+
+    PCB_DIM_LEADER* dimension = new PCB_DIM_LEADER( m_board );
+    m_board->Add( dimension, ADD_MODE::APPEND );
+    m_radialDimensions.push_back( dimension );
+
+    dimension->SetPrecision( aElem.textprecision );
+    dimension->SetLayer( klayer );
+    dimension->SetStart( referencePoint0 );
+    dimension->SetEnd( aElem.xy1 );
+    dimension->SetLineThickness( aElem.linewidth );
+
+    dimension->SetPrefix( aElem.textprefix );
+
+    // Suffix normally holds the units
+    dimension->SetUnitsFormat( aElem.textsuffix.IsEmpty() ? DIM_UNITS_FORMAT::NO_SUFFIX
+                                                          : DIM_UNITS_FORMAT::BARE_SUFFIX );
+
+    switch( aElem.textunit )
+    {
+    case ALTIUM_UNIT::INCHES:
+        dimension->SetUnits( EDA_UNITS::INCHES );
+        break;
+    case ALTIUM_UNIT::MILS:
+        dimension->SetUnits( EDA_UNITS::MILS );
+        break;
+    case ALTIUM_UNIT::MILLIMETERS:
+    case ALTIUM_UNIT::CENTIMETER:
+        dimension->SetUnits( EDA_UNITS::MILLIMETRES );
+        break;
+    default:
+        break;
+    }
+
+    if( aElem.textPoint.empty() )
+    {
+        wxLogError( "No text position present for leader dimension object" );
+        return;
+    }
+
+    dimension->Text().SetPosition( aElem.textPoint.at( 0 ) );
+    dimension->Text().SetTextThickness( aElem.textlinewidth );
+    dimension->Text().SetTextSize( wxSize( aElem.textheight, aElem.textheight ) );
+    dimension->Text().SetBold( aElem.textbold );
+    dimension->Text().SetItalic( aElem.textitalic );
+    dimension->Text().SetVertJustify( EDA_TEXT_VJUSTIFY_T::GR_TEXT_VJUSTIFY_BOTTOM );
+    dimension->Text().SetHorizJustify( EDA_TEXT_HJUSTIFY_T::GR_TEXT_HJUSTIFY_LEFT );
+
+    int yAdjust = dimension->Text().GetCenter().y - dimension->Text().GetPosition().y;
+    dimension->Text().Move( wxPoint( 0, yAdjust + aElem.textgap ) );
+    dimension->Text().SetVertJustify( EDA_TEXT_VJUSTIFY_T::GR_TEXT_VJUSTIFY_CENTER );
+}
+
 
 void ALTIUM_PCB::HelperParseDimensions6Leader( const ADIMENSION6& aElem )
 {
@@ -1158,6 +1298,7 @@ void ALTIUM_PCB::HelperParseDimensions6Leader( const ADIMENSION6& aElem )
     text->SetVertJustify( EDA_TEXT_VJUSTIFY_T::GR_TEXT_VJUSTIFY_BOTTOM );
 }
 
+
 void ALTIUM_PCB::HelperParseDimensions6Datum( const ADIMENSION6& aElem )
 {
     PCB_LAYER_ID klayer = GetKicadLayer( aElem.layer );
@@ -1181,6 +1322,7 @@ void ALTIUM_PCB::HelperParseDimensions6Datum( const ADIMENSION6& aElem )
         // shape->SetEnd( /* TODO: seems to be based on TEXTY */ );
     }
 }
+
 
 void ALTIUM_PCB::HelperParseDimensions6Center( const ADIMENSION6& aElem )
 {
@@ -1224,28 +1366,27 @@ void ALTIUM_PCB::ParseDimensions6Data( const CFB::CompoundFileReader& aReader,
         case ALTIUM_DIMENSION_KIND::LINEAR:
             HelperParseDimensions6Linear( elem );
             break;
+        case ALTIUM_DIMENSION_KIND::RADIAL:
+            HelperParseDimensions6Radial( elem );
+            break;
         case ALTIUM_DIMENSION_KIND::LEADER:
             HelperParseDimensions6Leader( elem );
             break;
         case ALTIUM_DIMENSION_KIND::DATUM:
-            wxLogError( _( "Ignored dimension of kind %d (not yet supported)." ),
-                        elem.kind );
+            wxLogError( _( "Ignored dimension of kind %d (not yet supported)." ), elem.kind );
             // HelperParseDimensions6Datum( elem );
             break;
         case ALTIUM_DIMENSION_KIND::CENTER:
             HelperParseDimensions6Center( elem );
             break;
         default:
-            wxLogError( _( "Ignored dimension of kind %d (not yet supported)." ),
-                        elem.kind );
+            wxLogError( _( "Ignored dimension of kind %d (not yet supported)." ), elem.kind );
             break;
         }
     }
 
     if( reader.GetRemainingBytes() != 0 )
-    {
         THROW_IO_ERROR( "Dimensions6 stream is not fully parsed" );
-    }
 }
 
 
@@ -1332,9 +1473,7 @@ void ALTIUM_PCB::ParseModelsData( const CFB::CompoundFileReader& aReader,
     }
 
     if( reader.GetRemainingBytes() != 0 )
-    {
         THROW_IO_ERROR( "Models stream is not fully parsed" );
-    }
 }
 
 
@@ -1356,9 +1495,7 @@ void ALTIUM_PCB::ParseNets6Data( const CFB::CompoundFileReader& aReader,
     }
 
     if( reader.GetRemainingBytes() != 0 )
-    {
         THROW_IO_ERROR( "Nets6 stream is not fully parsed" );
-    }
 }
 
 void ALTIUM_PCB::ParsePolygons6Data( const CFB::CompoundFileReader& aReader,
@@ -1458,10 +1595,9 @@ void ALTIUM_PCB::ParsePolygons6Data( const CFB::CompoundFileReader& aReader,
             zone->SetPriority( 1 );
 
             // check if this is the outer zone by simply comparing the BBOX
-            const auto& cur_outer_plane = m_outer_plane.find( elem.layer );
-            if( cur_outer_plane == m_outer_plane.end()
-                    || zone->GetBoundingBox().Contains(
-                            cur_outer_plane->second->GetBoundingBox() ) )
+            const auto& outer_plane = m_outer_plane.find( elem.layer );
+            if( outer_plane == m_outer_plane.end()
+                    || zone->GetBoundingBox().Contains( outer_plane->second->GetBoundingBox() ) )
             {
                 m_outer_plane[elem.layer] = zone;
             }
@@ -1859,15 +1995,33 @@ void ALTIUM_PCB::ParseArcs6Data( const CFB::CompoundFileReader& aReader,
             double  angle          = -NormalizeAngleDegreesPos( elem.endangle - elem.startangle );
             double  startradiant   = DEG2RAD( elem.startangle );
             wxPoint arcStartOffset = wxPoint( KiROUND( std::cos( startradiant ) * elem.radius ),
-                    -KiROUND( std::sin( startradiant ) * elem.radius ) );
+                                              -KiROUND( std::sin( startradiant ) * elem.radius ) );
 
-            SHAPE_ARC shapeArc( elem.center, elem.center + arcStartOffset, angle, elem.width );
+            arcStartOffset += elem.center;
+
+            // If it's a circle then add two 180-degree arcs
+            if( elem.startangle == 0. && elem.endangle == 360. )
+                angle = 180.;
+
+            SHAPE_ARC shapeArc( elem.center, arcStartOffset, angle, elem.width );
             PCB_ARC*  arc = new PCB_ARC( m_board, &shapeArc );
             m_board->Add( arc, ADD_MODE::APPEND );
 
             arc->SetWidth( elem.width );
             arc->SetLayer( klayer );
             arc->SetNetCode( GetNetCode( elem.net ) );
+
+            // Add second 180-degree arc for a circle
+            if( elem.startangle == 0. && elem.endangle == 360. )
+            {
+                shapeArc = SHAPE_ARC( elem.center, arcStartOffset, -angle, elem.width );
+                arc = new PCB_ARC( m_board, &shapeArc );
+                m_board->Add( arc, ADD_MODE::APPEND );
+
+                arc->SetWidth( elem.width );
+                arc->SetLayer( klayer );
+                arc->SetNetCode( GetNetCode( elem.net ) );
+            }
         }
         else
         {

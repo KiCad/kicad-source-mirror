@@ -85,6 +85,7 @@ class BOARD;
 class PCB_SHAPE;
 class FOOTPRINT;
 class ZONE;
+class PCB_DIMENSION_BASE;
 class PROGRESS_REPORTER;
 
 
@@ -119,8 +120,8 @@ public:
     explicit ALTIUM_PCB( BOARD* aBoard, PROGRESS_REPORTER* aProgressReporter );
     ~ALTIUM_PCB();
 
-    void Parse( const CFB::CompoundFileReader&           aReader,
-            const std::map<ALTIUM_PCB_DIR, std::string>& aFileMapping );
+    void Parse( const CFB::CompoundFileReader&               aReader,
+                const std::map<ALTIUM_PCB_DIR, std::string>& aFileMapping );
 
 private:
     void checkpoint();
@@ -175,6 +176,7 @@ private:
 
     // Helper Functions
     void HelperParseDimensions6Linear( const ADIMENSION6& aElem );
+    void HelperParseDimensions6Radial( const ADIMENSION6& aElem );
     void HelperParseDimensions6Leader( const ADIMENSION6& aElem );
     void HelperParseDimensions6Datum( const ADIMENSION6& aElem );
     void HelperParseDimensions6Center( const ADIMENSION6& aElem );
@@ -189,6 +191,7 @@ private:
     BOARD*                               m_board;
     std::vector<FOOTPRINT*>              m_components;
     std::vector<ZONE*>                   m_polygons;
+    std::vector<PCB_DIMENSION_BASE*>     m_radialDimensions;
     std::map<wxString, wxString>         m_models;
     size_t                               m_num_nets;
     std::map<ALTIUM_LAYER, PCB_LAYER_ID> m_layermap; // used to correctly map copper layers

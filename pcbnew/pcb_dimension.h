@@ -135,6 +135,9 @@ public:
 
     int GetMeasuredValue() const { return m_measuredValue; }
 
+    // KiCad normally calculates the measured value but some importers need to set it.
+    void SetMeasuredValue( int aValue ) { m_measuredValue = aValue; }
+
     /**
      * @return the dimension value, rendered with precision / zero suppression but no units, etc
      */

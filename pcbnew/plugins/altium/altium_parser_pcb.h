@@ -393,6 +393,8 @@ struct ADIMENSION6
     ALTIUM_DIMENSION_KIND kind;
 
     wxString textformat;
+    wxString textprefix;
+    wxString textsuffix;
 
     int32_t height;
     double  angle;
@@ -401,6 +403,7 @@ struct ADIMENSION6
     uint32_t textheight;
     uint32_t textlinewidth;
     int32_t  textprecision;
+    uint32_t textgap;
     bool     textbold;
     bool     textitalic;
 

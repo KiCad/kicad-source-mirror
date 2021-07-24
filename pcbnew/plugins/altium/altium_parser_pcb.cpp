@@ -278,6 +278,8 @@ ADIMENSION6::ADIMENSION6( ALTIUM_PARSER& aReader )
     kind = static_cast<ALTIUM_DIMENSION_KIND>( ALTIUM_PARSER::ReadInt( props, "DIMENSIONKIND", 0 ) );
 
     textformat = ALTIUM_PARSER::ReadString( props, "TEXTFORMAT", "" );
+    textprefix = ALTIUM_PARSER::ReadString( props, "TEXTPREFIX", "" );
+    textsuffix = ALTIUM_PARSER::ReadString( props, "TEXTSUFFIX", "" );
 
     height = ALTIUM_PARSER::ReadKicadUnit( props, "HEIGHT", "0mil" );
     angle  = ALTIUM_PARSER::ReadDouble( props, "ANGLE", 0. );
@@ -288,8 +290,11 @@ ADIMENSION6::ADIMENSION6( ALTIUM_PARSER& aReader )
     textprecision  = ALTIUM_PARSER::ReadInt( props, "TEXTPRECISION", 2 );
     textbold       = ALTIUM_PARSER::ReadBool( props, "TEXTLINEWIDTH", false );
     textitalic     = ALTIUM_PARSER::ReadBool( props, "ITALIC", false );
+    textgap        = ALTIUM_PARSER::ReadKicadUnit( props, "TEXTGAP", "10mil" );
 
     arrowsize = ALTIUM_PARSER::ReadKicadUnit( props, "ARROWSIZE", "60mil" );
+
+    wxString text_position_raw = ALTIUM_PARSER::ReadString( props, "TEXTPOSITION", "" );
 
     xy1 = wxPoint( ALTIUM_PARSER::ReadKicadUnit( props, "X1", "0mil" ),
                    -ALTIUM_PARSER::ReadKicadUnit( props, "Y1", "0mil" ) );

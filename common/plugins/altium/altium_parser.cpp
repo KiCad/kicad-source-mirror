@@ -156,6 +156,10 @@ std::map<wxString, wxString> ALTIUM_PARSER::ReadProperties()
         else
             value = wxString( valueS.c_str(), wxConvISO8859_1 );
 
+        // Breathless hack because I haven't a clue what the story is here (but this character
+        // appears in a lot of radial dimensions and is rendered by Altium as a space).
+        value.Replace( wxT( "ÿ" ), wxT( " " ) );
+
         if( canonicalKey == wxT( "DESIGNATOR" )
                 || canonicalKey == wxT( "NAME" )
                 || canonicalKey == wxT( "TEXT" ) )
