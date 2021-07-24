@@ -9,17 +9,17 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
-"PO-Revision-Date: 2021-07-12 08:34+0000\n"
+"PO-Revision-Date: 2021-07-31 11:56+0000\n"
 "Last-Translator: Konstantin Baranovskiy <baranovskiykonstantin@gmail.com>\n"
-"Language-Team: Russian <https://hosted.weblate.org/projects/kicad/master-"
-"source/ru/>\n"
+"Language-Team: Russian <https://hosted.weblate.org/projects/kicad/"
+"master-source/ru/>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.8-dev\n"
+"X-Generator: Weblate 4.7.2-dev\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-Basepath: ../../kicad\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -190,19 +190,17 @@ msgid "Simplifying copper layers polygons"
 msgstr "Оптимизация полигонов на слоях меди"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:767
-#, fuzzy
 msgid "Simplifying polygons on F_Cu"
-msgstr "Оптимизация полигонов на слоях меди"
+msgstr "Оптимизация полигонов на F_Cu"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:778
-#, fuzzy
 msgid "Simplifying polygons on B_Cu"
-msgstr "Оптимизация полигонов на слоях меди"
+msgstr "Оптимизация полигонов на B_Cu"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:808
-#, fuzzy, c-format
+#, c-format
 msgid "Simplifying %d copper layers"
-msgstr "Оптимизация полигонов на слоях меди"
+msgstr "Оптимизация %d слоёв меди"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:847
 msgid "Simplify holes contours"
@@ -217,9 +215,8 @@ msgid "Build BVH for holes and vias"
 msgstr "Построение глухих/внутр. перех.отв."
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:410
-#, fuzzy
 msgid "Your OpenGL version is not supported. Minimum required is 1.5."
-msgstr "Текущая версия OpenGL не поддерживается. Требуется минимум 1.5"
+msgstr "Текущая версия OpenGL не поддерживается. Требуется минимум 1.5."
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:531
 #, c-format
@@ -1435,14 +1432,14 @@ msgid "Cannot make path '%s' absolute with respect to '%s'."
 msgstr "Не удаётся сделать путь '%s' абсолютным по отношению к '%s'."
 
 #: common/common.cpp:339
-#, fuzzy, c-format
+#, c-format
 msgid "Output directory '%s' created."
-msgstr "Выходной каталог '%s' создан.\n"
+msgstr "Выходной каталог '%s' создан."
 
 #: common/common.cpp:348
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot create output directory '%s'."
-msgstr "Не удалось создать выходной каталог '%s'.\n"
+msgstr "Не удалось создать выходной каталог '%s'."
 
 #: common/common.cpp:620
 msgid "This operating system is not supported by KiCad and its dependencies."
@@ -3721,19 +3718,19 @@ msgid "Could not use OpenGL"
 msgstr "Не удаётся использовать OpenGL"
 
 #: common/drawing_sheet/drawing_sheet_reader.cpp:890
-#, fuzzy, c-format
+#, c-format
 msgid "Drawing sheet '%s' not found."
-msgstr "Файл форматной рамки '%s' не найден."
+msgstr "Форматная рамка '%s' не найдена."
 
 #: common/drawing_sheet/drawing_sheet_reader.cpp:900
-#, fuzzy, c-format
+#, c-format
 msgid "Drawing sheet '%s' could not be opened."
-msgstr "Файл форматной рамки '%s' не найден."
+msgstr "Не удаётся открыть форматную рамку '%s'."
 
 #: common/drawing_sheet/drawing_sheet_reader.cpp:913
-#, fuzzy, c-format
+#, c-format
 msgid "Drawing sheet '%s' was not fully read."
-msgstr "Файл '%s' был прочитан не полностью."
+msgstr "Форматная рамка '%s' была прочитана не полностью."
 
 #: common/drawing_sheet/ds_data_item.cpp:370
 #: common/drawing_sheet/ds_draw_item.cpp:122 common/eda_text.cpp:667
@@ -5187,14 +5184,12 @@ msgid "Hidden text"
 msgstr "Скрытый текст"
 
 #: common/layer_id.cpp:149
-#, fuzzy
 msgid "SMD pads front"
-msgstr "Конт.пл. сверху"
+msgstr "SMD конт.пл. сверху"
 
 #: common/layer_id.cpp:150
-#, fuzzy
 msgid "SMD pads back"
-msgstr "Конт.пл. снизу"
+msgstr "SMD конт.пл. снизу"
 
 #: common/layer_id.cpp:151
 msgid "Through-hole pads"
@@ -5375,14 +5370,12 @@ msgid "The KiCad language file for this language is not installed."
 msgstr "Файл перевода для этого языка не установлен с KiCad."
 
 #: common/plugins/altium/altium_parser.cpp:116
-#, fuzzy
 msgid ""
 "Missing null byte at end of property list. Imported data might be malformed "
 "or missing."
 msgstr ""
-"При импорте Altium предполагается что перечень свойств заканчивается нулевым "
-"байтом. Из-за его отсутствия импортируемые данные могут быть повреждены или "
-"отсутствовать."
+"Отсутствует нулевой байт в конце перечня свойств. Импортируемые данные могут "
+"быть повреждены или отсутствовать."
 
 #: common/plugins/altium/altium_parser.cpp:243
 #, c-format
@@ -5456,24 +5449,21 @@ msgid "Failed to output data."
 msgstr "Не удалось вывести данные."
 
 #: common/project/project_archiver.cpp:91
-#, fuzzy
 msgid "Could not open archive file."
-msgstr "Не удалось открыть файл архива\n"
+msgstr "Не удалось открыть файл архива."
 
 #: common/project/project_archiver.cpp:100
-#, fuzzy
 msgid "Invalid archive file format."
-msgstr "Неверный формат файла архива\n"
+msgstr "Неверный формат файла архива."
 
 #: common/project/project_archiver.cpp:111
-#, fuzzy, c-format
+#, c-format
 msgid "Extracting file '%s'."
-msgstr "Извлечение файла '%s'.\n"
+msgstr "Извлечение файла '%s'."
 
 #: common/project/project_archiver.cpp:151
-#, fuzzy
 msgid "Error extracting file!"
-msgstr "Ошибка извлечения файла!\n"
+msgstr "Ошибка извлечения файла!"
 
 #: common/project/project_archiver.cpp:208 eeschema/dialogs/dialog_erc.cpp:760
 #: eeschema/dialogs/dialog_plot_schematic.cpp:518
@@ -5506,19 +5496,19 @@ msgid "Failed to create file '%s'."
 msgstr "Не удалось создать файл '%s'."
 
 #: common/project/project_archiver.cpp:254
-#, fuzzy, c-format
+#, c-format
 msgid "Archived file '%s'."
-msgstr "Файл '%s' архивирован.\n"
+msgstr "Файл '%s' архивирован."
 
 #: common/project/project_archiver.cpp:264
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to archive file '%s'."
-msgstr "Не удалось архивировать файл '%s'.\n"
+msgstr "Не удалось архивировать файл '%s'."
 
 #: common/project/project_archiver.cpp:290
-#, fuzzy, c-format
+#, c-format
 msgid "Zip archive '%s' created (%s uncompressed, %s compressed)."
-msgstr "Zip архив '%s' создан (%s несжатым, %s сжатым).\n"
+msgstr "Zip архив '%s' создан (%s несжатым, %s сжатым)."
 
 #: common/rc_item.cpp:350
 msgid "Excluded "
@@ -7231,24 +7221,24 @@ msgid "%d duplicate time stamps were found and replaced."
 msgstr "%d дубликаты временных меток найдены и заменены."
 
 #: eeschema/annotate.cpp:284
-#, fuzzy, c-format
+#, c-format
 msgid "Updated %s (unit %s) from %s to %s."
-msgstr "Обновлено %s (часть %s) из %s в %s"
+msgstr "Обновлено %s (часть %s) из %s в %s."
 
 #: eeschema/annotate.cpp:292
-#, fuzzy, c-format
+#, c-format
 msgid "Updated %s from %s to %s."
-msgstr "Обновлено %s с %s в %s"
+msgstr "Обновлено %s с %s в %s."
 
 #: eeschema/annotate.cpp:302
-#, fuzzy, c-format
+#, c-format
 msgid "Annotated %s (unit %s) as %s."
-msgstr "Обозначено %s (часть %s) как %s"
+msgstr "Обозначено %s (часть %s) как %s."
 
 #: eeschema/annotate.cpp:309
-#, fuzzy, c-format
+#, c-format
 msgid "Annotated %s as %s."
-msgstr "Обозначено %s как %s"
+msgstr "Обозначено %s как %s."
 
 #: eeschema/annotate.cpp:326
 msgid "Annotation complete."
@@ -8545,9 +8535,9 @@ msgid "Violation Severity"
 msgstr "Уровни нарушений"
 
 #: eeschema/dialogs/dialog_erc.cpp:755 pcbnew/dialogs/dialog_gendrill.cpp:471
-#, fuzzy, c-format
+#, c-format
 msgid "Report file '%s' created."
-msgstr "Файл отчёта '%s' создан\n"
+msgstr "Файл отчёта '%s' создан."
 
 #: eeschema/dialogs/dialog_erc.cpp:773
 #, c-format
@@ -9453,9 +9443,8 @@ msgid "Set color to transparent to use Schematic Editor colors."
 msgstr "Установите цвет прозрачным для использования цвета по умолчанию."
 
 #: eeschema/dialogs/dialog_line_wire_bus_properties_base.h:67
-#, fuzzy
 msgid "Line, Wire & Bus Properties"
-msgstr "Свойства сегмента линии"
+msgstr "Свойства линий, проводников и шин"
 
 #: eeschema/dialogs/dialog_migrate_buses.cpp:102
 msgid "Conflicting Labels"
@@ -11205,9 +11194,8 @@ msgid "Add Field..."
 msgstr "Добавить поле..."
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.h:76
-#, fuzzy
 msgid "Symbol Fields Table"
-msgstr "Поля символов"
+msgstr "Таблица полей символов"
 
 #: eeschema/dialogs/dialog_symbol_properties.cpp:139
 msgid "Base Name"
@@ -13340,9 +13328,9 @@ msgid "Cannot open file '%s'."
 msgstr "Не удалось открыть файл '%s'."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:315
-#, fuzzy, c-format
+#, c-format
 msgid "Storage file not fully parsed (%d bytes remaining)."
-msgstr "Файл хранилища обработан не полностью, %d байт осталось."
+msgstr "Файл хранилища обработан не полностью (%d байт осталось)."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:487
 #, c-format
@@ -13350,9 +13338,9 @@ msgid "Unknown Record id: %d."
 msgstr "Неизвестный Record ID: %d."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:604
-#, fuzzy, c-format
+#, c-format
 msgid "Pin's owner (%d) not found."
-msgstr "Владелец имени файла (%d) не найден."
+msgstr "Владелец вывода (%d) не найден."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:649
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1833
@@ -13372,9 +13360,9 @@ msgid "Pin has unexpected inner edge type."
 msgstr "Вывод имеет неожиданный тип внутреннего края."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:831
-#, fuzzy, c-format
+#, c-format
 msgid "Label's owner (%d) not found."
-msgstr "Владелец имени файла (%d) не найден."
+msgstr "Владелец метки (%d) не найден."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:948
 #, c-format
@@ -13382,44 +13370,43 @@ msgid "Bezier has %d control points. At least 2 are expected."
 msgstr "Кривая Безье имеет %d контрольных точек. Должно быть как минимум 2."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1005
-#, fuzzy, c-format
+#, c-format
 msgid "Bezier's owner (%d) not found."
-msgstr "Владелец листа (%d) не найден."
+msgstr "Владелец кривой (%d) не найден."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1091
-#, fuzzy, c-format
+#, c-format
 msgid "Polyline's owner (%d) not found."
-msgstr "Владелец имени файла (%d) не найден."
+msgstr "Владелец ломаной лини (%d) не найден."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1150
-#, fuzzy, c-format
+#, c-format
 msgid "Polygon's owner (%d) not found."
-msgstr "Владелец имени файла (%d) не найден."
+msgstr "Владелец полигона (%d) не найден."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1231
-#, fuzzy, c-format
+#, c-format
 msgid "Rounded rectangle's owner (%d) not found."
-msgstr "Владелец имени листа (%d) не найден."
+msgstr "Владелец скруглённого прямоугольника (%d) не найден."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1268
-#, fuzzy
 msgid "Arc drawing on schematic not currently supported."
-msgstr "Ни одна схема не открыта."
+msgstr "Черчение дуг на схеме пока не поддерживается."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1278
-#, fuzzy, c-format
+#, c-format
 msgid "Arc's owner (%d) not found."
-msgstr "Владелец листа (%d) не найден."
+msgstr "Владелец дуги (%d) не найден."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1339
-#, fuzzy, c-format
+#, c-format
 msgid "Line's owner (%d) not found."
-msgstr "Владелец имени файла (%d) не найден."
+msgstr "Владелец линии (%d) не найден."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1410
-#, fuzzy, c-format
+#, c-format
 msgid "Rectangle's owner (%d) not found."
-msgstr "Владелец имени листа (%d) не найден."
+msgstr "Владелец прямоугольника (%d) не найден."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1478
 #, c-format
@@ -13436,9 +13423,9 @@ msgid "Power symbol creates a global label with name '%s'"
 msgstr "Символ питания создаёт глобальную метку с именем '%s'"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1882
-#, fuzzy, c-format
+#, c-format
 msgid "Port %s has no connections."
-msgstr "Подкл. к конт.пл.:"
+msgstr "Порт %s не имеет подключений."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2073
 #, c-format
@@ -13457,29 +13444,29 @@ msgid "File not found %s."
 msgstr "Файл не найден %s."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2185
-#, fuzzy, c-format
+#, c-format
 msgid "Sheetname's owner (%d) not found."
 msgstr "Владелец имени листа (%d) не найден."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2212
-#, fuzzy, c-format
+#, c-format
 msgid "Filename's owner (%d) not found."
 msgstr "Владелец имени файла (%d) не найден."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2250
-#, fuzzy, c-format
+#, c-format
 msgid "Designator's owner (%d) not found."
-msgstr "Владелец листа (%d) не найден."
+msgstr "Владелец обозначения (%d) не найден."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2405
-#, fuzzy, c-format
+#, c-format
 msgid "Implementation's owner (%d) not found."
-msgstr "Владелец имени файла (%d) не найден."
+msgstr "Владелец реализации (%d) не найден."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2415
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint's owner (%d) not found."
-msgstr "Владелец имени файла (%d) не найден."
+msgstr "Владелец посад.места (%d) не найден."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:71
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:69
@@ -14031,7 +14018,6 @@ msgid "Syntax Help"
 msgstr "Справка по синтаксису"
 
 #: eeschema/sch_text_help_md.h:2
-#, fuzzy
 msgid ""
 "<table>\n"
 "    <tr>\n"
@@ -14232,8 +14218,8 @@ msgstr ""
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>${refdes:field}</samp></td>\n"
 "        <td></td>\n"
-"        <td>&nbsp;<br><samp><i>field_value</i> of symbol <i>refdes</i></"
-"samp></td>\n"
+"        <td>&nbsp;<br><samp><i>field_value</i> of symbol "
+"<i>refdes</i></samp></td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>${R3:VALUE}</samp></td>\n"
@@ -14248,8 +14234,8 @@ msgstr ""
 "    </tr>\n"
 "    <tr>\n"
 "        <th>Определения шин</th>\n"
-"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
-"&nbsp;&nbsp;&nbsp;</th>\n"
+"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp"
+";&nbsp;&nbsp;</th>\n"
 "        <th>Результирующие цепи</th>\n"
 "    </tr>\n"
 "    <tr>\n"
@@ -14300,11 +14286,18 @@ msgstr ""
 "        <td>&nbsp;<br><samp>MEM{D_{[1..2]} ~LATCH}</samp></td>\n"
 "        <td></td>\n"
 "        <td> <samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
-"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; &nbsp;&nbsp;&nbsp;"
-"&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> <samp>MEM.D<sub>1</"
-"sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
+"&nbsp;&nbsp;&nbsp;&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> "
+"<samp>MEM.D<sub>1</sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
 "    </tr>\n"
 "</table>\n"
+"<p></p>\n"
+"<p></p>\n"
+"<i>Note that markup has precedence over bus definitions.</i>\n"
+"\n"
 
 #: eeschema/sch_validators.cpp:102
 #, c-format
@@ -14382,12 +14375,10 @@ msgid "Field Validation Error"
 msgstr "Ошибка проверки поля"
 
 #: eeschema/sch_validators.cpp:218
-#, fuzzy
 msgid "Signal name contains '[' or ']' but is not a valid vector bus name."
-msgstr "Имя сигнала содержит '[' или ']', но они запрещены в названиях шин"
+msgstr "Имя сигнала содержит '[' или ']', но они запрещены в названиях шин."
 
 #: eeschema/sch_validators.cpp:227
-#, fuzzy
 msgid "Signal name contains '{' and '}' but is not a valid group bus name"
 msgstr "Имя сигнала содержит '{' или '}', но они запрещены в названиях шин"
 
@@ -14402,7 +14393,7 @@ msgstr ""
 "'%s' или где-то в иерархии схемы имеется такой же родительский лист."
 
 #: eeschema/sheet.cpp:84
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The schematic '%s' has not had its symbol library links remapped to the "
 "symbol library table.  The project this schematic belongs to must first be "
@@ -16539,9 +16530,9 @@ msgstr "Правка поля %s"
 
 #: eeschema/tools/sch_edit_tool.cpp:1085
 #: eeschema/tools/symbol_editor_edit_tool.cpp:525
-#, fuzzy, c-format
+#, c-format
 msgid "Edit '%s' Field"
-msgstr "Правка поля %s"
+msgstr "Править поле '%s'"
 
 #: eeschema/tools/sch_edit_tool.cpp:1640
 msgid "There are no unreferenced pins in this sheet to remove."
@@ -20363,29 +20354,27 @@ msgid "PrePreg"
 msgstr "Препрег"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:175
-#, fuzzy, c-format
+#, c-format
 msgid "Enter board thickness in %s"
-msgstr "ширина и толщина в мил"
+msgstr "Ввод толщины платы в %s"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:178
 #, c-format
 msgid "Enter expected board thickness in %s (min value %s)"
-msgstr ""
+msgstr "Ввод ожидаемой толщины платы в %s (мин. значение %s)"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:182
-#, fuzzy
 msgid "Adjust not locked dielectric thickness layers"
-msgstr "Обновить толщину диэлектрика на основе толщины платы"
+msgstr "Подстроить толщину не заблокированных слоёв диэлектрика"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:193
 #, c-format
 msgid "Too small value (min value %s %s). Aborted"
-msgstr ""
+msgstr "Слишком малое значение (мин. значение %s %s). Отклонено"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:213
-#, fuzzy
 msgid "All dielectric  thickness layers are locked"
-msgstr "Обновить толщину диэлектрика на основе толщины платы"
+msgstr "Толщина всех слоёв диэлектрика заблокирована"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:279
 #, c-format
@@ -20565,9 +20554,8 @@ msgid "Board thickness from stackup:"
 msgstr "Толщина пакета:"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:139
-#, fuzzy
 msgid "Adjust Dielectric Thickness"
-msgstr "Установить толщину диэлектр."
+msgstr "Подстроить толщину диэлектр."
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:46
 msgid "ENIG"
@@ -21623,12 +21611,8 @@ msgid "No layer selected."
 msgstr "Слой не выбран."
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:868
-#, fuzzy
 msgid "Selecting <no net> will create an isolated copper island."
-msgstr ""
-"Если цепь не выбрана,\n"
-"зона меди останется\n"
-"без подключений."
+msgstr "При выборе <без цепи> будет создан изолированный островок меди."
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:47
 msgid ""
@@ -21639,9 +21623,8 @@ msgstr ""
 "Отображаются цепи с именами, подходящими под шаблон."
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:51
-#, fuzzy
 msgid "Hide auto-generated net names"
-msgstr "Неверное альтернативное имя вывода"
+msgstr "Скрыть автомат. созданные имена цепей"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:55
 msgid "Sort nets by pad count"
@@ -26844,6 +26827,9 @@ msgid ""
 "to approximate it.  Smaller values produce smoother graphics at the expense "
 "of performance."
 msgstr ""
+"Максимально допустимое отклонение между реальной дугой или кругом и "
+"сегментами, используемых для их построения. С меньшим значением формируется "
+"более сглаженная графика при больших затратах производительности."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:86
 #, c-format
@@ -26910,6 +26896,10 @@ msgid ""
 "net.  If set, this is an absolute minimum which cannot be reduced by "
 "netclasses, custom rules, or other settings."
 msgstr ""
+"Минимальный зазор между элементами меди, которые не принадлежат к одной и "
+"той же цепи. Если задано, то это значение является абсолютным минимумом и не "
+"переопределяется ни классом цепей, ни пользовательскими правилами, ни какими "
+"либо другими настройками."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:207
 msgid "Minimum track width:"
@@ -26920,6 +26910,9 @@ msgid ""
 "The minimum track width.  If set, this is an absolute minimum and cannot be "
 "reduced by netclasses, custom rules, or other settings."
 msgstr ""
+"Минимальная ширина дорожки. Если задано, то это значение является абсолютным "
+"минимумом и не переопределяется ни классом цепей, ни пользовательскими "
+"правилами, ни какими либо другими настройками."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:224
 msgid "Minimum annular width:"
@@ -26930,6 +26923,9 @@ msgid ""
 "The minimum annular ring width.  If set, this is an absolute minimum and "
 "cannot be reduced by netclasses, custom rules, or other settings."
 msgstr ""
+"Минимальная ширина пояска. Если задано, то это значение является абсолютным "
+"минимумом и не переопределяется ни классом цепей, ни пользовательскими "
+"правилами, ни какими либо другими настройками."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:240
 msgid "Minimum via diameter:"
@@ -26940,6 +26936,9 @@ msgid ""
 "The minimum via diameter.  If set, this is an absolute minimum and cannot be "
 "reduced by netclasses, custom rules, or other settings."
 msgstr ""
+"Минимальный диаметр перех.отв. Если задано, то это значение является "
+"абсолютным минимумом и не переопределяется ни классом цепей, ни "
+"пользовательскими правилами, ни какими либо другими настройками."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:256
 msgid "Copper hole clearance:"
@@ -26951,6 +26950,10 @@ msgid ""
 "set, this is an absolute minimum and cannot be reduced by custom rules or "
 "other settings."
 msgstr ""
+"Минимальный зазор между отверстием и другим медным элементом. Если задано, "
+"то это значение является абсолютным минимумом и не переопределяется ни "
+"классом цепей, ни пользовательскими правилами, ни какими либо другими "
+"настройками."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:272
 msgid "Copper edge clearance:"
@@ -26962,6 +26965,9 @@ msgid ""
 "this is an absolute minimum and cannot be reduced by custom rules or other "
 "settings."
 msgstr ""
+"Минимальный зазор между краем платы и медью. Если задано, то это значение "
+"является абсолютным минимумом и не переопределяется ни классом цепей, ни "
+"пользовательскими правилами, ни какими либо другими настройками."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:297
 msgid "Holes"
@@ -26976,6 +26982,9 @@ msgid ""
 "The minimum through-hole size.  If set, this is an absolute minimum and "
 "cannot be reduced by netclasses, custom rules or other settings."
 msgstr ""
+"Минимальный размер отв. сквозного монтажа. Если задано, то это значение "
+"является абсолютным минимумом и не переопределяется ни классом цепей, ни "
+"пользовательскими правилами, ни какими либо другими настройками."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:329
 msgid "Hole to hole clearance:"
@@ -26987,6 +26996,10 @@ msgid ""
 "absolute minimum and cannot be reduced by custom rules or other settings. "
 "(Note: does not apply to milled holes.)"
 msgstr ""
+"Минимальный зазор между двумя просверленными отверстиями. Если задано, то "
+"это значение является абсолютным минимумом и не переопределяется ни классом "
+"цепей, ни пользовательскими правилами, ни какими либо другими настройками. "
+"(Примечание: кроме фрезерованных отверстий)"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:354
 msgid "uVias"
@@ -27001,6 +27014,9 @@ msgid ""
 "The minimum diameter for micro-vias.  If set, this is an absolute minimum "
 "and cannot be reduced by netclasses, custom rules, or other settings."
 msgstr ""
+"Минимальный размер перех.микроотв. Если задано, то это значение является "
+"абсолютным минимумом и не переопределяется ни классом цепей, ни "
+"пользовательскими правилами, ни какими либо другими настройками."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:386
 msgid "Minimum uVia hole:"
@@ -27011,6 +27027,9 @@ msgid ""
 "The minimum micro-via hole size.  If set, this is an absolute minimum and "
 "cannot be reduced by netclasses, custom rules, or other settings."
 msgstr ""
+"Минимальное сверло перех.микроотв. Если задано, то это значение является "
+"абсолютным минимумом и не переопределяется ни классом цепей, ни "
+"пользовательскими правилами, ни какими либо другими настройками."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:411
 msgid "Silkscreen"
@@ -27026,6 +27045,9 @@ msgid ""
 "this can improve legibility.  (Note: does not apply to multiple shapes "
 "within a single footprint.)"
 msgstr ""
+"Минимальный зазор между двумя элементами на одном и том же слое шёлкографии. "
+"Если задано, это может улучшить чёткость. (Примечание: не задавайте разные "
+"значения для частей одного посад.места)"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:421
 msgid "Use the Physical Stackup page to change the number of copper layers."
@@ -28957,19 +28979,16 @@ msgid "Save Footprint Association File"
 msgstr "Сохранить файл связей символ-посад.место"
 
 #: pcbnew/exporters/export_hyperlynx.cpp:190
-#, fuzzy
 msgid ""
 "File contains pad shapes that are not supported by the Hyperlynx exporter "
 "(supported shapes are oval, rectangle and circle)."
 msgstr ""
-"В файле содержатся конт.пл. с фигурами, которые не поддерживаются Hyperlynx "
-"экспортёром\n"
-"(Поддерживаемые фигуры: овал, прямоугольник, круг).\n"
-"Они экспортированы в виде овальных конт.пл."
+"Файл содержат конт.пл. с фигурами, которые не поддерживаются Hyperlynx "
+"экспортёром (поддерживаемые фигуры: овал, прямоугольник, круг)."
 
 #: pcbnew/exporters/export_hyperlynx.cpp:194
 msgid "They have been exported as oval pads."
-msgstr ""
+msgstr "Они были экспортированы в виде овальных конт.пл."
 
 #: pcbnew/exporters/export_hyperlynx.cpp:307
 #: pcbnew/exporters/export_vrml.cpp:567
@@ -29014,9 +29033,9 @@ msgstr "Файл размещения на нижней стороне: '%s'."
 
 #: pcbnew/exporters/gen_footprints_placefile.cpp:307
 #: pcbnew/exporters/gen_footprints_placefile.cpp:448
-#, fuzzy, c-format
+#, c-format
 msgid "Full component count: %d."
-msgstr "Всего компонентов: %d.\n"
+msgstr "Всего компонентов: %d."
 
 #: pcbnew/exporters/gen_footprints_placefile.cpp:310
 #: pcbnew/exporters/gen_footprints_placefile.cpp:404
@@ -29058,16 +29077,13 @@ msgid "Created file '%s'."
 msgstr "Создать файл '%s'."
 
 #: pcbnew/exporters/gerber_jobfile_writer.cpp:158
-#, fuzzy, c-format
+#, c-format
 msgid "Created Gerber job file '%s'."
-msgstr "Создать файл Gerber Job '%s'."
+msgstr "Создан файл Gerber Job '%s'."
 
 #: pcbnew/exporters/gerber_jobfile_writer.cpp:575
-#, fuzzy
 msgid "Board stackup settings not up to date."
-msgstr ""
-"Параметры структуры платы не обновлены.\n"
-"Исправьте настройки."
+msgstr "Параметры структуры платы не обновлены."
 
 #: pcbnew/files.cpp:144
 msgid "All KiCad Board Files"
@@ -30375,9 +30391,9 @@ msgid "Netlist Load Error"
 msgstr "Ошибка чтения списка цепей"
 
 #: pcbnew/netlist_reader/netlist.cpp:155
-#, fuzzy, c-format
+#, c-format
 msgid "No footprint defined for symbol %s."
-msgstr "Не задано посад.место для символа %s.\n"
+msgstr "Не задано посад.место для символа %s."
 
 #: pcbnew/netlist_reader/netlist.cpp:182
 #, c-format
@@ -30392,12 +30408,11 @@ msgid "%s footprint ID '%s' is not valid."
 msgstr "У %s неверный ID посад.места '%s'."
 
 #: pcbnew/netlist_reader/netlist.cpp:222
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s footprint '%s' not found in any libraries in the footprint library table."
 msgstr ""
-"Для %s посад.место '%s' не найдено ни в одной библиотеке из таблиц "
-"библиотек.\n"
+"Для %s посад.место '%s' не найдено ни в одной библиотеке из таблиц библиотек."
 
 #: pcbnew/netlist_reader/netlist_reader.cpp:181
 #, c-format
@@ -32276,24 +32291,20 @@ msgid "?"
 msgstr "?"
 
 #: pcbnew/router/pns_kicad_iface.cpp:450
-#, fuzzy
 msgid "existing track"
-msgstr "При создании дорожки"
+msgstr "существующая дорожка"
 
 #: pcbnew/router/pns_kicad_iface.cpp:464 pcbnew/router/pns_kicad_iface.cpp:477
-#, fuzzy
 msgid "board minimum width"
-msgstr "минимума платы"
+msgstr "минимальная ширина платы"
 
 #: pcbnew/router/pns_kicad_iface.cpp:473
-#, fuzzy
 msgid "netclass 'Default'"
-msgstr "класс цепей '%s'"
+msgstr "класс цепей 'Default'"
 
 #: pcbnew/router/pns_kicad_iface.cpp:475
-#, fuzzy
 msgid "user choice"
-msgstr "Сохранить выбор"
+msgstr "выбор пользователя"
 
 #: pcbnew/router/pns_kicad_iface.cpp:1063
 #, c-format
@@ -32613,37 +32624,34 @@ msgid "Break Track"
 msgstr "Разорвать дорожку"
 
 #: pcbnew/router/router_tool.cpp:1895
-#, fuzzy, c-format
+#, c-format
 msgid "Routing Diff Pair: %s"
-msgstr "Проложить диф.пару"
+msgstr "Трассировка диф.пары: %s"
 
 #: pcbnew/router/router_tool.cpp:1895
-#, fuzzy, c-format
+#, c-format
 msgid "Routing Track: %s"
-msgstr "Проложить дорожку"
+msgstr "Трассировка дорожки: %s"
 
 #: pcbnew/router/router_tool.cpp:1901
-#, fuzzy, c-format
+#, c-format
 msgid "Net Class: %s"
-msgstr "Классы цепей"
+msgstr "Класс цепей: %s"
 
 #: pcbnew/router/router_tool.cpp:1905
-#, fuzzy
 msgid "Routing Track"
-msgstr "Проложить дорожку"
+msgstr "Трассировка дорожки"
 
 #: pcbnew/router/router_tool.cpp:1905
-#, fuzzy
 msgid "(no net)"
-msgstr "<без цепи>"
+msgstr "(без цепи)"
 
 #: pcbnew/router/router_tool.cpp:1911
-#, fuzzy, c-format
+#, c-format
 msgid "Track Width: %s"
-msgstr "Ширина дорожки"
+msgstr "Ширина дорожки: %s"
 
 #: pcbnew/router/router_tool.cpp:1933
-#, fuzzy
 msgid "Diff Pair Gap"
 msgstr "Зазор диф.пары"
 
@@ -32759,6 +32767,10 @@ msgid ""
 "overridden by the board minimum width, or by the width of an existing track "
 "if the 'Use Existing Track Width' feature is enabled."
 msgstr ""
+"Выберите ширину по умолчанию для новых дорожек. Заметьте, что эта ширина "
+"может быть переопределена минимальной шириной для платы или шириной уже "
+"существующей дорожки, когда активен параметр 'Использовать ширину "
+"существующей дорожки'."
 
 #: pcbnew/toolbars_pcb_editor.cpp:532
 msgid ""
@@ -34709,36 +34721,32 @@ msgid "Fill Zone"
 msgstr "Залить зону"
 
 #: pcbnew/tools/pcb_actions.cpp:1248
-#, fuzzy
 msgid "Update copper fill of selected zone(s)"
-msgstr "Обновить выбранные посад.места"
+msgstr "Обновить заливку выбранных зон"
 
 #: pcbnew/tools/pcb_actions.cpp:1254 pcbnew/tools/zone_filler_tool.cpp:144
 msgid "Fill All Zones"
 msgstr "Залить все зоны"
 
 #: pcbnew/tools/pcb_actions.cpp:1254
-#, fuzzy
 msgid "Update copper fill of all zones"
-msgstr "Отменить заливку всех зон"
+msgstr "Обновить заливку всех зон"
 
 #: pcbnew/tools/pcb_actions.cpp:1259 pcbnew/tools/zone_filler_tool.cpp:235
 msgid "Unfill Zone"
 msgstr "Отменить заливку зоны"
 
 #: pcbnew/tools/pcb_actions.cpp:1259
-#, fuzzy
 msgid "Remove copper fill from selected zone(s)"
-msgstr "Убрать из выделенного."
+msgstr "Отменить заливку выделенных зон"
 
 #: pcbnew/tools/pcb_actions.cpp:1265 pcbnew/tools/zone_filler_tool.cpp:253
 msgid "Unfill All Zones"
 msgstr "Отменить заливку всех зон"
 
 #: pcbnew/tools/pcb_actions.cpp:1265
-#, fuzzy
 msgid "Remove copper fill from all zones"
-msgstr "Переподключено зону меди от %s к %s."
+msgstr "Удалить заливку из всех зон"
 
 #: pcbnew/tools/pcb_actions.cpp:1273
 msgid "Place Selected Footprints"
