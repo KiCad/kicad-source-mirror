@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 Cirilo Bernardo <cirilo.bernardo@gmail.com>
+ * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -34,32 +35,25 @@
 class WRL2BASE;
 class SGNODE;
 
-/**
- * WRL2INLINE
- */
 class WRL2INLINE : public WRL2NODE
 {
-private:
-    WRL2BASE*   m_VRML2Base;
-    std::vector< std::string > url;
-    WRLVEC3F    bboxCenter;
-    WRLVEC3F    bboxSize;
-
-public:
-
-    // functions inherited from WRL2NODE
-    bool isDangling( void ) override;
-
 public:
     WRL2INLINE();
     WRL2INLINE( WRL2NODE* aParent );
     virtual ~WRL2INLINE();
 
-    // functions inherited from WRL2NODE
     bool Read( WRLPROC& proc, WRL2BASE* aTopNode ) override;
     bool AddRefNode( WRL2NODE* aNode ) override;
     bool AddChildNode( WRL2NODE* aNode ) override;
     SGNODE* TranslateToSG( SGNODE* aParent ) override;
+
+    bool isDangling( void ) override;
+
+private:
+    WRL2BASE*   m_VRML2Base;
+    std::vector< std::string > url;
+    WRLVEC3F    bboxCenter;
+    WRLVEC3F    bboxSize;
 };
 
 #endif  // VRML2_INLINE_H

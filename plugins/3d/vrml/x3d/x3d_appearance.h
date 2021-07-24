@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 Cirilo Bernardo <cirilo.bernardo@gmail.com>
+ * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -35,24 +36,8 @@
 #include "x3d_shape.h"
 
 
-/**
- * X3DAPP
- */
 class X3DAPP : public X3DNODE
 {
-private:
-    void init();
-    void readFields( wxXmlNode* aNode );
-    wxString m_MatName; // material name
-
-protected:
-    WRLVEC3F    diffuseColor;
-    WRLVEC3F    emissiveColor;
-    WRLVEC3F    specularColor;
-    float       ambientIntensity;
-    float       shininess;
-    float       transparency;
-
 public:
     X3DAPP();
     X3DAPP( X3DNODE* aParent );
@@ -64,6 +49,22 @@ public:
     bool AddChildNode( X3DNODE* aNode ) override;
     bool AddRefNode( X3DNODE* aNode ) override;
     SGNODE* TranslateToSG( SGNODE* aParent ) override;
+
+private:
+    void init();
+    void readFields( wxXmlNode* aNode );
+
+protected:
+    WRLVEC3F    diffuseColor;
+    WRLVEC3F    emissiveColor;
+    WRLVEC3F    specularColor;
+    float       ambientIntensity;
+    float       shininess;
+    float       transparency;
+
+private:
+    wxString    m_MatName; // material name
+
 };
 
 #endif  // X3D_APPEARANCE_H

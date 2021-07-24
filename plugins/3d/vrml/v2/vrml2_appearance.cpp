@@ -56,15 +56,10 @@ WRL2APPEARANCE::WRL2APPEARANCE( WRL2NODE* aParent ) : WRL2NODE()
 
 WRL2APPEARANCE::~WRL2APPEARANCE()
 {
-#if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 2 )
-    do {
-        std::ostringstream ostr;
-        ostr << " * [INFO] Destroying Appearance with " << m_Children.size();
-        ostr << " children, " << m_Refs.size() << " references and ";
-        ostr << m_BackPointers.size() << " backpointers";
-        wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
-    } while( 0 );
-#endif
+    wxLogTrace( traceVrmlPlugin,
+                wxT( " * [INFO] Destroying Appearance node with %ul children, %ul"
+                     "references, and %ul back pointers." ),
+                m_Children.size(), m_Refs.size(), m_BackPointers.size() );
 }
 
 
@@ -91,7 +86,6 @@ bool WRL2APPEARANCE::checkNodeType( WRL2NODES aType )
 bool WRL2APPEARANCE::isDangling( void )
 {
     // this node is dangling unless it has a parent of type WRL2_SHAPE
-
     if( nullptr == m_Parent || m_Parent->GetNodeType() != WRL2NODES::WRL2_SHAPE )
         return true;
 
@@ -101,33 +95,16 @@ bool WRL2APPEARANCE::isDangling( void )
 
 bool WRL2APPEARANCE::AddRefNode( WRL2NODE* aNode )
 {
-    if( nullptr == aNode )
-    {
-#ifdef DEBUG_VRML2
-        do {
-            std::ostringstream ostr;
-            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            ostr << " * [BUG] NULL passed for aNode";
-            wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
-        } while( 0 );
-#endif
-
-        return false;
-    }
+    wxCHECK_MSG( aNode, false, wxT( "Invalid node." ) );
 
     WRL2NODES type = aNode->GetNodeType();
 
     if( !checkNodeType( type ) )
     {
-#if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
-        do {
-            std::ostringstream ostr;
-            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            ostr << " * [INFO] bad file format; unexpected child node '";
-            ostr << aNode->GetNodeTypeName( type ) << "'";
-            wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
-        } while( 0 );
-#endif
+        wxLogTrace( traceVrmlPlugin,
+                    wxT( "%s:%s:%d\n"
+                         " * [INFO] bad file format; unexpected child node '%s'." ),
+                    __FILE__, __FUNCTION__, __LINE__, aNode->GetNodeTypeName( type ) );
 
         return false;
     }
@@ -136,14 +113,10 @@ bool WRL2APPEARANCE::AddRefNode( WRL2NODE* aNode )
     {
         if( nullptr != material )
         {
-#if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
-            do {
-                std::ostringstream ostr;
-                ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-                ostr << " * [INFO] bad file format; multiple material nodes";
-                wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
-            } while( 0 );
-#endif
+            wxLogTrace( traceVrmlPlugin,
+                        wxT( "%s:%s:%d\n"
+                             " * [INFO] bad file format; multiple material nodes." ),
+                        __FILE__, __FUNCTION__, __LINE__ );
 
             return false;
         }
@@ -156,14 +129,10 @@ bool WRL2APPEARANCE::AddRefNode( WRL2NODE* aNode )
     {
         if( nullptr != textureTransform )
         {
-#if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
-            do {
-                std::ostringstream ostr;
-                ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-                ostr << " * [INFO] bad file format; multiple textureTransform nodes";
-                wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
-            } while( 0 );
-#endif
+            wxLogTrace( traceVrmlPlugin,
+                        wxT( "%s:%s:%d\n"
+                             " * [INFO] bad file format; multiple textureTransform nodes." ),
+                             __FILE__, __FUNCTION__, __LINE__ );
 
             return false;
         }
@@ -174,14 +143,10 @@ bool WRL2APPEARANCE::AddRefNode( WRL2NODE* aNode )
 
     if( nullptr != texture )
     {
-#if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
-        do {
-            std::ostringstream ostr;
-            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            ostr << " * [INFO] bad file format; multiple texture nodes";
-            wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
-        } while( 0 );
-#endif
+        wxLogTrace( traceVrmlPlugin,
+                    wxT( "%s:%s:%d\n"
+                         " * [INFO] bad file format; multiple texture nodes." ),
+                    __FILE__, __FUNCTION__, __LINE__ );
 
         return false;
     }
@@ -193,33 +158,16 @@ bool WRL2APPEARANCE::AddRefNode( WRL2NODE* aNode )
 
 bool WRL2APPEARANCE::AddChildNode( WRL2NODE* aNode )
 {
-    if( nullptr == aNode )
-    {
-#ifdef DEBUG_VRML2
-        do {
-            std::ostringstream ostr;
-            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            ostr << " * [BUG] NULL passed for aNode";
-            wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
-        } while( 0 );
-#endif
-
-        return false;
-    }
+    wxCHECK_MSG( aNode, false, wxT( "Invalid node." ) );
 
     WRL2NODES type = aNode->GetNodeType();
 
     if( !checkNodeType( type ) )
     {
-#if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
-        do {
-            std::ostringstream ostr;
-            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            ostr << " * [INFO] bad file format; unexpected child node '";
-            ostr << aNode->GetNodeTypeName( type ) << "'";
-            wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
-        } while( 0 );
-#endif
+        wxLogTrace( traceVrmlPlugin,
+                    wxT( "%s:%s:%d\n"
+                         " * [INFO] bad file format; unexpected child node '%s'." ),
+                    __FILE__, __FUNCTION__, __LINE__, aNode->GetNodeTypeName( type ) );
 
         return false;
     }
@@ -228,14 +176,10 @@ bool WRL2APPEARANCE::AddChildNode( WRL2NODE* aNode )
     {
         if( nullptr != material )
         {
-#if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
-            do {
-                std::ostringstream ostr;
-                ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-                ostr << " * [INFO] bad file format; multiple material nodes";
-                wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
-            } while( 0 );
-#endif
+            wxLogTrace( traceVrmlPlugin,
+                        wxT( "%s:%s:%d\n"
+                             " * [INFO] bad file format; multiple material nodes." ),
+                        __FILE__, __FUNCTION__, __LINE__ );
 
             return false;
         }
@@ -248,14 +192,10 @@ bool WRL2APPEARANCE::AddChildNode( WRL2NODE* aNode )
     {
         if( nullptr != textureTransform )
         {
-#if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
-            do {
-                std::ostringstream ostr;
-                ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-                ostr << " * [INFO] bad file format; multiple textureTransform nodes";
-                wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
-            } while( 0 );
-#endif
+            wxLogTrace( traceVrmlPlugin,
+                        wxT( "%s:%s:%d\n"
+                             " * [INFO] bad file format; multiple textureTransform nodes." ),
+                        __FILE__, __FUNCTION__, __LINE__ );
 
             return false;
         }
@@ -266,14 +206,10 @@ bool WRL2APPEARANCE::AddChildNode( WRL2NODE* aNode )
 
     if( nullptr != texture )
     {
-#if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
-        do {
-            std::ostringstream ostr;
-            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            ostr << " * [INFO] bad file format; multiple texture nodes";
-            wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
-        } while( 0 );
-#endif
+        wxLogTrace( traceVrmlPlugin,
+                    wxT( "%s:%s:%d\n"
+                         " * [INFO] bad file format; multiple texture nodes." ),
+                    __FILE__, __FUNCTION__, __LINE__ );
 
         return false;
     }
@@ -285,52 +221,25 @@ bool WRL2APPEARANCE::AddChildNode( WRL2NODE* aNode )
 
 bool WRL2APPEARANCE::Read( WRLPROC& proc, WRL2BASE* aTopNode )
 {
-    if( nullptr == aTopNode )
-    {
-#ifdef DEBUG_VRML2
-        do {
-            std::ostringstream ostr;
-            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            ostr << " * [BUG] aTopNode is NULL";
-            wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
-        } while( 0 );
-#endif
-
-        return false;
-    }
-
-    size_t line, column;
-    proc.GetFilePosData( line, column );
+    wxCHECK_MSG( aTopNode, false, wxT( "Invalid top node." ) );
 
     char tok = proc.Peek();
 
     if( proc.eof() )
     {
-#if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
-        do {
-            std::ostringstream ostr;
-            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            ostr << " * [INFO] bad file format; unexpected eof at line ";
-            ostr << line << ", column " << column;
-            wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
-        } while( 0 );
-#endif
+        wxLogTrace( traceVrmlPlugin, wxT( "%s:%s:%d\n"
+                                          " * [INFO] bad file format; unexpected eof %s." ),
+                    __FILE__, __FUNCTION__, __LINE__, proc.GetFilePosition() );
 
         return false;
     }
 
     if( '{' != tok )
     {
-#if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
-        do {
-            std::ostringstream ostr;
-            ostr << proc.GetError() << "\n";
-            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            ostr << " * [INFO] bad file format; expecting '{' but got '" << tok;
-            ostr  << "' at line " << line << ", column " << column;
-            wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
-        } while( 0 );
-#endif
+        wxLogTrace( traceVrmlPlugin,
+                    wxT( "%s:%s:%d\n"
+                         " * [INFO] bad file format; expecting '{' but got '%s' %s." ),
+                    __FILE__, __FUNCTION__, __LINE__, tok, proc.GetFilePosition() );
 
         return false;
     }
@@ -348,14 +257,9 @@ bool WRL2APPEARANCE::Read( WRLPROC& proc, WRL2BASE* aTopNode )
 
         if( !proc.ReadName( glob ) )
         {
-#if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
-            do {
-                std::ostringstream ostr;
-                ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-                ostr << proc.GetError();
-                wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
-            } while( 0 );
-#endif
+            wxLogTrace( traceVrmlPlugin, wxT( "%s:%s:%d\n"
+                                              "%s" ),
+                        __FILE__, __FUNCTION__, __LINE__ , proc.GetError() );
 
             return false;
         }
@@ -365,20 +269,14 @@ bool WRL2APPEARANCE::Read( WRLPROC& proc, WRL2BASE* aTopNode )
         // texture
         // textureTransform
 
-        proc.GetFilePosData( line, column );
-
         if( !glob.compare( "material" ) )
         {
             if( !aTopNode->ReadNode( proc, this, nullptr ) )
             {
-#if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
-                do {
-                    std::ostringstream ostr;
-                    ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-                    ostr << " * [INFO] could not read material information";
-                    wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
-                } while( 0 );
-#endif
+                wxLogTrace( traceVrmlPlugin,
+                            wxT( "%s:%s:%d\n"
+                                 " * [INFO] could not read material information." ),
+                            __FILE__, __FUNCTION__, __LINE__ );
 
                 return false;
             }
@@ -387,14 +285,10 @@ bool WRL2APPEARANCE::Read( WRLPROC& proc, WRL2BASE* aTopNode )
         {
             if( !aTopNode->ReadNode( proc, this, nullptr ) )
             {
-#if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
-                do {
-                    std::ostringstream ostr;
-                    ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-                    ostr << " * [INFO] could not read texture information";
-                    wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
-                } while( 0 );
-#endif
+                wxLogTrace( traceVrmlPlugin,
+                            wxT( "%s:%s:%d\n"
+                                 " * [INFO] could not read texture information." ),
+                                 __FILE__, __FUNCTION__, __LINE__ );
 
                 return false;
             }
@@ -403,30 +297,21 @@ bool WRL2APPEARANCE::Read( WRLPROC& proc, WRL2BASE* aTopNode )
         {
             if( !aTopNode->ReadNode( proc, this, nullptr ) )
             {
-#if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
-                do {
-                    std::ostringstream ostr;
-                    ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-                    ostr << " * [INFO] could not read textureTransform information";
-                    wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
-                } while( 0 );
-#endif
+                wxLogTrace( traceVrmlPlugin,
+                            wxT( "%s:%s:%d\n"
+                                 " * [INFO] could not read textureTransform information." ),
+                            __FILE__, __FUNCTION__, __LINE__ );
 
                 return false;
             }
         }
         else
         {
-#if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
-            do {
-                std::ostringstream ostr;
-                ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-                ostr << " * [INFO] bad Appearance at line " << line << ", column ";
-                ostr << column << "\n";
-                ostr << " * [INFO] file: '" << proc.GetFileName() << "'";
-                wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
-            } while( 0 );
-#endif
+            wxLogTrace( traceVrmlPlugin, wxT( "%s:%s:%d\n"
+                                              " * [INFO] bad Appearance %s.\n"
+                                              " * [INFO] file: '%s'" ),
+                        __FILE__, __FUNCTION__, __LINE__, proc.GetFilePosition(),
+                        proc.GetFileName() );
 
             return false;
         }
@@ -443,30 +328,14 @@ SGNODE* WRL2APPEARANCE::TranslateToSG( SGNODE* aParent )
 
     S3D::SGTYPES ptype = S3D::GetSGNodeType( aParent );
 
-    if( nullptr != aParent && ptype != S3D::SGTYPE_SHAPE )
-    {
-#ifdef DEBUG_VRML2
-        do {
-            std::ostringstream ostr;
-            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            ostr << " * [BUG] Appearance does not have a Shape parent (parent ID: ";
-            ostr << ptype << ")";
-            wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
-        } while( 0 );
-#endif
+    wxCHECK_MSG( aParent && ( ptype == S3D::SGTYPE_SHAPE ), nullptr,
+                 wxString::Format( wxT( " * [BUG] Appearance does not have a Shape parent "
+                                        "(parent ID: %d)." ), ptype ) );
 
-        return nullptr;
-    }
-
-#if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 2 )
-    do {
-        std::ostringstream ostr;
-        ostr << " * [INFO] Translating Appearance with " << m_Children.size();
-        ostr << " children, " << m_Refs.size() << " references and ";
-        ostr << m_BackPointers.size() << " backpointers";
-        wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
-    } while( 0 );
-#endif
+    wxLogTrace( traceVrmlPlugin,
+                wxT( " * [INFO] Translating Appearance node with %ul children, %ul"
+                     "references, and %ul back pointers." ),
+                m_Children.size(), m_Refs.size(), m_BackPointers.size() );
 
     if( m_sgNode )
     {
@@ -494,6 +363,7 @@ SGNODE* WRL2APPEARANCE::TranslateToSG( SGNODE* aParent )
         matNode.SetEmissive( 0.0f, 0.0f, 0.0f );
         matNode.SetSpecular( 0.65f, 0.65f, 0.65f );
         matNode.SetDiffuse( 0.65f, 0.65f, 0.65f );
+
         // default ambient
         matNode.SetShininess( 0.2f );
         matNode.SetTransparency( 0.0f );

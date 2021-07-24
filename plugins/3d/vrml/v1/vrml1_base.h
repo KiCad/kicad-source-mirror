@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2016 Cirilo Bernardo <cirilo.bernardo@gmail.com>
+ * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -39,11 +40,27 @@ class SGNODE;
 class WRL1INLINE;
 
 /**
- * WRL1BASE
- * represents the top node of a VRML1 model
+ * Represent the top node of a VRML1 model.
  */
 class WRL1BASE : public WRL1NODE
 {
+public:
+    WRL1BASE();
+    virtual ~WRL1BASE();
+
+    // function to read entire VRML file
+    bool Read( WRLPROC& proc );
+
+    // read in a VRML node
+    bool ReadNode( WRLPROC& proc, WRL1NODE* aParent, WRL1NODE** aNode );
+
+    virtual std::string GetName( void ) override;
+    virtual bool SetName( const std::string& aName ) override;
+
+    bool Read( WRLPROC& proc, WRL1BASE* aTopNode ) override;
+    bool SetParent( WRL1NODE* aParent, bool doUnlink = true ) override;
+    SGNODE* TranslateToSG( SGNODE* aParent, WRL1STATUS* sp ) override;
+
 private:
     // handle cases of USE / DEF
     bool implementUse( WRLPROC& proc, WRL1NODE* aParent, WRL1NODE** aNode );
@@ -58,25 +75,6 @@ private:
     bool readFaceSet( WRLPROC& proc, WRL1NODE* aParent, WRL1NODE** aNode );
     bool readTransform( WRLPROC& proc, WRL1NODE* aParent, WRL1NODE** aNode );
     bool readShapeHints( WRLPROC& proc, WRL1NODE* aParent, WRL1NODE** aNode );
-
-public:
-    WRL1BASE();
-    virtual ~WRL1BASE();
-
-    // function to read entire VRML file
-    bool Read( WRLPROC& proc );
-
-    // read in a VRML node
-    bool ReadNode( WRLPROC& proc, WRL1NODE* aParent, WRL1NODE** aNode );
-
-    // overrides
-    virtual std::string GetName( void ) override;
-    virtual bool SetName( const std::string& aName ) override;
-
-    // functions inherited from WRL1NODE
-    bool Read( WRLPROC& proc, WRL1BASE* aTopNode ) override;
-    bool SetParent( WRL1NODE* aParent, bool doUnlink = true ) override;
-    SGNODE* TranslateToSG( SGNODE* aParent, WRL1STATUS* sp ) override;
 };
 
 #endif  // VRML1_BASE_H

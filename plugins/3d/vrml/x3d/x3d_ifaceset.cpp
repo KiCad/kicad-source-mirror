@@ -41,8 +41,6 @@ X3DIFACESET::X3DIFACESET() : X3DNODE()
     m_Type = X3D_INDEXED_FACE_SET;
     coord = nullptr;
     init();
-
-    return;
 }
 
 
@@ -62,18 +60,12 @@ X3DIFACESET::X3DIFACESET( X3DNODE* aParent ) : X3DNODE()
 
     if( nullptr != m_Parent )
         m_Parent->AddChildNode( this );
-
-    return;
 }
 
 
 X3DIFACESET::~X3DIFACESET()
 {
-#if defined( DEBUG_X3D ) && ( DEBUG_X3D > 2 )
-    wxLogTrace( MASK_VRML, " * [INFO] Destroying IndexedFaceSet\n" );
-#endif
-
-    return;
+    wxLogTrace( traceVrmlPlugin, " * [INFO] Destroying IndexedFaceSet." );
 }
 
 
@@ -84,7 +76,6 @@ void X3DIFACESET::init()
     ccw = true;
     creaseAngle = 0.733f;   // approx 42 degrees; this is larger than VRML spec.
     creaseLimit = 0.74317f; // cos( 0.733 )
-    return;
 }
 
 
@@ -133,8 +124,6 @@ void X3DIFACESET::readFields( wxXmlNode* aNode )
             }
         }
     }
-
-    return;
 }
 
 
@@ -156,7 +145,6 @@ bool X3DIFACESET::Read( wxXmlNode* aNode, X3DNODE* aTopNode, X3D_DICT& aDict )
 
     if( false == ok )
         return false;
-
 
     if( !SetParent( aTopNode ) )
         return false;
@@ -239,31 +227,15 @@ SGNODE* X3DIFACESET::TranslateToSG( SGNODE* aParent )
 {
     S3D::SGTYPES ptype = S3D::GetSGNodeType( aParent );
 
-    if( nullptr != aParent && ptype != S3D::SGTYPE_SHAPE )
-    {
-#ifdef DEBUG_X3D
-        do {
-            std::ostringstream ostr;
-            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            ostr << " * [BUG] IndexedFaceSet does not have a Shape parent (parent ID: ";
-            ostr << ptype << ")";
-            wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
-        } while( 0 );
-#endif
+    wxCHECK_MSG( aParent && ( ptype == S3D::SGTYPE_SHAPE ), nullptr,
+                 wxString::Format( wxT( "IndexedFaceSet does not have a valid Shape parent "
+                                        "(parent ID: %d)" ),
+                                   ptype ) );
 
-        return nullptr;
-    }
-
-#if defined( DEBUG_X3D ) && ( DEBUG_X3D > 2 )
-    do {
-        std::ostringstream ostr;
-        ostr << " * [INFO] Translating IndexedFaceSet with " << m_Children.size();
-        ostr << " children, " << m_Refs.size() << " references, ";
-        ostr << m_BackPointers.size() << " backpointers and ";
-        ostr << coordIndex.size() << " coord indices";
-        wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
-    } while( 0 );
-#endif
+    wxLogTrace( traceVrmlPlugin,
+                wxT( " * [INFO] Translating IndexedFaceSet with %ul children, %ul references, "
+                     "%ul back pointers, and %ul coordinate indices." ),
+                m_Children.size(), m_Refs.size(), m_BackPointers.size(), coordIndex.size() );
 
     if( m_sgNode )
     {

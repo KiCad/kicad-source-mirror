@@ -49,15 +49,10 @@ WRL2TRANSFORM::WRL2TRANSFORM( WRL2NODE* aParent ) : WRL2NODE()
 
 WRL2TRANSFORM::~WRL2TRANSFORM()
 {
-#if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 2 )
-    do {
-        std::ostringstream ostr;
-        ostr << " * [INFO] Destroying Transform with " << m_Children.size();
-        ostr << " children, " << m_Refs.size() << " references and ";
-        ostr << m_BackPointers.size() << " backpointers";
-        wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
-    } while( 0 );
-#endif
+    wxLogTrace( traceVrmlPlugin,
+                wxT( " * [INFO] Destroying Transform node with %ul children, %ul"
+                     "references, and %ul back pointers." ),
+                m_Children.size(), m_Refs.size(), m_BackPointers.size() );
 }
 
 
@@ -68,7 +63,6 @@ bool WRL2TRANSFORM::isDangling( void )
 }
 
 
-// functions inherited from WRL2NODE
 bool WRL2TRANSFORM::Read( WRLPROC& proc, WRL2BASE* aTopNode )
 {
     /*
@@ -88,19 +82,7 @@ bool WRL2TRANSFORM::Read( WRLPROC& proc, WRL2BASE* aTopNode )
      * }
      */
 
-    if( nullptr == aTopNode )
-    {
-#ifdef DEBUG_VRML2
-        do {
-            std::ostringstream ostr;
-            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            ostr << " * [BUG] aTopNode is NULL";
-            wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
-        } while( 0 );
-#endif
-
-        return false;
-    }
+    wxCHECK_MSG( aTopNode, false, wxT( "Invalid top node." ) );
 
     center.x = 0.0;
     center.y = 0.0;
@@ -128,31 +110,19 @@ bool WRL2TRANSFORM::Read( WRLPROC& proc, WRL2BASE* aTopNode )
 
     if( proc.eof() )
     {
-#if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
-        do {
-            std::ostringstream ostr;
-            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            ostr << " * [INFO] bad file format; unexpected eof at line ";
-            ostr << line << ", column " << column;
-            wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
-        } while( 0 );
-#endif
+        wxLogTrace( traceVrmlPlugin, wxT( "%s:%s:%d\n"
+                                          " * [INFO] bad file format; unexpected eof %s." ),
+                    __FILE__, __FUNCTION__, __LINE__, proc.GetFilePosition() );
 
         return false;
     }
 
     if( '{' != tok )
     {
-#if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
-        do {
-            std::ostringstream ostr;
-            ostr << proc.GetError() << "\n";
-            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            ostr << " * [INFO] bad file format; expecting '{' but got '" << tok;
-            ostr  << "' at line " << line << ", column " << column;
-            wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
-        } while( 0 );
-#endif
+        wxLogTrace( traceVrmlPlugin,
+                    wxT( "%s:%s:%d\n"
+                         " * [INFO] bad file format; expecting '{' but got '%s' %s." ),
+                    __FILE__, __FUNCTION__, __LINE__, tok, proc.GetFilePosition() );
 
         return false;
     }
@@ -170,14 +140,9 @@ bool WRL2TRANSFORM::Read( WRLPROC& proc, WRL2BASE* aTopNode )
 
         if( !proc.ReadName( glob ) )
         {
-#if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
-            do {
-                std::ostringstream ostr;
-                ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-                ostr << proc.GetError();
-                wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
-            } while( 0 );
-#endif
+            wxLogTrace( traceVrmlPlugin, wxT( "%s:%s:%d\n"
+                                              "%s" ),
+                        __FILE__, __FUNCTION__, __LINE__ , proc.GetError() );
 
             return false;
         }
@@ -189,24 +154,16 @@ bool WRL2TRANSFORM::Read( WRLPROC& proc, WRL2BASE* aTopNode )
         // scale
         // ScaleOrientation
         // translation
-
-        proc.GetFilePosData( line, column );
-
         if( !glob.compare( "center" ) )
         {
             if( !proc.ReadSFVec3f( center ) )
             {
-#if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
-                do {
-                    std::ostringstream ostr;
-                    ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-                    ostr << " * [INFO] invalid center at line " << line << ", column ";
-                    ostr << column << "\n";
-                    ostr << " * [INFO] file: '" << proc.GetFileName() << "'\n";
-                    ostr << " * [INFO] message: '" << proc.GetError() << "'";
-                    wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
-                } while( 0 );
-#endif
+                wxLogTrace( traceVrmlPlugin, wxT( "%s:%s:%d\n"
+                                                  " * [INFO] invalid center %s\n"
+                                                  " * [INFO] file: '%s'\n"
+                                                  "%s" ),
+                            __FILE__, __FUNCTION__, __LINE__, proc.GetFilePosition(),
+                            proc.GetFileName(), proc.GetError() );
 
                 return false;
             }
@@ -220,17 +177,12 @@ bool WRL2TRANSFORM::Read( WRLPROC& proc, WRL2BASE* aTopNode )
         {
             if( !proc.ReadSFRotation( rotation ) )
             {
-#if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
-                do {
-                    std::ostringstream ostr;
-                    ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-                    ostr << " * [INFO] invalid rotation at line " << line << ", column ";
-                    ostr << column << "\n";
-                    ostr << " * [INFO] file: '" << proc.GetFileName() << "'\n";
-                    ostr << " * [INFO] message: '" << proc.GetError() << "'";
-                    wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
-                } while( 0 );
-#endif
+                wxLogTrace( traceVrmlPlugin, wxT( "%s:%s:%d\n"
+                                                  " * [INFO] invalid rotation %s\n"
+                                                  " * [INFO] file: '%s'\n"
+                                                  "%s" ),
+                            __FILE__, __FUNCTION__, __LINE__, proc.GetFilePosition(),
+                            proc.GetFileName(), proc.GetError() );
 
                 return false;
             }
@@ -239,17 +191,12 @@ bool WRL2TRANSFORM::Read( WRLPROC& proc, WRL2BASE* aTopNode )
         {
             if( !proc.ReadSFVec3f( scale ) )
             {
-#if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
-                do {
-                    std::ostringstream ostr;
-                    ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-                    ostr << " * [INFO] invalid scale at line " << line << ", column ";
-                    ostr << column << "\n";
-                    ostr << " * [INFO] file: '" << proc.GetFileName() << "'\n";
-                    ostr << " * [INFO] message: '" << proc.GetError() << "'";
-                    wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
-                } while( 0 );
-#endif
+                wxLogTrace( traceVrmlPlugin, wxT( "%s:%s:%d\n"
+                                                  " * [INFO] invalid scale %s\n"
+                                                  " * [INFO] file: '%s'\n"
+                                                  "%s" ),
+                            __FILE__, __FUNCTION__, __LINE__, proc.GetFilePosition(),
+                            proc.GetFileName(), proc.GetError() );
 
                 return false;
             }
@@ -258,17 +205,12 @@ bool WRL2TRANSFORM::Read( WRLPROC& proc, WRL2BASE* aTopNode )
         {
             if( !proc.ReadSFRotation( scaleOrientation ) )
             {
-#if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
-                do {
-                    std::ostringstream ostr;
-                    ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-                    ostr << " * [INFO] invalid scaleOrientation at line " << line << ", column ";
-                    ostr << column << "\n";
-                    ostr << " * [INFO] file: '" << proc.GetFileName() << "'\n";
-                    ostr << " * [INFO] message: '" << proc.GetError() << "'";
-                    wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
-                } while( 0 );
-#endif
+                wxLogTrace( traceVrmlPlugin, wxT( "%s:%s:%d\n"
+                                                  " * [INFO] invalid scaleOrientation %s\n"
+                                                  " * [INFO] file: '%s'\n"
+                                                  "%s" ),
+                            __FILE__, __FUNCTION__, __LINE__, proc.GetFilePosition(),
+                            proc.GetFileName(), proc.GetError() );
 
                 return false;
             }
@@ -277,17 +219,12 @@ bool WRL2TRANSFORM::Read( WRLPROC& proc, WRL2BASE* aTopNode )
         {
             if( !proc.ReadSFVec3f( translation ) )
             {
-#if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
-                do {
-                    std::ostringstream ostr;
-                    ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-                    ostr << " * [INFO] invalid translation at line " << line << ", column ";
-                    ostr << column << "\n";
-                    ostr << " * [INFO] file: '" << proc.GetFileName() << "'\n";
-                    ostr << " * [INFO] message: '" << proc.GetError() << "'";
-                    wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
-                } while( 0 );
-#endif
+                wxLogTrace( traceVrmlPlugin, wxT( "%s:%s:%d\n"
+                                                  " * [INFO] invalid translation %s\n"
+                                                  " * [INFO] file: '%s'\n"
+                                                  "%s" ),
+                            __FILE__, __FUNCTION__, __LINE__, proc.GetFilePosition(),
+                            proc.GetFileName(), proc.GetError() );
 
                 return false;
             }
@@ -304,16 +241,12 @@ bool WRL2TRANSFORM::Read( WRLPROC& proc, WRL2BASE* aTopNode )
         }
         else
         {
-#if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
-            do {
-                std::ostringstream ostr;
-                ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-                ostr << " * [INFO] bad Transform at line " << line << ", column ";
-                ostr << column << "\n";
-                ostr << " * [INFO] file: '" << proc.GetFileName() << "'";
-                wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
-            } while( 0 );
-#endif
+            wxLogTrace( traceVrmlPlugin,
+                        wxT( "%s:%s:%d\n"
+                             " * [INFO] invalid Transform %s.\n"
+                             " * [INFO] file: '%s'\n" ),
+                        __FILE__, __FUNCTION__, __LINE__, proc.GetFilePosition(),
+                        proc.GetFileName() );
 
             return false;
         }
@@ -325,19 +258,7 @@ bool WRL2TRANSFORM::Read( WRLPROC& proc, WRL2BASE* aTopNode )
 
 bool WRL2TRANSFORM::AddRefNode( WRL2NODE* aNode )
 {
-    if( nullptr == aNode )
-    {
-#ifdef DEBUG_VRML2
-        do {
-            std::ostringstream ostr;
-            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            ostr << " * [BUG] NULL passed as node pointer";
-            wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
-        } while( 0 );
-#endif
-
-        return false;
-    }
+    wxCHECK_MSG( aNode, false, wxT( "Invalid node." ) );
 
     // take possession if the node is dangling WRL2_SHAPE
 
@@ -365,22 +286,13 @@ bool WRL2TRANSFORM::AddRefNode( WRL2NODE* aNode )
 
 bool WRL2TRANSFORM::readChildren( WRLPROC& proc, WRL2BASE* aTopNode )
 {
-    size_t line, column;
-    proc.GetFilePosData( line, column );
-
     char tok = proc.Peek();
 
     if( proc.eof() )
     {
-#if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
-        do {
-            std::ostringstream ostr;
-            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            ostr << " * [INFO] bad file format; unexpected eof at line ";
-            ostr << line << ", column " << column;
-            wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
-        } while( 0 );
-#endif
+        wxLogTrace( traceVrmlPlugin, wxT( "%s:%s:%d\n"
+                                          " * [INFO] bad file format; unexpected eof %s." ),
+                    __FILE__, __FUNCTION__, __LINE__, proc.GetFilePosition() );
 
         return false;
     }
@@ -412,7 +324,6 @@ bool WRL2TRANSFORM::readChildren( WRLPROC& proc, WRL2BASE* aTopNode )
 
         if( proc.Peek() == ',' )
             proc.Pop();
-
     }
 
     return true;
@@ -421,35 +332,19 @@ bool WRL2TRANSFORM::readChildren( WRLPROC& proc, WRL2BASE* aTopNode )
 
 SGNODE* WRL2TRANSFORM::TranslateToSG( SGNODE* aParent )
 {
-#if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 2 )
-    do {
-        std::ostringstream ostr;
-        ostr << " * [INFO] Translating Transform with " << m_Children.size();
-        ostr << " children, " << m_Refs.size() << " references and ";
-        ostr << m_BackPointers.size() << " backpointers";
-        wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
-    } while( 0 );
-#endif
+    wxLogTrace( traceVrmlPlugin,
+                wxT( " * [INFO] Translating Switch with %ul children, %ul references, and"
+                     "%ul back pointers." ),
+                m_Children.size(), m_Refs.size(), m_BackPointers.size() );
 
     if( m_Children.empty() && m_Refs.empty() )
         return nullptr;
 
     S3D::SGTYPES ptype = S3D::GetSGNodeType( aParent );
 
-    if( nullptr != aParent && ptype != S3D::SGTYPE_TRANSFORM )
-    {
-#ifdef DEBUG_VRML2
-        do {
-            std::ostringstream ostr;
-            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            ostr << " * [BUG] Transform does not have a Transform parent (parent ID: ";
-            ostr << ptype << ")";
-            wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
-        } while( 0 );
-#endif
-
-        return nullptr;
-    }
+    wxCHECK_MSG( aParent && ( ptype == S3D::SGTYPE_TRANSFORM ), nullptr,
+                 wxString::Format( wxT( "Transform does not have a Transform parent (parent "
+                                        "ID: %d)." ), ptype ) );
 
     if( m_sgNode )
     {

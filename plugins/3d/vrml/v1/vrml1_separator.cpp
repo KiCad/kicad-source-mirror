@@ -50,66 +50,34 @@ WRL1SEPARATOR::WRL1SEPARATOR( NAMEREGISTER* aDictionary, WRL1NODE* aParent ) :
 
 WRL1SEPARATOR::~WRL1SEPARATOR()
 {
-#if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 2 )
-    do {
-        std::ostringstream ostr;
-        ostr << " * [INFO] Destroying Separator with " << m_Children.size();
-        ostr << " children, " << m_Refs.size() << " references and ";
-        ostr << m_BackPointers.size() << " backpointers";
-        wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
-    } while( 0 );
-#endif
+    wxLogTrace( traceVrmlPlugin,
+                wxT( " * [INFO] Destroying Separator with %ul children %ul references, and %ul "
+                     "back pointers." ),
+                m_Children.size(), m_Refs.size(), m_BackPointers.size() );
 }
 
 
 bool WRL1SEPARATOR::Read( WRLPROC& proc, WRL1BASE* aTopNode )
 {
-    if( nullptr == aTopNode )
-    {
-#ifdef DEBUG_VRML1
-        do {
-            std::ostringstream ostr;
-            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            ostr << " * [BUG] aTopNode is NULL";
-            wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
-        } while( 0 );
-#endif
-
-        return false;
-    }
-
-    size_t line, column;
-    proc.GetFilePosData( line, column );
+    wxCHECK_MSG( aTopNode, false, wxT( "Invalid top node." ) );
 
     char tok = proc.Peek();
 
     if( proc.eof() )
     {
-#if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 1 )
-        do {
-            std::ostringstream ostr;
-            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            ostr << " * [INFO] bad file format; unexpected eof at line ";
-            ostr << line << ", column " << column;
-            wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
-        } while( 0 );
-#endif
+        wxLogTrace( traceVrmlPlugin, wxT( "%s:%s:%d\n"
+                                          " * [INFO] bad file format; unexpected eof %s." ),
+                    __FILE__, __FUNCTION__, __LINE__, proc.GetFilePosition() );
 
         return false;
     }
 
     if( '{' != tok )
     {
-#if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 1 )
-        do {
-            std::ostringstream ostr;
-            ostr << proc.GetError() << "\n";
-            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            ostr << " * [INFO] bad file format; expecting '{' but got '" << tok;
-            ostr << "' at line " << line << ", column " << column;
-            wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
-        } while( 0 );
-#endif
+        wxLogTrace( traceVrmlPlugin,
+                    wxT( "%s:%s:%d\n"
+                         " * [INFO] bad file format; expecting '{' but got '%s' %s." ),
+                    __FILE__, __FUNCTION__, __LINE__, tok, proc.GetFilePosition() );
 
         return false;
     }
@@ -124,19 +92,11 @@ bool WRL1SEPARATOR::Read( WRLPROC& proc, WRL1BASE* aTopNode )
             break;
         }
 
-        proc.GetFilePosData( line, column );
-
         if( !aTopNode->ReadNode( proc, this, nullptr ) )
         {
-#if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 1 )
-            do {
-                std::ostringstream ostr;
-                ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-                ostr << " * [INFO] bad file format; unexpected eof at line ";
-                ostr << line << ", column " << column;
-                wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
-            } while( 0 );
-#endif
+            wxLogTrace( traceVrmlPlugin, wxT( "%s:%s:%d\n"
+                                              " * [INFO] bad file format; unexpected eof %s." ),
+                        __FILE__, __FUNCTION__, __LINE__, proc.GetFilePosition() );
 
             return false;
         }
@@ -152,30 +112,12 @@ bool WRL1SEPARATOR::Read( WRLPROC& proc, WRL1BASE* aTopNode )
 
 SGNODE* WRL1SEPARATOR::TranslateToSG( SGNODE* aParent, WRL1STATUS* sp )
 {
-#if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 2 )
-    do {
-        std::ostringstream ostr;
-        ostr << " * [INFO] Translating Separator with " << m_Children.size();
-        ostr << " children, " << m_Refs.size() << " references and ";
-        ostr << m_BackPointers.size() << " backpointers (total ";
-        ostr << m_Items.size() << " items)";
-        wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
-    } while( 0 );
-#endif
+    wxCHECK_MSG( m_Parent, nullptr, wxT( "Separator has no parent." )  );
 
-    if( !m_Parent )
-    {
-#ifdef DEBUG
-        do {
-            std::ostringstream ostr;
-            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            ostr << " * [BUG] Separator has no parent";
-            wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
-        } while( 0 );
-#endif
-
-        return nullptr;
-    }
+    wxLogTrace( traceVrmlPlugin,
+                wxT( " * [INFO] Translating Separator with %ul children, %ul references, and "
+                     "%ul back pointers (%ul total items)." ),
+                m_Children.size(), m_Refs.size(), m_BackPointers.size(), m_Items.size() );
 
     if( sp != nullptr )
         m_current = *sp;
@@ -184,20 +126,9 @@ SGNODE* WRL1SEPARATOR::TranslateToSG( SGNODE* aParent, WRL1STATUS* sp )
 
     S3D::SGTYPES ptype = S3D::GetSGNodeType( aParent );
 
-    if( nullptr != aParent && ptype != S3D::SGTYPE_TRANSFORM )
-    {
-#ifdef DEBUG_VRML1
-        do {
-            std::ostringstream ostr;
-            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            ostr << " * [BUG] Separator does not have a Transform parent (parent ID: ";
-            ostr << ptype << ")";
-            wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
-        } while( 0 );
-#endif
-
-        return nullptr;
-    }
+    wxCHECK_MSG( aParent && ( ptype == S3D::SGTYPE_TRANSFORM ), nullptr,
+                 wxString::Format( wxT( "Separator does not have a Transform parent (parent "
+                                        "ID: %d)." ), ptype ) );
 
     IFSG_TRANSFORM txNode( aParent );
     bool hasContent = false;

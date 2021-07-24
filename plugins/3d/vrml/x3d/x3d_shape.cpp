@@ -61,17 +61,10 @@ X3DSHAPE::X3DSHAPE( X3DNODE* aParent ) : X3DNODE()
 
 X3DSHAPE::~X3DSHAPE()
 {
-#if defined( DEBUG_X3D ) && ( DEBUG_X3D > 2 )
-    do {
-        std::ostringstream ostr;
-        ostr << " * [INFO] Destroying Shape with " << m_Children.size();
-        ostr << " children, " << m_Refs.size() << " references and ";
-        ostr << m_BackPointers.size() << " backpointers";
-        wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
-    } while( 0 );
-#endif
-
-    return;
+    wxLogTrace( traceVrmlPlugin,
+                wxT( " * [INFO] Destroying Shape with %ul children, %ul references, "
+                     "%and ul back pointers." ),
+                m_Children.size(), m_Refs.size(), m_BackPointers.size() );
 }
 
 
@@ -252,32 +245,16 @@ SGNODE* X3DSHAPE::TranslateToSG( SGNODE* aParent )
     if( nullptr == geometry || nullptr == appearance )
         return nullptr;
 
-#if defined( DEBUG_X3D ) && ( DEBUG_X3D > 2 )
-    do {
-        std::ostringstream ostr;
-        ostr << " * [INFO] Translating Shape with " << m_Children.size();
-        ostr << " children, " << m_Refs.size() << " references and ";
-        ostr << m_BackPointers.size() << " backpointers";
-        wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
-    } while( 0 );
-#endif
+    wxLogTrace( traceVrmlPlugin,
+                wxT( " * [INFO] Translating Shape with %ul children, %ul references, "
+                     "%and ul back pointers." ),
+                m_Children.size(), m_Refs.size(), m_BackPointers.size() );
 
     S3D::SGTYPES ptype = S3D::GetSGNodeType( aParent );
 
-    if( nullptr != aParent && ptype != S3D::SGTYPE_TRANSFORM )
-    {
-#ifdef DEBUG_X3D
-        do {
-            std::ostringstream ostr;
-            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            ostr << " * [BUG] Shape does not have a Transform parent (parent ID: ";
-            ostr << ptype << ")";
-            wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
-        } while( 0 );
-#endif
-
-        return nullptr;
-    }
+    wxCHECK_MSG( aParent && ( ptype == S3D::SGTYPE_TRANSFORM ), nullptr,
+                 wxString::Format( wxT( "Shape does not have a Transform parent (parent ID: %d)" ),
+                                   ptype ) );
 
     if( m_sgNode )
     {

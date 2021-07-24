@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2016 Cirilo Bernardo <cirilo.bernardo@gmail.com>
+ * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -34,12 +35,23 @@
 class WRL2BASE;
 class SGNODE;
 
-/**
- * WRL2TRANSFORM
- */
+
 class WRL2TRANSFORM : public WRL2NODE
 {
+public:
+    WRL2TRANSFORM();
+    WRL2TRANSFORM( WRL2NODE* aNode );
+    virtual ~WRL2TRANSFORM();
+
+    bool Read( WRLPROC& proc, WRL2BASE* aTopNode ) override;
+    bool AddRefNode( WRL2NODE* aNode ) override;
+    SGNODE* TranslateToSG( SGNODE* aParent ) override;
+
+    bool isDangling( void ) override;
+
 private:
+    bool readChildren( WRLPROC& proc, WRL2BASE* aTopNode );
+
     WRLVEC3F    center;
     WRLVEC3F    scale;
     WRLVEC3F    translation;
@@ -47,23 +59,6 @@ private:
     WRLROTATION scaleOrientation;
     WRLVEC3F    bboxCenter;
     WRLVEC3F    bboxSize;
-
-    bool readChildren( WRLPROC& proc, WRL2BASE* aTopNode );
-
-public:
-
-    // functions inherited from WRL2NODE
-    bool isDangling( void ) override;
-
-public:
-    WRL2TRANSFORM();
-    WRL2TRANSFORM( WRL2NODE* aNode );
-    virtual ~WRL2TRANSFORM();
-
-    // functions inherited from WRL2NODE
-    bool Read( WRLPROC& proc, WRL2BASE* aTopNode ) override;
-    bool AddRefNode( WRL2NODE* aNode ) override;
-    SGNODE* TranslateToSG( SGNODE* aParent ) override;
 };
 
 #endif  // VRML2_TRANSFORM_H

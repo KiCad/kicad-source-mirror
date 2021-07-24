@@ -55,6 +55,14 @@
 #define PLUGIN_VRML_REVNO 2
 
 
+/**
+ * Flag to enable VRML plugin trace output.
+ *
+ * @ingroup trace_env_vars
+ */
+const wxChar* const traceVrmlPlugin = wxT( "KICAD_VRML_PLUGIN" );
+
+
 const char* GetKicadPluginName( void )
 {
     return "PLUGIN_3D_VRML";
@@ -141,9 +149,6 @@ bool CanRender( void )
 
 class LOCALESWITCH
 {
-    // Store the user locale name, to restore this locale later, in dtor
-    std::string m_locale;
-
 public:
     LOCALESWITCH()
     {
@@ -155,6 +160,10 @@ public:
     {
         setlocale( LC_NUMERIC, m_locale.c_str() );
     }
+
+private:
+    // Store the user locale name, to restore this locale later, in dtor
+    std::string m_locale;
 };
 
 
@@ -230,17 +239,17 @@ SCENEGRAPH* LoadVRML( const wxString& aFileName, bool useInline )
 
     if( proc.GetVRMLType() == WRLVERSION::VRML_V1 )
     {
-        wxLogTrace( MASK_VRML, " * [INFO] Processing VRML 1.0 file" );
+        wxLogTrace( traceVrmlPlugin, " * [INFO] Processing VRML 1.0 file" );
 
         WRL1BASE* bp = new WRL1BASE;
 
         if( !bp->Read( proc ) )
         {
-            wxLogTrace( MASK_VRML, " * [INFO] load failed" );
+            wxLogTrace( traceVrmlPlugin, " * [INFO] load failed" );
         }
         else
         {
-            wxLogTrace( MASK_VRML, " * [INFO] load completed" );
+            wxLogTrace( traceVrmlPlugin, " * [INFO] load completed" );
 
             scene = (SCENEGRAPH*)bp->TranslateToSG( nullptr, nullptr );
         }
@@ -249,7 +258,7 @@ SCENEGRAPH* LoadVRML( const wxString& aFileName, bool useInline )
     }
     else
     {
-        wxLogTrace( MASK_VRML, " * [INFO] Processing VRML 2.0 file" );
+        wxLogTrace( traceVrmlPlugin, " * [INFO] Processing VRML 2.0 file" );
 
         WRL2BASE* bp = new WRL2BASE;
 
@@ -258,11 +267,11 @@ SCENEGRAPH* LoadVRML( const wxString& aFileName, bool useInline )
 
         if( !bp->Read( proc ) )
         {
-            wxLogTrace( MASK_VRML, " * [INFO] load failed" );
+            wxLogTrace( traceVrmlPlugin, " * [INFO] load failed" );
         }
         else
         {
-            wxLogTrace( MASK_VRML, " * [INFO] load completed" );
+            wxLogTrace( traceVrmlPlugin, " * [INFO] load completed" );
 
             // for now we recalculate all normals per-vertex per-face
             scene = (SCENEGRAPH*)bp->TranslateToSG( nullptr );

@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2016 Cirilo Bernardo <cirilo.bernardo@gmail.com>
+ * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -34,28 +35,24 @@
 class WRL1BASE;
 class SGNODE;
 
-/**
- * WRL1TRANSFORM
- */
 class WRL1TRANSFORM : public WRL1NODE
 {
+public:
+    WRL1TRANSFORM( NAMEREGISTER* aDictionary );
+    WRL1TRANSFORM( NAMEREGISTER* aDictionary, WRL1NODE* aNode );
+    virtual ~WRL1TRANSFORM();
+
+    bool Read( WRLPROC& proc, WRL1BASE* aTopNode ) override;
+    bool AddRefNode( WRL1NODE* aNode ) override;
+    bool AddChildNode( WRL1NODE* aNode ) override;
+    SGNODE* TranslateToSG( SGNODE* aParent, WRL1STATUS* sp ) override;
+
 private:
     WRLVEC3F    center;
     WRLVEC3F    scale;
     WRLVEC3F    translation;
     WRLROTATION rotation;
     WRLROTATION scaleOrientation;
-
-public:
-    WRL1TRANSFORM( NAMEREGISTER* aDictionary );
-    WRL1TRANSFORM( NAMEREGISTER* aDictionary, WRL1NODE* aNode );
-    virtual ~WRL1TRANSFORM();
-
-    // functions inherited from WRL1NODE
-    bool Read( WRLPROC& proc, WRL1BASE* aTopNode ) override;
-    bool AddRefNode( WRL1NODE* aNode ) override;
-    bool AddChildNode( WRL1NODE* aNode ) override;
-    SGNODE* TranslateToSG( SGNODE* aParent, WRL1STATUS* sp ) override;
 };
 
 #endif  // VRML1_TRANSFORM_H

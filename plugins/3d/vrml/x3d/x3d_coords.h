@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 Cirilo Bernardo <cirilo.bernardo@gmail.com>
+ * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -35,14 +36,8 @@
 #include "x3d_ifaceset.h"
 
 
-/**
- * X3DCOORDS
- */
 class X3DCOORDS : public X3DNODE
 {
-private:
-    std::vector< WRLVEC3F > points;
-
 public:
     X3DCOORDS();
     X3DCOORDS( X3DNODE* aParent );
@@ -56,6 +51,9 @@ public:
     SGNODE* TranslateToSG( SGNODE* aParent ) override;
 
     void GetCoords( WRLVEC3F*& aCoordList, size_t& aListSize );
+
+private:
+    std::vector< WRLVEC3F > points;
 };
 
 #endif  // X3D_COORDS_H

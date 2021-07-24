@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 Cirilo Bernardo <cirilo.bernardo@gmail.com>
+ * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -35,12 +36,23 @@
 #include "wrltypes.h"
 
 
-/**
- * X3DTRANSFORM
- */
 class X3DTRANSFORM : public X3DNODE
 {
+public:
+    X3DTRANSFORM();
+    X3DTRANSFORM( X3DNODE* aParent );
+    virtual ~X3DTRANSFORM();
+
+    bool Read( wxXmlNode* aNode, X3DNODE* aTopNode, X3D_DICT& aDict ) override;
+    bool SetParent( X3DNODE* aParent, bool doUnlink = true ) override;
+    bool AddChildNode( X3DNODE* aNode ) override;
+    bool AddRefNode( X3DNODE* aNode ) override;
+    SGNODE* TranslateToSG( SGNODE* aParent ) override;
+
 private:
+    void init();
+    void readFields( wxXmlNode* aNode );
+
     WRLVEC3F    center;
     WRLVEC3F    scale;
     WRLVEC3F    translation;
@@ -48,21 +60,6 @@ private:
     WRLROTATION scaleOrientation;
     WRLVEC3F    bboxCenter;
     WRLVEC3F    bboxSize;
-
-    void init();
-    void readFields( wxXmlNode* aNode );
-
-public:
-    X3DTRANSFORM();
-    X3DTRANSFORM( X3DNODE* aParent );
-    virtual ~X3DTRANSFORM();
-
-    // functions inherited from X3DNODE
-    bool Read( wxXmlNode* aNode, X3DNODE* aTopNode, X3D_DICT& aDict ) override;
-    bool SetParent( X3DNODE* aParent, bool doUnlink = true ) override;
-    bool AddChildNode( X3DNODE* aNode ) override;
-    bool AddRefNode( X3DNODE* aNode ) override;
-    SGNODE* TranslateToSG( SGNODE* aParent ) override;
 };
 
 #endif  // X3D_TRANSFORM_H

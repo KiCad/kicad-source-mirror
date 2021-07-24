@@ -173,12 +173,9 @@ void X3DNODE::delNodeRef( X3DNODE* aNode )
         return;
     }
 
-#ifdef DEBUG_X3D
-    std::ostringstream ostr;
-    ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-    ostr << " * [BUG] delNodeRef() did not find its target";
-    wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
-#endif
+    wxLogTrace( traceVrmlPlugin, wxT( "%s:%s:%d\n"
+                                      " * [BUG] delNodeRef() did not find its target." ),
+                __FILE__, __FUNCTION__, __LINE__ );
 
     return;
 }

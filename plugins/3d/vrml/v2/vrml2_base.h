@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2016 Cirilo Bernardo <cirilo.bernardo@gmail.com>
+ * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -53,15 +54,37 @@ class SGNODE;
 class WRL2INLINE;
 
 /**
- * WRL2BASE
- * represents the top node of a VRML2 model
+ * The top node of a VRML2 model.
  */
 class WRL2BASE : public WRL2NODE
 {
-private:
-    bool m_useInline;
-    std::string m_dir;  // parent directory of the file
+public:
+    WRL2BASE();
+    virtual ~WRL2BASE();
 
+    // function to enable/disable Inline{} expansion
+    void SetEnableInline( bool enable );
+    bool GetEnableInline( void );
+
+    // function to manipulate Inline{} objects
+    SGNODE* GetInlineData( const std::string& aName );
+
+    // function to read entire VRML file
+    bool Read( WRLPROC& proc );
+
+    // read in a VRML node
+    bool ReadNode( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode );
+
+    virtual std::string GetName( void ) override;
+    virtual bool SetName( const std::string& aName ) override;
+
+    bool Read( WRLPROC& proc, WRL2BASE* aTopNode ) override;
+    bool SetParent( WRL2NODE* aParent, bool doUnlink = true ) override;
+    SGNODE* TranslateToSG( SGNODE* aParent ) override;
+
+    bool isDangling( void ) override;
+
+private:
     // handle cases of USE / DEF
     bool implementUse( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode );
     bool implementDef( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode );
@@ -80,38 +103,9 @@ private:
     bool readSwitch( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode );
     bool readInline( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode );
 
+    bool m_useInline;
+    std::string m_dir;  // parent directory of the file
     std::map< std::string, SGNODE* > m_inlineModels;
-
-public:
-
-    // functions inherited from WRL2NODE
-    bool isDangling( void ) override;
-
-public:
-    WRL2BASE();
-    virtual ~WRL2BASE();
-
-    // function to enable/disable Inline{} expansion
-    void SetEnableInline( bool enable );
-    bool GetEnableInline( void );
-
-    // functions to manipulate Inline{} objects
-    SGNODE* GetInlineData( const std::string& aName );
-
-    // function to read entire VRML file
-    bool Read( WRLPROC& proc );
-
-    // read in a VRML node
-    bool ReadNode( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode );
-
-    // overrides
-    virtual std::string GetName( void ) override;
-    virtual bool SetName( const std::string& aName ) override;
-
-    // functions inherited from WRL2NODE
-    bool Read( WRLPROC& proc, WRL2BASE* aTopNode ) override;
-    bool SetParent( WRL2NODE* aParent, bool doUnlink = true ) override;
-    SGNODE* TranslateToSG( SGNODE* aParent ) override;
 };
 
 #endif  // VRML2_BASE_H

@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 Cirilo Bernardo <cirilo.bernardo@gmail.com>
+ * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -35,30 +36,25 @@
 #include "wrltypes.h"
 
 
-/**
- * X3DSHAPE
- */
 class X3DSHAPE : public X3DNODE
 {
-private:
-    X3DNODE* appearance;
-    X3DNODE* geometry;
-
 public:
     X3DSHAPE();
     X3DSHAPE( X3DNODE* aParent );
     virtual ~X3DSHAPE();
 
-    // functions inherited from X3DNODE
     bool Read( wxXmlNode* aNode, X3DNODE* aTopNode, X3D_DICT& aDict ) override;
     bool SetParent( X3DNODE* aParent, bool doUnlink = true ) override;
     bool AddChildNode( X3DNODE* aNode ) override;
     bool AddRefNode( X3DNODE* aNode ) override;
     SGNODE* TranslateToSG( SGNODE* aParent ) override;
 
-    // overrides
     virtual void unlinkChildNode( const X3DNODE* aNode ) override;
     virtual void unlinkRefNode( const X3DNODE* aNode ) override;
+
+private:
+    X3DNODE* appearance;
+    X3DNODE* geometry;
 };
 
 #endif  // X3D_SHAPE_H

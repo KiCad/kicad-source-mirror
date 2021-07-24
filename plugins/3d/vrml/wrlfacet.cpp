@@ -135,8 +135,7 @@ static float VCalcCosAngle( const WRLVEC3F& p1, const WRLVEC3F& p2, const WRLVEC
 
     float cosAngle = ( p12 + p13 - p23 ) / dn;
 
-    // check the domain; errors in the cosAngle calculation
-    // can result in domain errors
+    // check the domain; errors in the cosAngle calculation can result in domain errors
     if( cosAngle > 1.0f )
         cosAngle = 1.0f;
     else if( cosAngle < -1.0f )

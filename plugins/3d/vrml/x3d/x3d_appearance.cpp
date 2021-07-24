@@ -36,8 +36,6 @@ X3DAPP::X3DAPP() : X3DNODE()
 {
     m_Type = X3D_APPEARANCE;
     init();
-
-    return;
 }
 
 
@@ -56,19 +54,15 @@ X3DAPP::X3DAPP( X3DNODE* aParent ) : X3DNODE()
 
     if( nullptr != m_Parent )
         m_Parent->AddChildNode( this );
-
-    return;
 }
 
 
 X3DAPP::~X3DAPP()
 {
-    wxLogTrace( MASK_VRML, " * [INFO] Destroying Appearance" );
+    wxLogTrace( traceVrmlPlugin, " * [INFO] Destroying Appearance" );
 
     if( !m_MatName.empty() && m_Dict )
         m_Dict->DelName( m_MatName, this );
-
-    return;
 }
 
 
@@ -238,28 +232,14 @@ SGNODE* X3DAPP::TranslateToSG( SGNODE* aParent )
 {
     S3D::SGTYPES ptype = S3D::GetSGNodeType( aParent );
 
-    if( nullptr != aParent && ptype != S3D::SGTYPE_SHAPE )
-    {
-#ifdef DEBUG_X3D
-        std::ostringstream ostr;
-        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        ostr << " * [BUG] Appearance does not have a Shape parent (parent ID: ";
-        ostr << ptype << ")";
-        wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
-#endif
+    wxCHECK_MSG( aParent && ( ptype == S3D::SGTYPE_SHAPE ), nullptr,
+                 wxString::Format( wxT( "Appearance does not have a Shape parent (parent ID: %d)" ),
+                                   ptype ) );
 
-        return nullptr;
-    }
-
-#if defined( DEBUG_X3D ) && ( DEBUG_X3D > 2 )
-    do {
-        std::ostringstream ostr;
-        ostr << " * [INFO] Translating Appearance with " << m_Children.size();
-        ostr << " children, " << m_Refs.size() << " references and ";
-        ostr << m_BackPointers.size() << " backpointers";
-        wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
-    } while( 0 );
-#endif
+    wxLogTrace( traceVrmlPlugin,
+                wxT( " * [INFO] Translating Appearance node with %ul children, %ul"
+                     "references, and %ul back pointers." ),
+                m_Children.size(), m_Refs.size(), m_BackPointers.size() );
 
     if( m_sgNode )
     {

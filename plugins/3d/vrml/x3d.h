@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 Cirilo Bernardo <cirilo.bernardo@gmail.com>
+ * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -34,16 +35,14 @@ class wxString;
 
 class X3DPARSER
 {
-private:
-
-    /**
-     * Function getGroupingNodes
-     * retrieves all permissible top-level nodes in an X3D/VRML file
-     */
-    bool getGroupingNodes( wxXmlNode* aNode, std::vector<wxXmlNode*>& aResult );
-
 public:
     SCENEGRAPH* Load( const wxString& aFileName );
+
+private:
+    /**
+     * Retrieve all permissible top-level nodes in an X3D/VRML file.
+     */
+    bool getGroupingNodes( wxXmlNode* aNode, std::vector<wxXmlNode*>& aResult );
 };
 
 #endif  // S3D_X3D_H

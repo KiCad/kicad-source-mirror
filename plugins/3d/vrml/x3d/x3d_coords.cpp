@@ -56,7 +56,7 @@ X3DCOORDS::X3DCOORDS( X3DNODE* aParent ) : X3DNODE()
 
 X3DCOORDS::~X3DCOORDS()
 {
-    wxLogTrace( MASK_VRML, " * [INFO] Destroying Coordinate" );
+    wxLogTrace( traceVrmlPlugin, " * [INFO] Destroying Coordinate" );
 }
 
 

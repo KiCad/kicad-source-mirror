@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015 Cirilo Bernardo <cirilo.bernardo@gmail.com>
+ * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -30,11 +31,13 @@
 #ifndef WRLTYPES_H
 #define WRLTYPES_H
 
+#include <wx/defs.h>
+
 #define GLM_FORCE_RADIANS
 #include <glm/glm.hpp>
 
-// log mask for wxLogTrace
-#define MASK_VRML "PLUGIN_VRML"
+// Mask for VRML tracing.
+extern const wxChar* const traceVrmlPlugin;
 
 // version of the VRML file being parsed
 enum class WRLVERSION

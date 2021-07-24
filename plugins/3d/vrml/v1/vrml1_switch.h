@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2016 Cirilo Bernardo <cirilo.bernardo@gmail.com>
+ * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -34,22 +35,18 @@
 class WRL1BASE;
 class SGNODE;
 
-/**
- * WRL1SWITCH
- */
 class WRL1SWITCH : public WRL1NODE
 {
-private:
-    int whichChild;
-
 public:
     WRL1SWITCH( NAMEREGISTER* aDictionary );
     WRL1SWITCH( NAMEREGISTER* aDictionary, WRL1NODE* aNode );
     virtual ~WRL1SWITCH();
 
-    // functions inherited from WRL1NODE
     bool Read( WRLPROC& proc, WRL1BASE* aTopNode ) override;
     SGNODE* TranslateToSG( SGNODE* aParent, WRL1STATUS* sp ) override;
+
+private:
+    int whichChild;
 };
 
 #endif  // VRML1_SWITCH_H

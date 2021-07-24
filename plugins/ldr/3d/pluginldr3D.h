@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015 Cirilo Bernardo <cirilo.bernardo@gmail.com>
+ * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -50,30 +51,17 @@ typedef SCENEGRAPH* (*PLUGIN_3D_LOAD) ( char const* aFileName );
 
 class KICAD_PLUGIN_LDR_3D : public KICAD_PLUGIN_LDR
 {
-private:
-    bool ok;    // set TRUE if all functions are linked
-    PLUGIN_3D_GET_N_EXTENSIONS      m_getNExtensions;
-    PLUGIN_3D_GET_MODEL_EXTENSION   m_getModelExtension;
-    PLUGIN_3D_GET_N_FILTERS         m_getNFilters;
-    PLUGIN_3D_GET_FILE_FILTER       m_getFileFilter;
-    PLUGIN_3D_CAN_RENDER            m_canRender;
-    PLUGIN_3D_LOAD                  m_load;
-
 public:
     KICAD_PLUGIN_LDR_3D();
     virtual ~KICAD_PLUGIN_LDR_3D();
 
-
-    // virtuals inherited from KICAD_PLUGIN_LDR
     bool Open( const wxString& aFullFileName ) override;
 
     void Close( void ) override;
 
     void GetLoaderVersion( unsigned char* Major, unsigned char* Minor,
-        unsigned char* Revision, unsigned char* Patch ) const override;
+                           unsigned char* Revision, unsigned char* Patch ) const override;
 
-
-    // these functions are shadows of the 3D Plugin functions from 3d_plugin.h
     int GetNExtensions( void );
 
     char const* GetModelExtension( int aIndex );
@@ -85,6 +73,15 @@ public:
     bool CanRender( void );
 
     SCENEGRAPH* Load( char const* aFileName );
+
+private:
+    bool ok;    // set TRUE if all functions are linked
+    PLUGIN_3D_GET_N_EXTENSIONS      m_getNExtensions;
+    PLUGIN_3D_GET_MODEL_EXTENSION   m_getModelExtension;
+    PLUGIN_3D_GET_N_FILTERS         m_getNFilters;
+    PLUGIN_3D_GET_FILE_FILTER       m_getFileFilter;
+    PLUGIN_3D_CAN_RENDER            m_canRender;
+    PLUGIN_3D_LOAD                  m_load;
 };
 
 #endif  // PLUGINMGR3D_H

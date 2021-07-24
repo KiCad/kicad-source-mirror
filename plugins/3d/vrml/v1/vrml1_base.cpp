@@ -49,7 +49,7 @@ WRL1BASE::WRL1BASE() : WRL1NODE( nullptr )
 
 WRL1BASE::~WRL1BASE()
 {
-    wxLogTrace( MASK_VRML, " * [INFO] Destroying virtual base node" );
+    wxLogTrace( traceVrmlPlugin, wxT( " * [INFO] Destroying virtual base node." ) );
 
     cancelDict();
 }
@@ -57,64 +57,27 @@ WRL1BASE::~WRL1BASE()
 
 bool WRL1BASE::SetParent( WRL1NODE* aParent, bool /* doUnlink */ )
 {
-#ifdef DEBUG_VRML1
-    do {
-        std::ostringstream ostr;
-        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        ostr << " * [BUG] attempting to set parent on WRL1BASE node";
-        wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
-    } while( 0 );
-#endif
-
-    return false;
+    wxCHECK_MSG( false, false, wxT( "Attempt to set parent on WRL1BASE node." ) );
 }
 
 
 std::string WRL1BASE::GetName( void )
 {
-#ifdef DEBUG_VRML1
-    do {
-        std::ostringstream ostr;
-        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        ostr << " * [BUG] attempting to extract name from virtual base node";
-        wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
-    } while( 0 );
-#endif
-
-    return std::string( "" );
+    wxCHECK_MSG( false, std::string( "" ),
+                 wxT( "Attempt to extract name from virtual base node." ) );
 }
 
 
 bool WRL1BASE::SetName( const std::string& aName )
 {
-#ifdef DEBUG_VRML1
-    do {
-        std::ostringstream ostr;
-        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        ostr << " * [BUG] attempting to set name on virtual base node";
-        wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
-    } while( 0 );
-#endif
-
-    return false;
+    wxCHECK_MSG( false, false, wxT( "Attempt to set name on virtual base node." ) );
 }
 
 
 bool WRL1BASE::Read( WRLPROC& proc )
 {
-    if( proc.GetVRMLType() != WRLVERSION::VRML_V1 )
-    {
-#ifdef DEBUG_VRML1
-        do {
-            std::ostringstream ostr;
-            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            ostr << " * [BUG] no open file or file is not a VRML1 file";
-            wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
-        } while( 0 );
-#endif
-
-        return false;
-    }
+    wxCHECK_MSG( proc.GetVRMLType() == WRLVERSION::VRML_V1, false,
+                 wxT( "No open file or file is not a VRML1 file" ) );
 
     // Note: according to the VRML1 specification, a file may contain
     // only one grouping node at the top level. The following code
@@ -123,20 +86,11 @@ bool WRL1BASE::Read( WRLPROC& proc )
 
     while( proc.Peek() )
     {
-        size_t line, column;
-        proc.GetFilePosData( line, column );
-
         if( !ReadNode( proc, this, nullptr ) )
         {
-#if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 1 )
-            do {
-                std::ostringstream ostr;
-                ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-                ostr << " * [INFO] bad file format; unexpected eof at line ";
-                ostr << line << ", column " << column;
-                wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
-            } while( 0 );
-#endif
+            wxLogTrace( traceVrmlPlugin,
+                        wxT( "%s:%s:%d\n * [INFO] bad file format; unexpected eof %s" ),
+                        __FILE__, __FUNCTION__, __LINE__, proc.GetFilePosition() );
 
             return false;
         }
@@ -144,14 +98,8 @@ bool WRL1BASE::Read( WRLPROC& proc )
 
     if( !proc.eof() )
     {
-#if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 1 )
-        do {
-            std::ostringstream ostr;
-            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            ostr << proc.GetError();
-            wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
-        } while( 0 );
-#endif
+        wxLogTrace( traceVrmlPlugin, wxT( "%s:%s:%d\n%s" ),
+                    __FILE__, __FUNCTION__, __LINE__, proc.GetError() );
 
         return false;
     }
@@ -165,32 +113,13 @@ bool WRL1BASE::implementUse( WRLPROC& proc, WRL1NODE* aParent, WRL1NODE** aNode 
     if( nullptr != aNode )
         *aNode = nullptr;
 
-    if( !aParent )
-    {
-#ifdef DEBUG_VRML1
-        do {
-            std::ostringstream ostr;
-            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            ostr << " * [BUG] invoked with NULL parent";
-            wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
-        } while( 0 );
-#endif
-
-        return false;
-    }
+    wxCHECK_MSG( aParent, false, wxT( "Invoked with invalid parent." ) );
 
     std::string glob;
 
     if( !proc.ReadName( glob ) )
     {
-#if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 1 )
-        do {
-            std::ostringstream ostr;
-            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            ostr << proc.GetError();
-            wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
-        } while( 0 );
-#endif
+        wxLogTrace( traceVrmlPlugin, wxT( "%s" ), proc.GetError() );
 
         return false;
     }
@@ -200,30 +129,19 @@ bool WRL1BASE::implementUse( WRLPROC& proc, WRL1NODE* aParent, WRL1NODE** aNode 
     // return 'true' - the file may be defective but it may still be somewhat OK
     if( nullptr == ref )
     {
-#if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 1 )
-        do {
-            std::ostringstream ostr;
-            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            ostr << " * [INFO] node '" << glob << "' not found";
-            wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
-        } while( 0 );
-#endif
+        wxLogTrace( traceVrmlPlugin, wxT( "%s:%s:%d\n * [INFO] node '%s' not found." ),
+                    __FILE__, __FUNCTION__, __LINE__, glob );
 
         return true;
     }
 
     if( !aParent->AddRefNode( ref ) )
     {
-#if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 1 )
-        do {
-            std::ostringstream ostr;
-            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            ostr << " * [INFO] failed to add node '" << glob << "' (";
-            ostr << ref->GetNodeTypeName( ref->GetNodeType() ) << ") to parent of type ";
-            ostr << aParent->GetNodeTypeName( aParent->GetNodeType() );
-            wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
-        } while( 0 );
-#endif
+        wxLogTrace( traceVrmlPlugin,
+                    wxT( "%s:%s:%d\n * [INFO] failed to add node '%s' (%s) to parent of type %s." ),
+                    __FILE__, __FUNCTION__, __LINE__, glob,
+                    ref->GetNodeTypeName( ref->GetNodeType() ),
+                    aParent->GetNodeTypeName( aParent->GetNodeType() ) );
 
         return false;
     }
@@ -240,39 +158,18 @@ bool WRL1BASE::implementDef( WRLPROC& proc, WRL1NODE* aParent, WRL1NODE** aNode 
     if( nullptr != aNode )
         *aNode = nullptr;
 
-    if( nullptr == aParent )
-    {
-#ifdef DEBUG_VRML1
-        do {
-            std::ostringstream ostr;
-            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            ostr << " * [BUG] invalid parent pointer (nullptr)";
-            wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
-        } while( 0 );
-#endif
-
-        return false;
-    }
+    wxCHECK_MSG( nullptr != aParent, false, wxT( "Invalid parent pointer." ) );
 
     std::string glob;
     WRL1NODE* lnode = nullptr;
 
     if( !proc.ReadName( glob ) )
     {
-#if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 1 )
-        do {
-            std::ostringstream ostr;
-            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            ostr << proc.GetError();
-            wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
-        } while( 0 );
-#endif
+        wxLogTrace( traceVrmlPlugin, wxT( "%s:%s:%d\n%s" ),
+                    __FILE__, __FUNCTION__, __LINE__, proc.GetError() );
 
         return false;
     }
-
-    size_t line, column;
-    proc.GetFilePosData( line, column );
 
     if( ReadNode( proc, aParent, &lnode ) )
     {
@@ -281,17 +178,9 @@ bool WRL1BASE::implementDef( WRLPROC& proc, WRL1NODE* aParent, WRL1NODE** aNode 
 
         if( lnode && !lnode->SetName( glob ) )
         {
-#if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 1 )
-            do {
-                std::ostringstream ostr;
-                size_t line, column;
-                proc.GetFilePosData( line, column );
-                ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-                ostr << " * [INFO] bad formatting (invalid name) at line";
-                ostr << line << ", column " << column;
-                wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
-            } while( 0 );
-#endif
+            wxLogTrace( traceVrmlPlugin,
+                        wxT( "%s:%s:%d\n * [INFO] bad formatting (invalid name) %s." ),
+                        __FILE__, __FUNCTION__, __LINE__, proc.GetFilePosition() );
 
             return false;
         }
@@ -319,34 +208,18 @@ bool WRL1BASE::ReadNode( WRLPROC& proc, WRL1NODE* aParent, WRL1NODE** aNode )
     if( nullptr != aNode )
         *aNode = nullptr;
 
-    if( nullptr == aParent )
-    {
-#ifdef DEBUG_VRML1
-        do {
-            std::ostringstream ostr;
-            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            ostr << " * [BUG] invalid parent pointer (NULL)";
-            wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
-        } while( 0 );
-#endif
-
-        return false;
-    }
+    wxCHECK_MSG( aParent, false, wxT( "Invalid parent pointer." ) );
 
     std::string glob;
     WRL1NODES ntype;
 
     if( !proc.ReadName( glob ) )
     {
-#if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 1 )
         if( !proc.eof() )
         {
-            std::ostringstream ostr;
-            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            ostr << proc.GetError();
-            wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
+            wxLogTrace( traceVrmlPlugin, wxT( "%s:%s:%d\n%s" ),
+                        __FILE__, __FUNCTION__, __LINE__, proc.GetError() );
         }
-#endif
 
         return false;
     }
@@ -358,18 +231,7 @@ bool WRL1BASE::ReadNode( WRLPROC& proc, WRL1NODE* aParent, WRL1NODE** aNode )
     if( !glob.compare( "USE" ) )
     {
         if( !implementUse( proc, aParent, aNode ) )
-        {
-#if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 1 )
-            do {
-                std::ostringstream ostr;
-                ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-                ostr << proc.GetError();
-                wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
-            } while( 0 );
-#endif
-
             return false;
-        }
 
         return true;
     }
@@ -377,34 +239,14 @@ bool WRL1BASE::ReadNode( WRLPROC& proc, WRL1NODE* aParent, WRL1NODE** aNode )
     if( !glob.compare( "DEF" ) )
     {
         if( !implementDef( proc, aParent, aNode ) )
-        {
-#if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 1 )
-            do {
-                std::ostringstream ostr;
-                ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-                ostr << proc.GetError();
-                wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
-            } while( 0 );
-#endif
-
             return false;
-        }
 
         return true;
     }
 
     ntype = getNodeTypeID( glob );
-    size_t line = 0;
-    size_t column = 0;
-    proc.GetFilePosData( line, column );
 
-#if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 2 )
-    do {
-        std::ostringstream ostr;
-        ostr << " * [INFO] Processing node '" << glob << "' ID: " << ntype;
-        wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
-    } while( 0 );
-#endif
+    wxLogTrace( traceVrmlPlugin, wxT( " * [INFO] Processing node '%s' ID: %d." ), glob, ntype );
 
     switch( ntype )
     {
@@ -479,32 +321,20 @@ bool WRL1BASE::ReadNode( WRLPROC& proc, WRL1NODE* aParent, WRL1NODE** aNode )
     //
     default:
 
-        proc.GetFilePosData( line, column );
-
         if( !proc.DiscardNode() )
         {
-#if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 1 )
-            do {
-                std::ostringstream ostr;
-                ostr << proc.GetError() << "\n";
-                ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-                ostr << " * [INFO] could not discard node at line " << line;
-                ostr << ", column " << column;
-                wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
-            } while( 0 );
-#endif
+            wxLogTrace( traceVrmlPlugin,
+                        wxT( "%s:%s:%d\n * [INFO] could not discard node %s." ),
+                        __FILE__, __FUNCTION__, __LINE__, proc.GetFilePosition() );
 
             return false;
         }
-#if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 1 )
         else
         {
-            std::ostringstream ostr;
-            ostr << " * [INFO] discarded node '" << glob << "' at line ";
-            ostr << line << ", col " << column << " (currently unsupported)";
-            wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
+            wxLogTrace( traceVrmlPlugin,
+                        wxT( " * [INFO] discarded node '%s' %s (currently unsupported)." ),
+                        glob, proc.GetFilePosition() );
         }
-#endif
 
         break;
     }
@@ -515,18 +345,7 @@ bool WRL1BASE::ReadNode( WRLPROC& proc, WRL1NODE* aParent, WRL1NODE** aNode )
 
 bool WRL1BASE::Read( WRLPROC& proc, WRL1BASE* aTopNode )
 {
-    // this function makes no sense in the base node
-#ifdef DEBUG_VRML1
-    do {
-        std::ostringstream ostr;
-        ostr << proc.GetError() << "\n";
-        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        ostr << " * [BUG] this method must never be invoked on a WRL1BASE object";
-        wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
-    } while( 0 );
-#endif
-
-    return false;
+    wxCHECK_MSG( false, false, wxT( "This method must never be invoked on a WRL1BASE object" ) );
 }
 
 
@@ -709,20 +528,14 @@ bool WRL1BASE::readShapeHints( WRLPROC& proc, WRL1NODE* aParent, WRL1NODE** aNod
 
 SGNODE* WRL1BASE::TranslateToSG( SGNODE* aParent, WRL1STATUS* /*sp*/ )
 {
-#if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 2 )
-    do {
-        std::ostringstream ostr;
-        ostr << " * [INFO] Translating VRML1 Base with " << m_Items.size();
-        ostr << " items";
-        wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
-    } while( 0 );
-#endif
+    wxLogTrace( traceVrmlPlugin, wxT( " * [INFO] Translating VRML1 Base with %ul items." ),
+                m_Items.size() );
 
     if( m_Items.empty() )
         return nullptr;
 
     if( m_Items.size() == 1 )
-        return (*m_Items.begin())->TranslateToSG( nullptr, nullptr );
+        return ( *m_Items.begin() )->TranslateToSG( nullptr, nullptr );
 
     // Note: according to the VRML1 specification, a file may contain
     // only one grouping node at the top level. The following code

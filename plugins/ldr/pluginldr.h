@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2016 Cirilo Bernardo <cirilo.bernardo@gmail.com>
+ * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,7 +24,7 @@
 
 /**
  * @file pluginldr.h
- * defines the most basic functions which all kicad plugin loaders require.
+ * defines the most basic functions which all KiCad plugin loaders require.
  */
 
 
@@ -33,6 +34,9 @@
 #include <string>
 #include <wx/dynlib.h>
 #include <wx/string.h>
+
+// Mask for plugin loader tracing.
+extern const wxChar* const tracePluginLoader;
 
 #define MASK_PLUGINLDR "PLUGIN_LOADER"
 
@@ -58,98 +62,89 @@ typedef void (*GET_VERSION) ( unsigned char*, unsigned char*,
 
 class KICAD_PLUGIN_LDR
 {
-private:
-    bool ok;    // set TRUE if all functions are linked
-    GET_PLUGIN_CLASS    m_getPluginClass;
-    GET_CLASS_VERSION   m_getClassVersion;
-    CHECK_CLASS_VERSION m_checkClassVersion;
-    GET_PLUGIN_NAME     m_getPluginName;
-    GET_VERSION         m_getVersion;
-
-    wxString    m_fileName;     // name of last opened Plugin
-    std::string m_pluginInfo;   // Name:Version tag for plugin
-
-protected:
-    std::string m_error;    // error message
-
-    /**
-     * Function open
-     * opens a plugin of the specified class and links the extensions
-     * required by kicad_plugin. Returns true on success otherwise
-     * false.
-     */
-    bool open( const wxString& aFullFileName, const char* aPluginClass );
-
-    /**
-     * Function close
-     * nullifies internal pointers in preparation for closing the plugin
-     */
-    void close( void );
-
-    /**
-     * Function reopen
-     * reopens a plugin and returns true on success
-     */
-    bool reopen( void );
-
-    // the plugin loader
-    wxDynamicLibrary m_PluginLoader;
-
 public:
     KICAD_PLUGIN_LDR();
     virtual ~KICAD_PLUGIN_LDR();
 
     /**
-     * Function GetLoaderVersion
-     * returns the version information of the Plugin Loader
-     * for plugin compatibility checking.
+     * Return the version information of the Plugin Loader for plugin compatibility checking.
      */
     virtual void GetLoaderVersion( unsigned char* Major, unsigned char* Minor,
-        unsigned char* Patch, unsigned char* Revision ) const = 0;
+                                   unsigned char* Patch, unsigned char* Revision ) const = 0;
 
     /**
-     * Function Open
-     * opens a plugin of the given class, performs version compatibility checks,
+     * Open a plugin of the given class, performs version compatibility checks,
      * and links all required functions.
      *
-     * @return true on success, otherwise false and a message may be accessible
-     * via GetLastError()
+     * @return true on success or false if failure. An error message may be accessible
+     *         via GetLastError()
      */
     virtual bool Open( const wxString& aFullFileName ) = 0;
 
     /**
-     * Function Close
-     * cleans up and closes/unloads the plugin
+     * Clean up and closes/unloads the plugin.
      */
     virtual void Close( void ) = 0;
 
     /**
-     * Function GetLastError
-     * returns the value of the internal error string
+     * Return the value of the internal error string.
      */
     std::string GetLastError( void ) const;
 
-    // the following functions are the equivalent of those required by kicad_plugin.h
-
-    // returns the Plugin Class or NULL if no plugin loaded
+    // Return the Plugin Class or NULL if no plugin loaded.
     char const* GetKicadPluginClass( void );
 
-    // returns false if no plugin loaded
+    // Return false if no plugin loaded.
     bool GetClassVersion( unsigned char* Major, unsigned char* Minor,
-        unsigned char* Patch, unsigned char* Revision );
+                          unsigned char* Patch, unsigned char* Revision );
 
-    // returns false if the class version check fails or no plugin is loaded
+    // Return false if the class version check fails or no plugin is loaded.
     bool CheckClassVersion( unsigned char Major, unsigned char Minor,
-        unsigned char Patch, unsigned char Revision );
+                            unsigned char Patch, unsigned char Revision );
 
-    // returns the Plugin Name or NULL if no plugin loaded
+    // Return the Plugin Name or NULL if no plugin loaded.
     const char* GetKicadPluginName( void );
 
-    // returns false if no plugin is loaded
+    // Return false if no plugin is loaded.
     bool GetVersion( unsigned char* Major, unsigned char* Minor,
-        unsigned char* Patch, unsigned char* Revision );
+                     unsigned char* Patch, unsigned char* Revision );
 
     void GetPluginInfo( std::string& aPluginInfo );
+
+protected:
+    /**
+     * Open a plugin of the specified class and links the extensions required by kicad_plugin.
+     *
+     * @return true on success otherwise false.
+     */
+    bool open( const wxString& aFullFileName, const char* aPluginClass );
+
+    /**
+     * Nullify internal pointers in preparation for closing the plugin.
+     */
+    void close( void );
+
+    /**
+     * Reopen a plugin.
+     *
+     * @return true on success or false on failure.
+     */
+    bool reopen( void );
+
+    std::string m_error;    // error message
+
+    // the plugin loader
+    wxDynamicLibrary m_PluginLoader;
+
+private:
+    bool                ok;                       // set TRUE if all functions are linked
+    GET_PLUGIN_CLASS    m_getPluginClass;
+    GET_CLASS_VERSION   m_getClassVersion;
+    CHECK_CLASS_VERSION m_checkClassVersion;
+    GET_PLUGIN_NAME     m_getPluginName;
+    GET_VERSION         m_getVersion;
+    wxString            m_fileName;               // name of last opened Plugin
+    std::string         m_pluginInfo;             // Name:Version tag for plugin
 };
 
 #endif  // PLUGINLDR_H

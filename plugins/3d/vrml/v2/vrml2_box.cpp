@@ -56,7 +56,7 @@ WRL2BOX::WRL2BOX( WRL2NODE* aParent ) : WRL2NODE()
 
 WRL2BOX::~WRL2BOX()
 {
-    wxLogTrace( MASK_VRML, " * [INFO] Destroying Box node" );
+    wxLogTrace( traceVrmlPlugin, " * [INFO] Destroying Box node." );
 }
 
 
@@ -73,38 +73,23 @@ bool WRL2BOX::isDangling( void )
 
 bool WRL2BOX::Read( WRLPROC& proc, WRL2BASE* aTopNode )
 {
-    size_t line, column;
-    proc.GetFilePosData( line, column );
-
     char tok = proc.Peek();
 
     if( proc.eof() )
     {
-#if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
-        do {
-            std::ostringstream ostr;
-            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            ostr << " * [INFO] bad file format; unexpected eof at line ";
-            ostr << line << ", column " << column;
-            wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
-        } while( 0 );
-#endif
+        wxLogTrace( traceVrmlPlugin, wxT( "%s:%s:%d\n"
+                                          " * [INFO] bad file format; unexpected eof %s." ),
+                    __FILE__, __FUNCTION__, __LINE__, proc.GetFilePosition() );
 
         return false;
     }
 
     if( '{' != tok )
     {
-#if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
-        do {
-            std::ostringstream ostr;
-            ostr << proc.GetError() << "\n";
-            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            ostr << " * [INFO] bad file format; expecting '{' but got '" << tok;
-            ostr  << "' at line " << line << ", column " << column;
-            wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
-        } while( 0 );
-#endif
+        wxLogTrace( traceVrmlPlugin,
+                    wxT( "%s:%s:%d\n"
+                         " * [INFO] bad file format; expecting '{' but got '%s' %s." ),
+                    __FILE__, __FUNCTION__, __LINE__, tok, proc.GetFilePosition() );
 
         return false;
     }
@@ -120,36 +105,24 @@ bool WRL2BOX::Read( WRLPROC& proc, WRL2BASE* aTopNode )
 
     if( !proc.ReadName( glob ) )
     {
-#if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
-        do {
-            std::ostringstream ostr;
-            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            ostr << proc.GetError();
-            wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
-        } while( 0 );
-#endif
+        wxLogTrace( traceVrmlPlugin, wxT( "%s:%s:%d\n"
+                                          "%s" ),
+                    __FILE__, __FUNCTION__, __LINE__ , proc.GetError() );
 
         return false;
     }
-
-    proc.GetFilePosData( line, column );
 
     // expecting 'size'
     if( !glob.compare( "size" ) )
     {
         if( !proc.ReadSFVec3f( size ) )
         {
-#if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
-            do {
-                std::ostringstream ostr;
-                ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-                ostr << " * [INFO] invalid size at line " << line << ", column ";
-                ostr << column << "\n";
-                ostr << " * [INFO] file: '" << proc.GetFileName() << "'\n";
-                ostr << " * [INFO] message: '" << proc.GetError() << "'";
-                wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
-            } while( 0 );
-#endif
+            wxLogTrace( traceVrmlPlugin, wxT( "%s:%s:%d"
+                                              " * [INFO] invalid size %s\n"
+                                              " * [INFO] file: '%s'\n"
+                                              "%s" ),
+                            __FILE__, __FUNCTION__, __LINE__, proc.GetFilePosition(),
+                            proc.GetFileName(), proc.GetError() );
 
             return false;
         }
@@ -159,32 +132,24 @@ bool WRL2BOX::Read( WRLPROC& proc, WRL2BASE* aTopNode )
     }
     else
     {
-#if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
-        do {
-            std::ostringstream ostr;
-            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            ostr << " * [INFO] bad Box at line " << line << ", column ";
-            ostr << column << "\n";
-            ostr << " * [INFO] file: '" << proc.GetFileName() << "'";
-            wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
-        } while( 0 );
-#endif
+        wxLogTrace( traceVrmlPlugin, wxT( "%s:%s:%d"
+                                          " * [INFO] invalid Box %s\n"
+                                          " * [INFO] file: '%s'\n" ),
+                    __FILE__, __FUNCTION__, __LINE__, proc.GetFilePosition(),
+                    proc.GetFileName() );
 
         return false;
     }
 
     if( size.x < 1e-6 || size.y < 1e-6 || size.z < 1e-6 )
     {
-#if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
-        do {
-            std::ostringstream ostr;
-            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            ostr << " * [INFO] bad Box (invalid size) at line " << line << ", column ";
-            ostr << column << "\n";
-            ostr << " * [INFO] file: '" << proc.GetFileName() << "'";
-            wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
-        } while( 0 );
-#endif
+        wxLogTrace( traceVrmlPlugin, wxT( "%s:%s:%d"
+                                          " * [INFO] invalid Box size %s\n"
+                                          " * [INFO] file: '%s'\n" ),
+                    __FILE__, __FUNCTION__, __LINE__, proc.GetFilePosition(),
+                    proc.GetFileName() );
+
+        /// @note If this box is bad, should false be returned here?
     }
 
     if( proc.Peek() == '}' )
@@ -193,18 +158,10 @@ bool WRL2BOX::Read( WRLPROC& proc, WRL2BASE* aTopNode )
         return true;
     }
 
-    proc.GetFilePosData( line, column );
-
-#if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
-    do {
-        std::ostringstream ostr;
-        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        ostr << " * [INFO] bad Box at line " << line << ", column ";
-        ostr << column << " (no closing brace)\n";
-        ostr << " * [INFO] file: '" << proc.GetFileName() << "'";
-        wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
-    } while( 0 );
-#endif
+    wxLogTrace( traceVrmlPlugin, wxT( "%s:%s:%d"
+                                      " * [INFO] invalid size %s (no closing brace).\n"
+                                      " * [INFO] file: '%s'\n" ),
+                __FILE__, __FUNCTION__, __LINE__, proc.GetFilePosition(), proc.GetFileName() );
 
     return false;
 }
@@ -213,34 +170,14 @@ bool WRL2BOX::Read( WRLPROC& proc, WRL2BASE* aTopNode )
 bool WRL2BOX::AddRefNode( WRL2NODE* aNode )
 {
     // this node may not own or reference any other node
-
-#ifdef DEBUG_VRML2
-    do {
-        std::ostringstream ostr;
-        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        ostr << " * [BUG] AddRefNode is not applicable";
-        wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
-    } while( 0 );
-#endif
-
-    return false;
+    wxCHECK_MSG( false, false, wxT( "AddRefNode is not applicable." ) );
 }
 
 
 bool WRL2BOX::AddChildNode( WRL2NODE* aNode )
 {
     // this node may not own or reference any other node
-
-#ifdef DEBUG_VRML2
-    do {
-        std::ostringstream ostr;
-        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        ostr << " * [BUG] AddChildNode is not applicable";
-        wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
-    } while( 0 );
-#endif
-
-    return false;
+    wxCHECK_MSG( false, false, wxT( "AddChildNode is not applicable." ) );
 }
 
 
@@ -248,20 +185,9 @@ SGNODE* WRL2BOX::TranslateToSG( SGNODE* aParent )
 {
     S3D::SGTYPES ptype = S3D::GetSGNodeType( aParent );
 
-    if( nullptr != aParent && ptype != S3D::SGTYPE_SHAPE )
-    {
-#ifdef DEBUG_VRML2
-        do {
-            std::ostringstream ostr;
-            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            ostr << " * [BUG] Box does not have a Shape parent (parent ID: ";
-            ostr << ptype << ")";
-            wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
-        } while( 0 );
-#endif
-
-        return nullptr;
-    }
+    wxCHECK_MSG( aParent && ( ptype == S3D::SGTYPE_SHAPE ), nullptr,
+                 wxString::Format( wxT( "Box does not have a Shape parent (parent ID: %s)" ),
+                                   ptype ) );
 
     // do not render a bad box
     if( size.x < 1e-6 || size.y < 1e-6 || size.z < 1e-6 )

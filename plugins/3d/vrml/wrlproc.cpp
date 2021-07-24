@@ -35,6 +35,7 @@
         try                                                                                    \
         {                                                                                      \
             char* cp = m_file->ReadLine();                                                     \
+                                                                                               \
             if( nullptr == cp )                                                                \
             {                                                                                  \
                 m_eof = true;                                                                  \
@@ -45,6 +46,7 @@
                 m_buf = cp;                                                                    \
                 m_bufpos = 0;                                                                  \
             }                                                                                  \
+                                                                                               \
             m_fileline = m_file->LineNumber();                                                 \
         }                                                                                      \
         catch( ... )                                                                           \
@@ -172,7 +174,7 @@ bool WRLPROC::getRawLine( void )
 
         while( sS != eS )
         {
-            if( ((*sS) & 0x80) )
+            if( ( ( *sS ) & 0x80 ) )
             {
                 m_error = " non-ASCII character sequence in VRML1 file";
                 return false;
@@ -391,7 +393,7 @@ bool WRLPROC::DiscardNode( void )
         ostr << ", column " << m_bufpos;
         m_error = ostr.str();
 
-        wxLogTrace( MASK_VRML, "%s\n", m_error.c_str() );
+        wxLogTrace( traceVrmlPlugin, "%s\n", m_error.c_str() );
 
         return false;
     }
@@ -1974,6 +1976,19 @@ bool WRLPROC::GetFilePosData( size_t& line, size_t& column )
     column = m_bufpos;
 
     return true;
+}
+
+
+std::string WRLPROC::GetFilePosition() const
+{
+    std::ostringstream retv;
+
+    if( !m_file )
+        retv << "no file loaded to provide file position information";
+    else
+        retv << "at line " << m_fileline << ", column " << m_bufpos;
+
+    return retv.str();
 }
 
 

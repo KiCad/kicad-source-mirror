@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 Cirilo Bernardo <cirilo.bernardo@gmail.com>
+ * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -36,26 +37,23 @@
 class WRL1BASE;
 class SGNODE;
 
-/**
- * WRL1COORDS
- */
+
 class WRL1COORDS : public WRL1NODE
 {
-private:
-    std::vector< WRLVEC3F > points;
-
 public:
     WRL1COORDS( NAMEREGISTER* aDictionary );
     WRL1COORDS( NAMEREGISTER* aDictionary, WRL1NODE* aParent );
     virtual ~WRL1COORDS();
 
-    // functions inherited from WRL1NODE
     bool Read( WRLPROC& proc, WRL1BASE* aTopNode ) override;
     bool AddRefNode( WRL1NODE* aNode ) override;
     bool AddChildNode( WRL1NODE* aNode ) override;
     SGNODE* TranslateToSG( SGNODE* aParent, WRL1STATUS* sp ) override;
 
     void GetCoords( WRLVEC3F*& aCoordList, size_t& aListSize );
+
+private:
+    std::vector< WRLVEC3F > points;
 };
 
 #endif  // VRML1_COORDS_H

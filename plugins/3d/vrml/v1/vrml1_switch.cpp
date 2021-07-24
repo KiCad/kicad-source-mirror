@@ -53,15 +53,10 @@ WRL1SWITCH::WRL1SWITCH( NAMEREGISTER* aDictionary, WRL1NODE* aParent ) :
 
 WRL1SWITCH::~WRL1SWITCH()
 {
-#if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 2 )
-    do {
-        std::ostringstream ostr;
-        ostr << " * [INFO] Destroying Switch with " << m_Children.size();
-        ostr << " children, " << m_Refs.size() << " references and ";
-        ostr << m_BackPointers.size() << " backpointers";
-        wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
-    } while( 0 );
-#endif
+    wxLogTrace( traceVrmlPlugin,
+                wxT( " * [INFO] Destroying Switch node with %ul children, %ul"
+                     "references, and %ul back pointers." ),
+                m_Children.size(), m_Refs.size(), m_BackPointers.size() );
 }
 
 
@@ -76,52 +71,27 @@ bool WRL1SWITCH::Read( WRLPROC& proc, WRL1BASE* aTopNode )
      * }
      */
 
-    if( nullptr == aTopNode )
-    {
-#ifdef DEBUG_VRML1
-        do {
-            std::ostringstream ostr;
-            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            ostr << " * [BUG] aTopNode is NULL";
-            wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
-        } while( 0 );
-#endif
-
-        return false;
-    }
-
-    size_t line, column;
-    proc.GetFilePosData( line, column );
+    wxCHECK_MSG( aTopNode, false, wxT( "Invalid top node." ) );
 
     char tok = proc.Peek();
 
     if( proc.eof() )
     {
-#if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 1 )
-        do {
-            std::ostringstream ostr;
-            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            ostr << " * [INFO] bad file format; unexpected eof at line ";
-            ostr << line << ", column " << column;
-            wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
-        } while( 0 );
-#endif
+        wxLogTrace( traceVrmlPlugin, wxT( "%s:%s:%d\n"
+                                          " * [INFO] bad file format; unexpected eof %s." ),
+                    __FILE__, __FUNCTION__, __LINE__, proc.GetFilePosition() );
 
         return false;
     }
 
     if( '{' != tok )
     {
-#if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 1 )
-        do {
-            std::ostringstream ostr;
-            ostr << proc.GetError() << "\n";
-            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            ostr << " * [INFO] bad file format; expecting '{' but got '" << tok;
-            ostr << "' at line " << line << ", column " << column;
-            wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
-        } while( 0 );
-#endif
+        wxLogTrace( traceVrmlPlugin,
+                    wxT( "%s:%s:%d\n"
+                         " * [INFO] bad file format; expecting '{' but got '%s' %s.\n"
+                         "%s" ),
+                    __FILE__, __FUNCTION__, __LINE__, tok, proc.GetFilePosition(),
+                    proc.GetError() );
 
         return false;
     }
@@ -142,14 +112,9 @@ bool WRL1SWITCH::Read( WRLPROC& proc, WRL1BASE* aTopNode )
         {
             if( !proc.ReadName( glob ) )
             {
-#if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 1 )
-                do {
-                    std::ostringstream ostr;
-                    ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-                    ostr << proc.GetError();
-                    wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
-                } while( 0 );
-#endif
+                wxLogTrace( traceVrmlPlugin, wxT( "%s:%s:%d\n"
+                                                  "%s" ),
+                            __FILE__, __FUNCTION__, __LINE__ , proc.GetError() );
 
                 return false;
             }
@@ -158,17 +123,13 @@ bool WRL1SWITCH::Read( WRLPROC& proc, WRL1BASE* aTopNode )
             {
                 if( !proc.ReadSFInt( whichChild ) )
                 {
-#if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 1 )
-                    do {
-                        std::ostringstream ostr;
-                        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-                        ostr << " * [INFO] invalid whichChild at line " << line << ", column ";
-                        ostr << column << "\n";
-                        ostr << " * [INFO] file: '" << proc.GetFileName() << "'\n";
-                        ostr << " * [INFO] message: '" << proc.GetError() << "'";
-                        wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
-                    } while( 0 );
-#endif
+                    wxLogTrace( traceVrmlPlugin,
+                                wxT( "%s:%s:%d"
+                                     " * [INFO] invalid whichChild %s (invalid value '%s')\n"
+                                     " * [INFO] file: '%s'\n"
+                                     "%s" ),
+                                __FILE__, __FUNCTION__, __LINE__, proc.GetFilePosition(), glob,
+                                proc.GetFileName(), proc.GetError() );
 
                     return false;
                 }
@@ -176,33 +137,22 @@ bool WRL1SWITCH::Read( WRLPROC& proc, WRL1BASE* aTopNode )
                 continue;
             }
 
-#if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 1 )
-            do {
-                std::ostringstream ostr;
-                ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-                ostr << " * [INFO] invalid Switch at line " << line << ", column ";
-                ostr << column << " (expected 'whichChild')\n";
-                ostr << " * [INFO] file: '" << proc.GetFileName() << "'";
-                wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
-            } while( 0 );
-#endif
+            wxLogTrace( traceVrmlPlugin,
+                        wxT( "%s:%s:%d\n"
+                             " * [INFO] invalid Switch %s (unexpected 'whichChild')\n"
+                             " * [INFO] file: '%s'" ),
+                        __FILE__, __FUNCTION__, __LINE__, proc.GetFilePosition(),
+                        proc.GetFileName() );
 
             return false;
         }
 
-        proc.GetFilePosData( line, column );
-
         if( !aTopNode->ReadNode( proc, this, nullptr ) )
         {
-#if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 1 )
-            do {
-                std::ostringstream ostr;
-                ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-                ostr << " * [INFO] bad file format; unexpected eof at line ";
-                ostr << line << ", column " << column;
-                wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
-            } while( 0 );
-#endif
+            wxLogTrace( traceVrmlPlugin,
+                        wxT( "%s:%s:%d\n"
+                             " * [INFO] bad file format; unexpected eof %s."),
+                        __FILE__, __FUNCTION__, __LINE__, proc.GetFilePosition() );
 
             return false;
         }
@@ -218,16 +168,10 @@ bool WRL1SWITCH::Read( WRLPROC& proc, WRL1BASE* aTopNode )
 
 SGNODE* WRL1SWITCH::TranslateToSG( SGNODE* aParent, WRL1STATUS* sp )
 {
-#if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 2 )
-    do {
-        std::ostringstream ostr;
-        ostr << " * [INFO] Translating Switch with " << m_Children.size();
-        ostr << " children, " << m_Refs.size() << " references and ";
-        ostr << m_BackPointers.size() << " backpointers (total ";
-        ostr << m_Items.size() << " items)";
-        wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
-    } while( 0 );
-#endif
+    wxLogTrace( traceVrmlPlugin,
+                wxT( " * [INFO] Translating Switch node with %ul children, %ul"
+                     "references, and %ul back pointers (%ul total items)." ),
+                m_Children.size(), m_Refs.size(), m_BackPointers.size(), m_Items.size() );
 
     if( m_Items.empty() )
         return nullptr;

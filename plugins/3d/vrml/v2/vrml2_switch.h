@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2016 Cirilo Bernardo <cirilo.bernardo@gmail.com>
+ * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -34,31 +35,25 @@
 class WRL2BASE;
 class SGNODE;
 
-/**
- * WRL2SWITCH
- */
+
 class WRL2SWITCH : public WRL2NODE
 {
-private:
-    int whichChoice;
-    std::vector< WRL2NODE* > choices;
-
-    bool readChildren( WRLPROC& proc, WRL2BASE* aTopNode );
-
-public:
-
-    // functions inherited from WRL2NODE
-    bool isDangling( void ) override;
-
 public:
     WRL2SWITCH();
     WRL2SWITCH( WRL2NODE* aNode );
     virtual ~WRL2SWITCH();
 
-    // functions inherited from WRL2NODE
     bool Read( WRLPROC& proc, WRL2BASE* aTopNode ) override;
     bool AddRefNode( WRL2NODE* aNode ) override;
     SGNODE* TranslateToSG( SGNODE* aParent ) override;
+
+    bool isDangling( void ) override;
+
+private:
+    int whichChoice;
+    std::vector< WRL2NODE* > choices;
+
+    bool readChildren( WRLPROC& proc, WRL2BASE* aTopNode );
 };
 
 #endif  // VRML2_SWITCH_H

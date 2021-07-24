@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 Cirilo Bernardo <cirilo.bernardo@gmail.com>
+ * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -35,25 +36,21 @@
 class WRL1BASE;
 class SGNODE;
 
-/**
- * WRL1SHAPEHINTS
- */
 class WRL1SHAPEHINTS : public WRL1NODE
 {
-private:
-    WRL1_ORDER m_order;     // vertex order
-    float      m_crease;    // VRML creaseAngle
-
 public:
     WRL1SHAPEHINTS( NAMEREGISTER* aDictionary );
     WRL1SHAPEHINTS( NAMEREGISTER* aDictionary, WRL1NODE* aParent );
     virtual ~WRL1SHAPEHINTS();
 
-    // functions inherited from WRL1NODE
     bool Read( WRLPROC& proc, WRL1BASE* aTopNode ) override;
     bool AddRefNode( WRL1NODE* aNode ) override;
     bool AddChildNode( WRL1NODE* aNode ) override;
     SGNODE* TranslateToSG( SGNODE* aParent, WRL1STATUS* sp ) override;
+
+private:
+    WRL1_ORDER m_order;     // vertex order
+    float      m_crease;    // VRML creaseAngle
 };
 
 #endif  // VRML1_SHAPEHINTS_H

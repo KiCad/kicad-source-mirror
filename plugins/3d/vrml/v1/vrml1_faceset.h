@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 Cirilo Bernardo <cirilo.bernardo@gmail.com>
+ * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -36,27 +37,23 @@
 class WRL1BASE;
 class SGNODE;
 
-/**
- * WRL1FACESET
- */
 class WRL1FACESET : public WRL1NODE
 {
-private:
-    std::vector< int > coordIndex;
-    std::vector< int > matIndex;
-    std::vector< int > normIndex;
-    std::vector< int > texIndex;
-
 public:
     WRL1FACESET( NAMEREGISTER* aDictionary );
     WRL1FACESET( NAMEREGISTER* aDictionary, WRL1NODE* aParent );
     virtual ~WRL1FACESET();
 
-    // functions inherited from WRL1NODE
     bool Read( WRLPROC& proc, WRL1BASE* aTopNode ) override;
     bool AddRefNode( WRL1NODE* aNode ) override;
     bool AddChildNode( WRL1NODE* aNode ) override;
     SGNODE* TranslateToSG( SGNODE* aParent, WRL1STATUS* sp ) override;
+
+private:
+    std::vector< int > coordIndex;
+    std::vector< int > matIndex;
+    std::vector< int > normIndex;
+    std::vector< int > texIndex;
 };
 
 #endif  // VRML1_FACESET_H

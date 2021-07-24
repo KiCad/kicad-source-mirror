@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 Cirilo Bernardo <cirilo.bernardo@gmail.com>
+ * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -36,12 +37,36 @@
 class WRL2BASE;
 class SGNODE;
 
-/**
- * WRL2FACESET
- */
 class WRL2FACESET : public WRL2NODE
 {
+public:
+    WRL2FACESET();
+    WRL2FACESET( WRL2NODE* aParent );
+    virtual ~WRL2FACESET();
+
+    bool Read( WRLPROC& proc, WRL2BASE* aTopNode ) override;
+    bool AddRefNode( WRL2NODE* aNode ) override;
+    bool AddChildNode( WRL2NODE* aNode ) override;
+    SGNODE* TranslateToSG( SGNODE* aParent ) override;
+
+    /**
+     * @return true if the face set has a color node.
+     */
+    bool HasColors( void );
+
+    bool isDangling( void ) override;
+
+    void unlinkChildNode( const WRL2NODE* aNode ) override;
+    void unlinkRefNode( const WRL2NODE* aNode ) override;
+
 private:
+    /**
+     * @return true if the node type is a valid subnode of FaceSet.
+     */
+    bool checkNodeType( WRL2NODES aType );
+
+    void setDefaults( void );
+
     WRL2NODE* color;
     WRL2NODE* coord;
     WRL2NODE* normal;
@@ -59,42 +84,6 @@ private:
 
     float creaseAngle;
     float creaseLimit;
-
-
-    /**
-     * Function checkNodeType
-     * returns true if the node type is a valid subnode of FaceSet
-     */
-    bool checkNodeType( WRL2NODES aType );
-
-    void setDefaults( void );
-
-public:
-
-    // functions inherited from WRL2NODE
-    bool isDangling( void ) override;
-
-
-    // overloads
-    void unlinkChildNode( const WRL2NODE* aNode ) override;
-    void unlinkRefNode( const WRL2NODE* aNode ) override;
-
-public:
-    WRL2FACESET();
-    WRL2FACESET( WRL2NODE* aParent );
-    virtual ~WRL2FACESET();
-
-    // functions inherited from WRL2NODE
-    bool Read( WRLPROC& proc, WRL2BASE* aTopNode ) override;
-    bool AddRefNode( WRL2NODE* aNode ) override;
-    bool AddChildNode( WRL2NODE* aNode ) override;
-    SGNODE* TranslateToSG( SGNODE* aParent ) override;
-
-    /**
-     * Function HasColors
-     * returns true if the face set has a color node
-     */
-    bool HasColors( void );
 };
 
 #endif  // VRML2_FACESET_H

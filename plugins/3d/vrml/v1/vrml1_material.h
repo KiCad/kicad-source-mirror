@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 Cirilo Bernardo <cirilo.bernardo@gmail.com>
+ * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -37,12 +38,36 @@ class WRL1BASE;
 class SGNODE;
 class SGCOLOR;
 
-/**
- * WRL1MATERIAL
- */
 class WRL1MATERIAL : public WRL1NODE
 {
+public:
+    WRL1MATERIAL( NAMEREGISTER* aDictionary );
+    WRL1MATERIAL( NAMEREGISTER* aDictionary, WRL1NODE* aParent );
+    virtual ~WRL1MATERIAL();
+
+    bool Read( WRLPROC& proc, WRL1BASE* aTopNode ) override;
+    bool AddRefNode( WRL1NODE* aNode ) override;
+    bool AddChildNode( WRL1NODE* aNode ) override;
+    SGNODE* TranslateToSG( SGNODE* aParent, WRL1STATUS* sp ) override;
+
+    /**
+     * Return an SGAPPEARANCE node representing the appearance for an IndexedFaceSet.
+     */
+    SGNODE* GetAppearance( int aIndex );
+
+    /**
+     * Compute an SGCOLOR representing the appearance of a vertex or face.
+     */
+    void GetColor( SGCOLOR* aColor, int aIndex );
+
+    /**
+     * Destroy the given color node if it does not have a parent.
+     */
+    void Reclaim( SGNODE* aColor );
+
 private:
+    void checkRange( float& aValue );
+
     std::vector< WRLVEC3F > diffuseColor;
     std::vector< WRLVEC3F > emissiveColor;
     std::vector< WRLVEC3F > specularColor;
@@ -51,38 +76,6 @@ private:
     std::vector< float >    transparency;
 
     SGNODE* colors[2];
-
-    void checkRange( float& aValue );
-
-public:
-    WRL1MATERIAL( NAMEREGISTER* aDictionary );
-    WRL1MATERIAL( NAMEREGISTER* aDictionary, WRL1NODE* aParent );
-    virtual ~WRL1MATERIAL();
-
-    // functions inherited from WRL1NODE
-    bool Read( WRLPROC& proc, WRL1BASE* aTopNode ) override;
-    bool AddRefNode( WRL1NODE* aNode ) override;
-    bool AddChildNode( WRL1NODE* aNode ) override;
-    SGNODE* TranslateToSG( SGNODE* aParent, WRL1STATUS* sp ) override;
-
-    /**
-     * Function GetAppearance
-     * returns an SGAPPEARANCE node representing the appearance
-     * for an IndexedFaceSet
-     */
-    SGNODE* GetAppearance( int aIndex );
-
-    /**
-     * Function GetColor
-     * computes an SGCOLOR representing the appearance of a vertex or face
-     */
-    void GetColor( SGCOLOR* aColor, int aIndex );
-
-    /**
-     * Function Reclaim
-     * will destroy the given color node if it does not have a parent
-     */
-    void Reclaim( SGNODE* aColor );
 };
 
 #endif  // VRML1_MATERIAL_H

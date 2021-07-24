@@ -88,11 +88,6 @@ typedef std::map< std::string, WRL1NODES > NODEMAP;
 static NODEMAP nodenames;
 
 
-#if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 2 )
-std::string WRL1NODE::tabs = "";
-#endif
-
-
 WRL1NODE::WRL1NODE( NAMEREGISTER* aDictionary )
 {
     m_sgNode = nullptr;
@@ -143,15 +138,10 @@ WRL1NODE::WRL1NODE( NAMEREGISTER* aDictionary )
 
 WRL1NODE::~WRL1NODE()
 {
-#if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 2 )
-    do {
-        std::ostringstream ostr;
-        ostr << " * [INFO] ^^ Destroying Type " << m_Type << " with " << m_Children.size();
-        ostr << " children, " << m_Refs.size() << " references and ";
-        ostr << m_BackPointers.size() << " backpointers";
-        wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
-    } while( 0 );
-#endif
+    wxLogTrace( traceVrmlPlugin,
+                wxT( " * [INFO] ^^ Destroying Type %d with %ul children, %ul references, and %ul "
+                     "back pointers." ),
+                m_Type, m_Children.size(), m_Refs.size(), m_BackPointers.size() );
 
     m_Items.clear();
 
@@ -164,30 +154,18 @@ WRL1NODE::~WRL1NODE()
     std::list< WRL1NODE* >::iterator sBP = m_BackPointers.begin();
     std::list< WRL1NODE* >::iterator eBP = m_BackPointers.end();
 
-#if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 2 )
-    int acc = 0;
-#endif
-
     while( sBP != eBP )
     {
-#if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 2 )
-        ++acc;
-        do {
-            std::ostringstream ostr;
-            ostr << " * [INFO] " << tabs << "Type " << m_Type << " is Unlinking ref #";
-            ostr << acc;
-            wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
-        } while( 0 );
-#endif
+        wxLogTrace( traceVrmlPlugin, wxT( " * [INFO]%sType %d is unlinking ref #%d" ),
+                    wxString( ' ', (size_t) std::distance( sBP, m_BackPointers.begin() ) * 2 ),
+                    m_Type, std::distance( sBP, m_BackPointers.begin() ) );
+
         (*sBP)->unlinkRefNode( this );
-#if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 2 )
-        do {
-            std::ostringstream ostr;
-            ostr << " * [INFO] " << tabs << "Type " << m_Type << " has unlinked ref #";
-            ostr << acc;
-            wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
-        } while( 0 );
-#endif
+
+        wxLogTrace( traceVrmlPlugin, wxT( " * [INFO]%sType %d has unlinked ref #%d" ),
+                    wxString( ' ', (size_t) std::distance( sBP, m_BackPointers.begin() ) * 2 ),
+                    m_Type, std::distance( sBP, m_BackPointers.begin() ) );
+
         ++sBP;
     }
 
@@ -196,52 +174,22 @@ WRL1NODE::~WRL1NODE()
     std::list< WRL1NODE* >::iterator sC = m_Children.begin();
     std::list< WRL1NODE* >::iterator eC = m_Children.end();
 
-#if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 2 )
-    std::string otabs = tabs;
-    tabs.append( "    " );
-#endif
-
     while( sC != eC )
     {
-#if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 2 )
-        ++acc;
-
-        do {
-            std::ostringstream ostr;
-            ostr << " * [INFO] " << otabs << "Type " << m_Type << " is Deleting child #";
-            ostr << acc;
-            wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
-        } while( 0 );
-#endif
-
         (*sC)->SetParent( nullptr, false );
 
-#if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 2 )
-        do {
-            std::ostringstream ostr;
-            ostr << " * [INFO] " << otabs << "Type " << m_Type << " has unlinked child #";
-            ostr << acc;
-            wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
-        } while( 0 );
-#endif
+        wxLogTrace( traceVrmlPlugin, wxT( " * [INFO]%sType %d has unlinked child  #%d" ),
+                    wxString( ' ', (size_t) std::distance( sC, m_Children.begin() ) * 2 ),
+                    m_Type, std::distance( sC, m_Children.begin() ) );
 
         delete *sC;
 
-#if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 2 )
-        do {
-            std::ostringstream ostr;
-            ostr << " * [INFO] " << otabs << "Type " << m_Type << " has deleted child #";
-            ostr << acc;
-            wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
-        } while( 0 );
-#endif
+        wxLogTrace( traceVrmlPlugin, wxT( " * [INFO]%sType %d has deleted child  #%d" ),
+                    wxString( ' ', (size_t) std::distance( sC, m_Children.begin() ) * 2 ),
+                    m_Type, std::distance( sC, m_Children.begin() ) );
 
         ++sC;
     }
-
-#if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 2 )
-    tabs = otabs;
-#endif
 
     m_Children.clear();
 }
@@ -288,8 +236,8 @@ void WRL1NODE::addNodeRef( WRL1NODE* aNode )
 
 void WRL1NODE::delNodeRef( WRL1NODE* aNode )
 {
-    std::list< WRL1NODE* >::iterator np =
-    std::find( m_BackPointers.begin(), m_BackPointers.end(), aNode );
+    std::list< WRL1NODE* >::iterator np = std::find( m_BackPointers.begin(),
+                                                     m_BackPointers.end(), aNode );
 
     if( np != m_BackPointers.end() )
     {
@@ -297,14 +245,9 @@ void WRL1NODE::delNodeRef( WRL1NODE* aNode )
         return;
     }
 
-#ifdef DEBUG_VRML1
-    do {
-        std::ostringstream ostr;
-        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        ostr << " * [BUG] delNodeRef() did not find its target";
-        wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
-    } while( 0 );
-#endif
+    wxLogTrace( traceVrmlPlugin, wxT( "%s:%s:%d\n"
+                                      " * [BUG] delNodeRef() did not find its target." ),
+                __FILE__, __FUNCTION__, __LINE__ );
 }
 
 
@@ -333,14 +276,9 @@ bool WRL1NODE::SetName( const std::string& aName )
 
     if( isdigit( aName[0] ) )
     {
-#if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 1 )
-        do {
-            std::ostringstream ostr;
-            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            ostr << " * [INFO] invalid node name '" << aName << "' (begins with digit)";
-            wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
-        } while( 0 );
-#endif
+        wxLogTrace( traceVrmlPlugin, wxT( "%s:%s:%d\n"
+                                          " * [INFO] invalid node name '%s' (begins with digit)" ),
+                    __FILE__, __FUNCTION__, __LINE__, aName );
 
         return false;
     }
@@ -354,15 +292,10 @@ bool WRL1NODE::SetName( const std::string& aName )
     if( std::string::npos != aName.find_first_of( BAD_CHARS1 )
         || std::string::npos != aName.find_first_of( BAD_CHARS2 ) )
     {
-#if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 1 )
-        do {
-            std::ostringstream ostr;
-            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            ostr << " * [INFO] invalid node name '" << aName;
-            ostr << "' (contains invalid character)";
-            wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
-        } while( 0 );
-#endif
+        wxLogTrace( traceVrmlPlugin,
+                    wxT( "%s:%s:%d\n"
+                         " * [INFO] invalid node name '%s' (contains invalid character)" ),
+                    __FILE__, __FUNCTION__, __LINE__, aName );
 
         return false;
     }
@@ -442,19 +375,9 @@ bool WRL1NODE::SetParent( WRL1NODE* aParent, bool doUnlink )
 
 bool WRL1NODE::AddChildNode( WRL1NODE* aNode )
 {
-    if( aNode->GetNodeType() == WRL1NODES::WRL1_BASE )
-    {
-#ifdef DEBUG_VRML1
-        do {
-            std::ostringstream ostr;
-            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            ostr << " * [BUG] attempting to add a base node to another node";
-            wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
-        } while( 0 );
-#endif
-
-        return false;
-    }
+    wxCHECK_MSG( aNode, false, wxT( "Invalid node pointer." )  );
+    wxCHECK_MSG( aNode->GetNodeType() != WRL1NODES::WRL1_BASE, false,
+                 wxT( "Attempting to add a base node to another node." ) );
 
     std::list< WRL1NODE* >::iterator sC = m_Children.begin();
     std::list< WRL1NODE* >::iterator eC = m_Children.end();
@@ -479,33 +402,9 @@ bool WRL1NODE::AddChildNode( WRL1NODE* aNode )
 
 bool WRL1NODE::AddRefNode( WRL1NODE* aNode )
 {
-    if( nullptr == aNode )
-    {
-#ifdef DEBUG_VRML1
-        do {
-            std::ostringstream ostr;
-            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            ostr << " * [BUG] NULL passed as node pointer";
-            wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
-        } while( 0 );
-#endif
-
-        return false;
-    }
-
-    if( aNode->GetNodeType() == WRL1NODES::WRL1_BASE )
-    {
-#ifdef DEBUG_VRML1
-        do {
-            std::ostringstream ostr;
-            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            ostr << " * [BUG] attempting to add a base node ref to another base node";
-            wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
-        } while( 0 );
-#endif
-
-        return false;
-    }
+    wxCHECK_MSG( aNode, false, wxT( "Invalid node pointer." )  );
+    wxCHECK_MSG( aNode->GetNodeType() != WRL1NODES::WRL1_BASE, false,
+                 wxT( "Attempt to add a base node reference to another base node" ) );
 
     // note: the VRML1 spec does not prevent the reuse of a node at
     // the same level; for example a Coordinate3 node can be recalled

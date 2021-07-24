@@ -47,8 +47,12 @@
 // number 0 is special (the PCB board color)
 #define NCOLORS 6
 
-// log mask for wxLogTrace
-#define MASK_IDF "PLUGIN_IDF"
+/**
+ * Flag to enable IDF plugin trace output.
+ *
+ * @ingroup trace_env_vars
+ */
+const wxChar* const traceIdfPlugin = wxT( "KICAD_IDF_PLUGIN" );
 
 
 // read and instantiate an IDF component outline
@@ -357,28 +361,16 @@ static bool getOutlineModel( VRML_LAYER& model, const std::list< IDF_OUTLINE* >*
 
         if( nvcont < 0 )
         {
-#ifdef DEBUG
-            do {
-                std::ostringstream ostr;
-                ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-                ostr << " * [INFO] cannot create an outline";
-                wxLogTrace( MASK_IDF, "%s\n", ostr.str().c_str() );
-            } while( 0 );
-#endif
+            wxLogTrace( traceIdfPlugin, "%s:%s:%s\n * [INFO] cannot create an outline",
+                        __FILE__, __FUNCTION__, __LINE__ );
 
             return false;
         }
 
         if( (*scont)->size() < 1 )
         {
-#ifdef DEBUG
-            do {
-                std::ostringstream ostr;
-                ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-                ostr << " * [INFO] invalid contour: no vertices";
-                wxLogTrace( MASK_IDF, "%s\n", ostr.str().c_str() );
-            } while( 0 );
-#endif
+            wxLogTrace( traceIdfPlugin, "%s:%s:%s\n  * [INFO] invalid contour: no vertices",
+                        __FILE__, __FUNCTION__, __LINE__ );
 
             return false;
         }
@@ -394,14 +386,8 @@ static bool getOutlineModel( VRML_LAYER& model, const std::list< IDF_OUTLINE* >*
 
             if( !addSegment( model, &lseg, nvcont, iseg ) )
             {
-#ifdef DEBUG
-                do {
-                    std::ostringstream ostr;
-                    ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-                    ostr << " * [BUG] cannot add segment";
-                    wxLogTrace( MASK_IDF, "%s\n", ostr.str().c_str() );
-                } while( 0 );
-#endif
+                wxLogTrace( traceIdfPlugin, "%s:%s:%s\n * [BUG] cannot add segment",
+                            __FILE__, __FUNCTION__, __LINE__ );
 
                 return false;
             }
@@ -428,14 +414,8 @@ static bool addSegment( VRML_LAYER& model, IDF_SEGMENT* seg, int icont, int iseg
         {
             if( iseg != 0 )
             {
-#ifdef DEBUG
-                do {
-                    std::ostringstream ostr;
-                    ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-                    ostr << " * [INFO] adding a circle to an existing vertex list";
-                    wxLogTrace( MASK_IDF, "%s\n", ostr.str().c_str() );
-                } while( 0 );
-#endif
+                wxLogTrace( traceIdfPlugin, "%s:%s:%s\n * [INFO] adding a circle to an "
+                            "existing vertex list", __FILE__, __FUNCTION__, __LINE__ );
 
                 return false;
             }
@@ -473,28 +453,16 @@ static SCENEGRAPH* vrmlToSG( VRML_LAYER& vpcb, int idxColor, SGNODE* aParent, do
 
     if( !vpcb.Get3DTriangles( vertices, idxPlane, idxSide, top, bottom ) )
     {
-#ifdef DEBUG
-        do {
-            std::ostringstream ostr;
-            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            ostr << " * [INFO] no vertex data";
-            wxLogTrace( MASK_IDF, "%s\n", ostr.str().c_str() );
-        } while( 0 );
-#endif
+        wxLogTrace( traceIdfPlugin, "%s:%s:%s\n * [INFO] no vertex data",
+                    __FILE__, __FUNCTION__, __LINE__ );
 
         return nullptr;
     }
 
     if( ( idxPlane.size() % 3 ) || ( idxSide.size() % 3 ) )
     {
-#ifdef DEBUG
-        do {
-            std::ostringstream ostr;
-            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            ostr << " * [BUG] index lists are not a multiple of 3 (not a triangle list)";
-            wxLogTrace( MASK_IDF, "%s\n", ostr.str().c_str() );
-        } while( 0 );
-#endif
+        wxLogTrace( traceIdfPlugin, "%s:%s:%s\n * [BUG] index lists are not a multiple of 3 "
+                    "(not a triangle list)", __FILE__, __FUNCTION__, __LINE__ );
 
         return nullptr;
     }
@@ -603,14 +571,8 @@ static SCENEGRAPH* addOutline( IDF3_COMP_OUTLINE* outline, int idxColor, SGNODE*
 
     if( !getOutlineModel( vpcb, outline->GetOutlines() ) )
     {
-#ifdef DEBUG
-        do {
-            std::ostringstream ostr;
-            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            ostr << " * [INFO] no valid outline data";
-            wxLogTrace( MASK_IDF, "%s\n", ostr.str().c_str() );
-        } while( 0 );
-#endif
+        wxLogTrace( traceIdfPlugin, "%s:%s:%s\n * [INFO] no valid outline data",
+                    __FILE__, __FUNCTION__, __LINE__ );
 
         return nullptr;
     }
@@ -643,17 +605,9 @@ static SCENEGRAPH* loadIDFOutline( const wxString& aFileName )
 
     if( nullptr == outline )
     {
-#ifdef DEBUG
-        do {
-            std::ostringstream ostr;
-            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            ostr << " * [INFO] Failed to read IDF data:\n";
-            ostr << brd.GetError() << "\n\n";
-            ostr << " * [INFO] no outline for file '";
-            ostr << aFileName << "'";
-            wxLogTrace( MASK_IDF, "%s\n", ostr.str().c_str() );
-        } while( 0 );
-#endif
+        wxLogTrace( traceIdfPlugin, "%s:%s:%s\n * [INFO] Failed to read IDF data:\n%s\n"
+                    " * [INFO] no outline for file '%s'",  __FILE__, __FUNCTION__, __LINE__,
+                    brd.GetError(), aFileName );
 
         return nullptr;
     }
@@ -672,16 +626,9 @@ static SCENEGRAPH* loadIDFBoard( const wxString& aFileName )
     // note: if the IDF model is defective no outline substitutes shall be made
     if( !brd.ReadFile( aFileName, true ) )
     {
-#ifdef DEBUG
-        do {
-            std::ostringstream ostr;
-            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            ostr << " * [INFO] Failed to read IDF file:\n";
-            ostr << brd.GetError() << "\n\n";
-            ostr << " * [INFO] IDF file '" << aFileName.ToUTF8() << "'";
-            wxLogTrace( MASK_IDF, "%s\n", ostr.str().c_str() );
-        } while( 0 );
-#endif
+        wxLogTrace( traceIdfPlugin, "%s:%s:%s\n"
+                    "* [INFO] Error '%s' occurred reading IDF file: %s",
+                    __FILE__, __FUNCTION__, __LINE__, brd.GetError(), aFileName );
 
         return nullptr;
     }

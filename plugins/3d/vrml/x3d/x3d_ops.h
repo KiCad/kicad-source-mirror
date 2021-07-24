@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 Cirilo Bernardo <cirilo.bernardo@gmail.com>
+ * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -35,7 +36,6 @@
 namespace X3D
 {
     /* Functions to create and read X3D Nodes */
-
     bool ReadTransform( wxXmlNode* aNode, X3DNODE* aParent, X3D_DICT& aDict );
     bool ReadSwitch( wxXmlNode* aNode, X3DNODE* aParent, X3D_DICT& aDict );
     bool ReadShape( wxXmlNode* aNode, X3DNODE* aParent, X3D_DICT& aDict );
@@ -47,7 +47,6 @@ namespace X3D
     bool ParseSFFloat( const wxString& aSource, float& aResult );
     bool ParseSFVec3( const wxString& aSource, WRLVEC3F& aResult );
     bool ParseSFRotation( const wxString& aSource, WRLROTATION& aResult );
-
 }
 
 #endif  // X3D_OPS_H

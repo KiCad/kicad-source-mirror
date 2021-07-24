@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2016 Cirilo Bernardo <cirilo.bernardo@gmail.com>
+ * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -39,25 +40,6 @@
 
 class WRLPROC
 {
-private:
-    LINE_READER* m_file;
-    std::string m_buf;          // string being parsed
-    bool m_eof;
-    unsigned int m_fileline;
-    unsigned int m_bufpos;
-
-    WRLVERSION m_fileVersion;   // VRML file version
-    std::string m_error;        // error message
-    std::string m_badchars;     // characters forbidden in VRML{1|2} names
-    std::string m_filename;     // current file
-    std::string m_filedir;      // parent directory of the file
-
-    // getRawLine reads a single non-blank line and in the case of a VRML1 file
-    // it checks for invalid characters (bit 8 set). If m_buf is not empty and
-    // not completely parsed the function returns 'true'. The file position
-    // parameters are updated as appropriate.
-    bool getRawLine( void );
-
 public:
     WRLPROC( LINE_READER* aLineReader );
     ~WRLPROC();
@@ -73,18 +55,23 @@ public:
     // helper routines
     std::string GetError( void );
     bool GetFilePosData( size_t& line, size_t& column );
+    std::string GetFilePosition() const;
     std::string GetFileName( void );
+
     // eatSpace discards all leading white space from the current m_linepos
     // and continues until a non-empty line is found which contains non-blank
     // characters
     bool EatSpace( void );
+
     // Peek returns the next non-white char in the file or '\0' on failure
     char Peek( void );
+
     // Pop removes the current char from the buffer
     void Pop( void );
 
     // read up to the next whitespace or comma
     bool ReadGlob( std::string& aGlob );
+
     // read a VRML name; is similar to ReadGlob except that it enforces
     // name checking rules, does not allow a comma at the end, and
     // stops when a left/right brace or bracket is found.
@@ -110,6 +97,25 @@ public:
     bool ReadMFRotation( std::vector< WRLROTATION >& aMFRotation );
     bool ReadMFVec2f( std::vector< WRLVEC2F >& aMFVec2f );
     bool ReadMFVec3f( std::vector< WRLVEC3F >& aMFVec3f );
+
+    // getRawLine reads a single non-blank line and in the case of a VRML1 file
+    // it checks for invalid characters (bit 8 set). If m_buf is not empty and
+    // not completely parsed the function returns 'true'. The file position
+    // parameters are updated as appropriate.
+    bool getRawLine( void );
+
+private:
+    LINE_READER* m_file;
+    std::string m_buf;          // string being parsed
+    bool m_eof;
+    unsigned int m_fileline;
+    unsigned int m_bufpos;
+
+    WRLVERSION m_fileVersion;   // VRML file version
+    std::string m_error;        // error message
+    std::string m_badchars;     // characters forbidden in VRML{1|2} names
+    std::string m_filename;     // current file
+    std::string m_filedir;      // parent directory of the file
 };
 
 #endif  // WRLPROC_H

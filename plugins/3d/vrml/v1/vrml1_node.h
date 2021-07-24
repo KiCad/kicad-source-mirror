@@ -24,7 +24,7 @@
 
 /**
  * @file vrmlv1_node.h
- * defines the base class for VRML1.0 nodes
+ * Define the base class for VRML1.0 nodes.
  */
 
 
@@ -43,16 +43,16 @@
 
 class WRL1NODE;
 
-// a class to hold the dictionary of node DEFs
+// The dictionary of node DEFs
 class NAMEREGISTER
 {
-private:
-    std::map< std::string, WRL1NODE* > reg;
-
 public:
     bool AddName( const std::string& aName, WRL1NODE* aNode );
     bool DelName( const std::string& aName, WRL1NODE* aNode );
     WRL1NODE* FindName( const std::string& aName );
+
+private:
+    std::map< std::string, WRL1NODE* > reg;
 };
 
 
@@ -62,10 +62,28 @@ class WRL1COORDS;
 class SGNODE;
 
 
-// current settings which may affect all subsequent nodes
-// during translation / rendering
+// current settings which may affect all subsequent nodes during translation / rendering
 struct WRL1STATUS
 {
+    WRL1STATUS()
+    {
+        Init();
+        return;
+    }
+
+    void Init()
+    {
+        mat = nullptr;
+        matbind = WRL1_BINDING::BIND_OVERALL;
+        norm = nullptr;
+        normbind = WRL1_BINDING::BIND_DEFAULT;
+        coord = nullptr;
+        txmatrix = glm::scale( glm::mat4( 1.0 ), glm::vec3( 1.0 ) );
+        order = WRL1_ORDER::ORD_UNKNOWN;
+        creaseLimit = 0.878f;
+        return;
+    }
+
     // material
     WRL1MATERIAL* mat;
 
@@ -89,38 +107,15 @@ struct WRL1STATUS
 
     // cos( creaseAngle ) defines a boundary for normals smoothing
     float creaseLimit;
-
-    WRL1STATUS()
-    {
-        Init();
-        return;
-    }
-
-    void Init()
-    {
-        mat = nullptr;
-        matbind = WRL1_BINDING::BIND_OVERALL;
-        norm = nullptr;
-        normbind = WRL1_BINDING::BIND_DEFAULT;
-        coord = nullptr;
-        txmatrix = glm::scale( glm::mat4( 1.0 ), glm::vec3( 1.0 ) );
-        order = WRL1_ORDER::ORD_UNKNOWN;
-        creaseLimit = 0.878f;
-        return;
-    }
 };
 
 
 /**
- * The base class of all VRML1 nodes
+ * The base class of all VRML1 nodes.
  */
 class WRL1NODE
 {
 public:
-#if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 2 )
-    static std::string tabs;
-#endif
-
     // cancel the dictionary pointer; for internal use only
     void cancelDict( void );
 
@@ -163,7 +158,6 @@ public:
      */
     void delNodeRef( WRL1NODE* aNode );
 
-public:
     WRL1NODE( NAMEREGISTER* aDictionary );
     virtual ~WRL1NODE();
 
