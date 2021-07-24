@@ -756,10 +756,9 @@ int SCH_LINE_WIRE_BUS_TOOL::doDrawSegments( const std::string& aTool, int aType,
                 segment = doUnfoldBus( net, contextMenuPos );
             }
         }
-        else if( evt->IsAction( &ACTIONS::doDelete ) )
+        else if( evt->IsAction( &ACTIONS::doDelete ) && ( segment || m_busUnfold.in_progress ) )
         {
-            if( segment || m_busUnfold.in_progress )
-                cleanup();
+            cleanup();
         }
         else
         {
