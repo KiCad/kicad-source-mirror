@@ -1402,6 +1402,8 @@ int EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
 
         if( ds && ds->HitTestDrawingSheetItems( getView(), (wxPoint) cursorPos ) )
             m_toolMgr->RunAction( ACTIONS::pageSettings );
+        else
+            m_toolMgr->RunAction( PCB_ACTIONS::footprintProperties, true );
     }
 
     if( selection.IsHover() )
