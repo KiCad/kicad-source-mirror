@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-01 11:31-0700\n"
-"PO-Revision-Date: 2021-07-23 08:32+0000\n"
+"PO-Revision-Date: 2021-07-24 08:02+0000\n"
 "Last-Translator: boonchai k. <kicadthai@gmail.com>\n"
 "Language-Team: Thai <https://hosted.weblate.org/projects/kicad/master-source/"
 "th/>\n"
@@ -6838,23 +6838,23 @@ msgstr "ค่าฟุ้ทพรินท์ ID '%s' ไม่ถูกต้
 #: cvpcb/display_footprints_frame.cpp:415
 #, c-format
 msgid "Library '%s' is not in the footprint library table."
-msgstr ""
+msgstr "ไลบรารี '%s' ไม่อยู่ในตารางไลบรารีฟุ้ทพรินท์"
 
 #: cvpcb/display_footprints_frame.cpp:424
 #: cvpcb/display_footprints_frame.cpp:449
 #, c-format
 msgid "Footprint '%s' not found."
-msgstr ""
+msgstr "ฟุ้ทพรินท์ '%s' หาไม่พบ"
 
 #: cvpcb/display_footprints_frame.cpp:479 pcbnew/footprint.cpp:878
 #, c-format
 msgid "Footprint: %s"
-msgstr ""
+msgstr "ฟุ้ทพรินท์:%s"
 
 #: cvpcb/display_footprints_frame.cpp:490
 #, c-format
 msgid "Lib: %s"
-msgstr ""
+msgstr "ไลบรารี:%s"
 
 #: cvpcb/readwrite_dlgs.cpp:115
 msgid ""
@@ -6867,20 +6867,20 @@ msgstr ""
 #: cvpcb/readwrite_dlgs.cpp:144
 #, c-format
 msgid "Component '%s' footprint '%s' <b>not found</b> in any library.\n"
-msgstr ""
+msgstr "อุปกรณ์ '%s' ฟุ้ทพรินท์ '%s' <b>ไม่พบ</b>ในไลบรารีใดๆ\n"
 
 #: cvpcb/readwrite_dlgs.cpp:151
 #, c-format
 msgid "Component '%s' footprint '%s' was found in <b>multiple</b> libraries.\n"
-msgstr ""
+msgstr "อุปกรณ์ '%s' ฟุ้ทพรินท์ '%s' ถูกพบใน<b>หลายๆ</b>ไลบรารี\n"
 
 #: cvpcb/readwrite_dlgs.cpp:164
 msgid "First check your footprint library table entries."
-msgstr ""
+msgstr "ขั้นแรกตรวจสอบในตารางไลบรารีฟุ้ทพรินท์"
 
 #: cvpcb/readwrite_dlgs.cpp:166
 msgid "Problematic Footprint Library Tables"
-msgstr ""
+msgstr "มีปัญหาในตารางไลบรารีฟุ้ทพรินท์"
 
 #: cvpcb/readwrite_dlgs.cpp:174
 msgid ""
@@ -6888,6 +6888,8 @@ msgid ""
 "assignments:\n"
 "\n"
 msgstr ""
+"มีความผิดพลาดดังข้างล่าง ในความพยายามเปลี่ยนการกำหนดฟุ้ทพรินท์\n"
+"\n"
 
 #: cvpcb/readwrite_dlgs.cpp:177
 msgid ""
@@ -6898,23 +6900,23 @@ msgstr ""
 
 #: cvpcb/readwrite_dlgs.cpp:294
 msgid "Schematic saved"
-msgstr ""
+msgstr "บันทึกวงจร"
 
 #: cvpcb/toolbars_cvpcb.cpp:75
 msgid "Footprint Filters:"
-msgstr ""
+msgstr "กรองฟุ้ทพรินท์:"
 
 #: cvpcb/tools/cvpcb_actions.cpp:52
 msgid "View selected footprint"
-msgstr ""
+msgstr "ดูภาพฟุ้ทพรินท์ที่เลือก"
 
 #: cvpcb/tools/cvpcb_actions.cpp:53
 msgid "View the selected footprint in the footprint viewer"
-msgstr ""
+msgstr "ดูภาพฟุ้ทพรินท์ที่เลือกในโปรแกรมผู้ดูฟุ้ทพรินท์"
 
 #: cvpcb/tools/cvpcb_actions.cpp:60
 msgid "Manage Footprint Association Files"
-msgstr ""
+msgstr "จัดการไฟล์เชื่อมโยงฟุ้ทพรินท์"
 
 #: cvpcb/tools/cvpcb_actions.cpp:61
 msgid ""
@@ -6924,7 +6926,7 @@ msgstr ""
 
 #: cvpcb/tools/cvpcb_actions.cpp:67
 msgid "Save to Schematic"
-msgstr ""
+msgstr "บันทึกในวงจร"
 
 #: cvpcb/tools/cvpcb_actions.cpp:68
 msgid "Save footprint associations in schematic symbol footprint fields"
@@ -6932,104 +6934,104 @@ msgstr ""
 
 #: cvpcb/tools/cvpcb_actions.cpp:91
 msgid "Select next unassigned symbol"
-msgstr ""
+msgstr "เลือกสัญลักษณ์ที่ไม่กำหนดตัวต่อไป"
 
 #: cvpcb/tools/cvpcb_actions.cpp:92
 msgid "Select next symbol with no footprint assignment"
-msgstr ""
+msgstr "เลือกสัญลักษณ์ที่ไม่กำหนดฟุ้ทพรินท์ตัวต่อไป"
 
 #: cvpcb/tools/cvpcb_actions.cpp:98
 msgid "Select previous unassigned symbol"
-msgstr ""
+msgstr "เลือกสัญลักษณ์ที่ไม่กำหนดตัวที่ผ่านมา"
 
 #: cvpcb/tools/cvpcb_actions.cpp:99
 msgid "Select previous symbol with no footprint assignment"
-msgstr ""
+msgstr "เลือกสัญลักษณ์ที่ไม่กำหนดฟุ้ทพรินท์ตัวที่ผ่านมา"
 
 #: cvpcb/tools/cvpcb_actions.cpp:108
 msgid "Assign footprint"
-msgstr ""
+msgstr "กำหนดฟุ้ทพรินท์"
 
 #: cvpcb/tools/cvpcb_actions.cpp:109
 msgid "Assign footprint to selected symbols"
-msgstr ""
+msgstr "กำหนดฟุ้ทพรินท์ให้แก่สัญลักษณ์ที่เลือก"
 
 #: cvpcb/tools/cvpcb_actions.cpp:114
 msgid "Automatically assign footprints"
-msgstr ""
+msgstr "กำหนดค่าฟุ้ทพรินท์อัตโนมัติ"
 
 #: cvpcb/tools/cvpcb_actions.cpp:115
 msgid "Perform automatic footprint assignment"
-msgstr ""
+msgstr "ดำเนินการกำหนดค่าฟุ้ทพรินท์อัตโนมัติ"
 
 #: cvpcb/tools/cvpcb_actions.cpp:121
 msgid "Delete association"
-msgstr ""
+msgstr "ลบการเชื่อมโยง"
 
 #: cvpcb/tools/cvpcb_actions.cpp:122
 msgid "Delete selected footprint associations"
-msgstr ""
+msgstr "ลบการเชื่อมโยงฟุ้ทพรินท์ที่เลือก"
 
 #: cvpcb/tools/cvpcb_actions.cpp:127 cvpcb/tools/cvpcb_actions.cpp:128
 msgid "Delete all footprint associations"
-msgstr ""
+msgstr "ลบการเชื่อมโยงฟุ้ทพรินท์ทั้งหมด"
 
 #: cvpcb/tools/cvpcb_actions.cpp:135
 msgid "Use symbol footprint filters"
-msgstr ""
+msgstr "ใช้การกรองสัญลักษณ์และฟุ้ทพรินท์"
 
 #: cvpcb/tools/cvpcb_actions.cpp:136
 msgid "Filter footprint list by footprint filters defined in the symbol"
-msgstr ""
+msgstr "กรองรายการฟุ้ทพรินท์โดยตัวกรองจากสัญลักษณ์"
 
 #: cvpcb/tools/cvpcb_actions.cpp:142
 msgid "Filter by pin count"
-msgstr ""
+msgstr "กรองโดยจำนวนขา"
 
 #: cvpcb/tools/cvpcb_actions.cpp:143
 msgid "Filter footprint list by pin count"
-msgstr ""
+msgstr "กรองรายการฟุ้ทพรินท์โดยจำนวนขา"
 
 #: cvpcb/tools/cvpcb_actions.cpp:149
 msgid "Filter by library"
-msgstr ""
+msgstr "กรองโดยไลบรารี"
 
 #: cvpcb/tools/cvpcb_actions.cpp:150
 msgid "Filter footprint list by library"
-msgstr ""
+msgstr "กรองรายการฟุ้ทพรินท์โดยไลบรารี"
 
 #: cvpcb/tools/cvpcb_association_tool.cpp:257
 msgid "Delete all associations?"
-msgstr ""
+msgstr "ลบการเชื่อมโยงทั้งหมด?"
 
 #: eeschema/annotate.cpp:159
 #, c-format
 msgid "%d duplicate time stamps were found and replaced."
-msgstr ""
+msgstr "%d พบเวลาซ้ำกันและแทนทันที"
 
 #: eeschema/annotate.cpp:283
 #, c-format
 msgid "Updated %s (unit %s) from %s to %s"
-msgstr ""
+msgstr "ปรับปรุง %s (หน่วย %s) จาก %s เป็น %s"
 
 #: eeschema/annotate.cpp:289
 #, c-format
 msgid "Updated %s from %s to %s"
-msgstr ""
+msgstr "ปรับปรุง %s จาก %s เป็น %s"
 
 #: eeschema/annotate.cpp:297
 #, c-format
 msgid "Annotated %s (unit %s) as %s"
-msgstr ""
+msgstr "สร้างคำอธิบายประกอบ %s (หน่วย %s) เป็น %s"
 
 #: eeschema/annotate.cpp:302
 #, c-format
 msgid "Annotated %s as %s"
-msgstr ""
+msgstr "สร้างคำอธิบายประกอบ %s เป็น %s"
 
 #: eeschema/annotate.cpp:318
 msgid "Annotation complete."
-msgstr ""
+msgstr "สร้างคำอธิบายประกอบเสร็จสิ้น"
 
 #: eeschema/bom_plugins.cpp:46
 #, c-format
@@ -7106,37 +7108,37 @@ msgstr ""
 #: eeschema/cross-probing.cpp:271 pcbnew/cross-probing.cpp:184
 #, c-format
 msgid "%s found"
-msgstr ""
+msgstr "%s พบ"
 
 #: eeschema/cross-probing.cpp:276 pcbnew/cross-probing.cpp:167
 #: pcbnew/cross-probing.cpp:186
 #, c-format
 msgid "%s not found"
-msgstr ""
+msgstr "%s ไม่พบ"
 
 #: eeschema/cross-probing.cpp:329
 msgid "Selected net:"
-msgstr ""
+msgstr "เน็ทที่เลือก:"
 
 #: eeschema/dialogs/dialog_annotate.cpp:87
 msgid "Annotation Messages:"
-msgstr ""
+msgstr "ข้อความจากคำอธิบายประกอบ:"
 
 #: eeschema/dialogs/dialog_annotate.cpp:92
 msgid "Annotate"
-msgstr ""
+msgstr "ใส่อธิบายประกอบ"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:39
 msgid "Entire schematic"
-msgstr ""
+msgstr "ทั่วทั้งวงจร"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:39
 msgid "Current sheet only"
-msgstr ""
+msgstr "หน้าปัจจุบันเท่านั้น"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:39
 msgid "Selection only"
-msgstr ""
+msgstr "เลือกเท่านั้น"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:41
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:23
@@ -7144,64 +7146,64 @@ msgstr ""
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:25
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.cpp:28
 msgid "Scope"
-msgstr ""
+msgstr "ขอบเขต"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:46
 msgid "Order"
-msgstr ""
+msgstr "ลำดับ"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:51
 msgid "Sort symbols by &X position"
-msgstr ""
+msgstr "เรียงสัญลักษณ์ตามตำแหน่ง &X"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:69
 msgid "Sort symbols by &Y position"
-msgstr ""
+msgstr "เรียงสัญลักษณ์ตามตำแหน่ง &Y"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:84
 msgid "Keep existing annotations"
-msgstr ""
+msgstr "เก็บคำอธิบายประกอบเดิมไว้"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:84
 msgid "Reset existing annotations"
-msgstr ""
+msgstr "ล้างคำอธิบายประกอบ"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:91
 msgid "Numbering"
-msgstr ""
+msgstr "การตั้งหมายเลข"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:98
 msgid "Use first free number after:"
-msgstr ""
+msgstr "ใช้ตัวเลขว่างแรกหลัง:"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:104
 msgid "First free after sheet number X 100"
-msgstr ""
+msgstr "ว่างตัวแรกหลังกระดาษเบอร์ X 100"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:107
 msgid "First free after sheet number X 1000"
-msgstr ""
+msgstr "ว่างตัวแรกหลังกระดาษเบอร์ X 1000"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:130
 msgid "Clear Annotation"
-msgstr ""
+msgstr "ล้างคำอธิบายประกอบ"
 
 #: eeschema/dialogs/dialog_annotate_base.h:81
 msgid "Annotate Schematic"
-msgstr ""
+msgstr "ทำคำอธิบายประกอบวงจร"
 
 #: eeschema/dialogs/dialog_bom.cpp:133
 msgid "Generate"
-msgstr ""
+msgstr "สร้าง"
 
 #: eeschema/dialogs/dialog_bom.cpp:217
 msgid "(file missing)"
-msgstr ""
+msgstr "(ไม่พบไฟล์)"
 
 #: eeschema/dialogs/dialog_bom.cpp:294
 #, c-format
 msgid "The selected BOM generator script %s could not be found."
-msgstr ""
+msgstr "สคริปสร้าง BOM %s หาไม่พบ"
 
 #: eeschema/dialogs/dialog_bom.cpp:299
 #, c-format
@@ -7212,63 +7214,68 @@ msgid ""
 "\t%s\n"
 "\t%s"
 msgstr ""
+"\n"
+"\n"
+"ค้นหา:\n"
+"\t%s\n"
+"\t%s"
 
 #: eeschema/dialogs/dialog_bom.cpp:345
 msgid "Generating BOM requires a fully annotated schematic."
-msgstr ""
+msgstr "การสร้าง BOM ต้องทำคำอธิบายประกอบวงจรทั้งหมดก่อน"
 
 #: eeschema/dialogs/dialog_bom.cpp:382 eeschema/dialogs/dialog_bom_base.cpp:43
 msgid "Generator nickname:"
-msgstr ""
+msgstr "สร้างชื่อเล่น:"
 
 #: eeschema/dialogs/dialog_bom.cpp:382
 msgid "Add Generator"
-msgstr ""
+msgstr "เพิ่มเครื่องสร้าง"
 
 #: eeschema/dialogs/dialog_bom.cpp:391
 #, c-format
 msgid "Nickname '%s' already in use."
-msgstr ""
+msgstr "ชื่อเล่น '%s' ถูกใช้แล้ว"
 
 #: eeschema/dialogs/dialog_bom.cpp:420 eeschema/dialogs/dialog_netlist.cpp:685
 msgid "Generator files:"
-msgstr ""
+msgstr "ไฟล์ผู้สร้าง:"
 
 #: eeschema/dialogs/dialog_bom.cpp:439
 msgid "Generator file name not found."
-msgstr ""
+msgstr "ชื่อไฟล์ผู้สร้างไม่พบ"
 
 #: eeschema/dialogs/dialog_bom.cpp:449
 msgid "No text editor selected in KiCad.  Please choose one."
-msgstr ""
+msgstr "ไม่มีเครื่องมือแก้ไขข้อความเลือกไว้ กรุณาเลือก"
 
 #: eeschema/dialogs/dialog_bom.cpp:461
 msgid "Bill of Material Generation Help"
-msgstr ""
+msgstr "ช่วยเหลือสร้างรายการวัสดุ"
 
 #: eeschema/dialogs/dialog_bom_base.cpp:25
 msgid "BOM generator scripts:"
-msgstr ""
+msgstr "สคริปท์ผู้สร้าง BOM:"
 
 #: eeschema/dialogs/dialog_bom_base.cpp:69
 msgid "Add a new BOM generator and its command line to the list"
-msgstr ""
+msgstr "เพิ่มผู้สร้าง BOM ใหม่ และคำสั่งบนบรรทัดเข้าไปในรายการ"
 
 #: eeschema/dialogs/dialog_bom_base.cpp:74
 msgid "Edit the script file in the text editor"
-msgstr ""
+msgstr "แก้ไขไฟล์สคริปท์ในเครื่องมือแก้ไขข้อความ"
 
 #: eeschema/dialogs/dialog_bom_base.cpp:82
 msgid "Remove the current generator script from list"
-msgstr ""
+msgstr "นำสคริปท์ผู้สร้างออกจากรายการ"
 
 #: eeschema/dialogs/dialog_bom_base.cpp:92
 msgid "Command line running the generator:"
-msgstr ""
+msgstr "คำสั่งบรรทัดให้ผู้สร้างทำงาน:"
 
 #: eeschema/dialogs/dialog_bom_base.cpp:101
 msgid "Show console window"
-msgstr ""
+msgstr "แสดงหน้าต่างคอนโซล"
 
 #: eeschema/dialogs/dialog_bom_base.cpp:102
 msgid ""
@@ -7276,14 +7283,17 @@ msgid ""
 "redirected to the info display.\n"
 "Set this option to show the window of the running command."
 msgstr ""
+"โดยตั้งต้น คำสั่งบรรทัดทำงานในหน้าต่างที่ซ่อนอยู่ และผลลัพธ์ส่งต่อไปที่ส่"
+"วนแสดงผล\n"
+"ทางเลือกนี้จะแสดงหน้าต่างระหว่างทำคำสั่ง"
 
 #: eeschema/dialogs/dialog_bom_base.cpp:116
 msgid "Reset the list of BOM generator scripts to the default settings"
-msgstr ""
+msgstr "ล้างรายการของสคริปผู้สร้าง BOM ไปเป็นค่าตั้งต้น"
 
 #: eeschema/dialogs/dialog_bom_base.h:81
 msgid "Bill of Material"
-msgstr ""
+msgstr "รายการวัสดุ"
 
 #: eeschema/dialogs/dialog_bom_help_md.h:2
 msgid ""
@@ -7471,237 +7481,420 @@ msgid ""
 "\"%O.csv\"\n"
 "```\n"
 msgstr ""
+"# 1 - เอกสารสมบูรณ์\n"
+"\n"
+"The Eeschema documentation (*eeschema.html*) describes this intermediate "
+"netlist and gives examples(chapter ***creating customized netlists and bom "
+"files***).\n"
+"\n"
+"# 2 - The intermediate Netlist File\n"
+"\n"
+"BOM files (and netlist files) can be created from an *Intermediate netlist "
+"file* created by Eeschema.\n"
+"\n"
+"This file uses XML syntax and is called the intermediate netlist. The "
+"intermediate netlist includes a large amount of data about your board and "
+"because of this, it can be used with post-processing to create a BOM or "
+"other reports.\n"
+"\n"
+"Depending on the output (BOM or netlist), different subsets of the complete "
+"Intermediate Netlist file will be used in the post-processing.\n"
+"\n"
+"# 3 - Conversion to a new format\n"
+"\n"
+"By applying a post-processing filter to the Intermediate netlist file you "
+"can generate foreign netlist files as well as BOM files. Because this "
+"conversion is a text to text transformation, this post-processing filter can "
+"be written using *Python*, *XSLT*, or any other tool capable of taking XML "
+"as input.\n"
+"\n"
+"XSLT itself is a XML language suitable for XML transformations. There is a "
+"free program called `xsltproc` that you can download and install. The "
+"`xsltproc` program can be used to read the Intermediate XML netlist input "
+"file, apply a style-sheet to transform the input, and save the results in an "
+"output file. Use of `xsltproc` requires a style-sheet file using XSLT "
+"conventions. The full conversion process is handled by Eeschema, after it is "
+"configured once to run `xsltproc` in a specific way.\n"
+"\n"
+"A Python script is somewhat more easy to create.\n"
+"\n"
+"# 4 - Initialization of the dialog window\n"
+"\n"
+"You should add a new plugin (a script) in the plugin list by clicking on the "
+"Add Plugin button.\n"
+"\n"
+"## 4.1 - Plugin Configuration Parameters\n"
+"\n"
+"The Eeschema plug-in configuration dialog requires the following information:"
+"\n"
+"\n"
+" * The title: for instance, the name of the netlist format.\n"
+" * The command line to launch the converter (usually a script).\n"
+"\n"
+"***Note (Windows only):***\n"
+"*By default, the command line runs with hidden console window and output is "
+"redirected to \"Plugin info\" field. To show the window of the running "
+"command, set the checkbox \"Show console window\".*\n"
+"\n"
+"Once you click on the generate button the following will happen:\n"
+"\n"
+"1. Eeschema creates an intermediate netlist file \\*.xml, for instance `test."
+"xml`.\n"
+"2. Eeschema runs the script from the command line to create the final output "
+"file.\n"
+"\n"
+"## 4.2 - Generate netlist files with the command line\n"
+"\n"
+"Assuming we are using the program `xsltproc.exe` to apply the sheet style to "
+"the intermediate file, `xsltproc.exe` is executed with the following command."
+"\n"
+"\n"
+"```\n"
+"xsltproc.exe -o <output filename> <style-sheet filename> <input XML file to "
+"convert>\n"
+"```\n"
+"\n"
+"On Windows the command line is the following.\n"
+"\n"
+"```\n"
+"f:/kicad/bin/xsltproc.exe -o \"%O\" f:/kicad/bin/plugins/myconverter.xsl \"%"
+"I\"\n"
+"```\n"
+"\n"
+"On Linux the command becomes as following.\n"
+"\n"
+"```\n"
+"xsltproc -o \"%O\" /usr/local/kicad/bin/plugins/myconverter .xsl \"%I\"\n"
+"```\n"
+"where `myconverter.xsl` is the style-sheet that you are applying.\n"
+"\n"
+"Do not forget the double quotes around the file names, this allows them to "
+"have spaces after the substitution by Eeschema.\n"
+"\n"
+"If a Python script is used, the command line is something like (depending on "
+"the Python script):\n"
+"\n"
+"```\n"
+"python f:/kicad/bin/plugins/bom-in-python/myconverter.py \"%I\" \"%O\"\n"
+"```\n"
+"\n"
+"or\n"
+"\n"
+"```\n"
+"python /usr/local/kicad/bin/plugins/bom-in-python/myconverter .xsl \"%I\" \"%"
+"O\"\n"
+"```\n"
+"\n"
+"The command line format accepts parameters for filenames. The supported "
+"formatting parameters are:\n"
+"\n"
+" * `%B`: base filename of selected output file, minus path and extension.\n"
+" * `%P`: project directory, without name and without trailing '/'.\n"
+" * `%I`: complete filename and path of the temporary input file\n"
+"(the intermediate net file).\n"
+" * `%O`: complete filename and path (but without extension) of the user\n"
+"chosen output file.\n"
+"\n"
+"`%I` will be replaced by the actual intermediate file name (usually the full "
+"root sheet filename with extension \".xml\").\n"
+"`%O` will be replaced by the actual output file name (the full root sheet "
+"filename minus extension).\n"
+"`%B` will be replaced by the actual output short file name (the short root "
+"sheet filename minus extension).\n"
+"`%P` will be replaced by the actual current project path.\n"
+"\n"
+"## 4.3 - Command line format:\n"
+"\n"
+"### 4.3.1 - Remark:\n"
+"\n"
+"Most of time, the created file must have an extension, depending on its type."
+"\n"
+"Therefore you have to add to the option ***%O*** the right file extension.\n"
+"\n"
+"For instance:\n"
+"\n"
+" * **%O.csv** to create a .csv file (comma separated value file).\n"
+" * **%O.htm** to create a .html file.\n"
+" * **%O.bom** to create a .bom file.\n"
+"\n"
+"### 4.3.2 Example for xsltproc:\n"
+"\n"
+"The command line format for xsltproc is the following:\n"
+"\n"
+"```\n"
+"<path of xsltproc> xsltproc <xsltproc parameters>\n"
+"```\n"
+"\n"
+"On Windows:\n"
+"```\n"
+"f:/kicad/bin/xsltproc.exe -o \"%O.bom\" f:/kicad/bin/plugins/"
+"netlist_form_pads-pcb.xsl \"%I\"\n"
+"```\n"
+"\n"
+"On Linux:\n"
+"```\n"
+"xsltproc -o \"%O.bom\" /usr/local/kicad/bin/plugins/netlist_form_pads-"
+"pcb.xsl \"%I\"\n"
+"```\n"
+"\n"
+"The above examples assume `xsltproc` is installed on your PC under Windows "
+"and xsl files located in `<path_to_kicad>/kicad/bin/plugins/`.\n"
+"\n"
+"\n"
+"### 4.3.3 Example for Python scripts:\n"
+"\n"
+"Assuming python is installed on your PC, and python scripts are located in\n"
+"\n"
+" `<path_to_kicad>/kicad/bin/plugins/bom-in-python/`,\n"
+"\n"
+"the command line format for python is something like:\n"
+"\n"
+"```\n"
+"python <script file name> <input filename> <output filename>\n"
+"```\n"
+"\n"
+"On Windows:\n"
+"```\n"
+"python.exe f:/kicad/bin/plugins/bom-in-python/my_python_script.py \"%I\" \"%O"
+".html\"\n"
+"```\n"
+"\n"
+"On Linux:\n"
+"```\n"
+"python /usr/local/kicad/bin/plugins/bom-in-python/my_python_script.py \"%I\" "
+"\"%O.csv\"\n"
+"```\n"
 
 #: eeschema/dialogs/dialog_bus_manager.cpp:42
 msgid "Bus Definitions"
-msgstr ""
+msgstr "ข้อกำหนดบัส"
 
 #: eeschema/dialogs/dialog_bus_manager.cpp:59
 msgid "Bus Aliases"
-msgstr ""
+msgstr "ชื่อแฝงบัส"
 
 #: eeschema/dialogs/dialog_bus_manager.cpp:69
 msgid "Alias Name"
-msgstr ""
+msgstr "ชื่อแฝง"
 
 #: eeschema/dialogs/dialog_bus_manager.cpp:79
 #: eeschema/dialogs/dialog_bus_manager.cpp:113
 msgid "Rename"
-msgstr ""
+msgstr "เปลี่ยนชื่อ"
 
 #: eeschema/dialogs/dialog_bus_manager.cpp:93
 msgid "Alias Members"
-msgstr ""
+msgstr "สมาชิกแฝง"
 
 #: eeschema/dialogs/dialog_bus_manager.cpp:103
 msgid "Member Name"
-msgstr ""
+msgstr "ชื่อสมาชิก"
 
 #: eeschema/dialogs/dialog_bus_manager.cpp:184
 msgid "Bus Alias Name"
-msgstr ""
+msgstr "ชื่อแฝงบัส"
 
 #: eeschema/dialogs/dialog_bus_manager.cpp:185
 msgid "Net or Bus Name"
-msgstr ""
+msgstr "ชื่อเน็ทหรือบัส"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:66
 msgid "Change all symbols in schematic"
-msgstr ""
+msgstr "เปลี่ยนสัญลักษณ์ทั้งหมดในวงจร"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:67
 msgid "Change Symbols"
-msgstr ""
+msgstr "เปลี่ยนสัญลักษณ์"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:76
 msgid "Change selected symbol(s)"
-msgstr ""
+msgstr "เปลี่ยนสัญลักษณ์ที่เลือก"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:93
 msgid "Change symbols matching reference designator:"
-msgstr ""
+msgstr "เปลี่ยนสัญลักษณ์ที่ตรงกับอักษรอ้างอิง:"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:94
 msgid "Change symbols matching value:"
-msgstr ""
+msgstr "เปลี่ยนค่าของสัญลักษณ์ตรงกัน:"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:95
 msgid "Change symbols matching library identifier:"
-msgstr ""
+msgstr "เปลี่ยนสัญลักษณ์ที่ตรงกับตัวระบุไลบรารี:"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:132
 msgid "Update Fields"
-msgstr ""
+msgstr "ปรับปรุงช่อง"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:133
 msgid "Remove fields if not in new symbol"
-msgstr ""
+msgstr "นำช่องออกหากไม่มีสัญลักษณ์ใหม่"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:134
 msgid "Reset fields if empty in new symbol"
-msgstr ""
+msgstr "ล้างค่าในช่องถ้าค่าเป็นว่างจากสัญลักษณ์ใหม่"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:135
 msgid "Update field text"
-msgstr ""
+msgstr "ปรับปรุงช่องข้อความ"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:136
 msgid "Update field visibilities"
-msgstr ""
+msgstr "ปรับปรุงการมองเห็นช่อง"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:137
 msgid "Update field sizes and styles"
-msgstr ""
+msgstr "ปรับปรุงรูปแบบและขนาดช่อง"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:138
 msgid "Update field positions"
-msgstr ""
+msgstr "ปรับปรุงตำแหน่งช่อง"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:139
 msgid "Update symbol attributes"
-msgstr ""
+msgstr "ปรับปรุงคุณลักษณะสัญลักษณ์"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:159
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:165
 msgid "Change"
-msgstr ""
+msgstr "เปลี่ยน"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:161
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:44
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:163
 msgid "Update"
-msgstr ""
+msgstr "ปรับปรุง"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:516
 #, c-format
 msgid "Update symbol %s from '%s' to '%s'"
-msgstr ""
+msgstr "ปรับปรุงสัญลักษณ์ %s จาก '%s' ไปยัง '%s'"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:523
 #, c-format
 msgid "Update symbols %s from '%s' to '%s'"
-msgstr ""
+msgstr "ปรับปรุงสัญลักษณ์ %s จาก '%s' ไปยัง '%s'"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:533
 #, c-format
 msgid "Change symbol %s from '%s' to '%s'"
-msgstr ""
+msgstr "เปลี่ยนสัญลักษณ์ %s จาก '%s' ไปยัง '%s'"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:540
 #, c-format
 msgid "Change symbols %s from '%s' to '%s'"
-msgstr ""
+msgstr "เปลี่ยนสัญลักษณ์ %s จาก '%s' ไปยัง '%s'"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:551
 msgid "*** symbol not found ***"
-msgstr ""
+msgstr "*** ไม่พบสัญลักษณ์ ***"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:560
 msgid "*** new symbol has too few units ***"
-msgstr ""
+msgstr "*** สัญลักษณ์ใหม่มีหน่วยเล็กไป ***"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:27
 msgid "Update all symbols in schematic"
-msgstr ""
+msgstr "ปรับค่าสัญลักษณ์ทั้งหมดในวงจร"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:30
 msgid "Update selected symbol(s)"
-msgstr ""
+msgstr "ปรับค่าเฉพาะสัญลักษณ์ที่เลือก"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:33
 msgid "Update symbols matching reference designator:"
-msgstr ""
+msgstr "ปรับค่าเฉพาะสัญลักษณ์ตรงกับอักษรอ้างอิง:"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:39
 msgid "Update symbols matching value:"
-msgstr ""
+msgstr "ปรับสัญลักษณ์ที่มีค่าตรงกัน:"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:45
 msgid "Update symbols matching library identifier:"
-msgstr ""
+msgstr "ปรับสัญลักษณ์ที่มีตัวระบุไลบารีตรงกัน:"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:72
 msgid "New library identifier:"
-msgstr ""
+msgstr "สร้างตัวระบุไลบรารีใหม่:"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:94
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:36
 msgid "Update/reset Fields"
-msgstr ""
+msgstr "ปรับค่า/ล้างค่า ในช่อง"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:108
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:50
 msgid "Select None"
-msgstr ""
+msgstr "ไม่เลือกใดๆ"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:117
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:59
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:94
 msgid "Update Options"
-msgstr ""
+msgstr "ทางเลือกปรับค่า"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:119
 msgid "Remove fields if not in library symbol"
-msgstr ""
+msgstr "นำช่องออกหากไม่มีในไลบรารีสัญลักษณ์"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:120
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:62
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:97
 msgid "Removes fields that do not occur in the original library symbols"
-msgstr ""
+msgstr "นำช่องออกหากไม่มีในไลบรารีสัญลักษณ์ตั้งแต่ต้น"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:124
 msgid "Reset fields if empty in library symbol"
-msgstr ""
+msgstr "ล้างค่าในช่องหากไลบรารีสัญลักษณ์ว่างเปล่า"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:130
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:72
 msgid "Update/reset field text"
-msgstr ""
+msgstr "ปรับค่า/ล้างค่า ในช่องข้อความ"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:133
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:75
 msgid "Update/reset field visibilities"
-msgstr ""
+msgstr "ปรับค่า/ล้างค่า การมองเห็นช่อง"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:136
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:78
 msgid "Update/reset field sizes and styles"
-msgstr ""
+msgstr "ปรับค่า/ล้างค่า ขนาดและรูปแบบช่อง"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:139
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:81
 msgid "Update/reset field positions"
-msgstr ""
+msgstr "ปรับค่า/ล้างค่า ตำแหน่งช่อง"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:145
 msgid "Update/reset symbol attributes"
-msgstr ""
+msgstr "ปรับค่า/ล้างค่า คุณลักษณะสัญลักษณ์"
 
 #: eeschema/dialogs/dialog_change_symbols_base.h:100
 msgid "Update Symbols from Library"
-msgstr ""
+msgstr "ปรับค่าสัญลักษณ์จากไลบรารี"
 
 #: eeschema/dialogs/dialog_choose_symbol.cpp:143
 #: pcbnew/dialogs/dialog_choose_footprint.cpp:95
 msgid "Select with Browser"
-msgstr ""
+msgstr "เลือกด้วยบราวเซอร์"
 
 #: eeschema/dialogs/dialog_choose_symbol.cpp:147
 msgid "Place repeated copies"
-msgstr ""
+msgstr "วางก้อปปี้ที่ทำซ้ำ"
 
 #: eeschema/dialogs/dialog_choose_symbol.cpp:149
 msgid "Keep the symbol selected for subsequent clicks."
-msgstr ""
+msgstr "เก็บสัญลักษณ์ไว้สำหรับคลิกวางครั้งถัดไป"
 
 #: eeschema/dialogs/dialog_choose_symbol.cpp:151
 msgid "Place all units"
-msgstr ""
+msgstr "วางทุกหน่วย"
 
 #: eeschema/dialogs/dialog_choose_symbol.cpp:153
 msgid "Sequentially place all units of the symbol."
-msgstr ""
+msgstr "วางทุกหน่วยสัญลักษณ์ไปตามลำดับ"
 
 #: eeschema/dialogs/dialog_choose_symbol.cpp:407
 #: eeschema/dialogs/dialog_choose_symbol.cpp:466
@@ -7710,149 +7903,151 @@ msgstr ""
 #: eeschema/widgets/symbol_preview_widget.cpp:181
 #, c-format
 msgid "Error loading symbol %s from library '%s'."
-msgstr ""
+msgstr "ผิดพลาดอ่านสัญลักษณ์ %s จากไลบรารี '%s'"
 
 #: eeschema/dialogs/dialog_choose_symbol.cpp:430
 msgid "No footprint specified"
-msgstr ""
+msgstr "ไม่ได้ระบุฟุ้ทพรินท์"
 
 #: eeschema/dialogs/dialog_choose_symbol.cpp:443
 msgid "Invalid footprint specified"
-msgstr ""
+msgstr "ระบุฟุ้ทพรินท์ไม่ถูกต้อง"
 
 #: eeschema/dialogs/dialog_choose_symbol.cpp:527
 msgid "No symbol selected"
-msgstr ""
+msgstr "ไม่ได้เลือกสัญลักษณ์"
 
 #: eeschema/dialogs/dialog_edit_label.cpp:104
 msgid "Global Label Properties"
-msgstr ""
+msgstr "คุณสมบัติป้ายชื่อแบบโกลบอล"
 
 #: eeschema/dialogs/dialog_edit_label.cpp:105
 msgid "Hierarchical Label Properties"
-msgstr ""
+msgstr "คุณสมบัติป้ายชื่อลำดับชั้น"
 
 #: eeschema/dialogs/dialog_edit_label.cpp:106
 msgid "Label Properties"
-msgstr ""
+msgstr "คุณสมบัติป้ายชื่อ"
 
 #: eeschema/dialogs/dialog_edit_label.cpp:107
 msgid "Hierarchical Sheet Pin Properties"
-msgstr ""
+msgstr "คุณสมบัติขาชีทชนิดลำดับชั้น"
 
 #: eeschema/dialogs/dialog_edit_label.cpp:108
 #: pcbnew/dialogs/dialog_text_properties.cpp:93
 #: pcbnew/dialogs/dialog_text_properties_base.h:89
 msgid "Text Properties"
-msgstr ""
+msgstr "คุณสมบัติข้อความ"
 
 #: eeschema/dialogs/dialog_edit_label.cpp:348
 msgid "Label requires non-empty text."
-msgstr ""
+msgstr "ป้ายชื่อมีข้อความว่างไม่ได้"
 
 #: eeschema/dialogs/dialog_edit_label_base.cpp:26
 #: eeschema/dialogs/dialog_edit_label_base.cpp:72
 msgid "Label:"
-msgstr ""
+msgstr "ป้ายชื่อ:"
 
 #: eeschema/dialogs/dialog_edit_label_base.cpp:28
 msgid "Enter the text to be used within the schematic"
-msgstr ""
+msgstr "ใส่ข้อความสำหรับใช้ในวงจร"
 
 #: eeschema/dialogs/dialog_edit_label_base.cpp:37
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:28
 #: pcbnew/dialogs/dialog_text_properties.cpp:85
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:24
 msgid "Text:"
-msgstr ""
+msgstr "ข้อความ:"
 
 #: eeschema/dialogs/dialog_edit_label_base.cpp:81
 msgid "Text Size:"
-msgstr ""
+msgstr "ขนาดข้อความ:"
 
 #: eeschema/dialogs/dialog_edit_label_base.cpp:98
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:38
 #: pcbnew/dialogs/panel_setup_rules_base.cpp:33
 msgid "Syntax help"
-msgstr ""
+msgstr "ช่วยเหลือไวยากรณ์"
 
 #: eeschema/dialogs/dialog_edit_label_base.cpp:99
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:39
 #: pcbnew/dialogs/panel_setup_rules_base.cpp:34
 msgid "Show syntax help window"
-msgstr ""
+msgstr "แสดงหน้าต่างช่วยเหลือไวยากรณ์"
 
 #: eeschema/dialogs/dialog_edit_label_base.cpp:106
 #: eeschema/dialogs/dialog_spice_model_base.cpp:240
 msgid "Note:"
-msgstr ""
+msgstr "บันทึก:"
 
 #: eeschema/dialogs/dialog_edit_label_base.cpp:110
 msgid ""
 "The margins around the text are controlled by the text offset ratio\n"
 "in Schematic Setup > General > Formatting."
 msgstr ""
+"ขอบเขตรอบข้อความควบคุมโดยสัดส่วนระยะเลื่อน\n"
+"ใน Schematic Setup > General > Formatting"
 
 #: eeschema/dialogs/dialog_edit_label_base.cpp:120 eeschema/sch_text.cpp:738
 msgid "Align right"
-msgstr ""
+msgstr "จัดชิดขวา"
 
 #: eeschema/dialogs/dialog_edit_label_base.cpp:120 eeschema/sch_text.cpp:739
 msgid "Align bottom"
-msgstr ""
+msgstr "จัดชิดล่าง"
 
 #: eeschema/dialogs/dialog_edit_label_base.cpp:120 eeschema/sch_text.cpp:740
 msgid "Align left"
-msgstr ""
+msgstr "จัดชิดซ้าย"
 
 #: eeschema/dialogs/dialog_edit_label_base.cpp:120 eeschema/sch_text.cpp:741
 msgid "Align top"
-msgstr ""
+msgstr "จัดชิดบน"
 
 #: eeschema/dialogs/dialog_edit_label_base.cpp:122 eeschema/sch_text.cpp:745
 msgid "Justification"
-msgstr ""
+msgstr "จัดพอเหมาะ"
 
 #: eeschema/dialogs/dialog_edit_label_base.cpp:126
 msgid "Bold and italic"
-msgstr ""
+msgstr "หนาและเอียง"
 
 #: eeschema/dialogs/dialog_edit_label_base.cpp:128
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:115
 #: eeschema/lib_field.cpp:431 eeschema/lib_pin.cpp:1028
 #: eeschema/lib_pin.cpp:1031 eeschema/sch_pin.cpp:205 eeschema/sch_text.cpp:756
 msgid "Style"
-msgstr ""
+msgstr "รูปแบบ"
 
 #: eeschema/dialogs/dialog_edit_label_base.cpp:132
 #: eeschema/dialogs/dialog_sheet_pin_properties.cpp:36 eeschema/pin_type.cpp:51
 #: eeschema/sch_text.cpp:556
 msgid "Input"
-msgstr ""
+msgstr "ใส่เข้า"
 
 #: eeschema/dialogs/dialog_edit_label_base.cpp:132
 #: eeschema/dialogs/dialog_sheet_pin_properties.cpp:37 eeschema/pin_type.cpp:52
 #: eeschema/sch_text.cpp:557
 msgid "Output"
-msgstr ""
+msgstr "ส่งออก"
 
 #: eeschema/dialogs/dialog_edit_label_base.cpp:132
 #: eeschema/dialogs/dialog_sheet_pin_properties.cpp:38 eeschema/pin_type.cpp:53
 #: eeschema/sch_text.cpp:558
 msgid "Bidirectional"
-msgstr ""
+msgstr "สองทิศทาง"
 
 #: eeschema/dialogs/dialog_edit_label_base.cpp:132
 #: eeschema/dialogs/dialog_sheet_pin_properties.cpp:39 eeschema/pin_type.cpp:54
 msgid "Tri-state"
-msgstr ""
+msgstr "สามสถานะ"
 
 #: eeschema/dialogs/dialog_edit_label_base.cpp:132
 #: eeschema/dialogs/dialog_sheet_pin_properties.cpp:40
 #: eeschema/dialogs/dialog_spice_model_base.cpp:199 eeschema/pin_type.cpp:55
 #: eeschema/sch_text.cpp:560
 msgid "Passive"
-msgstr ""
+msgstr "แพสซีฟ"
 
 #: eeschema/dialogs/dialog_edit_label_base.cpp:134
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:231
@@ -7861,74 +8056,74 @@ msgstr ""
 #: pcbnew/pad.cpp:1475 pcbnew/pcb_shape.cpp:510 pcbnew/pcb_target.cpp:158
 #: pcbnew/pcb_target.cpp:174
 msgid "Shape"
-msgstr ""
+msgstr "รูปร่าง"
 
 #: eeschema/dialogs/dialog_edit_label_base.h:72
 msgid "Text Editor"
-msgstr ""
+msgstr "เครื่องมือแก้ไขข้อความ"
 
 #: eeschema/dialogs/dialog_edit_line_style.cpp:53
 msgid "Leave unchanged"
-msgstr ""
+msgstr "ไม่เปลี่ยนแปลง"
 
 #: eeschema/dialogs/dialog_edit_line_style_base.cpp:44
 #: eeschema/dialogs/dialog_junction_props_base.cpp:38
 msgid "Color:"
-msgstr ""
+msgstr "สี:"
 
 #: eeschema/dialogs/dialog_edit_line_style_base.cpp:64
 msgid "Style:"
-msgstr ""
+msgstr "สไตล์:"
 
 #: eeschema/dialogs/dialog_edit_line_style_base.cpp:68
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:46
 msgid "Combo!"
-msgstr ""
+msgstr "คอมโบ!"
 
 #: eeschema/dialogs/dialog_edit_line_style_base.cpp:76
 msgid "Set width to 0 to use Schematic Editor line widths."
-msgstr ""
+msgstr "กำหนดขนาดเป็น 0 เพื่อใช้ขนาดเส้นจากเครื่องมือแก้ไขวงจร"
 
 #: eeschema/dialogs/dialog_edit_line_style_base.cpp:80
 msgid "Set color to transparent to use Schematic Editor colors."
-msgstr ""
+msgstr "กำหนเป็นสีใสเพื่อใช้สีจากเครื่องมือแก้ไขวงจร"
 
 #: eeschema/dialogs/dialog_edit_one_field.cpp:241
 msgid "Illegal reference designator value!"
-msgstr ""
+msgstr "ค่าอักษรอ้างอิงไม่ถูกต้อง!"
 
 #: eeschema/dialogs/dialog_edit_one_field.cpp:249
 msgid "Value may not be empty."
-msgstr ""
+msgstr "ค่าไม่สามารถว่างเปล่า"
 
 #: eeschema/dialogs/dialog_edit_symbols_libid.cpp:536
 #, c-format
 msgid "Symbol library identifier %s is not valid."
-msgstr ""
+msgstr "ตัวระบุไลบรารีสัญลักษณ์ %s ไม่ถูกต้อง"
 
 #: eeschema/dialogs/dialog_edit_symbols_libid.cpp:633
 #, c-format
 msgid "Available Candidates for %s "
-msgstr ""
+msgstr "มีผู้สมัครสำหรับ %s "
 
 #: eeschema/dialogs/dialog_edit_symbols_libid.cpp:637
 #, c-format
 msgid "Candidates count %d "
-msgstr ""
+msgstr "จำนวนผู้สมัคร %d "
 
 #: eeschema/dialogs/dialog_edit_symbols_libid.cpp:647
 #, c-format
 msgid "%u link(s) mapped, %u not found"
-msgstr ""
+msgstr "เชื่อมโยง %u สำเร็จ, จำนวน %u ไม่พบ"
 
 #: eeschema/dialogs/dialog_edit_symbols_libid.cpp:652
 #, c-format
 msgid "All %u link(s) resolved"
-msgstr ""
+msgstr "เชื่อมโยง %u ทั้งหมด แก้ไขแล้ว"
 
 #: eeschema/dialogs/dialog_edit_symbols_libid.cpp:682
 msgid "Invalid symbol library identifier"
-msgstr ""
+msgstr "ตัวระบุไลบรารีสัญลักษณ์ไม่ถูกต้อง"
 
 #: eeschema/dialogs/dialog_edit_symbols_libid.cpp:733
 #, c-format
@@ -7937,23 +8132,26 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
+"ผิดพลาดอ่านสัญลักษณ์ %s จากไลบรารี %s\n"
+"\n"
+"%s"
 
 #: eeschema/dialogs/dialog_edit_symbols_libid_base.cpp:37
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:86
 msgid "Symbols"
-msgstr ""
+msgstr "สัญลักษณ์"
 
 #: eeschema/dialogs/dialog_edit_symbols_libid_base.cpp:38
 msgid "Current Library Reference"
-msgstr ""
+msgstr "ไลบรารีอ้างอิงปัจจุบัน"
 
 #: eeschema/dialogs/dialog_edit_symbols_libid_base.cpp:39
 msgid "New Library Reference"
-msgstr ""
+msgstr "ไลบรารีอ้างอิงใหม่"
 
 #: eeschema/dialogs/dialog_edit_symbols_libid_base.cpp:58
 msgid "Map Orphans"
-msgstr ""
+msgstr "แผนที่กำพร้า"
 
 #: eeschema/dialogs/dialog_edit_symbols_libid_base.cpp:59
 msgid ""
@@ -7964,7 +8162,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_edit_symbols_libid_base.cpp:63
 msgid "Update symbol fields from new library"
-msgstr ""
+msgstr "ปรับค่าช่องสัญลักษณ์จากไลบรารีใหม่"
 
 #: eeschema/dialogs/dialog_edit_symbols_libid_base.cpp:64
 msgid ""
@@ -7974,152 +8172,152 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_edit_symbols_libid_base.h:57
 msgid "Symbol Library References"
-msgstr ""
+msgstr "ค่าอ้างอิงไลบรารีสัญลักษณ์"
 
 #: eeschema/dialogs/dialog_erc.cpp:79
 msgid "Run ERC"
-msgstr ""
+msgstr "ทำ ERC"
 
 #: eeschema/dialogs/dialog_erc.cpp:93
 msgid "Show Annotation dialog"
-msgstr ""
+msgstr "แสดงหน้าต่างคำอธิบายประกอบ"
 
 #: eeschema/dialogs/dialog_erc.cpp:106
 msgid "Schematic is not fully annotated. ERC results will be incomplete."
-msgstr ""
+msgstr "วงจรยังทำอธิบายประกอบไม่เสร็จ ERC จะทำงานไม่สมบูรณ์"
 
 #: eeschema/dialogs/dialog_erc.cpp:194
 msgid "Delete exclusions too?"
-msgstr ""
+msgstr "ลบข้อยกเว้นด้วย?"
 
 #: eeschema/dialogs/dialog_erc.cpp:194 pcbnew/dialogs/dialog_drc.cpp:893
 #: pcbnew/dialogs/dialog_drc_base.cpp:195
 #: pcbnew/dialogs/dialog_footprint_checker_base.cpp:82
 msgid "Delete All Markers"
-msgstr ""
+msgstr "ลบมาร์คเกอร์ทั้งหมด"
 
 #: eeschema/dialogs/dialog_erc.cpp:196
 msgid "Errors and Warnings Only"
-msgstr ""
+msgstr "ผิดพลาดและระวังเท่านั้น"
 
 #: eeschema/dialogs/dialog_erc.cpp:196
 msgid "Errors, Warnings and Exclusions"
-msgstr ""
+msgstr "ผิดพลาด,ระวังและยกเว้น"
 
 #: eeschema/dialogs/dialog_erc.cpp:302
 #, c-format
 msgid "%d symbol(s) require annotation.<br><br>"
-msgstr ""
+msgstr "สัญลักษณ์ %d ต้องการคำอธิบายประกอบ<br><br>"
 
 #: eeschema/dialogs/dialog_erc.cpp:306
 msgid "-------- ERC cancelled by user.<br><br>"
-msgstr ""
+msgstr "-------- ERC ยกเลิกโดยผู้ใช้<br><br>"
 
 #: eeschema/dialogs/dialog_erc.cpp:308
 msgid "ERC completed.<br><br>"
-msgstr ""
+msgstr "ERC เสร็จสิ้น<br><br>"
 
 #: eeschema/dialogs/dialog_erc.cpp:356
 msgid "Checking sheet names..."
-msgstr ""
+msgstr "ตรวจสอบชื่อกระดาษ…"
 
 #: eeschema/dialogs/dialog_erc.cpp:362
 msgid "Checking bus conflicts..."
-msgstr ""
+msgstr "ตรวจสอบบัสขัดแย้ง…"
 
 #: eeschema/dialogs/dialog_erc.cpp:367
 msgid "Checking conflicts..."
-msgstr ""
+msgstr "ตรวจสอบข้อขัดแย้ง…"
 
 #: eeschema/dialogs/dialog_erc.cpp:374
 msgid "Checking footprints..."
-msgstr ""
+msgstr "ตรวจสอบฟุ้ทพรินท์…"
 
 #: eeschema/dialogs/dialog_erc.cpp:378
 msgid "Checking pins..."
-msgstr ""
+msgstr "ตรวจสอบขา…"
 
 #: eeschema/dialogs/dialog_erc.cpp:391
 msgid "Checking labels..."
-msgstr ""
+msgstr "ตรวจสอบป้ายชื่อ…"
 
 #: eeschema/dialogs/dialog_erc.cpp:397
 msgid "Checking for unresolved variables..."
-msgstr ""
+msgstr "ตรวจสอบตัวแปรที่แก้ไม่ได้…"
 
 #: eeschema/dialogs/dialog_erc.cpp:403
 msgid "Checking no connect pins for connections..."
-msgstr ""
+msgstr "ตรวจสอบขาที่ไม่เชื่อมต่อ…"
 
 #: eeschema/dialogs/dialog_erc.cpp:409
 msgid "Checking for library symbol issues..."
-msgstr ""
+msgstr "ตรวจสอบไลบรารีสัญลักษณ์…"
 
 #: eeschema/dialogs/dialog_erc.cpp:487 pcbnew/dialogs/dialog_drc.cpp:440
 msgid "errors"
-msgstr ""
+msgstr "ผิดพลาด"
 
 #: eeschema/dialogs/dialog_erc.cpp:488 pcbnew/dialogs/dialog_drc.cpp:441
 msgid "warnings"
-msgstr ""
+msgstr "ระวัง"
 
 #: eeschema/dialogs/dialog_erc.cpp:489 pcbnew/dialogs/dialog_drc.cpp:442
 msgid "appropriate"
-msgstr ""
+msgstr "เหมาะสม"
 
 #: eeschema/dialogs/dialog_erc.cpp:494 pcbnew/dialogs/dialog_drc.cpp:447
 msgid "Remove exclusion for this violation"
-msgstr ""
+msgstr "เอาข้อยกเว้นออกสำหรับการละเมิดนี้"
 
 #: eeschema/dialogs/dialog_erc.cpp:495 pcbnew/dialogs/dialog_drc.cpp:448
 #, c-format
 msgid "It will be placed back in the %s list"
-msgstr ""
+msgstr "จะนำกลับไปใส่ในรายการ %s"
 
 #: eeschema/dialogs/dialog_erc.cpp:499 pcbnew/dialogs/dialog_drc.cpp:452
 msgid "Exclude this violation"
-msgstr ""
+msgstr "ไม่รวมการละเมิดนี้"
 
 #: eeschema/dialogs/dialog_erc.cpp:500 pcbnew/dialogs/dialog_drc.cpp:453
 #, c-format
 msgid "It will be excluded from the %s list"
-msgstr ""
+msgstr "จะไม่รวมในรายการ %s"
 
 #: eeschema/dialogs/dialog_erc.cpp:512 pcbnew/dialogs/dialog_drc.cpp:466
 #, c-format
 msgid "Change severity to Error for all '%s' violations"
-msgstr ""
+msgstr "เปลี่ยนระดับเป็นผิดพลาด สำหรับการละเมิด '%s' ทั้งหมด"
 
 #: eeschema/dialogs/dialog_erc.cpp:514 eeschema/dialogs/dialog_erc.cpp:520
 #: pcbnew/dialogs/dialog_drc.cpp:468 pcbnew/dialogs/dialog_drc.cpp:475
 msgid "Violation severities can also be edited in the Board Setup... dialog"
-msgstr ""
+msgstr "ระดับการละเมิดสามารถแก้ไขในไดอะล็อก Board Setup"
 
 #: eeschema/dialogs/dialog_erc.cpp:518 pcbnew/dialogs/dialog_drc.cpp:473
 #, c-format
 msgid "Change severity to Warning for all '%s' violations"
-msgstr ""
+msgstr "เปลี่ยนระดับเป็นระวังสำหรับการละเมิด '%s' ทั้งหมด"
 
 #: eeschema/dialogs/dialog_erc.cpp:523 pcbnew/dialogs/dialog_drc.cpp:479
 #, c-format
 msgid "Ignore all '%s' violations"
-msgstr ""
+msgstr "เพิกเชยการละเมิด '%s' ทั้งหมด"
 
 #: eeschema/dialogs/dialog_erc.cpp:524 pcbnew/dialogs/dialog_drc.cpp:481
 msgid "Violations will not be checked or reported"
-msgstr ""
+msgstr "การละเมิดจะไม่ถูกตรวจหรือไม่รายงาน"
 
 #: eeschema/dialogs/dialog_erc.cpp:531
 msgid "Edit pin-to-pin conflict map..."
-msgstr ""
+msgstr "แก้ไขข้อขัดแย้ง ขาถึงขา…"
 
 #: eeschema/dialogs/dialog_erc.cpp:535 pcbnew/dialogs/dialog_drc.cpp:486
 msgid "Edit violation severities..."
-msgstr ""
+msgstr "แก้ไขระดับการละเมิด…"
 
 #: eeschema/dialogs/dialog_erc.cpp:536
 msgid "Open the Schematic Setup... dialog"
-msgstr ""
+msgstr "ณฐพร กิ่งรุ้งเพชร"
 
 #: eeschema/dialogs/dialog_erc.cpp:628
 #: eeschema/dialogs/dialog_schematic_setup.cpp:73
