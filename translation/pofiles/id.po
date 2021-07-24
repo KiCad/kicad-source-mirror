@@ -5,16 +5,16 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
-"PO-Revision-Date: 2021-06-05 08:33+0000\n"
-"Last-Translator: Jacque Fresco <aidter@use.startmail.com>\n"
-"Language-Team: Indonesian <https://hosted.weblate.org/projects/kicad/master-"
-"source/id/>\n"
+"PO-Revision-Date: 2021-07-31 11:56+0000\n"
+"Last-Translator: Triyan W. Nugroho <triyan.wn@gmail.com>\n"
+"Language-Team: Indonesian <https://hosted.weblate.org/projects/kicad/"
+"master-source/id/>\n"
 "Language: id\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.7-dev\n"
+"X-Generator: Weblate 4.7.2-dev\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
 msgid "All Files (*.*)|*.*"
@@ -11484,7 +11484,7 @@ msgstr ""
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:123
 #: eeschema/erc_item.cpp:41
 msgid "Connections"
-msgstr ""
+msgstr "Koneksi"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:128
 msgid "Junction dot size:"
@@ -11492,20 +11492,20 @@ msgstr ""
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:132
 msgid "Smallest"
-msgstr ""
+msgstr "Terkecil"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:132
 #: pcbnew/dialogs/dialog_plot_base.cpp:117
 msgid "Small"
-msgstr ""
+msgstr "Kecil"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:132
 msgid "Large"
-msgstr ""
+msgstr "Besar"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:132
 msgid "Largest"
-msgstr ""
+msgstr "Terbesar"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:151
 msgid "Inter-sheet References"
@@ -11535,7 +11535,7 @@ msgstr ""
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:180
 msgid "["
-msgstr ""
+msgstr "["
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:183
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:153
@@ -11544,7 +11544,7 @@ msgstr ""
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:187
 msgid "]"
-msgstr ""
+msgstr "]"
 
 #: eeschema/dialogs/panel_setup_pinmap.cpp:169
 msgid "No error or warning"
@@ -11565,11 +11565,11 @@ msgstr ""
 #: eeschema/dialogs/panel_sym_color_settings_base.cpp:22
 #: pagelayout_editor/dialogs/panel_pl_editor_color_settings_base.cpp:18
 msgid "Color Theme"
-msgstr ""
+msgstr "Tema Warna"
 
 #: eeschema/dialogs/panel_sym_color_settings_base.cpp:25
 msgid "Use Eeschema color theme"
-msgstr ""
+msgstr "Gunakan tema warna Eeschema"
 
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:29
 msgid "&Default line width:"
@@ -11594,7 +11594,7 @@ msgstr ""
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:126
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:137
 msgid "100"
-msgstr ""
+msgstr "100"
 
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:133
 msgid "&Pitch of repeated pins:"
@@ -11602,7 +11602,7 @@ msgstr ""
 
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:137
 msgid "50"
-msgstr ""
+msgstr "50"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:350
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:531
@@ -11659,7 +11659,7 @@ msgstr ""
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:462
 msgid "Error Loading Library"
-msgstr ""
+msgstr "Kesalahan Memuat Pustaka"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:508
 msgid "Warning: Duplicate Nickname"
@@ -11734,7 +11734,7 @@ msgstr ""
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:1048
 msgid "Symbol Libraries"
-msgstr ""
+msgstr "Pustaka Simbol"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:1070
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:1103
@@ -11772,7 +11772,7 @@ msgstr ""
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:61
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:58
 msgid "Global Libraries"
-msgstr ""
+msgstr "Pustaka Global"
 
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:97
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:94
@@ -11782,16 +11782,16 @@ msgstr ""
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:105
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:103
 msgid "Add empty row to table"
-msgstr ""
+msgstr "Tambah baris kosong pada tabel"
 
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:110
 msgid "Add existing library to table"
-msgstr ""
+msgstr "Tambah pustaka yang sudah ada ke tabel"
 
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:128
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:124
 msgid "Remove library from table"
-msgstr ""
+msgstr "Buang pustaka dari tabel"
 
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:135
 #, fuzzy
@@ -11835,15 +11835,15 @@ msgstr ""
 
 #: eeschema/erc.cpp:59 eeschema/erc.cpp:76
 msgid "Input Pin"
-msgstr ""
+msgstr "Pin Masukan"
 
 #: eeschema/erc.cpp:60 eeschema/erc.cpp:77
 msgid "Output Pin"
-msgstr ""
+msgstr "Pin Keluaran"
 
 #: eeschema/erc.cpp:61 eeschema/erc.cpp:78
 msgid "Bidirectional Pin"
-msgstr ""
+msgstr "Pin Dua Arah"
 
 #: eeschema/erc.cpp:62 eeschema/erc.cpp:79
 msgid "Tri-State Pin"
@@ -11851,23 +11851,23 @@ msgstr ""
 
 #: eeschema/erc.cpp:63 eeschema/erc.cpp:80
 msgid "Passive Pin"
-msgstr ""
+msgstr "Pin Pasif"
 
 #: eeschema/erc.cpp:64 eeschema/erc.cpp:81
 msgid "Free Pin"
-msgstr ""
+msgstr "Pin Bebas"
 
 #: eeschema/erc.cpp:65 eeschema/erc.cpp:82
 msgid "Unspecified Pin"
-msgstr ""
+msgstr "Pin Tak Ditentukan"
 
 #: eeschema/erc.cpp:66 eeschema/erc.cpp:83
 msgid "Power Input Pin"
-msgstr ""
+msgstr "Pin Masukan Daya"
 
 #: eeschema/erc.cpp:67 eeschema/erc.cpp:84
 msgid "Power Output Pin"
-msgstr ""
+msgstr "Pin Keluaran Daya"
 
 #: eeschema/erc.cpp:68 eeschema/erc.cpp:85
 msgid "Open Collector"
@@ -11921,7 +11921,7 @@ msgstr ""
 
 #: eeschema/erc_item.cpp:42
 msgid "Conflicts"
-msgstr ""
+msgstr "Konflik"
 
 #: eeschema/erc_item.cpp:43 pcbnew/dialogs/panel_edit_options_base.cpp:362
 #: pcbnew/drc/drc_item.cpp:46
@@ -11934,7 +11934,7 @@ msgstr ""
 
 #: eeschema/erc_item.cpp:50
 msgid "Pin not connected"
-msgstr ""
+msgstr "Pin tak terhubung"
 
 #: eeschema/erc_item.cpp:54
 msgid "Input pin not driven by any Output pins"
@@ -12091,14 +12091,12 @@ msgid "Schematic '%s' does not exist.  Do you wish to create it?"
 msgstr ""
 
 #: eeschema/files-io.cpp:309
-#, fuzzy
 msgid "Creating Schematic"
-msgstr "Sunting Skematik"
+msgstr "Membuat Skematik"
 
 #: eeschema/files-io.cpp:310
-#, fuzzy
 msgid "Loading Schematic"
-msgstr "Sunting Skematik"
+msgstr "Memuat Skematik"
 
 #: eeschema/files-io.cpp:370
 msgid "Schematic file changes are unsaved"
@@ -12112,11 +12110,9 @@ msgstr ""
 
 #: eeschema/files-io.cpp:410 eeschema/files-io.cpp:418
 #: eeschema/files-io.cpp:1186 eeschema/sheet.cpp:162
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading schematic '%s'."
-msgstr ""
-"Terjadi kesalahan saat memuat berkas skematik \"%s\".\n"
-"%s"
+msgstr "Terjadi kesalahan saat memuat skematik '%s'."
 
 #: eeschema/files-io.cpp:426
 #, fuzzy, c-format
@@ -12182,7 +12178,7 @@ msgstr ""
 
 #: eeschema/files-io.cpp:542
 msgid "Abort"
-msgstr ""
+msgstr "Batalkan"
 
 #: eeschema/files-io.cpp:557 eeschema/files-io.cpp:574
 #: pagelayout_editor/files.cpp:250 pcbnew/files.cpp:794
@@ -12213,11 +12209,11 @@ msgstr ""
 #: eeschema/files-io.cpp:732 pcbnew/files.cpp:163
 #: pcbnew/import_gfx/dialog_import_gfx.cpp:250
 msgid "All supported formats|"
-msgstr ""
+msgstr "Semua format yang didukung|"
 
 #: eeschema/files-io.cpp:734
 msgid "Import Schematic"
-msgstr ""
+msgstr "Impor Skematik"
 
 #: eeschema/files-io.cpp:769
 #, fuzzy, c-format
@@ -15432,11 +15428,11 @@ msgstr ""
 
 #: eeschema/tools/ee_actions.cpp:498
 msgid "Symbol Properties..."
-msgstr ""
+msgstr "Properti Simbol..."
 
 #: eeschema/tools/ee_actions.cpp:498
 msgid "Displays symbol properties dialog"
-msgstr ""
+msgstr "Tampilkan dialog properti simbol"
 
 #: eeschema/tools/ee_actions.cpp:503
 msgid "Pin Table..."
@@ -18315,7 +18311,7 @@ msgstr ""
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:256
 msgid "Regulators"
-msgstr ""
+msgstr "Regulator"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:265
 msgid "PI"
@@ -28330,11 +28326,11 @@ msgstr ""
 
 #: pcbnew/import_gfx/dialog_import_gfx.cpp:55
 msgid "Centimeter"
-msgstr ""
+msgstr "Sentimeter"
 
 #: pcbnew/import_gfx/dialog_import_gfx.cpp:56
 msgid "Feet"
-msgstr ""
+msgstr "Kaki"
 
 #: pcbnew/import_gfx/dialog_import_gfx.cpp:252
 msgid "Open File"
@@ -28346,7 +28342,7 @@ msgstr "Tidak ada berkas yang dipilih!"
 
 #: pcbnew/import_gfx/dialog_import_gfx.cpp:288
 msgid "Please select a valid layer."
-msgstr ""
+msgstr "Silakan pilih lapisan yang valid."
 
 #: pcbnew/import_gfx/dialog_import_gfx.cpp:337
 msgid "Items in the imported file could not be handled properly."
@@ -28359,7 +28355,7 @@ msgstr "Tidak ada plugin untuk menangani tipe berkas ini."
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:26
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:31
 msgid "Only vectors will be imported.  Bitmaps and fonts will be ignored."
-msgstr ""
+msgstr "Hanya vektor yang akan diimpor.  Bitmap dan fonta akan diabaikan."
 
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:43
 msgid "Placement"
