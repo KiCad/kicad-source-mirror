@@ -87,6 +87,7 @@ DIALOG_SHIM::DIALOG_SHIM( wxWindow* aParent, wxWindowID id, const wxString& titl
             m_parentFrame( nullptr )
 {
     KIWAY_HOLDER* kiwayHolder = nullptr;
+    m_initialSize = size;
 
     if( aParent )
     {
@@ -255,6 +256,8 @@ bool DIALOG_SHIM::Show( bool show )
                          0 );
             }
         }
+        else if( m_initialSize != wxDefaultSize )
+            SetSize( m_initialSize );
 
         // Be sure that the dialog appears in a visible area
         // (the dialog position might have been stored at the time when it was
