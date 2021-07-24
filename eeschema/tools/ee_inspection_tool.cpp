@@ -335,7 +335,7 @@ int EE_INSPECTION_TOOL::CheckSymbol( const TOOL_EVENT& aEvent )
             {
                 if( symbol->GetUnitCount() <= 1 )
                 {
-                    msg.Printf( _( "<b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b>"
+                    msg.Printf( _( "Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b>"
                                    " of converted." ),
                                 pin->GetNumber(),
                                 pinName,
@@ -344,7 +344,7 @@ int EE_INSPECTION_TOOL::CheckSymbol( const TOOL_EVENT& aEvent )
                 }
                 else
                 {
-                    msg.Printf( _( "<b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b>"
+                    msg.Printf( _( "Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b>"
                                    " in unit %c of converted." ),
                                 pin->GetNumber(),
                                 pinName,
@@ -357,7 +357,7 @@ int EE_INSPECTION_TOOL::CheckSymbol( const TOOL_EVENT& aEvent )
             {
                 if( symbol->GetUnitCount() <= 1 )
                 {
-                    msg.Printf( _( "<b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b>." ),
+                    msg.Printf( _( "Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b>." ),
                                 pin->GetNumber(),
                                 pinName,
                                 MessageTextFromValue( units, pin->GetPosition().x ),
@@ -365,7 +365,7 @@ int EE_INSPECTION_TOOL::CheckSymbol( const TOOL_EVENT& aEvent )
                 }
                 else
                 {
-                    msg.Printf( _( "<b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b>"
+                    msg.Printf( _( "Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b>"
                                    " in unit %c." ),
                                 pin->GetNumber(),
                                 pinName,
