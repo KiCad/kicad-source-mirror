@@ -106,6 +106,11 @@ public:
     VECTOR2I CalcMidPoint() const;
 
     /**
+     * Calculate the start and end points using the center point and the two angles.
+     */
+    void CalcEndPoints();
+
+    /**
      * Calculate the radius and angle of an arc using the start, end, and center points.
      */
     void CalcRadiusAngles();

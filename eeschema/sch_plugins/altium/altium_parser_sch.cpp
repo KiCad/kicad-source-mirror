@@ -221,6 +221,9 @@ ASCH_LABEL::ASCH_LABEL( const std::map<wxString, wxString>& aProps )
 
     justification = ReadEnum<ASCH_LABEL_JUSTIFICATION>( aProps, "JUSTIFICATION", 0, 8,
                                                         ASCH_LABEL_JUSTIFICATION::BOTTOM_LEFT );
+
+    orientation = ReadEnum<ASCH_RECORD_ORIENTATION>( aProps, "ORIENTATION", 0, 3,
+                                                     ASCH_RECORD_ORIENTATION::RIGHTWARDS );
 }
 
 
@@ -688,6 +691,9 @@ ASCH_DESIGNATOR::ASCH_DESIGNATOR( const std::map<wxString, wxString>& aProps )
     name = ALTIUM_PARSER::ReadString( aProps, "NAME", "" );
     text = ALTIUM_PARSER::ReadString( aProps, "TEXT", "" );
 
+    justification = ReadEnum<ASCH_LABEL_JUSTIFICATION>( aProps, "JUSTIFICATION", 0, 8,
+                                                        ASCH_LABEL_JUSTIFICATION::BOTTOM_LEFT );
+
     orientation = ReadEnum<ASCH_RECORD_ORIENTATION>( aProps, "ORIENTATION", 0, 3,
                                                      ASCH_RECORD_ORIENTATION::RIGHTWARDS );
 
@@ -735,6 +741,9 @@ ASCH_PARAMETER::ASCH_PARAMETER( const std::map<wxString, wxString>& aProps )
 
     location = wxPoint( ReadKiCadUnitFrac( aProps, "LOCATION.X" ),
                         -ReadKiCadUnitFrac( aProps, "LOCATION.Y" ) );
+
+    justification = ReadEnum<ASCH_LABEL_JUSTIFICATION>( aProps, "JUSTIFICATION", 0, 8,
+                                                        ASCH_LABEL_JUSTIFICATION::BOTTOM_LEFT );
 
     orientation = ReadEnum<ASCH_RECORD_ORIENTATION>( aProps, "ORIENTATION", 0, 3,
                                                      ASCH_RECORD_ORIENTATION::RIGHTWARDS );

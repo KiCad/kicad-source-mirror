@@ -596,3 +596,16 @@ VECTOR2I LIB_ARC::CalcMidPoint() const
 
     return midPoint;
 }
+
+
+void LIB_ARC::CalcEndPoints()
+{
+    double startAngle = DEG2RAD( static_cast<double>( m_t1 ) / 10.0 );
+    double endAngle = DEG2RAD( static_cast<double>( m_t2 ) / 10.0 );
+
+    m_ArcStart.x = KiROUND( cos( startAngle ) * m_Radius ) + m_Pos.x;
+    m_ArcStart.y = KiROUND( sin( startAngle ) * m_Radius ) + m_Pos.y;
+
+    m_ArcEnd.x = KiROUND( cos( endAngle ) * m_Radius ) + m_Pos.x;
+    m_ArcEnd.y = KiROUND( sin( endAngle ) * m_Radius ) + m_Pos.y;
+}

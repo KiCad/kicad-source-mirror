@@ -99,10 +99,10 @@ enum class ALTIUM_SCH_RECORD
 
 enum class ASCH_RECORD_ORIENTATION
 {
-    RIGHTWARDS = 0,
-    UPWARDS    = 1,
-    LEFTWARDS  = 2,
-    DOWNWARDS  = 3
+    RIGHTWARDS = 0, // 0
+    UPWARDS    = 1, // 90
+    LEFTWARDS  = 2, // 180
+    DOWNWARDS  = 3  // 270
 };
 
 
@@ -257,6 +257,7 @@ struct ASCH_LABEL
     bool isMirrored;
 
     ASCH_LABEL_JUSTIFICATION justification;
+    ASCH_RECORD_ORIENTATION  orientation;
 
     explicit ASCH_LABEL( const std::map<wxString, wxString>& aProps );
 };
@@ -704,8 +705,9 @@ struct ASCH_DESIGNATOR
     wxString name;
     wxString text;
 
-    ASCH_RECORD_ORIENTATION orientation;
-    wxPoint location;
+    ASCH_RECORD_ORIENTATION  orientation;
+    ASCH_LABEL_JUSTIFICATION justification;
+    wxPoint                  location;
 
     explicit ASCH_DESIGNATOR( const std::map<wxString, wxString>& aProps );
 };
@@ -746,8 +748,9 @@ struct ASCH_PARAMETER
     int ownerindex;
     int ownerpartid;
 
-    wxPoint                 location;
-    ASCH_RECORD_ORIENTATION orientation;
+    wxPoint                  location;
+    ASCH_LABEL_JUSTIFICATION justification;
+    ASCH_RECORD_ORIENTATION  orientation;
 
     wxString name;
     wxString text;

@@ -56,6 +56,7 @@
 #include <compoundfilereader.h>
 #include <kicad_string.h>
 #include <sch_edit_frame.h>
+#include <trigo.h>
 #include <wildcards_and_files_ext.h>
 #include <wx/mstream.h>
 #include <wx/log.h>
@@ -738,8 +739,11 @@ void SCH_ALTIUM_PLUGIN::ParsePin( const std::map<wxString, wxString>& aPropertie
 }
 
 
-void SetEdaTextJustification( EDA_TEXT* text, ASCH_LABEL_JUSTIFICATION justification )
+void SetTextPositioning( EDA_TEXT* text, ASCH_LABEL_JUSTIFICATION justification, ASCH_RECORD_ORIENTATION orientation )
 {
+    int    vjustify, hjustify;
+    double angle;
+
     switch( justification )
     {
     default:
@@ -747,17 +751,17 @@ void SetEdaTextJustification( EDA_TEXT* text, ASCH_LABEL_JUSTIFICATION justifica
     case ASCH_LABEL_JUSTIFICATION::BOTTOM_LEFT:
     case ASCH_LABEL_JUSTIFICATION::BOTTOM_CENTER:
     case ASCH_LABEL_JUSTIFICATION::BOTTOM_RIGHT:
-        text->SetVertJustify( EDA_TEXT_VJUSTIFY_T::GR_TEXT_VJUSTIFY_BOTTOM );
+        vjustify = EDA_TEXT_VJUSTIFY_T::GR_TEXT_VJUSTIFY_BOTTOM;
         break;
     case ASCH_LABEL_JUSTIFICATION::CENTER_LEFT:
     case ASCH_LABEL_JUSTIFICATION::CENTER_CENTER:
     case ASCH_LABEL_JUSTIFICATION::CENTER_RIGHT:
-        text->SetVertJustify( EDA_TEXT_VJUSTIFY_T::GR_TEXT_VJUSTIFY_CENTER );
+        vjustify = EDA_TEXT_VJUSTIFY_T::GR_TEXT_VJUSTIFY_CENTER;
         break;
     case ASCH_LABEL_JUSTIFICATION::TOP_LEFT:
     case ASCH_LABEL_JUSTIFICATION::TOP_CENTER:
     case ASCH_LABEL_JUSTIFICATION::TOP_RIGHT:
-        text->SetVertJustify( EDA_TEXT_VJUSTIFY_T::GR_TEXT_VJUSTIFY_TOP );
+        vjustify = EDA_TEXT_VJUSTIFY_T::GR_TEXT_VJUSTIFY_TOP;
         break;
     }
 
@@ -768,19 +772,43 @@ void SetEdaTextJustification( EDA_TEXT* text, ASCH_LABEL_JUSTIFICATION justifica
     case ASCH_LABEL_JUSTIFICATION::BOTTOM_LEFT:
     case ASCH_LABEL_JUSTIFICATION::CENTER_LEFT:
     case ASCH_LABEL_JUSTIFICATION::TOP_LEFT:
-        text->SetHorizJustify( EDA_TEXT_HJUSTIFY_T::GR_TEXT_HJUSTIFY_LEFT );
+        hjustify = EDA_TEXT_HJUSTIFY_T::GR_TEXT_HJUSTIFY_LEFT;
         break;
     case ASCH_LABEL_JUSTIFICATION::BOTTOM_CENTER:
     case ASCH_LABEL_JUSTIFICATION::CENTER_CENTER:
     case ASCH_LABEL_JUSTIFICATION::TOP_CENTER:
-        text->SetHorizJustify( EDA_TEXT_HJUSTIFY_T::GR_TEXT_HJUSTIFY_CENTER );
+        hjustify = EDA_TEXT_HJUSTIFY_T::GR_TEXT_HJUSTIFY_CENTER;
         break;
     case ASCH_LABEL_JUSTIFICATION::BOTTOM_RIGHT:
     case ASCH_LABEL_JUSTIFICATION::CENTER_RIGHT:
     case ASCH_LABEL_JUSTIFICATION::TOP_RIGHT:
-        text->SetHorizJustify( EDA_TEXT_HJUSTIFY_T::GR_TEXT_HJUSTIFY_RIGHT );
+        hjustify = EDA_TEXT_HJUSTIFY_T::GR_TEXT_HJUSTIFY_RIGHT;
         break;
     }
+
+    switch( orientation )
+    {
+    case ASCH_RECORD_ORIENTATION::RIGHTWARDS:
+        angle = TEXT_ANGLE_HORIZ;
+        break;
+    case ASCH_RECORD_ORIENTATION::LEFTWARDS:
+        vjustify *= -1;
+        hjustify *= -1;
+        angle = TEXT_ANGLE_HORIZ;
+        break;
+    case ASCH_RECORD_ORIENTATION::UPWARDS:
+        angle = TEXT_ANGLE_VERT;
+        break;
+    case ASCH_RECORD_ORIENTATION::DOWNWARDS:
+        vjustify *= -1;
+        hjustify *= -1;
+        angle = TEXT_ANGLE_VERT;
+        break;
+    }
+
+    text->SetVertJustify( static_cast<EDA_TEXT_VJUSTIFY_T>( vjustify ) );
+    text->SetHorizJustify( static_cast<EDA_TEXT_HJUSTIFY_T>( hjustify ) );
+    text->SetTextAngle( angle );
 }
 
 
@@ -806,7 +834,7 @@ void SCH_ALTIUM_PLUGIN::ParseLabel( const std::map<wxString, wxString>& aPropert
         wxString  kicadText = AltiumSpecialStringsToKiCadVariables( elem.text, variableMap );
         SCH_TEXT* textItem = new SCH_TEXT( elem.location + m_sheetOffset, kicadText );
 
-        SetEdaTextJustification( textItem, elem.justification );
+        SetTextPositioning( textItem, elem.justification, elem.orientation );
 
         size_t fontId = static_cast<int>( elem.fontId );
 
@@ -842,7 +870,7 @@ void SCH_ALTIUM_PLUGIN::ParseLabel( const std::map<wxString, wxString>& aPropert
 
         textItem->SetPosition( GetRelativePosition( elem.location + m_sheetOffset, symbol ) );
         textItem->SetText( elem.text );
-        SetEdaTextJustification( textItem, elem.justification );
+        SetTextPositioning( textItem, elem.justification, elem.orientation );
 
         size_t fontId = static_cast<int>( elem.fontId );
 
@@ -1299,16 +1327,21 @@ void SCH_ALTIUM_PLUGIN::ParseArc( const std::map<wxString, wxString>& aPropertie
         }
         else
         {
+            if( fmod( 360.0 + elem.endAngle - elem.startAngle, 360.0 ) > 180.0 )
+            {
+                m_reporter->Report( _( "Arcs in Symbols cannot exceed 180 degrees." ),
+                                    RPT_SEVERITY_ERROR );
+                return;
+            }
+
             LIB_ARC* arc = new LIB_ARC( libSymbolIt->second );
             libSymbolIt->second->AddDrawItem( arc );
-
             arc->SetUnit( elem.ownerpartid );
-
-            // TODO: correct?
             arc->SetPosition( GetRelativePosition( elem.center + m_sheetOffset, symbol ) );
             arc->SetRadius( elem.radius );
             arc->SetFirstRadiusAngle( elem.startAngle * 10. );
             arc->SetSecondRadiusAngle( elem.endAngle * 10. );
+            arc->CalcEndPoints();
         }
     }
 }
@@ -1761,7 +1794,7 @@ void SCH_ALTIUM_PLUGIN::ParsePowerPort( const std::map<wxString, wxString>& aPro
         libSymbol->SetName( elem.text );
         libSymbol->GetReferenceField().SetText( "#PWR" );
         libSymbol->GetValueField().SetText( elem.text );
-        libSymbol->GetValueField().SetVisible( true ); // TODO: why does this not work?
+        libSymbol->GetValueField().SetVisible( true );
         libSymbol->SetDescription( wxString::Format( _( "Power symbol creates a global "
                                                         "label with name '%s'" ), elem.text ) );
         libSymbol->SetKeyWords( "power-flag" );
@@ -1800,9 +1833,9 @@ void SCH_ALTIUM_PLUGIN::ParsePowerPort( const std::map<wxString, wxString>& aPro
     symbol->SetLibSymbol( new LIB_SYMBOL( *libSymbol ) );
 
     SCH_FIELD* valueField = symbol->GetField( VALUE_FIELD );
+    valueField->SetVisible( elem.showNetName );
 
-    // TODO: Why do I need to set those a second time?
-    valueField->SetVisible( true );
+    // TODO: Why do I need to set this a second time?
     valueField->SetPosition( libSymbol->GetValueField().GetPosition() );
 
     symbol->SetPosition( elem.location + m_sheetOffset );
@@ -1811,22 +1844,22 @@ void SCH_ALTIUM_PLUGIN::ParsePowerPort( const std::map<wxString, wxString>& aPro
     {
     case ASCH_RECORD_ORIENTATION::RIGHTWARDS:
         symbol->SetOrientation( SYMBOL_ORIENTATION_T::SYM_ORIENT_90 );
-        valueField->SetTextAngle( -900. );
-        valueField->SetHorizJustify( EDA_TEXT_HJUSTIFY_T::GR_TEXT_HJUSTIFY_LEFT );
+        valueField->SetTextAngle( TEXT_ANGLE_VERT );
+        valueField->SetHorizJustify( EDA_TEXT_HJUSTIFY_T::GR_TEXT_HJUSTIFY_RIGHT );
         break;
     case ASCH_RECORD_ORIENTATION::UPWARDS:
         symbol->SetOrientation( SYMBOL_ORIENTATION_T::SYM_ORIENT_180 );
-        valueField->SetTextAngle( -1800. );
+        valueField->SetTextAngle( TEXT_ANGLE_HORIZ );
         valueField->SetHorizJustify( EDA_TEXT_HJUSTIFY_T::GR_TEXT_HJUSTIFY_CENTER );
         break;
     case ASCH_RECORD_ORIENTATION::LEFTWARDS:
         symbol->SetOrientation( SYMBOL_ORIENTATION_T::SYM_ORIENT_270 );
-        valueField->SetTextAngle( -2700. );
+        valueField->SetTextAngle( TEXT_ANGLE_VERT );
         valueField->SetHorizJustify( EDA_TEXT_HJUSTIFY_T::GR_TEXT_HJUSTIFY_RIGHT );
         break;
     case ASCH_RECORD_ORIENTATION::DOWNWARDS:
         symbol->SetOrientation( SYMBOL_ORIENTATION_T::SYM_ORIENT_0 );
-        valueField->SetTextAngle( 0. );
+        valueField->SetTextAngle( TEXT_ANGLE_HORIZ );
         valueField->SetHorizJustify( EDA_TEXT_HJUSTIFY_T::GR_TEXT_HJUSTIFY_CENTER );
         break;
     default:
@@ -2161,19 +2194,6 @@ void SCH_ALTIUM_PLUGIN::ParseSheet( const std::map<wxString, wxString>& aPropert
 }
 
 
-void SetFieldOrientation( SCH_FIELD& aField, ASCH_RECORD_ORIENTATION aOrientation )
-{
-    switch( aOrientation )
-    {
-    default:
-    case ASCH_RECORD_ORIENTATION::RIGHTWARDS: aField.SetTextAngle( 0 );    break;
-    case ASCH_RECORD_ORIENTATION::UPWARDS:    aField.SetTextAngle( 900 );  break;
-    case ASCH_RECORD_ORIENTATION::LEFTWARDS:  aField.SetTextAngle( 1800 ); break;
-    case ASCH_RECORD_ORIENTATION::DOWNWARDS:  aField.SetTextAngle( 2700 ); break;
-    }
-}
-
-
 void SCH_ALTIUM_PLUGIN::ParseSheetName( const std::map<wxString, wxString>& aProperties )
 {
     ASCH_SHEET_NAME elem( aProperties );
@@ -2193,11 +2213,7 @@ void SCH_ALTIUM_PLUGIN::ParseSheetName( const std::map<wxString, wxString>& aPro
     sheetNameField.SetPosition( elem.location + m_sheetOffset );
     sheetNameField.SetText( elem.text );
     sheetNameField.SetVisible( !elem.isHidden );
-
-    sheetNameField.SetHorizJustify( EDA_TEXT_HJUSTIFY_T::GR_TEXT_HJUSTIFY_LEFT );
-    sheetNameField.SetVertJustify( EDA_TEXT_VJUSTIFY_T::GR_TEXT_VJUSTIFY_BOTTOM );
-
-    SetFieldOrientation( sheetNameField, elem.orientation );
+    SetTextPositioning( &sheetNameField, ASCH_LABEL_JUSTIFICATION::BOTTOM_LEFT, elem.orientation );
 }
 
 
@@ -2230,11 +2246,7 @@ void SCH_ALTIUM_PLUGIN::ParseFileName( const std::map<wxString, wxString>& aProp
     filenameField.SetText( elem.text );
 
     filenameField.SetVisible( !elem.isHidden );
-
-    filenameField.SetHorizJustify( EDA_TEXT_HJUSTIFY_T::GR_TEXT_HJUSTIFY_LEFT );
-    filenameField.SetVertJustify( EDA_TEXT_VJUSTIFY_T::GR_TEXT_VJUSTIFY_BOTTOM );
-
-    SetFieldOrientation( filenameField, elem.orientation );
+    SetTextPositioning( &filenameField, ASCH_LABEL_JUSTIFICATION::BOTTOM_LEFT, elem.orientation );
 }
 
 
@@ -2263,11 +2275,7 @@ void SCH_ALTIUM_PLUGIN::ParseDesignator( const std::map<wxString, wxString>& aPr
 
     refField->SetPosition( elem.location + m_sheetOffset );
     refField->SetVisible( true );
-
-    refField->SetHorizJustify( EDA_TEXT_HJUSTIFY_T::GR_TEXT_HJUSTIFY_LEFT );
-    refField->SetVertJustify( EDA_TEXT_VJUSTIFY_T::GR_TEXT_VJUSTIFY_BOTTOM );
-
-    SetFieldOrientation( *refField, elem.orientation );
+    SetTextPositioning( refField, elem.justification, elem.orientation );
 }
 
 
@@ -2342,17 +2350,10 @@ void SCH_ALTIUM_PLUGIN::ParseParameter( const std::map<wxString, wxString>& aPro
         }
 
         SCH_SYMBOL* symbol = m_symbols.at( libSymbolIt->first );
-
-        // TODO: location not correct?
-        const wxPoint position = elem.location + m_sheetOffset;
-
-        SCH_FIELD* field = nullptr;
+        SCH_FIELD*  field = nullptr;
 
         if( elem.name.Upper() == "COMMENT" )
-        {
             field = symbol->GetField( VALUE_FIELD );
-            field->SetPosition( position );
-        }
         else
         {
             int      fieldIdx = symbol->GetFieldCount();
@@ -2361,23 +2362,14 @@ void SCH_ALTIUM_PLUGIN::ParseParameter( const std::map<wxString, wxString>& aPro
             if( fieldName == "VALUE" )
                 fieldName = "ALTIUM_VALUE";
 
-            field = symbol->AddField( { position, fieldIdx, symbol, fieldName } );
+            field = symbol->AddField( SCH_FIELD( wxPoint(), fieldIdx, symbol, fieldName ) );
         }
 
         wxString kicadText = AltiumSpecialStringsToKiCadVariables( elem.text, variableMap );
         field->SetText( kicadText );
-
+        field->SetPosition( elem.location + m_sheetOffset );
         field->SetVisible( !elem.isHidden );
-        field->SetHorizJustify( EDA_TEXT_HJUSTIFY_T::GR_TEXT_HJUSTIFY_LEFT );
-
-        switch( elem.orientation )
-        {
-        case ASCH_RECORD_ORIENTATION::RIGHTWARDS: field->SetTextAngle( 0 );   break;
-        case ASCH_RECORD_ORIENTATION::UPWARDS:    field->SetTextAngle( 90 );  break;
-        case ASCH_RECORD_ORIENTATION::LEFTWARDS:  field->SetTextAngle( 180 ); break;
-        case ASCH_RECORD_ORIENTATION::DOWNWARDS:  field->SetTextAngle( 270 ); break;
-        default:                                                              break;
-        }
+        SetTextPositioning( field, elem.justification, elem.orientation );
     }
 }
 
