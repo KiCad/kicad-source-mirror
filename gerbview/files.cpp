@@ -193,7 +193,10 @@ bool GERBVIEW_FRAME::LoadGerberFiles( const wxString& aFullFileName )
     // Set the busy cursor
     wxBusyCursor wait;
 
-    return LoadListOfGerberAndDrillFiles( currentPath, filenamesList );
+    bool success = LoadListOfGerberAndDrillFiles( currentPath, filenamesList );
+    Zoom_Automatique( false );
+
+    return success;
 }
 
 
@@ -328,8 +331,6 @@ bool GERBVIEW_FRAME::LoadListOfGerberAndDrillFiles( const wxString& aPath,
     }
 
     SetVisibleLayers( visibility );
-
-    Zoom_Automatique( false );
 
     // Synchronize layers tools with actual active layer:
     ReFillLayerWidget();
