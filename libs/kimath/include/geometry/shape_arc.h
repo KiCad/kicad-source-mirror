@@ -127,6 +127,25 @@ public:
         return SHAPE::Collide( aShape, aClearance, aActual, aLocation );
     }
 
+    /**
+     * Find intersection points between this arc and aSeg, treating aSeg as an infinite line.
+     * Ignores arc width.
+     *
+     * @param aSeg Line to intersect against (treated as an infinite line)
+     * @param aIpsBuffer Buffer to store the resulting intersection points (if any)
+     * @return Number of intersection points found
+     */
+    int IntersectLine( const SEG& aSeg, std::vector<VECTOR2I>* aIpsBuffer ) const;
+
+    /**
+     * Find intersection points between this arc and aArc. Ignores arc width.
+     *
+     * @param aSeg
+     * @param aIpsBuffer Buffer to store the resulting intersection points (if any)
+     * @return Number of intersection points found
+     */
+    int Intersect( const SHAPE_ARC& aArc, std::vector<VECTOR2I>* aIpsBuffer ) const;
+
     bool IsClockwise() const;
 
     void SetWidth( int aWidth )
@@ -232,6 +251,8 @@ private:
     }
 
     void update_bbox();
+
+    bool sliceContainsPoint( const VECTOR2I& p ) const;
 
 private:
     VECTOR2I m_start;

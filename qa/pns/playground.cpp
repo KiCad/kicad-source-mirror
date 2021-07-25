@@ -36,153 +36,53 @@
 std::shared_ptr<PNS_LOG_VIEWER_OVERLAY> overlay;
 
 
-template<class T>
-static T within_range(T x, T minval, T maxval, T wrap)
-{
-    int rv;
-
-    while (maxval >= wrap)
-        maxval -= wrap;
-
-    while (maxval < 0)
-        maxval += wrap;
-
-    while (minval >= wrap)
-        minval -= wrap;
-
-    while (minval < 0)
-        minval += wrap;
-
-    while (x < 0)
-        x += wrap;
-
-    while (x >= wrap)
-        x -= wrap;
-
-    if (maxval > minval)
-        rv = (x >= minval && x <= maxval) ? 1 : 0;
-    else
-        rv = (x >= minval || x <= maxval) ? 1 : 0;
-
-    return rv;
-}
-
-static bool sliceContainsPoint( const SHAPE_ARC& a, const VECTOR2I& p )
-{
-    double phi = 180.0 / M_PI * atan2( p.y - a.GetCenter().y, p.x - a.GetCenter().x );
-    double ca = a.GetCentralAngle();
-    double sa = a.GetStartAngle();
-    double ea;
-    if( ca >= 0 )
-    {
-        ea = sa + ca;
-    }
-    else
-    {
-        ea = sa;
-        sa += ca;
-    }
-
-
-    return within_range( phi, sa, ea, 360.0 );
-}
-
-static int arclineIntersect( const SHAPE_ARC& a, const SEG& s, std::vector<VECTOR2I>* ips )
-{
-    CIRCLE circ( a.GetCenter(), a.GetRadius() );
-
-    std::vector<VECTOR2I> intersections = circ.IntersectLine( s );
-
-    size_t originalSize = ips->size();
-
-    for( const VECTOR2I& intersection : intersections )
-    {
-        if( sliceContainsPoint( a, intersection ) )
-            ips->push_back( intersection );
-    }
-
-    return ips->size() - originalSize;
-}
-
-int intersectArc2Arc( const SHAPE_ARC& a1, const SHAPE_ARC& a2, std::vector<VECTOR2I>* ips )
-{
-    CIRCLE circ1( a1.GetCenter(), a1.GetRadius() );
-    CIRCLE circ2( a2.GetCenter(), a2.GetRadius() );
-
-    std::vector<VECTOR2I> intersections = circ1.Intersect( circ2 );
-
-    size_t originalSize = ips->size();
-
-    for( const VECTOR2I& intersection : intersections )
-    {
-        if( sliceContainsPoint( a1, intersection ) && sliceContainsPoint( a2, intersection ) )
-            ips->push_back( intersection );
-    }
-
-    return ips->size() - originalSize;
-}
-
-
 bool collideArc2Arc( const SHAPE_ARC& a1, const SHAPE_ARC& a2, int clearance, SEG& minDistSeg )
 {
     SEG mediatrix( a1.GetCenter(), a2.GetCenter() );
 
     std::vector<VECTOR2I> ips;
 
-    if( intersectArc2Arc( a1, a2, &ips ) > 0 )
+    // Basic case - arcs intersect
+    if( a1.Intersect( a2, &ips ) > 0 )
     {
         minDistSeg.A = minDistSeg.B = ips[0];
         return true;
     }
 
+    // Arcs don't intersect, build a list of points to check
     std::vector<VECTOR2I> ptsA;
     std::vector<VECTOR2I> ptsB;
 
     bool cocentered = ( mediatrix.A == mediatrix.B );
 
-    // arcs don't have the same center point
+    // 1: Interior points of both arcs, which are on the line segment between the two centres
     if( !cocentered )
     {
-        arclineIntersect( a1, mediatrix, &ptsA );
-        arclineIntersect( a2, mediatrix, &ptsB );
+        a1.IntersectLine( mediatrix, &ptsA );
+        a2.IntersectLine( mediatrix, &ptsB );
     }
 
-    arclineIntersect( a1, SEG( a2.GetP0(), a2.GetCenter() ), &ptsA );
-    arclineIntersect( a1, SEG( a2.GetP1(), a2.GetCenter() ), &ptsA );
-
-    arclineIntersect( a2, SEG( a1.GetP0(), a1.GetCenter() ), &ptsB );
-    arclineIntersect( a2, SEG( a1.GetP1(), a1.GetCenter() ), &ptsB );
-
+    // 2: Check arc end points
     ptsA.push_back( a1.GetP0() );
     ptsA.push_back( a1.GetP1() );
     ptsB.push_back( a2.GetP0() );
     ptsB.push_back( a2.GetP1() );
 
-    std::vector<VECTOR2I> nearestA, nearestB;
+    // 3: Endpoint of one and "projected" point on the other, which is on the
+    // line segment through that endpoint and the centre of the other arc
+    a1.IntersectLine( SEG( a2.GetP0(), a1.GetCenter() ), &ptsA );
+    a1.IntersectLine( SEG( a2.GetP1(), a1.GetCenter() ), &ptsA );
 
-    // this probably can be made with less points, but still...
-    CIRCLE circ1( a1.GetCenter(), a1.GetRadius() );
-    for( auto pB: ptsB )
-    {
-        auto nearest = circ1.NearestPoint( pB );
-        if( sliceContainsPoint( a1, nearest ) )
-            nearestA.push_back( nearest );
-    }
-    CIRCLE circ2( a2.GetCenter(), a2.GetRadius() );
-    for( auto pA: ptsA )
-    {
-        auto nearest = circ2.NearestPoint( pA );
-        if( sliceContainsPoint( a2, nearest ) )
-            nearestB.push_back( nearest );
-    }
-
-    ptsA.insert( ptsA.end(), nearestA.begin(), nearestA.end() );
-    ptsB.insert( ptsB.end(), nearestB.begin(), nearestB.end() );
+    a2.IntersectLine( SEG( a1.GetP0(), a2.GetCenter() ), &ptsB );
+    a2.IntersectLine( SEG( a1.GetP1(), a2.GetCenter() ), &ptsB );
 
     double minDist = std::numeric_limits<double>::max();
     bool   minDistFound = false;
 
-    for( const VECTOR2I& ptA: ptsA )
+    // @todo performance might be improved by only checking certain points (e.g only check end
+    // points against other end points or their corresponding "projected" points)
+    for( const VECTOR2I& ptA : ptsA )
+    {
         for( const VECTOR2I& ptB : ptsB )
         {
             double dist = ( ptA - ptB ).EuclideanNorm() - a1.GetWidth() / 2.0 - a2.GetWidth() / 2.0;
@@ -198,7 +98,7 @@ bool collideArc2Arc( const SHAPE_ARC& a1, const SHAPE_ARC& a2, int clearance, SE
                 minDistFound = true;
             }
         }
-
+    }
 
     return minDistFound;
 }
@@ -241,6 +141,10 @@ int playground_main_func( int argc, char* argv[] )
         {86.063537, 88.295989, 84.968628, 87.581351, -255.5, 0.2},
         {94.6551, 88.295989, 95.6551, 88.295989, 90.0, 0.2 }, // simulating diff pair
         {94.6551, 88.295989, 95.8551, 88.295989, 90.0, 0.2 },
+        {73.77532, 93.413654, 75.70532, 93.883054, 60.0, 0.1 }, // one arc fully enclosed in other
+        {73.86532, 93.393054, 75.86532, 93.393054, 90.0, 0.3 },
+        {79.87532, 93.413654, 81.64532, 94.113054, 60.0, 0.1 }, // concentric
+        {79.87532, 93.413654, 81.86532, 93.393054, 90.0, 0.3 }
     };
 
 
@@ -281,7 +185,7 @@ int playground_main_func( int argc, char* argv[] )
         SEG closestDist;
         std::vector<VECTOR2I> ips;
         bool collides = collideArc2Arc( arcs[i], arcs[i+1], 0, closestDist );
-        int ni = intersectArc2Arc( arcs[i], arcs[i+1], &ips );
+        int ni = arcs[i].Intersect( arcs[i+1], &ips );
 
         overlay->SetLineWidth( 10000.0 );
         overlay->SetStrokeColor( GREEN );
@@ -295,7 +199,7 @@ int playground_main_func( int argc, char* argv[] )
             overlay->Line( closestDist.A, closestDist.B );
             overlay->SetLineWidth( 10000.0 );
             overlay->SetGlyphSize( { 100000.0, 100000.0 } );
-            overlay->BitmapText( wxString::Format( "dist: %d", closestDist.Length() ),
+            overlay->BitmapText( wxString::Format( "dist=%d, l=%d", closestDist.Length() ),
                                  closestDist.A + VECTOR2I( 0, -arcs[i].GetWidth() ), 0 );
         }
 

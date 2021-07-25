@@ -23,6 +23,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <core/kicad_algo.h>
+#include <geometry/circle.h>
 #include <geometry/geometry_utils.h>
 #include <geometry/seg.h>               // for SEG
 #include <geometry/shape_arc.h>
@@ -293,6 +295,43 @@ bool SHAPE_ARC::Collide( const SEG& aSeg, int aClearance, int* aActual, VECTOR2I
     }
 
     return false;
+}
+
+
+int SHAPE_ARC::IntersectLine( const SEG& aSeg, std::vector<VECTOR2I>* aIpsBuffer ) const
+{
+    CIRCLE circ( GetCenter(), GetRadius() );
+
+    std::vector<VECTOR2I> intersections = circ.IntersectLine( aSeg );
+
+    size_t originalSize = aIpsBuffer->size();
+
+    for( const VECTOR2I& intersection : intersections )
+    {
+        if( sliceContainsPoint( intersection ) )
+            aIpsBuffer->push_back( intersection );
+    }
+
+    return aIpsBuffer->size() - originalSize;
+}
+
+
+int SHAPE_ARC::Intersect( const SHAPE_ARC& aArc, std::vector<VECTOR2I>* aIpsBuffer ) const
+{
+    CIRCLE thiscirc( GetCenter(), GetRadius() );
+    CIRCLE othercirc( aArc.GetCenter(), aArc.GetRadius() );
+
+    std::vector<VECTOR2I> intersections = thiscirc.Intersect( othercirc );
+
+    size_t originalSize = aIpsBuffer->size();
+
+    for( const VECTOR2I& intersection : intersections )
+    {
+        if( sliceContainsPoint( intersection ) && aArc.sliceContainsPoint( intersection ) )
+            aIpsBuffer->push_back( intersection );
+    }
+
+    return aIpsBuffer->size() - originalSize;
 }
 
 
@@ -585,4 +624,26 @@ void SHAPE_ARC::Reverse()
 SHAPE_ARC SHAPE_ARC::Reversed() const
 {
     return SHAPE_ARC( m_end, m_mid, m_start, m_width );
+}
+
+
+bool SHAPE_ARC::sliceContainsPoint( const VECTOR2I& p ) const
+{
+    VECTOR2I center = GetCenter();
+    double   phi = 180.0 / M_PI * atan2( p.y - center.y, p.x - center.x );
+    double   ca = GetCentralAngle();
+    double   sa = GetStartAngle();
+    double   ea;
+
+    if( ca >= 0 )
+    {
+        ea = sa + ca;
+    }
+    else
+    {
+        ea = sa;
+        sa += ca;
+    }
+
+    return alg::within_wrapped_range( phi, sa, ea, 360.0 );
 }

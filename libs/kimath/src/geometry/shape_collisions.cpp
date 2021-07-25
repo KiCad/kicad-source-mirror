@@ -552,14 +552,82 @@ static inline bool Collide( const SHAPE_ARC& aA, const SHAPE_ARC& aB, int aClear
                                            aA.Type(),
                                            aB.Type() ) );
 
-    const SHAPE_LINE_CHAIN lcA = aA.ConvertToPolyline();
-    const SHAPE_LINE_CHAIN lcB = aB.ConvertToPolyline();
-    int                    widths = ( aA.GetWidth() / 2 ) + ( aB.GetWidth() / 2 );
+    SEG mediatrix( aA.GetCenter(), aB.GetCenter() );
 
-    bool rv = Collide( lcA, lcB, aClearance + widths, aActual, aLocation, aMTV );
+    std::vector<VECTOR2I> ips;
+
+    // Basic case - arcs intersect
+    if( aA.Intersect( aB, &ips ) > 0 )
+    {
+        if( aActual )
+            *aActual = 0;
+
+        if( aLocation )
+            *aLocation = ips[0]; // Pick the first intersection point
+
+        return true;
+    }
+
+    // Arcs don't intersect, build a list of points to check
+    std::vector<VECTOR2I> ptsA;
+    std::vector<VECTOR2I> ptsB;
+
+    bool cocentered = ( mediatrix.A == mediatrix.B );
+
+    // 1: Interior points of both arcs, which are on the line segment between the two centres
+    if( !cocentered )
+    {
+        aA.IntersectLine( mediatrix, &ptsA );
+        aB.IntersectLine( mediatrix, &ptsB );
+    }
+
+    // 2: Check arc end points
+    ptsA.push_back( aA.GetP0() );
+    ptsA.push_back( aA.GetP1() );
+    ptsB.push_back( aB.GetP0() );
+    ptsB.push_back( aB.GetP1() );
+
+    // 3: Endpoint of one and "projected" point on the other, which is on the
+    // line segment through that endpoint and the centre of the other arc
+    aA.IntersectLine( SEG( aB.GetP0(), aA.GetCenter() ), &ptsA );
+    aA.IntersectLine( SEG( aB.GetP1(), aA.GetCenter() ), &ptsA );
+
+    aB.IntersectLine( SEG( aA.GetP0(), aB.GetCenter() ), &ptsB );
+    aB.IntersectLine( SEG( aA.GetP1(), aB.GetCenter() ), &ptsB );
+
+    double minDist = std::numeric_limits<double>::max();
+    SEG    minDistSeg;
+    bool   rv = false;
+
+    int widths = ( aA.GetWidth() / 2 ) + ( aB.GetWidth() / 2 );
+
+    // @todo performance could be improved by only checking certain points (e.g only check end
+    // points against other end points or their corresponding "projected" points)
+    for( const VECTOR2I& ptA : ptsA )
+    {
+        for( const VECTOR2I& ptB : ptsB )
+        {
+            SEG candidateMinDist( ptA, ptB );
+            int dist = candidateMinDist.Length() - widths;
+
+            if( dist < aClearance )
+            {
+                if( !rv || dist < minDist )
+                {
+                    minDist = dist;
+                    minDistSeg = candidateMinDist;
+                }
+
+                rv = true;
+            }
+        }
+    }
 
     if( rv && aActual )
-        *aActual = std::max( 0, *aActual - widths );
+        *aActual = std::max( 0, minDistSeg.Length() - widths );
+
+    if( rv && aLocation )
+        *aLocation = minDistSeg.Center();
 
     return rv;
 }

@@ -639,9 +639,9 @@ struct ARC_DATA_MM
 
     SHAPE_ARC GenerateArc() const
     {
-        SHAPE_ARC arc( VECTOR2D( PcbMillimeter2iu( m_center_x ), PcbMillimeter2iu( m_center_y ) ),
-                       VECTOR2D( PcbMillimeter2iu( m_start_x ), PcbMillimeter2iu( m_start_y ) ),
-                       m_center_angle, PcbMillimeter2iu( m_width ) );
+        SHAPE_ARC arc( VECTOR2D( PcbMm2iu( m_center_x ), PcbMm2iu( m_center_y ) ),
+                       VECTOR2D( PcbMm2iu( m_start_x ), PcbMm2iu( m_start_y ) ),
+                       m_center_angle, PcbMm2iu( m_width ) );
 
         return arc;
     }
@@ -717,8 +717,19 @@ static const std::vector<ARC_ARC_COLLIDE_CASE> arc_arc_collide_cases = {
     { "case 12: Simulated differential pair meander",
       { 94.6551, 88.295989, 95.6551, 88.295989, 90.0, 0.1 },
       { 94.6551, 88.295989, 95.8551, 88.295989, 90.0, 0.1 },
-      0.1 - SHAPE_ARC::DefaultAccuracyForPCB() / PCB_IU_PER_MM, // remove offset when support for true arc-arc intersection
+      // Offset needed due to rounding errors of integer coordinates
+      0.1 - PcbIu2mm( SHAPE_ARC::MIN_PRECISION_IU ),
       false },
+    { "case 13: One arc fully enclosed in other, non-concentric",
+      { 73.77532, 93.413654, 75.70532, 93.883054, 60.0, 0.1 },
+      { 73.86532, 93.393054, 75.86532, 93.393054, 90.0, 0.3 },
+      0,
+      true },
+    { "case 14: One arc fully enclosed in other, concentric",
+      { 79.87532, 93.413654, 81.64532, 94.113054, 60.0, 0.1 },
+      { 79.87532, 93.413654, 81.86532, 93.393054, 90.0, 0.3 },
+      0,
+      true },
 };
 
 
@@ -734,7 +745,7 @@ BOOST_AUTO_TEST_CASE( CollideArc )
             int      actual = 0;
             VECTOR2I location;
 
-            bool result = arc1.Collide( &arc2, PcbMillimeter2iu( c.m_clearance ), &actual, &location );
+            bool result = arc1.Collide( &arc2, PcbMm2iu( c.m_clearance ), &actual, &location );
 
             BOOST_CHECK_EQUAL( result, c.m_exp_result );
         }
@@ -776,9 +787,8 @@ BOOST_AUTO_TEST_CASE( CollideArcToPolygonApproximation )
     int      actual = 0;
     VECTOR2I location;
 
-    int tol = SHAPE_ARC::DefaultAccuracyForPCB();
+    int tol = SHAPE_ARC::MIN_PRECISION_IU;
 
-    //@todo remove "- tol" from collision check below once true arc collisions have been implemented
     BOOST_CHECK_EQUAL( zoneFill.Collide( &arc, clearance - tol, &actual, &location ), false );
 
     BOOST_CHECK_EQUAL( zoneFill.Collide( &arc, clearance * 2, &actual, &location ), true );
