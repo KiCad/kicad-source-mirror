@@ -327,6 +327,71 @@ struct SEG_SEG_VECPT_CASE
 /**
  * Test cases for #CIRCLE::Intersect( const SEG& aSeg )
  */
+static const std::vector<SEG_SEG_VECPT_CASE> intersect_seg_cases = {
+    {
+        "two point aligned",
+        { { 0, 0 }, 20 },
+        { { 10, -40 }, {10, 40} },
+        {
+            { 10, -17 },
+            { 10, 17 },
+        },
+    },
+    {
+        "two point angled",
+        { { 0, 0 }, 20 },
+        { { -20, -40 }, {20, 40} },
+        {
+            { 8, 17 },
+            { -8, -17 },
+        },
+    },
+    {
+        "tangent",
+        { { 0, 0 }, 20 },
+        { { 20, 0 }, {20, 40} },
+        {
+            { 20, 0 }
+        },
+    },
+    {
+        "no intersection",
+        { { 0, 0 }, 20 },
+        { { 25, 0 }, {25, 40} },
+        {
+            //no points
+        },
+    },
+    {
+        "no intersection: seg end points inside circle",
+        { { 0, 0 }, 20 },
+        { { 0, 10 }, {0, -10} },
+        {
+            //no points
+        },
+    },
+};
+// clang-format on
+
+
+BOOST_AUTO_TEST_CASE( Intersect )
+{
+    for( const auto& c : intersect_seg_cases )
+    {
+        BOOST_TEST_CONTEXT( c.m_case_name )
+        {
+            std::vector<VECTOR2I> ret = c.m_circle.Intersect( c.m_seg );
+            BOOST_CHECK_EQUAL( c.m_exp_result.size(), ret.size() );
+            KI_TEST::CheckUnorderedMatches( c.m_exp_result, ret, CompareVector2I );
+        }
+    }
+}
+
+
+// clang-format off
+/**
+ * Test cases for #CIRCLE::IntersectLine( const SEG& aSeg )
+ */
 static const std::vector<SEG_SEG_VECPT_CASE> intersect_line_cases = {
     {
         "two point aligned",
@@ -362,6 +427,15 @@ static const std::vector<SEG_SEG_VECPT_CASE> intersect_line_cases = {
             //no points
         },
     },
+    {
+        "intersection, seg end points inside circle",
+        { { 0, 0 }, 20 },
+        { { 0, 10 }, {0, -10} },
+        {
+            { 0, 20 },
+            { 0, -20 }
+        },
+    },
 };
 // clang-format on
 
@@ -372,12 +446,14 @@ BOOST_AUTO_TEST_CASE( IntersectLine )
     {
         BOOST_TEST_CONTEXT( c.m_case_name )
         {
-            std::vector<VECTOR2I> ret = c.m_circle.Intersect( c.m_seg );
+            std::vector<VECTOR2I> ret = c.m_circle.IntersectLine( c.m_seg );
             BOOST_CHECK_EQUAL( c.m_exp_result.size(), ret.size() );
             KI_TEST::CheckUnorderedMatches( c.m_exp_result, ret, CompareVector2I );
         }
     }
 }
+
+
 
 /**
  * Struct to hold test cases for two lines, a point and an expected returned circle

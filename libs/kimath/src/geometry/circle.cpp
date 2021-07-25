@@ -272,20 +272,8 @@ std::vector<VECTOR2I> CIRCLE::Intersect( const SEG& aSeg ) const
 
     for( VECTOR2I& intersection : IntersectLine( aSeg ) )
     {
-        VECTOR2I delta = aSeg.B - aSeg.A;
-
-        if( delta.x > delta.y )
-        {
-            if( intersection.x >= std::min( aSeg.A.x, aSeg.B.x )
-            && intersection.x <= std::max( aSeg.A.x, aSeg.B.x ) )
-                retval.push_back( intersection );
-        }
-        else
-        {
-            if( intersection.y >= std::min( aSeg.A.y, aSeg.B.y )
-            && intersection.y <= std::max( aSeg.A.y, aSeg.B.y ) )
-                retval.push_back( intersection );
-        }
+        if( aSeg.Contains( intersection ) )
+            retval.push_back( intersection );
     }
 
     return retval;
