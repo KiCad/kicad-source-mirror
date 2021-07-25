@@ -26,9 +26,8 @@
 #define DEFAULT_VALUES_H
 
 
+///< The size of the rectangle indicating an unconnected wire or label
 #define DANGLING_SYMBOL_SIZE 12
-
-#define TXT_MARGIN 15
 
 ///< The default pin len value when creating pins(can be changed in preference menu)
 #define DEFAULT_PIN_LENGTH 100
@@ -64,7 +63,10 @@
 #define DEFAULT_TEXT_SIZE 50
 
 ///< Ratio of the font height to the baseline of the text above the wire.
-#define DEFAULT_TEXT_OFFSET_RATIO 0.08
+#define DEFAULT_TEXT_OFFSET_RATIO 0.15
+
+///< Ratio of the font height to space around global labels
+#define DEFAULT_LABEL_SIZE_RATIO 0.375
 
 ///< The offset of the pin name string from the end of the pin in mils.
 #define DEFAULT_PIN_NAME_OFFSET 20

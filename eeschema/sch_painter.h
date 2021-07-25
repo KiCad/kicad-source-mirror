@@ -117,6 +117,7 @@ public:
 
     bool   m_OverrideItemColors;
 
+    double m_LabelSizeRatio;         // Proportion of font size to label box
     double m_TextOffsetRatio;        // Proportion of font size to offset text above/below
                                      // wires, buses, etc.
 

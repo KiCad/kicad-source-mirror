@@ -243,7 +243,13 @@ bool PROJECT_FILE::MigrateFromLegacy( wxConfigBase* aCfg )
     fromLegacy<int>( aCfg, "JunctionSize",          "schematic.drawing.default_junction_size" );
 
     fromLegacyString(   aCfg, "FieldNameTemplates", "schematic.drawing.field_names" );
-    fromLegacy<double>( aCfg, "TextOffsetRatio",    "schematic.drawing.text_offset_ratio" );
+
+    if( !fromLegacy<double>( aCfg, "TextOffsetRatio", "schematic.drawing.text_offset_ratio" ) )
+    {
+        // Use the spacing of Eeschema V5
+        Set( "schematic.drawing.text_offset_ratio", 0.08 );
+        Set( "schematic.drawing.label_size_ratio", 0.25 );
+    }
 
     // All schematic_editor keys we keep are migrated above
     group_blacklist.insert( wxT( "/schematic_editor" ) );

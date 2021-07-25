@@ -48,6 +48,7 @@ public:
     int       m_DefaultWireThickness;
     int       m_DefaultBusThickness;
     int       m_DefaultTextSize;
+    double    m_LabelSizeRatio;
     double    m_TextOffsetRatio;
     int       m_PinSymbolSize;
     int       m_JunctionSize; // Size of junction dot in mils

@@ -76,6 +76,19 @@ PANEL_SETUP_FORMATTING_BASE::PANEL_SETUP_FORMATTING_BASE( wxWindow* parent, wxWi
 	m_offsetRatioUnits->Wrap( -1 );
 	fgSizer2->Add( m_offsetRatioUnits, 0, wxALIGN_CENTER_VERTICAL|wxFIXED_MINSIZE, 5 );
 
+	m_labelSizeRatioLabel = new wxStaticText( sbSizer4->GetStaticBox(), wxID_ANY, _("Global label size:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_labelSizeRatioLabel->Wrap( -1 );
+	m_labelSizeRatioLabel->SetToolTip( _("Percentage of the text size to use as space around a global label") );
+
+	fgSizer2->Add( m_labelSizeRatioLabel, 0, wxALIGN_CENTER_VERTICAL, 5 );
+
+	m_labelSizeRatioCtrl = new wxTextCtrl( sbSizer4->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer2->Add( m_labelSizeRatioCtrl, 0, wxEXPAND, 5 );
+
+	m_labelSizeRatioUnits = new wxStaticText( sbSizer4->GetStaticBox(), wxID_ANY, _("%"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_labelSizeRatioUnits->Wrap( -1 );
+	fgSizer2->Add( m_labelSizeRatioUnits, 0, wxALIGN_CENTER_VERTICAL|wxFIXED_MINSIZE, 5 );
+
 
 	sbSizer4->Add( fgSizer2, 1, wxALL|wxEXPAND, 5 );
 

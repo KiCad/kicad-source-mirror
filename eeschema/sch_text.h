@@ -192,6 +192,8 @@ public:
 
     int GetTextOffset( const RENDER_SETTINGS* aSettings = nullptr ) const;
 
+    int GetLabelBoxExpansion( const RENDER_SETTINGS* aSettings = nullptr ) const;
+
     int GetPenWidth() const override;
 
     // Geometric transforms (used in block operations):

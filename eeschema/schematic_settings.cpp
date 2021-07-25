@@ -33,7 +33,7 @@
 #include <sim/spice_settings.h>
 
 
-const int schSettingsSchemaVersion = 0;
+const int schSettingsSchemaVersion = 1;
 
 
 SCHEMATIC_SETTINGS::SCHEMATIC_SETTINGS( JSON_SETTINGS* aParent, const std::string& aPath ) :
@@ -42,6 +42,7 @@ SCHEMATIC_SETTINGS::SCHEMATIC_SETTINGS( JSON_SETTINGS* aParent, const std::strin
         m_DefaultWireThickness( DEFAULT_WIRE_THICKNESS * IU_PER_MILS ),
         m_DefaultBusThickness( DEFAULT_BUS_THICKNESS * IU_PER_MILS ),
         m_DefaultTextSize( DEFAULT_TEXT_SIZE * IU_PER_MILS ),
+        m_LabelSizeRatio( DEFAULT_LABEL_SIZE_RATIO ),
         m_TextOffsetRatio( DEFAULT_TEXT_OFFSET_RATIO ),
         m_PinSymbolSize( DEFAULT_TEXT_SIZE * IU_PER_MILS / 2 ),
         m_JunctionSize( DEFAULT_JUNCTION_DIAM * IU_PER_MILS ),
@@ -115,8 +116,10 @@ SCHEMATIC_SETTINGS::SCHEMATIC_SETTINGS( JSON_SETTINGS* aParent, const std::strin
             1 / IU_PER_MILS ) );
 
     m_params.emplace_back( new PARAM<double>( "drawing.text_offset_ratio",
-            &m_TextOffsetRatio,
-            (double) TXT_MARGIN / DEFAULT_SIZE_TEXT, -200.0, 200.0 ) );
+            &m_TextOffsetRatio, DEFAULT_TEXT_OFFSET_RATIO, 0.0, 2.0 ) );
+
+    m_params.emplace_back( new PARAM<double>( "drawing.label_size_ratio",
+            &m_LabelSizeRatio, DEFAULT_LABEL_SIZE_RATIO, 0.0, 2.0 ) );
 
     m_params.emplace_back( new PARAM_SCALED<int>( "drawing.pin_symbol_size",
             &m_PinSymbolSize,
@@ -217,7 +220,17 @@ SCHEMATIC_SETTINGS::SCHEMATIC_SETTINGS( JSON_SETTINGS* aParent, const std::strin
             &m_AnnotateStartNum, 0 ) );
 
     m_NgspiceSimulatorSettings =
-            std::make_shared<NGSPICE_SIMULATOR_SETTINGS>( this, "ngspice" );
+        std::make_shared<NGSPICE_SIMULATOR_SETTINGS>( this, "ngspice" );
+
+    registerMigration( 0, 1, [&]() -> bool
+    {
+        OPT<double> tor = Get<double>( "drawing.text_offset_ratio" );
+
+        if( tor.is_initialized() )
+            Set( "drawing.label_size_ratio", tor.get() );
+
+        return true;
+    } );
 }
 
 

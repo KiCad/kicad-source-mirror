@@ -96,6 +96,9 @@ bool PANEL_SETUP_FORMATTING::TransferDataToWindow()
     wxString offsetRatio = wxString::Format( "%f", settings.m_TextOffsetRatio * 100.0 );
     m_textOffsetRatioCtrl->SetValue( offsetRatio );
 
+    wxString labelSizeRatio = wxString::Format( "%f", settings.m_LabelSizeRatio * 100.0 );
+    m_labelSizeRatioCtrl->SetValue( labelSizeRatio );
+
     return true;
 }
 
@@ -165,12 +168,16 @@ bool PANEL_SETUP_FORMATTING::TransferDataFromWindow()
     settings.m_IntersheetRefsSuffix      = m_suffixCtrl->GetValue();
     settings.m_IntersheetRefsListOwnPage = m_listOwnPage->GetValue();
 
-    double dtmp = 0.0;
-    wxString msg = m_textOffsetRatioCtrl->GetValue();
-    msg.ToDouble( &dtmp );
+    double dtmp = DEFAULT_TEXT_OFFSET_RATIO;
+    m_textOffsetRatioCtrl->GetValue().ToDouble( &dtmp );
     settings.m_TextOffsetRatio = dtmp / 100.0;
 
+    dtmp = DEFAULT_LABEL_SIZE_RATIO;
+    m_labelSizeRatioCtrl->GetValue().ToDouble( &dtmp );
+    settings.m_LabelSizeRatio = dtmp / 100.0;
+
     m_frame->GetRenderSettings()->SetDefaultPenWidth( settings.m_DefaultLineWidth );
+    m_frame->GetRenderSettings()->m_LabelSizeRatio       = settings.m_LabelSizeRatio;
     m_frame->GetRenderSettings()->m_TextOffsetRatio      = settings.m_TextOffsetRatio;
     m_frame->GetRenderSettings()->m_PinSymbolSize        = settings.m_PinSymbolSize;
     m_frame->GetRenderSettings()->m_JunctionSize         = settings.m_JunctionSize;
@@ -198,4 +205,7 @@ void PANEL_SETUP_FORMATTING::ImportSettingsFrom( SCHEMATIC_SETTINGS& aSettings )
 
     wxString offsetRatio = wxString::Format( "%f", aSettings.m_TextOffsetRatio * 100.0 );
     m_textOffsetRatioCtrl->SetValue( offsetRatio );
+
+    wxString labelSizeRatio = wxString::Format( "%f", aSettings.m_LabelSizeRatio * 100.0 );
+    m_labelSizeRatioCtrl->SetValue( labelSizeRatio );
 }

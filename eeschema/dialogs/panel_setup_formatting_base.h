@@ -47,6 +47,9 @@ class PANEL_SETUP_FORMATTING_BASE : public wxPanel
 		wxStaticText* m_textOffsetRatioLabel;
 		wxTextCtrl* m_textOffsetRatioCtrl;
 		wxStaticText* m_offsetRatioUnits;
+		wxStaticText* m_labelSizeRatioLabel;
+		wxTextCtrl* m_labelSizeRatioCtrl;
+		wxStaticText* m_labelSizeRatioUnits;
 		wxStaticText* m_lineWidthLabel;
 		wxTextCtrl* m_lineWidthCtrl;
 		wxStaticText* m_lineWidthUnits;
