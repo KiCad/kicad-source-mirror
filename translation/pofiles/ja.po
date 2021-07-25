@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
-"PO-Revision-Date: 2021-07-23 08:32+0000\n"
+"PO-Revision-Date: 2021-07-31 11:56+0000\n"
 "Last-Translator: Tokita, Hiroshi <tokita.hiroshi@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -15962,11 +15962,11 @@ msgstr "参照されていないシートピンを削除"
 
 #: eeschema/tools/ee_actions.cpp:492 pcbnew/tools/pcb_actions.cpp:442
 msgid "Edit Text & Graphics Properties..."
-msgstr "テキストとグラフィックのプロパティを編集..."
+msgstr "テキストと図形のプロパティを編集..."
 
 #: eeschema/tools/ee_actions.cpp:493
 msgid "Edit text and graphics properties globally across schematic"
-msgstr "回路図全般で使用するテキストとグラフィックのプロパティを編集"
+msgstr "回路図全般で使用するテキストと図形のプロパティを編集"
 
 #: eeschema/tools/ee_actions.cpp:498
 msgid "Symbol Properties..."
@@ -33071,11 +33071,11 @@ msgstr "線を描画"
 
 #: pcbnew/tools/pcb_actions.cpp:89
 msgid "Draw Graphic Polygon"
-msgstr "図形ポリゴンを描画"
+msgstr "図形ポリゴンを描く"
 
 #: pcbnew/tools/pcb_actions.cpp:89
 msgid "Draw a graphic polygon"
-msgstr "図形ポリゴンを描画"
+msgstr "図形ポリゴンを描く"
 
 #: pcbnew/tools/pcb_actions.cpp:94
 msgid "Draw Rectangle"
@@ -33455,7 +33455,7 @@ msgstr "ライブラリーから別のフットプリントを割り当て"
 
 #: pcbnew/tools/pcb_actions.cpp:431
 msgid "Swap Layers..."
-msgstr "レイヤーを入替..."
+msgstr "レイヤーを入れ替え..."
 
 #: pcbnew/tools/pcb_actions.cpp:431
 msgid "Move tracks or drawings from one layer to another"
@@ -33471,7 +33471,7 @@ msgstr "基板全体にわたって配線とビアのプロパティを編集"
 
 #: pcbnew/tools/pcb_actions.cpp:443
 msgid "Edit Text and graphics properties globally across board"
-msgstr "基板全般で使用するテキストとグラフィックのプロパティを編集"
+msgstr "基板全般で使用するテキストと図形のプロパティを編集"
 
 #: pcbnew/tools/pcb_actions.cpp:448
 msgid "Global Deletions..."
