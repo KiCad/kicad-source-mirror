@@ -198,7 +198,7 @@ bool GERBVIEW_FRAME::LoadGerberFiles( const wxString& aFullFileName )
     bool success = LoadListOfGerberAndDrillFiles( currentPath, filenamesList );
 
     // Auto zoom is only applied if there is only one file loaded
-    if ( isFirstFile )
+    if( isFirstFile )
     {
         Zoom_Automatique( false );
     }

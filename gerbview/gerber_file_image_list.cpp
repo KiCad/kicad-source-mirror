@@ -72,7 +72,10 @@ GERBER_FILE_IMAGE* GERBER_FILE_IMAGE_LIST::GetGbrImage( int aIdx )
 
 unsigned GERBER_FILE_IMAGE_LIST::GetLoadedImageCount()
 {
-    auto notNull = []( GERBER_FILE_IMAGE* image ){ return image != nullptr; };
+    auto notNull = []( GERBER_FILE_IMAGE* image )
+    {
+        return image != nullptr;
+    };
     return std::count_if( m_GERBER_List.begin(), m_GERBER_List.end(), notNull );
 }
 
