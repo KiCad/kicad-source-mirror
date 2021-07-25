@@ -2138,7 +2138,7 @@ BOARD::GroupLegalOpsField BOARD::GroupLegalOps( const PCB_SELECTION& selection )
         if( item->Type() == PCB_GROUP_T )
             hasGroup = true;
 
-        if( item->GetParent() && item->GetParent()->Type() == PCB_GROUP_T )
+        if( static_cast<BOARD_ITEM*>( item )->GetParentGroup() )
             hasMember = true;
     }
 
