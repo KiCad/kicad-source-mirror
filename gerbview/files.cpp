@@ -193,10 +193,7 @@ bool GERBVIEW_FRAME::LoadGerberFiles( const wxString& aFullFileName )
     // Set the busy cursor
     wxBusyCursor wait;
 
-    bool success = LoadListOfGerberAndDrillFiles( currentPath, filenamesList );
-    Zoom_Automatique( false );
-
-    return success;
+    return LoadListOfGerberAndDrillFiles( currentPath, filenamesList );
 }
 
 
