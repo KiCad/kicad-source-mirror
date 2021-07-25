@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
-"PO-Revision-Date: 2021-07-23 08:32+0000\n"
+"PO-Revision-Date: 2021-07-31 11:56+0000\n"
 "Last-Translator: 킴슨김랑기 <korearf@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
@@ -9894,7 +9894,6 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_print_using_printer_base.cpp:32
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:211
-#, fuzzy
 msgid "Print background color"
 msgstr "배경색 인쇄"
 
@@ -9960,7 +9959,6 @@ msgid "Instances of this symbol:"
 msgstr ""
 
 #: eeschema/dialogs/dialog_rescue_each_base.cpp:55
-#, fuzzy
 msgid "Cached Symbol:"
 msgstr "캐시된 기호:"
 
@@ -10023,7 +10021,6 @@ msgid "Formatting preferences"
 msgstr "풋프린트 레퍼런스"
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:51
-#, fuzzy
 msgid "Field name templates"
 msgstr "필드 이름 템플릿"
 
@@ -10057,7 +10054,6 @@ msgid "Replace &with:"
 msgstr ""
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:52
-#, fuzzy
 msgid "Direction:"
 msgstr "방향:"
 
@@ -10075,7 +10071,6 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:85
 #: pcbnew/dialogs/dialog_find_base.cpp:46
-#, fuzzy
 msgid "Words"
 msgstr "단어"
 
@@ -10105,21 +10100,18 @@ msgid "Replace matches in reference designators"
 msgstr "참조 지정자의 일치 항목 바꾸기"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:115
-#, fuzzy
 msgid "&Find"
-msgstr "찾기"
+msgstr "찾기(&F)"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:120
 msgid "&Replace"
-msgstr ""
+msgstr "바꾸기(&R)"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:125
-#, fuzzy
 msgid "Replace &All"
-msgstr "셀 배치"
+msgstr "모두 바꾸기(&A)"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:41
-#, fuzzy
 msgid "Schematic Setup"
 msgstr "회로도 설정"
 
@@ -16533,7 +16525,7 @@ msgstr "편집 %s 필드"
 #: eeschema/tools/symbol_editor_edit_tool.cpp:525
 #, fuzzy, c-format
 msgid "Edit '%s' Field"
-msgstr "필드 편집"
+msgstr "'%s' 필드 편집"
 
 #: eeschema/tools/sch_edit_tool.cpp:1640
 msgid "There are no unreferenced pins in this sheet to remove."
@@ -19927,7 +19919,7 @@ msgstr ""
 #: pcb_calculator/transline_ident.cpp:383
 #, fuzzy, c-format
 msgid "Effective %s:"
-msgstr "모듈 모두 자동 배치"
+msgstr "유효 %s:"
 
 #: pcb_calculator/transline_ident.cpp:119
 #: pcb_calculator/transline_ident.cpp:161
@@ -20255,7 +20247,7 @@ msgstr "부품 자동 배치 중..."
 #: pcbnew/autorouter/ar_autoplacer.cpp:951
 #, fuzzy, c-format
 msgid "Autoplacing %s"
-msgstr "모듈 모두 자동 배치"
+msgstr "자동 배치 %s"
 
 #: pcbnew/autorouter/autoplace_tool.cpp:68
 #, c-format
@@ -20564,7 +20556,7 @@ msgstr "탐색할 라이브러리 선택"
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:1478
 #, fuzzy, c-format
 msgid "Custom (%s)"
-msgstr "커퍼 텍스트 두께"
+msgstr "사용자 지정 (%s)"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:736
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:175
@@ -22640,7 +22632,7 @@ msgstr "설정 저장 (&S)"
 #: pcbnew/dialogs/dialog_drc.cpp:661
 #, fuzzy, c-format
 msgid "Report file '%s' created<br>"
-msgstr "만들기 중 에러"
+msgstr "보고서 파일 '%s' 생성됨<br>"
 
 #: pcbnew/dialogs/dialog_drc.cpp:892
 msgid "Do you wish to delete excluded markers as well?"
@@ -22684,17 +22676,17 @@ msgstr ""
 #: pcbnew/dialogs/dialog_drc_base.cpp:105
 #, fuzzy, c-format
 msgid "Violations (%d)"
-msgstr "치수 속성"
+msgstr "위반 (%d)"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:117
-#, fuzzy, c-format
+#, c-format
 msgid "Unconnected Items (%d)"
-msgstr "선택된 항목 복사"
+msgstr "연결되지 않은 항목 (%d)"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:129
 #, fuzzy, c-format
 msgid "Schematic Parity (%d)"
-msgstr "회로도 파일:"
+msgstr "회로도 패리티 (%d)"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:192
 #: pcbnew/dialogs/dialog_footprint_checker_base.cpp:79
@@ -22857,7 +22849,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:120
 #, fuzzy, c-format
 msgid "File %s already exists."
-msgstr "라이브러리가 이미 사용 중입니다."
+msgstr "파일 %s가 이미 존재합니다."
 
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:21
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:22
@@ -23319,7 +23311,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:386
 #, fuzzy, c-format
 msgid "Invalid filename: %s"
-msgstr "보드 파일명:"
+msgstr "잘못된 파일 이름: %s"
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:641
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:577
@@ -24950,9 +24942,9 @@ msgid "Select a corner to delete."
 msgstr "삭제할 모서리를 선택합니다."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:481
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint %s (%s), %s, rotated %g deg"
-msgstr "모듈 %s (%s) 방향 %.1f"
+msgstr "풋프린트 %s (%s), %s, 회전 %g deg"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:484
 #: pcbnew/dialogs/dialog_text_properties.cpp:235
@@ -26529,9 +26521,9 @@ msgid "Reference:"
 msgstr "레퍼런스:"
 
 #: pcbnew/dialogs/dialog_text_properties.cpp:232
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint %s (%s), %s, rotated %.1f deg"
-msgstr "모듈 %s (%s) 방향 %.1f"
+msgstr "풋프린트 %s (%s), %s, 회전 %.1f deg"
 
 #: pcbnew/dialogs/dialog_text_properties.cpp:336
 msgid ""
@@ -27109,7 +27101,7 @@ msgstr ""
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:798
 #, fuzzy, c-format
 msgid "Select %s Library"
-msgstr "라이브러리 선택"
+msgstr "%s 라이브러리 선택"
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:858
 msgid "The following directories could not be opened: \n"
@@ -28474,13 +28466,13 @@ msgstr ""
 #: pcbnew/drc/drc_engine.cpp:350
 #, fuzzy, c-format
 msgid "netclass '%s'"
-msgstr "네트 이름 사용"
+msgstr "넷클래스 '%s'"
 
 #: pcbnew/drc/drc_engine.cpp:268 pcbnew/drc/drc_engine.cpp:285
 #: pcbnew/drc/drc_engine.cpp:303
-#, fuzzy, c-format
+#, c-format
 msgid "netclass '%s' (diff pair)"
-msgstr "네트 이름 사용"
+msgstr "넷 클래스 '%s' (차동 쌍)"
 
 #: pcbnew/drc/drc_engine.cpp:425
 #, fuzzy
@@ -28490,7 +28482,7 @@ msgstr "트랙 삭제"
 #: pcbnew/drc/drc_engine.cpp:430
 #, fuzzy, c-format
 msgid "keepout area '%s'"
-msgstr "트랙 삭제"
+msgstr "금지 영역 '%s'"
 
 #: pcbnew/drc/drc_engine.cpp:702
 msgid "Tessellating copper zones..."
@@ -28966,12 +28958,12 @@ msgstr "영역 확인 중..."
 #: pcbnew/drc/drc_test_provider_silk_to_mask.cpp:160
 #, fuzzy, c-format
 msgid "(%s clearance %s; actual %s)"
-msgstr "전역 패드 설정"
+msgstr "(%s 클리어런스 %s; 실제 %s)"
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:570
 #, fuzzy, c-format
 msgid "(nets %s and %s)"
-msgstr "유닛 %d %c"
+msgstr "(네트 %s 및 %s)"
 
 #: pcbnew/drc/drc_test_provider_courtyard_clearance.cpp:85
 msgid "Checking footprint courtyard definitions..."
@@ -28992,7 +28984,7 @@ msgstr ""
 #: pcbnew/drc/drc_test_provider_diff_pair_coupling.cpp:460
 #, fuzzy, c-format
 msgid "(%s maximum uncoupled length: %s; actual: %s)"
-msgstr "전역 패드 설정"
+msgstr "(%s 최대 비결합 길이: %s, 실제: %s)"
 
 #: pcbnew/drc/drc_test_provider_diff_pair_coupling.cpp:494
 #, c-format
@@ -29056,12 +29048,12 @@ msgstr "구멍과 구멍간 간격 확인 중..."
 #: pcbnew/drc/drc_test_provider_hole_to_hole.cpp:313
 #, fuzzy, c-format
 msgid "(%s min %s; actual %s)"
-msgstr "유닛 %d %c"
+msgstr "(%s 최소 %s; 실제 %s)"
 
 #: pcbnew/drc/drc_test_provider_lvs.cpp:119
-#, fuzzy, c-format
+#, c-format
 msgid "Missing footprint %s (%s)"
-msgstr "풋프린트: %d"
+msgstr "풋프린트 누락 %s (%s)"
 
 #: pcbnew/drc/drc_test_provider_lvs.cpp:140
 msgid "No corresponding pin found in schematic."
@@ -29093,22 +29085,22 @@ msgstr ""
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:128
 #, fuzzy, c-format
 msgid "(%s min length: %s; actual: %s)"
-msgstr "전역 패드 설정"
+msgstr "(%s 최소 길이: %s, 실제: %s)"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:135
 #, fuzzy, c-format
 msgid "(%s max length: %s; actual: %s)"
-msgstr "전역 패드 설정"
+msgstr "(%s 최대 길이: %s, 실제: %s)"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:170
-#, fuzzy, c-format
+#, c-format
 msgid "(%s max skew: %s; actual: %s; average net length: %s; actual: %s)"
-msgstr "전역 패드 설정"
+msgstr "(%s 최대 왜곡: %s, 실제: %s, 평균 네트 길이: %s, 실제: %s)"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:199
 #, fuzzy, c-format
 msgid "(%s max count: %d; actual: %d)"
-msgstr "전역 패드 설정"
+msgstr "(%s 최대 개수: %d, 실제: %d)"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:230
 msgid "Gathering length-constrained connections..."
@@ -29126,7 +29118,7 @@ msgstr ""
 #: pcbnew/drc/drc_test_provider_misc.cpp:141
 #, fuzzy, c-format
 msgid "(layer %s)"
-msgstr "Comp layer"
+msgstr "(레이어 %s)"
 
 #: pcbnew/drc/drc_test_provider_misc.cpp:219
 msgid "Checking board outline..."
@@ -29237,9 +29229,9 @@ msgstr "전면(상단) 배치 파일: '%s'."
 #: pcbnew/exporters/gen_footprints_placefile.cpp:303
 #: pcbnew/exporters/gen_footprints_placefile.cpp:399
 #: pcbnew/exporters/gen_footprints_placefile.cpp:441
-#, fuzzy, c-format
+#, c-format
 msgid "Component count: %d."
-msgstr "컴포넌트를 찾을 수 없습니다."
+msgstr "컴포넌트 수: %d."
 
 #: pcbnew/exporters/gen_footprints_placefile.cpp:300
 #: pcbnew/exporters/gen_footprints_placefile.cpp:438
@@ -29352,7 +29344,7 @@ msgstr "복구 파일 '%s'을 로드하시겠습니까?"
 #: pcbnew/files.cpp:374
 #, fuzzy, c-format
 msgid "Current board will be closed, save changes to '%s' before continuing?"
-msgstr "현재 작업 데이터가 손실됩니다. 그래도 계속 하시겠습니까?"
+msgstr "현재 보드는 닫히고 계속하기 전에 '%s'로 변경 사항을 저장합니까?"
 
 #: pcbnew/files.cpp:388
 #, fuzzy
@@ -29375,7 +29367,7 @@ msgstr "전역 패드 설정"
 #: pcbnew/files.cpp:578
 #, fuzzy, c-format
 msgid "PCB '%s' is already open."
-msgstr "라이브러리가 이미 사용 중입니다."
+msgstr "PCB '%s'는 이미 열려 있습니다."
 
 #: pcbnew/files.cpp:585
 msgid "The current PCB has been modified.  Save changes?"
@@ -29401,9 +29393,9 @@ msgid "Memory exhausted loading PCB '%s'"
 msgstr "PCB '%s' 로드 중 메모리 소진"
 
 #: pcbnew/files.cpp:834
-#, fuzzy, c-format
+#, c-format
 msgid "Error saving footprint %s to project specific library."
-msgstr "컴포넌트 %s: 라이브러리에서 %s 풋프린트를 찾을 수 없습니다."
+msgstr "프로젝트 특정 라이브러리에 풋프린트 %s을 저장하는 동안 오류가 발생했습니다."
 
 #: pcbnew/files.cpp:863
 #, fuzzy
@@ -29491,7 +29483,7 @@ msgstr "속성"
 #: pcbnew/footprint.cpp:879
 #, fuzzy, c-format
 msgid "3D-Shape: %s"
-msgstr "3D 형상"
+msgstr "3D 형상: %s"
 
 #: pcbnew/footprint.cpp:879
 #, fuzzy
@@ -29506,7 +29498,7 @@ msgstr "문서: %s"
 #: pcbnew/footprint.cpp:884 pcbnew/tools/pcb_control.cpp:1140
 #, fuzzy, c-format
 msgid "Keywords: %s"
-msgstr "키워드:"
+msgstr "키워드: %s"
 
 #: pcbnew/footprint.cpp:1171
 #, fuzzy
@@ -29514,9 +29506,9 @@ msgid "<no reference designator>"
 msgstr "사용자 지정 에디터:"
 
 #: pcbnew/footprint.cpp:1173
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint %s"
-msgstr "풋프린트: %d"
+msgstr "풋프린트 %s"
 
 #: pcbnew/footprint.cpp:2094 pcbnew/pad.cpp:1529 pcbnew/zone.cpp:1414
 #, fuzzy
@@ -29546,7 +29538,7 @@ msgstr "써멀"
 #: pcbnew/footprint.h:206
 #, fuzzy, c-format
 msgid "footprint %s"
-msgstr "풋프린트: %d"
+msgstr "풋프린트 %s"
 
 #: pcbnew/footprint_edit_frame.cpp:119
 #, fuzzy
@@ -29681,7 +29673,7 @@ msgstr "%s 라이브러리를 찾을 수 없습니다."
 #: pcbnew/footprint_libraries_utils.cpp:468
 #, fuzzy, c-format
 msgid "Library %s already exists."
-msgstr "라이브러리가 이미 사용 중입니다."
+msgstr "라이브러리 %s가 이미 존재합니다."
 
 #: pcbnew/footprint_libraries_utils.cpp:629
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:963
@@ -29874,7 +29866,7 @@ msgstr ""
 #: pcbnew/fp_text.cpp:312
 #, fuzzy, c-format
 msgid "Reference '%s'"
-msgstr "레퍼런스"
+msgstr "참조 '%s'"
 
 #: pcbnew/fp_text.cpp:316
 #, c-format
@@ -29882,9 +29874,9 @@ msgid "Value '%s' of %s"
 msgstr "값 '%s' (%s)"
 
 #: pcbnew/fp_text.cpp:321
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint Text '%s' of %s"
-msgstr "풋프린트: %d"
+msgstr "풋프린트 텍스트 '%s'의%s"
 
 #: pcbnew/generate_footprint_info.cpp:43
 #, fuzzy
@@ -30034,9 +30026,9 @@ msgid "Choose Footprint (%d items loaded)"
 msgstr "컴포넌트 선택 (%d 항목 로드됨):"
 
 #: pcbnew/load_select_footprint.cpp:367
-#, fuzzy, c-format
+#, c-format
 msgid "Footprints [%u items]"
-msgstr "풋프린트 필터"
+msgstr "풋프린트 [%u 항목]"
 
 #: pcbnew/load_select_footprint.cpp:431
 #, c-format
@@ -30336,9 +30328,9 @@ msgid "Cannot add %s (no footprint assigned)."
 msgstr ""
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:152
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot add %s (footprint '%s' not found)."
-msgstr "%s 파일을 찾을 수 없습니다."
+msgstr "%s를 추가할 수 없음('%s' 풋프린트를 찾을 수 없음)."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:162
 #, c-format
@@ -30356,19 +30348,19 @@ msgid "Cannot update %s (no footprint assigned)."
 msgstr ""
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:216
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot update %s (footprint '%s' not found)."
-msgstr "%s 파일을 찾을 수 없습니다."
+msgstr "%s를 업데이트할 수 없음('%s' 풋프린트를 찾을 수 없음)."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:226
-#, fuzzy, c-format
+#, c-format
 msgid "Change %s footprint from '%s' to '%s'."
-msgstr "컴포넌트 %s: 라이브러리에서 %s 풋프린트를 찾을 수 없습니다."
+msgstr "풋프린트 %s을 '%s'에서 '%s'로 변경."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:238
 #, fuzzy, c-format
 msgid "Changed %s footprint from '%s' to '%s'."
-msgstr "컴포넌트 %s: 라이브러리에서 %s 풋프린트를 찾을 수 없습니다."
+msgstr "풋프린트 %s을 '%s'에서 '%s'로 변경."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:265
 #, c-format
@@ -30388,7 +30380,7 @@ msgstr ""
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:294
 #, fuzzy, c-format
 msgid "Changed %s value from %s to %s."
-msgstr "컴포넌트 %s: 라이브러리에서 %s 풋프린트를 찾을 수 없습니다."
+msgstr "%s 값을 %s에서 %s로 변경했습니다."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:316
 #, fuzzy, c-format
@@ -30481,14 +30473,14 @@ msgid "Reconnected via from %s to %s."
 msgstr "비아 %s에서 %s로 다시 연결했습니다."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:659
-#, fuzzy, c-format
+#, c-format
 msgid "Via connected to unknown net (%s)."
-msgstr "경고: 1 핀 이상이 미연결 심볼에 연결되어 있습니다."
+msgstr "비아가 알 수 없는 네트에 연결됨(%s)."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:702
 #, fuzzy, c-format
 msgid "Reconnect copper zone '%s' from %s to %s."
-msgstr "모듈 배치 %s %s"
+msgstr "구리 영역 '%s'을 %s에서 %s로 다시 연결합니다."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:709
 #, c-format
@@ -30496,9 +30488,9 @@ msgid "Reconnect copper zone from %s to %s."
 msgstr ""
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:730
-#, fuzzy, c-format
+#, c-format
 msgid "Reconnected copper zone '%s' from %s to %s."
-msgstr "모듈 배치 %s %s"
+msgstr "구리 영역 '%s'을 %s에서 %s로 다시 연결했습니다."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:737
 #, fuzzy, c-format
@@ -30511,9 +30503,9 @@ msgid "Copper zone '%s' has no pads connected."
 msgstr "[%s] 컴포넌트를 찾을 수 없습니다."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:758
-#, fuzzy, c-format
+#, c-format
 msgid "Copper zone on layer %s at (%s, %s) has no pads connected."
-msgstr "[%s] 컴포넌트를 찾을 수 없습니다."
+msgstr "레이어 %s의 (%s, %s) 구리 영역에는 연결된 패드가 없습니다."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:826
 #, c-format
@@ -30523,47 +30515,47 @@ msgstr ""
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:832
 #, fuzzy, c-format
 msgid "Removed single pad net %s."
-msgstr "풋프린트 이동"
+msgstr "단일 패드 네트%s를 제거했습니다."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:891
-#, fuzzy, c-format
+#, c-format
 msgid "%s pad %s not found in %s."
-msgstr "%s 파일을 찾을 수 없습니다."
+msgstr "%s 패드 %s를 %s에서 찾을 수 없습니다."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:942
 #, fuzzy, c-format
 msgid "Processing symbol '%s:%s'."
-msgstr "라이브러리 파일 저장 중 에러"
+msgstr "처리 기호 '%s:%s'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1011
-#, fuzzy, c-format
+#, c-format
 msgid "Multiple footprints found for '%s'."
-msgstr "컴포넌트를 찾을 수 없습니다."
+msgstr "'%s'에 대해 여러 풋프린트를 찾았습니다."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1042
 #, fuzzy, c-format
 msgid "Cannot remove unused footprint %s (locked)."
-msgstr "풋프린트 이동"
+msgstr "사용하지 않는 풋프린트를 제거할 수 없습니다%s(잠김)."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1047
-#, fuzzy, c-format
+#, c-format
 msgid "Could not remove unused footprint %s (locked)."
-msgstr "풋프린트 이동"
+msgstr "사용하지 않는 풋프린트 %s를 제거할 수 없습니다(잠김)."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1059
-#, fuzzy, c-format
+#, c-format
 msgid "Remove unused footprint %s."
-msgstr "풋프린트 이동"
+msgstr "사용하지 않은 풋프린트 %s을 제거합니다."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1064
 #, fuzzy, c-format
 msgid "Removed unused footprint %s."
-msgstr "풋프린트 이동"
+msgstr "사용하지 않은 풋프린트 %s을 제거합니다."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1095
-#, fuzzy, c-format
+#, c-format
 msgid "Removed unused net %s."
-msgstr "풋프린트 이동"
+msgstr "사용하지 않은 네트 %s을 제거했습니다."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1103
 #, fuzzy
@@ -30620,7 +30612,7 @@ msgstr ""
 #: pcbnew/netlist_reader/legacy_netlist_reader.cpp:246
 #, fuzzy, c-format
 msgid "Cannot find symbol %s in footprint filter section of netlist."
-msgstr "새 풋프린트 추가"
+msgstr "넷리스트의 풋프린트 필터 섹션에서 %s 기호를 찾을 수 없습니다."
 
 #: pcbnew/netlist_reader/netlist.cpp:67
 #, fuzzy, c-format
@@ -30745,7 +30737,7 @@ msgstr "드릴"
 #: pcbnew/router/router_tool.cpp:1925 pcbnew/zone.cpp:634
 #, fuzzy, c-format
 msgid "Min Clearance: %s"
-msgstr "마스크 유격"
+msgstr "최소 클리어런스: %s"
 
 #: pcbnew/pad.cpp:949 pcbnew/pcb_track.cpp:729 pcbnew/pcb_track.cpp:736
 #: pcbnew/pcb_track.cpp:772 pcbnew/pcb_track.cpp:778
@@ -30785,7 +30777,7 @@ msgstr "%s(%s) 패드"
 #: pcbnew/pad.cpp:1120
 #, fuzzy, c-format
 msgid "Through hole pad of %s"
-msgstr "비아 드래그"
+msgstr "%s의 관통 구멍 패드"
 
 #: pcbnew/pad.cpp:1128
 #, c-format
