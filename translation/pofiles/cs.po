@@ -15,10 +15,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
-"PO-Revision-Date: 2021-07-18 15:48+0000\n"
-"Last-Translator: Jan Vykydal <vvykys@gmail.com>\n"
-"Language-Team: Czech <https://hosted.weblate.org/projects/kicad/master-"
-"source/cs/>\n"
+"PO-Revision-Date: 2021-07-31 11:56+0000\n"
+"Last-Translator: Jan Straka <bach@email.cz>\n"
+"Language-Team: Czech <https://hosted.weblate.org/projects/kicad/"
+"master-source/cs/>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -179,19 +179,17 @@ msgid "Simplifying copper layers polygons"
 msgstr "Zjednodušení polygonů vrstev mědi"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:767
-#, fuzzy
 msgid "Simplifying polygons on F_Cu"
-msgstr "Zjednodušení polygonů vrstev mědi"
+msgstr "Zjednodušení polygonů na F_Cu"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:778
-#, fuzzy
 msgid "Simplifying polygons on B_Cu"
-msgstr "Zjednodušení polygonů vrstev mědi"
+msgstr "Zjednodušení polygonů na B_Cu"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:808
-#, fuzzy, c-format
+#, c-format
 msgid "Simplifying %d copper layers"
-msgstr "Zjednodušení polygonů vrstev mědi"
+msgstr "Zjednodušení vrstev mědi %d"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:847
 msgid "Simplify holes contours"
@@ -206,9 +204,8 @@ msgid "Build BVH for holes and vias"
 msgstr "Sestavuji BVH pro díry a prokovy"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:410
-#, fuzzy
 msgid "Your OpenGL version is not supported. Minimum required is 1.5."
-msgstr "Vaše verze OpenGL není podporována. Minimální požadovaná je 1.5"
+msgstr "Vaše verze OpenGL není podporována. Minimální požadovaná je 1.5."
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:531
 #, c-format
@@ -509,9 +506,8 @@ msgid "Material properties:"
 msgstr "Vlastnosti materiálu:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_display_options_base.cpp:101
-#, fuzzy
 msgid "Realistic"
-msgstr "Realistický mód"
+msgstr "Realistický"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_display_options_base.cpp:101
 msgid "Solid colors"
@@ -616,14 +612,12 @@ msgid "Disable holes"
 msgstr "Zakázat díry"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_raytracing_options_base.cpp:27
-#, fuzzy
 msgid "Procedural textures (slow)"
-msgstr "Procedurální textury"
+msgstr "Procesní textury (pomalé)"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_raytracing_options_base.cpp:31
-#, fuzzy
 msgid "Add floor (slow)"
-msgstr "Přidat referenční rovinu"
+msgstr "Přidat rovinu (pomalé)"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_raytracing_options_base.cpp:35
 msgid "Anti-aliasing (slow)"
@@ -921,27 +915,24 @@ msgid "3D Grid 1mm"
 msgstr "3D mřížka 1mm"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:187
-#, fuzzy
 msgid "Render Realistic Materials"
-msgstr "Dielektrické materiály"
+msgstr "Vykreslování realistických materiálů"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:188
 msgid "Use all material properties from each 3D model file"
 msgstr "Použít všechny vlastnosti materiálů z každého souboru 3D modelu"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:194
-#, fuzzy
 msgid "Render Solid Colors"
-msgstr "Rendrování stínů"
+msgstr "Vykreslení plných barev"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:195
 msgid "Use only the diffuse color property from model 3D model file"
 msgstr "Použít pouze vlastnosti difúzní barvy z 3D modelu"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:201
-#, fuzzy
 msgid "Render CAD Colors"
-msgstr "Definované barvy"
+msgstr "Vykreslování barev CAD"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:202
 msgid "Use a CAD color style based on the diffuse color of the material"
@@ -1427,14 +1418,14 @@ msgid "Cannot make path '%s' absolute with respect to '%s'."
 msgstr "Nelze vytvořit cestu '%s' absolutně s ohledem na '%s'."
 
 #: common/common.cpp:339
-#, fuzzy, c-format
+#, c-format
 msgid "Output directory '%s' created."
-msgstr "Výstupní adresář '%s' vytvořen.\n"
+msgstr "Výstupní adresář '%s' vytvořen."
 
 #: common/common.cpp:348
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot create output directory '%s'."
-msgstr "Nelze vytvořit výstupní adresář '%s'.\n"
+msgstr "Nelze vytvořit výstupní adresář '%s'."
 
 #: common/common.cpp:620
 msgid "This operating system is not supported by KiCad and its dependencies."
@@ -2637,7 +2628,6 @@ msgid "Assign unique reference designators to pasted symbols"
 msgstr "Přiřadit jedinečné označení reference na vložené symboly"
 
 #: common/dialogs/dialog_paste_special_base.cpp:22
-#, fuzzy
 msgid "Keep existing reference designators, even if they are duplicated"
 msgstr "Zachovat stávající číslování, i když existují duplikáty"
 
@@ -3687,14 +3677,14 @@ msgid "Could not use OpenGL"
 msgstr "Nelze použít OpenGL"
 
 #: common/drawing_sheet/drawing_sheet_reader.cpp:890
-#, fuzzy, c-format
+#, c-format
 msgid "Drawing sheet '%s' not found."
-msgstr "Soubor listu kreslení '%s' nenalezen."
+msgstr "List kreslení '%s' nenalezen."
 
 #: common/drawing_sheet/drawing_sheet_reader.cpp:900
-#, fuzzy, c-format
+#, c-format
 msgid "Drawing sheet '%s' could not be opened."
-msgstr "Soubor listu kreslení '%s' nenalezen."
+msgstr "List kreslení '%s' nelze otevřít."
 
 #: common/drawing_sheet/drawing_sheet_reader.cpp:913
 #, fuzzy, c-format
