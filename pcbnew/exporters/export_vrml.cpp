@@ -637,7 +637,7 @@ void EXPORTER_PCB_VRML::ExportVrmlViaHoles()
 
         // do not render a buried via
         if( top_layer != F_Cu && bottom_layer != B_Cu )
-            return;
+            continue;
 
         // Export all via holes to m_holes
         double hole_radius = via->GetDrillValue() * m_BoardToVrmlScale / 2.0;
