@@ -31,20 +31,15 @@
 #include <wx/log.h>
 #include <wx/textfile.h>
 #include <wx/tokenzr.h>
+#include <wx_filename.h>       // For ::ResolvePossibleSymlinks()
 
-#include <gr_text.h>
 #include <kiway.h>
 #include <kicad_string.h>
 #include <locale_io.h>
 #include <richio.h>
-#include <core/typeinfo.h>
-#include <properties.h>
 #include <trace_helpers.h>
 #include <trigo.h>
-#include <confirm.h>
 #include <widgets/progress_reporter.h>
-#include <wx_filename.h>       // For ::ResolvePossibleSymlinks()
-
 #include <general.h>
 #include <sch_bitmap.h>
 #include <sch_bus_entry.h>
@@ -56,10 +51,8 @@
 #include <sch_text.h>
 #include <sch_sheet.h>
 #include <sch_sheet_pin.h>
-#include <sch_bitmap.h>
 #include <bus_alias.h>
 #include <sch_plugins/legacy/sch_legacy_plugin.h>
-#include <template_fieldnames.h>
 #include <sch_screen.h>
 #include <schematic.h>
 #include <symbol_library.h>
@@ -72,9 +65,7 @@
 #include <lib_rectangle.h>
 #include <lib_text.h>
 #include <eeschema_id.h>       // for MAX_UNIT_COUNT_PER_PACKAGE definition
-#include <symbol_lib_table.h>  // for PropPowerSymsOnly definition.
 #include <tool/selection.h>
-#include <default_values.h>    // For some default values
 
 
 #define Mils2Iu( x ) Mils2iu( x )
@@ -1535,7 +1526,7 @@ SCH_TEXT* SCH_LEGACY_PLUGIN::loadText( LINE_READER& aReader )
         val.insert( i, wxT( "\n" ) );
     }
 
-    text->SetText( val );
+    text->SetText( ConvertToNewOverbarNotation( val ) );
 
     return text.release();
 }
