@@ -2040,7 +2040,7 @@ void OPENGL_GAL::drawBitmapOverbar( double aLength, double aHeight )
 
     Save();
 
-    Translate( VECTOR2D( -aLength, -aHeight - 1.5 * H ) );
+    Translate( VECTOR2D( -aLength, -aHeight ) );
 
     m_currentManager->Reserve( 6 );
     m_currentManager->Color( m_strokeColor.r, m_strokeColor.g, m_strokeColor.b, m_strokeColor.a );
@@ -2109,15 +2109,7 @@ std::pair<VECTOR2D, float> OPENGL_GAL::computeBitmapTextSize( const UTF8& aText 
         }
 
         if( glyph )
-        {
             textSize.x += glyph->advance;
-
-            if( overbarDepth != -1 )
-            {
-                const float H = lineGlyph->maxy - lineGlyph->miny;
-                textSize.y = std::max<float>( textSize.y, charHeight + 1.5 * H );
-            }
-        }
     }
 
     textSize.y = std::max<float>( textSize.y, charHeight );

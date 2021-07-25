@@ -994,15 +994,17 @@ void SCH_GLOBALLABEL::RunOnChildren( const std::function<void( SCH_ITEM* )>& aFu
 
 wxPoint SCH_GLOBALLABEL::GetSchematicTextOffset( const RENDER_SETTINGS* aSettings ) const
 {
-    wxPoint text_offset;
-    int     dist = GetTextOffset( aSettings );
+    int horiz = GetTextOffset( aSettings );
+
+    // Center the text on the center line of "E" instead of "R" to make room for an overbar
+    int vert = GetTextHeight() * 0.0715;
 
     switch( m_shape )
     {
     case PINSHEETLABEL_SHAPE::PS_INPUT:
     case PINSHEETLABEL_SHAPE::PS_BIDI:
     case PINSHEETLABEL_SHAPE::PS_TRISTATE:
-        dist += GetTextHeight() * 3 / 4;  // Use three-quarters-height as proxy for triangle size
+        horiz += GetTextHeight() * 3 / 4;  // Use three-quarters-height as proxy for triangle size
         break;
 
     case PINSHEETLABEL_SHAPE::PS_OUTPUT:
@@ -1014,13 +1016,11 @@ wxPoint SCH_GLOBALLABEL::GetSchematicTextOffset( const RENDER_SETTINGS* aSetting
     switch( GetLabelSpinStyle() )
     {
     default:
-    case LABEL_SPIN_STYLE::LEFT:   text_offset.x -= dist; break;
-    case LABEL_SPIN_STYLE::UP:     text_offset.y -= dist; break;
-    case LABEL_SPIN_STYLE::RIGHT:  text_offset.x += dist; break;
-    case LABEL_SPIN_STYLE::BOTTOM: text_offset.y += dist; break;
+    case LABEL_SPIN_STYLE::LEFT:   return wxPoint( -horiz, vert );
+    case LABEL_SPIN_STYLE::UP:     return wxPoint( vert, -horiz );
+    case LABEL_SPIN_STYLE::RIGHT:  return wxPoint( horiz, vert );
+    case LABEL_SPIN_STYLE::BOTTOM: return wxPoint( vert, horiz );
     }
-
-    return text_offset;
 }
 
 
