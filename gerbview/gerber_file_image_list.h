@@ -121,6 +121,13 @@ public:
      */
     std::unordered_map<int, int> SortImagesByZOrder();
 
+    /**
+     * Get number of loaded images
+     *
+     * @return number of images loaded
+     */
+    unsigned GetLoadedImageCount();
+
 private:
     // the list of loaded images (1 image = 1 gerber file)
     std::vector<GERBER_FILE_IMAGE*> m_GERBER_List;
