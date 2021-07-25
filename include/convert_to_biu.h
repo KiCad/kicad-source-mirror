@@ -142,7 +142,7 @@ constexpr int ARC_HIGH_DEF = Millimeter2iu( 0.005 );
 constexpr double PCB_IU_PER_MILS = (PCB_IU_PER_MM * 0.0254);
 constexpr double SCH_IU_PER_MILS = (SCH_IU_PER_MM * 0.0254);
 
-constexpr inline int SchMils2iu( int mils )
+constexpr inline int SchMils2iu( double mils )
 {
     double x = mils * SCH_IU_PER_MILS;
     return int( x < 0 ? x - 0.5 : x + 0.5 );
