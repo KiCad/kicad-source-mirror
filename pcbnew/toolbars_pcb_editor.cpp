@@ -26,6 +26,7 @@
 
 #include <memory>
 
+#include <advanced_config.h>
 #include <bitmaps.h>
 #include <board.h>
 #include <board_design_settings.h>
@@ -353,9 +354,14 @@ void PCB_EDIT_FRAME::ReCreateOptToolbar()
     m_optionsToolBar->Add( PCB_ACTIONS::toggleNetHighlight,   ACTION_TOOLBAR::TOGGLE );
 
     m_optionsToolBar->AddScaledSeparator( this );
-    m_optionsToolBar->Add( PCB_ACTIONS::zoneDisplayEnable,    ACTION_TOOLBAR::TOGGLE );
-    m_optionsToolBar->Add( PCB_ACTIONS::zoneDisplayDisable,   ACTION_TOOLBAR::TOGGLE );
-    m_optionsToolBar->Add( PCB_ACTIONS::zoneDisplayOutlines,  ACTION_TOOLBAR::TOGGLE );
+    m_optionsToolBar->Add( PCB_ACTIONS::zoneDisplayFilled,    ACTION_TOOLBAR::TOGGLE );
+    m_optionsToolBar->Add( PCB_ACTIONS::zoneDisplayOutline,   ACTION_TOOLBAR::TOGGLE );
+
+    if( ADVANCED_CFG::GetCfg().m_ExtraZoneDisplayModes )
+    {
+        m_optionsToolBar->Add( PCB_ACTIONS::zoneDisplayFractured,    ACTION_TOOLBAR::TOGGLE );
+        m_optionsToolBar->Add( PCB_ACTIONS::zoneDisplayTriangulated, ACTION_TOOLBAR::TOGGLE );
+    }
 
     m_optionsToolBar->AddScaledSeparator( this );
     m_optionsToolBar->Add( PCB_ACTIONS::padDisplayMode,       ACTION_TOOLBAR::TOGGLE );

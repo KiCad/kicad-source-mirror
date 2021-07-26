@@ -98,9 +98,13 @@ enum class HIGH_CONTRAST_MODE
 ///< Determine how zones should be displayed.
 enum class ZONE_DISPLAY_MODE
 {
-    SHOW_FILLED,          ///< Filled polygons are shown
-    SHOW_ZONE_OUTLINE,    ///< Only the zone outline is shown
-    SHOW_FILLED_OUTLINE   ///< Outlines of filled polygons are shown
+    SHOW_FILLED,
+    SHOW_ZONE_OUTLINE,
+
+    // Debug modes
+
+    SHOW_FRACTURE_BORDERS,
+    SHOW_TRIANGULATION
 };
 
 ///< Determine how net color overrides should be applied.

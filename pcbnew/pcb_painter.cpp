@@ -1737,7 +1737,8 @@ void PCB_PAINTER::draw( const ZONE* aZone, int aLayer )
 
     // Draw the filling
     if( displayMode == ZONE_DISPLAY_MODE::SHOW_FILLED
-            || displayMode == ZONE_DISPLAY_MODE::SHOW_FILLED_OUTLINE )
+            || displayMode == ZONE_DISPLAY_MODE::SHOW_FRACTURE_BORDERS
+            || displayMode == ZONE_DISPLAY_MODE::SHOW_TRIANGULATION )
     {
         const SHAPE_POLY_SET& polySet = aZone->GetFilledPolysList( layer );
 
@@ -1759,13 +1760,13 @@ void PCB_PAINTER::draw( const ZONE* aZone, int aLayer )
             m_gal->SetIsFill( true );
             m_gal->SetIsStroke( outline_thickness > 0 );
         }
-        else if( displayMode == ZONE_DISPLAY_MODE::SHOW_FILLED_OUTLINE )
+        else
         {
             m_gal->SetIsFill( false );
             m_gal->SetIsStroke( true );
         }
 
-        m_gal->DrawPolygon( polySet );
+        m_gal->DrawPolygon( polySet, displayMode == ZONE_DISPLAY_MODE::SHOW_TRIANGULATION );
     }
 }
 

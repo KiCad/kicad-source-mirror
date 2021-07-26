@@ -134,6 +134,12 @@ public:
     bool m_DrawTriangulationOutlines;
 
     /**
+     * When true, adds zone-diaplay-modes for stroking the zone fracture boundaries and the zone
+     * triangulation.
+     */
+    bool m_ExtraZoneDisplayModes;
+
+    /**
      * Sets an absolute minimum pen width for plotting.  Some formats (PDF, for example) don't
      * like ultra-thin lines.  Units are mm.
      */

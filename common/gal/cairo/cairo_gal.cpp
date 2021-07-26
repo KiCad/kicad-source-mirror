@@ -425,7 +425,7 @@ void CAIRO_GAL_BASE::DrawRectangle( const VECTOR2D& aStartPoint, const VECTOR2D&
 }
 
 
-void CAIRO_GAL_BASE::DrawPolygon( const SHAPE_POLY_SET& aPolySet )
+void CAIRO_GAL_BASE::DrawPolygon( const SHAPE_POLY_SET& aPolySet, bool aStrokeTriangulation )
 {
     for( int i = 0; i < aPolySet.OutlineCount(); ++i )
         drawPoly( aPolySet.COutline( i ) );

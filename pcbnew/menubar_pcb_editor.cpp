@@ -260,9 +260,14 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     drawingModeSubMenu->SetTitle( _( "&Drawing Mode" ) );
     drawingModeSubMenu->SetIcon( BITMAPS::add_zone );
 
-    drawingModeSubMenu->Add( PCB_ACTIONS::zoneDisplayEnable,   ACTION_MENU::CHECK );
-    drawingModeSubMenu->Add( PCB_ACTIONS::zoneDisplayDisable,  ACTION_MENU::CHECK );
-    drawingModeSubMenu->Add( PCB_ACTIONS::zoneDisplayOutlines, ACTION_MENU::CHECK );
+    drawingModeSubMenu->Add( PCB_ACTIONS::zoneDisplayFilled,   ACTION_MENU::CHECK );
+    drawingModeSubMenu->Add( PCB_ACTIONS::zoneDisplayOutline,  ACTION_MENU::CHECK );
+
+    if( ADVANCED_CFG::GetCfg().m_ExtraZoneDisplayModes )
+    {
+        drawingModeSubMenu->Add( PCB_ACTIONS::zoneDisplayFractured,    ACTION_MENU::CHECK );
+        drawingModeSubMenu->Add( PCB_ACTIONS::zoneDisplayTriangulated, ACTION_MENU::CHECK );
+    }
 
     drawingModeSubMenu->AppendSeparator();
     drawingModeSubMenu->Add( PCB_ACTIONS::padDisplayMode,      ACTION_MENU::CHECK );

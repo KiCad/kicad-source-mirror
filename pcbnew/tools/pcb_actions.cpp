@@ -829,26 +829,31 @@ TOOL_ACTION PCB_ACTIONS::zoomFootprintAutomatically( "pcbnew.Control.zoomFootpri
         _( "Automatically zoom to fit" ), _( "Zoom to fit when changing footprint" ),
         BITMAPS::zoom_auto_fit_in_page );
 
-TOOL_ACTION PCB_ACTIONS::zoneDisplayEnable( "pcbnew.Control.zoneDisplayEnable",
+TOOL_ACTION PCB_ACTIONS::zoneDisplayFilled( "pcbnew.Control.zoneDisplayEnable",
         AS_GLOBAL, 0, "",
-        _( "Fill Zones" ), _( "Show filled areas of zones" ),
+        _( "Draw Zone Fills" ), _( "Show filled areas of zones" ),
         BITMAPS::show_zone );
 
-TOOL_ACTION PCB_ACTIONS::zoneDisplayDisable( "pcbnew.Control.zoneDisplayDisable",
+TOOL_ACTION PCB_ACTIONS::zoneDisplayOutline( "pcbnew.Control.zoneDisplayDisable",
         AS_GLOBAL, 0, "",
-        _( "Wireframe Zones" ), _( "Show only zone boundaries" ),
+        _( "Draw Zone Outlines" ), _( "Show only zone boundaries" ),
         BITMAPS::show_zone_disable );
 
-TOOL_ACTION PCB_ACTIONS::zoneDisplayOutlines( "pcbnew.Control.zoneDisplayOutlines",
+TOOL_ACTION PCB_ACTIONS::zoneDisplayFractured( "pcbnew.Control.zoneDisplayOutlines",
         AS_GLOBAL, 0, "",
-        _( "Sketch Zones" ), _( "Show solid areas of zones in outline mode" ),
+        _( "Draw Zone Fill Fracture Borders" ), "",
         BITMAPS::show_zone_outline_only );
+
+TOOL_ACTION PCB_ACTIONS::zoneDisplayTriangulated( "pcbnew.Control.zoneDisplayTesselation",
+        AS_GLOBAL, 0, "",
+        _( "Draw Zone Fill Triangulation" ), "",
+        BITMAPS::show_zone_triangulation );
 
 TOOL_ACTION PCB_ACTIONS::zoneDisplayToggle( "pcbnew.Control.zoneDisplayToggle",
         AS_GLOBAL,
         'A', "",
         _( "Toggle Zone Display" ),
-        _( "Cycle between showing filled zones, wireframed zones and sketched zones" ),
+        _( "Cycle between showing zone fills and just their outlines" ),
         BITMAPS::show_zone );
 
 

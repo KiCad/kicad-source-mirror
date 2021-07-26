@@ -190,22 +190,28 @@ int PCB_CONTROL::ZoneDisplayMode( const TOOL_EVENT& aEvent )
     auto opts = displayOptions();
 
     // Apply new display options to the GAL canvas
-    if( aEvent.IsAction( &PCB_ACTIONS::zoneDisplayEnable ) )
+    if( aEvent.IsAction( &PCB_ACTIONS::zoneDisplayFilled ) )
     {
         opts.m_ZoneDisplayMode = ZONE_DISPLAY_MODE::SHOW_FILLED;
     }
-    else if( aEvent.IsAction( &PCB_ACTIONS::zoneDisplayDisable ) )
+    else if( aEvent.IsAction( &PCB_ACTIONS::zoneDisplayOutline ) )
     {
         opts.m_ZoneDisplayMode = ZONE_DISPLAY_MODE::SHOW_ZONE_OUTLINE;
     }
-    else if( aEvent.IsAction( &PCB_ACTIONS::zoneDisplayOutlines ) )
+    else if( aEvent.IsAction( &PCB_ACTIONS::zoneDisplayFractured ) )
     {
-        opts.m_ZoneDisplayMode = ZONE_DISPLAY_MODE::SHOW_FILLED_OUTLINE;
+        opts.m_ZoneDisplayMode = ZONE_DISPLAY_MODE::SHOW_FRACTURE_BORDERS;
+    }
+    else if( aEvent.IsAction( &PCB_ACTIONS::zoneDisplayTriangulated ) )
+    {
+        opts.m_ZoneDisplayMode = ZONE_DISPLAY_MODE::SHOW_TRIANGULATION;
     }
     else if( aEvent.IsAction( &PCB_ACTIONS::zoneDisplayToggle ) )
     {
-        int nextMode = ( static_cast<int>( opts.m_ZoneDisplayMode ) + 1 ) % 3;
-        opts.m_ZoneDisplayMode = static_cast<ZONE_DISPLAY_MODE>( nextMode );
+        if( opts.m_ZoneDisplayMode == ZONE_DISPLAY_MODE::SHOW_FILLED )
+            opts.m_ZoneDisplayMode = ZONE_DISPLAY_MODE::SHOW_ZONE_OUTLINE;
+        else
+            opts.m_ZoneDisplayMode = ZONE_DISPLAY_MODE::SHOW_FILLED;
     }
     else
     {
@@ -1176,9 +1182,10 @@ void PCB_CONTROL::setTransitions()
     Go( &PCB_CONTROL::ToggleRatsnest,        PCB_ACTIONS::showRatsnest.MakeEvent() );
     Go( &PCB_CONTROL::ToggleRatsnest,        PCB_ACTIONS::ratsnestLineMode.MakeEvent() );
     Go( &PCB_CONTROL::ViaDisplayMode,        PCB_ACTIONS::viaDisplayMode.MakeEvent() );
-    Go( &PCB_CONTROL::ZoneDisplayMode,       PCB_ACTIONS::zoneDisplayEnable.MakeEvent() );
-    Go( &PCB_CONTROL::ZoneDisplayMode,       PCB_ACTIONS::zoneDisplayDisable.MakeEvent() );
-    Go( &PCB_CONTROL::ZoneDisplayMode,       PCB_ACTIONS::zoneDisplayOutlines.MakeEvent() );
+    Go( &PCB_CONTROL::ZoneDisplayMode,       PCB_ACTIONS::zoneDisplayFilled.MakeEvent() );
+    Go( &PCB_CONTROL::ZoneDisplayMode,       PCB_ACTIONS::zoneDisplayOutline.MakeEvent() );
+    Go( &PCB_CONTROL::ZoneDisplayMode,       PCB_ACTIONS::zoneDisplayFractured.MakeEvent() );
+    Go( &PCB_CONTROL::ZoneDisplayMode,       PCB_ACTIONS::zoneDisplayTriangulated.MakeEvent() );
     Go( &PCB_CONTROL::ZoneDisplayMode,       PCB_ACTIONS::zoneDisplayToggle.MakeEvent() );
     Go( &PCB_CONTROL::HighContrastMode,      ACTIONS::highContrastMode.MakeEvent() );
     Go( &PCB_CONTROL::HighContrastModeCycle, ACTIONS::highContrastModeCycle.MakeEvent() );

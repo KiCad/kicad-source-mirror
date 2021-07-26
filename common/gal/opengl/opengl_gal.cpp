@@ -1068,7 +1068,8 @@ void OPENGL_GAL::DrawPolygon( const VECTOR2D aPointList[], int aListSize )
 }
 
 
-void OPENGL_GAL::drawTriangulatedPolyset( const SHAPE_POLY_SET& aPolySet )
+void OPENGL_GAL::drawTriangulatedPolyset( const SHAPE_POLY_SET& aPolySet,
+                                          bool aStrokeTriangulation )
 {
     m_currentManager->Shader( SHADER_NONE );
     m_currentManager->Color( m_fillColor.r, m_fillColor.g, m_fillColor.b, m_fillColor.a );
@@ -1105,11 +1106,16 @@ void OPENGL_GAL::drawTriangulatedPolyset( const SHAPE_POLY_SET& aPolySet )
 
     if( ADVANCED_CFG::GetCfg().m_DrawTriangulationOutlines )
     {
+        aStrokeTriangulation = true;
+        SetStrokeColor( COLOR4D( 0.0, 1.0, 0.2, 1.0 ) );
+    }
+
+    if( aStrokeTriangulation )
+    {
         COLOR4D oldStrokeColor = m_strokeColor;
         double  oldLayerDepth = m_layerDepth;
 
         SetLayerDepth( m_layerDepth - 1 );
-        SetStrokeColor( COLOR4D( 0.0, 1.0, 0.2, 1.0 ) );
 
         for( unsigned int j = 0; j < aPolySet.TriangulatedPolyCount(); ++j )
         {
@@ -1131,11 +1137,11 @@ void OPENGL_GAL::drawTriangulatedPolyset( const SHAPE_POLY_SET& aPolySet )
 }
 
 
-void OPENGL_GAL::DrawPolygon( const SHAPE_POLY_SET& aPolySet )
+void OPENGL_GAL::DrawPolygon( const SHAPE_POLY_SET& aPolySet, bool aStrokeTriangulation )
 {
     if( aPolySet.IsTriangulationUpToDate() )
     {
-        drawTriangulatedPolyset( aPolySet );
+        drawTriangulatedPolyset( aPolySet, aStrokeTriangulation );
         return;
     }
 

@@ -491,6 +491,7 @@ enum class BITMAPS : unsigned int
     show_zone,
     show_zone_disable,
     show_zone_outline_only,
+    show_zone_triangulation,
     showtrack,
     sim_add_signal,
     sim_probe,

@@ -170,7 +170,7 @@ public:
      */
     virtual void DrawPolygon( const std::deque<VECTOR2D>& aPointList ) {};
     virtual void DrawPolygon( const VECTOR2D aPointList[], int aListSize ) {};
-    virtual void DrawPolygon( const SHAPE_POLY_SET& aPolySet ) {};
+    virtual void DrawPolygon( const SHAPE_POLY_SET& aPolySet, bool aStrokeTriangulation = false ) {};
     virtual void DrawPolygon( const SHAPE_LINE_CHAIN& aPolySet ) {};
 
     /**

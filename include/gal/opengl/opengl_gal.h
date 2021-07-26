@@ -141,7 +141,7 @@ public:
     /// @copydoc GAL::DrawPolygon()
     void DrawPolygon( const std::deque<VECTOR2D>& aPointList ) override;
     void DrawPolygon( const VECTOR2D aPointList[], int aListSize ) override;
-    void DrawPolygon( const SHAPE_POLY_SET& aPolySet ) override;
+    void DrawPolygon( const SHAPE_POLY_SET& aPolySet, bool aStrokeTriangulation = false ) override;
     void DrawPolygon( const SHAPE_LINE_CHAIN& aPolySet ) override;
 
     /// @copydoc GAL::DrawCurve()
@@ -425,8 +425,11 @@ private:
 
     /**
      * Draw a set of polygons with a cached triangulation. Way faster than drawPolygon.
+     *
+     * @param aStrokeTriangulation indicates the triangulation should be stroked rather than
+     *                             filled.  Used for debugging.
      */
-    void drawTriangulatedPolyset( const SHAPE_POLY_SET& aPoly );
+    void drawTriangulatedPolyset( const SHAPE_POLY_SET& aPoly, bool aStrokeTriangulation );
 
 
     /**

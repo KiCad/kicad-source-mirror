@@ -13,7 +13,7 @@
    viewBox="0 0 24 24"
    version="1.1"
    sodipodi:docname="show_zone_outline_only.svg"
-   inkscape:version="1.0.1 (c497b03c, 2020-09-10)">
+   inkscape:version="1.0.2 (e86c8708, 2021-01-15)">
   <sodipodi:namedview
      pagecolor="#ffffff"
      bordercolor="#666666"
@@ -23,18 +23,19 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1280"
-     inkscape:window-height="715"
+     inkscape:window-width="1440"
+     inkscape:window-height="800"
      id="namedview42"
      showgrid="true"
-     inkscape:zoom="19.385992"
-     inkscape:cx="9.9710284"
-     inkscape:cy="11.030906"
+     inkscape:zoom="29.388028"
+     inkscape:cx="10.074196"
+     inkscape:cy="12.372081"
      inkscape:window-x="0"
      inkscape:window-y="23"
      inkscape:window-maximized="1"
      inkscape:current-layer="Слой_1"
-     inkscape:document-rotation="0">
+     inkscape:document-rotation="0"
+     inkscape:snap-global="false">
     <inkscape:grid
        type="xygrid"
        id="grid240579"
@@ -54,7 +55,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title>add_arc</dc:title>
+        <dc:title>show_zone_disable копия</dc:title>
       </cc:Work>
       <cc:License
          rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
@@ -122,4 +123,12 @@
      id="polygon838"
      style="display:inline;fill:none;stroke:#1a81c4;stroke-opacity:1"
      d="M 8.5 2.5 L 8.5 12.5 L 2.5 12.5 L 2.5 21.5 L 21.5 21.5 L 21.5 14.5 L 19.828125 14.5 A 4.5 4.5 0 0 1 17 15.5 A 4.5 4.5 0 0 1 12.5 11 A 4.5 4.5 0 0 1 17 6.5 A 4.5 4.5 0 0 1 19.828125 7.5 L 21.5 7.5 L 21.5 2.5 L 8.5 2.5 z " />
+  <rect
+     style="fill:#ffffff;stroke:#1a81c4;stroke-width:0.755906;stroke-miterlimit:4;stroke-dasharray:none"
+     id="rect865"
+     width="3.333333"
+     height="0.25833744"
+     x="8.7988548"
+     y="10.398369"
+     ry="0" />
 </svg>

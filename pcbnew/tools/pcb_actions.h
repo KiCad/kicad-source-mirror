@@ -243,9 +243,10 @@ public:
     static TOOL_ACTION trackDisplayMode;
     static TOOL_ACTION padDisplayMode;
     static TOOL_ACTION viaDisplayMode;
-    static TOOL_ACTION zoneDisplayEnable;
-    static TOOL_ACTION zoneDisplayDisable;
-    static TOOL_ACTION zoneDisplayOutlines;
+    static TOOL_ACTION zoneDisplayFilled;
+    static TOOL_ACTION zoneDisplayOutline;
+    static TOOL_ACTION zoneDisplayFractured;
+    static TOOL_ACTION zoneDisplayTriangulated;
     static TOOL_ACTION zoneDisplayToggle;
     static TOOL_ACTION showPadNumbers;
     static TOOL_ACTION zoomFootprintAutomatically;

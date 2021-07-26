@@ -27,7 +27,7 @@
 #include <tool/action_manager.h>
 #include <tool/tool_event.h>
 #include <tool/tool_action.h>
-
+#include <advanced_config.h>
 
 class PSEUDO_ACTION : public TOOL_ACTION
 {
@@ -114,6 +114,15 @@ void HOTKEY_STORE::Init( std::vector<TOOL_MANAGER*> aToolManagerList, bool aIncl
             // Internal actions probably shouldn't be allowed hotkeys
             if( entry.second->GetLabel().IsEmpty() )
                 continue;
+
+            if( !ADVANCED_CFG::GetCfg().m_ExtraZoneDisplayModes )
+            {
+                if( entry.second->GetName() == "pcbnew.Control.zoneDisplayOutlines"
+                        || entry.second->GetName() == "pcbnew.Control.zoneDisplayTesselation" )
+                {
+                    continue;
+                }
+            }
 
             HOTKEY& hotkey = masterMap[ entry.first ];
             hotkey.m_Actions.push_back( entry.second );

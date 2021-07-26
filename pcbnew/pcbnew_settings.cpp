@@ -181,7 +181,7 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS()
 
     m_params.emplace_back( new PARAM_ENUM<ZONE_DISPLAY_MODE>( "pcb_display.zone_mode",
             &m_Display.m_ZoneDisplayMode, ZONE_DISPLAY_MODE::SHOW_FILLED,
-            ZONE_DISPLAY_MODE::SHOW_FILLED_OUTLINE, ZONE_DISPLAY_MODE::SHOW_FILLED ) );
+            ZONE_DISPLAY_MODE::SHOW_TRIANGULATION, ZONE_DISPLAY_MODE::SHOW_FILLED ) );
 
     m_params.emplace_back( new PARAM<int>( "pcb_display.origin_mode",
             reinterpret_cast<int*>( &m_Display.m_DisplayOrigin ),

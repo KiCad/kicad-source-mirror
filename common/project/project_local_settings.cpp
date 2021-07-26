@@ -172,7 +172,7 @@ PROJECT_LOCAL_SETTINGS::PROJECT_LOCAL_SETTINGS( PROJECT* aProject, const wxStrin
     m_params.emplace_back( new PARAM_ENUM<ZONE_DISPLAY_MODE>( "board.zone_display_mode",
                            &m_ZoneDisplayMode,
                            ZONE_DISPLAY_MODE::SHOW_FILLED, ZONE_DISPLAY_MODE::SHOW_FILLED,
-                           ZONE_DISPLAY_MODE::SHOW_FILLED_OUTLINE ) );
+                           ZONE_DISPLAY_MODE::SHOW_TRIANGULATION ) );
 
     m_params.emplace_back( new PARAM_LAMBDA<nlohmann::json>( "project.files",
             [&]() -> nlohmann::json

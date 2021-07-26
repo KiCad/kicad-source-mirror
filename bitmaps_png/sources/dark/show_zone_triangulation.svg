@@ -12,7 +12,7 @@
    data-name="Слой 1"
    viewBox="0 0 24 24"
    version="1.1"
-   sodipodi:docname="show_zone_outline_only.svg"
+   sodipodi:docname="show_zone_triangulation.svg"
    inkscape:version="1.0.2 (e86c8708, 2021-01-15)">
   <sodipodi:namedview
      pagecolor="#ffffff"
@@ -27,7 +27,7 @@
      inkscape:window-height="800"
      id="namedview42"
      showgrid="true"
-     inkscape:zoom="44.542905"
+     inkscape:zoom="29.390539"
      inkscape:cx="9.9710284"
      inkscape:cy="11.030906"
      inkscape:window-x="0"
@@ -55,7 +55,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title>add_arc</dc:title>
+        <dc:title>show_zone_disable копия</dc:title>
       </cc:Work>
       <cc:License
          rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
@@ -123,11 +123,19 @@
      id="polygon838"
      style="display:inline;fill:none;stroke:#42B8EB;stroke-opacity:1"
      d="M 8.5 2.5 L 8.5 12.5 L 2.5 12.5 L 2.5 21.5 L 21.5 21.5 L 21.5 14.5 L 19.828125 14.5 A 4.5 4.5 0 0 1 17 15.5 A 4.5 4.5 0 0 1 12.5 11 A 4.5 4.5 0 0 1 17 6.5 A 4.5 4.5 0 0 1 19.828125 7.5 L 21.5 7.5 L 21.5 2.5 L 8.5 2.5 z " />
-  <rect
-     style="fill:#ffffff;stroke:#42b8eb;stroke-width:0.5;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:none"
-     id="rect1484"
-     width="4"
-     height="0.5"
-     x="8.5"
-     y="10.208146" />
+  <path
+     style="fill:none;stroke:#42b8eb;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+     d="M 21.163272,7.4513774 16.944228,2.4497679"
+     id="path2125"
+     sodipodi:nodetypes="cc" />
+  <path
+     style="fill:none;stroke:#42b8eb;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+     d="M 21.503518,14.562509 2.3817188,21.43547 2.517817,21.401445"
+     id="path2127"
+     sodipodi:nodetypes="ccc" />
+  <path
+     style="fill:none;stroke:#42b8eb;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+     d="M 17.216425,2.5178167 2.5858661,21.367421 2.517817,21.401445"
+     id="path2129"
+     sodipodi:nodetypes="ccc" />
 </svg>

@@ -104,7 +104,7 @@ public:
         drawPoly( aPointList, aListSize );
     }
 
-    void DrawPolygon( const SHAPE_POLY_SET& aPolySet ) override;
+    void DrawPolygon( const SHAPE_POLY_SET& aPolySet, bool aStrokeTriangulation = false ) override;
     void DrawPolygon( const SHAPE_LINE_CHAIN& aPolySet ) override;
 
     /// @copydoc GAL::DrawCurve()

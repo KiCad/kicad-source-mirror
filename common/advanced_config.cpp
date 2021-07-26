@@ -141,6 +141,12 @@ static const wxChar MaxTrackLengthToKeep[] = wxT( "MaxTrackLengthToKeep" );
 static const wxChar StrokeTriangulation[] = wxT( "StrokeTriangulation" );
 
 /**
+ * When true, a third zone-display-mode is included which strokes the filled areas and fracture
+ * boundaries.
+ */
+static const wxChar ExtraZoneDisplayModes[] = wxT( "ExtraZoneDisplayModes" );
+
+/**
  * Absolute minimum pen width to send to the plotter.  PDF seems happy enough with 0.0212mm
  * (which equates to 1px @ 1200dpi).
  */
@@ -252,6 +258,7 @@ ADVANCED_CFG::ADVANCED_CFG()
     m_DrawArcCenterMaxAngle     = 50.0;
     m_MaxTangentAngleDeviation  = 1.0;
     m_MaxTrackLengthToKeep      = 0.0001;
+    m_ExtraZoneDisplayModes     = false;
     m_DrawTriangulationOutlines = false;
 
     m_ExtraClearance            = 0.0001;
@@ -348,6 +355,9 @@ void ADVANCED_CFG::loadSettings( wxConfigBase& aCfg )
 
     configParams.push_back( new PARAM_CFG_DOUBLE( true, AC_KEYS::MaxTrackLengthToKeep,
                                                   &m_MaxTrackLengthToKeep, 0.0005, 0.0, 1.0 ) );
+
+    configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::ExtraZoneDisplayModes,
+                                                &m_ExtraZoneDisplayModes, false ) );
 
     configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::StrokeTriangulation,
                                                 &m_DrawTriangulationOutlines, false ) );
