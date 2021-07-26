@@ -1078,70 +1078,71 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
 
         std::unique_ptr<PAD>            dummyPad;
         std::shared_ptr<SHAPE_COMPOUND> shapes;
-        bool                            simpleShapes = true;
 
-        if( ( margin.x != margin.y && aPad->GetShape() != PAD_SHAPE::CUSTOM )
-            || ( aPad->GetShape() == PAD_SHAPE::ROUNDRECT && ( margin.x < 0 || margin.y < 0 ) ) )
+        // Drawing components of compound shapes in outline mode produces a mess. 
+        bool simpleShapes = !m_pcbSettings.m_sketchMode[LAYER_PADS_TH];
+
+        if( simpleShapes )
         {
-            // Our algorithms below (polygon inflation in particular) can't handle differential
-            // inflation along separate axes.  So for those cases we build a dummy pad instead,
-            // and inflate it.
-
-            // Margin is added to both sides.  If the total margin is larger than the pad
-            // then don't display this layer
-            if( pad_size.x + 2 * margin.x <= 0 || pad_size.y + 2 * margin.y <= 0 )
-                return;
-
-            dummyPad.reset( static_cast<PAD*>( aPad->Duplicate() ) );
-            int initial_radius = dummyPad->GetRoundRectCornerRadius();
-
-            dummyPad->SetSize( pad_size + margin + margin );
-
-            if( dummyPad->GetShape() == PAD_SHAPE::ROUNDRECT )
+            if( ( margin.x != margin.y && aPad->GetShape() != PAD_SHAPE::CUSTOM )
+                || ( aPad->GetShape() == PAD_SHAPE::ROUNDRECT && ( margin.x < 0 || margin.y < 0 ) ) )
             {
-                // To keep the right margin around the corners, we need to modify the corner radius.
-                // We must have only one radius correction, so use the smallest absolute margin.
-                int radius_margin = std::max( margin.x, margin.y );     // radius_margin is < 0
-                dummyPad->SetRoundRectCornerRadius( std::max( initial_radius + radius_margin, 0 ) );
+                // Our algorithms below (polygon inflation in particular) can't handle differential
+                // inflation along separate axes.  So for those cases we build a dummy pad instead,
+                // and inflate it.
+
+                // Margin is added to both sides.  If the total margin is larger than the pad
+                // then don't display this layer
+                if( pad_size.x + 2 * margin.x <= 0 || pad_size.y + 2 * margin.y <= 0 )
+                    return;
+
+                dummyPad.reset( static_cast<PAD*>( aPad->Duplicate() ) );
+                int initial_radius = dummyPad->GetRoundRectCornerRadius();
+
+                dummyPad->SetSize( pad_size + margin + margin );
+
+                if( dummyPad->GetShape() == PAD_SHAPE::ROUNDRECT )
+                {
+                    // To keep the right margin around the corners, we need to modify the corner radius.
+                    // We must have only one radius correction, so use the smallest absolute margin.
+                    int radius_margin = std::max( margin.x, margin.y );     // radius_margin is < 0
+                    dummyPad->SetRoundRectCornerRadius( std::max( initial_radius + radius_margin, 0 ) );
+                }
+
+                shapes = std::dynamic_pointer_cast<SHAPE_COMPOUND>( dummyPad->GetEffectiveShape() );
+                margin.x = margin.y = 0;
+            }
+            else
+            {
+                shapes = std::dynamic_pointer_cast<SHAPE_COMPOUND>( aPad->GetEffectiveShape() );
             }
 
-            shapes = std::dynamic_pointer_cast<SHAPE_COMPOUND>( dummyPad->GetEffectiveShape() );
-            margin.x = margin.y = 0;
-        }
-        else
-        {
-            shapes = std::dynamic_pointer_cast<SHAPE_COMPOUND>( aPad->GetEffectiveShape() );
-        }
-
-        if( aPad->GetShape() == PAD_SHAPE::CUSTOM && ( margin.x || margin.y ) )
-        {
-            // We can't draw as shapes because we don't know which edges are internal and which
-            // are external (so we don't know when to apply the margin and when not to).
-            simpleShapes = false;
-        }
-
-        for( const SHAPE* shape : shapes->Shapes() )
-        {
-            // Drawing components of compound shapes in outline mode produces a mess.
-            if( m_pcbSettings.m_sketchMode[LAYER_PADS_TH] )
-                simpleShapes = false;
-
-            if( !simpleShapes )
-                break;
-
-            switch( shape->Type() )
+            if( aPad->GetShape() == PAD_SHAPE::CUSTOM && ( margin.x || margin.y ) )
             {
-            case SH_SEGMENT:
-            case SH_CIRCLE:
-            case SH_RECT:
-            case SH_SIMPLE:
-                // OK so far
-                break;
-
-            default:
-                // Not OK
+                // We can't draw as shapes because we don't know which edges are internal and which
+                // are external (so we don't know when to apply the margin and when not to).
                 simpleShapes = false;
-                break;
+            }
+
+            for( const SHAPE* shape : shapes->Shapes() )
+            {
+                if( !simpleShapes )
+                    break;
+
+                switch( shape->Type() )
+                {
+                case SH_SEGMENT:
+                case SH_CIRCLE:
+                case SH_RECT:
+                case SH_SIMPLE:
+                    // OK so far
+                    break;
+
+                default:
+                    // Not OK
+                    simpleShapes = false;
+                    break;
+                }
             }
         }
 
