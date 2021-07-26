@@ -306,9 +306,11 @@ void BOARD_ADAPTER::createTrack( const PCB_TRACK* aTrack, CONTAINER_2D_BASE* aDs
 
 
 void BOARD_ADAPTER::createPadWithClearance( const PAD* aPad, CONTAINER_2D_BASE* aDstContainer,
-                                               PCB_LAYER_ID aLayer, wxSize aClearanceValue ) const
+                                            PCB_LAYER_ID aLayer,
+                                            const wxSize& aClearanceValue ) const
 {
     SHAPE_POLY_SET poly;
+    wxSize clearance = aClearanceValue;
 
     // Our shape-based builder can't handle negative or differing x:y clearance values (the
     // former are common for solder paste while the later get generated when a relative paste
@@ -317,13 +319,13 @@ void BOARD_ADAPTER::createPadWithClearance( const PAD* aPad, CONTAINER_2D_BASE* 
     // Of course being a hack it falls down when dealing with custom shape pads (where the size
     // is only the size of the anchor), so for those we punt and just use aClearanceValue.x.
 
-    if( ( aClearanceValue.x < 0 || aClearanceValue.x != aClearanceValue.y )
+    if( ( clearance.x < 0 || clearance.x != clearance.y )
             && aPad->GetShape() != PAD_SHAPE::CUSTOM )
     {
         PAD dummy( *aPad );
-        dummy.SetSize( aPad->GetSize() + aClearanceValue + aClearanceValue );
+        dummy.SetSize( aPad->GetSize() + clearance + clearance );
         dummy.TransformShapeWithClearanceToPolygon( poly, aLayer, 0, ARC_HIGH_DEF, ERROR_INSIDE );
-        aClearanceValue = { 0, 0 };
+        clearance = { 0, 0 };
     }
     else
     {
@@ -340,14 +342,14 @@ void BOARD_ADAPTER::createPadWithClearance( const PAD* aPad, CONTAINER_2D_BASE* 
                                                -seg->GetSeg().A.y * m_biuTo3Dunits );
                 const SFVEC2F        end3DU  (  seg->GetSeg().B.x * m_biuTo3Dunits,
                                                -seg->GetSeg().B.y * m_biuTo3Dunits );
-                const int            width = seg->GetWidth() + aClearanceValue.x * 2;
+                const int            width = seg->GetWidth() + clearance.x * 2;
 
                  // Cannot add segments that have the same start and end point
                 if( Is_segment_a_circle( start3DU, end3DU ) )
                 {
                     aDstContainer->Add( new FILLED_CIRCLE_2D( start3DU,
-                                                             ( width / 2) * m_biuTo3Dunits,
-                                                             *aPad ) );
+                                                              ( width / 2 ) * m_biuTo3Dunits,
+                                                              *aPad ) );
                 }
                 else
                 {
@@ -361,7 +363,7 @@ void BOARD_ADAPTER::createPadWithClearance( const PAD* aPad, CONTAINER_2D_BASE* 
             case SH_CIRCLE:
             {
                 const SHAPE_CIRCLE* circle = (SHAPE_CIRCLE*) shape;
-                const int           radius = circle->GetRadius() + aClearanceValue.x;
+                const int           radius = circle->GetRadius() + clearance.x;
                 const SFVEC2F       center(  circle->GetCenter().x * m_biuTo3Dunits,
                                              -circle->GetCenter().y * m_biuTo3Dunits );
 
@@ -402,14 +404,14 @@ void BOARD_ADAPTER::createPadWithClearance( const PAD* aPad, CONTAINER_2D_BASE* 
                                              -seg.GetSeg().A.y * m_biuTo3Dunits );
                     const SFVEC2F end3DU( seg.GetSeg().B.x * m_biuTo3Dunits,
                                           -seg.GetSeg().B.y * m_biuTo3Dunits );
-                    const int width = arc->GetWidth() + aClearanceValue.x * 2;
+                    const int width = arc->GetWidth() + clearance.x * 2;
 
                      // Cannot add segments that have the same start and end point
                     if( Is_segment_a_circle( start3DU, end3DU ) )
                     {
                         aDstContainer->Add( new FILLED_CIRCLE_2D( start3DU,
-                                                                 ( width / 2) * m_biuTo3Dunits,
-                                                                 *aPad ) );
+                                                                  ( width / 2 ) * m_biuTo3Dunits,
+                                                                  *aPad ) );
                     }
                     else
                     {
@@ -431,8 +433,8 @@ void BOARD_ADAPTER::createPadWithClearance( const PAD* aPad, CONTAINER_2D_BASE* 
 
     if( !poly.IsEmpty() )
     {
-        if( aClearanceValue.x )
-            poly.Inflate( aClearanceValue.x, 32 );
+        if( clearance.x )
+            poly.Inflate( clearance.x, 32 );
 
         // Add the PAD polygon
         ConvertPolygonToTriangles( poly, *aDstContainer, m_biuTo3Dunits, *aPad );
@@ -504,11 +506,13 @@ void BOARD_ADAPTER::addPadsWithClearance( const FOOTPRINT* aFootprint,
                 case PAD_SHAPE::CIRCLE:
                     if( pad->GetDrillShape() == PAD_DRILL_SHAPE_CIRCLE )
                         continue;
+
                     break;
 
                 case PAD_SHAPE::OVAL:
                     if( pad->GetDrillShape() != PAD_DRILL_SHAPE_CIRCLE )
                         continue;
+
                     break;
 
                 default:

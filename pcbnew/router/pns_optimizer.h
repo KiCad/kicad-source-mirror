@@ -114,7 +114,7 @@ public:
 
     ///< A quick shortcut to optimize a line without creating and setting up an optimizer.
     static bool Optimize( LINE* aLine, int aEffortLevel, NODE* aWorld,
-                          const VECTOR2I aV = VECTOR2I(0, 0) );
+                          const VECTOR2I& aV = VECTOR2I(0, 0) );
 
     bool Optimize( LINE* aLine, LINE* aResult = nullptr, LINE* aRoot = nullptr );
     bool Optimize( DIFF_PAIR* aPair );
@@ -251,7 +251,9 @@ public:
 
     virtual ~ANGLE_CONSTRAINT_45() {};
 
-    virtual bool Check ( int aVertex1, int aVertex2, const LINE* aOriginLine, const SHAPE_LINE_CHAIN& aCurrentPath, const SHAPE_LINE_CHAIN& aReplacement ) override;
+    virtual bool Check ( int aVertex1, int aVertex2, const LINE* aOriginLine,
+                         const SHAPE_LINE_CHAIN& aCurrentPath,
+                         const SHAPE_LINE_CHAIN& aReplacement ) override;
 
 private:
     int m_entryDirectionMask;
@@ -331,7 +333,8 @@ private:
 class CORNER_COUNT_LIMIT_CONSTRAINT: public OPT_CONSTRAINT
 {
 public:
-    CORNER_COUNT_LIMIT_CONSTRAINT( NODE* aWorld, int aMinCorners, int aMaxCorners, int aAngleMask ) :
+    CORNER_COUNT_LIMIT_CONSTRAINT( NODE* aWorld, int aMinCorners, int aMaxCorners,
+                                   int aAngleMask ) :
         OPT_CONSTRAINT( aWorld ),
         m_minCorners( aMinCorners ),
         m_maxCorners( aMaxCorners ),

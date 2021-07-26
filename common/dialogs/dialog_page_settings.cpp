@@ -70,7 +70,7 @@ static const wxString pageFmts[] =
 };
 
 DIALOG_PAGES_SETTINGS::DIALOG_PAGES_SETTINGS( EDA_DRAW_FRAME* aParent, double aIuPerMils,
-                                              wxSize aMaxUserSizeMils ) :
+                                              const wxSize& aMaxUserSizeMils ) :
         DIALOG_PAGES_SETTINGS_BASE( aParent ),
         m_parent( aParent ),
         m_screen( m_parent->GetScreen() ),

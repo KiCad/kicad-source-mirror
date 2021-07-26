@@ -568,7 +568,7 @@ private:
                        int aClearanceValue );
 
     void createPadWithClearance( const PAD *aPad, CONTAINER_2D_BASE* aDstContainer,
-                                 PCB_LAYER_ID aLayer, wxSize aClearanceValue ) const;
+                                 PCB_LAYER_ID aLayer, const wxSize& aClearanceValue ) const;
 
     OBJECT_2D* createPadWithDrill( const PAD* aPad, int aInflateValue );
 

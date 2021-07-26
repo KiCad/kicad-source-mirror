@@ -136,7 +136,7 @@ private:
      * It compensate and clamp the drill mark size depending on the current plot options.
      */
     void plotOneDrillMark( PAD_DRILL_SHAPE_T aDrillShape, const wxPoint& aDrillPos,
-                           wxSize aDrillSize, const wxSize& aPadSize,
+                           const wxSize& aDrillSize, const wxSize& aPadSize,
                            double aOrientation, int aSmallDrill );
 
     PLOTTER*    m_plotter;

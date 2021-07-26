@@ -109,7 +109,7 @@ void RotatePoint( double *pX, double *pY, double cx, double cy, double angle );
 const VECTOR2I GetArcCenter( const VECTOR2I& aStart, const VECTOR2I& aMid, const VECTOR2I& aEnd );
 const VECTOR2D GetArcCenter( const VECTOR2D& aStart, const VECTOR2D& aMid, const VECTOR2D& aEnd );
 const wxPoint GetArcCenter( const wxPoint& aStart, const wxPoint& aMid, const wxPoint& aEnd );
-const wxPoint GetArcCenter( VECTOR2I aStart, VECTOR2I aEnd, double aAngle );
+const wxPoint GetArcCenter( const VECTOR2I& aStart, const VECTOR2I& aEnd, double aAngle );
 
 /**
  * Return the subtended angle for a given arc.

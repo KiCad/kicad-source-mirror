@@ -1750,8 +1750,8 @@ void FIXED_TAIL::Clear()
 }
 
 
-void FIXED_TAIL::AddStage( VECTOR2I aStart, int aLayer, bool placingVias, DIRECTION_45 direction,
-                           NODE *aNode )
+void FIXED_TAIL::AddStage( const VECTOR2I& aStart, int aLayer, bool placingVias,
+                           DIRECTION_45 direction, NODE* aNode )
 {
     STAGE st;
     FIX_POINT pt;

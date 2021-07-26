@@ -75,7 +75,7 @@ private:
 
     SCH_SHEET_PIN* createSheetPin( SCH_SHEET* aSheet, SCH_HIERLABEL* aLabel );
 
-    void sizeSheet( SCH_SHEET* aSheet, VECTOR2I aPos );
+    void sizeSheet( SCH_SHEET* aSheet, const VECTOR2I& aPos );
 
     ///< Set up handlers for various events.
     void setTransitions() override;

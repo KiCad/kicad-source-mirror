@@ -54,7 +54,7 @@ public:
 protected:
     bool checkSnap( ITEM* aItem );
 
-    const VECTOR2I snapToItem( ITEM* aSnapToItem, VECTOR2I aP);
+    const VECTOR2I snapToItem( ITEM* aSnapToItem, const VECTOR2I& aP);
 
     virtual ITEM* pickSingleItem( const VECTOR2I& aWhere, int aNet = -1, int aLayer = -1,
                                   bool aIgnorePads = false,

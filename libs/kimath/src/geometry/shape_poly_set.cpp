@@ -258,7 +258,7 @@ int SHAPE_POLY_SET::Append( SHAPE_ARC& aArc, int aOutline, int aHole )
 }
 
 
-void SHAPE_POLY_SET::InsertVertex( int aGlobalIndex, VECTOR2I aNewVertex )
+void SHAPE_POLY_SET::InsertVertex( int aGlobalIndex, const VECTOR2I& aNewVertex )
 {
     VERTEX_INDEX index;
 

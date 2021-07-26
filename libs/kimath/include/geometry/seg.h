@@ -170,7 +170,7 @@ public:
       *
       * @return the nearest point
       */
-    const VECTOR2I NearestPoint( const VECTOR2I &aP ) const;
+    const VECTOR2I NearestPoint( const VECTOR2I& aP ) const;
 
     /**
       * Compute a point on the segment (this) that is closest to any point on \a aSeg.

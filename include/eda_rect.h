@@ -118,7 +118,7 @@ public:
         return m_init;
     }
 
-    void SetOrigin( const wxPoint &pos )
+    void SetOrigin( const wxPoint& pos )
     {
         m_pos = pos;
         m_init = true;
@@ -131,7 +131,7 @@ public:
         m_init = true;
     }
 
-    void SetSize( const wxSize &size )
+    void SetSize( const wxSize& size )
     {
         m_size = size;
         m_init = true;
@@ -150,7 +150,7 @@ public:
         m_pos.y += dy;
     }
 
-    void Offset( const wxPoint &offset )
+    void Offset( const wxPoint& offset )
     {
         m_pos += offset;
     }

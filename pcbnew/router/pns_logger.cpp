@@ -2,7 +2,7 @@
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
  * Copyright (C) 2013-2014 CERN
- * Copyright (C) 2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2021 KiCad Developers, see AUTHORS.txt for contributors.
  * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -61,7 +61,7 @@ void LOGGER::Save( const std::string& aFilename )
 }
 
 
-void LOGGER::Log( LOGGER::EVENT_TYPE evt, VECTOR2I pos, const ITEM* item )
+void LOGGER::Log( LOGGER::EVENT_TYPE evt, const VECTOR2I& pos, const ITEM* item )
 {
     LOGGER::EVENT_ENTRY ent;
 

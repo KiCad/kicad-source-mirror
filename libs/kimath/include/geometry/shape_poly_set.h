@@ -597,7 +597,7 @@ public:
      *                     inserted.
      * @param aNewVertex   is the new inserted vertex.
      */
-    void InsertVertex( int aGlobalIndex, VECTOR2I aNewVertex );
+    void InsertVertex( int aGlobalIndex, const VECTOR2I& aNewVertex );
 
     ///< Return the index-th vertex in a given hole outline within a given outline
     const VECTOR2I& CVertex( int aIndex, int aOutline, int aHole ) const;

@@ -266,7 +266,7 @@ VECTOR2<T>::VECTOR2()
 
 #ifdef WX_COMPATIBILITY
 template <class T>
-VECTOR2<T>::VECTOR2( wxPoint const& aPoint )
+VECTOR2<T>::VECTOR2( const wxPoint& aPoint )
 {
     x = T( aPoint.x );
     y = T( aPoint.y );
@@ -274,7 +274,7 @@ VECTOR2<T>::VECTOR2( wxPoint const& aPoint )
 
 
 template <class T>
-VECTOR2<T>::VECTOR2( wxSize const& aSize )
+VECTOR2<T>::VECTOR2( const wxSize& aSize )
 {
     x = T( aSize.x );
     y = T( aSize.y );

@@ -64,7 +64,7 @@ class PLOTTER;
  */
 int Clamp_Text_PenSize( int aPenSize, int aSize, bool aBold = true );
 float Clamp_Text_PenSize( float aPenSize, int aSize, bool aBold = true );
-int Clamp_Text_PenSize( int aPenSize, wxSize aSize, bool aBold = true );
+int Clamp_Text_PenSize( int aPenSize, const wxSize& aSize, bool aBold = true );
 
 /**
  * @param aTextSize the char size (height or width).
@@ -124,7 +124,7 @@ void GRText( wxDC* aDC, const wxPoint& aPos, const COLOR4D& aColor, const wxStri
  * in \a aColor2 with \a aColor1 border.  Otherwise colors are swapped.
  */
 void GRHaloText( wxDC* aDC, const wxPoint& aPos, const COLOR4D& aBgColor, const COLOR4D& aColor1,
-                 const COLOR4D& aColor2, const wxString& aText, double aOrient, const wxSize &aSize,
+                 const COLOR4D& aColor2, const wxString& aText, double aOrient, const wxSize& aSize,
                  enum EDA_TEXT_HJUSTIFY_T aH_justify, enum EDA_TEXT_VJUSTIFY_T aV_justify,
                  int aWidth, bool aItalic, bool aBold,
                  void (*aCallback)( int x0, int y0, int xf, int yf, void* aData ) = nullptr,

@@ -2,7 +2,7 @@
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
  * Copyright (C) 2013-2014 CERN
- * Copyright (C) 2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2021 KiCad Developers, see AUTHORS.txt for contributors.
  * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -106,7 +106,9 @@ void MEANDERED_LINE::MeanderSegment( const SEG& aBase, int aBaseIndex )
                         }
                     }
                 }
-            } else {
+            }
+            else
+            {
                 bool rv = m.Fit( MT_CHECK_FINISH, aBase, m_last, side );
 
                 if( rv )
@@ -114,7 +116,9 @@ void MEANDERED_LINE::MeanderSegment( const SEG& aBase, int aBaseIndex )
                     m.Fit( MT_TURN, aBase, m_last, side );
                     AddMeander( new MEANDER_SHAPE( m ) );
                     started = true;
-                } else {
+                }
+                else
+                {
                     m.Fit( MT_FINISH, aBase, m_last, side );
                     started = false;
                     AddMeander( new MEANDER_SHAPE( m ) );
@@ -123,15 +127,19 @@ void MEANDERED_LINE::MeanderSegment( const SEG& aBase, int aBaseIndex )
 
                 side = !side;
             }
-        } else if( started )
+        }
+        else if( started )
         {
             bool rv = m.Fit( MT_FINISH, aBase, m_last, side );
+
             if( rv )
                 AddMeander( new MEANDER_SHAPE( m ) );
 
             break;
 
-        } else {
+        }
+        else
+        {
            fail = true;
         }
 
@@ -187,7 +195,8 @@ int MEANDER_SHAPE::spacing( ) const
 }
 
 
-SHAPE_LINE_CHAIN MEANDER_SHAPE::makeMiterShape( VECTOR2D aP, VECTOR2D aDir, bool aSide )
+SHAPE_LINE_CHAIN MEANDER_SHAPE::makeMiterShape( const VECTOR2D& aP, const VECTOR2D& aDir,
+                                                bool aSide )
 {
     SHAPE_LINE_CHAIN lc;
 
@@ -201,7 +210,6 @@ SHAPE_LINE_CHAIN MEANDER_SHAPE::makeMiterShape( VECTOR2D aP, VECTOR2D aDir, bool
     VECTOR2D dir_v( aDir.Perpendicular( ) );
     VECTOR2D p = aP;
     lc.Append( ( int ) p.x, ( int ) p.y );
-
 
     // fixme: refactor
     switch( m_placer->MeanderSettings().m_cornerStyle )
@@ -218,6 +226,7 @@ SHAPE_LINE_CHAIN MEANDER_SHAPE::makeMiterShape( VECTOR2D aP, VECTOR2D aDir, bool
     {
         double radius = (double) aDir.EuclideanNorm();
         double correction = 0;
+
         if( m_dual && radius > m_meanCornerRadius )
             correction = (double)( -2 * abs(m_baselineOffset) ) * tan( 22.5 * M_PI / 180.0 );
 
@@ -290,8 +299,9 @@ void MEANDER_SHAPE::uShape( int aSides, int aCorner, int aTop )
 }
 
 
-SHAPE_LINE_CHAIN MEANDER_SHAPE::genMeanderShape( VECTOR2D aP, VECTOR2D aDir,
-        bool aSide, MEANDER_TYPE aType, int aAmpl, int aBaselineOffset )
+SHAPE_LINE_CHAIN MEANDER_SHAPE::genMeanderShape( const VECTOR2D& aP, const VECTOR2D& aDir,
+                                                 bool aSide, MEANDER_TYPE aType, int aAmpl,
+                                                 int aBaselineOffset )
 {
     int cr = cornerRadius();
     int offset = aBaselineOffset;
@@ -332,7 +342,6 @@ SHAPE_LINE_CHAIN MEANDER_SHAPE::genMeanderShape( VECTOR2D aP, VECTOR2D aDir,
         uShape( aAmpl - 2 * cr + std::abs( offset ), cr + offset, spc - 2 * cr );
         forward( std::min( cr - offset, cr + offset ) );
         forward( std::abs( offset ) );
-
         break;
     }
 
@@ -399,8 +408,10 @@ bool MEANDERED_LINE::CheckSelfIntersections( MEANDER_SHAPE* aShape, int aClearan
         int n = m->CLine( 0 ).SegmentCount();
 
         for( int j = n - 1; j >= 0; j-- )
+        {
             if( aShape->CLine( 0 ).Collide( m->CLine( 0 ) .CSegment( j ), aClearance ) )
                 return false;
+        }
     }
 
     return true;
@@ -456,8 +467,11 @@ bool MEANDER_SHAPE::Fit( MEANDER_TYPE aType, const SEG& aSeg, const VECTOR2I& aP
             updateBaseSegment();
             m_baselineOffset = m1.m_baselineOffset;
             return true;
-        } else
+        }
+        else
+        {
             return false;
+        }
     }
 
     int minAmpl = st.m_minAmplitude;
@@ -473,8 +487,10 @@ bool MEANDER_SHAPE::Fit( MEANDER_TYPE aType, const SEG& aSeg, const VECTOR2I& aP
     {
         if( m_dual )
         {
-            m_shapes[0] = genMeanderShape( aP, aSeg.B - aSeg.A, aSide, aType, ampl, m_baselineOffset );
-            m_shapes[1] = genMeanderShape( aP, aSeg.B - aSeg.A, aSide, aType, ampl, -m_baselineOffset );
+            m_shapes[0] = genMeanderShape( aP, aSeg.B - aSeg.A, aSide, aType, ampl,
+                                           m_baselineOffset );
+            m_shapes[1] = genMeanderShape( aP, aSeg.B - aSeg.A, aSide, aType, ampl,
+                                           -m_baselineOffset );
         }
         else
         {
@@ -499,10 +515,12 @@ bool MEANDER_SHAPE::Fit( MEANDER_TYPE aType, const SEG& aSeg, const VECTOR2I& aP
 
 void MEANDER_SHAPE::Recalculate()
 {
-    m_shapes[0] = genMeanderShape( m_p0, m_baseSeg.B - m_baseSeg.A, m_side, m_type, m_amplitude, m_dual ? m_baselineOffset : 0 );
+    m_shapes[0] = genMeanderShape( m_p0, m_baseSeg.B - m_baseSeg.A, m_side, m_type, m_amplitude,
+                                   m_dual ? m_baselineOffset : 0 );
 
     if( m_dual )
-        m_shapes[1] = genMeanderShape( m_p0, m_baseSeg.B - m_baseSeg.A, m_side, m_type, m_amplitude, -m_baselineOffset );
+        m_shapes[1] = genMeanderShape( m_p0, m_baseSeg.B - m_baseSeg.A, m_side, m_type,
+                                       m_amplitude, -m_baselineOffset );
 
     updateBaseSegment();
 }
@@ -545,7 +563,7 @@ void MEANDERED_LINE::AddCorner( const VECTOR2I& aA, const VECTOR2I& aB )
 }
 
 
-void MEANDER_SHAPE::MakeCorner( VECTOR2I aP1, VECTOR2I aP2 )
+void MEANDER_SHAPE::MakeCorner( const VECTOR2I& aP1, const VECTOR2I& aP2 )
 {
     SetType( MT_CORNER );
     m_shapes[0].Clear();

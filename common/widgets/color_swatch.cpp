@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
-
- * Copyright (C) 2017-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ *
+ * Copyright (C) 2017-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -36,13 +36,9 @@ using KIGFX::COLOR4D;
 extern COLOR4D DisplayColorFrame( wxWindow* aParent, COLOR4D aOldColor );
 
 
-/**
- * Make a simple color swatch bitmap
- *
- * @param aWindow - window used as context for device-independent size
- */
-wxBitmap COLOR_SWATCH::MakeBitmap( COLOR4D aColor, COLOR4D aBackground, wxSize aSize,
-                                   wxSize aCheckerboardSize, COLOR4D aCheckerboardBackground )
+wxBitmap COLOR_SWATCH::MakeBitmap( const COLOR4D& aColor, const COLOR4D& aBackground,
+                                   const wxSize& aSize, const wxSize& aCheckerboardSize,
+                                   const COLOR4D& aCheckerboardBackground )
 {
     wxBitmap    bitmap( aSize );
     wxBrush     brush;
@@ -113,8 +109,9 @@ wxBitmap COLOR_SWATCH::MakeBitmap( COLOR4D aColor, COLOR4D aBackground, wxSize a
 }
 
 
-COLOR_SWATCH::COLOR_SWATCH( wxWindow* aParent, COLOR4D aColor, int aID, COLOR4D aBackground,
-                            const COLOR4D aDefault, SWATCH_SIZE aSwatchSize ) :
+COLOR_SWATCH::COLOR_SWATCH( wxWindow* aParent, const COLOR4D& aColor, int aID,
+                            const COLOR4D& aBackground, const COLOR4D& aDefault,
+                            SWATCH_SIZE aSwatchSize ) :
         wxPanel( aParent, aID ),
         m_color( aColor ),
         m_background( aBackground ),
@@ -149,8 +146,8 @@ COLOR_SWATCH::COLOR_SWATCH( wxWindow* aParent, COLOR4D aColor, int aID, COLOR4D 
 }
 
 
-COLOR_SWATCH::COLOR_SWATCH( wxWindow *aParent, wxWindowID aID, const wxPoint &aPos,
-                            const wxSize &aSize, long aStyle ) :
+COLOR_SWATCH::COLOR_SWATCH( wxWindow* aParent, wxWindowID aID, const wxPoint& aPos,
+                            const wxSize& aSize, long aStyle ) :
         wxPanel( aParent, aID, aPos, aSize, aStyle ),
         m_userColors( nullptr ),
         m_readOnly( false ),
@@ -235,7 +232,7 @@ static void sendSwatchChangeEvent( COLOR_SWATCH& aSender )
 }
 
 
-void COLOR_SWATCH::SetSwatchColor( COLOR4D aColor, bool aSendEvent )
+void COLOR_SWATCH::SetSwatchColor( const COLOR4D& aColor, bool aSendEvent )
 {
     m_color = aColor;
 
@@ -247,13 +244,13 @@ void COLOR_SWATCH::SetSwatchColor( COLOR4D aColor, bool aSendEvent )
 }
 
 
-void COLOR_SWATCH::SetDefaultColor( COLOR4D aColor )
+void COLOR_SWATCH::SetDefaultColor( const COLOR4D& aColor )
 {
     m_default = aColor;
 }
 
 
-void COLOR_SWATCH::SetSwatchBackground( COLOR4D aBackground )
+void COLOR_SWATCH::SetSwatchBackground( const COLOR4D& aBackground )
 {
     m_background = aBackground;
     wxBitmap bm = MakeBitmap( m_color, m_background, m_size, m_checkerboardSize, m_checkerboardBg );

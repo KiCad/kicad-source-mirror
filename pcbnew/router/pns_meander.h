@@ -177,7 +177,7 @@ public:
      * @param aP1 corner point of the 1st line.
      * @param aP2 corner point of the 2nd line (if m_dual == true).
      */
-    void MakeCorner( VECTOR2I aP1, VECTOR2I aP2 = VECTOR2I( 0, 0 ) );
+    void MakeCorner( const VECTOR2I& aP1, const VECTOR2I& aP2 = VECTOR2I( 0, 0 ) );
 
     /**
      * Change the amplitude of the meander shape to aAmpl and recalculates the resulting
@@ -304,11 +304,11 @@ private:
     void uShape( int aSides, int aCorner, int aTop );
 
     ///< Generate a 90-degree circular arc.
-    SHAPE_LINE_CHAIN makeMiterShape( VECTOR2D aP, VECTOR2D aDir, bool aSide );
+    SHAPE_LINE_CHAIN makeMiterShape( const VECTOR2D& aP, const VECTOR2D& aDir, bool aSide );
 
     ///< Produce a meander shape of given type.
-    SHAPE_LINE_CHAIN genMeanderShape( VECTOR2D aP, VECTOR2D aDir, bool aSide, MEANDER_TYPE aType,
-                                      int aAmpl, int aBaselineOffset = 0 );
+    SHAPE_LINE_CHAIN genMeanderShape( const VECTOR2D& aP, const VECTOR2D& aDir, bool aSide,
+                                      MEANDER_TYPE aType, int aAmpl, int aBaselineOffset = 0 );
 
     ///< Recalculate the clipped baseline after the parameters of the meander have been changed.
     void updateBaseSegment();

@@ -65,8 +65,8 @@ public:
     };
 
     void Clear();
-    void AddStage( VECTOR2I aStart, int aLayer, bool placingVias, DIRECTION_45 direction,
-                   NODE *aNode );
+    void AddStage( const VECTOR2I& aStart, int aLayer, bool placingVias, DIRECTION_45 direction,
+                   NODE* aNode );
     bool PopStage( STAGE& aStage );
     int StageCount() const;
 

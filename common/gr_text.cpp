@@ -83,7 +83,7 @@ float Clamp_Text_PenSize( float aPenSize, int aSize, bool aBold )
 }
 
 
-int Clamp_Text_PenSize( int aPenSize, wxSize aSize, bool aBold )
+int Clamp_Text_PenSize( int aPenSize, const wxSize& aSize, bool aBold )
 {
     int size = std::min( std::abs( aSize.x ), std::abs( aSize.y ) );
 

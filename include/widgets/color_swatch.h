@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -51,8 +51,7 @@ const static wxSize CHECKERBOARD_SIZE_DU( 3, 3 );
 
 
 /**
- * Class representing a simple color swatch, of the kind used to
- * set layer colors
+ * A simple color swatch of the kind used to set layer colors.
  */
 class COLOR_SWATCH: public wxPanel
 {
@@ -65,8 +64,9 @@ public:
      * @param aColor initial swatch color
      * @param aID id to use when sending swatch events
      */
-    COLOR_SWATCH( wxWindow* aParent, KIGFX::COLOR4D aColor, int aID, KIGFX::COLOR4D aBackground,
-                  const KIGFX::COLOR4D aDefault, SWATCH_SIZE aSwatchType );
+    COLOR_SWATCH( wxWindow* aParent, const KIGFX::COLOR4D& aColor, int aID,
+                  const KIGFX::COLOR4D& aBackground, const KIGFX::COLOR4D& aDefault,
+                  SWATCH_SIZE aSwatchType );
 
     /**
      * constructor for wxFormBuilder
@@ -77,17 +77,17 @@ public:
     /**
      * Set the current swatch color directly.
      */
-    void SetSwatchColor( KIGFX::COLOR4D aColor, bool aSendEvent );
+    void SetSwatchColor( const KIGFX::COLOR4D& aColor, bool aSendEvent );
 
     /**
      * Sets the color that will be chosen with the "Reset to Default" button in the chooser
      */
-    void SetDefaultColor( KIGFX::COLOR4D aColor );
+    void SetDefaultColor( const KIGFX::COLOR4D& aColor );
 
     /**
      * Set the swatch background color.
      */
-    void SetSwatchBackground( KIGFX::COLOR4D aBackground );
+    void SetSwatchBackground( const KIGFX::COLOR4D& aBackground );
 
     /**
      * Fetch a reference to the user colors list.
@@ -114,8 +114,9 @@ public:
     /// Registers a handler for when the user tries to interact with a read-only swatch
     void SetReadOnlyCallback( std::function<void()> aCallback ) { m_readOnlyCallback = aCallback; }
 
-    static wxBitmap MakeBitmap( KIGFX::COLOR4D aColor, KIGFX::COLOR4D aBackground, wxSize aSize,
-                                wxSize aCheckerboardSize, KIGFX::COLOR4D aCheckerboardBackground );
+    static wxBitmap MakeBitmap( const KIGFX::COLOR4D& aColor, const KIGFX::COLOR4D& aBackground,
+                                const wxSize& aSize, const wxSize& aCheckerboardSize,
+                                const KIGFX::COLOR4D& aCheckerboardBackground );
 
 private:
     void setupEvents();
@@ -146,7 +147,7 @@ private:
 
 
 /**
- * Event signalling a swatch has changed color
+ * Event signaling a swatch has changed color
  */
 wxDECLARE_EVENT(COLOR_SWATCH_CHANGED, wxCommandEvent);
 

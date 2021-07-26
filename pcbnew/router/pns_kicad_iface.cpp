@@ -743,7 +743,8 @@ public:
         m_view->Add( m_items );
     }
 
-    virtual void AddPoint( VECTOR2I aP, const COLOR4D& aColor, int aSize, const std::string aName,
+    virtual void AddPoint( const VECTOR2I& aP, const COLOR4D& aColor, int aSize,
+                           const std::string& aName,
                            const SRC_LOCATION_INFO& aSrcLoc = SRC_LOCATION_INFO() ) override
     {
         SHAPE_LINE_CHAIN l;
@@ -760,7 +761,7 @@ public:
         AddLine( l, aColor, 10000, aName );
     }
 
-    virtual void AddBox( BOX2I aB, const COLOR4D& aColor, const std::string aName,
+    virtual void AddBox( const BOX2I& aB, const COLOR4D& aColor, const std::string& aName,
                          const SRC_LOCATION_INFO& aSrcLoc = SRC_LOCATION_INFO() ) override
     {
         SHAPE_LINE_CHAIN l;
@@ -777,7 +778,7 @@ public:
         AddLine( l, aColor, 10000, aName, aSrcLoc );
     }
 
-    virtual void AddSegment( SEG aS, const COLOR4D& aColor, const std::string aName,
+    virtual void AddSegment( const SEG& aS, const COLOR4D& aColor, const std::string& aName,
                              const SRC_LOCATION_INFO& aSrcLoc = SRC_LOCATION_INFO() ) override
     {
         SHAPE_LINE_CHAIN l;
@@ -790,7 +791,7 @@ public:
 
 
     virtual void AddLine( const SHAPE_LINE_CHAIN& aLine, const COLOR4D& aColor,
-                          int aWidth, const std::string aName,
+                          int aWidth, const std::string& aName,
                           const SRC_LOCATION_INFO& aSrcLoc = SRC_LOCATION_INFO() ) override
     {
         if( !m_view )
@@ -981,7 +982,7 @@ std::unique_ptr<PNS::SOLID> PNS_KICAD_IFACE_BASE::syncPad( PAD* aPad )
 std::unique_ptr<PNS::SEGMENT> PNS_KICAD_IFACE_BASE::syncTrack( PCB_TRACK* aTrack )
 {
     auto segment = std::make_unique<PNS::SEGMENT>( SEG( aTrack->GetStart(), aTrack->GetEnd() ),
-                                                     aTrack->GetNetCode() );
+                                                   aTrack->GetNetCode() );
 
     segment->SetWidth( aTrack->GetWidth() );
     segment->SetLayers( LAYER_RANGE( aTrack->GetLayer() ) );

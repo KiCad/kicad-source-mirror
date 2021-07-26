@@ -355,7 +355,7 @@ ROUTER *TOOL_BASE::Router() const
 }
 
 
-const VECTOR2I TOOL_BASE::snapToItem( ITEM* aItem, VECTOR2I aP )
+const VECTOR2I TOOL_BASE::snapToItem( ITEM* aItem, const VECTOR2I& aP )
 {
     if( !aItem || !m_iface->IsItemVisible( aItem ) )
     {

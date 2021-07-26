@@ -594,10 +594,14 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
     return 0;
 }
 
-void PCB_POINT_EDITOR::editArcEndpointKeepTangent( PCB_SHAPE* aArc, VECTOR2I aCenter,
-                                                   VECTOR2I aStart, VECTOR2I aMid, VECTOR2I aEnd,
-                                                   const VECTOR2I aCursor ) const
+void PCB_POINT_EDITOR::editArcEndpointKeepTangent( PCB_SHAPE* aArc, const VECTOR2I& aCenter,
+                                                   const VECTOR2I& aStart, const VECTOR2I& aMid,
+                                                   const VECTOR2I& aEnd,
+                                                   const VECTOR2I& aCursor ) const
 {
+    VECTOR2I start = aStart;
+    VECTOR2I end = aEnd;
+    VECTOR2I center = aCenter;
     VECTOR2D startLine = aStart - aCenter;
     VECTOR2D endLine   = aEnd - aCenter;
     double   newAngle  = RAD2DECIDEG( endLine.Angle() - startLine.Angle() );
@@ -606,23 +610,23 @@ void PCB_POINT_EDITOR::editArcEndpointKeepTangent( PCB_SHAPE* aArc, VECTOR2I aCe
     bool movingStart;
     bool arcValid = true;
 
-    VECTOR2I *p1, *p2, *p3;
+    VECTOR2I p1, p2, p3;
     // p1 does not move, p2 does.
 
     if( aStart != aArc->GetArcStart() )
     {
-        aStart      = aCursor;
-        p1          = &aEnd;
-        p2          = &aStart;
-        p3          = &aMid;
+        start       = aCursor;
+        p1          = aEnd;
+        p2          = aStart;
+        p3          = aMid;
         movingStart = true;
     }
     else if( aEnd != aArc->GetArcEnd() )
     {
-        aEnd        = aCursor;
-        p1          = &aStart;
-        p2          = &aEnd;
-        p3          = &aMid;
+        end         = aCursor;
+        p1          = aStart;
+        p2          = aEnd;
+        p3          = aMid;
         movingStart = false;
     }
     else
@@ -633,9 +637,9 @@ void PCB_POINT_EDITOR::editArcEndpointKeepTangent( PCB_SHAPE* aArc, VECTOR2I aCe
     VECTOR2D v1, v2, v3, v4;
 
     // Move the coordinate system
-    v1 = *p1 - aCenter;
-    v2 = *p2 - aCenter;
-    v3 = *p3 - aCenter;
+    v1 = p1 - aCenter;
+    v2 = p2 - aCenter;
+    v3 = p3 - aCenter;
 
     VECTOR2D u1, u2, u3;
 
@@ -742,10 +746,10 @@ void PCB_POINT_EDITOR::editArcEndpointKeepTangent( PCB_SHAPE* aArc, VECTOR2I aCe
         v4.x = tmpx;
         v4.y = tmpy;
 
-        aCenter = v4 + aCenter;
+        center = v4 + aCenter;
 
-        startLine = aStart - aCenter;
-        endLine   = aEnd - aCenter;
+        startLine = start - center;
+        endLine   = end - center;
         newAngle  = RAD2DECIDEG( endLine.Angle() - startLine.Angle() );
 
         if( clockwise && newAngle < 0.0 )
@@ -756,12 +760,12 @@ void PCB_POINT_EDITOR::editArcEndpointKeepTangent( PCB_SHAPE* aArc, VECTOR2I aCe
         if( arcValid )
         {
             aArc->SetAngle( newAngle, false );
-            aArc->SetCenter( wxPoint( aCenter.x, aCenter.y ) );
+            aArc->SetCenter( ( wxPoint ) center );
 
             if( movingStart )
-                aArc->SetArcStart( wxPoint( aStart.x, aStart.y ) );
+                aArc->SetArcStart( ( wxPoint ) start );
             else
-                aArc->SetArcEnd( wxPoint( aEnd.x, aEnd.y ) );
+                aArc->SetArcEnd( ( wxPoint ) end );
         }
     }
 }
@@ -782,7 +786,7 @@ void PCB_POINT_EDITOR::editArcEndpointKeepTangent( PCB_SHAPE* aArc, VECTOR2I aCe
  */
 static void pinEditedCorner( int aEditedPointIndex, int aMinWidth, int aMinHeight,
                              VECTOR2I& aTopLeft, VECTOR2I& aTopRight, VECTOR2I& aBotLeft,
-                             VECTOR2I& aBotRight, VECTOR2I aHole, VECTOR2I aHoleSize )
+                             VECTOR2I& aBotRight, VECTOR2I& aHole, VECTOR2I& aHoleSize )
 {
     switch( aEditedPointIndex )
     {
@@ -869,37 +873,38 @@ static void pinEditedCorner( int aEditedPointIndex, int aMinWidth, int aMinHeigh
 }
 
 
-void PCB_POINT_EDITOR::editArcEndpointKeepCenter( PCB_SHAPE* aArc, VECTOR2I aCenter,
-                                                  VECTOR2I aStart, VECTOR2I aMid, VECTOR2I aEnd,
-                                                  const VECTOR2I aCursor ) const
+void PCB_POINT_EDITOR::editArcEndpointKeepCenter( PCB_SHAPE* aArc, const VECTOR2I& aCenter,
+                                                  const VECTOR2I& aStart, const VECTOR2I& aMid,
+                                                  const VECTOR2I& aEnd,
+                                                  const VECTOR2I& aCursor ) const
 {
     bool clockwise;
     bool movingStart;
 
-    VECTOR2I *p1, *p2;
+    VECTOR2I p1, p2;
     VECTOR2I  target;
 
     // p1 does not move, p2 does.
 
     if( aStart != aArc->GetArcStart() )
     {
-        p1          = &aEnd;
-        p2          = &aStart;
+        p1          = aEnd;
+        p2          = aStart;
         movingStart = true;
     }
     else
     {
-        p1          = &aStart;
-        p2          = &aEnd;
+        p1          = aStart;
+        p2          = aEnd;
         movingStart = false;
     }
 
-    target = *p2 - aCenter;
+    target = p2 - aCenter;
 
-    double sqRadius = ( *p1 - aCenter ).SquaredEuclideanNorm();
+    double sqRadius = ( p1 - aCenter ).SquaredEuclideanNorm();
 
-    *p1 = *p1 - aCenter;
-    *p2 = *p2 - aCenter;
+    p1 = p1 - aCenter;
+    p2 = p2 - aCenter;
 
     // Circle : x^2 + y^2 = R ^ 2
     // In this coordinate system, the angular position of the cursor is (r, theta)
@@ -908,8 +913,8 @@ void PCB_POINT_EDITOR::editArcEndpointKeepCenter( PCB_SHAPE* aArc, VECTOR2I aCen
 
     if( target.x == 0 )
     {
-        p2->x = 0;
-        p2->y = ( target.y > 0 ) ? sqrt( sqRadius ) : -sqrt( sqRadius );
+        p2.x = 0;
+        p2.y = ( target.y > 0 ) ? sqrt( sqRadius ) : -sqrt( sqRadius );
     }
     else
     {
@@ -920,12 +925,12 @@ void PCB_POINT_EDITOR::editArcEndpointKeepCenter( PCB_SHAPE* aArc, VECTOR2I aCen
 
         // Move to the correct quadrant
         tmp   = target.x > 0 ? tmp : -tmp;
-        p2->y = target.y / static_cast<double>( target.x ) * tmp;
-        p2->x = tmp;
+        p2.y = target.y / static_cast<double>( target.x ) * tmp;
+        p2.x = tmp;
     }
 
-    *p1 = *p1 + aCenter;
-    *p2 = *p2 + aCenter;
+    p1 = p1 + aCenter;
+    p2 = p2 + aCenter;
 
     clockwise = aArc->GetAngle() > 0;
 
@@ -948,21 +953,21 @@ void PCB_POINT_EDITOR::editArcEndpointKeepCenter( PCB_SHAPE* aArc, VECTOR2I aCen
 }
 
 
-void PCB_POINT_EDITOR::editArcMidKeepCenter( PCB_SHAPE* aArc, VECTOR2I aCenter, VECTOR2I aStart,
-                                             VECTOR2I aMid, VECTOR2I aEnd,
-                                             const VECTOR2I aCursor ) const
+void PCB_POINT_EDITOR::editArcMidKeepCenter( PCB_SHAPE* aArc, const VECTOR2I& aCenter,
+                                             const VECTOR2I& aStart, const VECTOR2I& aMid,
+                                             const VECTOR2I& aEnd, const VECTOR2I& aCursor ) const
 {
     // Now, update the edit point position
     // Express the point in a circle-centered coordinate system.
-    aStart = aStart - aCenter;
-    aEnd   = aEnd - aCenter;
+    VECTOR2I start = aStart - aCenter;
+    VECTOR2I end   = aEnd - aCenter;
 
     double sqRadius = ( aCursor - aCenter ).SquaredEuclideanNorm();
 
     // Special case, because the tangent would lead to +/- infinity
-    if( aStart.x == 0 )
+    if( start.x == 0 )
     {
-        aStart.y = aCursor.y > 0 ? sqrt( sqRadius ) : -sqrt( sqRadius );
+        start.y = aCursor.y > 0 ? sqrt( sqRadius ) : -sqrt( sqRadius );
     }
     else
     {
@@ -971,19 +976,19 @@ void PCB_POINT_EDITOR::editArcMidKeepCenter( PCB_SHAPE* aArc, VECTOR2I aCenter, 
         // The line coming from the center of the circle is y = start.y / start.x * x
         // The intersection fulfills : x^2  = R^2 /  ( 1 + ( start.y / start.x ) ^ 2 )
 
-        double tan = aStart.y / static_cast<double>( aStart.x );
+        double tan = aStart.y / static_cast<double>( start.x );
         double tmp = sqrt( sqRadius / ( 1.0 + tan * tan ) );
 
         // Move to the correct quadrant
-        tmp      = aStart.x > 0 ? tmp : -tmp;
-        aStart.y = aStart.y / static_cast<double>( aStart.x ) * tmp;
-        aStart.x = tmp;
+        tmp      = start.x > 0 ? tmp : -tmp;
+        start.y = start.y / static_cast<double>( start.x ) * tmp;
+        start.x = tmp;
     }
 
     // Special case, because the tangent would lead to +/- infinity
-    if( aEnd.x == 0 )
+    if( end.x == 0 )
     {
-        aEnd.y = aMid.y > 0 ? sqrt( sqRadius ) : -sqrt( sqRadius );
+        end.y = aMid.y > 0 ? sqrt( sqRadius ) : -sqrt( sqRadius );
     }
     else
     {
@@ -992,25 +997,26 @@ void PCB_POINT_EDITOR::editArcMidKeepCenter( PCB_SHAPE* aArc, VECTOR2I aCenter, 
         // The line coming from the center of the circle is y = start.y / start.x * x
         // The intersection fulfills : x^2  = R^2 /  ( 1 + ( start.y / start.x ) ^ 2 )
 
-        double tan = aEnd.y / static_cast<double>( aEnd.x );
+        double tan = end.y / static_cast<double>( end.x );
         double tmp = sqrt( sqRadius / ( 1.0 + tan * tan ) );
 
         // Move to the correct quadrant
-        tmp    = aEnd.x > 0 ? tmp : -tmp;
-        aEnd.y = aEnd.y / static_cast<double>( aEnd.x ) * tmp;
-        aEnd.x = tmp;
+        tmp    = end.x > 0 ? tmp : -tmp;
+        end.y = end.y / static_cast<double>( end.x ) * tmp;
+        end.x = tmp;
     }
 
-    aStart = aStart + aCenter;
-    aEnd   = aEnd + aCenter;
+    start = start + aCenter;
+    end   = end + aCenter;
 
-    aArc->SetArcStart( (wxPoint) aStart );
-    aArc->SetArcEnd( (wxPoint) aEnd );
+    aArc->SetArcStart( (wxPoint) start );
+    aArc->SetArcEnd( (wxPoint) end );
 }
 
 
-void PCB_POINT_EDITOR::editArcMidKeepEndpoints( PCB_SHAPE* aArc, VECTOR2I aStart, VECTOR2I aEnd,
-                                                const VECTOR2I aCursor ) const
+void PCB_POINT_EDITOR::editArcMidKeepEndpoints( PCB_SHAPE* aArc, const VECTOR2I& aStart,
+                                                const VECTOR2I& aEnd,
+                                                const VECTOR2I& aCursor ) const
 {
     // Let 'm' be the middle point of the chord between the start and end points
     VECTOR2I  m = ( aStart + aEnd ) / 2;
@@ -1226,9 +1232,11 @@ void PCB_POINT_EDITOR::updateItem() const
             VECTOR2I topRight = m_editPoints->Point( RECT_TOP_RIGHT ).GetPosition();
             VECTOR2I botLeft = m_editPoints->Point( RECT_BOT_LEFT ).GetPosition();
             VECTOR2I botRight = m_editPoints->Point( RECT_BOT_RIGHT ).GetPosition();
+            VECTOR2I holeCenter = pad->GetPosition();
+            VECTOR2I holeSize = pad->GetDrillSize();
 
             pinEditedCorner( getEditedPointIndex(), Mils2iu( 1 ), Mils2iu( 1 ), topLeft, topRight,
-                             botLeft, botRight,pad->GetPosition(), pad->GetDrillSize() );
+                             botLeft, botRight, holeCenter, holeSize );
 
             if( ( pad->GetOffset().x || pad->GetOffset().y )
                     || ( pad->GetDrillSize().x && pad->GetDrillSize().y ) )
@@ -1328,6 +1336,7 @@ void PCB_POINT_EDITOR::updateItem() const
 
         validatePolygon( outline );
         zone->HatchBorder();
+
         // TODO Refill zone when KiCad supports auto re-fill
         break;
     }
@@ -1606,6 +1615,7 @@ void PCB_POINT_EDITOR::updatePoints()
                 for( unsigned i = 0; i < points.size(); i++ )
                     m_editPoints->Point( i ).SetPosition( points[i] );
             }
+
             break;
         }
 
@@ -2197,11 +2207,13 @@ int PCB_POINT_EDITOR::modifiedSelection( const TOOL_EVENT& aEvent )
     return 0;
 }
 
+
 int PCB_POINT_EDITOR::changeEditMethod( const TOOL_EVENT& aEvent )
 {
     m_altEditMethod = !m_altEditMethod;
     return 0;
 }
+
 
 void PCB_POINT_EDITOR::setTransitions()
 {

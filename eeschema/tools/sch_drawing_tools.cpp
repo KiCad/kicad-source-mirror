@@ -482,6 +482,7 @@ int SCH_DRAWING_TOOLS::PlaceImage( const TOOL_EVENT& aEvent )
                 // (Current mouse pos after closing the dialog will be used)
                 KIGFX::VIEW_CONTROLS* controls = getViewControls();
                 VECTOR2D initialMousePos = controls->GetMousePosition(false);
+
                 // Build the rectangle area acceptable to move the cursor without
                 // having an auto-pan
                 EDA_RECT canvas_area = GetCanvasFreeAreaPixels();
@@ -883,6 +884,7 @@ SCH_TEXT* SCH_DRAWING_TOOLS::createNewText( const VECTOR2I& aPosition, int aType
 
         if( settings.m_IntersheetRefsShow )
             static_cast<SCH_GLOBALLABEL*>( textItem )->GetIntersheetRefs()->SetVisible( true );
+
         break;
 
     default:
@@ -1419,7 +1421,7 @@ int SCH_DRAWING_TOOLS::DrawSheet( const TOOL_EVENT& aEvent )
 }
 
 
-void SCH_DRAWING_TOOLS::sizeSheet( SCH_SHEET* aSheet, VECTOR2I aPos )
+void SCH_DRAWING_TOOLS::sizeSheet( SCH_SHEET* aSheet, const VECTOR2I& aPos )
 {
     wxPoint pos = aSheet->GetPosition();
     wxPoint size = (wxPoint) aPos - pos;

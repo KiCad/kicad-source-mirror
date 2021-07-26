@@ -53,22 +53,20 @@ public:
     const BOX2I ViewBBox() const override;
 
     ///< Set the origin of the rectangle (the fixed corner)
-    void SetOrigin( VECTOR2I aOrigin )
+    void SetOrigin( const VECTOR2I& aOrigin )
     {
         m_origin = aOrigin;
     }
 
     /**
-     * Set the current end of the rectangle (the corner that moves
-     * with the cursor.
+     * Set the current end of the rectangle (the corner that moves with the cursor.
      */
-    void SetEnd( VECTOR2I aEnd )
+    void SetEnd( const VECTOR2I& aEnd )
     {
         m_end = aEnd;
     }
 
     /**
-     * Get class name
      * @return  string "SELECTION_AREA"
      */
     wxString GetClass() const override

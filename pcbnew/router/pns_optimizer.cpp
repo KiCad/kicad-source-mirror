@@ -101,7 +101,6 @@ bool COST_ESTIMATOR::IsBetter( const COST_ESTIMATOR& aOther, double aLengthToler
 {
     if( aOther.m_cornerCost < m_cornerCost && aOther.m_lengthCost < m_lengthCost )
         return true;
-
     else if( aOther.m_cornerCost < m_cornerCost * aCornerTolerance &&
              aOther.m_lengthCost < m_lengthCost * aLengthTolerance )
         return true;
@@ -304,15 +303,16 @@ static bool pointInside2( const SHAPE_LINE_CHAIN& aL, const VECTOR2I& aP )
 
     for( size_t i = 1; i <= cnt; ++i )
     {
-        VECTOR2I ipNext = (i == cnt ? aL.CPoint( 0 ) : aL.CPoint( i ));
+        VECTOR2I ipNext = ( i == cnt ? aL.CPoint( 0 ) : aL.CPoint( i ) );
 
         if( ipNext.y == aP.y )
         {
-            if( (ipNext.x ==aP.x) || ( ip.y == aP.y && ( (ipNext.x >aP.x) == (ip.x <aP.x) ) ) )
-                return true;  // pt on polyground boundary
+            if( ( ipNext.x == aP.x )
+                || ( ip.y == aP.y && ( ( ipNext.x > aP.x ) == ( ip.x < aP.x ) ) ) )
+                return true; // pt on polyground boundary
         }
 
-        if( (ip.y <aP.y) != (ipNext.y <aP.y) )
+        if( ( ip.y < aP.y ) != ( ipNext.y < aP.y ) )
         {
             if( ip.x >=aP.x )
             {
@@ -338,8 +338,8 @@ static bool pointInside2( const SHAPE_LINE_CHAIN& aL, const VECTOR2I& aP )
             {
                 if( ipNext.x >aP.x )
                 {
-                    double d = ((double)ip.x -aP.x) * ((double)ipNext.y -aP.y) -
-                               ((double)ipNext.x -aP.x) * ((double)ip.y -aP.y);
+                    double d = ( (double) ip.x - aP.x ) * ( (double) ipNext.y - aP.y )
+                               - ( (double) ipNext.x - aP.x ) * ( (double) ip.y - aP.y );
 
                     if( !d )
                         return true;  // pt on polyground boundary
@@ -1078,7 +1078,7 @@ bool OPTIMIZER::runSmartPads( LINE* aLine )
 }
 
 
-bool OPTIMIZER::Optimize( LINE* aLine, int aEffortLevel, NODE* aWorld, const VECTOR2I aV )
+bool OPTIMIZER::Optimize( LINE* aLine, int aEffortLevel, NODE* aWorld, const VECTOR2I& aV )
 {
     OPTIMIZER opt( aWorld );
 
@@ -1482,6 +1482,7 @@ bool tightenSegment( bool dir, NODE *aNode, const LINE& cur, const SHAPE_LINE_CH
 
     return true;
 }
+
 
 void Tighten( NODE *aNode, const SHAPE_LINE_CHAIN& aOldLine, const LINE& aNewLine,
               LINE& aOptimized )

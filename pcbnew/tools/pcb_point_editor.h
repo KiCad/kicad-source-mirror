@@ -134,26 +134,29 @@ private:
     /**
      * Move an end point of the arc, while keeping the tangent at the other endpoint.
      */
-    void editArcEndpointKeepTangent( PCB_SHAPE* aArc, VECTOR2I aCenter, VECTOR2I aStart,
-                                     VECTOR2I aMid, VECTOR2I aEnd, const VECTOR2I aCursor ) const;
+    void editArcEndpointKeepTangent( PCB_SHAPE* aArc, const VECTOR2I& aCenter,
+                                     const VECTOR2I& aStart, const VECTOR2I& aMid,
+                                     const VECTOR2I& aEnd, const VECTOR2I& aCursor ) const;
 
     /**
      * Move an end point of the arc around the circumference.
      */
-    void editArcEndpointKeepCenter( PCB_SHAPE* aArc, VECTOR2I aCenter, VECTOR2I aStart,
-                                    VECTOR2I aMid, VECTOR2I aEnd, const VECTOR2I aCursor ) const;
+    void editArcEndpointKeepCenter( PCB_SHAPE* aArc, const VECTOR2I& aCenter,
+                                    const VECTOR2I& aStart, const VECTOR2I& aMid,
+                                    const VECTOR2I& aEnd, const VECTOR2I& aCursor ) const;
 
     /**
      * Move the mid point of the arc, while keeping the two endpoints.
      */
-    void editArcMidKeepEndpoints( PCB_SHAPE* aArc, VECTOR2I aStart, VECTOR2I aEnd,
-                                  const VECTOR2I aCursor ) const;
+    void editArcMidKeepEndpoints( PCB_SHAPE* aArc, const VECTOR2I& aStart, const VECTOR2I& aEnd,
+                                  const VECTOR2I& aCursor ) const;
 
     /**
      * Move the mid point of the arc, while keeping the angle.
      */
-    void editArcMidKeepCenter( PCB_SHAPE* aArc, VECTOR2I aCenter, VECTOR2I aStart, VECTOR2I aMid,
-                               VECTOR2I aEnd, const VECTOR2I aCursor ) const;
+    void editArcMidKeepCenter( PCB_SHAPE* aArc, const VECTOR2I& aCenter, const VECTOR2I& aStart,
+                               const VECTOR2I& aMid, const VECTOR2I& aEnd,
+                               const VECTOR2I& aCursor ) const;
 
     ///< Change the edit method to an alternative method ( currently, arcs only )
     int changeEditMethod( const TOOL_EVENT& aEvent );
