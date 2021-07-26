@@ -248,6 +248,16 @@ void SCINTILLA_TRICKS::onCharHook( wxKeyEvent& aEvent )
 
         m_te->EndUndoAction();
     }
+#ifdef __WXMAC__
+    else if( aEvent.GetModifiers() == wxMOD_RAW_CONTROL && aEvent.GetKeyCode() == 'A' )
+    {
+        m_te->LineEndWrap();
+    }
+    else if( aEvent.GetModifiers() == wxMOD_RAW_CONTROL && aEvent.GetKeyCode() == 'E' )
+    {
+        m_te->HomeWrap();
+    }
+#endif
     else
     {
         aEvent.Skip();
