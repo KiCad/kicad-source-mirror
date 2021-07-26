@@ -123,7 +123,7 @@ template<class T> void Flip( T& aValue )
 
 int PCB_CONTROL::TrackDisplayMode( const TOOL_EVENT& aEvent )
 {
-    auto opts = displayOptions();
+    PCB_DISPLAY_OPTIONS opts = displayOptions();
 
     Flip( opts.m_DisplayPcbTrackFill );
     m_frame->SetDisplayOptions( opts );
@@ -142,7 +142,7 @@ int PCB_CONTROL::TrackDisplayMode( const TOOL_EVENT& aEvent )
 
 int PCB_CONTROL::ToggleRatsnest( const TOOL_EVENT& aEvent )
 {
-    auto opts = displayOptions();
+    PCB_DISPLAY_OPTIONS opts = displayOptions();
 
     if( aEvent.IsAction( &PCB_ACTIONS::showRatsnest ) )
     {
@@ -168,7 +168,7 @@ int PCB_CONTROL::ToggleRatsnest( const TOOL_EVENT& aEvent )
 
 int PCB_CONTROL::ViaDisplayMode( const TOOL_EVENT& aEvent )
 {
-    auto opts = displayOptions();
+    PCB_DISPLAY_OPTIONS opts = displayOptions();
 
     Flip( opts.m_DisplayViaFill );
     m_frame->SetDisplayOptions( opts );
@@ -187,11 +187,28 @@ int PCB_CONTROL::ViaDisplayMode( const TOOL_EVENT& aEvent )
 
 int PCB_CONTROL::ZoneDisplayMode( const TOOL_EVENT& aEvent )
 {
-    auto opts = displayOptions();
+    PCB_DISPLAY_OPTIONS opts = displayOptions();
 
     // Apply new display options to the GAL canvas
     if( aEvent.IsAction( &PCB_ACTIONS::zoneDisplayFilled ) )
     {
+        if( opts.m_ZoneDisplayMode == ZONE_DISPLAY_MODE::SHOW_FILLED )
+        {
+            // Check for user misunderstanding between fills and display mode
+            for( const ZONE* zone : board()->Zones() )
+            {
+                if( !zone->IsFilled() )
+                {
+                    wxString msg;
+                    msg.Printf( _( "Not all zones are filled. Use Edit > Fill All Zones (%s) "
+                                  "if you wish to see all fills." ),
+                                KeyNameFromKeyCode( PCB_ACTIONS::zoneFillAll.GetHotKey() ) );
+                    m_frame->ShowInfoBarMsg(  msg, true );
+                    break;
+                }
+            }
+        }
+
         opts.m_ZoneDisplayMode = ZONE_DISPLAY_MODE::SHOW_FILLED;
     }
     else if( aEvent.IsAction( &PCB_ACTIONS::zoneDisplayOutline ) )
@@ -231,7 +248,7 @@ int PCB_CONTROL::ZoneDisplayMode( const TOOL_EVENT& aEvent )
 
 int PCB_CONTROL::HighContrastMode( const TOOL_EVENT& aEvent )
 {
-    auto opts = displayOptions();
+    PCB_DISPLAY_OPTIONS opts = displayOptions();
 
     opts.m_ContrastModeDisplay =
             ( opts.m_ContrastModeDisplay == HIGH_CONTRAST_MODE::NORMAL ) ?
@@ -246,7 +263,7 @@ int PCB_CONTROL::HighContrastMode( const TOOL_EVENT& aEvent )
 
 int PCB_CONTROL::HighContrastModeCycle( const TOOL_EVENT& aEvent )
 {
-    auto opts = displayOptions();
+    PCB_DISPLAY_OPTIONS opts = displayOptions();
 
     switch( opts.m_ContrastModeDisplay )
     {
