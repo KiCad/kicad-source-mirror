@@ -365,18 +365,64 @@ void TransformTrapezoidToPolygon( SHAPE_POLY_SET& aCornerBuffer, const wxPoint& 
                                   const wxSize& aSize, double aRotation, int aDeltaX, int aDeltaY,
                                   int aInflate, int aError, ERROR_LOC aErrorLoc )
 {
-    SHAPE_POLY_SET outline;
-    wxSize         size( aSize / 2 );
-
+    SHAPE_POLY_SET              outline;
+    wxSize                      size( aSize / 2 );
     std::vector<ROUNDED_CORNER> corners;
-    corners.reserve( 4 );
-    corners.push_back( ROUNDED_CORNER( -size.x + aDeltaY, -size.y - aDeltaX ) );
-    corners.push_back( ROUNDED_CORNER( size.x - aDeltaY, -size.y + aDeltaX ) );
-    corners.push_back( ROUNDED_CORNER( size.x + aDeltaY, size.y - aDeltaX ) );
-    corners.push_back( ROUNDED_CORNER( -size.x - aDeltaY, size.y + aDeltaX ) );
 
-    if( aDeltaY == size.x || aDeltaX == size.y )
-        CornerListRemoveDuplicates( corners );
+    if( aInflate < 0 )
+    {
+        if( !aDeltaX && !aDeltaY ) // rectangle
+        {
+            size.x = std::max( 1, size.x + aInflate );
+            size.y = std::max( 1, size.y + aInflate );
+        }
+        else if( aDeltaX ) // horizontal trapezoid
+        {
+            double slope = (double) aDeltaX / size.x;
+            int    yShrink = KiROUND( ( std::hypot( size.x, aDeltaX ) * aInflate ) / size.x );
+            size.y = std::max( 1, size.y + yShrink );
+            size.x = std::max( 1, size.x + aInflate );
+            aDeltaX = KiROUND( size.x * slope );
+
+            if( aDeltaX > size.y ) // shrinking turned the trapezoid into a triangle
+            {
+                corners.reserve( 3 );
+                corners.push_back( ROUNDED_CORNER( -size.x, -size.y - aDeltaX ) );
+                corners.push_back( ROUNDED_CORNER( KiROUND( size.y / slope ), 0 ) );
+                corners.push_back( ROUNDED_CORNER( -size.x, size.y + aDeltaX ) );
+            }
+        }
+        else // vertical trapezoid
+        {
+            double slope = (double) aDeltaY / size.y;
+            int    xShrink = KiROUND( ( std::hypot( size.y, aDeltaY ) * aInflate ) / size.y );
+            size.x = std::max( 1, size.x + xShrink );
+            size.y = std::max( 1, size.y + aInflate );
+            aDeltaY = KiROUND( size.y * slope );
+
+            if( aDeltaY > size.x )
+            {
+                corners.reserve( 3 );
+                corners.push_back( ROUNDED_CORNER( 0, -KiROUND( size.x / slope ) ) );
+                corners.push_back( ROUNDED_CORNER( size.x + aDeltaY, size.y ) );
+                corners.push_back( ROUNDED_CORNER( -size.x - aDeltaY, size.y ) );
+            }
+        }
+
+        aInflate = 0;
+    }
+
+    if( corners.empty() )
+    {
+        corners.reserve( 4 );
+        corners.push_back( ROUNDED_CORNER( -size.x + aDeltaY, -size.y - aDeltaX ) );
+        corners.push_back( ROUNDED_CORNER( size.x - aDeltaY, -size.y + aDeltaX ) );
+        corners.push_back( ROUNDED_CORNER( size.x + aDeltaY, size.y - aDeltaX ) );
+        corners.push_back( ROUNDED_CORNER( -size.x - aDeltaY, size.y + aDeltaX ) );
+
+        if( aDeltaY == size.x || aDeltaX == size.y )
+            CornerListRemoveDuplicates( corners );
+    }
 
     CornerListToPolygon( outline, corners, aInflate, aError, aErrorLoc );
 
@@ -396,10 +442,16 @@ void TransformRoundChamferedRectToPolygon( SHAPE_POLY_SET& aCornerBuffer, const 
     SHAPE_POLY_SET outline;
     wxSize         size( aSize / 2 );
     int            chamferCnt = std::bitset<8>( aChamferCorners ).count();
+    double         chamferDeduct = 0;
 
-    // Ensure size is > 0, to avoid generating unusable shapes which can crash kicad.
-    size.x = std::max( 1, size.x );
-    size.y = std::max( 1, size.y );
+    if( aInflate < 0 )
+    {
+        size.x = std::max( 1, size.x + aInflate );
+        size.y = std::max( 1, size.y + aInflate );
+        chamferDeduct = aInflate * ( 2.0 - M_SQRT2 );
+        aCornerRadius = std::max( 0, aCornerRadius + aInflate );
+        aInflate = 0;
+    }
 
     std::vector<ROUNDED_CORNER> corners;
     corners.reserve( 4 + chamferCnt );
@@ -411,7 +463,7 @@ void TransformRoundChamferedRectToPolygon( SHAPE_POLY_SET& aCornerBuffer, const 
     if( aChamferCorners )
     {
         int shorterSide = std::min( aSize.x, aSize.y );
-        int chamfer = aChamferRatio * shorterSide;
+        int chamfer = std::max( 0, KiROUND( aChamferRatio * shorterSide + chamferDeduct ) );
         int chamId[4] = { RECT_CHAMFER_TOP_LEFT, RECT_CHAMFER_TOP_RIGHT,
                           RECT_CHAMFER_BOTTOM_RIGHT, RECT_CHAMFER_BOTTOM_LEFT };
         int sign[8] = { 0, 1, -1, 0, 0, -1, 1, 0 };
