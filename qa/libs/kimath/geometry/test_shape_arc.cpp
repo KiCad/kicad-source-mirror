@@ -761,10 +761,11 @@ BOOST_AUTO_TEST_CASE( CollideArcToPolygonApproximation )
     // Create a polyset approximation from the arc - error outside (simulating the zone filler)
     SHAPE_POLY_SET arcBuffer;
     int            clearance = ( arc.GetWidth() * 3 ) / 2;
+    int            polygonApproximationError = SHAPE_ARC::DefaultAccuracyForPCB();
 
     TransformArcToPolygon( arcBuffer, wxPoint( arc.GetP0() ), wxPoint( arc.GetArcMid() ),
                            wxPoint( arc.GetP1() ), arc.GetWidth() + 2 * clearance,
-                           SHAPE_ARC::DefaultAccuracyForPCB(), ERROR_OUTSIDE );
+                           polygonApproximationError, ERROR_OUTSIDE );
 
     BOOST_REQUIRE_EQUAL( arcBuffer.OutlineCount(), 1 );
     BOOST_CHECK_EQUAL( arcBuffer.HoleCount( 0 ), 0 );
@@ -793,7 +794,7 @@ BOOST_AUTO_TEST_CASE( CollideArcToPolygonApproximation )
 
     BOOST_CHECK_EQUAL( zoneFill.Collide( &arc, clearance * 2, &actual, &location ), true );
 
-    BOOST_CHECK( KI_TEST::IsWithin( actual, clearance, tol ) );
+    BOOST_CHECK( KI_TEST::IsWithin( actual, clearance, polygonApproximationError ) );
 }
 
 

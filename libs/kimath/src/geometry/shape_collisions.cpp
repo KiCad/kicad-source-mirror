@@ -534,14 +534,53 @@ static inline bool Collide( const SHAPE_ARC& aA, const SHAPE_LINE_CHAIN_BASE& aB
                                            aA.Type(),
                                            aB.Type() ) );
 
-    const SHAPE_LINE_CHAIN lc = aA.ConvertToPolyline();
+    int      closest_dist = INT_MAX;
+    VECTOR2I nearest;
 
-    bool rv = Collide( lc, aB, aClearance + aA.GetWidth() / 2, aActual, aLocation, aMTV );
+    if( aB.IsClosed() && aB.PointInside( aA.GetP0() ) )
+    {
+        closest_dist = 0;
+        nearest = aA.GetP0();
+    }
+    else
+    {
+        for( size_t i = 0; i < aB.GetSegmentCount(); i++ )
+        {
+            int      collision_dist = 0;
+            VECTOR2I pn;
 
-    if( rv && aActual )
-        *aActual = std::max( 0, *aActual - aA.GetWidth() / 2 );
+            if( aA.Collide( aB.GetSegment( i ), aClearance,
+                            aActual || aLocation ? &collision_dist : nullptr,
+                            aLocation ? &pn : nullptr ) )
+            {
+                if( collision_dist < closest_dist )
+                {
+                    nearest = pn;
+                    closest_dist = collision_dist;
+                }
 
-    return rv;
+                if( closest_dist == 0 )
+                    break;
+
+                // If we're not looking for aActual then any collision will do
+                if( !aActual )
+                    break;
+            }
+        }
+    }
+
+    if( closest_dist == 0 || closest_dist < aClearance )
+    {
+        if( aLocation )
+            *aLocation = nearest;
+
+        if( aActual )
+            *aActual = closest_dist;
+
+        return true;
+    }
+
+    return false;
 }
 
 
