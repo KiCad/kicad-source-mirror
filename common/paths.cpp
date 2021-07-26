@@ -240,6 +240,17 @@ wxString PATHS::GetStockPlugins3DPath()
 }
 
 
+wxString PATHS::GetStockDemosPath()
+{
+    wxFileName fn;
+
+    fn.AssignDir( PATHS::GetStockDataPath( false ) );
+    fn.AppendDir( wxT( "demos" ) );
+
+    return fn.GetPathWithSep();
+}
+
+
 wxString PATHS::GetUserCachePath()
 {
     wxFileName tmp;

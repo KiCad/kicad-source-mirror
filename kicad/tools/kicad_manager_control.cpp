@@ -30,10 +30,10 @@
 #include <tools/kicad_manager_control.h>
 #include <dialogs/dialog_template_selector.h>
 #include <gestfich.h>
+#include <paths.h>
 #include <wx/checkbox.h>
 #include <wx/dir.h>
 #include <wx/filedlg.h>
-
 
 ///< Helper widget to select whether a new directory should be created for a project.
 class DIR_CHECKBOX : public wxPanel
@@ -286,14 +286,13 @@ int KICAD_MANAGER_CONTROL::NewFromTemplate( const TOOL_EVENT& aEvent )
 }
 
 
-int KICAD_MANAGER_CONTROL::OpenProject( const TOOL_EVENT& aEvent )
+int KICAD_MANAGER_CONTROL::openProject( const wxString& aDefaultDir )
 {
     wxString wildcard = AllProjectFilesWildcard() + "|" + ProjectFileWildcard() + "|"
                         + LegacyProjectFileWildcard();
 
-    wxString     default_dir = m_frame->GetMruPath();
-    wxFileDialog dlg( m_frame, _( "Open Existing Project" ), default_dir, wxEmptyString,
-                      wildcard, wxFD_OPEN | wxFD_FILE_MUST_EXIST );
+    wxFileDialog dlg( m_frame, _( "Open Existing Project" ), aDefaultDir, wxEmptyString, wildcard,
+                      wxFD_OPEN | wxFD_FILE_MUST_EXIST );
 
     if( dlg.ShowModal() == wxID_CANCEL )
         return -1;
@@ -307,7 +306,20 @@ int KICAD_MANAGER_CONTROL::OpenProject( const TOOL_EVENT& aEvent )
         return -1;
 
     m_frame->LoadProject( pro );
+
     return 0;
+}
+
+
+int KICAD_MANAGER_CONTROL::OpenDemoProject( const TOOL_EVENT& aEvent )
+{
+    return openProject( PATHS::GetStockDemosPath() );
+}
+
+
+int KICAD_MANAGER_CONTROL::OpenProject( const TOOL_EVENT& aEvent )
+{
+    return openProject( m_frame->GetMruPath() );
 }
 
 
@@ -782,6 +794,7 @@ void KICAD_MANAGER_CONTROL::setTransitions()
 {
     Go( &KICAD_MANAGER_CONTROL::NewProject,      KICAD_MANAGER_ACTIONS::newProject.MakeEvent() );
     Go( &KICAD_MANAGER_CONTROL::NewFromTemplate, KICAD_MANAGER_ACTIONS::newFromTemplate.MakeEvent() );
+    Go( &KICAD_MANAGER_CONTROL::OpenDemoProject, KICAD_MANAGER_ACTIONS::openDemoProject.MakeEvent() );
     Go( &KICAD_MANAGER_CONTROL::OpenProject,     KICAD_MANAGER_ACTIONS::openProject.MakeEvent() );
     Go( &KICAD_MANAGER_CONTROL::CloseProject,    KICAD_MANAGER_ACTIONS::closeProject.MakeEvent() );
     Go( &KICAD_MANAGER_CONTROL::SaveProjectAs,   ACTIONS::saveAs.MakeEvent() );

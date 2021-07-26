@@ -69,6 +69,7 @@ void KICAD_MANAGER_FRAME::ReCreateMenuBar()
 
     fileMenu->Add( KICAD_MANAGER_ACTIONS::newProject );
     fileMenu->Add( KICAD_MANAGER_ACTIONS::newFromTemplate );
+    fileMenu->Add( KICAD_MANAGER_ACTIONS::openDemoProject );
     fileMenu->Add( KICAD_MANAGER_ACTIONS::openProject );
 
     wxMenuItem* item = fileMenu->Add( openRecentMenu );

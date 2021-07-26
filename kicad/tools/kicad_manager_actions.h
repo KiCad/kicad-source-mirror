@@ -33,6 +33,7 @@ class KICAD_MANAGER_ACTIONS : public ACTIONS
 public:
     static TOOL_ACTION newProject;
     static TOOL_ACTION newFromTemplate;
+    static TOOL_ACTION openDemoProject;
     static TOOL_ACTION openProject;
     static TOOL_ACTION closeProject;
 

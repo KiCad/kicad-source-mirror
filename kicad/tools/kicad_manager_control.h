@@ -47,6 +47,7 @@ public:
     int NewProject( const TOOL_EVENT& aEvent );
     int NewFromTemplate( const TOOL_EVENT& aEvent );
     int OpenProject( const TOOL_EVENT& aEvent );
+    int OpenDemoProject( const TOOL_EVENT& aEvent );
     int CloseProject( const TOOL_EVENT& aEvent );
     int SaveProjectAs( const TOOL_EVENT& aEvent );
 
@@ -65,6 +66,8 @@ private:
 
     // Mutex to allow only a single KiFace to load at one time (released when loaded)
     std::mutex m_loading;
+
+    int openProject( const wxString& aDefaultDir );
 };
 
 #endif

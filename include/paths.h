@@ -92,12 +92,17 @@ public:
     static wxString GetStockPluginsPath();
 
     /**
-     * Gets the stock (install) 3d viewer pluginspath
+     * Gets the stock (install) 3d viewer plugins path
      */
     static wxString GetStockPlugins3DPath();
 
     /**
-     * Gets the stock (install) 3d viewer pluginspath
+     * Gets the stock (install) demos path
+     */
+    static wxString GetStockDemosPath();
+
+    /**
+     * Gets the stock (install) 3d viewer plugins path
      */
     static wxString GetUserCachePath();
 
