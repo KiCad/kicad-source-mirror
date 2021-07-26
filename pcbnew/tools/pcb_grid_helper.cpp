@@ -88,14 +88,22 @@ VECTOR2I PCB_GRID_HELPER::AlignToSegment( const VECTOR2I& aPoint, const SEG& aSe
 
     VECTOR2I nearest = Align( aPoint );
 
+    SEG pos_slope( nearest + VECTOR2I( -1, 1 ), nearest + VECTOR2I( 1, -1 ) );
+    SEG neg_slope( nearest + VECTOR2I( -1, -1 ), nearest + VECTOR2I( 1, 1 ) );
+    int max_i = 2;
+
     pts[0] = aSeg.A;
     pts[1] = aSeg.B;
-    pts[2] = aSeg.IntersectLines( SEG( nearest + VECTOR2I( -1, 1 ), nearest + VECTOR2I( 1, -1 ) ) );
-    pts[3] = aSeg.IntersectLines( SEG( nearest + VECTOR2I( -1, -1 ), nearest + VECTOR2I( 1, 1 ) ) );
+
+    if( !aSeg.ApproxParallel( pos_slope ) )
+        pts[max_i++] = aSeg.IntersectLines( pos_slope );
+
+    if( !aSeg.ApproxParallel( neg_slope ) )
+        pts[max_i++] = aSeg.IntersectLines( neg_slope );
 
     int min_d = std::numeric_limits<int>::max();
 
-    for( int i = 0; i < 4; i++ )
+    for( int i = 0; i < max_i; i++ )
     {
         if( pts[i] && aSeg.Distance( *pts[i] ) <= c_gridSnapEpsilon )
         {
