@@ -96,7 +96,7 @@ HANDLE_EXCEPTIONS(BOARD::TracksInNetBetweenPoints)
                 return
     %}
 }
-%extend std::deque<TRACK *>
+%extend std::deque<PCB_TRACK *>
 {
     %pythoncode
     %{
