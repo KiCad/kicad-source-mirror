@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -138,7 +138,7 @@ void BuildConvexHull( std::vector<wxPoint>& aResult, const SHAPE_POLY_SET& aPoly
 
 
 void BuildConvexHull( std::vector<wxPoint>& aResult, const SHAPE_POLY_SET& aPolygons,
-                      wxPoint aPosition, double aRotation )
+                      const wxPoint& aPosition, double aRotation )
 {
     // Build the convex hull of the SHAPE_POLY_SET
     std::vector<wxPoint> buf;

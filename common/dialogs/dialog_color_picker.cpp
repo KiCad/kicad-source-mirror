@@ -684,7 +684,7 @@ void DIALOG_COLOR_PICKER::OnColorValueText( wxCommandEvent& event )
 }
 
 
-bool DIALOG_COLOR_PICKER::setHSvaluesFromCursor( wxPoint aMouseCursor )
+bool DIALOG_COLOR_PICKER::setHSvaluesFromCursor( const wxPoint& aMouseCursor )
 {
     wxPoint mousePos = aMouseCursor;
     wxSize bmsize = m_bitmapHSV->GetSize();

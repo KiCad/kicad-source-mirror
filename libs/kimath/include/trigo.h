@@ -58,8 +58,8 @@ bool IsPointOnSegment( const wxPoint& aSegStart, const wxPoint& aSegEnd,
  * @return bool - true if the two segments defined by four points intersect.
  * (i.e. if the 2 segments have at least a common point)
  */
-bool SegmentIntersectsSegment( const wxPoint &a_p1_l1, const wxPoint &a_p2_l1,
-                               const wxPoint &a_p1_l2, const wxPoint &a_p2_l2,
+bool SegmentIntersectsSegment( const wxPoint& a_p1_l1, const wxPoint& a_p2_l1,
+                               const wxPoint& a_p1_l2, const wxPoint& a_p2_l2,
                                wxPoint* aIntersectionPoint = nullptr );
 
 /*
@@ -75,8 +75,7 @@ void RotatePoint( int *pX, int *pY, double angle );
 void RotatePoint( int *pX, int *pY, int cx, int cy, double angle );
 
 /*
- * Calculates the new coord point point
- * for a rotation angle in (1 / 10 degree)
+ * Calculate the new coord point point for a rotation angle in (1 / 10 degree).
  */
 inline void RotatePoint( wxPoint* point, double angle )
 {
@@ -91,8 +90,7 @@ inline void RotatePoint( VECTOR2I& point, double angle )
 void RotatePoint( VECTOR2I& point, const VECTOR2I& centre, double angle );
 
 /*
- * Calculates the new coord point point
- * for a center rotation center and angle in (1 / 10 degree)
+ * Calculate the new coord point point for a center rotation center and angle in (1 / 10 degree).
  */
 void RotatePoint( wxPoint *point, const wxPoint & centre, double angle );
 
@@ -114,12 +112,12 @@ const wxPoint GetArcCenter( const wxPoint& aStart, const wxPoint& aMid, const wx
 const wxPoint GetArcCenter( VECTOR2I aStart, VECTOR2I aEnd, double aAngle );
 
 /**
- * Returns the subtended angle for a given arc
+ * Return the subtended angle for a given arc.
  */
 double GetArcAngle( const VECTOR2I& aStart, const VECTOR2I& aMid, const VECTOR2I& aEnd );
 
 /**
- * Returns the middle point of an arc, half-way between aStart and aEnd. There are two possible
+ * Return the middle point of an arc, half-way between aStart and aEnd. There are two possible
  * solutions which can be found by toggling aMinArcAngle. The behaviour is undefined for
  * semicircles (i.e. 180 degree arcs).
  *
@@ -162,9 +160,9 @@ inline double EuclideanNorm( const wxSize &vector )
 //! @param linePointA Point on line
 //! @param linePointB Point on line
 //! @param referencePoint Reference point
-inline double DistanceLinePoint( const wxPoint &linePointA,
-                                 const wxPoint &linePointB,
-                                 const wxPoint &referencePoint )
+inline double DistanceLinePoint( const wxPoint& linePointA,
+                                 const wxPoint& linePointB,
+                                 const wxPoint& referencePoint )
 {
     // Some of the multiple double casts are redundant. However in the previous
     // definition the cast was (implicitly) done too late, just before
@@ -183,7 +181,7 @@ inline double DistanceLinePoint( const wxPoint &linePointA,
 //! @param pointB Second point
 //! @param threshold The maximum distance
 //! @return True or false
-inline bool HitTestPoints( const wxPoint &pointA, const wxPoint &pointB, double threshold )
+inline bool HitTestPoints( const wxPoint& pointA, const wxPoint& pointB, double threshold )
 {
     wxPoint vectorAB = pointB - pointA;
 
@@ -197,7 +195,7 @@ inline bool HitTestPoints( const wxPoint &pointA, const wxPoint &pointB, double 
 //! @brief Determine the cross product
 //! @param vectorA Two-dimensional vector
 //! @param vectorB Two-dimensional vector
-inline double CrossProduct( const wxPoint &vectorA, const wxPoint &vectorB )
+inline double CrossProduct( const wxPoint& vectorA, const wxPoint& vectorB )
 {
     // As before the cast is to avoid int overflow
     return (double)vectorA.x * vectorB.y - (double)vectorA.y * vectorB.x;
@@ -211,7 +209,8 @@ inline double CrossProduct( const wxPoint &vectorA, const wxPoint &vectorB )
  * @param aEnd is the second end-point of the line segment
  * @param aDist = maximum distance for hit
 */
-bool TestSegmentHit( const wxPoint &aRefPoint, wxPoint aStart, wxPoint aEnd, int aDist );
+bool TestSegmentHit( const wxPoint& aRefPoint, const wxPoint& aStart, const wxPoint& aEnd,
+                     int aDist );
 
 /**
  * Return the length of a line segment defined by \a aPointA and \a aPointB.
@@ -223,8 +222,7 @@ bool TestSegmentHit( const wxPoint &aRefPoint, wxPoint aStart, wxPoint aEnd, int
 inline double GetLineLength( const wxPoint& aPointA, const wxPoint& aPointB )
 {
     // Implicitly casted to double
-    return hypot( aPointA.x - aPointB.x,
-                  aPointA.y - aPointB.y );
+    return hypot( aPointA.x - aPointB.x, aPointA.y - aPointB.y );
 }
 
 // These are the usual degrees <-> radians conversion routines
@@ -244,8 +242,10 @@ template <class T> inline T NormalizeAngle360Max( T Angle )
 {
     while( Angle < -3600 )
         Angle += 3600;
+
     while( Angle > 3600 )
         Angle -= 3600;
+
     return Angle;
 }
 
@@ -255,27 +255,29 @@ template <class T> inline T NormalizeAngle360Min( T Angle )
 {
     while( Angle <= -3600 )
         Angle += 3600;
+
     while( Angle >= 3600 )
         Angle -= 3600;
+
     return Angle;
 }
 
 
-/// Normalize angle to be in the 0.0 .. -360.0 range:
-/// angle is in 1/10 degrees
+/// Normalize angle to be in the 0.0 .. -360.0 range: angle is in 1/10 degrees.
 template <class T>
 inline T NormalizeAngleNeg( T Angle )
 {
     while( Angle <= -3600 )
         Angle += 3600;
+
     while( Angle > 0 )
         Angle -= 3600;
+
     return Angle;
 }
 
 
-/// Normalize angle to be in the 0.0 .. 360.0 range:
-/// angle is in 1/10 degrees
+/// Normalize angle to be in the 0.0 .. 360.0 range: angle is in 1/10 degrees.
 template <class T> inline T NormalizeAnglePos( T Angle )
 {
     while( Angle < 0 )
@@ -291,14 +293,15 @@ template <class T> inline void NORMALIZE_ANGLE_POS( T& Angle )
 }
 
 
-/// Normalize angle to be in the 0.0 .. 360.0 range:
-/// angle is in degrees
+/// Normalize angle to be in the 0.0 .. 360.0 range: angle is in degrees.
 inline double NormalizeAngleDegreesPos( double Angle )
 {
     while( Angle < 0 )
         Angle += 360.0;
+
     while( Angle >= 360.0 )
         Angle -= 360.0;
+
     return Angle;
 }
 
@@ -313,19 +316,22 @@ inline double NormalizeAngleRadiansPos( double Angle )
 {
     while( Angle < 0 )
         Angle += (2 * M_PI );
+
     while( Angle >= ( 2 * M_PI ) )
         Angle -= ( 2 * M_PI );
+
     return Angle;
 }
 
-/// Normalize angle to be aMin < angle <= aMax
-/// angle is in degrees
+/// Normalize angle to be aMin < angle <= aMax angle is in degrees.
 inline double NormalizeAngleDegrees( double Angle, double aMin, double aMax )
 {
     while( Angle < aMin )
         Angle += 360.0;
+
     while( Angle >= aMax )
         Angle -= 360.0;
+
     return Angle;
 }
 
@@ -343,10 +349,13 @@ template <class T, class T2> inline T AddAngles( T a1, T2 a2 )
 template <class T> inline T NegateAndNormalizeAnglePos( T Angle )
 {
     Angle = -Angle;
+
     while( Angle < 0 )
         Angle += 3600;
+
     while( Angle >= 3600 )
         Angle -= 3600;
+
     return Angle;
 }
 
@@ -361,8 +370,10 @@ template <class T> inline T NormalizeAngle90( T Angle )
 {
     while( Angle < -900 )
         Angle += 1800;
+
     while( Angle > 900 )
         Angle -= 1800;
+
     return Angle;
 }
 
@@ -377,8 +388,10 @@ template <class T> inline T NormalizeAngle180( T Angle )
 {
     while( Angle <= -1800 )
         Angle += 3600;
+
     while( Angle > 1800 )
         Angle -= 3600;
+
     return Angle;
 }
 

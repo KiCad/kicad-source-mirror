@@ -419,7 +419,7 @@ private:
      * @param aCadstarPoint
      * @return
      */
-    wxPoint getKiCadPoint( wxPoint aCadstarPoint );
+    wxPoint getKiCadPoint( const wxPoint& aCadstarPoint );
 
     /**
      * @brief
@@ -466,7 +466,7 @@ private:
      * @param aPoint
      * @return Angle in decidegrees of the polar representation of the point, scaled 0..360
      */
-    double getPolarAngle( wxPoint aPoint );
+    double getPolarAngle( const wxPoint& aPoint );
 
     /**
      * @brief Searches m_netMap and returns the NETINFO_ITEM pointer if exists. Otherwise

@@ -35,7 +35,7 @@
 class BOARD;
 
 /**
- * GERBER_WRITER is a class mainly used to create Gerber drill files
+ * Used to create Gerber drill files.
  */
 class GERBER_WRITER: public GENDRILL_WRITER_BASE
 {
@@ -60,7 +60,7 @@ public:
      *
      * @param aOffset is the drill coordinates offset.
      */
-    void SetOptions( wxPoint aOffset )
+    void SetOptions( const wxPoint& aOffset )
     {
         m_offset = aOffset;
         m_merge_PTH_NPTH = false;

@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2019-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -64,7 +64,8 @@ class DRC_CONSTRAINT;
 
 
 typedef
-std::function<void( const std::shared_ptr<DRC_ITEM>& aItem, wxPoint aPos )> DRC_VIOLATION_HANDLER;
+std::function<void( const std::shared_ptr<DRC_ITEM>& aItem,
+                    const wxPoint& aPos )> DRC_VIOLATION_HANDLER;
 
 
 /**
@@ -95,9 +96,12 @@ public:
     void SetDrawingSheet( DS_PROXY_VIEW_ITEM* aDrawingSheet ) { m_drawingSheet = aDrawingSheet; }
     DS_PROXY_VIEW_ITEM* GetDrawingSheet() const { return m_drawingSheet; }
 
-    void SetDebugOverlay( std::shared_ptr<KIGFX::VIEW_OVERLAY> aOverlay ) { m_debugOverlay = aOverlay; }
-    std::shared_ptr<KIGFX::VIEW_OVERLAY> GetDebugOverlay() const { return m_debugOverlay; }
+    void SetDebugOverlay( std::shared_ptr<KIGFX::VIEW_OVERLAY> aOverlay )
+    {
+        m_debugOverlay = aOverlay;
+    }
 
+    std::shared_ptr<KIGFX::VIEW_OVERLAY> GetDebugOverlay() const { return m_debugOverlay; }
 
     /**
      * Set an optional DRC violation handler (receives DRC_ITEMs and positions).
@@ -128,14 +132,14 @@ public:
     void SetLogReporter( REPORTER* aReporter ) { m_reporter = aReporter; }
 
     /**
-     * Initializes the DRC engine.
+     * Initialize the DRC engine.
      *
      * @throws PARSE_ERROR if the rules file contains errors
      */
     void InitEngine( const wxFileName& aRulePath );
 
     /**
-     * Runs the DRC tests.
+     * Run the DRC tests.
      */
     void RunTests( EDA_UNITS aUnits,  bool aReportAllTrackErrors, bool aTestFootprints );
 
@@ -154,7 +158,7 @@ public:
 
     bool RulesValid() { return m_rulesValid; }
 
-    void ReportViolation( const std::shared_ptr<DRC_ITEM>& aItem, wxPoint aPos );
+    void ReportViolation( const std::shared_ptr<DRC_ITEM>& aItem, const wxPoint& aPos );
     bool ReportProgress( double aProgress );
     bool ReportPhase( const wxString& aMessage );
     void ReportAux( const wxString& aStr );
@@ -168,7 +172,7 @@ public:
     static bool IsNetADiffPair( BOARD* aBoard, NETINFO_ITEM* aNet, int& aNetP, int& aNetN );
 
     /**
-     * Checks if the given net is a diff pair, returning its polarity and complement if so
+     * Check if the given net is a diff pair, returning its polarity and complement if so
      * @param aNetName is the input net name, like DIFF_P
      * @param aComplementNet will be filled with the complement, like DIFF_N
      * @param aBaseDpName will be filled with the base name, like DIFF
@@ -188,7 +192,7 @@ private:
     }
 
     /**
-     * Loads and parses a rule set from an sexpr text file.
+     * Load and parse a rule set from an sexpr text file.
      *
      * @throws PARSE_ERROR
      */

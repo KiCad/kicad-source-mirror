@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2004-2019 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2014 Dick Hollenbeck, dick@softplc.com
- * Copyright (C) 2017-2020 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2017-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -188,7 +188,6 @@ void DRC_ENGINE::loadImplicitRules()
     DRC_CONSTRAINT silkClearanceConstraint( SILK_CLEARANCE_CONSTRAINT );
     silkClearanceConstraint.Value().SetMin( bds.m_SilkClearance );
     rule->AddConstraint( silkClearanceConstraint );
-
 
     // 2) micro-via specific defaults (new DRC doesn't treat microvias in any special way)
 
@@ -461,6 +460,7 @@ void DRC_ENGINE::loadImplicitRules()
                                  (int) netclassClearanceRules.size() ) );
 }
 
+
 static wxString formatConstraint( const DRC_CONSTRAINT& constraint )
 {
     struct FORMATTER
@@ -523,9 +523,6 @@ static wxString formatConstraint( const DRC_CONSTRAINT& constraint )
 }
 
 
-/**
- * @throws PARSE_ERROR
- */
 void DRC_ENGINE::loadRules( const wxFileName& aPath )
 {
     if( aPath.FileExists() )
@@ -622,9 +619,6 @@ void DRC_ENGINE::compileRules()
 }
 
 
-/**
- * @throws PARSE_ERROR
- */
 void DRC_ENGINE::InitEngine( const wxFileName& aRulePath )
 {
     m_testProviders = DRC_TEST_PROVIDER_REGISTRY::Instance().GetTestProviders();
@@ -1107,7 +1101,7 @@ bool DRC_ENGINE::IsErrorLimitExceeded( int error_code )
 }
 
 
-void DRC_ENGINE::ReportViolation( const std::shared_ptr<DRC_ITEM>& aItem, wxPoint aPos )
+void DRC_ENGINE::ReportViolation( const std::shared_ptr<DRC_ITEM>& aItem, const wxPoint& aPos )
 {
     m_errorLimits[ aItem->GetErrorCode() ] -= 1;
 
@@ -1135,6 +1129,7 @@ void DRC_ENGINE::ReportViolation( const std::shared_ptr<DRC_ITEM>& aItem, wxPoin
                                               aPos.y ) );
     }
 }
+
 
 void DRC_ENGINE::ReportAux ( const wxString& aStr )
 {
@@ -1323,8 +1318,10 @@ bool DRC_ENGINE::IsNetTie( BOARD_ITEM* aItem )
 DRC_TEST_PROVIDER* DRC_ENGINE::GetTestProvider( const wxString& name ) const
 {
     for( auto prov : m_testProviders )
+    {
         if( name == prov->GetName() )
             return prov;
+    }
 
     return nullptr;
 }

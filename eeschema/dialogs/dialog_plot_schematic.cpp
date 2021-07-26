@@ -539,7 +539,7 @@ void DIALOG_PLOT_SCHEMATIC::createDxfFile( bool aPlotAll, bool aPlotDrawingSheet
 bool DIALOG_PLOT_SCHEMATIC::plotOneSheetDxf( const wxString&  aFileName,
                                              SCH_SCREEN*      aScreen,
                                              RENDER_SETTINGS* aRenderSettings,
-                                             wxPoint          aPlotOffset,
+                                             const wxPoint&   aPlotOffset,
                                              double           aScale,
                                              bool             aPlotFrameRef )
 {
@@ -707,7 +707,7 @@ bool DIALOG_PLOT_SCHEMATIC::plotOneSheetHpgl( const wxString&   aFileName,
                                               SCH_SCREEN*       aScreen,
                                               const PAGE_INFO&  aPageInfo,
                                               RENDER_SETTINGS*  aRenderSettings,
-                                              wxPoint           aPlot0ffset,
+                                              const wxPoint&    aPlot0ffset,
                                               double            aScale,
                                               bool              aPlotFrameRef,
                                               HPGL_PLOT_ORIGIN_AND_UNITS aOriginAndUnits )
@@ -1061,7 +1061,7 @@ bool DIALOG_PLOT_SCHEMATIC::plotOneSheetPS( const wxString&     aFileName,
                                             SCH_SCREEN*         aScreen,
                                             RENDER_SETTINGS*    aRenderSettings,
                                             const PAGE_INFO&    aPageInfo,
-                                            wxPoint             aPlot0ffset,
+                                            const wxPoint&      aPlot0ffset,
                                             double              aScale,
                                             bool                aPlotFrameRef )
 {

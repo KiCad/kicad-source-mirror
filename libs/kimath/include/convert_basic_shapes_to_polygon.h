@@ -75,7 +75,7 @@ int ConvertArcToPolyline( SHAPE_LINE_CHAIN& aPolyline, VECTOR2I aCenter, int aRa
  * @param aMinSegCount is the min count of segments to approximate.
  * Default = 0 to do not force a min count.
  */
-void TransformCircleToPolygon( SHAPE_LINE_CHAIN& aCornerBuffer, wxPoint aCenter, int aRadius,
+void TransformCircleToPolygon( SHAPE_LINE_CHAIN& aCornerBuffer, const wxPoint& aCenter, int aRadius,
                                int aError, ERROR_LOC aErrorLoc, int aMinSegCount = 0 );
 
 /**
@@ -89,7 +89,7 @@ void TransformCircleToPolygon( SHAPE_LINE_CHAIN& aCornerBuffer, wxPoint aCenter,
  * @param aMinSegCount is the min count of segments to approximate.
  * Default = 0 to do not force a min count.
  */
-void TransformCircleToPolygon( SHAPE_POLY_SET& aCornerBuffer, wxPoint aCenter, int aRadius,
+void TransformCircleToPolygon( SHAPE_POLY_SET& aCornerBuffer, const wxPoint& aCenter, int aRadius,
                                int aError, ERROR_LOC aErrorLoc, int aMinSegCount = 0 );
 
 
@@ -110,8 +110,9 @@ void TransformCircleToPolygon( SHAPE_POLY_SET& aCornerBuffer, wxPoint aCenter, i
  * @param aMinSegCount is the min count of segments to approximate.
  * Default = 0 to do not force a min count.
  */
-void TransformOvalToPolygon( SHAPE_POLY_SET& aCornerBuffer, wxPoint aStart, wxPoint aEnd,
-                             int aWidth, int aError, ERROR_LOC aErrorLoc, int aMinSegCount = 0 );
+void TransformOvalToPolygon( SHAPE_POLY_SET& aCornerBuffer, const wxPoint& aStart,
+                             const wxPoint& aEnd, int aWidth, int aError, ERROR_LOC aErrorLoc,
+                             int aMinSegCount = 0 );
 
 /**
  * Convert a rectangle or trapezoid to a polygon.
@@ -172,8 +173,9 @@ void TransformRoundChamferedRectToPolygon( SHAPE_POLY_SET& aCornerBuffer,
  * @param aError is the internal units allowed for error in approximation.
  * @param aErrorLoc determines if the approximation error be placed outside or inside the polygon.
  */
-void TransformArcToPolygon( SHAPE_POLY_SET& aCornerBuffer, wxPoint aStart, wxPoint aMid,
-                            wxPoint aEnd, int aWidth, int aError, ERROR_LOC aErrorLoc );
+void TransformArcToPolygon( SHAPE_POLY_SET& aCornerBuffer, const wxPoint& aStart,
+                            const wxPoint& aMid, const wxPoint& aEnd, int aWidth, int aError,
+                            ERROR_LOC aErrorLoc );
 
 /**
  * Convert arcs to multiple straight segments.
@@ -185,7 +187,7 @@ void TransformArcToPolygon( SHAPE_POLY_SET& aCornerBuffer, wxPoint aStart, wxPoi
  * @param aError is the internal units allowed for error in approximation.
  * @param aErrorLoc determines if the approximation error be placed outside or inside the polygon.
  */
-void TransformRingToPolygon( SHAPE_POLY_SET& aCornerBuffer, wxPoint aCentre, int aRadius,
+void TransformRingToPolygon( SHAPE_POLY_SET& aCornerBuffer, const wxPoint& aCentre, int aRadius,
                              int aWidth, int aError, ERROR_LOC aErrorLoc );
 
 #endif     // CONVERT_BASIC_SHAPES_TO_POLYGON_H

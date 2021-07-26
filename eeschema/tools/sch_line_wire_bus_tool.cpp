@@ -358,16 +358,18 @@ int SCH_LINE_WIRE_BUS_TOOL::UnfoldBus( const TOOL_EVENT& aEvent )
 }
 
 
-SCH_LINE* SCH_LINE_WIRE_BUS_TOOL::doUnfoldBus( const wxString& aNet, wxPoint aPos )
+SCH_LINE* SCH_LINE_WIRE_BUS_TOOL::doUnfoldBus( const wxString& aNet, const wxPoint& aPos )
 {
     SCHEMATIC_SETTINGS& cfg = getModel<SCHEMATIC>()->Settings();
 
+    wxPoint pos = aPos;
+
     if( aPos == wxDefaultPosition )
-        aPos = static_cast<wxPoint>( getViewControls()->GetCursorPosition() );
+        pos = static_cast<wxPoint>( getViewControls()->GetCursorPosition() );
 
     m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
 
-    m_busUnfold.entry = new SCH_BUS_WIRE_ENTRY( aPos );
+    m_busUnfold.entry = new SCH_BUS_WIRE_ENTRY( pos );
     m_busUnfold.entry->SetParent( m_frame->GetScreen() );
     m_frame->AddToScreen( m_busUnfold.entry, m_frame->GetScreen() );
 
@@ -378,7 +380,7 @@ SCH_LINE* SCH_LINE_WIRE_BUS_TOOL::doUnfoldBus( const wxString& aNet, wxPoint aPo
     m_busUnfold.label->SetFlags( IS_NEW | IS_MOVING );
 
     m_busUnfold.in_progress = true;
-    m_busUnfold.origin = aPos;
+    m_busUnfold.origin = pos;
     m_busUnfold.net_name = aNet;
 
     getViewControls()->SetCrossHairCursorPosition( m_busUnfold.entry->GetEnd(), false );

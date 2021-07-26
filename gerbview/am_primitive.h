@@ -142,7 +142,7 @@ public:
      */
     void DrawBasicShape( const GERBER_DRAW_ITEM* aParent,
                          SHAPE_POLY_SET& aShapeBuffer,
-                         wxPoint aShapePos );
+                         const wxPoint& aShapePos );
 
 private:
     /**
@@ -189,7 +189,8 @@ struct APERTURE_MACRO
      * @param aParent is the parent #GERBER_DRAW_ITEM which is actually drawn.
      * @return the shape of the item.
      */
-    SHAPE_POLY_SET* GetApertureMacroShape( const GERBER_DRAW_ITEM* aParent, wxPoint aShapePos );
+    SHAPE_POLY_SET* GetApertureMacroShape( const GERBER_DRAW_ITEM* aParent,
+                                           const wxPoint& aShapePos );
 
    /**
      * Draw the primitive shape for flashed items.
@@ -204,7 +205,8 @@ struct APERTURE_MACRO
      * @param aFilledShape set to true to draw in filled mode, false to draw in sketch mode.
      */
     void DrawApertureMacroShape( GERBER_DRAW_ITEM* aParent, EDA_RECT* aClipBox, wxDC* aDC,
-                                 const COLOR4D& aColor, wxPoint aShapePos, bool aFilledShape );
+                                 const COLOR4D& aColor, const wxPoint& aShapePos,
+                                 bool aFilledShape );
 
     /**
      * Calculate a value that can be used to evaluate the size of text when displaying the

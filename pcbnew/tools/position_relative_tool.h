@@ -72,7 +72,7 @@ public:
      * Position the m_position_relative_selection selection relative to anchor position using
      * the given translation.
      */
-    int RelativeItemSelectionMove( wxPoint anchor, wxPoint translation );
+    int RelativeItemSelectionMove( const wxPoint& anchor, const wxPoint& translation );
 
     ///< Set up handlers for various events.
     void setTransitions() override;

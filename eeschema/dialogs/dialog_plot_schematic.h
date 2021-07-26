@@ -112,8 +112,8 @@ private:
     // DXF
     void createDxfFile( bool aPlotAll, bool aPlotDrawingSheet, RENDER_SETTINGS* aRenderSettings );
     bool plotOneSheetDxf( const wxString& aFileName, SCH_SCREEN* aScreen,
-                          RENDER_SETTINGS* aRenderSettings, wxPoint aPlotOffset, double aScale,
-                          bool aPlotFrameRef );
+                          RENDER_SETTINGS* aRenderSettings, const wxPoint& aPlotOffset,
+                          double aScale, bool aPlotFrameRef );
 
     // HPGLGetPlotOriginAndUnits
     HPGL_PLOT_ORIGIN_AND_UNITS getPlotOriginAndUnits()
@@ -155,14 +155,14 @@ private:
     void setHpglPenWidth();
     bool plotOneSheetHpgl( const wxString& aFileName, SCH_SCREEN* aScreen,
                            const PAGE_INFO& aPageInfo, RENDER_SETTINGS* aRenderSettings,
-                           wxPoint aPlot0ffset, double aScale, bool aPlotFrameRef,
+                           const wxPoint& aPlot0ffset, double aScale, bool aPlotFrameRef,
                            HPGL_PLOT_ORIGIN_AND_UNITS aOriginAndUnits );
 
     // PS
     void createPSFile( bool aPlotAll, bool aPlotFrameRef, RENDER_SETTINGS* aSettings );
     bool plotOneSheetPS( const wxString& aFileName, SCH_SCREEN* aScreen,
                          RENDER_SETTINGS* aRenderSettings, const PAGE_INFO& aPageInfo,
-                         wxPoint aPlot0ffset, double aScale, bool aPlotFrameRef );
+                         const wxPoint& aPlot0ffset, double aScale, bool aPlotFrameRef );
 
     // SVG
     void createSVGFile( bool aPlotAll, bool aPlotFrameRef, RENDER_SETTINGS* aSettings );

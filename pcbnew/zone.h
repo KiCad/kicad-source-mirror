@@ -100,6 +100,7 @@ public:
 
         return BOARD_CONNECTED_ITEM::GetNetClassName();
     }
+
     /**
      * Copy aZone data to me
      */
@@ -187,6 +188,7 @@ public:
 
         m_thermalReliefGap = aThermalReliefGap;
     }
+
     int GetThermalReliefGap() const { return m_thermalReliefGap; }
     int GetThermalReliefGap( PAD* aPad, wxString* aSource = nullptr ) const;
 
@@ -197,6 +199,7 @@ public:
 
         m_thermalReliefSpokeWidth = aThermalReliefSpokeWidth;
     }
+
     int GetThermalReliefSpokeWidth() const { return m_thermalReliefSpokeWidth; }
     int GetThermalReliefSpokeWidth( PAD* aPad, wxString* aSource = nullptr ) const;
 
@@ -226,6 +229,7 @@ public:
     {
         return m_fillFlags.count( aLayer ) ? m_fillFlags[ aLayer ] : false;
     }
+
     void SetFillFlag( PCB_LAYER_ID aLayer, bool aFlag ) { m_fillFlags[ aLayer ] = aFlag; }
 
     bool IsFilled() const { return m_isFilled; }
@@ -568,7 +572,7 @@ public:
         return m_Poly->CVertex( index );
     }
 
-    void SetCornerPosition( int aCornerIndex, wxPoint new_pos )
+    void SetCornerPosition( int aCornerIndex, const wxPoint& new_pos )
     {
         SHAPE_POLY_SET::VERTEX_INDEX relativeIndices;
 

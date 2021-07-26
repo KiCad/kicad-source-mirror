@@ -189,7 +189,6 @@ bool AR_AUTOPLACER::fillMatrix()
 
         for( int v = 0; v < outline.PointCount(); v++ )
         {
-
             int seg_startX = outline.CPoint( v ).x;
             int seg_startY = outline.CPoint( v ).y;
             int seg_endX   = outline.CPoint( v + 1 ).x;
@@ -252,6 +251,7 @@ bool AR_AUTOPLACER::fillMatrix()
         {
             int seg_start_x = x_coordinates[ii] - coord_orgin.x;
             int seg_end_x = x_coordinates[ii + 1] - coord_orgin.x;
+
             // Fill cells at y coord = idy,
             // and at x cood >= seg_start_x and <= seg_end_x
 
@@ -263,7 +263,6 @@ bool AR_AUTOPLACER::fillMatrix()
                 if( idx * step >= seg_start_x )
                     m_matrix.SetCell( idy, idx, AR_SIDE_BOTTOM, CELL_IS_ZONE );
             }
-
         }
     }   // End examine segments in one area
 
@@ -286,7 +285,7 @@ void AR_AUTOPLACER::rotateFootprint( FOOTPRINT* aFootprint, double angle, bool i
 }
 
 
-void AR_AUTOPLACER::addFpBody( wxPoint aStart, wxPoint aEnd, LSET aLayerMask )
+void AR_AUTOPLACER::addFpBody( const wxPoint& aStart, const wxPoint& aEnd, LSET aLayerMask )
 {
     // Add a polygonal shape (rectangle) to m_fpAreaFront and/or m_fpAreaBack
     if( aLayerMask[ F_Cu ] )
@@ -307,6 +306,7 @@ void AR_AUTOPLACER::addFpBody( wxPoint aStart, wxPoint aEnd, LSET aLayerMask )
         m_fpAreaBottom.Append( aStart.x, aEnd.y );
     }
 }
+
 
 void AR_AUTOPLACER::addPad( PAD* aPad, int aClearance )
 {
@@ -1021,7 +1021,6 @@ end_of_tst:
 
         if( error == AR_ABORT_PLACEMENT )
             break;
-
 
         bestRotation += initialOrient;
 

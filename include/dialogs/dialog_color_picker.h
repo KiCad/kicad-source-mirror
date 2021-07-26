@@ -172,7 +172,7 @@ private:
      * if Saturation value computed from aMouseCursor is <= 1.0,
      * and false if aMouseCursor is outside this area.
      */
-	bool setHSvaluesFromCursor( wxPoint aMouseCursor );
+	bool setHSvaluesFromCursor( const wxPoint& aMouseCursor );
 
     ///< Event handler for defined color buttons
     void buttColorClick( wxMouseEvent& event );

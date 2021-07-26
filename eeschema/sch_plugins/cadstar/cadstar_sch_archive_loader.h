@@ -121,8 +121,8 @@ private:
     void loadTextVariables();
 
     //Helper Functions for loading sheets
-    void loadSheetAndChildSheets( LAYER_ID aCadstarSheetID, wxPoint aPosition, wxSize aSheetSize,
-            const SCH_SHEET_PATH& aParentSheet );
+    void loadSheetAndChildSheets( LAYER_ID aCadstarSheetID, const wxPoint& aPosition,
+                                  wxSize aSheetSize, const SCH_SHEET_PATH& aParentSheet );
 
     void loadChildSheets( LAYER_ID aCadstarSheetID, const SCH_SHEET_PATH& aSheet );
 
@@ -218,9 +218,9 @@ private:
 
     std::pair<wxPoint, wxSize> getFigureExtentsKiCad( const FIGURE& aCadstarFigure );
 
-    wxPoint getKiCadPoint( wxPoint aCadstarPoint );
+    wxPoint getKiCadPoint( const wxPoint& aCadstarPoint );
 
-    wxPoint getKiCadLibraryPoint( wxPoint aCadstarPoint, wxPoint aCadstarCentre );
+    wxPoint getKiCadLibraryPoint( const wxPoint& aCadstarPoint, const wxPoint& aCadstarCentre );
 
     wxPoint applyTransform( const wxPoint& aPoint, const wxPoint& aMoveVector = { 0, 0 },
             const double& aRotationAngleDeciDeg = 0.0, const double& aScalingFactor = 1.0,
@@ -281,14 +281,14 @@ private:
      * @param aPoint
      * @return Angle in decidegrees of the polar representation of the point, scaled 0..360
      */
-    double getPolarAngle( wxPoint aPoint );
+    double getPolarAngle( const wxPoint& aPoint );
 
     /**
      * @brief
      * @param aPoint
      * @return Radius of polar representation of the point
      */
-    double getPolarRadius( wxPoint aPoint );
+    double getPolarRadius( const wxPoint& aPoint );
 
 }; // CADSTAR_SCH_ARCHIVE_LOADER
 

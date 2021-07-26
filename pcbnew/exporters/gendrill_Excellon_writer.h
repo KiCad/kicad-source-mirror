@@ -86,7 +86,8 @@ public:
      * @param aMerge_PTH_NPTH set to true to create only one file containing PTH and NPTH
      *                        false to create 2 separate files : one for PTH and one for NPTH.
      */
-    void SetOptions( bool aMirror, bool aMinimalHeader, wxPoint aOffset, bool aMerge_PTH_NPTH )
+    void SetOptions( bool aMirror, bool aMinimalHeader, const wxPoint& aOffset,
+                     bool aMerge_PTH_NPTH )
     {
         m_mirror = aMirror;
         m_offset = aOffset;

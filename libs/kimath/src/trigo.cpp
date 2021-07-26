@@ -58,8 +58,8 @@ bool IsPointOnSegment( const wxPoint& aSegStart, const wxPoint& aSegEnd,
 
 
 // Returns true if the segment 1 intersected the segment 2.
-bool SegmentIntersectsSegment( const wxPoint &a_p1_l1, const wxPoint &a_p2_l1,
-                               const wxPoint &a_p1_l2, const wxPoint &a_p2_l2,
+bool SegmentIntersectsSegment( const wxPoint& a_p1_l1, const wxPoint& a_p2_l1,
+                               const wxPoint& a_p1_l2, const wxPoint& a_p2_l2,
                                wxPoint* aIntersectionPoint )
 {
 
@@ -126,7 +126,8 @@ bool SegmentIntersectsSegment( const wxPoint &a_p1_l1, const wxPoint &a_p2_l1,
 }
 
 
-bool TestSegmentHit( const wxPoint &aRefPoint, wxPoint aStart, wxPoint aEnd, int aDist )
+bool TestSegmentHit( const wxPoint& aRefPoint, const wxPoint& aStart, const wxPoint& aEnd,
+                     int aDist )
 {
     int xmin = aStart.x;
     int xmax = aEnd.x;

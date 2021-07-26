@@ -95,15 +95,17 @@ const int seg_per_circle = 64;   // Number of segments to approximate a circle
 
 
 void AM_PRIMITIVE::DrawBasicShape( const GERBER_DRAW_ITEM* aParent, SHAPE_POLY_SET& aShapeBuffer,
-                                   wxPoint aShapePos )
+                                   const wxPoint& aShapePos )
 {
 #define TO_POLY_SHAPE                                                                          \
     {                                                                                          \
         if( polybuffer.size() > 1 )                                                            \
         {                                                                                      \
             aShapeBuffer.NewOutline();                                                         \
+                                                                                               \
             for( unsigned jj = 0; jj < polybuffer.size(); jj++ )                               \
                 aShapeBuffer.Append( polybuffer[jj].x, polybuffer[jj].y );                     \
+                                                                                               \
             aShapeBuffer.Append( polybuffer[0].x, polybuffer[0].y );                           \
         }                                                                                      \
     }
@@ -809,7 +811,7 @@ int AM_PRIMITIVE::GetShapeDim( const GERBER_DRAW_ITEM* aParent )
 
 
 SHAPE_POLY_SET* APERTURE_MACRO::GetApertureMacroShape( const GERBER_DRAW_ITEM* aParent,
-                                                       wxPoint aShapePos )
+                                                       const wxPoint& aShapePos )
 {
     SHAPE_POLY_SET holeBuffer;
     bool hasHole = false;
@@ -858,8 +860,8 @@ SHAPE_POLY_SET* APERTURE_MACRO::GetApertureMacroShape( const GERBER_DRAW_ITEM* a
 
 
 void APERTURE_MACRO::DrawApertureMacroShape( GERBER_DRAW_ITEM* aParent, EDA_RECT* aClipBox,
-                                             wxDC* aDC, const COLOR4D& aColor, wxPoint aShapePos,
-                                             bool aFilledShape )
+                                             wxDC* aDC, const COLOR4D& aColor,
+                                             const wxPoint& aShapePos, bool aFilledShape )
 {
     SHAPE_POLY_SET* shapeBuffer = GetApertureMacroShape( aParent, aShapePos );
 

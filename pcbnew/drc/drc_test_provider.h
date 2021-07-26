@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2018 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2018-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -64,10 +64,10 @@ public:
     }
 };
 
+
 /**
- * DRC_TEST_PROVIDER
- * is a base class that represents a DRC "provider" which runs some DRC functions over a
- * #BOARD and spits out #DRC_ITEMs and positions as needed.
+ * Represent a DRC "provider" which runs some DRC functions over a #BOARD and spits out
+ * #DRC_ITEMs and positions as needed.
  */
 class DRC_TEST_PROVIDER
 {
@@ -82,7 +82,7 @@ public:
     }
 
     /**
-     * Runs this provider against the given PCB with configured options (if any).
+     * Run this provider against the given PCB with configured options (if any).
      */
     virtual bool Run() = 0;
 
@@ -113,7 +113,7 @@ protected:
                              const std::function<bool(BOARD_ITEM*)>& aFunc );
 
     virtual void reportAux( wxString fmt, ... );
-    virtual void reportViolation( std::shared_ptr<DRC_ITEM>& item, wxPoint aMarkerPos );
+    virtual void reportViolation( std::shared_ptr<DRC_ITEM>& item, const wxPoint& aMarkerPos );
     virtual bool reportProgress( int aCount, int aSize, int aDelta );
     virtual bool reportPhase( const wxString& aStageName );
 

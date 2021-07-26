@@ -57,6 +57,6 @@ void BuildConvexHull( std::vector<wxPoint>& aResult, const SHAPE_POLY_SET& aPoly
  * @param aRotation is the rotation of the convex hull.
  */
 void BuildConvexHull( std::vector<wxPoint>& aResult, const SHAPE_POLY_SET& aPolygons,
-                      wxPoint aPosition, double aRotation );
+                      const wxPoint& aPosition, double aRotation );
 
 #endif // __CONVEX_HULL_H

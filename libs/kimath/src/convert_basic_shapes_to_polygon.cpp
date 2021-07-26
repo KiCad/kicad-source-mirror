@@ -39,7 +39,7 @@
 #include <trigo.h>
 
 
-void TransformCircleToPolygon( SHAPE_LINE_CHAIN& aCornerBuffer, wxPoint aCenter, int aRadius,
+void TransformCircleToPolygon( SHAPE_LINE_CHAIN& aCornerBuffer, const wxPoint& aCenter, int aRadius,
                                int aError, ERROR_LOC aErrorLoc, int aMinSegCount )
 {
     wxPoint corner_position;
@@ -78,7 +78,7 @@ void TransformCircleToPolygon( SHAPE_LINE_CHAIN& aCornerBuffer, wxPoint aCenter,
 }
 
 
-void TransformCircleToPolygon( SHAPE_POLY_SET& aCornerBuffer, wxPoint aCenter, int aRadius,
+void TransformCircleToPolygon( SHAPE_POLY_SET& aCornerBuffer, const wxPoint& aCenter, int aRadius,
                                int aError, ERROR_LOC aErrorLoc, int aMinSegCount )
 {
     wxPoint corner_position;
@@ -123,8 +123,9 @@ void TransformCircleToPolygon( SHAPE_POLY_SET& aCornerBuffer, wxPoint aCenter, i
 }
 
 
-void TransformOvalToPolygon( SHAPE_POLY_SET& aCornerBuffer, wxPoint aStart, wxPoint aEnd,
-                             int aWidth, int aError, ERROR_LOC aErrorLoc, int aMinSegCount )
+void TransformOvalToPolygon( SHAPE_POLY_SET& aCornerBuffer, const wxPoint& aStart,
+                             const wxPoint& aEnd, int aWidth, int aError, ERROR_LOC aErrorLoc,
+                             int aMinSegCount )
 {
     // To build the polygonal shape outside the actual shape, we use a bigger
     // radius to build rounded ends.
@@ -479,8 +480,9 @@ int ConvertArcToPolyline( SHAPE_LINE_CHAIN& aPolyline, VECTOR2I aCenter, int aRa
 }
 
 
-void TransformArcToPolygon( SHAPE_POLY_SET& aCornerBuffer, wxPoint aStart, wxPoint aMid,
-                            wxPoint aEnd, int aWidth, int aError, ERROR_LOC aErrorLoc )
+void TransformArcToPolygon( SHAPE_POLY_SET& aCornerBuffer, const wxPoint& aStart,
+                            const wxPoint& aMid, const wxPoint& aEnd, int aWidth,
+                            int aError, ERROR_LOC aErrorLoc )
 {
     SHAPE_ARC        arc( aStart, aMid, aEnd, aWidth );
     // Currentlye have currently 2 algos:
@@ -611,7 +613,7 @@ void TransformArcToPolygon( SHAPE_POLY_SET& aCornerBuffer, wxPoint aStart, wxPoi
 }
 
 
-void TransformRingToPolygon( SHAPE_POLY_SET& aCornerBuffer, wxPoint aCentre, int aRadius,
+void TransformRingToPolygon( SHAPE_POLY_SET& aCornerBuffer, const wxPoint& aCentre, int aRadius,
                              int aWidth, int aError, ERROR_LOC aErrorLoc )
 {
     int inner_radius = aRadius - ( aWidth / 2 );

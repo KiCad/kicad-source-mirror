@@ -219,7 +219,7 @@ void GRLine( EDA_RECT* ClipBox, wxDC* DC, int x1, int y1, int x2, int y2, int wi
 }
 
 
-void GRLine( EDA_RECT* aClipBox, wxDC* aDC, wxPoint aStart, wxPoint aEnd, int aWidth,
+void GRLine( EDA_RECT* aClipBox, wxDC* aDC, const wxPoint& aStart, const wxPoint& aEnd, int aWidth,
              const COLOR4D& aColor, wxPenStyle aStyle )
 {
     GRLine( aClipBox, aDC, aStart.x, aStart.y, aEnd.x, aEnd.y, aWidth, aColor, aStyle );
@@ -359,7 +359,7 @@ void GRCSegm( EDA_RECT* ClipBox, wxDC* DC, int x1, int y1, int x2, int y2, int w
 }
 
 
-void GRCSegm( EDA_RECT* aClipBox, wxDC* aDC, wxPoint aStart, wxPoint aEnd, int aWidth,
+void GRCSegm( EDA_RECT* aClipBox, wxDC* aDC, const wxPoint& aStart, const wxPoint& aEnd, int aWidth,
               const COLOR4D& aColor )
 {
     GRCSegm( aClipBox, aDC, aStart.x, aStart.y, aEnd.x, aEnd.y, aWidth, 0, aColor );
@@ -374,7 +374,7 @@ void GRFillCSegm( EDA_RECT* ClipBox, wxDC* DC, int x1, int y1, int x2, int y2,
 }
 
 
-void GRFilledSegment( EDA_RECT* aClipBox, wxDC* aDC, wxPoint aStart, wxPoint aEnd,
+void GRFilledSegment( EDA_RECT* aClipBox, wxDC* aDC, const wxPoint& aStart, const wxPoint& aEnd,
                       int aWidth, const COLOR4D& aColor )
 {
     GRSetColorPen( aDC, aColor, aWidth );
@@ -565,7 +565,7 @@ void GRCircle( EDA_RECT* ClipBox, wxDC* DC, int x, int y, int r, const COLOR4D& 
 }
 
 
-void GRCircle( EDA_RECT* aClipBox, wxDC* aDC, wxPoint aPos, int aRadius, int aWidth,
+void GRCircle( EDA_RECT* aClipBox, wxDC* aDC, const wxPoint& aPos, int aRadius, int aWidth,
                const COLOR4D& aColor )
 {
     GRCircle( aClipBox, aDC, aPos.x, aPos.y, aRadius, aWidth, aColor );
@@ -584,7 +584,7 @@ void GRFilledCircle( EDA_RECT* ClipBox, wxDC* DC, int x, int y, int r, int width
 }
 
 
-void GRFilledCircle( EDA_RECT* aClipBox, wxDC* aDC, wxPoint aPos, int aRadius,
+void GRFilledCircle( EDA_RECT* aClipBox, wxDC* aDC, const wxPoint& aPos, int aRadius,
                      const COLOR4D& aColor )
 {
     GRFilledCircle( aClipBox, aDC, aPos.x, aPos.y, aRadius, 0, aColor, aColor );
@@ -630,8 +630,8 @@ void GRArc1( EDA_RECT* ClipBox, wxDC* DC, int x1, int y1, int x2, int y2, int xc
 }
 
 
-void GRArc1( EDA_RECT* aClipBox, wxDC* aDC, wxPoint aStart, wxPoint aEnd, wxPoint aCenter,
-             int aWidth, const COLOR4D& aColor )
+void GRArc1( EDA_RECT* aClipBox, wxDC* aDC, const wxPoint& aStart, const wxPoint& aEnd,
+             const wxPoint& aCenter, int aWidth, const COLOR4D& aColor )
 {
     GRArc1( aClipBox, aDC, aStart.x, aStart.y, aEnd.x, aEnd.y, aCenter.x, aCenter.y,
             aWidth, aColor );

@@ -3,9 +3,9 @@
  *
  * Copyright (C) 2012 Jean-Pierre Charras, jean-pierre.charras@ujf-grenoble.fr
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 2011 Wayne Stambaugh <stambaughw@gmail.com>
  *
- * Copyright (C) 1992-2012 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -71,8 +71,7 @@ public:
     }
 
     /**
-     * a callback function to redraw on screen the view after changes,
-     * for instance after moving a footprint
+     * Callback to redraw on screen the view after changes, for instance after moving a footprint.
      */
     void SetRefreshCallback( std::function<int( FOOTPRINT* aFootprint )> aCallback )
     {
@@ -89,8 +88,10 @@ private:
     void rotateFootprint( FOOTPRINT* aFootprint, double angle, bool incremental );
     int genPlacementRoutingMatrix();
 
-    /** fills m_matrix cells from m_boardShape.
-     * cells inside m_boardShape are set to CELL_IS_ZONE
+    /**
+     * Fill m_matrix cells from m_boardShape.
+     *
+     * Cells inside m_boardShape are set to CELL_IS_ZONE.
      */
     bool fillMatrix();
     void genModuleOnRoutingMatrix( FOOTPRINT* aFootprint );
@@ -113,7 +114,7 @@ private:
     const PAD* nearestPad( FOOTPRINT* aRefFP, PAD* aRefPad, const wxPoint& aOffset );
 
     // Add a polygonal shape (rectangle) to m_fpAreaFront and/or m_fpAreaBack
-    void addFpBody( wxPoint aStart, wxPoint aEnd, LSET aLayerMask );
+    void addFpBody( const wxPoint& aStart, const wxPoint& aEnd, LSET aLayerMask );
 
     // Add a polygonal shape (rectangle) to m_fpAreaFront and/or m_fpAreaBack
     void addPad( PAD* aPad, int aClearance );
@@ -126,8 +127,10 @@ private:
     SHAPE_POLY_SET m_topFreeArea;       // The polygonal description of the top side free areas;
     SHAPE_POLY_SET m_bottomFreeArea;    // The polygonal description of the bottom side free areas;
     SHAPE_POLY_SET m_boardShape;        // The polygonal description of the board;
-    SHAPE_POLY_SET m_fpAreaTop;         // The polygonal description of the footprint to place, top side;
-    SHAPE_POLY_SET m_fpAreaBottom;      // The polygonal description of the footprint to place, bottom side;
+    SHAPE_POLY_SET m_fpAreaTop;         // The polygonal description of the footprint to place,
+                                        // top side;
+    SHAPE_POLY_SET m_fpAreaBottom;      // The polygonal description of the footprint to place,
+                                        // bottom side;
 
     BOARD* m_board;
 

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015 John Beard, john.j.beard@gmail.com
- * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -49,7 +49,7 @@ public:
      * @param aOrigPos original item position (used for computing the circular array radius)
      */
     DIALOG_CREATE_ARRAY( PCB_BASE_FRAME* aParent, std::unique_ptr<ARRAY_OPTIONS>& aOptions,
-            bool enableNumbering, wxPoint aOrigPos );
+                         bool enableNumbering, const wxPoint& aOrigPos );
 
 private:
     // Event callbacks

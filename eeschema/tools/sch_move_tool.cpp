@@ -525,7 +525,7 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
 }
 
 
-void SCH_MOVE_TOOL::getConnectedDragItems( SCH_ITEM* aOriginalItem, wxPoint aPoint,
+void SCH_MOVE_TOOL::getConnectedDragItems( SCH_ITEM* aOriginalItem, const wxPoint& aPoint,
                                            EDA_ITEMS& aList )
 {
     EE_RTREE&         items = m_frame->GetScreen()->Items();
