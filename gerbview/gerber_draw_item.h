@@ -192,7 +192,8 @@ public:
     /**
      * Print the polygon stored in m_PolyCorners.
      */
-    void PrintGerberPoly( wxDC* aDC, COLOR4D aColor, const wxPoint& aOffset, bool aFilledShape );
+    void PrintGerberPoly( wxDC* aDC, const COLOR4D& aColor, const wxPoint& aOffset,
+                          bool aFilledShape );
 
     int Shape() const { return m_Shape; }
 

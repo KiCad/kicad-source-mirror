@@ -82,7 +82,7 @@ COLOR4D BRDITEMS_PLOTTER::getColor( LAYER_NUM aLayer ) const
 }
 
 
-void BRDITEMS_PLOTTER::PlotPad( const PAD* aPad, COLOR4D aColor, OUTLINE_MODE aPlotMode )
+void BRDITEMS_PLOTTER::PlotPad( const PAD* aPad, const COLOR4D& aColor, OUTLINE_MODE aPlotMode )
 {
     wxPoint shape_pos = aPad->ShapePos();
     GBR_METADATA gbr_metadata;
@@ -364,12 +364,14 @@ void BRDITEMS_PLOTTER::PlotBoardGraphicItems()
     }
 }
 
-void BRDITEMS_PLOTTER::PlotFootprintTextItem( const FP_TEXT* aTextMod, COLOR4D aColor )
+void BRDITEMS_PLOTTER::PlotFootprintTextItem( const FP_TEXT* aTextMod, const COLOR4D& aColor )
 {
-    if( aColor == COLOR4D::WHITE )
-        aColor = COLOR4D( LIGHTGRAY );
+    COLOR4D color = aColor;
 
-    m_plotter->SetColor( aColor );
+    if( aColor == COLOR4D::WHITE )
+        color = COLOR4D( LIGHTGRAY );
+
+    m_plotter->SetColor( color );
 
     // calculate some text parameters :
     wxSize  size      = aTextMod->GetTextSize();

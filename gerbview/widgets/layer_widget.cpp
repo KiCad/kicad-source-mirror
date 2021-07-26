@@ -91,6 +91,7 @@ void LAYER_WIDGET::OnLeftDownLayers( wxMouseEvent& event )
         int height = 0;
 
         int rowCount = GetLayerRowCount();
+
         for( row = 0;  row<rowCount;  ++row )
         {
             if( y < height + heights[row] )
@@ -120,7 +121,8 @@ void LAYER_WIDGET::OnLeftDownLayers( wxMouseEvent& event )
 }
 
 
-void LAYER_WIDGET::OnRightDownLayer( wxMouseEvent& aEvent, COLOR_SWATCH* aColorSwatch, const wxString& aLayerName )
+void LAYER_WIDGET::OnRightDownLayer( wxMouseEvent& aEvent, COLOR_SWATCH* aColorSwatch,
+                                     const wxString& aLayerName )
 {
     wxMenu menu;
 
@@ -131,13 +133,17 @@ void LAYER_WIDGET::OnRightDownLayer( wxMouseEvent& aEvent, COLOR_SWATCH* aColorS
 
     OnLayerRightClick( menu );
 
-    menu.Bind( wxEVT_COMMAND_MENU_SELECTED, [aColorSwatch]( wxCommandEvent& event ) {
-        if ( event.GetId() == ID_CHANGE_LAYER_COLOR ) {
-            aColorSwatch->GetNewSwatchColor();
-        } else {
-            event.Skip();
-        }
-    } );
+    menu.Bind( wxEVT_COMMAND_MENU_SELECTED, [aColorSwatch]( wxCommandEvent& event )
+                                            {
+                                                if( event.GetId() == ID_CHANGE_LAYER_COLOR )
+                                                {
+                                                    aColorSwatch->GetNewSwatchColor();
+                                                }
+                                                else
+                                                {
+                                                    event.Skip();
+                                                }
+                                            } );
 
     PopupMenu( &menu );
     passOnFocus();
@@ -170,7 +176,8 @@ void LAYER_WIDGET::OnLayerCheckBox( wxCommandEvent& event )
 }
 
 
-void LAYER_WIDGET::OnRightDownRender( wxMouseEvent& aEvent, COLOR_SWATCH* aColorSwatch, const wxString& aRenderName )
+void LAYER_WIDGET::OnRightDownRender( wxMouseEvent& aEvent, COLOR_SWATCH* aColorSwatch,
+                                      const wxString& aRenderName )
 {
     wxMenu menu;
 
@@ -424,7 +431,7 @@ void LAYER_WIDGET::insertRenderRow( int aRow, const ROW& aSpec )
     {
         col = 1;
         cb = new wxCheckBox( m_RenderScrolledWindow, encodeId( col, aSpec.id ),
-                            aSpec.rowName, wxDefaultPosition, wxDefaultSize, wxALIGN_LEFT );
+                             aSpec.rowName, wxDefaultPosition, wxDefaultSize, wxALIGN_LEFT );
         shrinkFont( cb, m_PointSize );
         cb->SetValue( aSpec.state );
         cb->Enable( aSpec.changeable );
@@ -434,6 +441,7 @@ void LAYER_WIDGET::insertRenderRow( int aRow, const ROW& aSpec )
 
     // column 0
     col = 0;
+
     if( aSpec.color != COLOR4D::UNSPECIFIED )
     {
         auto bmb = new COLOR_SWATCH( m_RenderScrolledWindow, aSpec.color, encodeId( col, aSpec.id ),
@@ -759,7 +767,7 @@ bool LAYER_WIDGET::IsLayerVisible( LAYER_NUM aLayer )
 }
 
 
-void LAYER_WIDGET::SetLayerColor( LAYER_NUM aLayer, COLOR4D aColor )
+void LAYER_WIDGET::SetLayerColor( LAYER_NUM aLayer, const COLOR4D& aColor )
 {
     int row = findLayerRow( aLayer );
 
@@ -881,7 +889,7 @@ class MYFRAME : public wxFrame
         {
         }
 
-        void OnLayerColorChange( int aLayer, COLOR4D aColor )
+        void OnLayerColorChange( int aLayer, const COLOR4D& aColor )
         {
             /* a test trigger only
             if( aLayer == 2 )
@@ -900,7 +908,7 @@ class MYFRAME : public wxFrame
         {
         }
 
-        void OnRenderColorChange( int aId, COLOR4D aColor )
+        void OnRenderColorChange( int aId, const COLOR4D& aColor )
         {
         }
 

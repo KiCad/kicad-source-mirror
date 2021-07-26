@@ -148,9 +148,9 @@ public:
     COLOR4D GetGridColor() override;
 
     /**
-     * @param aColor the new color of the grid.
+     * @param[in] aColor the new color of the grid.
      */
-    void SetGridColor( COLOR4D aColor ) override;
+    void SetGridColor( const COLOR4D& aColor ) override;
 
     // Configurations:
     void Process_Config( wxCommandEvent& event );

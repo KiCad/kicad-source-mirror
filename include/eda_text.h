@@ -266,7 +266,7 @@ public:
      * @param aDisplay_mode #FILLED or #SKETCH.
      */
     void Print( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset,
-                COLOR4D aColor, OUTLINE_MODE aDisplay_mode = FILLED );
+                const COLOR4D& aColor, OUTLINE_MODE aDisplay_mode = FILLED );
 
     /**
      * Convert the text shape to a list of segment.

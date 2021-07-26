@@ -646,7 +646,7 @@ void GERBER_DRAW_ITEM::ConvertSegmentToPolygon()
 }
 
 
-void GERBER_DRAW_ITEM::PrintGerberPoly( wxDC* aDC, COLOR4D aColor, const wxPoint& aOffset,
+void GERBER_DRAW_ITEM::PrintGerberPoly( wxDC* aDC, const COLOR4D& aColor, const wxPoint& aOffset,
                                         bool aFilledShape )
 {
     std::vector<wxPoint> points;

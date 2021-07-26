@@ -858,7 +858,7 @@ SHAPE_POLY_SET* APERTURE_MACRO::GetApertureMacroShape( const GERBER_DRAW_ITEM* a
 
 
 void APERTURE_MACRO::DrawApertureMacroShape( GERBER_DRAW_ITEM* aParent, EDA_RECT* aClipBox,
-                                             wxDC* aDC, COLOR4D aColor, wxPoint aShapePos,
+                                             wxDC* aDC, const COLOR4D& aColor, wxPoint aShapePos,
                                              bool aFilledShape )
 {
     SHAPE_POLY_SET* shapeBuffer = GetApertureMacroShape( aParent, aShapePos );

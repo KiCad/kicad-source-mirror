@@ -2,7 +2,7 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright 2012 Torsten Hueter, torstenhtr <at> gmx.de
- * Copyright 2017-2019 Kicad Developers, see AUTHORS.txt for contributors.
+ * Copyright 2017-2021 Kicad Developers, see AUTHORS.txt for contributors.
  *
  *
  * This program is free software; you can redistribute it and/or
@@ -108,88 +108,85 @@ COLOR4D::COLOR4D( EDA_COLOR_T aColor )
 
 
 #ifdef WX_COMPATIBILITY
-    COLOR4D::COLOR4D( const wxColour& aColor )
+COLOR4D::COLOR4D( const wxColour& aColor )
+{
+    r = aColor.Red() / 255.0;
+    g = aColor.Green() / 255.0;
+    b = aColor.Blue() / 255.0;
+    a = aColor.Alpha() / 255.0;
+}
+
+
+bool COLOR4D::SetFromWxString( const wxString& aColorString )
+{
+    wxColour c;
+
+    if( c.Set( aColorString ) )
     {
-        r = aColor.Red() / 255.0;
-        g = aColor.Green() / 255.0;
-        b = aColor.Blue() / 255.0;
-        a = aColor.Alpha() / 255.0;
-    }
-
-
-    bool COLOR4D::SetFromWxString( const wxString& aColorString )
-    {
-        wxColour c;
-
-        if( c.Set( aColorString ) )
-        {
-            r = c.Red() / 255.0;
-            g = c.Green() / 255.0;
-            b = c.Blue() / 255.0;
-            a = c.Alpha() / 255.0;
-
-            return true;
-        }
-
-        return false;
-    }
-
-
-    wxString COLOR4D::ToWxString( long flags ) const
-    {
-        wxColour c = ToColour();
-        return c.GetAsString( flags );
-    }
-
-
-    wxColour COLOR4D::ToColour() const
-    {
-        using CHAN_T = wxColourBase::ChannelType;
-
-        const wxColour colour(
-            static_cast<CHAN_T>( r * 255 + 0.5 ),
-            static_cast<CHAN_T>( g * 255 + 0.5 ),
-            static_cast<CHAN_T>( b * 255 + 0.5 ),
-            static_cast<CHAN_T>( a * 255 + 0.5 )
-        );
-        return colour;
-    }
-
-
-    COLOR4D COLOR4D::LegacyMix( COLOR4D aColor ) const
-    {
-        COLOR4D candidate;
-
-        // Blend the two colors (i.e. OR the RGB values)
-        candidate.r = ( (unsigned)( 255.0 * r ) | (unsigned)( 255.0 * aColor.r ) ) / 255.0,
-        candidate.g = ( (unsigned)( 255.0 * g ) | (unsigned)( 255.0 * aColor.g ) ) / 255.0,
-        candidate.b = ( (unsigned)( 255.0 * b ) | (unsigned)( 255.0 * aColor.b ) ) / 255.0,
-
-        // the alpha channel can be reinitialized
-        // but what is the best value?
-        candidate.a = ( aColor.a + a ) / 2;
-
-        return candidate;
-    }
-
-
-    unsigned int COLOR4D::ToU32() const
-    {
-        return ToColour().GetRGB();
-    }
-
-
-    void COLOR4D::FromU32( unsigned int aPackedColor )
-    {
-        wxColour c;
-        c.SetRGB( aPackedColor );
         r = c.Red() / 255.0;
         g = c.Green() / 255.0;
         b = c.Blue() / 255.0;
         a = c.Alpha() / 255.0;
+
+        return true;
     }
 
+    return false;
+}
+
+
+wxString COLOR4D::ToWxString( long flags ) const
+{
+    wxColour c = ToColour();
+    return c.GetAsString( flags );
+}
+
+
+wxColour COLOR4D::ToColour() const
+{
+    using CHAN_T = wxColourBase::ChannelType;
+
+    const wxColour colour(
+            static_cast<CHAN_T>( r * 255 + 0.5 ), static_cast<CHAN_T>( g * 255 + 0.5 ),
+            static_cast<CHAN_T>( b * 255 + 0.5 ), static_cast<CHAN_T>( a * 255 + 0.5 ) );
+    return colour;
+}
+
+
+COLOR4D COLOR4D::LegacyMix( const COLOR4D& aColor ) const
+{
+    COLOR4D candidate;
+
+    // Blend the two colors (i.e. OR the RGB values)
+    candidate.r = ( (unsigned) ( 255.0 * r ) | (unsigned) ( 255.0 * aColor.r ) ) / 255.0,
+    candidate.g = ( (unsigned) ( 255.0 * g ) | (unsigned) ( 255.0 * aColor.g ) ) / 255.0,
+    candidate.b = ( (unsigned) ( 255.0 * b ) | (unsigned) ( 255.0 * aColor.b ) ) / 255.0,
+
+    // the alpha channel can be reinitialized but what is the best value?
+    candidate.a = ( aColor.a + a ) / 2;
+
+    return candidate;
+}
+
+
+unsigned int COLOR4D::ToU32() const
+{
+    return ToColour().GetRGB();
+}
+
+
+void COLOR4D::FromU32( unsigned int aPackedColor )
+{
+    wxColour c;
+    c.SetRGB( aPackedColor );
+    r = c.Red() / 255.0;
+    g = c.Green() / 255.0;
+    b = c.Blue() / 255.0;
+    a = c.Alpha() / 255.0;
+}
+
 #endif
+
 
 namespace KIGFX {
 
@@ -203,6 +200,7 @@ const bool operator!=( const COLOR4D& lhs, const COLOR4D& rhs )
 {
     return !( lhs == rhs );
 }
+
 
 const bool operator<( const COLOR4D& lhs, const COLOR4D& rhs )
 {
@@ -218,10 +216,12 @@ const bool operator<( const COLOR4D& lhs, const COLOR4D& rhs )
     return false;
 }
 
+
 std::ostream &operator<<( std::ostream &aStream, COLOR4D const &aColor )
 {
     return aStream << aColor.ToWxString( wxC2S_CSS_SYNTAX );
 }
+
 
 void to_json( nlohmann::json& aJson, const COLOR4D& aColor )
 {
@@ -309,7 +309,8 @@ void COLOR4D::FromHSL( double aInHue, double aInSaturation, double aInLightness 
 }
 
 
-void COLOR4D::ToHSV( double& aOutHue, double& aOutSaturation, double& aOutValue, bool aAlwaysDefineHue ) const
+void COLOR4D::ToHSV( double& aOutHue, double& aOutSaturation, double& aOutValue,
+                     bool aAlwaysDefineHue ) const
 {
     double min, max, delta;
 
@@ -450,6 +451,7 @@ COLOR4D& COLOR4D::Saturate( double aFactor )
     return *this;
 }
 
+
 const COLOR4D COLOR4D::UNSPECIFIED( 0, 0, 0, 0 );
 const COLOR4D COLOR4D::WHITE( 1, 1, 1, 1 );
 const COLOR4D COLOR4D::BLACK( 0, 0, 0, 1 );
@@ -477,9 +479,9 @@ EDA_COLOR_T COLOR4D::FindNearestLegacyColor( int aR, int aG, int aB )
             trying = static_cast<EDA_COLOR_T>( int( trying ) + 1 ) )
     {
         const StructColors &c = colorRefs()[trying];
-        int distance = (aR - c.m_Red) * (aR - c.m_Red) +
-                       (aG - c.m_Green) * (aG - c.m_Green) +
-                       (aB - c.m_Blue) * (aB - c.m_Blue);
+        int distance = ( aR - c.m_Red ) * ( aR - c.m_Red ) +
+                       ( aG - c.m_Green ) * ( aG - c.m_Green ) +
+                       ( aB - c.m_Blue ) * ( aB - c.m_Blue );
 
         if( distance < nearest_distance && c.m_Red >= aR &&
             c.m_Green >= aG && c.m_Blue >= aB )
@@ -491,6 +493,7 @@ EDA_COLOR_T COLOR4D::FindNearestLegacyColor( int aR, int aG, int aB )
 
     return candidate;
 }
+
 
 COLOR4D& COLOR4D::FromCSSRGBA( int aRed, int aGreen, int aBlue, double aAlpha )
 {

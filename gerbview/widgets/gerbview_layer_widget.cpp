@@ -242,7 +242,7 @@ void GERBER_LAYER_WIDGET::OnLayerRightClick( wxMenu& aMenu )
 }
 
 
-void GERBER_LAYER_WIDGET::OnLayerColorChange( int aLayer, COLOR4D aColor )
+void GERBER_LAYER_WIDGET::OnLayerColorChange( int aLayer, const COLOR4D& aColor )
 {
     // NOTE: Active layer in GerbView is stored as 0-indexed, but layer color is
     //       stored according to the GERBER_DRAW_LAYER() offset.
@@ -297,7 +297,7 @@ void GERBER_LAYER_WIDGET::OnLayerVisible( int aLayer, bool isVisible, bool isFin
 }
 
 
-void GERBER_LAYER_WIDGET::OnRenderColorChange( int aId, COLOR4D aColor )
+void GERBER_LAYER_WIDGET::OnRenderColorChange( int aId, const COLOR4D& aColor )
 {
     m_frame->SetVisibleElementColor( aId, aColor );
 

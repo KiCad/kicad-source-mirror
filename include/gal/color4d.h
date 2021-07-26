@@ -165,7 +165,7 @@ public:
      *
      * @param aColor The color to mix with this one
      */
-    COLOR4D LegacyMix( COLOR4D aColor ) const;
+    COLOR4D LegacyMix( const COLOR4D& aColor ) const;
 
     /**
      * Packs the color into an unsigned int for compatibility with legacy canvas.

@@ -994,7 +994,7 @@ COLOR4D PCB_EDIT_FRAME::GetGridColor()
 }
 
 
-void PCB_EDIT_FRAME::SetGridColor( COLOR4D aColor )
+void PCB_EDIT_FRAME::SetGridColor( const COLOR4D& aColor )
 {
 
     GetColorSettings()->SetColor( LAYER_GRID, aColor );

@@ -127,7 +127,7 @@ int GraphicTextWidth( const wxString& aText, const wxSize& aSize, bool aItalic, 
  *  @param aPlotter is a PLOTTER instance, when this function is used to plot
  *                  the text. NULL to draw this text.
  */
-void GRText( wxDC* aDC, const wxPoint& aPos, COLOR4D aColor, const wxString& aText,
+void GRText( wxDC* aDC, const wxPoint& aPos, const COLOR4D& aColor, const wxString& aText,
              double aOrient, const wxSize& aSize, enum EDA_TEXT_HJUSTIFY_T aH_justify,
              enum EDA_TEXT_VJUSTIFY_T aV_justify, int aWidth, bool aItalic, bool aBold,
              void (* aCallback)( int x0, int y0, int xf, int yf, void* aData ),
@@ -171,28 +171,31 @@ void GRText( wxDC* aDC, const wxPoint& aPos, COLOR4D aColor, const wxString& aTe
 }
 
 
-void GRHaloText( wxDC* aDC, const wxPoint &aPos, COLOR4D aBgColor, COLOR4D aColor1,
-                 COLOR4D aColor2, const wxString &aText, double aOrient, const wxSize &aSize,
+void GRHaloText( wxDC* aDC, const wxPoint &aPos, const COLOR4D& aBgColor, const COLOR4D& aColor1,
+                 const COLOR4D& aColor2, const wxString &aText, double aOrient, const wxSize &aSize,
                  enum EDA_TEXT_HJUSTIFY_T aH_justify, enum EDA_TEXT_VJUSTIFY_T aV_justify,
                  int aWidth, bool aItalic, bool aBold,
                  void (*aCallback)( int x0, int y0, int xf, int yf, void* aData ),
                  void* aCallbackData, PLOTTER * aPlotter )
 {
+    COLOR4D color1 = aColor1;
+    COLOR4D color2 = aColor2;
+
     // Swap color if contrast would be better
     // TODO: Maybe calculate contrast some way other than brightness
     if( aBgColor.GetBrightness() > 0.5 )
     {
-        COLOR4D c = aColor1;
-        aColor1 = aColor2;
-        aColor2 = c;
+        COLOR4D c = color1;
+        color1 = color2;
+        color2 = c;
     }
 
     // Draw the background
-    GRText( aDC, aPos, aColor1, aText, aOrient, aSize, aH_justify, aV_justify, aWidth, aItalic,
+    GRText( aDC, aPos, color1, aText, aOrient, aSize, aH_justify, aV_justify, aWidth, aItalic,
             aBold, aCallback, aCallbackData, aPlotter );
 
     // Draw the text
-    GRText( aDC, aPos, aColor2, aText, aOrient, aSize, aH_justify, aV_justify, aWidth/4, aItalic,
+    GRText( aDC, aPos, color2, aText, aOrient, aSize, aH_justify, aV_justify, aWidth / 4, aItalic,
             aBold, aCallback, aCallbackData, aPlotter );
 }
 

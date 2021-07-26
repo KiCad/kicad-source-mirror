@@ -45,7 +45,8 @@ bool LAYER_SELECTOR::SetLayersHotkeys( bool value )
 }
 
 
-void LAYER_SELECTOR::DrawColorSwatch( wxBitmap& aLayerbmp, COLOR4D aBackground, COLOR4D aColor )
+void LAYER_SELECTOR::DrawColorSwatch( wxBitmap& aLayerbmp, const COLOR4D& aBackground,
+                                      const COLOR4D& aColor )
 {
     wxMemoryDC bmpDC;
     wxBrush    brush;

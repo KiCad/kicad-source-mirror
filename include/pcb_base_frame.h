@@ -2,8 +2,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2008-2016 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2008-2016 Wayne Stambaugh <stambaughw@gmail.com>
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -170,7 +170,7 @@ public:
 
     PCBNEW_SETTINGS& Settings() { return *m_settings; }
 
-    void SetDrawBgColor( COLOR4D aColor ) override;
+    void SetDrawBgColor( const COLOR4D& aColor ) override;
 
     /**
      * Display options control the way tracks, vias, outlines and other things are shown
@@ -332,7 +332,8 @@ public:
      * @param aItemsList is the list of items modified by the command to undo.
      * @param aTypeCommand is the command type (see enum #UNDO_REDO)
      */
-    virtual void SaveCopyInUndoList( const PICKED_ITEMS_LIST& aItemsList, UNDO_REDO aTypeCommand ) = 0;
+    virtual void SaveCopyInUndoList( const PICKED_ITEMS_LIST& aItemsList,
+                                     UNDO_REDO aTypeCommand ) = 0;
 
 
     /**

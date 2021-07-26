@@ -546,7 +546,7 @@ SFVEC4F BOARD_ADAPTER::GetItemColor( int aItemId ) const
 }
 
 
-SFVEC4F BOARD_ADAPTER::GetColor( COLOR4D aColor ) const
+SFVEC4F BOARD_ADAPTER::GetColor( const COLOR4D& aColor ) const
 {
     return SFVEC4F( aColor.r, aColor.g, aColor.b, aColor.a );
 }

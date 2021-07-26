@@ -92,9 +92,9 @@ public:
         bool        spacer;       ///< if true, this row is a spacer
         COLOR4D     defaultColor; ///< The default color for the row
 
-        ROW( const wxString& aRowName, int aId, COLOR4D aColor = COLOR4D::UNSPECIFIED,
+        ROW( const wxString& aRowName, int aId, const COLOR4D& aColor = COLOR4D::UNSPECIFIED,
              const wxString& aTooltip = wxEmptyString, bool aState = true,
-             bool aChangeable = true, COLOR4D aDefaultColor = COLOR4D::UNSPECIFIED )
+             bool aChangeable = true, const COLOR4D& aDefaultColor = COLOR4D::UNSPECIFIED )
         {
             rowName = aRowName;
             id      = aId;
@@ -238,7 +238,7 @@ public:
     /**
      * Change the color of \a aLayer
      */
-    void SetLayerColor( LAYER_NUM aLayer, COLOR4D aColor );
+    void SetLayerColor( LAYER_NUM aLayer, const COLOR4D& aColor );
 
     /**
      * Return the color of the layer ROW associated with \a aLayer id.
@@ -299,7 +299,7 @@ public:
      * @param aLayer is the board layer to change.
      * @param aColor is the new color.
      */
-    virtual void OnLayerColorChange( int aLayer, COLOR4D aColor ) = 0;
+    virtual void OnLayerColorChange( int aLayer, const COLOR4D& aColor ) = 0;
 
     /**
      * Notify client code whenever the user selects a different layer.
@@ -335,7 +335,7 @@ public:
      *            function.
      * @param aColor is the new color.
      */
-    virtual void OnRenderColorChange( int aId, COLOR4D aColor ) = 0;
+    virtual void OnRenderColorChange( int aId, const COLOR4D& aColor ) = 0;
 
     /**
      * Notify client code whenever the user changes an rendering enable in one of the rendering

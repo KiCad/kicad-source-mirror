@@ -204,7 +204,7 @@ struct APERTURE_MACRO
      * @param aFilledShape set to true to draw in filled mode, false to draw in sketch mode.
      */
     void DrawApertureMacroShape( GERBER_DRAW_ITEM* aParent, EDA_RECT* aClipBox, wxDC* aDC,
-                                 COLOR4D aColor, wxPoint aShapePos, bool aFilledShape );
+                                 const COLOR4D& aColor, wxPoint aShapePos, bool aFilledShape );
 
     /**
      * Calculate a value that can be used to evaluate the size of text when displaying the

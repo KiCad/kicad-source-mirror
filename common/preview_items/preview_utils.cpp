@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
- * Copyright (C) 2019 Kicad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2021 Kicad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -105,7 +105,7 @@ KIGFX::PREVIEW::TEXT_DIMS KIGFX::PREVIEW::SetConstantGlyphHeight( KIGFX::GAL* aG
 }
 
 
-KIGFX::COLOR4D KIGFX::PREVIEW::GetShadowColor(class KIGFX::COLOR4D aColor)
+KIGFX::COLOR4D KIGFX::PREVIEW::GetShadowColor( const KIGFX::COLOR4D& aColor )
 {
     if( aColor.GetBrightness() > 0.5 )
         return COLOR4D::BLACK;

@@ -155,10 +155,10 @@ public:
      */
     COLOR4D GetVisibleElementColor( int aLayerID );
 
-    void SetVisibleElementColor( int aLayerID, COLOR4D aColor );
+    void SetVisibleElementColor( int aLayerID, const COLOR4D& aColor );
 
     COLOR4D GetLayerColor( int aLayer ) const;
-    void SetLayerColor( int aLayer, COLOR4D aColor );
+    void SetLayerColor( int aLayer, const COLOR4D& aColor );
 
     /**
      * This is usually the background color, but can be another color in order to see
@@ -456,7 +456,7 @@ public:
     COLOR4D GetGridColor() override;
 
     ///< @copydoc EDA_DRAW_FRAME::SetGridColor()
-    virtual void SetGridColor( COLOR4D aColor ) override;
+    virtual void SetGridColor( const COLOR4D& aColor ) override;
 
     const BOX2I GetDocumentExtents( bool aIncludeAllVisible = true ) const override
     {

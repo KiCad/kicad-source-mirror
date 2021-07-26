@@ -76,7 +76,7 @@ public:
 
     COLOR4D GetDefaultColor( int aLayer );
 
-    void SetColor( int aLayer, COLOR4D aColor );
+    void SetColor( int aLayer, const COLOR4D& aColor );
 
     const wxString& GetName() const { return m_displayName; }
     void SetName( const wxString& aName ) { m_displayName = aName; }

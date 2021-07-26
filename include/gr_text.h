@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2009-2014 Jerry Jacobs
- * Copyright (C) 1992-2020 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -110,7 +110,7 @@ int GraphicTextWidth( const wxString& aText, const wxSize& aSize, bool italic, b
  *  @param aPlotter = a pointer to a PLOTTER instance, when this function is used to plot
  *                    the text. NULL to draw this text.
  */
-void GRText( wxDC* aDC, const wxPoint& aPos, COLOR4D aColor, const wxString& aText,
+void GRText( wxDC* aDC, const wxPoint& aPos, const COLOR4D& aColor, const wxString& aText,
              double aOrient, const wxSize& aSize, enum EDA_TEXT_HJUSTIFY_T aH_justify,
              enum EDA_TEXT_VJUSTIFY_T aV_justify, int aWidth, bool aItalic, bool aBold,
              void (*aCallback)( int x0, int y0, int xf, int yf, void* aData ) = nullptr,
@@ -123,8 +123,8 @@ void GRText( wxDC* aDC, const wxPoint& aPos, COLOR4D aColor, const wxString& aTe
  * See GRText for most of the parameters.  If \a aBgColor is a dark color text is drawn
  * in \a aColor2 with \a aColor1 border.  Otherwise colors are swapped.
  */
-void GRHaloText( wxDC* aDC, const wxPoint& aPos, COLOR4D aBgColor, COLOR4D aColor1,
-                 COLOR4D aColor2, const wxString& aText, double aOrient, const wxSize &aSize,
+void GRHaloText( wxDC* aDC, const wxPoint& aPos, const COLOR4D& aBgColor, const COLOR4D& aColor1,
+                 const COLOR4D& aColor2, const wxString& aText, double aOrient, const wxSize &aSize,
                  enum EDA_TEXT_HJUSTIFY_T aH_justify, enum EDA_TEXT_VJUSTIFY_T aV_justify,
                  int aWidth, bool aItalic, bool aBold,
                  void (*aCallback)( int x0, int y0, int xf, int yf, void* aData ) = nullptr,

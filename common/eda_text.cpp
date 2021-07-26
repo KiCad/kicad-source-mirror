@@ -405,7 +405,7 @@ bool EDA_TEXT::TextHitTest( const EDA_RECT& aRect, bool aContains, int aAccuracy
 
 
 void EDA_TEXT::Print( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset,
-                      COLOR4D aColor, OUTLINE_MODE aFillMode )
+                      const COLOR4D& aColor, OUTLINE_MODE aFillMode )
 {
     if( IsMultilineAllowed() )
     {

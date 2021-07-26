@@ -755,7 +755,7 @@ void GERBVIEW_FRAME::SetGridVisibility( bool aVisible )
 }
 
 
-void GERBVIEW_FRAME::SetVisibleElementColor( int aLayerID, COLOR4D aColor )
+void GERBVIEW_FRAME::SetVisibleElementColor( int aLayerID, const COLOR4D& aColor )
 {
     COLOR_SETTINGS* settings = Pgm().GetSettingsManager().GetColorSettings();
 
@@ -768,6 +768,7 @@ void GERBVIEW_FRAME::SetVisibleElementColor( int aLayerID, COLOR4D aColor )
 
     case LAYER_GERBVIEW_DRAWINGSHEET:
         settings->SetColor( LAYER_GERBVIEW_DRAWINGSHEET, aColor );
+
         // LAYER_DRAWINGSHEET color is also used to draw the drawing-sheet
         // FIX ME: why LAYER_DRAWINGSHEET must be set, although LAYER_GERBVIEW_DRAWINGSHEET
         // is used to initialize the drawing-sheet color layer.
@@ -806,7 +807,7 @@ COLOR4D GERBVIEW_FRAME::GetLayerColor( int aLayer ) const
 }
 
 
-void GERBVIEW_FRAME::SetLayerColor( int aLayer, COLOR4D aColor )
+void GERBVIEW_FRAME::SetLayerColor( int aLayer, const COLOR4D& aColor )
 {
     Pgm().GetSettingsManager().GetColorSettings()->SetColor( aLayer, aColor );
     applyDisplaySettingsToGAL();
@@ -891,7 +892,7 @@ COLOR4D GERBVIEW_FRAME::GetGridColor()
 }
 
 
-void GERBVIEW_FRAME::SetGridColor( COLOR4D aColor )
+void GERBVIEW_FRAME::SetGridColor( const COLOR4D& aColor )
 {
     Pgm().GetSettingsManager().GetColorSettings()->SetColor( LAYER_GRID, aColor );
     GetCanvas()->GetGAL()->SetGridColor( aColor );

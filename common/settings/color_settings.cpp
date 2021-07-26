@@ -346,7 +346,7 @@ COLOR4D COLOR_SETTINGS::GetDefaultColor( int aLayer )
 }
 
 
-void COLOR_SETTINGS::SetColor( int aLayer, COLOR4D aColor )
+void COLOR_SETTINGS::SetColor( int aLayer, const COLOR4D& aColor )
 {
     m_colors[ aLayer ] = aColor;
 }

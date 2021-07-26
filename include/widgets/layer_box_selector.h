@@ -46,7 +46,8 @@ public:
     bool SetLayersHotkeys( bool value );
 
     // Fill the layer bitmap aLayerbmp with the layer color
-    static void DrawColorSwatch( wxBitmap& aLayerbmp, COLOR4D aBackground, COLOR4D aColor );
+    static void DrawColorSwatch( wxBitmap& aLayerbmp, const COLOR4D& aBackground,
+                                 const COLOR4D& aColor );
 
 protected:
     // Return a color index from the layer id

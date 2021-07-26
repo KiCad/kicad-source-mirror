@@ -231,7 +231,7 @@ public:
      * @param aDefaultPensize the pen size used to plot the rectangle when bitmap is not supported.
      */
     void PlotImage( PLOTTER* aPlotter, const wxPoint& aPos,
-                    KIGFX::COLOR4D aDefaultColor, int aDefaultPensize ) const;
+                    const KIGFX::COLOR4D& aDefaultColor, int aDefaultPensize ) const;
 
 private:
     double    m_scale;              // The scaling factor of the bitmap

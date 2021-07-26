@@ -54,10 +54,10 @@ public:
 
     //-----<implement LAYER_WIDGET abstract callback functions>-----------
     void OnLayerRightClick( wxMenu& aMenu ) override;
-    void OnLayerColorChange( int aLayer, COLOR4D aColor ) override;
+    void OnLayerColorChange( int aLayer, const COLOR4D& aColor ) override;
     bool OnLayerSelect( int aLayer ) override;
     void OnLayerVisible( int aLayer, bool isVisible, bool isFinal ) override;
-    void OnRenderColorChange( int aId, COLOR4D aColor ) override;
+    void OnRenderColorChange( int aId, const COLOR4D& aColor ) override;
     void OnRenderEnable( int aId, bool isEnabled ) override;
 
     /**
