@@ -922,17 +922,39 @@ int SCH_EDITOR_CONTROL::AssignNetclass( const TOOL_EVENT& aEvent )
 
     if( conn )
     {
-        if( !conn->Driver() || CONNECTION_SUBGRAPH::GetDriverPriority( conn->Driver() )
-                                                < CONNECTION_SUBGRAPH::PRIORITY::SHEET_PIN )
+        if( !conn->IsBus()
+            && ( !conn->Driver()
+                 || CONNECTION_SUBGRAPH::GetDriverPriority( conn->Driver() )
+                            < CONNECTION_SUBGRAPH::PRIORITY::SHEET_PIN ) )
         {
             m_frame->ShowInfoBarError( _( "Net must be labeled to assign a netclass." ) );
             highlightNet( m_toolMgr, CLEAR );
             return 0;
         }
+        else if( conn->IsBus() && conn->Members().size() == 0 )
+        {
+            m_frame->ShowInfoBarError(
+                    _( "Bus must have at least one member to assign a netclass to members." ) );
+            highlightNet( m_toolMgr, CLEAR );
+            return 0;
+        }
 
-        wxString      netName = conn->Name();
+        wxArrayString netNames;
+
+        if( conn->IsBus() )
+        {
+            for( auto& m : conn->Members() )
+            {
+                netNames.Add( m->Name() );
+            }
+        }
+        else
+        {
+            netNames.Add( conn->Name() );
+        }
+
         NET_SETTINGS& netSettings = m_frame->Schematic().Prj().GetProjectFile().NetSettings();
-        wxString      netclassName = netSettings.GetNetclassName( netName );
+        wxString      netclassName = netSettings.GetNetclassName( netNames.front() );
 
         wxArrayString headers;
         std::vector<wxArrayString> items;
@@ -957,24 +979,27 @@ int SCH_EDITOR_CONTROL::AssignNetclass( const TOOL_EVENT& aEvent )
         {
             netclassName = dlg.GetTextSelection();
 
-            // Remove from old netclass membership list
-            if( netSettings.m_NetClassAssignments.count( netName ) )
+            for( auto& netName : netNames )
             {
-                const wxString oldNetclassName = netSettings.m_NetClassAssignments[ netName ];
-                NETCLASSPTR    oldNetclass = netSettings.m_NetClasses.Find( oldNetclassName );
+                // Remove from old netclass membership list
+                if( netSettings.m_NetClassAssignments.count( netName ) )
+                {
+                    const wxString oldNetclassName = netSettings.m_NetClassAssignments[netName];
+                    NETCLASSPTR    oldNetclass = netSettings.m_NetClasses.Find( oldNetclassName );
 
-                if( oldNetclass )
-                    oldNetclass->Remove( netName );
+                    if( oldNetclass )
+                        oldNetclass->Remove( netName );
+                }
+
+                // Add to new netclass membership list
+                NETCLASSPTR newNetclass = netSettings.m_NetClasses.Find( netclassName );
+
+                if( newNetclass )
+                    newNetclass->Add( netName );
+
+                netSettings.m_NetClassAssignments[netName] = netclassName;
+                netSettings.ResolveNetClassAssignments();
             }
-
-            // Add to new netclass membership list
-            NETCLASSPTR newNetclass = netSettings.m_NetClasses.Find( netclassName );
-
-            if( newNetclass )
-                newNetclass->Add( netName );
-
-            netSettings.m_NetClassAssignments[ netName ] = netclassName;
-            netSettings.ResolveNetClassAssignments();
         }
     }
 
