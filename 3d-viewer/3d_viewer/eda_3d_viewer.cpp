@@ -436,8 +436,8 @@ void EDA_3D_VIEWER_FRAME::LoadSettings( APP_SETTINGS_BASE *aCfg )
     set_color( colors->GetColor( LAYER_3D_SILKSCREEN_BOTTOM ),
                m_boardAdapter.m_SilkScreenColorBot );
     set_color( colors->GetColor( LAYER_3D_SILKSCREEN_TOP ), m_boardAdapter.m_SilkScreenColorTop );
-    set_color( colors->GetColor( LAYER_3D_SOLDERMASK ), m_boardAdapter.m_SolderMaskColorBot );
-    set_color( colors->GetColor( LAYER_3D_SOLDERMASK ), m_boardAdapter.m_SolderMaskColorTop );
+    set_color( colors->GetColor( LAYER_3D_SOLDERMASK_BOTTOM ), m_boardAdapter.m_SolderMaskColorBot );
+    set_color( colors->GetColor( LAYER_3D_SOLDERMASK_TOP ), m_boardAdapter.m_SolderMaskColorTop );
     set_color( colors->GetColor( LAYER_3D_SOLDERPASTE ), m_boardAdapter.m_SolderPasteColor );
 
     if( cfg )
@@ -586,7 +586,8 @@ void EDA_3D_VIEWER_FRAME::SaveSettings( APP_SETTINGS_BASE *aCfg )
     save_color( m_boardAdapter.m_CopperColor,        LAYER_3D_COPPER );
     save_color( m_boardAdapter.m_SilkScreenColorBot, LAYER_3D_SILKSCREEN_BOTTOM );
     save_color( m_boardAdapter.m_SilkScreenColorTop, LAYER_3D_SILKSCREEN_TOP );
-    save_color( m_boardAdapter.m_SolderMaskColorTop, LAYER_3D_SOLDERMASK );
+    save_color( m_boardAdapter.m_SolderMaskColorBot, LAYER_3D_SOLDERMASK_BOTTOM );
+    save_color( m_boardAdapter.m_SolderMaskColorTop, LAYER_3D_SOLDERMASK_TOP );
     save_color( m_boardAdapter.m_SolderPasteColor,   LAYER_3D_SOLDERPASTE );
 
     Pgm().GetSettingsManager().SaveColorSettings( colors, "3d_viewer" );

@@ -163,7 +163,8 @@ static const std::map<int, COLOR4D> s_defaultTheme =
             { LAYER_3D_COPPER,              COLOR4D( 0.7, 0.61, 0.0, 1.0 ) },
             { LAYER_3D_SILKSCREEN_BOTTOM,   COLOR4D( 0.9, 0.9, 0.9, 1.0 ) },
             { LAYER_3D_SILKSCREEN_TOP,      COLOR4D( 0.9, 0.9, 0.9, 1.0 ) },
-            { LAYER_3D_SOLDERMASK,          COLOR4D( 0.08, 0.2, 0.14, 0.83 ) },
+            { LAYER_3D_SOLDERMASK_BOTTOM,   COLOR4D( 0.08, 0.2, 0.14, 0.83 ) },
+            { LAYER_3D_SOLDERMASK_TOP,      COLOR4D( 0.08, 0.2, 0.14, 0.83 ) },
             { LAYER_3D_SOLDERPASTE,         COLOR4D( 0.5, 0.5, 0.5, 1.0 ) }
         };
 
@@ -306,7 +307,8 @@ static const std::map<int, COLOR4D> s_classicTheme =
             { LAYER_3D_COPPER,              COLOR4D( 0.7, 0.61, 0.0, 1.0 ) },
             { LAYER_3D_SILKSCREEN_BOTTOM,   COLOR4D( 0.9, 0.9, 0.9, 1.0 ) },
             { LAYER_3D_SILKSCREEN_TOP,      COLOR4D( 0.9, 0.9, 0.9, 1.0 ) },
-            { LAYER_3D_SOLDERMASK,          COLOR4D( 0.08, 0.2, 0.14, 0.83 ) },
+            { LAYER_3D_SOLDERMASK_BOTTOM,   COLOR4D( 0.08, 0.2, 0.14, 0.83 ) },
+            { LAYER_3D_SOLDERMASK_TOP,      COLOR4D( 0.08, 0.2, 0.14, 0.83 ) },
             { LAYER_3D_SOLDERPASTE,         COLOR4D( 0.5, 0.5, 0.5, 1.0 ) }
         };
 

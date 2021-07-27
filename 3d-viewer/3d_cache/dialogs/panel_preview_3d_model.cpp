@@ -195,8 +195,8 @@ void PANEL_PREVIEW_3D_MODEL::loadSettings()
         set( colors->GetColor( LAYER_3D_COPPER ), m_boardAdapter.m_CopperColor );
         set( colors->GetColor( LAYER_3D_SILKSCREEN_BOTTOM ), m_boardAdapter.m_SilkScreenColorBot );
         set( colors->GetColor( LAYER_3D_SILKSCREEN_TOP ), m_boardAdapter.m_SilkScreenColorTop );
-        set( colors->GetColor( LAYER_3D_SOLDERMASK ), m_boardAdapter.m_SolderMaskColorBot );
-        set( colors->GetColor( LAYER_3D_SOLDERMASK ), m_boardAdapter.m_SolderMaskColorTop );
+        set( colors->GetColor( LAYER_3D_SOLDERMASK_BOTTOM ), m_boardAdapter.m_SolderMaskColorBot );
+        set( colors->GetColor( LAYER_3D_SOLDERMASK_TOP ), m_boardAdapter.m_SolderMaskColorTop );
         set( colors->GetColor( LAYER_3D_SOLDERPASTE ), m_boardAdapter.m_SolderPasteColor );
     }
 
