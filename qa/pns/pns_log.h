@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2020 KiCad Developers.
+ * Copyright (C) 2020-2021 KiCad Developers.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -224,16 +224,16 @@ public:
     virtual void BeginGroup( const std::string& name,
                              const SRC_LOCATION_INFO& aSrcLoc = SRC_LOCATION_INFO() ) override;
     virtual void EndGroup( const SRC_LOCATION_INFO& aSrcLoc = SRC_LOCATION_INFO() ) override;
-    virtual void AddPoint( VECTOR2I aP, const KIGFX::COLOR4D& aColor, int aSize,
+    virtual void AddPoint( const VECTOR2I& aP, const KIGFX::COLOR4D& aColor, int aSize,
                            const std::string& aName,
                            const SRC_LOCATION_INFO& aSrcLoc = SRC_LOCATION_INFO() ) override;
     virtual void AddLine( const SHAPE_LINE_CHAIN& aLine, const KIGFX::COLOR4D& aColor,
                           int aWidth, const std::string& aName,
                           const SRC_LOCATION_INFO& aSrcLoc = SRC_LOCATION_INFO() ) override;
-    virtual void AddSegment( SEG aS, const KIGFX::COLOR4D& aColor,
+    virtual void AddSegment( const SEG& aS, const KIGFX::COLOR4D& aColor,
                              const std::string& aName,
                              const SRC_LOCATION_INFO& aSrcLoc = SRC_LOCATION_INFO() ) override;
-    virtual void AddBox( BOX2I aB, const KIGFX::COLOR4D& aColor,
+    virtual void AddBox( const BOX2I& aB, const KIGFX::COLOR4D& aColor,
                          const std::string& aName,
                          const SRC_LOCATION_INFO& aSrcLoc = SRC_LOCATION_INFO() ) override;
     virtual void Clear(){};

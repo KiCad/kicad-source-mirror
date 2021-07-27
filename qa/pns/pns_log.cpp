@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2020 KiCad Developers.
+ * Copyright (C) 2020-2021 KiCad Developers.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -38,6 +38,7 @@ static const wxString readLine( FILE* f )
     return wxString( str );
 }
 
+
 PNS_LOG_FILE::PNS_LOG_FILE()
 {
     m_routerSettings.reset( new PNS::ROUTING_SETTINGS( nullptr, "" ) );
@@ -46,29 +47,30 @@ PNS_LOG_FILE::PNS_LOG_FILE()
 
 bool PNS_LOG_FILE::Load( const std::string& logName, const std::string boardName )
 {
-    FILE*    f = fopen( logName.c_str(), "rb" );
+    FILE* f = fopen( logName.c_str(), "rb" );
 
-    if (!f)
+    if( !f )
         return false;
 
     while( !feof( f ) )
     {
         wxStringTokenizer tokens( readLine( f ) );
+
         if( !tokens.CountTokens() )
             continue;
 
         wxString cmd = tokens.GetNextToken();
 
-        if (cmd == "event")
+        if( cmd == "event" )
         {
             EVENT_ENTRY evt;
             evt.p.x = wxAtoi( tokens.GetNextToken() );
             evt.p.y = wxAtoi( tokens.GetNextToken() );
             evt.type = (PNS::LOGGER::EVENT_TYPE) wxAtoi( tokens.GetNextToken() );
             evt.uuid = KIID( tokens.GetNextToken() );
-            m_events.push_back(evt);
+            m_events.push_back( evt );
         }
-        else if (cmd == "config")
+        else if( cmd == "config" )
         {
             m_routerSettings->SetMode( (PNS::PNS_MODE) wxAtoi( tokens.GetNextToken() ) );
             m_routerSettings->SetRemoveLoops( wxAtoi( tokens.GetNextToken() ) );
@@ -78,42 +80,44 @@ bool PNS_LOG_FILE::Load( const std::string& logName, const std::string boardName
 
     fclose( f );
 
-    try {
+    try
+    {
         PCB_IO io;
         m_board.reset( io.Load( boardName.c_str(), nullptr, nullptr ) );
 
         std::shared_ptr<DRC_ENGINE> drcEngine( new DRC_ENGINE );
 
-        CONSOLE_LOG consoleLog;
+        CONSOLE_LOG            consoleLog;
         BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
 
         bds.m_DRCEngine = drcEngine;
 
         drcEngine->SetBoard( m_board.get() );
         drcEngine->SetDesignSettings( &bds );
-        drcEngine->SetLogReporter( new CONSOLE_MSG_REPORTER ( &consoleLog ) );
-        drcEngine->InitEngine(wxFileName());
+        drcEngine->SetLogReporter( new CONSOLE_MSG_REPORTER( &consoleLog ) );
+        drcEngine->InitEngine( wxFileName() );
+    }
+    catch( const PARSE_ERROR& parse_error )
+    {
+        printf( "parse error : %s (%s)\n", (const char*) parse_error.Problem().c_str(),
+                (const char*) parse_error.What().c_str() );
 
-    } catch ( const PARSE_ERROR& parse_error ) {
-                printf("parse error : %s (%s)\n", 
-                    (const char *) parse_error.Problem().c_str(),
-                    (const char *) parse_error.What().c_str() );
-
-                    return false;
+        return false;
     }
 
     return true;
 }
 
+
 PNS_TEST_ENVIRONMENT::PNS_TEST_ENVIRONMENT()
 {
-
 }
+
 
 PNS_TEST_ENVIRONMENT::~PNS_TEST_ENVIRONMENT()
 {
-
 }
+
 
 void PNS_TEST_ENVIRONMENT::SetMode( PNS::ROUTER_MODE mode )
 {
@@ -123,14 +127,14 @@ void PNS_TEST_ENVIRONMENT::SetMode( PNS::ROUTER_MODE mode )
 
 void PNS_TEST_ENVIRONMENT::createRouter()
 {
-    m_iface.reset ( new PNS_KICAD_IFACE_BASE);
+    m_iface.reset( new PNS_KICAD_IFACE_BASE );
     m_router.reset( new ROUTER );
     m_iface->SetBoard( m_board.get() );
     m_router->SetInterface( m_iface.get() );
     m_router->ClearWorld();
     m_router->SetMode( m_mode );
     m_router->SyncWorld();
-    m_router->LoadSettings( new PNS::ROUTING_SETTINGS (nullptr, ""));
+    m_router->LoadSettings( new PNS::ROUTING_SETTINGS( nullptr, "" ) );
     m_router->Settings().SetMode( PNS::RM_Walkaround );
     m_router->Sizes().SetTrackWidth( 250000 );
 
@@ -140,7 +144,8 @@ void PNS_TEST_ENVIRONMENT::createRouter()
     m_iface->SetDebugDecorator( &m_debugDecorator );
 }
 
-void PNS_TEST_ENVIRONMENT::ReplayLog ( PNS_LOG_FILE* aLog, int aStartEventIndex, int aFrom, int aTo )
+void PNS_TEST_ENVIRONMENT::ReplayLog ( PNS_LOG_FILE* aLog, int aStartEventIndex, int aFrom,
+                                       int aTo )
 {
 
     m_board = aLog->GetBoard();
@@ -158,48 +163,49 @@ void PNS_TEST_ENVIRONMENT::ReplayLog ( PNS_LOG_FILE* aLog, int aStartEventIndex,
 
         switch(evt.type)
         {
-            case LOGGER::EVT_START_ROUTE:
-            {
-                m_debugDecorator.NewStage("route-start", 0);
-                printf("  rtr start-route (%d, %d) %p \n", evt.p.x, evt.p.y, ritem);
-                m_router->StartRouting( evt.p, ritem, ritem ? ritem->Layers().Start() : F_Cu );
-                break;
-            }
-
-            case LOGGER::EVT_START_DRAG:
-            {
-                m_debugDecorator.NewStage("drag-start", 0);
-                bool rv = m_router->StartDragging( evt.p, ritem, 0 );
-                printf("  rtr start-drag (%d, %d) %p ret %d\n", evt.p.x, evt.p.y, ritem, rv?1:0);
-                break;
-            }
-
-            case LOGGER::EVT_FIX:
-            {
-                break;
-            }
-
-            case LOGGER::EVT_MOVE:
-            {
-                m_debugDecorator.NewStage("move", 0);
-                printf("  move -> (%d, %d)\n", evt.p.x, evt.p.y );
-                m_router->Move( evt.p, ritem );
-                break;
-            }
-            default:
-                break;
+        case LOGGER::EVT_START_ROUTE:
+        {
+            m_debugDecorator.NewStage( "route-start", 0 );
+            printf( "  rtr start-route (%d, %d) %p \n", evt.p.x, evt.p.y, ritem );
+            m_router->StartRouting( evt.p, ritem, ritem ? ritem->Layers().Start() : F_Cu );
+            break;
         }
 
+        case LOGGER::EVT_START_DRAG:
+        {
+            m_debugDecorator.NewStage( "drag-start", 0 );
+            bool rv = m_router->StartDragging( evt.p, ritem, 0 );
+            printf( "  rtr start-drag (%d, %d) %p ret %d\n", evt.p.x, evt.p.y, ritem, rv ? 1 : 0 );
+            break;
+        }
+
+        case LOGGER::EVT_FIX:
+        {
+            break;
+        }
+
+        case LOGGER::EVT_MOVE:
+        {
+            m_debugDecorator.NewStage( "move", 0 );
+            printf( "  move -> (%d, %d)\n", evt.p.x, evt.p.y );
+            m_router->Move( evt.p, ritem );
+            break;
+        }
+
+        default:
+            break;
+        }
 
         PNS::NODE* node = nullptr;
 
         if( m_router->GetState() == PNS::ROUTER::ROUTE_TRACK )
         {
-            #if 0
+#if 0
             m_debugDecorator.BeginGroup( "head");
 
             auto traces = m_router->Placer()->Traces();
-            for ( const auto& t : traces.CItems() )
+
+            for( const auto& t : traces.CItems() )
             {
                 const LINE *l  = static_cast<LINE*>(t.item);
                 const auto& sh = l->CLine();
@@ -208,23 +214,23 @@ void PNS_TEST_ENVIRONMENT::ReplayLog ( PNS_LOG_FILE* aLog, int aStartEventIndex,
             }
 
             m_debugDecorator.EndGroup();
-            #endif
+#endif
 
-            node = m_router->Placer()->CurrentNode(true);
+            node = m_router->Placer()->CurrentNode( true );
         }
         else if( m_router->GetState() == PNS::ROUTER::DRAG_SEGMENT )
         {
             node = m_router->GetDragger()->CurrentNode();
         }
 
-        if(!node)
+        if( !node )
             return;
 
         NODE::ITEM_VECTOR removed, added;
 
         node->GetUpdatedItems( removed, added );
 
-        #if 0
+#if 0
         if( ! added.empty() )
         {
             bool first = true;
@@ -234,7 +240,7 @@ void PNS_TEST_ENVIRONMENT::ReplayLog ( PNS_LOG_FILE* aLog, int aStartEventIndex,
             {
                 if( t->OfKind( PNS::ITEM::SEGMENT_T ) )
                 {
-                    auto s = static_cast<PNS::SEGMENT*>(t);
+                    auto s = static_cast<PNS::SEGMENT*>( t );
                     m_debugDecorator.AddSegment( s->Seg(), 2 );
                     first = false;
                 }
@@ -242,21 +248,22 @@ void PNS_TEST_ENVIRONMENT::ReplayLog ( PNS_LOG_FILE* aLog, int aStartEventIndex,
 
             m_debugDecorator.EndGroup();
         }
-        #endif
+#endif
     }
 }
 
 
 PNS_TEST_DEBUG_DECORATOR::STAGE* PNS_TEST_DEBUG_DECORATOR::currentStage()
 {
-    if (m_stages.empty() )
+    if( m_stages.empty() )
         m_stages.push_back( new STAGE() );
 
     return m_stages.back();
 }
 
 
-void PNS_TEST_DEBUG_DECORATOR::BeginGroup( std::string name, const SRC_LOCATION_INFO& aSrcLoc )
+void PNS_TEST_DEBUG_DECORATOR::BeginGroup( const std::string& name,
+                                           const SRC_LOCATION_INFO& aSrcLoc )
 {
     STAGE* st = currentStage();
     DEBUG_ENT *ent = new DEBUG_ENT();
@@ -269,7 +276,7 @@ void PNS_TEST_DEBUG_DECORATOR::BeginGroup( std::string name, const SRC_LOCATION_
         m_activeEntry->AddChild( ent );
     }
 
-    printf("LOG BeginGroup %s %p\n", name.c_str(), ent );
+    printf( "LOG BeginGroup %s %p\n", name.c_str(), ent );
 
     m_activeEntry = ent;
     m_grouping = true;
@@ -278,7 +285,7 @@ void PNS_TEST_DEBUG_DECORATOR::BeginGroup( std::string name, const SRC_LOCATION_
 
 void PNS_TEST_DEBUG_DECORATOR::EndGroup( const SRC_LOCATION_INFO& aSrcLoc )
 {
-    printf("LOG EndGroup\n" );
+    printf( "LOG EndGroup\n" );
 
     if( !m_activeEntry )
         return;
@@ -306,12 +313,16 @@ void PNS_TEST_DEBUG_DECORATOR::addEntry( DEBUG_ENT* ent )
                          const std::string        aName,
                          const SRC_LOCATION_INFO& aSrcLoc = SRC_LOCATION_INFO() ) override;
 */
-void PNS_TEST_DEBUG_DECORATOR::AddPoint( VECTOR2I aP, const KIGFX::COLOR4D& aColor, int aSize, const std::string aName, const SRC_LOCATION_INFO& aSrcLoc  )
+
+
+void PNS_TEST_DEBUG_DECORATOR::AddPoint( const VECTOR2I& aP, const KIGFX::COLOR4D& aColor,
+                                         int aSize, const std::string& aName,
+                                         const SRC_LOCATION_INFO& aSrcLoc )
 {
     auto sh = new SHAPE_LINE_CHAIN;
 
-    sh->Append( aP.x - aSize, aP.y - aSize);
-    sh->Append( aP.x + aSize, aP.y + aSize);
+    sh->Append( aP.x - aSize, aP.y - aSize );
+    sh->Append( aP.x + aSize, aP.y + aSize );
     sh->Append( aP.x, aP.y );
     sh->Append( aP.x - aSize, aP.y + aSize );
     sh->Append( aP.x + aSize, aP.y - aSize );
@@ -331,8 +342,8 @@ void PNS_TEST_DEBUG_DECORATOR::AddPoint( VECTOR2I aP, const KIGFX::COLOR4D& aCol
 
 
 void PNS_TEST_DEBUG_DECORATOR::AddLine( const SHAPE_LINE_CHAIN& aLine, const KIGFX::COLOR4D& aColor,
-                          int aWidth, const std::string aName,
-                          const SRC_LOCATION_INFO& aSrcLoc )
+                                        int aWidth, const std::string& aName,
+                                        const SRC_LOCATION_INFO& aSrcLoc )
 {
     auto       sh = new SHAPE_LINE_CHAIN( aLine );
     DEBUG_ENT* ent = new DEBUG_ENT();
@@ -347,12 +358,12 @@ void PNS_TEST_DEBUG_DECORATOR::AddLine( const SHAPE_LINE_CHAIN& aLine, const KIG
     addEntry( ent );
 }
 
-void PNS_TEST_DEBUG_DECORATOR::AddSegment( SEG aS, const KIGFX::COLOR4D& aColor,
-                             const std::string        aName,
-                             const SRC_LOCATION_INFO& aSrcLoc )
-{
 
-    auto sh = new SHAPE_LINE_CHAIN ( { aS.A, aS.B } );
+void PNS_TEST_DEBUG_DECORATOR::AddSegment( const SEG& aS, const KIGFX::COLOR4D& aColor,
+                                           const std::string&       aName,
+                                           const SRC_LOCATION_INFO& aSrcLoc )
+{
+    auto       sh = new SHAPE_LINE_CHAIN( { aS.A, aS.B } );
     DEBUG_ENT* ent = new DEBUG_ENT();
 
     ent->m_shapes.push_back( sh );
@@ -365,11 +376,11 @@ void PNS_TEST_DEBUG_DECORATOR::AddSegment( SEG aS, const KIGFX::COLOR4D& aColor,
     addEntry( ent );
 }
 
-void PNS_TEST_DEBUG_DECORATOR::AddBox( BOX2I aB, const KIGFX::COLOR4D& aColor,
-                            const std::string        aName,
-                            const SRC_LOCATION_INFO& aSrcLoc )
+
+void PNS_TEST_DEBUG_DECORATOR::AddBox( const BOX2I& aB, const KIGFX::COLOR4D& aColor,
+                                       const std::string& aName, const SRC_LOCATION_INFO& aSrcLoc )
 {
-    auto sh = new SHAPE_RECT ( aB.GetPosition(), aB.GetWidth(), aB.GetHeight() );
+    auto       sh = new SHAPE_RECT( aB.GetPosition(), aB.GetWidth(), aB.GetHeight() );
     DEBUG_ENT* ent = new DEBUG_ENT();
 
     ent->m_shapes.push_back( sh );
@@ -379,11 +390,10 @@ void PNS_TEST_DEBUG_DECORATOR::AddBox( BOX2I aB, const KIGFX::COLOR4D& aColor,
     ent->m_iter = m_iter;
     ent->m_srcLoc = aSrcLoc;
     addEntry( ent );
-
 }
 
 
-void PNS_TEST_DEBUG_DECORATOR::Message( const wxString msg, const SRC_LOCATION_INFO& aSrcLoc )
+void PNS_TEST_DEBUG_DECORATOR::Message( const wxString& msg, const SRC_LOCATION_INFO& aSrcLoc )
 {
     DEBUG_ENT* ent = new DEBUG_ENT();
     ent->m_msg = msg.c_str();
@@ -392,36 +402,38 @@ void PNS_TEST_DEBUG_DECORATOR::Message( const wxString msg, const SRC_LOCATION_I
 }
 
 
-void PNS_TEST_DEBUG_DECORATOR::NewStage(const std::string& name, int iter, const SRC_LOCATION_INFO& aSrcLoc)
+void PNS_TEST_DEBUG_DECORATOR::NewStage( const std::string& name, int iter,
+                                         const SRC_LOCATION_INFO& aSrcLoc )
 {
     m_stages.push_back( new STAGE );
     m_activeEntry = m_stages.back()->m_entries;
 }
 
 
-void PNS_TEST_DEBUG_DECORATOR::DEBUG_ENT::IterateTree( std::function<bool(PNS_TEST_DEBUG_DECORATOR::DEBUG_ENT*)> visitor, int depth )
+void PNS_TEST_DEBUG_DECORATOR::DEBUG_ENT::IterateTree(
+        std::function<bool( PNS_TEST_DEBUG_DECORATOR::DEBUG_ENT* )> visitor, int depth )
 {
-    if( ! visitor( this ) )
+    if( !visitor( this ) )
         return;
-    
+
 
     for( auto child : m_children )
     {
-        child->IterateTree( visitor, depth+1 );
+        child->IterateTree( visitor, depth + 1 );
     }
 }
 
-BOX2I PNS_TEST_DEBUG_DECORATOR::GetStageExtents(int stage) const
+
+BOX2I PNS_TEST_DEBUG_DECORATOR::GetStageExtents( int stage ) const
 {
     STAGE* st = m_stages[stage];
-    BOX2I bb;
-    bool first = true;
+    BOX2I  bb;
+    bool   first = true;
 
-    auto visitor = [ & ] ( DEBUG_ENT *ent ) -> bool
-    {
+    auto visitor = [&]( DEBUG_ENT* ent ) -> bool {
         for( auto sh : ent->m_shapes )
         {
-            if ( first )
+            if( first )
                 bb = sh->BBox();
             else
                 bb.Merge( sh->BBox() );
