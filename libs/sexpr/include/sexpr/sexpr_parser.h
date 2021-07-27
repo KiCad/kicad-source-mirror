@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2016 Mark Roszko <mark.roszko@gmail.com>
+ * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -34,7 +35,7 @@ namespace SEXPR
         ~PARSER();
         std::unique_ptr<SEXPR> Parse( const std::string& aString );
         std::unique_ptr<SEXPR> ParseFromFile( const std::string& aFilename );
-        static std::string GetFileContents( const std::string &aFilename );
+        static std::string GetFileContents( const std::string& aFilename );
 
     private:
         std::unique_ptr<SEXPR> parseString(

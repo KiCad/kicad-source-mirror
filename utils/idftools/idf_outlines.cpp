@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014-2017  Cirilo Bernardo
+ * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -39,35 +40,35 @@ static std::string GetOutlineTypeString( IDF3::OUTLINE_TYPE aOutlineType )
 {
     switch( aOutlineType )
     {
-        case OTLN_BOARD:
-            return ".BOARD_OUTLINE";
+    case OTLN_BOARD:
+        return ".BOARD_OUTLINE";
 
-        case OTLN_OTHER:
-            return ".OTHER_OUTLINE";
+    case OTLN_OTHER:
+        return ".OTHER_OUTLINE";
 
-        case OTLN_PLACE:
-            return ".PLACEMENT_OUTLINE";
+    case OTLN_PLACE:
+        return ".PLACEMENT_OUTLINE";
 
-        case OTLN_ROUTE:
-            return ".ROUTE_OUTLINE";
+    case OTLN_ROUTE:
+        return ".ROUTE_OUTLINE";
 
-        case OTLN_PLACE_KEEPOUT:
-            return ".PLACE_KEEPOUT";
+    case OTLN_PLACE_KEEPOUT:
+        return ".PLACE_KEEPOUT";
 
-        case OTLN_ROUTE_KEEPOUT:
-            return ".ROUTE_KEEPOUT";
+    case OTLN_ROUTE_KEEPOUT:
+        return ".ROUTE_KEEPOUT";
 
-        case OTLN_VIA_KEEPOUT:
-            return ".VIA_KEEPOUT";
+    case OTLN_VIA_KEEPOUT:
+        return ".VIA_KEEPOUT";
 
-        case OTLN_GROUP_PLACE:
-            return ".PLACE_REGION";
+    case OTLN_GROUP_PLACE:
+        return ".PLACE_REGION";
 
-        case OTLN_COMPONENT:
-            return "COMPONENT OUTLINE";
+    case OTLN_COMPONENT:
+        return "COMPONENT OUTLINE";
 
-        default:
-            break;
+    default:
+        break;
     }
 
     std::ostringstream ostr;
@@ -76,12 +77,13 @@ static std::string GetOutlineTypeString( IDF3::OUTLINE_TYPE aOutlineType )
     return ostr.str();
 }
 
+
 #ifndef DISABLE_IDF_OWNERSHIP
 static bool CheckOwnership( int aSourceLine, const char* aSourceFunc,
                             IDF3_BOARD* aParent, IDF3::KEY_OWNER aOwnerCAD,
                             IDF3::OUTLINE_TYPE aOutlineType, std::string& aErrorString )
 {
-    if( aParent == NULL )
+    if( aParent == nullptr )
     {
         ostringstream ostr;
         ostr << "* " << __FILE__ << ":" << aSourceLine << ":" << aSourceFunc << "():\n";
@@ -127,30 +129,28 @@ static bool CheckOwnership( int aSourceLine, const char* aSourceFunc,
 #endif
 
 
-/*
- * BOARD OUTLINE
- */
 BOARD_OUTLINE::BOARD_OUTLINE()
 {
     outlineType = OTLN_BOARD;
     single = false;
     owner = UNOWNED;
-    parent = NULL;
+    parent = nullptr;
     thickness = 0.0;
     unit = UNIT_MM;
-    return;
 }
+
 
 BOARD_OUTLINE::~BOARD_OUTLINE()
 {
     clear();
-    return;
 }
+
 
 IDF3::OUTLINE_TYPE BOARD_OUTLINE::GetOutlineType( void )
 {
     return outlineType;
 }
+
 
 void BOARD_OUTLINE::readOutlines( std::istream& aBoardFile, IDF3::IDF_VERSION aIdfVersion )
 {
@@ -167,8 +167,8 @@ void BOARD_OUTLINE::readOutlines( std::istream& aBoardFile, IDF3::IDF_VERSION aI
     std::string iline;
     std::string entry;
     std::stringstream tstr;
-    IDF_OUTLINE* op = NULL;
-    IDF_SEGMENT* sp = NULL;
+    IDF_OUTLINE* op = nullptr;
+    IDF_SEGMENT* sp = nullptr;
     IDF_POINT prePt;
     IDF_POINT curPt;
     std::streampos pos;
@@ -188,7 +188,8 @@ void BOARD_OUTLINE::readOutlines( std::istream& aBoardFile, IDF3::IDF_VERSION aI
         {
             ostringstream ostr;
 
-            ostr << "\n* invalid outline: RECORD 3, FIELD 1 of " << GetOutlineTypeString( outlineType );
+            ostr << "\n* invalid outline: RECORD 3, FIELD 1 of " <<
+                    GetOutlineTypeString( outlineType );
             ostr << " is quoted\n";
             ostr << "* line: '" << iline << "'";
 
@@ -201,7 +202,7 @@ void BOARD_OUTLINE::readOutlines( std::istream& aBoardFile, IDF3::IDF_VERSION aI
             // rewind to the start of the last line; the routine invoking
             // this is responsible for checking that the current '.END_ ...'
             // matches the section header.
-            if(aBoardFile.eof())
+            if( aBoardFile.eof() )
                 aBoardFile.clear();
 
             aBoardFile.seekg( pos );
@@ -227,7 +228,8 @@ void BOARD_OUTLINE::readOutlines( std::istream& aBoardFile, IDF3::IDF_VERSION aI
                         return;
                     }
 
-                    if( outlines.size() > 1 && outlines.back()->IsCCW() && !outlines.back()->IsCircle() )
+                    if( outlines.size() > 1 && outlines.back()->IsCCW() &&
+                        !outlines.back()->IsCircle() )
                     {
                         ERROR_IDF << "invalid IDF3 file (BOARD_OUTLINE)\n";
                         cerr << "* WARNING: final cutout does not have points in CW order\n";
@@ -244,6 +246,7 @@ void BOARD_OUTLINE::readOutlines( std::istream& aBoardFile, IDF3::IDF_VERSION aI
         tstr << entry;
 
         tstr >> tmp;
+
         if( tstr.fail() )
         {
             if( outlineType == OTLN_COMPONENT && CompareToken( "PROP", entry ) )
@@ -252,10 +255,12 @@ void BOARD_OUTLINE::readOutlines( std::istream& aBoardFile, IDF3::IDF_VERSION aI
                 return;
             }
 
-            do{
+            do
+            {
                 ostringstream ostr;
 
-                ostr << "\n* invalid outline: RECORD 3, FIELD 1 of " << GetOutlineTypeString( outlineType );
+                ostr << "\n* invalid outline: RECORD 3, FIELD 1 of " <<
+                GetOutlineTypeString( outlineType );
                 ostr << " is not numeric\n";
                 ostr << "* line: '" << iline << "'\n";
                 ostr << "* file position: " << pos;
@@ -281,7 +286,8 @@ void BOARD_OUTLINE::readOutlines( std::istream& aBoardFile, IDF3::IDF_VERSION aI
             {
                 ostringstream ostr;
 
-                ostr << "\n* invalid outline: RECORD 3, FIELD 1 of " << GetOutlineTypeString( outlineType );
+                ostr << "\n* invalid outline: RECORD 3, FIELD 1 of " <<
+                        GetOutlineTypeString( outlineType );
                 ostr << " is invalid\n";
                 ostr << "* line: '" << iline << "'\n";
                 ostr << "* file position: " << pos;
@@ -299,7 +305,7 @@ void BOARD_OUTLINE::readOutlines( std::istream& aBoardFile, IDF3::IDF_VERSION aI
                     {
                         op = new IDF_OUTLINE;
 
-                        if( op == NULL )
+                        if( op == nullptr )
                         {
                             clearOutlines();
                             throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__,
@@ -313,7 +319,8 @@ void BOARD_OUTLINE::readOutlines( std::istream& aBoardFile, IDF3::IDF_VERSION aI
                     {
                         ostringstream ostr;
 
-                        ostr << "\n* invalid outline: RECORD 3, FIELD 1 of " << GetOutlineTypeString( outlineType );
+                        ostr << "\n* invalid outline: RECORD 3, FIELD 1 of " <<
+                                GetOutlineTypeString( outlineType );
                         ostr << " is invalid (must be 0 or 1)\n";
                         ostr << "* line: '" << iline << "'\n";
                         ostr << "* file position: " << pos;
@@ -328,7 +335,8 @@ void BOARD_OUTLINE::readOutlines( std::istream& aBoardFile, IDF3::IDF_VERSION aI
                     {
                         ostringstream ostr;
 
-                        ostr << "\n* invalid outline: RECORD 3, FIELD 1 of " << GetOutlineTypeString( outlineType );
+                        ostr << "\n* invalid outline: RECORD 3, FIELD 1 of " <<
+                                GetOutlineTypeString( outlineType );
                         ostr << " is invalid (must be 0)\n";
                         ostr << "* line: '" << iline << "'\n";
                         ostr << "* file position: " << pos;
@@ -338,7 +346,7 @@ void BOARD_OUTLINE::readOutlines( std::istream& aBoardFile, IDF3::IDF_VERSION aI
 
                     op = new IDF_OUTLINE;
 
-                    if( op == NULL )
+                    if( op == nullptr )
                     {
                         clearOutlines();
                         throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__,
@@ -348,7 +356,6 @@ void BOARD_OUTLINE::readOutlines( std::istream& aBoardFile, IDF3::IDF_VERSION aI
                     outlines.push_back( op );
                     loopidx = tmp;
                 }
-                // end of block for first outline
             }
             else
             {
@@ -384,7 +391,8 @@ void BOARD_OUTLINE::readOutlines( std::istream& aBoardFile, IDF3::IDF_VERSION aI
                     ostringstream ostr;
 
                     ostr << "\n* invalid outline: " << GetOutlineTypeString( outlineType ) << "\n";
-                    ostr << "* violation of loop point order rules by Loop Index " << loopidx << "\n";
+                    ostr << "* violation of loop point order rules by Loop Index " << loopidx <<
+                            "\n";
                     ostr << "* line: '" << iline << "'\n";
                     ostr << "* file position: " << pos;
 
@@ -393,7 +401,7 @@ void BOARD_OUTLINE::readOutlines( std::istream& aBoardFile, IDF3::IDF_VERSION aI
 
                 op = new IDF_OUTLINE;
 
-                if( op == NULL )
+                if( op == nullptr )
                 {
                     clearOutlines();
                     throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__,
@@ -408,11 +416,12 @@ void BOARD_OUTLINE::readOutlines( std::istream& aBoardFile, IDF3::IDF_VERSION aI
             closed = false;
         }
 
-        if( op == NULL )
+        if( op == nullptr )
         {
             ostringstream ostr;
 
-            ostr << "\n* invalid outline: RECORD 3, FIELD 1 of " << GetOutlineTypeString( outlineType );
+            ostr << "\n* invalid outline: RECORD 3, FIELD 1 of " <<
+                    GetOutlineTypeString( outlineType );
             ostr << " is invalid\n";
             ostr << "* line: '" << iline << "'\n";
             ostr << "* file position: " << pos;
@@ -448,6 +457,7 @@ void BOARD_OUTLINE::readOutlines( std::istream& aBoardFile, IDF3::IDF_VERSION aI
         tstr << entry;
 
         tstr >> x;
+
         if( tstr.fail() )
         {
             ostringstream ostr;
@@ -488,6 +498,7 @@ void BOARD_OUTLINE::readOutlines( std::istream& aBoardFile, IDF3::IDF_VERSION aI
         tstr << entry;
 
         tstr >> y;
+
         if( tstr.fail() )
         {
             ostringstream ostr;
@@ -528,6 +539,7 @@ void BOARD_OUTLINE::readOutlines( std::istream& aBoardFile, IDF3::IDF_VERSION aI
         tstr << entry;
 
         tstr >> ang;
+
         if( tstr.fail() )
         {
             ostringstream ostr;
@@ -607,7 +619,7 @@ void BOARD_OUTLINE::readOutlines( std::istream& aBoardFile, IDF3::IDF_VERSION aI
                 sp = new IDF_SEGMENT( prePt, curPt, ang, false );
             }
 
-            if( sp == NULL )
+            if( sp == nullptr )
             {
                 clearOutlines();
                 throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__,
@@ -644,7 +656,7 @@ void BOARD_OUTLINE::readOutlines( std::istream& aBoardFile, IDF3::IDF_VERSION aI
             prePt.x = x;
             prePt.y = y;
         }
-    }   //  while( aBoardFile.good() )
+    }
 
     // NOTE:
     // 1. ideally we would ensure that there are no arcs with a radius of 0
@@ -654,6 +666,7 @@ void BOARD_OUTLINE::readOutlines( std::istream& aBoardFile, IDF3::IDF_VERSION aI
 
     return;
 }
+
 
 bool BOARD_OUTLINE::writeComments( std::ostream& aBoardFile )
 {
@@ -672,25 +685,27 @@ bool BOARD_OUTLINE::writeComments( std::ostream& aBoardFile )
     return !aBoardFile.fail();
 }
 
+
 bool BOARD_OUTLINE::writeOwner( std::ostream& aBoardFile )
 {
     switch( owner )
     {
-        case ECAD:
-            aBoardFile << "ECAD\n";
-            break;
+    case ECAD:
+        aBoardFile << "ECAD\n";
+        break;
 
-        case MCAD:
-            aBoardFile << "MCAD\n";
-            break;
+    case MCAD:
+        aBoardFile << "MCAD\n";
+        break;
 
-        default:
-            aBoardFile << "UNOWNED\n";
-            break;
+    default:
+        aBoardFile << "UNOWNED\n";
+        break;
     }
 
     return !aBoardFile.fail();
 }
+
 
 void BOARD_OUTLINE::writeOutline( std::ostream& aBoardFile, IDF_OUTLINE* aOutline, size_t aIndex )
 {
@@ -699,7 +714,7 @@ void BOARD_OUTLINE::writeOutline( std::ostream& aBoardFile, IDF_OUTLINE* aOutlin
 
     if( !aOutline )
         throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__,
-                          "\n* BUG: NULL outline pointer" ) );
+                          "\n* BUG: nullptr outline pointer" ) );
 
     if( aOutline->size() == 1 )
     {
@@ -748,8 +763,7 @@ void BOARD_OUTLINE::writeOutline( std::ostream& aBoardFile, IDF_OUTLINE* aOutlin
 
 
     // check if we must reverse things
-    if( ( aOutline->IsCCW() && ( aIndex > 0 ) )
-        || ( ( !aOutline->IsCCW() ) && ( aIndex == 0 ) ) )
+    if( ( aOutline->IsCCW() && ( aIndex > 0 ) ) || ( ( !aOutline->IsCCW() ) && ( aIndex == 0 ) ) )
     {
         eo  = aOutline->begin();
         bo  = aOutline->end();
@@ -768,48 +782,48 @@ void BOARD_OUTLINE::writeOutline( std::ostream& aBoardFile, IDF_OUTLINE* aOutlin
         {
             if( aOutline->front()->angle < MIN_ANG && aOutline->front()->angle > -MIN_ANG )
             {
-                aBoardFile << aIndex << " " << setiosflags(ios::fixed) << setprecision(5)
-                << aOutline->front()->endPoint.x << " "
-                << aOutline->front()->endPoint.y << " 0\n";
+                aBoardFile << aIndex << " " << setiosflags( ios::fixed ) << setprecision( 5 )
+                           << aOutline->front()->endPoint.x << " " << aOutline->front()->endPoint.y
+                           << " 0\n";
 
-                aBoardFile << aIndex << " " << setiosflags(ios::fixed) << setprecision(5)
-                << aOutline->front()->startPoint.x << " "
-                << aOutline->front()->startPoint.y << " 0\n";
+                aBoardFile << aIndex << " " << setiosflags( ios::fixed ) << setprecision( 5 )
+                           << aOutline->front()->startPoint.x << " "
+                           << aOutline->front()->startPoint.y << " 0\n";
             }
             else
             {
-                aBoardFile << aIndex << " " << setiosflags(ios::fixed) << setprecision(5)
-                << aOutline->front()->endPoint.x << " "
-                << aOutline->front()->endPoint.y << " 0\n";
+                aBoardFile << aIndex << " " << setiosflags( ios::fixed ) << setprecision( 5 )
+                           << aOutline->front()->endPoint.x << " " << aOutline->front()->endPoint.y
+                           << " 0\n";
 
-                aBoardFile << aIndex << " " << setiosflags(ios::fixed) << setprecision(5)
-                << aOutline->front()->startPoint.x << " "
-                << aOutline->front()->startPoint.y << " "
-                << setprecision(3) << -aOutline->front()->angle << "\n";
+                aBoardFile << aIndex << " " << setiosflags( ios::fixed ) << setprecision( 5 )
+                           << aOutline->front()->startPoint.x << " "
+                           << aOutline->front()->startPoint.y << " " << setprecision( 3 )
+                           << -aOutline->front()->angle << "\n";
             }
         }
         else
         {
             if( aOutline->front()->angle < MIN_ANG && aOutline->front()->angle > -MIN_ANG )
             {
-                aBoardFile << aIndex << " " << setiosflags(ios::fixed) << setprecision(1)
-                << (aOutline->front()->endPoint.x / IDF_THOU_TO_MM) << " "
-                << (aOutline->front()->endPoint.y / IDF_THOU_TO_MM) << " 0\n";
+                aBoardFile << aIndex << " " << setiosflags( ios::fixed ) << setprecision( 1 )
+                           << ( aOutline->front()->endPoint.x / IDF_THOU_TO_MM ) << " "
+                           << ( aOutline->front()->endPoint.y / IDF_THOU_TO_MM ) << " 0\n";
 
-                aBoardFile << aIndex << " " << setiosflags(ios::fixed) << setprecision(1)
-                << (aOutline->front()->startPoint.x / IDF_THOU_TO_MM) << " "
-                << (aOutline->front()->startPoint.y / IDF_THOU_TO_MM) << " 0\n";
+                aBoardFile << aIndex << " " << setiosflags( ios::fixed ) << setprecision( 1 )
+                           << ( aOutline->front()->startPoint.x / IDF_THOU_TO_MM ) << " "
+                           << ( aOutline->front()->startPoint.y / IDF_THOU_TO_MM ) << " 0\n";
             }
             else
             {
-                aBoardFile << aIndex << " " << setiosflags(ios::fixed) << setprecision(1)
-                << (aOutline->front()->endPoint.x / IDF_THOU_TO_MM) << " "
-                << (aOutline->front()->endPoint.y / IDF_THOU_TO_MM) << " 0\n";
+                aBoardFile << aIndex << " " << setiosflags( ios::fixed ) << setprecision( 1 )
+                           << ( aOutline->front()->endPoint.x / IDF_THOU_TO_MM ) << " "
+                           << ( aOutline->front()->endPoint.y / IDF_THOU_TO_MM ) << " 0\n";
 
-                aBoardFile << aIndex << " " << setiosflags(ios::fixed) << setprecision(1)
-                << (aOutline->front()->startPoint.x / IDF_THOU_TO_MM) << " "
-                << (aOutline->front()->startPoint.y / IDF_THOU_TO_MM) << " "
-                << setprecision(3) << -aOutline->front()->angle << "\n";
+                aBoardFile << aIndex << " " << setiosflags( ios::fixed ) << setprecision( 1 )
+                           << ( aOutline->front()->startPoint.x / IDF_THOU_TO_MM ) << " "
+                           << ( aOutline->front()->startPoint.y / IDF_THOU_TO_MM ) << " "
+                           << setprecision( 3 ) << -aOutline->front()->angle << "\n";
             }
         }
 
@@ -818,34 +832,32 @@ void BOARD_OUTLINE::writeOutline( std::ostream& aBoardFile, IDF_OUTLINE* aOutlin
         {
             if( unit != UNIT_THOU )
             {
-                if( (*bo)->angle < MIN_ANG && (*bo)->angle > -MIN_ANG )
+                if( ( *bo )->angle < MIN_ANG && ( *bo )->angle > -MIN_ANG )
                 {
-                    aBoardFile << aIndex << " " << setiosflags(ios::fixed) << setprecision(5)
-                    << (*bo)->startPoint.x << " "
-                    << (*bo)->startPoint.y << " 0\n";
+                    aBoardFile << aIndex << " " << setiosflags( ios::fixed ) << setprecision( 5 )
+                               << ( *bo )->startPoint.x << " " << ( *bo )->startPoint.y << " 0\n";
                 }
                 else
                 {
-                    aBoardFile << aIndex << " " << setiosflags(ios::fixed) << setprecision(5)
-                    << (*bo)->startPoint.x << " "
-                    << (*bo)->startPoint.y << " "
-                    << setprecision(3) << -(*bo)->angle << "\n";
+                    aBoardFile << aIndex << " " << setiosflags( ios::fixed ) << setprecision( 5 )
+                               << ( *bo )->startPoint.x << " " << ( *bo )->startPoint.y << " "
+                               << setprecision( 3 ) << -( *bo )->angle << "\n";
                 }
             }
             else
             {
-                if( (*bo)->angle < MIN_ANG && (*bo)->angle > -MIN_ANG )
+                if( ( *bo )->angle < MIN_ANG && ( *bo )->angle > -MIN_ANG )
                 {
-                    aBoardFile << aIndex << " " << setiosflags(ios::fixed) << setprecision(1)
-                    << ((*bo)->startPoint.x / IDF_THOU_TO_MM) << " "
-                    << ((*bo)->startPoint.y / IDF_THOU_TO_MM) << " 0\n";
+                    aBoardFile << aIndex << " " << setiosflags( ios::fixed ) << setprecision( 1 )
+                               << ( ( *bo )->startPoint.x / IDF_THOU_TO_MM ) << " "
+                               << ( ( *bo )->startPoint.y / IDF_THOU_TO_MM ) << " 0\n";
                 }
                 else
                 {
-                    aBoardFile << aIndex << " " << setiosflags(ios::fixed) << setprecision(1)
-                    << ((*bo)->startPoint.x / IDF_THOU_TO_MM) << " "
-                    << ((*bo)->startPoint.y / IDF_THOU_TO_MM) << " "
-                    << setprecision(3) << -(*bo)->angle << "\n";
+                    aBoardFile << aIndex << " " << setiosflags( ios::fixed ) << setprecision( 1 )
+                               << ( ( *bo )->startPoint.x / IDF_THOU_TO_MM ) << " "
+                               << ( ( *bo )->startPoint.y / IDF_THOU_TO_MM ) << " "
+                               << setprecision( 3 ) << -( *bo )->angle << "\n";
                 }
             }
 
@@ -864,50 +876,46 @@ void BOARD_OUTLINE::writeOutline( std::ostream& aBoardFile, IDF_OUTLINE* aOutlin
         // for the first item we write out both points
         if( unit != UNIT_THOU )
         {
-            if( (*bo)->angle < MIN_ANG && (*bo)->angle > -MIN_ANG )
+            if( ( *bo )->angle < MIN_ANG && ( *bo )->angle > -MIN_ANG )
             {
-                aBoardFile << aIndex << " " << setiosflags(ios::fixed) << setprecision(5)
-                << (*bo)->startPoint.x << " "
-                << (*bo)->startPoint.y << " 0\n";
+                aBoardFile << aIndex << " " << setiosflags( ios::fixed ) << setprecision( 5 )
+                           << ( *bo )->startPoint.x << " " << ( *bo )->startPoint.y << " 0\n";
 
-                aBoardFile << aIndex << " " << setiosflags(ios::fixed) << setprecision(5)
-                << (*bo)->endPoint.x << " "
-                << (*bo)->endPoint.y << " 0\n";
+                aBoardFile << aIndex << " " << setiosflags( ios::fixed ) << setprecision( 5 )
+                           << ( *bo )->endPoint.x << " " << ( *bo )->endPoint.y << " 0\n";
             }
             else
             {
-                aBoardFile << aIndex << " " << setiosflags(ios::fixed) << setprecision(5)
-                << (*bo)->startPoint.x << " "
-                << (*bo)->startPoint.y << " 0\n";
+                aBoardFile << aIndex << " " << setiosflags( ios::fixed ) << setprecision( 5 )
+                           << ( *bo )->startPoint.x << " " << ( *bo )->startPoint.y << " 0\n";
 
-                aBoardFile << aIndex << " " << setiosflags(ios::fixed) << setprecision(5)
-                << (*bo)->endPoint.x << " "
-                << (*bo)->endPoint.y << " "
-                << setprecision(3) << (*bo)->angle << "\n";
+                aBoardFile << aIndex << " " << setiosflags( ios::fixed ) << setprecision( 5 )
+                           << ( *bo )->endPoint.x << " " << ( *bo )->endPoint.y << " "
+                           << setprecision( 3 ) << ( *bo )->angle << "\n";
             }
         }
         else
         {
-            if( (*bo)->angle < MIN_ANG && (*bo)->angle > -MIN_ANG )
+            if( ( *bo )->angle < MIN_ANG && ( *bo )->angle > -MIN_ANG )
             {
-                aBoardFile << aIndex << " " << setiosflags(ios::fixed) << setprecision(1)
-                << ((*bo)->startPoint.x / IDF_THOU_TO_MM) << " "
-                << ((*bo)->startPoint.y / IDF_THOU_TO_MM) << " 0\n";
+                aBoardFile << aIndex << " " << setiosflags( ios::fixed ) << setprecision( 1 )
+                           << ( ( *bo )->startPoint.x / IDF_THOU_TO_MM ) << " "
+                           << ( ( *bo )->startPoint.y / IDF_THOU_TO_MM ) << " 0\n";
 
-                aBoardFile << aIndex << " " << setiosflags(ios::fixed) << setprecision(1)
-                << ((*bo)->endPoint.x / IDF_THOU_TO_MM) << " "
-                << ((*bo)->endPoint.y / IDF_THOU_TO_MM) << " 0\n";
+                aBoardFile << aIndex << " " << setiosflags( ios::fixed ) << setprecision( 1 )
+                           << ( ( *bo )->endPoint.x / IDF_THOU_TO_MM ) << " "
+                           << ( ( *bo )->endPoint.y / IDF_THOU_TO_MM ) << " 0\n";
             }
             else
             {
-                aBoardFile << aIndex << " " << setiosflags(ios::fixed) << setprecision(1)
-                << ((*bo)->startPoint.x / IDF_THOU_TO_MM) << " "
-                << ((*bo)->startPoint.y / IDF_THOU_TO_MM) << " 0\n";
+                aBoardFile << aIndex << " " << setiosflags( ios::fixed ) << setprecision( 1 )
+                           << ( ( *bo )->startPoint.x / IDF_THOU_TO_MM ) << " "
+                           << ( ( *bo )->startPoint.y / IDF_THOU_TO_MM ) << " 0\n";
 
-                aBoardFile << aIndex << " " << setiosflags(ios::fixed) << setprecision(1)
-                << ((*bo)->endPoint.x / IDF_THOU_TO_MM) << " "
-                << ((*bo)->endPoint.y / IDF_THOU_TO_MM) << " "
-                << setprecision(3) << (*bo)->angle << "\n";
+                aBoardFile << aIndex << " " << setiosflags( ios::fixed ) << setprecision( 1 )
+                           << ( ( *bo )->endPoint.x / IDF_THOU_TO_MM ) << " "
+                           << ( ( *bo )->endPoint.y / IDF_THOU_TO_MM ) << " " << setprecision( 3 )
+                           << ( *bo )->angle << "\n";
             }
         }
 
@@ -918,43 +926,40 @@ void BOARD_OUTLINE::writeOutline( std::ostream& aBoardFile, IDF_OUTLINE* aOutlin
         {
             if( unit != UNIT_THOU )
             {
-                if( (*bo)->angle < MIN_ANG && (*bo)->angle > -MIN_ANG )
+                if( ( *bo )->angle < MIN_ANG && ( *bo )->angle > -MIN_ANG )
                 {
-                    aBoardFile << aIndex << " " << setiosflags(ios::fixed) << setprecision(5)
-                    << (*bo)->endPoint.x << " "
-                    << (*bo)->endPoint.y << " 0\n";
+                    aBoardFile << aIndex << " " << setiosflags( ios::fixed ) << setprecision( 5 )
+                               << ( *bo )->endPoint.x << " " << ( *bo )->endPoint.y << " 0\n";
                 }
                 else
                 {
-                    aBoardFile << aIndex << " " << setiosflags(ios::fixed) << setprecision(5)
-                    << (*bo)->endPoint.x << " "
-                    << (*bo)->endPoint.y << " "
-                    << setprecision(3) << (*bo)->angle << "\n";
+                    aBoardFile << aIndex << " " << setiosflags( ios::fixed ) << setprecision( 5 )
+                               << ( *bo )->endPoint.x << " " << ( *bo )->endPoint.y << " "
+                               << setprecision( 3 ) << ( *bo )->angle << "\n";
                 }
             }
             else
             {
-                if( (*bo)->angle < MIN_ANG && (*bo)->angle > -MIN_ANG )
+                if( ( *bo )->angle < MIN_ANG && ( *bo )->angle > -MIN_ANG )
                 {
-                    aBoardFile << aIndex << " " << setiosflags(ios::fixed) << setprecision(1)
-                    << ((*bo)->endPoint.x / IDF_THOU_TO_MM) << " "
-                    << ((*bo)->endPoint.y / IDF_THOU_TO_MM) << " 0\n";
+                    aBoardFile << aIndex << " " << setiosflags( ios::fixed ) << setprecision( 1 )
+                               << ( ( *bo )->endPoint.x / IDF_THOU_TO_MM ) << " "
+                               << ( ( *bo )->endPoint.y / IDF_THOU_TO_MM ) << " 0\n";
                 }
                 else
                 {
-                    aBoardFile << aIndex << " " << setiosflags(ios::fixed) << setprecision(1)
-                    << ((*bo)->endPoint.x / IDF_THOU_TO_MM) << " "
-                    << ((*bo)->endPoint.y / IDF_THOU_TO_MM) << " "
-                    << setprecision(3) << (*bo)->angle << "\n";
+                    aBoardFile << aIndex << " " << setiosflags( ios::fixed ) << setprecision( 1 )
+                               << ( ( *bo )->endPoint.x / IDF_THOU_TO_MM ) << " "
+                               << ( ( *bo )->endPoint.y / IDF_THOU_TO_MM ) << " "
+                               << setprecision( 3 ) << ( *bo )->angle << "\n";
                 }
             }
 
             ++bo;
         }
     }
-
-    return;
 }
+
 
 void BOARD_OUTLINE::writeOutlines( std::ostream& aBoardFile )
 {
@@ -970,9 +975,8 @@ void BOARD_OUTLINE::writeOutlines( std::ostream& aBoardFile )
         writeOutline( aBoardFile, *itS, idx++ );
         ++itS;
     }
-
-    return;
 }
+
 
 bool BOARD_OUTLINE::SetUnit( IDF3::IDF_UNIT aUnit )
 {
@@ -993,10 +997,12 @@ bool BOARD_OUTLINE::SetUnit( IDF3::IDF_UNIT aUnit )
     return true;
 }
 
+
 IDF3::IDF_UNIT BOARD_OUTLINE::GetUnit( void )
 {
     return unit;
 }
+
 
 bool BOARD_OUTLINE::setThickness( double aThickness )
 {
@@ -1015,6 +1021,7 @@ bool BOARD_OUTLINE::setThickness( double aThickness )
     return true;
 }
 
+
 bool BOARD_OUTLINE::SetThickness( double aThickness )
 {
 #ifndef DISABLE_IDF_OWNERSHIP
@@ -1024,6 +1031,7 @@ bool BOARD_OUTLINE::SetThickness( double aThickness )
 
     return setThickness( aThickness );
 }
+
 
 double BOARD_OUTLINE::GetThickness( void )
 {
@@ -1047,7 +1055,8 @@ void BOARD_OUTLINE::readData( std::istream& aBoardFile, const std::string& aHead
     pos = aBoardFile.tellg();
 
     if( !GetIDFString( aHeader, token, quoted, idx ) )
-        throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__, "invalid invocation: blank header line" ) );
+        throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__,
+                          "invalid invocation: blank header line" ) );
 
     if( quoted )
     {
@@ -1106,6 +1115,7 @@ void BOARD_OUTLINE::readData( std::istream& aBoardFile, const std::string& aHead
     }
 
     idx = 0;
+
     if( comment )
     {
         ostringstream ostr;
@@ -1133,6 +1143,7 @@ void BOARD_OUTLINE::readData( std::istream& aBoardFile, const std::string& aHead
     teststr << token;
 
     teststr >> thickness;
+
     if( teststr.fail() )
     {
         ostringstream ostr;
@@ -1197,6 +1208,7 @@ void BOARD_OUTLINE::readData( std::istream& aBoardFile, const std::string& aHead
     }
 
     idx = 0;
+
     if( comment )
     {
         ostringstream ostr;
@@ -1219,8 +1231,6 @@ void BOARD_OUTLINE::readData( std::istream& aBoardFile, const std::string& aHead
 
         throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__, ostr.str() ) );
     }
-
-    return;
 }
 
 
@@ -1234,15 +1244,14 @@ void BOARD_OUTLINE::writeData( std::ostream& aBoardFile )
     writeOwner( aBoardFile );
 
     if( unit != UNIT_THOU )
-        aBoardFile << setiosflags(ios::fixed) << setprecision(5) << thickness << "\n";
+        aBoardFile << setiosflags( ios::fixed ) << setprecision( 5 ) << thickness << "\n";
     else
-        aBoardFile << setiosflags(ios::fixed) << setprecision(1) << (thickness / IDF_THOU_TO_MM) << "\n";
+        aBoardFile << setiosflags( ios::fixed ) << setprecision( 1 )
+                   << ( thickness / IDF_THOU_TO_MM ) << "\n";
 
     writeOutlines( aBoardFile );
 
     aBoardFile << ".END_BOARD_OUTLINE\n\n";
-
-    return;
 }
 
 void BOARD_OUTLINE::clear( void )
@@ -1253,6 +1262,7 @@ void BOARD_OUTLINE::clear( void )
     owner = UNOWNED;
     return;
 }
+
 
 bool BOARD_OUTLINE::Clear( void )
 {
@@ -1266,15 +1276,18 @@ bool BOARD_OUTLINE::Clear( void )
     return true;
 }
 
+
 void BOARD_OUTLINE::setParent( IDF3_BOARD* aParent )
 {
     parent = aParent;
 }
 
+
 IDF3_BOARD* BOARD_OUTLINE::GetParent( void )
 {
     return parent;
 }
+
 
 bool BOARD_OUTLINE::addOutline( IDF_OUTLINE* aOutline )
 {
@@ -1305,6 +1318,7 @@ bool BOARD_OUTLINE::addOutline( IDF_OUTLINE* aOutline )
     return true;
 }
 
+
 bool BOARD_OUTLINE::AddOutline( IDF_OUTLINE* aOutline )
 {
 #ifndef DISABLE_IDF_OWNERSHIP
@@ -1315,6 +1329,7 @@ bool BOARD_OUTLINE::AddOutline( IDF_OUTLINE* aOutline )
     return addOutline( aOutline );
 }
 
+
 bool BOARD_OUTLINE::DelOutline( IDF_OUTLINE* aOutline )
 {
     std::list< IDF_OUTLINE* >::iterator itS = outlines.begin();
@@ -1324,7 +1339,7 @@ bool BOARD_OUTLINE::DelOutline( IDF_OUTLINE* aOutline )
     {
         ostringstream ostr;
         ostr << __FILE__ << ":" << __LINE__ << ":" << __FUNCTION__ << "():\n";
-        ostr << "* BUG: NULL aOutline pointer\n";
+        ostr << "* BUG: nullptr aOutline pointer\n";
         ostr << "* outline type: " << GetOutlineTypeString( outlineType );
         errormsg = ostr.str();
 
@@ -1425,15 +1440,18 @@ bool BOARD_OUTLINE::DelOutline( size_t aIndex )
     return true;
 }
 
+
 const std::list< IDF_OUTLINE* >*const BOARD_OUTLINE::GetOutlines( void )
 {
     return &outlines;
 }
 
+
 size_t BOARD_OUTLINE::OutlinesSize( void )
 {
     return outlines.size();
 }
+
 
 IDF_OUTLINE* BOARD_OUTLINE::GetOutline( size_t aIndex )
 {
@@ -1444,7 +1462,7 @@ IDF_OUTLINE* BOARD_OUTLINE::GetOutline( size_t aIndex )
         ostr <<  "* aIndex (" << aIndex << ") is out of range (" << outlines.size() << ")";
         errormsg = ostr.str();
 
-        return NULL;
+        return nullptr;
     }
 
     std::list< IDF_OUTLINE* >::iterator itS = outlines.begin();
@@ -1455,10 +1473,12 @@ IDF_OUTLINE* BOARD_OUTLINE::GetOutline( size_t aIndex )
     return *itS;
 }
 
+
 IDF3::KEY_OWNER BOARD_OUTLINE::GetOwner( void )
 {
     return owner;
 }
+
 
 bool BOARD_OUTLINE::SetOwner( IDF3::KEY_OWNER aOwner )
 {
@@ -1471,10 +1491,12 @@ bool BOARD_OUTLINE::SetOwner( IDF3::KEY_OWNER aOwner )
     return true;
 }
 
+
 bool BOARD_OUTLINE::IsSingle( void )
 {
     return single;
 }
+
 
 void BOARD_OUTLINE::clearOutlines( void )
 {
@@ -1488,8 +1510,8 @@ void BOARD_OUTLINE::clearOutlines( void )
     }
 
     outlines.clear();
-    return;
 }
+
 
 void BOARD_OUTLINE::AddComment( const std::string& aComment )
 {
@@ -1497,23 +1519,25 @@ void BOARD_OUTLINE::AddComment( const std::string& aComment )
         return;
 
     comments.push_back( aComment );
-    return;
 }
+
 
 size_t BOARD_OUTLINE::CommentsSize( void )
 {
     return comments.size();
 }
 
+
 std::list< std::string >* BOARD_OUTLINE::GetComments( void )
 {
     return &comments;
 }
 
+
 const std::string* BOARD_OUTLINE::GetComment( size_t aIndex )
 {
     if( aIndex >= comments.size() )
-        return NULL;
+        return nullptr;
 
     std::list< std::string >::iterator itS = comments.begin();
 
@@ -1522,6 +1546,7 @@ const std::string* BOARD_OUTLINE::GetComment( size_t aIndex )
 
     return &(*itS);
 }
+
 
 bool  BOARD_OUTLINE::DeleteComment( size_t aIndex )
 {
@@ -1537,25 +1562,21 @@ bool  BOARD_OUTLINE::DeleteComment( size_t aIndex )
     return true;
 }
 
+
 void  BOARD_OUTLINE::ClearComments( void )
 {
     comments.clear();
-    return;
 }
 
 
-/*
- * OTHER_OUTLINE
- */
 OTHER_OUTLINE::OTHER_OUTLINE( IDF3_BOARD* aParent )
 {
     setParent( aParent );
     outlineType = OTLN_OTHER;
     side = LYR_INVALID;
     single = false;
-
-    return;
 }
+
 
 bool OTHER_OUTLINE::SetOutlineIdentifier( const std::string& aUniqueID )
 {
@@ -1569,10 +1590,12 @@ bool OTHER_OUTLINE::SetOutlineIdentifier( const std::string& aUniqueID )
     return true;
 }
 
+
 const std::string& OTHER_OUTLINE::GetOutlineIdentifier( void )
 {
     return uniqueID;
 }
+
 
 bool OTHER_OUTLINE::SetSide( IDF3::IDF_LAYER aSide )
 {
@@ -1589,7 +1612,8 @@ bool OTHER_OUTLINE::SetSide( IDF3::IDF_LAYER aSide )
             break;
 
         default:
-            do{
+            do
+            {
                 ostringstream ostr;
                 ostr << __FILE__ << ":" << __LINE__ << ":" << __FUNCTION__ << "():\n";
                 ostr << "* BUG: invalid side (" << aSide << "); must be one of TOP/BOTTOM\n";
@@ -1606,10 +1630,12 @@ bool OTHER_OUTLINE::SetSide( IDF3::IDF_LAYER aSide )
     return true;
 }
 
+
 IDF3::IDF_LAYER OTHER_OUTLINE::GetSide( void )
 {
     return side;
 }
+
 
 void OTHER_OUTLINE::readData( std::istream& aBoardFile, const std::string& aHeader,
                               IDF3::IDF_VERSION aIdfVersion )
@@ -1749,6 +1775,7 @@ void OTHER_OUTLINE::readData( std::istream& aBoardFile, const std::string& aHead
         teststr << token;
 
         teststr >> thickness;
+
         if( teststr.fail() )
         {
             ostringstream ostr;
@@ -1828,6 +1855,7 @@ void OTHER_OUTLINE::readData( std::istream& aBoardFile, const std::string& aHead
     }
 
     idx = 0;
+
     if( comment )
     {
         ostringstream ostr;
@@ -1866,9 +1894,8 @@ void OTHER_OUTLINE::readData( std::istream& aBoardFile, const std::string& aHead
             throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__, ostr.str() ) );
         }
     }
-
-    return;
 }
+
 
 void OTHER_OUTLINE::writeData( std::ostream& aBoardFile )
 {
@@ -1892,26 +1919,28 @@ void OTHER_OUTLINE::writeData( std::ostream& aBoardFile )
         aBoardFile << "\"" << uniqueID << "\" ";
 
         if( unit != UNIT_THOU )
-            aBoardFile << setiosflags(ios::fixed) << setprecision(5) << thickness << " ";
+            aBoardFile << setiosflags( ios::fixed ) << setprecision( 5 ) << thickness << " ";
         else
-            aBoardFile << setiosflags(ios::fixed) << setprecision(1) << (thickness / IDF_THOU_TO_MM) << " ";
+            aBoardFile << setiosflags( ios::fixed ) << setprecision( 1 )
+                       << ( thickness / IDF_THOU_TO_MM ) << " ";
 
         switch( side )
         {
-            case LYR_TOP:
-            case LYR_BOTTOM:
-                WriteLayersText( aBoardFile, side );
-                break;
+        case LYR_TOP:
+        case LYR_BOTTOM:
+            WriteLayersText( aBoardFile, side );
+            break;
 
-            default:
-                do{
-                    ostringstream ostr;
-                    ostr << "\n* invalid OTHER_OUTLINE side (neither top nor bottom): ";
-                    ostr << side;
-                    throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__, ostr.str() ) );
-                } while( 0 );
+        default:
+            do
+            {
+                ostringstream ostr;
+                ostr << "\n* invalid OTHER_OUTLINE side (neither top nor bottom): ";
+                ostr << side;
+                throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__, ostr.str() ) );
+            } while( 0 );
 
-                break;
+            break;
         }
     }
 
@@ -1923,8 +1952,6 @@ void OTHER_OUTLINE::writeData( std::ostream& aBoardFile )
         aBoardFile << ".END_OTHER_OUTLINE\n\n";
     else
         aBoardFile << ".END_VIA_KEEPOUT\n\n";
-
-    return;
 }
 
 
@@ -1943,9 +1970,6 @@ bool OTHER_OUTLINE::Clear( void )
 }
 
 
-/*
- * ROUTE_OUTLINE
- */
 ROUTE_OUTLINE::ROUTE_OUTLINE( IDF3_BOARD* aParent )
 {
     setParent( aParent );
@@ -1953,6 +1977,7 @@ ROUTE_OUTLINE::ROUTE_OUTLINE( IDF3_BOARD* aParent )
     single = true;
     layers = LYR_INVALID;
 }
+
 
 bool ROUTE_OUTLINE::SetLayers( IDF3::IDF_LAYER aLayer )
 {
@@ -1966,10 +1991,12 @@ bool ROUTE_OUTLINE::SetLayers( IDF3::IDF_LAYER aLayer )
     return true;
 }
 
+
 IDF3::IDF_LAYER ROUTE_OUTLINE::GetLayers( void )
 {
     return layers;
 }
+
 
 void ROUTE_OUTLINE::readData( std::istream& aBoardFile, const std::string& aHeader,
                               IDF3::IDF_VERSION aIdfVersion )
@@ -2053,6 +2080,7 @@ void ROUTE_OUTLINE::readData( std::istream& aBoardFile, const std::string& aHead
         }
 
         idx = 0;
+
         if( comment )
         {
             ostringstream ostr;
@@ -2116,8 +2144,7 @@ void ROUTE_OUTLINE::readData( std::istream& aBoardFile, const std::string& aHead
                 throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__, ostr.str() ) );
             }
         }
-
-    }   // RECORD 2, conditional > IDFv2 or ROUTE_KO_OUTLINE
+    }
     else
     {
         layers = LYR_ALL;
@@ -2141,6 +2168,7 @@ void ROUTE_OUTLINE::readData( std::istream& aBoardFile, const std::string& aHead
     }
 
     idx = 0;
+
     if( comment )
     {
         ostringstream ostr;
@@ -2179,8 +2207,6 @@ void ROUTE_OUTLINE::readData( std::istream& aBoardFile, const std::string& aHead
             throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__, ostr.str() ) );
         }
     }
-
-    return;
 }
 
 
@@ -2216,8 +2242,6 @@ void ROUTE_OUTLINE::writeData( std::ostream& aBoardFile )
         aBoardFile << ".END_ROUTE_OUTLINE\n\n";
     else
         aBoardFile << ".END_ROUTE_KEEPOUT\n\n";
-
-    return;
 }
 
 
@@ -2235,9 +2259,6 @@ bool ROUTE_OUTLINE::Clear( void )
 }
 
 
-/*
- * PLACE_OUTLINE
- */
 PLACE_OUTLINE::PLACE_OUTLINE( IDF3_BOARD* aParent )
 {
     setParent( aParent );
@@ -2257,25 +2278,26 @@ bool PLACE_OUTLINE::SetSide( IDF3::IDF_LAYER aSide )
 
     switch( aSide )
     {
-        case LYR_TOP:
-        case LYR_BOTTOM:
-        case LYR_BOTH:
-            side = aSide;
-            break;
+    case LYR_TOP:
+    case LYR_BOTTOM:
+    case LYR_BOTH:
+        side = aSide;
+        break;
 
-        default:
-            do{
-                side = LYR_INVALID;
-                ostringstream ostr;
-                ostr << __FILE__ << ":" << __LINE__ << ":" << __FUNCTION__ << "():\n";
-                ostr << "* BUG: invalid layer (" << aSide << "): must be one of TOP/BOTTOM/BOTH\n";
-                ostr << "* outline type: " << GetOutlineTypeString( outlineType );
-                errormsg = ostr.str();
+    default:
+        do
+        {
+            side = LYR_INVALID;
+            ostringstream ostr;
+            ostr << __FILE__ << ":" << __LINE__ << ":" << __FUNCTION__ << "():\n";
+            ostr << "* BUG: invalid layer (" << aSide << "): must be one of TOP/BOTTOM/BOTH\n";
+            ostr << "* outline type: " << GetOutlineTypeString( outlineType );
+            errormsg = ostr.str();
 
-                return false;
-            } while( 0 );
+            return false;
+        } while( 0 );
 
-            break;
+        break;
     }
 
     return true;
@@ -2299,7 +2321,8 @@ bool PLACE_OUTLINE::SetMaxHeight( double aHeight )
     {
         thickness = 0.0;
 
-        do{
+        do
+        {
             ostringstream ostr;
             ostr << __FILE__ << ":" << __LINE__ << ":" << __FUNCTION__ << "():\n";
             ostr << "* BUG: invalid height (" << aHeight << "): must be >= 0.0";
@@ -2314,10 +2337,12 @@ bool PLACE_OUTLINE::SetMaxHeight( double aHeight )
     return true;
 }
 
+
 double PLACE_OUTLINE::GetMaxHeight( void )
 {
     return thickness;
 }
+
 
 void PLACE_OUTLINE::readData( std::istream& aBoardFile, const std::string& aHeader,
                               IDF3::IDF_VERSION aIdfVersion )
@@ -2399,6 +2424,7 @@ void PLACE_OUTLINE::readData( std::istream& aBoardFile, const std::string& aHead
         }
 
         idx = 0;
+
         if( comment )
         {
             ostringstream ostr;
@@ -2485,7 +2511,6 @@ void PLACE_OUTLINE::readData( std::istream& aBoardFile, const std::string& aHead
 
             if( thickness < 0.0 )
                 thickness = 0.0;
-
         }
         else
         {
@@ -2529,6 +2554,7 @@ void PLACE_OUTLINE::readData( std::istream& aBoardFile, const std::string& aHead
     }
 
     idx = 0;
+
     if( comment )
     {
         ostringstream ostr;
@@ -2555,9 +2581,8 @@ void PLACE_OUTLINE::readData( std::istream& aBoardFile, const std::string& aHead
             throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__,
                               "invalid .PLACE_KEEPOUT section: no .END_PLACE_KEEPOUT found" ) );
     }
-
-    return;
 }
+
 
 void PLACE_OUTLINE::writeData( std::ostream& aBoardFile )
 {
@@ -2578,26 +2603,26 @@ void PLACE_OUTLINE::writeData( std::ostream& aBoardFile )
     // write RECORD 2
     switch( side )
     {
-        case LYR_TOP:
-        case LYR_BOTTOM:
-        case LYR_BOTH:
-            WriteLayersText( aBoardFile, side );
-            break;
+    case LYR_TOP:
+    case LYR_BOTTOM:
+    case LYR_BOTH:
+        WriteLayersText( aBoardFile, side );
+        break;
 
-        default:
-            do
-            {
-                ostringstream ostr;
-                ostr << "\n* invalid PLACE_OUTLINE/KEEPOUT side (";
-                ostr << side << "); must be one of TOP/BOTTOM/BOTH";
-                throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__, ostr.str() ) );
-            } while( 0 );
+    default:
+        do
+        {
+            ostringstream ostr;
+            ostr << "\n* invalid PLACE_OUTLINE/KEEPOUT side (";
+            ostr << side << "); must be one of TOP/BOTTOM/BOTH";
+            throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__, ostr.str() ) );
+        } while( 0 );
 
-            break;
+        break;
     }
 
     // thickness is optional for OTLN_PLACE, but mandatory for OTLN_PLACE_KEEPOUT
-    if( thickness < 0.0 && outlineType == OTLN_PLACE_KEEPOUT)
+    if( thickness < 0.0 && outlineType == OTLN_PLACE_KEEPOUT )
     {
         aBoardFile << "\n";
     }
@@ -2606,9 +2631,10 @@ void PLACE_OUTLINE::writeData( std::ostream& aBoardFile )
         aBoardFile << " ";
 
         if( unit != UNIT_THOU )
-            aBoardFile << setiosflags(ios::fixed) << setprecision(5) << thickness << "\n";
+            aBoardFile << setiosflags( ios::fixed ) << setprecision( 5 ) << thickness << "\n";
         else
-            aBoardFile << setiosflags(ios::fixed) << setprecision(1) << (thickness / IDF_THOU_TO_MM) << "\n";
+            aBoardFile << setiosflags( ios::fixed ) << setprecision( 1 )
+                       << ( thickness / IDF_THOU_TO_MM ) << "\n";
     }
 
     // write RECORD 3
@@ -2639,9 +2665,6 @@ bool PLACE_OUTLINE::Clear( void )
 }
 
 
-/*
- * ROUTE_KEEPOUT
- */
 ROUTE_KO_OUTLINE::ROUTE_KO_OUTLINE( IDF3_BOARD* aParent )
     : ROUTE_OUTLINE( aParent )
 {
@@ -2650,9 +2673,6 @@ ROUTE_KO_OUTLINE::ROUTE_KO_OUTLINE( IDF3_BOARD* aParent )
 }
 
 
-/*
- * PLACE_KEEPOUT
- */
 PLACE_KO_OUTLINE::PLACE_KO_OUTLINE( IDF3_BOARD* aParent )
     : PLACE_OUTLINE( aParent )
 {
@@ -2661,9 +2681,6 @@ PLACE_KO_OUTLINE::PLACE_KO_OUTLINE( IDF3_BOARD* aParent )
 }
 
 
-/*
- * VIA_KEEPOUT
- */
 VIA_KO_OUTLINE::VIA_KO_OUTLINE( IDF3_BOARD* aParent )
     : OTHER_OUTLINE( aParent )
 {
@@ -2672,9 +2689,6 @@ VIA_KO_OUTLINE::VIA_KO_OUTLINE( IDF3_BOARD* aParent )
 }
 
 
-/*
- * PLACEMENT GROUP (PLACE_REGION)
- */
 GROUP_OUTLINE::GROUP_OUTLINE( IDF3_BOARD* aParent )
 {
     setParent( aParent );
@@ -2695,23 +2709,24 @@ bool GROUP_OUTLINE::SetSide( IDF3::IDF_LAYER aSide )
 
     switch( aSide )
     {
-        case LYR_TOP:
-        case LYR_BOTTOM:
-        case LYR_BOTH:
-            side = aSide;
-            break;
+    case LYR_TOP:
+    case LYR_BOTTOM:
+    case LYR_BOTH:
+        side = aSide;
+        break;
 
-        default:
-            do{
-                ostringstream ostr;
-                ostr << "invalid side (" << aSide << "); must be one of TOP/BOTTOM/BOTH\n";
-                ostr << "* outline type: " << GetOutlineTypeString( outlineType );
-                errormsg = ostr.str();
+    default:
+        do
+        {
+            ostringstream ostr;
+            ostr << "invalid side (" << aSide << "); must be one of TOP/BOTTOM/BOTH\n";
+            ostr << "* outline type: " << GetOutlineTypeString( outlineType );
+            errormsg = ostr.str();
 
-                return false;
-            } while( 0 );
+            return false;
+        } while( 0 );
 
-            break;
+        break;
     }
 
     return true;
@@ -2731,7 +2746,7 @@ bool GROUP_OUTLINE::SetGroupName( std::string aGroupName )
         return false;
 #endif
 
-    groupName = std::move(aGroupName);
+    groupName = std::move( aGroupName );
 
     return true;
 }
@@ -2774,8 +2789,7 @@ void GROUP_OUTLINE::readData( std::istream& aBoardFile, const std::string& aHead
     }
 
     if( !CompareToken( ".PLACE_REGION", token ) )
-        throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__,
-                          "\n* BUG: not a .PLACE_REGION" ) );
+        throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__, "\n* BUG: not a .PLACE_REGION" ) );
 
     if( !GetIDFString( aHeader, token, quoted, idx ) )
     {
@@ -2812,6 +2826,7 @@ void GROUP_OUTLINE::readData( std::istream& aBoardFile, const std::string& aHead
     }
 
     idx = 0;
+
     if( comment )
     {
         ostringstream ostr;
@@ -2881,6 +2896,7 @@ void GROUP_OUTLINE::readData( std::istream& aBoardFile, const std::string& aHead
     }
 
     idx = 0;
+
     if( comment )
     {
         ostringstream ostr;
@@ -2893,12 +2909,9 @@ void GROUP_OUTLINE::readData( std::istream& aBoardFile, const std::string& aHead
         throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__, ostr.str() ) );
     }
 
-    if( !GetIDFString( iline, token, quoted, idx )
-        || !CompareToken( ".END_PLACE_REGION", token ) )
+    if( !GetIDFString( iline, token, quoted, idx ) || !CompareToken( ".END_PLACE_REGION", token ) )
         throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__,
                           "\n* invalid .PLACE_REGION section: no .END_PLACE_REGION found" ) );
-
-    return;
 }
 
 
@@ -2918,22 +2931,23 @@ void GROUP_OUTLINE::writeData( std::ostream& aBoardFile )
     // write RECORD 2
     switch( side )
     {
-        case LYR_TOP:
-        case LYR_BOTTOM:
-        case LYR_BOTH:
-            WriteLayersText( aBoardFile, side );
-            break;
+    case LYR_TOP:
+    case LYR_BOTTOM:
+    case LYR_BOTH:
+        WriteLayersText( aBoardFile, side );
+        break;
 
-        default:
-            do{
-                ostringstream ostr;
-                ostr << "\n* invalid PLACE_REGION side (must be TOP/BOTTOM/BOTH): ";
-                ostr << side;
+    default:
+        do
+        {
+            ostringstream ostr;
+            ostr << "\n* invalid PLACE_REGION side (must be TOP/BOTTOM/BOTH): ";
+            ostr << side;
 
-                throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__, ostr.str() ) );
-            } while( 0 );
+            throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__, ostr.str() ) );
+        } while( 0 );
 
-            break;
+        break;
     }
 
     aBoardFile << " \"" << groupName << "\"\n";
@@ -2943,9 +2957,8 @@ void GROUP_OUTLINE::writeData( std::ostream& aBoardFile )
 
     // write RECORD 4
     aBoardFile << ".END_PLACE_REGION\n\n";
-
-    return;
 }
+
 
 bool GROUP_OUTLINE::Clear( void )
 {
@@ -2962,9 +2975,7 @@ bool GROUP_OUTLINE::Clear( void )
     return true;
 }
 
-/*
- * COMPONENT OUTLINE
- */
+
 IDF3_COMP_OUTLINE::IDF3_COMP_OUTLINE( IDF3_BOARD* aParent )
 {
     setParent( aParent );
@@ -2974,6 +2985,7 @@ IDF3_COMP_OUTLINE::IDF3_COMP_OUTLINE( IDF3_BOARD* aParent )
     refNum = 0;
     return;
 }
+
 
 void IDF3_COMP_OUTLINE::readProperties( std::istream& aLibFile )
 {
@@ -3090,8 +3102,6 @@ void IDF3_COMP_OUTLINE::readProperties( std::istream& aLibFile )
             throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__, ostr.str() ) );
         }
     }
-
-    return;
 }
 
 
@@ -3099,6 +3109,7 @@ bool IDF3_COMP_OUTLINE::writeProperties( std::ostream& aLibFile )
 {
     if( props.empty() )
         return true;
+
     std::map< std::string, std::string >::const_iterator itS = props.begin();
     std::map< std::string, std::string >::const_iterator itE = props.end();
 
@@ -3111,6 +3122,7 @@ bool IDF3_COMP_OUTLINE::writeProperties( std::ostream& aLibFile )
 
     return !aLibFile.fail();
 }
+
 
 void IDF3_COMP_OUTLINE::readData( std::istream& aLibFile, const std::string& aHeader,
                                   IDF3::IDF_VERSION aIdfVersion )
@@ -3180,6 +3192,7 @@ void IDF3_COMP_OUTLINE::readData( std::istream& aLibFile, const std::string& aHe
     }
 
     idx = 0;
+
     if( comment )
     {
         ostringstream ostr;
@@ -3333,6 +3346,7 @@ void IDF3_COMP_OUTLINE::readData( std::istream& aLibFile, const std::string& aHe
     }
 
     idx = 0;
+
     if( comment )
     {
         ostringstream ostr;
@@ -3373,8 +3387,6 @@ void IDF3_COMP_OUTLINE::readData( std::istream& aLibFile, const std::string& aHe
             throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__, ostr.str() ) );
         }
     }
-
-    return;
 }
 
 
@@ -3404,9 +3416,10 @@ void IDF3_COMP_OUTLINE::writeData( std::ostream& aLibFile )
     aLibFile << "\"" << geometry << "\" \"" << part << "\" ";
 
     if( unit != UNIT_THOU )
-        aLibFile << "MM " << setiosflags(ios::fixed) << setprecision(5) << thickness << "\n";
+        aLibFile << "MM " << setiosflags( ios::fixed ) << setprecision( 5 ) << thickness << "\n";
     else
-        aLibFile << "THOU " << setiosflags(ios::fixed) << setprecision(1) << (thickness / IDF_THOU_TO_MM) << "\n";
+        aLibFile << "THOU " << setiosflags( ios::fixed ) << setprecision( 1 )
+                 << ( thickness / IDF_THOU_TO_MM ) << "\n";
 
     writeOutlines( aLibFile );
 
@@ -3419,8 +3432,6 @@ void IDF3_COMP_OUTLINE::writeData( std::ostream& aLibFile )
     {
         aLibFile << ".END_MECHANICAL\n\n";
     }
-
-    return;
 }
 
 
@@ -3442,27 +3453,29 @@ bool IDF3_COMP_OUTLINE::Clear( void )
     return true;
 }
 
+
 bool IDF3_COMP_OUTLINE::SetComponentClass( IDF3::COMP_TYPE aCompClass )
 {
     switch( aCompClass )
     {
-        case COMP_ELEC:
-        case COMP_MECH:
-            compType = aCompClass;
-            break;
+    case COMP_ELEC:
+    case COMP_MECH:
+        compType = aCompClass;
+        break;
 
-        default:
-            do{
-                ostringstream ostr;
-                ostr << __FILE__ << ":" << __LINE__ << ":" << __FUNCTION__ << "():\n";
-                ostr << "* BUG: invalid component class (must be ELECTRICAL or MECHANICAL): ";
-                ostr << aCompClass << "\n";
-                errormsg = ostr.str();
+    default:
+        do
+        {
+            ostringstream ostr;
+            ostr << __FILE__ << ":" << __LINE__ << ":" << __FUNCTION__ << "():\n";
+            ostr << "* BUG: invalid component class (must be ELECTRICAL or MECHANICAL): ";
+            ostr << aCompClass << "\n";
+            errormsg = ostr.str();
 
-                return false;
-            } while( 0 );
+            return false;
+        } while( 0 );
 
-            break;
+        break;
     }
 
     return true;
@@ -3479,25 +3492,27 @@ void IDF3_COMP_OUTLINE::SetGeomName( const std::string& aGeomName )
 {
     geometry = aGeomName;
     uid.clear();
-    return;
 }
+
 
 const std::string& IDF3_COMP_OUTLINE::GetGeomName( void )
 {
     return geometry;
 }
 
+
 void IDF3_COMP_OUTLINE::SetPartName( const std::string& aPartName )
 {
     part = aPartName;
     uid.clear();
-    return;
 }
+
 
 const std::string& IDF3_COMP_OUTLINE::GetPartName( void )
 {
     return part;
 }
+
 
 const std::string& IDF3_COMP_OUTLINE::GetUID( void )
 {
@@ -3518,6 +3533,7 @@ int IDF3_COMP_OUTLINE::incrementRef( void )
     return ++refNum;
 }
 
+
 int IDF3_COMP_OUTLINE::decrementRef( void )
 {
     if( refNum == 0 )
@@ -3534,7 +3550,8 @@ int IDF3_COMP_OUTLINE::decrementRef( void )
     return refNum;
 }
 
-bool IDF3_COMP_OUTLINE::CreateDefaultOutline( const std::string &aGeom, const std::string &aPart )
+
+bool IDF3_COMP_OUTLINE::CreateDefaultOutline( const std::string& aGeom, const std::string& aPart )
 {
     Clear();
 
@@ -3567,7 +3584,7 @@ bool IDF3_COMP_OUTLINE::CreateDefaultOutline( const std::string &aGeom, const st
     p1.x = 1.5 * cos( a );
     p1.y = 1.5 * sin( a );
 
-    if( ol == NULL )
+    if( ol == nullptr )
         return false;
 
     for( int i = 0; i < 10; ++i )
@@ -3585,7 +3602,7 @@ bool IDF3_COMP_OUTLINE::CreateDefaultOutline( const std::string &aGeom, const st
 
         sp = new IDF_SEGMENT( p1, p2 );
 
-        if( sp == NULL )
+        if( sp == nullptr )
         {
             Clear();
             return false;
@@ -3602,7 +3619,7 @@ bool IDF3_COMP_OUTLINE::CreateDefaultOutline( const std::string &aGeom, const st
 
     sp = new IDF_SEGMENT( p1, p2 );
 
-    if( sp == NULL )
+    if( sp == nullptr )
     {
         Clear();
         return false;

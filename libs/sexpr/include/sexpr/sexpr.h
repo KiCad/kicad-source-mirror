@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2016 Mark Roszko <mark.roszko@gmail.com>
+ * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -43,12 +44,6 @@ namespace SEXPR
 
     class SEXPR
     {
-    protected:
-        SEXPR_TYPE m_type;
-        SEXPR( SEXPR_TYPE aType, size_t aLineNumber );
-        SEXPR( SEXPR_TYPE aType );
-        size_t m_lineNumber;
-
     public:
         virtual ~SEXPR() {};
         bool IsList() const { return m_type == SEXPR_TYPE::SEXPR_TYPE_LIST; }
@@ -69,6 +64,12 @@ namespace SEXPR
         SEXPR_LIST* GetList();
         std::string AsString( size_t aLevel = 0) const;
         size_t GetLineNumber() const { return m_lineNumber; }
+
+    protected:
+        SEXPR_TYPE m_type;
+        SEXPR( SEXPR_TYPE aType, size_t aLineNumber );
+        SEXPR( SEXPR_TYPE aType );
+        size_t m_lineNumber;
     };
 
     struct SEXPR_INTEGER : public SEXPR
@@ -97,10 +98,10 @@ namespace SEXPR
     {
         std::string m_value;
 
-        SEXPR_STRING( std::string aValue ) :
-            SEXPR( SEXPR_TYPE::SEXPR_TYPE_ATOM_STRING ), m_value(aValue) {};
+        SEXPR_STRING( const std::string& aValue ) :
+            SEXPR( SEXPR_TYPE::SEXPR_TYPE_ATOM_STRING ), m_value( aValue ) {};
 
-        SEXPR_STRING( std::string aValue, int aLineNumber ) :
+        SEXPR_STRING( const std::string& aValue, int aLineNumber ) :
             SEXPR( SEXPR_TYPE::SEXPR_TYPE_ATOM_STRING, aLineNumber ), m_value( aValue ) {};
     };
 
@@ -108,10 +109,10 @@ namespace SEXPR
     {
         std::string m_value;
 
-        SEXPR_SYMBOL( std::string aValue ) :
+        SEXPR_SYMBOL( const std::string& aValue ) :
             SEXPR( SEXPR_TYPE::SEXPR_TYPE_ATOM_SYMBOL ), m_value( aValue ) {};
 
-        SEXPR_SYMBOL( std::string aValue, int aLineNumber ) :
+        SEXPR_SYMBOL( const std::string& aValue, int aLineNumber ) :
             SEXPR( SEXPR_TYPE::SEXPR_TYPE_ATOM_SYMBOL, aLineNumber ), m_value( aValue ) {};
     };
 
@@ -153,8 +154,6 @@ namespace SEXPR
 
     class SEXPR_SCAN_ARG
     {
-        friend class SEXPR_LIST;
-
     public:
         SEXPR_SCAN_ARG( int32_t* aValue ) :
             type( Type::INT ) { u.int_value = aValue; }
@@ -181,6 +180,8 @@ namespace SEXPR
             type( Type::STRING_COMP ) { str_value = aValue; }
 
     private:
+        friend class SEXPR_LIST;
+
         enum class Type : char { INT, DOUBLE, STRING, LONGINT, STRING_COMP, SEXPR_STRING };
         Type type;
 
@@ -198,8 +199,6 @@ namespace SEXPR
 
     class SEXPR_CHILDREN_ARG
     {
-        friend class SEXPR_LIST;
-
     public:
         SEXPR_CHILDREN_ARG( int32_t aValue ) :
             type( Type::INT ) { u.int_value = aValue; }
@@ -210,7 +209,7 @@ namespace SEXPR
         SEXPR_CHILDREN_ARG( double aValue ) :
             type( Type::DOUBLE ) { u.dbl_value = aValue; }
 
-        SEXPR_CHILDREN_ARG( std::string aValue ) :
+        SEXPR_CHILDREN_ARG( const std::string& aValue ) :
             type( Type::STRING ) { str_value = aValue; }
 
         SEXPR_CHILDREN_ARG( const char* aValue ) :
@@ -223,6 +222,8 @@ namespace SEXPR
             type( Type::SEXPR_ATOM ) { u.sexpr_ptr = aPointer; }
 
     private:
+        friend class SEXPR_LIST;
+
         enum class Type : char { INT, DOUBLE, STRING, LONGINT, SEXPR_STRING, SEXPR_ATOM };
         Type type;
 
