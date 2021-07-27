@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014  Cirilo Bernardo
- * Copyright (C) 2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -32,22 +32,6 @@
 
 class DXF2IDF : public DL_CreationAdapter
 {
-private:
-    std::list< IDF_SEGMENT* > lines;    // Unsorted list of graphical segments
-    double m_scale;                     // scaling factor to mm
-    int m_entityType;                   // the DXF type of entity
-    int m_entityParseStatus;            // Inside a entity: status od parsing:
-                                        // 0 = no entity
-                                        // 1 = first item of entity
-                                        // 2 = entity in progress
-    int m_entity_flags;                 // state of flags read from last entity
-    IDF_POINT m_lastCoordinate;         // the last vertex coordinate read (unit = mm)
-    IDF_POINT m_polylineStart;          // The first point of the polyline entity, when reading a polyline (unit = mm)
-    double m_bulgeVertex;               // the last vertex bulge value read
-
-    void insertLine( const IDF_POINT& aSegStart, const IDF_POINT& aSegEnd );
-    void insertArc( const IDF_POINT& aSegStart, const IDF_POINT& aSegEnd, double aBulge );
-
 public:
     DXF2IDF() : m_scale( 1.0 ), m_entityType( 0 ), m_entityParseStatus( 0 ),
                 m_entity_flags( 0 ), m_bulgeVertex( 0.0 ) {};
@@ -62,14 +46,17 @@ private:
     virtual void addArc( const DL_ArcData& aData ) override;
     virtual void addCircle( const DL_CircleData& aData ) override;
     virtual void addPolyline( const DL_PolylineData& aData ) override;
-    /** Called for every polyline vertex */
+
+    /**
+     * Called for every polyline vertex.
+     */
     virtual void addVertex( const DL_VertexData& aData ) override;
 
     /**
      * Called for every string variable in the DXF file (e.g. "$ACADVER").
      */
     virtual void setVariableString( const std::string& key, const std::string& value,
-            int code ) override {};
+                                    int code ) override {};
 
     /**
      * Called for every int variable in the DXF file (e.g. "$ACADMAINTVER").
@@ -82,6 +69,24 @@ private:
     virtual void setVariableDouble( const std::string& key, double value, int code ) override {}
 
     virtual void endEntity() override;
+
+private:
+    std::list< IDF_SEGMENT* > lines;    // Unsorted list of graphical segments
+    double m_scale;                     // scaling factor to mm
+    int m_entityType;                   // the DXF type of entity
+    int m_entityParseStatus;            // Inside a entity: status of parsing:
+                                        // 0 = no entity
+                                        // 1 = first item of entity
+                                        // 2 = entity in progress
+    int m_entity_flags;                 // state of flags read from last entity
+    IDF_POINT m_lastCoordinate;         // the last vertex coordinate read (unit = mm)
+
+    // The first point of the polyline entity, when reading a polyline (unit = mm).
+    IDF_POINT m_polylineStart;
+    double m_bulgeVertex;               // the last vertex bulge value read
+
+    void insertLine( const IDF_POINT& aSegStart, const IDF_POINT& aSegEnd );
+    void insertArc( const IDF_POINT& aSegStart, const IDF_POINT& aSegEnd, double aBulge );
 };
 
 #endif  // DXF2IDF_H

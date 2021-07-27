@@ -1,7 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2014  Cirilo Bernardo
+ * Copyright (C) 2014 Cirilo Bernardo
+ * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -39,18 +40,16 @@
 
 using namespace std;
 
-void make_vcyl( bool inch, bool axial, double dia, double length,
-                double z, double wireDia );
+void make_vcyl( bool inch, bool axial, double dia, double length, double z, double wireDia );
 
-void make_hcyl( bool inch, bool axial, double dia, double length,
-                double z, double wireDia );
+void make_hcyl( bool inch, bool axial, double dia, double length, double z, double wireDia );
 
 void writeAxialCyl( FILE* fp, bool inch, double dia, double length, double wireDia, double pitch );
 
-void writeRadialCyl( FILE* fp, bool inch, double dia, double length, double wireDia,
-                     double pitch, double lead );
+void writeRadialCyl( FILE* fp, bool inch, double dia, double length, double wireDia, double pitch,
+                     double lead );
 
-int main( int argc, char **argv )
+int main( int argc, char** argv )
 {
     // IDF implicitly requires the C locale
     setlocale( LC_ALL, "C" );
@@ -81,18 +80,19 @@ int main( int argc, char **argv )
         cout << "            *** only required for horizontal orientation with radial leads\n\n";
     }
 
-    char orientation = '\0';
-    bool inch  = false; // default mm
+    char   orientation = '\0';
+    bool   inch = false; // default mm
     double dia = 0.0;
     double length = 0.0;
     double extraZ = 0.0;
     double wireDia = 0.0;
-    bool axial = false;
+    bool   axial = false;
 
     stringstream tstr;
-    string line;
+    string       line;
 
     line.clear();
+
     while( line.compare( "mm" ) && line.compare( "in" ) )
     {
         cout << "* Units (mm,in): ";
@@ -104,8 +104,9 @@ int main( int argc, char **argv )
         inch = true;
 
     line.clear();
-    while( line.compare( "H" ) && line.compare( "h" )
-        && line.compare( "V" ) && line.compare( "v" ) )
+
+    while( line.compare( "H" ) && line.compare( "h" ) && line.compare( "V" )
+           && line.compare( "v" ) )
     {
         cout << "* Orientation (H,V): ";
         line.clear();
@@ -140,6 +141,7 @@ int main( int argc, char **argv )
 
     // cylinder dimensions
     ok = false;
+
     while( !ok )
     {
         cout << "* Diameter: ";
@@ -151,11 +153,13 @@ int main( int argc, char **argv )
         tstr.str( line );
 
         tstr >> dia;
+
         if( !tstr.fail() && dia > 0.0 )
             ok = true;
     }
 
     ok = false;
+
     while( !ok )
     {
         cout << "* Length: ";
@@ -167,11 +171,13 @@ int main( int argc, char **argv )
         tstr.str( line );
 
         tstr >> length;
+
         if( !tstr.fail() && length > 0.0 )
             ok = true;
     }
 
     ok = false;
+
     while( !ok )
     {
         cout << "* Board offset: ";
@@ -183,11 +189,13 @@ int main( int argc, char **argv )
         tstr.str( line );
 
         tstr >> extraZ;
+
         if( !tstr.fail() && extraZ >= 0.0 )
             ok = true;
     }
 
     ok = false;
+
     while( ( axial || orientation == 'h' ) && !ok )
     {
         cout << "* Wire diameter: ";
@@ -199,6 +207,7 @@ int main( int argc, char **argv )
         tstr.str( line );
 
         tstr >> wireDia;
+
         if( !tstr.fail() && wireDia > 0.0 )
         {
             if( wireDia < dia )
@@ -210,14 +219,9 @@ int main( int argc, char **argv )
 
     switch( orientation )
     {
-        case 'v':
-            make_vcyl( inch, axial, dia, length, extraZ, wireDia );
-            break;
-        case 'h':
-            make_hcyl( inch, axial, dia, length, extraZ, wireDia );
-            break;
-        default:
-            break;
+    case 'v': make_vcyl( inch, axial, dia, length, extraZ, wireDia ); break;
+    case 'h': make_hcyl( inch, axial, dia, length, extraZ, wireDia ); break;
+    default: break;
     }
 
     setlocale( LC_ALL, "" );
@@ -225,13 +229,12 @@ int main( int argc, char **argv )
 }
 
 
-void make_vcyl( bool inch, bool axial, double dia, double length,
-                double z, double wireDia )
+void make_vcyl( bool inch, bool axial, double dia, double length, double z, double wireDia )
 {
-    bool ok = false;
-    bool left = false;
+    bool         ok = false;
+    bool         left = false;
     stringstream tstr;
-    string line;
+    string       line;
 
     double pitch = 0.0;
 
@@ -246,9 +249,10 @@ void make_vcyl( bool inch, bool axial, double dia, double length,
         tstr.str( line );
 
         tstr >> pitch;
+
         if( !tstr.fail() && pitch > 0.0 )
         {
-            if( (pitch - wireDia) <= (dia / 2.0) )
+            if( ( pitch - wireDia ) <= ( dia / 2.0 ) )
             {
                 cout << "* WARNING: Pitch must be > dia/2 + wireDia\n";
             }
@@ -260,6 +264,7 @@ void make_vcyl( bool inch, bool axial, double dia, double length,
     }
 
     ok = false;
+
     while( axial && !ok )
     {
         cout << "* Pin side (L,R): ";
@@ -270,10 +275,12 @@ void make_vcyl( bool inch, bool axial, double dia, double length,
         if( !line.compare( "l" ) || !line.compare( "L" ) )
         {
             left = true;
-            ok   = true;
+            ok = true;
         }
         else if( !line.compare( "r" ) || !line.compare( "R" ) )
+        {
             ok = true;
+        }
     }
 
     line.clear();
@@ -304,14 +311,14 @@ void make_vcyl( bool inch, bool axial, double dia, double length,
 
     if( inch )
     {
-        fprintf( fp, "# dia: %d THOU\n", (int) (dia * 1000) );
-        fprintf( fp, "# length: %d THOU\n", (int) (length * 1000) );
-        fprintf( fp, "# board offset: %d THOU\n", (int) (z * 1000) );
+        fprintf( fp, "# dia: %d THOU\n", (int) ( dia * 1000 ) );
+        fprintf( fp, "# length: %d THOU\n", (int) ( length * 1000 ) );
+        fprintf( fp, "# board offset: %d THOU\n", (int) ( z * 1000 ) );
 
         if( axial )
         {
-            fprintf( fp, "# wire dia: %d THOU\n", (int) (wireDia * 1000) );
-            fprintf( fp, "# pitch: %d THOU\n", (int) (pitch * 1000) );
+            fprintf( fp, "# wire dia: %d THOU\n", (int) ( wireDia * 1000 ) );
+            fprintf( fp, "# pitch: %d THOU\n", (int) ( pitch * 1000 ) );
         }
     }
     else
@@ -331,8 +338,7 @@ void make_vcyl( bool inch, bool axial, double dia, double length,
 
     if( !axial )
     {
-        fprintf( fp, "\"CYLV_%s_RAD\" \"D%.3f_H%.3f_Z%.3f\" ", inch ? "IN" : "MM",
-            dia, length, z );
+        fprintf( fp, "\"CYLV_%s_RAD\" \"D%.3f_H%.3f_Z%.3f\" ", inch ? "IN" : "MM", dia, length, z );
     }
     else
     {
@@ -341,7 +347,7 @@ void make_vcyl( bool inch, bool axial, double dia, double length,
     }
 
     if( inch )
-        fprintf( fp, "THOU %d\n", (int) ((length + z) * 1000) );
+        fprintf( fp, "THOU %d\n", (int) ( ( length + z ) * 1000 ) );
     else
         fprintf( fp, "MM %.3f\n", length + z );
 
@@ -350,7 +356,7 @@ void make_vcyl( bool inch, bool axial, double dia, double length,
         fprintf( fp, "0 0 0 0\n" );
 
         if( inch )
-            fprintf( fp, "0 %d 0 360\n", (int) (dia * 500) );
+            fprintf( fp, "0 %d 0 360\n", (int) ( dia * 500 ) );
         else
             fprintf( fp, "0 %.3f 0 360\n", dia / 2.0 );
 
@@ -369,8 +375,8 @@ void make_vcyl( bool inch, bool axial, double dia, double length,
 
     if( inch )
     {
-        dia     *= 1000.0;
-        pitch   *= 1000.0;
+        dia *= 1000.0;
+        pitch *= 1000.0;
         wireDia *= 1000.0;
     }
 
@@ -393,7 +399,9 @@ void make_vcyl( bool inch, bool axial, double dia, double length,
     {
         li = '1';
         fullAng = -360.0;
-        for( int i = 0; i < 4; ++i ) px[i] = -px[i];
+
+        for( int i = 0; i < 4; ++i )
+            px[i] = -px[i];
     }
 
 
@@ -403,8 +411,7 @@ void make_vcyl( bool inch, bool axial, double dia, double length,
         fprintf( fp, "%c %d %d %.3f\n", li, (int) px[1], (int) py[1],
                  fullAng * ( 1 - ang / M_PI ) );
         fprintf( fp, "%c %d %d 0\n", li, (int) px[2], (int) py[2] );
-        fprintf( fp, "%c %d %d %s\n", li, (int) px[3], (int) py[3],
-                 left ? "-180" : "180" );
+        fprintf( fp, "%c %d %d %s\n", li, (int) px[3], (int) py[3], left ? "-180" : "180" );
         fprintf( fp, "%c %d %d 0\n", li, (int) px[0], (int) py[0] );
     }
     else
@@ -412,27 +419,25 @@ void make_vcyl( bool inch, bool axial, double dia, double length,
         fprintf( fp, "%c %.3f %.3f 0\n", li, px[0], py[0] );
         fprintf( fp, "%c %.3f %.3f %.3f\n", li, px[1], py[1], fullAng * ( 1 - ang / M_PI ) );
         fprintf( fp, "%c %.3f %.3f 0\n", li, px[2], py[2] );
-        fprintf( fp, "%c %.3f %.3f %s\n", li, px[3], py[3],
-                 left ? "-180" : "180" );
+        fprintf( fp, "%c %.3f %.3f %s\n", li, px[3], py[3], left ? "-180" : "180" );
         fprintf( fp, "%c %.3f %.3f 0\n", li, px[0], py[0] );
     }
 
     fprintf( fp, ".END_ELECTRICAL\n" );
     fclose( fp );
-    return;
 }
 
 
-void make_hcyl( bool inch, bool axial, double dia, double length,
-                double z, double wireDia )
+void make_hcyl( bool inch, bool axial, double dia, double length, double z, double wireDia )
 {
     stringstream tstr;
-    string line;
+    string       line;
 
     double pitch = 0.0;
-    double lead  = 0.0; // lead length for radial leads
+    double lead = 0.0; // lead length for radial leads
 
     bool ok = false;
+
     while( !ok )
     {
         if( axial )
@@ -447,11 +452,12 @@ void make_hcyl( bool inch, bool axial, double dia, double length,
         tstr.str( line );
 
         tstr >> pitch;
+
         if( !tstr.fail() && pitch > 0.0 )
         {
             if( axial )
             {
-                if( (pitch - wireDia) <= length )
+                if( ( pitch - wireDia ) <= length )
                 {
                     cout << "* WARNING: Axial pitch must be > length + wireDia\n";
                 }
@@ -462,7 +468,7 @@ void make_hcyl( bool inch, bool axial, double dia, double length,
             }
             else
             {
-                if( (pitch + wireDia) >= dia )
+                if( ( pitch + wireDia ) >= dia )
                 {
                     cout << "* WARNING: Radial pitch must be < dia - wireDia\n";
                 }
@@ -479,6 +485,7 @@ void make_hcyl( bool inch, bool axial, double dia, double length,
     }
 
     ok = false;
+
     while( !axial && !ok )
     {
         cout << "* Lead length: ";
@@ -490,6 +497,7 @@ void make_hcyl( bool inch, bool axial, double dia, double length,
         tstr.str( line );
 
         tstr >> lead;
+
         if( !tstr.fail() && lead > 0.0 )
         {
             if( lead < wireDia )
@@ -500,6 +508,7 @@ void make_hcyl( bool inch, bool axial, double dia, double length,
     }
 
     line.clear();
+
     while( line.empty() || line.find( ".idf" ) == string::npos )
     {
         cout << "* File name (*.idf): ";
@@ -524,13 +533,14 @@ void make_hcyl( bool inch, bool axial, double dia, double length,
 
     if( inch )
     {
-        fprintf( fp, "# dia: %d THOU\n", (int) (dia * 1000) );
-        fprintf( fp, "# length: %d THOU\n", (int) (length * 1000) );
-        fprintf( fp, "# extra height: %d THOU\n", (int) (z * 1000) );
-        fprintf( fp, "# wire dia: %d THOU\n", (int) (wireDia * 1000) );
-        fprintf( fp, "# pitch: %d THOU\n", (int) (pitch * 1000) );
+        fprintf( fp, "# dia: %d THOU\n", (int) ( dia * 1000 ) );
+        fprintf( fp, "# length: %d THOU\n", (int) ( length * 1000 ) );
+        fprintf( fp, "# extra height: %d THOU\n", (int) ( z * 1000 ) );
+        fprintf( fp, "# wire dia: %d THOU\n", (int) ( wireDia * 1000 ) );
+        fprintf( fp, "# pitch: %d THOU\n", (int) ( pitch * 1000 ) );
+
         if( !axial )
-            fprintf( fp, "# lead: %d THOU\n", (int) (lead * 1000) );
+            fprintf( fp, "# lead: %d THOU\n", (int) ( lead * 1000 ) );
     }
     else
     {
@@ -539,6 +549,7 @@ void make_hcyl( bool inch, bool axial, double dia, double length,
         fprintf( fp, "# extra height: %.3f mm\n", z );
         fprintf( fp, "# wire dia: %.3f mm\n", wireDia );
         fprintf( fp, "# pitch: %.3f mm\n", pitch );
+
         if( !axial )
             fprintf( fp, "# lead: %.3f mm\n", lead );
     }
@@ -547,8 +558,8 @@ void make_hcyl( bool inch, bool axial, double dia, double length,
 
     if( axial )
     {
-        fprintf( fp, "\"CYLH_%s_AXI\" \"D%.3f_H%.3f_Z%.3f_WD%.3f_P%.3f\" ",
-                 inch ? "IN" : "MM", dia, length, z, wireDia, pitch );
+        fprintf( fp, "\"CYLH_%s_AXI\" \"D%.3f_H%.3f_Z%.3f_WD%.3f_P%.3f\" ", inch ? "IN" : "MM", dia,
+                 length, z, wireDia, pitch );
     }
     else
     {
@@ -558,7 +569,7 @@ void make_hcyl( bool inch, bool axial, double dia, double length,
 
     if( inch )
     {
-        fprintf( fp, "THOU %d\n", (int) ((dia + z) * 1000) );
+        fprintf( fp, "THOU %d\n", (int) ( ( dia + z ) * 1000 ) );
         dia *= 1000.0;
         length *= 1000.0;
         wireDia *= 1000.0;
@@ -578,12 +589,10 @@ void make_hcyl( bool inch, bool axial, double dia, double length,
 
     fprintf( fp, ".END_ELECTRICAL\n" );
     fclose( fp );
-
-    return;
 }
 
-void writeAxialCyl( FILE* fp, bool inch, double dia, double length,
-                   double wireDia, double pitch )
+
+void writeAxialCyl( FILE* fp, bool inch, double dia, double length, double wireDia, double pitch )
 {
     double x1, y1;
     double x2, y2;
@@ -625,23 +634,20 @@ void writeAxialCyl( FILE* fp, bool inch, double dia, double length,
         fprintf( fp, "0 %.3f %.3f 0\n", -x1, y1 );
         fprintf( fp, "0 %.3f %.3f 0\n", x1, y1 );
     }
-
-    return;
 }
 
-void writeRadialCyl( FILE* fp, bool inch, double dia, double length,
-                    double wireDia, double pitch, double lead )
+void writeRadialCyl( FILE* fp, bool inch, double dia, double length, double wireDia, double pitch,
+                     double lead )
 {
     double x1, y1;
     double x2, y2;
     double x3;
 
-    // center is between the mounting holes
-    // which are on a horizontal line
+    // center is between the mounting holes which are on a horizontal line
     y1 = lead + length;
     y2 = lead;
     x1 = dia / 2.0;
-    x2 = ( pitch + wireDia ) /2.0;
+    x2 = ( pitch + wireDia ) / 2.0;
     x3 = x2 - wireDia;
 
     if( inch )
@@ -676,6 +682,4 @@ void writeRadialCyl( FILE* fp, bool inch, double dia, double length,
         fprintf( fp, "0 %.3f %.3f 0\n", x1, y1 );
         fprintf( fp, "0 %.3f %.3f 0\n", -x1, y1 );
     }
-
-    return;
 }

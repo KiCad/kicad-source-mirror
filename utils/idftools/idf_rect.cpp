@@ -1,7 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2014  Cirilo Bernardo
+ * Copyright (C) 2014 Cirilo Bernardo
+ * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -33,13 +34,11 @@
 
 using namespace std;
 
-void writeLeaded( FILE* fp, double width, double length,
-                  double wireDia, double pitch, bool inch );
+void writeLeaded( FILE* fp, double width, double length, double wireDia, double pitch, bool inch );
 
-void writeLeadless( FILE* fp, double width, double length,
-                    double chamfer, bool inch );
+void writeLeadless( FILE* fp, double width, double length, double chamfer, bool inch );
 
-int main( int argc, char **argv )
+int main( int argc, char** argv )
 {
     // IDF implicitly requires the C locale
     setlocale( LC_ALL, "C" );
@@ -64,20 +63,21 @@ int main( int argc, char **argv )
         cout << "            **  only required for leaded components\n\n";
     }
 
-    bool inch  = false; // default mm
+    bool   inch = false; // default mm
     double width = 0.0;
     double length = 0.0;
     double height = 0.0;
     double wireDia = 0.0;
     double pitch = 0.0;
     double chamfer = 0.0;
-    bool leaded = false;
-    bool ok = false;
+    bool   leaded = false;
+    bool   ok = false;
 
     stringstream tstr;
-    string line;
+    string       line;
 
     line.clear();
+
     while( line.compare( "mm" ) && line.compare( "in" ) )
     {
         cout << "* Units (mm,in): ";
@@ -89,6 +89,7 @@ int main( int argc, char **argv )
         inch = true;
 
     ok = false;
+
     while( !ok )
     {
         cout << "* Width: ";
@@ -100,11 +101,13 @@ int main( int argc, char **argv )
         tstr.str( line );
 
         tstr >> width;
+
         if( !tstr.fail() && width >= 0.001 )
             ok = true;
     }
 
     ok = false;
+
     while( !ok )
     {
         cout << "* Length: ";
@@ -116,11 +119,13 @@ int main( int argc, char **argv )
         tstr.str( line );
 
         tstr >> length;
+
         if( !tstr.fail() && length > 0.0 )
             ok = true;
     }
 
     ok = false;
+
     while( !ok )
     {
         cout << "* Height: ";
@@ -132,11 +137,13 @@ int main( int argc, char **argv )
         tstr.str( line );
 
         tstr >> height;
+
         if( !tstr.fail() && height >= 0.001 )
             ok = true;
     }
 
     ok = false;
+
     while( !ok )
     {
         cout << "* Chamfer (0 for none): ";
@@ -148,6 +155,7 @@ int main( int argc, char **argv )
         tstr.str( line );
 
         tstr >> chamfer;
+
         if( !tstr.fail() && chamfer >= 0.0 )
         {
             if( chamfer > width / 3.0 || chamfer > length / 3.0 )
@@ -160,6 +168,7 @@ int main( int argc, char **argv )
     if( chamfer < 1e-6 )
     {
         ok = false;
+
         while( !ok )
         {
             cout << "* Leaded: Y, N: ";
@@ -181,6 +190,7 @@ int main( int argc, char **argv )
     }
 
     ok = false;
+
     while( leaded && !ok )
     {
         cout << "* Wire dia.: ";
@@ -192,6 +202,7 @@ int main( int argc, char **argv )
         tstr.str( line );
 
         tstr >> wireDia;
+
         if( !tstr.fail() && wireDia >= 0.001 )
         {
             if( wireDia >= length )
@@ -202,6 +213,7 @@ int main( int argc, char **argv )
     }
 
     ok = false;
+
     while( leaded && !ok )
     {
         cout << "* Pitch: ";
@@ -213,6 +225,7 @@ int main( int argc, char **argv )
         tstr.str( line );
 
         tstr >> pitch;
+
         if( !tstr.fail() && pitch >= 0.001 )
         {
             if( pitch <= ( length + wireDia ) / 2.0 )
@@ -223,6 +236,7 @@ int main( int argc, char **argv )
     }
 
     line.clear();
+
     while( line.empty() || line.find( ".idf" ) == string::npos )
     {
         cout << "* File name (*.idf): ";
@@ -266,8 +280,8 @@ int main( int argc, char **argv )
             }
 
             fprintf( fp, ".ELECTRICAL\n" );
-            fprintf( fp, "\"RECT%sIN\" \"W%d_L%d_H%d", leaded ? "L" : "",
-                     (int) width, (int) length, (int) height );
+            fprintf( fp, "\"RECT%sIN\" \"W%d_L%d_H%d", leaded ? "L" : "", (int) width, (int) length,
+                     (int) height );
 
             if( leaded )
                 fprintf( fp, "_D%d_P%d\" ", (int) wireDia, (int) pitch );
@@ -293,8 +307,8 @@ int main( int argc, char **argv )
             }
 
             fprintf( fp, ".ELECTRICAL\n" );
-            fprintf( fp, "\"RECT%sMM\" \"W%.3f_L%.3f_H%.3f_", leaded ? "L" : "",
-                     width, length, height );
+            fprintf( fp, "\"RECT%sMM\" \"W%.3f_L%.3f_H%.3f_", leaded ? "L" : "", width, length,
+                     height );
 
             if( leaded )
                 fprintf( fp, "D%.3f_P%.3f\" ", wireDia, pitch );
@@ -318,8 +332,7 @@ int main( int argc, char **argv )
 }
 
 
-void writeLeaded( FILE* fp, double width, double length,
-                  double wireDia, double pitch, bool inch )
+void writeLeaded( FILE* fp, double width, double length, double wireDia, double pitch, bool inch )
 {
     if( inch )
     {
@@ -365,12 +378,10 @@ void writeLeaded( FILE* fp, double width, double length,
         fprintf( fp, "0 %.3f %.3f 0\n", x1, -y1 );
         fprintf( fp, "0 %.3f %.3f 180\n", x1, y1 );
     }
-
-    return;
 }
 
-void writeLeadless( FILE* fp, double width, double length,
-                    double chamfer, bool inch )
+
+void writeLeadless( FILE* fp, double width, double length, double chamfer, bool inch )
 {
     if( chamfer < 0.001 )
     {
@@ -428,6 +439,4 @@ void writeLeadless( FILE* fp, double width, double length,
         fprintf( fp, "0 %.3f %.3f 0\n", x, -y );
         fprintf( fp, "0 %.3f %.3f 0\n", x, y );
     }
-
-    return;
 }

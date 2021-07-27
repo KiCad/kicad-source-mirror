@@ -1,7 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2014  Cirilo Bernardo
+ * Copyright (C) 2014 Cirilo Bernardo
+ * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -61,6 +62,7 @@ int main( int argc, char **argv )
     }
 
     line.clear();
+
     while( line.empty() || line.find( ".dxf" ) == string::npos )
     {
         cout << "* DXF filename: ";
@@ -68,9 +70,11 @@ int main( int argc, char **argv )
         line.clear();
         std::getline( cin, line );
     }
+
     dname = line;
 
     line.clear();
+
     while( line.compare( "mm" ) && line.compare( "in" )
         && line.compare( "MM" ) && line.compare( "IN" ) )
     {
@@ -83,6 +87,7 @@ int main( int argc, char **argv )
         inch = true;
 
     line.clear();
+
     while( line.empty() )
     {
         cout << "* Geometry name: ";
@@ -95,9 +100,11 @@ int main( int argc, char **argv )
             line.clear();
         }
     }
+
     gname = line;
 
     line.clear();
+
     while( line.empty() )
     {
         cout << "* Part name: ";
@@ -110,9 +117,11 @@ int main( int argc, char **argv )
             line.clear();
         }
     }
+
     pname = line;
 
     ok = false;
+
     while( !ok )
     {
         cout << "* Height: ";
@@ -124,6 +133,7 @@ int main( int argc, char **argv )
         tstr.str( line );
 
         tstr >> height;
+
         if( !tstr.fail() && height > 0.001 )
             ok = true;
     }
@@ -131,6 +141,7 @@ int main( int argc, char **argv )
     cout << "* COMMENTS: any non-blank line is a comment;\n";
     cout << "            a blank line signifies the end of comments.\n";
     ok = false;
+
     while( !ok )
     {
         line.clear();
@@ -150,6 +161,7 @@ int main( int argc, char **argv )
     }
 
     line.clear();
+
     while( line.empty() || line.find( ".idf" ) == string::npos )
     {
         cout << "* File name (*.idf): ";
@@ -176,11 +188,10 @@ int main( int argc, char **argv )
     fprintf( fp, ".ELECTRICAL\n" );
 
     if( inch )
-        fprintf( fp, "\"%s\" \"%s\" THOU %d\n", gname.c_str(),
-                 pname.c_str(), (int) (height * 1000.0) );
+        fprintf( fp, "\"%s\" \"%s\" THOU %d\n", gname.c_str(), pname.c_str(),
+                 (int) ( height * 1000.0 ) );
     else
-        fprintf( fp, "\"%s\" \"%s\" MM %.3f\n", gname.c_str(),
-                 pname.c_str(), height );
+        fprintf( fp, "\"%s\" \"%s\" MM %.3f\n", gname.c_str(), pname.c_str(), height );
 
     dxf.WriteOutline( fp, inch );
 

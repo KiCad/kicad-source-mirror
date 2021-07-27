@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014  Cirilo Bernardo
- * Copyright (C) 2018-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -35,6 +35,7 @@
 // MAX_BULGE = 2000  ~89.97 degrees
 #define MIN_BULGE 0.002
 #define MAX_BULGE 2000.0
+
 
 DXF2IDF::~DXF2IDF()
 {
@@ -71,7 +72,6 @@ void DXF2IDF::addLine( const DL_LineData& aData )
     p2.y = aData.y2 * m_scale;
 
     insertLine( p1, p2 );
-    return;
 }
 
 
@@ -89,8 +89,6 @@ void DXF2IDF::addCircle( const DL_CircleData& aData )
 
     if( seg )
         lines.push_back( seg );
-
-    return;
 }
 
 
@@ -116,8 +114,6 @@ void DXF2IDF::addArc( const DL_ArcData& aData )
 
     if( seg )
         lines.push_back( seg );
-
-    return;
 }
 
 
@@ -156,24 +152,22 @@ bool DXF2IDF::WriteOutline( FILE* aFile, bool isInch )
             return false;
         }
 
-            // NOTE: a circle always has an angle of 360, never -360,
-            // otherwise SolidWorks chokes on the file.
-            if( isInch )
-            {
-                fprintf( aFile, "%c %d %d 0\n", loopDir,
-                         (int) (1000 * outline.front()->startPoint.x),
-                         (int) (1000 * outline.front()->startPoint.y) );
-                fprintf( aFile, "%c %d %d 360\n", loopDir,
-                         (int) (1000 * outline.front()->endPoint.x),
-                         (int) (1000 * outline.front()->endPoint.y) );
-            }
-            else
-            {
-                fprintf( aFile, "%c %.3f %.3f 0\n", loopDir,
-                         outline.front()->startPoint.x, outline.front()->startPoint.y );
-                fprintf( aFile, "%c %.3f %.3f 360\n", loopDir,
-                         outline.front()->endPoint.x, outline.front()->endPoint.y );
-            }
+        // NOTE: a circle always has an angle of 360, never -360,
+        // otherwise SolidWorks chokes on the file.
+        if( isInch )
+        {
+            fprintf( aFile, "%c %d %d 0\n", loopDir, (int) ( 1000 * outline.front()->startPoint.x ),
+                     (int) ( 1000 * outline.front()->startPoint.y ) );
+            fprintf( aFile, "%c %d %d 360\n", loopDir, (int) ( 1000 * outline.front()->endPoint.x ),
+                     (int) ( 1000 * outline.front()->endPoint.y ) );
+        }
+        else
+        {
+            fprintf( aFile, "%c %.3f %.3f 0\n", loopDir, outline.front()->startPoint.x,
+                     outline.front()->startPoint.y );
+            fprintf( aFile, "%c %.3f %.3f 360\n", loopDir, outline.front()->endPoint.x,
+                     outline.front()->endPoint.y );
+        }
 
         return true;
     }
@@ -185,43 +179,37 @@ bool DXF2IDF::WriteOutline( FILE* aFile, bool isInch )
     eo  = outline.end();
 
     // for the first item we write out both points
-    if( (*bo)->angle < MIN_ANG && (*bo)->angle > -MIN_ANG )
+    if( ( *bo )->angle < MIN_ANG && ( *bo )->angle > -MIN_ANG )
     {
         if( isInch )
         {
-            fprintf( aFile, "%c %d %d 0\n", loopDir,
-                     (int) (1000 * (*bo)->startPoint.x),
-                     (int) (1000 * (*bo)->startPoint.y) );
-            fprintf( aFile, "%c %d %d 0\n", loopDir,
-                     (int) (1000 * (*bo)->endPoint.x),
-                     (int) (1000 * (*bo)->endPoint.y) );
+            fprintf( aFile, "%c %d %d 0\n", loopDir, (int) ( 1000 * ( *bo )->startPoint.x ),
+                     (int) ( 1000 * ( *bo )->startPoint.y ) );
+            fprintf( aFile, "%c %d %d 0\n", loopDir, (int) ( 1000 * ( *bo )->endPoint.x ),
+                     (int) ( 1000 * ( *bo )->endPoint.y ) );
         }
         else
         {
-            fprintf( aFile, "%c %.3f %.3f 0\n", loopDir,
-                     (*bo)->startPoint.x, (*bo)->startPoint.y );
-            fprintf( aFile, "%c %.3f %.3f 0\n", loopDir,
-                     (*bo)->endPoint.x, (*bo)->endPoint.y );
+            fprintf( aFile, "%c %.3f %.3f 0\n", loopDir, ( *bo )->startPoint.x,
+                     ( *bo )->startPoint.y );
+            fprintf( aFile, "%c %.3f %.3f 0\n", loopDir, ( *bo )->endPoint.x, ( *bo )->endPoint.y );
         }
     }
     else
     {
         if( isInch )
         {
-            fprintf( aFile, "%c %d %d 0\n", loopDir,
-                     (int) (1000 * (*bo)->startPoint.x),
-                     (int) (1000 * (*bo)->startPoint.y) );
-            fprintf( aFile, "%c %d %d %.2f\n", loopDir,
-                     (int) (1000 * (*bo)->endPoint.x),
-                     (int) (1000 * (*bo)->endPoint.y),
-                     (*bo)->angle );
+            fprintf( aFile, "%c %d %d 0\n", loopDir, (int) ( 1000 * ( *bo )->startPoint.x ),
+                     (int) ( 1000 * ( *bo )->startPoint.y ) );
+            fprintf( aFile, "%c %d %d %.2f\n", loopDir, (int) ( 1000 * ( *bo )->endPoint.x ),
+                     (int) ( 1000 * ( *bo )->endPoint.y ), ( *bo )->angle );
         }
         else
         {
-            fprintf( aFile, "%c %.3f %.3f 0\n", loopDir,
-                     (*bo)->startPoint.x, (*bo)->startPoint.y );
-            fprintf( aFile, "%c %.3f %.3f %.2f\n", loopDir,
-                     (*bo)->endPoint.x, (*bo)->endPoint.y, (*bo)->angle );
+            fprintf( aFile, "%c %.3f %.3f 0\n", loopDir, ( *bo )->startPoint.x,
+                     ( *bo )->startPoint.y );
+            fprintf( aFile, "%c %.3f %.3f %.2f\n", loopDir, ( *bo )->endPoint.x,
+                     ( *bo )->endPoint.y, ( *bo )->angle );
         }
     }
 
@@ -232,31 +220,28 @@ bool DXF2IDF::WriteOutline( FILE* aFile, bool isInch )
     {
         if( isInch )
         {
-            if( (*bo)->angle < MIN_ANG && (*bo)->angle > -MIN_ANG )
+            if( ( *bo )->angle < MIN_ANG && ( *bo )->angle > -MIN_ANG )
             {
-                fprintf( aFile, "%c %d %d 0\n", loopDir,
-                         (int) (1000 * (*bo)->endPoint.x),
-                         (int) (1000 * (*bo)->endPoint.y) );
+                fprintf( aFile, "%c %d %d 0\n", loopDir, (int) ( 1000 * ( *bo )->endPoint.x ),
+                         (int) ( 1000 * ( *bo )->endPoint.y ) );
             }
             else
             {
-                fprintf( aFile, "%c %d %d %.2f\n", loopDir,
-                         (int) (1000 * (*bo)->endPoint.x),
-                         (int) (1000 * (*bo)->endPoint.y),
-                         (*bo)->angle );
+                fprintf( aFile, "%c %d %d %.2f\n", loopDir, (int) ( 1000 * ( *bo )->endPoint.x ),
+                         (int) ( 1000 * ( *bo )->endPoint.y ), ( *bo )->angle );
             }
         }
         else
         {
-            if( (*bo)->angle < MIN_ANG && (*bo)->angle > -MIN_ANG )
+            if( ( *bo )->angle < MIN_ANG && ( *bo )->angle > -MIN_ANG )
             {
-                fprintf( aFile, "%c %.5f %.5f 0\n", loopDir,
-                         (*bo)->endPoint.x, (*bo)->endPoint.y );
+                fprintf( aFile, "%c %.5f %.5f 0\n", loopDir, ( *bo )->endPoint.x,
+                         ( *bo )->endPoint.y );
             }
             else
             {
-                fprintf( aFile, "%c %.5f %.5f %.2f\n", loopDir,
-                         (*bo)->endPoint.x, (*bo)->endPoint.y, (*bo)->angle );
+                fprintf( aFile, "%c %.5f %.5f %.2f\n", loopDir, ( *bo )->endPoint.x,
+                         ( *bo )->endPoint.y, ( *bo )->angle );
             }
         }
 
@@ -336,8 +321,6 @@ void DXF2IDF::setVariableInt( const std::string& key, int value, int code )
             m_scale = 1.0;
             break;
         }
-
-    return;
     }
 }
 
@@ -400,20 +383,16 @@ void DXF2IDF::endEntity()
 }
 
 
-
 void DXF2IDF::insertLine( const IDF_POINT& aSegStart, const IDF_POINT& aSegEnd )
 {
     IDF_SEGMENT* seg = new IDF_SEGMENT( aSegStart, aSegEnd );
 
     if( seg )
         lines.push_back( seg );
-
-    return;
 }
 
 
-void DXF2IDF::insertArc( const IDF_POINT& aSegStart, const IDF_POINT& aSegEnd,
-    double aBulge )
+void DXF2IDF::insertArc( const IDF_POINT& aSegStart, const IDF_POINT& aSegEnd, double aBulge )
 {
     if( aBulge < -MAX_BULGE )
         aBulge = -MAX_BULGE;
@@ -426,6 +405,4 @@ void DXF2IDF::insertArc( const IDF_POINT& aSegStart, const IDF_POINT& aSegEnd,
 
     if( seg )
         lines.push_back( seg );
-
-    return;
 }

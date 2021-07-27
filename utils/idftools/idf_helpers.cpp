@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014-2017  Cirilo Bernardo
- * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -32,8 +32,9 @@
 using namespace std;
 using namespace IDF3;
 
-// fetch a line from the given input file and trim the ends
-bool IDF3::FetchIDFLine( std::istream& aModel, std::string& aLine, bool& isComment, std::streampos& aFilePos )
+
+bool IDF3::FetchIDFLine( std::istream& aModel, std::string& aLine, bool& isComment,
+                         std::streampos& aFilePos )
 {
     aLine = "";
     aFilePos = aModel.tellg();
@@ -68,9 +69,8 @@ bool IDF3::FetchIDFLine( std::istream& aModel, std::string& aLine, bool& isComme
 }
 
 
-// extract an IDF string and move the index to point to the character after the substring
-bool IDF3::GetIDFString( const std::string& aLine, std::string& aIDFString,
-                          bool& hasQuotes, int& aIndex )
+bool IDF3::GetIDFString( const std::string& aLine, std::string& aIDFString, bool& hasQuotes,
+                         int& aIndex )
 {
     // 1. drop all leading spaces
     // 2. if the first character is '"', read until the next '"',
@@ -97,6 +97,7 @@ bool IDF3::GetIDFString( const std::string& aLine, std::string& aIDFString,
     {
         hasQuotes = true;
         ++idx;
+
         while( idx < len && aLine[idx] != '"' )
             ostr << aLine[idx++];
 
@@ -145,7 +146,6 @@ bool IDF3::CompareToken( const char* aTokenString, const std::string& aInputStri
 }
 
 
-// parse a string for an IDF3::KEY_OWNER
 bool IDF3::ParseOwner( const std::string& aToken, IDF3::KEY_OWNER& aOwner )
 {
     if( CompareToken( "UNOWNED", aToken ) )
@@ -209,35 +209,36 @@ bool IDF3::WriteLayersText( std::ostream& aBoardFile, IDF3::IDF_LAYER aLayer )
 {
     switch( aLayer )
     {
-        case LYR_TOP:
-            aBoardFile << "TOP";
-            break;
+    case LYR_TOP:
+        aBoardFile << "TOP";
+        break;
 
-        case LYR_BOTTOM:
-            aBoardFile << "BOTTOM";
-            break;
+    case LYR_BOTTOM:
+        aBoardFile << "BOTTOM";
+        break;
 
-        case LYR_BOTH:
-            aBoardFile << "BOTH";
-            break;
+    case LYR_BOTH:
+        aBoardFile << "BOTH";
+        break;
 
-        case LYR_INNER:
-            aBoardFile << "INNER";
-            break;
+    case LYR_INNER:
+        aBoardFile << "INNER";
+        break;
 
-        case LYR_ALL:
-            aBoardFile << "ALL";
-            break;
+    case LYR_ALL:
+        aBoardFile << "ALL";
+        break;
 
-        default:
-            do{
-                std::ostringstream ostr;
-                ostr << "invalid IDF layer: " << aLayer;
+    default:
+        do
+        {
+            std::ostringstream ostr;
+            ostr << "invalid IDF layer: " << aLayer;
 
-                throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__, ostr.str() ) );
-            } while( 0 );
+            throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__, ostr.str() ) );
+        } while( 0 );
 
-            break;
+        break;
     }
 
     return !aBoardFile.fail();
@@ -248,20 +249,20 @@ std::string IDF3::GetPlacementString( IDF3::IDF_PLACEMENT aPlacement )
 {
     switch( aPlacement )
     {
-        case PS_UNPLACED:
-            return "UNPLACED";
+    case PS_UNPLACED:
+        return "UNPLACED";
 
-        case PS_PLACED:
-            return "PLACED";
+    case PS_PLACED:
+        return "PLACED";
 
-        case PS_MCAD:
-            return "MCAD";
+    case PS_MCAD:
+        return "MCAD";
 
-        case PS_ECAD:
-            return "ECAD";
+    case PS_ECAD:
+        return "ECAD";
 
-        default:
-            break;
+    default:
+        break;
     }
 
     std::ostringstream ostr;
@@ -275,23 +276,23 @@ std::string IDF3::GetLayerString( IDF3::IDF_LAYER aLayer )
 {
     switch( aLayer )
     {
-        case LYR_TOP:
-            return "TOP";
+    case LYR_TOP:
+        return "TOP";
 
-        case LYR_BOTTOM:
-            return "BOTTOM";
+    case LYR_BOTTOM:
+        return "BOTTOM";
 
-        case LYR_BOTH:
-            return "BOTH";
+    case LYR_BOTH:
+        return "BOTH";
 
-        case LYR_INNER:
-            return "INNER";
+    case LYR_INNER:
+        return "INNER";
 
-        case LYR_ALL:
-            return "ALL";
+    case LYR_ALL:
+        return "ALL";
 
-        default:
-            break;
+    default:
+        break;
     }
 
     std::ostringstream ostr;
@@ -300,21 +301,22 @@ std::string IDF3::GetLayerString( IDF3::IDF_LAYER aLayer )
     return ostr.str();
 }
 
+
 std::string IDF3::GetOwnerString( IDF3::KEY_OWNER aOwner )
 {
     switch( aOwner )
     {
-        case IDF3::UNOWNED:
-            return "UNOWNED";
+    case IDF3::UNOWNED:
+        return "UNOWNED";
 
-        case IDF3::MCAD:
-            return "MCAD";
+    case IDF3::MCAD:
+        return "MCAD";
 
-        case IDF3::ECAD:
-            return "ECAD";
+    case IDF3::ECAD:
+        return "ECAD";
 
-        default:
-            break;
+    default:
+        break;
     }
 
     ostringstream ostr;

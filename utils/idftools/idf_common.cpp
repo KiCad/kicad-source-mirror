@@ -1,9 +1,10 @@
-/**
+/*
  * file: idf_common.cpp
  *
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2013-2017  Cirilo Bernardo
+ * Copyright (C) 2013-2017 Cirilo Bernardo
+ * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -62,8 +63,6 @@ IDF_ERROR::IDF_ERROR( const char* aSourceFile, const char* aSourceMethod, int aS
 
     ostr << aMessage;
     message = ostr.str();
-
-    return;
 }
 
 
@@ -122,7 +121,8 @@ bool IDF_NOTE::readNote( std::istream& aBoardFile, IDF3::FILE_STATE& aBoardState
         aBoardState = IDF3::FILE_INVALID;
         throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__,
                           "invalid IDFv3 file\n"
-                          "* Violation of specification: X position in NOTES section must not be in quotes" ) );
+                          "* Violation of specification: X position in NOTES section must not be "
+                          "in quotes" ) );
     }
 
     if( CompareToken( ".END_NOTES", token ) )
@@ -132,12 +132,14 @@ bool IDF_NOTE::readNote( std::istream& aBoardFile, IDF3::FILE_STATE& aBoardState
     istr.str( token );
 
     istr >> xpos;
+
     if( istr.fail() )
     {
         aBoardState = IDF3::FILE_INVALID;
         throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__,
                           "invalid IDFv3 file\n"
-                          "* Violation of specification: X position in NOTES section is not numeric" ) );
+                          "* Violation of specification: X position in NOTES section is not "
+                          "numeric" ) );
     }
 
     if( !GetIDFString( iline, token, quoted, idx ) )
@@ -145,7 +147,8 @@ bool IDF_NOTE::readNote( std::istream& aBoardFile, IDF3::FILE_STATE& aBoardState
         aBoardState = IDF3::FILE_INVALID;
         throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__,
                           "invalid IDFv3 file\n"
-                          "* Violation of specification: Y position in NOTES section is missing" ) );
+                          "* Violation of specification: Y position in NOTES section is "
+                          "missing" ) );
     }
 
     if( quoted )
@@ -153,19 +156,22 @@ bool IDF_NOTE::readNote( std::istream& aBoardFile, IDF3::FILE_STATE& aBoardState
         aBoardState = IDF3::FILE_INVALID;
         throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__,
                           "invalid IDFv3 file\n"
-                          "* Violation of specification: Y position in NOTES section must not be in quotes" ) );
+                          "* Violation of specification: Y position in NOTES section must not be "
+                          "in quotes" ) );
     }
 
     istr.clear();
     istr.str( token );
 
     istr >> ypos;
+
     if( istr.fail() )
     {
         aBoardState = IDF3::FILE_INVALID;
         throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__,
                           "invalid IDFv3 file\n"
-                          "* Violation of specification: Y position in NOTES section is not numeric" ) );
+                          "* Violation of specification: Y position in NOTES section is not "
+                          "numeric" ) );
     }
 
     if( !GetIDFString( iline, token, quoted, idx ) )
@@ -173,7 +179,8 @@ bool IDF_NOTE::readNote( std::istream& aBoardFile, IDF3::FILE_STATE& aBoardState
         aBoardState = IDF3::FILE_INVALID;
         throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__,
                           "invalid IDFv3 file\n"
-                          "* Violation of specification: text height in NOTES section is missing" ) );
+                          "* Violation of specification: text height in NOTES section is "
+                          "missing" ) );
     }
 
     if( quoted )
@@ -181,19 +188,22 @@ bool IDF_NOTE::readNote( std::istream& aBoardFile, IDF3::FILE_STATE& aBoardState
         aBoardState = IDF3::FILE_INVALID;
         throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__,
                           "invalid IDFv3 file\n"
-                          "* Violation of specification: text height in NOTES section must not be in quotes" ) );
+                          "* Violation of specification: text height in NOTES section must not "
+                          "be in quotes" ) );
     }
 
     istr.clear();
     istr.str( token );
 
     istr >> height;
+
     if( istr.fail() )
     {
         aBoardState = IDF3::FILE_INVALID;
         throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__,
                           "invalid IDFv3 file\n"
-                          "* Violation of specification: text height in NOTES section is not numeric" ) );
+                          "* Violation of specification: text height in NOTES section is not "
+                          "numeric" ) );
     }
 
     if( !GetIDFString( iline, token, quoted, idx ) )
@@ -201,7 +211,8 @@ bool IDF_NOTE::readNote( std::istream& aBoardFile, IDF3::FILE_STATE& aBoardState
         aBoardState = IDF3::FILE_INVALID;
         throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__,
                           "invalid IDFv3 file\n"
-                          "* Violation of specification: text length in NOTES section is missing" ) );
+                          "* Violation of specification: text length in NOTES section is "
+                          "missing" ) );
     }
 
     if( quoted )
@@ -209,19 +220,22 @@ bool IDF_NOTE::readNote( std::istream& aBoardFile, IDF3::FILE_STATE& aBoardState
         aBoardState = IDF3::FILE_INVALID;
         throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__,
                           "invalid IDFv3 file\n"
-                          "* Violation of specification: text length in NOTES section must not be in quotes" ) );
+                          "* Violation of specification: text length in NOTES section must not "
+                          "be in quotes" ) );
     }
 
     istr.clear();
     istr.str( token );
 
     istr >> length;
+
     if( istr.fail() )
     {
         aBoardState = IDF3::FILE_INVALID;
         throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__,
                           "invalid IDFv3 file\n"
-                          "* Violation of specification: text length in NOTES section is not numeric" ) );
+                          "* Violation of specification: text length in NOTES section is not "
+                          "numeric" ) );
     }
 
     if( !GetIDFString( iline, token, quoted, idx ) )
@@ -229,7 +243,8 @@ bool IDF_NOTE::readNote( std::istream& aBoardFile, IDF3::FILE_STATE& aBoardState
         aBoardState = IDF3::FILE_INVALID;
         throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__,
                           "invalid IDFv3 file\n"
-                          "* Violation of specification: text value in NOTES section is missing" ) );
+                          "* Violation of specification: text value in NOTES section is "
+                          "missing" ) );
     }
 
     text = token;
@@ -250,16 +265,14 @@ bool IDF_NOTE::writeNote( std::ostream& aBoardFile, IDF3::IDF_UNIT aBoardUnit )
 {
     if( aBoardUnit == UNIT_THOU )
     {
-        aBoardFile << setiosflags(ios::fixed) << setprecision(1)
-                   << (xpos / IDF_THOU_TO_MM) << " "
-                   << (ypos / IDF_THOU_TO_MM) << " "
-                   << (height / IDF_THOU_TO_MM) << " "
-                   << (length / IDF_THOU_TO_MM) << " ";
+        aBoardFile << setiosflags( ios::fixed ) << setprecision( 1 ) << ( xpos / IDF_THOU_TO_MM )
+                   << " " << ( ypos / IDF_THOU_TO_MM ) << " " << ( height / IDF_THOU_TO_MM ) << " "
+                   << ( length / IDF_THOU_TO_MM ) << " ";
     }
     else
     {
-        aBoardFile << setiosflags(ios::fixed) << setprecision(5)
-                   << xpos << " " << ypos << " " << height << " " << length << " ";
+        aBoardFile << setiosflags( ios::fixed ) << setprecision( 5 ) << xpos << " " << ypos << " "
+                   << height << " " << length << " ";
     }
 
     aBoardFile << "\"" << text << "\"\n";
@@ -273,11 +286,13 @@ void IDF_NOTE::SetText( const std::string& aText )
     text = aText;
 }
 
+
 void IDF_NOTE::SetPosition( double aXpos, double aYpos )
 {
     xpos = aXpos;
     ypos = aYpos;
 }
+
 
 void IDF_NOTE::SetSize( double aHeight, double aLength )
 {
@@ -285,16 +300,19 @@ void IDF_NOTE::SetSize( double aHeight, double aLength )
     length = aLength;
 }
 
+
 const std::string& IDF_NOTE::GetText()
 {
     return text;
 }
+
 
 void IDF_NOTE::GetPosition( double& aXpos, double& aYpos )
 {
     aXpos = xpos;
     aYpos = ypos;
 }
+
 
 void IDF_NOTE::GetSize( double& aHeight, double& aLength )
 {
@@ -303,9 +321,6 @@ void IDF_NOTE::GetSize( double& aHeight, double& aLength )
 }
 
 
-/*
- * IDF_DRILL_DATA
- */
 IDF_DRILL_DATA::IDF_DRILL_DATA() :
         dia( 0.0 ),
         x( 0.0 ),
@@ -319,10 +334,8 @@ IDF_DRILL_DATA::IDF_DRILL_DATA() :
 
 
 IDF_DRILL_DATA::IDF_DRILL_DATA( double aDrillDia, double aPosX, double aPosY,
-                                IDF3::KEY_PLATING aPlating,
-                                const std::string& aRefDes,
-                                const std::string& aHoleType,
-                                IDF3::KEY_OWNER aOwner )
+                                IDF3::KEY_PLATING aPlating, const std::string& aRefDes,
+                                const std::string& aHoleType, IDF3::KEY_OWNER aOwner )
 {
     if( aDrillDia < 0.3 )
         dia = 0.3;
@@ -374,7 +387,8 @@ IDF_DRILL_DATA::IDF_DRILL_DATA( double aDrillDia, double aPosX, double aPosY,
     }
 
     owner = aOwner;
-}    // IDF_DRILL_DATA::IDF_DRILL_DATA( ... )
+}
+
 
 bool IDF_DRILL_DATA::Matches( double aDrillDia, double aPosX, double aPosY ) const
 {
@@ -391,6 +405,7 @@ bool IDF_DRILL_DATA::Matches( double aDrillDia, double aPosX, double aPosY ) con
 
     return false;
 }
+
 
 bool IDF_DRILL_DATA::read( std::istream& aBoardFile, IDF3::IDF_UNIT aBoardUnit,
                            IDF3::FILE_STATE aBoardState, IDF3::IDF_VERSION aIdfVersion )
@@ -415,7 +430,8 @@ bool IDF_DRILL_DATA::read( std::istream& aBoardFile, IDF3::IDF_UNIT aBoardUnit,
     {
         throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__,
                           "invalid IDF file\n"
-                          "* Violation of specification: comment within a section (DRILLED HOLES)" ) );
+                          "* Violation of specification: comment within a section (DRILLED "
+                          "HOLES)" ) );
     }
 
     idx = 0;
@@ -435,6 +451,7 @@ bool IDF_DRILL_DATA::read( std::istream& aBoardFile, IDF3::IDF_UNIT aBoardUnit,
     istr.str( token );
 
     istr >> dia;
+
     if( istr.fail() )
     {
         throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__,
@@ -464,18 +481,21 @@ bool IDF_DRILL_DATA::read( std::istream& aBoardFile, IDF3::IDF_UNIT aBoardUnit,
     {
         throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__,
                           "invalid IDF file\n"
-                          "* Violation of specification: X position in DRILLED HOLES section must not be in quotes" ) );
+                          "* Violation of specification: X position in DRILLED HOLES section "
+                          "must not be in quotes" ) );
     }
 
     istr.clear();
     istr.str( token );
 
     istr >> x;
+
     if( istr.fail() )
     {
         throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__,
                           "invalid IDF file\n"
-                          "* Violation of specification: X position in DRILLED HOLES section is not numeric" ) );
+                          "* Violation of specification: X position in DRILLED HOLES section is "
+                          "not numeric" ) );
     }
 
     if( !GetIDFString( iline, token, quoted, idx ) )
@@ -489,18 +509,21 @@ bool IDF_DRILL_DATA::read( std::istream& aBoardFile, IDF3::IDF_UNIT aBoardUnit,
     {
         throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__,
                           "invalid IDF file\n"
-                          "* Violation of specification: Y position in DRILLED HOLES section must not be in quotes" ) );
+                          "* Violation of specification: Y position in DRILLED HOLES section "
+                          "must not be in quotes" ) );
     }
 
     istr.clear();
     istr.str( token );
 
     istr >> y;
+
     if( istr.fail() )
     {
         throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__,
                           "invalid IDF file\n"
-                          "* Violation of specification: Y position in DRILLED HOLES section is not numeric" ) );
+                          "* Violation of specification: Y position in DRILLED HOLES section is "
+                          "not numeric" ) );
     }
 
     if( aIdfVersion > IDF_V2 )
@@ -546,7 +569,8 @@ bool IDF_DRILL_DATA::read( std::istream& aBoardFile, IDF3::IDF_UNIT aBoardUnit,
         {
             throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__,
                               "invalid IDFv2 file\n"
-                              "* Violation of specification: missing HOLE TYPE for drilled hole" ) );
+                              "* Violation of specification: missing HOLE TYPE for drilled "
+                              "hole" ) );
         }
     }
 
@@ -558,7 +582,8 @@ bool IDF_DRILL_DATA::read( std::istream& aBoardFile, IDF3::IDF_UNIT aBoardUnit,
         {
             throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__,
                               "invalid IDFv3 file\n"
-                              "* Violation of specification: missing HOLE TYPE for drilled hole" ) );
+                              "* Violation of specification: missing HOLE TYPE for drilled "
+                              "hole" ) );
         }
         else
         {
@@ -631,7 +656,8 @@ bool IDF_DRILL_DATA::read( std::istream& aBoardFile, IDF3::IDF_UNIT aBoardUnit,
         {
             ostringstream ostr;
             ostr << "invalid IDFv3 file\n";
-            ostr << "* Violation of specification: invalid OWNER for drilled hole ('" << token << "')";
+            ostr << "* Violation of specification: invalid OWNER for drilled hole ('" << token
+                 << "')";
 
             throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__, ostr.str() ) );
         }
@@ -664,6 +690,7 @@ bool IDF_DRILL_DATA::read( std::istream& aBoardFile, IDF3::IDF_UNIT aBoardUnit,
     return true;
 }
 
+
 void IDF_DRILL_DATA::write( std::ostream& aBoardFile, IDF3::IDF_UNIT aBoardUnit )
 {
     std::string holestr;
@@ -673,19 +700,19 @@ void IDF_DRILL_DATA::write( std::ostream& aBoardFile, IDF3::IDF_UNIT aBoardUnit 
 
     switch( khole )
     {
-        case PIN:   holestr = "PIN";                  break;
-        case VIA:   holestr = "VIA";                  break;
-        case TOOL:  holestr = "TOOL";                 break;
-        case OTHER: holestr = "\"" + holetype + "\""; break;
-        default:    holestr = "MTG";                  break;
+    case PIN:   holestr = "PIN";                  break;
+    case VIA:   holestr = "VIA";                  break;
+    case TOOL:  holestr = "TOOL";                 break;
+    case OTHER: holestr = "\"" + holetype + "\""; break;
+    default:    holestr = "MTG";                  break;
     }
 
     switch( kref )
     {
-        case BOARD:  refstr = "BOARD";              break;
-        case PANEL:  refstr = "PANEL";              break;
-        case REFDES: refstr = "\"" + refdes + "\""; break;
-        default:     refstr = "NOREFDES";           break;
+    case BOARD:  refstr = "BOARD";              break;
+    case PANEL:  refstr = "PANEL";              break;
+    case REFDES: refstr = "\"" + refdes + "\""; break;
+    default:     refstr = "NOREFDES";           break;
     }
 
     if( plating == PTH )
@@ -695,26 +722,26 @@ void IDF_DRILL_DATA::write( std::ostream& aBoardFile, IDF3::IDF_UNIT aBoardUnit 
 
     switch( owner )
     {
-        case MCAD: ownstr = "MCAD";    break;
-        case ECAD: ownstr = "ECAD";    break;
-        default:   ownstr = "UNOWNED"; break;
+    case MCAD: ownstr = "MCAD";    break;
+    case ECAD: ownstr = "ECAD";    break;
+    default:   ownstr = "UNOWNED"; break;
     }
 
     if( aBoardUnit == UNIT_MM )
     {
         aBoardFile << std::setiosflags( std::ios::fixed ) << std::setprecision( 3 ) << dia << " "
-            << std::setprecision( 5 ) << x << " " << y << " "
-            << pltstr.c_str() << " " << refstr.c_str() << " "
-            << holestr.c_str() << " " << ownstr.c_str() << "\n";
+                   << std::setprecision( 5 ) << x << " " << y << " " << pltstr.c_str() << " "
+                   << refstr.c_str() << " " << holestr.c_str() << " " << ownstr.c_str() << "\n";
     }
     else
     {
-        aBoardFile << std::setiosflags( std::ios::fixed ) << std::setprecision( 1 ) << (dia / IDF_THOU_TO_MM) << " "
-        << std::setprecision( 1 ) << (x / IDF_THOU_TO_MM) << " " << (y / IDF_THOU_TO_MM) << " "
-            << pltstr.c_str() << " " << refstr.c_str() << " "
-            << holestr.c_str() << " " << ownstr.c_str() << "\n";
+        aBoardFile << std::setiosflags( std::ios::fixed ) << std::setprecision( 1 )
+                   << ( dia / IDF_THOU_TO_MM ) << " " << std::setprecision( 1 )
+                   << ( x / IDF_THOU_TO_MM ) << " " << ( y / IDF_THOU_TO_MM ) << " "
+                   << pltstr.c_str() << " " << refstr.c_str() << " " << holestr.c_str() << " "
+                   << ownstr.c_str() << "\n";
     }
-}    // IDF_DRILL_DATA::Write( aBoardFile, unitMM )
+}
 
 
 double IDF_DRILL_DATA::GetDrillDia() const
@@ -722,43 +749,48 @@ double IDF_DRILL_DATA::GetDrillDia() const
     return dia;
 }
 
+
 double IDF_DRILL_DATA::GetDrillXPos() const
 {
     return x;
 }
+
 
 double IDF_DRILL_DATA::GetDrillYPos() const
 {
     return y;
 }
 
+
 IDF3::KEY_PLATING IDF_DRILL_DATA::GetDrillPlating()
 {
     return plating;
 }
 
+
 const std::string& IDF_DRILL_DATA::GetDrillRefDes()
 {
     switch( kref )
     {
-        case BOARD:  refdes = "BOARD";    break;
-        case PANEL:  refdes = "PANEL";    break;
-        case REFDES:                      break;
-        default:     refdes = "NOREFDES"; break;
+    case BOARD:  refdes = "BOARD";    break;
+    case PANEL:  refdes = "PANEL";    break;
+    case REFDES:                      break;
+    default:     refdes = "NOREFDES"; break;
     }
 
     return refdes;
 }
 
+
 const std::string& IDF_DRILL_DATA::GetDrillHoleType()
 {
     switch( khole )
     {
-        case PIN:   holetype = "PIN";  break;
-        case VIA:   holetype = "VIA";  break;
-        case TOOL:  holetype = "TOOL"; break;
-        case OTHER:                    break;
-        default:    holetype = "MTG";  break;
+    case PIN:   holetype = "PIN";  break;
+    case VIA:   holetype = "VIA";  break;
+    case TOOL:  holetype = "TOOL"; break;
+    case OTHER:                    break;
+    default:    holetype = "MTG";  break;
     }
 
     return holetype;
@@ -770,25 +802,22 @@ void IDF3::PrintSeg( IDF_SEGMENT* aSegment )
 {
     if( aSegment->IsCircle() )
     {
-        fprintf(stdout, "printSeg(): CIRCLE: C(%.3f, %.3f) P(%.3f, %.3f) rad. %.3f\n",
-                aSegment->startPoint.x, aSegment->startPoint.y,
-                aSegment->endPoint.x, aSegment->endPoint.y,
-                aSegment->radius );
+        fprintf( stdout, "printSeg(): CIRCLE: C(%.3f, %.3f) P(%.3f, %.3f) rad. %.3f\n",
+                 aSegment->startPoint.x, aSegment->startPoint.y, aSegment->endPoint.x,
+                 aSegment->endPoint.y, aSegment->radius );
         return;
     }
 
     if( aSegment->angle < -MIN_ANG || aSegment->angle > MIN_ANG )
     {
-        fprintf(stdout, "printSeg(): ARC: p1(%.3f, %.3f) p2(%.3f, %.3f) ang. %.3f\n",
-                aSegment->startPoint.x, aSegment->startPoint.y,
-                aSegment->endPoint.x, aSegment->endPoint.y,
-                aSegment->angle );
+        fprintf( stdout, "printSeg(): ARC: p1(%.3f, %.3f) p2(%.3f, %.3f) ang. %.3f\n",
+                 aSegment->startPoint.x, aSegment->startPoint.y, aSegment->endPoint.x,
+                 aSegment->endPoint.y, aSegment->angle );
         return;
     }
 
-    fprintf(stdout, "printSeg(): LINE: p1(%.3f, %.3f) p2(%.3f, %.3f)\n",
-            aSegment->startPoint.x, aSegment->startPoint.y,
-            aSegment->endPoint.x, aSegment->endPoint.y );
+    fprintf( stdout, "printSeg(): LINE: p1(%.3f, %.3f) p2(%.3f, %.3f)\n", aSegment->startPoint.x,
+             aSegment->startPoint.y, aSegment->endPoint.x, aSegment->endPoint.y );
 }
 #endif
 
@@ -836,8 +865,7 @@ double IDF3::CalcAngleDeg( const IDF_POINT& aStartPoint, const IDF_POINT& aEndPo
 }
 
 
-void IDF3::GetOutline( std::list<IDF_SEGMENT*>& aLines,
-                       IDF_OUTLINE& aOutline )
+void IDF3::GetOutline( std::list<IDF_SEGMENT*>& aLines, IDF_OUTLINE& aOutline )
 {
     aOutline.Clear();
 
@@ -869,9 +897,11 @@ void IDF3::GetOutline( std::list<IDF_SEGMENT*>& aLines,
     }
 
     aOutline.push( *idx );
+
 #ifdef DEBUG_IDF
     PrintSeg( *idx );
 #endif
+
     aLines.erase( idx );
 
     // If the item is a circle then we're done
@@ -900,9 +930,11 @@ void IDF3::GetOutline( std::list<IDF_SEGMENT*>& aLines,
                 else
                 {
                     matched = true;
+
 #ifdef DEBUG_IDF
                     PrintSeg( *bl );
 #endif
+
                     aOutline.push( *bl );
                     bl = aLines.erase( bl );
                 }
@@ -932,9 +964,11 @@ void IDF3::GetOutline( std::list<IDF_SEGMENT*>& aLines,
                     {
                         matched = true;
                         (*bl)->SwapEnds();
+
 #ifdef DEBUG_IDF
                         printSeg( *bl );
 #endif
+
                         aOutline.push( *bl );
                         bl = aLines.erase( bl );
                     }
@@ -959,9 +993,11 @@ void IDF3::GetOutline( std::list<IDF_SEGMENT*>& aLines,
                 if( seg )
                 {
                     complete = true;
+
 #ifdef DEBUG_IDF
                     printSeg( seg );
 #endif
+
                     aOutline.push( seg );
                     break;
                 }
@@ -1009,8 +1045,8 @@ IDF_SEGMENT::IDF_SEGMENT( const IDF_POINT& aStartPoint, const IDF_POINT& aEndPoi
 {
     double diff = abs( aAngle ) - 360.0;
 
-    if( ( diff < MIN_ANG
-        && diff > -MIN_ANG ) || ( aAngle < MIN_ANG && aAngle > -MIN_ANG ) || (!aFromKicad) )
+    if( ( diff < MIN_ANG && diff > -MIN_ANG ) || ( aAngle < MIN_ANG && aAngle > -MIN_ANG )
+        || ( !aFromKicad ) )
     {
         angle = 0.0;
         startPoint = aStartPoint;
@@ -1169,6 +1205,7 @@ void IDF_SEGMENT::SwapEnds()
 
     // change the direction of the arc
     angle = -angle;
+
     // calculate the new offset angle
     offsetAngle = IDF3::CalcAngleDeg( center, startPoint );
 }
@@ -1201,15 +1238,13 @@ bool IDF_OUTLINE::IsCCW()
             double a1 = outline.front()->angle;
             double a2 = outline.back()->angle;
 
-            if( ( a1 < -MIN_ANG || a1 > MIN_ANG )
-                && ( a2 < -MIN_ANG || a2 > MIN_ANG ) )
+            if( ( a1 < -MIN_ANG || a1 > MIN_ANG ) && ( a2 < -MIN_ANG || a2 > MIN_ANG ) )
             {
                 // we have 2 arcs; the winding is determined by
                 // the longer cord. although the angles are in
                 // degrees, there is no need to convert to radians
                 // to determine the longer cord.
-                if( abs( a1 * outline.front()->radius ) >=
-                    abs( a2 * outline.back()->radius ) )
+                if( abs( a1 * outline.front()->radius ) >= abs( a2 * outline.back()->radius ) )
                 {
                     // winding depends on a1
                     if( a1 < 0.0 )
@@ -1258,7 +1293,6 @@ bool IDF_OUTLINE::IsCCW()
 }
 
 
-// returns true if the outline is a circle
 bool IDF_OUTLINE::IsCircle()
 {
     if( outline.front()->IsCircle() )
@@ -1293,8 +1327,10 @@ bool IDF_OUTLINE::push( IDF_SEGMENT* item )
                 // startPoint[N] != endPoint[N -1]
                 ERROR_IDF << "INVALID GEOMETRY\n";
                 cerr << "* disjoint segments (current start point != last end point)\n";
-                cerr << "* start point: " << item->startPoint.x << ", " << item->startPoint.y << "\n";
-                cerr << "* end point: " << outline.back()->endPoint.x << ", " << outline.back()->endPoint.y << "\n";
+                cerr << "* start point: " << item->startPoint.x << ", " << item->startPoint.y
+                     << "\n";
+                cerr << "* end point: " << outline.back()->endPoint.x << ", "
+                     << outline.back()->endPoint.y << "\n";
                 return false;
             }
         }
@@ -1311,20 +1347,18 @@ bool IDF_OUTLINE::push( IDF_SEGMENT* item )
         // arcs require special consideration since the winding depends on
         // the arc length; the arc length is adequately represented by
         // taking 2 cords from the endpoints to the midpoint of the arc.
-        oang = (oang + ang / 2.0) * M_PI / 180.0;
+        oang = ( oang + ang / 2.0 ) * M_PI / 180.0;
         double midx = outline.back()->center.x + radius * cos( oang );
         double midy = outline.back()->center.y + radius * sin( oang );
 
-        dir += ( outline.back()->endPoint.x - midx )
-        * ( outline.back()->endPoint.y + midy );
+        dir += ( outline.back()->endPoint.x - midx ) * ( outline.back()->endPoint.y + midy );
 
-        dir += ( midx - outline.back()->startPoint.x )
-        * ( midy + outline.back()->startPoint.y );
+        dir += ( midx - outline.back()->startPoint.x ) * ( midy + outline.back()->startPoint.y );
     }
     else
     {
         dir += ( outline.back()->endPoint.x - outline.back()->startPoint.x )
-        * ( outline.back()->endPoint.y + outline.back()->startPoint.y );
+               * ( outline.back()->endPoint.y + outline.back()->startPoint.y );
     }
 
     return true;

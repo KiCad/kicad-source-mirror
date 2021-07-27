@@ -1,7 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2014-2017  Cirilo Bernardo
+ * Copyright (C) 2014-2017 Cirilo Bernardo
+ * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -30,17 +31,18 @@
 #include <idf_common.h>
 
 /**
- * Macro TO_UTF8
- * converts a wxString to a UTF8 encoded C string for all wxWidgets build modes.
+ * Convert a wxString to a UTF8 encoded C string for all wxWidgets build modes.
+ *
  * wxstring is a wxString, not a wxT() or _().  The scope of the return value
  * is very limited and volatile, but can be used with printf() style functions well.
+ *
  * NOTE: Taken from KiCad include/macros.h
  */
 #define TO_UTF8( wxstring )  ( (const char*) (wxstring).utf8_str() )
 
 /**
- * function FROM_UTF8
- * converts a UTF8 encoded C string to a wxString for all wxWidgets build modes.
+ * Convert a UTF8 encoded C string to a wxString for all wxWidgets build modes.
+ *
  * NOTE: Taken from KiCad include/macros.h
  */
 static inline wxString FROM_UTF8( const char* cstring )
@@ -70,102 +72,89 @@ namespace IDF3
 {
 
 /**
- *  Function FetchIDFLine
- *  retrieves a single line from an IDF file and performs minimal processing. If a comment symbol
- *  is encountered then it is removed and a single leading space is removed if present; all trailing
- *  spaces are removed. If the line is not a comment then all leading and trailing spaces are stripped.
+ *  Retrieve a single line from an IDF file and performs minimal processing.
  *
- * @param aModel is an open IDFv3 file
- * @param aLine (output) is the line retrieved from the file
- * @param isComment (output) is set to true if the line is a comment
- * @param aFilePos (output) is set to the beginning of the line in case the file needs to be rewound
+ * If a comment symbol is encountered then it is removed and a single leading space is removed
+ * if present; all trailing spaces are removed. If the line is not a comment then all leading
+ * and trailing spaces are stripped.
  *
- * @return bool: true if a line was read and was not empty; otherwise false
+ * @param[in] aModel is an open IDFv3 file.
+ * @param[out] aLine is the line retrieved from the file.
+ * @param[out] isComment is set to true if the line is a comment.
+ * @param[out] aFilePosis set to the beginning of the line in case the file needs to be rewound.
+ * @return true if a line was read and was not empty; otherwise false.
  */
-bool FetchIDFLine( std::istream& aModel, std::string& aLine, bool& isComment, std::streampos& aFilePos );
+bool FetchIDFLine( std::istream& aModel, std::string& aLine, bool& isComment,
+                   std::streampos& aFilePos );
 
 
 /**
- * Function GetIDFString
- * parses a line retrieved via FetchIDFLine() and returns the first IDF string found from the starting
- * point aIndex
+ * Parse a line retrieved via FetchIDFLine() and returns the first IDF string found from the
+ * starting point aIndex.
  *
- * @param aLine is the line to parse
- * @param aIDFString (output) is the IDF string retrieved
- * @param hasQuotes (output) is true if the string was in quotation marks
- * @param aIndex (input/output) is the index into the input line
- *
- * @return bool: true if a string was retrieved, otherwise false
+ * @param[in] aLine is the line to parse.
+ * @param[out] aIDFString is the IDF string retrieved.
+ * @param[out] hasQuotes is true if the string was in quotation marks.
+ * @param[in,out] aIndex is the index into the input line.
+ * @return true if a string was retrieved, otherwise false.
  */
-bool GetIDFString( const std::string& aLine, std::string& aIDFString,
-                   bool& hasQuotes, int& aIndex );
+bool GetIDFString( const std::string& aLine, std::string& aIDFString, bool& hasQuotes,
+                   int& aIndex );
 
 /**
- * Function CompareToken
- * performs a case-insensitive comparison of a token string and an input string
+ * Perform a case-insensitive comparison of a token string and an input string.
  *
- * @param aToken is an IDF token such as ".HEADER"
- * @param aInputString is a string typically retrieved via GetIDFString
- *
- * @return bool: true if the token and input string match
+ * @param aToken is an IDF token such as ".HEADER".
+ * @param aInputString is a string typically retrieved via GetIDFString.
+ * @return true if the token and input string match.
  */
 bool CompareToken( const char* aTokenString, const std::string& aInputString );
 
 
 /**
- * Function ParseOwner
- * parses the input string for a valid IDF Owner type
+ * Parse the input string for a valid IDF Owner type.
  *
- * @param aToken is the string to be parsed
- * @param aOwner (output) is the IDF Owner class
- *
- * @return bool: true if a valid OWNER was found, otherwise false
+ * @param[in] aToken is the string to be parsed.
+ * @param[out] aOwner is the IDF Owner class.
+ * @return true if a valid OWNER was found, otherwise false.
  */
 bool ParseOwner( const std::string& aToken, IDF3::KEY_OWNER& aOwner );
 
 
 /**
- * Function ParseIDFLayer
- * parses an input string for a valid IDF layer specification
+ * Parse an input string for a valid IDF layer specification.
  *
- * @param aToken is the string to be parsed
- * @param aLayer (output) is the IDF Layer type or group
- *
- * @return bool: true if a valid IDF Layer type was found, otherwise false
+ * @param[in] aToken is the string to be parsed.
+ * @param[out] aLayer is the IDF Layer type or group.
+ * @return true if a valid IDF Layer type was found, otherwise false.
  */
 bool ParseIDFLayer( const std::string& aToken, IDF3::IDF_LAYER& aLayer );
 
 
 /**
- * Function WriteLayersText
- * writes out text corresponding to the given IDF Layer type
+ * Write out text corresponding to the given IDF Layer type.
  *
- * @param aBoardFile is an IDFv3 file open for output
- * @param aLayer is the IDF Layer type
- *
- * @return bool: true if the data was successfully written, otherwise false
+ * @param[in] aBoardFile is an IDFv3 file open for output.
+ * @param aLayer is the IDF Layer type.
+ * @return true if the data was successfully written, otherwise false
  */
 bool WriteLayersText( std::ostream& aBoardFile, IDF3::IDF_LAYER aLayer );
 
 
 /**
- * Function GetPlacementString
- * returns a string representing the given IDF Placement type
+ * Return a string representing the given IDF Placement type.
  *
- * @param aPlacement is the IDF placement type to encode as a string
- *
- * @return string: the string representation of aPlacement
+ * @param aPlacement is the IDF placement type to encode as a string.
+ * @return the string representation of aPlacement.
  */
 std::string GetPlacementString( IDF3::IDF_PLACEMENT aPlacement );
 
 
 /**
- * Function GetLayerString
- * returns a string representing the given IDF Layer type
+ * Return a string representing the given IDF Layer type.
  *
- * @param aLayer is the IDF layer type to encode as a string
- *
- * @return string: the string representation of aLayer
+ * @param aLayer is the IDF layer type to encode as a string.
+ * @return the string representation of aLayer.
  */
 std::string GetLayerString( IDF3::IDF_LAYER aLayer );
 

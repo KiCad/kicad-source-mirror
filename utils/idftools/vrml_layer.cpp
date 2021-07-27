@@ -2,6 +2,7 @@
  * file: vrml_layer.cpp
  *
  * This program source code file is part of KiCad, a free EDA CAD application.
+ * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * Copyright (C) 2013-2017  Cirilo Bernardo
  *
@@ -100,13 +101,13 @@ int VRML_LAYER::calcNSides( double aRadius, double aAngle )
         if( csides < 2 * maxSeg )
             csides /= 2;
         else
-            csides = (((double) csides) * minSegLength / maxSegLength );
+            csides = ( ( (double) csides ) * minSegLength / maxSegLength );
     }
 
     if( csides < 3 )
         csides = 3;
 
-    if( (csides & 1) == 0 )
+    if( ( csides & 1 ) == 0 )
         csides += 1;
 
     return csides;
@@ -147,7 +148,7 @@ static void CALLBACK vrml_tess_err( GLenum errorID, void* user_data )
 
 
 static void CALLBACK vrml_tess_combine( GLdouble coords[3], VERTEX_3D* vertex_data[4],
-        GLfloat weight[4], void** outData, void* user_data )
+                                        GLfloat weight[4], void** outData, void* user_data )
 {
     VRML_LAYER* lp = (VRML_LAYER*) user_data;
 
@@ -232,6 +233,7 @@ void VRML_LAYER::GetArcParams( int& aMaxSeg, double& aMinLength, double& aMaxLen
     aMaxLength = maxSegLength;
 }
 
+
 bool VRML_LAYER::SetArcParams( int aMaxSeg, double aMinLength, double aMaxLength )
 {
     if( aMaxSeg < 8 )
@@ -247,7 +249,6 @@ bool VRML_LAYER::SetArcParams( int aMaxSeg, double aMinLength, double aMaxLength
 }
 
 
-// clear all data
 void VRML_LAYER::Clear( void )
 {
     int i;
@@ -275,7 +276,6 @@ void VRML_LAYER::Clear( void )
 }
 
 
-// clear ephemeral data in between invocations of the tesselation routine
 void VRML_LAYER::clearTmp( void )
 {
     unsigned int i;
@@ -315,9 +315,7 @@ void VRML_LAYER::clearTmp( void )
 }
 
 
-// create a new contour to be populated; returns an index
-// into the contour list or -1 if there are problems
-int VRML_LAYER::NewContour(  bool aPlatedHole )
+int VRML_LAYER::NewContour( bool aPlatedHole )
 {
     if( fix )
         return -1;
@@ -333,9 +331,6 @@ int VRML_LAYER::NewContour(  bool aPlatedHole )
 }
 
 
-// adds a vertex to the existing list and places its index in
-// an existing contour; returns true if OK,
-// false otherwise (indexed contour does not exist)
 bool VRML_LAYER::AddVertex( int aContourID, double aXpos, double aYpos )
 {
     if( fix )
@@ -372,8 +367,6 @@ bool VRML_LAYER::AddVertex( int aContourID, double aXpos, double aYpos )
 }
 
 
-// ensure the winding of a contour with respect to the normal (0, 0, 1);
-// set 'hole' to true to ensure a hole (clockwise winding)
 bool VRML_LAYER::EnsureWinding( int aContourID, bool aHoleFlag )
 {
     if( aContourID < 0 || (unsigned int) aContourID >= contours.size() )
@@ -408,8 +401,7 @@ bool VRML_LAYER::EnsureWinding( int aContourID, bool aHoleFlag )
 }
 
 
-bool VRML_LAYER::AppendCircle( double aXpos, double aYpos,
-                               double aRadius, int aContourID,
+bool VRML_LAYER::AppendCircle( double aXpos, double aYpos, double aRadius, int aContourID,
                                bool aHoleFlag )
 {
     if( aContourID < 0 || (unsigned int) aContourID >= contours.size() )
@@ -465,10 +457,8 @@ bool VRML_LAYER::AppendCircle( double aXpos, double aYpos,
 }
 
 
-// adds a circle to the existing list; if 'hole' is true the contour is
-// a hole. Returns true if OK.
-bool VRML_LAYER::AddCircle( double aXpos, double aYpos, double aRadius,
-                            bool aHoleFlag, bool aPlatedHole )
+bool VRML_LAYER::AddCircle( double aXpos, double aYpos, double aRadius, bool aHoleFlag,
+                            bool aPlatedHole )
 {
     int pad;
 
@@ -487,10 +477,7 @@ bool VRML_LAYER::AddCircle( double aXpos, double aYpos, double aRadius,
 }
 
 
-// adds a slotted pad with orientation given by angle; if 'hole' is true the
-// contour is a hole. Returns true if OK.
-bool VRML_LAYER::AddSlot( double aCenterX, double aCenterY,
-                          double aSlotLength, double aSlotWidth,
+bool VRML_LAYER::AddSlot( double aCenterX, double aCenterY, double aSlotLength, double aSlotWidth,
                           double aAngle, bool aHoleFlag, bool aPlatedHole )
 {
     aAngle *= M_PI / 180.0;
@@ -577,7 +564,7 @@ bool VRML_LAYER::AddSlot( double aCenterX, double aCenterY,
 
 
 bool VRML_LAYER::AddPolygon( const std::vector< wxRealPoint >& aPolySet, double aCenterX,
-        double aCenterY, double aAngle )
+                             double aCenterY, double aAngle )
 {
     int pad = NewContour( false );
 
@@ -639,7 +626,6 @@ bool VRML_LAYER::AppendArc( double aCenterX, double aCenterY, double aRadius,
 }
 
 
-// adds an arc with the given center, start point, pen width, and angle (degrees).
 bool VRML_LAYER::AddArc( double aCenterX, double aCenterY, double aStartX, double aStartY,
                          double aArcWidth, double aAngle, bool aHoleFlag, bool aPlatedHole )
 {
@@ -754,8 +740,6 @@ bool VRML_LAYER::AddArc( double aCenterX, double aCenterY, double aStartX, doubl
 }
 
 
-// tesselates the contours in preparation for a 3D output;
-// returns true if all was fine, false otherwise
 bool VRML_LAYER::Tesselate( VRML_LAYER* holes, bool aHolesOnly )
 {
     if( !tess )
@@ -1001,7 +985,6 @@ bool VRML_LAYER::pushOutline( VRML_LAYER* holes )
 }
 
 
-// writes out the vertex list for a planar feature
 bool VRML_LAYER::WriteVertices( double aZcoord, std::ostream& aOutFile, int aPrecision )
 {
     if( ordmap.size() < 3 )
@@ -1045,10 +1028,8 @@ bool VRML_LAYER::WriteVertices( double aZcoord, std::ostream& aOutFile, int aPre
 }
 
 
-// writes out the vertex list for a 3D feature; top and bottom are the
-// Z values for the top and bottom; top must be > bottom
-bool VRML_LAYER::Write3DVertices( double aTopZ, double aBottomZ,
-                                  std::ostream& aOutFile, int aPrecision )
+bool VRML_LAYER::Write3DVertices( double aTopZ, double aBottomZ, std::ostream& aOutFile,
+                                  int aPrecision )
 {
     if( ordmap.size() < 3 )
     {
@@ -1132,9 +1113,6 @@ bool VRML_LAYER::Write3DVertices( double aTopZ, double aBottomZ,
 }
 
 
-// writes out the index list;
-// 'top' indicates the vertex ordering and should be
-// true for a polygon visible from above the PCB
 bool VRML_LAYER::WriteIndices( bool aTopFlag, std::ostream& aOutFile )
 {
     if( triplets.empty() )
@@ -1182,7 +1160,6 @@ bool VRML_LAYER::WriteIndices( bool aTopFlag, std::ostream& aOutFile )
 }
 
 
-// writes out the index list for a 3D feature
 bool VRML_LAYER::Write3DIndices( std::ostream& aOutFile, bool aIncludePlatedHoles )
 {
     if( outline.empty() )
@@ -1229,14 +1206,17 @@ bool VRML_LAYER::Write3DIndices( std::ostream& aOutFile, bool aIncludePlatedHole
 
         while( tbeg != tend )
         {
-            if( (i++ & 7) == 4 )
+            if( ( i++ & 7 ) == 4 )
             {
                 i = 1;
-                aOutFile << ",\n" << (tbeg->i2 + idx2) << ", " << (tbeg->i1 + idx2) << ", " << (tbeg->i3  + idx2) << ", -1";
+                aOutFile << ",\n"
+                         << ( tbeg->i2 + idx2 ) << ", " << ( tbeg->i1 + idx2 ) << ", "
+                         << ( tbeg->i3 + idx2 ) << ", -1";
             }
             else
             {
-                aOutFile << ", " << (tbeg->i2 + idx2) << ", " << (tbeg->i1 + idx2) << ", " << (tbeg->i3  + idx2) << ", -1";
+                aOutFile << ", " << ( tbeg->i2 + idx2 ) << ", " << ( tbeg->i1 + idx2 ) << ", "
+                         << ( tbeg->i3 + idx2 ) << ", -1";
             }
 
             ++tbeg;
@@ -1244,7 +1224,6 @@ bool VRML_LAYER::Write3DIndices( std::ostream& aOutFile, bool aIncludePlatedHole
     }
     else
         mark = ' ';
-
 
     // print out indices for the walls joining top to bottom
     int lastPoint;
@@ -1258,6 +1237,7 @@ bool VRML_LAYER::Write3DIndices( std::ostream& aOutFile, bool aIncludePlatedHole
     std::list<int>::const_iterator  cend;
 
     i = 2;
+
     while( obeg != oend )
     {
         cp = *obeg;
@@ -1288,16 +1268,20 @@ bool VRML_LAYER::Write3DIndices( std::ostream& aOutFile, bool aIncludePlatedHole
 
             if( !holes_only )
             {
-                if( (i++ & 3) == 2 )
+                if( ( i++ & 3 ) == 2 )
                 {
                     i = 1;
-                    aOutFile << mark << "\n" << curPoint << ", " << lastPoint << ", " << curPoint + idx2;
-                    aOutFile << ", -1, " << curPoint + idx2 << ", " << lastPoint << ", " << lastPoint + idx2 << ", -1";
+                    aOutFile << mark << "\n"
+                             << curPoint << ", " << lastPoint << ", " << curPoint + idx2;
+                    aOutFile << ", -1, " << curPoint + idx2 << ", " << lastPoint << ", "
+                             << lastPoint + idx2 << ", -1";
                 }
                 else
                 {
-                    aOutFile << mark << " " << curPoint << ", " << lastPoint << ", " << curPoint + idx2;
-                    aOutFile << ", -1, " << curPoint + idx2 << ", " << lastPoint << ", " << lastPoint + idx2 << ", -1";
+                    aOutFile << mark << " " << curPoint << ", " << lastPoint << ", "
+                             << curPoint + idx2;
+                    aOutFile << ", -1, " << curPoint + idx2 << ", " << lastPoint << ", "
+                             << lastPoint + idx2 << ", -1";
                 }
             }
             else
@@ -1305,13 +1289,17 @@ bool VRML_LAYER::Write3DIndices( std::ostream& aOutFile, bool aIncludePlatedHole
                 if( (i++ & 3) == 2 )
                 {
                     i = 1;
-                    aOutFile << mark << "\n" << curPoint << ", " << curPoint + idx2 << ", " << lastPoint;
-                    aOutFile << ", -1, " << curPoint + idx2 << ", " << lastPoint + idx2 << ", " << lastPoint << ", -1";
+                    aOutFile << mark << "\n"
+                             << curPoint << ", " << curPoint + idx2 << ", " << lastPoint;
+                    aOutFile << ", -1, " << curPoint + idx2 << ", " << lastPoint + idx2 << ", "
+                             << lastPoint << ", -1";
                 }
                 else
                 {
-                    aOutFile << mark << " " << curPoint << ", " << curPoint + idx2 << ", " << lastPoint;
-                    aOutFile << ", -1, " << curPoint + idx2 << ", " << lastPoint + idx2 << ", " << lastPoint << ", -1";
+                    aOutFile << mark << " " << curPoint << ", " << curPoint + idx2 << ", "
+                             << lastPoint;
+                    aOutFile << ", -1, " << curPoint + idx2 << ", " << lastPoint + idx2 << ", "
+                             << lastPoint << ", -1";
                 }
             }
 
@@ -1328,28 +1316,32 @@ bool VRML_LAYER::Write3DIndices( std::ostream& aOutFile, bool aIncludePlatedHole
 
         if( !holes_only )
         {
-            if( (i++ & 3) == 2 )
+            if( ( i++ & 3 ) == 2 )
             {
                 aOutFile << ",\n" << curPoint << ", " << lastPoint << ", " << curPoint + idx2;
-                aOutFile << ", -1, " << curPoint + idx2 << ", " << lastPoint << ", " << lastPoint + idx2 << ", -1";
+                aOutFile << ", -1, " << curPoint + idx2 << ", " << lastPoint << ", "
+                         << lastPoint + idx2 << ", -1";
             }
             else
             {
                 aOutFile << ", " << curPoint << ", " << lastPoint << ", " << curPoint + idx2;
-                aOutFile << ", -1, " << curPoint + idx2 << ", " << lastPoint << ", " << lastPoint + idx2 << ", -1";
+                aOutFile << ", -1, " << curPoint + idx2 << ", " << lastPoint << ", "
+                         << lastPoint + idx2 << ", -1";
             }
         }
         else
         {
-            if( (i++ & 3) == 2 )
+            if( ( i++ & 3 ) == 2 )
             {
                 aOutFile << ",\n" << curPoint << ", " << curPoint + idx2 << ", " << lastPoint;
-                aOutFile << ", -1, " << curPoint + idx2 << ", " << lastPoint + idx2 << ", " << lastPoint << ", -1";
+                aOutFile << ", -1, " << curPoint + idx2 << ", " << lastPoint + idx2 << ", "
+                         << lastPoint << ", -1";
             }
             else
             {
                 aOutFile << ", " << curPoint << ", " << curPoint + idx2 << ", " << lastPoint;
-                aOutFile << ", -1, " << curPoint + idx2 << ", " << lastPoint + idx2 << ", " << lastPoint << ", -1";
+                aOutFile << ", -1, " << curPoint + idx2 << ", " << lastPoint + idx2 << ", "
+                         << lastPoint << ", -1";
             }
         }
 
@@ -1361,7 +1353,6 @@ bool VRML_LAYER::Write3DIndices( std::ostream& aOutFile, bool aIncludePlatedHole
 }
 
 
-// add a triangular facet (triplet) to the output index list
 bool VRML_LAYER::addTriplet( VERTEX_3D* p0, VERTEX_3D* p1, VERTEX_3D* p2 )
 {
     double  dx0 = p1->x - p0->x;
@@ -1400,7 +1391,6 @@ bool VRML_LAYER::addTriplet( VERTEX_3D* p0, VERTEX_3D* p1, VERTEX_3D* p2 )
 }
 
 
-// add an extra vertex (to be called only by the COMBINE callback)
 VERTEX_3D* VRML_LAYER::AddExtraVertex( double aXpos, double aYpos, bool aPlatedHole )
 {
     VERTEX_3D* vertex = new VERTEX_3D;
@@ -1420,7 +1410,6 @@ VERTEX_3D* VRML_LAYER::AddExtraVertex( double aXpos, double aYpos, bool aPlatedH
 }
 
 
-// start a GL command list
 void VRML_LAYER::glStart( GLenum cmd )
 {
     glcmd = cmd;
@@ -1430,7 +1419,6 @@ void VRML_LAYER::glStart( GLenum cmd )
 }
 
 
-// process a vertex
 void VRML_LAYER::glPushVertex( VERTEX_3D* vertex )
 {
     if( vertex->o < 0 )
@@ -1443,51 +1431,51 @@ void VRML_LAYER::glPushVertex( VERTEX_3D* vertex )
 }
 
 
-// end a GL command list
 void VRML_LAYER::glEnd( void )
 {
     switch( glcmd )
     {
     case GL_LINE_LOOP:
+    {
+        // add the loop to the list of outlines
+        std::list<int>* loop = new std::list<int>;
+
+        double firstX = 0.0;
+        double firstY = 0.0;
+        double lastX = 0.0;
+        double lastY = 0.0;
+        double curX, curY;
+        double area = 0.0;
+
+        if( vlist.size() > 0 )
         {
-            // add the loop to the list of outlines
-            std::list<int>* loop = new std::list<int>;
-
-            double firstX = 0.0;
-            double firstY = 0.0;
-            double lastX = 0.0;
-            double lastY = 0.0;
-            double curX, curY;
-            double area = 0.0;
-
-            if( vlist.size() > 0 )
-            {
-                loop->push_back( vlist[0]->o );
-                firstX = vlist[0]->x;
-                firstY = vlist[0]->y;
-                lastX = firstX;
-                lastY = firstY;
-            }
-
-            for( size_t i = 1; i < vlist.size(); ++i )
-            {
-                loop->push_back( vlist[i]->o );
-                curX = vlist[i]->x;
-                curY = vlist[i]->y;
-                area += ( curX - lastX ) * ( curY + lastY );
-                lastX = curX;
-                lastY = curY;
-            }
-
-            area += ( firstX - lastX ) * ( firstY + lastY );
-
-            outline.push_back( loop );
-
-            if( area <= 0.0 )
-                solid.push_back( true );
-            else
-                solid.push_back( false );
+            loop->push_back( vlist[0]->o );
+            firstX = vlist[0]->x;
+            firstY = vlist[0]->y;
+            lastX = firstX;
+            lastY = firstY;
         }
+
+        for( size_t i = 1; i < vlist.size(); ++i )
+        {
+            loop->push_back( vlist[i]->o );
+            curX = vlist[i]->x;
+            curY = vlist[i]->y;
+            area += ( curX - lastX ) * ( curY + lastY );
+            lastX = curX;
+            lastY = curY;
+        }
+
+        area += ( firstX - lastX ) * ( firstY + lastY );
+
+        outline.push_back( loop );
+
+        if( area <= 0.0 )
+            solid.push_back( true );
+        else
+            solid.push_back( false );
+        }
+
         break;
 
     case GL_TRIANGLE_FAN:
@@ -1513,7 +1501,6 @@ void VRML_LAYER::glEnd( void )
 }
 
 
-// set the error message
 void VRML_LAYER::SetGLError( GLenum errorID )
 {
     const char * msg = (const char*)gluErrorString( errorID );
@@ -1533,7 +1520,6 @@ void VRML_LAYER::SetGLError( GLenum errorID )
 }
 
 
-// process a GL_TRIANGLE_FAN list
 void VRML_LAYER::processFan( void )
 {
     if( vlist.size() < 3 )
@@ -1551,7 +1537,6 @@ void VRML_LAYER::processFan( void )
 }
 
 
-// process a GL_TRIANGLE_STRIP list
 void VRML_LAYER::processStrip( void )
 {
     // note: (source: http://www.opengl.org/wiki/Primitive)
@@ -1584,7 +1569,6 @@ void VRML_LAYER::processStrip( void )
 }
 
 
-// process a GL_TRIANGLES list
 void VRML_LAYER::processTri( void )
 {
     // notes:
@@ -1624,7 +1608,6 @@ int VRML_LAYER::checkNContours( bool holes )
 }
 
 
-// push the internally held vertices
 void VRML_LAYER::pushVertices( bool holes )
 {
     // push the internally held vertices
@@ -1705,17 +1688,12 @@ VERTEX_3D* VRML_LAYER::getVertexByIndex( int aPointIndex, VRML_LAYER* holes )
 }
 
 
-// retrieve the total number of vertices
 int VRML_LAYER::GetSize( void )
 {
     return vertices.size();
 }
 
 
-// Inserts all contours into the given tesselator; this results in the
-// renumbering of all vertices from 'start'. Returns the end number.
-// Take care when using this call since tesselators cannot work on
-// the internal data concurrently
 int VRML_LAYER::Import( int start, GLUtesselator* aTesselator )
 {
     if( start < 0 )
@@ -1772,7 +1750,6 @@ int VRML_LAYER::Import( int start, GLUtesselator* aTesselator )
 }
 
 
-// return the vertex identified by index
 VERTEX_3D* VRML_LAYER::GetVertexByIndex( int aPointIndex )
 {
     int i0 = vertices[0]->i;
@@ -1787,7 +1764,6 @@ VERTEX_3D* VRML_LAYER::GetVertexByIndex( int aPointIndex )
 }
 
 
-// return the error string
 const std::string& VRML_LAYER::GetError( void )
 {
     return error;
@@ -1803,8 +1779,8 @@ void VRML_LAYER::SetVertexOffsets( double aXoffset, double aYoffset )
 
 
 bool VRML_LAYER::Get3DTriangles( std::vector< double >& aVertexList,
-    std::vector< int > &aIndexPlane, std::vector< int > &aIndexSide,
-    double aTopZ, double aBotZ )
+                                 std::vector< int > &aIndexPlane, std::vector< int > &aIndexSide,
+                                 double aTopZ, double aBotZ )
 {
     aVertexList.clear();
     aIndexPlane.clear();
@@ -1897,6 +1873,7 @@ bool VRML_LAYER::Get3DTriangles( std::vector< double >& aVertexList,
     std::list< int >::const_iterator  cend;
 
     i = 2;
+
     while( obeg != oend )
     {
         cp = *obeg;
@@ -1977,7 +1954,7 @@ bool VRML_LAYER::Get3DTriangles( std::vector< double >& aVertexList,
 
 
 bool VRML_LAYER::Get2DTriangles( std::vector< double >& aVertexList,
-    std::vector< int > &aIndexPlane, double aHeight, bool aTopPlane )
+                                 std::vector< int > &aIndexPlane, double aHeight, bool aTopPlane )
 {
     aVertexList.clear();
     aIndexPlane.clear();
