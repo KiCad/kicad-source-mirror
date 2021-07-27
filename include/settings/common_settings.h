@@ -69,7 +69,6 @@ public:
 
     struct ENVIRONMENT
     {
-        bool show_warning_dialog;
         ENV_VAR_MAP vars;
     };
 
@@ -118,6 +117,13 @@ public:
         int clear_3d_cache_interval;
     };
 
+    struct DO_NOT_SHOW_AGAIN
+    {
+        bool zone_fill_warning;
+        bool env_var_overwrite_warning;
+        bool scaled_3d_models_warning;
+    };
+
     struct NETCLASS_PANEL
     {
         int sash_pos;
@@ -153,12 +159,9 @@ public:
 
     SYSTEM m_System;
 
+    DO_NOT_SHOW_AGAIN m_DoNotShowAgain;
+
     NETCLASS_PANEL m_NetclassPanel;
-
-    // TODO: These may not want to be in common
-    wxString m_3DLibsUrl;
-
-    wxString m_3DLibsDownloadPath;
 };
 
 #endif

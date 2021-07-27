@@ -101,6 +101,13 @@ private:
     void setTransitions() override;
 
     /**
+     * We have bug reports indicating that some new users confuse zone filling/unfilling with
+     * the display modes.  This will put up a warning if they show zone fills when one or more
+     * zones are unfilled.
+     */
+    void unfilledZoneCheck();
+
+    /**
      * Add and select or just select for move/place command a list of board items.
      *
      * @param aItems is the list of items

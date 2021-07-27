@@ -26,7 +26,7 @@
 #include <wx/stdpaths.h>
 #include <wx/process.h>
 
-
+#include <pgm_base.h>
 #include <board.h>
 #include <confirm.h>
 #include <dialog_export_step_base.h>
@@ -182,17 +182,21 @@ DIALOG_EXPORT_STEP::DIALOG_EXPORT_STEP( PCB_EDIT_FRAME* aParent, const wxString&
             break;
     }
 
-    if( !bad_scales.empty() )
+    if( !bad_scales.empty()
+            && !Pgm().GetCommonSettings()->m_DoNotShowAgain.scaled_3d_models_warning )
     {
         wxString extendedMsg = _( "Non-unity scaled models:" ) + "\n" + bad_scales;
 
         KIDIALOG msgDlg( m_parent, _( "Scaled models detected.  "
-                "Model scaling is not reliable for mechanical export." ),
+                                      "Model scaling is not reliable for mechanical export." ),
                          _( "Model Scale Warning" ), wxOK | wxICON_WARNING );
         msgDlg.SetExtendedMessage( extendedMsg );
         msgDlg.DoNotShowCheckbox( __FILE__, __LINE__ );
 
         msgDlg.ShowModal();
+
+        if( msgDlg.DoNotShowAgain() )
+            Pgm().GetCommonSettings()->m_DoNotShowAgain.scaled_3d_models_warning = true;
     }
     // Now all widgets have the size fixed, call FinishDialogSettings
     finishDialogSettings();

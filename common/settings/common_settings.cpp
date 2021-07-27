@@ -97,9 +97,6 @@ COMMON_SETTINGS::COMMON_SETTINGS() :
     m_params.emplace_back( new PARAM<int>( "auto_backup.min_interval",
             &m_Backup.min_interval, 300 ) );
 
-    m_params.emplace_back( new PARAM<bool>( "environment.show_warning_dialog",
-            &m_Env.show_warning_dialog, false ) );
-
     m_params.emplace_back( new PARAM_LAMBDA<nlohmann::json>( "environment.vars",
             [&]() -> nlohmann::json
             {
@@ -275,6 +272,15 @@ COMMON_SETTINGS::COMMON_SETTINGS() :
 
     m_params.emplace_back( new PARAM<int>( "system.clear_3d_cache_interval",
             &m_System.clear_3d_cache_interval, 30 ) );
+
+    m_params.emplace_back( new PARAM<bool>( "do_not_show_again.zone_fill_warning",
+            &m_DoNotShowAgain.zone_fill_warning, false ) );
+
+    m_params.emplace_back( new PARAM<bool>( "do_not_show_again.env_var_overwrite_warning",
+            &m_DoNotShowAgain.env_var_overwrite_warning, false ) );
+
+    m_params.emplace_back( new PARAM<bool>( "do_not_show_again.scaled_3d_models_warning",
+            &m_DoNotShowAgain.scaled_3d_models_warning, false ) );
 
     m_params.emplace_back( new PARAM<bool>( "session.remember_open_files",
             &m_Session.remember_open_files, false ) );

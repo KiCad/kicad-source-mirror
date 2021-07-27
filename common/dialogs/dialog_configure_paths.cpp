@@ -348,7 +348,8 @@ void DIALOG_CONFIGURE_PATHS::OnGridCellChanging( wxGridEvent& event )
 
     if( grid == m_EnvVars )
     {
-        if( col == TV_VALUE_COL && m_EnvVars->GetCellValue( row, TV_FLAG_COL ).Length() )
+        if( col == TV_VALUE_COL && m_EnvVars->GetCellValue( row, TV_FLAG_COL ).Length()
+                && !Pgm().GetCommonSettings()->m_DoNotShowAgain.env_var_overwrite_warning )
         {
             wxString msg1 = _( "This path was defined  externally to the running process and\n"
                                "will only be temporarily overwritten." );
@@ -361,14 +362,16 @@ void DIALOG_CONFIGURE_PATHS::OnGridCellChanging( wxGridEvent& event )
             dlg.ShowDetailedText( msg2 );
             dlg.DoNotShowCheckbox( __FILE__, __LINE__ );
             dlg.ShowModal();
+
+            if( dlg.DoNotShowAgain() )
+                Pgm().GetCommonSettings()->m_DoNotShowAgain.env_var_overwrite_warning = true;
         }
         else if( col == TV_NAME_COL && m_EnvVars->GetCellValue( row, TV_NAME_COL ) != text )
         {
             // This env var name is reserved and cannot be added here.
             if( text == PROJECT_VAR_NAME )
             {
-                wxMessageBox( wxString::Format(
-                              _( "The name %s is reserved, and cannot be used here" ),
+                wxMessageBox( wxString::Format( _( "The name %s is reserved, and cannot be used." ),
                               PROJECT_VAR_NAME ) );
                 event.Veto();
             }

@@ -327,9 +327,6 @@ protected:
     wxString        m_pdf_browser;
     wxString        m_editor_name;
 
-    /// Flag to indicate if the environment variable overwrite warning dialog should be shown.
-    bool            m_show_env_var_dialog;
-
 };
 
 

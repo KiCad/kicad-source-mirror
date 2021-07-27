@@ -24,6 +24,7 @@
  */
 
 #include "edit_tool.h"
+#include <pgm_base.h>
 #include "pcb_actions.h"
 #include "pcb_control.h"
 #include "pcb_picker_tool.h"
@@ -52,10 +53,11 @@
 #include <properties.h>
 #include <settings/color_settings.h>
 #include <tool/tool_manager.h>
-#include <view/view_controls.h>
 #include <footprint_viewer_frame.h>
 #include <footprint_edit_frame.h>
 #include <widgets/progress_reporter.h>
+#include <widgets/infobar.h>
+#include <wx/hyperlink.h>
 
 using namespace std::placeholders;
 
@@ -185,6 +187,53 @@ int PCB_CONTROL::ViaDisplayMode( const TOOL_EVENT& aEvent )
 }
 
 
+/**
+ * We have bug reports indicating that some new users confuse zone filling/unfilling with the
+ * display modes.  This will put up a warning if they show zone fills when one or more zones
+ * are unfilled.
+ */
+void PCB_CONTROL::unfilledZoneCheck()
+{
+    if( Pgm().GetCommonSettings()->m_DoNotShowAgain.zone_fill_warning )
+        return;
+
+    bool unfilledZones = false;
+
+    for( const ZONE* zone : board()->Zones() )
+    {
+        if( !zone->IsFilled() )
+        {
+            unfilledZones = true;
+            break;
+        }
+    }
+
+    if( unfilledZones )
+    {
+        WX_INFOBAR*      infobar = frame()->GetInfoBar();
+        wxHyperlinkCtrl* button = new wxHyperlinkCtrl( infobar, wxID_ANY, _( "Don't show again" ),
+                                                       wxEmptyString );
+
+        button->Bind( wxEVT_COMMAND_HYPERLINK, std::function<void( wxHyperlinkEvent& aEvent )>(
+                [&]( wxHyperlinkEvent& aEvent )
+                {
+                    Pgm().GetCommonSettings()->m_DoNotShowAgain.zone_fill_warning = true;
+                    frame()->GetInfoBar()->Dismiss();
+                } ) );
+
+        infobar->RemoveAllButtons();
+        infobar->AddButton( button );
+
+        wxString msg;
+        msg.Printf( _( "Not all zones are filled. Use Edit > Fill All Zones (%s) "
+                      "if you wish to see all fills." ),
+                    KeyNameFromKeyCode( PCB_ACTIONS::zoneFillAll.GetHotKey() ) );
+
+        infobar->ShowMessageFor( msg, 10000, wxICON_WARNING  );
+    }
+}
+
+
 int PCB_CONTROL::ZoneDisplayMode( const TOOL_EVENT& aEvent )
 {
     PCB_DISPLAY_OPTIONS opts = displayOptions();
@@ -192,22 +241,7 @@ int PCB_CONTROL::ZoneDisplayMode( const TOOL_EVENT& aEvent )
     // Apply new display options to the GAL canvas
     if( aEvent.IsAction( &PCB_ACTIONS::zoneDisplayFilled ) )
     {
-        if( opts.m_ZoneDisplayMode == ZONE_DISPLAY_MODE::SHOW_FILLED )
-        {
-            // Check for user misunderstanding between fills and display mode
-            for( const ZONE* zone : board()->Zones() )
-            {
-                if( !zone->IsFilled() )
-                {
-                    wxString msg;
-                    msg.Printf( _( "Not all zones are filled. Use Edit > Fill All Zones (%s) "
-                                  "if you wish to see all fills." ),
-                                KeyNameFromKeyCode( PCB_ACTIONS::zoneFillAll.GetHotKey() ) );
-                    m_frame->ShowInfoBarMsg(  msg, true );
-                    break;
-                }
-            }
-        }
+        unfilledZoneCheck();
 
         opts.m_ZoneDisplayMode = ZONE_DISPLAY_MODE::SHOW_FILLED;
     }
