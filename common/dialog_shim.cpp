@@ -35,6 +35,7 @@
 #include <wx/grid.h>
 #include <wx/bmpbuttn.h>
 #include <wx/textctrl.h>
+#include <wx/stc/stc.h>
 
 #include <algorithm>
 
@@ -323,11 +324,30 @@ static void selectAllInTextCtrls( wxWindowList& children )
     {
         if( wxTextCtrl* childTextCtrl = dynamic_cast<wxTextCtrl*>( child ) )
         {
+            // We don't currently run this on GTK because some window managers don't hide the
+            // selection in non-active controls, and other window managers do the selection
+            // automatically anyway.
 #if defined( __WXMAC__ ) || defined( __WXMSW__ )
-            // Respect an existing selection
-            if( childTextCtrl->GetStringSelection().IsEmpty() )
+            if( !childTextCtrl->GetStringSelection().IsEmpty() )
+            {
+                // Respect an existing selection
+            }
+            else
+            {
                 childTextCtrl->SelectAll();
+            }
 #endif
+        }
+        else if( wxStyledTextCtrl* scintilla = dynamic_cast<wxStyledTextCtrl*>( child ) )
+        {
+            if( !scintilla->GetSelectedText().IsEmpty() )
+            {
+                // Respect an existing selection
+            }
+            else
+            {
+                scintilla->SelectAll();
+            }
         }
 #ifdef __WXMAC__
         // Temp hack for square (looking) buttons on OSX.  Will likely be made redundant
