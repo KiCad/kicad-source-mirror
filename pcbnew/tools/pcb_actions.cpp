@@ -272,7 +272,7 @@ TOOL_ACTION PCB_ACTIONS::duplicateIncrement( "pcbnew.InteractiveEdit.duplicateIn
 
 TOOL_ACTION PCB_ACTIONS::moveExact( "pcbnew.InteractiveEdit.moveExact",
         AS_GLOBAL,
-        MD_CTRL + 'M', LEGACY_HK_NAME( "Move Item Exactly" ),
+        MD_SHIFT + 'M', LEGACY_HK_NAME( "Move Item Exactly" ),
         _( "Move Exactly..." ), _( "Moves the selected item(s) by an exact amount" ),
         BITMAPS::move_exactly );
 
