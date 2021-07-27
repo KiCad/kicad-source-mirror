@@ -364,11 +364,14 @@ void PAGED_DIALOG::OnPageChange( wxBookCtrlEvent& event )
     {
         if( auto panel = dynamic_cast<RESETTABLE_PANEL*>( m_treebook->GetPage( page ) ) )
         {
+            m_resetButton->SetLabel( wxString::Format( _( "Reset %s to Defaults" ),
+                                                       m_treebook->GetPageText( page ) ) );
             m_resetButton->SetToolTip( panel->GetResetTooltip() );
             m_resetButton->Enable( true );
         }
         else
         {
+            m_resetButton->SetLabel( _( "Reset to Defaults" ) );
             m_resetButton->SetToolTip( wxString() );
             m_resetButton->Enable( false );
         }
