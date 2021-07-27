@@ -917,8 +917,8 @@ int BOARD_EDITOR_CONTROL::PlaceFootprint( const TOOL_EVENT& aEvent )
 {
     if( m_inPlaceFootprint )
         return 0;
-    else
-        m_inPlaceFootprint = true;
+
+    REENTRANCY_GUARD guard( &m_inPlaceFootprint );
 
     FOOTPRINT*            fp = aEvent.Parameter<FOOTPRINT*>();
     KIGFX::VIEW_CONTROLS* controls = getViewControls();
@@ -1085,7 +1085,6 @@ int BOARD_EDITOR_CONTROL::PlaceFootprint( const TOOL_EVENT& aEvent )
     controls->CaptureCursor( false );
     m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
 
-    m_inPlaceFootprint = false;
     return 0;
 }
 
@@ -1171,8 +1170,8 @@ int BOARD_EDITOR_CONTROL::PlaceTarget( const TOOL_EVENT& aEvent )
 {
     if( m_inPlaceTarget )
         return 0;
-    else
-        m_inPlaceTarget = true;
+
+    REENTRANCY_GUARD guard( &m_inPlaceTarget );
 
     KIGFX::VIEW* view = getView();
     KIGFX::VIEW_CONTROLS* controls = getViewControls();
@@ -1281,7 +1280,6 @@ int BOARD_EDITOR_CONTROL::PlaceTarget( const TOOL_EVENT& aEvent )
 
     m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
 
-    m_inPlaceTarget = false;
     return 0;
 }
 

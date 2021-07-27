@@ -34,6 +34,25 @@
 
 class ACTION_MENU;
 
+
+struct REENTRANCY_GUARD
+{
+    REENTRANCY_GUARD( bool* aFlag ) :
+            m_flag( aFlag )
+    {
+        *m_flag = true;
+    }
+
+    ~REENTRANCY_GUARD()
+    {
+        *m_flag = false;
+    }
+
+private:
+    bool* m_flag;
+};
+
+
 class TOOL_INTERACTIVE : public TOOL_BASE
 {
 public:

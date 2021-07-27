@@ -249,8 +249,8 @@ int DRAWING_TOOL::DrawLine( const TOOL_EVENT& aEvent )
 
     if( m_inDrawingTool )
         return 0;
-    else
-        m_inDrawingTool = true;
+
+    REENTRANCY_GUARD guard( &m_inDrawingTool );
 
     FOOTPRINT*       parentFootprint = dynamic_cast<FOOTPRINT*>( m_frame->GetModel() );
     PCB_SHAPE*       line = m_isFootprintEditor ? new FP_SHAPE( parentFootprint ) : new PCB_SHAPE;
@@ -289,7 +289,6 @@ int DRAWING_TOOL::DrawLine( const TOOL_EVENT& aEvent )
         line->SetFlags( IS_NEW );
     }
 
-    m_inDrawingTool = false;
     return 0;
 }
 
@@ -301,8 +300,8 @@ int DRAWING_TOOL::DrawRectangle( const TOOL_EVENT& aEvent )
 
     if( m_inDrawingTool )
         return 0;
-    else
-        m_inDrawingTool = true;
+
+    REENTRANCY_GUARD guard( &m_inDrawingTool );
 
     FOOTPRINT*       parentFootprint = dynamic_cast<FOOTPRINT*>( m_frame->GetModel() );
     PCB_SHAPE*       rect = m_isFootprintEditor ? new FP_SHAPE( parentFootprint ) : new PCB_SHAPE;
@@ -341,7 +340,6 @@ int DRAWING_TOOL::DrawRectangle( const TOOL_EVENT& aEvent )
         startingPoint = NULLOPT;
     }
 
-    m_inDrawingTool = false;
     return 0;
 }
 
@@ -353,8 +351,8 @@ int DRAWING_TOOL::DrawCircle( const TOOL_EVENT& aEvent )
 
     if( m_inDrawingTool )
         return 0;
-    else
-        m_inDrawingTool = true;
+
+    REENTRANCY_GUARD guard( &m_inDrawingTool );
 
     FOOTPRINT*       parentFootprint = dynamic_cast<FOOTPRINT*>( m_frame->GetModel() );
     PCB_SHAPE*       circle = m_isFootprintEditor ? new FP_SHAPE( parentFootprint ) : new PCB_SHAPE;
@@ -393,7 +391,6 @@ int DRAWING_TOOL::DrawCircle( const TOOL_EVENT& aEvent )
         startingPoint = NULLOPT;
     }
 
-    m_inDrawingTool = false;
     return 0;
 }
 
@@ -405,8 +402,8 @@ int DRAWING_TOOL::DrawArc( const TOOL_EVENT& aEvent )
 
     if( m_inDrawingTool )
         return 0;
-    else
-        m_inDrawingTool = true;
+
+    REENTRANCY_GUARD guard( &m_inDrawingTool );
 
     FOOTPRINT*       parentFootprint = dynamic_cast<FOOTPRINT*>( m_frame->GetModel() );
     PCB_SHAPE*       arc = m_isFootprintEditor ? new FP_SHAPE( parentFootprint ) : new PCB_SHAPE;
@@ -440,7 +437,6 @@ int DRAWING_TOOL::DrawArc( const TOOL_EVENT& aEvent )
         immediateMode = false;
     }
 
-    m_inDrawingTool = false;
     return 0;
 }
 
@@ -452,8 +448,8 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
 
     if( m_inDrawingTool )
         return 0;
-    else
-        m_inDrawingTool = true;
+
+    REENTRANCY_GUARD guard( &m_inDrawingTool );
 
     BOARD_ITEM*                  text = nullptr;
     const BOARD_DESIGN_SETTINGS& dsnSettings = m_frame->GetDesignSettings();
@@ -673,7 +669,6 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
     m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
     m_frame->SetMsgPanel( board() );
 
-    m_inDrawingTool = false;
     return 0;
 }
 
@@ -694,8 +689,8 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
 
     if( m_inDrawingTool )
         return 0;
-    else
-        m_inDrawingTool = true;
+
+    REENTRANCY_GUARD guard( &m_inDrawingTool );
 
     enum DIMENSION_STEPS
     {
@@ -1121,7 +1116,6 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
     m_view->Remove( &preview );
     m_frame->SetMsgPanel( board() );
 
-    m_inDrawingTool = false;
     return 0;
 }
 
@@ -1133,8 +1127,8 @@ int DRAWING_TOOL::PlaceImportedGraphics( const TOOL_EVENT& aEvent )
 
     if( m_inDrawingTool )
         return 0;
-    else
-        m_inDrawingTool = true;
+
+    REENTRANCY_GUARD guard( &m_inDrawingTool );
 
     // Note: PlaceImportedGraphics() will convert PCB_SHAPE_T and PCB_TEXT_T to footprint
     // items if needed
@@ -1144,16 +1138,12 @@ int DRAWING_TOOL::PlaceImportedGraphics( const TOOL_EVENT& aEvent )
     std::list<std::unique_ptr<EDA_ITEM>>& list = dlg.GetImportedItems();
 
     if( dlgResult != wxID_OK )
-    {
-        m_inDrawingTool = false;
         return 0;
-    }
 
     // Ensure the list is not empty:
     if( list.empty() )
     {
         wxMessageBox( _( "No graphic items found in file.") );
-        m_inDrawingTool = false;
         return 0;
     }
 
@@ -1288,7 +1278,6 @@ int DRAWING_TOOL::PlaceImportedGraphics( const TOOL_EVENT& aEvent )
 
     m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
 
-    m_inDrawingTool = false;
     m_frame->PopTool( tool );
 
     return 0;
@@ -1304,8 +1293,8 @@ int DRAWING_TOOL::SetAnchor( const TOOL_EVENT& aEvent )
 
     if( m_inDrawingTool )
         return 0;
-    else
-        m_inDrawingTool = true;
+
+    REENTRANCY_GUARD guard( &m_inDrawingTool );
 
     SCOPED_DRAW_MODE scopedDrawMode( m_mode, MODE::ANCHOR );
     PCB_GRID_HELPER  grid( m_toolMgr, m_frame->GetMagneticItemsSettings() );
@@ -1372,7 +1361,6 @@ int DRAWING_TOOL::SetAnchor( const TOOL_EVENT& aEvent )
 
     m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
 
-    m_inDrawingTool = false;
     return 0;
 }
 
