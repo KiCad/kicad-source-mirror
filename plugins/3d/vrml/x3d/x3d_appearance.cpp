@@ -237,8 +237,8 @@ SGNODE* X3DAPP::TranslateToSG( SGNODE* aParent )
                                    ptype ) );
 
     wxLogTrace( traceVrmlPlugin,
-                wxT( " * [INFO] Translating Appearance node with %ul children, %ul"
-                     "references, and %ul back pointers." ),
+                wxT( " * [INFO] Translating Appearance node with %lu children, %lu"
+                     "references, and %lu back pointers." ),
                 m_Children.size(), m_Refs.size(), m_BackPointers.size() );
 
     if( m_sgNode )

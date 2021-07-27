@@ -62,7 +62,7 @@ X3DSHAPE::X3DSHAPE( X3DNODE* aParent ) : X3DNODE()
 X3DSHAPE::~X3DSHAPE()
 {
     wxLogTrace( traceVrmlPlugin,
-                wxT( " * [INFO] Destroying Shape with %ul children, %ul references, "
+                wxT( " * [INFO] Destroying Shape with %lu children, %lu references, "
                      "%and ul back pointers." ),
                 m_Children.size(), m_Refs.size(), m_BackPointers.size() );
 }
@@ -246,8 +246,8 @@ SGNODE* X3DSHAPE::TranslateToSG( SGNODE* aParent )
         return nullptr;
 
     wxLogTrace( traceVrmlPlugin,
-                wxT( " * [INFO] Translating Shape with %ul children, %ul references, "
-                     "%and ul back pointers." ),
+                wxT( " * [INFO] Translating Shape with %lu children, %lu references, "
+                     "and %lu back pointers." ),
                 m_Children.size(), m_Refs.size(), m_BackPointers.size() );
 
     S3D::SGTYPES ptype = S3D::GetSGNodeType( aParent );

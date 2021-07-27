@@ -139,7 +139,7 @@ WRL1NODE::WRL1NODE( NAMEREGISTER* aDictionary )
 WRL1NODE::~WRL1NODE()
 {
     wxLogTrace( traceVrmlPlugin,
-                wxT( " * [INFO] ^^ Destroying Type %d with %ul children, %ul references, and %ul "
+                wxT( " * [INFO] ^^ Destroying Type %d with %lu children, %lu references, and %lu "
                      "back pointers." ),
                 m_Type, m_Children.size(), m_Refs.size(), m_BackPointers.size() );
 

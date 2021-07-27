@@ -913,12 +913,6 @@ SGNODE* WRL2BASE::TranslateToSG( SGNODE* aParent )
     if( m_Children.empty() )
         return nullptr;
 
-    S3D::SGTYPES ptype = S3D::GetSGNodeType( aParent );
-
-    wxCHECK_MSG( aParent && ( ptype == S3D::SGTYPE_SHAPE ), nullptr,
-                 wxString::Format( wxT( " * [BUG] WRL2BASE does not have a Transform parent "
-                                        "(parent ID: %d)." ), ptype ) );
-
     if( m_sgNode )
     {
         if( nullptr != aParent )

@@ -57,7 +57,7 @@ WRL1GROUP::WRL1GROUP( NAMEREGISTER* aDictionary, WRL1NODE* aParent ) :
 WRL1GROUP::~WRL1GROUP()
 {
     wxLogTrace( traceVrmlPlugin,
-                wxT( " * [INFO] Destroying Group with %ul children, %ul references, and %ul "
+                wxT( " * [INFO] Destroying Group with %lu children, %lu references, and %lu "
                      "back pointers." ),
                 m_Children.size(), m_Refs.size(), m_BackPointers.size() );
 }
@@ -130,8 +130,8 @@ SGNODE* WRL1GROUP::TranslateToSG( SGNODE* aParent, WRL1STATUS* sp )
     wxCHECK_MSG( m_Parent, nullptr, wxT( "Group has no parent." ) );
 
     wxLogTrace( traceVrmlPlugin,
-                wxT( " * [INFO] Translating Group with %ul children, %ul references, %ul back "
-                     "pointers, and %ul items." ),
+                wxT( " * [INFO] Translating Group with %lu children, %lu references, %lu back "
+                     "pointers, and %lu items." ),
                 m_Children.size(), m_Refs.size(), m_BackPointers.size(), m_Items.size() );
 
     if( WRL1NODES::WRL1_BASE != m_Parent->GetNodeType() )

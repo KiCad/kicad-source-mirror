@@ -51,8 +51,8 @@ WRL1TRANSFORM::WRL1TRANSFORM( NAMEREGISTER* aDictionary, WRL1NODE* aParent ) :
 WRL1TRANSFORM::~WRL1TRANSFORM()
 {
     wxLogTrace( traceVrmlPlugin,
-                wxT( " * [INFO] Destroying Transform node with %ul children, %ul"
-                     "references, and %ul back pointers." ),
+                wxT( " * [INFO] Destroying Transform node with %lu children, %lu"
+                     "references, and %lu back pointers." ),
                 m_Children.size(), m_Refs.size(), m_BackPointers.size() );
 }
 

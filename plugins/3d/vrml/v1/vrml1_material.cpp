@@ -187,10 +187,11 @@ bool WRL1MATERIAL::Read( WRLPROC& proc, WRL1BASE* aTopNode )
             {
                 wxLogTrace( traceVrmlPlugin,
                             wxT( "%s:%s:%d\n"
-                                 " * [INFO] invalid shininess at line  %ul column %ul\n"
+                                 " * [INFO] invalid shininess %s\n"
                                  " * [INFO] file: '%s'\n"
                                  " * [INFO] error: '%s'." ),
-                            __FILE__, __FUNCTION__, __LINE__, proc.GetFileName(), proc.GetError() );
+                            __FILE__, __FUNCTION__, __LINE__, proc.GetFileName(),
+                            proc.GetFileName(), proc.GetError() );
 
                 return false;
             }
@@ -201,10 +202,11 @@ bool WRL1MATERIAL::Read( WRLPROC& proc, WRL1BASE* aTopNode )
             {
                 wxLogTrace( traceVrmlPlugin,
                             wxT( "%s:%s:%d\n"
-                                 " * [INFO] invalid transparency at line  %ul column %ul\n"
+                                 " * [INFO] invalid transparency %s\n"
                                  " * [INFO] file: '%s'\n"
                                  " * [INFO] error: '%s'." ),
-                            __FILE__, __FUNCTION__, __LINE__, proc.GetFileName(), proc.GetError() );
+                            __FILE__, __FUNCTION__, __LINE__, proc.GetFilePosition(),
+                            proc.GetFileName(), proc.GetError() );
 
                 return false;
             }
@@ -215,10 +217,11 @@ bool WRL1MATERIAL::Read( WRLPROC& proc, WRL1BASE* aTopNode )
             {
                 wxLogTrace( traceVrmlPlugin,
                             wxT( "%s:%s:%d\n"
-                                 " * [INFO] invalid ambientColor at line  %ul column %ul\n"
+                                 " * [INFO] invalid ambientColor %s\n"
                                  " * [INFO] file: '%s'\n"
                                  " * [INFO] error: '%s'." ),
-                            __FILE__, __FUNCTION__, __LINE__, proc.GetFileName(), proc.GetError() );
+                            __FILE__, __FUNCTION__, __LINE__, proc.GetFilePosition(),
+                            proc.GetFileName(), proc.GetError() );
 
                 return false;
             }

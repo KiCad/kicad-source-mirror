@@ -528,7 +528,7 @@ bool WRL1BASE::readShapeHints( WRLPROC& proc, WRL1NODE* aParent, WRL1NODE** aNod
 
 SGNODE* WRL1BASE::TranslateToSG( SGNODE* aParent, WRL1STATUS* /*sp*/ )
 {
-    wxLogTrace( traceVrmlPlugin, wxT( " * [INFO] Translating VRML1 Base with %ul items." ),
+    wxLogTrace( traceVrmlPlugin, wxT( " * [INFO] Translating VRML1 Base with %lu items." ),
                 m_Items.size() );
 
     if( m_Items.empty() )

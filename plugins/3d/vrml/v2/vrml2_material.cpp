@@ -262,8 +262,8 @@ SGNODE* WRL2MATERIAL::TranslateToSG( SGNODE* aParent )
                                         "ID: %d)." ), ptype ) );
 
     wxLogTrace( traceVrmlPlugin,
-                wxT( " * [INFO] Translating IndexedFaceSet with %ul children, %ul references, and"
-                     "%ul back pointers." ),
+                wxT( " * [INFO] Translating IndexedFaceSet with %lu children, %lu references, and"
+                     "%lu back pointers." ),
                 m_Children.size(), m_Refs.size(), m_BackPointers.size() );
 
     if( m_sgNode )

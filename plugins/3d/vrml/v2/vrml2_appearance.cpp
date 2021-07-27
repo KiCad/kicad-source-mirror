@@ -57,8 +57,8 @@ WRL2APPEARANCE::WRL2APPEARANCE( WRL2NODE* aParent ) : WRL2NODE()
 WRL2APPEARANCE::~WRL2APPEARANCE()
 {
     wxLogTrace( traceVrmlPlugin,
-                wxT( " * [INFO] Destroying Appearance node with %ul children, %ul"
-                     "references, and %ul back pointers." ),
+                wxT( " * [INFO] Destroying Appearance node with %lu children, %lu"
+                     "references, and %lu back pointers." ),
                 m_Children.size(), m_Refs.size(), m_BackPointers.size() );
 }
 
@@ -333,8 +333,8 @@ SGNODE* WRL2APPEARANCE::TranslateToSG( SGNODE* aParent )
                                         "(parent ID: %d)." ), ptype ) );
 
     wxLogTrace( traceVrmlPlugin,
-                wxT( " * [INFO] Translating Appearance node with %ul children, %ul"
-                     "references, and %ul back pointers." ),
+                wxT( " * [INFO] Translating Appearance node with %lu children, %lu"
+                     "references, and %lu back pointers." ),
                 m_Children.size(), m_Refs.size(), m_BackPointers.size() );
 
     if( m_sgNode )

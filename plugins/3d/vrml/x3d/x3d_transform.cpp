@@ -59,8 +59,8 @@ X3DTRANSFORM::X3DTRANSFORM( X3DNODE* aParent ) : X3DNODE()
 X3DTRANSFORM::~X3DTRANSFORM()
 {
     wxLogTrace( traceVrmlPlugin,
-                wxT( " * [INFO] Destroying Transform with %ul children, %ul references, "
-                     "%and ul back pointers." ),
+                wxT( " * [INFO] Destroying Transform with %lu children, %lu references, "
+                     "and %lu back pointers." ),
                 m_Children.size(), m_Refs.size(), m_BackPointers.size() );
 }
 
@@ -258,8 +258,8 @@ bool X3DTRANSFORM::AddRefNode( X3DNODE* aNode )
 SGNODE* X3DTRANSFORM::TranslateToSG( SGNODE* aParent )
 {
     wxLogTrace( traceVrmlPlugin,
-                wxT( " * [INFO] Translating Transform with %ul children, %ul references, "
-                     "%and ul back pointers." ),
+                wxT( " * [INFO] Translating Transform with %lu children, %lu references, "
+                     "and %lu back pointers." ),
                 m_Children.size(), m_Refs.size(), m_BackPointers.size() );
 
     if( m_Children.empty() && m_Refs.empty() )
