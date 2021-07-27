@@ -143,6 +143,7 @@ void DIALOG_EDIT_ONE_FIELD::init()
     if( m_StyledTextCtrl->IsShown() )
     {
         wxSize maxSize = m_StyledTextCtrl->GetSize();
+        maxSize.x = -1;     // Do not fix the max width
         maxSize.y = m_xPosCtrl->GetSize().y;
         m_StyledTextCtrl->SetMaxSize( maxSize );
         m_StyledTextCtrl->SetUseVerticalScrollBar( false );
