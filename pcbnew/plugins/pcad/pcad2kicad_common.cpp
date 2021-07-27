@@ -231,60 +231,71 @@ int StrToInt1Units( const wxString& aStr )
 }
 
 
-wxString ValidateName( wxString aName )
+wxString ValidateName( const wxString& aName )
 {
-    aName.Replace( wxT( " " ), wxT( "_" ) );
+    wxString retv = aName;
+    retv.Replace( wxT( " " ), wxT( "_" ) );
 
-    return aName;
+    return retv;
 }
 
 
-wxString ValidateReference( wxString aRef )
+wxString ValidateReference( const wxString& aRef )
 {
     wxRegEx reRef;
     reRef.Compile( wxT( "^[[:digit:]][[:digit:]]*$" ) );
 
-    if( reRef.Matches( aRef ) )
-        aRef.Prepend( wxT( '.' ) );
+    wxString retv = aRef;
 
-    return aRef;
+    if( reRef.Matches( retv ) )
+        retv.Prepend( wxT( '.' ) );
+
+    return retv;
 }
 
 
-void SetWidth( wxString aStr, const wxString& aDefaultMeasurementUnit, int* aWidth,
+void SetWidth( const wxString& aStr, const wxString& aDefaultMeasurementUnit, int* aWidth,
                const wxString& aActualConversion )
 {
-    *aWidth = StrToIntUnits( GetAndCutWordWithMeasureUnits( &aStr, aDefaultMeasurementUnit ),
+    wxString tmp = aStr;
+
+    *aWidth = StrToIntUnits( GetAndCutWordWithMeasureUnits( &tmp, aDefaultMeasurementUnit ),
                              wxT( ' ' ), aActualConversion );
 }
 
 
-void SetHeight( wxString aStr, const wxString& aDefaultMeasurementUnit, int* aHeight,
+void SetHeight( const wxString& aStr, const wxString& aDefaultMeasurementUnit, int* aHeight,
                 const wxString& aActualConversion )
 {
-    *aHeight = StrToIntUnits( GetAndCutWordWithMeasureUnits( &aStr, aDefaultMeasurementUnit ),
+    wxString tmp = aStr;
+
+    *aHeight = StrToIntUnits( GetAndCutWordWithMeasureUnits( &tmp, aDefaultMeasurementUnit ),
                               wxT( ' ' ), aActualConversion );
 }
 
 
-void SetPosition( wxString aStr, const wxString& aDefaultMeasurementUnit, int* aX, int* aY,
+void SetPosition( const wxString& aStr, const wxString& aDefaultMeasurementUnit, int* aX, int* aY,
                   const wxString& aActualConversion )
 {
-    *aX = StrToIntUnits( GetAndCutWordWithMeasureUnits( &aStr, aDefaultMeasurementUnit ),
+    wxString tmp = aStr;
+
+    *aX = StrToIntUnits( GetAndCutWordWithMeasureUnits( &tmp, aDefaultMeasurementUnit ),
                          wxT( 'X' ), aActualConversion );
-    *aY = StrToIntUnits( GetAndCutWordWithMeasureUnits( &aStr, aDefaultMeasurementUnit ),
+    *aY = StrToIntUnits( GetAndCutWordWithMeasureUnits( &tmp, aDefaultMeasurementUnit ),
                          wxT( 'Y' ), aActualConversion );
 }
 
 
-void SetDoublePrecisionPosition( wxString aStr, const wxString& aDefaultMeasurementUnit, double* aX,
-                                 double* aY, const wxString& aActualConversion )
+void SetDoublePrecisionPosition( const wxString& aStr, const wxString& aDefaultMeasurementUnit,
+                                 double* aX, double* aY, const wxString& aActualConversion )
 {
+    wxString tmp = aStr;
+
     *aX = StrToDoublePrecisionUnits(
-            GetAndCutWordWithMeasureUnits( &aStr, aDefaultMeasurementUnit ), wxT( 'X' ),
+            GetAndCutWordWithMeasureUnits( &tmp, aDefaultMeasurementUnit ), wxT( 'X' ),
             aActualConversion );
     *aY = StrToDoublePrecisionUnits(
-            GetAndCutWordWithMeasureUnits( &aStr, aDefaultMeasurementUnit ), wxT( 'Y' ),
+            GetAndCutWordWithMeasureUnits( &tmp, aDefaultMeasurementUnit ), wxT( 'Y' ),
             aActualConversion );
 }
 

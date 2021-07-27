@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2019 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2019-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -34,14 +34,17 @@ class NETCLASSES;
 
 class PANEL_SETUP_NETCLASSES : public PANEL_SETUP_NETCLASSES_BASE
 {
-private:
-    PAGED_DIALOG*         m_Parent;
-    NETCLASSES*           m_netclasses;
-    std::vector<wxString> m_netNames;
+public:
+    PANEL_SETUP_NETCLASSES( PAGED_DIALOG* aParent, NETCLASSES* aNetclasses,
+                            const std::vector<wxString>& aNetNames, bool isEEschema );
+    ~PANEL_SETUP_NETCLASSES( ) override;
 
-    int*                  m_originalColWidths;
-    bool                  m_netclassesDirty;    // The netclass drop-down menus need rebuilding
-    int                   m_hoveredCol;         // Column being hovered over, for tooltips
+    bool TransferDataToWindow() override;
+    bool TransferDataFromWindow() override;
+
+    bool Validate() override;
+
+    void ImportSettingsFrom( NETCLASSES* aBoard );
 
 private:
     void OnAddNetclassClick( wxCommandEvent& event ) override;
@@ -57,7 +60,7 @@ private:
     void OnAssignAll( wxCommandEvent& event ) override { doAssignments( true ); }
     void OnAssignSelected( wxCommandEvent& event ) override { doAssignments( false ); }
 
-    bool validateNetclassName( int aRow, wxString aName, bool focusFirst = true );
+    bool validateNetclassName( int aRow, const wxString& aName, bool focusFirst = true );
 
     void rebuildNetclassDropdowns();
 
@@ -68,17 +71,13 @@ private:
     void AdjustNetclassGridColumns( int aWidth );
     void AdjustMembershipGridColumns( int aWidth );
 
-public:
-    PANEL_SETUP_NETCLASSES( PAGED_DIALOG* aParent, NETCLASSES* aNetclasses,
-                            const std::vector<wxString>& aNetNames, bool isEEschema );
-    ~PANEL_SETUP_NETCLASSES( ) override;
+    PAGED_DIALOG*         m_Parent;
+    NETCLASSES*           m_netclasses;
+    std::vector<wxString> m_netNames;
 
-    bool TransferDataToWindow() override;
-    bool TransferDataFromWindow() override;
-
-    bool Validate() override;
-
-    void ImportSettingsFrom( NETCLASSES* aBoard );
+    int*                  m_originalColWidths;
+    bool                  m_netclassesDirty;    // The netclass drop-down menus need rebuilding
+    int                   m_hoveredCol;         // Column being hovered over, for tooltips
 };
 
 #endif //PANEL_SETUP_NETCLASSES_H

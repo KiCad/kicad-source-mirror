@@ -63,7 +63,7 @@ public:
     }
 
     wxString GetName() const { return m_name; }
-    void SetName( wxString aName ) { m_name = aName; }
+    void SetName( const wxString& aName ) { m_name = aName; }
 
     std::unordered_set<BOARD_ITEM*>& GetItems()
     {
@@ -125,7 +125,7 @@ public:
     }
 
     /** Set layer for all items within the group.
-     * 
+     *
      * To avoid freezes with circular references, the maximum depth is 20 by default.
      */
     void SetLayerRecursive( PCB_LAYER_ID aLayer, int aDepth );

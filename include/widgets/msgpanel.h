@@ -105,7 +105,7 @@ class EDA_MSG_PANEL : public wxPanel
 public:
     EDA_MSG_PANEL( wxWindow* aParent, int aId,
                    const wxPoint& aPosition, const wxSize& aSize,
-                   long style=wxTAB_TRAVERSAL, const wxString &name=wxPanelNameStr);
+                   long style=wxTAB_TRAVERSAL, const wxString& name=wxPanelNameStr);
     ~EDA_MSG_PANEL();
 
     /**

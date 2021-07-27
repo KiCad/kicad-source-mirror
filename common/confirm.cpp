@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2007 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -151,7 +151,7 @@ long KIDIALOG::getStyle( KD_TYPE aType )
 }
 
 
-int UnsavedChangesDialog( wxWindow* parent, wxString aMessage, bool* aApplyToAll )
+int UnsavedChangesDialog( wxWindow* parent, const wxString& aMessage, bool* aApplyToAll )
 {
     static bool s_apply_to_all = false;
 
@@ -218,19 +218,14 @@ bool HandleUnsavedChanges( wxWindow* aParent, const wxString& aMessage,
 
 
 int OKOrCancelDialog( wxWindow* aParent, const wxString& aWarning, const wxString& aMessage,
-                      wxString aDetailedMessage, wxString aOKLabel, wxString aCancelLabel,
-                      bool* aApplyToAll )
+                      const wxString& aDetailedMessage, const wxString& aOKLabel,
+                      const wxString& aCancelLabel, bool* aApplyToAll )
 {
     wxRichMessageDialog dlg( aParent, aMessage, aWarning,
                              wxOK | wxCANCEL | wxOK_DEFAULT | wxICON_WARNING | wxCENTER );
 
-    if( aOKLabel.IsEmpty() )
-        aOKLabel = _( "OK" );
-
-    if( aCancelLabel.IsEmpty() )
-        aCancelLabel = _( "Cancel" );
-
-    dlg.SetOKCancelLabels( aOKLabel, aCancelLabel );
+    dlg.SetOKCancelLabels( ( aOKLabel.IsEmpty() ) ? _( "OK" ) : aOKLabel,
+                           ( aCancelLabel.IsEmpty() ) ?  _( "Cancel" ) : aCancelLabel );
 
     if( !aDetailedMessage.IsEmpty() )
         dlg.SetExtendedMessage( aDetailedMessage );

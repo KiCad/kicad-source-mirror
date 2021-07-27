@@ -1148,7 +1148,7 @@ void SCH_SHEET::SetPageNumber( const SCH_SHEET_PATH& aInstance, const wxString& 
 }
 
 
-int SCH_SHEET::ComparePageNum( const wxString& aPageNumberA, const wxString aPageNumberB )
+int SCH_SHEET::ComparePageNum( const wxString& aPageNumberA, const wxString& aPageNumberB )
 {
     if( aPageNumberA == aPageNumberB )
         return 0; // A == B

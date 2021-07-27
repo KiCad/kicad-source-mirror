@@ -101,7 +101,7 @@ private:
     /**
      * @return String with page number in parenthesis
     */
-    wxString formatPageString( wxString aName, wxString aPage );
+    wxString formatPageString( const wxString& aName, const wxString& aPage );
 
     SCH_SHEET_PATH  m_currSheet;
     SCH_SHEET_PATH  m_list;

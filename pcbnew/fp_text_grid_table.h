@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -76,7 +76,7 @@ public:
     bool GetValueAsBool( int aRow, int aCol ) override;
     long GetValueAsLong( int aRow, int aCol ) override;
 
-    void SetValue( int aRow, int aCol, const wxString &aValue ) override;
+    void SetValue( int aRow, int aCol, const wxString& aValue ) override;
     void SetValueAsBool( int aRow, int aCol, bool aValue ) override;
     void SetValueAsLong( int aRow, int aCol, long aValue ) override;
 

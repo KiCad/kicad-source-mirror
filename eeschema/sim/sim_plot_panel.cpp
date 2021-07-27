@@ -300,9 +300,9 @@ void CURSOR::UpdateReference()
 }
 
 
-SIM_PLOT_PANEL::SIM_PLOT_PANEL( wxString aCommand, wxWindow* parent, SIM_PLOT_FRAME* aMainFrame,
-                                wxWindowID id, const wxPoint& pos, const wxSize& size,
-                                long style, const wxString& name )
+SIM_PLOT_PANEL::SIM_PLOT_PANEL( const wxString& aCommand, wxWindow* parent,
+                                SIM_PLOT_FRAME* aMainFrame, wxWindowID id, const wxPoint& pos,
+                                const wxSize& size, long style, const wxString& name )
     : SIM_PANEL_BASE( aCommand, parent, id, pos, size, style, name ),
       m_axis_x( nullptr ),
       m_axis_y1( nullptr ),

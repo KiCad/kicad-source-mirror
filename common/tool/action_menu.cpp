@@ -202,7 +202,7 @@ wxMenuItem* ACTION_MENU::Add( ACTION_MENU* aMenu )
 }
 
 
-void ACTION_MENU::AddClose( wxString aAppname )
+void ACTION_MENU::AddClose( const wxString& aAppname )
 {
 #ifdef __WINDOWS__
     Add( _( "Close" ),

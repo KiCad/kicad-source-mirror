@@ -56,7 +56,7 @@ public:
 
     // must return an empty string or an error description:
     wxString        SetParameterValues( int aPage, wxArrayString& aValues ) override;
-    FOOTPRINT*      GetFootprint( wxString * aMessages ) override;
+    FOOTPRINT*      GetFootprint( wxString* aMessages ) override;
     void*           GetObject() override;
     wxArrayString   GetParameterHints( int aPage ) override;
     wxArrayString   GetParameterDesignators( int aPage = 0 ) override;

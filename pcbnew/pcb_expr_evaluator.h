@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2019-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -43,7 +43,8 @@ public:
     PCB_EXPR_UCODE() {};
     virtual ~PCB_EXPR_UCODE() {};
 
-    virtual std::unique_ptr<LIBEVAL::VAR_REF> CreateVarRef( const wxString& aVar, const wxString& aField ) override;
+    virtual std::unique_ptr<LIBEVAL::VAR_REF> CreateVarRef( const wxString& aVar,
+                                                            const wxString& aField ) override;
     virtual LIBEVAL::FUNC_CALL_REF CreateFuncCall( const wxString& aName ) override;
 };
 
@@ -157,7 +158,7 @@ public:
         return self;
     }
 
-    LIBEVAL::FUNC_CALL_REF Get( const wxString &name )
+    LIBEVAL::FUNC_CALL_REF Get( const wxString& name )
     {
         return m_funcs[ name ];
     }

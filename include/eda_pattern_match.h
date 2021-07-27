@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2015-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2015-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -170,7 +170,7 @@ protected:
 class EDA_COMBINED_MATCHER
 {
 public:
-    EDA_COMBINED_MATCHER( const wxString &aPattern );
+    EDA_COMBINED_MATCHER( const wxString& aPattern );
 
     /*
      * Look in all existing matchers, return the earliest match of any of
@@ -182,13 +182,13 @@ public:
      *
      * @return true if any matchers found the term
      */
-    bool Find( const wxString &aTerm, int& aMatchersTriggered, int& aPosition );
+    bool Find( const wxString& aTerm, int& aMatchersTriggered, int& aPosition );
 
-    wxString const& GetPattern() const;
+    const wxString& GetPattern() const;
 
 private:
     // Add matcher if it can compile the pattern.
-    void AddMatcher( const wxString &aPattern, std::unique_ptr<EDA_PATTERN_MATCH> aMatcher );
+    void AddMatcher( const wxString& aPattern, std::unique_ptr<EDA_PATTERN_MATCH> aMatcher );
 
     std::vector<std::unique_ptr<EDA_PATTERN_MATCH>> m_matchers;
     wxString m_pattern;

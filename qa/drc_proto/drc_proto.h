@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2019-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -112,7 +112,10 @@ private:
     virtual bool updateUI() override
     {
         m_log->SetColor( CONSOLE_LOG::GREEN );
-        m_log->PrintProgress( wxString::Format( "      | %s : %.02f%%", m_rptMessage, (double) m_progress / (double) m_maxProgress * 100.0 ) );
+        m_log->PrintProgress( wxString::Format( "      | %s : %.02f%%",
+                                                m_rptMessage,
+                                                (double) m_progress / (double) m_maxProgress *
+                                                100.0 ) );
         return true;
     }
 
@@ -128,7 +131,8 @@ public:
     ~CONSOLE_MSG_REPORTER() {};
 
 
-    virtual REPORTER& Report( const wxString& aText, SEVERITY aSeverity = RPT_SEVERITY_UNDEFINED ) override
+    virtual REPORTER& Report( const wxString& aText,
+                              SEVERITY aSeverity = RPT_SEVERITY_UNDEFINED ) override
     {
         switch( aSeverity )
         {
@@ -157,15 +161,18 @@ private:
 };
 
 
-struct PROJECT_CONTEXT {
+struct PROJECT_CONTEXT
+{
     PROJECT* project;
     wxString rulesFilePath;
     std::shared_ptr<BOARD> board;
     std::shared_ptr<NETLIST> netlist;
 };
 
-PROJECT_CONTEXT loadKicadProject( wxString filename, OPT<wxString> rulesFilePath );
-int runDRCProto( PROJECT_CONTEXT project, std::shared_ptr<KIGFX::VIEW_OVERLAY> aDebugOverlay = nullptr);
+PROJECT_CONTEXT loadKicadProject( const wxString& filename, OPT<wxString> rulesFilePath );
+
+int runDRCProto( PROJECT_CONTEXT project,
+                 std::shared_ptr<KIGFX::VIEW_OVERLAY> aDebugOverlay = nullptr );
 
 #endif
 

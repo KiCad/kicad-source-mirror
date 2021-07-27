@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2021 KiCad Developers, see AUTHORS.txt for contributors.
  * Copyright (C) 2017 Chris Pavlina <pavlina.chris@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -57,7 +57,7 @@ public:
     /**
      * Set the contents of the status label and display it.
      */
-    void SetStatusText( wxString const& aText );
+    void SetStatusText( const wxString& aText );
 
     /**
      * Clear the contents of the status label and hide it.

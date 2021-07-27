@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2021 CERN
+ * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Wayne Stambaugh <stambaughw@gmail.com>
  *
@@ -44,7 +45,7 @@ public:
     bool operator!=( const SPICE_SIMULATOR_SETTINGS& aRhs ) const { return !( *this == aRhs ); }
 
     wxString GetWorkbookFilename() const { return m_workbookFilename; }
-    void     SetWorkbookFilename( wxString aFilename ) { m_workbookFilename = aFilename; }
+    void     SetWorkbookFilename( const wxString& aFilename ) { m_workbookFilename = aFilename; }
 
     bool GetFixPassiveVals() const { return m_fixPassiveVals; }
     void SetFixPassiveVals( bool aFixPassiveVals )

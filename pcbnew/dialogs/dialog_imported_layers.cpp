@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2020 Roberto Fernandez Bautista <roberto.fer.bau@gmail.com>
- * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -24,27 +24,33 @@
 
 #include <wx/msgdlg.h>
 
+
 wxString DIALOG_IMPORTED_LAYERS::WrapRequired( const wxString& aLayerName )
 {
     return aLayerName + " *";
 }
 
+
 wxString DIALOG_IMPORTED_LAYERS::UnwrapRequired( const wxString& aLayerName )
 {
     if( !aLayerName.EndsWith( " *" ) )
         return aLayerName;
+
     return aLayerName.Left( aLayerName.Length() - 2 );
 }
+
 
 const INPUT_LAYER_DESC* DIALOG_IMPORTED_LAYERS::GetLayerDescription(
         const wxString& aLayerName ) const
 {
     wxString layerName = UnwrapRequired( aLayerName );
+
     for( const INPUT_LAYER_DESC& layerDescription : m_input_layers )
     {
         if( layerDescription.Name == layerName )
             return &layerDescription;
     }
+
     return nullptr;
 }
 
@@ -80,7 +86,7 @@ PCB_LAYER_ID DIALOG_IMPORTED_LAYERS::GetSelectedLayerID()
 }
 
 
-PCB_LAYER_ID DIALOG_IMPORTED_LAYERS::GetAutoMatchLayerID( wxString aInputLayerName )
+PCB_LAYER_ID DIALOG_IMPORTED_LAYERS::GetAutoMatchLayerID( const wxString& aInputLayerName )
 {
     wxString pureInputLayerName = UnwrapRequired( aInputLayerName );
     for( INPUT_LAYER_DESC inputLayerDesc : m_input_layers )
@@ -299,22 +305,27 @@ DIALOG_IMPORTED_LAYERS::DIALOG_IMPORTED_LAYERS( wxWindow* aParent,
     finishDialogSettings();
 }
 
+
 std::vector<wxString> DIALOG_IMPORTED_LAYERS::GetUnmappedRequiredLayers() const
 {
     std::vector<wxString> unmappedLayers;
+
     for( const wxString& layerName : m_unmatched_layer_names )
     {
         const INPUT_LAYER_DESC* layerDesc = GetLayerDescription( layerName );
         wxASSERT_MSG( layerDesc != nullptr, "Expected to find layer description" );
+
         if( layerDesc->Required )
             unmappedLayers.push_back( layerDesc->Name );
     }
+
     return unmappedLayers;
 }
 
 
-std::map<wxString, PCB_LAYER_ID> DIALOG_IMPORTED_LAYERS::GetMapModal( wxWindow* aParent,
-                                               const std::vector<INPUT_LAYER_DESC>& aLayerDesc )
+std::map<wxString, PCB_LAYER_ID>
+        DIALOG_IMPORTED_LAYERS::GetMapModal( wxWindow* aParent,
+                                             const std::vector<INPUT_LAYER_DESC>& aLayerDesc )
 {
     DIALOG_IMPORTED_LAYERS dlg( aParent, aLayerDesc );
     bool                   dataOk = false;
@@ -328,7 +339,7 @@ std::map<wxString, PCB_LAYER_ID> DIALOG_IMPORTED_LAYERS::GetMapModal( wxWindow* 
             wxMessageBox( _( "All required layers (marked with '*') must be matched. "
                              "Please click on 'Auto-Match Layers' to "
                              "automatically match the remaining layers" ),
-                    _( "Unmatched Layers" ), wxICON_ERROR | wxOK );
+                          _( "Unmatched Layers" ), wxICON_ERROR | wxOK );
         }
         else
         {

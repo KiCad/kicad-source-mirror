@@ -75,7 +75,8 @@ BEGIN_EVENT_TABLE( SELECT_LAYER_DIALOG, wxDialog )
 END_EVENT_TABLE()
 
 
-int GERBVIEW_FRAME::SelectPCBLayer( int aDefaultLayer, int aCopperLayerCount, wxString aGerberName )
+int GERBVIEW_FRAME::SelectPCBLayer( int aDefaultLayer, int aCopperLayerCount,
+                                    const wxString& aGerberName )
 {
     SELECT_LAYER_DIALOG* frame =
             new SELECT_LAYER_DIALOG( this, aDefaultLayer, aCopperLayerCount, aGerberName );

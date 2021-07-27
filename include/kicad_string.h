@@ -180,7 +180,7 @@ bool WildCompareString( const wxString& pattern,
  * @return -1 if first string is less than the second, 0 if the strings are equal, or
  *          1 if the first string is greater than the second.
  */
-int ValueStringCompare( wxString strFWord, wxString strSWord );
+int ValueStringCompare( const wxString& strFWord, const wxString& strSWord );
 
 /**
  * Break a string into three parts: he alphabetic preamble, the numeric part, and any

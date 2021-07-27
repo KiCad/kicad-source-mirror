@@ -86,7 +86,7 @@ public:
      */
     virtual void SetValue( int aValue );
 
-    void SetValue( wxString aValue );
+    void SetValue( const wxString& aValue );
 
     /**
      * Set new value (in Internal Units) for the text field, taking care of units conversion.

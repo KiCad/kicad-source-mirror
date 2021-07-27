@@ -117,7 +117,7 @@ public:
      * @param aFilterType defines the criteria to filter \a aList.
      */
     void     SetFootprints( FOOTPRINT_LIST& aList, const wxString& aLibName, COMPONENT* aComponent,
-                            const wxString &aFootPrintFilterPattern, int aFilterType );
+                            const wxString& aFootPrintFilterPattern, int aFilterType );
 
     wxString GetSelectedFootprint();
 

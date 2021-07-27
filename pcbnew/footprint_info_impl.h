@@ -94,7 +94,7 @@ public:
                              PROGRESS_REPORTER* aProgressReporter = nullptr ) override;
 
 protected:
-    void startWorkers( FP_LIB_TABLE* aTable, wxString const* aNickname,
+    void startWorkers( FP_LIB_TABLE* aTable, const wxString* aNickname,
                        FOOTPRINT_ASYNC_LOADER* aLoader, unsigned aNThreads ) override;
     bool joinWorkers() override;
 

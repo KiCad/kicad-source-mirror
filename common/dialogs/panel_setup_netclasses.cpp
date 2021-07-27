@@ -399,12 +399,15 @@ bool PANEL_SETUP_NETCLASSES::TransferDataFromWindow()
 }
 
 
-bool PANEL_SETUP_NETCLASSES::validateNetclassName( int aRow, wxString aName, bool focusFirst )
+bool PANEL_SETUP_NETCLASSES::validateNetclassName( int aRow, const wxString& aName,
+                                                   bool focusFirst )
 {
-    aName.Trim( true );
-    aName.Trim( false );
+    wxString tmp = aName;
 
-    if( aName.IsEmpty() )
+    tmp.Trim( true );
+    tmp.Trim( false );
+
+    if( tmp.IsEmpty() )
     {
         wxString msg =  _( "Netclass must have a name." );
         m_Parent->SetError( msg, this, m_netclassGrid, aRow, GRID_NAME );
@@ -413,7 +416,7 @@ bool PANEL_SETUP_NETCLASSES::validateNetclassName( int aRow, wxString aName, boo
 
     for( int ii = 0; ii < m_netclassGrid->GetNumberRows(); ii++ )
     {
-        if( ii != aRow && m_netclassGrid->GetCellValue( ii, GRID_NAME ).CmpNoCase( aName ) == 0 )
+        if( ii != aRow && m_netclassGrid->GetCellValue( ii, GRID_NAME ).CmpNoCase( tmp ) == 0 )
         {
             wxString msg = _( "Netclass name already in use." );
             m_Parent->SetError( msg, this, m_netclassGrid, focusFirst ? aRow : ii, GRID_NAME );

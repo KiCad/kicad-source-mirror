@@ -66,7 +66,7 @@ public:
      * Load file and get its basic data
      *
      */
-    bool  Load( const wxString &aFileName );
+    bool Load( const wxString& aFileName );
 
 
     /**

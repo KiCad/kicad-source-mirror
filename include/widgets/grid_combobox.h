@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -45,7 +45,7 @@ public:
     void SetSize( const wxRect& aRect ) override;
 
     void BeginEdit( int aRow, int aCol, wxGrid* aGrid ) override;
-    bool EndEdit( int , int , const wxGrid* , const wxString& , wxString *aNewVal ) override;
+    bool EndEdit( int aRow, int aCol, const wxGrid*, const wxString&, wxString* aNewVal ) override;
     void ApplyEdit( int aRow, int aCol, wxGrid* aGrid ) override;
     void Reset() override;
 

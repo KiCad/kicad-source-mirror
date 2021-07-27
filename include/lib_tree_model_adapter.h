@@ -156,7 +156,7 @@ public:
      * @param aLibId    symbol #LIB_ID to be selected
      * @param aUnit     unit to be selected, if > 0 (0 selects the alias itself)
      */
-    void SetPreselectNode( LIB_ID const& aLibId, int aUnit );
+    void SetPreselectNode( const LIB_ID& aLibId, int aUnit );
 
     /**
      * Add the given list of symbols by alias. To be called in the setup
@@ -166,8 +166,8 @@ public:
      * @param aDesc        the description field of the parent node
      * @param aItemList    list of symbols
      */
-    void DoAddLibrary( wxString const& aNodeName, wxString const& aDesc,
-                       std::vector<LIB_TREE_ITEM*> const& aItemList, bool presorted );
+    void DoAddLibrary( const wxString& aNodeName, const wxString& aDesc,
+                       const std::vector<LIB_TREE_ITEM*>& aItemList, bool presorted );
 
 
     /**
@@ -181,7 +181,7 @@ public:
      * @param aSearch   full, unprocessed search text
      * @param aState    if true, we are keeping the state and so we shouldn't collapse the tree
      */
-    void UpdateSearchString( wxString const& aSearch, bool aState );
+    void UpdateSearchString( const wxString& aSearch, bool aState );
 
     /**
      * Attach to a wxDataViewCtrl and initialize it. This will set up columns
@@ -230,7 +230,7 @@ public:
 
     LIB_TREE_NODE* GetTreeNodeFor( const wxDataViewItem& aSelection ) const;
 
-    virtual wxString GenerateInfo( LIB_ID const& aLibId, int aUnit ) { return wxEmptyString; };
+    virtual wxString GenerateInfo( const LIB_ID& aLibId, int aUnit ) { return wxEmptyString; };
 
     /**
      * Return the number of symbols loaded in the tree.
@@ -258,7 +258,7 @@ public:
      *
      * @return number of children
      */
-    unsigned int GetChildren( wxDataViewItem const& aItem,
+    unsigned int GetChildren( const wxDataViewItem& aItem,
                               wxDataViewItemArray& aChildren ) const override;
 
     // Freezing/Thawing.  Used when updating the table model so that we don't try and fetch
@@ -277,7 +277,7 @@ protected:
     /**
      * Convert #SYM_TREE_NODE -> wxDataViewItem.
      */
-    static wxDataViewItem ToItem( LIB_TREE_NODE const* aNode );
+    static wxDataViewItem ToItem( const LIB_TREE_NODE* aNode );
 
     /**
      * Convert wxDataViewItem -> #SYM_TREE_NODE.
@@ -287,7 +287,7 @@ protected:
     /**
      * Convert SYM_TREE_NODE's children to wxDataViewItemArray.
      */
-    static unsigned int IntoArray( LIB_TREE_NODE const& aNode, wxDataViewItemArray& aChildren );
+    static unsigned int IntoArray( const LIB_TREE_NODE& aNode, wxDataViewItemArray& aChildren );
 
     /**
      * Create the adapter.
@@ -295,26 +295,26 @@ protected:
      * @param aParent is the parent frame
      * @param aPinnedKey is the key to load the pinned libraries list from the project file
      */
-    LIB_TREE_MODEL_ADAPTER( EDA_BASE_FRAME* aParent, wxString aPinnedKey );
+    LIB_TREE_MODEL_ADAPTER( EDA_BASE_FRAME* aParent, const wxString& aPinnedKey );
 
-    LIB_TREE_NODE_LIB& DoAddLibraryNode( wxString const& aNodeName, wxString const& aDesc );
+    LIB_TREE_NODE_LIB& DoAddLibraryNode( const wxString& aNodeName, const wxString& aDesc );
 
     /**
      * Check whether a container has columns too
      */
-    bool HasContainerColumns( wxDataViewItem const& aItem ) const override;
+    bool HasContainerColumns( const wxDataViewItem& aItem ) const override;
 
     /**
      * Check whether an item can have children.
      */
-    bool IsContainer( wxDataViewItem const& aItem ) const override;
+    bool IsContainer( const wxDataViewItem& aItem ) const override;
 
     /**
      * Get the parent of an item.
      *
      * @return parent of aItem, or an invalid wxDataViewItem if parent is root
      */
-    wxDataViewItem GetParent( wxDataViewItem const& aItem ) const override;
+    wxDataViewItem GetParent( const wxDataViewItem& aItem ) const override;
 
     unsigned int GetColumnCount() const override { return NUM_COLS; }
 
@@ -331,15 +331,15 @@ protected:
      * @param aCol      column number of the data
      */
     void GetValue( wxVariant&              aVariant,
-                   wxDataViewItem const&   aItem,
+                   const wxDataViewItem&   aItem,
                    unsigned int            aCol ) const override;
 
     /**
      * Set the value of an item. Does nothing - this model doesn't support
      * editing.
      */
-    bool SetValue( wxVariant const& aVariant,
-                   wxDataViewItem const&   aItem,
+    bool SetValue( const wxVariant&        aVariant,
+                   const wxDataViewItem&   aItem,
                    unsigned int            aCol ) override { return false; }
 
     /**
@@ -350,7 +350,7 @@ protected:
      * @param aAttr     receiver for attributes
      * @return          true if the item has non-default attributes
      */
-    bool GetAttr( wxDataViewItem const&   aItem,
+    bool GetAttr( const wxDataViewItem&   aItem,
                   unsigned int            aCol,
                   wxDataViewItemAttr&     aAttr ) const override;
 
@@ -369,7 +369,7 @@ private:
      * Find any results worth highlighting and expand them, according to given criteria
      * The highest-scoring node is written to aHighScore
      */
-    void FindAndExpand( LIB_TREE_NODE& aNode, std::function<bool( LIB_TREE_NODE const* )> aFunc,
+    void FindAndExpand( LIB_TREE_NODE& aNode, std::function<bool( const LIB_TREE_NODE* )> aFunc,
                         LIB_TREE_NODE** aHighScore );
 
     /**

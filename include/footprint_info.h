@@ -273,7 +273,7 @@ protected:
      * Launch worker threads to load footprints. Part of the #FOOTPRINT_ASYNC_LOADER
      * implementation.
      */
-    virtual void startWorkers( FP_LIB_TABLE* aTable, wxString const* aNickname,
+    virtual void startWorkers( FP_LIB_TABLE* aTable, const wxString* aNickname,
                                FOOTPRINT_ASYNC_LOADER* aLoader, unsigned aNThreads ) = 0;
 
     /**
@@ -327,7 +327,7 @@ public:
      *                  all known libraries in \a aTable.
      * @param aNThreads is the number of worker threads.
      */
-    void Start( FP_LIB_TABLE* aTable, wxString const* aNickname = nullptr,
+    void Start( FP_LIB_TABLE* aTable, const wxString* aNickname = nullptr,
                 unsigned aNThreads = DEFAULT_THREADS );
 
     /**

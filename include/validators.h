@@ -194,7 +194,7 @@ public:
 class NETNAME_VALIDATOR : public wxTextValidator
 {
 public:
-    NETNAME_VALIDATOR( wxString *aVal = nullptr );
+    NETNAME_VALIDATOR( wxString* aVal = nullptr );
 
     NETNAME_VALIDATOR( bool aAllowSpaces );
 

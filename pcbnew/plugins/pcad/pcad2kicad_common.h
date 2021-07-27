@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2007, 2008 Lubo Racko <developer@lura.sk>
  * Copyright (C) 2008, 2012 Alexander Lunev <al.lunev@yahoo.com>
- * Copyright (C) 2012 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2012-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -68,22 +68,23 @@ struct TTEXTVALUE
 
 extern wxString     GetWord( wxString* aStr );
 extern XNODE*       FindPinMap( XNODE* aNode );
-extern int          StrToIntUnits( const wxString& aStr, char aAxe, const wxString& aActualConversion );
+extern int          StrToIntUnits( const wxString& aStr, char aAxe,
+                                   const wxString& aActualConversion );
 extern wxString     GetAndCutWordWithMeasureUnits( wxString*       aStr,
                                                    const wxString& aDefaultMeasurementUnit );
 extern int          StrToInt1Units( const wxString& aStr );
-extern wxString     ValidateName( wxString aName );
-extern wxString     ValidateReference( wxString aRef );
-extern void         SetWidth( wxString        aStr,
+extern wxString     ValidateName( const wxString& aName );
+extern wxString     ValidateReference( const wxString& aRef );
+extern void         SetWidth( const wxString& aStr,
                               const wxString& aDefaultMeasurementUnit,
                               int*            aWidth,
                               const wxString& aActualConversion );
-extern void         SetPosition( wxString        aStr,
+extern void         SetPosition( const wxString& aStr,
                                  const wxString& aDefaultMeasurementUnit,
                                  int*            aX,
                                  int*            aY,
                                  const wxString& aActualConversion );
-extern void         SetDoublePrecisionPosition( wxString        aStr,
+extern void         SetDoublePrecisionPosition( const wxString& aStr,
                                                 const wxString& aDefaultMeasurementUnit,
                                                 double*         aX,
                                                 double*         aY,

@@ -51,7 +51,7 @@ public:
     /**
      * Set the contents of the status label and display it.
      */
-    void SetStatusText( wxString const& aText );
+    void SetStatusText( const wxString& aText );
 
     /**
      * Set the currently displayed symbol.

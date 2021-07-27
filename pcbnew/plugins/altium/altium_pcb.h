@@ -144,7 +144,7 @@ private:
     void ParseDimensions6Data(
             const CFB::CompoundFileReader& aReader, const CFB::COMPOUND_FILE_ENTRY* aEntry );
     void ParseModelsData( const CFB::CompoundFileReader& aReader,
-            const CFB::COMPOUND_FILE_ENTRY* aEntry, const wxString aRootDir );
+            const CFB::COMPOUND_FILE_ENTRY* aEntry, const wxString& aRootDir );
     void ParseNets6Data(
             const CFB::CompoundFileReader& aReader, const CFB::COMPOUND_FILE_ENTRY* aEntry );
     void ParsePolygons6Data(

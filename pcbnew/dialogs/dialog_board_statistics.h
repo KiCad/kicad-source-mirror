@@ -50,7 +50,7 @@ public:
     template <typename T>
     struct typeContainer_t
     {
-        typeContainer_t<T>( T aAttribute, wxString aTitle )
+        typeContainer_t<T>( T aAttribute, const wxString& aTitle )
                 : attribute( aAttribute ),
                   title( aTitle ),
                   qty( 0 )

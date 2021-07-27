@@ -95,7 +95,7 @@ public:
     wxString GetValue( int aRow, int aCol ) override;
     bool GetValueAsBool( int aRow, int aCol ) override;
 
-    void SetValue( int aRow, int aCol, const wxString &aValue ) override;
+    void SetValue( int aRow, int aCol, const wxString& aValue ) override;
     void SetValueAsBool( int aRow, int aCol, bool aValue ) override;
 
     wxString StringFromBool( bool aValue ) const;

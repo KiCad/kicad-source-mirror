@@ -738,7 +738,8 @@ void CADSTAR_ARCHIVE_PARSER::SETTINGS::Parse( XNODE* aNode, PARSER_CONTEXT* aCon
 }
 
 
-wxString CADSTAR_ARCHIVE_PARSER::ParseTextFields( wxString aTextString, PARSER_CONTEXT* aContext )
+wxString CADSTAR_ARCHIVE_PARSER::ParseTextFields( const wxString& aTextString,
+                                                  PARSER_CONTEXT* aContext )
 {
     static const std::map<TEXT_FIELD_NAME, wxString> txtTokens =
     {
@@ -763,7 +764,6 @@ wxString CADSTAR_ARCHIVE_PARSER::ParseTextFields( wxString aTextString, PARSER_C
         { TEXT_FIELD_NAME::UNITS_FULL,          wxT( "UNITS FULL" ) },
         { TEXT_FIELD_NAME::HYPERLINK,           wxT( "HYPERLINK" ) }
     };
-
 
     wxString remainingStr = aTextString;
     wxString returnStr;

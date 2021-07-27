@@ -257,7 +257,7 @@ void UNIT_BINDER::SetDoubleValue( double aValue )
 }
 
 
-void UNIT_BINDER::SetValue( wxString aValue )
+void UNIT_BINDER::SetValue( const wxString& aValue )
 {
     wxTextEntry*  textEntry = dynamic_cast<wxTextEntry*>( m_valueCtrl );
     wxStaticText* staticText = dynamic_cast<wxStaticText*>( m_valueCtrl );

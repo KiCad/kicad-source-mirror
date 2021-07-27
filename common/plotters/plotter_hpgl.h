@@ -160,7 +160,7 @@ protected:
     /// @param content is the content substring.
     ///
     /// @return whether a new item was made
-    bool startOrAppendItem( DPOINT location, wxString const& content );
+    bool startOrAppendItem( DPOINT location, const wxString& content );
 
     int            penSpeed;
     int            penNumber;

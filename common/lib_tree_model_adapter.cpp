@@ -37,7 +37,7 @@
 static const int kDataViewIndent = 20;
 
 
-wxDataViewItem LIB_TREE_MODEL_ADAPTER::ToItem( LIB_TREE_NODE const* aNode )
+wxDataViewItem LIB_TREE_MODEL_ADAPTER::ToItem( const LIB_TREE_NODE* aNode )
 {
     return wxDataViewItem( const_cast<void*>( static_cast<void const*>( aNode ) ) );
 }
@@ -49,7 +49,7 @@ LIB_TREE_NODE* LIB_TREE_MODEL_ADAPTER::ToNode( wxDataViewItem aItem )
 }
 
 
-unsigned int LIB_TREE_MODEL_ADAPTER::IntoArray( LIB_TREE_NODE const& aNode,
+unsigned int LIB_TREE_MODEL_ADAPTER::IntoArray( const LIB_TREE_NODE& aNode,
                                                 wxDataViewItemArray& aChildren )
 {
     unsigned int n = 0;
@@ -67,7 +67,8 @@ unsigned int LIB_TREE_MODEL_ADAPTER::IntoArray( LIB_TREE_NODE const& aNode,
 }
 
 
-LIB_TREE_MODEL_ADAPTER::LIB_TREE_MODEL_ADAPTER( EDA_BASE_FRAME* aParent, wxString aPinnedKey ) :
+LIB_TREE_MODEL_ADAPTER::LIB_TREE_MODEL_ADAPTER( EDA_BASE_FRAME* aParent,
+                                                const wxString& aPinnedKey ) :
         m_parent( aParent ),
         m_filter( SYM_FILTER_NONE ),
         m_show_units( true ),
@@ -148,15 +149,15 @@ void LIB_TREE_MODEL_ADAPTER::ShowUnits( bool aShow )
 }
 
 
-void LIB_TREE_MODEL_ADAPTER::SetPreselectNode( LIB_ID const& aLibId, int aUnit )
+void LIB_TREE_MODEL_ADAPTER::SetPreselectNode( const LIB_ID& aLibId, int aUnit )
 {
     m_preselect_lib_id = aLibId;
     m_preselect_unit = aUnit;
 }
 
 
-LIB_TREE_NODE_LIB& LIB_TREE_MODEL_ADAPTER::DoAddLibraryNode( wxString const& aNodeName,
-                                                             wxString const& aDesc )
+LIB_TREE_NODE_LIB& LIB_TREE_MODEL_ADAPTER::DoAddLibraryNode( const wxString& aNodeName,
+                                                             const wxString& aDesc )
 {
     LIB_TREE_NODE_LIB& lib_node = m_tree.AddLib( aNodeName, aDesc );
 
@@ -166,8 +167,8 @@ LIB_TREE_NODE_LIB& LIB_TREE_MODEL_ADAPTER::DoAddLibraryNode( wxString const& aNo
 }
 
 
-void LIB_TREE_MODEL_ADAPTER::DoAddLibrary( wxString const& aNodeName, wxString const& aDesc,
-                                           std::vector<LIB_TREE_ITEM*> const& aItemList,
+void LIB_TREE_MODEL_ADAPTER::DoAddLibrary( const wxString& aNodeName, const wxString& aDesc,
+                                           const std::vector<LIB_TREE_ITEM*>& aItemList,
                                            bool presorted )
 {
     LIB_TREE_NODE_LIB& lib_node = DoAddLibraryNode( aNodeName, aDesc );
@@ -179,7 +180,7 @@ void LIB_TREE_MODEL_ADAPTER::DoAddLibrary( wxString const& aNodeName, wxString c
 }
 
 
-void LIB_TREE_MODEL_ADAPTER::UpdateSearchString( wxString const& aSearch, bool aState )
+void LIB_TREE_MODEL_ADAPTER::UpdateSearchString( const wxString& aSearch, bool aState )
 {
     {
         wxWindowUpdateLocker updateLock( m_widget );
@@ -362,7 +363,7 @@ wxDataViewItem LIB_TREE_MODEL_ADAPTER::FindItem( const LIB_ID& aLibId )
 }
 
 
-unsigned int LIB_TREE_MODEL_ADAPTER::GetChildren( wxDataViewItem const&   aItem,
+unsigned int LIB_TREE_MODEL_ADAPTER::GetChildren( const wxDataViewItem&   aItem,
                                                   wxDataViewItemArray&    aChildren ) const
 {
     const LIB_TREE_NODE* node = ( aItem.IsOk() ? ToNode( aItem ) : &m_tree );
@@ -409,20 +410,20 @@ void LIB_TREE_MODEL_ADAPTER::RefreshTree()
 }
 
 
-bool LIB_TREE_MODEL_ADAPTER::HasContainerColumns( wxDataViewItem const& aItem ) const
+bool LIB_TREE_MODEL_ADAPTER::HasContainerColumns( const wxDataViewItem& aItem ) const
 {
     return IsContainer( aItem );
 }
 
 
-bool LIB_TREE_MODEL_ADAPTER::IsContainer( wxDataViewItem const& aItem ) const
+bool LIB_TREE_MODEL_ADAPTER::IsContainer( const wxDataViewItem& aItem ) const
 {
     LIB_TREE_NODE* node = ToNode( aItem );
     return node ? node->m_Children.size() : true;
 }
 
 
-wxDataViewItem LIB_TREE_MODEL_ADAPTER::GetParent( wxDataViewItem const& aItem ) const
+wxDataViewItem LIB_TREE_MODEL_ADAPTER::GetParent( const wxDataViewItem& aItem ) const
 {
     if( m_freeze )
         return ToItem( nullptr );
@@ -440,7 +441,7 @@ wxDataViewItem LIB_TREE_MODEL_ADAPTER::GetParent( wxDataViewItem const& aItem ) 
 
 
 void LIB_TREE_MODEL_ADAPTER::GetValue( wxVariant&              aVariant,
-                                       wxDataViewItem const&   aItem,
+                                       const wxDataViewItem&   aItem,
                                        unsigned int            aCol ) const
 {
     if( IsFrozen() )
@@ -465,7 +466,7 @@ void LIB_TREE_MODEL_ADAPTER::GetValue( wxVariant&              aVariant,
 }
 
 
-bool LIB_TREE_MODEL_ADAPTER::GetAttr( wxDataViewItem const&   aItem,
+bool LIB_TREE_MODEL_ADAPTER::GetAttr( const wxDataViewItem&   aItem,
                                       unsigned int            aCol,
                                       wxDataViewItemAttr&     aAttr ) const
 {
@@ -495,7 +496,7 @@ bool LIB_TREE_MODEL_ADAPTER::GetAttr( wxDataViewItem const&   aItem,
 
 
 void LIB_TREE_MODEL_ADAPTER::FindAndExpand( LIB_TREE_NODE& aNode,
-                                            std::function<bool( LIB_TREE_NODE const* )> aFunc,
+                                            std::function<bool( const LIB_TREE_NODE* )> aFunc,
                                             LIB_TREE_NODE** aHighScore )
 {
     for( std::unique_ptr<LIB_TREE_NODE>& node: aNode.m_Children )

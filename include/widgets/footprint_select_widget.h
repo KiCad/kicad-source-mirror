@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -95,13 +95,13 @@ public:
      * @param aZeroFilters - if true, zero filters = zero footprints. If false, zero filters =
      *  not filtering.
      */
-    void FilterByFootprintFilters( wxArrayString const& aFilters, bool aZeroFilters );
+    void FilterByFootprintFilters( const wxArrayString& aFilters, bool aZeroFilters );
 
     /**
      * Set the default footprint for a part. This will be listed at the
      * top. May be an empty string.
      */
-    void SetDefaultFootprint( wxString const& aFp );
+    void SetDefaultFootprint( const wxString& aFp );
 
     /**
      * Update the contents of the list to match the filters. Has no effect if

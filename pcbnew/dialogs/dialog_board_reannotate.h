@@ -143,7 +143,7 @@ private:
     void FilterBackPrefix( wxCommandEvent& event ) override;
 
     /// Break report into strings separated by \n and sent to the reporter.
-    void ShowReport( wxString aMessage, SEVERITY aSeverity );
+    void ShowReport( const wxString& aMessage, SEVERITY aSeverity );
 
 	/// Create a list of the footprints and their coordinates.
     void LogFootprints( const wxString& aMessage, const std::vector<RefDesInfo>& aFootprints );
@@ -161,7 +161,7 @@ private:
 
     /// Scan through the footprint arrays and create the from -> to array.
     void BuildChangeArray( std::vector<RefDesInfo>& aFootprints, unsigned int aStartRefDes,
-                           wxString aPrefix, bool aRemovePrefix,
+                           const wxString& aPrefix, bool aRemovePrefix,
                            std::vector<RefDesInfo>& aBadRefDes );
 
     /// @return the new reference for this footprint.

@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 CERN
+ * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Sylwester Kocjan <s.kocjan@o2.pl>
  *
  * This program is free software; you can redistribute it and/or
@@ -34,12 +35,12 @@ SIM_PANEL_BASE::SIM_PANEL_BASE() : m_simCommand( wxEmptyString )
 }
 
 
-SIM_PANEL_BASE::SIM_PANEL_BASE( wxString aCommand ) : m_simCommand( aCommand )
+SIM_PANEL_BASE::SIM_PANEL_BASE( const wxString& aCommand ) : m_simCommand( aCommand )
 {
 }
 
 
-SIM_PANEL_BASE::SIM_PANEL_BASE( wxString aCommand, wxWindow* parent, wxWindowID id,
+SIM_PANEL_BASE::SIM_PANEL_BASE( const wxString& aCommand, wxWindow* parent, wxWindowID id,
                                 const wxPoint& pos, const wxSize& size, long style,
                                 const wxString& name ) :
         wxWindow( parent, id, pos, size, style, name ),
@@ -74,7 +75,7 @@ SIM_TYPE SIM_PANEL_BASE::GetType() const
 }
 
 
-SIM_NOPLOT_PANEL::SIM_NOPLOT_PANEL( wxString aCommand, wxWindow* parent, wxWindowID id,
+SIM_NOPLOT_PANEL::SIM_NOPLOT_PANEL( const wxString& aCommand, wxWindow* parent, wxWindowID id,
                                     const wxPoint& pos, const wxSize& size, long style,
                                     const wxString& name ) :
         SIM_PANEL_BASE( aCommand, parent, id, pos, size, style, name )

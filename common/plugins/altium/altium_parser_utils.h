@@ -32,7 +32,7 @@
 
 #include <iostream>
 
-LIB_ID AltiumToKiCadLibID( wxString aLibName, wxString aLibReference );
+LIB_ID AltiumToKiCadLibID( const wxString& aLibName, const wxString& aLibReference );
 
 wxString AltiumPropertyToKiCadString( const wxString& aString );
 

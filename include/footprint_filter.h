@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2017-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -58,7 +58,7 @@ public:
     /**
      * Add library name to filter criteria.
      */
-    void FilterByLibrary( wxString const& aLibName );
+    void FilterByLibrary( const wxString& aLibName );
 
     /**
      * Set a pin count to filter by.
@@ -68,13 +68,13 @@ public:
     /**
      * Set a list of footprint filters to filter by.
      */
-    void FilterByFootprintFilters( wxArrayString const& aFilters );
+    void FilterByFootprintFilters( const wxArrayString& aFilters );
 
     /**
      * Add a pattern to filter by name, including wildcards and optionally a colon-delimited
      * library name.
      */
-    void FilterByTextPattern( wxString const& aPattern );
+    void FilterByTextPattern( const wxString& aPattern );
 
     /**
      * Inner iterator class returned by begin() and end().
@@ -84,7 +84,7 @@ public:
     {
     public:
         ITERATOR();
-        ITERATOR( ITERATOR const& aOther );
+        ITERATOR( const ITERATOR& aOther );
         ITERATOR( FOOTPRINT_FILTER& aFilter );
 
     private:
@@ -92,7 +92,7 @@ public:
         friend class FOOTPRINT_FILTER;
 
         void increment();
-        bool equal( ITERATOR const& aOther ) const;
+        bool equal( const ITERATOR& aOther ) const;
         FOOTPRINT_INFO& dereference() const;
 
         size_t            m_pos;

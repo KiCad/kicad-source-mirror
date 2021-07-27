@@ -217,24 +217,24 @@ public:
 
     virtual void SetIteration( int iter ) override { m_iter = iter; }
 
-    virtual void Message( const wxString           msg,
+    virtual void Message( const wxString& msg,
                           const SRC_LOCATION_INFO& aSrcLoc = SRC_LOCATION_INFO() ) override;
     virtual void NewStage( const std::string& name, int iter,
                            const SRC_LOCATION_INFO& aSrcLoc = SRC_LOCATION_INFO() ) override;
-    virtual void BeginGroup( const std::string        name,
+    virtual void BeginGroup( const std::string& name,
                              const SRC_LOCATION_INFO& aSrcLoc = SRC_LOCATION_INFO() ) override;
     virtual void EndGroup( const SRC_LOCATION_INFO& aSrcLoc = SRC_LOCATION_INFO() ) override;
     virtual void AddPoint( VECTOR2I aP, const KIGFX::COLOR4D& aColor, int aSize,
-                           const std::string        aName,
+                           const std::string& aName,
                            const SRC_LOCATION_INFO& aSrcLoc = SRC_LOCATION_INFO() ) override;
     virtual void AddLine( const SHAPE_LINE_CHAIN& aLine, const KIGFX::COLOR4D& aColor,
-                          int aWidth, const std::string aName,
+                          int aWidth, const std::string& aName,
                           const SRC_LOCATION_INFO& aSrcLoc = SRC_LOCATION_INFO() ) override;
     virtual void AddSegment( SEG aS, const KIGFX::COLOR4D& aColor,
-                             const std::string        aName,
+                             const std::string& aName,
                              const SRC_LOCATION_INFO& aSrcLoc = SRC_LOCATION_INFO() ) override;
     virtual void AddBox( BOX2I aB, const KIGFX::COLOR4D& aColor,
-                         const std::string        aName,
+                         const std::string& aName,
                          const SRC_LOCATION_INFO& aSrcLoc = SRC_LOCATION_INFO() ) override;
     virtual void Clear(){};
 

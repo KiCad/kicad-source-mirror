@@ -124,7 +124,7 @@ public:
     wxString m_layerName;
     int      m_lineWeight;
 
-    DXF_IMPORT_LAYER( wxString aName, int aLineWeight )
+    DXF_IMPORT_LAYER( const wxString& aName, int aLineWeight )
     {
         m_layerName  = aName;
         m_lineWeight = aLineWeight;
@@ -142,7 +142,7 @@ public:
 
     GRAPHICS_IMPORTER_BUFFER m_buffer;
 
-    DXF_IMPORT_BLOCK( wxString aName, double aX, double aY )
+    DXF_IMPORT_BLOCK( const wxString& aName, double aX, double aY )
     {
         m_name = aName;
         m_baseX = aX;
@@ -162,7 +162,7 @@ public:
     bool m_bold;
     bool m_italic;
 
-    DXF_IMPORT_STYLE( wxString aName, double aTextHeight, double aWidthFactor, bool aBold,
+    DXF_IMPORT_STYLE( const wxString& aName, double aTextHeight, double aWidthFactor, bool aBold,
                       bool aItalic )
     {
         m_name = aName;

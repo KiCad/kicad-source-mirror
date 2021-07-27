@@ -194,7 +194,7 @@ public:
      * @param aParserContext PARSER_CONTEXT in which to store the values of the found fields
      * @return
      */
-    static wxString ParseTextFields( wxString aTextString, PARSER_CONTEXT* aParserContext );
+    static wxString ParseTextFields( const wxString& aTextString, PARSER_CONTEXT* aParserContext );
 
 
     struct PARSER

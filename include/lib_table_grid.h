@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -85,7 +85,7 @@ public:
             return false;
     }
 
-    void SetValue( int aRow, int aCol, const wxString &aValue ) override
+    void SetValue( int aRow, int aCol, const wxString& aValue ) override
     {
         if( aRow < (int) size() )
         {

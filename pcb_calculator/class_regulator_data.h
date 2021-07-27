@@ -100,7 +100,7 @@ public:
         return nullptr;
     }
 
-    void Remove( const wxString & aRegName )
+    void Remove( const wxString& aRegName )
     {
         for( unsigned ii = 0; ii < m_List.size(); ii++ )
         {

@@ -115,7 +115,7 @@ public:
      *
      * @param aAppname is the application name to append to the tooltip.
      */
-    void AddClose( wxString aAppname = "" );
+    void AddClose( const wxString& aAppname = "" );
 
     /**
      * Add either a standard Quit or Close item to the menu.

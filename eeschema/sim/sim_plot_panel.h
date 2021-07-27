@@ -178,9 +178,10 @@ class SIM_PLOT_PANEL : public SIM_PANEL_BASE
     friend class SIM_WORKBOOK;
 
 public:
-    SIM_PLOT_PANEL( wxString aCommand, wxWindow* parent, SIM_PLOT_FRAME* aMainFrame, wxWindowID id,
-                    const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
-                    long style = 0, const wxString& name = wxPanelNameStr );
+    SIM_PLOT_PANEL( const wxString& aCommand, wxWindow* parent, SIM_PLOT_FRAME* aMainFrame,
+                    wxWindowID id, const wxPoint& pos = wxDefaultPosition,
+                    const wxSize& size = wxDefaultSize, long style = 0,
+                    const wxString& name = wxPanelNameStr );
 
     virtual ~SIM_PLOT_PANEL();
 

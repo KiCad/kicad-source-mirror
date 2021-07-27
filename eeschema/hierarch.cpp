@@ -270,7 +270,7 @@ wxString HIERARCHY_NAVIG_DLG::getRootString()
 }
 
 
-wxString HIERARCHY_NAVIG_DLG::formatPageString( wxString aName, wxString aPage )
+wxString HIERARCHY_NAVIG_DLG::formatPageString( const wxString& aName, const wxString& aPage )
 {
     return aName + wxT( " " ) + wxString::Format( _( "(page %s)" ), aPage );
 }

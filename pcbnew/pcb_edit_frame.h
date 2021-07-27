@@ -581,7 +581,7 @@ public:
      * @param aReporter is a #REPORTER object to display messages.
      * @return true if the netlist was read successfully.
      */
-    bool ReadNetlistFromFile( const wxString &aFilename, NETLIST& aNetlist, REPORTER& aReporter );
+    bool ReadNetlistFromFile( const wxString& aFilename, NETLIST& aNetlist, REPORTER& aReporter );
 
     /**
      * Called after netlist is updated.

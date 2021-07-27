@@ -49,7 +49,7 @@ public:
 private:
     //Helper functions
     PCB_LAYER_ID GetSelectedLayerID();
-    PCB_LAYER_ID GetAutoMatchLayerID( wxString aInputLayerName );
+    PCB_LAYER_ID GetAutoMatchLayerID( const wxString& aInputLayerName );
 
     void AddMappings();
     void RemoveMappings( int aStatus );

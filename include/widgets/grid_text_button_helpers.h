@@ -149,7 +149,7 @@ public:
      */
     GRID_CELL_PATH_EDITOR( DIALOG_SHIM* aParentDialog, WX_GRID* aGrid, wxString* aCurrentDir,
                            const wxString& aExt, bool aNormalize = false,
-                           wxString aNormalizeBasePath = wxEmptyString ) :
+                           const wxString& aNormalizeBasePath = wxEmptyString ) :
             m_dlg( aParentDialog ),
             m_grid( aGrid ),
             m_currentDir( aCurrentDir ),

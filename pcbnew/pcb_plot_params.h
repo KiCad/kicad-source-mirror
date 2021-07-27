@@ -136,7 +136,7 @@ public:
     void        SetFormat( PLOT_FORMAT aFormat ) { m_format = aFormat; }
     PLOT_FORMAT GetFormat() const { return m_format; }
 
-    void        SetOutputDirectory( wxString aDir ) { m_outputDirectory = aDir; }
+    void        SetOutputDirectory( const wxString& aDir ) { m_outputDirectory = aDir; }
     wxString    GetOutputDirectory() const { return m_outputDirectory; }
 
     void        SetDisableGerberMacros( bool aDisable ) { m_gerberDisableApertMacros = aDisable; }

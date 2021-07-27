@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -44,14 +44,14 @@ public:
 
 protected:
     virtual void DoSetPopupControl( wxComboPopup* aPopup ) override;
-    virtual void OnDrawItem( wxDC& aDC, wxRect const& aRect, int aItem, int aFlags ) const override;
+    virtual void OnDrawItem( wxDC& aDC, const wxRect& aRect, int aItem, int aFlags ) const override;
     virtual wxCoord OnMeasureItem( size_t aItem ) const override;
     virtual wxCoord OnMeasureItemWidth( size_t aItem ) const override;
 
     /**
      * Draw a fragment of text, then return the next x coordinate to continue drawing.
      */
-    static wxCoord DrawTextFragment( wxDC& aDC, wxCoord x, wxCoord y, wxString const& aText );
+    static wxCoord DrawTextFragment( wxDC& aDC, wxCoord x, wxCoord y, const wxString& aText );
 
     /// Veto a mouseover event if in the separator
     void TryVetoMouse( wxMouseEvent& aEvent );

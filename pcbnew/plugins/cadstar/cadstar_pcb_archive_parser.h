@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2020 Roberto Fernandez Bautista <roberto.fer.bau@gmail.com>
- * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -42,7 +42,7 @@
 class CADSTAR_PCB_ARCHIVE_PARSER : public CADSTAR_ARCHIVE_PARSER
 {
 public:
-    explicit CADSTAR_PCB_ARCHIVE_PARSER( wxString aFilename )
+    explicit CADSTAR_PCB_ARCHIVE_PARSER( const wxString& aFilename )
             : Filename( aFilename ), Header(), Assignments(), CADSTAR_ARCHIVE_PARSER()
     {
         KiCadUnitMultiplier = 10; // assume hundredth micron
@@ -474,8 +474,8 @@ public:
 
     /**
      * @brief From CADSTAR Help: "This parameter indicates the physical layers on which the selected
-     * pad is placed. Note: When you change the Side parameter in PCB Design, the Side assigned to the
-     * pad in the library is not overwritten."
+     * pad is placed. Note: When you change the Side parameter in PCB Design, the Side assigned to
+     * the pad in the library is not overwritten."
      */
     enum class PAD_SIDE
     {
@@ -490,14 +490,14 @@ public:
     static PAD_SIDE GetPadSide( const wxString& aPadSideString );
 
     /**
-     * @brief From CADSTAR help: "For specifying the directions in which routes can enter or exit the
-     * pad. There are eight pre-defined directions to choose from, North, South, East, West,
-     * North-East, North-West, South-East and South-West, plus "Free Angle" which allows routes to exit
-     * in any direction.
+     * @brief From CADSTAR help: "For specifying the directions in which routes can enter or exit
+     * the pad. There are eight pre-defined directions to choose from, North, South, East, West,
+     * North-East, North-West, South-East and South-West, plus "Free Angle" which allows routes to
+     * exit in any direction.
      *
-     * If none of the direction boxes are checked, the system uses the default which is all directions
-     * (as shown above) for all pad shapes, except the long (drawn) Routes exit from the short sides of
-     * long pads - in other words in line with the long axis.
+     * If none of the direction boxes are checked, the system uses the default which is all
+     * directions (as shown above) for all pad shapes, except the long (drawn) Routes exit from
+     * the short sides of long pads - in other words in line with the long axis.
      *
      * Note: These Exit Directions are applied to the PCB component. If the PCB component is rotated
      * when it is used on a PCB Design, the Exit Directions will rotate with it."
@@ -801,9 +801,11 @@ public:
         std::map<ATTRIBUTE_ID, ATTRIBUTE_VALUE> AttributeValues;
         bool                                    Fixed = false;
 
-        GROUP_ID      GroupID = wxEmptyString; ///< If not empty, this CADSTAR_BOARD is part of a group
-        REUSEBLOCKREF ReuseBlockRef;           ///< Normally CADSTAR_BOARD cannot be part of a reuseblock,
-                                               ///< but included for completeness
+        ///< If not empty, this CADSTAR_BOARD is part of a group
+        GROUP_ID      GroupID = wxEmptyString;
+
+        ///< Normally CADSTAR_BOARD cannot be part of a reuseblock, but included for completeness.
+        REUSEBLOCKREF ReuseBlockRef;
 
         void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
     };
@@ -984,7 +986,8 @@ public:
             bool   Fixed = false;
             VERTEX Vertex;
 
-            XNODE* Parse( XNODE* aNode, PARSER_CONTEXT* aContext ); ///< Returns a pointer to the last node
+            ///< Returns a pointer to the last node.
+            XNODE* Parse( XNODE* aNode, PARSER_CONTEXT* aContext );
         };
 
         struct ROUTE : PARSER ///< "ROUTE" nodename
@@ -1069,7 +1072,8 @@ public:
             long AdditionalIsolation; ///< This is the gap to apply in routes and pads
                                       ///< in addition to the existing pad-to-copper or
                                       ///< route-to-copper spacing (see SPACINGCODE.ID)
-            long ThermalReliefPadsAngle; ///< Orientation for the thermal reliefs. Disabled when !ThermalReliefOnPads (param5)
+            long ThermalReliefPadsAngle; ///< Orientation for the thermal reliefs. Disabled when
+                                         ///< !ThermalReliefOnPads (param5)
             long ThermalReliefViasAngle; ///< Disabled when !ThermalReliefOnVias (param6)
             long MinIsolatedCopper = UNDEFINED_VALUE; ///< The value is the length of one side of
                                                       ///< a notional square. Disabled when

@@ -51,8 +51,11 @@
 #include "kicad_manager_frame.h"
 
 
-void KICAD_MANAGER_FRAME::ImportNonKiCadProject( wxString aWindowTitle, wxString aFilesWildcard,
-        wxString aSchFileExtension, wxString aPcbFileExtension, int aSchFileType, int aPcbFileType )
+void KICAD_MANAGER_FRAME::ImportNonKiCadProject( const wxString& aWindowTitle,
+                                                 const wxString& aFilesWildcard,
+                                                 const wxString& aSchFileExtension,
+                                                 const wxString& aPcbFileExtension,
+                                                 int aSchFileType, int aPcbFileType )
 {
     wxString msg;
     wxString default_dir = GetMruPath();

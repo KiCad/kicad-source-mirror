@@ -33,7 +33,7 @@
 const int colorsSchemaVersion = 2;
 
 
-COLOR_SETTINGS::COLOR_SETTINGS( wxString aFilename ) :
+COLOR_SETTINGS::COLOR_SETTINGS( const wxString& aFilename ) :
         JSON_SETTINGS( std::move( aFilename ), SETTINGS_LOC::COLORS, colorsSchemaVersion ),
         m_overrideSchItemColors( false )
 {

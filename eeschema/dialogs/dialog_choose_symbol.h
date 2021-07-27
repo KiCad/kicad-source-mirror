@@ -185,19 +185,19 @@ protected:
     /**
      * Look up the footprint for a given symbol specified in the #LIB_ID and display it.
      */
-    void ShowFootprintFor( LIB_ID const& aLibId );
+    void ShowFootprintFor( const LIB_ID& aLibId );
 
     /**
      * Display the given footprint by name.
      */
-    void ShowFootprint( wxString const& aFootprint );
+    void ShowFootprint( const wxString& aFootprint );
 
     /**
      * Populate the footprint selector for a given alias.
      *
      * @param aLibId the #LIB_ID of the selection or invalid to clear.
      */
-    void PopulateFootprintSelector( LIB_ID const& aLibId );
+    void PopulateFootprintSelector( const LIB_ID& aLibId );
 
 public:
     static std::mutex g_Mutex;
