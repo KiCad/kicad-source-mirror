@@ -402,14 +402,17 @@ TOOL_ACTION ACTIONS::cursorDblClick( "common.Control.cursorDblClick",
         BITMAPS::INVALID_BITMAP, AF_NONE, (void*) CURSOR_DBL_CLICK );
 
 TOOL_ACTION ACTIONS::refreshPreview( "common.Control.refreshPreview",
-         AS_GLOBAL );
+        AS_GLOBAL );
 
-TOOL_ACTION ACTIONS::pinLibrary( "common.Control.pinLibrary", AS_GLOBAL, 0, "", _( "Pin Library" ),
-                                 _( "Keep the library at the top of the list" ) );
+TOOL_ACTION ACTIONS::pinLibrary( "common.Control.pinLibrary",
+        AS_GLOBAL, 0, "",
+        _( "Pin Library" ),
+        _( "Keep the library at the top of the list" ) );
 
-TOOL_ACTION ACTIONS::unpinLibrary( "common.Control.unpinLibrary", AS_GLOBAL, 0, "",
-                                   _( "Unpin Library" ),
-                                   _( "No longer keep the library at the top of the list" ) );
+TOOL_ACTION ACTIONS::unpinLibrary( "common.Control.unpinLibrary",
+        AS_GLOBAL, 0, "",
+        _( "Unpin Library" ),
+        _( "No longer keep the library at the top of the list" ) );
 
 TOOL_ACTION ACTIONS::panUp( "common.Control.panUp",
         AS_GLOBAL,
@@ -526,13 +529,17 @@ TOOL_ACTION ACTIONS::toggleCursorStyle( "common.Control.toggleCursorStyle",
         BITMAPS::cursor_shape );
 
 TOOL_ACTION ACTIONS::highContrastMode( "common.Control.highContrastMode",
-        AS_GLOBAL, 0, LEGACY_HK_NAME( "Toggle High Contrast Mode" ),
+        AS_GLOBAL,
+        0, LEGACY_HK_NAME( "Toggle High Contrast Mode" ),
         _( "Single Layer View Mode" ), _( "Toggle inactive layers between normal and dimmed" ),
         BITMAPS::contrast_mode );
 
 TOOL_ACTION ACTIONS::highContrastModeCycle( "common.Control.highContrastModeCycle",
-        AS_GLOBAL, MD_CTRL + 'H', "",  _( "Single Layer View Mode (3-state)" ),
-        _( "Toggle inactive layers between normal, dimmed, and hidden" ), BITMAPS::contrast_mode );
+        AS_GLOBAL,
+        'H', "",
+        _( "Single Layer View Mode (3-state)" ),
+        _( "Toggle inactive layers between normal, dimmed, and hidden" ),
+        BITMAPS::contrast_mode );
 
 TOOL_ACTION ACTIONS::selectionTool( "common.InteractiveSelection.selectionTool",
         AS_GLOBAL, 0, "",
@@ -547,7 +554,9 @@ TOOL_ACTION ACTIONS::measureTool( "common.InteractiveEdit.measureTool",
         BITMAPS::measurement, AF_ACTIVATE );
 
 TOOL_ACTION ACTIONS::pickerTool( "common.InteractivePicker.pickerTool",
-        AS_GLOBAL, 0, "", "", "", BITMAPS::INVALID_BITMAP, AF_ACTIVATE );
+        AS_GLOBAL, 0, "",
+        "", "",
+        BITMAPS::INVALID_BITMAP, AF_ACTIVATE );
 
 TOOL_ACTION ACTIONS::show3DViewer( "common.Control.show3DViewer",
         AS_GLOBAL,
