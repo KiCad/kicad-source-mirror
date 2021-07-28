@@ -206,17 +206,25 @@ int EDA_3D_CONTROLLER::ToggleVisibility( const TOOL_EVENT& aEvent )
 
     switch( flag )
     {
-    // These commands do not request a 3D scene rebuild:
+    // These commands do not request a 3D scene rebuild (and do not exist in raytracing):
     case FL_RENDER_OPENGL_SHOW_MODEL_BBOX:
+    case FL_AXIS:
+        m_canvas->Request_refresh();
+        break;
+
+    // These commands do not request a 3D scene rebuild and exist in raytracing:
     case FL_RENDER_RAYTRACING_SHADOWS:
     case FL_RENDER_RAYTRACING_REFRACTIONS:
     case FL_RENDER_RAYTRACING_REFLECTIONS:
     case FL_RENDER_RAYTRACING_ANTI_ALIASING:
-    case FL_AXIS:
     case FL_FP_ATTRIBUTES_NORMAL:
     case FL_FP_ATTRIBUTES_NORMAL_INSERT:
     case FL_FP_ATTRIBUTES_VIRTUAL:
-        m_canvas->Request_refresh();
+        if( m_boardAdapter->GetRenderEngine() == RENDER_ENGINE::OPENGL_LEGACY )
+            m_canvas->Request_refresh();
+        else
+            m_canvas->RenderRaytracingRequest();
+
         break;
 
     default:
