@@ -209,7 +209,7 @@ protected:
         KIWAY_PLAYER* frame = m_dlg->Kiway().Player( FRAME_SCH_VIEWER_MODAL, true, m_dlg );
 
         if( frame->ShowModal( &symbolId, m_dlg ) )
-            SetValue( symbolId );
+            SetValue( UnescapeString( symbolId ) );
 
         frame->Destroy();
     }

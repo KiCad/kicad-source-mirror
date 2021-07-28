@@ -509,6 +509,10 @@ void DIALOG_EDIT_SYMBOLS_LIBID::AddRowToGrid( bool aMarkRow, const wxString& aRe
 wxString getLibIdValue( const WX_GRID* aGrid, int aRow, int aCol )
 {
     wxString rawValue = aGrid->GetCellValue( aRow, aCol );
+
+    if( rawValue.IsEmpty() )
+        return rawValue;
+
     wxString itemName;
     wxString libName = rawValue.BeforeFirst( ':', &itemName );
 
