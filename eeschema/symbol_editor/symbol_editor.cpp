@@ -421,8 +421,13 @@ void SYMBOL_EDIT_FRAME::CreateNewSymbol()
         wxString msg = wxString::Format( _( "Symbol '%s' already exists in library '%s'." ),
                                          name,
                                          lib );
-        DisplayError( this, msg );
-        return;
+
+        KIDIALOG errorDlg( this, msg, _( "Confirmation" ), wxOK | wxCANCEL | wxICON_WARNING );
+        errorDlg.SetOKLabel( _( "Overwrite" ) );
+        errorDlg.DoNotShowCheckbox( __FILE__, __LINE__ );
+
+        if( errorDlg.ShowModal() == wxID_CANCEL )
+            return;
     }
 
     LIB_SYMBOL new_symbol( name );  // do not create symbol on the heap, it will be buffered soon
@@ -673,8 +678,13 @@ void SYMBOL_EDIT_FRAME::saveSymbolAs()
             wxString msg = wxString::Format( _( "Symbol '%s' already exists in library '%s'" ),
                                              new_name,
                                              new_lib );
-            DisplayError( this, msg );
-            return;
+
+            KIDIALOG errorDlg( this, msg, _( "Confirmation" ), wxOK | wxCANCEL | wxICON_WARNING );
+            errorDlg.SetOKLabel( _( "Overwrite" ) );
+            errorDlg.DoNotShowCheckbox( __FILE__, __LINE__ );
+
+            if( errorDlg.ShowModal() == wxID_CANCEL )
+                return;
         }
 
         LIB_SYMBOL new_symbol( *symbol );
