@@ -341,20 +341,22 @@ DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::DIALOG_FOOTPRINT_PROPERTIES_FP_EDITO
 	m_modelsGrid = new WX_GRID( sbSizer3->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, wxBORDER_SIMPLE );
 
 	// Grid
-	m_modelsGrid->CreateGrid( 3, 2 );
+	m_modelsGrid->CreateGrid( 3, 3 );
 	m_modelsGrid->EnableEditing( true );
 	m_modelsGrid->EnableGridLines( false );
 	m_modelsGrid->EnableDragGridSize( false );
 	m_modelsGrid->SetMargins( 0, 0 );
 
 	// Columns
-	m_modelsGrid->SetColSize( 0, 650 );
-	m_modelsGrid->SetColSize( 1, 65 );
+	m_modelsGrid->SetColSize( 0, 20 );
+	m_modelsGrid->SetColSize( 1, 650 );
+	m_modelsGrid->SetColSize( 2, 65 );
 	m_modelsGrid->EnableDragColMove( false );
 	m_modelsGrid->EnableDragColSize( false );
 	m_modelsGrid->SetColLabelSize( 22 );
-	m_modelsGrid->SetColLabelValue( 0, _("3D Model(s)") );
-	m_modelsGrid->SetColLabelValue( 1, _("Show") );
+	m_modelsGrid->SetColLabelValue( 0, wxEmptyString );
+	m_modelsGrid->SetColLabelValue( 1, _("3D Model(s)") );
+	m_modelsGrid->SetColLabelValue( 2, _("Show") );
 	m_modelsGrid->SetColLabelAlignment( wxALIGN_LEFT, wxALIGN_CENTER );
 
 	// Rows

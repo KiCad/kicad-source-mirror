@@ -26,10 +26,13 @@
 #define _GRID_TRICKS_H_
 
 
+#include <bitset>
 #include <wx/grid.h>
 #include <wx/event.h>
 #include <wx/menu.h>
 #include <widgets/wx_grid.h>
+
+#define GRIDTRICKS_MAX_COL 20
 
 enum
 {
@@ -40,9 +43,9 @@ enum
     GRIDTRICKS_ID_PASTE,
     GRIDTRICKS_ID_SELECT,
 
-    GRIDTRICKS_FIRST_SHOWHIDE = 979,    // reserve 20 IDs for show/hide-column-n
+    GRIDTRICKS_FIRST_SHOWHIDE = 979,    // reserve IDs for show/hide-column-n
 
-    GRIDTRICKS_LAST_ID = 999
+    GRIDTRICKS_LAST_ID = GRIDTRICKS_FIRST_SHOWHIDE + GRIDTRICKS_MAX_COL
 };
 
 
@@ -53,6 +56,30 @@ class GRID_TRICKS : public wxEvtHandler
 {
 public:
     explicit GRID_TRICKS( WX_GRID* aGrid );
+
+    /**
+     * Enable the tooltip for a column.
+     *
+     * The tooltip is read from the string contained in the cell data.
+     *
+     * @param aCol is the column to use
+     * @param aEnable is true to enable the tooltip (default)
+     */
+    void SetTooltipEnable( int aCol, bool aEnable = true )
+    {
+        m_tooltipEnabled[aCol] = aEnable;
+    }
+
+    /**
+     * Query if the tooltip for a column is enabled
+     *
+     * @param aCol is the column to query
+     * @return if the tooltip is enabled for the column
+     */
+    bool GetTooltipEnabled( int aCol )
+    {
+        return m_tooltipEnabled[aCol];
+    }
 
 protected:
     /// Puts the selected area into a sensible rectangle of m_sel_{row,col}_{start,count} above.
@@ -66,6 +93,7 @@ protected:
     void onPopupSelection( wxCommandEvent& event );
     void onKeyDown( wxKeyEvent& ev );
     void onUpdateUI( wxUpdateUIEvent& event );
+    void onGridMotion( wxMouseEvent& event );
 
     virtual bool handleDoubleClick( wxGridEvent& aEvent );
     virtual void showPopupMenu( wxMenu& menu );
@@ -86,6 +114,8 @@ protected:
     int      m_sel_col_start;
     int      m_sel_row_count;
     int      m_sel_col_count;
+
+    std::bitset<GRIDTRICKS_MAX_COL> m_tooltipEnabled;
 };
 
 #endif  // _GRID_TRICKS_H_

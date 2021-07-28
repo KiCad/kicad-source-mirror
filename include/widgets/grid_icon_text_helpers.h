@@ -24,6 +24,7 @@
 #ifndef GRID_ICON_TEXT_HELPERS_H
 #define GRID_ICON_TEXT_HELPERS_H
 
+#include <wx/bitmap.h>
 #include <wx/bmpcbox.h>
 #include <wx/generic/gridctrl.h>
 #include <wx/generic/grideditors.h>
@@ -66,6 +67,27 @@ public:
 private:
     const wxBitmap& m_icon;
 };
+
+//---- Grid helpers: custom wxGridCellRenderer that renders just an icon from wxArtprovider -
+//
+// Note: use with read only cells
+
+class GRID_CELL_STATUS_ICON_RENDERER : public wxGridCellRenderer
+{
+public:
+    GRID_CELL_STATUS_ICON_RENDERER( int aStatus );
+
+    void Draw( wxGrid& aGrid, wxGridCellAttr& aAttr, wxDC& aDC,
+               const wxRect& aRect, int aRow, int aCol, bool isSelected ) override;
+    wxSize GetBestSize( wxGrid & grid, wxGridCellAttr & attr, wxDC & dc, int row, int col ) override;
+    wxGridCellRenderer* Clone() const override;
+
+private:
+    int      m_status;
+    wxBitmap m_bitmap;
+};
+
+
 
 //---- Grid helpers: custom wxGridCellEditor ------------------------------------------
 //

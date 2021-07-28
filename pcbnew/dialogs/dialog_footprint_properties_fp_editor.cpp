@@ -31,6 +31,7 @@
 #include <board_design_settings.h>
 #include <board_commit.h>
 #include <bitmaps.h>
+#include <widgets/grid_icon_text_helpers.h>
 #include <widgets/grid_text_button_helpers.h>
 #include <widgets/wx_grid.h>
 #include <widgets/text_ctrl_eval.h>
@@ -52,6 +53,12 @@
 // Remember the last open page during session.
 int DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::m_page = 0;
 
+enum MODELS_TABLE_COLUMNS
+{
+    COL_PROBLEM  = 0,
+    COL_FILENAME = 1,
+    COL_SHOWN    = 2
+};
 
 DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR(
         FOOTPRINT_EDIT_FRAME* aParent,
@@ -87,7 +94,11 @@ DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR(
 
     m_itemsGrid->SetTable( m_texts );
     m_itemsGrid->PushEventHandler( new GRID_TRICKS( m_itemsGrid ) );
-    m_modelsGrid->PushEventHandler( new GRID_TRICKS( m_modelsGrid ) );
+
+    GRID_TRICKS* trick = new GRID_TRICKS( m_modelsGrid );
+    trick->SetTooltipEnable( COL_PROBLEM );
+
+    m_modelsGrid->PushEventHandler( trick );
 
     // Show/hide columns according to the user's preference
     m_itemsGrid->ShowHideColumns( m_frame->GetSettings()->m_FootprintTextShownColumns );
@@ -99,17 +110,23 @@ DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR(
         wxGetEnv( KICAD6_3DMODEL_DIR, &cfg->m_lastFootprint3dDir );
     }
 
+    // Icon showing warning/error information
     wxGridCellAttr* attr = new wxGridCellAttr;
+    attr->SetReadOnly();
+    m_modelsGrid->SetColAttr( COL_PROBLEM, attr );
+
+    // Filename
+    attr = new wxGridCellAttr;
     attr->SetEditor( new GRID_CELL_PATH_EDITOR( this, m_modelsGrid, &cfg->m_lastFootprint3dDir,
                                                 "*.*", true, Prj().GetProjectPath() ) );
-    m_modelsGrid->SetColAttr( 0, attr );
+    m_modelsGrid->SetColAttr( COL_FILENAME, attr );
 
     // Show checkbox
     attr = new wxGridCellAttr;
     attr->SetRenderer( new wxGridCellBoolRenderer() );
     attr->SetReadOnly();    // not really; we delegate interactivity to GRID_TRICKS
     attr->SetAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
-    m_modelsGrid->SetColAttr( 1, attr );
+    m_modelsGrid->SetColAttr( COL_SHOWN, attr );
     m_modelsGrid->SetWindowStyleFlag( m_modelsGrid->GetWindowStyle() & ~wxHSCROLL );
 
     aParent->Prj().Get3DCacheManager()->GetResolver()->SetProgramBase( &Pgm() );
@@ -313,8 +330,11 @@ bool DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::TransferDataToWindow()
 
         m_modelsGrid->AppendRows( 1 );
         int row = m_modelsGrid->GetNumberRows() - 1;
-        m_modelsGrid->SetCellValue( row, 0, origPath );
-        m_modelsGrid->SetCellValue( row, 1, model.m_Show ? wxT( "1" ) : wxT( "0" ) );
+        m_modelsGrid->SetCellValue( row, COL_FILENAME, origPath );
+        m_modelsGrid->SetCellValue( row, COL_SHOWN, model.m_Show ? wxT( "1" ) : wxT( "0" ) );
+
+        // Must be after the filename is set
+        updateValidateStatus( row );
     }
 
     select3DModel( 0 );   // will clamp idx within bounds
@@ -344,7 +364,7 @@ bool DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::TransferDataToWindow()
     }
 
     m_itemsGrid->SetRowLabelSize( m_itemsGrid->GetVisibleWidth( -1, true, true, true ) );
-    m_modelsGrid->SetColSize( 1, m_modelsGrid->GetVisibleWidth( 1, true, false, false ) );
+    m_modelsGrid->SetColSize( COL_SHOWN, m_modelsGrid->GetVisibleWidth( COL_SHOWN, true, false, false ) );
 
     Layout();
     adjustGridColumns( m_itemsGrid->GetRect().GetWidth() );
@@ -363,7 +383,7 @@ void DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::select3DModel( int aModelIdx )
     if( m_modelsGrid->GetNumberRows() )
     {
         m_modelsGrid->SelectRow( aModelIdx );
-        m_modelsGrid->SetGridCursor( aModelIdx, 0 );
+        m_modelsGrid->SetGridCursor( aModelIdx, COL_FILENAME );
     }
 
     m_previewPane->SetSelectedModel( aModelIdx );
@@ -381,11 +401,11 @@ void DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::On3DModelSelected( wxGridEvent& aEve
 
 void DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::On3DModelCellChanged( wxGridEvent& aEvent )
 {
-    if( aEvent.GetCol() == 0 )
+    if( aEvent.GetCol() == COL_FILENAME )
     {
         bool               hasAlias = false;
         FILENAME_RESOLVER* res = Prj().Get3DCacheManager()->GetResolver();
-        wxString           filename = m_modelsGrid->GetCellValue( aEvent.GetRow(), 0 );
+        wxString           filename = m_modelsGrid->GetCellValue( aEvent.GetRow(), COL_FILENAME );
 
         filename.Replace( "\n", "" );
         filename.Replace( "\r", "" );
@@ -411,11 +431,13 @@ void DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::On3DModelCellChanged( wxGridEvent& a
 #endif
 
         m_shapes3D_list[ aEvent.GetRow() ].m_Filename = filename;
-        m_modelsGrid->SetCellValue( aEvent.GetRow(), 0, filename );
+        m_modelsGrid->SetCellValue( aEvent.GetRow(), COL_FILENAME, filename );
+
+        updateValidateStatus( aEvent.GetRow() );
     }
-    else if( aEvent.GetCol() == 1 )
+    else if( aEvent.GetCol() == COL_SHOWN )
     {
-        wxString showValue = m_modelsGrid->GetCellValue( aEvent.GetRow(), 1 );
+        wxString showValue = m_modelsGrid->GetCellValue( aEvent.GetRow(), COL_SHOWN );
 
         m_shapes3D_list[ aEvent.GetRow() ].m_Show = ( showValue == wxT( "1" ) );
     }
@@ -501,8 +523,10 @@ void DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::OnAdd3DModel( wxCommandEvent&  )
 
     int idx = m_modelsGrid->GetNumberRows();
     m_modelsGrid->AppendRows( 1 );
-    m_modelsGrid->SetCellValue( idx, 0, filename );
-    m_modelsGrid->SetCellValue( idx, 1, wxT( "1" ) );
+    m_modelsGrid->SetCellValue( idx, COL_FILENAME, filename );
+    m_modelsGrid->SetCellValue( idx, COL_SHOWN, wxT( "1" ) );
+
+    updateValidateStatus( idx );
 
     select3DModel( idx );
     m_previewPane->UpdateDummyFootprint();
@@ -521,13 +545,14 @@ void DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::OnAdd3DRow( wxCommandEvent&  )
 
     int row = m_modelsGrid->GetNumberRows();
     m_modelsGrid->AppendRows( 1 );
-    m_modelsGrid->SetCellValue( row, 1, wxT( "1" ) );
+    m_modelsGrid->SetCellValue( row, COL_SHOWN, wxT( "1" ) );
+    m_modelsGrid->SetCellValue( row, COL_PROBLEM, "" );
 
     select3DModel( row );
 
     m_modelsGrid->SetFocus();
-    m_modelsGrid->MakeCellVisible( row, 0 );
-    m_modelsGrid->SetGridCursor( row, 0 );
+    m_modelsGrid->MakeCellVisible( row, COL_FILENAME );
+    m_modelsGrid->SetGridCursor( row, COL_FILENAME );
 
     m_modelsGrid->EnableCellEditControl( true );
     m_modelsGrid->ShowCellEditControl();
@@ -549,6 +574,59 @@ bool DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::checkFootprintName( const wxString& 
     }
 
     return true;
+}
+
+
+void DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::updateValidateStatus( int aRow )
+{
+    int icon = 0;
+    wxString errStr;
+
+    switch( validateModelExists( m_modelsGrid->GetCellValue( aRow, COL_FILENAME) ) )
+    {
+        case MODEL_VALIDATE_ERRORS::NO_ERROR:
+            icon   = 0;
+            errStr = "";
+            break;
+
+        case MODEL_VALIDATE_ERRORS::RESOLVE_FAIL:
+            icon   = wxICON_ERROR;
+            errStr = _( "File not found" );
+            break;
+
+        case MODEL_VALIDATE_ERRORS::OPEN_FAIL:
+            icon   = wxICON_ERROR;
+            errStr = _( "Unable to open file" );
+            break;
+
+        default:
+            icon   = wxICON_ERROR;
+            errStr = _( "Unknown error" );
+            break;
+    }
+
+    m_modelsGrid->SetCellValue( aRow, COL_PROBLEM, errStr );
+    m_modelsGrid->SetCellRenderer( aRow, COL_PROBLEM,
+                                   new GRID_CELL_STATUS_ICON_RENDERER( icon ) );
+}
+
+
+MODEL_VALIDATE_ERRORS DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::validateModelExists( const wxString& aFilename )
+{
+    FILENAME_RESOLVER* resolv = Prj().Get3DFilenameResolver();
+
+    if( !resolv )
+        return MODEL_VALIDATE_ERRORS::RESOLVE_FAIL;
+
+    wxString fullPath = resolv->ResolvePath( aFilename );
+
+    if( fullPath.IsEmpty() )
+        return MODEL_VALIDATE_ERRORS::RESOLVE_FAIL;
+
+    if( wxFileName::IsFileReadable( fullPath ) )
+        return MODEL_VALIDATE_ERRORS::NO_ERROR;
+    else
+        return MODEL_VALIDATE_ERRORS::OPEN_FAIL;
 }
 
 
@@ -829,10 +907,15 @@ void DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::adjustGridColumns( int aWidth )
         itemsWidth -= m_itemsGrid->GetColSize( i );
 
     if( itemsWidth > 0 )
+    {
         m_itemsGrid->SetColSize( 0, std::max( itemsWidth,
                 m_itemsGrid->GetVisibleWidth( 0, true, false, false ) ) );
+    }
 
-    m_modelsGrid->SetColSize( 0, modelsWidth - m_modelsGrid->GetColSize( 1 ) - 5 );
+    int width = modelsWidth - m_modelsGrid->GetColSize( COL_SHOWN )
+                            - m_modelsGrid->GetColSize( COL_PROBLEM ) - 5;
+
+    m_modelsGrid->SetColSize( COL_FILENAME, width );
 }
 
 

@@ -23,6 +23,8 @@
 
 #include <widgets/grid_icon_text_helpers.h>
 
+#include <wx/artprov.h>
+#include <wx/defs.h>
 #include <wx/textctrl.h>
 #include <wx/dc.h>
 
@@ -118,6 +120,61 @@ wxSize GRID_CELL_ICON_RENDERER::GetBestSize( wxGrid& grid, wxGridCellAttr& attr,
 wxGridCellRenderer* GRID_CELL_ICON_RENDERER::Clone() const
 {
     return new GRID_CELL_ICON_RENDERER( m_icon );
+}
+
+
+//---- Grid helpers: custom wxGridCellRenderer that renders just an icon ----------------
+//
+// Note: this renderer is supposed to be used with read only cells
+
+GRID_CELL_STATUS_ICON_RENDERER::GRID_CELL_STATUS_ICON_RENDERER( int aStatus ) :
+    m_status( aStatus )
+{
+    if( m_status != 0 )
+    {
+        m_bitmap = wxArtProvider::GetBitmap( wxArtProvider::GetMessageBoxIconId( m_status ),
+                                             wxART_BUTTON );
+    }
+    else
+    {
+        // Dummy bitmap for size
+        m_bitmap = wxArtProvider::GetBitmap( wxArtProvider::GetMessageBoxIconId( wxICON_INFORMATION ),
+                                             wxART_BUTTON );
+    }
+}
+
+
+void GRID_CELL_STATUS_ICON_RENDERER::Draw( wxGrid& aGrid, wxGridCellAttr& aAttr, wxDC& aDC,
+                                           const wxRect& aRect, int aRow, int aCol,
+                                           bool isSelected )
+{
+    wxRect rect = aRect;
+    rect.Inflate( -1 );
+
+    // erase background
+    wxGridCellRenderer::Draw( aGrid, aAttr, aDC, aRect, aRow, aCol, isSelected );
+
+    // Draw icon
+    if( ( m_status != 0 ) && m_bitmap.IsOk() )
+    {
+        aDC.DrawBitmap( m_bitmap,
+                        rect.GetLeft() + ( rect.GetWidth() - m_bitmap.GetWidth() ) / 2,
+                        rect.GetTop() + ( rect.GetHeight() - m_bitmap.GetHeight() ) / 2,
+                        true );
+    }
+}
+
+
+wxSize GRID_CELL_STATUS_ICON_RENDERER::GetBestSize( wxGrid& grid, wxGridCellAttr& attr, wxDC& dc,
+                                                    int row, int col )
+{
+    return wxSize( m_bitmap.GetWidth() + 6, m_bitmap.GetHeight() + 4 );
+}
+
+
+wxGridCellRenderer* GRID_CELL_STATUS_ICON_RENDERER::Clone() const
+{
+    return new GRID_CELL_STATUS_ICON_RENDERER( m_status );
 }
 
 

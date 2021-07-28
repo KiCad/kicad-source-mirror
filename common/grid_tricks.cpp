@@ -23,6 +23,8 @@
  */
 
 #include <grid_tricks.h>
+#include <wx/defs.h>
+#include <wx/event.h>
 #include <wx/tokenzr.h>
 #include <wx/clipbrd.h>
 #include <wx/log.h>
@@ -58,6 +60,10 @@ GRID_TRICKS::GRID_TRICKS( WX_GRID* aGrid ):
     aGrid->Connect( wxEVT_KEY_DOWN, wxKeyEventHandler( GRID_TRICKS::onKeyDown ), nullptr, this );
     aGrid->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( GRID_TRICKS::onUpdateUI ),
                     nullptr, this );
+
+    // The handlers that control the tooltips must be on the actual grid window, not the grid
+    aGrid->GetGridWindow()->Connect( wxEVT_MOTION,
+                            wxMouseEventHandler( GRID_TRICKS::onGridMotion ), nullptr, this );
 }
 
 
@@ -162,6 +168,36 @@ void GRID_TRICKS::onGridCellLeftDClick( wxGridEvent& aEvent )
 {
     if( !handleDoubleClick( aEvent ) )
         onGridCellLeftClick( aEvent );
+}
+
+
+void GRID_TRICKS::onGridMotion( wxMouseEvent& aEvent )
+{
+    // Always skip the event
+    aEvent.Skip();
+
+    wxPoint pt  = aEvent.GetPosition();
+    wxPoint pos = m_grid->CalcScrolledPosition( wxPoint( pt.x, pt.y ) );
+
+    int col = m_grid->XToCol( pos.x );
+
+    // Skip the event if the tooltip shouldn't be shown
+    if( !m_tooltipEnabled[col] || ( col == wxNOT_FOUND ) )
+    {
+        m_grid->GetGridWindow()->SetToolTip( "" );
+        return;
+    }
+
+    int row = m_grid->YToRow( pos.y );
+
+    if( row == wxNOT_FOUND )
+    {
+        m_grid->GetGridWindow()->SetToolTip( "" );
+        return;
+    }
+
+    // Set the tooltip to the string contained in the cell
+    m_grid->GetGridWindow()->SetToolTip( m_grid->GetCellValue( row, col ) );
 }
 
 

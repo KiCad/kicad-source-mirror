@@ -36,6 +36,13 @@ class PANEL_PREVIEW_3D_MODEL;
 class FOOTPRINT_EDIT_FRAME;
 
 
+enum class MODEL_VALIDATE_ERRORS
+{
+    NO_ERROR,
+    RESOLVE_FAIL,
+    OPEN_FAIL
+};
+
 class DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR : public DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE
 {
 public:
@@ -61,6 +68,10 @@ private:
     void OnAddField( wxCommandEvent& event ) override;
     void OnDeleteField( wxCommandEvent& event ) override;
     void OnUpdateUI( wxUpdateUIEvent& event ) override;
+
+    void updateValidateStatus( int aRow );
+
+    MODEL_VALIDATE_ERRORS validateModelExists( const wxString& aFilename );
 
     bool checkFootprintName( const wxString& aFootprintName );
 
