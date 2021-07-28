@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
- * Copyright (C) 1992-2020 Kicad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 Kicad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,6 +27,7 @@
 #include <kiway_player.h>
 #include <locale_io.h>
 #include <panel_hotkeys_editor.h>
+#include <wildcards_and_files_ext.h>
 #include <tool/tool_manager.h>
 #include <widgets/button_row_panel.h>
 #include <widgets/ui_common.h>
@@ -188,10 +189,9 @@ void PANEL_HOTKEYS_EDITOR::OnFilterSearch( wxCommandEvent& aEvent )
 
 void PANEL_HOTKEYS_EDITOR::ImportHotKeys()
 {
-    wxString ext  = DEFAULT_HOTKEY_FILENAME_EXT;
-    wxString mask = wxT( "*." ) + ext;
-    wxString filename = EDA_FILE_SELECTOR( _( "Import Hotkeys File:" ), m_frame->GetMruPath(),
-                                           wxEmptyString, ext, mask, this, wxFD_OPEN, true );
+    wxString filename = wxFileSelector( _( "Import Hotkeys File:" ), m_frame->GetMruPath(),
+                                        wxEmptyString, HotkeyFileExtension,
+                                        HotkeyFileWildcard(), wxFD_OPEN, this );
 
     if( filename.IsEmpty() )
         return;
@@ -216,9 +216,9 @@ void PANEL_HOTKEYS_EDITOR::ImportHotKeys()
 
 void PANEL_HOTKEYS_EDITOR::dumpHotkeys()
 {
-    wxString filename = EDA_FILE_SELECTOR( wxT( "Dump Hotkeys File:" ), m_frame->GetMruPath(),
-                                           wxEmptyString, wxT( "txt" ), wxT( "*.txt" ), this,
-                                           wxFD_SAVE, true );
+    wxString filename = wxFileSelector( wxT( "Hotkeys File" ), m_frame->GetMruPath(),
+                                        wxEmptyString, TextFileExtension, TextFileWildcard(),
+                                        wxFD_SAVE, this );
 
     if( filename.IsEmpty() )
         return;

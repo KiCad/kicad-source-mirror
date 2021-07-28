@@ -138,6 +138,7 @@ const std::string GerberFileExtension( "gbr" );
 const std::string GerberJobFileExtension( "gbrjob" );
 const std::string HtmlFileExtension( "html" );
 const std::string EquFileExtension( "equ" );
+const std::string HotkeyFileExtension( "hotkeys" );
 
 const std::string ArchiveFileExtension( "zip" );
 
@@ -160,11 +161,13 @@ const std::string GedaPcbFootprintLibFileExtension( "fp" );     // this is a fil
 
 const std::string KiCadFootprintFileExtension( "kicad_mod" );
 const std::string SpecctraDsnFileExtension( "dsn" );
+const std::string SpecctraSessionFileExtension( "ses" );
 const std::string IpcD356FileExtension( "d356" );
 const std::string WorkbookFileExtension( "wbk" );
 
 const std::string PngFileExtension( "png" );
 const std::string JpegFileExtension( "jpg" );
+const std::string TextFileExtension( "txt" );
 
 
 bool IsProtelExtension( const wxString& ext )
@@ -500,6 +503,12 @@ wxString SpecctraDsnFileWildcard()
 }
 
 
+wxString SpecctraSessionFileWildcard()
+{
+    return _( "Specctra Session file" ) + AddFileExtListToFilter( { "ses" } );
+}
+
+
 wxString IpcD356FileWildcard()
 {
     return _( "IPC-D-356 Test Files" ) + AddFileExtListToFilter( { "d356" } );
@@ -521,4 +530,10 @@ wxString PngFileWildcard()
 wxString JpegFileWildcard()
 {
     return _( "Jpeg file" ) + AddFileExtListToFilter( { "jpg", "jpeg" } );
+}
+
+
+wxString HotkeyFileWildcard()
+{
+    return _( "Hotkey file" ) + AddFileExtListToFilter( { "hotkey" } );
 }

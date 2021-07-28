@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2009-2014 Jerry Jacobs
- * Copyright (C) 1992-2020 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -65,36 +65,6 @@ bool CanPrintFile( const wxString& file );
  * @param aErrors a wxString to *append* any errors to
  */
 void KiCopyFile( const wxString& aSrcPath, const wxString& aDestPath, wxString& aErrors );
-
-/**
- * A helper function that wraps a call to wxFileSelector.
- *
- * @param aTitle is a string to display in the dialog title bar.
- * @param aPath is a string contain the default path for the path dialog.
- * @param aFileName is a string containing the default file name.
- * @param aExtension is a string containing the default file extension.
- * @param aWildcard is a string containing the default wildcard.
- * @param aParent is the parent window of the dialog.
- * @param aStyle is the style of the path dialog, wxFD_???.
- * @param aKeepWorkingDirectory determines if current working directory should be set to the
- *                              user selected path.
- * @param aPosition is the position of the dialog.
- * @param aMruPath is a pointer to a string to copy the path selected by the user when
- *                 the OK button is pressed to dismiss the dialog.  This can be NULL.
- * @return the full path and file name of the selected file or wxEmptyString if the user
- *         pressed the cancel button to dismiss the dialog.
- */
-wxString EDA_FILE_SELECTOR( const wxString& aTitle,
-                            const wxString& aPath,
-                            const wxString& aFileName,
-                            const wxString& aExtension,
-                            const wxString& aWildcard,
-                            wxWindow*       aParent,
-                            int             aStyle,
-                            const bool      aKeepWorkingDirectory,
-                            const wxPoint&  aPosition = wxDefaultPosition,
-                            wxString*       aMruPath = nullptr );
-
 
 /**
  * Call the executable file \a ExecFile with the command line parameters \a param.

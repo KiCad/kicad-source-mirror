@@ -106,9 +106,6 @@ static const wxChar* s_allowedExtensionsToList[] = {
  *       library as required.
  */
 
-// File extension definitions.
-const wxChar  TextFileExtension[] = wxT( "txt" );
-
 // Gerber file extension wildcard.
 const wxString GerberFileExtensionWildCard( ".((gbr|gbrjob|(gb|gt)[alops])|pho)" );
 
@@ -505,6 +502,7 @@ wxTreeItemId PROJECT_TREE_PANE::addItemToProjectTree( const wxString& aName,
             bool                  haveFile = dir.GetFirst( &dir_filename );
 
             data->SetPopulated( true );
+
 #ifndef __WINDOWS__
             subdir_populated = aRecurse;
 #endif
@@ -799,12 +797,13 @@ void PROJECT_TREE_PANE::onRight( wxTreeEvent& Event )
     {
         popup_menu.AppendSeparator();
         AddMenuItem( &popup_menu, ID_PROJECT_PRINT,
+
 #ifdef __APPLE__
-                _( "Print..." ),
+                     _( "Print..." ),
 #else
-                _( "Print" ),
+                     _( "Print" ),
 #endif
-                _( "Print the contents of the file" ), KiBitmap( BITMAPS::print_button ) );
+                     _( "Print the contents of the file" ), KiBitmap( BITMAPS::print_button ) );
     }
 
     if( popup_menu.GetMenuItemCount() > 0 )
@@ -969,6 +968,7 @@ void PROJECT_TREE_PANE::onExpand( wxTreeEvent& Event )
             }
 
             itemData->SetPopulated( true );       // set state to populated
+
 #ifndef __WINDOWS__
             subdir_populated = true;
 #endif
@@ -1097,19 +1097,19 @@ void PROJECT_TREE_PANE::onFileSystemEvent( wxFileSystemWatcherEvent& event )
     switch( event.GetChangeType() )
     {
     case wxFSW_EVENT_CREATE:
-        {
-            wxTreeItemId newitem = addItemToProjectTree( pathModified.GetFullPath(), root_id,
-                                                         nullptr, true );
+    {
+        wxTreeItemId newitem =
+                addItemToProjectTree( pathModified.GetFullPath(), root_id, nullptr, true );
 
-            // If we are in the process of renaming a file, select the new one
-            // This is needed for MSW and OSX, since we don't get RENAME events from them, just a
-            // pair of DELETE and CREATE events.
-            if( m_isRenaming && newitem.IsOk() )
-            {
-                m_TreeProject->SelectItem( newitem );
-                m_isRenaming = false;
-            }
+        // If we are in the process of renaming a file, select the new one
+        // This is needed for MSW and OSX, since we don't get RENAME events from them, just a
+        // pair of DELETE and CREATE events.
+        if( m_isRenaming && newitem.IsOk() )
+        {
+            m_TreeProject->SelectItem( newitem );
+            m_isRenaming = false;
         }
+    }
         break;
 
     case wxFSW_EVENT_DELETE:
@@ -1127,45 +1127,45 @@ void PROJECT_TREE_PANE::onFileSystemEvent( wxFileSystemWatcherEvent& event )
         break;
 
     case wxFSW_EVENT_RENAME :
+    {
+        const wxFileName& newpath = event.GetNewPath();
+        wxString newdir = newpath.GetPath();
+        wxString newfn = newpath.GetFullPath();
+
+        while( kid.IsOk() )
         {
-            const wxFileName& newpath = event.GetNewPath();
-            wxString newdir = newpath.GetPath();
-            wxString newfn = newpath.GetFullPath();
+            PROJECT_TREE_ITEM* itemData = GetItemIdData( kid );
 
-            while( kid.IsOk() )
+            if( itemData && itemData->GetFileName() == fn )
             {
-                PROJECT_TREE_ITEM* itemData = GetItemIdData( kid );
-
-                if( itemData && itemData->GetFileName() == fn )
-                {
-                    m_TreeProject->Delete( kid );
-                    break;
-                }
-
-                kid = m_TreeProject->GetNextChild( root_id, cookie );
+                m_TreeProject->Delete( kid );
+                break;
             }
 
-            // Add the new item only if it is not the current project file (root item).
-            // Remember: this code is called by a wxFileSystemWatcherEvent event, and not always
-            // called after an actual file rename, and the cleanup code does not explore the
-            // root item, because it cannot be renamed by the user. Also, ensure the new file
-            // actually exists on the file system before it is readded. On Linux, moving a file
-            // to the trash can cause the same path to be returned in both the old and new paths
-            // of the event, even though the file isn't there anymore.
-            PROJECT_TREE_ITEM* rootData = GetItemIdData( root_id );
-
-            if( newpath.Exists() && ( newfn != rootData->GetFileName() ) )
-            {
-                wxTreeItemId newroot_id = findSubdirTreeItem( newdir );
-                wxTreeItemId newitem = addItemToProjectTree( newfn, newroot_id, nullptr, true );
-
-                // If the item exists, select it
-                if( newitem.IsOk() )
-                    m_TreeProject->SelectItem( newitem );
-            }
-
-            m_isRenaming = false;
+            kid = m_TreeProject->GetNextChild( root_id, cookie );
         }
+
+        // Add the new item only if it is not the current project file (root item).
+        // Remember: this code is called by a wxFileSystemWatcherEvent event, and not always
+        // called after an actual file rename, and the cleanup code does not explore the
+        // root item, because it cannot be renamed by the user. Also, ensure the new file
+        // actually exists on the file system before it is readded. On Linux, moving a file
+        // to the trash can cause the same path to be returned in both the old and new paths
+        // of the event, even though the file isn't there anymore.
+        PROJECT_TREE_ITEM* rootData = GetItemIdData( root_id );
+
+        if( newpath.Exists() && ( newfn != rootData->GetFileName() ) )
+        {
+            wxTreeItemId newroot_id = findSubdirTreeItem( newdir );
+            wxTreeItemId newitem = addItemToProjectTree( newfn, newroot_id, nullptr, true );
+
+            // If the item exists, select it
+            if( newitem.IsOk() )
+                m_TreeProject->SelectItem( newitem );
+        }
+
+        m_isRenaming = false;
+    }
         break;
     }
 

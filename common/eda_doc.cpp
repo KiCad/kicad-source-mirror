@@ -121,40 +121,33 @@ bool GetAssociatedDocument( wxWindow* aParent, const wxString& aDocName, PROJECT
     /* Compute the full file name */
     if( wxIsAbsolutePath( docname ) || aPaths == nullptr )
         fullfilename = docname;
-    /* If the file exists, this is a trivial case: return the filename
-     * "as this".  the name can be an absolute path, or a relative path
-     * like ./filename or ../<filename>
+    /* If the file exists, this is a trivial case: return the filename "as this".  the name can
+     * be an absolute path, or a relative path like ./filename or ../<filename>.
      */
     else if( wxFileName::FileExists( docname ) )
         fullfilename = docname;
     else
         fullfilename = aPaths->FindValidPath( docname );
 
-    wxString mask( wxT( "*" ) ), extension;
+    wxString extension;
 
 #ifdef __WINDOWS__
-    mask     += wxT( ".*" );
     extension = wxT( ".*" );
 #endif
 
     if( wxIsWild( fullfilename ) )
     {
-        fullfilename = EDA_FILE_SELECTOR( _( "Doc Files" ),
-                                          wxPathOnly( fullfilename ),
-                                          fullfilename,
-                                          extension,
-                                          mask,
-                                          aParent,
-                                          wxFD_OPEN,
-                                          true,
-                                          wxPoint( -1, -1 ) );
+        fullfilename = wxFileSelector( _( "Documentation File" ), wxPathOnly( fullfilename ),
+                                       fullfilename, extension, wxFileSelectorDefaultWildcardStr,
+                                       wxFD_OPEN, aParent );
+
         if( fullfilename.IsEmpty() )
             return false;
     }
 
     if( !wxFileExists( fullfilename ) )
     {
-        msg.Printf( _( "Doc File '%s' not found" ), docname );
+        msg.Printf( _( "Documentation file '%s' not found." ), docname );
         DisplayError( aParent, msg );
         return false;
     }
@@ -197,7 +190,7 @@ bool GetAssociatedDocument( wxWindow* aParent, const wxString& aDocName, PROJECT
 
     if( !success )
     {
-        msg.Printf( _( "Unknown MIME type for doc file '%s'" ), fullfilename );
+        msg.Printf( _( "Unknown MIME type for documentation file '%s'" ), fullfilename );
         DisplayError( aParent, msg );
     }
 

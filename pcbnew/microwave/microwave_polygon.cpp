@@ -27,7 +27,6 @@
 #include <confirm.h>
 #include <trigo.h>
 #include <kicad_string.h>
-#include <gestfich.h>
 #include <pcb_edit_frame.h>
 #include <dialog_helpers.h>
 #include <dialog_shim.h>
@@ -172,9 +171,8 @@ void MWAVE_POLYGONAL_SHAPE_DLG::ReadDataShapeDescr( wxCommandEvent& event )
     wxString fullFileName;
     wxString mask = wxFileSelectorDefaultWildcardStr;
 
-    fullFileName = EDA_FILE_SELECTOR( _( "Read Shape Description File" ), lastpath,
-                                      fullFileName, wxEmptyString, mask, this,
-                                      wxFD_OPEN, true );
+    fullFileName = wxFileSelector( _( "Shape Description File" ), lastpath,
+                                   fullFileName, wxEmptyString, mask, wxFD_OPEN, this );
 
     if( fullFileName.IsEmpty() )
         return;

@@ -193,8 +193,8 @@ const wxString PGM_BASE::AskUserForPreferredEditor( const wxString& aDefaultEdit
 
     // Show the modal editor and return the file chosen (may be empty if the user cancels
     // the dialog).
-    return EDA_FILE_SELECTOR( _( "Select Preferred Editor" ), path, name, ext, mask, nullptr,
-                              wxFD_OPEN | wxFD_FILE_MUST_EXIST, true );
+    return wxFileSelector( _( "Select Preferred Editor" ), path, name, wxT( "." ) + ext,
+                           mask, wxFD_OPEN | wxFD_FILE_MUST_EXIST, nullptr );
 }
 
 

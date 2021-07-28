@@ -49,56 +49,6 @@ void AddDelimiterString( wxString& string )
 }
 
 
-wxString EDA_FILE_SELECTOR( const wxString& aTitle,
-                            const wxString& aPath,
-                            const wxString& aFileName,
-                            const wxString& aExtension,
-                            const wxString& aWildcard,
-                            wxWindow*       aParent,
-                            int             aStyle,
-                            const bool      aKeepWorkingDirectory,
-                            const wxPoint&  aPosition,
-                            wxString*       aMruPath )
-{
-    wxString fullfilename;
-    wxString curr_cwd    = wxGetCwd();
-    wxString defaultname = aFileName;
-    wxString defaultpath = aPath;
-    wxString dotted_Ext = wxT(".") + aExtension;
-
-#ifdef __WINDOWS__
-    defaultname.Replace( wxT( "/" ), wxT( "\\" ) );
-    defaultpath.Replace( wxT( "/" ), wxT( "\\" ) );
-#endif
-
-    if( defaultpath.IsEmpty() )
-    {
-        if( aMruPath == nullptr )
-            defaultpath = wxGetCwd();
-        else
-            defaultpath = *aMruPath;
-    }
-
-    wxSetWorkingDirectory( defaultpath );
-
-    fullfilename = wxFileSelector( aTitle, defaultpath, defaultname,
-                                   dotted_Ext, aWildcard,
-                                   aStyle,         // open mode wxFD_OPEN, wxFD_SAVE ..
-                                   aParent, aPosition.x, aPosition.y );
-
-    if( aKeepWorkingDirectory )
-        wxSetWorkingDirectory( curr_cwd );
-
-    if( !fullfilename.IsEmpty() && aMruPath )
-    {
-        wxFileName fn = fullfilename;
-        *aMruPath = fn.GetPath();
-    }
-
-    return fullfilename;
-}
-
-
 wxString FindKicadFile( const wxString& shortname )
 {
     // Test the presence of the file in the directory shortname of

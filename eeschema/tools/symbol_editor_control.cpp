@@ -32,7 +32,7 @@
 #include <symbol_viewer_frame.h>
 #include <symbol_tree_model_adapter.h>
 #include <wildcards_and_files_ext.h>
-#include <gestfich.h>
+#include <wildcards_and_files_ext.h>
 #include <bitmaps/bitmap_types.h>
 #include <confirm.h>
 #include <wx/filedlg.h>
@@ -427,15 +427,15 @@ int SYMBOL_EDITOR_CONTROL::ExportSymbolAsSVG( const TOOL_EVENT& aEvent )
         return 0;
     }
 
-    wxString   file_ext = wxT( "svg" );
-    wxString   mask     = wxT( "*." ) + file_ext;
+    wxString   file_ext = SVGFileExtension;
     wxFileName fn( symbol->GetName() );
-    fn.SetExt( file_ext );
+    fn.SetExt( SVGFileExtension );
 
     wxString pro_dir = wxPathOnly( m_frame->Prj().GetProjectFullName() );
 
-    wxString fullFileName = EDA_FILE_SELECTOR( _( "Filename:" ), pro_dir, fn.GetFullName(),
-                                               file_ext, mask, m_frame, wxFD_SAVE, true );
+    wxString fullFileName = wxFileSelector( _( "SVG File Name" ), pro_dir, fn.GetFullName(),
+                                            SVGFileExtension, SVGFileWildcard(), wxFD_SAVE,
+                                            m_frame );
 
     if( !fullFileName.IsEmpty() )
     {
@@ -443,7 +443,7 @@ int SYMBOL_EDITOR_CONTROL::ExportSymbolAsSVG( const TOOL_EVENT& aEvent )
         PAGE_INFO pageTemp = pageSave;
 
         wxSize symbolSize = symbol->GetUnitBoundingBox( editFrame->GetUnit(),
-                                                      editFrame->GetConvert() ).GetSize();
+                                                        editFrame->GetConvert() ).GetSize();
 
         // Add a small margin to the plot bounding box
         pageTemp.SetWidthMils(  int( symbolSize.x * 1.2 ) );

@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2010 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -29,6 +29,7 @@
 #include <kicad_string.h>
 #include <eda_base_frame.h>
 #include <eda_draw_frame.h>
+#include <wildcards_and_files_ext.h>
 #include <settings/settings_manager.h>
 
 #include <tool/tool_manager.h>
@@ -49,6 +50,7 @@ struct hotkey_name_descr
     const wxChar* m_Name;
     int           m_KeyCode;
 };
+
 
 /* table giving the hotkey name from the hotkey code, for special keys
  * Note : when modifiers (ATL, SHIFT, CTRL) do not modify
@@ -119,6 +121,7 @@ static struct hotkey_name_descr hotkeyNameList[] =
     // Do not change this line: end of list
     { wxT( "" ),             KEY_NON_FOUND                                            }
 };
+
 
 // name of modifier keys.
 // Note: the Ctrl key is Cmd key on Mac OS X.
@@ -326,7 +329,7 @@ void ReadHotKeyConfig( const wxString& aFileName, std::map<std::string, int>& aH
     if( fileName.IsEmpty() )
     {
         wxFileName fn( "user" );
-        fn.SetExt( DEFAULT_HOTKEY_FILENAME_EXT );
+        fn.SetExt( HotkeyFileExtension );
         fn.SetPath( SETTINGS_MANAGER::GetUserSettingsPath() );
         fileName = fn.GetFullPath();
     }
@@ -362,7 +365,7 @@ int WriteHotKeyConfig( const std::map<std::string, TOOL_ACTION*>& aActionMap )
     std::map<std::string, int> hotkeys;
     wxFileName fn( "user" );
 
-    fn.SetExt( DEFAULT_HOTKEY_FILENAME_EXT );
+    fn.SetExt( HotkeyFileExtension );
     fn.SetPath( SETTINGS_MANAGER::GetUserSettingsPath() );
 
     // Read the existing config (all hotkeys)
@@ -408,7 +411,7 @@ int ReadLegacyHotkeyConfigFile( const wxString& aFilename, std::map<std::string,
 {
     wxFileName fn( aFilename );
 
-    fn.SetExt( DEFAULT_HOTKEY_FILENAME_EXT );
+    fn.SetExt( HotkeyFileExtension );
     fn.SetPath( SETTINGS_MANAGER::GetUserSettingsPath() );
 
     if( !wxFile::Exists( fn.GetFullPath() ) )

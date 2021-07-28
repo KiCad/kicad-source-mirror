@@ -376,8 +376,8 @@ void NETLIST_DIALOG::InstallCustomPages()
 }
 
 
-NETLIST_PAGE_DIALOG* NETLIST_DIALOG::AddOneCustomPage( const wxString & aTitle,
-                                                       const wxString & aCommandString,
+NETLIST_PAGE_DIALOG* NETLIST_DIALOG::AddOneCustomPage( const wxString& aTitle,
+                                                       const wxString& aCommandString,
                                                        NETLIST_TYPE_ID aNetTypeId )
 {
     NETLIST_PAGE_DIALOG* currPage = new NETLIST_PAGE_DIALOG( m_NoteBook, aTitle, aNetTypeId );
@@ -686,9 +686,11 @@ void NETLIST_DIALOG_ADD_GENERATOR::OnBrowseGenerators( wxCommandEvent& event )
 #else
     Path = PATHS::GetOSXKicadDataDir() + wxT( "/plugins" );
 #endif
-    FullFileName = EDA_FILE_SELECTOR( _( "Generator files:" ), Path, FullFileName,
-                                      wxEmptyString, wxFileSelectorDefaultWildcardStr,
-                                      this, wxFD_OPEN, true );
+
+    FullFileName = wxFileSelector( _( "Generator File" ), Path, FullFileName,
+                                   wxEmptyString, wxFileSelectorDefaultWildcardStr,
+                                   wxFD_OPEN, this );
+
     if( FullFileName.IsEmpty() )
         return;
 

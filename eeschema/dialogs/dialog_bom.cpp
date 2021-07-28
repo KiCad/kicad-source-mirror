@@ -417,9 +417,9 @@ wxString DIALOG_BOM::chooseGenerator()
     if( lastPath.IsEmpty() )
         lastPath = PATHS::GetUserPluginsPath();
 
-    wxString fullFileName = EDA_FILE_SELECTOR( _( "Generator files:" ), lastPath, wxEmptyString,
-                                               wxEmptyString, wxFileSelectorDefaultWildcardStr,
-                                               this, wxFD_OPEN, true );
+    wxString fullFileName = wxFileSelector( _( "Generator File" ), lastPath, wxEmptyString,
+                                            wxEmptyString, wxFileSelectorDefaultWildcardStr,
+                                            wxFD_OPEN, this );
 
     return fullFileName;
 }
