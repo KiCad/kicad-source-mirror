@@ -52,7 +52,7 @@ enum MODELS_TABLE_COLUMNS
 };
 
 PANEL_FP_PROPERTIES_3D_MODEL::PANEL_FP_PROPERTIES_3D_MODEL(
-        FOOTPRINT_EDIT_FRAME* aFrame, FOOTPRINT* aFootprint, DIALOG_SHIM* aDialogParent,
+        PCB_BASE_EDIT_FRAME* aFrame, FOOTPRINT* aFootprint, DIALOG_SHIM* aDialogParent,
         wxWindow* aParent, wxWindowID aId, const wxPoint& aPos, const wxSize& aSize, long aStyle,
         const wxString& aName ) :
     PANEL_FP_PROPERTIES_3D_MODEL_BASE( aParent, aId, aPos, aSize, aStyle, aName ),
@@ -119,6 +119,12 @@ PANEL_FP_PROPERTIES_3D_MODEL::~PANEL_FP_PROPERTIES_3D_MODEL()
 }
 
 
+bool PANEL_FP_PROPERTIES_3D_MODEL::TransferDataToWindow()
+{
+    ReloadModelsFromFootprint();
+    return true;
+}
+
 bool PANEL_FP_PROPERTIES_3D_MODEL::TransferDataFromWindow()
 {
     // Only commit changes in the editor, not the models
@@ -163,9 +169,9 @@ void PANEL_FP_PROPERTIES_3D_MODEL::ReloadModelsFromFootprint()
         updateValidateStatus( row );
     }
 
-    select3DModel( 0 );   // will clamp idx within bounds
-    m_previewPane->UpdateDummyFootprint();
+    select3DModel( 0 );
 
+    m_previewPane->UpdateDummyFootprint();
     m_modelsGrid->SetColSize( COL_SHOWN, m_modelsGrid->GetVisibleWidth( COL_SHOWN, true, false, false ) );
 
     Layout();
@@ -210,6 +216,7 @@ void PANEL_FP_PROPERTIES_3D_MODEL::On3DModelCellChanged( wxGridEvent& aEvent )
         filename.Replace( "\r", "" );
         filename.Replace( "\t", "" );
 
+        // The user is warned about failed validation through the updateValidateStatus call below
         if( filename.empty() || !res->ValidateFileName( filename, hasAlias ) )
             aEvent.Veto();
 

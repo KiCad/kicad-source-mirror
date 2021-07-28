@@ -30,8 +30,8 @@
 #include <vector>
 
 class DIALOG_SHIM;
-class FOOTPRINT_EDIT_FRAME;
 class PANEL_PREVIEW_3D_MODEL;
+class PCB_BASE_EDIT_FRAME;
 
 enum class MODEL_VALIDATE_ERRORS
 {
@@ -45,7 +45,7 @@ class PANEL_FP_PROPERTIES_3D_MODEL : public PANEL_FP_PROPERTIES_3D_MODEL_BASE
 
 public:
 
-    PANEL_FP_PROPERTIES_3D_MODEL( FOOTPRINT_EDIT_FRAME* aFrame, FOOTPRINT* aFootprint,
+    PANEL_FP_PROPERTIES_3D_MODEL( PCB_BASE_EDIT_FRAME* aFrame, FOOTPRINT* aFootprint,
                                   DIALOG_SHIM* aDialogParent, wxWindow* aParent,
                                   wxWindowID aId = wxID_ANY,
                                   const wxPoint& aPos = wxDefaultPosition,
@@ -55,6 +55,7 @@ public:
 
     ~PANEL_FP_PROPERTIES_3D_MODEL() override;
 
+    bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
 
     void ReloadModelsFromFootprint();
@@ -84,14 +85,14 @@ private:
     void select3DModel( int aModelIdx );
 
 private:
-    DIALOG_SHIM*             m_parentDialog;
-    FOOTPRINT_EDIT_FRAME*    m_frame;
-    FOOTPRINT*               m_footprint;
+    DIALOG_SHIM*            m_parentDialog;
+    PCB_BASE_EDIT_FRAME*    m_frame;
+    FOOTPRINT*              m_footprint;
 
-    std::vector<FP_3DMODEL>  m_shapes3D_list;
-    PANEL_PREVIEW_3D_MODEL*  m_previewPane;
+    std::vector<FP_3DMODEL> m_shapes3D_list;
+    PANEL_PREVIEW_3D_MODEL* m_previewPane;
 
-    bool                     m_inSelect;
+    bool                    m_inSelect;
 };
 
 #endif // PANEL_FP_PROPERTIES_3D_MODEL_H_

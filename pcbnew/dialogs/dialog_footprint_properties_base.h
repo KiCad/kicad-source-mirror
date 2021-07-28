@@ -109,14 +109,6 @@ class DIALOG_FOOTPRINT_PROPERTIES_BASE : public DIALOG_SHIM
 		wxStaticText* m_staticTextInfoPaste;
 		wxStaticText* m_staticText16;
 		wxChoice* m_ZoneConnectionChoice;
-		wxPanel* m_Panel3D;
-		wxBoxSizer* bSizerMain3D;
-		WX_GRID* m_modelsGrid;
-		wxBitmapButton* m_buttonAdd;
-		wxBitmapButton* m_buttonBrowse;
-		wxBitmapButton* m_buttonRemove;
-		wxButton* m_buttonCfgPath;
-		wxBoxSizer* bLowerSizer3D;
 		wxStaticText* m_libraryIDLabel;
 		wxTextCtrl* m_tcLibraryID;
 		wxStdDialogButtonSizer* m_sdbSizerStdButtons;
@@ -136,12 +128,6 @@ class DIALOG_FOOTPRINT_PROPERTIES_BASE : public DIALOG_SHIM
 		virtual void ChangeFootprint( wxCommandEvent& event ) { event.Skip(); }
 		virtual void EditFootprint( wxCommandEvent& event ) { event.Skip(); }
 		virtual void EditLibraryFootprint( wxCommandEvent& event ) { event.Skip(); }
-		virtual void On3DModelCellChanged( wxGridEvent& event ) { event.Skip(); }
-		virtual void On3DModelSelected( wxGridEvent& event ) { event.Skip(); }
-		virtual void OnAdd3DRow( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnAdd3DModel( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnRemove3DModel( wxCommandEvent& event ) { event.Skip(); }
-		virtual void Cfg3DPath( wxCommandEvent& event ) { event.Skip(); }
 
 
 	public:

@@ -83,7 +83,7 @@ DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR(
     m_delayedFocusPage = NOTEBOOK_PAGES::PAGE_UNKNOWN;
 
     // Give an icon
-    wxIcon  icon;
+    wxIcon icon;
     icon.CopyFromBitmap( KiBitmap( BITMAPS::icon_modedit ) );
     SetIcon( icon );
 
@@ -92,7 +92,6 @@ DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR(
 
     m_itemsGrid->SetTable( m_texts );
     m_itemsGrid->PushEventHandler( new GRID_TRICKS( m_itemsGrid ) );
-
 
     // Show/hide columns according to the user's preference
     m_itemsGrid->ShowHideColumns( m_frame->GetSettings()->m_FootprintTextShownColumns );
@@ -126,14 +125,6 @@ DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR(
     {
         SetInitialFocus( m_NetClearanceCtrl );
     }
-/*    else
-    {
-        m_delayedFocusGrid = m_modelsGrid;
-        m_delayedFocusRow = 0;
-        m_delayedFocusColumn = 0;
-        m_delayedFocusPage = NOTEBOOK_PAGES::PAGE_3D_MODELS;
-    }
-    */
 
     m_sdbSizerStdButtonsOK->SetDefault();
 
@@ -188,11 +179,11 @@ bool DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::TransferDataToWindow()
     if( !m_PanelGeneral->TransferDataToWindow() )
         return false;
 
+    // Add the models to the panel
     if( !m_3dPanel->TransferDataToWindow() )
         return false;
 
-    // Module Texts
-
+    // Footprint Texts
     m_texts->push_back( m_footprint->Reference() );
     m_texts->push_back( m_footprint->Value() );
 
@@ -204,7 +195,7 @@ bool DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::TransferDataToWindow()
             m_texts->push_back( *textItem );
     }
 
-    // notify the grid
+    // Notify the grid
     wxGridTableMessage tmsg( m_texts, wxGRIDTABLE_NOTIFY_ROWS_APPENDED, m_texts->GetNumberRows() );
     m_itemsGrid->ProcessTableMessage( tmsg );
 
@@ -247,22 +238,11 @@ bool DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::TransferDataToWindow()
     switch( m_footprint->GetZoneConnection() )
     {
     default:
-    case ZONE_CONNECTION::INHERITED:
-        m_ZoneConnectionChoice->SetSelection( 0 );
-        break;
-    case ZONE_CONNECTION::FULL:
-        m_ZoneConnectionChoice->SetSelection( 1 );
-        break;
-    case ZONE_CONNECTION::THERMAL:
-        m_ZoneConnectionChoice->SetSelection( 2 );
-        break;
-    case ZONE_CONNECTION::NONE:
-        m_ZoneConnectionChoice->SetSelection( 3 );
-        break;
+    case ZONE_CONNECTION::INHERITED: m_ZoneConnectionChoice->SetSelection( 0 ); break;
+    case ZONE_CONNECTION::FULL:      m_ZoneConnectionChoice->SetSelection( 1 ); break;
+    case ZONE_CONNECTION::THERMAL:   m_ZoneConnectionChoice->SetSelection( 2 ); break;
+    case ZONE_CONNECTION::NONE:      m_ZoneConnectionChoice->SetSelection( 3 ); break;
     }
-
-    // 3D Settings
-    m_3dPanel->ReloadModelsFromFootprint();
 
     // Items grid
     for( int col = 0; col < m_itemsGrid->GetNumberCols(); col++ )
@@ -374,7 +354,8 @@ bool DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::TransferDataFromWindow()
     if( !m_itemsGrid->CommitPendingChanges() )
         return false;
 
-    // This only commits the editor, model updating is done below
+    // This only commits the editor, model updating is done below so it is inside
+    // the commit
     if( !m_3dPanel->TransferDataFromWindow() )
         return false;
 
@@ -555,7 +536,9 @@ void DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::OnDeleteField( wxCommandEvent& event
     int curRow = m_itemsGrid->GetGridCursorRow();
 
     if( curRow < 0 )
+    {
         return;
+    }
     else if( curRow < 2 )
     {
         DisplayError( nullptr, _( "Reference and value are mandatory." ) );
@@ -589,7 +572,7 @@ void DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::adjustGridColumns( int aWidth )
     if( itemsWidth > 0 )
     {
         m_itemsGrid->SetColSize( 0, std::max( itemsWidth,
-                m_itemsGrid->GetVisibleWidth( 0, true, false, false ) ) );
+                                 m_itemsGrid->GetVisibleWidth( 0, true, false, false ) ) );
     }
 
     // Update the width of the 3D panel
@@ -601,11 +584,6 @@ void DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::OnUpdateUI( wxUpdateUIEvent& event )
 {
     if( !m_itemsGrid->IsCellEditControlShown() )
         adjustGridColumns( m_itemsGrid->GetRect().GetWidth() );
-
-    if( m_itemsGrid->IsCellEditControlShown() )
-    {
-        // Currently: nothing to do
-    }
 
     // Handle a delayed focus.  The delay allows us to:
     // a) change focus when the error was triggered from within a killFocus handler
