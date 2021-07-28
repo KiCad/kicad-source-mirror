@@ -241,7 +241,7 @@ wxString SCH_SYMBOL::GetSchSymbolLibraryName() const
     if( !m_schLibSymbolName.IsEmpty() )
         return m_schLibSymbolName;
     else
-        return m_lib_id.Format().wx_str();
+        return m_lib_id.Format();
 }
 
 

@@ -150,7 +150,7 @@ void SYMBOL_EDIT_FRAME::updateTitle()
         if( GetScreen() && GetScreen()->IsContentModified() )
             title = wxT( "*" );
 
-        title += FROM_UTF8( GetCurSymbol()->GetLibId().Format().c_str() );
+        title += UnescapeString( GetCurSymbol()->GetLibId().Format() );
 
         if( m_libMgr && m_libMgr->IsLibraryReadOnly( GetCurLib() ) )
             title += wxS( " " ) + _( "[Read Only Library]" );

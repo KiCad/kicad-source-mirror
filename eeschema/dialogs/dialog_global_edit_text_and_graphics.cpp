@@ -315,7 +315,7 @@ void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::visitItem( const SCH_SHEET_PATH& aShe
     {
         if( aItem->Type() == SCH_SYMBOL_T )
         {
-            wxString id = static_cast<SCH_SYMBOL*>( aItem )->GetLibId().Format();
+            wxString id = UnescapeString( static_cast<SCH_SYMBOL*>( aItem )->GetLibId().Format() );
 
             if( !WildCompareString( m_symbolFilter->GetValue(), id, false ) )
                 return;

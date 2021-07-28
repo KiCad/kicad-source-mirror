@@ -557,7 +557,7 @@ void SCH_SCREEN::UpdateSymbolLinks( REPORTER* aReporter )
     // Clear all existing symbol links.
     clearLibSymbols();
 
-    for( auto symbol : symbols )
+    for( SCH_SYMBOL* symbol : symbols )
     {
         LIB_SYMBOL* tmp = nullptr;
         libSymbol.reset();
@@ -569,11 +569,10 @@ void SCH_SCREEN::UpdateSymbolLinks( REPORTER* aReporter )
         {
             if( aReporter )
             {
-                msg.Printf( _( "Setting schematic symbol '%s %s' library identifier "
-                               "to '%s'. " ),
+                msg.Printf( _( "Setting schematic symbol '%s %s' library identifier to '%s'." ),
                             symbol->GetField( REFERENCE_FIELD )->GetText(),
                             symbol->GetField( VALUE_FIELD )->GetText(),
-                            symbol->GetLibId().Format().wx_str() );
+                            UnescapeString( symbol->GetLibId().Format() ) );
                 aReporter->ReportTail( msg, RPT_SEVERITY_INFO );
             }
 
@@ -586,9 +585,9 @@ void SCH_SCREEN::UpdateSymbolLinks( REPORTER* aReporter )
         {
             if( aReporter )
             {
-                msg.Printf( _( "Schematic symbol reference '%s' library identifier is not "
-                               "valid.  Unable to link library symbol." ),
-                            symbol->GetLibId().Format().wx_str() );
+                msg.Printf( _( "Schematic symbol reference '%s' library identifier is not valid. "
+                               "Unable to link library symbol." ),
+                            UnescapeString( symbol->GetLibId().Format() ) );
                 aReporter->ReportTail( msg, RPT_SEVERITY_WARNING );
             }
 
@@ -602,8 +601,8 @@ void SCH_SCREEN::UpdateSymbolLinks( REPORTER* aReporter )
         {
             if( aReporter )
             {
-                msg.Printf( _( "Symbol library '%s' not found and no fallback cache "
-                               "library available.  Unable to link library symbol." ),
+                msg.Printf( _( "Symbol library '%s' not found and no fallback cache library "
+                               "available.  Unable to link library symbol." ),
                             symbol->GetLibId().GetLibNickname().wx_str() );
                 aReporter->ReportTail( msg, RPT_SEVERITY_WARNING );
             }
@@ -622,7 +621,7 @@ void SCH_SCREEN::UpdateSymbolLinks( REPORTER* aReporter )
                 if( aReporter )
                 {
                     msg.Printf( _( "I/O error %s resolving library symbol %s" ), ioe.What(),
-                                symbol->GetLibId().Format().wx_str() );
+                                UnescapeString( symbol->GetLibId().Format() ) );
                     aReporter->ReportTail( msg, RPT_SEVERITY_ERROR );
                 }
             }
@@ -644,7 +643,7 @@ void SCH_SCREEN::UpdateSymbolLinks( REPORTER* aReporter )
                 msg.Printf( _( "Falling back to cache to set symbol '%s:%s' link '%s'." ),
                             symbol->GetField( REFERENCE_FIELD )->GetText(),
                             symbol->GetField( VALUE_FIELD )->GetText(),
-                            id );
+                            UnescapeString( id ) );
                 aReporter->ReportTail( msg, RPT_SEVERITY_WARNING );
             }
 
@@ -665,7 +664,7 @@ void SCH_SCREEN::UpdateSymbolLinks( REPORTER* aReporter )
                 msg.Printf( _( "Setting schematic symbol '%s %s' library identifier to '%s'." ),
                             symbol->GetField( REFERENCE_FIELD )->GetText(),
                             symbol->GetField( VALUE_FIELD )->GetText(),
-                            symbol->GetLibId().Format().wx_str() );
+                            UnescapeString( symbol->GetLibId().Format() ) );
                 aReporter->ReportTail( msg, RPT_SEVERITY_INFO );
             }
         }

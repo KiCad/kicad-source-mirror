@@ -75,10 +75,10 @@ DIALOG_CHANGE_SYMBOLS::DIALOG_CHANGE_SYMBOLS( SCH_EDIT_FRAME* aParent, SCH_SYMBO
         if( m_mode == MODE::CHANGE )
             m_matchBySelection->SetLabel( _( "Change selected symbol(s)" ) );
 
-        m_newId->AppendText( FROM_UTF8( m_symbol->GetLibId().Format().c_str() ) );
+        m_newId->ChangeValue( UnescapeString( m_symbol->GetLibId().Format() ) );
         m_specifiedReference->ChangeValue( m_symbol->GetRef( currentSheet ) );
         m_specifiedValue->ChangeValue( m_symbol->GetValue( currentSheet, false ) );
-        m_specifiedId->ChangeValue( FROM_UTF8( m_symbol->GetLibId().Format().c_str() ) );
+        m_specifiedId->ChangeValue( UnescapeString( m_symbol->GetLibId().Format() ) );
     }
     else
     {
@@ -233,15 +233,25 @@ DIALOG_CHANGE_SYMBOLS::~DIALOG_CHANGE_SYMBOLS()
 }
 
 
+wxString getLibIdValue( const wxTextCtrl* aCtrl )
+{
+    wxString rawValue = aCtrl->GetValue();
+    wxString itemName;
+    wxString libName = rawValue.BeforeFirst( ':', &itemName );
+
+    return EscapeString( libName, CTX_LIBID ) + ':' + EscapeString( itemName, CTX_LIBID );
+}
+
+
 void DIALOG_CHANGE_SYMBOLS::launchMatchIdSymbolBrowser( wxCommandEvent& aEvent )
 {
-    wxString newName = m_specifiedId->GetValue();
+    wxString newName = getLibIdValue( m_specifiedId );
 
     KIWAY_PLAYER* frame = Kiway().Player( FRAME_SCH_VIEWER_MODAL, true );
 
     if( frame->ShowModal( &newName, this ) )
     {
-        m_specifiedId->SetValue( newName );
+        m_specifiedId->SetValue( UnescapeString( newName ) );
         updateFieldsList();
     }
 
@@ -251,13 +261,13 @@ void DIALOG_CHANGE_SYMBOLS::launchMatchIdSymbolBrowser( wxCommandEvent& aEvent )
 
 void DIALOG_CHANGE_SYMBOLS::launchNewIdSymbolBrowser( wxCommandEvent& aEvent )
 {
-    wxString newName = m_newId->GetValue();
+    wxString newName = getLibIdValue( m_newId );
 
     KIWAY_PLAYER* frame = Kiway().Player( FRAME_SCH_VIEWER_MODAL, true );
 
     if( frame->ShowModal( &newName, this ) )
     {
-        m_newId->SetValue( newName );
+        m_newId->SetValue( UnescapeString( newName ) );
         updateFieldsList();
     }
 
@@ -323,7 +333,7 @@ void DIALOG_CHANGE_SYMBOLS::updateFieldsList()
     {
         LIB_ID newId;
 
-        newId.Parse( m_newId->GetValue() );
+        newId.Parse( getLibIdValue( m_newId ) );
 
         if( newId.IsValid() )
         {
@@ -421,7 +431,7 @@ bool DIALOG_CHANGE_SYMBOLS::isMatch( SCH_SYMBOL* aSymbol, SCH_SHEET_PATH* aInsta
     }
     else if( m_matchById )
     {
-        id.Parse( m_specifiedId->GetValue() );
+        id.Parse( getLibIdValue( m_specifiedId ) );
         return aSymbol->GetLibId() == id;
     }
 
@@ -442,7 +452,7 @@ bool DIALOG_CHANGE_SYMBOLS::processMatchingSymbols()
 
     if( m_mode == MODE::CHANGE )
     {
-        newId.Parse( m_newId->GetValue() );
+        newId.Parse( getLibIdValue( m_newId ) );
 
         if( !newId.IsValid() )
             return false;
@@ -515,15 +525,15 @@ bool DIALOG_CHANGE_SYMBOLS::processSymbol( SCH_SYMBOL* aSymbol, const SCH_SHEET_
         {
             msg.Printf( _( "Update symbol %s from '%s' to '%s'" ),
                         references,
-                        oldId.Format().c_str(),
-                        aNewId.Format().c_str() );
+                        UnescapeString( oldId.Format() ),
+                        UnescapeString( aNewId.Format() ) );
         }
         else
         {
             msg.Printf( _( "Update symbols %s from '%s' to '%s'" ),
                         references,
-                        oldId.Format().c_str(),
-                        aNewId.Format().c_str() );
+                        UnescapeString( oldId.Format() ),
+                        UnescapeString( aNewId.Format() ) );
         }
     }
     else
@@ -532,15 +542,15 @@ bool DIALOG_CHANGE_SYMBOLS::processSymbol( SCH_SYMBOL* aSymbol, const SCH_SHEET_
         {
             msg.Printf( _( "Change symbol %s from '%s' to '%s'" ),
                         references,
-                        oldId.Format().c_str(),
-                        aNewId.Format().c_str() );
+                        UnescapeString( oldId.Format() ),
+                        UnescapeString( aNewId.Format() ) );
         }
         else
         {
             msg.Printf( _( "Change symbols %s from '%s' to '%s'" ),
                         references,
-                        oldId.Format().c_str(),
-                        aNewId.Format().c_str() );
+                        UnescapeString( oldId.Format() ),
+                        UnescapeString( aNewId.Format() ) );
         }
     }
 
