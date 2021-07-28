@@ -27,23 +27,21 @@ class DRC_RULE;
 class DRC_LENGTH_REPORT
 {
 public:
-    typedef std::set<BOARD_CONNECTED_ITEM*> CITEMS;
-
     struct ENTRY
     {
-        int                   netcode;
-        wxString              netname;
-        BOARD_CONNECTED_ITEM* fromItem;
-        BOARD_CONNECTED_ITEM* toItem;
-        DRC_RULE*             matchingRule;
-        wxString              from;
-        wxString              to;
-        CITEMS                items;
-        int                   viaCount;
-        int                   totalRoute;
-        int                   totalVia;
-        int                   totalPadToDie;
-        int                   total;
+        int                             netcode;
+        wxString                        netname;
+        BOARD_CONNECTED_ITEM*           fromItem;
+        BOARD_CONNECTED_ITEM*           toItem;
+        DRC_RULE*                       matchingRule;
+        wxString                        from;
+        wxString                        to;
+        std::set<BOARD_CONNECTED_ITEM*> items;
+        int                             viaCount;
+        int                             totalRoute;
+        int                             totalVia;
+        int                             totalPadToDie;
+        int                             total;
     };
 
     DRC_LENGTH_REPORT()

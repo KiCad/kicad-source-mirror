@@ -196,7 +196,7 @@ bool ZONE::UnFill()
         pair.second.RemoveAllContours();
     }
 
-    for( std::pair<const PCB_LAYER_ID, ZONE_SEGMENT_FILL>& pair : m_FillSegmList )
+    for( std::pair<const PCB_LAYER_ID, std::vector<SEG> >& pair : m_FillSegmList )
     {
         change |= !pair.second.empty();
         pair.second.clear();
@@ -678,7 +678,7 @@ void ZONE::Move( const wxPoint& offset )
     for( std::pair<const PCB_LAYER_ID, SHAPE_POLY_SET>& pair : m_FilledPolysList )
         pair.second.Move( offset );
 
-    for( std::pair<const PCB_LAYER_ID, ZONE_SEGMENT_FILL>& pair : m_FillSegmList )
+    for( std::pair<const PCB_LAYER_ID, std::vector<SEG> >& pair : m_FillSegmList )
     {
         for( SEG& seg : pair.second )
         {
@@ -715,7 +715,7 @@ void ZONE::Rotate( const wxPoint& aCentre, double aAngle )
     for( std::pair<const PCB_LAYER_ID, SHAPE_POLY_SET>& pair : m_FilledPolysList )
         pair.second.Rotate( aAngle, VECTOR2I( aCentre ) );
 
-    for( std::pair<const PCB_LAYER_ID, ZONE_SEGMENT_FILL>& pair : m_FillSegmList )
+    for( std::pair<const PCB_LAYER_ID, std::vector<SEG> >& pair : m_FillSegmList )
     {
         for( SEG& seg : pair.second )
         {
@@ -752,7 +752,7 @@ void ZONE::Mirror( const wxPoint& aMirrorRef, bool aMirrorLeftRight )
     for( std::pair<const PCB_LAYER_ID, SHAPE_POLY_SET>& pair : m_FilledPolysList )
         pair.second.Mirror( aMirrorLeftRight, !aMirrorLeftRight, VECTOR2I( aMirrorRef ) );
 
-    for( std::pair<const PCB_LAYER_ID, ZONE_SEGMENT_FILL>& pair : m_FillSegmList )
+    for( std::pair<const PCB_LAYER_ID, std::vector<SEG> >& pair : m_FillSegmList )
     {
         for( SEG& seg : pair.second )
         {

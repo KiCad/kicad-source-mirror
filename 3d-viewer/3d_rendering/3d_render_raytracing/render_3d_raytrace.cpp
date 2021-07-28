@@ -1567,8 +1567,6 @@ SFVEC3F RENDER_3D_RAYTRACE::shadeHit( const SFVEC3F& aBgColor, const RAY& aRay, 
 
     const SFVEC3F diffuseColorObj = aHitInfo.pHitObject->GetDiffuseColor( aHitInfo );
 
-    const LIST_LIGHT& lightList = m_lights.GetList();
-
 #if USE_EXPERIMENTAL_SOFT_SHADOWS
     const bool is_aa_enabled = m_boardAdapter.GetFlag( FL_RENDER_RAYTRACING_ANTI_ALIASING ) &&
                                (!m_isPreview);
@@ -1578,10 +1576,8 @@ SFVEC3F RENDER_3D_RAYTRACE::shadeHit( const SFVEC3F& aBgColor, const RAY& aRay, 
 
     unsigned int nr_lights_that_can_cast_shadows = 0;
 
-    for( LIST_LIGHT::const_iterator ii = lightList.begin(); ii != lightList.end(); ++ii )
+    for( const LIGHT* light : m_lights )
     {
-        const LIGHT* light = (LIGHT *)*ii;
-
         SFVEC3F vectorToLight;
         SFVEC3F colorOfLight;
         float   distToLight;

@@ -43,7 +43,6 @@ class BOARD;
 class ZONE;
 class MSG_PANEL_ITEM;
 
-typedef std::vector<SEG> ZONE_SEGMENT_FILL;
 
 /**
  * Handle a list of polygons defining a copper zone.
@@ -306,13 +305,13 @@ public:
     int GetLocalFlags() const { return m_localFlgs; }
     void SetLocalFlags( int aFlags ) { m_localFlgs = aFlags; }
 
-    ZONE_SEGMENT_FILL& FillSegments( PCB_LAYER_ID aLayer )
+    std::vector<SEG>& FillSegments( PCB_LAYER_ID aLayer )
     {
         wxASSERT( m_FillSegmList.count( aLayer ) );
         return m_FillSegmList.at( aLayer );
     }
 
-    const ZONE_SEGMENT_FILL& FillSegments( PCB_LAYER_ID aLayer ) const
+    const std::vector<SEG>& FillSegments( PCB_LAYER_ID aLayer ) const
     {
         wxASSERT( m_FillSegmList.count( aLayer ) );
         return m_FillSegmList.at( aLayer );
@@ -711,7 +710,7 @@ public:
 
     void AddPolygon( const SHAPE_LINE_CHAIN& aPolygon );
 
-    void SetFillSegments( PCB_LAYER_ID aLayer, const ZONE_SEGMENT_FILL& aSegments )
+    void SetFillSegments( PCB_LAYER_ID aLayer, const std::vector<SEG>& aSegments )
     {
         m_FillSegmList[aLayer] = aSegments;
     }
@@ -905,7 +904,7 @@ protected:
      * Segments used to fill the zone (#m_FillMode ==1 ), when fill zone by segment is used.
      * In this case the segments have #m_ZoneMinThickness width.
      */
-    std::map<PCB_LAYER_ID, ZONE_SEGMENT_FILL> m_FillSegmList;
+    std::map<PCB_LAYER_ID, std::vector<SEG> > m_FillSegmList;
 
     /* set of filled polygons used to draw a zone as a filled area.
      * from outlines (m_Poly) but unlike m_Poly these filled polygons have no hole

@@ -55,7 +55,7 @@ wxString s_bomHelpInfo =
 
 // BOM "plugins" are not actually plugins. They are external tools
 // (scripts or executables) called by this dialog.
-typedef std::vector<BOM_GENERATOR_HANDLER::PTR> BOM_GENERATOR_ARRAY;
+typedef std::vector< std::unique_ptr<BOM_GENERATOR_HANDLER> > BOM_GENERATOR_ARRAY;
 
 
 // The main dialog frame to run scripts to build bom

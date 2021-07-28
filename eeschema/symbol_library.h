@@ -183,7 +183,6 @@ struct LibSymbolMapSort
 /// Symbol map used by symbol library object.
 
 typedef std::map< wxString, LIB_SYMBOL*, LibSymbolMapSort > LIB_SYMBOL_MAP;
-typedef std::vector< LIB_SYMBOL* >                          LIB_SYMBOLS;
 typedef boost::ptr_vector< SYMBOL_LIB >                     SYMBOL_LIBS_BASE;
 
 

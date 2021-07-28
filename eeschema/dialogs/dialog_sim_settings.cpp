@@ -223,7 +223,7 @@ bool DIALOG_SIM_SETTINGS::TransferDataFromWindow()
     }
     else if( page == m_pgNoise )        // Noise analysis
     {
-        const NETLIST_EXPORTER_PSPICE::NET_INDEX_MAP& netMap = m_exporter->GetNetIndexMap();
+        const std::map<wxString, int>& netMap = m_exporter->GetNetIndexMap();
 
         if( empty( m_noiseMeas ) || empty( m_noiseSrc ) || empty( m_noisePointsNumber )
                 || empty( m_noiseFreqStart ) || empty( m_noiseFreqStop ) )

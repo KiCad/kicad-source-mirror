@@ -5255,7 +5255,7 @@ ZONE* PCB_PARSER::parseZONE( BOARD_ITEM_CONTAINER* aParent )
 
         case T_fill_segments:
         {
-            ZONE_SEGMENT_FILL segs;
+            std::vector<SEG> segs;
 
             for( token = NextTok(); token != T_RIGHT; token = NextTok() )
             {

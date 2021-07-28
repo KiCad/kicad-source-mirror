@@ -108,7 +108,7 @@ wxString PIN_NUMBERS::GetSummary() const
 }
 
 
-int PIN_NUMBERS::Compare( const PinNumber& lhs, const PinNumber& rhs )
+int PIN_NUMBERS::Compare( const wxString& lhs, const wxString& rhs )
 {
     wxString::size_type cursor1 = 0;
     wxString::size_type cursor2 = 0;

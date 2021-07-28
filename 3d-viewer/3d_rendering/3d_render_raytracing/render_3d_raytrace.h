@@ -161,7 +161,7 @@ private:
 
     POST_SHADER_SSAO m_postShaderSsao;
 
-    LIGHT_SOURCES m_lights;
+    std::list<LIGHT*> m_lights;
 
     DIRECTIONAL_LIGHT* m_cameraLight;
 

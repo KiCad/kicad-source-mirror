@@ -45,8 +45,6 @@ extern const wxChar BOM_TRACE[];
 class BOM_GENERATOR_HANDLER
 {
 public:
-    typedef std::unique_ptr<BOM_GENERATOR_HANDLER> PTR;
-
     /**
      * @param aFile is path to the plugin file.
      */

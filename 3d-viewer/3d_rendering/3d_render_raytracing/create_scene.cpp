@@ -958,7 +958,10 @@ void RENDER_3D_RAYTRACE::Reload( REPORTER* aStatusReporter, REPORTER* aWarningRe
         }
 
         // Init initial lights
-        m_lights.Clear();
+        for( LIGHT* light : m_lights )
+            delete light;
+
+        m_lights.clear();
 
         auto IsColorZero =
                 []( const SFVEC3F& aSource )
@@ -972,19 +975,23 @@ void RENDER_3D_RAYTRACE::Reload( REPORTER* aStatusReporter, REPORTER* aWarningRe
         m_cameraLight->SetCastShadows( false );
 
         if( !IsColorZero( m_boardAdapter.m_RtCameraLightColor ) )
-            m_lights.Add( m_cameraLight );
+            m_lights.push_back( m_cameraLight );
 
         const SFVEC3F& boardCenter = m_boardAdapter.GetBBox().GetCenter();
 
         if( !IsColorZero( m_boardAdapter.m_RtLightColorTop ) )
-            m_lights.Add( new POINT_LIGHT( SFVEC3F( boardCenter.x, boardCenter.y,
-                                                    +RANGE_SCALE_3D * 2.0f ),
-                                           m_boardAdapter.m_RtLightColorTop ) );
+        {
+            m_lights.push_back( new POINT_LIGHT( SFVEC3F( boardCenter.x, boardCenter.y,
+                                                          +RANGE_SCALE_3D * 2.0f ),
+                                                 m_boardAdapter.m_RtLightColorTop ) );
+        }
 
         if( !IsColorZero( m_boardAdapter.m_RtLightColorBottom ) )
-            m_lights.Add( new POINT_LIGHT( SFVEC3F( boardCenter.x, boardCenter.y,
-                                                    -RANGE_SCALE_3D * 2.0f ),
-                                           m_boardAdapter.m_RtLightColorBottom ) );
+        {
+            m_lights.push_back( new POINT_LIGHT( SFVEC3F( boardCenter.x, boardCenter.y,
+                                                          -RANGE_SCALE_3D * 2.0f ),
+                                                 m_boardAdapter.m_RtLightColorBottom ) );
+        }
 
         wxASSERT( m_boardAdapter.m_RtLightColor.size()
                   == m_boardAdapter.m_RtLightSphericalCoords.size() );
@@ -995,7 +1002,7 @@ void RENDER_3D_RAYTRACE::Reload( REPORTER* aStatusReporter, REPORTER* aWarningRe
             {
                 const SFVEC2F sc = m_boardAdapter.m_RtLightSphericalCoords[i];
 
-                m_lights.Add( new DIRECTIONAL_LIGHT(
+                m_lights.push_back( new DIRECTIONAL_LIGHT(
                         SphericalToCartesian( glm::pi<float>() * sc.x, glm::pi<float>() * sc.y ),
                         m_boardAdapter.m_RtLightColor[i] ) );
             }
@@ -1003,20 +1010,13 @@ void RENDER_3D_RAYTRACE::Reload( REPORTER* aStatusReporter, REPORTER* aWarningRe
     }
 
     // Create an accelerator
-    if( m_accelerator )
-    {
-        delete m_accelerator;
-    }
-
-    m_accelerator = 0;
-
+    delete m_accelerator;
     m_accelerator = new BVH_PBRT( m_objectContainer, 8, SPLITMETHOD::MIDDLE );
 
     if( aStatusReporter )
     {
         // Calculation time in seconds
-        const double calculation_time =
-                (double) ( GetRunningMicroSecs() - stats_startReloadTime ) / 1e6;
+        double calculation_time = (double) GetRunningMicroSecs() - stats_startReloadTime / 1e6;
 
         aStatusReporter->Report( wxString::Format( _( "Reload time %.3f s" ), calculation_time ) );
     }
@@ -1051,9 +1051,12 @@ void RENDER_3D_RAYTRACE::insertHole( const PCB_VIA* aVia )
 
     if( m_boardAdapter.GetFlag( FL_USE_REALISTIC_MODE ) )
         objPtr->SetColor( ConvertSRGBToLinear( (SFVEC3F) m_boardAdapter.m_CopperColor ) );
+    else if( aVia->GetViaType() == VIATYPE::MICROVIA )
+        objPtr->SetColor( ConvertSRGBToLinear( m_boardAdapter.GetItemColor( LAYER_VIA_MICROVIA ) ) );
+    else if( aVia->GetViaType() == VIATYPE::BLIND_BURIED )
+        objPtr->SetColor( ConvertSRGBToLinear( m_boardAdapter.GetItemColor( LAYER_VIA_BBLIND ) ) );
     else
-        objPtr->SetColor( ConvertSRGBToLinear( m_boardAdapter.GetItemColor(
-                LAYER_VIAS + static_cast<int>( aVia->GetViaType() ) ) ) );
+        objPtr->SetColor( ConvertSRGBToLinear( m_boardAdapter.GetItemColor( LAYER_VIAS ) ) );
 
     m_objectContainer.Add( objPtr );
 }

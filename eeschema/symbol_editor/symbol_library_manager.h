@@ -300,9 +300,6 @@ private:
             return ret;
         }
 
-        typedef std::shared_ptr<SYMBOL_BUFFER> PTR;
-        typedef std::weak_ptr<SYMBOL_BUFFER> WEAK_PTR;
-
     private:
         std::unique_ptr<SCH_SCREEN> m_screen;
 
@@ -325,7 +322,7 @@ private:
             if( !m_deleted.empty() )
                 return true;
 
-            for( const auto& symbolBuf : m_symbols )
+            for( const std::shared_ptr<SYMBOL_BUFFER>& symbolBuf : m_symbols )
             {
                 if( symbolBuf->IsModified() )
                     return true;
@@ -343,9 +340,9 @@ private:
         bool CreateBuffer( LIB_SYMBOL* aCopy, SCH_SCREEN* aScreen );
 
         ///< Update the buffered symbol with the contents of \a aCopy.
-        bool UpdateBuffer( SYMBOL_BUFFER::PTR aSymbolBuf, LIB_SYMBOL* aCopy );
+        bool UpdateBuffer( std::shared_ptr<SYMBOL_BUFFER> aSymbolBuf, LIB_SYMBOL* aCopy );
 
-        bool DeleteBuffer( SYMBOL_BUFFER::PTR aSymbolBuf );
+        bool DeleteBuffer( std::shared_ptr<SYMBOL_BUFFER> aSymbolBuf );
 
         void ClearDeletedBuffer()
         {
@@ -354,18 +351,18 @@ private:
 
         ///< Save stored modifications to Symbol Lib Table. It may result in saving the symbol
         ///< to disk as well, depending on the row properties.
-        bool SaveBuffer( SYMBOL_BUFFER::PTR aSymbolBuf, SYMBOL_LIB_TABLE* aLibTable );
+        bool SaveBuffer( std::shared_ptr<SYMBOL_BUFFER> aSymbolBuf, SYMBOL_LIB_TABLE* aLibTable );
 
         ///< Save stored modifications using a plugin. aBuffer decides whether the changes
         ///< should be cached or stored directly to the disk (for SCH_LEGACY_PLUGIN).
-        bool SaveBuffer( SYMBOL_BUFFER::PTR aSymbolBuf, const wxString& aFileName,
+        bool SaveBuffer( std::shared_ptr<SYMBOL_BUFFER> aSymbolBuf, const wxString& aFileName,
                          SCH_PLUGIN* aPlugin, bool aBuffer );
 
         ///< Return a symbol buffer with LIB_SYMBOL holding a symbolicular alias
-        SYMBOL_BUFFER::PTR GetBuffer( const wxString& aAlias ) const;
+        std::shared_ptr<SYMBOL_BUFFER> GetBuffer( const wxString& aAlias ) const;
 
         ///< Return all buffered symbols
-        const std::deque<SYMBOL_BUFFER::PTR>& GetBuffers() const { return m_symbols; }
+        const std::deque< std::shared_ptr<SYMBOL_BUFFER> >& GetBuffers() const { return m_symbols; }
 
         /**
          * Check to see any symbols in the buffer are derived from a parent named \a aParentName.
@@ -400,14 +397,14 @@ private:
          * @param aParent is the #SYMBOL_BUFFER to check against.
          * @return the count of #SYMBOL_BUFFER objects removed from the library.
          */
-        int removeChildSymbols( SYMBOL_BUFFER::PTR aSymbolBuf );
+        int removeChildSymbols( std::shared_ptr<SYMBOL_BUFFER> aSymbolBuf );
 
-        std::deque<SYMBOL_BUFFER::PTR> m_symbols;
+        std::deque< std::shared_ptr<SYMBOL_BUFFER> > m_symbols;
 
         ///< Buffer for deleted symbols until library is saved.
-        std::deque<SYMBOL_BUFFER::PTR> m_deleted;
-        const wxString                 m_libName;  // Buffered library name
-        int                            m_hash;
+        std::deque< std::shared_ptr<SYMBOL_BUFFER> > m_deleted;
+        const wxString                               m_libName;  // Buffered library name
+        int                                          m_hash;
     };
 
     /**

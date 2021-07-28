@@ -269,11 +269,9 @@ wxString NETLIST_EXPORTER_PSPICE::GetSpiceFieldDefVal( SPICE_FIELD aField, SCH_S
 
 bool NETLIST_EXPORTER_PSPICE::ProcessNetlist( unsigned aCtl )
 {
-    const wxString      delimiters( "{:,; }" );
-
-    SCH_SHEET_LIST      sheetList = m_schematic->GetSheets();
-    // Set of reference names, to check for duplication
-    std::set<wxString>  refNames;
+    const wxString     delimiters( "{:,; }" );
+    SCH_SHEET_LIST     sheetList = m_schematic->GetSheets();
+    std::set<wxString> refNames;       // Set of reference names, to check for duplication
 
     m_netMap.clear();
     m_netMap["GND"] = 0;        // 0 is reserved for "GND"
@@ -330,7 +328,7 @@ bool NETLIST_EXPORTER_PSPICE::ProcessNetlist( unsigned aCtl )
             // Store pin information
             for( const PIN_INFO& pin : m_sortedSymbolPinList )
             {
-                    // Create net mapping
+                // Create net mapping
                 spiceItem.m_pins.push_back( pin.netName );
                 pinNames.Add( pin.num );
 
@@ -458,7 +456,7 @@ void NETLIST_EXPORTER_PSPICE::UpdateDirectives( unsigned aCtl )
 
                 // Mark directive as started or continued in case it is a multi-line one
                 directiveStarted = line.StartsWith( '.' )
-                    || ( directiveStarted && line.StartsWith( '+' ) );
+                                        || ( directiveStarted && line.StartsWith( '+' ) );
             }
         }
     }
@@ -468,9 +466,7 @@ void NETLIST_EXPORTER_PSPICE::UpdateDirectives( unsigned aCtl )
 void NETLIST_EXPORTER_PSPICE::writeDirectives( OUTPUTFORMATTER* aFormatter, unsigned aCtl ) const
 {
     for( const wxString& dir : m_directives )
-    {
         aFormatter->Print( 0, "%s\n", TO_UTF8( dir ) );
-    }
 }
 
 

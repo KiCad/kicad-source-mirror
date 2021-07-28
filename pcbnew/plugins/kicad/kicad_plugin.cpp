@@ -2198,7 +2198,7 @@ void PCB_IO::format( const ZONE* aZone, int aNestLevel ) const
         }
 
         // Save the filling segments list
-        const auto& segs = aZone->FillSegments( layer );
+        const std::vector<SEG>& segs = aZone->FillSegments( layer );
 
         if( segs.size() )
         {
@@ -2206,11 +2206,11 @@ void PCB_IO::format( const ZONE* aZone, int aNestLevel ) const
             m_out->Print( aNestLevel + 2, "(layer %s)\n",
                           TO_UTF8( BOARD::GetStandardLayerName( layer ) ) );
 
-            for( ZONE_SEGMENT_FILL::const_iterator it = segs.begin(); it != segs.end(); ++it )
+            for( const SEG& seg : segs )
             {
                 m_out->Print( aNestLevel + 2, "(pts (xy %s) (xy %s))\n",
-                              FormatInternalUnits( wxPoint( it->A ) ).c_str(),
-                              FormatInternalUnits( wxPoint( it->B ) ).c_str() );
+                              FormatInternalUnits( wxPoint( seg.A ) ).c_str(),
+                              FormatInternalUnits( wxPoint( seg.B ) ).c_str() );
             }
 
             m_out->Print( aNestLevel + 1, ")\n" );

@@ -79,13 +79,11 @@ private:
 
     bool runInternal( bool aDelayReportMode = false );
 
-    using LENGTH_ENTRY = DRC_LENGTH_REPORT::ENTRY;
-    typedef std::set<BOARD_CONNECTED_ITEM*> CITEMS;
-    typedef std::vector<LENGTH_ENTRY> LENGTH_ENTRIES;
+    using CONNECTION = DRC_LENGTH_REPORT::ENTRY;
 
-    void checkLengthViolations( DRC_CONSTRAINT& aConstraint, LENGTH_ENTRIES& aMatchedConnections );
-    void checkSkewViolations( DRC_CONSTRAINT& aConstraint, LENGTH_ENTRIES& aMatchedConnections );
-    void checkViaCountViolations( DRC_CONSTRAINT& aConstraint, LENGTH_ENTRIES& aMatchedConnections );
+    void checkLengths( DRC_CONSTRAINT& aConstraint, std::vector<CONNECTION>& aMatchedConnections );
+    void checkSkews( DRC_CONSTRAINT& aConstraint, std::vector<CONNECTION>& aMatchedConnections );
+    void checkViaCounts( DRC_CONSTRAINT& aConstraint, std::vector<CONNECTION>& aMatchedConnections );
 
     BOARD* m_board;
     DRC_LENGTH_REPORT m_report;
@@ -98,10 +96,10 @@ static int computeViaThruLength( PCB_VIA *aVia, const std::set<BOARD_CONNECTED_I
 }
 
 
-void DRC_TEST_PROVIDER_MATCHED_LENGTH::checkLengthViolations( DRC_CONSTRAINT& aConstraint,
-                                                              LENGTH_ENTRIES& matchedConnections )
+void DRC_TEST_PROVIDER_MATCHED_LENGTH::checkLengths( DRC_CONSTRAINT& aConstraint,
+                                                     std::vector<CONNECTION>& aMatchedConnections )
 {
-    for( const DRC_LENGTH_REPORT::ENTRY& ent : matchedConnections )
+    for( const DRC_LENGTH_REPORT::ENTRY& ent : aMatchedConnections )
     {
         bool minViolation = false;
         bool maxViolation = false;
@@ -150,17 +148,17 @@ void DRC_TEST_PROVIDER_MATCHED_LENGTH::checkLengthViolations( DRC_CONSTRAINT& aC
     }
 }
 
-void DRC_TEST_PROVIDER_MATCHED_LENGTH::checkSkewViolations( DRC_CONSTRAINT& aConstraint,
-                                                            LENGTH_ENTRIES& matchedConnections )
+void DRC_TEST_PROVIDER_MATCHED_LENGTH::checkSkews( DRC_CONSTRAINT& aConstraint,
+                                                   std::vector<CONNECTION>& aMatchedConnections )
 {
     int avgLength = 0;
 
-    for( const DRC_LENGTH_REPORT::ENTRY& ent : matchedConnections )
+    for( const DRC_LENGTH_REPORT::ENTRY& ent : aMatchedConnections )
         avgLength += ent.total;
 
-    avgLength /= matchedConnections.size();
+    avgLength /= aMatchedConnections.size();
 
-    for( const auto& ent : matchedConnections )
+    for( const auto& ent : aMatchedConnections )
     {
         int skew = ent.total - avgLength;
         if( aConstraint.GetValue().HasMax() && abs( skew ) > aConstraint.GetValue().Max() )
@@ -187,10 +185,10 @@ void DRC_TEST_PROVIDER_MATCHED_LENGTH::checkSkewViolations( DRC_CONSTRAINT& aCon
 }
 
 
-void DRC_TEST_PROVIDER_MATCHED_LENGTH::checkViaCountViolations( DRC_CONSTRAINT& aConstraint,
-                                                                LENGTH_ENTRIES& matchedConnections )
+void DRC_TEST_PROVIDER_MATCHED_LENGTH::checkViaCounts( DRC_CONSTRAINT& aConstraint,
+                                                       std::vector<CONNECTION>& aMatchedConnections )
 {
-    for( const auto& ent : matchedConnections )
+    for( const auto& ent : aMatchedConnections )
     {
         if( aConstraint.GetValue().HasMax() && ent.viaCount > aConstraint.GetValue().Max() )
         {
@@ -231,7 +229,7 @@ bool DRC_TEST_PROVIDER_MATCHED_LENGTH::runInternal( bool aDelayReportMode )
             return false;
     }
 
-    std::map<DRC_RULE*, CITEMS> itemSets;
+    std::map<DRC_RULE*, std::set<BOARD_CONNECTED_ITEM*> > itemSets;
 
     auto evaluateLengthConstraints =
             [&]( BOARD_ITEM *item ) -> bool
@@ -265,11 +263,11 @@ bool DRC_TEST_PROVIDER_MATCHED_LENGTH::runInternal( bool aDelayReportMode )
     forEachGeometryItem( { PCB_TRACE_T, PCB_VIA_T, PCB_ARC_T }, LSET::AllCuMask(),
                          evaluateLengthConstraints );
 
-    std::map<DRC_RULE*, LENGTH_ENTRIES> matches;
+    std::map<DRC_RULE*, std::vector<CONNECTION> > matches;
 
     for( auto it : itemSets )
     {
-        std::map<int, CITEMS> netMap;
+        std::map<int, std::set<BOARD_CONNECTED_ITEM*> > netMap;
 
         for( auto citem : it.second )
             netMap[ citem->GetNetCode() ].insert( citem );
@@ -277,7 +275,7 @@ bool DRC_TEST_PROVIDER_MATCHED_LENGTH::runInternal( bool aDelayReportMode )
 
         for( auto nitem : netMap )
         {
-            LENGTH_ENTRY ent;
+            CONNECTION ent;
             ent.items = nitem.second;
             ent.netcode = nitem.first;
             ent.netname = m_board->GetNetInfo().GetNetItem( ent.netcode )->GetNetname();
@@ -340,7 +338,7 @@ bool DRC_TEST_PROVIDER_MATCHED_LENGTH::runInternal( bool aDelayReportMode )
             auto& matchedConnections = it.second;
 
             std::sort( matchedConnections.begin(), matchedConnections.end(),
-                       [] ( const LENGTH_ENTRY&a, const LENGTH_ENTRY&b ) -> int
+                       [] ( const CONNECTION&a, const CONNECTION&b ) -> int
                        {
                            return a.netname < b.netname;
                        } );
@@ -369,17 +367,17 @@ bool DRC_TEST_PROVIDER_MATCHED_LENGTH::runInternal( bool aDelayReportMode )
             OPT<DRC_CONSTRAINT> lengthConstraint = rule->FindConstraint( LENGTH_CONSTRAINT );
 
             if( lengthConstraint )
-                checkLengthViolations( *lengthConstraint, matchedConnections );
+                checkLengths( *lengthConstraint, matchedConnections );
 
             OPT<DRC_CONSTRAINT> skewConstraint = rule->FindConstraint( SKEW_CONSTRAINT );
 
             if( skewConstraint )
-                checkSkewViolations( *skewConstraint, matchedConnections );
+                checkSkews( *skewConstraint, matchedConnections );
 
             OPT<DRC_CONSTRAINT> viaCountConstraint = rule->FindConstraint( VIA_COUNT_CONSTRAINT );
 
             if( viaCountConstraint )
-                checkViaCountViolations( *viaCountConstraint, matchedConnections );
+                checkViaCounts( *viaCountConstraint, matchedConnections );
         }
 
         reportRuleStatistics();
