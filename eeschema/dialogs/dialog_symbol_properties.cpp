@@ -497,7 +497,7 @@ bool DIALOG_SYMBOL_PROPERTIES::TransferDataToWindow()
     }
 
     // Set the symbol's library name.
-    m_tcLibraryID->SetLabelText( UnescapeString( m_symbol->GetLibId().Format() ) );
+    m_tcLibraryID->SetValue( UnescapeString( m_symbol->GetLibId().Format() ) );
 
     Layout();
 
