@@ -55,8 +55,8 @@ WRL2LINESET::WRL2LINESET( WRL2NODE* aParent ) : WRL2NODE()
 WRL2LINESET::~WRL2LINESET()
 {
     wxLogTrace( traceVrmlPlugin,
-                wxT( " * [INFO] Destroying IndexedLineSet node with %lu children, %lu"
-                     "references, and %lu back pointers." ),
+                wxT( " * [INFO] Destroying IndexedLineSet node with %zu children, %zu"
+                     "references, and %zu back pointers." ),
                 m_Children.size(), m_Refs.size(), m_BackPointers.size() );
 }
 

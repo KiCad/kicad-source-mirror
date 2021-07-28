@@ -54,8 +54,8 @@ WRL1SWITCH::WRL1SWITCH( NAMEREGISTER* aDictionary, WRL1NODE* aParent ) :
 WRL1SWITCH::~WRL1SWITCH()
 {
     wxLogTrace( traceVrmlPlugin,
-                wxT( " * [INFO] Destroying Switch node with %lu children, %lu"
-                     "references, and %lu back pointers." ),
+                wxT( " * [INFO] Destroying Switch node with %zu children, %zu"
+                     "references, and %zu back pointers." ),
                 m_Children.size(), m_Refs.size(), m_BackPointers.size() );
 }
 
@@ -169,8 +169,8 @@ bool WRL1SWITCH::Read( WRLPROC& proc, WRL1BASE* aTopNode )
 SGNODE* WRL1SWITCH::TranslateToSG( SGNODE* aParent, WRL1STATUS* sp )
 {
     wxLogTrace( traceVrmlPlugin,
-                wxT( " * [INFO] Translating Switch node with %lu children, %lu"
-                     "references, and %lu back pointers (%lu total items)." ),
+                wxT( " * [INFO] Translating Switch node with %zu children, %zu"
+                     "references, and %zu back pointers (%zu total items)." ),
                 m_Children.size(), m_Refs.size(), m_BackPointers.size(), m_Items.size() );
 
     if( m_Items.empty() )

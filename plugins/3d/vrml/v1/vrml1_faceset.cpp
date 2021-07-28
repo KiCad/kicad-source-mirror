@@ -54,8 +54,8 @@ WRL1FACESET::WRL1FACESET( NAMEREGISTER* aDictionary, WRL1NODE* aParent ) :
 
 WRL1FACESET::~WRL1FACESET()
 {
-    wxLogTrace( traceVrmlPlugin, wxT( " * [INFO] Destroying IndexedFaceSet with %lu children, "
-                                      "%lu references, and %lu back pointers." ),
+    wxLogTrace( traceVrmlPlugin, wxT( " * [INFO] Destroying IndexedFaceSet with %zu children, "
+                                      "%zu references, and %zu back pointers." ),
                 m_Children.size(), m_Refs.size(), m_BackPointers.size() );
 }
 
@@ -243,7 +243,7 @@ SGNODE* WRL1FACESET::TranslateToSG( SGNODE* aParent, WRL1STATUS* sp )
     if( coordsize < 3 || vsize < 3 )
     {
         wxLogTrace( traceVrmlPlugin,
-                    wxT( " * [INFO] bad model: coordsize = %lu, indexsize = %lu" ),
+                    wxT( " * [INFO] bad model: coordsize = %zu, indexsize = %zu" ),
                     coordsize, vsize );
 
         return nullptr;

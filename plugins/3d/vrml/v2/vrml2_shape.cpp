@@ -56,8 +56,8 @@ WRL2SHAPE::WRL2SHAPE( WRL2NODE* aParent ) : WRL2NODE()
 WRL2SHAPE::~WRL2SHAPE()
 {
     wxLogTrace( traceVrmlPlugin,
-                wxT( " * [INFO] Destroying Shape node with %lu children, %lu"
-                     "references, and %lu back pointers." ),
+                wxT( " * [INFO] Destroying Shape node with %zu children, %zu"
+                     "references, and %zu back pointers." ),
                 m_Children.size(), m_Refs.size(), m_BackPointers.size() );
 }
 
@@ -306,8 +306,8 @@ SGNODE* WRL2SHAPE::TranslateToSG( SGNODE* aParent )
     }
 
     wxLogTrace( traceVrmlPlugin,
-                wxT( " * [INFO] Translating Shape with %lu children, %lu references, and"
-                     "%lu back pointers." ),
+                wxT( " * [INFO] Translating Shape with %zu children, %zu references, and"
+                     "%zu back pointers." ),
                 m_Children.size(), m_Refs.size(), m_BackPointers.size() );
 
     bool vcolors = false;

@@ -56,8 +56,8 @@ WRL2FACESET::WRL2FACESET( WRL2NODE* aParent ) : WRL2NODE()
 WRL2FACESET::~WRL2FACESET()
 {
     wxLogTrace( traceVrmlPlugin,
-                wxT( " * [INFO] Destroying IndexedFaceSet node with %lu children, %lu"
-                     "references, and %lu back pointers." ),
+                wxT( " * [INFO] Destroying IndexedFaceSet node with %zu children, %zu"
+                     "references, and %zu back pointers." ),
                 m_Children.size(), m_Refs.size(), m_BackPointers.size() );
 }
 
@@ -550,8 +550,8 @@ SGNODE* WRL2FACESET::TranslateToSG( SGNODE* aParent )
                                         "ID: %d)." ), ptype ) );
 
     wxLogTrace( traceVrmlPlugin,
-                wxT( " * [INFO] Translating IndexedFaceSet with %lu children, %lu references, "
-                     "%lu back pointers, and %lu coord indices." ),
+                wxT( " * [INFO] Translating IndexedFaceSet with %zu children, %zu references, "
+                     "%zu back pointers, and %zu coord indices." ),
                 m_Children.size(), m_Refs.size(), m_BackPointers.size(), coordIndex.size() );
 
     if( m_sgNode )

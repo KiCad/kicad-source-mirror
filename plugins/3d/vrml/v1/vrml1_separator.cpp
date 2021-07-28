@@ -51,7 +51,7 @@ WRL1SEPARATOR::WRL1SEPARATOR( NAMEREGISTER* aDictionary, WRL1NODE* aParent ) :
 WRL1SEPARATOR::~WRL1SEPARATOR()
 {
     wxLogTrace( traceVrmlPlugin,
-                wxT( " * [INFO] Destroying Separator with %lu children %lu references, and %lu "
+                wxT( " * [INFO] Destroying Separator with %zu children %zu references, and %zu "
                      "back pointers." ),
                 m_Children.size(), m_Refs.size(), m_BackPointers.size() );
 }
@@ -115,8 +115,8 @@ SGNODE* WRL1SEPARATOR::TranslateToSG( SGNODE* aParent, WRL1STATUS* sp )
     wxCHECK_MSG( m_Parent, nullptr, wxT( "Separator has no parent." )  );
 
     wxLogTrace( traceVrmlPlugin,
-                wxT( " * [INFO] Translating Separator with %lu children, %lu references, and "
-                     "%lu back pointers (%lu total items)." ),
+                wxT( " * [INFO] Translating Separator with %zu children, %zu references, and "
+                     "%zu back pointers (%zu total items)." ),
                 m_Children.size(), m_Refs.size(), m_BackPointers.size(), m_Items.size() );
 
     if( sp != nullptr )

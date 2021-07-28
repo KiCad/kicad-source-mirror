@@ -50,8 +50,8 @@ WRL2TRANSFORM::WRL2TRANSFORM( WRL2NODE* aParent ) : WRL2NODE()
 WRL2TRANSFORM::~WRL2TRANSFORM()
 {
     wxLogTrace( traceVrmlPlugin,
-                wxT( " * [INFO] Destroying Transform node with %lu children, %lu"
-                     "references, and %lu back pointers." ),
+                wxT( " * [INFO] Destroying Transform node with %zu children, %zu"
+                     "references, and %zu back pointers." ),
                 m_Children.size(), m_Refs.size(), m_BackPointers.size() );
 }
 
@@ -333,8 +333,8 @@ bool WRL2TRANSFORM::readChildren( WRLPROC& proc, WRL2BASE* aTopNode )
 SGNODE* WRL2TRANSFORM::TranslateToSG( SGNODE* aParent )
 {
     wxLogTrace( traceVrmlPlugin,
-                wxT( " * [INFO] Translating Switch with %lu children, %lu references, and"
-                     "%lu back pointers." ),
+                wxT( " * [INFO] Translating Switch with %zu children, %zu references, and"
+                     "%zu back pointers." ),
                 m_Children.size(), m_Refs.size(), m_BackPointers.size() );
 
     if( m_Children.empty() && m_Refs.empty() )

@@ -52,8 +52,8 @@ WRL2SWITCH::WRL2SWITCH( WRL2NODE* aParent ) : WRL2NODE()
 WRL2SWITCH::~WRL2SWITCH()
 {
     wxLogTrace( traceVrmlPlugin,
-                wxT( " * [INFO] Destroying Switch node with %lu children, %lu"
-                     "references, and %lu back pointers." ),
+                wxT( " * [INFO] Destroying Switch node with %zu children, %zu"
+                     "references, and %zu back pointers." ),
                 m_Children.size(), m_Refs.size(), m_BackPointers.size() );
 }
 
@@ -242,8 +242,8 @@ bool WRL2SWITCH::readChildren( WRLPROC& proc, WRL2BASE* aTopNode )
 SGNODE* WRL2SWITCH::TranslateToSG( SGNODE* aParent )
 {
     wxLogTrace( traceVrmlPlugin,
-                wxT( " * [INFO] Translating Switch with %lu children, %lu references, and"
-                     "%lu back pointers." ),
+                wxT( " * [INFO] Translating Switch with %zu children, %zu references, and"
+                     "%zu back pointers." ),
                 m_Children.size(), m_Refs.size(), m_BackPointers.size() );
 
     if( choices.empty() )
@@ -262,7 +262,7 @@ SGNODE* WRL2SWITCH::TranslateToSG( SGNODE* aParent )
     if( whichChoice < 0 || whichChoice >= (int)choices.size() )
     {
         wxLogTrace( traceVrmlPlugin,
-                    wxT( " * [INFO] Switch translation: no choice (choices = %lu), "
+                    wxT( " * [INFO] Switch translation: no choice (choices = %zu), "
                          "whichChoice = %d." ), choices.size(), whichChoice );
 
         return nullptr;

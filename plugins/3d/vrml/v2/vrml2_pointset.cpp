@@ -55,8 +55,8 @@ WRL2POINTSET::WRL2POINTSET( WRL2NODE* aParent ) : WRL2NODE()
 WRL2POINTSET::~WRL2POINTSET()
 {
     wxLogTrace( traceVrmlPlugin,
-                wxT( " * [INFO] Destroying PointSet node with %lu children, %lu"
-                     "references, and %lu back pointers." ),
+                wxT( " * [INFO] Destroying PointSet node with %zu children, %zu"
+                     "references, and %zu back pointers." ),
                 m_Children.size(), m_Refs.size(), m_BackPointers.size() );
 }
 
