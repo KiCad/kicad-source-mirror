@@ -704,7 +704,7 @@ int ERC_TESTER::TestLibSymbolIssues()
                 std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_LIB_SYMBOL_ISSUES );
                 ercItem->SetItems( symbol );
                 msg.Printf( _( "The current configuration does not include the library '%s'." ),
-                            libName );
+                            UnescapeString( libName ) );
                 ercItem->SetErrorMessage( msg );
 
                 markers.emplace_back( new SCH_MARKER( ercItem, symbol->GetPosition() ) );
@@ -715,7 +715,7 @@ int ERC_TESTER::TestLibSymbolIssues()
                 std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_LIB_SYMBOL_ISSUES );
                 ercItem->SetItems( symbol );
                 msg.Printf( _( "The library '%s' is not enabled in the current configuration." ),
-                            libName );
+                            UnescapeString( libName ) );
                 ercItem->SetErrorMessage( msg );
 
                 markers.emplace_back( new SCH_MARKER( ercItem, symbol->GetPosition() ) );
@@ -730,8 +730,8 @@ int ERC_TESTER::TestLibSymbolIssues()
                 std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_LIB_SYMBOL_ISSUES );
                 ercItem->SetItems( symbol );
                 msg.Printf( "Symbol '%s' not found in symbol library '%s'.",
-                            symbolName,
-                            libName );
+                            UnescapeString( symbolName ),
+                            UnescapeString( libName ) );
                 ercItem->SetErrorMessage( msg );
 
                 markers.emplace_back( new SCH_MARKER( ercItem, symbol->GetPosition() ) );
@@ -745,8 +745,8 @@ int ERC_TESTER::TestLibSymbolIssues()
                 std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_LIB_SYMBOL_ISSUES );
                 ercItem->SetItems( symbol );
                 msg.Printf( "Symbol '%s' has been modified in library '%s'.",
-                            symbolName,
-                            libName );
+                            UnescapeString( symbolName ),
+                            UnescapeString( libName ) );
                 ercItem->SetErrorMessage( msg );
 
                 markers.emplace_back( new SCH_MARKER( ercItem, symbol->GetPosition() ) );

@@ -35,7 +35,14 @@ DIALOG_LIB_NEW_SYMBOL::DIALOG_LIB_NEW_SYMBOL( EDA_DRAW_FRAME* aParent,
                        m_staticPinTextPositionUnits, true )
 {
     if( aRootSymbolNames && aRootSymbolNames->GetCount() )
-        m_comboInheritanceSelect->Append( *aRootSymbolNames );
+    {
+        wxArrayString escapedNames;
+
+        for( const wxString& name : *aRootSymbolNames )
+            escapedNames.Add( UnescapeString( name ) );
+
+        m_comboInheritanceSelect->Append( escapedNames );
+    }
 
     m_textName->SetValidator( SCH_FIELD_VALIDATOR( true, VALUE_FIELD ) );
     m_textReference->SetValidator( SCH_FIELD_VALIDATOR( true, REFERENCE_FIELD ) );

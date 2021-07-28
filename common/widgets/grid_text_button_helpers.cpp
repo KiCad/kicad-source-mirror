@@ -30,6 +30,7 @@
 #include <bitmaps.h>
 #include <kiway.h>
 #include <kiway_player.h>
+#include <kicad_string.h>
 #include <dialog_shim.h>
 #include <common.h>
 #include <env_paths.h>
@@ -189,18 +190,26 @@ protected:
         m_popup = nullptr;
     }
 
+    wxString escapeLibId( const wxString& aRawValue )
+    {
+        wxString itemName;
+        wxString libName = aRawValue.BeforeFirst( ':', &itemName );
+        return EscapeString( libName, CTX_LIBID ) + ':' + EscapeString( itemName, CTX_LIBID );
+    }
+
     void OnButtonClick() override
     {
-        // pick a footprint using the footprint picker.
-        wxString      compid = GetValue();
+        // pick a symbol using the symbol picker.
+        wxString rawValue = GetValue();
 
-        if( compid.IsEmpty() )
-            compid = m_preselect;
+        if( rawValue.IsEmpty() )
+            rawValue = m_preselect;
 
+        wxString      symbolId = escapeLibId( rawValue );
         KIWAY_PLAYER* frame = m_dlg->Kiway().Player( FRAME_SCH_VIEWER_MODAL, true, m_dlg );
 
-        if( frame->ShowModal( &compid, m_dlg ) )
-            SetValue( compid );
+        if( frame->ShowModal( &symbolId, m_dlg ) )
+            SetValue( symbolId );
 
         frame->Destroy();
     }

@@ -1194,7 +1194,7 @@ void SYMBOL_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
             {
                 msg.Printf( _( "The library '%s' is not enabled in the current configuration.\n"
                                "Use Manage Symbol Libraries to edit the configuration." ),
-                            libNickname );
+                            UnescapeString( libNickname ) );
                 DisplayErrorMessage( this, _( "Symbol library not enabled." ), msg );
                 break;
             }

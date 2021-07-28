@@ -21,7 +21,7 @@
 #define __LIB_TABLE_GRID_H__
 
 #include <lib_table_base.h>
-
+#include <kicad_string.h>
 #include <wx/grid.h>
 
 const wxColour COLOUR_ROW_ENABLED( 0, 0, 0 );
@@ -62,15 +62,13 @@ public:
 
             switch( aCol )
             {
-            case COL_NICKNAME:  return r->GetNickName();
-            case COL_URI:       return r->GetFullURI();
-            case COL_TYPE:      return r->GetType();
-            case COL_OPTIONS:   return r->GetOptions();
-            case COL_DESCR:     return r->GetDescr();
-            // Render a boolean value as its text equivalent
-            case COL_ENABLED:   return r->GetIsEnabled() ? wxT( "1" ) : wxT( "0" );
-            default:
-                ;       // fall thru to wxEmptyString
+            case COL_NICKNAME: return UnescapeString( r->GetNickName() );
+            case COL_URI:      return r->GetFullURI();
+            case COL_TYPE:     return r->GetType();
+            case COL_OPTIONS:  return r->GetOptions();
+            case COL_DESCR:    return r->GetDescr();
+            case COL_ENABLED:  return r->GetIsEnabled() ? wxT( "1" ) : wxT( "0" );
+            default:           return wxEmptyString;
             }
         }
 
@@ -93,14 +91,12 @@ public:
 
             switch( aCol )
             {
-            case COL_NICKNAME:  r->SetNickName( aValue );    break;
-            case COL_URI:       r->SetFullURI( aValue );     break;
-            case COL_TYPE:      r->SetType( aValue  );       break;
-            case COL_OPTIONS:   r->SetOptions( aValue );     break;
-            case COL_DESCR:     r->SetDescr( aValue );       break;
-            case COL_ENABLED:
-                r->SetEnabled( aValue == wxT( "1" ) );
-                break;
+            case COL_NICKNAME: r->SetNickName( EscapeString( aValue, CTX_LIBID ) ); break;
+            case COL_URI:      r->SetFullURI( aValue );                             break;
+            case COL_TYPE:     r->SetType( aValue  );                               break;
+            case COL_OPTIONS:  r->SetOptions( aValue );                             break;
+            case COL_DESCR:    r->SetDescr( aValue );                               break;
+            case COL_ENABLED:  r->SetEnabled( aValue == wxT( "1" ) );               break;
             }
         }
     }
