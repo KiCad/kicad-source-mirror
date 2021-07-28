@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
-"PO-Revision-Date: 2021-07-23 08:32+0000\n"
+"PO-Revision-Date: 2021-07-28 01:46+0000\n"
 "Last-Translator: VicSanRoPe <vicsanrope@protonmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/kicad/"
 "master-source/es/>\n"
@@ -24922,7 +24922,7 @@ msgstr "grado"
 
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:174
 msgid "Smooth amount:"
-msgstr ""
+msgstr "Cantidad de suavizado:"
 
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.h:84
 msgid "Non Copper Zones Properties"
@@ -24947,18 +24947,16 @@ msgid "Polygon must have at least 3 corners"
 msgstr "El polígono tiene que tener al menos 3 esquinas"
 
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:347
-#, fuzzy
 msgid "Polygon must have at least 3 corners after simplification"
-msgstr "Polígono incorrecto: insuficientes esquitas tras la simplificación"
+msgstr "El polígono tiene que tener al menos 3 esquinas tras la simplificación"
 
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:353
 msgid "Polygon can not be self-intersecting"
 msgstr "El polígono no puede intersectarse a sí mismo"
 
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:371
-#, fuzzy
 msgid "Note: redundant corners removed"
-msgstr "Polígono: se han eliminado las esquinas redundantes"
+msgstr "Nota: se han eliminado esquinas redundantes"
 
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:397
 msgid "Select a corner to add the new corner after."
@@ -24984,36 +24982,30 @@ msgid "front side"
 msgstr "parte frontal"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:694
-#, fuzzy
 msgid "width"
-msgstr "ancho %s"
+msgstr "ancho"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:700
 #: pcbnew/dialogs/dialog_pad_properties.cpp:706
-#, fuzzy
 msgid "from"
-msgstr "desde "
+msgstr "desde"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:701
 #: pcbnew/dialogs/dialog_pad_properties.cpp:707
-#, fuzzy
 msgid "to"
-msgstr "a "
+msgstr "a"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:712
-#, fuzzy
 msgid "center"
-msgstr "centro "
+msgstr "centro"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:713
-#, fuzzy
 msgid "start"
-msgstr "inicio "
+msgstr "inicio"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:714
-#, fuzzy
 msgid "angle"
-msgstr "ángulo %s"
+msgstr "ángulo"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:719
 msgid "ring"
@@ -25024,9 +25016,8 @@ msgid "circle"
 msgstr "círculo"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:724
-#, fuzzy
 msgid "radius"
-msgstr "radio %s"
+msgstr "radio"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:729
 #, c-format
@@ -25043,26 +25034,26 @@ msgid "%s, %s and connected layers"
 msgstr "%s, %s y capas conectadas"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:919
-#, fuzzy
 msgid "Connected layers only"
-msgstr "Solo la capa actual"
+msgstr "Solo las capas conectadas"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:924
-#, fuzzy, c-format
+#, c-format
 msgid "%s and %s"
-msgstr "%d %s"
+msgstr "%s y %s"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1226
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1231
-#, fuzzy
 msgid "Warning: Pad size is less than zero."
-msgstr "El tamaño del pad debe ser mayor de cero"
+msgstr "Advertencia: el tamaño del pad es menor a cero."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1256
 msgid ""
 "Warning: Pad drill will leave no copper or drill shape and pad shape do not "
 "overlap."
 msgstr ""
+"Advertencia: el taladro del pad no dejará cobre, o la forma del taladro y "
+"del pad no se superponen."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1262
 msgid "Warning: Negative local clearance values will have no effect."
@@ -25070,39 +25061,40 @@ msgstr ""
 "Advertencia: los valores negativos de margen local no tendrán ningún efecto."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1279
-#, fuzzy
 msgid ""
 "Warning: Negative solder mask clearances larger than some shape primitives. "
 "Results may be surprising."
 msgstr ""
-"Un margen negativo indica un área menor que el pad (lo normal para el margen "
-"de la pasta)."
+"Advertencia: hay márgenes negativos de máscara de soldadura más grandes que "
+"algunas formas primitivas. Los resultados pueden ser sorprendentes."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1288
 msgid ""
 "Warning: Negative solder mask clearance larger than pad. No solder mask will "
 "be generated."
 msgstr ""
+"Advertencia: hay márgenes negativos de máscara de soldadura más grandes que "
+"el pad. No se generará una máscara de soldadura."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1307
-#, fuzzy
 msgid ""
 "Warning: Negative solder paste margins larger than pad. No solder paste mask "
 "will be generated."
 msgstr ""
-"Un margen negativo indica un área menor que el pad (lo normal para el margen "
-"de la pasta)."
+"Advertencia: hay márgenes negativos de máscara de pasta de soldadura más "
+"grandes que el pad. No se generará una máscara de pasta de soldadura."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1314
-#, fuzzy
 msgid "Error: pad has no layer."
-msgstr "Error: el pad no tiene capa asignada"
+msgstr "Error: el pad no tiene una capa."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1320
 msgid ""
 "Warning: Plated through holes should normally have a copper pad on at least "
 "one layer."
 msgstr ""
+"Advertencia: los agujeros revestidos normalmente tienen un pad de cobre en "
+"al menos una capa."
 
 # Pendiente de contexto
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1326
