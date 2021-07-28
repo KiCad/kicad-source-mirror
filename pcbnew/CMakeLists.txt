@@ -155,6 +155,8 @@ set( PCBNEW_DIALOGS
     dialogs/panel_fp_editor_color_settings.cpp
     dialogs/panel_fp_editor_defaults.cpp
     dialogs/panel_fp_editor_defaults_base.cpp
+    dialogs/panel_fp_properties_3d_model.cpp
+    dialogs/panel_fp_properties_3d_model_base.cpp
     dialogs/panel_pcbnew_action_plugins.cpp
     dialogs/panel_pcbnew_action_plugins_base.cpp
     dialogs/panel_pcbnew_color_settings.cpp

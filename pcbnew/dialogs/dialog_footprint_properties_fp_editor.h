@@ -32,15 +32,16 @@
 #include <dialog_footprint_properties_fp_editor_base.h>
 
 
-class PANEL_PREVIEW_3D_MODEL;
 class FOOTPRINT_EDIT_FRAME;
+class PANEL_FP_PROPERTIES_3D_MODEL;
 
 
-enum class MODEL_VALIDATE_ERRORS
+enum class NOTEBOOK_PAGES
 {
-    MODEL_NO_ERROR,
-    RESOLVE_FAIL,
-    OPEN_FAIL
+    PAGE_UNKNOWN = -1,
+    PAGE_GENERAL = 0,
+    PAGE_CLEARANCES = 1,
+    PAGE_3D_MODELS = 2
 };
 
 class DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR : public DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE
@@ -56,12 +57,6 @@ public:
 
 private:
     // virtual event functions
-    void On3DModelSelected( wxGridEvent&  ) override;
-    void On3DModelCellChanged( wxGridEvent& aEvent ) override;
-    void OnRemove3DModel( wxCommandEvent& event ) override;
-    void OnAdd3DModel( wxCommandEvent& event ) override;
-    void OnAdd3DRow( wxCommandEvent& event ) override;
-    void Cfg3DPath( wxCommandEvent& event ) override;
     void OnGridSize( wxSizeEvent& event ) override;
     void OnFootprintNameText( wxCommandEvent& event ) override;
     void OnGridCellChanging( wxGridEvent& event );
@@ -69,13 +64,7 @@ private:
     void OnDeleteField( wxCommandEvent& event ) override;
     void OnUpdateUI( wxUpdateUIEvent& event ) override;
 
-    void updateValidateStatus( int aRow );
-
-    MODEL_VALIDATE_ERRORS validateModelExists( const wxString& aFilename );
-
     bool checkFootprintName( const wxString& aFootprintName );
-
-    void select3DModel( int aModelIdx );
 
     void adjustGridColumns( int aWidth );
 
@@ -83,7 +72,7 @@ private:
     FOOTPRINT_EDIT_FRAME*    m_frame;
     FOOTPRINT*               m_footprint;
 
-    static int               m_page;       // remember the last open page during session
+    static NOTEBOOK_PAGES    m_page;       // remember the last open page during session
 
     FP_TEXT_GRID_TABLE*      m_texts;
 
@@ -91,18 +80,15 @@ private:
     UNIT_BINDER              m_solderMask;
     UNIT_BINDER              m_solderPaste;
 
-    std::vector<FP_3DMODEL>  m_shapes3D_list;
-    PANEL_PREVIEW_3D_MODEL*  m_previewPane;
-
     wxControl*               m_delayedFocusCtrl;
-    int                      m_delayedFocusPage;
+    NOTEBOOK_PAGES           m_delayedFocusPage;
 
     WX_GRID*                 m_delayedFocusGrid;
     int                      m_delayedFocusRow;
     int                      m_delayedFocusColumn;
     wxString                 m_delayedErrorMessage;
 
-    bool                     m_inSelect;
+    PANEL_FP_PROPERTIES_3D_MODEL* m_3dPanel;
 };
 
 
