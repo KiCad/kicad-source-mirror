@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
-"PO-Revision-Date: 2021-07-28 01:46+0000\n"
+"PO-Revision-Date: 2021-07-31 11:56+0000\n"
 "Last-Translator: VicSanRoPe <vicsanrope@protonmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/kicad/"
 "master-source/es/>\n"
@@ -25115,9 +25115,8 @@ msgstr ""
 "Utilice pads SMD en su lugar."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1352
-#, fuzzy
 msgid "Warning: SMD pad has no outer layers."
-msgstr "Error: el pad no tiene capa asignada"
+msgstr "Advertencia: el pad SMD no tiene capas externas."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1361
 msgid "Warning: Fiducial property makes no sense on NPTH pads."
@@ -25133,41 +25132,37 @@ msgid "Warning: Heatsink property makes no sense of NPTH pads."
 msgstr "Advertencia: propiedad de disipador no tiene sentido en pads NPTH."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1379
-#, fuzzy
 msgid "Warning: Castellated property is for PTH pads."
-msgstr "Propiedades para"
+msgstr "Advertencia: la propiedad castellada es para pads PTH."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1385
-#, fuzzy
 msgid "Warning: BGA property is for SMD pads."
-msgstr "Propiedades para"
+msgstr "Advertencia: la propiedad BGA es para pads SMD."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1397
 msgid "Error: Corner size not a number."
-msgstr ""
+msgstr "Error: el tamaño de esquina no es un número."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1402
-#, fuzzy
 msgid "Error: Negative corner size."
-msgstr "Valor del tamaño de redondeo incorrecto (negativo)"
+msgstr "Error: el tamaño de esquina es negativo."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1404
 msgid "Warning: Corner size will make pad circular."
-msgstr ""
+msgstr "Advertencia: el tamaño de esquina hará que el pad sea circular."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1415
 msgid "Error: Custom pad shape must resolve to a single polygon."
 msgstr ""
+"Error: la forma personalizada del pad debe resolverse en un solo polígono."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1421
-#, fuzzy
 msgid "Pad Properties Errors"
-msgstr "Propiedades de pad"
+msgstr "Errores de propiedades de pad"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1422
-#, fuzzy
 msgid "Pad Properties Warnings"
-msgstr "Propiedades de pad"
+msgstr "Advertencias de propiedades de pad"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1652
 msgid "Modify pad"
@@ -25184,9 +25179,8 @@ msgid "Ring/Circle"
 msgstr "Anillo/Círculo"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:2149
-#, fuzzy
 msgid "Shape type:"
-msgstr "Seleccionar tipo de forma:"
+msgstr "Tipo de forma:"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:2149
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:815
@@ -25202,17 +25196,16 @@ msgid "Through-hole"
 msgstr "Pasante"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:40
-#, fuzzy
 msgid "Edge Connector"
-msgstr "Conector"
+msgstr "Conector de borde"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:40
 msgid "NPTH, Mechanical"
-msgstr "Pasante sin platear, mecánico"
+msgstr "NPTH, mecánico"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:40
 msgid "SMD Aperture"
-msgstr ""
+msgstr "Apertura SMD"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:46
 msgid "Pad number:"
@@ -25221,11 +25214,11 @@ msgstr "Número de pad:"
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:83
 msgid "Do not allow position of pad relative to parent footprint to be changed"
 msgstr ""
+"No permitir que la posición del pad relativa a la huella padre sea cambiada"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:105
-#, fuzzy
 msgid "Pad shape:"
-msgstr "Forma de la Isleta:"
+msgstr "Forma del pad:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:109
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:369
@@ -25236,7 +25229,7 @@ msgstr "Circular"
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:369 pcbnew/pad.cpp:1084
 #: pcbnew/pad.cpp:1452
 msgid "Oval"
-msgstr "Oval"
+msgstr "Ovalado"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:109
 msgid "Rectangular"
@@ -25247,29 +25240,24 @@ msgid "Trapezoidal"
 msgstr "Trapezoidal"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:109 pcbnew/pad.cpp:1454
-#, fuzzy
 msgid "Rounded rectangle"
 msgstr "Rectángulo redondeado"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:109 pcbnew/pad.cpp:1455
-#, fuzzy
 msgid "Chamfered rectangle"
-msgstr "Eliminar rectángulo"
+msgstr "Rectángulo biselado"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:109
-#, fuzzy
 msgid "Chamfered with other corners rounded"
-msgstr "Crear esquina"
+msgstr "Biselado con otras esquinas redondeadas"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:109
-#, fuzzy
 msgid "Custom (circular base)"
-msgstr "Altura de papel personalizada."
+msgstr "Personalizado (base circular)"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:109
-#, fuzzy
 msgid "Custom (rectangular base)"
-msgstr "Altura de papel personalizada."
+msgstr "Personalizado (base rectangular)"
 
 # Pendiente de contexto
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:127
@@ -25315,46 +25303,41 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:197
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:247
-#, fuzzy
 msgid "Chamfer size:"
-msgstr "Distacia de biselado:"
+msgstr "Tamaño de biselado:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:199
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:249
-#, fuzzy
 msgid ""
 "Chamfer size in percent of the pad width.\n"
 "The width is the smaller value between size X and size Y.\n"
 "The max value is 50 percent."
 msgstr ""
-"Radio del redondeo en tanto por ciento del ancho del pad.\n"
-"El ancho es el valor menor entre la dimensión en X y la dimensión en Y\n"
+"Radio del redondeo en porcentaje del ancho del pad.\n"
+"El ancho es el valor menor entre la dimensión en X y la dimensión en Y.\n"
 "El valor máximo es del 50%."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:210
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:260
-#, fuzzy
 msgid "Chamfer corners:"
-msgstr "Crear esquina"
+msgstr "Biselar esquinas:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:212
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:262
-#, fuzzy
 msgid ""
 "Chamfered corners. The position is relative to a pad orientation 0 degree."
-msgstr "Las coordenadas son relativas al ancla, orientación 0"
+msgstr ""
+"Esquinas biseladas. La posición es relativa a la orientación de pad 0 grados."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:219
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:269
-#, fuzzy
 msgid "Top left"
-msgstr "Pad superior izquierdo"
+msgstr "Superior izquierda"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:223
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:273
-#, fuzzy
 msgid "Top right"
-msgstr "Hacia arriba"
+msgstr "Superior derecha"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:226
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:276
@@ -25363,14 +25346,12 @@ msgstr "Inferior izquierda"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:229
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:279
-#, fuzzy
 msgid "Bottom right"
-msgstr "Vista inferior"
+msgstr "Inferior derecha"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:314
-#, fuzzy
 msgid "Pad size X:"
-msgstr "Tamaño de página:"
+msgstr "Tamaño de pad X:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:342
 msgid "90"
@@ -25390,9 +25371,8 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:412
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:462
-#, fuzzy
 msgid ":"
-msgstr "X:"
+msgstr ":"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:459
 #, fuzzy
