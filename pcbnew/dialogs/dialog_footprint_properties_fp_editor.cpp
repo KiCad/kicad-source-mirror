@@ -584,7 +584,7 @@ void DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::updateValidateStatus( int aRow )
 
     switch( validateModelExists( m_modelsGrid->GetCellValue( aRow, COL_FILENAME) ) )
     {
-        case MODEL_VALIDATE_ERRORS::NO_ERROR:
+        case MODEL_VALIDATE_ERRORS::MODEL_NO_ERROR:
             icon   = 0;
             errStr = "";
             break;
@@ -624,7 +624,7 @@ MODEL_VALIDATE_ERRORS DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::validateModelExists
         return MODEL_VALIDATE_ERRORS::RESOLVE_FAIL;
 
     if( wxFileName::IsFileReadable( fullPath ) )
-        return MODEL_VALIDATE_ERRORS::NO_ERROR;
+        return MODEL_VALIDATE_ERRORS::MODEL_NO_ERROR;
     else
         return MODEL_VALIDATE_ERRORS::OPEN_FAIL;
 }
