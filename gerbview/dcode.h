@@ -144,7 +144,7 @@ public:
      * @param aFilledShape set to true to draw in filled mode, false to draw in sketch mode
      */
     void DrawFlashedShape( GERBER_DRAW_ITEM* aParent, EDA_RECT* aClipBox, wxDC* aDC,
-                           COLOR4D aColor, const wxPoint& aShapePos, bool aFilledShape );
+                           const COLOR4D& aColor, const wxPoint& aShapePos, bool aFilledShape );
 
     /**
      * A helper function used to draw the polygon stored in m_PolyCorners.
@@ -161,7 +161,7 @@ public:
      * @param aPosition is the actual shape position.
      */
     void DrawFlashedPolygon( GERBER_DRAW_ITEM* aParent, EDA_RECT* aClipBox, wxDC* aDC,
-                             COLOR4D aColor, bool aFilled, const wxPoint& aPosition );
+                             const COLOR4D& aColor, bool aFilled, const wxPoint& aPosition );
 
     /**
      * Convert a shape to an equivalent polygon.

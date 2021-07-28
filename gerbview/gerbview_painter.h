@@ -41,8 +41,7 @@ namespace KIGFX
 class GAL;
 
 /**
- * GERBVIEW_RENDER_SETTINGS
- * Stores GerbView specific render settings.
+ * Store GerbView specific render settings.
  */
 class GERBVIEW_RENDER_SETTINGS : public RENDER_SETTINGS
 {
@@ -54,8 +53,8 @@ public:
     void LoadColors( const COLOR_SETTINGS* aSettings ) override;
 
     /**
-     * Function LoadDisplayOptions
-     * Loads settings related to display options
+     * Load settings related to display options.
+     *
      * @param aOptions are settings that you want to use for displaying items.
      */
     void LoadDisplayOptions( const GBR_DISPLAY_OPTIONS& aOptions );
@@ -64,8 +63,8 @@ public:
     virtual COLOR4D GetColor( const VIEW_ITEM* aItem, int aLayer ) const override;
 
     /**
-     * Function GetLayerColor
-     * Returns the color used to draw a layer.
+     * Return the color used to draw a layer.
+     *
      * @param aLayer is the layer number.
      */
     inline const COLOR4D& GetLayerColor( int aLayer ) const
@@ -74,8 +73,8 @@ public:
     }
 
     /**
-     * Function SetLayerColor
-     * Changes the color used to draw a layer.
+     * Change the color used to draw a layer.
+     *
      * @param aLayer is the layer number.
      * @param aColor is the new color.
      */
@@ -86,7 +85,10 @@ public:
         update();       // recompute other shades of the color
     }
 
-    const COLOR4D& GetBackgroundColor() override { return m_layerColors[ LAYER_GERBVIEW_BACKGROUND ]; }
+    const COLOR4D& GetBackgroundColor() override
+    {
+        return m_layerColors[ LAYER_GERBVIEW_BACKGROUND ];
+    }
 
     void SetBackgroundColor( const COLOR4D& aColor ) override
     {
@@ -165,8 +167,7 @@ protected:
 
 
 /**
- * GERBVIEW_PAINTER
- * Contains methods for drawing GerbView-specific items.
+ * Methods for drawing GerbView specific items.
  */
 class GERBVIEW_PAINTER : public PAINTER
 {
@@ -189,11 +190,12 @@ protected:
     void draw( /*const*/ GERBER_DRAW_ITEM* aVia, int aLayer );
 
     /**
-     *  Helper routine to draw a polygon
-     * @param aParent Pointer to the draw item for AB Position calculation
-     * @param aPolygon the polygon to draw
-     * @param aFilled If true, draw the polygon as filled, otherwise only outline
-     * @param aShift If true, draw the polygon relative to the parent item position
+     * Helper routine to draw a polygon.
+     *
+     * @param aParent Pointer to the draw item for AB Position calculation.
+     * @param aPolygon the polygon to draw.
+     * @param aFilled If true, draw the polygon as filled, otherwise only outline.
+     * @param aShift If true, draw the polygon relative to the parent item position.
      */
     void drawPolygon( GERBER_DRAW_ITEM* aParent, const SHAPE_POLY_SET& aPolygon,
                       bool aFilled, bool aShift = false );
@@ -205,11 +207,10 @@ protected:
     void drawApertureMacro( GERBER_DRAW_ITEM* aParent, bool aFilled );
 
     /**
-     * Function getLineThickness()
-     * Get the thickness to draw for a line (e.g. 0 thickness lines
-     * get a minimum value).
-     * @param aActualThickness line own thickness
-     * @return the thickness to draw
+     * Get the thickness to draw for a line (e.g. 0 thickness lines get a minimum value).
+     *
+     * @param aActualThickness line own thickness.
+     * @return the thickness to draw.
      */
     int getLineThickness( int aActualThickness ) const;
 };

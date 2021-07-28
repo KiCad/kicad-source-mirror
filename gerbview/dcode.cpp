@@ -146,15 +146,15 @@ int D_CODE::GetShapeDim( GERBER_DRAW_ITEM* aParent )
 
 
 void D_CODE::DrawFlashedShape( GERBER_DRAW_ITEM* aParent, EDA_RECT* aClipBox, wxDC* aDC,
-                               COLOR4D aColor, const wxPoint& aShapePos, bool aFilledShape )
+                               const COLOR4D& aColor, const wxPoint& aShapePos, bool aFilledShape )
 {
     int radius;
 
     switch( m_Shape )
     {
     case APT_MACRO:
-        GetMacro()->DrawApertureMacroShape( aParent, aClipBox, aDC, aColor,
-                                            aShapePos, aFilledShape);
+        GetMacro()->DrawApertureMacroShape( aParent, aClipBox, aDC, aColor, aShapePos,
+                                            aFilledShape );
         break;
 
     case APT_CIRCLE:
@@ -218,14 +218,14 @@ void D_CODE::DrawFlashedShape( GERBER_DRAW_ITEM* aParent, EDA_RECT* aClipBox, wx
 
         if( m_Size.x > m_Size.y )   // horizontal oval
         {
-            int delta = (m_Size.x - m_Size.y) / 2;
+            int delta = ( m_Size.x - m_Size.y ) / 2;
             start.x -= delta;
             end.x   += delta;
             radius   = m_Size.y;    // Width in fact
         }
         else   // vertical oval
         {
-            int delta = (m_Size.y - m_Size.x) / 2;
+            int delta = ( m_Size.y - m_Size.x ) / 2;
             start.y -= delta;
             end.y   += delta;
             radius   = m_Size.x;    // Width in fact
@@ -264,7 +264,7 @@ void D_CODE::DrawFlashedShape( GERBER_DRAW_ITEM* aParent, EDA_RECT* aClipBox, wx
 
 
 void D_CODE::DrawFlashedPolygon( GERBER_DRAW_ITEM* aParent, EDA_RECT* aClipBox, wxDC* aDC,
-                                 COLOR4D aColor, bool aFilled, const wxPoint& aPosition )
+                                 const COLOR4D& aColor, bool aFilled, const wxPoint& aPosition )
 {
     if( m_Polygon.OutlineCount() == 0 )
         return;
