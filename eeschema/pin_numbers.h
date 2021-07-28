@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015 Simon Richter
- * Copyright (C) 2015 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2021 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,32 +22,30 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef PIN_NUMBER_H_
-#define PIN_NUMBER_H_ 1
+#ifndef PIN_NUMBERS_H
+#define PIN_NUMBERS_H
 
 #include <wx/string.h>
 
 #include <set>
 
-typedef wxString PinNumber;
-
-class PinNumbers
+class PIN_NUMBERS
 {
 public:
     wxString GetSummary() const;
 
-    static int Compare( PinNumber const &lhs, PinNumber const &rhs );
+    static int Compare( const wxString& lhs, const wxString& rhs );
 
 private:
     struct less
     {
-        bool operator()( PinNumber const &lhs, PinNumber const &rhs ) const
+        bool operator()( const wxString& lhs, const wxString& rhs ) const
         {
             return Compare( lhs, rhs ) < 0;
         }
     };
 
-    typedef std::set< PinNumber, less > container_type;
+    typedef std::set<wxString, less> container_type;
 
 public:
     typedef container_type::value_type value_type;

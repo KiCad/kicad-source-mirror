@@ -24,7 +24,7 @@
 #include "dialog_lib_edit_pin_table.h"
 #include "grid_tricks.h"
 #include "lib_pin.h"
-#include "pin_number.h"
+#include "pin_numbers.h"
 #include <bitmaps.h>
 #include <confirm.h>
 #include <symbol_edit_frame.h>
@@ -254,12 +254,11 @@ public:
         {
         case COL_NUMBER:
         case COL_NAME:
-            res = cmp( PinNumbers::Compare( lhStr, rhStr ), 0 );
+            res = cmp( PIN_NUMBERS::Compare( lhStr, rhStr ), 0 );
             break;
         case COL_NUMBER_SIZE:
         case COL_NAME_SIZE:
-            res = cmp( ValueFromString( units, lhStr ),
-                    ValueFromString( units, rhStr ) );
+            res = cmp( ValueFromString( units, lhStr ), ValueFromString( units, rhStr ) );
             break;
         case COL_LENGTH:
         case COL_POSX:
@@ -341,7 +340,7 @@ public:
         std::sort( aRow.begin(), aRow.end(),
                    []( LIB_PIN* lhs, LIB_PIN* rhs ) -> bool
                    {
-                       return PinNumbers::Compare( lhs->GetNumber(), rhs->GetNumber() ) < 0;
+                       return PIN_NUMBERS::Compare( lhs->GetNumber(), rhs->GetNumber() ) < 0;
                    } );
     }
 
@@ -789,7 +788,7 @@ void DIALOG_LIB_EDIT_PIN_TABLE::OnClose( wxCloseEvent& event )
 
 void DIALOG_LIB_EDIT_PIN_TABLE::updateSummary()
 {
-    PinNumbers pinNumbers;
+    PIN_NUMBERS pinNumbers;
 
     for( LIB_PIN* pin : m_pins )
     {

@@ -28,7 +28,7 @@
 #include <grid_tricks.h>
 #include <confirm.h>
 #include <kiface_i.h>
-#include <pin_number.h>
+#include <pin_numbers.h>
 #include <kicad_string.h>
 #include <menus_helpers.h>
 #include <widgets/grid_icon_text_helpers.h>
@@ -248,7 +248,7 @@ public:
         case COL_NUMBER:
         case COL_BASE_NAME:
         case COL_ALT_NAME:
-            res = cmp( PinNumbers::Compare( lhStr, rhStr ), 0 );
+            res = cmp( PIN_NUMBERS::Compare( lhStr, rhStr ), 0 );
             break;
         case COL_TYPE:
         case COL_SHAPE:

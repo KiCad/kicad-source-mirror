@@ -190,7 +190,7 @@ set( EESCHEMA_SRCS
     symbol_viewer_frame.cpp
     libarch.cpp
     menubar.cpp
-    pin_number.cpp
+    pin_numbers.cpp
     pin_type.cpp
     sch_draw_panel.cpp
     project_rescue.cpp

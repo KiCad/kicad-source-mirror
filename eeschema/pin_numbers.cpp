@@ -22,7 +22,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include "pin_number.h"
+#include "pin_numbers.h"
 #include <wx/crt.h>
 
 namespace {
@@ -68,7 +68,7 @@ wxString GetNextSymbol( const wxString& str, wxString::size_type& cursor )
 }
 
 
-wxString PinNumbers::GetSummary() const
+wxString PIN_NUMBERS::GetSummary() const
 {
     wxString ret;
 
@@ -108,7 +108,7 @@ wxString PinNumbers::GetSummary() const
 }
 
 
-int PinNumbers::Compare( const PinNumber& lhs, const PinNumber& rhs )
+int PIN_NUMBERS::Compare( const PinNumber& lhs, const PinNumber& rhs )
 {
     wxString::size_type cursor1 = 0;
     wxString::size_type cursor2 = 0;
