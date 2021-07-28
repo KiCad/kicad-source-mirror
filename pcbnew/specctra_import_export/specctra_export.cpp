@@ -85,36 +85,14 @@ static const double safetyMargin = 0.1;
 
 bool PCB_EDIT_FRAME::ExportSpecctraFile( const wxString& aFullFilename )
 {
-    SPECCTRA_DB     db;
-    bool            ok = true;
-    wxString        errorText;
-
-    BASE_SCREEN*    screen = GetScreen();
-    bool            wasModified = screen->IsContentModified();
-
-    db.SetPCB( SPECCTRA_DB::MakePCB() );
-
-    LOCALE_IO       toggle;     // Switch the locale to standard C
-
-    // Build the board outlines *before* flipping footprints
-    if( !db.BuiltBoardOutlines( GetBoard() ) )
-    {
-        wxLogWarning( _( "Board outline is malformed. Run DRC for a full analysis." ) );
-    }
-
-    // DSN Images (=KiCad FOOTPRINTs and PADs) must be presented from the top view.  So we
-    // temporarily flip any footprints which are on the back side of the board to the front,
-    // and record this in the FOOTPRINT's flag field.
-    db.FlipFOOTPRINTs( GetBoard() );
+    BASE_SCREEN* screen = GetScreen();
+    bool         wasModified = screen->IsContentModified();
+    wxString     errorText;
+    bool         ok = true;
 
     try
     {
-        GetBoard()->SynchronizeNetsAndNetClasses();
-        db.FromBOARD( GetBoard() );
-        db.ExportPCB( aFullFilename, true );
-
-        // if an exception is thrown by FromBOARD or ExportPCB(), then
-        // ~SPECCTRA_DB() will close the file.
+        ExportBoardToSpecctraFile( GetBoard(), aFullFilename );
     }
     catch( const IO_ERROR& ioe )
     {
@@ -124,10 +102,7 @@ bool PCB_EDIT_FRAME::ExportSpecctraFile( const wxString& aFullFilename )
         errorText = ioe.What();
     }
 
-    // done assuredly, even if an exception was thrown and caught.
-    db.RevertFOOTPRINTs( GetBoard() );
-
-    // The two calls below to FOOTPRINT::Flip(), both set the
+    // The two calls to FOOTPRINT::Flip() in ExportBoardToSpecctraFile both set the
     // modified flag, yet their actions cancel each other out, so it should
     // be ok to clear the modify flag.
     if( !wasModified )
@@ -139,12 +114,45 @@ bool PCB_EDIT_FRAME::ExportSpecctraFile( const wxString& aFullFilename )
     }
     else
     {
-        DisplayErrorMessage( this,
-                             _( "Unable to export, please fix and try again" ),
-                             errorText );
+        DisplayErrorMessage( this, _( "Unable to export, please fix and try again" ), errorText );
     }
 
     return ok;
+}
+
+
+void ExportBoardToSpecctraFile( BOARD* aBoard, const wxString& aFullFilename )
+{
+    SPECCTRA_DB db;
+
+    db.SetPCB( SPECCTRA_DB::MakePCB() );
+
+    LOCALE_IO toggle; // Switch the locale to standard C
+
+    // Build the board outlines *before* flipping footprints
+    if( !db.BuiltBoardOutlines( aBoard ) )
+        wxLogWarning( _( "Board outline is malformed. Run DRC for a full analysis." ) );
+
+    // DSN Images (=KiCad FOOTPRINTs and PADs) must be presented from the top view.  So we
+    // temporarily flip any footprints which are on the back side of the board to the front,
+    // and record this in the FOOTPRINT's flag field.
+    db.FlipFOOTPRINTs( aBoard );
+
+    try
+    {
+        aBoard->SynchronizeNetsAndNetClasses();
+        db.FromBOARD( aBoard );
+        db.ExportPCB( aFullFilename, true );
+        db.RevertFOOTPRINTs( aBoard );
+
+        // if an exception is thrown by FromBOARD or ExportPCB(), then
+        // ~SPECCTRA_DB() will close the file.
+    }
+    catch( ... )
+    {
+        db.RevertFOOTPRINTs( aBoard );
+        throw;
+    }
 }
 
 

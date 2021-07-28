@@ -84,6 +84,17 @@ wxArrayString GetFootprints( const wxString& aNickName );
 bool ExportSpecctraDSN( wxString& aFullFilename );
 
 /**
+ * Will export the BOARD to a specctra dsn file.
+ * Unlike first overload doesn't need a valid PCB_EDIT_FRAME set and can be used
+ * in a standalone python script.
+ *
+ * See http://www.autotraxeda.com/docs/SPECCTRA/SPECCTRA.pdf for the specification.
+ *
+ * @return true if OK
+ */
+bool ExportSpecctraDSN( BOARD* aBoard, wxString& aFullFilename );
+
+/**
  * Export the current BOARD to a VRML (wrl) file.
  *
  * See ExportVRML_File in pcb_edit_frame.h for detailed documentation.
