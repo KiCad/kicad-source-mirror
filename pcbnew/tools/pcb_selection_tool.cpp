@@ -1042,8 +1042,11 @@ void PCB_SELECTION_TOOL::RemoveItemFromSel( BOARD_ITEM* aItem, bool aQuietMode )
     {
         unselect( aItem );
 
-        // Inform other potentially interested tools
-        m_toolMgr->ProcessEvent( EVENTS::UnselectedEvent );
+        if( !aQuietMode )
+        {
+            // Inform other potentially interested tools
+            m_toolMgr->ProcessEvent( EVENTS::UnselectedEvent );
+        }
     }
 }
 
