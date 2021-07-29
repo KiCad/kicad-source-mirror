@@ -188,10 +188,10 @@ bool SCH_EDIT_TOOL::Init()
                 if( SCH_LINE_WIRE_BUS_TOOL::IsDrawingLineWireOrBus( aSel ) )
                     return false;
 
-                SCH_ITEM* item = (SCH_ITEM*) aSel.Front();
-
                 if( aSel.GetSize() > 1 )
                     return true;
+
+                SCH_ITEM* item = (SCH_ITEM*) aSel.Front();
 
                 switch( item->Type() )
                 {
@@ -255,6 +255,18 @@ bool SCH_EDIT_TOOL::Init()
                 }
             };
 
+    auto autoplaceCondition =
+            [] ( const SELECTION& aSel )
+            {
+                for( const EDA_ITEM* item : aSel )
+                {
+                    if( item->IsType( EE_COLLECTOR::FieldOwners ) )
+                        return true;
+                }
+
+                return false;
+            };
+
     static KICAD_T toLabelTypes[] = { SCH_GLOBAL_LABEL_T, SCH_HIER_LABEL_T, SCH_TEXT_T, EOT };
     auto toLabelCondition = E_C::Count( 1 ) && E_C::OnlyTypes( toLabelTypes );
 
@@ -269,9 +281,6 @@ bool SCH_EDIT_TOOL::Init()
 
     static KICAD_T entryTypes[] = { SCH_BUS_WIRE_ENTRY_T, SCH_BUS_BUS_ENTRY_T, EOT };
     auto entryCondition = E_C::MoreThan( 0 ) && E_C::OnlyTypes( entryTypes );
-
-    static KICAD_T fieldParentTypes[] = { SCH_SYMBOL_T, SCH_SHEET_T, SCH_GLOBAL_LABEL_T, EOT };
-    auto singleFieldParentCondition = E_C::Count( 1 ) && E_C::OnlyTypes( fieldParentTypes );
 
     auto singleSheetCondition =  E_C::Count( 1 ) && E_C::OnlyType( SCH_SHEET_T );
 
@@ -323,7 +332,7 @@ bool SCH_EDIT_TOOL::Init()
     drawMenu.AddItem( EE_ACTIONS::editReference,    E_C::SingleSymbol, 200 );
     drawMenu.AddItem( EE_ACTIONS::editValue,        E_C::SingleSymbol, 200 );
     drawMenu.AddItem( EE_ACTIONS::editFootprint,    E_C::SingleSymbol, 200 );
-    drawMenu.AddItem( EE_ACTIONS::autoplaceFields,  singleFieldParentCondition, 200 );
+    drawMenu.AddItem( EE_ACTIONS::autoplaceFields,  autoplaceCondition, 200 );
     drawMenu.AddItem( EE_ACTIONS::toggleDeMorgan,   E_C::SingleDeMorganSymbol, 200 );
 
     std::shared_ptr<SYMBOL_UNIT_MENU> symUnitMenu2 = std::make_shared<SYMBOL_UNIT_MENU>();
@@ -353,7 +362,7 @@ bool SCH_EDIT_TOOL::Init()
     selToolMenu.AddItem( EE_ACTIONS::editReference,    E_C::SingleSymbol, 200 );
     selToolMenu.AddItem( EE_ACTIONS::editValue,        E_C::SingleSymbol, 200 );
     selToolMenu.AddItem( EE_ACTIONS::editFootprint,    E_C::SingleSymbol, 200 );
-    selToolMenu.AddItem( EE_ACTIONS::autoplaceFields,  singleFieldParentCondition, 200 );
+    selToolMenu.AddItem( EE_ACTIONS::autoplaceFields,  autoplaceCondition, 200 );
     selToolMenu.AddItem( EE_ACTIONS::toggleDeMorgan,   E_C::SingleSymbol, 200 );
 
     std::shared_ptr<SYMBOL_UNIT_MENU> symUnitMenu3 = std::make_shared<SYMBOL_UNIT_MENU>();
