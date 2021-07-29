@@ -22,7 +22,7 @@
  */
 
 
-#include <kicad_string.h>
+#include <string_utils.h>
 #include <scintilla_tricks.h>
 #include <wx/stc/stc.h>
 #include <gal/color4d.h>

@@ -30,7 +30,7 @@
 #include <cmath>
 #include <macros.h>
 #include <richio.h>                        // StrPrintf
-#include <kicad_string.h>
+#include <string_utils.h>
 
 
 /**

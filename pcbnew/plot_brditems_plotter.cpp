@@ -32,7 +32,7 @@
 #include <geometry/shape_line_chain.h>        // for SHAPE_LINE_CHAIN
 #include <geometry/shape_poly_set.h>          // for SHAPE_POLY_SET, SHAPE_P...
 #include <geometry/shape_segment.h>
-#include <kicad_string.h>
+#include <string_utils.h>
 #include <macros.h>
 #include <math/util.h>                        // for KiROUND, Clamp
 #include <math/vector2d.h>                    // for VECTOR2I

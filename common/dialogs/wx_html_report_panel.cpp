@@ -26,7 +26,7 @@
 #include <wildcards_and_files_ext.h>
 #include <gal/color4d.h>
 #include <wx/clipbrd.h>
-#include <kicad_string.h>
+#include <string_utils.h>
 #include <wx/ffile.h>
 #include <wx/log.h>
 #include <wx/filedlg.h>

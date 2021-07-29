@@ -29,7 +29,7 @@
 #include <fill_type.h>
 #include <plotters_specific.h>
 #include <macros.h>
-#include <kicad_string.h>
+#include <string_utils.h>
 #include <convert_basic_shapes_to_polygon.h>
 #include <render_settings.h>
 #include <trigo.h>

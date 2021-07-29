@@ -30,7 +30,7 @@
 #include <bitmaps.h>
 #include <kiway.h>
 #include <kiway_player.h>
-#include <kicad_string.h>
+#include <string_utils.h>
 #include <dialog_shim.h>
 #include <common.h>
 #include <env_paths.h>

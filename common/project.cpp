@@ -27,7 +27,7 @@
 #include <confirm.h>
 #include <core/arraydim.h>
 #include <fp_lib_table.h>
-#include <kicad_string.h>
+#include <string_utils.h>
 #include <kiface_ids.h>
 #include <kiway.h>
 #include <macros.h>

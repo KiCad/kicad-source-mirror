@@ -34,7 +34,7 @@
 #include <dialogs/panel_setup_netclasses.h>
 #include <tool/tool_manager.h>
 #include <widgets/wx_grid.h>
-#include <kicad_string.h>
+#include <string_utils.h>
 #include <widgets/grid_color_swatch_helpers.h>
 #include <widgets/grid_icon_text_helpers.h>
 #include <widgets/grid_text_helpers.h>

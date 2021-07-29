@@ -43,7 +43,7 @@
 #include <schematic.h>
 #include <connection_graph.h>
 #include <widgets/ui_common.h>
-#include <kicad_string.h>
+#include <string_utils.h>
 #include <wx/log.h>
 
 #include <advanced_config.h> // for realtime connectivity switch

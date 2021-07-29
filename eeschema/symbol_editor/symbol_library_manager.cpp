@@ -39,7 +39,7 @@
 #include <list>
 #include <locale_io.h>
 #include <wx/log.h>
-#include <kicad_string.h>
+#include <string_utils.h>
 #include "lib_logger.h"
 
 

@@ -26,7 +26,7 @@
 #include "connection_graph.h"
 #include <common.h>     // for ExpandEnvVarSubstitutions
 #include <erc.h>
-#include <kicad_string.h>
+#include <string_utils.h>
 #include <lib_pin.h>
 #include <sch_edit_frame.h>
 #include <sch_marker.h>

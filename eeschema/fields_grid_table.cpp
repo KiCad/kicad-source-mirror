@@ -36,7 +36,7 @@
 #include <project/project_file.h>
 #include "eda_doc.h"
 #include <wx/settings.h>
-#include <kicad_string.h>
+#include <string_utils.h>
 
 
 enum

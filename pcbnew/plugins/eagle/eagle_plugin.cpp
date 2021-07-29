@@ -61,7 +61,7 @@ Load() TODO's
 #include <convert_basic_shapes_to_polygon.h>
 #include <core/arraydim.h>
 #include <geometry/geometry_utils.h>
-#include <kicad_string.h>
+#include <string_utils.h>
 #include <locale_io.h>
 #include <macros.h>
 #include <properties.h>

@@ -43,7 +43,7 @@
 #include <wx/clipbrd.h>
 #include <wx/filedlg.h>
 #include <wx/log.h>
-#include <kicad_string.h>
+#include <string_utils.h>
 
 
 /**

@@ -29,7 +29,7 @@
 #include <sch_screen.h>
 #include <project/net_settings.h>
 #include <advanced_config.h>
-#include <kicad_string.h>
+#include <string_utils.h>
 
 #include <sch_connection.h>
 

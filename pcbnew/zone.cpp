@@ -34,7 +34,7 @@
 #include <board_design_settings.h>
 #include <pad.h>
 #include <zone.h>
-#include <kicad_string.h>
+#include <string_utils.h>
 #include <math_for_graphics.h>
 #include <settings/color_settings.h>
 #include <settings/settings_manager.h>

@@ -55,7 +55,7 @@
 #include <plugins/kicad/pcb_parser.h>
 #include <convert_basic_shapes_to_polygon.h>    // for RECT_CHAMFER_POSITIONS definition
 #include <math/util.h>                           // KiROUND, Clamp
-#include <kicad_string.h>
+#include <string_utils.h>
 #include <wx/log.h>
 #include <widgets/progress_reporter.h>
 

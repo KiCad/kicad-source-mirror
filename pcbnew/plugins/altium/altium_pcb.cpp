@@ -34,7 +34,7 @@
 #include <pcb_shape.h>
 #include <pcb_text.h>
 #include <pcb_track.h>
-#include <kicad_string.h>
+#include <string_utils.h>
 
 #include <fp_shape.h>
 #include <fp_text.h>

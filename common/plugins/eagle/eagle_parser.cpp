@@ -27,7 +27,7 @@
 
 #include <plugins/eagle/eagle_parser.h>
 
-#include <kicad_string.h>
+#include <string_utils.h>
 #include <richio.h>
 #include <wx/log.h>
 

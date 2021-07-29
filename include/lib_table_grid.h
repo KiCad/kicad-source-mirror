@@ -21,7 +21,7 @@
 #define __LIB_TABLE_GRID_H__
 
 #include <lib_table_base.h>
-#include <kicad_string.h>
+#include <string_utils.h>
 #include <wx/grid.h>
 
 const wxColour COLOUR_ROW_ENABLED( 0, 0, 0 );

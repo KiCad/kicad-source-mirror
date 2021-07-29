@@ -39,7 +39,7 @@ using namespace std::placeholders;
 #include <footprint_viewer_frame.h>
 #include <fp_lib_table.h>
 #include <io_mgr.h>
-#include <kicad_string.h>
+#include <string_utils.h>
 #include <kiway.h>
 #include <lib_id.h>
 #include <macros.h>

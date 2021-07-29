@@ -28,7 +28,7 @@
 #include <general.h>
 #include <geometry/shape_line_chain.h>
 #include <gr_text.h>
-#include <kicad_string.h>
+#include <string_utils.h>
 #include <plotter.h>
 #include <sch_draw_panel.h>
 #include <sch_edit_frame.h>

@@ -26,7 +26,7 @@ using namespace std::placeholders;
 #include <eda_item.h>
 #include <gerber_collectors.h>
 #include <class_draw_panel_gal.h>
-#include <kicad_string.h>
+#include <string_utils.h>
 #include <view/view.h>
 #include <view/view_group.h>
 #include <painter.h>

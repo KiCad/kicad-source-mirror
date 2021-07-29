@@ -25,7 +25,7 @@
 #include <pgm_base.h>
 #include <kiface_i.h>
 #include <confirm.h>
-#include <kicad_string.h>
+#include <string_utils.h>
 #include <macros.h>
 #include <pcb_edit_frame.h>
 #include <dialog_helpers.h>

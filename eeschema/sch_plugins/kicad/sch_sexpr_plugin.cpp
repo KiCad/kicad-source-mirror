@@ -59,7 +59,7 @@
 #include <sch_plugins/kicad/sch_sexpr_parser.h>
 #include <symbol_lib_table.h>  // for PropPowerSymsOnly definition.
 #include <ee_selection.h>
-#include <kicad_string.h>
+#include <string_utils.h>
 #include <wx_filename.h>       // for ::ResolvePossibleSymlinks()
 #include <widgets/progress_reporter.h>
 

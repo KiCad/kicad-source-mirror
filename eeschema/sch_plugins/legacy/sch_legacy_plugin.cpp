@@ -34,7 +34,7 @@
 #include <wx_filename.h>       // For ::ResolvePossibleSymlinks()
 
 #include <kiway.h>
-#include <kicad_string.h>
+#include <string_utils.h>
 #include <locale_io.h>
 #include <richio.h>
 #include <trace_helpers.h>

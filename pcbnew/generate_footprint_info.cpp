@@ -19,7 +19,7 @@
  */
 
 #include <generate_footprint_info.h>
-#include <kicad_string.h>
+#include <string_utils.h>
 #include <footprint.h>
 #include <fp_lib_table.h>
 #include <wx/log.h>

@@ -25,7 +25,7 @@
  */
 
 #include "netlist_exporter_pspice_sim.h"
-#include <kicad_string.h>
+#include <string_utils.h>
 #include <macros.h>     // for TO_UTF8 def
 #include <wx/regex.h>
 #include <wx/tokenzr.h>

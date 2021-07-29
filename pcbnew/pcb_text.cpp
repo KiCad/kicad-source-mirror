@@ -34,7 +34,7 @@
 #include <pcb_text.h>
 #include <pcb_painter.h>
 #include <trigo.h>
-#include <kicad_string.h>
+#include <string_utils.h>
 #include <geometry/shape_compound.h>
 
 using KIGFX::PCB_RENDER_SETTINGS;

@@ -38,7 +38,7 @@
 #include <gal/color4d.h>
 #include <gestfich.h>
 #include <trace_helpers.h>
-#include <kicad_string.h>
+#include <string_utils.h>
 #include <macros.h>
 
 #include <kiface_ids.h>

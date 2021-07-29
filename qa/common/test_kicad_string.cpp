@@ -29,7 +29,7 @@
 #include <qa_utils/wx_utils/unit_test_utils.h>
 
 // Code under test
-#include <kicad_string.h>
+#include <string_utils.h>
 
 /**
  * Declare the test suite

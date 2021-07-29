@@ -26,7 +26,7 @@
 #include <gerber_file_image.h>
 #include <gerber_file_image_list.h>
 #include <dialog_helpers.h>
-#include <kicad_string.h>
+#include <string_utils.h>
 #include <wx/wupdlock.h>
 #include <tool/actions.h>
 #include <tool/action_toolbar.h>

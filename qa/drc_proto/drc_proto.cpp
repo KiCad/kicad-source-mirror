@@ -38,7 +38,7 @@
 #include <pcbnew/pcb_expr_evaluator.h>
 #include <board_design_settings.h>
 
-#include <kicad_string.h>
+#include <string_utils.h>
 
 #include <connectivity/connectivity_data.h>
 #include <connectivity/connectivity_algo.h>

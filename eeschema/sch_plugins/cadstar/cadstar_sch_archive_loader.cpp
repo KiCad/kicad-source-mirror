@@ -32,7 +32,7 @@
 #include <lib_polyline.h>
 #include <lib_text.h>
 #include <macros.h>
-#include <kicad_string.h>
+#include <string_utils.h>
 #include <sch_bus_entry.h>
 #include <sch_edit_frame.h> //SYMBOL_ORIENTATION_T
 #include <sch_io_mgr.h>

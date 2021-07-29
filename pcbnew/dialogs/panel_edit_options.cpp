@@ -22,7 +22,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <kicad_string.h>
+#include <string_utils.h>
 #include <panel_edit_options.h>
 #include <pcb_edit_frame.h>
 #include <pcb_painter.h>

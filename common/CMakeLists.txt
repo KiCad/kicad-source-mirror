@@ -105,7 +105,7 @@ add_library( singletop STATIC EXCLUDE_FROM_ALL
 # Functions and data all need to use the #include <import_export.h> and be declared
 # as APIEXPORT
 set( LIB_KICAD_SRCS
-    string.cpp
+    string_utils.cpp
     )
 
 if( future )

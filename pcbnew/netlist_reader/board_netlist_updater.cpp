@@ -35,7 +35,7 @@
 #include <pad.h>
 #include <pcb_track.h>
 #include <zone.h>
-#include <kicad_string.h>
+#include <string_utils.h>
 #include <pcbnew_settings.h>
 #include <pcb_edit_frame.h>
 #include <netlist_reader/pcb_netlist.h>

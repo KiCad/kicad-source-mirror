@@ -32,7 +32,7 @@
 #include <footprint.h>
 #include <settings/settings_manager.h>
 #include <trigo.h>
-#include <kicad_string.h>
+#include <string_utils.h>
 #include <painter.h>
 #include <geometry/shape_compound.h>
 

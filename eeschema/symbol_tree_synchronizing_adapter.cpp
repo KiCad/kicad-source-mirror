@@ -27,7 +27,7 @@
 #include <symbol_library_manager.h>
 #include <symbol_lib_table.h>
 #include <tools/symbol_editor_control.h>
-#include <kicad_string.h>
+#include <string_utils.h>
 
 
 wxObjectDataPtr<LIB_TREE_MODEL_ADAPTER>

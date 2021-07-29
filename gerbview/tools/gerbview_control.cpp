@@ -25,7 +25,7 @@
 #include <gerber_file_image_list.h>
 #include <gerbview_painter.h>
 #include <gerbview_frame.h>
-#include <kicad_string.h>
+#include <string_utils.h>
 #include <excellon_image.h>
 #include <menus_helpers.h>
 #include <tool/tool_manager.h>

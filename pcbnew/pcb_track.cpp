@@ -31,7 +31,7 @@
 #include <pcb_track.h>
 #include <base_units.h>
 #include <bitmaps.h>
-#include <kicad_string.h>
+#include <string_utils.h>
 #include <view/view.h>
 #include <settings/color_settings.h>
 #include <settings/settings_manager.h>

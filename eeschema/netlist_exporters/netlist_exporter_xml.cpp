@@ -29,7 +29,7 @@
 #include <common.h>     // for ExpandTextVars
 #include <sch_base_frame.h>
 #include <symbol_library.h>
-#include <kicad_string.h>
+#include <string_utils.h>
 #include <connection_graph.h>
 #include <refdes_utils.h>
 #include <wx/wfstream.h>

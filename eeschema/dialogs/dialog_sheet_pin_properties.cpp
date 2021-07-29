@@ -28,7 +28,7 @@
 #include <sch_validators.h>
 #include <dialog_sheet_pin_properties.h>
 #include <dialogs/html_messagebox.h>
-#include <kicad_string.h>
+#include <string_utils.h>
 
 
 static wxString sheetPinTypes[] =

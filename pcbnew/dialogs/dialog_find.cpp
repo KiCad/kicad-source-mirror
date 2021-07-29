@@ -30,7 +30,7 @@
 #include <fp_text.h>
 #include <zone.h>
 #include <dialog_find.h>
-#include <kicad_string.h>
+#include <string_utils.h>
 #include <pcb_edit_frame.h>
 #include <string>
 #include <tool/tool_manager.h>

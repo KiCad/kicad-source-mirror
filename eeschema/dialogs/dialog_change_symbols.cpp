@@ -23,7 +23,7 @@
 #include <algorithm>
 
 #include <bitmaps.h>
-#include <kicad_string.h>   // WildCompareString
+#include <string_utils.h>   // WildCompareString
 #include <kiway.h>
 #include <lib_id.h>
 #include <refdes_utils.h>

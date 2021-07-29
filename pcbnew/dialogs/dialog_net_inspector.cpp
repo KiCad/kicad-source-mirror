@@ -23,7 +23,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <kicad_string.h>
+#include <string_utils.h>
 #include <tools/board_inspection_tool.h>
 #include <board.h>
 #include <board_design_settings.h>

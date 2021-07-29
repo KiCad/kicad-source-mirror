@@ -26,7 +26,7 @@
 #include <lib_tree_item.h>
 #include <utility>
 #include <pgm_base.h>
-#include <kicad_string.h>
+#include <string_utils.h>
 
 // Each node gets this lowest score initially, without any matches applied.
 // Matches will then increase this score depending on match quality.  This way,

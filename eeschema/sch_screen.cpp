@@ -34,7 +34,7 @@
 #include <eda_item.h>
 #include <eda_rect.h>
 #include <id.h>
-#include <kicad_string.h>
+#include <string_utils.h>
 #include <kiway.h>
 #include <plotter.h>
 #include <project.h>

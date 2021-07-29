@@ -49,7 +49,7 @@
 #include <wx/hyperlink.h>
 #include <erc_item.h>
 #include <eeschema_settings.h>
-#include <kicad_string.h>
+#include <string_utils.h>
 #include <kiplatform/ui.h>
 
 DIALOG_ERC::DIALOG_ERC( SCH_EDIT_FRAME* parent ) :

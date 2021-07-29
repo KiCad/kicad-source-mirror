@@ -24,7 +24,7 @@
  */
 
 #include <confirm.h>
-#include <kicad_string.h>
+#include <string_utils.h>
 #include <kiface_i.h>
 #include <sch_edit_frame.h>
 #include <wildcards_and_files_ext.h>

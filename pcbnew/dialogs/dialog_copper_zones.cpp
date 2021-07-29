@@ -37,7 +37,7 @@
 #include <eda_pattern_match.h>
 
 #include <dialog_copper_zones_base.h>
-#include <kicad_string.h>
+#include <string_utils.h>
 
 
 class DIALOG_COPPER_ZONE : public DIALOG_COPPER_ZONE_BASE

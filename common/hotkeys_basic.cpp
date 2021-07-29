@@ -26,7 +26,7 @@
 #include <kiface_i.h>
 #include <hotkeys_basic.h>
 #include <id.h>
-#include <kicad_string.h>
+#include <string_utils.h>
 #include <eda_base_frame.h>
 #include <eda_draw_frame.h>
 #include <wildcards_and_files_ext.h>

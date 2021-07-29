@@ -34,7 +34,7 @@
 #include <confirm.h>
 #include <eda_item.h>
 #include <reporter.h>
-#include <kicad_string.h>
+#include <string_utils.h>
 #include <sch_item.h>
 #include <sch_symbol.h>
 #include <sch_sheet.h>

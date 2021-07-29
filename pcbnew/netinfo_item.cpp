@@ -28,7 +28,7 @@
  */
 
 #include <pcb_base_frame.h>
-#include <kicad_string.h>
+#include <string_utils.h>
 #include <widgets/msgpanel.h>
 #include <base_units.h>
 #include <board.h>

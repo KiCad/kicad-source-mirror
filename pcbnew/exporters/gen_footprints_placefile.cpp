@@ -27,7 +27,7 @@
  */
 
 #include <confirm.h>
-#include <kicad_string.h>
+#include <string_utils.h>
 #include <gestfich.h>
 #include <pcb_edit_frame.h>
 #include <pcbnew_settings.h>

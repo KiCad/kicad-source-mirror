@@ -33,7 +33,7 @@
 #include <geometry/shape_simple.h>
 #include <geometry/shape_rect.h>
 #include <geometry/shape_compound.h>
-#include <kicad_string.h>
+#include <string_utils.h>
 #include <i18n_utility.h>
 #include <view/view.h>
 #include <board.h>

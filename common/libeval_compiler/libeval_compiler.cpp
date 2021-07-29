@@ -23,7 +23,7 @@
 #include <vector>
 #include <algorithm>
 
-#include <kicad_string.h>
+#include <string_utils.h>
 #include <wx/log.h>
 
 #ifdef DEBUG

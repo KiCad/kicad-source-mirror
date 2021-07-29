@@ -25,7 +25,7 @@
 #include <lib_symbol.h>
 #include <symbol_edit_frame.h>
 #include <template_fieldnames.h>
-#include <kicad_string.h>
+#include <string_utils.h>
 
 
 bool g_removeExtraLibFields      = false;

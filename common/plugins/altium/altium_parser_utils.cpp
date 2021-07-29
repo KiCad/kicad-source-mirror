@@ -24,7 +24,7 @@
 
 #include "altium_parser_utils.h"
 
-#include <kicad_string.h>
+#include <string_utils.h>
 #include <lib_id.h>
 
 

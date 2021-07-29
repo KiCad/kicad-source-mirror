@@ -52,7 +52,7 @@
 #include <zone.h>
 #include <common.h>
 #include <geometry/shape_arc.h>
-#include <kicad_string.h>
+#include <string_utils.h>
 #include <widgets/progress_reporter.h>
 #include <math/util.h>
 #include <wx/filename.h>

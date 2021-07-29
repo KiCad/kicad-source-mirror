@@ -36,7 +36,7 @@
 
 #include <base_units.h>
 #include <common.h>
-#include <kicad_string.h>
+#include <string_utils.h>
 #include <math/util.h>      // for KiROUND
 #include <macros.h>
 #include <title_block.h>

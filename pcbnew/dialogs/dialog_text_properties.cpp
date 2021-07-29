@@ -28,7 +28,7 @@
 #include <board_commit.h>
 #include <board.h>
 #include <footprint.h>
-#include <kicad_string.h>
+#include <string_utils.h>
 #include <pcb_text.h>
 #include <fp_text.h>
 #include <pcbnew.h>

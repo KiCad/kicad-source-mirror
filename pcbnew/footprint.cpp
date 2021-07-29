@@ -29,7 +29,7 @@
 #include <refdes_utils.h>
 #include <bitmaps.h>
 #include <unordered_set>
-#include <kicad_string.h>
+#include <string_utils.h>
 #include <pcb_edit_frame.h>
 #include <board.h>
 #include <board_design_settings.h>

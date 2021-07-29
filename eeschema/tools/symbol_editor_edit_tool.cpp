@@ -29,7 +29,7 @@
 #include <tools/symbol_editor_move_tool.h>
 #include <ee_actions.h>
 #include <bitmaps.h>
-#include <kicad_string.h>
+#include <string_utils.h>
 #include <symbol_edit_frame.h>
 #include <dialogs/dialog_lib_edit_draw_item.h>
 #include <dialogs/dialog_lib_edit_text.h>

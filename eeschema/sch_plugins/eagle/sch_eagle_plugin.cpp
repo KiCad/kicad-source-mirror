@@ -37,7 +37,7 @@
 
 #include <symbol_library.h>
 #include <plugins/eagle/eagle_parser.h>
-#include <kicad_string.h>
+#include <string_utils.h>
 #include <lib_arc.h>
 #include <lib_circle.h>
 #include <lib_id.h>

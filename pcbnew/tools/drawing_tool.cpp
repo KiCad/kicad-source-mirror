@@ -57,7 +57,7 @@
 #include <ratsnest/ratsnest_data.h>
 #include <pcbnew_id.h>
 #include <dialogs/dialog_track_via_size.h>
-#include <kicad_string.h>
+#include <string_utils.h>
 #include <macros.h>
 #include <widgets/infobar.h>
 #include <board_design_settings.h>

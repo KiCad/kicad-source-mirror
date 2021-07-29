@@ -43,7 +43,7 @@
 #include <wx/dcclient.h>
 #include <grid_tricks.h>
 #include <widgets/grid_text_button_helpers.h>
-#include <kicad_string.h>
+#include <string_utils.h>
 
 
 #define COL_REFS 0

@@ -22,7 +22,7 @@
  */
 
 #include <confirm.h>
-#include <kicad_string.h>
+#include <string_utils.h>
 #include <macros.h>
 #include <pcb_edit_frame.h>
 #include <board.h>

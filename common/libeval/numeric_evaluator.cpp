@@ -18,7 +18,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include <kicad_string.h>
+#include <string_utils.h>
 #include <libeval/numeric_evaluator.h>
 
 /* The (generated) lemon parser is written in C.

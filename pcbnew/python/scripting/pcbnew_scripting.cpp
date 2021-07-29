@@ -37,7 +37,7 @@
 #include <eda_base_frame.h>
 #include <gal/color4d.h>
 #include <trace_helpers.h>
-#include <kicad_string.h>
+#include <string_utils.h>
 #include <macros.h>
 #include <paths.h>
 #include <settings/settings_manager.h>

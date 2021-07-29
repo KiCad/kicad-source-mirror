@@ -26,7 +26,7 @@
 #include <settings/parameters.h>
 #include <settings/json_settings_internals.h>
 #include <settings/settings_manager.h>
-#include <kicad_string.h>
+#include <string_utils.h>
 #include <convert_to_biu.h>
 
 

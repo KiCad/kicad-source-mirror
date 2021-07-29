@@ -24,7 +24,7 @@
  */
 
 #include <common.h>     // for ProcessExecute
-#include <kicad_string.h>
+#include <string_utils.h>
 #include <gestfich.h>
 #include <sch_edit_frame.h>
 #include <schematic.h>

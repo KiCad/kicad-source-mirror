@@ -31,7 +31,7 @@
 
 #include "3d_info.h"
 #include <core/typeinfo.h>
-#include "kicad_string.h"
+#include "string_utils.h"
 #include <list>
 #include <map>
 #include "plugins/3dapi/c3dmodel.h"

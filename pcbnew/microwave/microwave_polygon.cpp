@@ -26,7 +26,7 @@
 
 #include <confirm.h>
 #include <trigo.h>
-#include <kicad_string.h>
+#include <string_utils.h>
 #include <pcb_edit_frame.h>
 #include <dialog_helpers.h>
 #include <dialog_shim.h>

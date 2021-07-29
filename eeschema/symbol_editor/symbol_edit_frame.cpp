@@ -72,7 +72,7 @@
 #include <wildcards_and_files_ext.h>
 #include <panel_sym_lib_table.h>
 #include <wx/choicdlg.h>
-#include <kicad_string.h>
+#include <string_utils.h>
 
 
 bool SYMBOL_EDIT_FRAME::m_showDeMorgan = false;

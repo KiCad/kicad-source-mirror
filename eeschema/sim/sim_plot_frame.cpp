@@ -36,7 +36,7 @@
 #include <wildcards_and_files_ext.h>
 #include <widgets/tuner_slider.h>
 #include <dialogs/dialog_signal_list.h>
-#include "kicad_string.h"
+#include "string_utils.h"
 #include "netlist_exporter_pspice_sim.h"
 #include <pgm_base.h>
 #include "ngspice.h"

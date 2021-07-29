@@ -18,7 +18,7 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <kicad_string.h>
+#include <string_utils.h>
 #include <widgets/grid_text_helpers.h>
 
 

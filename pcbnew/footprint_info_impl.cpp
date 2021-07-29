@@ -26,7 +26,7 @@
 #include <footprint_info.h>
 #include <fp_lib_table.h>
 #include <dialogs/html_messagebox.h>
-#include <kicad_string.h>
+#include <string_utils.h>
 #include <locale_io.h>
 #include <kiway.h>
 #include <lib_id.h>

@@ -26,7 +26,7 @@
 #include <bitmaps.h>
 #include <kiway.h>
 #include <confirm.h>
-#include <kicad_string.h>
+#include <string_utils.h>
 #include <sch_base_frame.h>
 #include <sch_edit_frame.h>
 #include <ee_collectors.h>

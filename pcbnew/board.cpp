@@ -42,7 +42,7 @@
 #include <core/arraydim.h>
 #include <core/kicad_algo.h>
 #include <connectivity/connectivity_data.h>
-#include <kicad_string.h>
+#include <string_utils.h>
 #include <pgm_base.h>
 #include <pcbnew_settings.h>
 #include <project.h>

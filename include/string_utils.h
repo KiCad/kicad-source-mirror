@@ -21,14 +21,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file  kicad_string.h
- * @see   common.h, string.cpp
- */
-
-
-#ifndef KICAD_STRING_H_
-#define KICAD_STRING_H_
+#ifndef STRING_UTILS_H
+#define STRING_UTILS_H
 
 #include "config.h"
 
@@ -354,4 +348,4 @@ std::string Double2Str( double aValue );
  */
 wxString AngleToStringDegrees( double aAngle );
 
-#endif  // KICAD_STRING_H_
+#endif  // STRING_UTILS_H

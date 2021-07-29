@@ -26,7 +26,7 @@
 #define __dialog_lib_new_symbol__
 
 #include <widgets/unit_binder.h>
-#include <kicad_string.h>
+#include <string_utils.h>
 #include <dialog_lib_new_symbol_base.h>
 
 class EDA_DRAW_FRAME;

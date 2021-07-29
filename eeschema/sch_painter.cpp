@@ -63,7 +63,7 @@
 #include <kiface_i.h>
 #include <default_values.h>
 #include <advanced_config.h>
-#include <kicad_string.h>
+#include <string_utils.h>
 #include "sch_painter.h"
 
 namespace KIGFX

@@ -29,7 +29,7 @@
 #include <widgets/ui_common.h>
 #include <wx/tokenzr.h>
 #include <wx/wupdlock.h>
-#include <kicad_string.h>
+#include <string_utils.h>
 
 
 #define PINNED_ITEMS_KEY      wxT( "PinnedItems" )

@@ -55,7 +55,7 @@
 #include <wx/listbox.h>
 
 #include <default_values.h>
-#include <kicad_string.h>
+#include <string_utils.h>
 
 // Save previous symbol library viewer state.
 wxString SYMBOL_VIEWER_FRAME::m_libraryName;

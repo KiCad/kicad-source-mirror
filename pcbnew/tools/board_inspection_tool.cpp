@@ -34,7 +34,7 @@
 #include <drc/drc_engine.h>
 #include <dialogs/panel_setup_rules_base.h>
 #include <dialogs/dialog_constraints_reporter.h>
-#include <kicad_string.h>
+#include <string_utils.h>
 #include "board_inspection_tool.h"
 #include <pcbnew_settings.h>
 #include <widgets/appearance_controls.h>

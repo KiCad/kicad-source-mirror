@@ -46,7 +46,7 @@
 #include <sch_field.h>
 #include <schematic.h>
 #include <settings/color_settings.h>
-#include <kicad_string.h>
+#include <string_utils.h>
 #include <trace_helpers.h>
 #include <trigo.h>
 #include <eeschema_id.h>

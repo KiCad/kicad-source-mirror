@@ -32,7 +32,7 @@
 #include <footprint.h>
 #include <pad.h>
 #include <pcb_shape.h>
-#include <kicad_string.h>
+#include <string_utils.h>
 #include <zone.h>
 #include <pcb_text.h>
 #include <pcb_marker.h>

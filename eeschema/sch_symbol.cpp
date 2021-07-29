@@ -36,7 +36,7 @@
 #include <trigo.h>
 #include <refdes_utils.h>
 #include <wx/log.h>
-#include <kicad_string.h>
+#include <string_utils.h>
 
 /**
  * Convert a wxString to UTF8 and replace any control characters with a ~,

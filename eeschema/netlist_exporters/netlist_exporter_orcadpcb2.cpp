@@ -28,7 +28,7 @@
 
 #include <sch_edit_frame.h>
 #include <sch_reference_list.h>
-#include <kicad_string.h>
+#include <string_utils.h>
 #include <symbol_library.h>
 #include <symbol_lib_table.h>
 

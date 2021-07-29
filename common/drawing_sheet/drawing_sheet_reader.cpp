@@ -25,7 +25,7 @@
 
 #include <eda_item.h>
 #include <locale_io.h>
-#include <kicad_string.h>
+#include <string_utils.h>
 #include <drawing_sheet/ds_data_item.h>
 #include <drawing_sheet/ds_data_model.h>
 #include <drawing_sheet/ds_draw_item.h>

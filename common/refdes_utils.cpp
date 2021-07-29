@@ -23,7 +23,7 @@
 
 #include <refdes_utils.h>
 
-#include <kicad_string.h>
+#include <string_utils.h>
 
 #include <algorithm>
 #include <cctype>

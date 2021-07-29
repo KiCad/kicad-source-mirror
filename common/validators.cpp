@@ -28,7 +28,7 @@
  * @brief Custom text control validator implementations.
  */
 
-#include <kicad_string.h>
+#include <string_utils.h>
 #include <confirm.h>
 #include <validators.h>
 

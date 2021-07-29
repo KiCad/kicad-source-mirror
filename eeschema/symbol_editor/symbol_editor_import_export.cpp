@@ -31,7 +31,7 @@
 #include <symbol_library_manager.h>
 #include <wx/filename.h>
 #include <wx/filedlg.h>
-#include <kicad_string.h>
+#include <string_utils.h>
 
 
 void SYMBOL_EDIT_FRAME::ImportSymbol()

@@ -40,7 +40,7 @@
 #include <fp_shape.h>
 #include <pcb_group.h>
 #include <pcb_text.h>
-#include <kicad_string.h>
+#include <string_utils.h>
 #include <wx/utils.h>
 
 

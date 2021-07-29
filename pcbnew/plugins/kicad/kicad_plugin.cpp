@@ -33,7 +33,7 @@
 #include <pcb_dimension.h>
 #include <footprint.h>
 #include <fp_shape.h>
-#include <kicad_string.h>
+#include <string_utils.h>
 #include <kiface_i.h>
 #include <locale_io.h>
 #include <macros.h>

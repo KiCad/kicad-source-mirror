@@ -28,7 +28,7 @@
 
 
 
-#include <kicad_string.h>
+#include <string_utils.h>
 #include <reporter.h>
 
 #include "pcb_netlist.h"

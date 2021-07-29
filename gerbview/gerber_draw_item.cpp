@@ -30,7 +30,7 @@
 #include <gerber_draw_item.h>
 #include <gerber_file_image.h>
 #include <gerber_file_image_list.h>
-#include <kicad_string.h>
+#include <string_utils.h>
 #include <geometry/shape_arc.h>
 #include <math/util.h>      // for KiROUND
 #include <widgets/msgpanel.h>

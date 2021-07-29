@@ -29,7 +29,7 @@
 #include <confirm.h>
 #include <kiface_i.h>
 #include <pin_numbers.h>
-#include <kicad_string.h>
+#include <string_utils.h>
 #include <menus_helpers.h>
 #include <widgets/grid_icon_text_helpers.h>
 #include <widgets/grid_combobox.h>

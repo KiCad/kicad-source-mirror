@@ -31,7 +31,7 @@
 #include <eeschema_settings.h>
 #include <general.h>
 #include <grid_tricks.h>
-#include <kicad_string.h>
+#include <string_utils.h>
 #include <kiface_i.h>
 #include <refdes_utils.h>
 #include <sch_edit_frame.h>

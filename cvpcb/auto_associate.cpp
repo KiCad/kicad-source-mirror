@@ -32,7 +32,7 @@
 
 
 #include <kiface_i.h>
-#include <kicad_string.h>
+#include <string_utils.h>
 #include <macros.h>
 
 #include <auto_associate.h>

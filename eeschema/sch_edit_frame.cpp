@@ -34,7 +34,7 @@
 #include <hierarch.h>
 #include <dialogs/html_messagebox.h>
 #include <invoke_sch_dialog.h>
-#include <kicad_string.h>
+#include <string_utils.h>
 #include <kiface_i.h>
 #include <kiplatform/app.h>
 #include <kiway.h>

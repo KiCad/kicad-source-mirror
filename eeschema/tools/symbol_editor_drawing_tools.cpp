@@ -36,7 +36,7 @@
 #include <pgm_base.h>
 #include <symbol_editor/symbol_editor_settings.h>
 #include <settings/settings_manager.h>
-#include <kicad_string.h>
+#include <string_utils.h>
 
 static void* g_lastPinWeakPtr;
 

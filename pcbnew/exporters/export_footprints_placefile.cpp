@@ -26,7 +26,7 @@
  *  2 - create a footprint report (pos and footprint descr) (ascii file)
  */
 
-#include <kicad_string.h>
+#include <string_utils.h>
 #include <macros.h>
 #include <locale_io.h>
 #include <board_design_settings.h>

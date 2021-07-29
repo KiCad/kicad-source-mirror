@@ -29,7 +29,7 @@
 #include <board.h>
 #include <board_design_settings.h>
 #include <project.h>
-#include <kicad_string.h>
+#include <string_utils.h>
 #include <tool/tool_manager.h>
 #include <panel_setup_rules.h>
 #include <wx_html_report_box.h>

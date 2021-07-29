@@ -31,7 +31,7 @@
 #include <sch_symbol.h>
 #include <widgets/grid_text_button_helpers.h>
 #include <widgets/wx_grid.h>
-#include <kicad_string.h>
+#include <string_utils.h>
 
 #ifdef KICAD_SPICE
 #include <dialog_spice_model.h>

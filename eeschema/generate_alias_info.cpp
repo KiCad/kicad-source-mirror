@@ -19,7 +19,7 @@
  */
 
 #include <generate_alias_info.h>
-#include <kicad_string.h>
+#include <string_utils.h>
 #include <template_fieldnames.h>
 #include <lib_symbol.h>
 #include <symbol_lib_table.h>

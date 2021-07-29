@@ -32,7 +32,7 @@
 #include <eda_item.h>
 #include <gr_text.h>
 #include <confirm.h>
-#include <kicad_string.h>
+#include <string_utils.h>
 #include <locale_io.h>
 #include <macros.h>
 #include <math/util.h>      // for KiROUND

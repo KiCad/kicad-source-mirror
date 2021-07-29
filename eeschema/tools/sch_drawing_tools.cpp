@@ -50,7 +50,7 @@
 #include <dialogs/dialog_line_wire_bus_properties.h>
 #include <dialogs/dialog_junction_props.h>
 #include <dialogs/dialog_sheet_pin_properties.h>
-#include <kicad_string.h>
+#include <string_utils.h>
 #include <wildcards_and_files_ext.h>
 #include <wx/filedlg.h>
 

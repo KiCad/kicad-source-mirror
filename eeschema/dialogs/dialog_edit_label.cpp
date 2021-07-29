@@ -35,7 +35,7 @@
 #include <schematic.h>
 #include <dialogs/html_messagebox.h>
 #include <dialog_edit_label.h>
-#include <kicad_string.h>
+#include <string_utils.h>
 #include <tool/actions.h>
 #include <scintilla_tricks.h>
 

@@ -29,7 +29,7 @@
 #include <trigo.h>
 #include <sch_edit_frame.h>
 #include <plotter.h>
-#include <kicad_string.h>
+#include <string_utils.h>
 #include <widgets/msgpanel.h>
 #include <math/util.h>      // for KiROUND
 #include <sch_sheet.h>

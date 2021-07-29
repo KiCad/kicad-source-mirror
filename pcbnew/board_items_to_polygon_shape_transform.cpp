@@ -30,7 +30,7 @@
 #include <pad.h>
 #include <pcb_dimension.h>
 #include <pcb_track.h>
-#include <kicad_string.h>
+#include <string_utils.h>
 #include <pcb_shape.h>
 #include <pcb_text.h>
 #include <zone.h>

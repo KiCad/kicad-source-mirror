@@ -41,7 +41,7 @@
 #include <drc/drc_item.h>
 #include <fp_lib_table.h>
 #include <io_mgr.h>
-#include <kicad_string.h>
+#include <string_utils.h>
 #include <macros.h>
 #include <pcbnew_scripting_helpers.h>
 #include <project.h>
