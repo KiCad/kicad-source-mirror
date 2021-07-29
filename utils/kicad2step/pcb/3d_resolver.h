@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2016 Cirilo Bernardo <cirilo.bernardo@gmail.com>
+ * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -38,53 +39,52 @@
 
 namespace S3D
 {
-
-    struct rsort_wxString
+struct rsort_wxString
+{
+    bool operator() (const wxString& strA, const wxString& strB ) const
     {
-        bool operator() (const wxString& strA, const wxString& strB ) const
+        // sort a wxString using the reverse character order; for 3d model
+        // filenames this will typically be a much faster operation than
+        // a normal alphabetic sort
+        wxString::const_reverse_iterator sA = strA.rbegin();
+        wxString::const_reverse_iterator eA = strA.rend();
+
+        wxString::const_reverse_iterator sB = strB.rbegin();
+        wxString::const_reverse_iterator eB = strB.rend();
+
+        if( strA.empty() )
         {
-            // sort a wxString using the reverse character order; for 3d model
-            // filenames this will typically be a much faster operation than
-            // a normal alphabetic sort
-            wxString::const_reverse_iterator sA = strA.rbegin();
-            wxString::const_reverse_iterator eA = strA.rend();
-
-            wxString::const_reverse_iterator sB = strB.rbegin();
-            wxString::const_reverse_iterator eB = strB.rend();
-
-            if( strA.empty() )
-            {
-                if( strB.empty() )
-                    return false;
-
-                // note: this rule implies that a null string is first in the sort order
-                return true;
-            }
-
             if( strB.empty() )
                 return false;
 
-            while( sA != eA && sB != eB )
-            {
-                if( (*sA) == (*sB) )
-                {
-                    ++sA;
-                    ++sB;
-                    continue;
-                }
-
-                if( (*sA) < (*sB) )
-                    return true;
-                else
-                    return false;
-            }
-
-            if( sB == eB )
-                return false;
-
+            // note: this rule implies that a null string is first in the sort order
             return true;
         }
-    };
+
+        if( strB.empty() )
+            return false;
+
+        while( sA != eA && sB != eB )
+        {
+            if( (*sA) == (*sB) )
+            {
+                ++sA;
+                ++sB;
+                continue;
+            }
+
+            if( (*sA) < (*sB) )
+                return true;
+            else
+                return false;
+        }
+
+        if( sB == eB )
+            return false;
+
+        return true;
+    }
+};
 
 };  // end NAMESPACE
 
@@ -99,128 +99,114 @@ struct SEARCH_PATH
     wxString m_Description;     // description of the aliased path
 };
 
+
 class S3D_RESOLVER
 {
-private:
-    wxString m_ConfigDir;           // 3D configuration directory
-    std::list< SEARCH_PATH > m_Paths; // list of base paths to search from
-    // mapping of (short) file names to resolved names
-    std::map< wxString, wxString, S3D::rsort_wxString > m_NameMap;
-    int m_errflags;
-    wxString m_curProjDir;
-    // environment variables
-    std::map< wxString, wxString > m_EnvVars;
+public:
+    S3D_RESOLVER();
 
     /**
-     * Function createPathList
-     * builds the path list using available information such as
-     * KICAD6_3DMODEL_DIR and the 3d_path_list configuration file. Invalid
-     * paths are silently discarded and removed from the configuration
-     * file.
+     * Set the user's configuration directory for 3D models.
+     *
+     * @param aConfigDir
+     * @return true if the call succeeds (directory exists).
+     */
+    bool Set3DConfigDir( const wxString& aConfigDir );
+
+    /**
+     * Set the current KiCad project directory as the first entry in the model path list.
+     *
+     * @param aProjDir is the current project directory.
+     * @param flgChanged, if specified, is set to true if the directory actually changed.
+     * @return true if the call succeeds.
+     */
+    bool SetProjectDir( const wxString& aProjDir, bool* flgChanged = NULL );
+    wxString GetProjectDir( void );
+
+    /**
+     * Determine the full path of the given file name.
+     *
+     * In the future remote files may be supported, in which case it is best to require a full
+     * URI in which case #ResolvePath should check that the URI conforms to RFC-2396 and related
+     * documents and copies \a aFileName into the resolved name if the URI is valid.
+     */
+    wxString ResolvePath( const wxString& aFileName );
+
+    /**
+     * Produce a relative path based on the existing search directories or returns the same path
+     * if the path is not a superset of an existing search path.
+     *
+     * @param aFullPathName is an absolute path to shorten.
+     * @return the shortened path or aFullPathName.
+     */
+    wxString ShortenPath( const wxString& aFullPathName );
+
+    /**
+     * Return a pointer to the internal path list.
+     *
+     * The list can be used to set up the list of search paths available to a 3D file browser.
+     *
+     * @return the search path list.
+     */
+    const std::list< SEARCH_PATH >* GetPaths( void );
+
+    /**
+     * Return true if the given name contains an alias and populates the string with the alias
+     * and the relative path.
+     */
+    bool SplitAlias( const wxString& aFileName, wxString& anAlias, wxString& aRelPath );
+
+    /**
+     * If the path contains an alias then \a hasAlias is set true.
+     *
+     * @return true if the given path is a valid aliased relative path.
+     */
+    bool ValidateFileName( const wxString& aFileName, bool& hasAlias );
+
+private:
+    /**
+     * Build the path list using available information such as KICAD6_3DMODEL_DIR and the
+     * 3d_path_list configuration file.
+     *
+     * Invalid paths are silently discarded and removed from the configuration file.
      *
      * @return true if at least one valid path was found
      */
     bool createPathList( void );
 
     /**
-     * Function addPath
-     * checks that a path is valid and adds it to the search list
+     * Check that \a aPath is valid and adds it to the search list.
      *
-     * @param aPath is the alias set to be checked and added
-     * @return true if aPath is valid
+     * @param aPath is the alias set to be checked and added.
+     * @return true if \a aPath is valid.
      */
     bool addPath( const SEARCH_PATH& aPath );
 
     /**
-     * Function readPathList
-     * reads a list of path names from a configuration file
+     * Read a list of path names from a configuration file.
      *
-     * @return true if a file was found and contained at least
-     * one valid path
+     * @return true if a file was found and contained at least one valid path.
      */
     bool readPathList( void );
 
     /**
-     * Function checkEnvVarPath
-     * checks the ${ENV_VAR} component of a path and adds
-     * it to the resolver's path list if it is not yet in
-     * the list
+     * Check the ${ENV_VAR} component of a path and adds it to the resolver's path list if it
+     * is not yet in the list.
      */
     void checkEnvVarPath( const wxString& aPath );
 
     wxString expandVars( const wxString& aPath );
 
-public:
-    S3D_RESOLVER();
+    wxString m_ConfigDir;             ///< 3D configuration directory.
+    std::list< SEARCH_PATH > m_Paths; ///< List of base search paths.
 
-    /**
-     * Function Set3DConfigDir
-     * sets the user's configuration directory
-     * for 3D models.
-     *
-     * @param aConfigDir
-     * @return true if the call succeeds (directory exists)
-     */
-    bool Set3DConfigDir( const wxString& aConfigDir );
+    ///< Mapping of (short) file names to resolved names.
+    std::map< wxString, wxString, S3D::rsort_wxString > m_NameMap;
+    int m_errflags;
+    wxString m_curProjDir;
 
-    /**
-     * Function SetProjectDir
-     * sets the current KiCad project directory as the first
-     * entry in the model path list
-     *
-     * @param aProjDir is the current project directory
-     * @param flgChanged, if specified, is set to true if the directory actually changed
-     * @return true if the call succeeds
-     */
-    bool SetProjectDir( const wxString& aProjDir, bool* flgChanged = NULL );
-    wxString GetProjectDir( void );
-
-    /**
-     * Function ResolvePath
-     * determines the full path of the given file name. In the future
-     * remote files may be supported, in which case it is best to
-     * require a full URI in which case ResolvePath should check that
-     * the URI conforms to RFC-2396 and related documents and copies
-     * aFileName into aResolvedName if the URI is valid.
-     */
-    wxString ResolvePath( const wxString& aFileName );
-
-    /**
-     * Function ShortenPath
-     * produces a relative path based on the existing
-     * search directories or returns the same path if
-     * the path is not a superset of an existing search path.
-     *
-     * @param aFullPathName is an absolute path to shorten
-     * @return the shortened path or aFullPathName
-     */
-    wxString ShortenPath( const wxString& aFullPathName );
-
-    /**
-     * Function GetPaths
-     * returns a pointer to the internal path list; the items in:load
-     *
-     * the list can be used to set up the list of search paths
-     * available to a 3D file browser.
-     *
-     * @return pointer to the internal path list
-     */
-    const std::list< SEARCH_PATH >* GetPaths( void );
-
-    /**
-     * Function SplitAlias
-     * returns true if the given name contains an alias and
-     * populates the string anAlias with the alias and aRelPath
-     * with the relative path.
-     */
-    bool SplitAlias( const wxString& aFileName, wxString& anAlias, wxString& aRelPath );
-
-    /**
-     * Function ValidateName
-     * returns true if the given path is a valid aliased relative path.
-     * If the path contains an alias then hasAlias is set true.
-     */
-    bool ValidateFileName( const wxString& aFileName, bool& hasAlias );
+    ///< Environment variables.
+    std::map< wxString, wxString > m_EnvVars;
 };
 
 #endif  // RESOLVER_3D_H

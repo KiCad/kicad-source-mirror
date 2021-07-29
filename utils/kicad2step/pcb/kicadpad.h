@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 Cirilo Bernardo <cirilo.bernardo@gmail.com>
+ * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,7 +24,7 @@
 
 /**
  * @file kicadpad.h
- * declares the PAD description object.
+ * Declare the PAD description object.
  */
 
 #ifndef KICADPAD_H
@@ -43,10 +44,6 @@ struct KICADDRILL
 
 class KICADPAD
 {
-private:
-    bool        m_thruhole;
-    bool parseDrill( const SEXPR::SEXPR* aDrill );
-
 public:
     KICADPAD();
     virtual ~KICADPAD();
@@ -58,9 +55,16 @@ public:
         return m_thruhole;
     }
 
+private:
+    bool parseDrill( const SEXPR::SEXPR* aDrill );
+
+public:
     DOUBLET     m_position;
     double      m_rotation; // rotation (radians)
     KICADDRILL  m_drill;
+
+private:
+    bool        m_thruhole;
 };
 
 #endif  // KICADPAD_H

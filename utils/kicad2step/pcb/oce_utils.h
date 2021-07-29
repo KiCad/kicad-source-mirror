@@ -49,15 +49,7 @@ class KICADPAD;
 
 class OUTLINE
 {
-private:
-    bool   m_closed;        // set true if the loop is closed
-    double m_minDistance2;  // min squared distance to treat points as separate entities (mm)
-
-    bool addEdge( BRepBuilderAPI_MakeWire* aWire, KICADCURVE& aCurve, DOUBLET& aLastPoint );
-    bool testClosed( const KICADCURVE& aFrontCurve, const KICADCURVE& aBackCurve );
-
 public:
-    std::list< KICADCURVE > m_curves;   // list of contiguous segments
     OUTLINE();
     virtual ~OUTLINE();
 
@@ -77,51 +69,22 @@ public:
     }
 
     bool MakeShape( TopoDS_Shape& aShape, double aThickness );
+
+private:
+    bool addEdge( BRepBuilderAPI_MakeWire* aWire, KICADCURVE& aCurve, DOUBLET& aLastPoint );
+    bool testClosed( const KICADCURVE& aFrontCurve, const KICADCURVE& aBackCurve );
+
+public:
+    std::list< KICADCURVE > m_curves;   // list of contiguous segments
+
+private:
+    bool   m_closed;        // set true if the loop is closed
+    double m_minDistance2;  // min squared distance to treat points as separate entities (mm)
 };
 
 
 class PCBMODEL
 {
-    Handle( XCAFApp_Application )   m_app;
-    Handle( TDocStd_Document )      m_doc;
-    Handle( XCAFDoc_ShapeTool )     m_assy;
-    TDF_Label                       m_assy_label;
-    bool                            m_hasPCB;       // set true if CreatePCB() has been invoked
-    TDF_Label                       m_pcb_label;    // label for the PCB model
-    MODEL_MAP                       m_models;       // map of file names to model labels
-    int                             m_components;   // number of successfully loaded components;
-    double                          m_precision;    // model (length unit) numeric precision
-    double                          m_angleprec;    // angle numeric precision
-    double                          m_thickness;    // PCB thickness, mm
-    double                          m_minx;         // minimum X value in curves (leftmost curve feature)
-    double                          m_minDistance2; // minimum squared distance between items (mm)
-    std::list<KICADCURVE>::iterator m_mincurve;   // iterator to the leftmost curve
-
-    std::list<KICADCURVE>           m_curves;
-    std::vector<TopoDS_Shape>       m_cutouts;
-
-    /**
-     * Load a 3D model data
-     * aFileName is the filename (different formats allowed) but for WRML files a model
-     * data can be loaded instead of the vrml data, not suitable in a step file
-     * @param aScale is the X,Y,Z scaling factors
-     * @param aLabel is the TDF_Label to store the data
-     * @param aSubstituteModels = true to allows data substitution, false to disallow.
-     * @param aErrorMessage (can be nullptr) is an error message to be displayed on error.
-     * @return true if successfully loaded, false on error
-     */
-    bool getModelLabel( const std::string& aFileName, TRIPLET aScale, TDF_Label& aLabel,
-                        bool aSubstituteModels, wxString* aErrorMessage = nullptr );
-
-    bool getModelLocation( bool aBottom, DOUBLET aPosition, double aRotation,
-        TRIPLET aOffset, TRIPLET aOrientation, TopLoc_Location& aLocation );
-
-    bool readIGES( Handle( TDocStd_Document )& m_doc, const char* fname );
-    bool readSTEP( Handle( TDocStd_Document )& m_doc, const char* fname );
-
-    TDF_Label transferModel( Handle( TDocStd_Document )& source,
-                             Handle( TDocStd_Document )& dest, TRIPLET aScale );
-
 public:
     PCBMODEL();
     virtual ~PCBMODEL();
@@ -157,6 +120,50 @@ public:
 
     // write the assembly model in STEP format
     bool WriteSTEP( const wxString& aFileName );
+
+private:
+    /**
+     * Load a 3D model data.
+     *
+     * @param aFileName is the filename (different formats allowed) but for WRML files a model
+     *        data can be loaded instead of the vrml data, not suitable in a step file.
+     * @param aScale is the X,Y,Z scaling factors.
+     * @param aLabel is the TDF_Label to store the data.
+     * @param aSubstituteModels = true to allows data substitution, false to disallow.
+     * @param aErrorMessage (can be nullptr) is an error message to be displayed on error.
+     * @return true if successfully loaded, false on error.
+     */
+    bool getModelLabel( const std::string& aFileName, TRIPLET aScale, TDF_Label& aLabel,
+                        bool aSubstituteModels, wxString* aErrorMessage = nullptr );
+
+    bool getModelLocation( bool aBottom, DOUBLET aPosition, double aRotation, TRIPLET aOffset,
+                           TRIPLET aOrientation, TopLoc_Location& aLocation );
+
+    bool readIGES( Handle( TDocStd_Document )& m_doc, const char* fname );
+    bool readSTEP( Handle( TDocStd_Document )& m_doc, const char* fname );
+
+    TDF_Label transferModel( Handle( TDocStd_Document )& source,
+                             Handle( TDocStd_Document )& dest, TRIPLET aScale );
+
+    Handle( XCAFApp_Application )   m_app;
+    Handle( TDocStd_Document )      m_doc;
+    Handle( XCAFDoc_ShapeTool )     m_assy;
+    TDF_Label                       m_assy_label;
+    bool                            m_hasPCB;       // set true if CreatePCB() has been invoked
+    TDF_Label                       m_pcb_label;    // label for the PCB model
+    MODEL_MAP                       m_models;       // map of file names to model labels
+    int                             m_components;   // number of successfully loaded components;
+    double                          m_precision;    // model (length unit) numeric precision
+    double                          m_angleprec;    // angle numeric precision
+    double                          m_thickness;    // PCB thickness, mm
+
+    // minimum X value in curves (leftmost curve feature).
+    double                          m_minx;
+    double                          m_minDistance2; // minimum squared distance between items (mm)
+    std::list<KICADCURVE>::iterator m_mincurve;     // iterator to the leftmost curve
+
+    std::list<KICADCURVE>           m_curves;
+    std::vector<TopoDS_Shape>       m_cutouts;
 };
 
 #endif // OCE_VIS_OCE_UTILS_H

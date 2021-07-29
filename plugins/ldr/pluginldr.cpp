@@ -32,6 +32,11 @@
 #include "pluginldr.h"
 
 
+/**
+ * Flag to enable plugin loader trace output.
+ *
+ * @ingroup trace_env_vars
+ */
 const wxChar* const tracePluginLoader = wxT( "KICAD_PLUGIN_LOADER" );
 
 

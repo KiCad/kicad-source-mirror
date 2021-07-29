@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 Cirilo Bernardo <cirilo.bernardo@gmail.com>
+ * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -52,38 +53,6 @@ class PCBMODEL;
 
 class KICADPCB
 {
-private:
-    S3D_RESOLVER m_resolver;
-    wxString    m_filename;
-    PCBMODEL*   m_pcb_model;
-    DOUBLET     m_origin;
-    DOUBLET     m_gridOrigin;
-    DOUBLET     m_drillOrigin;
-    bool        m_useGridOrigin;
-    bool        m_useDrillOrigin;
-    // set to TRUE if the origin was actually parsed
-    bool        m_hasGridOrigin;
-    bool        m_hasDrillOrigin;
-    // minimum distance between points to treat them as separate entities (mm)
-    double      m_minDistance;
-    // the names of layers in use, and the internal layer ID
-    std::map<std::string, int> m_layersNames;
-
-    // PCB parameters/entities
-    double                       m_thickness;
-    std::vector<KICADFOOTPRINT*> m_footprints;
-    std::vector<KICADCURVE*>     m_curves;
-
-    bool parsePCB( SEXPR::SEXPR* data );
-    bool parseGeneral( SEXPR::SEXPR* data );
-    bool parseSetup( SEXPR::SEXPR* data );
-    bool parseLayers( SEXPR::SEXPR* data );
-    bool parseModule( SEXPR::SEXPR* data );
-    bool parseCurve( SEXPR::SEXPR* data, CURVE_TYPE aCurveType );
-    bool parseRect( SEXPR::SEXPR* data );
-    bool parsePolygon( SEXPR::SEXPR* data );
-
-
 public:
     KICADPCB();
     virtual ~KICADPCB();
@@ -114,9 +83,44 @@ public:
     bool ReadFile( const wxString& aFileName );
     bool ComposePCB( bool aComposeVirtual = true, bool aSubstituteModels = true );
     bool WriteSTEP( const wxString& aFileName );
-    #ifdef SUPPORTS_IGES
+
+#ifdef SUPPORTS_IGES
     bool WriteIGES( const wxString& aFileName );
-    #endif
+#endif
+
+private:
+    bool parsePCB( SEXPR::SEXPR* data );
+    bool parseGeneral( SEXPR::SEXPR* data );
+    bool parseSetup( SEXPR::SEXPR* data );
+    bool parseLayers( SEXPR::SEXPR* data );
+    bool parseModule( SEXPR::SEXPR* data );
+    bool parseCurve( SEXPR::SEXPR* data, CURVE_TYPE aCurveType );
+    bool parseRect( SEXPR::SEXPR* data );
+    bool parsePolygon( SEXPR::SEXPR* data );
+
+    S3D_RESOLVER m_resolver;
+    wxString    m_filename;
+    PCBMODEL*   m_pcb_model;
+    DOUBLET     m_origin;
+    DOUBLET     m_gridOrigin;
+    DOUBLET     m_drillOrigin;
+    bool        m_useGridOrigin;
+    bool        m_useDrillOrigin;
+
+    // set to TRUE if the origin was actually parsed
+    bool        m_hasGridOrigin;
+    bool        m_hasDrillOrigin;
+
+    // minimum distance between points to treat them as separate entities (mm)
+    double      m_minDistance;
+
+    // the names of layers in use, and the internal layer ID
+    std::map<std::string, int> m_layersNames;
+
+    // PCB parameters/entities
+    double                       m_thickness;
+    std::vector<KICADFOOTPRINT*> m_footprints;
+    std::vector<KICADCURVE*>     m_curves;
 };
 
 

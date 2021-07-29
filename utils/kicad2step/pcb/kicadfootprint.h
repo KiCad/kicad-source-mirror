@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 Cirilo Bernardo <cirilo.bernardo@gmail.com>
+ * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -43,6 +44,15 @@ class S3D_RESOLVER;
 
 class KICADFOOTPRINT
 {
+public:
+    KICADFOOTPRINT( KICADPCB* aParent );
+    virtual ~KICADFOOTPRINT();
+
+    bool Read( SEXPR::SEXPR* aEntry );
+
+    bool ComposePCB( class PCBMODEL* aPCB, S3D_RESOLVER* resolver,
+                     DOUBLET aOrigin, bool aComposeVirtual = true, bool aSubstituteModels = true );
+
 private:
     bool parseModel( SEXPR::SEXPR* data );
     bool parseCurve( SEXPR::SEXPR* data, CURVE_TYPE aCurveType );
@@ -64,15 +74,6 @@ private:
     std::vector< KICADPAD* >    m_pads;
     std::vector< KICADCURVE* >  m_curves;
     std::vector< KICADMODEL* >  m_models;
-
-public:
-    KICADFOOTPRINT( KICADPCB* aParent );
-    virtual ~KICADFOOTPRINT();
-
-    bool Read( SEXPR::SEXPR* aEntry );
-
-    bool ComposePCB( class PCBMODEL* aPCB, S3D_RESOLVER* resolver,
-        DOUBLET aOrigin, bool aComposeVirtual = true, bool aSubstituteModels = true );
 };
 
 #endif  // KICADFOOTPRINT_H

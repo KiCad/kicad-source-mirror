@@ -85,17 +85,21 @@
 
 static constexpr double USER_PREC = 1e-4;
 static constexpr double USER_ANGLE_PREC = 1e-6;
+
 // minimum PCB thickness in mm (2 microns assumes a very thin polyimide film)
 static constexpr double THICKNESS_MIN = 0.002;
+
 // default PCB thickness in mm
 static constexpr double THICKNESS_DEFAULT = 1.6;
+
 // nominal offset from the board
 static constexpr double BOARD_OFFSET = 0.05;
+
 // min. length**2 below which 2 points are considered coincident
 static constexpr double MIN_LENGTH2 = MIN_DISTANCE * MIN_DISTANCE;
 
 static void getEndPoints( const KICADCURVE& aCurve, double& spx0, double& spy0,
-    double& epx0, double& epy0 )
+                          double& epx0, double& epy0 )
 {
     if( CURVE_ARC == aCurve.m_form )
     {
@@ -111,8 +115,8 @@ static void getEndPoints( const KICADCURVE& aCurve, double& spx0, double& spy0,
     spy0 = aCurve.m_start.y;
     epx0 = aCurve.m_end.x;
     epy0 = aCurve.m_end.y;
-    return;
 }
+
 
 static void getCurveEndPoint( const KICADCURVE& aCurve, DOUBLET& aEndPoint )
 {
@@ -129,7 +133,6 @@ static void getCurveEndPoint( const KICADCURVE& aCurve, DOUBLET& aEndPoint )
     // assume a line
     aEndPoint.x = aCurve.m_end.x;
     aEndPoint.y = aCurve.m_end.y;
-    return;
 }
 
 
@@ -154,8 +157,6 @@ static void reverseCurve( KICADCURVE& aCurve )
     std::swap( aCurve.m_end, aCurve.m_ep );
     std::swap( aCurve.m_endangle, aCurve.m_startangle );
     aCurve.m_angle = -aCurve.m_angle;
-
-    return;
 }
 
 
@@ -252,17 +253,15 @@ PCBMODEL::PCBMODEL()
     m_minx = 1.0e10;    // absurdly large number; any valid PCB X value will be smaller
     m_mincurve = m_curves.end();
     BRepBuilderAPI::Precision( MIN_DISTANCE );
-    return;
 }
 
 
 PCBMODEL::~PCBMODEL()
 {
     m_doc->Close();
-    return;
 }
 
-// add an outline segment
+
 bool PCBMODEL::AddOutlineSegment( KICADCURVE* aCurve )
 {
     if( NULL == aCurve || LAYER_EDGE != aCurve->m_layer || CURVE_NONE == aCurve->m_form )
@@ -330,7 +329,8 @@ bool PCBMODEL::AddOutlineSegment( KICADCURVE* aCurve )
             if( rad < m_minDistance2 )
             {
                 wxString msg;
-                msg.Printf( "  * AddOutlineSegment() rejected an arc with equivalent end points, %s\n",
+                msg.Printf( "  * AddOutlineSegment() rejected an arc with equivalent end "
+                            "points, %s\n",
                             aCurve->Describe() );
                 ReportMessage( msg );
                 return false;
@@ -343,124 +343,122 @@ bool PCBMODEL::AddOutlineSegment( KICADCURVE* aCurve )
     // check if this curve has the current leftmost feature
     switch( aCurve->m_form )
     {
-        case CURVE_LINE:
-            if( aCurve->m_start.x < m_minx )
+    case CURVE_LINE:
+        if( aCurve->m_start.x < m_minx )
+        {
+            m_minx = aCurve->m_start.x;
+            m_mincurve = --( m_curves.end() );
+        }
+
+        if( aCurve->m_end.x < m_minx )
+        {
+            m_minx = aCurve->m_end.x;
+            m_mincurve = --( m_curves.end() );
+        }
+
+        break;
+
+    case CURVE_CIRCLE:
+        do
+        {
+            double dx = aCurve->m_start.x - aCurve->m_radius;
+
+            if( dx < m_minx )
             {
-                m_minx = aCurve->m_start.x;
-                m_mincurve = --(m_curves.end());
+                m_minx = dx;
+                m_mincurve = --( m_curves.end() );
+            }
+        } while( 0 );
+
+        break;
+
+    case CURVE_ARC:
+        do
+        {
+            double dx0 = aCurve->m_end.x - aCurve->m_start.x;
+            double dy0 = aCurve->m_end.y - aCurve->m_start.y;
+            int    q0; // quadrant of start point
+
+            if( dx0 > 0.0 && dy0 >= 0.0 )
+                q0 = 1;
+            else if( dx0 <= 0.0 && dy0 > 0.0 )
+                q0 = 2;
+            else if( dx0 < 0.0 && dy0 <= 0.0 )
+                q0 = 3;
+            else
+                q0 = 4;
+
+            double dx1 = aCurve->m_ep.x - aCurve->m_start.x;
+            double dy1 = aCurve->m_ep.y - aCurve->m_start.y;
+            int    q1; // quadrant of end point
+
+            if( dx1 > 0.0 && dy1 >= 0.0 )
+                q1 = 1;
+            else if( dx1 <= 0.0 && dy1 > 0.0 )
+                q1 = 2;
+            else if( dx1 < 0.0 && dy1 <= 0.0 )
+                q1 = 3;
+            else
+                q1 = 4;
+
+            // calculate x0, y0 for the start point on a CCW arc
+            double x0 = aCurve->m_end.x;
+            double x1 = aCurve->m_ep.x;
+
+            if( aCurve->m_angle < 0.0 )
+            {
+                std::swap( q0, q1 );
+                std::swap( x0, x1 );
             }
 
-            if( aCurve->m_end.x < m_minx )
+            double minx;
+
+            if( ( q0 <= 2 && q1 >= 3 ) || ( q0 >= 3 && x0 > x1 ) )
+                minx = aCurve->m_start.x - aCurve->m_radius;
+            else
+                minx = std::min( x0, x1 );
+
+            if( minx < m_minx )
             {
-                m_minx = aCurve->m_end.x;
-                m_mincurve = --(m_curves.end());
+                m_minx = minx;
+                m_mincurve = --( m_curves.end() );
             }
 
-            break;
+        } while( 0 );
 
-        case CURVE_CIRCLE:
-            do
-            {
-                double dx = aCurve->m_start.x - aCurve->m_radius;
+        break;
 
-                if( dx < m_minx )
-                {
-                    m_minx = dx;
-                    m_mincurve = --(m_curves.end());
-                }
-            } while( 0 );
+    case CURVE_BEZIER:
+        if( aCurve->m_start.x < m_minx )
+        {
+            m_minx = aCurve->m_start.x;
+            m_mincurve = --( m_curves.end() );
+        }
 
-            break;
+        if( aCurve->m_end.x < m_minx )
+        {
+            m_minx = aCurve->m_end.x;
+            m_mincurve = --( m_curves.end() );
+        }
 
-        case CURVE_ARC:
-            do
-            {
-                double dx0 = aCurve->m_end.x - aCurve->m_start.x;
-                double dy0 = aCurve->m_end.y - aCurve->m_start.y;
-                int q0;  // quadrant of start point
+        break;
 
-                if( dx0 > 0.0 && dy0 >= 0.0 )
-                    q0 = 1;
-                else if( dx0 <= 0.0 && dy0 > 0.0 )
-                    q0 = 2;
-                else if( dx0 < 0.0 && dy0 <= 0.0 )
-                    q0 = 3;
-                else
-                    q0 = 4;
+    default:
+        // unexpected curve type
+        do
+        {
+            wxString msg;
+            msg.Printf( "  * AddOutlineSegment() unsupported curve type: %d\n", aCurve->m_form );
+            ReportMessage( msg );
+        } while( 0 );
 
-                double dx1 = aCurve->m_ep.x - aCurve->m_start.x;
-                double dy1 = aCurve->m_ep.y - aCurve->m_start.y;
-                int q1;  // quadrant of end point
-
-                if( dx1 > 0.0 && dy1 >= 0.0 )
-                    q1 = 1;
-                else if( dx1 <= 0.0 && dy1 > 0.0 )
-                    q1 = 2;
-                else if( dx1 < 0.0 && dy1 <= 0.0 )
-                    q1 = 3;
-                else
-                    q1 = 4;
-
-                // calculate x0, y0 for the start point on a CCW arc
-                double x0 = aCurve->m_end.x;
-                double x1 = aCurve->m_ep.x;
-
-                if( aCurve->m_angle < 0.0 )
-                {
-                    std::swap( q0, q1 );
-                    std::swap( x0, x1 );
-                }
-
-                double minx;
-
-                if( ( q0 <= 2 && q1 >= 3 ) || ( q0 >= 3 && x0 > x1 ) )
-                    minx = aCurve->m_start.x - aCurve->m_radius;
-                else
-                    minx = std::min( x0, x1 );
-
-                if( minx < m_minx )
-                {
-                    m_minx = minx;
-                    m_mincurve = --(m_curves.end());
-                }
-
-            } while( 0 );
-
-            break;
-
-        case CURVE_BEZIER:
-            if( aCurve->m_start.x < m_minx )
-            {
-                m_minx = aCurve->m_start.x;
-                m_mincurve = --(m_curves.end());
-            }
-
-            if( aCurve->m_end.x < m_minx )
-            {
-                m_minx = aCurve->m_end.x;
-                m_mincurve = --(m_curves.end());
-            }
-
-            break;
-
-        default:
-            // unexpected curve type
-            do
-            {
-                wxString msg;
-                msg.Printf( "  * AddOutlineSegment() unsupported curve type: %d\n",
-                            aCurve->m_form );
-                ReportMessage( msg );
-            } while( 0 );
-
-            return false;
+        return false;
     }
 
     return true;
 }
 
 
-// add a pad hole or slot
 bool PCBMODEL::AddPadHole( const KICADPAD* aPad )
 {
     if( NULL == aPad || !aPad->IsThruHole() )
@@ -469,9 +467,10 @@ bool PCBMODEL::AddPadHole( const KICADPAD* aPad )
     if( !aPad->m_drill.oval )
     {
         TopoDS_Shape s = BRepPrimAPI_MakeCylinder( aPad->m_drill.size.x * 0.5,
-            m_thickness * 2.0 ).Shape();
+                                                   m_thickness * 2.0 ).Shape();
         gp_Trsf shift;
-        shift.SetTranslation( gp_Vec( aPad->m_position.x, aPad->m_position.y, -m_thickness * 0.5 ) );
+        shift.SetTranslation( gp_Vec( aPad->m_position.x, aPad->m_position.y,
+                                      -m_thickness * 0.5 ) );
         BRepBuilderAPI_Transform hole( s, shift );
         m_cutouts.push_back( hole.Shape() );
         return true;
@@ -601,7 +600,6 @@ bool PCBMODEL::AddPadHole( const KICADPAD* aPad )
 }
 
 
-// add a component at the given position and orientation
 bool PCBMODEL::AddComponent( const std::string& aFileName, const std::string& aRefDes,
                              bool aBottom, DOUBLET aPosition, double aRotation,
                              TRIPLET aOffset, TRIPLET aOrientation, TRIPLET aScale,
@@ -664,8 +662,6 @@ void PCBMODEL::SetPCBThickness( double aThickness )
         m_thickness = THICKNESS_MIN;
     else
         m_thickness = aThickness;
-
-    return;
 }
 
 
@@ -677,7 +673,6 @@ void PCBMODEL::SetMinDistance( double aDistance )
 }
 
 
-// create the PCB (board only) model using the current outlines and drill holes
 bool PCBMODEL::CreatePCB()
 {
     if( m_hasPCB )
@@ -814,7 +809,8 @@ bool PCBMODEL::CreatePCB()
                                          (int)m_cutouts.size() ) );
     }
 
-#if 0 // First version for holes removing: very slow when having many (> 300) holes
+#if 0
+    // First version for holes removing: very slow when having many (> 300) holes
     // Substract holes (cutouts) can be time consuming, so display activity
     // state to be sure there is no hang:
     int char_count = 0;
@@ -863,8 +859,7 @@ bool PCBMODEL::CreatePCB()
         return false;
 
     // color the PCB
-    Handle(XCAFDoc_ColorTool) color =
-        XCAFDoc_DocumentTool::ColorTool( m_doc->Main () );
+    Handle( XCAFDoc_ColorTool ) color = XCAFDoc_DocumentTool::ColorTool( m_doc->Main () );
     Quantity_Color pcb_green( 0.06, 0.4, 0.06, Quantity_TOC_RGB );
     color->SetColor( m_pcb_label, pcb_green, XCAFDoc_ColorSurf );
 
@@ -915,7 +910,6 @@ bool PCBMODEL::WriteIGES( const wxString& aFileName )
 #endif
 
 
-// write the assembly model in STEP format
 bool PCBMODEL::WriteSTEP( const wxString& aFileName )
 {
     if( m_pcb_label.IsNull() )
@@ -942,9 +936,11 @@ bool PCBMODEL::WriteSTEP( const wxString& aFileName )
         return false;
 
     APIHeaderSection_MakeHeader hdr( writer.ChangeWriter().Model() );
+
     // Note: use only Ascii7 chars, non Ascii7 chars (therefore UFT8 chars)
     // are creating issues in the step file
     hdr.SetName( new TCollection_HAsciiString( fn.GetFullName().ToAscii() ) );
+
     // TODO: how to control and ensure consistency with IGES?
     hdr.SetAuthorValue( 1, new TCollection_HAsciiString( "Pcbnew" ) );
     hdr.SetOrganizationValue( 1, new TCollection_HAsciiString( "Kicad" ) );
@@ -952,10 +948,10 @@ bool PCBMODEL::WriteSTEP( const wxString& aFileName )
     hdr.SetDescriptionValue( 1, new TCollection_HAsciiString( "KiCad electronic assembly" ) );
 
     bool success = true;
-    // Creates a temporary file with a ascii7 name, because writer does not know
-    // unicode filenames
+
+    // Creates a temporary file with a ascii7 name, because writer does not know unicode filenames.
     wxString currCWD = wxGetCwd();
-    wxString workCWD =fn.GetPath();
+    wxString workCWD = fn.GetPath();
 
     if( !workCWD.IsEmpty() )
         wxSetWorkingDirectory( workCWD );
@@ -1005,171 +1001,166 @@ bool PCBMODEL::getModelLabel( const std::string& aFileName, TRIPLET aScale, TDF_
 
     switch( modelFmt )
     {
-        case FMT_IGES:
-            if( !readIGES( doc, aFileName.c_str() ) )
-            {
-                ReportMessage( wxString::Format( "readIGES() failed on filename '%s'.\n",
-                               aFileName ) );
-                return false;
-            }
-            break;
-
-        case FMT_STEP:
-            if( !readSTEP( doc, aFileName.c_str() ) )
-            {
-                ReportMessage( wxString::Format( "readSTEP() failed on filename '%s'.\n",
-                               aFileName ) );
-                return false;
-            }
-            break;
-
-        case FMT_STEPZ:
+    case FMT_IGES:
+        if( !readIGES( doc, aFileName.c_str() ) )
         {
-            wxFFileInputStream ifile( aFileName );
-            wxFileName outFile( aFileName );
+            ReportMessage( wxString::Format( "readIGES() failed on filename '%s'.\n", aFileName ) );
+            return false;
+        }
+        break;
 
-            outFile.SetPath( wxStandardPaths::Get().GetTempDir() );
-            outFile.SetExt( "STEP" );
+    case FMT_STEP:
+        if( !readSTEP( doc, aFileName.c_str() ) )
+        {
+            ReportMessage( wxString::Format( "readSTEP() failed on filename '%s'.\n", aFileName ) );
+            return false;
+        }
+        break;
 
-            wxFileOffset size = ifile.GetLength();
+    case FMT_STEPZ:
+    {
+        wxFFileInputStream ifile( aFileName );
+        wxFileName         outFile( aFileName );
 
-            if( size == wxInvalidOffset )
-            {
-                ReportMessage( wxString::Format( "readSTEP() failed on filename '%s'.\n",
-                                                 aFileName ) );
-                return false;
-            }
+        outFile.SetPath( wxStandardPaths::Get().GetTempDir() );
+        outFile.SetExt( "STEP" );
 
-            {
-                bool success = false;
-                wxFFileOutputStream ofile( outFile.GetFullPath() );
+        wxFileOffset size = ifile.GetLength();
 
-                if( !ofile.IsOk() )
-                    return false;
-
-                char *buffer = new char[size];
-
-                ifile.Read( buffer, size);
-                std::string expanded;
-
-                try
-                {
-                    expanded = gzip::decompress( buffer, size );
-                    success = true;
-                }
-                catch(...)
-                {}
-
-                if( expanded.empty() )
-                {
-                    ifile.Reset();
-                    ifile.SeekI( 0 );
-                    wxZipInputStream izipfile( ifile );
-                    std::unique_ptr<wxZipEntry> zip_file( izipfile.GetNextEntry() );
-
-                    if( zip_file && !zip_file->IsDir() && izipfile.CanRead() )
-                    {
-                        izipfile.Read( ofile );
-                        success = true;
-                    }
-                }
-                else
-                {
-                    ofile.Write( expanded.data(), expanded.size() );
-                }
-
-                delete[] buffer;
-                ofile.Close();
-
-                return success;
-            }
-
-            break;
+        if( size == wxInvalidOffset )
+        {
+            ReportMessage( wxString::Format( "readSTEP() failed on filename '%s'.\n", aFileName ) );
+            return false;
         }
 
-        case FMT_WRL:
-        case FMT_WRZ:
-            /* WRL files are preferred for internal rendering,
-             * due to superior material properties, etc.
-             * However they are not suitable for MCAD export.
-             *
-             * If a .wrl file is specified, attempt to locate
-             * a replacement file for it.
-             *
-             * If a valid replacement file is found, the label
-             * for THAT file will be associated with the .wrl file
-             *
-             */
-            if( aSubstituteModels )
+        {
+            bool                success = false;
+            wxFFileOutputStream ofile( outFile.GetFullPath() );
+
+            if( !ofile.IsOk() )
+                return false;
+
+            char* buffer = new char[size];
+
+            ifile.Read( buffer, size );
+            std::string expanded;
+
+            try
             {
-                wxFileName wrlName( aFileName );
+                expanded = gzip::decompress( buffer, size );
+                success = true;
+            }
+            catch( ... )
+            {
+            }
 
-                wxString basePath = wrlName.GetPath();
-                wxString baseName = wrlName.GetName();
+            if( expanded.empty() )
+            {
+                ifile.Reset();
+                ifile.SeekI( 0 );
+                wxZipInputStream            izipfile( ifile );
+                std::unique_ptr<wxZipEntry> zip_file( izipfile.GetNextEntry() );
 
-                // List of alternate files to look for
-                // Given in order of preference
-                // (Break if match is found)
-                wxArrayString alts;
-
-                // Step files
-                alts.Add( "stp" );
-                alts.Add( "step" );
-                alts.Add( "STP" );
-                alts.Add( "STEP" );
-                alts.Add( "Stp" );
-                alts.Add( "Step" );
-                alts.Add( "stpz" );
-                alts.Add( "stpZ" );
-                alts.Add( "STPZ" );
-                alts.Add( "step.gz" );
-
-                // IGES files
-                alts.Add( "iges" );
-                alts.Add( "IGES" );
-                alts.Add( "igs" );
-                alts.Add( "IGS" );
-
-                //TODO - Other alternative formats?
-
-                for( const auto& alt : alts )
+                if( zip_file && !zip_file->IsDir() && izipfile.CanRead() )
                 {
-                    wxFileName altFile( basePath, baseName + "." + alt );
+                    izipfile.Read( ofile );
+                    success = true;
+                }
+            }
+            else
+            {
+                ofile.Write( expanded.data(), expanded.size() );
+            }
 
-                    if( altFile.IsOk() && altFile.FileExists() )
+            delete[] buffer;
+            ofile.Close();
+
+            return success;
+        }
+
+        break;
+    }
+
+    case FMT_WRL:
+    case FMT_WRZ:
+        /* WRL files are preferred for internal rendering, due to superior material properties, etc.
+         * However they are not suitable for MCAD export.
+         *
+         * If a .wrl file is specified, attempt to locate a replacement file for it.
+         *
+         * If a valid replacement file is found, the label for THAT file will be associated with
+         * the .wrl file
+         */
+        if( aSubstituteModels )
+        {
+            wxFileName wrlName( aFileName );
+
+            wxString basePath = wrlName.GetPath();
+            wxString baseName = wrlName.GetName();
+
+            // List of alternate files to look for
+            // Given in order of preference
+            // (Break if match is found)
+            wxArrayString alts;
+
+            // Step files
+            alts.Add( "stp" );
+            alts.Add( "step" );
+            alts.Add( "STP" );
+            alts.Add( "STEP" );
+            alts.Add( "Stp" );
+            alts.Add( "Step" );
+            alts.Add( "stpz" );
+            alts.Add( "stpZ" );
+            alts.Add( "STPZ" );
+            alts.Add( "step.gz" );
+
+            // IGES files
+            alts.Add( "iges" );
+            alts.Add( "IGES" );
+            alts.Add( "igs" );
+            alts.Add( "IGS" );
+
+            //TODO - Other alternative formats?
+
+            for( const auto& alt : alts )
+            {
+                wxFileName altFile( basePath, baseName + "." + alt );
+
+                if( altFile.IsOk() && altFile.FileExists() )
+                {
+                    std::string altFileName = altFile.GetFullPath().ToStdString();
+
+                    // When substituting a STEP/IGS file for VRML, do not apply the VRML scaling
+                    // to the new STEP model.  This process of auto-substitution is janky as all
+                    // heck so let's not mix up un-displayed scale factors with potentially
+                    // mis-matched files.  And hope that the user doesn't have multiples files
+                    // named "model.wrl" and "model.stp" referring to different parts.
+                    // TODO: Fix model handling in v7.  Default models should only be STP.
+                    //       Have option to override this in DISPLAY.
+                    if( getModelLabel( altFileName, TRIPLET( 1.0, 1.0, 1.0 ), aLabel, false ) )
                     {
-                        std::string altFileName = altFile.GetFullPath().ToStdString();
-
-                        // When substituting a STEP/IGS file for VRML, do not apply the VRML scaling
-                        // to the new STEP model.  This process of auto-substitution is janky as all
-                        // heck so let's not mix up un-displayed scale factors with potentially
-                        // mis-matched files.  And hope that the user doesn't have multiples files
-                        // named "model.wrl" and "model.stp" referring to different parts.
-                        // TODO: Fix model handling in v7.  Default models should only be STP.
-                        //       Have option to override this in DISPLAY.
-                        if( getModelLabel( altFileName, TRIPLET( 1.0, 1.0, 1.0 ), aLabel, false ) )
-                        {
-                            return true;
-                        }
+                        return true;
                     }
                 }
-
-                return false;   // No replacement model found
-            }
-            else        // Substitution is not allowed
-            {
-                if( aErrorMessage )
-                    aErrorMessage->Printf( "Cannot add a VRML model data to a Step file.\n",
-                                           aFileName );
-                return false;
             }
 
-            break;
+            return false; // No replacement model found
+        }
+        else // Substitution is not allowed
+        {
+            if( aErrorMessage )
+                aErrorMessage->Printf( "Cannot add a VRML model data to a Step file.\n",
+                                       aFileName );
+            return false;
+        }
+
+        break;
 
         // TODO: implement IDF and EMN converters
 
-        default:
-            return false;
+    default:
+        return false;
     }
 
     aLabel = transferModel( doc, m_doc, aScale );
@@ -1338,7 +1329,6 @@ TDF_Label PCBMODEL::transferModel( Handle( TDocStd_Document )& source,
                                               0, 0, aScale.z ) );
     BRepBuilderAPI_GTransform brep( scale_transform );
 
-
     // s_assy = shape tool for the source
     Handle(XCAFDoc_ShapeTool) s_assy = XCAFDoc_DocumentTool::ShapeTool ( source->Main() );
 
@@ -1456,13 +1446,11 @@ OUTLINE::OUTLINE()
 {
     m_closed = false;
     m_minDistance2 = MIN_LENGTH2;
-    return;
 }
 
 
 OUTLINE::~OUTLINE()
 {
-    return;
 }
 
 
@@ -1470,7 +1458,6 @@ void OUTLINE::Clear()
 {
     m_closed = false;
     m_curves.clear();
-    return;
 }
 
 
@@ -1618,53 +1605,52 @@ bool OUTLINE::addEdge( BRepBuilderAPI_MakeWire* aWire, KICADCURVE& aCurve, DOUBL
 
     switch( aCurve.m_form )
     {
-        case CURVE_LINE:
-            edge = BRepBuilderAPI_MakeEdge( gp_Pnt( aLastPoint.x, aLastPoint.y, 0.0 ),
-                gp_Pnt( endPoint.x, endPoint.y, 0.0 ) );
-            break;
+    case CURVE_LINE:
+        edge = BRepBuilderAPI_MakeEdge( gp_Pnt( aLastPoint.x, aLastPoint.y, 0.0 ),
+                                        gp_Pnt( endPoint.x, endPoint.y, 0.0 ) );
+        break;
 
-        case CURVE_ARC:
-            {
-                gp_Circ arc( gp_Ax2( gp_Pnt( aCurve.m_start.x, aCurve.m_start.y, 0.0 ),
-                    gp_Dir( 0.0, 0.0, 1.0 ) ), aCurve.m_radius );
+    case CURVE_ARC:
+    {
+        gp_Circ arc( gp_Ax2( gp_Pnt( aCurve.m_start.x, aCurve.m_start.y, 0.0 ),
+                             gp_Dir( 0.0, 0.0, 1.0 ) ), aCurve.m_radius );
 
-                gp_Pnt sa( aLastPoint.x, aLastPoint.y, 0.0 );
-                gp_Pnt ea( endPoint.x, endPoint.y, 0.0 );
+        gp_Pnt sa( aLastPoint.x, aLastPoint.y, 0.0 );
+        gp_Pnt ea( endPoint.x, endPoint.y, 0.0 );
 
-                if( aCurve.m_angle < 0.0 )
-                    edge = BRepBuilderAPI_MakeEdge( arc, ea, sa );
-                else
-                    edge = BRepBuilderAPI_MakeEdge( arc, sa, ea );
-            }
-            break;
+        if( aCurve.m_angle < 0.0 )
+            edge = BRepBuilderAPI_MakeEdge( arc, ea, sa );
+        else
+            edge = BRepBuilderAPI_MakeEdge( arc, sa, ea );
+    }
+        break;
 
-        case CURVE_CIRCLE:
-            edge = BRepBuilderAPI_MakeEdge( gp_Circ( gp_Ax2( gp_Pnt( aCurve.m_start.x,
-                                                                     aCurve.m_start.y, 0.0 ),
-                                                             gp_Dir( 0.0, 0.0, 1.0 ) ),
-                                                     aCurve.m_radius ) );
-            break;
+    case CURVE_CIRCLE:
+        edge = BRepBuilderAPI_MakeEdge(
+                gp_Circ( gp_Ax2( gp_Pnt( aCurve.m_start.x, aCurve.m_start.y, 0.0 ),
+                                 gp_Dir( 0.0, 0.0, 1.0 ) ), aCurve.m_radius ) );
+        break;
 
-        case CURVE_BEZIER:
-            {
-            TColgp_Array1OfPnt poles(0, 3);
-            gp_Pnt pt = gp_Pnt( aCurve.m_start.x, aCurve.m_start.y, 0.0 );
-            poles(0) = pt;
-            pt = gp_Pnt( aCurve.m_bezierctrl1.x, aCurve.m_bezierctrl1.y, 0.0 );
-            poles(1) = pt;
-            pt = gp_Pnt( aCurve.m_bezierctrl2.x, aCurve.m_bezierctrl2.y, 0.0 );
-            poles(2) = pt;
-            pt = gp_Pnt( endPoint.x, endPoint.y, 0.0 );
-            poles(3) = pt;
+    case CURVE_BEZIER:
+    {
+        TColgp_Array1OfPnt poles( 0, 3 );
+        gp_Pnt             pt = gp_Pnt( aCurve.m_start.x, aCurve.m_start.y, 0.0 );
+        poles( 0 ) = pt;
+        pt = gp_Pnt( aCurve.m_bezierctrl1.x, aCurve.m_bezierctrl1.y, 0.0 );
+        poles( 1 ) = pt;
+        pt = gp_Pnt( aCurve.m_bezierctrl2.x, aCurve.m_bezierctrl2.y, 0.0 );
+        poles( 2 ) = pt;
+        pt = gp_Pnt( endPoint.x, endPoint.y, 0.0 );
+        poles( 3 ) = pt;
 
-            Geom_BezierCurve* bezier_curve = new Geom_BezierCurve( poles );
-            edge = BRepBuilderAPI_MakeEdge( bezier_curve );
-            }
-            break;
+        Geom_BezierCurve* bezier_curve = new Geom_BezierCurve( poles );
+        edge = BRepBuilderAPI_MakeEdge( bezier_curve );
+    }
+        break;
 
-        default:
-            ReportMessage( wxString::Format( "unsupported curve type: %d\n", aCurve.m_form ) );
-            return false;
+    default:
+        ReportMessage( wxString::Format( "unsupported curve type: %d\n", aCurve.m_form ) );
+        return false;
     }
 
     if( edge.IsNull() )
