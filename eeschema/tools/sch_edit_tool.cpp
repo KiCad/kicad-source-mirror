@@ -1156,14 +1156,17 @@ int SCH_EDIT_TOOL::AutoplaceFields( const TOOL_EVENT& aEvent )
     if( selection.Empty() )
         return 0;
 
-    SCH_ITEM* item = static_cast<SCH_ITEM*>( selection.Front() );
+    for( EDA_ITEM* item : selection )
+    {
+        SCH_ITEM* sch_item = static_cast<SCH_ITEM*>( item );
 
-    if( !item->IsNew() )
-        saveCopyInUndoList( item, UNDO_REDO::CHANGED );
+        if( !sch_item->IsNew() )
+            saveCopyInUndoList( sch_item, UNDO_REDO::CHANGED );
 
-    item->AutoplaceFields( m_frame->GetScreen(), /* aManual */ true );
+        sch_item->AutoplaceFields( m_frame->GetScreen(), /* aManual */ true );
+        updateItem( sch_item, true );
+    }
 
-    updateItem( item, true );
     m_frame->OnModify();
 
     if( selection.IsHover() )
@@ -1595,12 +1598,12 @@ int SCH_EDIT_TOOL::BreakWire( const TOOL_EVENT& aEvent )
 
     std::vector<SCH_LINE*> lines;
 
-    for( auto& item : selection )
+    for( EDA_ITEM* item : selection )
     {
         if( SCH_LINE* line = dyn_cast<SCH_LINE*>( item ) )
         {
             if( !line->IsEndPoint( cursorPos ) )
-            lines.push_back( line );
+                lines.push_back( line );
         }
     }
 
