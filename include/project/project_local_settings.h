@@ -22,7 +22,7 @@
 #ifndef KICAD_PROJECT_LOCAL_SETTINGS_H
 #define KICAD_PROJECT_LOCAL_SETTINGS_H
 
-#include <layers_id_colors_and_visibility.h>
+#include <layer_ids.h>
 #include <project/board_project_settings.h>
 #include <settings/json_settings.h>
 #include <wildcards_and_files_ext.h>

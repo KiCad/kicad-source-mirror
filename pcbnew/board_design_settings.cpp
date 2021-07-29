@@ -23,7 +23,7 @@
 
 #include <pcb_dimension.h>
 #include <pcb_track.h>
-#include <layers_id_colors_and_visibility.h>
+#include <layer_ids.h>
 #include <kiface_i.h>
 #include <pad.h>
 #include <board_design_settings.h>

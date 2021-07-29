@@ -30,7 +30,7 @@
 #include "board_stackup.h"
 #include <convert_to_biu.h>
 #include <core/arraydim.h>
-#include <layers_id_colors_and_visibility.h>
+#include <layer_ids.h>
 #include <board_design_settings.h>
 #include <i18n_utility.h>       // _HKI definition
 #include <macros.h>

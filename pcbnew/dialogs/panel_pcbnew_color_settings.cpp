@@ -22,7 +22,7 @@
 
 #include <board.h>
 #include <gal/gal_display_options.h>
-#include <layers_id_colors_and_visibility.h>
+#include <layer_ids.h>
 #include <panel_pcbnew_color_settings.h>
 #include <pcbnew_settings.h>
 #include <pcb_edit_frame.h>

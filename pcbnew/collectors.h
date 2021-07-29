@@ -33,7 +33,7 @@
 
 
 #include <collector.h>
-#include <layers_id_colors_and_visibility.h>              // LAYER_COUNT, layer defs
+#include <layer_ids.h>              // LAYER_COUNT, layer defs
 #include <view/view.h>
 #include <board_item.h>
 

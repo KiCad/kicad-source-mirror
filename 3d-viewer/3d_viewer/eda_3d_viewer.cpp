@@ -39,7 +39,7 @@
 #include <board_design_settings.h>
 #include <board_stackup_manager/board_stackup.h>
 #include <core/arraydim.h>
-#include <layers_id_colors_and_visibility.h>
+#include <layer_ids.h>
 #include <gal/dpi_scaling.h>
 #include <pgm_base.h>
 #include <project.h>

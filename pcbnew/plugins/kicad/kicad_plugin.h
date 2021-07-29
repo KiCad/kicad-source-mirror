@@ -27,7 +27,7 @@
 
 #include <io_mgr.h>
 #include <string>
-#include <layers_id_colors_and_visibility.h>
+#include <layer_ids.h>
 
 class BOARD;
 class BOARD_ITEM;

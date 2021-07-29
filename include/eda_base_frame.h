@@ -35,7 +35,7 @@
 #include <vector>
 
 #include <wx/aui/aui.h>
-#include <layers_id_colors_and_visibility.h>
+#include <layer_ids.h>
 #include <frame_type.h>
 #include <hotkeys_basic.h>
 #include <kiway_holder.h>

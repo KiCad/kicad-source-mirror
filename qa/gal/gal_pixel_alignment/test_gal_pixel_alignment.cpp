@@ -6,7 +6,7 @@
 #include <view/view_item.h>
 #include <pcb_draw_panel_gal.h>
 
-#include <layers_id_colors_and_visibility.h>
+#include <layer_ids.h>
 
 const VECTOR2D xform2( const MATRIX3x3D& minv, const VECTOR2D& p )
 {

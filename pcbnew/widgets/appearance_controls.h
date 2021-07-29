@@ -25,7 +25,7 @@
 
 #include <board.h>
 #include <gal/color4d.h>
-#include <layers_id_colors_and_visibility.h>
+#include <layer_ids.h>
 #include <project/board_project_settings.h>
 #include <widgets/appearance_controls_base.h>
 

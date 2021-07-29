@@ -23,7 +23,7 @@
 #include <bitmaps.h>
 #include <eeschema_settings.h>
 #include <gal/gal_display_options.h>
-#include <layers_id_colors_and_visibility.h>
+#include <layer_ids.h>
 #include <lib_polyline.h>
 #include <page_info.h>
 #include <panel_eeschema_color_settings.h>

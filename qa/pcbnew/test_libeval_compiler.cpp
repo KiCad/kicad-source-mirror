@@ -25,7 +25,7 @@
 
 #include <qa_utils/wx_utils/unit_test_utils.h>
 
-#include <layers_id_colors_and_visibility.h>
+#include <layer_ids.h>
 #include <pcbnew/pcb_expr_evaluator.h>
 
 #include <pcbnew/board.h>

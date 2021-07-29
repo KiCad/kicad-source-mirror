@@ -55,7 +55,7 @@
 #include <drawing_sheet/ds_data_model.h>
 #include <base_units.h>
 #include <page_info.h>
-#include <layers_id_colors_and_visibility.h>
+#include <layer_ids.h>
 #include <gr_basic.h>
 #include <trigo.h>
 #include <render_settings.h>

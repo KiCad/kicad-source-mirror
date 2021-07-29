@@ -31,7 +31,7 @@
 
 #include <vector>
 
-#include <layers_id_colors_and_visibility.h>
+#include <layer_ids.h>
 #include <math/vector2d.h>
 
 class FOOTPRINT;

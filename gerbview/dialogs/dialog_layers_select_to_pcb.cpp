@@ -34,7 +34,7 @@
 #include <gerbview_id.h>
 #include <gerbview_settings.h>
 #include <kiface_i.h>
-#include <layers_id_colors_and_visibility.h>
+#include <layer_ids.h>
 
 #include <dialogs/dialog_layers_select_to_pcb.h>
 

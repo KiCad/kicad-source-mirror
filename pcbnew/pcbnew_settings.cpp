@@ -25,7 +25,7 @@
 
 #include <common.h>
 #include <footprint_editor_settings.h>
-#include <layers_id_colors_and_visibility.h>
+#include <layer_ids.h>
 #include <pcbnew_settings.h>
 #include <pgm_base.h>
 #include <router/pns_routing_settings.h>

@@ -32,7 +32,7 @@
 #include <vector>
 
 #include <convert_to_biu.h>
-#include <layers_id_colors_and_visibility.h>
+#include <layer_ids.h>
 
 #include <locale_io.h>
 #include <potracelib.h>

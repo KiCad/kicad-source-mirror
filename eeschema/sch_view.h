@@ -24,7 +24,7 @@
 #ifndef SCH_VIEW_H_
 #define SCH_VIEW_H_
 
-#include <layers_id_colors_and_visibility.h>
+#include <layer_ids.h>
 #include <math/vector2d.h>
 #include <view/view.h>
 

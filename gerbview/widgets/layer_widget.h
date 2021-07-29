@@ -40,7 +40,7 @@
 #include <wx/bitmap.h>
 #include <wx/image.h>
 #include <wx/icon.h>
-#include <layers_id_colors_and_visibility.h>
+#include <layer_ids.h>
 #include <gal/color4d.h>
 #include <widgets/color_swatch.h>
 #include <widgets/indicator_icon.h>

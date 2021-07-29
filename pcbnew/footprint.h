@@ -31,7 +31,7 @@
 #include <board_item.h>
 #include <collectors.h>
 #include <convert_to_biu.h>
-#include <layers_id_colors_and_visibility.h> // ALL_LAYERS definition.
+#include <layer_ids.h> // ALL_LAYERS definition.
 #include <lib_id.h>
 #include <list>
 

@@ -30,7 +30,7 @@
 #ifndef ZONE_SETTINGS_H_
 #define ZONE_SETTINGS_H_
 
-#include <layers_id_colors_and_visibility.h>
+#include <layer_ids.h>
 #include <zones.h>
 
 class wxDataViewListCtrl;

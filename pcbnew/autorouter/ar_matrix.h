@@ -30,7 +30,7 @@
 #define __AR_MATRIX_H
 
 #include <eda_rect.h>
-#include <layers_id_colors_and_visibility.h>
+#include <layer_ids.h>
 
 class PCB_SHAPE;
 class PAD;

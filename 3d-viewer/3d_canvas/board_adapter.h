@@ -35,7 +35,7 @@
 #include "../3d_cache/3d_cache.h"
 #include "../common_ogl/ogl_attr_list.h"
 
-#include <layers_id_colors_and_visibility.h>
+#include <layer_ids.h>
 #include <pad.h>
 #include <pcb_track.h>
 #include <wx/gdicmn.h>

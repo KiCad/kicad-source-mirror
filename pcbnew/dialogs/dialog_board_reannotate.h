@@ -29,7 +29,7 @@
 #include <board.h>
 #include <footprint.h>
 #include <dialogs/dialog_board_reannotate_base.h>
-#include <layers_id_colors_and_visibility.h>
+#include <layer_ids.h>
 #include <netlist_reader/pcb_netlist.h>
 #include <pcb_base_frame.h>
 #include <pcb_edit_frame.h>

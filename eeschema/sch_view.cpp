@@ -32,7 +32,7 @@
 #include <view/view_rtree.h>
 #include <view/wx_view_controls.h>
 #include <drawing_sheet/ds_proxy_view_item.h>
-#include <layers_id_colors_and_visibility.h>
+#include <layer_ids.h>
 #include <sch_screen.h>
 #include <schematic.h>
 #include <sch_base_frame.h>

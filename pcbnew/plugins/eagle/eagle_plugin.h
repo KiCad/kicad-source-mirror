@@ -27,7 +27,7 @@
 
 #include <convert_to_biu.h>
 #include <io_mgr.h>
-#include <layers_id_colors_and_visibility.h>
+#include <layer_ids.h>
 #include <plugins/eagle/eagle_parser.h>
 #include <plugins/common/plugin_common_layer_mapping.h>
 

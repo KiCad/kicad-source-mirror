@@ -25,7 +25,7 @@
 
 #include <dialogs/dialog_bom_cfg_lexer.h>
 #include <eeschema_settings.h>
-#include <layers_id_colors_and_visibility.h>
+#include <layer_ids.h>
 #include <symbol_editor_settings.h>
 #include <macros.h>
 #include <pgm_base.h>

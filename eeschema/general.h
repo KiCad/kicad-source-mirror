@@ -26,7 +26,7 @@
 #define _GENERAL_H_
 
 #include <gal/color4d.h>
-#include <layers_id_colors_and_visibility.h>
+#include <layer_ids.h>
 
 using KIGFX::COLOR4D;
 

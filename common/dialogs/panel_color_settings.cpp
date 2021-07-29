@@ -21,7 +21,7 @@
 #include <bitmaps.h>
 #include <dialogs/dialog_color_picker.h>
 #include <launch_ext.h>
-#include <layers_id_colors_and_visibility.h>
+#include <layer_ids.h>
 #include <menus_helpers.h>
 #include <dialogs/panel_color_settings.h>
 #include <pgm_base.h>

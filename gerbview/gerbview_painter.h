@@ -21,7 +21,7 @@
 #ifndef __GERBVIEW_PAINTER_H
 #define __GERBVIEW_PAINTER_H
 
-#include <layers_id_colors_and_visibility.h>
+#include <layer_ids.h>
 #include <painter.h>
 
 #include <dcode.h>

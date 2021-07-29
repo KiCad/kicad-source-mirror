@@ -33,7 +33,7 @@
 #include <convert_to_biu.h>                      // IU_PER_MM
 #include <core/wx_stl_compat.h>
 #include <hashtables.h>
-#include <layers_id_colors_and_visibility.h>     // PCB_LAYER_ID
+#include <layer_ids.h>     // PCB_LAYER_ID
 #include <pcb_lexer.h>
 #include <kiid.h>
 

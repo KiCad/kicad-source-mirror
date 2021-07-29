@@ -39,7 +39,7 @@
 #include <eda_item.h>
 #include <bitmaps.h>
 #include <core/typeinfo.h>
-#include <layers_id_colors_and_visibility.h>
+#include <layer_ids.h>
 #include <math/vector2d.h>
 #include <advanced_config.h>
 #include <tool/actions.h>

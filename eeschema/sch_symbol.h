@@ -29,7 +29,7 @@
 
 #include <eda_item.h>
 #include <core/typeinfo.h>
-#include <layers_id_colors_and_visibility.h>
+#include <layer_ids.h>
 #include <lib_id.h>
 #include <widgets/msgpanel.h>
 

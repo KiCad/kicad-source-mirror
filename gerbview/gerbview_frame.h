@@ -25,7 +25,7 @@
 #include <filehistory.h>
 #include <config_params.h>
 #include <eda_draw_frame.h>
-#include <layers_id_colors_and_visibility.h>
+#include <layer_ids.h>
 #include <gerbview.h>
 #include <convert_to_biu.h>
 #include <gbr_layout.h>

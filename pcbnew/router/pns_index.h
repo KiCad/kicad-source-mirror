@@ -27,7 +27,7 @@
 #include <map>
 #include <unordered_set>
 
-#include <layers_id_colors_and_visibility.h>
+#include <layer_ids.h>
 #include <geometry/shape_index.h>
 
 #include "pns_item.h"

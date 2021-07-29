@@ -29,7 +29,7 @@
 
 #include "graphics_importer.h"
 
-#include <layers_id_colors_and_visibility.h>
+#include <layer_ids.h>
 
 class BOARD_ITEM;
 class BOARD;

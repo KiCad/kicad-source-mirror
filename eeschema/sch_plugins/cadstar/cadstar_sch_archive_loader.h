@@ -28,7 +28,7 @@
 
 #include <sch_plugins/cadstar/cadstar_sch_archive_parser.h>
 
-#include <layers_id_colors_and_visibility.h> // SCH_LAYER_ID
+#include <layer_ids.h> // SCH_LAYER_ID
 #include <plotter.h>                         // PLOT_DASH_TYPE
 #include <pin_type.h>                        // ELECTRICAL_PINTYPE
 #include <sch_io_mgr.h>

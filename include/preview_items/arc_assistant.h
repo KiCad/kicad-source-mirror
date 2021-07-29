@@ -26,7 +26,7 @@
 
 #include <eda_item.h>
 #include <preview_items/arc_geom_manager.h>
-#include <layers_id_colors_and_visibility.h>
+#include <layer_ids.h>
 
 namespace KIGFX
 {

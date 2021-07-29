@@ -28,7 +28,7 @@
 
 #include <vector>
 #include <wx/string.h>
-#include <layers_id_colors_and_visibility.h>
+#include <layer_ids.h>
 
 class BOARD;
 class BOARD_DESIGN_SETTINGS;

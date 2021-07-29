@@ -21,7 +21,7 @@
 #ifndef KICAD_BOARD_PROJECT_SETTINGS_H
 #define KICAD_BOARD_PROJECT_SETTINGS_H
 
-#include <layers_id_colors_and_visibility.h>
+#include <layer_ids.h>
 #include <settings/parameters.h>
 
 // Can be removed by refactoring PARAM_LAYER_PRESET

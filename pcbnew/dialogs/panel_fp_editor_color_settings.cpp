@@ -24,7 +24,7 @@
 #include <footprint_edit_frame.h>
 #include <footprint_editor_settings.h>
 #include <gal/gal_display_options.h>
-#include <layers_id_colors_and_visibility.h>
+#include <layer_ids.h>
 #include <panel_fp_editor_color_settings.h>
 #include <settings/settings_manager.h>
 

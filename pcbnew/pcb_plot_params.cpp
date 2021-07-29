@@ -23,7 +23,7 @@
 
 #include <board_design_settings.h>
 #include <convert_to_biu.h>
-#include <layers_id_colors_and_visibility.h>
+#include <layer_ids.h>
 #include <macros.h>
 #include <math/util.h> // for KiROUND
 #include <pcb_plot_params.h>

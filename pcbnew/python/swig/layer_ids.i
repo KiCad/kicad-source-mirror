@@ -27,7 +27,7 @@
  */
 
 /**
- * @file layers_id_colors_and_visibility.i
+ * @file layer_ids.i
  * @brief layers IDs, draw layers IDs, layers set and templates
  * these IDs are used as physical layers or draw layers (for colors, visibility...)
  */
@@ -37,7 +37,7 @@
 %ignore GAL_SET::set(int, bool);
 %ignore GAL_SET::set(int);
 
-%include layers_id_colors_and_visibility.h
+%include layer_ids.h
 
 // Extend LSET by 2 methods to add or remove layers from the layer list
 // Mainly used to add or remove layers of a pad layer list
@@ -64,6 +64,6 @@
     %}
 }
 %{
-#include <layers_id_colors_and_visibility.h>
+#include <layer_ids.h>
 #include <pcbnew_scripting_helpers.h>
 %}

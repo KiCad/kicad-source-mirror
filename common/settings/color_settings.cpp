@@ -18,7 +18,7 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <layers_id_colors_and_visibility.h>
+#include <layer_ids.h>
 #include <pgm_base.h>
 #include <settings/color_settings.h>
 #include <settings/json_settings_internals.h>

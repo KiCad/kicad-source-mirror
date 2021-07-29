@@ -25,7 +25,7 @@
 #define DRC_RULE_CONDITION_H
 
 #include <core/typeinfo.h>
-#include <layers_id_colors_and_visibility.h>
+#include <layer_ids.h>
 
 class BOARD_ITEM;
 class PCB_EXPR_UCODE;

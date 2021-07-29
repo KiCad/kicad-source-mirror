@@ -31,7 +31,7 @@
 #include <pcad/pcb_callbacks.h>
 
 #include <kiid.h>
-#include <layers_id_colors_and_visibility.h>
+#include <layer_ids.h>
 #include <wx/object.h>
 
 class BOARD;

@@ -25,7 +25,7 @@
  */
 
 #include <pcb_screen.h>
-#include <layers_id_colors_and_visibility.h>
+#include <layer_ids.h>
 
 
 PCB_SCREEN::PCB_SCREEN( const wxSize& aPageSizeIU ) :

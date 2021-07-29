@@ -30,7 +30,7 @@
 #ifndef PCB_CALLBACKS_H_
 #define PCB_CALLBACKS_H_
 
-#include <layers_id_colors_and_visibility.h>
+#include <layer_ids.h>
 
 class wxString;
 

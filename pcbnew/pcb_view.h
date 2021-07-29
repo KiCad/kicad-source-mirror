@@ -25,7 +25,7 @@
 #ifndef __PCB_VIEW_H
 #define __PCB_VIEW_H
 
-#include <layers_id_colors_and_visibility.h>
+#include <layer_ids.h>
 #include <view/view.h>
 #include <board_item.h>
 

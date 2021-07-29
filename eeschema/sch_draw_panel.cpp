@@ -38,7 +38,7 @@
 #include <eda_draw_frame.h>
 #include <gal/definitions.h>
 #include <gal/graphics_abstraction_layer.h>
-#include <layers_id_colors_and_visibility.h>
+#include <layer_ids.h>
 #include <math/vector2d.h>
 #include <pgm_base.h>
 #include <settings/settings_manager.h>

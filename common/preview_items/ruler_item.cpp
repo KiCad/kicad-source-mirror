@@ -24,7 +24,7 @@
 #include <preview_items/ruler_item.h>
 #include <preview_items/preview_utils.h>
 #include <gal/graphics_abstraction_layer.h>
-#include <layers_id_colors_and_visibility.h>
+#include <layer_ids.h>
 #include <painter.h>
 #include <view/view.h>
 #include <trigo.h>

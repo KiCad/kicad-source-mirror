@@ -26,7 +26,7 @@
 
 #include <core/typeinfo.h>
 #include <netclass.h>
-#include <layers_id_colors_and_visibility.h>
+#include <layer_ids.h>
 #include <drc/drc_rule.h>
 #include <drc_rules_lexer.h>
 

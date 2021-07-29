@@ -100,7 +100,7 @@ principle should be easily implemented by adapting the current STL containers.
     #include <convert_to_biu.h>
     #include <id.h>
     #include <build_version.h>
-    #include <layers_id_colors_and_visibility.h>
+    #include <layer_ids.h>
     #include <settings/settings_manager.h>
 %}
 

@@ -19,7 +19,7 @@
  */
 
 
-#include <layers_id_colors_and_visibility.h>
+#include <layer_ids.h>
 #include <dialog_imported_layers.h>
 
 #include <wx/msgdlg.h>

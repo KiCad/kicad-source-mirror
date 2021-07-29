@@ -25,7 +25,7 @@
 #include <dialogs/dialog_track_via_properties_base.h>
 #include <widgets/unit_binder.h>
 #include <core/optional.h>
-#include <layers_id_colors_and_visibility.h>
+#include <layer_ids.h>
 
 class PCB_SELECTION;
 class COMMIT;

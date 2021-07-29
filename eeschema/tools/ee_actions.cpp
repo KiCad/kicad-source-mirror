@@ -24,7 +24,7 @@
 
 #include <bitmaps.h>
 #include <core/typeinfo.h>
-#include <layers_id_colors_and_visibility.h>
+#include <layer_ids.h>
 #include <sch_line_wire_bus_tool.h>
 #include <tools/ee_actions.h>
 #include <tool/tool_action.h>

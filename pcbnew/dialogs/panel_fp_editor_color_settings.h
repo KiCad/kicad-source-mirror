@@ -22,7 +22,7 @@
 #define PANEL_FP_EDITOR_COLOR_SETTINGS_H
 
 #include <gal/color4d.h>
-#include <layers_id_colors_and_visibility.h>
+#include <layer_ids.h>
 #include <dialogs/panel_color_settings.h>
 
 class COLOR_SETTINGS;

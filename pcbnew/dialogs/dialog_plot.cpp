@@ -32,7 +32,7 @@
 #include <gerber_jobfile_writer.h>
 #include <reporter.h>
 #include <wildcards_and_files_ext.h>
-#include <layers_id_colors_and_visibility.h>
+#include <layer_ids.h>
 #include <locale_io.h>
 #include <bitmaps.h>
 #include <board.h>

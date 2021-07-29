@@ -20,7 +20,7 @@
 
 #include <common.h>
 #include <footprint_editor_settings.h>
-#include <layers_id_colors_and_visibility.h>
+#include <layer_ids.h>
 #include <pgm_base.h>
 #include <settings/common_settings.h>
 #include <settings/json_settings_internals.h>

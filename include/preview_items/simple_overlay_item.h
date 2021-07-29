@@ -26,7 +26,7 @@
 
 #include <eda_item.h>
 
-#include <layers_id_colors_and_visibility.h>
+#include <layer_ids.h>
 #include <gal/color4d.h>
 
 namespace KIGFX

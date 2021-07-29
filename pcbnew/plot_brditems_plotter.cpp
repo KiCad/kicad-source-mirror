@@ -46,7 +46,7 @@
 #include <gal/color4d.h>                      // for COLOR4D, operator!=
 #include <gbr_metadata.h>
 #include <gbr_netlist_metadata.h>             // for GBR_NETLIST_METADATA
-#include <layers_id_colors_and_visibility.h>  // for LSET, IsCopperLayer
+#include <layer_ids.h>  // for LSET, IsCopperLayer
 #include <pad_shapes.h>                       // for PAD_ATTRIB::NPTH
 #include <pcbplot.h>
 #include <pcb_plot_params.h>                  // for PCB_PLOT_PARAMS, PCB_PL...

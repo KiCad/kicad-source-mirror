@@ -24,7 +24,7 @@
 #ifndef PCB_SELECTION_H
 #define PCB_SELECTION_H
 
-#include <layers_id_colors_and_visibility.h>
+#include <layer_ids.h>
 #include <tool/selection.h>
 
 

@@ -27,7 +27,7 @@
 #include "tool/tool_event.h"
 #include <pcbnew_id.h>
 #include <bitmaps.h>
-#include <layers_id_colors_and_visibility.h>
+#include <layer_ids.h>
 #include <microwave/microwave_tool.h>
 #include <tool/tool_manager.h>
 #include <router/pns_router.h>

@@ -41,7 +41,7 @@
 #include <advanced_config.h>
 #include <core/arraydim.h>
 
-#include <layers_id_colors_and_visibility.h>
+#include <layer_ids.h>
 #include <pcb_painter.h>
 #include <pcb_display_options.h>
 #include <project/net_settings.h>

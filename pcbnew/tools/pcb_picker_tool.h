@@ -27,7 +27,7 @@
 #ifndef PCB_PICKER_TOOL_H
 #define PCB_PICKER_TOOL_H
 
-#include <layers_id_colors_and_visibility.h>
+#include <layer_ids.h>
 #include <tool/picker_tool.h>
 #include <tools/pcb_tool_base.h>
 

@@ -37,7 +37,7 @@
 #include <wx/string.h>
 #include <wx/filename.h>
 
-#include <layers_id_colors_and_visibility.h>
+#include <layer_ids.h>
 #include <trigo.h>
 #include <core/wx_stl_compat.h>
 

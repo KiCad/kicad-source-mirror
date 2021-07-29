@@ -28,7 +28,7 @@
 #define PCB_DRAW_PANEL_GAL_H_
 
 #include <class_draw_panel_gal.h>
-#include <layers_id_colors_and_visibility.h>
+#include <layer_ids.h>
 #include <pcb_view.h>
 
 class DS_PROXY_VIEW_ITEM;

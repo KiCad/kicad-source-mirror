@@ -20,7 +20,7 @@
 
 #include <class_draw_panel_gal.h>
 #include <common.h>
-#include <layers_id_colors_and_visibility.h>
+#include <layer_ids.h>
 #include <pgm_base.h>
 #include <settings/app_settings.h>
 #include <settings/json_settings_internals.h>

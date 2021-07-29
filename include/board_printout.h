@@ -34,7 +34,7 @@
 #define BOARD_PRINTOUT_H
 
 #include <wx/print.h>
-#include <layers_id_colors_and_visibility.h>
+#include <layer_ids.h>
 #include <eda_rect.h>
 #include <printout.h>
 

@@ -36,7 +36,7 @@
 #include <view/view.h>
 #include <painter.h>
 #include <gal/graphics_abstraction_layer.h>
-#include <layers_id_colors_and_visibility.h>
+#include <layer_ids.h>
 
 using namespace KIGFX;
 

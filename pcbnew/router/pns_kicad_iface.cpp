@@ -30,7 +30,7 @@
 #include <pcb_shape.h>
 #include <pcb_text.h>
 #include <board_commit.h>
-#include <layers_id_colors_and_visibility.h>
+#include <layer_ids.h>
 #include <geometry/convex_hull.h>
 #include <confirm.h>
 

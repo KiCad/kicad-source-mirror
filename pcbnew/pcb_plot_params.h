@@ -25,7 +25,7 @@
 
 #include <outline_mode.h>
 #include <plotter.h>
-#include <layers_id_colors_and_visibility.h>
+#include <layer_ids.h>
 
 class COLOR_SETTINGS;
 class PCB_PLOT_PARAMS_PARSER;

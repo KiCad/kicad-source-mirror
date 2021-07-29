@@ -24,7 +24,7 @@
 
 #include <gal/color4d.h>
 #include <gal/gal_display_options.h>
-#include <layers_id_colors_and_visibility.h>
+#include <layer_ids.h>
 #include <dialogs/panel_color_settings.h>
 
 class COLOR_SETTINGS;

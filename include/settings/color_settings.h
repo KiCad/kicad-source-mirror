@@ -104,7 +104,7 @@ private:
 
     /**
      * Map of all layer colors.
-     * The key needs to be a valid layer ID, see layers_id_colors_and_visibility.h
+     * The key needs to be a valid layer ID, see layer_ids.h
      */
     std::unordered_map<int, COLOR4D> m_colors;
 

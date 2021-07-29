@@ -38,7 +38,7 @@
 #include <core/typeinfo.h>
 #include <kiid.h>
 #include <kiway_holder.h>
-#include <layers_id_colors_and_visibility.h>
+#include <layer_ids.h>
 #include <marker_base.h>
 #include <page_info.h>
 #include <template_fieldnames.h>

@@ -23,7 +23,7 @@
 #include <convert_to_biu.h>
 #include <base_units.h>
 #include <kicad_string.h>
-#include <layers_id_colors_and_visibility.h>
+#include <layer_ids.h>
 #include <board_design_settings.h>
 #include <board.h>
 #include <i18n_utility.h>       // For _HKI definition

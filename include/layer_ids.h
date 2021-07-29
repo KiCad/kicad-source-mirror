@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2014 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2010 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2007-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2007-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,13 +23,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file layers_id_colors_and_visibility.h
- * @brief Board layer functions and definitions.
- */
-
-#ifndef LAYERS_ID_AND_VISIBILITY_H_
-#define LAYERS_ID_AND_VISIBILITY_H_
+#ifndef LAYER_IDS_H
+#define LAYER_IDS_H
 
 #include <set>
 #include <vector>
@@ -1003,4 +998,4 @@ inline bool IsNetCopperLayer( LAYER_NUM aLayer )
 
 PCB_LAYER_ID ToLAYER_ID( int aLayer );
 
-#endif // LAYERS_ID_AND_VISIBILITY_H_
+#endif // LAYER_IDS_H

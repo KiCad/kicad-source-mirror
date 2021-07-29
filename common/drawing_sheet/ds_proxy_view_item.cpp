@@ -22,7 +22,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <layers_id_colors_and_visibility.h>
+#include <layer_ids.h>
 #include <page_info.h>
 #include <drawing_sheet/ds_proxy_view_item.h>
 #include <drawing_sheet/ds_draw_item.h>
