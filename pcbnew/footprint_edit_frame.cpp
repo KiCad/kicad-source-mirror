@@ -118,7 +118,7 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent,
     m_canvasType = aBackend;
     m_aboutTitle = _( "KiCad Footprint Editor" );
     m_selLayerBox = nullptr;
-    m_settings = nullptr;
+    m_editorSettings = nullptr;
 
     // Give an icon
     wxIcon icon;
@@ -255,13 +255,13 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent,
 
     FinishAUIInitialization();
 
-    if( m_settings->m_LibWidth > 0 )
+    if( m_editorSettings->m_LibWidth > 0 )
     {
         wxAuiPaneInfo& treePane = m_auimgr.GetPane( "Footprints" );
 
         // wxAUI hack: force width by setting MinSize() and then Fixed()
         // thanks to ZenJu http://trac.wxwidgets.org/ticket/13180
-        treePane.MinSize( m_settings->m_LibWidth, -1 );
+        treePane.MinSize( m_editorSettings->m_LibWidth, -1 );
         treePane.Fixed();
         m_auimgr.Update();
 
@@ -505,17 +505,17 @@ void FOOTPRINT_EDIT_FRAME::SetPlotSettings( const PCB_PLOT_PARAMS& aSettings )
 
 FOOTPRINT_EDITOR_SETTINGS* FOOTPRINT_EDIT_FRAME::GetSettings()
 {
-    if( !m_settings )
-        m_settings = Pgm().GetSettingsManager().GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>();
+    if( !m_editorSettings )
+        m_editorSettings = Pgm().GetSettingsManager().GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>();
 
-    return m_settings;
+    return m_editorSettings;
 }
 
 
 APP_SETTINGS_BASE* FOOTPRINT_EDIT_FRAME::config() const
 {
-    return m_settings ? m_settings
-                      : Pgm().GetSettingsManager().GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>();
+    return m_editorSettings ? m_editorSettings
+                            : Pgm().GetSettingsManager().GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>();
 }
 
 

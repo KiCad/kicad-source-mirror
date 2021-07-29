@@ -317,10 +317,6 @@ protected:
     /// protected so only friend PCB::IFACE::CreateWindow() can act as sole factory.
     FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent, EDA_DRAW_PANEL_GAL::GAL_TYPE aBackend );
 
-    PCB_LAYER_BOX_SELECTOR* m_selLayerBox;  // a combo box to display and select active layer
-
-    FOOTPRINT_EDITOR_SETTINGS* m_settings;
-
     /**
      * Make sure the footprint info list is loaded (with a progress dialog) and then initialize
      * the footprint library tree.
@@ -336,6 +332,10 @@ protected:
     void editFootprintProperties( FOOTPRINT* aFootprint );
 
     void setupUIConditions() override;
+
+protected:
+    PCB_LAYER_BOX_SELECTOR*     m_selLayerBox;  // a combo box to display and select active layer
+    FOOTPRINT_EDITOR_SETTINGS*  m_editorSettings;
 
 private:
     friend struct PCB::IFACE;
