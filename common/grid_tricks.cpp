@@ -180,17 +180,10 @@ void GRID_TRICKS::onGridMotion( wxMouseEvent& aEvent )
     wxPoint pos = m_grid->CalcScrolledPosition( wxPoint( pt.x, pt.y ) );
 
     int col = m_grid->XToCol( pos.x );
-
-    // Skip the event if the tooltip shouldn't be shown
-    if( !m_tooltipEnabled[col] || ( col == wxNOT_FOUND ) )
-    {
-        m_grid->GetGridWindow()->SetToolTip( "" );
-        return;
-    }
-
     int row = m_grid->YToRow( pos.y );
 
-    if( row == wxNOT_FOUND )
+    // Empty tooltip if the cell doesn't exist or the column doesn't have tooltips
+    if( ( col == wxNOT_FOUND ) || ( row == wxNOT_FOUND ) || !m_tooltipEnabled[col] )
     {
         m_grid->GetGridWindow()->SetToolTip( "" );
         return;
