@@ -49,6 +49,12 @@ struct ZONE_FILL_TEST_FIXTURE
 
     void loadBoard( const wxString& relPath )
     {
+        if( m_board )
+        {
+            m_board->SetProject( nullptr );
+            m_board = nullptr;
+        }
+
         wxString boardPath = KI_TEST::GetPcbnewTestDataDir() + relPath + ".kicad_pcb";
         wxString projectPath = KI_TEST::GetPcbnewTestDataDir() + relPath + ".kicad_pro";
 
