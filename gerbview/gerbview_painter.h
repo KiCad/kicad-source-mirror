@@ -129,6 +129,9 @@ public:
         return m_diffMode;
     }
 
+    /// Clear all highlight selections (dcode, net, component, attribute selection)
+    void ClearHighlightSelections();
+
     /// If set to anything but an empty string, will highlight items with matching component
     wxString m_componentHighlightString;
 

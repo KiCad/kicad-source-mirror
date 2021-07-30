@@ -165,10 +165,7 @@ int GERBVIEW_CONTROL::HighlightControl( const TOOL_EVENT& aEvent )
         m_frame->m_SelNetnameBox->SetSelection( 0 );
         m_frame->m_SelAperAttributesBox->SetSelection( 0 );
 
-        settings->m_netHighlightString = "";
-        settings->m_componentHighlightString = "";
-        settings->m_attributeHighlightString = "";
-        settings->m_dcodeHighlightValue = -1;
+        settings->ClearHighlightSelections();
 
         GERBER_FILE_IMAGE* gerber = m_frame->GetGbrImage( m_frame->GetActiveLayer() );
 
@@ -320,6 +317,11 @@ int GERBVIEW_CONTROL::ClearAllLayers( const TOOL_EVENT& aEvent )
     m_toolMgr->RunAction( ACTIONS::zoomFitScreen, true );
     canvas()->Refresh();
     m_frame->ClearMsgPanel();
+
+    // Clear pending highlight selections, now outdated
+    KIGFX::GERBVIEW_RENDER_SETTINGS* settings =
+            static_cast<KIGFX::GERBVIEW_PAINTER*>( getView()->GetPainter() )->GetSettings();
+    settings->ClearHighlightSelections();
 
     return 0;
 }

@@ -104,6 +104,15 @@ void GERBVIEW_RENDER_SETTINGS::LoadDisplayOptions( const GBR_DISPLAY_OPTIONS& aO
 }
 
 
+void GERBVIEW_RENDER_SETTINGS::ClearHighlightSelections()
+{
+    // Clear all highlight selections (dcode, net, component, attribute selection)
+    m_componentHighlightString.Empty();
+    m_netHighlightString.Empty();
+    m_attributeHighlightString.Empty();
+    m_dcodeHighlightValue = -1;
+}
+
 COLOR4D GERBVIEW_RENDER_SETTINGS::GetColor( const VIEW_ITEM* aItem, int aLayer ) const
 {
     const EDA_ITEM* item = dynamic_cast<const EDA_ITEM*>( aItem );
