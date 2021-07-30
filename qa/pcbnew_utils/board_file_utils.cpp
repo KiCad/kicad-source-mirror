@@ -35,6 +35,33 @@
 namespace KI_TEST
 {
 
+#ifndef QA_PCBNEW_DATA_LOCATION
+    #define QA_PCBNEW_DATA_LOCATION "???"
+#endif
+
+std::string GetPcbnewTestDataDir()
+{
+    const char* env = std::getenv( "KICAD_TEST_PCBNEW_DATA_DIR" );
+    std::string fn;
+
+    if( !env )
+    {
+        // Use the compiled-in location of the data dir (i.e. where the files were at build time)
+        fn = QA_PCBNEW_DATA_LOCATION;
+    }
+    else
+    {
+        // Use whatever was given in the env var
+        fn = env;
+    }
+
+    // Ensure the string ends in / to force a directory interpretation
+    fn += "/";
+
+    return fn;
+}
+
+
 void DumpBoardToFile( BOARD& board, const std::string& aFilename )
 {
     PCB_IO io;
@@ -76,8 +103,9 @@ std::unique_ptr<BOARD_ITEM> ReadBoardItemFromStream( std::istream& aStream )
     return board;
 }
 
-std::unique_ptr<BOARD> ReadBoardFromFileOrStream(
-        const std::string& aFilename, std::istream& aFallback )
+
+std::unique_ptr<BOARD> ReadBoardFromFileOrStream( const std::string& aFilename,
+                                                  std::istream& aFallback )
 {
     std::istream* in_stream = nullptr;
     std::ifstream file_stream;
@@ -95,5 +123,7 @@ std::unique_ptr<BOARD> ReadBoardFromFileOrStream(
 
     return ReadItemFromStream<BOARD>( *in_stream );
 }
+
+
 
 } // namespace KI_TEST

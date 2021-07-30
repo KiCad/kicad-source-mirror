@@ -83,3 +83,9 @@ target_link_libraries( qa_pcbnew_utils PUBLIC
 target_compile_definitions( qa_pcbnew_utils
     PUBLIC PCBNEW
 )
+
+# Pass in the default data location
+set_source_files_properties( board_file_utils.cpp PROPERTIES
+    COMPILE_DEFINITIONS "QA_PCBNEW_DATA_LOCATION=(\"${CMAKE_CURRENT_SOURCE_DIR}/../data\")"
+)
+

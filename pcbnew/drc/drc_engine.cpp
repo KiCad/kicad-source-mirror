@@ -679,7 +679,6 @@ void DRC_ENGINE::RunTests( EDA_UNITS aUnits, bool aReportAllTrackErrors, bool aT
 {
     m_userUnits = aUnits;
 
-    // Note: set these first.  The phase counts may be dependent on some of them.
     m_reportAllTrackErrors = aReportAllTrackErrors;
     m_testFootprints = aTestFootprints;
 

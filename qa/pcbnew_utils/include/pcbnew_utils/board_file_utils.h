@@ -39,6 +39,11 @@ class BOARD_ITEM;
 namespace KI_TEST
 {
 /**
+ * Utility which returns a path to the data directory where the test board files are stored.
+ */
+std::string GetPcbnewTestDataDir();
+
+/**
  * Utility function to simply write a Board out to a file.
  *
  * Helps debug tests and utility programs by making it easy to quickly
@@ -92,8 +97,8 @@ template <typename ITEM> std::unique_ptr<ITEM> ReadItemFromStream( std::istream&
  * @param aFallback: the fallback stream
  * @return a #BOARD, if successful
  */
-std::unique_ptr<BOARD> ReadBoardFromFileOrStream(
-        const std::string& aFilename, std::istream& aFallback = std::cin );
+std::unique_ptr<BOARD> ReadBoardFromFileOrStream( const std::string& aFilename,
+                                                  std::istream& aFallback = std::cin );
 
 } // namespace KI_TEST
 

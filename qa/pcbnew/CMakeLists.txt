@@ -37,6 +37,7 @@ set( QA_PCBNEW_SRCS
     test_lset.cpp
     test_pad_naming.cpp
     test_libeval_compiler.cpp
+    test_zone_filler.cpp
 
     drc/test_drc_courtyard_invalid.cpp
     drc/test_drc_courtyard_overlap.cpp
@@ -63,6 +64,23 @@ target_compile_definitions( qa_pcbnew
 # to ensure that the generated lexer files are finished being used before the qa runs in a
 # multi-threaded build
 add_dependencies( qa_pcbnew pcbnew )
+
+include_directories( BEFORE ${INC_BEFORE} )
+include_directories(
+    ${CMAKE_SOURCE_DIR}
+    ${CMAKE_SOURCE_DIR}/include
+    ${CMAKE_SOURCE_DIR}/3d-viewer
+    ${CMAKE_SOURCE_DIR}/common
+    ${CMAKE_SOURCE_DIR}/pcbnew
+    ${CMAKE_SOURCE_DIR}/pcbnew/router
+    ${CMAKE_SOURCE_DIR}/pcbnew/tools
+    ${CMAKE_SOURCE_DIR}/pcbnew/dialogs
+    ${CMAKE_SOURCE_DIR}/polygon
+    ${CMAKE_SOURCE_DIR}/common/geometry
+    ${CMAKE_SOURCE_DIR}/qa/qa_utils
+    ${Boost_INCLUDE_DIR}
+    ${INC_AFTER}
+)
 
 target_link_libraries( qa_pcbnew
     qa_pcbnew_utils
