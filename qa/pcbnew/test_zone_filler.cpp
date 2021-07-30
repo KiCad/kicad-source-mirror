@@ -55,8 +55,8 @@ struct ZONE_FILL_TEST_FIXTURE
             m_board = nullptr;
         }
 
-        wxString boardPath = KI_TEST::GetPcbnewTestDataDir() + relPath + ".kicad_pcb";
-        wxString projectPath = KI_TEST::GetPcbnewTestDataDir() + relPath + ".kicad_pro";
+        std::string boardPath = KI_TEST::GetPcbnewTestDataDir() + relPath + ".kicad_pcb";
+        wxString    projectPath = KI_TEST::GetPcbnewTestDataDir() + relPath + ".kicad_pro";
 
         wxFileName pro( projectPath );
 
@@ -104,50 +104,6 @@ struct ZONE_FILL_TEST_FIXTURE
 BOOST_FIXTURE_TEST_SUITE( TestZoneFiller, ZONE_FILL_TEST_FIXTURE )
 
 constexpr int delta = KiROUND( 0.006 * IU_PER_MM );
-
-
-BOOST_AUTO_TEST_CASE( RegressionZoneFillTests )
-{
-    for( const wxString& relPath : { "issue2568", "issue3812", "issue5320", "issue5830",
-                                     "issue6284", "issue7086" } )
-    {
-        loadBoard( relPath );
-
-        for( int fillVersion : { 5, 6 } )
-        {
-            fillZones( fillVersion );
-
-            std::vector<DRC_ITEM> violations;
-
-            m_DRCEngine->SetViolationHandler(
-                    [&]( const std::shared_ptr<DRC_ITEM>& aItem, wxPoint aPos )
-                    {
-                        if( aItem->GetErrorCode() == DRCE_CLEARANCE )
-                            violations.push_back( *aItem );
-                    } );
-
-            m_DRCEngine->RunTests( EDA_UNITS::MILLIMETRES, true, false );
-
-            if( violations.empty() )
-            {
-                BOOST_TEST_MESSAGE( wxString::Format( "Passed: %s (V%d fill algo)",
-                                                      relPath,
-                                                      fillVersion ) );
-            }
-            else
-            {
-                std::map<KIID, EDA_ITEM*> itemMap;
-                m_board->FillItemMap( itemMap );
-
-                for( const DRC_ITEM& item : violations )
-                {
-                    BOOST_ERROR( item.ShowReport( EDA_UNITS::MILLIMETRES, RPT_SEVERITY_ERROR,
-                                                  itemMap ) );
-                }
-            }
-        }
-    }
-}
 
 
 BOOST_AUTO_TEST_CASE( BasicZoneFills )
@@ -233,6 +189,94 @@ BOOST_AUTO_TEST_CASE( BasicZoneFills )
     BOOST_CHECK_EQUAL( foundArc8Error, true );
     BOOST_CHECK_EQUAL( foundArc12Error, true );
     BOOST_CHECK_EQUAL( foundOtherError, false );
+}
+
+
+BOOST_AUTO_TEST_CASE( NotchedZones )
+{
+    loadBoard( "notched_zones" );
+
+    // Older algorithms had trouble where the filleted zones intersected and left notches.
+    // See:
+    //   https://gitlab.com/kicad/code/kicad/-/issues/2737
+    //   https://gitlab.com/kicad/code/kicad/-/issues/2752
+
+    // First, run a sanity check to validate that the saved board still has holes.
+    SHAPE_POLY_SET frontCopper;
+
+    for( ZONE* zone : m_board->Zones() )
+    {
+        if( zone->GetLayerSet().Contains( F_Cu ) )
+        {
+            frontCopper.BooleanAdd( zone->GetFilledPolysList( F_Cu ),
+                                    SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
+        }
+    }
+
+    BOOST_CHECK_GT( frontCopper.OutlineCount(), 2 );
+
+    // Now re-fill and make sure the holes are gone.
+    fillZones( 6 );
+    frontCopper = SHAPE_POLY_SET();
+
+    for( ZONE* zone : m_board->Zones() )
+    {
+        if( zone->GetLayerSet().Contains( F_Cu ) )
+        {
+            frontCopper.BooleanAdd( zone->GetFilledPolysList( F_Cu ),
+                                    SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
+        }
+    }
+
+    BOOST_CHECK_EQUAL( frontCopper.OutlineCount(), 2 );
+}
+
+
+BOOST_AUTO_TEST_CASE( RegressionZoneFillTests )
+{
+    for( const wxString& relPath : { "issue2568",
+                                     "issue3812",
+                                     "issue5102",
+                                     "issue5320",
+                                     "issue5567",
+                                     "issue5830",
+                                     "issue6039",
+                                     "issue6260",
+                                     "issue6284",
+                                     "issue7086" } )
+    {
+        loadBoard( relPath );
+
+        for( int fillVersion : { 5, 6 } )
+        {
+            fillZones( fillVersion );
+
+            std::vector<DRC_ITEM> violations;
+
+            m_DRCEngine->SetViolationHandler(
+                    [&]( const std::shared_ptr<DRC_ITEM>& aItem, wxPoint aPos )
+                    {
+                        if( aItem->GetErrorCode() == DRCE_CLEARANCE )
+                            violations.push_back( *aItem );
+                    } );
+
+            m_DRCEngine->RunTests( EDA_UNITS::MILLIMETRES, true, false );
+
+            BOOST_TEST_MESSAGE( wxString::Format( "Zone fill regression: %s, V%d fill algo %s",
+                                                  relPath,
+                                                  fillVersion,
+                                                  violations.empty() ? "passed" : "failed" ) );
+
+            if( !violations.empty() )
+            {
+                std::map<KIID, EDA_ITEM*> itemMap;
+                m_board->FillItemMap( itemMap );
+
+                for( const DRC_ITEM& v : violations )
+                    BOOST_ERROR( v.ShowReport( EDA_UNITS::INCHES, RPT_SEVERITY_ERROR, itemMap ) );
+            }
+        }
+    }
 }
 
 
