@@ -55,8 +55,8 @@ struct DRC_REGRESSION_TEST_FIXTURE
             m_board = nullptr;
         }
 
-        std::string boardPath = KI_TEST::GetPcbnewTestDataDir() + relPath + ".kicad_pcb";
-        wxString    projectPath = KI_TEST::GetPcbnewTestDataDir() + relPath + ".kicad_pro";
+        std::string boardPath = KI_TEST::GetPcbnewTestDataDir() + relPath.ToStdString() + ".kicad_pcb";
+        wxString    projectPath = KI_TEST::GetPcbnewTestDataDir() + relPath.ToStdString() + ".kicad_pro";
 
         wxFileName pro( projectPath );
 
