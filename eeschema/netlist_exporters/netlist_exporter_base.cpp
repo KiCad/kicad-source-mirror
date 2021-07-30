@@ -72,7 +72,10 @@ wxString NETLIST_EXPORTER_BASE::MakeCommandLine( const wxString& aFormatString,
 
 SCH_SYMBOL* NETLIST_EXPORTER_BASE::findNextSymbol( EDA_ITEM* aItem, SCH_SHEET_PATH* aSheetPath )
 {
-    wxString    ref;
+    wxCHECK( aItem, nullptr );
+    wxCHECK( aSheetPath, nullptr );
+
+    wxString ref;
 
     if( aItem->Type() != SCH_SYMBOL_T )
         return nullptr;
@@ -87,16 +90,16 @@ SCH_SYMBOL* NETLIST_EXPORTER_BASE::findNextSymbol( EDA_ITEM* aItem, SCH_SHEET_PA
     if( ref[0] == wxChar( '#' ) )
         return nullptr;
 
-    // if( symbol->m_FlagControlMulti == 1 )
-    //    continue;                                      /* yes */
-    // removed because with multiple instances of one schematic (several sheets pointing to
-    // 1 screen), this will be erroneously be toggled.
+    SCH_SCREEN* screen = aSheetPath->LastScreen();
 
-    if( !symbol->GetLibSymbolRef() )
-        return nullptr;
+    wxCHECK( screen, nullptr );
+
+    LIB_SYMBOL* libSymbol = screen->GetLibSymbols()[ symbol->GetSchSymbolLibraryName() ];
+
+    wxCHECK( libSymbol, nullptr );
 
     // If symbol is a "multi parts per package" type
-    if( symbol->GetLibSymbolRef()->GetUnitCount() > 1 )
+    if( libSymbol->GetUnitCount() > 1 )
     {
         // test if this reference has already been processed, and if so skip
         if( m_referencesAlreadyFound.Lookup( ref ) )
@@ -104,7 +107,7 @@ SCH_SYMBOL* NETLIST_EXPORTER_BASE::findNextSymbol( EDA_ITEM* aItem, SCH_SHEET_PA
     }
 
     // record the usage of this library symbol entry.
-    m_libParts.insert( symbol->GetLibSymbolRef().get() ); // rejects non-unique pointers
+    m_libParts.insert( libSymbol ); // rejects non-unique pointers
 
     return symbol;
 }

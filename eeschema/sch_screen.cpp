@@ -178,16 +178,27 @@ void SCH_SCREEN::Append( SCH_ITEM* aItem )
                         int cnt = 1;
                         wxString newName;
 
-                        newName.Printf( "%s_%d", symbol->GetLibId().Format().wx_str(), cnt );
+                        newName.Printf( "%s_%d", symbol->GetLibId().GetUniStringLibItemName(),
+                                        cnt );
 
                         while( m_libSymbols.find( newName ) != m_libSymbols.end() )
                         {
                             cnt += 1;
-                            newName.Printf( "%s_%d", symbol->GetLibId().Format().wx_str(), cnt );
+                            newName.Printf( "%s_%d", symbol->GetLibId().GetUniStringLibItemName(),
+                                            cnt );
                         }
 
+                        // Update the schematic symbol library link as this symbol only exists
+                        // in the schematic.
                         symbol->SetSchSymbolLibraryName( newName );
-                        m_libSymbols[newName] = new LIB_SYMBOL( *symbol->GetLibSymbolRef() );
+
+                        LIB_SYMBOL* newLibSymbol = new LIB_SYMBOL( *symbol->GetLibSymbolRef() );
+                        LIB_ID newLibId( wxEmptyString, newName );
+
+                        newLibSymbol->SetLibId( newLibId );
+                        newLibSymbol->SetName( newName );
+                        symbol->SetLibSymbol( newLibSymbol->Flatten().release() );
+                        m_libSymbols[newName] = newLibSymbol;
                     }
                 }
             }
