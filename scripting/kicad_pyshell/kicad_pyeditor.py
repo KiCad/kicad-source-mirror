@@ -15,6 +15,14 @@ from wx.py import crust, version, dispatcher
 from wx.py.editor import Editor
 from wx.py.buffer import Buffer
 
+def KiNewId():
+    try:
+        wx.NewIdRef
+    except NameError:
+        return wx.NewId()
+    else:
+        return wx.NewIdRef()
+
 ID_NEW = wx.ID_NEW
 ID_OPEN = wx.ID_OPEN
 ID_REVERT = wx.ID_REVERT
@@ -30,38 +38,38 @@ ID_COPY = wx.ID_COPY
 ID_PASTE = wx.ID_PASTE
 ID_CLEAR = wx.ID_CLEAR
 ID_SELECTALL = wx.ID_SELECTALL
-ID_EMPTYBUFFER = wx.NewIdRef()
+ID_EMPTYBUFFER = KiNewId()
 ID_ABOUT = wx.ID_ABOUT
-ID_HELP = wx.NewIdRef()
-ID_AUTOCOMP_SHOW = wx.NewIdRef()
-ID_AUTOCOMP_MAGIC = wx.NewIdRef()
-ID_AUTOCOMP_SINGLE = wx.NewIdRef()
-ID_AUTOCOMP_DOUBLE = wx.NewIdRef()
-ID_CALLTIPS_SHOW = wx.NewIdRef()
-ID_CALLTIPS_INSERT = wx.NewIdRef()
-ID_COPY_PLUS = wx.NewIdRef()
-ID_NAMESPACE = wx.NewIdRef()
-ID_PASTE_PLUS = wx.NewIdRef()
-ID_WRAP = wx.NewIdRef()
-ID_TOGGLE_MAXIMIZE = wx.NewIdRef()
-ID_SHOW_LINENUMBERS = wx.NewIdRef()
-ID_ENABLESHELLMODE = wx.NewIdRef()
-ID_ENABLEAUTOSYMPY = wx.NewIdRef()
-ID_AUTO_SAVESETTINGS = wx.NewIdRef()
-ID_SAVEACOPY = wx.NewIdRef()
-ID_SAVEHISTORY = wx.NewIdRef()
-ID_SAVEHISTORYNOW = wx.NewIdRef()
-ID_CLEARHISTORY = wx.NewIdRef()
-ID_SAVESETTINGS = wx.NewIdRef()
-ID_DELSETTINGSFILE = wx.NewIdRef()
-ID_EDITSTARTUPSCRIPT = wx.NewIdRef()
-ID_EXECSTARTUPSCRIPT = wx.NewIdRef()
-ID_SHOWPYSLICESTUTORIAL = wx.NewIdRef()
+ID_HELP = KiNewId()
+ID_AUTOCOMP_SHOW = KiNewId()
+ID_AUTOCOMP_MAGIC = KiNewId()
+ID_AUTOCOMP_SINGLE = KiNewId()
+ID_AUTOCOMP_DOUBLE = KiNewId()
+ID_CALLTIPS_SHOW = KiNewId()
+ID_CALLTIPS_INSERT = KiNewId()
+ID_COPY_PLUS = KiNewId()
+ID_NAMESPACE = KiNewId()
+ID_PASTE_PLUS = KiNewId()
+ID_WRAP = KiNewId()
+ID_TOGGLE_MAXIMIZE = KiNewId()
+ID_SHOW_LINENUMBERS = KiNewId()
+ID_ENABLESHELLMODE = KiNewId()
+ID_ENABLEAUTOSYMPY = KiNewId()
+ID_AUTO_SAVESETTINGS = KiNewId()
+ID_SAVEACOPY = KiNewId()
+ID_SAVEHISTORY = KiNewId()
+ID_SAVEHISTORYNOW = KiNewId()
+ID_CLEARHISTORY = KiNewId()
+ID_SAVESETTINGS = KiNewId()
+ID_DELSETTINGSFILE = KiNewId()
+ID_EDITSTARTUPSCRIPT = KiNewId()
+ID_EXECSTARTUPSCRIPT = KiNewId()
+ID_SHOWPYSLICESTUTORIAL = KiNewId()
 ID_FIND = wx.ID_FIND
-ID_FINDNEXT = wx.NewIdRef()
-ID_FINDPREVIOUS = wx.NewIdRef()
-ID_SHOWTOOLS = wx.NewIdRef()
-ID_HIDEFOLDINGMARGIN = wx.NewIdRef()
+ID_FINDNEXT = KiNewId()
+ID_FINDPREVIOUS = KiNewId()
+ID_SHOWTOOLS = KiNewId()
+ID_HIDEFOLDINGMARGIN = KiNewId()
 
 import pcbnew
 
