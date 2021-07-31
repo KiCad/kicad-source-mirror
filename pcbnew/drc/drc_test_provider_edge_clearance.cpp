@@ -109,6 +109,7 @@ bool DRC_TEST_PROVIDER_EDGE_CLEARANCE::testAgainstEdge( BOARD_ITEM* item, SHAPE*
         drce->SetViolatingRule( constraint.GetParentRule() );
 
         reportViolation( drce, (wxPoint) pos );
+        return false;       // don't report violations with multiple edges; one is enough
     }
 
     return true;
@@ -153,8 +154,8 @@ bool DRC_TEST_PROVIDER_EDGE_CLEARANCE::Run()
 
                 if( shape->GetShape() == SHAPE_T::RECT )
                 {
-                    // A single rectangle for the board would make the RTree useless, so
-                    // convert to 4 edges
+                    // A single rectangle for the board would make the RTree useless, so convert
+                    // to 4 edges
                     edges.emplace_back( static_cast<PCB_SHAPE*>( shape->Clone() ) );
                     edges.back()->SetShape( SHAPE_T::SEGMENT );
                     edges.back()->SetEndX( shape->GetStartX() );
@@ -175,7 +176,8 @@ bool DRC_TEST_PROVIDER_EDGE_CLEARANCE::Run()
                 }
                 else if( shape->GetShape() == SHAPE_T::POLY )
                 {
-                    // Same for polygons
+                    // A single polygon for the board would make the RTree useless, so convert
+                    // to n edges.
                     SHAPE_LINE_CHAIN poly = shape->GetPolyShape().Outline( 0 );
 
                     for( size_t ii = 0; ii < poly.GetSegmentCount(); ++ii )
@@ -205,7 +207,7 @@ bool DRC_TEST_PROVIDER_EDGE_CLEARANCE::Run()
 
     forEachGeometryItem( { PCB_SHAPE_T, PCB_FP_SHAPE_T }, LSET( 2, Edge_Cuts, Margin ),
                          queryBoardOutlineItems );
-    forEachGeometryItem( s_allBasicItemsButZones, LSET::AllCuMask(), queryBoardGeometryItems );
+    forEachGeometryItem( s_allBasicItemsButZones, LSET::AllLayersMask(), queryBoardGeometryItems );
 
     for( const std::unique_ptr<PCB_SHAPE>& edge : edges )
     {
@@ -255,14 +257,21 @@ bool DRC_TEST_PROVIDER_EDGE_CLEARANCE::Run()
 
             if( testSilk && ( item->GetLayer() == F_SilkS || item->GetLayer() == B_SilkS ) )
             {
-                edgesTree.QueryColliding( item, UNDEFINED_LAYER, testLayer, nullptr,
+                if( edgesTree.QueryColliding( item, UNDEFINED_LAYER, testLayer, nullptr,
                         [&]( BOARD_ITEM* edge ) -> bool
                         {
                             return testAgainstEdge( item, itemShape.get(), edge,
                                                     SILK_CLEARANCE_CONSTRAINT,
                                                     DRCE_SILK_MASK_CLEARANCE );
                         },
-                        m_largestClearance );
+                        m_largestClearance ) )
+                {
+                    // violations reported during QueryColliding
+                }
+                else
+                {
+                    // TODO: check postion being outside board boundary
+                }
             }
         }
     }

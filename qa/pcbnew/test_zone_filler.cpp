@@ -56,21 +56,25 @@ struct ZONE_FILL_TEST_FIXTURE
         }
 
         std::string absPath = KI_TEST::GetPcbnewTestDataDir() + relPath.ToStdString();
-        std::string projectPath = absPath + ".kicad_pro";
+        wxFileName  projectFile( absPath + ".kicad_pro" );
         std::string boardPath = absPath + ".kicad_pcb";
+        wxFileName  rulesFile( absPath + ".kicad_dru" );
 
-        wxFileName pro( projectPath );
-
-        if( pro.Exists() )
-            m_settingsManager.LoadProject( pro.GetFullPath() );
+        if( projectFile.Exists() )
+            m_settingsManager.LoadProject( projectFile.GetFullPath() );
 
         m_board = KI_TEST::ReadBoardFromFileOrStream( boardPath );
 
-        if( pro.Exists() )
+        if( projectFile.Exists() )
             m_board->SetProject( &m_settingsManager.Prj() );
 
         m_DRCEngine = std::make_shared<DRC_ENGINE>( m_board.get(), &m_board->GetDesignSettings() );
-        m_DRCEngine->InitEngine( wxFileName() );
+
+        if( rulesFile.Exists() )
+            m_DRCEngine->InitEngine( rulesFile );
+        else
+            m_DRCEngine->InitEngine( wxFileName() );
+
         m_board->GetDesignSettings().m_DRCEngine = m_DRCEngine;
 
         m_toolMgr = std::make_unique<TOOL_MANAGER>();
@@ -233,16 +237,20 @@ BOOST_AUTO_TEST_CASE( NotchedZones )
 
 BOOST_AUTO_TEST_CASE( RegressionZoneFillTests )
 {
-    for( const wxString& relPath : { "issue2568",
-                                     "issue3812",
-                                     "issue5102",
-                                     "issue5320",
-                                     "issue5567",
-                                     "issue5830",
-                                     "issue6039",
-                                     "issue6260",
-                                     "issue6284",
-                                     "issue7086" } )
+    std::vector<wxString> tests = { "issue18",
+                                    "issue2568",
+                                    "issue3812",
+                                    "issue5102",
+                                    "issue5313",
+                                    "issue5320",
+                                    "issue5567",
+                                    "issue5830",
+                                    "issue6039",
+                                    "issue6260",
+                                    "issue6284",
+                                    "issue7086" };
+
+    for( const wxString& relPath : tests )
     {
         loadBoard( relPath );
 
@@ -261,18 +269,26 @@ BOOST_AUTO_TEST_CASE( RegressionZoneFillTests )
 
             m_DRCEngine->RunTests( EDA_UNITS::MILLIMETRES, true, false );
 
-            BOOST_TEST_MESSAGE( wxString::Format( "Zone fill regression: %s, V%d fill algo %s",
-                                                  relPath,
-                                                  fillVersion,
-                                                  violations.empty() ? "passed" : "failed" ) );
-
-            if( !violations.empty() )
+            if( violations.empty() )
+            {
+                BOOST_TEST_MESSAGE( wxString::Format( "Zone fill regression: %s, V%d algo passed",
+                                                      relPath,
+                                                      fillVersion ) );
+            }
+            else
             {
                 std::map<KIID, EDA_ITEM*> itemMap;
                 m_board->FillItemMap( itemMap );
 
-                for( const DRC_ITEM& v : violations )
-                    BOOST_ERROR( v.ShowReport( EDA_UNITS::INCHES, RPT_SEVERITY_ERROR, itemMap ) );
+                for( const DRC_ITEM& item : violations )
+                {
+                    BOOST_TEST_MESSAGE( item.ShowReport( EDA_UNITS::INCHES, RPT_SEVERITY_ERROR,
+                                                         itemMap ) );
+                }
+
+                BOOST_ERROR( wxString::Format( "Zone fill regression: %s, V%d algo failed",
+                                               relPath,
+                                               fillVersion ) );
             }
         }
     }

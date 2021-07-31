@@ -1,0 +1,61 @@
+(version 1)
+(rule "Distance between 1mm test points"  
+	(constraint courtyard_clearance (min 1.54mm))
+	(condition "A.Reference =='TP*' && B.Reference == 'TP*")
+)
+
+(rule "Distance between Vias Hole Same Nets"  
+	(constraint hole_to_hole (min 0.254mm))
+	(condition "A.Type =='Via' && B.Type =='Via' && A.Net == B.Net")
+)
+
+(rule "Distance between Vias Hole Different Nets"  
+	(constraint hole_to_hole (min 0.5mm))
+	(condition "A.Type =='Via' && B.Type =='Via' && A.Net != B.Net")
+)
+
+(rule "Via Hole to Track Clearance"  
+	(constraint hole_clearance (min 0.254mm))
+	(condition "A.Type =='Via' && B.Type =='Track'")
+)
+
+(rule "Pad to Track Clearance"  
+	(constraint clearance (min 0.2mm))
+	(condition "A.Type =='Pad' && B.Type =='Track'")
+)
+
+(rule "Distance between Pads Hole Same Nets"  
+	(constraint hole_to_hole (min 0.254mm))
+	(condition "A.Type =='Pad' && B.Type =='Pad' && A.Net == B.Net")
+)
+
+(rule "Distance between Pads Hole Different Nets"  
+	(constraint hole_to_hole (min 0.50mm))
+	(condition "A.Type =='Pad' && B.Type =='Pad' && A.Net != B.Net")
+)
+
+(rule "PTH to Track Clearance"  
+	(constraint hole_clearance (min 0.33mm))
+    (condition "A.Type == 'Pad' && A.Pad_Type == 'Through-hole' && B.Type =='Track'")
+)
+
+(rule "NPTH to Track Clearance"  
+	(constraint hole_clearance (min 0.254mm))
+    (condition "(A.Type == 'Pad' && A.Pad_Type == 'NPTH, mechanical') && B.Type =='Track'")
+)
+
+(rule "Max Drill Hole Size Mechanical"  
+	(constraint hole (max 6.3mm))
+    (condition "A.Pad_Type == 'NPTH, mechanical'")
+)
+
+(rule "Max Drill Hole Size PTH"  
+	(constraint hole (max 6.35mm))
+    (condition "A.Pad_Type == 'Through-hole'")
+)
+
+#TEST
+(rule "Disallow via in testpoint pad"  
+    (constraint disallow via)
+    (condition "A.insideCourtyard('TP*')")
+)

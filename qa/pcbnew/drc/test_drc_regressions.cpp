@@ -56,21 +56,25 @@ struct DRC_REGRESSION_TEST_FIXTURE
         }
 
         std::string absPath = KI_TEST::GetPcbnewTestDataDir() + relPath.ToStdString();
-        std::string projectPath = absPath + ".kicad_pro";
+        wxFileName  projectFile( absPath + ".kicad_pro" );
         std::string boardPath = absPath + ".kicad_pcb";
+        wxFileName  rulesFile( absPath + ".kicad_dru" );
 
-        wxFileName pro( projectPath );
-
-        if( pro.Exists() )
-            m_settingsManager.LoadProject( pro.GetFullPath() );
+        if( projectFile.Exists() )
+            m_settingsManager.LoadProject( projectFile.GetFullPath() );
 
         m_board = KI_TEST::ReadBoardFromFileOrStream( boardPath );
 
-        if( pro.Exists() )
+        if( projectFile.Exists() )
             m_board->SetProject( &m_settingsManager.Prj() );
 
         m_DRCEngine = std::make_shared<DRC_ENGINE>( m_board.get(), &m_board->GetDesignSettings() );
-        m_DRCEngine->InitEngine( wxFileName() );
+
+        if( rulesFile.Exists() )
+            m_DRCEngine->InitEngine( rulesFile );
+        else
+            m_DRCEngine->InitEngine( wxFileName() );
+
         m_board->GetDesignSettings().m_DRCEngine = m_DRCEngine;
 
         m_toolMgr = std::make_unique<TOOL_MANAGER>();
@@ -105,15 +109,20 @@ BOOST_FIXTURE_TEST_SUITE( TestDRCRegressions, DRC_REGRESSION_TEST_FIXTURE )
 constexpr int delta = KiROUND( 0.006 * IU_PER_MM );
 
 
-BOOST_AUTO_TEST_CASE( DRCRegressions )
+BOOST_AUTO_TEST_CASE( DRCFalsePositiveRegressions )
 {
-    for( const wxString& relPath : { "issue4139",
-                                     "issue4774",
-                                     "issue5978",
-                                     "issue5990",
-                                     "issue6443",
-                                     "issue7975",
-                                     "issue8407" } )
+    // These documents at one time flagged DRC errors that they shouldn't have.
+
+    std::vector<wxString> tests = { "issue4139",
+                                    "issue4774",
+                                    "issue5978",
+                                    "issue5990",
+                                    "issue6443",
+                                    "issue7567",
+                                    "issue7975",
+                                    "issue8407" };
+
+    for( const wxString& relPath : tests )
     {
         loadBoard( relPath );
         fillZones( 6 );
@@ -121,8 +130,8 @@ BOOST_AUTO_TEST_CASE( DRCRegressions )
         std::vector<DRC_ITEM>  violations;
         BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
 
-        bds.m_DRCSeverities[ DRCE_INVALID_OUTLINE ] = SEVERITY::RPT_SEVERITY_WARNING;
-        bds.m_DRCSeverities[ DRCE_UNCONNECTED_ITEMS ] = SEVERITY::RPT_SEVERITY_WARNING;
+        bds.m_DRCSeverities[ DRCE_INVALID_OUTLINE ] = SEVERITY::RPT_SEVERITY_IGNORE;
+        bds.m_DRCSeverities[ DRCE_UNCONNECTED_ITEMS ] = SEVERITY::RPT_SEVERITY_IGNORE;
 
         m_DRCEngine->SetViolationHandler(
                 [&]( const std::shared_ptr<DRC_ITEM>& aItem, wxPoint aPos )
@@ -133,17 +142,76 @@ BOOST_AUTO_TEST_CASE( DRCRegressions )
 
         m_DRCEngine->RunTests( EDA_UNITS::MILLIMETRES, true, false );
 
-        BOOST_TEST_MESSAGE( wxString::Format( "DRC regression: %s, %s",
-                                              relPath,
-                                              violations.empty() ? "passed" : "failed" ) );
-
-        if( !violations.empty() )
+        if( violations.empty() )
+        {
+            BOOST_TEST_MESSAGE( wxString::Format( "DRC regression: %s, passed", relPath ) );
+        }
+        else
         {
             std::map<KIID, EDA_ITEM*> itemMap;
             m_board->FillItemMap( itemMap );
 
             for( const DRC_ITEM& item : violations )
-                BOOST_ERROR( item.ShowReport( EDA_UNITS::INCHES, RPT_SEVERITY_ERROR, itemMap ) );
+            {
+                BOOST_TEST_MESSAGE( item.ShowReport( EDA_UNITS::INCHES, RPT_SEVERITY_ERROR,
+                                                     itemMap ) );
+            }
+
+            BOOST_ERROR( wxString::Format( "DRC regression: %s, failed", relPath ) );
+        }
+    }
+}
+
+
+BOOST_AUTO_TEST_CASE( DRCFalseNegativeRegressions )
+{
+    // These documents at one time failed to catch DRC errors that they should have.
+
+    std::vector< std::pair<wxString, int> > tests = { { "issue1358", 2 },
+                                                      { "issue2528", 1 },
+                                                      { "issue5750", 4 },
+                                                      { "issue5854", 3 },
+                                                      { "issue6879", 6 },
+                                                      { "issue6945", 2 },
+                                                      { "issue7241", 1 },
+                                                      { "issue7267", 4 },
+                                                      { "issue7325", 21 },
+                                                      { "issue8003", 2 } };
+
+    for( const std::pair<wxString, int>& entry : tests )
+    {
+        loadBoard( entry.first );
+        fillZones( 6 );
+
+        std::vector<DRC_ITEM>  violations;
+        BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
+
+        m_DRCEngine->SetViolationHandler(
+                [&]( const std::shared_ptr<DRC_ITEM>& aItem, wxPoint aPos )
+                {
+                    violations.push_back( *aItem );
+                } );
+
+        m_DRCEngine->RunTests( EDA_UNITS::MILLIMETRES, true, false );
+
+        if( violations.size() == entry.second )
+        {
+            BOOST_TEST_MESSAGE( wxString::Format( "DRC regression: %s, passed", entry.first ) );
+        }
+        else
+        {
+            BOOST_CHECK_EQUAL( violations.size(), entry.second );
+
+            std::map<KIID, EDA_ITEM*> itemMap;
+            m_board->FillItemMap( itemMap );
+
+            for( const DRC_ITEM& item : violations )
+            {
+                BOOST_TEST_MESSAGE( item.ShowReport( EDA_UNITS::INCHES, RPT_SEVERITY_ERROR,
+                                                     itemMap ) );
+            }
+
+            BOOST_ERROR( wxString::Format( "DRC regression: %s, failed", entry.first ) );
         }
     }
 }

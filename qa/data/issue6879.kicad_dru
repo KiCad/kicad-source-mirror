@@ -1,0 +1,16 @@
+(version 1)
+
+(rule "PTH to Track Clearance"  
+	(constraint hole_clearance (min 1.0mm))
+    (condition "A.Type == 'Pad' && A.Pad_Type == 'Through-hole' && B.Type =='Track'")
+)
+
+(rule "NPTH to Track Clearance"  
+	(constraint hole_clearance (min 1.0mm))
+    (condition "(A.Type == 'Pad' && A.Pad_Type == 'NPTH, mechanical') && B.Type =='Track'")
+)
+
+(rule "Max Drill Hole Size Mechanical"  
+	(constraint hole (max 2.0mm))
+    (condition "A.Type == 'Pad'")
+)

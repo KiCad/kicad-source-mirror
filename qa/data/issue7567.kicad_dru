@@ -1,0 +1,9 @@
+(version 1)
+(rule "keepout holes"
+	(constraint disallow hole)
+	(condition "A.insideArea('NoBottomFootprints')" )
+)
+(rule "keepout bottom footprints"
+	(constraint disallow pad)
+	(condition "A.Layer_Bottom && A.insideArea('NoBottomFootprints')" )
+)

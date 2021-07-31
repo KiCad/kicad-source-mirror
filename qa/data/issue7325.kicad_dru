@@ -1,0 +1,7 @@
+#(version 1.0)
+#(rule silk2via
+# (constraint silk_clearance(min 0.15mm))
+# (condition "A.Type=='*Text' && B.Type=='Via'"))
+#(rule silk2via1
+#(constraint silk_clearance(min 0.15mm))
+#(condition "A.Type=='Graphic*' && B.Type=='Via'"))
