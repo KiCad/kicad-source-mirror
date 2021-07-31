@@ -38,6 +38,14 @@
 using namespace std::placeholders;
 
 
+BOARD_COMMIT::BOARD_COMMIT( TOOL_MANAGER* aToolMgr ) :
+        m_toolMgr( aToolMgr ),
+        m_isFootprintEditor( false ),
+        m_resolveNetConflicts( false )
+{
+}
+
+
 BOARD_COMMIT::BOARD_COMMIT( PCB_TOOL_BASE* aTool ) :
         m_resolveNetConflicts( false )
 {

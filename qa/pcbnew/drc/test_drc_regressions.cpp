@@ -55,8 +55,9 @@ struct DRC_REGRESSION_TEST_FIXTURE
             m_board = nullptr;
         }
 
-        std::string boardPath = KI_TEST::GetPcbnewTestDataDir() + relPath.ToStdString() + ".kicad_pcb";
-        wxString    projectPath = KI_TEST::GetPcbnewTestDataDir() + relPath.ToStdString() + ".kicad_pro";
+        std::string absPath = KI_TEST::GetPcbnewTestDataDir() + relPath.ToStdString();
+        std::string projectPath = absPath + ".kicad_pro";
+        std::string boardPath = absPath + ".kicad_pcb";
 
         wxFileName pro( projectPath );
 
@@ -74,13 +75,11 @@ struct DRC_REGRESSION_TEST_FIXTURE
 
         m_toolMgr = std::make_unique<TOOL_MANAGER>();
         m_toolMgr->SetEnvironment( m_board.get(), nullptr, nullptr, nullptr, nullptr );
-        m_toolMgr->RegisterTool( new ZONE_FILLER_TOOL );
     }
 
     void fillZones( int aFillVersion )
     {
-        ZONE_FILLER_TOOL*  fillerTool = m_toolMgr->GetTool<ZONE_FILLER_TOOL>();
-        BOARD_COMMIT       commit( fillerTool );
+        BOARD_COMMIT       commit( m_toolMgr.get() );
         ZONE_FILLER        filler( m_board.get(), &commit );
         std::vector<ZONE*> toFill;
 
