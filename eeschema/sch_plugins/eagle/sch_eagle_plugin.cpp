@@ -1280,7 +1280,7 @@ void SCH_EAGLE_PLUGIN::loadInstance( wxXmlNode* aInstanceNode )
     wxString gatename    = epart->deviceset + epart->device + einstance.gate;
     wxString symbolname  = wxString( epart->deviceset + epart->device );
     symbolname.Replace( "*", "" );
-    wxString kisymbolname = fixSymbolName( symbolname );
+    wxString kisymbolname = EscapeString( symbolname, CTX_LIBID );
 
     int unit = m_eagleLibs[libraryname].GateUnit[gatename];
 
@@ -1292,13 +1292,13 @@ void SCH_EAGLE_PLUGIN::loadInstance( wxXmlNode* aInstanceNode )
     if( p != elib->package.end() )
         package = p->second;
 
-    LIB_SYMBOL* part =
-            m_pi->LoadSymbol( getLibFileName().GetFullPath(), kisymbolname, m_properties.get() );
+    LIB_SYMBOL* part = m_pi->LoadSymbol( getLibFileName().GetFullPath(), kisymbolname,
+                                         m_properties.get() );
 
     if( !part )
     {
         m_reporter->Report( wxString::Format( _( "Could not find '%s' in the imported library." ),
-                                              kisymbolname ),
+                                              UnescapeString( kisymbolname ) ),
                             RPT_SEVERITY_ERROR );
         return;
     }
@@ -1510,28 +1510,32 @@ EAGLE_LIBRARY* SCH_EAGLE_PLUGIN::loadLibrary( wxXmlNode* aLibraryNode,
             wxString symbolName = edeviceset.name + edevice.name;
             symbolName.Replace( "*", "" );
             wxASSERT( !symbolName.IsEmpty() );
-            symbolName = fixSymbolName( symbolName );
+            symbolName = EscapeString( symbolName, CTX_LIBID );
 
             if( edevice.package )
                 aEagleLibrary->package[symbolName] = edevice.package.Get();
 
             // Create KiCad symbol.
-            unique_ptr<LIB_SYMBOL> kpart( new LIB_SYMBOL( symbolName ) );
+            unique_ptr<LIB_SYMBOL> libSymbol( new LIB_SYMBOL( symbolName ) );
 
             // Process each gate in the deviceset for this device.
             wxXmlNode* gateNode    = getChildrenNodes( deviceSetChildren, "gates" );
             int        gates_count = countChildren( deviceSetChildren["gates"], "gate" );
-            kpart->SetUnitCount( gates_count );
-            kpart->LockUnits( true );
+            libSymbol->SetUnitCount( gates_count );
+            libSymbol->LockUnits( true );
 
-            LIB_FIELD* reference = kpart->GetFieldById( REFERENCE_FIELD );
+            LIB_FIELD* reference = libSymbol->GetFieldById( REFERENCE_FIELD );
 
             if( prefix.length() == 0 )
+            {
                 reference->SetVisible( false );
+            }
             else
+            {
                 // If there is no footprint assigned, then prepend the reference value
                 // with a hash character to mute netlist updater complaints
                 reference->SetText( edevice.package ? prefix : '#' + prefix );
+            }
 
             int  gateindex = 1;
             bool ispower   = false;
@@ -1543,23 +1547,23 @@ EAGLE_LIBRARY* SCH_EAGLE_PLUGIN::loadLibrary( wxXmlNode* aLibraryNode,
                 EGATE egate = EGATE( gateNode );
 
                 aEagleLibrary->GateUnit[edeviceset.name + edevice.name + egate.name] = gateindex;
-                ispower = loadSymbol( aEagleLibrary->SymbolNodes[egate.symbol], kpart, &edevice,
-                        gateindex, egate.name );
+                ispower = loadSymbol( aEagleLibrary->SymbolNodes[egate.symbol], libSymbol, &edevice,
+                                      gateindex, egate.name );
 
                 gateindex++;
                 gateNode = gateNode->GetNext();
             } // gateNode
 
-            kpart->SetUnitCount( gates_count );
+            libSymbol->SetUnitCount( gates_count );
 
             if( gates_count == 1 && ispower )
-                kpart->SetPower();
+                libSymbol->SetPower();
 
-            wxString name = fixSymbolName( kpart->GetName() );
-            kpart->SetName( name );
-            m_pi->SaveSymbol( getLibFileName().GetFullPath(), new LIB_SYMBOL( *kpart.get() ),
-                    m_properties.get() );
-            aEagleLibrary->KiCadSymbols.insert( name, kpart.release() );
+            wxString name = libSymbol->GetName();
+            libSymbol->SetName( name );
+            m_pi->SaveSymbol( getLibFileName().GetFullPath(), new LIB_SYMBOL( *libSymbol.get() ),
+                              m_properties.get() );
+            aEagleLibrary->KiCadSymbols.insert( name, libSymbol.release() );
 
             deviceNode = deviceNode->GetNext();
         } // devicenode
@@ -2999,14 +3003,6 @@ void SCH_EAGLE_PLUGIN::addImplicitConnections( SCH_SYMBOL* aSymbol, SCH_SCREEN* 
             }
         }
     }
-}
-
-
-wxString SCH_EAGLE_PLUGIN::fixSymbolName( const wxString& aName )
-{
-    wxString ret = EscapeString( aName, CTX_LIBID );
-
-    return ret;
 }
 
 

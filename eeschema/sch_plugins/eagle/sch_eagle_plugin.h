@@ -190,16 +190,6 @@ private:
 
     bool netHasPowerDriver( SCH_LINE* aLine, const wxString& aNetName ) const;
 
-    /**
-     * Fix invalid characters in Eagle symbol names.
-     *
-     * It changes invalid characters to underscores.
-     *
-     * @param aName is the symbol name to be fixed.
-     * @return Fixed symbol name.
-     */
-    static wxString fixSymbolName( const wxString& aName );
-
     // Describe missing units containing pins creating implicit connections
     // (named power pins in Eagle).
     struct EAGLE_MISSING_CMP
