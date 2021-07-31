@@ -110,7 +110,7 @@ class PcbnewPyShell(editor.EditorNotebookFrame):
 
         """Keep pydoc output on stdout instead of pager and
             place the stdout into the editor window """
-        import pydoc, sys
+        import pydoc
         self._keep_stdin = sys.stdin
         pydoc.pager = pydoc.plainpager
 
