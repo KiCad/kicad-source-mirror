@@ -217,7 +217,8 @@ void GERBER_LAYER_WIDGET::ReFill()
         int      aRow = findLayerRow( layer );
         bool     visible = true;
         COLOR4D  color = m_frame->GetLayerColor( GERBER_DRAW_LAYER( layer ) );
-        wxString msg = GetImagesList()->GetDisplayName( layer, /* include layer number */ false,
+        wxString msg = GetImagesList()->GetDisplayName( layer,
+                                                        /* include layer number */ false,
                                                         /* Get the full name */ true );
 
         if( m_frame->GetCanvas() )
@@ -226,7 +227,10 @@ void GERBER_LAYER_WIDGET::ReFill()
             visible = m_frame->IsLayerVisible( layer );
 
         if( aRow >= 0 )
+        {
             updateLayerRow( findLayerRow( layer ), msg );
+            SetLayerVisible( layer, visible );
+        }
         else
             AppendLayerRow( LAYER_WIDGET::ROW( msg, layer, color, wxEmptyString, visible, true ) );
     }

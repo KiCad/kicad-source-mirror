@@ -297,15 +297,15 @@ public:
     bool unarchiveFiles( const wxString& aFullFileName, REPORTER* aReporter = nullptr );
 
     /**
-     * Load a photoplot (Gerber) file or many files.
+     * Load a given Gerber file or selected file(s), if the filename is empty.
      *
-     * @param aFileName - void string or file name with full path to open or empty string to
-     *                    open a new file. In this case one one file is loaded
-     *                    if void string: user will be prompted for filename(s)
+     * @param aFileName - file name with full path to open or empty string.
+     *                    if empty string: a dialog will be opened to select one or
+     *                    a set of files
      * @return true if file was opened successfully.
      */
     bool LoadGerberFiles( const wxString& aFileName );
-    bool Read_GERBER_File( const wxString&   GERBER_FullFileName );
+    bool Read_GERBER_File( const wxString& GERBER_FullFileName );
 
     /**
      * Load a drill (EXCELLON) file or many files.
