@@ -34,6 +34,18 @@ do
         # MacOS wants icons with 10% clearance on each side
         let "sub_sz = $sz * 8 / 10"
 
+        sigma=3
+        if [ $sz -eq 16 ]
+        then
+            sigma=2
+        elif [ $sz -ge 512 ]
+        then
+            sigma=5
+        fi
+
+        # Offset the drop shadow by one smaller than the kernel
+        let "off = $sigma - 1"
+
         # Use specialized icons for smaller sizes to keep pixel alignment
         if [ $sz -le 32 ]
         then
@@ -42,7 +54,7 @@ do
             inkscape sources/light/icon_${pgm}.svg -o macos_tmp/${pgm}_small_${sz}px.png -w ${sub_sz} -h ${sub_sz} --export-area-snap
         fi
 
-        convert macos_tmp/${pgm}_small_${sz}px.png -size $size xc:transparent +swap -gravity center -composite macos_tmp/${pgm}_${sz}px.png
+        convert macos_tmp/${pgm}_small_${sz}px.png \( +clone -background black -shadow 80x${sigma}+${off}+${off} \) +swap -background transparent -layers merge +repage -size $size xc:transparent +swap -gravity center -composite macos_tmp/${pgm}_${sz}px.png
 
         output+="macos_tmp/${pgm}_${sz}px.png "
     done
@@ -61,4 +73,4 @@ do
     fi
 done
 
-rm -rf macos_tmp
+# rm -rf macos_tmp
