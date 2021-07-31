@@ -104,12 +104,11 @@ struct DRC_REGRESSION_TEST_FIXTURE
 };
 
 
-BOOST_FIXTURE_TEST_SUITE( TestDRCRegressions, DRC_REGRESSION_TEST_FIXTURE )
 
 constexpr int delta = KiROUND( 0.006 * IU_PER_MM );
 
 
-BOOST_AUTO_TEST_CASE( DRCFalsePositiveRegressions )
+BOOST_FIXTURE_TEST_CASE( DRCFalsePositiveRegressions, DRC_REGRESSION_TEST_FIXTURE )
 {
     // These documents at one time flagged DRC errors that they shouldn't have.
 
@@ -163,7 +162,7 @@ BOOST_AUTO_TEST_CASE( DRCFalsePositiveRegressions )
 }
 
 
-BOOST_AUTO_TEST_CASE( DRCFalseNegativeRegressions )
+BOOST_FIXTURE_TEST_CASE( DRCFalseNegativeRegressions, DRC_REGRESSION_TEST_FIXTURE )
 {
     // These documents at one time failed to catch DRC errors that they should have.
 
@@ -215,6 +214,3 @@ BOOST_AUTO_TEST_CASE( DRCFalseNegativeRegressions )
         }
     }
 }
-
-
-BOOST_AUTO_TEST_SUITE_END()

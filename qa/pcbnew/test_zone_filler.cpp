@@ -104,12 +104,10 @@ struct ZONE_FILL_TEST_FIXTURE
 };
 
 
-BOOST_FIXTURE_TEST_SUITE( TestZoneFiller, ZONE_FILL_TEST_FIXTURE )
-
 constexpr int delta = KiROUND( 0.006 * IU_PER_MM );
 
 
-BOOST_AUTO_TEST_CASE( BasicZoneFills )
+BOOST_FIXTURE_TEST_CASE( BasicZoneFills, ZONE_FILL_TEST_FIXTURE )
 {
     loadBoard( "zone_filler" );
 
@@ -195,7 +193,7 @@ BOOST_AUTO_TEST_CASE( BasicZoneFills )
 }
 
 
-BOOST_AUTO_TEST_CASE( NotchedZones )
+BOOST_FIXTURE_TEST_CASE( NotchedZones, ZONE_FILL_TEST_FIXTURE )
 {
     loadBoard( "notched_zones" );
 
@@ -235,7 +233,7 @@ BOOST_AUTO_TEST_CASE( NotchedZones )
 }
 
 
-BOOST_AUTO_TEST_CASE( RegressionZoneFillTests )
+BOOST_FIXTURE_TEST_CASE( RegressionZoneFillTests, ZONE_FILL_TEST_FIXTURE )
 {
     std::vector<wxString> tests = { "issue18",
                                     "issue2568",
@@ -294,5 +292,3 @@ BOOST_AUTO_TEST_CASE( RegressionZoneFillTests )
     }
 }
 
-
-BOOST_AUTO_TEST_SUITE_END()
