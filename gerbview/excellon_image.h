@@ -53,6 +53,8 @@ enum drill_M_code_t {
     DRILL_RESET_CMD,
     DRILL_AUTOMATIC_TOOL_CHANGE,
     DRILL_FMT,
+    DRILL_FORMAT_ALTIUM,
+    DRILL_HEADER_SKIP,
     DRILL_SKIP,
     DRILL_TOOL_INFORMATION,
     DRILL_M_END_LIST                // not used: sentinel
@@ -163,6 +165,14 @@ private:
     bool Select_Tool( char*& text );
     bool Execute_EXCELLON_G_Command( char*& text );
     bool Execute_Drill_Command( char*& text );
+
+    /**
+     * Read an Altium-specific FILE_FORMAT=X:X attribute that specifies the length
+     * and mantissa of the numbers in the gerber file
+     *
+     * @param aText Text containing format and mantissa
+     */
+    void readFileFormat( char*& aText );
 
     /**
      * Read a tool definition like T1C0.02 or T1F00S00C0.02 or T1C0.02F00S00

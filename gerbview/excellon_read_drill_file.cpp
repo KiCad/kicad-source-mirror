@@ -213,6 +213,9 @@ static EXCELLON_CMD excellonHeaderCmdList[] =
     { "DETECT", DRILL_DETECT_BROKEN,         -1 },
     { "ICI",    DRILL_INCREMENTALHEADER,      1 },
     { "FMAT",   DRILL_FMT,                    1 },  // Use Format command
+    { ";FILE_FORMAT",
+                DRILL_FORMAT_ALTIUM,          1 },  // Use Format command
+    { ";",      DRILL_HEADER_SKIP,            0 },  // Other ; hints that we don't implement
     { "ATC",    DRILL_AUTOMATIC_TOOL_CHANGE,  0 },
     { "TCST",   DRILL_TOOL_CHANGE_STOP,       0 },  // Tool Change Stop
     { "AFS",    DRILL_AUTOMATIC_SPEED,        0 },  // Automatic Feeds and Speeds
@@ -345,7 +348,7 @@ bool EXCELLON_IMAGE::LoadFile( const wxString & aFullFileName )
         char* line = excellonReader.Line();
         char* text = StrPurge( line );
 
-        if( *text == ';' || *text == 0 )       // comment: skip line or empty malformed line
+        if( *text == 0 ) // Skip empty lines
             continue;
 
         if( m_State == EXCELLON_IMAGE::READ_HEADER_STATE )
@@ -356,6 +359,7 @@ bool EXCELLON_IMAGE::LoadFile( const wxString & aFullFileName )
         {
             switch( *text )
             {
+            case ';':
             case 'M':
                 Execute_HEADER_And_M_Command( text );
                 break;
@@ -474,6 +478,13 @@ bool EXCELLON_IMAGE::Execute_HEADER_And_M_Command( char*& text )
         m_State = READ_PROGRAM_STATE;
         break;
 
+    case DRILL_FORMAT_ALTIUM:
+        readFileFormat( text );
+        break;
+
+    case DRILL_HEADER_SKIP:
+        break;
+
     case DRILL_M_METRIC:
         SelectUnits( true );
         break;
@@ -565,6 +576,42 @@ bool EXCELLON_IMAGE::Execute_HEADER_And_M_Command( char*& text )
         text++;
 
     return true;
+}
+
+
+void EXCELLON_IMAGE::readFileFormat( char*& aText )
+{
+    int mantissaDigits = 0;
+    int characteristicDigits = 0;
+
+    // Example String: ;FILE_FORMAT=4:4
+    // The ;FILE_FORMAT potion will already be stripped off.
+    // Parse the rest strictly as single_digit:single_digit like 4:4 or 2:4
+    // Don't allow anything clever like spaces or multiple digits
+    if( *aText != '=' )
+        return;
+
+    aText++;
+
+    if( !isdigit( *aText ) )
+        return;
+
+    characteristicDigits = *aText - '0';
+    aText++;
+
+    if( *aText != ':' )
+        return;
+
+    aText++;
+
+    if( !isdigit( *aText ) )
+        return;
+
+    mantissaDigits = *aText - '0';
+
+    m_hasFormat = true;
+    m_FmtLen.x = m_FmtLen.y = characteristicDigits + mantissaDigits;
+    m_FmtScale.x = m_FmtScale.y = mantissaDigits;
 }
 
 
@@ -885,16 +932,24 @@ void EXCELLON_IMAGE::SelectUnits( bool aMetric )
     if( aMetric )
     {
         m_GerbMetric = true;
-        // number of digits in mantissa
-        m_FmtScale.x = m_FmtScale.y = fmtMantissaMM;
-        // number of digits (mantissa+integer)
-        m_FmtLen.x = m_FmtLen.y = fmtIntegerMM+fmtMantissaMM;
+
+        if( !m_hasFormat )
+        {
+            // number of digits in mantissa
+            m_FmtScale.x = m_FmtScale.y = fmtMantissaMM;
+            // number of digits (mantissa+integer)
+            m_FmtLen.x = m_FmtLen.y = fmtIntegerMM + fmtMantissaMM;
+        }
     }
     else
     {
         m_GerbMetric = false;
-        m_FmtScale.x = m_FmtScale.y = fmtMantissaInch;
-        m_FmtLen.x = m_FmtLen.y = fmtIntegerInch+fmtMantissaInch;
+
+        if( !m_hasFormat )
+        {
+            m_FmtScale.x = m_FmtScale.y = fmtMantissaInch;
+            m_FmtLen.x = m_FmtLen.y = fmtIntegerInch + fmtMantissaInch;
+        }
     }
 }
 

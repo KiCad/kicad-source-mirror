@@ -183,6 +183,7 @@ void GERBER_FILE_IMAGE::ResetDefaultValues()
     m_ImageJustifyXCenter = false;                  // Image Justify Center on X axis (default = false)
     m_ImageJustifyYCenter = false;                  // Image Justify Center on Y axis (default = false)
     m_GerbMetric    = false;                        // false = Inches (default), true = metric
+    m_hasFormat = false;
     m_Relative = false;                             // false = absolute Coord,
                                                     // true = relative Coord
     m_NoTrailingZeros = false;                      // true: trailing zeros deleted
