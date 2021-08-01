@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
-"PO-Revision-Date: 2021-08-01 08:06+0000\n"
+"PO-Revision-Date: 2021-08-01 08:15+0000\n"
 "Last-Translator: David Chen <d0123456789g@yahoo.com.tw>\n"
 "Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hant/>\n"
@@ -7288,7 +7288,7 @@ msgstr "批註原理圖"
 
 #: eeschema/dialogs/dialog_bom.cpp:133
 msgid "Generate"
-msgstr "生成"
+msgstr "產生"
 
 #: eeschema/dialogs/dialog_bom.cpp:217
 msgid "(file missing)"
@@ -7297,7 +7297,7 @@ msgstr "(檔案缺失)"
 #: eeschema/dialogs/dialog_bom.cpp:294
 #, c-format
 msgid "The selected BOM generator script %s could not be found."
-msgstr "所選的材料表生成器指令碼 %s 無法被找到。"
+msgstr "所選的材料表產生器指令碼 %s 無法被找到。"
 
 #: eeschema/dialogs/dialog_bom.cpp:299
 #, c-format
@@ -7316,15 +7316,15 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_bom.cpp:345
 msgid "Generating BOM requires a fully annotated schematic."
-msgstr "生成材料表 (BOM) 需要一張完全註釋的原理圖。"
+msgstr "產生材料表 (BOM) 需要一張完全註釋的原理圖。"
 
 #: eeschema/dialogs/dialog_bom.cpp:382 eeschema/dialogs/dialog_bom_base.cpp:43
 msgid "Generator nickname:"
-msgstr "生成別稱："
+msgstr "產生別稱："
 
 #: eeschema/dialogs/dialog_bom.cpp:382
 msgid "Add Generator"
-msgstr "新增生成器"
+msgstr "新增產生器"
 
 #: eeschema/dialogs/dialog_bom.cpp:391
 #, fuzzy, c-format
@@ -7333,11 +7333,11 @@ msgstr "別名 \"%s\" 已經被佔用了。"
 
 #: eeschema/dialogs/dialog_bom.cpp:420 eeschema/dialogs/dialog_netlist.cpp:685
 msgid "Generator files:"
-msgstr "生成鑽孔檔案："
+msgstr "產生鑽孔檔案："
 
 #: eeschema/dialogs/dialog_bom.cpp:439
 msgid "Generator file name not found."
-msgstr "找不到生成器檔名。"
+msgstr "找不到產生器檔名。"
 
 #: eeschema/dialogs/dialog_bom.cpp:449
 msgid "No text editor selected in KiCad.  Please choose one."
@@ -7345,15 +7345,15 @@ msgstr "在 KiCad 中未選擇任何文字編輯器，請選擇一個。"
 
 #: eeschema/dialogs/dialog_bom.cpp:461
 msgid "Bill of Material Generation Help"
-msgstr "BOM 生成幫助"
+msgstr "BOM 產生幫助"
 
 #: eeschema/dialogs/dialog_bom_base.cpp:25
 msgid "BOM generator scripts:"
-msgstr "BOM 生成器指令碼："
+msgstr "BOM 產生器指令碼："
 
 #: eeschema/dialogs/dialog_bom_base.cpp:69
 msgid "Add a new BOM generator and its command line to the list"
-msgstr "向列表中新增新的 BOM 生成器及其命令列"
+msgstr "向列表中新增新的 BOM 產生器及其命令列"
 
 #: eeschema/dialogs/dialog_bom_base.cpp:74
 msgid "Edit the script file in the text editor"
@@ -7365,7 +7365,7 @@ msgstr "從列表中移除目前的產生器指令碼"
 
 #: eeschema/dialogs/dialog_bom_base.cpp:92
 msgid "Command line running the generator:"
-msgstr "執行生成器的命令列："
+msgstr "執行產生器的命令列："
 
 #: eeschema/dialogs/dialog_bom_base.cpp:101
 msgid "Show console window"
@@ -7382,7 +7382,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_bom_base.cpp:116
 msgid "Reset the list of BOM generator scripts to the default settings"
-msgstr "重置 BOM 生成器指令碼到預設設定"
+msgstr "重置 BOM 產生器指令碼到預設設定"
 
 #: eeschema/dialogs/dialog_bom_base.h:81
 msgid "Bill of Material"
@@ -7588,7 +7588,7 @@ msgstr ""
 "\n"
 "＃ 3 - 轉換為新格式\n"
 "\n"
-"透過對中間網表文件套用後處理過濾器，您可以生成外部網表文件以及 BOM 檔案。由於此轉換是從文字到文字的轉換，因此可以使用 *Python*，*XSLT*"
+"透過對中間網表文件套用後處理過濾器，您可以產生外部網表文件以及 BOM 檔案。由於此轉換是從文字到文字的轉換，因此可以使用 *Python*，*XSLT*"
 " 或任何其他能夠將 XML 作為輸入的工具來編寫此後處理過濾器。\n"
 "\n"
 "XSLT 本身是適合 XML 轉換的 XML 語言。您可以下載並安裝一個名為 `xsltproc` 的免費程式。`xsltproc` 程式可用於讀取中間 "
@@ -7611,12 +7611,12 @@ msgstr ""
 "***注意（僅 Windows）：***\n"
 " *預設情況下，命令列使用隱藏的控制檯視窗執行，並且輸出重定向到 “外掛資訊” 字段。要顯示正在執行的命令視窗，請選中 “顯示控制檯視窗” 複選框。*\n"
 "\n"
-"單擊“生成”按鈕後，將發生以下情況：\n"
+"單擊“產生”按鈕後，將發生以下情況：\n"
 "\n"
 "1. Eeschema 建立一箇中間網表文件 \\*.xml，例如 `test.xml`。\n"
 "2. Eeschema 從命令列執行指令碼以建立最終輸出檔案。\n"
 "\n"
-"## 4.2 - 透過命令列生成網表文件\n"
+"## 4.2 - 透過命令列產生網表文件\n"
 "\n"
 "假設我們正在使用程式 `xsltproc.exe` 將樣式表套用於中間檔案，則 `xsltproc.exe` 將透過以下命令執行。\n"
 "\n"
@@ -9400,11 +9400,11 @@ msgstr "不要忘記為這個網表控制頁選擇一個標題"
 
 #: eeschema/dialogs/dialog_netlist_base.cpp:39
 msgid "Add Generator..."
-msgstr "新增生成器..."
+msgstr "新增產生器..."
 
 #: eeschema/dialogs/dialog_netlist_base.cpp:42
 msgid "Remove Generator"
-msgstr "移除生成器"
+msgstr "移除產生器"
 
 #: eeschema/dialogs/dialog_netlist_base.cpp:85
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:28
@@ -9417,15 +9417,15 @@ msgstr "名稱："
 
 #: eeschema/dialogs/dialog_netlist_base.cpp:92
 msgid "Command line to run the generator:"
-msgstr "命令列執行生成器："
+msgstr "命令列執行產生器："
 
 #: eeschema/dialogs/dialog_netlist_base.cpp:107
 msgid "Browse Generators..."
-msgstr "瀏覽生成器..."
+msgstr "瀏覽產生器..."
 
 #: eeschema/dialogs/dialog_netlist_base.h:109
 msgid "Script Generator Properties"
-msgstr "指令碼生成器屬性"
+msgstr "指令碼產生器屬性"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:50
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:201
@@ -10611,7 +10611,7 @@ msgstr "Lambda:"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:1116
 msgid "type of random generator for source is invalid"
-msgstr "源的隨機生成器型別無效"
+msgstr "源的隨機產生器型別無效"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:30
 #: eeschema/dialogs/dialog_spice_model_base.cpp:233
@@ -11735,11 +11735,11 @@ msgstr "沒有錯誤或警告"
 
 #: eeschema/dialogs/panel_setup_pinmap.cpp:174
 msgid "Generate warning"
-msgstr "生成警告"
+msgstr "產生警告"
 
 #: eeschema/dialogs/panel_setup_pinmap.cpp:179
 msgid "Generate error"
-msgstr "生成錯誤"
+msgstr "產生錯誤"
 
 #: eeschema/dialogs/panel_setup_pinmap_base.cpp:24
 msgid "Pin to Pin Connections"
@@ -15942,7 +15942,7 @@ msgstr "匯出包含某種格式的網表的檔案"
 
 #: eeschema/tools/ee_actions.cpp:624
 msgid "Generate BOM..."
-msgstr "生成 BOM..."
+msgstr "產生 BOM..."
 
 #: eeschema/tools/ee_actions.cpp:624
 msgid "Generate a bill of materials for the current schematic"
@@ -17906,7 +17906,7 @@ msgstr "自定義模板"
 
 #: kicad/tools/kicad_manager_control.cpp:174
 msgid "No project template was selected.  Cannot generate new project."
-msgstr "未選中工程模板。無法生成新的工程。"
+msgstr "未選中工程模板。無法產生新的工程。"
 
 #: kicad/tools/kicad_manager_control.cpp:182
 msgid "New Project Folder"
@@ -21209,7 +21209,7 @@ msgstr "鑽孔"
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:265
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:214
 msgid "Generate Report File..."
-msgstr "生成報告檔案..."
+msgstr "產生報告檔案..."
 
 #: pcbnew/dialogs/dialog_board_statistics_base.h:66
 msgid "Board Statistics"
@@ -22451,9 +22451,8 @@ msgid "Overwrite old file"
 msgstr "覆蓋舊的檔案"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:123
-#, fuzzy
 msgid "Board outline chaining tolerance:"
-msgstr "電路板輪廓生成器："
+msgstr "電路板外框鏈接公差："
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:127
 msgid "Tight (0.001 mm)"
@@ -23137,11 +23136,11 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_footprint_wizard_list.cpp:142
 msgid "All footprint generator scripts were loaded"
-msgstr "所有的封裝生成器指令碼都已載入"
+msgstr "所有的封裝產生器指令碼都已載入"
 
 #: pcbnew/dialogs/dialog_footprint_wizard_list_base.cpp:65
 msgid "Available Footprint Generators"
-msgstr "可用的封裝生成器"
+msgstr "可用的封裝產生器"
 
 #: pcbnew/dialogs/dialog_footprint_wizard_list_base.cpp:70
 msgid "Search paths:"
@@ -23161,7 +23160,7 @@ msgstr "更新 Python 模組"
 
 #: pcbnew/dialogs/dialog_footprint_wizard_list_base.h:66
 msgid "Footprint Generators"
-msgstr "封裝生成"
+msgstr "封裝產生"
 
 #: pcbnew/dialogs/dialog_footprint_wizard_list_base.h:85
 msgid "Traceback of Python Script Errors"
@@ -23249,7 +23248,7 @@ msgstr "使用鑽孔/放置檔案原點"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.h:73
 msgid "Generate Placement Files"
-msgstr "生成放置檔案"
+msgstr "產生放置檔案"
 
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:41
 msgid "Export to GenCAD settings"
@@ -23265,11 +23264,11 @@ msgstr "翻轉底層封裝焊盤槽/孔"
 
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:137
 msgid "Generate unique pin names"
-msgstr "生成唯一的引腳名稱"
+msgstr "產生唯一的引腳名稱"
 
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:138
 msgid "Generate a new shape for each footprint instance (do not reuse shapes)"
-msgstr "為每個封裝例項生成一個新形狀（不要重複使用形狀）"
+msgstr "為每個封裝例項產生一個新形狀（不要重複使用形狀）"
 
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:139
 msgid "Use drill/place file origin as origin"
@@ -23281,11 +23280,11 @@ msgstr "設定檔案中的網格原點"
 
 #: pcbnew/dialogs/dialog_gendrill.cpp:78
 msgid "Generate Drill File"
-msgstr "生成鑽孔檔案"
+msgstr "產生鑽孔檔案"
 
 #: pcbnew/dialogs/dialog_gendrill.cpp:79
 msgid "Generate Map File"
-msgstr "生成圖檔案"
+msgstr "產生圖檔案"
 
 #: pcbnew/dialogs/dialog_gendrill.cpp:313
 msgid "Cannot make path relative (target volume different from file volume)!"
@@ -23454,7 +23453,7 @@ msgstr "埋孔："
 
 #: pcbnew/dialogs/dialog_gendrill_base.h:91
 msgid "Generate Drill Files"
-msgstr "生成鑽孔檔案"
+msgstr "產生鑽孔檔案"
 
 #: pcbnew/dialogs/dialog_get_footprint_by_name_base.cpp:28
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:66
@@ -24178,7 +24177,7 @@ msgstr "刪除僅包含單個焊盤的網路"
 
 #: pcbnew/dialogs/dialog_netlist_base.cpp:66
 msgid "Generate warnings for pads with no net"
-msgstr "為無網路焊盤生成警告"
+msgstr "為無網路焊盤產生警告"
 
 #: pcbnew/dialogs/dialog_netlist_base.cpp:67
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:53
@@ -24366,7 +24365,7 @@ msgstr "警告：阻焊層的負間隙大於焊盤。不會產生阻焊層。"
 msgid ""
 "Warning: Negative solder paste margins larger than pad. No solder paste mask "
 "will be generated."
-msgstr "警告：負焊膏邊緣大於焊盤。不會生成錫膏掩模。"
+msgstr "警告：負焊膏邊緣大於焊盤。不會產生錫膏掩模。"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1314
 msgid "Error: pad has no layer."
@@ -24893,7 +24892,7 @@ msgstr "基本形狀多邊形"
 
 #: pcbnew/dialogs/dialog_plot.cpp:69
 msgid "Generate Drill Files..."
-msgstr "生成鑽孔檔案..."
+msgstr "產生鑽孔檔案..."
 
 #: pcbnew/dialogs/dialog_plot.cpp:680
 msgid "HPGL pen size constrained."
@@ -25068,15 +25067,15 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:210
 msgid "Generate Gerber job file"
-msgstr "生成 Gerber 工作檔案"
+msgstr "產生 Gerber 工作檔案"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:212
 msgid ""
 "Generate a Gerber job file that contains info about the board,\n"
 "and the list of generated Gerber plot files"
 msgstr ""
-"生成一個 Gerber 工作檔案，其中包含有關該板的資訊，\n"
-"和生成的 Gerber 繪製檔案列表"
+"產生一個 Gerber 工作檔案，其中包含有關該板的資訊，\n"
+"和產生的 Gerber 繪製檔案列表"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:217
 msgid "Remove silkscreen from areas without soldermask"
@@ -25978,7 +25977,7 @@ msgstr "當只有一個焊盤屬於該網路時，清除焊盤的網路名稱。
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:51
 msgid "Generate warnings for pads with no nets"
-msgstr "為無網路焊盤生成警告"
+msgstr "為無網路焊盤產生警告"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.h:55
 msgid "Update PCB from Schematic"
@@ -26421,9 +26420,7 @@ msgstr "模仿舊行為"
 msgid ""
 "Produces a slightly smoother outline at the expense of performance, some "
 "export fidelity issues, and overly aggressive higher-priority zone knockouts."
-msgstr ""
-"以犧牲效能、一些匯出保真度問題和過於激進的高優先順序區域挖空為代價，生成稍微"
-"平滑的輪廓。"
+msgstr "以犧牲效能、一些匯出保真度問題和過於激進的高優先順序區域挖空為代價，產生稍微平滑的輪廓。"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:116
 msgid "Smoothed polygons (best performance)"
@@ -28515,7 +28512,7 @@ msgstr "VRML 匯出失敗：輪廓上不能新增孔。"
 
 #: pcbnew/exporters/gen_footprints_placefile.cpp:67
 msgid "Generate Position File"
-msgstr "生成位置檔案"
+msgstr "產生位置檔案"
 
 #: pcbnew/exporters/gen_footprints_placefile.cpp:278
 #: pcbnew/exporters/gen_footprints_placefile.cpp:395
@@ -28559,13 +28556,13 @@ msgid "Placement file: '%s'."
 msgstr "放置檔案：\"%s\"。"
 
 #: pcbnew/exporters/gen_footprints_placefile.cpp:524
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Footprint report file created:\n"
 "'%s'."
 msgstr ""
-"生成封裝報告檔案：\n"
-"\"%s\""
+"封裝報告檔案已產生：\n"
+"\"%s\"。"
 
 #: pcbnew/exporters/gen_footprints_placefile.cpp:525
 msgid "Footprint Report"
@@ -32406,7 +32403,7 @@ msgstr "為間隙解決報告選擇兩個專案。"
 #: pcbnew/tools/board_inspection_tool.cpp:387
 #: pcbnew/tools/board_inspection_tool.cpp:400
 msgid "Cannot generate clearance report on empty group."
-msgstr "無法為空組合生成間隙報告。"
+msgstr "無法為空組合產生間隙報告。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:444
 msgid "Silkscreen clearance resolution for:"
@@ -33441,7 +33438,7 @@ msgstr "Gerbers (.gbr)..."
 
 #: pcbnew/tools/pcb_actions.cpp:583
 msgid "Generate Gerbers for fabrication"
-msgstr "生成用於製造的 Gerbers"
+msgstr "產生用於製造的 Gerbers"
 
 #: pcbnew/tools/pcb_actions.cpp:588
 msgid "Drill Files (.drl)..."
@@ -33449,7 +33446,7 @@ msgstr "鑽孔檔案 (.drl)..."
 
 #: pcbnew/tools/pcb_actions.cpp:588
 msgid "Generate Excellon drill file(s)"
-msgstr "生成出色的鑽取檔案"
+msgstr "產生出色的鑽取檔案"
 
 #: pcbnew/tools/pcb_actions.cpp:593
 msgid "Component Placement (.pos)..."
@@ -33457,7 +33454,7 @@ msgstr "元件放置檔案 (.pos)..."
 
 #: pcbnew/tools/pcb_actions.cpp:594
 msgid "Generate component placement file(s) for pick and place"
-msgstr "生成用於貼裝的元件放置檔案"
+msgstr "產生用於貼裝的元件放置檔案"
 
 #: pcbnew/tools/pcb_actions.cpp:599
 msgid "Footprint Report (.rpt)..."
