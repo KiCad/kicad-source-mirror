@@ -171,7 +171,7 @@ bool TRACKS_CLEANER::deleteDanglingTracks( bool aTrack, bool aVia )
     do // Iterate when at least one track is deleted
     {
         item_erased = false;
-        // Ensure the connectivity is up to date, especially after removind a dangling segment
+        // Ensure the connectivity is up to date, especially after removing a dangling segment
         m_brd->BuildConnectivity();
 
         // Keep a duplicate deque to all deleting in the primary
@@ -179,7 +179,7 @@ bool TRACKS_CLEANER::deleteDanglingTracks( bool aTrack, bool aVia )
 
         for( PCB_TRACK* track : temp_tracks )
         {
-            if( track->IsLocked() )
+            if( track->IsLocked() || ( track->GetFlags() & IS_DELETED ) > 0 )
                 continue;
 
             if( !aVia && track->Type() == PCB_VIA_T )
@@ -200,19 +200,18 @@ bool TRACKS_CLEANER::deleteDanglingTracks( bool aTrack, bool aVia )
 
                 item->SetItems( track );
                 m_itemsList->push_back( item );
+                track->SetFlags( IS_DELETED );
+
+                // keep iterating, because a track connected to the deleted track
+                // now perhaps is not connected and should be deleted
+                item_erased = true;
 
                 if( !m_dryRun )
                 {
                     m_brd->Remove( track );
                     m_commit.Removed( track );
-
-                    /* keep iterating, because a track connected to the deleted track
-                     * now perhaps is not connected and should be deleted */
-                    item_erased = true;
                     modified = true;
                 }
-                // Fix me: In dry run we should disable the track to erase and retry with this disabled track
-                // However the connectivity algo does not handle disabled items.
             }
         }
     } while( item_erased ); // A segment was erased: test for some new dangling segments
@@ -249,11 +248,12 @@ void TRACKS_CLEANER::deleteTracksInPads()
 
                 if( poly.IsEmpty() )
                 {
-                    std::shared_ptr<CLEANUP_ITEM> item = std::make_shared<CLEANUP_ITEM>( CLEANUP_TRACK_IN_PAD );
+                    auto item = std::make_shared<CLEANUP_ITEM>( CLEANUP_TRACK_IN_PAD );
                     item->SetItems( track );
                     m_itemsList->push_back( item );
 
                     toRemove.insert( track );
+                    track->SetFlags( IS_DELETED );
                 }
             }
         }
