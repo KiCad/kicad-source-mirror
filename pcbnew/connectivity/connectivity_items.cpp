@@ -365,23 +365,25 @@ bool CN_ANCHOR::IsDangling() const
         return connected_count < minimal_count;
 
     if( Parent()->Type() == PCB_TRACE_T || Parent()->Type() == PCB_ARC_T )
-        accuracy = ( static_cast<const PCB_TRACK*>( Parent() )->GetWidth() + 1 ) / 2;
+        accuracy = KiROUND( static_cast<const PCB_TRACK*>( Parent() )->GetWidth() / 2 );
 
     // Items with multiple anchors have usually items connected to each anchor.
     // We want only the item count of this anchor point
     connected_count = 0;
-    for( auto item : m_item->ConnectedItems() )
+
+    for( CN_ITEM* item : m_item->ConnectedItems() )
     {
         if( item->Parent()->Type() == PCB_ZONE_T )
         {
             ZONE* zone = static_cast<ZONE*>( item->Parent() );
 
-            if( zone->HitTestFilledArea( static_cast<PCB_LAYER_ID>( item->Layer() ),
-                                         wxPoint( Pos() ), accuracy ) )
+            if( zone->HitTestFilledArea( ToLAYER_ID( item->Layer() ), (wxPoint) Pos(), accuracy ) )
                 connected_count++;
         }
-        else if( item->Parent()->HitTest( wxPoint( Pos() ), accuracy ) )
+        else if( item->Parent()->HitTest( (wxPoint) Pos(), accuracy ) )
+        {
             connected_count++;
+        }
     }
 
     return connected_count < minimal_count;
@@ -401,12 +403,13 @@ int CN_ANCHOR::ConnectedItemsCount() const
         {
             ZONE* zone = static_cast<ZONE*>( item->Parent() );
 
-            if( zone->HitTestFilledArea( static_cast<PCB_LAYER_ID>( item->Layer() ),
-                                         (wxPoint) Pos() ) )
+            if( zone->HitTestFilledArea( ToLAYER_ID( item->Layer() ), (wxPoint) Pos() ) )
                 connected_count++;
         }
         else if( item->Parent()->HitTest( (wxPoint) Pos() ) )
+        {
             connected_count++;
+        }
     }
 
     return connected_count;
