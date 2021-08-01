@@ -36,7 +36,9 @@ WX_GRID::WX_GRID( wxWindow *parent, wxWindowID id, const wxPoint& pos, const wxS
                   long style, const wxString& name ) :
         wxGrid( parent, id, pos, size, style, name ),
         m_weOwnTable( false )
-{}
+{
+    SetDefaultCellOverflow( false );
+}
 
 
 WX_GRID::~WX_GRID()
