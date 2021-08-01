@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-01 11:31-0700\n"
-"PO-Revision-Date: 2021-07-31 11:58+0000\n"
+"PO-Revision-Date: 2021-08-01 22:03+0000\n"
 "Last-Translator: boonchai k. <kicadthai@gmail.com>\n"
 "Language-Team: Thai <https://hosted.weblate.org/projects/kicad/master-source/"
 "th/>\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.7.2-dev\n"
+"X-Generator: Weblate 4.8-dev\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
 msgid "All Files (*.*)|*.*"
@@ -1928,7 +1928,7 @@ msgstr "สร้างตารางไลบรารี %s"
 #, c-format
 msgid ""
 "Select this option to define %s libraries in project specific library tables"
-msgstr "เลือกทางเลือกนี้เพื่อกำหนดไลบรารี %s ในตารางไลบรารีเฉพาะโปรเจ็ค"
+msgstr "เลือกทางเลือกนี้เพื่อกำหนดไลบรารี %s ในตารางไลบรารีเฉพาะโครงการ"
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:67
 #, c-format
@@ -3084,14 +3084,14 @@ msgstr "วาระ"
 
 #: common/dialogs/panel_common_settings_base.cpp:306
 msgid "Remember open files for next project launch"
-msgstr "จำไฟล์เปิดไว้ สำหรับเรียกโปรเจ็คครั้งหน้า"
+msgstr "จำไฟล์เปิดไว้ สำหรับเรียกโครงการครั้งหน้า"
 
 #: common/dialogs/panel_common_settings_base.cpp:308
 msgid ""
 "If checked, launching a project will also launch tools such as eeschema and "
 "pcbnew with previously open files"
 msgstr ""
-"ถ้าเลือก เมื่อเปิดโปรเจ็ค จะเปิดเครื่องมือเช่น eeschema และ pcbnew "
+"ถ้าเลือก เมื่อเปิดโครงการ จะเปิดเครื่องมือเช่น eeschema และ pcbnew "
 "พร้อมไฟล์เก่าที่ค้างไว้"
 
 #: common/dialogs/panel_hotkeys_editor.cpp:77
@@ -5986,7 +5986,7 @@ msgstr "จัดการไลบรารีสัญลักษณ์…"
 
 #: common/tool/actions.cpp:602
 msgid "Edit the global and project symbol library lists"
-msgstr "แก้ไขไลบรารีสัญลักษณ์ทั้งระดับโกลบอลและโปรเจ็ค"
+msgstr "แก้ไขไลบรารีสัญลักษณ์ทั้งระดับโกลบอลและโครงการ"
 
 #: common/tool/actions.cpp:607
 msgid "Manage Footprint Libraries..."
@@ -5994,7 +5994,7 @@ msgstr "จัดการไลบรารีฟุ้ทพรินท์…
 
 #: common/tool/actions.cpp:608
 msgid "Edit the global and project footprint library lists"
-msgstr "แก้ไขรายการไลบรารีฟุ้ทพรินท์ทั้งระดับโกลบอลและระดับโปรเจ็ก"
+msgstr "แก้ไขรายการไลบรารีฟุ้ทพรินท์ทั้งระดับโกลบอลและระดับโครงการ"
 
 #: common/tool/actions.cpp:613
 msgid "Getting Started with KiCad"
@@ -6072,7 +6072,7 @@ msgid ""
 "For information on how to help the KiCad project, visit %s"
 msgstr ""
 "ไม่สามารถเรียกใช้บราวส์เซอร์ที่กำหนดไว้\n"
-"สำหรับความช่วยเหลือ ใช้งานโปรเจ็กใน KiCad, ไปดูที่ %s"
+"สำหรับความช่วยเหลือ ใช้งานโครงการใน KiCad, ไปดูที่ %s"
 
 #: common/tool/common_control.cpp:269
 msgid "Get involved with KiCad"
@@ -6391,15 +6391,15 @@ msgstr "ไฟล์ไลบรารีสัญลักษณ์ KiCad ท�
 
 #: common/wildcards_and_files_ext.cpp:209
 msgid "KiCad project files"
-msgstr "ไฟล์โปรเจ็ค KiCad"
+msgstr "ไฟล์โครงการ KiCad"
 
 #: common/wildcards_and_files_ext.cpp:215
 msgid "KiCad legacy project files"
-msgstr "ไฟล์โปรเจ็ค KiCad รุ่นเก่า"
+msgstr "ไฟล์โครงการ KiCad รุ่นเก่า"
 
 #: common/wildcards_and_files_ext.cpp:221
 msgid "All KiCad project files"
-msgstr "ไฟล์โปรเจ็ค KiCad ทั้งหมด"
+msgstr "ไฟล์โครงการ KiCad ทั้งหมด"
 
 #: common/wildcards_and_files_ext.cpp:227
 msgid "KiCad legacy schematic files"
@@ -6758,7 +6758,7 @@ msgstr ""
 #: cvpcb/dialogs/dialog_config_equfiles.cpp:51
 #, c-format
 msgid "Project file: '%s'"
-msgstr "ไฟล์โปรเจ็ก:'%s'"
+msgstr "ไฟล์โครงการ:'%s'"
 
 #: cvpcb/dialogs/dialog_config_equfiles.cpp:103
 msgid "No editor defined in KiCad. Please choose it."
@@ -9742,7 +9742,7 @@ msgstr "ไม่สามารถปรับพาธ '%s%s'"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:1297
 msgid "No project or path defined for the current schematic."
-msgstr "ไมมีโปรเจ็คหรือพาธกำหนดไว้สำหรับวงจรปัจจุบัน"
+msgstr "ไมมีโครงการหรือพาธกำหนดไว้สำหรับวงจรปัจจุบัน"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:24
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:24
@@ -9973,7 +9973,7 @@ msgstr "ไม่แสดงอีก"
 #: eeschema/dialogs/dialog_rescue_each_base.h:66
 #: eeschema/project_rescue.cpp:569 eeschema/project_rescue.cpp:584
 msgid "Project Rescue Helper"
-msgstr "ผู้ช่วยเหลือกู้ภัยโปรเจ็ค"
+msgstr "ผู้ช่วยเหลือกู้ภัยโครงการ"
 
 #: eeschema/dialogs/dialog_sch_import_settings.cpp:43
 #: eeschema/dialogs/dialog_sch_import_settings_base.h:61
@@ -10107,7 +10107,7 @@ msgstr "ตั้งค่าวาดวงจร"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:42
 msgid "Import Settings from Another Project..."
-msgstr "นำเข้าตั้งค่าจากโปรเจ็คอื่น…"
+msgstr "นำเข้าตั้งค่าจากโครงการอื่น…"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:68
 msgid "Formatting"
@@ -10127,7 +10127,7 @@ msgstr "กฎทางไฟฟ้า"
 #: pcbnew/dialogs/dialog_board_statistics.cpp:651
 #: pcbnew/footprint_libraries_utils.cpp:516
 msgid "Project"
-msgstr "โปรเจ็ค"
+msgstr "โครงการ"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:76
 #: pcbnew/dialogs/dialog_board_setup.cpp:103
@@ -10144,7 +10144,7 @@ msgstr "ตัวแปรอักษร"
 #: eeschema/dialogs/dialog_schematic_setup.cpp:87
 #: pcbnew/dialogs/dialog_board_setup.cpp:142
 msgid "Project is missing or read-only. Changes will not be saved."
-msgstr "โปรเจ็คไม่พบหรืออ่านเท่านั้น การเปลี่ยนแปลงไม่บันทึก"
+msgstr "โครงการไม่พบหรืออ่านเท่านั้น การเปลี่ยนแปลงไม่บันทึก"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:149
 #, c-format
@@ -10152,8 +10152,8 @@ msgid ""
 "Error importing settings from project:\n"
 "Project file %s could not be loaded."
 msgstr ""
-"ผิดพลาดนำเข้าการตั้งค่าจากโปรเจ็ค\n"
-"ไฟล์โปรเจ็ค %s หาไม่พบ"
+"ผิดพลาดนำเข้าการตั้งค่าจากโครงการ\n"
+"ไฟล์โครงการ %s หาไม่พบ"
 
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:66
 msgid "Connection type:"
@@ -11188,7 +11188,7 @@ msgid ""
 "Remapping is not possible because you have insufficient privileges to the "
 "project folder '%s'."
 msgstr ""
-"การจับคู่อีกครั้งทำไม่ได้ เพราะคุณไม่มีสิทธิเพียงพอในโฟลเดอร์โปรเจ็ก '%s'"
+"การจับคู่อีกครั้งทำไม่ได้ เพราะคุณไม่มีสิทธิเพียงพอในโฟลเดอร์โครงการ '%s'"
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:67
 msgid ""
@@ -11203,9 +11203,9 @@ msgid ""
 msgstr ""
 "ปัจจุบันแผนผังนี้ใช้รายการไลบรารีสัญลักษณ์โครงการค้นหาวิธีการโหลดสัญลักษณ์ไลบ"
 "รารี KiCad จะพยายามจับคู่สัญลักษณ์ที่มีอยู่เพื่อใช้ตารางไลบรารีสัญลักษณ์ใหม่ "
-"การแมปใหม่จะเปลี่ยนไฟล์โปรเจ็กต์บางไฟล์ และแผนผังอาจเข้ากันไม่ได้กับ KiCad "
+"การแมปใหม่จะเปลี่ยนไฟล์โครงการบางไฟล์ และแผนผังอาจเข้ากันไม่ได้กับ KiCad "
 "เวอร์ชันเก่า ไฟล์ทั้งหมดที่เปลี่ยนแปลงจะถูกสำรองไปยังโฟลเดอร์ \"remap_backup"
-"\" ในโฟลเดอร์โปรเจ็กต์ หากคุณต้องการยกเลิกการเปลี่ยนแปลงใดๆ "
+"\" ในโฟลเดอร์โครงการ หากคุณต้องการยกเลิกการเปลี่ยนแปลงใดๆ "
 "หากคุณเลือกที่จะข้ามขั้นตอนนี้ "
 "คุณจะต้องรับผิดชอบในการรีแมปสัญลักษณ์ใหม่ด้วยตนเอง"
 
@@ -11231,7 +11231,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:242
 msgid "Created project symbol library table.\n"
-msgstr "สร้างตารางไลบรารีสัญลักษณ์ระดับโปรเจ็ก\n"
+msgstr "สร้างตารางไลบรารีสัญลักษณ์ระดับโครงการ\n"
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:264
 #, c-format
@@ -11294,7 +11294,7 @@ msgstr "ผิดพลาดที่จะสร้างโฟลเดอร
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:499
 msgid "Some of the project files could not be backed up."
-msgstr "บางไฟล์ในโปรเจ็ก ไม่สามารถแบ็คอัพ"
+msgstr "บางไฟล์ในโครงการ ไม่สามารถแบ็คอัพ"
 
 #: eeschema/dialogs/dialog_symbol_remap_base.cpp:30
 #: eeschema/dialogs/dialog_symbol_remap_base.h:51
@@ -11628,7 +11628,7 @@ msgstr "แม่แบบชื่อช่องโกลบอล:"
 
 #: eeschema/dialogs/panel_eeschema_template_fieldnames.cpp:42
 msgid "Project field name templates:"
-msgstr "แม่แบบชื่อช่องของโปรเจ็ค:"
+msgstr "แม่แบบชื่อช่องของโครงการ:"
 
 #: eeschema/dialogs/panel_eeschema_template_fieldnames.cpp:85
 msgid "Untitled Field"
@@ -11985,7 +11985,7 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
-"ผิดพลาดระหว่างบันทึกตารางไลบรารีของโปรเจ็ก:\n"
+"ผิดพลาดระหว่างบันทึกตารางไลบรารีของโครงการ:\n"
 "\n"
 "%s"
 
@@ -12002,7 +12002,7 @@ msgstr "ไลบรารีโกลบอล"
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:97
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:94
 msgid "Project Specific Libraries"
-msgstr "ไลบรารีเจาะจงของโปรเจ็ก"
+msgstr "ไลบรารีเจาะจงของโครงการ"
 
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:105
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:103
@@ -12361,7 +12361,7 @@ msgstr "พบรายการที่ผิดพลาดในรายก
 
 #: eeschema/files-io.cpp:492
 msgid "Project Load Warning"
-msgstr "คำเตือนการโหลดโปรเจ็กต์"
+msgstr "คำเตือนการโหลดโครงการ"
 
 #: eeschema/files-io.cpp:495
 msgid ""
@@ -12864,7 +12864,7 @@ msgstr "กู้ภัยแก้ไขสัญลักษณ์ %s เป�
 
 #: eeschema/project_rescue.cpp:568
 msgid "This project has nothing to rescue."
-msgstr "โปรเจ็คนี้ไม่มีอะไรจะช่วยเหลือ"
+msgstr "โครงการนี้ไม่มีอะไรจะช่วยเหลือ"
 
 #: eeschema/project_rescue.cpp:583
 msgid "No symbols were rescued."
@@ -12883,7 +12883,7 @@ msgstr "ล้มเหลวที่จะบันทึกไลบารี
 
 #: eeschema/project_rescue.cpp:839
 msgid "Error occurred saving project specific symbol library table."
-msgstr "เกิดข้อผิดพลาดในการบันทึกตารางไลบรารีสัญลักษณ์ของโปรเจ็กต์"
+msgstr "เกิดข้อผิดพลาดในการบันทึกตารางไลบรารีสัญลักษณ์ของโครงการ"
 
 #: eeschema/sch_base_frame.cpp:218
 #, c-format
@@ -12900,7 +12900,7 @@ msgid ""
 "Error saving project-specific symbol library table:\n"
 "%s"
 msgstr ""
-"ผิดพลาดระหว่างบันทึกตารางไลบรารีของโปรเจ็ก:\n"
+"ผิดพลาดระหว่างบันทึกตารางไลบรารีของโครงการ:\n"
 "%s"
 
 #: eeschema/sch_bus_entry.cpp:420
@@ -13410,7 +13410,7 @@ msgstr ""
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:1200
 msgid "Text Variables could not be set as there is no project attached."
-msgstr "ไม่สามารถตั้งค่าตัวแปรข้อความ เนื่องจากไม่ได้แนบโปรเจ็กต์"
+msgstr "ไม่สามารถตั้งค่าตัวแปรข้อความ เนื่องจากไม่ได้แนบโครงการ"
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:1620
 #, c-format
@@ -14195,8 +14195,8 @@ msgid ""
 "remapped before it can be imported into the current project."
 msgstr ""
 "วงจร '%s' ไม่มีลิงก์ไลบรารีสัญลักษณ์ที่จับคู่ไปยังตารางไลบรารีสัญลักษณ์ "
-"โปรเจ็กต์ที่เป็นของวงจรนี้ ต้องทำการจับคู่อีกครั้งก่อน "
-"จึงจะนำเข้าโปรเจ็กต์ปัจจุบันได้"
+"โครงการที่เป็นของวงจรนี้ ต้องทำการจับคู่อีกครั้งก่อน "
+"จึงจะนำเข้าโครงการปัจจุบันได้"
 
 #: eeschema/sheet.cpp:147
 msgid ""
@@ -14279,7 +14279,7 @@ msgstr ""
 "ชื่อไฟล์ '%s' อาจทำให้เกิดปัญหากับชื่อไฟล์ที่มีอยู่\n"
 "กำหนดไว้แล้วในวงจรระบบที่รองรับกรณี\n"
 "ชื่อไฟล์ที่ไม่ละเอียดอ่อน สิ่งนี้จะทำให้เกิดปัญหาหากคุณคัดลอกสิ่งนี้\n"
-"โปรเจ็กต์ไปยังระบบปฏิบัติการที่รองรับไฟล์ที่ไม่คำนึงถึงขนาดตัวพิมพ์\n"
+"โครงการไปยังระบบปฏิบัติการที่รองรับไฟล์ที่ไม่คำนึงถึงขนาดตัวพิมพ์\n"
 "ชื่อ\n"
 "\n"
 "คุณต้องการดำเนินการต่อหรือไม่?"
@@ -15175,7 +15175,7 @@ msgid ""
 "You must launch the KiCad project manager and create a project."
 msgstr ""
 "ไม่สามารถดึงรายชื่อเน็ตพีซีบี เนื่องจากอีอีสกีมมาเปิดในโหมดโดดเดี่ยว\n"
-"คุณต้องเปิดผ่านโปรเจ็ค KiCad และสร้างโปรเจ็ค"
+"คุณต้องเปิดผ่านโครงการ KiCad และสร้างโครงการ"
 
 #: eeschema/tools/backannotate.cpp:164
 #, c-format
@@ -15921,7 +15921,7 @@ msgstr "สัญลักษณ์กู้ภัย..."
 
 #: eeschema/tools/ee_actions.cpp:593
 msgid "Find old symbols in project and rename/rescue them"
-msgstr "ค้นหาสัญลักษณ์เก่าในโปรเจ็กและเปลี่ยนชื่อ / ช่วยเหลือพวกเขา"
+msgstr "ค้นหาสัญลักษณ์เก่าในโครงการและเปลี่ยนชื่อ / ช่วยเหลือพวกเขา"
 
 #: eeschema/tools/ee_actions.cpp:598
 msgid "Remap Legacy Library Symbols..."
@@ -16743,208 +16743,208 @@ msgstr "โอเวอร์เลย์ด้านบน (*.GTO)|*.GTO;*.gto|
 
 #: gerbview/files.cpp:150
 msgid "Bottom paste (*.GBP)|*.GBP;*.gbp|"
-msgstr ""
+msgstr "กาวด้านล่าง (*.GBP)|*.GBP;*.gbp|"
 
 #: gerbview/files.cpp:151
 msgid "Top paste (*.GTP)|*.GTP;*.gtp|"
-msgstr ""
+msgstr "กาวด้านบน (*.GTP)|*.GTP;*.gtp|"
 
 #: gerbview/files.cpp:152
 msgid "Keep-out layer (*.GKO)|*.GKO;*.gko|"
-msgstr ""
+msgstr "เลเยอร์ป้องกัน (*.GKO)|*.GKO;*.gko|"
 
 #: gerbview/files.cpp:153
 msgid "Mechanical layers (*.GMx)|*.GM1;*.gm1;*.GM2;*.gm2;*.GM3;*.gm3|"
-msgstr ""
+msgstr "เลเยอร์ทางกล (*.GMx)|*.GM1;*.gm1;*.GM2;*.gm2;*.GM3;*.gm3|"
 
 #: gerbview/files.cpp:154
 msgid "Top Pad Master (*.GPT)|*.GPT;*.gpt|"
-msgstr ""
+msgstr "แพดด้านบน (*. GPT)|*. GPT;*.gpt|"
 
 #: gerbview/files.cpp:155
 msgid "Bottom Pad Master (*.GPB)|*.GPB;*.gpb|"
-msgstr ""
+msgstr "แพดด้านล่าง (*. GPB)|*. GPB;*.gpb|"
 
 #: gerbview/files.cpp:173
 msgid "Open Gerber File(s)"
-msgstr ""
+msgstr "เปิดไฟล์เกอร์เบอร์"
 
 #: gerbview/files.cpp:230
 msgid "File not found:"
-msgstr ""
+msgstr "ไม่พบไฟล์:"
 
 #: gerbview/files.cpp:242
 msgid "Loading Gerber files..."
-msgstr ""
+msgstr "กำลังโหลดไฟล์เกอร์เบอร์…"
 
 #: gerbview/files.cpp:245 gerbview/files.cpp:252
 #, c-format
 msgid "Loading %u/%zu %s..."
-msgstr ""
+msgstr "กำลังโหลด %u/%zu %s..."
 
 #: gerbview/files.cpp:276
 #, c-format
 msgid "<b>A gerber job file cannot be loaded as a plot file</b> <i>%s</i>"
-msgstr ""
+msgstr "<b>ไม่สามารถโหลดไฟล์งานเกอร์เบอร์เป็นไฟล์พล็อต</b> <i>%s</i>"
 
 #: gerbview/files.cpp:374
 msgid "Open NC (Excellon) Drill File(s)"
-msgstr ""
+msgstr "เปิดแฟ้มสําหรับการเจาะ NC (Excellon)"
 
 #: gerbview/files.cpp:471
 #, c-format
 msgid "Zip file '%s' cannot be opened."
-msgstr ""
+msgstr "ไฟล์ Zip '%s' ไม่สามารถเปิดได้"
 
 #: gerbview/files.cpp:513
 #, c-format
 msgid "Skipped file '%s' (unknown type).\n"
-msgstr ""
+msgstr "ข้ามไฟล์ '%s' (ไม่ทราบประเภท)\n"
 
 #: gerbview/files.cpp:525
 #, c-format
 msgid "Skipped file '%s' (gerber job file).\n"
-msgstr ""
+msgstr "ข้ามไฟล์ '%s' (ไฟล์งานเกอร์เบอร์)\n"
 
 #: gerbview/files.cpp:566
 #, c-format
 msgid "<b>Unable to create temporary file '%s'.</b>\n"
-msgstr ""
+msgstr "<b>ไม่สามารถสร้างไฟล์ชั่วคราว '%s'. </b>\n"
 
 #: gerbview/files.cpp:596
 #, c-format
 msgid "<b>unzipped file %s read error</b>\n"
-msgstr ""
+msgstr "<b>แตกไฟล์ %s มีข้อผิดพลาดในการอ่าน</b>\n"
 
 #: gerbview/files.cpp:631
 msgid "Open Zip File"
-msgstr ""
+msgstr "เปิดไฟล์ Zip"
 
 #: gerbview/gerber_draw_item.cpp:672
 msgid "Attribute"
-msgstr ""
+msgstr "คุณลักษณะ"
 
 #: gerbview/gerber_draw_item.cpp:675 gerbview/gerber_draw_item.cpp:685
 msgid "No attribute"
-msgstr ""
+msgstr "ไม่มีคุณลักษณะ"
 
 #: gerbview/gerber_draw_item.cpp:681
 #, c-format
 msgid "D Code %d"
-msgstr ""
+msgstr "ดีโค้ด %d"
 
 #: gerbview/gerber_draw_item.cpp:694
 msgid "Graphic Layer"
-msgstr ""
+msgstr "เลเยอร์กราฟิก"
 
 #: gerbview/gerber_draw_item.cpp:704
 msgid "Clear"
-msgstr ""
+msgstr "ล้าง"
 
 #: gerbview/gerber_draw_item.cpp:705 gerbview/gerber_file_image.cpp:353
 msgid "Polarity"
-msgstr ""
+msgstr "ขั้ว"
 
 #: gerbview/gerber_draw_item.cpp:711 pcbnew/fp_text.cpp:291
 #: pcbnew/pcb_text.cpp:122 pcbnew/tools/edit_tool.cpp:1614
 #: pcbnew/tools/pcb_actions.cpp:307
 msgid "Mirror"
-msgstr ""
+msgstr "กลับกระจก"
 
 #: gerbview/gerber_draw_item.cpp:715
 msgid "AB axis"
-msgstr ""
+msgstr "แกน AB"
 
 #: gerbview/gerber_draw_item.cpp:727 gerbview/toolbars_gerber.cpp:136
 #: gerbview/toolbars_gerber.cpp:139
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:25
 msgid "Net:"
-msgstr ""
+msgstr "เน็ท:"
 
 #: gerbview/gerber_draw_item.cpp:739
 #, c-format
 msgid "Cmp: %s  Pad: %s"
-msgstr ""
+msgstr "Cmp: %s  Pad: %s"
 
 #: gerbview/gerber_draw_item.cpp:743
 #, c-format
 msgid "Cmp: %s  Pad: %s  Fct %s"
-msgstr ""
+msgstr "Cmp: %s  Pad: %s  Fct :%s"
 
 #: gerbview/gerber_draw_item.cpp:751 gerbview/toolbars_gerber.cpp:122
 #: gerbview/toolbars_gerber.cpp:125
 msgid "Cmp:"
-msgstr ""
+msgstr "Cmp:"
 
 #: gerbview/gerber_draw_item.cpp:1010
 #, c-format
 msgid "%s (D%d) on layer %d: %s"
-msgstr ""
+msgstr "%s (D%d) บนเลเยอร์ %d: %s"
 
 #: gerbview/gerber_file_image.cpp:340
 msgid "Image name"
-msgstr ""
+msgstr "ชื่อภาพ"
 
 #: gerbview/gerber_file_image.cpp:345
 msgid "Graphic layer"
-msgstr ""
+msgstr "เลเยอร์กราฟิก"
 
 #: gerbview/gerber_file_image.cpp:349
 msgid "Img Rot."
-msgstr ""
+msgstr "ภาพหมุน"
 
 #: gerbview/gerber_file_image.cpp:357
 msgid "X Justify"
-msgstr ""
+msgstr "เหมาะสม X"
 
 #: gerbview/gerber_file_image.cpp:360
 msgid "Y Justify"
-msgstr ""
+msgstr "เหมาะสม Y"
 
 #: gerbview/gerber_file_image.cpp:384
 msgid "Image Justify Offset"
-msgstr ""
+msgstr "ปรับระยะเลื่อนรูป"
 
 #: gerbview/gerber_file_image_list.cpp:188
 #, c-format
 msgid "Graphic layer %d"
-msgstr ""
+msgstr "เลเยอร์กราฟิก %d"
 
 #: gerbview/gerbview_frame.cpp:73 gerbview/menubar.cpp:125
 msgid "Clear Recent Zip Files"
-msgstr ""
+msgstr "ล้างไฟล์บีบอัดล่าสุด"
 
 #: gerbview/gerbview_frame.cpp:75 gerbview/menubar.cpp:89
 msgid "Clear Recent Drill Files"
-msgstr ""
+msgstr "ล้างไฟล์เจาะล่าสุด"
 
 #: gerbview/gerbview_frame.cpp:77 gerbview/menubar.cpp:107
 msgid "Clear Recent Job Files"
-msgstr ""
+msgstr "ล้างไฟล์บันทึกงานล่าสุด"
 
 #: gerbview/gerbview_frame.cpp:94
 #: resources/linux/launchers/org.kicad.gerbview.desktop.in:10
 msgid "KiCad Gerber Viewer"
-msgstr ""
+msgstr "โปรแกรมดูเกอร์เบอร์ KiCad"
 
 #: gerbview/gerbview_frame.cpp:608 gerbview/gerbview_frame.cpp:632
 #: gerbview/menubar.cpp:146 kicad/tools/kicad_manager_actions.cpp:88
 msgid "Gerber Viewer"
-msgstr ""
+msgstr "โปรแกรมดูเกอร์เบอร์"
 
 #: gerbview/gerbview_frame.cpp:613
 #, c-format
 msgid "Drawing layer %d not in use"
-msgstr ""
+msgstr "เลเยอร์การวาด %d ไม่ใช้งาน"
 
 #: gerbview/gerbview_frame.cpp:630
 msgid "(with X2 attributes)"
-msgstr ""
+msgstr "(มีคุณลักษณะ X2)"
 
 #: gerbview/gerbview_frame.cpp:639
 #, c-format
 msgid "Image name: \"%s\"  Layer name: \"%s\""
-msgstr ""
+msgstr "ชื่อรูป: \"%s\" ชื่อเลเยอร์: \"%s\""
 
 #: gerbview/gerbview_frame.cpp:655
 msgid "X2 attr"
@@ -16952,237 +16952,241 @@ msgstr ""
 
 #: gerbview/gerbview_frame.cpp:1014
 msgid "GerbView"
-msgstr ""
+msgstr "GerbView"
 
 #: gerbview/job_file_reader.cpp:157
 msgid "This job file uses an outdated format. Please recreate it."
-msgstr ""
+msgstr "ไฟล์งานนี้ใช้รูปแบบที่ล้าสมัย โปรดสร้างแบบใหม่"
 
 #: gerbview/job_file_reader.cpp:193
 msgid "Open Gerber Job File"
-msgstr ""
+msgstr "เปิดไฟล์งานเกอร์เบอร์"
 
 #: gerbview/menubar.cpp:67
 msgid "Open Recent Gerber File"
-msgstr ""
+msgstr "เปิดไฟล์เกอร์เบอร์ล่าสุด"
 
 #: gerbview/menubar.cpp:71
 msgid "Clear Recent Gerber Files"
-msgstr ""
+msgstr "ล้างไฟล์เกอร์เบอร์ล่าสุด"
 
 #: gerbview/menubar.cpp:85
 msgid "Open Recent Drill File"
-msgstr ""
+msgstr "เปิดไฟล์เจาะล่าสุด"
 
 #: gerbview/menubar.cpp:103
 msgid "Open Recent Job File"
-msgstr ""
+msgstr "เปิดไฟล์งานล่าสุด"
 
 #: gerbview/menubar.cpp:121
 msgid "Open Recent Zip File"
-msgstr ""
+msgstr "เปิดไฟล์บีบอัดล่าสุด"
 
 #: gerbview/readgerb.cpp:63
 #, c-format
 msgid "File \"%s\" not found"
-msgstr ""
+msgstr "ไฟล์ '%s' ไม่พบ"
 
 #: gerbview/readgerb.cpp:88
 msgid ""
 "Warning: this file has no D-Code definition\n"
 "Therefore the size of some items is undefined"
 msgstr ""
+"คำเตือน: ไฟล์นี้ไม่มีคำจำกัดความ D-Code\n"
+"ดังนั้นขนาดของบางรายการจึงไม่ถูกกำหนด"
 
 #: gerbview/readgerb.cpp:91
 msgid ""
 "Warning: this file has some missing D-Code definitions\n"
 "Therefore the size of some items is undefined"
 msgstr ""
+"คำเตือน: ไฟล์นี้มีคำจำกัดความ D-Code ขาดหายไปบางส่วน\n"
+"ดังนั้นขนาดของบางรายการจึงไม่ถูกกำหนด"
 
 #: gerbview/rs274d.cpp:645
 msgid "Invalid Gerber file: missing G74 or G75 arc command"
-msgstr ""
+msgstr "ไฟล์เกอร์เบอร์ไม่ถูกต้อง: คําสั่งส่วนโค้ง G74 หรือ G75 หายไป"
 
 #: gerbview/rs274x.cpp:229
 #, c-format
 msgid "RS274X: Invalid GERBER format command '%c' at line %d: \"%s\""
-msgstr ""
+msgstr "RS274X: คําสั่งรูปแบบเกอร์เบอร์ไม่ถูกต้อง '%c' ที่บรรทัด %d: \"%s\""
 
 #: gerbview/rs274x.cpp:232
 #, c-format
 msgid "GERBER file \"%s\" may not display as intended."
-msgstr ""
+msgstr "ไฟล์เกอร์เบอร์ \"%s\" อาจไม่แสดงตามที่ตั้งใจไว้"
 
 #: gerbview/rs274x.cpp:540
 msgid "RS274X: Command \"IR\" rotation value not allowed"
-msgstr ""
+msgstr "RS274X: ไม่อนุญาตให้ใช้ค่าการหมุนคำสั่ง \"IR\""
 
 #: gerbview/rs274x.cpp:648
 msgid "RS274X: Command KNOCKOUT ignored by GerbView"
-msgstr ""
+msgstr "RS274X: คําสั่ง KNOCKOUT ถูกเพิกเฉยโดย GerbView"
 
 #: gerbview/toolbars_gerber.cpp:124
 msgid "Highlight items belonging to this component"
-msgstr ""
+msgstr "รายการที่เน้นเป็นของส่วนประกอบนี้"
 
 #: gerbview/toolbars_gerber.cpp:138
 msgid "Highlight items belonging to this net"
-msgstr ""
+msgstr "เน้นรายการที่เป็นของเน็ตนี้"
 
 #: gerbview/toolbars_gerber.cpp:150 gerbview/toolbars_gerber.cpp:153
 msgid "Attr:"
-msgstr ""
+msgstr "Attr:"
 
 #: gerbview/toolbars_gerber.cpp:152
 msgid "Highlight items with this aperture attribute"
-msgstr ""
+msgstr "แสดงรายการเน้นด้วยคุณลักษณะอาเพอร์เจอร์"
 
 #: gerbview/toolbars_gerber.cpp:164 gerbview/toolbars_gerber.cpp:166
 msgid "DCode:"
-msgstr ""
+msgstr "DCode:"
 
 #: gerbview/toolbars_gerber.cpp:279
 msgid "<No selection>"
-msgstr ""
+msgstr "<ไม่มีการเลือก>"
 
 #: gerbview/tools/gerbview_actions.cpp:39
 msgid "Open Gerber Plot File(s)..."
-msgstr ""
+msgstr "เปิดไฟล์พล็อตเกอร์เบอร์…"
 
 #: gerbview/tools/gerbview_actions.cpp:40
 msgid ""
 "Open Gerber plot file(s) on the current layer. Previous data will be deleted"
-msgstr ""
+msgstr "เปิดไฟล์พล็อตเกอร์เบอร์บนเลเยอร์ปัจจุบัน ข้อมูลก่อนหน้าจะถูกลบ"
 
 #: gerbview/tools/gerbview_actions.cpp:45
 msgid "Open Excellon Drill File(s)..."
-msgstr ""
+msgstr "เปิดไฟล์เจาะเอ็กเซลลอน..."
 
 #: gerbview/tools/gerbview_actions.cpp:46
 msgid ""
 "Open Excellon drill file(s) on the current layer. Previous data will be "
 "deleted"
-msgstr ""
+msgstr "เปิดไฟล์เจาะเอ็กซิลลอนบนเลเยอร์ปัจจุบัน ข้อมูลก่อนหน้าจะถูกลบ"
 
 #: gerbview/tools/gerbview_actions.cpp:51
 msgid "Open Gerber Job File..."
-msgstr ""
+msgstr "เปิดไฟล์งานเกอร์เบอร์…"
 
 #: gerbview/tools/gerbview_actions.cpp:52
 msgid "Open a Gerber job file and its associated gerber plot files"
-msgstr ""
+msgstr "เปิดไฟล์งานเกอร์เบอร์และไฟล์พล็อตเกอร์เบอร์ที่เกี่ยวข้อง"
 
 #: gerbview/tools/gerbview_actions.cpp:57
 msgid "Open Zip Archive File..."
-msgstr ""
+msgstr "เปิดแฟ้มบีบอัดจากคลัง…"
 
 #: gerbview/tools/gerbview_actions.cpp:58
 msgid "Open a zipped archive (Gerber and Drill) file"
-msgstr ""
+msgstr "เปิดไฟล์บีบอัดจากคลัง (Gerber and Drill)"
 
 #: gerbview/tools/gerbview_actions.cpp:63
 msgid "Show Layers Manager"
-msgstr ""
+msgstr "แสดงตัวจัดการเลเยอร์"
 
 #: gerbview/tools/gerbview_actions.cpp:64
 msgid "Show or hide the layer manager"
-msgstr ""
+msgstr "แสดงหรือซ่อนตัวจัดการเลเยอร์"
 
 #: gerbview/tools/gerbview_actions.cpp:69
 msgid "List DCodes..."
-msgstr ""
+msgstr "แสดงรหัส DCodes…"
 
 #: gerbview/tools/gerbview_actions.cpp:70
 msgid "List D-codes defined in Gerber files"
-msgstr ""
+msgstr "แสดงรายการรหัส D ที่กําหนดไว้ในไฟล์เกอร์เบอร์"
 
 #: gerbview/tools/gerbview_actions.cpp:75
 msgid "Show Source..."
-msgstr ""
+msgstr "แสดงที่มา..."
 
 #: gerbview/tools/gerbview_actions.cpp:76
 msgid "Show source file for the current layer"
-msgstr ""
+msgstr "แสดงไฟล์ต้นฉบับสำหรับเลเยอร์ปัจจุบัน"
 
 #: gerbview/tools/gerbview_actions.cpp:81
 msgid "Export to PCB Editor..."
-msgstr ""
+msgstr "ส่งออกไปยังตัวแก้ไขพีซีบี…"
 
 #: gerbview/tools/gerbview_actions.cpp:82
 msgid "Export data as a KiCad PCB file"
-msgstr ""
+msgstr "ส่งออกข้อมูลเป็นไฟล์ KiCad PCB"
 
 #: gerbview/tools/gerbview_actions.cpp:87
 msgid "Clear Current Layer..."
-msgstr ""
+msgstr "ล้างเลเยอร์ปัจจุบัน..."
 
 #: gerbview/tools/gerbview_actions.cpp:87
 msgid "Clear the selected graphic layer"
-msgstr ""
+msgstr "ล้างเลเยอร์กราฟิกที่เลือก"
 
 #: gerbview/tools/gerbview_actions.cpp:92
 msgid "Clear All Layers"
-msgstr ""
+msgstr "ล้างเลเยอร์ทั้งหมด"
 
 #: gerbview/tools/gerbview_actions.cpp:93
 msgid "Clear all layers. All data will be deleted"
-msgstr ""
+msgstr "ล้างเลเยอร์ทั้งหมด ข้อมูลทั้งหมดจะถูกลบ"
 
 #: gerbview/tools/gerbview_actions.cpp:98
 msgid "Reload All Layers"
-msgstr ""
+msgstr "โหลดซ้ำทุกเลเยอร์"
 
 #: gerbview/tools/gerbview_actions.cpp:99
 msgid "Reload all layers. All data will be reloaded"
-msgstr ""
+msgstr "โหลดเลเยอร์ทั้งหมดอีกครั้ง ข้อมูลทั้งหมดจะถูกโหลดใหม่"
 
 #: gerbview/tools/gerbview_actions.cpp:108
 msgid "Clear Highlight"
-msgstr ""
+msgstr "ล้างการสีเน้น"
 
 #: gerbview/tools/gerbview_actions.cpp:118
 msgid "Highlight Component"
-msgstr ""
+msgstr "แสดงเน้นส่วนประกอบ"
 
 #: gerbview/tools/gerbview_actions.cpp:123
 msgid "Highlight Attribute"
-msgstr ""
+msgstr "แสดงเน้นที่คุณลักษณะ"
 
 #: gerbview/tools/gerbview_actions.cpp:128
 msgid "Highlight DCode"
-msgstr ""
+msgstr "แสดงเน้นที่ DCode"
 
 #: gerbview/tools/gerbview_actions.cpp:134
 msgid "Next Layer"
-msgstr ""
+msgstr "เลเยอร์ถัดไป"
 
 #: gerbview/tools/gerbview_actions.cpp:139
 msgid "Previous Layer"
-msgstr ""
+msgstr "เลเยอร์ก่อนหน้า"
 
 #: gerbview/tools/gerbview_actions.cpp:144
 msgid "Sketch Lines"
-msgstr ""
+msgstr "ร่างเส้นตรง"
 
 #: gerbview/tools/gerbview_actions.cpp:144
 msgid "Show lines in outline mode"
-msgstr ""
+msgstr "แสดงเส้นตรงโหมดเค้าร่าง"
 
 #: gerbview/tools/gerbview_actions.cpp:150
 msgid "Sketch Flashed Items"
-msgstr ""
+msgstr "ร่างรายการแฟลช"
 
 #: gerbview/tools/gerbview_actions.cpp:150
 msgid "Show flashed items in outline mode"
-msgstr ""
+msgstr "แสดงรายการแฟลชในโหมดเค้าร่าง"
 
 #: gerbview/tools/gerbview_actions.cpp:156
 msgid "Sketch Polygons"
-msgstr ""
+msgstr "ร่างรูปหลายเหลี่ยม"
 
 #: gerbview/tools/gerbview_actions.cpp:156
 msgid "Show polygons in outline mode"
-msgstr ""
+msgstr "แสดงรูปหลายเหลี่ยมในโหมดเค้าร่าง"
 
 #: gerbview/tools/gerbview_actions.cpp:162
 msgid "Ghost Negative Objects"
@@ -17190,81 +17194,81 @@ msgstr ""
 
 #: gerbview/tools/gerbview_actions.cpp:162
 msgid "Show negative objects in ghost color"
-msgstr ""
+msgstr "แสดงวัตถุที่เป็นค่าลบในสีโกสต์"
 
 #: gerbview/tools/gerbview_actions.cpp:168
 msgid "Show DCodes"
-msgstr ""
+msgstr "แสดง DCode"
 
 #: gerbview/tools/gerbview_actions.cpp:168
 msgid "Show dcode number"
-msgstr ""
+msgstr "แสดงหมายเลข dcode"
 
 #: gerbview/tools/gerbview_actions.cpp:173
 msgid "Show in Differential Mode"
-msgstr ""
+msgstr "แสดงในโหมดความแตกต่าง"
 
 #: gerbview/tools/gerbview_actions.cpp:173
 msgid "Show layers in diff (compare) mode"
-msgstr ""
+msgstr "แสดงเลเยอร์ในโหมดแตกต่าง (เปรียบเทียบ)"
 
 #: gerbview/tools/gerbview_actions.cpp:178
 msgid "Flip Gerber View"
-msgstr ""
+msgstr "กลับด้านมุมมองเกอร์เบอร์"
 
 #: gerbview/tools/gerbview_actions.cpp:178
 msgid "Show as mirror image"
-msgstr ""
+msgstr "แสดงเป็นภาพกลับกระจก"
 
 #: gerbview/tools/gerbview_control.cpp:112
 msgid "None of the Gerber layers contain any data"
-msgstr ""
+msgstr "ไม่มีเลเยอร์เกอร์เบอร์ใด ที่มีข้อมูล"
 
 #: gerbview/tools/gerbview_control.cpp:119
 msgid "Board File Name"
-msgstr ""
+msgstr "ชื่อไฟล์บอร์ด"
 
 #: gerbview/tools/gerbview_inspection_tool.cpp:147
 msgid "D Codes"
-msgstr ""
+msgstr "รหัส D Code"
 
 #: gerbview/tools/gerbview_inspection_tool.cpp:175
 #, c-format
 msgid "Source file '%s' not found."
-msgstr ""
+msgstr "ไม่พบไฟล์ต้นฉบับ '%s'"
 
 #: gerbview/tools/gerbview_inspection_tool.cpp:185
 msgid "No editor defined. Please select one."
-msgstr ""
+msgstr "ไม่ได้กำหนดตัวแก้ไข โปรดเลือกอย่างใดอย่างหนึ่ง"
 
 #: gerbview/tools/gerbview_inspection_tool.cpp:191
 #, c-format
 msgid "No file loaded on the active layer %d."
-msgstr ""
+msgstr "ไม่มีการโหลดไฟล์ในเลเยอร์ที่ใช้งานอยู่ %d"
 
 #: gerbview/tools/gerbview_selection_tool.cpp:48
 msgid "Highlight"
-msgstr ""
+msgstr "แสดงเน้น"
 
 #: gerbview/tools/gerbview_selection_tool.cpp:70
 #, c-format
 msgid "Highlight Items of Component \"%s\""
-msgstr ""
+msgstr "แสดงเน้นส่วนประกอบ \"%s\""
 
 #: gerbview/tools/gerbview_selection_tool.cpp:78
 #, c-format
 msgid "Highlight Items of Net \"%s\""
-msgstr ""
+msgstr "แสดงเน้นรายการของเน็ท \"%s\""
 
 #: gerbview/tools/gerbview_selection_tool.cpp:88
 #, c-format
 msgid "Highlight Aperture Type \"%s\""
-msgstr ""
+msgstr "เน้นประเภทรูรับแสง \"%s\""
 
 #: gerbview/tools/gerbview_selection_tool.cpp:96
 #, c-format
 msgid "Highlight DCode D%d"
-msgstr ""
+msgstr "แสดงเน้น DCode D%d"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:84
 #: gerbview/widgets/layer_widget.cpp:534
@@ -17274,211 +17278,212 @@ msgstr ""
 #: pcbnew/dialogs/panel_setup_layers.cpp:795
 #: pcbnew/widgets/appearance_controls_base.cpp:33
 msgid "Layers"
-msgstr ""
+msgstr "เลเยอร์"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:85
 #: gerbview/widgets/layer_widget.cpp:554
 msgid "Items"
-msgstr ""
+msgstr "สิ่งของ"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:105
 msgid "DCodes"
-msgstr ""
+msgstr "DCode"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:105
 msgid "Show DCodes identification"
-msgstr ""
+msgstr "แสดงรหัส DCCode"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:106
 msgid "Negative Objects"
-msgstr ""
+msgstr "วัตถุค่าลบ"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:106
 msgid "Show negative objects in this color"
-msgstr ""
+msgstr "แสดงวัตถุที่เป็นค่าลบในสีนี้"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:108
 #: pcbnew/widgets/appearance_controls.cpp:361
 msgid "Show the (x,y) grid dots"
-msgstr ""
+msgstr "แสดงจุดกริด (x,y)"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:109
 #: pcbnew/widgets/appearance_controls.cpp:360
 msgid "Drawing Sheet"
-msgstr ""
+msgstr "กระดาษเขียนแบบ"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:109
 msgid "Show drawing sheet border and title block"
-msgstr ""
+msgstr "แสดงเส้นขอบกระดาษชีตและบล็อกชื่อเรื่อง"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:110
 msgid "PCB Background"
-msgstr ""
+msgstr "พื้นหลังพีซีบี"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:129
 #: pcbnew/widgets/appearance_controls.cpp:1596
 msgid "Show All Layers"
-msgstr ""
+msgstr "แสดงเลเยอร์ทั้งหมด"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:133
 #: pcbnew/widgets/appearance_controls.cpp:1583
 msgid "Hide All Layers But Active"
-msgstr ""
+msgstr "ซ่อนทุกเลเยอร์ยกเว้นใช้งานอยู่"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:137
 msgid "Always Hide All Layers But Active"
-msgstr ""
+msgstr "ซ่อนทุกเลเยอร์ยกเว้นใช้งานอยู่"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:140
 #: pcbnew/widgets/appearance_controls.cpp:1599
 msgid "Hide All Layers"
-msgstr ""
+msgstr "ซ่อนทุกเลเยอร์"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:144
 msgid "Sort Layers if X2 Mode"
-msgstr ""
+msgstr "เรียงลําดับเลเยอร์ถ้าโหมด X2"
 
 #: gerbview/widgets/layer_widget.cpp:130
 msgid "Change Layer Color for"
-msgstr ""
+msgstr "เปลี่ยนสีเลเยอร์สำหรับ"
 
 #: gerbview/widgets/layer_widget.cpp:180
 msgid "Change Render Color for"
-msgstr ""
+msgstr "เปลี่ยนสีการแสดงผลสำหรับ"
 
 #: gerbview/widgets/layer_widget.cpp:337
 #: pcbnew/widgets/appearance_controls.cpp:1908
 #: pcbnew/widgets/appearance_controls.cpp:2110
 msgid ""
 "Left double click or middle click for color change, right click for menu"
-msgstr ""
+msgstr "ดับเบิลคลิกซ้ายหรือคลิกกลางเพื่อเปลี่ยนสี คลิกขวาสำหรับเมนู"
 
 #: gerbview/widgets/layer_widget.cpp:345
 msgid "Enable this for visibility"
-msgstr ""
+msgstr "เปิดใช้งานเพื่อให้มองเห็นได้"
 
 #: gerbview/widgets/layer_widget.cpp:441
 msgid "Left double click or middle click for color change"
-msgstr ""
+msgstr "คลิกสองครั้งซ้ายหรือคลิกกลางเพื่อเปลี่ยนสี"
 
 #: include/base_units.h:47
 msgid "-- mixed values --"
-msgstr ""
+msgstr "-- ค่าผสม --"
 
 #: include/dialogs/panel_color_settings.h:50
 msgid "Reset all colors in this theme to the KiCad defaults"
-msgstr ""
+msgstr "ล้างสีทั้งหมดในชุดรูปแบบนี้เป็นค่าเริ่มต้นของ KiCad"
 
 #: include/filehistory.h:54
 msgid "Clear Recent Files"
-msgstr ""
+msgstr "ล้างไฟล์ล่าสุด"
 
 #: include/kiway_player.h:242
 msgid "This file is already open."
-msgstr ""
+msgstr "ไฟล์นี้เปิดอยู่"
 
 #: include/lib_table_grid.h:184
 msgid "Library Path"
-msgstr ""
+msgstr "เส้นทางไลบรารี"
 
 #: include/lib_table_grid.h:187
 msgid "Library Format"
-msgstr ""
+msgstr "รูปแบบไลบรารี"
 
 #: include/lib_table_grid.h:190
 msgid "Active"
-msgstr ""
+msgstr "ใช้งานอยู่"
 
 #: include/libeval_compiler/libeval_compiler.h:297
 msgid "Malformed expression"
-msgstr ""
+msgstr "นิพจน์ที่มีรูปแบบที่ไม่ถูกต้อง"
 
 #: include/panel_hotkeys_editor.h:55
 msgid "Reset all hotkeys to the built-in KiCad defaults"
-msgstr ""
+msgstr "ล้างการตั้งค่าปุ่มลัดทั้งหมดเป็นค่าเริ่มต้น KiCad"
 
 #: include/project.h:41
 msgid "untitled"
-msgstr ""
+msgstr "ไม่มีชื่อ"
 
 #: include/widgets/infobar.h:113
 msgid "Hide this message."
-msgstr ""
+msgstr "ซ่อนข้อความนี้"
 
 #: include/widgets/resettable_panel.h:54
 msgid "Reset all settings on this page to their default"
-msgstr ""
+msgstr "ล้างการตั้งค่าทั้งหมดในหน้านี้ให้เป็นค่าเริ่มต้น"
 
 #: kicad/dialogs/dialog_template_selector.cpp:126
 msgid "<html><h1>Template Selector</h1></html>"
-msgstr ""
+msgstr "<html> <h1> ตัวเลือกแม่แบบ</h1></html>"
 
 #: kicad/dialogs/dialog_template_selector.cpp:227
 msgid "Select Templates Directory"
-msgstr ""
+msgstr "เลือกไดเรกทอรีแม่แบบ"
 
 #: kicad/dialogs/dialog_template_selector_base.cpp:29
 msgid "Folder:"
-msgstr ""
+msgstr "โฟลเดอร์:"
 
 #: kicad/dialogs/dialog_template_selector_base.cpp:36
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:216
 msgid "Browse"
-msgstr ""
+msgstr "เรียกดู"
 
 #: kicad/dialogs/dialog_template_selector_base.cpp:39
 msgid "Validate"
-msgstr ""
+msgstr "ตรวจสอบ"
 
 #: kicad/dialogs/dialog_template_selector_base.cpp:114
 msgid "Project Template Title"
-msgstr ""
+msgstr "ชื่อแม่แบบโครงการ"
 
 #: kicad/dialogs/dialog_template_selector_base.h:65
 msgid "Project Template Selector"
-msgstr ""
+msgstr "ตัวเลือกแม่แบบโครงการ"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:108
 msgid "Edit the project schematic"
-msgstr ""
+msgstr "แก้ไขแผนผังโครงการ"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:112
 msgid "Edit global and/or project schematic symbol libraries"
-msgstr ""
+msgstr "แก้ไขส่วนโกลบอลและ/หรือไลบรารีสัญลักษณ์ของโครงการ"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:116
 msgid "Edit the project PCB design"
-msgstr ""
+msgstr "แก้ไขโครงการการออกแบบพีซีบี"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:120
 msgid "Edit global and/or project PCB footprint libraries"
-msgstr ""
+msgstr "แก้ไขโกลบอลและ/หรือโครงการไลบรารีพีซีบีฟุ้ทพรินท์"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:124
 msgid "Preview Gerber files"
-msgstr ""
+msgstr "แสดงตัวอย่างไฟล์เกอร์เบอร์"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:128
 msgid "Convert bitmap images to schematic symbols or PCB footprints"
-msgstr ""
+msgstr "แปลงภาพบิตแมปเป็นสัญลักษณ์วงจรหรือฟุ้ทพรินท์พีซีบี"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:132
 msgid "Show tools for calculating resistance, current capacity, etc."
-msgstr ""
+msgstr "แสดงเครื่องมือสำหรับคำนวณความต้านทาน ความจุกระแส ฯลฯ"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:136
 msgid ""
 "Edit drawing sheet borders and title blocks for use in schematics and PCB "
 "designs"
 msgstr ""
+"แก้ไขเส้นขอบของแผ่นงานวาดและบล็อคหัวเรื่องเพื่อใช้ในการออกแบบวงจรและพีซีบี"
 
 #: kicad/files-io.cpp:46
 msgid "KiCad project file"
-msgstr ""
+msgstr "ไฟล์โครงการ KiCad"
 
 #: kicad/files-io.cpp:66
 msgid "Unzip Project"
-msgstr ""
+msgstr "คลายบีบอัดโครงการ"
 
 #: kicad/files-io.cpp:73
 #, c-format
@@ -17486,23 +17491,25 @@ msgid ""
 "\n"
 "Open \"%s\"\n"
 msgstr ""
+"\n"
+"เปิด \"%s\"\n"
 
 #: kicad/files-io.cpp:76
 msgid "Target Directory"
-msgstr ""
+msgstr "ไดเรกทอรีเป้าหมาย"
 
 #: kicad/files-io.cpp:82
 #, c-format
 msgid "Unzipping project in '%s'.\n"
-msgstr ""
+msgstr "กำลังแตกไฟล์โครงการใน '%s'\n"
 
 #: kicad/files-io.cpp:117
 msgid "Archive Project Files"
-msgstr ""
+msgstr "เก็บเข้าคลังไฟล์โครงการ"
 
 #: kicad/import_project.cpp:75
 msgid "KiCad Project Destination"
-msgstr ""
+msgstr "เป้าหมายโครงการ KiCad"
 
 #: kicad/import_project.cpp:91
 msgid ""
@@ -17511,12 +17518,18 @@ msgid ""
 "\n"
 "Do you want to create a new empty directory for the project?"
 msgstr ""
+"ไดเร็กทอรีที่เลือกไม่ว่าง เราขอแนะนำให้คุณสร้างโครงการในไดเร็กทอรีใหม่ทั้"
+"งหมด\n"
+"\n"
+"คุณต้องการสร้างไดเร็กทอรีว่างใหม่สำหรับโครงการหรือไม่?"
 
 #: kicad/import_project.cpp:116
 msgid ""
 "Error creating new directory. Please try a different path. The project "
 "cannot be imported."
 msgstr ""
+"เกิดข้อผิดพลาดในการสร้างไดเร็กทอรีใหม่ โปรดลองใช้เส้นทางอื่น "
+"ไม่สามารถนำเข้าโครงการ"
 
 #: kicad/import_project.cpp:141 kicad/import_project.cpp:160
 #, c-format
@@ -17525,14 +17538,17 @@ msgid ""
 "to '%s'\n"
 "The project cannot be imported."
 msgstr ""
+"ไม่สามารถคัดลอกไฟล์ '%s'\n"
+"ถึง '%s'\n"
+"ไม่สามารถนำเข้าโครงการ"
 
 #: kicad/import_project.cpp:223
 msgid "Import CADSTAR Archive Project Files"
-msgstr ""
+msgstr "นำเข้าไฟล์จากคลังโครงการ CADSTAR"
 
 #: kicad/import_project.cpp:231
 msgid "Import Eagle Project Files"
-msgstr ""
+msgstr "นำเข้าไฟล์โครงการ Eagle"
 
 #: kicad/kicad.cpp:169
 #, c-format
@@ -17540,354 +17556,358 @@ msgid ""
 "File '%s'\n"
 "does not appear to be a valid KiCad project file."
 msgstr ""
+"ไฟล์ '%s'\n"
+"ดูเหมือนจะไม่ใช่ไฟล์โครงการ KiCad ที่ถูกต้อง"
 
 #: kicad/kicad_manager_frame.cpp:157
 msgid "Project Files"
-msgstr ""
+msgstr "ไฟล์โครงการ"
 
 #: kicad/kicad_manager_frame.cpp:161
 msgid "Editors"
-msgstr ""
+msgstr "เครื่องมือแก้ไข"
 
 #: kicad/kicad_manager_frame.cpp:553
 msgid "Load File to Edit"
-msgstr ""
+msgstr "โหลดไฟล์เพื่อแก้ไข"
 
 #: kicad/kicad_manager_frame.cpp:622
 msgid "[no project loaded]"
-msgstr ""
+msgstr "[ไม่มีการโหลดโครงการ]"
 
 #: kicad/kicad_manager_frame.cpp:625
 msgid "KiCad "
-msgstr ""
+msgstr "คีแคด "
 
 #: kicad/kicad_manager_frame.cpp:664
 #, c-format
 msgid "Project: %s"
-msgstr ""
+msgstr "โครงการ: %s"
 
 #: kicad/kicad_manager_frame.cpp:699
 msgid "Restoring session"
-msgstr ""
+msgstr "กําลังคืนค่าเซสชัน"
 
 #: kicad/kicad_manager_frame.cpp:709
 #, c-format
 msgid "Restoring \"%s\""
-msgstr ""
+msgstr "กําลังคืนค่า \"%s\""
 
 #: kicad/menubar.cpp:54
 msgid "Clear Recent Projects"
-msgstr ""
+msgstr "ล้างโครงการล่าสุด"
 
 #: kicad/menubar.cpp:91
 msgid "Import Non-KiCad Project..."
-msgstr ""
+msgstr "นำเข้าโครงการที่ไม่ใช่ KiCad..."
 
 #: kicad/menubar.cpp:94
 msgid "CADSTAR Project..."
-msgstr ""
+msgstr "โครงการ CADSTAR..."
 
 #: kicad/menubar.cpp:95
 msgid "Import CADSTAR Archive Schematic and PCB (*.csa, *.cpa)"
-msgstr ""
+msgstr "นำเข้าวงจรในคลัง CADSTAR และ PCB (*.csa, *.cpa)"
 
 #: kicad/menubar.cpp:99
 msgid "EAGLE Project..."
-msgstr ""
+msgstr "โครงการ EAGLE..."
 
 #: kicad/menubar.cpp:100
 msgid "Import EAGLE CAD XML schematic and board"
-msgstr ""
+msgstr "นำเข้าวงจร EAGLE CAD XML และพีซีบอร์ด"
 
 #: kicad/menubar.cpp:107
 msgid "&Archive Project..."
-msgstr ""
+msgstr "&เก็บโครงการเข้าคลัง..."
 
 #: kicad/menubar.cpp:108
 msgid "Archive all needed project files into zip archive"
-msgstr ""
+msgstr "เก็บไฟล์โครงการที่จำเป็นทั้งหมดลงในไฟล์บีบอัด"
 
 #: kicad/menubar.cpp:112
 msgid "&Unarchive Project..."
-msgstr ""
+msgstr "&ยกเลิกการเก็บโครงการ..."
 
 #: kicad/menubar.cpp:113 kicad/menubar.cpp:218
 msgid "Unarchive project files from zip archive"
-msgstr ""
+msgstr "ยกเลิกการเก็บถาวรไฟล์โครงการจากไฟล์ zip"
 
 #: kicad/menubar.cpp:128
 msgid "Browse Project Files"
-msgstr ""
+msgstr "เรียกดูไฟล์โครงการ"
 
 #: kicad/menubar.cpp:129
 msgid "Open project directory in file browser"
-msgstr ""
+msgstr "เปิดไดเรกทอรีโครงการในไฟล์เบราว์เซอร์"
 
 #: kicad/menubar.cpp:154
 msgid "Edit Local File..."
-msgstr ""
+msgstr "แก้ไขไฟล์ในเครื่อง..."
 
 #: kicad/menubar.cpp:155
 msgid "Edit local file in text editor"
-msgstr ""
+msgstr "แก้ไขไฟล์ในเครื่อง ในโปรแกรมแก้ไขข้อความ"
 
 #: kicad/menubar.cpp:214
 msgid "Archive all project files"
-msgstr ""
+msgstr "เก็บเข้าคลังไฟล์โครงการทั้งหมด"
 
 #: kicad/menubar.cpp:227
 msgid "Reveal project folder in Finder"
-msgstr ""
+msgstr "เปิดเผยโฟลเดอร์โครงการในไฟน์เดอร์"
 
 #: kicad/menubar.cpp:229
 msgid "Open project directory in file explorer"
-msgstr ""
+msgstr "เปิดไดเร็กทอรีโครงการในไฟล์เอ็กซ์พลอเรอร์"
 
 #: kicad/project_template.cpp:52
 msgid "Could open the template path!"
-msgstr ""
+msgstr "สามารถเปิดเส้นทางแม่แบบ!"
 
 #: kicad/project_template.cpp:57
 msgid "Couldn't open the meta information directory for this template!"
-msgstr ""
+msgstr "เปิดไดเรกทอรีข้อมูลเมตาสำหรับแม่แบบนี้ไม่ได้!"
 
 #: kicad/project_template.cpp:63
 msgid "Cound't find the meta HTML information file for this template!"
-msgstr ""
+msgstr "ไม่พบแฟ้มข้อมูลเมต้า HTML สําหรับแม่แบบนี้!"
 
 #: kicad/project_template.cpp:238
 #, c-format
 msgid "Cannot create folder '%s'."
-msgstr ""
+msgstr "ไม่สามารถสร้างโฟลเดอร์ '%s'"
 
 #: kicad/project_tree_item.cpp:110
 msgid ""
 "Changing file extension will change file type.\n"
 "Do you want to continue ?"
 msgstr ""
+"การเปลี่ยนนามสกุลไฟล์จะเปลี่ยนประเภทไฟล์ด้วย\n"
+"คุณต้องการทำต่อหรือไม่?"
 
 #: kicad/project_tree_item.cpp:112
 msgid "Rename File"
-msgstr ""
+msgstr "เปลี่ยนชื่อไฟล์"
 
 #: kicad/project_tree_item.cpp:120
 msgid "Unable to rename file ... "
-msgstr ""
+msgstr "ไม่สามารถเปลี่ยนชื่อไฟล์ ... "
 
 #: kicad/project_tree_item.cpp:120
 msgid "Permission error?"
-msgstr ""
+msgstr "ข้อผิดพลาดในการอนุญาต?"
 
 #: kicad/project_tree_item.cpp:136
 #, c-format
 msgid "Can not move '%s' to recycle bin."
-msgstr ""
+msgstr "ไม่สามารถย้าย '%s' ไปยังถังรีไซเคิล"
 
 #: kicad/project_tree_item.cpp:139
 #, c-format
 msgid "Can not move '%s' to trash."
-msgstr ""
+msgstr "ไม่สามารถย้าย '%s' ไปที่ถังขยะ"
 
 #: kicad/project_tree_pane.cpp:256
 msgid "Directory name:"
-msgstr ""
+msgstr "ชื่อไดเรกทอรี:"
 
 #: kicad/project_tree_pane.cpp:256
 msgid "Create New Directory"
-msgstr ""
+msgstr "สร้างไดเรกทอรีใหม่"
 
 #: kicad/project_tree_pane.cpp:707
 msgid "Switch to this Project"
-msgstr ""
+msgstr "สลับไปยังโครงการนี้"
 
 #: kicad/project_tree_pane.cpp:708
 msgid "Close all editors, and switch to the selected project"
-msgstr ""
+msgstr "ปิดตัวแก้ไขทั้งหมด แล้วสลับไปยังโครงการที่เลือก"
 
 #: kicad/project_tree_pane.cpp:715
 msgid "New Directory..."
-msgstr ""
+msgstr "ไดเรกทอรีใหม่..."
 
 #: kicad/project_tree_pane.cpp:716
 msgid "Create a New Directory"
-msgstr ""
+msgstr "สร้างไดเรกทอรีใหม่"
 
 #: kicad/project_tree_pane.cpp:724 kicad/project_tree_pane.cpp:734
 msgid "Reveal in Finder"
-msgstr ""
+msgstr "เปิดเผยในไฟน์เดอร์"
 
 #: kicad/project_tree_pane.cpp:725
 msgid "Reveals the directory in a Finder window"
-msgstr ""
+msgstr "เปิดเผยไดเรกทอรีในหน้าต่างไฟน์เดอร์"
 
 #: kicad/project_tree_pane.cpp:727
 msgid "Open Directory in File Explorer"
-msgstr ""
+msgstr "เปิดไดเรกทอรีในไฟล์เอ็กพลอเรอร์"
 
 #: kicad/project_tree_pane.cpp:728 pcbnew/tools/pcb_actions.cpp:554
 msgid "Opens the directory in the default system file manager"
-msgstr ""
+msgstr "เปิดไดเร็กทอรีในตัวจัดการไฟล์ระบบเริ่มต้น"
 
 #: kicad/project_tree_pane.cpp:735
 msgid "Reveals the directories in a Finder window"
-msgstr ""
+msgstr "เปิดเผยไดเรกทอรีในหน้าต่างไฟน์เดอร์"
 
 #: kicad/project_tree_pane.cpp:737
 msgid "Open Directories in File Explorer"
-msgstr ""
+msgstr "เปิดไดเรกทอรีในไฟล์เอ็กซ์พลอเรอร์"
 
 #: kicad/project_tree_pane.cpp:738
 msgid "Opens the directories in the default system file manager"
-msgstr ""
+msgstr "เปิดไดเร็กทอรีในตัวจัดการไฟล์ระบบเริ่มต้น"
 
 #: kicad/project_tree_pane.cpp:749
 msgid "Open the file in a Text Editor"
-msgstr ""
+msgstr "เปิดไฟล์ในตัวแก้ไขข้อความ"
 
 #: kicad/project_tree_pane.cpp:751
 msgid "Open files in a Text Editor"
-msgstr ""
+msgstr "เปิดไฟล์ในตัวแก้ไขข้อความ"
 
 #: kicad/project_tree_pane.cpp:753
 msgid "Edit in a Text Editor"
-msgstr ""
+msgstr "แก้ไขในตัวแก้ไขข้อความ"
 
 #: kicad/project_tree_pane.cpp:761
 msgid "Rename File..."
-msgstr ""
+msgstr "เปลี่ยนชื่อไฟล์..."
 
 #: kicad/project_tree_pane.cpp:762
 msgid "Rename file"
-msgstr ""
+msgstr "เปลี่ยนชื่อไฟล์"
 
 #: kicad/project_tree_pane.cpp:766
 msgid "Rename Files..."
-msgstr ""
+msgstr "เปลี่ยนชื่อไฟล์..."
 
 #: kicad/project_tree_pane.cpp:767
 msgid "Rename files"
-msgstr ""
+msgstr "เปลี่ยนชื่อไฟล์"
 
 #: kicad/project_tree_pane.cpp:776
 msgid "Delete the file and its content"
-msgstr ""
+msgstr "ลบไฟล์และเนื้อหา"
 
 #: kicad/project_tree_pane.cpp:778
 msgid "Delete the files and their contents"
-msgstr ""
+msgstr "ลบไฟล์และเนื้อหา"
 
 #: kicad/project_tree_pane.cpp:793
 msgid "Move to Trash"
-msgstr ""
+msgstr "ย้ายไปที่ถังขยะ"
 
 #: kicad/project_tree_pane.cpp:807
 msgid "Print the contents of the file"
-msgstr ""
+msgstr "พิมพ์เนื้อหาของไฟล์"
 
 #: kicad/project_tree_pane.cpp:869
 #, c-format
 msgid "Change filename: \"%s\""
-msgstr ""
+msgstr "เปลี่ยนชื่อไฟล์: \"%s\""
 
 #: kicad/project_tree_pane.cpp:871
 msgid "Change filename"
-msgstr ""
+msgstr "เปลี่ยนชื่อไฟล์"
 
 #: kicad/project_tree_pane.cpp:1190
 msgid "Network path: not monitoring folder changes"
-msgstr ""
+msgstr "เส้นทางเครือข่าย: ไม่ตรวจสอบการเปลี่ยนแปลงโฟลเดอร์"
 
 #: kicad/project_tree_pane.cpp:1195
 msgid "Local path: monitoring folder changes"
-msgstr ""
+msgstr "เส้นทางภายในเครื่อง: การตรวจสอบการเปลี่ยนแปลงโฟลเดอร์"
 
 #: kicad/tools/kicad_manager_actions.cpp:41
 msgid "New Project..."
-msgstr ""
+msgstr "โครงการใหม่..."
 
 #: kicad/tools/kicad_manager_actions.cpp:41
 msgid "Create new blank project"
-msgstr ""
+msgstr "สร้างโครงการใหม่ที่ว่างเปล่า"
 
 #: kicad/tools/kicad_manager_actions.cpp:47
 msgid "New Project from Template..."
-msgstr ""
+msgstr "สร้างโครงการจากแม่แบบ..."
 
 #: kicad/tools/kicad_manager_actions.cpp:47
 msgid "Create new project from template"
-msgstr ""
+msgstr "สร้างโครงการใหม่จากแม่แบบ"
 
 #: kicad/tools/kicad_manager_actions.cpp:52
 msgid "Open Project..."
-msgstr ""
+msgstr "เปิดโครงการ..."
 
 #: kicad/tools/kicad_manager_actions.cpp:52
 msgid "Open an existing project"
-msgstr ""
+msgstr "เปิดโครงการที่มี"
 
 #: kicad/tools/kicad_manager_actions.cpp:58
 msgid "Close Project"
-msgstr ""
+msgstr "ปิดโครงการ"
 
 #: kicad/tools/kicad_manager_actions.cpp:58
 msgid "Close the current project"
-msgstr ""
+msgstr "ปิดโครงการปัจจุบัน"
 
 #: kicad/tools/kicad_manager_actions.cpp:64
 msgid "Edit schematic"
-msgstr ""
+msgstr "แก้ไขวงจร"
 
 #: kicad/tools/kicad_manager_actions.cpp:70
 msgid "Edit schematic symbols"
-msgstr ""
+msgstr "แก้ไขสัญลักษณ์วงจร"
 
 #: kicad/tools/kicad_manager_actions.cpp:76
 msgid "Edit PCB"
-msgstr ""
+msgstr "แก้ไขพีซีบี"
 
 #: kicad/tools/kicad_manager_actions.cpp:82
 msgid "Edit PCB footprints"
-msgstr ""
+msgstr "แก้ไขพีซีบีฟุ้ทพรินท์"
 
 #: kicad/tools/kicad_manager_actions.cpp:88
 msgid "Preview Gerber output files"
-msgstr ""
+msgstr "ดูตัวอย่างไฟล์เอาต์พุตเกอร์เบอร์"
 
 #: kicad/tools/kicad_manager_actions.cpp:94
 msgid "Image Converter"
-msgstr ""
+msgstr "ตัวแปลงรูป"
 
 #: kicad/tools/kicad_manager_actions.cpp:94
 msgid "Convert bitmap images to schematic or PCB components"
-msgstr ""
+msgstr "แปลงภาพบิตแมปเป็นอุปกรณ์ในวงจรหรือพีซีบี"
 
 #: kicad/tools/kicad_manager_actions.cpp:99
 msgid "Calculator Tools"
-msgstr ""
+msgstr "เครื่องคิดเลข"
 
 #: kicad/tools/kicad_manager_actions.cpp:99
 msgid "Run component calculations, track width calculations, etc."
-msgstr ""
+msgstr "เรียกใช้การคำนวณอุปกรณ์ การคำนวณความกว้างของแทร็ก ฯลฯ"
 
 #: kicad/tools/kicad_manager_actions.cpp:105
 msgid "Edit drawing sheet borders and title block"
-msgstr ""
+msgstr "แก้ไขเส้นขอบแผ่นชีตและบล็อกชื่อเรื่อง"
 
 #: kicad/tools/kicad_manager_actions.cpp:111
 msgid "Open Text Editor"
-msgstr ""
+msgstr "เปิดตัวแก้ไขข้อความ"
 
 #: kicad/tools/kicad_manager_actions.cpp:111
 msgid "Launch preferred text editor"
-msgstr ""
+msgstr "เปิดตัวแก้ไขข้อความที่ต้องการ"
 
 #: kicad/tools/kicad_manager_control.cpp:46
 msgid "Create a new folder for the project"
-msgstr ""
+msgstr "สร้างโฟลเดอร์ใหม่สำหรับโครงการ"
 
 #: kicad/tools/kicad_manager_control.cpp:86
 msgid "Create New Project"
-msgstr ""
+msgstr "สร้างโครงการใหม่"
 
 #: kicad/tools/kicad_manager_control.cpp:128
 msgid ""
@@ -17896,53 +17916,56 @@ msgid ""
 "\n"
 "Do you want to continue?"
 msgstr ""
+"โฟลเดอร์ที่เลือกไม่ว่าง ขอแนะนำให้คุณสร้างโครงการในโฟลเดอร์ว่างของตัวเอง\n"
+"\n"
+"คุณต้องการดำเนินการต่อหรือไม่?"
 
 #: kicad/tools/kicad_manager_control.cpp:156
 msgid "System Templates"
-msgstr ""
+msgstr "แม่แบบระบบ"
 
 #: kicad/tools/kicad_manager_control.cpp:165
 msgid "User Templates"
-msgstr ""
+msgstr "แม่แบบผู้ใช้"
 
 #: kicad/tools/kicad_manager_control.cpp:174
 msgid "No project template was selected.  Cannot generate new project."
-msgstr ""
+msgstr "ไม่ได้เลือกแม่แบบโครงการ ไม่สามารถสร้างโครงการใหม่"
 
 #: kicad/tools/kicad_manager_control.cpp:182
 msgid "New Project Folder"
-msgstr ""
+msgstr "สร้างโฟลเดอร์โครงการ"
 
 #: kicad/tools/kicad_manager_control.cpp:228
 #: kicad/tools/kicad_manager_control.cpp:547
 #, c-format
 msgid "Insufficient permissions to write to folder '%s'."
-msgstr ""
+msgstr "สิทธิ์ไม่เพียงพอในการเขียนไปยังโฟลเดอร์ '%s'"
 
 #: kicad/tools/kicad_manager_control.cpp:249
 msgid "Overwriting files:"
-msgstr ""
+msgstr "กําลังเขียนทับไฟล์:"
 
 #: kicad/tools/kicad_manager_control.cpp:254
 msgid "Similar files already exist in the destination folder."
-msgstr ""
+msgstr "ไฟล์ที่คล้ายกันมีอยู่แล้วในโฟลเดอร์ปลายทาง"
 
 #: kicad/tools/kicad_manager_control.cpp:272
 msgid "A problem occurred creating new project from template."
-msgstr ""
+msgstr "เกิดปัญหาในการสร้างโครงการใหม่จากแม่แบบ"
 
 #: kicad/tools/kicad_manager_control.cpp:295
 msgid "Open Existing Project"
-msgstr ""
+msgstr "เปิดโครงการที่มีอยู่"
 
 #: kicad/tools/kicad_manager_control.cpp:475
 #, c-format
 msgid "Cannot copy folder '%s'."
-msgstr ""
+msgstr "ไม่สามารถคัดลอกโฟลเดอร์ '%s'"
 
 #: kicad/tools/kicad_manager_control.cpp:518
 msgid "Save Project To"
-msgstr ""
+msgstr "บันทึกโครงการไปที่"
 
 #: kicad/tools/kicad_manager_control.cpp:538
 #, c-format
@@ -17951,88 +17974,91 @@ msgid ""
 "\n"
 "Please make sure you have write permissions and try again."
 msgstr ""
+"ไม่สามารถสร้างโฟลเดอร์ '%s'\n"
+"\n"
+"โปรดตรวจสอบว่าคุณมีสิทธิ์ในการเขียนและลองอีกครั้ง"
 
 #: kicad/tools/kicad_manager_control.cpp:549
 msgid "Error!"
-msgstr ""
+msgstr "ข้อผิดพลาด!"
 
 #: kicad/tools/kicad_manager_control.cpp:606
 msgid "Create (or open) a project to edit a schematic."
-msgstr ""
+msgstr "สร้าง (หรือเปิด) โครงการเพื่อแก้ไขวงจร"
 
 #: kicad/tools/kicad_manager_control.cpp:612
 msgid "Create (or open) a project to edit a pcb."
-msgstr ""
+msgstr "สร้าง (หรือเปิด) โครงการเพื่อแก้ไขพีซีบี"
 
 #: kicad/tools/kicad_manager_control.cpp:629
 msgid "Application failed to load:\n"
-msgstr ""
+msgstr "ไม่สามารถโหลดแอปพลิเคชัน:\n"
 
 #: kicad/tools/kicad_manager_control.cpp:629
 #: kicad/tools/kicad_manager_control.cpp:636 pcbnew/pcb_edit_frame.cpp:1458
 #: pcbnew/pcb_edit_frame.cpp:1489
 msgid "KiCad Error"
-msgstr ""
+msgstr "KiCad ผิดพลาด"
 
 #: kicad/tools/kicad_manager_control.cpp:636
 msgid "Application failed to load."
-msgstr ""
+msgstr "ไม่สามารถโหลดแอปพลิเคชัน"
 
 #: kicad/tools/kicad_manager_control.cpp:702
 #, c-format
 msgid "%s closed [pid=%d]\n"
-msgstr ""
+msgstr "%s ปิด [pid=%d]\n"
 
 #: kicad/tools/kicad_manager_control.cpp:764
 #, c-format
 msgid "%s %s opened [pid=%ld]\n"
-msgstr ""
+msgstr "%s %s เปิด [pid=%ld]\n"
 
 #: libs/kiplatform/msw/environment.cpp:57
 #, c-format
 msgid "Error code: %d"
-msgstr ""
+msgstr "รหัสข้อผิดพลาด: %d"
 
 #: pagelayout_editor/dialogs/design_inspector.cpp:223
 msgid "Layout"
-msgstr ""
+msgstr "เค้าโครง"
 
 #: pagelayout_editor/dialogs/design_inspector.cpp:227
 #, c-format
 msgid "Size: %.1fx%.1fmm"
-msgstr ""
+msgstr "ขนาด: %.1fx%.1fมม."
 
 #: pagelayout_editor/dialogs/dialog_design_inspector_base.cpp:38
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:230
 msgid "Count"
-msgstr ""
+msgstr "นับ"
 
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:30
 msgid "Y start:"
-msgstr ""
+msgstr "เริ่ม Y:"
 
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:44
 msgid "X start:"
-msgstr ""
+msgstr "เริ่ม X:"
 
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:64
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:124
 msgid "Origin"
-msgstr ""
+msgstr "จุดกำเนิด"
 
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:68
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:128
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:225
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:278
 msgid "Upper Right"
-msgstr ""
+msgstr "บนขวา"
 
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:68
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:128
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:226
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:279
 msgid "Upper Left"
-msgstr ""
+msgstr "บนซ้าย"
 
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:68
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:128
@@ -18040,7 +18066,7 @@ msgstr ""
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:227
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:280
 msgid "Lower Right"
-msgstr ""
+msgstr "ขวาล่าง"
 
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:68
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:128
@@ -18048,198 +18074,198 @@ msgstr ""
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:277
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:281
 msgid "Lower Left"
-msgstr ""
+msgstr "ล่างซ้าย"
 
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:90
 msgid "X end:"
-msgstr ""
+msgstr "สิ้นสุด X:"
 
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:104
 msgid "Y end:"
-msgstr ""
+msgstr "สิ้นสุด Y:"
 
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.h:72
 msgid "New Item"
-msgstr ""
+msgstr "รายการใหม่"
 
 #: pagelayout_editor/dialogs/dialogs_for_printing.cpp:236
 msgid "Print Drawing Sheet"
-msgstr ""
+msgstr "พิมพ์แผ่นชีต"
 
 #: pagelayout_editor/dialogs/dialogs_for_printing.cpp:241
 msgid "An error occurred attempting to print the drawing sheet."
-msgstr ""
+msgstr "เกิดข้อผิดพลาดขณะพยายามพิมพ์แผ่นชีต"
 
 #: pagelayout_editor/dialogs/dialogs_for_printing.cpp:242
 msgid "Printing"
-msgstr ""
+msgstr "การพิมพ์"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:31
 msgid "Show on all pages"
-msgstr ""
+msgstr "แสดงในทุกหน้า"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:31
 msgid "First page only"
-msgstr ""
+msgstr "หน้าแรกเท่านั้น"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:31
 msgid "Subsequent pages only"
-msgstr ""
+msgstr "หน้าถัดไปเท่านั้น"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:81
 msgid "H align:"
-msgstr ""
+msgstr "การจัดแนว H:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:97
 msgid "V align:"
-msgstr ""
+msgstr "จัดเรียงแนว V:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:125
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:424
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:169
 msgid "Text width:"
-msgstr ""
+msgstr "ความกว้างข้อความ:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:136
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:438
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:188
 msgid "Text height:"
-msgstr ""
+msgstr "ความสูงข้อความ:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:147
 msgid "Max width:"
-msgstr ""
+msgstr "ความกว้างมากที่สุด:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:149
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:162
 msgid "Set to 0 to disable this constraint"
-msgstr ""
+msgstr "ตั้งค่าเป็น 0 เพื่อปิดใช้งานข้อจํากัดนี้"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:160
 msgid "Max height:"
-msgstr ""
+msgstr "ความสูงสูงสุด:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:176
 msgid "Set to 0 to use default values"
-msgstr ""
+msgstr "ตั้งค่าเป็น 0 เพื่อใช้ค่าเริ่มต้น"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:183
 msgid "Comment:"
-msgstr ""
+msgstr "ความคิดเห็น:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:190
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:105
 msgid "Position"
-msgstr ""
+msgstr "ตำแหน่ง"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:220
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:273
 msgid "From:"
-msgstr ""
+msgstr "จาก:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:243
 msgid "End Position"
-msgstr ""
+msgstr "ตําแหน่งสิ้นสุด"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:315
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1354
 msgid "Rotation:"
-msgstr ""
+msgstr "การหมุน:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:322
 msgid "Bitmap DPI:"
-msgstr ""
+msgstr "บิตแมป DPI:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:338
 msgid "Repeat Parameters"
-msgstr ""
+msgstr "ทำซ้ำพารามิเตอร์"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:346
 #: pcbnew/dialogs/dialog_create_array_base.cpp:254
 msgid "Count:"
-msgstr ""
+msgstr "นับ:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:356
 msgid "Step text:"
-msgstr ""
+msgstr "ข้อความขั้นตอน:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:361
 msgid "Number of characters or digits to step text by for each repeat."
-msgstr ""
+msgstr "จำนวนอักขระหรือตัวเลขสำหรับข้อความเลื่อนขั้น สำหรับทำซ้ำแต่ละครั้ง"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:368
 msgid "Step X:"
-msgstr ""
+msgstr "ขั้น X:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:373
 msgid "Distance on the X axis to step for each repeat."
-msgstr ""
+msgstr "ระยะบนแกน X เพื่อก้าวสำหรับการทำซ้ำแต่ละครั้ง"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:381
 msgid "Step Y:"
-msgstr ""
+msgstr "ขั้น Y:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:386
 msgid "Distance to step on Y axis for each repeat."
-msgstr ""
+msgstr "ระยะขั้นบนแกน Y สำหรับการทำซ้ำแต่ละครั้ง"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:400
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:560
 msgid "Apply"
-msgstr ""
+msgstr "นำมาใช้"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:409
 msgid "Item Properties"
-msgstr ""
+msgstr "คุณสมบัติรายการ"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:416
 #: pcbnew/footprint_edit_frame.cpp:925
 msgid "Default Values"
-msgstr ""
+msgstr "ค่าเริ่มต้น"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:452
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:351
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:137
 msgid "Line thickness:"
-msgstr ""
+msgstr "ความหนาของเส้น:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:466
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:206
 msgid "Text thickness:"
-msgstr ""
+msgstr "ความหนาของข้อความ:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:486
 msgid "Set to Default"
-msgstr ""
+msgstr "ตั้งเป็นค่าเริ่มต้น"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:493
 msgid "Page Margins"
-msgstr ""
+msgstr "ระยะขอบหน้า"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:501
 msgid "Left:"
-msgstr ""
+msgstr "ซ้าย:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:515
 msgid "Right:"
-msgstr ""
+msgstr "ขวา:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:529
 msgid "Top:"
-msgstr ""
+msgstr "บน:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:543
 msgid "Bottom:"
-msgstr ""
+msgstr "ล่าง:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:572
 #: pcbnew/dialogs/dialog_plot_base.cpp:68
 msgid "General Options"
-msgstr ""
+msgstr "ตัวเลือกทั่วไป"
 
 #: pagelayout_editor/files.cpp:55
 msgid "Drawing Sheet File"
-msgstr ""
+msgstr "ไฟล์กระดาษเขียนแบบ"
 
 #: pagelayout_editor/files.cpp:61 pagelayout_editor/files.cpp:102
 msgid "The current drawing sheet has been modified. Save changes?"
