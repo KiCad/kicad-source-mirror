@@ -933,8 +933,8 @@ int SCH_EDITOR_CONTROL::AssignNetclass( const TOOL_EVENT& aEvent )
         }
         else if( conn->IsBus() && conn->Members().size() == 0 )
         {
-            m_frame->ShowInfoBarError(
-                    _( "Bus must have at least one member to assign a netclass to members." ) );
+            m_frame->ShowInfoBarError( _( "Bus must have at least one member to assign a netclass "
+                                          "to members." ) );
             highlightNet( m_toolMgr, CLEAR );
             return 0;
         }

@@ -60,7 +60,7 @@ bool GERBVIEW_FRAME::Read_GERBER_File( const wxString& GERBER_FullFileName )
     if( !success )
     {
         gerber_uptr.reset();
-        msg.Printf( _( "File \"%s\" not found" ), GERBER_FullFileName );
+        msg.Printf( _( "File '%s' not found" ), GERBER_FullFileName );
         ShowInfoBarError( msg );
         return false;
     }
@@ -72,7 +72,7 @@ bool GERBVIEW_FRAME::Read_GERBER_File( const wxString& GERBER_FullFileName )
     // Display errors list
     if( gerber->GetMessages().size() > 0 )
     {
-        HTML_MESSAGE_BOX dlg( this, _("Errors") );
+        HTML_MESSAGE_BOX dlg( this, _( "Errors" ) );
         dlg.ListSet( gerber->GetMessages() );
         dlg.ShowModal();
     }
