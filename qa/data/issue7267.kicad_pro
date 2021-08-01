@@ -341,7 +341,7 @@
     "pinned_symbol_libs": []
   },
   "meta": {
-    "filename": "020.02.010.0221.kicad_pro",
+    "filename": "issue7267.kicad_pro",
     "version": 1
   },
   "net_settings": {
@@ -365,7 +365,7 @@
       }
     ],
     "meta": {
-      "version": 0
+      "version": 1
     },
     "net_colors": null
   },

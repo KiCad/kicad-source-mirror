@@ -57,7 +57,7 @@
       ],
       "drc_exclusions": [],
       "meta": {
-        "version": 1
+        "version": 2
       },
       "rule_severities": {
         "annular_width": "error",
@@ -88,12 +88,12 @@
         "silk_overlap": "warning",
         "skew_out_of_range": "error",
         "too_many_vias": "error",
-        "track_dangling": "warning",
+        "track_dangling": "ignore",
         "track_width": "error",
         "tracks_crossing": "error",
         "unconnected_items": "error",
         "unresolved_variable": "error",
-        "via_dangling": "warning",
+        "via_dangling": "ignore",
         "zone_has_empty_net": "error",
         "zones_intersect": "error"
       },
@@ -112,10 +112,7 @@
         "min_track_width": 0.2032,
         "min_via_annular_width": 0.15,
         "min_via_diameter": 0.6,
-        "solder_mask_clearance": 0.0,
-        "solder_mask_min_width": 0.0,
-        "solder_paste_clearance": 0.0,
-        "solder_paste_margin_ratio": -0.0
+        "use_height_for_length_calcs": true
       },
       "track_widths": [
         0.0,
@@ -341,7 +338,7 @@
     "pinned_symbol_libs": []
   },
   "meta": {
-    "filename": "020.02.010.0221.kicad_pro",
+    "filename": "issue7325.kicad_pro",
     "version": 1
   },
   "net_settings": {
@@ -365,7 +362,7 @@
       }
     ],
     "meta": {
-      "version": 0
+      "version": 1
     },
     "net_colors": null
   },
