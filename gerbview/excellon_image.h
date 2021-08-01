@@ -155,11 +155,10 @@ public: EXCELLON_IMAGE( int layer ) :
 
     ~EXCELLON_IMAGE() {};
 
-    virtual void ResetDefaultValues() override
-    {
-        GERBER_FILE_IMAGE::ResetDefaultValues();
-        SelectUnits( false );
-    }
+    /**
+     * Set all parameters to a default value, before reading a file
+     */
+    virtual void ResetDefaultValues() override;
 
 
     /**
