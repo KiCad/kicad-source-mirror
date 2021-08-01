@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
-"PO-Revision-Date: 2021-08-01 08:15+0000\n"
+"PO-Revision-Date: 2021-08-01 18:25+0000\n"
 "Last-Translator: David Chen <d0123456789g@yahoo.com.tw>\n"
 "Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hant/>\n"
@@ -1859,7 +1859,7 @@ msgstr ""
 
 #: common/dialogs/dialog_configure_paths.cpp:621
 msgid "Environment Variable Help"
-msgstr "環境變數幫助"
+msgstr "環境變數說明"
 
 #: common/dialogs/dialog_configure_paths_base.cpp:22
 msgid "Environment Variables"
@@ -2591,12 +2591,12 @@ msgstr "瀏覽..."
 msgid ""
 "Finds the next available reference designator for any designators that "
 "already exist in the design."
-msgstr "為設計中已經存在的任何位號查詢下一個可用的位號。"
+msgstr "為設計中已經存在的任何位號尋找下一個可用的位號。"
 
 #: common/dialogs/dialog_paste_special.cpp:44
 #, c-format
 msgid "Replaces reference designators with '%s'."
-msgstr "用 '%s' 替換位號。"
+msgstr "用 \"%s\" 取代位號。"
 
 #: common/dialogs/dialog_paste_special_base.cpp:22
 msgid "Assign unique reference designators to pasted symbols"
@@ -2784,7 +2784,7 @@ msgstr "檢視預設切換器"
 
 #: common/dialogs/panel_color_settings.cpp:51
 msgid "Reveal Themes in Finder"
-msgstr "在訪達中顯示主題檔案"
+msgstr "在尋找器中顯示主題檔案"
 
 #: common/dialogs/panel_color_settings.cpp:131
 msgid "New theme name:"
@@ -3125,7 +3125,7 @@ msgstr "匯入快速鍵..."
 #: common/dialogs/panel_hotkeys_editor.cpp:129
 msgid ""
 "Import hotkey definitions from an external file, replacing the current values"
-msgstr "從外部檔案匯入快速鍵定義，來替換目前的值"
+msgstr "從外部檔案匯入快速鍵定義，來取代目前的值"
 
 #: common/dialogs/panel_hotkeys_editor.cpp:193
 msgid "Import Hotkeys File:"
@@ -3548,7 +3548,7 @@ msgstr "變數名"
 
 #: common/dialogs/panel_text_variables_base.cpp:38
 msgid "Text Substitution"
-msgstr "文字替換"
+msgstr "文字取代"
 
 #: common/dialogs/wx_html_report_panel.cpp:189
 #: common/dialogs/wx_html_report_panel.cpp:214
@@ -3791,7 +3791,7 @@ msgstr "關於 KiCad (&A)"
 
 #: common/eda_base_frame.cpp:455
 msgid "&Help"
-msgstr "幫助 (&H)"
+msgstr "說明 (&H)"
 
 #: common/eda_base_frame.cpp:938
 #, fuzzy, c-format
@@ -4476,9 +4476,9 @@ msgstr ""
 "命令是 \"%s\""
 
 #: common/gestfich.cpp:255
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to find a PDF viewer for '%s'."
-msgstr "沒有找到 PDF 瀏覽器 \"%s\""
+msgstr "沒有找到 PDF 瀏覽器來開啟 \"%s\"。"
 
 #: common/gestfich.cpp:349
 #, c-format
@@ -4907,7 +4907,7 @@ msgstr "User.9"
 
 #: common/layer_id.cpp:101 pcbnew/plugins/kicad/pcb_parser.cpp:850
 msgid "Rescue"
-msgstr "恢復"
+msgstr "還原"
 
 #: common/layer_id.cpp:105
 msgid "Wires"
@@ -5205,11 +5205,11 @@ msgstr "無法識別的字元 '%c'"
 
 #: common/libeval_compiler/libeval_compiler.cpp:827
 msgid "Unknown parent of function parameters"
-msgstr "函式引數的父級未知"
+msgstr "不明的函式引數母體"
 
 #: common/libeval_compiler/libeval_compiler.cpp:846
 msgid "Unknown parent of property"
-msgstr "屬性的未知父級"
+msgstr "不明的屬性母體"
 
 #: common/libeval_compiler/libeval_compiler.cpp:869
 #: common/libeval_compiler/libeval_compiler.cpp:899
@@ -5641,35 +5641,35 @@ msgstr "修改編輯方法限制"
 #: common/tool/actions.cpp:209 eeschema/dialogs/dialog_schematic_find.cpp:33
 #: eeschema/dialogs/dialog_schematic_find_base.h:81
 msgid "Find"
-msgstr "查詢"
+msgstr "尋找"
 
 #: common/tool/actions.cpp:209
 msgid "Find text"
-msgstr "查詢文字"
+msgstr "尋找文字"
 
 #: common/tool/actions.cpp:215 eeschema/dialogs/dialog_schematic_find.cpp:44
 msgid "Find and Replace"
-msgstr "查詢和替換"
+msgstr "尋找和取代"
 
 #: common/tool/actions.cpp:215
 msgid "Find and replace text"
-msgstr "查詢和替換文字"
+msgstr "尋找和取代文字"
 
 #: common/tool/actions.cpp:221 pcbnew/dialogs/dialog_find_base.cpp:93
 msgid "Find Next"
-msgstr "查詢下一項"
+msgstr "找下一個"
 
 #: common/tool/actions.cpp:221
 msgid "Find next match"
-msgstr "查詢下一個匹配項"
+msgstr "尋找下一個符合的項目"
 
 #: common/tool/actions.cpp:227
 msgid "Find Next Marker"
-msgstr "查詢下一項標記"
+msgstr "找下一個標記"
 
 #: common/tool/actions.cpp:233
 msgid "Replace and Find Next"
-msgstr "替換並查詢下一項"
+msgstr "取代並尋找下一個"
 
 #: common/tool/actions.cpp:233
 msgid "Replace current match and find next"
@@ -5677,11 +5677,11 @@ msgstr "取代目前匹配的項目並尋找下一個"
 
 #: common/tool/actions.cpp:239
 msgid "Replace All"
-msgstr "全部替換"
+msgstr "全部取代"
 
 #: common/tool/actions.cpp:239
 msgid "Replace all matches"
-msgstr "替換所有匹配項"
+msgstr "取代所有符合的項目"
 
 #: common/tool/actions.cpp:250
 msgid "Previous Marker"
@@ -6047,7 +6047,7 @@ msgstr "開啟“KiCad 入門”手冊"
 #: common/tool/actions.cpp:619
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:598
 msgid "Help"
-msgstr "幫助"
+msgstr "說明"
 
 #: common/tool/actions.cpp:620
 msgid "Open product documentation in a web browser"
@@ -6097,13 +6097,13 @@ msgid "File Not Found"
 msgstr "檔案未找到"
 
 #: common/tool/common_control.cpp:237
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Help file '%s' could not be found.\n"
 "Do you want to access the KiCad online help?"
 msgstr ""
-"無法找到幫助檔案 \"%s\" 。\n"
-"是否要訪問 KiCad 聯機幫助?"
+"無法找到說明檔 \"%s\" 。\n"
+"是否要存取 KiCad 線上說明?"
 
 #: common/tool/common_control.cpp:267
 #, c-format
@@ -7096,7 +7096,7 @@ msgstr "是否刪除所有關聯？"
 #: eeschema/annotate.cpp:159
 #, c-format
 msgid "%d duplicate time stamps were found and replaced."
-msgstr "找到並替換 %d 個重複的時間戳。"
+msgstr "找到並取代 %d 個重複的時間戳。"
 
 #: eeschema/annotate.cpp:284
 #, fuzzy, c-format
@@ -7185,7 +7185,7 @@ msgstr "圖框引腳 %s 在圖框內沒有匹配的分層標籤"
 #: eeschema/connection_graph.cpp:2894
 #, c-format
 msgid "Hierarchical label %s has no matching sheet pin in the parent sheet"
-msgstr "層次標籤 %s 在父圖框內沒有匹配的圖框引腳"
+msgstr "層次標籤 %s 在母體圖框內沒有匹配的圖框引腳"
 
 #: eeschema/cross-probing.cpp:265 pcbnew/cross-probing.cpp:171
 #, c-format
@@ -7345,7 +7345,7 @@ msgstr "在 KiCad 中未選擇任何文字編輯器，請選擇一個。"
 
 #: eeschema/dialogs/dialog_bom.cpp:461
 msgid "Bill of Material Generation Help"
-msgstr "BOM 產生幫助"
+msgstr "BOM 產生說明"
 
 #: eeschema/dialogs/dialog_bom_base.cpp:25
 msgid "BOM generator scripts:"
@@ -7638,7 +7638,7 @@ msgstr ""
 "```\n"
 "其中 `myconverter.xsl` 是您要套用的樣式表。\n"
 "\n"
-"不要忘記檔名周圍的雙引號，這使它們在用 Eeschema 替換後可以有空格。\n"
+"不要忘記檔名周圍的雙引號，這使它們在用 Eeschema 取代後可以有空格。\n"
 "\n"
 "如果使用 Python 指令碼，則命令列類似於（取決於 Python 指令碼）：\n"
 "\n"
@@ -7662,10 +7662,10 @@ msgstr ""
 " * `%O`：使用者選擇的輸出檔案的完整檔名和路徑\n"
 "（但不帶副檔名）。\n"
 "\n"
-"`%I` 將被實際的中間檔名替換（通常是帶有副檔名“.xml” 的完整根表文件名）。\n"
-"`%O` 將被實際的輸出檔名（完整的根表文件名減去副檔名）替換。\n"
+"`%I` 將被實際的中間檔名取代（通常是帶有副檔名“.xml” 的完整根表文件名）。\n"
+"`%O` 將被實際的輸出檔名（完整的根表文件名減去副檔名）取代。\n"
 "`%B` 將被實際的輸出短檔名（短根表文件名減去副檔名）代替。\n"
-"`%B` 將被實際的目前專案路徑替換。\n"
+"`%B` 將被實際的目前專案路徑取代。\n"
 "\n"
 "## 4.3 - 命令列格式：\n"
 "\n"
@@ -8031,13 +8031,13 @@ msgstr "文字大小："
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:38
 #: pcbnew/dialogs/panel_setup_rules_base.cpp:33
 msgid "Syntax help"
-msgstr "語法幫助"
+msgstr "語法說明"
 
 #: eeschema/dialogs/dialog_edit_label_base.cpp:99
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:39
 #: pcbnew/dialogs/panel_setup_rules_base.cpp:34
 msgid "Show syntax help window"
-msgstr "顯示語法幫助視窗"
+msgstr "顯示語法說明視窗"
 
 #: eeschema/dialogs/dialog_edit_label_base.cpp:106
 #: eeschema/dialogs/dialog_spice_model_base.cpp:240
@@ -8210,8 +8210,8 @@ msgid ""
 "Replace current symbols fields by fields from the new library.\n"
 "Warning: fields \"Value\" and \"Footprints\" will be therefore replaced."
 msgstr ""
-"用新庫中的欄位替換目前的符號欄位。\n"
-"警告：因此將替換 “值” 和 “封裝” 欄位。"
+"用新庫中的欄位取代目前的符號欄位。\n"
+"警告：因此將取代 \"值\" 和 \"裝\" 欄位。"
 
 #: eeschema/dialogs/dialog_edit_symbols_libid_base.h:57
 msgid "Symbol Library References"
@@ -8473,15 +8473,15 @@ msgstr "按名稱篩選欄位："
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:94
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:72
 msgid "Filter items by parent reference designator:"
-msgstr "按父級位號過濾項目："
+msgstr "按母體位號過濾項目："
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:102
 msgid "Filter items by parent symbol library id:"
-msgstr "按父級符號庫 ID 篩選項目："
+msgstr "按母體符號庫 ID 篩選項目："
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:108
 msgid "Filter items by parent symbol type:"
-msgstr "按父級符號型別篩選項目："
+msgstr "按母體符號型別篩選項目："
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:111
 msgid "Non-power symbols"
@@ -8875,7 +8875,7 @@ msgid ""
 "This was previously known as an alias.  Do not select\n"
 "an existing symbol to create a new root symbol."
 msgstr ""
-"選擇目前的庫中的符號作為父級符號。\n"
+"選擇目前的庫中的符號作為母體符號。\n"
 "\n"
 "這以前稱為別名。 請勿選擇\n"
 "現有符號來建立新的根符號。"
@@ -8958,7 +8958,7 @@ msgstr "欄位必須要有名稱。"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:269
 msgid "Aliased symbol must have a parent selected"
-msgstr "帶別名的符號必須選擇父級"
+msgstr "帶別名的符號必須選擇母體"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:277
 msgid "Delete extra units from symbol?"
@@ -9358,7 +9358,7 @@ msgid ""
 msgstr ""
 "輸入命令列以執行 SPICE。\n"
 "通常 <SPICE 二進位制路徑> %I。\n"
-"%I 將被實際的 SPICE 網表名稱替換"
+"%I 將被實際的 SPICE 網表名稱取代"
 
 #: eeschema/dialogs/dialog_netlist.cpp:349
 msgid "Create Netlist and Run Simulator Command"
@@ -9853,7 +9853,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_rescue_each.cpp:297
 msgid "Rescue Symbols"
-msgstr "恢復符號"
+msgstr "還原符號"
 
 #: eeschema/dialogs/dialog_rescue_each_base.cpp:28
 msgid "Symbols to update:"
@@ -9878,7 +9878,7 @@ msgstr "不再顯示"
 #: eeschema/dialogs/dialog_rescue_each_base.h:66
 #: eeschema/project_rescue.cpp:569 eeschema/project_rescue.cpp:584
 msgid "Project Rescue Helper"
-msgstr "工程恢復助手"
+msgstr "專案還原小幫手"
 
 #: eeschema/dialogs/dialog_sch_import_settings.cpp:43
 #: eeschema/dialogs/dialog_sch_import_settings_base.h:61
@@ -9949,7 +9949,7 @@ msgstr "文字萬用字元可選"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:41
 msgid "Replace &with:"
-msgstr "替換 (&W)："
+msgstr "取代 (&W)："
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:52
 msgid "Direction:"
@@ -9991,19 +9991,19 @@ msgstr "僅搜尋目前的圖框 (&S)"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:101
 msgid "Replace matches in reference designators"
-msgstr "替換位號中的匹配項"
+msgstr "取代位號中的匹配項"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:115
 msgid "&Find"
-msgstr "查詢 (&F)"
+msgstr "尋找 (&F)"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:120
 msgid "&Replace"
-msgstr "替換 (&R)"
+msgstr "取代 (&R)"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:125
 msgid "Replace &All"
-msgstr "替換所有 (&A)"
+msgstr "全部取代 (&A)"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:41
 msgid "Schematic Setup"
@@ -10134,7 +10134,7 @@ msgid ""
 "against parent sheet schematic file path:\n"
 "'%s'."
 msgstr ""
-"不能違反父圖框原理圖檔案路徑:\n"
+"不能違反母體圖框原理圖檔案路徑:\n"
 "'%s'\n"
 "來正常化新圖框原理圖檔案路徑:\n"
 "'%s'。"
@@ -11232,12 +11232,12 @@ msgstr "備份錯誤"
 #: eeschema/dialogs/dialog_symbol_remap.cpp:354
 #: eeschema/dialogs/dialog_symbol_remap.cpp:504
 msgid "Continue with Rescue"
-msgstr "繼續恢復"
+msgstr "繼續還原"
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:355
 #: eeschema/dialogs/dialog_symbol_remap.cpp:505
 msgid "Abort Rescue"
-msgstr "停止恢復"
+msgstr "取消救援"
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:372
 #: eeschema/dialogs/dialog_symbol_remap.cpp:407
@@ -11310,11 +11310,11 @@ msgstr "封裝關聯"
 msgid ""
 "Update footprint associations of symbols whose footprints have been replaced "
 "with different footprints in PCB."
-msgstr "更新其封裝已替換為 PCB 中不同封裝的符號的封裝關聯。"
+msgstr "更新其封裝已取代為 PCB 中不同封裝的符號的封裝關聯。"
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:65
 msgid "Update symbols values that have been replaced in the PCB editor."
-msgstr "更新在 PCB 編輯器中替換的符號值。"
+msgstr "更新在 PCB 編輯器中取代的符號值。"
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:69
 msgid "Net names"
@@ -11326,15 +11326,15 @@ msgstr "從 PCB 更新原理圖"
 
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:21
 msgid "Parent symbol:"
-msgstr "父符號："
+msgstr "母體符號："
 
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:61
 msgid "Remove fields if not in parent symbol"
-msgstr "如果不在父符號中，則刪除欄位"
+msgstr "如果不在母體符號中，則刪除欄位"
 
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:66
 msgid "Reset fields if empty in parent symbol"
-msgstr "如果父符號為空，則重置欄位"
+msgstr "如果母體符號為空，則重置欄位"
 
 #: eeschema/dialogs/dialog_update_symbol_fields_base.h:68
 msgid "Update Symbol Fields"
@@ -11478,7 +11478,7 @@ msgid ""
 "If disabled, clicking on a pin select only the pin."
 msgstr ""
 "在原理圖編輯器中：\n"
-"如果啟用，則點選引腳選擇父級符號。\n"
+"如果啟用，則點選引腳選擇母體符號。\n"
 "如果停用，則點選引腳僅選擇引腳。"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:84
@@ -11881,14 +11881,14 @@ msgstr "選擇包含舊格式 (*.lib) 庫的一行或多行來儲存為目前的
 msgid ""
 "Save '%s' as current KiCad format (*.kicad_sym) and replace legacy entry in "
 "table?"
-msgstr "將 '%s' 另存為目前的KiCad格式（* .kicad_sym）並替換表中的舊條目？"
+msgstr "將 '%s' 另存為目前的KiCad格式（* .kicad_sym）並取代表中的舊條目？"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:747
 #, c-format
 msgid ""
 "Save %d Legacy format libraries as current KiCad format (*.kicad_sym) and "
 "replace legacy entries in table?"
-msgstr "將 %d 箇舊格式庫另存為目前的 KiCad 格式（* .kicad_sym）並替換表中的舊格式條目？"
+msgstr "將 %d 箇舊格式庫另存為目前的 KiCad 格式（* .kicad_sym）並取代表中的舊格式條目？"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:775
 #: pcbnew/dialogs/dialog_export_step.cpp:324
@@ -11988,7 +11988,7 @@ msgstr "遷移庫"
 
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:145
 msgid "Path Substitutions:"
-msgstr "替換路徑："
+msgstr "取代路徑："
 
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:174
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:167
@@ -12367,7 +12367,7 @@ msgstr "載入時不使用快取檔案"
 
 #: eeschema/files-io.cpp:542
 msgid "Abort"
-msgstr "終止"
+msgstr "取消"
 
 #: eeschema/files-io.cpp:557 eeschema/files-io.cpp:574
 #: pagelayout_editor/files.cpp:250 pcbnew/files.cpp:794
@@ -12444,7 +12444,7 @@ msgstr "覆蓋檔案"
 
 #: eeschema/files-io.cpp:937
 msgid "Abort Project Save"
-msgstr "中止工程儲存"
+msgstr "取消專案儲存"
 
 #: eeschema/files-io.cpp:1113
 #, c-format
@@ -12652,7 +12652,7 @@ msgstr "非 KiCad 原理圖..."
 #: eeschema/menubar.cpp:100
 msgid ""
 "Replace current schematic sheet with one imported from another application"
-msgstr "將目前的原理圖頁替換為從另一個應用程式匯入的原理圖頁"
+msgstr "將目前的原理圖頁取代成從另一個應用程式匯入的原理圖頁"
 
 #: eeschema/menubar.cpp:104
 msgid "Footprint Assignments..."
@@ -12802,12 +12802,12 @@ msgstr "將 %s 重新命名為 %s"
 #, c-format
 msgid ""
 "Cannot rescue symbol %s which is not available in any library or the cache."
-msgstr "無法恢復在任何庫或快取中都不可用的符號 %s。"
+msgstr "無法還原在任何庫或快取中都不可用的符號 %s。"
 
 #: eeschema/project_rescue.cpp:305 eeschema/project_rescue.cpp:468
 #, c-format
 msgid "Rescue symbol %s found only in cache library to %s."
-msgstr "僅在快取庫 %s 中找到的恢復符號 %s。"
+msgstr "僅在快取庫 %s 中找到的還原符號 %s。"
 
 #: eeschema/project_rescue.cpp:308 eeschema/project_rescue.cpp:474
 #, c-format
@@ -12816,11 +12816,11 @@ msgstr "將修改後的符號 %s 修復為 %s"
 
 #: eeschema/project_rescue.cpp:568
 msgid "This project has nothing to rescue."
-msgstr "這個工程不需要恢復。"
+msgstr "這個專案不需要還原。"
 
 #: eeschema/project_rescue.cpp:583
 msgid "No symbols were rescued."
-msgstr "未恢復元件符號。"
+msgstr "未還原元件符號。"
 
 #: eeschema/project_rescue.cpp:691
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:185
@@ -12831,7 +12831,7 @@ msgstr "無法建立元件庫檔案 \"%s\""
 #: eeschema/project_rescue.cpp:815
 #, c-format
 msgid "Failed to save rescue library %s."
-msgstr "無法儲存恢復庫 %s。"
+msgstr "無法儲存還原庫 %s。"
 
 #: eeschema/project_rescue.cpp:839
 msgid "Error occurred saving project specific symbol library table."
@@ -13436,7 +13436,7 @@ msgstr "無效的訊號名稱"
 #, fuzzy, c-format
 msgid "No parent for extended symbol %s"
 msgstr ""
-"沒有擴充套件符號 %s 的父級在\n"
+"沒有擴充套件符號 %s 的母體在\n"
 "檔案：\"%s\"\n"
 "行：%d\n"
 "偏移：%d"
@@ -13738,7 +13738,7 @@ msgstr "標誌"
 
 #: eeschema/sch_symbol.cpp:1381
 msgid "Missing parent"
-msgstr "缺少父級"
+msgstr "缺少母體"
 
 #: eeschema/sch_symbol.cpp:1396
 msgid "Undefined!!!"
@@ -13806,7 +13806,7 @@ msgstr "層次標籤 '%s'"
 
 #: eeschema/sch_text.cpp:1661 pcbnew/dialogs/panel_setup_rules.cpp:471
 msgid "Syntax Help"
-msgstr "語法幫助"
+msgstr "語法說明"
 
 #: eeschema/sch_text_help_md.h:2
 #, fuzzy
@@ -14327,7 +14327,7 @@ msgstr "Spice 模擬器"
 
 #: eeschema/sim/sim_plot_frame.cpp:482 eeschema/sim/sim_plot_frame.cpp:1422
 msgid "There were errors during netlist export, aborted."
-msgstr "在網表匯出過程中出現錯誤，中止。"
+msgstr "在網表匯出過程中出現錯誤，作業已取消。"
 
 #: eeschema/sim/sim_plot_frame.cpp:522
 #, c-format
@@ -14749,7 +14749,7 @@ msgstr "儲存庫後不執行任何額外動作。"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:63
 msgid "Replace library table entry"
-msgstr "替換庫表條目"
+msgstr "取代庫表條目"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:64
 msgid ""
@@ -14757,7 +14757,7 @@ msgid ""
 "\n"
 "The original library will no longer be available for use."
 msgstr ""
-"用新庫替換符號庫表條目。\n"
+"用新庫取代符號庫表條目。\n"
 "\n"
 "原始庫將不再可用。"
 
@@ -14869,7 +14869,7 @@ msgstr "沒有指定庫，符號無法儲存。"
 #: eeschema/symbol_editor/symbol_editor.cpp:654
 msgid ""
 "Derived symbols must be saved in the same library as their parent symbol."
-msgstr "派生符號必須被儲存在父級符號所在的同一庫中。"
+msgstr "派生符號必須被儲存在母體符號所在的同一庫中。"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:673
 #, c-format
@@ -14955,7 +14955,7 @@ msgstr "未定義！"
 #: eeschema/symbol_viewer_frame.cpp:368 pcbnew/fp_shape.cpp:343
 #: pcbnew/fp_text.cpp:466 pcbnew/pad.cpp:1532
 msgid "Parent"
-msgstr "父級"
+msgstr "母體"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1202
 #: pcbnew/tools/convert_tool.cpp:75
@@ -15342,7 +15342,7 @@ msgstr "更新符號欄位..."
 
 #: eeschema/tools/ee_actions.cpp:173
 msgid "Update symbol to match changes made in parent symbol"
-msgstr "更新符號以匹配父符號中所做的任何變更"
+msgstr "更新符號以符合母體符號中所做的任何變更"
 
 #: eeschema/tools/ee_actions.cpp:178
 msgid "Add Symbol to Schematic"
@@ -15892,11 +15892,11 @@ msgstr "編輯目前或選定圖框的頁碼"
 
 #: eeschema/tools/ee_actions.cpp:592
 msgid "Rescue Symbols..."
-msgstr "恢復符號..."
+msgstr "還原符號..."
 
 #: eeschema/tools/ee_actions.cpp:593
 msgid "Find old symbols in project and rename/rescue them"
-msgstr "在工程中找到舊的符號重新命名或恢復它們"
+msgstr "在專案中找到舊的符號重新命名或還原它們"
 
 #: eeschema/tools/ee_actions.cpp:598
 msgid "Remap Legacy Library Symbols..."
@@ -16002,7 +16002,7 @@ msgstr "離開分頁"
 
 #: eeschema/tools/ee_actions.cpp:662
 msgid "Display the parent sheet in the schematic editor"
-msgstr "在原理圖編輯器中顯示父級圖框"
+msgstr "在原理圖編輯器中顯示母體圖框"
 
 #: eeschema/tools/ee_actions.cpp:667
 msgid "Hierarchy Navigator"
@@ -16316,7 +16316,7 @@ msgstr "到達圖框的末尾。"
 
 #: eeschema/tools/sch_editor_control.cpp:450
 msgid "Find again to wrap around to the start."
-msgstr "再次查詢到開始。"
+msgstr "再從頭開始尋找。"
 
 #: eeschema/tools/sch_editor_control.cpp:839
 msgid "Error: duplicate sub-sheet names found in current sheet."
@@ -16339,14 +16339,14 @@ msgid "Select netclass:"
 msgstr "選擇網路類："
 
 #: eeschema/tools/sch_editor_control.cpp:1544
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The pasted sheet '%s'\n"
 "was dropped because the destination already has the sheet or one of its "
 "subsheets as a parent."
 msgstr ""
 "貼上的圖框 \"%s\"\n"
-"已刪除, 因為目標已具有圖框或其子圖框之一作為父級窗體。"
+"已被移除因為目標已具有圖框或其子圖框之一作為母體。"
 
 #: eeschema/tools/sch_line_wire_bus_tool.cpp:116
 msgid "No bus selected"
@@ -17631,7 +17631,7 @@ msgstr "壓縮全部工程檔案"
 
 #: kicad/menubar.cpp:227
 msgid "Reveal project folder in Finder"
-msgstr "在查詢器中顯示工程資料夾"
+msgstr "在尋找器中顯示專案資料夾"
 
 #: kicad/menubar.cpp:229
 msgid "Open project directory in file explorer"
@@ -17710,11 +17710,11 @@ msgstr "建立一個新目錄"
 
 #: kicad/project_tree_pane.cpp:724 kicad/project_tree_pane.cpp:734
 msgid "Reveal in Finder"
-msgstr "在查詢器中顯示"
+msgstr "在尋找器中顯示"
 
 #: kicad/project_tree_pane.cpp:725
 msgid "Reveals the directory in a Finder window"
-msgstr "在查詢器視窗中顯示目錄"
+msgstr "在尋找器視窗中顯示目錄"
 
 #: kicad/project_tree_pane.cpp:727
 msgid "Open Directory in File Explorer"
@@ -17726,7 +17726,7 @@ msgstr "在預設系統檔案管理器中開啟目錄"
 
 #: kicad/project_tree_pane.cpp:735
 msgid "Reveals the directories in a Finder window"
-msgstr "在查詢器視窗中顯示目錄"
+msgstr "在尋找器視窗中顯示目錄"
 
 #: kicad/project_tree_pane.cpp:737
 msgid "Open Directories in File Explorer"
@@ -18431,7 +18431,7 @@ msgid ""
 "text placeholders will be replaced with preview data."
 msgstr ""
 "在預覽模式下顯示標題塊:\n"
-"文字佔位符將替換為預覽資料。"
+"文字佔位符將取代為預覽資料。"
 
 #: pagelayout_editor/tools/pl_actions.cpp:99
 msgid "Show title block in edit mode"
@@ -18571,7 +18571,7 @@ msgstr "獨立 Vref 檢測端(4腳)"
 
 #: pcb_calculator/dialogs/dialog_regulator_form_base.cpp:52
 msgid "3 terminals regulator"
-msgstr "三端穩壓"
+msgstr "三端穩壓器"
 
 #: pcb_calculator/dialogs/dialog_regulator_form_base.cpp:61
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:155
@@ -18640,7 +18640,7 @@ msgid ""
 "Should not be 0."
 msgstr ""
 "穩壓器的內部參考電壓。\n"
-"它不應該是 0。"
+"不應該為 0。"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:157
 msgid "For 3 terminal regulators only, the  Adjust pin current."
@@ -19406,12 +19406,11 @@ msgstr ""
 "\tE3:  1.0   -    -    -   2.2   -    -    -   4.7   -    -    -\n"
 "\tE1:  1.0   -    -    -    -    -    -    -    -    -    -    -\n"
 "\n"
-"此計算器查詢標準 E 系列元件的組合來\n"
+"此計算器尋找標準 E 系列元件的組合來\n"
 "建立任意值。您可以輸入所需的電阻，範圍從0.0025 到 4000 kΩ。\n"
 "給出的解決方案使用多達 4 個元件。\n"
 "\n"
-"預設情況下，請求值總是被排除在解決方案集之外。也可以指定將最多兩個額外的值排"
-"除在解決方案之外，前提是\n"
+"預設情況下，請求值總是被排除在解決方案集之外。也可以指定將最多兩個額外的值排除在解決方案之外，前提是\n"
 "這些元件值不可用。\n"
 "\n"
 "解決方案依照下列格式提供：\n"
@@ -19461,7 +19460,7 @@ msgstr "無法讀取資料檔案 \"%s\""
 
 #: pcb_calculator/regulators_funct.cpp:195
 msgid "This regulator is already in list. Aborted"
-msgstr "這個穩壓器已經在列表中"
+msgstr "這個穩壓器已經在列表中。作業已取消"
 
 #: pcb_calculator/regulators_funct.cpp:312
 msgid "Vout must be greater than vref"
@@ -20105,7 +20104,7 @@ msgstr "根据电路板厚度更新介质厚度"
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:193
 #, c-format
 msgid "Too small value (min value %s %s). Aborted"
-msgstr "數值太小了（最小值為 %s %s ）。放棄修改"
+msgstr "數值太小了（最小值為 %s %s ）。作業已取消"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:213
 #, fuzzy
@@ -20731,7 +20730,7 @@ msgstr "無論如何都要重新批註嗎？"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:777
 msgid "Aborted: too many errors"
-msgstr "已中止：錯誤太多"
+msgstr "作業已取消：錯誤太多"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:810
 msgid ""
@@ -22418,7 +22417,7 @@ msgstr "網格原點"
 #: pcbnew/dialogs/dialog_export_step_base.cpp:46
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:44
 msgid "User defined origin"
-msgstr "自定義原點"
+msgstr "使用者自訂的原點"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:49
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:44
@@ -22426,9 +22425,8 @@ msgid "Board center origin"
 msgstr "電路板中心原點"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:56
-#, fuzzy
 msgid "User Defined Origin"
-msgstr "自定義原點"
+msgstr "使用者自訂的原點"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:110
 msgid "Other Options"
@@ -22440,11 +22438,11 @@ msgstr "忽略虛擬元件"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:115
 msgid "Substitute similarly named models"
-msgstr "替換命名相似的模型"
+msgstr "取代命名相似的模型"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:116
 msgid "Replace VRML models with STEP models of the same name"
-msgstr "將VRML模型替換為同名的STEP模型"
+msgstr "將VRML模型取代為同名的STEP模型"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:120
 msgid "Overwrite old file"
@@ -22582,7 +22580,7 @@ msgstr "座標原點選擇："
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:53
 msgid "User defined origin:"
-msgstr "使用者自定義原點："
+msgstr "使用者自訂的原點："
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:109
 msgid "meter"
@@ -22713,7 +22711,7 @@ msgstr "搜尋 DRC 標記"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:98
 msgid "Find Previous"
-msgstr "查詢預覽"
+msgstr "找上一個"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:101
 msgid "Restart Search"
@@ -23654,7 +23652,7 @@ msgstr "按層篩選專案："
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:78
 msgid "Filter items by parent footprint library id:"
-msgstr "按父級封裝庫 ID 篩選專案："
+msgstr "按母體封裝庫 ID 篩選專案："
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:103
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:90
@@ -24160,7 +24158,7 @@ msgstr "選擇是否更新封裝參考以匹配其目前關聯的符號，或者
 
 #: pcbnew/dialogs/dialog_netlist_base.cpp:54
 msgid "Replace footprints with those specified in netlist"
-msgstr "將封裝替換為網表中指定的封裝"
+msgstr "將封裝取代為網表中指定的封裝"
 
 #: pcbnew/dialogs/dialog_netlist_base.cpp:57
 msgid "Delete footprints with no components in netlist"
@@ -24654,7 +24652,7 @@ msgid ""
 "Parent footprint on board is flipped.\n"
 "Layers will be reversed."
 msgstr ""
-"板上的父級封裝被翻轉。\n"
+"板上的母體封裝被翻轉。\n"
 "圖層將被反轉。"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:518
@@ -24711,7 +24709,7 @@ msgid ""
 msgstr ""
 "在製造檔案中指定特殊用途或約束的可選屬性：\n"
 "BGA 屬性用於 BGA 封裝中的焊盤\n"
-"基準區域性是父級封裝的基準\n"
+"基準區域性是母體封裝的基準\n"
 "基準全域性是整個電路板的基準\n"
 "測試板可用於在 Gerber 檔案中指定測試點\n"
 "散熱器焊盤指定熱焊盤\n"
@@ -24744,7 +24742,7 @@ msgstr "郵票孔（僅限通孔）"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:588
 msgid "Set values to 0 to use parent footprint or netclass values."
-msgstr "設定值為 0，使用父級封裝或網路類值。"
+msgstr "設定值為 0，使用母體封裝或網路類值。"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:614
 msgid ""
@@ -24796,7 +24794,7 @@ msgstr "焊盤連線："
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:730
 msgid "From parent footprint"
-msgstr "來自父級封裝"
+msgstr "來自母體封裝"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:761
 msgid "Custom pad shape in zone:"
@@ -25356,7 +25354,7 @@ msgstr "間隔 (s)："
 msgid ""
 "Minimum spacing between adjacent meander segments. The resulting spacing may "
 "be greater based on design rules."
-msgstr ""
+msgstr "相鄰彎曲線段之間的最小間距。基於設計規則，最後可能會得到更大的間距。"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:144
 msgid "Miter style:"
@@ -25777,7 +25775,7 @@ msgstr "保持文字直立"
 
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:227
 msgid "Parent footprint description"
-msgstr "父級封裝描述"
+msgstr "母體封裝描述"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:346
 #, c-format
@@ -25961,7 +25959,7 @@ msgstr "從線路板移除未連結到原理圖符號的未鎖定封裝。"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:37
 msgid "Replace footprints with those specified in the schematic"
-msgstr "用原理圖中指定的封裝替換封裝"
+msgstr "用原理圖中指定的封裝取代封裝"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:39
 msgid ""
@@ -26284,7 +26282,7 @@ msgstr "無法開啟以下目錄： \n"
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:863
 msgid "Failed to open directories to look for libraries"
-msgstr "無法開啟目錄以查詢庫"
+msgstr "無法開啟目錄以尋找庫"
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:891
 msgid "Warning: Duplicate Nicknames"
@@ -26296,7 +26294,7 @@ msgstr "新增現有"
 
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:138
 msgid "Path Substitutions"
-msgstr "路徑替換"
+msgstr "路徑取代"
 
 #: pcbnew/dialogs/panel_pcbnew_action_plugins_base.cpp:36
 msgid "Icon"
@@ -26646,17 +26644,15 @@ msgstr "要刪除的內部銅層"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:816
 msgid "All user-defined layers have already been added."
-msgstr ""
+msgstr "所有使用者自訂的圖層都已被加入。"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:820
-#, fuzzy
 msgid "Add User-defined Layer"
-msgstr "新增使用者定義的圖層"
+msgstr "新增使用者自訂的圖層"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:26
-#, fuzzy
 msgid "Add User Defined Layer..."
-msgstr "新增使用者定義的圖層"
+msgstr "加入使用者自訂的圖層..."
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:44
 msgid "If you want a courtyard layer for the front side of the board"
@@ -27155,7 +27151,7 @@ msgstr "使用者 1"
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:789
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:799
 msgid "User defined layer"
-msgstr "使用者定義的圖層"
+msgstr "使用者自訂的圖層"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:726
 msgid "User2"
@@ -29018,7 +29014,7 @@ msgstr "封裝 \"%s\" 已經存在於 \"%s\" 中。"
 #: pcbnew/footprint_libraries_utils.cpp:1049
 #, c-format
 msgid "Footprint '%s' replaced in '%s'"
-msgstr "封裝 '%s' 在 '%s' 中被替換"
+msgstr "封裝 '%s' 在 '%s' 中被取代"
 
 #: pcbnew/footprint_libraries_utils.cpp:1050
 #, c-format
@@ -29357,7 +29353,7 @@ msgstr "恢復 (&U)"
 
 #: pcbnew/menubar_pcb_editor.cpp:101
 msgid "Clear board and get last rescue file automatically saved by PCB editor"
-msgstr "清除電路板並獲得 PCB 編輯器自動儲存的上個救援檔案"
+msgstr "清除電路板並獲得 PCB 編輯器自動儲存的上個還原檔案"
 
 #: pcbnew/menubar_pcb_editor.cpp:111
 msgid "Specctra Session..."
@@ -29449,7 +29445,7 @@ msgid ""
 "(if the library already exists it will be replaced)"
 msgstr ""
 "建立包含電路板上使用的封裝的新封裝庫。\n"
-"(如果庫已存在，它將被替換)"
+"(如果庫已存在，它將被取代)"
 
 #: pcbnew/menubar_pcb_editor.cpp:164
 msgid "Fabrication Outputs"
@@ -29494,7 +29490,7 @@ msgstr "扇形角度（°）："
 
 #: pcbnew/microwave/microwave_footprint.cpp:104
 msgid "Incorrect number, abort"
-msgstr "數值錯誤, 退出"
+msgstr "數值錯誤，作業已取消"
 
 #: pcbnew/microwave/microwave_inductor.cpp:320
 msgid "Add microwave inductor"
@@ -29920,7 +29916,7 @@ msgstr "焊盤 %s"
 
 #: pcbnew/pad.cpp:802 pcbnew/pad.cpp:823 pcbnew/pad.cpp:842
 msgid "parent footprint"
-msgstr "父級封裝"
+msgstr "母體封裝"
 
 #: pcbnew/pad.cpp:809 pcbnew/pad.cpp:829 pcbnew/pad.cpp:848
 msgid "pad"
@@ -30752,17 +30748,15 @@ msgid "The CADSTAR pad definition '%s' has import errors: %s"
 msgstr "CADSTAR 焊盤定義 '%s' 有匯入錯誤：%s"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1216
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to find group ID %s in the group definitions."
-msgstr "該檔案似乎已損壞。無法在組合定義中查詢組合 ID %s。"
+msgstr "該檔案似乎已損壞。無法在組合定義中尋找組合 ID %s。"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1222
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Unable to find sub group %s in the group map (parent group ID=%s, Name=%s)."
-msgstr ""
-"該檔案似乎已損壞。無法在組合對映中查詢子組合 %s（父組合 ID = %s，名稱 = "
-"%s）。"
+msgstr "該檔案似乎已損壞。無法在組合對映中尋找子組合 %s（母體組合 ID = %s，名稱 = %s）。"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1297
 #, c-format
@@ -30815,12 +30809,12 @@ msgstr "CADSTAR 區域 '%s' 沒有 KiCad 等效項。不支援純放置區域。
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1575
 #, c-format
 msgid "Unable to find component '%s' in the library(Symdef ID: '%s')"
-msgstr "無法在庫中查詢元件 \"%s\" (符號定義 ID：\"%s\")"
+msgstr "無法在庫中尋找元件 \"%s\" (符號定義 ID：\"%s\")"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1693
 #, c-format
 msgid "Unable to find documentation symbol in the library (Symdef ID: '%s')"
-msgstr "無法在庫中查詢文件符號 (符號定義 ID：'%s')"
+msgstr "無法在庫中尋找文件符號 (符號定義 ID：'%s')"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1762
 #, c-format
@@ -31288,9 +31282,8 @@ msgid "unknown zone corner smoothing type %d"
 msgstr "未知覆銅角平滑型別 %d"
 
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:2250
-#, fuzzy
 msgid "Open cancelled by user."
-msgstr "使用者取消了封裝重新連結。"
+msgstr "使用者取消了開啟動作。"
 
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:2299
 #, fuzzy
@@ -31735,9 +31728,8 @@ msgid "netclass 'Default'"
 msgstr "網路類 '%s'"
 
 #: pcbnew/router/pns_kicad_iface.cpp:475
-#, fuzzy
 msgid "user choice"
-msgstr "儲存選項"
+msgstr "使用者自訂值"
 
 #: pcbnew/router/pns_kicad_iface.cpp:1063
 #, c-format
@@ -32264,13 +32256,13 @@ msgstr "I/O 錯誤"
 #: pcbnew/tools/board_editor_control.cpp:534
 #, c-format
 msgid "Orphaned net %s re-parented.\n"
-msgstr "孤立網路 %s 重新成為父級。\n"
+msgstr "孤立網路 %s 重新成為母體。\n"
 
 #: pcbnew/tools/board_editor_control.cpp:591
 #: pcbnew/tools/footprint_editor_control.cpp:566
 #, c-format
 msgid "%d duplicate IDs replaced.\n"
-msgstr "已替換 %d 個重複 ID。\n"
+msgstr "已取代 %d 個重複 ID。\n"
 
 #: pcbnew/tools/board_editor_control.cpp:606
 #: pcbnew/tools/footprint_editor_control.cpp:581
@@ -33334,7 +33326,7 @@ msgstr "將預設焊盤屬性貼上到選定項"
 
 #: pcbnew/tools/pcb_actions.cpp:502
 msgid "Replace the current pad's properties with those copied earlier"
-msgstr "將先前複製的屬性替換為目前的焊盤屬性"
+msgstr "將先前複製的屬性取代成目前的焊盤屬性"
 
 #: pcbnew/tools/pcb_actions.cpp:507
 msgid "Push Pad Properties to Other Pads..."
@@ -33394,11 +33386,11 @@ msgstr "重新載入所有的 Python 外掛並重新整理外掛選單"
 
 #: pcbnew/tools/pcb_actions.cpp:552
 msgid "Reveal Plugin Folder in Finder"
-msgstr "在查詢器中顯示外掛資料夾"
+msgstr "在尋找器中顯示外掛資料夾"
 
 #: pcbnew/tools/pcb_actions.cpp:552
 msgid "Reveals the plugins folder in a Finder window"
-msgstr "在查詢器視窗中顯示外掛資料夾"
+msgstr "在尋找器視窗中顯示外掛資料夾"
 
 #: pcbnew/tools/pcb_actions.cpp:562
 msgid "Board Setup..."
@@ -34715,7 +34707,7 @@ msgstr "描述性註釋"
 #: pcbnew/widgets/appearance_controls.cpp:1520
 #: pcbnew/widgets/appearance_controls.cpp:1521
 msgid "User defined meaning"
-msgstr "使用者自定義"
+msgstr "使用者自訂的釋義"
 
 #: pcbnew/widgets/appearance_controls.cpp:1522
 msgid "Board's perimeter definition"
@@ -34743,39 +34735,39 @@ msgstr "底層封裝裝配"
 
 #: pcbnew/widgets/appearance_controls.cpp:1528
 msgid "User defined layer 1"
-msgstr "使用者定義的圖層 1"
+msgstr "使用者自訂的圖層 1"
 
 #: pcbnew/widgets/appearance_controls.cpp:1529
 msgid "User defined layer 2"
-msgstr "使用者定義的圖層 2"
+msgstr "使用者自訂的圖層 2"
 
 #: pcbnew/widgets/appearance_controls.cpp:1530
 msgid "User defined layer 3"
-msgstr "使用者定義的圖層 3"
+msgstr "使用者自訂的圖層 3"
 
 #: pcbnew/widgets/appearance_controls.cpp:1531
 msgid "User defined layer 4"
-msgstr "使用者定義的圖層 4"
+msgstr "使用者自訂的圖層 4"
 
 #: pcbnew/widgets/appearance_controls.cpp:1532
 msgid "User defined layer 5"
-msgstr "使用者定義的圖層 5"
+msgstr "使用者自訂的圖層 5"
 
 #: pcbnew/widgets/appearance_controls.cpp:1533
 msgid "User defined layer 6"
-msgstr "使用者定義的圖層 6"
+msgstr "使用者自訂的圖層 6"
 
 #: pcbnew/widgets/appearance_controls.cpp:1534
 msgid "User defined layer 7"
-msgstr "使用者定義的圖層 7"
+msgstr "使用者自訂的圖層 7"
 
 #: pcbnew/widgets/appearance_controls.cpp:1535
 msgid "User defined layer 8"
-msgstr "使用者定義的圖層 8"
+msgstr "使用者自訂的圖層 8"
 
 #: pcbnew/widgets/appearance_controls.cpp:1536
 msgid "User defined layer 9"
-msgstr "使用者定義的圖層 9"
+msgstr "使用者自訂的圖層 9"
 
 #: pcbnew/widgets/appearance_controls.cpp:1574
 msgid "Show All Copper Layers"
