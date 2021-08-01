@@ -4334,7 +4334,7 @@ PAD* PCB_PARSER::parsePAD( FOOTPRINT* aParent )
 
                 case T_gr_poly:
                     dummyShape = parsePCB_SHAPE();
-                    pad->AddPrimitivePoly( dummyShape->BuildPolyPointsList(), dummyShape->GetWidth(),
+                    pad->AddPrimitivePoly( dummyShape->GetPolyShape(), dummyShape->GetWidth(),
                                            dummyShape->IsFilled() );
                     break;
 

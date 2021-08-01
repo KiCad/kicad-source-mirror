@@ -842,9 +842,9 @@ void PCB_IO::format( const PCB_SHAPE* aShape, int aNestLevel ) const
 
             for( int ii = 0; ii < outline.PointCount();  ++ii )
             {
-                int nestLevel = ii == 0 ? aNestLevel + 2 : 0;
+                int nestLevel = 0;
 
-                if( ii && ( !( ii % 4 ) || !ADVANCED_CFG::GetCfg().m_CompactSave ) )
+                if( !( ii % 4 ) || !ADVANCED_CFG::GetCfg().m_CompactSave )
                 {
                     // newline every 4 pts.
                     nestLevel = aNestLevel + 2;
@@ -864,11 +864,11 @@ void PCB_IO::format( const PCB_SHAPE* aShape, int aNestLevel ) const
                 else
                 {
                     const SHAPE_ARC& arc = outline.Arc( ind );
-                    m_out->Print( aNestLevel, "%s(arc (start %s) (mid %s) (end %s))",
-                            nestLevel ? "" : " ",
-                            FormatInternalUnits( arc.GetP0() ).c_str(),
-                            FormatInternalUnits( arc.GetArcMid() ).c_str(),
-                            FormatInternalUnits( arc.GetP1() ).c_str() );
+                    m_out->Print( nestLevel, "%s(arc (start %s) (mid %s) (end %s))",
+                                  nestLevel ? "" : " ",
+                                  FormatInternalUnits( arc.GetP0() ).c_str(),
+                                  FormatInternalUnits( arc.GetArcMid() ).c_str(),
+                                  FormatInternalUnits( arc.GetP1() ).c_str() );
                     need_newline = true;
 
                     do
@@ -973,15 +973,18 @@ void PCB_IO::format( const FP_SHAPE* aFPShape, int aNestLevel ) const
             m_out->Print( aNestLevel, "(fp_poly%s (pts",
                           locked.c_str() );
 
+            bool need_newline = false;
+
             for( int ii = 0; ii < outline.PointCount();  ++ii )
             {
                 int nestLevel = 0;
 
-                if( ii && ( !( ii%4 ) || !ADVANCED_CFG::GetCfg().m_CompactSave ) )
+                if( !( ii % 4 ) || !ADVANCED_CFG::GetCfg().m_CompactSave )
                 {
                     // newline every 4 pts.
-                    nestLevel = aNestLevel + 1;
                     m_out->Print( 0, "\n" );
+                    need_newline = false;
+                    nestLevel = aNestLevel + 2;
                 }
 
                 int ind = outline.ArcIndex( ii );
@@ -989,16 +992,19 @@ void PCB_IO::format( const FP_SHAPE* aFPShape, int aNestLevel ) const
                 if( ind < 0 )
                 {
                     m_out->Print( nestLevel, "%s(xy %s)",
-                                  nestLevel ? "" : " ", FormatInternalUnits( outline.CPoint( ii ) ).c_str() );
+                                  nestLevel ? "" : " ",
+                                  FormatInternalUnits( outline.CPoint( ii ) ).c_str() );
+                    need_newline = true;
                 }
                 else
                 {
                     auto& arc = outline.Arc( ind );
-                    m_out->Print( aNestLevel, "%s(arc (start %s) (mid %s) (end %s))",
-                            nestLevel ? "" : " ",
-                            FormatInternalUnits( arc.GetP0() ).c_str(),
-                            FormatInternalUnits( arc.GetArcMid() ).c_str(),
-                            FormatInternalUnits( arc.GetP1() ).c_str() );
+                    m_out->Print( nestLevel, "%s(arc (start %s) (mid %s) (end %s))",
+                                  nestLevel ? "" : " ",
+                                  FormatInternalUnits( arc.GetP0() ).c_str(),
+                                  FormatInternalUnits( arc.GetArcMid() ).c_str(),
+                                  FormatInternalUnits( arc.GetP1() ).c_str() );
+                    need_newline = true;
 
                     do
                     {
@@ -1009,7 +1015,10 @@ void PCB_IO::format( const FP_SHAPE* aFPShape, int aNestLevel ) const
                 }
             }
 
-            m_out->Print( 0, ")" );
+            if( need_newline )
+                m_out->Print( 0, "\n" );
+
+            m_out->Print( aNestLevel + 1, ")" );
         }
         else
         {
@@ -1646,33 +1655,60 @@ void PCB_IO::format( const PAD* aPad, int aNestLevel ) const
                 break;
 
             case SHAPE_T::POLY:
-                if( primitive->GetPolyShape().COutline( 0 ).CPoints().size() < 2 )
-                    break;      // Malformed polygon.
-
-            {
-                m_out->Print( nested_level, "(gr_poly (pts\n");
-
-                // Write the polygon corners coordinates:
-                int newLine = 0;
-
-                for( const VECTOR2I &pt : primitive->GetPolyShape().COutline( 0 ).CPoints() )
+                if( primitive->IsPolyShapeValid() )
                 {
-                    if( newLine == 0 )
-                        m_out->Print( nested_level+1, "(xy %s)",
-                                      FormatInternalUnits( (wxPoint) pt ).c_str() );
-                    else
-                        m_out->Print( 0, " (xy %s)",
-                                      FormatInternalUnits( (wxPoint) pt ).c_str() );
+                    const SHAPE_POLY_SET& poly = primitive->GetPolyShape();
+                    const SHAPE_LINE_CHAIN& outline = poly.Outline( 0 );
 
-                    if( ++newLine > 4 || !ADVANCED_CFG::GetCfg().m_CompactSave )
+                    m_out->Print( nested_level, "(gr_poly (pts" );
+
+                    bool need_newline = false;
+
+                    for( int ii = 0; ii < outline.PointCount();  ++ii )
                     {
-                        newLine = 0;
-                        m_out->Print( 0, "\n" );
-                    }
-                }
+                        nested_level = 0;
 
-                m_out->Print( newLine ? 0 : nested_level, ")" );
-            }
+                        if( !( ii % 4 ) || !ADVANCED_CFG::GetCfg().m_CompactSave )
+                        {
+                            // newline every 4 pts.
+                            m_out->Print( 0, "\n" );
+                            need_newline = false;
+                            nested_level = aNestLevel + 4;
+                        }
+
+                        int ind = outline.ArcIndex( ii );
+
+                        if( ind < 0 )
+                        {
+                            m_out->Print( nested_level, "%s(xy %s)",
+                                          nested_level ? "" : " ",
+                                          FormatInternalUnits( outline.CPoint( ii ) ).c_str() );
+                            need_newline = true;
+                        }
+                        else
+                        {
+                            const SHAPE_ARC& arc = outline.Arc( ind );
+                            m_out->Print( nested_level, "%s(arc (start %s) (mid %s) (end %s))",
+                                          nested_level ? "" : " ",
+                                          FormatInternalUnits( arc.GetP0() ).c_str(),
+                                          FormatInternalUnits( arc.GetArcMid() ).c_str(),
+                                          FormatInternalUnits( arc.GetP1() ).c_str() );
+                            need_newline = true;
+
+                            do
+                            {
+                                ++ii;
+                            } while( ii < outline.PointCount() && outline.ArcIndex( ii ) == ind );
+
+                            --ii;
+                        }
+                    }
+
+                    if( need_newline )
+                        m_out->Print( 0, "\n" );
+
+                    m_out->Print( aNestLevel + 3, ")" );
+                }
                 break;
 
             default:
@@ -2089,9 +2125,9 @@ void PCB_IO::format( const ZONE* aZone, int aNestLevel ) const
 
                 if( !( ii % 4 ) || !ADVANCED_CFG::GetCfg().m_CompactSave )   // newline every 4 pts
                 {
-                    nestLevel = aNestLevel + 3;
                     m_out->Print( 0, "\n" );
                     need_newline = false;
+                    nestLevel = aNestLevel + 3;
                 }
 
                 int ind = chain.ArcIndex( ii );
@@ -2106,11 +2142,11 @@ void PCB_IO::format( const ZONE* aZone, int aNestLevel ) const
                 else
                 {
                     auto& arc = chain.Arc( ind );
-                    m_out->Print( aNestLevel, "%s(arc (start %s) (mid %s) (end %s))",
-                            nestLevel ? "" : " ",
-                            FormatInternalUnits( arc.GetP0() ).c_str(),
-                            FormatInternalUnits( arc.GetArcMid() ).c_str(),
-                            FormatInternalUnits( arc.GetP1() ).c_str() );
+                    m_out->Print( nestLevel, "%s(arc (start %s) (mid %s) (end %s))",
+                                  nestLevel ? "" : " ",
+                                  FormatInternalUnits( arc.GetP0() ).c_str(),
+                                  FormatInternalUnits( arc.GetArcMid() ).c_str(),
+                                  FormatInternalUnits( arc.GetP1() ).c_str() );
                     need_newline = true;
 
                     do
@@ -2140,7 +2176,7 @@ void PCB_IO::format( const ZONE* aZone, int aNestLevel ) const
         {
             m_out->Print( aNestLevel + 1, "(filled_polygon\n" );
             m_out->Print( aNestLevel + 2, "(layer %s)\n",
-                    m_out->Quotew( LSET::Name( layer ) ).c_str() );
+                          m_out->Quotew( LSET::Name( layer ) ).c_str() );
 
             if( aZone->IsIsland( layer, ii ) )
                 m_out->Print( aNestLevel + 2, "(island)\n" );
@@ -2157,9 +2193,9 @@ void PCB_IO::format( const ZONE* aZone, int aNestLevel ) const
 
                 if( !( jj%4 ) || !ADVANCED_CFG::GetCfg().m_CompactSave )   // newline every 4 pts
                 {
-                    nestLevel = aNestLevel + 3;
                     m_out->Print( 0, "\n" );
                     need_newline = false;
+                    nestLevel = aNestLevel + 3;
                 }
 
                 int ind = chain.ArcIndex( jj );
@@ -2174,11 +2210,11 @@ void PCB_IO::format( const ZONE* aZone, int aNestLevel ) const
                 else
                 {
                     auto& arc = chain.Arc( ind );
-                    m_out->Print( aNestLevel, "%s(arc (start %s) (mid %s) (end %s))",
-                            nestLevel ? "" : " ",
-                            FormatInternalUnits( arc.GetP0() ).c_str(),
-                            FormatInternalUnits( arc.GetArcMid() ).c_str(),
-                            FormatInternalUnits( arc.GetP1() ).c_str() );
+                    m_out->Print( nestLevel, "%s(arc (start %s) (mid %s) (end %s))",
+                                  nestLevel ? "" : " ",
+                                  FormatInternalUnits( arc.GetP0() ).c_str(),
+                                  FormatInternalUnits( arc.GetArcMid() ).c_str(),
+                                  FormatInternalUnits( arc.GetP1() ).c_str() );
                     need_newline = true;
 
                     do
