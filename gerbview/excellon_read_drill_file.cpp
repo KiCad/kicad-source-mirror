@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 1992-2016 Jean-Pierre Charras <jp.charras at wanadoo.fr>
- * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -246,9 +246,9 @@ bool GERBVIEW_FRAME::Read_EXCELLON_File( const wxString& aFullFileName )
     wxString msg;
     int layerId = GetActiveLayer();      // current layer used in GerbView
     GERBER_FILE_IMAGE_LIST* images = GetGerberLayout()->GetImagesList();
-    auto gerber_layer = images->GetGbrImage( layerId );
+    GERBER_FILE_IMAGE* gerber_layer = images->GetGbrImage( layerId );
 
-    // OIf the active layer contains old gerber or nc drill data, remove it
+    // If the active layer contains old gerber or nc drill data, remove it
     if( gerber_layer )
         Erase_Current_DrawLayer( false );
 
@@ -366,7 +366,8 @@ bool EXCELLON_IMAGE::LoadFile( const wxString & aFullFileName )
                 }
                 break;
 
-            case 'T': // Tool command
+            case 'T':               // Select Tool command (can also create
+                                    // the tool with an embedded definition)
                 Select_Tool( text );
                 break;
 
@@ -717,14 +718,19 @@ bool EXCELLON_IMAGE::Select_Tool( char*& text )
             dcode_id = TOOLS_MAX_COUNT - 1;
 
         m_Current_Tool = dcode_id;
-        D_CODE* currDcode = GetDCODEOrCreate( dcode_id, true );
+        D_CODE* currDcode = GetDCODE( dcode_id );
 
-        if( currDcode == nullptr && tool_id > 0 )   // if the definition is embedded, enter it
+        // if the tool does not exist, and the definition is embedded, create this tool
+        if( currDcode == nullptr && tool_id > 0 )
         {
             text = startline;   // text starts at the beginning of the command
             readToolInformation( text );
             currDcode = GetDCODE( dcode_id );
         }
+
+        // If the Tool is still not existing, create a dummy tool
+        if( !currDcode )
+            currDcode = GetDCODEOrCreate( dcode_id, true );
 
         if( currDcode )
             currDcode->m_InUse = true;

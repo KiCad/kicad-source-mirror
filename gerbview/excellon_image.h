@@ -184,12 +184,12 @@ private:
     void SelectUnits( bool aMetric );
 
 private:
-    enum excellon_state {
+    enum EXCELLON_STATE {
         READ_HEADER_STATE,          // When we are in this state, we are reading header
         READ_PROGRAM_STATE          // When we are in this state, we are reading drill data
     };
 
-    excellon_state m_State;         // state of excellon file analysis
+    EXCELLON_STATE m_State;         // state of excellon file analysis
     bool           m_SlotOn;        // true during an oblong drill definition
                                     // by G85 (canned slot) command
     bool           m_RouteModeOn;   // true during a route mode (for instance a oval hole) or
