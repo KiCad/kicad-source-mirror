@@ -152,11 +152,11 @@ constexpr inline double SchIu2Mils( int iu )
     return iu / SCH_IU_PER_MILS;
 }
 
-constexpr inline int PcbMillimeter2iu( double mm )
+constexpr inline int PcbMm2iu( double mm )
 {
     return (int) ( mm < 0 ? mm * PCB_IU_PER_MM - 0.5 : mm * PCB_IU_PER_MM + 0.5 );
 }
-constexpr inline double PcbIu2Millimeter( int iu )
+constexpr inline double PcbIu2mm( int iu )
 {
     return iu / PCB_IU_PER_MM;
 }
