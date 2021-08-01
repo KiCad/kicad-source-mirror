@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
-"PO-Revision-Date: 2021-08-01 18:25+0000\n"
+"PO-Revision-Date: 2021-08-01 22:03+0000\n"
 "Last-Translator: David Chen <d0123456789g@yahoo.com.tw>\n"
 "Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hant/>\n"
@@ -26399,7 +26399,7 @@ msgid ""
 "The maximum allowed deviation between a true arc or circle and segments used "
 "to approximate it.  Smaller values produce smoother graphics at the expense "
 "of performance."
-msgstr ""
+msgstr "用於近似真實弧線或圓圈與線段之間的最大允許偏差。 設定越小的值，系統將消耗越多效能來產生越平滑的圖形。"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:86
 #, c-format
@@ -26458,7 +26458,7 @@ msgid ""
 "The minimum clearance between copper items which do not belong to the same "
 "net.  If set, this is an absolute minimum which cannot be reduced by "
 "netclasses, custom rules, or other settings."
-msgstr ""
+msgstr "兩個不屬於相同網路的銅層物件之間的最小間距。  此欄位將被視為絕對的最小值，並且無法透過其他網路類別，自訂規則，或其它設定來降低此最小值。"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:207
 msgid "Minimum track width:"
@@ -26468,7 +26468,7 @@ msgstr "最小布線寬度："
 msgid ""
 "The minimum track width.  If set, this is an absolute minimum and cannot be "
 "reduced by netclasses, custom rules, or other settings."
-msgstr ""
+msgstr "佈線的最小寬度。  此欄位將被視為絕對的最小值，並且無法透過其他網路類別，自訂規則，或其它設定來降低此最小值。"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:224
 msgid "Minimum annular width:"
@@ -26478,7 +26478,7 @@ msgstr "最小環形寬度："
 msgid ""
 "The minimum annular ring width.  If set, this is an absolute minimum and "
 "cannot be reduced by netclasses, custom rules, or other settings."
-msgstr ""
+msgstr "孔環的最小寬度。  此欄位將被視為絕對的最小值，並且無法透過其他網路類別，自訂規則，或其它設定來降低此最小值。"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:240
 msgid "Minimum via diameter:"
@@ -26488,7 +26488,7 @@ msgstr "最小過孔外徑："
 msgid ""
 "The minimum via diameter.  If set, this is an absolute minimum and cannot be "
 "reduced by netclasses, custom rules, or other settings."
-msgstr ""
+msgstr "過孔的最小直徑。  此欄位將被視為絕對的最小值，並且無法透過其他網路類別，自訂規則，或其它設定來降低此最小值。"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:256
 msgid "Copper hole clearance:"
@@ -26499,7 +26499,7 @@ msgid ""
 "The minimum clearance between a hole and an unassociated copper item.  If "
 "set, this is an absolute minimum and cannot be reduced by custom rules or "
 "other settings."
-msgstr ""
+msgstr "一個孔與一個不相關的銅層物件之間的最小間距。  此欄位將被視為絕對的最小值，並且無法透過其他網路類別，自訂規則，或其它設定來降低此最小值。"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:272
 msgid "Copper edge clearance:"
@@ -26510,7 +26510,7 @@ msgid ""
 "The minimum clearance between the board edge and any copper item.  If set, "
 "this is an absolute minimum and cannot be reduced by custom rules or other "
 "settings."
-msgstr ""
+msgstr "一個孔與一個不相關的銅層物件之間的最小間距。  此欄位將被視為絕對的最小值，並且無法透過其他網路類別，自訂規則，或其它設定來降低此最小值。"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:297
 msgid "Holes"
@@ -26524,7 +26524,7 @@ msgstr "最小通孔："
 msgid ""
 "The minimum through-hole size.  If set, this is an absolute minimum and "
 "cannot be reduced by netclasses, custom rules or other settings."
-msgstr ""
+msgstr "通孔的最小大小。  此欄位將被視為絕對的最小值，並且無法透過其他網路類別，自訂規則，或其它設定來降低此最小值。"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:329
 msgid "Hole to hole clearance:"
@@ -27859,7 +27859,7 @@ msgstr "檢查 %s。"
 
 #: pcbnew/drc/drc_engine.cpp:886
 msgid "Board and netclass clearances apply only between copper items."
-msgstr "電路板和網類間隙僅適用於銅專案之間。"
+msgstr "電路板和網類間隙僅適用於銅層物件之間。"
 
 #: pcbnew/drc/drc_engine.cpp:930
 msgid "Keepout constraint not met."
@@ -28191,7 +28191,7 @@ msgstr "無法識別的圖層 '%s'。"
 
 #: pcbnew/drc/drc_test_provider_annular_width.cpp:87
 msgid "Checking via annular rings..."
-msgstr "檢查過孔環形孔..."
+msgstr "檢查孔環..."
 
 #: pcbnew/drc/drc_test_provider_annular_width.cpp:128
 #, c-format
@@ -28213,7 +28213,7 @@ msgstr "正在檢查網路連線..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:192
 msgid "Gathering copper items..."
-msgstr "正在收集銅專案..."
+msgstr "正在收集銅層物件..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:208
 msgid "Checking track & via clearances..."
@@ -32458,11 +32458,11 @@ msgstr "直徑約束：最小 %s 最大 %s。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:679
 msgid "Via Annular Width"
-msgstr "過孔環形寬度"
+msgstr "孔環寬度"
 
 #: pcbnew/tools/board_inspection_tool.cpp:681
 msgid "Via annular width resolution for:"
-msgstr "過孔環形寬度解析適用於:"
+msgstr "孔環寬度解析適用於:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:707
 #, c-format
@@ -33634,7 +33634,7 @@ msgstr "切換網路強調顯示"
 
 #: pcbnew/tools/pcb_actions.cpp:732
 msgid "Highlight all copper items on the selected net(s)"
-msgstr "強調顯示選定網路 (s) 中的所有銅專案"
+msgstr "強調顯示選定網路 (s) 中的所有銅層物件"
 
 #: pcbnew/tools/pcb_actions.cpp:739
 msgid "Hide Net"
@@ -34574,7 +34574,7 @@ msgstr "選擇何時顯示網路和網路類顏色"
 
 #: pcbnew/widgets/appearance_controls.cpp:661
 msgid "Net and netclass colors are shown on all copper items"
-msgstr "網路和網路類顏色顯示在所有銅專案上"
+msgstr "網路和網路類顏色顯示在所有銅層物件上"
 
 #: pcbnew/widgets/appearance_controls.cpp:668
 msgid "Net and netclass colors are shown on the ratsnest only"
