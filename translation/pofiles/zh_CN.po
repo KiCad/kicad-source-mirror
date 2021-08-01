@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
-"PO-Revision-Date: 2021-08-01 06:19+0000\n"
+"PO-Revision-Date: 2021-08-01 22:02+0000\n"
 "Last-Translator: David Chen <d0123456789g@yahoo.com.tw>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
@@ -4216,7 +4216,7 @@ msgstr "向右"
 #: eeschema/fields_grid_table.cpp:516
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:101
 msgid "Top"
-msgstr "向上对齐"
+msgstr "上对齐"
 
 #: common/eda_text.cpp:663
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:255
