@@ -7,13 +7,14 @@
 # Liu Guang <l.g110@163.com>, 2021.
 # CloverGit <w991593239@163.com>, 2021.
 # Deleted User <noreply+33206@weblate.org>, 2021.
+# David Chen <d0123456789g@yahoo.com.tw>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
-"PO-Revision-Date: 2021-07-21 08:50+0000\n"
-"Last-Translator: Eric <spice2wolf@gmail.com>\n"
+"PO-Revision-Date: 2021-08-01 06:18+0000\n"
+"Last-Translator: David Chen <d0123456789g@yahoo.com.tw>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -21,7 +22,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.7.2-dev\n"
+"X-Generator: Weblate 4.8-dev\n"
 "X-Poedit-KeywordsList: _HKI;_\n"
 "X-Poedit-Basepath: ../../kicad-source-mirror\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -4215,7 +4216,7 @@ msgstr "向右"
 #: eeschema/fields_grid_table.cpp:516
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:101
 msgid "Top"
-msgstr "向上对齐"
+msgstr "頂部"
 
 #: common/eda_text.cpp:663
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:255
@@ -18170,7 +18171,7 @@ msgstr "右:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:529
 msgid "Top:"
-msgstr "上："
+msgstr "頂："
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:543
 msgid "Bottom:"
