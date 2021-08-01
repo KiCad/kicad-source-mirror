@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
-"PO-Revision-Date: 2021-07-31 11:56+0000\n"
+"PO-Revision-Date: 2021-08-01 22:02+0000\n"
 "Last-Translator: Jan Straka <bach@email.cz>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/"
 "master-source/cs/>\n"
@@ -24,7 +24,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 4.7.2-dev\n"
+"X-Generator: Weblate 4.8-dev\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-Basepath: .\n"
 
@@ -5406,24 +5406,21 @@ msgid "Failed to output data."
 msgstr "Selhaly výstupní data."
 
 #: common/project/project_archiver.cpp:91
-#, fuzzy
 msgid "Could not open archive file."
-msgstr "Soubor archivu nelze otevřít\n"
+msgstr "Soubor archivu nelze otevřít."
 
 #: common/project/project_archiver.cpp:100
-#, fuzzy
 msgid "Invalid archive file format."
-msgstr "Neplatný formát souboru archívu\n"
+msgstr "Neplatný formát souboru archívu."
 
 #: common/project/project_archiver.cpp:111
-#, fuzzy, c-format
+#, c-format
 msgid "Extracting file '%s'."
-msgstr "Rozbalování souboru '%s'.\n"
+msgstr "Rozbalování souboru '%s'."
 
 #: common/project/project_archiver.cpp:151
-#, fuzzy
 msgid "Error extracting file!"
-msgstr "Chyba rozbalování souboru!\n"
+msgstr "Chyba rozbalování souboru!"
 
 #: common/project/project_archiver.cpp:208 eeschema/dialogs/dialog_erc.cpp:760
 #: eeschema/dialogs/dialog_plot_schematic.cpp:518
@@ -5456,19 +5453,19 @@ msgid "Failed to create file '%s'."
 msgstr "Selhalo vytvoření souboru '%s'."
 
 #: common/project/project_archiver.cpp:254
-#, fuzzy, c-format
+#, c-format
 msgid "Archived file '%s'."
-msgstr "Archivovaný soubor '%s'.\n"
+msgstr "Archivovaný soubor '%s'."
 
 #: common/project/project_archiver.cpp:264
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to archive file '%s'."
-msgstr "Archivace souboru '%s' se nezdařila.\n"
+msgstr "Nepodařilo se archivovat soubor '%s'."
 
 #: common/project/project_archiver.cpp:290
-#, fuzzy, c-format
+#, c-format
 msgid "Zip archive '%s' created (%s uncompressed, %s compressed)."
-msgstr "Zip archív '%s' vytvořen (%s nekomprimováno, %s komprimováno).\n"
+msgstr "Zip archív '%s' vytvořen (%s nekomprimováno, %s komprimováno)."
 
 #: common/rc_item.cpp:350
 msgid "Excluded "
@@ -8489,9 +8486,9 @@ msgid "Violation Severity"
 msgstr "Závažnost porušení"
 
 #: eeschema/dialogs/dialog_erc.cpp:755 pcbnew/dialogs/dialog_gendrill.cpp:471
-#, fuzzy, c-format
+#, c-format
 msgid "Report file '%s' created."
-msgstr "Soubor hlášení '%s' vytvořen\n"
+msgstr "Soubor hlášení '%s' vytvořen."
 
 #: eeschema/dialogs/dialog_erc.cpp:773
 #, c-format
@@ -13284,9 +13281,9 @@ msgid "Unknown Record id: %d."
 msgstr "Neznámé ID záznamu: %d."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:604
-#, fuzzy, c-format
+#, c-format
 msgid "Pin's owner (%d) not found."
-msgstr "Soubor '%s' nenalezen."
+msgstr "Vlastník vývodu(ů) (%d) nebyl nalezen."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:649
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1833
@@ -21465,12 +21462,8 @@ msgid "No layer selected."
 msgstr "Není vybrána žádná vrstva."
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:868
-#, fuzzy
 msgid "Selecting <no net> will create an isolated copper island."
-msgstr ""
-"Vznikne ostrov\n"
-"mědi nepřipojený\n"
-"k žádné síti."
+msgstr "Výběr <žádná síť> vytvoří izolovaný ostrov mědi."
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:47
 msgid ""
@@ -21893,7 +21886,6 @@ msgid "Radius:"
 msgstr "Poloměr:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:246
-#, fuzzy
 msgid ""
 "Positive angles represent an anti-clockwise rotation. An angle of 0 will "
 "produce a full circle divided evenly into \"Count\" portions."
@@ -22270,9 +22262,8 @@ msgid "Report file '%s' created<br>"
 msgstr "Soubor hlášení '%s' vytvořen<br>"
 
 #: pcbnew/dialogs/dialog_drc.cpp:892
-#, fuzzy
 msgid "Do you wish to delete excluded markers as well?"
-msgstr "Chcete vyčistit tento list?"
+msgstr "Chcete také odstranit vyloučené značky?"
 
 #: pcbnew/dialogs/dialog_drc.cpp:895
 msgid "Delete exclusions"
@@ -22304,9 +22295,8 @@ msgstr ""
 "Není-li zvoleno, bude hlášeno pouze první porušení DRC pro každý spoj."
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:41
-#, fuzzy
 msgid "Test for parity between PCB and schematic"
-msgstr "Test pouzder podle schématu"
+msgstr "Test parity mezi DPS a schématem"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:77
 msgid "Tests Running..."
@@ -22349,9 +22339,8 @@ msgid "First pad number:"
 msgstr "První číslo plošky:"
 
 #: pcbnew/dialogs/dialog_enum_pads_base.h:51
-#, fuzzy
 msgid "Pad Enumeration Settings"
-msgstr "Nastavení číslování plošek"
+msgstr "Nastavení číslování plošky"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:74
 msgid "Change Footprints"
@@ -22367,9 +22356,8 @@ msgid "Change selected footprint(s)"
 msgstr "Změnit vybrané pouzdro"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:77
-#, fuzzy
 msgid "Change footprints matching reference designator:"
-msgstr "%s pouzdro s odkazem:"
+msgstr "Změnit pouzdra v souladu s referencí schématu:"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:78
 #, fuzzy
@@ -28696,9 +28684,9 @@ msgstr "Zadní strana (spodní strana) soubor umístění: \"%s\"."
 
 #: pcbnew/exporters/gen_footprints_placefile.cpp:307
 #: pcbnew/exporters/gen_footprints_placefile.cpp:448
-#, fuzzy, c-format
+#, c-format
 msgid "Full component count: %d."
-msgstr "Úplný počet pouzder: %d\n"
+msgstr "Úplný počet pouzder: %d."
 
 #: pcbnew/exporters/gen_footprints_placefile.cpp:310
 #: pcbnew/exporters/gen_footprints_placefile.cpp:404
@@ -30050,9 +30038,9 @@ msgid "Netlist Load Error"
 msgstr "Chyba načtení netlistu"
 
 #: pcbnew/netlist_reader/netlist.cpp:155
-#, fuzzy, c-format
+#, c-format
 msgid "No footprint defined for symbol %s."
-msgstr "Není definované pouzdro pro symbol \"%s\".\n"
+msgstr "Není definované pouzdro pro symbol %s."
 
 #: pcbnew/netlist_reader/netlist.cpp:182
 #, fuzzy, c-format
@@ -30065,12 +30053,10 @@ msgid "%s footprint ID '%s' is not valid."
 msgstr "%s pouzdro ID \"%s\" není platné."
 
 #: pcbnew/netlist_reader/netlist.cpp:222
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s footprint '%s' not found in any libraries in the footprint library table."
-msgstr ""
-"Součástka \"%s\" pouzdro \"%s\" nenalezeno v žádné knihovně v tabulce "
-"knihoven pouzder.\n"
+msgstr "%s pouzdro '%s' nenalezeno v žádné knihovně v tabulce knihoven pouzder."
 
 #: pcbnew/netlist_reader/netlist_reader.cpp:181
 #, fuzzy, c-format
@@ -32733,9 +32719,8 @@ msgid "Copper Finish: "
 msgstr "Povrchová úprava mědi: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:443
-#, fuzzy
 msgid "Castellated pads: "
-msgstr "Vypočítat"
+msgstr "Prolamované plošky: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:451
 msgid "Board Thickness: "
