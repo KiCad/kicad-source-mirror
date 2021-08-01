@@ -2273,15 +2273,13 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
         int                         m_drcEpsilon;
         int                         m_worstClearance;
         bool                        m_allowDRCViolations;
-        bool                        m_flaggedDRC;
 
         VIA_PLACER( PCB_BASE_EDIT_FRAME* aFrame ) :
             m_frame( aFrame ),
             m_gridHelper( aFrame->GetToolManager(), aFrame->GetMagneticItemsSettings() ),
             m_drcEngine( aFrame->GetBoard()->GetDesignSettings().m_DRCEngine ),
             m_drcEpsilon( aFrame->GetBoard()->GetDesignSettings().GetDRCEpsilon() ),
-            m_worstClearance( 0 ),
-            m_flaggedDRC( false )
+            m_worstClearance( 0 )
         {
             ROUTER_TOOL* router = m_frame->GetToolManager()->GetTool<ROUTER_TOOL>();
 
@@ -2545,10 +2543,11 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
 
         bool PlaceItem( BOARD_ITEM* aItem, BOARD_COMMIT& aCommit ) override
         {
-            PCB_VIA*   via = static_cast<PCB_VIA*>( aItem );
-            wxPoint    viaPos = via->GetPosition();
-            PCB_TRACK* track = findTrack( via );
-            PAD *   pad = findPad( via );
+            WX_INFOBAR* infobar = m_frame->GetInfoBar();
+            PCB_VIA*    via = static_cast<PCB_VIA*>( aItem );
+            wxPoint     viaPos = via->GetPosition();
+            PCB_TRACK*  track = findTrack( via );
+            PAD*        pad = findPad( via );
 
             if( track )
                 via->SetNetCode( track->GetNetCode() );
@@ -2557,14 +2556,15 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
 
             if( !m_allowDRCViolations && checkDRCViolation( via ) )
             {
-                m_frame->ShowInfoBarError( _( "Via location violates DRC." ) );
+                m_frame->ShowInfoBarError( _( "Via location violates DRC." ), true,
+                                           WX_INFOBAR::MESSAGE_TYPE::DRC_VIOLATION );
                 via->SetNetCode( 0 );
-                m_flaggedDRC = true;
                 return false;
             }
-            else if( m_flaggedDRC )
+            else
             {
-                m_frame->GetInfoBar()->Dismiss();
+                if( infobar->GetMessageType() == WX_INFOBAR::MESSAGE_TYPE::DRC_VIOLATION )
+                    infobar->Dismiss();
             }
 
             if( track )

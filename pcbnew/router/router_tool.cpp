@@ -839,7 +839,7 @@ int ROUTER_TOOL::handleLayerSwitch( const TOOL_EVENT& aEvent, bool aForceVia )
 
             infobar->ShowMessageFor( _( "Blind/buried vias must first be enabled in "
                                         "Board Setup > Design Rules > Constraints." ),
-                                     10000, wxICON_ERROR );
+                                     10000, wxICON_ERROR, WX_INFOBAR::MESSAGE_TYPE::DRC_VIOLATION );
             return false;
         }
 
@@ -860,7 +860,7 @@ int ROUTER_TOOL::handleLayerSwitch( const TOOL_EVENT& aEvent, bool aForceVia )
 
             infobar->ShowMessageFor( _( "Microvias must first be enabled in "
                                         "Board Setup > Design Rules > Constraints." ),
-                                     10000, wxICON_ERROR );
+                                     10000, wxICON_ERROR, WX_INFOBAR::MESSAGE_TYPE::DRC_VIOLATION );
             return false;
         }
     }

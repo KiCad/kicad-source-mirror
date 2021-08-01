@@ -120,7 +120,8 @@ void WX_INFOBAR::QueueDismiss()
 }
 
 
-void WX_INFOBAR::ShowMessageFor( const wxString& aMessage, int aTime, int aFlags )
+void WX_INFOBAR::ShowMessageFor( const wxString& aMessage, int aTime, int aFlags,
+                                 MESSAGE_TYPE aType )
 {
     // Don't do anything if we requested the UI update
     if( m_updateLock )
@@ -128,6 +129,8 @@ void WX_INFOBAR::ShowMessageFor( const wxString& aMessage, int aTime, int aFlags
 
     m_showTime = aTime;
     ShowMessage( aMessage, aFlags );
+
+    m_type = aType;
 }
 
 
@@ -161,15 +164,6 @@ void WX_INFOBAR::ShowMessage( const wxString& aMessage, int aFlags, MESSAGE_TYPE
     ShowMessage( aMessage, aFlags );
 
     m_type = aType;
-}
-
-
-void WX_INFOBAR::DismissOutdatedSave()
-{
-    if( m_updateLock || m_type != MESSAGE_TYPE::OUTDATED_SAVE )
-        return;
-
-    Dismiss();
 }
 
 

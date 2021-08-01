@@ -847,14 +847,15 @@ void EDA_BASE_FRAME::FinishAUIInitialization()
 }
 
 
-void EDA_BASE_FRAME::ShowInfoBarError( const wxString& aErrorMsg, bool aShowCloseButton )
+void EDA_BASE_FRAME::ShowInfoBarError( const wxString& aErrorMsg, bool aShowCloseButton,
+                                       WX_INFOBAR::MESSAGE_TYPE aType )
 {
     m_infoBar->RemoveAllButtons();
 
     if( aShowCloseButton )
         m_infoBar->AddCloseButton();
 
-    GetInfoBar()->ShowMessageFor( aErrorMsg, 8000, wxICON_ERROR );
+    GetInfoBar()->ShowMessageFor( aErrorMsg, 8000, wxICON_ERROR, aType );
 }
 
 

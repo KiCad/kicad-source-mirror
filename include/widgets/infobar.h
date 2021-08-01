@@ -90,9 +90,13 @@ public:
      */
     enum class MESSAGE_TYPE
     {
-        GENERIC,     /**< GENERIC Are messages that do not have special handling */
-        OUTDATED_SAVE/**< OUTDATED_SAVE Messages that should be cleared on save */
+        GENERIC,          /**< GENERIC Are messages that do not have special handling */
+        OUTDATED_SAVE,    /**< OUTDATED_SAVE Messages that should be cleared on save */
+        DRC_RULES_ERROR,
+        DRC_VIOLATION
     };
+
+    MESSAGE_TYPE GetMessageType() const { return m_type; }
 
     /**
      * Set the time period to show the infobar.
@@ -162,7 +166,8 @@ public:
      * @param aTime is the amount of time in milliseconds to show the infobar
      * @param aFlags is the flag containing the icon to display on the left side of the infobar
      */
-    void ShowMessageFor( const wxString& aMessage, int aTime, int aFlags = wxICON_INFORMATION );
+    void ShowMessageFor( const wxString& aMessage, int aTime, int aFlags = wxICON_INFORMATION,
+                         MESSAGE_TYPE aType = WX_INFOBAR::MESSAGE_TYPE::GENERIC );
 
     /**
      * Show the info bar with the provided message and icon.
@@ -186,12 +191,6 @@ public:
      * (if one is provided).
      */
     void Dismiss() override;
-
-    /**
-     * Dismisses the infobar for outdated save warnings and updates the containing
-     * layout and AUI manager (if one is provided).
-     */
-    void DismissOutdatedSave();
 
     /**
      * Send the infobar an event telling it to show a message.

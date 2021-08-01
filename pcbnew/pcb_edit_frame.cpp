@@ -1612,7 +1612,9 @@ void PCB_EDIT_FRAME::CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVars
     try
     {
         drcTool->GetDRCEngine()->InitEngine( GetDesignRulesPath() );
-        infobar->Hide();
+
+        if( infobar->GetMessageType() == WX_INFOBAR::MESSAGE_TYPE::DRC_RULES_ERROR )
+            infobar->Dismiss();
     }
     catch( PARSE_ERROR& )
     {
@@ -1628,7 +1630,8 @@ void PCB_EDIT_FRAME::CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVars
         infobar->RemoveAllButtons();
         infobar->AddButton( button );
         infobar->AddCloseButton();
-        infobar->ShowMessage( _( "Could not compile custom design rules." ), wxICON_ERROR );
+        infobar->ShowMessage( _( "Could not compile custom design rules." ), wxICON_ERROR,
+                              WX_INFOBAR::MESSAGE_TYPE::DRC_RULES_ERROR );
     }
 
     // Update the environment variables in the Python interpreter

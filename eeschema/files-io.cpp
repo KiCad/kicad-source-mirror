@@ -1023,7 +1023,8 @@ bool SCH_EDIT_FRAME::SaveProject()
 
     UpdateTitle();
 
-    m_infoBar->DismissOutdatedSave();
+    if( m_infoBar->GetMessageType() == WX_INFOBAR::MESSAGE_TYPE::OUTDATED_SAVE )
+        m_infoBar->Dismiss();
 
     return success;
 }

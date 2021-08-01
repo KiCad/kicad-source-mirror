@@ -41,6 +41,7 @@
 #include <kiway_holder.h>
 #include <tool/tools_holder.h>
 #include <widgets/ui_common.h>
+#include <widgets/infobar.h>
 #include <undo_redo_container.h>
 #include <eda_units.h>
 
@@ -78,7 +79,6 @@ class FILE_HISTORY;
 class SETTINGS_MANAGER;
 class SEARCH_STACK;
 class APP_SETTINGS_BASE;
-class WX_INFOBAR;
 struct WINDOW_SETTINGS;
 struct WINDOW_STATE;
 
@@ -242,7 +242,8 @@ public:
      * @param aErrorMsg is the message to display.
      * @param aShowCloseButton true to show a close button on the right of the #WX_INFOBAR.
      */
-    void ShowInfoBarError( const wxString& aErrorMsg, bool aShowCloseButton = false );
+    void ShowInfoBarError( const wxString& aErrorMsg, bool aShowCloseButton = false,
+                           WX_INFOBAR::MESSAGE_TYPE aType = WX_INFOBAR::MESSAGE_TYPE::GENERIC );
 
     /**
      * Show the #WX_INFOBAR displayed on the top of the canvas with a message and an error
