@@ -135,6 +135,9 @@ public:
      */
     int GetDcodesCount();
 
+    /**
+     * Set all parameters to a default value, before reading a file
+     */
     virtual void ResetDefaultValues();
 
     COLOR4D GetPositiveDrawColor() const { return m_PositiveDrawColor; }

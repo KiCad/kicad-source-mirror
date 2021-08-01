@@ -293,6 +293,19 @@ bool GERBVIEW_FRAME::Read_EXCELLON_File( const wxString& aFullFileName )
     return success;
 }
 
+
+void EXCELLON_IMAGE::ResetDefaultValues()
+{
+    GERBER_FILE_IMAGE::ResetDefaultValues();
+    SelectUnits( false );       // Default unit = inch
+
+    // Files using non decimal can use No Trailing zeros or No leading Zeros
+    // Unfortunately, the identifier (INCH,TZ or INCH,LZ for instance) is not
+    // always set in drill files.
+    // The option leading zeros looks like more frequent, so use this default
+    m_NoTrailingZeros = true;
+}
+
 /*
  * Read a EXCELLON file.
  * Gerber classes are used because there is likeness between Gerber files
@@ -305,7 +318,6 @@ bool GERBVIEW_FRAME::Read_EXCELLON_File( const wxString& aFullFileName )
  *   integer 2.4 format in imperial units,
  *   integer 3.2 or 3.3 format (metric units).
  */
-
 bool EXCELLON_IMAGE::LoadFile( const wxString & aFullFileName )
 {
     // Set the default parameter values:
@@ -473,8 +485,7 @@ bool EXCELLON_IMAGE::Execute_HEADER_And_M_Command( char*& text )
         if( *text != ',' )
         {
             // No TZ or LZ specified. Should be a decimal format
-            // but this is not always the case. Use default TZ setting as default
-            m_NoTrailingZeros = false;
+            // but this is not always the case. Use our default setting
             break;
         }
 
