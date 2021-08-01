@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
-"PO-Revision-Date: 2021-07-31 16:25+0000\n"
+"PO-Revision-Date: 2021-08-01 08:06+0000\n"
 "Last-Translator: David Chen <d0123456789g@yahoo.com.tw>\n"
 "Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hant/>\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.7.2-dev\n"
+"X-Generator: Weblate 4.8-dev\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-Basepath: ../../../../../Downloads/kicad-master\n"
@@ -42,7 +42,7 @@ msgstr "可用路徑："
 #: 3d-viewer/3d_cache/dialogs/dialog_select_3d_model_base.cpp:67
 #: common/dialogs/dialog_configure_paths_base.h:72
 msgid "Configure Paths"
-msgstr "配置路徑"
+msgstr "設定路徑"
 
 #: 3d-viewer/3d_cache/dialogs/dialog_select_3d_model_base.h:63
 msgid "Select 3D Model"
@@ -680,7 +680,7 @@ msgstr "一束光線所能在反光的物體上反射的次數"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_raytracing_options_base.cpp:134
 msgid "Lights Configuration"
-msgstr "燈光配置"
+msgstr "燈光設定"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_raytracing_options_base.cpp:139
 msgid "Ambient camera light:"
@@ -1818,7 +1818,7 @@ msgid ""
 "the external environment variable(s) from your system."
 msgstr ""
 "下次啟動 KiCad 時，將支援已定義的\n"
-"任何路徑，並忽略在路徑配置對話方塊\n"
+"任何路徑，並忽略在路徑設定對話方塊\n"
 "中定義的任何設定。如果您不打算執\n"
 "行此行為，請重新命名任何衝突的條目\n"
 "或從系統中刪除外部環境變數。"
@@ -1905,7 +1905,7 @@ msgstr "別名"
 #: common/dialogs/dialog_global_lib_table_config.cpp:39
 #, c-format
 msgid "Configure Global %s Library Table"
-msgstr "配置全域性%s庫表"
+msgstr "設定全域性%s庫表"
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:42
 #, c-format
@@ -1918,7 +1918,7 @@ msgid ""
 msgstr ""
 "KiCad 首次使用新的 %s 庫表來訪問庫。\n"
 "為了讓 KiCad 訪問 %s 庫，\n"
-"您必須配置全域性 %s 庫表。\n"
+"您必須設定全域性 %s 庫表。\n"
 "請從以下選項中選擇一個。\n"
 "如果您不確定要選擇哪個選項，請使用預設選擇。"
 
@@ -1932,7 +1932,7 @@ msgstr "複製預設的全域性%s庫表 (推薦)"
 msgid ""
 "Select this option if you not sure about configuring the global %s library "
 "table"
-msgstr "如果你不確定如何配置全域性%s庫表，請選擇此選項"
+msgstr "如果您不確定如何設定全域性%s庫表格，請選擇此選項"
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:55
 #, c-format
@@ -2039,7 +2039,7 @@ msgstr "選擇檔案"
 
 #: common/dialogs/dialog_global_lib_table_config_base.h:56
 msgid "Configure Global Library Table"
-msgstr "配置全域性庫表"
+msgstr "設定全域性庫表"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:26 common/tool/actions.cpp:461
 msgid "Grid Origin"
@@ -2221,7 +2221,7 @@ msgstr "選擇設定路徑"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:30
 msgid "How would you like to configure KiCad?"
-msgstr "您想如何配置 KiCad？"
+msgstr "您想如何設定 KiCad？"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:34
 msgid "Import settings from a previous version at:"
@@ -2237,7 +2237,7 @@ msgstr "所選路徑不包含有效的 KiCad 設定！"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:63
 msgid "Import library configuration from previous version"
-msgstr "從先前版本匯入庫配置"
+msgstr "從先前版本匯入庫設定"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:65
 msgid ""
@@ -2251,7 +2251,7 @@ msgstr "以預設設定啟動"
 
 #: common/dialogs/dialog_migrate_settings_base.h:67
 msgid "Configure KiCad Settings Path"
-msgstr "配置 KiCad 設定路徑"
+msgstr "設定 KiCad 設定路徑"
 
 #: common/dialogs/dialog_page_settings.cpp:54
 msgid "A5 148x210mm"
@@ -2373,7 +2373,7 @@ msgid ""
 "\"%s\"?"
 msgstr ""
 "圖紙檔名稱已變更。\n"
-"你想使用相對路徑：\n"
+"您想使用相對路徑：\n"
 "\"%s\"\n"
 "而非\n"
 "\"%s\" 嗎？"
@@ -2856,10 +2856,9 @@ msgid ""
 msgstr ""
 "設定畫布的縮放比例。\n"
 "\n"
-"在某些平臺的高 DPI 顯示器上，KiCad 無法確定縮放倍數。\n"
-"在這種情況下，你可能需要將其設定為一個匹配系統 DPI 縮放的數值。2.0 是一個常見"
-"的值。\n"
-"如果這與系統 DPI 縮放不匹配，則畫布將與視窗大小和游標位置不匹配。"
+"在某些平臺的高解析度顯示器上，KiCad 無法確定縮放倍數。\n"
+"在這種情況下，您可能需要將其設定為一個符合系統解析度縮放的數值。2.0 是一個常見的值。\n"
+"如果這與系統解析度縮放不匹配，則畫布將與視窗大小和游標位置不匹配。"
 
 #: common/dialogs/panel_common_settings.cpp:64
 msgid ""
@@ -3480,7 +3479,7 @@ msgstr "預設"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:84
 msgid "Set color to transparent to use Kicad default color."
-msgstr ""
+msgstr "將顏色設定為透明來使用 KiCad 的預設顏色。"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:103
 msgid "Filter Nets"
@@ -3806,7 +3805,7 @@ msgstr "偏好設定"
 #: common/eda_base_frame.cpp:984 common/hotkey_store.cpp:80
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:20
 msgid "Common"
-msgstr "常規"
+msgstr "常態"
 
 #: common/eda_base_frame.cpp:986
 msgid "Mouse and Touchpad"
@@ -3817,11 +3816,9 @@ msgid "Hotkeys"
 msgstr "快速鍵"
 
 #: common/eda_base_frame.cpp:1043
-#, fuzzy, c-format
+#, c-format
 msgid "Insufficient permissions to folder '%s'."
-msgstr ""
-"儲存檔案所需的許可權不足。\n"
-"%s"
+msgstr "存取目錄 %s 時權限不足。"
 
 #: common/eda_base_frame.cpp:1083
 #, c-format
@@ -3833,9 +3830,9 @@ msgid ""
 "made?"
 msgstr ""
 "這可能存在問題！\n"
-"似乎你在上次編輯檔案\n"
+"似乎在您上次編輯檔案時發生了\n"
 "\"%s\"\n"
-"後沒有正確儲存它, 你是否希望恢復上次儲存的修改內容？"
+"沒有正確被儲存，您是否希望還原上次儲存的修改內容？"
 
 #: common/eda_base_frame.cpp:1099
 msgid "The auto save file could not be renamed to the board file name."
@@ -3846,9 +3843,9 @@ msgid "Doc Files"
 msgstr "文件檔案"
 
 #: common/eda_doc.cpp:157
-#, fuzzy, c-format
+#, c-format
 msgid "Doc File '%s' not found"
-msgstr "文件檔案 \"%s\" 沒有找到"
+msgstr "找不到文件檔案 \"%s\""
 
 #: common/eda_doc.cpp:200
 #, fuzzy, c-format
@@ -4420,7 +4417,7 @@ msgstr "別名錯誤（重複名稱）"
 
 #: common/filename_resolver.cpp:610
 msgid "3D configuration directory is unknown"
-msgstr "3D 配置目錄未知"
+msgstr "3D 設定目錄未知"
 
 #: common/filename_resolver.cpp:613 common/filename_resolver.cpp:643
 #: common/filename_resolver.cpp:668
@@ -4429,11 +4426,11 @@ msgstr "寫入 3D 搜尋路徑列表"
 
 #: common/filename_resolver.cpp:640
 msgid "Could not open configuration file"
-msgstr "無法開啟配置檔案"
+msgstr "無法開啟設定檔"
 
 #: common/filename_resolver.cpp:667
 msgid "Problems writing configuration file"
-msgstr "寫入配置檔案時出錯"
+msgstr "寫入設定檔時出錯"
 
 #: common/footprint_info.cpp:99 cvpcb/cvpcb_mainframe.cpp:858
 #: eeschema/symbol_editor/symbol_library_manager.cpp:104
@@ -4660,9 +4657,8 @@ msgstr ""
 "'"
 
 #: common/kiway.cpp:422 common/kiway.cpp:426 common/kiway.cpp:430
-#, fuzzy
 msgid "Error loading editor."
-msgstr "載入編輯器時出錯"
+msgstr "載入編輯器時發生錯誤。"
 
 #: common/kiway.cpp:516
 #, c-format
@@ -5092,14 +5088,12 @@ msgid "Hidden text"
 msgstr "隱藏文字"
 
 #: common/layer_id.cpp:149
-#, fuzzy
 msgid "SMD pads front"
-msgstr "焊盤正面"
+msgstr "SMD 焊墊正面"
 
 #: common/layer_id.cpp:150
-#, fuzzy
 msgid "SMD pads back"
-msgstr "焊盤背面"
+msgstr "SMD 焊墊背面"
 
 #: common/layer_id.cpp:151
 msgid "Through-hole pads"
@@ -5283,17 +5277,17 @@ msgstr "未安裝此語言的 KiCad 語言檔案。"
 msgid ""
 "Missing null byte at end of property list. Imported data might be malformed "
 "or missing."
-msgstr ""
+msgstr "屬性列表的結尾沒有空字元。匯入的資料可能已毀損或遺失。"
 
 #: common/plugins/altium/altium_parser.cpp:243
 #, c-format
 msgid "Unit '%s' does not end with 'mil'."
-msgstr ""
+msgstr "單位 \"%s\" 不是以 \"mil\" 作結尾。"
 
 #: common/plugins/altium/altium_parser.cpp:251
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot convert '%s' to double."
-msgstr "無法移動 '%s' 到垃圾箱。"
+msgstr "無法將 \"%s\" 轉換成 double。"
 
 #: common/plugins/cadstar/cadstar_archive_parser.cpp:2328
 #, c-format
@@ -5349,34 +5343,29 @@ msgid "Invalid Arc with radius %f and angle %f"
 msgstr "半徑為 %f 且角度為 %f 的無效圓弧"
 
 #: common/project.cpp:310 common/project.cpp:315 pcbnew/pcb_base_frame.cpp:156
-#, fuzzy
 msgid "Error loading project footprint library table."
-msgstr "載入工程封裝庫表時出錯"
+msgstr "載入專案封裝庫表時出錯。"
 
 #: common/project/project_archiver.cpp:63
-#, fuzzy
 msgid "Failed to output data."
-msgstr "要更新的欄位:"
+msgstr "輸出資料時發生錯誤。"
 
 #: common/project/project_archiver.cpp:91
-#, fuzzy
 msgid "Could not open archive file."
-msgstr "無法開啟壓縮檔案\n"
+msgstr "無法開啟壓縮檔。"
 
 #: common/project/project_archiver.cpp:100
-#, fuzzy
 msgid "Invalid archive file format."
-msgstr "無效的壓縮檔案格式\n"
+msgstr "無效的壓縮檔格式。"
 
 #: common/project/project_archiver.cpp:111
-#, fuzzy, c-format
+#, c-format
 msgid "Extracting file '%s'."
-msgstr "正在解壓檔案 \"%s\"\n"
+msgstr "正在解壓縮檔案 \"%s\"。"
 
 #: common/project/project_archiver.cpp:151
-#, fuzzy
 msgid "Error extracting file!"
-msgstr "解壓檔案時出錯！\n"
+msgstr "解壓縮檔案時出錯！"
 
 #: common/project/project_archiver.cpp:208 eeschema/dialogs/dialog_erc.cpp:760
 #: eeschema/dialogs/dialog_plot_schematic.cpp:518
@@ -5404,19 +5393,19 @@ msgstr "解壓檔案時出錯！\n"
 #: pcbnew/exporters/gendrill_file_writer_base.cpp:344
 #: pcbnew/exporters/gendrill_gerber_writer.cpp:104
 #: pcbnew/exporters/gerber_jobfile_writer.cpp:152
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to create file '%s'."
-msgstr "建立檔案 \"%s\" 失敗"
+msgstr "建立檔案 \"%s\" 失敗。"
 
 #: common/project/project_archiver.cpp:254
-#, fuzzy, c-format
+#, c-format
 msgid "Archived file '%s'."
-msgstr "壓縮檔案 \"%s\"\n"
+msgstr "壓縮檔案 \"%s\"。"
 
 #: common/project/project_archiver.cpp:264
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to archive file '%s'."
-msgstr "無法備份檔案 \"%s\"。\n"
+msgstr "無法壓縮檔案 \"%s\"。"
 
 #: common/project/project_archiver.cpp:290
 #, fuzzy, c-format
@@ -6025,11 +6014,11 @@ msgstr "根據 PCB 的變化更新原理圖"
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:490
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:389
 msgid "Configure Paths..."
-msgstr "配置路徑..."
+msgstr "設定路徑..."
 
 #: common/tool/actions.cpp:596
 msgid "Edit path configuration environment variables"
-msgstr "編輯路徑環境變數配置"
+msgstr "編輯路徑環境變數設定"
 
 #: common/tool/actions.cpp:601
 msgid "Manage Symbol Libraries..."
@@ -6093,15 +6082,15 @@ msgid "Report Bug"
 msgstr "報告 Bug"
 
 #: common/tool/common_control.cpp:217
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Help file '%s' or\n"
 "'%s' could not be found.\n"
 "Do you want to access the KiCad online help?"
 msgstr ""
-"幫助檔案 \"%s\"或\n"
+"說明檔 \"%s\"或\n"
 "“%s” 無法被找到。\n"
-"你想訪問 KiCad 聯機幫助嗎？"
+"您想存取 KiCad 的線上說明嗎？"
 
 #: common/tool/common_control.cpp:220 common/tool/common_control.cpp:240
 msgid "File Not Found"
@@ -6400,7 +6389,7 @@ msgstr "重置為預設值"
 msgid ""
 "'%s' is already assigned to '%s' in section '%s'. Are you sure you want to "
 "change its assignment?"
-msgstr "\"%s\" 已經指定給 \"%s\" ，在 \"%s\" 部分。你確定修改指定嗎？"
+msgstr "\"%s\" 已經指定給 \"%s\" ，在 \"%s\" 部分。您確定修改指定嗎？"
 
 #: common/widgets/widget_hotkey_list.cpp:425
 msgid "Confirm change"
@@ -6693,10 +6682,10 @@ msgid ""
 "See the \"Footprint Library Table\" section of the CvPcb documentation for "
 "more information."
 msgstr ""
-"你首次使用新的封裝庫表方法執行 CvPcb 查詢封裝。\n"
-"CvPcb 已經複製了預設表或在你的主資料夾中建立了一個空表。\n"
-"你必須先配置庫表，以包含 KiCad 中未包含的所有封裝庫。\n"
-"有關更多資訊。請參閱 CvPcb 文件的“封裝庫表”部分。"
+"您是初次使用 CvPcb 新的封裝庫表格來尋找封裝。\n"
+"CvPcb 可能已經複製了預設表格或在您的家目錄中建立了一個空表格。\n"
+"您必須先設定庫表格，使 KiCad 包含它原先未包含的所有封裝庫。\n"
+"有關更多資訊。請參閱 CvPcb 文件的 \"封裝庫表格\" 章節。"
 
 #: cvpcb/cvpcb.cpp:187
 #, fuzzy
@@ -6789,7 +6778,7 @@ msgstr "在目前的封裝庫表中沒有列出 PCB 封裝庫。"
 
 #: cvpcb/cvpcb_mainframe.cpp:789
 msgid "Configuration Error"
-msgstr "配置錯誤"
+msgstr "設定錯誤"
 
 #: cvpcb/cvpcb_mainframe.cpp:793 pcbnew/footprint_edit_frame.cpp:825
 #: pcbnew/load_select_footprint.cpp:224
@@ -6959,9 +6948,8 @@ msgid ""
 "format? (If you answer no, then these assignments will be cleared and you "
 "will need to re-assign them manually.)"
 msgstr ""
-"一些分配的封裝是沒有庫名的舊條目。你希望 Kicad 試著將它們轉換為新的必需的 "
-"LIB_ID 格式嗎？（如果你回答否，這些分配將被清除，你必須自己手動重新分配它"
-"們。）"
+"一些分配的封裝是沒有庫名的舊條目。您希望 Kicad 試著將它們轉換為新的必需的 LIB_ID "
+"格式嗎？（如果您回答否，這些分配將被清除，您必須自己手動重新分配它們。）"
 
 #: cvpcb/readwrite_dlgs.cpp:148
 #, fuzzy, c-format
@@ -6997,7 +6985,7 @@ msgid ""
 "correctly the next time you import the netlist in Pcbnew."
 msgstr ""
 "\n"
-"如果你希望下次在 Pcbnew 中匯入網表時正確更新它們，則需要手動重新關聯它們。"
+"如果您希望下次在 Pcbnew 中匯入網表時正確更新它們，則需要手動重新關聯它們。"
 
 #: cvpcb/readwrite_dlgs.cpp:299
 msgid "Schematic saved"
@@ -7023,8 +7011,7 @@ msgstr "管理封裝關聯檔案"
 msgid ""
 "Configure footprint association file (.equ) list.  These files are used to "
 "automatically assign footprint names from symbol values."
-msgstr ""
-"配置佔用空間關聯檔案 (.equ) 列表。 這些檔案用於從符號值自動關聯封裝名稱。"
+msgstr "設定佔用空間關聯檔案 (.equ) 列表。 這些檔案用於從符號值自動關聯封裝名稱。"
 
 #: cvpcb/tools/cvpcb_actions.cpp:67
 msgid "Save to Schematic"
@@ -7606,7 +7593,7 @@ msgstr ""
 "\n"
 "XSLT 本身是適合 XML 轉換的 XML 語言。您可以下載並安裝一個名為 `xsltproc` 的免費程式。`xsltproc` 程式可用於讀取中間 "
 "XML 網表輸入檔案，套用樣式表以轉換輸入，並將結果儲存在輸出檔案中。使用 `xsltproc` 需要使用 XSLT 約定的樣式表文件。完整的轉換過程由 "
-"Eeschema 處理，將其配置一次以特定的方式執行 `xsltproc`。\n"
+"Eeschema 處理，將其設定一次以特定的方式執行 `xsltproc`。\n"
 "\n"
 "Python 指令碼更容易建立。\n"
 "\n"
@@ -7614,9 +7601,9 @@ msgstr ""
 "\n"
 "您應透過單擊“新增外掛”按鈕在外掛列表中新增一個新外掛（指令碼）。\n"
 "\n"
-"## 4.1 - 外掛配置引數\n"
+"## 4.1 - 外掛設定引數\n"
 "\n"
-"Eeschema 外掛配置對話方塊需要以下資訊：\n"
+"Eeschema 外掛設定對話方塊需要以下資訊：\n"
 "\n"
 " * 標題：例如，網表格式的名稱。\n"
 " * 用於啟動轉換器的命令列（通常是指令碼）。\n"
@@ -8063,7 +8050,7 @@ msgid ""
 "in Schematic Setup > General > Formatting."
 msgstr ""
 "文字周圍的邊距由文字偏移率控制\n"
-"在 “原理圖設定” > “常規” > “格式” 中。"
+"在 \"原理圖設定\" > 通用 > \"格式\" 中。"
 
 #: eeschema/dialogs/dialog_edit_label_base.cpp:120 eeschema/sch_text.cpp:745
 msgid "Align right"
@@ -9200,7 +9187,7 @@ msgstr "位置偏移："
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:242
 msgid "Margin between the pin name position and the symbol body."
-msgstr ""
+msgstr "引腳名稱位置與符號本體之間的間距。"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:249
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:111
@@ -9234,7 +9221,7 @@ msgstr "單元"
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:212
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:576
 msgid "General"
-msgstr "常規"
+msgstr "通用"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:280
 msgid "Footprint filters:"
@@ -9288,7 +9275,7 @@ msgstr "切換到原理圖編輯器"
 
 #: eeschema/dialogs/dialog_line_wire_bus_properties_base.cpp:80
 msgid "Set color to transparent to use Schematic Editor colors."
-msgstr ""
+msgstr "將顏色設定為透明以使用線路圖編輯器的預設顏色。"
 
 #: eeschema/dialogs/dialog_line_wire_bus_properties_base.h:67
 #, fuzzy
@@ -9401,11 +9388,11 @@ msgstr "此外掛已存在。"
 
 #: eeschema/dialogs/dialog_netlist.cpp:662
 msgid "Error. You must provide a command String"
-msgstr "錯誤。你必須提供一個命令字串"
+msgstr "錯誤。您必須提供一個命令字串"
 
 #: eeschema/dialogs/dialog_netlist.cpp:668
 msgid "Error. You must provide a Title"
-msgstr "錯誤。你必須提供一個標題"
+msgstr "錯誤。您必須提供一個標題"
 
 #: eeschema/dialogs/dialog_netlist.cpp:712
 msgid "Do not forget to choose a title for this netlist control page"
@@ -9463,7 +9450,7 @@ msgid ""
 msgstr ""
 "此引腳不在 %d mils 網格上\n"
 "在原理圖中難以連線\n"
-"你想繼續嗎？"
+"您想繼續嗎？"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:35
 msgid "Pin &name:"
@@ -10230,7 +10217,7 @@ msgstr "按名稱新增訊號："
 
 #: eeschema/dialogs/dialog_sim_settings.cpp:113
 msgid "You need to select DC source"
-msgstr "你需要選擇 DC 源"
+msgstr "您需要選擇 DC 源"
 
 #: eeschema/dialogs/dialog_sim_settings.cpp:217
 msgid "Source 1 and Source 2 must be different"
@@ -10238,15 +10225,13 @@ msgstr "源 1 和源 2 必須不同"
 
 #: eeschema/dialogs/dialog_sim_settings.cpp:281
 msgid "No valid simulation is configured."
-msgstr "沒有配置有效的模擬。"
+msgstr "沒有設定有效的模擬。"
 
 #: eeschema/dialogs/dialog_sim_settings.cpp:284
 msgid ""
 "A valid simulation can be configured by selecting a simulation tab, setting "
 "the simulation parameters and clicking the OK button with the tab selected."
-msgstr ""
-"可以透過選擇模擬選項卡，設定模擬引數並在該選項卡下單擊“確定”按鈕來配置有效的"
-"模擬。"
+msgstr "可以透過選擇模擬選項卡，設定模擬引數並在該選項卡下單擊“確定”按鈕來設定有效的模擬。"
 
 #: eeschema/dialogs/dialog_sim_settings.cpp:288
 msgid "Exit Without Valid Simulation"
@@ -10254,7 +10239,7 @@ msgstr "在無有效模擬的情況下退出"
 
 #: eeschema/dialogs/dialog_sim_settings.cpp:289
 msgid "Configure Valid Simulation"
-msgstr "配置有效模擬"
+msgstr "設定有效的模擬"
 
 #: eeschema/dialogs/dialog_sim_settings.cpp:593
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:146
@@ -10511,7 +10496,7 @@ msgstr "相容模式："
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:450
 msgid "User configuration"
-msgstr "使用者配置"
+msgstr "使用者設定"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:450
 msgid "Spice"
@@ -10586,12 +10571,12 @@ msgstr "對於 JFET，引腳順序為 drain、gate、source"
 #, c-format
 msgid ""
 "You need to specify at least the first %d parameters for the transient source"
-msgstr "你需要指定瞬時源的至少前 %d 個引數"
+msgstr "您需要指定瞬時源的至少前 %d 個引數"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:808
 msgid ""
 "You cannot leave interleaved empty fields when defining a transient source"
-msgstr "定義暫態源時，你不能保留交錯的空欄位"
+msgstr "定義暫態源時，您不能保留交錯的空欄位"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:1025
 msgid "Select library"
@@ -11175,11 +11160,11 @@ msgid "Symbol Properties"
 msgstr "符號屬性"
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:58
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Remapping is not possible because you have insufficient privileges to the "
 "project folder '%s'."
-msgstr "由於你對工程資料夾 \"%s\" 沒有寫入許可權, 因此無法重新對映。"
+msgstr "無法重新對映，因為您沒有足夠的存取權限來存取專案資料夾 \"%s\" 。"
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:67
 msgid ""
@@ -11192,9 +11177,9 @@ msgid ""
 "to skip this step, you will be responsible for manually remapping the "
 "symbols."
 msgstr ""
-"此原理圖目前的使用工程符號庫表查詢載入庫符號的方法。 KiCad 將嘗試對映現有符號以使用新的符號庫表。 重新對映將變更某些專案檔案, "
-"原理圖可能與舊版本的 KiCad 不相容。 如果需要還原任何變更, 則所有變更的檔案都將備份到專案資料夾中的  \"remap_backup \" "
-"資料夾中。 如果選擇跳過此步驟, 你將負責手動重新對映符號。"
+"此原理圖目前的使用專案符號庫表單尋找作為載入庫符號的方法。 KiCad 將嘗試對映現有符號以使用新的符號庫表。 重新對映將變更某些專案檔案、"
+"原理圖可能與舊版本的 KiCad 不相容。   如果需要還原任何變更，所有變更的檔案都將備份到專案資料夾的 \"remap_backup \" 資料夾中。"
+" 如果選擇跳過此步驟，您將負責手動重新對映符號。"
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:210
 #, fuzzy, c-format
@@ -11363,7 +11348,7 @@ msgid ""
 msgstr ""
 "有些項目的顏色與背景相同，\n"
 "在螢幕上它們將無法顯示。\n"
-"你確定要使用這些顏色嗎？"
+"您確定要使用這些顏色嗎？"
 
 #: eeschema/dialogs/panel_eeschema_color_settings.cpp:207
 msgid "(symbol editor only)"
@@ -11909,7 +11894,7 @@ msgstr "將 %d 箇舊格式庫另存為目前的 KiCad 格式（* .kicad_sym）�
 #: pcbnew/dialogs/dialog_export_step.cpp:324
 #, c-format
 msgid "File '%s' already exists. Do you want overwrite this file?"
-msgstr "檔案 \"%s\" 已經存在，你想覆蓋它嗎？"
+msgstr "檔案 \"%s\" 已經存在，您想覆蓋它嗎？"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:778
 msgid "Migrate Library"
@@ -12114,12 +12099,12 @@ msgstr "引腳 %s 同時連線到 %s 和 %s"
 #: eeschema/erc.cpp:706
 #, c-format
 msgid "The current configuration does not include the library '%s'."
-msgstr "目前的配置不包含庫 '%s'。"
+msgstr "目前的設定不包含庫 '%s'。"
 
 #: eeschema/erc.cpp:717
 #, c-format
 msgid "The library '%s' is not enabled in the current configuration."
-msgstr "目前的配置中未啟用庫 '%s'。"
+msgstr "目前的設定中未啟用庫 '%s'。"
 
 #: eeschema/erc_item.cpp:42
 msgid "Conflicts"
@@ -12287,9 +12272,9 @@ msgid "Schematic file '%s' is already open."
 msgstr "電路圖檔案 \"%s\" 已經開啟。"
 
 #: eeschema/files-io.cpp:292
-#, fuzzy, c-format
+#, c-format
 msgid "Schematic '%s' does not exist.  Do you wish to create it?"
-msgstr "原理圖 \"%s\" 不存在。你想建立它嗎？"
+msgstr "原理圖 \"%s\" 不存在。 您想建立它嗎？"
 
 #: eeschema/files-io.cpp:309
 #, fuzzy
@@ -12435,7 +12420,7 @@ msgid ""
 msgstr ""
 "無法建立目錄 '%s'。\n"
 "\n"
-"請確保你有寫入許可權並再次嘗試。"
+"請確保您有寫入權限再重試。"
 
 #: eeschema/files-io.cpp:931
 msgid "Saving will overwrite existing files."
@@ -12467,9 +12452,8 @@ msgid "Schematic '%s' is already open."
 msgstr "原理圖 '%s' 已經開啟。"
 
 #: eeschema/files-io.cpp:1122
-#, fuzzy
 msgid "Importing Schematic"
-msgstr "匯入原理圖"
+msgstr "正在匯入原理圖"
 
 #: eeschema/files-io.cpp:1212
 msgid "The current schematic has been modified.  Save changes?"
@@ -12972,9 +12956,8 @@ msgid "[Unsaved]"
 msgstr "[未儲存]"
 
 #: eeschema/sch_edit_frame.cpp:1287
-#, fuzzy
 msgid "[no schematic loaded]"
-msgstr "儲存原理圖"
+msgstr "[沒有原理圖被載入]"
 
 #: eeschema/sch_edit_frame.cpp:1468
 #, c-format
@@ -13126,7 +13109,7 @@ msgstr "無法開啟檔案 '%s'。"
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:315
 #, c-format
 msgid "Storage file not fully parsed (%d bytes remaining)."
-msgstr ""
+msgstr "檔案尚未完全解析（剩餘%d位元組）。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:487
 #, c-format
@@ -13563,8 +13546,9 @@ msgid "Invalid page type"
 msgstr "過孔直徑無效"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1688
+#, fuzzy
 msgid "Invalid title block comment number"
-msgstr ""
+msgstr "無效的標題區塊註釋號碼"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1787
 #, fuzzy
@@ -14262,7 +14246,7 @@ msgid ""
 msgstr "引用其他庫的重複庫名稱存在於目前的庫表中。 無法解決此衝突,並可能導致原理圖的符號庫連結斷開。 是否要繼續？"
 
 #: eeschema/sheet.cpp:561
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The file name '%s' can cause issues with an existing file name\n"
 "already defined in the schematic on systems that support case\n"
@@ -14274,11 +14258,11 @@ msgid ""
 msgstr ""
 "在支援不區分大小寫的檔名的系統上，\n"
 "檔名 \"%s\" 可能會導致原理圖中已定義\n"
-"的現有檔名出現問題。如果將此工程\n"
-"複製到支援不區分大小寫的檔名的作業系統，\n"
-"這將導致問題。\n"
+"的現有檔名出現問題。如果將此專案\n"
+"複製到支援不區分大小寫檔名的作業系統，\n"
+"將出現問題。\n"
 "\n"
-"你想繼續嗎？"
+"您想繼續嗎？"
 
 #: eeschema/sheet.cpp:570
 msgid "Do not show this message again."
@@ -14722,8 +14706,8 @@ msgid ""
 "The current configuration does not include the library '%s'.\n"
 "Use Manage Symbol Libraries to edit the configuration."
 msgstr ""
-"目前的配置不包括符號庫'%s'。\n"
-"使用管理符號庫來編輯配置。"
+"目前的設定不包括符號庫'%s'。\n"
+"使用管理符號庫來編輯設定。"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1184
 #: eeschema/symbol_viewer_frame.cpp:396
@@ -14737,8 +14721,8 @@ msgid ""
 "The library '%s' is not enabled in the current configuration.\n"
 "Use Manage Symbol Libraries to edit the configuration."
 msgstr ""
-"目前的配置未啟用庫 '%s'。\n"
-"使用管理符號庫來編輯配置。"
+"目前的設定未啟用庫 '%s'。\n"
+"使用管理符號庫來編輯設定。"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1195
 #: eeschema/symbol_viewer_frame.cpp:403
@@ -14861,7 +14845,7 @@ msgstr "符號庫'%s'不可寫入。"
 #: eeschema/symbol_editor/symbol_editor.cpp:549
 #: eeschema/symbol_editor/symbol_editor.cpp:1142
 msgid "You must save to a different location."
-msgstr "你必須儲存到一個不同位置。"
+msgstr "您必須儲存到一個不同位置。"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:601 include/lib_table_grid.h:183
 #: pcbnew/footprint_libraries_utils.cpp:951
@@ -14903,6 +14887,8 @@ msgid ""
 "The symbol '%s' has been modified.\n"
 "Do you want to remove it from the library?"
 msgstr ""
+"符號 \"%s\" 已被變更。\n"
+"是否要從庫中移除此符號？"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:743
 #, fuzzy, c-format
@@ -16588,8 +16574,9 @@ msgid "Drawing Mode"
 msgstr "繪圖模式"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:40
+#, fuzzy
 msgid "Sketch flashed items"
-msgstr "專案快速草圖"
+msgstr "快速草圖的項目"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:43
 msgid "Sketch lines"
@@ -16987,7 +16974,7 @@ msgid ""
 "Therefore the size of some items is undefined"
 msgstr ""
 "警告：此檔案沒有 D 程式碼定義\n"
-"因此，某些項目的大小未定義"
+"因此，某些項目的大小未被定義"
 
 #: gerbview/readgerb.cpp:91
 msgid ""
@@ -16995,7 +16982,7 @@ msgid ""
 "Therefore the size of some items is undefined"
 msgstr ""
 "警告：此檔案缺少一些 D 程式碼定義\n"
-"因此，某些專案的大小未定義"
+"因此，某些項目的大小未定義"
 
 #: gerbview/rs274d.cpp:643
 msgid "Invalid Gerber file: missing G74 or G75 arc command"
@@ -17021,11 +17008,11 @@ msgstr "RS274X: GerbView 命令 KNOCKOUT 被忽略"
 
 #: gerbview/toolbars_gerber.cpp:126
 msgid "Highlight items belonging to this component"
-msgstr "強調顯示屬於此元件的專案"
+msgstr "強調顯示屬於此元件的項目"
 
 #: gerbview/toolbars_gerber.cpp:140
 msgid "Highlight items belonging to this net"
-msgstr "強調顯示屬於此網路的專案"
+msgstr "強調顯示屬於此網路的項目"
 
 #: gerbview/toolbars_gerber.cpp:152 gerbview/toolbars_gerber.cpp:155
 msgid "Attr:"
@@ -17167,8 +17154,9 @@ msgid "Show lines in outline mode"
 msgstr "在輪廓模式下顯示線"
 
 #: gerbview/tools/gerbview_actions.cpp:150
+#, fuzzy
 msgid "Sketch Flashed Items"
-msgstr "專案快速草圖"
+msgstr "快速草圖項目"
 
 #: gerbview/tools/gerbview_actions.cpp:150
 msgid "Show flashed items in outline mode"
@@ -17672,7 +17660,7 @@ msgid ""
 "Do you want to continue ?"
 msgstr ""
 "變更副檔名可能會導致檔案無法存取。\n"
-"你確定要變更嗎?"
+"您確定要變更嗎?"
 
 #: kicad/project_tree_item.cpp:112
 msgid "Rename File"
@@ -17904,9 +17892,9 @@ msgid ""
 "\n"
 "Do you want to continue?"
 msgstr ""
-"所選的不是空目錄。 建議在空目錄中建立專案。\n"
+"選取的目錄不是空的。 建議在空目錄中建立專案。\n"
 "\n"
-"你想繼續嗎？"
+"您想繼續嗎？"
 
 #: kicad/tools/kicad_manager_control.cpp:156
 msgid "System Templates"
@@ -17958,7 +17946,7 @@ msgid "Save Project To"
 msgstr "將工程儲存到"
 
 #: kicad/tools/kicad_manager_control.cpp:538
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Folder '%s' could not be created.\n"
 "\n"
@@ -17966,7 +17954,7 @@ msgid ""
 msgstr ""
 "無法建立目錄 '%s'。\n"
 "\n"
-"請確保你有寫入許可權並再次嘗試。"
+"請確保您有寫入權限再重試。"
 
 #: kicad/tools/kicad_manager_control.cpp:549
 msgid "Error!"
@@ -18251,7 +18239,7 @@ msgstr "下："
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:572
 #: pcbnew/dialogs/dialog_plot_base.cpp:68
 msgid "General Options"
-msgstr "常規選項"
+msgstr "通用選項"
 
 #: pagelayout_editor/files.cpp:55
 msgid "Drawing Sheet File"
@@ -19464,7 +19452,7 @@ msgstr "選擇 PCB 計算器資料檔案"
 
 #: pcb_calculator/regulators_funct.cpp:147
 msgid "Do you want to load this file and replace current regulator list?"
-msgstr "你要載入該檔案，並替換穩流器列表嗎？"
+msgstr "您確定要載入檔案並取代目前的穩壓器列表嗎？"
 
 #: pcb_calculator/regulators_funct.cpp:162
 #, fuzzy, c-format
@@ -19510,15 +19498,13 @@ msgid ""
 "__W,H__ = width and thickness in mils  \n"
 "__K__ = 0.024 for internal traces or 0.048 for external traces\n"
 msgstr ""
-"如果你指定最大電流，則會計算相應的佈線寬度。\n"
+"如果您指定最大電流，則會計算相應的佈線寬度。\n"
 "\n"
-"如果你指定其中一個佈線寬度，則將計算它可以處理的最大電流。然後將計算另外的同"
-"樣處理此電流的佈線寬度。\n"
+"如果您指定其中一個佈線寬度，則將計算它可以處理的最大電流。然後將計算另外的同樣處理此電流的佈線寬度。\n"
 "\n"
 "控制值以粗體顯示。\n"
 "\n"
-"計算適用於最大 35A（外部）或 17.5A（內部）的電流、最多 100 攝氏度的氣溫上升和"
-"最多 400mil（10mm）的寬度。\n"
+"計算適用於最大 35A（外部）或 17.5A（內部）的電流、最多 100 攝氏度的氣溫上升和最多 400mil（10mm）的寬度。\n"
 "\n"
 "來自 IPC 2221的該公式，為\n"
 "<center>__I = K * dT<sup>0.44</sup> * (W*H)<sup>0.725</sup>__</center>\n"
@@ -20109,7 +20095,7 @@ msgstr "寬度和厚度 (單位：mil)"
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:178
 #, c-format
 msgid "Enter expected board thickness in %s (min value %s)"
-msgstr ""
+msgstr "請輸入期望的板子厚度（單位 %s，最小值 %s ）"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:182
 #, fuzzy
@@ -20119,7 +20105,7 @@ msgstr "根据电路板厚度更新介质厚度"
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:193
 #, c-format
 msgid "Too small value (min value %s %s). Aborted"
-msgstr ""
+msgstr "數值太小了（最小值為 %s %s ）。放棄修改"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:213
 #, fuzzy
@@ -22518,7 +22504,7 @@ msgid ""
 "Enter a filename if you do not want to use default file names\n"
 "Can be used only when printing the current sheet"
 msgstr ""
-"如果你不想使用預設檔名,請輸入新的檔名\n"
+"如果您不想使用預設檔名，請輸入新的檔名\n"
 "僅限目前的圖框列印"
 
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:63
@@ -22571,7 +22557,7 @@ msgstr "匯出 SVG 檔案"
 
 #: pcbnew/dialogs/dialog_export_vrml.cpp:179
 msgid "Are you sure you want to overwrite the existing file?"
-msgstr "你確定要覆蓋現有的檔案嗎？"
+msgstr "您確定要覆蓋現有的檔案嗎？"
 
 #: pcbnew/dialogs/dialog_export_vrml.cpp:254
 #: pcbnew/plugins/altium/altium_pcb.cpp:1283
@@ -26555,6 +26541,7 @@ msgid ""
 "absolute minimum and cannot be reduced by custom rules or other settings. "
 "(Note: does not apply to milled holes.)"
 msgstr ""
+"兩鑽孔之間的最小間隙。   此欄位將被視為絕對的最小值，並且無法透過其他規則或設定來降低此最小值。  (註：此選項不適用於 milled holes。)"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:354
 msgid "uVias"
@@ -26568,17 +26555,17 @@ msgstr "最小微孔外徑："
 msgid ""
 "The minimum diameter for micro-vias.  If set, this is an absolute minimum "
 "and cannot be reduced by netclasses, custom rules, or other settings."
-msgstr ""
+msgstr "微孔的最小直徑。   此欄位將被視為絕對的最小值，並且無法透過其他網路類別，自訂規則，或其它設定來降低此最小值。"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:386
 msgid "Minimum uVia hole:"
-msgstr "最小 U 形導通孔："
+msgstr "最小微過孔："
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:391
 msgid ""
 "The minimum micro-via hole size.  If set, this is an absolute minimum and "
 "cannot be reduced by netclasses, custom rules, or other settings."
-msgstr ""
+msgstr "微孔的最小大小。   此欄位將被視為絕對的最小值，並且無法透過其他網路類別，自訂規則，或其它設定來降低此最小值。"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:411
 msgid "Silkscreen"
@@ -26623,8 +26610,8 @@ msgid ""
 "items from removed layers and cannot be undone.\n"
 "Do you wish to continue?"
 msgstr ""
-"在移除的圖層上找到了專案。 該作業將刪除已移除圖層中的所有專案，並且無法復原。 \n"
-"你想繼續嗎？"
+"在移除的圖層上找到了項目。 該作業將刪除已移除圖層中的所有項目，並且無法復原。 \n"
+"您想繼續嗎？"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:653
 msgid "Layer must have a name."
@@ -28663,10 +28650,8 @@ msgid ""
 "This may result in different fills from previous KiCad versions which used "
 "the line thicknesses of the board boundary on the Edge Cuts layer."
 msgstr ""
-"如果此電路板上的覆銅被重新填充，將應用銅邊緣間隙設定 （見電路板配置 > 設計規"
-"則 >限制）。\n"
-"這可能導致來自先前 KiCad 版本的不同填充，這些版本會將電路板邊緣的線粗細用於 "
-"Edge Cuts 層。"
+"如果此電路板上的覆銅被重新填充，將應用銅邊緣間隙設定 （見電路板設定 > 設計規則 >限制）。\n"
+"這可能導致來自先前 KiCad 版本的不同填充，這些版本會將電路板邊緣的線粗細用於 Edge Cuts 層。"
 
 #: pcbnew/files.cpp:547
 msgid "Edge Clearance Warning"
@@ -28684,7 +28669,7 @@ msgstr "目前的 PCB 已被修改。是否儲存變更？"
 #: pcbnew/files.cpp:604
 #, c-format
 msgid "PCB '%s' does not exist. Do you wish to create it?"
-msgstr "PCB '%s' 不存在，你想建立它嗎？"
+msgstr "PCB '%s' 不存在，您想建立它嗎？"
 
 #: pcbnew/files.cpp:613
 msgid "Creating PCB"
@@ -28894,8 +28879,8 @@ msgid ""
 "The current configuration does not include a library named '%s'.\n"
 "Use Manage Footprint Libraries to edit the configuration."
 msgstr ""
-"目前的配置不包含名為 '%s'的庫。\n"
-"使用管理封裝庫來編輯配置。"
+"目前的設定不包含名為 '%s'的庫。\n"
+"使用管理封裝庫來編輯設定。"
 
 #: pcbnew/footprint_editor_utils.cpp:285
 msgid "Library not found in footprint library table."
@@ -28907,8 +28892,8 @@ msgid ""
 "The library '%s' is not enabled in the current configuration.\n"
 "Use Manage Footprint Libraries to edit the configuration."
 msgstr ""
-"庫 '%s'在目前的配置中未被啟用。\n"
-"使用管理封裝庫來編輯配置。"
+"庫 '%s'在目前的設定中未被啟用。\n"
+"使用管理封裝庫來編輯設定。"
 
 #: pcbnew/footprint_editor_utils.cpp:296 pcbnew/footprint_viewer_frame.cpp:917
 msgid "Footprint library not enabled."
@@ -28933,8 +28918,8 @@ msgid ""
 msgstr ""
 "不允許寫入或修改舊版庫 (.mod 檔案) \n"
 "請將目前的庫儲存為新的 .pretty 格式\n"
-"並更新你的封裝庫列表\n"
-".pretty 庫資料夾恢復你的封裝(.kicad_mod 檔案)"
+"並更新您的封裝庫列表\n"
+"還原您的封裝 (.kicad_mod 檔案) 至 .pretty 庫資料夾中"
 
 #: pcbnew/footprint_libraries_utils.cpp:64
 msgid ""
@@ -28945,7 +28930,7 @@ msgid ""
 msgstr ""
 "不允許修改舊版庫(.mod 檔案)\n"
 "請根據新的 .pretty 格式儲存目前的庫\n"
-"並更新你的封裝庫列表\n"
+"並更新您的封裝庫列表\n"
 "然後刪除之前的封裝"
 
 #: pcbnew/footprint_libraries_utils.cpp:85
@@ -29085,7 +29070,7 @@ msgstr ""
 msgid ""
 "The current configuration does not include library '%s'.  Use Manage "
 "Footprint Libraries to edit the configuration."
-msgstr "目前的配置不包含庫 '%s'。使用管理封裝庫來編輯配置來編輯配置。"
+msgstr "目前的設定不包含庫 '%s'。使用管理封裝庫來編輯設定來編輯設定。"
 
 #: pcbnew/footprint_viewer_frame.cpp:910
 msgid "Footprint library not found."
@@ -29096,7 +29081,7 @@ msgstr "封裝庫沒有找到。"
 msgid ""
 "Library '%s' is not enabled in the current configuration.  Use Manage "
 "Footprint Libraries to edit the configuration."
-msgstr "庫 '%s' 在目前的配置中未被啟用。使用管理封裝庫來編輯配置。"
+msgstr "庫 '%s' 在目前的設定中未被啟用。使用管理封裝庫來編輯設定。"
 
 #: pcbnew/footprint_wizard_frame.cpp:81
 #: pcbnew/footprint_wizard_frame_functions.cpp:85
@@ -30159,8 +30144,7 @@ msgid ""
 "order to create or update PCBs from schematics, you must launch the KiCad "
 "project manager and create a project."
 msgstr ""
-"無法更新 PCB, 因為 PCB 編輯器是在獨立模式下開啟的。為了從原理圖建立或更新 "
-"PCB, 你必須啟動 KiCad 工程管理器並建立一個工程。"
+"無法更新 PCB ，因為 PCB 編輯器是在獨立模式下開啟的。為了從原理圖建立或更新 PCB，您必須啟動 KiCad 專案管理器並建立一個專案。"
 
 #: pcbnew/pcb_edit_frame.cpp:1414
 msgid "Eeschema netlist"
@@ -31388,7 +31372,7 @@ msgid ""
 "rescue them to the User.Comments layer?"
 msgstr ""
 "在未定義的圖層上找到的專案。 \n"
-"你想把他們恢復到使用者註釋層嗎？"
+"您想把他們還原到使用者註釋層嗎？"
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:842
 msgid "Undefined layers:"
@@ -31696,7 +31680,7 @@ msgstr "無法找到互補差分對網路。請確保屬於差分對網路的名
 msgid ""
 "Can't find a suitable starting point.  If starting from an existing "
 "differential pair make sure you are at the end."
-msgstr "找不到合適的起點。 如果從現有差分對開始，請確保你在終點。"
+msgstr "找不到合適的起點。 如果從現有差動對開始請確定您在終點。"
 
 #: pcbnew/router/pns_diff_pair_placer.cpp:546
 #, c-format
@@ -34912,7 +34896,7 @@ msgstr "展示網檢查器"
 
 #: pcbnew/widgets/appearance_controls_base.cpp:128
 msgid "Configure net classes"
-msgstr "配置網路類"
+msgstr "設定網路類別"
 
 #: pcbnew/widgets/appearance_controls_base.cpp:169
 msgid "Presets:"
