@@ -14,7 +14,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
 "PO-Revision-Date: 2021-08-01 06:19+0000\n"
-"Last-Translator: Eric <spice2wolf@gmail.com>\n"
+"Last-Translator: David Chen <d0123456789g@yahoo.com.tw>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -18171,7 +18171,7 @@ msgstr "右:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:529
 msgid "Top:"
-msgstr "頂："
+msgstr "上："
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:543
 msgid "Bottom:"
