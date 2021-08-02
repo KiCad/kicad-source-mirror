@@ -21,6 +21,7 @@
 #include <3d_enums.h>
 #include <common_ogl/ogl_attr_list.h>
 #include <settings/parameters.h>
+#include <settings/json_settings_internals.h>
 #include <wx/config.h>
 
 #include "eda_3d_viewer_settings.h"
@@ -28,7 +29,7 @@
 using KIGFX::COLOR4D;
 
 ///! Update the schema version whenever a migration is required
-const int viewer3dSchemaVersion = 0;
+const int viewer3dSchemaVersion = 1;
 
 
 EDA_3D_VIEWER_SETTINGS::EDA_3D_VIEWER_SETTINGS()
@@ -169,7 +170,8 @@ EDA_3D_VIEWER_SETTINGS::EDA_3D_VIEWER_SETTINGS()
                                             &m_Render.show_board_body, true ) );
     m_params.emplace_back( new PARAM<bool>( "render.show_comments",
                                             &m_Render.show_comments, true ) );
-    m_params.emplace_back( new PARAM<bool>( "render.show_eco", &m_Render.show_eco, true ) );
+    m_params.emplace_back( new PARAM<bool>( "render.show_eco",
+                                            &m_Render.show_eco, true ) );
     m_params.emplace_back( new PARAM<bool>( "render.show_footprints_insert",
                                             &m_Render.show_footprints_insert, true ) );
     m_params.emplace_back( new PARAM<bool>( "render.show_footprints_normal",
@@ -199,7 +201,27 @@ EDA_3D_VIEWER_SETTINGS::EDA_3D_VIEWER_SETTINGS()
     m_params.emplace_back( new PARAM<int>( "camera.projection_mode",
                                            &m_Camera.projection_mode, 1 ) );
 
-    m_params.emplace_back( new PARAM_OBSOLETE( "colors" ) );
+    registerMigration( 0, 1, std::bind( &EDA_3D_VIEWER_SETTINGS::migrateSchema0to1, this ) );
+}
+
+
+bool EDA_3D_VIEWER_SETTINGS::migrateSchema0to1()
+{
+    /**
+     * Schema version 0 to 1:
+     *
+     * delete colors (they're now stored in the 'user' color theme.
+     */
+    try
+    {
+        if( m_internals->contains( "colors" ) )
+            m_internals->erase( "colors" );
+    }
+    catch( ... )
+    {
+    }
+
+    return true;
 }
 
 

@@ -106,8 +106,10 @@ public:
     CAMERA_SETTINGS m_Camera;
 
 protected:
-
     virtual std::string getLegacyFrameName() const override { return "Viewer3DFrameName"; }
+
+private:
+    bool migrateSchema0to1();
 };
 
 

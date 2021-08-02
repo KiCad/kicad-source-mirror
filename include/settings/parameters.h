@@ -157,30 +157,6 @@ protected:
 };
 
 /**
- * Handles an obsolete parameter (ie: removes it on write).
- */
-class PARAM_OBSOLETE : public PARAM_BASE
-{
-public:
-    PARAM_OBSOLETE( const std::string& aJsonPath ) :
-            PARAM_BASE( aJsonPath, false )
-    { }
-
-    void Load( JSON_SETTINGS* aSettings, bool aResetIfMissing = true ) const override
-    { }
-
-    void Store( JSON_SETTINGS* aSettings ) const override;
-
-    void SetDefault() override
-    { }
-
-    bool MatchesFile( JSON_SETTINGS* aSettings ) const override
-    {
-        return !aSettings->Contains( m_path );
-    }
-};
-
-/**
  * Stores a path as a string with directory separators normalized to unix-style
  */
 class PARAM_PATH : public PARAM<wxString>
