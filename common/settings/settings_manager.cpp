@@ -181,16 +181,23 @@ COLOR_SETTINGS* SETTINGS_MANAGER::GetColorSettings( const wxString& aName )
     if( m_color_settings.count( aName ) )
         return m_color_settings.at( aName );
 
-    COLOR_SETTINGS* ret = nullptr;
-
     if( !aName.empty() )
-        ret = loadColorSettingsByName( aName );
+    {
+        COLOR_SETTINGS* ret = loadColorSettingsByName( aName );
+
+        if( !ret )
+        {
+            ret = registerColorSettings( aName );
+            *ret = *m_color_settings.at( "_builtin_default" );
+            ret->SetFilename( wxT( "user" ) );
+            ret->SetReadOnly( false );
+        }
+
+        return ret;
+    }
 
     // This had better work
-    if( !ret )
-        ret = m_color_settings.at( "_builtin_default" );
-
-    return ret;
+    return m_color_settings.at( "_builtin_default" );
 }
 
 
@@ -206,8 +213,7 @@ COLOR_SETTINGS* SETTINGS_MANAGER::loadColorSettingsByName( const wxString& aName
         return nullptr;
     }
 
-    auto cs = static_cast<COLOR_SETTINGS*>(
-            RegisterSettings( new COLOR_SETTINGS( aName.ToStdString() ) ) );
+    auto cs = static_cast<COLOR_SETTINGS*>( RegisterSettings( new COLOR_SETTINGS( aName ) ) );
 
     if( cs->GetFilename() != aName.ToStdString() )
         wxLogTrace( traceSettings, "Warning: stored filename is actually %s, ", cs->GetFilename() );
@@ -248,25 +254,24 @@ public:
 };
 
 
-void SETTINGS_MANAGER::registerColorSettings( const wxString& aFilename )
+COLOR_SETTINGS* SETTINGS_MANAGER::registerColorSettings( const wxString& aName )
 {
-    if( m_color_settings.count( aFilename ) )
-        return;
+    if( !m_color_settings.count( aName ) )
+    {
+        auto cs = static_cast<COLOR_SETTINGS*>( RegisterSettings( new COLOR_SETTINGS( aName ) ) );
+        m_color_settings[aName] = cs;
+    }
 
-    m_color_settings[aFilename] = static_cast<COLOR_SETTINGS*>(
-            RegisterSettings( new COLOR_SETTINGS( aFilename ) ) );
+    return m_color_settings.at( aName );
 }
 
 
-COLOR_SETTINGS* SETTINGS_MANAGER::AddNewColorSettings( const wxString& aFilename )
+COLOR_SETTINGS* SETTINGS_MANAGER::AddNewColorSettings( const wxString& aName )
 {
-    wxString filename = aFilename;
-
-    if( filename.EndsWith( wxT( ".json" ) ) )
-        filename = filename.BeforeLast( '.' );
-
-    registerColorSettings( filename );
-    return m_color_settings[filename];
+    if( aName.EndsWith( wxT( ".json" ) ) )
+        return registerColorSettings( aName.BeforeLast( '.' ) );
+    else
+        return registerColorSettings( aName );
 }
 
 
@@ -274,9 +279,9 @@ COLOR_SETTINGS* SETTINGS_MANAGER::GetMigratedColorSettings()
 {
     if( !m_color_settings.count( "user" ) )
     {
-        registerColorSettings( wxT( "user" ) );
-        m_color_settings.at( "user" )->SetName( wxT( "User" ) );
-        Save( m_color_settings.at( "user" ) );
+        COLOR_SETTINGS* settings = registerColorSettings( wxT( "user" ) );
+        settings->SetName( wxT( "User" ) );
+        Save( settings );
     }
 
     return m_color_settings.at( "user" );

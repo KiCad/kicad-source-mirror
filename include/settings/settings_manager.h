@@ -380,7 +380,7 @@ private:
      */
     COLOR_SETTINGS* loadColorSettingsByName( const wxString& aName );
 
-    void registerColorSettings( const wxString& aFilename );
+    COLOR_SETTINGS* registerColorSettings( const wxString& aFilename );
 
     void loadAllColorSettings();
 
