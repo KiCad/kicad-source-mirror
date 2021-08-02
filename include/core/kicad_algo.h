@@ -26,9 +26,9 @@
 #define INCLUDE_CORE_KICAD_ALGO_H_
 
 #include <algorithm>
-#include <assert.h>
 #include <functional> // std::function
 #include <utility>    // std::pair
+#include <wx/debug.h> // wxCHECK_MSG
 
 namespace alg
 {
@@ -127,10 +127,7 @@ bool pair_contains( const std::pair<_Type, _Type> __pair, _Value __value )
 template <class T>
 bool within_wrapped_range( T __val, T __minval, T __maxval, T __wrap )
 {
-    assert( __wrap > 0 );  // Wrap must be positive!
-
-    if( __wrap <= 0 )
-        return false;
+    wxCHECK_MSG( __wrap > 0, false, "Wrap must be positive!" );
 
     while( __maxval >= __wrap )
         __maxval -= __wrap;
