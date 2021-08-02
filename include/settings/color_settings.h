@@ -151,11 +151,6 @@ public:
         ( *m_map )[ m_key ] = m_default;
     }
 
-    bool IsDefault() const override
-    {
-        return ( *m_map )[ m_key ] == m_default;
-    }
-
     bool MatchesFile( JSON_SETTINGS* aSettings ) const override
     {
         if( OPT<COLOR4D> optval = aSettings->Get<COLOR4D>( m_path ) )

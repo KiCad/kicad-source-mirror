@@ -61,7 +61,8 @@ public:
     friend class NESTED_SETTINGS;
 
     JSON_SETTINGS( const wxString& aFilename, SETTINGS_LOC aLocation, int aSchemaVersion ) :
-            JSON_SETTINGS( aFilename, aLocation, aSchemaVersion, true, true, true ) {}
+            JSON_SETTINGS( aFilename, aLocation, aSchemaVersion, true, true, true )
+    {}
 
     JSON_SETTINGS( const wxString& aFilename, SETTINGS_LOC aLocation, int aSchemaVersion,
                    bool aCreateIfMissing, bool aCreateIfDefault, bool aWriteFile );
@@ -122,13 +123,6 @@ c     * @return true if the file was saved
      * Resets all parameters to default values.  Does NOT write to file or update underlying JSON.
      */
     void ResetToDefaults();
-
-    /**
-     * Checks if the current state of a parameter matches its default value
-     * @param aParamName is the JSON path to the parameter
-     * @return true if the given parameter is at its default value
-     */
-    bool IsDefault( const std::string& aParamName );
 
     /**
      * Fetches a JSON object that is a subset of this JSON_SETTINGS object, using a path of the

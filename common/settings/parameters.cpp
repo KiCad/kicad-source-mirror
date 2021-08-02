@@ -25,6 +25,13 @@
 #include <gal/color4d.h>
 #include <project/project_file.h>
 #include <settings/parameters.h>
+#include <settings/json_settings_internals.h>
+
+
+void PARAM_OBSOLETE::Store( JSON_SETTINGS* aSettings ) const
+{
+    aSettings->Internals()->erase( m_path );
+}
 
 
 template <typename ValueType>

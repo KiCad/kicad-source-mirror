@@ -198,6 +198,8 @@ EDA_3D_VIEWER_SETTINGS::EDA_3D_VIEWER_SETTINGS()
                                               &m_Camera.rotation_increment, 10.0 ) );
     m_params.emplace_back( new PARAM<int>( "camera.projection_mode",
                                            &m_Camera.projection_mode, 1 ) );
+
+    m_params.emplace_back( new PARAM_OBSOLETE( "colors" ) );
 }
 
 

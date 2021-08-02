@@ -55,12 +55,6 @@ public:
     virtual void SetDefault() = 0;
 
     /**
-     * Checks whether or not this param has been changed from its default value
-     * @return true if the parameter in memory matches its default value
-     */
-    virtual bool IsDefault() const = 0;
-
-    /**
      * Checks whether the parameter in memory matches the one in a given JSON file
      * @param aSettings is a JSON_SETTINGS to check the JSON file contents of
      * @return true if the parameter in memory matches its value in the file
@@ -144,11 +138,6 @@ public:
         *m_ptr = m_default;
     }
 
-    bool IsDefault() const override
-    {
-        return *m_ptr == m_default;
-    }
-
     bool MatchesFile( JSON_SETTINGS* aSettings ) const override
     {
         if( OPT<ValueType> optval = aSettings->Get<ValueType>( m_path ) )
@@ -165,6 +154,30 @@ private:
 protected:
     ValueType* m_ptr;
     ValueType m_default;
+};
+
+/**
+ * Handles an obsolete parameter (ie: removes it on write).
+ */
+class PARAM_OBSOLETE : public PARAM_BASE
+{
+public:
+    PARAM_OBSOLETE( const std::string& aJsonPath ) :
+            PARAM_BASE( aJsonPath, false )
+    { }
+
+    void Load( JSON_SETTINGS* aSettings, bool aResetIfMissing = true ) const override
+    { }
+
+    void Store( JSON_SETTINGS* aSettings ) const override;
+
+    void SetDefault() override
+    { }
+
+    bool MatchesFile( JSON_SETTINGS* aSettings ) const override
+    {
+        return !aSettings->Contains( m_path );
+    }
 };
 
 /**
@@ -268,11 +281,6 @@ public:
         *m_ptr = m_default;
     }
 
-    bool IsDefault() const override
-    {
-        return *m_ptr == m_default;
-    }
-
     bool MatchesFile( JSON_SETTINGS* aSettings ) const override
     {
         if( OPT<int> val = aSettings->Get<int>( m_path ) )
@@ -326,11 +334,6 @@ public:
     void SetDefault() override
     {
         m_setter( m_default );
-    }
-
-    bool IsDefault() const override
-    {
-        return m_getter() == m_default;
     }
 
     bool MatchesFile( JSON_SETTINGS* aSettings ) const override;
@@ -414,11 +417,6 @@ public:
         *m_ptr = m_default;
     }
 
-    bool IsDefault() const override
-    {
-        return *m_ptr == m_default;
-    }
-
     bool MatchesFile( JSON_SETTINGS* aSettings ) const override
     {
         if( OPT<double> optval = aSettings->Get<double>( m_path ) )
@@ -461,11 +459,6 @@ public:
     void SetDefault() override
     {
         *m_ptr = m_default;
-    }
-
-    bool IsDefault() const override
-    {
-        return *m_ptr == m_default;
     }
 
     bool MatchesFile( JSON_SETTINGS* aSettings ) const override;
@@ -559,11 +552,6 @@ public:
         *m_ptr = m_default;
     }
 
-    bool IsDefault() const override
-    {
-        return *m_ptr == m_default;
-    }
-
     bool MatchesFile( JSON_SETTINGS* aSettings ) const override;
 
 private:
@@ -594,11 +582,6 @@ public:
     virtual void SetDefault() override
     {
         *m_ptr = m_default;
-    }
-
-    bool IsDefault() const override
-    {
-        return *m_ptr == m_default;
     }
 
     bool MatchesFile( JSON_SETTINGS* aSettings ) const override;
