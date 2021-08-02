@@ -1,4 +1,4 @@
-(kicad_pcb (version 20201220) (generator pcbnew)
+(kicad_pcb (version 20210722) (generator pcbnew)
 
   (general
     (thickness 1.6)
@@ -51,6 +51,7 @@
       (copper_finish "None")
       (dielectric_constraints no)
     )
+    (pad_to_mask_clearance 0)
     (pcbplotparams
       (layerselection 0x00010fc_ffffffff)
       (disableapertmacros false)
@@ -68,6 +69,9 @@
       (hpglpennumber 1)
       (hpglpenspeed 20)
       (hpglpendiameter 15.000000)
+      (dxfpolygonmode true)
+      (dxfimperialunits true)
+      (dxfusepcbnewfont true)
       (psnegative false)
       (psa4output false)
       (plotreference true)
@@ -82,7 +86,6 @@
       (outputdirectory "")
     )
   )
-
 
   (net 0 "")
   (net 1 "Net-(C1-Pad2)")
@@ -111,7 +114,7 @@
     )
     (fp_circle (center 0 0) (end 2.8 0) (layer "Cmts.User") (width 0.15) (fill none) (tstamp 533cb978-4c67-4904-86ed-173bc2ff1b45))
     (fp_circle (center 0 0) (end 3.05 0) (layer "F.CrtYd") (width 0.05) (fill none) (tstamp c08b7dbb-612b-43e9-a6cc-d4e66c1ea404))
-    (pad "1" thru_hole circle (at 0 0) (size 5.6 5.6) (drill 3.2) (layers *.Cu *.Mask) (tstamp cfbc907d-8a25-46e9-a224-6b8152fa214f))
+    (pad "1" thru_hole circle locked (at 0 0) (size 5.6 5.6) (drill 3.2) (layers *.Cu *.Mask) (tstamp cfbc907d-8a25-46e9-a224-6b8152fa214f))
   )
 
   (footprint "MountingHole:MountingHole_3.2mm_M3_DIN965_Pad" (layer "F.Cu")
@@ -137,7 +140,7 @@
     )
     (fp_circle (center 0 0) (end 2.8 0) (layer "Cmts.User") (width 0.15) (fill none) (tstamp 7f8e2e3b-3a66-47a9-a58a-28516317d286))
     (fp_circle (center 0 0) (end 3.05 0) (layer "F.CrtYd") (width 0.05) (fill none) (tstamp ee76c024-e387-4561-9d80-268c0015a52b))
-    (pad "1" thru_hole circle (at 0 0) (size 5.6 5.6) (drill 3.2) (layers *.Cu *.Mask) (tstamp b5c3eb60-d01c-403e-abf7-cd1ddd2c14be))
+    (pad "1" thru_hole circle locked (at 0 0) (size 5.6 5.6) (drill 3.2) (layers *.Cu *.Mask) (tstamp b5c3eb60-d01c-403e-abf7-cd1ddd2c14be))
   )
 
   (footprint "MountingHole:MountingHole_3.2mm_M3" (layer "F.Cu")
@@ -163,7 +166,7 @@
     )
     (fp_circle (center 0 0) (end 3.2 0) (layer "Cmts.User") (width 0.15) (fill none) (tstamp d4901f12-4dae-4cd4-9bb1-5d962ba4e57d))
     (fp_circle (center 0 0) (end 3.45 0) (layer "F.CrtYd") (width 0.05) (fill none) (tstamp 3d371e65-4ed5-435b-8cfc-b2bca6d607db))
-    (pad "1" np_thru_hole circle (at 0 0) (size 3.2 3.2) (drill 3.2) (layers *.Cu *.Mask) (tstamp 30bed439-ee98-4fbc-9d75-6c7a47f1e483))
+    (pad "1" np_thru_hole circle locked (at 0 0) (size 3.2 3.2) (drill 3.2) (layers *.Cu *.Mask) (tstamp 30bed439-ee98-4fbc-9d75-6c7a47f1e483))
   )
 
   (footprint "MountingHole:MountingHole_3.2mm_M3" (layer "F.Cu")
@@ -189,7 +192,7 @@
     )
     (fp_circle (center 0 0) (end 3.2 0) (layer "Cmts.User") (width 0.15) (fill none) (tstamp ad1a6974-bb9c-4845-bf1b-4eb349a7b5f9))
     (fp_circle (center 0 0) (end 3.45 0) (layer "F.CrtYd") (width 0.05) (fill none) (tstamp 7495fc84-6ec6-45ca-9071-d10637312859))
-    (pad "1" np_thru_hole circle (at 0 0) (size 3.2 3.2) (drill 3.2) (layers *.Cu *.Mask) (tstamp 3c6562ef-6330-45e0-b952-0a82c3116b50))
+    (pad "1" np_thru_hole circle locked (at 0 0) (size 3.2 3.2) (drill 3.2) (layers *.Cu *.Mask) (tstamp 3c6562ef-6330-45e0-b952-0a82c3116b50))
   )
 
   (footprint "Connector_JST:JST_XH_B2B-XH-A_1x02_P2.50mm_Vertical" (layer "F.Cu")
@@ -249,9 +252,9 @@
     (fp_line (start -2.45 3.4) (end 4.95 3.4) (layer "F.Fab") (width 0.1) (tstamp b6e260db-b404-43d2-9d13-3d72bf702940))
     (fp_line (start -0.625 -2.35) (end 0 -1.35) (layer "F.Fab") (width 0.1) (tstamp d901e84b-f741-4b4a-93a0-440497371c23))
     (fp_line (start 4.95 3.4) (end 4.95 -2.35) (layer "F.Fab") (width 0.1) (tstamp e9b8a997-2bef-41da-8437-468ed47a22a5))
-    (pad "1" thru_hole roundrect (at 0 0 90) (size 1.7 2) (drill 1) (layers *.Cu *.Mask) (roundrect_rratio 0.147059)
+    (pad "1" thru_hole roundrect locked (at 0 0 90) (size 1.7 2) (drill 1) (layers *.Cu *.Mask) (roundrect_rratio 0.147059)
       (net 2 "Net-(C1-Pad1)") (pinfunction "Pin_1") (tstamp 3bbb4641-3942-4c40-a8f5-028930bd1924))
-    (pad "2" thru_hole oval (at 2.5 0 90) (size 1.7 2) (drill 1) (layers *.Cu *.Mask)
+    (pad "2" thru_hole oval locked (at 2.5 0 90) (size 1.7 2) (drill 1) (layers *.Cu *.Mask)
       (net 1 "Net-(C1-Pad2)") (pinfunction "Pin_2") (tstamp 63fbe990-c88a-466e-a812-693fc90734fb))
     (model "${KISYS3DMOD}/Connector_JST.3dshapes/JST_XH_B2B-XH-A_1x02_P2.50mm_Vertical.wrl"
       (offset (xyz 0 0 0))
@@ -480,9 +483,9 @@
     (fp_line (start -1.288861 -2.6875) (end -1.288861 -1.6875) (layer "F.Fab") (width 0.1) (tstamp b6c4deb0-fbd8-49e2-b960-ea1125602887))
     (fp_line (start -1.788861 -2.1875) (end -0.788861 -2.1875) (layer "F.Fab") (width 0.1) (tstamp fae7d5ad-c3c5-4fcb-bcd4-fc23876b2809))
     (fp_circle (center 2.5 0) (end 7.5 0) (layer "F.Fab") (width 0.1) (fill none) (tstamp 5b63012c-bc76-4056-91fe-35f030921af3))
-    (pad "1" thru_hole rect (at 0 0 90) (size 2 2) (drill 1) (layers *.Cu *.Mask)
+    (pad "1" thru_hole rect locked (at 0 0 90) (size 2 2) (drill 1) (layers *.Cu *.Mask)
       (net 2 "Net-(C1-Pad1)") (tstamp d1b41142-17bd-4982-b9b6-d4a10278ed3d))
-    (pad "2" thru_hole circle (at 5 0 90) (size 2 2) (drill 1) (layers *.Cu *.Mask)
+    (pad "2" thru_hole circle locked (at 5 0 90) (size 2 2) (drill 1) (layers *.Cu *.Mask)
       (net 1 "Net-(C1-Pad2)") (tstamp a9206b2b-cfcc-466f-81ba-e763a0afb122))
     (model "${KISYS3DMOD}/Capacitor_THT.3dshapes/CP_Radial_D10.0mm_P5.00mm.wrl"
       (offset (xyz 0 0 0))
@@ -500,7 +503,6 @@
   (segment (start 172.58 104.67) (end 180 97.25) (width 1) (layer "F.Cu") (net 1) (tstamp dc290915-31f5-4f0b-ab64-8739fddbcb76))
   (segment (start 167.20001 103.93001) (end 167.94 104.67) (width 1) (layer "F.Cu") (net 1) (tstamp f6868b20-ef70-414e-925a-2c4c9f34cb51))
   (segment (start 165.5 101.25) (end 165.5 106.75) (width 1) (layer "F.Cu") (net 2) (tstamp 2404edcf-bf9e-4398-926e-3c87149c9e87))
-  (segment (start 165.5 101.25) (end 165.25 101.25) (width 0.25) (layer "F.Cu") (net 2) (tstamp 310f0fbf-62d2-41b4-a487-1a46623d436e))
   (segment (start 165.5 106.75) (end 170 111.25) (width 1) (layer "F.Cu") (net 2) (tstamp 3644bbd8-a9d9-4c8e-8dd6-6a37d4866b02))
   (segment (start 170 111.25) (end 171 111.25) (width 1) (layer "F.Cu") (net 2) (tstamp 3af17702-004e-460b-a2d0-f0d3d8066df2))
   (segment (start 171 111.25) (end 180 102.25) (width 1) (layer "F.Cu") (net 2) (tstamp 55ddfac6-70ec-48ed-90ad-fc1178b0e3cc))

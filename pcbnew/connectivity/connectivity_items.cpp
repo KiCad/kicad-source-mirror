@@ -147,7 +147,6 @@ const VECTOR2I CN_ITEM::GetAnchor( int n ) const
 
     default:
         assert( false );
-        break;
     }
 
     return pt0;

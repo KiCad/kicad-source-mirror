@@ -36,6 +36,7 @@
 #include <connectivity/from_to_cache.h>
 
 #include <ratsnest/ratsnest_data.h>
+#include <trigo.h>
 
 CONNECTIVITY_DATA::CONNECTIVITY_DATA()
 {
@@ -586,6 +587,25 @@ void CONNECTIVITY_DATA::GetUnconnectedEdges( std::vector<CN_EDGE>& aEdges) const
 }
 
 
+static int getMinDist( BOARD_CONNECTED_ITEM* aItem, const wxPoint& aPoint )
+{
+    switch( aItem->Type() )
+    {
+    case PCB_TRACE_T:
+    case PCB_ARC_T:
+    {
+        PCB_TRACK* track = static_cast<PCB_TRACK*>( aItem );
+
+        return std::min( GetLineLength( track->GetStart(), aPoint ),
+                         GetLineLength( track->GetEnd(), aPoint ) );
+    }
+
+    default:
+        return GetLineLength( aItem->GetPosition(), aPoint );
+    }
+}
+
+
 bool CONNECTIVITY_DATA::TestTrackEndpointDangling( PCB_TRACK* aTrack, wxPoint* aPos )
 {
     std::list<CN_ITEM*> items = GetConnectivityAlgo()->ItemEntry( aTrack ).GetItems();
@@ -623,14 +643,12 @@ bool CONNECTIVITY_DATA::TestTrackEndpointDangling( PCB_TRACK* aTrack, wxPoint* a
 
             std::shared_ptr<SHAPE> shape = item->GetEffectiveShape( layer );
 
-            int  startDist;
-            int  endDist;
-            bool hitStart = shape->Collide( aTrack->GetStart(), accuracy, &startDist );
-            bool hitEnd = shape->Collide( aTrack->GetEnd(), accuracy, &endDist );
+            bool hitStart = shape->Collide( aTrack->GetStart(), accuracy );
+            bool hitEnd = shape->Collide( aTrack->GetEnd(), accuracy );
 
             if( hitStart && hitEnd )
             {
-                if( startDist <= endDist )
+                if( getMinDist( item, aTrack->GetStart() ) < getMinDist( item, aTrack->GetEnd() ) )
                     start_count++;
                 else
                     end_count++;
