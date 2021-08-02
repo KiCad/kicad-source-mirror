@@ -513,28 +513,27 @@ bool GERBVIEW_FRAME::unarchiveFiles( const wxString& aFullFileName, REPORTER* aR
         // The archive contains Gerber and/or Excellon drill files. Use the right loader.
         // However it can contain a few other files (reports, pdf files...),
         // which will be skipped.
-        // Gerber files ext is usually "gbr", but can be also another value, starting by "g"
-        // old gerber files ext from kicad is .pho
-        // drill files do not have a well defined ext
-        // It is .drl in kicad, but .txt in Altium for instance
-        // Allows only .drl for drill files.
-        if( curr_ext[0] != 'g' && curr_ext != "pho" && curr_ext != "drl" )
-        {
-            if( aReporter )
-            {
-                msg.Printf( _( "Skipped file '%s' (unknown type).\n" ), entry->GetName() );
-                aReporter->Report( msg, RPT_SEVERITY_WARNING );
-            }
-
-            continue;
-        }
-
         if( curr_ext == GerberJobFileExtension.c_str() )
         {
             //We cannot read a gerber job file as a gerber plot file: skip it
             if( aReporter )
             {
                 msg.Printf( _( "Skipped file '%s' (gerber job file).\n" ), entry->GetName() );
+                aReporter->Report( msg, RPT_SEVERITY_WARNING );
+            }
+
+            continue;
+        }
+
+        wxString               matchedExt;
+        enum GERBER_ORDER_ENUM order;
+        GERBER_FILE_IMAGE_LIST::GetGerberLayerFromFilename( fname, order, matchedExt );
+
+        if( order == GERBER_ORDER_ENUM::GERBER_LAYER_UNKNOWN )
+        {
+            if( aReporter )
+            {
+                msg.Printf( _( "Skipped file '%s' (unknown type).\n" ), entry->GetName() );
                 aReporter->Report( msg, RPT_SEVERITY_WARNING );
             }
 
@@ -584,7 +583,7 @@ bool GERBVIEW_FRAME::unarchiveFiles( const wxString& aFullFileName, REPORTER* aR
 
         bool read_ok = true;
 
-        if( curr_ext[0] == 'g' || curr_ext == "pho" )
+        if( order != GERBER_ORDER_ENUM::GERBER_DRILL )
         {
             // Read gerber files: each file is loaded on a new GerbView layer
             read_ok = Read_GERBER_File( unzipped_tempfile );
@@ -593,7 +592,7 @@ bool GERBVIEW_FRAME::unarchiveFiles( const wxString& aFullFileName, REPORTER* aR
                 GetCanvas()->GetView()->SetLayerHasNegatives(
                         GERBER_DRAW_LAYER( layer ), GetGbrImage( layer )->HasNegativeItems() );
         }
-        else // if( curr_ext == "drl" )
+        else // Everything else is a drill file
         {
             read_ok = Read_EXCELLON_File( unzipped_tempfile );
         }
