@@ -433,8 +433,7 @@ void EDA_3D_VIEWER_FRAME::LoadSettings( APP_SETTINGS_BASE *aCfg )
     set_color( colors->GetColor( LAYER_3D_BACKGROUND_TOP ), m_boardAdapter.m_BgColorTop );
     set_color( colors->GetColor( LAYER_3D_BOARD ), m_boardAdapter.m_BoardBodyColor );
     set_color( colors->GetColor( LAYER_3D_COPPER ), m_boardAdapter.m_CopperColor );
-    set_color( colors->GetColor( LAYER_3D_SILKSCREEN_BOTTOM ),
-               m_boardAdapter.m_SilkScreenColorBot );
+    set_color( colors->GetColor( LAYER_3D_SILKSCREEN_BOTTOM ), m_boardAdapter.m_SilkScreenColorBot );
     set_color( colors->GetColor( LAYER_3D_SILKSCREEN_TOP ), m_boardAdapter.m_SilkScreenColorTop );
     set_color( colors->GetColor( LAYER_3D_SOLDERMASK_BOTTOM ), m_boardAdapter.m_SolderMaskColorBot );
     set_color( colors->GetColor( LAYER_3D_SOLDERMASK_TOP ), m_boardAdapter.m_SolderMaskColorTop );
@@ -477,8 +476,7 @@ void EDA_3D_VIEWER_FRAME::LoadSettings( APP_SETTINGS_BASE *aCfg )
         TRANSFER_SETTING( FL_RENDER_OPENGL_SHOW_MODEL_BBOX,           opengl_show_model_bbox );
         TRANSFER_SETTING( FL_HIGHLIGHT_ROLLOVER_ITEM,                 opengl_highlight_on_rollover );
         TRANSFER_SETTING( FL_RENDER_OPENGL_AA_DISABLE_ON_MOVE,        opengl_AA_disableOnMove );
-        TRANSFER_SETTING( FL_RENDER_OPENGL_THICKNESS_DISABLE_ON_MOVE,
-                          opengl_thickness_disableOnMove );
+        TRANSFER_SETTING( FL_RENDER_OPENGL_THICKNESS_DISABLE_ON_MOVE, opengl_thickness_disableOnMove );
         TRANSFER_SETTING( FL_RENDER_OPENGL_VIAS_DISABLE_ON_MOVE,      opengl_vias_disableOnMove );
         TRANSFER_SETTING( FL_RENDER_OPENGL_HOLES_DISABLE_ON_MOVE,     opengl_holes_disableOnMove );
 
@@ -576,8 +574,10 @@ void EDA_3D_VIEWER_FRAME::SaveSettings( APP_SETTINGS_BASE *aCfg )
                                          float( colors->GetColor( aTarget ).a ) );
 
                 if( aSource != newSFVEC4Fcolor )
+                {
                     colors->SetColor( aTarget, COLOR4D( aSource.r, aSource.g, aSource.b,
                                                         aSource.a ) );
+                }
             };
 
     save_color( m_boardAdapter.m_BgColorBot,         LAYER_3D_BACKGROUND_BOTTOM );
@@ -598,7 +598,6 @@ void EDA_3D_VIEWER_FRAME::SaveSettings( APP_SETTINGS_BASE *aCfg )
 
     if( cfg )
     {
-
         auto save_color =
                 [] ( const SFVEC3F& aSource, COLOR4D& aTarget )
                 {
