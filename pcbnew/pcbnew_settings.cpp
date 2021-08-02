@@ -643,9 +643,9 @@ bool PCBNEW_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
                 }
 
                 std::string key( pluginTokenizer.GetNextToken().ToUTF8() );
+                bool        value( pluginTokenizer.GetNextToken().Cmp( wxT( "Visible" ) ) == 0 );
 
-                js.push_back( nlohmann::json( {
-                        { key, pluginTokenizer.GetNextToken().Cmp( wxT( "Visible" ) ) == 0 } } ) );
+                js.push_back( nlohmann::json( { { key, value } } ) );
             }
         }
 
@@ -743,12 +743,14 @@ bool PCBNEW_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
 
     COLOR_SETTINGS* cs = Pgm().GetSettingsManager().GetMigratedColorSettings();
 
-    auto migrateLegacyColor = [&] ( const std::string& aKey, int aLayerId ) {
-        wxString str;
+    auto migrateLegacyColor =
+            [&] ( const std::string& aKey, int aLayerId )
+            {
+                wxString str;
 
-        if( aCfg->Read( aKey, &str ) )
-            cs->SetColor( aLayerId, COLOR4D( str ) );
-    };
+                if( aCfg->Read( aKey, &str ) )
+                    cs->SetColor( aLayerId, COLOR4D( str ) );
+            };
 
     for( int i = 0; i < PCB_LAYER_ID_COUNT; ++i )
     {

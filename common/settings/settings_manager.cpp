@@ -69,8 +69,8 @@ SETTINGS_MANAGER::SETTINGS_MANAGER( bool aHeadless ) :
     m_ok = true;
 
     // create the common settings shared by all applications.  Not loaded immediately
-    m_common_settings =
-            static_cast<COMMON_SETTINGS*>( RegisterSettings( new COMMON_SETTINGS, false ) );
+    m_common_settings = static_cast<COMMON_SETTINGS*>( RegisterSettings( new COMMON_SETTINGS,
+                                                                         false ) );
 
     loadAllColorSettings();
 }
@@ -172,8 +172,6 @@ void SETTINGS_MANAGER::FlushAndRelease( JSON_SETTINGS* aSettings, bool aSave )
             m_app_settings_cache.erase( typeHash );
 
         m_settings.erase( it );
-
-
     }
 }
 
@@ -212,9 +210,7 @@ COLOR_SETTINGS* SETTINGS_MANAGER::loadColorSettingsByName( const wxString& aName
             RegisterSettings( new COLOR_SETTINGS( aName.ToStdString() ) ) );
 
     if( cs->GetFilename() != aName.ToStdString() )
-    {
         wxLogTrace( traceSettings, "Warning: stored filename is actually %s, ", cs->GetFilename() );
-    }
 
     m_color_settings[aName] = cs;
 
