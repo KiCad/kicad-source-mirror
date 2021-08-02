@@ -33,7 +33,6 @@ fedora_build_linux:
       -DKICAD_SPICE=ON
       -DKICAD_BUILD_I18N=ON
       -DKICAD_BUILD_PNS_DEBUG_TOOL=ON
-      -DCMAKE_CXX_FLAGS="-fuse-ld=gold"
       ../../
     - make 2>&1 | tee compilation_log.txt
     - cd ../../
