@@ -32,6 +32,26 @@
 #include <gerber_draw_item.h>
 #include <am_primitive.h>
 
+
+enum class GERBER_ORDER_ENUM : int
+{
+    GERBER_TOP_PASTE = 0,
+    GERBER_TOP_SILK_SCREEN,
+    GERBER_TOP_SOLDER_MASK,
+    GERBER_TOP_COPPER,
+    GERBER_INNER,
+    GERBER_BOTTOM_COPPER,
+    GERBER_BOTTOM_SOLDER_MASK,
+    GERBER_BOTTOM_SILK_SCREEN,
+    GERBER_BOTTOM_PASTE,
+    GERBER_KEEP_OUT,
+    GERBER_MECHANICAL,
+    GERBER_BOARD_OUTLINE,
+    GERBER_DRILL,
+    GERBER_LAYER_UNKNOWN,
+};
+
+
 /* gerber files have different parameters to define units and how items must be plotted.
  *  some are for the entire file, and other can change along a file.
  *  In Gerber world:
@@ -53,6 +73,9 @@
  *  But a GERBER_FILE_IMAGE can use more than one GERBER_LAYER.
  */
 
+typedef bool( LayerSortFunction )( const GERBER_FILE_IMAGE* const& ref,
+                                   const GERBER_FILE_IMAGE* const& test );
+
 class GERBER_FILE_IMAGE;
 
 /**
@@ -65,6 +88,19 @@ class GERBER_FILE_IMAGE_LIST
 public:
     GERBER_FILE_IMAGE_LIST();
     ~GERBER_FILE_IMAGE_LIST();
+
+    /**
+     * @brief Utility function to guess which PCB layer of a gerber/drill file corresponds to based
+     * on its file extension.
+     *
+     * Supports many CAD program file extension patterns. Detects gerbers, drills, edge layers, etc.
+     *
+     * @param filename Filename to check against the extension matching table.
+     * @param order Returns the order that this layer should be placed in a set of layers.
+     * @param matchedExtension The actual extension pattern that this filename matched.
+     */
+    static void GetGerberLayerFromFilename( const wxString& filename, enum GERBER_ORDER_ENUM& order,
+                                            wxString& matchedExtension );
 
     static GERBER_FILE_IMAGE_LIST& GetImagesList();
     GERBER_FILE_IMAGE* GetGbrImage( int aIdx );
@@ -112,6 +148,20 @@ public:
      *         in the status bar
      */
     const wxString GetDisplayName( int aIdx, bool aNameOnly = false, bool aFullName = false );
+
+    /**
+     * Sort loaded images by file extension matching
+     *
+     * @return a mapping of old to new layer index
+     */
+    std::unordered_map<int, int> SortImagesByFunction( LayerSortFunction sortFunction );
+
+    /**
+     * Sort loaded images by file extension matching
+     *
+     * @return a mapping of old to new layer index
+     */
+    std::unordered_map<int, int> SortImagesByFileExtension();
 
     /**
      * Sort loaded images by Z order priority, if they have the X2 FileFormat info

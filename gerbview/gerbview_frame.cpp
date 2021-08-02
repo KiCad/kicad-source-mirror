@@ -499,10 +499,20 @@ void GERBVIEW_FRAME::syncLayerBox( bool aRebuildLayerBox )
 }
 
 
+void GERBVIEW_FRAME::SortLayersByFileExtension()
+{
+    RemapLayers( GetImagesList()->SortImagesByFileExtension() );
+}
+
+
 void GERBVIEW_FRAME::SortLayersByX2Attributes()
 {
-    auto remapping = GetImagesList()->SortImagesByZOrder();
+    RemapLayers( GetImagesList()->SortImagesByZOrder() );
+}
 
+
+void GERBVIEW_FRAME::RemapLayers( std::unordered_map<int, int> remapping )
+{
     ReFillLayerWidget();
     syncLayerBox( true );
 

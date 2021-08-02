@@ -200,6 +200,185 @@ const wxString GERBER_FILE_IMAGE_LIST::GetDisplayName( int aIdx, bool aNameOnly,
 }
 
 
+struct GERBER_ORDER
+{
+    std::string       m_FilenameMask;
+    GERBER_ORDER_ENUM m_Order;
+};
+
+
+// clang-format off
+static struct GERBER_ORDER gerberFileExtensionOrder[] =
+{
+       { ".GM1",        GERBER_ORDER_ENUM::GERBER_BOARD_OUTLINE },
+       { ".GM3",        GERBER_ORDER_ENUM::GERBER_BOARD_OUTLINE },
+       { ".GBR",        GERBER_ORDER_ENUM::GERBER_BOARD_OUTLINE },
+       { ".DIM",        GERBER_ORDER_ENUM::GERBER_BOARD_OUTLINE },
+       { ".MIL",        GERBER_ORDER_ENUM::GERBER_BOARD_OUTLINE },
+       { ".GML",        GERBER_ORDER_ENUM::GERBER_BOARD_OUTLINE },
+       { "EDGE.CUTS",   GERBER_ORDER_ENUM::GERBER_BOARD_OUTLINE },
+       { ".FAB",        GERBER_ORDER_ENUM::GERBER_BOARD_OUTLINE },
+
+       { ".GKO",        GERBER_ORDER_ENUM::GERBER_KEEP_OUT },
+
+       { ".GM?",        GERBER_ORDER_ENUM::GERBER_MECHANICAL },
+       { ".GM??",       GERBER_ORDER_ENUM::GERBER_MECHANICAL },
+
+       { ".TXT",        GERBER_ORDER_ENUM::GERBER_DRILL },
+       { ".XLN",        GERBER_ORDER_ENUM::GERBER_DRILL },
+       { ".TAP",        GERBER_ORDER_ENUM::GERBER_DRILL },
+       { ".DRD",        GERBER_ORDER_ENUM::GERBER_DRILL },
+       { ".NC",         GERBER_ORDER_ENUM::GERBER_DRILL },
+       { ".XNC",        GERBER_ORDER_ENUM::GERBER_DRILL },
+
+       { ".GTP",        GERBER_ORDER_ENUM::GERBER_TOP_PASTE },
+       { ".CRC",        GERBER_ORDER_ENUM::GERBER_TOP_PASTE },
+       { ".TSP",        GERBER_ORDER_ENUM::GERBER_TOP_PASTE },
+       { "F.PASTE",     GERBER_ORDER_ENUM::GERBER_TOP_PASTE },
+       { ".SPT",        GERBER_ORDER_ENUM::GERBER_TOP_PASTE },
+       { "PT.PHO",      GERBER_ORDER_ENUM::GERBER_TOP_PASTE },
+
+       { ".GTO",        GERBER_ORDER_ENUM::GERBER_TOP_SILK_SCREEN },
+       { ".PLC",        GERBER_ORDER_ENUM::GERBER_TOP_SILK_SCREEN },
+       { ".TSK",        GERBER_ORDER_ENUM::GERBER_TOP_SILK_SCREEN },
+       { "F.SILKS",     GERBER_ORDER_ENUM::GERBER_TOP_SILK_SCREEN },
+       { ".SST",        GERBER_ORDER_ENUM::GERBER_TOP_SILK_SCREEN },
+       { "ST.PHO",      GERBER_ORDER_ENUM::GERBER_TOP_SILK_SCREEN },
+
+       { ".GTS",        GERBER_ORDER_ENUM::GERBER_TOP_SOLDER_MASK },
+       { ".STC",        GERBER_ORDER_ENUM::GERBER_TOP_SOLDER_MASK },
+       { ".TSM",        GERBER_ORDER_ENUM::GERBER_TOP_SOLDER_MASK },
+       { "F.MASK",      GERBER_ORDER_ENUM::GERBER_TOP_SOLDER_MASK },
+       { ".SMT",        GERBER_ORDER_ENUM::GERBER_TOP_SOLDER_MASK },
+       { "MT.PHO",      GERBER_ORDER_ENUM::GERBER_TOP_SOLDER_MASK },
+
+       { ".GTL",        GERBER_ORDER_ENUM::GERBER_TOP_COPPER },
+       { ".CMP",        GERBER_ORDER_ENUM::GERBER_TOP_COPPER },
+       { ".TOP",        GERBER_ORDER_ENUM::GERBER_TOP_COPPER },
+       { "F.CU",        GERBER_ORDER_ENUM::GERBER_TOP_COPPER },
+       { "L1.PHO",      GERBER_ORDER_ENUM::GERBER_TOP_COPPER },
+       { ".PHD",        GERBER_ORDER_ENUM::GERBER_TOP_COPPER },
+       { ".ART",        GERBER_ORDER_ENUM::GERBER_TOP_COPPER },
+
+       { ".GBL",        GERBER_ORDER_ENUM::GERBER_BOTTOM_COPPER },
+       { ".SOL",        GERBER_ORDER_ENUM::GERBER_BOTTOM_COPPER },
+       { ".BOT",        GERBER_ORDER_ENUM::GERBER_BOTTOM_COPPER },
+       { "B.CU",        GERBER_ORDER_ENUM::GERBER_BOTTOM_COPPER },
+       { ".BOT",        GERBER_ORDER_ENUM::GERBER_BOTTOM_COPPER },
+
+       { ".GBS",        GERBER_ORDER_ENUM::GERBER_BOTTOM_SOLDER_MASK },
+       { ".STS",        GERBER_ORDER_ENUM::GERBER_BOTTOM_SOLDER_MASK },
+       { ".BSM",        GERBER_ORDER_ENUM::GERBER_BOTTOM_SOLDER_MASK },
+       { "B.MASK",      GERBER_ORDER_ENUM::GERBER_BOTTOM_SOLDER_MASK },
+       { ".SMB",        GERBER_ORDER_ENUM::GERBER_BOTTOM_SOLDER_MASK },
+       { "MB.PHO",      GERBER_ORDER_ENUM::GERBER_BOTTOM_SOLDER_MASK },
+
+       { ".GBO",        GERBER_ORDER_ENUM::GERBER_BOTTOM_SILK_SCREEN },
+       { ".PLS",        GERBER_ORDER_ENUM::GERBER_BOTTOM_SILK_SCREEN },
+       { ".BSK",        GERBER_ORDER_ENUM::GERBER_BOTTOM_SILK_SCREEN },
+       { "B.SILK",      GERBER_ORDER_ENUM::GERBER_BOTTOM_SILK_SCREEN },
+       { ".SSB",        GERBER_ORDER_ENUM::GERBER_BOTTOM_SILK_SCREEN },
+       { "SB.PHO",      GERBER_ORDER_ENUM::GERBER_BOTTOM_SILK_SCREEN },
+
+       { ".GBP",        GERBER_ORDER_ENUM::GERBER_BOTTOM_PASTE },
+       { ".CRS",        GERBER_ORDER_ENUM::GERBER_BOTTOM_PASTE },
+       { ".BSP",        GERBER_ORDER_ENUM::GERBER_BOTTOM_PASTE },
+       { "B.PASTE",     GERBER_ORDER_ENUM::GERBER_BOTTOM_PASTE },
+       { ".SMB",        GERBER_ORDER_ENUM::GERBER_BOTTOM_PASTE },
+       { "MB.PHO",      GERBER_ORDER_ENUM::GERBER_BOTTOM_PASTE },
+
+       // EAGLE CAD file to explicitly ignore that can match some other
+       // layers otherwise
+       { ".GPI",        GERBER_ORDER_ENUM::GERBER_LAYER_UNKNOWN },
+
+       // Inner copper layers need to come last so the wildcard
+       // number matching doesn't pick up other specific layer names.
+       { ".GI?",        GERBER_ORDER_ENUM::GERBER_INNER },
+       { ".GI??",       GERBER_ORDER_ENUM::GERBER_INNER },
+       { ".G?",         GERBER_ORDER_ENUM::GERBER_INNER },
+       { ".G??",        GERBER_ORDER_ENUM::GERBER_INNER },
+       { ".G?L",        GERBER_ORDER_ENUM::GERBER_INNER },
+       { ".G??L",       GERBER_ORDER_ENUM::GERBER_INNER },
+};
+// clang-format on
+
+
+void GERBER_FILE_IMAGE_LIST::GetGerberLayerFromFilename( const wxString&         filename,
+                                                         enum GERBER_ORDER_ENUM& order,
+                                                         wxString&               matchedExtension )
+{
+    order = GERBER_ORDER_ENUM::GERBER_LAYER_UNKNOWN;
+    matchedExtension = "";
+
+    for( struct GERBER_ORDER o : gerberFileExtensionOrder )
+    {
+        wxString ext = filename.Right( o.m_FilenameMask.length() ).Upper();
+
+        if( ext.Matches( o.m_FilenameMask ) )
+        {
+            order = o.m_Order;
+            matchedExtension = ext;
+            return;
+        }
+    }
+}
+
+
+static bool sortFileExtension( const GERBER_FILE_IMAGE* const& ref,
+                               const GERBER_FILE_IMAGE* const& test )
+{
+    // Do not change order: no criteria to sort items
+    if( !ref && !test )
+        return false;
+
+    // Not used: ref ordered after
+    if( !ref || !ref->m_InUse )
+        return false;
+
+    // Not used: ref ordered before
+    if( !test || !test->m_InUse )
+        return true;
+
+    enum GERBER_ORDER_ENUM ref_layer;
+    enum GERBER_ORDER_ENUM test_layer;
+    wxString               ref_extension;
+    wxString               test_extension;
+
+    GERBER_FILE_IMAGE_LIST::GetGerberLayerFromFilename( ref->m_FileName, ref_layer,
+                                                               ref_extension );
+    GERBER_FILE_IMAGE_LIST::GetGerberLayerFromFilename( test->m_FileName, test_layer,
+                                                               test_extension );
+
+    // Inner layers have a numeric code that we can compare against
+    if( ref_layer == GERBER_ORDER_ENUM::GERBER_INNER
+        && test_layer == GERBER_ORDER_ENUM::GERBER_INNER )
+    {
+        unsigned long ref_layer_number = 0;
+        unsigned long test_layer_number = 0;
+
+        // Strip extensions down to only the numbers in it. Later conversion to int will
+        // automatically skip the spaces
+        for( wxString::iterator it = ref_extension.begin(); it != ref_extension.end(); ++it )
+        {
+            if( !isdigit( *it ) )
+                *it = ' ';
+        }
+
+        for( wxString::iterator it = test_extension.begin(); it != test_extension.end(); ++it )
+        {
+            if( !isdigit( *it ) )
+                *it = ' ';
+        }
+
+        ref_extension.ToULong( &ref_layer_number );
+        test_extension.ToULong( &test_layer_number );
+
+        return ref_layer_number < test_layer_number;
+    }
+
+    return (int) ref_layer < (int) test_layer;
+}
+
 
 // Helper function, for std::sort.
 // Sort loaded images by Z order priority, if they have the X2 FileFormat info
@@ -231,9 +410,10 @@ static bool sortZorder( const GERBER_FILE_IMAGE* const& ref, const GERBER_FILE_I
 }
 
 
-std::unordered_map<int, int> GERBER_FILE_IMAGE_LIST::SortImagesByZOrder()
+std::unordered_map<int, int>
+GERBER_FILE_IMAGE_LIST::SortImagesByFunction( LayerSortFunction sortFunction )
 {
-    std::sort( m_GERBER_List.begin(), m_GERBER_List.end(), sortZorder );
+    std::sort( m_GERBER_List.begin(), m_GERBER_List.end(), sortFunction );
 
     // The image order has changed.
     // Graphic layer numbering must be updated to match the widgets layer order
@@ -253,4 +433,16 @@ std::unordered_map<int, int> GERBER_FILE_IMAGE_LIST::SortImagesByZOrder()
     }
 
     return tab_lyr;
+}
+
+
+std::unordered_map<int, int> GERBER_FILE_IMAGE_LIST::SortImagesByFileExtension()
+{
+    return SortImagesByFunction( sortFileExtension );
+}
+
+
+std::unordered_map<int, int> GERBER_FILE_IMAGE_LIST::SortImagesByZOrder()
+{
+    return SortImagesByFunction( sortZorder );
 }

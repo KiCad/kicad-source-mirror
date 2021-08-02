@@ -134,7 +134,11 @@ void GERBER_LAYER_WIDGET::AddRightClickMenuItems( wxMenu* aMenu )
                  KiBitmap( BITMAPS::show_no_layers ) );
 
     aMenu->AppendSeparator();
-    AddMenuItem( aMenu, ID_SORT_GBR_LAYERS, _( "Sort Layers if X2 Mode" ),
+
+    AddMenuItem( aMenu, ID_SORT_GBR_LAYERS_X2, _( "Sort Layers if X2 Mode" ),
+                 KiBitmap( BITMAPS::reload ) );
+
+    AddMenuItem( aMenu, ID_SORT_GBR_LAYERS_FILE_EXT, _( "Sort Layers by File Extension" ),
                  KiBitmap( BITMAPS::reload ) );
 }
 
@@ -189,8 +193,12 @@ void GERBER_LAYER_WIDGET::onPopupSelection( wxCommandEvent& event )
         m_frame->GetCanvas()->Refresh();
         break;
 
-    case ID_SORT_GBR_LAYERS:
+    case ID_SORT_GBR_LAYERS_X2:
         m_frame->SortLayersByX2Attributes();
+        break;
+
+    case ID_SORT_GBR_LAYERS_FILE_EXT:
+        m_frame->SortLayersByFileExtension();
         break;
     }
 }
