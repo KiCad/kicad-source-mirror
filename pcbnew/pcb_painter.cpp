@@ -1540,7 +1540,7 @@ void PCB_PAINTER::draw( const PCB_TEXT* aText, int aLayer )
         return;
 
     const COLOR4D& color = m_pcbSettings.GetColor( aText, aText->GetLayer() );
-    VECTOR2D position( aText->GetTextPos().x, aText->GetTextPos().y );
+    VECTOR2D       position( aText->GetTextPos().x, aText->GetTextPos().y );
 
     if( m_pcbSettings.m_sketchText || m_pcbSettings.m_sketchMode[aLayer] )
     {
@@ -1569,7 +1569,7 @@ void PCB_PAINTER::draw( const FP_TEXT* aText, int aLayer )
         return;
 
     const COLOR4D& color = m_pcbSettings.GetColor( aText, aLayer );
-    VECTOR2D position( aText->GetTextPos().x, aText->GetTextPos().y );
+    VECTOR2D       position( aText->GetTextPos().x, aText->GetTextPos().y );
 
     if( m_pcbSettings.m_sketchText )
     {
@@ -1700,16 +1700,16 @@ void PCB_PAINTER::draw( const ZONE* aZone, int aLayer )
     if( !aZone->IsOnLayer( layer ) )
         return;
 
-    COLOR4D color = m_pcbSettings.GetColor( aZone, layer );
+    COLOR4D              color = m_pcbSettings.GetColor( aZone, layer );
     std::deque<VECTOR2D> corners;
-    ZONE_DISPLAY_MODE displayMode = m_pcbSettings.m_zoneDisplayMode;
+    ZONE_DISPLAY_MODE    displayMode = m_pcbSettings.m_zoneDisplayMode;
 
     // Draw the outline
     const SHAPE_POLY_SET* outline = aZone->Outline();
 
     if( m_pcbSettings.m_zoneOutlines && outline && outline->OutlineCount() > 0 )
     {
-        m_gal->SetStrokeColor( color.WithAlpha( 1.0 ) );
+        m_gal->SetStrokeColor( color.a > 0.0 ? color.WithAlpha( 1.0 ) : color );
         m_gal->SetIsFill( false );
         m_gal->SetIsStroke( true );
         m_gal->SetLineWidth( m_pcbSettings.m_outlineWidth );
