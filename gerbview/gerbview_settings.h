@@ -1,7 +1,7 @@
 /*
 * This program source code file is part of KiCad, a free EDA CAD application.
 *
-* Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
+* Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
 *
 * This program is free software; you can redistribute it and/or
 * modify it under the terms of the GNU General Public License
@@ -25,6 +25,7 @@
 #define _GERBVIEW_SETTINGS_H
 
 #include <settings/app_settings.h>
+#include <excellon_defaults.h>
 
 
 class GERBVIEW_SETTINGS : public APP_SETTINGS_BASE
@@ -44,6 +45,15 @@ public:
 
     virtual bool MigrateFromLegacy( wxConfigBase* aLegacyConfig ) override;
 
+    /**
+     * return the Excellon default values to read a drill file
+     * @param aNCDefaults is the EXCELLON_DEFAULTS to store these prms
+     */
+    void GetExcellonDefaults( EXCELLON_DEFAULTS& aNCDefaults )
+    {
+        aNCDefaults = m_ExcellonDefaults;
+    }
+
 public:
 
     APPEARANCE m_Appearance;
@@ -61,6 +71,8 @@ public:
      * to PCB layers, used when exporting gerbers to a PCB
      */
     std::vector<int> m_GerberToPcbLayerMapping;
+
+    EXCELLON_DEFAULTS m_ExcellonDefaults;
 
 protected:
 

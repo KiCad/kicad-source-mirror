@@ -25,6 +25,8 @@
 #ifndef EXCELLON_IMAGE_H
 #define EXCELLON_IMAGE_H
 
+struct EXCELLON_DEFAULTS;
+
 
 enum drill_M_code_t {
     DRILL_M_UNKNOWN,
@@ -155,10 +157,11 @@ public: EXCELLON_IMAGE( int layer ) :
      *
      * When the file cannot be loaded, warning and info messages are stored in m_Messages.
      *
-     * @param aFullFileName is the full filename of the Gerber file.
+     * @param aFullFileName is the full filename of the Excellon file.
+     * @param aDefaults is the default values when not found in file.
      * @return true if OK, false if the gerber file was not loaded.
      */
-    bool LoadFile( const wxString& aFullFileName );
+    bool LoadFile( const wxString& aFullFileName, EXCELLON_DEFAULTS* aDefaults );
 
 private:
     bool Execute_HEADER_And_M_Command( char*& text );
@@ -190,7 +193,10 @@ private:
      */
     void FinishRouteCommand();
 
-    void SelectUnits( bool aMetric );
+    /**
+     * Switch unit selection, and the coordinate format (nn:mm) if not yet set
+     */
+    void SelectUnits( bool aMetric, EXCELLON_DEFAULTS* aDefaults );
 
 private:
     enum EXCELLON_STATE {
@@ -204,6 +210,12 @@ private:
     bool           m_RouteModeOn;   // true during a route mode (for instance a oval hole) or
                                     // a cutout.
     std::vector<EXCELLON_ROUTE_COORD> m_RoutePositions;  // The list of points in a route mode
+
+    /// Excellon file do not have a format statement to specify the coordinate format
+    /// like nn:mm.
+    /// However Altium files have a comment to specify it (";FILE_FORMET_"
+    /// m_hasFormat is set to true if this comment is found, and coordinate format is known.
+    bool           m_hasFormat;
 };
 
 

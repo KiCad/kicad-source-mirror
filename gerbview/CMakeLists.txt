@@ -18,6 +18,8 @@ include_directories(
 set( DIALOGS_SRCS
     dialogs/panel_gerbview_display_options.cpp
     dialogs/panel_gerbview_display_options_base.cpp
+    dialogs/panel_gerbview_excellon_settings.cpp
+    dialogs/panel_gerbview_excellon_settings_base.cpp
     dialogs/panel_gerbview_settings.cpp
     dialogs/panel_gerbview_settings_base.cpp
     dialogs/dialog_layers_select_to_pcb.cpp

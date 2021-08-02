@@ -1,7 +1,7 @@
 /*
 * This program source code file is part of KiCad, a free EDA CAD application.
 *
-* Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
+* Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
 *
 * This program is free software; you can redistribute it and/or
 * modify it under the terms of the GNU General Public License
@@ -67,6 +67,24 @@ GERBVIEW_SETTINGS::GERBVIEW_SETTINGS() :
 
     m_params.emplace_back( new PARAM<int>( "gerber_to_pcb_copperlayers_count",
             &m_BoardLayersCount, 2 ) );
+
+    m_params.emplace_back( new PARAM<bool>( "excellon_defaults.unit_mm",
+            &m_ExcellonDefaults.m_UnitsMM, false ) );
+
+    m_params.emplace_back( new PARAM<bool>( "excellon_defaults.lz_format",
+            &m_ExcellonDefaults.m_LeadingZero, true ) );
+
+    m_params.emplace_back( new PARAM<int>( "excellon_defaults.mm_integer_len",
+            &m_ExcellonDefaults.m_MmIntegerLen, FMT_INTEGER_MM, 2 , 6 ) );
+
+    m_params.emplace_back( new PARAM<int>( "excellon_defaults.mm_mantissa_len",
+            &m_ExcellonDefaults.m_MmMantissaLen, FMT_MANTISSA_MM, 2 , 6 ) );
+
+    m_params.emplace_back( new PARAM<int>( "excellon_defaults.inch_integer_len",
+            &m_ExcellonDefaults.m_InchIntegerLen, FMT_INTEGER_INCH, 2 , 6 ) );
+
+    m_params.emplace_back( new PARAM<int>( "excellon_defaults.inch_mantissa_len",
+            &m_ExcellonDefaults.m_InchMantissaLen, FMT_MANTISSA_INCH, 2 , 6 ) );
 }
 
 

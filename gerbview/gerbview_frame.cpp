@@ -55,6 +55,7 @@
 #include <widgets/paged_dialog.h>
 #include <dialogs/panel_gerbview_settings.h>
 #include <dialogs/panel_gerbview_display_options.h>
+#include <dialogs/panel_gerbview_excellon_settings.h>
 #include <panel_hotkeys_editor.h>
 #include <wx/wupdlock.h>
 #include <wx/treebook.h>
@@ -1015,8 +1016,11 @@ void GERBVIEW_FRAME::InstallPreferences( PAGED_DIALOG* aParent,
     wxTreebook* book = aParent->GetTreebook();
 
     book->AddPage( new wxPanel( book ), _( "GerbView" ) );
-    book->AddSubPage( new PANEL_GERBVIEW_DISPLAY_OPTIONS( this, book ), _( "Display Options" ) );
+    book->AddSubPage( new PANEL_GERBVIEW_DISPLAY_OPTIONS( this, book ),
+                      _( "Display Options" ) );
     book->AddSubPage( new PANEL_GERBVIEW_SETTINGS( this, book ), _( "Editing Options" ) );
+    book->AddSubPage( new PANEL_GERBVIEW_EXCELLON_SETTINGS( this, book ),
+                      _( "Excellon Options" ) );
 
     aHotkeysPanel->AddHotKeys( GetToolManager() );
 }

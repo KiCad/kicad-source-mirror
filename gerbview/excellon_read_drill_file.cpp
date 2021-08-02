@@ -69,23 +69,17 @@
 #include <gerber_file_image.h>
 #include <gerber_file_image_list.h>
 #include <excellon_image.h>
+#include <excellon_defaults.h>
 #include <macros.h>
 #include <string_utils.h>
 #include <locale_io.h>
 #include <X2_gerber_attributes.h>
 #include <view/view.h>
+#include <gerbview_settings.h>
 
 #include <cmath>
 
 #include <dialogs/html_messagebox.h>
-
-// Default format for dimensions: they are the default values, not the actual values
-// number of digits in mantissa:
-static const int fmtMantissaMM = 3;
-static const int fmtMantissaInch = 4;
-// number of digits, integer part:
-static const int fmtIntegerMM = 3;
-static const int fmtIntegerInch = 2;
 
 // A helper function to calculate the arc center of an arc
 // known by 2 end points, the radius, and the angle direction (CW or CCW)
@@ -257,8 +251,12 @@ bool GERBVIEW_FRAME::Read_EXCELLON_File( const wxString& aFullFileName )
 
     std::unique_ptr<EXCELLON_IMAGE> drill_layer_uptr = std::make_unique<EXCELLON_IMAGE>( layerId );
 
+    EXCELLON_DEFAULTS nc_defaults;
+    GERBVIEW_SETTINGS* cfg = static_cast<GERBVIEW_SETTINGS*>( config() );
+    cfg->GetExcellonDefaults( nc_defaults );
+
     // Read the Excellon drill file:
-    bool success = drill_layer_uptr->LoadFile( aFullFileName );
+    bool success = drill_layer_uptr->LoadFile( aFullFileName, &nc_defaults );
 
     if( !success )
     {
@@ -300,7 +298,9 @@ bool GERBVIEW_FRAME::Read_EXCELLON_File( const wxString& aFullFileName )
 void EXCELLON_IMAGE::ResetDefaultValues()
 {
     GERBER_FILE_IMAGE::ResetDefaultValues();
-    SelectUnits( false );       // Default unit = inch
+    SelectUnits( false, nullptr );      // Default unit = inch
+    m_hasFormat = false;                // will be true if a Altium file containing
+                                        // the nn:mm file format is read
 
     // Files using non decimal can use No Trailing zeros or No leading Zeros
     // Unfortunately, the identifier (INCH,TZ or INCH,LZ for instance) is not
@@ -321,7 +321,7 @@ void EXCELLON_IMAGE::ResetDefaultValues()
  *   integer 2.4 format in imperial units,
  *   integer 3.2 or 3.3 format (metric units).
  */
-bool EXCELLON_IMAGE::LoadFile( const wxString & aFullFileName )
+bool EXCELLON_IMAGE::LoadFile( const wxString & aFullFileName, EXCELLON_DEFAULTS* aDefaults )
 {
     // Set the default parameter values:
     ResetDefaultValues();
@@ -331,6 +331,10 @@ bool EXCELLON_IMAGE::LoadFile( const wxString & aFullFileName )
 
     if( m_Current_File == nullptr )
         return false;
+
+    // Initial format setting, usualy defined in file, but not always...
+    m_NoTrailingZeros = aDefaults->m_LeadingZero;
+    m_GerbMetric = aDefaults->m_UnitsMM;
 
     wxString msg;
     m_FileName = aFullFileName;
@@ -354,6 +358,9 @@ bool EXCELLON_IMAGE::LoadFile( const wxString & aFullFileName )
         if( m_State == EXCELLON_IMAGE::READ_HEADER_STATE )
         {
             Execute_HEADER_And_M_Command( text );
+
+            // Now units (inch/mm) are known, set the coordinate format
+            SelectUnits( m_GerbMetric, aDefaults );
         }
         else
         {
@@ -486,12 +493,12 @@ bool EXCELLON_IMAGE::Execute_HEADER_And_M_Command( char*& text )
         break;
 
     case DRILL_M_METRIC:
-        SelectUnits( true );
+        SelectUnits( true, nullptr );
         break;
 
     case DRILL_IMPERIAL_HEADER:  // command like INCH,TZ or INCH,LZ
     case DRILL_METRIC_HEADER:    // command like METRIC,TZ or METRIC,LZ
-        SelectUnits( cmd->m_Code == DRILL_METRIC_HEADER ? true : false );
+        SelectUnits( cmd->m_Code == DRILL_METRIC_HEADER ? true : false, nullptr );
 
         if( *text != ',' )
         {
@@ -915,7 +922,7 @@ bool EXCELLON_IMAGE::Execute_EXCELLON_G_Command( char*& text )
     return success;
 }
 
-void EXCELLON_IMAGE::SelectUnits( bool aMetric )
+void EXCELLON_IMAGE::SelectUnits( bool aMetric, EXCELLON_DEFAULTS* aDefaults )
 {
     /* Coordinates are measured either in inch or metric (millimeters).
      * Inch coordinates are in six digits (00.0000) with increments
@@ -928,6 +935,8 @@ void EXCELLON_IMAGE::SelectUnits( bool aMetric )
      *
      * Inches: Default fmt = 2.4 for X and Y axis: 6 digits with  0.0001 resolution
      * metric: Default fmt = 3.3 for X and Y axis: 6 digits, 1 micron resolution
+     *
+     * However some drill files do not use standard values.
      */
     if( aMetric )
     {
@@ -935,10 +944,19 @@ void EXCELLON_IMAGE::SelectUnits( bool aMetric )
 
         if( !m_hasFormat )
         {
-            // number of digits in mantissa
-            m_FmtScale.x = m_FmtScale.y = fmtMantissaMM;
-            // number of digits (mantissa+integer)
-            m_FmtLen.x = m_FmtLen.y = fmtIntegerMM + fmtMantissaMM;
+            if( aDefaults )
+            {
+                // number of digits in mantissa
+                m_FmtScale.x = m_FmtScale.y = aDefaults->m_MmMantissaLen;
+                // number of digits (mantissa+integer)
+                m_FmtLen.x = m_FmtLen.y = aDefaults->m_MmIntegerLen
+                                          + aDefaults->m_MmMantissaLen;
+            }
+            else
+            {
+                m_FmtScale.x = m_FmtScale.y = FMT_MANTISSA_MM;
+                m_FmtLen.x = m_FmtLen.y = FMT_INTEGER_MM + FMT_MANTISSA_MM;
+            }
         }
     }
     else
@@ -947,8 +965,17 @@ void EXCELLON_IMAGE::SelectUnits( bool aMetric )
 
         if( !m_hasFormat )
         {
-            m_FmtScale.x = m_FmtScale.y = fmtMantissaInch;
-            m_FmtLen.x = m_FmtLen.y = fmtIntegerInch + fmtMantissaInch;
+            if( aDefaults )
+            {
+                m_FmtScale.x = m_FmtScale.y = aDefaults->m_InchMantissaLen;
+                m_FmtLen.x = m_FmtLen.y = aDefaults->m_InchIntegerLen
+                                          + aDefaults->m_InchMantissaLen;
+            }
+            else
+            {
+                m_FmtScale.x = m_FmtScale.y = FMT_MANTISSA_INCH;
+                m_FmtLen.x = m_FmtLen.y = FMT_INTEGER_INCH + FMT_MANTISSA_INCH;
+            }
         }
     }
 }

@@ -379,7 +379,6 @@ public:
     ///< Image Justify Offset on XY axis (default = 0,0).
     wxPoint            m_ImageJustifyOffset;
     bool               m_GerbMetric;                     // false = Inches, true = metric
-    bool               m_hasFormat;
 
     ///< false = absolute Coord, true = relative Coord.
     bool               m_Relative;
