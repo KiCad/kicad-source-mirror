@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
-"PO-Revision-Date: 2021-08-01 22:03+0000\n"
+"PO-Revision-Date: 2021-08-02 09:48+0000\n"
 "Last-Translator: David Chen <d0123456789g@yahoo.com.tw>\n"
 "Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hant/>\n"
@@ -297,7 +297,7 @@ msgstr "3D 檢視器"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:69
 msgid "Copy 3D Image"
-msgstr "複製 3D 影象"
+msgstr "複製 3D 影像"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:107
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:238
@@ -368,7 +368,7 @@ msgstr "重新載入電路板"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:60
 msgid "Copy 3D image to clipboard"
-msgstr "複製 3D 影象到剪貼簿"
+msgstr "複製 3D 影像到剪貼簿"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:65
 msgid "Render current view using Raytracing"
@@ -403,9 +403,8 @@ msgid "Solder paste:"
 msgstr "錫膏："
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:100
-#, fuzzy
 msgid "Copper/surface finish:"
-msgstr "銅表面處理（鍍銅）："
+msgstr "銅／表面處理："
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:113
 msgid "Board body:"
@@ -505,9 +504,8 @@ msgid "Realistic"
 msgstr "真實算繪模式"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_display_options_base.cpp:101
-#, fuzzy
 msgid "Solid colors"
-msgstr "選區顏色："
+msgstr "實心顏色"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_display_options_base.cpp:101
 msgid "CAD colors"
@@ -696,55 +694,45 @@ msgstr "底部光："
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_raytracing_options_base.cpp:187
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_raytracing_options_base.cpp:204
-#, fuzzy
 msgid "Elevation (deg)"
-msgstr "海拔 (度)"
+msgstr "海拔（度）"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_raytracing_options_base.cpp:191
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_raytracing_options_base.cpp:208
-#, fuzzy
 msgid "Azimuth (deg)"
-msgstr "方位角 (度)"
+msgstr "方位角（度）"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_raytracing_options_base.cpp:212
-#, fuzzy
 msgid "Light 1:"
-msgstr "淺色"
+msgstr "光源 1："
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_raytracing_options_base.cpp:230
-#, fuzzy
 msgid "Light 5:"
-msgstr "淺色"
+msgstr "光源 5："
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_raytracing_options_base.cpp:245
-#, fuzzy
 msgid "Light 2:"
-msgstr "淺色"
+msgstr "光源 2："
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_raytracing_options_base.cpp:263
-#, fuzzy
 msgid "Light 6:"
-msgstr "淺色"
+msgstr "光源 6："
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_raytracing_options_base.cpp:278
-#, fuzzy
 msgid "Light 3:"
-msgstr "淺色"
+msgstr "光源 3："
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_raytracing_options_base.cpp:296
-#, fuzzy
 msgid "Light 7:"
-msgstr "淺色"
+msgstr "光源 7："
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_raytracing_options_base.cpp:311
-#, fuzzy
 msgid "Light 4:"
-msgstr "淺色"
+msgstr "光源 4："
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_raytracing_options_base.cpp:329
-#, fuzzy
 msgid "Light 8:"
-msgstr "淺色"
+msgstr "光源 8："
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:100
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:72
@@ -770,7 +758,7 @@ msgstr "顏色"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:717
 msgid "3D Image File Name"
-msgstr "3D 影象檔名稱"
+msgstr "3D 影像檔名稱"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:738 common/eda_base_frame.cpp:1048
 #: common/eda_base_frame.cpp:1053 pcbnew/plugins/altium/altium_pcb.cpp:1319
@@ -791,7 +779,7 @@ msgstr "錯誤"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:772
 msgid "Failed to copy image to clipboard"
-msgstr "無法將影象複製到剪貼簿"
+msgstr "無法將影像複製到剪貼簿"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:783
 msgid "Can't save file"
@@ -923,7 +911,7 @@ msgstr "使用每個 3D 模型檔案中的所有材質屬性"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:194
 msgid "Render Solid Colors"
-msgstr "素色算繪"
+msgstr "實體算繪"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:195
 msgid "Use only the diffuse color property from model 3D model file"
@@ -2133,14 +2121,14 @@ msgstr "錯誤的比例數值"
 #, c-format
 msgid ""
 "This scale results in an image which is too small (%.2f mm or %.1f mil)."
-msgstr "此比例會使影象尺寸太小 (%.2f mm 或 %.1f mil)。"
+msgstr "此比例會使影像尺寸太小 (%.2f mm 或 %.1f mil)。"
 
 #: common/dialogs/dialog_image_editor.cpp:93
 #, c-format
 msgid ""
 "This scale results in an image which is very large (%.1f mm or %.2f in). Are "
 "you sure?"
-msgstr "此比例會使影象尺寸非常大(%.1f mm 或 %.2f in)。確定嗎？"
+msgstr "此比例會使影像尺寸非常大(%.1f mm 或 %.2f in)。確定嗎？"
 
 #: common/dialogs/dialog_image_editor_base.cpp:33
 msgid "Grey"
@@ -2148,11 +2136,11 @@ msgstr "灰度"
 
 #: common/dialogs/dialog_image_editor_base.cpp:39
 msgid "Image Scale:"
-msgstr "影象比例："
+msgstr "影像比例："
 
 #: common/dialogs/dialog_image_editor_base.h:53
 msgid "Image Editor"
-msgstr "影象編輯器"
+msgstr "影像編輯器"
 
 #: common/dialogs/dialog_locked_items_query.cpp:34
 msgid "Skip Locked Items"
@@ -2213,7 +2201,7 @@ msgstr "歡迎來到 KiCad %s！"
 
 #: common/dialogs/dialog_migrate_settings.cpp:61
 msgid "Import settings from a previous version (none found)"
-msgstr "從早期版本匯入設定（未找到）"
+msgstr "從前一個版本匯入設定（未找到）"
 
 #: common/dialogs/dialog_migrate_settings.cpp:123
 msgid "Select Settings Path"
@@ -2225,7 +2213,7 @@ msgstr "您想如何設定 KiCad？"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:34
 msgid "Import settings from a previous version at:"
-msgstr "在以下位置從先前版本匯入設定："
+msgstr "在以下位置從前一個版本匯入設定："
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:49
 msgid "Choose a different path"
@@ -2237,13 +2225,13 @@ msgstr "所選路徑不包含有效的 KiCad 設定！"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:63
 msgid "Import library configuration from previous version"
-msgstr "從先前版本匯入庫設定"
+msgstr "從前一個的版本匯入庫設定"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:65
 msgid ""
 "When checked, the symbol and footprint library tables from the previous "
 "version will be imported into this version"
-msgstr "選中後，以前版本的符號和封裝庫表將匯入到該版本中"
+msgstr "選中後，前一個版本的符號和封裝庫表將匯入到該版本中"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:69
 msgid "Start with default settings"
@@ -3213,7 +3201,7 @@ msgstr "拖動選定的物件；否則繪製選擇矩形"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:103
 msgid "Drag any object (selected or not)"
-msgstr "拖動任意專案（選中或未選中）"
+msgstr "拖動任意物件（選中或未選中）"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:112
 msgid "Middle button drag:"
@@ -3385,11 +3373,11 @@ msgstr "微孔鍍孔直徑"
 
 #: common/dialogs/panel_setup_netclasses.cpp:485
 msgid "Differential pair track width"
-msgstr "差分對佈線寬度"
+msgstr "差動對佈線寬度"
 
 #: common/dialogs/panel_setup_netclasses.cpp:486
 msgid "Differential pair gap"
-msgstr "差分對間隙"
+msgstr "差動對間隙"
 
 #: common/dialogs/panel_setup_netclasses.cpp:487
 msgid "Schematic wire thickness"
@@ -3975,15 +3963,15 @@ msgstr "電路板標記"
 
 #: common/eda_item.cpp:262
 msgid "Aligned Dimension"
-msgstr "對齊標註"
+msgstr "對齊尺標"
 
 #: common/eda_item.cpp:263
 msgid "Orthogonal Dimension"
-msgstr "正交標註"
+msgstr "正交尺標"
 
 #: common/eda_item.cpp:264
 msgid "Center Dimension"
-msgstr "中心標註"
+msgstr "中心尺標"
 
 #: common/eda_item.cpp:265 pcbnew/pcb_dimension.cpp:1041
 msgid "Leader"
@@ -4245,7 +4233,7 @@ msgstr "厚度"
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:189
 #: pcbnew/microwave/microwave_polygon.cpp:139
 msgid "Mirrored"
-msgstr "映象"
+msgstr "鏡像"
 
 #: common/eda_text.cpp:681 eeschema/dialogs/dialog_lib_edit_pin_table.cpp:61
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:55
@@ -4323,16 +4311,16 @@ msgid ""
 "containing a project specific footprint library named footprints.pretty."
 msgstr ""
 "由 KiCad "
-"內部定義（不能被編輯），並設定為目前載入的工程檔案的絕對路徑。這個環境變數可以用於定義相對於目前載入的工程檔案和路徑。例如，${KIPRJMOD}/"
-"libs/footprints.pretty 可以被定義為包含名為 footprints.pretty 工程專用封裝庫的檔案夾。"
+"內部定義（不能被編輯），並設定為目前載入的專案檔的絕對路徑。這個環境變數可以用於定義相對於目前載入的專案檔和路徑。例如，${KIPRJMOD}/libs/"
+"footprints.pretty 可以被定義為包含名為 footprints.pretty 工程專用封裝庫的檔案夾。"
 
 #: common/env_vars.cpp:88
 msgid "A directory containing system-wide scripts installed with KiCad"
-msgstr "一個包含用 KiCad 安裝的系統級指令碼的目錄"
+msgstr "一個包含用 KiCad 安裝的系統級腳本的目錄"
 
 #: common/env_vars.cpp:90
 msgid "A directory containing user-specific scripts installed with KiCad"
-msgstr "一個包含用 KiCad 安裝的使用者指定指令碼的目錄"
+msgstr "一個包含用 KiCad 安裝的使用者指定腳本的目錄"
 
 #: common/env_vars.cpp:94
 msgid "Deprecated version of KICAD_TEMPLATE_DIR."
@@ -4595,7 +4583,7 @@ msgstr "退出"
 
 #: common/hotkey_store.cpp:81
 msgid "Project Manager"
-msgstr "工程管理器"
+msgstr "專案管理器"
 
 #: common/hotkey_store.cpp:82 eeschema/eeschema_config.cpp:67
 #: eeschema/menubar.cpp:125 eeschema/sch_edit_frame.cpp:1290
@@ -5855,7 +5843,7 @@ msgstr "網格屬性..."
 
 #: common/tool/actions.cpp:479
 msgid "Set grid dimensions"
-msgstr "設定網格標註"
+msgstr "設定網格尺標"
 
 #: common/tool/actions.cpp:484
 msgid "Use inches"
@@ -6182,7 +6170,7 @@ msgstr "訊號名稱不能包含空格"
 
 #: common/view/view.cpp:542
 msgid "Mirroring for Y axis is not supported yet"
-msgstr "Y 軸的映象尚不支援"
+msgstr "Y 軸鏡像尚未支援"
 
 #: common/widgets/footprint_preview_widget.cpp:103
 msgid "Footprint not found."
@@ -6429,15 +6417,15 @@ msgstr "所有 KiCad 符號庫檔案"
 
 #: common/wildcards_and_files_ext.cpp:210
 msgid "KiCad project files"
-msgstr "KiCad 工程檔案"
+msgstr "KiCad 專案檔"
 
 #: common/wildcards_and_files_ext.cpp:216
 msgid "KiCad legacy project files"
-msgstr "KiCad 舊工程檔案"
+msgstr "KiCad 舊專案檔"
 
 #: common/wildcards_and_files_ext.cpp:222
 msgid "All KiCad project files"
-msgstr "所有 KiCad 工程檔案"
+msgstr "所有 KiCad 專案檔"
 
 #: common/wildcards_and_files_ext.cpp:228
 msgid "KiCad legacy schematic files"
@@ -6642,14 +6630,14 @@ msgid "Jpeg file"
 msgstr "JPEG 檔案"
 
 #: cvpcb/auto_associate.cpp:105
-#, fuzzy, c-format
+#, c-format
 msgid "Equivalence file '%s' could not be found in the default search paths."
-msgstr "在預設路徑沒有找到等價檔案 \"%s\"。"
+msgstr "在預設路徑中找不到等校的檔案 \"%s\"。"
 
 #: cvpcb/auto_associate.cpp:126
-#, fuzzy, c-format
+#, c-format
 msgid "Error opening equivalence file '%s'."
-msgstr "開啟等效檔案 \"%s\" 時出現錯誤。"
+msgstr "開啟等效檔案 \"%s\" 時發生錯誤。"
 
 #: cvpcb/auto_associate.cpp:178
 msgid "Equivalence File Load Error"
@@ -6658,7 +6646,7 @@ msgstr "等效檔案載入錯誤"
 #: cvpcb/auto_associate.cpp:185
 #, c-format
 msgid "%lu footprint/symbol equivalences found."
-msgstr "找到了 %lu 個封裝/符號等價。"
+msgstr "找到了 %lu 個封裝/符號等效。"
 
 #: cvpcb/auto_associate.cpp:261
 #, c-format
@@ -6795,9 +6783,9 @@ msgstr ""
 "%s"
 
 #: cvpcb/dialogs/dialog_config_equfiles.cpp:51
-#, fuzzy, c-format
+#, c-format
 msgid "Project file: '%s'"
-msgstr "工程檔案：\"%s\""
+msgstr "專案檔：\"%s\""
 
 #: cvpcb/dialogs/dialog_config_equfiles.cpp:103
 msgid "No editor defined in KiCad. Please choose it."
@@ -7349,7 +7337,7 @@ msgstr "BOM 產生說明"
 
 #: eeschema/dialogs/dialog_bom_base.cpp:25
 msgid "BOM generator scripts:"
-msgstr "BOM 產生器指令碼："
+msgstr "BOM 產生器腳本："
 
 #: eeschema/dialogs/dialog_bom_base.cpp:69
 msgid "Add a new BOM generator and its command line to the list"
@@ -7382,7 +7370,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_bom_base.cpp:116
 msgid "Reset the list of BOM generator scripts to the default settings"
-msgstr "重置 BOM 產生器指令碼到預設設定"
+msgstr "重置 BOM 產生器腳本到預設設定"
 
 #: eeschema/dialogs/dialog_bom_base.h:81
 msgid "Bill of Material"
@@ -7704,9 +7692,9 @@ msgstr ""
 "plugins/`。\n"
 "\n"
 "\n"
-"### 4.3.3 Python 指令碼示例：\n"
+"### 4.3.3 Python 腳本範例：\n"
 "\n"
-"假設您的 PC 上安裝了 python，並且 python 指令碼位於\n"
+"假設您的 PC 上安裝了 python，並且 python 腳本位於\n"
 "\n"
 "`<通向 kicad 的路徑>/kicad/bin/plugins/bom-in-python/`，\n"
 "\n"
@@ -7861,9 +7849,8 @@ msgid "Update all symbols in schematic"
 msgstr "更新原理圖中的所有符號"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:30
-#, fuzzy
 msgid "Update selected symbol(s)"
-msgstr "更新選擇符號"
+msgstr "更新選取的符號"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:33
 msgid "Update symbols matching reference designator:"
@@ -7979,7 +7966,7 @@ msgstr "指定的封裝無效"
 
 #: eeschema/dialogs/dialog_choose_symbol.cpp:528
 msgid "No symbol selected"
-msgstr "沒有選擇符號"
+msgstr "尚未選擇符號"
 
 #: eeschema/dialogs/dialog_edit_label.cpp:104
 msgid "Global Label Properties"
@@ -9531,13 +9518,13 @@ msgstr "選擇輸出目錄"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:231
 #: pcbnew/dialogs/dialog_gendrill.cpp:305 pcbnew/dialogs/dialog_plot.cpp:398
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Do you want to use a path relative to\n"
 "'%s'?"
 msgstr ""
 "是否要使用相對路徑\n"
-"\"%s\""
+"相對於 \"%s\"？"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:233
 #: pcbnew/dialogs/dialog_export_svg.cpp:214
@@ -9890,7 +9877,7 @@ msgstr "匯入設定"
 #: eeschema/dialogs/dialog_sch_import_settings.cpp:62
 #: pcbnew/dialogs/dialog_import_settings.cpp:116
 msgid "Import Settings From"
-msgstr "匯入設定"
+msgstr "從...匯入設定"
 
 #: eeschema/dialogs/dialog_sch_import_settings.cpp:74
 #: pcbnew/dialogs/dialog_import_settings.cpp:128
@@ -9900,7 +9887,7 @@ msgstr "檔案沒有找到。"
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:22
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:22
 msgid "Import from:"
-msgstr "匯入："
+msgstr "從...匯入："
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:27
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:31
@@ -10051,13 +10038,13 @@ msgid "Project is missing or read-only. Changes will not be saved."
 msgstr "專案遺失或為唯讀。變更將不會被儲存。"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:154
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error importing settings from project:\n"
 "Project file %s could not be loaded."
 msgstr ""
-"從專案匯入設定時出錯：\n"
-"無法載入專案檔案 %s"
+"從專案匯入設定時發生錯誤：\n"
+"無法載入專案檔 %s。"
 
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:66
 msgid "Connection type:"
@@ -11066,11 +11053,11 @@ msgstr "180"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:152
 msgid "Mirror:"
-msgstr "映象："
+msgstr "鏡像："
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:156
 msgid "Not mirrored"
-msgstr "無映象"
+msgstr "無鏡像"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:156
 msgid "Around X axis"
@@ -12337,7 +12324,7 @@ msgid ""
 "\n"
 "This may cause broken symbol library links under certain conditions."
 msgstr ""
-"工程檔案符號庫列表中定義的符號庫不再受支援,並且將\n"
+"專案檔符號庫列表中定義的符號庫不再受支援,並且將\n"
 "\n"
 "刪除。 在某些情況下,這可能會導致符號庫連結斷開。"
 
@@ -12381,9 +12368,8 @@ msgid "Schematic is read only."
 msgstr "原理圖是隻讀的。"
 
 #: eeschema/files-io.cpp:658
-#, fuzzy
 msgid "Insert Schematic"
-msgstr "匯入原理圖"
+msgstr "插入原理圖"
 
 #: eeschema/files-io.cpp:686
 msgid ""
@@ -13213,9 +13199,9 @@ msgstr "沒有找到備份檔案 \"%s\"。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2090
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2109
-#, fuzzy, c-format
+#, c-format
 msgid "Error reading image %s."
-msgstr "讀取圖表出錯"
+msgstr "圖片讀取錯誤 %s 。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2102
 #, fuzzy, c-format
@@ -14975,7 +14961,7 @@ msgid "Import Symbol"
 msgstr "匯入符號"
 
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:79
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot import symbol library '%s'."
 msgstr "無法匯入符號庫 \"%s\"。"
 
@@ -14992,7 +14978,7 @@ msgstr "符號 '%s' 已存在於庫 '%s' 中"
 
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:114
 msgid "There is no symbol selected to save."
-msgstr "沒有選擇元件儲存。"
+msgstr "尚未選擇要儲存的符號。"
 
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:123
 msgid "Export Symbol"
@@ -15094,9 +15080,8 @@ msgid "Unit %c"
 msgstr "單元 %c"
 
 #: eeschema/symbol_viewer_frame.cpp:919 pcbnew/footprint_viewer_frame.cpp:990
-#, fuzzy
 msgid "[no library selected]"
-msgstr "沒有選擇庫"
+msgstr "[尚未選擇庫]"
 
 #: eeschema/toolbars_symbol_viewer.cpp:51
 msgid "Choose symbol"
@@ -15570,7 +15555,7 @@ msgstr "新增圖片"
 
 #: eeschema/tools/ee_actions.cpp:350
 msgid "Add bitmap image"
-msgstr "新增圖片"
+msgstr "新增點陣圖"
 
 #: eeschema/tools/ee_actions.cpp:355
 msgid "Finish Sheet"
@@ -15594,7 +15579,7 @@ msgstr "順時針旋轉"
 
 #: eeschema/tools/ee_actions.cpp:372 pcbnew/tools/pcb_actions.cpp:290
 msgid "Rotates selected item(s) clockwise"
-msgstr "將選中的項目順時針旋轉"
+msgstr "將選取的項目順時針旋轉"
 
 #: eeschema/tools/ee_actions.cpp:378 pcbnew/tools/edit_tool.cpp:1477
 msgid "Rotate"
@@ -15606,7 +15591,7 @@ msgstr "逆時針旋轉所選的項目"
 
 #: eeschema/tools/ee_actions.cpp:384
 msgid "Mirror Vertically"
-msgstr "垂直映象"
+msgstr "垂直鏡像"
 
 #: eeschema/tools/ee_actions.cpp:384
 msgid "Flips selected item(s) from top to bottom"
@@ -15614,7 +15599,7 @@ msgstr "從上到下翻轉選定的項目"
 
 #: eeschema/tools/ee_actions.cpp:390
 msgid "Mirror Horizontally"
-msgstr "水平映象"
+msgstr "水平鏡像"
 
 #: eeschema/tools/ee_actions.cpp:390
 msgid "Flips selected item(s) from left to right"
@@ -16231,14 +16216,14 @@ msgstr "按 <ESC> 鍵取消符號建立。"
 
 #: eeschema/tools/sch_drawing_tools.cpp:457
 msgid "Press <ESC> to cancel image creation."
-msgstr "按 <ESC> 取消圖片建立。"
+msgstr "按 <ESC> 取消建立圖片。"
 
 #: eeschema/tools/sch_drawing_tools.cpp:516
 #: pagelayout_editor/pl_editor_frame.cpp:855
 #: pagelayout_editor/pl_editor_frame.cpp:863
-#, fuzzy, c-format
+#, c-format
 msgid "Could not load image from '%s'."
-msgstr "無法從 \"%s\" 載入圖片"
+msgstr "無法從 \"%s\" 載入圖片。"
 
 #: eeschema/tools/sch_drawing_tools.cpp:643
 #: eeschema/tools/sch_drawing_tools.cpp:1149
@@ -16267,7 +16252,7 @@ msgstr "符號單元"
 
 #: eeschema/tools/sch_edit_tool.cpp:101
 msgid "no symbol selected"
-msgstr "沒有選擇符號"
+msgstr "尚未選擇符號"
 
 #: eeschema/tools/sch_edit_tool.cpp:110
 msgid "symbol is not multi-unit"
@@ -16379,7 +16364,7 @@ msgstr "沒有要匯出的符號"
 
 #: eeschema/tools/symbol_editor_control.cpp:397
 msgid "Image File Name"
-msgstr "影象檔名稱"
+msgstr "影像檔名稱"
 
 #: eeschema/tools/symbol_editor_control.cpp:408
 #, fuzzy, c-format
@@ -16452,7 +16437,7 @@ msgstr "通孔資料"
 msgid ""
 "Exported board does not have enough copper layers to handle selected inner "
 "layers"
-msgstr "匯出的電路板沒有足夠的銅層來處理選定的內層"
+msgstr "匯出的電路板尚未有足夠的銅層來處理選定的內層"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:33
 msgid "Layer selection:"
@@ -16520,7 +16505,7 @@ msgstr "層選擇"
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:94
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:248
 msgid "Print mirrored"
-msgstr "映象列印"
+msgstr "鏡像列印"
 
 #: gerbview/dialogs/dialog_print_gerbview.cpp:180
 #: pcbnew/dialogs/dialog_plot_base.cpp:54
@@ -16625,7 +16610,7 @@ msgstr "顯示圖框限制"
 
 #: gerbview/events_called_functions.cpp:179 gerbview/gerbview_frame.cpp:164
 msgid "Layers Manager"
-msgstr "層管理器"
+msgstr "圖層管理員"
 
 #: gerbview/excellon_read_drill_file.cpp:263
 #, c-format
@@ -16830,7 +16815,7 @@ msgstr "極性"
 #: pcbnew/pcb_text.cpp:122 pcbnew/tools/edit_tool.cpp:1622
 #: pcbnew/tools/pcb_actions.cpp:307
 msgid "Mirror"
-msgstr "映象"
+msgstr "鏡像"
 
 #: gerbview/gerber_draw_item.cpp:722
 msgid "AB axis"
@@ -16884,7 +16869,7 @@ msgstr "Y 對齊"
 
 #: gerbview/gerber_file_image.cpp:384
 msgid "Image Justify Offset"
-msgstr "影象偏移對齊"
+msgstr "影像偏移對齊"
 
 #: gerbview/gerber_file_image_list.cpp:186
 #, c-format
@@ -17067,11 +17052,11 @@ msgstr "開啟一個 Zip 壓縮 (Gerber 和鑽孔) 檔案"
 
 #: gerbview/tools/gerbview_actions.cpp:63
 msgid "Show Layers Manager"
-msgstr "顯示層管理"
+msgstr "顯示圖層管理員"
 
 #: gerbview/tools/gerbview_actions.cpp:64
 msgid "Show or hide the layer manager"
-msgstr "顯示/隱藏層管理器"
+msgstr "顯示/隱藏圖層管理員"
 
 #: gerbview/tools/gerbview_actions.cpp:69
 msgid "List DCodes..."
@@ -17200,7 +17185,7 @@ msgstr "翻轉 Gerber 檢視"
 
 #: gerbview/tools/gerbview_actions.cpp:178
 msgid "Show as mirror image"
-msgstr "顯示為映象"
+msgstr "顯示為鏡像"
 
 #: gerbview/tools/gerbview_control.cpp:112
 msgid "None of the Gerber layers contain any data"
@@ -17447,7 +17432,7 @@ msgstr "預覽 Gerber 檔案"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:128
 msgid "Convert bitmap images to schematic symbols or PCB footprints"
-msgstr "將點陣圖影象轉換為原理符號或 PCB 封裝"
+msgstr "將點陣圖轉換為原理符號或 PCB 封裝"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:132
 msgid "Show tools for calculating resistance, current capacity, etc."
@@ -17461,7 +17446,7 @@ msgstr "編輯用於原理圖和 PCB 設計的圖紙邊框和工程圖明細表"
 
 #: kicad/files-io.cpp:46
 msgid "KiCad project file"
-msgstr "KiCad 工程檔案"
+msgstr "KiCad 專案檔"
 
 #: kicad/files-io.cpp:66
 msgid "Unzip Project"
@@ -17487,7 +17472,7 @@ msgstr "解壓工程到 \"%s\"\n"
 
 #: kicad/files-io.cpp:117
 msgid "Archive Project Files"
-msgstr "壓縮工程檔案"
+msgstr "壓縮專案檔"
 
 #: kicad/import_project.cpp:75
 msgid "KiCad Project Destination"
@@ -17523,11 +17508,11 @@ msgstr ""
 
 #: kicad/import_project.cpp:223
 msgid "Import CADSTAR Archive Project Files"
-msgstr "匯入 CADSTAR 存檔工程檔案"
+msgstr "匯入 CADSTAR 壓縮的專案檔"
 
 #: kicad/import_project.cpp:231
 msgid "Import Eagle Project Files"
-msgstr "匯入 Eagle 工程檔案"
+msgstr "匯入 Eagle 專案檔"
 
 #: kicad/kicad.cpp:169
 #, c-format
@@ -17536,11 +17521,11 @@ msgid ""
 "does not appear to be a valid KiCad project file."
 msgstr ""
 "檔案 '%s'\n"
-"似乎不是有效的 KiCad 工程檔案。"
+"似乎不是有效的 KiCad 專案檔。"
 
 #: kicad/kicad_manager_frame.cpp:158
 msgid "Project Files"
-msgstr "工程檔案"
+msgstr "專案檔"
 
 #: kicad/kicad_manager_frame.cpp:162
 msgid "Editors"
@@ -17575,7 +17560,7 @@ msgstr "清除最近的專案"
 
 #: kicad/menubar.cpp:91
 msgid "Import Non-KiCad Project..."
-msgstr "匯入非 KiCad 工程..."
+msgstr "匯入非 KiCad 專案..."
 
 #: kicad/menubar.cpp:94
 msgid "CADSTAR Project..."
@@ -17607,11 +17592,11 @@ msgstr "解壓工程(&U)..."
 
 #: kicad/menubar.cpp:113 kicad/menubar.cpp:218
 msgid "Unarchive project files from zip archive"
-msgstr "選擇一個 Zip 工程檔案，並解壓縮"
+msgstr "選擇一個 Zip 專案檔，並解壓縮"
 
 #: kicad/menubar.cpp:128
 msgid "Browse Project Files"
-msgstr "瀏覽工程檔案"
+msgstr "瀏覽專案檔"
 
 #: kicad/menubar.cpp:129
 msgid "Open project directory in file browser"
@@ -17627,7 +17612,7 @@ msgstr "在文字編輯器中編輯本地檔案"
 
 #: kicad/menubar.cpp:214
 msgid "Archive all project files"
-msgstr "壓縮全部工程檔案"
+msgstr "壓縮全部的專案檔"
 
 #: kicad/menubar.cpp:227
 msgid "Reveal project folder in Finder"
@@ -17635,7 +17620,7 @@ msgstr "在尋找器中顯示專案資料夾"
 
 #: kicad/menubar.cpp:229
 msgid "Open project directory in file explorer"
-msgstr "在檔案資源管理器中開啟工程目錄"
+msgstr "在檔案管理器中開啟專案目錄"
 
 #: kicad/project_template.cpp:52
 msgid "Could open the template path!"
@@ -17698,7 +17683,7 @@ msgstr "切換到此工程"
 
 #: kicad/project_tree_pane.cpp:708
 msgid "Close all editors, and switch to the selected project"
-msgstr "關閉所有編輯器，然後切換到所選工程"
+msgstr "關閉所有編輯器，然後切換到所選取的專案"
 
 #: kicad/project_tree_pane.cpp:715
 msgid "New Directory..."
@@ -17718,7 +17703,7 @@ msgstr "在尋找器視窗中顯示目錄"
 
 #: kicad/project_tree_pane.cpp:727
 msgid "Open Directory in File Explorer"
-msgstr "在檔案資源管理器中開啟目錄"
+msgstr "在檔案管理器中開啟目錄"
 
 #: kicad/project_tree_pane.cpp:728 pcbnew/tools/pcb_actions.cpp:554
 msgid "Opens the directory in the default system file manager"
@@ -17730,7 +17715,7 @@ msgstr "在尋找器視窗中顯示目錄"
 
 #: kicad/project_tree_pane.cpp:737
 msgid "Open Directories in File Explorer"
-msgstr "在檔案資源管理器中開啟目錄"
+msgstr "在檔案管理器中開啟目錄"
 
 #: kicad/project_tree_pane.cpp:738
 msgid "Opens the directories in the default system file manager"
@@ -17855,7 +17840,7 @@ msgstr "圖片轉換器"
 
 #: kicad/tools/kicad_manager_actions.cpp:94
 msgid "Convert bitmap images to schematic or PCB components"
-msgstr "將點陣圖影象轉換為原理圖或 PCB 元件"
+msgstr "將點陣圖轉換為原理圖或 PCB 元件"
 
 #: kicad/tools/kicad_manager_actions.cpp:99
 msgid "Calculator Tools"
@@ -17892,7 +17877,7 @@ msgid ""
 "\n"
 "Do you want to continue?"
 msgstr ""
-"選取的目錄不是空的。 建議在空目錄中建立專案。\n"
+"選擇的目錄不是空的。 建議在空目錄中建立專案。\n"
 "\n"
 "您想繼續嗎？"
 
@@ -17906,7 +17891,7 @@ msgstr "自定義模板"
 
 #: kicad/tools/kicad_manager_control.cpp:174
 msgid "No project template was selected.  Cannot generate new project."
-msgstr "未選中工程模板。無法產生新的工程。"
+msgstr "尚未選擇專案模板。無法產生新的專案。"
 
 #: kicad/tools/kicad_manager_control.cpp:182
 msgid "New Project Folder"
@@ -18395,7 +18380,7 @@ msgstr "新增點陣圖"
 
 #: pagelayout_editor/tools/pl_actions.cpp:59
 msgid "Add a bitmap image"
-msgstr "新增一個位圖影象"
+msgstr "新增一個點陣圖"
 
 #: pagelayout_editor/tools/pl_actions.cpp:73
 msgid "Append Existing Drawing Sheet..."
@@ -20488,7 +20473,7 @@ msgstr "僅底部"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:89
 msgid "Only selected"
-msgstr "僅選中"
+msgstr "僅選取"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:95
 msgid "Empty"
@@ -20519,7 +20504,7 @@ msgstr "PCB 和原理圖已成功重新批註"
 msgid ""
 "PCB annotation changes should be synchronized with schematic using the "
 "\"Update Schematic from PCB\" tool."
-msgstr ""
+msgstr "PCB 標註變更必須使用 \"從 PCB 更新原理圖...\" 工具來進行同步。"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:285
 #, c-format
@@ -21015,9 +21000,8 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:198 pcbnew/files.cpp:614
 #: pcbnew/tools/pcb_control.cpp:1022
-#, fuzzy
 msgid "Loading PCB"
-msgstr "載入中 "
+msgstr "PCB 載入中"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:220
 #, c-format
@@ -21216,7 +21200,7 @@ msgstr "電路板統計"
 
 #: pcbnew/dialogs/dialog_choose_footprint.cpp:229
 msgid "No footprint selected"
-msgstr "沒有選擇封裝"
+msgstr "尚未選擇封裝"
 
 #: pcbnew/dialogs/dialog_cleanup_graphics.cpp:46
 msgid "Update Footprint"
@@ -21327,7 +21311,7 @@ msgstr "熱風焊盤輻射線不能小於最小寬度。"
 #: pcbnew/dialogs/dialog_copper_zones.cpp:532
 #: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:256
 msgid "No layer selected."
-msgstr "沒有圖層被選擇。"
+msgstr "尚未選擇圖層。"
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:868
 #, fuzzy
@@ -21807,7 +21791,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_dimension_properties.cpp:280
 msgid "Change dimension properties"
-msgstr "變更標註屬性"
+msgstr "變更尺標屬性"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:20
 msgid "Leader Format"
@@ -21836,12 +21820,12 @@ msgstr "層："
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:67
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:87
 msgid "Dimension Format"
-msgstr "標註格式"
+msgstr "尺標格式"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:96
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:102
 msgid "Measured value of this dimension"
-msgstr "該標註的測量值"
+msgstr "該尺標的測量值"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:106
 msgid "Override value"
@@ -21866,12 +21850,12 @@ msgstr "單位："
 msgid ""
 "Units of this dimension (\"automatic\" to follow the units selected in the "
 "editor)"
-msgstr "此標註的單位(“自動”以遵循編輯器中選擇的單位)"
+msgstr "此尺標的單位(“自動”以遵循編輯器中選擇的單位)"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:130
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:135
 msgid "Text to print before the dimension value"
-msgstr "要在標註值之前列印的文字"
+msgstr "要在尺標值之前列印的文字"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:139
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:108
@@ -21901,7 +21885,7 @@ msgstr "1234 (mm)"
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:155
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:160
 msgid "Text to print after the dimension value"
-msgstr "要在標註值之後列印的文字"
+msgstr "要在尺標值之後列印的文字"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:164
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:124
@@ -21956,7 +21940,7 @@ msgstr "選中後，即使精度設定更高，\"0.100\" 也會顯示為 \"0.1\"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:210
 msgid "Dimension Text"
-msgstr "標註文字"
+msgstr "尺標文字"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:219
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:110
@@ -22014,16 +21998,16 @@ msgstr "180.0"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:301
 msgid "Keep aligned with dimension"
-msgstr "與標註保持對齊"
+msgstr "與尺標保持對齊"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:302
 msgid "Automatically set the text orientation to match the dimension lines"
-msgstr "自動設定文字方向以匹配標註線"
+msgstr "自動設定文字方向以符合尺標線"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:307
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:190
 msgid "Mirror text"
-msgstr "映象文字"
+msgstr "鏡像文字"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:311
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:140
@@ -22051,15 +22035,15 @@ msgstr "手動"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:329
 msgid "Choose how to position the text relative to the dimension line"
-msgstr "選擇文字相對於標註線的定位方式"
+msgstr "選擇文字相對於尺標線的定位方式"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:344
 msgid "Dimension Line"
-msgstr "標註線"
+msgstr "尺標線"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:353
 msgid "Thickness of the dimension lines"
-msgstr "標註線的粗細"
+msgstr "尺標線的粗細"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:367
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:135
@@ -22078,7 +22062,7 @@ msgstr "測量點與尺寸界線起點之間的間隙"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.h:120
 msgid "Dimension Properties"
-msgstr "標註屬性"
+msgstr "尺標屬性"
 
 #: pcbnew/dialogs/dialog_drc.cpp:85
 msgid "Run DRC"
@@ -22536,7 +22520,7 @@ msgstr "SVG 圖框尺寸"
 
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:95
 msgid "Print the layer(s) horizontally mirrored"
-msgstr "水平映象列印層"
+msgstr "水平鏡像列印層"
 
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:99
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:254
@@ -23134,7 +23118,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_footprint_wizard_list.cpp:142
 msgid "All footprint generator scripts were loaded"
-msgstr "所有的封裝產生器指令碼都已載入"
+msgstr "所有的封裝產生器腳本都已載入"
 
 #: pcbnew/dialogs/dialog_footprint_wizard_list_base.cpp:65
 msgid "Available Footprint Generators"
@@ -23146,7 +23130,7 @@ msgstr "搜尋路徑："
 
 #: pcbnew/dialogs/dialog_footprint_wizard_list_base.cpp:77
 msgid "Not loadable python scripts:"
-msgstr "沒有可載入的 Python 指令碼："
+msgstr "沒有可載入的 Python 腳本："
 
 #: pcbnew/dialogs/dialog_footprint_wizard_list_base.cpp:84
 msgid "Show Trace"
@@ -23162,7 +23146,7 @@ msgstr "封裝產生"
 
 #: pcbnew/dialogs/dialog_footprint_wizard_list_base.h:85
 msgid "Traceback of Python Script Errors"
-msgstr "追溯 Python 指令碼錯誤"
+msgstr "追溯 Python 腳本錯誤"
 
 #: pcbnew/dialogs/dialog_fp_plugin_options.cpp:37
 msgid ""
@@ -23311,7 +23295,7 @@ msgstr "Excellon"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:50
 msgid "Mirror Y axis"
-msgstr "Y 軸映象"
+msgstr "Y 軸鏡像"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:51
 msgid ""
@@ -23703,24 +23687,18 @@ msgid "footprint"
 msgstr "封裝"
 
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:59
-#, fuzzy, c-format
+#, c-format
 msgid "Error occurred writing empty footprint library table '%s'."
-msgstr ""
-"寫入空封裝庫表文件時發生錯誤\n"
-"\n"
-"%s"
+msgstr "寫入空封裝庫表檔案時發生錯誤 \"%s\" 。"
 
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:73
 msgid "Please select a footprint library table file."
 msgstr "請選擇一個封裝庫表文件。"
 
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:95
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' is not a valid footprint library table."
-msgstr ""
-"檔案 \"%s\" 不是一個有效的封裝庫表文件。\n"
-"\n"
-"%s"
+msgstr "檔案 \"%s\" 不是一個有效的封裝庫表檔案。"
 
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:106
 #, fuzzy, c-format
@@ -23855,7 +23833,7 @@ msgstr "設計規則"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:58
 msgid "Predefined track and via dimensions"
-msgstr "預定義的佈線和通孔標註"
+msgstr "預定義的佈線和通孔尺標"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:61
 msgid "Solder mask/paste defaults"
@@ -24200,7 +24178,7 @@ msgstr "輪廓平滑："
 
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:120
 msgid "Solid shape"
-msgstr "實體形狀"
+msgstr "實心形狀"
 
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:120
 msgid "HatchBorder pattern"
@@ -24264,7 +24242,7 @@ msgstr "封裝 %s (%s), %s, 旋轉 %g°"
 #: pcbnew/dialogs/dialog_pad_properties.cpp:484
 #: pcbnew/dialogs/dialog_text_properties.cpp:235
 msgid "back side (mirrored)"
-msgstr "背面(映象)"
+msgstr "背面(鏡像)"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:485
 #: pcbnew/dialogs/dialog_text_properties.cpp:235
@@ -24838,7 +24816,7 @@ msgstr "自定義形狀"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:973
 msgid "Footprint R1 (300K), back side (mirrored), rotated 180.0º"
-msgstr "封裝 R1 (300K)，背面 (映象)，旋轉 180.0º"
+msgstr "封裝 R1 (300K)，背面 (鏡像)，旋轉 180.0º"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:982
 msgid "Preview pad in sketch mode"
@@ -24913,7 +24891,7 @@ msgstr "寬度校正限制。目前的設計規則合理的寬度修正值必須
 
 #: pcbnew/dialogs/dialog_plot.cpp:801
 msgid "No layer selected, Nothing to plot"
-msgstr "沒有圖層選擇，沒有繪製"
+msgstr "尚未選擇圖層，無法繪製"
 
 #: pcbnew/dialogs/dialog_plot.cpp:856
 msgid "Warning: Scale option set to a very small value"
@@ -25019,7 +24997,7 @@ msgstr "草圖"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:143
 msgid "Mirrored plot"
-msgstr "映象繪製"
+msgstr "鏡像繪製"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:146
 msgid "Negative plot"
@@ -25291,7 +25269,7 @@ msgstr "過孔間距與線路間距相同"
 
 #: pcbnew/dialogs/dialog_pns_diff_pair_dimensions_base.h:60
 msgid "Differential Pair Dimensions"
-msgstr "差分對標註"
+msgstr "差動對尺寸"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings.cpp:79
 msgid "Single Track Length Tuning"
@@ -25299,11 +25277,11 @@ msgstr "調整單軌佈線長度"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings.cpp:85
 msgid "Differential Pair Length Tuning"
-msgstr "調整差分對長度"
+msgstr "調整差動對長度"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings.cpp:91
 msgid "Differential Pair Skew Tuning"
-msgstr "調整差分對斜交"
+msgstr "調整差動對斜交"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings.cpp:93
 msgid "Target skew:"
@@ -25438,8 +25416,7 @@ msgstr "繞過障礙物"
 msgid ""
 "When enabled, the router tries to move colliding traces behind solid "
 "obstacles (e.g. pads) instead of \"reflecting\" back the collision"
-msgstr ""
-"啟用後，佈線器會嘗試移動後面障礙物衝突的走線（例如焊盤），而不是“反映”衝突"
+msgstr "啟用後，佈線器會嘗試移動實心障礙物之後衝突的走線（例如焊盤），而不是 \"迴避\" 衝突"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:61
 msgid "Remove redundant tracks"
@@ -25593,7 +25570,7 @@ msgstr "相対於參考專案的位置"
 
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:207
 msgid "Print according to objects tab of appearance manager"
-msgstr "根據“外觀管理器”的“物件”選項卡進行列印"
+msgstr "根據外觀管理員的物件分頁進行列印"
 
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:235
 msgid "No drill mark"
@@ -25637,7 +25614,7 @@ msgstr "推擠焊盤屬性"
 
 #: pcbnew/dialogs/dialog_rule_area_properties.cpp:153
 msgid "No layers selected."
-msgstr "沒有選擇層。"
+msgstr "尚未選擇圖層。"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:25
 msgid "Layers:"
@@ -27710,7 +27687,7 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:72
 msgid "Default properties for new dimension objects:"
-msgstr "新標註物件的預設屬性："
+msgstr "新尺標物件的預設屬性："
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:89
 msgid ""
@@ -27731,7 +27708,7 @@ msgstr "保持文字對齊"
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:119
 msgid "When checked, dimension text will be kept aligned with dimension lines"
-msgstr "選中後，標註文字將與標註線保持對齊"
+msgstr "選中後，標註文字將與尺標線保持對齊"
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:131
 msgid "How many digits of precision to show"
@@ -27749,11 +27726,11 @@ msgstr "未定義通孔尺寸。"
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias.cpp:273
 msgid "No differential pair gap defined."
-msgstr "沒有定義差分對間距。"
+msgstr "沒有定義差動對間距。"
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:19
 msgid "Pre-defined track and via dimensions:"
-msgstr "預定義佈線和過孔標註："
+msgstr "預定義佈線和過孔尺標："
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:50
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:107
@@ -27773,7 +27750,7 @@ msgstr "孔"
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:140
 msgid "Differential Pairs"
-msgstr "差分對佈線"
+msgstr "差動對佈線"
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:156
 msgid "Gap"
@@ -27946,7 +27923,7 @@ msgstr "不允許的專案"
 
 #: pcbnew/drc/drc_item.cpp:61
 msgid "Text (or dimension) on Edge.Cuts layer"
-msgstr "Edge.Cuts 層上的文字 (或標註)"
+msgstr "Edge.Cuts 層上的文字 (或尺標)"
 
 #: pcbnew/drc/drc_item.cpp:65
 msgid "Clearance violation"
@@ -28078,11 +28055,11 @@ msgstr "連線上的過孔太多"
 
 #: pcbnew/drc/drc_item.cpp:197
 msgid "Differential pair gap out of range"
-msgstr "差分對間隙範圍"
+msgstr "差動對間隙範圍"
 
 #: pcbnew/drc/drc_item.cpp:201
 msgid "Differential uncoupled length too long"
-msgstr "差分未耦合長度太長"
+msgstr "差動未耦合長度太長"
 
 #: pcbnew/drc/drc_rule.h:135
 #, c-format
@@ -28489,7 +28466,7 @@ msgstr ""
 
 #: pcbnew/exporters/export_hyperlynx.cpp:194
 msgid "They have been exported as oval pads."
-msgstr ""
+msgstr "它們已被匯出成橢圓焊墊。"
 
 #: pcbnew/exporters/export_hyperlynx.cpp:307
 #: pcbnew/exporters/export_vrml.cpp:567
@@ -28532,9 +28509,9 @@ msgstr "背面 (底部) 放置檔案：\"%s\"。"
 
 #: pcbnew/exporters/gen_footprints_placefile.cpp:307
 #: pcbnew/exporters/gen_footprints_placefile.cpp:448
-#, fuzzy, c-format
+#, c-format
 msgid "Full component count: %d."
-msgstr "全部元件數量：%d\n"
+msgstr "全部元件數量：%d。"
 
 #: pcbnew/exporters/gen_footprints_placefile.cpp:310
 #: pcbnew/exporters/gen_footprints_placefile.cpp:404
@@ -28565,15 +28542,15 @@ msgid "Footprint Report"
 msgstr "封裝報告"
 
 #: pcbnew/exporters/gendrill_Excellon_writer.cpp:124
-#, fuzzy, c-format
+#, c-format
 msgid "Created file '%s'"
-msgstr "建立檔案 %s\n"
+msgstr "已建立檔案 \"%s\""
 
 #: pcbnew/exporters/gendrill_file_writer_base.cpp:354
 #: pcbnew/exporters/gendrill_gerber_writer.cpp:113
-#, fuzzy, c-format
+#, c-format
 msgid "Created file '%s'."
-msgstr "建立檔案 %s\n"
+msgstr "已建立檔案 \"%s\"。"
 
 #: pcbnew/exporters/gerber_jobfile_writer.cpp:158
 #, fuzzy, c-format
@@ -28618,14 +28595,14 @@ msgid "Printed circuit board"
 msgstr "印刷電路板"
 
 #: pcbnew/files.cpp:346
-#, fuzzy, c-format
+#, c-format
 msgid "Recovery file '%s' not found."
 msgstr "沒有找到備份檔案 \"%s\"。"
 
 #: pcbnew/files.cpp:351
-#, fuzzy, c-format
+#, c-format
 msgid "OK to load recovery file '%s'?"
-msgstr "確定載入恢復檔案 \"%s\""
+msgstr "確定載入備份檔案 \"%s\"？"
 
 #: pcbnew/files.cpp:374
 #, c-format
@@ -28666,7 +28643,7 @@ msgstr "PCB '%s' 不存在，您想建立它嗎？"
 
 #: pcbnew/files.cpp:613
 msgid "Creating PCB"
-msgstr ""
+msgstr "正在建立 PCB"
 
 #: pcbnew/files.cpp:706 pcbnew/files.cpp:716
 #, fuzzy, c-format
@@ -28856,11 +28833,11 @@ msgstr "更新封裝庫"
 
 #: pcbnew/footprint_edit_frame.cpp:1131
 msgid "No footprint selected."
-msgstr "沒有選擇封裝。"
+msgstr "尚未選擇封裝。"
 
 #: pcbnew/footprint_edit_frame.cpp:1140
 msgid "Footprint Image File Name"
-msgstr "封裝影象檔名稱"
+msgstr "封裝圖檔名稱"
 
 #: pcbnew/footprint_editor_utils.cpp:209
 msgid "Edit Zone"
@@ -29079,7 +29056,7 @@ msgstr "庫 '%s' 在目前的設定中未被啟用。使用管理封裝庫來編
 #: pcbnew/footprint_wizard_frame.cpp:81
 #: pcbnew/footprint_wizard_frame_functions.cpp:85
 msgid "Footprint Wizard"
-msgstr "封裝嚮導"
+msgstr "封裝精靈"
 
 #: pcbnew/footprint_wizard_frame.cpp:328
 msgid "Parameter"
@@ -29092,11 +29069,11 @@ msgstr "模型瀏覽：3D 檢視器 [%s]"
 
 #: pcbnew/footprint_wizard_frame.cpp:593
 msgid "Select wizard script to run"
-msgstr "選擇嚮導指令碼執行"
+msgstr "選擇精靈腳本來執行"
 
 #: pcbnew/footprint_wizard_frame.cpp:598
 msgid "Reset wizard parameters to default"
-msgstr "重置嚮導引數為預設值"
+msgstr "重置精靈引數為預設值"
 
 #: pcbnew/footprint_wizard_frame.cpp:603
 msgid "Select previous parameters page"
@@ -29112,11 +29089,11 @@ msgstr "匯出封裝到編輯器"
 
 #: pcbnew/footprint_wizard_frame_functions.cpp:91
 msgid "no wizard selected"
-msgstr "沒有嚮導選擇"
+msgstr "尚未選擇精靈"
 
 #: pcbnew/footprint_wizard_frame_functions.cpp:143
 msgid "Couldn't reload footprint wizard"
-msgstr "無法重複載入封裝嚮導"
+msgstr "無法重複載入封裝精靈"
 
 #: pcbnew/fp_shape.cpp:115 pcbnew/fp_text.cpp:275
 msgid "<invalid>"
@@ -29185,7 +29162,7 @@ msgstr "開啟檔案"
 
 #: pcbnew/import_gfx/dialog_import_gfx.cpp:277
 msgid "No file selected!"
-msgstr "沒有選中的檔案！"
+msgstr "尚未選擇檔案！"
 
 #: pcbnew/import_gfx/dialog_import_gfx.cpp:288
 msgid "Please select a valid layer."
@@ -30083,7 +30060,7 @@ msgstr "載入工程封裝庫時出錯"
 
 #: pcbnew/pcb_dimension.cpp:299
 msgid "Dimension"
-msgstr "標註"
+msgstr "尺標"
 
 #: pcbnew/pcb_dimension.cpp:301
 msgid "Prefix"
@@ -30100,7 +30077,7 @@ msgstr "字尾"
 #: pcbnew/pcb_dimension.cpp:439
 #, c-format
 msgid "Dimension '%s' on %s"
-msgstr "標註 '%s' 在 %s"
+msgstr "尺標 '%s' 在 %s"
 
 #: pcbnew/pcb_edit_frame.cpp:190
 msgid "KiCad PCB Editor"
@@ -30395,16 +30372,16 @@ msgstr "PLUGIN::Footprint*() 輸入已定義的 Python 函式模組。"
 #: pcbnew/plugins/altium/altium_parser_pcb.cpp:134
 #, c-format
 msgid "Unknown mapping of the Altium layer '%s'."
-msgstr ""
+msgstr "Altium 圖層 \"%s\" 的對應不明。"
 
 #: pcbnew/plugins/altium/altium_parser_pcb.cpp:788
 #, c-format
 msgid "Pads6 stream has unexpected length for subrecord 6: %d."
-msgstr ""
+msgstr "Pads6 資料流在 subrecord 6 有非預期的長度: %d."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:75
 msgid "Error reading file: cannot determine length."
-msgstr ""
+msgstr "檔案讀取錯誤：無法辨識大小。"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:86
 #, fuzzy
@@ -30435,22 +30412,21 @@ msgstr "重複的網路類名 \"%s\""
 #: pcbnew/plugins/altium/altium_pcb.cpp:1088
 #: pcbnew/plugins/altium/altium_pcb.cpp:1167
 #: pcbnew/plugins/altium/altium_pcb.cpp:1191
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Dimension found on an Altium layer (%d) with no KiCad equivalent. It has "
 "been moved to KiCad layer Eco1_User."
-msgstr "Altium 層 %d 上的標註沒有任何 KiCad 等效項。改為將其放在 Eco1_User 上"
+msgstr "Altium 層 （%d） 上找到的尺標沒有 KiCad 等效的項目。它們已被移動到 Eco1_User 圖層。"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1231
 #: pcbnew/plugins/altium/altium_pcb.cpp:1239
 #, c-format
 msgid "Ignored dimension of kind %d (not yet supported)."
-msgstr ""
+msgstr "尺標類型 %d 已被忽略（KiCad 目前尚未支援此功能）。"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1284
-#, fuzzy
 msgid "No 3D-models will be imported."
-msgstr "無法建立目錄 \"%s\" -> 無法匯入 3D 模型。"
+msgstr "沒有 3D 模型被匯入。"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1307
 #, fuzzy, c-format
@@ -30469,12 +30445,11 @@ msgstr "執行多邊形填充..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1381
 #: pcbnew/plugins/altium/altium_pcb.cpp:1633
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Polygon found on an Altium layer (%d) with no KiCad equivalent. It has been "
 "moved to KiCad layer Eco1_User."
-msgstr ""
-"Altium 層 %d 上的 Polygon 沒有任何 KiCad 等效項。改為將其放在 Eco1_User 上"
+msgstr "Altium 層 （%d） 上找到的 Polygon 沒有 KiCad 等效的項目。它們已被移動到 Eco1_User 圖層。"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1504
 #, fuzzy
@@ -30492,16 +30467,16 @@ msgid "Loading zones..."
 msgstr "載入中..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1614
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Zone found on an Altium layer (%d) with no KiCad equivalent. It has been "
 "moved to KiCad layer Eco1_User."
-msgstr "Altium 層 %d 上的覆銅沒有任何 KiCad 等效項。改為將其放在 Eco1_User 上"
+msgstr "Altium 層 （%d） 上找到的覆銅區域沒有 KiCad 等效的項目。它們已被移動到 Eco1_User 圖層。"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1668
 #, c-format
 msgid "Ignored polygon shape of kind %d (not yet supported)."
-msgstr ""
+msgstr "多邊型類型 %d 已被忽略（KiCad 目前尚未支援此功能）。"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1682
 #, fuzzy
@@ -30514,18 +30489,18 @@ msgid "Loading arcs..."
 msgstr "載入中..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1833
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Arc keepout found on an Altium layer (%d) with no KiCad equivalent. It has "
 "been moved to KiCad layer Eco1_User."
-msgstr "Altium 層 %d 上的圓弧沒有 KiCad 等效項。改為將其放在 Eco1_User 上"
+msgstr "Altium 層 （%d） 上找到的圓弧沒有 KiCad 等效的項目。它們已被移動到 Eco1_User 圖層。"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1852
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Arc found on an Altium layer (%d) with no KiCad equivalent. It has been "
 "moved to KiCad layer Eco1_User."
-msgstr "Altium 層 %d 上的圓弧沒有 KiCad 等效項。改為將其放在 Eco1_User 上"
+msgstr "Altium 層 （%d） 上找到的圓弧沒有 KiCad 等效的項目。它們已被移動到 Eco1_User 圖層。"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1911
 #, fuzzy
@@ -30535,12 +30510,12 @@ msgstr "載入中..."
 #: pcbnew/plugins/altium/altium_pcb.cpp:1971
 #, c-format
 msgid "Footprint %s pad %s is not marked as multilayer, but is a TH pad."
-msgstr ""
+msgstr "封裝 %s 中的焊墊 %s 未被標記成多圖層，但它卻是個通孔(TH)焊墊。"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1991
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint %s pad %s has a square hole (not yet supported)."
-msgstr "焊盤 \"%s\"（封裝 %s）有一個方孔。KiCad 目前還不支援此功能"
+msgstr "焊盤 \"%s\"（封裝 %s）有一個方孔（KiCad 目前尚未支援此功能）。"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2013
 #, fuzzy, c-format
@@ -30552,25 +30527,24 @@ msgstr "焊盤 \"%s\"（封裝 %s）有 %f 度的孔旋轉。KiCad 僅支援 90 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2027
 #, c-format
 msgid "Footprint %s pad %s uses a hole of unknown kind %d."
-msgstr ""
+msgstr "封裝 %s 中的焊墊 %s 使用了一個不明類型的孔 %d 。"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2045
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint %s pad %s uses a complex pad stack (not yet supported.)"
-msgstr "焊盤 \"%s\"（封裝 %s）使用複雜的焊盤壓層（型別為 %d），尚不支援"
+msgstr "封裝 %s 中的焊盤 %s 使用了複雜的焊盤堆疊（KiCad 目前尚未支援此功能）。"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2079
 #, c-format
 msgid "Footprint %s pad %s uses an unknown pad-shape."
-msgstr ""
+msgstr "封裝 %s 的 %s 焊墊使用了不明的焊墊形狀。"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2138
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Non-copper pad %s found on an Altium layer (%d) with no KiCad equivalent. It "
 "has been moved to KiCad layer Eco1_User."
-msgstr ""
-"Altium 層 %d 上的非銅焊盤沒有任何 KiCad 等效項。改為將其放在 Eco1_User 上"
+msgstr "非銅焊盤 %s 在 Altium 層 （%d） 上被找到，沒有 KiCad 等效的項目。它們已被移動到 Eco1_User 圖層。"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2147
 #, fuzzy, c-format
@@ -30583,14 +30557,14 @@ msgid "Non-copper pad %s has a hole, which is not supported."
 msgstr "非銅焊盤 '%s' 有一個洞。這不應該發生"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2158
-#, fuzzy, c-format
+#, c-format
 msgid "Non-copper pad %s has a complex pad stack (not yet supported)."
-msgstr "非銅焊盤 \"%s\" 使用複雜的焊盤壓層（型別為 %d）。這不應該發生"
+msgstr "非銅焊盤 %s 使用複雜的焊盤堆疊（KiCad 目前尚未支援此功能）。"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2312
 #, c-format
 msgid "Non-copper pad %s uses an unknown pad-shape."
-msgstr ""
+msgstr "非銅的焊墊 %s 使用了不明的焊墊形狀。"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2321
 #, fuzzy
@@ -30601,7 +30575,7 @@ msgstr "載入中..."
 #, c-format
 msgid ""
 "Via from layer %d to %d uses a non-copper layer, which is not supported."
-msgstr ""
+msgstr "由 %d 層至 %d 層的通孔使用了非銅層，並不支援此狀態。"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2383
 #, fuzzy
@@ -30609,18 +30583,18 @@ msgid "Loading tracks..."
 msgstr "載入中..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2431
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Track keepout found on an Altium layer (%d) with no KiCad equivalent. It has "
 "been moved to KiCad layer Eco1_User."
-msgstr "Altium 層 %d 上的佈線沒有任何 KiCad 等效項。 改為將其放在 Eco1_User 上"
+msgstr "Altium 層 （%d） 上找到的佈線沒有 KiCad 等效的項目。它們已被移動到 Eco1_User 圖層。"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2449
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Track found on an Altium layer (%d) with no KiCadequivalent. It has been "
 "moved to KiCad layer Eco1_User."
-msgstr "Altium 層 %d 上的佈線沒有任何 KiCad 等效項。 改為將其放在 Eco1_User 上"
+msgstr "Altium 層 （%d） 上找到的佈線沒有 KiCad 等效的項目。它們已被移動到 Eco1_User 圖層。"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2490
 #, fuzzy
@@ -30628,17 +30602,16 @@ msgid "Loading text..."
 msgstr "載入中..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2501
-#, fuzzy, c-format
+#, c-format
 msgid "Ignored barcode on Altium layer %d (not yet supported)."
-msgstr "忽略 Altium 層 %d 上的條形碼，因為目前不支援該條形碼。"
+msgstr "忽略 Altium 層 %d 上的條碼（KiCad 目前尚未支援此功能）。"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2589
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Text found on an Altium layer (%d) with no KiCad equivalent. It has been "
 "moved to KiCad layer Eco1_User."
-msgstr ""
-"Altium 層 %d 上的 Text 沒有任何 KiCad 等效項。改為將其放在 Eco1_User 上"
+msgstr "Altium 層 （%d） 上找到的文字沒有 KiCad 等效的項目。它們已被移動到 Eco1_User 圖層。"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2675
 #, fuzzy
@@ -30646,12 +30619,11 @@ msgid "Loading rectangles..."
 msgstr "載入 Gerber 檔案..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2695
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Fill found on an Altium layer (%d) with no KiCad equivalent. It has been "
 "moved to KiCad layer Eco1_User."
-msgstr ""
-"Altium 層 %d 上的 Fill 沒有任何 KiCad 等效項。改為將其放在 Eco1_User 上"
+msgstr "Altium 層 （%d） 上找到的填充沒有 KiCad 等效的項目。它們已被移動到 Eco1_User 圖層。"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:87
 msgid ""
@@ -30667,23 +30639,21 @@ msgstr ""
 msgid ""
 "The CADSTAR design contains Trunk routing elements, which have no KiCad "
 "equivalent. These elements were not loaded."
-msgstr "CADSTAR 設計包含沒有 KiCad 等效項的佈線元素。未載入這些元素。"
+msgstr "CADSTAR 設計包含沒有 KiCad 等效項目的佈線元素。未載入這些元素。"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:121
 #, c-format
 msgid ""
 "The CADSTAR design contains variants which has no KiCad equivalent. Only the "
 "variant '%s' was loaded."
-msgstr "這個 CADSTAR 設計包含沒有 KiCad 等效項的變數。僅變數 '%s'被載入。"
+msgstr "這個 CADSTAR 設計包含沒有 KiCad 等效項目的變數。僅變數 '%s'被載入。"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:158
 #, c-format
 msgid ""
 "The CADSTAR layer '%s' has no KiCad equivalent. All elements on this layer "
 "have been mapped to KiCad layer '%s' instead."
-msgstr ""
-"CADSTAR 圖層 \"%s\" 沒有等效項。此圖層上的所有元素都對映到 KiCad 圖層 \"%s"
-"\"。"
+msgstr "CADSTAR 圖層 \"%s\" 沒有 KiCad 等效的項目。此圖層上的所有元素都對映到 KiCad 圖層 \"%s\"。"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:171
 #, c-format
@@ -30719,9 +30689,7 @@ msgid ""
 "The CADSTAR area '%s' in library component '%s' does not have a KiCad "
 "equivalent. The area is neither a via nor route keepout area. The area was "
 "not imported."
-msgstr ""
-"庫元件 '%s' 中的 CADSTAR 區域 '%s' 沒有一個 KiCad 等價物。該區域既不是過孔也"
-"不是佈線禁止區。該區域沒有被匯入。"
+msgstr "CADSTAR 區域 \"%s\" 在庫元件 '%s' 中，沒有 KiCad 等效的項目。該區域既不是過孔也不是佈線禁止區。該區域沒有被匯入。"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:931
 #, c-format
@@ -30778,16 +30746,16 @@ msgstr ""
 "尺寸樣式匯入了尺寸物件。"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1364
-#, fuzzy, c-format
+#, c-format
 msgid "Unexpected Dimension type (ID %s). This was not imported."
-msgstr "出乎意料的尺度型別 （ID%s）。這未被匯入"
+msgstr "非預期的尺度型別 （ID%s）。未被匯入。"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1499
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Dimension %s is an angular dimension which has no KiCad equivalent. The "
 "object was not imported."
-msgstr "尺度ID %s是一個沒有 KiCad 等價物的角度標註。物件未被匯入。"
+msgstr "尺標 %s 是一個沒有 KiCad 等效項目的角度標註。因此物件未被匯入。"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1539
 #, c-format
@@ -30804,7 +30772,7 @@ msgstr ""
 msgid ""
 "The CADSTAR area '%s' does not have a KiCad equivalent. Pure Placement areas "
 "are not supported."
-msgstr "CADSTAR 區域 '%s' 沒有 KiCad 等效項。不支援純放置區域。"
+msgstr "CADSTAR 區域 '%s' 沒有 KiCad 等效的項目。不支援單純放置區域。"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1575
 #, c-format
@@ -30883,8 +30851,8 @@ msgid ""
 "has been applied instead. When the template is re-filled the thermal reliefs "
 "will be removed."
 msgstr ""
-"CADSTAR 模板 '%s' 在原始設計中具有散熱功能，但是沒有與原始 CADSTAR 設定等效"
-"的 KiCad。實體填充已被應用。重新填充模板後，散熱片將被移除。"
+"CADSTAR 模板 '%s' 在原始設計中具有散熱功能，但是沒有與原始 CADSTAR 設定等效的 "
+"KiCad。實心填充已被應用。重新填充模板後，散熱片將被移除。"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1918
 #, c-format
@@ -30903,9 +30871,8 @@ msgid ""
 "filled, or as a KiCad Track if the shape was an unfilled outline (open or "
 "closed)."
 msgstr ""
-"CADSTAR 設計包含沒有直接 KiCad 等價物的銅元素。如果填充的是實體或圖案填充，則"
-"它們已匯入為 KiCad 覆銅；如果形狀是未填充的輪廓(開放或閉合)，則它們將匯入為 "
-"KiCad 佈線。"
+"CADSTAR 設計包含沒有直接 KiCad 等價物的銅元素。如果填充的是實心或圖案填充，則它們已匯入為 KiCad "
+"覆銅；如果形狀是未填充的輪廓(開放或閉合)，則它們將匯入為 KiCad 佈線。"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2125
 #, c-format
@@ -30939,9 +30906,7 @@ msgstr ""
 msgid ""
 "The shape for '%s' is Hatch filled in CADSTAR, which has no KiCad "
 "equivalent. Using solid fill instead."
-msgstr ""
-"'%s' 的形狀是在 CADSTAR 中填充的圖案填充，該 CADSTAR 沒有 KiCad 等效項。改用"
-"實體填充。"
+msgstr "'%s' 的形狀是在 CADSTAR 中填充的圖案填充，該 CADSTAR 沒有 KiCad 等效項。改用實心填充。"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3436
 #, c-format
@@ -31065,9 +31030,9 @@ msgid "Unknown FABMASTER section %s:%s at row %zu."
 msgstr "未知  FABMASTER  部分 %s:%s，位於行 %zu。"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:271
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid row size in J row %zu. Expecting 11 elements but found %zu."
-msgstr "J 行 %zu 中的行大小無效。  預計有 11 個元素，但發現了 %zu"
+msgstr "J 行 %zu 中的行大小無效。預計有 11 個元素，但發現了 %zu。"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:294
 #, fuzzy
@@ -31369,9 +31334,9 @@ msgid "Undefined layers:"
 msgstr "未定義的層："
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:1097
-#, fuzzy, c-format
+#, c-format
 msgid "Page type '%s' is not valid."
-msgstr "圖框型別 \"%s\" 無效 "
+msgstr "圖框型別 \"%s\" 無效。"
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:1628
 #, fuzzy, c-format
@@ -31606,7 +31571,7 @@ msgstr "套用動作腳本"
 
 #: pcbnew/python/scripting/pcbnew_footprint_wizards.cpp:70
 msgid "Exception on python footprint wizard code"
-msgstr "Python 封裝嚮導程式碼異常"
+msgstr "Python 封裝精靈程式碼異常"
 
 #: pcbnew/router/length_tuner_tool.cpp:46
 msgid "New Track"
@@ -31664,7 +31629,7 @@ msgstr "長度調整"
 msgid ""
 "Unable to find complementary differential pair nets. Make sure the names of "
 "the nets belonging to a differential pair end with either N/P or +/-."
-msgstr "無法找到互補差分對網路。請確保屬於差分對網路的名稱以 N/P 或 +/- 結尾。"
+msgstr "無法找到互補差動對網路。請確保屬於差動對網路的名稱以 N/P 或 +/- 結尾。"
 
 #: pcbnew/router/pns_diff_pair_placer.cpp:493
 msgid ""
@@ -31687,9 +31652,7 @@ msgid ""
 "Unable to find complementary differential pair net for length tuning. Make "
 "sure the names of the nets belonging to a differential pair end with either "
 "_N/_P or +/-."
-msgstr ""
-"無法找到互補差分對網路進行長度調整。請確保屬於差分對的名稱以 _N/_P 或 +/- 結"
-"束。"
+msgstr "無法找到互補差動對網路進行長度調整。請確保屬於差動對的名稱以 _N/_P 或 +/- 結束。"
 
 #: pcbnew/router/pns_dp_meander_placer.cpp:392
 #: pcbnew/router/pns_meander_placer.cpp:266
@@ -31713,9 +31676,8 @@ msgid "?"
 msgstr "？"
 
 #: pcbnew/router/pns_kicad_iface.cpp:450
-#, fuzzy
 msgid "existing track"
-msgstr "當建立新佈線時"
+msgstr "現有的佈線"
 
 #: pcbnew/router/pns_kicad_iface.cpp:464 pcbnew/router/pns_kicad_iface.cpp:477
 #, fuzzy
@@ -31750,16 +31712,14 @@ msgstr "互動佈線"
 
 #: pcbnew/router/pns_meander_skew_placer.cpp:54
 msgid "Please select a differential pair trace you want to tune."
-msgstr "請選擇要調整的差分對走線。"
+msgstr "請選擇要調整的差動對走線。"
 
 #: pcbnew/router/pns_meander_skew_placer.cpp:70
 msgid ""
 "Unable to find complementary differential pair net for skew tuning. Make "
 "sure the names of the nets belonging to a differential pair end with either "
 "_N/_P or +/-."
-msgstr ""
-"無法找到互補差分對網路進行長度調整。請確保屬於差分對的名稱以 _N/_P 或 +/- 結"
-"束。"
+msgstr "無法找到互補的差動對網路進行長度調整。請確保屬於差動對的名稱以 _N/_P 或 +/- 結束。"
 
 #: pcbnew/router/pns_meander_skew_placer.cpp:165
 msgid "Too long: skew "
@@ -31804,7 +31764,7 @@ msgstr "佈線起點違反 DRC。"
 
 #: pcbnew/router/pns_router.cpp:313
 msgid "Cannot start a differential pair in the middle of nowhere."
-msgstr "無法在空白區域開始差分對佈線。"
+msgstr "無法在空白區域開始差動對佈線。"
 
 #: pcbnew/router/router_tool.cpp:89
 msgid "Finish Track"
@@ -31954,15 +31914,15 @@ msgstr "過孔 %s"
 
 #: pcbnew/router/router_tool.cpp:313
 msgid "Select Differential Pair Dimensions"
-msgstr "選擇差分對標註"
+msgstr "選擇差動對尺寸"
 
 #: pcbnew/router/router_tool.cpp:330
 msgid "Use differential pair dimensions from the net class"
-msgstr "使用網路類中的差分對標註"
+msgstr "使用網路類中的差動對尺寸"
 
 #: pcbnew/router/router_tool.cpp:335
 msgid "Specify custom differential pair dimensions"
-msgstr "指定自定義差分對標註"
+msgstr "自訂差動對尺寸"
 
 #: pcbnew/router/router_tool.cpp:352
 #, c-format
@@ -32182,7 +32142,7 @@ msgid ""
 "Select the default width for new tracks. Note that this width can be "
 "overridden by the board minimum width, or by the width of an existing track "
 "if the 'Use Existing Track Width' feature is enabled."
-msgstr ""
+msgstr "選擇新佈線的預設寬度。請留意這個寬度值可以被板子的最小寬度覆蓋，或是當 \"使用現有的佈線寬度\" 功能開啟時，被使用現有的佈線寬度覆蓋。"
 
 #: pcbnew/toolbars_pcb_editor.cpp:532
 msgid ""
@@ -32283,9 +32243,7 @@ msgid ""
 "Cannot update schematic because Pcbnew is opened in stand-alone mode. In "
 "order to create or update PCBs from schematics, you must launch the KiCad "
 "project manager and create a project."
-msgstr ""
-"無法更新原理圖，因為 Pcbnew 在獨立模式下開啟。為了從原理圖建立或更新 PCB，您"
-"必須啟動 KiCad 專案管理器並建立專案。"
+msgstr "無法更新原理圖，因為 Pcbnew 在獨立模式下開啟。為了從原理圖建立或更新 PCB，您必須啟動 KiCad 專案管理器並建立專案。"
 
 #: pcbnew/tools/board_editor_control.cpp:1057
 msgid "Place a footprint"
@@ -32612,7 +32570,7 @@ msgstr "繪製引線"
 
 #: pcbnew/tools/drawing_tool.cpp:947
 msgid "Draw a dimension"
-msgstr "繪製標註"
+msgstr "繪製尺標"
 
 #: pcbnew/tools/drawing_tool.cpp:1154
 #, fuzzy
@@ -32883,7 +32841,7 @@ msgstr "在圖形層上新增板壓層表"
 
 #: pcbnew/tools/pcb_actions.cpp:130
 msgid "Add Aligned Dimension"
-msgstr "新增對齊標註"
+msgstr "新增對齊尺標"
 
 #: pcbnew/tools/pcb_actions.cpp:130
 msgid "Add an aligned linear dimension"
@@ -32895,15 +32853,15 @@ msgstr "新增中心標註"
 
 #: pcbnew/tools/pcb_actions.cpp:135
 msgid "Add a center dimension"
-msgstr "新增中心標註"
+msgstr "新增中心尺標"
 
 #: pcbnew/tools/pcb_actions.cpp:140
 msgid "Add Orthogonal Dimension"
-msgstr "新增正交標註"
+msgstr "新增正交尺標"
 
 #: pcbnew/tools/pcb_actions.cpp:140
 msgid "Add an orthogonal dimension"
-msgstr "新增正交標註"
+msgstr "新增正交尺標"
 
 #: pcbnew/tools/pcb_actions.cpp:145
 msgid "Add Leader"
@@ -32911,7 +32869,7 @@ msgstr "新增引線"
 
 #: pcbnew/tools/pcb_actions.cpp:145
 msgid "Add a leader dimension"
-msgstr "新增引線標註"
+msgstr "新增引線尺標"
 
 #: pcbnew/tools/pcb_actions.cpp:156
 msgid "Add Filled Zone"
@@ -33093,7 +33051,7 @@ msgstr "將所選專案翻轉到板的另一側"
 
 #: pcbnew/tools/pcb_actions.cpp:307
 msgid "Mirrors selected item"
-msgstr "映象選擇項"
+msgstr "鏡像選取的項目"
 
 #: pcbnew/tools/pcb_actions.cpp:312
 msgid "Change Track Width"
@@ -33137,7 +33095,7 @@ msgstr "建立封裝..."
 
 #: pcbnew/tools/pcb_actions.cpp:351
 msgid "Create a new footprint using the Footprint Wizard"
-msgstr "使用封裝嚮導建立一個新的封裝"
+msgstr "使用封裝精靈建立一個新的封裝"
 
 #: pcbnew/tools/pcb_actions.cpp:356
 msgid "Edit Footprint"
@@ -33674,11 +33632,11 @@ msgstr "顯示網路檢查"
 
 #: pcbnew/tools/pcb_actions.cpp:778
 msgid "Show Appearance Manager"
-msgstr "顯示外觀管理器"
+msgstr "顯示外觀管理員"
 
 #: pcbnew/tools/pcb_actions.cpp:778
 msgid "Show/hide the appearance manager"
-msgstr "顯示/隱藏外觀管理器"
+msgstr "顯示/隱藏外觀管理員"
 
 #: pcbnew/tools/pcb_actions.cpp:783
 msgid "Flip Board View"
@@ -34112,9 +34070,8 @@ msgid "Fill Zone"
 msgstr "填充覆銅"
 
 #: pcbnew/tools/pcb_actions.cpp:1248
-#, fuzzy
 msgid "Update copper fill of selected zone(s)"
-msgstr "更新選擇的封裝"
+msgstr "更新選取區域中的鋪銅"
 
 #: pcbnew/tools/pcb_actions.cpp:1254 pcbnew/tools/zone_filler_tool.cpp:144
 msgid "Fill All Zones"
@@ -34130,9 +34087,8 @@ msgid "Unfill Zone"
 msgstr "取消填充覆銅"
 
 #: pcbnew/tools/pcb_actions.cpp:1259
-#, fuzzy
 msgid "Remove copper fill from selected zone(s)"
-msgstr "從選區刪除專案。"
+msgstr "移除選取區域中的鋪銅"
 
 #: pcbnew/tools/pcb_actions.cpp:1265 pcbnew/tools/zone_filler_tool.cpp:253
 msgid "Unfill All Zones"
@@ -34169,11 +34125,11 @@ msgstr "佈線"
 
 #: pcbnew/tools/pcb_actions.cpp:1294
 msgid "Route Differential Pair"
-msgstr "差分對互動佈線"
+msgstr "差動對互動佈線"
 
 #: pcbnew/tools/pcb_actions.cpp:1294
 msgid "Route differential pairs"
-msgstr "佈線差分對"
+msgstr "佈線差動對"
 
 #: pcbnew/tools/pcb_actions.cpp:1300
 msgid "Interactive Router Settings..."
@@ -34185,11 +34141,11 @@ msgstr "開啟互動佈線設定"
 
 #: pcbnew/tools/pcb_actions.cpp:1305
 msgid "Differential Pair Dimensions..."
-msgstr "差分對標註..."
+msgstr "差動對尺寸..."
 
 #: pcbnew/tools/pcb_actions.cpp:1305
 msgid "Open Differential Pair Dimension settings"
-msgstr "開啟差分對標註設定"
+msgstr "開啟差動對尺寸設定"
 
 #: pcbnew/tools/pcb_actions.cpp:1310
 msgid "Router Highlight Mode"
@@ -34229,11 +34185,11 @@ msgstr "調整單軌佈線長度"
 
 #: pcbnew/tools/pcb_actions.cpp:1339
 msgid "Tune length of a differential pair"
-msgstr "調整差分對佈線長度"
+msgstr "調整差動對佈線長度"
 
 #: pcbnew/tools/pcb_actions.cpp:1346
 msgid "Tune skew of a differential pair"
-msgstr "調整差分對佈線偏移"
+msgstr "調整差動對佈線偏移"
 
 #: pcbnew/tools/pcb_actions.cpp:1355
 msgid "Undo Last Segment"
