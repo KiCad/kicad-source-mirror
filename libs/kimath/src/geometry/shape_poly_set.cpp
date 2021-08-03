@@ -1516,19 +1516,24 @@ bool SHAPE_POLY_SET::Collide( const SHAPE* aShape, int aClearance, int* aActual,
     {
         for( const TRIANGULATED_POLYGON::TRI& tri : tpoly->Triangles() )
         {
-            int      triActual;
-            VECTOR2I triLocation;
-
-            if( aShape->Collide( &tri, aClearance, &triActual, &triLocation ) )
+            if( aActual || aLocation )
             {
-                if( !aActual && !aLocation )
-                    return true;
+                int      triActual;
+                VECTOR2I triLocation;
 
-                if( triActual < actual )
+                if( aShape->Collide( &tri, aClearance, &triActual, &triLocation ) )
                 {
-                    actual = triActual;
-                    location = triLocation;
+                    if( triActual < actual )
+                    {
+                        actual = triActual;
+                        location = triLocation;
+                    }
                 }
+            }
+            else    // A much faster version of above
+            {
+                if( aShape->Collide( &tri, aClearance ) )
+                    return true;
             }
         }
     }

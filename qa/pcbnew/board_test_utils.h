@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,18 +21,16 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file board_test_utils.h
- * General utilities for PCB tests
- */
 
 #ifndef QA_PCBNEW_BOARD_TEST_UTILS__H
 #define QA_PCBNEW_BOARD_TEST_UTILS__H
 
 #include <string>
+#include <wx/string.h>
 
 class BOARD;
 class BOARD_ITEM;
+class SETTINGS_MANAGER;
 
 
 namespace KI_TEST
@@ -57,6 +55,13 @@ public:
 
     const bool m_dump_boards;
 };
+
+
+void LoadBoard( SETTINGS_MANAGER& aSettingsManager, const wxString& aRelPath,
+                std::unique_ptr<BOARD>& aBoard );
+
+void FillZones( BOARD* m_board, int aFillVersion );
+
 
 } // namespace KI_TEST
 

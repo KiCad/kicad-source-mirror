@@ -37,6 +37,7 @@ set( QA_PCBNEW_SRCS
     test_lset.cpp
     test_pad_naming.cpp
     test_libeval_compiler.cpp
+    test_tracks_cleaner.cpp
     test_zone_filler.cpp
 
     drc/test_drc_courtyard_invalid.cpp

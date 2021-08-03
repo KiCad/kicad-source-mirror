@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 201 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,86 +21,27 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <string>
-
-#include <wx/toplevel.h>
-
 #include <qa_utils/wx_utils/unit_test_utils.h>
-#include <pcbnew_utils/board_file_utils.h>
+#include <qa/pcbnew/board_test_utils.h>
 #include <board.h>
 #include <board_design_settings.h>
 #include <pad.h>
 #include <pcb_track.h>
 #include <footprint.h>
+#include <zone.h>
 #include <drc/drc_item.h>
 #include <drc/drc_engine.h>
-#include <zone_filler.h>
-#include <board_commit.h>
-#include <tool/tool_manager.h>
-#include <zone_filler_tool.h>
 #include <settings/settings_manager.h>
+
 
 struct ZONE_FILL_TEST_FIXTURE
 {
     ZONE_FILL_TEST_FIXTURE() :
             m_settingsManager( true /* headless */ )
-    {
-    }
+    { }
 
-    void loadBoard( const wxString& relPath )
-    {
-        if( m_board )
-        {
-            m_board->SetProject( nullptr );
-            m_board = nullptr;
-        }
-
-        std::string absPath = KI_TEST::GetPcbnewTestDataDir() + relPath.ToStdString();
-        wxFileName  projectFile( absPath + ".kicad_pro" );
-        std::string boardPath = absPath + ".kicad_pcb";
-        wxFileName  rulesFile( absPath + ".kicad_dru" );
-
-        if( projectFile.Exists() )
-            m_settingsManager.LoadProject( projectFile.GetFullPath() );
-
-        m_board = KI_TEST::ReadBoardFromFileOrStream( boardPath );
-
-        if( projectFile.Exists() )
-            m_board->SetProject( &m_settingsManager.Prj() );
-
-        m_DRCEngine = std::make_shared<DRC_ENGINE>( m_board.get(), &m_board->GetDesignSettings() );
-
-        if( rulesFile.Exists() )
-            m_DRCEngine->InitEngine( rulesFile );
-        else
-            m_DRCEngine->InitEngine( wxFileName() );
-
-        m_board->GetDesignSettings().m_DRCEngine = m_DRCEngine;
-
-        m_toolMgr = std::make_unique<TOOL_MANAGER>();
-        m_toolMgr->SetEnvironment( m_board.get(), nullptr, nullptr, nullptr, nullptr );
-    }
-
-    void fillZones( int aFillVersion )
-    {
-        BOARD_COMMIT       commit( m_toolMgr.get() );
-        ZONE_FILLER        filler( m_board.get(), &commit );
-        std::vector<ZONE*> toFill;
-
-        m_board->GetDesignSettings().m_ZoneFillVersion = aFillVersion;
-
-        for( ZONE* zone : m_board->Zones() )
-            toFill.push_back( zone );
-
-        if( filler.Fill( toFill, false, nullptr ) )
-            commit.Push( _( "Fill Zone(s)" ), false, false );
-    }
-
-    SETTINGS_MANAGER              m_settingsManager;
-
-    std::unique_ptr<BOARD>        m_board;
-    std::unique_ptr<TOOL_MANAGER> m_toolMgr;
-    std::shared_ptr<DRC_ENGINE>   m_DRCEngine;
+    SETTINGS_MANAGER       m_settingsManager;
+    std::unique_ptr<BOARD> m_board;
 };
 
 
@@ -109,9 +50,11 @@ constexpr int delta = KiROUND( 0.006 * IU_PER_MM );
 
 BOOST_FIXTURE_TEST_CASE( BasicZoneFills, ZONE_FILL_TEST_FIXTURE )
 {
-    loadBoard( "zone_filler" );
+    KI_TEST::LoadBoard( m_settingsManager, "zone_filler", m_board );
 
-    fillZones( 6 );
+    BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
+
+    KI_TEST::FillZones( m_board.get(), 6 );
 
     // Now that the zones are filled we're going to increase the size of -some- pads and
     // tracks so that they generate DRC errors.  The test then makes sure that those errors
@@ -153,9 +96,9 @@ BOOST_FIXTURE_TEST_CASE( BasicZoneFills, ZONE_FILL_TEST_FIXTURE )
     bool foundArc12Error = false;
     bool foundOtherError = false;
 
-    m_DRCEngine->InitEngine( wxFileName() );     // Just to be sure to be sure
+    bds.m_DRCEngine->InitEngine( wxFileName() );     // Just to be sure to be sure
 
-    m_DRCEngine->SetViolationHandler(
+    bds.m_DRCEngine->SetViolationHandler(
             [&]( const std::shared_ptr<DRC_ITEM>& aItem, wxPoint aPos )
             {
                 if( aItem->GetErrorCode() == DRCE_CLEARANCE )
@@ -182,7 +125,7 @@ BOOST_FIXTURE_TEST_CASE( BasicZoneFills, ZONE_FILL_TEST_FIXTURE )
                 }
             } );
 
-    m_DRCEngine->RunTests( EDA_UNITS::MILLIMETRES, true, false );
+    bds.m_DRCEngine->RunTests( EDA_UNITS::MILLIMETRES, true, false );
 
     BOOST_CHECK_EQUAL( foundPad2Error, true );
     BOOST_CHECK_EQUAL( foundPad4Error, true );
@@ -195,7 +138,7 @@ BOOST_FIXTURE_TEST_CASE( BasicZoneFills, ZONE_FILL_TEST_FIXTURE )
 
 BOOST_FIXTURE_TEST_CASE( NotchedZones, ZONE_FILL_TEST_FIXTURE )
 {
-    loadBoard( "notched_zones" );
+    KI_TEST::LoadBoard( m_settingsManager, "notched_zones", m_board );
 
     // Older algorithms had trouble where the filleted zones intersected and left notches.
     // See:
@@ -217,7 +160,8 @@ BOOST_FIXTURE_TEST_CASE( NotchedZones, ZONE_FILL_TEST_FIXTURE )
     BOOST_CHECK_GT( frontCopper.OutlineCount(), 2 );
 
     // Now re-fill and make sure the holes are gone.
-    fillZones( 6 );
+    KI_TEST::FillZones( m_board.get(), 6 );
+
     frontCopper = SHAPE_POLY_SET();
 
     for( ZONE* zone : m_board->Zones() )
@@ -250,25 +194,28 @@ BOOST_FIXTURE_TEST_CASE( RegressionZoneFillTests, ZONE_FILL_TEST_FIXTURE )
 
     for( const wxString& relPath : tests )
     {
-        loadBoard( relPath );
+        KI_TEST::LoadBoard( m_settingsManager, relPath, m_board );
+
+        BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
 
         for( int fillVersion : { 5, 6 } )
         {
-            fillZones( fillVersion );
+            KI_TEST::FillZones( m_board.get(), fillVersion );
 
             std::vector<DRC_ITEM> violations;
 
-            m_DRCEngine->SetViolationHandler(
+            bds.m_DRCEngine->SetViolationHandler(
                     [&]( const std::shared_ptr<DRC_ITEM>& aItem, wxPoint aPos )
                     {
                         if( aItem->GetErrorCode() == DRCE_CLEARANCE )
                             violations.push_back( *aItem );
                     } );
 
-            m_DRCEngine->RunTests( EDA_UNITS::MILLIMETRES, true, false );
+            bds.m_DRCEngine->RunTests( EDA_UNITS::MILLIMETRES, true, false );
 
             if( violations.empty() )
             {
+                BOOST_CHECK_EQUAL( 1, 1 );  // quiet "did not check any assertions" warning
                 BOOST_TEST_MESSAGE( wxString::Format( "Zone fill regression: %s, V%d algo passed",
                                                       relPath,
                                                       fillVersion ) );
