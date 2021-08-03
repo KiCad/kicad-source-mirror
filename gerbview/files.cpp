@@ -468,6 +468,7 @@ bool GERBVIEW_FRAME::LoadExcellonFiles( const wxString& aFullFileName )
 
 bool GERBVIEW_FRAME::unarchiveFiles( const wxString& aFullFileName, REPORTER* aReporter )
 {
+    bool     foundX2Gerbers = false;
     wxString msg;
 
     // Extract the path of aFullFileName. We use it to store temporary files
@@ -628,12 +629,21 @@ bool GERBVIEW_FRAME::unarchiveFiles( const wxString& aFullFileName, REPORTER* aR
             GERBER_FILE_IMAGE* gerber_image = GetGbrImage( layer );
 
             if( gerber_image )
+            {
                 gerber_image->m_FileName = fname;
+                if( gerber_image->m_IsX2_file )
+                    foundX2Gerbers = true;
+            }
 
             layer = getNextAvailableLayer( layer );
             SetActiveLayer( layer, false );
         }
     }
+
+    if( foundX2Gerbers )
+        SortLayersByX2Attributes();
+    else
+        SortLayersByFileExtension();
 
     return success;
 }
