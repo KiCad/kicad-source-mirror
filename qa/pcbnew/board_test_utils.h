@@ -25,6 +25,7 @@
 #ifndef QA_PCBNEW_BOARD_TEST_UTILS__H
 #define QA_PCBNEW_BOARD_TEST_UTILS__H
 
+#include <memory>
 #include <string>
 #include <wx/string.h>
 
