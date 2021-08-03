@@ -110,6 +110,122 @@ bool GERBVIEW_FRAME::Read_GERBER_File( const wxString& GERBER_FullFileName )
 }
 
 
+/*
+ * Original function derived from gerber_is_rs274x_p() of gerbv 2.7.0.
+ * Copyright of the source file readgerb.cpp included below:
+ */
+/* gEDA - GNU Electronic Design Automation
+ * This is a part of gerbv
+ *
+ *   Copyright (C) 2000-2003 Stefan Petersen (spe@stacken.kth.se)
+ *
+ * $Id$
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111 USA
+ */
+bool GERBER_FILE_IMAGE::TestFileIsRS274( const wxString& aFullFileName )
+{
+    char* letter;
+    bool  foundADD = false;
+    bool  foundD0 = false;
+    bool  foundD2 = false;
+    bool  foundM0 = false;
+    bool  foundM2 = false;
+    bool  foundStar = false;
+    bool  foundX = false;
+    bool  foundY = false;
+
+
+    FILE* file = wxFopen( aFullFileName, "rb" );
+
+    if( file == nullptr )
+        return false;
+
+    FILE_LINE_READER gerberReader( aFullFileName );
+
+    try
+    {
+        while( true )
+        {
+            if( gerberReader.ReadLine() == nullptr )
+                break;
+
+            // Remove all whitespace from the beginning and end
+            char* line = StrPurge( gerberReader.Line() );
+
+            // Skip empty lines
+            if( *line == 0 )
+                continue;
+
+            // Check that file is not binary (non-printing chars)
+            for( size_t i = 0; i < strlen( line ); i++ )
+            {
+                if( !isascii( line[i] ) )
+                    return false;
+            }
+
+            if( strstr( line, "%ADD" ) )
+                foundADD = true;
+
+            if( strstr( line, "D00" ) || strstr( line, "D0" ) )
+                foundD0 = true;
+
+            if( strstr( line, "D02" ) || strstr( line, "D2" ) )
+                foundD2 = true;
+
+            if( strstr( line, "M00" ) || strstr( line, "M0" ) )
+                foundM0 = true;
+
+            if( strstr( line, "M02" ) || strstr( line, "M2" ) )
+                foundM2 = true;
+
+            if( strstr( line, "*" ) )
+                foundStar = true;
+
+            /* look for X<number> or Y<number> */
+            if( ( letter = strstr( line, "X" ) ) != nullptr )
+            {
+                if( isdigit( letter[1] ) )
+                    foundX = true;
+            }
+
+            if( ( letter = strstr( line, "Y" ) ) != nullptr )
+            {
+                if( isdigit( letter[1] ) )
+                    foundY = true;
+            }
+        }
+    }
+    catch( IO_ERROR& e )
+    {
+        return false;
+    }
+
+    // RS-274X
+    if( ( foundD0 || foundD2 || foundM0 || foundM2 ) && foundADD && foundStar
+        && ( foundX || foundY ) )
+        return true;
+    // RS-274D. Could be folded into the expression above, but someday
+    // we might want to test for them separately.
+    else if( ( foundD0 || foundD2 || foundM0 || foundM2 ) && !foundADD && foundStar
+             && ( foundX || foundY ) )
+        return true;
+
+
+    return false;
+}
 
 // size of a single line of text from a gerber file.
 // warning: some files can have *very long* lines, so the buffer must be large.

@@ -119,6 +119,16 @@ public:
     }
 
     /**
+     * @brief Performs a heuristics-based check of whether the file is an RS274 gerber file.
+     *
+     * Does not invoke the full parser.
+     *
+     * @param aFullFileName aFullFileName is the full filename of the gerber file.
+     * @return True if RS274 file, false otherwise
+     */
+    static bool TestFileIsRS274( const wxString& aFullFileName );
+
+    /**
      * Read and load a gerber file.
      *
      * If the file cannot be loaded, warning and information messages are stored in m_messagesList.

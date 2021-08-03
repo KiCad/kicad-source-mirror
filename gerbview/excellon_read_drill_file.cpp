@@ -315,6 +315,131 @@ void EXCELLON_IMAGE::ResetDefaultValues()
     m_NoTrailingZeros = true;
 }
 
+
+/*
+ * Original function derived from drill_file_p() of gerbv 2.7.0.
+ * Copyright of the source file drill.cpp included below:
+ */
+/*
+ * gEDA - GNU Electronic Design Automation
+ * drill.c
+ * Copyright (C) 2000-2006 Andreas Andersson
+ *
+ * $Id$
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+ */
+bool EXCELLON_IMAGE::TestFileIsExcellon( const wxString& aFullFileName )
+{
+    char* letter;
+    bool  foundM48 = false;
+    bool  foundM30 = false;
+    bool  foundPercent = false;
+    bool  foundT = false;
+    bool  foundX = false;
+    bool  foundY = false;
+
+    FILE* file = wxFopen( aFullFileName, "rb" );
+
+    if( file == nullptr )
+        return false;
+
+    FILE_LINE_READER excellonReader( file, aFullFileName );
+
+    try
+    {
+        while( true )
+        {
+            if( excellonReader.ReadLine() == nullptr )
+                break;
+
+            // Remove all whitespace from the beginning and end
+            char* line = StrPurge( excellonReader.Line() );
+
+            // Skip empty lines
+            if( *line == 0 )
+                continue;
+
+            // Check that file is not binary (non-printing chars)
+            for( size_t i = 0; i < strlen( line ); i++ )
+            {
+                if( !isascii( line[i] ) )
+                    return false;
+            }
+
+            // We don't want to look for any commands after a comment so
+            // just end the line early if we find a comment
+            char* buf = strstr( line, ";" );
+            if( buf != nullptr )
+                *buf = 0;
+
+            // Check for M48 = start of drill header
+            if( strstr( line, "M48" ) )
+                foundM48 = true;
+
+            // Check for M30 = end of drill program
+            if( strstr( line, "M30" ) )
+                if( foundPercent )
+                    foundM30 = true; // Found M30 after % = good
+
+            // Check for % on its own line at end of header
+            if( ( letter = strstr( line, "%" ) ) != nullptr )
+                if( ( letter[1] == '\r' ) || ( letter[1] == '\n' ) )
+                    foundPercent = true;
+
+            // Check for T<number>
+            if( ( letter = strstr( line, "T" ) ) != nullptr )
+            {
+                if( !foundT && ( foundX || foundY ) )
+                    foundT = false; /* Found first T after X or Y */
+                else
+                {
+                    // verify next char is digit
+                    if( isdigit( letter[1] ) )
+                        foundT = true;
+                }
+            }
+
+            // look for X<number> or Y<number>
+            if( ( letter = strstr( line, "X" ) ) != nullptr )
+                if( isdigit( letter[1] ) )
+                    foundX = true;
+
+            if( ( letter = strstr( line, "Y" ) ) != nullptr )
+                if( isdigit( letter[1] ) )
+                    foundY = true;
+        }
+    }
+    catch( IO_ERROR& e )
+    {
+        return false;
+    }
+
+
+    /* Now form logical expression determining if this is a drill file */
+    if( ( ( foundX || foundY ) && foundT ) && ( foundM48 || ( foundPercent && foundM30 ) ) )
+        return true;
+    else if( foundM48 && foundT && foundPercent && foundM30 )
+        /* Pathological case of drill file with valid header
+           and EOF but no drill XY locations. */
+        return true;
+
+    return false;
+}
+
+
 /*
  * Read a EXCELLON file.
  * Gerber classes are used because there is likeness between Gerber files

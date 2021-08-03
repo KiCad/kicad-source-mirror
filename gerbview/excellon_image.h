@@ -155,6 +155,16 @@ public: EXCELLON_IMAGE( int layer ) :
 
 
     /**
+     * @brief Performs a heuristics-based check of whether the file is an Excellon drill file.
+     *
+     * Does not invoke the full parser.
+     *
+     * @param aFullFileName aFullFileName is the full filename of the Excellon file.
+     * @return True if drill file, false otherwise
+     */
+    static bool TestFileIsExcellon( const wxString& aFullFileName );
+
+    /**
      * Read and load a drill (EXCELLON format) file.
      *
      * When the file cannot be loaded, warning and info messages are stored in m_Messages.

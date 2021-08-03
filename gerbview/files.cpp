@@ -529,17 +529,6 @@ bool GERBVIEW_FRAME::unarchiveFiles( const wxString& aFullFileName, REPORTER* aR
         enum GERBER_ORDER_ENUM order;
         GERBER_FILE_IMAGE_LIST::GetGerberLayerFromFilename( fname, order, matchedExt );
 
-        if( order == GERBER_ORDER_ENUM::GERBER_LAYER_UNKNOWN )
-        {
-            if( aReporter )
-            {
-                msg.Printf( _( "Skipped file '%s' (unknown type).\n" ), entry->GetName() );
-                aReporter->Report( msg, RPT_SEVERITY_WARNING );
-            }
-
-            continue;
-        }
-
         int layer = GetActiveLayer();
 
         if( layer == NO_AVAILABLE_LAYERS )
@@ -583,7 +572,33 @@ bool GERBVIEW_FRAME::unarchiveFiles( const wxString& aFullFileName, REPORTER* aR
 
         bool read_ok = true;
 
-        if( order != GERBER_ORDER_ENUM::GERBER_DRILL )
+        // Try to parse files if we can't tell from file extension
+        if( order == GERBER_ORDER_ENUM::GERBER_LAYER_UNKNOWN )
+        {
+            if( EXCELLON_IMAGE::TestFileIsExcellon( unzipped_tempfile ) )
+            {
+                order = GERBER_ORDER_ENUM::GERBER_DRILL;
+            }
+            else if( GERBER_FILE_IMAGE::TestFileIsRS274( unzipped_tempfile ) )
+            {
+                // If we have no way to know what layer it is, just guess
+                order = GERBER_ORDER_ENUM::GERBER_TOP_COPPER;
+            }
+            else
+            {
+                if( aReporter )
+                {
+                    msg.Printf( _( "Skipped file '%s' (unknown type).\n" ), entry->GetName() );
+                    aReporter->Report( msg, RPT_SEVERITY_WARNING );
+                }
+            }
+        }
+
+        if( order == GERBER_ORDER_ENUM::GERBER_DRILL )
+        {
+            read_ok = Read_EXCELLON_File( unzipped_tempfile );
+        }
+        else if( order != GERBER_ORDER_ENUM::GERBER_LAYER_UNKNOWN )
         {
             // Read gerber files: each file is loaded on a new GerbView layer
             read_ok = Read_GERBER_File( unzipped_tempfile );
@@ -591,10 +606,6 @@ bool GERBVIEW_FRAME::unarchiveFiles( const wxString& aFullFileName, REPORTER* aR
             if( read_ok )
                 GetCanvas()->GetView()->SetLayerHasNegatives(
                         GERBER_DRAW_LAYER( layer ), GetGbrImage( layer )->HasNegativeItems() );
-        }
-        else // Everything else is a drill file
-        {
-            read_ok = Read_EXCELLON_File( unzipped_tempfile );
         }
 
         delete entry;
