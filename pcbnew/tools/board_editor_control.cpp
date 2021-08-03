@@ -22,14 +22,12 @@
  * or you may write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
+
+#include <functional>
+#include <memory>
+
 #include <advanced_config.h>
 #include "board_editor_control.h"
-#include "drawing_tool.h"
-#include "pcb_actions.h"
-#include "pcb_picker_tool.h"
-#include "pcb_selection_tool.h"
-#include "edit_tool.h"
-#include "tool/tool_event.h"
 #include <bitmaps.h>
 #include <board.h>
 #include <board_commit.h>
@@ -41,24 +39,25 @@
 #include <pcb_track.h>
 #include <zone.h>
 #include <pcb_marker.h>
-#include <collectors.h>
 #include <confirm.h>
-#include <cstdint>
 #include <dialogs/dialog_page_settings.h>
 #include <dialogs/dialog_update_pcb.h>
-#include <functional>
 #include <kiface_i.h>
 #include <kiway.h>
-#include <memory>
 #include <netlist_reader/pcb_netlist.h>
 #include <origin_viewitem.h>
-#include <painter.h>
 #include <pcb_edit_frame.h>
 #include <pcbnew_id.h>
 #include <pcbnew_settings.h>
 #include <project.h>
 #include <project/project_file.h> // LAST_PATH_TYPE
 #include <tool/tool_manager.h>
+#include <tool/tool_event.h>
+#include <tools/drawing_tool.h>
+#include <tools/pcb_actions.h>
+#include <tools/pcb_picker_tool.h>
+#include <tools/pcb_selection_tool.h>
+#include <tools/edit_tool.h>
 #include <tools/tool_event_utils.h>
 #include <router/router_tool.h>
 #include <view/view_controls.h>

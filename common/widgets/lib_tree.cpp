@@ -46,12 +46,12 @@ LIB_TREE::LIB_TREE( wxWindow* aParent, LIB_TABLE* aLibTable,
       m_query_ctrl( nullptr ),
       m_details_ctrl( nullptr )
 {
-    auto sizer = new wxBoxSizer( wxVERTICAL );
+    wxBoxSizer* sizer = new wxBoxSizer( wxVERTICAL );
 
     // Search text control
     if( aWidgets & SEARCH )
     {
-        auto search_sizer = new wxBoxSizer( wxHORIZONTAL );
+        wxBoxSizer* search_sizer = new wxBoxSizer( wxHORIZONTAL );
 
         m_query_ctrl = new wxSearchCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition,
                                          wxDefaultSize );
@@ -62,9 +62,9 @@ LIB_TREE::LIB_TREE( wxWindow* aParent, LIB_TABLE* aLibTable,
 
 // Additional visual cue for GTK, which hides the placeholder text on focus
 #ifdef __WXGTK__
-        auto bitmap = new wxStaticBitmap( this, wxID_ANY,
-                                          wxArtProvider::GetBitmap( wxART_FIND,
-                                                                    wxART_FRAME_ICON ) );
+        wxStaticBitmap* bitmap = new wxStaticBitmap( this, wxID_ANY,
+                                                     wxArtProvider::GetBitmap( wxART_FIND,
+                                                                               wxART_FRAME_ICON ) );
 
         search_sizer->Add( bitmap, 0, wxALIGN_CENTER | wxRIGHT, 5 );
 #endif
@@ -169,14 +169,10 @@ LIB_TREE::~LIB_TREE()
 
 LIB_ID LIB_TREE::GetSelectedLibId( int* aUnit ) const
 {
-    auto sel = m_tree_ctrl->GetSelection();
+    wxDataViewItem sel = m_tree_ctrl->GetSelection();
 
     if( !sel )
-    {
-        LIB_ID emptyId;
-
-        return emptyId;
-    }
+        return LIB_ID();
 
     if( aUnit )
         *aUnit = m_adapter->GetUnitFor( sel );
@@ -187,7 +183,7 @@ LIB_ID LIB_TREE::GetSelectedLibId( int* aUnit ) const
 
 LIB_TREE_NODE* LIB_TREE::GetCurrentTreeNode() const
 {
-    auto sel = m_tree_ctrl->GetSelection();
+    wxDataViewItem sel = m_tree_ctrl->GetSelection();
 
     if( !sel )
         return nullptr;

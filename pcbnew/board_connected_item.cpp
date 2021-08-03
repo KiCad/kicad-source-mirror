@@ -27,7 +27,6 @@
 #include <board_connected_item.h>
 #include <board_design_settings.h>
 #include <connectivity/connectivity_data.h>
-#include <drc/drc_engine.h>
 #include <string_utils.h>
 #include <i18n_utility.h>
 #include <netinfo.h>

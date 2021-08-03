@@ -30,7 +30,6 @@
 #include <tracks_cleaner.h>
 #include <cleanup_item.h>
 #include <drc/drc_item.h>
-#include <drc/drc_engine.h>
 #include <settings/settings_manager.h>
 #include <tool/tool_manager.h>
 
@@ -67,7 +66,7 @@ BOOST_FIXTURE_TEST_CASE( FailedToCleanRegressionTests, TRACK_CLEANER_TEST_FIXTUR
     {
                      //   short    redundant  redundant  dangling   tracks    dangling
                      //  circuits    vias      tracks     tracks    in pads     vias    expected
-        { "issue2904",    false,     false,    false,     true,      false,    false,       6    },
+        { "issue2904",    false,     false,    false,     true,      false,    false,       9    },
         { "issue5093",    false,     false,    false,     false,     true,     false,     118    },
         { "issue7004",    false,     true,     false,     false,     false,    true,       25    },
         { "issue8883",    true,      true,     true,      true,      false,    true,       80    }

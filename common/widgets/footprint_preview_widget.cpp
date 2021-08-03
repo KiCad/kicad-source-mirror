@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2017-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2021 KiCad Developers, see AUTHORS.txt for contributors.
  * Copyright (C) 2017 Chris Pavlina <pavlina.chris@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -113,9 +113,8 @@ FOOTPRINT_PREVIEW_PANEL_BASE* FOOTPRINT_PREVIEW_PANEL_BASE::Create( wxWindow* aP
 
     try
     {
-        KIFACE* kiface = aKiway.KiFACE( KIWAY::FACE_PCB );
-
-        auto window = kiface->CreateWindow( aParent, FRAME_FOOTPRINT_PREVIEW, &aKiway );
+        KIFACE*   kiface = aKiway.KiFACE( KIWAY::FACE_PCB );
+        wxWindow* window = kiface->CreateWindow( aParent, FRAME_FOOTPRINT_PREVIEW, &aKiway );
 
         panel = dynamic_cast<FOOTPRINT_PREVIEW_PANEL_BASE*>( window );
 

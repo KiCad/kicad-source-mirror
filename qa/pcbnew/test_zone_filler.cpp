@@ -30,7 +30,6 @@
 #include <footprint.h>
 #include <zone.h>
 #include <drc/drc_item.h>
-#include <drc/drc_engine.h>
 #include <settings/settings_manager.h>
 
 

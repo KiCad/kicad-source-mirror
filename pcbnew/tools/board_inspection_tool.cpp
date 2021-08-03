@@ -29,7 +29,6 @@
 #include <tools/edit_tool.h>
 #include <pcb_painter.h>
 #include <connectivity/connectivity_data.h>
-#include <profile.h>
 #include <dialogs/wx_html_report_box.h>
 #include <drc/drc_engine.h>
 #include <dialogs/panel_setup_rules_base.h>

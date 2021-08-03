@@ -26,11 +26,10 @@
 #include <pybind11/pybind11.h>
 
 #include <wx/debug.h>
+#include <wx/msgdlg.h>
 #include <i18n_utility.h>
 #include <board.h>
 #include <pcb_group.h>
-#include <string>
-#include <wx/msgdlg.h>
 
 
 wxString BOARD_ITEM::ShowShape( SHAPE_T aShape )

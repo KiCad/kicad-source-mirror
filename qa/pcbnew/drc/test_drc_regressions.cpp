@@ -29,7 +29,6 @@
 #include <pcb_track.h>
 #include <footprint.h>
 #include <drc/drc_item.h>
-#include <drc/drc_engine.h>
 #include <settings/settings_manager.h>
 
 

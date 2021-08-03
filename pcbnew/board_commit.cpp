@@ -24,7 +24,6 @@
 
 #include <board.h>
 #include <footprint.h>
-#include <pcb_edit_frame.h>
 #include <pcb_group.h>
 #include <tool/tool_manager.h>
 #include <tools/pcb_selection_tool.h>
