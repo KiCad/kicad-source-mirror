@@ -47,7 +47,7 @@
 #include <wx/textdlg.h>
 
 #include <locale_io.h>
-#include <dialog_helpers.h>
+#include <eda_list_dialog.h>
 
 
 // Some wx widget ID to know what widget has fired a event:

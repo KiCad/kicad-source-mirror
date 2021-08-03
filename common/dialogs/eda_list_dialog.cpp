@@ -23,7 +23,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <dialog_helpers.h>
+#include <eda_list_dialog.h>
 #include <eda_draw_frame.h>
 #include <string_utils.h>
 #include <macros.h>

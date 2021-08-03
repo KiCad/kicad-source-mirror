@@ -19,15 +19,16 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <wx/wupdlock.h>
+#include <wx/stattext.h>
+
 #include <gerbview.h>
 #include <gerbview_frame.h>
 #include <bitmaps.h>
 #include <gerbview_id.h>
 #include <gerber_file_image.h>
 #include <gerber_file_image_list.h>
-#include <dialog_helpers.h>
 #include <string_utils.h>
-#include <wx/wupdlock.h>
 #include <tool/actions.h>
 #include <tool/action_toolbar.h>
 #include <tools/gerbview_actions.h>

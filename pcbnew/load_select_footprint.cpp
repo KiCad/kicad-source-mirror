@@ -32,7 +32,7 @@ using namespace std::placeholders;
 #include <connectivity/connectivity_data.h>
 #include <dialog_choose_footprint.h>
 #include <dialog_get_footprint_by_name.h>
-#include <dialog_helpers.h>
+#include <eda_list_dialog.h>
 #include <footprint_edit_frame.h>
 #include <footprint_info_impl.h>
 #include <footprint_tree_pane.h>

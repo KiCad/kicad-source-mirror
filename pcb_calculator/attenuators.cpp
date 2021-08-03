@@ -26,7 +26,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <dialog_helpers.h>
+#include <string_utils.h>
 
 #include "pcb_calculator_frame.h"
 

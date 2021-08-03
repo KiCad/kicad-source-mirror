@@ -24,22 +24,18 @@
  */
 
 #include <pcb_edit_frame.h>
-#include <dialog_helpers.h>
-
 #include <board.h>
 #include <footprint.h>
-
 #include <pcbnew.h>
 #include <pcbnew_id.h>
-#include "footprint_wizard_frame.h"
 #include <wildcards_and_files_ext.h>
 #include <dialogs/dialog_footprint_wizard_list.h>
 #include <base_units.h>
 #include <widgets/wx_grid.h>
 #include <wx/listbox.h>
 #include <wx/msgdlg.h>
-
 #include <tool/tool_manager.h>
+#include "footprint_wizard_frame.h"
 
 
 void FOOTPRINT_WIZARD_FRAME::Process_Special_Functions( wxCommandEvent& event )

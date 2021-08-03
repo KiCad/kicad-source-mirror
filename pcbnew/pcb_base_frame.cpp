@@ -34,7 +34,6 @@
 
 #include <kiface_i.h>
 #include <confirm.h>
-#include <dialog_helpers.h>
 #include <pcb_base_frame.h>
 #include <base_units.h>
 #include <widgets/msgpanel.h>

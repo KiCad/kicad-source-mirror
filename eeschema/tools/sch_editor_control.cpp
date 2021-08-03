@@ -60,7 +60,7 @@
 #include <tools/sch_editor_control.h>
 #include <drawing_sheet/ds_proxy_undo_item.h>
 #include <dialog_update_from_pcb.h>
-#include <dialog_helpers.h>
+#include <eda_list_dialog.h>
 
 
 int SCH_EDITOR_CONTROL::New( const TOOL_EVENT& aEvent )

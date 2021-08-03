@@ -29,10 +29,7 @@
  */
 
 #include <base_units.h>
-#include <dialog_helpers.h>
-#include <eda_item.h>
 #include <gr_basic.h>
-#include <drawing_sheet/ds_draw_item.h>
 #include <drawing_sheet/ds_data_item.h>
 #include <drawing_sheet/ds_data_model.h>
 #include <drawing_sheet/ds_painter.h>

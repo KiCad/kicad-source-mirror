@@ -39,7 +39,7 @@
 #include <sch_plugins/legacy/sch_legacy_plugin.h>
 #include <sch_plugins/kicad/sch_sexpr_plugin.h>
 #include <dialogs/dialog_lib_new_symbol.h>
-#include <dialog_helpers.h>
+#include <eda_list_dialog.h>
 #include <wx/clipbrd.h>
 #include <wx/filedlg.h>
 #include <wx/log.h>

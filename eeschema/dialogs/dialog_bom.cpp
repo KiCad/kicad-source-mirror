@@ -32,7 +32,7 @@
 #include <bom_plugins.h>
 #include <confirm.h>
 #include <dialog_bom_base.h>
-#include <dialog_helpers.h>
+#include <string_utils.h>
 #include <eeschema_settings.h>
 #include <gestfich.h>
 #include <dialogs/html_messagebox.h>

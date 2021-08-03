@@ -26,7 +26,6 @@
 #include <eeschema_id.h>
 #include <symbol_edit_frame.h>
 #include <sch_painter.h>
-#include <dialog_helpers.h>
 #include <bitmaps.h>
 #include <symbol_library_manager.h>
 #include <tool/action_toolbar.h>

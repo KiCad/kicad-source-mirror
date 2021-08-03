@@ -28,7 +28,7 @@
 #include <string_utils.h>
 #include <macros.h>
 #include <pcb_edit_frame.h>
-#include <dialog_helpers.h>
+#include <eda_list_dialog.h>
 #include <filter_reader.h>
 #include <fp_lib_table.h>
 #include <validators.h>

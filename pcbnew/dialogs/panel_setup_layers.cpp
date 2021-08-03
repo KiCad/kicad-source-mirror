@@ -36,7 +36,7 @@
 
 #include <wx/choicdlg.h>
 #include <wx/treebook.h>
-#include <dialog_helpers.h>
+#include <eda_list_dialog.h>
 
 
 // some define to choose how copper layers widgets are shown

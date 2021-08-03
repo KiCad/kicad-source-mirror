@@ -30,7 +30,6 @@
 #include <bitmaps.h>
 #include <board.h>
 #include <board_design_settings.h>
-#include <dialog_helpers.h>
 #include <kiface_i.h>
 #include <macros.h>
 #include <pcb_edit_frame.h>

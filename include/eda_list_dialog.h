@@ -22,20 +22,13 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file dialog_helpers.h
- * @brief Helper dialog and control classes.
- * @note Due to use of wxFormBuilder to create dialogs many of them should be removed.
- */
-
-#ifndef  DIALOG_HELPERS_H_
-#define  DIALOG_HELPERS_H_
+#ifndef  EDA_LIST_DIALOG_H
+#define  EDA_LIST_DIALOG_H
 
 
 #include <../common/dialogs/eda_list_dialog_base.h>
 #include <eda_units.h>
 
-void ConvertMarkdown2Html( const wxString& aMarkdownInput, wxString& aHtmlOutput );
 
 class EDA_DRAW_FRAME;
 
@@ -90,45 +83,4 @@ private:
 };
 
 
-/**
- * Object to edit/enter a coordinate (pair of values) ( INCHES or MM ) in  dialog boxes.
- */
-class EDA_POSITION_CTRL
-{
-public:
-    EDA_POSITION_CTRL( wxWindow* parent, const wxString& title, const wxPoint& pos_to_edit,
-                       EDA_UNITS user_unit, wxBoxSizer* BoxSizer );
-
-    ~EDA_POSITION_CTRL();
-
-    void    Enable( bool x_win_on, bool y_win_on );
-    void    SetValue( int x_value, int y_value );
-    wxPoint GetValue() const;
-
-    EDA_UNITS m_UserUnit;
-
-    wxTextCtrl*   m_FramePosX;
-    wxTextCtrl*   m_FramePosY;
-
-private:
-    wxStaticText* m_TextX;
-    wxStaticText* m_TextY;
-};
-
-
-/**
- * Object to edit/enter a size (pair of values for X and Y size ( INCHES or MM ) in dialog boxes.
- */
-class EDA_SIZE_CTRL : public EDA_POSITION_CTRL
-{
-public:
-    EDA_SIZE_CTRL( wxWindow* parent, const wxString& title, const wxSize& size_to_edit,
-                   EDA_UNITS user_unit, wxBoxSizer* BoxSizer );
-
-    ~EDA_SIZE_CTRL() { }
-
-    wxSize GetValue() const;
-};
-
-
-#endif    // DIALOG_HELPERS_H_
+#endif    // EDA_LIST_DIALOG_H

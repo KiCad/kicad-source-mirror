@@ -25,16 +25,11 @@
  */
 
 #include <confirm.h>
-#include <trigo.h>
-#include <string_utils.h>
+#include <widgets/unit_binder.h>
 #include <pcb_edit_frame.h>
-#include <dialog_helpers.h>
 #include <dialog_shim.h>
 #include <locale_io.h>
-#include <richio.h>
 #include <filter_reader.h>
-#include <base_units.h>
-#include <validators.h>
 #include <dialogs/dialog_text_entry.h>
 #include <board.h>
 #include <footprint.h>
@@ -49,12 +44,12 @@
 #include <wx/filedlg.h>
 #include <wx/radiobox.h>
 #include <wx/sizer.h>
+#include <wx/statbox.h>
 
-static std::vector< wxRealPoint > PolyEdges;
-static double  ShapeScaleX, ShapeScaleY;
-static wxSize  ShapeSize;
-static int     PolyShapeType;
-
+static std::vector< wxRealPoint > g_PolyEdges;
+static double  g_ShapeScaleX, g_ShapeScaleY;
+static wxSize  g_ShapeSize;
+static int     g_PolyShapeType;
 
 
 enum id_mw_cmd {
@@ -66,7 +61,12 @@ class MWAVE_POLYGONAL_SHAPE_DLG : public DIALOG_SHIM
 {
 public:
     MWAVE_POLYGONAL_SHAPE_DLG( PCB_EDIT_FRAME* parent, const wxPoint& pos );
-    ~MWAVE_POLYGONAL_SHAPE_DLG() { };
+
+    ~MWAVE_POLYGONAL_SHAPE_DLG()
+    {
+        delete m_sizeX;
+        delete m_sizeY;
+    };
 
     bool TransferDataFromWindow() override;
 
@@ -93,9 +93,10 @@ private:
 
     DECLARE_EVENT_TABLE()
 
-    PCB_EDIT_FRAME*  m_Parent;
-    wxRadioBox*      m_ShapeOptionCtrl;
-    EDA_SIZE_CTRL*   m_SizeCtrl;
+    PCB_EDIT_FRAME*  m_frame;
+    wxRadioBox*      m_shapeOptionCtrl;
+    UNIT_BINDER*     m_sizeX;
+    UNIT_BINDER*     m_sizeY;
 };
 
 
@@ -107,40 +108,74 @@ END_EVENT_TABLE()
 
 MWAVE_POLYGONAL_SHAPE_DLG::MWAVE_POLYGONAL_SHAPE_DLG( PCB_EDIT_FRAME* parent,
                                                       const wxPoint&  framepos ) :
-    DIALOG_SHIM( parent, -1, _( "Complex shape" ), framepos, wxDefaultSize,
-                 wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER )
+    DIALOG_SHIM( parent, -1, _( "Complex Shape" ), framepos, wxDefaultSize,
+                 wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER ),
+    m_sizeX(),
+    m_sizeY()
 {
-    m_Parent = parent;
+    m_frame = parent;
 
-    PolyEdges.clear();
+    g_PolyEdges.clear();
 
-    wxBoxSizer* MainBoxSizer = new wxBoxSizer( wxHORIZONTAL );
-    SetSizer( MainBoxSizer );
-    wxBoxSizer* LeftBoxSizer  = new wxBoxSizer( wxVERTICAL );
-    wxBoxSizer* RightBoxSizer = new wxBoxSizer( wxVERTICAL );
-    MainBoxSizer->Add( LeftBoxSizer, 0, wxGROW | wxALL, 5 );
-    MainBoxSizer->Add( RightBoxSizer, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5 );
+    wxBoxSizer* mainBoxSizer = new wxBoxSizer( wxVERTICAL );
+    SetSizer( mainBoxSizer );
 
-    wxButton* Button = new wxButton( this, wxID_OK, _( "OK" ) );
-    RightBoxSizer->Add( Button, 0, wxGROW | wxALL, 5 );
+    // Controls
 
-    Button = new wxButton( this, wxID_CANCEL, _( "Cancel" ) );
-    RightBoxSizer->Add( Button, 0, wxGROW | wxALL, 5 );
-
-    Button = new wxButton( this, ID_READ_SHAPE_FILE,
-                           _( "Read Shape Description File..." ) );
-    RightBoxSizer->Add( Button, 0, wxGROW | wxALL, 5 );
+    wxBoxSizer* topBoxSizer  = new wxBoxSizer( wxHORIZONTAL );
+    mainBoxSizer->Add( topBoxSizer, 1, wxGROW | wxALL, 5 );
 
     wxString shapelist[] = { _( "Normal" ), _( "Symmetrical" ), _( "Mirrored" ) };
 
-    m_ShapeOptionCtrl = new wxRadioBox( this, -1, _( "Shape Option" ),
+    m_shapeOptionCtrl = new wxRadioBox( this, -1, _( "Shape" ),
                                         wxDefaultPosition, wxDefaultSize, 3,
                                         shapelist, 1,
                                         wxRA_SPECIFY_COLS );
-    LeftBoxSizer->Add( m_ShapeOptionCtrl, 0, wxGROW | wxALL, 5 );
+    topBoxSizer->Add( m_shapeOptionCtrl, 1, wxGROW | wxALL, 5 );
 
-    m_SizeCtrl = new EDA_SIZE_CTRL( this, _( "Size" ), ShapeSize, parent->GetUserUnits(),
-                                    LeftBoxSizer );
+    auto sizeSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _( "Size" ) ),
+                                           wxVERTICAL );
+    wxBoxSizer* xSizer = new wxBoxSizer( wxHORIZONTAL );
+    wxBoxSizer* ySizer = new wxBoxSizer( wxHORIZONTAL );
+
+    topBoxSizer->Add( sizeSizer, 1, wxGROW | wxALL, 5 );
+    sizeSizer->Add( xSizer, 0, 0, 5 );
+    sizeSizer->Add( ySizer, 0, 0, 5 );
+
+    wxStaticText* xLabel = new wxStaticText( this, -1, _( "X:" ) );
+    wxTextCtrl*   xCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString );
+    wxStaticText* xUnits = new wxStaticText( this, -1, _( "units" ) );
+
+    xSizer->Add( xLabel, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5 );
+    xSizer->Add( xCtrl, 1, wxALIGN_CENTER_VERTICAL, 5 );
+    xSizer->Add( xUnits, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5 );
+    m_sizeX = new UNIT_BINDER( m_frame, xLabel, xCtrl, xUnits );
+
+    wxStaticText* yLabel = new wxStaticText( this, -1, _( "Y:" ) );
+    wxTextCtrl*   yCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString );
+    wxStaticText* yUnits = new wxStaticText( this, -1, _( "units" ) );
+
+    ySizer->Add( yLabel, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5 );
+    ySizer->Add( yCtrl, 1, wxALIGN_CENTER_VERTICAL, 5 );
+    ySizer->Add( yUnits, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5 );
+    m_sizeY = new UNIT_BINDER( m_frame, yLabel, yCtrl, yUnits );
+
+    // Buttons
+
+    wxBoxSizer* buttonsBoxSizer = new wxBoxSizer( wxHORIZONTAL );
+    mainBoxSizer->Add( buttonsBoxSizer, 0, wxALL, 5 );
+
+    wxButton* btn = new wxButton( this, ID_READ_SHAPE_FILE, _( "Read Shape Description File..." ) );
+    buttonsBoxSizer->Add( btn, 0, wxALIGN_CENTER_VERTICAL | wxLEFT | wxRIGHT, 10 );
+    buttonsBoxSizer->AddStretchSpacer();
+
+    wxStdDialogButtonSizer* sdbSizer = new wxStdDialogButtonSizer();
+    buttonsBoxSizer->Add( sdbSizer, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5 );
+    wxButton* sdbSizerOK = new wxButton( this, wxID_OK );
+   	sdbSizer->AddButton( sdbSizerOK );
+   	wxButton* sdbSizerCancel = new wxButton( this, wxID_CANCEL );
+   	sdbSizer->AddButton( sdbSizerCancel );
+   	sdbSizer->Realize();
 
     GetSizer()->SetSizeHints( this );
 }
@@ -148,7 +183,7 @@ MWAVE_POLYGONAL_SHAPE_DLG::MWAVE_POLYGONAL_SHAPE_DLG( PCB_EDIT_FRAME* parent,
 
 void MWAVE_POLYGONAL_SHAPE_DLG::OnCancelClick( wxCommandEvent& event )
 {
-    PolyEdges.clear();
+    g_PolyEdges.clear();
     event.Skip();
 }
 
@@ -158,8 +193,9 @@ bool MWAVE_POLYGONAL_SHAPE_DLG::TransferDataFromWindow()
     if( !wxDialog::TransferDataFromWindow() )
         return false;
 
-    ShapeSize     = m_SizeCtrl->GetValue();
-    PolyShapeType = m_ShapeOptionCtrl->GetSelection();
+    g_ShapeSize.x = m_sizeX->GetValue();
+    g_ShapeSize.y = m_sizeY->GetValue();
+    g_PolyShapeType = m_shapeOptionCtrl->GetSelection();
 
     return true;
 }
@@ -167,19 +203,19 @@ bool MWAVE_POLYGONAL_SHAPE_DLG::TransferDataFromWindow()
 
 void MWAVE_POLYGONAL_SHAPE_DLG::ReadDataShapeDescr( wxCommandEvent& event )
 {
-    static wxString lastpath;       // To remember the last open path during a session
+    static wxString s_lastpath;       // To remember the last open path during a session
     wxString fullFileName;
     wxString mask = wxFileSelectorDefaultWildcardStr;
 
-    fullFileName = wxFileSelector( _( "Shape Description File" ), lastpath,
+    fullFileName = wxFileSelector( _( "Shape Description File" ), s_lastpath,
                                    fullFileName, wxEmptyString, mask, wxFD_OPEN, this );
 
     if( fullFileName.IsEmpty() )
         return;
 
     wxFileName fn( fullFileName );
-    lastpath = fn.GetPath();
-    PolyEdges.clear();
+    s_lastpath = fn.GetPath();
+    g_PolyEdges.clear();
 
     FILE* File = wxFopen( fullFileName, wxT( "rt" ) );
 
@@ -190,7 +226,7 @@ void MWAVE_POLYGONAL_SHAPE_DLG::ReadDataShapeDescr( wxCommandEvent& event )
     }
 
     double   unitconv = IU_PER_MM;
-    ShapeScaleX = ShapeScaleY = 1.0;
+    g_ShapeScaleX = g_ShapeScaleY = 1.0;
 
     FILE_LINE_READER fileReader( File, fullFileName );
     FILTER_READER reader( fileReader );
@@ -227,21 +263,22 @@ void MWAVE_POLYGONAL_SHAPE_DLG::ReadDataShapeDescr( wxCommandEvent& event )
                     break;
 
                 wxRealPoint coord( atof( param1 ), atof( param2 ) );
-                PolyEdges.push_back( coord );
+                g_PolyEdges.push_back( coord );
             }
         }
 
         if( strncasecmp( Line, "XScale", 6 ) == 0 )
-            ShapeScaleX = atof( param2 );
+            g_ShapeScaleX = atof( param2 );
 
         if( strncasecmp( Line, "YScale", 6 ) == 0 )
-            ShapeScaleY = atof( param2 );
+            g_ShapeScaleY = atof( param2 );
     }
 
-    ShapeScaleX *= unitconv;
-    ShapeScaleY *= unitconv;
+    g_ShapeScaleX *= unitconv;
+    g_ShapeScaleY *= unitconv;
 
-    m_SizeCtrl->SetValue( (int) ShapeScaleX, (int) ShapeScaleY );
+    m_sizeX->SetValue( (int) g_ShapeScaleX );
+    m_sizeY->SetValue( (int) g_ShapeScaleY );
 }
 
 
@@ -262,23 +299,23 @@ FOOTPRINT* MICROWAVE_TOOL::createPolygonShape()
 
     if( ret != wxID_OK )
     {
-        PolyEdges.clear();
+        g_PolyEdges.clear();
         return nullptr;
     }
 
-    if( PolyShapeType == 2 )  // mirrored
-        ShapeScaleY = -ShapeScaleY;
+    if( g_PolyShapeType == 2 )  // mirrored
+        g_ShapeScaleY = -g_ShapeScaleY;
 
-    ShapeSize.x = KiROUND( ShapeScaleX );
-    ShapeSize.y = KiROUND( ShapeScaleY );
+    g_ShapeSize.x = KiROUND( g_ShapeScaleX );
+    g_ShapeSize.y = KiROUND( g_ShapeScaleY );
 
-    if( ( ShapeSize.x ) == 0 || ( ShapeSize.y == 0 ) )
+    if(( g_ShapeSize.x ) == 0 || ( g_ShapeSize.y == 0 ) )
     {
         editFrame.ShowInfoBarError( _( "Shape has a null size." ) );
         return nullptr;
     }
 
-    if( PolyEdges.size() == 0 )
+    if( g_PolyEdges.size() == 0 )
     {
         editFrame.ShowInfoBarError( _( "Shape has no points." ) );
         return nullptr;
@@ -291,7 +328,7 @@ FOOTPRINT* MICROWAVE_TOOL::createPolygonShape()
 
     // We try to place the footprint anchor to the middle of the shape len
     wxPoint offset;
-    offset.x = -ShapeSize.x / 2;
+    offset.x = -g_ShapeSize.x / 2;
 
     auto it = footprint->Pads().begin();
 
@@ -300,7 +337,7 @@ FOOTPRINT* MICROWAVE_TOOL::createPolygonShape()
     pad1->SetX( pad1->GetPos0().x );
 
     pad2 = *( ++it );
-    pad2->SetX0( offset.x + ShapeSize.x );
+    pad2->SetX0( offset.x + g_ShapeSize.x );
     pad2->SetX( pad2->GetPos0().x );
 
     // Add a polygonal edge (corners will be added later) on copper layer
@@ -313,17 +350,17 @@ FOOTPRINT* MICROWAVE_TOOL::createPolygonShape()
 
     // Get the corner buffer of the polygonal edge
     std::vector<wxPoint> polyPoints;
-    polyPoints.reserve( PolyEdges.size() + 2 );
+    polyPoints.reserve( g_PolyEdges.size() + 2 );
 
     // Init start point coord:
     polyPoints.emplace_back( wxPoint( offset.x, 0 ) );
 
     wxPoint last_coordinate;
 
-    for( wxRealPoint& pt: PolyEdges )  // Copy points
+    for( wxRealPoint& pt: g_PolyEdges )  // Copy points
     {
-        last_coordinate.x = KiROUND( pt.x * ShapeScaleX );
-        last_coordinate.y = -KiROUND( pt.y * ShapeScaleY );
+        last_coordinate.x = KiROUND( pt.x * g_ShapeScaleX );
+        last_coordinate.y = -KiROUND( pt.y * g_ShapeScaleY );
         last_coordinate += offset;
         polyPoints.push_back( last_coordinate );
     }
@@ -332,7 +369,7 @@ FOOTPRINT* MICROWAVE_TOOL::createPolygonShape()
     if( last_coordinate.y != 0 )
         polyPoints.emplace_back( wxPoint( last_coordinate.x, 0 ) );
 
-    switch( PolyShapeType )
+    switch( g_PolyShapeType )
     {
     case 0:     // shape from file
     case 2:     // shape from file, mirrored (the mirror is already done)
@@ -354,7 +391,7 @@ FOOTPRINT* MICROWAVE_TOOL::createPolygonShape()
     // Set the polygon outline thickness to 0, only the polygonal shape is filled
     // without extra thickness.
     shape->SetWidth( 0 );
-    PolyEdges.clear();
+    g_PolyEdges.clear();
 
     editFrame.OnModify();
     return footprint;

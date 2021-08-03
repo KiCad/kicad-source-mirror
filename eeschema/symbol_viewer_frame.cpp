@@ -26,7 +26,6 @@
 #include <bitmaps.h>
 #include <symbol_library.h>
 #include <confirm.h>
-#include <dialog_helpers.h>
 #include <dialog_choose_symbol.h>
 #include <eeschema_id.h>
 #include <eeschema_settings.h>

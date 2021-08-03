@@ -32,6 +32,8 @@
 #include <wx/filename.h>
 
 
+void ConvertMarkdown2Html( const wxString& aMarkdownInput, wxString& aHtmlOutput );
+
 /**
  * Convert the old `~...~` overbar notation to the new `~{...}` one.
  */

@@ -19,12 +19,9 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <vector>
 #include <array>
-#include <iostream>
-#include <string>
 
-#include <dialog_helpers.h>
+#include <string_utils.h>
 #include "class_regulator_data.h"
 #include "pcb_calculator_frame.h"
 
