@@ -477,6 +477,7 @@ bool GERBVIEW_FRAME::unarchiveFiles( const wxString& aFullFileName, REPORTER* aR
 {
     bool     foundX2Gerbers = false;
     wxString msg;
+    int      firstLoadedLayer = NO_AVAILABLE_LAYERS;
 
     // Extract the path of aFullFileName. We use it to store temporary files
     wxFileName fn( aFullFileName );
@@ -616,6 +617,12 @@ bool GERBVIEW_FRAME::unarchiveFiles( const wxString& aFullFileName, REPORTER* aR
                         GERBER_DRAW_LAYER( layer ), GetGbrImage( layer )->HasNegativeItems() );
         }
 
+        // Select the first added layer by default when done loading
+        if( read_ok && firstLoadedLayer == NO_AVAILABLE_LAYERS )
+        {
+            firstLoadedLayer = layer;
+        }
+
         delete entry;
 
         // The unzipped file is only a temporary file, delete it.
@@ -651,6 +658,10 @@ bool GERBVIEW_FRAME::unarchiveFiles( const wxString& aFullFileName, REPORTER* aR
         SortLayersByX2Attributes();
     else
         SortLayersByFileExtension();
+
+    // Select the first layer loaded so we don't show another layer on top after
+    if( firstLoadedLayer != NO_AVAILABLE_LAYERS )
+        SetActiveLayer( firstLoadedLayer, true );
 
     return success;
 }
