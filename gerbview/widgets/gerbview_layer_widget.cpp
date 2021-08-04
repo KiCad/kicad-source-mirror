@@ -140,6 +140,16 @@ void GERBER_LAYER_WIDGET::AddRightClickMenuItems( wxMenu* aMenu )
 
     AddMenuItem( aMenu, ID_SORT_GBR_LAYERS_FILE_EXT, _( "Sort Layers by File Extension" ),
                  KiBitmap( BITMAPS::reload ) );
+
+    aMenu->AppendSeparator();
+
+    AddMenuItem( aMenu, ID_LAYER_MOVE_UP, _( "Move Current Layer Up" ), KiBitmap( BITMAPS::up ) );
+
+    AddMenuItem( aMenu, ID_LAYER_MOVE_DOWN, _( "Move Current Layer Down" ),
+                 KiBitmap( BITMAPS::down ) );
+
+    AddMenuItem( aMenu, ID_LAYER_DELETE, _( "Clear Current Layer..." ),
+                 KiBitmap( BITMAPS::delete_gerber ) );
 }
 
 
@@ -156,6 +166,7 @@ void GERBER_LAYER_WIDGET::onRightDownLayers( wxMouseEvent& event )
 
 void GERBER_LAYER_WIDGET::onPopupSelection( wxCommandEvent& event )
 {
+    int  layer;
     int  rowCount;
     int  menuId = event.GetId();
     bool visible = (menuId == ID_SHOW_ALL_LAYERS) ? true : false;
@@ -179,7 +190,7 @@ void GERBER_LAYER_WIDGET::onPopupSelection( wxCommandEvent& event )
         for( int row = 0; row < rowCount; ++row )
         {
             wxCheckBox* cb = (wxCheckBox*) getLayerComp( row, COLUMN_COLOR_LYR_CB );
-            int layer = getDecodedId( cb->GetId() );
+            layer = getDecodedId( cb->GetId() );
             bool loc_visible = visible;
 
             if( force_active_layer_visible && (layer == m_frame->GetActiveLayer() ) )
@@ -199,6 +210,31 @@ void GERBER_LAYER_WIDGET::onPopupSelection( wxCommandEvent& event )
 
     case ID_SORT_GBR_LAYERS_FILE_EXT:
         m_frame->SortLayersByFileExtension();
+        break;
+
+    case ID_LAYER_MOVE_UP:
+        layer = m_frame->GetActiveLayer();
+
+        if( layer > 0 )
+        {
+            m_frame->RemapLayers( GetImagesList()->SwapImages( layer, layer - 1 ) );
+            m_frame->SetActiveLayer( layer - 1 );
+        }
+        break;
+
+    case ID_LAYER_MOVE_DOWN:
+        layer = m_frame->GetActiveLayer();
+
+        if( layer < ( GetImagesList()->GetLoadedImageCount() - 1 ) )
+        {
+            m_frame->RemapLayers( GetImagesList()->SwapImages( layer, layer + 1 ) );
+            m_frame->SetActiveLayer( layer + 1 );
+        }
+        break;
+
+    case ID_LAYER_DELETE:
+        m_frame->Erase_Current_DrawLayer( false );
+
         break;
     }
 }

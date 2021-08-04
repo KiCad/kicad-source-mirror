@@ -410,11 +410,8 @@ static bool sortZorder( const GERBER_FILE_IMAGE* const& ref, const GERBER_FILE_I
 }
 
 
-std::unordered_map<int, int>
-GERBER_FILE_IMAGE_LIST::SortImagesByFunction( LayerSortFunction sortFunction )
+std::unordered_map<int, int> GERBER_FILE_IMAGE_LIST::GetLayerRemap()
 {
-    std::sort( m_GERBER_List.begin(), m_GERBER_List.end(), sortFunction );
-
     // The image order has changed.
     // Graphic layer numbering must be updated to match the widgets layer order
 
@@ -436,6 +433,14 @@ GERBER_FILE_IMAGE_LIST::SortImagesByFunction( LayerSortFunction sortFunction )
 }
 
 
+std::unordered_map<int, int>
+GERBER_FILE_IMAGE_LIST::SortImagesByFunction( LayerSortFunction sortFunction )
+{
+    std::sort( m_GERBER_List.begin(), m_GERBER_List.end(), sortFunction );
+    return GetLayerRemap();
+}
+
+
 std::unordered_map<int, int> GERBER_FILE_IMAGE_LIST::SortImagesByFileExtension()
 {
     return SortImagesByFunction( sortFileExtension );
@@ -445,4 +450,30 @@ std::unordered_map<int, int> GERBER_FILE_IMAGE_LIST::SortImagesByFileExtension()
 std::unordered_map<int, int> GERBER_FILE_IMAGE_LIST::SortImagesByZOrder()
 {
     return SortImagesByFunction( sortZorder );
+}
+
+
+std::unordered_map<int, int> GERBER_FILE_IMAGE_LIST::SwapImages( unsigned int layer1,
+                                                                 unsigned int layer2 )
+{
+    if( ( layer1 < 0 || layer1 >= m_GERBER_List.size() )
+        || ( layer2 < 0 || layer2 >= m_GERBER_List.size() ) )
+    {
+        return std::unordered_map<int, int>();
+    }
+
+    std::swap( m_GERBER_List[layer1], m_GERBER_List[layer2] );
+    return GetLayerRemap();
+}
+
+std::unordered_map<int, int> GERBER_FILE_IMAGE_LIST::RemoveImage( unsigned int layer )
+{
+    if( layer < 0 || layer >= m_GERBER_List.size() )
+        return std::unordered_map<int, int>();
+
+    DeleteImage( layer );
+    // Move deleted image to end of list, move all other images up
+    std::rotate( m_GERBER_List.begin() + layer, m_GERBER_List.begin() + layer + 1,
+                 m_GERBER_List.end() );
+    return GetLayerRemap();
 }

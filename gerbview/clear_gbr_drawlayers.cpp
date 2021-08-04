@@ -83,7 +83,7 @@ void GERBVIEW_FRAME::Erase_Current_DrawLayer( bool query )
     if( m_toolManager )
         m_toolManager->ResetTools( TOOL_BASE::MODEL_RELOAD );
 
-    GetImagesList()->DeleteImage( layer );
+    RemapLayers( GetImagesList()->RemoveImage( layer ) );
 
     ReFillLayerWidget();
     syncLayerBox();

@@ -172,6 +172,20 @@ public:
     std::unordered_map<int, int> SortImagesByZOrder();
 
     /**
+     * Swap two images and their orders.
+     *
+     * @return a mapping of old to new layer index
+     */
+    std::unordered_map<int, int> SwapImages( unsigned int layer1, unsigned int layer2 );
+
+    /**
+     * Removes (and deletes) an image, rotating the removed image to the end.
+     *
+     * @return a mapping of old to new layer index
+     */
+    std::unordered_map<int, int> RemoveImage( unsigned int layer );
+
+    /**
      * Get number of loaded images
      *
      * @return number of images loaded
@@ -179,6 +193,15 @@ public:
     unsigned GetLoadedImageCount();
 
 private:
+    /**
+     * When the image order has changed, call this to get a mapping
+     * to pass to the frame's Remap() function to remap the widgets
+     * layer order.
+     *
+     * @return Map describing the remap.
+     */
+    std::unordered_map<int, int> GetLayerRemap();
+
     // the list of loaded images (1 image = 1 gerber file)
     std::vector<GERBER_FILE_IMAGE*> m_GERBER_List;
 };
