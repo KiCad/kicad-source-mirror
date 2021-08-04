@@ -595,9 +595,11 @@ int EDIT_TOOL::DragArcTrack( const TOOL_EVENT& aEvent )
             restore_state = true; // Perform undo locally
             break;                // Finish
         }
-        else if( hasMouseMoved
-                 && ( evt->IsMouseUp( BUT_LEFT ) || evt->IsClick( BUT_LEFT )
-                      || evt->IsDblClick( BUT_LEFT ) ) )
+        // Note: ignore mouse-up/-click events that leaked through from the lock dialog
+        else if( ( hasMouseMoved || evt->Parameter<intptr_t>() == ACTIONS::CURSOR_CLICK )
+                 && ( evt->IsMouseUp( BUT_LEFT )
+                        || evt->IsClick( BUT_LEFT )
+                        || evt->IsDblClick( BUT_LEFT ) ) )
         {
             break; // Finish
         }
@@ -1049,11 +1051,10 @@ int EDIT_TOOL::doMoveSelection( TOOL_EVENT aEvent, bool aPickReference )
 
             break; // finish -- we moved exactly, so we are finished
         }
+        // Note: ignore mouse-up/-click events that leaked through from the lock dialog
         else if( ( hasMouseMoved || evt->Parameter<intptr_t>() == ACTIONS::CURSOR_CLICK )
                     && ( evt->IsMouseUp( BUT_LEFT ) || evt->IsClick( BUT_LEFT ) ) )
         {
-            // Ignore mouse up and click events until we receive at least one mouse move or
-            // mouse drag event
             break; // finish
         }
         else
