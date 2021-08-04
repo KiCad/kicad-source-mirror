@@ -189,7 +189,6 @@ bool GERBVIEW_FRAME::LoadGerberFiles( const wxString& aFullFileName )
         m_mruPath = currentPath = filename.GetPath();
     }
 
-    Erase_Current_DrawLayer( false );
 
     // Set the busy cursor
     wxBusyCursor wait;
@@ -217,6 +216,7 @@ bool GERBVIEW_FRAME::LoadListOfGerberAndDrillFiles( const wxString& aPath,
     // Read gerber files: each file is loaded on a new GerbView layer
     bool success = true;
     int layer = GetActiveLayer();
+    int  firstLoadedLayer = NO_AVAILABLE_LAYERS;
     LSET visibility = GetVisibleLayers();
 
     // Manage errors when loading files
@@ -245,6 +245,19 @@ bool GERBVIEW_FRAME::LoadListOfGerberAndDrillFiles( const wxString& aPath,
             continue;
         }
 
+        if( filename.GetExt() == GerberJobFileExtension.c_str() )
+        {
+            //We cannot read a gerber job file as a gerber plot file: skip it
+            wxString txt;
+            txt.Printf( _( "<b>A gerber job file cannot be loaded as a plot file</b> "
+                           "<i>%s</i>" ),
+                        filename.GetFullName() );
+            success = false;
+            reporter.Report( txt, RPT_SEVERITY_ERROR );
+            continue;
+        }
+
+
         m_lastFileName = filename.GetFullPath();
 
         if( !progress && ( aFilenameList.GetCount() > 1 ) )
@@ -267,56 +280,54 @@ bool GERBVIEW_FRAME::LoadListOfGerberAndDrillFiles( const wxString& aPath,
             progress->KeepRefreshing();
         }
 
-        SetActiveLayer( layer, false );
 
+        // Make sure we have a layer available to load into
+        layer = getNextAvailableLayer( layer );
+
+        if( layer == NO_AVAILABLE_LAYERS && ii < aFilenameList.GetCount() - 1 )
+        {
+            success = false;
+            reporter.Report( MSG_NO_MORE_LAYER, RPT_SEVERITY_ERROR );
+
+            // Report the name of not loaded files:
+            ii += 1;
+            while( ii < aFilenameList.GetCount() )
+            {
+                filename = aFilenameList[ii++];
+                wxString txt = wxString::Format( MSG_NOT_LOADED, filename.GetFullName() );
+                reporter.Report( txt, RPT_SEVERITY_ERROR );
+            }
+            break;
+        }
+
+        SetActiveLayer( layer, false );
         visibility[ layer ] = true;
 
         try
         {
             if( aFileType && ( *aFileType )[ii] == 1 )
             {
-                LoadExcellonFiles( filename.GetFullPath() );
-                layer = GetActiveLayer(); // Loading NC drill file changes the active layer
+                if( LoadExcellonFiles( filename.GetFullPath() ) )
+                {
+                    UpdateFileHistory( filename.GetFullPath(), &m_drillFileHistory );
+
+                    // Select the first added layer by default when done loading
+                    if( firstLoadedLayer == NO_AVAILABLE_LAYERS )
+                    {
+                        firstLoadedLayer = layer;
+                    }
+                }
             }
             else
             {
-                if( filename.GetExt() == GerberJobFileExtension.c_str() )
+                if( Read_GERBER_File( filename.GetFullPath() ) )
                 {
-                    //We cannot read a gerber job file as a gerber plot file: skip it
-                    wxString txt;
-                    txt.Printf( _( "<b>A gerber job file cannot be loaded as a plot file</b> "
-                                   "<i>%s</i>" ),
-                                filename.GetFullName() );
-                    success = false;
-                    reporter.Report( txt, RPT_SEVERITY_ERROR );
-                }
-                else if( Read_GERBER_File( filename.GetFullPath() ) )
-                {
-                    UpdateFileHistory( m_lastFileName );
+                    UpdateFileHistory( filename.GetFullPath() );
 
-                    GetCanvas()->GetView()->SetLayerHasNegatives(
-                            GERBER_DRAW_LAYER( layer ), GetGbrImage( layer )->HasNegativeItems() );
-
-                    layer = getNextAvailableLayer( layer );
-
-                    if( layer == NO_AVAILABLE_LAYERS && ii < aFilenameList.GetCount() - 1 )
+                    if( firstLoadedLayer == NO_AVAILABLE_LAYERS )
                     {
-                        success = false;
-                        reporter.Report( MSG_NO_MORE_LAYER, RPT_SEVERITY_ERROR );
-
-                        // Report the name of not loaded files:
-                        ii += 1;
-                        while( ii < aFilenameList.GetCount() )
-                        {
-                            filename = aFilenameList[ii++];
-                            wxString txt =
-                                    wxString::Format( MSG_NOT_LOADED, filename.GetFullName() );
-                            reporter.Report( txt, RPT_SEVERITY_ERROR );
-                        }
-                        break;
+                        firstLoadedLayer = layer;
                     }
-
-                    SetActiveLayer( layer, false );
                 }
             }
         }
@@ -343,15 +354,11 @@ bool GERBVIEW_FRAME::LoadListOfGerberAndDrillFiles( const wxString& aPath,
 
     SetVisibleLayers( visibility );
 
+    if( firstLoadedLayer != NO_AVAILABLE_LAYERS )
+        SetActiveLayer( firstLoadedLayer, true );
+
     // Synchronize layers tools with actual active layer:
     ReFillLayerWidget();
-
-    // TODO: it would be nice if we could set the active layer to one of the
-    // ones that was just loaded, but to maintain the previous user experience
-    // we need to set it to a blank layer in case they load another file.
-    // We can't start with the next available layer when loading files because
-    // some users expect the behavior of overwriting the active layer on load.
-    SetActiveLayer( getNextAvailableLayer( layer ), true );
 
     m_LayersManager->UpdateLayerIcons();
     syncLayerBox( true );
