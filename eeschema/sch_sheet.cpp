@@ -973,34 +973,19 @@ void SCH_SHEET::Plot( PLOTTER* aPlotter ) const
     if( override || backgroundColor == COLOR4D::UNSPECIFIED )
         backgroundColor = aPlotter->RenderSettings()->GetLayerColor( LAYER_SHEET_BACKGROUND );
 
-    aPlotter->SetColor( backgroundColor );
     // Do not fill shape in B&W mode, otherwise texts are unreadable
     bool fill = aPlotter->GetColorMode();
 
-    aPlotter->Rect( m_pos, m_pos + m_size, fill ? FILL_TYPE::FILLED_SHAPE : FILL_TYPE::NO_FILL,
-                    1.0 );
+    if( fill )
+    {
+        aPlotter->SetColor( backgroundColor );
+        aPlotter->Rect( m_pos, m_pos + m_size, FILL_TYPE::FILLED_SHAPE, 1 );
+    }
 
     aPlotter->SetColor( borderColor );
 
     int penWidth = std::max( GetPenWidth(), aPlotter->RenderSettings()->GetMinPenWidth() );
-    aPlotter->SetCurrentLineWidth( penWidth );
-
-    aPlotter->MoveTo( m_pos );
-    pos = m_pos;
-    pos.x += m_size.x;
-
-    aPlotter->LineTo( pos );
-    pos.y += m_size.y;
-
-    aPlotter->LineTo( pos );
-    pos = m_pos;
-    pos.y += m_size.y;
-
-    aPlotter->LineTo( pos );
-    aPlotter->FinishTo( m_pos );
-
-    for( SCH_FIELD field : m_fields )
-        field.Plot( aPlotter );
+    aPlotter->Rect( m_pos, m_pos + m_size, FILL_TYPE::NO_FILL, penWidth );
 
     /* Draw texts : SheetLabel */
     for( SCH_SHEET_PIN* sheetPin : m_pins )

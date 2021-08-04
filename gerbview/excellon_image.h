@@ -131,7 +131,8 @@ struct EXCELLON_ROUTE_COORD
  * Handle a drill image.
  *
  * It is derived from #GERBER_FILE_IMAGE because there is a lot of likeness between EXCELLON
- * files and GERBER files.   DCode aperture are also similar to T Codes.
+ * files and GERBER files.
+ * DCode apertures are also similar to T Codes.
  */
 class EXCELLON_IMAGE : public GERBER_FILE_IMAGE
 {
@@ -141,6 +142,7 @@ public: EXCELLON_IMAGE( int layer ) :
         m_State  = READ_HEADER_STATE;
         m_SlotOn = false;
         m_RouteModeOn = false;
+        m_hasFormat = false;
     }
 
 

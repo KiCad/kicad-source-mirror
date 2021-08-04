@@ -82,6 +82,7 @@ DIALOG_FOOTPRINT_PROPERTIES::DIALOG_FOOTPRINT_PROPERTIES( PCB_EDIT_FRAME* aParen
     m_delayedFocusGrid = nullptr;
     m_delayedFocusRow = -1;
     m_delayedFocusColumn = -1;
+    m_initialFocus = false;
 
     // Give an icon
     wxIcon  icon;
