@@ -59,7 +59,11 @@ public:
      * @param aSettings is a settings object to register
      * @return a handle to the owned pointer
      */
-    JSON_SETTINGS* RegisterSettings( JSON_SETTINGS* aSettings, bool aLoadNow = true );
+    template<typename T>
+    T* RegisterSettings( T* aSettings, bool aLoadNow = true )
+    {
+        return static_cast<T*>( registerSettings( aSettings, aLoadNow ) );
+    }
 
     void Load();
 
@@ -81,18 +85,18 @@ public:
      * If the settings have not been loaded, creates a new object owned by the
      * settings manager and returns a pointer to it.
      *
-     * @tparam AppSettings is a type derived from APP_SETTINGS_BASE
+     * @tparam T is a type derived from APP_SETTINGS_BASE
      * @param aLoadNow is true to load the registered file from disk immediately
      * @return a pointer to a loaded settings object
      */
-    template<typename AppSettings>
-    AppSettings* GetAppSettings( bool aLoadNow = true )
+    template<typename T>
+    T* GetAppSettings( bool aLoadNow = true )
     {
-        AppSettings* ret      = nullptr;
-        size_t       typeHash = typeid( AppSettings ).hash_code();
+        T*     ret      = nullptr;
+        size_t typeHash = typeid( T ).hash_code();
 
          if( m_app_settings_cache.count( typeHash ) )
-            ret = dynamic_cast<AppSettings*>( m_app_settings_cache.at( typeHash ) );
+            ret = dynamic_cast<T*>( m_app_settings_cache.at( typeHash ) );
 
         if( ret )
             return ret;
@@ -100,18 +104,18 @@ public:
         auto it = std::find_if( m_settings.begin(), m_settings.end(),
                                 []( const std::unique_ptr<JSON_SETTINGS>& aSettings )
                                 {
-                                    return dynamic_cast<AppSettings*>( aSettings.get() );
+                                    return dynamic_cast<T*>( aSettings.get() );
                                 } );
 
         if( it != m_settings.end() )
         {
-            ret = dynamic_cast<AppSettings*>( it->get() );
+            ret = dynamic_cast<T*>( it->get() );
         }
         else
         {
             try
             {
-                ret = static_cast<AppSettings*>( RegisterSettings( new AppSettings, aLoadNow ) );
+                ret = static_cast<T*>( RegisterSettings( new T, aLoadNow ) );
             }
             catch( ... )
             {
@@ -341,6 +345,8 @@ public:
     static std::string GetSettingsVersion();
 
 private:
+
+    JSON_SETTINGS* registerSettings( JSON_SETTINGS* aSettings, bool aLoadNow = true );
 
     /**
      * Determines the base path for user settings files.

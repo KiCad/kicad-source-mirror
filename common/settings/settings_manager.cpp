@@ -69,8 +69,7 @@ SETTINGS_MANAGER::SETTINGS_MANAGER( bool aHeadless ) :
     m_ok = true;
 
     // create the common settings shared by all applications.  Not loaded immediately
-    m_common_settings = static_cast<COMMON_SETTINGS*>( RegisterSettings( new COMMON_SETTINGS,
-                                                                         false ) );
+    m_common_settings = RegisterSettings( new COMMON_SETTINGS, false );
 
     loadAllColorSettings();
 }
@@ -83,7 +82,7 @@ SETTINGS_MANAGER::~SETTINGS_MANAGER()
 }
 
 
-JSON_SETTINGS* SETTINGS_MANAGER::RegisterSettings( JSON_SETTINGS* aSettings, bool aLoadNow )
+JSON_SETTINGS* SETTINGS_MANAGER::registerSettings( JSON_SETTINGS* aSettings, bool aLoadNow )
 {
     std::unique_ptr<JSON_SETTINGS> ptr( aSettings );
 
@@ -213,18 +212,17 @@ COLOR_SETTINGS* SETTINGS_MANAGER::loadColorSettingsByName( const wxString& aName
         return nullptr;
     }
 
-    auto cs = static_cast<COLOR_SETTINGS*>( RegisterSettings( new COLOR_SETTINGS( aName ) ) );
+    COLOR_SETTINGS* settings = RegisterSettings( new COLOR_SETTINGS( aName ) );
 
-    if( cs->GetFilename() != aName.ToStdString() )
+    if( settings->GetFilename() != aName.ToStdString() )
     {
-        // wxLogTrace is actually a macro so these braces are needed to keep Coverity from
-        // worrying about dangline else clauses....
-        wxLogTrace( traceSettings, "Warning: stored filename is actually %s, ", cs->GetFilename() );
+        wxLogTrace( traceSettings, "Warning: stored filename is actually %s, ",
+                    settings->GetFilename() );
     }
 
-    m_color_settings[aName] = cs;
+    m_color_settings[aName] = settings;
 
-    return cs;
+    return settings;
 }
 
 
@@ -262,8 +260,8 @@ COLOR_SETTINGS* SETTINGS_MANAGER::registerColorSettings( const wxString& aName )
 {
     if( !m_color_settings.count( aName ) )
     {
-        auto cs = static_cast<COLOR_SETTINGS*>( RegisterSettings( new COLOR_SETTINGS( aName ) ) );
-        m_color_settings[aName] = cs;
+        COLOR_SETTINGS* colorSettings = RegisterSettings( new COLOR_SETTINGS( aName ) );
+        m_color_settings[aName] = colorSettings;
     }
 
     return m_color_settings.at( aName );
@@ -296,10 +294,7 @@ void SETTINGS_MANAGER::loadAllColorSettings()
 {
     // Create the built-in color settings
     for( COLOR_SETTINGS* settings : COLOR_SETTINGS::CreateBuiltinColorSettings() )
-    {
-        m_color_settings[settings->GetFilename()] =
-                static_cast<COLOR_SETTINGS*>( RegisterSettings( settings, false ) );
-    }
+        m_color_settings[settings->GetFilename()] = RegisterSettings( settings, false );
 
     // Search for and load any other settings
     COLOR_SETTINGS_LOADER loader( [&]( const wxString& aFilename )
@@ -809,7 +804,7 @@ bool SETTINGS_MANAGER::LoadProject( const wxString& aFullPath, bool aSetActive )
     PROJECT_LOCAL_SETTINGS* settings = new PROJECT_LOCAL_SETTINGS( m_projects[fullPath], fn );
 
     if( aSetActive )
-        settings = static_cast<PROJECT_LOCAL_SETTINGS*>( RegisterSettings( settings ) );
+        settings = RegisterSettings( settings );
 
     m_projects[fullPath]->setLocalSettings( settings );
 
@@ -974,8 +969,7 @@ bool SETTINGS_MANAGER::loadProjectFile( PROJECT& aProject )
     wxFileName fullFn( aProject.GetProjectFullName() );
     wxString fn( fullFn.GetName() );
 
-    PROJECT_FILE* file = static_cast<PROJECT_FILE*>( RegisterSettings( new PROJECT_FILE( fn ),
-                                                                       false ) );
+    PROJECT_FILE* file = RegisterSettings( new PROJECT_FILE( fn ), false );
 
     m_project_files[aProject.GetProjectFullName()] = file;
 
