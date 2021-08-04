@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
-"PO-Revision-Date: 2021-07-31 11:56+0000\n"
+"PO-Revision-Date: 2021-08-04 22:43+0000\n"
 "Last-Translator: VicSanRoPe <vicsanrope@protonmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/kicad/"
 "master-source/es/>\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.7.2-dev\n"
+"X-Generator: Weblate 4.8-dev\n"
 "X-Poedit-Basepath: ../Git/kicad\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -16712,7 +16712,7 @@ msgstr "No se han encontrado nuevas etiquetas jerárquicas."
 
 #: eeschema/tools/sch_drawing_tools.cpp:728
 msgid "Junction location contains no joinable wires and/or pins."
-msgstr ""
+msgstr "La ubicación de la unión no contiene ningún cable o pin unible."
 
 #: eeschema/tools/sch_drawing_tools.cpp:1081
 msgid "Press <ESC> to cancel item creation."
@@ -23072,9 +23072,8 @@ msgstr "Coordenadas"
 #: pcbnew/dialogs/dialog_export_step_base.cpp:40
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:96
 #: pcbnew/dialogs/panel_pcbnew_display_origin_base.cpp:23
-#, fuzzy
 msgid "Drill/place file origin"
-msgstr "Origen de taladrado"
+msgstr "Origen del archivo de taladrado/colocación"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:43
 #: pcbnew/dialogs/panel_pcbnew_display_origin_base.cpp:23
@@ -23364,7 +23363,7 @@ msgstr "Diferenciar may./min."
 
 #: pcbnew/dialogs/dialog_find_base.cpp:52
 msgid "Wrap"
-msgstr ""
+msgstr "Envolvente"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:62
 msgid "Search footprint reference designators"
@@ -24293,7 +24292,7 @@ msgstr "Cortes de bordes"
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:138
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:58
 msgid "Courtyards"
-msgstr ""
+msgstr "Patios"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:217
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:139
@@ -25367,7 +25366,7 @@ msgstr "Tamaño X orificio:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:409
 msgid "Offset shape from hole"
-msgstr ""
+msgstr "Desfasar forma del agujero"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:412
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:462
@@ -25424,9 +25423,8 @@ msgid "E.C.O.2"
 msgstr "E.C.O.2"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:554
-#, fuzzy
 msgid "Fabrication Property:"
-msgstr "Archivos de &fabricación"
+msgstr "Propiedad de fabricación:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:556
 msgid ""
@@ -25440,33 +25438,41 @@ msgid ""
 "Castellated specify castellated through hole pads on a board edge\n"
 "These properties are specified in Gerber X2  files."
 msgstr ""
+"Propiedad opcional para especificar un propósito especial o requerimiento en "
+"archivos de fabricación:\n"
+"El atributo BGA es para pads en huellas BGA\n"
+"Fiduciario local es un fiduciario para la huella padre\n"
+"Fiduciario global es un fiduciario para toda la placa\n"
+"Pad de punto de prueba es útil para especificar puntos de prueba en archivos "
+"Gerber\n"
+"Pad de disipador especifica un pad térmico\n"
+"Castellado especifica pads de orificio pasante castellados en el borde de la "
+"placa\n"
+"Estas propiedades son especificadas en archivos Gerber X2."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:563 pcbnew/pad.cpp:1460
-#, fuzzy
 msgid "BGA pad"
-msgstr "Añadir pad"
+msgstr "Pad BGA"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:563 pcbnew/pad.cpp:1462
-#, fuzzy
 msgid "Fiducial, local to footprint"
-msgstr "Actualizar huellas"
+msgstr "Fiduciario, local a la huella"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:563 pcbnew/pad.cpp:1461
 msgid "Fiducial, global to board"
-msgstr "Fiducial, global para abordar"
+msgstr "Fiduciario, global a la placa"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:563 pcbnew/pad.cpp:1463
-#, fuzzy
 msgid "Test point pad"
-msgstr "Imprimir Isletas (Pads) siempre"
+msgstr "Pad de punto de prueba"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:563 pcbnew/pad.cpp:1464
 msgid "Heatsink pad"
-msgstr "Pad disipador térmico"
+msgstr "Pad de disipador"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:563
 msgid "Castellated pad (through hole only)"
-msgstr ""
+msgstr "Pad castellado (solo orificio pasante)"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:588
 msgid "Set values to 0 to use parent footprint or netclass values."
@@ -25475,25 +25481,22 @@ msgstr ""
 "clase de red."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:614
-#, fuzzy
 msgid ""
 "This is the local net clearance for this pad.\n"
 "If 0, the footprint local value or the Netclass value is used."
 msgstr ""
-"Este es el margen del pad para la red local.\n"
-"Si es 0, se utiliza el valor local de la huella o de la clase de red"
+"Este es el margen de red local para este pad.\n"
+"Si es 0, se utiliza el valor local de la huella o de la clase de red."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:627
-#, fuzzy
 msgid ""
 "This is the local clearance between this pad and the solder mask.\n"
 "If 0, the footprint local value or the global value is used."
 msgstr ""
-"Este es el margen local entre el pad y la máscara de soldadura.\n"
-"Si es 0, se utiliza el valor local de la huella o el valor global"
+"Este es el margen local entre este pad y la máscara de soldadura.\n"
+"Si es 0, se utiliza el valor local de la huella o el valor global."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:640
-#, fuzzy
 msgid ""
 "This is the local clearance between this pad and the solder paste.\n"
 "If 0, the footprint value or the global value is used.\n"
@@ -25501,14 +25504,13 @@ msgid ""
 "ratio.\n"
 "A negative value means a smaller mask size than pad size."
 msgstr ""
-"Este es el margen local entre el pad y la pasta de soldadura.\n"
+"Este es el margen local entre este pad y la pasta de soldadura.\n"
 "Si es 0, se utiliza el valor de la huella o el global.\n"
 "El valor final del margen es la suma de este valor y la proporción de "
 "margen\n"
-"Un valor negativo significa un tamaño de máscara menor que el del pad"
+"Un valor negativo significa un tamaño de máscara menor que el del pad."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:653
-#, fuzzy
 msgid ""
 "This is the local clearance ratio in percent between this pad and the solder "
 "paste.\n"
@@ -25517,17 +25519,17 @@ msgid ""
 "The final clearance value is the sum of this value and the clearance value.\n"
 "A negative value means a smaller mask size than pad size."
 msgstr ""
-"Este es el valor local de la proporción de margen en tanto por ciento entre "
-"el pad y la pasta de soldadura\n"
+"Esta es la proporción de margen local en porcentaje entre este pad y la "
+"pasta de soldadura.\n"
 "Un valor de 10 significa que el margen es un 10% del tamaño del pad.\n"
 "Si es 0, se utiliza el valor de la huella o el global.\n"
-"El valor final del margen es la suma de este valor y la proporción de "
-"margen.\n"
+"El valor final del margen es la suma de este valor y la proporción de margen."
+"\n"
 "Un valor negativo significa un tamaño de máscara menor que el del pad."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:726
 msgid "Pad connection:"
-msgstr "Conexión pads:"
+msgstr "Conexión de pad:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:730
 msgid "From parent footprint"
@@ -25546,27 +25548,24 @@ msgid "Use pad convex hull"
 msgstr "Utilizar pad convexo"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:791
-#, fuzzy
 msgid "Primitives list:"
-msgstr "Lista de primitivas"
+msgstr "Lista de primitivas:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:797
-#, fuzzy
 msgid "Note: coordinates are relative to anchor pad, orientation 0."
-msgstr " Las coordenadas son relativas al ancla del pad, orientación 0"
+msgstr "Nota: las coordenadas son relativas al ancla del pad, orientación 0."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:818
 msgid "Edit Primitive"
-msgstr "Eliminar primitiva"
+msgstr "Editar primitiva"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:821
 msgid "Duplicate Primitive"
 msgstr "Duplicar primitiva"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:824
-#, fuzzy
 msgid "Transform Primitive"
-msgstr "Transformar huella"
+msgstr "Transformar primitiva"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:830
 msgid "Delete Primitive"
@@ -25578,51 +25577,43 @@ msgstr "Primitivas de forma personalizada"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:973
 msgid "Footprint R1 (300K), back side (mirrored), rotated 180.0º"
-msgstr ""
+msgstr "Huella R1 (300K), lado trasero (espejado), rotado 180,0°"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:982
-#, fuzzy
 msgid "Preview pad in sketch mode"
-msgstr "Mostrar pads como bocetos"
+msgstr "Previsualizar pad en modo boceto"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1140
-#, fuzzy
 msgid "Start point"
-msgstr "Punto inicial:"
+msgstr "Punto inicial"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1166
-#, fuzzy
 msgid "Control point 1"
-msgstr "Punto de inicio X"
+msgstr "Punto de control 1"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1192
-#, fuzzy
 msgid "Control point 2"
-msgstr "Punto de inicio X"
+msgstr "Punto de control 2"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1218
-#, fuzzy
 msgid "End point"
-msgstr "Punto final:"
+msgstr "Punto final"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1328
-#, fuzzy
 msgid "Move vector"
-msgstr "Mover vector:"
+msgstr "Mover vector"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1377
 msgid "Scaling factor:"
 msgstr "Factor de escalado:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1399
-#, fuzzy
 msgid "Duplicate:"
 msgstr "Duplicados:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1567
-#, fuzzy
 msgid "Coordinates are relative to anchor pad, rotated 0.0 deg."
-msgstr "Las coordenadas son relativas al ancla, orientación 0"
+msgstr "Las coordenadas son relativas al ancla del pad, rotado 0,0°."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.h:265
 msgid "Pad Properties"
@@ -25653,13 +25644,13 @@ msgid "Y scale constrained."
 msgstr "Escala Y restringida."
 
 #: pcbnew/dialogs/dialog_plot.cpp:724
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Width correction constrained. The reasonable width correction value must be "
 "in a range of  [%s; %s] (%s) for current design rules."
 msgstr ""
 "Corrección del ancho restringida. El valor razonable de la corrección del "
-"ancho debe encontrarse en el rango de [%+f; %+f] (%s) para las reglas de "
+"ancho debe encontrarse en el rango de [%s; %s] (%s) para las reglas de "
 "diseño actuales."
 
 #: pcbnew/dialogs/dialog_plot.cpp:801
@@ -25687,24 +25678,20 @@ msgid "Plot footprint values"
 msgstr "Trazar valores de las huellas"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:84
-#, fuzzy
 msgid "Plot reference designators"
-msgstr "indicador de referencia"
+msgstr "Trazar indicadores de referencia"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:88
-#, fuzzy
 msgid "Force plotting of invisible values / refs"
-msgstr "Forzar trazado de valores/referencias no visibles"
+msgstr "Forzar trazado de valores/referencias invisibles"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:89
-#, fuzzy
 msgid "Force plot invisible footprint values and reference designators"
-msgstr "Fuerza el trazado de valores o referencias no visibles"
+msgstr "Fuerza el trazado de valores o referencias invisibles de huellas"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:93
-#, fuzzy
 msgid "Plot Edge.Cuts on all layers"
-msgstr "Trazar referencia de la hoja en todas las capas"
+msgstr "Trazar Edge.Cuts en todas las capas"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:94
 msgid "Do not plot the contents of the PCB edge layer on any other layers."
@@ -25713,13 +25700,12 @@ msgstr ""
 "demás capas."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:98
-#, fuzzy
 msgid "Sketch pads on fab layers"
-msgstr "Forzar la impresión/Trazado de Isletas (Pads) en TODAS las capas"
+msgstr "Bosquejar pads en las capas fab"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:99
 msgid "Include pad outlines on F.Fab and B.Fab layers when plotting"
-msgstr ""
+msgstr "Incluir las siluetas de los pads en las capas F.Fab y B.Fab al trazar"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:103
 msgid "Do not tent vias"
@@ -25730,12 +25716,11 @@ msgid "Remove soldermask on vias"
 msgstr "Eliminar la máscara de soldadura sobre las vías"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:109
-#, fuzzy
 msgid ""
 "Use the drill/place file origin as the coordinate origin for plotted files"
 msgstr ""
-"Utilizar los ejes auxiliares como origen de coordenadas en los archivos de "
-"trazado"
+"Utilizar el origen del archivo de taladrado/colocación como el eje de "
+"coordenadas en los archivos trazados"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:113
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:234
@@ -25793,27 +25778,28 @@ msgstr "Comprobar relleno de zonas antes de trazar"
 #: pcbnew/dialogs/dialog_plot_base.cpp:169
 msgid "Global solder mask min width and/or margin are not set to 0. "
 msgstr ""
+"El ancho y/o margen mínimo global de máscara de soldadura no están fijos a "
+"0. "
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:173
 msgid ""
 "Most board houses expect 0 and use their constraints, especially for solder "
 "mask min width."
 msgstr ""
+"La mayoría de fabricantes esperan 0 y usan sus propias constantes, "
+"especialmente para el ancho mínimo de máscara de soldadura."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:183
-#, fuzzy
 msgid "Board setup"
-msgstr "Optimización de placa"
+msgstr "Configuración de placa"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:184
-#, fuzzy
 msgid "File > Board Setup..."
-msgstr "Configuración de placa..."
+msgstr "Archivo > Configuración de placa..."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:197
-#, fuzzy
 msgid "Gerber Options"
-msgstr "Opciones Gerber:"
+msgstr "Opciones Gerber"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:204
 msgid "Use Protel filename extensions"
@@ -25845,9 +25831,8 @@ msgid "Remove silkscreen from areas without soldermask"
 msgstr "Elimina la serigrafía de las áreas sin máscara de soldadura"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:221
-#, fuzzy
 msgid "Coordinate format:"
-msgstr "Formato de coordenadas"
+msgstr "Formato de coordenadas:"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:225
 msgid "4.5, unit mm"
@@ -25859,7 +25844,7 @@ msgstr "4.6, unidad mm"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:231
 msgid "Use extended X2 format (recommended)"
-msgstr ""
+msgstr "Usar el formato extendido X2 (recomendado)"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:232
 msgid ""
@@ -25875,9 +25860,8 @@ msgstr ""
 "archivos."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:236
-#, fuzzy
 msgid "Include netlist attributes"
-msgstr "Incluir atributos extendidos"
+msgstr "Incluir atributos de lista de redes"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:237
 msgid ""
@@ -25892,49 +25876,47 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:241
 msgid "Disable aperture macros (non recommended)"
-msgstr ""
+msgstr "Desactivar las macros de apertura (no recomendado)"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:242
 msgid ""
 "Disable aperture macros in Gerber files\n"
 "Use *only* for broken Gerber viewers."
 msgstr ""
+"Deshabilita las macros de apertura en los archivos Gerber\n"
+"Usar *solo* para visores Gerber rotos."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:256
 msgid "Default pen size:"
 msgstr "Tamaño del trazo por defecto:"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:273
-#, fuzzy
 msgid "Postscript Options"
-msgstr "Opciones PostScrip:"
+msgstr "Opciones Postscript"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:283
-#, fuzzy
 msgid "X scale factor:"
-msgstr "Factor de escalado:"
+msgstr "Factor de escalado X:"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:288
-#, fuzzy
 msgid "Set global X scale adjust for exact scale PostScript output."
 msgstr ""
-"Ajustar la escala X global para obtener una escala salida PostScript exacta."
+"Ajustar la escala X global para obtener una escala exacta de salida "
+"PostScript."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:295
-#, fuzzy
 msgid "Y scale factor:"
-msgstr "Factor de escalado:"
+msgstr "Factor de escalado Y:"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:300
-#, fuzzy
 msgid "Set global Y scale adjust for exact scale PostScript output."
 msgstr ""
-"Ajustar la escala Y global para obtener una escala salida PostScript exacta."
+"Ajustar la escala Y global para obtener una escala exacta de salida "
+"PostScript."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:307
-#, fuzzy
 msgid "Track width correction:"
-msgstr "Corrección de ancho:"
+msgstr "Corrección de ancho de pista:"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:312
 msgid ""
@@ -25957,58 +25939,54 @@ msgid "Force A4 output"
 msgstr "Forzar salida A4"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:329
-#, fuzzy
 msgid "DXF Options"
-msgstr "Opciones DXF:"
+msgstr "Opciones DXF"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:334
-#, fuzzy
 msgid "Plot graphic items using their contours"
-msgstr "No se han encontrado elementos gráficos para importar en el archivo"
+msgstr "Trazar los elementos gráficos usando sus contornos"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:336
 msgid "Uncheck to plot graphic items using their center lines"
 msgstr ""
+"Desmarcar para trazar los elementos gráficos usando sus líneas centrales"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:340
-#, fuzzy
 msgid "Use KiCad font to plot texts"
-msgstr "Utilizar el tipo de letra de Pcbnew para trazar textos"
+msgstr "Utilizar el tipo de letra de KiCad para trazar textos"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:341
-#, fuzzy
 msgid ""
 "Check to use KiCad stroke font\n"
 "Uncheck to plot single-line ASCII texts as editable text (using DXF font)"
 msgstr ""
-"Marcar para utilizar la letra de trazos de Pcbnew\n"
-"Desmarcar para trazar los textos ASCII de una línea como texto editable "
-"(utilizando tipo de letra DXF)"
+"Marcar para utilizar la letra de trazos de KiCad\n"
+"Desmarcar para trazar los textos ASCII de una línea como texto editable ("
+"utilizando tipo de letra DXF)"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:354
-#, fuzzy
 msgid "Export units:"
-msgstr "Exportar archivos"
+msgstr "Exportar unidades:"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:362
 msgid "The units to use for the exported DXF file"
-msgstr ""
+msgstr "Las unidades a usar para el archivo DXF exportado"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:372
-#, fuzzy
 msgid "SVG Options"
-msgstr "Opciones de cuadrícula"
+msgstr "Opciones SVG"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:378
-#, fuzzy
 msgid "Millimeter"
-msgstr "Milímetros"
+msgstr "Milímetro"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:382
 msgid ""
 "The units that are used for a SVG user units.\n"
 "Choose Millimeter when you are not sure."
 msgstr ""
+"Las unidades que son usadas para las unidades SVG de usuario.\n"
+"Elija Milímetro cuando no está seguro."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:394
 msgid ""
@@ -26018,6 +25996,11 @@ msgid ""
 "User unit is 10^-<N> mm or 10^-<N> inch.\n"
 "Choose 6 if you are not sure."
 msgstr ""
+"Que tan grande es una unidad SVG de usuario.\n"
+"El número define cuantos dígitos son exportados que están por debajo 1 mm o "
+"1 inch,\n"
+"La unidad de usuario es 10^-<N> mm o 10^-<N> inch.\n"
+"Elija 6 si no está seguro."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:420
 msgid "Run DRC..."
@@ -26026,7 +26009,7 @@ msgstr "Ejecutar DRC..."
 #: pcbnew/dialogs/dialog_plot_base.cpp:423
 #, c-format
 msgid "(%d known DRC violations; %d exclusions)"
-msgstr ""
+msgstr "(%d violaciones conocidas de DRC; %d exclusiones)"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:447
 msgid "Select Fab Layers"
@@ -26049,9 +26032,8 @@ msgid "Deselect all Layers"
 msgstr "No seleccionar ninguna capa"
 
 #: pcbnew/dialogs/dialog_pns_diff_pair_dimensions.cpp:55
-#, fuzzy
 msgid "Trace gap must be greater than 0."
-msgstr "El radio debe ser mayor de cero."
+msgstr "El espacio entre pistas debe ser mayor a 0."
 
 #: pcbnew/dialogs/dialog_pns_diff_pair_dimensions_base.cpp:32
 #: pcbnew/dialogs/dialog_pns_diff_pair_dimensions_base.cpp:43
@@ -26089,9 +26071,8 @@ msgstr "Ajuste del desvío de par diferencial"
 
 # Desvío deseado:
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings.cpp:93
-#, fuzzy
 msgid "Target skew:"
-msgstr "Desvío objetivo: "
+msgstr "Desvío objetivo:"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:22
 msgid "Length / Skew"
@@ -26189,9 +26170,8 @@ msgid "Walk around"
 msgstr "Rodear"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:21
-#, fuzzy
 msgid "Mode"
-msgstr "Modelo"
+msgstr "Modo"
 
 # Complicadillo...
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:34
@@ -26309,18 +26289,19 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:91
 msgid "Use mouse path to set track posture"
-msgstr ""
+msgstr "Usar el recorrido del ratón para fijar la postura de la pista"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:92
 msgid ""
 "When enabled, the posture of tracks will be guided by how the mouse is moved "
 "from the starting location"
 msgstr ""
+"Cuando está habilitado, la postura de las pistas serán guiadas por como el "
+"ratón se ha movido desde la ubicación inicial"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:96
-#, fuzzy
 msgid "Fix all segments on click"
-msgstr "Guarda todas las hojas del esquema"
+msgstr "Fijar todos los segmentos al hacer clic"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:97
 msgid ""
@@ -26337,14 +26318,12 @@ msgid "Interactive Router Settings"
 msgstr "Opciones del enrutador interactivo"
 
 #: pcbnew/dialogs/dialog_position_relative.cpp:165
-#, fuzzy
 msgid "Reset to the current distance from the reference position."
-msgstr "Mover la fila seleccionada una posición hacia arriba"
+msgstr "Reiniciar a la distancia actual a la posición de referencia."
 
 #: pcbnew/dialogs/dialog_position_relative.cpp:166
-#, fuzzy
 msgid "Reset to the current angle from the reference position."
-msgstr "Mover la fila seleccionada una posición hacia arriba"
+msgstr "Reiniciar al ángulo actual a la posición de referencia."
 
 #: pcbnew/dialogs/dialog_position_relative.cpp:170
 #: pcbnew/dialogs/dialog_position_relative_base.cpp:67
@@ -26357,50 +26336,42 @@ msgid "Offset Y:"
 msgstr "Desplazamiento Y:"
 
 #: pcbnew/dialogs/dialog_position_relative.cpp:173
-#, fuzzy
 msgid "Reset to the current X offset from the reference position."
-msgstr "Mover la fila seleccionada una posición hacia arriba"
+msgstr "Reiniciar al desplazamiento X actual a la posición de referencia."
 
 #: pcbnew/dialogs/dialog_position_relative.cpp:174
-#, fuzzy
 msgid "Reset to the current Y offset from the reference position."
-msgstr "Mover la fila seleccionada una posición hacia arriba"
+msgstr "Reiniciar al desplazamiento Y actual a la posición de referencia."
 
 #: pcbnew/dialogs/dialog_position_relative.cpp:240
-#, fuzzy
 msgid "Reference location: grid origin"
-msgstr "Ajustar el origen de la cuadrícula"
+msgstr "Ubicación de referencia: origen de la cuadrícula"
 
 #: pcbnew/dialogs/dialog_position_relative.cpp:249
-#, fuzzy
 msgid "Reference location: local coordinates origin"
-msgstr "Utilizar el origen de la cuadrícula como origen de coordenadas STEP."
+msgstr "Ubicación de referencia: origen local de coordenadas"
 
 #: pcbnew/dialogs/dialog_position_relative.cpp:255
-#, fuzzy
 msgid "<none selected>"
-msgstr "no se ha seleccionado archivo"
+msgstr "<nada seleccionado>"
 
 #: pcbnew/dialogs/dialog_position_relative_base.cpp:22
 msgid "Reference item: <none selected>"
-msgstr ""
+msgstr "Elemento de referencia: <nada seleccionado>"
 
 #: pcbnew/dialogs/dialog_position_relative_base.cpp:35
-#, fuzzy
 msgid "Use Local Origin"
-msgstr "Origen personalizado"
+msgstr "Usar origen local"
 
 # ¿Reiniciar?
 # ¿Valor inicial?
 #: pcbnew/dialogs/dialog_position_relative_base.cpp:38
-#, fuzzy
 msgid "Use Grid Origin"
-msgstr "Restaurar origen de cuadrícula"
+msgstr "Usar el origen de cuadrícula"
 
 #: pcbnew/dialogs/dialog_position_relative_base.cpp:41
-#, fuzzy
 msgid "Select Item..."
-msgstr "Seleccionar elementos"
+msgstr "Seleccionar elemento..."
 
 #: pcbnew/dialogs/dialog_position_relative_base.cpp:42
 msgid ""
@@ -26411,13 +26382,13 @@ msgstr ""
 "La posición del ancla será la posición del elemento seleccionado."
 
 #: pcbnew/dialogs/dialog_position_relative_base.h:73
-#, fuzzy
 msgid "Position Relative To Reference Item"
-msgstr "Posición relativa a..."
+msgstr "Posición relativa al elemento de referencia"
 
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:207
 msgid "Print according to objects tab of appearance manager"
 msgstr ""
+"Imprimir de acuerdo a la pestaña de objetos del administrador de apariencia"
 
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:235
 msgid "No drill mark"
@@ -26432,9 +26403,8 @@ msgid "Real drill"
 msgstr "Taladro real"
 
 #: pcbnew/dialogs/dialog_push_pad_properties.cpp:51
-#, fuzzy
 msgid "Change Pads on Current Footprint"
-msgstr "Cambiar pads de la huella"
+msgstr "Cambiar pads en la huella actual"
 
 #: pcbnew/dialogs/dialog_push_pad_properties.cpp:56
 msgid "Change Pads on Identical Footprints"
@@ -26453,13 +26423,13 @@ msgid "Do not modify pads having a different orientation"
 msgstr "No modificar pads con orientación diferente"
 
 #: pcbnew/dialogs/dialog_push_pad_properties_base.cpp:34
-#, fuzzy
 msgid "Do not modify pads having a different type"
-msgstr "No modificar pads con diferente forma"
+msgstr "No modificar pads con tipo diferente"
 
 #: pcbnew/dialogs/dialog_push_pad_properties_base.h:51
+#, fuzzy
 msgid "Push Pad Properties"
-msgstr "Aplicar de pad"
+msgstr "Aplicar propiedades de pad"
 
 #: pcbnew/dialogs/dialog_rule_area_properties.cpp:153
 msgid "No layers selected."
@@ -26470,88 +26440,78 @@ msgid "Layers:"
 msgstr "Capas:"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:41
-#, fuzzy
 msgid "Basic rules:"
-msgstr "Reglas de &diseño"
+msgstr "Reglas básicas:"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:48
 msgid "Keep out tracks"
 msgstr "Área restringida para pistas"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:49
-#, fuzzy
 msgid "Prevent tracks from routing into this area"
-msgstr "Eliminar pistas que conectan múltiples redes"
+msgstr "Evitar que las pistas sean enrutadas a esta zona"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:53
 msgid "Keep out vias"
 msgstr "Área restringida para vías"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:54
-#, fuzzy
 msgid "Prevent vias from being placed in this area"
-msgstr "Evitar que CvPcb se cierre al guardar la lista de redes"
+msgstr "Evitar que las vías sean colocadas en esta zona"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:58
-#, fuzzy
 msgid "Keep out pads"
-msgstr "Área restringida para vías"
+msgstr "Área restringida para pads"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:59
 msgid "Raise a DRC error if a pad overlaps this area"
-msgstr ""
+msgstr "Generar un error de DRC si un pad está en esta zona"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:63
-#, fuzzy
 msgid "Keep out copper fill"
 msgstr "Área restringida para zonas de cobre"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:64
 msgid "Zones will not fill copper into this area"
-msgstr ""
+msgstr "Las zonas no se llenarán de cobre en esta área"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:68
-#, fuzzy
 msgid "Keep out footprints"
-msgstr "No hay huellas"
+msgstr "Área restringida para huellas"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:69
 msgid "Raise a DRC error if a footprint courtyard overlaps this area"
-msgstr ""
+msgstr "Generar un error de DRC si un patio de huella está en esta área"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:79
-#, fuzzy
 msgid "Area name:"
-msgstr "Nombre de archivo:"
+msgstr "Nombre de área:"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:81
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:89
 msgid "A unique name for this rule area for use in DRC rules"
 msgstr ""
+"Un nombre único para esta área de reglas para su uso en las reglas de DRC"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:96
 msgid "Constrain outline to H, V and 45 deg"
 msgstr "Trazar solo líneas H, V y 45 grad"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:97
-#, fuzzy
 msgid "Draw the area using horizontal, verical and 45 degree lines only"
-msgstr "Dibujar únicamente líneas y buses horizontales o verticales"
+msgstr "Dibujar el área usando solo líneas horizontales, verticales, y a 45°"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.h:67
-#, fuzzy
 msgid "Rule Area Properties"
-msgstr "Propiedades de área restringida"
+msgstr "Propiedades de área de reglas"
 
 #: pcbnew/dialogs/dialog_swap_layers.cpp:48
-#, fuzzy
 msgid "Move items on:"
-msgstr "Mover elemento"
+msgstr "Mover elementos en:"
 
 #: pcbnew/dialogs/dialog_swap_layers.cpp:49
-#, fuzzy
 msgid "To layer:"
-msgstr "sin capas"
+msgstr "A la capa:"
 
 #: pcbnew/dialogs/dialog_swap_layers_base.h:48
 msgid "Swap Layers"
@@ -26586,73 +26546,61 @@ msgid "Reference:"
 msgstr "Referencia:"
 
 #: pcbnew/dialogs/dialog_text_properties.cpp:232
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint %s (%s), %s, rotated %.1f deg"
-msgstr "Huella %s (%s) orientación %.1f"
+msgstr "Huella %s (%s), %s, rotado %.1f deg"
 
 #: pcbnew/dialogs/dialog_text_properties.cpp:336
-#, fuzzy
 msgid ""
 "The text thickness is too large for the text size.\n"
 "It will be clamped."
 msgstr ""
-"El grosor del texto es demasiado grande para el tamaño del texto. Será "
-"recortado"
+"El grosor del texto es demasiado grande para el tamaño del texto.\n"
+"Será recortado."
 
 #: pcbnew/dialogs/dialog_text_properties.cpp:359
 msgid "Change text properties"
-msgstr "Cmabiar propiedades de texto"
+msgstr "Cambiar propiedades de texto"
 
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:57
 msgid "Enter the text placed on selected layer."
-msgstr "Introduzca el texto emplazado en la capa seleccionada."
+msgstr "Introduzca el texto colocado en la capa seleccionada."
 
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:211
-#, fuzzy
 msgid "Keep text upright"
-msgstr "Mantener hacia arriba"
+msgstr "Mantener el texto hacia arriba"
 
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:227
-#, fuzzy
 msgid "Parent footprint description"
-msgstr "Orientación de la huella madre"
+msgstr "Descripción de la huella padre"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:346
-#, fuzzy, c-format
+#, c-format
 msgid "Changing the net will also update %s pad %s to %s."
-msgstr ""
-"Cambiando de la huella \"%s:%s\" el nombre de la red del pad \"%s\" de \"%s"
-"\" a \"%s\".\n"
+msgstr "Cambiar la red también actualizará %s pad %s a %s."
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:355
-#, fuzzy, c-format
+#, c-format
 msgid "Changing the net will also update %s pad %s and %s pad %s to %s."
-msgstr ""
-"Cambiando de la huella \"%s:%s\" el nombre de la red del pad \"%s\" de \"%s"
-"\" a \"%s\".\n"
+msgstr "Cambiar la red también actualizará %s pad %s y %s pad %s a %s."
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:364
-#, fuzzy, c-format
+#, c-format
 msgid "Changing the net will also update %lu connected pads to %s."
-msgstr ""
-"Cambiando de la huella \"%s:%s\" el nombre de la red del pad \"%s\" de \"%s"
-"\" a \"%s\".\n"
+msgstr "Cambiar la red también actualizará %lu pads conectados a %s."
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:370
-#, fuzzy
 msgid "Change Nets"
-msgstr "Cambiar Red"
+msgstr "Cambiar redes"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:370
-#, fuzzy
 msgid "Leave Nets Unchanged"
-msgstr "Mantener sin cambios"
+msgstr "Mantener redes sin cambios"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:391
-#, fuzzy
 msgid "Via hole size must be smaller than via diameter"
 msgstr ""
-"El tamaño de taladro de la vía ha de ser menor que el diámetro de la vía"
+"El tamaño del agujero de vía tiene que ser menor que el diámetro de la vía"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:400
 msgid "Via start layer and end layer cannot be the same"
@@ -26663,20 +26611,20 @@ msgid "Edit track/via properties"
 msgstr "Editar propiedades de pista/vía"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:606
-#, fuzzy
 msgid "Updating nets"
-msgstr "Actualizar lista de redes"
+msgstr "Actualizando redes"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:35
-#, fuzzy
 msgid "Automatically update via nets"
-msgstr "Enrutar pad automáticamente"
+msgstr "Editar redes de vías automáticamente"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:36
 msgid ""
 "Automatically change the net of this via when the pads or zones it touches "
 "are changed"
 msgstr ""
+"Cambiar automáticamente la red de esta vía cuando los pads o zonas que toca "
+"son cambiados"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:60
 msgid "Start point X:"
@@ -26695,9 +26643,8 @@ msgid "End point Y:"
 msgstr "Punto final Y:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:104
-#, fuzzy
 msgid "Pre-defined widths:"
-msgstr "Grosor del trazo:"
+msgstr "Anchos predefinidos:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:117
 #: pcbnew/dialogs/dialog_track_via_size_base.cpp:25
@@ -26705,14 +26652,12 @@ msgid "Track width:"
 msgstr "Ancho de pista:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:131
-#, fuzzy
 msgid "Use net class widths"
-msgstr "Utilizar el ancho de la clase de red"
+msgstr "Utilizar anchos de clases de red"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:192
-#, fuzzy
 msgid "Pre-defined sizes:"
-msgstr "Tamaño del trazo:"
+msgstr "Tamaños predefinidos:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:205
 #: pcbnew/dialogs/dialog_track_via_size_base.cpp:36
@@ -26720,14 +26665,12 @@ msgid "Via diameter:"
 msgstr "Diámetro de vía:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:216
-#, fuzzy
 msgid "Via hole:"
-msgstr "Orificios de vía"
+msgstr "Orificio de vía:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:230
-#, fuzzy
 msgid "Use net class sizes"
-msgstr "Utilizar el tamaño de la clase de red"
+msgstr "Utilizar tamaños de clases de red"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:247
 msgid "Via type:"
@@ -26761,10 +26704,9 @@ msgid "Track & Via Properties"
 msgstr "Propiedades de pistas y vías"
 
 #: pcbnew/dialogs/dialog_track_via_size.cpp:58
-#, fuzzy
 msgid "Via drill size must be smaller than via diameter"
 msgstr ""
-"El tamaño de taladro de la vía ha de ser menor que el diámetro de la vía"
+"El tamaño de taladro de la vía tiene que ser menor que el diámetro de la vía"
 
 #: pcbnew/dialogs/dialog_track_via_size_base.cpp:47
 msgid "Via drill:"
@@ -26775,59 +26717,52 @@ msgid "Track Width and Via Size"
 msgstr "Ancho de pista y tamaño de vía"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers.cpp:146
-#, fuzzy
 msgid "Set Unused Pad Properties"
-msgstr "Aplicar de pad"
+msgstr "Fijar propiedades de pads sin usar"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.cpp:26
-#, fuzzy
 msgid "&Vias"
-msgstr "Vías"
+msgstr "&Vías"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.cpp:26
 msgid "&Pads"
 msgstr "&Pads"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.cpp:32
-#, fuzzy
 msgid "&Remove unused layers"
-msgstr "Eliminar esquina"
+msgstr "Elimina&r capas sin usar"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.cpp:32
-#, fuzzy
 msgid "Res&tore unused layers"
-msgstr "Eliminar esquina"
+msgstr "Res&taurar capas sin usar"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.cpp:38
-#, fuzzy
 msgid "&Selection only"
-msgstr "Eliminar selección"
+msgstr "&Solo selección"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.cpp:41
-#, fuzzy
 msgid "Keep &outside layers"
-msgstr "Capas de zona no permitida:"
+msgstr "Mantener capas de z&onas no permitidas"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.h:58
-#, fuzzy
 msgid "Remove Unused Pads"
-msgstr "Enumerar pads..."
+msgstr "Eliminar pads sin usar"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:32
-#, fuzzy
 msgid "Delete footprints with no symbols"
-msgstr "Eliminar todas las asociaciones de huellas"
+msgstr "Eliminar huellas sin símbolos"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:33
 msgid ""
 "Remove from the board unlocked footprints which are not linked to a "
 "schematic symbol."
 msgstr ""
+"Eliminar de la placa huellas desbloqueadas que no están enlazadas a un "
+"símbolo de esquema."
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:37
-#, fuzzy
 msgid "Replace footprints with those specified in the schematic"
-msgstr "Eliminar todas las asociaciones de huellas"
+msgstr "Remplazar huellas con las especificadas en el esquema"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:39
 msgid ""
@@ -26835,18 +26770,20 @@ msgid ""
 "assignment changes made in the schematic. Uncheck this only if you don't "
 "want to change existing footprints on the board."
 msgstr ""
+"Normalmente las huellas en la placa se cambian para que coincidan con las "
+"asignaciones de huellas hechas en el esquema. Desmarque esto solo si no "
+"quiere cambiar las huellas existentes en la placa."
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:47
-#, fuzzy
 msgid ""
 "Clear the net name of pads when there is only one pad belonging to this net."
 msgstr ""
-"Seleccionar una red y remarcar los elementos gráficos que pertenecen a ella"
+"Limpia el nombre de red de los pads cuando hay un solo pad perteneciente a "
+"esta red."
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:51
-#, fuzzy
 msgid "Generate warnings for pads with no nets"
-msgstr "Generar archvos de fabricación"
+msgstr "Generar advertencias por pads sin redes"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.h:55
 msgid "Update PCB from Schematic"
@@ -26858,24 +26795,20 @@ msgid "Do not show"
 msgstr "No mostrar"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:37
-#, fuzzy
 msgid "Show on pads"
-msgstr "Mostrar redes sin pads"
+msgstr "Mostrar en pads"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:37
-#, fuzzy
 msgid "Show on tracks"
-msgstr "Mostrar pistas"
+msgstr "Mostrar en pistas"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:37
-#, fuzzy
 msgid "Show on pads and tracks"
-msgstr "En pads y pistas"
+msgstr "Mostrar en pads y pistas"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:39
-#, fuzzy
 msgid "Net Names"
-msgstr "Nombre red"
+msgstr "Nombres de redes"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:41
 msgid "Show or hide net names on pads and/or tracks."
@@ -26887,39 +26820,32 @@ msgid "Show pad numbers"
 msgstr "Mostrar números de pad"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:49
-#, fuzzy
 msgid "Show pad <no net> indicator"
-msgstr "Mostrar el indicador de pad sin red"
+msgstr "Mostrar el indicador de pad <sin red>"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:57
-#, fuzzy
 msgid "Clearance Outlines"
-msgstr "Perímetros de margen:"
+msgstr "Perímetros de margen"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:59
-#, fuzzy
 msgid "Show when creating tracks"
-msgstr "Al crear pistas"
+msgstr "Mostrar al crear pistas"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:59
-#, fuzzy
 msgid "Show with via clearance at end"
-msgstr "Mostrar margen de pista:"
+msgstr "Mostrar con margen de vía al final"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:59
-#, fuzzy
 msgid "Show when creating and editing tracks"
-msgstr "Al crear pistas"
+msgstr "Mostrar al crear y editar pistas"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:59
-#, fuzzy
 msgid "Show always"
-msgstr "Mostrar todos"
+msgstr "Mostrar siempre"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:61
-#, fuzzy
 msgid "Track Clearance"
-msgstr "Márgenes de pista"
+msgstr "Margen de pista"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:63
 msgid ""
@@ -26954,23 +26880,25 @@ msgid "Magnetic pads"
 msgstr "Pads magnéticos"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:32
-#, fuzzy
 msgid "Magnetic graphics"
-msgstr "Pistas magnéticas:"
+msgstr "Gráficos magnéticos"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:41
 msgid "Flip board items L/R (default is T/B)"
 msgstr ""
+"Voltear los elementos de la placa izquierda/derecha (por defecto es arriba/"
+"abajo)"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:50
-#, fuzzy
 msgid "L&imit graphic lines to H, V and 45 degrees"
-msgstr "L&imitar líneas gráficas a 45 grados"
+msgstr "L&imitar líneas gráficas a H, V, y 45°"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:51
 msgid ""
 "When drawing graphic lines force to horizontal, vertical, or 45 degrees."
 msgstr ""
+"Cuando se dibujan líneas gráficas, forzarlas a horizontales, verticales, o "
+"45 grados."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:58
 msgid "Step for &rotate commands:"
@@ -26994,56 +26922,47 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:102
 #: pcbnew/dialogs/panel_edit_options_base.cpp:183
-#, fuzzy
 msgid "No modifier"
-msgstr "No es un fichero de módulos"
+msgstr "Ningún modificador"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:107
 #: pcbnew/dialogs/panel_edit_options_base.cpp:188
-#, fuzzy
 msgid "Select item(s)."
-msgstr "Seleccionar elemento(s)"
+msgstr "Seleccionar elemento(s)."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:122
-#, fuzzy
 msgid "Shift+Alt"
-msgstr "Shift"
+msgstr "Shift+Alt"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:152
-#, fuzzy
 msgid "Ctrl+Shift"
-msgstr "Shift"
+msgstr "Ctrl+Shift"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:157
 #: pcbnew/dialogs/panel_edit_options_base.cpp:238
-#, fuzzy
 msgid "Highlight net (for pads or tracks)."
-msgstr "Listar pads o pistas no conectadas"
+msgstr "Resaltar red (para pads o pistas)."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:203
-#, fuzzy
 msgid "Shift+Cmd"
-msgstr "Shift"
+msgstr "Shift+Cmd"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:233
 msgid "Alt+Cmd"
-msgstr ""
+msgstr "Alt+Cmd"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:261
-#, fuzzy
 msgid "Magnetic Points"
-msgstr "Pads magnéticos:"
+msgstr "Puntos magnéticos"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:268
-#, fuzzy
 msgid "Snap to pads:"
-msgstr "Conectado a las isletas"
+msgstr "Ajustar a pads:"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:270
 #: pcbnew/dialogs/panel_edit_options_base.cpp:278
-#, fuzzy
 msgid "Capture cursor when the mouse enters a pad area"
-msgstr "Controla la captura del cursor cuando este entra en el área de un pad."
+msgstr "Capturar el cursor cuando este entra en el área de un pad"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:274
 #: pcbnew/dialogs/panel_edit_options_base.cpp:288
@@ -27051,42 +26970,35 @@ msgid "When creating tracks"
 msgstr "Al crear pistas"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:282
-#, fuzzy
 msgid "Snap to tracks:"
-msgstr "En pistas"
+msgstr "Ajustar a pistas:"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:284
 #: pcbnew/dialogs/panel_edit_options_base.cpp:292
-#, fuzzy
 msgid "Capture cursor when the mouse approaches a track"
-msgstr "Controla la captura del cursor cuando este se acerca a una pista."
+msgstr "Capturar el cursor cuando este se acerca a una pista"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:296
-#, fuzzy
 msgid "Snap to graphics:"
-msgstr "En pistas"
+msgstr "Ajustar a gráficos:"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:298
 #: pcbnew/dialogs/panel_edit_options_base.cpp:306
-#, fuzzy
 msgid "Capture cursor when the mouse approaches graphical control points"
-msgstr "Controla la captura del cursor cuando este se acerca a una pista."
+msgstr "Capturar el cursor cuando este se acerca a puntos de control gráficos"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:319
-#, fuzzy
 msgid "Always show selected ratsnest"
-msgstr "Mostrar siempre el cursor"
+msgstr "Mostrar siempre la línea aérea seleccionada"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:322
 #: pcbnew/tools/pcb_actions.cpp:794
-#, fuzzy
 msgid "Show ratsnest with curved lines"
-msgstr "Mostrar conexiones de la huella al mover"
+msgstr "Mostrar líneas aéreas con líneas curvas"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:329
-#, fuzzy
 msgid "Track Editing"
-msgstr "Edición"
+msgstr "Edición de pistas"
 
 # Complicadillo...
 #: pcbnew/dialogs/panel_edit_options_base.cpp:331
@@ -27097,13 +27009,12 @@ msgstr "Comportamiento de pista con arrastre del ratón:"
 msgid ""
 "Choose the action to perform when dragging a track segment with the mouse"
 msgstr ""
+"Elegir la acción a realizar cuando se desplaza un segmento de pista con el "
+"ratón"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:341
-#, fuzzy
 msgid "Moves the track segment without moving connected tracks"
-msgstr ""
-"Arrastra el segmento de pista mientras mantiene las pistas unidas a 45 "
-"grados."
+msgstr "Mueve el segmento de pista sin mover las pistas conectadas"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:345
 #: pcbnew/tools/pcb_actions.cpp:1373
@@ -27130,90 +27041,81 @@ msgstr "Arrastra la unión más cercana en la pista sin restriciones de ángulos
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:366
 msgid "Draw an outline to show the sheet size."
-msgstr ""
+msgstr "Dibujar un perímetro para mostrar el tamaño de la hoja."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:370
-#, fuzzy
 msgid "Refill zones after Zone Properties dialog"
-msgstr "Diálogo de propiedades de elemento"
+msgstr "Rellenar zonas después del diálogo de propiedades de zona"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:372
 msgid ""
 "If checked, zones will be re-filled after editing the properties of the zone "
 "using the Zone Properties dialog"
 msgstr ""
+"Si está marcado, las zonas serán rellenadas después de editar las "
+"propiedades de la zona usando el diálogo de propiedades de zona"
 
 #: pcbnew/dialogs/panel_fp_editor_color_settings.cpp:130
-#, fuzzy
 msgid "Internal Layers"
-msgstr "Pistas de la capa interna:"
+msgstr "Capas internas"
 
 #: pcbnew/dialogs/panel_fp_editor_defaults.cpp:323
 msgid ""
 "Text will not be readable with a thickness greater than\n"
 "1/4 its width or height."
 msgstr ""
+"El texto no será legible con un grosor mayor a\n"
+"1/4 de su ancho o alto."
 
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:22
-#, fuzzy
 msgid "Default text items for new footprints:"
-msgstr "Valores por defecto para nuevas huellas"
+msgstr "Elementos de texto por defecto para nuevas huellas:"
 
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:84
-#, fuzzy
 msgid ""
 "Note: a blank reference designator or value will use the footprint name."
 msgstr ""
-"Dejar la referencia y/o el valor en blanco para utilizar el nombre de la "
+"Nota: una referencia o valor en blanco hará que se use el nombre de la "
 "huella."
 
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:103
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:21
-#, fuzzy
 msgid "Default properties for new graphic items:"
-msgstr "Valores por defecto para nuevos elementos gráficos"
+msgstr "Propiedades por defecto para nuevos elementos gráficos:"
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:288
-#, fuzzy
 msgid "Options Editor..."
-msgstr "Editor de opciones"
+msgstr "Editor de opciones..."
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:288
-#, fuzzy
 msgid "Edit options"
-msgstr "Opciones de edición"
+msgstr "Editar opciones"
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:555
-#, fuzzy, c-format
+#, c-format
 msgid "Illegal character '%c' in nickname '%s'."
-msgstr "Caracter ilegal \"%c\" en el apodo: \"%s\""
+msgstr "Carácter ilegal '%c' en el apodo: '%s'."
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:798
-#, fuzzy, c-format
+#, c-format
 msgid "Select %s Library"
-msgstr "Seleccionar librería"
+msgstr "Seleccionar librería %s"
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:858
-#, fuzzy
 msgid "The following directories could not be opened: \n"
-msgstr "No se han encontrado las siguientes librerías:"
+msgstr "No se han podido abrir las siguientes carpetas: \n"
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:863
-#, fuzzy
 msgid "Failed to open directories to look for libraries"
-msgstr ""
-"No han podido guardarse los cambios del archivo de librería de símbolos \"%s"
-"\""
+msgstr "Fallo al abrir carpetas para buscar librerías"
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:891
-#, fuzzy
 msgid "Warning: Duplicate Nicknames"
-msgstr "Atención: Alias duplicado"
+msgstr "Advertencia: Sobrenombres duplicados"
 
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:107
-#, fuzzy
 msgid "Add Existing"
-msgstr "&Añadir librería existente"
+msgstr "Añadir existente"
 
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:138
 msgid "Path Substitutions"
@@ -27598,7 +27500,7 @@ msgstr "Cuadrícula personalizada:"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:44
 msgid "If you want a courtyard layer for the front side of the board"
-msgstr "Si desea una capa de áreas para la parte frontal de la placa"
+msgstr "Si desea una capa de patios para la parte frontal de la placa"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:48
 #, fuzzy
@@ -28044,7 +27946,7 @@ msgstr "Fab_Back_later"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:636
 msgid "If you want a courtyard layer for the back side of the board"
-msgstr "Si desea una capa áreas para la parte trasera de la placa"
+msgstr "Si desea una capa de patios para la parte trasera de la placa"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:640
 #, fuzzy
@@ -28638,9 +28540,9 @@ msgid "Checking %s; clearance: %s."
 msgstr "Cambiar la referencia del símbolo %s a %s.\n"
 
 #: pcbnew/drc/drc_engine.cpp:852
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s; courtyard clearance: %s."
-msgstr "Comprobar el solapamiento del área de la huella"
+msgstr "Comprobando %s; margen de patio: %s."
 
 #: pcbnew/drc/drc_engine.cpp:859
 #, c-format
@@ -28839,26 +28741,23 @@ msgstr "Tamaño de taladro de microvía"
 
 #: pcbnew/drc/drc_item.cpp:129
 msgid "Courtyards overlap"
-msgstr "Solapamiento de áreas"
+msgstr "Solapamiento de patios"
 
 #: pcbnew/drc/drc_item.cpp:133
 msgid "Footprint has no courtyard defined"
-msgstr "La huella no tiene área definida"
+msgstr "La huella no tiene un patio definido"
 
 #: pcbnew/drc/drc_item.cpp:137
-#, fuzzy
 msgid "Footprint has malformed courtyard"
-msgstr "la huella \"%s\" tiene un área mal conformada"
+msgstr "La huella tiene un patio mal formado"
 
 #: pcbnew/drc/drc_item.cpp:141
-#, fuzzy
 msgid "PTH inside courtyard"
-msgstr "Pad dentro de área restringida"
+msgstr "PTH dentro de patio"
 
 #: pcbnew/drc/drc_item.cpp:145
-#, fuzzy
 msgid "NPTH inside courtyard"
-msgstr "Pad dentro de área restringida"
+msgstr "NPTH dentro de patio"
 
 #: pcbnew/drc/drc_item.cpp:149
 msgid "Item on a disabled layer"
@@ -29116,19 +29015,16 @@ msgid "(nets %s and %s)"
 msgstr " en unidades %c y %c"
 
 #: pcbnew/drc/drc_test_provider_courtyard_clearance.cpp:85
-#, fuzzy
 msgid "Checking footprint courtyard definitions..."
-msgstr "Comprobar el solapamiento del área de la huella"
+msgstr "Comprobando definiciones de patios de huellas..."
 
 #: pcbnew/drc/drc_test_provider_courtyard_clearance.cpp:90
-#, fuzzy
 msgid "Gathering footprint courtyards..."
-msgstr "Comprobar el solapamiento del área de la huella"
+msgstr "Recolectando patios de huellas..."
 
 #: pcbnew/drc/drc_test_provider_courtyard_clearance.cpp:151
-#, fuzzy
 msgid "Checking footprints for overlapping courtyards..."
-msgstr "Comprobar el solapamiento del área de la huella"
+msgstr "Comprobando el solapamiento del patios de huellas..."
 
 #: pcbnew/drc/drc_test_provider_diff_pair_coupling.cpp:348
 #, fuzzy
@@ -31192,19 +31088,16 @@ msgid "Unrecognized layer '%s'"
 msgstr "Agujeros definidos"
 
 #: pcbnew/pcb_expr_evaluator.cpp:499
-#, fuzzy
 msgid "Footprint's courtyard is not a single, closed shape."
-msgstr "La huella tiene un área incorrecta (no es una forma cerrada)"
+msgstr "El patio de la huella no es una forma única y cerrada."
 
 #: pcbnew/pcb_expr_evaluator.cpp:511
-#, fuzzy
 msgid "Footprint has no front courtyard."
-msgstr "la huella \"%s\" tiene un área mal conformada"
+msgstr "La huella no tiene un patio frontal."
 
 #: pcbnew/pcb_expr_evaluator.cpp:528
-#, fuzzy
 msgid "Footprint has no back courtyard."
-msgstr "La huella no tiene área definida"
+msgstr "La huella no tiene un patio trasero."
 
 #: pcbnew/pcb_expr_evaluator.cpp:1059
 msgid "must be mm, in, or mil"
@@ -33559,6 +33452,8 @@ msgstr "Área restringida para vías"
 #: pcbnew/tools/board_inspection_tool.cpp:765
 msgid "Report may be incomplete: some footprint courtyards are malformed."
 msgstr ""
+"El informe puede estar incompleto: algunos patios de huellas están mal "
+"formados."
 
 #: pcbnew/tools/board_inspection_tool.cpp:766
 msgid "Run DRC for a full analysis."
@@ -35986,15 +35881,15 @@ msgstr "Definición del perímetro de la placa"
 
 #: pcbnew/widgets/appearance_controls.cpp:1523
 msgid "Board's edge setback outline"
-msgstr "Board's edge setback outline"
+msgstr "Línea de espaciado del borde de la placa"
 
 #: pcbnew/widgets/appearance_controls.cpp:1524
 msgid "Footprint courtyards on board's front"
-msgstr "Áreas frontales de las huellas"
+msgstr "Patios de huellas en el lado frontal de la placa"
 
 #: pcbnew/widgets/appearance_controls.cpp:1525
 msgid "Footprint courtyards on board's back"
-msgstr "Áreas traseras de las huellas"
+msgstr "Patios de huellas en el lado trasero de la placa"
 
 #: pcbnew/widgets/appearance_controls.cpp:1526
 msgid "Footprint assembly on board's front"
