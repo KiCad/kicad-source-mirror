@@ -238,6 +238,7 @@ int GROUP_TOOL::Group( const TOOL_EVENT& aEvent )
                         case PCB_FP_TEXT_T:
                         case PCB_FP_SHAPE_T:
                         case PCB_FP_ZONE_T:
+                        case PCB_PAD_T:
                             aCollector.Remove( item );
                             break;
 

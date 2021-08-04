@@ -1002,6 +1002,7 @@ void PCB_PARSER::resolveGroups( BOARD_ITEM* aParent )
                 case PCB_FP_TEXT_T:
                 case PCB_FP_SHAPE_T:
                 case PCB_FP_ZONE_T:
+                case PCB_PAD_T:
                     if( item->GetParent() == group->GetParent() )
                         group->AddItem( item );
 
