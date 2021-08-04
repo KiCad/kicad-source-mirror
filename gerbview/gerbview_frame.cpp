@@ -26,6 +26,7 @@
 #include <gerbview_id.h>
 #include <gerber_file_image.h>
 #include <gerber_file_image_list.h>
+#include <excellon_image.h>
 #include <gerbview_draw_panel_gal.h>
 #include <gerbview_settings.h>
 #include <drawing_sheet/ds_proxy_view_item.h>
@@ -253,24 +254,46 @@ bool GERBVIEW_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
         const unsigned limit = std::min( unsigned( aFileSet.size() ),
                                          unsigned( GERBER_DRAWLAYERS_COUNT ) );
 
-        int layer = 0;
-
-        for( unsigned i = 0; i < limit; ++i, ++layer )
+        for( unsigned i = 0; i < limit; ++i )
         {
-            SetActiveLayer( layer );
+            wxString ext = wxFileName( aFileSet[i] ).GetExt().Lower();
 
-            // Try to guess the type of file by its ext
-            // if it is .drl (KiCad files), .nc or .xnc it is a drill file
-            wxFileName fn( aFileSet[i] );
-            wxString ext = fn.GetExt();
-
-            if( ext == DrillFileExtension ||    // our Excellon format
-                ext == "nc" || ext == "xnc" )   // alternate ext for Excellon format
-                LoadExcellonFiles( aFileSet[i] );
-            else if( ext == GerberJobFileExtension )
+            if( ext == "zip" )
+                LoadZipArchiveFile( aFileSet[i] );
+            else if( ext == "gbrprj" )
                 LoadGerberJobFile( aFileSet[i] );
             else
-                LoadGerberFiles( aFileSet[i] );
+            {
+                GERBER_ORDER_ENUM fnameLayer;
+                wxString          fnameExtensionMatched;
+
+                GERBER_FILE_IMAGE_LIST::GetGerberLayerFromFilename( aFileSet[i], fnameLayer,
+                                                                    fnameExtensionMatched );
+
+                if( fnameLayer == GERBER_ORDER_ENUM::GERBER_LAYER_UNKNOWN )
+                {
+                    if( EXCELLON_IMAGE::TestFileIsExcellon( aFileSet[i] ) )
+                    {
+                        fnameLayer = GERBER_ORDER_ENUM::GERBER_DRILL;
+                    }
+                    else if( GERBER_FILE_IMAGE::TestFileIsRS274( aFileSet[i] ) )
+                    {
+                        // If we have no way to know what layer it is, just guess
+                        fnameLayer = GERBER_ORDER_ENUM::GERBER_TOP_COPPER;
+                    }
+                }
+
+                switch( fnameLayer )
+                {
+                case GERBER_ORDER_ENUM::GERBER_DRILL:
+                    LoadExcellonFiles( aFileSet[i] );
+                    break;
+                case GERBER_ORDER_ENUM::GERBER_LAYER_UNKNOWN:
+                    break;
+                default:
+                    LoadGerberFiles( aFileSet[i] );
+                }
+            }
         }
     }
 
