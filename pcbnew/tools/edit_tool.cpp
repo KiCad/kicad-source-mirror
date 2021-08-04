@@ -50,14 +50,12 @@
 #include <view/view_controls.h>
 #include <connectivity/connectivity_algo.h>
 #include <connectivity/connectivity_items.h>
-#include <confirm.h>
 #include <bitmaps.h>
 #include <cassert>
 #include <functional>
 using namespace std::placeholders;
 #include "kicad_clipboard.h"
 #include <wx/hyperlink.h>
-#include <widgets/infobar.h>
 #include <router/router_tool.h>
 #include <dialogs/dialog_move_exact.h>
 #include <dialogs/dialog_track_via_properties.h>
@@ -514,7 +512,7 @@ int EDIT_TOOL::DragArcTrack( const TOOL_EVENT& aEvent )
     int cSegTanEndSide = cSegTanEnd.Side( theArc->GetMid() );
     int cSegChordSide = cSegChord.Side( theArc->GetMid() );
 
-    bool hasMouseMoved = false;
+    bool eatFirstMouseUp = true;
 
     // Start the tool loop
     while( TOOL_EVENT* evt = Wait() )
@@ -583,7 +581,7 @@ int EDIT_TOOL::DragArcTrack( const TOOL_EVENT& aEvent )
         // Handle events
         if( evt->IsMotion() || evt->IsDrag( BUT_LEFT ) )
         {
-            hasMouseMoved = true;
+            eatFirstMouseUp = false;
         }
         else if( evt->IsCancelInteractive() || evt->IsActivate() )
         {
@@ -595,12 +593,16 @@ int EDIT_TOOL::DragArcTrack( const TOOL_EVENT& aEvent )
             restore_state = true; // Perform undo locally
             break;                // Finish
         }
-        // Note: ignore mouse-up/-click events that leaked through from the lock dialog
-        else if( ( hasMouseMoved || evt->Parameter<intptr_t>() == ACTIONS::CURSOR_CLICK )
-                 && ( evt->IsMouseUp( BUT_LEFT )
-                        || evt->IsClick( BUT_LEFT )
-                        || evt->IsDblClick( BUT_LEFT ) ) )
+        else if( evt->IsMouseUp( BUT_LEFT ) || evt->IsClick( BUT_LEFT )
+                || evt->IsDblClick( BUT_LEFT ) )
         {
+            // Eat mouse-up/-click events that leaked through from the lock dialog
+            if( eatFirstMouseUp && evt->Parameter<intptr_t>() != ACTIONS::CURSOR_CLICK )
+            {
+                eatFirstMouseUp = false;
+                continue;
+            }
+
             break; // Finish
         }
     }
@@ -842,9 +844,9 @@ int EDIT_TOOL::doMoveSelection( TOOL_EVENT aEvent, bool aPickReference )
     TOOL_EVENT* evt = &aEvent;
     VECTOR2I    prevPos;
 
-    bool hasMouseMoved = false;
-    bool hasRedrawn3D  = false;
-    bool allowRedraw3D = editFrame->GetDisplayOptions().m_Live3DRefresh;
+    bool eatFirstMouseUp = true;
+    bool hasRedrawn3D    = false;
+    bool allowRedraw3D   = editFrame->GetDisplayOptions().m_Live3DRefresh;
 
     // Prime the pump
     m_toolMgr->RunAction( ACTIONS::refreshPreview );
@@ -858,7 +860,7 @@ int EDIT_TOOL::doMoveSelection( TOOL_EVENT aEvent, bool aPickReference )
         grid.SetUseGrid( getView()->GetGAL()->GetGridSnapping() && !evt->DisableGridSnapping() );
 
         if( evt->IsMotion() || evt->IsDrag( BUT_LEFT ) )
-            hasMouseMoved = true;
+            eatFirstMouseUp = false;
 
         if( evt->IsAction( &PCB_ACTIONS::move ) || evt->IsMotion() || evt->IsDrag( BUT_LEFT )
                 || evt->IsAction( &ACTIONS::refreshPreview )
@@ -1040,6 +1042,14 @@ int EDIT_TOOL::doMoveSelection( TOOL_EVENT aEvent, bool aPickReference )
             evt->SetPassEvent();
             break; // finish -- Duplicate tool will start a new Move with the dup'ed items
         }
+        else if( evt->IsAction( &PCB_ACTIONS::rotateCw )
+                || evt->IsAction( &PCB_ACTIONS::rotateCcw )
+                || evt->IsAction( &PCB_ACTIONS::flip )
+                || evt->IsAction( &PCB_ACTIONS::mirror ) )
+        {
+            eatFirstMouseUp = false;
+            evt->SetPassEvent();
+        }
         else if( evt->IsAction( &PCB_ACTIONS::moveExact ) )
         {
             // Reset positions so the Move Exactly is from the start.
@@ -1051,10 +1061,15 @@ int EDIT_TOOL::doMoveSelection( TOOL_EVENT aEvent, bool aPickReference )
 
             break; // finish -- we moved exactly, so we are finished
         }
-        // Note: ignore mouse-up/-click events that leaked through from the lock dialog
-        else if( ( hasMouseMoved || evt->Parameter<intptr_t>() == ACTIONS::CURSOR_CLICK )
-                    && ( evt->IsMouseUp( BUT_LEFT ) || evt->IsClick( BUT_LEFT ) ) )
+        else if( evt->IsMouseUp( BUT_LEFT ) || evt->IsClick( BUT_LEFT ) )
         {
+            // Eat mouse-up/-click events that leaked through from the lock dialog
+            if( eatFirstMouseUp && evt->Parameter<intptr_t>() != ACTIONS::CURSOR_CLICK )
+            {
+                eatFirstMouseUp = false;
+                continue;
+            }
+
             break; // finish
         }
         else
