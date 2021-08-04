@@ -216,7 +216,11 @@ COLOR_SETTINGS* SETTINGS_MANAGER::loadColorSettingsByName( const wxString& aName
     auto cs = static_cast<COLOR_SETTINGS*>( RegisterSettings( new COLOR_SETTINGS( aName ) ) );
 
     if( cs->GetFilename() != aName.ToStdString() )
+    {
+        // wxLogTrace is actually a macro so these braces are needed to keep Coverity from
+        // worrying about dangline else clauses....
         wxLogTrace( traceSettings, "Warning: stored filename is actually %s, ", cs->GetFilename() );
+    }
 
     m_color_settings[aName] = cs;
 

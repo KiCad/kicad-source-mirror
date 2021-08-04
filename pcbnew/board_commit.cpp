@@ -100,7 +100,7 @@ void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry, bool a
     PICKED_ITEMS_LIST   undoList;
     KIGFX::VIEW*        view = m_toolMgr->GetView();
     BOARD*              board = (BOARD*) m_toolMgr->GetModel();
-    PCB_BASE_FRAME*     frame = (PCB_BASE_FRAME*) m_toolMgr->GetToolHolder();
+    PCB_BASE_FRAME*     frame = dynamic_cast<PCB_BASE_FRAME*>( m_toolMgr->GetToolHolder() );
     auto                connectivity = board->GetConnectivity();
     std::set<EDA_ITEM*> savedModules;
     PCB_SELECTION_TOOL* selTool = m_toolMgr->GetTool<PCB_SELECTION_TOOL>();
@@ -138,7 +138,7 @@ void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry, bool a
                 wxASSERT( ent.m_item->Type() == PCB_FOOTPRINT_T );
                 wxASSERT( ent.m_copy->Type() == PCB_FOOTPRINT_T );
 
-                if( aCreateUndoEntry )
+                if( aCreateUndoEntry && frame )
                 {
                     ITEM_PICKER itemWrapper( nullptr, ent.m_item, UNDO_REDO::CHANGED );
                     itemWrapper.SetLink( ent.m_copy );
@@ -409,7 +409,7 @@ void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry, bool a
         }
     }
 
-    if( !m_isFootprintEditor && aCreateUndoEntry )
+    if( !m_isFootprintEditor && aCreateUndoEntry && frame )
         frame->SaveCopyInUndoList( undoList, UNDO_REDO::UNSPECIFIED );
 
     m_toolMgr->PostEvent( { TC_MESSAGE, TA_MODEL_CHANGE, AS_GLOBAL } );
@@ -417,10 +417,13 @@ void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry, bool a
     if( itemsDeselected )
         m_toolMgr->PostEvent( EVENTS::UnselectedEvent );
 
-    if( aSetDirtyBit )
-        frame->OnModify();
-    else if( frame )
-        frame->Update3DView( true, frame->GetDisplayOptions().m_Live3DRefresh );
+    if( frame )
+    {
+        if( aSetDirtyBit )
+            frame->OnModify();
+        else
+            frame->Update3DView( true, frame->GetDisplayOptions().m_Live3DRefresh );
+    }
 
     clear();
 }
