@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
-"PO-Revision-Date: 2021-08-02 09:48+0000\n"
+"PO-Revision-Date: 2021-08-06 21:14+0000\n"
 "Last-Translator: David Chen <d0123456789g@yahoo.com.tw>\n"
 "Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hant/>\n"
@@ -1424,7 +1424,7 @@ msgstr "不支援的作業系統"
 msgid ""
 "Any issues with KiCad on this system cannot be reported to the official "
 "bugtracker."
-msgstr "無法將這個系統上任何 KiCad 的問題報告至官方 bugtracker。"
+msgstr "無法將這個系統上的任何 KiCad 問題回報至官方 bugtracker。"
 
 #: common/confirm.cpp:57
 msgid "Do not show again"
@@ -1559,7 +1559,7 @@ msgstr "Bug 追蹤"
 
 #: common/dialog_about/AboutDialog_main.cpp:162
 msgid "Report or examine bugs - "
-msgstr "報告或檢查 Bug - "
+msgstr "問題回報或檢查 Bug - "
 
 #: common/dialog_about/AboutDialog_main.cpp:168
 msgid "KiCad users group and community"
@@ -1693,11 +1693,11 @@ msgstr "複製 KiCad 版本資訊到剪貼簿"
 
 #: common/dialog_about/dialog_about_base.cpp:63
 msgid "&Report Bug"
-msgstr "報告 Bug (&R)"
+msgstr "回報 Bug (&R)"
 
 #: common/dialog_about/dialog_about_base.cpp:64 common/tool/actions.cpp:644
 msgid "Report a problem with KiCad"
-msgstr "報告 KiCad 的問題"
+msgstr "回報 KiCad 的問題"
 
 #: common/dialog_about/dialog_about_base.cpp:89
 msgid "&OK"
@@ -1893,7 +1893,7 @@ msgstr "別名"
 #: common/dialogs/dialog_global_lib_table_config.cpp:39
 #, c-format
 msgid "Configure Global %s Library Table"
-msgstr "設定全域性%s庫表"
+msgstr "設定全域 %s 庫列表"
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:42
 #, c-format
@@ -1906,48 +1906,48 @@ msgid ""
 msgstr ""
 "KiCad 首次使用新的 %s 庫表來訪問庫。\n"
 "為了讓 KiCad 訪問 %s 庫，\n"
-"您必須設定全域性 %s 庫表。\n"
+"您必須設定全域 %s 庫表。\n"
 "請從以下選項中選擇一個。\n"
 "如果您不確定要選擇哪個選項，請使用預設選擇。"
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:49
 #, c-format
 msgid "Copy default global %s library table (recommended)"
-msgstr "複製預設的全域性%s庫表 (推薦)"
+msgstr "複製預設的全域 %s 庫列表（建議）"
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:51
 #, c-format
 msgid ""
 "Select this option if you not sure about configuring the global %s library "
 "table"
-msgstr "如果您不確定如何設定全域性%s庫表格，請選擇此選項"
+msgstr "如果您不確定如何設定全域 %s 庫列表，請選擇此選項"
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:55
 #, c-format
 msgid "Copy custom global %s library table"
-msgstr "複製自定義全域性%s庫表"
+msgstr "複製自訂的全域 %s 庫列表"
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:57
 #, c-format
 msgid ""
 "Select this option to copy a %s library table file other than the default"
-msgstr "選擇此選項可複製除預設值以外的%s庫表文件"
+msgstr "選擇此選項可複製除預設值以外的 %s 庫列表檔"
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:61
 #, c-format
 msgid "Create an empty global %s library table"
-msgstr "建立一個空的全域性%s庫表"
+msgstr "建立一個空的全域 %s 庫列表"
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:63
 #, c-format
 msgid ""
 "Select this option to define %s libraries in project specific library tables"
-msgstr "選擇此選項可在工程專用庫表中定義%s庫"
+msgstr "選擇此選項可在專案指定的庫列表中定義 %s 庫"
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:67
 #, c-format
 msgid "Select global %s library table file:"
-msgstr "選擇全域性%s庫表文件："
+msgstr "選擇全域%s庫表文件："
 
 #: common/dialogs/dialog_global_lib_table_config_base.cpp:21
 #: common/dialogs/dialog_global_lib_table_config_base.cpp:28
@@ -2027,7 +2027,7 @@ msgstr "選擇檔案"
 
 #: common/dialogs/dialog_global_lib_table_config_base.h:56
 msgid "Configure Global Library Table"
-msgstr "設定全域性庫表"
+msgstr "設定全域庫列表"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:26 common/tool/actions.cpp:461
 msgid "Grid Origin"
@@ -2334,9 +2334,9 @@ msgid "Portrait"
 msgstr "縱向"
 
 #: common/dialogs/dialog_page_settings.cpp:467
-#, fuzzy, c-format
+#, c-format
 msgid "Drawing sheet file '%s' not found."
-msgstr "未找到圖紙檔案 \"%s\"。"
+msgstr "找不到圖紙檔案 \"%s\"。"
 
 #: common/dialogs/dialog_page_settings.cpp:539
 msgid "the translation for paper size must preserve original spellings"
@@ -3353,7 +3353,7 @@ msgstr "最小銅間隙"
 
 #: common/dialogs/panel_setup_netclasses.cpp:480
 msgid "Minimum track width"
-msgstr "最小布線寬度"
+msgstr "最小佈線寬度"
 
 #: common/dialogs/panel_setup_netclasses.cpp:481
 msgid "Via pad diameter"
@@ -3436,11 +3436,11 @@ msgstr "U 形輔助孔"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:49
 msgid "DP Width"
-msgstr "差分對線寬"
+msgstr "差動對線寬"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:50
 msgid "DP Gap"
-msgstr "差分對間距"
+msgstr "差動對間距"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:51
 msgid "Wire Thickness"
@@ -3500,9 +3500,8 @@ msgid "New net class:"
 msgstr "新網路類："
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:178
-#, fuzzy
 msgid "Assign To All Listed Nets"
-msgstr "關聯到列表中的網路"
+msgstr "指定到列表中的網路"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:184
 msgid "Assign To Selected Nets"
@@ -3558,12 +3557,12 @@ msgstr "資訊："
 #: common/dialogs/wx_html_report_panel.cpp:336
 #: eeschema/dialogs/dialog_erc.cpp:736 pcbnew/dialogs/dialog_drc.cpp:642
 msgid "Save Report to File"
-msgstr "儲存報告到檔案"
+msgstr "儲存報告至檔案"
 
 #: common/dialogs/wx_html_report_panel.cpp:353
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot write report to file '%s'."
-msgstr "無法寫入報告到檔案 \"%s\"。"
+msgstr "無法將報告寫入至檔案 \"%s\"。"
 
 #: common/dialogs/wx_html_report_panel.cpp:355
 msgid "File save error"
@@ -3620,19 +3619,19 @@ msgid "Could not use OpenGL"
 msgstr "無法使用 OpenGL"
 
 #: common/drawing_sheet/drawing_sheet_reader.cpp:890
-#, fuzzy, c-format
+#, c-format
 msgid "Drawing sheet '%s' not found."
-msgstr "未找到圖紙檔案 \"%s\"。"
+msgstr "找不到圖紙檔案 \"%s\" 。"
 
 #: common/drawing_sheet/drawing_sheet_reader.cpp:900
-#, fuzzy, c-format
+#, c-format
 msgid "Drawing sheet '%s' could not be opened."
-msgstr "未找到圖紙檔案 \"%s\"。"
+msgstr "無法開啟圖紙檔案 \"%s\" 。"
 
 #: common/drawing_sheet/drawing_sheet_reader.cpp:913
-#, fuzzy, c-format
+#, c-format
 msgid "Drawing sheet '%s' was not fully read."
-msgstr "檔案 \"%s\" 沒有被完全讀取"
+msgstr "圖紙檔案 \"%s\" 未被完全讀取。"
 
 #: common/drawing_sheet/ds_data_item.cpp:370
 #: common/drawing_sheet/ds_draw_item.cpp:122 common/eda_text.cpp:667
@@ -3748,7 +3747,7 @@ msgstr "預期 '%s'"
 #: common/dsnlexer.cpp:341
 #, c-format
 msgid "Unexpected %s"
-msgstr "未預料的 %s"
+msgstr "非預期的 %s"
 
 #: common/dsnlexer.cpp:349
 #, c-format
@@ -3758,7 +3757,7 @@ msgstr "%s 是重複的"
 #: common/dsnlexer.cpp:357
 #, c-format
 msgid "Unexpected '%s'"
-msgstr "未預料的 '%s'"
+msgstr "非預期的 \"%s\""
 
 #: common/dsnlexer.cpp:407
 #, c-format
@@ -3782,9 +3781,9 @@ msgid "&Help"
 msgstr "說明 (&H)"
 
 #: common/eda_base_frame.cpp:938
-#, fuzzy, c-format
+#, c-format
 msgid "File '%s' was not found."
-msgstr "沒有找到檔案 \"%s\"。"
+msgstr "找不到檔案 \"%s\"。"
 
 #: common/eda_base_frame.cpp:981
 msgid "Preferences"
@@ -3806,7 +3805,7 @@ msgstr "快速鍵"
 #: common/eda_base_frame.cpp:1043
 #, c-format
 msgid "Insufficient permissions to folder '%s'."
-msgstr "存取目錄 %s 時權限不足。"
+msgstr "存取目錄 %s 所需的權限不足。"
 
 #: common/eda_base_frame.cpp:1083
 #, c-format
@@ -3836,9 +3835,9 @@ msgid "Doc File '%s' not found"
 msgstr "找不到文件檔案 \"%s\""
 
 #: common/eda_doc.cpp:200
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown MIME type for doc file '%s'"
-msgstr "文件檔案 \"%s\" 的 MIME 型別未知"
+msgstr "文件檔案 \"%s\" 的 MIME 類型不明"
 
 #: common/eda_draw_frame.cpp:141 common/tool/actions.cpp:484
 #: pagelayout_editor/pl_editor_frame.cpp:158
@@ -4339,14 +4338,14 @@ msgid "Deprecated version of KICAD_SYMBOL_DIR."
 msgstr "KICAD_SYMBOL_DIR 的廢棄版本。"
 
 #: common/exceptions.cpp:62
-#, fuzzy, c-format
+#, c-format
 msgid "from %s : %s() line %d"
-msgstr "來自 %s : %s() 行：%d"
+msgstr "從 %s : %s() 在第 %d 行"
 
 #: common/exceptions.cpp:76
-#, fuzzy, c-format
+#, c-format
 msgid "%s in '%s', line %d, offset %d."
-msgstr "%s 在 \"%s\" 中，行 %d，偏移 %d"
+msgstr "%s 在 \"%s\" 中，第 %d 行，偏移 %d 。"
 
 #: common/exceptions.cpp:90
 #, c-format
@@ -4354,26 +4353,20 @@ msgid "from %s : %s() line:%d"
 msgstr "來自 %s : %s() 行：%d"
 
 #: common/exceptions.cpp:101
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "KiCad was unable to open this file because it was created with a more recent "
 "version than the one you are running.\n"
 "\n"
 "To open it you will need to upgrade KiCad to a version dated %s or later."
 msgstr ""
-"KiCad 無法開啟此檔案，因為它是用比您\n"
-"正在執行的版本更新的版本建立的。\n"
-"要開啟它，您需要將 KiCad 升級到更新版本。\n"
+"KiCad 無法開啟此檔案，因為它是用比您目前還新的版本建立的。\n"
 "\n"
-"所需的 KiCad 版本日期(或更新版本)：%s。\n"
-"\n"
-"完整錯誤文字：\n"
-"%s"
+"若要開啟它，您需要將 KiCad 升級到 %s 以上的版本。"
 
 #: common/exceptions.cpp:126
-#, fuzzy
 msgid "Full error text:"
-msgstr "映象文字"
+msgstr "完整的錯誤資料："
 
 #: common/filehistory.cpp:155
 msgid "No Files"
@@ -4431,11 +4424,11 @@ msgid "Errors were encountered loading footprints:"
 msgstr "載入封裝時出現錯誤："
 
 #: common/fp_lib_table.cpp:200
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Duplicate library nickname '%s' found in footprint library table file line "
 "%d."
-msgstr "找到重複的庫別名 \"%s\" ，在封裝庫表文件第 %d 行"
+msgstr "找到重複的庫別名 \"%s\" ，在封裝庫表文件的第 %d 行。"
 
 #: common/fp_lib_table.cpp:300
 #, c-format
@@ -4447,21 +4440,21 @@ msgstr "fp-lib-table 檔案不包含名為 '%s' 的庫。"
 #: eeschema/symbol_lib_table.cpp:507
 #, c-format
 msgid "Cannot create global library table path '%s'."
-msgstr "無法建立全域性庫表路徑 '%s'。"
+msgstr "無法建立全域庫列表路徑 '%s'。"
 
 #: common/gestfich.cpp:190
-#, fuzzy, c-format
+#, c-format
 msgid "Command '%s' could not be found."
-msgstr "沒有找到命令 \"%s\""
+msgstr "找不到指令 \"%s\"。"
 
 #: common/gestfich.cpp:248
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Problem while running the PDF viewer.\n"
 "Command is '%s'."
 msgstr ""
-"執行 PDF 瀏覽器出現問題\n"
-"命令是 \"%s\""
+"執行 PDF 檢視器時出現問題。\n"
+"指令是 \"%s\"。"
 
 #: common/gestfich.cpp:255
 #, c-format
@@ -4608,9 +4601,9 @@ msgid "Gestures"
 msgstr "手勢"
 
 #: common/kiway.cpp:256
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to load kiface library '%s'."
-msgstr "載入 kiface 庫 \"%s\" 失敗。"
+msgstr "無法載入 kiface 庫 \"%s\"。"
 
 #: common/kiway.cpp:264
 #, fuzzy, c-format
@@ -5293,7 +5286,7 @@ msgstr "所選檔案無效或可能已損壞！"
 #: common/plugins/cadstar/cadstar_archive_parser.cpp:2489
 #, c-format
 msgid "Unexpected number of points in '%s'. Found %d but expected %d."
-msgstr "'%s' 中的意外點數。找到 %d，但需要 %d。"
+msgstr "'%s' 中非預期的點數。找到 %d，但需要 %d。"
 
 #: common/plugins/cadstar/cadstar_archive_parser.h:39
 #, c-format
@@ -5332,7 +5325,7 @@ msgstr "半徑為 %f 且角度為 %f 的無效圓弧"
 
 #: common/project.cpp:310 common/project.cpp:315 pcbnew/pcb_base_frame.cpp:156
 msgid "Error loading project footprint library table."
-msgstr "載入專案封裝庫表時出錯。"
+msgstr "載入專案封裝庫列表時發生錯誤。"
 
 #: common/project/project_archiver.cpp:63
 msgid "Failed to output data."
@@ -5396,9 +5389,9 @@ msgid "Failed to archive file '%s'."
 msgstr "無法壓縮檔案 \"%s\"。"
 
 #: common/project/project_archiver.cpp:290
-#, fuzzy, c-format
+#, c-format
 msgid "Zip archive '%s' created (%s uncompressed, %s compressed)."
-msgstr "已建立 Zip 壓縮包 \"%s\" (%s 未壓縮，%s 已壓縮)\n"
+msgstr "已建立 Zip 壓縮檔 \"%s\" （%s 未壓縮，%s 已壓縮）。"
 
 #: common/rc_item.cpp:350
 msgid "Excluded "
@@ -5413,9 +5406,9 @@ msgid "Warning: "
 msgstr "警告： "
 
 #: common/richio.cpp:170
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to open %s for reading."
-msgstr "無法開啟檔名 \"%s\" 進行讀取"
+msgstr "無法開啟檔案 \"%s\" 進行讀取。"
 
 #: common/richio.cpp:221 common/richio.cpp:317
 msgid "Maximum line length exceeded"
@@ -6067,7 +6060,7 @@ msgstr "在 Web 瀏覽器中開啟“向 KiCad 捐款”"
 
 #: common/tool/actions.cpp:643
 msgid "Report Bug"
-msgstr "報告 Bug"
+msgstr "回報 Bug"
 
 #: common/tool/common_control.cpp:217
 #, c-format
@@ -6373,11 +6366,11 @@ msgid "Restore Default"
 msgstr "重置為預設值"
 
 #: common/widgets/widget_hotkey_list.cpp:419
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "'%s' is already assigned to '%s' in section '%s'. Are you sure you want to "
 "change its assignment?"
-msgstr "\"%s\" 已經指定給 \"%s\" ，在 \"%s\" 部分。您確定修改指定嗎？"
+msgstr "\"%s\" 已經指定給 \"%s\" ，在 \"%s\" 部分。您確定要變更指定嗎？"
 
 #: common/widgets/widget_hotkey_list.cpp:425
 msgid "Confirm change"
@@ -6676,10 +6669,9 @@ msgstr ""
 "有關更多資訊。請參閱 CvPcb 文件的 \"封裝庫表格\" 章節。"
 
 #: cvpcb/cvpcb.cpp:187
-#, fuzzy
 msgid ""
 "An error occurred attempting to load the global footprint library table."
-msgstr "嘗試載入全域性封裝庫表時發生錯誤"
+msgstr "嘗試載入全域封裝庫列表時發生錯誤。"
 
 #: cvpcb/cvpcb_mainframe.cpp:64 cvpcb/menubar.cpp:51
 msgid "Assign Footprints"
@@ -6762,7 +6754,7 @@ msgstr "庫位置：未知"
 #: cvpcb/cvpcb_mainframe.cpp:788
 msgid ""
 "No PCB footprint libraries are listed in the current footprint library table."
-msgstr "在目前的封裝庫表中沒有列出 PCB 封裝庫。"
+msgstr "在目前的封裝庫列表中沒有列出 PCB 封裝庫。"
 
 #: cvpcb/cvpcb_mainframe.cpp:789
 msgid "Configuration Error"
@@ -6796,9 +6788,9 @@ msgid "Footprint Association File"
 msgstr "封裝關聯檔案"
 
 #: cvpcb/dialogs/dialog_config_equfiles.cpp:293
-#, fuzzy, c-format
+#, c-format
 msgid "File '%s' already exists in list."
-msgstr "檔案 \"%s\" 已經存在於列表中"
+msgstr "檔案 \"%s\" 已經存在於列表中。"
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:20
 msgid "Symbol Footprint Association Files (.equ)"
@@ -6909,9 +6901,9 @@ msgid "Footprint ID '%s' is not valid."
 msgstr "封裝 ID \"%s\" 無效。"
 
 #: cvpcb/display_footprints_frame.cpp:420
-#, fuzzy, c-format
+#, c-format
 msgid "Library '%s' is not in the footprint library table."
-msgstr "在封裝庫表中未找到 \"%s\" 庫。"
+msgstr "在封裝庫列表中未找到 \"%s\" 庫。"
 
 #: cvpcb/display_footprints_frame.cpp:429
 #: cvpcb/display_footprints_frame.cpp:454
@@ -6951,11 +6943,11 @@ msgstr "元件 \"%s\" 封裝 \"%s\" 在 <b>多個</b> 庫中被找到。\n"
 
 #: cvpcb/readwrite_dlgs.cpp:168
 msgid "First check your footprint library table entries."
-msgstr "首先檢查封裝庫表條目。"
+msgstr "首先檢查封裝庫列表條目。"
 
 #: cvpcb/readwrite_dlgs.cpp:170
 msgid "Problematic Footprint Library Tables"
-msgstr "有問題的封裝庫表"
+msgstr "有問題的封裝庫列表"
 
 #: cvpcb/readwrite_dlgs.cpp:178
 msgid ""
@@ -7087,24 +7079,24 @@ msgid "%d duplicate time stamps were found and replaced."
 msgstr "找到並取代 %d 個重複的時間戳。"
 
 #: eeschema/annotate.cpp:284
-#, fuzzy, c-format
+#, c-format
 msgid "Updated %s (unit %s) from %s to %s."
-msgstr "更新 %s， (單元 %s) 從 %s 到 %s"
+msgstr "更新 %s， (單元 %s) 從 %s 到 %s 。"
 
 #: eeschema/annotate.cpp:292
-#, fuzzy, c-format
+#, c-format
 msgid "Updated %s from %s to %s."
-msgstr "更新 %s， 從 %s 到 %s"
+msgstr "更新 %s ， 從 %s 到 %s 。"
 
 #: eeschema/annotate.cpp:302
-#, fuzzy, c-format
+#, c-format
 msgid "Annotated %s (unit %s) as %s."
-msgstr "批註 %s (單元 %s)為 %s"
+msgstr "批註 %s (單元 %s)為 %s 。"
 
 #: eeschema/annotate.cpp:309
-#, fuzzy, c-format
+#, c-format
 msgid "Annotated %s as %s."
-msgstr "批註 %s 為 %s"
+msgstr "批註 %s 為 %s 。"
 
 #: eeschema/annotate.cpp:326
 msgid "Annotation complete."
@@ -8361,9 +8353,9 @@ msgid "Violation Severity"
 msgstr "違規嚴重程度"
 
 #: eeschema/dialogs/dialog_erc.cpp:755 pcbnew/dialogs/dialog_gendrill.cpp:471
-#, fuzzy, c-format
+#, c-format
 msgid "Report file '%s' created."
-msgstr "建立報告檔案 \"%s\"\n"
+msgstr "已建立報告檔案 \"%s\" 。"
 
 #: eeschema/dialogs/dialog_erc.cpp:773
 #, c-format
@@ -8565,7 +8557,7 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
-"寫入空符號庫表文件時出錯\n"
+"寫入至空的符號庫列表時發生錯誤。\n"
 "\n"
 "%s"
 
@@ -8587,23 +8579,24 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
-"'%s' 不是一個有效的符號庫表\n"
+"'%s' 不是一個有效的符號庫列表\n"
 "\n"
 "%s"
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:115
 #, c-format
 msgid "Cannot copy global symbol library table file '%s' to '%s'."
-msgstr "無法複製全域性庫表文件 '%s' 到 '%s'。"
+msgstr "無法將全域庫列表檔 \"%s\" 複製到 \"%s\"。"
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:132
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error loading global symbol library table.\n"
 "\n"
 "%s"
 msgstr ""
-"儲存全域性符號庫表時出錯：\n"
+"載入全域符號庫列表時發生錯誤。\n"
+"\n"
 "%s"
 
 #: eeschema/dialogs/dialog_junction_props_base.cpp:27
@@ -9256,9 +9249,8 @@ msgid "Style:"
 msgstr "樣式："
 
 #: eeschema/dialogs/dialog_line_wire_bus_properties_base.cpp:76
-#, fuzzy
 msgid "Set width to 0 to use Schematic Editor line widths."
-msgstr "切換到原理圖編輯器"
+msgstr "將值設為 0 以使用線路編輯器的線寬設定。"
 
 #: eeschema/dialogs/dialog_line_wire_bus_properties_base.cpp:80
 msgid "Set color to transparent to use Schematic Editor colors."
@@ -9614,9 +9606,9 @@ msgid "Plotted to '%s'."
 msgstr "未能載入 '%s'."
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:874
-#, fuzzy, c-format
+#, c-format
 msgid "Plotted to '%s'.\n"
-msgstr "未能載入 '%s'."
+msgstr "已繪製到 \"%s\" 。\n"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:1250
 #, c-format
@@ -11169,9 +11161,9 @@ msgstr ""
 " 如果選擇跳過此步驟，您將負責手動重新對映符號。"
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:210
-#, fuzzy, c-format
+#, c-format
 msgid "Adding library '%s', file '%s' to project symbol library table."
-msgstr "新增庫 \"%s\"，檔案\"%s\"到工程符號庫表。"
+msgstr "新增庫 \"%s\"，檔案\"%s\"到專案符號庫列表。"
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:220
 #: eeschema/dialogs/panel_sym_lib_table.cpp:765
@@ -11185,17 +11177,17 @@ msgid ""
 "Failed to write project symbol library table. Error:\n"
 "  %s"
 msgstr ""
-"無法寫入工程符號庫表。 錯誤：\n"
+"無法寫入專案符號庫列表。 錯誤：\n"
 "  %s"
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:242
 msgid "Created project symbol library table.\n"
-msgstr "建立工程符號庫表。\n"
+msgstr "專案符號庫列表已建立。\n"
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:264
-#, fuzzy, c-format
+#, c-format
 msgid "No symbol %s found in symbol library table."
-msgstr "在符號庫表中找不到符號 \"%s\" 。"
+msgstr "在符號庫列表中找不到符號 \"%s\" 。"
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:270
 #, fuzzy, c-format
@@ -11204,7 +11196,7 @@ msgstr "符號 \"%s\" 對映到符號庫 \"%s\"。"
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:279
 msgid "Symbol library table mapping complete!"
-msgstr "符號庫表對映完成！"
+msgstr "符號庫列表對映完成！"
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:349
 #, fuzzy, c-format
@@ -11820,11 +11812,9 @@ msgid "Multiple libraries cannot share the same nickname ('%s')."
 msgstr "多個庫不能共享相同的暱稱（'%s'）。"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:459 eeschema/symbol_library.cpp:550
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol library '%s' failed to load."
-msgstr ""
-"符號庫 \"%s\" 載入失敗。\n"
-" %s"
+msgstr "無法載入符號庫 \"%s\"。"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:462
 msgid "Error Loading Library"
@@ -11900,7 +11890,7 @@ msgid ""
 "modified."
 msgstr ""
 "已對一個或多個符號庫進行了修改。\n"
-"必須先儲存或放棄變更，然後才能修改符號庫表。"
+"必須先儲存或放棄變更，然後才能修改符號庫列表。"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:1048
 msgid "Symbol Libraries"
@@ -11914,7 +11904,7 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
-"儲存全域性庫表時發生錯誤：\n"
+"儲存全域庫列表時發生錯誤：\n"
 "\n"
 "%s"
 
@@ -11936,7 +11926,7 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
-"儲存工程特定庫表時出錯:\n"
+"儲存專案指定的庫列表時發生錯誤：\n"
 "\n"
 "%s"
 
@@ -11987,8 +11977,8 @@ msgid ""
 "An error occurred attempting to load the global symbol library table.\n"
 "Please edit this global symbol library table in Preferences menu."
 msgstr ""
-"試圖載入全域性符號庫表時出錯。\n"
-"請在偏好設定選單中編輯這個全域性符號庫表。"
+"試圖載入全域符號庫列表時發生錯誤。\n"
+"請在偏好設定選單中編輯這個全域符號庫列表。"
 
 #: eeschema/eeschema_config.cpp:69 eeschema/eeschema_config.cpp:226
 #: gerbview/gerbview_frame.cpp:1018
@@ -11998,14 +11988,13 @@ msgid "Editing Options"
 msgstr "編輯選項"
 
 #: eeschema/eeschema_config.cpp:100 pcbnew/pcbnew_config.cpp:83
-#, fuzzy
 msgid "Error loading drawing sheet."
-msgstr "載入圖紙錯誤"
+msgstr "載入圖紙時發生錯誤。"
 
 #: eeschema/eeschema_config.cpp:271 eeschema/sheet.cpp:284
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading the symbol library table '%s'."
-msgstr "載入符號庫表 \"%s\" 時發生錯誤。"
+msgstr "載入符號庫列表 \"%s\" 時發生錯誤。"
 
 #: eeschema/erc.cpp:59 eeschema/erc.cpp:76
 msgid "Input Pin"
@@ -12230,13 +12219,13 @@ msgid "Failed to create temporary file '%s'."
 msgstr "未能建立臨時檔案 '%s'。"
 
 #: eeschema/files-io.cpp:163
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error saving schematic file '%s'.\n"
 "Failed to rename temporary file '%s'."
 msgstr ""
-"儲存原理圖檔案 \"%s\" 時出錯。\n"
-"重新命名臨時檔案 %s 失敗"
+"儲存原理圖檔案 \"%s\" 時發生錯誤。\n"
+"無法重新命名暫存檔 \"%s\"。"
 
 #: eeschema/files-io.cpp:169 pcbnew/files.cpp:1036
 #, fuzzy, c-format
@@ -12264,25 +12253,22 @@ msgid "Schematic '%s' does not exist.  Do you wish to create it?"
 msgstr "原理圖 \"%s\" 不存在。 您想建立它嗎？"
 
 #: eeschema/files-io.cpp:309
-#, fuzzy
 msgid "Creating Schematic"
-msgstr "列印原理圖"
+msgstr "建立原理圖"
 
 #: eeschema/files-io.cpp:310
-#, fuzzy
 msgid "Loading Schematic"
-msgstr "列印原理圖"
+msgstr "正在載入原理圖"
 
 #: eeschema/files-io.cpp:370
 msgid "Schematic file changes are unsaved"
 msgstr "原理圖檔案變更未儲存"
 
 #: eeschema/files-io.cpp:403
-#, fuzzy
 msgid ""
 "The entire schematic could not be loaded.  Errors occurred attempting to "
 "load hierarchical sheets."
-msgstr "無法載入全部原理圖。 嘗試載入層次原理圖時發生錯誤。"
+msgstr "無法載入整個原理圖。  嘗試載入階層原理圖時發生錯誤。"
 
 #: eeschema/files-io.cpp:410 eeschema/files-io.cpp:418
 #: eeschema/files-io.cpp:1186 eeschema/sheet.cpp:162
@@ -12291,9 +12277,9 @@ msgid "Error loading schematic '%s'."
 msgstr "載入原理圖 '%s' 時出錯。"
 
 #: eeschema/files-io.cpp:426
-#, fuzzy, c-format
+#, c-format
 msgid "Memory exhausted loading schematic '%s'."
-msgstr "載入原理圖檔案 \"%s\" 時記憶體耗盡"
+msgstr "載入原理圖檔案 \"%s\" 時記憶體耗盡。"
 
 #: eeschema/files-io.cpp:440 eeschema/files-io.cpp:1189 eeschema/sheet.cpp:165
 #, c-format
@@ -12369,7 +12355,7 @@ msgstr "原理圖是隻讀的。"
 
 #: eeschema/files-io.cpp:658
 msgid "Insert Schematic"
-msgstr "插入原理圖"
+msgstr "置入原理圖"
 
 #: eeschema/files-io.cpp:686
 msgid ""
@@ -12391,9 +12377,9 @@ msgid "Import Schematic"
 msgstr "匯入原理圖"
 
 #: eeschema/files-io.cpp:769
-#, fuzzy, c-format
+#, c-format
 msgid "Unexpected file extension: '%s'."
-msgstr "使用 Protel 副檔名"
+msgstr "非預期的檔案副檔名：\"%s\"。"
 
 #: eeschema/files-io.cpp:814 eeschema/files-io.cpp:871
 #: kicad/tools/kicad_manager_control.cpp:119
@@ -12599,7 +12585,7 @@ msgstr "無法將符號 \"%s\" 新增到庫檔案 \"%s\"。"
 
 #: eeschema/libarch.cpp:110
 msgid "Unexpected exception occurred."
-msgstr "發生異常。"
+msgstr "發生非預期的例外。"
 
 #: eeschema/libarch.cpp:125
 #, c-format
@@ -12617,9 +12603,8 @@ msgid "Open Recent"
 msgstr "開啟最近使用"
 
 #: eeschema/menubar.cpp:88
-#, fuzzy
 msgid "Insert Schematic Sheet Content..."
-msgstr "新增原理圖內容..."
+msgstr "置入原理圖內容..."
 
 #: eeschema/menubar.cpp:89
 msgid ""
@@ -12810,9 +12795,9 @@ msgstr "未還原元件符號。"
 
 #: eeschema/project_rescue.cpp:691
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:185
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to create symbol library file '%s'."
-msgstr "無法建立元件庫檔案 \"%s\""
+msgstr "無法建立元件庫檔案 \"%s\"。"
 
 #: eeschema/project_rescue.cpp:815
 #, c-format
@@ -12821,7 +12806,7 @@ msgstr "無法儲存還原庫 %s。"
 
 #: eeschema/project_rescue.cpp:839
 msgid "Error occurred saving project specific symbol library table."
-msgstr "儲存專案特定的符號庫表時出錯。"
+msgstr "儲存專案指定的符號庫列表時發生錯誤。"
 
 #: eeschema/sch_base_frame.cpp:218
 #, c-format
@@ -12829,7 +12814,7 @@ msgid ""
 "Error saving global symbol library table:\n"
 "%s"
 msgstr ""
-"儲存全域性符號庫表時出錯：\n"
+"儲存全域符號庫列表時發生錯誤：\n"
 "%s"
 
 #: eeschema/sch_base_frame.cpp:234
@@ -12838,7 +12823,7 @@ msgid ""
 "Error saving project-specific symbol library table:\n"
 "%s"
 msgstr ""
-"儲存專案特定符號庫表時出錯：\n"
+"儲存專案指定的符號庫列表時發生錯誤：\n"
 "%s"
 
 #: eeschema/sch_bus_entry.cpp:420
@@ -13103,31 +13088,31 @@ msgid "Unknown Record id: %d."
 msgstr "未知的記錄編號： %d。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:604
-#, fuzzy, c-format
+#, c-format
 msgid "Pin's owner (%d) not found."
-msgstr "找不到檔案 '%s'。"
+msgstr "找不到引腳的擁有者 \"%d\" 。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:649
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1833
 msgid "Pin has unexpected orientation."
-msgstr "引腳方向不符預期。"
+msgstr "非預期的引腳方向。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:688
 msgid "Pin has unexpected electrical type."
-msgstr "引腳電氣型別不符預期。"
+msgstr "非預期的引腳電氣型別。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:693
 msgid "Pin has unexpected outer edge type."
-msgstr "引腳的外邊緣型別出乎意料。"
+msgstr "非預期的引腳的外緣型別。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:696
 msgid "Pin has unexpected inner edge type."
-msgstr "引腳的內邊緣型別出乎意料。"
+msgstr "非預期的引腳的內緣型別。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:831
-#, fuzzy, c-format
+#, c-format
 msgid "Label's owner (%d) not found."
-msgstr "找不到檔案 '%s'。"
+msgstr "找不到標籤的擁有者 \"%d\" 。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:948
 #, c-format
@@ -13135,48 +13120,48 @@ msgid "Bezier has %d control points. At least 2 are expected."
 msgstr "貝塞爾曲線有 %d 個控制點。預期至少2 個。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1005
-#, fuzzy, c-format
+#, c-format
 msgid "Bezier's owner (%d) not found."
-msgstr "未找到位號 \"%s\"。"
+msgstr "找不到貝茲曲線的擁有者 \"%d\" 。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1091
-#, fuzzy, c-format
+#, c-format
 msgid "Polyline's owner (%d) not found."
-msgstr "找不到檔案 '%s'。"
+msgstr "找不到折線的擁有者 \"%d\" 。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1150
-#, fuzzy, c-format
+#, c-format
 msgid "Polygon's owner (%d) not found."
-msgstr "找不到檔案 '%s'。"
+msgstr "找不到多邊形的擁有者 \"%d\" 。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1231
-#, fuzzy, c-format
+#, c-format
 msgid "Rounded rectangle's owner (%d) not found."
-msgstr "未找到位號 \"%s\"。"
+msgstr "找不到圓角矩形的擁有者 \"%d\" 。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1268
 msgid "Arc drawing on schematic not currently supported."
 msgstr "目前不支援在原理圖上繪製 Arc 。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1278
-#, fuzzy, c-format
+#, c-format
 msgid "Arc's owner (%d) not found."
-msgstr "未找到位號 \"%s\"。"
+msgstr "找不到弧形的擁有者 \"%d\" 。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1339
-#, fuzzy, c-format
+#, c-format
 msgid "Line's owner (%d) not found."
-msgstr "找不到檔案 '%s'。"
+msgstr "找不到線條的擁有者 \"%d\" 。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1410
-#, fuzzy, c-format
+#, c-format
 msgid "Rectangle's owner (%d) not found."
-msgstr "未找到位號 \"%s\"。"
+msgstr "找不到矩形的擁有者 \"%d\" 。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1478
-#, fuzzy, c-format
+#, c-format
 msgid "Sheet entry's owner (%d) not found."
-msgstr "未找到位號 \"%s\"。"
+msgstr "找不到 sheet entry 的擁有者 \"%d\" 。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1724
 msgid "Power Port has unknown style, use bar instead."
@@ -13188,9 +13173,9 @@ msgid "Power symbol creates a global label with name '%s'"
 msgstr "電源符號建立名為 '%s' 的全域性標籤"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1882
-#, fuzzy, c-format
+#, c-format
 msgid "Port %s has no connections."
-msgstr "焊盤連線："
+msgstr "連接埠 %s 尚未連線。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2073
 #, fuzzy, c-format
@@ -13204,34 +13189,34 @@ msgid "Error reading image %s."
 msgstr "圖片讀取錯誤 %s 。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2102
-#, fuzzy, c-format
+#, c-format
 msgid "File not found %s."
-msgstr "檔案沒有找到。"
+msgstr "找不到檔案 %s 。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2185
-#, fuzzy, c-format
+#, c-format
 msgid "Sheetname's owner (%d) not found."
-msgstr "未找到位號 \"%s\"。"
+msgstr "找不到圖紙名稱的擁有者 \"%d\" 。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2212
-#, fuzzy, c-format
+#, c-format
 msgid "Filename's owner (%d) not found."
-msgstr "找不到檔案 '%s'。"
+msgstr "找不到檔案名稱的擁有者 \"%d\" 。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2250
-#, fuzzy, c-format
+#, c-format
 msgid "Designator's owner (%d) not found."
-msgstr "未找到位號 \"%s\"。"
+msgstr "找不到元件編號的擁有者 \"%d\" 。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2405
-#, fuzzy, c-format
+#, c-format
 msgid "Implementation's owner (%d) not found."
-msgstr "找不到檔案 '%s'。"
+msgstr "找不到 implementation 的擁有者 \"%d\" 。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2415
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint's owner (%d) not found."
-msgstr "找不到檔案 '%s'。"
+msgstr "找不到封裝的擁有者 \"%d\" 。"
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:71
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:69
@@ -13387,9 +13372,9 @@ msgstr "CADSTAR 原理圖可能已損壞：塊 %s 引用子圖框，但沒有定
 
 #: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:442
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:2876
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to read file '%s'."
-msgstr "無法讀取檔案 \"%s\""
+msgstr "無法讀取檔案 \"%s\"。"
 
 #: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:1269
 #, c-format
@@ -13419,13 +13404,9 @@ msgid "Invalid parent symbol name"
 msgstr "無效的訊號名稱"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:260
-#, fuzzy, c-format
+#, c-format
 msgid "No parent for extended symbol %s"
-msgstr ""
-"沒有擴充套件符號 %s 的母體在\n"
-"檔案：\"%s\"\n"
-"行：%d\n"
-"偏移：%d"
+msgstr "擴充的符號 %s 沒有母體"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:275
 #, fuzzy
@@ -13433,55 +13414,36 @@ msgid "Invalid symbol unit name"
 msgstr "無效的訊號名稱"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:283
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid symbol unit name prefix %s"
-msgstr "無效的單元字首"
+msgstr "無效的符號單元名稱前綴 %s"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:293
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid symbol unit name suffix %s"
-msgstr ""
-"無效的符號單元名稱字尾 %s 在\n"
-"檔案：\"%s\"\n"
-"行：%d\n"
-"偏移：%d"
+msgstr "無效的符號單元名稱後綴 %s"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:299
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid symbol unit number %s"
-msgstr "無效的符號庫識別符號"
+msgstr "無效的符號單元碼 %s"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:307
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid symbol convert number %s"
-msgstr ""
-"無效的符號轉換編號 %s 在\n"
-"檔案：\"%s\"\n"
-"行：%d\n"
-"位移：%d"
+msgstr "無效的符號轉換碼 %s"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:428
-#, fuzzy
 msgid "Floating point number with incorrect locale"
-msgstr ""
-"帶不正確 local 的浮點數，位於：\n"
-"檔案：\"%s\"\n"
-"行：%d\n"
-"位移：%d"
+msgstr "浮點數的小數點有誤"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:438
-#, fuzzy
 msgid "Invalid floating point number"
-msgstr ""
-"無效的小數在\n"
-"檔案：\"%s\"\n"
-"行：%d\n"
-"位移：%d"
+msgstr "無效的浮點數"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:444
-#, fuzzy
 msgid "Missing floating point number"
-msgstr "缺少版本號。"
+msgstr "浮點數遺失"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:749
 #, fuzzy
@@ -13496,9 +13458,8 @@ msgstr "無效的訊號名稱"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:779
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1722
-#, fuzzy
 msgid "Empty property name"
-msgstr "輸入封裝名稱:"
+msgstr "空的屬性名稱"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:788
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1730
@@ -13576,9 +13537,9 @@ msgstr "庫 \"%s\" 已經存在。"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_plugin.cpp:2273
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:4425
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol library '%s' cannot be deleted."
-msgstr "不能刪除庫 \"%s\""
+msgstr "無法刪除符號庫 \"%s\" 。"
 
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:165
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:207
@@ -13592,16 +13553,16 @@ msgstr "不能刪除庫 \"%s\""
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:1094
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:3077
 msgid "unexpected end of line"
-msgstr "行意外結束"
+msgstr "非預期的行結尾"
 
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:363
 msgid "expected unquoted string"
 msgstr "需要不帶括號的字元"
 
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:871
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' does not appear to be an Eeschema file."
-msgstr "\"%s\" 似乎不是一個 Eeschema 檔案"
+msgstr "\"%s\" 不是一個 Eeschema 檔案。"
 
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:901
 msgid "Missing 'EELAYER END'"
@@ -13611,11 +13572,11 @@ msgstr "缺少 'EELAYER END'"
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:1217
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:1225
 msgid "unexpected end of file"
-msgstr "檔案意外結束"
+msgstr "非預期的檔案結尾"
 
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:1184
 msgid "Unexpected end of file"
-msgstr "檔案意外結束"
+msgstr "非預期的檔案結尾"
 
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:1509
 msgid "expected 'Italics' or '~'"
@@ -13626,16 +13587,13 @@ msgid "symbol field text attributes must be 3 characters wide"
 msgstr "符號欄位文字屬性必須是3個字元寬"
 
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:2624
-#, fuzzy
 msgid "Unexpected end of file."
-msgstr "檔案意外結束"
+msgstr "非預期的檔案結尾。"
 
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:2710
-#, fuzzy, c-format
+#, c-format
 msgid "Insufficient permissions to read library '%s'."
-msgstr ""
-"儲存檔案所需的許可權不足。\n"
-"%s"
+msgstr "讀取庫 \"%s\" 所需的權限不足。"
 
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:2719
 msgid "symbol document library file is empty"
@@ -13795,7 +13753,6 @@ msgid "Syntax Help"
 msgstr "語法說明"
 
 #: eeschema/sch_text_help_md.h:2
-#, fuzzy
 msgid ""
 "<table>\n"
 "    <tr>\n"
@@ -13970,7 +13927,7 @@ msgstr ""
 "        <td></td>\n"
 "    </tr>\n"
 "    <tr>\n"
-"        <td> &nbsp;<br><samp>~波浪號</samp><br> &nbsp;<br><samp>~CLK</"
+"        <td> &nbsp;<br><samp>~{波浪號}</samp><br> &nbsp;<br><samp>~{CLK}</"
 "samp><br> &nbsp;<br><samp>~~</samp> </td>\n"
 "        <td></td>\n"
 "        <td> <samp><u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></"
@@ -14011,9 +13968,9 @@ msgstr ""
 "    </tr>\n"
 "    <tr>\n"
 "        <th>匯流排定義</th>\n"
-"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
-"&nbsp;&nbsp;&nbsp;</th>\n"
-"        <th>合成網</th>\n"
+"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp"
+";&nbsp;&nbsp;</th>\n"
+"        <th>匯總網路</th>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>字首[m..n]</samp></td>\n"
@@ -14057,17 +14014,24 @@ msgstr ""
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>成員{D[1..2] LATCH}</samp></td>\n"
 "        <td></td>\n"
-"        <td>&nbsp;<br> <samp>成員.D1, 成員.D2,成員.LATCH</samp> </td>\n"
+"        <td>&nbsp;<br> <samp>成員.D1, 成員.D2, 成員.LATCH</samp> </td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>成員{D_{[1..2]} ~LATCH}</samp></td>\n"
 "        <td></td>\n"
 "        <td> <samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
-"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; &nbsp;&nbsp;&nbsp;"
-"&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> <samp>成員.D<sub>1</"
-"sub>, 成員.D<sub>2</sub>, 成員.LATCH</samp> </td>\n"
+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
+"&nbsp;&nbsp;&nbsp;&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> "
+"<samp>成員.D<sub>1</sub>, 成員.D<sub>2</sub>, 成員.LATCH</samp> </td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
 "    </tr>\n"
 "</table>\n"
+"<p></p>\n"
+"<p></p>\n"
+"<i>注意：解析時語法標記的優先權高於匯流排定義</i>\n"
+"\n"
 
 #: eeschema/sch_validators.cpp:102
 #, c-format
@@ -14145,9 +14109,8 @@ msgid "Field Validation Error"
 msgstr "欄位驗證錯誤"
 
 #: eeschema/sch_validators.cpp:218
-#, fuzzy
 msgid "Signal name contains '[' or ']' but is not a valid vector bus name."
-msgstr "訊號名稱包含 \"[\" 或 \"]\", 但不是有效的向量匯流排名稱"
+msgstr "訊號名稱包含 \"[\" 或 \"]\" ，但仍不是一個有效的向量匯流排名稱。"
 
 #: eeschema/sch_validators.cpp:227
 #, fuzzy
@@ -14168,7 +14131,7 @@ msgid ""
 "The schematic '%s' has not had its symbol library links remapped to the "
 "symbol library table.  The project this schematic belongs to must first be "
 "remapped before it can be imported into the current project."
-msgstr "原理圖 \"%s\" 沒有將其符號庫連結重新對映到符號庫表。 必須先重新對映此原理圖所屬的專案,然後才能將其匯入目前的專案。"
+msgstr "原理圖 \"%s\" 沒有將其符號庫連結重新對映到符號庫列表。 必須先重新對映此原理圖所屬的專案，然後才能將其匯入目前的專案。"
 
 #: eeschema/sheet.cpp:147
 msgid ""
@@ -14197,9 +14160,7 @@ msgid ""
 "There are library names in the loaded schematic that are missing from the "
 "project library table.  This may result in broken symbol library links for "
 "the loaded schematic.  Do you wish to continue?"
-msgstr ""
-"載入的原理圖中缺少專案庫表中的庫名稱。 這可能會導致載入的原理圖的符號庫連結斷"
-"開。 是否要繼續？"
+msgstr "載入的原理圖中缺少專案庫列表中的庫名稱。 這可能會導致載入的原理圖的符號庫連結斷開。 是否要繼續？"
 
 #: eeschema/sheet.cpp:227 eeschema/sheet.cpp:268 eeschema/sheet.cpp:317
 #: eeschema/sheet.cpp:378
@@ -14229,7 +14190,7 @@ msgid ""
 "A duplicate library name that references a different library exists in the "
 "current library table.  This conflict cannot be resolved and may result in "
 "broken symbol library links for the schematic.  Do you wish to continue?"
-msgstr "引用其他庫的重複庫名稱存在於目前的庫表中。 無法解決此衝突,並可能導致原理圖的符號庫連結斷開。 是否要繼續？"
+msgstr "另一個同名卻參考另一個庫的庫已存在於目前的庫列表中。 無法解決此衝突且可能導致原理圖的符號庫連結斷開。 是否要繼續？"
 
 #: eeschema/sheet.cpp:561
 #, c-format
@@ -14531,9 +14492,9 @@ msgid "Please, fill required fields"
 msgstr "請填寫必填欄位"
 
 #: eeschema/sim/spice_value.cpp:277
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' is not a valid Spice value."
-msgstr "\"%s\" 不是有效的 Spice 值"
+msgstr "\"%s\" 不是有效的 Spice 值。"
 
 #: eeschema/symbol_async_loader.cpp:126
 #, c-format
@@ -14547,9 +14508,9 @@ msgstr ""
 "%s\n"
 
 #: eeschema/symbol_async_loader.cpp:134
-#, fuzzy, c-format
+#, c-format
 msgid "Loading library %s..."
-msgstr "載入庫 \"%s\""
+msgstr "正在載入庫 \"%s\" ..."
 
 #: eeschema/symbol_editor/lib_logger.cpp:64
 msgid ""
@@ -14637,13 +14598,13 @@ msgid "Library '%s' already exists."
 msgstr "庫 \"%s\" 已經存在。"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:834
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Could not create the library file '%s'.\n"
 "Make sure you have write permissions and try again."
 msgstr ""
 "無法建立庫檔案 \"%s\"。\n"
-"請檢查寫入許可權。"
+"請確認您具備寫入權限並且再試一次。"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:844
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:206
@@ -14651,19 +14612,19 @@ msgid "Could not open the library file."
 msgstr "無法開啟庫檔案。"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:914
-#, fuzzy, c-format
+#, c-format
 msgid "Loading library '%s'..."
-msgstr "正在載入庫 '%s'"
+msgstr "正在載入庫 \"%s\" ..."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:988
 #: pcbnew/footprint_libraries_utils.cpp:504
 msgid "Add the library to the global library table?"
-msgstr "是否將庫新增到全域性庫表？"
+msgstr "是否將庫新增到全域庫列表？"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:989
 #: pcbnew/footprint_libraries_utils.cpp:505
 msgid "Add To Global Library Table"
-msgstr "新增到全域性庫表"
+msgstr "新增到全域庫列表"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:999
 #: pcbnew/footprint_libraries_utils.cpp:515
@@ -14673,17 +14634,17 @@ msgstr "全域性"
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1002
 #: pcbnew/footprint_libraries_utils.cpp:518
 msgid "Choose the Library Table to add the library to:"
-msgstr "選擇庫表新增到以下庫："
+msgstr "選擇庫列表來加入到以下庫："
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1003
 #: pcbnew/footprint_libraries_utils.cpp:519
 msgid "Add To Library Table"
-msgstr "新增到庫表"
+msgstr "加入到庫列表"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1035
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to save backup to '%s'."
-msgstr "未能將備份儲存到 \"%s\""
+msgstr "無法將備份儲存到 \"%s\"。"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1181
 #: eeschema/symbol_viewer_frame.cpp:393
@@ -14698,7 +14659,7 @@ msgstr ""
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1184
 #: eeschema/symbol_viewer_frame.cpp:396
 msgid "Library not found in symbol library table."
-msgstr "在符號庫表中找不到庫。"
+msgstr "在符號庫列表中找不到庫。"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1192
 #: eeschema/symbol_viewer_frame.cpp:400
@@ -14718,12 +14679,12 @@ msgstr "符號庫未啟用。"
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1383
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1438
 msgid "Error saving global library table."
-msgstr "儲存全域性庫表時發生錯誤。"
+msgstr "儲存全域庫列表時發生錯誤。"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1384
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1439
 msgid "Error saving project library table."
-msgstr "儲存工程庫表時出錯。"
+msgstr "儲存專案庫列表時發生錯誤。"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:58
 msgid "Normal save as operation"
@@ -14735,7 +14696,7 @@ msgstr "儲存庫後不執行任何額外動作。"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:63
 msgid "Replace library table entry"
-msgstr "取代庫表條目"
+msgstr "取代庫列表條目"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:64
 msgid ""
@@ -14743,13 +14704,13 @@ msgid ""
 "\n"
 "The original library will no longer be available for use."
 msgstr ""
-"用新庫取代符號庫表條目。\n"
+"用新庫取代符號庫列表條目。\n"
 "\n"
-"原始庫將不再可用。"
+"原始庫將無法使用。"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:68
 msgid "Add new global library table entry"
-msgstr "新增新的全域性庫表條目"
+msgstr "新增新的全域庫列表條目"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:69
 msgid ""
@@ -14758,14 +14719,14 @@ msgid ""
 "The symbol library table nickname is suffixed with\n"
 "an integer to ensure no duplicate table entries."
 msgstr ""
-"將新條目新增到全域性符號庫表中。\n"
+"將新條目新增到全域符號庫列表中。\n"
 "\n"
-"符號庫表的暱稱字尾為\n"
-"一個整數，以確保沒有重複的表條目。"
+"符號庫列表的暱稱後綴為一個整數，\n"
+"以確保沒有重複的表條目。"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:74
 msgid "Add new project library table entry"
-msgstr "新增新的專案庫表條目"
+msgstr "加入新的專案庫列表條目"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:75
 msgid ""
@@ -14810,9 +14771,9 @@ msgid "This new symbol has no name and cannot be created."
 msgstr "此新符號沒有名稱, 無法建立。"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:421
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol '%s' already exists in library '%s'."
-msgstr "符號 '%s' 已存在於庫 '%s' 中"
+msgstr "符號 \"%s\" 已存在於庫 \"%s\" 中。"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:527
 #: eeschema/tools/symbol_editor_control.cpp:506
@@ -14929,9 +14890,9 @@ msgid "Error Saving Library"
 msgstr "儲存庫時出錯"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1092
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol library file '%s' saved."
-msgstr "符號庫檔案 \"%s\" 已儲存"
+msgstr "符號庫檔 \"%s\" 已儲存。"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1192
 msgid "Undefined!"
@@ -14972,9 +14933,9 @@ msgstr "符號庫 \"%s\" 為空。"
 
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:96
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:152
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol %s already exists in library '%s'."
-msgstr "符號 '%s' 已存在於庫 '%s' 中"
+msgstr "符號 \"%s\" 已存在於庫 \"%s\" 中。"
 
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:114
 msgid "There is no symbol selected to save."
@@ -14985,9 +14946,9 @@ msgid "Export Symbol"
 msgstr "匯出符號"
 
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:144
-#, fuzzy, c-format
+#, c-format
 msgid "Error occurred attempting to load symbol library file '%s'."
-msgstr "試圖載入符號庫檔案 \"%s\" 時出錯"
+msgstr "試圖載入符號庫檔案 \"%s\" 時發生錯誤。"
 
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:157
 #: kicad/tools/kicad_manager_control.cpp:257
@@ -14999,34 +14960,29 @@ msgid "Overwrite"
 msgstr "覆蓋"
 
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:167
-#, fuzzy, c-format
+#, c-format
 msgid "Insufficient permissions to save library '%s'."
-msgstr ""
-"儲存檔案所需的許可權不足。\n"
-"%s"
+msgstr "儲存檔案 \"%s\" 所需的權限不足。"
 
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:187
-#, fuzzy, c-format
+#, c-format
 msgid "Error creating symbol library '%s'."
-msgstr "建立符號庫 \"%s\"錯誤"
+msgstr "建立符號庫 \"%s\" 時發生錯誤。"
 
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:194
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol %s saved to library '%s'."
-msgstr "符號 \"%s\" 儲存到庫中 \"%s\""
+msgstr "符號 \"%s\" 已儲存到庫中 \"%s\"。"
 
 #: eeschema/symbol_editor/symbol_library_manager.cpp:106
 #: eeschema/symbol_tree_model_adapter.cpp:105
-#, fuzzy
 msgid "Errors loading symbols:"
-msgstr ""
-"電路板載入錯誤。\n"
-"%s"
+msgstr "符號載入時發生的錯誤："
 
 #: eeschema/symbol_editor/symbol_library_manager.cpp:176
-#, fuzzy, c-format
+#, c-format
 msgid "Library '%s' not found in the Symbol Library Table."
-msgstr "在符號庫表中找不到庫。"
+msgstr "在符號庫列表 \"%s\" 中找不到庫。"
 
 #: eeschema/symbol_editor/symbol_library_manager.cpp:402
 msgid "Symbol not found."
@@ -15043,9 +14999,9 @@ msgid "Cannot load symbol '%s' from library '%s'."
 msgstr "載入符號 \"%s\" 時出錯，來自於庫 \"%s\"。"
 
 #: eeschema/symbol_editor/symbol_library_manager.cpp:775
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot enumerate library '%s'."
-msgstr "無法列舉庫 \"%s\"(%s)"
+msgstr "無法列舉庫 \"%s\"。"
 
 #: eeschema/symbol_editor/symbol_library_manager.cpp:1053
 #, fuzzy, c-format
@@ -15056,15 +15012,12 @@ msgstr "載入符號 \"%s\" 時出錯，來自於庫 \"%s\"。"
 #, c-format
 msgid ""
 "Duplicate library nickname '%s' found in symbol library table file line %d"
-msgstr "找到重複的庫別名 '%s' 在符號庫表文件行 %d 中"
+msgstr "找到重複的庫別名 '%s' 在符號庫列表檔案中的 %d 行"
 
 #: eeschema/symbol_library.cpp:572 eeschema/symbol_tree_model_adapter.cpp:153
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading symbol library '%s'."
-msgstr ""
-"載入符號庫 %s 出現錯誤。\n"
-"\n"
-"%s"
+msgstr "載入符號庫 \"%s\" 時發生錯誤。"
 
 #: eeschema/symbol_tree_synchronizing_adapter.cpp:259
 msgid "(failed to load)"
@@ -16559,9 +16512,8 @@ msgid "Drawing Mode"
 msgstr "繪圖模式"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:40
-#, fuzzy
 msgid "Sketch flashed items"
-msgstr "快速草圖的項目"
+msgstr "顯示焊盤"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:43
 msgid "Sketch lines"
@@ -17139,9 +17091,8 @@ msgid "Show lines in outline mode"
 msgstr "在輪廓模式下顯示線"
 
 #: gerbview/tools/gerbview_actions.cpp:150
-#, fuzzy
 msgid "Sketch Flashed Items"
-msgstr "快速草圖項目"
+msgstr "顯示焊盤"
 
 #: gerbview/tools/gerbview_actions.cpp:150
 msgid "Show flashed items in outline mode"
@@ -17657,7 +17608,7 @@ msgstr "無法重新命名檔案... "
 
 #: kicad/project_tree_item.cpp:120
 msgid "Permission error?"
-msgstr "許可權錯誤？"
+msgstr "權限錯誤？"
 
 #: kicad/project_tree_item.cpp:136
 #, c-format
@@ -17899,11 +17850,9 @@ msgstr "新建工程資料夾"
 
 #: kicad/tools/kicad_manager_control.cpp:228
 #: kicad/tools/kicad_manager_control.cpp:547
-#, fuzzy, c-format
+#, c-format
 msgid "Insufficient permissions to write to folder '%s'."
-msgstr ""
-"儲存檔案所需的許可權不足。\n"
-"%s"
+msgstr "寫入至資料夾 \"%s\" 所需的權限不足。"
 
 #: kicad/tools/kicad_manager_control.cpp:249
 msgid "Overwriting files:"
@@ -17937,9 +17886,9 @@ msgid ""
 "\n"
 "Please make sure you have write permissions and try again."
 msgstr ""
-"無法建立目錄 '%s'。\n"
+"無法建立目錄 \"%s\"。\n"
 "\n"
-"請確保您有寫入權限再重試。"
+"請確認您具備寫入權限並且再試一次。"
 
 #: kicad/tools/kicad_manager_control.cpp:549
 msgid "Error!"
@@ -18110,7 +18059,7 @@ msgstr "最大高度："
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:176
 msgid "Set to 0 to use default values"
-msgstr "設定為 0 以使用預設值"
+msgstr "將值設為 0 以使用預設值"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:183
 msgid "Comment:"
@@ -18251,7 +18200,7 @@ msgstr "無法載入檔案 %s"
 #: pagelayout_editor/files.cpp:139
 #, c-format
 msgid "File \"%s\" inserted"
-msgstr "插入檔案 \"%s\""
+msgstr "置入檔案 \"%s\""
 
 #: pagelayout_editor/files.cpp:147
 msgid "Open"
@@ -18292,9 +18241,9 @@ msgid "Properties"
 msgstr "屬性"
 
 #: pagelayout_editor/pl_editor_frame.cpp:335
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading drawing sheet '%s'."
-msgstr "載入圖紙錯誤"
+msgstr "載入圖紙 \"%s\" 時發生錯誤。"
 
 #: pagelayout_editor/pl_editor_frame.cpp:440
 msgid "Error Init Printer info"
@@ -20072,9 +20021,9 @@ msgid "PrePreg"
 msgstr "預浸料"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:175
-#, fuzzy, c-format
+#, c-format
 msgid "Enter board thickness in %s"
-msgstr "寬度和厚度 (單位：mil)"
+msgstr "輸入板子厚度，單位 %s"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:178
 #, c-format
@@ -20121,9 +20070,8 @@ msgid "Remove Dielectric Layer"
 msgstr "移除電介質層"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:351
-#, fuzzy
 msgid "Select layer to remove:"
-msgstr "選擇要瀏覽的封裝庫"
+msgstr "選擇要移除的圖層："
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:536
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:1263
@@ -20570,7 +20518,7 @@ msgid ""
 "Front footprints will have '%s' inserted as a prefix."
 msgstr ""
 "\n"
-"頂層封裝將插入 '%s' 作為字首。"
+"頂層封裝將插入 '%s' 作為前綴。"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:333
 #, c-format
@@ -20588,7 +20536,7 @@ msgid ""
 "Back footprints will have '%s' inserted as a prefix."
 msgstr ""
 "\n"
-"底層封裝將插入 '%s' 作為字首。"
+"底層封裝將插入 '%s' 作為前綴。"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:347
 #, c-format
@@ -21314,12 +21262,8 @@ msgid "No layer selected."
 msgstr "尚未選擇圖層。"
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:868
-#, fuzzy
 msgid "Selecting <no net> will create an isolated copper island."
-msgstr ""
-"沒有網路的鋪銅將\n"
-"形成一片無任何電\n"
-"氣連線的孤銅。"
+msgstr "選擇 <no net> 將產生一個鋪銅孤島。"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:47
 msgid ""
@@ -22053,7 +21997,7 @@ msgstr "箭頭長度："
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:378
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:151
 msgid "Extension line offset:"
-msgstr "尺寸界線偏移："
+msgstr "尺寸界線位移："
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:380
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:385
@@ -22871,7 +22815,7 @@ msgstr "間隙"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:319
 msgid "Set values to 0 to use Board Setup values."
-msgstr "設定值為 0，使用電路板設定值。"
+msgstr "將值設為 0 以使用電路板設定值。"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:325
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:226
@@ -23053,7 +22997,7 @@ msgstr "元件型別："
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:220
 msgid "Set values to 0 to use netclass values."
-msgstr "設定值為 0，使用網路類值。"
+msgstr "將值設為 0 以使用網路類值。"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:246
 msgid ""
@@ -23689,42 +23633,38 @@ msgstr "封裝"
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:59
 #, c-format
 msgid "Error occurred writing empty footprint library table '%s'."
-msgstr "寫入空封裝庫表檔案時發生錯誤 \"%s\" 。"
+msgstr "寫入空封裝庫列表檔案時發生錯誤 \"%s\" 。"
 
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:73
 msgid "Please select a footprint library table file."
-msgstr "請選擇一個封裝庫表文件。"
+msgstr "請選擇一個封裝庫列表檔案。"
 
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:95
 #, c-format
 msgid "'%s' is not a valid footprint library table."
-msgstr "檔案 \"%s\" 不是一個有效的封裝庫表檔案。"
+msgstr "檔案 \"%s\" 不是一個有效的封裝庫列表檔案。"
 
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:106
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot create library table path '%s'."
-msgstr "無法建立全域性庫表路徑 '%s'。"
+msgstr "無法建立全域庫列表路徑 '%s'。"
 
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:114
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Cannot copy footprint library table from:\n"
 "%s\n"
 "to:\n"
 "%s."
 msgstr ""
-"無法複製全域性封裝庫表文件：\n"
-"\n"
+"無法複製全域封裝庫表檔案由：\n"
 "%s\n"
-"\n"
-"：到：\n"
-"\n"
+"：至：\n"
 "\"%s\"。"
 
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:133
-#, fuzzy
 msgid "Error loading footprint library table."
-msgstr "載入工程封裝庫表時出錯"
+msgstr "載入專案封裝庫列表時發生錯誤。"
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:178
 msgid "Circle Properties"
@@ -24720,7 +24660,7 @@ msgstr "郵票孔（僅限通孔）"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:588
 msgid "Set values to 0 to use parent footprint or netclass values."
-msgstr "設定值為 0，使用母體封裝或網路類值。"
+msgstr "將值設為 0 以使用母體的封裝或網路類別值。"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:614
 msgid ""
@@ -28455,14 +28395,10 @@ msgid "Save Footprint Association File"
 msgstr "儲存封裝關聯檔案"
 
 #: pcbnew/exporters/export_hyperlynx.cpp:190
-#, fuzzy
 msgid ""
 "File contains pad shapes that are not supported by the Hyperlynx exporter "
 "(supported shapes are oval, rectangle and circle)."
-msgstr ""
-"檔案包含 Hyperynx 匯出器不支援的焊盤形狀\n"
-"(支援的形狀為橢圓形、矩形、圓形。）\n"
-"它們已作為橢圓形焊盤匯出器。"
+msgstr "檔案包含 Hyperynx 匯出器不支援的焊盤形狀（支援的形狀有橢圓形、矩形、圓形）。"
 
 #: pcbnew/exporters/export_hyperlynx.cpp:194
 msgid "They have been exported as oval pads."
@@ -28558,11 +28494,8 @@ msgid "Created Gerber job file '%s'."
 msgstr "建立 Gerber 工作檔案 \"%s\""
 
 #: pcbnew/exporters/gerber_jobfile_writer.cpp:575
-#, fuzzy
 msgid "Board stackup settings not up to date."
-msgstr ""
-"電路板壓層設定不是最新的\n"
-"請修復壓層"
+msgstr "電路板堆疊設定不是最新的。"
 
 #: pcbnew/files.cpp:144
 msgid "All KiCad Board Files"
@@ -28651,29 +28584,24 @@ msgid "Error loading PCB '%s'."
 msgstr "載入原理圖 '%s' 時出錯。"
 
 #: pcbnew/files.cpp:725
-#, fuzzy, c-format
+#, c-format
 msgid "Memory exhausted loading PCB '%s'"
-msgstr ""
-"載入電路板檔案時記憶體耗盡：\n"
-"%s"
+msgstr "載入電路板檔案 \"%s\" 時記憶體耗盡"
 
 #: pcbnew/files.cpp:834
-#, fuzzy, c-format
+#, c-format
 msgid "Error saving footprint %s to project specific library."
-msgstr "將封裝 '%s' 儲存到工程專用封裝庫時出錯：%s"
+msgstr "儲存封裝 \"%s\" 至專案指定的庫時發生錯誤。"
 
 #: pcbnew/files.cpp:863
-#, fuzzy
 msgid "Error saving project specific footprint library table."
-msgstr "儲存到工程專用封裝庫表時出錯：%s"
+msgstr "儲存到專案指定的封裝庫列表時發生錯誤。"
 
 #: pcbnew/files.cpp:955 pcbnew/files.cpp:1094
 #: pcbnew/footprint_libraries_utils.cpp:359
-#, fuzzy, c-format
+#, c-format
 msgid "Insufficient permissions to write file '%s'."
-msgstr ""
-"儲存檔案所需的許可權不足。\n"
-"%s"
+msgstr "寫入檔案 \"%s\" 所需的權限不足。"
 
 #: pcbnew/files.cpp:983 pcbnew/files.cpp:1139
 #, c-format
@@ -28854,7 +28782,7 @@ msgstr ""
 
 #: pcbnew/footprint_editor_utils.cpp:285
 msgid "Library not found in footprint library table."
-msgstr "在封裝庫表中未找到庫。"
+msgstr "在封裝庫列表中未找到庫。"
 
 #: pcbnew/footprint_editor_utils.cpp:293
 #, c-format
@@ -28875,9 +28803,8 @@ msgid "Fetching footprint libraries..."
 msgstr "獲取封裝庫"
 
 #: pcbnew/footprint_info_impl.cpp:159
-#, fuzzy
 msgid "Loading footprints..."
-msgstr "載入封裝"
+msgstr "正在載入封裝..."
 
 #: pcbnew/footprint_libraries_utils.cpp:58
 msgid ""
@@ -28908,9 +28835,8 @@ msgid "Import Footprint"
 msgstr "匯入封裝"
 
 #: pcbnew/footprint_libraries_utils.cpp:261
-#, fuzzy
 msgid "Not a footprint file."
-msgstr "不是封裝檔案"
+msgstr "不是一個封裝檔案。"
 
 #: pcbnew/footprint_libraries_utils.cpp:273
 #, c-format
@@ -29137,12 +29063,9 @@ msgid "Documentation"
 msgstr "文件"
 
 #: pcbnew/generate_footprint_info.cpp:81
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading footprint %s from library '%s'."
-msgstr ""
-"載入封裝 %s 出錯，來自於庫%s。\n"
-"\n"
-"%s"
+msgstr "載入封裝 \"%s\" 時發生錯誤，來自於庫 \"%s\"。"
 
 #: pcbnew/generate_footprint_info.cpp:121
 msgid "doc url"
@@ -29318,11 +29241,11 @@ msgstr "將目前電路板的封裝載入到編輯器中"
 
 #: pcbnew/menubar_footprint_editor.cpp:213
 msgid "&Insert Footprint on PCB"
-msgstr "在 PCB 上插入封裝 (&I)"
+msgstr "在 PCB 上置入封裝 (&I)"
 
 #: pcbnew/menubar_footprint_editor.cpp:214
 msgid "Insert footprint onto current board"
-msgstr "將封裝插入到目前的電路板"
+msgstr "將封裝置入到目前的電路板"
 
 #: pcbnew/menubar_pcb_editor.cpp:100
 msgid "Resc&ue"
@@ -29791,7 +29714,7 @@ msgid "Cannot find component with ref '%s' in netlist."
 msgstr "在網表中找不到位號為 '%s' 的元件。"
 
 #: pcbnew/netlist_reader/kicad_netlist_reader.cpp:438
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Invalid footprint ID in\n"
 "file: '%s'\n"
@@ -29801,7 +29724,7 @@ msgstr ""
 "無效的封裝 ID 在\n"
 "檔案：\"%s\"\n"
 "行：%d\n"
-"偏移：%d"
+"字元：%d"
 
 #: pcbnew/netlist_reader/legacy_netlist_reader.cpp:118
 msgid "Cannot parse time stamp in symbol section of netlist."
@@ -29855,9 +29778,9 @@ msgid "Netlist Load Error"
 msgstr "網表載入錯誤"
 
 #: pcbnew/netlist_reader/netlist.cpp:155
-#, fuzzy, c-format
+#, c-format
 msgid "No footprint defined for symbol %s."
-msgstr "沒有為符號 \"%s\" 定義封裝。\n"
+msgstr "沒有為符號 \"%s\" 定義封裝。"
 
 #: pcbnew/netlist_reader/netlist.cpp:182
 #, c-format
@@ -29870,10 +29793,10 @@ msgid "%s footprint ID '%s' is not valid."
 msgstr "%s的封裝 ID \"%s\" 無效。"
 
 #: pcbnew/netlist_reader/netlist.cpp:222
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s footprint '%s' not found in any libraries in the footprint library table."
-msgstr "\"%s\" 的封裝 \"%s\" 在封裝庫列表中的任何庫都沒有找到。\n"
+msgstr "\"%s\" 的封裝 \"%s\" 在封裝庫列表中的任何庫都無法找到。"
 
 #: pcbnew/netlist_reader/netlist_reader.cpp:181
 #, fuzzy, c-format
@@ -30126,9 +30049,8 @@ msgid "Schematic file '%s' not found."
 msgstr "沒有找到原理圖檔案 '%s'。"
 
 #: pcbnew/pcb_edit_frame.cpp:1477
-#, fuzzy
 msgid "Eeschema failed to load."
-msgstr "Eeschema 無法載入:\n"
+msgstr "Eeschema 無法載入。"
 
 #: pcbnew/pcb_edit_frame.cpp:1616
 msgid "Edit design rules"
@@ -30341,8 +30263,8 @@ msgid ""
 "An error occurred attempting to load the global footprint library table.\n"
 "Please edit this global footprint library table in Preferences menu."
 msgstr ""
-"試圖載入全域性封裝庫表時出錯：\n"
-"請在偏好設定選單中編輯此全域性封裝庫表。"
+"試圖載入全域封裝庫列表時出錯：\n"
+"請在偏好設定選單中編輯此全域封裝庫列表。"
 
 #: pcbnew/pcbnew_config.cpp:61
 msgid "Action Plugins"
@@ -30384,9 +30306,8 @@ msgid "Error reading file: cannot determine length."
 msgstr "檔案讀取錯誤：無法辨識大小。"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:86
-#, fuzzy
 msgid "Error reading file."
-msgstr "解壓檔案時出錯！\n"
+msgstr "檔案讀取錯誤。"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:465
 #, fuzzy, c-format
@@ -30547,14 +30468,14 @@ msgid ""
 msgstr "非銅焊盤 %s 在 Altium 層 （%d） 上被找到，沒有 KiCad 等效的項目。它們已被移動到 Eco1_User 圖層。"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2147
-#, fuzzy, c-format
+#, c-format
 msgid "Non-copper pad %s is connected to a net, which is not supported."
-msgstr "網路的銅區沒有焊盤"
+msgstr "非銅焊墊 \"%s\" 連接到一個網絡，並不支援此狀態。"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2153
-#, fuzzy, c-format
+#, c-format
 msgid "Non-copper pad %s has a hole, which is not supported."
-msgstr "非銅焊盤 '%s' 有一個洞。這不應該發生"
+msgstr "非銅焊墊 \"%s\" 有一個孔，並不支援此狀態。"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2158
 #, c-format
@@ -30667,7 +30588,7 @@ msgstr ""
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:458
 #, c-format
 msgid "Unexpected layer '%s' in layer stack."
-msgstr "圖層堆疊中意外的圖層 \"%s\"。"
+msgstr "圖層堆疊中非預期的圖層 \"%s\"。"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:616
 #, c-format
@@ -30748,7 +30669,7 @@ msgstr ""
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1364
 #, c-format
 msgid "Unexpected Dimension type (ID %s). This was not imported."
-msgstr "非預期的尺度型別 （ID%s）。未被匯入。"
+msgstr "非預期的尺標型別 （ID %s）。未被匯入。"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1499
 #, c-format
@@ -31121,9 +31042,9 @@ msgstr "未處理圖形項 '%s'，位於 Traces 定義行 %zu"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1490
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1505
-#, fuzzy, c-format
+#, c-format
 msgid "Duplicate item for ID %d and sequence %d in row %zu."
-msgstr "ID %d 和序列 %d 的重複項位於佈線定義行 %zu 中 \n"
+msgstr "重複的 ID %d 和序列 %d 項目於佈線定義行 %zu 中。"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:2318
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:2347
@@ -31149,9 +31070,9 @@ msgstr "\"%s\" 無法轉換為整數"
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:229
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:877
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:242
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint library '%s' not found."
-msgstr "封裝庫沒有找到。"
+msgstr "找不到封裝庫 \"%s\"。"
 
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:283
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:298
@@ -31173,22 +31094,20 @@ msgstr "元素標記包含 %d 個引數。"
 
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:982
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:2581
-#, fuzzy, c-format
+#, c-format
 msgid "Insufficient permissions to delete folder '%s'."
-msgstr ""
-"儲存檔案所需的許可權不足。\n"
-"%s"
+msgstr "刪除資料夾 \"%s\" 所需的權限不足。"
 
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:990
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:2589
 #, fuzzy, c-format
 msgid "Library folder '%s' has unexpected sub-folders."
-msgstr "庫目錄 \"%s\" 有額外的子目錄。"
+msgstr "庫目錄 \"%s\" 有非預期的的子目錄。"
 
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:1009
 #, fuzzy, c-format
 msgid "Unexpected file '%s' found in library '%s'."
-msgstr "在庫路徑 \"%s\" 中找到了額外的檔案 \"%s\"。"
+msgstr "在庫路徑 \"%s\" 中找到了非預期的檔案 \"%s\"。"
 
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:1028
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:2626
@@ -31219,7 +31138,7 @@ msgid ""
 "\n"
 "Save anyway?"
 msgstr ""
-"請報告此錯誤。驗證組合結構時出錯：%s。\n"
+"請回報此錯誤。驗證組合結構時出錯：%s。\n"
 "\n"
 "還是要儲存嗎？"
 
@@ -31274,11 +31193,9 @@ msgid "Footprint file name '%s' is not valid."
 msgstr "無效的封裝檔名稱 \"%s\"。"
 
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:2485
-#, fuzzy, c-format
+#, c-format
 msgid "Insufficient permissions to delete '%s'."
-msgstr ""
-"儲存檔案所需的許可權不足。\n"
-"%s"
+msgstr "刪除 \"%s\" 所需的權限不足。"
 
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:2556
 #, fuzzy, c-format
@@ -31288,33 +31205,33 @@ msgstr "不能覆蓋庫路徑 \"%s\"。"
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:2608
 #, fuzzy, c-format
 msgid "Unexpected file '%s' found in library path '%s'."
-msgstr "在庫路徑 \"%s\" 中找到了額外的檔案 \"%s\"。"
+msgstr "在庫路徑 \"%s\" 中找到了非預期的檔案 \"%s\"。"
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:176
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Invalid floating point number in\n"
 "file: '%s'\n"
 "line: %d\n"
 "offset: %d"
 msgstr ""
-"無效的小數在\n"
+"無效的浮點數在\n"
 "檔案：\"%s\"\n"
 "行：%d\n"
-"位移：%d"
+"字元：%d"
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:185
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Missing floating point number in\n"
 "file: '%s'\n"
 "line: %d\n"
 "offset: %d"
 msgstr ""
-"無效的小數在\n"
+"遺失的小數點在\n"
 "檔案：\"%s\"\n"
 "行：%d\n"
-"偏移：%d"
+"字元：%d"
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:259
 #, c-format
@@ -31354,7 +31271,7 @@ msgid "Duplicate NETCLASS name '%s' in file '%s' at line %d, offset %d."
 msgstr "重複網路類名稱 \"%s\" 在檔案 \"%s\" 的 %d,行 位移 %d"
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:3157
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Invalid footprint ID in\n"
 "file: '%s'\n"
@@ -31364,7 +31281,7 @@ msgstr ""
 "無效的封裝 ID 在\n"
 "檔案：\"%s\"\n"
 "行：%d\n"
-"偏移：%d"
+"字元：%d"
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:3491
 #, c-format
@@ -31372,42 +31289,42 @@ msgid "Cannot handle footprint text type %s"
 msgstr "無法處理封裝文字型別 %s"
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:4085
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Invalid net ID in\n"
 "file: %s\n"
 "line: %d offset: %d"
 msgstr ""
-"無效的網路 ID\n"
+"無效的網路 ID 在\n"
 "檔案：\"%s\"\n"
 "行：%d\n"
-"偏移：%d"
+"字元：%d"
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:4106
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Net name doesn't match ID in\n"
 "file: %s\n"
 "line: %d offset: %d"
 msgstr ""
-"網路名稱與中的網路 ID 不匹配\n"
+"網路名稱不符合他的 ID 在\n"
 "檔案：\"%s\"\n"
 "行：%d\n"
-"偏移：%d"
+"字元：%d"
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:4558
 #: pcbnew/plugins/kicad/pcb_parser.cpp:4638
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Invalid net ID in\n"
 "file: '%s'\n"
 "line: %d\n"
 "offset: %d."
 msgstr ""
-"無效的網路 ID\n"
+"無效的網路 ID 在\n"
 "檔案：\"%s\"\n"
 "行：%d\n"
-"偏移：%d"
+"字元：%d"
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:4732
 #, c-format
@@ -31417,23 +31334,23 @@ msgid ""
 "line: %d\n"
 "offset: %d"
 msgstr ""
-"無效的網路 ID\n"
+"無效的網路 ID 在\n"
 "檔案：\"%s\"\n"
 "行：%d\n"
-"偏移：%d"
+"字元：%d"
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:4842
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Invalid net ID in\n"
 " file: '%s;\n"
 "line: %d\n"
 "offset: %d."
 msgstr ""
-"無效的網路 ID\n"
+"無效的網路 ID 在\n"
 "檔案：\"%s\"\n"
 "行：%d\n"
-"偏移：%d"
+"字元：%d"
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:4960
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:2630
@@ -31497,7 +31414,7 @@ msgstr "CZONE_CONTAINER \"%s\" 的 ZClearance 選項不正確"
 
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:2983
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:3022
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Invalid floating point number in file: '%s'\n"
 "line: %d, offset: %d"
@@ -31505,19 +31422,19 @@ msgstr ""
 "無效的小數在\n"
 "檔案：\"%s\"\n"
 "行：%d\n"
-"位移：%d"
+"字元：%d"
 
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:2993
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:3032
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Missing floating point number in file: '%s'\n"
 "line: %d, offset: %d"
 msgstr ""
-"無效的小數在\n"
+"遺失的小數在\n"
 "檔案：\"%s\"\n"
 "行：%d\n"
-"偏移：%d"
+"字元：%d"
 
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:3176
 #, c-format
@@ -31680,9 +31597,8 @@ msgid "existing track"
 msgstr "現有的佈線"
 
 #: pcbnew/router/pns_kicad_iface.cpp:464 pcbnew/router/pns_kicad_iface.cpp:477
-#, fuzzy
 msgid "board minimum width"
-msgstr "最小寬度："
+msgstr "板子最小寬度"
 
 #: pcbnew/router/pns_kicad_iface.cpp:473
 #, fuzzy
@@ -31735,7 +31651,7 @@ msgstr "調整：偏移 "
 
 #: pcbnew/router/pns_router.cpp:211
 msgid "Diff pair gap is less than board minimum clearance."
-msgstr "差分對間距小於電路板最小間隙。"
+msgstr "差動對間距小於電路板最小間隙。"
 
 #: pcbnew/router/pns_router.cpp:231
 msgid "Cannot start routing from a non-plated hole."
@@ -31998,19 +31914,19 @@ msgid "Break Track"
 msgstr "分割佈線"
 
 #: pcbnew/router/router_tool.cpp:1895
-#, fuzzy, c-format
+#, c-format
 msgid "Routing Diff Pair: %s"
-msgstr "調整差分對歪斜"
+msgstr "差動對佈線： %s"
 
 #: pcbnew/router/router_tool.cpp:1895
-#, fuzzy, c-format
+#, c-format
 msgid "Routing Track: %s"
-msgstr "單軌互動式佈線"
+msgstr "單線佈線：%s"
 
 #: pcbnew/router/router_tool.cpp:1901
-#, fuzzy, c-format
+#, c-format
 msgid "Net Class: %s"
-msgstr "網路類表"
+msgstr "網路類別：%s"
 
 #: pcbnew/router/router_tool.cpp:1905
 #, fuzzy
@@ -32023,14 +31939,13 @@ msgid "(no net)"
 msgstr "<無網路>"
 
 #: pcbnew/router/router_tool.cpp:1911
-#, fuzzy, c-format
+#, c-format
 msgid "Track Width: %s"
-msgstr "佈線寬度"
+msgstr "佈線寬度：%s"
 
 #: pcbnew/router/router_tool.cpp:1933
-#, fuzzy
 msgid "Diff Pair Gap"
-msgstr "差分對間隙"
+msgstr "差動對間隙"
 
 #: pcbnew/sel_layer.cpp:294
 msgid "Warning: top and bottom layers are same."
@@ -32119,7 +32034,7 @@ msgstr "從目前的電路板開啟封裝"
 
 #: pcbnew/toolbars_footprint_editor.cpp:95
 msgid "Insert footprint into current board"
-msgstr "插入封裝放置到目前的電路板"
+msgstr "將封裝置入到目前的電路板"
 
 #: pcbnew/toolbars_footprint_editor.cpp:236 pcbnew/toolbars_pcb_editor.cpp:737
 msgid "+/- to switch"
@@ -32135,7 +32050,7 @@ msgstr "顯示下一個封裝"
 
 #: pcbnew/toolbars_footprint_viewer.cpp:77
 msgid "Insert footprint in board"
-msgstr "將封裝放置到電路板"
+msgstr "將封裝置入到電路板"
 
 #: pcbnew/toolbars_pcb_editor.cpp:525
 msgid ""
@@ -32498,7 +32413,7 @@ msgstr "Loss Tangent（損耗切線）"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:351
 msgid "Insert board stackup table"
-msgstr "插入電路板壓層表"
+msgstr "置入電路板壓層表"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:390
 msgid "BOARD CHARACTERISTICS"
@@ -32573,9 +32488,8 @@ msgid "Draw a dimension"
 msgstr "繪製尺標"
 
 #: pcbnew/tools/drawing_tool.cpp:1154
-#, fuzzy
 msgid "No graphic items found in file."
-msgstr "在要匯入的檔案中找不到圖形專案"
+msgstr "在檔案中找不到圖形物件。"
 
 #: pcbnew/tools/drawing_tool.cpp:1205 pcbnew/tools/drawing_tool.cpp:1276
 msgid "Place a DXF_SVG drawing"
@@ -34196,9 +34110,8 @@ msgid "Undo Last Segment"
 msgstr "復原最後一段線段"
 
 #: pcbnew/tools/pcb_actions.cpp:1355
-#, fuzzy
 msgid "Walks the current track back one segment."
-msgstr "使目前的圖層更加透明"
+msgstr "使目前的走線復原一個線段。"
 
 #: pcbnew/tools/pcb_actions.cpp:1361 pcbnew/tools/pcb_actions.cpp:1367
 msgid ""
