@@ -221,6 +221,44 @@ FOOTPRINT::~FOOTPRINT()
 }
 
 
+bool FOOTPRINT::FixUuids()
+{
+    // replace null UUIDs if any by a valid uuid
+    std::vector< BOARD_ITEM* > item_list;
+
+    item_list.push_back( m_reference );
+    item_list.push_back( m_value );
+
+    for( PAD* pad : m_pads )
+        item_list.push_back( pad );
+
+    for( BOARD_ITEM* gr_item : m_drawings )
+        item_list.push_back( gr_item );
+
+    // Note: one cannot fix null UUIDs inside the group, but it should not happen
+    // because null uuids can be found in old footprints, therefore without group
+    for( PCB_GROUP* group : m_fp_groups )
+        item_list.push_back( group );
+
+    // Probably notneeded, because old fp do not have zones. But just in case.
+    for( FP_ZONE* zone : m_fp_zones )
+        item_list.push_back( zone );
+
+    bool changed = false;
+
+    for( BOARD_ITEM* item : item_list )
+    {
+        if( item->m_Uuid == niluuid )
+        {
+            const_cast<KIID&>( item->m_Uuid ) = KIID();
+            changed = true;
+        }
+    }
+
+    return changed;
+}
+
+
 FOOTPRINT& FOOTPRINT::operator=( FOOTPRINT&& aOther )
 {
     BOARD_ITEM::operator=( aOther );

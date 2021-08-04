@@ -135,6 +135,15 @@ public:
     void ClearAllNets();
 
     /**
+     * Old footprints do not alway have a valid UUID (some can be set to null uuid)
+     * However null UUIDs, having a special meaning in editor, create issues when
+     * editing a footprint
+     * So all null uuids a re replaced by a valid uuid
+     * @return true if at least one uuid is changed, false if no change
+     */
+    bool FixUuids();
+
+    /**
      * Return the bounding box containing pads when the footprint is on the front side,
      * orientation 0, position 0,0.
      *
