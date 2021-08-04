@@ -20,12 +20,12 @@ PANEL_PL_EDITOR_COLOR_SETTINGS_BASE::PANEL_PL_EDITOR_COLOR_SETTINGS_BASE( wxWind
 	sbSizer1->SetMinSize( wxSize( 250,-1 ) );
 	m_txtTheme = new wxStaticText( sbSizer1->GetStaticBox(), wxID_ANY, _("Theme:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_txtTheme->Wrap( -1 );
-	sbSizer1->Add( m_txtTheme, 0, wxALIGN_CENTER_VERTICAL|wxALL, 10 );
+	sbSizer1->Add( m_txtTheme, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
-	wxArrayString m_themeSelectionChoices;
-	m_themeSelection = new wxChoice( sbSizer1->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_themeSelectionChoices, 0 );
-	m_themeSelection->SetSelection( 0 );
-	sbSizer1->Add( m_themeSelection, 1, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxTOP, 10 );
+	wxArrayString m_themesChoices;
+	m_themes = new wxChoice( sbSizer1->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_themesChoices, 0 );
+	m_themes->SetSelection( 0 );
+	sbSizer1->Add( m_themes, 1, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT, 5 );
 
 
 	p1mainSizer->Add( sbSizer1, 0, wxALL, 10 );

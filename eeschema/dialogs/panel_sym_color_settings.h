@@ -35,7 +35,7 @@ public:
     PANEL_SYM_COLOR_SETTINGS( SYMBOL_EDIT_FRAME* aFrame, wxWindow* aWindow );
 
 protected:
-    void OnUseEeschemaThemeChanged( wxCommandEvent& event ) override;
+    void OnThemeChanged( wxCommandEvent& event ) override;
 
 private:
     bool TransferDataToWindow() override;

@@ -10,7 +10,7 @@
 ///////////////////////////////////////////////////////////////////////////
 
 BEGIN_EVENT_TABLE( PANEL_SYM_COLOR_SETTINGS_BASE, wxPanel )
-	EVT_CHECKBOX( wxID_ANY, PANEL_SYM_COLOR_SETTINGS_BASE::_wxFB_OnUseEeschemaThemeChanged )
+	EVT_CHOICE( wxID_ANY, PANEL_SYM_COLOR_SETTINGS_BASE::_wxFB_OnThemeChanged )
 END_EVENT_TABLE()
 
 PANEL_SYM_COLOR_SETTINGS_BASE::PANEL_SYM_COLOR_SETTINGS_BASE( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style, const wxString& name ) : wxPanel( parent, id, pos, size, style, name )
@@ -19,25 +19,25 @@ PANEL_SYM_COLOR_SETTINGS_BASE::PANEL_SYM_COLOR_SETTINGS_BASE( wxWindow* parent, 
 	p1mainSizer = new wxBoxSizer( wxHORIZONTAL );
 
 	wxStaticBoxSizer* sbSizer1;
-	sbSizer1 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Color Theme") ), wxHORIZONTAL );
+	sbSizer1 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Color Theme") ), wxVERTICAL );
 
 	sbSizer1->SetMinSize( wxSize( 250,-1 ) );
-	m_useEeschemaTheme = new wxCheckBox( sbSizer1->GetStaticBox(), wxID_ANY, _("Use Eeschema color theme"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_useEeschemaTheme->SetValue(true);
-	sbSizer1->Add( m_useEeschemaTheme, 0, wxALL|wxEXPAND, 10 );
+	m_eeschemaRB = new wxRadioButton( sbSizer1->GetStaticBox(), wxID_ANY, _("Use schematic editor color theme"), wxDefaultPosition, wxDefaultSize, wxRB_GROUP );
+	sbSizer1->Add( m_eeschemaRB, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
-	m_txtTheme = new wxStaticText( sbSizer1->GetStaticBox(), wxID_ANY, _("Theme:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_txtTheme->Wrap( -1 );
-	m_txtTheme->Enable( false );
+	wxBoxSizer* bSizer2;
+	bSizer2 = new wxBoxSizer( wxHORIZONTAL );
 
-	sbSizer1->Add( m_txtTheme, 0, wxALIGN_CENTER_VERTICAL|wxALL, 10 );
+	m_themeRB = new wxRadioButton( sbSizer1->GetStaticBox(), wxID_ANY, _("Use theme:"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer2->Add( m_themeRB, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
-	wxArrayString m_themeSelectionChoices;
-	m_themeSelection = new wxChoice( sbSizer1->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_themeSelectionChoices, 0 );
-	m_themeSelection->SetSelection( 0 );
-	m_themeSelection->Enable( false );
+	wxArrayString m_themesChoices;
+	m_themes = new wxChoice( sbSizer1->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_themesChoices, 0 );
+	m_themes->SetSelection( 0 );
+	bSizer2->Add( m_themes, 1, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
-	sbSizer1->Add( m_themeSelection, 1, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxTOP, 10 );
+
+	sbSizer1->Add( bSizer2, 1, wxEXPAND|wxTOP|wxBOTTOM, 5 );
 
 
 	p1mainSizer->Add( sbSizer1, 0, wxALL, 5 );

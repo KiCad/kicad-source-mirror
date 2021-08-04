@@ -11,12 +11,11 @@
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
 #include <wx/string.h>
-#include <wx/checkbox.h>
+#include <wx/radiobut.h>
 #include <wx/gdicmn.h>
 #include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
-#include <wx/stattext.h>
 #include <wx/choice.h>
 #include <wx/sizer.h>
 #include <wx/statbox.h>
@@ -34,16 +33,16 @@ class PANEL_SYM_COLOR_SETTINGS_BASE : public wxPanel
 	private:
 
 		// Private event handlers
-		void _wxFB_OnUseEeschemaThemeChanged( wxCommandEvent& event ){ OnUseEeschemaThemeChanged( event ); }
+		void _wxFB_OnThemeChanged( wxCommandEvent& event ){ OnThemeChanged( event ); }
 
 
 	protected:
-		wxCheckBox* m_useEeschemaTheme;
-		wxStaticText* m_txtTheme;
-		wxChoice* m_themeSelection;
+		wxRadioButton* m_eeschemaRB;
+		wxRadioButton* m_themeRB;
+		wxChoice* m_themes;
 
 		// Virtual event handlers, overide them in your derived class
-		virtual void OnUseEeschemaThemeChanged( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnThemeChanged( wxCommandEvent& event ) { event.Skip(); }
 
 
 	public:

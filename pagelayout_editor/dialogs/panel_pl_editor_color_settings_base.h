@@ -33,7 +33,7 @@ class PANEL_PL_EDITOR_COLOR_SETTINGS_BASE : public wxPanel
 
 	protected:
 		wxStaticText* m_txtTheme;
-		wxChoice* m_themeSelection;
+		wxChoice* m_themes;
 
 	public:
 

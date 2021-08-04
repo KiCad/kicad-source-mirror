@@ -45,20 +45,20 @@ bool PANEL_PL_EDITOR_COLOR_SETTINGS::TransferDataToWindow()
     int height   = 0;
     int minwidth = width;
 
-    m_themeSelection->Clear();
+    m_themes->Clear();
 
     for( COLOR_SETTINGS* settings : Pgm().GetSettingsManager().GetColorSettingsList() )
     {
-        int pos = m_themeSelection->Append( settings->GetName(), static_cast<void*>( settings ) );
+        int pos = m_themes->Append( settings->GetName(), static_cast<void*>( settings ) );
 
         if( settings == current )
-            m_themeSelection->SetSelection( pos );
+            m_themes->SetSelection( pos );
 
-        m_themeSelection->GetTextExtent( settings->GetName(), &width, &height );
+        m_themes->GetTextExtent( settings->GetName(), &width, &height );
         minwidth = std::max( minwidth, width );
     }
 
-    m_themeSelection->SetMinSize( wxSize( minwidth + 50, -1 ) );
+    m_themes->SetMinSize( wxSize( minwidth + 50, -1 ) );
 
     Fit();
 
@@ -69,16 +69,14 @@ bool PANEL_PL_EDITOR_COLOR_SETTINGS::TransferDataToWindow()
 bool PANEL_PL_EDITOR_COLOR_SETTINGS::TransferDataFromWindow()
 {
     SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
-
-    auto selected = static_cast<COLOR_SETTINGS*>(
-            m_themeSelection->GetClientData( m_themeSelection->GetSelection() ) );
+    int               sel = m_themes->GetSelection();
+    COLOR_SETTINGS*   colors = static_cast<COLOR_SETTINGS*>( m_themes->GetClientData( sel ) );
 
     PL_EDITOR_SETTINGS* cfg = mgr.GetAppSettings<PL_EDITOR_SETTINGS>();
+    cfg->m_ColorTheme = colors->GetFilename();
 
-    cfg->m_ColorTheme = selected->GetFilename();
-
-    auto settings = m_frame->GetCanvas()->GetView()->GetPainter()->GetSettings();
-    settings->LoadColors( selected );
+    RENDER_SETTINGS* settings = m_frame->GetCanvas()->GetView()->GetPainter()->GetSettings();
+    settings->LoadColors( colors );
 
     return true;
 }
