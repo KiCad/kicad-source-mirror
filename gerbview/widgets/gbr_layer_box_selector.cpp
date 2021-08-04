@@ -41,6 +41,10 @@ void GBR_LAYER_BOX_SELECTOR::Resync()
         if( !isLayerEnabled( layerid ) )
             continue;
 
+        // Don't show unused layers
+        if ( images.GetGbrImage(layerid) == nullptr )
+            continue;
+
         // Prepare Bitmap
         wxBitmap bmp( BM_SIZE, BM_SIZE );
         DrawColorSwatch( bmp, getLayerColor( LAYER_PCB_BACKGROUND ), getLayerColor( layerid ) );

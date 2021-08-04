@@ -218,10 +218,16 @@ bool  GERBER_LAYER_WIDGET::OnLayerSelected()
 
 void GERBER_LAYER_WIDGET::ReFill()
 {
+    ClearLayerRows();
+
     Freeze();
 
     for( int layer = 0; layer < GERBER_DRAWLAYERS_COUNT; ++layer )
     {
+        // Don't show inactive layers
+        if ( GetImagesList()->GetGbrImage(layer) == nullptr )
+                continue;
+
         int      aRow = findLayerRow( layer );
         bool     visible = true;
         COLOR4D  color = m_frame->GetLayerColor( GERBER_DRAW_LAYER( layer ) );
