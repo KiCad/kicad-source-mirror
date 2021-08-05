@@ -46,6 +46,7 @@
 #include <zone.h>
 #include <footprint.h>
 #include <reporter.h>
+#include <dialogs/dialog_color_picker.h>
 
 class COLOR_SETTINGS;
 
@@ -606,6 +607,21 @@ private:
 
     void transformFPShapesToPolygon( const FOOTPRINT* aFootprint, PCB_LAYER_ID aLayer,
                                      SHAPE_POLY_SET& aCornerBuffer ) const;
+
+public:
+    static CUSTOM_COLORS_LIST   g_SilkscreenColors;
+    static CUSTOM_COLORS_LIST   g_MaskColors;
+    static CUSTOM_COLORS_LIST   g_PasteColors;
+    static CUSTOM_COLORS_LIST   g_FinishColors;
+    static CUSTOM_COLORS_LIST   g_BoardColors;
+
+    static KIGFX::COLOR4D       g_DefaultBackgroundTop;
+    static KIGFX::COLOR4D       g_DefaultBackgroundBot;
+    static KIGFX::COLOR4D       g_DefaultSilkscreen;
+    static KIGFX::COLOR4D       g_DefaultSolderMask;
+    static KIGFX::COLOR4D       g_DefaultSolderPaste;
+    static KIGFX::COLOR4D       g_DefaultSurfaceFinish;
+    static KIGFX::COLOR4D       g_DefaultBoardBody;
 
 public:
     SFVEC4F m_BgColorBot;         ///< background bottom color

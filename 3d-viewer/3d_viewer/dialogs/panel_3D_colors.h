@@ -38,17 +38,8 @@ public:
     /// Automatically called after creating the dialog
     bool TransferDataToWindow() override;
 
-    void OnLoadColorsFromBoardStackup( wxCommandEvent& event ) override;
-
 private:
-    EDA_3D_VIEWER_FRAME* m_frame;
-    BOARD_ADAPTER&       m_boardAdapter;
-
-    CUSTOM_COLORS_LIST   m_silkscreenColors;
-    CUSTOM_COLORS_LIST   m_maskColors;
-    CUSTOM_COLORS_LIST   m_pasteColors;
-    CUSTOM_COLORS_LIST   m_finishColors;
-    CUSTOM_COLORS_LIST   m_boardColors;
+    BOARD_ADAPTER& m_boardAdapter;
 };
 
 

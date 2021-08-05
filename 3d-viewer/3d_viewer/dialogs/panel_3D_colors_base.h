@@ -19,10 +19,8 @@ class COLOR_SWATCH;
 #include <wx/colour.h>
 #include <wx/settings.h>
 #include <wx/sizer.h>
-#include <wx/bitmap.h>
-#include <wx/image.h>
-#include <wx/icon.h>
-#include <wx/button.h>
+#include <wx/statbox.h>
+#include <wx/radiobut.h>
 #include <wx/panel.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -40,6 +38,10 @@ class PANEL_3D_COLORS_BASE : public wxPanel
 		COLOR_SWATCH* m_backgroundTop;
 		wxStaticText* backgroundBotLabel;
 		COLOR_SWATCH* m_backgroundBottom;
+		wxStaticText* solderPasteLabel;
+		COLOR_SWATCH* m_solderPaste;
+		wxRadioButton* m_boardStackupRB;
+		wxRadioButton* m_specificColorsRB;
 		wxStaticText* silkscreenTopLabel;
 		COLOR_SWATCH* m_silkscreenTop;
 		wxStaticText* silkscreenBottomLabel;
@@ -48,17 +50,10 @@ class PANEL_3D_COLORS_BASE : public wxPanel
 		COLOR_SWATCH* m_solderMaskTop;
 		wxStaticText* solderMaskBottomLabel;
 		COLOR_SWATCH* m_solderMaskBottom;
-		wxStaticText* solderPasteLabel;
-		COLOR_SWATCH* m_solderPaste;
 		wxStaticText* surfaceFinishLabel;
 		COLOR_SWATCH* m_surfaceFinish;
 		wxStaticText* boardBodyLabel;
 		COLOR_SWATCH* m_boardBody;
-		wxButton* m_loadStackup;
-
-		// Virtual event handlers, overide them in your derived class
-		virtual void OnLoadColorsFromBoardStackup( wxCommandEvent& event ) { event.Skip(); }
-
 
 	public:
 

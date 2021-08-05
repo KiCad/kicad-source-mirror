@@ -22,16 +22,13 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file  cinfo3d_visu.cpp
- * @brief Handles data related with the board to be visualized
- */
-
 #include "../3d_rendering/camera.h"
 #include "board_adapter.h"
 #include <board_design_settings.h>
+#include <board_stackup_manager/board_stackup.h>
 #include <3d_rendering/3d_render_raytracing/shapes2D/polygon_2d.h>
 #include <board.h>
+#include <dialogs/dialog_color_picker.h>
 #include <3d_math.h>
 #include "3d_fastmath.h"
 #include <geometry/geometry_utils.h>
@@ -39,6 +36,23 @@
 #include <pgm_base.h>
 #include <settings/settings_manager.h>
 #include <wx/log.h>
+
+
+CUSTOM_COLORS_LIST   BOARD_ADAPTER::g_SilkscreenColors;
+CUSTOM_COLORS_LIST   BOARD_ADAPTER::g_MaskColors;
+CUSTOM_COLORS_LIST   BOARD_ADAPTER::g_PasteColors;
+CUSTOM_COLORS_LIST   BOARD_ADAPTER::g_FinishColors;
+CUSTOM_COLORS_LIST   BOARD_ADAPTER::g_BoardColors;
+
+KIGFX::COLOR4D       BOARD_ADAPTER::g_DefaultBackgroundTop;
+KIGFX::COLOR4D       BOARD_ADAPTER::g_DefaultBackgroundBot;
+KIGFX::COLOR4D       BOARD_ADAPTER::g_DefaultSilkscreen;
+KIGFX::COLOR4D       BOARD_ADAPTER::g_DefaultSolderMask;
+KIGFX::COLOR4D       BOARD_ADAPTER::g_DefaultSolderPaste;
+KIGFX::COLOR4D       BOARD_ADAPTER::g_DefaultSurfaceFinish;
+KIGFX::COLOR4D       BOARD_ADAPTER::g_DefaultBoardBody;
+
+static bool          g_ColorsLoaded = false;
 
 /**
  *  Trace mask used to enable or disable the trace output of this class.
@@ -60,7 +74,7 @@ BOARD_ADAPTER::BOARD_ADAPTER() :
 {
     wxLogTrace( m_logTrace, wxT( "BOARD_ADAPTER::BOARD_ADAPTER" ) );
 
-    m_gridType     = GRID3D_TYPE::NONE;
+    m_gridType = GRID3D_TYPE::NONE;
     m_antiAliasingMode = ANTIALIASING_MODE::AA_8X;
     m_drawFlags.resize( FL_LAST, false );
 
@@ -142,6 +156,61 @@ BOARD_ADAPTER::BOARD_ADAPTER() :
 
     m_RtRecursiveReflectionCount = 0;
     m_RtRecursiveRefractionCount = 0;
+
+    if( !g_ColorsLoaded )
+    {
+#define ADD_COLOR( list, r, g, b, a, name ) \
+    list.push_back( CUSTOM_COLOR_ITEM( r/255.0, g/255.0, b/255.0, a, name ) )
+
+        ADD_COLOR( g_SilkscreenColors, 241, 241, 241, 1.0, "White" );
+        ADD_COLOR( g_SilkscreenColors,   4,  18,  21, 1.0, "Dark" );
+
+        ADD_COLOR( g_MaskColors,  20,  51,  36, 0.83, "Green" );
+        ADD_COLOR( g_MaskColors,  91, 168,  12, 0.83, "Light Green" );
+        ADD_COLOR( g_MaskColors,  13, 104,  11, 0.83, "Saturated Green" );
+        ADD_COLOR( g_MaskColors, 181,  19,  21, 0.83, "Red" );
+        ADD_COLOR( g_MaskColors, 210,  40,  14, 0.83, "Light Red" );
+        ADD_COLOR( g_MaskColors, 239,  53,  41, 0.83, "Red/Orange" );
+        ADD_COLOR( g_MaskColors,   2,  59, 162, 0.83, "Blue" );
+        ADD_COLOR( g_MaskColors,  54,  79, 116, 0.83, "Light Blue 1" );
+        ADD_COLOR( g_MaskColors,  61,  85, 130, 0.83, "Light Blue 2" );
+        ADD_COLOR( g_MaskColors,  21,  70,  80, 0.83, "Green/Blue" );
+        ADD_COLOR( g_MaskColors,  11,  11,  11, 0.83, "Black" );
+        ADD_COLOR( g_MaskColors, 245, 245, 245, 0.83, "White" );
+        ADD_COLOR( g_MaskColors,  32,   2,  53, 0.83, "Purple" );
+        ADD_COLOR( g_MaskColors, 119,  31,  91, 0.83, "Light Purple" );
+
+        ADD_COLOR( g_PasteColors, 128, 128, 128, 1.0, "Grey" );
+        ADD_COLOR( g_PasteColors,  90,  90,  90, 1.0, "Dark Grey" );
+        ADD_COLOR( g_PasteColors, 213, 213, 213, 1.0, "Silver" );
+
+        ADD_COLOR( g_FinishColors, 184, 115,  50, 1.0, "Copper" );
+        ADD_COLOR( g_FinishColors, 178, 156,   0, 1.0, "Gold" );
+        ADD_COLOR( g_FinishColors, 213, 213, 213, 1.0, "Silver" );
+        ADD_COLOR( g_FinishColors, 160, 160, 160, 1.0, "Tin" );
+
+        ADD_COLOR( g_BoardColors,  51,  43,  22, 0.83, "FR4 natural, dark" );
+        ADD_COLOR( g_BoardColors, 109, 116,  75, 0.83, "FR4 natural" );
+        ADD_COLOR( g_BoardColors, 252, 252, 250, 0.90, "PTFE natural" );
+        ADD_COLOR( g_BoardColors, 205, 130,   0, 0.68, "Polyimide" );
+        ADD_COLOR( g_BoardColors,  92,  17,   6, 0.90, "Phenolic natural" );
+        ADD_COLOR( g_BoardColors, 146,  99,  47, 0.83, "Brown 1" );
+        ADD_COLOR( g_BoardColors, 160, 123,  54, 0.83, "Brown 2" );
+        ADD_COLOR( g_BoardColors, 146,  99,  47, 0.83, "Brown 3" );
+        ADD_COLOR( g_BoardColors, 213, 213, 213,  1.0, "Aluminum" );
+
+        g_DefaultBackgroundTop = COLOR4D(  0.80, 0.80, 0.90, 1.0 );
+        g_DefaultBackgroundBot = COLOR4D(  0.40, 0.40, 0.50, 1.0 );
+
+        g_DefaultSilkscreen =    COLOR4D( 0.94, 0.94, 0.94,  1.0 );
+        g_DefaultSolderMask =    COLOR4D( 0.08, 0.20, 0.14, 0.83 );
+        g_DefaultSolderPaste =   COLOR4D( 0.50, 0.50, 0.50,  1.0 );
+        g_DefaultSurfaceFinish = COLOR4D( 0.75, 0.61, 0.23,  1.0 );
+        g_DefaultBoardBody =     COLOR4D( 0.43, 0.45, 0.30, 0.90 );
+
+        g_ColorsLoaded = true;
+    }
+#undef ADD_COLOR
 }
 
 
@@ -299,9 +368,12 @@ void BOARD_ADAPTER::InitSettings( REPORTER* aStatusReporter, REPORTER* aWarningR
 
     if( ( m_board && m_board->IsFootprintHolder() ) || !GetFlag( FL_USE_REALISTIC_MODE )
             || !succeedToGetBoardPolygon )
+    {
         boardEdgesOnly = false;
+    }
 
     EDA_RECT bbbox;
+
     if( m_board )
         bbbox = m_board->ComputeBoundingBox( boardEdgesOnly );
 
@@ -457,6 +529,144 @@ void BOARD_ADAPTER::InitSettings( REPORTER* aStatusReporter, REPORTER* aWarningR
         aStatusReporter->Report( _( "Create layers" ) );
 
     createLayers( aStatusReporter );
+
+    COLOR_SETTINGS* colors = Pgm().GetSettingsManager().GetColorSettings();
+
+    auto to_SFVEC4F =
+            []( const COLOR4D& src )
+            {
+                return SFVEC4F( src.r, src.g, src.b, src.a );
+            };
+
+    m_BgColorTop = to_SFVEC4F( colors->GetColor( LAYER_3D_BACKGROUND_TOP ) );
+    m_BgColorBot = to_SFVEC4F( colors->GetColor( LAYER_3D_BACKGROUND_BOTTOM ) );
+
+    m_SolderPasteColor = to_SFVEC4F( colors->GetColor( LAYER_3D_SOLDERPASTE ) );
+
+    if( m_board && colors->GetUseBoardStackupColors() )
+    {
+        const BOARD_STACKUP& stackup = m_board->GetDesignSettings().GetStackupDescriptor();
+
+        auto findColor =
+                []( const wxString& aColorName, const CUSTOM_COLORS_LIST& aColorSet )
+                {
+                    for( const CUSTOM_COLOR_ITEM& color : aColorSet )
+                    {
+                        if( color.m_ColorName == aColorName )
+                            return color.m_Color;
+                    }
+
+                    return KIGFX::COLOR4D();
+                };
+
+        m_SilkScreenColorTop = to_SFVEC4F( g_DefaultSilkscreen );
+        m_SilkScreenColorBot = to_SFVEC4F( g_DefaultSilkscreen );
+        m_SolderMaskColorTop = to_SFVEC4F( g_DefaultSolderMask );
+        m_SolderMaskColorBot = to_SFVEC4F( g_DefaultSolderMask );
+
+        KIGFX::COLOR4D bodyColor( 0, 0, 0, 0 );
+
+        for( const BOARD_STACKUP_ITEM* stackupItem : stackup.GetList() )
+        {
+            wxString colorName = stackupItem->GetColor();
+
+            switch( stackupItem->GetType() )
+            {
+            case BS_ITEM_TYPE_SILKSCREEN:
+                if( stackupItem->GetBrdLayerId() == F_SilkS )
+                    m_SilkScreenColorTop = to_SFVEC4F( findColor( colorName, g_SilkscreenColors ) );
+                else
+                    m_SilkScreenColorBot = to_SFVEC4F( findColor( colorName, g_SilkscreenColors ) );
+
+                break;
+
+            case BS_ITEM_TYPE_SOLDERMASK:
+                if( stackupItem->GetBrdLayerId() == F_Mask )
+                    m_SolderMaskColorTop = to_SFVEC4F( findColor( colorName, g_MaskColors ) );
+                else
+                    m_SolderMaskColorBot = to_SFVEC4F( findColor( colorName, g_MaskColors ) );
+
+                break;
+
+            case BS_ITEM_TYPE_DIELECTRIC:
+            {
+                KIGFX::COLOR4D  layerColor = COLOR4D::CLEAR;
+                const wxString& materialName = stackupItem->GetMaterial();
+
+                if( materialName.StartsWith( "FR4" ) )
+                {
+                    layerColor = findColor( "FR4 natural", g_BoardColors );
+                }
+                else if( materialName.IsSameAs( "PTFE" )
+                      || materialName.IsSameAs( "Teflon" ) )
+                {
+                    layerColor = findColor( "PTFE natural", g_BoardColors );
+                }
+                else if( materialName.IsSameAs( "Polyimide" )
+                      || materialName.IsSameAs( "Kapton" ) )
+                {
+                    layerColor = findColor( "Polyimide", g_BoardColors );
+                }
+                else if( materialName.IsSameAs( "Al" ) )
+                {
+                    layerColor = findColor( "Aluminum", g_BoardColors );
+                }
+
+                if( bodyColor == COLOR4D( 0, 0, 0, 0 ) )
+                    bodyColor = layerColor;
+                else
+                    bodyColor = bodyColor.Mix( layerColor, 1.0 - layerColor.a );
+
+                bodyColor.a += ( 1.0 - bodyColor.a ) * layerColor.a / 2;
+                break;
+            }
+
+            default:
+                break;
+            }
+        }
+
+        if( bodyColor != COLOR4D( 0, 0, 0, 0 ) )
+            m_BoardBodyColor = to_SFVEC4F( bodyColor );
+        else
+            m_BoardBodyColor = to_SFVEC4F( g_DefaultBoardBody );
+
+        const wxString& finishName = stackup.m_FinishType;
+
+        if( finishName.EndsWith( "OSP" ) )
+        {
+            m_CopperColor = to_SFVEC4F( findColor( "Copper", g_FinishColors ) );
+        }
+        else if( finishName.EndsWith( "IG" )
+              || finishName.EndsWith( "gold" ) )
+        {
+            m_CopperColor = to_SFVEC4F( findColor( "Gold", g_FinishColors ) );
+        }
+        else if( finishName.StartsWith( "HAL" )
+              || finishName.StartsWith( "HASL" )
+              || finishName.EndsWith( "tin" )
+              || finishName.EndsWith( "nickel" ) )
+        {
+            m_CopperColor = to_SFVEC4F( findColor( "Tin", g_FinishColors ) );
+        }
+        else if( finishName.EndsWith( "silver" ) )
+        {
+            m_CopperColor = to_SFVEC4F( findColor( "Silver", g_FinishColors ) );
+        }
+        else
+        {
+            m_CopperColor = to_SFVEC4F( g_DefaultSurfaceFinish );
+        }
+    }
+    else
+    {
+        m_SilkScreenColorBot = to_SFVEC4F( colors->GetColor( LAYER_3D_SILKSCREEN_BOTTOM ) );
+        m_SilkScreenColorTop = to_SFVEC4F( colors->GetColor( LAYER_3D_SILKSCREEN_TOP ) );
+        m_SolderMaskColorBot = to_SFVEC4F( colors->GetColor( LAYER_3D_SOLDERMASK_BOTTOM ) );
+        m_SolderMaskColorTop = to_SFVEC4F( colors->GetColor( LAYER_3D_SOLDERMASK_TOP ) );
+        m_CopperColor        = to_SFVEC4F( colors->GetColor( LAYER_3D_COPPER ) );
+        m_BoardBodyColor     = to_SFVEC4F( colors->GetColor( LAYER_3D_BOARD ) );
+    }
 }
 
 

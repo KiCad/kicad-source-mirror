@@ -37,9 +37,7 @@
 #include <3d_viewer/tools/eda_3d_conditions.h>
 #include <bitmaps.h>
 #include <board_design_settings.h>
-#include <board_stackup_manager/board_stackup.h>
 #include <core/arraydim.h>
-#include <layer_ids.h>
 #include <gal/dpi_scaling.h>
 #include <pgm_base.h>
 #include <project.h>
@@ -414,27 +412,6 @@ void EDA_3D_VIEWER_FRAME::LoadSettings( APP_SETTINGS_BASE *aCfg )
 
     wxLogTrace( m_logTrace, "EDA_3D_VIEWER_FRAME::LoadSettings" );
 
-    COLOR_SETTINGS* colors = Pgm().GetSettingsManager().GetColorSettings();
-
-    auto set_color =
-            [] ( const COLOR4D& aColor, SFVEC4F& aTarget )
-            {
-                aTarget.r = aColor.r;
-                aTarget.g = aColor.g;
-                aTarget.b = aColor.b;
-                aTarget.a = aColor.a;
-            };
-
-    set_color( colors->GetColor( LAYER_3D_BACKGROUND_BOTTOM ), m_boardAdapter.m_BgColorBot );
-    set_color( colors->GetColor( LAYER_3D_BACKGROUND_TOP ), m_boardAdapter.m_BgColorTop );
-    set_color( colors->GetColor( LAYER_3D_BOARD ), m_boardAdapter.m_BoardBodyColor );
-    set_color( colors->GetColor( LAYER_3D_COPPER ), m_boardAdapter.m_CopperColor );
-    set_color( colors->GetColor( LAYER_3D_SILKSCREEN_BOTTOM ), m_boardAdapter.m_SilkScreenColorBot );
-    set_color( colors->GetColor( LAYER_3D_SILKSCREEN_TOP ), m_boardAdapter.m_SilkScreenColorTop );
-    set_color( colors->GetColor( LAYER_3D_SOLDERMASK_BOTTOM ), m_boardAdapter.m_SolderMaskColorBot );
-    set_color( colors->GetColor( LAYER_3D_SOLDERMASK_TOP ), m_boardAdapter.m_SolderMaskColorTop );
-    set_color( colors->GetColor( LAYER_3D_SOLDERPASTE ), m_boardAdapter.m_SolderPasteColor );
-
     if( cfg )
     {
         m_boardAdapter.m_RtCameraLightColor =
@@ -550,43 +527,6 @@ void EDA_3D_VIEWER_FRAME::SaveSettings( APP_SETTINGS_BASE *aCfg )
     EDA_BASE_FRAME::SaveSettings( cfg );
 
     wxLogTrace( m_logTrace, "EDA_3D_VIEWER_FRAME::SaveSettings" );
-
-    COLOR_SETTINGS* colors = Pgm().GetSettingsManager().GetColorSettings();
-
-    auto save_color =
-            [colors] ( SFVEC4F& aSource, LAYER_3D_ID aTarget )
-            {
-                // You could think just copy the new color in config is enough.
-                // unfortunately, SFVEC4F uses floats, and COLOR4D uses doubles,
-                // and the conversion SFVEC4F from/to COLOR4D creates small diffs.
-                //
-                // This has no matter to draw colors, but creates slight differences
-                // in config file, that appears always modified.
-                // So we must compare the SFVEC4F old and new values and update only
-                // actual changes.
-                SFVEC4F newSFVEC4Fcolor( float( colors->GetColor( aTarget ).r ),
-                                         float( colors->GetColor( aTarget ).g ),
-                                         float( colors->GetColor( aTarget ).b ),
-                                         float( colors->GetColor( aTarget ).a ) );
-
-                if( aSource != newSFVEC4Fcolor )
-                {
-                    colors->SetColor( aTarget, COLOR4D( aSource.r, aSource.g, aSource.b,
-                                                        aSource.a ) );
-                }
-            };
-
-    save_color( m_boardAdapter.m_BgColorBot,         LAYER_3D_BACKGROUND_BOTTOM );
-    save_color( m_boardAdapter.m_BgColorTop,         LAYER_3D_BACKGROUND_TOP );
-    save_color( m_boardAdapter.m_BoardBodyColor,     LAYER_3D_BOARD );
-    save_color( m_boardAdapter.m_CopperColor,        LAYER_3D_COPPER );
-    save_color( m_boardAdapter.m_SilkScreenColorBot, LAYER_3D_SILKSCREEN_BOTTOM );
-    save_color( m_boardAdapter.m_SilkScreenColorTop, LAYER_3D_SILKSCREEN_TOP );
-    save_color( m_boardAdapter.m_SolderMaskColorBot, LAYER_3D_SOLDERMASK_BOTTOM );
-    save_color( m_boardAdapter.m_SolderMaskColorTop, LAYER_3D_SOLDERMASK_TOP );
-    save_color( m_boardAdapter.m_SolderPasteColor,   LAYER_3D_SOLDERPASTE );
-
-    Pgm().GetSettingsManager().SaveColorSettings( colors, "3d_viewer" );
 
     wxLogTrace( m_logTrace, m_boardAdapter.GetRenderEngine() == RENDER_ENGINE::RAYTRACING ?
                             "EDA_3D_VIEWER_FRAME::SaveSettings render setting Ray Trace" :

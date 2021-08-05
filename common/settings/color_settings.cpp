@@ -35,7 +35,8 @@ const int colorsSchemaVersion = 3;
 
 COLOR_SETTINGS::COLOR_SETTINGS( const wxString& aFilename ) :
         JSON_SETTINGS( std::move( aFilename ), SETTINGS_LOC::COLORS, colorsSchemaVersion ),
-        m_overrideSchItemColors( false )
+        m_overrideSchItemColors( false ),
+        m_useBoardStackupColors( true )
 {
 
     m_params.emplace_back( new PARAM<wxString>( "meta.name", &m_displayName, "KiCad Default" ) );
@@ -62,6 +63,9 @@ COLOR_SETTINGS::COLOR_SETTINGS( const wxString& aFilename ) :
 
     m_params.emplace_back( new PARAM<bool>( "schematic.override_item_colors",
                                             &m_overrideSchItemColors, false ) );
+
+    m_params.emplace_back( new PARAM<bool>( "3d_viewer.use_board_stackup_colors",
+                                            &m_overrideSchItemColors, true ) );
 
 #define CLR( x, y ) \
     wxASSERT( s_defaultTheme.count( y ) ); \
@@ -271,6 +275,7 @@ void COLOR_SETTINGS::initFromOther( const COLOR_SETTINGS& aOther )
 {
     m_displayName           = aOther.m_displayName;
     m_overrideSchItemColors = aOther.m_overrideSchItemColors;
+    m_useBoardStackupColors = aOther.m_useBoardStackupColors;
     m_colors                = aOther.m_colors;
     m_defaultColors         = aOther.m_defaultColors;
     m_writeFile             = aOther.m_writeFile;

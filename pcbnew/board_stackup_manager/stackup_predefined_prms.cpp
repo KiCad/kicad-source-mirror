@@ -23,17 +23,10 @@
  */
 
 
-/**
- * @file stackup_predefined_prms.cpp
- */
-
-#include "board_stackup.h"
-#include <convert_to_biu.h>
+#include <wx/string.h>
 #include <core/arraydim.h>
-#include <layer_ids.h>
 #include <board_design_settings.h>
 #include <i18n_utility.h>       // _HKI definition
-#include <macros.h>
 #include "stackup_predefined_prms.h"
 
 // A list of copper finish standard type names
@@ -67,14 +60,15 @@ static wxString CopperFinishType[] =
 // and R<integer>G<integer>B<integer> In gbrjob file.
 static FAB_LAYER_COLOR solderMaskColors[]  =
 {
-    { NotSpecifiedPrm(), wxColor( 80, 80, 80 ) },       // Not specified, not in .gbrjob file
-    { _HKI( "Green" ), wxColor( 60, 150, 80 ) },        // used in .gbrjob file
-    { _HKI( "Red" ), wxColor( 128, 0, 0 ) },            // used in .gbrjob file
-    { _HKI( "Blue" ), wxColor( 0, 0, 128 ) },           // used in .gbrjob file
-    { _HKI( "Black" ), wxColor( 20, 20, 20 ) },         // used in .gbrjob file
-    { _HKI( "White" ), wxColor( 200, 200, 200 ) },      // used in .gbrjob file
-    { _HKI( "Yellow" ), wxColor( 128, 128, 0 ) },       // used in .gbrjob file
-    { _HKI( "User defined" ), wxColor( 128, 128, 128 ) }//free. the name is a dummy name here
+    { NotSpecifiedPrm(),      wxColor(  80,  80,  80 ) },  // Not specified, not in .gbrjob file
+    { _HKI( "Green" ),        wxColor(  60, 150,  80 ) },  // used in .gbrjob file
+    { _HKI( "Red" ),          wxColor( 128,   0,   0 ) },  // used in .gbrjob file
+    { _HKI( "Blue" ),         wxColor(   0,   0, 128 ) },  // used in .gbrjob file
+    { _HKI( "Purple" ),       wxColor(  80,   0,  80 ) },  // used in .gbrjob file
+    { _HKI( "Black" ),        wxColor(  20,  20,  20 ) },  // used in .gbrjob file
+    { _HKI( "White" ),        wxColor( 200, 200, 200 ) },  // used in .gbrjob file
+    { _HKI( "Yellow" ),       wxColor( 128, 128,   0 ) },  // used in .gbrjob file
+    { _HKI( "User defined" ), wxColor( 128, 128, 128 ) }   // free. the name is a dummy name here
 };
 
 
