@@ -27,7 +27,7 @@
 #ifndef COLOR4D_H_
 #define COLOR4D_H_
 
-#include <cassert>
+#include <wx/debug.h>
 #include <nlohmann/json_fwd.hpp>
 
 #ifdef WX_COMPATIBILITY
@@ -105,7 +105,10 @@ class COLOR4D
 public:
     // Constructor (creates the Color 0,0,0,0)
     COLOR4D() :
-        r( 0 ), g( 0 ), b( 0 ), a( 1.0 )
+        r( 0 ),
+        g( 0 ),
+        b( 0 ),
+        a( 1.0 )
     {
     }
 
@@ -115,13 +118,16 @@ public:
      * @param aBlue  is the blue component  [0.0 .. 1.0].
      * @param aAlpha is the alpha value     [0.0 .. 1.0].
      */
-    constexpr COLOR4D( double aRed, double aGreen, double aBlue, double aAlpha ) :
-        r( aRed ), g( aGreen ), b( aBlue ), a( aAlpha )
+    COLOR4D( double aRed, double aGreen, double aBlue, double aAlpha ) :
+        r( aRed ),
+        g( aGreen ),
+        b( aBlue ),
+        a( aAlpha )
     {
-        assert( r >= 0.0 && r <= 1.0 );
-        assert( g >= 0.0 && g <= 1.0 );
-        assert( b >= 0.0 && b <= 1.0 );
-        assert( a >= 0.0 && a <= 1.0 );
+        wxASSERT( r >= 0.0 && r <= 1.0 );
+        wxASSERT( g >= 0.0 && g <= 1.0 );
+        wxASSERT( b >= 0.0 && b <= 1.0 );
+        wxASSERT( a >= 0.0 && a <= 1.0 );
     }
 
     /**
@@ -211,7 +217,7 @@ public:
      */
     COLOR4D& Brighten( double aFactor )
     {
-        assert( aFactor >= 0.0 && aFactor <= 1.0 );
+        wxASSERT( aFactor >= 0.0 && aFactor <= 1.0 );
 
         r = r * ( 1.0 - aFactor ) + aFactor;
         g = g * ( 1.0 - aFactor ) + aFactor;
@@ -228,7 +234,7 @@ public:
      */
     COLOR4D& Darken( double aFactor )
     {
-        assert( aFactor >= 0.0 && aFactor <= 1.0 );
+        wxASSERT( aFactor >= 0.0 && aFactor <= 1.0 );
 
         r = r * ( 1.0 - aFactor );
         g = g * ( 1.0 - aFactor );
@@ -264,7 +270,7 @@ public:
      */
     COLOR4D Brightened( double aFactor ) const
     {
-        assert( aFactor >= 0.0 && aFactor <= 1.0 );
+        wxASSERT( aFactor >= 0.0 && aFactor <= 1.0 );
 
         return COLOR4D( r * ( 1.0 - aFactor ) + aFactor, g * ( 1.0 - aFactor ) + aFactor,
                         b * ( 1.0 - aFactor ) + aFactor, a );
@@ -278,7 +284,7 @@ public:
      */
     COLOR4D Darkened( double aFactor ) const
     {
-        assert( aFactor >= 0.0 && aFactor <= 1.0 );
+        wxASSERT( aFactor >= 0.0 && aFactor <= 1.0 );
 
         return COLOR4D( r * ( 1.0 - aFactor ), g * ( 1.0 - aFactor ), b * ( 1.0 - aFactor ), a );
     }
@@ -291,7 +297,7 @@ public:
      */
     COLOR4D Mix( const COLOR4D& aColor, double aFactor ) const
     {
-        assert( aFactor >= 0.0 && aFactor <= 1.0 );
+        wxASSERT( aFactor >= 0.0 && aFactor <= 1.0 );
 
         return COLOR4D( aColor.r * ( 1.0 - aFactor ) + r * aFactor,
                         aColor.g * ( 1.0 - aFactor ) + g * aFactor,
@@ -307,7 +313,7 @@ public:
      */
      COLOR4D WithAlpha( double aAlpha ) const
      {
-         assert( aAlpha >= 0.0 && aAlpha <= 1.0 );
+         wxASSERT( aAlpha >= 0.0 && aAlpha <= 1.0 );
 
          return COLOR4D( r, g, b, aAlpha );
      }
