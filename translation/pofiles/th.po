@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-01 11:31-0700\n"
-"PO-Revision-Date: 2021-08-05 14:11+0000\n"
+"PO-Revision-Date: 2021-08-06 21:14+0000\n"
 "Last-Translator: boonchai k. <kicadthai@gmail.com>\n"
 "Language-Team: Thai <https://hosted.weblate.org/projects/kicad/master-source/"
 "th/>\n"
@@ -19242,11 +19242,11 @@ msgstr "31 .. 50V"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1858
 msgid "51 .. 100 V"
-msgstr ""
+msgstr "51 .. 100V"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1859
 msgid "101 .. 150 V"
-msgstr ""
+msgstr "101 .. 150V"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1860
 msgid "151 .. 170 V"
@@ -19335,21 +19335,21 @@ msgstr "แพ็ดไม่เคลือบ: (ศก.-รูเจาะ)"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1967
 msgid "Board Classes"
-msgstr ""
+msgstr "ชั้นคุณภาพบอร์ด"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.h:421
 #: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:10
 msgid "PCB Calculator"
-msgstr ""
+msgstr "เครื่องคิดเลขพีซีบี"
 
 #: pcb_calculator/eserie.cpp:322 pcb_calculator/eserie.cpp:341
 #: pcb_calculator/eserie.cpp:367
 msgid "Exact"
-msgstr ""
+msgstr "ที่แน่นอน"
 
 #: pcb_calculator/eserie.cpp:350 pcb_calculator/eserie.cpp:373
 msgid "Not worth using"
-msgstr ""
+msgstr "ไม่คุ้มค่าจะใช้"
 
 #: pcb_calculator/eserie_help.h:2
 msgid ""
@@ -19381,7 +19381,7 @@ msgstr ""
 
 #: pcb_calculator/pcb_calculator_frame.cpp:250
 msgid "Write Data Failed"
-msgstr ""
+msgstr "เขียนข้อมูลล้มเหลว"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:254
 msgid ""
