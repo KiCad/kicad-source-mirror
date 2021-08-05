@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
-"PO-Revision-Date: 2021-07-31 11:56+0000\n"
+"PO-Revision-Date: 2021-08-06 21:14+0000\n"
 "Last-Translator: Tokita, Hiroshi <tokita.hiroshi@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.7.2-dev\n"
+"X-Generator: Weblate 4.8-dev\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-Basepath: Source/kicad-master\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -11965,10 +11965,11 @@ msgstr "不正な行の定義"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:358
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:539
+#, fuzzy
 msgid ""
 "Empty cells will result in all rows that are invalid to be removed from the "
 "table."
-msgstr ""
+msgstr "空白のセルを使用すると、無効なすべての行がテーブルから削除されます。"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:374
 #, c-format
@@ -13287,7 +13288,7 @@ msgstr "ファイル '%s' を開くことができません。"
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:315
 #, c-format
 msgid "Storage file not fully parsed (%d bytes remaining)."
-msgstr ""
+msgstr "ストレージファイルは完全に読み込まれていません(%d バイト残っています)."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:487
 #, c-format
@@ -21701,7 +21702,7 @@ msgstr "サーマルリリーフのギャップ:"
 msgid ""
 "The distance that will be kept clear between the filled area of the zone and "
 "a pad connected by thermal relief spokes."
-msgstr ""
+msgstr "ゾーンの塗りつぶし領域とサーマルリリーフのスポークで接続されたパッドとの間の空白の距離."
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:234
 msgid "Clearance between pads in the same net and filled areas."
@@ -22613,12 +22614,12 @@ msgstr "スケールが不統一のモデル:"
 #: pcbnew/dialogs/dialog_export_step.cpp:189
 msgid ""
 "Scaled models detected.  Model scaling is not reliable for mechanical export."
-msgstr ""
+msgstr "スケールされたモデルが検出されました。  モデルのスケーリングは、機械向けのエクスポートとして信頼できるものではありません。"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:191
 #, fuzzy
 msgid "Model Scale Warning"
-msgstr "保存時の警告"
+msgstr "モデルスケールの警告"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:250
 msgid "STEP export failed!  Please save the PCB and try again"
@@ -22688,16 +22689,15 @@ msgstr "似た名前のモデルを置換します"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:116
 msgid "Replace VRML models with STEP models of the same name"
-msgstr ""
+msgstr "VRML モデルを同名の STEP モデルに置き換える"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:120
 msgid "Overwrite old file"
 msgstr "古いファイルを上書き"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:123
-#, fuzzy
 msgid "Board outline chaining tolerance:"
-msgstr "基板外形ビルダー:"
+msgstr "基板外形線接続の許容値:"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:127
 msgid "Tight (0.001 mm)"
@@ -22861,9 +22861,8 @@ msgid "Use relative paths to model files in board VRML file"
 msgstr "VRMLファイル中に相対パスでモデル ファイルを指定"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:130
-#, fuzzy
 msgid "Use paths for model files in board VRML file relative to the VRML file"
-msgstr "基板のモデル ファイルへのパスはVRML ファイルへの相対パスを使って下さい"
+msgstr "基板中のモデル ファイルのパスにはVRMLファイルへの相対パスを使って下さい"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.h:67
 msgid "VRML Export Options"
@@ -24620,13 +24619,10 @@ msgid "Warning: Negative local clearance values will have no effect."
 msgstr "警告: ローカルクリアランス値が負の値では効果がありません。"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1279
-#, fuzzy
 msgid ""
 "Warning: Negative solder mask clearances larger than some shape primitives. "
 "Results may be surprising."
-msgstr ""
-"警告: 負のハンダ マスクのクリアランスはカスタム形状のパッドではサポートされて"
-"いません。"
+msgstr "警告: 負のハンダマスクのクリアランスは形状プリミティブよりも大きいです。予期せぬ結果になるかもしれなせん。"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1288
 msgid ""
@@ -28096,9 +28092,8 @@ msgid "Items not allowed"
 msgstr "アイテム禁止"
 
 #: pcbnew/drc/drc_item.cpp:61
-#, fuzzy
 msgid "Text (or dimension) on Edge.Cuts layer"
-msgstr "(Edge.Cutsのレイヤーに基板外形がありません)"
+msgstr "Edge.Cutsのレイヤー上の文字(もしくは寸法)"
 
 #: pcbnew/drc/drc_item.cpp:65
 msgid "Clearance violation"
@@ -28948,14 +28943,12 @@ msgid "Clearance Override"
 msgstr "クリアランスのオーバーライド"
 
 #: pcbnew/footprint.cpp:2097 pcbnew/pad.cpp:1506
-#, fuzzy
 msgid "Solderpaste Margin Override"
-msgstr "ローカル ハンダペースト マージン"
+msgstr "ハンダペースト マージンの上書き値"
 
 #: pcbnew/footprint.cpp:2101 pcbnew/pad.cpp:1509
-#, fuzzy
 msgid "Solderpaste Margin Ratio Override"
-msgstr "ローカル ハンダペースト マージン比率"
+msgstr "ハンダペースト マージン比率の上書き値"
 
 #: pcbnew/footprint.cpp:2104 pcbnew/pad.cpp:1511 pcbnew/zone.cpp:1425
 msgid "Thermal Relief Width"
@@ -30231,9 +30224,8 @@ msgid "Pad To Die Length"
 msgstr "パッドからダイまでの長さ"
 
 #: pcbnew/pad.cpp:1503
-#, fuzzy
 msgid "Soldermask Margin Override"
-msgstr "ローカル ハンダマスク マージン"
+msgstr "ハンダマスク マージンの上書き値"
 
 #: pcbnew/pad.cpp:1517
 msgid "Fabrication Property"
@@ -30459,9 +30451,8 @@ msgid "Segment Length"
 msgstr "セグメント長"
 
 #: pcbnew/pcb_track.cpp:712
-#, fuzzy
 msgid "Routed Length"
-msgstr "基板の長さ"
+msgstr "配線長"
 
 #: pcbnew/pcb_track.cpp:720
 msgid "Full Length"
@@ -31498,9 +31489,8 @@ msgid "unknown zone corner smoothing type %d"
 msgstr "未知のゾーンのコーナー用スムージング タイプ %d"
 
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:2250
-#, fuzzy
 msgid "Open cancelled by user."
-msgstr "フットプリントの再リンクはユーザーによってキャンセルされました。"
+msgstr "オープンの操作はユーザーによってキャンセルされました。"
 
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:2299
 msgid "This file does not contain a PCB."
@@ -31869,13 +31859,11 @@ msgid "Length Tuner"
 msgstr "配線長調整"
 
 #: pcbnew/router/pns_diff_pair_placer.cpp:476
-#, fuzzy
 msgid ""
 "Unable to find complementary differential pair nets. Make sure the names of "
 "the nets belonging to a differential pair end with either N/P or +/-."
 msgstr ""
-"相補的な差動ペアのネットを見つけることができません。_N/_P か +/- で終わってい"
-"る差動ペアに属しているネットの名前かどうか確認して下さい。"
+"相補的な差動ペアのネットを見つけることができません。差動ペアに属しているネットが N/P もしくは +/- で終わる名前であるか確認してください。"
 
 #: pcbnew/router/pns_diff_pair_placer.cpp:493
 msgid ""
@@ -31938,9 +31926,8 @@ msgid "netclass 'Default'"
 msgstr "ネットクラス 'Default'"
 
 #: pcbnew/router/pns_kicad_iface.cpp:475
-#, fuzzy
 msgid "user choice"
-msgstr "選択内容の保存"
+msgstr "ユーザー設定の値"
 
 #: pcbnew/router/pns_kicad_iface.cpp:1063
 #, c-format
