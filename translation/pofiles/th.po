@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-01 11:31-0700\n"
-"PO-Revision-Date: 2021-08-01 22:03+0000\n"
+"PO-Revision-Date: 2021-08-05 14:11+0000\n"
 "Last-Translator: boonchai k. <kicadthai@gmail.com>\n"
 "Language-Team: Thai <https://hosted.weblate.org/projects/kicad/master-source/"
 "th/>\n"
@@ -18269,210 +18269,216 @@ msgstr "ไฟล์กระดาษเขียนแบบ"
 
 #: pagelayout_editor/files.cpp:61 pagelayout_editor/files.cpp:102
 msgid "The current drawing sheet has been modified. Save changes?"
-msgstr ""
+msgstr "แผ่นชีตปัจจุบันได้รับการแก้ไข บันทึกการเปลี่ยนแปลง?"
 
 #: pagelayout_editor/files.cpp:74
 #, c-format
 msgid "File \"%s\" loaded"
-msgstr ""
+msgstr "ไฟล์ \"%s\" โหลด"
 
 #: pagelayout_editor/files.cpp:121
 msgid "Append Existing Drawing Sheet"
-msgstr ""
+msgstr "ต่อท้ายแผ่นชีตที่มีอยู่"
 
 #: pagelayout_editor/files.cpp:132 pagelayout_editor/files.cpp:157
 #, c-format
 msgid "Unable to load %s file"
-msgstr ""
+msgstr "ไม่สามารถโหลด %s ไฟล์"
 
 #: pagelayout_editor/files.cpp:139
 #, c-format
 msgid "File \"%s\" inserted"
-msgstr ""
+msgstr "ไฟล์ \"%s\" แทรก"
 
 #: pagelayout_editor/files.cpp:147
 msgid "Open"
-msgstr ""
+msgstr "เปิด"
 
 #: pagelayout_editor/files.cpp:163 pagelayout_editor/files.cpp:210
 #, c-format
 msgid "File \"%s\" saved."
-msgstr ""
+msgstr "บันทึกไฟล์ '%s' เรียบร้อย"
 
 #: pagelayout_editor/files.cpp:172
 #, c-format
 msgid "Unable to write '%s'."
-msgstr ""
+msgstr "ไม่สามารถเขียน ' %s'"
 
 #: pagelayout_editor/files.cpp:185
 msgid "Save As"
-msgstr ""
+msgstr "บันทึกเป็น"
 
 #: pagelayout_editor/files.cpp:204 pcbnew/exporters/export_gencad.cpp:252
 #, c-format
 msgid "Unable to create \"%s\""
-msgstr ""
+msgstr "ไม่สามารถสร้าง \"%s\""
 
 #: pagelayout_editor/files.cpp:235
 msgid "Error reading drawing sheet"
-msgstr ""
+msgstr "เกิดข้อผิดพลาดในการอ่านแผ่นชีต"
 
 #: pagelayout_editor/files.cpp:257
 msgid "Layout file is read only."
-msgstr ""
+msgstr "ไฟล์เค้าโครงอ่านได้อย่างเดียว"
 
 #: pagelayout_editor/pl_editor_frame.cpp:100
 msgid "KiCad Drawing Sheet Editor"
-msgstr ""
+msgstr "ตัวแก้ไขแผ่นชีตของ KiCad"
 
 #: pagelayout_editor/pl_editor_frame.cpp:155
 msgid "coord origin: Right Bottom page corner"
-msgstr ""
+msgstr "จุดกำเนิดพิกัด: มุมขวาล่างของหน้า"
 
 #: pagelayout_editor/pl_editor_frame.cpp:182
 msgid "Properties"
-msgstr ""
+msgstr "คุณสมบัติ"
 
 #: pagelayout_editor/pl_editor_frame.cpp:335
 #, c-format
 msgid "Error loading drawing sheet '%s'."
-msgstr ""
+msgstr "เกิดข้อผิดพลาดในการโหลดแผ่นชีต '%s'"
 
 #: pagelayout_editor/pl_editor_frame.cpp:440
 msgid "Error Init Printer info"
-msgstr ""
+msgstr "ข้อผิดพลาด ตั้งข้อมูลเริ่มต้นให้เครื่องพิมพ์"
 
 #: pagelayout_editor/pl_editor_frame.cpp:553
 msgid "[no drawing sheet loaded]"
-msgstr ""
+msgstr "[ไม่มีการโหลดแผ่นชีต]"
 
 #: pagelayout_editor/pl_editor_frame.cpp:761
 #, c-format
 msgid "coord origin: %s"
-msgstr ""
+msgstr "จุดกำเนิดพิกัด:%s"
 
 #: pagelayout_editor/pl_editor_frame.cpp:901
 msgid "New drawing sheet file is unsaved"
-msgstr ""
+msgstr "ไฟล์แผ่นชีตใหม่ ยังไม่บันทึก"
 
 #: pagelayout_editor/pl_editor_frame.cpp:905
 msgid "Drawing sheet changes are unsaved"
-msgstr ""
+msgstr "การเปลี่ยนแปลงงานบนแผ่นชีต จะไม่ถูกบันทึก"
 
 #: pagelayout_editor/pl_editor_layout.cpp:62
 msgid "Page Width"
-msgstr ""
+msgstr "ความกว้างของหน้า"
 
 #: pagelayout_editor/pl_editor_layout.cpp:65
 msgid "Page Height"
-msgstr ""
+msgstr "ความสูงของหน้า"
 
 #: pagelayout_editor/toolbars_pl_editor.cpp:75
 msgid "Left Top paper corner"
-msgstr ""
+msgstr "มุมบนด้านซ้ายกระดาษ"
 
 #: pagelayout_editor/toolbars_pl_editor.cpp:76
 msgid "Right Bottom page corner"
-msgstr ""
+msgstr "มุมล่างขวาของหน้า"
 
 #: pagelayout_editor/toolbars_pl_editor.cpp:77
 msgid "Left Bottom page corner"
-msgstr ""
+msgstr "มุมล่างซ้ายของหน้า"
 
 #: pagelayout_editor/toolbars_pl_editor.cpp:78
 msgid "Right Top page corner"
-msgstr ""
+msgstr "มุมขวาบนของหน้า"
 
 #: pagelayout_editor/toolbars_pl_editor.cpp:79
 msgid "Left Top page corner"
-msgstr ""
+msgstr "มุมซ้ายบนของหน้า"
 
 #: pagelayout_editor/toolbars_pl_editor.cpp:90
 msgid "Origin of coordinates displayed to the status bar"
-msgstr ""
+msgstr "จุดเริ่มต้นของพิกัด แสดงที่แถบสถานะ"
 
 #: pagelayout_editor/toolbars_pl_editor.cpp:105
 msgid "Page 1"
-msgstr ""
+msgstr "หน้า 1"
 
 #: pagelayout_editor/toolbars_pl_editor.cpp:106
 msgid "Other pages"
-msgstr ""
+msgstr "หน้าอื่นๆ"
 
 #: pagelayout_editor/toolbars_pl_editor.cpp:116
 msgid ""
 "Simulate page 1 or other pages to show how items\n"
 "which are not on all page are displayed"
 msgstr ""
+"จำลองหน้า 1 หรือหน้าอื่น ๆ เพื่อแสดงว่ารายการ\n"
+"ที่ไม่ได้แสดงอยู่ทุกหน้า"
 
 #: pagelayout_editor/tools/pl_actions.cpp:44
 msgid "Add Line"
-msgstr ""
+msgstr "เพิ่มเส้นตรง"
 
 #: pagelayout_editor/tools/pl_actions.cpp:44
 msgid "Add a line"
-msgstr ""
+msgstr "เพิ่มเส้นตรง"
 
 #: pagelayout_editor/tools/pl_actions.cpp:59
 msgid "Add Bitmap"
-msgstr ""
+msgstr "เพิ่มบิตแมป"
 
 #: pagelayout_editor/tools/pl_actions.cpp:59
 msgid "Add a bitmap image"
-msgstr ""
+msgstr "เพิ่มภาพบิตแมป"
 
 #: pagelayout_editor/tools/pl_actions.cpp:73
 msgid "Append Existing Drawing Sheet..."
-msgstr ""
+msgstr "ต่อท้ายแผ่นชีตที่มีอยู่"
 
 #: pagelayout_editor/tools/pl_actions.cpp:74
 msgid "Append an existing drawing sheet file to current file"
-msgstr ""
+msgstr "ต่อท้ายไฟล์แผ่นชีตที่มีอยู่กับไฟล์ปัจจุบัน"
 
 #: pagelayout_editor/tools/pl_actions.cpp:82
 msgid "Show Design Inspector"
-msgstr ""
+msgstr "แสดงตัวตรวจสอบการออกแบบ"
 
 #: pagelayout_editor/tools/pl_actions.cpp:82
 msgid "Show the list of items in the drawing sheet"
-msgstr ""
+msgstr "แสดงรายการในแผ่นชีต"
 
 #: pagelayout_editor/tools/pl_actions.cpp:87
 msgid "Page Preview Settings..."
-msgstr ""
+msgstr "การตั้งค่าแสดงหน้าตัวอย่าง..."
 
 #: pagelayout_editor/tools/pl_actions.cpp:87
 msgid "Edit preview data for page size and title block"
-msgstr ""
+msgstr "แก้ไขข้อมูลตัวอย่างสำหรับขนาดหน้าและชื่อบล็อก"
 
 #: pagelayout_editor/tools/pl_actions.cpp:92
 msgid "Show title block in preview mode"
-msgstr ""
+msgstr "แสดงหัวเรื่องในโหมดแสดงตัวอย่าง"
 
 #: pagelayout_editor/tools/pl_actions.cpp:93
 msgid ""
 "Show title block in preview mode:\n"
 "text placeholders will be replaced with preview data."
 msgstr ""
+"แสดงบล็อคชื่อในโหมดแสดงตัวอย่าง:\n"
+"ตัวยึดข้อความจะถูกแทนที่ด้วยข้อมูลตัวอย่าง"
 
 #: pagelayout_editor/tools/pl_actions.cpp:99
 msgid "Show title block in edit mode"
-msgstr ""
+msgstr "แสดงหัวเรื่องในโหมดแก้ไข"
 
 #: pagelayout_editor/tools/pl_actions.cpp:100
 msgid ""
 "Show title block in edit mode:\n"
 "text placeholders are shown as ${keyword} tokens."
 msgstr ""
+"แสดงหัวเรื่องในโหมดแก้ไข:\n"
+"ตัวยึดข้อความจะแสดงเป็นโทเค็น ${keyword}"
 
 #: pagelayout_editor/tools/pl_edit_tool.cpp:474
 msgid "Error writing objects to clipboard"
-msgstr ""
+msgstr "เกิดข้อผิดพลาดในการเขียนวัตถุไปยังคลิปบอร์ด"
 
 #: pcb_calculator/attenuators.cpp:128
 #, c-format
 msgid "Attenuation more than %f dB"
-msgstr ""
+msgstr "การลดทอนมากกว่า %f ดีบี"
 
 #: pcb_calculator/attenuators/bridget_tee_formula.h:2
 msgid ""
@@ -18531,12 +18537,12 @@ msgstr ""
 
 #: pcb_calculator/datafile_read_write.cpp:76
 msgid "Data file error."
-msgstr ""
+msgstr "ไฟล์ข้อมูลผิดพลาด"
 
 #: pcb_calculator/dialogs/dialog_regulator_form.cpp:35
 #: pcb_calculator/regulators_funct.cpp:177
 msgid "Bad or missing parameters!"
-msgstr ""
+msgstr "พารามิเตอร์ไม่ถูกต้องหรือขาดหายไป!"
 
 #: pcb_calculator/dialogs/dialog_regulator_form_base.cpp:37
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:139
@@ -18545,15 +18551,15 @@ msgstr ""
 
 #: pcb_calculator/dialogs/dialog_regulator_form_base.cpp:44
 msgid "Volt"
-msgstr ""
+msgstr "โวลต์"
 
 #: pcb_calculator/dialogs/dialog_regulator_form_base.cpp:52
 msgid "Separate sense pin"
-msgstr ""
+msgstr "แยกขาเซ็นส์"
 
 #: pcb_calculator/dialogs/dialog_regulator_form_base.cpp:52
 msgid "3 terminals regulator"
-msgstr ""
+msgstr "เรกูเลเตอร์ 3 ขา"
 
 #: pcb_calculator/dialogs/dialog_regulator_form_base.cpp:61
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:155
@@ -18567,7 +18573,7 @@ msgstr ""
 
 #: pcb_calculator/dialogs/dialog_regulator_form_base.h:60
 msgid "Regulator Parameters"
-msgstr ""
+msgstr "พารามิเตอร์ของเร็กกูเลเตอร์"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:41
 msgid ""
@@ -18576,19 +18582,23 @@ msgid ""
 "- regulators which have a dedicated sense pin for the voltage regulation.\n"
 "- 3 terminal pins."
 msgstr ""
+"ประเภทของเร็กกูเลเตอร์\n"
+"มี 2 ประเภท:\n"
+"- เร็กกูเลเตอร์ที่มีขาเซ็นส์เฉพาะสำหรับการควบคุมแรงดันไฟฟ้า\n"
+"- 3 ขา"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:45
 msgid "Standard Type"
-msgstr ""
+msgstr "ชนิดมาตรฐาน"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:45
 msgid "3 Terminal Type"
-msgstr ""
+msgstr "ประเภท 3 ขั้ว"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:67
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:414
 msgid "Formula"
-msgstr ""
+msgstr "สูตร"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:97
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:352
@@ -18601,7 +18611,7 @@ msgstr ""
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:461
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:472
 msgid "kOhm"
-msgstr ""
+msgstr "กิโลโอห์ม"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:111
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:363
@@ -18617,92 +18627,94 @@ msgid ""
 "The internal reference voltage of the regulator.\n"
 "Should not be 0."
 msgstr ""
+"แรงดันอ้างอิงภายในของเร็กกูเลเตอร์\n"
+"ไม่ควรเป็น 0"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:157
 msgid "For 3 terminal regulators only, the  Adjust pin current."
-msgstr ""
+msgstr "สำหรับเรกูเลเตอร์ 3 ขาเท่านั้น ให้ปรับขากระแส"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:177
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:334
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:579
 msgid "Calculate"
-msgstr ""
+msgstr "คำนวณ"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:197
 msgid "Regulator"
-msgstr ""
+msgstr "เรกูเลเตอร์"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:204
 msgid "Regulators data file:"
-msgstr ""
+msgstr "แฟ้มข้อมูลเรกูเลเตอร์:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:206
 msgid "The name of the data file which stores known regulators parameters."
-msgstr ""
+msgstr "ชื่อของไฟล์ข้อมูลที่จัดเก็บพารามิเตอร์ของเรกูเลเตอร์"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:225
 msgid "Edit Regulator"
-msgstr ""
+msgstr "แก้ไขเรกูเลเตอร์"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:226
 msgid "Edit the current selected regulator."
-msgstr ""
+msgstr "แก้ไขเรกูเลเตอร์ที่เลือกปัจจุบัน"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:230
 msgid "Add Regulator"
-msgstr ""
+msgstr "เพิ่มเรกูเลเตอร์"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:231
 msgid "Enter a new item to the current list of available regulators"
-msgstr ""
+msgstr "ใส่รายการใหม่ ลงในรายการเรกูเลเตอร์ที่มีอยู่ในปัจจุบัน"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:235
 #: pcb_calculator/regulators_funct.cpp:226
 msgid "Remove Regulator"
-msgstr ""
+msgstr "ถอดเรกูเลเตอร์"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:236
 msgid "Remove an item from the current list of available regulators"
-msgstr ""
+msgstr "ลบรายการ ออกจากรายการเรกูเลเตอร์ที่มีอยู่"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:256
 msgid "Regulators"
-msgstr ""
+msgstr "เรกูเลเตอร์"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:265
 msgid "PI"
-msgstr ""
+msgstr "ไพ"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:265
 msgid "Tee"
-msgstr ""
+msgstr "ที"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:265
 msgid "Bridged tee"
-msgstr ""
+msgstr "สะพานเชื่อมที"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:265
 msgid "Resistive splitter"
-msgstr ""
+msgstr "ตัวแยกตัวต้านทาน"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:267
 msgid "Attenuators"
-msgstr ""
+msgstr "ตัวลดทอน"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:284
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1144
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1500
 #: pcbnew/footprint_wizard_frame.cpp:198
 msgid "Parameters"
-msgstr ""
+msgstr "พารามิเตอร์"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:292
 msgid "Attenuation:"
-msgstr ""
+msgstr "การลดทอน:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:299
 msgid "dB"
-msgstr ""
+msgstr "เดซิเบล"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:303
 msgid "Zin:"
@@ -18718,23 +18730,23 @@ msgstr ""
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:426
 msgid "RF Attenuators"
-msgstr ""
+msgstr "ตัวลดทอนสัญญาณ RF"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:435
 msgid "Inputs"
-msgstr ""
+msgstr "อินพุต"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:443
 msgid "Required resistance:"
-msgstr ""
+msgstr "ความต้านทานที่ต้องการ:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:454
 msgid "Exclude value 1:"
-msgstr ""
+msgstr "ไม่รวมค่า 1:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:465
 msgid "Exclude value 2:"
-msgstr ""
+msgstr "ไม่รวมค่า 2:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:485
 msgid "E1"
@@ -18754,100 +18766,100 @@ msgstr ""
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:505
 msgid "Solutions"
-msgstr ""
+msgstr "แก้ปัญหา"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:513
 msgid "Simple solution:"
-msgstr ""
+msgstr "วิธีแก้ปัญหาอย่างง่าย:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:533
 msgid "3R solution:"
-msgstr ""
+msgstr "แก้ปัญหา 3R:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:553
 msgid "4R solution:"
-msgstr ""
+msgstr "แก้ปัญหา 4R:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:613
 msgid "E-Series"
-msgstr ""
+msgstr "อี-ซีรีส์"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:621
 msgid "10% / 5%"
-msgstr ""
+msgstr "10% / 5%"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:621
 msgid "<= 2%"
-msgstr ""
+msgstr "<= 2%"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:623
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:655
 msgid "Tolerance"
-msgstr ""
+msgstr "ระยะผิดพลาด"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:635
 msgid "1st Band"
-msgstr ""
+msgstr "แถบที่ 1"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:639
 msgid "2nd Band"
-msgstr ""
+msgstr "แถบที่ 2"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:643
 msgid "3rd Band"
-msgstr ""
+msgstr "แถบที่ 3"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:647
 msgid "4th Band"
-msgstr ""
+msgstr "แถบที่ 4"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:651
 msgid "Multiplier"
-msgstr ""
+msgstr "ตัวคูณ"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:684
 msgid "Color Code"
-msgstr ""
+msgstr "รหัสสี"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:692
 msgid "Microstrip Line"
-msgstr ""
+msgstr "สายไมโครสทริป"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:692
 msgid "Coplanar wave guide"
-msgstr ""
+msgstr "แนวคลื่นโคพลานาร์"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:692
 msgid "Coplanar wave guide w/ ground plane"
-msgstr ""
+msgstr "แนวคลื่นโคพลานาร์ มี/กรานด์เพลน"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:692
 msgid "Rectangular Waveguide"
-msgstr ""
+msgstr "ท่อนำคลื่นสี่เหลี่ยม"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:692
 msgid "Coaxial Line"
-msgstr ""
+msgstr "สายโคแอกเชียล"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:692
 msgid "Coupled Microstrip Line"
-msgstr ""
+msgstr "สายไมโครสตริปคู่"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:692
 msgid "Stripline"
-msgstr ""
+msgstr "สตริปไลน์"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:692
 msgid "Twisted Pair"
-msgstr ""
+msgstr "สายคู่เกลียว"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:694
 msgid "Transmission Line Type"
-msgstr ""
+msgstr "ประเภทสายส่ง"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:711
 msgid "Substrate Parameters"
-msgstr ""
+msgstr "พารามิเตอร์ของซับสเตรท"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:719
 msgid "Er:"
@@ -18860,7 +18872,7 @@ msgstr ""
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1279
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:571
 msgid "..."
-msgstr ""
+msgstr "..."
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:738
 msgid "Tan delta:"
@@ -18873,7 +18885,7 @@ msgstr ""
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:759
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1247
 msgid "Specific resistance in ohms * meters"
-msgstr ""
+msgstr "ความต้านทานจำเพาะเป็นโอห์ม * เมตร"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:778
 msgid "H:"
@@ -18901,7 +18913,7 @@ msgstr ""
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:857
 msgid "Component Parameters"
-msgstr ""
+msgstr "พารามิเตอร์คอมโพเนนต์"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:895
 msgid "Zdiff = Zodd * 2"
@@ -18913,24 +18925,24 @@ msgstr ""
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:920
 msgid "Physical Parameters"
-msgstr ""
+msgstr "พารามิเตอร์ทางกายภาพ"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:988
 msgid "Analyze"
-msgstr ""
+msgstr "วิเคราะห์"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:991
 msgid "Synthesize"
-msgstr ""
+msgstr "สังเคราะห์"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1004
 msgid "Electrical Parameters"
-msgstr ""
+msgstr "พารามิเตอร์ทางไฟฟ้า"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1055
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1336
 msgid "Results"
-msgstr ""
+msgstr "ผลลัพธ์"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1135
 msgid "TransLine"
@@ -18938,35 +18950,35 @@ msgstr ""
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1152
 msgid "Finished hole diameter (D):"
-msgstr ""
+msgstr "เส้นผ่าศูนย์กลางรูเจาะเมื่อสำเร็จ (D):"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1166
 msgid "Plating thickness (T):"
-msgstr ""
+msgstr "ความหนาของการชุบ (T):"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1178
 msgid "Via length:"
-msgstr ""
+msgstr "ความยาวเวีย:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1180
 msgid "Via length is the board thickness for through hole vias"
-msgstr ""
+msgstr "ความยาวของเวีย คือความหนาของบอร์ดเจาะทะลุ"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1192
 msgid "Via pad diameter:"
-msgstr ""
+msgstr "เส้นผ่าศูนย์กลางแพ็ดของเวีย:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1194
 msgid "Diameter of pad surrounding via (annular ring)"
-msgstr ""
+msgstr "เส้นผ่าศูนย์กลางของแพ็ดรอบๆ( วงแหวน)"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1206
 msgid "Clearance hole diameter:"
-msgstr ""
+msgstr "ระยะห่างรูเจาะ:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1208
 msgid "Diameter of clearance hole in ground plane(s)"
-msgstr ""
+msgstr "เส้นผ่าศูนย์กลางของระยะห่างรูเจาะในกราวน์เพลน"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1220
 msgid "Z0:"
@@ -18974,50 +18986,50 @@ msgstr ""
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1222
 msgid "Characteristic impedance of conductor"
-msgstr ""
+msgstr "ความต้านทานลักษณะของตัวนํา"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1234
 msgid "Applied current:"
-msgstr ""
+msgstr "ป้อนกระแส:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1245
 msgid "Plating resistivity:"
-msgstr ""
+msgstr "ความต้านทานการชุบ:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1263
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1549
 msgid "ohm-meter"
-msgstr ""
+msgstr "โอห์มมิเตอร์"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1267
 msgid "Substrate relative permittivity:"
-msgstr ""
+msgstr "ค่าสัมพัทธ์เพอมิทิวิตี้ของซับสเตรท:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1269
 msgid "Relative dielectric constant (epsilon r)"
-msgstr ""
+msgstr "ค่าคงที่ไดอิเล็กตริกสัมพัทธ์ (เอ็บซิลอน อาร์)"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1288
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1519
 msgid "Temperature rise:"
-msgstr ""
+msgstr "อุณหภูมิสูงขึ้น:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1290
 msgid "Maximum acceptable rise in temperature"
-msgstr ""
+msgstr "อุณหภูมิที่เพิ่มขึ้นสูงสุดที่ยอมรับได้"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1297
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1526
 msgid "deg C"
-msgstr ""
+msgstr "องศา C"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1301
 msgid "Pulse rise time:"
-msgstr ""
+msgstr "เวลาเพิ่มขึ้นของพัลส์:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1303
 msgid "Pulse rise time to calculate reactance"
-msgstr ""
+msgstr "เวลาเพิ่มขึ้นของพัลส์ในการคำนวณค่ารีแอกแตนซ์"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1310
 msgid "ns"
@@ -19025,7 +19037,7 @@ msgstr ""
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1312
 msgid "nanoseconds"
-msgstr ""
+msgstr "นาโนวินาที"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1322
 msgid ""
@@ -19033,31 +19045,34 @@ msgid ""
 "Via pad diameter >= Clearance hole diameter.\n"
 "Some parameters cannot be calculated for a via inside a copper zone."
 msgstr ""
+"คำเตือน:\n"
+"เส้นผ่าศูนย์กลางเวีย >= ระยะห่างรูเจาะ\n"
+"ไม่สามารถคำนวณพารามิเตอร์สำหรับเวียบนเขตทองแดง"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1345
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1624
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1722
 msgid "Resistance:"
-msgstr ""
+msgstr "ความต้านทาน:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1353
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1463
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1632
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1730
 msgid "ohm"
-msgstr ""
+msgstr "โอห์ม"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1357
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1636
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1734
 msgid "Voltage drop:"
-msgstr ""
+msgstr "แรงดันตก:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1369
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1648
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1746
 msgid "Power loss:"
-msgstr ""
+msgstr "พลังงานสูญหาย:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1377
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1656
@@ -19067,27 +19082,27 @@ msgstr ""
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1381
 msgid "Thermal resistance:"
-msgstr ""
+msgstr "ความต้านทานความร้อน:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1383
 msgid "Using thermal conductivity value 401 Watts/(meter-Kelvin)"
-msgstr ""
+msgstr "ใช้ค่าการนำความร้อน 401 วัตต์/(เมตร-เคลวิน)"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1391
 msgid "deg C/W"
-msgstr ""
+msgstr "องศา C/W"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1395
 msgid "Estimated ampacity:"
-msgstr ""
+msgstr "ค่าแอมป์โดยประมาณ:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1397
 msgid "Based on temperature rise"
-msgstr ""
+msgstr "ขึ้นอยู่กับการเพิ่มขึ้นของอุณหภูมิ"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1409
 msgid "Capacitance:"
-msgstr ""
+msgstr "ค่าความจุ:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1417
 msgid "pF"
@@ -19095,15 +19110,15 @@ msgstr ""
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1419
 msgid "pico-Farad"
-msgstr ""
+msgstr "พิโค-ฟารัด"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1423
 msgid "Rise time degradation:"
-msgstr ""
+msgstr "การเสื่อมสภาพเวลาขาขึ้น:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1425
 msgid "Rise time degradation for given Z0 and calculated capacitance"
-msgstr ""
+msgstr "การเสื่อมสภาพเวลาขาขึ้น สำหรับค่า Z0 และความจุที่คำนวนได้"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1433
 msgid "ps"
@@ -19111,11 +19126,11 @@ msgstr ""
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1435
 msgid "picoseconds"
-msgstr ""
+msgstr "พิโควินาที"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1439
 msgid "Inductance:"
-msgstr ""
+msgstr "ความเหนี่ยวนำ:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1447
 msgid "nH"
@@ -19123,71 +19138,71 @@ msgstr ""
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1449
 msgid "nano-Henry"
-msgstr ""
+msgstr "นาโน-เฮนรี่"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1453
 msgid "Reactance:"
-msgstr ""
+msgstr "ค่ารีแอกซ์แตนซ์:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1455
 msgid "Inductive reactance for given rise time and calculated inductance"
-msgstr ""
+msgstr "ค่ารีแอกแตนซ์ สำหรับเวลาขาขึ้นที่กำหนด และการเหนี่ยวนำที่คำนวณได้"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1474
 msgid "Top view of via"
-msgstr ""
+msgstr "มุมมองด้านบนเวีย"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1508
 msgid "Current:"
-msgstr ""
+msgstr "กระแส:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1530
 msgid "Conductor length:"
-msgstr ""
+msgstr "ความยาวของตัวนำ:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1542
 msgid "Copper resistivity:"
-msgstr ""
+msgstr "ความต้านทานทองแดง:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1569
 msgid "External Layer Traces"
-msgstr ""
+msgstr "เส้นทองแดงบนเลเยอร์ภายนอก"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1577
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1675
 msgid "Trace width:"
-msgstr ""
+msgstr "ความกว้างเทรส:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1591
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1689
 msgid "Trace thickness:"
-msgstr ""
+msgstr "ความหนาเทรส:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1612
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1710
 msgid "Cross-section area:"
-msgstr ""
+msgstr "พื้นที่หน้าตัด:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1620
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1718
 msgid "mm ^ 2"
-msgstr ""
+msgstr "มม ^ 2"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1667
 msgid "Internal Layer Traces"
-msgstr ""
+msgstr "เส้นทองแดงเลเยอร์ภายใน"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1792
 msgid "Voltage > 500 V:"
-msgstr ""
+msgstr "แรงดันไฟฟ้า > 500 โวลต์:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1799
 msgid "Update Values"
-msgstr ""
+msgstr "ปรับปรุงค่า"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1807
 msgid "Note: Values are minimal values (from IPC 2221)"
-msgstr ""
+msgstr "หมายเหตุ: ค่านี้เป็นค่าที่น้อยที่สุด (จาก IPC 2221)"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1833
 msgid "B1"
@@ -19215,15 +19230,15 @@ msgstr ""
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1855
 msgid "0 .. 15 V"
-msgstr ""
+msgstr "0 .. 15V"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1856
 msgid "16 .. 30 V"
-msgstr ""
+msgstr "16 .. 30V"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1857
 msgid "31 .. 50 V"
-msgstr ""
+msgstr "31 .. 50V"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1858
 msgid "51 .. 100 V"
@@ -19235,23 +19250,23 @@ msgstr ""
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1860
 msgid "151 .. 170 V"
-msgstr ""
+msgstr "151 .. 170 โวลต์"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1861
 msgid "171 .. 250 V"
-msgstr ""
+msgstr "171 .. 250 โวลต์"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1862
 msgid "251 .. 300 V"
-msgstr ""
+msgstr "251 .. 300 โวลต์"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1863
 msgid "301 .. 500 V"
-msgstr ""
+msgstr "301 .. 500 โวลต์"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1864
 msgid " > 500 V"
-msgstr ""
+msgstr " > 500 โวลต์"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1873
 msgid ""
@@ -19268,55 +19283,55 @@ msgstr ""
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1884
 msgid "Electrical Spacing"
-msgstr ""
+msgstr "ระยะห่างทางไฟฟ้า"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1903
 msgid "Note: Values are minimal values"
-msgstr ""
+msgstr "หมายเหตุ: ค่านี้เป็นค่าที่น้อยที่สุด"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1928
 msgid "Class 1"
-msgstr ""
+msgstr "คลาส 1"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1929
 msgid "Class 2"
-msgstr ""
+msgstr "คลาส 2"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1930
 msgid "Class 3"
-msgstr ""
+msgstr "คลาส 3"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1931
 msgid "Class 4"
-msgstr ""
+msgstr "คลาส 4"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1932
 msgid "Class 5"
-msgstr ""
+msgstr "คลาส 5"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1933
 msgid "Class 6"
-msgstr ""
+msgstr "คลาส 6"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1944
 msgid "Lines width"
-msgstr ""
+msgstr "ความกว้างของเส้น"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1945
 msgid "Min clearance"
-msgstr ""
+msgstr "ระยะห่างน้อยที่สุด"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1946
 msgid "Via: (diam - drill)"
-msgstr ""
+msgstr "เวีย: (ศก.-รูเจาะ)"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1947
 msgid "Plated Pad: (diam - drill)"
-msgstr ""
+msgstr "แพ็ดเคลือบ: (ศก.-รูเจาะ)"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1948
 msgid "NP Pad: (diam - drill)"
-msgstr ""
+msgstr "แพ็ดไม่เคลือบ: (ศก.-รูเจาะ)"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1967
 msgid "Board Classes"
