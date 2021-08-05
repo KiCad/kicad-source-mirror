@@ -376,14 +376,14 @@ const wxPoint GetArcCenter( const VECTOR2I& aStart, const VECTOR2I& aEnd, double
         aAngle = 360 - aAngle;
     }
 
-    int chord = ( aStart - aEnd ).EuclideanNorm();
+    int chord = ( start - end ).EuclideanNorm();
     int r = ( chord / 2 ) / sin( aAngle * M_PI / 360.0 );
 
-    VECTOR2I vec = aEnd - aStart;
+    VECTOR2I vec = end - start;
     vec = vec.Resize( r );
     vec = vec.Rotate( ( 180.0 - aAngle ) * M_PI / 360.0 );
 
-    return (wxPoint) ( aStart + vec );
+    return (wxPoint) ( start + vec );
 }
 
 
