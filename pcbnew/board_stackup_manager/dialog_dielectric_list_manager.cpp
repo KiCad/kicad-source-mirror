@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2009-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2009-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -18,16 +18,12 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/**
- * @file dialog_dielectric_manager.h
- */
-
 #include "dialog_dielectric_list_manager.h"
 #include <wx/msgdlg.h>
 
 DIALOG_DIELECTRIC_MATERIAL::DIALOG_DIELECTRIC_MATERIAL( wxWindow* aParent,
-                                                        DIELECTRIC_SUBSTRATE_LIST& aMaterialList )
-        :DIALOG_DIELECTRIC_MATERIAL_BASE( aParent ),
+                                                        DIELECTRIC_SUBSTRATE_LIST& aMaterialList ) :
+        DIALOG_DIELECTRIC_MATERIAL_BASE( aParent ),
         m_materialList( aMaterialList )
 {
     initMaterialList();
@@ -76,14 +72,16 @@ bool DIALOG_DIELECTRIC_MATERIAL::TransferDataToWindow()
 DIELECTRIC_SUBSTRATE DIALOG_DIELECTRIC_MATERIAL::GetSelectedSubstrate()
 {
     DIELECTRIC_SUBSTRATE substrate;
+    double               tmp;
 
     // return the selected/created substrate. A empty substrate can be returned
-    double dummy;
     substrate.m_Name = m_tcMaterial->GetValue();
-    m_tcEpsilonR->GetValue().ToDouble( &dummy );
-    substrate.m_EpsilonR = dummy;
-    m_tcLossTg->GetValue().ToDouble( &dummy );
-    substrate.m_LossTangent = dummy;
+
+    m_tcEpsilonR->GetValue().ToDouble( &tmp );
+    substrate.m_EpsilonR = tmp;
+
+    m_tcLossTg->GetValue().ToDouble( &tmp );
+    substrate.m_LossTangent = tmp;
 
     return substrate;
 }
@@ -95,6 +93,8 @@ void DIALOG_DIELECTRIC_MATERIAL::initMaterialList()
     m_lcMaterials->AppendColumn( _( "Epsilon R" ) );
     m_lcMaterials->AppendColumn( _( "Loss Tg" ) );
 
+    m_lcMaterials->SetColumnWidth( 0, m_lcMaterials->GetColumnWidth( 1 ) * 3 / 2 );
+
     // Fills m_lcMaterials with available materials
     // The first item is expected a not specified material
     // Other names are proper nouns, and are not translated
@@ -102,12 +102,12 @@ void DIALOG_DIELECTRIC_MATERIAL::initMaterialList()
     {
         DIELECTRIC_SUBSTRATE* item = m_materialList.GetSubstrate( idx );
 
-        long tmp = m_lcMaterials->InsertItem( idx,
-            idx == 0 ? wxGetTranslation( item->m_Name ) : item->m_Name );
+        long tmp = m_lcMaterials->InsertItem( idx, idx == 0 ? wxGetTranslation( item->m_Name )
+                                                            : item->m_Name );
 
-        m_lcMaterials->SetItemData(tmp, idx);
-        m_lcMaterials->SetItem(tmp, 1, item->FormatEpsilonR() );
-        m_lcMaterials->SetItem(tmp, 2, item->FormatLossTangent() );
+        m_lcMaterials->SetItemData( tmp, idx );
+        m_lcMaterials->SetItem( tmp, 1, item->FormatEpsilonR() );
+        m_lcMaterials->SetItem( tmp, 2, item->FormatLossTangent() );
     }
 }
 
@@ -123,6 +123,7 @@ void DIALOG_DIELECTRIC_MATERIAL::onListItemSelected( wxListEvent& event )
         m_tcMaterial->SetValue( wxGetTranslation( m_materialList.GetSubstrate( 0 )->m_Name ) );
     else
         m_tcMaterial->SetValue( m_materialList.GetSubstrate( idx )->m_Name );
+
     m_tcEpsilonR->SetValue( m_materialList.GetSubstrate( idx )->FormatEpsilonR() );
     m_tcLossTg->SetValue( m_materialList.GetSubstrate( idx )->FormatLossTangent() );
 }

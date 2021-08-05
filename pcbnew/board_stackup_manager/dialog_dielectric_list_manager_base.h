@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.9.0 Nov  1 2020)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -35,7 +35,6 @@ class DIALOG_DIELECTRIC_MATERIAL_BASE : public DIALOG_SHIM
 	private:
 
 	protected:
-		wxStaticText* m_staticTextNewDielectric;
 		wxStaticText* m_staticTexMaterial;
 		wxStaticText* m_staticTextEpsilonR;
 		wxStaticText* m_staticTextLossTg;
@@ -55,7 +54,7 @@ class DIALOG_DIELECTRIC_MATERIAL_BASE : public DIALOG_SHIM
 
 	public:
 
-		DIALOG_DIELECTRIC_MATERIAL_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Dielectric Materials"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		DIALOG_DIELECTRIC_MATERIAL_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Dielectric Material Characteristics"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 		~DIALOG_DIELECTRIC_MATERIAL_BASE();
 
 };

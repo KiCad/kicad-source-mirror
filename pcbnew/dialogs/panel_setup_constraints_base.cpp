@@ -253,7 +253,7 @@ PANEL_SETUP_CONSTRAINTS_BASE::PANEL_SETUP_CONSTRAINTS_BASE( wxWindow* parent, wx
 	m_bitmapHoleClearance = new wxStaticBitmap( m_scrolledWindow, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
 	fgFeatureConstraints->Add( m_bitmapHoleClearance, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
-	m_HoleClearanceLabel = new wxStaticText( m_scrolledWindow, wxID_ANY, _("Copper hole clearance:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_HoleClearanceLabel = new wxStaticText( m_scrolledWindow, wxID_ANY, _("Copper to hole clearance:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_HoleClearanceLabel->Wrap( -1 );
 	fgFeatureConstraints->Add( m_HoleClearanceLabel, 0, wxTOP|wxBOTTOM|wxRIGHT|wxALIGN_CENTER_VERTICAL, 5 );
 
@@ -269,7 +269,7 @@ PANEL_SETUP_CONSTRAINTS_BASE::PANEL_SETUP_CONSTRAINTS_BASE( wxWindow* parent, wx
 	m_bitmapEdgeClearance = new wxStaticBitmap( m_scrolledWindow, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
 	fgFeatureConstraints->Add( m_bitmapEdgeClearance, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
-	m_EdgeClearanceLabel = new wxStaticText( m_scrolledWindow, wxID_ANY, _("Copper edge clearance:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_EdgeClearanceLabel = new wxStaticText( m_scrolledWindow, wxID_ANY, _("Copper to edge clearance:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_EdgeClearanceLabel->Wrap( -1 );
 	fgFeatureConstraints->Add( m_EdgeClearanceLabel, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 

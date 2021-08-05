@@ -20,6 +20,9 @@ PANEL_SETUP_MASK_AND_PASTE_BASE::PANEL_SETUP_MASK_AND_PASTE_BASE( wxWindow* pare
 	wxBoxSizer* bMessages;
 	bMessages = new wxBoxSizer( wxHORIZONTAL );
 
+
+	bMessages->Add( 4, 0, 0, wxEXPAND, 5 );
+
 	m_bitmapWarning = new wxStaticBitmap( this, wxID_ANY, wxArtProvider::GetBitmap( wxART_WARNING, wxART_OTHER ), wxDefaultPosition, wxDefaultSize, 0 );
 	bMessages->Add( m_bitmapWarning, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
@@ -30,26 +33,25 @@ PANEL_SETUP_MASK_AND_PASTE_BASE::PANEL_SETUP_MASK_AND_PASTE_BASE( wxWindow* pare
 	m_staticTextInfoMaskMinWidth->Wrap( -1 );
 	m_staticTextInfoMaskMinWidth->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_ITALIC, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
 
-	bSizer4->Add( m_staticTextInfoMaskMinWidth, 0, wxALL|wxEXPAND, 5 );
+	bSizer4->Add( m_staticTextInfoMaskMinWidth, 0, wxEXPAND, 1 );
 
 	m_staticTextInfoMaskMinWidth1 = new wxStaticText( this, wxID_ANY, _("If none is provided, setting the values to zero is suggested."), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextInfoMaskMinWidth1->Wrap( -1 );
 	m_staticTextInfoMaskMinWidth1->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_ITALIC, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
 
-	bSizer4->Add( m_staticTextInfoMaskMinWidth1, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
+	bSizer4->Add( m_staticTextInfoMaskMinWidth1, 0, wxEXPAND|wxTOP, 1 );
 
 
-	bMessages->Add( bSizer4, 1, wxEXPAND, 5 );
+	bMessages->Add( bSizer4, 1, wxEXPAND|wxLEFT, 5 );
 
 
-	bSizer3->Add( bMessages, 0, wxEXPAND|wxALL, 5 );
+	bSizer3->Add( bMessages, 0, wxEXPAND|wxTOP|wxBOTTOM, 10 );
 
 	m_staticline1 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
 	bSizer3->Add( m_staticline1, 0, wxEXPAND | wxALL, 5 );
 
 	wxFlexGridSizer* fgGridSolderMaskSizer;
 	fgGridSolderMaskSizer = new wxFlexGridSizer( 0, 3, 0, 0 );
-	fgGridSolderMaskSizer->AddGrowableCol( 1 );
 	fgGridSolderMaskSizer->SetFlexibleDirection( wxBOTH );
 	fgGridSolderMaskSizer->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 

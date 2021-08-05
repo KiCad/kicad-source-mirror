@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.9.0 Nov  1 2020)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -19,15 +19,11 @@ DIALOG_DIELECTRIC_MATERIAL_BASE::DIALOG_DIELECTRIC_MATERIAL_BASE( wxWindow* pare
 	wxBoxSizer* bSizerUpper;
 	bSizerUpper = new wxBoxSizer( wxVERTICAL );
 
-	m_staticTextNewDielectric = new wxStaticText( this, wxID_ANY, _("Dielectric material characteristics:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticTextNewDielectric->Wrap( -1 );
-	bSizerUpper->Add( m_staticTextNewDielectric, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
-
 	wxBoxSizer* bSizerNewItem;
 	bSizerNewItem = new wxBoxSizer( wxHORIZONTAL );
 
 	wxFlexGridSizer* fgSizerNewDielectric;
-	fgSizerNewDielectric = new wxFlexGridSizer( 2, 3, 0, 0 );
+	fgSizerNewDielectric = new wxFlexGridSizer( 2, 3, 0, 5 );
 	fgSizerNewDielectric->AddGrowableCol( 0 );
 	fgSizerNewDielectric->SetFlexibleDirection( wxBOTH );
 	fgSizerNewDielectric->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
@@ -45,6 +41,8 @@ DIALOG_DIELECTRIC_MATERIAL_BASE::DIALOG_DIELECTRIC_MATERIAL_BASE( wxWindow* pare
 	fgSizerNewDielectric->Add( m_staticTextLossTg, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 
 	m_tcMaterial = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_tcMaterial->SetMinSize( wxSize( 150,-1 ) );
+
 	fgSizerNewDielectric->Add( m_tcMaterial, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 	m_tcEpsilonR = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
@@ -59,7 +57,7 @@ DIALOG_DIELECTRIC_MATERIAL_BASE::DIALOG_DIELECTRIC_MATERIAL_BASE( wxWindow* pare
 
 	bSizerUpper->Add( bSizerNewItem, 0, wxEXPAND, 5 );
 
-	m_staticText = new wxStaticText( this, wxID_ANY, _("Available materials:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText = new wxStaticText( this, wxID_ANY, _("Common materials:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText->Wrap( -1 );
 	bSizerUpper->Add( m_staticText, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 
@@ -67,7 +65,7 @@ DIALOG_DIELECTRIC_MATERIAL_BASE::DIALOG_DIELECTRIC_MATERIAL_BASE( wxWindow* pare
 	bSizerUpper->Add( m_lcMaterials, 1, wxALL|wxEXPAND, 5 );
 
 
-	bSizerMain->Add( bSizerUpper, 1, wxEXPAND, 5 );
+	bSizerMain->Add( bSizerUpper, 1, wxEXPAND|wxRIGHT|wxLEFT, 10 );
 
 	m_staticline = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
 	bSizerMain->Add( m_staticline, 0, wxEXPAND | wxALL, 5 );
