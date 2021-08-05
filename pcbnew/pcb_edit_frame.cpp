@@ -25,7 +25,7 @@
 #include <kiway.h>
 #include <pgm_base.h>
 #include <pcb_edit_frame.h>
-#include <3d_viewer/eda_3d_viewer.h>
+#include <3d_viewer/eda_3d_viewer_frame.h>
 #include <fp_lib_table.h>
 #include <bitmaps.h>
 #include <confirm.h>

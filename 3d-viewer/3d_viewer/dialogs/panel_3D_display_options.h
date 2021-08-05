@@ -26,7 +26,7 @@
 #define PANEL_3D_DISPLAY_OPTIONS_H
 
 #include "panel_3D_display_options_base.h"
-#include <3d_viewer/eda_3d_viewer.h>
+#include <3d_viewer/eda_3d_viewer_frame.h>
 
 
 class PANEL_3D_DISPLAY_OPTIONS : public PANEL_3D_DISPLAY_OPTIONS_BASE

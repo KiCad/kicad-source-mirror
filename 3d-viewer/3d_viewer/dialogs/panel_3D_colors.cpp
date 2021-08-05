@@ -24,7 +24,7 @@
 #include "panel_3D_colors.h"
 #include <widgets/color_swatch.h>
 #include <3d_canvas/board_adapter.h>
-#include <3d_viewer/eda_3d_viewer.h>
+#include <3d_viewer/eda_3d_viewer_frame.h>
 #include <eda_3d_viewer_settings.h>
 #include <settings/settings_manager.h>
 #include <board_stackup_manager/stackup_predefined_prms.h>

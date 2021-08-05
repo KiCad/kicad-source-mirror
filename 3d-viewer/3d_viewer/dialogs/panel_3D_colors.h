@@ -25,7 +25,7 @@
 #define PANEL_3D_COLORS_H
 
 #include "panel_3D_colors_base.h"
-#include <3d_viewer/eda_3d_viewer.h>
+#include <3d_viewer/eda_3d_viewer_frame.h>
 
 class PANEL_3D_COLORS : public PANEL_3D_COLORS_BASE
 {

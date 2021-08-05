@@ -27,7 +27,7 @@
 #include <wx/wupdlock.h>
 
 #include <bitmaps.h>
-#include <eda_3d_viewer.h>
+#include <eda_3d_viewer_frame.h>
 #include <menus_helpers.h>
 #include <tool/action_toolbar.h>
 #include <tools/eda_3d_actions.h>

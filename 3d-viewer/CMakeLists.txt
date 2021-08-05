@@ -98,7 +98,7 @@ set(3D-VIEWER_SRCS
     3d_viewer/tools/eda_3d_actions.cpp
     3d_viewer/tools/eda_3d_conditions.cpp
     3d_viewer/tools/eda_3d_controller.cpp
-    3d_viewer/eda_3d_viewer.cpp
+    3d_viewer/eda_3d_viewer_frame.cpp
     3d_viewer/eda_3d_viewer_settings.cpp
     common_ogl/ogl_attr_list.cpp
     common_ogl/ogl_utils.cpp

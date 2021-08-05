@@ -39,7 +39,7 @@
 #include <wx/filedlg.h>
 
 #include <project.h>
-#include <3d_viewer/eda_3d_viewer.h>      // for KICAD6_3DMODEL_DIR
+#include <3d_viewer/eda_3d_viewer_frame.h>      // for KICAD6_3DMODEL_DIR
 #include <panel_fp_lib_table.h>
 #include <lib_id.h>
 #include <fp_lib_table.h>

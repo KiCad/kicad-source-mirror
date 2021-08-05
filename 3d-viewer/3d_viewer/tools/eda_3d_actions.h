@@ -76,10 +76,10 @@ public:
     static TOOL_ACTION materialCAD;
 
     static TOOL_ACTION rotate45axisZ;
-    static TOOL_ACTION attributesTHT;
-    static TOOL_ACTION attributesSMD;
-    static TOOL_ACTION attributesVirtual;
-    static TOOL_ACTION showBoundingBoxes;
+    static TOOL_ACTION showTHT;
+    static TOOL_ACTION showSMD;
+    static TOOL_ACTION showVirtual;
+    static TOOL_ACTION showBBoxes;
     static TOOL_ACTION toggleRealisticMode;
     static TOOL_ACTION toggleBoardBody;
     static TOOL_ACTION showAxis;

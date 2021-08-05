@@ -24,7 +24,7 @@
 #include <tool/actions.h>
 #include <tool/tool_manager.h>
 #include <eda_3d_canvas.h>
-#include <eda_3d_viewer.h>
+#include <eda_3d_viewer_frame.h>
 #include <id.h>
 #include <kiface_i.h>
 #include <tools/eda_3d_controller.h>
@@ -353,10 +353,10 @@ void EDA_3D_CONTROLLER::setTransitions()
 
     // Visibility
     Go( &EDA_3D_CONTROLLER::ToggleOrtho,        EDA_3D_ACTIONS::toggleOrtho.MakeEvent() );
-    Go( &EDA_3D_CONTROLLER::ToggleVisibility,   EDA_3D_ACTIONS::attributesTHT.MakeEvent() );
-    Go( &EDA_3D_CONTROLLER::ToggleVisibility,   EDA_3D_ACTIONS::attributesSMD.MakeEvent() );
-    Go( &EDA_3D_CONTROLLER::ToggleVisibility,   EDA_3D_ACTIONS::attributesVirtual.MakeEvent() );
-    Go( &EDA_3D_CONTROLLER::ToggleVisibility,   EDA_3D_ACTIONS::showBoundingBoxes.MakeEvent() );
+    Go( &EDA_3D_CONTROLLER::ToggleVisibility,   EDA_3D_ACTIONS::showTHT.MakeEvent() );
+    Go( &EDA_3D_CONTROLLER::ToggleVisibility,   EDA_3D_ACTIONS::showSMD.MakeEvent() );
+    Go( &EDA_3D_CONTROLLER::ToggleVisibility,   EDA_3D_ACTIONS::showVirtual.MakeEvent() );
+    Go( &EDA_3D_CONTROLLER::ToggleVisibility,   EDA_3D_ACTIONS::showBBoxes.MakeEvent() );
     Go( &EDA_3D_CONTROLLER::ToggleVisibility,   EDA_3D_ACTIONS::toggleRealisticMode.MakeEvent() );
     Go( &EDA_3D_CONTROLLER::ToggleVisibility,   EDA_3D_ACTIONS::toggleBoardBody.MakeEvent() );
     Go( &EDA_3D_CONTROLLER::ToggleVisibility,   EDA_3D_ACTIONS::showAxis.MakeEvent() );

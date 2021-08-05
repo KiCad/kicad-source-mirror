@@ -27,7 +27,7 @@
 #include <kiface_i.h>
 #include <pcb_draw_panel_gal.h>
 #include <pcb_edit_frame.h>
-#include <3d_viewer/eda_3d_viewer.h>
+#include <3d_viewer/eda_3d_viewer_frame.h>
 #include <widgets/msgpanel.h>
 #include <bitmaps.h>
 #include <grid_tricks.h>

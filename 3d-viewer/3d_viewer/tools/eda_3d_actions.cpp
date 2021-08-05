@@ -207,25 +207,25 @@ TOOL_ACTION EDA_3D_ACTIONS::rotate45axisZ( "3DViewer.Control.rotate45axisZ",
         WXK_TAB, "",
         "Rotate 45 degrees over Z axis" );
 
-TOOL_ACTION EDA_3D_ACTIONS::attributesTHT( "3DViewer.Control.attributesTHT",
+TOOL_ACTION EDA_3D_ACTIONS::showTHT( "3DViewer.Control.attributesTHT",
         AS_ACTIVE,
         'T', "",
         _( "Toggle Through Hole 3D models" ), _( "Toggle 3D models with 'Through hole' attribute" ),
         BITMAPS::INVALID_BITMAP, AF_NONE, (void*) FL_FP_ATTRIBUTES_NORMAL );
 
-TOOL_ACTION EDA_3D_ACTIONS::attributesSMD( "3DViewer.Control.attributesSMD",
+TOOL_ACTION EDA_3D_ACTIONS::showSMD( "3DViewer.Control.attributesSMD",
         AS_ACTIVE,
         'S', "",
         _( "Toggle SMD 3D models" ), _( "Toggle 3D models with 'Surface mount' attribute" ),
         BITMAPS::INVALID_BITMAP, AF_NONE, (void*) FL_FP_ATTRIBUTES_NORMAL_INSERT );
 
-TOOL_ACTION EDA_3D_ACTIONS::attributesVirtual( "3DViewer.Control.attributesVirtual",
+TOOL_ACTION EDA_3D_ACTIONS::showVirtual( "3DViewer.Control.attributesVirtual",
         AS_ACTIVE,
         'V', "",
         _( "Toggle Virtual 3D models" ), _( "Toggle 3D models with 'Virtual' attribute" ),
         BITMAPS::INVALID_BITMAP, AF_NONE, (void*) FL_FP_ATTRIBUTES_VIRTUAL );
 
-TOOL_ACTION EDA_3D_ACTIONS::showBoundingBoxes( "3DViewer.Control.showBoundingBoxes",
+TOOL_ACTION EDA_3D_ACTIONS::showBBoxes( "3DViewer.Control.showBoundingBoxes",
          AS_GLOBAL, 0, "",
          _( "Show Model Bounding Boxes" ), _( "Show Model Bounding Boxes" ),
          BITMAPS::ortho, AF_NONE, (void*) FL_RENDER_OPENGL_SHOW_MODEL_BBOX );

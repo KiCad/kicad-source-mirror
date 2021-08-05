@@ -30,7 +30,7 @@
 #include "pcb_picker_tool.h"
 #include "pcb_selection_tool.h"
 #include "board_reannotate_tool.h"
-#include <3d_viewer/eda_3d_viewer.h>
+#include <3d_viewer/eda_3d_viewer_frame.h>
 #include <bitmaps.h>
 #include <board_commit.h>
 #include <board.h>

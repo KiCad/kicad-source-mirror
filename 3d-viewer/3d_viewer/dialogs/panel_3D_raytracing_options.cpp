@@ -24,7 +24,7 @@
 
 #include "panel_3D_raytracing_options.h"
 #include <3d_canvas/board_adapter.h>
-#include <3d_viewer/eda_3d_viewer.h>
+#include <3d_viewer/eda_3d_viewer_frame.h>
 #include <3d_viewer/tools/eda_3d_controller.h>
 #include <bitmaps.h>
 #include <tool/tool_manager.h>

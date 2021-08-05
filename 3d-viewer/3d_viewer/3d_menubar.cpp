@@ -26,7 +26,7 @@
 
 #include <bitmaps.h>
 #include <tool/conditional_menu.h>
-#include <eda_3d_viewer.h>
+#include <eda_3d_viewer_frame.h>
 #include <menus_helpers.h>
 #include <3d_viewer_id.h>
 #include <3d_viewer/tools/eda_3d_actions.h>
@@ -118,14 +118,14 @@ void EDA_3D_VIEWER_FRAME::CreateMenuBar()
 
     prefsMenu->AppendSeparator();
 
-    prefsMenu->Add( EDA_3D_ACTIONS::attributesTHT, ACTION_MENU::CHECK );
-    prefsMenu->Add( EDA_3D_ACTIONS::attributesSMD, ACTION_MENU::CHECK );
-    prefsMenu->Add( EDA_3D_ACTIONS::attributesVirtual, ACTION_MENU::CHECK );
+    prefsMenu->Add( EDA_3D_ACTIONS::showTHT,     ACTION_MENU::CHECK );
+    prefsMenu->Add( EDA_3D_ACTIONS::showSMD,     ACTION_MENU::CHECK );
+    prefsMenu->Add( EDA_3D_ACTIONS::showVirtual, ACTION_MENU::CHECK );
 
     prefsMenu->AppendSeparator();
 
-    prefsMenu->Add( EDA_3D_ACTIONS::showAxis, ACTION_MENU::CHECK );
-    prefsMenu->Add( EDA_3D_ACTIONS::showBoundingBoxes, ACTION_MENU::CHECK );
+    prefsMenu->Add( EDA_3D_ACTIONS::showAxis,    ACTION_MENU::CHECK );
+    prefsMenu->Add( EDA_3D_ACTIONS::showBBoxes,  ACTION_MENU::CHECK );
 
     // Grid submenu
     ACTION_MENU* gridSubmenu = new ACTION_MENU( false, tool );

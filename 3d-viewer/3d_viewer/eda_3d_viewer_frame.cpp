@@ -29,7 +29,7 @@
 #include <wx/clipbrd.h>
 #include <wx/filedlg.h>
 #include <wx/treebook.h>
-#include "eda_3d_viewer.h"
+#include "eda_3d_viewer_frame.h"
 #include <eda_3d_viewer_settings.h>
 #include <3d_viewer_id.h>
 #include <3d_viewer/tools/eda_3d_actions.h>
@@ -194,25 +194,21 @@ void EDA_3D_VIEWER_FRAME::setupUIConditions()
 #define FlagCheck( x )     ACTION_CONDITIONS().Check( cond.Flag( x ) )
 #define GridSizeCheck( x ) ACTION_CONDITIONS().Check( cond.GridSize( x ) )
 
-    auto raytracingCondition = [this]( const SELECTION& aSel )
-    {
-        return m_boardAdapter.GetRenderEngine() != RENDER_ENGINE::OPENGL_LEGACY;
-    };
+    auto raytracingCondition =
+            [this]( const SELECTION& aSel )
+            {
+                return m_boardAdapter.GetRenderEngine() != RENDER_ENGINE::OPENGL_LEGACY;
+            };
 
     RegisterUIUpdateHandler( ID_RENDER_CURRENT_VIEW,
                              ACTION_CONDITIONS().Check( raytracingCondition ) );
 
-    mgr->SetConditions( EDA_3D_ACTIONS::attributesTHT,
-                        FlagCheck( FL_FP_ATTRIBUTES_NORMAL ) );
-    mgr->SetConditions( EDA_3D_ACTIONS::attributesSMD,
-                        FlagCheck( FL_FP_ATTRIBUTES_NORMAL_INSERT ) );
-    mgr->SetConditions( EDA_3D_ACTIONS::attributesVirtual,
-                        FlagCheck( FL_FP_ATTRIBUTES_VIRTUAL ) );
+    mgr->SetConditions( EDA_3D_ACTIONS::showTHT,     FlagCheck( FL_FP_ATTRIBUTES_NORMAL ) );
+    mgr->SetConditions( EDA_3D_ACTIONS::showSMD,     FlagCheck( FL_FP_ATTRIBUTES_NORMAL_INSERT ) );
+    mgr->SetConditions( EDA_3D_ACTIONS::showVirtual, FlagCheck( FL_FP_ATTRIBUTES_VIRTUAL ) );
 
-    mgr->SetConditions( EDA_3D_ACTIONS::showBoundingBoxes,
-                        FlagCheck( FL_RENDER_OPENGL_SHOW_MODEL_BBOX ) );
-    mgr->SetConditions( EDA_3D_ACTIONS::showAxis,
-                        FlagCheck( FL_AXIS ) );
+    mgr->SetConditions( EDA_3D_ACTIONS::showBBoxes, FlagCheck( FL_RENDER_OPENGL_SHOW_MODEL_BBOX ) );
+    mgr->SetConditions( EDA_3D_ACTIONS::showAxis,   FlagCheck( FL_AXIS ) );
 
     mgr->SetConditions( EDA_3D_ACTIONS::noGrid,        GridSizeCheck( GRID3D_TYPE::NONE ) );
     mgr->SetConditions( EDA_3D_ACTIONS::show10mmGrid,  GridSizeCheck( GRID3D_TYPE::GRID_10MM ) );
@@ -791,7 +787,6 @@ void EDA_3D_VIEWER_FRAME::takeScreenshot( wxCommandEvent& event )
 
         screenshotImage.Destroy();
     }
-
 }
 
 

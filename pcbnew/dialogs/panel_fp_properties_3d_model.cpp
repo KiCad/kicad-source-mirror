@@ -27,7 +27,7 @@
 #include <panel_fp_properties_3d_model.h>
 
 #include <confirm.h>
-#include <3d_viewer/eda_3d_viewer.h>
+#include <3d_viewer/eda_3d_viewer_frame.h>
 #include <board_design_settings.h>
 #include <bitmaps.h>
 #include <widgets/grid_icon_text_helpers.h>
