@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
-"PO-Revision-Date: 2021-08-04 22:43+0000\n"
+"PO-Revision-Date: 2021-08-06 21:14+0000\n"
 "Last-Translator: VicSanRoPe <vicsanrope@protonmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/kicad/"
 "master-source/es/>\n"
@@ -6139,7 +6139,7 @@ msgstr "Editar las listas de librerías de símbolos globales y de proyecto"
 
 #: common/tool/actions.cpp:607
 msgid "Manage Footprint Libraries..."
-msgstr "Gestionar bibliotecas de huellas..."
+msgstr "Administrar librerías de huellas..."
 
 #: common/tool/actions.cpp:608
 msgid "Edit the global and project footprint library lists"
@@ -27139,28 +27139,24 @@ msgid "Open Plugin Directory"
 msgstr "Abrir carpeta de plugins"
 
 #: pcbnew/dialogs/panel_pcbnew_action_plugins_base.cpp:80
-#, fuzzy
 msgid "Reload Plugins"
-msgstr "Eliminar complemento"
+msgstr "Recargar complementos"
 
 #: pcbnew/dialogs/panel_pcbnew_action_plugins_base.cpp:85
-#, fuzzy
 msgid "Show Plugin Errors"
-msgstr "Propiedades de complemento"
+msgstr "Buscar errores de complementos"
 
 #: pcbnew/dialogs/panel_pcbnew_display_origin_base.cpp:23
 msgid "Page origin"
 msgstr "Origen de la página"
 
 #: pcbnew/dialogs/panel_pcbnew_display_origin_base.cpp:25
-#, fuzzy
 msgid "Display Origin"
-msgstr "Origen de coordenadas de taladrado:"
+msgstr "Mostrar origen"
 
 #: pcbnew/dialogs/panel_pcbnew_display_origin_base.cpp:27
-#, fuzzy
 msgid "Select which origin is used for X,Y coordinate display."
-msgstr "Seleccionar las unidades a mostrar"
+msgstr "Seleccionar que origen se usa para mostrar coordenadas X, Y."
 
 #: pcbnew/dialogs/panel_pcbnew_display_origin_base.cpp:31
 msgid "Increases right"
@@ -27176,7 +27172,7 @@ msgstr "Eje X"
 
 #: pcbnew/dialogs/panel_pcbnew_display_origin_base.cpp:35
 msgid "Select which the direction on the screen in which the X axis increases."
-msgstr ""
+msgstr "Seleccionar en que dirección de la pantalla aumenta el eje X."
 
 #: pcbnew/dialogs/panel_pcbnew_display_origin_base.cpp:39
 msgid "Increases up"
@@ -27192,12 +27188,11 @@ msgstr "Eje Y"
 
 #: pcbnew/dialogs/panel_pcbnew_display_origin_base.cpp:43
 msgid "Select which the direction on the screen in which the Y axis increases."
-msgstr ""
+msgstr "Seleccionar en que dirección de la pantalla aumenta el eje Y."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:25
-#, fuzzy
 msgid "Allowed features"
-msgstr "Teclas permitidas:\n"
+msgstr "Características permitidas"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:37
 msgid "Allow blind/buried vias"
@@ -27209,12 +27204,11 @@ msgstr "Permitir microvías (uVías)"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:55
 msgid "Arc/circle approximated by segments"
-msgstr ""
+msgstr "Arco/círculo aproximado con segmentos"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:68
-#, fuzzy
 msgid "Max allowed deviation:"
-msgstr "Altura máxima:"
+msgstr "Desviación máxima permitida:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:70
 msgid ""
@@ -27222,6 +27216,9 @@ msgid ""
 "approximate it.\n"
 "The error max defines the number of segments of this polygon."
 msgstr ""
+"Esta es la distancia máxima entre un círculo y la forma de polígono que lo "
+"aproxima.\n"
+"El error máximo define el número máximo de segmentos del polígono."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:75
 msgid ""
@@ -27229,19 +27226,22 @@ msgid ""
 "to approximate it.  Smaller values produce smoother graphics at the expense "
 "of performance."
 msgstr ""
+"La desviación máxima entre un arco verdadero o círculo y los segmentos usado "
+"para aproximarlo. Valores más pequeños producen gráficos más suaves a costa "
+"del rendimiento."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:86
 #, c-format
 msgid "Note: zone filling can be slow when < %s."
-msgstr ""
+msgstr "Nota: el relleno de zonas puede ser lento cuando < %s."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:98
 msgid "Zone fill strategy"
-msgstr ""
+msgstr "Estrategia de relleno de zonas"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:111
 msgid "Mimic legacy behavior"
-msgstr ""
+msgstr "Imitar comportamiento de legado"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:112
 msgid ""
@@ -27254,26 +27254,27 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:116
 msgid "Smoothed polygons (best performance)"
-msgstr ""
+msgstr "Polígonos suavizados (mejor rendimiento)"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:118
 msgid ""
 "Better performance, exact export fidelity, and more complete filling near "
 "higher-priority zones."
 msgstr ""
+"Mejor rendimiento, fidelidad de exportación exacta, y relleno más completo "
+"al lado de zonas de mayor prioridad."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:134
 msgid "Allow fillets outside zone outline"
-msgstr ""
+msgstr "Permitir redondeos por encima del perímetro de la zona"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:149
-#, fuzzy
 msgid "Length tuning"
-msgstr "Ajuste de longitud de pista"
+msgstr "Ajuste de longitud"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:153
 msgid "Include stackup height in track length calculations"
-msgstr ""
+msgstr "Incluir la altura del apilado en los cálculos de largo de pista"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:154
 msgid ""
@@ -27281,11 +27282,13 @@ msgid ""
 "length calculations for tracks with vias.  When disabled, via stackup height "
 "is ignored."
 msgstr ""
+"Cuando está habilitado, la distancia entre capas de cobre se incluirá en los "
+"cálculos de longitud para pistas con vías. Cuando está deshabilitado, la "
+"altura del apilado para vías se ignora."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:191
-#, fuzzy
 msgid "Minimum clearance:"
-msgstr "Margen min"
+msgstr "Margen mínimo:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:196
 msgid ""
@@ -27293,27 +27296,36 @@ msgid ""
 "net.  If set, this is an absolute minimum which cannot be reduced by "
 "netclasses, custom rules, or other settings."
 msgstr ""
+"El margen mínimo entre dos elementos de cobre que no pertenecen a la misma "
+"red. Si está habilitado, este es un mínimo absoluto que no puede ser "
+"reducido por las clases de red, reglas personalizadas, u otras "
+"configuraciones."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:207
 msgid "Minimum track width:"
-msgstr "Mínimo ancho de pista:"
+msgstr "Ancho mínimo de pista:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:212
 msgid ""
 "The minimum track width.  If set, this is an absolute minimum and cannot be "
 "reduced by netclasses, custom rules, or other settings."
 msgstr ""
+"El ancho mínimo de pista. Si está habilitado, este es un mínimo absoluto que "
+"no puede ser reducido por las clases de red, reglas personalizadas, u otras "
+"configuraciones."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:224
-#, fuzzy
 msgid "Minimum annular width:"
-msgstr "Ancho mínimo:"
+msgstr "Ancho mínimo de anular:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:229
 msgid ""
 "The minimum annular ring width.  If set, this is an absolute minimum and "
 "cannot be reduced by netclasses, custom rules, or other settings."
 msgstr ""
+"El ancho mínimo del anillo anular. Si está habilitado, este es un mínimo "
+"absoluto que no puede ser reducido por las clases de red, reglas "
+"personalizadas, u otras configuraciones."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:240
 msgid "Minimum via diameter:"
@@ -27324,6 +27336,9 @@ msgid ""
 "The minimum via diameter.  If set, this is an absolute minimum and cannot be "
 "reduced by netclasses, custom rules, or other settings."
 msgstr ""
+"El diámetro mínimo de vía. Si está habilitado, este es un mínimo absoluto "
+"que no puede ser reducido por las clases de red, reglas personalizadas, u "
+"otras configuraciones."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:256
 msgid "Copper hole clearance:"
@@ -27335,11 +27350,13 @@ msgid ""
 "set, this is an absolute minimum and cannot be reduced by custom rules or "
 "other settings."
 msgstr ""
+"El margen mínimo entre un orificio y un elemento de cobre no asociado. Si "
+"está habilitado, este es un mínimo absoluto que no puede ser reducido por "
+"reglas personalizadas u otras configuraciones."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:272
-#, fuzzy
 msgid "Copper edge clearance:"
-msgstr "Margen de la pasta de soldadura:"
+msgstr "Margen de borde de cobre:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:277
 msgid ""
@@ -27347,27 +27364,30 @@ msgid ""
 "this is an absolute minimum and cannot be reduced by custom rules or other "
 "settings."
 msgstr ""
+"El margen mínimo entre de el borde de la placa y cualquier elemento de "
+"cobre. Si está habilitado, este es un mínimo absoluto que no puede ser "
+"reducido por reglas personalizadas u otras configuraciones."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:297
-#, fuzzy
 msgid "Holes"
-msgstr "Archivos de taladros"
+msgstr "Orificios"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:313
-#, fuzzy
 msgid "Minimum through hole:"
-msgstr "Valores mínimos permitidos:"
+msgstr "Orificio pasante mínimo:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:318
 msgid ""
 "The minimum through-hole size.  If set, this is an absolute minimum and "
 "cannot be reduced by netclasses, custom rules or other settings."
 msgstr ""
+"El tamaño mínimo de orificio pasante. Si está habilitado, este es un mínimo "
+"absoluto que no puede ser reducido por las clases de red, reglas "
+"personalizadas, u otras configuraciones."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:329
-#, fuzzy
 msgid "Hole to hole clearance:"
-msgstr "Margen de la pasta de soldadura:"
+msgstr "Margen de orificio a orificio:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:334
 msgid ""
@@ -27375,42 +27395,47 @@ msgid ""
 "absolute minimum and cannot be reduced by custom rules or other settings. "
 "(Note: does not apply to milled holes.)"
 msgstr ""
+"El margen mínimo entre dos orificios taladrados. Si está habilitado, este es "
+"un mínimo absoluto que no puede ser reducido por reglas personalizadas, u "
+"otras configuraciones. (Nota: no aplica a agujeros fresados.)"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:354
-#, fuzzy
 msgid "uVias"
-msgstr "Vías"
+msgstr "uVías"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:370
 msgid "Minimum uVia diameter:"
-msgstr "Mínimo diámetro de uVía:"
+msgstr "Diámetro mínimo de uVía:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:375
 msgid ""
 "The minimum diameter for micro-vias.  If set, this is an absolute minimum "
 "and cannot be reduced by netclasses, custom rules, or other settings."
 msgstr ""
+"El diámetro mínimo para micro-vías. Si está habilitado, este es un mínimo "
+"absoluto que no puede ser reducido por las clases de red, reglas "
+"personalizadas, u otras configuraciones."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:386
-#, fuzzy
 msgid "Minimum uVia hole:"
-msgstr "Tamaño mínimo de uVía:"
+msgstr "Orificio mínimo de uVía:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:391
 msgid ""
 "The minimum micro-via hole size.  If set, this is an absolute minimum and "
 "cannot be reduced by netclasses, custom rules, or other settings."
 msgstr ""
+"El tamaño mínimo de orificio de micro-vía. Si está habilitado, este es un "
+"mínimo absoluto que no puede ser reducido por las clases de red, reglas "
+"personalizadas, u otras configuraciones."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:411
-#, fuzzy
 msgid "Silkscreen"
 msgstr "Serigrafía"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:427
-#, fuzzy
 msgid "Minimum item clearance:"
-msgstr "Margen min"
+msgstr "Margen mínimo de elemento:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:432
 msgid ""
@@ -27418,10 +27443,14 @@ msgid ""
 "this can improve legibility.  (Note: does not apply to multiple shapes "
 "within a single footprint.)"
 msgstr ""
+"Margen mínimo entre dos elementos en la misma capa de serigrafía. Si está "
+"habilitado, puede mejorar la legibilidad. (Nota: no aplica a formas "
+"múltiples dentro de la misma huella.)"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:421
 msgid "Use the Physical Stackup page to change the number of copper layers."
 msgstr ""
+"Usar la página de apilado físico para cambiar el número de capas de cobre."
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:434
 #, c-format
@@ -27442,19 +27471,18 @@ msgstr ""
 "¿Desea continuar?"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:477
-#, fuzzy
 msgid ""
 "Items have been found on removed layers. This operation will delete all "
 "items from removed layers and cannot be undone.\n"
 "Do you wish to continue?"
 msgstr ""
 "Se han encontrado elementos en capas eliminadas. Esta operación eliminará "
-"todos los elementos de las capas eliminadas y no podrá revertirse. ¿Desea "
-"continuar?"
+"todos los elementos de las capas eliminadas y no podrá revertirse.\n"
+"¿Desea continuar?"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:653
 msgid "Layer must have a name."
-msgstr ""
+msgstr "La capa debe tener un nombre."
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:659
 #, c-format
@@ -27462,14 +27490,13 @@ msgid "%s are forbidden in layer names."
 msgstr "%s están prohibidos en nombres de capas."
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:666
-#, fuzzy
 msgid "Layer name \"signal\" is reserved."
-msgstr "'señal' es un nombre de capa reservado."
+msgstr "El nombre de capa \"señal\" esta reservado."
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:674
-#, fuzzy, c-format
+#, c-format
 msgid "Layer name '%s' already in use."
-msgstr "El alias o nombre de componente \"%s\" está en uso."
+msgstr "El nombre de capa '%s' ya está en uso."
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:774
 #, c-format
@@ -27479,33 +27506,35 @@ msgid ""
 "\n"
 "Continue and delete the extra inner copper layers from the current board?"
 msgstr ""
+"La configuración importada tiene menos capas de cobre que la placa actual ("
+"%i en vez de %i).\n"
+"\n"
+"¿Continuar y eliminar las capas internas de cobre internas de la placa "
+"actual?"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:781
 msgid "Inner Layers To Be Deleted"
-msgstr ""
+msgstr "Capas internas a eliminarse"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:816
 msgid "All user-defined layers have already been added."
-msgstr ""
+msgstr "Todas las capas definidas por el usuario ya han sido añadidas."
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:820
-#, fuzzy
 msgid "Add User-defined Layer"
-msgstr "Cuadrícula personalizada:"
+msgstr "Añadir capa definida por el usuario"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:26
-#, fuzzy
 msgid "Add User Defined Layer..."
-msgstr "Cuadrícula personalizada:"
+msgstr "Añadir capa definida por el usuario..."
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:44
 msgid "If you want a courtyard layer for the front side of the board"
 msgstr "Si desea una capa de patios para la parte frontal de la placa"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:48
-#, fuzzy
 msgid "CrtYd_Front"
-msgstr "CrtYd_Front_later"
+msgstr "CrtYd_Front"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:53
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:643
@@ -27517,9 +27546,8 @@ msgid "If you want a fabrication layer for the front side of the board"
 msgstr "Si desea una capa de fabricación para la parte frontal de la placa"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:64
-#, fuzzy
 msgid "Fab_Front"
-msgstr "Fab_Front_later"
+msgstr "Fab_Front"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:67
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:631
@@ -27531,9 +27559,8 @@ msgid "If you want an adhesive template for the front side of the board"
 msgstr "Si desea una capa de adhesivo para la parte frontal de la placa"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:76
-#, fuzzy
 msgid "Adhes_Front"
-msgstr "Adhes_Front_later"
+msgstr "Adhes_Front"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:79
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:91
@@ -27552,18 +27579,16 @@ msgstr ""
 "Si desea una capa de pasta de soldadura para la parte frontal de la placa"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:88
-#, fuzzy
 msgid "SoldP_Front"
-msgstr "SoldP_Front_later"
+msgstr "SoldP_Front"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:96
 msgid "If you want a silk screen layer for the front side of the board"
 msgstr "Si desea una capa de serigrafía para la parte frontal de la placa"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:100
-#, fuzzy
 msgid "SilkS_Front"
-msgstr "SilkS_Front_later"
+msgstr "SilkS_Front"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:108
 msgid "If you want a solder mask layer for the front of the board"
@@ -27571,18 +27596,16 @@ msgstr ""
 "Si desea una capa de máscara de soldadura para la parte frontal de la placa"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:112
-#, fuzzy
 msgid "Mask_Front"
-msgstr "Mask_Front_later"
+msgstr "Mask_Front"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:120
 msgid "If you want a front copper layer"
 msgstr "Si desea una capa de cobre para la parte frontal de la placa"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:124
-#, fuzzy
 msgid "Front_layer"
-msgstr "Front_later"
+msgstr "Front_layer"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:125
 msgid "Layer name of front (top) copper layer"
@@ -27655,9 +27678,8 @@ msgstr "señal"
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:535
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:549
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:567
-#, fuzzy
 msgid "power plane"
-msgstr "Power In"
+msgstr "plano de potencia"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:129
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:143
@@ -27761,13 +27783,13 @@ msgstr "puente"
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:539
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:553
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:571
-#, fuzzy
 msgid ""
 "Copper layer type for Freerouter and other external routers.\n"
 "Power plane layers are removed from Freerouter's layer menus."
 msgstr ""
-"Tipo de capa de cobre para Freerouter. Las capas de alimentación se eliminan "
-"del menú de capas de Freerouter."
+"Tipo de capa de cobre para Freerouter y otros enrutadores externos.\n"
+"Las capas de plano de alimentación se eliminan del menú de capas de "
+"Freerouter."
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:140
 msgid "In1"
@@ -27903,18 +27925,16 @@ msgstr ""
 "Si desea una capa de máscara de soldadura para la parte trasera de la placa"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:580
-#, fuzzy
 msgid "SoldM_Back"
-msgstr "SoldP_Back_later"
+msgstr "SoldM_Back"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:588
 msgid "If you want a silk screen layer for the back side of the board"
 msgstr "Si desea una capa de serigrafía para la parte trasera de la placa"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:592
-#, fuzzy
 msgid "SilkS_Back"
-msgstr "SilkS_Back_later"
+msgstr "SilkS_Back"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:600
 msgid "If you want a solder paste layer for the back side of the board"
@@ -27922,45 +27942,40 @@ msgstr ""
 "Si desea una capa de pasta de soldadura para la parte trasera de la placa"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:604
-#, fuzzy
 msgid "SoldP_Back"
-msgstr "SoldP_Back_later"
+msgstr "SoldP_Back"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:612
 msgid "If you want an adhesive layer for the back side of the board"
 msgstr "Si desea una capa de adhesivo para la parte trasera de la placa"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:616
-#, fuzzy
 msgid "Adhes_Back"
-msgstr "Adhes_Back_later"
+msgstr "Adhes_Back"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:624
 msgid "If you want a fabrication layer for the back side of the board"
 msgstr "Si desea una capa de fabricación para la parte trasera de la placa"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:628
-#, fuzzy
 msgid "Fab_Back"
-msgstr "Fab_Back_later"
+msgstr "Fab_Back"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:636
 msgid "If you want a courtyard layer for the back side of the board"
 msgstr "Si desea una capa de patios para la parte trasera de la placa"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:640
-#, fuzzy
 msgid "CrtYd_Back"
-msgstr "CrtYd_Back_later"
+msgstr "CrtYd_Back"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:648
 msgid "If you want a board perimeter layer"
 msgstr "Si desea una capa de perímetro de la placa"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:652
-#, fuzzy
 msgid "Pcb_Edges"
-msgstr "Añadir contorno"
+msgstr "Pcb_Edges"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:655
 msgid "Board contour"
@@ -27968,12 +27983,11 @@ msgstr "Contorno de placa"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:665
 msgid "Edge_Cuts setback"
-msgstr "Edge_Cuts setback"
+msgstr "Edge_Cuts espaciado"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:672
-#, fuzzy
 msgid "Eco1"
-msgstr "Eco1     "
+msgstr "Eco1"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:675
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:685
@@ -27983,18 +27997,16 @@ msgid "Auxiliary"
 msgstr "Auxiliar"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:682
-#, fuzzy
 msgid "Eco2"
-msgstr "Eco2     "
+msgstr "Eco2"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:690
 msgid "If you want a separate layer for comments or notes"
 msgstr "Si desea una capa separada para comentarios o notas"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:694
-#, fuzzy
 msgid "Comments"
-msgstr "Comentarios "
+msgstr "Comentarios"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:702
 msgid "If you want a layer for documentation drawings"
@@ -28018,9 +28030,8 @@ msgstr "Usuario"
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:779
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:789
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:799
-#, fuzzy
 msgid "User defined layer"
-msgstr "Agujeros definidos"
+msgstr "Capa definida por el usuario"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:726
 #, fuzzy
@@ -28067,133 +28078,121 @@ msgid ""
 "Use your board house's recommendation for solder mask clearance and minimum "
 "bridge width."
 msgstr ""
+"Use la recomendación de su fabricante para el margen de la máscara de "
+"soldadura y ancho mínimo de puente."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:35
 msgid "If none is provided, setting the values to zero is suggested."
-msgstr ""
+msgstr "Si no se provee ninguno, se recomienda fijar los valores a cero."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:58
-#, fuzzy
 msgid ""
 "Global clearance between pads and the solder mask.\n"
 "This value can be superseded by local values for a footprint or a pad."
 msgstr ""
-"Este es el margen global entre los pads y la máscara de soldadura.\n"
+"Margen global entre los pads y la máscara de soldadura.\n"
 "Este valor puede ser reemplazado por valores locales para una huella o pad."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:63
-#, fuzzy
 msgid ""
 "Positive clearance means area bigger than the pad (usual for solder mask "
 "clearance)."
 msgstr ""
 "Un margen positivo indica un área mayor que el pad (habitual para el margen "
-"de la máscara)."
+"de la máscara de soldadura)."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:71
-#, fuzzy
 msgid "Solder mask minimum bridge width:"
-msgstr "Ancho min máscara de soldadura:"
+msgstr "Ancho mínimo de puente de máscara de soldadura:"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:73
-#, fuzzy
 msgid ""
 "Min. dist between 2 pad areas.\n"
 "Two pad areas nearer than this value will be merged during plotting.\n"
 "This parameter is only used to plot solder mask layers.\n"
 "Leave at 0 unless you know what you are doing."
 msgstr ""
-"Distancia mínima entre dos zonas de pad.\n"
-"Dos zonas de pad más cercanas que este valor se unirán en una sola durante "
-"el trazado.\n"
-"Este parámetro se utiliza únicamente para trazar las capas de máscara de "
-"soldadura."
+"Distancia mínima entre dos áreas de pad.\n"
+"Dos áreas de pad más cercanas que este valor se unirán durante el trazado.\n"
+"Este parámetro solo se usa para trazar las capas de máscara de soldadura.\n"
+"Déjelo a 0 amenos que sepa lo que hace."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:78
-#, fuzzy
 msgid ""
 "Minimum distance between openings in the solder mask.  Pad openings closer "
 "than this distance will be plotted as a single opening."
 msgstr ""
-"Distancia mínima entre dos zonas de pads.\n"
-"Durante el trazado dos zonas de pads más cercanas de esta cantidad se "
-"unificarán"
+"Distancia mínima entre aberturas en la máscara de soldadura. Aberturas de "
+"pad más cercanas que esta distancia será trazadas como una sola apertura."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:97
-#, fuzzy
 msgid ""
 "Global clearance between pads and the solder paste.\n"
 "This value can be superseded by local values for a footprint or a pad.\n"
 "Final clearance value is the sum of this value and the clearance value ratio."
 msgstr ""
-"Este es el valor global del margen entre los pads y la pasta de soldadura\n"
-"Este valor puede ser sustituido por los valores locales de una huella o un "
+"Margen global entre los pads y la pasta de soldadura.\n"
+"Este valor puede ser remplazado por los valores locales de una huella o un "
 "pad.\n"
-"El valor final del margen es la suma de este valor y la proporción de margen"
+"El valor final del margen es la suma de este valor y la proporción de margen."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:102
-#, fuzzy
 msgid ""
 "Negative clearance means area smaller than the pad (usual for solder paste "
 "clearance)."
 msgstr ""
-"Un margen negativo indica un área menor que el pad (lo normal para el margen "
-"de la pasta)."
+"Un margen negativo indica un área menor que el pad (habitual para el margen "
+"de la pasta de soldadura)."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:112
-#, fuzzy
 msgid ""
 "Global clearance ratio in percent between pads and the solder paste.\n"
 "A value of 10 means the clearance value is 10 percent of the pad size.\n"
 "This value can be superseded by local values for a footprint or a pad.\n"
 "Final clearance value is the sum of this value and the clearance value."
 msgstr ""
-"Este es el valor global de la proporción de margen en tanto por ciento entre "
-"pads y la pasta de soldadura\n"
-"Un valor de 10 significa que el margen es un 10% del tamaño del pad\n"
-"Este valor puede ser sustituido por los valores locales de una huella o un "
-"pad.\n"
-"El valor final del margen es la suma de este valor y el valor del margen"
+"Proporción de margen en porcentaje entre pads y la pasta de soldadura.\n"
+"Un valor de 10 significa que el margen es un 10% del tamaño del pad.\n"
+"Este valor puede ser remplazado por los valores locales de una huella o pad."
+"\n"
+"El valor final del margen es la suma de este valor y el valor del margen."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:117
-#, fuzzy
 msgid "Additional clearance as a percentage of the pad size."
-msgstr "Un margen positivo indica un área mayor que el pad."
+msgstr "Margen adicional como un porcentaje del tamaño del pad."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:131
 msgid ""
 "Note: Solder paste clearances (absolute and relative) are added to determine "
 "the final clearance."
 msgstr ""
+"Nota: los márgenes de pasta de soldadura (absolutos y relativos) son "
+"añadidos para determinar el margen final."
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:82
-#, fuzzy
 msgid "Cancel Changes?"
-msgstr "¿Guardar cambios?"
+msgstr "¿Cancelar cambios?"
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:350
-#, fuzzy
 msgid "DRC rules"
-msgstr "Reglas de diseño de vías:"
+msgstr "Reglas de DRC"
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:357
 #: pcbnew/drc/drc_rule_condition.cpp:64
-#, fuzzy
 msgid "ERROR:"
-msgstr "*** ERROR: ***"
+msgstr "ERROR:"
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:418
 msgid "Design rules cannot be added without a project"
-msgstr ""
+msgstr "No se pueden añadir reglas de diseño sin un proyecto"
 
 #: pcbnew/dialogs/panel_setup_rules_base.cpp:26
-#, fuzzy
 msgid "DRC rules:"
-msgstr "Reglas de diseño de vías:"
+msgstr "Reglas de DRC:"
 
 #: pcbnew/dialogs/panel_setup_rules_base.cpp:77
 msgid "Check rule syntax"
-msgstr ""
+msgstr "Verificar reglas de sintaxis"
 
 #: pcbnew/dialogs/panel_setup_rules_help_md.h:2
 msgid ""
@@ -28405,57 +28404,58 @@ msgid ""
 msgstr ""
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:72
-#, fuzzy
 msgid "Default properties for new dimension objects:"
-msgstr "Valores por defecto para nuevos elementos gráficos"
+msgstr "Propiedades por defecto para nuevos objetos de dimensión:"
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:89
 msgid ""
 "Default units for dimensions (\"automatic\" to follow the chosen UI units)"
 msgstr ""
+"Unidades por defecto para dimensiones (\"automático\" para usar las unidades "
+"de la interfaz)"
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:96
-#, fuzzy
 msgid "Text position:"
-msgstr "Posición X del texto:"
+msgstr "Posición del texto:"
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:104
-#, fuzzy
 msgid "Where to position the dimension text relative to the dimension line"
-msgstr "La coordenada X del texto con respecto al componente"
+msgstr ""
+"Donde posicionar el texto de dimensión en relación con la línea de dimensión"
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:118
 msgid "Keep text aligned"
-msgstr ""
+msgstr "Mantener el texto alineado"
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:119
 msgid "When checked, dimension text will be kept aligned with dimension lines"
 msgstr ""
+"Cuando está marcado, el texto de dimensión será alineado con las líneas de "
+"dimensión"
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:131
 msgid "How many digits of precision to show"
-msgstr ""
+msgstr "Cuántos dígitos de precisión mostrar"
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:147
 msgid ""
 "When checked, \"1.2300\" will be rendered as \"1.23\" even if precision is "
 "set to show more digits"
 msgstr ""
+"Cuando está marcado, \"1,2300\" será renderizado como \"1,23\" incluso si la "
+"precisión está fijada para mostrar más dígitos"
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias.cpp:258
-#, fuzzy
 msgid "No via hole size defined."
-msgstr "Taladro min de vía"
+msgstr "Taladro de orificio de vía no definido."
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias.cpp:273
-#, fuzzy
 msgid "No differential pair gap defined."
-msgstr "Dimensiones de par diferencial"
+msgstr "Espacio de par diferencial no definido."
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:19
-#, fuzzy
 msgid "Pre-defined track and via dimensions:"
-msgstr "Crear pistas y vías"
+msgstr "Dimensiones predefinidas de pistas y vías:"
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:50
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:107
@@ -28470,45 +28470,41 @@ msgid "7"
 msgstr "7"
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:99 pcbnew/pad.cpp:931
-#, fuzzy
 msgid "Hole"
-msgstr "Archivos de taladros"
+msgstr "Orificio"
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:140
-#, fuzzy
 msgid "Differential Pairs"
-msgstr "Par &differencial"
+msgstr "Pares diferenciales"
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:156
 msgid "Gap"
 msgstr "Espacio"
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:157
-#, fuzzy
 msgid "Via Gap"
-msgstr "Espaciado de vía:"
+msgstr "Espaciado de vía"
 
 #: pcbnew/drc/drc_engine.cpp:144 pcbnew/drc/drc_engine.cpp:186
 #: pcbnew/drc/drc_engine.cpp:216
-#, fuzzy
 msgid "board setup constraints"
-msgstr "Escala X restringida."
+msgstr "restricciones de configuración de placa"
 
 #: pcbnew/drc/drc_engine.cpp:195
 msgid "board setup micro-via constraints"
-msgstr ""
+msgstr "restricciones de configuración de placa para micro-vías"
 
 #: pcbnew/drc/drc_engine.cpp:241 pcbnew/drc/drc_engine.cpp:322
 #: pcbnew/drc/drc_engine.cpp:350
-#, fuzzy, c-format
+#, c-format
 msgid "netclass '%s'"
-msgstr "tamaño de clase de red"
+msgstr "clase de red '%s'"
 
 #: pcbnew/drc/drc_engine.cpp:268 pcbnew/drc/drc_engine.cpp:285
 #: pcbnew/drc/drc_engine.cpp:303
-#, fuzzy, c-format
+#, c-format
 msgid "netclass '%s' (diff pair)"
-msgstr "tamaño de clase de red"
+msgstr "clase de red '%s' (par diferencial)"
 
 #: pcbnew/drc/drc_engine.cpp:425
 msgid "keepout area"
@@ -28520,24 +28516,23 @@ msgid "keepout area '%s'"
 msgstr "área restringida '%s'"
 
 #: pcbnew/drc/drc_engine.cpp:702
-#, fuzzy
 msgid "Tessellating copper zones..."
-msgstr "Márgenes entre zonas...\n"
+msgstr "Teselando zonas de cobre..."
 
 #: pcbnew/drc/drc_engine.cpp:801 pcbnew/drc/drc_engine.cpp:811
 #, c-format
 msgid "Local override on %s; clearance: %s."
-msgstr ""
+msgstr "Sustitución local en %s; margen: %s."
 
 #: pcbnew/drc/drc_engine.cpp:825
-#, fuzzy, c-format
+#, c-format
 msgid "Board minimum clearance: %s."
-msgstr "Margen min"
+msgstr "Margen mínimo de placa: %s."
 
 #: pcbnew/drc/drc_engine.cpp:845
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s; clearance: %s."
-msgstr "Cambiar la referencia del símbolo %s a %s.\n"
+msgstr "Comprobando %s; margen: %s."
 
 #: pcbnew/drc/drc_engine.cpp:852
 #, c-format
@@ -28547,26 +28542,27 @@ msgstr "Comprobando %s; margen de patio: %s."
 #: pcbnew/drc/drc_engine.cpp:859
 #, c-format
 msgid "Checking %s; silk clearance: %s."
-msgstr ""
+msgstr "Comprobando %s; margen de serigrafía: %s."
 
 #: pcbnew/drc/drc_engine.cpp:866
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s; hole clearance: %s."
-msgstr "Cambiar la referencia del símbolo %s a %s.\n"
+msgstr "Comprobando %s; margen de orificio: %s."
 
 #: pcbnew/drc/drc_engine.cpp:873
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s; edge clearance: %s."
-msgstr "Cambiar la referencia del símbolo %s a %s.\n"
+msgstr "Comprobando %s; margen de borde: %s."
 
 #: pcbnew/drc/drc_engine.cpp:879
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s."
-msgstr "Comprobando zonas"
+msgstr "Comprobando %s."
 
 #: pcbnew/drc/drc_engine.cpp:886
 msgid "Board and netclass clearances apply only between copper items."
 msgstr ""
+"Los márgenes de placa y clase de red solo aplican entre elementos de cobre."
 
 #: pcbnew/drc/drc_engine.cpp:930
 msgid "Keepout constraint not met."
@@ -28590,40 +28586,38 @@ msgid "Rule layer not matched; rule ignored."
 msgstr "Capa de reglas no coincide; regla ignorada."
 
 #: pcbnew/drc/drc_engine.cpp:992
-#, fuzzy
 msgid "Unconditional constraint applied."
-msgstr "Escala X restringida."
+msgstr "Requerimiento incondicional aplicado."
 
 #: pcbnew/drc/drc_engine.cpp:993
 msgid "Unconditional rule applied."
-msgstr ""
+msgstr "Regla incondicional aplicada."
 
 #: pcbnew/drc/drc_engine.cpp:1006
-#, fuzzy, c-format
+#, c-format
 msgid "Checking rule condition '%s'."
-msgstr "Comprobando relleno de zonas..."
+msgstr "Comprobando la condición de regla '%s'."
 
 #: pcbnew/drc/drc_engine.cpp:1012
-#, fuzzy
 msgid "Constraint applied."
-msgstr "Límite:"
+msgstr "Requerimiento aplicado."
 
 #: pcbnew/drc/drc_engine.cpp:1013
 msgid "Rule applied; overrides previous constraints."
-msgstr ""
+msgstr "Regla aplicada; sustituye requerimientos previos."
 
 #: pcbnew/drc/drc_engine.cpp:1020
 msgid "Membership not satisfied; constraint ignored."
-msgstr ""
+msgstr "Membresía no satisfecha; requerimiento ignorado."
 
 #: pcbnew/drc/drc_engine.cpp:1021
 msgid "Condition not satisfied; rule ignored."
-msgstr ""
+msgstr "Condición no satisfecha; regla ignorada."
 
 #: pcbnew/drc/drc_engine.cpp:1066 pcbnew/drc/drc_engine.cpp:1077
-#, fuzzy, c-format
+#, c-format
 msgid "Local clearance on %s; clearance: %s."
-msgstr "Margen local y ajustes"
+msgstr "Margen local en %s; margen: %s."
 
 #: pcbnew/drc/drc_item.cpp:42
 msgid "Electrical"
@@ -28638,92 +28632,76 @@ msgid "Schematic Parity"
 msgstr "Paridad de esquema"
 
 #: pcbnew/drc/drc_item.cpp:45
-#, fuzzy
 msgid "Signal Integrity"
-msgstr "Retardo de la señal:"
+msgstr "Integridad de señal"
 
 #: pcbnew/drc/drc_item.cpp:49
-#, fuzzy
 msgid "Missing connection between items"
-msgstr "Conexión no válida entre el bus y los elementos de red"
+msgstr "Conexión faltante entre elementos"
 
 #: pcbnew/drc/drc_item.cpp:53
-#, fuzzy
 msgid "Items shorting two nets"
-msgstr "Pistas conectando múltiples redes:"
+msgstr "Elementos conectando dos redes"
 
 #: pcbnew/drc/drc_item.cpp:57
-#, fuzzy
 msgid "Items not allowed"
-msgstr "Elementos a borrar:"
+msgstr "Elementos no permitidos"
 
 #: pcbnew/drc/drc_item.cpp:61
-#, fuzzy
 msgid "Text (or dimension) on Edge.Cuts layer"
-msgstr "No se permiten textos en la capa de perímetro"
+msgstr "Texto (o dimensión) en la capa Edge.Cuts"
 
 #: pcbnew/drc/drc_item.cpp:65
-#, fuzzy
 msgid "Clearance violation"
-msgstr "Perímetros de margen:"
+msgstr "Infracción de margen"
 
 #: pcbnew/drc/drc_item.cpp:69
 msgid "Tracks crossing"
 msgstr "Pistas cruzándose"
 
 #: pcbnew/drc/drc_item.cpp:73
-#, fuzzy
 msgid "Board edge clearance violation"
-msgstr "Board's edge setback outline"
+msgstr "Infracción de margen de borde de placa"
 
 #: pcbnew/drc/drc_item.cpp:77
-#, fuzzy
 msgid "Copper areas intersect"
-msgstr "Áreas de cobre superpuestas o demasiado cerca"
+msgstr "Áreas de cobre superpuestas"
 
 #: pcbnew/drc/drc_item.cpp:81
-#, fuzzy
 msgid "Copper zone net has no pads"
-msgstr "Zona de cobre (red %s) no tiene pads conectados."
+msgstr "Zona de cobre no tiene pads"
 
 #: pcbnew/drc/drc_item.cpp:85
-#, fuzzy
 msgid "Via is not connected or connected on only one layer"
-msgstr "Eliminar vías conectadas en una sola capa"
+msgstr "La vía no está conectada o está conectada en una sola capa"
 
 #: pcbnew/drc/drc_item.cpp:89
-#, fuzzy
 msgid "Track has unconnected end"
-msgstr "Buscar isletas No Conectadas"
+msgstr "La pista tiene un lado no conectado"
 
 #: pcbnew/drc/drc_item.cpp:93
-#, fuzzy
 msgid "Hole clearance violation"
-msgstr "Valor aislamiento de zona:"
+msgstr "Infracción de margen de orificio"
 
 #: pcbnew/drc/drc_item.cpp:97
 msgid "Drilled holes too close together"
-msgstr ""
+msgstr "Orificios taladrados demasiado juntos"
 
 #: pcbnew/drc/drc_item.cpp:101
-#, fuzzy
 msgid "Drilled holes co-located"
-msgstr "Archivos de taladros"
+msgstr "Orificios taladrados en un mismo lugar"
 
 #: pcbnew/drc/drc_item.cpp:105
-#, fuzzy
 msgid "Track width"
-msgstr "Ancho de pista:"
+msgstr "Ancho de pista"
 
 #: pcbnew/drc/drc_item.cpp:109
-#, fuzzy
 msgid "Annular width"
-msgstr "Ancho de pulso:"
+msgstr "Ancho de anular"
 
 #: pcbnew/drc/drc_item.cpp:113
-#, fuzzy
 msgid "Drill out of range"
-msgstr "Ajuste de longitud de pista"
+msgstr "Taladro fuera del rango"
 
 #: pcbnew/drc/drc_item.cpp:117
 msgid "Via diameter"
@@ -28732,12 +28710,11 @@ msgstr "Diámetro de vía"
 #: pcbnew/drc/drc_item.cpp:121
 #, fuzzy
 msgid "Padstack is not valid"
-msgstr "Tipo de página \"%s\" no válido "
+msgstr "Padstack inválido"
 
 #: pcbnew/drc/drc_item.cpp:125
-#, fuzzy
 msgid "Micro via drill out of range"
-msgstr "Tamaño de taladro de microvía"
+msgstr "Taladro de micro-vía fuera del rango"
 
 #: pcbnew/drc/drc_item.cpp:129
 msgid "Courtyards overlap"
@@ -28764,234 +28741,207 @@ msgid "Item on a disabled layer"
 msgstr "Elemento en capa desactivada"
 
 #: pcbnew/drc/drc_item.cpp:153
-#, fuzzy
 msgid "Board has malformed outline"
-msgstr "Capa para el contorno:"
+msgstr "La placa tiene un contorno mal formado"
 
 #: pcbnew/drc/drc_item.cpp:157
-#, fuzzy
 msgid "Duplicate footprints"
-msgstr "Actualizar huellas"
+msgstr "Duplicar huellas"
 
 #: pcbnew/drc/drc_item.cpp:161
-#, fuzzy
 msgid "Missing footprint"
-msgstr "No faltan huellas."
+msgstr "Huella faltante"
 
 #: pcbnew/drc/drc_item.cpp:165
-#, fuzzy
 msgid "Extra footprint"
-msgstr "Huellas extra:"
+msgstr "Huella extra"
 
 #: pcbnew/drc/drc_item.cpp:169
-#, fuzzy
 msgid "Pad net doesn't match schematic"
-msgstr "Cargar directivas desde el esquema"
+msgstr "La red del pad no coincide con el esquema"
 
 #: pcbnew/drc/drc_item.cpp:177
-#, fuzzy
 msgid "Silkscreen clipped by solder mask"
-msgstr "Serigrafía trasera"
+msgstr "Serigrafía recortada por la máscara del soldadura"
 
 #: pcbnew/drc/drc_item.cpp:181
-#, fuzzy
 msgid "Silkscreen overlap"
-msgstr "Serigr Cu "
+msgstr "Solapamiento de serigrafía"
 
 #: pcbnew/drc/drc_item.cpp:185
-#, fuzzy
 msgid "Trace length out of range"
-msgstr "Ajuste de longitud de pista"
+msgstr "Longitud de pista fuera del rango"
 
 #: pcbnew/drc/drc_item.cpp:189
 msgid "Skew between traces out of range"
-msgstr ""
+msgstr "Inclinación entre pistas fuera del rango"
 
 #: pcbnew/drc/drc_item.cpp:193
 msgid "Too many vias on a connection"
-msgstr ""
+msgstr "Demasiadas vías en una conexión"
 
 #: pcbnew/drc/drc_item.cpp:197
-#, fuzzy
 msgid "Differential pair gap out of range"
-msgstr "Ajuste de longitud de par diferencial"
+msgstr "Espacio de par diferencial fuera del rango"
 
 #: pcbnew/drc/drc_item.cpp:201
-#, fuzzy
 msgid "Differential uncoupled length too long"
-msgstr "Ajuste de longitud de par diferencial"
+msgstr "Longitud diferencial desacoplada demasiado larga"
 
 #: pcbnew/drc/drc_rule.h:135
-#, fuzzy, c-format
+#, c-format
 msgid "rule %s"
-msgstr "ángulo %s"
+msgstr "regla %s"
 
 #: pcbnew/drc/drc_rule_condition.cpp:52
 msgid "ERROR in expression."
-msgstr ""
+msgstr "ERROR en la expresión."
 
 #: pcbnew/drc/drc_rule_condition.cpp:100 pcbnew/drc/drc_rule_parser.cpp:60
 #: pcbnew/drc/drc_rule_parser.cpp:443
 #, c-format
 msgid "ERROR: <a href='%d:%d'>%s</a>%s"
-msgstr ""
+msgstr "ERROR: <a href='%d:%d'>%s</a>%s"
 
 #: pcbnew/drc/drc_rule_parser.cpp:70 pcbnew/drc/drc_rule_parser.cpp:453
-#, fuzzy, c-format
+#, c-format
 msgid "ERROR: %s%s"
-msgstr ""
-"IO_ERROR: %s\n"
-"de %s : %s"
+msgstr "ERROR: %s%s"
 
 #: pcbnew/drc/drc_rule_parser.cpp:107 pcbnew/drc/drc_rule_parser.cpp:190
 #: pcbnew/drc/drc_rule_parser.cpp:345
-#, fuzzy
 msgid "Missing '('."
-msgstr "Faltantes:"
+msgstr "Falta un '('."
 
 #: pcbnew/drc/drc_rule_parser.cpp:113
 msgid "Missing version statement."
-msgstr ""
+msgstr "Falta la declaración de la versión."
 
 #: pcbnew/drc/drc_rule_parser.cpp:125
 msgid "Missing version number."
-msgstr ""
+msgstr "Falta el número de versión."
 
 #: pcbnew/drc/drc_rule_parser.cpp:137
-#, fuzzy, c-format
+#, c-format
 msgid "Unrecognized item '%s'.| Expected version number."
-msgstr "Elementos no conectados"
+msgstr "Elemento '%s' desconocido. Se espera un número de versión."
 
 #: pcbnew/drc/drc_rule_parser.cpp:144 pcbnew/drc/drc_rule_parser.cpp:223
 #: pcbnew/drc/drc_rule_parser.cpp:365 pcbnew/drc/drc_rule_parser.cpp:386
 #: pcbnew/drc/drc_rule_parser.cpp:407 pcbnew/drc/drc_rule_parser.cpp:511
-#, fuzzy, c-format
+#, c-format
 msgid "Unrecognized item '%s'."
-msgstr "Elementos no conectados"
+msgstr "Elemento '%s' desconocido."
 
 #: pcbnew/drc/drc_rule_parser.cpp:157 pcbnew/drc/drc_rule_parser.cpp:236
 #: pcbnew/drc/drc_rule_parser.cpp:415
 msgid "Incomplete statement."
-msgstr ""
+msgstr "Declaración incompleta."
 
 #: pcbnew/drc/drc_rule_parser.cpp:161 pcbnew/drc/drc_rule_parser.cpp:240
 #: pcbnew/drc/drc_rule_parser.cpp:293 pcbnew/drc/drc_rule_parser.cpp:326
 #: pcbnew/drc/drc_rule_parser.cpp:419
 #, c-format
 msgid "Unrecognized item '%s'.| Expected %s."
-msgstr ""
+msgstr "Elemento '%s' desconocido. Se espera %s."
 
 #: pcbnew/drc/drc_rule_parser.cpp:170
-#, fuzzy
 msgid "No errors found."
-msgstr "No se ha encontrado marcador"
+msgstr "No se han encontrado errores."
 
 #: pcbnew/drc/drc_rule_parser.cpp:183
-#, fuzzy
 msgid "Missing rule name."
-msgstr "Nombre de Módulo:"
+msgstr "Nombre de regla faltante."
 
 #: pcbnew/drc/drc_rule_parser.cpp:205
-#, fuzzy
 msgid "Missing condition expression."
-msgstr "no se encuentra la función 'GetVersion'"
+msgstr "Expresión de condición faltante."
 
 #: pcbnew/drc/drc_rule_parser.cpp:216
 #, c-format
 msgid "Unrecognized item '%s'.| Expected quoted expression."
-msgstr ""
+msgstr "Elemento '%s' desconocido. Se espera una expresión entrecomillada."
 
 #: pcbnew/drc/drc_rule_parser.cpp:249 pcbnew/drc/drc_rule_parser.cpp:322
 #: pcbnew/drc/drc_rule_parser.cpp:336 pcbnew/drc/drc_rule_parser.cpp:428
-#, fuzzy
 msgid "Missing ')'."
-msgstr "Faltantes:"
+msgstr "Falta un ')'."
 
 #: pcbnew/drc/drc_rule_parser.cpp:266
 #, c-format
 msgid "Missing constraint type.|  Expected %s."
-msgstr ""
+msgstr "Tipo de requerimiento faltante. Se espera %s."
 
 #: pcbnew/drc/drc_rule_parser.cpp:356
 msgid "Missing min value."
-msgstr ""
+msgstr "Valor min faltante."
 
 #: pcbnew/drc/drc_rule_parser.cpp:377
 msgid "Missing max value."
-msgstr ""
+msgstr "Valor max faltante."
 
 #: pcbnew/drc/drc_rule_parser.cpp:398
 msgid "Missing opt value."
-msgstr ""
+msgstr "Valor opt faltante."
 
 #: pcbnew/drc/drc_rule_parser.cpp:477
 msgid "Missing layer name or type."
-msgstr ""
+msgstr "Tipo o nombre de capa faltante."
 
 #: pcbnew/drc/drc_rule_parser.cpp:503
-#, fuzzy, c-format
+#, c-format
 msgid "Unrecognized layer '%s'."
-msgstr "Agujeros definidos"
+msgstr "Capa '%s' desconocida."
 
 #: pcbnew/drc/drc_test_provider_annular_width.cpp:87
-#, fuzzy
 msgid "Checking via annular rings..."
-msgstr "Comprobando relleno de zonas..."
+msgstr "Comprobando anillos anulares de vía..."
 
 #: pcbnew/drc/drc_test_provider_annular_width.cpp:128
 #, c-format
 msgid "(%s min annular width %s; actual %s)"
-msgstr ""
+msgstr "(%s ancho anular min %s; real %s)"
 
 #: pcbnew/drc/drc_test_provider_annular_width.cpp:134
 #, c-format
 msgid "(%s max annular width %s; actual %s)"
-msgstr ""
+msgstr "(%s ancho anular max %s; real %s)"
 
 #: pcbnew/drc/drc_test_provider_connectivity.cpp:75
-#, fuzzy
 msgid "Checking pad, via and zone connections..."
-msgstr "Comprobando relleno de zonas..."
+msgstr "Comprobando conexiones de pads, vías, y zonas..."
 
 #: pcbnew/drc/drc_test_provider_connectivity.cpp:149
-#, fuzzy
 msgid "Checking net connections..."
-msgstr "Comprobando relleno de zonas..."
+msgstr "Comprobando conexiones de redes..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:192
-#, fuzzy
 msgid "Gathering copper items..."
-msgstr "Propiedades de cuadrícula..."
+msgstr "Recolectando elementos de cobre..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:208
-#, fuzzy
 msgid "Checking track & via clearances..."
-msgstr "Márgenes de pistas...\n"
+msgstr "Comprobando márgenes de pistas y vías..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:215
-#, fuzzy
 msgid "Checking hole clearances..."
-msgstr "Márgenes entre zonas...\n"
+msgstr "Comprobando márgenes de orificios..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:223
-#, fuzzy
 msgid "Checking pad clearances..."
-msgstr "Márgenes de pads...\n"
+msgstr "Comprobando márgenes de pads..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:231
-#, fuzzy
 msgid "Checking pads..."
-msgstr "Comprobando pines..."
+msgstr "Comprobando pads..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:239
-#, fuzzy
 msgid "Checking copper zone clearances..."
-msgstr "Márgenes entre zonas...\n"
+msgstr "Comprobando márgenes de zonas de cobres..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:246
-#, fuzzy
 msgid "Checking zones..."
-msgstr "Comprobando relleno de zonas..."
+msgstr "Comprobando zonas..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:309
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:357
@@ -29005,14 +28955,14 @@ msgstr "Comprobando relleno de zonas..."
 #: pcbnew/drc/drc_test_provider_edge_clearance.cpp:100
 #: pcbnew/drc/drc_test_provider_silk_clearance.cpp:190
 #: pcbnew/drc/drc_test_provider_silk_to_mask.cpp:160
-#, fuzzy, c-format
+#, c-format
 msgid "(%s clearance %s; actual %s)"
-msgstr "Margen local y ajustes"
+msgstr "(%s margen %s; real %s)"
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:570
-#, fuzzy, c-format
+#, c-format
 msgid "(nets %s and %s)"
-msgstr " en unidades %c y %c"
+msgstr "(redes %s y %s)"
 
 #: pcbnew/drc/drc_test_provider_courtyard_clearance.cpp:85
 msgid "Checking footprint courtyard definitions..."
@@ -29027,9 +28977,8 @@ msgid "Checking footprints for overlapping courtyards..."
 msgstr "Comprobando el solapamiento del patios de huellas..."
 
 #: pcbnew/drc/drc_test_provider_diff_pair_coupling.cpp:348
-#, fuzzy
 msgid "DPs evaluated:"
-msgstr "Valor pulsado:"
+msgstr "Pares diferenciales evaluados:"
 
 #: pcbnew/drc/drc_test_provider_diff_pair_coupling.cpp:460
 #, c-format
@@ -29039,204 +28988,194 @@ msgstr "(%s largo desacoplado máximo: %s; real: %s)"
 #: pcbnew/drc/drc_test_provider_diff_pair_coupling.cpp:494
 #, c-format
 msgid "minimum gap: %s; "
-msgstr ""
+msgstr "espacio mínimo: %s; "
 
 #: pcbnew/drc/drc_test_provider_diff_pair_coupling.cpp:498
 #, c-format
 msgid "maximum gap: %s; "
-msgstr ""
+msgstr "espacio máximo: %s; "
 
 #: pcbnew/drc/drc_test_provider_diff_pair_coupling.cpp:501
-#, fuzzy, c-format
+#, c-format
 msgid "actual: %s)"
-msgstr "Tamaño real"
+msgstr "real: %s)"
 
 #: pcbnew/drc/drc_test_provider_disallow.cpp:70
 msgid "Checking keepouts & disallow constraints..."
-msgstr ""
+msgstr "Comprobando requerimientos de zonas restringidas y rechazo..."
 
 #: pcbnew/drc/drc_test_provider_edge_clearance.cpp:122
-#, fuzzy
 msgid "Checking copper to board edge clearances..."
-msgstr "Márgenes entre zonas...\n"
+msgstr "Comprobando márgenes del cobre al borde de la placa..."
 
 #: pcbnew/drc/drc_test_provider_edge_clearance.cpp:127
-#, fuzzy
 msgid "Checking silk to board edge clearances..."
-msgstr "Márgenes entre zonas...\n"
+msgstr "Comprobando márgenes de la serigrafía al borde de la placa..."
 
 #: pcbnew/drc/drc_test_provider_hole_size.cpp:80
-#, fuzzy
 msgid "Checking pad holes..."
-msgstr "Comprobando relleno de zonas..."
+msgstr "Comprobando orificios de pads..."
 
 #: pcbnew/drc/drc_test_provider_hole_size.cpp:105
-#, fuzzy
 msgid "Checking via holes..."
-msgstr "Comprobando relleno de zonas..."
+msgstr "Comprobando orificios de vías..."
 
 #: pcbnew/drc/drc_test_provider_hole_size.cpp:110
-#, fuzzy
 msgid "Checking micro-via holes..."
-msgstr "Comprobando relleno de zonas..."
+msgstr "Comprobando orificios de micro-vías..."
 
 #: pcbnew/drc/drc_test_provider_hole_size.cpp:172
 #: pcbnew/drc/drc_test_provider_hole_size.cpp:237
 #: pcbnew/drc/drc_test_provider_track_width.cpp:134
-#, fuzzy, c-format
+#, c-format
 msgid "(%s min width %s; actual %s)"
-msgstr "no hay pines con la señal %s"
+msgstr "(%s ancho mínimo %s; real %s)"
 
 #: pcbnew/drc/drc_test_provider_hole_size.cpp:179
 #: pcbnew/drc/drc_test_provider_hole_size.cpp:244
 #: pcbnew/drc/drc_test_provider_track_width.cpp:141
 #, c-format
 msgid "(%s max width %s; actual %s)"
-msgstr ""
+msgstr "(%s ancho máximo %s; real %s)"
 
 #: pcbnew/drc/drc_test_provider_hole_to_hole.cpp:124
-#, fuzzy
 msgid "Checking hole to hole clearances..."
-msgstr "Márgenes entre zonas...\n"
+msgstr "Comprobando márgenes entre orificio y orificio..."
 
 #: pcbnew/drc/drc_test_provider_hole_to_hole.cpp:313
-#, fuzzy, c-format
+#, c-format
 msgid "(%s min %s; actual %s)"
-msgstr "Tamaño real"
+msgstr "(%s mínimo %s; real %s)"
 
 #: pcbnew/drc/drc_test_provider_lvs.cpp:119
-#, fuzzy, c-format
+#, c-format
 msgid "Missing footprint %s (%s)"
-msgstr "No faltan huellas."
+msgstr "Huella faltante %s (%s)"
 
 #: pcbnew/drc/drc_test_provider_lvs.cpp:140
 msgid "No corresponding pin found in schematic."
-msgstr ""
+msgstr "No se ha encontrado un pin correspondiente en el esquema."
 
 #: pcbnew/drc/drc_test_provider_lvs.cpp:149
 #, c-format
 msgid "Pad missing net given by schematic (%s)."
-msgstr ""
+msgstr "Al pad le falta una red dada por el esquema (%s)."
 
 #: pcbnew/drc/drc_test_provider_lvs.cpp:159
 #, c-format
 msgid "Pad net (%s) doesn't match net given by schematic (%s)."
-msgstr ""
+msgstr "La red del pad (%s) no coincide con la dada en el esquema (%s)."
 
 #: pcbnew/drc/drc_test_provider_lvs.cpp:179
 #, c-format
 msgid "No pad found for pin %s in schematic."
-msgstr ""
+msgstr "No se ha encontrado un pad para el pin %s en el esquema."
 
 #: pcbnew/drc/drc_test_provider_lvs.cpp:215
-#, fuzzy
 msgid "Checking PCB to schematic parity..."
-msgstr "Actualizar placa desde esquema..."
+msgstr "Comprobando la paridad de placa a esquema..."
 
 #: pcbnew/drc/drc_test_provider_lvs.cpp:222
 msgid "No netlist provided, skipping LVS."
-msgstr ""
+msgstr "No se ha proporcionado una lista de redes, salteando LVS."
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:128
-#, fuzzy, c-format
+#, c-format
 msgid "(%s min length: %s; actual: %s)"
-msgstr "no hay pines con la señal %s"
+msgstr "(%s largo mínimo %s; real %s)"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:135
-#, fuzzy, c-format
+#, c-format
 msgid "(%s max length: %s; actual: %s)"
-msgstr "no hay pines con la señal %s"
+msgstr "(%s largo máximo %s; real %s)"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:170
-#, fuzzy, c-format
+#, c-format
 msgid "(%s max skew: %s; actual: %s; average net length: %s; actual: %s)"
-msgstr "no hay pines con la señal %s"
+msgstr ""
+"(%s desviación máxima: %s; real %s; longitud promedio de redes: %s; real: %s)"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:199
-#, fuzzy, c-format
+#, c-format
 msgid "(%s max count: %d; actual: %d)"
-msgstr "no hay pines con la señal %s"
+msgstr "(%s cantidad máxima %d; real %d)"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:230
 msgid "Gathering length-constrained connections..."
-msgstr ""
+msgstr "Recolectando las conexiones de longitud limitada..."
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:327
-#, fuzzy
 msgid "<unconstrained>"
-msgstr "Escala X restringida."
+msgstr "<no limitado>"
 
 #: pcbnew/drc/drc_test_provider_misc.cpp:114
-#, fuzzy
 msgid "(no edges found on Edge.Cuts layer)"
-msgstr "No se permiten textos en la capa de perímetro"
+msgstr "(no se han encontrado bordes en la capa Edge.Cuts)"
 
 #: pcbnew/drc/drc_test_provider_misc.cpp:141
-#, fuzzy, c-format
+#, c-format
 msgid "(layer %s)"
-msgstr "Capa construida %s"
+msgstr "(capa %s)"
 
 #: pcbnew/drc/drc_test_provider_misc.cpp:219
-#, fuzzy
 msgid "Checking board outline..."
-msgstr "Contorno de la placa"
+msgstr "Comprobando el contorno de la placa..."
 
 #: pcbnew/drc/drc_test_provider_misc.cpp:227
-#, fuzzy
 msgid "Checking disabled layers..."
-msgstr "Elementos en capas desactivadas...\n"
+msgstr "Comprobando las capas desactivadas..."
 
 #: pcbnew/drc/drc_test_provider_misc.cpp:235
-#, fuzzy
 msgid "Checking text variables..."
-msgstr "Comprobando relleno de zonas..."
+msgstr "Comprobando variables de texto..."
 
 #: pcbnew/drc/drc_test_provider_silk_clearance.cpp:106
 msgid "Checking silkscreen for overlapping items..."
-msgstr ""
+msgstr "Comprobando elementos superpuestos en la serigrafía..."
 
 #: pcbnew/drc/drc_test_provider_silk_clearance.cpp:220
 #, c-format
 msgid "Testing %d silkscreen features against %d board items."
 msgstr ""
+"Comprobando %d elementos de serigrafía frente a %d elementos de la placa."
 
 #: pcbnew/drc/drc_test_provider_silk_to_mask.cpp:100
 msgid "Checking silkscreen for potential soldermask clipping..."
 msgstr ""
+"Comprobando la serigrafía por potenciales recortes de máscara de soldadura..."
 
 #: pcbnew/drc/drc_test_provider_silk_to_mask.cpp:182
 #, c-format
 msgid "Testing %d mask apertures against %d silkscreen features."
 msgstr ""
+"Comprobando %d aperturas de máscara frente a %d elementos de serigrafía."
 
 #: pcbnew/drc/drc_test_provider_track_width.cpp:83
-#, fuzzy
 msgid "Checking track widths..."
-msgstr "Ancho min de pista"
+msgstr "Comprobando anchos de pistas..."
 
 #: pcbnew/drc/drc_test_provider_via_diameter.cpp:82
-#, fuzzy
 msgid "Checking via diameters..."
-msgstr "Diámetro min de vía"
+msgstr "Comprobando diámetros de vías..."
 
 #: pcbnew/drc/drc_test_provider_via_diameter.cpp:119
 #, c-format
 msgid "(%s min diameter %s; actual %s)"
-msgstr ""
+msgstr "(%s diámetro mínimo %s; real %s)"
 
 #: pcbnew/drc/drc_test_provider_via_diameter.cpp:126
 #, c-format
 msgid "(%s max diameter %s; actual %s)"
-msgstr ""
+msgstr "(%s diámetro máximo %s; real %s)"
 
 #: pcbnew/edit_zone_helpers.cpp:86 pcbnew/edit_zone_helpers.cpp:149
 msgid "Modify zone properties"
-msgstr "Modificar las propiedades del la zona"
+msgstr "Modificar las propiedades de la zona"
 
 #: pcbnew/edit_zone_helpers.cpp:137
 #, c-format
 msgid "Refill %d Zones"
-msgstr "Rellenar las zonas %d"
+msgstr "Rellenar %d zonas"
 
 #: pcbnew/exporters/export_d356.cpp:376
 msgid "Export D-356 Test File"
@@ -29251,10 +29190,12 @@ msgid ""
 "File contains pad shapes that are not supported by the Hyperlynx exporter "
 "(supported shapes are oval, rectangle and circle)."
 msgstr ""
+"El archivo contiene formas de pads que no son soportadas por el exportador "
+"Hyperlynx (las formas soportadas son óvalo, rectángulo, y círculo)."
 
 #: pcbnew/exporters/export_hyperlynx.cpp:194
 msgid "They have been exported as oval pads."
-msgstr ""
+msgstr "Han sido exportados como pads ovalados."
 
 #: pcbnew/exporters/export_hyperlynx.cpp:307
 #: pcbnew/exporters/export_vrml.cpp:567
@@ -29276,15 +29217,14 @@ msgstr ""
 "contornos."
 
 #: pcbnew/exporters/gen_footprints_placefile.cpp:67
-#, fuzzy
 msgid "Generate Position File"
-msgstr "Generar archivos de posicción de huellas"
+msgstr "Generar archivo de posición"
 
 #: pcbnew/exporters/gen_footprints_placefile.cpp:278
 #: pcbnew/exporters/gen_footprints_placefile.cpp:395
-#, fuzzy, c-format
+#, c-format
 msgid "Front (top side) placement file: '%s'."
-msgstr "Archivo de posicionamiento de capa frontal: \"%s\"."
+msgstr "Archivo de posicionamiento del lado frontal: '%s'."
 
 #: pcbnew/exporters/gen_footprints_placefile.cpp:281
 #: pcbnew/exporters/gen_footprints_placefile.cpp:303
@@ -29296,71 +29236,68 @@ msgstr "Número de componentes: %d."
 
 #: pcbnew/exporters/gen_footprints_placefile.cpp:300
 #: pcbnew/exporters/gen_footprints_placefile.cpp:438
-#, fuzzy, c-format
+#, c-format
 msgid "Back (bottom side) placement file: '%s'."
-msgstr "Archivo de emplazamiento de capa trasera: \"%s\"."
+msgstr "Archivo de posicionamiento del lado trasero: '%s'."
 
 #: pcbnew/exporters/gen_footprints_placefile.cpp:307
 #: pcbnew/exporters/gen_footprints_placefile.cpp:448
-#, fuzzy, c-format
+#, c-format
 msgid "Full component count: %d."
-msgstr "Número total de componentes: %d\n"
+msgstr "Número total de componentes: %d."
 
 #: pcbnew/exporters/gen_footprints_placefile.cpp:310
 #: pcbnew/exporters/gen_footprints_placefile.cpp:404
 #: pcbnew/exporters/gen_footprints_placefile.cpp:452
-#, fuzzy
 msgid "File generation successful."
-msgstr "Se ha creado de forma satisfactoria el archivo STEP."
+msgstr "Archivo creado satisfactoriamente."
 
 #: pcbnew/exporters/gen_footprints_placefile.cpp:336
 msgid "No footprint for automated placement."
 msgstr "No hay huellas para el posicionamiento automático."
 
 #: pcbnew/exporters/gen_footprints_placefile.cpp:393
-#, fuzzy, c-format
+#, c-format
 msgid "Placement file: '%s'."
-msgstr "Archivo de posicionamiento: \"%s\"."
+msgstr "Archivo de posicionamiento: '%s'."
 
 #: pcbnew/exporters/gen_footprints_placefile.cpp:524
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Footprint report file created:\n"
 "'%s'."
 msgstr ""
 "Se ha creado informe de huellas:\n"
-"\"%s\""
+"'%s'."
 
 #: pcbnew/exporters/gen_footprints_placefile.cpp:525
 msgid "Footprint Report"
 msgstr "Informe de huellas"
 
 #: pcbnew/exporters/gendrill_Excellon_writer.cpp:124
-#, fuzzy, c-format
+#, c-format
 msgid "Created file '%s'"
-msgstr "Crear archivo %s\n"
+msgstr "Archivo '%s' creado"
 
 #: pcbnew/exporters/gendrill_file_writer_base.cpp:354
 #: pcbnew/exporters/gendrill_gerber_writer.cpp:113
-#, fuzzy, c-format
+#, c-format
 msgid "Created file '%s'."
-msgstr "Crear archivo %s\n"
+msgstr "Archivo '%s' creado."
 
 #: pcbnew/exporters/gerber_jobfile_writer.cpp:158
-#, fuzzy, c-format
+#, c-format
 msgid "Created Gerber job file '%s'."
-msgstr "Crear archivo de trabajo Gerber \"%s\""
+msgstr "Archivo de trabajo Gerber '%s' creado."
 
 #: pcbnew/exporters/gerber_jobfile_writer.cpp:575
-#, fuzzy
 msgid "Board stackup settings not up to date."
-msgstr "Grosor de la placa de %s está fuera del rango."
+msgstr "La configuración del apilado de la placa está desactualizada."
 
 # Pendiente de contexto
 #: pcbnew/files.cpp:144
-#, fuzzy
 msgid "All KiCad Board Files"
-msgstr "Importar archivo de placa"
+msgstr "Todos los archivos de placa de KiCad"
 
 #: pcbnew/files.cpp:185
 msgid "Open Board File"
@@ -29372,45 +29309,44 @@ msgid "Import Non KiCad Board File"
 msgstr "Importar archivo de placa"
 
 #: pcbnew/files.cpp:212
-#, fuzzy
 msgid "Create a new project for this board"
-msgstr "Crear nuevo proyecto"
+msgstr "Crear un nuevo proyecto para esta placa"
 
 #: pcbnew/files.cpp:214
 msgid ""
 "Creating a project will enable features such as design rules, net classes, "
 "and layer presets"
 msgstr ""
+"Crear un proyecto habilitará características como reglas de diseño, clases "
+"de redes, y ajustes predefinidos de capas"
 
 #: pcbnew/files.cpp:254
 msgid "Save Board File As"
-msgstr "Guardar archivo de placa"
+msgstr "Guardar archivo de placa como"
 
 #: pcbnew/files.cpp:282
 msgid "Printed circuit board"
 msgstr "Placa de circuito impreso"
 
 #: pcbnew/files.cpp:346
-#, fuzzy, c-format
+#, c-format
 msgid "Recovery file '%s' not found."
-msgstr "No se ha encontrado el archivo de recuperación \"%s\"."
+msgstr "No se ha encontrado el archivo de recuperación '%s'."
 
 # Pendiente de contexto
 #: pcbnew/files.cpp:351
-#, fuzzy, c-format
+#, c-format
 msgid "OK to load recovery file '%s'?"
-msgstr "Cargar el archivo de copia de seguridad o recuperación \"%s\""
+msgstr "¿Cargar el archivo de recuperación '%s'?"
 
 #: pcbnew/files.cpp:374
-#, fuzzy, c-format
+#, c-format
 msgid "Current board will be closed, save changes to '%s' before continuing?"
-msgstr ""
-"Se perderá la placa activa y esta operación no puede deshacerse. ¿Continuar?"
+msgstr "Se cerrará la placa actual, ¿guardar cambios a '%s' antes de continuar?"
 
 #: pcbnew/files.cpp:388
-#, fuzzy
 msgid "Current Board will be closed. Continue?"
-msgstr "La placa de C.I. actual se perderá ?"
+msgstr "Se cerrará la placa actual. ¿Continuar?"
 
 #: pcbnew/files.cpp:542
 msgid ""
@@ -29419,21 +29355,24 @@ msgid ""
 "This may result in different fills from previous KiCad versions which used "
 "the line thicknesses of the board boundary on the Edge Cuts layer."
 msgstr ""
+"Si se rellenan las zonas de esta placa, se usará la configuración de margen "
+"de borde de cobre (vea Configuración de placa > Reglas de diseño > "
+"Requerimientos).\n"
+"Esto puede resultar en rellenos diferentes a versiones anteriores de KiCad "
+"que usaban el ancho de línea del borde de la placa en la capa Edge.Cuts."
 
 #: pcbnew/files.cpp:547
-#, fuzzy
 msgid "Edge Clearance Warning"
-msgstr "Margen local y ajustes"
+msgstr "Advertencia de margen de bordes"
 
 #: pcbnew/files.cpp:578
-#, fuzzy, c-format
+#, c-format
 msgid "PCB '%s' is already open."
-msgstr "El archivo de placa \"%s\" ya está abierto."
+msgstr "La placa '%s' ya está abierta."
 
 #: pcbnew/files.cpp:585
-#, fuzzy
 msgid "The current PCB has been modified.  Save changes?"
-msgstr "Se ha modificado la placa. ¿Desea guardar los cambios?"
+msgstr "Se ha modificado la placa actual. ¿Guardar cambios?"
 
 #: pcbnew/files.cpp:604
 #, c-format
@@ -29442,47 +29381,33 @@ msgstr "No existe la placa '%s'. ¿Desea crearla?"
 
 #: pcbnew/files.cpp:613
 msgid "Creating PCB"
-msgstr ""
+msgstr "Creando placa"
 
 #: pcbnew/files.cpp:706 pcbnew/files.cpp:716
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading PCB '%s'."
-msgstr ""
-"Error al cargar el esquema.\n"
-"%s"
+msgstr "Error al cargar la placa '%s'."
 
 #: pcbnew/files.cpp:725
-#, fuzzy, c-format
+#, c-format
 msgid "Memory exhausted loading PCB '%s'"
-msgstr ""
-"Error al cargar el archivo de placa.\n"
-"%s"
+msgstr "Se agotó la memoria al cargar la placa '%s'"
 
 #: pcbnew/files.cpp:834
-#, fuzzy, c-format
+#, c-format
 msgid "Error saving footprint %s to project specific library."
-msgstr ""
-"Ha ocurrido un error al guardar la tabla de librerías de huellas específicas "
-"del proyecto:\n"
-"\n"
-"%s"
+msgstr "Error al guardar la huella %s a la librería específica del proyecto."
 
 #: pcbnew/files.cpp:863
-#, fuzzy
 msgid "Error saving project specific footprint library table."
 msgstr ""
-"Ha ocurrido un error al guardar la tabla de librerías de huellas específicas "
-"del proyecto:\n"
-"\n"
-"%s"
+"Error al guardar la tabla de librerías de huellas específicas del proyecto."
 
 #: pcbnew/files.cpp:955 pcbnew/files.cpp:1094
 #: pcbnew/footprint_libraries_utils.cpp:359
-#, fuzzy, c-format
+#, c-format
 msgid "Insufficient permissions to write file '%s'."
-msgstr ""
-"Permisos insuficientes para guardar el archivo\n"
-"%s"
+msgstr "Permisos insuficientes para escribir el archivo '%s'."
 
 #: pcbnew/files.cpp:983 pcbnew/files.cpp:1139
 #, c-format
@@ -29499,13 +29424,13 @@ msgstr ""
 "%s"
 
 #: pcbnew/files.cpp:1031
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error saving board file '%s'.\n"
 "Failed to rename temporary file '%s."
 msgstr ""
-"Error al guardar el archivo de placa \"%s\".\n"
-"%s"
+"Error al guardar el archivo de placa '%s'.\n"
+"Fallo al renombrar el archivo temporal '%s'."
 
 #: pcbnew/files.cpp:1143
 #, c-format
@@ -29529,38 +29454,33 @@ msgid "Back (Flipped)"
 msgstr "Trasera (Volteado)"
 
 #: pcbnew/footprint.cpp:863
-#, fuzzy
 msgid "autoplaced"
-msgstr "Emplazamiento automático:"
+msgstr "autocolocado"
 
 #: pcbnew/footprint.cpp:866
-#, fuzzy
 msgid "not in schematic"
-msgstr "Trazar esquema"
+msgstr "no en el esquema"
 
 #: pcbnew/footprint.cpp:869
-#, fuzzy
 msgid "exclude from pos files"
-msgstr "Excluir pads de la serigrafía"
+msgstr "excluir de los archivos de posicionamiento"
 
 #: pcbnew/footprint.cpp:872
 msgid "exclude from BOM"
 msgstr "excluir de la lista de materiales"
 
 #: pcbnew/footprint.cpp:874
-#, fuzzy
 msgid "Status: "
-msgstr "Estado"
+msgstr "Estado: "
 
 #: pcbnew/footprint.cpp:874
-#, fuzzy
 msgid "Attributes:"
-msgstr "Atributos"
+msgstr "Atributos:"
 
 #: pcbnew/footprint.cpp:879
-#, fuzzy, c-format
+#, c-format
 msgid "3D-Shape: %s"
-msgstr "Modelo 3D"
+msgstr "Forma 3D: %s"
 
 #: pcbnew/footprint.cpp:879
 msgid "<none>"
@@ -29572,144 +29492,123 @@ msgid "Doc: %s"
 msgstr "Doc: %s"
 
 #: pcbnew/footprint.cpp:884 pcbnew/tools/pcb_control.cpp:1140
-#, fuzzy, c-format
+#, c-format
 msgid "Keywords: %s"
 msgstr "Palabras clave: %s"
 
 #: pcbnew/footprint.cpp:1171
-#, fuzzy
 msgid "<no reference designator>"
-msgstr "indicador de referencia"
+msgstr "<sin indicador de referencia>"
 
 #: pcbnew/footprint.cpp:1173
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint %s"
-msgstr "Huella: %s"
+msgstr "Huella %s"
 
 #: pcbnew/footprint.cpp:2094 pcbnew/pad.cpp:1529 pcbnew/zone.cpp:1414
-#, fuzzy
 msgid "Clearance Override"
-msgstr "Perímetros de margen:"
+msgstr "Remplazo de margen"
 
 #: pcbnew/footprint.cpp:2097 pcbnew/pad.cpp:1506
-#, fuzzy
 msgid "Solderpaste Margin Override"
-msgstr "Margen de la pasta de soldadura:"
+msgstr "Remplazo de margen de pasta de soldadura"
 
 #: pcbnew/footprint.cpp:2101 pcbnew/pad.cpp:1509
-#, fuzzy
 msgid "Solderpaste Margin Ratio Override"
-msgstr "Relación Local del Margen de la Pasta de Soldadura"
+msgstr "Remplazo de relación de margen de la pasta de soldadura"
 
 #: pcbnew/footprint.cpp:2104 pcbnew/pad.cpp:1511 pcbnew/zone.cpp:1425
-#, fuzzy
 msgid "Thermal Relief Width"
-msgstr "Ancho del alivio térmico:"
+msgstr "Ancho del alivio térmico"
 
 #: pcbnew/footprint.cpp:2108 pcbnew/pad.cpp:1514 pcbnew/zone.cpp:1422
-#, fuzzy
 msgid "Thermal Relief Gap"
-msgstr "Alivios térmicos:"
+msgstr "Espacio del alivio térmico"
 
 #: pcbnew/footprint.h:206
-#, fuzzy, c-format
+#, c-format
 msgid "footprint %s"
-msgstr "Huella: %s"
+msgstr "huella %s"
 
 #: pcbnew/footprint_edit_frame.cpp:119
-#, fuzzy
 msgid "KiCad Footprint Editor"
-msgstr "Editor de huellas"
+msgstr "Editor de huellas de KiCad"
 
 #: pcbnew/footprint_edit_frame.cpp:205 pcbnew/zone_settings.cpp:219
-#, fuzzy
 msgid "Inner layers"
-msgstr "sin capas"
+msgstr "Capas internas"
 
 #: pcbnew/footprint_edit_frame.cpp:244 pcbnew/pcb_edit_frame.cpp:275
-#, fuzzy
 msgid "Selection Filter"
-msgstr "Seleccionar un archivo"
+msgstr "Filtro de selección"
 
 #: pcbnew/footprint_edit_frame.cpp:287
-#, fuzzy
 msgid "Footprint changes are unsaved"
-msgstr "Se ha guardado la huella \"%s\""
+msgstr "Cambios de huella no guardados"
 
 #: pcbnew/footprint_edit_frame.cpp:468
 #, c-format
 msgid "Editing %s from board.  Saving will update the board only."
-msgstr ""
+msgstr "Editando %s desde la placa. Guardar solo actualizará la placa."
 
 #: pcbnew/footprint_edit_frame.cpp:763
-#, fuzzy, c-format
+#, c-format
 msgid "[from %s]"
-msgstr "desde "
+msgstr "[desde %s]"
 
 #: pcbnew/footprint_edit_frame.cpp:797
-#, fuzzy
 msgid "[no footprint loaded]"
-msgstr "No se ha especificado huella."
+msgstr "[huella no cargada]"
 
 #: pcbnew/footprint_edit_frame.cpp:853
-#, fuzzy
 msgid "Updating Footprint Libraries"
-msgstr "Cargando librerías de huellas"
+msgstr "Actualizando librerías de huellas"
 
 #: pcbnew/footprint_edit_frame.cpp:1131
-#, fuzzy
 msgid "No footprint selected."
-msgstr "No se ha seleccionado huella"
+msgstr "No se ha seleccionado una huella."
 
 #: pcbnew/footprint_edit_frame.cpp:1140
-#, fuzzy
 msgid "Footprint Image File Name"
-msgstr "Nombre del archivo de imagen 3D:"
+msgstr "Nombre del archivo de imagen de huella"
 
 #: pcbnew/footprint_editor_utils.cpp:209
-#, fuzzy
 msgid "Edit Zone"
-msgstr "Editar Zona"
+msgstr "Editar zona"
 
 #: pcbnew/footprint_editor_utils.cpp:282
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The current configuration does not include a library named '%s'.\n"
 "Use Manage Footprint Libraries to edit the configuration."
 msgstr ""
-"La configuración actual no incluye una librería\n"
-"con el aIias \"%s\". Utilice Organizar las bibliotecas de símbolos\n"
-"para editar la configuración."
+"La configuración actual no incluye una librería de nombre '%s'.\n"
+"Utilice administrar librerías de huellas para editar la configuración."
 
 #: pcbnew/footprint_editor_utils.cpp:285
-#, fuzzy
 msgid "Library not found in footprint library table."
-msgstr "Editar la tabla de librerías de huellas"
+msgstr "No se encontró la librería en la tabla de librerías de huellas."
 
 #: pcbnew/footprint_editor_utils.cpp:293
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The library '%s' is not enabled in the current configuration.\n"
 "Use Manage Footprint Libraries to edit the configuration."
 msgstr ""
-"No se ha activado la librería \"%s\"\n"
-"en la configuración actual. Utilice el Editor de librerías de símbolos\n"
-"para editar la configuración."
+"No se ha habilitado la librería '%s' en la configuración actual.\n"
+"Utilice administrar librerías de huellas para editar la configuración."
 
 #: pcbnew/footprint_editor_utils.cpp:296 pcbnew/footprint_viewer_frame.cpp:917
-#, fuzzy
 msgid "Footprint library not enabled."
-msgstr "Tabla de li&brerías de huellas..."
+msgstr "Librería de huellas no habilitada."
 
 #: pcbnew/footprint_info_impl.cpp:130
-#, fuzzy
 msgid "Fetching footprint libraries..."
-msgstr "Adquiriendo librerías de huellas"
+msgstr "Recolectando librerías de huellas..."
 
 #: pcbnew/footprint_info_impl.cpp:159
-#, fuzzy
 msgid "Loading footprints..."
-msgstr "Cargando huellas"
+msgstr "Cargando huellas..."
 
 #: pcbnew/footprint_libraries_utils.cpp:58
 msgid ""
@@ -29718,8 +29617,8 @@ msgid ""
 "and update your footprint lib table\n"
 "to save your footprint (a .kicad_mod file) in the .pretty library folder"
 msgstr ""
-"No se permite escribir/modificar librerías antiguas (archivos .mod)\n"
-"Por favor, guarde la librería activa en el nuevo formato .pretty\n"
+"No se permite escribir/modificar librerías de legado (archivos .mod)\n"
+"Por favor, guarde la librería actual en el nuevo formato .pretty\n"
 "y actualice su tabla de librerías de huellas\n"
 "para guardar la huella (un archivo .kicad_mod) en la carpeta de librería ."
 "pretty"
@@ -29741,73 +29640,71 @@ msgid "Import Footprint"
 msgstr "Importar huella"
 
 #: pcbnew/footprint_libraries_utils.cpp:261
-#, fuzzy
 msgid "Not a footprint file."
-msgstr "No es un archivo de huellas"
+msgstr "No es un archivo de huellas."
 
 #: pcbnew/footprint_libraries_utils.cpp:273
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to load footprint '%s' from '%s'"
-msgstr "No se puede encontrar o cargar la huella desde la ruta \"%s\""
+msgstr "No se puede cargar la huella '%s' desde '%s'"
 
 #: pcbnew/footprint_libraries_utils.cpp:330
 msgid "Export Footprint"
 msgstr "Exportar huella"
 
 #: pcbnew/footprint_libraries_utils.cpp:373
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint exported to file '%s'."
-msgstr "Huella exportada al archivo \"%s\""
+msgstr "Huella exportada al archivo '%s'."
 
 #: pcbnew/footprint_libraries_utils.cpp:462
-#, fuzzy, c-format
+#, c-format
 msgid "Library %s is read only."
-msgstr "La librería \"%s\" es de solo lectura"
+msgstr "La librería '%s' es de solo lectura."
 
 #: pcbnew/footprint_libraries_utils.cpp:468
-#, fuzzy, c-format
+#, c-format
 msgid "Library %s already exists."
-msgstr "La librería \"%s\" ya existe"
+msgstr "La librería %s ya existe."
 
 #: pcbnew/footprint_libraries_utils.cpp:629
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:963
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:2461
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:2537
-#, fuzzy, c-format
+#, c-format
 msgid "Library '%s' is read only."
-msgstr "La librería \"%s\" es de solo lectura"
+msgstr "La librería '%s' es de solo lectura."
 
 #: pcbnew/footprint_libraries_utils.cpp:635
-#, fuzzy, c-format
+#, c-format
 msgid "Delete footprint '%s' from library '%s'?"
-msgstr "¿Eliminar el símbolo '%s' de la librería '%s'?"
+msgstr "¿Eliminar la huella '%s' de la librería '%s'?"
 
 #: pcbnew/footprint_libraries_utils.cpp:652
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint '%s' deleted from library '%s'"
-msgstr "Huella %s eliminada de la librería \"%s\""
+msgstr "Huella '%s' eliminada de la librería '%s'"
 
 #: pcbnew/footprint_libraries_utils.cpp:667
-#, fuzzy
 msgid "No footprints to export!"
-msgstr "¡No hay huellas para archivar!"
+msgstr "¡No hay huellas para exportar!"
 
 #: pcbnew/footprint_libraries_utils.cpp:847
 #: pcbnew/footprint_viewer_frame.cpp:703
 msgid "No board currently open."
-msgstr "No hay ninguna placa abierta."
+msgstr "No hay ninguna placa abierta actualmente."
 
 #: pcbnew/footprint_libraries_utils.cpp:873
-#, fuzzy
 msgid ""
 "Unable to find the footprint on the main board.\n"
 "Cannot save."
-msgstr "No puede encontrarse el origen de la huella en la placa principal"
+msgstr ""
+"No puede encontrarse la huella en la placa principal.\n"
+"No se puede guardar."
 
 #: pcbnew/footprint_libraries_utils.cpp:962
-#, fuzzy
 msgid "Save Footprint As"
-msgstr "Guardar huella"
+msgstr "Guardar huella como"
 
 #: pcbnew/footprint_libraries_utils.cpp:999
 msgid "No library specified.  Footprint could not be saved."
@@ -29818,19 +29715,19 @@ msgid "No footprint name specified.  Footprint could not be saved."
 msgstr "No se ha especificado el nombre. No puede guardarse la huella."
 
 #: pcbnew/footprint_libraries_utils.cpp:1033
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint %s already exists in %s."
-msgstr "La huella \"%s\" ya existe en la librería \"%s\""
+msgstr "La huella %s ya existe en %s."
 
 #: pcbnew/footprint_libraries_utils.cpp:1049
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint '%s' replaced in '%s'"
-msgstr "Huella %s eliminada de la librería \"%s\""
+msgstr "Huella '%s' remplazada en '%s'"
 
 #: pcbnew/footprint_libraries_utils.cpp:1050
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint '%s' added to '%s'"
-msgstr "Huella %s eliminada de la librería \"%s\""
+msgstr "Huella '%s' añadida a '%s'"
 
 #: pcbnew/footprint_libraries_utils.cpp:1098
 msgid "Enter footprint name:"
@@ -29845,9 +29742,8 @@ msgid "No footprint name defined."
 msgstr "No se ha definido un nombre de huella."
 
 #: pcbnew/footprint_viewer_frame.cpp:121
-#, fuzzy
 msgid "KiCad Footprint Library Viewer"
-msgstr "Explorador de librerías de huellas"
+msgstr "Visor de librerías de huellas de KiCad"
 
 #: pcbnew/footprint_viewer_frame.cpp:160
 msgid ""
@@ -29855,42 +29751,44 @@ msgid ""
 "Search terms are separated by spaces.  All search terms must match.\n"
 "A term which is a number will also match against the pad count."
 msgstr ""
+"Filtro en nombres, palabras claves, descripciones, y cantidad de pads de "
+"huellas.\n"
+"Los términos de búsqueda se separan con espacios. Todos los términos de "
+"búsqueda deben coincidir.\n"
+"Un término que sea un número también debe coincidir con la cantidad de pads."
 
 #: pcbnew/footprint_viewer_frame.cpp:659
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Could not load footprint '%s' from library '%s'.\n"
 "\n"
 "%s"
 msgstr ""
-"No puede cargarse la huella \"%s\" desde la librería \"%s\".\n"
+"No se puede cargar la huella '%s' desde la librería '%s'.\n"
 "\n"
-"Error %s."
+"%s"
 
 #: pcbnew/footprint_viewer_frame.cpp:907
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The current configuration does not include library '%s'.  Use Manage "
 "Footprint Libraries to edit the configuration."
 msgstr ""
-"La configuración actual no incluye la librería de huellas\n"
-"\"%s\".\n"
-"Utilice el Editor de librerías de símbolos para editar la configuración."
+"La configuración actual no incluye la librería '%s'. Utilice administrar "
+"librerías de huellas para editar la configuración."
 
 #: pcbnew/footprint_viewer_frame.cpp:910
-#, fuzzy
 msgid "Footprint library not found."
-msgstr "No se ha encontrado la huella"
+msgstr "No se ha encontrado la librería de huellas."
 
 #: pcbnew/footprint_viewer_frame.cpp:914
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Library '%s' is not enabled in the current configuration.  Use Manage "
 "Footprint Libraries to edit the configuration."
 msgstr ""
-"No se ha activado la librería \"%s\"\n"
-"en la configuración actual. Utilice el Editor de librerías de símbolos\n"
-"para editar la configuración."
+"No se ha habilitado la librería '%s' en la configuración actual. Utilice "
+"administrar librerías de huellas para editar la configuración."
 
 #: pcbnew/footprint_wizard_frame.cpp:81
 #: pcbnew/footprint_wizard_frame_functions.cpp:85
@@ -29936,14 +29834,13 @@ msgid "Couldn't reload footprint wizard"
 msgstr "No puede cargarse de nuevo el asistente de huellas"
 
 #: pcbnew/fp_shape.cpp:115 pcbnew/fp_text.cpp:275
-#, fuzzy
 msgid "<invalid>"
-msgstr "Entrada no válida"
+msgstr "<inválido>"
 
 #: pcbnew/fp_shape.cpp:124 pcbnew/pcb_shape.cpp:960
-#, fuzzy, c-format
+#, c-format
 msgid "%s on %s"
-msgstr "%s o %s"
+msgstr "%s en %s"
 
 #: pcbnew/fp_text.cpp:272
 msgid "Ref."
@@ -29959,88 +29856,79 @@ msgid "Angle"
 msgstr "Ángulo"
 
 #: pcbnew/fp_text.cpp:312
-#, fuzzy, c-format
+#, c-format
 msgid "Reference '%s'"
-msgstr "Referencia %s"
+msgstr "Referencia '%s'"
 
 #: pcbnew/fp_text.cpp:316
-#, fuzzy, c-format
+#, c-format
 msgid "Value '%s' of %s"
-msgstr "Valor %s de %s"
+msgstr "Valor '%s' de %s"
 
 #: pcbnew/fp_text.cpp:321
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint Text '%s' of %s"
-msgstr "Huella %s en %s"
+msgstr "Texto de huella '%s' de %s"
 
 #: pcbnew/generate_footprint_info.cpp:43
-#, fuzzy
 msgid "Documentation"
-msgstr "Abrir documentación"
+msgstr "Documentación"
 
 #: pcbnew/generate_footprint_info.cpp:81
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading footprint %s from library '%s'."
-msgstr ""
-"Ha ocurrido un error al cargar el símbolo %s desde la librería %s.\n"
-"\n"
-"%s"
+msgstr "Error al cargar la huella %s desde la librería '%s'."
 
 #: pcbnew/generate_footprint_info.cpp:121
 msgid "doc url"
 msgstr ""
 
 #: pcbnew/import_gfx/dialog_import_gfx.cpp:55
-#, fuzzy
 msgid "Centimeter"
-msgstr "Centrado"
+msgstr "Centímetro"
 
 #: pcbnew/import_gfx/dialog_import_gfx.cpp:56
 msgid "Feet"
-msgstr ""
+msgstr "Pie"
 
 #: pcbnew/import_gfx/dialog_import_gfx.cpp:252
 msgid "Open File"
 msgstr "Abrir archivo"
 
 #: pcbnew/import_gfx/dialog_import_gfx.cpp:277
-#, fuzzy
 msgid "No file selected!"
-msgstr "no se ha seleccionado archivo"
+msgstr "¡No se ha seleccionado un archivo!"
 
 #: pcbnew/import_gfx/dialog_import_gfx.cpp:288
-#, fuzzy
 msgid "Please select a valid layer."
-msgstr "Seleccione una librería de símbolos."
+msgstr "Por favor seleccione una capa válida."
 
 #: pcbnew/import_gfx/dialog_import_gfx.cpp:337
-#, fuzzy
 msgid "Items in the imported file could not be handled properly."
-msgstr "No han podido respaldarse algunos de los archivos del proyecto."
+msgstr ""
+"No se han podido manejar correctamente elementos en el archivo importado."
 
 #: pcbnew/import_gfx/dialog_import_gfx.cpp:345
 msgid "There is no plugin to handle this file type."
-msgstr ""
+msgstr "No hay un complemento para manejar este tipo de archivo."
 
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:26
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:31
 msgid "Only vectors will be imported.  Bitmaps and fonts will be ignored."
 msgstr ""
+"Solo se importarán los vectores. Se ignorarán los mapas de bits y fuentes."
 
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:43
-#, fuzzy
 msgid "Placement"
-msgstr "Tipo de emplazamiento:"
+msgstr "Emplazamiento"
 
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:48
-#, fuzzy
 msgid "Interactive placement"
-msgstr "Arrastre interactivo"
+msgstr "Emplazamiento interactivo"
 
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:55
-#, fuzzy
 msgid "At"
-msgstr "A"
+msgstr "En"
 
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:74
 msgid "DXF origin on PCB Grid, X Coordinate"
@@ -30055,62 +29943,54 @@ msgid "Select PCB grid units"
 msgstr "Seleccionar unidades de la cuadrícula"
 
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:120
-#, fuzzy
 msgid "Import Parameters"
-msgstr "Importar parámetros:"
+msgstr "Importar parámetros"
 
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:131
 msgid "Graphic layer:"
 msgstr "Capa gráfica:"
 
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:141
-#, fuzzy
 msgid "Import scale:"
-msgstr "Escala de icono:"
+msgstr "Importar escala:"
 
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:163
-#, fuzzy
 msgid "Group items"
-msgstr "Copiar elementos"
+msgstr "Agrupar elementos"
 
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:164
 msgid "Add all imported items into a new group"
-msgstr ""
+msgstr "Añadir todos los elementos importados a un nuevo grupo"
 
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:175
-#, fuzzy
 msgid "DXF Parameters"
-msgstr "Parámetros"
+msgstr "Parámetros DXF"
 
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:199
-#, fuzzy
 msgid "Default units:"
-msgstr "Defecto"
+msgstr "Unidades por defecto:"
 
 #: pcbnew/import_gfx/dialog_import_gfx_base.h:87
-#, fuzzy
 msgid "Import Vector Graphics File"
-msgstr "Importar componente..."
+msgstr "Importar archivo de gráficos vectoriales"
 
 #: pcbnew/import_gfx/dxf_import_plugin.cpp:1333
 msgid "Invalid spline definition encountered"
-msgstr ""
+msgstr "Se encontró una definición inválida de spline"
 
 #: pcbnew/import_gfx/dxf_import_plugin.cpp:1340
 msgid "Invalid Bezier curve created"
-msgstr ""
+msgstr "Se ha creado una curva Bezier inválida"
 
 #: pcbnew/initpcb.cpp:50
-#, fuzzy
 msgid ""
 "Current Board will be lost and this operation cannot be undone. Continue?"
 msgstr ""
-"Se perderá la placa activa y esta operación no puede deshacerse. ¿Continuar?"
+"Se perderá la placa actual y esta operación no puede deshacerse. ¿Continuar?"
 
 #: pcbnew/initpcb.cpp:109 pcbnew/tools/footprint_editor_control.cpp:188
-#, fuzzy
 msgid "The current footprint has been modified.  Save changes?"
-msgstr "Se ha modificado la placa. ¿Desea guardar los cambios?"
+msgstr "Se ha modificado la huella actual. ¿Guardar los cambios?"
 
 #: pcbnew/io_mgr.cpp:89
 #, c-format
@@ -30122,9 +30002,9 @@ msgid "Clipboard content is not KiCad compatible"
 msgstr "El contenido del portapapeles no es compatible con KiCad"
 
 #: pcbnew/load_select_footprint.cpp:265
-#, fuzzy, c-format
+#, c-format
 msgid "Choose Footprint (%d items loaded)"
-msgstr "Seleccionar componente (%d elementos cargados)"
+msgstr "Seleccionar huella (%d elementos cargados)"
 
 #: pcbnew/load_select_footprint.cpp:367
 #, c-format
@@ -30132,29 +30012,27 @@ msgid "Footprints [%u items]"
 msgstr "Huellas [%u elementos]"
 
 #: pcbnew/load_select_footprint.cpp:431
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint '%s' saved."
-msgstr "Se ha guardado la huella \"%s\""
+msgstr "Huella '%s' guardada."
 
 #: pcbnew/load_select_footprint.cpp:441
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint library '%s' saved as '%s'."
-msgstr "Se ha guardado la librería de huellas \"%s\" como \"%s\"."
+msgstr "Se ha guardado la librería de huellas '%s' como '%s'."
 
 #: pcbnew/menubar_footprint_editor.cpp:68
 #: pcbnew/menubar_footprint_editor.cpp:77
-#, fuzzy
 msgid "Footprint..."
-msgstr "&Huella..."
+msgstr "Huella..."
 
 #: pcbnew/menubar_footprint_editor.cpp:69 pcbnew/menubar_pcb_editor.cpp:112
 msgid "Graphics..."
 msgstr "Gráficos..."
 
 #: pcbnew/menubar_footprint_editor.cpp:78
-#, fuzzy
 msgid "View as &PNG..."
-msgstr "Exportar vista como PNG..."
+msgstr "Ver como &PNG..."
 
 #: pcbnew/menubar_footprint_editor.cpp:79
 msgid "Create a PNG file from the current view"
@@ -30169,14 +30047,12 @@ msgid "&Contrast Mode"
 msgstr "Modo &contraste"
 
 #: pcbnew/menubar_footprint_editor.cpp:208
-#, fuzzy
 msgid "&Load Footprint from PCB..."
-msgstr "Cargar hue&lla"
+msgstr "Cargar hue&lla desde una placa..."
 
 #: pcbnew/menubar_footprint_editor.cpp:209
-#, fuzzy
 msgid "Load a footprint from the current board into the editor"
-msgstr "Importar una huella desde la placa activa"
+msgstr "Cargar una huella desde la placa actual al editor"
 
 #: pcbnew/menubar_footprint_editor.cpp:213
 msgid "&Insert Footprint on PCB"
@@ -30191,20 +30067,18 @@ msgid "Resc&ue"
 msgstr "Rec&uperar"
 
 #: pcbnew/menubar_pcb_editor.cpp:101
-#, fuzzy
 msgid "Clear board and get last rescue file automatically saved by PCB editor"
 msgstr ""
-"Eliminar la placa activa y cargar en último archivo de recuperación guardado "
-"automáticamente por Pcbnew"
+"Limpiar la placa y cargar el último archivo de recuperación guardado "
+"automáticamente por el editor de placas"
 
 #: pcbnew/menubar_pcb_editor.cpp:111
 msgid "Specctra Session..."
 msgstr "Sesión Specctra..."
 
 #: pcbnew/menubar_pcb_editor.cpp:116
-#, fuzzy
 msgid "Non-KiCad Board File..."
-msgstr "Importar archivo de placa ajena a KiCad..."
+msgstr "Archivo de placa ajeno a KiCad..."
 
 #: pcbnew/menubar_pcb_editor.cpp:117
 msgid "Import board file from other applications"
@@ -30215,54 +30089,44 @@ msgid "Specctra DSN..."
 msgstr "Specctra DSN..."
 
 #: pcbnew/menubar_pcb_editor.cpp:130
-#, fuzzy
 msgid "GenCAD..."
-msgstr "&GenCAD..."
+msgstr "GenCAD..."
 
 #: pcbnew/menubar_pcb_editor.cpp:130
-#, fuzzy
 msgid "Export GenCAD board representation"
-msgstr "Exportar una representación VRML de la placa"
+msgstr "Exportar una representación GenCAD de la placa"
 
 #: pcbnew/menubar_pcb_editor.cpp:132
-#, fuzzy
 msgid "VRML..."
-msgstr "&VRML..."
+msgstr "VRML..."
 
 #: pcbnew/menubar_pcb_editor.cpp:132
-#, fuzzy
 msgid "Export VRML 3D board representation"
-msgstr "Exportar una representación VRML de la placa"
+msgstr "Exportar una representación VRML 3D de la placa"
 
 #: pcbnew/menubar_pcb_editor.cpp:134
-#, fuzzy
 msgid "IDFv3..."
-msgstr "I&DFv3..."
+msgstr "IDFv3..."
 
 #: pcbnew/menubar_pcb_editor.cpp:134
-#, fuzzy
 msgid "Export IDF 3D board representation"
-msgstr "Exportar una representación VRML de la placa"
+msgstr "Exportar una representación IDF 3D de la placa"
 
 #: pcbnew/menubar_pcb_editor.cpp:136
-#, fuzzy
 msgid "STEP..."
-msgstr "S&TEP..."
+msgstr "STEP..."
 
 #: pcbnew/menubar_pcb_editor.cpp:136
-#, fuzzy
 msgid "Export STEP 3D board representation"
-msgstr "Exportar una representación VRML de la placa"
+msgstr "Exportar una representación STEP 3D de la placa"
 
 #: pcbnew/menubar_pcb_editor.cpp:138
-#, fuzzy
 msgid "SVG..."
-msgstr "&SVG..."
+msgstr "SVG..."
 
 #: pcbnew/menubar_pcb_editor.cpp:138
-#, fuzzy
 msgid "Export SVG board representation"
-msgstr "Exportar una representación VRML de la placa"
+msgstr "Exportar una representación SVG de la placa"
 
 #: pcbnew/menubar_pcb_editor.cpp:140
 msgid "Footprint Association (.cmp) File..."
@@ -30276,42 +30140,40 @@ msgstr ""
 
 #: pcbnew/menubar_pcb_editor.cpp:143
 msgid "Hyperlynx..."
-msgstr ""
+msgstr "Hyperlynx..."
 
 #: pcbnew/menubar_pcb_editor.cpp:150
 msgid "Footprints to Library..."
 msgstr "Huellas a librería..."
 
 #: pcbnew/menubar_pcb_editor.cpp:151
-#, fuzzy
 msgid ""
 "Add footprints used on board to an existing footprint library\n"
 "(does not remove other footprints from this library)"
 msgstr ""
-"Archivar las huellas en una librería existente en la tabla de librerías de "
-"huellas (no elimina otras huellas de la librería)"
+"Añadir huellas usadas en la placa a una librería existente\n"
+"(no elimina otras huellas de la librería)"
 
 #: pcbnew/menubar_pcb_editor.cpp:155
 msgid "Footprints to New Library..."
 msgstr "Huellas a nueva librería..."
 
 #: pcbnew/menubar_pcb_editor.cpp:156
-#, fuzzy
 msgid ""
 "Create a new footprint library containing the footprints used on board\n"
 "(if the library already exists it will be replaced)"
 msgstr ""
-"Archiva todas las huellas en una librería nueva\n"
-"(si la librería ya existe, será eliminada)"
+"Crear una nueva librería de huellas que contenga todas las huellas usadas en "
+"la placa\n"
+"(si la librería ya existe, será remplazada)"
 
 #: pcbnew/menubar_pcb_editor.cpp:164
 msgid "Fabrication Outputs"
-msgstr "Archivos de fabricación"
+msgstr "Salidas de fabricación"
 
 #: pcbnew/menubar_pcb_editor.cpp:304
-#, fuzzy
 msgid "Add Microwave Shape"
-msgstr "Añadir espacio de microondas"
+msgstr "Añadir forma de microondas"
 
 #: pcbnew/menubar_pcb_editor.cpp:339
 msgid "Auto-Place Footprints"
@@ -30340,9 +30202,8 @@ msgstr "Valor del radio del arco:"
 # Mejorable
 #: pcbnew/microwave/microwave_footprint.cpp:80
 #: pcbnew/microwave/microwave_footprint.cpp:95
-#, fuzzy
 msgid "Create microwave footprint"
-msgstr "Crear espacio de microondas"
+msgstr "Crear huella de microondas"
 
 #: pcbnew/microwave/microwave_footprint.cpp:94
 msgid "Angle in degrees:"
@@ -30366,17 +30227,15 @@ msgstr "Longitud solicitada < longitud mínima"
 
 #: pcbnew/microwave/microwave_inductor.cpp:397
 msgid "Requested length too large"
-msgstr "Longitud solicitada excesivamente larga"
+msgstr "La longitud solicitada es demasiado larga"
 
 #: pcbnew/microwave/microwave_inductor.cpp:400
-#, fuzzy
 msgid "Requested length too small"
-msgstr "Longitud solicitada excesivamente larga"
+msgstr "La longitud solicitada es demasiado corta"
 
 #: pcbnew/microwave/microwave_inductor.cpp:403
-#, fuzzy
 msgid "Requested length can't be represented"
-msgstr "Longitud solicitada excesivamente larga"
+msgstr "La longitud solicitada no puede representarse"
 
 #: pcbnew/microwave/microwave_inductor.cpp:411
 msgid "Component Value:"
@@ -30432,19 +30291,19 @@ msgid "Cannot add %s (no footprint assigned)."
 msgstr "No puede añadirse %s (no se ha asignado huella)."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:152
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot add %s (footprint '%s' not found)."
-msgstr "No puede añadirse %s (no se ha encontrado la huella \"%s\")."
+msgstr "No puede añadirse %s (no se ha encontrado la huella '%s')."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:162
-#, fuzzy, c-format
+#, c-format
 msgid "Add %s (footprint '%s')."
-msgstr "Añadir %s (huella \"%s\")."
+msgstr "Añadir %s (huella '%s')."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:186
-#, fuzzy, c-format
+#, c-format
 msgid "Added %s (footprint '%s')."
-msgstr "Añadir %s (huella \"%s\")."
+msgstr "Añadir %s (huella '%s')."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:204
 #, c-format
@@ -30452,29 +30311,29 @@ msgid "Cannot update %s (no footprint assigned)."
 msgstr "No se puede actualizar %s (no se ha asignado huella)."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:216
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot update %s (footprint '%s' not found)."
-msgstr "No se puede actualizar %s (no se ha encontrado la huella \"%s\")."
+msgstr "No se puede actualizar %s (no se ha encontrado la huella '%s')."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:226
-#, fuzzy, c-format
+#, c-format
 msgid "Change %s footprint from '%s' to '%s'."
-msgstr "Cambiar huella %s de \"%s\" a \"%s\"."
+msgstr "Cambiar la huella %s de '%s' a '%s'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:238
-#, fuzzy, c-format
+#, c-format
 msgid "Changed %s footprint from '%s' to '%s'."
-msgstr "Cambiar huella %s de \"%s\" a \"%s\"."
+msgstr "Huella %s cambiada de '%s' a '%s'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:265
-#, fuzzy, c-format
+#, c-format
 msgid "Change %s reference designator to %s."
-msgstr "Cambiar la referencia %s a %s."
+msgstr "Cambiar el indicador de referencia %s a %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:271
-#, fuzzy, c-format
+#, c-format
 msgid "Changed %s reference designator to %s."
-msgstr "Cambiar la referencia %s a %s."
+msgstr "Indicador de referencia cambiado de %s a %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:287
 #, c-format
@@ -30482,49 +30341,52 @@ msgid "Change %s value from %s to %s."
 msgstr "Cambiar el valor %s de %s a %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:294
-#, fuzzy, c-format
+#, c-format
 msgid "Changed %s value from %s to %s."
-msgstr "Cambiar el valor %s de %s a %s."
+msgstr "Valor %s cambiado de %s a %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:316
-#, fuzzy, c-format
+#, c-format
 msgid "Update %s symbol association from %s to %s."
-msgstr "Actualizado %s de %s a %s"
+msgstr "Actualizar la asociación de símbolos %s de %s a %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:323
-#, fuzzy, c-format
+#, c-format
 msgid "Updated %s symbol association from %s to %s."
-msgstr "Actualizado %s de %s a %s"
+msgstr "Asociación de símbolos %s actualizada de %s a %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:339
-#, fuzzy, c-format
+#, c-format
 msgid "Update %s properties."
-msgstr "Propiedades de etiqueta"
+msgstr "Actualizar %s propiedades."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:344
-#, fuzzy, c-format
+#, c-format
 msgid "Updated %s properties."
-msgstr "Propiedades de etiqueta"
+msgstr "%s propiedades actualizadas."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:361
-#, fuzzy, c-format
+#, c-format
 msgid "Add %s 'exclude from BOM' fabrication attribute."
-msgstr "Archivos de &fabricación"
+msgstr ""
+"Añadir el atributo de fabricación 'excluir de la lista de materiales' %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:366
-#, fuzzy, c-format
+#, c-format
 msgid "Remove %s 'exclude from BOM' fabrication attribute."
-msgstr "Archivos de &fabricación"
+msgstr ""
+"Eliminar el atributo de fabricación 'excluir de la lista de materiales' %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:377
-#, fuzzy, c-format
+#, c-format
 msgid "Added %s 'exclude from BOM' fabrication attribute."
-msgstr "Archivos de &fabricación"
+msgstr "Atributo de fabricación 'excluir de la lista de materiales' %s añadido."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:383
-#, fuzzy, c-format
+#, c-format
 msgid "Removed %s 'exclude from BOM' fabrication attribute."
-msgstr "Archivos de &fabricación"
+msgstr ""
+"Atributo de fabricación 'excluir de la lista de materiales' %s eliminado."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:450
 #, c-format
@@ -30532,14 +30394,14 @@ msgid "Disconnect %s pin %s."
 msgstr "Desconectar %s pin %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:456
-#, fuzzy, c-format
+#, c-format
 msgid "Disconnected %s pin %s."
-msgstr "Desconectar %s pin %s."
+msgstr "%s pin %s desconectado."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:466
-#, fuzzy, c-format
+#, c-format
 msgid "No net found for symbol %s pin %s."
-msgstr "Borrando del componente %s la red del pin %s."
+msgstr "No se ha encontrado la red del símbolo %s pin %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:516
 #, c-format
@@ -30552,39 +30414,39 @@ msgid "Reconnect %s pin %s from %s to %s."
 msgstr "Reconectar %s pin %s de %s a %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:534
-#, fuzzy, c-format
+#, c-format
 msgid "Reconnected %s pin %s from %s to %s."
-msgstr "Reconectar %s pin %s de %s a %s."
+msgstr "%s pin %s reconectado de %s a %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:545
 #, c-format
 msgid "Connect %s pin %s to %s."
-msgstr "Conectar %s el %s a %s."
+msgstr "Conectar %s pin %s a %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:552
-#, fuzzy, c-format
+#, c-format
 msgid "Connected %s pin %s to %s."
-msgstr "Conectar %s el %s a %s."
+msgstr "%s pin %s conectado a %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:631
-#, fuzzy, c-format
+#, c-format
 msgid "Reconnect via from %s to %s."
-msgstr "Reconectar %s pin %s de %s a %s."
+msgstr "Reconectar vía de %s a %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:649
-#, fuzzy, c-format
+#, c-format
 msgid "Reconnected via from %s to %s."
-msgstr "Reconectar %s pin %s de %s a %s."
+msgstr "Vía reconectada de %s a %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:659
-#, fuzzy, c-format
+#, c-format
 msgid "Via connected to unknown net (%s)."
-msgstr "Hay más de un pin conectado a un símbolo de no conectado."
+msgstr "Vía conectada a red desconocida (%s)."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:702
-#, fuzzy, c-format
+#, c-format
 msgid "Reconnect copper zone '%s' from %s to %s."
-msgstr "Reconectar zona de cobre de %s a %s."
+msgstr "Reconectar zona de cobre '%s' de %s a %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:709
 #, c-format
@@ -30592,19 +30454,19 @@ msgid "Reconnect copper zone from %s to %s."
 msgstr "Reconectar zona de cobre de %s a %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:730
-#, fuzzy, c-format
+#, c-format
 msgid "Reconnected copper zone '%s' from %s to %s."
-msgstr "Reconectar zona de cobre de %s a %s."
+msgstr "Zona de cobre '%s' reconectada de %s a %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:737
-#, fuzzy, c-format
+#, c-format
 msgid "Reconnected copper zone from %s to %s."
-msgstr "Reconectar zona de cobre de %s a %s."
+msgstr "Zona de cobre reconectada de %s a %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:750
-#, fuzzy, c-format
+#, c-format
 msgid "Copper zone '%s' has no pads connected."
-msgstr "Zona de cobre (%s) no tiene pads conectados."
+msgstr "La zona de cobre '%s' no tiene pads conectados."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:758
 #, fuzzy, c-format
