@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,13 +21,13 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef DIALOG_LABEL_EDITOR_H_
-#define DIALOG_LABEL_EDITOR_H_
+#ifndef DIALOG_TEXT_AND_LABEL_PROPERTIES_H
+#define DIALOG_TEXT_AND_LABEL_PROPERTIES_H
 
 #include <widgets/unit_binder.h>
 #include <sch_text.h>
 #include <sch_validators.h>
-#include <dialog_edit_label_base.h>
+#include <dialog_text_and_label_properties_base.h>
 
 
 class SCH_EDIT_FRAME;
@@ -36,11 +36,11 @@ class SCINTILLA_TRICKS;
 class HTML_MESSAGE_BOX;
 
 
-class DIALOG_LABEL_EDITOR : public DIALOG_LABEL_EDITOR_BASE
+class DIALOG_TEXT_AND_LABEL_PROPERTIES : public DIALOG_TEXT_AND_LABEL_PROPERTIES_BASE
 {
 public:
-    DIALOG_LABEL_EDITOR( SCH_EDIT_FRAME* parent, SCH_TEXT* aTextItem );
-    ~DIALOG_LABEL_EDITOR();
+    DIALOG_TEXT_AND_LABEL_PROPERTIES( SCH_EDIT_FRAME* parent, SCH_TEXT* aTextItem );
+    ~DIALOG_TEXT_AND_LABEL_PROPERTIES();
 
     // This class is shared for numerous tasks: a couple of single line labels and
     // multi-line text fields.  Since the desired size of the multi-line text field editor
@@ -69,4 +69,4 @@ private:
 
 
 
-#endif // DIALOG_LABEL_EDITOR_H_
+#endif // DIALOG_TEXT_AND_LABEL_PROPERTIES_H

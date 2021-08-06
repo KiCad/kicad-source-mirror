@@ -33,9 +33,9 @@
 ///////////////////////////////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////////////////////////////////
-/// Class DIALOG_LIB_EDIT_TEXT_BASE
+/// Class DIALOG_LIB_TEXT_PROPERTIES_BASE
 ///////////////////////////////////////////////////////////////////////////////
-class DIALOG_LIB_EDIT_TEXT_BASE : public DIALOG_SHIM
+class DIALOG_LIB_TEXT_PROPERTIES_BASE : public DIALOG_SHIM
 {
 	private:
 
@@ -78,8 +78,8 @@ class DIALOG_LIB_EDIT_TEXT_BASE : public DIALOG_SHIM
 
 	public:
 
-		DIALOG_LIB_EDIT_TEXT_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Text Item Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 739,340 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
-		~DIALOG_LIB_EDIT_TEXT_BASE();
+		DIALOG_LIB_TEXT_PROPERTIES_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Text Item Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 739,340 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		~DIALOG_LIB_TEXT_PROPERTIES_BASE();
 
 };
 

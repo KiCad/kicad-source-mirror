@@ -23,21 +23,21 @@
  */
 
 
-#ifndef _DIALOG_LIB_EDIT_TEXT_H_
-#define _DIALOG_LIB_EDIT_TEXT_H_
+#ifndef DIALOG_LIB_TEXT_PROPERTIES_H
+#define DIALOG_LIB_TEXT_PROPERTIES_H
 
-#include <dialog_lib_edit_text_base.h>
+#include <dialog_lib_text_properties_base.h>
 #include <widgets/unit_binder.h>
 
 class SYMBOL_EDIT_FRAME;
 class LIB_TEXT;
 
 
-class DIALOG_LIB_EDIT_TEXT : public DIALOG_LIB_EDIT_TEXT_BASE
+class DIALOG_LIB_TEXT_PROPERTIES : public DIALOG_LIB_TEXT_PROPERTIES_BASE
 {
 public:
-    DIALOG_LIB_EDIT_TEXT( SYMBOL_EDIT_FRAME* aParent, LIB_TEXT* aText );
-    ~DIALOG_LIB_EDIT_TEXT() override {};
+    DIALOG_LIB_TEXT_PROPERTIES( SYMBOL_EDIT_FRAME* aParent, LIB_TEXT* aText );
+    ~DIALOG_LIB_TEXT_PROPERTIES() override {};
 
 private:
     bool TransferDataToWindow() override;
@@ -52,4 +52,4 @@ private:
 };
 
 
-#endif    // _DIALOG_LIB_EDIT_TEXT_H_
+#endif    // DIALOG_LIB_TEXT_PROPERTIES_H

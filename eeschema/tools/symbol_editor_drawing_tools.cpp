@@ -28,7 +28,7 @@
 #include <tools/symbol_editor_pin_tool.h>
 #include <bitmaps.h>
 #include <lib_text.h>
-#include <dialogs/dialog_lib_edit_text.h>
+#include <dialogs/dialog_lib_text_properties.h>
 #include <lib_arc.h>
 #include <lib_circle.h>
 #include <lib_polyline.h>
@@ -175,7 +175,7 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
                                                Mils2iu( settings->m_Defaults.text_size ) ) );
                     text->SetTextAngle( m_lastTextAngle );
 
-                    DIALOG_LIB_EDIT_TEXT dlg( m_frame, text );
+                    DIALOG_LIB_TEXT_PROPERTIES dlg( m_frame, text );
 
                     if( dlg.ShowModal() != wxID_OK || NoPrintableChars( text->GetText() ) )
                         delete text;

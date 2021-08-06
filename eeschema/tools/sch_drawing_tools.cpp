@@ -46,7 +46,7 @@
 #include <schematic.h>
 #include <symbol_library.h>
 #include <eeschema_settings.h>
-#include <dialogs/dialog_edit_label.h>
+#include <dialogs/dialog_text_and_label_properties.h>
 #include <dialogs/dialog_line_wire_bus_properties.h>
 #include <dialogs/dialog_junction_props.h>
 #include <dialogs/dialog_sheet_pin_properties.h>
@@ -899,7 +899,7 @@ SCH_TEXT* SCH_DRAWING_TOOLS::createNewText( const VECTOR2I& aPosition, int aType
     textItem->SetTextSize( wxSize( settings.m_DefaultTextSize, settings.m_DefaultTextSize ) );
     textItem->SetFlags( IS_NEW | IS_MOVING );
 
-    DIALOG_LABEL_EDITOR dlg( m_frame, textItem );
+    DIALOG_TEXT_AND_LABEL_PROPERTIES dlg( m_frame, textItem );
 
     // Must be quasi modal for syntax help
     if( dlg.ShowQuasiModal() != wxID_OK || NoPrintableChars( textItem->GetText() ) )

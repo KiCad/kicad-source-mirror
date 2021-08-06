@@ -11,12 +11,12 @@
         <property name="embedded_files_path">res</property>
         <property name="encoding">UTF-8</property>
         <property name="event_generation">connect</property>
-        <property name="file">dialog_lib_edit_text_base</property>
+        <property name="file">dialog_lib_text_properties_base</property>
         <property name="first_id">1000</property>
         <property name="help_provider">none</property>
         <property name="indent_with_spaces"></property>
         <property name="internationalize">1</property>
-        <property name="name">DIALOG_LIB_EDIT_TEXT_BASE</property>
+        <property name="name">DIALOG_LIB_TEXT_PROPERTIES_BASE</property>
         <property name="namespace"></property>
         <property name="path">.</property>
         <property name="precompiled_header"></property>
@@ -43,7 +43,7 @@
             <property name="id">wxID_ANY</property>
             <property name="maximum_size"></property>
             <property name="minimum_size"></property>
-            <property name="name">DIALOG_LIB_EDIT_TEXT_BASE</property>
+            <property name="name">DIALOG_LIB_TEXT_PROPERTIES_BASE</property>
             <property name="pos"></property>
             <property name="size">739,340</property>
             <property name="style">wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER</property>

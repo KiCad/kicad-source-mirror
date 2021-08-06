@@ -1,15 +1,15 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.9.0 Jun  3 2020)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#include "dialog_edit_label_base.h"
+#include "dialog_text_and_label_properties_base.h"
 
 ///////////////////////////////////////////////////////////////////////////
 
-DIALOG_LABEL_EDITOR_BASE::DIALOG_LABEL_EDITOR_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : DIALOG_SHIM( parent, id, title, pos, size, style )
+DIALOG_TEXT_AND_LABEL_PROPERTIES_BASE::DIALOG_TEXT_AND_LABEL_PROPERTIES_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : DIALOG_SHIM( parent, id, title, pos, size, style )
 {
 	this->SetSizeHints( wxDefaultSize, wxDefaultSize );
 
@@ -159,16 +159,16 @@ DIALOG_LABEL_EDITOR_BASE::DIALOG_LABEL_EDITOR_BASE( wxWindow* parent, wxWindowID
 	bMainSizer->Fit( this );
 
 	// Connect Events
-	m_valueSingleLine->Connect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_LABEL_EDITOR_BASE::OnEnterKey ), NULL, this );
-	m_valueCombo->Connect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_LABEL_EDITOR_BASE::OnEnterKey ), NULL, this );
-	m_formattingHelp->Connect( wxEVT_COMMAND_HYPERLINK, wxHyperlinkEventHandler( DIALOG_LABEL_EDITOR_BASE::OnFormattingHelp ), NULL, this );
+	m_valueSingleLine->Connect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_TEXT_AND_LABEL_PROPERTIES_BASE::OnEnterKey ), NULL, this );
+	m_valueCombo->Connect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_TEXT_AND_LABEL_PROPERTIES_BASE::OnEnterKey ), NULL, this );
+	m_formattingHelp->Connect( wxEVT_COMMAND_HYPERLINK, wxHyperlinkEventHandler( DIALOG_TEXT_AND_LABEL_PROPERTIES_BASE::OnFormattingHelp ), NULL, this );
 }
 
-DIALOG_LABEL_EDITOR_BASE::~DIALOG_LABEL_EDITOR_BASE()
+DIALOG_TEXT_AND_LABEL_PROPERTIES_BASE::~DIALOG_TEXT_AND_LABEL_PROPERTIES_BASE()
 {
 	// Disconnect Events
-	m_valueSingleLine->Disconnect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_LABEL_EDITOR_BASE::OnEnterKey ), NULL, this );
-	m_valueCombo->Disconnect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_LABEL_EDITOR_BASE::OnEnterKey ), NULL, this );
-	m_formattingHelp->Disconnect( wxEVT_COMMAND_HYPERLINK, wxHyperlinkEventHandler( DIALOG_LABEL_EDITOR_BASE::OnFormattingHelp ), NULL, this );
+	m_valueSingleLine->Disconnect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_TEXT_AND_LABEL_PROPERTIES_BASE::OnEnterKey ), NULL, this );
+	m_valueCombo->Disconnect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_TEXT_AND_LABEL_PROPERTIES_BASE::OnEnterKey ), NULL, this );
+	m_formattingHelp->Disconnect( wxEVT_COMMAND_HYPERLINK, wxHyperlinkEventHandler( DIALOG_TEXT_AND_LABEL_PROPERTIES_BASE::OnFormattingHelp ), NULL, this );
 
 }

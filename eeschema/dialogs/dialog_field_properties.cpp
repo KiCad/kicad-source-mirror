@@ -36,15 +36,15 @@
 #include <symbol_library.h>
 #include <sch_validators.h>
 #include <schematic.h>
-#include <dialog_edit_one_field.h>
+#include <dialog_field_properties.h>
 #include <sch_text.h>
 #include <scintilla_tricks.h>
 #include <wildcards_and_files_ext.h>
 
 
-DIALOG_EDIT_ONE_FIELD::DIALOG_EDIT_ONE_FIELD( SCH_BASE_FRAME* aParent, const wxString& aTitle,
-                                              const EDA_TEXT* aTextItem ) :
-    DIALOG_LIB_EDIT_TEXT_BASE( aParent ),
+DIALOG_FIELD_PROPERTIES::DIALOG_FIELD_PROPERTIES( SCH_BASE_FRAME* aParent, const wxString& aTitle,
+                                                  const EDA_TEXT* aTextItem ) :
+    DIALOG_LIB_TEXT_PROPERTIES_BASE( aParent ),
     m_posX( aParent, m_xPosLabel, m_xPosCtrl, m_xPosUnits, true ),
     m_posY( aParent, m_yPosLabel, m_yPosCtrl, m_yPosUnits, true ),
     m_textSize( aParent, m_textSizeLabel, m_textSizeCtrl, m_textSizeUnits, true ),
@@ -78,13 +78,13 @@ DIALOG_EDIT_ONE_FIELD::DIALOG_EDIT_ONE_FIELD( SCH_BASE_FRAME* aParent, const wxS
 }
 
 
-DIALOG_EDIT_ONE_FIELD::~DIALOG_EDIT_ONE_FIELD()
+DIALOG_FIELD_PROPERTIES::~DIALOG_FIELD_PROPERTIES()
 {
     delete m_scintillaTricks;
 }
 
 
-void DIALOG_EDIT_ONE_FIELD::init()
+void DIALOG_FIELD_PROPERTIES::init()
 {
     SCH_BASE_FRAME* parent = GetParent();
     bool isSymbolEditor = parent && parent->IsType( FRAME_SCH_SYMBOL_EDITOR );
@@ -155,7 +155,7 @@ void DIALOG_EDIT_ONE_FIELD::init()
 }
 
 
-void DIALOG_EDIT_ONE_FIELD::OnTextValueSelectButtonClick( wxCommandEvent& aEvent )
+void DIALOG_FIELD_PROPERTIES::OnTextValueSelectButtonClick( wxCommandEvent& aEvent )
 {
     // pick a footprint using the footprint picker.
     wxString fpid;
@@ -179,7 +179,7 @@ void DIALOG_EDIT_ONE_FIELD::OnTextValueSelectButtonClick( wxCommandEvent& aEvent
 }
 
 
-void DIALOG_EDIT_ONE_FIELD::OnSetFocusText( wxFocusEvent& event )
+void DIALOG_FIELD_PROPERTIES::OnSetFocusText( wxFocusEvent& event )
 {
     if( m_firstFocus )
     {
@@ -206,7 +206,7 @@ void DIALOG_EDIT_ONE_FIELD::OnSetFocusText( wxFocusEvent& event )
 }
 
 
-bool DIALOG_EDIT_ONE_FIELD::TransferDataToWindow()
+bool DIALOG_FIELD_PROPERTIES::TransferDataToWindow()
 {
     if( m_TextCtrl->IsShown() )
         m_TextCtrl->SetValue( m_text );
@@ -227,7 +227,7 @@ bool DIALOG_EDIT_ONE_FIELD::TransferDataToWindow()
 }
 
 
-bool DIALOG_EDIT_ONE_FIELD::TransferDataFromWindow()
+bool DIALOG_FIELD_PROPERTIES::TransferDataFromWindow()
 {
     if( m_TextCtrl->IsShown() )
         m_text = m_TextCtrl->GetValue();
@@ -277,7 +277,7 @@ bool DIALOG_EDIT_ONE_FIELD::TransferDataFromWindow()
 }
 
 
-void DIALOG_EDIT_ONE_FIELD::updateText( EDA_TEXT* aText )
+void DIALOG_FIELD_PROPERTIES::updateText( EDA_TEXT* aText )
 {
     aText->SetTextPos( m_position );
     aText->SetTextSize( wxSize( m_size, m_size ) );
@@ -290,10 +290,10 @@ void DIALOG_EDIT_ONE_FIELD::updateText( EDA_TEXT* aText )
 }
 
 
-DIALOG_LIB_EDIT_ONE_FIELD::DIALOG_LIB_EDIT_ONE_FIELD( SCH_BASE_FRAME* aParent,
-                                                      const wxString& aTitle,
-                                                      const LIB_FIELD* aField ) :
-        DIALOG_EDIT_ONE_FIELD( aParent, aTitle, aField )
+DIALOG_LIB_FIELD_PROPERTIES::DIALOG_LIB_FIELD_PROPERTIES( SCH_BASE_FRAME* aParent,
+                                                          const wxString& aTitle,
+                                                          const LIB_FIELD* aField ) :
+        DIALOG_FIELD_PROPERTIES( aParent, aTitle, aField )
 {
     m_fieldId = aField->GetId();
 
@@ -306,10 +306,10 @@ DIALOG_LIB_EDIT_ONE_FIELD::DIALOG_LIB_EDIT_ONE_FIELD( SCH_BASE_FRAME* aParent,
 }
 
 
-DIALOG_SCH_EDIT_ONE_FIELD::DIALOG_SCH_EDIT_ONE_FIELD( SCH_BASE_FRAME* aParent,
-                                                      const wxString& aTitle,
-                                                      const SCH_FIELD* aField ) :
-        DIALOG_EDIT_ONE_FIELD( aParent, aTitle, aField ),
+DIALOG_SCH_FIELD_PROPERTIES::DIALOG_SCH_FIELD_PROPERTIES( SCH_BASE_FRAME* aParent,
+                                                          const wxString& aTitle,
+                                                          const SCH_FIELD* aField ) :
+        DIALOG_FIELD_PROPERTIES( aParent, aTitle, aField ),
         m_field( aField )
 {
     if( aField->GetParent() && aField->GetParent()->Type() == SCH_SYMBOL_T )
@@ -347,13 +347,13 @@ DIALOG_SCH_EDIT_ONE_FIELD::DIALOG_SCH_EDIT_ONE_FIELD( SCH_BASE_FRAME* aParent,
     }
 
     m_StyledTextCtrl->Bind( wxEVT_STC_CHARADDED,
-                            &DIALOG_SCH_EDIT_ONE_FIELD::onScintillaCharAdded, this );
+                            &DIALOG_SCH_FIELD_PROPERTIES::onScintillaCharAdded, this );
 
     init();
 }
 
 
-void DIALOG_SCH_EDIT_ONE_FIELD::onScintillaCharAdded( wxStyledTextEvent &aEvent )
+void DIALOG_SCH_FIELD_PROPERTIES::onScintillaCharAdded( wxStyledTextEvent &aEvent )
 {
     int key = aEvent.GetKey();
 
@@ -443,7 +443,7 @@ void DIALOG_SCH_EDIT_ONE_FIELD::onScintillaCharAdded( wxStyledTextEvent &aEvent 
 }
 
 
-void DIALOG_SCH_EDIT_ONE_FIELD::UpdateField( SCH_FIELD* aField, SCH_SHEET_PATH* aSheetPath )
+void DIALOG_SCH_FIELD_PROPERTIES::UpdateField( SCH_FIELD* aField, SCH_SHEET_PATH* aSheetPath )
 {
     SCH_EDIT_FRAME* editFrame = dynamic_cast<SCH_EDIT_FRAME*>( GetParent() );
     SCH_ITEM*       parent = dynamic_cast<SCH_ITEM*>( aField->GetParent() );

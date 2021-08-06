@@ -34,7 +34,7 @@
 #include <sch_reference_list.h>
 #include <schematic.h>
 #include <dialogs/html_messagebox.h>
-#include <dialog_edit_label.h>
+#include <dialog_text_and_label_properties.h>
 #include <string_utils.h>
 #include <tool/actions.h>
 #include <scintilla_tricks.h>
@@ -43,12 +43,13 @@ class SCH_EDIT_FRAME;
 class SCH_TEXT;
 
 
-DIALOG_LABEL_EDITOR::DIALOG_LABEL_EDITOR( SCH_EDIT_FRAME* aParent, SCH_TEXT* aTextItem ) :
-    DIALOG_LABEL_EDITOR_BASE( aParent ),
-    m_textSize( aParent, m_textSizeLabel, m_textSizeCtrl, m_textSizeUnits, false ),
-    m_netNameValidator( true ),
-    m_scintillaTricks( nullptr ),
-    m_helpWindow( nullptr )
+DIALOG_TEXT_AND_LABEL_PROPERTIES::DIALOG_TEXT_AND_LABEL_PROPERTIES( SCH_EDIT_FRAME* aParent,
+                                                                    SCH_TEXT* aTextItem ) :
+        DIALOG_TEXT_AND_LABEL_PROPERTIES_BASE( aParent ),
+        m_textSize( aParent, m_textSizeLabel, m_textSizeCtrl, m_textSizeUnits, false ),
+        m_netNameValidator( true ),
+        m_scintillaTricks( nullptr ),
+        m_helpWindow( nullptr )
 {
     m_Parent = aParent;
     m_CurrentText = aTextItem;
@@ -101,11 +102,11 @@ DIALOG_LABEL_EDITOR::DIALOG_LABEL_EDITOR( SCH_EDIT_FRAME* aParent, SCH_TEXT* aTe
 
     switch( m_CurrentText->Type() )
     {
-    case SCH_GLOBAL_LABEL_T:       SetTitle( _( "Global Label Properties" ) );           break;
-    case SCH_HIER_LABEL_T:         SetTitle( _( "Hierarchical Label Properties" ) );     break;
-    case SCH_LABEL_T:              SetTitle( _( "Label Properties" ) );                  break;
-    case SCH_SHEET_PIN_T:          SetTitle( _( "Hierarchical Sheet Pin Properties" ) ); break;
-    default:                       SetTitle( _( "Text Properties" ) );                   break;
+    case SCH_GLOBAL_LABEL_T: SetTitle( _( "Global Label Properties" ) );           break;
+    case SCH_HIER_LABEL_T:   SetTitle( _( "Hierarchical Label Properties" ) );     break;
+    case SCH_LABEL_T:        SetTitle( _( "Label Properties" ) );                  break;
+    case SCH_SHEET_PIN_T:    SetTitle( _( "Hierarchical Sheet Pin Properties" ) ); break;
+    default:                 SetTitle( _( "Text Properties" ) );                   break;
     }
 
     SetInitialFocus( m_activeTextCtrl );
@@ -129,7 +130,7 @@ DIALOG_LABEL_EDITOR::DIALOG_LABEL_EDITOR( SCH_EDIT_FRAME* aParent, SCH_TEXT* aTe
     m_sdbSizer1OK->SetDefault();
     Layout();
 
-    m_valueMultiLine->Bind( wxEVT_STC_CHARADDED, &DIALOG_LABEL_EDITOR::onScintillaCharAdded, this );
+    m_valueMultiLine->Bind( wxEVT_STC_CHARADDED, &DIALOG_TEXT_AND_LABEL_PROPERTIES::onScintillaCharAdded, this );
 
     // DIALOG_SHIM needs a unique hash_key because classname is not sufficient because the
     // various versions have different controls so we want to store sizes for each version.
@@ -141,7 +142,7 @@ DIALOG_LABEL_EDITOR::DIALOG_LABEL_EDITOR( SCH_EDIT_FRAME* aParent, SCH_TEXT* aTe
 }
 
 
-DIALOG_LABEL_EDITOR::~DIALOG_LABEL_EDITOR()
+DIALOG_TEXT_AND_LABEL_PROPERTIES::~DIALOG_TEXT_AND_LABEL_PROPERTIES()
 {
     delete m_scintillaTricks;
 
@@ -150,7 +151,7 @@ DIALOG_LABEL_EDITOR::~DIALOG_LABEL_EDITOR()
 }
 
 
-void DIALOG_LABEL_EDITOR::SetTitle( const wxString& aTitle )
+void DIALOG_TEXT_AND_LABEL_PROPERTIES::SetTitle( const wxString& aTitle )
 {
     // This class is shared for numerous tasks: a couple of single line labels and
     // multi-line text fields.  Since the desired size of the multi-line text field editor
@@ -168,11 +169,11 @@ void DIALOG_LABEL_EDITOR::SetTitle( const wxString& aTitle )
         m_hash_key += typeid(*this).name();
     }
 
-    DIALOG_LABEL_EDITOR_BASE::SetTitle( aTitle );
+    DIALOG_TEXT_AND_LABEL_PROPERTIES_BASE::SetTitle( aTitle );
 }
 
 
-bool DIALOG_LABEL_EDITOR::TransferDataToWindow()
+bool DIALOG_TEXT_AND_LABEL_PROPERTIES::TransferDataToWindow()
 {
     if( !wxDialog::TransferDataToWindow() )
         return false;
@@ -238,13 +239,13 @@ bool DIALOG_LABEL_EDITOR::TransferDataToWindow()
 /*!
  * wxEVT_COMMAND_ENTER event handler for single-line control
  */
-void DIALOG_LABEL_EDITOR::OnEnterKey( wxCommandEvent& aEvent )
+void DIALOG_TEXT_AND_LABEL_PROPERTIES::OnEnterKey( wxCommandEvent& aEvent )
 {
     wxPostEvent( this, wxCommandEvent( wxEVT_COMMAND_BUTTON_CLICKED, wxID_OK ) );
 }
 
 
-void DIALOG_LABEL_EDITOR::onScintillaCharAdded( wxStyledTextEvent &aEvent )
+void DIALOG_TEXT_AND_LABEL_PROPERTIES::onScintillaCharAdded( wxStyledTextEvent &aEvent )
 {
     wxStyledTextCtrl* te = m_valueMultiLine;
     wxArrayString     autocompleteTokens;
@@ -307,7 +308,7 @@ void DIALOG_LABEL_EDITOR::onScintillaCharAdded( wxStyledTextEvent &aEvent )
 }
 
 
-bool DIALOG_LABEL_EDITOR::TransferDataFromWindow()
+bool DIALOG_TEXT_AND_LABEL_PROPERTIES::TransferDataFromWindow()
 {
     if( !wxDialog::TransferDataFromWindow() )
         return false;
@@ -385,7 +386,7 @@ bool DIALOG_LABEL_EDITOR::TransferDataFromWindow()
 }
 
 
-void DIALOG_LABEL_EDITOR::OnFormattingHelp( wxHyperlinkEvent& aEvent )
+void DIALOG_TEXT_AND_LABEL_PROPERTIES::OnFormattingHelp( wxHyperlinkEvent& aEvent )
 {
     m_helpWindow = SCH_TEXT::ShowSyntaxHelp( this );
 }

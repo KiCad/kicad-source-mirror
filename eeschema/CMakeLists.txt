@@ -58,9 +58,7 @@ set( EESCHEMA_DLGS
     dialogs/dialog_lib_symbol_properties_base.cpp
     dialogs/dialog_edit_symbols_libid.cpp
     dialogs/dialog_edit_symbols_libid_base.cpp
-    dialogs/dialog_edit_label.cpp
-    dialogs/dialog_edit_label_base.cpp
-    dialogs/dialog_edit_one_field.cpp
+    dialogs/dialog_field_properties.cpp
     dialogs/dialog_eeschema_page_settings.cpp
     dialogs/dialog_erc.cpp
     dialogs/dialog_erc_base.cpp
@@ -69,14 +67,14 @@ set( EESCHEMA_DLGS
     dialogs/dialog_global_edit_text_and_graphics_base.cpp
     dialogs/dialog_junction_props.cpp
     dialogs/dialog_junction_props_base.cpp
-    dialogs/dialog_lib_edit_draw_item.cpp
-    dialogs/dialog_lib_edit_draw_item_base.cpp
     dialogs/dialog_lib_edit_pin_table.cpp
     dialogs/dialog_lib_edit_pin_table_base.cpp
-    dialogs/dialog_lib_edit_text.cpp
-    dialogs/dialog_lib_edit_text_base.cpp
+    dialogs/dialog_lib_text_properties.cpp
+    dialogs/dialog_lib_text_properties_base.cpp
     dialogs/dialog_lib_new_symbol.cpp
     dialogs/dialog_lib_new_symbol_base.cpp
+    dialogs/dialog_lib_shape_properties.cpp
+    dialogs/dialog_lib_shape_properties_base.cpp
     dialogs/dialog_line_wire_bus_properties.cpp
     dialogs/dialog_line_wire_bus_properties_base.cpp
     dialogs/dialog_migrate_buses.cpp
@@ -106,6 +104,8 @@ set( EESCHEMA_DLGS
     dialogs/dialog_symbol_properties_base.cpp
     dialogs/dialog_symbol_remap.cpp
     dialogs/dialog_symbol_remap_base.cpp
+    dialogs/dialog_text_and_label_properties.cpp
+    dialogs/dialog_text_and_label_properties_base.cpp
     dialogs/dialog_update_from_pcb.cpp
     dialogs/dialog_update_from_pcb_base.cpp
     dialogs/dialog_update_symbol_fields.cpp

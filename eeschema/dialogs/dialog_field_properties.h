@@ -27,7 +27,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <dialog_lib_edit_text_base.h>
+#include <dialog_lib_text_properties_base.h>
 #include <widgets/unit_binder.h>
 #include <lib_field.h>
 #include <template_fieldnames.h>
@@ -44,13 +44,13 @@ class SCINTILLA_TRICKS;
  * This class is setup in expectation of its children possibly using Kiway player so
  * #DIALOG_SHIM::ShowQuasiModal is required when calling any subclasses.
  */
-class DIALOG_EDIT_ONE_FIELD : public DIALOG_LIB_EDIT_TEXT_BASE
+class DIALOG_FIELD_PROPERTIES : public DIALOG_LIB_TEXT_PROPERTIES_BASE
 {
 public:
-    DIALOG_EDIT_ONE_FIELD( SCH_BASE_FRAME* aParent, const wxString& aTitle,
-                           const EDA_TEXT* aTextItem );
+    DIALOG_FIELD_PROPERTIES( SCH_BASE_FRAME* aParent, const wxString& aTitle,
+                             const EDA_TEXT* aTextItem );
 
-    ~DIALOG_EDIT_ONE_FIELD() override;
+    ~DIALOG_FIELD_PROPERTIES() override;
 
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
@@ -103,17 +103,17 @@ protected:
 
 
 /**
- * Handle editing a single symbol field in the library editor.
+ * Handle editing a single symbol field in the symbol editor.
  *
  * @note Use ShowQuasiModal when calling this class!
  */
-class DIALOG_LIB_EDIT_ONE_FIELD : public DIALOG_EDIT_ONE_FIELD
+class DIALOG_LIB_FIELD_PROPERTIES : public DIALOG_FIELD_PROPERTIES
 {
 public:
-    DIALOG_LIB_EDIT_ONE_FIELD( SCH_BASE_FRAME* aParent, const wxString& aTitle,
-                               const LIB_FIELD* aField );
+    DIALOG_LIB_FIELD_PROPERTIES( SCH_BASE_FRAME* aParent, const wxString& aTitle,
+                                 const LIB_FIELD* aField );
 
-    ~DIALOG_LIB_EDIT_ONE_FIELD() {}
+    ~DIALOG_LIB_FIELD_PROPERTIES() {}
 
     void UpdateField( LIB_FIELD* aField )
     {
@@ -138,13 +138,13 @@ public:
  *
  * @note Use ShowQuasiModal when calling this class!
  */
-class DIALOG_SCH_EDIT_ONE_FIELD : public DIALOG_EDIT_ONE_FIELD
+class DIALOG_SCH_FIELD_PROPERTIES : public DIALOG_FIELD_PROPERTIES
 {
 public:
-    DIALOG_SCH_EDIT_ONE_FIELD( SCH_BASE_FRAME* aParent, const wxString& aTitle,
-                               const SCH_FIELD* aField );
+    DIALOG_SCH_FIELD_PROPERTIES( SCH_BASE_FRAME* aParent, const wxString& aTitle,
+                                 const SCH_FIELD* aField );
 
-    ~DIALOG_SCH_EDIT_ONE_FIELD() {}
+    ~DIALOG_SCH_FIELD_PROPERTIES() {}
 
     void onScintillaCharAdded( wxStyledTextEvent &aEvent );
 

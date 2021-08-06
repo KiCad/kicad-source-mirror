@@ -21,19 +21,15 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file dialog_lib_edit_draw_item.cpp
- */
-
 #include <lib_item.h>
-#include <dialog_lib_edit_draw_item.h>
+#include <dialog_lib_shape_properties.h>
 #include <symbol_edit_frame.h>
 #include <confirm.h>
 
 
-DIALOG_LIB_EDIT_DRAW_ITEM::DIALOG_LIB_EDIT_DRAW_ITEM( SYMBOL_EDIT_FRAME* aParent,
-                                                      LIB_ITEM* aItem ) :
-    DIALOG_LIB_EDIT_DRAW_ITEM_BASE( aParent ),
+DIALOG_LIB_SHAPE_PROPERTIES::DIALOG_LIB_SHAPE_PROPERTIES( SYMBOL_EDIT_FRAME* aParent,
+                                                          LIB_ITEM* aItem ) :
+    DIALOG_LIB_SHAPE_PROPERTIES_BASE( aParent ),
     m_frame( aParent ),
     m_item( aItem ),
     m_lineWidth( aParent, m_widthLabel, m_widthCtrl, m_widthUnits, true )
@@ -61,7 +57,7 @@ DIALOG_LIB_EDIT_DRAW_ITEM::DIALOG_LIB_EDIT_DRAW_ITEM( SYMBOL_EDIT_FRAME* aParent
 }
 
 
-bool DIALOG_LIB_EDIT_DRAW_ITEM::TransferDataToWindow()
+bool DIALOG_LIB_SHAPE_PROPERTIES::TransferDataToWindow()
 {
     if( !wxDialog::TransferDataToWindow() )
         return false;
@@ -91,7 +87,7 @@ bool DIALOG_LIB_EDIT_DRAW_ITEM::TransferDataToWindow()
 }
 
 
-bool DIALOG_LIB_EDIT_DRAW_ITEM::TransferDataFromWindow()
+bool DIALOG_LIB_SHAPE_PROPERTIES::TransferDataFromWindow()
 {
     if( !wxDialog::TransferDataFromWindow() )
         return false;
@@ -115,13 +111,13 @@ bool DIALOG_LIB_EDIT_DRAW_ITEM::TransferDataFromWindow()
 }
 
 
-bool DIALOG_LIB_EDIT_DRAW_ITEM::GetApplyToAllConversions()
+bool DIALOG_LIB_SHAPE_PROPERTIES::GetApplyToAllConversions()
 {
     return m_checkApplyToAllConversions->IsChecked();
 }
 
 
-bool DIALOG_LIB_EDIT_DRAW_ITEM::GetApplyToAllUnits()
+bool DIALOG_LIB_SHAPE_PROPERTIES::GetApplyToAllUnits()
 {
     return m_checkApplyToAllUnits->IsChecked();
 }

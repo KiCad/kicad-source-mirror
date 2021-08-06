@@ -31,9 +31,9 @@
 #include <bitmaps.h>
 #include <string_utils.h>
 #include <symbol_edit_frame.h>
-#include <dialogs/dialog_lib_edit_draw_item.h>
-#include <dialogs/dialog_lib_edit_text.h>
-#include <dialogs/dialog_edit_one_field.h>
+#include <dialogs/dialog_lib_shape_properties.h>
+#include <dialogs/dialog_lib_text_properties.h>
+#include <dialogs/dialog_field_properties.h>
 #include <dialogs/dialog_lib_symbol_properties.h>
 #include <dialogs/dialog_lib_edit_pin_table.h>
 #include <dialogs/dialog_update_symbol_fields.h>
@@ -468,10 +468,7 @@ int SYMBOL_EDITOR_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
 
 void SYMBOL_EDITOR_EDIT_TOOL::editGraphicProperties( LIB_ITEM* aItem )
 {
-    if( aItem == nullptr )
-        return;
-
-    DIALOG_LIB_EDIT_DRAW_ITEM dlg( m_frame, aItem );
+    DIALOG_LIB_SHAPE_PROPERTIES dlg( m_frame, aItem );
 
     if( dlg.ShowModal() != wxID_OK )
         return;
@@ -492,10 +489,10 @@ void SYMBOL_EDITOR_EDIT_TOOL::editGraphicProperties( LIB_ITEM* aItem )
 
 void SYMBOL_EDITOR_EDIT_TOOL::editTextProperties( LIB_ITEM* aItem )
 {
-    if ( ( aItem == nullptr ) || ( aItem->Type() != LIB_TEXT_T ) )
+    if ( aItem->Type() != LIB_TEXT_T )
         return;
 
-    DIALOG_LIB_EDIT_TEXT dlg( m_frame, (LIB_TEXT*) aItem );
+    DIALOG_LIB_TEXT_PROPERTIES dlg( m_frame, (LIB_TEXT*) aItem );
 
     if( dlg.ShowModal() != wxID_OK )
         return;
@@ -524,7 +521,7 @@ void SYMBOL_EDITOR_EDIT_TOOL::editFieldProperties( LIB_FIELD* aField )
     else
         caption.Printf( _( "Edit '%s' Field" ), aField->GetName() );
 
-    DIALOG_LIB_EDIT_ONE_FIELD dlg( m_frame, caption, aField );
+    DIALOG_LIB_FIELD_PROPERTIES dlg( m_frame, caption, aField );
 
     // The dialog may invoke a kiway player for footprint fields
     // so we must use a quasimodal dialog.

@@ -57,14 +57,14 @@
 #include <dialogs/dialog_line_wire_bus_properties.h>
 #include <dialogs/dialog_symbol_properties.h>
 #include <dialogs/dialog_sheet_pin_properties.h>
-#include <dialogs/dialog_edit_one_field.h>
+#include <dialogs/dialog_field_properties.h>
 #include <dialogs/dialog_junction_props.h>
 #include "sch_drawing_tools.h"
 #include <math/util.h>      // for KiROUND
 #include <pgm_base.h>
 #include <settings/settings_manager.h>
 #include <symbol_editor_settings.h>
-#include <dialogs/dialog_edit_label.h>
+#include <dialogs/dialog_text_and_label_properties.h>
 #include <core/kicad_algo.h>
 //#include <wx/filedlg.h>
 #include <wx/textdlg.h>
@@ -1093,7 +1093,7 @@ void SCH_EDIT_TOOL::editFieldText( SCH_FIELD* aField )
     else
         caption.Printf( _( "Edit '%s' Field" ), aField->GetName() );
 
-    DIALOG_SCH_EDIT_ONE_FIELD dlg( m_frame, caption, aField );
+    DIALOG_SCH_FIELD_PROPERTIES dlg( m_frame, caption, aField );
 
     // The footprint field dialog can invoke a KIWAY_PLAYER so we must use a quasi-modal
     if( dlg.ShowQuasiModal() != wxID_OK )
@@ -1398,7 +1398,7 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
     case SCH_GLOBAL_LABEL_T:
     case SCH_HIER_LABEL_T:
     {
-        DIALOG_LABEL_EDITOR dlg( m_frame, (SCH_TEXT*) item );
+        DIALOG_TEXT_AND_LABEL_PROPERTIES dlg( m_frame, (SCH_TEXT*) item );
 
         // Must be quasi modal for syntax help
         if( dlg.ShowQuasiModal() == wxID_OK )

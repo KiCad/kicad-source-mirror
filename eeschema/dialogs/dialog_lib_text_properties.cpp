@@ -25,16 +25,17 @@
 #include <symbol_edit_frame.h>
 #include <lib_text.h>
 #include <settings/settings_manager.h>
-#include <dialog_lib_edit_text.h>
+#include <dialog_lib_text_properties.h>
 #include <symbol_editor/symbol_editor_settings.h>
 #include <tools/symbol_editor_drawing_tools.h>
 
 
-DIALOG_LIB_EDIT_TEXT::DIALOG_LIB_EDIT_TEXT( SYMBOL_EDIT_FRAME* aParent, LIB_TEXT* aText ) :
-    DIALOG_LIB_EDIT_TEXT_BASE( aParent ),
-    m_posX( aParent, m_xPosLabel, m_xPosCtrl, m_xPosUnits, true ),
-    m_posY( aParent, m_yPosLabel, m_yPosCtrl, m_yPosUnits, true ),
-    m_textSize( aParent, m_textSizeLabel, m_textSizeCtrl, m_textSizeUnits, true )
+DIALOG_LIB_TEXT_PROPERTIES::DIALOG_LIB_TEXT_PROPERTIES( SYMBOL_EDIT_FRAME* aParent,
+                                                        LIB_TEXT* aText ) :
+        DIALOG_LIB_TEXT_PROPERTIES_BASE( aParent ),
+        m_posX( aParent, m_xPosLabel, m_xPosCtrl, m_xPosUnits, true ),
+        m_posY( aParent, m_yPosLabel, m_yPosCtrl, m_yPosUnits, true ),
+        m_textSize( aParent, m_textSizeLabel, m_textSizeCtrl, m_textSizeUnits, true )
 {
     m_parent = aParent;
     m_graphicText = aText;
@@ -65,7 +66,7 @@ DIALOG_LIB_EDIT_TEXT::DIALOG_LIB_EDIT_TEXT( SYMBOL_EDIT_FRAME* aParent, LIB_TEXT
 }
 
 
-bool DIALOG_LIB_EDIT_TEXT::TransferDataToWindow()
+bool DIALOG_LIB_TEXT_PROPERTIES::TransferDataToWindow()
 {
     if( m_graphicText )
     {
@@ -110,7 +111,7 @@ bool DIALOG_LIB_EDIT_TEXT::TransferDataToWindow()
 }
 
 
-bool DIALOG_LIB_EDIT_TEXT::TransferDataFromWindow()
+bool DIALOG_LIB_TEXT_PROPERTIES::TransferDataFromWindow()
 {
     if( m_graphicText )
     {

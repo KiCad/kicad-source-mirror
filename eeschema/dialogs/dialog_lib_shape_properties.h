@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2009 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 2014 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2014-2021 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,25 +22,25 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef __dialog_lib_edit_draw_item__
-#define __dialog_lib_edit_draw_item__
+#ifndef DIALOG_LIB_SHAPE_PROPERTIES_H
+#define DIALOG_LIB_SHAPE_PROPERTIES_H
 
 
 class LIB_ITEM;
 class SYMBOL_EDIT_FRAME;
 
 
-#include <dialog_lib_edit_draw_item_base.h>
+#include <dialog_lib_shape_properties_base.h>
 #include <widgets/unit_binder.h>
 
 /**
  * Dialog to edit library component graphic items.
  */
-class DIALOG_LIB_EDIT_DRAW_ITEM : public DIALOG_LIB_EDIT_DRAW_ITEM_BASE
+class DIALOG_LIB_SHAPE_PROPERTIES : public DIALOG_LIB_SHAPE_PROPERTIES_BASE
 {
 public:
     /** Constructor */
-    DIALOG_LIB_EDIT_DRAW_ITEM( SYMBOL_EDIT_FRAME* parent, LIB_ITEM* aItem );
+    DIALOG_LIB_SHAPE_PROPERTIES( SYMBOL_EDIT_FRAME* parent, LIB_ITEM* aItem );
 
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
@@ -54,4 +54,4 @@ private:
     UNIT_BINDER        m_lineWidth;
 };
 
-#endif // __dialog_lib_edit_draw_item__
+#endif // DIALOG_LIB_SHAPE_PROPERTIES_H
