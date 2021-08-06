@@ -146,7 +146,7 @@ public:
 
     bool IsErrorLimitExceeded( int error_code );
 
-    DRC_CONSTRAINT EvalRules( DRC_CONSTRAINT_T aConstraintId, const BOARD_ITEM* a,
+    DRC_CONSTRAINT EvalRules( DRC_CONSTRAINT_T aConstraintType, const BOARD_ITEM* a,
                               const BOARD_ITEM* b, PCB_LAYER_ID aLayer,
                               REPORTER* aReporter = nullptr );
 

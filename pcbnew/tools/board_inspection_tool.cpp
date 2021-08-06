@@ -343,7 +343,6 @@ int BOARD_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
 {
     PCB_SELECTION_TOOL*  selTool = m_toolMgr->GetTool<PCB_SELECTION_TOOL>();
     const PCB_SELECTION& selection = selTool->GetSelection();
-    PCB_LAYER_ID         layer = m_frame->GetActiveLayer();
 
     if( selection.Size() != 2 )
     {
@@ -406,32 +405,13 @@ int BOARD_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
     // a and b could be null after group tests above.
     wxCHECK( a && b, 0 );
 
-    if( a->Type() == PCB_TRACE_T || a->Type() == PCB_ARC_T )
-    {
-        layer = a->GetLayer();
-    }
-    else if( b->Type() == PCB_TRACE_T || b->Type() == PCB_ARC_T )
-    {
-        layer = b->GetLayer();
-    }
-    else if( a->Type() == PCB_PAD_T && static_cast<PAD*>( a )->GetAttribute() == PAD_ATTRIB::SMD )
-    {
-        PAD* pad = static_cast<PAD*>( a );
+    PCB_LAYER_ID layer;
+    LSET         intersection = a->GetLayerSet() & b->GetLayerSet();
 
-        if( pad->IsOnLayer( F_Cu ) )
-            layer = F_Cu;
-        else
-            layer = B_Cu;
-    }
-    else if( b->Type() == PCB_PAD_T && static_cast<PAD*>( a )->GetAttribute() == PAD_ATTRIB::SMD )
-    {
-        PAD* pad = static_cast<PAD*>( b );
-
-        if( pad->IsOnLayer( F_Cu ) )
-            layer = F_Cu;
-        else
-            layer = B_Cu;
-    }
+    if( intersection.any() && !intersection.Contains( m_frame->GetActiveLayer() ) )
+        layer = intersection.Seq().front();
+    else
+        layer = m_frame->GetActiveLayer();
 
     if( a->Type() != PCB_ZONE_T && b->Type() == PCB_ZONE_T )
         std::swap( a, b );

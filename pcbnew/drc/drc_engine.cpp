@@ -40,6 +40,7 @@
 #include <geometry/shape.h>
 #include <geometry/shape_segment.h>
 #include <geometry/shape_null.h>
+#include <convert_basic_shapes_to_polygon.h>
 
 void drcPrintDebugMessage( int level, const wxString& msg, const char *function, int line )
 {
@@ -163,31 +164,34 @@ void DRC_ENGINE::loadImplicitRules()
     diameterConstraint.Value().SetMin( bds.m_ViasMinSize );
     rule->AddConstraint( diameterConstraint );
 
-    DRC_CONSTRAINT edgeClearanceConstraint( EDGE_CLEARANCE_CONSTRAINT );
-    edgeClearanceConstraint.Value().SetMin( bds.m_CopperEdgeClearance );
-    rule->AddConstraint( edgeClearanceConstraint );
-
-    DRC_CONSTRAINT holeClearanceConstraint( HOLE_CLEARANCE_CONSTRAINT );
-    holeClearanceConstraint.Value().SetMin( bds.m_HoleClearance );
-    rule->AddConstraint( holeClearanceConstraint );
-
     DRC_CONSTRAINT holeToHoleConstraint( HOLE_TO_HOLE_CONSTRAINT );
     holeToHoleConstraint.Value().SetMin( bds.m_HoleToHoleMin );
     rule->AddConstraint( holeToHoleConstraint );
-
-    DRC_CONSTRAINT courtyardClearanceConstraint( COURTYARD_CLEARANCE_CONSTRAINT );
-    holeToHoleConstraint.Value().SetMin( 0 );
-    rule->AddConstraint( courtyardClearanceConstraint );
 
     DRC_CONSTRAINT diffPairGapConstraint( DIFF_PAIR_GAP_CONSTRAINT );
     diffPairGapConstraint.Value().SetMin( bds.m_MinClearance );
     rule->AddConstraint( diffPairGapConstraint );
 
-    rule = createImplicitRule( _( "board setup constraints" ) );
+    rule = createImplicitRule( _( "board setup constraints silk" ) );
     rule->m_LayerCondition = LSET( 2, F_SilkS, B_SilkS );
     DRC_CONSTRAINT silkClearanceConstraint( SILK_CLEARANCE_CONSTRAINT );
     silkClearanceConstraint.Value().SetMin( bds.m_SilkClearance );
     rule->AddConstraint( silkClearanceConstraint );
+
+    rule = createImplicitRule( _( "board setup constraints hole" ) );
+    DRC_CONSTRAINT holeClearanceConstraint( HOLE_CLEARANCE_CONSTRAINT );
+    holeClearanceConstraint.Value().SetMin( bds.m_HoleClearance );
+    rule->AddConstraint( holeClearanceConstraint );
+
+    rule = createImplicitRule( _( "board setup constraints edge" ) );
+    DRC_CONSTRAINT edgeClearanceConstraint( EDGE_CLEARANCE_CONSTRAINT );
+    edgeClearanceConstraint.Value().SetMin( bds.m_CopperEdgeClearance );
+    rule->AddConstraint( edgeClearanceConstraint );
+
+    rule = createImplicitRule( _( "board setup constraints courtyard" ) );
+    DRC_CONSTRAINT courtyardClearanceConstraint( COURTYARD_CLEARANCE_CONSTRAINT );
+    holeToHoleConstraint.Value().SetMin( 0 );
+    rule->AddConstraint( courtyardClearanceConstraint );
 
     // 2) micro-via specific defaults (new DRC doesn't treat microvias in any special way)
 
@@ -758,12 +762,60 @@ void DRC_ENGINE::RunTests( EDA_UNITS aUnits, bool aReportAllTrackErrors, bool aT
 }
 
 
-DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintId, const BOARD_ITEM* a,
+bool isUnflashedNPTH( const BOARD_ITEM* aItem, PCB_LAYER_ID aLayer )
+{
+    if( !aItem || aItem->Type() != PCB_PAD_T )
+        return false;
+
+    const PAD* pad = static_cast<const PAD*>( aItem );
+
+    if( pad->GetAttribute() != PAD_ATTRIB::NPTH )
+        return false;
+
+    // Run a couple of quick tests to see if there's any copper
+
+    if( pad->GetShape() == PAD_SHAPE::CIRCLE && pad->GetDrillShape() == PAD_DRILL_SHAPE_CIRCLE
+            && pad->GetSizeX() <= pad->GetDrillSizeX() )
+    {
+        return true;
+    }
+
+    if( pad->GetShape() == PAD_SHAPE::OVAL && pad->GetDrillShape() == PAD_DRILL_SHAPE_OBLONG
+            && pad->GetSizeX() <= pad->GetDrillSizeX()
+            && pad->GetSizeY() <= pad->GetDrillSizeY() )
+    {
+        return true;
+    }
+
+    if( !pad->FlashLayer( aLayer ) )
+        return true;
+
+    // We're out of optimizations.  Do it the hard way.
+
+    SHAPE_POLY_SET       padOutline;
+    const SHAPE_SEGMENT* drillShape = pad->GetEffectiveHoleShape();
+    const SEG            drillSeg   = drillShape->GetSeg();
+    SHAPE_POLY_SET       drillOutline;
+
+    pad->TransformShapeWithClearanceToPolygon( padOutline, aLayer, 0, ARC_HIGH_DEF,
+                                               ERROR_LOC::ERROR_INSIDE );
+
+    TransformOvalToPolygon( drillOutline, (wxPoint) drillSeg.A, (wxPoint) drillSeg.B,
+                            drillShape->GetWidth(), ARC_HIGH_DEF, ERROR_LOC::ERROR_INSIDE );
+
+    padOutline.BooleanSubtract( drillOutline, SHAPE_POLY_SET::POLYGON_MODE::PM_FAST );
+
+    return padOutline.IsEmpty();
+}
+
+
+DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BOARD_ITEM* a,
                                       const BOARD_ITEM* b, PCB_LAYER_ID aLayer,
                                       REPORTER* aReporter )
 {
 #define REPORT( s ) { if( aReporter ) { aReporter->Report( s ); } }
 #define UNITS aReporter ? aReporter->GetUnits() : EDA_UNITS::MILLIMETRES
+#define REPORT_VALUE( v ) MessageTextFromValue( UNITS, v )
     /*
      * NOTE: all string manipulation MUST BE KEPT INSIDE the REPORT macro.  It absolutely
      * kills performance when running bulk DRC tests (where aReporter is nullptr).
@@ -781,7 +833,7 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintId, const BOAR
     bool                  implicit = false;
 
     // Local overrides take precedence over everything *except* board min clearance
-    if( aConstraintId == CLEARANCE_CONSTRAINT )
+    if( aConstraintType == CLEARANCE_CONSTRAINT )
     {
         int overrideA = 0;
         int overrideB = 0;
@@ -793,7 +845,7 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintId, const BOAR
             REPORT( "" )
             REPORT( wxString::Format( _( "Local override on %s; clearance: %s." ),
                                       EscapeHTML( a->GetSelectMenuText( UNITS ) ),
-                                      EscapeHTML( MessageTextFromValue( UNITS, overrideA ) ) ) )
+                                      EscapeHTML( REPORT_VALUE( overrideA ) ) ) )
         }
 
         if( bc && !a_is_non_copper && bc->GetLocalClearanceOverrides( nullptr ) > 0 )
@@ -803,23 +855,37 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintId, const BOAR
             REPORT( "" )
             REPORT( wxString::Format( _( "Local override on %s; clearance: %s." ),
                                       EscapeHTML( b->GetSelectMenuText( UNITS ) ),
-                                      EscapeHTML( MessageTextFromValue( UNITS, overrideB ) ) ) )
+                                      EscapeHTML( REPORT_VALUE( overrideB ) ) ) )
         }
 
         if( overrideA || overrideB )
         {
             int override = std::max( overrideA, overrideB );
 
-            if( override < m_designSettings->m_MinClearance )
+            if( isUnflashedNPTH( a, aLayer ) || isUnflashedNPTH( b, aLayer ) )
             {
-                override = m_designSettings->m_MinClearance;
+                if( override < m_designSettings->m_HoleClearance )
+                {
+                    override = m_designSettings->m_HoleClearance;
 
-                REPORT( "" )
-                REPORT( wxString::Format( _( "Board minimum clearance: %s." ),
-                                          EscapeHTML( MessageTextFromValue( UNITS, override ) ) ) )
+                    REPORT( "" )
+                    REPORT( wxString::Format( _( "Board minimum hole clearance: %s." ),
+                                              EscapeHTML( REPORT_VALUE( override ) ) ) )
+                }
+            }
+            else
+            {
+                if( override < m_designSettings->m_MinClearance )
+                {
+                    override = m_designSettings->m_MinClearance;
+
+                    REPORT( "" )
+                    REPORT( wxString::Format( _( "Board minimum clearance: %s." ),
+                                              EscapeHTML( REPORT_VALUE( override ) ) ) )
+                }
             }
 
-            DRC_CONSTRAINT constraint( aConstraintId, m_msg );
+            DRC_CONSTRAINT constraint( aConstraintType, m_msg );
             constraint.m_Value.SetMin( override );
             return constraint;
         }
@@ -832,47 +898,47 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintId, const BOAR
 
                 REPORT( "" )
 
-                if( aConstraintId == CLEARANCE_CONSTRAINT )
+                if( c->constraint.m_Type == CLEARANCE_CONSTRAINT )
                 {
                     int val = c->constraint.m_Value.Min();
-                    REPORT( wxString::Format( _( "Checking %s; clearance: %s." ),
+                    REPORT( wxString::Format( _( "Checking %s clearance: %s." ),
                                               EscapeHTML( c->constraint.GetName() ),
-                                              EscapeHTML( MessageTextFromValue( UNITS, val ) ) ) )
+                                              EscapeHTML( REPORT_VALUE( val ) ) ) )
                 }
-                else if( aConstraintId == COURTYARD_CLEARANCE_CONSTRAINT )
+                else if( c->constraint.m_Type == COURTYARD_CLEARANCE_CONSTRAINT )
                 {
                     int val = c->constraint.m_Value.Min();
-                    REPORT( wxString::Format( _( "Checking %s; courtyard clearance: %s." ),
+                    REPORT( wxString::Format( _( "Checking %s clearance: %s." ),
                                               EscapeHTML( c->constraint.GetName() ),
-                                              EscapeHTML( MessageTextFromValue( UNITS, val ) ) ) )
+                                              EscapeHTML( REPORT_VALUE( val ) ) ) )
                 }
-                else if( aConstraintId == SILK_CLEARANCE_CONSTRAINT )
+                else if( c->constraint.m_Type == SILK_CLEARANCE_CONSTRAINT )
                 {
                     int val = c->constraint.m_Value.Min();
-                    REPORT( wxString::Format( _( "Checking %s; silk clearance: %s." ),
+                    REPORT( wxString::Format( _( "Checking %s clearance: %s." ),
                                               EscapeHTML( c->constraint.GetName() ),
-                                              EscapeHTML( MessageTextFromValue( UNITS, val ) ) ) )
+                                              EscapeHTML( REPORT_VALUE( val ) ) ) )
                 }
-                else if( aConstraintId == HOLE_CLEARANCE_CONSTRAINT )
+                else if( c->constraint.m_Type == HOLE_CLEARANCE_CONSTRAINT )
                 {
                     int val = c->constraint.m_Value.Min();
-                    REPORT( wxString::Format( _( "Checking %s; hole clearance: %s." ),
+                    REPORT( wxString::Format( _( "Checking %s clearance: %s." ),
                                               EscapeHTML( c->constraint.GetName() ),
-                                              EscapeHTML( MessageTextFromValue( UNITS, val ) ) ) )
+                                              EscapeHTML( REPORT_VALUE( val ) ) ) )
                 }
-                else if( aConstraintId == EDGE_CLEARANCE_CONSTRAINT )
+                else if( c->constraint.m_Type == EDGE_CLEARANCE_CONSTRAINT )
                 {
                     int val = c->constraint.m_Value.Min();
-                    REPORT( wxString::Format( _( "Checking %s; edge clearance: %s." ),
+                    REPORT( wxString::Format( _( "Checking %s clearance: %s." ),
                                               EscapeHTML( c->constraint.GetName() ),
-                                              EscapeHTML( MessageTextFromValue( UNITS, val ) ) ) )
+                                              EscapeHTML( REPORT_VALUE( val ) ) ) )
                 }
                 else
                 {
                     REPORT( wxString::Format( _( "Checking %s." ), c->constraint.GetName() ) )
                 }
 
-                if( aConstraintId == CLEARANCE_CONSTRAINT )
+                if( c->constraint.m_Type == CLEARANCE_CONSTRAINT )
                 {
                     if( implicit && ( a_is_non_copper || b_is_non_copper ) )
                     {
@@ -881,7 +947,7 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintId, const BOAR
                         return true;
                     }
                 }
-                else if( aConstraintId == DISALLOW_CONSTRAINT )
+                else if( c->constraint.m_Type == DISALLOW_CONSTRAINT )
                 {
                     int mask;
 
@@ -891,12 +957,14 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintId, const BOAR
                     }
                     else if( a->Type() == PCB_VIA_T )
                     {
-                        if( static_cast<const PCB_VIA*>( a )->GetViaType() == VIATYPE::BLIND_BURIED )
-                            mask = DRC_DISALLOW_VIAS | DRC_DISALLOW_BB_VIAS;
-                        else if( static_cast<const PCB_VIA*>( a )->GetViaType() == VIATYPE::MICROVIA )
-                            mask = DRC_DISALLOW_VIAS | DRC_DISALLOW_MICRO_VIAS;
-                        else
-                            mask = DRC_DISALLOW_VIAS;
+                        mask = DRC_DISALLOW_VIAS;
+
+                        switch( static_cast<const PCB_VIA*>( a )->GetViaType() )
+                        {
+                        case VIATYPE::BLIND_BURIED: mask |= DRC_DISALLOW_BB_VIAS;    break;
+                        case VIATYPE::MICROVIA:     mask |= DRC_DISALLOW_MICRO_VIAS; break;
+                        default:                                                     break;
+                        }
                     }
                     else
                     {
@@ -1018,9 +1086,17 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintId, const BOAR
                 }
             };
 
-    if( m_constraintMap.count( aConstraintId ) )
+    DRC_CONSTRAINT_T effectiveConstraintType = aConstraintType;
+
+    if( aConstraintType == CLEARANCE_CONSTRAINT
+            && ( isUnflashedNPTH( a, aLayer ) || isUnflashedNPTH( b, aLayer ) ) )
     {
-        std::vector<DRC_ENGINE_CONSTRAINT*>* ruleset = m_constraintMap[ aConstraintId ];
+        effectiveConstraintType = HOLE_CLEARANCE_CONSTRAINT;
+    }
+
+    if( m_constraintMap.count( effectiveConstraintType ) )
+    {
+        std::vector<DRC_ENGINE_CONSTRAINT*>* ruleset = m_constraintMap[ effectiveConstraintType ];
 
         if( aReporter )
         {
@@ -1046,7 +1122,7 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintId, const BOAR
     // Unfortunately implicit rules don't work for local clearances (such as zones) because
     // they have to be max'ed with netclass values (which are already implicit rules), and our
     // rule selection paradigm is "winner takes all".
-    if( aConstraintId == CLEARANCE_CONSTRAINT && !explicitConstraintFound )
+    if( aConstraintType == CLEARANCE_CONSTRAINT && !explicitConstraintFound )
     {
         int global = constraintRef ? constraintRef->m_Value.Min() : 0;
         int localA = ac ? ac->GetLocalClearance( nullptr ) : 0;
@@ -1058,7 +1134,7 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintId, const BOAR
             REPORT( "" )
             REPORT( wxString::Format( _( "Local clearance on %s; clearance: %s." ),
                                       EscapeHTML( a->GetSelectMenuText( UNITS ) ),
-                                      EscapeHTML( MessageTextFromValue( UNITS, localA ) ) ) )
+                                      EscapeHTML( REPORT_VALUE( localA ) ) ) )
 
             if( localA > clearance )
                 clearance = ac->GetLocalClearance( &m_msg );
@@ -1069,7 +1145,7 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintId, const BOAR
             REPORT( "" )
             REPORT( wxString::Format( _( "Local clearance on %s; clearance: %s." ),
                                       EscapeHTML( b->GetSelectMenuText( UNITS ) ),
-                                      EscapeHTML( MessageTextFromValue( UNITS, localB ) ) ) )
+                                      EscapeHTML( REPORT_VALUE( localB ) ) ) )
 
             if( localB > clearance )
                 clearance = bc->GetLocalClearance( &m_msg );
@@ -1090,6 +1166,7 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintId, const BOAR
 
 #undef REPORT
 #undef UNITS
+#undef REPORT_VALUE
 }
 
 
