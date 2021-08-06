@@ -505,18 +505,14 @@ LAYER_WIDGET::LAYER_WIDGET( wxWindow* aParent, wxWindow* aFocusOwner, wxWindowID
 
     wxBoxSizer* mainSizer = new wxBoxSizer( wxVERTICAL );
 
-    m_notebook = new wxAuiNotebook( this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
-                                    wxAUI_NB_TOP );
+    m_notebook = new wxNotebook( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxNB_TOP );
 
     wxFont font = m_notebook->GetFont();
 
     // change the font size on the notebook's tabs to match aPointSize
     font.SetPointSize( pointSize );
     m_notebook->SetFont( font );
-    m_notebook->SetNormalFont( font );
-    m_notebook->SetSelectedFont( font );
-    m_notebook->SetMeasuringFont( font );
-
+    
     m_LayerPanel = new wxPanel( m_notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize,
                                 wxTAB_TRAVERSAL );
 

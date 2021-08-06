@@ -457,7 +457,7 @@ protected:
         ID_LAST_VALUE
     };
 
-    wxAuiNotebook*      m_notebook;
+    wxNotebook*         m_notebook;
     wxPanel*            m_LayerPanel;
     wxScrolledWindow*   m_LayerScrolledWindow;
     wxFlexGridSizer*    m_LayersFlexGridSizer;
