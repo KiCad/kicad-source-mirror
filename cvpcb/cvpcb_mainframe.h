@@ -367,15 +367,16 @@ private:
     void refreshAfterSymbolSearch( COMPONENT* aSymbol );
 
 public:
-    FOOTPRINT_LIST*           m_FootprintsList;
+    FOOTPRINT_LIST* m_FootprintsList;
 
 protected:
-    bool                      m_modified;
-    bool                      m_skipComponentSelect;   // skip component selection event during
-                                                       // automatic selection/deletion of
-                                                       // associations
+    bool            m_modified;
+    bool            m_skipComponentSelect;  // skip component selection event during
+                                            // automatic selection/deletion of associations
 
-    bool                      m_initialized;
+    bool            m_initialized;          // true after creating widgets.
+    bool            m_cannotClose;          // true when the cvpcb frame cannot be closed
+                                            // (mainly during reading a netlist sent by Eeschema)
 
 private:
     friend struct CV::IFACE;

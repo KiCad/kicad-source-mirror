@@ -59,7 +59,6 @@
 
 #define CVPCB_MAINFRAME_NAME wxT( "CvpcbFrame" )
 
-
 CVPCB_MAINFRAME::CVPCB_MAINFRAME( KIWAY* aKiway, wxWindow* aParent ) :
     KIWAY_PLAYER( aKiway, aParent, FRAME_CVPCB, _( "Assign Footprints" ), wxDefaultPosition,
                   wxDefaultSize, KICAD_DEFAULT_DRAWFRAME_STYLE, CVPCB_MAINFRAME_NAME )
@@ -69,6 +68,7 @@ CVPCB_MAINFRAME::CVPCB_MAINFRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_librariesListBox    = nullptr;
     m_mainToolBar         = nullptr;
     m_modified            = false;
+    m_cannotClose         = false;
     m_skipComponentSelect = false;
     m_filteringOptions    = FOOTPRINTS_LISTBOX::UNFILTERED_FP_LIST;
     m_tcFilterString      = nullptr;
@@ -393,6 +393,9 @@ bool CVPCB_MAINFRAME::canCloseWindow( wxCloseEvent& aEvent )
             return false;
         }
     }
+
+    if( m_cannotClose )
+        return false;
 
     return true;
 }
@@ -1127,7 +1130,11 @@ void CVPCB_MAINFRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
     switch( mail.Command() )
     {
     case MAIL_EESCHEMA_NETLIST:
+        // Disable Close events during ReadNetListAndFpFiles() to avoid crash when updating
+        // widgets:
+        m_cannotClose = true;
         ReadNetListAndFpFiles( payload );
+        m_cannotClose = false;
         /* @todo
         Go into SCH_EDIT_FRAME::OnOpenCvpcb( wxCommandEvent& event ) and trim GNL_ALL down.
         */
