@@ -64,6 +64,8 @@ public:
      */
     virtual void SetUnits( EDA_UNITS aUnits );
 
+    virtual void SetNegativeZero() { m_negativeZero = true; }
+
     /**
      * Normally not needed, but can be used to set the precision when using
      * internal units that are floats (not integers) like DEGREES or PERCENT.
@@ -81,8 +83,6 @@ public:
 
     /**
      * Set new value (in Internal Units) for the text field, taking care of units conversion.
-     *
-     * @param aValue is the new value.
      */
     virtual void SetValue( int aValue );
 
@@ -91,21 +91,25 @@ public:
     /**
      * Set new value (in Internal Units) for the text field, taking care of units conversion.
      *
-     * @param aValue is the new value.
-     * the initialized value will be truncated according to the precision set by SetPrecision()
-     * (if not <= 0)
+     * The value will be truncated according to the precision set by SetPrecision() (if not <= 0).
      */
     virtual void SetDoubleValue( double aValue );
 
     /**
-     * Change the value (in Internal Units) for the text field, taking care of units conversion
-     * but does not trigger the update routine
-     *
-     * @param aValue is the new value.
+     * Set new value (in Internal Units) for the text field, taking care of units conversion
+     * WITHOUT triggering the update routine.
      */
     virtual void ChangeValue( int aValue );
 
     void ChangeValue( const wxString& aValue );
+
+    /**
+     * Set new value (in Internal Units) for the text field, taking care of units conversion
+     * WITHOUT triggering the update routine.
+     *
+     * The value will be truncated according to the precision set by SetPrecision() (if not <= 0).
+     */
+    virtual void ChangeDoubleValue( double aValue );
 
     /**
      * Return the current value in Internal Units.
@@ -201,23 +205,21 @@ protected:
     ///< The bound widgets
     wxStaticText*     m_label;
     wxWindow*         m_valueCtrl;
-    wxStaticText*     m_unitLabel;  // Can be nullptr
+    wxStaticText*     m_unitLabel;      ///< Can be nullptr
 
     ///< Currently used units.
     EDA_UNITS         m_units;
+    bool              m_negativeZero;   ///< Indicates "-0" should be displayed for 0.
     EDA_DATA_TYPE     m_dataType;
-    int               m_precision;     // 0 to 6
+    int               m_precision;      ///< 0 to 6
 
-    ///< Validation support.
     wxString          m_errorMessage;
 
-    ///< Evaluator
     NUMERIC_EVALUATOR m_eval;
     bool              m_allowEval;
     bool              m_needsEval;
 
-    ///< Selection start and end of the original text
-    long              m_selStart;
+    long              m_selStart;       ///< Selection start and end of the original text
     long              m_selEnd;
 
     /// A reference to an ORIGIN_TRANSFORMS object

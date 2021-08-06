@@ -44,6 +44,7 @@ private:
     UNIT_BINDER             m_maskMargin;
     UNIT_BINDER             m_maskMinWidth;
     UNIT_BINDER             m_pasteMargin;
+    UNIT_BINDER             m_pasteMarginRatio;
 
 public:
     PANEL_SETUP_MASK_AND_PASTE( PAGED_DIALOG* aParent, PCB_EDIT_FRAME* aFrame );

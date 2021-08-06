@@ -1388,10 +1388,10 @@
                                                                     <property name="window_style">wxTAB_TRAVERSAL</property>
                                                                 </object>
                                                             </object>
-                                                            <object class="simplebookpage" expanded="0">
+                                                            <object class="simplebookpage" expanded="1">
                                                                 <property name="label">a page</property>
                                                                 <property name="select">0</property>
-                                                                <object class="wxPanel" expanded="0">
+                                                                <object class="wxPanel" expanded="1">
                                                                     <property name="BottomDockable">1</property>
                                                                     <property name="LeftDockable">1</property>
                                                                     <property name="RightDockable">1</property>
@@ -1770,10 +1770,10 @@
                                                                     </object>
                                                                 </object>
                                                             </object>
-                                                            <object class="simplebookpage" expanded="0">
+                                                            <object class="simplebookpage" expanded="1">
                                                                 <property name="label">a page</property>
                                                                 <property name="select">0</property>
-                                                                <object class="wxPanel" expanded="0">
+                                                                <object class="wxPanel" expanded="1">
                                                                     <property name="BottomDockable">1</property>
                                                                     <property name="LeftDockable">1</property>
                                                                     <property name="RightDockable">1</property>
@@ -1824,7 +1824,7 @@
                                                                     <property name="window_extra_style"></property>
                                                                     <property name="window_name"></property>
                                                                     <property name="window_style">wxTAB_TRAVERSAL</property>
-                                                                    <object class="wxFlexGridSizer" expanded="0">
+                                                                    <object class="wxFlexGridSizer" expanded="1">
                                                                         <property name="cols">3</property>
                                                                         <property name="flexible_direction">wxBOTH</property>
                                                                         <property name="growablecols">1</property>
@@ -1877,7 +1877,7 @@
                                                                                 <property name="minimize_button">0</property>
                                                                                 <property name="minimum_size"></property>
                                                                                 <property name="moveable">1</property>
-                                                                                <property name="name">m_staticTextCornerSizeRatio</property>
+                                                                                <property name="name">m_cornerRatioLabel</property>
                                                                                 <property name="pane_border">1</property>
                                                                                 <property name="pane_position"></property>
                                                                                 <property name="pane_size"></property>
@@ -1937,7 +1937,7 @@
                                                                                 <property name="minimize_button">0</property>
                                                                                 <property name="minimum_size"></property>
                                                                                 <property name="moveable">1</property>
-                                                                                <property name="name">m_tcCornerSizeRatio</property>
+                                                                                <property name="name">m_cornerRatioCtrl</property>
                                                                                 <property name="pane_border">1</property>
                                                                                 <property name="pane_position"></property>
                                                                                 <property name="pane_size"></property>
@@ -2003,7 +2003,7 @@
                                                                                 <property name="minimize_button">0</property>
                                                                                 <property name="minimum_size"></property>
                                                                                 <property name="moveable">1</property>
-                                                                                <property name="name">m_staticTextCornerSizeRatioUnit</property>
+                                                                                <property name="name">m_cornerRatioUnits</property>
                                                                                 <property name="pane_border">1</property>
                                                                                 <property name="pane_position"></property>
                                                                                 <property name="pane_size"></property>
@@ -2124,7 +2124,7 @@
                                                                                 <property name="minimize_button">0</property>
                                                                                 <property name="minimum_size"></property>
                                                                                 <property name="moveable">1</property>
-                                                                                <property name="name">m_tcCornerRadius</property>
+                                                                                <property name="name">m_cornerRadiusCtrl</property>
                                                                                 <property name="pane_border">1</property>
                                                                                 <property name="pane_position"></property>
                                                                                 <property name="pane_size"></property>
@@ -2213,10 +2213,10 @@
                                                                     </object>
                                                                 </object>
                                                             </object>
-                                                            <object class="simplebookpage" expanded="0">
+                                                            <object class="simplebookpage" expanded="1">
                                                                 <property name="label">a page</property>
                                                                 <property name="select">0</property>
-                                                                <object class="wxPanel" expanded="0">
+                                                                <object class="wxPanel" expanded="1">
                                                                     <property name="BottomDockable">1</property>
                                                                     <property name="LeftDockable">1</property>
                                                                     <property name="RightDockable">1</property>
@@ -2267,7 +2267,7 @@
                                                                     <property name="window_extra_style"></property>
                                                                     <property name="window_name"></property>
                                                                     <property name="window_style">wxTAB_TRAVERSAL</property>
-                                                                    <object class="wxFlexGridSizer" expanded="0">
+                                                                    <object class="wxFlexGridSizer" expanded="1">
                                                                         <property name="cols">3</property>
                                                                         <property name="flexible_direction">wxBOTH</property>
                                                                         <property name="growablecols">1</property>
@@ -2320,7 +2320,7 @@
                                                                                 <property name="minimize_button">0</property>
                                                                                 <property name="minimum_size"></property>
                                                                                 <property name="moveable">1</property>
-                                                                                <property name="name">m_staticTextChamferRatio</property>
+                                                                                <property name="name">m_chamferRatioLabel</property>
                                                                                 <property name="pane_border">1</property>
                                                                                 <property name="pane_position"></property>
                                                                                 <property name="pane_size"></property>
@@ -2380,7 +2380,7 @@
                                                                                 <property name="minimize_button">0</property>
                                                                                 <property name="minimum_size"></property>
                                                                                 <property name="moveable">1</property>
-                                                                                <property name="name">m_tcChamferRatio</property>
+                                                                                <property name="name">m_chamferRatioCtrl</property>
                                                                                 <property name="pane_border">1</property>
                                                                                 <property name="pane_position"></property>
                                                                                 <property name="pane_size"></property>
@@ -2446,7 +2446,7 @@
                                                                                 <property name="minimize_button">0</property>
                                                                                 <property name="minimum_size"></property>
                                                                                 <property name="moveable">1</property>
-                                                                                <property name="name">m_staticTextChamferRatioUnit</property>
+                                                                                <property name="name">m_chamferRatioUnits</property>
                                                                                 <property name="pane_border">1</property>
                                                                                 <property name="pane_position"></property>
                                                                                 <property name="pane_size"></property>
@@ -2911,7 +2911,7 @@
                                                                                 <property name="minimize_button">0</property>
                                                                                 <property name="minimum_size"></property>
                                                                                 <property name="moveable">1</property>
-                                                                                <property name="name">m_stMixedChamferRatio</property>
+                                                                                <property name="name">m_mixedChamferRatioLabel</property>
                                                                                 <property name="pane_border">1</property>
                                                                                 <property name="pane_position"></property>
                                                                                 <property name="pane_size"></property>
@@ -2971,7 +2971,7 @@
                                                                                 <property name="minimize_button">0</property>
                                                                                 <property name="minimum_size"></property>
                                                                                 <property name="moveable">1</property>
-                                                                                <property name="name">m_tcMixedChamferRatio</property>
+                                                                                <property name="name">m_mixedChamferRatioCtrl</property>
                                                                                 <property name="pane_border">1</property>
                                                                                 <property name="pane_position"></property>
                                                                                 <property name="pane_size"></property>
@@ -3037,7 +3037,7 @@
                                                                                 <property name="minimize_button">0</property>
                                                                                 <property name="minimum_size"></property>
                                                                                 <property name="moveable">1</property>
-                                                                                <property name="name">m_stMixedChamferRatioUnit</property>
+                                                                                <property name="name">m_mixedChamferRatioUnits</property>
                                                                                 <property name="pane_border">1</property>
                                                                                 <property name="pane_position"></property>
                                                                                 <property name="pane_size"></property>
@@ -3434,7 +3434,7 @@
                                                                                 <property name="gripper">0</property>
                                                                                 <property name="hidden">0</property>
                                                                                 <property name="id">wxID_ANY</property>
-                                                                                <property name="label">Corner radius:</property>
+                                                                                <property name="label">Corner size:</property>
                                                                                 <property name="markup">0</property>
                                                                                 <property name="max_size"></property>
                                                                                 <property name="maximize_button">0</property>
@@ -3443,7 +3443,7 @@
                                                                                 <property name="minimize_button">0</property>
                                                                                 <property name="minimum_size"></property>
                                                                                 <property name="moveable">1</property>
-                                                                                <property name="name">m_stMixedCornerSizeRatio</property>
+                                                                                <property name="name">m_mixedCornerRatioLabel</property>
                                                                                 <property name="pane_border">1</property>
                                                                                 <property name="pane_position"></property>
                                                                                 <property name="pane_size"></property>
@@ -3503,7 +3503,7 @@
                                                                                 <property name="minimize_button">0</property>
                                                                                 <property name="minimum_size"></property>
                                                                                 <property name="moveable">1</property>
-                                                                                <property name="name">m_tcMixedCornerSizeRatio</property>
+                                                                                <property name="name">m_mixedCornerRatioCtrl</property>
                                                                                 <property name="pane_border">1</property>
                                                                                 <property name="pane_position"></property>
                                                                                 <property name="pane_size"></property>
@@ -3569,7 +3569,7 @@
                                                                                 <property name="minimize_button">0</property>
                                                                                 <property name="minimum_size"></property>
                                                                                 <property name="moveable">1</property>
-                                                                                <property name="name">m_stMixedCornerSizeRatioUnit</property>
+                                                                                <property name="name">m_mixedCornerRatioUnits</property>
                                                                                 <property name="pane_border">1</property>
                                                                                 <property name="pane_position"></property>
                                                                                 <property name="pane_size"></property>
@@ -4878,7 +4878,7 @@
                                                             <property name="window_style"></property>
                                                         </object>
                                                     </object>
-                                                    <object class="sizeritem" expanded="0">
+                                                    <object class="sizeritem" expanded="1">
                                                         <property name="border">5</property>
                                                         <property name="flag">wxEXPAND|wxTOP</property>
                                                         <property name="proportion">0</property>
@@ -5015,11 +5015,11 @@
                                                             </object>
                                                         </object>
                                                     </object>
-                                                    <object class="sizeritem" expanded="0">
+                                                    <object class="sizeritem" expanded="1">
                                                         <property name="border">25</property>
                                                         <property name="flag">wxEXPAND|wxLEFT|wxRESERVE_SPACE_EVEN_IF_HIDDEN</property>
                                                         <property name="proportion">0</property>
-                                                        <object class="wxFlexGridSizer" expanded="0">
+                                                        <object class="wxFlexGridSizer" expanded="1">
                                                             <property name="cols">6</property>
                                                             <property name="flexible_direction">wxBOTH</property>
                                                             <property name="growablecols">1,4</property>
@@ -6884,11 +6884,11 @@
                                         </object>
                                     </object>
                                 </object>
-                                <object class="notebookpage" expanded="0">
+                                <object class="notebookpage" expanded="1">
                                     <property name="bitmap"></property>
                                     <property name="label">Clearance Overrides and Settings</property>
                                     <property name="select">0</property>
-                                    <object class="wxPanel" expanded="0">
+                                    <object class="wxPanel" expanded="1">
                                         <property name="BottomDockable">1</property>
                                         <property name="LeftDockable">1</property>
                                         <property name="RightDockable">1</property>
@@ -7392,7 +7392,7 @@
                                                                             <property name="minimize_button">0</property>
                                                                             <property name="minimum_size"></property>
                                                                             <property name="moveable">1</property>
-                                                                            <property name="name">m_maskClearanceLabel</property>
+                                                                            <property name="name">m_maskMarginLabel</property>
                                                                             <property name="pane_border">1</property>
                                                                             <property name="pane_position"></property>
                                                                             <property name="pane_size"></property>
@@ -7452,7 +7452,7 @@
                                                                             <property name="minimize_button">0</property>
                                                                             <property name="minimum_size"></property>
                                                                             <property name="moveable">1</property>
-                                                                            <property name="name">m_maskClearanceCtrl</property>
+                                                                            <property name="name">m_maskMarginCtrl</property>
                                                                             <property name="pane_border">1</property>
                                                                             <property name="pane_position"></property>
                                                                             <property name="pane_size"></property>
@@ -7517,7 +7517,7 @@
                                                                             <property name="minimize_button">0</property>
                                                                             <property name="minimum_size"></property>
                                                                             <property name="moveable">1</property>
-                                                                            <property name="name">m_maskClearanceUnits</property>
+                                                                            <property name="name">m_maskMarginUnits</property>
                                                                             <property name="pane_border">1</property>
                                                                             <property name="pane_position"></property>
                                                                             <property name="pane_size"></property>
@@ -7578,7 +7578,7 @@
                                                                             <property name="minimize_button">0</property>
                                                                             <property name="minimum_size"></property>
                                                                             <property name="moveable">1</property>
-                                                                            <property name="name">m_pasteClearanceLabel</property>
+                                                                            <property name="name">m_pasteMarginLabel</property>
                                                                             <property name="pane_border">1</property>
                                                                             <property name="pane_position"></property>
                                                                             <property name="pane_size"></property>
@@ -7638,7 +7638,7 @@
                                                                             <property name="minimize_button">0</property>
                                                                             <property name="minimum_size"></property>
                                                                             <property name="moveable">1</property>
-                                                                            <property name="name">m_pasteClearanceCtrl</property>
+                                                                            <property name="name">m_pasteMarginCtrl</property>
                                                                             <property name="pane_border">1</property>
                                                                             <property name="pane_position"></property>
                                                                             <property name="pane_size"></property>
@@ -7703,7 +7703,7 @@
                                                                             <property name="minimize_button">0</property>
                                                                             <property name="minimum_size"></property>
                                                                             <property name="moveable">1</property>
-                                                                            <property name="name">m_pasteClearanceUnits</property>
+                                                                            <property name="name">m_pasteMarginUnits</property>
                                                                             <property name="pane_border">1</property>
                                                                             <property name="pane_position"></property>
                                                                             <property name="pane_size"></property>
@@ -7764,7 +7764,7 @@
                                                                             <property name="minimize_button">0</property>
                                                                             <property name="minimum_size"></property>
                                                                             <property name="moveable">1</property>
-                                                                            <property name="name">m_staticTextRatio</property>
+                                                                            <property name="name">m_pasteMarginRatioLabel</property>
                                                                             <property name="pane_border">1</property>
                                                                             <property name="pane_position"></property>
                                                                             <property name="pane_size"></property>
@@ -7824,7 +7824,7 @@
                                                                             <property name="minimize_button">0</property>
                                                                             <property name="minimum_size"></property>
                                                                             <property name="moveable">1</property>
-                                                                            <property name="name">m_SolderPasteMarginRatioCtrl</property>
+                                                                            <property name="name">m_pasteMarginRatioCtrl</property>
                                                                             <property name="pane_border">1</property>
                                                                             <property name="pane_position"></property>
                                                                             <property name="pane_size"></property>
@@ -7889,7 +7889,7 @@
                                                                             <property name="minimize_button">0</property>
                                                                             <property name="minimum_size"></property>
                                                                             <property name="moveable">1</property>
-                                                                            <property name="name">m_SolderPasteRatioMarginUnits</property>
+                                                                            <property name="name">m_pasteMarginRatioUnits</property>
                                                                             <property name="pane_border">1</property>
                                                                             <property name="pane_position"></property>
                                                                             <property name="pane_size"></property>

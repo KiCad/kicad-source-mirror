@@ -67,7 +67,9 @@ DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR(
     m_solderMask( aParent, m_SolderMaskMarginLabel, m_SolderMaskMarginCtrl,
                   m_SolderMaskMarginUnits ),
     m_solderPaste( aParent, m_SolderPasteMarginLabel, m_SolderPasteMarginCtrl,
-                   m_SolderPasteMarginUnits )
+                   m_SolderPasteMarginUnits ),
+    m_solderPasteRatio( aParent, m_PasteMarginRatioLabel, m_PasteMarginRatioCtrl,
+                        m_PasteMarginRatioUnits )
 {
     // Create the 3D models page
     m_3dPanel = new PANEL_FP_PROPERTIES_3D_MODEL( m_frame, m_footprint, this, m_NoteBook );
@@ -125,6 +127,11 @@ DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR(
     {
         SetInitialFocus( m_NetClearanceCtrl );
     }
+
+    m_solderPaste.SetNegativeZero();
+
+    m_solderPasteRatio.SetUnits( EDA_UNITS::PERCENT );
+    m_solderPasteRatio.SetNegativeZero();
 
     m_sdbSizerStdButtonsOK->SetDefault();
 
@@ -219,21 +226,7 @@ bool DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::TransferDataToWindow()
     m_netClearance.SetValue( m_footprint->GetLocalClearance() );
     m_solderMask.SetValue( m_footprint->GetLocalSolderMaskMargin() );
     m_solderPaste.SetValue( m_footprint->GetLocalSolderPasteMargin() );
-
-    // Prefer "-0" to "0" for normally negative values
-    if( m_footprint->GetLocalSolderPasteMargin() == 0 )
-        m_SolderPasteMarginCtrl->SetValue( wxT( "-" ) + m_SolderPasteMarginCtrl->GetValue() );
-
-    // Add solder paste margin ratio in percent
-    // for the usual default value 0.0, display -0.0 (or -0,0 in some countries)
-    wxString msg;
-    msg.Printf( wxT( "%f" ), m_footprint->GetLocalSolderPasteMarginRatio() * 100.0 );
-
-    if( m_footprint->GetLocalSolderPasteMarginRatio() == 0.0 &&
-        msg[0] == '0')  // Sometimes Printf adds a sign if the value is very small (0.0)
-        m_SolderPasteMarginRatioCtrl->SetValue( wxT("-") + msg );
-    else
-        m_SolderPasteMarginRatioCtrl->SetValue( msg );
+    m_solderPasteRatio.SetDoubleValue( m_footprint->GetLocalSolderPasteMarginRatio() * 100.0 );
 
     switch( m_footprint->GetZoneConnection() )
     {
@@ -437,21 +430,7 @@ bool DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::TransferDataFromWindow()
     m_footprint->SetLocalClearance( m_netClearance.GetValue() );
     m_footprint->SetLocalSolderMaskMargin( m_solderMask.GetValue() );
     m_footprint->SetLocalSolderPasteMargin( m_solderPaste.GetValue() );
-
-    double dtmp = 0.0;
-    wxString msg = m_SolderPasteMarginRatioCtrl->GetValue();
-    msg.ToDouble( &dtmp );
-
-    // A -50% margin ratio means no paste on a pad, the ratio must be >= -50%
-    if( dtmp < -50.0 )
-        dtmp = -50.0;
-
-    // A margin ratio is always <= 0
-    // 0 means use full pad copper area
-    if( dtmp > 0.0 )
-        dtmp = 0.0;
-
-    m_footprint->SetLocalSolderPasteMarginRatio( dtmp / 100 );
+    m_footprint->SetLocalSolderPasteMarginRatio( m_solderPasteRatio.GetDoubleValue() / 100.0 );
 
     switch( m_ZoneConnectionChoice->GetSelection() )
     {

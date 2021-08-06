@@ -79,6 +79,7 @@ private:
     UNIT_BINDER              m_netClearance;
     UNIT_BINDER              m_solderMask;
     UNIT_BINDER              m_solderPaste;
+    UNIT_BINDER              m_solderPasteRatio;
 
     wxControl*               m_delayedFocusCtrl;
     NOTEBOOK_PAGES           m_delayedFocusPage;

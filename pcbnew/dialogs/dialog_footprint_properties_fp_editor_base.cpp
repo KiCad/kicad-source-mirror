@@ -280,18 +280,18 @@ DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::DIALOG_FOOTPRINT_PROPERTIES_FP_EDITO
 	m_SolderPasteMarginUnits->Wrap( -1 );
 	fgSizerClearances->Add( m_SolderPasteMarginUnits, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
-	m_staticTextRatio = new wxStaticText( sbSizerLocalProperties->GetStaticBox(), wxID_ANY, _("Solder paste relative clearance:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticTextRatio->Wrap( -1 );
-	m_staticTextRatio->SetToolTip( _("This is the local clearance ratio in percent between pads and the\nsolder paste for this footprint.\nA value of 10 means the clearance value is 10 percent of the pad size.\nThe final clearance value is the sum of this value and the clearance value.\nA negative value means a smaller mask size than pad size.\nThis value can be overridden on a pad-by-pad basis in the Local\nClearance and Settings tab of Pad Properties.") );
+	m_PasteMarginRatioLabel = new wxStaticText( sbSizerLocalProperties->GetStaticBox(), wxID_ANY, _("Solder paste relative clearance:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_PasteMarginRatioLabel->Wrap( -1 );
+	m_PasteMarginRatioLabel->SetToolTip( _("This is the local clearance ratio in percent between pads and the\nsolder paste for this footprint.\nA value of 10 means the clearance value is 10 percent of the pad size.\nThe final clearance value is the sum of this value and the clearance value.\nA negative value means a smaller mask size than pad size.\nThis value can be overridden on a pad-by-pad basis in the Local\nClearance and Settings tab of Pad Properties.") );
 
-	fgSizerClearances->Add( m_staticTextRatio, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
+	fgSizerClearances->Add( m_PasteMarginRatioLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
 
-	m_SolderPasteMarginRatioCtrl = new TEXT_CTRL_EVAL( sbSizerLocalProperties->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizerClearances->Add( m_SolderPasteMarginRatioCtrl, 1, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
+	m_PasteMarginRatioCtrl = new TEXT_CTRL_EVAL( sbSizerLocalProperties->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizerClearances->Add( m_PasteMarginRatioCtrl, 1, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 
-	m_SolderPasteRatioMarginUnits = new wxStaticText( sbSizerLocalProperties->GetStaticBox(), wxID_ANY, _("%"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_SolderPasteRatioMarginUnits->Wrap( -1 );
-	fgSizerClearances->Add( m_SolderPasteRatioMarginUnits, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+	m_PasteMarginRatioUnits = new wxStaticText( sbSizerLocalProperties->GetStaticBox(), wxID_ANY, _("%"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_PasteMarginRatioUnits->Wrap( -1 );
+	fgSizerClearances->Add( m_PasteMarginRatioUnits, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 
 	sbSizerLocalProperties->Add( fgSizerClearances, 1, wxEXPAND, 5 );

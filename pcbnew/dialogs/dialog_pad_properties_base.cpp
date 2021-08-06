@@ -156,18 +156,18 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	fgSizerRoundingProps->SetFlexibleDirection( wxBOTH );
 	fgSizerRoundingProps->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
-	m_staticTextCornerSizeRatio = new wxStaticText( m_roudingProps, wxID_ANY, _("Corner size:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticTextCornerSizeRatio->Wrap( -1 );
-	m_staticTextCornerSizeRatio->SetToolTip( _("Corner radius in percent  of the pad width.\nThe width is the smaller value between size X and size Y.\nThe max value is 50 percent.") );
+	m_cornerRatioLabel = new wxStaticText( m_roudingProps, wxID_ANY, _("Corner size:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cornerRatioLabel->Wrap( -1 );
+	m_cornerRatioLabel->SetToolTip( _("Corner radius in percent  of the pad width.\nThe width is the smaller value between size X and size Y.\nThe max value is 50 percent.") );
 
-	fgSizerRoundingProps->Add( m_staticTextCornerSizeRatio, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+	fgSizerRoundingProps->Add( m_cornerRatioLabel, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
-	m_tcCornerSizeRatio = new TEXT_CTRL_EVAL( m_roudingProps, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizerRoundingProps->Add( m_tcCornerSizeRatio, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+	m_cornerRatioCtrl = new TEXT_CTRL_EVAL( m_roudingProps, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizerRoundingProps->Add( m_cornerRatioCtrl, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
-	m_staticTextCornerSizeRatioUnit = new wxStaticText( m_roudingProps, wxID_ANY, _("%"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticTextCornerSizeRatioUnit->Wrap( -1 );
-	fgSizerRoundingProps->Add( m_staticTextCornerSizeRatioUnit, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+	m_cornerRatioUnits = new wxStaticText( m_roudingProps, wxID_ANY, _("%"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cornerRatioUnits->Wrap( -1 );
+	fgSizerRoundingProps->Add( m_cornerRatioUnits, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
 	m_cornerRadiusLabel = new wxStaticText( m_roudingProps, wxID_ANY, _("Corner radius:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_cornerRadiusLabel->Wrap( -1 );
@@ -175,8 +175,8 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 
 	fgSizerRoundingProps->Add( m_cornerRadiusLabel, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
-	m_tcCornerRadius = new wxTextCtrl( m_roudingProps, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizerRoundingProps->Add( m_tcCornerRadius, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+	m_cornerRadiusCtrl = new wxTextCtrl( m_roudingProps, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizerRoundingProps->Add( m_cornerRadiusCtrl, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	m_cornerRadiusUnits = new wxStaticText( m_roudingProps, wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_cornerRadiusUnits->Wrap( -1 );
@@ -194,18 +194,18 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	fgSizerChamferProps->SetFlexibleDirection( wxBOTH );
 	fgSizerChamferProps->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
-	m_staticTextChamferRatio = new wxStaticText( m_chamferProps, wxID_ANY, _("Chamfer size:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticTextChamferRatio->Wrap( -1 );
-	m_staticTextChamferRatio->SetToolTip( _("Chamfer size in percent of the pad width.\nThe width is the smaller value between size X and size Y.\nThe max value is 50 percent.") );
+	m_chamferRatioLabel = new wxStaticText( m_chamferProps, wxID_ANY, _("Chamfer size:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_chamferRatioLabel->Wrap( -1 );
+	m_chamferRatioLabel->SetToolTip( _("Chamfer size in percent of the pad width.\nThe width is the smaller value between size X and size Y.\nThe max value is 50 percent.") );
 
-	fgSizerChamferProps->Add( m_staticTextChamferRatio, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+	fgSizerChamferProps->Add( m_chamferRatioLabel, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
-	m_tcChamferRatio = new TEXT_CTRL_EVAL( m_chamferProps, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizerChamferProps->Add( m_tcChamferRatio, 1, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+	m_chamferRatioCtrl = new TEXT_CTRL_EVAL( m_chamferProps, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizerChamferProps->Add( m_chamferRatioCtrl, 1, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
-	m_staticTextChamferRatioUnit = new wxStaticText( m_chamferProps, wxID_ANY, _("%"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticTextChamferRatioUnit->Wrap( -1 );
-	fgSizerChamferProps->Add( m_staticTextChamferRatioUnit, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+	m_chamferRatioUnits = new wxStaticText( m_chamferProps, wxID_ANY, _("%"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_chamferRatioUnits->Wrap( -1 );
+	fgSizerChamferProps->Add( m_chamferRatioUnits, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
 	m_staticTextChamferCorner = new wxStaticText( m_chamferProps, wxID_ANY, _("Chamfer corners:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextChamferCorner->Wrap( -1 );
@@ -244,18 +244,18 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	fgMixedProps->SetFlexibleDirection( wxBOTH );
 	fgMixedProps->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
-	m_stMixedChamferRatio = new wxStaticText( m_mixedProps, wxID_ANY, _("Chamfer size:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_stMixedChamferRatio->Wrap( -1 );
-	m_stMixedChamferRatio->SetToolTip( _("Chamfer size in percent of the pad width.\nThe width is the smaller value between size X and size Y.\nThe max value is 50 percent.") );
+	m_mixedChamferRatioLabel = new wxStaticText( m_mixedProps, wxID_ANY, _("Chamfer size:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_mixedChamferRatioLabel->Wrap( -1 );
+	m_mixedChamferRatioLabel->SetToolTip( _("Chamfer size in percent of the pad width.\nThe width is the smaller value between size X and size Y.\nThe max value is 50 percent.") );
 
-	fgMixedProps->Add( m_stMixedChamferRatio, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+	fgMixedProps->Add( m_mixedChamferRatioLabel, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
-	m_tcMixedChamferRatio = new TEXT_CTRL_EVAL( m_mixedProps, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgMixedProps->Add( m_tcMixedChamferRatio, 1, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+	m_mixedChamferRatioCtrl = new TEXT_CTRL_EVAL( m_mixedProps, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgMixedProps->Add( m_mixedChamferRatioCtrl, 1, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
-	m_stMixedChamferRatioUnit = new wxStaticText( m_mixedProps, wxID_ANY, _("%"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_stMixedChamferRatioUnit->Wrap( -1 );
-	fgMixedProps->Add( m_stMixedChamferRatioUnit, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+	m_mixedChamferRatioUnits = new wxStaticText( m_mixedProps, wxID_ANY, _("%"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_mixedChamferRatioUnits->Wrap( -1 );
+	fgMixedProps->Add( m_mixedChamferRatioUnits, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
 	m_staticTextChamferCorner1 = new wxStaticText( m_mixedProps, wxID_ANY, _("Chamfer corners:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextChamferCorner1->Wrap( -1 );
@@ -285,18 +285,18 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 
 	fgMixedProps->Add( 0, 0, 1, wxEXPAND, 5 );
 
-	m_stMixedCornerSizeRatio = new wxStaticText( m_mixedProps, wxID_ANY, _("Corner radius:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_stMixedCornerSizeRatio->Wrap( -1 );
-	m_stMixedCornerSizeRatio->SetToolTip( _("Corner radius in percent  of the pad width.\nThe width is the smaller value between size X and size Y.\nThe max value is 50 percent.") );
+	m_mixedCornerRatioLabel = new wxStaticText( m_mixedProps, wxID_ANY, _("Corner size:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_mixedCornerRatioLabel->Wrap( -1 );
+	m_mixedCornerRatioLabel->SetToolTip( _("Corner radius in percent  of the pad width.\nThe width is the smaller value between size X and size Y.\nThe max value is 50 percent.") );
 
-	fgMixedProps->Add( m_stMixedCornerSizeRatio, 0, wxBOTTOM|wxRIGHT|wxALIGN_CENTER_VERTICAL, 5 );
+	fgMixedProps->Add( m_mixedCornerRatioLabel, 0, wxBOTTOM|wxRIGHT|wxALIGN_CENTER_VERTICAL, 5 );
 
-	m_tcMixedCornerSizeRatio = new TEXT_CTRL_EVAL( m_mixedProps, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgMixedProps->Add( m_tcMixedCornerSizeRatio, 0, wxEXPAND|wxBOTTOM|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
+	m_mixedCornerRatioCtrl = new TEXT_CTRL_EVAL( m_mixedProps, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgMixedProps->Add( m_mixedCornerRatioCtrl, 0, wxEXPAND|wxBOTTOM|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
 
-	m_stMixedCornerSizeRatioUnit = new wxStaticText( m_mixedProps, wxID_ANY, _("%"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_stMixedCornerSizeRatioUnit->Wrap( -1 );
-	fgMixedProps->Add( m_stMixedCornerSizeRatioUnit, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
+	m_mixedCornerRatioUnits = new wxStaticText( m_mixedProps, wxID_ANY, _("%"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_mixedCornerRatioUnits->Wrap( -1 );
+	fgMixedProps->Add( m_mixedCornerRatioUnits, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
 
 
 	m_mixedProps->SetSizer( fgMixedProps );
@@ -622,44 +622,44 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	m_clearanceUnits->Wrap( -1 );
 	fgClearancesGridSizer->Add( m_clearanceUnits, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT|wxLEFT, 5 );
 
-	m_maskClearanceLabel = new wxStaticText( sbClearancesSizer->GetStaticBox(), wxID_ANY, _("Solder mask clearance:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_maskClearanceLabel->Wrap( -1 );
-	m_maskClearanceLabel->SetToolTip( _("This is the local clearance between this pad and the solder mask.\nIf 0, the footprint local value or the global value is used.") );
+	m_maskMarginLabel = new wxStaticText( sbClearancesSizer->GetStaticBox(), wxID_ANY, _("Solder mask clearance:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_maskMarginLabel->Wrap( -1 );
+	m_maskMarginLabel->SetToolTip( _("This is the local clearance between this pad and the solder mask.\nIf 0, the footprint local value or the global value is used.") );
 
-	fgClearancesGridSizer->Add( m_maskClearanceLabel, 0, wxALIGN_CENTER_VERTICAL|wxTOP, 5 );
+	fgClearancesGridSizer->Add( m_maskMarginLabel, 0, wxALIGN_CENTER_VERTICAL|wxTOP, 5 );
 
-	m_maskClearanceCtrl = new wxTextCtrl( sbClearancesSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgClearancesGridSizer->Add( m_maskClearanceCtrl, 0, wxEXPAND|wxLEFT|wxTOP, 5 );
+	m_maskMarginCtrl = new wxTextCtrl( sbClearancesSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgClearancesGridSizer->Add( m_maskMarginCtrl, 0, wxEXPAND|wxLEFT|wxTOP, 5 );
 
-	m_maskClearanceUnits = new wxStaticText( sbClearancesSizer->GetStaticBox(), wxID_ANY, _("Inch"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_maskClearanceUnits->Wrap( -1 );
-	fgClearancesGridSizer->Add( m_maskClearanceUnits, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT|wxTOP, 5 );
+	m_maskMarginUnits = new wxStaticText( sbClearancesSizer->GetStaticBox(), wxID_ANY, _("Inch"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_maskMarginUnits->Wrap( -1 );
+	fgClearancesGridSizer->Add( m_maskMarginUnits, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT|wxTOP, 5 );
 
-	m_pasteClearanceLabel = new wxStaticText( sbClearancesSizer->GetStaticBox(), wxID_ANY, _("Solder paste absolute clearance:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_pasteClearanceLabel->Wrap( -1 );
-	m_pasteClearanceLabel->SetToolTip( _("This is the local clearance between this pad and the solder paste.\nIf 0, the footprint value or the global value is used.\nThe final clearance value is the sum of this value and the clearance value ratio.\nA negative value means a smaller mask size than pad size.") );
+	m_pasteMarginLabel = new wxStaticText( sbClearancesSizer->GetStaticBox(), wxID_ANY, _("Solder paste absolute clearance:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_pasteMarginLabel->Wrap( -1 );
+	m_pasteMarginLabel->SetToolTip( _("This is the local clearance between this pad and the solder paste.\nIf 0, the footprint value or the global value is used.\nThe final clearance value is the sum of this value and the clearance value ratio.\nA negative value means a smaller mask size than pad size.") );
 
-	fgClearancesGridSizer->Add( m_pasteClearanceLabel, 0, wxALIGN_CENTER_VERTICAL|wxTOP, 5 );
+	fgClearancesGridSizer->Add( m_pasteMarginLabel, 0, wxALIGN_CENTER_VERTICAL|wxTOP, 5 );
 
-	m_pasteClearanceCtrl = new wxTextCtrl( sbClearancesSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgClearancesGridSizer->Add( m_pasteClearanceCtrl, 0, wxEXPAND|wxLEFT|wxTOP, 5 );
+	m_pasteMarginCtrl = new wxTextCtrl( sbClearancesSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgClearancesGridSizer->Add( m_pasteMarginCtrl, 0, wxEXPAND|wxLEFT|wxTOP, 5 );
 
-	m_pasteClearanceUnits = new wxStaticText( sbClearancesSizer->GetStaticBox(), wxID_ANY, _("Inch"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_pasteClearanceUnits->Wrap( -1 );
-	fgClearancesGridSizer->Add( m_pasteClearanceUnits, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT|wxTOP, 5 );
+	m_pasteMarginUnits = new wxStaticText( sbClearancesSizer->GetStaticBox(), wxID_ANY, _("Inch"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_pasteMarginUnits->Wrap( -1 );
+	fgClearancesGridSizer->Add( m_pasteMarginUnits, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT|wxTOP, 5 );
 
-	m_staticTextRatio = new wxStaticText( sbClearancesSizer->GetStaticBox(), wxID_ANY, _("Solder paste relative clearance:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticTextRatio->Wrap( -1 );
-	m_staticTextRatio->SetToolTip( _("This is the local clearance ratio in percent between this pad and the solder paste.\nA value of 10 means the clearance value is 10 percent of the pad size.\nIf 0, the footprint value or the global value is used.\nThe final clearance value is the sum of this value and the clearance value.\nA negative value means a smaller mask size than pad size.") );
+	m_pasteMarginRatioLabel = new wxStaticText( sbClearancesSizer->GetStaticBox(), wxID_ANY, _("Solder paste relative clearance:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_pasteMarginRatioLabel->Wrap( -1 );
+	m_pasteMarginRatioLabel->SetToolTip( _("This is the local clearance ratio in percent between this pad and the solder paste.\nA value of 10 means the clearance value is 10 percent of the pad size.\nIf 0, the footprint value or the global value is used.\nThe final clearance value is the sum of this value and the clearance value.\nA negative value means a smaller mask size than pad size.") );
 
-	fgClearancesGridSizer->Add( m_staticTextRatio, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM, 5 );
+	fgClearancesGridSizer->Add( m_pasteMarginRatioLabel, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM, 5 );
 
-	m_SolderPasteMarginRatioCtrl = new TEXT_CTRL_EVAL( sbClearancesSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgClearancesGridSizer->Add( m_SolderPasteMarginRatioCtrl, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxTOP, 5 );
+	m_pasteMarginRatioCtrl = new TEXT_CTRL_EVAL( sbClearancesSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgClearancesGridSizer->Add( m_pasteMarginRatioCtrl, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxTOP, 5 );
 
-	m_SolderPasteRatioMarginUnits = new wxStaticText( sbClearancesSizer->GetStaticBox(), wxID_ANY, _("%"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_SolderPasteRatioMarginUnits->Wrap( -1 );
-	fgClearancesGridSizer->Add( m_SolderPasteRatioMarginUnits, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	m_pasteMarginRatioUnits = new wxStaticText( sbClearancesSizer->GetStaticBox(), wxID_ANY, _("%"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_pasteMarginRatioUnits->Wrap( -1 );
+	fgClearancesGridSizer->Add( m_pasteMarginRatioUnits, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
 
 	sbClearancesSizer->Add( fgClearancesGridSizer, 0, wxEXPAND, 5 );
@@ -1012,19 +1012,19 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	m_PadShapeSelector->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::OnPadShapeSelection ), NULL, this );
 	m_trapDeltaCtrl->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::OnValuesChanged ), NULL, this );
 	m_trapAxisCtrl->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::OnSetLayers ), NULL, this );
-	m_tcCornerSizeRatio->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::onCornerSizePercentChange ), NULL, this );
-	m_tcCornerRadius->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::onCornerRadiusChange ), NULL, this );
-	m_tcChamferRatio->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::onCornerSizePercentChange ), NULL, this );
+	m_cornerRatioCtrl->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::onCornerSizePercentChange ), NULL, this );
+	m_cornerRadiusCtrl->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::onCornerRadiusChange ), NULL, this );
+	m_chamferRatioCtrl->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::onCornerSizePercentChange ), NULL, this );
 	m_cbTopLeft->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::OnValuesChanged ), NULL, this );
 	m_cbTopRight->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::OnValuesChanged ), NULL, this );
 	m_cbBottomLeft->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::OnValuesChanged ), NULL, this );
 	m_cbBottomRight->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::OnValuesChanged ), NULL, this );
-	m_tcMixedChamferRatio->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::onCornerSizePercentChange ), NULL, this );
+	m_mixedChamferRatioCtrl->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::onCornerSizePercentChange ), NULL, this );
 	m_cbTopLeft1->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::OnValuesChanged ), NULL, this );
 	m_cbTopRight1->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::OnValuesChanged ), NULL, this );
 	m_cbBottomLeft1->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::OnValuesChanged ), NULL, this );
 	m_cbBottomRight1->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::OnValuesChanged ), NULL, this );
-	m_tcMixedCornerSizeRatio->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::onCornerSizePercentChange ), NULL, this );
+	m_mixedCornerRatioCtrl->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::onCornerSizePercentChange ), NULL, this );
 	m_sizeXCtrl->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::OnValuesChanged ), NULL, this );
 	m_sizeYCtrl->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::OnValuesChanged ), NULL, this );
 	m_orientation->Connect( wxEVT_COMMAND_COMBOBOX_SELECTED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::PadOrientEvent ), NULL, this );
@@ -1072,19 +1072,19 @@ DIALOG_PAD_PROPERTIES_BASE::~DIALOG_PAD_PROPERTIES_BASE()
 	m_PadShapeSelector->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::OnPadShapeSelection ), NULL, this );
 	m_trapDeltaCtrl->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::OnValuesChanged ), NULL, this );
 	m_trapAxisCtrl->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::OnSetLayers ), NULL, this );
-	m_tcCornerSizeRatio->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::onCornerSizePercentChange ), NULL, this );
-	m_tcCornerRadius->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::onCornerRadiusChange ), NULL, this );
-	m_tcChamferRatio->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::onCornerSizePercentChange ), NULL, this );
+	m_cornerRatioCtrl->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::onCornerSizePercentChange ), NULL, this );
+	m_cornerRadiusCtrl->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::onCornerRadiusChange ), NULL, this );
+	m_chamferRatioCtrl->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::onCornerSizePercentChange ), NULL, this );
 	m_cbTopLeft->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::OnValuesChanged ), NULL, this );
 	m_cbTopRight->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::OnValuesChanged ), NULL, this );
 	m_cbBottomLeft->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::OnValuesChanged ), NULL, this );
 	m_cbBottomRight->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::OnValuesChanged ), NULL, this );
-	m_tcMixedChamferRatio->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::onCornerSizePercentChange ), NULL, this );
+	m_mixedChamferRatioCtrl->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::onCornerSizePercentChange ), NULL, this );
 	m_cbTopLeft1->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::OnValuesChanged ), NULL, this );
 	m_cbTopRight1->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::OnValuesChanged ), NULL, this );
 	m_cbBottomLeft1->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::OnValuesChanged ), NULL, this );
 	m_cbBottomRight1->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::OnValuesChanged ), NULL, this );
-	m_tcMixedCornerSizeRatio->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::onCornerSizePercentChange ), NULL, this );
+	m_mixedCornerRatioCtrl->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::onCornerSizePercentChange ), NULL, this );
 	m_sizeXCtrl->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::OnValuesChanged ), NULL, this );
 	m_sizeYCtrl->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::OnValuesChanged ), NULL, this );
 	m_orientation->Disconnect( wxEVT_COMMAND_COMBOBOX_SELECTED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::PadOrientEvent ), NULL, this );

@@ -101,6 +101,7 @@ private:
     UNIT_BINDER                      m_netClearance;
     UNIT_BINDER                      m_solderMask;
     UNIT_BINDER                      m_solderPaste;
+    UNIT_BINDER                      m_solderPasteRatio;
 
     wxString                         m_delayedErrorMessage;
     wxGrid*                          m_delayedFocusGrid;

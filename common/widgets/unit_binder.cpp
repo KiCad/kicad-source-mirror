@@ -43,13 +43,14 @@ UNIT_BINDER::UNIT_BINDER( EDA_DRAW_FRAME* aParent, wxStaticText* aLabel, wxWindo
         m_label( aLabel ),
         m_valueCtrl( aValueCtrl ),
         m_unitLabel( aUnitLabel ),
+        m_negativeZero( false ),
+        m_dataType( EDA_DATA_TYPE::DISTANCE ),
+        m_precision( 0 ),
         m_eval( aParent->GetUserUnits() ),
         m_originTransforms( aParent->GetOriginTransforms() ),
         m_coordType( ORIGIN_TRANSFORMS::NOT_A_COORD )
 {
     m_units     = aParent->GetUserUnits();
-    m_dataType  = EDA_DATA_TYPE::DISTANCE;
-    m_precision = 0;
     m_allowEval = allowEval && dynamic_cast<wxTextEntry*>( m_valueCtrl );
     m_needsEval = false;
     m_selStart  = 0;
@@ -60,7 +61,10 @@ UNIT_BINDER::UNIT_BINDER( EDA_DRAW_FRAME* aParent, wxStaticText* aLabel, wxWindo
     if( textEntry )
     {
         // Use ChangeValue() instead of SetValue() so we don't generate events.
-        textEntry->ChangeValue( wxT( "0" ) );
+        if( m_negativeZero )
+            textEntry->ChangeValue( wxT( "-0" ) );
+        else
+            textEntry->ChangeValue( wxT( "0" ) );
     }
 
     if( m_unitLabel )
@@ -245,7 +249,11 @@ void UNIT_BINDER::SetValue( int aValue )
 {
     double value = aValue;
     double displayValue = m_originTransforms.ToDisplay( value, m_coordType );
-    SetValue( StringFromValue( m_units, displayValue, false, m_dataType ) );
+
+    if( displayValue == 0 && m_negativeZero )
+        SetValue( wxT( "-" ) + StringFromValue( m_units, displayValue, false, m_dataType ) );
+    else
+        SetValue( StringFromValue( m_units, displayValue, false, m_dataType ) );
 }
 
 
@@ -253,7 +261,11 @@ void UNIT_BINDER::SetDoubleValue( double aValue )
 {
     double displayValue = m_originTransforms.ToDisplay( aValue, m_coordType );
     displayValue = setPrecision( displayValue, false );
-    SetValue( StringFromValue( m_units, displayValue, false, m_dataType ) );
+
+    if( displayValue == 0 && m_negativeZero )
+        SetValue( wxT( "-" ) + StringFromValue( m_units, displayValue, false, m_dataType ) );
+    else
+        SetValue( StringFromValue( m_units, displayValue, false, m_dataType ) );
 }
 
 
@@ -279,7 +291,23 @@ void UNIT_BINDER::ChangeValue( int aValue )
 {
     double value = aValue;
     double displayValue = m_originTransforms.ToDisplay( value, m_coordType );
-    ChangeValue( StringFromValue( m_units, displayValue, false ) );
+
+    if( displayValue == 0 && m_negativeZero )
+        ChangeValue( wxT( "-" ) + StringFromValue( m_units, displayValue, false ) );
+    else
+        ChangeValue( StringFromValue( m_units, displayValue, false ) );
+}
+
+
+void UNIT_BINDER::ChangeDoubleValue( double aValue )
+{
+    double displayValue = m_originTransforms.ToDisplay( aValue, m_coordType );
+    displayValue = setPrecision( displayValue, false );
+
+    if( displayValue == 0 && m_negativeZero )
+        ChangeValue( wxT( "-" ) + StringFromValue( m_units, displayValue, false, m_dataType ) );
+    else
+        ChangeValue( StringFromValue( m_units, displayValue, false, m_dataType ) );
 }
 
 

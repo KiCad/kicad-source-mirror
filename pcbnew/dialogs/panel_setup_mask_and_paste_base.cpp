@@ -55,35 +55,35 @@ PANEL_SETUP_MASK_AND_PASTE_BASE::PANEL_SETUP_MASK_AND_PASTE_BASE( wxWindow* pare
 	fgGridSolderMaskSizer->SetFlexibleDirection( wxBOTH );
 	fgGridSolderMaskSizer->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
-	m_MaskMarginLabel = new wxStaticText( this, wxID_ANY, _("Solder mask clearance:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_MaskMarginLabel->Wrap( -1 );
-	m_MaskMarginLabel->SetToolTip( _("Global clearance between pads and the solder mask.\nThis value can be superseded by local values for a footprint or a pad.") );
+	m_maskMarginLabel = new wxStaticText( this, wxID_ANY, _("Solder mask clearance:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_maskMarginLabel->Wrap( -1 );
+	m_maskMarginLabel->SetToolTip( _("Global clearance between pads and the solder mask.\nThis value can be superseded by local values for a footprint or a pad.") );
 
-	fgGridSolderMaskSizer->Add( m_MaskMarginLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+	fgGridSolderMaskSizer->Add( m_maskMarginLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
-	m_MaskMarginCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_MaskMarginCtrl->SetToolTip( _("Positive clearance means area bigger than the pad (usual for solder mask clearance).") );
+	m_maskMarginCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_maskMarginCtrl->SetToolTip( _("Positive clearance means area bigger than the pad (usual for solder mask clearance).") );
 
-	fgGridSolderMaskSizer->Add( m_MaskMarginCtrl, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	fgGridSolderMaskSizer->Add( m_maskMarginCtrl, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 
-	m_MaskMarginUnits = new wxStaticText( this, wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_MaskMarginUnits->Wrap( -1 );
-	fgGridSolderMaskSizer->Add( m_MaskMarginUnits, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+	m_maskMarginUnits = new wxStaticText( this, wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_maskMarginUnits->Wrap( -1 );
+	fgGridSolderMaskSizer->Add( m_maskMarginUnits, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
-	m_MaskMinWidthLabel = new wxStaticText( this, wxID_ANY, _("Solder mask minimum bridge width:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_MaskMinWidthLabel->Wrap( -1 );
-	m_MaskMinWidthLabel->SetToolTip( _("Min. dist between 2 pad areas.\nTwo pad areas nearer than this value will be merged during plotting.\nThis parameter is only used to plot solder mask layers.\nLeave at 0 unless you know what you are doing.") );
+	m_maskMinWidthLabel = new wxStaticText( this, wxID_ANY, _("Solder mask minimum bridge width:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_maskMinWidthLabel->Wrap( -1 );
+	m_maskMinWidthLabel->SetToolTip( _("Min. dist between 2 pad areas.\nTwo pad areas nearer than this value will be merged during plotting.\nThis parameter is only used to plot solder mask layers.\nLeave at 0 unless you know what you are doing.") );
 
-	fgGridSolderMaskSizer->Add( m_MaskMinWidthLabel, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxLEFT, 5 );
+	fgGridSolderMaskSizer->Add( m_maskMinWidthLabel, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxLEFT, 5 );
 
-	m_MaskMinWidthCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_MaskMinWidthCtrl->SetToolTip( _("Minimum distance between openings in the solder mask.  Pad openings closer than this distance will be plotted as a single opening.") );
+	m_maskMinWidthCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_maskMinWidthCtrl->SetToolTip( _("Minimum distance between openings in the solder mask.  Pad openings closer than this distance will be plotted as a single opening.") );
 
-	fgGridSolderMaskSizer->Add( m_MaskMinWidthCtrl, 0, wxEXPAND|wxALL, 5 );
+	fgGridSolderMaskSizer->Add( m_maskMinWidthCtrl, 0, wxEXPAND|wxALL, 5 );
 
-	m_MaskMinWidthUnits = new wxStaticText( this, wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_MaskMinWidthUnits->Wrap( -1 );
-	fgGridSolderMaskSizer->Add( m_MaskMinWidthUnits, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxRIGHT, 5 );
+	m_maskMinWidthUnits = new wxStaticText( this, wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_maskMinWidthUnits->Wrap( -1 );
+	fgGridSolderMaskSizer->Add( m_maskMinWidthUnits, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxRIGHT, 5 );
 
 
 	fgGridSolderMaskSizer->Add( 0, 0, 1, wxEXPAND|wxTOP|wxBOTTOM, 10 );
@@ -94,35 +94,35 @@ PANEL_SETUP_MASK_AND_PASTE_BASE::PANEL_SETUP_MASK_AND_PASTE_BASE( wxWindow* pare
 
 	fgGridSolderMaskSizer->Add( 0, 0, 1, wxEXPAND, 5 );
 
-	m_PasteMarginLabel = new wxStaticText( this, wxID_ANY, _("Solder paste absolute clearance:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_PasteMarginLabel->Wrap( -1 );
-	m_PasteMarginLabel->SetToolTip( _("Global clearance between pads and the solder paste.\nThis value can be superseded by local values for a footprint or a pad.\nFinal clearance value is the sum of this value and the clearance value ratio.") );
+	m_pasteMarginLabel = new wxStaticText( this, wxID_ANY, _("Solder paste absolute clearance:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_pasteMarginLabel->Wrap( -1 );
+	m_pasteMarginLabel->SetToolTip( _("Global clearance between pads and the solder paste.\nThis value can be superseded by local values for a footprint or a pad.\nFinal clearance value is the sum of this value and the clearance value ratio.") );
 
-	fgGridSolderMaskSizer->Add( m_PasteMarginLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+	fgGridSolderMaskSizer->Add( m_pasteMarginLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
-	m_PasteMarginCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_PasteMarginCtrl->SetToolTip( _("Negative clearance means area smaller than the pad (usual for solder paste clearance).") );
+	m_pasteMarginCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_pasteMarginCtrl->SetToolTip( _("Negative clearance means area smaller than the pad (usual for solder paste clearance).") );
 
-	fgGridSolderMaskSizer->Add( m_PasteMarginCtrl, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	fgGridSolderMaskSizer->Add( m_pasteMarginCtrl, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 
-	m_PasteMarginUnits = new wxStaticText( this, wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_PasteMarginUnits->Wrap( -1 );
-	fgGridSolderMaskSizer->Add( m_PasteMarginUnits, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+	m_pasteMarginUnits = new wxStaticText( this, wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_pasteMarginUnits->Wrap( -1 );
+	fgGridSolderMaskSizer->Add( m_pasteMarginUnits, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
-	m_staticTextRatio = new wxStaticText( this, wxID_ANY, _("Solder paste relative clearance:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticTextRatio->Wrap( -1 );
-	m_staticTextRatio->SetToolTip( _("Global clearance ratio in percent between pads and the solder paste.\nA value of 10 means the clearance value is 10 percent of the pad size.\nThis value can be superseded by local values for a footprint or a pad.\nFinal clearance value is the sum of this value and the clearance value.") );
+	m_pasteMarginRatioLabel = new wxStaticText( this, wxID_ANY, _("Solder paste relative clearance:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_pasteMarginRatioLabel->Wrap( -1 );
+	m_pasteMarginRatioLabel->SetToolTip( _("Global clearance ratio in percent between pads and the solder paste.\nA value of 10 means the clearance value is 10 percent of the pad size.\nThis value can be superseded by local values for a footprint or a pad.\nFinal clearance value is the sum of this value and the clearance value.") );
 
-	fgGridSolderMaskSizer->Add( m_staticTextRatio, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxLEFT, 5 );
+	fgGridSolderMaskSizer->Add( m_pasteMarginRatioLabel, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxLEFT, 5 );
 
-	m_SolderPasteMarginRatioCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_SolderPasteMarginRatioCtrl->SetToolTip( _("Additional clearance as a percentage of the pad size.") );
+	m_pasteMarginRatioCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_pasteMarginRatioCtrl->SetToolTip( _("Additional clearance as a percentage of the pad size.") );
 
-	fgGridSolderMaskSizer->Add( m_SolderPasteMarginRatioCtrl, 0, wxEXPAND|wxALL, 5 );
+	fgGridSolderMaskSizer->Add( m_pasteMarginRatioCtrl, 0, wxEXPAND|wxALL, 5 );
 
-	m_SolderPasteRatioMarginUnits = new wxStaticText( this, wxID_ANY, _("%"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_SolderPasteRatioMarginUnits->Wrap( -1 );
-	fgGridSolderMaskSizer->Add( m_SolderPasteRatioMarginUnits, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxRIGHT, 5 );
+	m_pasteMarginRatioUnits = new wxStaticText( this, wxID_ANY, _("%"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_pasteMarginRatioUnits->Wrap( -1 );
+	fgGridSolderMaskSizer->Add( m_pasteMarginRatioUnits, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxRIGHT, 5 );
 
 
 	bSizer3->Add( fgGridSolderMaskSizer, 0, wxEXPAND|wxTOP|wxBOTTOM|wxRIGHT, 5 );

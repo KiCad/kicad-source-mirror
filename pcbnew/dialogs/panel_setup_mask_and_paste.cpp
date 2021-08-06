@@ -32,12 +32,19 @@
 PANEL_SETUP_MASK_AND_PASTE::PANEL_SETUP_MASK_AND_PASTE( PAGED_DIALOG* aParent,
                                                         PCB_EDIT_FRAME* aFrame ) :
         PANEL_SETUP_MASK_AND_PASTE_BASE( aParent->GetTreebook() ),
-        m_maskMargin( aFrame, m_MaskMarginLabel, m_MaskMarginCtrl, m_MaskMarginUnits ),
-        m_maskMinWidth( aFrame, m_MaskMinWidthLabel, m_MaskMinWidthCtrl, m_MaskMinWidthUnits ),
-        m_pasteMargin( aFrame, m_PasteMarginLabel, m_PasteMarginCtrl, m_PasteMarginUnits )
+        m_maskMargin( aFrame, m_maskMarginLabel, m_maskMarginCtrl, m_maskMarginUnits ),
+        m_maskMinWidth( aFrame, m_maskMinWidthLabel, m_maskMinWidthCtrl, m_maskMinWidthUnits ),
+        m_pasteMargin( aFrame, m_pasteMarginLabel, m_pasteMarginCtrl, m_pasteMarginUnits ),
+        m_pasteMarginRatio( aFrame, m_pasteMarginRatioLabel, m_pasteMarginRatioCtrl,
+                            m_pasteMarginRatioUnits )
 {
     m_Frame = aFrame;
     m_BrdSettings = &m_Frame->GetBoard()->GetDesignSettings();
+
+    m_pasteMargin.SetNegativeZero();
+
+    m_pasteMarginRatio.SetUnits( EDA_UNITS::PERCENT );
+    m_pasteMarginRatio.SetNegativeZero();
 }
 
 
@@ -46,21 +53,7 @@ bool PANEL_SETUP_MASK_AND_PASTE::TransferDataToWindow()
     m_maskMargin.SetValue( m_BrdSettings->m_SolderMaskMargin );
     m_maskMinWidth.SetValue( m_BrdSettings->m_SolderMaskMinWidth );
     m_pasteMargin.SetValue( m_BrdSettings->m_SolderPasteMargin );
-
-    // Prefer "-0" to "0" for normally negative values
-    if( m_BrdSettings->m_SolderPasteMargin == 0 )
-        m_PasteMarginCtrl->SetValue( wxT( "-" ) + m_PasteMarginCtrl->GetValue() );
-
-    // Add solder paste margin ratio in percent
-    // for the usual default value 0.0, display -0.0 (or -0,0 in some countries)
-    wxString msg;
-    msg.Printf( wxT( "%f" ), m_BrdSettings->m_SolderPasteMarginRatio * 100.0 );
-
-    // Sometimes Printf adds a sign if the value is small
-    if(  m_BrdSettings->m_SolderPasteMarginRatio == 0.0 && msg[0] == '0' )
-        m_SolderPasteMarginRatioCtrl->SetValue( wxT( "-" ) + msg );
-    else
-        m_SolderPasteMarginRatioCtrl->SetValue( msg );
+    m_pasteMarginRatio.SetDoubleValue( m_BrdSettings->m_SolderPasteMarginRatio * 100.0 );
 
     return true;
 }
@@ -71,21 +64,8 @@ bool PANEL_SETUP_MASK_AND_PASTE::TransferDataFromWindow()
     // These are all stored in project file, not board, so no need for OnModify()
     m_BrdSettings->m_SolderMaskMargin = m_maskMargin.GetValue();
     m_BrdSettings->m_SolderMaskMinWidth = m_maskMinWidth.GetValue();
-
     m_BrdSettings->m_SolderPasteMargin = m_pasteMargin.GetValue();
-
-    double dtmp = 0.0;
-    wxString msg = m_SolderPasteMarginRatioCtrl->GetValue();
-    msg.ToDouble( &dtmp );
-
-    // A margin ratio de -50% means no paste on a pad, the ratio must be >= 50 %
-    if( dtmp < -50 )
-        dtmp = -50;
-
-    if( dtmp > +100 )
-        dtmp = +100;
-
-    m_BrdSettings->m_SolderPasteMarginRatio = dtmp / 100;
+    m_BrdSettings->m_SolderPasteMarginRatio = m_pasteMarginRatio.GetDoubleValue() / 100.0;
 
     return true;
 }

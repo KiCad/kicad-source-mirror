@@ -39,18 +39,18 @@ class PANEL_SETUP_MASK_AND_PASTE_BASE : public wxPanel
 		wxStaticText* m_staticTextInfoMaskMinWidth;
 		wxStaticText* m_staticTextInfoMaskMinWidth1;
 		wxStaticLine* m_staticline1;
-		wxStaticText* m_MaskMarginLabel;
-		wxTextCtrl* m_MaskMarginCtrl;
-		wxStaticText* m_MaskMarginUnits;
-		wxStaticText* m_MaskMinWidthLabel;
-		wxTextCtrl* m_MaskMinWidthCtrl;
-		wxStaticText* m_MaskMinWidthUnits;
-		wxStaticText* m_PasteMarginLabel;
-		wxTextCtrl* m_PasteMarginCtrl;
-		wxStaticText* m_PasteMarginUnits;
-		wxStaticText* m_staticTextRatio;
-		wxTextCtrl* m_SolderPasteMarginRatioCtrl;
-		wxStaticText* m_SolderPasteRatioMarginUnits;
+		wxStaticText* m_maskMarginLabel;
+		wxTextCtrl* m_maskMarginCtrl;
+		wxStaticText* m_maskMarginUnits;
+		wxStaticText* m_maskMinWidthLabel;
+		wxTextCtrl* m_maskMinWidthCtrl;
+		wxStaticText* m_maskMinWidthUnits;
+		wxStaticText* m_pasteMarginLabel;
+		wxTextCtrl* m_pasteMarginCtrl;
+		wxStaticText* m_pasteMarginUnits;
+		wxStaticText* m_pasteMarginRatioLabel;
+		wxTextCtrl* m_pasteMarginRatioCtrl;
+		wxStaticText* m_pasteMarginRatioUnits;
 		wxStaticText* m_staticTextInfoPaste;
 
 	public:
