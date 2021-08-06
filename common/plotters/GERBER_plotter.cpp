@@ -856,6 +856,8 @@ void GERBER_PLOTTER::plotArc( const SHAPE_ARC& aArc, bool aPlotInRegion )
     DPOINT devEnd = userToDeviceCoordinates( end );
     DPOINT devCenter = userToDeviceCoordinates( center ) - userToDeviceCoordinates( start );
 
+    fprintf( m_outputFile, "G75*\n" );        // Multiquadrant (360 degrees) mode
+
     if( start_angle < end_angle )
         fprintf( m_outputFile, "G03*\n" );    // Active circular interpolation, CCW
     else
