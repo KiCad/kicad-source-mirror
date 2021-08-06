@@ -125,6 +125,7 @@ CVPCB_MAINFRAME::CVPCB_MAINFRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_libListBox            = NULL;
     m_mainToolBar           = NULL;
     m_modified              = false;
+    m_cannotClose           = false;
     m_skipComponentSelect   = false;
     m_filteringOptions      = 0;
     m_tcFilterString        = NULL;
@@ -306,6 +307,10 @@ void CVPCB_MAINFRAME::OnCloseWindow( wxCloseEvent& Event )
 
     // clear highlight symbol in schematic:
     SendMessageToEESCHEMA( true );
+
+
+    if( m_cannotClose )
+        return;
 
     // Delete window
     Destroy();
@@ -1117,7 +1122,11 @@ void CVPCB_MAINFRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
     switch( mail.Command() )
     {
     case MAIL_EESCHEMA_NETLIST:
+        // Disable Close events during ReadNetListAndFpFiles() to avoid crash when updating
+        // widgets:
+        m_cannotClose = true;
         ReadNetListAndFpFiles( payload );
+        m_cannotClose = false;
         /* @todo
         Go into SCH_EDIT_FRAME::OnOpenCvpcb( wxCommandEvent& event ) and trim GNL_ALL down.
         */

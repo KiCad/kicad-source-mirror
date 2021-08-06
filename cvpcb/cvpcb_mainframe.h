@@ -80,11 +80,13 @@ public:
 
 protected:
     bool            m_modified;
-    bool            m_skipComponentSelect;      // true to skip OnSelectComponent event
-                                                // (in automatic selection/deletion of associations)
+    bool            m_skipComponentSelect;  // true to skip OnSelectComponent event
+                                            // (in automatic selection/deletion of associations)
     PARAM_CFG_ARRAY m_projectFileParams;
 
     bool            m_initialized;
+    bool            m_cannotClose;          // true when the cvpcb frame cannot be closed
+                                            // (mainly during reading a netlist sent by Eeschema)
 
     CVPCB_MAINFRAME( KIWAY* aKiway, wxWindow* aParent );
 
