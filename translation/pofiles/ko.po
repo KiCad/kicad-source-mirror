@@ -1,11 +1,12 @@
 # 킴슨김랑기 <korearf@gmail.com>, 2021.
+# Ji Yoon Choi <chichoon.choi@gmail.com>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
-"PO-Revision-Date: 2021-08-06 21:14+0000\n"
-"Last-Translator: 킴슨김랑기 <korearf@gmail.com>\n"
+"PO-Revision-Date: 2021-08-07 11:48+0000\n"
+"Last-Translator: Ji Yoon Choi <chichoon.choi@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
 "Language: ko\n"
@@ -4377,12 +4378,12 @@ msgstr "%s : %s() 에서 %d 행"
 #: common/exceptions.cpp:76
 #, c-format
 msgid "%s in '%s', line %d, offset %d."
-msgstr ""
+msgstr "%s ('%s' 로부터), %d번째 라인, 오프셋 %d."
 
 #: common/exceptions.cpp:90
 #, c-format
 msgid "from %s : %s() line:%d"
-msgstr ""
+msgstr "%s로부터: %s() 라인: %d"
 
 #: common/exceptions.cpp:101
 #, c-format, fuzzy
@@ -5634,14 +5635,12 @@ msgid "Copy selected item(s) to clipboard"
 msgstr "클립보드로 3D 이미지 복사"
 
 #: common/tool/actions.cpp:166
-#, fuzzy
 msgid "Paste items(s) from clipboard"
-msgstr "클립보드로 플로트"
+msgstr "클립보드로부터 항목 붙여넣기"
 
 #: common/tool/actions.cpp:172
-#, fuzzy
 msgid "Select all items on screen"
-msgstr "탐색할 라이브러리 선택"
+msgstr "화면상의 모든 아이템 선택"
 
 #: common/tool/actions.cpp:176
 msgid "Paste Special..."
@@ -5668,7 +5667,7 @@ msgstr "선택된 항목 잘라내기"
 
 #: common/tool/actions.cpp:197
 msgid "Interactive Delete Tool"
-msgstr ""
+msgstr "인터랙티브 삭제 도구"
 
 #: common/tool/actions.cpp:197
 #, fuzzy
@@ -5697,11 +5696,11 @@ msgstr "항목 찾기"
 
 #: common/tool/actions.cpp:215 eeschema/dialogs/dialog_schematic_find.cpp:44
 msgid "Find and Replace"
-msgstr ""
+msgstr "찾기 및 바꾸기"
 
 #: common/tool/actions.cpp:215
 msgid "Find and replace text"
-msgstr ""
+msgstr "문자열 찾기 및 바꾸기"
 
 #: common/tool/actions.cpp:221 pcbnew/dialogs/dialog_find_base.cpp:93
 #, fuzzy
@@ -5724,7 +5723,7 @@ msgstr "교체 및 다음 찾기"
 
 #: common/tool/actions.cpp:233
 msgid "Replace current match and find next"
-msgstr ""
+msgstr "현재 검색 결과를 교체 및 다음 찾기"
 
 #: common/tool/actions.cpp:239
 #, fuzzy
@@ -5763,7 +5762,7 @@ msgstr "패드 제외"
 
 #: common/tool/actions.cpp:260
 msgid "Mark current violation in Checker window as an exclusion"
-msgstr ""
+msgstr "체커 창의 현재 위반사항을 예외로 마크하기"
 
 #: common/tool/actions.cpp:271
 #, fuzzy
@@ -5849,11 +5848,11 @@ msgstr "커서 모양 바꾸기"
 
 #: common/tool/actions.cpp:395
 msgid "Click"
-msgstr ""
+msgstr "클릭"
 
 #: common/tool/actions.cpp:395
 msgid "Performs left mouse button click"
-msgstr ""
+msgstr "왼쪽 마우스 버튼 클릭과 같이 동작"
 
 #: common/tool/actions.cpp:401
 #, fuzzy
@@ -5862,7 +5861,7 @@ msgstr "편집할 필드"
 
 #: common/tool/actions.cpp:401
 msgid "Performs left mouse button double-click"
-msgstr ""
+msgstr "왼쪽 마우스 버튼 더블 클릭과 같이 동작"
 
 #: common/tool/actions.cpp:407
 #, fuzzy
@@ -5886,40 +5885,35 @@ msgstr "현재 시트만 저장"
 
 #: common/tool/actions.cpp:417
 msgid "Pan Up"
-msgstr ""
+msgstr "위로 패닝"
 
 #: common/tool/actions.cpp:423
-#, fuzzy
 msgid "Pan Down"
-msgstr "아래쪽"
+msgstr "아래로 패닝"
 
 #: common/tool/actions.cpp:429
-#, fuzzy
 msgid "Pan Left"
-msgstr "왼쪽"
+msgstr "왼쪽으로 패닝"
 
 #: common/tool/actions.cpp:435
-#, fuzzy
 msgid "Pan Right"
-msgstr "오른쪽"
+msgstr "오른쪽으로 패닝"
 
 #: common/tool/actions.cpp:442
 msgid "Switch to Fast Grid 1"
-msgstr ""
+msgstr "빠른 그리드 1로 전환"
 
 #: common/tool/actions.cpp:447
 msgid "Switch to Fast Grid 2"
-msgstr ""
+msgstr "빠른 그리드 2로 전환"
 
 #: common/tool/actions.cpp:452
-#, fuzzy
 msgid "Switch to Next Grid"
-msgstr "트랙 두께 선택"
+msgstr "다음 그리드로 전환"
 
 #: common/tool/actions.cpp:456
-#, fuzzy
 msgid "Switch to Previous Grid"
-msgstr "회로도 열기 (&L)"
+msgstr "이전 그리드로 전환"
 
 #: common/tool/actions.cpp:461
 msgid "Set the grid origin point"
@@ -5932,7 +5926,7 @@ msgstr "그리드 보이기"
 
 #: common/tool/actions.cpp:474
 msgid "Display grid dots or lines in the edit window"
-msgstr ""
+msgstr "편집 창에 그리드 점 및 선 보이기"
 
 #: common/tool/actions.cpp:479
 msgid "Grid Properties..."
@@ -5954,11 +5948,11 @@ msgstr "inch"
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:85
 #: pcbnew/import_gfx/dialog_import_gfx.cpp:54
 msgid "Mils"
-msgstr ""
+msgstr "mil"
 
 #: common/tool/actions.cpp:489
 msgid "Use mils"
-msgstr ""
+msgstr "mil 단위 사용"
 
 #: common/tool/actions.cpp:494
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:120
@@ -5973,13 +5967,12 @@ msgid "Millimeters"
 msgstr "mm"
 
 #: common/tool/actions.cpp:494
-#, fuzzy
 msgid "Use millimeters"
-msgstr "mm"
+msgstr "mm 단위 사용"
 
 #: common/tool/actions.cpp:503
 msgid "Switch units"
-msgstr ""
+msgstr "단위 전환"
 
 #: common/tool/actions.cpp:503
 msgid "Switch between imperial and metric units"
@@ -21053,9 +21046,8 @@ msgid "footprint location"
 msgstr "글꼴 선택 (&F)"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:350
-#, fuzzy
 msgid "reference designator location"
-msgstr "사용자 지정 에디터:"
+msgstr "레퍼런스 지정자 위치"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:492
 #, c-format
@@ -21104,14 +21096,12 @@ msgid ""
 msgstr ""
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:536
-#, fuzzy
 msgid "Footprint Coordinates"
-msgstr "풋프린트 이름:"
+msgstr "풋프린트 좌표"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:537
-#, fuzzy
 msgid "Reference Designator Coordinates"
-msgstr "사용자 지정 에디터:"
+msgstr "레퍼런스 지정자의 좌표"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:539
 #, c-format
@@ -21214,19 +21204,16 @@ msgid "Vertically: bottom right to top left"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:132
-#, fuzzy
 msgid "Based on location of:"
-msgstr "패드 설정"
+msgstr "위치의 기준:"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:136
-#, fuzzy
 msgid "Reference Designator"
-msgstr "사용자 지정 에디터:"
+msgstr "레퍼런스 지정자"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:142
-#, fuzzy
 msgid "Round locations to:"
-msgstr "패드 설정"
+msgstr "위치 반올림하여 정렬:"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:144
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:151
@@ -21242,9 +21229,8 @@ msgid "Reannotation Scope"
 msgstr "치수 속성"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:170
-#, fuzzy
 msgid "Reannotate:"
-msgstr "애노테이트"
+msgstr "주석 재작성:"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:178
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:140
@@ -21261,14 +21247,12 @@ msgid "Back"
 msgstr "후면에서 보기"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:208
-#, fuzzy
 msgid "Front reference start:"
-msgstr "풋프린트 레퍼런스"
+msgstr "정면 레퍼런스 시작:"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:210
-#, fuzzy
 msgid "Starting reference designation for front."
-msgstr "전면에 대한 참조 지정 시작."
+msgstr "정면에 대한 참조 지정 시작."
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:214
 #: pcbnew/dialogs/dialog_create_array_base.cpp:93
@@ -21292,37 +21276,36 @@ msgid "Default is 1"
 msgstr "기본값"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:220
-#, fuzzy
 msgid "Back reference start:"
-msgstr "설정 (&P)"
+msgstr "후면 레퍼런스 시작:"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:222
 msgid ""
 "Blank continues from front or enter a number greater than the highest "
 "reference designation on the front."
-msgstr ""
+msgstr "공백으로 비워둠으로써 정면의 값을 계속 사용하거나, 전면의 가장 큰 레퍼런스 지정자보다 큰 값을 입력하세요."
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:227
 msgid ""
 "Leave blank or zero, or enter a number greater than the highest reference "
 "designation on the front."
-msgstr ""
+msgstr "공백 또는 0으로 남겨 놓거나, 정면의 가장 큰 레퍼런스 지정자보다 큰 값을 입력하세요."
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:232
-#, fuzzy
 msgid "Remove front prefix"
-msgstr "선택된 부품 보기"
+msgstr "정면 접두사를 삭제"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:233
 msgid ""
 "If checked will remove the front side prefix\n"
 "in the front prefix box if present"
 msgstr ""
+"해당 항목을 체크하면, 정면 접두사 박스에 값이 존재할 경우\n"
+"정면 접두사를 삭제합니다"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:237
-#, fuzzy
 msgid "Remove back prefix"
-msgstr "선택된 부품 보기"
+msgstr "후면 접두사 삭제"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:238
 msgid ""
