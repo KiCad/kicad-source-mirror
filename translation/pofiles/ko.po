@@ -8,7 +8,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
 "PO-Revision-Date: 2021-08-07 11:57+0000\n"
-"Last-Translator: jeongsuAn <dks9467@gmail.com>\n"
+"Last-Translator: Ji Yoon Choi <chichoon.choi@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
 "Language: ko\n"
@@ -5728,7 +5728,6 @@ msgid "Mark current violation in Checker window as an exclusion"
 msgstr "체커 창의 현재 위반사항을 예외로 마크하기"
 
 #: common/tool/actions.cpp:271
-#, fuzzy
 msgid "Refresh"
 msgstr "새로고침"
 
