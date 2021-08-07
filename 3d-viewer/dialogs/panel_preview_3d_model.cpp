@@ -247,7 +247,7 @@ wxString PANEL_PREVIEW_3D_MODEL::formatScaleValue( double aValue )
 
 wxString PANEL_PREVIEW_3D_MODEL::formatRotationValue( double aValue )
 {
-    return wxString::Format( "%.2f %s", aValue, GetAbbreviatedUnitsLabel( EDA_UNITS::DEGREES ) );
+    return wxString::Format( "%.2f%s", aValue, GetAbbreviatedUnitsLabel( EDA_UNITS::DEGREES ) );
 }
 
 
@@ -257,7 +257,7 @@ wxString PANEL_PREVIEW_3D_MODEL::formatOffsetValue( double aValue )
     if( m_userUnits == EDA_UNITS::INCHES )
         aValue /= 25.4f;
 
-    return wxString::Format( "%.4f %s", aValue, GetAbbreviatedUnitsLabel( m_userUnits ) );
+    return wxString::Format( "%.4f%s", aValue, GetAbbreviatedUnitsLabel( m_userUnits ) );
 }
 
 

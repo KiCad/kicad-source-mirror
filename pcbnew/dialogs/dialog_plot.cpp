@@ -720,12 +720,10 @@ void DIALOG_PLOT::applyPlotSettings()
                  m_widthAdjustMaxValue ) )
     {
         m_trackWidthCorrection.SetValue( m_PSWidthAdjust );
-        msg.Printf( _( "Width correction constrained. "
-                       "The reasonable width correction value must be in a range of "
-                       " [%s; %s] (%s) for current design rules." ),
-                    StringFromValue( GetUserUnits(), m_widthAdjustMinValue, false ),
-                    StringFromValue( GetUserUnits(), m_widthAdjustMaxValue, false ),
-                    GetAbbreviatedUnitsLabel( GetUserUnits() ) );
+        msg.Printf( _( "Width correction constrained.  The width correction value must be in the"
+                       " range of [%s; %s] for the current design rules." ),
+                    StringFromValue( GetUserUnits(), m_widthAdjustMinValue, true ),
+                    StringFromValue( GetUserUnits(), m_widthAdjustMaxValue, true ) );
         reporter.Report( msg, RPT_SEVERITY_WARNING );
     }
 

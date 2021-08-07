@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015 CERN
- * Copyright (C) 2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018-2021 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -298,7 +298,7 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParen
             m_netSelector->Disable();
         }
 
-        m_DesignRuleViasUnit->SetLabel( GetAbbreviatedUnitsLabel( m_frame->GetUserUnits() ) );
+        m_DesignRuleViasUnit->SetLabel( GetAbbreviatedUnitsLabel( m_frame->GetUserUnits() ).Trim( false ) );
 
         int viaSelection = wxNOT_FOUND;
 
@@ -341,7 +341,7 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParen
 
     if( m_tracks )
     {
-        m_DesignRuleWidthsUnits->SetLabel( GetAbbreviatedUnitsLabel( m_frame->GetUserUnits() ) );
+        m_DesignRuleWidthsUnits->SetLabel( GetAbbreviatedUnitsLabel( m_frame->GetUserUnits() ).Trim( false ) );
 
         int widthSelection = wxNOT_FOUND;
 

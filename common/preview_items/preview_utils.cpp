@@ -55,7 +55,7 @@ wxString KIGFX::PREVIEW::DimensionLabel( const wxString& prefix, double aVal, ED
     str << wxString::Format( fmtStr, To_User_Unit( aUnits, aVal ) );
 
     if( aIncludeUnits )
-        str << " " << GetAbbreviatedUnitsLabel( aUnits );
+        str << GetAbbreviatedUnitsLabel( aUnits );
 
     return str;
 }

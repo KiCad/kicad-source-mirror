@@ -319,7 +319,7 @@ void PCB_DIMENSION_BASE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame,
     EDA_UNITS units;
 
     GetUnits( units );
-    aList.emplace_back( _( "Units" ), GetAbbreviatedUnitsLabel( units ) );
+    aList.emplace_back( _( "Units" ), GetAbbreviatedUnitsLabel( units ).Trim( false ) );
 
     ORIGIN_TRANSFORMS originTransforms = aFrame->GetOriginTransforms();
     units = aFrame->GetUserUnits();

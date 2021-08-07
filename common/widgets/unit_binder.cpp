@@ -68,7 +68,7 @@ UNIT_BINDER::UNIT_BINDER( EDA_DRAW_FRAME* aParent, wxStaticText* aLabel, wxWindo
     }
 
     if( m_unitLabel )
-        m_unitLabel->SetLabel( GetAbbreviatedUnitsLabel( m_units, m_dataType ) );
+        m_unitLabel->SetLabel( GetAbbreviatedUnitsLabel( m_units, m_dataType ).Trim( false ) );
 
     m_valueCtrl->Connect( wxEVT_SET_FOCUS, wxFocusEventHandler( UNIT_BINDER::onSetFocus ),
                           nullptr, this );
@@ -94,7 +94,7 @@ void UNIT_BINDER::SetUnits( EDA_UNITS aUnits )
     m_units = aUnits;
 
     if( m_unitLabel )
-        m_unitLabel->SetLabel( GetAbbreviatedUnitsLabel( m_units, m_dataType ) );
+        m_unitLabel->SetLabel( GetAbbreviatedUnitsLabel( m_units, m_dataType ).Trim( false ) );
 }
 
 
@@ -109,7 +109,7 @@ void UNIT_BINDER::SetDataType( EDA_DATA_TYPE aDataType )
     m_dataType = aDataType;
 
     if( m_unitLabel )
-        m_unitLabel->SetLabel( GetAbbreviatedUnitsLabel( m_units, m_dataType ) );
+        m_unitLabel->SetLabel( GetAbbreviatedUnitsLabel( m_units, m_dataType ).Trim( false ) );
 }
 
 
@@ -283,7 +283,7 @@ void UNIT_BINDER::SetValue( const wxString& aValue )
         m_eval.Clear();
 
     if( m_unitLabel )
-        m_unitLabel->SetLabel( GetAbbreviatedUnitsLabel( m_units, m_dataType ) );
+        m_unitLabel->SetLabel( GetAbbreviatedUnitsLabel( m_units, m_dataType ).Trim( false ) );
 }
 
 
@@ -325,7 +325,7 @@ void UNIT_BINDER::ChangeValue( const wxString& aValue )
         m_eval.Clear();
 
     if( m_unitLabel )
-        m_unitLabel->SetLabel( GetAbbreviatedUnitsLabel( m_units, m_dataType ) );
+        m_unitLabel->SetLabel( GetAbbreviatedUnitsLabel( m_units, m_dataType ).Trim( false ) );
 }
 
 

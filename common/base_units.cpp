@@ -179,10 +179,7 @@ wxString MessageTextFromValue( EDA_UNITS aUnits, double aValue, bool aAddUnitLab
     text.Printf( format, value );
 
     if( aAddUnitLabel )
-    {
-        text += " ";
         text += GetAbbreviatedUnitsLabel( aUnits, aType );
-    }
 
     return text;
 }
@@ -219,13 +216,11 @@ wxString StringFromValue( EDA_UNITS aUnits, double aValue, bool aAddUnitSymbol,
         value_to_print = To_User_Unit( aUnits, value_to_print );
     }
 
-
-    char    buf[50];
-    int     len;
+    char buf[50];
 
     if( value_to_print != 0.0 && fabs( value_to_print ) <= 0.0001 )
     {
-        len = sprintf( buf, "%.10f", value_to_print );
+        int len = sprintf( buf, "%.10f", value_to_print );
 
         while( --len > 0 && buf[len] == '0' )
             buf[len] = '\0';
@@ -238,41 +233,15 @@ wxString StringFromValue( EDA_UNITS aUnits, double aValue, bool aAddUnitSymbol,
     else
     {
         if( aUnits == EDA_UNITS::MILS )
-            len = sprintf( buf, "%.7g", value_to_print );
+            sprintf( buf, "%.7g", value_to_print );
         else
-            len = sprintf( buf, "%.10g", value_to_print );
+            sprintf( buf, "%.10g", value_to_print );
     }
 
-    wxString    stringValue( buf, wxConvUTF8 );
+    wxString stringValue( buf, wxConvUTF8 );
 
     if( aAddUnitSymbol )
-    {
-        switch( aUnits )
-        {
-        case EDA_UNITS::MILLIMETRES:
-            stringValue += wxT( " mm" );
-            break;
-
-        case EDA_UNITS::DEGREES:
-            stringValue += wxT( " deg" );
-            break;
-
-        case EDA_UNITS::MILS:
-            stringValue += wxT( " mils" );
-            break;
-
-        case EDA_UNITS::INCHES:
-            stringValue += wxT( " in" );
-            break;
-
-        case EDA_UNITS::PERCENT:
-            stringValue += wxT( "%" );
-            break;
-
-        case EDA_UNITS::UNSCALED:
-            break;
-        }
-    }
+        stringValue += GetAbbreviatedUnitsLabel( aUnits, aType );
 
     return stringValue;
 }
@@ -420,64 +389,30 @@ long long int ValueFromString( EDA_UNITS aUnits, const wxString& aTextValue, EDA
 }
 
 
-wxString GetAbbreviatedUnitsLabel( EDA_UNITS aUnit, EDA_DATA_TYPE aType )
+wxString GetAbbreviatedUnitsLabel( EDA_UNITS aUnits, EDA_DATA_TYPE aType )
 {
-    switch( aUnit )
+    wxString label;
+
+    switch( aUnits )
     {
-    case EDA_UNITS::MILLIMETRES:
-        switch( aType )
-        {
-        default:
-            wxASSERT( 0 );
-            KI_FALLTHROUGH;
-        case EDA_DATA_TYPE::DISTANCE:
-            return _( "mm" );
-        case EDA_DATA_TYPE::AREA:
-            return _( "sq. mm" );
-        case EDA_DATA_TYPE::VOLUME:
-            return _( "cu. mm" );
-        }
-
-    case EDA_UNITS::MILS:
-        switch( aType )
-        {
-        default:
-            wxASSERT( 0 );
-            KI_FALLTHROUGH;
-        case EDA_DATA_TYPE::DISTANCE:
-            return _( "mils" );
-        case EDA_DATA_TYPE::AREA:
-            return _( "sq. mils" );
-        case EDA_DATA_TYPE::VOLUME:
-            return _( "cu. mils" );
-        }
-
-    case EDA_UNITS::INCHES:
-        switch( aType )
-        {
-        default:
-            wxASSERT( 0 );
-            KI_FALLTHROUGH;
-        case EDA_DATA_TYPE::DISTANCE:
-            return _( "in" );
-        case EDA_DATA_TYPE::AREA:
-            return _( "sq. in" );
-        case EDA_DATA_TYPE::VOLUME:
-            return _( "cu. in" );
-        }
-
-    case EDA_UNITS::PERCENT:
-        return _( "%" );
-
-    case EDA_UNITS::UNSCALED:
-        return wxEmptyString;
-
-    case EDA_UNITS::DEGREES:
-        return _( "deg" );
-
-    default:
-        return wxT( "??" );
+    case EDA_UNITS::MILLIMETRES:  label = wxT( " mm" );   break;
+    case EDA_UNITS::DEGREES:      label = wxT( "°" );     break;
+    case EDA_UNITS::MILS:         label = wxT( " mils" ); break;
+    case EDA_UNITS::INCHES:       label = wxT( " in" );   break;
+    case EDA_UNITS::PERCENT:      label = wxT( "%" );     break;
+    case EDA_UNITS::UNSCALED:                             break;
+    default: UNIMPLEMENTED_FOR( "Unknown units" );        break;
     }
+
+    switch( aType )
+    {
+    case EDA_DATA_TYPE::VOLUME:   label += wxT( "³" );    break;
+    case EDA_DATA_TYPE::AREA:     label += wxT( "²" );    break;
+    case EDA_DATA_TYPE::DISTANCE:                         break;
+    default: UNIMPLEMENTED_FOR( "Unknown measurement" );  break;
+    }
+
+    return label;
 }
 
 
