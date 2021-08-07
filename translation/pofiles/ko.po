@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
-"PO-Revision-Date: 2021-08-07 11:56+0000\n"
+"PO-Revision-Date: 2021-08-07 11:57+0000\n"
 "Last-Translator: jeongsuAn <dks9467@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
@@ -5732,7 +5732,7 @@ msgstr "체커 창의 현재 위반사항을 예외로 마크하기"
 #: common/tool/actions.cpp:271
 #, fuzzy
 msgid "Refresh"
-msgstr "프로젝트 목록 새로 고침"
+msgstr "새로고침"
 
 #: common/tool/actions.cpp:282
 #, fuzzy
