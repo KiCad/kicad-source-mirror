@@ -1,13 +1,14 @@
 # 킴슨김랑기 <korearf@gmail.com>, 2021.
 # Ji Yoon Choi <chichoon.choi@gmail.com>, 2021.
 # jeongsuAn <dks9467@gmail.com>, 2021.
+# 이상수 <kku1818@gmail.com>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
 "PO-Revision-Date: 2021-08-07 11:48+0000\n"
-"Last-Translator: 킴슨김랑기 <korearf@gmail.com>\n"
+"Last-Translator: 이상수 <kku1818@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
 "Language: ko\n"
@@ -4387,7 +4388,7 @@ msgid "from %s : %s() line:%d"
 msgstr "%s로부터: %s() 라인: %d"
 
 #: common/exceptions.cpp:101
-#, c-format, fuzzy
+#, c-format
 msgid ""
 "KiCad was unable to open this file because it was created with a more recent "
 "version than the one you are running.\n"
