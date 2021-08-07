@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
-"PO-Revision-Date: 2021-08-07 11:57+0000\n"
+"PO-Revision-Date: 2021-08-07 12:09+0000\n"
 "Last-Translator: Ji Yoon Choi <chichoon.choi@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
@@ -5732,9 +5732,8 @@ msgid "Refresh"
 msgstr "새로고침"
 
 #: common/tool/actions.cpp:282
-#, fuzzy
 msgid "Zoom to Fit"
-msgstr "맞춤 확대"
+msgstr "화면에 맞게 확대"
 
 #: common/tool/actions.cpp:287
 #, fuzzy
@@ -5882,7 +5881,6 @@ msgid "Set the grid origin point"
 msgstr "그리드 원점 설정"
 
 #: common/tool/actions.cpp:474
-#, fuzzy
 msgid "Show Grid"
 msgstr "그리드 보이기"
 
@@ -5895,14 +5893,12 @@ msgid "Grid Properties..."
 msgstr "그리드 속성..."
 
 #: common/tool/actions.cpp:479
-#, fuzzy
 msgid "Set grid dimensions"
-msgstr "치수 (&D)"
+msgstr "그리드 차원 설정"
 
 #: common/tool/actions.cpp:484
-#, fuzzy
 msgid "Use inches"
-msgstr "inch"
+msgstr "inch 단위 사용"
 
 #: common/tool/actions.cpp:489
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:120
@@ -5924,7 +5920,6 @@ msgstr "mil 단위 사용"
 #: pcbnew/dialogs/dialog_plot_base.cpp:358
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:85
 #: pcbnew/import_gfx/dialog_import_gfx.cpp:53
-#, fuzzy
 msgid "Millimeters"
 msgstr "mm"
 
@@ -5938,78 +5933,72 @@ msgstr "단위 전환"
 
 #: common/tool/actions.cpp:503
 msgid "Switch between imperial and metric units"
-msgstr ""
+msgstr "야드파운드법과 미터법 간 전환"
 
 #: common/tool/actions.cpp:508
-#, fuzzy
 msgid "Polar Coordinates"
-msgstr "좌표 숨기기"
+msgstr "극 좌표계"
 
 #: common/tool/actions.cpp:508
 msgid "Switch between polar and cartesian coordinate systems"
-msgstr ""
+msgstr "극 좌표계와 데카르트 좌표계 간 전환"
 
 #: common/tool/actions.cpp:514
 msgid "Reset Local Coordinates"
-msgstr ""
+msgstr "로컬 좌표계 초기화"
 
 #: common/tool/actions.cpp:520
-#, fuzzy
 msgid "Always Show Cursor"
-msgstr "커서"
+msgstr "커서 항상 보이기"
 
 #: common/tool/actions.cpp:520
 msgid "Display crosshairs even in selection tool"
-msgstr ""
+msgstr "선택 툴에도 십자선 표시하기"
 
 #: common/tool/actions.cpp:525
 msgid "Full-Window Crosshairs"
-msgstr ""
+msgstr "전체 화면 십자선"
 
 #: common/tool/actions.cpp:525
 msgid "Switch display of full-window crosshairs"
-msgstr ""
+msgstr "전체 화면에 십자선 표시 여부 선택"
 
 #: common/tool/actions.cpp:530
-#, fuzzy
 msgid "Single Layer View Mode"
-msgstr "3D 모드로 보드 보이기"
+msgstr "단일 레이어 표시 모드"
 
 #: common/tool/actions.cpp:530
 msgid "Toggle inactive layers between normal and dimmed"
-msgstr ""
+msgstr "비활성화한 레이어를 표시하기 / 흐리게 표시하기 간 전환"
 
 #: common/tool/actions.cpp:534
 msgid "Single Layer View Mode (3-state)"
-msgstr ""
+msgstr "단일 레이어 표시 모드 (3개 상태)"
 
 #: common/tool/actions.cpp:535
 msgid "Toggle inactive layers between normal, dimmed, and hidden"
-msgstr ""
+msgstr "비활성화한 레이어를 표시하기 / 흐리게 표시하기 / 숨기기 간 전환"
 
 #: common/tool/actions.cpp:539
-#, fuzzy
 msgid "Select item(s)"
 msgstr "항목 선택"
 
 #: common/tool/actions.cpp:546
 msgid "Measure Tool"
-msgstr ""
+msgstr "측정 도구"
 
 #: common/tool/actions.cpp:546
 msgid "Interactively measure distance between points"
-msgstr ""
+msgstr "두 점 사이의 거리를 인터랙티브하게 계측"
 
 #: common/tool/actions.cpp:555
-#, fuzzy
 msgid "Show 3D viewer window"
-msgstr "3D 모드로 보드 보이기"
+msgstr "3D 표시 창 보이기"
 
 #: common/tool/actions.cpp:560 eeschema/symbol_viewer_frame.cpp:102
 #: eeschema/symbol_viewer_frame.cpp:921
-#, fuzzy
 msgid "Symbol Library Browser"
-msgstr "라이브러리 브라우저"
+msgstr "심볼 라이브러리 브라우저"
 
 #: common/tool/actions.cpp:560
 msgid "Browse symbol libraries"
@@ -6018,9 +6007,8 @@ msgstr "심볼 라이브러리 탐색"
 #: common/tool/actions.cpp:565 eeschema/eeschema_config.cpp:224
 #: eeschema/symbol_editor/symbol_editor.cpp:163
 #: kicad/tools/kicad_manager_actions.cpp:70
-#, fuzzy
 msgid "Symbol Editor"
-msgstr "라이브러리 에디터 실행"
+msgstr "심볼 편집기"
 
 #: common/tool/actions.cpp:565
 msgid "Create, delete and edit symbols"
@@ -6028,21 +6016,18 @@ msgstr "심볼 생성, 삭제 및 편집"
 
 #: common/tool/actions.cpp:570 pcbnew/footprint_viewer_frame.cpp:109
 #: pcbnew/footprint_viewer_frame.cpp:993
-#, fuzzy
 msgid "Footprint Library Browser"
-msgstr "라이브러리 브라우저"
+msgstr "풋프린트 라이브러리 브라우저"
 
 #: common/tool/actions.cpp:570
-#, fuzzy
 msgid "Browse footprint libraries"
-msgstr "풋프린트 압축 만들기"
+msgstr "풋프린트 라이브러리 탐색"
 
 #: common/tool/actions.cpp:575 kicad/tools/kicad_manager_actions.cpp:82
 #: pcbnew/footprint_edit_frame.cpp:800 pcbnew/footprint_edit_frame.cpp:921
 #: pcbnew/menubar_footprint_editor.cpp:89
-#, fuzzy
 msgid "Footprint Editor"
-msgstr "풋프린트 필터"
+msgstr "풋프린트 편집기"
 
 #: common/tool/actions.cpp:575
 #, fuzzy
