@@ -8,7 +8,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
 "PO-Revision-Date: 2021-08-07 12:09+0000\n"
-"Last-Translator: Ji Yoon Choi <chichoon.choi@gmail.com>\n"
+"Last-Translator: jeongsuAn <dks9467@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
 "Language: ko\n"
@@ -5738,7 +5738,7 @@ msgstr "화면에 맞게 확대"
 #: common/tool/actions.cpp:287
 #, fuzzy
 msgid "Zoom to Objects"
-msgstr "프로젝트 (&P)"
+msgstr "개체 확대"
 
 #: common/tool/actions.cpp:298
 #, fuzzy
@@ -6971,8 +6971,9 @@ msgid "Absolute"
 msgstr "절대값"
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:99
+#, fuzzy
 msgid "Relative"
-msgstr ""
+msgstr "상대적인"
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:101
 #, fuzzy
@@ -7324,7 +7325,7 @@ msgstr "주석 메시지:"
 #: eeschema/dialogs/dialog_annotate.cpp:92
 #, fuzzy
 msgid "Annotate"
-msgstr "애노테이트 (&A)"
+msgstr "주석 달기"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:39
 #, fuzzy
@@ -7400,7 +7401,7 @@ msgstr "새 회로도 (&S)"
 #: eeschema/dialogs/dialog_bom.cpp:133
 #, fuzzy
 msgid "Generate"
-msgstr "일반"
+msgstr "생성"
 
 #: eeschema/dialogs/dialog_bom.cpp:217
 #, fuzzy
@@ -8077,8 +8078,9 @@ msgstr "흑백 이미지"
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:115
 #: eeschema/lib_field.cpp:429 eeschema/lib_pin.cpp:1028
 #: eeschema/lib_pin.cpp:1031 eeschema/sch_pin.cpp:205 eeschema/sch_text.cpp:763
+#, fuzzy
 msgid "Style"
-msgstr ""
+msgstr "스타일"
 
 #: eeschema/dialogs/dialog_edit_label_base.cpp:132
 #: eeschema/dialogs/dialog_sheet_pin_properties.cpp:36 eeschema/pin_type.cpp:51
@@ -8095,8 +8097,9 @@ msgstr "출력"
 #: eeschema/dialogs/dialog_edit_label_base.cpp:132
 #: eeschema/dialogs/dialog_sheet_pin_properties.cpp:38 eeschema/pin_type.cpp:53
 #: eeschema/sch_text.cpp:559
+#, fuzzy
 msgid "Bidirectional"
-msgstr ""
+msgstr "양방향"
 
 #: eeschema/dialogs/dialog_edit_label_base.cpp:132
 #: eeschema/dialogs/dialog_sheet_pin_properties.cpp:39 eeschema/pin_type.cpp:54
@@ -8176,7 +8179,7 @@ msgstr ""
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:86
 #, fuzzy
 msgid "Symbols"
-msgstr "전원 심볼"
+msgstr "기호"
 
 #: eeschema/dialogs/dialog_edit_symbols_libid_base.cpp:38
 #, fuzzy
@@ -8584,7 +8587,7 @@ msgstr "부품 속성 편집"
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:31
 #, fuzzy
 msgid "symbol"
-msgstr "전원 심볼"
+msgstr "심볼"
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:60
 #, c-format
@@ -9049,7 +9052,7 @@ msgstr "필드"
 #: pcbnew/fp_text_grid_table.cpp:90
 #, fuzzy
 msgid "Show"
-msgstr "모두 보이기"
+msgstr "표시"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:59
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:53
@@ -9108,7 +9111,7 @@ msgstr "항목 삭제"
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:115
 #, fuzzy
 msgid "Description:"
-msgstr "드로우 설정:"
+msgstr "설명:"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:138
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:122
@@ -11063,8 +11066,9 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:225
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:235
+#, fuzzy
 msgid "Qty"
-msgstr ""
+msgstr "수량"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:687
 #: eeschema/lib_field.cpp:438 eeschema/lib_field.h:79
@@ -11078,8 +11082,9 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:962
 #: eeschema/symbol_editor/symbol_editor.cpp:1216
+#, fuzzy
 msgid "Datasheet"
-msgstr ""
+msgstr "데이터 시트"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:984
 #, fuzzy
@@ -11748,7 +11753,7 @@ msgstr ""
 #: pcbnew/dialogs/panel_display_options_base.cpp:35
 #, fuzzy
 msgid "Annotations"
-msgstr "치수 추가"
+msgstr "주석"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:30
 msgid "Symbol unit notation:"
@@ -21404,8 +21409,9 @@ msgstr ""
 #: pcbnew/dialogs/dialog_board_statistics.cpp:365
 #: pcbnew/dialogs/dialog_board_statistics.cpp:380
 #: pcbnew/dialogs/dialog_board_statistics.cpp:404
+#, fuzzy
 msgid "Total:"
-msgstr ""
+msgstr "합계:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:423
 #: pcbnew/dialogs/dialog_board_statistics.cpp:424
