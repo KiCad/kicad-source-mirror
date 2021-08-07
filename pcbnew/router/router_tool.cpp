@@ -890,7 +890,11 @@ int ROUTER_TOOL::handleLayerSwitch( const TOOL_EVENT& aEvent, bool aForceVia )
             {
                 // front-side microvia
                 currentLayer = F_Cu;
-                targetLayer = In1_Cu;
+
+                if( layerCount > 2 )    // Ensure the inner layer In1_Cu exists
+                    targetLayer = In1_Cu;
+                else
+                    targetLayer = B_Cu;
             }
             else if( currentLayer == B_Cu || currentLayer == layerCount - 2 )
             {

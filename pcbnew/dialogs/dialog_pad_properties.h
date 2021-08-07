@@ -153,7 +153,8 @@ private:
     UNIT_BINDER m_offsetX, m_offsetY;
     UNIT_BINDER m_padToDie;
     UNIT_BINDER m_trapDelta;
-    UNIT_BINDER m_cornerRatio, m_cornerRadius;
+    UNIT_BINDER m_cornerRadius;
+    UNIT_BINDER m_cornerRatio;
     UNIT_BINDER m_chamferRatio;
     UNIT_BINDER m_mixedCornerRatio, m_mixedChamferRatio;
     UNIT_BINDER m_holeX, m_holeY;
