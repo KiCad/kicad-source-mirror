@@ -8,7 +8,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
 "PO-Revision-Date: 2021-08-08 03:31+0000\n"
-"Last-Translator: 이상수 <kku1818@gmail.com>\n"
+"Last-Translator: Ji Yoon Choi <chichoon.choi@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
 "Language: ko\n"
@@ -6011,45 +6011,42 @@ msgid "Footprint Editor"
 msgstr "풋프린트 편집기"
 
 #: common/tool/actions.cpp:575
-#, fuzzy
 msgid "Create, delete and edit footprints"
-msgstr "새 풋프린트 추가"
+msgstr "풋프린트 생성, 삭제 및 편집"
 
 #: common/tool/actions.cpp:581
 msgid "Update PCB from Schematic..."
-msgstr ""
+msgstr "회로도로부터 PCB 업데이트..."
 
 #: common/tool/actions.cpp:581
-#, fuzzy
 msgid "Update PCB with changes made to schematic"
-msgstr "회로도 인쇄"
+msgstr "회로도의 수정사항을 PCB에 반영하여 업데이트"
 
 #: common/tool/actions.cpp:586
 msgid "Update Schematic from PCB..."
 msgstr "PCB에서 회로도 업데이트..."
 
 #: common/tool/actions.cpp:586
-#, fuzzy
 msgid "Update schematic with changes made to PCB"
-msgstr "새 회로도 (&S)"
+msgstr "PCB의 수정사항을 회로도에 반영하여 업데이트"
 
 #: common/tool/actions.cpp:596
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:490
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:389
 msgid "Configure Paths..."
-msgstr "경로 구성..."
+msgstr "경로 설정..."
 
 #: common/tool/actions.cpp:596
 msgid "Edit path configuration environment variables"
-msgstr ""
+msgstr "경로 설정 환경 변수 편집"
 
 #: common/tool/actions.cpp:601
 msgid "Manage Symbol Libraries..."
-msgstr ""
+msgstr "심볼 라이브러리 관리..."
 
 #: common/tool/actions.cpp:602
 msgid "Edit the global and project symbol library lists"
-msgstr ""
+msgstr "전역과 프로젝트 내의 심볼 라이브러리 리스트 편집"
 
 #: common/tool/actions.cpp:607
 msgid "Manage Footprint Libraries..."
@@ -6057,15 +6054,15 @@ msgstr "풋프린트 라이브러리 관리..."
 
 #: common/tool/actions.cpp:608
 msgid "Edit the global and project footprint library lists"
-msgstr ""
+msgstr "전역과 프로젝트 내의 풋프린트 라이브러리 리스트 편집"
 
 #: common/tool/actions.cpp:613
 msgid "Getting Started with KiCad"
-msgstr ""
+msgstr "KiCad 시작하기"
 
 #: common/tool/actions.cpp:614
 msgid "Open \"Getting Started in KiCad\" guide for beginners"
-msgstr ""
+msgstr "입문자를 위한 \"KiCad 시작하기\" 가이드 열기"
 
 #: common/tool/actions.cpp:619
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:598
@@ -6075,7 +6072,7 @@ msgstr "도움말 (&H)"
 
 #: common/tool/actions.cpp:620
 msgid "Open product documentation in a web browser"
-msgstr ""
+msgstr "웹 브라우저에서 제품 설명서 열기"
 
 #: common/tool/actions.cpp:626
 msgid "List Hotkeys..."
@@ -6083,24 +6080,23 @@ msgstr "단축키 목록…"
 
 #: common/tool/actions.cpp:627
 msgid "Displays current hotkeys table and corresponding commands"
-msgstr ""
+msgstr "현재 단축키 표와 대응하는 커맨드 표시"
 
 #: common/tool/actions.cpp:632
 msgid "Get Involved"
-msgstr ""
+msgstr "참여하기"
 
 #: common/tool/actions.cpp:633
 msgid "Open \"Contribute to KiCad\" in a web browser"
-msgstr ""
+msgstr "웹 브라우저에서 \"KiCad에 기여하기\" 열기"
 
 #: common/tool/actions.cpp:638
 msgid "Donate"
-msgstr ""
+msgstr "기부하기"
 
 #: common/tool/actions.cpp:639
-#, fuzzy
 msgid "Open \"Donate to KiCad\" in a web browser"
-msgstr "라이브러리 브라우저"
+msgstr "웹 브라우저에서 \"KiCad에 기부하기\" 열기"
 
 #: common/tool/actions.cpp:643
 msgid "Report Bug"
@@ -6122,7 +6118,7 @@ msgid "File Not Found"
 msgstr "파일을 찾을 수 없음"
 
 #: common/tool/common_control.cpp:237
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Help file '%s' could not be found.\n"
 "Do you want to access the KiCad online help?"
@@ -6136,10 +6132,12 @@ msgid ""
 "Could not launch the default browser.\n"
 "For information on how to help the KiCad project, visit %s"
 msgstr ""
+"기본 브라우저를 실행할 수 없습니다.\n"
+"KiCad 프로젝트를 지원하는 방법에 대해서는 %s 를 참고하세요"
 
 #: common/tool/common_control.cpp:270
 msgid "Get involved with KiCad"
-msgstr ""
+msgstr "KiCad에 참여하기"
 
 #: common/tool/common_control.cpp:282
 #, c-format
@@ -6147,11 +6145,12 @@ msgid ""
 "Could not launch the default browser.\n"
 "To donate to the KiCad project, visit %s"
 msgstr ""
+"기본 브라우저를 실행할 수 없습니다.\n"
+"KiCad 프로젝트에 기부하는 방법에 대해서는 %s 를 참고하세요"
 
 #: common/tool/common_control.cpp:285
-#, fuzzy
 msgid "Donate to KiCad"
-msgstr "닫기"
+msgstr "KiCad에 기부하기"
 
 #: common/tool/grid_menu.cpp:93
 #, c-format
@@ -6175,20 +6174,20 @@ msgstr "잘못된 값: %s"
 
 #: common/validators.cpp:294
 msgid "Entry contains trailing white space."
-msgstr ""
+msgstr "항목 뒤에 공백이 있습니다."
 
 #: common/validators.cpp:298
 msgid "Entry contains leading white space."
-msgstr ""
+msgstr "항목 앞에 공백이 있습니다."
 
 #: common/validators.cpp:302
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' is not a valid library identifier format."
-msgstr "%s 파일은 EESchema 라이브러리가 아닙니다."
+msgstr "%s 은 유효한 라이브러리 식별자 포맷이 아닙니다."
 
 #: common/validators.cpp:309
 msgid "Library Identifier Validation Error"
-msgstr ""
+msgstr "라이브러리 식별자 검증 오류"
 
 #: common/validators.cpp:356
 msgid "Invalid signal name"
@@ -6196,29 +6195,27 @@ msgstr "잘못된 신호 이름"
 
 #: common/validators.cpp:367
 msgid "Signal names cannot contain CR or LF characters"
-msgstr ""
+msgstr "신호 이름에는 CR 또는 LF 문자가 포함될 수 없습니다"
 
 #: common/validators.cpp:370
 msgid "Signal names cannot contain spaces"
-msgstr "신호 이름은 공백을 포함 할 수 없음"
+msgstr "신호 이름에는 공백 문자가 포함될 수 없습니다"
 
 #: common/view/view.cpp:542
 msgid "Mirroring for Y axis is not supported yet"
-msgstr ""
+msgstr "Y축 미러링은 아직 지원하지 않는 기능입니다"
 
 #: common/widgets/footprint_preview_widget.cpp:103
 msgid "Footprint not found."
 msgstr "풋프린트를 찾을 수 없습니다."
 
 #: common/widgets/footprint_select_widget.cpp:144
-#, fuzzy
 msgid "No default footprint"
-msgstr "풋프린트 이동"
+msgstr "기본 풋프린트 존재하지 않음"
 
 #: common/widgets/gal_options_panel.cpp:85
-#, fuzzy
 msgid "Accelerated graphics"
-msgstr "그래픽 추가"
+msgstr "가속된 그래픽"
 
 #: common/widgets/gal_options_panel.cpp:85
 #, fuzzy
@@ -6226,56 +6223,52 @@ msgid "Fallback graphics"
 msgstr "잠김 트랙 포함"
 
 #: common/widgets/gal_options_panel.cpp:86
-#, fuzzy
 msgid "Rendering Engine"
-msgstr "일반 설정"
+msgstr "렌더링 엔진"
 
 #: common/widgets/gal_options_panel.cpp:90
 msgid "Hardware-accelerated graphics (recommended)"
-msgstr ""
+msgstr "하드웨어 가속 그래픽 (권장)"
 
 #: common/widgets/gal_options_panel.cpp:91
 msgid ""
 "Software graphics (for computers which do not support KiCad's hardware "
 "acceleration requirements)"
-msgstr ""
+msgstr "소프트웨어 그래픽 (KiCad의 하드웨어 가속 요구사항을 충족하지 못하는 컴퓨터용)"
 
 #: common/widgets/gal_options_panel.cpp:103
-#, fuzzy
 msgid "Grid Options"
-msgstr "GERBVIEW 설정"
+msgstr "그리드 설정"
 
 #: common/widgets/gal_options_panel.cpp:108
 msgid "Dots"
-msgstr ""
+msgstr "점"
 
 #: common/widgets/gal_options_panel.cpp:109
 msgid "Lines"
-msgstr "행"
+msgstr "선"
 
 #: common/widgets/gal_options_panel.cpp:110
-#, fuzzy
 msgid "Small crosses"
-msgstr "작은 마크"
+msgstr "작은 십자선"
 
 #: common/widgets/gal_options_panel.cpp:114
 msgid "Grid Style"
 msgstr "그리드 스타일"
 
 #: common/widgets/gal_options_panel.cpp:126
-#, fuzzy
 msgid "Grid thickness:"
-msgstr "그리드 (인치):"
+msgstr "그리드 두께:"
 
 #: common/widgets/gal_options_panel.cpp:137
 #: common/widgets/gal_options_panel.cpp:153
 #: common/widgets/gal_options_panel.cpp:171
 msgid "px"
-msgstr ""
+msgstr "px"
 
 #: common/widgets/gal_options_panel.cpp:142
 msgid "Min grid spacing:"
-msgstr ""
+msgstr "최소 그리드 간격:"
 
 #: common/widgets/gal_options_panel.cpp:158
 msgid "Snap to Grid:"
@@ -6291,7 +6284,7 @@ msgstr "항상"
 
 #: common/widgets/gal_options_panel.cpp:162
 msgid "When grid shown"
-msgstr ""
+msgstr "그리드가 보일 때만"
 
 #: common/widgets/gal_options_panel.cpp:162
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:339
@@ -6302,66 +6295,60 @@ msgid "Never"
 msgstr "안 함"
 
 #: common/widgets/gal_options_panel.cpp:188
-#, fuzzy
 msgid "Cursor Options"
-msgstr "호 설정"
+msgstr "커서 설정"
 
 #: common/widgets/gal_options_panel.cpp:194
-#, fuzzy
 msgid "Small crosshair"
-msgstr "작은 마크"
+msgstr "작은 십자선"
 
 #: common/widgets/gal_options_panel.cpp:195
 msgid "Full window crosshair"
-msgstr ""
+msgstr "전체 화면 십자선"
 
 #: common/widgets/gal_options_panel.cpp:200
-#, fuzzy
 msgid "Cursor Shape"
-msgstr "커서 모양 바꾸기"
+msgstr "커서 모양"
 
 #: common/widgets/gal_options_panel.cpp:205
 msgid "Cursor shape for drawing, placement and movement tools"
-msgstr ""
+msgstr "그리기, 배치 및 이동 도구에 대한 커서 모양 설정"
 
 #: common/widgets/gal_options_panel.cpp:208
 msgid "Always show crosshairs"
-msgstr ""
+msgstr "항상 십자선으로 표시"
 
 #: common/widgets/grid_text_button_helpers.cpp:370
-#, fuzzy
 msgid "Select a File"
-msgstr "시트 파일"
+msgstr "파일 선택"
 
 #: common/widgets/mathplot.cpp:1759
 msgid "Center plot view to this position"
-msgstr ""
+msgstr "플롯 뷰의 중심을 해당 위치에 적용"
 
 #: common/widgets/mathplot.cpp:1760 eeschema/sim/sim_plot_frame_base.cpp:95
-#, fuzzy
 msgid "Fit on Screen"
-msgstr "실크스크린에 패드 인쇄"
+msgstr "화면에 맞춤"
 
 #: common/widgets/mathplot.cpp:1760
 msgid "Set plot view to show all items"
-msgstr ""
+msgstr "모든 항목을 표시하도록 플롯 뷰 설정"
 
 #: common/widgets/mathplot.cpp:1761
 msgid "Zoom in plot view."
-msgstr ""
+msgstr "플롯 뷰 확대."
 
 #: common/widgets/mathplot.cpp:1762
 msgid "Zoom out plot view."
-msgstr ""
+msgstr "플롯 뷰 축소."
 
 #: common/widgets/net_selector.cpp:58
 msgid "<no net>"
-msgstr ""
+msgstr "<네트 없음>"
 
 #: common/widgets/net_selector.cpp:59
-#, fuzzy
 msgid "<create net>"
-msgstr "영역 삭제"
+msgstr "<네트 생성>"
 
 #: common/widgets/net_selector.cpp:84
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:625
@@ -6374,28 +6361,26 @@ msgstr "필터:"
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1125
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1481
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1764
-#, fuzzy
 msgid "Reset to Defaults"
-msgstr "비아홀 크기 초기화"
+msgstr "설정 초기화"
 
 #: common/widgets/unit_binder.cpp:213
 #, c-format
 msgid "%s must be at least %s."
-msgstr ""
+msgstr "%s는 최소 %s여야 합니다."
 
 #: common/widgets/unit_binder.cpp:228
 #, c-format
 msgid "%s must be less than %s."
-msgstr ""
+msgstr "%s는 %s보다 작아야 합니다."
 
 #: common/widgets/widget_hotkey_list.cpp:96
 msgid "Press a new hotkey, or press Esc to cancel..."
-msgstr ""
+msgstr "새로 설정할 단축키를 누르거나, ESC를 눌러 설정을 취소하세요..."
 
 #: common/widgets/widget_hotkey_list.cpp:103
-#, fuzzy
 msgid "Command:"
-msgstr "주석1:"
+msgstr "커맨드:"
 
 #: common/widgets/widget_hotkey_list.cpp:111
 msgid "Current key:"
@@ -6403,76 +6388,66 @@ msgstr "현재 키:"
 
 #: common/widgets/widget_hotkey_list.cpp:153
 msgid "Set Hotkey"
-msgstr ""
+msgstr "단축키 설정"
 
 #: common/widgets/widget_hotkey_list.cpp:380
 msgid "Edit..."
 msgstr "편집…"
 
 #: common/widgets/widget_hotkey_list.cpp:381
-#, fuzzy
 msgid "Undo Changes"
-msgstr "변경 없음"
+msgstr "변경 취소"
 
 #: common/widgets/widget_hotkey_list.cpp:382
-#, fuzzy
 msgid "Clear Assigned Hotkey"
-msgstr "EESchema 애노테이션"
+msgstr "연결된 단축키 삭제"
 
 #: common/widgets/widget_hotkey_list.cpp:383
-#, fuzzy
 msgid "Restore Default"
-msgstr "기본값"
+msgstr "기본값으로 복원"
 
 #: common/widgets/widget_hotkey_list.cpp:419
 #, c-format
 msgid ""
 "'%s' is already assigned to '%s' in section '%s'. Are you sure you want to "
 "change its assignment?"
-msgstr ""
+msgstr "'%s'는 이미 '%s'에 지정되어 있습니다. (섹션 %s) 현재 설정으로 변경할까요?"
 
 #: common/widgets/widget_hotkey_list.cpp:425
-#, fuzzy
 msgid "Confirm change"
 msgstr "확인"
 
 #: common/widgets/widget_hotkey_list.cpp:445
 msgid "Command"
-msgstr "명령"
+msgstr "커맨드"
 
 #: common/widgets/widget_hotkey_list.cpp:448
-#, fuzzy
 msgid "(double-click to edit)"
-msgstr "편집할 필드"
+msgstr "(더블 클릭으로 편집)"
 
 #: common/widgets/widget_hotkey_list.cpp:451
 msgid "Hotkey"
-msgstr ""
+msgstr "단축키"
 
 #: common/wildcards_and_files_ext.cpp:180
-#, fuzzy
 msgid "All files"
-msgstr "드릴 파일"
+msgstr "모든 파일"
 
 #: common/wildcards_and_files_ext.cpp:186
-#, fuzzy
 msgid "KiCad drawing symbol files"
-msgstr "필드 편집"
+msgstr "KiCad 도형 심볼 파일"
 
 #: common/wildcards_and_files_ext.cpp:192
-#, fuzzy
 msgid "KiCad symbol library files"
-msgstr "문서 라이브러리 파일 만들기 실패"
+msgstr "KiCad 심볼 라이브러리 파일"
 
 #: common/wildcards_and_files_ext.cpp:198
-#, fuzzy
 msgid "KiCad legacy symbol library files"
-msgstr "문서 라이브러리 파일 만들기 실패"
+msgstr "KiCad 레거시 심볼 라이브러리 파일"
 
 #: common/wildcards_and_files_ext.cpp:204
-#, fuzzy
 msgid "All KiCad symbol library files"
-msgstr "문서 라이브러리 파일 만들기 실패"
+msgstr "모든 KiCad 심볼 라이브러리 파일"
 
 #: common/wildcards_and_files_ext.cpp:210
 msgid "KiCad project files"
@@ -6524,13 +6499,12 @@ msgstr "거버 파일"
 
 #: common/wildcards_and_files_ext.cpp:282
 #: common/wildcards_and_files_ext.cpp:323
-#, fuzzy
 msgid "KiCad printed circuit board files"
-msgstr "보드 인쇄"
+msgstr "KiCad 출력된 회로 기판 파일"
 
 #: common/wildcards_and_files_ext.cpp:288
 msgid "Eagle ver. 6.x XML PCB files"
-msgstr ""
+msgstr "이글 버전 6.x XML PCB 파일"
 
 #: common/wildcards_and_files_ext.cpp:293
 msgid "CADSTAR PCB Archive files"
@@ -6538,59 +6512,53 @@ msgstr "CADSTAR PCB 아카이브 파일"
 
 #: common/wildcards_and_files_ext.cpp:298
 msgid "P-Cad 200x ASCII PCB files"
-msgstr ""
+msgstr "P-Cad 200x ASCII PCB 파일"
 
 #: common/wildcards_and_files_ext.cpp:303
 msgid "Altium Designer PCB files"
-msgstr ""
+msgstr "알티움 디자이너 PCB 파일"
 
 #: common/wildcards_and_files_ext.cpp:308
 msgid "Altium Circuit Studio PCB files"
-msgstr ""
+msgstr "알티움 서킷 스튜디오 PCB 파일"
 
 #: common/wildcards_and_files_ext.cpp:313
 msgid "Altium Circuit Maker PCB files"
-msgstr ""
+msgstr "알티움 서킷 메이커 PCB 파일"
 
 #: common/wildcards_and_files_ext.cpp:318
 msgid "Fabmaster PCB files"
-msgstr ""
+msgstr "Fabmaster PCB 파일"
 
 #: common/wildcards_and_files_ext.cpp:329
-#, fuzzy
 msgid "KiCad footprint files"
-msgstr "풋프린트 필터"
+msgstr "KiCad 풋프린트 파일"
 
 #: common/wildcards_and_files_ext.cpp:335
-#, fuzzy
 msgid "KiCad footprint library paths"
-msgstr "풋프린트 압축 만들기"
+msgstr "KiCad 풋프린트 라이브러리 경로"
 
 #: common/wildcards_and_files_ext.cpp:341
-#, fuzzy
 msgid "Legacy footprint library files"
-msgstr "풋프린트 압축 만들기"
+msgstr "레거시 풋프린트 라이브러리 파일"
 
 #: common/wildcards_and_files_ext.cpp:347
 msgid "Eagle ver. 6.x XML library files"
-msgstr ""
+msgstr "이글 버전 6.x XML 라이브러리 파일"
 
 #: common/wildcards_and_files_ext.cpp:353
-#, fuzzy
 msgid "Geda PCB footprint library files"
-msgstr "하나의 라이브러리 파일에 풋프린트 압축 또는 추가"
+msgstr "Geda PCB 풋프린트 라이브러리 파일"
 
 #: common/wildcards_and_files_ext.cpp:359
 msgid "Drawing sheet files"
 msgstr "도면 시트 파일"
 
 #: common/wildcards_and_files_ext.cpp:366
-#, fuzzy
 msgid "KiCad symbol footprint link files"
-msgstr "풋프린트 압축 만들기"
+msgstr "KiCad 심볼 풋프린트 링크 파일"
 
 #: common/wildcards_and_files_ext.cpp:373 gerbview/files.cpp:68
-#, fuzzy
 msgid "Drill files"
 msgstr "드릴 파일"
 
@@ -6611,27 +6579,24 @@ msgid "Portable document format files"
 msgstr "휴대용 문서 형식 파일"
 
 #: common/wildcards_and_files_ext.cpp:403
-#, fuzzy
 msgid "PostScript files"
-msgstr "PS 플로트"
+msgstr "PostScript 파일"
 
 #: common/wildcards_and_files_ext.cpp:409
 msgid "Report files"
 msgstr "보고서 파일"
 
 #: common/wildcards_and_files_ext.cpp:415
-#, fuzzy
 msgid "Component placement files"
-msgstr "컴포넌트 속성"
+msgstr "컴포넌트 배치 파일"
 
 #: common/wildcards_and_files_ext.cpp:421
 msgid "VRML and X3D files"
-msgstr ""
+msgstr "VRML과 X3D 파일"
 
 #: common/wildcards_and_files_ext.cpp:427
-#, fuzzy
 msgid "IDFv3 footprint files"
-msgstr "풋프린트 필터"
+msgstr "IDFv3 풋프린트 파일"
 
 #: common/wildcards_and_files_ext.cpp:433
 msgid "Text files"
@@ -6639,16 +6604,15 @@ msgstr "텍스트 파일"
 
 #: common/wildcards_and_files_ext.cpp:439
 msgid "Legacy footprint export files"
-msgstr "기존 풋프린트 파일 내보내기"
+msgstr "레거시 풋프린트 내보내기 파일"
 
 #: common/wildcards_and_files_ext.cpp:445
-#, fuzzy
 msgid "Electrical rule check file"
-msgstr "회로도 ERC"
+msgstr "전기 규칙 검토 파일"
 
 #: common/wildcards_and_files_ext.cpp:451
 msgid "Spice library file"
-msgstr "스파이스 라이브러리 파일"
+msgstr "Spice 라이브러리 파일"
 
 #: common/wildcards_and_files_ext.cpp:457
 msgid "SPICE netlist file"
@@ -6659,23 +6623,20 @@ msgid "CadStar netlist file"
 msgstr "CadStar 네트리스트 파일"
 
 #: common/wildcards_and_files_ext.cpp:469
-#, fuzzy
 msgid "Symbol footprint association files"
-msgstr "풋프린트 회전"
+msgstr "심볼 풋프린트 관련성 파일"
 
 #: common/wildcards_and_files_ext.cpp:475
 msgid "Zip file"
 msgstr "Zip 파일"
 
 #: common/wildcards_and_files_ext.cpp:481
-#, fuzzy
 msgid "GenCAD 1.4 board files"
-msgstr "보드 저장"
+msgstr "GenCAD 1.4 보드 파일"
 
 #: common/wildcards_and_files_ext.cpp:487
-#, fuzzy
 msgid "DXF Files"
-msgstr "문서 파일"
+msgstr "DXF 파일"
 
 #: common/wildcards_and_files_ext.cpp:493
 #: resources/linux/mime/kicad-gerbers.xml.in:21
@@ -6683,18 +6644,16 @@ msgid "Gerber job file"
 msgstr "거버 작업 파일"
 
 #: common/wildcards_and_files_ext.cpp:499
-#, fuzzy
 msgid "Specctra DSN file"
-msgstr "시트 파일"
+msgstr "Specctra DSN 파일"
 
 #: common/wildcards_and_files_ext.cpp:505
-#, fuzzy
 msgid "IPC-D-356 Test Files"
-msgstr "네트리스트 파일 열기 (&L)"
+msgstr "IPC-D-356 테스트 파일"
 
 #: common/wildcards_and_files_ext.cpp:511
 msgid "Workbook file"
-msgstr "통합 문서 파일"
+msgstr "Workbook 파일"
 
 #: common/wildcards_and_files_ext.cpp:517
 msgid "PNG file"
@@ -6707,33 +6666,32 @@ msgstr "JPEG 파일"
 #: cvpcb/auto_associate.cpp:105
 #, c-format
 msgid "Equivalence file '%s' could not be found in the default search paths."
-msgstr ""
+msgstr "기본 검색 경로에서 %s 파일을 찾을 수 없습니다."
 
 #: cvpcb/auto_associate.cpp:126
-#, fuzzy, c-format
+#, c-format
 msgid "Error opening equivalence file '%s'."
-msgstr "'%s'회로도 파일을 저장하는 중 오류 발생."
+msgstr "'%s' 파일을 여는 중 오류 발생."
 
 #: cvpcb/auto_associate.cpp:178
 msgid "Equivalence File Load Error"
-msgstr ""
+msgstr "파일 불러오기 에러"
 
 #: cvpcb/auto_associate.cpp:185
 #, c-format
 msgid "%lu footprint/symbol equivalences found."
-msgstr ""
+msgstr "%lu 풋프린트/심볼이 발견되었습니다."
 
 #: cvpcb/auto_associate.cpp:261
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Component %s: footprint %s not found in any of the project footprint "
 "libraries."
-msgstr "컴포넌트 %s: 라이브러리에서 %s 풋프린트를 찾을 수 없습니다."
+msgstr "컴포넌트 %s: 어떠한 프로젝트 풋프린트 라이브러리에서도 %s 풋프린트를 찾지 못했습니다."
 
 #: cvpcb/auto_associate.cpp:306
-#, fuzzy
 msgid "CvPcb Warning"
-msgstr "ERC 경고"
+msgstr "CvPcb 경고"
 
 #: cvpcb/cvpcb.cpp:174
 msgid ""
@@ -6746,6 +6704,10 @@ msgid ""
 "See the \"Footprint Library Table\" section of the CvPcb documentation for "
 "more information."
 msgstr ""
+"CvPcb가 처음 구동되었으며, 풋프린트를 검색하기 위한 새로운 풋프린트 라이브러리 테이블 방식을 사용할 수 있습니다.\n"
+"CvPcb는 여러분의 홈 폴더에 기본 테이블을 복사하거나 빈 테이블을 생성합니다.\n"
+"당신은 먼저 KiCad에 기본적으로 포함되지 않은 풋프린트 라이브러리를 포함시키기 위하여 라이브러리 테이블을 설정하여야 합니다.\n"
+"자세한 내용은 CvPcb 공식 문서의 \"풋프린트 라이브러리 테이블\" 섹션을 참고하세요."
 
 #: cvpcb/cvpcb.cpp:187
 msgid ""
@@ -6753,46 +6715,38 @@ msgid ""
 msgstr "전역 풋프린트 라이브러리 테이블을 로드하는 중에 오류가 발생했습니다."
 
 #: cvpcb/cvpcb_mainframe.cpp:64 cvpcb/menubar.cpp:51
-#, fuzzy
 msgid "Assign Footprints"
-msgstr "풋프린트"
+msgstr "풋프린트 할당"
 
 #: cvpcb/cvpcb_mainframe.cpp:103 pcbnew/dialogs/panel_fp_lib_table.cpp:1082
-#, fuzzy
 msgid "Footprint Libraries"
-msgstr "풋프린트 레퍼런스"
+msgstr "풋프린트 라이브러리"
 
 #: cvpcb/cvpcb_mainframe.cpp:107
-#, fuzzy
 msgid "Symbol : Footprint Assignments"
-msgstr "풋프린트 회전"
+msgstr "심볼: 풋프린트 할당"
 
 #: cvpcb/cvpcb_mainframe.cpp:110
-#, fuzzy
 msgid "Filtered Footprints"
-msgstr "풋프린트"
+msgstr "필터링된 풋프린트"
 
 #: cvpcb/cvpcb_mainframe.cpp:144
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:105
-#, fuzzy
 msgid "Apply, Save Schematic && Continue"
-msgstr "회로도 저장 (&S)"
+msgstr "변경 사항 반영, 회로도 저장 && 계속하기"
 
 #: cvpcb/cvpcb_mainframe.cpp:212
-#, fuzzy
 msgid "Symbol to footprint changes are unsaved"
-msgstr "풋프린트 회전"
+msgstr "풋프린트 심볼의 변경점이 저장되지 않았습니다"
 
 #: cvpcb/cvpcb_mainframe.cpp:386
-#, fuzzy
 msgid "Symbol to Footprint links have been modified. Save changes?"
-msgstr ""
-"네트리스트와 컴포넌트 리스트가 수정되었습니다. 끝내기 전에 저장하시겠습니까?"
+msgstr "풋프린트 심볼 링크가 변경되었습니다. 저장하시겠습니까?"
 
 #: cvpcb/cvpcb_mainframe.cpp:524 cvpcb/tools/cvpcb_association_tool.cpp:207
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' is not a valid footprint."
-msgstr "%s 파일은 EESchema 라이브러리가 아닙니다."
+msgstr "%s 는 유효한 풋프린트가 아닙니다."
 
 #: cvpcb/cvpcb_mainframe.cpp:679 eeschema/generate_alias_info.cpp:39
 #: eeschema/sch_symbol.cpp:1410 eeschema/symbol_editor/symbol_editor.cpp:1215
@@ -6801,9 +6755,8 @@ msgid "Keywords"
 msgstr "키워드"
 
 #: cvpcb/cvpcb_mainframe.cpp:695
-#, fuzzy
 msgid "Pin Count"
-msgstr "패드 커퍼"
+msgstr "핀 개수"
 
 #: cvpcb/cvpcb_mainframe.cpp:708 eeschema/sch_symbol.cpp:1392
 #: eeschema/sch_symbol.cpp:1396 eeschema/sch_symbol.cpp:1424
@@ -6813,19 +6766,17 @@ msgid "Library"
 msgstr "라이브러리"
 
 #: cvpcb/cvpcb_mainframe.cpp:721
-#, fuzzy
 msgid "Search Text"
-msgstr "키워드 검색"
+msgstr "문자열 검색"
 
 #: cvpcb/cvpcb_mainframe.cpp:725
-#, fuzzy
 msgid "No Filtering"
-msgstr "방향 필터"
+msgstr "필터 없음"
 
 #: cvpcb/cvpcb_mainframe.cpp:727
 #, c-format
 msgid "Filtered by %s"
-msgstr ""
+msgstr "%s로 필터링됨"
 
 #: cvpcb/cvpcb_mainframe.cpp:741
 #, c-format
@@ -6844,18 +6795,16 @@ msgstr "라이브러리 위치: 알 수 없음"
 #: cvpcb/cvpcb_mainframe.cpp:788
 msgid ""
 "No PCB footprint libraries are listed in the current footprint library table."
-msgstr ""
+msgstr "현재 풋프린트 라이브러리 테이블에는 PCB 풋프린트 라이브러리가 존재하지 않습니다."
 
 #: cvpcb/cvpcb_mainframe.cpp:789
-#, fuzzy
 msgid "Configuration Error"
-msgstr "설정"
+msgstr "설정 오류"
 
 #: cvpcb/cvpcb_mainframe.cpp:793 pcbnew/footprint_edit_frame.cpp:825
 #: pcbnew/load_select_footprint.cpp:224
-#, fuzzy
 msgid "Loading Footprint Libraries"
-msgstr "풋프린트 미러"
+msgstr "풋프린트 라이브러리 불러오는 중"
 
 #: cvpcb/cvpcb_mainframe.cpp:856
 #, c-format
@@ -6867,18 +6816,17 @@ msgstr ""
 "%s"
 
 #: cvpcb/dialogs/dialog_config_equfiles.cpp:51
-#, fuzzy, c-format
+#, c-format
 msgid "Project file: '%s'"
-msgstr "프로젝트 파일: %s"
+msgstr "프로젝트 파일: '%s'"
 
 #: cvpcb/dialogs/dialog_config_equfiles.cpp:103
 msgid "No editor defined in KiCad. Please choose it."
-msgstr ""
+msgstr "KiCad에 편집기가 지정되어 있지 않습니다. 선택해 주세요."
 
 #: cvpcb/dialogs/dialog_config_equfiles.cpp:249
-#, fuzzy
 msgid "Footprint Association File"
-msgstr "풋프린트 회전"
+msgstr "풋프린트 관련성 파일"
 
 #: cvpcb/dialogs/dialog_config_equfiles.cpp:293
 #, c-format
@@ -6887,7 +6835,7 @@ msgstr "파일 '%s'은 이미 목록에 있습니다."
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:20
 msgid "Symbol Footprint Association Files (.equ)"
-msgstr ""
+msgstr "심볼 풋프린트 관련성 파일 (.equ)"
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:36
 #: eeschema/dialogs/dialog_bus_manager.cpp:79
@@ -6907,23 +6855,21 @@ msgstr "제거"
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:42
 #: pcbnew/dialogs/panel_pcbnew_action_plugins_base.cpp:62
-#, fuzzy
 msgid "Move Up"
-msgstr "위쪽으로 이동 ^"
+msgstr "위로 이동"
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:45
 #: pcbnew/dialogs/panel_pcbnew_action_plugins_base.cpp:67
 msgid "Move Down"
-msgstr "아래쪽으로 이동"
+msgstr "아래로 이동"
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:48
-#, fuzzy
 msgid "Edit File"
-msgstr "필드 편집"
+msgstr "파일 편집"
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:63
 msgid "Available environment variables for relative paths:"
-msgstr ""
+msgstr "상대 경로에 사용 가능한 환경 변수들:"
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:81
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:57
