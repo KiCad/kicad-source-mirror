@@ -8,7 +8,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
 "PO-Revision-Date: 2021-08-07 11:56+0000\n"
-"Last-Translator: Ji Yoon Choi <chichoon.choi@gmail.com>\n"
+"Last-Translator: jeongsuAn <dks9467@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
 "Language: ko\n"
@@ -5712,9 +5712,8 @@ msgid "Go to previous marker in Checker window"
 msgstr "체커 창의 이전 마커로 이동"
 
 #: common/tool/actions.cpp:255
-#, fuzzy
 msgid "Next Marker"
-msgstr "다음 마커 찾기"
+msgstr "다음 마커"
 
 #: common/tool/actions.cpp:255
 #, fuzzy
@@ -19419,8 +19418,9 @@ msgid "Estimated ampacity:"
 msgstr ""
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1397
+#, fuzzy
 msgid "Based on temperature rise"
-msgstr ""
+msgstr "온도 상승에 따라"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1409
 #, fuzzy
@@ -19430,7 +19430,7 @@ msgstr "정전 용량:"
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1417
 #, fuzzy
 msgid "pF"
-msgstr "위쪽"
+msgstr "pF"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1419
 msgid "pico-Farad"
@@ -19447,24 +19447,26 @@ msgstr ""
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1433
 #, fuzzy
 msgid "ps"
-msgstr "위쪽"
+msgstr "ps"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1435
 msgid "picoseconds"
 msgstr ""
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1439
+#, fuzzy
 msgid "Inductance:"
-msgstr ""
+msgstr "인덕턴스:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1447
 #, fuzzy
 msgid "nH"
-msgstr "아니오"
+msgstr "nH"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1449
+#, fuzzy
 msgid "nano-Henry"
-msgstr ""
+msgstr "나노-헨리"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1453
 #, fuzzy
@@ -19486,13 +19488,14 @@ msgid "Current:"
 msgstr "전류:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1530
+#, fuzzy
 msgid "Conductor length:"
-msgstr ""
+msgstr "도체 길이:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1542
 #, fuzzy
 msgid "Copper resistivity:"
-msgstr "커퍼 사이드 배치 파일:"
+msgstr "구리 저항:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1569
 #, fuzzy
@@ -36167,7 +36170,7 @@ msgstr "프로젝트 파일 열기:"
 #: resources/linux/mime/kicad-kicad.xml.in:12
 #, fuzzy
 msgid "KiCad Schematic"
-msgstr "회로도 인쇄"
+msgstr "KiCad 회로도"
 
 #: resources/linux/mime/kicad-kicad.xml.in:25
 #, fuzzy
