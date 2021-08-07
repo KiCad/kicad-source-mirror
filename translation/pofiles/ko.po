@@ -7,8 +7,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
-"PO-Revision-Date: 2021-08-07 12:09+0000\n"
-"Last-Translator: jeongsuAn <dks9467@gmail.com>\n"
+"PO-Revision-Date: 2021-08-08 03:31+0000\n"
+"Last-Translator: 이상수 <kku1818@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
 "Language: ko\n"
@@ -5736,76 +5736,62 @@ msgid "Zoom to Fit"
 msgstr "화면에 맞게 확대"
 
 #: common/tool/actions.cpp:287
-#, fuzzy
 msgid "Zoom to Objects"
-msgstr "개체 확대"
+msgstr "개체로 확대/축소"
 
 #: common/tool/actions.cpp:298
-#, fuzzy
 msgid "Zoom In at Cursor"
-msgstr "확대"
+msgstr "커서 확대"
 
 #: common/tool/actions.cpp:309
-#, fuzzy
 msgid "Zoom Out at Cursor"
-msgstr "확대"
+msgstr "커서 축소"
 
 #: common/tool/actions.cpp:315 common/widgets/mathplot.cpp:1761
 #: eeschema/sim/sim_plot_frame_base.cpp:87
-#, fuzzy
 msgid "Zoom In"
 msgstr "확대"
 
 #: common/tool/actions.cpp:321 common/widgets/mathplot.cpp:1762
 #: eeschema/sim/sim_plot_frame_base.cpp:91
-#, fuzzy
 msgid "Zoom Out"
-msgstr "확대"
+msgstr "축소"
 
 #: common/tool/actions.cpp:333
-#, fuzzy
 msgid "Zoom to Selection"
-msgstr "확대 선택"
+msgstr "선택 확대/축소"
 
 #: common/tool/actions.cpp:346
-#, fuzzy
 msgid "Cursor Up"
-msgstr "커서"
+msgstr "커서 위로"
 
 #: common/tool/actions.cpp:352
-#, fuzzy
 msgid "Cursor Down"
-msgstr "호 설정"
+msgstr "커서 아래로"
 
 #: common/tool/actions.cpp:358
-#, fuzzy
 msgid "Cursor Left"
-msgstr "커서"
+msgstr "왼쪽 커서"
 
 #: common/tool/actions.cpp:364
-#, fuzzy
 msgid "Cursor Right"
-msgstr "오른쪽"
+msgstr "오른쪽 커서"
 
 #: common/tool/actions.cpp:371
-#, fuzzy
 msgid "Cursor Up Fast"
-msgstr "커서"
+msgstr "커서 위로 빠르게 이동"
 
 #: common/tool/actions.cpp:377
-#, fuzzy
 msgid "Cursor Down Fast"
-msgstr "호 설정"
+msgstr "커서 아래로 빠르게 이동"
 
 #: common/tool/actions.cpp:383
-#, fuzzy
 msgid "Cursor Left Fast"
-msgstr "커서"
+msgstr "커서 왼쪽으로 빠르게 이동"
 
 #: common/tool/actions.cpp:389
-#, fuzzy
 msgid "Cursor Right Fast"
-msgstr "커서 모양 바꾸기"
+msgstr "커서 오른족으로 빠르게 이동"
 
 #: common/tool/actions.cpp:395
 msgid "Click"
@@ -5816,33 +5802,28 @@ msgid "Performs left mouse button click"
 msgstr "왼쪽 마우스 버튼 클릭과 같이 동작"
 
 #: common/tool/actions.cpp:401
-#, fuzzy
 msgid "Double-click"
-msgstr "편집할 필드"
+msgstr "두 번 클릭"
 
 #: common/tool/actions.cpp:401
 msgid "Performs left mouse button double-click"
 msgstr "왼쪽 마우스 버튼 더블 클릭과 같이 동작"
 
 #: common/tool/actions.cpp:407
-#, fuzzy
 msgid "Pin Library"
-msgstr "라이브러리"
+msgstr "라이브러리 고정"
 
 #: common/tool/actions.cpp:408
-#, fuzzy
 msgid "Keep the library at the top of the list"
-msgstr "현재 시트만 저장"
+msgstr "라이브러리를 목록의 맨 위에 두십시오"
 
 #: common/tool/actions.cpp:411
-#, fuzzy
 msgid "Unpin Library"
-msgstr "새 라이브러리"
+msgstr "라이브러리 고정 해제"
 
 #: common/tool/actions.cpp:412
-#, fuzzy
 msgid "No longer keep the library at the top of the list"
-msgstr "현재 시트만 저장"
+msgstr "더 이상 목록의 맨 위에 라이브러리를 유지하지 않습니다"
 
 #: common/tool/actions.cpp:417
 msgid "Pan Up"
@@ -6978,7 +6959,7 @@ msgstr "상대적인"
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:101
 #, fuzzy
 msgid "Path Type"
-msgstr "패드 형식"
+msgstr "경로 유형"
 
 #: cvpcb/dialogs/fp_conflict_assignment_selector.cpp:37
 msgid "Ref"
@@ -6999,38 +6980,39 @@ msgid ""
 "\n"
 "Please choose the assignment."
 msgstr ""
+"개략적인 넷리스트의 설치 공간 할당과 기호 설치 공간 연결 파일(.cmp)이 충돌합니다.\n"
+"\n"
+"과제를 선택하세요."
 
 #: cvpcb/dialogs/fp_conflict_assignment_selector_base.h:53
-#, fuzzy
 msgid "Footprint Assignment Conflicts"
-msgstr "풋프린트 회전"
+msgstr "설치 공간 할당 충돌"
 
 #: cvpcb/display_footprints_frame.cpp:69
 #: pcbnew/toolbars_footprint_viewer.cpp:158
-#, fuzzy
 msgid "Footprint Viewer"
-msgstr "풋프린트 필터"
+msgstr "설치공간 보기"
 
 #: cvpcb/display_footprints_frame.cpp:405
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint ID '%s' is not valid."
-msgstr "%s 풋프린트 ID가 잘못되었습니다."
+msgstr "설치 공간 ID '%s' 이(가) 잘못되었습니다."
 
 #: cvpcb/display_footprints_frame.cpp:420
-#, fuzzy, c-format
+#, c-format
 msgid "Library '%s' is not in the footprint library table."
-msgstr "%s 라이브러리가 풋프린트 라이브러리 테이블에 없습니다."
+msgstr "라이브러리 '%s' 이(가) 설치공간 라이브러리 테이블에 없습니다."
 
 #: cvpcb/display_footprints_frame.cpp:429
 #: cvpcb/display_footprints_frame.cpp:454
 #, fuzzy, c-format
 msgid "Footprint '%s' not found."
-msgstr "%s 파일을 찾을 수 없습니다."
+msgstr "%s 설치공간을  찾을 수 없습니다."
 
 #: cvpcb/display_footprints_frame.cpp:484 pcbnew/footprint.cpp:878
 #, c-format
 msgid "Footprint: %s"
-msgstr "풋프린트: %s"
+msgstr "설치공간: %s"
 
 #: cvpcb/display_footprints_frame.cpp:495
 #, c-format
