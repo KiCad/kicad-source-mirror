@@ -7,8 +7,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
-"PO-Revision-Date: 2021-08-07 11:48+0000\n"
-"Last-Translator: 이상수 <kku1818@gmail.com>\n"
+"PO-Revision-Date: 2021-08-07 11:56+0000\n"
+"Last-Translator: Ji Yoon Choi <chichoon.choi@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
 "Language: ko\n"
@@ -5604,16 +5604,15 @@ msgstr "재실행"
 
 #: common/tool/actions.cpp:148
 msgid "Redo last edit"
-msgstr "마지막 편집 재 실행"
+msgstr "마지막 편집 재실행"
 
 #: common/tool/actions.cpp:154
 msgid "Cut selected item(s) to clipboard"
-msgstr "클립보드로 선택된 항목 잘라내기"
+msgstr "클립보드로 선택한 항목 잘라내기"
 
 #: common/tool/actions.cpp:160
-#, fuzzy
 msgid "Copy selected item(s) to clipboard"
-msgstr "클립보드로 3D 이미지 복사"
+msgstr "클립보드로 선택한 아이템 복사"
 
 #: common/tool/actions.cpp:166
 msgid "Paste items(s) from clipboard"
@@ -5624,47 +5623,40 @@ msgid "Select all items on screen"
 msgstr "화면상의 모든 아이템 선택"
 
 #: common/tool/actions.cpp:176
-#, fuzzy
 msgid "Paste Special..."
 msgstr "특수 붙여넣기..."
 
 #: common/tool/actions.cpp:176
-#, fuzzy
 msgid "Paste item(s) from clipboard with options"
-msgstr "클립보드로 플로트"
+msgstr "옵션을 지정하여 클립보드로부터 항목 붙여넣기"
 
 #: common/tool/actions.cpp:181
 msgid "Duplicate"
 msgstr "복제"
 
 #: common/tool/actions.cpp:181
-#, fuzzy
 msgid "Duplicates the selected item(s)"
-msgstr "선택된 항목 잘라내기"
+msgstr "선택한 항목 복제"
 
 #: common/tool/actions.cpp:192
-#, fuzzy
 msgid "Deletes selected item(s)"
-msgstr "선택된 항목 잘라내기"
+msgstr "선택된 항목 삭제"
 
 #: common/tool/actions.cpp:197
 msgid "Interactive Delete Tool"
 msgstr "인터랙티브 삭제 도구"
 
 #: common/tool/actions.cpp:197
-#, fuzzy
 msgid "Delete clicked items"
-msgstr "선택된 항목 잘라내기"
+msgstr "클릭한 항목 삭제"
 
 #: common/tool/actions.cpp:204
-#, fuzzy
 msgid "Change Edit Method"
-msgstr "텍스트로 바꾸기"
+msgstr "편집 방식 변경"
 
 #: common/tool/actions.cpp:204
-#, fuzzy
 msgid "Change edit method constraints"
-msgstr "풋프린트"
+msgstr "편집 방식의 제약 변경"
 
 #: common/tool/actions.cpp:209 eeschema/dialogs/dialog_schematic_find.cpp:33
 #: eeschema/dialogs/dialog_schematic_find_base.h:81
@@ -5672,9 +5664,8 @@ msgid "Find"
 msgstr "찾기"
 
 #: common/tool/actions.cpp:209
-#, fuzzy
 msgid "Find text"
-msgstr "항목 찾기"
+msgstr "문자열 찾기"
 
 #: common/tool/actions.cpp:215 eeschema/dialogs/dialog_schematic_find.cpp:44
 msgid "Find and Replace"
@@ -5685,47 +5676,40 @@ msgid "Find and replace text"
 msgstr "문자열 찾기 및 바꾸기"
 
 #: common/tool/actions.cpp:221 pcbnew/dialogs/dialog_find_base.cpp:93
-#, fuzzy
 msgid "Find Next"
 msgstr "다음 항목 찾기"
 
 #: common/tool/actions.cpp:221
-#, fuzzy
 msgid "Find next match"
-msgstr "다음 항목 찾기"
+msgstr "다음 일치하는 항목 찾기"
 
 #: common/tool/actions.cpp:227
-#, fuzzy
 msgid "Find Next Marker"
 msgstr "다음 마커 찾기"
 
 #: common/tool/actions.cpp:233
 msgid "Replace and Find Next"
-msgstr "교체 및 다음 찾기"
+msgstr "교체 및 다음 항목 찾기"
 
 #: common/tool/actions.cpp:233
 msgid "Replace current match and find next"
 msgstr "현재 검색 결과를 교체 및 다음 찾기"
 
 #: common/tool/actions.cpp:239
-#, fuzzy
 msgid "Replace All"
-msgstr "셀 배치"
+msgstr "모든 항목 교체"
 
 #: common/tool/actions.cpp:239
-#, fuzzy
 msgid "Replace all matches"
-msgstr "모든 레이어 지우기"
+msgstr "모든 일치하는 값 교체"
 
 #: common/tool/actions.cpp:250
-#, fuzzy
 msgid "Previous Marker"
-msgstr "이전 버전 (&P)"
+msgstr "이전 마커"
 
 #: common/tool/actions.cpp:250
-#, fuzzy
 msgid "Go to previous marker in Checker window"
-msgstr "PCB DRC"
+msgstr "체커 창의 이전 마커로 이동"
 
 #: common/tool/actions.cpp:255
 #, fuzzy
