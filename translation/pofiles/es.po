@@ -11,8 +11,8 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
-"PO-Revision-Date: 2021-08-08 22:31+0000\n"
-"Last-Translator: Adolfo Jayme Barrientos <fitojb@ubuntu.com>\n"
+"PO-Revision-Date: 2021-08-08 22:35+0000\n"
+"Last-Translator: VicSanRoPe <vicsanrope@protonmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/kicad/"
 "master-source/es/>\n"
 "Language: es\n"
@@ -1947,7 +1947,7 @@ msgstr ""
 #: common/dialogs/dialog_global_lib_table_config.cpp:49
 #, c-format
 msgid "Copy default global %s library table (recommended)"
-msgstr "Copiar tabla de bibliotecas %s global predeterminada (recomendado)"
+msgstr "Copiar tabla de librerías %s global predeterminada (recomendado)"
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:51
 #, c-format
@@ -32383,14 +32383,13 @@ msgid "KiCad only supports 32 signal layers."
 msgstr "KiCad solo admite 32 capas de señales."
 
 #: pcbnew/plugins/pcad/pcb_via.cpp:93
-#, fuzzy
 msgid "Unable to find library section."
-msgstr "Imposible encontrar el archivo"
+msgstr "No se puede encontrar la sección de librería."
 
 #: pcbnew/plugins/pcad/pcb_via.cpp:108
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to find viaStyleDef %s."
-msgstr "Imposible encontrar el archivo"
+msgstr "No se puede encontrar viaStyleDef %s."
 
 #: pcbnew/python/scripting/pcbnew_action_plugins.cpp:70
 msgid "Exception on python action plugin code"
@@ -32468,14 +32467,13 @@ msgid "Length Tuner"
 msgstr "Afinado de longitud"
 
 #: pcbnew/router/pns_diff_pair_placer.cpp:476
-#, fuzzy
 msgid ""
 "Unable to find complementary differential pair nets. Make sure the names of "
 "the nets belonging to a differential pair end with either N/P or +/-."
 msgstr ""
-"No pueden encontrarse las redes complementarias del par diferencial. "
+"No se pueden encontrar las redes complementarias del par diferencial. "
 "Asegúrese de que los nombres de las redes que pertenecen al mismo par "
-"terminan en _N/_P o +/-."
+"diferencial terminen en N/P o +/-."
 
 #: pcbnew/router/pns_diff_pair_placer.cpp:493
 msgid ""
@@ -32528,14 +32526,12 @@ msgid "?"
 msgstr "?"
 
 #: pcbnew/router/pns_kicad_iface.cpp:450
-#, fuzzy
 msgid "existing track"
-msgstr "Al crear pistas"
+msgstr "pista existente"
 
 #: pcbnew/router/pns_kicad_iface.cpp:464 pcbnew/router/pns_kicad_iface.cpp:477
-#, fuzzy
 msgid "board minimum width"
-msgstr "Ancho mínimo:"
+msgstr "ancho mínimo de placa"
 
 #: pcbnew/router/pns_kicad_iface.cpp:473
 #, fuzzy
