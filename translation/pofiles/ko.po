@@ -13,7 +13,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
 "PO-Revision-Date: 2021-08-08 16:56+0000\n"
-"Last-Translator: Ji Yoon Choi <chichoon.choi@gmail.com>\n"
+"Last-Translator: jeongsuAn <dks9467@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
 "Language: ko\n"
@@ -20843,16 +20843,17 @@ msgstr "선택한 것만"
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:95
 #, fuzzy
 msgid "Empty"
-msgstr "텍스트 편집"
+msgstr "비어있음"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:96
+#, fuzzy
 msgid "Invalid"
-msgstr ""
+msgstr "유효하지 않음"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:97
 #, fuzzy
 msgid "Excluded"
-msgstr "패드 제외"
+msgstr "제외"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:112
 #, fuzzy
@@ -21372,20 +21373,20 @@ msgstr "후면에서 보기"
 #: pcbnew/dialogs/dialog_board_statistics.cpp:95
 #: pcbnew/dialogs/dialog_board_statistics.cpp:686
 msgid "Total"
-msgstr ""
+msgstr "합계"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:102
 msgid "Area:"
-msgstr ""
+msgstr "면적:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:139
 msgid "THT:"
-msgstr ""
+msgstr "THT:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:140
 #: pcbnew/dialogs/dialog_board_statistics.cpp:144
 msgid "SMD:"
-msgstr ""
+msgstr "SMD:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:143
 msgid "Through hole:"
@@ -21397,7 +21398,7 @@ msgstr "연결선:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:146
 msgid "NPTH:"
-msgstr ""
+msgstr "NPTH:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:149
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:165
@@ -21427,7 +21428,7 @@ msgstr "합계:"
 #: pcbnew/dialogs/dialog_board_statistics.cpp:667
 #: pcbnew/dialogs/dialog_board_statistics.cpp:668
 msgid "unknown"
-msgstr ""
+msgstr "알 수 없음"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:453
 msgid "Round"
@@ -21435,25 +21436,26 @@ msgstr "둥근"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:456
 msgid "Slot"
-msgstr ""
+msgstr "슬롯"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:459
-#, fuzzy
 msgid "???"
-msgstr "????"
+msgstr "???"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:464
 #: pcbnew/dialogs/dialog_board_statistics.cpp:469
 msgid "N/A"
-msgstr ""
+msgstr "N/A"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:481 pcbnew/pad.cpp:1099
+#, fuzzy
 msgid "PTH"
-msgstr ""
+msgstr "PTH"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:481 pcbnew/pad.cpp:1102
+#, fuzzy
 msgid "NPTH"
-msgstr ""
+msgstr "NPTH"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:628
 #, fuzzy
@@ -21522,13 +21524,12 @@ msgid "Y Size"
 msgstr "크기"
 
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:234
-#, fuzzy
 msgid "Plated"
-msgstr "자동 배치"
+msgstr "도금"
 
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:235
 msgid "Via/Pad"
-msgstr ""
+msgstr "비아/패드"
 
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:236
 #, fuzzy
@@ -22251,7 +22252,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:145
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:112
 msgid "1234"
-msgstr ""
+msgstr "1234"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:145
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:112
@@ -22292,22 +22293,20 @@ msgstr "0.00000"
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:170
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:127
 msgid "0.00"
-msgstr ""
+msgstr "0.00"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:170
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:127
 msgid "0.000"
-msgstr ""
+msgstr "0.000"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:170
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:127
-#, fuzzy
 msgid "0.0000"
-msgstr "0.00000"
+msgstr "0.0000"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:170
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:127
-#, fuzzy
 msgid "0.00000"
 msgstr "0.00000"
 
@@ -22414,12 +22413,12 @@ msgstr "위치 모드 :"
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:325
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:100
 msgid "Outside"
-msgstr ""
+msgstr "외부"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:325
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:100
 msgid "Inline"
-msgstr ""
+msgstr "인라인"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:325
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:68
@@ -22468,9 +22467,8 @@ msgstr "Cvpcb 실행"
 
 #: pcbnew/dialogs/dialog_drc.cpp:194 pcbnew/tools/board_inspection_tool.cpp:47
 #: pcbnew/tools/zone_filler_tool.cpp:131
-#, fuzzy
 msgid "Rules"
-msgstr "모듈"
+msgstr "규칙"
 
 #: pcbnew/dialogs/dialog_drc.cpp:227
 msgid "DRC incomplete: could not compile custom design rules.  "
@@ -23220,7 +23218,7 @@ msgstr "참조 지정자"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:136
 msgid "Side:"
-msgstr ""
+msgstr "옆:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:195
 #, fuzzy
@@ -25667,9 +25665,8 @@ msgid "SVG Options"
 msgstr "GERBVIEW 설정"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:378
-#, fuzzy
 msgid "Millimeter"
-msgstr "mm"
+msgstr "밀리미터"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:382
 msgid ""
@@ -26412,12 +26409,11 @@ msgstr "패드 속성"
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.cpp:26
 #, fuzzy
 msgid "&Vias"
-msgstr "비아"
+msgstr "비아(&V)"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.cpp:26
-#, fuzzy
 msgid "&Pads"
-msgstr "패드"
+msgstr "패드(&P)"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.cpp:32
 #, fuzzy
@@ -27078,7 +27074,7 @@ msgstr ""
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:354
 #, fuzzy
 msgid "uVias"
-msgstr "비아"
+msgstr "마이크로 비아"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:370
 msgid "Minimum uVia diameter:"
@@ -27101,9 +27097,8 @@ msgid ""
 msgstr ""
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:411
-#, fuzzy
 msgid "Silkscreen"
-msgstr "Silkscreen Cmp"
+msgstr "실크스크린"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:427
 msgid "Minimum item clearance:"
@@ -27195,7 +27190,7 @@ msgstr ""
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:48
 #, fuzzy
 msgid "CrtYd_Front"
-msgstr "Draft layer"
+msgstr "CrtYd_Front"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:53
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:643
@@ -27220,9 +27215,8 @@ msgid "If you want an adhesive template for the front side of the board"
 msgstr ""
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:76
-#, fuzzy
 msgid "Adhes_Front"
-msgstr "Draft layer"
+msgstr "Adhes_Front"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:79
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:91
@@ -27240,27 +27234,24 @@ msgid "If you want a solder paster layer for front side of the board"
 msgstr ""
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:88
-#, fuzzy
 msgid "SoldP_Front"
-msgstr "Draft layer"
+msgstr "SoldP_Front"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:96
 msgid "If you want a silk screen layer for the front side of the board"
 msgstr ""
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:100
-#, fuzzy
 msgid "SilkS_Front"
-msgstr "Draft layer"
+msgstr "SilkS_Front"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:108
 msgid "If you want a solder mask layer for the front of the board"
 msgstr ""
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:112
-#, fuzzy
 msgid "Mask_Front"
-msgstr "Draft layer"
+msgstr "Mask_Front"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:120
 #, fuzzy
@@ -27604,36 +27595,32 @@ msgid "If you want a solder mask layer for the back side of the board"
 msgstr ""
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:580
-#, fuzzy
 msgid "SoldM_Back"
-msgstr "Draft layer"
+msgstr "SoldM_Back"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:588
 msgid "If you want a silk screen layer for the back side of the board"
 msgstr ""
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:592
-#, fuzzy
 msgid "SilkS_Back"
-msgstr "Draft layer"
+msgstr "SilkS_Back"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:600
 msgid "If you want a solder paste layer for the back side of the board"
 msgstr ""
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:604
-#, fuzzy
 msgid "SoldP_Back"
-msgstr "Draft layer"
+msgstr "SoldP_Back"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:612
 msgid "If you want an adhesive layer for the back side of the board"
 msgstr ""
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:616
-#, fuzzy
 msgid "Adhes_Back"
-msgstr "Draft layer"
+msgstr "Adhes_Back"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:624
 msgid "If you want a fabrication layer for the back side of the board"
@@ -27648,9 +27635,8 @@ msgid "If you want a courtyard layer for the back side of the board"
 msgstr ""
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:640
-#, fuzzy
 msgid "CrtYd_Back"
-msgstr "Draft layer"
+msgstr "CrtYd_Back"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:648
 msgid "If you want a board perimeter layer"
@@ -27702,9 +27688,8 @@ msgid "Drawings"
 msgstr "도면"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:716
-#, fuzzy
 msgid "User1"
-msgstr "사용자"
+msgstr "사용자1"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:719
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:729
@@ -27720,44 +27705,36 @@ msgid "User defined layer"
 msgstr "정의된 홀"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:726
-#, fuzzy
 msgid "User2"
-msgstr "사용자"
+msgstr "사용자2"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:736
-#, fuzzy
 msgid "User3"
-msgstr "사용자"
+msgstr "사용자3"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:746
-#, fuzzy
 msgid "User4"
-msgstr "사용자"
+msgstr "사용자4"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:756
-#, fuzzy
 msgid "User5"
-msgstr "사용자"
+msgstr "사용자5"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:766
-#, fuzzy
 msgid "User6"
-msgstr "사용자"
+msgstr "사용자6"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:776
-#, fuzzy
 msgid "User7"
-msgstr "사용자"
+msgstr "사용자7"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:786
-#, fuzzy
 msgid "User8"
-msgstr "사용자"
+msgstr "사용자8"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:796
-#, fuzzy
 msgid "User9"
-msgstr "사용자"
+msgstr "사용자9"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:29
 msgid ""
@@ -28800,9 +28777,8 @@ msgid "Gathering length-constrained connections..."
 msgstr ""
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:327
-#, fuzzy
 msgid "<unconstrained>"
-msgstr "색상 인쇄"
+msgstr "<제약 없음>"
 
 #: pcbnew/drc/drc_test_provider_misc.cpp:114
 msgid "(no edges found on Edge.Cuts layer)"
@@ -29791,9 +29767,8 @@ msgid "Specctra DSN..."
 msgstr "Specctra DSN..."
 
 #: pcbnew/menubar_pcb_editor.cpp:130
-#, fuzzy
 msgid "GenCAD..."
-msgstr "젠CAD..."
+msgstr "GenCAD..."
 
 #: pcbnew/menubar_pcb_editor.cpp:130
 #, fuzzy
@@ -29802,7 +29777,7 @@ msgstr "패드 설정 내보내기"
 
 #: pcbnew/menubar_pcb_editor.cpp:132
 msgid "VRML..."
-msgstr ""
+msgstr "VRML..."
 
 #: pcbnew/menubar_pcb_editor.cpp:132
 msgid "Export VRML 3D board representation"
@@ -29810,7 +29785,7 @@ msgstr ""
 
 #: pcbnew/menubar_pcb_editor.cpp:134
 msgid "IDFv3..."
-msgstr ""
+msgstr "IDFv3..."
 
 #: pcbnew/menubar_pcb_editor.cpp:134
 msgid "Export IDF 3D board representation"
@@ -29818,7 +29793,7 @@ msgstr ""
 
 #: pcbnew/menubar_pcb_editor.cpp:136
 msgid "STEP..."
-msgstr ""
+msgstr "STEP..."
 
 #: pcbnew/menubar_pcb_editor.cpp:136
 msgid "Export STEP 3D board representation"
@@ -29826,7 +29801,7 @@ msgstr ""
 
 #: pcbnew/menubar_pcb_editor.cpp:138
 msgid "SVG..."
-msgstr ""
+msgstr "SVG..."
 
 #: pcbnew/menubar_pcb_editor.cpp:138
 msgid "Export SVG board representation"
@@ -29842,7 +29817,7 @@ msgstr ""
 
 #: pcbnew/menubar_pcb_editor.cpp:143
 msgid "Hyperlynx..."
-msgstr ""
+msgstr "Hyperlynx..."
 
 #: pcbnew/menubar_pcb_editor.cpp:150
 msgid "Footprints to Library..."
@@ -30472,7 +30447,6 @@ msgid "NPTH, mechanical"
 msgstr "기계적"
 
 #: pcbnew/pad.cpp:1453
-#, fuzzy
 msgid "Trapezoid"
 msgstr "사다리꼴"
 
@@ -30700,8 +30674,9 @@ msgid "Points"
 msgstr "풋프린트"
 
 #: pcbnew/pcb_shape.cpp:570
+#, fuzzy
 msgid "Unrecognized"
-msgstr ""
+msgstr "인식할 수 없음"
 
 #: pcbnew/pcb_shape.cpp:1324 pcbnew/pcb_track.cpp:1117
 #: pcbnew/pcb_track.cpp:1134
@@ -32737,7 +32712,7 @@ msgstr "영역 연결 유형: %s."
 #: pcbnew/zone.cpp:352 pcbnew/zone.cpp:500 pcbnew/zone.cpp:781
 #, fuzzy
 msgid "zone"
-msgstr "영역 추가"
+msgstr "구역"
 
 #: pcbnew/tools/board_inspection_tool.cpp:151
 #, c-format
@@ -33084,7 +33059,7 @@ msgstr ""
 #: pcbnew/tools/drc_tool.cpp:207
 #, fuzzy
 msgid "DRC"
-msgstr "Cvpcb 실행"
+msgstr "DRC"
 
 #: pcbnew/tools/edit_tool.cpp:94
 #, fuzzy
@@ -33178,8 +33153,9 @@ msgid "No footprint problems found."
 msgstr "마커를 찾았습니다."
 
 #: pcbnew/tools/group_tool.cpp:43
+#, fuzzy
 msgid "Grouping"
-msgstr ""
+msgstr "그룹화"
 
 #: pcbnew/tools/group_tool.cpp:65
 msgid "Group is in inconsistent state:"
@@ -34007,7 +33983,7 @@ msgstr "IPC-D-356 네트리스트 파일 생성"
 
 #: pcbnew/tools/pcb_actions.cpp:610
 msgid "BOM..."
-msgstr ""
+msgstr "부품 목록..."
 
 #: pcbnew/tools/pcb_actions.cpp:610
 #, fuzzy
@@ -34120,8 +34096,9 @@ msgid "Group the selected items so that they are treated as a single item"
 msgstr "선택된 항목 잘라내기"
 
 #: pcbnew/tools/pcb_actions.cpp:688
+#, fuzzy
 msgid "Ungroup"
-msgstr ""
+msgstr "그룹 해제"
 
 #: pcbnew/tools/pcb_actions.cpp:688
 #, fuzzy
@@ -35699,7 +35676,7 @@ msgstr "풋프린트 이동"
 #: pcbnew/zone.cpp:585
 #, fuzzy
 msgid "Restrictions"
-msgstr "사각형 설정"
+msgstr "제한"
 
 #: pcbnew/zone.cpp:594 pcbnew/zone.cpp:1408
 msgid "Priority"
@@ -35750,8 +35727,9 @@ msgid "Zone %s on %s"
 msgstr "모듈 배치 %s %s"
 
 #: pcbnew/zone.cpp:1399
+#, fuzzy
 msgid "Inherited"
-msgstr ""
+msgstr "상속"
 
 #: pcbnew/zone.cpp:1417
 #, fuzzy
