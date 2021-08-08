@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
-"PO-Revision-Date: 2021-08-08 15:09+0000\n"
+"PO-Revision-Date: 2021-08-08 15:25+0000\n"
 "Last-Translator: jeongsuAn <dks9467@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
@@ -20631,12 +20631,14 @@ msgid "Adjust Dielectric Thickness"
 msgstr "삭제 선택"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:46
+#, fuzzy
 msgid "ENIG"
-msgstr ""
+msgstr "ENIG (무전해 니켈 금 도금)"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:47
+#, fuzzy
 msgid "ENEPIG"
-msgstr ""
+msgstr "ENEPIG (무전해 니켈 팔라듐 금 도금)"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:48
 msgid "HAL SnPb"
@@ -20669,12 +20671,13 @@ msgid "Immersion gold"
 msgstr "GERBVIEW 정보"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:55
+#, fuzzy
 msgid "HT_OSP"
-msgstr ""
+msgstr "HT_OSP"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:56
 msgid "OSP"
-msgstr ""
+msgstr "OSP"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:58
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:77
@@ -20684,12 +20687,11 @@ msgstr "사용자 그리드"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:71
 msgid "Green"
-msgstr ""
+msgstr "초록"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:72
-#, fuzzy
 msgid "Red"
-msgstr "다시 실행 (&R)\t"
+msgstr "빨강"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:73
 msgid "Blue"
@@ -20705,7 +20707,7 @@ msgstr "흰색"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:76
 msgid "Yellow"
-msgstr ""
+msgstr "노랑"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.h:51
 #, fuzzy
@@ -29146,7 +29148,6 @@ msgid "Back (Flipped)"
 msgstr "후면에서 보기"
 
 #: pcbnew/footprint.cpp:863
-#, fuzzy
 msgid "autoplaced"
 msgstr "자동 배치"
 
@@ -30374,8 +30375,9 @@ msgid "Pin Type"
 msgstr "핀 형식"
 
 #: pcbnew/pad.cpp:890
+#, fuzzy
 msgid "BGA"
-msgstr ""
+msgstr "BGA"
 
 #: pcbnew/pad.cpp:891
 msgid "Fiducial global"
@@ -30545,7 +30547,7 @@ msgstr "치수 (&D)"
 
 #: pcbnew/pcb_dimension.cpp:301
 msgid "Prefix"
-msgstr ""
+msgstr "접두사"
 
 #: pcbnew/pcb_dimension.cpp:305
 #, fuzzy
@@ -30554,7 +30556,7 @@ msgstr "텍스트 추가"
 
 #: pcbnew/pcb_dimension.cpp:315
 msgid "Suffix"
-msgstr ""
+msgstr "접미사"
 
 #: pcbnew/pcb_dimension.cpp:439
 #, c-format
@@ -30686,9 +30688,8 @@ msgid "Marker"
 msgstr "마커 찾기"
 
 #: pcbnew/pcb_marker.cpp:95
-#, fuzzy
 msgid "Violation"
-msgstr "시뮬레이터 실행 (&R)"
+msgstr "위반"
 
 #: pcbnew/pcb_marker.cpp:142
 #, fuzzy, c-format
