@@ -5,13 +5,14 @@
 # jehunseo <benbot591@gmail.com>, 2021.
 # Uibeom Jung <wjddmlqja17@gmail.com>, 2021.
 # 박준언 <joonun1696@pusan.ac.kr>, 2021.
+# 방준영 <wnsdudtkwkd8@naver.com>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
 "PO-Revision-Date: 2021-08-08 10:14+0000\n"
-"Last-Translator: jeongsuAn <dks9467@gmail.com>\n"
+"Last-Translator: 방준영 <wnsdudtkwkd8@naver.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
 "Language: ko\n"
@@ -8823,8 +8824,9 @@ msgid "Pin Table"
 msgstr "핀 테이블"
 
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:66
+#, fuzzy
 msgid "(Power symbol value field text cannot be changed.)"
-msgstr ""
+msgstr "(전원 기호 값 필드 텍스트를 변경할 수 없습니다.)"
 
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:95
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:233
@@ -8986,13 +8988,13 @@ msgstr "전원 심볼"
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:232
 #: eeschema/dialogs/dialog_symbol_properties.cpp:562
 msgid "References must start with a letter."
-msgstr ""
+msgstr "참조는 문자로 시작해야 합니다."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:252
 #: eeschema/dialogs/dialog_sheet_properties.cpp:194
 #: eeschema/dialogs/dialog_symbol_properties.cpp:579
 msgid "Fields must have a name."
-msgstr ""
+msgstr "필드에는 이름이 있어야 합니다."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:269
 msgid "Aliased symbol must have a parent selected"
@@ -9064,7 +9066,7 @@ msgstr "표시"
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:56
 #: eeschema/fields_grid_table.cpp:200
 msgid "H Align"
-msgstr ""
+msgstr "H 정렬"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:60
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:54
@@ -9169,7 +9171,7 @@ msgstr "유닛 개수:"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:189
 msgid "Enter the number of units for a symbol that contains more than one unit"
-msgstr ""
+msgstr "두 개 이상의 단위가 포함된 기호의 단위 수를 입력합니다"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:199
 msgid "All units are interchangeable"
@@ -9224,8 +9226,9 @@ msgid "Position offset:"
 msgstr "위치 옵셋 :"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:242
+#, fuzzy
 msgid "Margin between the pin name position and the symbol body."
-msgstr ""
+msgstr "핀 이름 위치와 기호 본문 사이의 여백."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:249
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:111
@@ -9316,8 +9319,9 @@ msgid "Set width to 0 to use Schematic Editor line widths."
 msgstr "회로도 편집기 선 너비를 사용하려면 너비를 0으로 설정합니다."
 
 #: eeschema/dialogs/dialog_line_wire_bus_properties_base.cpp:80
+#, fuzzy
 msgid "Set color to transparent to use Schematic Editor colors."
-msgstr ""
+msgstr "회로도 편집기 색상을 사용하도록 색상을 투명하게 설정합니다."
 
 #: eeschema/dialogs/dialog_line_wire_bus_properties_base.h:67
 #, fuzzy
@@ -9325,8 +9329,9 @@ msgid "Line, Wire & Bus Properties"
 msgstr "라인, 와이어 및 버스 속성"
 
 #: eeschema/dialogs/dialog_migrate_buses.cpp:102
+#, fuzzy
 msgid "Conflicting Labels"
-msgstr ""
+msgstr "충돌하는 레이블"
 
 #: eeschema/dialogs/dialog_migrate_buses.cpp:103
 #, fuzzy
@@ -9369,8 +9374,9 @@ msgid "Accept Name"
 msgstr "네트 이름"
 
 #: eeschema/dialogs/dialog_migrate_buses_base.h:53
+#, fuzzy
 msgid "Migrate Buses"
-msgstr ""
+msgstr "버스 마이그레이션"
 
 #: eeschema/dialogs/dialog_netlist.cpp:273
 #: eeschema/dialogs/dialog_netlist_base.h:67
