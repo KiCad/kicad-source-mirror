@@ -12,7 +12,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
 "PO-Revision-Date: 2021-08-08 22:23+0000\n"
-"Last-Translator: VicSanRoPe <vicsanrope@protonmail.com>\n"
+"Last-Translator: Adolfo Jayme Barrientos <fitojb@ubuntu.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/kicad/"
 "master-source/es/>\n"
 "Language: es\n"
@@ -1878,7 +1878,7 @@ msgstr ""
 
 #: common/dialogs/dialog_configure_paths.cpp:621
 msgid "Environment Variable Help"
-msgstr "Ayusa sobre variables de entorno"
+msgstr "Ayuda sobre variables de entorno"
 
 #: common/dialogs/dialog_configure_paths_base.cpp:22
 msgid "Environment Variables"
@@ -1935,19 +1935,19 @@ msgid ""
 "of the options below.  If you are not sure which option to select, please\n"
 "use the default selection."
 msgstr ""
-"Se ha ejecutado por primera vez KiCad utilizando la nueva tabla de librerías "
-"%s\n"
-"para acceder a las librerías. Para que KiCad tenga acceso a las librerías "
-"%s,\n"
-"debe configurar la tabla de librerías %s. Por favor, seleccione una de las "
-"opciones siguientes.\n"
-"Si no está seguro sobre qué opción seleccionar, utilice la selección por "
-"defecto."
+"Se ha ejecutado por primera vez KiCad utilizando la nueva tabla de "
+"bibliotecas %s\n"
+"para acceder a las bibliotecas. Para que KiCad tenga acceso a las "
+"bibliotecas %s,\n"
+"debe configurar la tabla global %s. Seleccione una de las opciones "
+"siguientes.\n"
+"Si no sabe con certeza qué opción seleccionar, utilice la selección "
+"predeterminada."
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:49
 #, c-format
 msgid "Copy default global %s library table (recommended)"
-msgstr "Copiar la tabla global de librerías %s por defecto (recomendado)"
+msgstr "Copiar tabla de bibliotecas %s global predeterminada (recomendado)"
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:51
 #, c-format
@@ -32103,12 +32103,12 @@ msgid ""
 "Library '%s' does not exist.\n"
 "Would you like to create it?"
 msgstr ""
-"La librería '%s' no existe.\n"
-"¿Desea crearla?"
+"La biblioteca «%s» no existe.\n"
+"¿Quiere crearla?"
 
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:2453
 msgid "Library Not Found"
-msgstr "Librería no encontrada"
+msgstr "No se encontró la biblioteca"
 
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:2479
 #, c-format
@@ -32123,13 +32123,13 @@ msgstr "Permisos insuficientes para eliminar '%s'."
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:2556
 #, c-format
 msgid "Cannot overwrite library path '%s'."
-msgstr "No puede sobrescribirse la ruta de librería '%s'."
+msgstr "No puede sobrescribirse la ruta de la biblioteca «%s»."
 
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:2608
 #, c-format
 msgid "Unexpected file '%s' found in library path '%s'."
 msgstr ""
-"Se ha encontrado un archivo inesperado '%s' en la ruta de librerías '%s'."
+"Se encontró un archivo inesperado, «%s», en la ruta de bibliotecas «%s»."
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:176
 #, c-format
@@ -32177,7 +32177,7 @@ msgstr "Capas no definidas:"
 #: pcbnew/plugins/kicad/pcb_parser.cpp:1097
 #, c-format
 msgid "Page type '%s' is not valid."
-msgstr "Tipo de página %s inválido."
+msgstr "El tipo de página «%s» no es válido."
 
 # Pendiente de contexto
 #: pcbnew/plugins/kicad/pcb_parser.cpp:1628
