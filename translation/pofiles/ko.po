@@ -13,7 +13,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
 "PO-Revision-Date: 2021-08-09 00:20+0000\n"
-"Last-Translator: Ji Yoon Choi <chichoon.choi@gmail.com>\n"
+"Last-Translator: jeongsuAn <dks9467@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
 "Language: ko\n"
@@ -18866,7 +18866,7 @@ msgstr "R1:"
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:461
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:472
 msgid "kOhm"
-msgstr "kOhm"
+msgstr "kΩ"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:111
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:363
@@ -20088,7 +20088,7 @@ msgstr "MHz"
 
 #: pcb_calculator/widgets/unit_selector.cpp:102
 msgid "kHz"
-msgstr ""
+msgstr "kHz"
 
 #: pcb_calculator/widgets/unit_selector.cpp:129
 #, fuzzy
@@ -21411,7 +21411,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:650
 msgid "Date"
-msgstr ""
+msgstr "날짜"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:652
 msgid "Board name"
@@ -21420,7 +21420,7 @@ msgstr "보드 이름"
 #: pcbnew/dialogs/dialog_board_statistics.cpp:655
 #, fuzzy
 msgid "Board"
-msgstr "보드 인쇄"
+msgstr "기판"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:661
 #: pcbnew/dialogs/dialog_board_statistics.cpp:668
@@ -22430,7 +22430,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_drc.cpp:264
 msgid "Done.<br><br>"
-msgstr ""
+msgstr "완료되었습니다.<br><br>"
 
 #: pcbnew/dialogs/dialog_drc.cpp:459
 #, fuzzy
@@ -32768,7 +32768,7 @@ msgstr "다음을 위한 배선 폭 계산:"
 #: pcbnew/tools/board_inspection_tool.cpp:736
 #, fuzzy
 msgid "undefined"
-msgstr "정의된 홀"
+msgstr "정의되지 않음"
 
 #: pcbnew/tools/board_inspection_tool.cpp:634
 #, c-format
@@ -35132,8 +35132,9 @@ msgid "Inactive layers will be dimmed"
 msgstr ""
 
 #: pcbnew/widgets/appearance_controls.cpp:607
+#, fuzzy
 msgid "Hide"
-msgstr ""
+msgstr "숨김"
 
 #: pcbnew/widgets/appearance_controls.cpp:609
 msgid "Inactive layers will be hidden"
@@ -35477,9 +35478,8 @@ msgid "Save Layer Preset"
 msgstr "라이브러리"
 
 #: pcbnew/widgets/appearance_controls.cpp:2366
-#, fuzzy
 msgid "Presets"
-msgstr "초기화"
+msgstr "프리셋"
 
 #: pcbnew/widgets/appearance_controls.cpp:2378
 #, fuzzy
