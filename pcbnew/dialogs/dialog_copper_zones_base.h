@@ -87,8 +87,6 @@ class DIALOG_COPPER_ZONE_BASE : public DIALOG_SHIM
 		wxTextCtrl* m_minWidthCtrl;
 		wxStaticText* m_minWidthUnits;
 		wxStaticLine* m_staticline2;
-		wxStaticLine* m_staticline3;
-		wxStaticLine* m_staticline4;
 		wxStaticText* m_connectionLabel;
 		wxChoice* m_PadInZoneOpt;
 		wxStaticText* m_antipadLabel;
@@ -112,6 +110,7 @@ class DIALOG_COPPER_ZONE_BASE : public DIALOG_SHIM
 		wxSpinCtrl* m_spinCtrlSmoothLevel;
 		wxStaticText* m_staticTextGridSmootingVal;
 		wxSpinCtrlDouble* m_spinCtrlSmoothValue;
+		wxStaticLine* m_staticline5;
 		wxStaticText* m_staticText40;
 		wxChoice* m_cbRemoveIslands;
 		wxStaticText* m_islandThresholdLabel;
