@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
-"PO-Revision-Date: 2021-08-08 15:25+0000\n"
+"PO-Revision-Date: 2021-08-08 16:56+0000\n"
 "Last-Translator: Ji Yoon Choi <chichoon.choi@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
@@ -8877,13 +8877,12 @@ msgid "Symbol name:"
 msgstr "기호 이름:"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:35
-#, fuzzy
 msgid ""
 "The symbol name in library and also the default\n"
 "symbol value when loaded in the schematic."
 msgstr ""
-"라이브러리의 기호 이름 및 기본값\n"
-"도식도에 로드된 경우 기호 값."
+"이것은 라이브러리에 포함된 심볼 이름이며, 회로도에 불러올 경우\n"
+"기본 심볼 값으로도 적용됩니다."
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:42
 msgid "Derive from existing symbol:"
@@ -8937,9 +8936,8 @@ msgid "Create symbol with alternate body style (DeMorgan)"
 msgstr "대체 본문 스타일을 사용하여 기호 작성(드모르간)"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:79
-#, fuzzy
 msgid "Create symbol as power symbol"
-msgstr "전원기호와 같은 기호를 만들다"
+msgstr "전원 심볼로서 심볼 생성"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:82
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:178
@@ -8949,26 +8947,22 @@ msgstr "회로도 자재 명세서에서 제외"
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:85
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:181
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:199
-#, fuzzy
 msgid "Exclude from board"
-msgstr "보드에서 제외"
+msgstr "기판에서 제외"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:103
 msgid "Pin name position offset:"
 msgstr "핀 이름 위치 오프셋:"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:120
-#, fuzzy
 msgid "Show pin number text"
 msgstr "핀 번호 텍스트 표시"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:124
-#, fuzzy
 msgid "Show pin name text"
 msgstr "핀 이름 텍스트 표시"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:128
-#, fuzzy
 msgid "Pin name inside"
 msgstr "내부 핀 이름"
 
@@ -9060,7 +9054,6 @@ msgstr "H 정렬"
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:54
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:57
 #: eeschema/fields_grid_table.cpp:201
-#, fuzzy
 msgid "V Align"
 msgstr "V 정렬"
 
@@ -9127,6 +9120,13 @@ msgid ""
 "derived from another symbols or they stand alone as\n"
 "root symbols."
 msgstr ""
+"이 심볼을 파생시킬 신호를 선택하거나, 루트 심볼에 대하여\n"
+"<None>을 선택하세요.\n"
+"\n"
+"파생된 심볼은 이전에 에일리어스로서 참조되었습니다.\n"
+"이는 더이상 유효하지 않으며, 모든 심볼은 다른 심볼로부터\n"
+"파생되었거나 루트 심볼로서 독립되어\n"
+"사용됩니다."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:168
 msgid "Has alternate body style (DeMorgan)"
@@ -9147,6 +9147,10 @@ msgid ""
 "from editing in Eeschema.  The symbol will not be included in\n"
 "the BOM and cannot be assigned a footprint."
 msgstr ""
+"이 옵션을 설정하면 \"전원 포트 추가\" 대화 상자에 \n"
+"해당 심볼을 표시합니다. 또한 값 텍스트를 잠궈 Eeschema가\n"
+"편집하지 못하도록 막아줍니다. 이 심볼은 더이상 BOM에\n"
+"포함될 수 없으며, 풋프린트에 할당될 수 없습니다."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:187
 msgid "Number of Units:"
@@ -9158,60 +9162,57 @@ msgstr "두 개 이상의 단위가 포함된 기호의 단위 수를 입력합�
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:199
 msgid "All units are interchangeable"
-msgstr ""
+msgstr "모든 유닛은 교환 가능"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:200
 msgid ""
 "Check this option when all symbol units are identical except\n"
 "for pin numbers."
 msgstr ""
+"핀 번호를 제외한 모든 심볼 유닛이 동일할 때\n"
+"이 옵션을 체크하세요."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:214
-#, fuzzy
 msgid "Pin Text Options"
-msgstr "핀 설정"
+msgstr "핀 텍스트 설정"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:216
-#, fuzzy
 msgid "Show pin number"
-msgstr "D-Codes 번호 보이기"
+msgstr "핀 번호 표시"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:218
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:178
-#, fuzzy
 msgid "Show or hide pin numbers"
-msgstr "D-Codes 번호 보이기"
+msgstr "핀 번호 표시 / 숨김"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:222
-#, fuzzy
 msgid "Show pin name"
-msgstr "핀 이름 보이기"
+msgstr "핀 이름 표시"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:224
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:184
-#, fuzzy
 msgid "Show or hide pin names"
-msgstr "숨은 핀 보이기"
+msgstr "핀 이름 표시 / 숨김"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:231
-#, fuzzy
 msgid "Place pin names inside"
-msgstr "핀 이름을 안쪽으로"
+msgstr "핀 이름을 안쪽에 배치"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:233
 msgid ""
 "Check this option to have pin names inside the body and pin number outside.\n"
 "If not checked pins names and pins numbers are outside."
 msgstr ""
+"핀 이름을 바디 안쪽에 표시하고, 핀 번호를 바깥에 표시하고자 할 때 이 옵션을 체크하세요.\n"
+"체크하지 않으면, 핀 이름과 번호는 둘 다 바깥에 표시됩니다."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:240
 msgid "Position offset:"
 msgstr "위치 옵셋 :"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:242
-#, fuzzy
 msgid "Margin between the pin name position and the symbol body."
-msgstr "핀 이름 위치와 기호 본문 사이의 여백."
+msgstr "핀 이름의 위치와 심볼 본체 사이의 여백."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:249
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:111
@@ -9232,7 +9233,6 @@ msgstr "핀 이름 위치와 기호 본문 사이의 여백."
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:95
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:147
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:158
-#, fuzzy
 msgid "units"
 msgstr "단위"
 
@@ -9258,24 +9258,22 @@ msgid ""
 "Footprints names can used wildcards like sm* to allow all footprints names "
 "starting by sm."
 msgstr ""
+"이 심볼에 대하여 사용가능한 풋프린트 이름 목록입니다.\n"
+"풋프린트 이름은 sm*과 같이 와일드카드를 사용할 수 있으며, 이는 sm으로 시작하는 모든 풋프린트를 허용하게 합니다."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:293
-#, fuzzy
 msgid "Add footprint filter"
-msgstr "풋프린트 필터"
+msgstr "풋프린트 필터 추가"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:298
-#, fuzzy
 msgid "Edit footprint filter"
-msgstr "풋프린트 필터"
+msgstr "풋프린트 필터 편집"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:306
-#, fuzzy
 msgid "Delete footprint filter"
-msgstr "풋프린트 필터"
+msgstr "풋프린트 필터 삭제"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:320
-#, fuzzy
 msgid "Footprint Filters"
 msgstr "풋프린트 필터"
 
@@ -9284,14 +9282,12 @@ msgid "Edit Spice Model..."
 msgstr "스파이스 모델 편집 ..."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.h:110
-#, fuzzy
 msgid "Library Symbol Properties"
-msgstr "라이브러리 컴포넌트 속성"
+msgstr "라이브러리 심볼 속성"
 
 #: eeschema/dialogs/dialog_line_wire_bus_properties.cpp:53
-#, fuzzy
 msgid "Leave unchanged"
-msgstr "설정 저장 (&S)"
+msgstr "변경하지 않고 그대로 두기"
 
 #: eeschema/dialogs/dialog_line_wire_bus_properties_base.cpp:64
 msgid "Style:"
@@ -9302,32 +9298,27 @@ msgid "Set width to 0 to use Schematic Editor line widths."
 msgstr "회로도 편집기 선 너비를 사용하려면 너비를 0으로 설정합니다."
 
 #: eeschema/dialogs/dialog_line_wire_bus_properties_base.cpp:80
-#, fuzzy
 msgid "Set color to transparent to use Schematic Editor colors."
-msgstr "회로도 편집기 색상을 사용하도록 색상을 투명하게 설정합니다."
+msgstr "회로도 편집기 색상을 사용할 수 있도록 색상을 투명하게 설정합니다."
 
 #: eeschema/dialogs/dialog_line_wire_bus_properties_base.h:67
-#, fuzzy
 msgid "Line, Wire & Bus Properties"
-msgstr "라인, 와이어 및 버스 속성"
+msgstr "배선, 와이어 및 버스 속성"
 
 #: eeschema/dialogs/dialog_migrate_buses.cpp:102
-#, fuzzy
 msgid "Conflicting Labels"
-msgstr "충돌하는 레이블"
+msgstr "충돌하는 라벨"
 
 #: eeschema/dialogs/dialog_migrate_buses.cpp:103
-#, fuzzy
 msgid "New Label"
-msgstr "라벨"
+msgstr "새로운 라벨"
 
 #: eeschema/dialogs/dialog_migrate_buses.cpp:104
 #: pcbnew/dialogs/dialog_find_base.cpp:120 pcbnew/fp_text.cpp:284
 #: pcbnew/pad.cpp:876 pcbnew/pcb_dimension.cpp:349 pcbnew/pcb_shape.cpp:508
 #: pcbnew/pcb_text.cpp:118 pcbnew/pcb_track.cpp:811 pcbnew/zone.cpp:598
-#, fuzzy
 msgid "Status"
-msgstr "시작"
+msgstr "상태"
 
 #: eeschema/dialogs/dialog_migrate_buses.cpp:215
 msgid "Updated"
@@ -9338,45 +9329,45 @@ msgid ""
 "This schematic has one or more buses with more than one label.\n"
 "This was allowed in previous KiCad versions but is no longer permitted."
 msgstr ""
+"이 회로도는 하나 이상의 라벨을 가진 버스를 1개 이상 포함하고 있습니다.\n"
+"이전 버전의 KiCad에서는 이것이 허용되었지만, 지금은 더이상 불가능합니다."
 
 #: eeschema/dialogs/dialog_migrate_buses_base.cpp:23
 msgid ""
 "Please select a new name for each of the buses below.\n"
 "A name has been suggested for you based on the labels attached to the bus."
 msgstr ""
+"아래의 각 버스에 대하여 새로운 이름을 선택하세요.\n"
+"이름은 버스에 붙은 라벨을 토대로 제안되었습니다."
 
 #: eeschema/dialogs/dialog_migrate_buses_base.cpp:32
-#, fuzzy
 msgid "Proposed new name:"
-msgstr "시트 이름:"
+msgstr "제안된 새 이름:"
 
 #: eeschema/dialogs/dialog_migrate_buses_base.cpp:45
-#, fuzzy
 msgid "Accept Name"
-msgstr "네트 이름"
+msgstr "이름 사용"
 
 #: eeschema/dialogs/dialog_migrate_buses_base.h:53
-#, fuzzy
 msgid "Migrate Buses"
 msgstr "버스 마이그레이션"
 
 #: eeschema/dialogs/dialog_netlist.cpp:273
 #: eeschema/dialogs/dialog_netlist_base.h:67
-#, fuzzy
 msgid "Export Netlist"
-msgstr "네트리스트 열기"
+msgstr "네트리스트 내보내기"
 
 #: eeschema/dialogs/dialog_netlist.cpp:305
 msgid "Simulator requires a fully annotated schematic."
-msgstr ""
+msgstr "시뮬레이터는 완전히 주석 처리된 회로도가 필요합니다."
 
 #: eeschema/dialogs/dialog_netlist.cpp:328
 msgid "Reformat passive symbol values"
-msgstr ""
+msgstr "수동 심볼 값 재 포맷"
 
 #: eeschema/dialogs/dialog_netlist.cpp:329
 msgid "Reformat passive symbol values e.g. 1M -> 1Meg"
-msgstr ""
+msgstr "수동 심볼 값 재 포맷 예시: 1M -> 1Meg"
 
 #: eeschema/dialogs/dialog_netlist.cpp:334
 #, fuzzy
@@ -9389,10 +9380,13 @@ msgid ""
 "Usually <path to spice binary> %I\n"
 "%I will be replaced by the actual spice netlist name"
 msgstr ""
+"Spice를 실행하기 위해서 명령줄을 입력하세요\n"
+"주로 <spice 경로> %I\n"
+"%I는 spice 네트리스트 이름으로 대체됩니다"
 
 #: eeschema/dialogs/dialog_netlist.cpp:349
 msgid "Create Netlist and Run Simulator Command"
-msgstr ""
+msgstr "네트리스트 생성 및 시뮬레이터 명령줄 실행"
 
 #: eeschema/dialogs/dialog_netlist.cpp:400
 msgid "Netlist command:"
@@ -9411,7 +9405,7 @@ msgstr "%s 내보내기"
 #: eeschema/dialogs/dialog_netlist.cpp:514
 #: eeschema/netlist_exporters/netlist_generator.cpp:54
 msgid "Exporting netlist requires a fully annotated schematic."
-msgstr ""
+msgstr "네트리스트를 내보내기 위해선 완전히 주석 처리된 회로도가 필요합니다."
 
 #: eeschema/dialogs/dialog_netlist.cpp:634
 #, fuzzy
@@ -9420,11 +9414,11 @@ msgstr "라이브러리가 이미 사용 중입니다."
 
 #: eeschema/dialogs/dialog_netlist.cpp:662
 msgid "Error. You must provide a command String"
-msgstr ""
+msgstr "오류: 명령 문자열을 입력해야 합니다"
 
 #: eeschema/dialogs/dialog_netlist.cpp:668
 msgid "Error. You must provide a Title"
-msgstr ""
+msgstr "오류: 제목을 입력해야 합니다"
 
 #: eeschema/dialogs/dialog_netlist.cpp:712
 msgid "Do not forget to choose a title for this netlist control page"
@@ -9450,7 +9444,7 @@ msgstr "이름:"
 
 #: eeschema/dialogs/dialog_netlist_base.cpp:92
 msgid "Command line to run the generator:"
-msgstr ""
+msgstr "생성기를 실행시키기 위한 명령줄:"
 
 #: eeschema/dialogs/dialog_netlist_base.cpp:107
 msgid "Browse Generators..."
@@ -9468,7 +9462,7 @@ msgstr "대체 핀 이름"
 #: eeschema/dialogs/dialog_pin_properties.cpp:188
 #: eeschema/dialogs/dialog_symbol_properties.cpp:335
 msgid "Alternate pin assignments are not available for DeMorgan symbols."
-msgstr ""
+msgstr "DeMorgan 심볼에 대해서 대체 핀 할당은 사용할 수 없습니다."
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:274
 msgid "Alternate pin definitions must have a name."
@@ -9481,6 +9475,9 @@ msgid ""
 "difficult to connect to in the schematic.\n"
 "Do you want to continue?"
 msgstr ""
+"해당 핀은 %d mils 그리드 위에 있지 않으며, 이 때문에\n"
+"회로도와 연결하기 어려워집니다.\n"
+"계속하시겠습니까?"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:35
 #, fuzzy
@@ -9494,7 +9491,7 @@ msgstr "펜 번호:"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:44
 msgid "Pin number: 1 to 4 ASCII letters and/or digits"
-msgstr ""
+msgstr "핀 번호: 1 ~ 4개의 ASCII 문자와 (또는) 숫자"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:51
 msgid "&X position:"
@@ -9523,7 +9520,7 @@ msgstr "전기 유형:"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:90
 msgid "Used by the ERC."
-msgstr ""
+msgstr "ERC에 사용됩니다."
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:97
 msgid "Graphic style:"
@@ -9596,7 +9593,7 @@ msgstr "회로도 크기"
 #: eeschema/dialogs/dialog_plot_schematic.cpp:282
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1837
 msgid "A5"
-msgstr ""
+msgstr "A5"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:283
 #: eeschema/dialogs/dialog_plot_schematic.cpp:298
@@ -9673,7 +9670,7 @@ msgstr "'%s'에 플롯됨.\n"
 #: eeschema/dialogs/dialog_plot_schematic.cpp:1250
 #, c-format
 msgid "Falling back to user path '%s'."
-msgstr ""
+msgstr "사용자 경로 '%s'로 폴백 합니다."
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:1271
 #: eeschema/dialogs/dialog_plot_schematic.cpp:1311
@@ -9696,7 +9693,7 @@ msgstr "출력 디렉토리:"
 msgid ""
 "Target directory for plot files. Can be absolute or relative to the "
 "schematic main file location."
-msgstr ""
+msgstr "플롯 파일에 대한 목표 디렉토리입니다. 절대경로이거나, 회로도의 메인 파일 위치에 대한 상대 경로일 수 있습니다."
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:41
 #: pcbnew/dialogs/dialog_plot_base.cpp:27
@@ -9757,7 +9754,7 @@ msgstr "플롯 배경색"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:83
 msgid "Plot the background color if the output format supports it"
-msgstr ""
+msgstr "출력 포맷이 지원한다면, 배경색을 플롯합니다"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:87
 msgid "Color theme:"
@@ -9765,7 +9762,7 @@ msgstr "색상 테마:"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:94
 msgid "Select the color theme to use for plotting"
-msgstr ""
+msgstr "플로팅에 사용할 색상 테마를 선택하세요"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:98
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:186
@@ -9776,7 +9773,7 @@ msgstr "기본 선 너비:"
 msgid ""
 "Selection of the default pen thickness used to draw items, when their "
 "thickness is set to 0."
-msgstr ""
+msgstr "만일 굵기가 0으로 설정되어 있을 경우, 개체를 그릴 기본 펜 굵기를 선택합니다."
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:119
 #: pcbnew/dialogs/dialog_plot_base.cpp:254
@@ -9789,19 +9786,19 @@ msgstr "위치 및 단위:"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:130
 msgid "Bottom left, plotter units"
-msgstr ""
+msgstr "왼쪽 아래, 플로터 유닛"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:130
 msgid "Centered, plotter units"
-msgstr ""
+msgstr "중앙, 플로터 유닛"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:130
 msgid "Page fit, user units"
-msgstr ""
+msgstr "페이지에 맞춤, 사용자 유닛"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:130
 msgid "Content fit, user units"
-msgstr ""
+msgstr "내용물에 맞춤, 사용자 유닛"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:136
 #, fuzzy
@@ -9819,7 +9816,7 @@ msgstr "회로도 인쇄"
 
 #: eeschema/dialogs/dialog_print_using_printer.cpp:333
 msgid "An error occurred attempting to print the schematic."
-msgstr ""
+msgstr "회로도를 출력하는 도중 오류가 발생하였습니다."
 
 #: eeschema/dialogs/dialog_print_using_printer.cpp:358
 #, c-format
@@ -9828,15 +9825,15 @@ msgstr "페이지 인쇄 %d"
 
 #: eeschema/dialogs/dialog_print_using_printer_base.cpp:22
 msgid "Print sheet &reference and title block"
-msgstr ""
+msgstr "시트 참조와 타이틀 블록을 출력 (&r)"
 
 #: eeschema/dialogs/dialog_print_using_printer_base.cpp:24
 msgid "Print (or not) the Frame references."
-msgstr ""
+msgstr "프레임 참조를 출력합니다 (또는 출력하지 않음)."
 
 #: eeschema/dialogs/dialog_print_using_printer_base.cpp:28
 msgid "Print in &black and white only"
-msgstr ""
+msgstr "흑백으로만 출력 (&b)"
 
 #: eeschema/dialogs/dialog_print_using_printer_base.cpp:32
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:211
@@ -9846,7 +9843,7 @@ msgstr "배경색 인쇄"
 #: eeschema/dialogs/dialog_print_using_printer_base.cpp:35
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:216
 msgid "Use a different color theme for printing:"
-msgstr ""
+msgstr "출력 시에 다른 색상 테마 사용:"
 
 #: eeschema/dialogs/dialog_rescue_each.cpp:103
 msgid ""
@@ -9857,6 +9854,10 @@ msgid ""
 "\n"
 "The following changes are recommended to update the project."
 msgstr ""
+"이 회로도는 오래된 심볼 라이브러리로 제작되었으며, 회로도를 손상시킬 수 있습니다.  몇몇 심볼들은 다른 심볼 이름에 연결될 필요가 "
+"있습니다.  몇몇 심볼들은 새로운 라이브러리로 \"구조되는\" (복사하여 새로운 이름 붙이기) 작업이 필요합니다.\n"
+"\n"
+"프로젝트를 업데이트하기 위하여 다음과 같은 변경점이 권장됩니다."
 
 #: eeschema/dialogs/dialog_rescue_each.cpp:110
 msgid "Accept"
@@ -9864,11 +9865,11 @@ msgstr "확인"
 
 #: eeschema/dialogs/dialog_rescue_each.cpp:124
 msgid "Symbol Name"
-msgstr ""
+msgstr "심볼 이름"
 
 #: eeschema/dialogs/dialog_rescue_each.cpp:128
 msgid "Action Taken"
-msgstr ""
+msgstr "취한 액션"
 
 #: eeschema/dialogs/dialog_rescue_each.cpp:132
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:959
@@ -9880,7 +9881,7 @@ msgstr "참조"
 #: eeschema/dialogs/dialog_rescue_each.cpp:231
 #, c-format
 msgid "Instances of this symbol (%d items):"
-msgstr ""
+msgstr "이 심볼의 인스턴스 (%d 개의 항목):"
 
 #: eeschema/dialogs/dialog_rescue_each.cpp:293
 msgid ""
@@ -9890,6 +9891,11 @@ msgid ""
 "This setting can be changed from the \"Symbol Libraries\" dialog,\n"
 "and the tool can be activated manually from the \"Tools\" menu."
 msgstr ""
+"이 도구의 표시를 중단할까요?\n"
+"변경 사항이 없습니다.\n"
+"\n"
+"이 설정은 \"심볼 라이브러리\" 대화 창에서 변경될 수 있으며,\n"
+"도구는 \"도구\" 메뉴에서 수동으로 다시 활성화시킬 수 있습니다."
 
 #: eeschema/dialogs/dialog_rescue_each.cpp:297
 #, fuzzy
@@ -9898,11 +9904,11 @@ msgstr "전원 심볼"
 
 #: eeschema/dialogs/dialog_rescue_each_base.cpp:28
 msgid "Symbols to update:"
-msgstr ""
+msgstr "업데이트할 심볼:"
 
 #: eeschema/dialogs/dialog_rescue_each_base.cpp:37
 msgid "Instances of this symbol:"
-msgstr ""
+msgstr "이 심볼의 인스턴스:"
 
 #: eeschema/dialogs/dialog_rescue_each_base.cpp:55
 msgid "Cached Symbol:"
@@ -9914,7 +9920,7 @@ msgstr "라이브러리 심볼:"
 
 #: eeschema/dialogs/dialog_rescue_each_base.cpp:100
 msgid "Never Show Again"
-msgstr ""
+msgstr "다시 표시하지 않음"
 
 #: eeschema/dialogs/dialog_rescue_each_base.h:66
 #: eeschema/project_rescue.cpp:569 eeschema/project_rescue.cpp:584
@@ -9954,7 +9960,7 @@ msgstr "이곳에서 가져오기:"
 msgid ""
 "Target directory for plot files. Can be absolute or relative to the board "
 "file location."
-msgstr ""
+msgstr "플롯 파일의 대상 디렉토리입니다. 절대 경로이거나, 기판 파일 위치에 대한 상대 경로일 수 있습니다."
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:44
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:45
@@ -9971,7 +9977,7 @@ msgstr "필드 이름 템플릿"
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:54
 msgid "Pin conflict map"
-msgstr ""
+msgstr "핀 충돌 맵"
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:57
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:64
@@ -9992,11 +9998,11 @@ msgstr "찾기(S):"
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:36
 #: pcbnew/dialogs/dialog_find_base.cpp:33
 msgid "Text with optional wildcards"
-msgstr ""
+msgstr "와일드카드가 옵션으로 있는 텍스트"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:41
 msgid "Replace &with:"
-msgstr ""
+msgstr "다음으로 교체 (&w):"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:52
 msgid "Direction:"
@@ -10012,7 +10018,7 @@ msgstr "이전으로(R)"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:82
 msgid "&Match case"
-msgstr ""
+msgstr "대소문자 구분 (&m)"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:85
 #: pcbnew/dialogs/dialog_find_base.cpp:46
@@ -10104,7 +10110,7 @@ msgstr "텍스트 변수"
 #: eeschema/dialogs/dialog_schematic_setup.cpp:89
 #: pcbnew/dialogs/dialog_board_setup.cpp:142
 msgid "Project is missing or read-only. Changes will not be saved."
-msgstr ""
+msgstr "프로젝트를 찾을 수 없거나 읽기 전용입니다. 변경점은 저장되지 않습니다."
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:154
 #, c-format
@@ -10112,6 +10118,8 @@ msgid ""
 "Error importing settings from project:\n"
 "Project file %s could not be loaded."
 msgstr ""
+"프로젝트 세팅을 가져오는 도중 오류가 발생하였습니다:\n"
+"프로젝트 파일 %s는 불러올 수 없습니다."
 
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:66
 #, fuzzy
@@ -10130,11 +10138,11 @@ msgstr "시트에 유효한 파일 이름이 있어야 합니다."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:259
 msgid "Sheet file must have a '.kicad_sch' extension."
-msgstr ""
+msgstr "시트 파일의 확장자는 반드시 '.kicad_sch' 여야 합니다."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:293
 msgid "Use relative path for sheet file?"
-msgstr ""
+msgstr "시트 파일에 대해 상대 경로를 사용할까요?"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:294
 #, fuzzy
@@ -10147,6 +10155,8 @@ msgid ""
 "portability across systems and platforms.  Using absolute paths can result "
 "in portability issues."
 msgstr ""
+"상대적인 계층 시트 파일 이름 경로를 사용하면 시스템 및 플랫폼 전반의 회로도 이식성이 향상됩니다.  절대 경로는 이식 문제가 발생할 수 "
+"있습니다."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:301
 #, fuzzy
@@ -10173,11 +10183,13 @@ msgid ""
 "To see individual item colors uncheck '%s'\n"
 "in Preferences > Eeschema > Colors."
 msgstr ""
+"개별 항목의 색상을 보기 위해서는 환경 설정 > Eeschema > 색상 에서\n"
+"'%s' 선택을 취소하세요."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:407
 #, c-format
 msgid "The file '%s' does not appear to be a valid schematic file."
-msgstr ""
+msgstr "파일 '%s'는 유효한 회로도 파일이 아닌 것 같습니다."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:409
 #, fuzzy
@@ -10192,6 +10204,10 @@ msgid ""
 "against parent sheet schematic file path:\n"
 "'%s'."
 msgstr ""
+"새로운 시트 회로도 파일 경로를 부모 파일 경로에 대해 정상화할 수 없습니다:\n"
+"'%s'\n"
+"부모 시트 회로도 파일 경로는 다음과 같습니다:\n"
+"'%s'."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:469
 #: kicad/tools/kicad_manager_control.cpp:531
@@ -10202,7 +10218,7 @@ msgstr "'%s' 이 이미 있습니다."
 #: eeschema/dialogs/dialog_sheet_properties.cpp:472
 #, c-format
 msgid "Link '%s' to this file?"
-msgstr ""
+msgstr "'%s'를 이 파일에 연결할까요?"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:512
 #, c-format
@@ -10212,12 +10228,12 @@ msgstr "'%s' 링크를 '%s'에서 '%s'로 변경하겠습니까?"
 #: eeschema/dialogs/dialog_sheet_properties.cpp:517
 #: eeschema/dialogs/dialog_sheet_properties.cpp:533
 msgid "This action cannot be undone."
-msgstr ""
+msgstr "이 작업은 취소할 수 없습니다."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:529
 #, c-format
 msgid "Create new file '%s' with contents of '%s'?"
-msgstr ""
+msgstr "'%s' 파일을 생성하여 '%s' 내용을 포함할까요?"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:563
 #, c-format
@@ -10236,7 +10252,7 @@ msgstr "시트에는 이름이 있어야 합니다."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:657
 msgid "A sheet must have a file specified."
-msgstr ""
+msgstr "시트에는 지정된 파일이 있어야 합니다."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:804
 msgid "Hierarchical path: "
@@ -10279,21 +10295,23 @@ msgstr "이름으로 신호 추가:"
 
 #: eeschema/dialogs/dialog_sim_settings.cpp:113
 msgid "You need to select DC source"
-msgstr ""
+msgstr "DC 소스를 선택하여야 합니다"
 
 #: eeschema/dialogs/dialog_sim_settings.cpp:217
 msgid "Source 1 and Source 2 must be different"
-msgstr ""
+msgstr "소스 1과 소스 2는 반드시 달라야 합니다"
 
 #: eeschema/dialogs/dialog_sim_settings.cpp:281
 msgid "No valid simulation is configured."
-msgstr ""
+msgstr "유효한 시뮬레이션이 설정되지 않았습니다."
 
 #: eeschema/dialogs/dialog_sim_settings.cpp:284
 msgid ""
 "A valid simulation can be configured by selecting a simulation tab, setting "
 "the simulation parameters and clicking the OK button with the tab selected."
 msgstr ""
+"유효한 시뮬레이션은 시뮬레이션 탭을 선택하여 시뮬레이션 매개변수를 설정한 후, 탭이 선택된 상태에서 OK 버튼을 누름으로써 설정할 수 "
+"있습니다."
 
 #: eeschema/dialogs/dialog_sim_settings.cpp:288
 #, fuzzy
@@ -10313,11 +10331,11 @@ msgstr "시뮬레이터 실행 (&R)"
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:186
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:195
 msgid "Volts"
-msgstr "V"
+msgstr "볼트"
 
 #: eeschema/dialogs/dialog_sim_settings.cpp:594
 msgid "Amperes"
-msgstr ""
+msgstr "암페어"
 
 #: eeschema/dialogs/dialog_sim_settings.cpp:595
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:310
@@ -10326,7 +10344,7 @@ msgstr ""
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:370
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:381
 msgid "Ohms"
-msgstr ""
+msgstr "옴"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:27
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:266
@@ -10336,27 +10354,25 @@ msgstr "10진법"
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:27
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:266
 msgid "Octave"
-msgstr ""
+msgstr "8진법"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:27
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:266
-#, fuzzy
 msgid "Linear"
 msgstr "선형"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:29
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:268
 msgid "Frequency scale"
-msgstr ""
+msgstr "주파수 스케일"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:43
-#, fuzzy
 msgid "Number of points:"
-msgstr "유닛 개수:"
+msgstr "포인트 개수:"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:53
 msgid "Start frequency:"
-msgstr ""
+msgstr "시작 주파수:"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:60
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:71
@@ -10365,10 +10381,9 @@ msgstr ""
 #: eeschema/dialogs/dialog_spice_model_base.cpp:796
 #: eeschema/dialogs/dialog_spice_model_base.cpp:807
 msgid "Hertz"
-msgstr "Hz"
+msgstr "헤르츠"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:64
-#, fuzzy
 msgid "Stop frequency:"
 msgstr "정지 주파수:"
 
@@ -20064,7 +20079,7 @@ msgstr ""
 
 #: pcb_calculator/transline_ident.cpp:337
 msgid "Zodd"
-msgstr "Zodd (홀수 모드 임피던스)"
+msgstr "Zodd"
 
 #: pcb_calculator/transline_ident.cpp:338
 msgid "Odd mode impedance (lines driven by opposite (differential) voltages)"
@@ -20618,9 +20633,8 @@ msgid "ENIG"
 msgstr "ENIG (무전해 니켈 금 도금)"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:47
-#, fuzzy
 msgid "ENEPIG"
-msgstr "ENEPIG (무전해 니켈 팔라듐 금 도금)"
+msgstr "ENEPIG"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:48
 msgid "HAL SnPb"
@@ -21375,7 +21389,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:143
 msgid "Through hole:"
-msgstr "관통 구멍:"
+msgstr "스루홀:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:145
 msgid "Connector:"
@@ -29741,46 +29755,40 @@ msgid "&Load Footprint from PCB..."
 msgstr "PCB에서 풋프린트 로드(&L)..."
 
 #: pcbnew/menubar_footprint_editor.cpp:209
-#, fuzzy
 msgid "Load a footprint from the current board into the editor"
-msgstr "현재 보드로부터 모듈 열기"
+msgstr "현재 기판으로부터 풋프린트를 편집기로 불러오기"
 
 #: pcbnew/menubar_footprint_editor.cpp:213
 msgid "&Insert Footprint on PCB"
-msgstr ""
+msgstr "PCB에 풋프린트 삽입 (&I)"
 
 #: pcbnew/menubar_footprint_editor.cpp:214
-#, fuzzy
 msgid "Insert footprint onto current board"
-msgstr "현재 보드로 모듈 삽입"
+msgstr "현재 보드에 풋프린트 삽입"
 
 #: pcbnew/menubar_pcb_editor.cpp:100
 msgid "Resc&ue"
 msgstr "복구 (&u)"
 
 #: pcbnew/menubar_pcb_editor.cpp:101
-#, fuzzy
 msgid "Clear board and get last rescue file automatically saved by PCB editor"
-msgstr "이전 보드 삭제 후 마지막 복구 파일 열기"
+msgstr "보드 삭제 후 PCB 편집기에 의해 자동 저장된 마지막 복구 파일을 불러옵니다"
 
 #: pcbnew/menubar_pcb_editor.cpp:111
-#, fuzzy
 msgid "Specctra Session..."
-msgstr "스펙트라 세션..."
+msgstr "Specctra 세션..."
 
 #: pcbnew/menubar_pcb_editor.cpp:116
-#, fuzzy
 msgid "Non-KiCad Board File..."
-msgstr "비 KiCad 보드 파일..."
+msgstr "비 KiCad 기판 파일..."
 
 #: pcbnew/menubar_pcb_editor.cpp:117
 msgid "Import board file from other applications"
-msgstr ""
+msgstr "다른 응용 프로그램에서 기판 파일 가져오기"
 
 #: pcbnew/menubar_pcb_editor.cpp:129
-#, fuzzy
 msgid "Specctra DSN..."
-msgstr "스펙트라 DSN..."
+msgstr "Specctra DSN..."
 
 #: pcbnew/menubar_pcb_editor.cpp:130
 #, fuzzy
