@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
-"PO-Revision-Date: 2021-08-08 08:28+0000\n"
+"PO-Revision-Date: 2021-08-08 08:29+0000\n"
 "Last-Translator: Ji Yoon Choi <chichoon.choi@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
@@ -24360,7 +24360,7 @@ msgid ""
 "All required layers (marked with '*') must be matched. Please click on 'Auto-"
 "Match Layers' to automatically match the remaining layers"
 msgstr ""
-"('*' 로 표시된) 모든 필수 레이어가 일치해야 합니다. 나머지 레이어를 자동으로 일치시키려면 '레이어 자동 일치'를 클릭하세요."
+"('*' 로 표시된) 모든 필수 레이어가 일치해야 합니다. 나머지 레이어를 자동으로 일치시키려면 '레이어 자동 일치'를 클릭하세요"
 
 #: pcbnew/dialogs/dialog_imported_layers.cpp:331
 #: pcbnew/dialogs/dialog_imported_layers_base.cpp:22
