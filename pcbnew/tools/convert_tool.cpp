@@ -551,8 +551,9 @@ int CONVERT_TOOL::PolyToLines( const TOOL_EVENT& aEvent )
             };
 
     BOARD_COMMIT          commit( m_frame );
-    FOOTPRINT_EDIT_FRAME* fpEditor = dynamic_cast<FOOTPRINT_EDIT_FRAME*>( m_frame );
-    FOOTPRINT*            footprint = nullptr;
+    FOOTPRINT_EDIT_FRAME* fpEditor    = dynamic_cast<FOOTPRINT_EDIT_FRAME*>( m_frame );
+    FOOTPRINT*            footprint   = nullptr;
+    PCB_LAYER_ID          targetLayer = m_frame->GetActiveLayer();
     PCB_LAYER_ID          copperLayer = UNSELECTED_LAYER;
 
     if( fpEditor )
@@ -560,7 +561,6 @@ int CONVERT_TOOL::PolyToLines( const TOOL_EVENT& aEvent )
 
     for( EDA_ITEM* item : selection )
     {
-        PCB_LAYER_ID     layer   = static_cast<BOARD_ITEM*>( item )->GetLayer();
         SHAPE_POLY_SET   polySet = getPolySet( item );
         std::vector<SEG> segs    = getSegList( polySet );
 
@@ -572,7 +572,7 @@ int CONVERT_TOOL::PolyToLines( const TOOL_EVENT& aEvent )
                 {
                     FP_SHAPE* graphic = new FP_SHAPE( footprint, SHAPE_T::SEGMENT );
 
-                    graphic->SetLayer( layer );
+                    graphic->SetLayer( targetLayer );
                     graphic->SetStart( wxPoint( seg.A ) );
                     graphic->SetStart0( wxPoint( seg.A ) );
                     graphic->SetEnd( wxPoint( seg.B ) );
@@ -584,7 +584,7 @@ int CONVERT_TOOL::PolyToLines( const TOOL_EVENT& aEvent )
                     PCB_SHAPE* graphic = new PCB_SHAPE;
 
                     graphic->SetShape( SHAPE_T::SEGMENT );
-                    graphic->SetLayer( layer );
+                    graphic->SetLayer( targetLayer );
                     graphic->SetStart( wxPoint( seg.A ) );
                     graphic->SetEnd( wxPoint( seg.B ) );
                     commit.Add( graphic );
@@ -596,7 +596,7 @@ int CONVERT_TOOL::PolyToLines( const TOOL_EVENT& aEvent )
             PCB_BASE_EDIT_FRAME*  frame  = getEditFrame<PCB_BASE_EDIT_FRAME>();
             BOARD_ITEM_CONTAINER* parent = frame->GetModel();
 
-            if( !IsCopperLayer( layer ) )
+            if( !IsCopperLayer( targetLayer ) )
             {
                 if( copperLayer == UNSELECTED_LAYER )
                     copperLayer = frame->SelectOneLayer( F_Cu, LSET::AllNonCuMask() );
@@ -604,7 +604,7 @@ int CONVERT_TOOL::PolyToLines( const TOOL_EVENT& aEvent )
                 if( copperLayer == UNDEFINED_LAYER )    // User canceled
                     continue;
 
-                layer = copperLayer;
+                targetLayer = copperLayer;
             }
 
             // I am really unsure converting a polygon to "tracks" (i.e. segments on
@@ -615,7 +615,7 @@ int CONVERT_TOOL::PolyToLines( const TOOL_EVENT& aEvent )
                 for( SEG& seg : segs )
                 {
                     FP_SHAPE* graphic = new FP_SHAPE( footprint, SHAPE_T::SEGMENT );
-                    graphic->SetLayer( layer );
+                    graphic->SetLayer( targetLayer );
                     graphic->SetStart( wxPoint( seg.A ) );
                     graphic->SetStart0( wxPoint( seg.A ) );
                     graphic->SetEnd( wxPoint( seg.B ) );
@@ -630,7 +630,7 @@ int CONVERT_TOOL::PolyToLines( const TOOL_EVENT& aEvent )
                 {
                     PCB_TRACK* track = new PCB_TRACK( parent );
 
-                    track->SetLayer( layer );
+                    track->SetLayer( targetLayer );
                     track->SetStart( wxPoint( seg.A ) );
                     track->SetEnd( wxPoint( seg.B ) );
                     commit.Add( track );
