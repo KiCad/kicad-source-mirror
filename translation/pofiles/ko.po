@@ -24369,7 +24369,7 @@ msgstr "일치되지 않은 레이어"
 
 #: pcbnew/dialogs/dialog_imported_layers_base.cpp:32
 msgid "Imported Layers"
-msgstr "레이어 불러오기"
+msgstr "가져온 레이어"
 
 #: pcbnew/dialogs/dialog_imported_layers_base.cpp:36
 #, fuzzy
