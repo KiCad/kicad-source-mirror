@@ -462,10 +462,13 @@ void ROUTER::markViolations( NODE* aNode, ITEM_SET& aCurrent, NODE::ITEM_VECTOR&
             [&]( ITEM* currentItem, ITEM* itemToMark )
             {
                 std::unique_ptr<ITEM> tmp( itemToMark->Clone() );
-                int                   clearance;
-                bool                  removeOriginal = true;
 
-                if( itemToMark->Marker() & MK_HOLE )
+                int  clearance;
+                bool removeOriginal = true;
+                bool holeOnly       = ( ( itemToMark->Marker() & MK_HOLE )
+                                        && !( itemToMark->Marker() & MK_VIOLATION ) );
+
+                if( holeOnly )
                     clearance = aNode->GetHoleClearance( currentItem, itemToMark );
                 else
                     clearance = aNode->GetClearance( currentItem, itemToMark );
@@ -475,8 +478,7 @@ void ROUTER::markViolations( NODE* aNode, ITEM_SET& aCurrent, NODE::ITEM_VECTOR&
 
                 if( itemToMark->Kind() == ITEM::SOLID_T )
                 {
-                    if( ( itemToMark->Marker() & PNS::MK_HOLE )
-                      || !m_iface->IsFlashedOnLayer( itemToMark, itemToMark->Layer() ) )
+                    if( holeOnly || !m_iface->IsFlashedOnLayer( itemToMark, itemToMark->Layer() ) )
                     {
                         SOLID* solid = static_cast<SOLID*>( tmp.get() );
                         solid->SetShape( solid->Hole()->Clone() );
