@@ -3,13 +3,14 @@
 # jeongsuAn <dks9467@gmail.com>, 2021.
 # 이상수 <kku1818@gmail.com>, 2021.
 # jehunseo <benbot591@gmail.com>, 2021.
+# Uibeom Jung <wjddmlqja17@gmail.com>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
 "PO-Revision-Date: 2021-08-08 04:31+0000\n"
-"Last-Translator: Ji Yoon Choi <chichoon.choi@gmail.com>\n"
+"Last-Translator: Uibeom Jung <wjddmlqja17@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
 "Language: ko\n"
@@ -7742,7 +7743,7 @@ msgstr "*** 기호를 찾을 수 없음 ***"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:560
 msgid "*** new symbol has too few units ***"
-msgstr ""
+msgstr "*** 새 기호에 단위가 너무 적습니다 ***"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:27
 #, fuzzy
