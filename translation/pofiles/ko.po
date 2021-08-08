@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
-"PO-Revision-Date: 2021-08-08 06:56+0000\n"
+"PO-Revision-Date: 2021-08-08 07:22+0000\n"
 "Last-Translator: Ji Yoon Choi <chichoon.choi@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
@@ -5711,7 +5711,7 @@ msgstr "이전 마커"
 
 #: common/tool/actions.cpp:250
 msgid "Go to previous marker in Checker window"
-msgstr "체커 창의 이전 마커로 이동"
+msgstr "검사기 창의 이전 마커로 이동"
 
 #: common/tool/actions.cpp:255
 msgid "Next Marker"
@@ -5727,7 +5727,7 @@ msgstr "마커 제외"
 
 #: common/tool/actions.cpp:260
 msgid "Mark current violation in Checker window as an exclusion"
-msgstr "체커 창의 현재 위반사항을 예외로 마크하기"
+msgstr "검사기 창의 현재 위반사항을 예외로 마크하기"
 
 #: common/tool/actions.cpp:271
 msgid "Refresh"
@@ -7197,7 +7197,7 @@ msgstr "%s와 %s 가 같은 항목에 연결되어 있습니다; %s 는 네트�
 #, c-format
 msgid ""
 "Net %s is graphically connected to bus %s but is not a member of that bus"
-msgstr "네트 %s는 버스 %s에 시각적으로 연결되어 있지만 해당 버스의 구성원은 아닙니다"
+msgstr "네트 %s는 버스 %s에 시각적으로 연결되어 있지만 해당 버스의 멤버가 아닙니다"
 
 #: eeschema/connection_graph.cpp:2877
 #, c-format
@@ -8454,7 +8454,7 @@ msgstr "마커 삭제"
 
 #: eeschema/dialogs/dialog_erc_base.h:87 eeschema/tools/ee_actions.cpp:45
 msgid "Electrical Rules Checker"
-msgstr "전기적 규칙 체커 (ERC)"
+msgstr "전기적 규칙 검사기 (ERC)"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:31
 msgid "Other symbol fields"
@@ -15263,12 +15263,11 @@ msgstr "회로도 ERC"
 
 #: eeschema/tools/ee_actions.cpp:50
 msgid "Symbol Checker"
-msgstr "심볼 체커"
+msgstr "심볼 검사기"
 
 #: eeschema/tools/ee_actions.cpp:50
-#, fuzzy
 msgid "Show the symbol checker window"
-msgstr "PCB DRC"
+msgstr "심볼 검사기 창 보이기"
 
 #: eeschema/tools/ee_actions.cpp:55
 msgid "Simulator..."
@@ -23129,9 +23128,8 @@ msgstr "모듈 검사"
 
 #: pcbnew/dialogs/dialog_footprint_checker_base.h:71
 #: pcbnew/tools/pcb_actions.cpp:396
-#, fuzzy
 msgid "Footprint Checker"
-msgstr "풋프린트 필터"
+msgstr "풋프린트 검사기"
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:333
 msgid "Footprint can be freely moved and oriented on the canvas."
@@ -23456,29 +23454,27 @@ msgid ""
 "The library ID and footprint ID currently assigned.  Use “Change Footprint…” "
 "to assign a different footprint."
 msgstr ""
+"라이브러리 ID와 풋프린트 ID가 이미 할당되어 있습니다.  \"풋프린트 바꾸기...\" 를 사용하여 다른 풋프린트에 할당하세요."
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.h:149
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.h:122
-#, fuzzy
 msgid "Footprint Properties"
-msgstr "풋프린트 회전"
+msgstr "풋프린트 속성"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:531
 msgid "Footprint must have a name."
 msgstr "풋프린트에는 이름이 있어야 합니다."
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:536
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint name may not contain '%s'."
-msgstr "<%s> 파일로 모듈을 내보냈습니다."
+msgstr "풋프린트 이름에는 '%s'가 포함되지 않아야 합니다."
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:61
-#, fuzzy
 msgid "Unconstrained"
-msgstr "색상 인쇄"
+msgstr "제약 없음"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:107
-#, fuzzy
 msgid "Footprint name:"
 msgstr "풋프린트 이름:"
 
@@ -23487,9 +23483,8 @@ msgid "Component type:"
 msgstr "부품 유형:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:220
-#, fuzzy
 msgid "Set values to 0 to use netclass values."
-msgstr "netclass 값을 사용하려면 값을 0으로 설정하십시오."
+msgstr "네트클래스 값을 사용하려면 값을 0으로 설정하십시오."
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:246
 msgid ""
@@ -23498,6 +23493,10 @@ msgid ""
 "This value can be overridden on a pad-by-pad basis in the Local\n"
 "Clearance and Settings tab of Pad Properties."
 msgstr ""
+"이 값은 해당 풋프린트의 모든 패드에 대한 지역 유격 값을 나타냅니다.\n"
+"0으로 설정할 경우, 네트클래스 값이 사용됩니다.\n"
+"이 값은 패드 설정에 위치한 지역 유격과 설정 탭에서\n"
+"패드 단위로 재정의될 수 있습니다."
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:259
 msgid ""
@@ -28376,7 +28375,7 @@ msgstr ""
 #: pcbnew/drc/drc_engine.cpp:1066 pcbnew/drc/drc_engine.cpp:1077
 #, c-format
 msgid "Local clearance on %s; clearance: %s."
-msgstr "로컬 클리어런스 %s; 클리어런스: %s."
+msgstr "%s의 지역 유격값; 유격: %s."
 
 #: pcbnew/drc/drc_item.cpp:42
 #, fuzzy
@@ -33635,14 +33634,12 @@ msgid "Limit graphic lines to H, V and 45 degrees"
 msgstr "수평, 수직 또는 45도 각도로만 선 그리기"
 
 #: pcbnew/tools/pcb_actions.cpp:230
-#, fuzzy
 msgid "Design Rules Checker"
-msgstr "PCB DRC"
+msgstr "디자인 규칙 검사기"
 
 #: pcbnew/tools/pcb_actions.cpp:230
-#, fuzzy
 msgid "Show the design rules checker window"
-msgstr "PCB DRC"
+msgstr "디자인 규칙 검사기 창 보이기"
 
 #: pcbnew/tools/pcb_actions.cpp:239
 #, fuzzy
@@ -33832,9 +33829,8 @@ msgid "Edit footprint properties"
 msgstr "부품 속성 편집"
 
 #: pcbnew/tools/pcb_actions.cpp:396
-#, fuzzy
 msgid "Show the footprint checker window"
-msgstr "PCB DRC"
+msgstr "풋프린트 검사기 창 보이기"
 
 #: pcbnew/tools/pcb_actions.cpp:403
 msgid "Update Footprint..."
