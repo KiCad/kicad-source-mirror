@@ -11,7 +11,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
 "PO-Revision-Date: 2021-08-08 06:53+0000\n"
-"Last-Translator: Ji Yoon Choi <chichoon.choi@gmail.com>\n"
+"Last-Translator: jeongsuAn <dks9467@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
 "Language: ko\n"
@@ -5649,10 +5649,12 @@ msgid "Interactive Delete Tool"
 msgstr "인터랙티브 삭제 도구"
 
 #: common/tool/actions.cpp:197
+#, fuzzy
 msgid "Delete clicked items"
 msgstr "클릭한 항목 삭제"
 
 #: common/tool/actions.cpp:204
+#, fuzzy
 msgid "Change Edit Method"
 msgstr "편집 방식 변경"
 
@@ -5666,6 +5668,7 @@ msgid "Find"
 msgstr "찾기"
 
 #: common/tool/actions.cpp:209
+#, fuzzy
 msgid "Find text"
 msgstr "문자열 찾기"
 
@@ -5702,8 +5705,9 @@ msgid "Replace All"
 msgstr "모든 항목 교체"
 
 #: common/tool/actions.cpp:239
+#, fuzzy
 msgid "Replace all matches"
-msgstr "모든 일치하는 값 교체"
+msgstr "모든 일치 항목 교체"
 
 #: common/tool/actions.cpp:250
 msgid "Previous Marker"
@@ -6379,8 +6383,9 @@ msgid "Press a new hotkey, or press Esc to cancel..."
 msgstr "새로 설정할 단축키를 누르거나, ESC를 눌러 설정을 취소하세요..."
 
 #: common/widgets/widget_hotkey_list.cpp:103
+#, fuzzy
 msgid "Command:"
-msgstr "커맨드:"
+msgstr "명령어:"
 
 #: common/widgets/widget_hotkey_list.cpp:111
 msgid "Current key:"
@@ -6426,6 +6431,7 @@ msgid "(double-click to edit)"
 msgstr "(더블 클릭으로 편집)"
 
 #: common/widgets/widget_hotkey_list.cpp:451
+#, fuzzy
 msgid "Hotkey"
 msgstr "단축키"
 
@@ -6893,12 +6899,13 @@ msgstr "값"
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:99
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:96
+#, fuzzy
 msgid "Absolute"
-msgstr "절대경로"
+msgstr "절대 경로"
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:99
 msgid "Relative"
-msgstr "상대경로"
+msgstr "상대 경로"
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:101
 msgid "Path Type"
