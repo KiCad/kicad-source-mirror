@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
-"PO-Revision-Date: 2021-08-08 04:12+0000\n"
-"Last-Translator: 킴슨김랑기 <korearf@gmail.com>\n"
+"PO-Revision-Date: 2021-08-08 04:31+0000\n"
+"Last-Translator: jehunseo <benbot591@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
 "Language: ko\n"
@@ -7362,8 +7362,9 @@ msgid "Generator file name not found."
 msgstr "%s 파일을 찾을 수 없습니다."
 
 #: eeschema/dialogs/dialog_bom.cpp:449
+#, fuzzy
 msgid "No text editor selected in KiCad.  Please choose one."
-msgstr ""
+msgstr "KiCad에서 선택한 텍스트 편집기가 없습니다. 하나를 선택하세요."
 
 #: eeschema/dialogs/dialog_bom.cpp:461
 msgid "Bill of Material Generation Help"
@@ -7371,11 +7372,12 @@ msgstr "BOM 생성 도움말"
 
 #: eeschema/dialogs/dialog_bom_base.cpp:25
 msgid "BOM generator scripts:"
-msgstr ""
+msgstr "BOM 생성기 스크립트:"
 
 #: eeschema/dialogs/dialog_bom_base.cpp:69
+#, fuzzy
 msgid "Add a new BOM generator and its command line to the list"
-msgstr ""
+msgstr "목록에 새 BOM 생성기 및 해당 명령줄 추가"
 
 #: eeschema/dialogs/dialog_bom_base.cpp:74
 #, fuzzy
@@ -7393,7 +7395,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_bom_base.cpp:101
 msgid "Show console window"
-msgstr ""
+msgstr "콘솔창 표시"
 
 #: eeschema/dialogs/dialog_bom_base.cpp:102
 msgid ""
@@ -7401,6 +7403,8 @@ msgid ""
 "redirected to the info display.\n"
 "Set this option to show the window of the running command."
 msgstr ""
+"기본적으로, 명령줄은 숨겨진 콘솔 창으로 실행되고 출력은 정보창으로 리디렉션됩니다.\n"
+"실행 중인 명령창을 표시하려면 이 옵션을 설정하십시오."
 
 #: eeschema/dialogs/dialog_bom_base.cpp:116
 #, fuzzy
@@ -7689,8 +7693,9 @@ msgid "Update field visibilities"
 msgstr "시트 속성"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:137
+#, fuzzy
 msgid "Update field sizes and styles"
-msgstr ""
+msgstr "필드 크기 및 스타일 업데이트"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:138
 #, fuzzy
@@ -7795,7 +7800,7 @@ msgstr "라이브러리 기호에 없는 경우 필드 제거"
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:62
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:97
 msgid "Removes fields that do not occur in the original library symbols"
-msgstr ""
+msgstr "원본 라이브러리 기호에 없는 필드를 제거"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:124
 #, fuzzy
@@ -22572,24 +22577,21 @@ msgid "Update selected footprint(s)"
 msgstr "선택된 부품 보기"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:30
-#, fuzzy
 msgid "Update footprints matching reference designator:"
-msgstr "풋프린트 레퍼런스"
+msgstr "참조 지정자와 일치하는 풋프린트 업데이트:"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:38
-#, fuzzy
 msgid "Update footprints matching value:"
-msgstr "풋프린트 값"
+msgstr "값과 일치하는 풋프린트 업데이트:"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:44
 #, fuzzy
 msgid "Update footprints with library id:"
-msgstr "풋프린트 압축 만들기"
+msgstr "라이브러리 ID로 풋프린트 업데이트"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:73
-#, fuzzy
 msgid "New footprint library id:"
-msgstr "풋프린트 압축 만들기"
+msgstr "새 풋프린트 라이브러리 ID:"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:96
 msgid "Remove text items which are not in library footprint"
@@ -22649,15 +22651,13 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:60
 #: pcbnew/dialogs/dialog_export_step_base.cpp:73
-#, fuzzy
 msgid "X position:"
-msgstr "위치 기준"
+msgstr "X 위치:"
 
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:81
 #: pcbnew/dialogs/dialog_export_step_base.cpp:88
-#, fuzzy
 msgid "Y position:"
-msgstr "위치 기준"
+msgstr "Y 위치:"
 
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:104
 #, fuzzy
@@ -22721,9 +22721,8 @@ msgstr "드릴 원점:"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:43
 #: pcbnew/dialogs/panel_pcbnew_display_origin_base.cpp:23
-#, fuzzy
 msgid "Grid origin"
-msgstr "드릴 원점:"
+msgstr "그리드 원점"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:46
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:44
@@ -22758,9 +22757,8 @@ msgid "Replace VRML models with STEP models of the same name"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:120
-#, fuzzy
 msgid "Overwrite old file"
-msgstr "거버 파일:"
+msgstr "오래된 파일 덮어쓰기"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:123
 #, fuzzy
@@ -22989,12 +22987,11 @@ msgid "Filter Selected Items"
 msgstr "항목 선택"
 
 #: pcbnew/dialogs/dialog_find.cpp:221
-#, fuzzy
 msgid "Searching..."
-msgstr "검색..."
+msgstr "찾는 중..."
 
 #: pcbnew/dialogs/dialog_find.cpp:337
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' not found"
 msgstr "%s 을 찾을 수 없음"
 
@@ -23017,9 +23014,8 @@ msgid "Hit(s): %ld / %lu"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_find_base.cpp:28
-#, fuzzy
 msgid "Search for:"
-msgstr "키워드 검색"
+msgstr "찾기:"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:43
 #, fuzzy
@@ -24586,7 +24582,6 @@ msgid "Using tstamps (unique IDs) to match symbols and footprints.\n"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_netlist_base.cpp:25
-#, fuzzy
 msgid "Netlist file:"
 msgstr "네트리스트 파일:"
 
@@ -24639,9 +24634,8 @@ msgid ""
 msgstr ""
 
 #: pcbnew/dialogs/dialog_netlist_base.h:69
-#, fuzzy
 msgid "Import Netlist"
-msgstr "핀 시트 가져오기"
+msgstr "네트리스트 불러오기"
 
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:57
 #, fuzzy
@@ -24665,7 +24659,7 @@ msgstr "Solder paste Cmp"
 
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:136
 msgid "degree"
-msgstr ""
+msgstr "각도"
 
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:174
 msgid "Smooth amount:"
