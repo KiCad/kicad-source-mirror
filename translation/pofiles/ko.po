@@ -11,7 +11,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
 "PO-Revision-Date: 2021-08-08 06:53+0000\n"
-"Last-Translator: jeongsuAn <dks9467@gmail.com>\n"
+"Last-Translator: Uibeom Jung <wjddmlqja17@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
 "Language: ko\n"
@@ -8469,7 +8469,7 @@ msgstr "그 외의 심볼 필드"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:37
 msgid "Wires && wire labels"
-msgstr ""
+msgstr "와이어 및 와이어 라벨"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:40
 msgid "Buses && bus labels"
@@ -8561,15 +8561,15 @@ msgstr "-- 설정 변경 없이 유지 --"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:229
 msgid "H Alignment (fields only):"
-msgstr ""
+msgstr "수평 정렬 (필드 전용):"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:245
 msgid "Visible (fields only)"
-msgstr ""
+msgstr "보기 (필드 전용)"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:251
 msgid "V Alignment (fields only):"
-msgstr ""
+msgstr "수직 정렬 (필드 전용):"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:291
 #: eeschema/dialogs/dialog_lib_edit_draw_item_base.cpp:25
@@ -8614,7 +8614,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:74
 msgid "Please select a symbol library table file."
-msgstr ""
+msgstr "심볼 라이브러리 테이블 파일을 선택하십시오."
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:83
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:82
@@ -8676,7 +8676,7 @@ msgstr "채우지 마십시오"
 
 #: eeschema/dialogs/dialog_lib_edit_draw_item_base.cpp:39
 msgid "Fill with body outline color"
-msgstr ""
+msgstr "바디 윤곽선 색상으로 채우기"
 
 #: eeschema/dialogs/dialog_lib_edit_draw_item_base.cpp:39
 msgid "Fill with body background color"
@@ -8787,7 +8787,7 @@ msgstr "변경 내용을 저장 할까요?"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:86
 msgid "Group by name"
-msgstr ""
+msgstr "이름으로 그룹화"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:95
 #, fuzzy
@@ -8900,12 +8900,12 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:42
 msgid "Derive from existing symbol:"
-msgstr ""
+msgstr "기존 심볼에서 파생:"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:46
 #: eeschema/dialogs/dialog_line_wire_bus_properties_base.cpp:68
 msgid "Combo!"
-msgstr ""
+msgstr "콤보!"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:47
 msgid ""
@@ -8914,6 +8914,10 @@ msgid ""
 "This was previously known as an alias.  Do not select\n"
 "an existing symbol to create a new root symbol."
 msgstr ""
+"현재 라이브러리의 심볼을 상위 심볼로 선택합니다.\n"
+"\n"
+"이것은 이전에 별칭으로 알려져 있었습니다.  새 루트\n"
+"심볼을 생성하기 위해 기존의 심볼을 선택하지 마십시오."
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:51
 msgid "Default reference designator:"
