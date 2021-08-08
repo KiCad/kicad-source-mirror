@@ -12,7 +12,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
 "PO-Revision-Date: 2021-08-08 22:35+0000\n"
-"Last-Translator: VicSanRoPe <vicsanrope@protonmail.com>\n"
+"Last-Translator: Adolfo Jayme Barrientos <fitojb@ubuntu.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/kicad/"
 "master-source/es/>\n"
 "Language: es\n"
@@ -32370,7 +32370,7 @@ msgstr "El archivo '%s' está vacío."
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:3179
 #, c-format
 msgid "File '%s' is not a legacy library."
-msgstr "El archivo '%s' no es una librería de legado."
+msgstr "El archivo «%s» no es una biblioteca heredada."
 
 #: pcbnew/plugins/pcad/pcb.cpp:50 pcbnew/plugins/pcad/pcb.cpp:60
 #: pcbnew/plugins/pcad/pcb.cpp:70
