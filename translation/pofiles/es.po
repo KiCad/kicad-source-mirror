@@ -11,8 +11,8 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
-"PO-Revision-Date: 2021-08-08 22:26+0000\n"
-"Last-Translator: Adolfo Jayme Barrientos <fitojb@ubuntu.com>\n"
+"PO-Revision-Date: 2021-08-08 22:31+0000\n"
+"Last-Translator: VicSanRoPe <vicsanrope@protonmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/kicad/"
 "master-source/es/>\n"
 "Language: es\n"
@@ -32307,7 +32307,7 @@ msgstr "Se desconoce el tipo de hoja «%s» en la línea: %d."
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:1430
 #, c-format
 msgid "Missing '$EndMODULE' for MODULE '%s'."
-msgstr "Falta «$EndMODULE» para el MODULE «%s»"
+msgstr "Falta '$EndMODULE' para el MODULE '%s'."
 
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:1480
 #, c-format
@@ -32344,43 +32344,39 @@ msgstr "Opción de pad ZClearance incorrecta para CZONE_CONTAINER \"%s\""
 
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:2983
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:3022
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Invalid floating point number in file: '%s'\n"
 "line: %d, offset: %d"
 msgstr ""
-"Número de coma flotante inválido en\n"
-"archivo: \"%s\"\n"
-"línea: %d\n"
-"posición: %d"
+"Número de coma flotante inválido en archivo: '%s'\n"
+"línea: %d, posición: %d"
 
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:2993
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:3032
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Missing floating point number in file: '%s'\n"
 "line: %d, offset: %d"
 msgstr ""
-"Falta número de coma flotante en\n"
-"archivo: \"%s\"\n"
-"línea: %d\n"
-"posición: %d"
+"Falta número de coma flotante en archivo: '%s'\n"
+"línea: %d, posición: %d"
 
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:3176
-#, fuzzy, c-format
+#, c-format
 msgid "File '%s' is empty."
-msgstr "Archivo vacío"
+msgstr "El archivo '%s' está vacío."
 
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:3179
-#, fuzzy, c-format
+#, c-format
 msgid "File '%s' is not a legacy library."
-msgstr "El Archivo %s no es una biblioteca Eeschema"
+msgstr "El archivo '%s' no es una librería de legado."
 
 #: pcbnew/plugins/pcad/pcb.cpp:50 pcbnew/plugins/pcad/pcb.cpp:60
 #: pcbnew/plugins/pcad/pcb.cpp:70
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown PCad layer %u"
-msgstr "Forma de isleta desconocida"
+msgstr "Capa de PCad %u desconocida"
 
 #: pcbnew/plugins/pcad/pcb.cpp:748
 msgid "KiCad only supports 32 signal layers."
