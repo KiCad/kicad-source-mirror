@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
-"PO-Revision-Date: 2021-08-06 21:14+0000\n"
+"PO-Revision-Date: 2021-08-08 21:59+0000\n"
 "Last-Translator: VicSanRoPe <vicsanrope@protonmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/kicad/"
 "master-source/es/>\n"
@@ -30469,9 +30469,9 @@ msgid "Copper zone '%s' has no pads connected."
 msgstr "La zona de cobre '%s' no tiene pads conectados."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:758
-#, fuzzy, c-format
+#, c-format
 msgid "Copper zone on layer %s at (%s, %s) has no pads connected."
-msgstr "Zona de cobre (%s) no tiene pads conectados."
+msgstr "La zona de cobre en la capa %s en (%s, %s) no tiene pads conectados."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:826
 #, c-format
@@ -30479,24 +30479,24 @@ msgid "Remove single pad net %s."
 msgstr "Eliminar la red de un único pad %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:832
-#, fuzzy, c-format
+#, c-format
 msgid "Removed single pad net %s."
-msgstr "Eliminar la red de un único pad %s."
+msgstr "Red de un único pad %s eliminada."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:891
 #, c-format
 msgid "%s pad %s not found in %s."
-msgstr "no se ha encontrado de %s el pad %s en %s."
+msgstr "No se ha encontrado %s pad %s en %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:942
-#, fuzzy, c-format
+#, c-format
 msgid "Processing symbol '%s:%s'."
-msgstr "Prosesando componente \"%s:%s:%s\"."
+msgstr "Procesando el símbolo '%s:%s'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1011
-#, fuzzy, c-format
+#, c-format
 msgid "Multiple footprints found for '%s'."
-msgstr "Se han encontrado múltiples huellas para \"%s\"."
+msgstr "Se han encontrado múltiples huellas para '%s'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1042
 #, c-format
@@ -30504,9 +30504,9 @@ msgid "Cannot remove unused footprint %s (locked)."
 msgstr "No puede eliminarse la huella no utilizada %s (bloquedada)."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1047
-#, fuzzy, c-format
+#, c-format
 msgid "Could not remove unused footprint %s (locked)."
-msgstr "No puede eliminarse la huella no utilizada %s (bloquedada)."
+msgstr "No puede eliminarse la huella no utilizada %s (bloqueada)."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1059
 #, c-format
@@ -30514,14 +30514,14 @@ msgid "Remove unused footprint %s."
 msgstr "Eliminar huella no utilizada %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1064
-#, fuzzy, c-format
+#, c-format
 msgid "Removed unused footprint %s."
-msgstr "Eliminar huella no utilizada %s."
+msgstr "Huella no utilizada %s eliminada."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1095
-#, fuzzy, c-format
+#, c-format
 msgid "Removed unused net %s."
-msgstr "Eliminar %s sin utilizar."
+msgstr "Red no utilizada %s eliminada."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1103
 msgid "Update netlist"
@@ -30533,29 +30533,28 @@ msgid "Total warnings: %d, errors: %d."
 msgstr "Número de avisos: %d, errores: %d."
 
 #: pcbnew/netlist_reader/kicad_netlist_reader.cpp:270
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot find component with ref '%s' in netlist."
 msgstr ""
-"No puede encontrarse un componente con referencia \"%s\" en la lista de "
-"redes."
+"No puede encontrarse un componente con referencia '%s' en la lista de redes."
 
 #: pcbnew/netlist_reader/kicad_netlist_reader.cpp:438
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Invalid footprint ID in\n"
 "file: '%s'\n"
 "line: %d\n"
 "offset: %d"
 msgstr ""
-"ID de huella no válido en el\n"
-"archivo: \"%s\"\n"
+"ID de huella inválida en\n"
+"archivo: '%s'\n"
 "línea: %d\n"
 "posición: %d"
 
 #: pcbnew/netlist_reader/legacy_netlist_reader.cpp:118
 msgid "Cannot parse time stamp in symbol section of netlist."
 msgstr ""
-"No puede interpretarse la marca de tiempo en la sección de símboloss de la "
+"No puede interpretarse la marca de tiempo en la sección de símbolos de la "
 "lista de redes."
 
 #: pcbnew/netlist_reader/legacy_netlist_reader.cpp:128
@@ -30589,16 +30588,16 @@ msgstr ""
 "lista de redes."
 
 #: pcbnew/netlist_reader/legacy_netlist_reader.cpp:246
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot find symbol %s in footprint filter section of netlist."
 msgstr ""
-"No puede encontrarse el símbolo \"%s\" en la sección filtrada de la lista de "
-"reds."
+"No puede encontrarse el símbolo %s en la sección de filtro de huella de la "
+"lista de redes."
 
 #: pcbnew/netlist_reader/netlist.cpp:67
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot open netlist file '%s'."
-msgstr "No puede abrirse el archivo de lista redes \"%s\"."
+msgstr "No puede abrirse el archivo de lista redes '%s'."
 
 #: pcbnew/netlist_reader/netlist.cpp:68
 msgid "Netlist Load Error."
@@ -30618,16 +30617,16 @@ msgid "Netlist Load Error"
 msgstr "Error al cargar la lista de redes"
 
 #: pcbnew/netlist_reader/netlist.cpp:155
-#, fuzzy, c-format
+#, c-format
 msgid "No footprint defined for symbol %s."
-msgstr "No se ha definido huella para el símbolo \"%s\".\n"
+msgstr "No se ha definido una huella para el símbolo %s."
 
 #: pcbnew/netlist_reader/netlist.cpp:182
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint of %s changed: board footprint '%s', netlist footprint '%s'."
 msgstr ""
-"Ha cambiado la huella del símbolo \"%s\": huella en placa \"%s\", huella en "
-"listado de redes \"%s\"\n"
+"Ha cambiado la huella de %s: huella en placa '%s', huella en la lista de "
+"redes '%s'."
 
 #: pcbnew/netlist_reader/netlist.cpp:205
 #, fuzzy, c-format
@@ -30643,40 +30642,36 @@ msgstr ""
 "librería de la tabla de librerías de huellas.\n"
 
 #: pcbnew/netlist_reader/netlist_reader.cpp:181
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Invalid footprint ID in\n"
 "file: '%s'\n"
 "line: %d"
 msgstr ""
-"ID de huella no válido en\n"
-"archivo: \"%s\"\n"
+"ID de huella inválida en\n"
+"archivo: '%s'\n"
 "línea: %d"
 
 #: pcbnew/pad.cpp:692
-#, fuzzy, c-format
+#, c-format
 msgid "pad %s"
-msgstr "%d %s"
+msgstr "pad %s"
 
 #: pcbnew/pad.cpp:802 pcbnew/pad.cpp:823 pcbnew/pad.cpp:842
-#, fuzzy
 msgid "parent footprint"
-msgstr "Como la huella madre"
+msgstr "huella padre"
 
 #: pcbnew/pad.cpp:809 pcbnew/pad.cpp:829 pcbnew/pad.cpp:848
-#, fuzzy
 msgid "pad"
-msgstr "Pad"
+msgstr "pad"
 
 #: pcbnew/pad.cpp:866 pcbnew/pad.cpp:1481
-#, fuzzy
 msgid "Pin Name"
-msgstr "Nombre de Pin"
+msgstr "Nombre de pin"
 
 #: pcbnew/pad.cpp:869 pcbnew/pad.cpp:1483
-#, fuzzy
 msgid "Pin Type"
-msgstr "Tipo de complemento"
+msgstr "Tipo de pin"
 
 #: pcbnew/pad.cpp:890
 msgid "BGA"
@@ -30691,47 +30686,42 @@ msgid "Fiducial local"
 msgstr "Fiduciario local"
 
 #: pcbnew/pad.cpp:893
-#, fuzzy
 msgid "Test point"
-msgstr "Comprobar huellas"
+msgstr "Punto de prueba"
 
 #: pcbnew/pad.cpp:894
-#, fuzzy
 msgid "Heat sink"
-msgstr "Repetir pin"
+msgstr "Disipador"
 
 #: pcbnew/pad.cpp:895
-#, fuzzy
 msgid "Castellated"
-msgstr "Calcular"
+msgstr "Castellado"
 
 #: pcbnew/pad.cpp:902 pcbnew/pcb_track.cpp:761 pcbnew/pcb_track.cpp:1146
 msgid "Diameter"
 msgstr "Diámetro"
 
 #: pcbnew/pad.cpp:924
-#, fuzzy
 msgid "Length in Package"
 msgstr "Longitud en empaquetado"
 
 #: pcbnew/pad.cpp:937
-#, fuzzy
 msgid "Hole X / Y"
-msgstr "Taladro X/Y"
+msgstr "Orificio X / Y"
 
 #: pcbnew/pad.cpp:947 pcbnew/pcb_track.cpp:727 pcbnew/pcb_track.cpp:770
 #: pcbnew/router/router_tool.cpp:1925 pcbnew/zone.cpp:634
-#, fuzzy, c-format
+#, c-format
 msgid "Min Clearance: %s"
-msgstr "Margen min"
+msgstr "Margen mínimo: %s"
 
 #: pcbnew/pad.cpp:949 pcbnew/pcb_track.cpp:729 pcbnew/pcb_track.cpp:736
 #: pcbnew/pcb_track.cpp:772 pcbnew/pcb_track.cpp:778
 #: pcbnew/router/router_tool.cpp:1913 pcbnew/router/router_tool.cpp:1927
 #: pcbnew/zone.cpp:636
-#, fuzzy, c-format
+#, c-format
 msgid "(from %s)"
-msgstr "desde "
+msgstr "(desde %s)"
 
 #: pcbnew/pad.cpp:1086
 msgid "Trap"
@@ -30759,9 +30749,9 @@ msgid "Pad of %s on %s"
 msgstr "Pad de %s en %s"
 
 #: pcbnew/pad.cpp:1120
-#, fuzzy, c-format
+#, c-format
 msgid "Through hole pad of %s"
-msgstr "Pads pasantes"
+msgstr "Pad de orificio pasante en %s"
 
 #: pcbnew/pad.cpp:1128
 #, c-format
@@ -30769,29 +30759,26 @@ msgid "Pad %s of %s on %s"
 msgstr "Pad %s de %s en %s"
 
 #: pcbnew/pad.cpp:1135
-#, fuzzy, c-format
+#, c-format
 msgid "Through hole pad %s of %s"
-msgstr "Pads pasantes"
+msgstr "Pad de orificio pasante %s de %s"
 
 #: pcbnew/pad.cpp:1446
-#, fuzzy
 msgid "Edge connector"
-msgstr "Conector"
+msgstr "Conector de borde"
 
 #: pcbnew/pad.cpp:1447
 #, fuzzy
 msgid "NPTH, mechanical"
-msgstr "Pasante sin platear, mecánico"
+msgstr "NPTH, mecánico"
 
 #: pcbnew/pad.cpp:1453
-#, fuzzy
 msgid "Trapezoid"
-msgstr "Trapezoidal"
+msgstr "Trapezoide"
 
 #: pcbnew/pad.cpp:1465
-#, fuzzy
 msgid "Castellated pad"
-msgstr "Pads plateados:"
+msgstr "Pads castellados"
 
 #: pcbnew/pad.cpp:1471
 msgid "Pad Type"
@@ -30810,37 +30797,32 @@ msgid "Size Y"
 msgstr "Tamaño Y"
 
 #: pcbnew/pad.cpp:1494
-#, fuzzy
 msgid "Hole Size X"
-msgstr "Tamaño X orificio:"
+msgstr "Tamaño X de orificio"
 
 #: pcbnew/pad.cpp:1497
-#, fuzzy
 msgid "Hole Size Y"
-msgstr "Tamaño Y orificio:"
+msgstr "Tamaño Y de orificio"
 
 #: pcbnew/pad.cpp:1500 pcbnew/pcb_track.cpp:717
 msgid "Pad To Die Length"
 msgstr "Distancia de pad a die"
 
 #: pcbnew/pad.cpp:1503
-#, fuzzy
 msgid "Soldermask Margin Override"
-msgstr "Margen de la máscara de soldadura:"
+msgstr "Remplazo de margen de la máscara de soldadura"
 
 #: pcbnew/pad.cpp:1517
 msgid "Fabrication Property"
 msgstr "Propiedad de fabricación"
 
 #: pcbnew/pad.cpp:1520
-#, fuzzy
 msgid "Round Radius Ratio"
-msgstr "Ejecutar simulación"
+msgstr "Relación de radios redondos"
 
 #: pcbnew/pcb_base_frame.cpp:151
-#, fuzzy
 msgid "Error loading project footprint libraries."
-msgstr "Error al cargar las librerías de huellas del proyecto"
+msgstr "Error al cargar las librerías de huellas del proyecto."
 
 #: pcbnew/pcb_dimension.cpp:299
 msgid "Dimension"
@@ -30851,52 +30833,46 @@ msgid "Prefix"
 msgstr "Prefijo"
 
 #: pcbnew/pcb_dimension.cpp:305
-#, fuzzy
 msgid "Override Text"
-msgstr "Texto oculto"
+msgstr "Remplazo de texto"
 
 #: pcbnew/pcb_dimension.cpp:315
 msgid "Suffix"
 msgstr "Sufijo"
 
 #: pcbnew/pcb_dimension.cpp:439
-#, fuzzy, c-format
+#, c-format
 msgid "Dimension '%s' on %s"
-msgstr "Dimensión \"%s\" en %s"
+msgstr "Dimensión '%s' en %s"
 
 #: pcbnew/pcb_edit_frame.cpp:190
 msgid "KiCad PCB Editor"
-msgstr "Editor de PCB de KiCad"
+msgstr "Editor de placas de KiCad"
 
 #: pcbnew/pcb_edit_frame.cpp:196
-#, fuzzy
 msgid "Export netlist used to update schematics"
-msgstr ""
-"Para exportar la lista de redes se necesita un esquema anotado completamente."
+msgstr "Exportar la lista de redes usada para actualizar esquemas"
 
 #: pcbnew/pcb_edit_frame.cpp:329
-#, fuzzy
 msgid "New PCB file is unsaved"
-msgstr "Se ha guardado el archivo %s"
+msgstr "El archivo de placa no está guardado"
 
 #: pcbnew/pcb_edit_frame.cpp:864
-#, fuzzy, c-format
+#, c-format
 msgid "The auto save file '%s' could not be removed!"
-msgstr "¡No puede eliminarse el archivo de respaldo automático \"%s\"!"
+msgstr "¡No se puede eliminar el archivo de guardado automático '%s'!"
 
 #: pcbnew/pcb_edit_frame.cpp:1092
-#, fuzzy
 msgid "Board file is read only."
-msgstr "Solo área de la placa"
+msgstr "El archivo de placa es de solo lectura."
 
 #: pcbnew/pcb_edit_frame.cpp:1126
 msgid "PCB file changes are unsaved"
-msgstr ""
+msgstr "Los cambios a la placa no están guardados"
 
 #: pcbnew/pcb_edit_frame.cpp:1368
-#, fuzzy
 msgid "The schematic for this board cannot be found."
-msgstr "Esta acción no puede deshacerse."
+msgstr "No puede encontrar el esquema para esta placa."
 
 #: pcbnew/pcb_edit_frame.cpp:1392
 msgid ""
@@ -30913,28 +30889,25 @@ msgid "Eeschema netlist"
 msgstr "Lista de redes de Eeschema"
 
 #: pcbnew/pcb_edit_frame.cpp:1446
-#, fuzzy, c-format
+#, c-format
 msgid "Schematic file '%s' not found."
-msgstr "No se ha encontrado el archivo de recuperación \"%s\"."
+msgstr "No se ha encontrado el archivo de esquema '%s'."
 
 #: pcbnew/pcb_edit_frame.cpp:1477
-#, fuzzy
 msgid "Eeschema failed to load."
-msgstr "No ha podido cargarse Eeschema:\n"
+msgstr "Fallo al cargar Eeschema."
 
 #: pcbnew/pcb_edit_frame.cpp:1616
-#, fuzzy
 msgid "Edit design rules"
-msgstr "Reglas de diseño de vías:"
+msgstr "Editar reglas de diseño"
 
 #: pcbnew/pcb_edit_frame.cpp:1628
-#, fuzzy
 msgid "Could not compile custom design rules."
-msgstr "No puede abrirse el archivo de configuración"
+msgstr "No se pueden compilar las reglas de diseño personalizadas."
 
 #: pcbnew/pcb_edit_frame.cpp:1662
 msgid "Export Hyperlynx Layout"
-msgstr ""
+msgstr "Exportar diseño Hyperlynx"
 
 #: pcbnew/pcb_expr_evaluator.cpp:94 pcbnew/pcb_expr_evaluator.cpp:193
 #: pcbnew/pcb_expr_evaluator.cpp:274 pcbnew/pcb_expr_evaluator.cpp:356
@@ -30942,12 +30915,12 @@ msgstr ""
 #: pcbnew/pcb_expr_evaluator.cpp:780
 #, c-format
 msgid "Missing argument to '%s'"
-msgstr ""
+msgstr "Argumento faltante a '%s'"
 
 #: pcbnew/pcb_expr_evaluator.cpp:122
-#, fuzzy, c-format
+#, c-format
 msgid "Unrecognized layer '%s'"
-msgstr "Agujeros definidos"
+msgstr "Capa no reconocida '%s'"
 
 #: pcbnew/pcb_expr_evaluator.cpp:499
 msgid "Footprint's courtyard is not a single, closed shape."
@@ -30963,27 +30936,25 @@ msgstr "La huella no tiene un patio trasero."
 
 #: pcbnew/pcb_expr_evaluator.cpp:1059
 msgid "must be mm, in, or mil"
-msgstr ""
+msgstr "deber ser mm, in, o mil"
 
 #: pcbnew/pcb_group.cpp:304
-#, fuzzy, c-format
+#, c-format
 msgid "Unnamed Group, %zu members"
-msgstr "Grupo anónimo, %zu miembros"
+msgstr "Grupo sin nombre, %zu miembros"
 
 #: pcbnew/pcb_group.cpp:308
-#, fuzzy, c-format
+#, c-format
 msgid "Group '%s', %zu members"
-msgstr "Grupo \"%s\", %zu miembros"
+msgstr "Grupo '%s', %zu miembros"
 
 #: pcbnew/pcb_group.cpp:322
-#, fuzzy
 msgid "<unnamed>"
-msgstr "sin nombre"
+msgstr "<sin nombre>"
 
 #: pcbnew/pcb_group.cpp:323
-#, fuzzy
 msgid "Members"
-msgstr "Pertenencia:"
+msgstr "Miembros"
 
 #: pcbnew/pcb_layer_box_selector.cpp:94
 msgid "(not activated)"
@@ -30994,14 +30965,13 @@ msgid "Marker"
 msgstr "Marcador"
 
 #: pcbnew/pcb_marker.cpp:95
-#, fuzzy
 msgid "Violation"
-msgstr "Simulación"
+msgstr "Infracción"
 
 #: pcbnew/pcb_marker.cpp:142
-#, fuzzy, c-format
+#, c-format
 msgid "Marker (%s)"
-msgstr "Marcador @(%s,%s)"
+msgstr "Marcador (%s)"
 
 #: pcbnew/pcb_shape.cpp:505
 msgid "Drawing"
@@ -31012,54 +30982,50 @@ msgid "Curve"
 msgstr "Curva"
 
 #: pcbnew/pcb_shape.cpp:542
-#, fuzzy
 msgid "Points"
-msgstr "Punto X"
+msgstr "Puntos"
 
 #: pcbnew/pcb_shape.cpp:570
 msgid "Unrecognized"
-msgstr ""
+msgstr "No reconocido"
 
 #: pcbnew/pcb_shape.cpp:1324 pcbnew/pcb_track.cpp:1117
 #: pcbnew/pcb_track.cpp:1134
-#, fuzzy
 msgid "End X"
-msgstr "Final X:"
+msgstr "Final X"
 
 #: pcbnew/pcb_shape.cpp:1326 pcbnew/pcb_track.cpp:1119
 #: pcbnew/pcb_track.cpp:1136
-#, fuzzy
 msgid "End Y"
-msgstr "Final Y:"
+msgstr "Final Y"
 
 #: pcbnew/pcb_target.cpp:152
-#, fuzzy
 msgid "PCB Target"
-msgstr "Texto de la placa"
+msgstr "Objetivo de la placa"
 
 #: pcbnew/pcb_text.cpp:115
 msgid "PCB Text"
 msgstr "Texto de la placa"
 
 #: pcbnew/pcb_text.cpp:192
-#, fuzzy, c-format
+#, c-format
 msgid "PCB Text '%s' on %s"
-msgstr "Texto \"%s\" en %s de la placa"
+msgstr "Texto de placa '%s' en %s"
 
 #: pcbnew/pcb_track.cpp:102
-#, fuzzy, c-format
+#, c-format
 msgid "Blind/Buried Via %s on %s"
-msgstr "Vía ciega/enterrada %s, red[%s] (%d) en las capas %s/%s"
+msgstr "Vía ciega/enterrada %s en %s"
 
 #: pcbnew/pcb_track.cpp:103
-#, fuzzy, c-format
+#, c-format
 msgid "Micro Via %s on %s"
-msgstr "Microvía %s, red [%s] (%d) en las capas %s/%s"
+msgstr "Micro vía %s en %s"
 
 #: pcbnew/pcb_track.cpp:104
-#, fuzzy, c-format
+#, c-format
 msgid "Via %s on %s"
-msgstr "Valor %s de %s"
+msgstr "Vía %s en %s"
 
 #: pcbnew/pcb_track.cpp:167
 msgid "removed annular ring"
@@ -31070,22 +31036,21 @@ msgid "Segment Length"
 msgstr "Longitud de segmento"
 
 #: pcbnew/pcb_track.cpp:712
-#, fuzzy
 msgid "Routed Length"
-msgstr "Configuración de la placa"
+msgstr "Longitud enrutada"
 
 #: pcbnew/pcb_track.cpp:720
 msgid "Full Length"
 msgstr "Longitud total"
 
 #: pcbnew/pcb_track.cpp:734
-#, fuzzy, c-format
+#, c-format
 msgid "Min Width: %s"
-msgstr "Ancho de línea:"
+msgstr "Ancho mínimo: %s"
 
 #: pcbnew/pcb_track.cpp:747
 msgid "Micro Via"
-msgstr "Microvía"
+msgstr "Micro vía"
 
 #: pcbnew/pcb_track.cpp:748
 msgid "Blind/Buried Via"
@@ -31109,39 +31074,34 @@ msgid "NetCode"
 msgstr "Código de red"
 
 #: pcbnew/pcb_track.cpp:929
-#, fuzzy, c-format
+#, c-format
 msgid "Track (arc) %s on %s, length %s"
-msgstr "Pista %s, red [%s] (%d) en capa %s, longitud: %s"
+msgstr "Pista (arco) %s en %s, longitud %s"
 
 #: pcbnew/pcb_track.cpp:930
-#, fuzzy, c-format
+#, c-format
 msgid "Track %s on %s, length %s"
-msgstr "Pista %s, red [%s] (%d) en capa %s, longitud: %s"
+msgstr "Pista %s en (%s), longitud %s"
 
 #: pcbnew/pcb_track.cpp:1112 pcbnew/pcb_track.cpp:1129
-#, fuzzy
 msgid "Origin X"
-msgstr "Origen"
+msgstr "Origen X"
 
 #: pcbnew/pcb_track.cpp:1115 pcbnew/pcb_track.cpp:1132
-#, fuzzy
 msgid "Origin Y"
-msgstr "Origen"
+msgstr "Origen Y"
 
 #: pcbnew/pcb_track.cpp:1151
-#, fuzzy
 msgid "Layer Top"
-msgstr "Capa"
+msgstr "Capa superior"
 
 #: pcbnew/pcb_track.cpp:1153
-#, fuzzy
 msgid "Layer Bottom"
-msgstr "Inferior"
+msgstr "Capa inferior"
 
 #: pcbnew/pcb_track.cpp:1155
-#, fuzzy
 msgid "Via Type"
-msgstr "Tipo de vía:"
+msgstr "Tipo de vía"
 
 #: pcbnew/pcbnew.cpp:260
 msgid ""
@@ -31149,18 +31109,17 @@ msgid ""
 "Please edit this global footprint library table in Preferences menu."
 msgstr ""
 "Ha ocurrido un error al intentar cargar la tabla global de librerías de "
-"símbolos.\n"
-"Por favor, edite la tabla global de librerías de símbolos en el menú "
-"Preferencias"
+"huellas.\n"
+"Por favor, edite la tabla global de librerías de huellas en el menú "
+"Preferencias."
 
 #: pcbnew/pcbnew_config.cpp:61
 msgid "Action Plugins"
 msgstr "Complementos de acciones"
 
 #: pcbnew/pcbnew_config.cpp:62
-#, fuzzy
 msgid "Origins & Axes"
-msgstr "Origen"
+msgstr "Orígenes y ejes"
 
 #: pcbnew/pcbnew_printout.cpp:108
 msgid "Multiple Layers"
@@ -31187,7 +31146,7 @@ msgstr ""
 #: pcbnew/plugins/altium/altium_parser_pcb.cpp:134
 #, c-format
 msgid "Unknown mapping of the Altium layer '%s'."
-msgstr ""
+msgstr "Mapeado desconocido de la capa '%s' de Altium."
 
 #: pcbnew/plugins/altium/altium_parser_pcb.cpp:788
 #, c-format
@@ -31196,32 +31155,31 @@ msgstr ""
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:75
 msgid "Error reading file: cannot determine length."
-msgstr ""
+msgstr "Error al leer el archivo: no se puede determinar la longitud."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:86
-#, fuzzy
 msgid "Error reading file."
-msgstr "¡Error al extraer el archivo!\n"
+msgstr "Error al leer el archivo."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:465
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' was not parsed correctly."
-msgstr "Zona de cobre (%s) no tiene pads conectados."
+msgstr "'%s' no fue analizado correctamente."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:473
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' was not fully parsed."
-msgstr "No se ha leído completamente el archivo \"%s\""
+msgstr "'%s' no fue analizado completamente."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:509
-#, fuzzy, c-format
+#, c-format
 msgid "File not found: '%s'."
-msgstr "Archivo no encontrado"
+msgstr "Archivo no encontrado: '%s'."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:863
-#, fuzzy, c-format
+#, c-format
 msgid "Duplicate netclass name '%s'."
-msgstr "nombre de clase \"%s\" duplicado"
+msgstr "Nombre de clase de red '%s' duplicado."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1010
 #: pcbnew/plugins/altium/altium_pcb.cpp:1088
@@ -31232,31 +31190,31 @@ msgid ""
 "Dimension found on an Altium layer (%d) with no KiCad equivalent. It has "
 "been moved to KiCad layer Eco1_User."
 msgstr ""
+"Se ha encontrado una dimensión en una capa de Altium (%d) sin un equivalente "
+"de KiCad. Se ha movido a la capa de KiCad Eco1_User."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1231
 #: pcbnew/plugins/altium/altium_pcb.cpp:1239
 #, c-format
 msgid "Ignored dimension of kind %d (not yet supported)."
-msgstr ""
+msgstr "Dimensión de tipo %d ignorada (todavía no soportada)."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1284
 msgid "No 3D-models will be imported."
-msgstr ""
+msgstr "No se importarán modelos 3D."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1307
-#, fuzzy, c-format
+#, c-format
 msgid "File not found: '%s'. 3D-model not imported."
-msgstr "Archivo no encontrado"
+msgstr "Archivo no encontrado: '%s'. Modelo 3D no importado."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1345
-#, fuzzy
 msgid "Loading nets..."
-msgstr "Cargando..."
+msgstr "Cargando redes..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1368
-#, fuzzy
 msgid "Loading polygons..."
-msgstr "Ejecutando rellenos poligonales..."
+msgstr "Cargando polígonos..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1381
 #: pcbnew/plugins/altium/altium_pcb.cpp:1633
@@ -31265,21 +31223,20 @@ msgid ""
 "Polygon found on an Altium layer (%d) with no KiCad equivalent. It has been "
 "moved to KiCad layer Eco1_User."
 msgstr ""
+"Se ha encontrado un polígono en una capa de Altium (%d) sin un equivalente "
+"de KiCad. Se ha movido a la capa de KiCad Eco1_User."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1504
-#, fuzzy
 msgid "Loading rules..."
-msgstr "Cargando archivos Gerber..."
+msgstr "Cargando reglas..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1536
-#, fuzzy
 msgid "Loading board regions..."
-msgstr "Cargando archivos Gerber..."
+msgstr "Cargando regiones de placa..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1558
-#, fuzzy
 msgid "Loading zones..."
-msgstr "Cargando..."
+msgstr "Cargando zonas..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1614
 #, c-format
@@ -31287,21 +31244,21 @@ msgid ""
 "Zone found on an Altium layer (%d) with no KiCad equivalent. It has been "
 "moved to KiCad layer Eco1_User."
 msgstr ""
+"Se ha encontrado una zona en una capa de Altium (%d) sin un equivalente de "
+"KiCad. Se ha movido a la capa de KiCad Eco1_User."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1668
 #, c-format
 msgid "Ignored polygon shape of kind %d (not yet supported)."
-msgstr ""
+msgstr "Forma de polígono de tipo %d ignorado (todavía no soportada)."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1682
-#, fuzzy
 msgid "Loading zone fills..."
-msgstr "Construyendo relleno de zonas..."
+msgstr "Cargando relleno de zonas..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1771
-#, fuzzy
 msgid "Loading arcs..."
-msgstr "Cargando..."
+msgstr "Cargando arcos..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1833
 #, c-format
@@ -31309,6 +31266,8 @@ msgid ""
 "Arc keepout found on an Altium layer (%d) with no KiCad equivalent. It has "
 "been moved to KiCad layer Eco1_User."
 msgstr ""
+"Se ha encontrado una restricción de arco en una capa de Altium (%d) sin un "
+"equivalente de KiCad. Se ha movido a la capa de KiCad Eco1_User."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1852
 #, c-format
@@ -31316,21 +31275,22 @@ msgid ""
 "Arc found on an Altium layer (%d) with no KiCad equivalent. It has been "
 "moved to KiCad layer Eco1_User."
 msgstr ""
+"Se ha encontrado un arco en una capa de Altium (%d) sin un equivalente de "
+"KiCad. Se ha movido a la capa de KiCad Eco1_User."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1911
-#, fuzzy
 msgid "Loading pads..."
-msgstr "Cargando..."
+msgstr "Cargando pads..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1971
 #, c-format
 msgid "Footprint %s pad %s is not marked as multilayer, but is a TH pad."
-msgstr ""
+msgstr "Huella %s pad %s no marcado como multicapa, pero es un pad pasante."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1991
 #, c-format
 msgid "Footprint %s pad %s has a square hole (not yet supported)."
-msgstr ""
+msgstr "Huella %s pad %s tiene un orificio cuadrado (todavía no soportado)."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2013
 #, c-format
@@ -31338,21 +31298,24 @@ msgid ""
 "Footprint %s pad %s has a hole-rotation of %f degrees. KiCad only supports "
 "90 degree rotations."
 msgstr ""
+"Huella %s pad %s tiene una rotación de orificio de %f°. KiCad solo soporta "
+"rotaciones de 90°."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2027
 #, c-format
 msgid "Footprint %s pad %s uses a hole of unknown kind %d."
-msgstr ""
+msgstr "Huella %s pad %s utiliza un orificio de tipo desconocido %d."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2045
 #, c-format
 msgid "Footprint %s pad %s uses a complex pad stack (not yet supported.)"
 msgstr ""
+"Huella %s pad %s utiliza un apilado de pads complejo (todavía no soportado)."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2079
 #, c-format
 msgid "Footprint %s pad %s uses an unknown pad-shape."
-msgstr ""
+msgstr "Huella %s pad %s utiliza una forma de pad desconocida."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2138
 #, c-format
@@ -31360,42 +31323,48 @@ msgid ""
 "Non-copper pad %s found on an Altium layer (%d) with no KiCad equivalent. It "
 "has been moved to KiCad layer Eco1_User."
 msgstr ""
+"Se ha encontrado un pad que no es de cobre %s en una capa de Altium (%d) sin "
+"un equivalente de KiCad. Se ha movido a la capa de KiCad Eco1_User."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2147
-#, fuzzy, c-format
+#, c-format
 msgid "Non-copper pad %s is connected to a net, which is not supported."
-msgstr "Área de cobre perteneciente a una red sin pads. Es extraño"
+msgstr ""
+"Un pad que no es de cobre %s está conectado a una red, esto no está "
+"soportado."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2153
 #, c-format
 msgid "Non-copper pad %s has a hole, which is not supported."
-msgstr ""
+msgstr "Un pad que no es de cobre %s tiene un orificio, esto no está soportado."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2158
 #, c-format
 msgid "Non-copper pad %s has a complex pad stack (not yet supported)."
 msgstr ""
+"Un pad que no es de cobre %s tiene un apilado de pads complejo (todavía no "
+"soportado)."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2312
 #, c-format
 msgid "Non-copper pad %s uses an unknown pad-shape."
-msgstr ""
+msgstr "Un pad que no es de cobre %s utiliza una forma de pad desconocida."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2321
-#, fuzzy
 msgid "Loading vias..."
-msgstr "Cargando..."
+msgstr "Cargando vías..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2362
 #, c-format
 msgid ""
 "Via from layer %d to %d uses a non-copper layer, which is not supported."
 msgstr ""
+"Una vía de capa %d a %d utiliza una capa que no es de cobre, esto no está "
+"soportado."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2383
-#, fuzzy
 msgid "Loading tracks..."
-msgstr "Cargando..."
+msgstr "Cargando pistas..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2431
 #, c-format
@@ -31403,6 +31372,8 @@ msgid ""
 "Track keepout found on an Altium layer (%d) with no KiCad equivalent. It has "
 "been moved to KiCad layer Eco1_User."
 msgstr ""
+"Se ha encontrado una restricción de pista en una capa de Altium (%d) sin un "
+"equivalente de KiCad. Se ha movido a la capa de KiCad Eco1_User."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2449
 #, c-format
@@ -31410,16 +31381,18 @@ msgid ""
 "Track found on an Altium layer (%d) with no KiCadequivalent. It has been "
 "moved to KiCad layer Eco1_User."
 msgstr ""
+"Se ha encontrado una pista en una capa de Altium (%d) sin un equivalente de "
+"KiCad. Se ha movido a la capa de KiCad Eco1_User."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2490
-#, fuzzy
 msgid "Loading text..."
-msgstr "Cargando..."
+msgstr "Cargando texto..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2501
 #, c-format
 msgid "Ignored barcode on Altium layer %d (not yet supported)."
 msgstr ""
+"Código de barras ignorado en la capa de Altium %d (todavía no soportado)."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2589
 #, c-format
@@ -31427,11 +31400,12 @@ msgid ""
 "Text found on an Altium layer (%d) with no KiCad equivalent. It has been "
 "moved to KiCad layer Eco1_User."
 msgstr ""
+"Se ha encontrado texto en una capa de Altium (%d) sin un equivalente de "
+"KiCad. Se ha movido a la capa de KiCad Eco1_User."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2675
-#, fuzzy
 msgid "Loading rectangles..."
-msgstr "Cargando archivos Gerber..."
+msgstr "Cargando rectángulos..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2695
 #, c-format
@@ -31439,6 +31413,8 @@ msgid ""
 "Fill found on an Altium layer (%d) with no KiCad equivalent. It has been "
 "moved to KiCad layer Eco1_User."
 msgstr ""
+"Se ha encontrado un relleno en una capa de Altium (%d) sin un equivalente de "
+"KiCad. Se ha movido a la capa de KiCad Eco1_User."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:87
 msgid ""
@@ -31447,22 +31423,27 @@ msgid ""
 "procedure in CADSTAR and re-import, to avoid inconsistencies between the PCB "
 "and the schematic. "
 msgstr ""
+"El archivo indicado indica que las redes pueden no estar sincronizadas con "
+"el esquema. Se recomienda que realice el procedimiento 'Alinear redes' en "
+"CADSTAR y reimporte, para evitar inconsistencias entre la placa y el "
+"esquema. "
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:114
 msgid ""
 "The CADSTAR design contains Trunk routing elements, which have no KiCad "
 "equivalent. These elements were not loaded."
 msgstr ""
+"El diseño de CADSTAR contiene elementos de enrutado de troncos, que no "
+"tienen equivalente en KiCad. Estos elementos no se han cargado."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:121
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The CADSTAR design contains variants which has no KiCad equivalent. Only the "
 "variant '%s' was loaded."
 msgstr ""
-"El diseño de CADSTAR contiene variantes (\"variants\") que no tienen "
-"equivalente en KiCad. Todos los componentes han sido cargados uno encima del "
-"otro. "
+"El diseño de CADSTAR contiene variantes que no tienen equivalente en KiCad. "
+"Solo se cargó la variante '%s'."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:158
 #, c-format
@@ -31470,6 +31451,8 @@ msgid ""
 "The CADSTAR layer '%s' has no KiCad equivalent. All elements on this layer "
 "have been mapped to KiCad layer '%s' instead."
 msgstr ""
+"La capa de CADSTAR '%s' no tiene equivalente en KiCad. En su lugar, todos "
+"los elementos de esta capa han sido mapeados a la capa de KiCad '%s'."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:171
 #, c-format
@@ -31477,16 +31460,18 @@ msgid ""
 "The CADSTAR layer '%s' has been assumed to be a technical layer. All "
 "elements on this layer have been mapped to KiCad layer '%s'."
 msgstr ""
+"Se asume que la capa de CADSTAR '%s' es una capa técnica. Todos los "
+"elementos de esta capa han sido mapeados a la capa de KiCad '%s'."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:458
 #, c-format
 msgid "Unexpected layer '%s' in layer stack."
-msgstr ""
+msgstr "Capa '%s' inesperada en el apilado de capas."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:616
 #, c-format
 msgid "Design rule %s was not found. This was ignored."
-msgstr ""
+msgstr "No se ha encontrado la regla de diseño %s. Esto fue ignorado."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:647
 msgid ""
@@ -31494,6 +31479,9 @@ msgid ""
 "design rules were imported. It is recommended that you review the design "
 "rules that have been applied."
 msgstr ""
+"Las reglas de diseño de KiCad son distintas a las de CADSTAR. Solo se "
+"importaron las reglas de diseño compatibles. Se recomienda que revise las "
+"reglas de diseño que se han aplicado."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:839
 #, c-format
@@ -31502,6 +31490,9 @@ msgid ""
 "equivalent. The area is neither a via nor route keepout area. The area was "
 "not imported."
 msgstr ""
+"El área de CADSTAR '%s' en el componente de librería '%s' no tiene un "
+"equivalente de KiCad. El área no es ni una vía ni una área restringida de "
+"enrutado. El área no ha sido importada."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:931
 #, c-format
@@ -31510,6 +31501,9 @@ msgid ""
 "supported in KiCad. Please review the imported pads as they may require "
 "manual correction."
 msgstr ""
+"La definición de pad de CADSTAR '%s' es un apilado complejo de pad, que no "
+"está soportado en KiCad. Por favor revise los pads importados ya que pueden "
+"requerir corrección manual."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1140
 #, c-format
@@ -31517,31 +31511,36 @@ msgid ""
 "The CADSTAR pad definition '%s' has the hole shape outside the pad shape. "
 "The hole has been moved to the center of the pad."
 msgstr ""
+"La definición de pad de CADSTAR '%s' tiene la forma de orificio por fuera de "
+"la forma del pad. El orificio se ha movido al centro del pad."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1174
 #, c-format
 msgid "The CADSTAR pad definition '%s' has import errors: %s"
-msgstr ""
+msgstr "La definición de pad de CADSTAR '%s' tiene errores de importación: %s"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1216
 #, c-format
 msgid "Unable to find group ID %s in the group definitions."
 msgstr ""
+"No se ha podido encontrar el ID de grupo %s en las definiciones de grupos."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1222
 #, c-format
 msgid ""
 "Unable to find sub group %s in the group map (parent group ID=%s, Name=%s)."
 msgstr ""
+"No se ha podido encontrar el subgrupo %s en el mapa de grupos (ID de grupo "
+"padre = %s, nombre = %s)."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1297
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Dimension ID %s is an angled dimension, which has no KiCad equivalent. An "
 "aligned dimension was loaded instead."
 msgstr ""
-"El diseño CADSTAR contiene elementos agrupados que no tienen equivalente de "
-"KiCad. Todos los elementos agrupados se han desagrupado."
+"El ID de dimensión %s es una dimensión en ángulo, que no tiene equivalente "
+"de KiCad. En su lugar, se cargó una dimensión alineada."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1308
 #, c-format
@@ -31550,20 +31549,23 @@ msgid ""
 "are not yet supported in KiCad. The dimension object was imported with an "
 "internal dimension style instead."
 msgstr ""
+"El ID de dimensión %s tiene el estilo 'Externo' en CADSTAR. Los estilos de "
+"dimensión externos no tienen equivalente de KiCad. En su lugar, se cargó el "
+"objeto de dimensión con un estilo de dimensión interno."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1364
 #, c-format
 msgid "Unexpected Dimension type (ID %s). This was not imported."
-msgstr ""
+msgstr "Tipo de dimensión inesperado (ID %s). Esto no fue importado."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1499
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Dimension %s is an angular dimension which has no KiCad equivalent. The "
 "object was not imported."
 msgstr ""
-"El diseño CADSTAR contiene elementos agrupados que no tienen equivalente de "
-"KiCad. Todos los elementos agrupados se han desagrupado."
+"La dimensión %s es una dimensión en ángulo, que no tiene equivalente de "
+"KiCad. El objeto no fue importado."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1539
 #, c-format
@@ -31572,6 +31574,9 @@ msgid ""
 "areas are not supported in KiCad. Only the supported elements for the area "
 "were imported."
 msgstr ""
+"El área de CADSTAR '%s' está marcada como un área de colocación en CADSTAR. "
+"Las áreas de colocación no están soportadas en KiCad. Solo los elementos "
+"soportados del área."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1548
 #, c-format
@@ -31579,16 +31584,22 @@ msgid ""
 "The CADSTAR area '%s' does not have a KiCad equivalent. Pure Placement areas "
 "are not supported."
 msgstr ""
+"El área de CADSTAR '%s' no tiene un equivalente de KiCad. Las áreas de pura "
+"colocación no están soportadas."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1575
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to find component '%s' in the library(Symdef ID: '%s')"
-msgstr "No puede renombrarse el archivo temporal '%s' a la librería '%s'"
+msgstr ""
+"No se puede encontrar el componente '%s' en la librería (ID de definición de "
+"símbolo: '%s')"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1693
 #, c-format
 msgid "Unable to find documentation symbol in the library (Symdef ID: '%s')"
 msgstr ""
+"No se puede encontrar el símbolo de documentación en la librería (ID de "
+"definición de símbolo: '%s')"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1762
 #, c-format
@@ -31596,24 +31607,29 @@ msgid ""
 "The CADSTAR template '%s' has the setting 'Allow in No Routing Areas' "
 "enabled. This setting has no KiCad equivalent, so it has been ignored."
 msgstr ""
+"La plantilla de CADSTAR '%s' tiene la configuración 'Permitir en ninguna "
+"área de enrutamiento' habilitada. Esta configuración no tiene equivalente de "
+"KiCad, por lo que fue ignorado."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1770
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The CADSTAR template '%s' has the setting 'Box Isolated Pins' enabled. This "
 "setting has no KiCad equivalent, so it has been ignored."
 msgstr ""
-"El diseño CADSTAR contiene elementos agrupados que no tienen equivalente de "
-"KiCad. Todos los elementos agrupados se han desagrupado."
+"La plantilla de CADSTAR '%s' tiene la configuración 'Pines aislados de caja' "
+"habilitada. Esta configuración no tiene equivalente de KiCad, por lo que fue "
+"ignorado."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1778
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The CADSTAR template '%s' has the setting 'Automatic Repour' enabled. This "
 "setting has no KiCad equivalent, so it has been ignored."
 msgstr ""
-"El diseño CADSTAR contiene elementos agrupados que no tienen equivalente de "
-"KiCad. Todos los elementos agrupados se han desagrupado."
+"La plantilla de CADSTAR '%s' tiene la configuración 'Retorno automático' "
+"habilitada. Esta configuración no tiene equivalente de KiCad, por lo que fue "
+"ignorado."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1789
 #, c-format
@@ -31622,6 +31638,9 @@ msgid ""
 "Width' setting. There is no KiCad equivalent for this, so this setting was "
 "ignored."
 msgstr ""
+"La plantilla de CADSTAR '%s' tiene un valor distinto de cero definido para "
+"la configuración 'Ancho de astilla'. Esta configuración no tiene equivalente "
+"de KiCad, por lo que fue ignorado."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1799
 #, c-format
@@ -31631,6 +31650,10 @@ msgid ""
 "between these two settings. The setting for disjoint copper has been applied "
 "as the minimum island area of the KiCad Zone."
 msgstr ""
+"La plantilla de CADSTAR '%s' tiene configuraciones distintas para 'Retener "
+"cobre vertido - Disjunto' y 'Retener cobre vertido - Aislado'. KiCad no "
+"distingue entre estos dos. La configuración para el cobre disjunto se ha "
+"aplicado como el área mínima de la isla de la zona de KiCad."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1859
 #, c-format
@@ -31639,6 +31662,9 @@ msgid ""
 "and vias. KiCad only supports one single setting for both. The setting for "
 "pads has been applied."
 msgstr ""
+"La plantilla de CADSTAR '%s' tiene configuraciones distintas para alivio "
+"térmico de pads y vías. KiCad solo soporta una configuración para ambos. La "
+"configuración para pads ha sido aplicada."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1882
 #, c-format
@@ -31648,6 +31674,10 @@ msgid ""
 "has been applied instead. When the template is re-filled the thermal reliefs "
 "will be removed."
 msgstr ""
+"La plantilla de CADSTAR '%s' tiene alivios térmicos en el diseño original "
+"pero no hay un equivalente de KiCad para la configuración original de "
+"CADSTAR. En su lugar, se ha aplicado un relleno sólido. Cuando la plantilla "
+"sea rellenada, se eliminarán los alivios térmicos."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1918
 #, c-format
@@ -31656,6 +31686,9 @@ msgid ""
 "with such name exists. The layer has been loaded but no copper zone was "
 "created."
 msgstr ""
+"La capa de CADSTAR '%s' está definida como una capa de plano de potencia. "
+"Sin embargo, no existe una red con ese nombre. La capa ha sido cargada pero "
+"no se ha creado una zona de cobre."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2020
 msgid ""
@@ -31666,13 +31699,13 @@ msgid ""
 msgstr ""
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2125
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The net '%s' references component ID '%s' which does not exist. This has "
 "been ignored."
 msgstr ""
-"El símbolo '%s' hace referencia a la hoja con la ID '%s' que no existe en el "
-"diseño. El símbolo no se ha cargado."
+"La red '%s' hace referencia al ID de componente '%s', que no existe. Esto "
+"fue ignorado."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2131
 #, c-format
@@ -31680,10 +31713,14 @@ msgid ""
 "The net '%s' references non-existent pad index '%d' in component '%s'. This "
 "has been ignored."
 msgstr ""
+"La red '%s' hace referencia al indice de pad inexistente '%d' en el "
+"componente '%s'. Esto fue ignorado."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2281
 msgid "Text Variables could not be set as there is no project loaded."
 msgstr ""
+"No se pudieron fijar las variables de texto ya que no hay un proyecto "
+"cargado."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2388
 #, c-format
@@ -31692,6 +31729,9 @@ msgid ""
 "only supports circular vias so this via type has been changed to be a via "
 "with circular shape of %.2f mm diameter."
 msgstr ""
+"El código de vía de CADSTAR '%s' tiene una forma distinta a un círculo "
+"definido. KiCad solo soporta vías circulares, por lo que este tipo de vías "
+"se han cambiado a vías circulares con un diámetro de %.2f mm."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2605
 #, c-format
@@ -31739,6 +31779,8 @@ msgid ""
 "Dimension ID %s uses a type of unit that is not supported in KiCad. "
 "Millimetres were applied instead."
 msgstr ""
+"El ID de dimensión %s utiliza un tipo de unidad que no está soportado en "
+"KiCad. En su lugar, se han aplicado milímetros."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3759
 msgid ""
@@ -31747,6 +31789,11 @@ msgid ""
 "imported. Note: KiCad's version of 'Net Class' is closer to CADSTAR's 'Net "
 "Route Code' (which has been imported for all nets)."
 msgstr ""
+"El diseño de CADSTAR contiene redes con una 'Clase de red' asignada. KiCad "
+"no tiene un equivalente a las clases de red de CADSTAR, por lo que estos "
+"elementos no fueron importados. Nota: La versión de 'Clase de red' de KiCad "
+"es más cercana a los 'Códigos de enrutado de redes' de CADSTAR (que han sido "
+"importados para todas las redes)."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3769
 msgid ""
@@ -31755,73 +31802,79 @@ msgid ""
 "imported. Please review the design rules as copper pours will affected by "
 "this."
 msgstr ""
+"El diseño de CADSTAR contiene redes con un 'Clase de espaciado' asignado. "
+"KiCad no tiene un equivalente a las clases de espaciado de CADSTAR, por lo "
+"que estos elementos no se importaron. Por favor revise las reglas de diseño "
+"ya que los rellenos de cobre serán afectados por esto."
 
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:380
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to read file '%s'"
-msgstr "No se puede crear el archivo '%s'"
+msgstr "No se puede leer el archivo '%s'"
 
 # Pendiente. ¿A qué se refiere <package>?
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:1042
-#, fuzzy, c-format
+#, c-format
 msgid "<package> '%s' duplicated in <library> '%s'"
-msgstr "nombre <empaquetado>: \"%s\" duplicado en <librería> Eagle : \"%s\""
+msgstr "<empaquetado> '%s' duplicado en <librería> '%s'"
 
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:1120
-#, fuzzy, c-format
+#, c-format
 msgid "No '%s' package in library '%s'."
-msgstr "No se encuentra el empaquetado \"%s\" en la librería \"%s\""
+msgstr "No se encuentra el empaquetado '%s' en la librería '%s'."
 
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:1344
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:2119
 #, c-format
 msgid "Ignoring a polygon since Eagle layer '%s' (%d) was not mapped"
-msgstr ""
+msgstr "Ignorando un polígono ya que la capa de Eagle '%s' (%d) no fue mapeada"
 
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:1693
 #, c-format
 msgid "Ignoring a wire since Eagle layer '%s' (%d) was not mapped"
-msgstr ""
+msgstr "Ignorando un cable ya que la capa de Eagle '%s' (%d) no fue mapeada"
 
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:1866
 #, c-format
 msgid "Ignoring a text since Eagle layer '%s' (%d) was not mapped"
-msgstr ""
+msgstr "Ignorando un texto ya que la capa de Eagle '%s' (%d) no fue mapeada"
 
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:2004
 #, c-format
 msgid "Ignoring a rectangle since Eagle layer '%s' (%d) was not mapped"
 msgstr ""
-"Ignorando un rectángulo ya que la capa '%s' (%d) de Eagle no fue mapeada"
+"Ignorando un rectángulo ya que la capa de Eagle '%s' (%d) no fue mapeada"
 
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:2189
 #, c-format
 msgid "Ignoring a circle since Eagle layer '%s' (%d) was not mapped"
-msgstr ""
+msgstr "Ignorando un círculo ya que la capa de Eagle '%s' (%d) no fue mapeada"
 
 #: pcbnew/plugins/fabmaster/fabmaster_plugin.cpp:85
-#, fuzzy
 msgid "Could not read file "
-msgstr "No puede crearse el archivo \"%s\""
+msgstr "No se puede leer el archivo "
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:254
 #, c-format
 msgid "Unknown FABMASTER section %s:%s at row %zu."
-msgstr ""
+msgstr "Sección FABMASTER desconocida %s:%s en la fila %zu."
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:271
 #, c-format
 msgid "Invalid row size in J row %zu. Expecting 11 elements but found %zu."
 msgstr ""
+"Tamaño de fila inválido en la fila J %zu. Se esperaban 11 elementos pero se "
+"encontraron %zu."
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:294
 msgid "Could not find units value, defaulting to mils."
 msgstr ""
+"No se ha podido encontrar el valor de unidad, utilizando por defecto mils."
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:319
-#, fuzzy, c-format
+#, c-format
 msgid "Could not find column label %s."
-msgstr "No puede encontrarse el archivo de librería %s"
+msgstr "No se ha podido encontrar la etiqueta de columna %s."
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:363
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:446
@@ -31836,51 +31889,61 @@ msgstr "No puede encontrarse el archivo de librería %s"
 #, c-format
 msgid "Invalid row size in row %zu. Expecting %zu elements but found %zu."
 msgstr ""
+"Tamaño de fila inválido en la fila %zu. Se esperaban %zu elementos pero se "
+"encontraron %zu."
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:498
 #, c-format
 msgid "Expecting drill size value but found %s!%s!%s in row %zu."
 msgstr ""
+"Se esperaba un valor de tamaño de taladro pero se encontró %s!%s!%s en la "
+"fila %zu."
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:546
 #, c-format
 msgid "Expecting pad size values but found %s : %s in row %zu."
 msgstr ""
+"Se esperaban valores de tamaño de pad pero se encontró %s : %s en la fila "
+"%zu."
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:568
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid pad size in row %zu."
-msgstr "tamaño de página no válido"
+msgstr "Tamaño de pad inválido en la fila %zu."
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:603
 #, c-format
 msgid "Expecting pad offset values but found %s:%s in row %zu."
 msgstr ""
+"Se esperaban valores de desfase de pads pero se encontró %s:%s en la fila "
+"%zu."
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:648
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown pad shape name '%s' on layer '%s' in row %zu."
-msgstr "Se desconoce el tipo de hoja «%s» en la línea: %d"
+msgstr "Nombre de forma de pad desconocido '%s' en la capa '%s' en la fila %zu."
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:970
 #, c-format
 msgid "Invalid format for id string '%s' in custom pad row %zu."
 msgstr ""
+"Formato inválido para el cadena de ID '%s' en pad personalizado en la fila "
+"%zu."
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1011
-#, fuzzy, c-format
+#, c-format
 msgid "Could not insert graphical item %d into padstack '%s'."
-msgstr "No pueden guardarse los archivos de trazado en la carpeta '%s'."
+msgstr "No se pudo insertar el elemento gráfico %d en la pila de pad '%s'."
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1018
-#, fuzzy, c-format
+#, c-format
 msgid "Unrecognized pad shape primitive '%s' in row %zu."
-msgstr "Propiedad no reconocida '%s'"
+msgstr "Primitiva de forma de pad no reconocida '%s' en la fila %zu."
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1125
 #, c-format
 msgid "Invalid token count. Expected 8 but found %zu."
-msgstr ""
+msgstr "Cantidad inválida de tokens. Se esperaban 8 pero se encontraron %zu."
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1260
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1449
@@ -31892,28 +31955,30 @@ msgstr ""
 #, c-format
 msgid "Invalid row size in row %zu.  Expecting %zu elements but found %zu."
 msgstr ""
+"Tamaño de fila inválido en la fila %zu. Se esperaban %zu elementos pero se "
+"encontraron %zu."
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1459
 #, c-format
 msgid "Unhandled graphic item '%s' in row %zu."
-msgstr ""
+msgstr "Elemento gráfico no manejado '%s' en la fila %zu."
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1490
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1505
 #, c-format
 msgid "Duplicate item for ID %d and sequence %d in row %zu."
-msgstr ""
+msgstr "Elemento duplicado para el ID %d y la secuencia %d en la fila %zu."
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:2318
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:2347
 #, c-format
 msgid "Invalid custom pad '%s'. Replacing with circular pad."
-msgstr ""
+msgstr "Pad personalizado inválido '%s'. Reemplazándolo con un pad circular."
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:2355
-#, fuzzy, c-format
+#, c-format
 msgid "Could not find custom pad '%s'."
-msgstr "No puede encontrarse el archivo de librería %s"
+msgstr "No se puede encontrar el pad personalizado '%s'."
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:2555
 #, c-format
@@ -31921,79 +31986,74 @@ msgid "Expecting etch data to be on copper layer. Row found on layer '%s'"
 msgstr ""
 
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:91
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot convert '%s' to an integer."
-msgstr "No puede convertirse \"%s\" a un entero"
+msgstr "No se puede convertir '%s' a un entero."
 
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:229
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:877
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:242
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint library '%s' not found."
-msgstr "No se ha encontrado la huella"
+msgstr "No se ha encontrado la librería de huellas '%s'."
 
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:283
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:298
-#, fuzzy, c-format
+#, c-format
 msgid "Library '%s' has no footprint '%s'."
-msgstr "la librería '%s' no contiene la huella '%s' a borrar"
+msgstr "La librería '%s' no tiene la huella '%s'."
 
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:347
 #: pcbnew/plugins/kicad/pcb_parser.cpp:660
 #: pcbnew/plugins/kicad/pcb_parser.cpp:826
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown token '%s'"
-msgstr "Símbolo desconocido \"%s\""
+msgstr "Token desconocido '%s'"
 
 # Pendiente de contexto
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:354
 #, c-format
 msgid "Element token contains %d parameters."
-msgstr "El elemento contiene %d parámetros."
+msgstr "El token de elemento contiene %d parámetros."
 
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:982
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:2581
-#, fuzzy, c-format
+#, c-format
 msgid "Insufficient permissions to delete folder '%s'."
-msgstr ""
-"Permisos insuficientes para guardar el archivo\n"
-"%s"
+msgstr "Permisos insuficientes para eliminar la carpeta '%s'."
 
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:990
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:2589
-#, fuzzy, c-format
+#, c-format
 msgid "Library folder '%s' has unexpected sub-folders."
-msgstr "la carpeta de librerías \"%s\" tiene subcarpetas no esperadas"
+msgstr "La carpeta de librerías '%s' tiene subcarpetas inesperadas."
 
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:1009
-#, fuzzy, c-format
+#, c-format
 msgid "Unexpected file '%s' found in library '%s'."
-msgstr ""
-"se ha encontrado el archivo inesperado \"%s\" en la ruta de librerías \"%s\""
+msgstr "Archivo inesperado '%s' encontrado en la librería '%s'."
 
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:1028
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:2626
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:3405
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint library '%s' cannot be deleted."
-msgstr "no puede eliminarse la librería de huellas \"%s\""
+msgstr "No se puede eliminar la librería de huellas '%s'."
 
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:172
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot create footprint library '%s'."
-msgstr "No puede crearse la ruta de librería de huellas \"%s\""
+msgstr "No se puede crear la librería de huellas '%s'."
 
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:178
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint library '%s' is read only."
-msgstr "La ruta de librería de huellas \"%s\" es de solo lectura"
+msgstr "La librería de huellas '%s' es de solo lectura."
 
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:216
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot rename temporary file '%s' to '%s'"
-msgstr ""
-"No puede renombrarse el archivo temporal \"%s\" a la librería de huellas \"%s"
-"\""
+msgstr "No se puede renombrar el archivo temporal '%s' a '%s'"
 
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:342
 #, c-format
@@ -32002,15 +32062,17 @@ msgid ""
 "\n"
 "Save anyway?"
 msgstr ""
+"Por favor reporte este bug. Error al validar la estructura de grupo: %s\n"
+"\n"
+"¿Guardar de todas formas?"
 
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:344
 msgid "Internal group data structure corrupt"
-msgstr ""
+msgstr "La estructura interna de datos de grupo está corrupta"
 
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:346
-#, fuzzy
 msgid "Save Anyway"
-msgstr "Añadir de todas formas"
+msgstr "Guardar de todas formas"
 
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:1372
 #, c-format
@@ -32028,54 +32090,49 @@ msgid "unknown zone corner smoothing type %d"
 msgstr "tipo de suavizado de esquinas de zona desconocido %d"
 
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:2250
-#, fuzzy
 msgid "Open cancelled by user."
-msgstr "Carga incompleta; cancelada por el usuario."
+msgstr "Apertura cancelada por el usuario."
 
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:2299
-#, fuzzy
 msgid "This file does not contain a PCB."
-msgstr "este archivo no contiene una placa"
+msgstr "Este archivo no contiene una placa."
 
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:2449
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Library '%s' does not exist.\n"
 "Would you like to create it?"
 msgstr ""
-"No existe la librería \"%s\".\n"
+"La librería '%s' no existe.\n"
 "¿Desea crearla?"
 
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:2453
-#, fuzzy
 msgid "Library Not Found"
-msgstr "Biblioteca %s no encontrada"
+msgstr "Librería no encontrada"
 
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:2479
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint file name '%s' is not valid."
-msgstr "El nombre del archivo de huellas \"%s\" no es válido."
+msgstr "El nombre del archivo de huellas '%s' es inválido."
 
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:2485
-#, fuzzy, c-format
+#, c-format
 msgid "Insufficient permissions to delete '%s'."
-msgstr ""
-"Permisos insuficientes para guardar el archivo\n"
-"%s"
+msgstr "Permisos insuficientes para eliminar '%s'."
 
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:2556
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot overwrite library path '%s'."
-msgstr "no puede sobreescribirse la ruta de librería \"%s\""
+msgstr "No puede sobrescribirse la ruta de librería '%s'."
 
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:2608
-#, fuzzy, c-format
+#, c-format
 msgid "Unexpected file '%s' found in library path '%s'."
 msgstr ""
-"se ha encontrado el archivo inesperado \"%s\" en la ruta de librerías \"%s\""
+"Se ha encontrado un archivo inesperado '%s' en la ruta de librerías '%s'."
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:176
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Invalid floating point number in\n"
 "file: '%s'\n"
@@ -32083,12 +32140,12 @@ msgid ""
 "offset: %d"
 msgstr ""
 "Número de coma flotante inválido en\n"
-"archivo: \"%s\"\n"
+"archivo: '%s'\n"
 "línea: %d\n"
 "posición: %d"
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:185
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Missing floating point number in\n"
 "file: '%s'\n"
@@ -32096,7 +32153,7 @@ msgid ""
 "offset: %d"
 msgstr ""
 "Falta número de coma flotante en\n"
-"archivo: \"%s\"\n"
+"archivo: '%s'\n"
 "línea: %d\n"
 "posición: %d"
 
@@ -32110,23 +32167,25 @@ msgid ""
 "Items found on undefined layers.  Do you wish to\n"
 "rescue them to the User.Comments layer?"
 msgstr ""
+"Se encontraron elementos es capas indefinidas.\n"
+"¿Quiere rescatarlos a la capa User.Comments?"
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:842
 msgid "Undefined layers:"
 msgstr "Capas no definidas:"
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:1097
-#, fuzzy, c-format
+#, c-format
 msgid "Page type '%s' is not valid."
-msgstr "Tipo de página \"%s\" no válido "
+msgstr "Tipo de página %s inválido."
 
 # Pendiente de contexto
 #: pcbnew/plugins/kicad/pcb_parser.cpp:1628
-#, fuzzy, c-format
+#, c-format
 msgid "Layer '%s' in file '%s' at line %d is not in fixed layer hash."
 msgstr ""
-"La capa \"%s\" en el archivo \"%s\" en la línea %d, no se encuentra en el "
-"grupo de capas fijas"
+"La capa '%s' en el archivo '%s' en la línea %d no está en el hash de capas "
+"fijas."
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:1666
 #, c-format
@@ -32141,17 +32200,17 @@ msgstr ""
 "posición %d"
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:3157
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Invalid footprint ID in\n"
 "file: '%s'\n"
 "line: %d\n"
 "offset: %d."
 msgstr ""
-"ID de huella no válido en el\n"
-"archivo: \"%s\"\n"
+"ID de huella inválido en el\n"
+"archivo: '%s'\n"
 "línea: %d\n"
-"posición: %d"
+"posición: %d."
 
 # Pendiente de contexto
 #: pcbnew/plugins/kicad/pcb_parser.cpp:3491
@@ -32160,16 +32219,15 @@ msgid "Cannot handle footprint text type %s"
 msgstr "No puede utilizarse el texto de huella tipo %s"
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:4085
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Invalid net ID in\n"
 "file: %s\n"
 "line: %d offset: %d"
 msgstr ""
-"ID de red no válido en\n"
-"archivo: '%s'\n"
-"línea: %d\n"
-"posición: %d"
+"ID de red inválido en\n"
+"archivo: %s\n"
+"línea: %d posición: %d"
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:4106
 #, fuzzy, c-format
