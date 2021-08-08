@@ -6,13 +6,14 @@
 # Uibeom Jung <wjddmlqja17@gmail.com>, 2021.
 # 박준언 <joonun1696@pusan.ac.kr>, 2021.
 # 방준영 <wnsdudtkwkd8@naver.com>, 2021.
+# 박기정 <pgj0334@naver.com>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
-"PO-Revision-Date: 2021-08-08 10:15+0000\n"
-"Last-Translator: jehunseo <benbot591@gmail.com>\n"
+"PO-Revision-Date: 2021-08-08 13:56+0000\n"
+"Last-Translator: 박기정 <pgj0334@naver.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
 "Language: ko\n"
@@ -8717,9 +8718,8 @@ msgstr "전기적 형식"
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:203
 #: eeschema/dialogs/dialog_symbol_properties.cpp:142
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:268
-#, fuzzy
 msgid "Graphic Style"
-msgstr "그래픽"
+msgstr "그래픽 스타일"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:55
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:49
@@ -8738,21 +8738,18 @@ msgstr "방향"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:56
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:50
-#, fuzzy
 msgid "Number Text Size"
-msgstr "시트 크기"
+msgstr "숫자 텍스트 크기"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:57
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:51
-#, fuzzy
 msgid "Name Text Size"
-msgstr "시트 크기"
+msgstr "이름 텍스트 크기"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:58
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:52
 #: eeschema/lib_pin.cpp:1035 eeschema/sch_pin.cpp:212 pcbnew/pcb_shape.cpp:535
 #: pcbnew/pcb_shape.cpp:560
-#, fuzzy
 msgid "Length"
 msgstr "길이"
 
@@ -8784,9 +8781,8 @@ msgid "Group by name"
 msgstr "이름으로 그룹화"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:95
-#, fuzzy
 msgid "Pin numbers:"
-msgstr "펜 번호:"
+msgstr "핀 번호:"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:99
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:146
@@ -8824,7 +8820,6 @@ msgid "Pin Table"
 msgstr "핀 테이블"
 
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:66
-#, fuzzy
 msgid "(Power symbol value field text cannot be changed.)"
 msgstr "(전원 기호 값 필드 텍스트를 변경할 수 없습니다.)"
 
@@ -8840,9 +8835,8 @@ msgstr "위치 X:"
 #: eeschema/fields_grid_table.cpp:166 eeschema/fields_grid_table.cpp:422
 #: eeschema/fields_grid_table.cpp:540
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:142
-#, fuzzy
 msgid "Horizontal"
-msgstr "가로/세로"
+msgstr "수평"
 
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:119
 #: eeschema/fields_grid_table.cpp:167 eeschema/fields_grid_table.cpp:423
@@ -8867,35 +8861,34 @@ msgid "V Align:"
 msgstr "V 정렬:"
 
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:191
-#, fuzzy
 msgid "Common to all units"
-msgstr "공통 유닛"
+msgstr "모든 유닛에 공통"
 
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:194
-#, fuzzy
 msgid "Common to all body styles"
-msgstr "공통 유닛"
+msgstr "모든 바디 스타일에 공통"
 
 #: eeschema/dialogs/dialog_lib_edit_text_base.h:81
-#, fuzzy
 msgid "Text Item Properties"
-msgstr "속성"
+msgstr "텍스트 항목 속성"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:33
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:123
-#, fuzzy
 msgid "Symbol name:"
-msgstr "모듈 이름:"
+msgstr "기호 이름:"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:35
+#, fuzzy
 msgid ""
 "The symbol name in library and also the default\n"
 "symbol value when loaded in the schematic."
 msgstr ""
+"라이브러리의 기호 이름 및 기본값\n"
+"도식도에 로드된 경우 기호 값."
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:42
 msgid "Derive from existing symbol:"
-msgstr "기존 심볼에서 파생:"
+msgstr "기존 기호에서 파생:"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:46
 #: eeschema/dialogs/dialog_line_wire_bus_properties_base.cpp:68
@@ -8923,9 +8916,8 @@ msgid "U"
 msgstr "U"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:58
-#, fuzzy
 msgid "Number of units per package:"
-msgstr "유닛 개수:"
+msgstr "패키지당 유닛의 수:"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:71
 msgid "Units are not interchangeable"
@@ -8943,14 +8935,16 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:76
 msgid "Create symbol with alternate body style (DeMorgan)"
-msgstr ""
+msgstr "대체 본문 스타일을 사용하여 기호 작성(드모르간)"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:79
+#, fuzzy
 msgid "Create symbol as power symbol"
-msgstr ""
+msgstr "전원기호와 같은 기호를 만들다"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:82
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:178
+#, fuzzy
 msgid "Exclude from schematic bill of materials"
 msgstr "회로도 BOM에서 제외"
 
@@ -8959,7 +8953,7 @@ msgstr "회로도 BOM에서 제외"
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:199
 #, fuzzy
 msgid "Exclude from board"
-msgstr "패드 제외"
+msgstr "보드에서 제외"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:103
 msgid "Pin name position offset:"
@@ -8968,22 +8962,21 @@ msgstr "핀 이름 위치 오프셋:"
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:120
 #, fuzzy
 msgid "Show pin number text"
-msgstr "D-Codes 번호 보이기"
+msgstr "핀 번호 텍스트 표시"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:124
 #, fuzzy
 msgid "Show pin name text"
-msgstr "핀 이름 보이기"
+msgstr "핀 이름 텍스트 표시"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:128
 #, fuzzy
 msgid "Pin name inside"
-msgstr "핀 이름을 안쪽으로"
+msgstr "내부 핀 이름"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.h:74
-#, fuzzy
 msgid "New Symbol"
-msgstr "전원 심볼"
+msgstr "새 기호"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:232
 #: eeschema/dialogs/dialog_symbol_properties.cpp:562
@@ -8997,8 +8990,9 @@ msgid "Fields must have a name."
 msgstr "필드에는 이름이 있어야 합니다."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:269
+#, fuzzy
 msgid "Aliased symbol must have a parent selected"
-msgstr ""
+msgstr "별칭 기호에는 상위 기호가 선택해야 합니다."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:277
 msgid "Delete extra units from symbol?"
@@ -9006,38 +9000,36 @@ msgstr "심볼에서 추가 유닛을 삭제 하겠습니까?"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:283
 msgid "Add new pins for alternate body style (DeMorgan) to symbol?"
-msgstr ""
+msgstr "심볼에 대체 바디 스타일(DeMorgan)에 대한 새 핀을 추가하시겠습니까?"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:288
 msgid "Delete alternate body style (DeMorgan) draw items from symbol?"
-msgstr ""
+msgstr "심볼에서 대체 바디 스타일(DeMorgan) 그리기 항목을 삭제하시겠습니까?"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:316
 #, c-format
 msgid "The name '%s' conflicts with an existing entry in the library '%s'."
-msgstr ""
+msgstr "'%s'이라는 이름은 라이브러리의 기존 항목과 충돌합니다.[%s'."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:432
 #, c-format
 msgid "The name '%s' is already in use."
-msgstr "'%s' 이름은 이미 사용 중입니다."
+msgstr "'%s'라는 이름은 이미 사용 중입니다."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:504
 #: eeschema/dialogs/dialog_sheet_properties.cpp:709
 #: eeschema/dialogs/dialog_symbol_properties.cpp:842
 #, c-format
 msgid "The first %d fields are mandatory."
-msgstr ""
+msgstr "첫  %d 필드는 필수입니다."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:625
-#, fuzzy
 msgid "Add Footprint Filter"
-msgstr "풋프린트 필터"
+msgstr "풋프린트 필터 추가"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:664
-#, fuzzy
 msgid "Edit Footprint Filter"
-msgstr "풋프린트 필터"
+msgstr "풋프린트 필터 편집"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:30
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:24
@@ -9074,22 +9066,20 @@ msgstr "H 정렬"
 #: eeschema/fields_grid_table.cpp:201
 #, fuzzy
 msgid "V Align"
-msgstr "세로쓰기"
+msgstr "V 정렬"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:63
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:57
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:60
 #: eeschema/fields_grid_table.cpp:204
-#, fuzzy
 msgid "Text Size"
-msgstr "텍스트 가로 크기"
+msgstr "텍스트 크기"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:85
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:80
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:83
-#, fuzzy
 msgid "Add field"
-msgstr "필드 2 추가"
+msgstr "필드 추가"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:90
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:85
@@ -9110,13 +9100,11 @@ msgstr "아래로 이동"
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:103
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:98
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:101
-#, fuzzy
 msgid "Delete field"
-msgstr "항목 삭제"
+msgstr "필드 삭제"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:131
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:115
-#, fuzzy
 msgid "Description:"
 msgstr "설명:"
 
@@ -9130,7 +9118,6 @@ msgid "Derive from symbol:"
 msgstr "기호에서 파생:"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:149
-#, fuzzy
 msgid "<None>"
 msgstr "없음"
 
@@ -9147,15 +9134,15 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:168
 msgid "Has alternate body style (DeMorgan)"
-msgstr ""
+msgstr "대체 바디 스타일(DeMorgan)"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:169
 msgid "Check this option if the symbol has an alternate body style (De Morgan)"
-msgstr ""
+msgstr "기호에 대체 바디 스타일이 있는 경우 이 옵션을 확인합니다(De Morgan)"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:173
 msgid "Define as power symbol"
-msgstr "전원 심볼로 정의"
+msgstr "전원 기호로 정의"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:174
 msgid ""
