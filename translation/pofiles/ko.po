@@ -12,8 +12,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
-"PO-Revision-Date: 2021-08-08 13:56+0000\n"
-"Last-Translator: jeongsuAn <dks9467@gmail.com>\n"
+"PO-Revision-Date: 2021-08-08 15:09+0000\n"
+"Last-Translator: Ji Yoon Choi <chichoon.choi@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
 "Language: ko\n"
@@ -8708,9 +8708,8 @@ msgstr "핀 번호"
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:202
 #: eeschema/dialogs/dialog_symbol_properties.cpp:141
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:267
-#, fuzzy
 msgid "Electrical Type"
-msgstr "전기적 형식"
+msgstr "전기 형식"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:54
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:48
@@ -8944,9 +8943,8 @@ msgstr "전원기호와 같은 기호를 만들다"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:82
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:178
-#, fuzzy
 msgid "Exclude from schematic bill of materials"
-msgstr "회로도 BOM에서 제외"
+msgstr "회로도 자재 명세서에서 제외"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:85
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:181
@@ -8990,9 +8988,8 @@ msgid "Fields must have a name."
 msgstr "필드에는 이름이 있어야 합니다."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:269
-#, fuzzy
 msgid "Aliased symbol must have a parent selected"
-msgstr "별칭 기호에는 상위 기호가 선택해야 합니다."
+msgstr "별칭이 지정된 심볼은 상위 항목이 선택되어 있어야 합니다"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:277
 msgid "Delete extra units from symbol?"
@@ -9021,7 +9018,7 @@ msgstr "'%s'라는 이름은 이미 사용 중입니다."
 #: eeschema/dialogs/dialog_symbol_properties.cpp:842
 #, c-format
 msgid "The first %d fields are mandatory."
-msgstr "첫  %d 필드는 필수입니다."
+msgstr "첫 %d 필드는 필수로 입력하여야 합니다."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:625
 msgid "Add Footprint Filter"
@@ -9049,9 +9046,8 @@ msgstr "필드"
 #: pcbnew/dialogs/panel_fp_editor_defaults.cpp:52
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:46
 #: pcbnew/fp_text_grid_table.cpp:90
-#, fuzzy
 msgid "Show"
-msgstr "보이기"
+msgstr "표시"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:59
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:53
@@ -9535,7 +9531,7 @@ msgstr "그래픽 스타일:"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:154
 msgid "&Visible"
-msgstr ""
+msgstr "보이기 (&V)"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:161
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:190
@@ -10169,7 +10165,7 @@ msgstr "시트로 들어가기"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:359
 msgid "Note: item colors are overridden in the current color theme."
-msgstr ""
+msgstr "참고: 항목 색상은 현재 색상 테마에 의해 덮어씌워집니다."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:361
 #, c-format
@@ -10763,7 +10759,6 @@ msgid "Model:"
 msgstr "모델:"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:244
-#, fuzzy
 msgid "note"
 msgstr "메모"
 
@@ -18543,17 +18538,16 @@ msgid "File \"%s\" loaded"
 msgstr "파일 \"%s\" 로드됨"
 
 #: pagelayout_editor/files.cpp:121
-#, fuzzy
 msgid "Append Existing Drawing Sheet"
-msgstr "기존 레이어 열기"
+msgstr "이미 존재하는 도면 시트 추가하기"
 
 #: pagelayout_editor/files.cpp:132 pagelayout_editor/files.cpp:157
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to load %s file"
 msgstr "%s 파일을 로드할 수 없음"
 
 #: pagelayout_editor/files.cpp:139
-#, fuzzy, c-format
+#, c-format
 msgid "File \"%s\" inserted"
 msgstr "파일 \"%s\" 삽입됨"
 
@@ -18562,37 +18556,34 @@ msgid "Open"
 msgstr "열기"
 
 #: pagelayout_editor/files.cpp:163 pagelayout_editor/files.cpp:210
-#, fuzzy, c-format
+#, c-format
 msgid "File \"%s\" saved."
-msgstr "파일 '%s'이 저장됨."
+msgstr "파일 '%s' 저장됨."
 
 #: pagelayout_editor/files.cpp:172
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to write '%s'."
-msgstr "<%s>을(를) 생성할 수 없습니다."
+msgstr "'%s' 을 쓸 수 없습니다."
 
 #: pagelayout_editor/files.cpp:185
-#, fuzzy
 msgid "Save As"
-msgstr "다른이름으로 저장"
+msgstr "다른 이름으로 저장"
 
 #: pagelayout_editor/files.cpp:235
-#, fuzzy
 msgid "Error reading drawing sheet"
-msgstr "기존 드로잉 가져오기"
+msgstr "도면 시트를 읽어들이는 데 오류가 발생하였습니다"
 
 #: pagelayout_editor/files.cpp:257
-#, fuzzy
 msgid "Layout file is read only."
-msgstr "%s 라이브러리를 찾을 수 없습니다."
+msgstr "레이아웃 파일은 읽기 전용입니다."
 
 #: pagelayout_editor/pl_editor_frame.cpp:100
 msgid "KiCad Drawing Sheet Editor"
-msgstr ""
+msgstr "KiCad 도면 시트 편집기"
 
 #: pagelayout_editor/pl_editor_frame.cpp:155
 msgid "coord origin: Right Bottom page corner"
-msgstr ""
+msgstr "좌표 원점: 오른쪽 아래 페이지 모서리"
 
 #: pagelayout_editor/pl_editor_frame.cpp:182
 msgid "Properties"
@@ -18608,153 +18599,142 @@ msgid "Error Init Printer info"
 msgstr "프린터 정보 초기화 에러"
 
 #: pagelayout_editor/pl_editor_frame.cpp:553
-#, fuzzy
 msgid "[no drawing sheet loaded]"
-msgstr "기존 드로잉 가져오기"
+msgstr "[도면 시트 로드되지 않음]"
 
 #: pagelayout_editor/pl_editor_frame.cpp:761
 #, c-format
 msgid "coord origin: %s"
-msgstr ""
+msgstr "좌표 원점: %s"
 
 #: pagelayout_editor/pl_editor_frame.cpp:901
 msgid "New drawing sheet file is unsaved"
 msgstr "새 도면 시트 파일이 저장되지 않았음"
 
 #: pagelayout_editor/pl_editor_frame.cpp:905
-#, fuzzy
 msgid "Drawing sheet changes are unsaved"
-msgstr "풋프린트: %d"
+msgstr "도면 시트의 변경점이 저장되지 않았습니다"
 
 #: pagelayout_editor/pl_editor_layout.cpp:62
-#, fuzzy
 msgid "Page Width"
-msgstr "보드 에지 두께"
+msgstr "페이지 폭"
 
 #: pagelayout_editor/pl_editor_layout.cpp:65
-#, fuzzy
 msgid "Page Height"
-msgstr "텍스트 에디터"
+msgstr "페이지 높이"
 
 #: pagelayout_editor/toolbars_pl_editor.cpp:75
 msgid "Left Top paper corner"
-msgstr ""
+msgstr "용지의 왼쪽 위 모서리"
 
 #: pagelayout_editor/toolbars_pl_editor.cpp:76
 msgid "Right Bottom page corner"
-msgstr ""
+msgstr "페이지의 오른쪽 아래 모서리"
 
 #: pagelayout_editor/toolbars_pl_editor.cpp:77
 msgid "Left Bottom page corner"
-msgstr ""
+msgstr "페이지의 왼쪽 아래 모서리"
 
 #: pagelayout_editor/toolbars_pl_editor.cpp:78
 msgid "Right Top page corner"
-msgstr ""
+msgstr "페이지의 오른쪽 위 모서리"
 
 #: pagelayout_editor/toolbars_pl_editor.cpp:79
 msgid "Left Top page corner"
-msgstr ""
+msgstr "페이지의 왼쪽 위 모서리"
 
 #: pagelayout_editor/toolbars_pl_editor.cpp:90
 msgid "Origin of coordinates displayed to the status bar"
-msgstr ""
+msgstr "좌표의 원점이 상태 바에 표시되었습니다"
 
 #: pagelayout_editor/toolbars_pl_editor.cpp:105
-#, fuzzy
 msgid "Page 1"
-msgstr "용지 크기 A1"
+msgstr "페이지 1"
 
 #: pagelayout_editor/toolbars_pl_editor.cpp:106
-#, fuzzy
 msgid "Other pages"
-msgstr "기타"
+msgstr "기타 페이지"
 
 #: pagelayout_editor/toolbars_pl_editor.cpp:116
 msgid ""
 "Simulate page 1 or other pages to show how items\n"
 "which are not on all page are displayed"
 msgstr ""
+"페이지 1 또는 다른 페이지를 시뮬레이션 함으로써 모든 페이지에 존재하지 않는\n"
+"아이템들이 어떻게 표시될 지 나타냅니다"
 
 #: pagelayout_editor/tools/pl_actions.cpp:44
 msgid "Add Line"
 msgstr "선 추가"
 
 #: pagelayout_editor/tools/pl_actions.cpp:44
-#, fuzzy
 msgid "Add a line"
 msgstr "선 추가"
 
 #: pagelayout_editor/tools/pl_actions.cpp:59
-#, fuzzy
 msgid "Add Bitmap"
-msgstr "간격 추가"
+msgstr "비트맵 추가"
 
 #: pagelayout_editor/tools/pl_actions.cpp:59
-#, fuzzy
 msgid "Add a bitmap image"
-msgstr "선 추가"
+msgstr "비트맵 이미지 추가"
 
 #: pagelayout_editor/tools/pl_actions.cpp:73
-#, fuzzy
 msgid "Append Existing Drawing Sheet..."
 msgstr "기존 도면 시트 추가..."
 
 #: pagelayout_editor/tools/pl_actions.cpp:74
-#, fuzzy
 msgid "Append an existing drawing sheet file to current file"
-msgstr "기존 레이어 열기"
+msgstr "이미 존재하는 도면 시트를 현재 파일에 추가"
 
 #: pagelayout_editor/tools/pl_actions.cpp:82
-#, fuzzy
 msgid "Show Design Inspector"
-msgstr "D-Codes 번호 보이기"
+msgstr "디자인 검사기 보이기"
 
 #: pagelayout_editor/tools/pl_actions.cpp:82
-#, fuzzy
 msgid "Show the list of items in the drawing sheet"
-msgstr "텍스트 에디터로 열기 (&O)"
+msgstr "도면 시트에 존재하는 개체 목록 보이기"
 
 #: pagelayout_editor/tools/pl_actions.cpp:87
-#, fuzzy
 msgid "Page Preview Settings..."
 msgstr "페이지 미리보기 설정..."
 
 #: pagelayout_editor/tools/pl_actions.cpp:87
 msgid "Edit preview data for page size and title block"
-msgstr ""
+msgstr "미리보기 데이터의 페이지 크기와 제목 블록을 편집"
 
 #: pagelayout_editor/tools/pl_actions.cpp:92
-#, fuzzy
 msgid "Show title block in preview mode"
-msgstr "플로트 모드 선 두께 설정"
+msgstr "미리보기 모드에서 제목 블록 표시하기"
 
 #: pagelayout_editor/tools/pl_actions.cpp:93
 msgid ""
 "Show title block in preview mode:\n"
 "text placeholders will be replaced with preview data."
 msgstr ""
+"미리보기 모드에서 제목 블록 표시하기:\n"
+"텍스트 자리 표시자는 미리보기 데이터로 대체됩니다."
 
 #: pagelayout_editor/tools/pl_actions.cpp:99
-#, fuzzy
 msgid "Show title block in edit mode"
-msgstr "트랙 채움 모드 보이기"
+msgstr "편집 모드에서 제목 블록 표시하기"
 
 #: pagelayout_editor/tools/pl_actions.cpp:100
 msgid ""
 "Show title block in edit mode:\n"
 "text placeholders are shown as ${keyword} tokens."
 msgstr ""
+"편집 모드에서 제목 블록 표시하기:\n"
+"텍스트 자리 표시자는 ${keyword} 토큰으로 표시됩니다."
 
 #: pagelayout_editor/tools/pl_edit_tool.cpp:474
-#, fuzzy
 msgid "Error writing objects to clipboard"
-msgstr "클립보드로 드로잉 내보내기"
+msgstr "클립보드에 객체 쓰는 중에 오류 발생"
 
 #: pcb_calculator/attenuators.cpp:128
 #, c-format
 msgid "Attenuation more than %f dB"
-msgstr ""
+msgstr "감쇠량은 %f dB보다 크게 설정하세요"
 
 #: pcb_calculator/attenuators/bridget_tee_formula.h:2
 msgid ""
@@ -18768,6 +18748,15 @@ msgid ""
 "* ___R1 = Z<sub>0</sub> \\* (L - 1)___\n"
 "* ___R2 = Z<sub>0</sub> / (L - 1)___"
 msgstr ""
+"### 브릿지 T형 감쇠기\n"
+"__Zin__ 입력 임피던스 기대값 in &#x2126;<br>\n"
+"__Zout__ 출력 임피던스 기대값<br>\n"
+"__Z<sub>0</sub> = Zin = Zout__<br><br>\n"
+"\n"
+"* __a__ 감쇠량 (dB)\n"
+"* __L = 10<sup>a/20</sup>__ (손실)<br><br>\n"
+"* ___R1 = Z<sub>0</sub> \\* (L - 1)___\n"
+"* ___R2 = Z<sub>0</sub> / (L - 1)___"
 
 #: pcb_calculator/attenuators/pi_formula.h:2
 msgid ""
@@ -18783,6 +18772,17 @@ msgid ""
 "* ___R1 = 1 / (A / Zin - 1 / R2)___\n"
 "* ___R3 = 1 / (A / Zout - 1 / R2)___"
 msgstr ""
+"### π형 감쇠기\n"
+"__Zin__ 입력 임피던스 기대값 in &#x2126;<br>\n"
+"__Zout__ 출력 임피던스 기대값<br>\n"
+"__Zin = Zout__<br><br>\n"
+"\n"
+"* __a__ 감쇠량 (dB)\n"
+"* __L = 10<sup>a/20</sup>__ (손실)\n"
+"* __A = (L + 1) / (L - 1)__<br><br>\n"
+"* ___R2 = (L- 1) / 2 \\* &radic; ( (Zin \\* Zout) / L)___\n"
+"* ___R1 = 1 / (A / Zin - 1 / R2)___\n"
+"* ___R3 = 1 / (A / Zout - 1 / R2)___"
 
 #: pcb_calculator/attenuators/splitter_formula.h:2
 msgid ""
@@ -18794,6 +18794,13 @@ msgid ""
 "\n"
 "___R1 = R2 = R3 = Z<sub>out</sub> / 3___\n"
 msgstr ""
+"### 분할 감쇠기\n"
+"#### 감쇠량은 6dB\n"
+"___Z<sub>in</sub>___ 입력 임피던스 기대값 in &#x2126;<br>\n"
+"___Z<sub>out</sub>___ 출력 임피던스 기대값 in &#x2126;<br>\n"
+"___Z<sub>in</sub> = Z<sub>out</sub>___\n"
+"\n"
+"___R1 = R2 = R3 = Z<sub>out</sub> / 3___\n"
 
 #: pcb_calculator/attenuators/tee_formula.h:2
 msgid ""
@@ -18810,6 +18817,18 @@ msgid ""
 "* ___R1 = Z<sub>in</sub> \\* A - R2___\n"
 "* ___R3 = Z<sub>out</sub> \\* A - R2___\n"
 msgstr ""
+"### T형 감쇠기\n"
+"__Zin__ 입력 임피던스 기대값 in &#x2126;<br>\n"
+"__Zout__ 출력 임피던스 기대값<br>\n"
+"__Zin = Zout__<br><br>\n"
+"\n"
+"* __a__ 감쇠량 (dB)\n"
+"* __L = 10<sup>a/20</sup>__ (손실)\n"
+"* ___A = (L + 1) / (L - 1)___<br><br>\n"
+"* ___R2 = 2 &radic; (L \\* Z<sub>in</sub> \\* Z<sub>out</sub> ) / (L - 1)"
+"___\n"
+"* ___R1 = Z<sub>in</sub> \\* A - R2___\n"
+"* ___R3 = Z<sub>out</sub> \\* A - R2___\n"
 
 #: pcb_calculator/datafile_read_write.cpp:76
 msgid "Data file error."
@@ -18818,40 +18837,38 @@ msgstr "데이터 파일 오류."
 #: pcb_calculator/dialogs/dialog_regulator_form.cpp:35
 #: pcb_calculator/regulators_funct.cpp:176
 msgid "Bad or missing parameters!"
-msgstr ""
+msgstr "매개변수가 잘못되었거나 누락되었습니다!"
 
 #: pcb_calculator/dialogs/dialog_regulator_form_base.cpp:37
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:139
 msgid "Vref:"
-msgstr ""
+msgstr "Vref:"
 
 #: pcb_calculator/dialogs/dialog_regulator_form_base.cpp:44
-#, fuzzy
 msgid "Volt"
 msgstr "V"
 
 #: pcb_calculator/dialogs/dialog_regulator_form_base.cpp:52
 msgid "Separate sense pin"
-msgstr ""
+msgstr "분리된 감지 핀"
 
 #: pcb_calculator/dialogs/dialog_regulator_form_base.cpp:52
 msgid "3 terminals regulator"
-msgstr ""
+msgstr "3 단자 레귤레이터"
 
 #: pcb_calculator/dialogs/dialog_regulator_form_base.cpp:61
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:155
 msgid "Iadj:"
-msgstr ""
+msgstr "ladj:"
 
 #: pcb_calculator/dialogs/dialog_regulator_form_base.cpp:68
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:164
-#, fuzzy
 msgid "uA"
-msgstr "uA"
+msgstr "μA"
 
 #: pcb_calculator/dialogs/dialog_regulator_form_base.h:60
 msgid "Regulator Parameters"
-msgstr ""
+msgstr "레귤레이터 매개변수"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:41
 msgid ""
@@ -18860,25 +18877,26 @@ msgid ""
 "- regulators which have a dedicated sense pin for the voltage regulation.\n"
 "- 3 terminal pins."
 msgstr ""
+"레귤레이터의 종류.\n"
+"두 가지 종류가 있습니다:\n"
+"- 전압 조정을 위한 전용 감지 핀이 있는 레귤레이터.\n"
+"- 3개의 터미널 핀."
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:45
-#, fuzzy
 msgid "Standard Type"
-msgstr "표준"
+msgstr "표준 형식"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:45
-#, fuzzy
 msgid "3 Terminal Type"
-msgstr "전기적 형식"
+msgstr "3 터미널 형식"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:67
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:414
 msgid "Formula"
-msgstr ""
+msgstr "계산식"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:97
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:352
-#, fuzzy
 msgid "R1:"
 msgstr "R1:"
 
@@ -18888,16 +18906,14 @@ msgstr "R1:"
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:461
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:472
 msgid "kOhm"
-msgstr ""
+msgstr "kOhm"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:111
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:363
-#, fuzzy
 msgid "R2:"
 msgstr "R2:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:125
-#, fuzzy
 msgid "Vout:"
 msgstr "Vout:"
 
@@ -18906,84 +18922,79 @@ msgid ""
 "The internal reference voltage of the regulator.\n"
 "Should not be 0."
 msgstr ""
+"레귤레이터의 내부 기준 전압입니다.\n"
+"0이 될 수 없습니다."
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:157
 msgid "For 3 terminal regulators only, the  Adjust pin current."
-msgstr ""
+msgstr "3 터미널 레귤레이터 전용으로,  핀의 전류를 더합니다."
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:177
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:334
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:579
-#, fuzzy
 msgid "Calculate"
 msgstr "계산"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:197
-#, fuzzy
 msgid "Regulator"
-msgstr "아래로 추가"
+msgstr "레귤레이터"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:204
-#, fuzzy
 msgid "Regulators data file:"
 msgstr "레귤레이터 데이터 파일:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:206
 msgid "The name of the data file which stores known regulators parameters."
-msgstr ""
+msgstr "알려진 레귤레이터 매개변수를 저장하는 데이터 파일의 이름입니다."
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:225
-#, fuzzy
 msgid "Edit Regulator"
-msgstr "네트 편집"
+msgstr "레귤레이터 편집"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:226
 msgid "Edit the current selected regulator."
-msgstr "현재 선택한 조절기를 편집합니다."
+msgstr "현재 선택한 레귤레이터를 편집합니다."
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:230
-#, fuzzy
 msgid "Add Regulator"
-msgstr "아래로 추가"
+msgstr "레귤레이터 추가"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:231
 msgid "Enter a new item to the current list of available regulators"
-msgstr ""
+msgstr "현재 사용 가능한 레귤레이터의 리스트에 새로운 항목을 추가합니다"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:235
 #: pcb_calculator/regulators_funct.cpp:227
 msgid "Remove Regulator"
-msgstr ""
+msgstr "레귤레이터 삭제"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:236
 msgid "Remove an item from the current list of available regulators"
-msgstr ""
+msgstr "현재 사용 가능한 레귤레이터의 리스트에서 항목을 삭제합니다"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:256
 msgid "Regulators"
-msgstr ""
+msgstr "레귤레이터"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:265
 msgid "PI"
-msgstr ""
+msgstr "π"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:265
-#, fuzzy
 msgid "Tee"
-msgstr "사다리꼴"
+msgstr "T형"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:265
 msgid "Bridged tee"
-msgstr ""
+msgstr "브릿지 T형"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:265
 msgid "Resistive splitter"
-msgstr ""
+msgstr "저항 분할형"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:267
-#, fuzzy
 msgid "Attenuators"
-msgstr "방향"
+msgstr "감쇠기"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:284
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1144
@@ -18993,48 +19004,44 @@ msgid "Parameters"
 msgstr "매개 변수"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:292
-#, fuzzy
 msgid "Attenuation:"
-msgstr "감쇠:"
+msgstr "감쇠량:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:299
 msgid "dB"
-msgstr ""
+msgstr "dB"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:303
 msgid "Zin:"
-msgstr ""
+msgstr "Zin:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:314
 msgid "Zout:"
-msgstr ""
+msgstr "Zout:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:374
-#, fuzzy
 msgid "R3:"
 msgstr "R3:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:426
 msgid "RF Attenuators"
-msgstr ""
+msgstr "RF 감쇠기"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:435
-#, fuzzy
 msgid "Inputs"
-msgstr "입력"
+msgstr "입력값"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:443
 msgid "Required resistance:"
-msgstr "필요한 저항:"
+msgstr "필요한 저항값:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:454
 msgid "Exclude value 1:"
-msgstr "제외 값 1:"
+msgstr "제외할 값 1:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:465
-#, fuzzy
 msgid "Exclude value 2:"
-msgstr "제외 값 2:"
+msgstr "제외할 값 2:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:485
 #, fuzzy
@@ -19529,7 +19536,7 @@ msgstr ""
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1807
 msgid "Note: Values are minimal values (from IPC 2221)"
-msgstr ""
+msgstr "참고: 값은 최소 값입니다 (IPC 2221로부터)"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1833
 msgid "B1"
@@ -19615,7 +19622,7 @@ msgstr "전기적 형식"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1903
 msgid "Note: Values are minimal values"
-msgstr ""
+msgstr "참고: 값은 최소 값입니다"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1928
 msgid "Class 1"
@@ -23400,7 +23407,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:701
 msgid ""
 "Note: solder mask and paste values are used only for pads on copper layers."
-msgstr "주의: 솔더 마스크와 페이스트 값은 구리 층의 패드에만 이용됩니다."
+msgstr "참고: 솔더 마스크와 페이스트 값은 구리 층의 패드에만 이용됩니다."
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:404
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:305
@@ -23408,7 +23415,7 @@ msgstr "주의: 솔더 마스크와 페이스트 값은 구리 층의 패드에�
 msgid ""
 "Note: solder paste clearances (absolute and relative) are added to determine "
 "the final clearance."
-msgstr "주의: 솔더 페이스트 유격은 (절대값이나 상대값 모두) 최종 유격을 결정하는 데에 더해져 사용됩니다."
+msgstr "참고: 솔더 페이스트 유격은 (절대값이나 상대값 모두) 최종 유격을 결정하는 데에 더해져 사용됩니다."
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:414
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:315
@@ -24387,59 +24394,52 @@ msgstr "Y 이동:"
 msgid ""
 "Invalid movement values.  Movement would place selection outside of the "
 "maximum board area."
-msgstr ""
+msgstr "잘못된 이동 값입니다.  기판의 최대 영역보다 밖으로 이동할 수 없습니다."
 
 #: pcbnew/dialogs/dialog_move_exact_base.cpp:69
-#, fuzzy
 msgid "Rotate around center of selection"
-msgstr "글꼴 선택 (&F)"
+msgstr "선택한 영역의 중심을 주위로 회전"
 
 #: pcbnew/dialogs/dialog_move_exact_base.cpp:84
 #: pcbnew/dialogs/dialog_position_relative_base.cpp:116
 msgid "Use polar coordinates"
-msgstr ""
+msgstr "극 좌표계 사용"
 
 #: pcbnew/dialogs/dialog_move_exact_base.h:71
-#, fuzzy
 msgid "Move Item"
-msgstr "텍스트 이동"
+msgstr "항목 이동"
 
 #: pcbnew/dialogs/dialog_net_inspector.cpp:77 pcbnew/netinfo_item.cpp:78
 msgid "Net Name"
 msgstr "네트 이름"
 
 #: pcbnew/dialogs/dialog_net_inspector.cpp:78
-#, fuzzy
 msgid "Pad Count"
-msgstr "패드 커퍼"
+msgstr "패드 개수"
 
 #: pcbnew/dialogs/dialog_net_inspector.cpp:79
-#, fuzzy
 msgid "Via Count"
-msgstr "패드 커퍼"
+msgstr "비아 개수"
 
 #: pcbnew/dialogs/dialog_net_inspector.cpp:80
 msgid "Via Length"
 msgstr "비아 길이"
 
 #: pcbnew/dialogs/dialog_net_inspector.cpp:81
-#, fuzzy
 msgid "Track Length"
-msgstr "트랙"
+msgstr "배선 길이"
 
 #: pcbnew/dialogs/dialog_net_inspector.cpp:82
-#, fuzzy
 msgid "Die Length"
-msgstr "선 삭제"
+msgstr "다이 길이"
 
 #: pcbnew/dialogs/dialog_net_inspector.cpp:83
 msgid "Total Length"
 msgstr "전체 길이"
 
 #: pcbnew/dialogs/dialog_net_inspector.cpp:83 pcbnew/netinfo_item.cpp:125
-#, fuzzy
 msgid "Net Length"
-msgstr "길이"
+msgstr "네트 길이"
 
 #: pcbnew/dialogs/dialog_net_inspector.cpp:1782
 #: pcbnew/dialogs/dialog_net_inspector.cpp:1839
@@ -24448,9 +24448,8 @@ msgid "Net name:"
 msgstr "네트 이름:"
 
 #: pcbnew/dialogs/dialog_net_inspector.cpp:1782
-#, fuzzy
 msgid "New Net"
-msgstr "새 네트리스트 (&N)"
+msgstr "새 네트"
 
 #: pcbnew/dialogs/dialog_net_inspector.cpp:1794
 #: pcbnew/dialogs/dialog_net_inspector.cpp:1862
@@ -24459,24 +24458,22 @@ msgid "Net name '%s' is already in use."
 msgstr "네트 이름 '%s'은 이미 사용 중입니다."
 
 #: pcbnew/dialogs/dialog_net_inspector.cpp:1839
-#, fuzzy
 msgid "Rename Net"
-msgstr "파일 이름 바꾸기"
+msgstr "네트 이름 바꾸기"
 
 #: pcbnew/dialogs/dialog_net_inspector.cpp:1852
-#, fuzzy
 msgid "Net name cannot be empty."
-msgstr "%s 라이브러리를 찾을 수 없습니다."
+msgstr "네트 이름은 빈 칸이 될 수 없습니다."
 
 #: pcbnew/dialogs/dialog_net_inspector.cpp:1918
 #, c-format
 msgid "Net '%s' is in use.  Delete anyway?"
-msgstr ""
+msgstr "네트 '%s'는 사용 중입니다.  삭제할까요?"
 
 #: pcbnew/dialogs/dialog_net_inspector.cpp:1948
 #, c-format
 msgid "Delete all nets in group '%s'?"
-msgstr ""
+msgstr "그룹 '%s' 에 포함된 모든 네트를 삭제할까요?"
 
 #: pcbnew/dialogs/dialog_net_inspector.cpp:1971
 #: pcbnew/dialogs/dialog_net_inspector.cpp:1972
@@ -24484,31 +24481,29 @@ msgid "Report file"
 msgstr "보고서 파일"
 
 #: pcbnew/dialogs/dialog_net_inspector_base.cpp:44
-#, fuzzy
 msgid "Show zero pad nets"
-msgstr "영역 보이기"
+msgstr "패드가 0개인 네트 보이기"
 
 #: pcbnew/dialogs/dialog_net_inspector_base.cpp:48
-#, fuzzy
 msgid "Group by:"
-msgstr "풋프린트 이름:"
+msgstr "다음 그룹으로 묶기:"
 
 #: pcbnew/dialogs/dialog_net_inspector_base.cpp:54
 #: pcbnew/dialogs/dialog_net_inspector_base.cpp:55
 msgid "Wildcard"
-msgstr ""
+msgstr "와일드카드"
 
 #: pcbnew/dialogs/dialog_net_inspector_base.cpp:56
 msgid "RegEx"
-msgstr ""
+msgstr "정규표현"
 
 #: pcbnew/dialogs/dialog_net_inspector_base.cpp:57
 msgid "Wildcard Substr"
-msgstr ""
+msgstr "와일드카드 부분 문자열"
 
 #: pcbnew/dialogs/dialog_net_inspector_base.cpp:58
 msgid "RegEx Substr"
-msgstr ""
+msgstr "정규표현 부분 문자열"
 
 #: pcbnew/dialogs/dialog_net_inspector_base.cpp:97
 msgid "Create Report..."
@@ -24516,34 +24511,30 @@ msgstr "보고서 만들기..."
 
 #: pcbnew/dialogs/dialog_net_inspector_base.h:72
 #: pcbnew/tools/pcb_actions.cpp:768
-#, fuzzy
 msgid "Net Inspector"
-msgstr "네트 인스펙터"
+msgstr "네트 검사기"
 
 #: pcbnew/dialogs/dialog_netlist.cpp:134
-#, fuzzy
 msgid "Select Netlist"
-msgstr "네트 선택"
+msgstr "네트리스트 선택"
 
 #: pcbnew/dialogs/dialog_netlist.cpp:150
 msgid "Please, choose a valid netlist file."
-msgstr ""
+msgstr "유효한 네트리스트 파일을 선택하세요."
 
 #: pcbnew/dialogs/dialog_netlist.cpp:156 pcbnew/dialogs/dialog_netlist.cpp:191
-#, fuzzy
 msgid "The netlist file does not exist."
-msgstr "%s 네트리스트 파일을 찾을 수 없습니다."
+msgstr "네트리스트 파일이 존재하지 않습니다."
 
 #: pcbnew/dialogs/dialog_netlist.cpp:160
 #: pcbnew/dialogs/dialog_update_pcb.cpp:141
-#, fuzzy
 msgid "Changes Applied to PCB"
-msgstr "라벨로 바꾸기"
+msgstr "PCB에 변경점 반영됨"
 
 #: pcbnew/dialogs/dialog_netlist.cpp:226
-#, fuzzy, c-format
+#, c-format
 msgid "Reading netlist file '%s'.\n"
-msgstr "\"%s\" 네트리스트 파일을 읽고 있습니다.\n"
+msgstr "'%s' 네트리스트 파일을 읽고 있습니다.\n"
 
 #: pcbnew/dialogs/dialog_netlist.cpp:230
 msgid "Using reference designators to match symbols and footprints.\n"
@@ -24551,7 +24542,7 @@ msgstr "참조 지정자를 사용하여 심볼과 풋프린트를 일치시킵�
 
 #: pcbnew/dialogs/dialog_netlist.cpp:232
 msgid "Using tstamps (unique IDs) to match symbols and footprints.\n"
-msgstr ""
+msgstr "tstamp (고유 ID) 를 사용하여 심볼과 풋프린트를 매칭합니다.\n"
 
 #: pcbnew/dialogs/dialog_netlist_base.cpp:25
 msgid "Netlist file:"
@@ -24559,7 +24550,7 @@ msgstr "네트리스트 파일:"
 
 #: pcbnew/dialogs/dialog_netlist_base.cpp:43
 msgid "Link footprints using component tstamps (unique ids)"
-msgstr ""
+msgstr "컴포넌트의 tstamp (고유 ID) 를 사용하여 풋프린트를 연결"
 
 #: pcbnew/dialogs/dialog_netlist_base.cpp:43
 msgid "Link footprints using reference designators"
@@ -24567,35 +24558,35 @@ msgstr "참조 지정자를 이용하여 풋프린트 연결"
 
 #: pcbnew/dialogs/dialog_netlist_base.cpp:45
 msgid "Link Method"
-msgstr "링크 방법"
+msgstr "연결 방법"
 
 #: pcbnew/dialogs/dialog_netlist_base.cpp:47
 msgid ""
 "Select whether to update footprint references to match their currently-"
 "assigned symbols, or to re-assign footprints to symbols which match their "
 "current references."
-msgstr ""
+msgstr "풋프린트 참조를 현재 할당된 심볼과 일치하도록 업데이트할 지, 풋프린트를 현재 참조와 일치하도록 심볼에 재할당할 지 선택하세요."
 
 #: pcbnew/dialogs/dialog_netlist_base.cpp:54
 msgid "Replace footprints with those specified in netlist"
-msgstr ""
+msgstr "네트리스트에 지정된 값으로 풋프린트 대체"
 
 #: pcbnew/dialogs/dialog_netlist_base.cpp:57
 msgid "Delete footprints with no components in netlist"
-msgstr ""
+msgstr "네트리스트에 컴포넌트가 없는 풋프린트 삭제"
 
 #: pcbnew/dialogs/dialog_netlist_base.cpp:60
 msgid "Delete tracks shorting multiple nets"
-msgstr "여러 네트를 단락시키는 트랙 삭제"
+msgstr "여러 네트를 단락시키는 배선 삭제"
 
 #: pcbnew/dialogs/dialog_netlist_base.cpp:63
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:46
 msgid "Delete nets containing only a single pad"
-msgstr ""
+msgstr "한 개의 패드만을 포함한 네트 삭제"
 
 #: pcbnew/dialogs/dialog_netlist_base.cpp:66
 msgid "Generate warnings for pads with no net"
-msgstr ""
+msgstr "네트가 없는 패드에 대하여 경고 생성"
 
 #: pcbnew/dialogs/dialog_netlist_base.cpp:67
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:53
@@ -24603,6 +24594,8 @@ msgid ""
 "Display a warning if a pad in a footprint does not appear in netlist.\n"
 "Only pads on a copper layer and having a name are tested."
 msgstr ""
+"풋프린트에 존재하는 패드가 네트리스트에 보이지 않을 때 경고를 표시합니다.\n"
+"구리 레이어에 존재하고 이름을 가진 패드만 테스트됩니다."
 
 #: pcbnew/dialogs/dialog_netlist_base.h:69
 msgid "Import Netlist"
@@ -24617,14 +24610,12 @@ msgid "Outline smooth:"
 msgstr "외곽선의 매끄러움:"
 
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:120
-#, fuzzy
 msgid "Solid shape"
-msgstr "복합 형상"
+msgstr "솔리드 도형"
 
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:120
-#, fuzzy
 msgid "HatchBorder pattern"
-msgstr "Solder paste Cmp"
+msgstr "해치 외곽선 패턴"
 
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:136
 msgid "degree"
@@ -24632,12 +24623,11 @@ msgstr "각도"
 
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:174
 msgid "Smooth amount:"
-msgstr ""
+msgstr "매끄러움 강도:"
 
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.h:84
-#, fuzzy
 msgid "Non Copper Zones Properties"
-msgstr "라이브러리 컴포넌트 속성"
+msgstr "비 구리 영역 속성"
 
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:81
 #: pcbnew/dialogs/dialog_pad_properties.cpp:699
@@ -24655,27 +24645,27 @@ msgstr "가운데:"
 
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:332
 msgid "Polygon must have at least 3 corners"
-msgstr ""
+msgstr "다각형은 최소 3개 이상의 모서리가 있어야 합니다"
 
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:347
 msgid "Polygon must have at least 3 corners after simplification"
-msgstr ""
+msgstr "다각형은 단순화된 이후에도 3개 이상의 모서리가 있어야 합니다"
 
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:353
 msgid "Polygon can not be self-intersecting"
-msgstr ""
+msgstr "다각형은 자체 교차할 수 없습니다"
 
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:371
 msgid "Note: redundant corners removed"
-msgstr ""
+msgstr "참고: 중복된 모서리 제거됨"
 
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:397
 msgid "Select a corner to add the new corner after."
-msgstr ""
+msgstr "다음에 새 모서리를 추가할 모서리를 선택하세요."
 
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:431
 msgid "Select a corner to delete."
-msgstr "삭제할 모서리를 선택합니다."
+msgstr "삭제할 모서리를 선택하세요."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:481
 #, c-format
@@ -24685,34 +24675,30 @@ msgstr "풋프린트 %s (%s), %s, 회전 %g deg"
 #: pcbnew/dialogs/dialog_pad_properties.cpp:484
 #: pcbnew/dialogs/dialog_text_properties.cpp:235
 msgid "back side (mirrored)"
-msgstr ""
+msgstr "후면 (미러 처리됨)"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:485
 #: pcbnew/dialogs/dialog_text_properties.cpp:235
-#, fuzzy
 msgid "front side"
-msgstr "정면에서 보기"
+msgstr "정면"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:694
-#, fuzzy
 msgid "width"
-msgstr "두께"
+msgstr "폭"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:700
 #: pcbnew/dialogs/dialog_pad_properties.cpp:706
 msgid "from"
-msgstr "에서"
+msgstr "from"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:701
 #: pcbnew/dialogs/dialog_pad_properties.cpp:707
-#, fuzzy
 msgid "to"
-msgstr "자동"
+msgstr "to"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:712
-#, fuzzy
 msgid "center"
-msgstr "가운데"
+msgstr "중심"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:713
 #, fuzzy
@@ -25010,6 +24996,10 @@ msgid ""
 "The width is the smaller value between size X and size Y.\n"
 "Note: IPC norm gives a max value = 0.25mm."
 msgstr ""
+"모서리 반경.\n"
+"패드 폭의 절반 이상이 되면 안 됩니다.\n"
+"사이즈 X와 Y 중 작은 값이 폭이 됩니다.\n"
+"참고: IPC 기준에 의하면 최대치는 0.25mm입니다."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:197
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:247
@@ -25261,7 +25251,7 @@ msgstr "기본 요소 리스트:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:797
 msgid "Note: coordinates are relative to anchor pad, orientation 0."
-msgstr ""
+msgstr "참고: 좌표는 앵커 패드의 상대값이어야 하며, 방향 0입니다."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:818
 #, fuzzy
@@ -26778,7 +26768,7 @@ msgstr "새 풋프린트에 대한 기본 텍스트 항목:"
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:84
 msgid ""
 "Note: a blank reference designator or value will use the footprint name."
-msgstr ""
+msgstr "참고: 빈 참조 지정자 또는 값은 풋프린트 이름을 사용합니다."
 
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:103
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:21
@@ -26944,7 +26934,7 @@ msgstr ""
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:86
 #, c-format
 msgid "Note: zone filling can be slow when < %s."
-msgstr ""
+msgstr "참고: %s < 의 경우에 존 채우기는 느려질 수 있습니다."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:98
 msgid "Zone fill strategy"
@@ -27078,6 +27068,8 @@ msgid ""
 "absolute minimum and cannot be reduced by custom rules or other settings. "
 "(Note: does not apply to milled holes.)"
 msgstr ""
+"드릴로 뚫은 두 개의 구멍 사이의 최소 유격.   이 값이 설정되면, 해당 값은 절대 최소값이 되며 사용자 지정 규칙 또는 기타 설정으로 "
+"줄일 수 없게 됩니다. (참고: 밀링된 구멍에는 적용되지 않습니다.)"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:354
 #, fuzzy
@@ -27119,6 +27111,8 @@ msgid ""
 "this can improve legibility.  (Note: does not apply to multiple shapes "
 "within a single footprint.)"
 msgstr ""
+"같은 실크스크린 레이어 상의 두 개체에 대한 최소 유격.  이 값이 설정될 경우, 가독성을 높일 수 있습니다. (참고: 단일 풋 프린트 "
+"내의 여러 모양에는 적용되지 않습니다.)"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:421
 msgid "Use the Physical Stackup page to change the number of copper layers."
@@ -27837,7 +27831,7 @@ msgstr ""
 msgid ""
 "Note: Solder paste clearances (absolute and relative) are added to determine "
 "the final clearance."
-msgstr ""
+msgstr "참고: 솔더 페이스트 유격 (상대값과 절대값 모두) 은 최종 유격을 결정하는 데에 더해져 사용됩니다."
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:82
 msgid "Cancel Changes?"
@@ -31423,6 +31417,9 @@ msgid ""
 "imported. Note: KiCad's version of 'Net Class' is closer to CADSTAR's 'Net "
 "Route Code' (which has been imported for all nets)."
 msgstr ""
+"CADSTAR 디자인은 '네트 클래스' 가 할당된 네트를 포함합니다. KiCad는 CADSTAR의 네트 클래스와 호환되는 클래스를 갖고 "
+"있지 않기 때문에, 해당 요소들은 가져올 수 없습니다. 참고: KiCad의 '네트 클래스' 버전은 CADSTAR의 '네트 라우터 코드' "
+"와 더 비슷합니다 (모든 네트에 대해 가져오기 됨)."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3769
 msgid ""
