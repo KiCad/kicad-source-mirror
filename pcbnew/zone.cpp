@@ -1169,10 +1169,15 @@ bool ZONE::BuildSmoothedPoly( SHAPE_POLY_SET& aSmoothedPoly, PCB_LAYER_ID aLayer
     if( GetNumCorners() <= 2 )  // malformed zone. polygon calculations will not like it ...
         return false;
 
+    // Processing of arc shapes in zones is not yet supported because Clipper can't do boolean
+    // operations on them.  The poly outline must be flattened first.
+    SHAPE_POLY_SET flattened = *m_Poly;
+    flattened.ClearArcs();
+
     if( GetIsRuleArea() )
     {
         // We like keepouts just the way they are....
-        aSmoothedPoly = *m_Poly;
+        aSmoothedPoly = flattened;
         return true;
     }
 
@@ -1210,19 +1215,19 @@ bool ZONE::BuildSmoothedPoly( SHAPE_POLY_SET& aSmoothedPoly, PCB_LAYER_ID aLayer
     std::vector<ZONE*> interactingZones;
     GetInteractingZones( aLayer, &interactingZones );
 
-    SHAPE_POLY_SET* maxExtents = m_Poly;
+    SHAPE_POLY_SET* maxExtents = &flattened;
     SHAPE_POLY_SET  withFillets;
 
-    aSmoothedPoly = *m_Poly;
+    aSmoothedPoly = flattened;
 
     // Should external fillets (that is, those applied to concave corners) be kept?  While it
     // seems safer to never have copper extend outside the zone outline, 5.1.x and prior did
     // indeed fill them so we leave the mode available.
     if( keepExternalFillets )
     {
-        withFillets = *m_Poly;
+        withFillets = flattened;
         smooth( withFillets );
-        withFillets.BooleanAdd( *m_Poly, SHAPE_POLY_SET::PM_FAST );
+        withFillets.BooleanAdd( flattened, SHAPE_POLY_SET::PM_FAST );
         maxExtents = &withFillets;
     }
 
