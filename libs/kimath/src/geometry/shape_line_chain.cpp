@@ -228,7 +228,10 @@ void SHAPE_LINE_CHAIN::splitArc( ssize_t aPtIndex, bool aCoincident )
         m_arcs.insert( m_arcs.begin() + currArcIdx + 1, newArc2 );
 
         if( aCoincident )
+        {
             m_shapes[aPtIndex].second = currArcIdx + 1;
+            aPtIndex++;
+        }
 
         // Only change the arc indices for the second half of the point range
         for( int i = aPtIndex; i < PointCount(); i++ )
@@ -736,11 +739,13 @@ int SHAPE_LINE_CHAIN::NextShape( int aPointIndex, bool aForwards ) const
     if( aPointIndex < 0 )
         aPointIndex += PointCount();
 
+    int lastIndex = PointCount() - 1;
+
     // First or last point?
-    if( ( aForwards && aPointIndex == PointCount() - 1 ) ||
+    if( ( aForwards && aPointIndex == lastIndex ) ||
         ( !aForwards && aPointIndex == 0 ) )
     {
-        return -1;
+            return -1; // we don't want to wrap around
     }
 
     int delta = aForwards ? 1 : -1;
@@ -760,11 +765,18 @@ int SHAPE_LINE_CHAIN::NextShape( int aPointIndex, bool aForwards ) const
     if( arcIndex == SHAPE_IS_PT || !aForwards )
         arcIndex = m_shapes[aPointIndex].first; // Not a shared point or we are going backwards
 
-    int numPoints = static_cast<int>( m_shapes.size() );
 
     // Now skip the rest of the arc
-    while( aPointIndex < numPoints && aPointIndex >= 0 && m_shapes[aPointIndex].first == arcIndex )
+    while( aPointIndex < lastIndex && aPointIndex >= 0 && m_shapes[aPointIndex].first == arcIndex )
         aPointIndex += delta;
+
+    if( aPointIndex == lastIndex )
+    {
+        if( !m_closed )
+            return -1;
+        else
+            return lastIndex; // Segment between last point and the start
+    }
 
     bool indexStillOnArc = alg::pair_contains( m_shapes[aPointIndex], arcIndex );
 
@@ -843,39 +855,96 @@ const SHAPE_LINE_CHAIN SHAPE_LINE_CHAIN::Slice( int aStartIndex, int aEndIndex )
 
     int numPoints = static_cast<int>( m_points.size() );
 
+
+    if( IsArcSegment( aStartIndex ) && !IsArcStart( aStartIndex ) )
+    {
+        // Cutting in middle of an arc, lets split it
+        ssize_t          arcIndex = ArcIndex( aStartIndex );
+        const SHAPE_ARC& currentArc = Arc( arcIndex );
+
+        // Copy the points as arc points
+        for( size_t i = aStartIndex; arcIndex == ArcIndex( i ); i++ )
+        {
+            rv.m_points.push_back( m_points[i] );
+            rv.m_shapes.push_back( { rv.m_arcs.size(), SHAPE_IS_PT } );
+            rv.m_bbox.Merge( m_points[i] );
+        }
+
+        // Create a new arc from the existing one, with different start point.
+        SHAPE_ARC newArc;
+
+        VECTOR2I newArcStart = m_points[aStartIndex];
+
+        newArc.ConstructFromStartEndCenter( newArcStart, currentArc.GetP1(),
+                                             currentArc.GetCenter(),
+                                             currentArc.IsClockwise() );
+
+
+        rv.m_arcs.push_back( newArc );
+
+        aStartIndex += rv.PointCount();
+    }
+
     for( int i = aStartIndex; i <= aEndIndex && i < numPoints; i++ )
     {
-        if( m_shapes[i] != SHAPES_ARE_PT )
+        if( IsArcStart( i ) )
         {
-            int  arcIdx = ArcIndex( i );
-            bool wholeArc = true;
-            int  arcStart = i;
-            size_t prevIdx = static_cast<size_t>( i ) - 1;
+            const SHAPE_ARC &currentArc = Arc( ArcIndex( i ) );
+            int  nextShape = NextShape( i );
+            bool isLastShape = nextShape < 0;
 
-            if( i > 0 && IsArcSegment( prevIdx ) && ArcIndex( prevIdx ) != arcIdx )
-                wholeArc = false;
-
-            while( i < numPoints && ArcIndex( i ) == arcIdx )
-                i++;
-
-            i--;
-
-            if( i > aEndIndex )
-                wholeArc = false;
-
-            if( wholeArc )
+            if(  ( isLastShape && aEndIndex != ( numPoints - 1 ) )
+                     || ( nextShape > aEndIndex ) )
             {
-                rv.Append( m_arcs[arcIdx] );
+                if( i == aEndIndex )
+                {
+                    // Single point on an arc, just append the single point
+                    rv.Append( m_points[i] );
+                    return rv;
+                }
+
+                // Cutting in middle of an arc, lets split it
+                ssize_t          arcIndex = ArcIndex( i );
+                const SHAPE_ARC& currentArc = Arc( arcIndex );
+
+                // Copy the points as arc points
+                for( ; i <= aEndIndex; i++ )
+                {
+                    rv.m_points.push_back( m_points[i] );
+                    rv.m_shapes.push_back( { rv.m_arcs.size(), SHAPE_IS_PT } );
+                    rv.m_bbox.Merge( m_points[i] );
+                }
+
+                // Create a new arc from the existing one, with different end point.
+                SHAPE_ARC newArc;
+
+                VECTOR2I newArcEnd = m_points[aEndIndex];
+
+                newArc.ConstructFromStartEndCenter( currentArc.GetP0(), newArcEnd,
+                                                    currentArc.GetCenter(),
+                                                    currentArc.IsClockwise() );
+
+
+                rv.m_arcs.push_back( newArc );
+
+                return rv;
             }
             else
             {
-                //@todo need to split up the arc
-                rv.Append( m_points[arcStart] );
-                i = arcStart;
+                // append the whole arc
+                rv.Append( currentArc );
             }
+
+            if( isLastShape )
+                return rv;
+
+            i = nextShape;
+            i--;
         }
         else
         {
+            wxASSERT_MSG( !IsArcSegment( i ), "Still on an arc segment, we missed something..." );
+
             rv.Append( m_points[i] );
         }
     }

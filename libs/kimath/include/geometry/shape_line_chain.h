@@ -321,16 +321,17 @@ public:
     }
 
     /**
-     * Return the vertex index of the next shape in the chain, or -1 if \a aPoint is in the last
-     * shape.
+     * Return the vertex index of the next shape in the chain, or -1 if \a aPointIndex is the
+     * last shape.
      *
-     * If \a aPoint is the start of a segment, this will be ( aPoint + 1 ).  If \a aPoint is
-     * part of an arc, this will be the index of the start of the next shape after the arc,
-     * in other words, the last point of the arc.
+     * If \a aPointIndex is the start of a segment, this will be ( aPointIndex + 1 ).  If
+     * \a aPointIndex is part of an arc, this will be the index of the start of the next shape after
+     * the arc, in other words, the last point of the arc.
      *
      * @param aPointIndex is a vertex in the chain.
      * @param aForwards is true if the next shape is desired, false for previous shape.
-     * @return the vertex index of the start of the next shape after aPoint's shape.
+     * @return the vertex index of the start of the next shape after aPoint's shape or -1 if
+     * the end was reached.
      */
     int NextShape( int aPointIndex, bool aForwards = true ) const;
 
