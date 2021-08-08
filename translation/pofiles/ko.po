@@ -11,7 +11,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
 "PO-Revision-Date: 2021-08-08 06:53+0000\n"
-"Last-Translator: jehunseo <benbot591@gmail.com>\n"
+"Last-Translator: 박준언 <joonun1696@pusan.ac.kr>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
 "Language: ko\n"
@@ -15611,9 +15611,8 @@ msgid "Add Label"
 msgstr "라벨 추가"
 
 #: eeschema/tools/ee_actions.cpp:311
-#, fuzzy
 msgid "Add a net label"
-msgstr "라벨 추가"
+msgstr "네트 라벨 추가"
 
 #: eeschema/tools/ee_actions.cpp:317
 #, fuzzy
@@ -15660,18 +15659,16 @@ msgid "Add text"
 msgstr "텍스트 추가"
 
 #: eeschema/tools/ee_actions.cpp:350
-#, fuzzy
 msgid "Add Image"
-msgstr "선 추가"
+msgstr "이미지 추가"
 
 #: eeschema/tools/ee_actions.cpp:350
 msgid "Add bitmap image"
-msgstr ""
+msgstr "비트맵 이미지 추가"
 
 #: eeschema/tools/ee_actions.cpp:355
-#, fuzzy
 msgid "Finish Sheet"
-msgstr "시트로 들어가기"
+msgstr "시트 완료"
 
 #: eeschema/tools/ee_actions.cpp:355
 msgid "Finish drawing sheet"
@@ -15687,22 +15684,20 @@ msgid "Duplicates the last drawn item"
 msgstr "선택된 항목 잘라내기"
 
 #: eeschema/tools/ee_actions.cpp:372 pcbnew/tools/pcb_actions.cpp:290
-#, fuzzy
 msgid "Rotate Clockwise"
-msgstr "블록 회전"
+msgstr "시계 방향으로 회전"
 
 #: eeschema/tools/ee_actions.cpp:372 pcbnew/tools/pcb_actions.cpp:290
 msgid "Rotates selected item(s) clockwise"
-msgstr ""
+msgstr "선택한 항목(들) 시계 방향으로 회전"
 
 #: eeschema/tools/ee_actions.cpp:378 pcbnew/tools/edit_tool.cpp:1477
 msgid "Rotate"
 msgstr "회전"
 
 #: eeschema/tools/ee_actions.cpp:378
-#, fuzzy
 msgid "Rotates selected item(s) counter-clockwise"
-msgstr "블록 회전"
+msgstr "선택한 항목(들) 반시계 방향으로 회전"
 
 #: eeschema/tools/ee_actions.cpp:384
 #, fuzzy
