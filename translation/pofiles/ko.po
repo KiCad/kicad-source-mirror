@@ -11,7 +11,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
 "PO-Revision-Date: 2021-08-08 08:28+0000\n"
-"Last-Translator: jehunseo <benbot591@gmail.com>\n"
+"Last-Translator: 박준언 <joonun1696@pusan.ac.kr>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
 "Language: ko\n"
@@ -22706,7 +22706,7 @@ msgstr "파일 %s가 이미 존재합니다."
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:21
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:22
 msgid "File name:"
-msgstr "파일명:"
+msgstr "파일 이름:"
 
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:25
 msgid "Select an IDF export filename"
