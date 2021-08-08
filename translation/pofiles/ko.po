@@ -11,7 +11,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
 "PO-Revision-Date: 2021-08-08 07:22+0000\n"
-"Last-Translator: Ji Yoon Choi <chichoon.choi@gmail.com>\n"
+"Last-Translator: jeongsuAn <dks9467@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
 "Language: ko\n"
@@ -5718,8 +5718,9 @@ msgid "Next Marker"
 msgstr "다음 마커"
 
 #: common/tool/actions.cpp:255
+#, fuzzy
 msgid "Go to next marker in Checker window"
-msgstr "체커 창의 다음 마커로 이동"
+msgstr "검사기 창에서 다음 마커로 이동"
 
 #: common/tool/actions.cpp:260
 msgid "Exclude Marker"
@@ -5739,15 +5740,15 @@ msgstr "화면에 맞게 확대"
 
 #: common/tool/actions.cpp:287
 msgid "Zoom to Objects"
-msgstr "개체로 확대/축소"
+msgstr "개체에 맞게 확대"
 
 #: common/tool/actions.cpp:298
 msgid "Zoom In at Cursor"
-msgstr "커서 확대"
+msgstr "커서를 중심으로 확대"
 
 #: common/tool/actions.cpp:309
 msgid "Zoom Out at Cursor"
-msgstr "커서 축소"
+msgstr "커서를 중심으로 축소"
 
 #: common/tool/actions.cpp:315 common/widgets/mathplot.cpp:1761
 #: eeschema/sim/sim_plot_frame_base.cpp:87
@@ -5760,8 +5761,9 @@ msgid "Zoom Out"
 msgstr "축소"
 
 #: common/tool/actions.cpp:333
+#, fuzzy
 msgid "Zoom to Selection"
-msgstr "선택 확대/축소"
+msgstr "선택 영역 확대"
 
 #: common/tool/actions.cpp:346
 msgid "Cursor Up"
