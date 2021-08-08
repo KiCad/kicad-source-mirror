@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
-"PO-Revision-Date: 2021-08-08 08:29+0000\n"
+"PO-Revision-Date: 2021-08-08 10:14+0000\n"
 "Last-Translator: Ji Yoon Choi <chichoon.choi@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
@@ -9474,9 +9474,8 @@ msgstr "스크립트 생성기 속성"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:50
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:201
-#, fuzzy
 msgid "Alternate Pin Name"
-msgstr "대체 비아 드릴"
+msgstr "대체 핀 이름"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:188
 #: eeschema/dialogs/dialog_symbol_properties.cpp:335
@@ -13684,9 +13683,8 @@ msgid "Invalid pin number"
 msgstr "잘못된 핀 번호"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1348
-#, fuzzy
 msgid "Invalid alternate pin name"
-msgstr "대체 비아 드릴"
+msgstr "올바르지 않은 대체 핀 이름"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1513
 #, fuzzy
@@ -17069,9 +17067,8 @@ msgid "Clear Recent Zip Files"
 msgstr "압축 파일 풀기"
 
 #: gerbview/gerbview_frame.cpp:75 gerbview/menubar.cpp:89
-#, fuzzy
 msgid "Clear Recent Drill Files"
-msgstr "드릴 파일 만들기"
+msgstr "최근에 불러온 드릴 파일 목록 삭제"
 
 #: gerbview/gerbview_frame.cpp:77 gerbview/menubar.cpp:107
 #, fuzzy
@@ -21480,9 +21477,8 @@ msgid "Components"
 msgstr "컴포넌트"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:720
-#, fuzzy
 msgid "Drill holes"
-msgstr "드릴 파일"
+msgstr "드릴 홀"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:727
 #, c-format
@@ -21532,9 +21528,8 @@ msgid "Stop Layer"
 msgstr "Top Layer"
 
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:258
-#, fuzzy
 msgid "Drill Holes"
-msgstr "드릴 파일"
+msgstr "드릴 홀"
 
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:265
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:214
@@ -21682,9 +21677,8 @@ msgid ""
 msgstr ""
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:51
-#, fuzzy
 msgid "Hide auto-generated net names"
-msgstr "대체 비아 드릴"
+msgstr "자동 생성된 네트 이름 숨기기"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:55
 #, fuzzy
@@ -23564,111 +23558,102 @@ msgstr "사용가능한 풋프린트 생성기"
 
 #: pcbnew/dialogs/dialog_footprint_wizard_list_base.cpp:70
 msgid "Search paths:"
-msgstr ""
+msgstr "경로 검색:"
 
 #: pcbnew/dialogs/dialog_footprint_wizard_list_base.cpp:77
 msgid "Not loadable python scripts:"
-msgstr ""
+msgstr "불러올 수 없는 python 스크립트:"
 
 #: pcbnew/dialogs/dialog_footprint_wizard_list_base.cpp:84
-#, fuzzy
 msgid "Show Trace"
-msgstr "텍스트 보이기"
+msgstr "트레이스 보이기"
 
 #: pcbnew/dialogs/dialog_footprint_wizard_list_base.cpp:98
-#, fuzzy
 msgid "Update Python Modules"
-msgstr "업데이트 설정"
+msgstr "python 모듈 업데이트"
 
 #: pcbnew/dialogs/dialog_footprint_wizard_list_base.h:66
-#, fuzzy
 msgid "Footprint Generators"
-msgstr "풋프린트 회전"
+msgstr "풋프린트 생성기"
 
 #: pcbnew/dialogs/dialog_footprint_wizard_list_base.h:85
 msgid "Traceback of Python Script Errors"
-msgstr ""
+msgstr "python 스크립트 에러에 대한 Traceback"
 
 #: pcbnew/dialogs/dialog_fp_plugin_options.cpp:37
 msgid ""
 "Select an <b>Option Choice</b> in the listbox above, and then click the "
 "<b>Append Selected Option</b> button."
-msgstr ""
+msgstr "위의 리스트 박스에서 <b>옵션 선택지</b>를 고른 뒤, <b>선택한 옵션 추가</b>버튼을 누릅니다."
 
 #: pcbnew/dialogs/dialog_fp_plugin_options.cpp:62
-#, fuzzy, c-format
+#, c-format
 msgid "Options for Library '%s'"
-msgstr "라이브러리 로딩 '%s'"
+msgstr "라이브러리 '%s' 에 대한 옵션"
 
 #: pcbnew/dialogs/dialog_fp_plugin_options_base.cpp:25
-#, fuzzy
 msgid "Plugin Options"
-msgstr "핀 설정"
+msgstr "플러그인 옵션"
 
 #: pcbnew/dialogs/dialog_fp_plugin_options_base.cpp:43
-#, fuzzy
 msgid "Option"
-msgstr "설정"
+msgstr "옵션"
 
 #: pcbnew/dialogs/dialog_fp_plugin_options_base.cpp:77
-#, fuzzy
 msgid "Option Choices"
-msgstr "설정"
+msgstr "옵션 선택지"
 
 #: pcbnew/dialogs/dialog_fp_plugin_options_base.cpp:80
 msgid "Options supported by current plugin"
-msgstr ""
+msgstr "현재 플러그인에 의해 지원되는 옵션"
 
 #: pcbnew/dialogs/dialog_fp_plugin_options_base.cpp:84
-#, fuzzy
 msgid "<<    Append Selected Option"
-msgstr "연결 삭제"
+msgstr "<<    선택한 옵션 추가"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:48
 msgid "ASCII"
-msgstr ""
+msgstr "ASCII"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:48
 msgid "CSV"
-msgstr ""
+msgstr "CSV"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:48
 msgid "Gerber (very experimental)"
-msgstr ""
+msgstr "거버 (매우 실험적 요소)"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:50
-#, fuzzy
 msgid "Format"
-msgstr "플로트 형식"
+msgstr "형식"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:60
 msgid "Separate files for front, back"
-msgstr "앞 뒤가 분리된 별도의 파일"
+msgstr "정면과 후면을 별도의 파일로 분리"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:60
 msgid "Single file for board"
-msgstr ""
+msgstr "보드에 대하여 단 하나의 파일"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:62
-#, fuzzy
 msgid "Files"
-msgstr "파일 (&F)"
+msgstr "파일"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:64
 msgid ""
 "Creates 2 files: one for each board side or\n"
 "Creates only one file containing all footprints to place\n"
 msgstr ""
+"각 보드 면마다 하나씩 총 두 개의 파일을 생성하거나,\n"
+"모든 배치된 풋프린트를 포함하는 단 하나의 파일을 생성합니다\n"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:74
-#, fuzzy
 msgid "Exclude all footprints with through hole pads"
-msgstr "풋프린트 압축 만들기"
+msgstr "스루홀 패드가 존재하는 모든 풋프린트를 제외"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:77
-#, fuzzy
 msgid "Include board edge layer"
-msgstr "에지 레이어 포함"
+msgstr "보드 에지 레이어 포함"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:80
 #: pcbnew/dialogs/dialog_plot_base.cpp:108
@@ -23676,31 +23661,28 @@ msgid "Use drill/place file origin"
 msgstr "드릴/파일 배치 원점을 사용"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.h:73
-#, fuzzy
 msgid "Generate Placement Files"
-msgstr "새 파일 만들기"
+msgstr "부품 배치 파일 생성"
 
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:41
-#, fuzzy
 msgid "Export to GenCAD settings"
-msgstr "패드 설정 내보내기"
+msgstr "GenCAD 설정으로 내보내기"
 
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:49
-#, fuzzy
 msgid "Select a GenCAD export filename"
-msgstr "보드 저장"
+msgstr "GenCAD로 내보낼 파일 이름 선택"
 
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:136
 msgid "Flip bottom footprint padstacks"
-msgstr ""
+msgstr "풋프린트 패드스택의 바닥면 뒤집기"
 
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:137
 msgid "Generate unique pin names"
-msgstr ""
+msgstr "고유한 핀 이름 생성"
 
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:138
 msgid "Generate a new shape for each footprint instance (do not reuse shapes)"
-msgstr ""
+msgstr "각 풋프린트 인스턴스에 대하여 새로운 도형 생성 (도형 재사용 하지 않음)"
 
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:139
 msgid "Use drill/place file origin as origin"
@@ -23708,26 +23690,24 @@ msgstr "드릴/파일 배치 원점을 원점으로 사용"
 
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:140
 msgid "Save the origin coordinates in the file"
-msgstr ""
+msgstr "원점 좌표를 파일에 저장"
 
 #: pcbnew/dialogs/dialog_gendrill.cpp:78
-#, fuzzy
 msgid "Generate Drill File"
-msgstr "드릴 파일 만들기"
+msgstr "드릴 파일 생성"
 
 #: pcbnew/dialogs/dialog_gendrill.cpp:79
-#, fuzzy
 msgid "Generate Map File"
-msgstr "새 파일 만들기"
+msgstr "맵 파일 생성"
 
 #: pcbnew/dialogs/dialog_gendrill.cpp:313
 msgid "Cannot make path relative (target volume different from file volume)!"
-msgstr ""
+msgstr "상대 경로를 만들 수 없습니다 (파일 볼륨과 타겟 볼륨이 다릅니다)!"
 
 #: pcbnew/dialogs/dialog_gendrill.cpp:391
-#, fuzzy, c-format
+#, c-format
 msgid "Could not write drill and/or map files to folder '%s'."
-msgstr "%s 파일을 만들 수 없습니다."
+msgstr "'%s' 폴더에 드릴과 (또는) 맵 파일을 쓸 수 없습니다."
 
 #: pcbnew/dialogs/dialog_gendrill.cpp:440
 msgid "Save Drill Report File"
@@ -23738,27 +23718,26 @@ msgid "Output folder:"
 msgstr "출력 폴더:"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:42
-#, fuzzy
 msgid "Drill File Format"
-msgstr "드릴 맵 파일"
+msgstr "드릴 파일 형식"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:44
 msgid "Excellon"
-msgstr ""
+msgstr "Excellon"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:50
-#, fuzzy
 msgid "Mirror Y axis"
-msgstr "Y축 미러"
+msgstr "Y축을 기준으로 미러"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:51
 msgid ""
 "Not recommended.\n"
 "Used mostly by users who make the boards themselves."
 msgstr ""
+"권장되지 않습니다.\n"
+"주로 기판을 직접 제작하는 사용자들이 이용합니다."
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:55
-#, fuzzy
 msgid "Minimal header"
 msgstr "최소 헤더"
 
@@ -23767,10 +23746,12 @@ msgid ""
 "Not recommended.\n"
 "Only use it for board houses which do not accept fully featured headers."
 msgstr ""
+"권장되지 않습니다.\n"
+"모든 기능을 갖춘 헤더를 접수하지 않는 기판 제작 업체용으로만 사용하세요."
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:60
 msgid "PTH and NPTH in single file"
-msgstr ""
+msgstr "PTH와 NPTH를 하나의 파일로 합치기"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:61
 msgid ""
@@ -23778,20 +23759,20 @@ msgid ""
 "Only use for board houses which ask for merged PTH and NPTH into a single "
 "file."
 msgstr ""
+"권장되지 않습니다.\n"
+"PTH와 NPTH를 하나의 파일로 합쳐 접수받는 기판 제작 업체용으로만 사용하세요."
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:65
 msgid "Use route command (recommended)"
-msgstr ""
+msgstr "라우트 명령어 사용 (권장)"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:65
-#, fuzzy
 msgid "Use alternate drill mode"
-msgstr "고대비 모드 표시"
+msgstr "대체 드릴 모드 사용"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:67
-#, fuzzy
 msgid "Oval Holes Drill Mode"
-msgstr "3D 표시"
+msgstr "타원 홀 드릴 모드"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:69
 msgid ""
@@ -23800,15 +23781,18 @@ msgid ""
 " \"Use alternate mode\" uses another drill/ route command (G85)\n"
 "(Use it only if the recommended command does not work)"
 msgstr ""
+"타원형 홀은 기판 제조 업체에 문제를 자주 일으킵니다.\n"
+"\"라우트 명령어 사용\" 은 G00 라우트 명령어를 사용합니다 (권장합니다)\n"
+"\"대체 모드\" 는 다른 드릴 / 라우트 명령어를 사용합니다 (G85)\n"
+"(권장하는 명령어가 동작하지 않을 때만 사용하세요)"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:76
 msgid "Gerber X2"
 msgstr "거버 X2"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:82
-#, fuzzy
 msgid "PostScript"
-msgstr "PS 플로트"
+msgstr "PostScript"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:82
 #: pcbnew/dialogs/dialog_plot_base.cpp:27
@@ -23816,13 +23800,12 @@ msgid "Gerber"
 msgstr "거버"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:84
-#, fuzzy
 msgid "Map File Format"
-msgstr "플로트 형식"
+msgstr "맵 파일 형식"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:86
 msgid "Creates a drill map in PS, HPGL or other formats"
-msgstr ""
+msgstr "PS, HPGL 또는 다른 형식으로 드릴 맵을 생성합니다"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:98
 msgid "Drill Origin"
@@ -23832,87 +23815,77 @@ msgstr "드릴 원점"
 msgid ""
 "Choose the coordinate origin: absolute or relative to the drill/place file "
 "origin"
-msgstr ""
+msgstr "좌표 원점 선택: 절대 위치 또는 드릴/배치 파일의 원점에 대한 상대 위치"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:106
-#, fuzzy
 msgid "Drill Units"
 msgstr "드릴 단위"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:110
-#, fuzzy
 msgid "Decimal format (recommended)"
-msgstr "십진수 형식"
+msgstr "십진수 형식 (권장)"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:110
-#, fuzzy
 msgid "Suppress leading zeros"
-msgstr "앞자리 0 표시하지 않음"
+msgstr "앞 자리의 0 표시하지 않음"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:110
-#, fuzzy
 msgid "Suppress trailing zeros"
-msgstr "뒷자리 0 표시하지 않음"
+msgstr "뒷 자리의 0 표시하지 않음"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:110
-#, fuzzy
 msgid "Keep zeros"
-msgstr "영점 유지"
+msgstr "0 표시 유지"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:112
-#, fuzzy
 msgid "Zeros Format"
-msgstr "0 자리 형식"
+msgstr "0 표시 형식"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:114
 msgid "Choose EXCELLON numbers notation"
-msgstr ""
+msgstr "EXCELLON 수 표기법 선택"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:128 pcbnew/pcb_dimension.cpp:312
 msgid "Precision"
 msgstr "정밀도"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:142
-#, fuzzy
 msgid "Hole Counts"
-msgstr "모듈 개수"
+msgstr "홀 개수"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:149
 msgid "Plated pads:"
-msgstr ""
+msgstr "도금된 패드:"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:157
 msgid "Non-plated pads:"
-msgstr ""
+msgstr "도금되지 않은 패드:"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:181
 msgid "Buried vias:"
 msgstr "숨겨진 비아:"
 
 #: pcbnew/dialogs/dialog_gendrill_base.h:91
-#, fuzzy
 msgid "Generate Drill Files"
-msgstr "드릴 파일 만들기"
+msgstr "드릴 파일 생성"
 
 #: pcbnew/dialogs/dialog_get_footprint_by_name_base.cpp:28
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:66
-#, fuzzy
 msgid "Reference designator:"
-msgstr "사용자 지정 에디터:"
+msgstr "참조 지정자:"
 
 #: pcbnew/dialogs/dialog_get_footprint_by_name_base.cpp:35
 msgid "(specify multiple items separated by spaces for successive placement)"
-msgstr ""
+msgstr "(연속 배치를 위해 공백으로 구분된 여러 항목을 지정)"
 
 #: pcbnew/dialogs/dialog_get_footprint_by_name_base.cpp:39
-#, fuzzy
 msgid "Available footprints:"
-msgstr "파일 이름:"
+msgstr "사용 가능한 풋프린트:"
 
 #: pcbnew/dialogs/dialog_get_footprint_by_name_base.h:56
 #: pcbnew/tools/pcb_actions.cpp:246
 msgid "Get and Move Footprint"
-msgstr "풋프린트 이동"
+msgstr "풋 프린트 가져오기 및 이동"
 
 #: pcbnew/dialogs/dialog_global_deletion.cpp:110
 msgid "Are you sure you want to delete the entire board?"
@@ -23923,7 +23896,6 @@ msgid "Are you sure you want to delete the selected items?"
 msgstr "선택한 항목을 삭제 하겠습니까?"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:23
-#, fuzzy
 msgid "Items to Delete"
 msgstr "삭제할 항목"
 
@@ -23931,7 +23903,6 @@ msgstr "삭제할 항목"
 #: pcbnew/tools/board_editor_control.cpp:83
 #: pcbnew/widgets/appearance_controls.cpp:343
 #: pcbnew/widgets/panel_selection_filter_base.cpp:55
-#, fuzzy
 msgid "Zones"
 msgstr "영역"
 
@@ -23941,7 +23912,6 @@ msgstr "보드 외곽선"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:34
 #: pcbnew/widgets/panel_selection_filter_base.cpp:51
-#, fuzzy
 msgid "Graphics"
 msgstr "그래픽"
 
@@ -23951,68 +23921,55 @@ msgid "Footprints"
 msgstr "풋프린트"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:40
-#, fuzzy
 msgid "Tracks && vias"
-msgstr "트랙 작업 (&T)"
+msgstr "배선 && 비아"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:43
-#, fuzzy
 msgid "Markers"
-msgstr "마커 삭제"
+msgstr "마커"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:46
-#, fuzzy
 msgid "Clear board"
 msgstr "보드 비우기"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:55
-#, fuzzy
 msgid "Filter Settings"
-msgstr "페이지 설정"
+msgstr "설정 필터링"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:57
-#, fuzzy
 msgid "Locked graphics"
-msgstr "트랙 이동"
+msgstr "잠긴 그래픽"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:60
-#, fuzzy
 msgid "Unlocked graphics"
-msgstr "잠김 트랙 포함"
+msgstr "잠기지 않은 그래픽"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:63
-#, fuzzy
 msgid "Locked footprints"
-msgstr "풋프린트 이동"
+msgstr "잠긴 풋프린트"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:66
-#, fuzzy
 msgid "Unlocked footprints"
-msgstr "풋프린트 이동"
+msgstr "잠기지 않은 풋프린트"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:70
-#, fuzzy
 msgid "Locked tracks"
-msgstr "트랙 이동"
+msgstr "잠긴 배선"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:73
-#, fuzzy
 msgid "Unlocked tracks"
-msgstr "잠김 트랙 포함"
+msgstr "잠기지 않은 배선"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:84
 #: pcbnew/widgets/appearance_controls.cpp:691
-#, fuzzy
 msgid "All layers"
-msgstr "모든 레이어 지우기"
+msgstr "모든 레이어"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:84
-#, fuzzy
 msgid "Current layer only"
-msgstr "현재 값"
+msgstr "현재 레이어만"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:86
-#, fuzzy
 msgid "Layer Filter"
 msgstr "레이어 필터"
 
@@ -24021,42 +23978,38 @@ msgid "Current layer:"
 msgstr "현재 레이어:"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.h:74
-#, fuzzy
 msgid "Delete Items"
 msgstr "항목 삭제"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:213
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:135
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:55
-#, fuzzy
 msgid "Silk Layers"
-msgstr "레이어"
+msgstr "실크 레이어"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:214
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:136
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:56
 msgid "Copper Layers"
-msgstr "구리층"
+msgstr "구리 레이어"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:215
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:137
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:57
-#, fuzzy
 msgid "Edge Cuts"
-msgstr "에지"
+msgstr "기판 외형"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:216
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:138
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:58
 msgid "Courtyards"
-msgstr ""
+msgstr "코트야드"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:217
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:139
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:59
-#, fuzzy
 msgid "Fab Layers"
-msgstr "레이어"
+msgstr "Fab 레이어"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:218
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:140
@@ -24369,7 +24322,7 @@ msgstr "일치하지 않는 레이어"
 
 #: pcbnew/dialogs/dialog_imported_layers_base.cpp:32
 msgid "Imported Layers"
-msgstr "가져온 레이어"
+msgstr "불러온 레이어"
 
 #: pcbnew/dialogs/dialog_imported_layers_base.cpp:36
 #, fuzzy
@@ -25495,13 +25448,12 @@ msgid "Do not plot the contents of the PCB edge layer on any other layers."
 msgstr ""
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:98
-#, fuzzy
 msgid "Sketch pads on fab layers"
-msgstr "모든 레이어에 패드 인쇄/플로트"
+msgstr "Fab 레이어 위에 패드 그리기"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:99
 msgid "Include pad outlines on F.Fab and B.Fab layers when plotting"
-msgstr ""
+msgstr "플롯 시, F.Fab 레이어와 B.Fab 레이어에 패드 외곽선을 포함"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:103
 msgid "Do not tent vias"
@@ -27281,12 +27233,11 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:60
 msgid "If you want a fabrication layer for the front side of the board"
-msgstr ""
+msgstr "기판의 정면에 기판 제조 레이어를 사용하고 싶은 경우"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:64
-#, fuzzy
 msgid "Fab_Front"
-msgstr "Draft layer"
+msgstr "Fab_Front"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:67
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:631
@@ -27708,12 +27659,11 @@ msgstr "Draft layer"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:624
 msgid "If you want a fabrication layer for the back side of the board"
-msgstr ""
+msgstr "기판의 후면에 기판 제조 레이어를 사용하고 싶은 경우"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:628
-#, fuzzy
 msgid "Fab_Back"
-msgstr "Draft layer"
+msgstr "Fab_Back"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:636
 msgid "If you want a courtyard layer for the back side of the board"
