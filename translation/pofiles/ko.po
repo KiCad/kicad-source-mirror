@@ -10,7 +10,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
 "PO-Revision-Date: 2021-08-08 05:48+0000\n"
-"Last-Translator: jehunseo <benbot591@gmail.com>\n"
+"Last-Translator: Uibeom Jung <wjddmlqja17@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
 "Language: ko\n"
@@ -7880,7 +7880,7 @@ msgstr "*** 심볼을 찾을 수 없음 ***"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:560
 msgid "*** new symbol has too few units ***"
-msgstr "*** 새 기호에 단위가 너무 적습니다 ***"
+msgstr "*** 새 심볼에 단위가 너무 적습니다 ***"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:27
 msgid "Update all symbols in schematic"
@@ -7975,7 +7975,7 @@ msgstr "반복되는 복사본 배치"
 
 #: eeschema/dialogs/dialog_choose_symbol.cpp:149
 msgid "Keep the symbol selected for subsequent clicks."
-msgstr ""
+msgstr "이후의 클릭을 위해 심볼을 선택한 상태로 유지합니다."
 
 #: eeschema/dialogs/dialog_choose_symbol.cpp:151
 msgid "Place all units"
@@ -8000,7 +8000,7 @@ msgstr "풋프린트가 지정되지 않음"
 
 #: eeschema/dialogs/dialog_choose_symbol.cpp:444
 msgid "Invalid footprint specified"
-msgstr ""
+msgstr "잘못된 풋프린트 지정"
 
 #: eeschema/dialogs/dialog_choose_symbol.cpp:528
 msgid "No symbol selected"
@@ -8030,7 +8030,7 @@ msgstr "텍스트 속성"
 
 #: eeschema/dialogs/dialog_edit_label.cpp:348
 msgid "Label requires non-empty text."
-msgstr ""
+msgstr "레이블에는 비어 있지 않은 텍스트가 필요합니다."
 
 #: eeschema/dialogs/dialog_edit_label_base.cpp:26
 #: eeschema/dialogs/dialog_edit_label_base.cpp:72
@@ -8039,7 +8039,7 @@ msgstr "라벨:"
 
 #: eeschema/dialogs/dialog_edit_label_base.cpp:28
 msgid "Enter the text to be used within the schematic"
-msgstr ""
+msgstr "회로도 내에서 사용할 텍스트 입력"
 
 #: eeschema/dialogs/dialog_edit_label_base.cpp:37
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:28
@@ -8056,7 +8056,7 @@ msgstr "텍스트 크기:"
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:38
 #: pcbnew/dialogs/panel_setup_rules_base.cpp:33
 msgid "Syntax help"
-msgstr ""
+msgstr "구문 도움말"
 
 #: eeschema/dialogs/dialog_edit_label_base.cpp:99
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:39
@@ -8087,7 +8087,7 @@ msgstr "아래쪽으로 정렬"
 
 #: eeschema/dialogs/dialog_edit_label_base.cpp:120 eeschema/sch_text.cpp:747
 msgid "Align left"
-msgstr ""
+msgstr "왼쪽 정렬"
 
 #: eeschema/dialogs/dialog_edit_label_base.cpp:120 eeschema/sch_text.cpp:748
 msgid "Align top"
@@ -8157,7 +8157,7 @@ msgstr "참조 지정자 값이 잘못되었습니다!"
 
 #: eeschema/dialogs/dialog_edit_one_field.cpp:249
 msgid "Value may not be empty."
-msgstr ""
+msgstr "값을 비워둘 수 없습니다."
 
 #: eeschema/dialogs/dialog_edit_symbols_libid.cpp:536
 #, c-format
@@ -8167,12 +8167,12 @@ msgstr "심볼 라이브러리 식별자 %s가 잘못되었습니다."
 #: eeschema/dialogs/dialog_edit_symbols_libid.cpp:633
 #, c-format
 msgid "Available Candidates for %s "
-msgstr ""
+msgstr "%s에 사용 가능한 후보들 "
 
 #: eeschema/dialogs/dialog_edit_symbols_libid.cpp:637
-#, c-format
+#, c-format, fuzzy
 msgid "Candidates count %d "
-msgstr ""
+msgstr "후보자 수 %d "
 
 #: eeschema/dialogs/dialog_edit_symbols_libid.cpp:648
 #, c-format
@@ -8182,11 +8182,12 @@ msgstr "%u 링크가 매핑 됨, %u 을 찾을 수 없음"
 #: eeschema/dialogs/dialog_edit_symbols_libid.cpp:654
 #, c-format
 msgid "All %u link(s) resolved"
-msgstr ""
+msgstr "모든 %u 링크(들) 해결됨"
 
 #: eeschema/dialogs/dialog_edit_symbols_libid.cpp:685
+#, fuzzy
 msgid "Invalid symbol library identifier"
-msgstr ""
+msgstr "잘못된 기호 라이브러리 식별자"
 
 #: eeschema/dialogs/dialog_edit_symbols_libid.cpp:736
 #, c-format
@@ -8235,6 +8236,8 @@ msgid ""
 "Replace current symbols fields by fields from the new library.\n"
 "Warning: fields \"Value\" and \"Footprints\" will be therefore replaced."
 msgstr ""
+"현재 기호 필드를 새 라이브러리의 필드로 바꿉니다.\n"
+"경고: 따라서 \"값\" 및 \"풋프린트\" 필드가 대체됩니다."
 
 #: eeschema/dialogs/dialog_edit_symbols_libid_base.h:57
 #, fuzzy
@@ -8267,24 +8270,25 @@ msgstr "마커 삭제"
 
 #: eeschema/dialogs/dialog_erc.cpp:196
 msgid "Errors and Warnings Only"
-msgstr ""
+msgstr "오류 및 경고에 한함"
 
 #: eeschema/dialogs/dialog_erc.cpp:196
+#, fuzzy
 msgid "Errors, Warnings and Exclusions"
-msgstr ""
+msgstr "오류, 경고 및 제외"
 
 #: eeschema/dialogs/dialog_erc.cpp:302
 #, c-format
 msgid "%d symbol(s) require annotation.<br><br>"
-msgstr ""
+msgstr "%d개의 기호(들)에 주석이 필요합니다.<br><br>"
 
 #: eeschema/dialogs/dialog_erc.cpp:306
 msgid "-------- ERC cancelled by user.<br><br>"
-msgstr ""
+msgstr "-------- 사용자가 ERC를 취소했습니다.<br><br>"
 
 #: eeschema/dialogs/dialog_erc.cpp:308
 msgid "ERC completed.<br><br>"
-msgstr ""
+msgstr "ERC가 완료되었습니다.<br><br>"
 
 #: eeschema/dialogs/dialog_erc.cpp:356
 msgid "Checking sheet names..."
@@ -8349,12 +8353,12 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_erc.cpp:499 pcbnew/dialogs/dialog_drc.cpp:452
 msgid "Exclude this violation"
-msgstr ""
+msgstr "이 위반 제외"
 
 #: eeschema/dialogs/dialog_erc.cpp:500 pcbnew/dialogs/dialog_drc.cpp:453
 #, c-format
 msgid "It will be excluded from the %s list"
-msgstr ""
+msgstr "%s 목록에서 제외됩니다"
 
 #: eeschema/dialogs/dialog_erc.cpp:512 pcbnew/dialogs/dialog_drc.cpp:466
 #, c-format
@@ -8374,11 +8378,11 @@ msgstr ""
 #: eeschema/dialogs/dialog_erc.cpp:523 pcbnew/dialogs/dialog_drc.cpp:479
 #, c-format
 msgid "Ignore all '%s' violations"
-msgstr ""
+msgstr "모든 '%s' 위반 무시"
 
 #: eeschema/dialogs/dialog_erc.cpp:524 pcbnew/dialogs/dialog_drc.cpp:481
 msgid "Violations will not be checked or reported"
-msgstr ""
+msgstr "위반 사항을 확인하거나 보고하지 않음"
 
 #: eeschema/dialogs/dialog_erc.cpp:531
 msgid "Edit pin-to-pin conflict map..."
@@ -8411,7 +8415,7 @@ msgstr "보고서 파일 '%s' 생성됨."
 #: eeschema/dialogs/dialog_erc.cpp:773
 #, c-format
 msgid "ERC report (%s, Encoding UTF8)\n"
-msgstr ""
+msgstr "ERC 보고(%s, UTF8 인코딩)\n"
 
 #: eeschema/dialogs/dialog_erc.cpp:788
 #, c-format
@@ -8428,6 +8432,8 @@ msgid ""
 "\n"
 " ** ERC messages: %d  Errors %d  Warnings %d\n"
 msgstr ""
+"\n"
+" ** ERC 메시지: %d 오류 %d 경고 %d\n"
 
 #: eeschema/dialogs/dialog_erc_base.cpp:44 gerbview/files.cpp:665
 #: gerbview/job_file_reader.cpp:239
@@ -8440,7 +8446,7 @@ msgstr "메시지"
 #: eeschema/dialogs/dialog_erc_base.cpp:50
 #: pcbnew/dialogs/dialog_drc_base.cpp:97
 msgid "Click on items to highlight them on the board."
-msgstr ""
+msgstr "항목을 클릭하여 보드에서 강조 표시합니다."
 
 #: eeschema/dialogs/dialog_erc_base.cpp:59
 msgid "Violations"
@@ -8450,7 +8456,7 @@ msgstr "위반"
 #: pcbnew/dialogs/dialog_drc_base.cpp:169
 #: pcbnew/dialogs/dialog_footprint_checker_base.cpp:55
 msgid "Exclusions"
-msgstr ""
+msgstr "제외"
 
 #: eeschema/dialogs/dialog_erc_base.cpp:111
 msgid "Delete Markers"
