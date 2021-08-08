@@ -11,7 +11,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
 "PO-Revision-Date: 2021-08-08 08:27+0000\n"
-"Last-Translator: Ji Yoon Choi <chichoon.choi@gmail.com>\n"
+"Last-Translator: jeongsuAn <dks9467@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
 "Language: ko\n"
@@ -10018,7 +10018,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:66
 msgid "&Backward"
-msgstr ""
+msgstr "이전으로(R)"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:82
 msgid "&Match case"
@@ -10323,7 +10323,7 @@ msgstr "시뮬레이터 실행 (&R)"
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:186
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:195
 msgid "Volts"
-msgstr ""
+msgstr "V"
 
 #: eeschema/dialogs/dialog_sim_settings.cpp:594
 msgid "Amperes"
@@ -10352,7 +10352,7 @@ msgstr ""
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:266
 #, fuzzy
 msgid "Linear"
-msgstr "선"
+msgstr "선형"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:29
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:268
@@ -10374,8 +10374,9 @@ msgstr ""
 #: eeschema/dialogs/dialog_spice_model_base.cpp:727
 #: eeschema/dialogs/dialog_spice_model_base.cpp:796
 #: eeschema/dialogs/dialog_spice_model_base.cpp:807
+#, fuzzy
 msgid "Hertz"
-msgstr ""
+msgstr "헤르츠"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:64
 #, fuzzy
@@ -10509,7 +10510,7 @@ msgstr ""
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:338
 #: eeschema/sim/spice_simulator.cpp:76
 msgid "Sensitivity"
-msgstr ""
+msgstr "감도"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:342
 msgid "Transfer Function"
@@ -10536,8 +10537,9 @@ msgstr "시간 단계:"
 #: eeschema/dialogs/dialog_spice_model_base.cpp:818
 #: eeschema/dialogs/dialog_spice_model_base.cpp:869
 #: eeschema/dialogs/dialog_spice_model_base.cpp:880
+#, fuzzy
 msgid "seconds"
-msgstr ""
+msgstr "초"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:369
 msgid "Final time:"
@@ -10555,7 +10557,7 @@ msgstr ""
 #: eeschema/sim/spice_simulator.cpp:64
 #, fuzzy
 msgid "Transient"
-msgstr "방향"
+msgstr "일시적인"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:413
 msgid "Spice directives:"
@@ -10567,8 +10569,9 @@ msgid "Load directives from schematic"
 msgstr "회로도로 내보내기"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:429 pcbnew/pad.cpp:1456
+#, fuzzy
 msgid "Custom"
-msgstr ""
+msgstr "사용자 정의"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:436
 msgid "Adjust passive symbol values (e.g. M -> Meg; 100 nF -> 100n)"
