@@ -305,9 +305,12 @@ void PANEL_SETUP_RULES::onScintillaCharAdded( wxStyledTextEvent &aEvent )
                      "skew|"
                      "text_height|"
                      "text_thickness|"
+                     "thermal_relief_gap|"
+                     "thermal_spoke_width|"
                      "track_width|"
                      "via_count|"
-                     "via_diameter";
+                     "via_diameter|"
+                     "zone_connection";
         }
         else if( sexprs.top() == "disallow" || isDisallowToken( sexprs.top() ) )
         {
@@ -320,6 +323,12 @@ void PANEL_SETUP_RULES::onScintillaCharAdded( wxStyledTextEvent &aEvent )
                      "track|"
                      "via|"
                      "zone";
+        }
+        else if( sexprs.top() == "zone_connection" )
+        {
+            tokens = "solid "
+                     "thermal_relief "
+                     "none";
         }
         else if( sexprs.top() == "layer" )
         {

@@ -136,8 +136,9 @@ DIALOG_PAD_PROPERTIES::DIALOG_PAD_PROPERTIES( PCB_BASE_FRAME* aParent, PAD* aPad
         m_pasteMargin( aParent, m_pasteMarginLabel, m_pasteMarginCtrl, m_pasteMarginUnits ),
         m_pasteMarginRatio( aParent, m_pasteMarginRatioLabel, m_pasteMarginRatioCtrl,
                             m_pasteMarginRatioUnits ),
-        m_spokeWidth( aParent, m_spokeWidthLabel, m_spokeWidthCtrl, m_spokeWidthUnits ),
         m_thermalGap( aParent, m_thermalGapLabel, m_thermalGapCtrl, m_thermalGapUnits ),
+        m_spokeWidth( aParent, m_spokeWidthLabel, m_spokeWidthCtrl, m_spokeWidthUnits ),
+        m_spokeAngle( aParent, m_spokeAngleLabel, m_spokeAngleCtrl, m_spokeAngleUnits ),
         m_pad_orientation( aParent, m_PadOrientText, m_cb_padrotation, m_orientationUnits )
 {
     SetName( PAD_PROPERTIES_DLG_NAME );
@@ -193,6 +194,8 @@ DIALOG_PAD_PROPERTIES::DIALOG_PAD_PROPERTIES( PCB_BASE_FRAME* aParent, PAD* aPad
     m_mixedChamferRatio.SetUnits( EDA_UNITS::PERCENT );
     m_pad_orientation.SetUnits( EDA_UNITS::DEGREES );
     m_pad_orientation.SetPrecision( 3 );
+
+    m_spokeAngle.SetUnits( EDA_UNITS::DEGREES );
 
     m_pasteMargin.SetNegativeZero();
 
@@ -558,6 +561,7 @@ void DIALOG_PAD_PROPERTIES::initValues()
     m_clearance.ChangeValue( m_dummyPad->GetLocalClearance() );
     m_maskMargin.ChangeValue( m_dummyPad->GetLocalSolderMaskMargin() );
     m_spokeWidth.ChangeValue( m_dummyPad->GetThermalSpokeWidth() );
+    m_spokeAngle.ChangeDoubleValue( m_dummyPad->GetThermalSpokeAngle() );
     m_thermalGap.ChangeValue( m_dummyPad->GetThermalGap() );
     m_pasteMargin.ChangeValue( m_dummyPad->GetLocalSolderPasteMargin() );
     m_pasteMarginRatio.ChangeDoubleValue( m_dummyPad->GetLocalSolderPasteMarginRatio() * 100.0 );
@@ -802,7 +806,7 @@ void DIALOG_PAD_PROPERTIES::OnPadShapeSelection( wxCommandEvent& event )
 
         // A reasonable default (from  IPC-7351C)
         if( m_dummyPad->GetRoundRectRadiusRatio() == 0.0 )
-            m_cornerRatio.ChangeValue( 25 );
+            m_cornerRatio.ChangeDoubleValue( 25.0 );
 
         break;
     }
@@ -854,6 +858,19 @@ void DIALOG_PAD_PROPERTIES::OnPadShapeSelection( wxCommandEvent& event )
         break;
     }
 
+    // Note: must do this before enabling/disabling m_sizeY as we're using that as a flag to see
+    // what the last shape was.
+    if( m_PadShapeSelector->GetSelection() == CHOICE_SHAPE_CIRCLE )
+    {
+        if( m_sizeYCtrl->IsEnabled() && m_spokeAngle.GetDoubleValue() == 900.0 )
+            m_spokeAngle.SetDoubleValue( 450.0 );
+    }
+    else
+    {
+        if( !m_sizeYCtrl->IsEnabled() && m_spokeAngle.GetDoubleValue() == 450.0 )
+            m_spokeAngle.SetDoubleValue( 900.0 );
+    }
+
     // Readjust props book size
     wxSize size = m_shapePropsBook->GetSize();
     size.y = m_shapePropsBook->GetPage( m_shapePropsBook->GetSelection() )->GetBestSize().y;
@@ -877,8 +894,6 @@ void DIALOG_PAD_PROPERTIES::OnPadShapeSelection( wxCommandEvent& event )
                   || m_PadShapeSelector->GetSelection() == CHOICE_SHAPE_CUSTOM_RECT_ANCHOR;
 
     enablePrimitivePage( is_custom );
-    m_staticTextcps->Enable( is_custom );
-    m_ZoneCustomPadShape->Enable( is_custom );
 
     transferDataToPad( m_dummyPad );
 
@@ -1396,7 +1411,7 @@ bool DIALOG_PAD_PROPERTIES::padValuesOK()
     if( m_dummyPad->GetShape() == PAD_SHAPE::ROUNDRECT ||
         m_dummyPad->GetShape() == PAD_SHAPE::CHAMFERED_RECT )
     {
-        wxASSERT( m_cornerRatio.GetValue() == m_mixedCornerRatio.GetValue() );
+        wxASSERT( m_cornerRatio.GetDoubleValue() == m_mixedCornerRatio.GetDoubleValue() );
 
         if( m_cornerRatio.GetDoubleValue() < 0.0 )
             error_msgs.Add( _( "Error: Negative corner size." ) );
@@ -1607,6 +1622,7 @@ bool DIALOG_PAD_PROPERTIES::TransferDataFromWindow()
     m_currentPad->SetLocalSolderPasteMargin( m_padMaster->GetLocalSolderPasteMargin() );
     m_currentPad->SetLocalSolderPasteMarginRatio( m_padMaster->GetLocalSolderPasteMarginRatio() );
     m_currentPad->SetThermalSpokeWidth( m_padMaster->GetThermalSpokeWidth() );
+    m_currentPad->SetThermalSpokeAngle( m_padMaster->GetThermalSpokeAngle() );
     m_currentPad->SetThermalGap( m_padMaster->GetThermalGap() );
     m_currentPad->SetRoundRectRadiusRatio( m_padMaster->GetRoundRectRadiusRatio() );
     m_currentPad->SetChamferRectRatio( m_padMaster->GetChamferRectRatio() );
@@ -1706,6 +1722,7 @@ bool DIALOG_PAD_PROPERTIES::transferDataToPad( PAD* aPad )
     aPad->SetLocalSolderPasteMargin( m_pasteMargin.GetValue() );
     aPad->SetLocalSolderPasteMarginRatio( m_pasteMarginRatio.GetDoubleValue() / 100.0 );
     aPad->SetThermalSpokeWidth( m_spokeWidth.GetValue() );
+    aPad->SetThermalSpokeAngle( m_spokeAngle.GetDoubleValue() );
     aPad->SetThermalGap( m_thermalGap.GetValue() );
 
     // And rotation
@@ -1832,12 +1849,14 @@ bool DIALOG_PAD_PROPERTIES::transferDataToPad( PAD* aPad )
         // reference
         if( aPad->GetAnchorPadShape() == PAD_SHAPE::CIRCLE )
             aPad->SetSize( wxSize( m_sizeX.GetValue(), m_sizeX.GetValue() ) );
-
-        // define the way the clearance area is defined in zones
-        aPad->SetCustomShapeInZoneOpt( m_ZoneCustomPadShape->GetSelection() == 0 ?
-                                       CUST_PAD_SHAPE_IN_ZONE_OUTLINE :
-                                       CUST_PAD_SHAPE_IN_ZONE_CONVEXHULL );
     }
+
+    // Define the way the clearance area is defined in zones.  Since all non-custom pad
+    // shapes are convex to begin with, this really only makes any difference for custom
+    // pad shapes.
+    aPad->SetCustomShapeInZoneOpt( m_ZoneCustomPadShape->GetSelection() == 0 ?
+                                   CUST_PAD_SHAPE_IN_ZONE_OUTLINE :
+                                   CUST_PAD_SHAPE_IN_ZONE_CONVEXHULL );
 
     switch( aPad->GetAttribute() )
     {

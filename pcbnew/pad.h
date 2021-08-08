@@ -475,33 +475,29 @@ public:
     void SetZoneConnection( ZONE_CONNECTION aType ) { m_zoneConnection = aType; }
     ZONE_CONNECTION GetZoneConnection() const { return m_zoneConnection; }
 
-    /**
-     * Return the zone connection in effect (either locally overridden or overridden in the
-     * parent footprint).
-     *
-     * Optionally reports on the source of the property (pad, parent footprint or zone).
-     */
-    ZONE_CONNECTION GetEffectiveZoneConnection( wxString* aSource = nullptr ) const;
+    ZONE_CONNECTION GetLocalZoneConnectionOverride( wxString* aSource = nullptr ) const;
 
     /**
      * Set the width of the thermal spokes connecting the pad to a zone.  If != 0 this will
      * override similar settings in the parent footprint and zone.
      */
-    void SetThermalSpokeWidth( int aWidth ) { m_thermalWidth = aWidth; }
-    int GetThermalSpokeWidth() const { return m_thermalWidth; }
+    void SetThermalSpokeWidth( int aWidth ) { m_thermalSpokeWidth = aWidth; }
+    int GetThermalSpokeWidth() const { return m_thermalSpokeWidth; }
+
+    int GetLocalSpokeWidthOverride( wxString* aSource = nullptr ) const;
 
     /**
-     * Return the effective thermal spoke width having resolved any inheritance.
+     * The orientation of the thermal spokes (in decidegrees).  450 will produce an X (the
+     * default for circular pads and circular-anchored custom shaped pads), while 900 will
+     * produce a + (the default for all other shapes).
      */
-    int GetEffectiveThermalSpokeWidth( wxString* aSource = nullptr ) const;
+    void SetThermalSpokeAngle( double aAngle ) { m_thermalSpokeAngle = aAngle; }
+    double GetThermalSpokeAngle() const { return m_thermalSpokeAngle; }
 
     void SetThermalGap( int aGap ) { m_thermalGap = aGap; }
     int GetThermalGap() const { return m_thermalGap; }
 
-    /**
-     * Return the effective thermal gap having resolved any inheritance.
-     */
-    int GetEffectiveThermalGap( wxString* aSource = nullptr ) const;
+    int GetLocalThermalGapOverride( wxString* aSource = nullptr ) const;
 
     /**
      * Has meaning only for rounded rectangle pads.
@@ -775,7 +771,9 @@ private:
                                                 // The final margin is the sum of these 2 values
 
     ZONE_CONNECTION m_zoneConnection;           // No connection, thermal relief, etc.
-    int         m_thermalWidth;                 // Thermal spoke width.
+    int         m_thermalSpokeWidth;            // Thermal spoke width.
+    double      m_thermalSpokeAngle;            // Rotation of the spokes, in deci-degrees.  450
+                                                //   will produce an X, while 900 will produce a +.
     int         m_thermalGap;
 };
 

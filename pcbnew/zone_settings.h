@@ -99,8 +99,8 @@ public:
     /// Option to show the zone area (outlines only, short hatches or full hatches
     ZONE_BORDER_DISPLAY_STYLE m_ZoneBorderDisplayStyle;
 
-    long            m_ThermalReliefGap;      // thickness of the gap in thermal reliefs
-    long            m_ThermalReliefSpokeWidth;     // thickness of the copper bridge in thermal reliefs
+    long            m_ThermalReliefGap;        // thickness of the gap in thermal reliefs
+    long            m_ThermalReliefSpokeWidth; // thickness of the copper bridge in thermal reliefs
 
     bool            m_Zone_45_Only;
     bool            m_Locked;

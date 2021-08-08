@@ -267,6 +267,7 @@ text_frame
 text_position_mode
 thermal_width
 thermal_gap
+thermal_bridge_angle
 thermal_bridge_width
 thickness
 through_hole

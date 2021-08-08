@@ -21,6 +21,7 @@ length
 max
 micro_via
 min
+none
 npth
 opt
 outer
@@ -29,9 +30,13 @@ pth
 rule
 silk_clearance
 skew
+solid
 text
 text_height
 text_thickness
+thermal_reliefs
+thermal_relief_gap
+thermal_spoke_width
 track
 track_width
 version
@@ -39,3 +44,4 @@ via
 via_count
 via_diameter
 zone
+zone_connection

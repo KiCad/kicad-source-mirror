@@ -373,7 +373,6 @@ int BOARD_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
     if( copperIntersection.any() && zone && pad && zone->GetNetCode() == pad->GetNetCode() )
     {
         PCB_LAYER_ID layer = active;
-        wxString     source;
 
         if( !zone->IsOnLayer( active ) )
             layer = zone->GetLayerSet().Seq().front();
@@ -387,44 +386,41 @@ int BOARD_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
                                      EscapeHTML( getItemDescription( a ) ),
                                      EscapeHTML( getItemDescription( b ) ) ) );
 
-        ZONE_CONNECTION zoneConnection = zone->GetPadConnection( pad );
+        constraint = drcEngine.EvalZoneConnection( pad, zone, layer, r );
 
-        if( zoneConnection == ZONE_CONNECTION::THERMAL )
+        if( constraint.m_ZoneConnection == ZONE_CONNECTION::THERMAL )
         {
-            int gap = zone->GetThermalReliefGap();
+            constraint = drcEngine.EvalRules( THERMAL_RELIEF_GAP_CONSTRAINT, pad, zone, layer, r );
+            int gap = constraint.m_Value.Min();
+
+            r->Report( wxString::Format( _( "Resolved thermal relief gap: %s." ),
+                                         StringFromValue( units, gap, true ) ) );
+
+            constraint = drcEngine.EvalRules( THERMAL_SPOKE_WIDTH_CONSTRAINT, pad, zone, layer, r );
+            int width = constraint.m_Value.Opt();
+
+            if( compileError )
+                reportCompileError( r );
 
             r->Report( "" );
-            r->Report( wxString::Format( _( "Zone thermal relief: %s." ),
-                                         StringFromValue( r->GetUnits(), gap, true ) ) );
-
-            gap = zone->GetThermalReliefGap( pad, &source );
-
-            if( source != _( "zone" ) )
-            {
-                r->Report( wxString::Format( _( "Overridden by %s; thermal relief: %s." ),
-                                             source,
-                                             StringFromValue( r->GetUnits(), gap, true ) ) );
-            }
+            r->Report( wxString::Format( _( "Resolved thermal spoke width: %s." ),
+                                         StringFromValue( units, width, true ) ) );
         }
-        else if( zoneConnection == ZONE_CONNECTION::NONE )
+        else if( constraint.m_ZoneConnection == ZONE_CONNECTION::NONE )
         {
             clearance = zone->GetLocalClearance();
-
-            r->Report( "" );
             r->Report( wxString::Format( _( "Zone clearance: %s." ),
-                                         StringFromValue( r->GetUnits(), clearance, true ) ) );
+                                         StringFromValue( units, clearance, true ) ) );
 
-            if( zone->GetThermalReliefGap( pad ) > clearance )
+            constraint = drcEngine.EvalRules( THERMAL_RELIEF_GAP_CONSTRAINT, pad, zone, layer, r );
+
+            if( constraint.m_Value.Min() > clearance )
             {
-                clearance = zone->GetThermalReliefGap( pad, &source );
-
-                if( source != _( "zone" ) )
-                {
-                    r->Report( wxString::Format( _( "Overridden by larger thermal relief from %s;"
-                                                    "clearance: %s." ),
-                                                 source,
-                                                 StringFromValue( r->GetUnits(), clearance, true ) ) );
-                }
+                clearance = constraint.m_Value.Min();
+                r->Report( wxString::Format( _( "Overridden by larger thermal relief from %s;"
+                                                "clearance: %s." ),
+                                             EscapeHTML( constraint.GetName() ),
+                                             StringFromValue( units, clearance, true ) ) );
             }
 
             if( compileError )

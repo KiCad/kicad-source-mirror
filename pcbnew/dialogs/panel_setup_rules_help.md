@@ -5,7 +5,7 @@
     (rule <rule_name> <rule_clause> ...)
 
 
-<br><br>
+<br>
 
 ### Rule Clauses
 
@@ -16,7 +16,7 @@
     (layer "<layer_name>")
 
 
-<br><br>
+<br>
 
 ### Constraint Types
 
@@ -34,24 +34,35 @@
  * skew
  * text\_height
  * text\_thickness
+ * thermal\_relief\_gap
+ * thermal\_spoke\_width
  * track\_width
  * via\_count
  * via\_diameter
+ * zone\_connection
 
 
-<br><br>
+<br>
 
 ### Item Types
 
- * buried_via
+ * buried\_via
  * graphic
  * hole
- * micro_via
+ * micro\_via
  * pad
  * text
  * track
  * via
  * zone
+
+<br>
+
+### Zone Connections
+
+ * solid
+ * thermal\_reliefs
+ * none
 
 <br>
 
@@ -79,6 +90,11 @@
     (rule HV_unshielded
        (constraint clearance (min 2mm))
        (condition "A.NetClass == 'HV' && !A.insideArea('Shield*')"))
+
+
+    (rule heavy_thermals
+       (constraint thermal_spoke_width (min 0.5mm))
+       (condition "A.NetClass == 'HV'))
 <br><br>
 
 ### Notes
@@ -203,3 +219,9 @@ For the latter use a `(layer "layer_name")` clause in the rule.
     (rule "dp clearance"
         (constraint clearance (min "1.5mm"))
         (condition "A.inDiffPair('*') && !AB.isCoupledDiffPair()"))
+
+
+    # Don't use thermal reliefs on heatsink pads
+    (rule heat_sink_pad
+        (constraint zone_connection solid)
+        (condition "A.Fabrication_Property == 'Heatsink pad'"))

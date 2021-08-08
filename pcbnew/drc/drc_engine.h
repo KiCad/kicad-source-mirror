@@ -150,6 +150,9 @@ public:
                               const BOARD_ITEM* b, PCB_LAYER_ID aLayer,
                               REPORTER* aReporter = nullptr );
 
+    DRC_CONSTRAINT EvalZoneConnection( const BOARD_ITEM* a, const BOARD_ITEM* b,
+                                       PCB_LAYER_ID aLayer, REPORTER* aReporter = nullptr );
+
     bool HasRulesForConstraintType( DRC_CONSTRAINT_T constraintID );
 
     EDA_UNITS UserUnits() const { return m_userUnits; }

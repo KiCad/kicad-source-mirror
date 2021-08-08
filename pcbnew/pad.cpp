@@ -85,9 +85,10 @@ PAD::PAD( FOOTPRINT* parent ) :
     m_chamferScale = 0.2;                        // Size of chamfer: ratio of smallest of X,Y size
     m_chamferPositions  = RECT_NO_CHAMFER;       // No chamfered corner
 
-    m_zoneConnection = ZONE_CONNECTION::INHERITED; // Use parent setting by default
-    m_thermalWidth = 0;                            // Use parent setting by default
-    m_thermalGap = 0;                              // Use parent setting by default
+    m_zoneConnection    = ZONE_CONNECTION::INHERITED; // Use parent setting by default
+    m_thermalSpokeWidth = 0;                          // Use parent setting by default
+    m_thermalSpokeAngle = 450.0;                      // Default for circular pads
+    m_thermalGap        = 0;                          // Use parent setting by default
 
     m_customShapeClearanceArea = CUST_PAD_SHAPE_IN_ZONE_OUTLINE;
 
@@ -819,59 +820,27 @@ wxSize PAD::GetSolderPasteMargin() const
 }
 
 
-ZONE_CONNECTION PAD::GetEffectiveZoneConnection( wxString* aSource ) const
+ZONE_CONNECTION PAD::GetLocalZoneConnectionOverride( wxString* aSource ) const
 {
-    FOOTPRINT* parentFootprint = GetParent();
-
-    if( m_zoneConnection == ZONE_CONNECTION::INHERITED && parentFootprint )
-    {
-        if( aSource )
-            *aSource = _( "parent footprint" );
-
-        return parentFootprint->GetZoneConnection();
-    }
-    else
-    {
-        if( aSource )
-            *aSource = _( "pad" );
-
-        return m_zoneConnection;
-    }
-}
-
-
-int PAD::GetEffectiveThermalSpokeWidth( wxString* aSource ) const
-{
-    FOOTPRINT* parentFootprint = GetParent();
-
-    if( m_thermalWidth == 0 && parentFootprint )
-    {
-        if( aSource )
-            *aSource = _( "parent footprint" );
-
-        return parentFootprint->GetThermalWidth();
-    }
-
-    if( aSource )
+    if( m_zoneConnection != ZONE_CONNECTION::INHERITED && aSource )
         *aSource = _( "pad" );
 
-    return m_thermalWidth;
+    return m_zoneConnection;
 }
 
 
-int PAD::GetEffectiveThermalGap( wxString* aSource ) const
+int PAD::GetLocalSpokeWidthOverride( wxString* aSource ) const
 {
-    FOOTPRINT* parentFootprint = GetParent();
+    if( m_thermalSpokeWidth > 0 && aSource )
+        *aSource = _( "pad" );
 
-    if( m_thermalGap == 0 && parentFootprint )
-    {
-        if( aSource )
-            *aSource = _( "parent footprint" );
+    return m_thermalSpokeWidth;
+}
 
-        return parentFootprint->GetThermalGap();
-    }
 
-    if( aSource )
+int PAD::GetLocalThermalGapOverride( wxString* aSource ) const
+{
+    if( m_thermalGap > 0 && aSource )
         *aSource = _( "pad" );
 
     return m_thermalGap;
@@ -1488,8 +1457,9 @@ void PAD::ImportSettingsFrom( const PAD& aMasterPad )
     SetLocalSolderPasteMargin( aMasterPad.GetLocalSolderPasteMargin() );
     SetLocalSolderPasteMarginRatio( aMasterPad.GetLocalSolderPasteMarginRatio() );
 
-    SetZoneConnection( aMasterPad.GetEffectiveZoneConnection() );
+    SetZoneConnection( aMasterPad.GetZoneConnection() );
     SetThermalSpokeWidth( aMasterPad.GetThermalSpokeWidth() );
+    SetThermalSpokeAngle( aMasterPad.GetThermalSpokeAngle() );
     SetThermalGap( aMasterPad.GetThermalGap() );
 
     SetCustomShapeInZoneOpt( aMasterPad.GetCustomShapeInZoneOpt() );
@@ -1705,9 +1675,12 @@ static struct PAD_DESC
                     PROPERTY_DISPLAY::DISTANCE ) );
         propMgr.AddProperty( new PROPERTY<PAD, double>( _HKI( "Solderpaste Margin Ratio Override" ),
                     &PAD::SetLocalSolderPasteMarginRatio, &PAD::GetLocalSolderPasteMarginRatio ) );
-        propMgr.AddProperty( new PROPERTY<PAD, int>( _HKI( "Thermal Relief Width" ),
+        propMgr.AddProperty( new PROPERTY<PAD, int>( _HKI( "Thermal Relief Spoke Width" ),
                     &PAD::SetThermalSpokeWidth, &PAD::GetThermalSpokeWidth,
                     PROPERTY_DISPLAY::DISTANCE ) );
+        propMgr.AddProperty( new PROPERTY<PAD, double>( _HKI( "Thermal Relief Spoke Angle" ),
+                    &PAD::SetThermalSpokeAngle, &PAD::GetThermalSpokeAngle,
+                    PROPERTY_DISPLAY::DEGREE ) );
         propMgr.AddProperty( new PROPERTY<PAD, int>( _HKI( "Thermal Relief Gap" ),
                     &PAD::SetThermalGap, &PAD::GetThermalGap,
                     PROPERTY_DISPLAY::DISTANCE ) );

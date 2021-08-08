@@ -68,9 +68,7 @@ FOOTPRINT::FOOTPRINT( BOARD* parent ) :
     m_localSolderMaskMargin       = 0;
     m_localSolderPasteMargin      = 0;
     m_localSolderPasteMarginRatio = 0.0;
-    m_zoneConnection              = ZONE_CONNECTION::INHERITED; // Use zone setting by default
-    m_thermalWidth = 0;     // Use zone setting by default
-    m_thermalGap = 0;       // Use zone setting by default
+    m_zoneConnection              = ZONE_CONNECTION::INHERITED;
 
     // These are special and mandatory text fields
     m_reference = new FP_TEXT( this, FP_TEXT::TEXT_is_REFERENCE );
@@ -108,8 +106,6 @@ FOOTPRINT::FOOTPRINT( const FOOTPRINT& aFootprint ) :
     m_localSolderPasteMargin         = aFootprint.m_localSolderPasteMargin;
     m_localSolderPasteMarginRatio    = aFootprint.m_localSolderPasteMarginRatio;
     m_zoneConnection                 = aFootprint.m_zoneConnection;
-    m_thermalWidth                   = aFootprint.m_thermalWidth;
-    m_thermalGap                     = aFootprint.m_thermalGap;
 
     std::map<BOARD_ITEM*, BOARD_ITEM*> ptrMap;
 
@@ -291,8 +287,6 @@ FOOTPRINT& FOOTPRINT::operator=( FOOTPRINT&& aOther )
     m_localSolderPasteMargin         = aOther.m_localSolderPasteMargin;
     m_localSolderPasteMarginRatio    = aOther.m_localSolderPasteMarginRatio;
     m_zoneConnection                 = aOther.m_zoneConnection;
-    m_thermalWidth                   = aOther.m_thermalWidth;
-    m_thermalGap                     = aOther.m_thermalGap;
 
     // Move reference and value
     m_reference = aOther.m_reference;
@@ -391,8 +385,6 @@ FOOTPRINT& FOOTPRINT::operator=( const FOOTPRINT& aOther )
     m_localSolderPasteMargin         = aOther.m_localSolderPasteMargin;
     m_localSolderPasteMarginRatio    = aOther.m_localSolderPasteMarginRatio;
     m_zoneConnection                 = aOther.m_zoneConnection;
-    m_thermalWidth                   = aOther.m_thermalWidth;
-    m_thermalGap                     = aOther.m_thermalGap;
 
     // Copy reference and value
     *m_reference = *aOther.m_reference;
@@ -2439,14 +2431,6 @@ static struct FOOTPRINT_DESC
                              double>( _HKI( "Solderpaste Margin Ratio Override" ),
                                       &FOOTPRINT::SetLocalSolderPasteMarginRatio,
                                       &FOOTPRINT::GetLocalSolderPasteMarginRatio ) );
-        propMgr.AddProperty( new PROPERTY<FOOTPRINT, int>( _HKI( "Thermal Relief Width" ),
-                                                           &FOOTPRINT::SetThermalWidth,
-                                                           &FOOTPRINT::GetThermalWidth,
-                                                           PROPERTY_DISPLAY::DISTANCE ) );
-        propMgr.AddProperty( new PROPERTY<FOOTPRINT, int>( _HKI( "Thermal Relief Gap" ),
-                                                           &FOOTPRINT::SetThermalGap,
-                                                           &FOOTPRINT::GetThermalGap,
-                                                           PROPERTY_DISPLAY::DISTANCE ) );
         // TODO zone connection, FPID?
     }
 } _FOOTPRINT_DESC;

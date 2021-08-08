@@ -1196,14 +1196,6 @@ void PCB_PLUGIN::format( const FOOTPRINT* aFootprint, int aNestLevel ) const
         m_out->Print( aNestLevel+1, "(zone_connect %d)\n",
                                     static_cast<int>( aFootprint->GetZoneConnection() ) );
 
-    if( aFootprint->GetThermalWidth() != 0 )
-        m_out->Print( aNestLevel+1, "(thermal_width %s)\n",
-                      FormatInternalUnits( aFootprint->GetThermalWidth() ).c_str() );
-
-    if( aFootprint->GetThermalGap() != 0 )
-        m_out->Print( aNestLevel+1, "(thermal_gap %s)\n",
-                      FormatInternalUnits( aFootprint->GetThermalGap() ).c_str() );
-
     // Attributes
     if( aFootprint->GetAttributes() )
     {
@@ -1586,8 +1578,15 @@ void PCB_PLUGIN::format( const PAD* aPad, int aNestLevel ) const
 
     if( aPad->GetThermalSpokeWidth() != 0 )
     {
-        StrPrintf( &output, " (thermal_width %s)",
+        StrPrintf( &output, " (thermal_bridge_width %s)",
                    FormatInternalUnits( aPad->GetThermalSpokeWidth() ).c_str() );
+    }
+
+    if( ( aPad->GetShape() == PAD_SHAPE::CIRCLE && aPad->GetThermalSpokeAngle() != 450.0 )
+            || ( aPad->GetShape() != PAD_SHAPE::CIRCLE && aPad->GetThermalSpokeAngle() != 900.0 ) )
+    {
+        StrPrintf( &output, " (thermal_bridge_angle %s)",
+                   FormatAngle( aPad->GetThermalSpokeAngle() ).c_str() );
     }
 
     if( aPad->GetThermalGap() != 0 )

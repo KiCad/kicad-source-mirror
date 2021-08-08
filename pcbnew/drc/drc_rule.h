@@ -29,6 +29,7 @@
 #include <core/minoptmax.h>
 #include <layer_ids.h>
 #include <netclass.h>
+#include <zones.h>
 #include <libeval_compiler/libeval_compiler.h>
 #include <wx/intl.h>
 
@@ -52,6 +53,9 @@ enum DRC_CONSTRAINT_T
     TEXT_THICKNESS_CONSTRAINT,
     TRACK_WIDTH_CONSTRAINT,
     ANNULAR_WIDTH_CONSTRAINT,
+    ZONE_CONNECTION_CONSTRAINT,
+    THERMAL_RELIEF_GAP_CONSTRAINT,
+    THERMAL_SPOKE_WIDTH_CONSTRAINT,
     DISALLOW_CONSTRAINT,
     VIA_DIAMETER_CONSTRAINT,
     LENGTH_CONSTRAINT,
@@ -111,6 +115,7 @@ class DRC_CONSTRAINT
             m_Type( aType ),
             m_Value(),
             m_DisallowFlags( 0 ),
+            m_ZoneConnection( ZONE_CONNECTION::INHERITED ),
             m_name( aName ),
             m_parentRule( nullptr )
     {
@@ -146,6 +151,7 @@ public:
     DRC_CONSTRAINT_T  m_Type;
     MINOPTMAX<int>    m_Value;
     int               m_DisallowFlags;
+    ZONE_CONNECTION   m_ZoneConnection;
 
 private:
     wxString          m_name;          // For just-in-time constraints

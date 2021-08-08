@@ -227,12 +227,6 @@ public:
     void SetZoneConnection( ZONE_CONNECTION aType ) { m_zoneConnection = aType; }
     ZONE_CONNECTION GetZoneConnection() const { return m_zoneConnection; }
 
-    void SetThermalWidth( int aWidth ) { m_thermalWidth = aWidth; }
-    int GetThermalWidth() const { return m_thermalWidth; }
-
-    void SetThermalGap( int aGap ) { m_thermalGap = aGap; }
-    int GetThermalGap() const { return m_thermalGap; }
-
     int GetAttributes() const { return m_attributes; }
     void SetAttributes( int aAttributes ) { m_attributes = aAttributes; }
 
@@ -772,8 +766,6 @@ private:
     mutable int            m_hullCacheTimeStamp;
 
     ZONE_CONNECTION m_zoneConnection;
-    int             m_thermalWidth;
-    int             m_thermalGap;
     int             m_localClearance;
     int             m_localSolderMaskMargin;       // Solder mask margin
     int             m_localSolderPasteMargin;      // Solder paste margin absolute value

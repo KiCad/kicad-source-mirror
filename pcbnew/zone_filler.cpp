@@ -47,8 +47,6 @@
 #include <math/util.h>      // for KiROUND
 #include "zone_filler.h"
 
-static const double s_RoundPadThermalSpokeAngle = 450;      // in deci-degrees
-
 
 ZONE_FILLER::ZONE_FILLER(  BOARD* aBoard, COMMIT* aCommit ) :
         m_board( aBoard ),
@@ -504,35 +502,6 @@ bool ZONE_FILLER::Fill( std::vector<ZONE*>& aZones, bool aCheck, wxWindow* aPare
 
 
 /**
- * Return true if the given pad has a thermal connection with the given zone.
- */
-bool hasThermalConnection( PAD* pad, const ZONE* aZone )
-{
-    // Rejects non-standard pads with tht-only thermal reliefs
-    if( aZone->GetPadConnection( pad ) == ZONE_CONNECTION::THT_THERMAL
-            && pad->GetAttribute() != PAD_ATTRIB::PTH )
-    {
-        return false;
-    }
-
-    if( aZone->GetPadConnection( pad ) != ZONE_CONNECTION::THERMAL
-            && aZone->GetPadConnection( pad ) != ZONE_CONNECTION::THT_THERMAL )
-    {
-        return false;
-    }
-
-    if( pad->GetNetCode() != aZone->GetNetCode() || pad->GetNetCode() <= 0 )
-        return false;
-
-    EDA_RECT item_boundingbox = pad->GetBoundingBox();
-    int thermalGap = aZone->GetThermalReliefGap( pad );
-    item_boundingbox.Inflate( thermalGap, thermalGap );
-
-    return item_boundingbox.Intersects( aZone->GetCachedBoundingBox() );
-}
-
-
-/**
  * Add a knockout for a pad.  The knockout is 'aGap' larger than the pad (which might be
  * either the thermal clearance or the electrical clearance).
  */
@@ -619,31 +588,62 @@ void ZONE_FILLER::addKnockout( BOARD_ITEM* aItem, PCB_LAYER_ID aLayer, int aGap,
  * in spokes, which must be done later.
  */
 void ZONE_FILLER::knockoutThermalReliefs( const ZONE* aZone, PCB_LAYER_ID aLayer,
-                                          SHAPE_POLY_SET& aFill )
+                                          SHAPE_POLY_SET& aFill,
+                                          std::vector<PAD*>& aThermalConnectionPads,
+                                          std::vector<PAD*>& aNoConnectionPads )
 {
-    SHAPE_POLY_SET holes;
+    BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
+    DRC_CONSTRAINT         constraint;
+    SHAPE_POLY_SET         holes;
 
     for( FOOTPRINT* footprint : m_board->Footprints() )
     {
         for( PAD* pad : footprint->Pads() )
         {
-            if( !hasThermalConnection( pad, aZone ) )
+            if( !pad->IsOnLayer( aLayer ) )
                 continue;
 
-            int gap = aZone->GetThermalReliefGap( pad );
-
-            // If the pad is flashed to the current layer, or is on the same layer and shares a netcode, then
-            // we need to knock out the thermal relief.
-            if( pad->FlashLayer( aLayer ) || ( pad->IsOnLayer( aLayer ) && pad->GetNetCode() == aZone->GetNetCode() ) )
+            if( pad->GetNetCode() != aZone->GetNetCode() || pad->GetNetCode() <= 0 )
             {
+                aNoConnectionPads.push_back( pad );
+                continue;
+            }
+
+            constraint = bds.m_DRCEngine->EvalZoneConnection( pad, aZone, aLayer );
+            ZONE_CONNECTION conn = constraint.m_ZoneConnection;
+
+            if( conn == ZONE_CONNECTION::FULL )
+                continue;
+
+            constraint = bds.m_DRCEngine->EvalRules( THERMAL_RELIEF_GAP_CONSTRAINT, pad, aZone,
+                                                     aLayer );
+            int gap = constraint.GetValue().Min();
+
+            EDA_RECT item_boundingbox = pad->GetBoundingBox();
+            item_boundingbox.Inflate( gap, gap );
+
+            if( !item_boundingbox.Intersects( aZone->GetCachedBoundingBox() ) )
+                continue;
+
+            // If the pad is flashed to the current layer, or is on the same layer and shares a
+            // netcode, then we need to knock out the thermal relief.
+            if( pad->FlashLayer( aLayer ) )
+            {
+                if( conn == ZONE_CONNECTION::THERMAL )
+                    aThermalConnectionPads.push_back( pad );
+                else if( conn == ZONE_CONNECTION::NONE )
+                    aNoConnectionPads.push_back( pad );
+
                 addKnockout( pad, aLayer, gap, holes );
             }
             else
             {
-                // If the pad isn't on the current layer but has a hole, knock out a thermal relief
-                // for the hole.
+                // If the pad isn't flashed on the current layer but has a hole, knock out a
+                // thermal relief for the hole.
                 if( pad->GetDrillSize().x == 0 && pad->GetDrillSize().y == 0 )
                     continue;
+
+                aNoConnectionPads.push_back( pad );
 
                 // Note: drill size represents finish size, which means the actual holes size is
                 // the plating thickness larger.
@@ -664,9 +664,11 @@ void ZONE_FILLER::knockoutThermalReliefs( const ZONE* aZone, PCB_LAYER_ID aLayer
  * not connected to it.
  */
 void ZONE_FILLER::buildCopperItemClearances( const ZONE* aZone, PCB_LAYER_ID aLayer,
+                                             const std::vector<PAD*> aNoConnectionPads,
                                              SHAPE_POLY_SET& aHoles )
 {
-    long ticker = 0;
+    BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
+    long                   ticker = 0;
 
     auto checkForCancel =
             [&ticker]( PROGRESS_REPORTER* aReporter ) -> bool
@@ -677,11 +679,8 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE* aZone, PCB_LAYER_ID aLa
     // A small extra clearance to be sure actual track clearances are not smaller than
     // requested clearance due to many approximations in calculations, like arc to segment
     // approx, rounding issues, etc.
-    int extra_margin = Millimeter2iu( ADVANCED_CFG::GetCfg().m_ExtraClearance );
-
-    BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
-    int                    zone_clearance = aZone->GetLocalClearance();
-    EDA_RECT               zone_boundingbox = aZone->GetCachedBoundingBox();
+    EDA_RECT zone_boundingbox = aZone->GetCachedBoundingBox();
+    int      extra_margin = Millimeter2iu( ADVANCED_CFG::GetCfg().m_ExtraClearance );
 
     // Items outside the zone bounding box are skipped, so it needs to be inflated by the
     // largest clearance value found in the netclasses and rules
@@ -692,7 +691,7 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE* aZone, PCB_LAYER_ID aLa
                     PCB_LAYER_ID aEvalLayer ) -> int
             {
                 auto c = bds.m_DRCEngine->EvalRules( aConstraint, a, b, aEvalLayer );
-                return c.Value().Min();
+                return c.GetValue().Min();
             };
 
     // Add non-connected pad clearances
@@ -711,7 +710,7 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE* aZone, PCB_LAYER_ID aLa
                         // clearances have no meanings.
                         // So just knock out the greater of the zone's local clearance and
                         // thermal relief.
-                        gap = std::max( zone_clearance, aZone->GetThermalReliefGap( aPad ) );
+                        gap = std::max( aZone->GetLocalClearance(), aZone->GetThermalReliefGap() );
                         knockoutHoleClearance = false;
                     }
                     else
@@ -736,20 +735,12 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE* aZone, PCB_LAYER_ID aLa
                 }
             };
 
-    for( FOOTPRINT* footprint : m_board->Footprints() )
+    for( PAD* pad : aNoConnectionPads )
     {
-        for( PAD* pad : footprint->Pads() )
-        {
-            if( checkForCancel( m_progressReporter ) )
-                return;
+        if( checkForCancel( m_progressReporter ) )
+            return;
 
-            if( pad->GetNetCode() != aZone->GetNetCode()
-                    || pad->GetNetCode() <= 0
-                    || aZone->GetPadConnection( pad ) == ZONE_CONNECTION::NONE )
-            {
-                knockoutPadClearance( pad );
-            }
-        }
+        knockoutPadClearance( pad );
     }
 
     // Add non-connected track clearances
@@ -770,7 +761,7 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE* aZone, PCB_LAYER_ID aLa
                             // For pads having the same netcode as the zone, the net and hole
                             // clearances have no meanings.
                             // So just knock out the zone's local clearance.
-                            gap = zone_clearance;
+                            gap = aZone->GetLocalClearance();
                             checkHoleClearance = false;
                         }
                         else
@@ -1080,8 +1071,10 @@ bool ZONE_FILLER::computeRawFilledArea( const ZONE* aZone,
     SHAPE_POLY_SET::CORNER_STRATEGY fastCornerStrategy = SHAPE_POLY_SET::CHAMFER_ALL_CORNERS;
     SHAPE_POLY_SET::CORNER_STRATEGY cornerStrategy = SHAPE_POLY_SET::ROUND_ALL_CORNERS;
 
+    std::vector<PAD*>            thermalConnectionPads;
+    std::vector<PAD*>            noConnectionPads;
     std::deque<SHAPE_LINE_CHAIN> thermalSpokes;
-    SHAPE_POLY_SET clearanceHoles;
+    SHAPE_POLY_SET               clearanceHoles;
 
     aRawPolys = aSmoothedOutline;
     DUMP_POLYS_TO_COPPER_LAYER( aRawPolys, In1_Cu, "smoothed-outline" );
@@ -1089,19 +1082,19 @@ bool ZONE_FILLER::computeRawFilledArea( const ZONE* aZone,
     if( m_progressReporter && m_progressReporter->IsCancelled() )
         return false;
 
-    knockoutThermalReliefs( aZone, aLayer, aRawPolys );
+    knockoutThermalReliefs( aZone, aLayer, aRawPolys, thermalConnectionPads, noConnectionPads );
     DUMP_POLYS_TO_COPPER_LAYER( aRawPolys, In2_Cu, "minus-thermal-reliefs" );
 
     if( m_progressReporter && m_progressReporter->IsCancelled() )
         return false;
 
-    buildCopperItemClearances( aZone, aLayer, clearanceHoles );
+    buildCopperItemClearances( aZone, aLayer, noConnectionPads, clearanceHoles );
     DUMP_POLYS_TO_COPPER_LAYER( clearanceHoles, In3_Cu, "clearance-holes" );
 
     if( m_progressReporter && m_progressReporter->IsCancelled() )
         return false;
 
-    buildThermalSpokes( aZone, aLayer, thermalSpokes );
+    buildThermalSpokes( aZone, aLayer, thermalConnectionPads, thermalSpokes );
 
     if( m_progressReporter && m_progressReporter->IsCancelled() )
         return false;
@@ -1298,118 +1291,118 @@ bool ZONE_FILLER::fillSingleZone( ZONE* aZone, PCB_LAYER_ID aLayer, SHAPE_POLY_S
  * Function buildThermalSpokes
  */
 void ZONE_FILLER::buildThermalSpokes( const ZONE* aZone, PCB_LAYER_ID aLayer,
+                                      const std::vector<PAD*>& aSpokedPadsList,
                                       std::deque<SHAPE_LINE_CHAIN>& aSpokesList )
 {
-    auto zoneBB = aZone->GetCachedBoundingBox();
-    int  zone_clearance = aZone->GetLocalClearance();
-    int  biggest_clearance = m_board->GetDesignSettings().GetBiggestClearanceValue();
-    biggest_clearance = std::max( biggest_clearance, zone_clearance );
-    zoneBB.Inflate( biggest_clearance );
+    BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
+    EDA_RECT               zoneBB = aZone->GetCachedBoundingBox();
+    DRC_CONSTRAINT         constraint;
+
+    zoneBB.Inflate( std::max( bds.GetBiggestClearanceValue(), aZone->GetLocalClearance() ) );
 
     // Is a point on the boundary of the polygon inside or outside?  This small epsilon lets
     // us avoid the question.
     int epsilon = KiROUND( IU_PER_MM * 0.04 );  // about 1.5 mil
 
-    for( FOOTPRINT* footprint : m_board->Footprints() )
+    for( PAD* pad : aSpokedPadsList )
     {
-        for( PAD* pad : footprint->Pads() )
+        // We currently only connect to pads, not pad holes
+        if( !pad->IsOnLayer( aLayer ) )
+            continue;
+
+        constraint = bds.m_DRCEngine->EvalRules( THERMAL_RELIEF_GAP_CONSTRAINT, pad, aZone, aLayer );
+        int thermalReliefGap = constraint.GetValue().Min();
+
+        constraint = bds.m_DRCEngine->EvalRules( THERMAL_SPOKE_WIDTH_CONSTRAINT, pad, aZone, aLayer );
+        int spoke_w = constraint.GetValue().Opt();
+
+        // Spoke width should ideally be smaller than the pad minor axis.
+        spoke_w = std::min( spoke_w, pad->GetSize().x );
+        spoke_w = std::min( spoke_w, pad->GetSize().y );
+
+        spoke_w = std::max( spoke_w, constraint.Value().Min() );
+        spoke_w = std::min( spoke_w, constraint.Value().Max() );
+
+        // Cannot create stubs having a width < zone min thickness
+        if( spoke_w < aZone->GetMinThickness() )
+            continue;
+
+        int spoke_half_w = spoke_w / 2;
+
+        // Quick test here to possibly save us some work
+        BOX2I itemBB = pad->GetBoundingBox();
+        itemBB.Inflate( thermalReliefGap + epsilon );
+
+        if( !( itemBB.Intersects( zoneBB ) ) )
+            continue;
+
+        // Thermal spokes consist of segments from the pad center to points just outside
+        // the thermal relief.
+        wxPoint shapePos = pad->ShapePos();
+        double  spokesAngle = pad->GetOrientation() + pad->GetThermalSpokeAngle();
+
+        while( spokesAngle >= 900.0 )
+            spokesAngle -= 900.0;
+
+        while( spokesAngle < 0.0 )
+            spokesAngle += 900.0;
+
+        // We use the bounding-box to lay out the spokes, but for this to work the
+        // bounding box has to be built at the same rotation as the spokes.
+        // We have to use a dummy pad to avoid dirtying the cached shapes
+        PAD dummy_pad( *pad );
+        dummy_pad.SetOrientation( spokesAngle );
+
+        // Spokes are from center of pad, not from hole
+        dummy_pad.SetPosition( -pad->GetOffset() );
+
+        BOX2I reliefBB = dummy_pad.GetBoundingBox();
+        reliefBB.Inflate( thermalReliefGap + epsilon );
+
+        for( int i = 0; i < 4; i++ )
         {
-            if( !hasThermalConnection( pad, aZone ) )
-                continue;
-
-            // We currently only connect to pads, not pad holes
-            if( !pad->IsOnLayer( aLayer ) )
-                continue;
-
-            int thermalReliefGap = aZone->GetThermalReliefGap( pad );
-
-            // Calculate thermal bridge half width
-            int spoke_w = aZone->GetThermalReliefSpokeWidth( pad );
-            // Avoid spoke_w bigger than the smaller pad size, because
-            // it is not possible to create stubs bigger than the pad.
-            // Possible refinement: have a separate size for vertical and horizontal stubs
-            spoke_w = std::min( spoke_w, pad->GetSize().x );
-            spoke_w = std::min( spoke_w, pad->GetSize().y );
-
-            // Cannot create stubs having a width < zone min thickness
-            if( spoke_w < aZone->GetMinThickness() )
-                continue;
-
-            int spoke_half_w = spoke_w / 2;
-
-            // Quick test here to possibly save us some work
-            BOX2I itemBB = pad->GetBoundingBox();
-            itemBB.Inflate( thermalReliefGap + epsilon );
-
-            if( !( itemBB.Intersects( zoneBB ) ) )
-                continue;
-
-            // Thermal spokes consist of segments from the pad center to points just outside
-            // the thermal relief.
-            //
-            // We use the bounding-box to lay out the spokes, but for this to work the
-            // bounding box has to be built at the same rotation as the spokes.
-            // We have to use a dummy pad to avoid dirtying the cached shapes
-            wxPoint shapePos = pad->ShapePos();
-            double  padAngle = pad->GetOrientation();
-            PAD     dummy_pad( *pad );
-            dummy_pad.SetOrientation( 0.0 );
-
-            // Spokes are from center of pad, not from hole
-            dummy_pad.SetPosition( -pad->GetOffset() );
-
-            BOX2I reliefBB = dummy_pad.GetBoundingBox();
-            reliefBB.Inflate( thermalReliefGap + epsilon );
-
-            // For circle pads, the thermal spoke orientation is 45 deg
-            if( pad->GetShape() == PAD_SHAPE::CIRCLE )
-                padAngle = s_RoundPadThermalSpokeAngle;
-
-            for( int i = 0; i < 4; i++ )
+            SHAPE_LINE_CHAIN spoke;
+            switch( i )
             {
-                SHAPE_LINE_CHAIN spoke;
-                switch( i )
-                {
-                case 0:       // lower stub
-                    spoke.Append( +spoke_half_w,       -spoke_half_w );
-                    spoke.Append( -spoke_half_w,       -spoke_half_w );
-                    spoke.Append( -spoke_half_w,       reliefBB.GetBottom() );
-                    spoke.Append( 0,                   reliefBB.GetBottom() );  // test pt
-                    spoke.Append( +spoke_half_w,       reliefBB.GetBottom() );
-                    break;
+            case 0:       // lower stub
+                spoke.Append( +spoke_half_w,       -spoke_half_w );
+                spoke.Append( -spoke_half_w,       -spoke_half_w );
+                spoke.Append( -spoke_half_w,       reliefBB.GetBottom() );
+                spoke.Append( 0,                   reliefBB.GetBottom() );  // test pt
+                spoke.Append( +spoke_half_w,       reliefBB.GetBottom() );
+                break;
 
-                case 1:       // upper stub
-                    spoke.Append( +spoke_half_w,       spoke_half_w );
-                    spoke.Append( -spoke_half_w,       spoke_half_w );
-                    spoke.Append( -spoke_half_w,       reliefBB.GetTop() );
-                    spoke.Append( 0,                   reliefBB.GetTop() );     // test pt
-                    spoke.Append( +spoke_half_w,       reliefBB.GetTop() );
-                    break;
+            case 1:       // upper stub
+                spoke.Append( +spoke_half_w,       spoke_half_w );
+                spoke.Append( -spoke_half_w,       spoke_half_w );
+                spoke.Append( -spoke_half_w,       reliefBB.GetTop() );
+                spoke.Append( 0,                   reliefBB.GetTop() );     // test pt
+                spoke.Append( +spoke_half_w,       reliefBB.GetTop() );
+                break;
 
-                case 2:       // right stub
-                    spoke.Append( -spoke_half_w,       spoke_half_w );
-                    spoke.Append( -spoke_half_w,       -spoke_half_w );
-                    spoke.Append( reliefBB.GetRight(), -spoke_half_w );
-                    spoke.Append( reliefBB.GetRight(), 0 );                     // test pt
-                    spoke.Append( reliefBB.GetRight(), spoke_half_w );
-                    break;
+            case 2:       // right stub
+                spoke.Append( -spoke_half_w,       spoke_half_w );
+                spoke.Append( -spoke_half_w,       -spoke_half_w );
+                spoke.Append( reliefBB.GetRight(), -spoke_half_w );
+                spoke.Append( reliefBB.GetRight(), 0 );                     // test pt
+                spoke.Append( reliefBB.GetRight(), spoke_half_w );
+                break;
 
-                case 3:       // left stub
-                    spoke.Append( spoke_half_w,        spoke_half_w );
-                    spoke.Append( spoke_half_w,        -spoke_half_w );
-                    spoke.Append( reliefBB.GetLeft(),  -spoke_half_w );
-                    spoke.Append( reliefBB.GetLeft(),  0 );                     // test pt
-                    spoke.Append( reliefBB.GetLeft(),  spoke_half_w );
-                    break;
-                }
-
-                spoke.Rotate( -DECIDEG2RAD( padAngle ) );
-                spoke.Move( shapePos );
-
-                spoke.SetClosed( true );
-                spoke.GenerateBBoxCache();
-                aSpokesList.push_back( std::move( spoke ) );
+            case 3:       // left stub
+                spoke.Append( spoke_half_w,        spoke_half_w );
+                spoke.Append( spoke_half_w,        -spoke_half_w );
+                spoke.Append( reliefBB.GetLeft(),  -spoke_half_w );
+                spoke.Append( reliefBB.GetLeft(),  0 );                     // test pt
+                spoke.Append( reliefBB.GetLeft(),  spoke_half_w );
+                break;
             }
+
+            spoke.Rotate( -DECIDEG2RAD( pad->GetOrientation() + spokesAngle ) );
+            spoke.Move( shapePos );
+
+            spoke.SetClosed( true );
+            spoke.GenerateBBoxCache();
+            aSpokesList.push_back( std::move( spoke ) );
         }
     }
 }

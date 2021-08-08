@@ -63,9 +63,12 @@ private:
 
     void addHoleKnockout( PAD* aPad, int aGap, SHAPE_POLY_SET& aHoles );
 
-    void knockoutThermalReliefs( const ZONE* aZone, PCB_LAYER_ID aLayer, SHAPE_POLY_SET& aFill );
+    void knockoutThermalReliefs( const ZONE* aZone, PCB_LAYER_ID aLayer, SHAPE_POLY_SET& aFill,
+                                 std::vector<PAD*>& aThermalConnectionPads,
+                                 std::vector<PAD*>& aNoConnectionPads );
 
     void buildCopperItemClearances( const ZONE* aZone, PCB_LAYER_ID aLayer,
+                                    const std::vector<PAD*> aNoConnectionPads,
                                     SHAPE_POLY_SET& aHoles );
 
     void subtractHigherPriorityZones( const ZONE* aZone, PCB_LAYER_ID aLayer,
@@ -91,6 +94,7 @@ private:
      * Constructs a list of all thermal spokes for the given zone.
      */
     void buildThermalSpokes( const ZONE* aZone, PCB_LAYER_ID aLayer,
+                             const std::vector<PAD*>& aSpokedPadsList,
                              std::deque<SHAPE_LINE_CHAIN>& aSpokes );
 
     /**

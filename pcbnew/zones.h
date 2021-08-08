@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2008-2014 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2012 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,6 +25,8 @@
 #ifndef ZONES_H_
 #define ZONES_H_
 
+#include <wx/translation.h>
+
 // Default values in mils for parameters in ZONE
 #define ZONE_THERMAL_RELIEF_GAP_MIL 20     // default value for ZONE_SETTINGS::m_ThermalReliefGap
 #define ZONE_THERMAL_RELIEF_COPPER_WIDTH_MIL 20 // default value for ZONE_SETTINGS::m_ThermalReliefCopperBridge
@@ -37,6 +39,7 @@
 #define ZONE_EXPORT_VALUES  1004        // Copper zone dialog reports wxID_OK, wxID_CANCEL or
                                         // ZONE_EXPORT_VALUES
 
+
 /// How pads are covered by copper in zone
 enum class ZONE_CONNECTION
 {
@@ -46,6 +49,20 @@ enum class ZONE_CONNECTION
     FULL,       ///< pads are covered by copper
     THT_THERMAL ///< Thermal relief only for THT pads
 };
+
+
+inline wxString PrintZoneConnection( ZONE_CONNECTION aConnection )
+{
+    switch( aConnection )
+    {
+    case ZONE_CONNECTION::INHERITED:   return _( "inherited" );
+    case ZONE_CONNECTION::NONE:        return _( "none" );
+    case ZONE_CONNECTION::THERMAL:     return _( "thermal reliefs" );
+    case ZONE_CONNECTION::FULL:        return _( "solid" );
+    case ZONE_CONNECTION::THT_THERMAL: return _( "thermal reliefs for PTH" );
+    }
+}
+
 
 class ZONE;
 class ZONE_SETTINGS;

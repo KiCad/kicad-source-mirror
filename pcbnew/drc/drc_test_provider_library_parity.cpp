@@ -34,7 +34,6 @@
 #include <drc/drc_engine.h>
 #include <drc/drc_item.h>
 #include <drc/drc_test_provider.h>
-#include <macros.h>
 
 /*
     Library parity test.
@@ -171,6 +170,7 @@ bool padsNeedUpdate( const PAD* a, const PAD* b )
     TEST( a->GetZoneConnection(), b->GetZoneConnection() );
     TEST( a->GetThermalGap(), b->GetThermalGap() );
     TEST( a->GetThermalSpokeWidth(), b->GetThermalSpokeWidth() );
+    TEST( a->GetThermalSpokeAngle(), b->GetThermalSpokeAngle() );
     TEST( a->GetCustomShapeInZoneOpt(), b->GetCustomShapeInZoneOpt() );
 
     TEST( a->GetPrimitives().size(), b->GetPrimitives().size() );

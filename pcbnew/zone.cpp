@@ -41,37 +41,21 @@
 #include <trigo.h>
 #include <i18n_utility.h>
 
+
 ZONE::ZONE( BOARD_ITEM_CONTAINER* aParent, bool aInFP ) :
         BOARD_CONNECTED_ITEM( aParent, aInFP ? PCB_FP_ZONE_T : PCB_ZONE_T ),
         m_area( 0.0 )
 {
     m_CornerSelection = nullptr;                // no corner is selected
     m_isFilled = false;                         // fill status : true when the zone is filled
-    m_fillMode = ZONE_FILL_MODE::POLYGONS;
     m_borderStyle = ZONE_BORDER_DISPLAY_STYLE::DIAGONAL_EDGE;
     m_borderHatchPitch = GetDefaultHatchPitch();
-    m_hv45 = false;
-    m_hatchThickness = 0;
-    m_hatchGap = 0;
-    m_hatchOrientation = 0.0;
-    m_hatchSmoothingLevel = 0;          // Grid pattern smoothing type. 0 = no smoothing
-    m_hatchSmoothingValue = 0.1;        // Grid pattern chamfer value relative to the gap value
-                                        // used only if m_hatchSmoothingLevel > 0
-    m_hatchHoleMinArea = 0.3;           // Min size before holes are dropped (ratio of hole size)
-    m_hatchBorderAlgorithm = 1;         // 0 = use zone min thickness; 1 = use hatch width
     m_priority = 0;
-    m_cornerSmoothingType = ZONE_SETTINGS::SMOOTHING_NONE;
-    SetIsRuleArea( aInFP );             // Zones living in footprints have the rule area option
-    SetDoNotAllowCopperPour( false );   // has meaning only if m_isRuleArea == true
-    SetDoNotAllowVias( true );          // has meaning only if m_isRuleArea == true
-    SetDoNotAllowTracks( true );        // has meaning only if m_isRuleArea == true
-    SetDoNotAllowPads( true );          // has meaning only if m_isRuleArea == true
-    SetDoNotAllowFootprints( false );   // has meaning only if m_isRuleArea == true
-    m_cornerRadius = 0;
-    SetLocalFlags( 0 );                 // flags temporary used in zone calculations
-    m_Poly = new SHAPE_POLY_SET();      // Outlines
-    m_fillVersion = 5;                  // set the "old" way to build filled polygon areas (< 6.0.x)
-    m_islandRemovalMode = ISLAND_REMOVAL_MODE::ALWAYS;
+    SetIsRuleArea( aInFP );           // Zones living in footprints have the rule area option
+    SetLocalFlags( 0 );               // flags temporary used in zone calculations
+    m_Poly = new SHAPE_POLY_SET();    // Outlines
+    m_fillVersion = 5;                // set the "old" way to build filled polygon areas (< 6.0.x)
+
     aParent->GetZoneSettings().ExportSetting( *this );
 
     m_ZoneMinThickness = Mils2iu( ZONE_THICKNESS_MIL );
@@ -335,7 +319,7 @@ const EDA_RECT ZONE::GetBoundingBox() const
 
 int ZONE::GetThermalReliefGap( PAD* aPad, wxString* aSource ) const
 {
-    if( aPad->GetEffectiveThermalGap() == 0 )
+    if( aPad->GetLocalThermalGapOverride() == 0 )
     {
         if( aSource )
             *aSource = _( "zone" );
@@ -343,21 +327,8 @@ int ZONE::GetThermalReliefGap( PAD* aPad, wxString* aSource ) const
         return m_thermalReliefGap;
     }
 
-    return aPad->GetEffectiveThermalGap( aSource );
-}
+    return aPad->GetLocalThermalGapOverride( aSource );
 
-
-int ZONE::GetThermalReliefSpokeWidth( PAD* aPad, wxString* aSource ) const
-{
-    if( aPad->GetEffectiveThermalSpokeWidth() == 0 )
-    {
-        if( aSource )
-            *aSource = _( "zone" );
-
-        return m_thermalReliefSpokeWidth;
-    }
-
-    return aPad->GetEffectiveThermalSpokeWidth( aSource );
 }
 
 
@@ -780,22 +751,6 @@ void ZONE::Mirror( const wxPoint& aMirrorRef, bool aMirrorLeftRight )
                 MIRROR( seg.B.y, aMirrorRef.y );
             }
         }
-    }
-}
-
-
-ZONE_CONNECTION ZONE::GetPadConnection( PAD* aPad, wxString* aSource ) const
-{
-    if( aPad == nullptr || aPad->GetEffectiveZoneConnection() == ZONE_CONNECTION::INHERITED )
-    {
-        if( aSource )
-            *aSource = _( "zone" );
-
-        return m_PadConnection;
-    }
-    else
-    {
-        return aPad->GetEffectiveZoneConnection( aSource );
     }
 }
 
@@ -1464,7 +1419,7 @@ static struct ZONE_DESC
                 .Map( ZONE_CONNECTION::NONE,        _HKI( "None" ) )
                 .Map( ZONE_CONNECTION::THERMAL,     _HKI( "Thermal reliefs" ) )
                 .Map( ZONE_CONNECTION::FULL,        _HKI( "Solid" ) )
-                .Map( ZONE_CONNECTION::THT_THERMAL, _HKI( "Reliefs for PTH" ) );
+                .Map( ZONE_CONNECTION::THT_THERMAL, _HKI( "Thermal reliefs for PTH" ) );
 
         PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
         REGISTER_TYPE( ZONE );
@@ -1486,7 +1441,7 @@ static struct ZONE_DESC
         propMgr.AddProperty( new PROPERTY<ZONE, int>( _HKI( "Thermal Relief Gap" ),
                     &ZONE::SetThermalReliefGap, &ZONE::GetThermalReliefGap,
                     PROPERTY_DISPLAY::DISTANCE ) );
-        propMgr.AddProperty( new PROPERTY<ZONE, int>( _HKI( "Thermal Relief Width" ),
+        propMgr.AddProperty( new PROPERTY<ZONE, int>( _HKI( "Thermal Relief Spoke Width" ),
                     &ZONE::SetThermalReliefSpokeWidth, &ZONE::GetThermalReliefSpokeWidth,
                     PROPERTY_DISPLAY::DISTANCE ) );
     }

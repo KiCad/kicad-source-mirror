@@ -105,7 +105,7 @@ ZONE_SETTINGS& ZONE_SETTINGS::operator << ( const ZONE& aSource )
     m_Name                        = aSource.GetZoneName();
     m_ZoneBorderDisplayStyle      = aSource.GetHatchStyle();
     m_ThermalReliefGap            = aSource.GetThermalReliefGap();
-    m_ThermalReliefSpokeWidth   = aSource.GetThermalReliefSpokeWidth();
+    m_ThermalReliefSpokeWidth     = aSource.GetThermalReliefSpokeWidth();
     m_padConnection               = aSource.GetPadConnection();
     m_cornerSmoothingType         = aSource.GetCornerSmoothingType();
     m_cornerRadius                = aSource.GetCornerRadius();

@@ -23,6 +23,7 @@
 
 
 #include <board.h>
+#include <zones.h>
 #include <drc/drc_rule_parser.h>
 #include <drc/drc_rule_condition.h>
 #include <drc_rules_lexer.h>
@@ -277,6 +278,9 @@ void DRC_RULES_PARSER::parseConstraint( DRC_RULE* aRule )
     case T_track_width:               c.m_Type = TRACK_WIDTH_CONSTRAINT;               break;
     case T_annular_width:             c.m_Type = ANNULAR_WIDTH_CONSTRAINT;             break;
     case T_via_diameter:              c.m_Type = VIA_DIAMETER_CONSTRAINT;              break;
+    case T_zone_connection:           c.m_Type = ZONE_CONNECTION_CONSTRAINT;           break;
+    case T_thermal_relief_gap:        c.m_Type = THERMAL_RELIEF_GAP_CONSTRAINT;        break;
+    case T_thermal_spoke_width:       c.m_Type = THERMAL_SPOKE_WIDTH_CONSTRAINT;       break;
     case T_disallow:                  c.m_Type = DISALLOW_CONSTRAINT;                  break;
     case T_length:                    c.m_Type = LENGTH_CONSTRAINT;                    break;
     case T_skew:                      c.m_Type = SKEW_CONSTRAINT;                      break;
@@ -286,8 +290,10 @@ void DRC_RULES_PARSER::parseConstraint( DRC_RULE* aRule )
     default:
         msg.Printf( _( "Unrecognized item '%s'.| Expected %s." ), FromUTF8(),
                     "clearance, hole_clearance, edge_clearance, hole_size, hole_to_hole, "
-                    "courtyard_clearance, silk_clearance, track_width, annular_width, via_diameter, "
-                    "disallow, length, skew, diff_pair_gap or diff_pair_uncoupled." );
+                    "courtyard_clearance, silk_clearance, text_height, text_thickness, "
+                    "track_width, annular_width, via_diameter, zone_connection, "
+                    "thermal_relief_gap, thermal_spoke_width, disallow, length, skew, "
+                    "diff_pair_gap or diff_pair_uncoupled." );
         reportError( msg );
     }
 
@@ -331,6 +337,36 @@ void DRC_RULES_PARSER::parseConstraint( DRC_RULE* aRule )
         }
 
         if( (int) CurTok() != DSN_RIGHT )
+            reportError( _( "Missing ')'." ) );
+
+        aRule->AddConstraint( c );
+        return;
+    }
+    else if( c.m_Type == ZONE_CONNECTION_CONSTRAINT )
+    {
+        token = NextTok();
+
+        if( (int) token == DSN_STRING )
+            token = GetCurStrAsToken();
+
+        switch( token )
+        {
+        case T_solid:           c.m_ZoneConnection = ZONE_CONNECTION::FULL;    break;
+        case T_thermal_reliefs: c.m_ZoneConnection = ZONE_CONNECTION::THERMAL; break;
+        case T_none:            c.m_ZoneConnection = ZONE_CONNECTION::NONE;    break;
+
+        case T_EOF:
+            reportError( _( "Missing ')'." ) );
+            return;
+
+        default:
+            msg.Printf( _( "Unrecognized item '%s'.| Expected %s." ), FromUTF8(),
+                        "'solid', 'thermal_reliefs' or 'none'." );
+            reportError( msg );
+            break;
+        }
+
+        if( (int) NextTok() != DSN_RIGHT )
             reportError( _( "Missing ')'." ) );
 
         aRule->AddConstraint( c );
