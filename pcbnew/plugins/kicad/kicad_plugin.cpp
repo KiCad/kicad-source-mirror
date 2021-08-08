@@ -1562,10 +1562,10 @@ void PCB_IO::format( const PAD* aPad, int aNestLevel ) const
                    FormatInternalUnits( aPad->GetLocalClearance() ).c_str() );
     }
 
-    if( aPad->GetEffectiveZoneConnection() != ZONE_CONNECTION::INHERITED )
+    if( aPad->GetZoneConnection() != ZONE_CONNECTION::INHERITED )
     {
         StrPrintf( &output, " (zone_connect %d)",
-                   static_cast<int>( aPad->GetEffectiveZoneConnection() ) );
+                   static_cast<int>( aPad->GetZoneConnection() ) );
     }
 
     if( aPad->GetThermalSpokeWidth() != 0 )

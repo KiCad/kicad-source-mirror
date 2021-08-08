@@ -1601,7 +1601,7 @@ bool DIALOG_PAD_PROPERTIES::TransferDataFromWindow()
     m_currentPad->SetRoundRectRadiusRatio( m_padMaster->GetRoundRectRadiusRatio() );
     m_currentPad->SetChamferRectRatio( m_padMaster->GetChamferRectRatio() );
     m_currentPad->SetChamferPositions( m_padMaster->GetChamferPositions() );
-    m_currentPad->SetZoneConnection( m_padMaster->GetEffectiveZoneConnection() );
+    m_currentPad->SetZoneConnection( m_padMaster->GetZoneConnection() );
 
     // rounded rect pads with radius ratio = 0 are in fact rect pads.
     // So set the right shape (and perhaps issues with a radius = 0)
