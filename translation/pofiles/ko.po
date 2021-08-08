@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
 "PO-Revision-Date: 2021-08-08 04:12+0000\n"
-"Last-Translator: Ji Yoon Choi <chichoon.choi@gmail.com>\n"
+"Last-Translator: 킴슨김랑기 <korearf@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
 "Language: ko\n"
@@ -6067,9 +6067,8 @@ msgstr "입문자를 위한 \"KiCad 시작하기\" 가이드 열기"
 
 #: common/tool/actions.cpp:619
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:598
-#, fuzzy
 msgid "Help"
-msgstr "도움말 (&H)"
+msgstr "도움말"
 
 #: common/tool/actions.cpp:620
 msgid "Open product documentation in a web browser"
@@ -6219,9 +6218,8 @@ msgid "Accelerated graphics"
 msgstr "가속된 그래픽"
 
 #: common/widgets/gal_options_panel.cpp:85
-#, fuzzy
 msgid "Fallback graphics"
-msgstr "잠김 트랙 포함"
+msgstr "대체 그래픽"
 
 #: common/widgets/gal_options_panel.cpp:86
 msgid "Rendering Engine"
