@@ -4,13 +4,14 @@
 # 이상수 <kku1818@gmail.com>, 2021.
 # jehunseo <benbot591@gmail.com>, 2021.
 # Uibeom Jung <wjddmlqja17@gmail.com>, 2021.
+# 박준언 <joonun1696@pusan.ac.kr>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
 "PO-Revision-Date: 2021-08-08 05:48+0000\n"
-"Last-Translator: Uibeom Jung <wjddmlqja17@gmail.com>\n"
+"Last-Translator: 박준언 <joonun1696@pusan.ac.kr>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
 "Language: ko\n"
@@ -22565,7 +22566,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:77
 msgid "Tests Running..."
-msgstr ""
+msgstr "테스트 실행 중..."
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:105
 #, fuzzy, c-format
@@ -22602,17 +22603,15 @@ msgstr "패드 이름 접두사:"
 
 #: pcbnew/dialogs/dialog_enum_pads_base.cpp:47
 msgid "First pad number:"
-msgstr ""
+msgstr "첫 번째 패드 번호:"
 
 #: pcbnew/dialogs/dialog_enum_pads_base.h:51
-#, fuzzy
 msgid "Pad Enumeration Settings"
-msgstr "패드 설정"
+msgstr "패드 열거 설정"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:74
-#, fuzzy
 msgid "Change Footprints"
-msgstr "풋프린트"
+msgstr "풋프린트 변경"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:75
 #, fuzzy
@@ -22652,9 +22651,8 @@ msgid "Update fabrication attributes"
 msgstr "속성"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:83
-#, fuzzy
 msgid "Update 3D models"
-msgstr "D-Code 보이기"
+msgstr "3D 모델 업데이트"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:87
 msgid ""
@@ -22706,7 +22704,7 @@ msgstr "새 풋프린트 라이브러리 ID:"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:96
 msgid "Remove text items which are not in library footprint"
-msgstr ""
+msgstr "라이브러리 풋프린트에 없는 텍스트 항목 제거"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:101
 #, fuzzy
@@ -22734,15 +22732,14 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_export_idf.cpp:161
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:120
-#, fuzzy, c-format
+#, c-format
 msgid "File %s already exists."
 msgstr "파일 %s가 이미 존재합니다."
 
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:21
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:22
-#, fuzzy
 msgid "File name:"
-msgstr "파일 이름:"
+msgstr "파일명:"
 
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:25
 msgid "Select an IDF export filename"
@@ -22754,11 +22751,11 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:34
 msgid "Grid reference point:"
-msgstr ""
+msgstr "그리드 기준점:"
 
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:38
 msgid "Adjust automatically"
-msgstr ""
+msgstr "자동 수정"
 
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:60
 #: pcbnew/dialogs/dialog_export_step_base.cpp:73
