@@ -13,7 +13,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
 "PO-Revision-Date: 2021-08-08 15:25+0000\n"
-"Last-Translator: jeongsuAn <dks9467@gmail.com>\n"
+"Last-Translator: Ji Yoon Choi <chichoon.choi@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
 "Language: ko\n"
@@ -19048,135 +19048,121 @@ msgid "Exclude value 2:"
 msgstr "제외할 값 2:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:485
-#, fuzzy
 msgid "E1"
 msgstr "E1"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:488
-#, fuzzy
 msgid "E3"
 msgstr "E3"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:491
-#, fuzzy
 msgid "E6"
 msgstr "E6"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:495
-#, fuzzy
 msgid "E12"
 msgstr "E12"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:505
-#, fuzzy
 msgid "Solutions"
-msgstr "솔루션"
+msgstr "해답"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:513
-#, fuzzy
 msgid "Simple solution:"
-msgstr "버전:"
+msgstr "간단한 해답:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:533
-#, fuzzy
 msgid "3R solution:"
-msgstr "버전:"
+msgstr "3R 해답:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:553
-#, fuzzy
 msgid "4R solution:"
-msgstr "버전:"
+msgstr "4R 해답:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:613
-#, fuzzy
 msgid "E-Series"
 msgstr "E-시리즈"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:621
 msgid "10% / 5%"
-msgstr ""
+msgstr "10% / 5%"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:621
 msgid "<= 2%"
-msgstr ""
+msgstr "<= 2%"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:623
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:655
-#, fuzzy
 msgid "Tolerance"
-msgstr "유격"
+msgstr "오차"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:635
 msgid "1st Band"
-msgstr ""
+msgstr "첫 번째 밴드"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:639
-#, fuzzy
 msgid "2nd Band"
-msgstr "보드 추가"
+msgstr "두 번째 밴드"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:643
 msgid "3rd Band"
-msgstr ""
+msgstr "세 번째 밴드"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:647
 msgid "4th Band"
-msgstr ""
+msgstr "네 번째 밴드"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:651
-#, fuzzy
 msgid "Multiplier"
-msgstr "복수 항목 %s%s"
+msgstr "곱셈 회로"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:684
-#, fuzzy
 msgid "Color Code"
-msgstr "색상 이미지"
+msgstr "색상 코드"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:692
 msgid "Microstrip Line"
-msgstr ""
+msgstr "마이크로스트립 선"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:692
 msgid "Coplanar wave guide"
-msgstr ""
+msgstr "동일 평면 도파관 (CPW)"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:692
 msgid "Coplanar wave guide w/ ground plane"
-msgstr ""
+msgstr "접지면을 포함한 동일 평면 도파관"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:692
 msgid "Rectangular Waveguide"
-msgstr ""
+msgstr "구형 도파관"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:692
 msgid "Coaxial Line"
-msgstr ""
+msgstr "동축 선"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:692
 msgid "Coupled Microstrip Line"
 msgstr "결합된 마이크로스트립 선"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:692
-#, fuzzy
 msgid "Stripline"
-msgstr "선"
+msgstr "스트립라인"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:692
 msgid "Twisted Pair"
-msgstr ""
+msgstr "연선"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:694
 msgid "Transmission Line Type"
-msgstr ""
+msgstr "전송 선 유형"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:711
 msgid "Substrate Parameters"
-msgstr ""
+msgstr "기판 매개변수"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:719
 msgid "Er:"
-msgstr ""
+msgstr "Er:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:729
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:748
@@ -19185,58 +19171,56 @@ msgstr ""
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1279
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:653
 msgid "..."
-msgstr ""
+msgstr "..."
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:738
-#, fuzzy
 msgid "Tan delta:"
-msgstr "탄 델타:"
+msgstr "Tan delta:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:757
 msgid "Rho:"
-msgstr ""
+msgstr "Rho:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:759
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1247
 msgid "Specific resistance in ohms * meters"
-msgstr ""
+msgstr "옴 * 미터 단위의 비저항"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:778
 msgid "H:"
-msgstr ""
+msgstr "H:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:790
 msgid "H_t:"
-msgstr ""
+msgstr "H_t:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:802
 msgid "T:"
-msgstr ""
+msgstr "T:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:814
 msgid "Rough:"
-msgstr ""
+msgstr "균일성:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:826
 msgid "Insulator mu:"
-msgstr ""
+msgstr "절연체 mu:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:838
 msgid "Conductor mu:"
-msgstr "콘덕터 뮤:"
+msgstr "도체 mu:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:857
-#, fuzzy
 msgid "Component Parameters"
-msgstr "컴포넌트 속성"
+msgstr "컴포넌트 매개변수"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:895
 msgid "Zdiff = Zodd * 2"
-msgstr ""
+msgstr "Zdiff = Zodd * 2"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:901
 msgid "Zcommon = Zeven / 2"
-msgstr ""
+msgstr "Zcommon = Zeven / 2"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:920
 #, fuzzy
@@ -19427,7 +19411,6 @@ msgid "Based on temperature rise"
 msgstr "온도 상승에 따라"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1409
-#, fuzzy
 msgid "Capacitance:"
 msgstr "정전용량:"
 
@@ -20072,9 +20055,8 @@ msgid "Dielectric losses (odd):"
 msgstr "유전 손실(홀수):"
 
 #: pcb_calculator/transline_ident.cpp:333
-#, fuzzy
 msgid "Zeven"
-msgstr "Zeven (짝수 모드 임피던스)"
+msgstr "Zeven"
 
 #: pcb_calculator/transline_ident.cpp:334
 msgid "Even mode impedance (lines driven by common voltages)"
