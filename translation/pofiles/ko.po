@@ -2,13 +2,14 @@
 # Ji Yoon Choi <chichoon.choi@gmail.com>, 2021.
 # jeongsuAn <dks9467@gmail.com>, 2021.
 # 이상수 <kku1818@gmail.com>, 2021.
+# jehunseo <benbot591@gmail.com>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
-"PO-Revision-Date: 2021-08-08 03:31+0000\n"
-"Last-Translator: Ji Yoon Choi <chichoon.choi@gmail.com>\n"
+"PO-Revision-Date: 2021-08-08 04:12+0000\n"
+"Last-Translator: jehunseo <benbot591@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
 "Language: ko\n"
@@ -7251,24 +7252,21 @@ msgid "Annotation Messages:"
 msgstr "주석 메시지:"
 
 #: eeschema/dialogs/dialog_annotate.cpp:92
-#, fuzzy
 msgid "Annotate"
-msgstr "주석 달기"
+msgstr "주석"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:39
-#, fuzzy
 msgid "Entire schematic"
-msgstr "회로도 인쇄"
+msgstr "전체 회로도"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:39
-#, fuzzy
 msgid "Current sheet only"
-msgstr "현재 값"
+msgstr "현재 시트만"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:39
 #, fuzzy
 msgid "Selection only"
-msgstr "네트 선택"
+msgstr "선택 영역만"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:41
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:23
@@ -7276,29 +7274,27 @@ msgstr "네트 선택"
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:25
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.cpp:28
 msgid "Scope"
-msgstr ""
+msgstr "범위"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:46
 msgid "Order"
-msgstr ""
+msgstr "순서"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:51
 msgid "Sort symbols by &X position"
-msgstr ""
+msgstr "&X 위치에 따라 기호 정렬"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:69
 msgid "Sort symbols by &Y position"
-msgstr ""
+msgstr "&Y 위치에 따라 기호 정렬"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:84
-#, fuzzy
 msgid "Keep existing annotations"
-msgstr "기존 드로잉 가져오기"
+msgstr "기존 주석 유지"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:84
-#, fuzzy
 msgid "Reset existing annotations"
-msgstr "기존 드로잉 가져오기"
+msgstr "기존 주석 초기화"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:91
 msgid "Numbering"
