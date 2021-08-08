@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
 "PO-Revision-Date: 2021-08-08 04:31+0000\n"
-"Last-Translator: jehunseo <benbot591@gmail.com>\n"
+"Last-Translator: Ji Yoon Choi <chichoon.choi@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
 "Language: ko\n"
@@ -7196,17 +7196,17 @@ msgstr "%s와 %s 가 같은 항목에 연결되어 있습니다; %s 는 네트�
 #, c-format
 msgid ""
 "Net %s is graphically connected to bus %s but is not a member of that bus"
-msgstr ""
+msgstr "네트 %s는 표현상으로 버스 %s와 연결되어 있지만, 해당 버스의 멤버가 아닙니다"
 
 #: eeschema/connection_graph.cpp:2877
 #, c-format
 msgid "Sheet pin %s has no matching hierarchical label inside the sheet"
-msgstr "시트 핀%s에는 시트 내부에 일치하는 계층 레이블이 없음"
+msgstr "시트 핀 %s에는 시트 내부에 일치하는 계층 레이블이 없음"
 
 #: eeschema/connection_graph.cpp:2894
 #, c-format
 msgid "Hierarchical label %s has no matching sheet pin in the parent sheet"
-msgstr "계층 레이블 %s에는 상위 시트에 일치하는 시트 핀이 없음"
+msgstr "계층 라벨 %s에는 상위 시트 내부에 일치하는 시트 핀이 없음"
 
 #: eeschema/cross-probing.cpp:265 pcbnew/cross-probing.cpp:171
 #, c-format
@@ -7250,7 +7250,6 @@ msgid "Current sheet only"
 msgstr "현재 시트만"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:39
-#, fuzzy
 msgid "Selection only"
 msgstr "선택 영역만"
 
@@ -7288,40 +7287,36 @@ msgstr "번호 매기기"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:98
 msgid "Use first free number after:"
-msgstr ""
+msgstr "해당 번호 이후의 첫 번째 빈 번호부터 사용:"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:104
 msgid "First free after sheet number X 100"
-msgstr ""
+msgstr "시트 번호 X 100 이후의 첫번째 빈 번호"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:107
 msgid "First free after sheet number X 1000"
-msgstr ""
+msgstr "시트 번호 X 1000 이후의 첫번째 빈 번호"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:130
-#, fuzzy
 msgid "Clear Annotation"
-msgstr "EESchema 애노테이션"
+msgstr "주석 지우기"
 
 #: eeschema/dialogs/dialog_annotate_base.h:81
-#, fuzzy
 msgid "Annotate Schematic"
-msgstr "새 회로도 (&S)"
+msgstr "회로도에 주석 달기"
 
 #: eeschema/dialogs/dialog_bom.cpp:133
-#, fuzzy
 msgid "Generate"
 msgstr "생성"
 
 #: eeschema/dialogs/dialog_bom.cpp:217
-#, fuzzy
 msgid "(file missing)"
-msgstr "정렬"
+msgstr "(파일 찾을 수 없음)"
 
 #: eeschema/dialogs/dialog_bom.cpp:294
-#, fuzzy, c-format
+#, c-format
 msgid "The selected BOM generator script %s could not be found."
-msgstr "%s 파일을 찾을 수 없습니다."
+msgstr "선택한 BOM 생성 스크립트 %s을 찾을 수 없습니다."
 
 #: eeschema/dialogs/dialog_bom.cpp:299
 #, c-format
@@ -7332,34 +7327,36 @@ msgid ""
 "\t%s\n"
 "\t%s"
 msgstr ""
+"\n"
+"\n"
+"검색 결과:\n"
+"\t%s\n"
+"\t%s"
 
 #: eeschema/dialogs/dialog_bom.cpp:345
 msgid "Generating BOM requires a fully annotated schematic."
-msgstr ""
+msgstr "BOM 생성을 위해서는 완전히 주석 처리된 회로도가 필요합니다."
 
 #: eeschema/dialogs/dialog_bom.cpp:382 eeschema/dialogs/dialog_bom_base.cpp:43
-#, fuzzy
 msgid "Generator nickname:"
-msgstr "라이브러리 파일:"
+msgstr "생성기 별칭:"
 
 #: eeschema/dialogs/dialog_bom.cpp:382
-#, fuzzy
 msgid "Add Generator"
-msgstr "아래로 추가"
+msgstr "생성기 추가"
 
 #: eeschema/dialogs/dialog_bom.cpp:391
-#, fuzzy, c-format
+#, c-format
 msgid "Nickname '%s' already in use."
-msgstr "“%s” 별명은 이미 사용 중입니다."
+msgstr "“%s” 별칭은 이미 사용 중입니다."
 
 #: eeschema/dialogs/dialog_bom.cpp:420 eeschema/dialogs/dialog_netlist.cpp:685
 msgid "Generator files:"
 msgstr "생성기 파일:"
 
 #: eeschema/dialogs/dialog_bom.cpp:439
-#, fuzzy
 msgid "Generator file name not found."
-msgstr "%s 파일을 찾을 수 없습니다."
+msgstr "생성기 파일명을 찾을 수 없습니다."
 
 #: eeschema/dialogs/dialog_bom.cpp:449
 #, fuzzy
