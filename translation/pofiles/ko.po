@@ -12,8 +12,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
-"PO-Revision-Date: 2021-08-08 16:56+0000\n"
-"Last-Translator: jeongsuAn <dks9467@gmail.com>\n"
+"PO-Revision-Date: 2021-08-09 00:20+0000\n"
+"Last-Translator: Ji Yoon Choi <chichoon.choi@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
 "Language: ko\n"
@@ -9370,9 +9370,8 @@ msgid "Reformat passive symbol values e.g. 1M -> 1Meg"
 msgstr "수동 심볼 값 재 포맷 예시: 1M -> 1Meg"
 
 #: eeschema/dialogs/dialog_netlist.cpp:334
-#, fuzzy
 msgid "External simulator command:"
-msgstr "시뮬레이터 명령:"
+msgstr "외부 시뮬레이터 명령:"
 
 #: eeschema/dialogs/dialog_netlist.cpp:335
 msgid ""
@@ -9393,9 +9392,8 @@ msgid "Netlist command:"
 msgstr "네트리스트 명령:"
 
 #: eeschema/dialogs/dialog_netlist.cpp:446
-#, fuzzy
 msgid "Save Netlist File"
-msgstr "네트리스트 파일 열기 (&L)"
+msgstr "네트리스트 파일 저장"
 
 #: eeschema/dialogs/dialog_netlist.cpp:485
 #, c-format
@@ -9408,9 +9406,8 @@ msgid "Exporting netlist requires a fully annotated schematic."
 msgstr "네트리스트를 내보내기 위해선 완전히 주석 처리된 회로도가 필요합니다."
 
 #: eeschema/dialogs/dialog_netlist.cpp:634
-#, fuzzy
 msgid "This plugin already exists."
-msgstr "라이브러리가 이미 사용 중입니다."
+msgstr "플러그인이 이미 존재합니다."
 
 #: eeschema/dialogs/dialog_netlist.cpp:662
 msgid "Error. You must provide a command String"
@@ -9429,9 +9426,8 @@ msgid "Add Generator..."
 msgstr "생성기 추가..."
 
 #: eeschema/dialogs/dialog_netlist_base.cpp:42
-#, fuzzy
 msgid "Remove Generator"
-msgstr "제거"
+msgstr "생성기 제거"
 
 #: eeschema/dialogs/dialog_netlist_base.cpp:85
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:28
@@ -9480,14 +9476,12 @@ msgstr ""
 "계속하시겠습니까?"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:35
-#, fuzzy
 msgid "Pin &name:"
-msgstr "핀 이름:"
+msgstr "핀 이름 (&n):"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:42
-#, fuzzy
 msgid "Pin num&ber:"
-msgstr "펜 번호:"
+msgstr "핀 번호 (&b):"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:44
 msgid "Pin number: 1 to 4 ASCII letters and/or digits"
@@ -9502,9 +9496,8 @@ msgid "&Y position:"
 msgstr "&Y 위치:"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:67
-#, fuzzy
 msgid "&Pin length:"
-msgstr "핀 길이:"
+msgstr "핀 길이 (&P):"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:74
 msgid "N&ame text size:"
@@ -9536,9 +9529,8 @@ msgid "Preview:"
 msgstr "미리보기:"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:179
-#, fuzzy
 msgid "Alternate pin definitions"
-msgstr "설정 저장"
+msgstr "대체 핀 정의"
 
 #: eeschema/dialogs/dialog_pin_properties_base.h:101
 #, fuzzy
@@ -9546,23 +9538,20 @@ msgid "Pin Properties"
 msgstr "핀 속성"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:109
-#, fuzzy
 msgid "Plot All Pages"
-msgstr "플로트 용지 크기"
+msgstr "모든 페이지 플로트"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:110
-#, fuzzy
 msgid "Plot Current Page"
-msgstr "현재 값"
+msgstr "현재 페이지 플로트"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:214
 #: pcbnew/dialogs/dialog_export_svg.cpp:207
 #: pcbnew/dialogs/dialog_gendrill.cpp:296 pcbnew/dialogs/dialog_plot.cpp:381
 #: pcbnew/exporters/gen_footprints_placefile.cpp:184
 #: pcbnew/exporters/gen_footprints_placefile.cpp:509
-#, fuzzy
 msgid "Select Output Directory"
-msgstr "디렉토리 삭제 (&D)"
+msgstr "출력 경로 지정"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:231
 #: pcbnew/dialogs/dialog_gendrill.cpp:305 pcbnew/dialogs/dialog_plot.cpp:398
@@ -9581,9 +9570,8 @@ msgstr ""
 #: pcbnew/dialogs/dialog_gendrill.cpp:314 pcbnew/dialogs/dialog_plot.cpp:400
 #: pcbnew/exporters/gen_footprints_placefile.cpp:192
 #: pcbnew/exporters/gen_footprints_placefile.cpp:201
-#, fuzzy
 msgid "Plot Output Directory"
-msgstr "디렉토리 삭제 (&D)"
+msgstr "출력 경로 플로트"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:276
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:59
@@ -9649,9 +9637,9 @@ msgid "Schematic"
 msgstr "회로도"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:438
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to write plot files to folder '%s'."
-msgstr "%s 파일을 만들 수 없습니다."
+msgstr "폴더 '%s'에 플롯 파일을 쓸 수 없습니다."
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:513
 #: eeschema/dialogs/dialog_plot_schematic.cpp:683
@@ -9697,35 +9685,30 @@ msgstr "플롯 파일에 대한 목표 디렉토리입니다. 절대경로이거
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:41
 #: pcbnew/dialogs/dialog_plot_base.cpp:27
-#, fuzzy
 msgid "Postscript"
 msgstr "PostScript"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:41
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:82
 #: pcbnew/dialogs/dialog_plot_base.cpp:27
-#, fuzzy
 msgid "PDF"
 msgstr "PDF"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:41
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:82
 #: pcbnew/dialogs/dialog_plot_base.cpp:27
-#, fuzzy
 msgid "SVG"
 msgstr "SVG"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:41
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:82
 #: pcbnew/dialogs/dialog_plot_base.cpp:27
-#, fuzzy
 msgid "DXF"
 msgstr "DXF"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:41
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:82
 #: pcbnew/dialogs/dialog_plot_base.cpp:27
-#, fuzzy
 msgid "HPGL"
 msgstr "HPGL"
 
@@ -9734,19 +9717,16 @@ msgid "Page size:"
 msgstr "페이지 크기:"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:65
-#, fuzzy
 msgid "Plot drawing sheet"
-msgstr "기존 드로잉 가져오기"
+msgstr "도면 시트 플로트"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:67
-#, fuzzy
 msgid "Plot the drawing sheet border and title block"
-msgstr "페이지 설정"
+msgstr "도면 시트의 테두리와 제목 블록을 플로트"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:76
-#, fuzzy
 msgid "Black and White"
-msgstr "흑백 이미지"
+msgstr "흑백 처리"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:82
 msgid "Plot background color"
@@ -9801,16 +9781,14 @@ msgid "Content fit, user units"
 msgstr "내용물에 맞춤, 사용자 유닛"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:136
-#, fuzzy
 msgid "Pen width:"
-msgstr "최소 펜 굵기:"
+msgstr "펜 굵기:"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.h:86
 msgid "Plot Schematic Options"
 msgstr "플롯 회로도 옵션"
 
 #: eeschema/dialogs/dialog_print_using_printer.cpp:326
-#, fuzzy
 msgid "Print Schematic"
 msgstr "회로도 인쇄"
 
@@ -9855,7 +9833,7 @@ msgid ""
 "The following changes are recommended to update the project."
 msgstr ""
 "이 회로도는 오래된 심볼 라이브러리로 제작되었으며, 회로도를 손상시킬 수 있습니다.  몇몇 심볼들은 다른 심볼 이름에 연결될 필요가 "
-"있습니다.  몇몇 심볼들은 새로운 라이브러리로 \"구조되는\" (복사하여 새로운 이름 붙이기) 작업이 필요합니다.\n"
+"있습니다.  몇몇 심볼들은 새로운 라이브러리로 \"복구하는\" (복사하여 새로운 이름 붙이기) 작업이 필요합니다.\n"
 "\n"
 "프로젝트를 업데이트하기 위하여 다음과 같은 변경점이 권장됩니다."
 
@@ -9898,9 +9876,8 @@ msgstr ""
 "도구는 \"도구\" 메뉴에서 수동으로 다시 활성화시킬 수 있습니다."
 
 #: eeschema/dialogs/dialog_rescue_each.cpp:297
-#, fuzzy
 msgid "Rescue Symbols"
-msgstr "전원 심볼"
+msgstr "심볼 복구"
 
 #: eeschema/dialogs/dialog_rescue_each_base.cpp:28
 msgid "Symbols to update:"
@@ -9924,27 +9901,23 @@ msgstr "다시 표시하지 않음"
 
 #: eeschema/dialogs/dialog_rescue_each_base.h:66
 #: eeschema/project_rescue.cpp:569 eeschema/project_rescue.cpp:584
-#, fuzzy
 msgid "Project Rescue Helper"
-msgstr "새 프로젝트 (&N)"
+msgstr "프로젝트 복구 도우미"
 
 #: eeschema/dialogs/dialog_sch_import_settings.cpp:43
 #: eeschema/dialogs/dialog_sch_import_settings_base.h:61
 #: pcbnew/dialogs/dialog_import_settings.cpp:46
 #: pcbnew/dialogs/dialog_import_settings_base.h:66
-#, fuzzy
 msgid "Import Settings"
-msgstr "핀 시트 가져오기"
+msgstr "설정 가져오기"
 
 #: eeschema/dialogs/dialog_sch_import_settings.cpp:62
 #: pcbnew/dialogs/dialog_import_settings.cpp:116
-#, fuzzy
 msgid "Import Settings From"
-msgstr "핀 시트 가져오기"
+msgstr "다음 경로에서 설정 가져오기"
 
 #: eeschema/dialogs/dialog_sch_import_settings.cpp:74
 #: pcbnew/dialogs/dialog_import_settings.cpp:128
-#, fuzzy
 msgid "File not found."
 msgstr "파일을 찾을 수 없습니다."
 
@@ -9981,15 +9954,13 @@ msgstr "핀 충돌 맵"
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:57
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:64
-#, fuzzy
 msgid "Violation severities"
-msgstr "3D 설정"
+msgstr "위반 사항 심각도"
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:60
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:67
-#, fuzzy
 msgid "Net classes"
-msgstr "네트 코드"
+msgstr "네트 클래스"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:31
 msgid "&Search for:"
@@ -10027,27 +9998,22 @@ msgstr "단어"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:89
 #: pcbnew/dialogs/dialog_find_base.cpp:49
-#, fuzzy
 msgid "Wildcards"
 msgstr "와일드카드"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:92
-#, fuzzy
 msgid "Search pin &names and numbers"
-msgstr "핀 이름을 안쪽으로"
+msgstr "핀 이름 또는 번호 찾기 (&n)"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:95
-#, fuzzy
 msgid "Search hidden fields"
-msgstr "모든 컴포넌트"
+msgstr "숨겨진 필드 찾기"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:98
-#, fuzzy
 msgid "Search the current &sheet only"
-msgstr "현재 시트만 저장"
+msgstr "현재 시트 내에서만 찾기 (&s)"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:101
-#, fuzzy
 msgid "Replace matches in reference designators"
 msgstr "참조 지정자의 일치 항목 바꾸기"
 
@@ -10068,7 +10034,6 @@ msgid "Schematic Setup"
 msgstr "회로도 설정"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:42
-#, fuzzy
 msgid "Import Settings from Another Project..."
 msgstr "다른 프로젝트에서 설정 가져오기..."
 
@@ -10078,14 +10043,12 @@ msgstr "서식"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:69
 #: eeschema/eeschema_config.cpp:72
-#, fuzzy
 msgid "Field Name Templates"
 msgstr "필드 이름 템플릿"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:71
-#, fuzzy
 msgid "Electrical Rules"
-msgstr "회로도 ERC"
+msgstr "전기 규칙"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:75
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1000
@@ -10098,9 +10061,8 @@ msgstr "프로젝트"
 #: pcbnew/dialogs/dialog_board_setup.cpp:103
 #: pcbnew/widgets/appearance_controls.cpp:494
 #: pcbnew/widgets/appearance_controls_base.cpp:121
-#, fuzzy
 msgid "Net Classes"
-msgstr "네트 코드"
+msgstr "네트 클래스"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:77
 #: pcbnew/dialogs/dialog_board_setup.cpp:98
@@ -10122,19 +10084,16 @@ msgstr ""
 "프로젝트 파일 %s는 불러올 수 없습니다."
 
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:66
-#, fuzzy
 msgid "Connection type:"
 msgstr "연결 유형:"
 
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.h:62
-#, fuzzy
 msgid "Sheet Pin Properties"
-msgstr "시트 속성"
+msgstr "시트 핀 속성"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:249
-#, fuzzy
 msgid "A sheet must have a valid file name."
-msgstr "시트에 유효한 파일 이름이 있어야 합니다."
+msgstr "시트는 유효한 파일 이름이 있어야 합니다."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:259
 msgid "Sheet file must have a '.kicad_sch' extension."
@@ -10145,9 +10104,8 @@ msgid "Use relative path for sheet file?"
 msgstr "시트 파일에 대해 상대 경로를 사용할까요?"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:294
-#, fuzzy
 msgid "Sheet File Path"
-msgstr "시트 파일"
+msgstr "시트 파일 경로"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:297
 msgid ""
@@ -10159,19 +10117,16 @@ msgstr ""
 "있습니다."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:301
-#, fuzzy
 msgid "Use Relative Path"
-msgstr "사각형 이동"
+msgstr "상대 경로 사용"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:302
-#, fuzzy
 msgid "Use Absolute Path"
-msgstr "절대값"
+msgstr "절대 경로 사용"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:333
-#, fuzzy
 msgid "Untitled Sheet"
-msgstr "시트로 들어가기"
+msgstr "이름 없는 시트"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:359
 msgid "Note: item colors are overridden in the current color theme."
@@ -10192,7 +10147,6 @@ msgid "The file '%s' does not appear to be a valid schematic file."
 msgstr "파일 '%s'는 유효한 회로도 파일이 아닌 것 같습니다."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:409
-#, fuzzy
 msgid "Invalid Schematic File"
 msgstr "잘못된 회로도 파일"
 
@@ -10246,7 +10200,6 @@ msgid "Failed to save schematic '%s'"
 msgstr "'%s'회로도를 저장하지 못했습니다"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:649
-#, fuzzy
 msgid "A sheet must have a name."
 msgstr "시트에는 이름이 있어야 합니다."
 
@@ -10259,37 +10212,30 @@ msgid "Hierarchical path: "
 msgstr "계층 경로: "
 
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:117
-#, fuzzy
 msgid "Border width:"
-msgstr "테두리 너비:"
+msgstr "테두리 폭:"
 
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:131
-#, fuzzy
 msgid "Border color:"
 msgstr "테두리 색상:"
 
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:144
-#, fuzzy
 msgid "Background fill:"
 msgstr "배경 채우기:"
 
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:165
-#, fuzzy
 msgid "Page number:"
-msgstr "패드 번호 :"
+msgstr "페이지 번호:"
 
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:184
-#, fuzzy
 msgid "Hierarchical path:"
 msgstr "계층적 경로:"
 
 #: eeschema/dialogs/dialog_sheet_properties_base.h:79
-#, fuzzy
 msgid "Sheet Properties"
 msgstr "시트 속성"
 
 #: eeschema/dialogs/dialog_signal_list_base.cpp:27
-#, fuzzy
 msgid "Add signal by name:"
 msgstr "이름으로 신호 추가:"
 
@@ -10314,14 +10260,12 @@ msgstr ""
 "있습니다."
 
 #: eeschema/dialogs/dialog_sim_settings.cpp:288
-#, fuzzy
 msgid "Exit Without Valid Simulation"
-msgstr "치수 편집"
+msgstr "유효한 시뮬레이션 없이 종료"
 
 #: eeschema/dialogs/dialog_sim_settings.cpp:289
-#, fuzzy
 msgid "Configure Valid Simulation"
-msgstr "시뮬레이터 실행 (&R)"
+msgstr "유효한 시뮬레이션 설정"
 
 #: eeschema/dialogs/dialog_sim_settings.cpp:593
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:146
@@ -10392,9 +10336,8 @@ msgid "AC"
 msgstr "AC"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:98
-#, fuzzy
 msgid "Source 2"
-msgstr "소스 보이기 (&S)"
+msgstr "소스 2"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:103
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:109
@@ -10410,34 +10353,31 @@ msgstr "V"
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:103
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:109
 msgid "I"
-msgstr ""
+msgstr "I"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:103
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:109
 msgid "R"
-msgstr ""
+msgstr "R"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:103
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:109
 msgid "TEMP"
-msgstr ""
+msgstr "TEMP"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:115
 msgid "Source:"
 msgstr "소스:"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:119
-#, fuzzy
 msgid "Sweep type:"
-msgstr "레이어 선택:"
+msgstr "스윕 종류:"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:123
-#, fuzzy
 msgid "Source 1"
-msgstr "소스 보이기 (&S)"
+msgstr "소스 1"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:139
-#, fuzzy
 msgid "Starting value:"
 msgstr "시작 값:"
 
@@ -10447,26 +10387,24 @@ msgstr "최종 값:"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:179
 msgid "Increment step:"
-msgstr ""
+msgstr "증가량:"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:199
-#, fuzzy
 msgid "Swap sources"
-msgstr "소스 보이기 (&S)"
+msgstr "소스 뒤바꾸기"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:212
 msgid "DC Transfer"
-msgstr ""
+msgstr "DC 전송"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:214
 #: eeschema/sim/spice_simulator.cpp:67
-#, fuzzy
 msgid "Distortion"
-msgstr "정렬"
+msgstr "왜곡"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:229
 msgid "Measured node"
-msgstr ""
+msgstr "측정 노드"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:239
 msgid "Reference node"
@@ -10474,7 +10412,7 @@ msgstr "참조 노드"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:246
 msgid "(optional; default GND)"
-msgstr ""
+msgstr "(선택사항; 기본값은 GND)"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:250
 #, fuzzy
@@ -10488,11 +10426,11 @@ msgstr "포인트 수"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:287
 msgid "Start frequency [Hz]"
-msgstr ""
+msgstr "시작 주파수 [Hz]"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:294
 msgid "Stop frequency [Hz]"
-msgstr ""
+msgstr "정지 주파수 [Hz]"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:311
 #: eeschema/sim/spice_simulator.cpp:70
@@ -10501,16 +10439,16 @@ msgstr "노이즈"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:319
 msgid "This tab has no settings"
-msgstr ""
+msgstr "이 탭에는 설정이 없습니다"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:330
 #: eeschema/sim/spice_simulator.cpp:55
 msgid "Operating Point"
-msgstr ""
+msgstr "동작점"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:334
 msgid "Pole-Zero"
-msgstr ""
+msgstr "극 영점"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:338
 #: eeschema/sim/spice_simulator.cpp:76
@@ -10519,7 +10457,7 @@ msgstr "감도"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:342
 msgid "Transfer Function"
-msgstr ""
+msgstr "전송 함수"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:355
 #, fuzzy
@@ -10548,15 +10486,15 @@ msgstr "초"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:369
 msgid "Final time:"
-msgstr ""
+msgstr "최종 시간:"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:383
 msgid "Initial time:"
-msgstr ""
+msgstr "초기 시간:"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:394
 msgid "(optional; default 0)"
-msgstr ""
+msgstr "(선택사항; 기본값 0)"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:408
 #: eeschema/sim/spice_simulator.cpp:64
@@ -10566,7 +10504,7 @@ msgstr "일시적인"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:413
 msgid "Spice directives:"
-msgstr ""
+msgstr "Spice 지시문:"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:422
 #, fuzzy
@@ -10580,15 +10518,15 @@ msgstr "사용자 정의"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:436
 msgid "Adjust passive symbol values (e.g. M -> Meg; 100 nF -> 100n)"
-msgstr ""
+msgstr "수동 심볼값을 조정 (예시: M -> Meg; 100 nF -> 100n)"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:439
 msgid "Add full path for .include library directives"
-msgstr ""
+msgstr ".include 라이브러리 지시문에 대한 전체 경로 추가"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:446
 msgid "Compatibility mode:"
-msgstr ""
+msgstr "호환 모드:"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:450
 #, fuzzy
@@ -10612,7 +10550,7 @@ msgstr "&Spice"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:450
 msgid "PSpice and LTSpice"
-msgstr ""
+msgstr "PSpice와 LTSpice"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:450
 #, fuzzy
@@ -10651,33 +10589,35 @@ msgid ""
 "Check the symbol and use \"Alternate node sequence\" to reorder the pins, if "
 "necessary"
 msgstr ""
+"심볼 핀 번호는 요구하는 Spice 핀 순서와 항상 맞지 않습니다.\n"
+"필요하다면, 심볼을 확인하고 \"대체 노드 시퀀스\" 를 사용하여 핀을 재정렬하세요"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:454
 msgid "For a Diode, pin order is anode, cathode"
-msgstr ""
+msgstr "다이오드에 대해서, 핀 순서는 애노드, 캐소드 순입니다"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:458
 msgid "For a BJT, pin order is collector, base, emitter, substrate (optional)"
-msgstr ""
+msgstr "BJT에 대해서, 핀 순서는 컬렉터, 베이스, 이미터, 기판 (선택사항) 순입니다"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:462
 msgid "For a MOSFET, pin order is drain, gate, source"
-msgstr ""
+msgstr "MOSFET에 대해서, 핀 순서는 드레인, 게이트, 소스 순입니다"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:466
 msgid "For a JFET, pin order is drain, gate, source"
-msgstr ""
+msgstr "JFET에 대해서, 핀 순서는 드레인, 게이트, 소스 순입니다"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:799
 #, c-format
 msgid ""
 "You need to specify at least the first %d parameters for the transient source"
-msgstr ""
+msgstr "과도 소스에 대하여 최소한 앞의 %d개 매개변수를 지정해주어야 합니다"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:808
 msgid ""
 "You cannot leave interleaved empty fields when defining a transient source"
-msgstr ""
+msgstr "과도 소스를 정의할 때 인터리브된 공백 필드를 남겨둘 수 없습니다"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:1025
 #, fuzzy
@@ -10714,7 +10654,7 @@ msgstr "Lambda:"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:1116
 msgid "type of random generator for source is invalid"
-msgstr ""
+msgstr "소스에 대한 난수 발생기의 형식이 유효하지 않습니다"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:30
 #: eeschema/dialogs/dialog_spice_model_base.cpp:233
@@ -10748,17 +10688,19 @@ msgstr "수동"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:54
 msgid "Spice value in simulation"
-msgstr ""
+msgstr "시뮬레이션 상의 Spice 값"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:67
 msgid ""
 "In Spice values, the decimal separator is the point.\n"
 "Values can use Spice unit symbols."
 msgstr ""
+"Spice 값에서 소수점은 마침표 (.) 가 사용됩니다.\n"
+"해당 값은 Spice 유닛 심볼을 사용할 수 있습니다."
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:71
 msgid "Spice unit symbols in values (case insensitive):"
-msgstr ""
+msgstr "값에 대한 Spice 유닛 심볼 (대소문자 구분 없음):"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:210
 msgid "Library:"
@@ -10784,7 +10726,7 @@ msgstr "모델"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:301
 msgid "DC/AC Analysis"
-msgstr ""
+msgstr "DC/AC 분석"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:310
 #, fuzzy
@@ -10809,11 +10751,11 @@ msgstr "V/A"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:332
 msgid "AC magnitude:"
-msgstr ""
+msgstr "AC 진도:"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:345
 msgid "AC phase:"
-msgstr ""
+msgstr "AC 위상:"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:354
 #, fuzzy
@@ -10828,24 +10770,24 @@ msgstr "방향"
 #: eeschema/dialogs/dialog_spice_model_base.cpp:375
 #: eeschema/dialogs/dialog_spice_model_base.cpp:535
 msgid "Initial value:"
-msgstr ""
+msgstr "초기 값:"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:388
 #: eeschema/dialogs/dialog_spice_model_base.cpp:548
 msgid "Pulsed value:"
-msgstr ""
+msgstr "펄스 값:"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:399
 msgid "Delay time:"
-msgstr ""
+msgstr "지연 시간:"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:410
 msgid "Rise time:"
-msgstr ""
+msgstr "상승 시간:"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:421
 msgid "Fall time:"
-msgstr ""
+msgstr "하강 시간:"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:432
 #, fuzzy
@@ -10854,11 +10796,11 @@ msgstr "최소 펜 굵기:"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:443
 msgid "Period:"
-msgstr ""
+msgstr "주기:"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:458
 msgid "Pulse"
-msgstr ""
+msgstr "펄스"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:466
 msgid "DC offset:"
@@ -10889,7 +10831,7 @@ msgstr "지연:"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:512
 msgid "Damping factor:"
-msgstr ""
+msgstr "댐핑 팩터:"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:519
 msgid "1/seconds"
@@ -10902,19 +10844,19 @@ msgstr "사인 곡선"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:559
 msgid "Rise delay time:"
-msgstr ""
+msgstr "상승 지연 시간:"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:570
 msgid "Rise time constant:"
-msgstr ""
+msgstr "상승 시간 제한:"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:581
 msgid "Fall delay time:"
-msgstr ""
+msgstr "하강 지연 시간:"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:592
 msgid "Fall time constant:"
-msgstr ""
+msgstr "하강 시간 제한:"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:607
 #: eeschema/dialogs/dialog_spice_model_base.cpp:853
@@ -10924,7 +10866,7 @@ msgstr "Component"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:609
 msgid "Piece-wise linear"
-msgstr ""
+msgstr "조각별 선형"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:624
 #, fuzzy
@@ -10938,7 +10880,7 @@ msgstr "초"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:666
 msgid "Piece-wise Linear"
-msgstr ""
+msgstr "조각별 선형"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:698
 #: eeschema/dialogs/dialog_spice_model_base.cpp:800
@@ -10962,7 +10904,7 @@ msgstr "신호 주파수:"
 #: eeschema/dialogs/dialog_spice_model_base.cpp:731
 #: eeschema/dialogs/dialog_spice_model_base.cpp:822
 msgid "Carrier phase:"
-msgstr ""
+msgstr "캐리어 펄스:"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:738
 #: eeschema/dialogs/dialog_spice_model_base.cpp:749
@@ -10973,7 +10915,7 @@ msgstr "각도"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:742
 msgid "Signal phase:"
-msgstr ""
+msgstr "신호 펄스:"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:757
 #, fuzzy
@@ -10986,7 +10928,7 @@ msgstr "변조 주파수:"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:811
 msgid "Signal delay:"
-msgstr ""
+msgstr "신호 지연:"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:837
 msgid "AM"
@@ -10994,25 +10936,23 @@ msgstr "AM"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:841
 msgid "Transient noise"
-msgstr ""
+msgstr "과도 노이즈"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:853
 msgid "Uniform"
-msgstr ""
+msgstr "균일 분포"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:853
-#, fuzzy
 msgid "Gaussian"
-msgstr "가우스"
+msgstr "가우시안"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:853
-#, fuzzy
 msgid "Poisson"
-msgstr "푸아송"
+msgstr "포아송"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:862
 msgid "Individual value duration:"
-msgstr ""
+msgstr "개별 값 지속시간:"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:873
 msgid "Time delay:"
@@ -11024,7 +10964,7 @@ msgstr "랜덤"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:912
 msgid "External data"
-msgstr ""
+msgstr "외부 데이터"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:919
 #: eeschema/sim/sim_plot_panel.cpp:342
@@ -11048,11 +10988,11 @@ msgstr "소스"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:936
 msgid "Disable symbol for simulation"
-msgstr ""
+msgstr "시뮬레이션에서 심볼 비활성화"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:942
 msgid "Alternate node sequence:"
-msgstr ""
+msgstr "대체 노드 시퀀스:"
 
 #: eeschema/dialogs/dialog_spice_model_base.h:254
 #, fuzzy
@@ -11085,7 +11025,7 @@ msgstr "라이브러리 브라우저"
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:129
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1043
 msgid "The Reference column cannot be hidden."
-msgstr ""
+msgstr "참조 열은 숨겨질 수 없습니다."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:225
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:235
@@ -11101,7 +11041,7 @@ msgstr "필드"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:690
 msgid "Group By"
-msgstr ""
+msgstr "다음으로 분류"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:962
 #: eeschema/symbol_editor/symbol_editor.cpp:1216
@@ -11121,7 +11061,7 @@ msgstr "필드 2 추가"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:993
 msgid "Field must have a name."
-msgstr ""
+msgstr "필드에는 이름이 포함되어 있어야 합니다."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1001
 #, c-format
@@ -11130,11 +11070,11 @@ msgstr "\"%s\" 필드 이름이 이미 사용 중입니다."
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:31
 msgid "Group symbols"
-msgstr ""
+msgstr "심볼 분류"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:33
 msgid "Group symbols together based on common properties"
-msgstr ""
+msgstr "기본 속성을 기반으로 심볼 분류하기"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:53
 #, fuzzy
@@ -11167,13 +11107,15 @@ msgstr "유닛:"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:137
 msgid "Alternate symbol (DeMorgan)"
-msgstr ""
+msgstr "대체 심볼 (DeMorgan)"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:138
 msgid ""
 "Use the alternate shape of this symbol.\n"
 "For gates, this is the \"De Morgan\" conversion"
 msgstr ""
+"해당 심볼의 대체 형태를 사용합니다.\n"
+"게이트에 대해선, \"De Morgan\" 변환이 적용됩니다"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:142
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1036
@@ -11183,7 +11125,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:336
 #: pcbnew/dialogs/dialog_position_relative.cpp:163
 msgid "Angle:"
-msgstr ""
+msgstr "각도:"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:146
 msgid "+90"
@@ -11371,13 +11313,12 @@ msgstr "ERC 에러"
 #: eeschema/dialogs/dialog_symbol_remap.cpp:354
 #: eeschema/dialogs/dialog_symbol_remap.cpp:504
 msgid "Continue with Rescue"
-msgstr ""
+msgstr "복구한 후 계속하기"
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:355
 #: eeschema/dialogs/dialog_symbol_remap.cpp:505
-#, fuzzy
 msgid "Abort Rescue"
-msgstr "복구 (&R)"
+msgstr "복구 중단"
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:372
 #: eeschema/dialogs/dialog_symbol_remap.cpp:407
@@ -13008,25 +12949,25 @@ msgstr "%s에서 %s로 이름 바꾸기"
 #, c-format
 msgid ""
 "Cannot rescue symbol %s which is not available in any library or the cache."
-msgstr ""
+msgstr "심볼 %s를 복구할 수 없습니다. 어떠한 라이브러리나 캐시에서도 찾을 수 없습니다."
 
 #: eeschema/project_rescue.cpp:305 eeschema/project_rescue.cpp:468
 #, c-format
 msgid "Rescue symbol %s found only in cache library to %s."
-msgstr ""
+msgstr "캐시 라이브러리에서만 찾을 수 있는 심볼 %s를 %s로 복구."
 
 #: eeschema/project_rescue.cpp:308 eeschema/project_rescue.cpp:474
 #, c-format
 msgid "Rescue modified symbol %s to %s"
-msgstr ""
+msgstr "심볼 %s를 %s로 수정하여 복구"
 
 #: eeschema/project_rescue.cpp:568
 msgid "This project has nothing to rescue."
-msgstr ""
+msgstr "이 프로젝트는 복구할 사항이 없습니다."
 
 #: eeschema/project_rescue.cpp:583
 msgid "No symbols were rescued."
-msgstr ""
+msgstr "아무 심볼도 복구되지 않았습니다."
 
 #: eeschema/project_rescue.cpp:691
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:185
@@ -13035,9 +12976,9 @@ msgid "Failed to create symbol library file '%s'."
 msgstr "기호 라이브러리 파일 '%s'을 만들지 못했습니다."
 
 #: eeschema/project_rescue.cpp:815
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to save rescue library %s."
-msgstr "%s 파일은 EESchema 라이브러리가 아닙니다."
+msgstr "복구 라이브러리 %s를 저장하는 데에 실패하였습니다."
 
 #: eeschema/project_rescue.cpp:839
 msgid "Error occurred saving project specific symbol library table."
@@ -16031,11 +15972,11 @@ msgstr "현재 또는 선택한 시트의 페이지 번호 편집"
 
 #: eeschema/tools/ee_actions.cpp:592
 msgid "Rescue Symbols..."
-msgstr "구조 기호..."
+msgstr "심볼 복구..."
 
 #: eeschema/tools/ee_actions.cpp:593
 msgid "Find old symbols in project and rename/rescue them"
-msgstr ""
+msgstr "프로젝트에서 오래된 심볼을 찾아, 이름을 바꾸거나 복구합니다"
 
 #: eeschema/tools/ee_actions.cpp:598
 #, fuzzy
@@ -29771,9 +29712,8 @@ msgid "GenCAD..."
 msgstr "GenCAD..."
 
 #: pcbnew/menubar_pcb_editor.cpp:130
-#, fuzzy
 msgid "Export GenCAD board representation"
-msgstr "패드 설정 내보내기"
+msgstr "GenCAD 보드 표현을 내보내기"
 
 #: pcbnew/menubar_pcb_editor.cpp:132
 msgid "VRML..."
@@ -29781,7 +29721,7 @@ msgstr "VRML..."
 
 #: pcbnew/menubar_pcb_editor.cpp:132
 msgid "Export VRML 3D board representation"
-msgstr ""
+msgstr "VRML 3D 보드 표현 내보내기"
 
 #: pcbnew/menubar_pcb_editor.cpp:134
 msgid "IDFv3..."
@@ -29789,7 +29729,7 @@ msgstr "IDFv3..."
 
 #: pcbnew/menubar_pcb_editor.cpp:134
 msgid "Export IDF 3D board representation"
-msgstr ""
+msgstr "IDF 3D 보드 표현 내보내기"
 
 #: pcbnew/menubar_pcb_editor.cpp:136
 msgid "STEP..."
@@ -29797,7 +29737,7 @@ msgstr "STEP..."
 
 #: pcbnew/menubar_pcb_editor.cpp:136
 msgid "Export STEP 3D board representation"
-msgstr ""
+msgstr "STEP 3D 보드 표현 내보내기"
 
 #: pcbnew/menubar_pcb_editor.cpp:138
 msgid "SVG..."
@@ -29805,15 +29745,15 @@ msgstr "SVG..."
 
 #: pcbnew/menubar_pcb_editor.cpp:138
 msgid "Export SVG board representation"
-msgstr ""
+msgstr "SVG 기판 표현 내보내기"
 
 #: pcbnew/menubar_pcb_editor.cpp:140
 msgid "Footprint Association (.cmp) File..."
-msgstr "풋프린트 연관(.cmp) 파일..."
+msgstr "풋프린트 관련성 (.cmp) 파일..."
 
 #: pcbnew/menubar_pcb_editor.cpp:141
 msgid "Export footprint association file (*.cmp) for schematic back annotation"
-msgstr ""
+msgstr "회로도 뒷면 주석을 위해 풋프린트 관련성 파일 (*.cmp) 내보내기"
 
 #: pcbnew/menubar_pcb_editor.cpp:143
 msgid "Hyperlynx..."
@@ -29821,26 +29761,26 @@ msgstr "Hyperlynx..."
 
 #: pcbnew/menubar_pcb_editor.cpp:150
 msgid "Footprints to Library..."
-msgstr "라이브러리에 대한 풋프린트..."
+msgstr "풋프린트를 라이브러리로 내보내기..."
 
 #: pcbnew/menubar_pcb_editor.cpp:151
 msgid ""
 "Add footprints used on board to an existing footprint library\n"
 "(does not remove other footprints from this library)"
 msgstr ""
-"보드에서 사용되는 풋프린트를 기존 풋프린트 라이브러리에 추가\n"
+"기판에서 사용되는 풋프린트를 기존 풋프린트 라이브러리에 추가합니다\n"
 "(이 라이브러리에서 다른 풋프린트를 제거하지 않음)"
 
 #: pcbnew/menubar_pcb_editor.cpp:155
 msgid "Footprints to New Library..."
-msgstr "새 라이브러리에 대한 풋프린트..."
+msgstr "풋프린트를 새 라이브러리로 내보내기.."
 
 #: pcbnew/menubar_pcb_editor.cpp:156
 msgid ""
 "Create a new footprint library containing the footprints used on board\n"
 "(if the library already exists it will be replaced)"
 msgstr ""
-"보드에서 사용 된 풋프린트를 포함하는 새 풋프린트 라이브러리를 만듬\n"
+"기판에서 사용된 풋프린트를 포함하는 새 풋프린트 라이브러리를 만듭니다\n"
 "(이미 존재하는 라이브러리는 대체됨)"
 
 #: pcbnew/menubar_pcb_editor.cpp:164
@@ -29848,27 +29788,24 @@ msgid "Fabrication Outputs"
 msgstr "기판 제조 출력"
 
 #: pcbnew/menubar_pcb_editor.cpp:304
-#, fuzzy
 msgid "Add Microwave Shape"
-msgstr "선 이동"
+msgstr "마이크로파 형태 추가"
 
 #: pcbnew/menubar_pcb_editor.cpp:339
-#, fuzzy
 msgid "Auto-Place Footprints"
-msgstr "풋프린트"
+msgstr "풋프린트 자동 배치"
 
 #: pcbnew/menubar_pcb_editor.cpp:417
-#, fuzzy
 msgid "External Plugins"
-msgstr "플러그인 추가"
+msgstr "외부 플러그인"
 
 #: pcbnew/menubar_pcb_editor.cpp:455
 msgid "Ro&ute"
-msgstr ""
+msgstr "배선하기 (&u)"
 
 #: pcbnew/microwave/microwave_footprint.cpp:56
 msgid "Gap Size:"
-msgstr "간격 크기:"
+msgstr "갭 크기:"
 
 #: pcbnew/microwave/microwave_footprint.cpp:62
 msgid "Stub Size:"
@@ -31739,6 +31676,8 @@ msgid ""
 "Items found on undefined layers.  Do you wish to\n"
 "rescue them to the User.Comments layer?"
 msgstr ""
+"정의되지 않은 레이어에서 개체를 발견하였습니다.\n"
+"User.Comments 레이어로 복구할까요?"
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:842
 msgid "Undefined layers:"
