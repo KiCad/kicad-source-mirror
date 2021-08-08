@@ -9,8 +9,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
-"PO-Revision-Date: 2021-08-08 04:31+0000\n"
-"Last-Translator: Uibeom Jung <wjddmlqja17@gmail.com>\n"
+"PO-Revision-Date: 2021-08-08 05:48+0000\n"
+"Last-Translator: Ji Yoon Choi <chichoon.choi@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
 "Language: ko\n"
@@ -5212,7 +5212,7 @@ msgstr "논리 라이브러리 이름에 잘못된 문자가 있음"
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:212
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:223
 msgid "Unit"
-msgstr "단위"
+msgstr "유닛"
 
 #: common/lib_tree_model_adapter.cpp:272
 msgid "Item"
@@ -5253,7 +5253,7 @@ msgstr "인식할 수 없는 함수 '%s'"
 #: common/libeval_compiler/libeval_compiler.cpp:1009
 #, c-format
 msgid "Missing units for '%s'| (%s)"
-msgstr "단위 누락 '%s'| (%s)"
+msgstr "'%s'에 대한 단위 누락| (%s)"
 
 #: common/libeval_compiler/libeval_compiler.cpp:1126
 #, c-format
@@ -7158,7 +7158,7 @@ msgstr ""
 #: eeschema/component_references_lister.cpp:608
 #, c-format
 msgid "Item not annotated: %s%s (unit %d)\n"
-msgstr "주석이 없는 항목: %s%s (unit %d)\n"
+msgstr "주석이 없는 항목: %s%s (단위 %d)\n"
 
 #: eeschema/component_references_lister.cpp:615
 #, c-format
@@ -7360,36 +7360,32 @@ msgid "Generator file name not found."
 msgstr "생성기 파일명을 찾을 수 없습니다."
 
 #: eeschema/dialogs/dialog_bom.cpp:449
-#, fuzzy
 msgid "No text editor selected in KiCad.  Please choose one."
-msgstr "KiCad에서 선택한 텍스트 편집기가 없습니다. 하나를 선택하세요."
+msgstr "KiCad에서 선택한 텍스트 편집기가 없습니다.  하나를 선택하세요."
 
 #: eeschema/dialogs/dialog_bom.cpp:461
 msgid "Bill of Material Generation Help"
-msgstr "BOM 생성 도움말"
+msgstr "자재 명세서 (BOM) 생성 도움말"
 
 #: eeschema/dialogs/dialog_bom_base.cpp:25
 msgid "BOM generator scripts:"
 msgstr "BOM 생성기 스크립트:"
 
 #: eeschema/dialogs/dialog_bom_base.cpp:69
-#, fuzzy
 msgid "Add a new BOM generator and its command line to the list"
-msgstr "목록에 새 BOM 생성기 및 해당 명령줄 추가"
+msgstr "새 BOM 생성기와 명령줄을 리스트에 추가"
 
 #: eeschema/dialogs/dialog_bom_base.cpp:74
-#, fuzzy
 msgid "Edit the script file in the text editor"
-msgstr "텍스트 에디터로 열기 (&O)"
+msgstr "텍스트 편집기에서 스크립트 파일 편집"
 
 #: eeschema/dialogs/dialog_bom_base.cpp:82
-#, fuzzy
 msgid "Remove the current generator script from list"
-msgstr "현재 시트만 저장"
+msgstr "현재 편집기 스크립트를 리스트에서 삭제"
 
 #: eeschema/dialogs/dialog_bom_base.cpp:92
 msgid "Command line running the generator:"
-msgstr ""
+msgstr "생성기를 실행하는 명령줄:"
 
 #: eeschema/dialogs/dialog_bom_base.cpp:101
 msgid "Show console window"
@@ -7401,17 +7397,16 @@ msgid ""
 "redirected to the info display.\n"
 "Set this option to show the window of the running command."
 msgstr ""
-"기본적으로, 명령줄은 숨겨진 콘솔 창으로 실행되고 출력은 정보창으로 리디렉션됩니다.\n"
-"실행 중인 명령창을 표시하려면 이 옵션을 설정하십시오."
+"기본적으로, 명령줄은 숨겨진 콘솔 창으로 실행되고 출력은 정보 창으로 리디렉션됩니다.\n"
+"실행 중인 명령 창을 표시하려면 이 옵션을 설정하십시오."
 
 #: eeschema/dialogs/dialog_bom_base.cpp:116
-#, fuzzy
 msgid "Reset the list of BOM generator scripts to the default settings"
-msgstr "비아홀 크기 초기화"
+msgstr "BOM 생성기 스크립트의 리스트를 초기 설정으로 초기화"
 
 #: eeschema/dialogs/dialog_bom_base.h:81
 msgid "Bill of Material"
-msgstr "BOM"
+msgstr "자재 명세서"
 
 #: eeschema/dialogs/dialog_bom_help_md.h:2
 msgid ""
@@ -7599,16 +7594,173 @@ msgid ""
 "\"%O.csv\"\n"
 "```\n"
 msgstr ""
+"# 1 - 전체 문서\n"
+"\n"
+"Eeschema 문서 (*eeschema.html*) 은 해당 중간 네트리스트를 설명하고, 예시를 제시합니다. (챕터 ***사용자 정의 "
+"네트리스트와 BOM 파일***)\n"
+"\n"
+"# 2 - 중간 네트리스트 파일\n"
+"\n"
+"BOM 파일 (과 네트리스트 파일) 은 Eeschema에 의해 만들어진 *중간 네트리스트 파일* 로부터 생성될 수 있습니다.\n"
+"\n"
+"이러한 파일들은 XML 문법 구조를 따르며, 중간 네트리스트라 불립니다. 중간 네트리스트는 당신의 보드에 대한 많은 양의 데이터를 담고 "
+"있으며, 이 때문에 BOM 또는 다른 기록을 작성할 때 사용될 수 있습니다.\n"
+"\n"
+"출력 결과가 무엇인지에 따라 (BOM 또는 네트리스트), 완전한 중간 네트리스트의 하위 집합들이 후처리에 사용됩니다.\n"
+"\n"
+"# 3 - 새로운 포맷으로 변환\n"
+"\n"
+"후처리 필터를 중간 네트리스트에 적용함으로써, 당신은 외부 네트리스트 파일과 BOM 파일을 생성할 수 있습니다. 변환이 문자 간 "
+"이루어지기 때문에, 이 후처리 필터는 *Python*, *XSLT* 또는 XML을 입력값으로 받아들일 수 있는 모든 툴로 작성될 수 "
+"있습니다.\n"
+"\n"
+"XSLT 자체는 XML 변환에 최적인 XML 언어입니다. `xsltproc` 이라는 무료 프로그램을 설치함으로써 중급 XML 네트리스트 "
+"입력 파일을 읽어들이거나, 입력 파일을 변환하기 위해 스타일시트를 적용하거나, 결과값을 출력하여 저장할 수 있습니다. `xsltproc`"
+"을 사용하기 위해서는 XSLT 변환을 위한 스타일시트 파일이 필요합니다. 모든 변환 과정은 (`xsltproc`을 실행하도록 특별한 "
+"방법으로 설정한 이후) Eeschema에 의해 이루어집니다.\n"
+"\n"
+"Python 스크립트는 훨씬 쉽게 생성할 수 있습니다.\n"
+"\n"
+"# 4 - 대화 창 초기화\n"
+"\n"
+"\"플러그인 추가하기\" 버튼을 누름으로써 플러그인 (스크립트) 를 추가해야 합니다.\n"
+"\n"
+"## 4.1 - 플러그인 설정 매개변수\n"
+"\n"
+"Eeschema 플러그인 설정 대화 상자는 다음의 정보를 필요로 합니다:\n"
+"\n"
+" * 제목: 예를 들면, 네트리스트 포맷의 이름.\n"
+" * 변환기를 실행시키기 위한 명령줄 (주로 스크립트 형태로 제작됩니다).\n"
+"\n"
+"***주의사항 (Windows 사용자 전용):***\n"
+"* 기본값으로, 명령줄은 숨겨진 콘솔 창에서 실행되고, 출력값은 \"플러그인 정보\" 필드에 리디렉션됩니다. 실행되고 있는 명령을 창에 "
+"보이기 위해서는, \"콘솔 창 보이기\" 체크박스를 체크하세요. *\n"
+"\n"
+"생성 버튼을 클릭하면 다음과 같은 행동이 실행됩니다 :\n"
+"\n"
+"1. Eeschema는 \\*.xml 형식의 중간 네트리스트 파일을 생성합니다. 예를 들어 `test.xml`.\n"
+"2. Eeschema는 명령줄의 스크립트를 실행하여 최종 출력 파일을 생성합니다.\n"
+"\n"
+"## 4.2 - 명령줄을 통해 네트리스트 파일 생성하기\n"
+"\n"
+"`xsltproc.exe` 프로그램을 사용한다고 가정하고, 스타일시트를 중간 파일에 적용하기 위해선 `xsltproc.exe`는 다음과 "
+"같은 명령줄로 실행되어야 합니다.\n"
+"\n"
+"```\n"
+"xsltproc.exe -o <출력 파일명> <스타일시트 파일명> <변환할 XML 파일명>\n"
+"```\n"
+"\n"
+"Windows 운영체제에서 명령줄은 다음과 같습니다.\n"
+"\n"
+"```\n"
+"f:/kicad/bin/xsltproc.exe -o \"%O\" f:/kicad/bin/plugins/myconverter.xsl \"%"
+"I\"\n"
+"```\n"
+"\n"
+"리눅스에서 명령줄은 다음과 같습니다.\n"
+"\n"
+"```\n"
+"xsltproc -o \"%O\" /usr/local/kicad/bin/plugins/myconverter.xsl \"%I\"\n"
+"```\n"
+"이때 `myconverter.xsl`은 여러분이 적용하고자 하는 스타일시트 파일명입니다.\n"
+"\n"
+"파일명 양 옆의 쌍따옴표를 잊지 마세요. 이들은 Eeschema에 의해 파일이 대체된 후 공백을 갖게 해 줍니다.\n"
+"\n"
+"Python 스크립트를 사용할 경우, 명령줄은 다음과 비슷해야 합니다 (어떤 Python 스크립트를 쓰느냐에 따라 다릅니다):\n"
+"\n"
+"```\n"
+"python f:/kicad/bin/plugins/bom-in-python/myconverter.py \"%I\" \"%O\"\n"
+"```\n"
+"\n"
+"또는\n"
+"\n"
+"```\n"
+"python /usr/local/kicad/bin/plugins/bom-in-python/myconverter .xsl \"%I\" \"%"
+"O\"\n"
+"```\n"
+"\n"
+"명령줄 포맷은 파일명을 위한 매개변수를 받습니다. 형식 지정용 매개변수는 다음과 같습니다:\n"
+"\n"
+" * `%B`: 선택한 출력 파일에 대한 기본 파일명, 확장자와 경로 제외\n"
+" * `%P`: 프로젝트 디렉토리, 이름과 딸려오는 '/' 제외\n"
+" * `%I`: 임시 입력 파일 (중간 네트 파일) 의 \n"
+"완전한 파일명과 경로\n"
+" * `%O`: 사용자가 선택한 출력 파일의 완전한 파일명과 경로 \n"
+"(확장자 제외)\n"
+"\n"
+"`%I` 는 실제 중간 파일명으로 대체됩니다 (보통 \".xml\" 확장자를 가진 완전한 루트 시트 파일명).\n"
+"`%O` 는 실제 출력 파일명으로 대체됩니다 (확장자를 제외한 완전한 루트 시트 파일명).\n"
+"`%B` 는 실제 짧은 출력 파일명으로 대체됩니다 (확장자를 제외한 짧은 루트 시트 파일명)\n"
+"`%P` 는 현재 프로젝트 경로로 대체됩니다.\n"
+"\n"
+"## 4.3 - 명령줄 형식:\n"
+"\n"
+"### 4.3.1 - 비고:\n"
+"\n"
+"대부분, 생성된 파일은 파일 형식에 따라 확장자를 가져야 합니다.\n"
+"그러므로 여러분은 정확한 파일 확장자를 위해 ***%O*** 옵션을 추가하여야 합니다.\n"
+"\n"
+"예를 들어:\n"
+"\n"
+" * **%O.csv** 는 .csv 파일을 생성합니다. (반점으로 구분된 값 파일)\n"
+" * **%O.htm** 는 .html 파일을 생성합니다.\n"
+" * **%O.bom** 는 .bom 파일을 생성합니다.\n"
+"\n"
+" ### 4.3.2 xsltproc 예시:\n"
+"\n"
+"xsltproc을 사용하기 위한 명령줄 형식은 다음과 같습니다:\n"
+"\n"
+"```\n"
+"<xsltproc 경로> xsltproc <xsltproc 매개변수>\n"
+"```\n"
+"\n"
+"Windows에서:\n"
+"```\n"
+"f:/kicad/bin/xsltproc.exe -o \"%O.bom\" f:/kicad/bin/plugins/"
+"netlist_form_pads-pcb.xsl \"%I\"\n"
+"```\n"
+"\n"
+"리눅스에서:\n"
+"```\n"
+"xsltproc -o \"%O.bom\" /usr/local/kicad/bin/plugins/netlist_form_pads-"
+"pcb.xsl \"%I\"\n"
+"```\n"
+"\n"
+"위의 예시는 `xsltproc`이 사용자의 PC 내부 Windows 하위에 설치되어 있고, xsl 파일이 `<kicad_경로>/kicad/"
+"bin/plugins/` 에 존재한다고 가정합니다.\n"
+"\n"
+"\n"
+"### 4.3.3 Python 스크립트 예시:\n"
+"\n"
+"Python이 PC에 설치되어 있고, Python 스크립트가 다음의 경로에 저장되어 있다고 가정합니다.\n"
+"\n"
+" `<kicad_경로>/kicad/bin/plugins/bom-in-python/`\n"
+"\n"
+"Python을 위한 명령줄은 다음과 비슷합니다:\n"
+"\n"
+"```\n"
+"python <스크립트 파일명> <입력 파일명> <출력 파일명>\n"
+"```\n"
+"\n"
+"Windows에서:\n"
+"```\n"
+"python.exe f:/kicad/bin/plugins/bom-in-python/my_python_script.py \"%I\" \"%O"
+".html\"\n"
+"```\n"
+"\n"
+"리눅스에서:\n"
+"```\n"
+"python /usr/local/kicad/bin/plugins/bom-in-python/my_python_script.py \"%I\" "
+"\"%O.csv\"\n"
+"```\n"
 
 #: eeschema/dialogs/dialog_bus_manager.cpp:43
-#, fuzzy
 msgid "Bus Definitions"
-msgstr "방향"
+msgstr "버스 정의"
 
 #: eeschema/dialogs/dialog_bus_manager.cpp:60
-#, fuzzy
 msgid "Bus Aliases"
-msgstr "별명"
+msgstr "버스 별칭"
 
 #: eeschema/dialogs/dialog_bus_manager.cpp:70
 msgid "Alias Name"
@@ -7616,79 +7768,68 @@ msgstr "별칭 이름"
 
 #: eeschema/dialogs/dialog_bus_manager.cpp:80
 #: eeschema/dialogs/dialog_bus_manager.cpp:114
-#, fuzzy
 msgid "Rename"
-msgstr "네트 이름"
+msgstr "이름 변경"
 
 #: eeschema/dialogs/dialog_bus_manager.cpp:94
-#, fuzzy
 msgid "Alias Members"
-msgstr "별명"
+msgstr "별칭 멤버"
 
 #: eeschema/dialogs/dialog_bus_manager.cpp:104
-#, fuzzy
 msgid "Member Name"
-msgstr "네트 이름"
+msgstr "멤버 이름"
 
 #: eeschema/dialogs/dialog_bus_manager.cpp:185
 msgid "Bus Alias Name"
 msgstr "버스 별칭 이름"
 
 #: eeschema/dialogs/dialog_bus_manager.cpp:186
-#, fuzzy
 msgid "Net or Bus Name"
-msgstr "네트 이름"
+msgstr "네트 또는 버스 이름"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:66
-#, fuzzy
 msgid "Change all symbols in schematic"
-msgstr "회로도 인쇄"
+msgstr "회로도 내의 모든 심볼 바꾸기"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:67
-#, fuzzy
 msgid "Change Symbols"
-msgstr "모듈 바꾸기"
+msgstr "심볼 바꾸기"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:76
-#, fuzzy
 msgid "Change selected symbol(s)"
-msgstr "라이브러리 선택"
+msgstr "선택한 심볼 바꾸기"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:93
 msgid "Change symbols matching reference designator:"
-msgstr "참조 지정자와 일치하는 기호 변경:"
+msgstr "레퍼런스 지정자와 일치하는 심볼 변경:"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:94
 msgid "Change symbols matching value:"
-msgstr "값과 일치하는 기호 변경:"
+msgstr "값과 일치하는 심볼 변경:"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:95
 msgid "Change symbols matching library identifier:"
-msgstr "라이브러리 식별자와 일치하는 기호 변경:"
+msgstr "라이브러리 식별자와 일치하는 심볼 변경:"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:132
-#, fuzzy
 msgid "Update Fields"
-msgstr "[%s]에 심볼 저장"
+msgstr "필드 업데이트"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:133
 msgid "Remove fields if not in new symbol"
-msgstr "새 기호에 없는 경우 필드 제거"
+msgstr "새 심볼에 없는 경우 필드 제거"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:134
-#, fuzzy
 msgid "Reset fields if empty in new symbol"
-msgstr "새 디렉토리 만들기"
+msgstr "새 심볼에 비어있는 경우 필드 초기화"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:135
-#, fuzzy
 msgid "Update field text"
-msgstr "[%s]에 심볼 저장"
+msgstr "필드 텍스트 수정"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:136
-#, fuzzy
 msgid "Update field visibilities"
-msgstr "시트 속성"
+msgstr "필드 가시성 수정"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:137
 #, fuzzy
@@ -7696,14 +7837,12 @@ msgid "Update field sizes and styles"
 msgstr "필드 크기 및 스타일 업데이트"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:138
-#, fuzzy
 msgid "Update field positions"
-msgstr "시트 속성"
+msgstr "필드 위치 수정"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:139
-#, fuzzy
 msgid "Update symbol attributes"
-msgstr "속성"
+msgstr "심볼 속성 수정"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:159
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:165
@@ -7713,19 +7852,18 @@ msgstr "바꾸기"
 #: eeschema/dialogs/dialog_change_symbols.cpp:161
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:44
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:163
-#, fuzzy
 msgid "Update"
-msgstr "업데이트 설정"
+msgstr "수정"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:516
 #, c-format
 msgid "Update symbol %s from '%s' to '%s'"
-msgstr "심볼 %s를 '%s'에서 '%s'로 업데이트"
+msgstr "심볼 %s를 '%s'에서 '%s'로 수정"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:523
 #, c-format
 msgid "Update symbols %s from '%s' to '%s'"
-msgstr "기호 %s를 '%s'에서 '%s'로 업데이트"
+msgstr "심볼 %s를 '%s'에서 '%s'로 수정"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:533
 #, c-format
@@ -7739,33 +7877,31 @@ msgstr "심볼 %s를 '%s'에서 '%s'로 변경"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:551
 msgid "*** symbol not found ***"
-msgstr "*** 기호를 찾을 수 없음 ***"
+msgstr "*** 심볼을 찾을 수 없음 ***"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:560
 msgid "*** new symbol has too few units ***"
 msgstr "*** 새 기호에 단위가 너무 적습니다 ***"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:27
-#, fuzzy
 msgid "Update all symbols in schematic"
-msgstr "회로도 인쇄"
+msgstr "회로도의 모든 심볼 업데이트"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:30
-#, fuzzy
 msgid "Update selected symbol(s)"
-msgstr "라이브러리 선택"
+msgstr "선택한 심볼 업데이트"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:33
 msgid "Update symbols matching reference designator:"
-msgstr "참조 지정자와 일치하는 기호 업데이트:"
+msgstr "레퍼런스 지정자와 일치하는 심볼 업데이트:"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:39
 msgid "Update symbols matching value:"
-msgstr "값과 일치하는 기호 업데이트:"
+msgstr "값과 일치하는 심볼 업데이트:"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:45
 msgid "Update symbols matching library identifier:"
-msgstr "라이브러리 식별자와 일치하는 기호 업데이트:"
+msgstr "라이브러리 식별자와 일치하는 심볼 업데이트:"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:72
 msgid "New library identifier:"
@@ -7773,94 +7909,82 @@ msgstr "새 라이브러리 식별자:"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:94
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:36
-#, fuzzy
 msgid "Update/reset Fields"
-msgstr "[%s]에 심볼 저장"
+msgstr "필드 업데이트 / 초기화"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:108
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:50
-#, fuzzy
 msgid "Select None"
-msgstr "네트 선택"
+msgstr "선택 안 함"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:117
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:59
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:94
-#, fuzzy
 msgid "Update Options"
 msgstr "업데이트 설정"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:119
 msgid "Remove fields if not in library symbol"
-msgstr "라이브러리 기호에 없는 경우 필드 제거"
+msgstr "라이브러리 심볼에 없는 경우 필드 제거"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:120
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:62
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:97
 msgid "Removes fields that do not occur in the original library symbols"
-msgstr "원본 라이브러리 기호에 없는 필드를 제거"
+msgstr "원본 라이브러리 심볼에 없는 필드를 제거"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:124
-#, fuzzy
 msgid "Reset fields if empty in library symbol"
-msgstr "새 디렉토리 만들기"
+msgstr "라이브러리 심볼이 비어있을 경우 필드 초기화"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:130
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:72
-#, fuzzy
 msgid "Update/reset field text"
-msgstr "[%s]에 심볼 저장"
+msgstr "필드 텍스트 업데이트 / 초기화"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:133
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:75
-#, fuzzy
 msgid "Update/reset field visibilities"
-msgstr "시트 속성"
+msgstr "필드 가시성 업데이트 / 초기화"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:136
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:78
-#, fuzzy
 msgid "Update/reset field sizes and styles"
-msgstr "새 디렉토리 만들기"
+msgstr "필드 크기와 스타일 업데이트 / 초기화"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:139
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:81
-#, fuzzy
 msgid "Update/reset field positions"
-msgstr "시트 속성"
+msgstr "필드 위치 업데이트 / 초기화"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:145
-#, fuzzy
 msgid "Update/reset symbol attributes"
-msgstr "속성"
+msgstr "심볼 속성 업데이트 / 초기화"
 
 #: eeschema/dialogs/dialog_change_symbols_base.h:100
 msgid "Update Symbols from Library"
-msgstr "라이브러리에서 기호 업데이트"
+msgstr "라이브러리에서 심볼 업데이트"
 
 #: eeschema/dialogs/dialog_choose_symbol.cpp:143
 #: pcbnew/dialogs/dialog_choose_footprint.cpp:95
-#, fuzzy
 msgid "Select with Browser"
-msgstr "탐색할 라이브러리 선택"
+msgstr "브라우저에서 선택"
 
 #: eeschema/dialogs/dialog_choose_symbol.cpp:147
-#, fuzzy
 msgid "Place repeated copies"
-msgstr "선택된 부품 보기"
+msgstr "반복되는 복사본 배치"
 
 #: eeschema/dialogs/dialog_choose_symbol.cpp:149
 msgid "Keep the symbol selected for subsequent clicks."
 msgstr ""
 
 #: eeschema/dialogs/dialog_choose_symbol.cpp:151
-#, fuzzy
 msgid "Place all units"
-msgstr "셀 배치"
+msgstr "모든 유닛 배치"
 
 #: eeschema/dialogs/dialog_choose_symbol.cpp:153
 msgid "Sequentially place all units of the symbol."
-msgstr ""
+msgstr "심볼의 모든 유닛을 순차적으로 배치합니다."
 
 #: eeschema/dialogs/dialog_choose_symbol.cpp:408
 #: eeschema/dialogs/dialog_choose_symbol.cpp:467
@@ -7884,29 +8008,24 @@ msgid "No symbol selected"
 msgstr "선택된 기호 없음"
 
 #: eeschema/dialogs/dialog_edit_label.cpp:104
-#, fuzzy
 msgid "Global Label Properties"
 msgstr "전역 라벨 속성"
 
 #: eeschema/dialogs/dialog_edit_label.cpp:105
-#, fuzzy
 msgid "Hierarchical Label Properties"
-msgstr "전역 라벨 속성"
+msgstr "계층 라벨 속성"
 
 #: eeschema/dialogs/dialog_edit_label.cpp:106
-#, fuzzy
 msgid "Label Properties"
 msgstr "라벨 속성"
 
 #: eeschema/dialogs/dialog_edit_label.cpp:107
-#, fuzzy
 msgid "Hierarchical Sheet Pin Properties"
-msgstr "그래픽 텍스트 속성"
+msgstr "계층 시트 핀 속성"
 
 #: eeschema/dialogs/dialog_edit_label.cpp:108
 #: pcbnew/dialogs/dialog_text_properties.cpp:93
 #: pcbnew/dialogs/dialog_text_properties_base.h:89
-#, fuzzy
 msgid "Text Properties"
 msgstr "텍스트 속성"
 
@@ -7943,9 +8062,8 @@ msgstr ""
 #: eeschema/dialogs/dialog_edit_label_base.cpp:99
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:39
 #: pcbnew/dialogs/panel_setup_rules_base.cpp:34
-#, fuzzy
 msgid "Show syntax help window"
-msgstr "PCB DRC"
+msgstr "문법 도움말 창 보이기"
 
 #: eeschema/dialogs/dialog_edit_label_base.cpp:106
 #: eeschema/dialogs/dialog_spice_model_base.cpp:240
@@ -7957,41 +8075,37 @@ msgid ""
 "The margins around the text are controlled by the text offset ratio\n"
 "in Schematic Setup > General > Formatting."
 msgstr ""
+"텍스트 주위의 여백은 회로도 설정 > 일반 > 서식 에 정의된\n"
+"텍스트 간격 비율에 따라 결정됩니다."
 
 #: eeschema/dialogs/dialog_edit_label_base.cpp:120 eeschema/sch_text.cpp:745
-#, fuzzy
 msgid "Align right"
-msgstr "오른쪽"
+msgstr "오른쪽으로 정렬"
 
 #: eeschema/dialogs/dialog_edit_label_base.cpp:120 eeschema/sch_text.cpp:746
-#, fuzzy
 msgid "Align bottom"
-msgstr "아래쪽에서 보기"
+msgstr "아래쪽으로 정렬"
 
 #: eeschema/dialogs/dialog_edit_label_base.cpp:120 eeschema/sch_text.cpp:747
 msgid "Align left"
 msgstr ""
 
 #: eeschema/dialogs/dialog_edit_label_base.cpp:120 eeschema/sch_text.cpp:748
-#, fuzzy
 msgid "Align top"
-msgstr "세로쓰기"
+msgstr "위쪽으로 정렬"
 
 #: eeschema/dialogs/dialog_edit_label_base.cpp:122 eeschema/sch_text.cpp:752
-#, fuzzy
 msgid "Justification"
-msgstr "교차점"
+msgstr "위치 정렬"
 
 #: eeschema/dialogs/dialog_edit_label_base.cpp:126
-#, fuzzy
 msgid "Bold and italic"
-msgstr "흑백 이미지"
+msgstr "굵기와 기울임"
 
 #: eeschema/dialogs/dialog_edit_label_base.cpp:128
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:115
 #: eeschema/lib_field.cpp:429 eeschema/lib_pin.cpp:1028
 #: eeschema/lib_pin.cpp:1031 eeschema/sch_pin.cpp:205 eeschema/sch_text.cpp:763
-#, fuzzy
 msgid "Style"
 msgstr "스타일"
 
@@ -8010,13 +8124,11 @@ msgstr "출력"
 #: eeschema/dialogs/dialog_edit_label_base.cpp:132
 #: eeschema/dialogs/dialog_sheet_pin_properties.cpp:38 eeschema/pin_type.cpp:53
 #: eeschema/sch_text.cpp:559
-#, fuzzy
 msgid "Bidirectional"
 msgstr "양방향"
 
 #: eeschema/dialogs/dialog_edit_label_base.cpp:132
 #: eeschema/dialogs/dialog_sheet_pin_properties.cpp:39 eeschema/pin_type.cpp:54
-#, fuzzy
 msgid "Tri-state"
 msgstr "3-스테이트"
 
@@ -8049,9 +8161,9 @@ msgid "Value may not be empty."
 msgstr ""
 
 #: eeschema/dialogs/dialog_edit_symbols_libid.cpp:536
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol library identifier %s is not valid."
-msgstr "“%s” 심볼 라이브러리 식별자가 잘못되었습니다."
+msgstr "심볼 라이브러리 식별자 %s가 잘못되었습니다."
 
 #: eeschema/dialogs/dialog_edit_symbols_libid.cpp:633
 #, c-format
@@ -9883,9 +9995,8 @@ msgid "Import:"
 msgstr "가져오기:"
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:48
-#, fuzzy
 msgid "Formatting preferences"
-msgstr "풋프린트 레퍼런스"
+msgstr "서식 설정"
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:51
 msgid "Field name templates"
@@ -9988,9 +10099,8 @@ msgid "Import Settings from Another Project..."
 msgstr "다른 프로젝트에서 설정 가져오기..."
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:68
-#, fuzzy
 msgid "Formatting"
-msgstr "플로트 형식"
+msgstr "서식"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:69
 #: eeschema/eeschema_config.cpp:72
