@@ -13,7 +13,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
 "PO-Revision-Date: 2021-08-08 15:09+0000\n"
-"Last-Translator: Ji Yoon Choi <chichoon.choi@gmail.com>\n"
+"Last-Translator: jeongsuAn <dks9467@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
 "Language: ko\n"
@@ -10695,7 +10695,7 @@ msgstr "평균:"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:1111
 msgid "Lambda:"
-msgstr ""
+msgstr "Lambda:"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:1116
 msgid "type of random generator for source is invalid"
@@ -10952,8 +10952,9 @@ msgstr ""
 #: eeschema/dialogs/dialog_spice_model_base.cpp:738
 #: eeschema/dialogs/dialog_spice_model_base.cpp:749
 #: eeschema/dialogs/dialog_spice_model_base.cpp:829
+#, fuzzy
 msgid "degrees"
-msgstr ""
+msgstr "각도"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:742
 msgid "Signal phase:"
@@ -10987,11 +10988,12 @@ msgstr ""
 #: eeschema/dialogs/dialog_spice_model_base.cpp:853
 #, fuzzy
 msgid "Gaussian"
-msgstr "러시아어"
+msgstr "가우스"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:853
+#, fuzzy
 msgid "Poisson"
-msgstr ""
+msgstr "푸아송"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:862
 msgid "Individual value duration:"
@@ -11548,9 +11550,8 @@ msgstr ""
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:78
 #: pcbnew/dialogs/panel_display_options_base.cpp:74
-#, fuzzy
 msgid "Cross-probing"
-msgstr "후공정 (&O)"
+msgstr "교차-탐지"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:80
 #: pcbnew/dialogs/panel_display_options_base.cpp:76
@@ -11868,17 +11869,20 @@ msgid "Prefix:"
 msgstr "접두어:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:180
+#, fuzzy
 msgid "["
-msgstr ""
+msgstr "["
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:183
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:153
+#, fuzzy
 msgid "Suffix:"
-msgstr ""
+msgstr "접미사:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:187
+#, fuzzy
 msgid "]"
-msgstr ""
+msgstr "]"
 
 #: eeschema/dialogs/panel_setup_pinmap.cpp:169
 msgid "No error or warning"
@@ -13885,8 +13889,9 @@ msgid "Power symbol"
 msgstr "전원 심볼"
 
 #: eeschema/sch_symbol.cpp:1371
+#, fuzzy
 msgid "flags"
-msgstr ""
+msgstr "플래그"
 
 #: eeschema/sch_symbol.cpp:1381
 #, fuzzy
@@ -14572,7 +14577,7 @@ msgstr "교차점"
 
 #: eeschema/sim/spice_simulator.cpp:83
 msgid "UNKNOWN!"
-msgstr ""
+msgstr "알려지지 않음!"
 
 #: eeschema/sim/spice_value.cpp:42
 msgid "Spice value cannot be empty"
@@ -18254,9 +18259,8 @@ msgid "Error code: %d"
 msgstr "오류 코드: %d"
 
 #: pagelayout_editor/dialogs/design_inspector.cpp:223
-#, fuzzy
 msgid "Layout"
-msgstr "미리 보기 (&V)"
+msgstr "레이아웃"
 
 #: pagelayout_editor/dialogs/design_inspector.cpp:227
 #, c-format
@@ -18267,7 +18271,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:230
 #, fuzzy
 msgid "Count"
-msgstr "패드 커퍼"
+msgstr "개수"
 
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:30
 msgid "Y start:"
@@ -19046,22 +19050,22 @@ msgstr "제외할 값 2:"
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:485
 #, fuzzy
 msgid "E1"
-msgstr "&1"
+msgstr "E1"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:488
 #, fuzzy
 msgid "E3"
-msgstr "0"
+msgstr "E3"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:491
 #, fuzzy
 msgid "E6"
-msgstr "&6"
+msgstr "E6"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:495
 #, fuzzy
 msgid "E12"
-msgstr "&12"
+msgstr "E12"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:505
 #, fuzzy
@@ -19084,8 +19088,9 @@ msgid "4R solution:"
 msgstr "버전:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:613
+#, fuzzy
 msgid "E-Series"
-msgstr ""
+msgstr "E-시리즈"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:621
 msgid "10% / 5%"
@@ -19354,7 +19359,7 @@ msgstr ""
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1310
 #, fuzzy
 msgid "ns"
-msgstr "아니오"
+msgstr "ns"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1312
 msgid "nanoseconds"
@@ -19424,7 +19429,7 @@ msgstr "온도 상승에 따라"
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1409
 #, fuzzy
 msgid "Capacitance:"
-msgstr "정전 용량:"
+msgstr "정전용량:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1417
 #, fuzzy
@@ -19432,8 +19437,9 @@ msgid "pF"
 msgstr "pF"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1419
+#, fuzzy
 msgid "pico-Farad"
-msgstr ""
+msgstr "피코-패러드"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1423
 msgid "Rise time degradation:"
@@ -19449,8 +19455,9 @@ msgid "ps"
 msgstr "ps"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1435
+#, fuzzy
 msgid "picoseconds"
-msgstr ""
+msgstr "피코초"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1439
 #, fuzzy
@@ -19468,9 +19475,8 @@ msgid "nano-Henry"
 msgstr "나노-헨리"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1453
-#, fuzzy
 msgid "Reactance:"
-msgstr "유도 저항:"
+msgstr "리액턴스 :"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1455
 msgid "Inductive reactance for given rise time and calculated inductance"
@@ -20018,9 +20024,8 @@ msgstr "도파관 길이"
 
 #: pcb_calculator/transline_ident.cpp:282
 #: pcb_calculator/transline_ident.cpp:402
-#, fuzzy
 msgid "Din"
-msgstr "핀"
+msgstr "Din"
 
 #: pcb_calculator/transline_ident.cpp:283
 #: pcb_calculator/transline_ident.cpp:403
@@ -20029,8 +20034,9 @@ msgstr ""
 
 #: pcb_calculator/transline_ident.cpp:285
 #: pcb_calculator/transline_ident.cpp:405
+#, fuzzy
 msgid "Dout"
-msgstr ""
+msgstr "Dout"
 
 #: pcb_calculator/transline_ident.cpp:286
 #: pcb_calculator/transline_ident.cpp:406
@@ -20066,8 +20072,9 @@ msgid "Dielectric losses (odd):"
 msgstr "유전 손실(홀수):"
 
 #: pcb_calculator/transline_ident.cpp:333
+#, fuzzy
 msgid "Zeven"
-msgstr ""
+msgstr "Zeven (짝수 모드 임피던스)"
 
 #: pcb_calculator/transline_ident.cpp:334
 msgid "Even mode impedance (lines driven by common voltages)"
@@ -20075,7 +20082,7 @@ msgstr ""
 
 #: pcb_calculator/transline_ident.cpp:337
 msgid "Zodd"
-msgstr ""
+msgstr "Zodd (홀수 모드 임피던스)"
 
 #: pcb_calculator/transline_ident.cpp:338
 msgid "Odd mode impedance (lines driven by opposite (differential) voltages)"
@@ -20406,8 +20413,9 @@ msgid "Options for edge card connectors."
 msgstr "에지 카드 커넥터용 옵션."
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:116
+#, fuzzy
 msgid "Core"
-msgstr ""
+msgstr "코어"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:117
 msgid "PrePreg"
@@ -21152,7 +21160,7 @@ msgstr "정면에서 보기"
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:562
 #, fuzzy
 msgid "Back"
-msgstr "후면에서 보기"
+msgstr "뒤로 가기"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:208
 msgid "Front reference start:"
@@ -22371,14 +22379,16 @@ msgstr ""
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:294
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:169
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:172
+#, fuzzy
 msgid "-90.0"
-msgstr ""
+msgstr "-90.0"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:295
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:172
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:173
+#, fuzzy
 msgid "180.0"
-msgstr ""
+msgstr "180.0"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:301
 msgid "Keep aligned with dimension"
@@ -22415,8 +22425,9 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:325
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:68
+#, fuzzy
 msgid "Manual"
-msgstr ""
+msgstr "설명서"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:329
 msgid "Choose how to position the text relative to the dimension line"
@@ -22981,7 +22992,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:109
 #, fuzzy
 msgid "meter"
-msgstr "mm"
+msgstr "미터"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:109
 #, fuzzy
@@ -24637,7 +24648,7 @@ msgstr "세그먼트"
 
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:135
 msgid "Ring"
-msgstr ""
+msgstr "링"
 
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:145
 msgid "Center:"
@@ -24712,12 +24723,11 @@ msgstr "사각형 추가"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:719
 msgid "ring"
-msgstr ""
+msgstr "링"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:721
-#, fuzzy
 msgid "circle"
-msgstr "원"
+msgstr "원형"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:724
 #, fuzzy
@@ -24869,9 +24879,8 @@ msgid "No shape selected"
 msgstr "선택한 모양이 없음"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:2145
-#, fuzzy
 msgid "Ring/Circle"
-msgstr "원"
+msgstr "링/원형"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:2149
 #, fuzzy
@@ -24890,7 +24899,7 @@ msgstr "패드 형식:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:40 pcbnew/pad.cpp:1444
 msgid "Through-hole"
-msgstr ""
+msgstr "스루-홀"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:40
 #, fuzzy
@@ -24921,9 +24930,8 @@ msgstr "패드 형태:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:109
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:369
-#, fuzzy
 msgid "Circular"
-msgstr "원"
+msgstr "원형"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:109
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:369 pcbnew/pad.cpp:1084
@@ -24934,7 +24942,7 @@ msgstr "타원형"
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:109
 #, fuzzy
 msgid "Rectangular"
-msgstr "사각형 추가"
+msgstr "직사각형"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:109
 msgid "Trapezoidal"
@@ -25118,14 +25126,12 @@ msgid "Drafting notes"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:545
-#, fuzzy
 msgid "E.C.O.1"
-msgstr "E.C.O.1 layer"
+msgstr "E.C.O.1"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:548
-#, fuzzy
 msgid "E.C.O.2"
-msgstr "E.C.O.2 layer"
+msgstr "E.C.O.2"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:554
 msgid "Fabrication Property:"
@@ -25452,14 +25458,12 @@ msgid "3:2"
 msgstr "3:2"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:127
-#, fuzzy
 msgid "2:1"
-msgstr "2:3"
+msgstr "2:1"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:127
-#, fuzzy
 msgid "3:1"
-msgstr "3:2"
+msgstr "3:1"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:133
 msgid "Plot mode:"
@@ -25815,7 +25819,7 @@ msgstr "45도"
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:148
 #, fuzzy
 msgid "arc"
-msgstr "ERC"
+msgstr "호"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:157
 msgid "Miter radius (r):"
@@ -26367,8 +26371,9 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:251
 #: pcbnew/pcb_track.cpp:1091
+#, fuzzy
 msgid "Micro"
-msgstr ""
+msgstr "마이크로"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:251
 #: pcbnew/pcb_track.cpp:1090
@@ -26819,8 +26824,9 @@ msgid "Path Substitutions"
 msgstr "경로 대체"
 
 #: pcbnew/dialogs/panel_pcbnew_action_plugins_base.cpp:36
+#, fuzzy
 msgid "Icon"
-msgstr ""
+msgstr "아이콘"
 
 #: pcbnew/dialogs/panel_pcbnew_action_plugins_base.cpp:37
 #, fuzzy
@@ -29174,7 +29180,7 @@ msgstr "3D 형상: %s"
 #: pcbnew/footprint.cpp:879
 #, fuzzy
 msgid "<none>"
-msgstr "없음"
+msgstr "<없음>"
 
 #: pcbnew/footprint.cpp:883 pcbnew/tools/pcb_control.cpp:1139
 #, c-format
@@ -29621,9 +29627,8 @@ msgid "Interactive placement"
 msgstr ""
 
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:55
-#, fuzzy
 msgid "At"
-msgstr "자동"
+msgstr "At"
 
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:74
 msgid "DXF origin on PCB Grid, X Coordinate"
