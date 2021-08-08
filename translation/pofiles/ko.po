@@ -10,7 +10,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
 "PO-Revision-Date: 2021-08-08 05:48+0000\n"
-"Last-Translator: Ji Yoon Choi <chichoon.choi@gmail.com>\n"
+"Last-Translator: jehunseo <benbot591@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
 "Language: ko\n"
@@ -7832,9 +7832,8 @@ msgid "Update field visibilities"
 msgstr "필드 가시성 수정"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:137
-#, fuzzy
 msgid "Update field sizes and styles"
-msgstr "필드 크기 및 스타일 업데이트"
+msgstr "필드 크기 및 스타일 수정"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:138
 msgid "Update field positions"
@@ -10364,7 +10363,7 @@ msgstr ""
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:27
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:266
 msgid "Decade"
-msgstr ""
+msgstr "10진법"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:27
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:266
@@ -10407,7 +10406,7 @@ msgstr "정지 주파수:"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:85
 msgid "AC"
-msgstr ""
+msgstr "AC"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:98
 #, fuzzy
@@ -10515,7 +10514,7 @@ msgstr ""
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:311
 #: eeschema/sim/spice_simulator.cpp:70
 msgid "Noise"
-msgstr ""
+msgstr "노이즈"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:319
 msgid "This tab has no settings"
@@ -10642,19 +10641,19 @@ msgstr "3D 설정"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:79
 msgid "Diode"
-msgstr ""
+msgstr "다이오드"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:80
 msgid "BJT"
-msgstr ""
+msgstr "BJT"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:81
 msgid "MOSFET"
-msgstr ""
+msgstr "MOSFET"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:82
 msgid "JFET"
-msgstr ""
+msgstr "JFET"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:83
 msgid "Subcircuit"
@@ -10711,9 +10710,8 @@ msgstr "범위:"
 #: eeschema/dialogs/dialog_spice_model_base.cpp:674
 #: eeschema/dialogs/dialog_spice_model_base.cpp:778
 #: eeschema/dialogs/dialog_spice_model_base.cpp:894
-#, fuzzy
 msgid "Offset:"
-msgstr "옵셋:"
+msgstr "오프셋:"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:1099
 msgid "Standard deviation:"
@@ -10722,7 +10720,7 @@ msgstr "표준 편차:"
 #: eeschema/dialogs/dialog_spice_model.cpp:1100
 #: eeschema/dialogs/dialog_spice_model.cpp:1105
 msgid "Mean:"
-msgstr ""
+msgstr "평균:"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:1111
 msgid "Lambda:"
@@ -22693,9 +22691,8 @@ msgid "Update footprints matching value:"
 msgstr "값과 일치하는 풋프린트 업데이트:"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:44
-#, fuzzy
 msgid "Update footprints with library id:"
-msgstr "라이브러리 ID로 풋프린트 업데이트"
+msgstr "라이브러리 ID로 풋프린트 업데이트:"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:73
 msgid "New footprint library id:"
@@ -23755,9 +23752,8 @@ msgid "Save Drill Report File"
 msgstr "드릴 리포트:"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:22
-#, fuzzy
 msgid "Output folder:"
-msgstr "출력 형식"
+msgstr "출력 폴더:"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:42
 #, fuzzy
@@ -24044,9 +24040,8 @@ msgid "Layer Filter"
 msgstr "레이어 필터"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:102
-#, fuzzy
 msgid "Current layer:"
-msgstr "현재 값"
+msgstr "현재 레이어:"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.h:74
 #, fuzzy
@@ -24151,9 +24146,8 @@ msgid "Filter items by layer:"
 msgstr "레이어별로 항목 필터링:"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:78
-#, fuzzy
 msgid "Filter items by parent footprint library id:"
-msgstr "풋프린트 레퍼런스"
+msgstr "상위 풋프린트 라이브러리 ID로 항목 필터링:"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:103
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:90
@@ -24249,9 +24243,8 @@ msgid "Error loading footprint library table."
 msgstr "풋프린트 라이브러리 테이블을 로드하는 동안 오류가 발생했습니다."
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:178
-#, fuzzy
 msgid "Circle Properties"
-msgstr "마이어 속성"
+msgstr "원 속성"
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:191
 #, fuzzy
@@ -24259,14 +24252,12 @@ msgid "Arc Properties"
 msgstr "속성"
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:197
-#, fuzzy
 msgid "Polygon Properties"
-msgstr "핀 속성"
+msgstr "다각형 속성"
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:203
-#, fuzzy
 msgid "Rectangle Properties"
-msgstr "마이어 속성"
+msgstr "사각형 속성"
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:209
 #, fuzzy
@@ -24339,24 +24330,21 @@ msgid "Modified group"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_group_properties_base.cpp:28
-#, fuzzy
 msgid "Group name:"
-msgstr "풋프린트 이름:"
+msgstr "그룹 이름:"
 
 #: pcbnew/dialogs/dialog_group_properties_base.cpp:38
 msgid "Group members:"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_group_properties_base.h:62
-#, fuzzy
 msgid "Group Properties"
-msgstr "속성"
+msgstr "그룹 속성"
 
 #: pcbnew/dialogs/dialog_import_settings.cpp:52
 #: pcbnew/dialogs/dialog_import_settings.cpp:101
-#, fuzzy
 msgid "Deselect All"
-msgstr "선택 해제"
+msgstr "모두 선택 해제"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:49
 #, fuzzy
@@ -24390,9 +24378,8 @@ msgid "Imported Layer"
 msgstr "자동 스케일"
 
 #: pcbnew/dialogs/dialog_imported_layers.cpp:253
-#, fuzzy
 msgid "KiCad Layer"
-msgstr "레이어"
+msgstr "KiCad 레이어"
 
 #: pcbnew/dialogs/dialog_imported_layers.cpp:328
 msgid ""
@@ -24407,18 +24394,17 @@ msgid "Unmatched Layers"
 msgstr "기타"
 
 #: pcbnew/dialogs/dialog_imported_layers_base.cpp:32
-#, fuzzy
 msgid "Imported Layers"
-msgstr "에지 레이어 포함"
+msgstr "레이어 불러오기"
 
 #: pcbnew/dialogs/dialog_imported_layers_base.cpp:36
 #, fuzzy
 msgid "KiCad Layers"
-msgstr "레이어"
+msgstr "KiCad 레이어"
 
 #: pcbnew/dialogs/dialog_imported_layers_base.cpp:59
 msgid ">"
-msgstr ""
+msgstr ">"
 
 #: pcbnew/dialogs/dialog_imported_layers_base.cpp:61
 msgid "Add selected layers to matched layers list."
@@ -24426,7 +24412,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_imported_layers_base.cpp:65
 msgid "<"
-msgstr ""
+msgstr "<"
 
 #: pcbnew/dialogs/dialog_imported_layers_base.cpp:67
 msgid "Remove selected layers from matched layers list."
@@ -24434,21 +24420,20 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_imported_layers_base.cpp:71
 msgid "<<"
-msgstr ""
+msgstr "<<"
 
 #: pcbnew/dialogs/dialog_imported_layers_base.cpp:73
 msgid "Remove all matched layers."
 msgstr "일치하는 모든 레이어를 제거합니다."
 
 #: pcbnew/dialogs/dialog_imported_layers_base.cpp:81
-#, fuzzy
 msgid "Matched Layers"
-msgstr "기타"
+msgstr "일치하는 레이어"
 
 #: pcbnew/dialogs/dialog_imported_layers_base.cpp:97
 #, fuzzy
 msgid "Auto-Match Layers"
-msgstr "기타"
+msgstr "레이어 자동 일치"
 
 #: pcbnew/dialogs/dialog_imported_layers_base.cpp:98
 msgid "Automatically match any unmatched layers to their KiCad equivalent."
@@ -25184,15 +25169,13 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:219
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:269
-#, fuzzy
 msgid "Top left"
-msgstr "왼쪽으로 이동 <-"
+msgstr "왼쪽 상단"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:223
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:273
-#, fuzzy
 msgid "Top right"
-msgstr "오른쪽"
+msgstr "오른쪽 상단"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:226
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:276
@@ -25202,9 +25185,8 @@ msgstr "아래쪽에서 보기"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:229
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:279
-#, fuzzy
 msgid "Bottom right"
-msgstr "아래쪽에서 보기"
+msgstr "오른쪽 하단"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:314
 #, fuzzy
@@ -25750,9 +25732,8 @@ msgid "Postscript Options"
 msgstr "플로트 설정:"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:283
-#, fuzzy
 msgid "X scale factor:"
-msgstr "X 스케일 설정:"
+msgstr "X 배율 설정:"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:288
 #, fuzzy
@@ -25760,9 +25741,8 @@ msgid "Set global X scale adjust for exact scale PostScript output."
 msgstr "정확한 축척 PostScript 출력을 위해 전역 X 축척 조정을 설정합니다."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:295
-#, fuzzy
 msgid "Y scale factor:"
-msgstr "Y 스케일 설정:"
+msgstr "Y 배율 설정:"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:300
 #, fuzzy
@@ -25785,7 +25765,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:323
 msgid "Force A4 output"
-msgstr ""
+msgstr "강제로 A4로 출력"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:329
 #, fuzzy
@@ -25869,14 +25849,12 @@ msgid "Deselect all Copper Layers"
 msgstr "Copper Layers"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:459
-#, fuzzy
 msgid "Select all Layers"
-msgstr "레이어 선택:"
+msgstr "모든 레이어 선택"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:463
-#, fuzzy
 msgid "Deselect all Layers"
-msgstr "드로우 레이어 삭제"
+msgstr "모든 레이어 선택 해제"
 
 #: pcbnew/dialogs/dialog_pns_diff_pair_dimensions.cpp:55
 msgid "Trace gap must be greater than 0."
@@ -25894,9 +25872,8 @@ msgid "Trace gap:"
 msgstr "트랙 복사"
 
 #: pcbnew/dialogs/dialog_pns_diff_pair_dimensions_base.cpp:47
-#, fuzzy
 msgid "Via gap:"
-msgstr "비아 형식"
+msgstr "비아 간격:"
 
 #: pcbnew/dialogs/dialog_pns_diff_pair_dimensions_base.cpp:67
 msgid "Via gap same as trace gap"
@@ -25925,7 +25902,7 @@ msgstr "타겟 디렉토리"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:22
 msgid "Length / Skew"
-msgstr ""
+msgstr "길이 / 기울기"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:30
 msgid "Tune from:"
@@ -25963,9 +25940,8 @@ msgid "Max amplitude (Amax):"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:131
-#, fuzzy
 msgid "Min spacing (s):"
-msgstr "세로쓰기"
+msgstr "최소 간격 (s):"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:136
 msgid ""
@@ -25979,7 +25955,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:148
 msgid "45 degree"
-msgstr ""
+msgstr "45도"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:148
 #, fuzzy
