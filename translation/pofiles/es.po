@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
-"PO-Revision-Date: 2021-08-08 21:59+0000\n"
+"PO-Revision-Date: 2021-08-08 22:23+0000\n"
 "Last-Translator: VicSanRoPe <vicsanrope@protonmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/kicad/"
 "master-source/es/>\n"
@@ -32230,30 +32230,29 @@ msgstr ""
 "línea: %d posición: %d"
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:4106
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Net name doesn't match ID in\n"
 "file: %s\n"
 "line: %d offset: %d"
 msgstr ""
-"Nombre de red no coincide con ID de red en\n"
-"archivo: '%s'\n"
-"línea: %d\n"
-"posición: %d"
+"Nombre de red no coincide con ID en\n"
+"archivo: %s\n"
+"línea: %d posición: %d"
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:4558
 #: pcbnew/plugins/kicad/pcb_parser.cpp:4638
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Invalid net ID in\n"
 "file: '%s'\n"
 "line: %d\n"
 "offset: %d."
 msgstr ""
-"ID de red no válido en\n"
+"ID de red inválido en\n"
 "archivo: '%s'\n"
 "línea: %d\n"
-"posición: %d"
+"posición: %d."
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:4732
 #, c-format
@@ -32269,47 +32268,46 @@ msgstr ""
 "posición: %d"
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:4842
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Invalid net ID in\n"
 " file: '%s;\n"
 "line: %d\n"
 "offset: %d."
 msgstr ""
-"ID de red no válido en\n"
-"archivo: '%s'\n"
+"ID de red inválido en\n"
+" archivo: '%s';\n"
 "línea: %d\n"
-"posición: %d"
+"posición: %d."
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:4960
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:2630
-#, fuzzy
 msgid ""
 "The legacy segment fill mode is no longer supported.\n"
 "Convert zones to polygon fills?"
 msgstr ""
-"El antiguo modo de relleno por segmentos no se recomienda. ¿Convertir la "
-"zona a relleno por polígonos?"
+"El antiguo modo de relleno por segmentos ya no está soportado.\n"
+"¿Convertir la zona a relleno por polígonos?"
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:4962
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:2632
 msgid "Legacy Zone Warning"
-msgstr "Aviso de zona heredada"
+msgstr "Aviso de zona de legado"
 
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:596
 #, c-format
 msgid "File '%s' has an unrecognized version: %d."
-msgstr "El archivo «%s» tiene una versión no reconocida: %d."
+msgstr "El archivo '%s' tiene una versión no reconocida: %d."
 
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:750
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown sheet type '%s' on line: %d."
-msgstr "Se desconoce el tipo de hoja «%s» en la línea: %d"
+msgstr "Se desconoce el tipo de hoja '%s' en la línea: %d."
 
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:1430
-#, fuzzy, c-format
+#, c-format
 msgid "Missing '$EndMODULE' for MODULE '%s'."
-msgstr "Falta «$EndMODULE» para el MODULE «%s»"
+msgstr "Falta '$EndMODULE' para el MODULE '%s'."
 
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:1480
 #, fuzzy, c-format
