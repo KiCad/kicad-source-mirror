@@ -11,7 +11,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
 "PO-Revision-Date: 2021-08-08 10:14+0000\n"
-"Last-Translator: Ji Yoon Choi <chichoon.choi@gmail.com>\n"
+"Last-Translator: jeongsuAn <dks9467@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
 "Language: ko\n"
@@ -9662,9 +9662,8 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:431
 #: eeschema/sch_edit_frame.cpp:942
-#, fuzzy
 msgid "Schematic"
-msgstr "새 회로도 (&S)"
+msgstr "회로도"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:438
 #, fuzzy, c-format
@@ -10096,9 +10095,8 @@ msgstr "회로도 ERC"
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1000
 #: pcbnew/dialogs/dialog_board_statistics.cpp:651
 #: pcbnew/footprint_libraries_utils.cpp:516
-#, fuzzy
 msgid "Project"
-msgstr "프로젝트 (&P)"
+msgstr "프로젝트"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:76
 #: pcbnew/dialogs/dialog_board_setup.cpp:103
@@ -10401,8 +10399,9 @@ msgstr "소스 보이기 (&S)"
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1365
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1644
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1742
+#, fuzzy
 msgid "V"
-msgstr ""
+msgstr "V"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:103
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:109
@@ -10724,16 +10723,19 @@ msgstr "유형:"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:34
 #: eeschema/dialogs/dialog_spice_model_base.cpp:35
+#, fuzzy
 msgid "Resistor"
-msgstr ""
+msgstr "저항"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:36
+#, fuzzy
 msgid "Capacitor"
-msgstr ""
+msgstr "커패시터"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:37
+#, fuzzy
 msgid "Inductor"
-msgstr ""
+msgstr "인덕터"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:41
 #, fuzzy
@@ -10763,24 +10765,27 @@ msgid "Select file..."
 msgstr "파일 선택..."
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:226
+#, fuzzy
 msgid "Model:"
-msgstr ""
+msgstr "모델:"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:244
 msgid "note"
 msgstr ""
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:293
+#, fuzzy
 msgid "Model"
-msgstr ""
+msgstr "모델"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:301
 msgid "DC/AC Analysis"
 msgstr ""
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:310
+#, fuzzy
 msgid "DC:"
-msgstr ""
+msgstr "직류:"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:319
 #: eeschema/dialogs/dialog_spice_model_base.cpp:341
@@ -10796,7 +10801,7 @@ msgstr ""
 #: eeschema/dialogs/dialog_spice_model_base.cpp:774
 #: eeschema/dialogs/dialog_spice_model_base.cpp:785
 msgid "Volts/Amps"
-msgstr ""
+msgstr "V/A"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:332
 msgid "AC magnitude:"
@@ -10807,8 +10812,9 @@ msgid "AC phase:"
 msgstr ""
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:354
+#, fuzzy
 msgid "radians"
-msgstr ""
+msgstr "라디안"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:365
 #, fuzzy
@@ -10857,22 +10863,25 @@ msgstr "DC 오프셋:"
 #: eeschema/dialogs/dialog_spice_model_base.cpp:479
 #: eeschema/dialogs/dialog_spice_model_base.cpp:687
 #: eeschema/dialogs/dialog_spice_model_base.cpp:765
+#, fuzzy
 msgid "Amplitude:"
-msgstr ""
+msgstr "진폭:"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:490
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:865
 msgid "Frequency:"
-msgstr ""
+msgstr "주파수:"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:497
 #: pcb_calculator/widgets/unit_selector.cpp:103
+#, fuzzy
 msgid "Hz"
-msgstr ""
+msgstr "Hz"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:501
+#, fuzzy
 msgid "Delay:"
-msgstr ""
+msgstr "지연:"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:512
 msgid "Damping factor:"
@@ -10880,11 +10889,12 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:519
 msgid "1/seconds"
-msgstr ""
+msgstr "1/sec"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:527
+#, fuzzy
 msgid "Sinusoidal"
-msgstr ""
+msgstr "사인 곡선"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:559
 msgid "Rise delay time:"
@@ -10913,12 +10923,14 @@ msgid "Piece-wise linear"
 msgstr ""
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:624
+#, fuzzy
 msgid "Time:"
-msgstr ""
+msgstr "시간:"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:633
+#, fuzzy
 msgid "second"
-msgstr ""
+msgstr "초"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:666
 msgid "Piece-wise Linear"
@@ -10959,8 +10971,9 @@ msgid "Signal phase:"
 msgstr ""
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:757
+#, fuzzy
 msgid "FM"
-msgstr ""
+msgstr "FM"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:789
 msgid "Modulating frequency:"
@@ -10972,7 +10985,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:837
 msgid "AM"
-msgstr ""
+msgstr "AM"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:841
 msgid "Transient noise"
@@ -11001,7 +11014,7 @@ msgstr "시간 지연:"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:908
 msgid "Random"
-msgstr ""
+msgstr "랜덤"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:912
 msgid "External data"
@@ -11010,7 +11023,7 @@ msgstr ""
 #: eeschema/dialogs/dialog_spice_model_base.cpp:919
 #: eeschema/sim/sim_plot_panel.cpp:342
 msgid "Voltage"
-msgstr ""
+msgstr "전압"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:919
 #: eeschema/sim/sim_plot_panel.cpp:343 eeschema/sim/sim_plot_panel.cpp:420
@@ -11025,7 +11038,7 @@ msgstr "소스 보이기 (&S)"
 #: eeschema/dialogs/dialog_spice_model_base.cpp:929
 #, fuzzy
 msgid "Source"
-msgstr "소스 보이기 (&S)"
+msgstr "소스"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:936
 msgid "Disable symbol for simulation"
@@ -11750,7 +11763,7 @@ msgstr "필드 이름:"
 
 #: eeschema/dialogs/panel_eeschema_template_fieldnames_base.cpp:45
 msgid "URL"
-msgstr ""
+msgstr "URL"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:25
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:28
@@ -11765,27 +11778,27 @@ msgstr "심볼 단위 표기:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:34
 msgid ".A"
-msgstr ""
+msgstr ".A"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:34
 msgid "-A"
-msgstr ""
+msgstr "-A"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:34
 msgid "_A"
-msgstr ""
+msgstr "_A"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:34
 msgid ".1"
-msgstr ""
+msgstr ".1"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:34
 msgid "-1"
-msgstr ""
+msgstr "-1"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:34
 msgid "_1"
-msgstr ""
+msgstr "_1"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:55
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:40
@@ -11929,18 +11942,16 @@ msgstr "전기적 형식"
 
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:126
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:137
-#, fuzzy
 msgid "100"
-msgstr "180"
+msgstr "100"
 
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:133
 msgid "&Pitch of repeated pins:"
 msgstr "반복되는 핀의 피치(&P):"
 
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:137
-#, fuzzy
 msgid "50"
-msgstr "0"
+msgstr "50"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:350
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:531
@@ -12018,8 +12029,9 @@ msgstr "이 라이브러리를 추가한 후 별명 중 하나를 변경해야 �
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1007
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:908
 #: pcbnew/footprint_libraries_utils.cpp:523
+#, fuzzy
 msgid "Skip"
-msgstr ""
+msgstr "건너뛰기"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:529
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:908
@@ -12633,8 +12645,9 @@ msgstr "별칭"
 #: eeschema/generate_alias_info.cpp:121 eeschema/sim/spice_simulator.cpp:83
 #: pcbnew/footprint.cpp:839 pcbnew/tools/pcb_control.cpp:1131
 #: pcbnew/zone.cpp:623
+#, fuzzy
 msgid "Unknown"
-msgstr ""
+msgstr "알 수 없음"
 
 #: eeschema/getpart.cpp:134 pcbnew/load_select_footprint.cpp:255
 #, fuzzy
@@ -12689,8 +12702,9 @@ msgstr ""
 #: eeschema/lib_circle.cpp:256
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:181
 #: pcbnew/pcb_shape.cpp:518 pcbnew/pcb_shape.cpp:528 pcbnew/pcb_track.cpp:698
+#, fuzzy
 msgid "Radius"
-msgstr ""
+msgstr "반지름"
 
 #: eeschema/lib_circle.cpp:276
 #, c-format
@@ -12719,7 +12733,6 @@ msgid "yes"
 msgstr "예"
 
 #: eeschema/lib_item.cpp:70 eeschema/sch_pin.cpp:198
-#, fuzzy
 msgid "Converted"
 msgstr "변환"
 
@@ -12853,7 +12866,7 @@ msgstr "네트리스트…"
 #: pcbnew/menubar_footprint_editor.cpp:138 pcbnew/menubar_pcb_editor.cpp:244
 #, fuzzy
 msgid "&Units"
-msgstr "단위"
+msgstr "단위(&U)"
 
 #: eeschema/menubar.cpp:286
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:179
@@ -12872,9 +12885,8 @@ msgstr ""
 
 #: eeschema/menubar.cpp:288 gerbview/menubar.cpp:225 kicad/menubar.cpp:182
 #: pcbnew/menubar_footprint_editor.cpp:246 pcbnew/menubar_pcb_editor.cpp:457
-#, fuzzy
 msgid "&Tools"
-msgstr "도구"
+msgstr "도구(&T)"
 
 #: eeschema/menubar.cpp:289
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:181
@@ -13894,11 +13906,12 @@ msgstr "정렬"
 
 #: eeschema/sch_symbol.cpp:1396
 msgid "Undefined!!!"
-msgstr ""
+msgstr "정의되어 있지 않습니다!!!"
 
 #: eeschema/sch_symbol.cpp:1403
+#, fuzzy
 msgid "<Unknown>"
-msgstr ""
+msgstr "<알 수 없음>"
 
 #: eeschema/sch_symbol.cpp:1424
 msgid "No library defined!"
@@ -14369,8 +14382,9 @@ msgid "Error: simulation type doesn't support plotting!\n"
 msgstr ""
 
 #: eeschema/sim/sim_plot_frame.cpp:812 eeschema/sim/sim_plot_frame.cpp:1616
+#, fuzzy
 msgid "Signal"
-msgstr ""
+msgstr "신호"
 
 #: eeschema/sim/sim_plot_frame.cpp:1097
 msgid "Open simulation workbook"
@@ -14469,14 +14483,12 @@ msgid "Shows current simulation's netlist. Useful for debugging SPICE errors."
 msgstr ""
 
 #: eeschema/sim/sim_plot_frame_base.cpp:80
-#, fuzzy
 msgid "Settings..."
-msgstr "색상 설정..."
+msgstr "설정..."
 
 #: eeschema/sim/sim_plot_frame_base.cpp:83
-#, fuzzy
 msgid "Simulation"
-msgstr "시뮬레이터 실행 (&R)"
+msgstr "시뮬레이션"
 
 #: eeschema/sim/sim_plot_frame_base.cpp:101
 #, fuzzy
@@ -14501,11 +14513,12 @@ msgstr "흰색"
 #: eeschema/sim/sim_plot_frame_base.cpp:118
 #, fuzzy
 msgid "View"
-msgstr "위쪽에서 보기"
+msgstr "보기"
 
 #: eeschema/sim/sim_plot_frame_base.cpp:197
+#, fuzzy
 msgid "Signals"
-msgstr ""
+msgstr "신호"
 
 #: eeschema/sim/sim_plot_frame_base.cpp:225
 #, fuzzy
@@ -14515,7 +14528,7 @@ msgstr "커서"
 #: eeschema/sim/sim_plot_panel.cpp:324 eeschema/sim/sim_plot_panel.cpp:336
 #: pcb_calculator/transline_ident.cpp:108
 msgid "Frequency"
-msgstr ""
+msgstr "주파수"
 
 #: eeschema/sim/sim_plot_panel.cpp:325
 msgid "Gain"
@@ -14532,7 +14545,7 @@ msgstr ""
 #: eeschema/sim/sim_plot_panel.cpp:341
 #, fuzzy
 msgid "Time"
-msgstr "타임스탬프"
+msgstr "시간"
 
 #: eeschema/sim/sim_plot_panel.cpp:403
 msgid "Voltage (swept)"
@@ -14888,9 +14901,8 @@ msgstr ""
 #: eeschema/symbol_editor/symbol_editor.cpp:601 include/lib_table_grid.h:183
 #: pcbnew/footprint_libraries_utils.cpp:951
 #: pcbnew/footprint_libraries_utils.cpp:1187
-#, fuzzy
 msgid "Nickname"
-msgstr "네트 이름"
+msgstr "별칭"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:612
 #, fuzzy
@@ -15050,8 +15062,9 @@ msgstr "심볼 라이브러리 파일 '%s'을 로드하는 동안 오류가 발�
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:122
 #: pcbnew/footprint_libraries_utils.cpp:470
 #: pcbnew/footprint_libraries_utils.cpp:1037
+#, fuzzy
 msgid "Overwrite"
-msgstr ""
+msgstr "덮어쓰기"
 
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:167
 #, c-format
@@ -16552,7 +16565,7 @@ msgstr "라이브러리 만들기"
 
 #: eeschema/widgets/tuner_slider_base.cpp:24
 msgid " X "
-msgstr ""
+msgstr " X "
 
 #: gerbview/clear_gbr_drawlayers.cpp:47
 #, fuzzy
@@ -16989,8 +17002,9 @@ msgid "Clear"
 msgstr "유격"
 
 #: gerbview/gerber_draw_item.cpp:713 gerbview/gerber_file_image.cpp:353
+#, fuzzy
 msgid "Polarity"
-msgstr ""
+msgstr "극성"
 
 #: gerbview/gerber_draw_item.cpp:718 pcbnew/fp_text.cpp:291
 #: pcbnew/pcb_text.cpp:122 pcbnew/tools/edit_tool.cpp:1622
@@ -17191,8 +17205,9 @@ msgid "Highlight items belonging to this net"
 msgstr ""
 
 #: gerbview/toolbars_gerber.cpp:152 gerbview/toolbars_gerber.cpp:155
+#, fuzzy
 msgid "Attr:"
-msgstr ""
+msgstr "속성:"
 
 #: gerbview/toolbars_gerber.cpp:154
 msgid "Highlight items with this aperture attribute"
@@ -17439,7 +17454,7 @@ msgstr ""
 #: gerbview/tools/gerbview_selection_tool.cpp:48
 #, fuzzy
 msgid "Highlight"
-msgstr "네트 높이"
+msgstr "강조"
 
 #: gerbview/tools/gerbview_selection_tool.cpp:70
 #, c-format
@@ -17478,9 +17493,8 @@ msgid "Items"
 msgstr "Nb 항목"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:93
-#, fuzzy
 msgid "DCodes"
-msgstr "D-Codes 아이디"
+msgstr "D코드"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:94
 msgid "Show DCodes identification"
@@ -18278,7 +18292,7 @@ msgstr ""
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:124
 #, fuzzy
 msgid "Origin"
-msgstr "플로트 원점"
+msgstr "원본"
 
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:68
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:128
@@ -18396,7 +18410,7 @@ msgstr "비아홀 크기 초기화"
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:183
 #, fuzzy
 msgid "Comment:"
-msgstr "주석1:"
+msgstr "주석:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:190
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:105
@@ -18416,7 +18430,7 @@ msgstr "끝 위치"
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1354
 #, fuzzy
 msgid "Rotation:"
-msgstr "형상 회전:"
+msgstr "회전:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:322
 msgid "Bitmap DPI:"
@@ -18550,9 +18564,8 @@ msgid "File \"%s\" inserted"
 msgstr "파일 \"%s\" 삽입됨"
 
 #: pagelayout_editor/files.cpp:147
-#, fuzzy
 msgid "Open"
-msgstr "열기 (&O)"
+msgstr "열기"
 
 #: pagelayout_editor/files.cpp:163 pagelayout_editor/files.cpp:210
 #, fuzzy, c-format
@@ -18819,8 +18832,9 @@ msgid "Vref:"
 msgstr ""
 
 #: pcb_calculator/dialogs/dialog_regulator_form_base.cpp:44
+#, fuzzy
 msgid "Volt"
-msgstr ""
+msgstr "V"
 
 #: pcb_calculator/dialogs/dialog_regulator_form_base.cpp:52
 msgid "Separate sense pin"
@@ -18837,8 +18851,9 @@ msgstr ""
 
 #: pcb_calculator/dialogs/dialog_regulator_form_base.cpp:68
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:164
+#, fuzzy
 msgid "uA"
-msgstr ""
+msgstr "uA"
 
 #: pcb_calculator/dialogs/dialog_regulator_form_base.h:60
 msgid "Regulator Parameters"
@@ -18869,8 +18884,9 @@ msgstr ""
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:97
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:352
+#, fuzzy
 msgid "R1:"
-msgstr ""
+msgstr "R1:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:104
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:118
@@ -18887,8 +18903,9 @@ msgid "R2:"
 msgstr "R2:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:125
+#, fuzzy
 msgid "Vout:"
-msgstr ""
+msgstr "Vout:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:141
 msgid ""
@@ -18903,8 +18920,9 @@ msgstr ""
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:177
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:334
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:579
+#, fuzzy
 msgid "Calculate"
-msgstr ""
+msgstr "계산"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:197
 #, fuzzy
@@ -20096,16 +20114,15 @@ msgstr ""
 
 #: pcb_calculator/widgets/unit_selector.cpp:35
 msgid "um"
-msgstr ""
+msgstr "um"
 
 #: pcb_calculator/widgets/unit_selector.cpp:36
 msgid "cm"
-msgstr ""
+msgstr "cm"
 
 #: pcb_calculator/widgets/unit_selector.cpp:37
-#, fuzzy
 msgid "mil"
-msgstr "컴파일"
+msgstr "mil"
 
 #: pcb_calculator/widgets/unit_selector.cpp:38
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:48
@@ -20117,11 +20134,12 @@ msgstr "인치"
 
 #: pcb_calculator/widgets/unit_selector.cpp:100
 msgid "GHz"
-msgstr ""
+msgstr "GHz"
 
 #: pcb_calculator/widgets/unit_selector.cpp:101
+#, fuzzy
 msgid "MHz"
-msgstr ""
+msgstr "MHz"
 
 #: pcb_calculator/widgets/unit_selector.cpp:102
 msgid "kHz"
@@ -22340,8 +22358,9 @@ msgstr "텍스트 위치 Y"
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:272
 #: pcbnew/dialogs/dialog_target_properties_base.cpp:39
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:150
+#, fuzzy
 msgid "Thickness:"
-msgstr ""
+msgstr "두께:"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:274
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:152
