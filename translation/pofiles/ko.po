@@ -10,8 +10,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
-"PO-Revision-Date: 2021-08-08 06:53+0000\n"
-"Last-Translator: 박준언 <joonun1696@pusan.ac.kr>\n"
+"PO-Revision-Date: 2021-08-08 06:56+0000\n"
+"Last-Translator: Uibeom Jung <wjddmlqja17@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
 "Language: ko\n"
@@ -7204,7 +7204,7 @@ msgstr "%s와 %s 가 같은 항목에 연결되어 있습니다; %s 는 네트�
 #, c-format
 msgid ""
 "Net %s is graphically connected to bus %s but is not a member of that bus"
-msgstr "네트 %s는 표현상으로 버스 %s와 연결되어 있지만, 해당 버스의 멤버가 아닙니다"
+msgstr "네트 %s는 버스 %s에 시각적으로 연결되어 있지만 해당 버스의 구성원은 아닙니다"
 
 #: eeschema/connection_graph.cpp:2877
 #, c-format
@@ -8921,7 +8921,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:51
 msgid "Default reference designator:"
-msgstr ""
+msgstr "기본 참조 지정자:"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:55
 msgid "U"
