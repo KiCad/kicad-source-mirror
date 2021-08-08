@@ -12,7 +12,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
 "PO-Revision-Date: 2021-08-09 02:20+0000\n"
-"Last-Translator: VicSanRoPe <vicsanrope@protonmail.com>\n"
+"Last-Translator: Adolfo Jayme Barrientos <fitojb@ubuntu.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/kicad/"
 "master-source/es/>\n"
 "Language: es\n"
@@ -1968,13 +1968,13 @@ msgstr "Copiar tabla de bibliotecas globales %s personalizada"
 msgid ""
 "Select this option to copy a %s library table file other than the default"
 msgstr ""
-"Seleccione esta opción para copiar un archivo de tablas de librerías %s "
+"Seleccione esta opción para copiar un archivo de tablas de bibliotecas %s "
 "diferente al predeterminado"
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:61
 #, c-format
 msgid "Create an empty global %s library table"
-msgstr "Crear una tabla de librerías global %s vacía"
+msgstr "Crear una tabla de bibliotecas global %s vacía"
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:63
 #, c-format
@@ -33330,7 +33330,7 @@ msgstr "Elemento <b>no permitido</b> en la ubicación actual."
 
 #: pcbnew/tools/board_inspection_tool.cpp:777
 msgid "Item allowed at current location."
-msgstr ""
+msgstr "Elemento permitido en la ubicación actual."
 
 #: pcbnew/tools/convert_tool.cpp:200
 msgid "Convert shapes to polygon"
@@ -33370,7 +33370,7 @@ msgstr "Inserte la tabla de apilado de placa"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:390
 msgid "BOARD CHARACTERISTICS"
-msgstr ""
+msgstr "CARACTERÍSTICAS DE LA PLACA"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:406
 msgid "Copper Layer Count: "
@@ -33568,7 +33568,7 @@ msgstr "Agrupamiento"
 
 #: pcbnew/tools/group_tool.cpp:65
 msgid "Group is in inconsistent state:"
-msgstr ""
+msgstr "El grupo se encuentra en un estado incoherente:"
 
 #: pcbnew/tools/group_tool.cpp:148
 msgid "Click on new member..."
@@ -34541,7 +34541,7 @@ msgstr "Voltear vista de placa"
 
 #: pcbnew/tools/pcb_actions.cpp:783
 msgid "View board from the opposite side"
-msgstr ""
+msgstr "Ver la placa del lado opuesto"
 
 #: pcbnew/tools/pcb_actions.cpp:789
 msgid "Show Ratsnest"
@@ -34839,7 +34839,7 @@ msgstr "Borrar Placa"
 
 #: pcbnew/tools/pcb_actions.cpp:1088
 msgid "Run various diagnostics and attempt to repair board"
-msgstr ""
+msgstr "Ejecutar varios diagnósticos e intentar reparar la placa"
 
 #: pcbnew/tools/pcb_actions.cpp:1093
 #, fuzzy
