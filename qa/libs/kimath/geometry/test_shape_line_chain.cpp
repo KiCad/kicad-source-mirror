@@ -260,4 +260,35 @@ BOOST_AUTO_TEST_CASE( Slice )
 }
 
 
+// Test SHAPE_LINE_CHAIN::NearestPoint( VECTOR2I )
+BOOST_AUTO_TEST_CASE( NearestPointPt )
+{
+    SEG       seg1( VECTOR2I( 0, 100000 ), VECTOR2I( 50000, 0 ) );
+    SEG       seg2( VECTOR2I( 200000, 0 ), VECTOR2I( 300000, 0 ) );
+    SHAPE_ARC arc( VECTOR2I( 200000, 0 ), VECTOR2I( 300000, 0 ), 180.0 );
+
+    // Start a chain with 2 points (seg1)
+    SHAPE_LINE_CHAIN chain( { seg1.A, seg1.B } );
+    BOOST_CHECK_EQUAL( chain.PointCount(), 2 );
+    // Add first arc
+    chain.Append( arc );
+    BOOST_CHECK_EQUAL( chain.PointCount(), 9 );
+    // Add two points (seg2)
+    chain.Append( seg2.A );
+    chain.Append( seg2.B );
+    BOOST_CHECK_EQUAL( chain.PointCount(), 11 );
+    BOOST_CHECK( GEOM_TEST::IsOutlineValid( chain ) );
+
+    VECTOR2I ptOnArcCloseToStart( 297553, 31697 ); //should be index 3 in chain
+    VECTOR2I ptOnArcCloseToEnd( 139709, 82983 ); //should be index 6 in chain
+
+    BOOST_CHECK_EQUAL( chain.NearestPoint( ptOnArcCloseToStart, true ), ptOnArcCloseToStart );
+    BOOST_CHECK_EQUAL( chain.NearestPoint( ptOnArcCloseToStart, false ), arc.GetP0() );
+
+    BOOST_CHECK_EQUAL( chain.NearestPoint( ptOnArcCloseToEnd, true ), ptOnArcCloseToEnd );
+    BOOST_CHECK_EQUAL( chain.NearestPoint( ptOnArcCloseToEnd, false ), arc.GetP1() );
+}
+
+
+
 BOOST_AUTO_TEST_SUITE_END()

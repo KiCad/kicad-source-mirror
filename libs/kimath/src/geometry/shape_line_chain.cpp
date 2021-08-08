@@ -1557,29 +1557,42 @@ const VECTOR2I SHAPE_LINE_CHAIN::NearestPoint( const VECTOR2I& aP,
     {
         int d = CSegment( i ).Distance( aP );
 
-        bool isInternalShapePoint = false;
-
-        // An internal shape point here is everything after the start of an arc and before the
-        // second-to-last vertex of the arc, because we are looking at segments here!
-        if( i > 0 && i < SegmentCount() - 1 && m_shapes[i] != SHAPES_ARE_PT
-            && ( ( m_shapes[i - 1] != SHAPES_ARE_PT && m_shapes[i - 1] == m_shapes[i] )
-                 && ( m_shapes[i + 2] != SHAPES_ARE_PT && m_shapes[i + 2] == m_shapes[i] ) ) )
-        {
-            isInternalShapePoint = true;
-        }
-
-        if( ( d < min_d ) && ( aAllowInternalShapePoints || !isInternalShapePoint ) )
+        if( d < min_d )
         {
             min_d = d;
             nearest = i;
         }
     }
 
-    // Is this the start or end of an arc?  If so, return it directly
-    if( !aAllowInternalShapePoints && ( IsArcStart( nearest ) || IsArcEnd( nearest ) ) )
+    if( !aAllowInternalShapePoints )
     {
-        //@todo should we calculate the nearest point to the "true" arc?
-        return m_points[nearest];
+        //Snap to arc end points if the closest found segment is part of an arc segment
+        if( nearest > 0 && nearest < PointCount() && IsArcSegment( nearest ) )
+        {
+            VECTOR2I ptToSegStart = CSegment( nearest ).A - aP;
+            VECTOR2I ptToSegEnd = CSegment( nearest ).B - aP;
+
+            if( ptToSegStart.EuclideanNorm() > ptToSegEnd.EuclideanNorm() )
+                nearest++;
+
+            // Is this the start or end of an arc?  If so, return it directly
+            if( IsArcStart( nearest ) || IsArcEnd( nearest ) )
+            {
+                return m_points[nearest];
+            }
+            else
+            {
+                const SHAPE_ARC& nearestArc = Arc( ArcIndex( nearest ) );
+                VECTOR2I         ptToArcStart = nearestArc.GetP0() - aP;
+                VECTOR2I         ptToArcEnd = nearestArc.GetP1() - aP;
+
+                if( ptToArcStart.EuclideanNorm() > ptToArcEnd.EuclideanNorm() )
+                    return nearestArc.GetP1();
+                else
+                    return nearestArc.GetP0();
+            }
+
+        }
     }
 
     return CSegment( nearest ).NearestPoint( aP );
