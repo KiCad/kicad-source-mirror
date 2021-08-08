@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
 "PO-Revision-Date: 2021-08-08 04:12+0000\n"
-"Last-Translator: jehunseo <benbot591@gmail.com>\n"
+"Last-Translator: Ji Yoon Choi <chichoon.choi@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
 "Language: ko\n"
@@ -6894,17 +6894,14 @@ msgstr "값"
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:99
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:96
-#, fuzzy
 msgid "Absolute"
-msgstr "절대값"
+msgstr "절대경로"
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:99
-#, fuzzy
 msgid "Relative"
-msgstr "상대적인"
+msgstr "상대경로"
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:101
-#, fuzzy
 msgid "Path Type"
 msgstr "경로 유형"
 
@@ -6927,39 +6924,39 @@ msgid ""
 "\n"
 "Please choose the assignment."
 msgstr ""
-"개략적인 넷리스트의 설치 공간 할당과 기호 설치 공간 연결 파일(.cmp)이 충돌합니다.\n"
+"회로도 네트리스트에서의 풋프린트 할당과 심볼 풋프린트 관련성 파일(.cmp) 이 충돌합니다.\n"
 "\n"
-"과제를 선택하세요."
+"할당 항목을 선택하세요."
 
 #: cvpcb/dialogs/fp_conflict_assignment_selector_base.h:53
 msgid "Footprint Assignment Conflicts"
-msgstr "설치 공간 할당 충돌"
+msgstr "풋프린트 할당 충돌"
 
 #: cvpcb/display_footprints_frame.cpp:69
 #: pcbnew/toolbars_footprint_viewer.cpp:158
 msgid "Footprint Viewer"
-msgstr "설치공간 보기"
+msgstr "풋프린트 보기"
 
 #: cvpcb/display_footprints_frame.cpp:405
 #, c-format
 msgid "Footprint ID '%s' is not valid."
-msgstr "설치 공간 ID '%s' 이(가) 잘못되었습니다."
+msgstr "풋프린트 ID '%s' 은 유효하지 않습니다."
 
 #: cvpcb/display_footprints_frame.cpp:420
 #, c-format
 msgid "Library '%s' is not in the footprint library table."
-msgstr "라이브러리 '%s' 이(가) 설치공간 라이브러리 테이블에 없습니다."
+msgstr "라이브러리 '%s' 이(가) 풋프린트 라이브러리 테이블에 없습니다."
 
 #: cvpcb/display_footprints_frame.cpp:429
 #: cvpcb/display_footprints_frame.cpp:454
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint '%s' not found."
-msgstr "%s 설치공간을  찾을 수 없습니다."
+msgstr "%s 풋프린트를 찾을 수 없습니다."
 
 #: cvpcb/display_footprints_frame.cpp:484 pcbnew/footprint.cpp:878
 #, c-format
 msgid "Footprint: %s"
-msgstr "설치공간: %s"
+msgstr "풋프린트: %s"
 
 #: cvpcb/display_footprints_frame.cpp:495
 #, c-format
@@ -6973,19 +6970,18 @@ msgid ""
 "format? (If you answer no, then these assignments will be cleared and you "
 "will need to re-assign them manually.)"
 msgstr ""
+"할당된 풋프린트 중 몇 종류는 라이브러리명이 없는 오래된 항목입니다. KiCad를 통해 해당 풋프린트를 새로운 필요 LIB_ID 포맷으로 "
+"변환하시겠습니까? (아니오를 선택하실 경우, 해당 할당은 모두 지워지고 사용자가 수동으로 각각의 풋프린트를 재할당 해주어야 합니다.)"
 
 #: cvpcb/readwrite_dlgs.cpp:148
-#, fuzzy, c-format
+#, c-format
 msgid "Component '%s' footprint '%s' <b>not found</b> in any library.\n"
-msgstr ""
-"라이브러리에서 구성 요소 \"%s\"풋 프린트 \"%s\"을 <b> 찾을 수 없습니다 </"
-"b>.\n"
+msgstr "라이브러리에서 구성 요소 '%s'의 풋프린트 '%s'을 <b> 찾을 수 없습니다</b>.\n"
 
 #: cvpcb/readwrite_dlgs.cpp:155
-#, fuzzy, c-format
+#, c-format
 msgid "Component '%s' footprint '%s' was found in <b>multiple</b> libraries.\n"
-msgstr ""
-"구성 요소 %s\" 풋프린트 %s\"가 <b> 여러 </b> 라이브러리에서 발견되었습니다.\n"
+msgstr "구성 요소 '%s'의 풋프린트 '%s'가 <b>여러</b> 라이브러리에서 발견되었습니다.\n"
 
 #: cvpcb/readwrite_dlgs.cpp:168
 msgid "First check your footprint library table entries."
@@ -6993,7 +6989,7 @@ msgstr "먼저 풋프린트 라이브러리 테이블 항목을 확인하세요.
 
 #: cvpcb/readwrite_dlgs.cpp:170
 msgid "Problematic Footprint Library Tables"
-msgstr ""
+msgstr "문제가 발견된 풋프린트 라이브러리 테이블"
 
 #: cvpcb/readwrite_dlgs.cpp:178
 msgid ""
@@ -7001,6 +6997,8 @@ msgid ""
 "assignments:\n"
 "\n"
 msgstr ""
+"풋프린트 할당을 변환하는 도중 다음의 에러가 발생하였습니다:\n"
+"\n"
 
 #: cvpcb/readwrite_dlgs.cpp:181
 msgid ""
@@ -7008,116 +7006,103 @@ msgid ""
 "You will need to reassign them manually if you want them to be updated "
 "correctly the next time you import the netlist in Pcbnew."
 msgstr ""
+"\n"
+"다음에 Pcbnew에서 네트리스트로 불러올 때 업데이트가 제대로 이루어지기 위해서는 해당 항목을 수동으로 재할당 해주어야 합니다."
 
 #: cvpcb/readwrite_dlgs.cpp:299
 msgid "Schematic saved"
-msgstr "저장된 회로도"
+msgstr "회로도 저장됨"
 
 #: cvpcb/toolbars_cvpcb.cpp:75
 msgid "Footprint Filters:"
 msgstr "풋프린터 필터:"
 
 #: cvpcb/tools/cvpcb_actions.cpp:52
-#, fuzzy
 msgid "View selected footprint"
-msgstr "선택된 부품 보기"
+msgstr "선택한 풋프린트 보기"
 
 #: cvpcb/tools/cvpcb_actions.cpp:53
-#, fuzzy
 msgid "View the selected footprint in the footprint viewer"
-msgstr "텍스트 에디터로 열기 (&O)"
+msgstr "선택한 풋프린트를 풋프린트 뷰어에서 보기"
 
 #: cvpcb/tools/cvpcb_actions.cpp:60
-#, fuzzy
 msgid "Manage Footprint Association Files"
-msgstr "풋프린트 회전"
+msgstr "풋프린트 할당 파일 관리"
 
 #: cvpcb/tools/cvpcb_actions.cpp:61
 msgid ""
 "Configure footprint association file (.equ) list.  These files are used to "
 "automatically assign footprint names from symbol values."
 msgstr ""
+"풋프린트 관련성 파일 (.equ) 리스트를 편집합니다.  이 파일들은 심볼 값들로부터 자동으로 풋프린트 이름을 할당할 때 사용됩니다."
 
 #: cvpcb/tools/cvpcb_actions.cpp:67
-#, fuzzy
 msgid "Save to Schematic"
-msgstr "새 회로도 (&S)"
+msgstr "회로도로 저장"
 
 #: cvpcb/tools/cvpcb_actions.cpp:68
 msgid "Save footprint associations in schematic symbol footprint fields"
-msgstr ""
+msgstr "풋프린트 관련성을 회로도의 심볼 풋프린트 필드에 저장"
 
 #: cvpcb/tools/cvpcb_actions.cpp:91
-#, fuzzy
 msgid "Select next unassigned symbol"
-msgstr "다음의 자유 컴포넌트를 선택"
+msgstr "할당되지 않은 다음 심볼을 선택"
 
 #: cvpcb/tools/cvpcb_actions.cpp:92
-#, fuzzy
 msgid "Select next symbol with no footprint assignment"
-msgstr "모든 연결 삭제"
+msgstr "풋프린트 할당이 되지 않은 다음 심볼을 선택"
 
 #: cvpcb/tools/cvpcb_actions.cpp:98
-#, fuzzy
 msgid "Select previous unassigned symbol"
-msgstr "이전의 자유 컴포넌트를 선택"
+msgstr "할당되지 않은 이전 심볼을 선택"
 
 #: cvpcb/tools/cvpcb_actions.cpp:99
-#, fuzzy
 msgid "Select previous symbol with no footprint assignment"
-msgstr "모든 연결 삭제"
+msgstr "풋프린트 할당이 되지 않은 이전 심볼을 선택"
 
 #: cvpcb/tools/cvpcb_actions.cpp:108
-#, fuzzy
 msgid "Assign footprint"
-msgstr "풋프린트"
+msgstr "풋프린트 할당"
 
 #: cvpcb/tools/cvpcb_actions.cpp:109
 msgid "Assign footprint to selected symbols"
-msgstr "선택한 기호에 풋프린트 지정"
+msgstr "선택한 심볼에 풋프린트 할당"
 
 #: cvpcb/tools/cvpcb_actions.cpp:114
-#, fuzzy
 msgid "Automatically assign footprints"
-msgstr "새 풋프린트 추가"
+msgstr "자동으로 풋프린트 할당"
 
 #: cvpcb/tools/cvpcb_actions.cpp:115
-#, fuzzy
 msgid "Perform automatic footprint assignment"
-msgstr "자동 패키지 연결"
+msgstr "풋프린트 할당을 자동으로 수행하기"
 
 #: cvpcb/tools/cvpcb_actions.cpp:121
-#, fuzzy
 msgid "Delete association"
-msgstr "삭제 선택"
+msgstr "관련성 삭제"
 
 #: cvpcb/tools/cvpcb_actions.cpp:122
-#, fuzzy
 msgid "Delete selected footprint associations"
-msgstr "모든 연결 삭제"
+msgstr "선택한 풋프린트 관련성 삭제"
 
 #: cvpcb/tools/cvpcb_actions.cpp:127 cvpcb/tools/cvpcb_actions.cpp:128
-#, fuzzy
 msgid "Delete all footprint associations"
-msgstr "모든 연결 삭제"
+msgstr "모든 풋프린트 관련성 삭제"
 
 #: cvpcb/tools/cvpcb_actions.cpp:135
-#, fuzzy
 msgid "Use symbol footprint filters"
-msgstr "풋프린트 압축 만들기"
+msgstr "심볼 풋프린트 필터 사용"
 
 #: cvpcb/tools/cvpcb_actions.cpp:136
 msgid "Filter footprint list by footprint filters defined in the symbol"
-msgstr ""
+msgstr "풋프린트 리스트를 심볼에 정의되어 있는 풋프린트 필터로 필터링"
 
 #: cvpcb/tools/cvpcb_actions.cpp:142
-#, fuzzy
 msgid "Filter by pin count"
-msgstr "모듈 개수"
+msgstr "핀 개수로 필터링"
 
 #: cvpcb/tools/cvpcb_actions.cpp:143
 msgid "Filter footprint list by pin count"
-msgstr ""
+msgstr "풋프린트 리스트를 핀 개수로 필터링"
 
 #: cvpcb/tools/cvpcb_actions.cpp:149
 msgid "Filter by library"
@@ -7125,40 +7110,40 @@ msgstr "라이브러리로 필터링"
 
 #: cvpcb/tools/cvpcb_actions.cpp:150
 msgid "Filter footprint list by library"
-msgstr "라이브러리별로 풋프린트 목록 필터링"
+msgstr "풋프린트 리스트를 라이브러리별로 필터링"
 
 #: cvpcb/tools/cvpcb_association_tool.cpp:257
 msgid "Delete all associations?"
-msgstr "모든 연결을 삭제 하시겠습니까?"
+msgstr "모든 관련성을 삭제하시겠습니까?"
 
 #: eeschema/annotate.cpp:159
 #, c-format
 msgid "%d duplicate time stamps were found and replaced."
-msgstr ""
+msgstr "%d개의 중복되는 타임스탬프가 발견되었고 교체되었습니다."
 
 #: eeschema/annotate.cpp:284
-#, fuzzy, c-format
+#, c-format
 msgid "Updated %s (unit %s) from %s to %s."
-msgstr "%s(단위 %s)을 %s에서 %s로 업데이트했습니다."
+msgstr "%s (단위 %s)을 %s에서 %s로 업데이트했습니다."
 
 #: eeschema/annotate.cpp:292
-#, fuzzy, c-format
+#, c-format
 msgid "Updated %s from %s to %s."
 msgstr "%s을 %s에서 %s로 업데이트했습니다."
 
 #: eeschema/annotate.cpp:302
 #, c-format
 msgid "Annotated %s (unit %s) as %s."
-msgstr "%s (단위 %s) %s로 주석됨.."
+msgstr "%s (단위 %s)을 %s로 주석 처리하였습니다."
 
 #: eeschema/annotate.cpp:309
 #, c-format
 msgid "Annotated %s as %s."
-msgstr "%s에 %s로 주석됨."
+msgstr "%s이 %s로 주석 처리되었습니다."
 
 #: eeschema/annotate.cpp:326
 msgid "Annotation complete."
-msgstr "부품 참조번호 주석이 완료되었음."
+msgstr "부품 참조번호 주석 처리가 완료되었습니다."
 
 #: eeschema/bom_plugins.cpp:46
 #, c-format
@@ -7167,6 +7152,9 @@ msgid ""
 "%s\n"
 "not found. Script not available."
 msgstr ""
+"스크립트 파일:\n"
+"%s\n"
+"찾지 못했습니다. 스크립트가 존재하지 않습니다."
 
 #: eeschema/component_references_lister.cpp:608
 #, c-format
@@ -7181,30 +7169,30 @@ msgstr "주석이 없는 항목: %s%s\n"
 #: eeschema/component_references_lister.cpp:633
 #, c-format
 msgid "Error: symbol %s%s%s (unit %d) exceeds units defined (%d)\n"
-msgstr ""
+msgstr "오류: 심볼 %s%s%s (단위 %d)가 정의된 유닛 개수 (%d) 를 초과하였습니다.\n"
 
 #: eeschema/component_references_lister.cpp:670
 #: eeschema/component_references_lister.cpp:698
 #, c-format
 msgid "Duplicate items %s%s%s\n"
-msgstr "중복항목 %s%s%s\n"
+msgstr "중복된 항목 %s%s%s\n"
 
 #: eeschema/component_references_lister.cpp:677
 #: eeschema/component_references_lister.cpp:705
 #, c-format
 msgid "Duplicate items %s%s\n"
-msgstr "중복 항목 %s%s\n"
+msgstr "중복된 항목 %s%s\n"
 
 #: eeschema/component_references_lister.cpp:717
 #, c-format
 msgid "Different values for %s%d%s (%s) and %s%d%s (%s)"
-msgstr "다른 값 %s%d%s (%s) 및 %s%d%s (%s)"
+msgstr "서로 다른 값 : %s%d%s (%s) 과 %s%d%s (%s)"
 
 #: eeschema/connection_graph.cpp:2251
 #, c-format
 msgid ""
 "Both %s and %s are attached to the same items; %s will be used in the netlist"
-msgstr ""
+msgstr "%s와 %s 가 같은 항목에 연결되어 있습니다; %s 는 네트리스트에 사용됩니다"
 
 #: eeschema/connection_graph.cpp:2469
 #, c-format
