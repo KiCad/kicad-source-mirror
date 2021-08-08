@@ -12,7 +12,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
 "PO-Revision-Date: 2021-08-08 22:26+0000\n"
-"Last-Translator: VicSanRoPe <vicsanrope@protonmail.com>\n"
+"Last-Translator: Adolfo Jayme Barrientos <fitojb@ubuntu.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/kicad/"
 "master-source/es/>\n"
 "Language: es\n"
@@ -1955,8 +1955,8 @@ msgid ""
 "Select this option if you not sure about configuring the global %s library "
 "table"
 msgstr ""
-"Seleccione esta opción si no está seguro de cómo configurar la tabla global "
-"de librerías %s"
+"Seleccione esta opción si no tiene certeza de cómo configurar la tabla "
+"global de bibliotecas %s"
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:55
 #, c-format
@@ -32292,22 +32292,22 @@ msgstr ""
 #: pcbnew/plugins/kicad/pcb_parser.cpp:4962
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:2632
 msgid "Legacy Zone Warning"
-msgstr "Aviso de zona de legado"
+msgstr "Aviso de zona heredada"
 
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:596
 #, c-format
 msgid "File '%s' has an unrecognized version: %d."
-msgstr "El archivo '%s' tiene una versión no reconocida: %d."
+msgstr "El archivo «%s» tiene una versión no reconocida: %d."
 
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:750
 #, c-format
 msgid "Unknown sheet type '%s' on line: %d."
-msgstr "Se desconoce el tipo de hoja '%s' en la línea: %d."
+msgstr "Se desconoce el tipo de hoja «%s» en la línea: %d."
 
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:1430
 #, c-format
 msgid "Missing '$EndMODULE' for MODULE '%s'."
-msgstr "Falta '$EndMODULE' para el MODULE '%s'."
+msgstr "Falta «$EndMODULE» para el MODULE «%s»"
 
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:1480
 #, c-format
@@ -32413,7 +32413,7 @@ msgstr "Método desconocido"
 
 #: pcbnew/python/scripting/pcbnew_action_plugins.cpp:368
 msgid "Apply action script"
-msgstr ""
+msgstr "Aplicar secuencia de acciones"
 
 #: pcbnew/python/scripting/pcbnew_footprint_wizards.cpp:70
 msgid "Exception on python footprint wizard code"
