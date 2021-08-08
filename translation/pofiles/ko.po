@@ -11,8 +11,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
-"PO-Revision-Date: 2021-08-08 10:14+0000\n"
-"Last-Translator: 방준영 <wnsdudtkwkd8@naver.com>\n"
+"PO-Revision-Date: 2021-08-08 10:15+0000\n"
+"Last-Translator: jehunseo <benbot591@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
 "Language: ko\n"
@@ -24360,7 +24360,7 @@ msgstr ">"
 
 #: pcbnew/dialogs/dialog_imported_layers_base.cpp:61
 msgid "Add selected layers to matched layers list."
-msgstr ""
+msgstr "일치하는 레이어 목록에 선택한 레이어를 추가합니다."
 
 #: pcbnew/dialogs/dialog_imported_layers_base.cpp:65
 msgid "<"
@@ -24495,7 +24495,7 @@ msgstr "선 삭제"
 
 #: pcbnew/dialogs/dialog_net_inspector.cpp:83
 msgid "Total Length"
-msgstr "총 길이"
+msgstr "전체 길이"
 
 #: pcbnew/dialogs/dialog_net_inspector.cpp:83 pcbnew/netinfo_item.cpp:125
 #, fuzzy
@@ -25902,7 +25902,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:19
 msgid "Highlight collisions"
-msgstr ""
+msgstr "충돌한 부분 강조"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:19
 msgid "Shove"
