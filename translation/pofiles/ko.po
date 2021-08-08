@@ -10,8 +10,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
-"PO-Revision-Date: 2021-08-08 05:48+0000\n"
-"Last-Translator: 박준언 <joonun1696@pusan.ac.kr>\n"
+"PO-Revision-Date: 2021-08-08 06:53+0000\n"
+"Last-Translator: Ji Yoon Choi <chichoon.choi@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
 "Language: ko\n"
@@ -1328,8 +1328,7 @@ msgid ""
 "layer (but will be marked invisible)."
 msgstr ""
 "윤곽선을 그릴 보드 층을 선택합니다.\n"
-"기준 지정자와 값은 항상 실크 스크린 층에 배치됩니다(그러나 보이지 않음으로 표"
-"시됨)."
+"참조 지정자와 값은 항상 실크 스크린 층에 배치됩니다 (단, 보이지 않음으로 표시됩니다)."
 
 #: bitmap2component/bitmap2cmp_gui_base.h:100
 #: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:10
@@ -2613,7 +2612,7 @@ msgstr "참조 지정자를 '%s'로 바꿉니다."
 
 #: common/dialogs/dialog_paste_special_base.cpp:22
 msgid "Assign unique reference designators to pasted symbols"
-msgstr "붙여넣은 기호에 고유 참조 지정자 할당"
+msgstr "붙여넣은 심볼에 고유 참조 지정자 할당"
 
 #: common/dialogs/dialog_paste_special_base.cpp:22
 msgid "Keep existing reference designators, even if they are duplicated"
@@ -4307,11 +4306,11 @@ msgstr "높이"
 
 #: common/eda_text.cpp:693
 msgid "Horizontal Justification"
-msgstr "수평 맞춤"
+msgstr "수평 위치 맞춤"
 
 #: common/eda_text.cpp:697
 msgid "Vertical Justification"
-msgstr "수직 맞춤"
+msgstr "수직 위치 맞춤"
 
 #: common/env_vars.cpp:70
 msgid ""
@@ -7802,7 +7801,7 @@ msgstr "선택한 심볼 바꾸기"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:93
 msgid "Change symbols matching reference designator:"
-msgstr "레퍼런스 지정자와 일치하는 심볼 변경:"
+msgstr "참조 지정자와 일치하는 심볼 변경:"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:94
 msgid "Change symbols matching value:"
@@ -7893,7 +7892,7 @@ msgstr "선택한 심볼 업데이트"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:33
 msgid "Update symbols matching reference designator:"
-msgstr "레퍼런스 지정자와 일치하는 심볼 업데이트:"
+msgstr "참조 지정자와 일치하는 심볼 업데이트:"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:39
 msgid "Update symbols matching value:"
@@ -8096,7 +8095,7 @@ msgstr "위쪽으로 정렬"
 
 #: eeschema/dialogs/dialog_edit_label_base.cpp:122 eeschema/sch_text.cpp:752
 msgid "Justification"
-msgstr "위치 정렬"
+msgstr "위치 맞춤"
 
 #: eeschema/dialogs/dialog_edit_label_base.cpp:126
 msgid "Bold and italic"
@@ -8171,9 +8170,9 @@ msgid "Available Candidates for %s "
 msgstr "%s에 사용 가능한 후보들 "
 
 #: eeschema/dialogs/dialog_edit_symbols_libid.cpp:637
-#, c-format, fuzzy
+#, c-format
 msgid "Candidates count %d "
-msgstr "후보자 수 %d "
+msgstr "후보 개수 %d "
 
 #: eeschema/dialogs/dialog_edit_symbols_libid.cpp:648
 #, c-format
@@ -8186,9 +8185,8 @@ msgid "All %u link(s) resolved"
 msgstr "모든 %u 링크(들) 해결됨"
 
 #: eeschema/dialogs/dialog_edit_symbols_libid.cpp:685
-#, fuzzy
 msgid "Invalid symbol library identifier"
-msgstr "잘못된 기호 라이브러리 식별자"
+msgstr "잘못된 심볼 라이브러리 식별자"
 
 #: eeschema/dialogs/dialog_edit_symbols_libid.cpp:736
 #, c-format
@@ -8203,23 +8201,20 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_edit_symbols_libid_base.cpp:37
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:86
-#, fuzzy
 msgid "Symbols"
-msgstr "기호"
+msgstr "심볼"
 
 #: eeschema/dialogs/dialog_edit_symbols_libid_base.cpp:38
-#, fuzzy
 msgid "Current Library Reference"
-msgstr "레퍼런스에 의한 컴포넌트"
+msgstr "현재 라이브러리 참조"
 
 #: eeschema/dialogs/dialog_edit_symbols_libid_base.cpp:39
-#, fuzzy
 msgid "New Library Reference"
-msgstr "새 라이브러리"
+msgstr "새 라이브러리 참조"
 
 #: eeschema/dialogs/dialog_edit_symbols_libid_base.cpp:58
 msgid "Map Orphans"
-msgstr ""
+msgstr "고립된 항목 매핑"
 
 #: eeschema/dialogs/dialog_edit_symbols_libid_base.cpp:59
 msgid ""
@@ -8227,6 +8222,8 @@ msgid ""
 "try to find a candidate having the same name in one of loaded symbol "
 "libraries."
 msgstr ""
+"특정 심볼이 고립되었을 경우 (연결된 심볼을 어디서도 찾을 수 없는 경우),\n"
+"불러온 심볼 라이브러리 내에서 같은 이름을 가진 후보를 찾습니다."
 
 #: eeschema/dialogs/dialog_edit_symbols_libid_base.cpp:63
 msgid "Update symbol fields from new library"
@@ -8241,14 +8238,12 @@ msgstr ""
 "경고: 따라서 \"값\" 및 \"풋프린트\" 필드가 대체됩니다."
 
 #: eeschema/dialogs/dialog_edit_symbols_libid_base.h:57
-#, fuzzy
 msgid "Symbol Library References"
-msgstr "레퍼런스에 의한 컴포넌트"
+msgstr "심볼 라이브러리 참조"
 
 #: eeschema/dialogs/dialog_erc.cpp:79
-#, fuzzy
 msgid "Run ERC"
-msgstr "Cvpcb 실행"
+msgstr "ERC 실행"
 
 #: eeschema/dialogs/dialog_erc.cpp:93
 msgid "Show Annotation dialog"
@@ -8256,7 +8251,7 @@ msgstr "주석 대화 상자 표시"
 
 #: eeschema/dialogs/dialog_erc.cpp:106
 msgid "Schematic is not fully annotated. ERC results will be incomplete."
-msgstr ""
+msgstr "회로도가 완전히 주석 처리되지 않았습니다. ERC 결과는 불완전할 것입니다."
 
 #: eeschema/dialogs/dialog_erc.cpp:194
 msgid "Delete exclusions too?"
@@ -8265,18 +8260,16 @@ msgstr "제외 항목도 삭제 하시겠습니까?"
 #: eeschema/dialogs/dialog_erc.cpp:194 pcbnew/dialogs/dialog_drc.cpp:893
 #: pcbnew/dialogs/dialog_drc_base.cpp:195
 #: pcbnew/dialogs/dialog_footprint_checker_base.cpp:82
-#, fuzzy
 msgid "Delete All Markers"
-msgstr "마커 삭제"
+msgstr "모든 마커 삭제"
 
 #: eeschema/dialogs/dialog_erc.cpp:196
 msgid "Errors and Warnings Only"
 msgstr "오류 및 경고에 한함"
 
 #: eeschema/dialogs/dialog_erc.cpp:196
-#, fuzzy
 msgid "Errors, Warnings and Exclusions"
-msgstr "오류, 경고 및 제외"
+msgstr "오류, 경고 및 예외"
 
 #: eeschema/dialogs/dialog_erc.cpp:302
 #, c-format
@@ -8316,9 +8309,8 @@ msgid "Checking labels..."
 msgstr "라벨 확인..."
 
 #: eeschema/dialogs/dialog_erc.cpp:397
-#, fuzzy
 msgid "Checking for unresolved variables..."
-msgstr "아직 사용할 수 없습니다."
+msgstr "해결되지 않은 변수를 확인 중..."
 
 #: eeschema/dialogs/dialog_erc.cpp:403
 msgid "Checking no connect pins for connections..."
@@ -8329,28 +8321,25 @@ msgid "Checking for library symbol issues..."
 msgstr "라이브러리 심볼 문제 확인 중..."
 
 #: eeschema/dialogs/dialog_erc.cpp:487 pcbnew/dialogs/dialog_drc.cpp:440
-#, fuzzy
 msgid "errors"
-msgstr "에러"
+msgstr "오류"
 
 #: eeschema/dialogs/dialog_erc.cpp:488 pcbnew/dialogs/dialog_drc.cpp:441
-#, fuzzy
 msgid "warnings"
 msgstr "경고"
 
 #: eeschema/dialogs/dialog_erc.cpp:489 pcbnew/dialogs/dialog_drc.cpp:442
-#, fuzzy
 msgid "appropriate"
-msgstr "패드 속성"
+msgstr "적절함"
 
 #: eeschema/dialogs/dialog_erc.cpp:494 pcbnew/dialogs/dialog_drc.cpp:447
 msgid "Remove exclusion for this violation"
-msgstr ""
+msgstr "해당 위반에 대한 예외를 삭제"
 
 #: eeschema/dialogs/dialog_erc.cpp:495 pcbnew/dialogs/dialog_drc.cpp:448
 #, c-format
 msgid "It will be placed back in the %s list"
-msgstr ""
+msgstr "%s 리스트에 다시 배치됩니다"
 
 #: eeschema/dialogs/dialog_erc.cpp:499 pcbnew/dialogs/dialog_drc.cpp:452
 msgid "Exclude this violation"
@@ -8364,17 +8353,17 @@ msgstr "%s 목록에서 제외됩니다"
 #: eeschema/dialogs/dialog_erc.cpp:512 pcbnew/dialogs/dialog_drc.cpp:466
 #, c-format
 msgid "Change severity to Error for all '%s' violations"
-msgstr ""
+msgstr "'%s' 위반에 대한 심각도를 오류로 변경"
 
 #: eeschema/dialogs/dialog_erc.cpp:514 eeschema/dialogs/dialog_erc.cpp:520
 #: pcbnew/dialogs/dialog_drc.cpp:468 pcbnew/dialogs/dialog_drc.cpp:475
 msgid "Violation severities can also be edited in the Board Setup... dialog"
-msgstr ""
+msgstr "위반 심각도는 보드 설정... 대화 박스에서도 편집할 수 있습니다"
 
 #: eeschema/dialogs/dialog_erc.cpp:518 pcbnew/dialogs/dialog_drc.cpp:473
 #, c-format
 msgid "Change severity to Warning for all '%s' violations"
-msgstr ""
+msgstr "모든 '%s' 위반에 대한 심각도를 경고로 변경"
 
 #: eeschema/dialogs/dialog_erc.cpp:523 pcbnew/dialogs/dialog_drc.cpp:479
 #, c-format
@@ -8387,7 +8376,7 @@ msgstr "위반 사항을 확인하거나 보고하지 않음"
 
 #: eeschema/dialogs/dialog_erc.cpp:531
 msgid "Edit pin-to-pin conflict map..."
-msgstr ""
+msgstr "핀 간 충돌 맵 편집..."
 
 #: eeschema/dialogs/dialog_erc.cpp:535 pcbnew/dialogs/dialog_drc.cpp:486
 msgid "Edit violation severities..."
@@ -8395,18 +8384,18 @@ msgstr "위반 심각도 편집..."
 
 #: eeschema/dialogs/dialog_erc.cpp:536
 msgid "Open the Schematic Setup... dialog"
-msgstr ""
+msgstr "회로도 설정... 대화 창 열기"
 
 #: eeschema/dialogs/dialog_erc.cpp:628
 #: eeschema/dialogs/dialog_schematic_setup.cpp:73
 msgid "Pin Conflicts Map"
-msgstr ""
+msgstr "충돌 맵 핀 하기"
 
 #: eeschema/dialogs/dialog_erc.cpp:632
 #: eeschema/dialogs/dialog_schematic_setup.cpp:72
 #: pcbnew/dialogs/dialog_board_setup.cpp:105 pcbnew/dialogs/dialog_drc.cpp:589
 msgid "Violation Severity"
-msgstr ""
+msgstr "위반 사항 심각도"
 
 #: eeschema/dialogs/dialog_erc.cpp:755 pcbnew/dialogs/dialog_gendrill.cpp:471
 #, c-format
@@ -8464,38 +8453,32 @@ msgid "Delete Markers"
 msgstr "마커 삭제"
 
 #: eeschema/dialogs/dialog_erc_base.h:87 eeschema/tools/ee_actions.cpp:45
-#, fuzzy
 msgid "Electrical Rules Checker"
-msgstr "회로도 ERC"
+msgstr "전기적 규칙 체커 (ERC)"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:31
-#, fuzzy
 msgid "Other symbol fields"
-msgstr "필드 편집"
+msgstr "그 외의 심볼 필드"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:37
 msgid "Wires && wire labels"
 msgstr ""
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:40
-#, fuzzy
 msgid "Buses && bus labels"
-msgstr "와이어 또는 버스 라벨 추가"
+msgstr "버스 && 버스 라벨"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:52
-#, fuzzy
 msgid "Sheet titles"
-msgstr "시트 라벨"
+msgstr "시트 제목"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:55
-#, fuzzy
 msgid "Other sheet fields"
-msgstr "시트 편집"
+msgstr "그 외의 시트 필드"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:61
-#, fuzzy
 msgid "Sheet borders && backgrounds"
-msgstr "검정색"
+msgstr "시트 테두리 && 배경"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:67
 msgid "Schematic text && graphics"
@@ -8503,12 +8486,10 @@ msgstr "회로도 텍스트 및 그래픽"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:74
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:52
-#, fuzzy
 msgid "Filters"
-msgstr "패드 필터"
+msgstr "필터"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:82
-#, fuzzy
 msgid "Filter other symbol fields by name:"
 msgstr "이름으로 다른 기호 필드 필터링:"
 
@@ -8526,12 +8507,10 @@ msgid "Filter items by parent symbol type:"
 msgstr "상위 기호 유형별로 항목 필터링:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:111
-#, fuzzy
 msgid "Non-power symbols"
-msgstr "전원 심볼"
+msgstr "무전원 심볼"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:111
-#, fuzzy
 msgid "Power symbols"
 msgstr "전원 심볼"
 
@@ -8543,13 +8522,12 @@ msgstr "네트 항목으로 필터링:"
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:135
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:84
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:77
-#, fuzzy
 msgid "Only include selected items"
-msgstr "선택된 항목 잘라내기"
+msgstr "선택한 항목만 포함하기"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:154
 msgid "Set To"
-msgstr ""
+msgstr "설정"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:167
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:155
@@ -8571,9 +8549,8 @@ msgstr "아래쪽"
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:233
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:255
 #: include/base_units.h:48
-#, fuzzy
 msgid "-- leave unchanged --"
-msgstr "설정 저장 (&S)"
+msgstr "-- 설정 변경 없이 유지 --"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:229
 msgid "H Alignment (fields only):"
@@ -8605,18 +8582,15 @@ msgid "Line style:"
 msgstr "선 스타일:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:330
-#, fuzzy
 msgid "Sheet background color:"
-msgstr "배경색:"
+msgstr "시트 배경색:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.h:105
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.h:95
-#, fuzzy
 msgid "Edit Text and Graphic Properties"
-msgstr "부품 속성 편집"
+msgstr "텍스트와 그래픽 설정 편집"
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:31
-#, fuzzy
 msgid "symbol"
 msgstr "심볼"
 
@@ -8638,9 +8612,9 @@ msgstr ""
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:83
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:82
 #: pcbnew/footprint_libraries_utils.cpp:249
-#, fuzzy, c-format
+#, c-format
 msgid "File '%s' not found."
-msgstr "%s 파일을 찾을 수 없습니다."
+msgstr "'%s' 파일을 찾을 수 없습니다."
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:96
 #, c-format
@@ -8679,17 +8653,15 @@ msgid "Color:"
 msgstr "색:"
 
 #: eeschema/dialogs/dialog_junction_props_base.h:57
-#, fuzzy
 msgid "Junction Properties"
-msgstr "핀 속성"
+msgstr "핀 접합부 속성"
 
 #: eeschema/dialogs/dialog_lib_edit_draw_item.cpp:51
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:496
 #: eeschema/dialogs/dialog_lib_edit_text.cpp:55
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:91
-#, fuzzy
 msgid "Read Only"
-msgstr "[%s]에 심볼 저장"
+msgstr "읽기 전용"
 
 #: eeschema/dialogs/dialog_lib_edit_draw_item_base.cpp:39
 msgid "Do not fill"
@@ -8700,38 +8672,33 @@ msgid "Fill with body outline color"
 msgstr ""
 
 #: eeschema/dialogs/dialog_lib_edit_draw_item_base.cpp:39
-#, fuzzy
 msgid "Fill with body background color"
-msgstr "배경색 선택"
+msgstr "바디 배경색으로 채우기"
 
 #: eeschema/dialogs/dialog_lib_edit_draw_item_base.cpp:41
-#, fuzzy
 msgid "Fill Style"
-msgstr "채움"
+msgstr "채우기 스타일"
 
 #: eeschema/dialogs/dialog_lib_edit_draw_item_base.cpp:45
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:145
-#, fuzzy
 msgid "Common to all &units in symbol"
-msgstr "공통 유닛"
+msgstr "심볼 내의 모든 유닛에 속성 적용 (&u)"
 
 #: eeschema/dialogs/dialog_lib_edit_draw_item_base.cpp:48
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:148
 msgid "Common to all body &styles (DeMorgan)"
-msgstr ""
+msgstr "심볼 내의 모든 바디 스타일에 속성 적용 (DeMorgan) (&s)"
 
 #: eeschema/dialogs/dialog_lib_edit_draw_item_base.h:51
-#, fuzzy
 msgid "Drawing Properties"
-msgstr "핀 속성"
+msgstr "그리기 속성"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:51
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:45
 #: eeschema/dialogs/dialog_symbol_properties.cpp:138 eeschema/lib_pin.cpp:1026
 #: eeschema/sch_pin.cpp:201
-#, fuzzy
 msgid "Number"
-msgstr "번호"
+msgstr "핀 번호"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:53
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:47
@@ -9914,7 +9881,7 @@ msgstr ""
 #: eeschema/sch_symbol.cpp:1364 eeschema/sch_symbol.cpp:1415
 #: pcbnew/footprint.cpp:2087
 msgid "Reference"
-msgstr "레퍼런스"
+msgstr "참조"
 
 #: eeschema/dialogs/dialog_rescue_each.cpp:231
 #, c-format
@@ -10492,9 +10459,8 @@ msgid "Measured node"
 msgstr ""
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:239
-#, fuzzy
 msgid "Reference node"
-msgstr "레퍼런스"
+msgstr "참조 노드"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:246
 msgid "(optional; default GND)"
@@ -11711,7 +11677,7 @@ msgstr ""
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:209
 msgid "A&llow field autoplace to change justification"
-msgstr ""
+msgstr "정렬 변경에 따른 필드 자동 배치 허용 (&l)"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:212
 msgid "Al&ways align autoplaced fields to the 50 mil grid"
@@ -15176,9 +15142,8 @@ msgid "Display next symbol"
 msgstr "다음 부품 표시"
 
 #: eeschema/toolbars_symbol_viewer.cpp:108
-#, fuzzy
 msgid "Symbol Viewer"
-msgstr "모듈 레퍼런스 인쇄"
+msgstr "심볼 뷰어"
 
 #: eeschema/tools/assign_footprints.cpp:207
 msgid "Load Symbol Footprint Link File"
@@ -15293,9 +15258,8 @@ msgid "Perform electrical rules check"
 msgstr "회로도 ERC"
 
 #: eeschema/tools/ee_actions.cpp:50
-#, fuzzy
 msgid "Symbol Checker"
-msgstr "모듈 레퍼런스 인쇄"
+msgstr "심볼 체커"
 
 #: eeschema/tools/ee_actions.cpp:50
 #, fuzzy
@@ -20982,7 +20946,7 @@ msgstr "글꼴 선택 (&F)"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:350
 msgid "reference designator location"
-msgstr "레퍼런스 지정자 위치"
+msgstr "참조 지정자의 위치"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:492
 #, c-format
@@ -21036,7 +21000,7 @@ msgstr "풋프린트 좌표"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:537
 msgid "Reference Designator Coordinates"
-msgstr "레퍼런스 지정자의 좌표"
+msgstr "참조 지정자의 좌표"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:539
 #, c-format
@@ -21144,7 +21108,7 @@ msgstr "위치의 기준:"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:136
 msgid "Reference Designator"
-msgstr "레퍼런스 지정자"
+msgstr "참조 지정자"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:142
 msgid "Round locations to:"
@@ -21183,7 +21147,7 @@ msgstr "후면에서 보기"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:208
 msgid "Front reference start:"
-msgstr "정면 레퍼런스 시작:"
+msgstr "정면 참조 시작:"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:210
 msgid "Starting reference designation for front."
@@ -21212,19 +21176,19 @@ msgstr "기본값"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:220
 msgid "Back reference start:"
-msgstr "후면 레퍼런스 시작:"
+msgstr "후면 참조 시작:"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:222
 msgid ""
 "Blank continues from front or enter a number greater than the highest "
 "reference designation on the front."
-msgstr "공백으로 비워둠으로써 정면의 값을 계속 사용하거나, 전면의 가장 큰 레퍼런스 지정자보다 큰 값을 입력하세요."
+msgstr "공백으로 비워둠으로써 정면의 값을 계속 사용하거나, 전면의 가장 큰 참조 지정자보다 큰 값을 입력하세요."
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:227
 msgid ""
 "Leave blank or zero, or enter a number greater than the highest reference "
 "designation on the front."
-msgstr "공백 또는 0으로 남겨 놓거나, 정면의 가장 큰 레퍼런스 지정자보다 큰 값을 입력하세요."
+msgstr "공백 또는 0으로 남겨 놓거나, 정면의 가장 큰 참조 지정자보다 큰 값을 입력하세요."
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:232
 msgid "Remove front prefix"
@@ -22425,9 +22389,8 @@ msgstr "미러 ||"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:311
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:140
-#, fuzzy
 msgid "Justification:"
-msgstr "정당화:"
+msgstr "위치 맞춤:"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:321
 msgid "Position mode:"
@@ -22823,9 +22786,8 @@ msgstr "좌표 숨기기"
 #: pcbnew/dialogs/dialog_export_step_base.cpp:40
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:96
 #: pcbnew/dialogs/panel_pcbnew_display_origin_base.cpp:23
-#, fuzzy
 msgid "Drill/place file origin"
-msgstr "드릴 원점:"
+msgstr "드릴/배치 파일의 원점"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:43
 #: pcbnew/dialogs/panel_pcbnew_display_origin_base.cpp:23
@@ -22928,9 +22890,8 @@ msgstr ""
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:63
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:512
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:286
-#, fuzzy
 msgid "Technical layers:"
-msgstr "Tech Layers"
+msgstr "기술 계층:"
 
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:82
 #, fuzzy
@@ -23135,9 +23096,8 @@ msgid "Wrap"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_find_base.cpp:62
-#, fuzzy
 msgid "Search footprint reference designators"
-msgstr "설정 파일 저장:"
+msgstr "풋프린트 참조 지정자를 검색"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:66
 #, fuzzy
@@ -23242,9 +23202,8 @@ msgstr "옵셋"
 #: pcbnew/dialogs/panel_fp_editor_defaults.cpp:62
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:53
 #: pcbnew/fp_text_grid_table.cpp:109
-#, fuzzy
 msgid "Reference designator"
-msgstr "사용자 지정 에디터:"
+msgstr "참조 지정자"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:136
 msgid "Side:"
@@ -23302,9 +23261,8 @@ msgid "Fabrication Attributes"
 msgstr "속성"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:276
-#, fuzzy
 msgid "Component:"
-msgstr "Component"
+msgstr "부품:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:280
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:184
@@ -23320,45 +23278,40 @@ msgstr "SMD"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:280
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:184
-#, fuzzy
 msgid "Other"
 msgstr "기타"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:289
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:193
-#, fuzzy
 msgid "Not in schematic"
-msgstr "회로도 인쇄"
+msgstr "회로도에 없음"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:292
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:196
-#, fuzzy
 msgid "Exclude from position files"
-msgstr "실크스크린에 패드 인쇄"
+msgstr "부품 배치 파일에서 제외"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:295
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:199
 msgid "Exclude from BOM"
-msgstr ""
+msgstr "BOM에서 제외"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:317
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:218
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:585
-#, fuzzy
 msgid "Clearances"
 msgstr "유격"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:319
-#, fuzzy
 msgid "Set values to 0 to use Board Setup values."
-msgstr "보드 설정 값을 사용하려면 값을 0으로 설정하십시오."
+msgstr "보드 설정 값을 사용하려면 이 값을 0으로 설정하십시오."
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:325
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:226
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:594
 msgid ""
 "Positive clearance means area bigger than the pad (usual for mask clearance)."
-msgstr ""
+msgstr "유격 값이 양수일 경우, 패드보다 넓은 면적을 의미합니다 (일반적으로 마스크 유격)."
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:331
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:232
@@ -23366,14 +23319,13 @@ msgstr ""
 msgid ""
 "Negative clearance means area smaller than the pad (usual for paste "
 "clearance)."
-msgstr ""
+msgstr "유격 값이 음수일 경우, 패드보다 작은 면적을 의미합니다 (일반적으로 페이스트 유격)."
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:343
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:244
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:612
-#, fuzzy
 msgid "Pad clearance:"
-msgstr "마스크 유격"
+msgstr "패드 유격:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:345
 msgid ""
@@ -23381,14 +23333,16 @@ msgid ""
 "If 0, the Netclass values are used\n"
 "This value can be superseded by a pad local value."
 msgstr ""
+"현재 풋프린트에 대한 모든 패드의 지역 네트 유격 값을 의미합니다.\n"
+"0으로 설정될 경우, 네트클래스 값이 사용됩니다.\n"
+"이 값은 패드의 지역 값으로 대체될 수 있습니다."
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:356
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:257
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:625
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:56
-#, fuzzy
 msgid "Solder mask clearance:"
-msgstr "마스크 유격"
+msgstr "솔더 마스크 유격:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:358
 msgid ""
@@ -23397,14 +23351,16 @@ msgid ""
 "This value can be superseded by a pad local value.\n"
 "If 0, the global value is used."
 msgstr ""
+"이 값은 해당 풋프린트의 패드와 솔더 마스크 간의 지역 유격 값을 나타냅니다.\n"
+"이 값은 패드의 지역 값으로 대체될 수 있습니다.\n"
+"0으로 설정될 경우, 전역 값이 적용됩니다."
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:369
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:270
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:638
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:95
-#, fuzzy
 msgid "Solder paste absolute clearance:"
-msgstr "Solder paste Copper"
+msgstr "솔더 페이스트의 절대 유격:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:371
 msgid ""
@@ -23415,14 +23371,17 @@ msgid ""
 "ratio.\n"
 "A negative value means a smaller mask size than pad size."
 msgstr ""
+"이 값은 해당 풋프린트의 패드와 솔더 페이스트 간의 지역 유격 값을 나타냅니다.\n"
+"이 값은 패드의 지역 값으로 대체될 수 있습니다.\n"
+"최종 유격 값은 이 값과 유격 값의 비율의 합입니다.\n"
+"값이 음수일 경우, 패드 크기보다 마스크 크기가 작음을 의미합니다."
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:382
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:283
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:651
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:110
-#, fuzzy
 msgid "Solder paste relative clearance:"
-msgstr "Solder paste Copper"
+msgstr "솔더 페이스트의 상대 유격:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:384
 msgid ""
@@ -23433,6 +23392,11 @@ msgid ""
 "The final clearance value is the sum of this value and the clearance value.\n"
 "A negative value means a smaller mask size than pad size."
 msgstr ""
+"이 값은 해당 풋프린트의 패드와 솔더 페이스트 간의 지역 유격 값을 백분율로 나타냅니다.\n"
+"값이 10일 경우, 유격 값은 패드 크기의 10 퍼센트라는 의미입니다.\n"
+"이 값은 패드의 지역 값으로 대체될 수 있습니다.\n"
+"최종 유격 값은 이 값과 유격 값의 합입니다.\n"
+"값이 음수일 경우, 패드 크기보다 마스크 크기가 작음을 의미합니다."
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:398
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:299
@@ -23440,7 +23404,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:701
 msgid ""
 "Note: solder mask and paste values are used only for pads on copper layers."
-msgstr ""
+msgstr "주의: 솔더 마스크와 페이스트 값은 구리 층의 패드에만 이용됩니다."
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:404
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:305
@@ -23448,50 +23412,45 @@ msgstr ""
 msgid ""
 "Note: solder paste clearances (absolute and relative) are added to determine "
 "the final clearance."
-msgstr ""
+msgstr "주의: 솔더 페이스트 유격은 (절대값이나 상대값 모두) 최종 유격을 결정하는 데에 더해져 사용됩니다."
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:414
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:315
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:718
 msgid "Connection to Copper Zones"
-msgstr ""
+msgstr "구리 영역 연결"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:416
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:317
-#, fuzzy
 msgid "Pad connection to zones:"
-msgstr "패드 설정"
+msgstr "영역과 패드 간 연결:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:420
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:321
 msgid "Use zone setting"
-msgstr ""
+msgstr "영역 설정 사용"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:420
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:321
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:730
-#, fuzzy
 msgid "Thermal relief"
-msgstr "써멀"
+msgstr "단열판"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:433
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:334
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:784
-#, fuzzy
 msgid "Clearance Overrides and Settings"
-msgstr "전역 패드 설정"
+msgstr "유격 재정의 및 설정"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:455
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:356
-#, fuzzy
 msgid "3D Model(s)"
-msgstr "D-Code 보이기"
+msgstr "3D 모델"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:508
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:407
-#, fuzzy
 msgid "3D Models"
-msgstr "D-Code 보이기"
+msgstr "3D 모델"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:529
 msgid ""
@@ -26373,7 +26332,7 @@ msgstr "텍스트 속성"
 
 #: pcbnew/dialogs/dialog_text_properties.cpp:83
 msgid "Reference:"
-msgstr "레퍼런스:"
+msgstr "참조:"
 
 #: pcbnew/dialogs/dialog_text_properties.cpp:232
 #, c-format
@@ -29648,9 +29607,8 @@ msgstr ""
 
 #: pcbnew/footprint_wizard_frame.cpp:81
 #: pcbnew/footprint_wizard_frame_functions.cpp:85
-#, fuzzy
 msgid "Footprint Wizard"
-msgstr "풋프린트 레퍼런스"
+msgstr "풋프린트 마법사"
 
 #: pcbnew/footprint_wizard_frame.cpp:328
 msgid "Parameter"
@@ -33733,9 +33691,8 @@ msgid ""
 msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:258
-#, fuzzy
 msgid "Move with Reference"
-msgstr "모듈 레퍼런스:"
+msgstr "레퍼런스에 따라 이동"
 
 #: pcbnew/tools/pcb_actions.cpp:259
 #, fuzzy
@@ -33743,9 +33700,8 @@ msgid "Moves the selected item(s) with a specified starting point"
 msgstr "선택된 항목 잘라내기"
 
 #: pcbnew/tools/pcb_actions.cpp:264
-#, fuzzy
 msgid "Copy with Reference"
-msgstr "모듈 레퍼런스:"
+msgstr "레퍼런스에 따라 복사"
 
 #: pcbnew/tools/pcb_actions.cpp:265
 #, fuzzy
@@ -35292,9 +35248,8 @@ msgid "Show footprint values"
 msgstr "풋프린트 값"
 
 #: pcbnew/widgets/appearance_controls.cpp:349
-#, fuzzy
 msgid "References"
-msgstr "레퍼런스"
+msgstr "참조"
 
 #: pcbnew/widgets/appearance_controls.cpp:349
 #, fuzzy
