@@ -13,7 +13,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
 "PO-Revision-Date: 2021-08-09 04:25+0000\n"
-"Last-Translator: Ji Yoon Choi <chichoon.choi@gmail.com>\n"
+"Last-Translator: 방준영 <wnsdudtkwkd8@naver.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
 "Language: ko\n"
@@ -11279,8 +11279,9 @@ msgid ""
 msgstr ""
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:242
+#, fuzzy
 msgid "Created project symbol library table.\n"
-msgstr ""
+msgstr "프로젝트 기호 라이브러리 테이블을 생성했습니다.\n"
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:264
 #, fuzzy, c-format
@@ -11293,8 +11294,9 @@ msgid "Symbol %s mapped to symbol library '%s'."
 msgstr "매핑된 기호 %s 의 기호 라이브러리 '%s'."
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:279
+#, fuzzy
 msgid "Symbol library table mapping complete!"
-msgstr ""
+msgstr "기호 라이브러리 테이블 매핑 완료!"
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:349
 #, fuzzy, c-format
@@ -11343,8 +11345,9 @@ msgid "Failed to create backup folder '%s'.\n"
 msgstr "\"%s\" 백업 폴더를 만들지 못함\n"
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:499
+#, fuzzy
 msgid "Some of the project files could not be backed up."
-msgstr ""
+msgstr "일부 프로젝트 파일을 백업할 수 없습니다."
 
 #: eeschema/dialogs/dialog_symbol_remap_base.cpp:30
 #: eeschema/dialogs/dialog_symbol_remap_base.h:51
@@ -11365,21 +11368,26 @@ msgstr "새 회로도 (&S)"
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:32
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:27
+#, fuzzy
 msgid ""
 "Re-link footprints to schematic symbols based on their reference designators"
-msgstr ""
+msgstr "참조 지정자를 기반으로 풋프린트를 스키매틱 기호에 다시 연결"
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:33
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:28
+#, fuzzy
 msgid ""
 "Normally footprints are linked to their symbols via their Unique IDs.  "
 "Select this option only if you want to reset the footprint linkages based on "
 "their reference designators."
 msgstr ""
+"일반적으로 발자국은 고유 ID를 통해 기호에 연결됩니다.  참조 지정자를 기반으로 설치 공간 연결을 재설정하려는 경우에만 이 옵션을 "
+"선택합니다."
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:55
+#, fuzzy
 msgid "Update references of symbols that have been changed in the PCB editor."
-msgstr ""
+msgstr "PCB 편집기에서 변경된 기호의 참조를 업데이트합니다."
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:59
 #, fuzzy
@@ -11387,14 +11395,16 @@ msgid "Footprint assignments"
 msgstr "풋프린트 회전"
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:60
+#, fuzzy
 msgid ""
 "Update footprint associations of symbols whose footprints have been replaced "
 "with different footprints in PCB."
-msgstr ""
+msgstr "발자국을 PCB의 다른 발자국으로 대체한 기호의 설치 공간 연결을 업데이트합니다."
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:65
+#, fuzzy
 msgid "Update symbols values that have been replaced in the PCB editor."
-msgstr ""
+msgstr "PCB 편집기에서 대체된 기호 값을 업데이트합니다."
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:69
 #, fuzzy
@@ -11424,11 +11434,15 @@ msgid "Update Symbol Fields"
 msgstr "기호 필드 업데이트"
 
 #: eeschema/dialogs/panel_eeschema_color_settings.cpp:153
+#, fuzzy
 msgid ""
 "Some items have the same color as the background\n"
 "and they will not be seen on the screen.  Are you\n"
 "sure you want to use these colors?"
 msgstr ""
+"일부 항목에는 배경과 동일한 색상이 있습니다.\n"
+"그리고 그들은 화면에 표시되지 않습니다. 당신은\n"
+"이 색상을 사용하시겠습니까?"
 
 #: eeschema/dialogs/panel_eeschema_color_settings.cpp:207
 #, fuzzy
@@ -11442,8 +11456,9 @@ msgid "Color Preview"
 msgstr "색상 이미지"
 
 #: eeschema/dialogs/panel_eeschema_color_settings.cpp:405
+#, fuzzy
 msgid "/path/to/sheet"
-msgstr ""
+msgstr "/경로/대상/시트"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:26
 #: pcbnew/footprint_edit_frame.cpp:240 pcbnew/footprint_edit_frame.cpp:726
@@ -11495,7 +11510,7 @@ msgstr "두께 강조 표시(&H):"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:70
 msgid "(highlight color can be edited in the \"Colors\" page)"
-msgstr ""
+msgstr "(하이라이트 색상은 \"색상\" 페이지에서 편집할 수 있습니다)"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:78
 #: pcbnew/dialogs/panel_display_options_base.cpp:74
@@ -11504,8 +11519,9 @@ msgstr "교차-탐지"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:80
 #: pcbnew/dialogs/panel_display_options_base.cpp:76
+#, fuzzy
 msgid "Center view on cross-probed items"
-msgstr ""
+msgstr "교차 프로브 항목에 대한 중앙 보기"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:84
 #: pcbnew/dialogs/panel_display_options_base.cpp:80
@@ -11520,8 +11536,9 @@ msgid "Highlight cross-probed nets"
 msgstr "컴포넌트 편집"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:90
+#, fuzzy
 msgid "Highlight nets when they are highlighted in the PCB editor"
-msgstr ""
+msgstr "PCB 편집기에서 강조 표시될 때 net 강조 표시"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:23
 msgid "&Restrict buses and wires to H and V orientation"
