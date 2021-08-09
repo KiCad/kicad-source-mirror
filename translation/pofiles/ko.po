@@ -16668,9 +16668,8 @@ msgstr "레이어 포함"
 
 #: gerbview/dialogs/dialog_print_gerbview.cpp:194
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:301
-#, fuzzy
 msgid "Select all"
-msgstr "선택"
+msgstr "전체 선택"
 
 #: gerbview/dialogs/dialog_print_gerbview.cpp:196
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:303
