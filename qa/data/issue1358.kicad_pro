@@ -33,9 +33,9 @@
         "other_text_thickness": 0.15,
         "other_text_upright": false,
         "pads": {
-          "drill": 0.762,
-          "height": 1.524,
-          "width": 1.524
+          "drill": 0.0,
+          "height": 0.4,
+          "width": 1.35
         },
         "silk_line_width": 0.12,
         "silk_text_italic": false,
@@ -56,6 +56,7 @@
       },
       "rule_severities": {
         "annular_width": "error",
+        "aperture_clearance": "error",
         "clearance": "error",
         "copper_edge_clearance": "error",
         "courtyards_overlap": "error",
@@ -83,6 +84,9 @@
         "silk_over_copper": "ignore",
         "silk_overlap": "warning",
         "skew_out_of_range": "error",
+        "starved_thermal": "error",
+        "text_height": "warning",
+        "text_thickness": "warning",
         "too_many_vias": "error",
         "track_dangling": "ignore",
         "track_width": "error",
@@ -97,13 +101,17 @@
         "allow_blind_buried_vias": false,
         "allow_microvias": false,
         "max_error": 0.005,
+        "min_aperture_clearance": 0.049999999999999996,
         "min_clearance": 0.0,
         "min_copper_edge_clearance": 0.024999999999999998,
         "min_hole_clearance": 0.0,
         "min_hole_to_hole": 0.25,
         "min_microvia_diameter": 0.19999999999999998,
         "min_microvia_drill": 0.09999999999999999,
+        "min_resolved_spokes": 2,
         "min_silk_clearance": 0.0,
+        "min_text_height": 0.7999999999999999,
+        "min_text_thickness": 0.12,
         "min_through_hole_diameter": 0.3,
         "min_track_width": 0.19999999999999998,
         "min_via_annular_width": 0.049999999999999996,
@@ -315,7 +323,7 @@
     "pinned_symbol_libs": []
   },
   "meta": {
-    "filename": "issue6417.kicad_pro",
+    "filename": "issue1358.kicad_pro",
     "version": 1
   },
   "net_settings": {

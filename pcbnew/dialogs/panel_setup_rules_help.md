@@ -30,6 +30,7 @@
  * length
  * hole\_clearance
  * hole\_size
+ * min\_resolved\_spokes
  * silk\_clearance
  * skew
  * text\_height
@@ -225,3 +226,7 @@ For the latter use a `(layer "layer_name")` clause in the rule.
     (rule heat_sink_pad
         (constraint zone_connection solid)
         (condition "A.Fabrication_Property == 'Heatsink pad'"))
+
+    # Require all four thermal relief spokes to connect to parent zone
+    (rule fully_spoked_pads
+        (constraint min_resolved_spokes 4))

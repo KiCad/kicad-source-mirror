@@ -27,6 +27,7 @@
 #include <board_design_settings.h>
 #include <pad.h>
 #include <pcb_track.h>
+#include <pcb_marker.h>
 #include <footprint.h>
 #include <drc/drc_item.h>
 #include <settings/settings_manager.h>
@@ -125,7 +126,10 @@ BOOST_FIXTURE_TEST_CASE( DRCFalseNegativeRegressions, DRC_REGRESSION_TEST_FIXTUR
         bds.m_DRCEngine->SetViolationHandler(
                 [&]( const std::shared_ptr<DRC_ITEM>& aItem, wxPoint aPos )
                 {
-                    violations.push_back( *aItem );
+                    PCB_MARKER temp( aItem, aPos );
+
+                    if( bds.m_DrcExclusions.find( temp.Serialize() ) == bds.m_DrcExclusions.end() )
+                        violations.push_back( *aItem );
                 } );
 
         bds.m_DRCEngine->RunTests( EDA_UNITS::MILLIMETRES, true, false );

@@ -281,6 +281,7 @@ void DRC_RULES_PARSER::parseConstraint( DRC_RULE* aRule )
     case T_zone_connection:           c.m_Type = ZONE_CONNECTION_CONSTRAINT;           break;
     case T_thermal_relief_gap:        c.m_Type = THERMAL_RELIEF_GAP_CONSTRAINT;        break;
     case T_thermal_spoke_width:       c.m_Type = THERMAL_SPOKE_WIDTH_CONSTRAINT;       break;
+    case T_min_resolved_spokes:       c.m_Type = MIN_RESOLVED_SPOKES_CONSTRAINT;       break;
     case T_disallow:                  c.m_Type = DISALLOW_CONSTRAINT;                  break;
     case T_length:                    c.m_Type = LENGTH_CONSTRAINT;                    break;
     case T_skew:                      c.m_Type = SKEW_CONSTRAINT;                      break;
@@ -292,8 +293,8 @@ void DRC_RULES_PARSER::parseConstraint( DRC_RULE* aRule )
                     "clearance, hole_clearance, edge_clearance, hole_size, hole_to_hole, "
                     "courtyard_clearance, silk_clearance, text_height, text_thickness, "
                     "track_width, annular_width, via_diameter, zone_connection, "
-                    "thermal_relief_gap, thermal_spoke_width, disallow, length, skew, "
-                    "diff_pair_gap or diff_pair_uncoupled." );
+                    "thermal_relief_gap, thermal_spoke_width, min_resolved_spokes, "
+                    "disallow, length, skew, diff_pair_gap or diff_pair_uncoupled." );
         reportError( msg );
     }
 
@@ -364,6 +365,37 @@ void DRC_RULES_PARSER::parseConstraint( DRC_RULE* aRule )
                         "'solid', 'thermal_reliefs' or 'none'." );
             reportError( msg );
             break;
+        }
+
+        if( (int) NextTok() != DSN_RIGHT )
+            reportError( _( "Missing ')'." ) );
+
+        aRule->AddConstraint( c );
+        return;
+    }
+    else if( c.m_Type == MIN_RESOLVED_SPOKES_CONSTRAINT )
+    {
+        // We don't use a min/max/opt structure here for two reasons:
+        //
+        // 1) The min/max/opt parser can't handle unitless numbers, and if we make it handle
+        //    them then it will no longer catch the more common case of forgetting to add a unit
+        //    and getting an ineffective rule because the distances are in nanometers.
+        //
+        // 2) Min/max/opt gives a strong implication that you could specify the optimal number
+        //    of spokes.  We don't want to open that door because the spoke generator is highly
+        //    optimized around being able to "cheat" off of a cartesian coordinate system.
+
+        token = NextTok();
+
+        if( (int) token == DSN_NUMBER )
+        {
+            value = (int) strtol( CurText(), nullptr, 10 );
+            c.m_Value.SetMin( value );
+        }
+        else
+        {
+            reportError( _( "Expecting number." ) );
+            parseUnknown();
         }
 
         if( (int) NextTok() != DSN_RIGHT )

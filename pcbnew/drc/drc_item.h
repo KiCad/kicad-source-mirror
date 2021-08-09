@@ -42,6 +42,7 @@ enum PCB_DRC_CODE {
     DRCE_EDGE_CLEARANCE,                 // a copper item is too close to the board edge
     DRCE_ZONES_INTERSECT,                // copper area outlines intersect
     DRCE_ZONE_HAS_EMPTY_NET,             // copper area has a net but no pads in nets, which is suspicious
+    DRCE_STARVED_THERMAL,                // insufficient number of thermal spokes connected to zone
     DRCE_DANGLING_VIA,                   // via which isn't connected to anything
     DRCE_DANGLING_TRACK,                 // track with at least one end not connected to anything
     DRCE_DRILLED_HOLES_TOO_CLOSE,        // overlapping drilled holes break drill bits
@@ -146,6 +147,7 @@ private:
     static DRC_ITEM edgeClearance;
     static DRC_ITEM zonesIntersect;
     static DRC_ITEM zoneHasEmptyNet;
+    static DRC_ITEM starvedThermal;
     static DRC_ITEM viaDangling;
     static DRC_ITEM trackDangling;
     static DRC_ITEM holeNearHole;

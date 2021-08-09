@@ -172,6 +172,12 @@ void DRC_ENGINE::loadImplicitRules()
     diffPairGapConstraint.Value().SetMin( bds.m_MinClearance );
     rule->AddConstraint( diffPairGapConstraint );
 
+    rule = createImplicitRule( _( "default" ) );
+
+    DRC_CONSTRAINT thermalSpokeCountConstraint( MIN_RESOLVED_SPOKES_CONSTRAINT );
+    thermalSpokeCountConstraint.Value().SetMin( bds.m_MinResolvedSpokes );
+    rule->AddConstraint( thermalSpokeCountConstraint );
+
     rule = createImplicitRule( _( "board setup constraints silk" ) );
     rule->m_LayerCondition = LSET( 2, F_SilkS, B_SilkS );
 
@@ -496,6 +502,18 @@ static wxString formatConstraint( const DRC_CONSTRAINT& constraint )
                 return str;
             };
 
+    auto formatMin =
+            []( const DRC_CONSTRAINT& c ) -> wxString
+            {
+                wxString str;
+                const auto value = c.GetValue();
+
+                if ( value.HasMin() )
+                    str += wxString::Format( " min: %d", value.Min() );
+
+                return str;
+            };
+
     std::vector<FORMATTER> formats =
     {
         { CLEARANCE_CONSTRAINT,           "clearance",           formatMinMax },
@@ -512,6 +530,7 @@ static wxString formatConstraint( const DRC_CONSTRAINT& constraint )
         { ZONE_CONNECTION_CONSTRAINT,     "zone_connection",     nullptr      },
         { THERMAL_RELIEF_GAP_CONSTRAINT,  "thermal_relief_gap",  formatMinMax },
         { THERMAL_SPOKE_WIDTH_CONSTRAINT, "thermal_spoke_width", formatMinMax },
+        { MIN_RESOLVED_SPOKES_CONSTRAINT, "min_resolved_spokes", formatMin    },
         { DISALLOW_CONSTRAINT,            "disallow",            nullptr      },
         { VIA_DIAMETER_CONSTRAINT,        "via_diameter",        formatMinMax },
         { LENGTH_CONSTRAINT,              "length",              formatMinMax },

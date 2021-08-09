@@ -151,6 +151,7 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS( JSON_SETTINGS* aParent, const std:
     m_HoleClearance       = Millimeter2iu( DEFAULT_HOLECLEARANCE );
     m_HoleToHoleMin       = Millimeter2iu( DEFAULT_HOLETOHOLEMIN );
     m_SilkClearance       = Millimeter2iu( DEFAULT_SILKCLEARANCE );
+    m_MinResolvedSpokes   = DEFAULT_MINRESOLVEDSPOKES;
     m_MinSilkTextHeight   = Millimeter2iu( DEFAULT_SILK_TEXT_SIZE * 0.8 );
     m_MinSilkTextThickness= Millimeter2iu( DEFAULT_SILK_TEXT_WIDTH * 0.8 );
 
@@ -255,6 +256,9 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS( JSON_SETTINGS* aParent, const std:
     m_params.emplace_back( new PARAM_SCALED<int>( "rules.min_silk_clearance", &m_SilkClearance,
             Millimeter2iu( DEFAULT_SILKCLEARANCE ), Millimeter2iu( 0.00 ), Millimeter2iu( 100.0 ),
             MM_PER_IU ) );
+
+    m_params.emplace_back( new PARAM<int>( "rules.min_resolved_spokes",
+            &m_MinResolvedSpokes, DEFAULT_MINRESOLVEDSPOKES, 0, 4 ) );
 
     m_params.emplace_back( new PARAM_SCALED<int>( "rules.min_text_height", &m_MinSilkTextHeight,
             Millimeter2iu( DEFAULT_SILK_TEXT_SIZE * 0.8 ), Millimeter2iu( 0.00 ),

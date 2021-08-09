@@ -83,6 +83,10 @@ DRC_ITEM DRC_ITEM::zoneHasEmptyNet( DRCE_ZONE_HAS_EMPTY_NET,
         _( "Copper zone net has no pads" ),
         wxT( "zone_has_empty_net" ) );
 
+DRC_ITEM DRC_ITEM::starvedThermal( DRCE_STARVED_THERMAL,
+        _( "Thermal relief connection to zone incomplete" ),
+        wxT( "starved_thermal" ) );
+
 DRC_ITEM DRC_ITEM::viaDangling( DRCE_DANGLING_VIA,
         _( "Via is not connected or connected on only one layer" ),
         wxT( "via_dangling" ) );
@@ -231,6 +235,7 @@ std::vector<std::reference_wrapper<RC_ITEM>> DRC_ITEM::allItemTypes( {
             DRC_ITEM::clearance,
             DRC_ITEM::viaDangling,
             DRC_ITEM::trackDangling,
+            DRC_ITEM::starvedThermal,
 
             DRC_ITEM::heading_DFM,
             DRC_ITEM::edgeClearance,
@@ -294,6 +299,7 @@ std::shared_ptr<DRC_ITEM> DRC_ITEM::Create( int aErrorCode )
     case DRCE_EDGE_CLEARANCE:           return std::make_shared<DRC_ITEM>( edgeClearance );
     case DRCE_ZONES_INTERSECT:          return std::make_shared<DRC_ITEM>( zonesIntersect );
     case DRCE_ZONE_HAS_EMPTY_NET:       return std::make_shared<DRC_ITEM>( zoneHasEmptyNet );
+    case DRCE_STARVED_THERMAL:          return std::make_shared<DRC_ITEM>( starvedThermal );
     case DRCE_DANGLING_VIA:             return std::make_shared<DRC_ITEM>( viaDangling );
     case DRCE_DANGLING_TRACK:           return std::make_shared<DRC_ITEM>( trackDangling );
     case DRCE_DRILLED_HOLES_TOO_CLOSE:  return std::make_shared<DRC_ITEM>( holeNearHole );

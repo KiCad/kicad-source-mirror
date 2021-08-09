@@ -92,6 +92,8 @@
                                               // on edge cut line thicknesses) should be used.
 #define DEFAULT_SILKCLEARANCE         0.0
 
+#define DEFAULT_MINRESOLVEDSPOKES     2       // Fewer resolved spokes indicates a starved thermal
+
 #define MINIMUM_ERROR_SIZE_MM         0.001
 #define MAXIMUM_ERROR_SIZE_MM         0.1
 
@@ -678,7 +680,8 @@ public:
     int        m_CopperEdgeClearance;
     int        m_HoleClearance;             // Hole to copper clearance
     int        m_HoleToHoleMin;             // Min width of web between two drilled holes
-    int        m_SilkClearance;
+    int        m_SilkClearance;             // Min dist between two silk items
+    int        m_MinResolvedSpokes;         // Min spoke count to not be a starved thermal
     int        m_MinSilkTextHeight;         // Min text height for silkscreen layers
     int        m_MinSilkTextThickness;      // Min text thickness for silkscreen layers
 

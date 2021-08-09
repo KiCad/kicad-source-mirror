@@ -455,6 +455,7 @@ set( BMAPS_MID
     switch_corner_rounding_shape
     text
     text_sketch
+    thermal_spokes
     three_d
     tool_ratsnest
     tools

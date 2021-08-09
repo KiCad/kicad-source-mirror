@@ -301,6 +301,7 @@ void PANEL_SETUP_RULES::onScintillaCharAdded( wxStyledTextEvent &aEvent )
                      "hole_clearance|"
                      "hole_size|"
                      "hole_to_hole|"
+                     "min_resolved_spokes|"
                      "silk_clearance|"
                      "skew|"
                      "text_height|"
@@ -329,6 +330,10 @@ void PANEL_SETUP_RULES::onScintillaCharAdded( wxStyledTextEvent &aEvent )
             tokens = "solid "
                      "thermal_relief "
                      "none";
+        }
+        else if( sexprs.top() == "min_resolved_spokes" )
+        {
+            tokens = "0 1 2 3 4";
         }
         else if( sexprs.top() == "layer" )
         {
