@@ -40,6 +40,10 @@ extern std::string GetCurlLibVersion();
 #include <Standard_Version.hxx>
 #endif
 
+#if defined( KICAD_SPICE )
+#include <ngspice/sharedspice.h>
+#endif
+
 // The include file version.h is always created even if the repo version cannot be
 // determined.  In this case KICAD_VERSION_FULL will default to the KICAD_VERSION
 // that is set in KiCadVersion.cmake.
@@ -181,6 +185,8 @@ wxString GetVersionInfoData( const wxString& aTitle, bool aHtml, bool aBrief )
     #undef HAVE_STRNCASECMP     /* is redefined in ngspice/config.h */
     #include <ngspice/config.h>
     aMsg << indent4 << "ngspice: " << PACKAGE_VERSION << eol;
+#elif defined( NGSPICE_PACKAGE_VERSION )
+    aMsg << indent4 << "ngspice: " << NGSPICE_PACKAGE_VERSION << eol;
 #else
     aMsg << indent4 << "ngspice: " << "unknown" << eol;
 #endif
