@@ -14,7 +14,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
 "PO-Revision-Date: 2021-08-09 09:28+0000\n"
-"Last-Translator: jeongsuAn <dks9467@gmail.com>\n"
+"Last-Translator: Ji Yoon Choi <chichoon.choi@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
 "Language: ko\n"
@@ -1427,11 +1427,11 @@ msgstr "출력 디렉토리 '%s'을 생성할 수 없습니다."
 
 #: common/common.cpp:620
 msgid "This operating system is not supported by KiCad and its dependencies."
-msgstr "이 운영 체제는 KiCad 및 해당 종속 항목에서 지원되지 않습니다."
+msgstr "이 운영 체제는 KiCad 및 해당 종속 항목에서 지원하지 않습니다."
 
 #: common/common.cpp:622
 msgid "Unsupported Operating System"
-msgstr "지원되지 않는 운영 체제"
+msgstr "지원하지 않는 운영 체제"
 
 #: common/common.cpp:625
 msgid ""
@@ -5290,7 +5290,7 @@ msgstr "환경 변수 HOME이 비어 있습니다. 계속할 수 없습니다."
 
 #: common/pgm_base.cpp:421
 msgid "This language is not supported by the operating system."
-msgstr "이 언어는 운영 체제에서 지원되지 않습니다."
+msgstr "이 언어는 운영 체제에서 지원하지 않습니다."
 
 #: common/pgm_base.cpp:472 common/pgm_base.cpp:510
 msgid "The KiCad language file for this language is not installed."
@@ -13317,7 +13317,7 @@ msgstr ""
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1765
 #, c-format
 msgid "Power symbol creates a global label with name '%s'"
-msgstr "전원 심볼이 '%s'라는 이름의 전역 라벨을 생성합니다"
+msgstr "전원 심볼은 '%s'라는 이름의 전역 라벨을 생성합니다"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1882
 #, fuzzy, c-format
@@ -30345,7 +30345,7 @@ msgstr "%s의 %s에 대한 패드 (%s 위)"
 #: pcbnew/pad.cpp:1135
 #, c-format
 msgid "Through hole pad %s of %s"
-msgstr "%s의 %s에 대한 스루홀  패드"
+msgstr "%s의 %s에 대한 스루홀 패드"
 
 #: pcbnew/pad.cpp:1446
 msgid "Edge connector"
@@ -30712,45 +30712,45 @@ msgstr "Footprint*() 함수 로그를 얻기 위해서 현재 플러그인의 <b
 
 #: pcbnew/plugin.cpp:158
 msgid "Regular expression <b>footprint name</b> filter."
-msgstr ""
+msgstr "정규표현식을 통해 <b>풋프린트 이름</b> 을 필터링합니다."
 
 #: pcbnew/plugin.cpp:179
 msgid ""
 "Enter the python module which implements the PLUGIN::Footprint*() functions."
-msgstr ""
+msgstr "PLUGIN::Footprint*() 함수를 구현하는 python 모듈을 입력하세요."
 
 #: pcbnew/plugins/altium/altium_parser_pcb.cpp:134
 #, c-format
 msgid "Unknown mapping of the Altium layer '%s'."
-msgstr ""
+msgstr "Altium 레이어 '%s' 에 대하여 알 수 없는 매핑이 있습니다."
 
 #: pcbnew/plugins/altium/altium_parser_pcb.cpp:788
 #, c-format
 msgid "Pads6 stream has unexpected length for subrecord 6: %d."
-msgstr ""
+msgstr "Pads6 스트림이 서브레코드 6에 대하여 예상치 못한 길이 %d를 얻었습니다."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:75
 msgid "Error reading file: cannot determine length."
-msgstr ""
+msgstr "파일을 읽는 중에 오류가 발생하였습니다: 길이를 측정할 수 없습니다."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:86
 msgid "Error reading file."
-msgstr "파일을 읽는 중 오류가 발생함."
+msgstr "파일을 읽는 중에 오류가 발생하였습니다."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:465
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' was not parsed correctly."
-msgstr "[%s] 컴포넌트를 찾을 수 없습니다."
+msgstr "'%s' 는 제대로 파싱되지 않았습니다."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:473
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' was not fully parsed."
-msgstr "'%s'은 완전히 구문 분석되지 않았습니다."
+msgstr "'%s'은 완전히 파싱되지 않았습니다."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:509
-#, fuzzy, c-format
+#, c-format
 msgid "File not found: '%s'."
-msgstr "파일을 찾을 수 없음: '%s'."
+msgstr "파일을 찾지 못했습니다: '%s'."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:863
 #, c-format
@@ -30766,31 +30766,30 @@ msgid ""
 "Dimension found on an Altium layer (%d) with no KiCad equivalent. It has "
 "been moved to KiCad layer Eco1_User."
 msgstr ""
+"Altium 레이어 (%d) 에서 KiCad에 대응되지 않는 치수를 발견하였습니다. KiCad 레이어 Eco1_User로 이동되었습니다."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1231
 #: pcbnew/plugins/altium/altium_pcb.cpp:1239
 #, c-format
 msgid "Ignored dimension of kind %d (not yet supported)."
-msgstr ""
+msgstr "%d 종류의 치수를 무시하였습니다 (아직 지원되지 않음)."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1284
 msgid "No 3D-models will be imported."
-msgstr ""
+msgstr "3D 모델을 가져오지 않았습니다."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1307
-#, fuzzy, c-format
+#, c-format
 msgid "File not found: '%s'. 3D-model not imported."
 msgstr "파일을 찾을 수 없음: '%s'. 3D 모델을 가져올 수 없습니다."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1345
-#, fuzzy
 msgid "Loading nets..."
-msgstr "로드 중..."
+msgstr "네트 불러오는 중..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1368
-#, fuzzy
 msgid "Loading polygons..."
-msgstr "로드 중..."
+msgstr "다각형을 불러오는 중..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1381
 #: pcbnew/plugins/altium/altium_pcb.cpp:1633
@@ -30799,21 +30798,19 @@ msgid ""
 "Polygon found on an Altium layer (%d) with no KiCad equivalent. It has been "
 "moved to KiCad layer Eco1_User."
 msgstr ""
+"Altium 레이어 (%d) 에서 KiCad에 대응되지 않는 다각형을 발견하였습니다. KiCad 레이어 Eco1_User로 이동되었습니다."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1504
-#, fuzzy
 msgid "Loading rules..."
-msgstr "규칙 로드 중..."
+msgstr "규칙 불러오는 중..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1536
-#, fuzzy
 msgid "Loading board regions..."
-msgstr "보드 영역 로드 중..."
+msgstr "기판 영역 불러오는 중..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1558
-#, fuzzy
 msgid "Loading zones..."
-msgstr "로드 중..."
+msgstr "영역 불러오는 중..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1614
 #, c-format
@@ -30821,21 +30818,20 @@ msgid ""
 "Zone found on an Altium layer (%d) with no KiCad equivalent. It has been "
 "moved to KiCad layer Eco1_User."
 msgstr ""
+"Altium 레이어 (%d) 에서 KiCad에 대응되지 않는 영역을 발견하였습니다. KiCad 레이어 Eco1_User로 이동되었습니다."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1668
 #, c-format
 msgid "Ignored polygon shape of kind %d (not yet supported)."
-msgstr ""
+msgstr "%d 종류의 다각형 형상이 무시되었습니다 (아직 지원되지 않음)."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1682
-#, fuzzy
 msgid "Loading zone fills..."
-msgstr "영역 채우기 로드 중..."
+msgstr "영역 채우기 불러오는 중..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1771
-#, fuzzy
 msgid "Loading arcs..."
-msgstr "로드 중..."
+msgstr "호 불러오는 중..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1833
 #, c-format
@@ -30843,6 +30839,8 @@ msgid ""
 "Arc keepout found on an Altium layer (%d) with no KiCad equivalent. It has "
 "been moved to KiCad layer Eco1_User."
 msgstr ""
+"Altium 레이어 (%d) 에서 KiCad에 대응되지 않는 호 킵아웃을 발견하였습니다. KiCad 레이어 Eco1_User로 "
+"이동되었습니다."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1852
 #, c-format
@@ -30850,43 +30848,43 @@ msgid ""
 "Arc found on an Altium layer (%d) with no KiCad equivalent. It has been "
 "moved to KiCad layer Eco1_User."
 msgstr ""
+"Altium 레이어 (%d) 에서 KiCad에 대응되지 않는 호를 발견하였습니다. KiCad 레이어 Eco1_User로 이동되었습니다."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1911
-#, fuzzy
 msgid "Loading pads..."
-msgstr "로드 중..."
+msgstr "패드 불러오는 중..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1971
 #, c-format
 msgid "Footprint %s pad %s is not marked as multilayer, but is a TH pad."
-msgstr ""
+msgstr "풋프린트 %s 패드 %s는 다중 레이어로 마크되지 않았으나, TH 패드입니다."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1991
 #, c-format
 msgid "Footprint %s pad %s has a square hole (not yet supported)."
-msgstr ""
+msgstr "풋프린트 %s 패드 %s에 사각형 홀이 존재합니다 (아직 지원되지 않음)."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2013
 #, c-format
 msgid ""
 "Footprint %s pad %s has a hole-rotation of %f degrees. KiCad only supports "
 "90 degree rotations."
-msgstr ""
+msgstr "풋프린트 %s 패드 %s는 %f도로 회전된 홀이 존재합니다. KiCad는 90도 회전만을 지원합니다."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2027
 #, c-format
 msgid "Footprint %s pad %s uses a hole of unknown kind %d."
-msgstr ""
+msgstr "풋프린트 %s 패드 %s는 알 수 없는 종류 %d 홀을 사용합니다."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2045
 #, c-format
 msgid "Footprint %s pad %s uses a complex pad stack (not yet supported.)"
-msgstr ""
+msgstr "풋프린트 %s 패드 %s는 복잡한 패드 스택을 사용합니다 (아직 지원되지 않음)"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2079
 #, c-format
 msgid "Footprint %s pad %s uses an unknown pad-shape."
-msgstr ""
+msgstr "풋프린트 %s 패드 %s는 알 수 없는 패드 형태를 사용합니다."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2138
 #, c-format
@@ -30894,42 +30892,42 @@ msgid ""
 "Non-copper pad %s found on an Altium layer (%d) with no KiCad equivalent. It "
 "has been moved to KiCad layer Eco1_User."
 msgstr ""
+"KiCad에 대응되지 않는 비 구리 패드 %s를 Altium 레이어 (%d) 에서 발견하였습니다. KiCad 레이어 Eco1_User로 "
+"이동되었습니다."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2147
 #, c-format
 msgid "Non-copper pad %s is connected to a net, which is not supported."
-msgstr ""
+msgstr "비 구리 패드 %s가 네트에 연결되었습니다. 이는 아직 지원되지 않습니다."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2153
 #, c-format
 msgid "Non-copper pad %s has a hole, which is not supported."
-msgstr ""
+msgstr "비 구리 패드 %s에 홀이 존재합니다. 이는 아직 지원되지 않습니다."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2158
 #, c-format
 msgid "Non-copper pad %s has a complex pad stack (not yet supported)."
-msgstr ""
+msgstr "비 구리 패드 %s에 복잡한 패드 스택을 사용합니다 (아직 지원되지 않음)."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2312
 #, c-format
 msgid "Non-copper pad %s uses an unknown pad-shape."
-msgstr ""
+msgstr "비 구리 패드 %s는 알 수 없는 패드 형태를 사용합니다."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2321
-#, fuzzy
 msgid "Loading vias..."
-msgstr "로드 중..."
+msgstr "비아 불러오는 중..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2362
 #, c-format
 msgid ""
 "Via from layer %d to %d uses a non-copper layer, which is not supported."
-msgstr ""
+msgstr "레이어 %d에서 %d에 해당하는 비아는 비 구리 레이어를 사용합니다. 이는 아직 지원되지 않습니다."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2383
-#, fuzzy
 msgid "Loading tracks..."
-msgstr "로드 중..."
+msgstr "배선 불러오는 중..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2431
 #, c-format
@@ -30937,6 +30935,8 @@ msgid ""
 "Track keepout found on an Altium layer (%d) with no KiCad equivalent. It has "
 "been moved to KiCad layer Eco1_User."
 msgstr ""
+"Altium 레이어 (%d) 에서 KiCad에 대응되지 않는 배선 킵아웃을 발견하였습니다. KiCad 레이어 Eco1_User로 "
+"이동되었습니다."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2449
 #, c-format
@@ -30944,16 +30944,16 @@ msgid ""
 "Track found on an Altium layer (%d) with no KiCadequivalent. It has been "
 "moved to KiCad layer Eco1_User."
 msgstr ""
+"Altium 레이어 (%d) 에서 KiCad에 대응되지 않는 배선을 발견하였습니다. KiCad 레이어 Eco1_User로 이동되었습니다."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2490
-#, fuzzy
 msgid "Loading text..."
-msgstr "로드 중..."
+msgstr "텍스트 불러오는 중..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2501
 #, c-format
 msgid "Ignored barcode on Altium layer %d (not yet supported)."
-msgstr ""
+msgstr "Altium 레이어 %d의 바코드를 무시하였습니다 (아직 지원되지 않음)."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2589
 #, c-format
@@ -30961,11 +30961,11 @@ msgid ""
 "Text found on an Altium layer (%d) with no KiCad equivalent. It has been "
 "moved to KiCad layer Eco1_User."
 msgstr ""
+"Altium 레이어 (%d) 에서 KiCad에 대응되지 않는 텍스트를 발견하였습니다. KiCad 레이어 Eco1_User로 이동되었습니다."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2675
-#, fuzzy
 msgid "Loading rectangles..."
-msgstr "직사각형 로드 중..."
+msgstr "직사각형 불러오는 중..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2695
 #, c-format
@@ -30973,6 +30973,7 @@ msgid ""
 "Fill found on an Altium layer (%d) with no KiCad equivalent. It has been "
 "moved to KiCad layer Eco1_User."
 msgstr ""
+"Altium 레이어 (%d) 에서 KiCad에 대응되지 않는 채움을 발견하였습니다. KiCad 레이어 Eco1_User로 이동되었습니다."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:87
 msgid ""
@@ -30981,19 +30982,21 @@ msgid ""
 "procedure in CADSTAR and re-import, to avoid inconsistencies between the PCB "
 "and the schematic. "
 msgstr ""
+"선택한 파일은 네트가 회로도와 동기화되지 않았을 수도 있음을 나타내고 있습니다. PCB와 회로도 사이의 불일치를 피하기 위해 사용자가 "
+"직접 CADSTAR에서 '네트 정렬' 을 수행하고 다시 가져올 것을 권장합니다. "
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:114
 msgid ""
 "The CADSTAR design contains Trunk routing elements, which have no KiCad "
 "equivalent. These elements were not loaded."
-msgstr ""
+msgstr "CADSTAR 디자인에 KiCad에서 대응되지 않는 트렁크 라우팅 요소가 포함되어 있습니다. 이 요소들은 불러와지지 않습니다."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:121
 #, c-format
 msgid ""
 "The CADSTAR design contains variants which has no KiCad equivalent. Only the "
 "variant '%s' was loaded."
-msgstr ""
+msgstr "CADSTAR 디자인에 KiCad에서 대응되지 않는 변형이 포함되어 있습니다. 변형 '%s'만 불러옵니다."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:158
 #, c-format
@@ -31001,6 +31004,8 @@ msgid ""
 "The CADSTAR layer '%s' has no KiCad equivalent. All elements on this layer "
 "have been mapped to KiCad layer '%s' instead."
 msgstr ""
+"CADSTAR 레이어 '%s' 는 KiCad에서 대응되지 않습니다. 해당 레이어 위의 요소들은 KiCad 레이어 '%s'에 대신 "
+"매핑됩니다."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:171
 #, c-format
@@ -31008,16 +31013,17 @@ msgid ""
 "The CADSTAR layer '%s' has been assumed to be a technical layer. All "
 "elements on this layer have been mapped to KiCad layer '%s'."
 msgstr ""
+"CADSTAR 레이어 '%s' 는 기술 레이어로 간주됩니다. 해당 레이어 위의 요소들은 KiCad 레이어 '%s'에 대신 매핑됩니다."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:458
 #, c-format
 msgid "Unexpected layer '%s' in layer stack."
-msgstr ""
+msgstr "레이어 스택에 예기치 않은 레이어 '%s'가 있습니다."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:616
 #, c-format
 msgid "Design rule %s was not found. This was ignored."
-msgstr ""
+msgstr "디자인 규칙 %s를 찾을 수 없습니다. 이는 무시되었습니다."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:647
 msgid ""
@@ -31025,6 +31031,8 @@ msgid ""
 "design rules were imported. It is recommended that you review the design "
 "rules that have been applied."
 msgstr ""
+"KiCad 디자인 규칙은 CADSTAR의 규칙과 차이가 있습니다. 호환되는 디자인 규칙만이 가져와집니다. 적용된 디자인 규칙을 검토하는 "
+"것을 권장합니다."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:839
 #, c-format
@@ -31033,6 +31041,8 @@ msgid ""
 "equivalent. The area is neither a via nor route keepout area. The area was "
 "not imported."
 msgstr ""
+"CADSTAR 영역 '%s' (라이브러리 컴포넌트 '%s' 에 있음) 은 KiCad에서 대응되지 않습니다. 비아 영역도, 라우트 킵아웃 "
+"영역도 아닙니다. 영역은 불러와지지 않습니다."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:931
 #, c-format
@@ -31041,36 +31051,38 @@ msgid ""
 "supported in KiCad. Please review the imported pads as they may require "
 "manual correction."
 msgstr ""
+"CADSTAR 패드 정의 '%s' 는 복잡한 패드 스택으로, KiCad에서 지원하지 않습니다. 수동으로 수정해 주어야 할 가능성이 "
+"있으므로 가져온 패드들을 검토하세요."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1140
 #, c-format
 msgid ""
 "The CADSTAR pad definition '%s' has the hole shape outside the pad shape. "
 "The hole has been moved to the center of the pad."
-msgstr ""
+msgstr "CADSTAR 패드 정의 '%s' 는 패드 형상 바깥에 홀 형상이 존재합니다. 홀은 패드의 정중앙으로 이동되었습니다."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1174
 #, c-format
 msgid "The CADSTAR pad definition '%s' has import errors: %s"
-msgstr ""
+msgstr "CADSTAR 패드 정의 '%s' 불러오기 오류가 발생하였습니다: %s"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1216
 #, c-format
 msgid "Unable to find group ID %s in the group definitions."
-msgstr ""
+msgstr "그룹 ID %s를 그룹 정의에서 찾을 수 없습니다."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1222
 #, c-format
 msgid ""
 "Unable to find sub group %s in the group map (parent group ID=%s, Name=%s)."
-msgstr ""
+msgstr "그룹 맵에서 서브 그룹 %s를 찾을 수 없습니다 (상위 그룹 ID=%s, 이름=%s)."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1297
 #, c-format
 msgid ""
 "Dimension ID %s is an angled dimension, which has no KiCad equivalent. An "
 "aligned dimension was loaded instead."
-msgstr ""
+msgstr "치수 ID %s는 각이 있는 치수로, KiCad에서 대응되지 않습니다. 정렬된 치수를 대신 불러옵니다."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1308
 #, c-format
@@ -31079,18 +31091,20 @@ msgid ""
 "are not yet supported in KiCad. The dimension object was imported with an "
 "internal dimension style instead."
 msgstr ""
+"치수 ID %s는 CADSTAR에서 '외부' 스타일을 포함합니다. 외부 치수 스타일은 KiCad에서 지원하지 않습니다. 치수 객체는 내부 "
+"치수 스타일로 불러옵니다."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1364
 #, c-format
 msgid "Unexpected Dimension type (ID %s). This was not imported."
-msgstr ""
+msgstr "예기치 않은 치수 유형 (ID %s). 이는 불러와지지 않습니다."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1499
 #, c-format
 msgid ""
 "Dimension %s is an angular dimension which has no KiCad equivalent. The "
 "object was not imported."
-msgstr ""
+msgstr "치수 %s는 각이 있는 치수로, KiCad에서 대응되지 않습니다. 이 객체는 불러와지지 않습니다."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1539
 #, c-format
@@ -31099,23 +31113,25 @@ msgid ""
 "areas are not supported in KiCad. Only the supported elements for the area "
 "were imported."
 msgstr ""
+"CADSTAR 영역 '%s'는 CADSTAR에서 배치 영역으로 표시됩니다. 배치 영역은 KiCad에서 아직 지원하지 않습니다. 영역 "
+"내에서 지원되는 원소만 불러옵니다."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1548
 #, c-format
 msgid ""
 "The CADSTAR area '%s' does not have a KiCad equivalent. Pure Placement areas "
 "are not supported."
-msgstr ""
+msgstr "CADSTAR 영역 '%s'는 KiCad에서 대응되지 않습니다. 순수 배치 영역은 지원되지 않습니다."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1575
 #, c-format
 msgid "Unable to find component '%s' in the library(Symdef ID: '%s')"
-msgstr ""
+msgstr "라이브러리에서 컴포넌트 '%s'를 찾을 수 없습니다 (Symdef ID: '%s')"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1693
 #, c-format
 msgid "Unable to find documentation symbol in the library (Symdef ID: '%s')"
-msgstr ""
+msgstr "라이브러리에서 문서 심볼을 찾을 수 없습니다 (Symdef ID: '%s')"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1762
 #, c-format
@@ -31123,6 +31139,8 @@ msgid ""
 "The CADSTAR template '%s' has the setting 'Allow in No Routing Areas' "
 "enabled. This setting has no KiCad equivalent, so it has been ignored."
 msgstr ""
+"CADSTAR 템플릿 '%s'는 설정 'Allow in No Routing Areas' 이 활성화되어 있습니다. 이 설정은 KiCad에서 "
+"대응되지 않으며, 따라서 무시됩니다."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1770
 #, c-format
@@ -31130,6 +31148,8 @@ msgid ""
 "The CADSTAR template '%s' has the setting 'Box Isolated Pins' enabled. This "
 "setting has no KiCad equivalent, so it has been ignored."
 msgstr ""
+"CADSTAR 템플릿 '%s'는 설정 'Box Isolated Pins' 이 활성화되어 있습니다. 이 설정은 KiCad에서 대응되지 "
+"않으며, 따라서 무시됩니다."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1778
 #, c-format
@@ -31137,6 +31157,8 @@ msgid ""
 "The CADSTAR template '%s' has the setting 'Automatic Repour' enabled. This "
 "setting has no KiCad equivalent, so it has been ignored."
 msgstr ""
+"CADSTAR 템플릿 '%s'는 설정 'Automatic Repour' 이 활성화되어 있습니다. 이 설정은 KiCad에서 대응되지 "
+"않으며, 따라서 무시됩니다."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1789
 #, c-format
@@ -31145,6 +31167,8 @@ msgid ""
 "Width' setting. There is no KiCad equivalent for this, so this setting was "
 "ignored."
 msgstr ""
+"CADSTAR 템플릿 '%s'는 'Sliver Width'의 값이 0이 아닌 값으로 설정되어 있습니다. 이는 KiCad에서 대응되지 "
+"않으며, 따라서 무시됩니다."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1799
 #, c-format
@@ -31154,6 +31178,9 @@ msgid ""
 "between these two settings. The setting for disjoint copper has been applied "
 "as the minimum island area of the KiCad Zone."
 msgstr ""
+"CADSTAR 템플릿 '%s'는 서로 다른 설정 'Retain Poured Copper - Disjoint'와 'Retain Poured "
+"Copper - Isolated'이 존재합니다. KiCad에선 해당 두 설정을 구분하지 않습니다. 분리된 구리의 설정은 KiCad 영역의 "
+"최소 섬 면적으로 적용됩니다."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1859
 #, c-format
