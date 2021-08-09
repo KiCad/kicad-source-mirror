@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
-"PO-Revision-Date: 2021-08-09 06:59+0000\n"
+"PO-Revision-Date: 2021-08-09 08:08+0000\n"
 "Last-Translator: Ji Yoon Choi <chichoon.choi@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
@@ -12677,14 +12677,13 @@ msgstr "경계 상자"
 #: eeschema/lib_arc.cpp:417
 #, c-format
 msgid "Arc, radius %s"
-msgstr "호, 반지름 %s"
+msgstr "호, 반경 %s"
 
 #: eeschema/lib_circle.cpp:256
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:181
 #: pcbnew/pcb_shape.cpp:518 pcbnew/pcb_shape.cpp:528 pcbnew/pcb_track.cpp:698
-#, fuzzy
 msgid "Radius"
-msgstr "반지름"
+msgstr "반경"
 
 #: eeschema/lib_circle.cpp:276
 #, c-format
@@ -20346,7 +20345,7 @@ msgstr "전기적 형식"
 
 #: pcbnew/board_stackup_manager/panel_board_finish_base.cpp:20
 msgid "Has castellated pads"
-msgstr ""
+msgstr "Castellated 패드가 있음"
 
 #: pcbnew/board_stackup_manager/panel_board_finish_base.cpp:23
 #, fuzzy
@@ -21843,6 +21842,9 @@ msgid ""
 "0 = no smoothing\n"
 "1.0 = max radius/chamfer size (half gap value)"
 msgstr ""
+"매끄러운 모서리 사이즈와 선 사이의 갭의 비율\n"
+"0 = 매끄러움 없음\n"
+"1.0 = 최대 반경 / 모따기 크기 (갭의 절반값)"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:333
 #, fuzzy
@@ -22076,7 +22078,7 @@ msgstr "수직 중심:"
 #: pcbnew/dialogs/dialog_create_array_base.cpp:229
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1244
 msgid "Radius:"
-msgstr ""
+msgstr "반경:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:246
 msgid ""
@@ -24166,7 +24168,7 @@ msgstr "호의 각도는 0이 될 수 없습니다."
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:396
 msgid "The radius cannot be zero."
-msgstr "반지름은 0이 될 수 없습니다."
+msgstr "반경은 0이 될 수 없습니다."
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:402
 msgid "The rectangle cannot be empty."
@@ -24691,7 +24693,7 @@ msgstr "원형"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:724
 msgid "radius"
-msgstr "반지름"
+msgstr "반경"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:729
 #, c-format
@@ -24795,7 +24797,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1379
 msgid "Warning: Castellated property is for PTH pads."
-msgstr ""
+msgstr "경고: Castellated 속성은 PTH 패드 전용입니다."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1385
 msgid "Warning: BGA property is for SMD pads."
@@ -24950,11 +24952,14 @@ msgid ""
 "The width is the smaller value between size X and size Y.\n"
 "The max value is 50 percent."
 msgstr ""
+"모서리 반경은 패드 폭에 대한 백분율로 표현됩니다.\n"
+"사이즈 X와 Y 중 작은 값이 폭이 됩니다.\n"
+"최대값은 50 퍼센트 입니다."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:172
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:288
 msgid "Corner radius:"
-msgstr ""
+msgstr "모서리 반경:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:174
 msgid ""
@@ -25114,7 +25119,7 @@ msgstr ""
 "전역 기준은 전체 기판에 대한 기준입니다\n"
 "테스트 포인트 패드는 거버 파일에서 테스트 포인트를 지정할 때 유용합니다\n"
 "히트싱크 패드는 서멀 패드를 지정합니다\n"
-"Castellated는 기판 단의 단면에 위치한 스루홀 패드를 지정합니다\n"
+"Castellated는 기판 단의 단면에 위치한 Castellated 스루홀 패드를 지정합니다\n"
 "이러한 속성들은 거버 X2 파일에 지정되어 있습니다."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:563 pcbnew/pad.cpp:1460
@@ -25142,7 +25147,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:563
 msgid "Castellated pad (through hole only)"
-msgstr ""
+msgstr "Castellated 패드 (스루홀 전용)"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:588
 msgid "Set values to 0 to use parent footprint or netclass values."
@@ -25784,7 +25789,7 @@ msgstr "호"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:157
 msgid "Miter radius (r):"
-msgstr ""
+msgstr "마이터 반경 (r):"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.h:74
 msgid "Trace Length Tuning"
@@ -30341,33 +30346,33 @@ msgstr "네트리스트의 심볼 영역에선 풋프린트를 파싱할 수 없
 
 #: pcbnew/netlist_reader/legacy_netlist_reader.cpp:142
 msgid "Cannot parse reference designator in symbol section of netlist."
-msgstr ""
+msgstr "네트리스트의 심볼 영역에서 참조 지정자를 파싱할 수 없습니다."
 
 #: pcbnew/netlist_reader/legacy_netlist_reader.cpp:152
 msgid "Cannot parse value in symbol section of netlist."
-msgstr ""
+msgstr "네트리스트의 심볼 영역에서 값을 파싱할 수 없습니다."
 
 #: pcbnew/netlist_reader/legacy_netlist_reader.cpp:189
 msgid "Cannot parse pin name in symbol net section of netlist."
-msgstr ""
+msgstr "네트리스트의 심볼 네트 영역에서 핀 이름을 파싱할 수 없습니다."
 
 #: pcbnew/netlist_reader/legacy_netlist_reader.cpp:198
 msgid "Cannot parse net name in symbol net section of netlist."
-msgstr ""
+msgstr "네트리스트의 심볼 네트 영역에서 네트 이름을 파싱할 수 없습니다."
 
 #: pcbnew/netlist_reader/legacy_netlist_reader.cpp:246
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot find symbol %s in footprint filter section of netlist."
-msgstr "넷리스트의 풋프린트 필터 섹션에서 %s 기호를 찾을 수 없습니다."
+msgstr "넷리스트의 풋프린트 필터 영역에서 기호 %s 를 찾을 수 없습니다."
 
 #: pcbnew/netlist_reader/netlist.cpp:67
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot open netlist file '%s'."
-msgstr "%s 파일을 만들 수 없습니다."
+msgstr "네트리스트 파일 '%s' 을 열 수 없습니다."
 
 #: pcbnew/netlist_reader/netlist.cpp:68
 msgid "Netlist Load Error."
-msgstr "네트리스트 로드 오류."
+msgstr "네트리스트 불러오기 오류."
 
 #: pcbnew/netlist_reader/netlist.cpp:78
 #, c-format
@@ -30375,11 +30380,12 @@ msgid ""
 "Error loading netlist.\n"
 "%s"
 msgstr ""
+"네트리스트를 불러오는 도중에 오류가 발생하였습니다.\n"
+"%s"
 
 #: pcbnew/netlist_reader/netlist.cpp:79
-#, fuzzy
 msgid "Netlist Load Error"
-msgstr "네트리스트 에러: %s"
+msgstr "네트리스트 불러오기 오류"
 
 #: pcbnew/netlist_reader/netlist.cpp:155
 #, c-format
@@ -30389,12 +30395,12 @@ msgstr "심볼 %s에 대해 정의된 풋프린트가 없습니다."
 #: pcbnew/netlist_reader/netlist.cpp:182
 #, c-format
 msgid "Footprint of %s changed: board footprint '%s', netlist footprint '%s'."
-msgstr ""
+msgstr "%s의 풋프린트가 변경되었습니다: 기판 풋프린트 '%s', 네트리스트 풋프린트 '%s'."
 
 #: pcbnew/netlist_reader/netlist.cpp:205
-#, fuzzy, c-format
+#, c-format
 msgid "%s footprint ID '%s' is not valid."
-msgstr "컴포넌트 %s: 라이브러리에서 %s 풋프린트를 찾을 수 없습니다."
+msgstr "%s 풋프린트 ID '%s'는 유효하지 않습니다."
 
 #: pcbnew/netlist_reader/netlist.cpp:222
 #, c-format
@@ -30409,80 +30415,72 @@ msgid ""
 "file: '%s'\n"
 "line: %d"
 msgstr ""
-"잘못된 풋프린트 ID의\n"
+"다음 위치에서 잘못된 풋프린트 ID가 발견되었습니다\n"
 "파일: '%s'\n"
 "라인: %d"
 
 #: pcbnew/pad.cpp:692
 #, c-format
 msgid "pad %s"
-msgstr ""
+msgstr "패드 %s"
 
 #: pcbnew/pad.cpp:802 pcbnew/pad.cpp:823 pcbnew/pad.cpp:842
-#, fuzzy
 msgid "parent footprint"
-msgstr "풋프린트 이동"
+msgstr "상위 풋프린트"
 
 #: pcbnew/pad.cpp:809 pcbnew/pad.cpp:829 pcbnew/pad.cpp:848
-#, fuzzy
 msgid "pad"
 msgstr "패드"
 
 #: pcbnew/pad.cpp:866 pcbnew/pad.cpp:1481
-#, fuzzy
 msgid "Pin Name"
 msgstr "핀 이름"
 
 #: pcbnew/pad.cpp:869 pcbnew/pad.cpp:1483
-#, fuzzy
 msgid "Pin Type"
-msgstr "핀 형식"
+msgstr "핀 유형"
 
 #: pcbnew/pad.cpp:890
-#, fuzzy
 msgid "BGA"
 msgstr "BGA"
 
 #: pcbnew/pad.cpp:891
 msgid "Fiducial global"
-msgstr ""
+msgstr "전역 기준"
 
 #: pcbnew/pad.cpp:892
 msgid "Fiducial local"
-msgstr ""
+msgstr "지역 기준"
 
 #: pcbnew/pad.cpp:893
-#, fuzzy
 msgid "Test point"
-msgstr "풋프린트 삭제"
+msgstr "테스트 포인트"
 
 #: pcbnew/pad.cpp:894
 msgid "Heat sink"
-msgstr ""
+msgstr "히트 싱크"
 
 #: pcbnew/pad.cpp:895
 msgid "Castellated"
-msgstr ""
+msgstr "Castellated"
 
 #: pcbnew/pad.cpp:902 pcbnew/pcb_track.cpp:761 pcbnew/pcb_track.cpp:1146
 msgid "Diameter"
 msgstr "직경"
 
 #: pcbnew/pad.cpp:924
-#, fuzzy
 msgid "Length in Package"
-msgstr "페이지에 맞추기"
+msgstr "패키지 내부 길이"
 
 #: pcbnew/pad.cpp:937
-#, fuzzy
 msgid "Hole X / Y"
-msgstr "드릴"
+msgstr "홀 X / Y"
 
 #: pcbnew/pad.cpp:947 pcbnew/pcb_track.cpp:727 pcbnew/pcb_track.cpp:770
 #: pcbnew/router/router_tool.cpp:1925 pcbnew/zone.cpp:634
-#, fuzzy, c-format
+#, c-format
 msgid "Min Clearance: %s"
-msgstr "최소 클리어런스: %s"
+msgstr "최소 유격: %s"
 
 #: pcbnew/pad.cpp:949 pcbnew/pcb_track.cpp:729 pcbnew/pcb_track.cpp:736
 #: pcbnew/pcb_track.cpp:772 pcbnew/pcb_track.cpp:778
@@ -30490,59 +30488,55 @@ msgstr "최소 클리어런스: %s"
 #: pcbnew/zone.cpp:636
 #, c-format
 msgid "(from %s)"
-msgstr "(%s 에서)"
+msgstr "(%s 로부터)"
 
 #: pcbnew/pad.cpp:1086
-#, fuzzy
 msgid "Trap"
-msgstr "사다리꼴"
+msgstr "트랩"
 
 #: pcbnew/pad.cpp:1087
 msgid "Roundrect"
-msgstr ""
+msgstr "모서리를 둥글린 직사각형"
 
 #: pcbnew/pad.cpp:1088
 msgid "Chamferedrect"
-msgstr ""
+msgstr "모따기된 직사각형"
 
 #: pcbnew/pad.cpp:1089
-#, fuzzy
 msgid "CustomShape"
-msgstr "형상"
+msgstr "사용자 지정 도형"
 
 #: pcbnew/pad.cpp:1101
 msgid "Conn"
-msgstr "연결"
+msgstr "커넥터"
 
 #: pcbnew/pad.cpp:1114
 #, c-format
 msgid "Pad of %s on %s"
-msgstr "%s(%s) 패드"
+msgstr "%s의 %s에 대한 패드"
 
 #: pcbnew/pad.cpp:1120
-#, fuzzy, c-format
+#, c-format
 msgid "Through hole pad of %s"
-msgstr "%s의 관통 구멍 패드"
+msgstr "%s의 스루홀 패드"
 
 #: pcbnew/pad.cpp:1128
 #, c-format
 msgid "Pad %s of %s on %s"
-msgstr "%s(%s) 패드 %s"
+msgstr "%s의 %s에 대한 패드 (%s 위)"
 
 #: pcbnew/pad.cpp:1135
 #, c-format
 msgid "Through hole pad %s of %s"
-msgstr "관통 구멍 패드 %s의 %s"
+msgstr "%s의 %s에 대한 스루홀  패드"
 
 #: pcbnew/pad.cpp:1446
-#, fuzzy
 msgid "Edge connector"
-msgstr "연결"
+msgstr "모서리 커넥터"
 
 #: pcbnew/pad.cpp:1447
-#, fuzzy
 msgid "NPTH, mechanical"
-msgstr "기계적"
+msgstr "NPTH, 기계 홀"
 
 #: pcbnew/pad.cpp:1453
 msgid "Trapezoid"
@@ -30550,24 +30544,21 @@ msgstr "사다리꼴"
 
 #: pcbnew/pad.cpp:1465
 msgid "Castellated pad"
-msgstr ""
+msgstr "Castellated 패드"
 
 #: pcbnew/pad.cpp:1471
-#, fuzzy
 msgid "Pad Type"
-msgstr "패드 형식"
+msgstr "패드 유형"
 
 #: pcbnew/pad.cpp:1479
 msgid "Pad Number"
 msgstr "패드 번호"
 
 #: pcbnew/pad.cpp:1488
-#, fuzzy
 msgid "Size X"
 msgstr "X 크기"
 
 #: pcbnew/pad.cpp:1491
-#, fuzzy
 msgid "Size Y"
 msgstr "Y 크기"
 
@@ -30581,40 +30572,35 @@ msgstr "홀 사이즈 Y"
 
 #: pcbnew/pad.cpp:1500 pcbnew/pcb_track.cpp:717
 msgid "Pad To Die Length"
-msgstr ""
+msgstr "패드부터 다이까지의 길이"
 
 #: pcbnew/pad.cpp:1503
-#, fuzzy
 msgid "Soldermask Margin Override"
-msgstr "마스크 유격"
+msgstr "솔더 마스크 여백 재정의"
 
 #: pcbnew/pad.cpp:1517
 msgid "Fabrication Property"
 msgstr "기판 제조 속성"
 
 #: pcbnew/pad.cpp:1520
-#, fuzzy
 msgid "Round Radius Ratio"
-msgstr "시뮬레이터 실행 (&R)"
+msgstr "둥근 모서리 반경 비율"
 
 #: pcbnew/pcb_base_frame.cpp:151
-#, fuzzy
 msgid "Error loading project footprint libraries."
-msgstr "프로젝트 풋프린트 라이브러리를 로드하는 동안 오류가 발생했습니다."
+msgstr "프로젝트 풋프린트 라이브러리를 불러오는 중에 오류가 발생했습니다."
 
 #: pcbnew/pcb_dimension.cpp:299
-#, fuzzy
 msgid "Dimension"
-msgstr "치수 (&D)"
+msgstr "치수"
 
 #: pcbnew/pcb_dimension.cpp:301
 msgid "Prefix"
 msgstr "접두사"
 
 #: pcbnew/pcb_dimension.cpp:305
-#, fuzzy
 msgid "Override Text"
-msgstr "텍스트 추가"
+msgstr "텍스트 재정의"
 
 #: pcbnew/pcb_dimension.cpp:315
 msgid "Suffix"
@@ -30623,16 +30609,15 @@ msgstr "접미사"
 #: pcbnew/pcb_dimension.cpp:439
 #, c-format
 msgid "Dimension '%s' on %s"
-msgstr "치수 '%s' 에 %s"
+msgstr "치수 '%s' (%s 위)"
 
 #: pcbnew/pcb_edit_frame.cpp:190
-#, fuzzy
 msgid "KiCad PCB Editor"
-msgstr "에디터 (&E)"
+msgstr "KiCad PCB 편집기"
 
 #: pcbnew/pcb_edit_frame.cpp:196
 msgid "Export netlist used to update schematics"
-msgstr ""
+msgstr "회로도를 업데이트하기 위해 사용된 네트리스트 내보내기"
 
 #: pcbnew/pcb_edit_frame.cpp:329
 msgid "New PCB file is unsaved"
@@ -30641,20 +30626,19 @@ msgstr "새 PCB 파일이 저장되지 않았음"
 #: pcbnew/pcb_edit_frame.cpp:864
 #, c-format
 msgid "The auto save file '%s' could not be removed!"
-msgstr ""
+msgstr "자동 저장 파일 '%s'는 삭제될 수 없습니다!"
 
 #: pcbnew/pcb_edit_frame.cpp:1092
 msgid "Board file is read only."
-msgstr "보드 파일은 읽기 전용입니다."
+msgstr "기판 파일은 읽기 전용입니다."
 
 #: pcbnew/pcb_edit_frame.cpp:1126
 msgid "PCB file changes are unsaved"
-msgstr ""
+msgstr "PCB 파일 변경점이 저장되지 않음"
 
 #: pcbnew/pcb_edit_frame.cpp:1368
-#, fuzzy
 msgid "The schematic for this board cannot be found."
-msgstr "%s 파일을 찾을 수 없습니다."
+msgstr "이 기판의 회로도를 찾을 수 없습니다."
 
 #: pcbnew/pcb_edit_frame.cpp:1392
 msgid ""
@@ -30662,16 +30646,17 @@ msgid ""
 "order to create or update PCBs from schematics, you must launch the KiCad "
 "project manager and create a project."
 msgstr ""
+"PCB 에디터가 스탠드얼론 모드로 열려있기 때문에 PCB를 업데이트할 수 없습니다. 회로도로부터 PCB를 생성하거나 업데이트하려면, "
+"KiCad 프로젝트 매니저를 실행하여 프로젝트를 생성하세요."
 
 #: pcbnew/pcb_edit_frame.cpp:1414
-#, fuzzy
 msgid "Eeschema netlist"
-msgstr "EESchema 정보"
+msgstr "Eeschema 네트리스트"
 
 #: pcbnew/pcb_edit_frame.cpp:1446
-#, fuzzy, c-format
+#, c-format
 msgid "Schematic file '%s' not found."
-msgstr "%s 파일을 찾을 수 없습니다."
+msgstr "회로도 파일 '%s' 을 찾을 수 없습니다."
 
 #: pcbnew/pcb_edit_frame.cpp:1477
 #, fuzzy
@@ -30679,18 +30664,16 @@ msgid "Eeschema failed to load."
 msgstr "Eeschema를 불러오지 못했습니다."
 
 #: pcbnew/pcb_edit_frame.cpp:1616
-#, fuzzy
 msgid "Edit design rules"
-msgstr "PCB DRC"
+msgstr "디자인 규칙 편집"
 
 #: pcbnew/pcb_edit_frame.cpp:1628
-#, fuzzy
 msgid "Could not compile custom design rules."
 msgstr "사용자 지정 디자인 규칙을 컴파일할 수 없습니다."
 
 #: pcbnew/pcb_edit_frame.cpp:1662
 msgid "Export Hyperlynx Layout"
-msgstr ""
+msgstr "Hyperlynx 레이아웃 내보내기"
 
 #: pcbnew/pcb_expr_evaluator.cpp:94 pcbnew/pcb_expr_evaluator.cpp:193
 #: pcbnew/pcb_expr_evaluator.cpp:274 pcbnew/pcb_expr_evaluator.cpp:356
@@ -30698,10 +30681,10 @@ msgstr ""
 #: pcbnew/pcb_expr_evaluator.cpp:780
 #, c-format
 msgid "Missing argument to '%s'"
-msgstr ""
+msgstr "'%s'에 대한 인수가 없습니다"
 
 #: pcbnew/pcb_expr_evaluator.cpp:122
-#, fuzzy, c-format
+#, c-format
 msgid "Unrecognized layer '%s'"
 msgstr "인식할 수 없는 레이어 '%s'"
 
@@ -30719,17 +30702,17 @@ msgstr "풋프린트에 후면 코트야드가 없습니다."
 
 #: pcbnew/pcb_expr_evaluator.cpp:1059
 msgid "must be mm, in, or mil"
-msgstr ""
+msgstr "mm, in 또는 mil이어야 합니다"
 
 #: pcbnew/pcb_group.cpp:304
 #, c-format
 msgid "Unnamed Group, %zu members"
-msgstr ""
+msgstr "이름없는 그룹, %zu 멤버"
 
 #: pcbnew/pcb_group.cpp:308
 #, c-format
 msgid "Group '%s', %zu members"
-msgstr ""
+msgstr "그룹 '%s', %zu 멤버"
 
 #: pcbnew/pcb_group.cpp:322
 msgid "<unnamed>"
@@ -30741,19 +30724,18 @@ msgstr "멤버"
 
 #: pcbnew/pcb_layer_box_selector.cpp:94
 msgid "(not activated)"
-msgstr ""
+msgstr "(활성화되지 않음)"
 
 #: pcbnew/pcb_marker.cpp:94
-#, fuzzy
 msgid "Marker"
-msgstr "마커 찾기"
+msgstr "마커"
 
 #: pcbnew/pcb_marker.cpp:95
 msgid "Violation"
 msgstr "위반"
 
 #: pcbnew/pcb_marker.cpp:142
-#, fuzzy, c-format
+#, c-format
 msgid "Marker (%s)"
 msgstr "마커 (%s)"
 
@@ -30763,12 +30745,11 @@ msgstr "도면"
 
 #: pcbnew/pcb_shape.cpp:532
 msgid "Curve"
-msgstr ""
+msgstr "곡선"
 
 #: pcbnew/pcb_shape.cpp:542
-#, fuzzy
 msgid "Points"
-msgstr "풋프린트"
+msgstr "포인트"
 
 #: pcbnew/pcb_shape.cpp:570
 #, fuzzy
@@ -30777,20 +30758,17 @@ msgstr "인식할 수 없음"
 
 #: pcbnew/pcb_shape.cpp:1324 pcbnew/pcb_track.cpp:1117
 #: pcbnew/pcb_track.cpp:1134
-#, fuzzy
 msgid "End X"
-msgstr "테스트 마침"
+msgstr "끝 X"
 
 #: pcbnew/pcb_shape.cpp:1326 pcbnew/pcb_track.cpp:1119
 #: pcbnew/pcb_track.cpp:1136
-#, fuzzy
 msgid "End Y"
-msgstr "테스트 마침"
+msgstr "끝 Y"
 
 #: pcbnew/pcb_target.cpp:152
-#, fuzzy
 msgid "PCB Target"
-msgstr "PCB 텍스트"
+msgstr "PCB 타겟"
 
 #: pcbnew/pcb_text.cpp:115
 msgid "PCB Text"
@@ -30802,7 +30780,7 @@ msgid "PCB Text '%s' on %s"
 msgstr "PCB 텍스트 '%s' (%s)"
 
 #: pcbnew/pcb_track.cpp:102
-#, fuzzy, c-format
+#, c-format
 msgid "Blind/Buried Via %s on %s"
 msgstr "블라인드/매장된 비아 %s on %s"
 
@@ -30818,31 +30796,28 @@ msgstr "비아 %s on %s"
 
 #: pcbnew/pcb_track.cpp:167
 msgid "removed annular ring"
-msgstr ""
+msgstr "환형 고리 제거됨"
 
 #: pcbnew/pcb_track.cpp:701
-#, fuzzy
 msgid "Segment Length"
-msgstr "세그먼트 삭제"
+msgstr "세그먼트 길이"
 
 #: pcbnew/pcb_track.cpp:712
-#, fuzzy
 msgid "Routed Length"
 msgstr "배선 길이"
 
 #: pcbnew/pcb_track.cpp:720
-#, fuzzy
 msgid "Full Length"
-msgstr "길이"
+msgstr "총 길이"
 
 #: pcbnew/pcb_track.cpp:734
-#, fuzzy, c-format
+#, c-format
 msgid "Min Width: %s"
 msgstr "최소 너비: %s"
 
 #: pcbnew/pcb_track.cpp:747
 msgid "Micro Via"
-msgstr ""
+msgstr "마이크로 비아"
 
 #: pcbnew/pcb_track.cpp:748
 #, fuzzy
@@ -33064,7 +33039,7 @@ msgstr "구리 마감: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:443
 msgid "Castellated pads: "
-msgstr ""
+msgstr "Castellated 패드: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:451
 msgid "Board Thickness: "
@@ -33191,7 +33166,7 @@ msgstr ""
 
 #: pcbnew/tools/edit_tool.cpp:1198
 msgid "Enter fillet radius:"
-msgstr "필렛 지름을 입력:"
+msgstr "필렛 반경을 입력:"
 
 #: pcbnew/tools/edit_tool.cpp:1198 pcbnew/tools/edit_tool.cpp:1361
 #: pcbnew/tools/pcb_actions.cpp:316
@@ -33204,6 +33179,8 @@ msgid ""
 "A radius of zero was entered.\n"
 "The fillet operation was not performed."
 msgstr ""
+"반경에 0이 입력되었습니다.\n"
+"필렛 작업은 수행되지 않습니다."
 
 #: pcbnew/tools/edit_tool.cpp:1368
 #, fuzzy
