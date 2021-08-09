@@ -12,8 +12,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
-"PO-Revision-Date: 2021-08-09 04:54+0000\n"
-"Last-Translator: Uibeom Jung <wjddmlqja17@gmail.com>\n"
+"PO-Revision-Date: 2021-08-09 05:46+0000\n"
+"Last-Translator: jeongsuAn <dks9467@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
 "Language: ko\n"
@@ -12173,9 +12173,8 @@ msgid "Tri-State Pin"
 msgstr "트라이스테이트 핀"
 
 #: eeschema/erc.cpp:63 eeschema/erc.cpp:80
-#, fuzzy
 msgid "Passive Pin"
-msgstr "수동"
+msgstr "수동 핀"
 
 #: eeschema/erc.cpp:64 eeschema/erc.cpp:81
 #, fuzzy
@@ -12185,7 +12184,7 @@ msgstr "라이브러리 만들기"
 #: eeschema/erc.cpp:65 eeschema/erc.cpp:82
 #, fuzzy
 msgid "Unspecified Pin"
-msgstr "지정하지 않음"
+msgstr "지정되지 않은 핀"
 
 #: eeschema/erc.cpp:66 eeschema/erc.cpp:83
 #, fuzzy
@@ -12210,7 +12209,7 @@ msgstr "오픈 이미터"
 #: eeschema/erc.cpp:70 eeschema/erc.cpp:87
 #, fuzzy
 msgid "No Connection"
-msgstr "연결"
+msgstr "연결 없음"
 
 #: eeschema/erc.cpp:269
 msgid "Unresolved text variable in drawing sheet."
@@ -12550,9 +12549,8 @@ msgid "All supported formats|"
 msgstr ""
 
 #: eeschema/files-io.cpp:734
-#, fuzzy
 msgid "Import Schematic"
-msgstr "회로도로 내보내기"
+msgstr "회로도로 가져오기"
 
 #: eeschema/files-io.cpp:769
 #, c-format
@@ -12621,7 +12619,7 @@ msgstr "알 수 없음"
 #: eeschema/getpart.cpp:134 pcbnew/load_select_footprint.cpp:255
 #, fuzzy
 msgid "Recently Used"
-msgstr "항목 삭제"
+msgstr "최근 사용"
 
 #: eeschema/getpart.cpp:152
 #, c-format
@@ -14464,7 +14462,7 @@ msgstr "시뮬레이션"
 #: eeschema/sim/sim_plot_frame_base.cpp:101
 #, fuzzy
 msgid "Show &Grid"
-msgstr "그리드 보이기"
+msgstr "격자 보이기(&G)"
 
 #: eeschema/sim/sim_plot_frame_base.cpp:105
 #, fuzzy
@@ -14993,9 +14991,8 @@ msgid "Power Symbol"
 msgstr "전원 심볼"
 
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:54
-#, fuzzy
 msgid "Import Symbol"
-msgstr "전원 심볼"
+msgstr "심볼 가져오기"
 
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:79
 #, c-format
@@ -15018,9 +15015,8 @@ msgid "There is no symbol selected to save."
 msgstr ""
 
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:123
-#, fuzzy
 msgid "Export Symbol"
-msgstr "보드 내보내기"
+msgstr "심볼 내보내기"
 
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:144
 #, c-format
@@ -15540,9 +15536,8 @@ msgid "Copy pin number size to other pins in symbol"
 msgstr ""
 
 #: eeschema/tools/ee_actions.cpp:281
-#, fuzzy
 msgid "Add Symbol"
-msgstr "스터브 추가"
+msgstr "심볼 추가"
 
 #: eeschema/tools/ee_actions.cpp:281
 #, fuzzy
@@ -15635,7 +15630,6 @@ msgid "Add a global label"
 msgstr "전역 라벨 추가"
 
 #: eeschema/tools/ee_actions.cpp:345
-#, fuzzy
 msgid "Add text"
 msgstr "텍스트 추가"
 
@@ -15735,9 +15729,8 @@ msgid "Displays footprint field dialog"
 msgstr "풋프린트 필터"
 
 #: eeschema/tools/ee_actions.cpp:420
-#, fuzzy
 msgid "Autoplace Fields"
-msgstr "모듈 모두 자동 배치"
+msgstr "필드 자동 배치"
 
 #: eeschema/tools/ee_actions.cpp:420
 msgid "Runs the automatic placement algorithm on the symbol or sheet's fields"
@@ -33690,7 +33683,7 @@ msgstr "어레이 생성"
 #: pcbnew/tools/pcb_actions.cpp:296
 #, fuzzy
 msgid "Rotate Counterclockwise"
-msgstr "블록 회전"
+msgstr "시계 반대 방향으로 회전"
 
 #: pcbnew/tools/pcb_actions.cpp:296
 msgid "Rotates selected item(s) counterclockwise"
