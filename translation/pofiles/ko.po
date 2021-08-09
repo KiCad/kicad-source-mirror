@@ -12,8 +12,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
-"PO-Revision-Date: 2021-08-09 04:25+0000\n"
-"Last-Translator: 방준영 <wnsdudtkwkd8@naver.com>\n"
+"PO-Revision-Date: 2021-08-09 04:36+0000\n"
+"Last-Translator: Ji Yoon Choi <chichoon.choi@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
 "Language: ko\n"
@@ -22488,7 +22488,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:41
 msgid "Test for parity between PCB and schematic"
-msgstr ""
+msgstr "PCB와 회로도 간 동등성 테스트"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:77
 msgid "Tests Running..."
@@ -22505,9 +22505,9 @@ msgid "Unconnected Items (%d)"
 msgstr "연결되지 않은 항목 (%d)"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:129
-#, fuzzy, c-format
+#, c-format
 msgid "Schematic Parity (%d)"
-msgstr "회로도 패리티 (%d)"
+msgstr "회로도 동등성 (%d)"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:192
 #: pcbnew/dialogs/dialog_footprint_checker_base.cpp:79
@@ -28799,40 +28799,39 @@ msgid "Checking silk to board edge clearances..."
 msgstr "실크에서 기판까지 모서리 유격 확인 중..."
 
 #: pcbnew/drc/drc_test_provider_hole_size.cpp:80
-#, fuzzy
 msgid "Checking pad holes..."
-msgstr "패드 구멍 확인..."
+msgstr "패드 홀 확인 중..."
 
 #: pcbnew/drc/drc_test_provider_hole_size.cpp:105
 msgid "Checking via holes..."
-msgstr "비아 구멍 확인 ..."
+msgstr "비아 홀 확인 중..."
 
 #: pcbnew/drc/drc_test_provider_hole_size.cpp:110
 msgid "Checking micro-via holes..."
-msgstr "마이크로 비아 홀 확인..."
+msgstr "마이크로 비아 홀 확인 중..."
 
 #: pcbnew/drc/drc_test_provider_hole_size.cpp:172
 #: pcbnew/drc/drc_test_provider_hole_size.cpp:237
 #: pcbnew/drc/drc_test_provider_track_width.cpp:134
 #, c-format
 msgid "(%s min width %s; actual %s)"
-msgstr ""
+msgstr "(%s 최소 폭 %s; 실제 값 %s)"
 
 #: pcbnew/drc/drc_test_provider_hole_size.cpp:179
 #: pcbnew/drc/drc_test_provider_hole_size.cpp:244
 #: pcbnew/drc/drc_test_provider_track_width.cpp:141
 #, c-format
 msgid "(%s max width %s; actual %s)"
-msgstr ""
+msgstr "(%s 최대 폭 %s; 실제 값 %s)"
 
 #: pcbnew/drc/drc_test_provider_hole_to_hole.cpp:124
 msgid "Checking hole to hole clearances..."
-msgstr "구멍과 구멍간 간격 확인 중..."
+msgstr "홀과 홀 사이 유격 확인 중..."
 
 #: pcbnew/drc/drc_test_provider_hole_to_hole.cpp:313
-#, fuzzy, c-format
+#, c-format
 msgid "(%s min %s; actual %s)"
-msgstr "(%s 최소 %s; 실제 %s)"
+msgstr "(%s 최소 값 %s; 실제 값 %s)"
 
 #: pcbnew/drc/drc_test_provider_lvs.cpp:119
 #, c-format
@@ -28841,26 +28840,26 @@ msgstr "풋프린트 누락 %s (%s)"
 
 #: pcbnew/drc/drc_test_provider_lvs.cpp:140
 msgid "No corresponding pin found in schematic."
-msgstr ""
+msgstr "회로도에서 대응하는 핀을 찾지 못했습니다."
 
 #: pcbnew/drc/drc_test_provider_lvs.cpp:149
 #, c-format
 msgid "Pad missing net given by schematic (%s)."
-msgstr ""
+msgstr "회로도 (%s) 에서 지정된 네트의 패드를 찾지 못했습니다."
 
 #: pcbnew/drc/drc_test_provider_lvs.cpp:159
 #, c-format
 msgid "Pad net (%s) doesn't match net given by schematic (%s)."
-msgstr ""
+msgstr "패드 네트 (%s) 와 회로도 (%s) 에 지정된 네트가 일치하지 않습니다."
 
 #: pcbnew/drc/drc_test_provider_lvs.cpp:179
 #, c-format
 msgid "No pad found for pin %s in schematic."
-msgstr ""
+msgstr "회로도에서 핀 %s에 해당하는 패드를 찾지 못했습니다."
 
 #: pcbnew/drc/drc_test_provider_lvs.cpp:215
 msgid "Checking PCB to schematic parity..."
-msgstr ""
+msgstr "PCB와 회로도의 동등성 확인 중..."
 
 #: pcbnew/drc/drc_test_provider_lvs.cpp:222
 msgid "No netlist provided, skipping LVS."
