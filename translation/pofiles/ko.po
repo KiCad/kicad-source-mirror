@@ -12,8 +12,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
-"PO-Revision-Date: 2021-08-09 01:15+0000\n"
-"Last-Translator: Ji Yoon Choi <chichoon.choi@gmail.com>\n"
+"PO-Revision-Date: 2021-08-09 01:16+0000\n"
+"Last-Translator: 킴슨김랑기 <korearf@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
 "Language: ko\n"
@@ -10420,7 +10420,6 @@ msgid "Noise source"
 msgstr "소스 보이기 (&S)"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:280
-#, fuzzy
 msgid "Number of points"
 msgstr "포인트 수"
 
@@ -10460,7 +10459,6 @@ msgid "Transfer Function"
 msgstr "전송 함수"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:355
-#, fuzzy
 msgid "Time step:"
 msgstr "시간 단계:"
 
@@ -10626,7 +10624,6 @@ msgstr "작업 라이브러리 선택"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:1093
 #: eeschema/dialogs/dialog_spice_model_base.cpp:884
-#, fuzzy
 msgid "Range:"
 msgstr "범위:"
 
@@ -10650,7 +10647,7 @@ msgstr "평균:"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:1111
 msgid "Lambda:"
-msgstr "Lambda:"
+msgstr "람다:"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:1116
 msgid "type of random generator for source is invalid"
@@ -10661,7 +10658,6 @@ msgstr "소스에 대한 난수 발생기의 형식이 유효하지 않습니다
 #: eeschema/dialogs/dialog_spice_model_base.cpp:849
 #: pcb_calculator/dialogs/dialog_regulator_form_base.cpp:48
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:39
-#, fuzzy
 msgid "Type:"
 msgstr "유형:"
 
@@ -11077,7 +11073,6 @@ msgid "Group symbols together based on common properties"
 msgstr "기본 속성을 기반으로 심볼 분류하기"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:53
-#, fuzzy
 msgid "Add Field..."
 msgstr "필드 추가..."
 
@@ -11238,7 +11233,6 @@ msgid "Library link:"
 msgstr "라이브러리 링크:"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:314
-#, fuzzy
 msgid "Spice Model..."
 msgstr "스파이스 모델..."
 
@@ -11267,10 +11261,9 @@ msgid ""
 msgstr "이 회로도는 현재 라이브러리 심볼을 불러오기 위해서 프로젝트 심볼 라이브러리 목록"
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:210
-#, fuzzy, c-format
+#, c-format
 msgid "Adding library '%s', file '%s' to project symbol library table."
-msgstr ""
-"프로젝트 기호 라이브러리 테이블에 라이브러리 '%s', 파일 '%s'을 추가합니다."
+msgstr "프로젝트 기호 라이브러리 테이블에 라이브러리 '%s', 파일 '%s'을 추가합니다."
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:220
 #: eeschema/dialogs/panel_sym_lib_table.cpp:765
@@ -11414,12 +11407,10 @@ msgid "Update Schematic from PCB"
 msgstr "새 회로도 (&S)"
 
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:21
-#, fuzzy
 msgid "Parent symbol:"
 msgstr "상위 기호:"
 
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:61
-#, fuzzy
 msgid "Remove fields if not in parent symbol"
 msgstr "상위 기호에 없는 경우 필드 제거"
 
@@ -11429,7 +11420,6 @@ msgid "Reset fields if empty in parent symbol"
 msgstr "새 디렉토리 만들기"
 
 #: eeschema/dialogs/dialog_update_symbol_fields_base.h:68
-#, fuzzy
 msgid "Update Symbol Fields"
 msgstr "기호 필드 업데이트"
 
@@ -11500,7 +11490,6 @@ msgid "Fill selected shapes"
 msgstr "선택된 항목 복사"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:59
-#, fuzzy
 msgid "&Highlight thickness:"
 msgstr "두께 강조 표시(&H):"
 
@@ -11568,7 +11557,6 @@ msgid "Sheet border:"
 msgstr "시트 테두리:"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:55
-#, fuzzy
 msgid "Sheet background:"
 msgstr "시트 배경:"
 
@@ -11664,7 +11652,6 @@ msgstr "항목 삭제"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:229
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:111
-#, fuzzy
 msgid "&Horizontal pitch:"
 msgstr "수평 피치(&H):"
 
@@ -11872,7 +11859,6 @@ msgid "Use Eeschema color theme"
 msgstr ""
 
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:29
-#, fuzzy
 msgid "&Default line width:"
 msgstr "기본 선 너비(&D):"
 
@@ -12353,7 +12339,6 @@ msgid "Units of same symbol have different values"
 msgstr ""
 
 #: eeschema/erc_item.cpp:150
-#, fuzzy
 msgid "Duplicate reference designators"
 msgstr "중복 참조 지정자"
 
@@ -13912,7 +13897,7 @@ msgid "Size"
 msgstr "크기"
 
 #: eeschema/sch_text.cpp:902
-#, fuzzy, c-format
+#, c-format
 msgid "Label '%s'"
 msgstr "라벨 '%s'"
 
@@ -14981,7 +14966,7 @@ msgid "Import Symbol"
 msgstr "전원 심볼"
 
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:79
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot import symbol library '%s'."
 msgstr "기호 라이브러리 '%s'를 가져올 수 없습니다."
 
@@ -19977,7 +19962,6 @@ msgstr ""
 
 #: pcb_calculator/transline_ident.cpp:285
 #: pcb_calculator/transline_ident.cpp:405
-#, fuzzy
 msgid "Dout"
 msgstr "Dout"
 
@@ -24640,6 +24624,7 @@ msgstr "폭"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:700
 #: pcbnew/dialogs/dialog_pad_properties.cpp:706
+#, fuzzy
 msgid "from"
 msgstr "from"
 
@@ -27133,7 +27118,6 @@ msgid "If you want a courtyard layer for the front side of the board"
 msgstr ""
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:48
-#, fuzzy
 msgid "CrtYd_Front"
 msgstr "CrtYd_Front"
 
@@ -27204,7 +27188,6 @@ msgid "If you want a front copper layer"
 msgstr "커퍼 레이어 텍스트 포함"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:124
-#, fuzzy
 msgid "Front_layer"
 msgstr "Front_layer"
 
