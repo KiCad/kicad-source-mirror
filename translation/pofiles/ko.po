@@ -13,7 +13,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
 "PO-Revision-Date: 2021-08-09 04:54+0000\n"
-"Last-Translator: Ji Yoon Choi <chichoon.choi@gmail.com>\n"
+"Last-Translator: 방준영 <wnsdudtkwkd8@naver.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
 "Language: ko\n"
@@ -11345,7 +11345,6 @@ msgid "Failed to create backup folder '%s'.\n"
 msgstr "\"%s\" 백업 폴더를 만들지 못함\n"
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:499
-#, fuzzy
 msgid "Some of the project files could not be backed up."
 msgstr "일부 프로젝트 파일을 백업할 수 없습니다."
 
@@ -12222,7 +12221,7 @@ msgstr "도면 시트에서 확인되지 않은 텍스트 변수입니다."
 #: eeschema/erc.cpp:300
 #, c-format
 msgid "Bus alias %s has conflicting definitions on %s and %s"
-msgstr ""
+msgstr "버스 별칭 %s에 %s과%s의 정의가 충돌합니다."
 
 #: eeschema/erc.cpp:370
 #, c-format
@@ -12231,12 +12230,12 @@ msgstr "%s와 %s에 다른 풋프린트가 할당되었음"
 
 #: eeschema/erc.cpp:419
 msgid "Pins with \"no connection\" type are connected"
-msgstr ""
+msgstr "\"연결 없음\" 유형의 핀이 연결되어 있습니다"
 
 #: eeschema/erc.cpp:533
 #, c-format
 msgid "Pins of type %s and %s are connected"
-msgstr ""
+msgstr "%s 및 %s 유형의 핀이 연결됨"
 
 #: eeschema/erc.cpp:599
 #, c-format
@@ -12246,12 +12245,12 @@ msgstr "핀 %s이(가) %s 및 %s에 모두 연결됨"
 #: eeschema/erc.cpp:706
 #, c-format
 msgid "The current configuration does not include the library '%s'."
-msgstr ""
+msgstr "현재 구성에 라이브러리 '%s'이(가) 포함되어 있지 않습니다."
 
 #: eeschema/erc.cpp:717
 #, c-format
 msgid "The library '%s' is not enabled in the current configuration."
-msgstr ""
+msgstr "라이브러리 '%s'이(가) 현재 구성에서 사용하도록 설정되어 있지 않습니다."
 
 #: eeschema/erc_item.cpp:42
 #, fuzzy
@@ -12266,7 +12265,7 @@ msgstr "기타"
 
 #: eeschema/erc_item.cpp:46
 msgid "Duplicate sheet names within a given sheet"
-msgstr ""
+msgstr "지정된 시트 내에서 시트 이름 복제"
 
 #: eeschema/erc_item.cpp:50
 #, fuzzy
@@ -12275,15 +12274,15 @@ msgstr "네트가 없습니다. (연결 안 됨)"
 
 #: eeschema/erc_item.cpp:54
 msgid "Input pin not driven by any Output pins"
-msgstr ""
+msgstr "입력 핀이 출력 핀에 의해 구동되지 않음"
 
 #: eeschema/erc_item.cpp:58
 msgid "Input Power pin not driven by any Output Power pins"
-msgstr ""
+msgstr "입력 전력 핀이 출력 전력 핀에 의해 구동되지 않음"
 
 #: eeschema/erc_item.cpp:62 eeschema/erc_item.cpp:66
 msgid "Conflict problem between pins"
-msgstr ""
+msgstr "핀 간 충돌 문제"
 
 #: eeschema/erc_item.cpp:70
 #, fuzzy
@@ -12292,7 +12291,7 @@ msgstr "시트에 계층구조 핀 추가"
 
 #: eeschema/erc_item.cpp:74
 msgid "A pin with a \"no connection\" flag is connected"
-msgstr ""
+msgstr "\"연결 없음\" 플래그가 있는 핀이 연결되어 있습니다"
 
 #: eeschema/erc_item.cpp:78
 #, fuzzy
@@ -12318,35 +12317,35 @@ msgstr "모든 연결 삭제"
 
 #: eeschema/erc_item.cpp:98
 msgid "Different net assigned to a shared pin in another unit of the symbol"
-msgstr ""
+msgstr "기호의 다른 단위에서 공유 핀에 할당된 다른 네트"
 
 #: eeschema/erc_item.cpp:102
 msgid "Conflict between bus alias definitions across schematic sheets"
-msgstr ""
+msgstr "개략도 시트에서 버스 별칭 정의 간의 충돌"
 
 #: eeschema/erc_item.cpp:106
 msgid "More than one name given to this bus or net"
-msgstr ""
+msgstr "이 버스 또는 네트워크에 둘 이상의 이름이 지정되었습니다"
 
 #: eeschema/erc_item.cpp:110
 msgid "Net is graphically connected to a bus but not a bus member"
-msgstr ""
+msgstr "넷은 버스에 그래픽으로 연결되어 있지만 버스 회원은 연결되어 있지 않습니다"
 
 #: eeschema/erc_item.cpp:114
 msgid "Label attached to bus item does not describe a bus"
-msgstr ""
+msgstr "버스 항목에 부착된 레이블이 버스를 설명하지 않습니다"
 
 #: eeschema/erc_item.cpp:118
 msgid "Buses are graphically connected but share no bus members"
-msgstr ""
+msgstr "버스는 그래픽으로 연결되어 있지만 버스 회원은 공유하지 않습니다"
 
 #: eeschema/erc_item.cpp:122
 msgid "Invalid connection between bus and net items"
-msgstr ""
+msgstr "버스와 네트 항목 간의 연결이 잘못되었습니다"
 
 #: eeschema/erc_item.cpp:126 pcbnew/drc/drc_item.cpp:173
 msgid "Unresolved text variable"
-msgstr ""
+msgstr "확인되지 않은 텍스트 변수"
 
 #: eeschema/erc_item.cpp:130
 msgid "Wires not connected to anything"
@@ -12368,7 +12367,7 @@ msgstr "풋프린트 회전"
 
 #: eeschema/erc_item.cpp:146
 msgid "Units of same symbol have different values"
-msgstr ""
+msgstr "동일한 기호의 단위가 다른 값을 가집니다"
 
 #: eeschema/erc_item.cpp:150
 msgid "Duplicate reference designators"
@@ -12430,7 +12429,7 @@ msgstr "회로도 파일 '%s'은 이미 열려 있습니다."
 #: eeschema/files-io.cpp:292
 #, c-format
 msgid "Schematic '%s' does not exist.  Do you wish to create it?"
-msgstr ""
+msgstr "개략도 '%s'이(가) 존재하지 않습니다. 생성하시겠습니까?"
 
 #: eeschema/files-io.cpp:309
 #, fuzzy
@@ -12450,7 +12449,7 @@ msgstr "회로도 파일 변경 내용이 저장되지 않았음"
 msgid ""
 "The entire schematic could not be loaded.  Errors occurred attempting to "
 "load hierarchical sheets."
-msgstr ""
+msgstr "전체 도식을 로드할 수 없습니다. 계층 시트를 로드하는 동안 오류가 발생했습니다."
 
 #: eeschema/files-io.cpp:410 eeschema/files-io.cpp:418
 #: eeschema/files-io.cpp:1186 eeschema/sheet.cpp:162
@@ -12474,6 +12473,8 @@ msgid ""
 "fixed.  Please save the schematic to repair the broken file or it may not be "
 "usable with other versions of KiCad."
 msgstr ""
+"자동으로 수정된 도식을 로드하는 동안 오류가 발생했습니다. 손상된 파일을 복구하기 위해 도식을 저장해 두십시오. 그렇지 않으면 다른 "
+"버전의 KiCad에서는 사용할 수 없습니다."
 
 #: eeschema/files-io.cpp:491
 #, fuzzy
