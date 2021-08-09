@@ -14,7 +14,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
 "PO-Revision-Date: 2021-08-09 08:13+0000\n"
-"Last-Translator: Ji Yoon Choi <chichoon.choi@gmail.com>\n"
+"Last-Translator: jeongsuAn <dks9467@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
 "Language: ko\n"
@@ -11569,7 +11569,6 @@ msgid "Toggle selected state of item(s)."
 msgstr "선택한 항목 상태를 전환합니다."
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:114
-#, fuzzy
 msgid "Alt+Shift"
 msgstr "Alt+Shift"
 
@@ -11597,7 +11596,6 @@ msgstr ""
 "Alt, Shift 및 Cmd."
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:170
-#, fuzzy
 msgid "Cmd+Shift"
 msgstr "Cmd+Shift"
 
@@ -11750,12 +11748,10 @@ msgid "Small"
 msgstr "작은 모양"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:132
-#, fuzzy
 msgid "Large"
 msgstr "큰"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:132
-#, fuzzy
 msgid "Largest"
 msgstr "가장 큰"
 
@@ -12195,13 +12191,11 @@ msgid "The library '%s' is not enabled in the current configuration."
 msgstr "라이브러리 '%s'이(가) 현재 구성에서 사용하도록 설정되어 있지 않습니다."
 
 #: eeschema/erc_item.cpp:42
-#, fuzzy
 msgid "Conflicts"
 msgstr "충돌"
 
 #: eeschema/erc_item.cpp:43 pcbnew/dialogs/panel_edit_options_base.cpp:362
 #: pcbnew/drc/drc_item.cpp:46
-#, fuzzy
 msgid "Miscellaneous"
 msgstr "기타"
 
@@ -12876,7 +12870,6 @@ msgid "Open emitter"
 msgstr "오픈 이미터"
 
 #: eeschema/pin_type.cpp:62
-#, fuzzy
 msgid "Unconnected"
 msgstr "연결되지 않음"
 
@@ -17687,7 +17680,6 @@ msgid "Project Files"
 msgstr "프로젝트 파일"
 
 #: kicad/kicad_manager_frame.cpp:162
-#, fuzzy
 msgid "Editors"
 msgstr "편집기"
 
@@ -19155,7 +19147,6 @@ msgstr "전기적 형식"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1055
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1336
-#, fuzzy
 msgid "Results"
 msgstr "결과"
 
@@ -19583,7 +19574,6 @@ msgstr "PCB 계산기"
 
 #: pcb_calculator/eserie.cpp:322 pcb_calculator/eserie.cpp:341
 #: pcb_calculator/eserie.cpp:367
-#, fuzzy
 msgid "Exact"
 msgstr "정확히"
 
@@ -19895,7 +19885,6 @@ msgstr "TM-모드:"
 
 #: pcb_calculator/transline_ident.cpp:238
 #: pcb_calculator/transline_ident.cpp:273
-#, fuzzy
 msgid "insulator"
 msgstr "절연체"
 
@@ -21360,13 +21349,11 @@ msgid "Board name"
 msgstr "보드 이름"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:655
-#, fuzzy
 msgid "Board"
 msgstr "기판"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:661
 #: pcbnew/dialogs/dialog_board_statistics.cpp:668
-#, fuzzy
 msgid "Area"
 msgstr "지역"
 
@@ -22985,7 +22972,6 @@ msgid "Match case"
 msgstr "기타"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:52
-#, fuzzy
 msgid "Wrap"
 msgstr "감싸다"
 
@@ -24594,7 +24580,6 @@ msgid "start"
 msgstr "시작"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:714
-#, fuzzy
 msgid "angle"
 msgstr "각도"
 
@@ -25733,7 +25718,6 @@ msgid "Walk around"
 msgstr "검정색"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:21
-#, fuzzy
 msgid "Mode"
 msgstr "모드"
 
@@ -26503,12 +26487,10 @@ msgid "Select item(s)."
 msgstr "항목을 선택합니다."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:122
-#, fuzzy
 msgid "Shift+Alt"
 msgstr "Shift+Alt"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:152
-#, fuzzy
 msgid "Ctrl+Shift"
 msgstr "Ctrl+Shift"
 
@@ -26519,12 +26501,10 @@ msgid "Highlight net (for pads or tracks)."
 msgstr "하이라이트 네트(패드 또는 트랙용)."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:203
-#, fuzzy
 msgid "Shift+Cmd"
 msgstr "Shift+Cmd"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:233
-#, fuzzy
 msgid "Alt+Cmd"
 msgstr "Alt+Cmd"
 
@@ -29586,12 +29566,10 @@ msgid "doc url"
 msgstr "doc url"
 
 #: pcbnew/import_gfx/dialog_import_gfx.cpp:55
-#, fuzzy
 msgid "Centimeter"
 msgstr "센티미터"
 
 #: pcbnew/import_gfx/dialog_import_gfx.cpp:56
-#, fuzzy
 msgid "Feet"
 msgstr "피트"
 
@@ -30658,7 +30636,6 @@ msgid "Points"
 msgstr "포인트"
 
 #: pcbnew/pcb_shape.cpp:570
-#, fuzzy
 msgid "Unrecognized"
 msgstr "인식할 수 없음"
 
@@ -32798,7 +32775,6 @@ msgstr "다음을 위한 배선 폭 계산:"
 #: pcbnew/tools/board_inspection_tool.cpp:697
 #: pcbnew/tools/board_inspection_tool.cpp:698
 #: pcbnew/tools/board_inspection_tool.cpp:736
-#, fuzzy
 msgid "undefined"
 msgstr "정의되지 않음"
 
@@ -33027,7 +33003,6 @@ msgid "Schematic parity tests require a fully annotated schematic."
 msgstr ""
 
 #: pcbnew/tools/drc_tool.cpp:207
-#, fuzzy
 msgid "DRC"
 msgstr "DRC"
 
@@ -33125,7 +33100,6 @@ msgid "No footprint problems found."
 msgstr "마커를 찾았습니다."
 
 #: pcbnew/tools/group_tool.cpp:43
-#, fuzzy
 msgid "Grouping"
 msgstr "그룹화"
 
@@ -34068,7 +34042,6 @@ msgid "Group the selected items so that they are treated as a single item"
 msgstr "선택된 항목 잘라내기"
 
 #: pcbnew/tools/pcb_actions.cpp:688
-#, fuzzy
 msgid "Ungroup"
 msgstr "그룹 해제"
 
@@ -35164,7 +35137,6 @@ msgid "Inactive layers will be dimmed"
 msgstr ""
 
 #: pcbnew/widgets/appearance_controls.cpp:607
-#, fuzzy
 msgid "Hide"
 msgstr "숨김"
 
@@ -35556,7 +35528,6 @@ msgid "(Ctrl+Tab)"
 msgstr "(Ctrl+Tab)"
 
 #: pcbnew/widgets/appearance_controls_base.cpp:180
-#, fuzzy
 msgid "(unsaved)"
 msgstr "(저장되지 않음)"
 
