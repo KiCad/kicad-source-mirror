@@ -13,7 +13,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
 "PO-Revision-Date: 2021-08-09 06:58+0000\n"
-"Last-Translator: jeongsuAn <dks9467@gmail.com>\n"
+"Last-Translator: Ji Yoon Choi <chichoon.choi@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
 "Language: ko\n"
@@ -19268,7 +19268,7 @@ msgstr ""
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1222
 msgid "Characteristic impedance of conductor"
-msgstr ""
+msgstr "도체의 특성 임피던스"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1234
 msgid "Applied current:"
@@ -19454,7 +19454,6 @@ msgid "Current:"
 msgstr "전류:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1530
-#, fuzzy
 msgid "Conductor length:"
 msgstr "도체 길이:"
 
@@ -19581,6 +19580,13 @@ msgid ""
 "*  A7 - External Component lead termination, with conformal coating (any "
 "elevation)"
 msgstr ""
+"*  B1 - 내부 도체\n"
+"*  B2 - 외부 도체, 코팅 없음, 해발 3050m까지\n"
+"*  B3 - 외부 도체, 코팅 없으며, 3050m 이상\n"
+"*  B4 - 외부 도체, 영구적인 폴리머 코팅 (모든 높이 가능)\n"
+"*  A5 - 외부 도체, 조립 시에 등각 코팅됨 (모든 높이 가능)\n"
+"*  A6 - 외부 부품 납 마감, 코팅 없음\n"
+"*  A7 - 외부 부품 납 마감, 등각 코팅됨 (모든 높이 가능)"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1884
 #, fuzzy
@@ -19788,7 +19794,7 @@ msgstr ""
 msgid ""
 "Electrical resistivity or specific electrical resistance of conductor "
 "(ohm*meter)"
-msgstr ""
+msgstr "도체의 전기 저항성 또는 특정한 전기 저항 (Ω・m)"
 
 #: pcb_calculator/transline_ident.cpp:109
 msgid "Frequency of the input signal"
@@ -19813,7 +19819,7 @@ msgstr "유효 %s:"
 #: pcb_calculator/transline_ident.cpp:350
 #: pcb_calculator/transline_ident.cpp:384
 msgid "Conductor losses:"
-msgstr ""
+msgstr "도체 손실:"
 
 #: pcb_calculator/transline_ident.cpp:120
 #: pcb_calculator/transline_ident.cpp:162
@@ -19865,7 +19871,7 @@ msgstr "표면 거칠기"
 #: pcb_calculator/transline_ident.cpp:132
 #: pcb_calculator/transline_ident.cpp:318
 msgid "Conductor roughness"
-msgstr ""
+msgstr "도체 거칠기"
 
 #: pcb_calculator/transline_ident.cpp:135
 msgid "substrate"
@@ -19883,7 +19889,6 @@ msgstr ""
 #: pcb_calculator/transline_ident.cpp:321
 #: pcb_calculator/transline_ident.cpp:363
 #: pcb_calculator/transline_ident.cpp:393
-#, fuzzy
 msgid "conductor"
 msgstr "도체"
 
@@ -19896,7 +19901,7 @@ msgstr "도체"
 #: pcb_calculator/transline_ident.cpp:364
 #: pcb_calculator/transline_ident.cpp:394
 msgid "Relative permeability (mu) of conductor"
-msgstr ""
+msgstr "도체의 상대 투과율 (mu)"
 
 #: pcb_calculator/transline_ident.cpp:144
 #: pcb_calculator/transline_ident.cpp:176
@@ -20016,11 +20021,11 @@ msgstr ""
 
 #: pcb_calculator/transline_ident.cpp:304
 msgid "Conductor losses (even):"
-msgstr ""
+msgstr "도체 손실 (even):"
 
 #: pcb_calculator/transline_ident.cpp:305
 msgid "Conductor losses (odd):"
-msgstr ""
+msgstr "도체 손실 (odd):"
 
 #: pcb_calculator/transline_ident.cpp:306
 #, fuzzy
@@ -29980,34 +29985,32 @@ msgstr "스텁 크기:"
 
 #: pcbnew/microwave/microwave_footprint.cpp:69
 msgid "Arc Stub Radius Value:"
-msgstr ""
+msgstr "호 스텁 반경 값:"
 
 #: pcbnew/microwave/microwave_footprint.cpp:80
 #: pcbnew/microwave/microwave_footprint.cpp:95
-#, fuzzy
 msgid "Create microwave footprint"
-msgstr "파일 만들기"
+msgstr "마이크로파 풋프린트 생성"
 
 #: pcbnew/microwave/microwave_footprint.cpp:94
-#, fuzzy
 msgid "Angle in degrees:"
-msgstr "각도 (0.1도):"
+msgstr "각도 (도 기준):"
 
 #: pcbnew/microwave/microwave_footprint.cpp:104
 msgid "Incorrect number, abort"
-msgstr "잘못된 번호, 중지"
+msgstr "잘못된 번호, 중단됨"
 
 #: pcbnew/microwave/microwave_inductor.cpp:320
 msgid "Add microwave inductor"
-msgstr ""
+msgstr "마이크로파 인덕터 추가"
 
 #: pcbnew/microwave/microwave_inductor.cpp:372
 msgid "Length of Trace:"
-msgstr ""
+msgstr "추적의 길이:"
 
 #: pcbnew/microwave/microwave_inductor.cpp:383
 msgid "Requested length < minimum length"
-msgstr "요청 된 길이 < 최소 길이"
+msgstr "요청한 길이 < 최소 길이"
 
 #: pcbnew/microwave/microwave_inductor.cpp:397
 msgid "Requested length too large"
@@ -30018,7 +30021,6 @@ msgid "Requested length too small"
 msgstr "요청한 길이가 너무 작음"
 
 #: pcbnew/microwave/microwave_inductor.cpp:403
-#, fuzzy
 msgid "Requested length can't be represented"
 msgstr "요청한 길이를 표현할 수 없습니다"
 
@@ -30031,16 +30033,14 @@ msgid "Complex shape"
 msgstr "복합 형상"
 
 #: pcbnew/microwave/microwave_polygon.cpp:136
-#, fuzzy
 msgid "Read Shape Description File..."
-msgstr "모양 설명 파일 읽기..."
+msgstr "형상 설명 파일 읽기..."
 
 #: pcbnew/microwave/microwave_polygon.cpp:139
 msgid "Symmetrical"
 msgstr "대칭"
 
 #: pcbnew/microwave/microwave_polygon.cpp:141
-#, fuzzy
 msgid "Shape Option"
 msgstr "형상 설정"
 
@@ -30054,64 +30054,63 @@ msgstr "파일을 찾을 수 없음"
 
 #: pcbnew/microwave/microwave_polygon.cpp:279
 msgid "Shape has a null size."
-msgstr "크기가 없는 형상."
+msgstr "형상의 크기가 없습니다."
 
 #: pcbnew/microwave/microwave_polygon.cpp:285
 msgid "Shape has no points."
-msgstr "포인트가 없는 형상."
+msgstr "형상에 포인트가 없습니다."
 
 #: pcbnew/microwave/microwave_tool.cpp:93
 msgid "Place microwave feature"
-msgstr ""
+msgstr "마이크로파 특성 배치"
 
 #: pcbnew/netinfo_item.cpp:129
-#, fuzzy
 msgid "On Board"
-msgstr "보드 인쇄"
+msgstr "기판 위"
 
 #: pcbnew/netinfo_item.cpp:133
 msgid "In Package"
-msgstr ""
+msgstr "패키지"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:140
 #, c-format
 msgid "Cannot add %s (no footprint assigned)."
-msgstr ""
+msgstr "%s를 추가할 수 없습니다 (할당된 풋프린트 없음)."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:152
 #, c-format
 msgid "Cannot add %s (footprint '%s' not found)."
-msgstr "%s를 추가할 수 없음('%s' 풋프린트를 찾을 수 없음)."
+msgstr "%s를 추가할 수 없습니다 (풋프린트 '%s'를 찾을 수 없음)."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:162
 #, c-format
 msgid "Add %s (footprint '%s')."
-msgstr "추가 %s(풋프린트 '%s')."
+msgstr "%s 추가 (풋프린트 '%s')."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:186
 #, c-format
 msgid "Added %s (footprint '%s')."
-msgstr "추가됨 %s(풋프린트 '%s')."
+msgstr "%s가 추가되었습니다 (풋프린트 '%s')."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:204
 #, c-format
 msgid "Cannot update %s (no footprint assigned)."
-msgstr ""
+msgstr "%s를 업데이트할 수 없습니다 (할당된 풋프린트 없음)."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:216
 #, c-format
 msgid "Cannot update %s (footprint '%s' not found)."
-msgstr "%s를 업데이트할 수 없음('%s' 풋프린트를 찾을 수 없음)."
+msgstr "%s를 업데이트할 수 없습니다 (풋프린트 '%s'를 찾을 수 없음)."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:226
 #, c-format
 msgid "Change %s footprint from '%s' to '%s'."
-msgstr "풋프린트 %s을 '%s'에서 '%s'로 변경."
+msgstr "풋프린트 %s을 '%s'에서 '%s'로 변경합니다."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:238
-#, fuzzy, c-format
+#, c-format
 msgid "Changed %s footprint from '%s' to '%s'."
-msgstr "풋프린트 %s을 '%s'에서 '%s'로 변경."
+msgstr "풋프린트 %s을 '%s'에서 '%s'로 변경하였습니다."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:265
 #, c-format
@@ -30126,30 +30125,30 @@ msgstr "참조 지정자 %s를 %s로 변경하였습니다."
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:287
 #, c-format
 msgid "Change %s value from %s to %s."
-msgstr ""
+msgstr "값 %s를 %s에서 %s로 변경합니다."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:294
-#, fuzzy, c-format
+#, c-format
 msgid "Changed %s value from %s to %s."
-msgstr "%s 값을 %s에서 %s로 변경했습니다."
+msgstr "값 %s를 %s에서 %s로 변경하였습니다."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:316
-#, fuzzy, c-format
+#, c-format
 msgid "Update %s symbol association from %s to %s."
 msgstr "%s 기호 연결을 %s에서 %s로 업데이트합니다."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:323
-#, fuzzy, c-format
+#, c-format
 msgid "Updated %s symbol association from %s to %s."
-msgstr "%s 기호 연결이 %s에서 %s로 업데이트되었습니다."
+msgstr "%s 기호 연결을 %s에서 %s로 업데이트하였습니다."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:339
-#, fuzzy, c-format
+#, c-format
 msgid "Update %s properties."
 msgstr "%s 속성을 업데이트합니다."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:344
-#, fuzzy, c-format
+#, c-format
 msgid "Updated %s properties."
 msgstr "%s 속성이 업데이트되었습니다."
 
@@ -30174,19 +30173,19 @@ msgid "Removed %s 'exclude from BOM' fabrication attribute."
 msgstr "%s에 'BOM에서 제외' 제작 속성이 제거되었습니다."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:450
-#, fuzzy, c-format
+#, c-format
 msgid "Disconnect %s pin %s."
 msgstr "%s 핀 %s을 분리합니다."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:456
-#, fuzzy, c-format
+#, c-format
 msgid "Disconnected %s pin %s."
 msgstr "%s 핀 %s이 분리되었습니다."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:466
-#, fuzzy, c-format
+#, c-format
 msgid "No net found for symbol %s pin %s."
-msgstr "기호 %s 핀 %s에 대한 네트를 찾을 수 없습니다."
+msgstr "심볼 %s 핀 %s에 대한 네트를 찾을 수 없습니다."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:516
 #, c-format
@@ -30196,62 +30195,62 @@ msgstr "네트 %s을 추가합니다."
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:526
 #, c-format
 msgid "Reconnect %s pin %s from %s to %s."
-msgstr ""
+msgstr "%s 핀 %s를 %s에서 %s로 재연결합니다."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:534
 #, c-format
 msgid "Reconnected %s pin %s from %s to %s."
-msgstr "다시 연결 %s 핀 %s from %s to %s."
+msgstr "%s 핀 %s가 %s에서 %s로 재연결되었습니다."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:545
-#, fuzzy, c-format
+#, c-format
 msgid "Connect %s pin %s to %s."
 msgstr "%s 핀 %s를 %s에 연결합니다."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:552
-#, fuzzy, c-format
+#, c-format
 msgid "Connected %s pin %s to %s."
 msgstr "%s 핀 %s을 %s에 연결했습니다."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:631
 #, c-format
 msgid "Reconnect via from %s to %s."
-msgstr "비아 %s에서 %s로 다시 연결합니다."
+msgstr "비아를 %s에서 %s로 다시 연결합니다."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:649
 #, c-format
 msgid "Reconnected via from %s to %s."
-msgstr "비아 %s에서 %s로 다시 연결했습니다."
+msgstr "비아가 %s에서 %s로 다시 연결되었습니다."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:659
 #, c-format
 msgid "Via connected to unknown net (%s)."
-msgstr "비아가 알 수 없는 네트에 연결됨(%s)."
+msgstr "비아가 알 수 없는 네트 (%s) 에 연결되었습니다."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:702
-#, fuzzy, c-format
+#, c-format
 msgid "Reconnect copper zone '%s' from %s to %s."
-msgstr "구리 영역 '%s'을 %s에서 %s로 다시 연결합니다."
+msgstr "구리 영역 '%s'를 %s에서 %s로 다시 연결합니다."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:709
 #, c-format
 msgid "Reconnect copper zone from %s to %s."
-msgstr ""
+msgstr "구리 영역을 %s에서 %s로 다시 연결합니다."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:730
 #, c-format
 msgid "Reconnected copper zone '%s' from %s to %s."
-msgstr "구리 영역 '%s'을 %s에서 %s로 다시 연결했습니다."
+msgstr "구리 영역 '%s'가 %s에서 %s로 다시 연결되었습니다."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:737
-#, fuzzy, c-format
+#, c-format
 msgid "Reconnected copper zone from %s to %s."
-msgstr "구리 영역을 %s에서 %s로 다시 연결합니다."
+msgstr "구리 영역이 %s에서 %s로 다시 연결되었습니다."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:750
-#, fuzzy, c-format
+#, c-format
 msgid "Copper zone '%s' has no pads connected."
-msgstr "[%s] 컴포넌트를 찾을 수 없습니다."
+msgstr "구리 영역 '%s' 에는 연결된 패드가 없습니다."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:758
 #, c-format
@@ -30261,12 +30260,12 @@ msgstr "레이어 %s의 (%s, %s) 구리 영역에는 연결된 패드가 없습�
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:826
 #, c-format
 msgid "Remove single pad net %s."
-msgstr ""
+msgstr "단일 패드 네트 %s를 제거합니다."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:832
-#, fuzzy, c-format
+#, c-format
 msgid "Removed single pad net %s."
-msgstr "단일 패드 네트%s를 제거했습니다."
+msgstr "단일 패드 네트 %s를 제거하였습니다."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:891
 #, c-format
@@ -30274,9 +30273,9 @@ msgid "%s pad %s not found in %s."
 msgstr "%s 패드 %s를 %s에서 찾을 수 없습니다."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:942
-#, fuzzy, c-format
+#, c-format
 msgid "Processing symbol '%s:%s'."
-msgstr "처리 기호 '%s:%s'."
+msgstr "심볼 '%s:%s' 처리 중입니다."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1011
 #, c-format
@@ -30284,14 +30283,14 @@ msgid "Multiple footprints found for '%s'."
 msgstr "'%s'에 대해 여러 풋프린트를 찾았습니다."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1042
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot remove unused footprint %s (locked)."
-msgstr "사용하지 않는 풋프린트를 제거할 수 없습니다%s(잠김)."
+msgstr "사용하지 않은 풋프린트 %s 를 제거할 수 없습니다 (잠김)."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1047
 #, c-format
 msgid "Could not remove unused footprint %s (locked)."
-msgstr "사용하지 않는 풋프린트 %s를 제거할 수 없습니다(잠김)."
+msgstr "사용하지 않은 풋프린트 %s 를 제거할 수 없습니다 (잠김)."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1059
 #, c-format
@@ -30299,9 +30298,9 @@ msgid "Remove unused footprint %s."
 msgstr "사용하지 않은 풋프린트 %s을 제거합니다."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1064
-#, fuzzy, c-format
+#, c-format
 msgid "Removed unused footprint %s."
-msgstr "사용하지 않은 풋프린트 %s을 제거합니다."
+msgstr "사용하지 않은 풋프린트 %s를 제거했습니다."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1095
 #, c-format
@@ -30309,40 +30308,39 @@ msgid "Removed unused net %s."
 msgstr "사용하지 않은 네트 %s을 제거했습니다."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1103
-#, fuzzy
 msgid "Update netlist"
-msgstr "업데이트 설정"
+msgstr "네트리스트 업데이트"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1128
 #, c-format
 msgid "Total warnings: %d, errors: %d."
-msgstr ""
+msgstr "총 경고: %d개, 에러 수: %d개."
 
 #: pcbnew/netlist_reader/kicad_netlist_reader.cpp:270
 #, c-format
 msgid "Cannot find component with ref '%s' in netlist."
-msgstr ""
+msgstr "네트리스트에서 참조 '%s'에 해당하는 컴포넌트를 찾을 수 없습니다."
 
 #: pcbnew/netlist_reader/kicad_netlist_reader.cpp:438
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Invalid footprint ID in\n"
 "file: '%s'\n"
 "line: %d\n"
 "offset: %d"
 msgstr ""
-"잘못된 속성 이름\n"
+"다음 위치에서 잘못된 풋프린트 ID가 발견되었습니다.\n"
 "파일: '%s'\n"
 "라인: %d\n"
 "옵셋: %d"
 
 #: pcbnew/netlist_reader/legacy_netlist_reader.cpp:118
 msgid "Cannot parse time stamp in symbol section of netlist."
-msgstr ""
+msgstr "네트리스트의 심볼 영역에선 타임 스탬프를 파싱할 수 없습니다."
 
 #: pcbnew/netlist_reader/legacy_netlist_reader.cpp:128
 msgid "Cannot parse footprint name in symbol section of netlist."
-msgstr ""
+msgstr "네트리스트의 심볼 영역에선 풋프린트를 파싱할 수 없습니다."
 
 #: pcbnew/netlist_reader/legacy_netlist_reader.cpp:142
 msgid "Cannot parse reference designator in symbol section of netlist."
