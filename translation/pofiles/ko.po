@@ -12,8 +12,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
-"PO-Revision-Date: 2021-08-09 00:20+0000\n"
-"Last-Translator: jeongsuAn <dks9467@gmail.com>\n"
+"PO-Revision-Date: 2021-08-09 01:15+0000\n"
+"Last-Translator: Ji Yoon Choi <chichoon.choi@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
 "Language: ko\n"
@@ -11189,6 +11189,8 @@ msgid ""
 "This is useful for adding symbols for board footprints such as fiducials\n"
 "and logos that you do not want to appear in the bill of materials export"
 msgstr ""
+"이 기능은 자재 명세서를 내보낼 때 같이 표시되지 않기를 원하는\n"
+"기준점과 로고를 추가하는 데에 도움이 됩니다"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:200
 msgid ""
@@ -11196,6 +11198,8 @@ msgid ""
 "materials but\n"
 "not required to layout the board such as mechanical fasteners and enclosures"
 msgstr ""
+"이 기능은 자재 명세서를 내보낼 때만 같이 출력되고, 기계식 고정 장치나 인클로저 등\n"
+"기판의 위에는 표시될 필요가 없는 심볼을 추가할 때 도움이 됩니다"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:213
 #, fuzzy
@@ -11248,7 +11252,7 @@ msgstr "모듈 속성"
 msgid ""
 "Remapping is not possible because you have insufficient privileges to the "
 "project folder '%s'."
-msgstr ""
+msgstr "프로젝트 폴더 '%s'에 대한 권한이 부족하므로 리매핑이 불가능합니다."
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:67
 msgid ""
@@ -11260,7 +11264,7 @@ msgid ""
 "in the project folder should you need to revert any changes.  If you choose "
 "to skip this step, you will be responsible for manually remapping the "
 "symbols."
-msgstr ""
+msgstr "이 회로도는 현재 라이브러리 심볼을 불러오기 위해서 프로젝트 심볼 라이브러리 목록"
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:210
 #, fuzzy, c-format
