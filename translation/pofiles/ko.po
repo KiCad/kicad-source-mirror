@@ -13,7 +13,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
 "PO-Revision-Date: 2021-08-09 05:46+0000\n"
-"Last-Translator: jeongsuAn <dks9467@gmail.com>\n"
+"Last-Translator: Ji Yoon Choi <chichoon.choi@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
 "Language: ko\n"
@@ -9054,7 +9054,6 @@ msgstr "H 정렬"
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:54
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:57
 #: eeschema/fields_grid_table.cpp:201
-#, fuzzy
 msgid "V Align"
 msgstr "V 정렬"
 
@@ -11030,7 +11029,6 @@ msgid "Field"
 msgstr "필드"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:690
-#, fuzzy
 msgid "Group By"
 msgstr "그룹화"
 
@@ -11948,7 +11946,7 @@ msgstr "셀이 비어 있으면 테이블에서 제거할 수 없는 모든 행�
 #: eeschema/dialogs/panel_sym_lib_table.cpp:374
 #, c-format
 msgid "Illegal character '%c' in nickname '%s'"
-msgstr "별칭 '%c'의 '%s' 문자가 잘못되었습니다."
+msgstr "잘못된 문자 '%c'가 별칭 '%s' 에서 발견됨"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:385
 #: eeschema/dialogs/panel_sym_lib_table.cpp:426
@@ -12218,7 +12216,7 @@ msgstr "도면 시트에서 확인되지 않은 텍스트 변수입니다."
 #: eeschema/erc.cpp:300
 #, c-format
 msgid "Bus alias %s has conflicting definitions on %s and %s"
-msgstr "버스 별칭 %s에 %s과%s의 정의가 충돌합니다."
+msgstr "버스 별칭 %s에서 %s와 %s의 정의가 충돌합니다"
 
 #: eeschema/erc.cpp:370
 #, c-format
@@ -17583,7 +17581,6 @@ msgid "Reset all hotkeys to the built-in KiCad defaults"
 msgstr ""
 
 #: include/project.h:41
-#, fuzzy
 msgid "untitled"
 msgstr "제목 없음"
 
@@ -22677,7 +22674,6 @@ msgid "Select an IDF export filename"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:25
-#, fuzzy
 msgid "*.emn"
 msgstr "*.emn"
 
@@ -22926,7 +22922,6 @@ msgid "Save VRML Board File"
 msgstr "보드 저장"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:26
-#, fuzzy
 msgid "*.wrl"
 msgstr "*.wrl"
 
@@ -28976,39 +28971,38 @@ msgid "(%s max diameter %s; actual %s)"
 msgstr "(%s 최대 직경 %s; 실제 값 %s)"
 
 #: pcbnew/edit_zone_helpers.cpp:86 pcbnew/edit_zone_helpers.cpp:149
-#, fuzzy
 msgid "Modify zone properties"
-msgstr "모듈 속성"
+msgstr "영역 속성 수정"
 
 #: pcbnew/edit_zone_helpers.cpp:137
 #, c-format
 msgid "Refill %d Zones"
-msgstr ""
+msgstr "%d개의 영역 다시 채우기"
 
 #: pcbnew/exporters/export_d356.cpp:376
 msgid "Export D-356 Test File"
-msgstr ""
+msgstr "D-356 테스트 파일 내보내기"
 
 #: pcbnew/exporters/export_footprint_associations.cpp:73
-#, fuzzy
 msgid "Save Footprint Association File"
-msgstr "풋프린트 회전"
+msgstr "풋프린트 관련성 파일 저장"
 
 #: pcbnew/exporters/export_hyperlynx.cpp:190
 msgid ""
 "File contains pad shapes that are not supported by the Hyperlynx exporter "
 "(supported shapes are oval, rectangle and circle)."
 msgstr ""
+"파일에 Hyperlynx 내보내기 도구에서 지원하지 않는 패드 도형이 포함되어 있습니다 (지원되는 도형은 타원, 직사각형과 원 입니다)."
 
 #: pcbnew/exporters/export_hyperlynx.cpp:194
 msgid "They have been exported as oval pads."
-msgstr ""
+msgstr "이들은 타원 패드로 출력되었습니다."
 
 #: pcbnew/exporters/export_hyperlynx.cpp:307
 #: pcbnew/exporters/export_vrml.cpp:567
 #: pcbnew/specctra_import_export/specctra_export.cpp:102
 msgid "Board outline is malformed. Run DRC for a full analysis."
-msgstr ""
+msgstr "기판의 외곽선이 잘못되었습니다. DRC를 실행하여 전체 분석을 진행하세요."
 
 #: pcbnew/exporters/export_idf.cpp:641 pcbnew/exporters/export_idf.cpp:650
 #: pcbnew/exporters/export_idf.cpp:658 pcbnew/exporters/export_vrml.cpp:1015
@@ -29017,18 +29011,17 @@ msgstr "IDF 내보내기 실패:\n"
 
 #: pcbnew/exporters/export_vrml.cpp:596
 msgid "VRML Export Failed: Could not add holes to contours."
-msgstr ""
+msgstr "VRML 내보내기 실패: 윤곽에 홀을 추가할 수 없습니다."
 
 #: pcbnew/exporters/gen_footprints_placefile.cpp:67
-#, fuzzy
 msgid "Generate Position File"
-msgstr "풋프린트 삭제"
+msgstr "위치 파일 생성"
 
 #: pcbnew/exporters/gen_footprints_placefile.cpp:278
 #: pcbnew/exporters/gen_footprints_placefile.cpp:395
-#, fuzzy, c-format
+#, c-format
 msgid "Front (top side) placement file: '%s'."
-msgstr "전면(상단) 배치 파일: '%s'."
+msgstr "전면 (상단) 배치 파일: '%s'."
 
 #: pcbnew/exporters/gen_footprints_placefile.cpp:281
 #: pcbnew/exporters/gen_footprints_placefile.cpp:303
@@ -29040,9 +29033,9 @@ msgstr "컴포넌트 수: %d."
 
 #: pcbnew/exporters/gen_footprints_placefile.cpp:300
 #: pcbnew/exporters/gen_footprints_placefile.cpp:438
-#, fuzzy, c-format
+#, c-format
 msgid "Back (bottom side) placement file: '%s'."
-msgstr "후면(하단) 배치 파일: '%s'."
+msgstr "후면 (하단) 배치 파일: '%s'."
 
 #: pcbnew/exporters/gen_footprints_placefile.cpp:307
 #: pcbnew/exporters/gen_footprints_placefile.cpp:448
@@ -29053,17 +29046,15 @@ msgstr "전체 컴포넌트 수: %d."
 #: pcbnew/exporters/gen_footprints_placefile.cpp:310
 #: pcbnew/exporters/gen_footprints_placefile.cpp:404
 #: pcbnew/exporters/gen_footprints_placefile.cpp:452
-#, fuzzy
 msgid "File generation successful."
 msgstr "파일 생성에 성공했습니다."
 
 #: pcbnew/exporters/gen_footprints_placefile.cpp:336
-#, fuzzy
 msgid "No footprint for automated placement."
-msgstr "자동 배치를 위한 모듈이 없습니다."
+msgstr "자동 배치를 위한 풋프린트가 없습니다."
 
 #: pcbnew/exporters/gen_footprints_placefile.cpp:393
-#, fuzzy, c-format
+#, c-format
 msgid "Placement file: '%s'."
 msgstr "배치 파일: '%s'."
 
@@ -29077,9 +29068,8 @@ msgstr ""
 "'%s'."
 
 #: pcbnew/exporters/gen_footprints_placefile.cpp:525
-#, fuzzy
 msgid "Footprint Report"
-msgstr "풋프린트 텍스트"
+msgstr "풋프린트 보고서"
 
 #: pcbnew/exporters/gendrill_Excellon_writer.cpp:124
 #, c-format
@@ -29093,67 +29083,62 @@ msgid "Created file '%s'."
 msgstr "'%s' 파일 생성됨."
 
 #: pcbnew/exporters/gerber_jobfile_writer.cpp:158
-#, fuzzy, c-format
+#, c-format
 msgid "Created Gerber job file '%s'."
-msgstr "거버 작업 파일 '%s'를 만들었습니다."
+msgstr "거버 작업 파일 '%s'를 생성하였습니다."
 
 #: pcbnew/exporters/gerber_jobfile_writer.cpp:575
 msgid "Board stackup settings not up to date."
-msgstr ""
+msgstr "기판 시작 설정이 최신이 아닙니다."
 
 #: pcbnew/files.cpp:144
-#, fuzzy
 msgid "All KiCad Board Files"
-msgstr "모든 KiCad 보드 파일"
+msgstr "모든 KiCad 기판 파일"
 
 #: pcbnew/files.cpp:185
 msgid "Open Board File"
-msgstr "보드 파일 열기"
+msgstr "기판 파일 열기"
 
 #: pcbnew/files.cpp:185
 msgid "Import Non KiCad Board File"
-msgstr ""
+msgstr "비 KiCad 기판 파일 가져오기"
 
 #: pcbnew/files.cpp:212
-#, fuzzy
 msgid "Create a new project for this board"
-msgstr "새 프로젝트 만들기"
+msgstr "이 기판으로부터 새로운 프로젝트 생성"
 
 #: pcbnew/files.cpp:214
 msgid ""
 "Creating a project will enable features such as design rules, net classes, "
 "and layer presets"
-msgstr ""
+msgstr "새로운 프로젝트를 생성함으로써 디자인 규칙, 네트 클래스와 레이어 프리셋 등의 기능을 사용할 수 있습니다"
 
 #: pcbnew/files.cpp:254
-#, fuzzy
 msgid "Save Board File As"
-msgstr "다른 이름으로 보드 파일 저장"
+msgstr "다른 이름으로 기판 파일 저장"
 
 #: pcbnew/files.cpp:282
-#, fuzzy
 msgid "Printed circuit board"
-msgstr "보드 인쇄"
+msgstr "인쇄된 회로 기판"
 
 #: pcbnew/files.cpp:346
-#, fuzzy, c-format
+#, c-format
 msgid "Recovery file '%s' not found."
-msgstr "%s 파일을 찾을 수 없습니다."
+msgstr "복구 파일 '%s'를 찾을 수 없습니다."
 
 #: pcbnew/files.cpp:351
 #, c-format
 msgid "OK to load recovery file '%s'?"
-msgstr "복구 파일 '%s'을 로드하시겠습니까?"
+msgstr "복구 파일 '%s'을 불러오시겠습니까?"
 
 #: pcbnew/files.cpp:374
-#, fuzzy, c-format
+#, c-format
 msgid "Current board will be closed, save changes to '%s' before continuing?"
-msgstr "현재 보드는 닫히고 계속하기 전에 '%s'로 변경 사항을 저장합니까?"
+msgstr "현재 기판은 닫힐 것입니다. 계속하기 전에 '%s'에 변경 사항을 저장할까요?"
 
 #: pcbnew/files.cpp:388
-#, fuzzy
 msgid "Current Board will be closed. Continue?"
-msgstr "현재 작업 데이터가 손실됩니다. 그래도 계속 하시겠습니까?"
+msgstr "현재 기판이 닫힙니다. 계속하시겠습니까?"
 
 #: pcbnew/files.cpp:542
 msgid ""
@@ -29162,29 +29147,30 @@ msgid ""
 "This may result in different fills from previous KiCad versions which used "
 "the line thicknesses of the board boundary on the Edge Cuts layer."
 msgstr ""
+"기판의 영역이 다시 채워질 때, 구리 모서리 유격이 사용됩니다 (기판 설정 > 디자인 규칙 > 제약 을 참조하세요).\n"
+"이는 Edge Cuts 레이어에 기판 테두리 선 굵기를 사용하던 이전 KiCad 버전과는 다른 채움 결과를 내보낼 것입니다."
 
 #: pcbnew/files.cpp:547
-#, fuzzy
 msgid "Edge Clearance Warning"
-msgstr "전역 패드 설정"
+msgstr "모서리 유격 경고"
 
 #: pcbnew/files.cpp:578
-#, fuzzy, c-format
+#, c-format
 msgid "PCB '%s' is already open."
 msgstr "PCB '%s'는 이미 열려 있습니다."
 
 #: pcbnew/files.cpp:585
 msgid "The current PCB has been modified.  Save changes?"
-msgstr ""
+msgstr "현재 PCB는 수정되었습니다.  변경사항을 저장할까요?"
 
 #: pcbnew/files.cpp:604
 #, c-format
 msgid "PCB '%s' does not exist. Do you wish to create it?"
-msgstr ""
+msgstr "PCB '%s'는 존재하지 않습니다. 생성할까요?"
 
 #: pcbnew/files.cpp:613
 msgid "Creating PCB"
-msgstr ""
+msgstr "PCB 생성"
 
 #: pcbnew/files.cpp:706 pcbnew/files.cpp:716
 #, c-format
@@ -29199,18 +29185,17 @@ msgstr "PCB '%s' 로드 중 메모리 소진"
 #: pcbnew/files.cpp:834
 #, c-format
 msgid "Error saving footprint %s to project specific library."
-msgstr "프로젝트 특정 라이브러리에 풋프린트 %s을 저장하는 동안 오류가 발생했습니다."
+msgstr "프로젝트의 특정 라이브러리에 풋프린트 %s을 저장하는 동안 오류가 발생했습니다."
 
 #: pcbnew/files.cpp:863
-#, fuzzy
 msgid "Error saving project specific footprint library table."
-msgstr "%s 파일은 EESchema 라이브러리가 아닙니다."
+msgstr "프로젝트 특정 풋프린트 라이브러리 테이블을 저장하는 도중 오류가 발생했습니다."
 
 #: pcbnew/files.cpp:955 pcbnew/files.cpp:1094
 #: pcbnew/footprint_libraries_utils.cpp:359
 #, c-format
 msgid "Insufficient permissions to write file '%s'."
-msgstr "'%s' 파일 저장에 필요한 권한이 충분하지 않음."
+msgstr "'%s' 파일 저장에 필요한 권한이 충분하지 않습니다."
 
 #: pcbnew/files.cpp:983 pcbnew/files.cpp:1139
 #, c-format
@@ -29241,6 +29226,8 @@ msgid ""
 "Board copied to:\n"
 "\"%s\""
 msgstr ""
+"기판이 복사되었습니다:\n"
+"\"%s\"로 복사됨"
 
 #: pcbnew/footprint.cpp:841 pcbnew/tools/pcb_control.cpp:1133
 msgid "Last Change"
@@ -29251,27 +29238,24 @@ msgid "Board Side"
 msgstr "보드 측면"
 
 #: pcbnew/footprint.cpp:845
-#, fuzzy
 msgid "Back (Flipped)"
-msgstr "후면에서 보기"
+msgstr "후면 (뒤집힘)"
 
 #: pcbnew/footprint.cpp:863
 msgid "autoplaced"
 msgstr "자동 배치"
 
 #: pcbnew/footprint.cpp:866
-#, fuzzy
 msgid "not in schematic"
-msgstr "회로도 인쇄"
+msgstr "회로도에 없음"
 
 #: pcbnew/footprint.cpp:869
-#, fuzzy
 msgid "exclude from pos files"
-msgstr "실크스크린에 패드 인쇄"
+msgstr "pos 파일에서 제외"
 
 #: pcbnew/footprint.cpp:872
 msgid "exclude from BOM"
-msgstr ""
+msgstr "BOM에서 제외"
 
 #: pcbnew/footprint.cpp:874
 msgid "Status: "
@@ -29282,12 +29266,11 @@ msgid "Attributes:"
 msgstr "속성:"
 
 #: pcbnew/footprint.cpp:879
-#, fuzzy, c-format
+#, c-format
 msgid "3D-Shape: %s"
-msgstr "3D 형상: %s"
+msgstr "3D 형태: %s"
 
 #: pcbnew/footprint.cpp:879
-#, fuzzy
 msgid "<none>"
 msgstr "<없음>"
 
@@ -29297,7 +29280,7 @@ msgid "Doc: %s"
 msgstr "문서: %s"
 
 #: pcbnew/footprint.cpp:884 pcbnew/tools/pcb_control.cpp:1140
-#, fuzzy, c-format
+#, c-format
 msgid "Keywords: %s"
 msgstr "키워드: %s"
 
@@ -29311,79 +29294,67 @@ msgid "Footprint %s"
 msgstr "풋프린트 %s"
 
 #: pcbnew/footprint.cpp:2094 pcbnew/pad.cpp:1529 pcbnew/zone.cpp:1414
-#, fuzzy
 msgid "Clearance Override"
-msgstr "유격"
+msgstr "유격 재정의"
 
 #: pcbnew/footprint.cpp:2097 pcbnew/pad.cpp:1506
-#, fuzzy
 msgid "Solderpaste Margin Override"
-msgstr "Solder paste Copper"
+msgstr "솔더 페이스트 간격 재정의"
 
 #: pcbnew/footprint.cpp:2101 pcbnew/pad.cpp:1509
-#, fuzzy
 msgid "Solderpaste Margin Ratio Override"
-msgstr "Solder paste Copper"
+msgstr "솔더 페이스트 간격 비율 재정의"
 
 #: pcbnew/footprint.cpp:2104 pcbnew/pad.cpp:1511 pcbnew/zone.cpp:1425
-#, fuzzy
 msgid "Thermal Relief Width"
-msgstr "써멀"
+msgstr "단열판 폭"
 
 #: pcbnew/footprint.cpp:2108 pcbnew/pad.cpp:1514 pcbnew/zone.cpp:1422
-#, fuzzy
 msgid "Thermal Relief Gap"
-msgstr "써멀"
+msgstr "단열판 간격"
 
 #: pcbnew/footprint.h:206
-#, fuzzy, c-format
+#, c-format
 msgid "footprint %s"
 msgstr "풋프린트 %s"
 
 #: pcbnew/footprint_edit_frame.cpp:119
-#, fuzzy
 msgid "KiCad Footprint Editor"
-msgstr "풋프린트 필터"
+msgstr "KiCad 풋프린트 편집기"
 
 #: pcbnew/footprint_edit_frame.cpp:205 pcbnew/zone_settings.cpp:219
-#, fuzzy
 msgid "Inner layers"
-msgstr "Comp layer"
+msgstr "내부 레이어"
 
 #: pcbnew/footprint_edit_frame.cpp:244 pcbnew/pcb_edit_frame.cpp:275
-#, fuzzy
 msgid "Selection Filter"
-msgstr "시트 파일"
+msgstr "선택 필터"
 
 #: pcbnew/footprint_edit_frame.cpp:287
-#, fuzzy
 msgid "Footprint changes are unsaved"
-msgstr "풋프린트: %d"
+msgstr "풋프린트 변경사항이 저장되지 않았습니다"
 
 #: pcbnew/footprint_edit_frame.cpp:468
 #, c-format
 msgid "Editing %s from board.  Saving will update the board only."
-msgstr ""
+msgstr "%s를 기판에서 수정 중입니다.  저장하면 기판만을 업데이트합니다."
 
 #: pcbnew/footprint_edit_frame.cpp:763
-#, fuzzy, c-format
+#, c-format
 msgid "[from %s]"
-msgstr "(%s 에서)"
+msgstr "[%s에서]"
 
 #: pcbnew/footprint_edit_frame.cpp:797
-#, fuzzy
 msgid "[no footprint loaded]"
 msgstr "[풋프린트가 로드되지 않음]"
 
 #: pcbnew/footprint_edit_frame.cpp:853
-#, fuzzy
 msgid "Updating Footprint Libraries"
-msgstr "풋프린트 미러"
+msgstr "풋프린트 라이브러리 업데이트 중"
 
 #: pcbnew/footprint_edit_frame.cpp:1131
-#, fuzzy
 msgid "No footprint selected."
-msgstr "라이브러리가 정의되지 않았습니다."
+msgstr "풋프린트가 선택되지 않았습니다."
 
 #: pcbnew/footprint_edit_frame.cpp:1140
 msgid "Footprint Image File Name"
@@ -29399,6 +29370,8 @@ msgid ""
 "The current configuration does not include a library named '%s'.\n"
 "Use Manage Footprint Libraries to edit the configuration."
 msgstr ""
+"현재 설정은 '%s' 라이브러리를 포함하지 않습니다.\n"
+"풋프린트 라이브러리 관리를 사용하여 설정을 편집하세요."
 
 #: pcbnew/footprint_editor_utils.cpp:285
 msgid "Library not found in footprint library table."
@@ -29410,9 +29383,10 @@ msgid ""
 "The library '%s' is not enabled in the current configuration.\n"
 "Use Manage Footprint Libraries to edit the configuration."
 msgstr ""
+"라이브러리 '%s'는 현재 설정에서 활성화되어 있지 않습니다.\n"
+"풋프린트 라이브러리 관리를 사용하여 설정을 편집합니다."
 
 #: pcbnew/footprint_editor_utils.cpp:296 pcbnew/footprint_viewer_frame.cpp:917
-#, fuzzy
 msgid "Footprint library not enabled."
 msgstr "풋프린트 라이브러리가 활성화되지 않았습니다."
 
@@ -29431,6 +29405,10 @@ msgid ""
 "and update your footprint lib table\n"
 "to save your footprint (a .kicad_mod file) in the .pretty library folder"
 msgstr ""
+"오래된 라이브러리 (.mod 파일) 를 쓰거나 편집하는 것은 허용되지 않습니다\n"
+"현재 라이브러리를 새로운 .pretty 형식으로 저장하고\n"
+"풋프린트 라이브러리 테이블을 업데이트하여\n"
+"풋프린트 (.kicad_mod 파일) 를 .pretty 라이브러리 폴더에 저장할 수 있도록 하세요"
 
 #: pcbnew/footprint_libraries_utils.cpp:64
 msgid ""
@@ -29439,11 +29417,14 @@ msgid ""
 "and update your footprint lib table\n"
 "before deleting a footprint"
 msgstr ""
+"오래된 라이브러리 (.mod 파일) 를 편집하는 것은 허용되지 않습니다\n"
+"현재 라이브러리를 새로운 .pretty 형식으로 저장하고\n"
+"풋프린트를 삭제하기 전에\n"
+"풋프린트 라이브러리 테이블을 업데이트하세요"
 
 #: pcbnew/footprint_libraries_utils.cpp:85
-#, fuzzy
 msgid "Import Footprint"
-msgstr "풋프린트"
+msgstr "풋프린트 불러오기"
 
 #: pcbnew/footprint_libraries_utils.cpp:261
 msgid "Not a footprint file."
@@ -29455,22 +29436,21 @@ msgid "Unable to load footprint '%s' from '%s'"
 msgstr "풋프린트 '%s'을 '%s' 에서 로드할 수 없음"
 
 #: pcbnew/footprint_libraries_utils.cpp:330
-#, fuzzy
 msgid "Export Footprint"
-msgstr "풋프린트"
+msgstr "풋프린트 내보내기"
 
 #: pcbnew/footprint_libraries_utils.cpp:373
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint exported to file '%s'."
-msgstr "<%s> 파일로 모듈을 내보냈습니다."
+msgstr "풋프린트를 '%s' 파일로 내보냈습니다."
 
 #: pcbnew/footprint_libraries_utils.cpp:462
-#, fuzzy, c-format
+#, c-format
 msgid "Library %s is read only."
-msgstr "%s 라이브러리를 찾을 수 없습니다."
+msgstr "%s 라이브러리는 읽기 전용입니다."
 
 #: pcbnew/footprint_libraries_utils.cpp:468
-#, fuzzy, c-format
+#, c-format
 msgid "Library %s already exists."
 msgstr "라이브러리 %s가 이미 존재합니다."
 
@@ -29478,9 +29458,9 @@ msgstr "라이브러리 %s가 이미 존재합니다."
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:963
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:2461
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:2537
-#, fuzzy, c-format
+#, c-format
 msgid "Library '%s' is read only."
-msgstr "%s 라이브러리를 찾을 수 없습니다."
+msgstr "%s 라이브러리는 읽기 전용입니다."
 
 #: pcbnew/footprint_libraries_utils.cpp:635
 #, c-format
@@ -29494,65 +29474,63 @@ msgstr "풋프린트 '%s'가 라이브러리 '%s'에서 삭제됨"
 
 #: pcbnew/footprint_libraries_utils.cpp:667
 msgid "No footprints to export!"
-msgstr "내보낼 풋프린트 없음!"
+msgstr "내보낼 풋프린트가 없습니다!"
 
 #: pcbnew/footprint_libraries_utils.cpp:847
 #: pcbnew/footprint_viewer_frame.cpp:703
 msgid "No board currently open."
-msgstr ""
+msgstr "현재 열린 기판이 없습니다."
 
 #: pcbnew/footprint_libraries_utils.cpp:873
 msgid ""
 "Unable to find the footprint on the main board.\n"
 "Cannot save."
 msgstr ""
+"메인 기판에서 풋프린트를 찾을 수 없습니다.\n"
+"저장할 수 없습니다."
 
 #: pcbnew/footprint_libraries_utils.cpp:962
-#, fuzzy
 msgid "Save Footprint As"
-msgstr "풋프린트"
+msgstr "풋프린트를 다른 이름으로 저장"
 
 #: pcbnew/footprint_libraries_utils.cpp:999
 msgid "No library specified.  Footprint could not be saved."
-msgstr ""
+msgstr "특정된 라이브러리가 없습니다.  풋프린트는 저장될 수 없습니다."
 
 #: pcbnew/footprint_libraries_utils.cpp:1009
 msgid "No footprint name specified.  Footprint could not be saved."
-msgstr ""
+msgstr "풋프린트 이름이 특정되지 않았습니다.  풋프린트는 저장될 수 없습니다."
 
 #: pcbnew/footprint_libraries_utils.cpp:1033
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint %s already exists in %s."
-msgstr "%s 라이브러리의 %s 컴포넌트가 삭제되었습니다."
+msgstr "풋프린트 %s는 이미 %s에 존재합니다."
 
 #: pcbnew/footprint_libraries_utils.cpp:1049
 #, c-format
 msgid "Footprint '%s' replaced in '%s'"
-msgstr "풋프린트 '%s'가 라이브러리 '%s'에서 교체됨"
+msgstr "풋프린트 '%s'가 '%s'에서 교체됨"
 
 #: pcbnew/footprint_libraries_utils.cpp:1050
 #, c-format
 msgid "Footprint '%s' added to '%s'"
-msgstr "풋프린트 '%s'가 라이브러리 '%s'에서 추가됨"
+msgstr "풋프린트 '%s'가 '%s'에 추가됨"
 
 #: pcbnew/footprint_libraries_utils.cpp:1098
-#, fuzzy
 msgid "Enter footprint name:"
 msgstr "풋프린트 이름:"
 
 #: pcbnew/footprint_libraries_utils.cpp:1098
-#, fuzzy
 msgid "New Footprint"
-msgstr "풋프린트"
+msgstr "새 풋프린트"
 
 #: pcbnew/footprint_libraries_utils.cpp:1111
 msgid "No footprint name defined."
 msgstr "정의된 풋프린트 이름이 없습니다."
 
 #: pcbnew/footprint_viewer_frame.cpp:121
-#, fuzzy
 msgid "KiCad Footprint Library Viewer"
-msgstr "라이브러리 브라우저"
+msgstr "KiCad 풋프린트 라이브러리 뷰어"
 
 #: pcbnew/footprint_viewer_frame.cpp:160
 msgid ""
@@ -29560,6 +29538,9 @@ msgid ""
 "Search terms are separated by spaces.  All search terms must match.\n"
 "A term which is a number will also match against the pad count."
 msgstr ""
+"풋프린트 이름, 키워드, 설명과 패드 개수로 필터링할 수 있습니다.\n"
+"검색어는 공백으로 구분됩니다.  모든 검색어가 일치하여야 합니다.\n"
+"숫자 검색어는 패드 개수에 대해서도 일치합니다."
 
 #: pcbnew/footprint_viewer_frame.cpp:659
 #, c-format
@@ -29568,7 +29549,7 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
-"풋프린트 '%s' 을 '%s 라이브러리에서 로드할 수 없음.\n"
+"풋프린트 '%s' 을 라이브러리 '%s'에서 로드할 수 없음.\n"
 "\n"
 "%s"
 
@@ -29577,7 +29558,7 @@ msgstr ""
 msgid ""
 "The current configuration does not include library '%s'.  Use Manage "
 "Footprint Libraries to edit the configuration."
-msgstr ""
+msgstr "현재 설정은 '%s' 라이브러리를 포함하지 않습니다.  풋프린트 라이브러리 관리를 사용하여 설정을 편집하세요."
 
 #: pcbnew/footprint_viewer_frame.cpp:910
 msgid "Footprint library not found."
@@ -29588,7 +29569,7 @@ msgstr "풋프린트 라이브러리를 찾을 수 없습니다."
 msgid ""
 "Library '%s' is not enabled in the current configuration.  Use Manage "
 "Footprint Libraries to edit the configuration."
-msgstr ""
+msgstr "라이브러리 '%s'는 현재 설정에서 활성화되어 있지 않습니다.  풋프린트 라이브러리 관리를 사용하여 설정을 편집합니다."
 
 #: pcbnew/footprint_wizard_frame.cpp:81
 #: pcbnew/footprint_wizard_frame_functions.cpp:85
@@ -29602,42 +29583,35 @@ msgstr "매개 변수"
 #: pcbnew/footprint_wizard_frame.cpp:572
 #, c-format
 msgid "ModView: 3D Viewer [%s]"
-msgstr ""
+msgstr "ModView: 3D 뷰어 [%s]"
 
 #: pcbnew/footprint_wizard_frame.cpp:593
-#, fuzzy
 msgid "Select wizard script to run"
-msgstr "탐색할 부품 선택"
+msgstr "실행할 마법사 스크립트를 선택"
 
 #: pcbnew/footprint_wizard_frame.cpp:598
-#, fuzzy
 msgid "Reset wizard parameters to default"
-msgstr "비아홀 모두 초기화"
+msgstr "마법사 매개변수를 기본값으로 초기화"
 
 #: pcbnew/footprint_wizard_frame.cpp:603
-#, fuzzy
 msgid "Select previous parameters page"
-msgstr "이전의 자유 컴포넌트를 선택"
+msgstr "이전의 매개변수 페이지를 선택"
 
 #: pcbnew/footprint_wizard_frame.cpp:606
-#, fuzzy
 msgid "Select next parameters page"
-msgstr "다음의 자유 컴포넌트를 선택"
+msgstr "다음의 매개변수 페이지를 선택"
 
 #: pcbnew/footprint_wizard_frame.cpp:623
-#, fuzzy
 msgid "Export footprint to editor"
-msgstr "클립보드로 드로잉 내보내기"
+msgstr "풋프린트를 편집기로 내보내기"
 
 #: pcbnew/footprint_wizard_frame_functions.cpp:91
-#, fuzzy
 msgid "no wizard selected"
 msgstr "선택한 마법사 없음"
 
 #: pcbnew/footprint_wizard_frame_functions.cpp:143
-#, fuzzy
 msgid "Couldn't reload footprint wizard"
-msgstr "풋프린트 압축 만들기"
+msgstr "풋프린트 마법사를 다시 불러올 수 없습니다"
 
 #: pcbnew/fp_shape.cpp:115 pcbnew/fp_text.cpp:275
 msgid "<invalid>"
@@ -29659,10 +29633,10 @@ msgstr "표시"
 #: pcbnew/fp_text.cpp:294 pcbnew/pcb_shape.cpp:525 pcbnew/pcb_shape.cpp:565
 #: pcbnew/pcb_text.cpp:124
 msgid "Angle"
-msgstr ""
+msgstr "각도"
 
 #: pcbnew/fp_text.cpp:312
-#, fuzzy, c-format
+#, c-format
 msgid "Reference '%s'"
 msgstr "참조 '%s'"
 
@@ -29677,7 +29651,6 @@ msgid "Footprint Text '%s' of %s"
 msgstr "풋프린트 텍스트 '%s'의%s"
 
 #: pcbnew/generate_footprint_info.cpp:43
-#, fuzzy
 msgid "Documentation"
 msgstr "문서"
 
@@ -29688,7 +29661,7 @@ msgstr "풋프린트 %s 을 '%s' 라이브러리에서 로드 중 오류 발생.
 
 #: pcbnew/generate_footprint_info.cpp:121
 msgid "doc url"
-msgstr ""
+msgstr "doc url"
 
 #: pcbnew/import_gfx/dialog_import_gfx.cpp:55
 #, fuzzy
@@ -29701,40 +29674,37 @@ msgid "Feet"
 msgstr "피트"
 
 #: pcbnew/import_gfx/dialog_import_gfx.cpp:252
-#, fuzzy
 msgid "Open File"
-msgstr "방향 필터"
+msgstr "파일 열기"
 
 #: pcbnew/import_gfx/dialog_import_gfx.cpp:277
 msgid "No file selected!"
 msgstr "선택된 파일 없음!"
 
 #: pcbnew/import_gfx/dialog_import_gfx.cpp:288
-#, fuzzy
 msgid "Please select a valid layer."
 msgstr "유효한 레이어를 선택하세요."
 
 #: pcbnew/import_gfx/dialog_import_gfx.cpp:337
 msgid "Items in the imported file could not be handled properly."
-msgstr ""
+msgstr "불러온 파일에 있는 항목을 제대로 처리할 수 없습니다."
 
 #: pcbnew/import_gfx/dialog_import_gfx.cpp:345
 msgid "There is no plugin to handle this file type."
-msgstr ""
+msgstr "이 파일 형식을 처리할 플러그인이 없습니다."
 
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:26
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:31
 msgid "Only vectors will be imported.  Bitmaps and fonts will be ignored."
-msgstr ""
+msgstr "벡터만 불러오기가 가능합니다.  비트맵과 서체는 무시됩니다."
 
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:43
-#, fuzzy
 msgid "Placement"
 msgstr "배치"
 
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:48
 msgid "Interactive placement"
-msgstr ""
+msgstr "인터랙티브 배치"
 
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:55
 msgid "At"
@@ -29742,21 +29712,19 @@ msgstr "At"
 
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:74
 msgid "DXF origin on PCB Grid, X Coordinate"
-msgstr ""
+msgstr "PCB 그리드에서의 DXF 원점, X 좌표"
 
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:91
 msgid "DXF origin on PCB Grid, Y Coordinate"
-msgstr ""
+msgstr "PCB 그리드에서의 DXF 원점, Y 좌표"
 
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:103
-#, fuzzy
 msgid "Select PCB grid units"
-msgstr "항목 선택"
+msgstr "PCB 그리드 유닛 선택"
 
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:120
-#, fuzzy
 msgid "Import Parameters"
-msgstr "부품 가져오기"
+msgstr "매개변수 불러오기"
 
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:131
 msgid "Graphic layer:"
@@ -29767,54 +29735,50 @@ msgid "Import scale:"
 msgstr "스케일 불러오기:"
 
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:163
-#, fuzzy
 msgid "Group items"
-msgstr "항목 목록"
+msgstr "개체 그룹화"
 
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:164
 msgid "Add all imported items into a new group"
-msgstr ""
+msgstr "모든 불러온 개체를 새로운 그룹에 추가"
 
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:175
-#, fuzzy
 msgid "DXF Parameters"
-msgstr "패드 속성"
+msgstr "DXF 매개변수"
 
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:199
-#, fuzzy
 msgid "Default units:"
 msgstr "기본 단위:"
 
 #: pcbnew/import_gfx/dialog_import_gfx_base.h:87
-#, fuzzy
 msgid "Import Vector Graphics File"
-msgstr "프로젝트 파일 저장 (&P)"
+msgstr "벡터 그래픽 파일 불러오기"
 
 #: pcbnew/import_gfx/dxf_import_plugin.cpp:1333
 msgid "Invalid spline definition encountered"
-msgstr ""
+msgstr "잘못된 스플라인 정의가 발견됨"
 
 #: pcbnew/import_gfx/dxf_import_plugin.cpp:1340
 msgid "Invalid Bezier curve created"
-msgstr ""
+msgstr "잘못된 베지어 곡선이 생성됨"
 
 #: pcbnew/initpcb.cpp:50
 msgid ""
 "Current Board will be lost and this operation cannot be undone. Continue?"
-msgstr ""
+msgstr "현재 기판의 정보가 사라집니다. 이 작업은 되돌릴 수 없습니다. 계속하시겠습니까?"
 
 #: pcbnew/initpcb.cpp:109 pcbnew/tools/footprint_editor_control.cpp:188
 msgid "The current footprint has been modified.  Save changes?"
-msgstr ""
+msgstr "현재 풋프린트가 수정되었습니다.  변경사항을 저장할까요?"
 
 #: pcbnew/io_mgr.cpp:89
 #, c-format
 msgid "UNKNOWN (%d)"
-msgstr ""
+msgstr "알 수 없음 (%d)"
 
 #: pcbnew/kicad_clipboard.cpp:412
 msgid "Clipboard content is not KiCad compatible"
-msgstr ""
+msgstr "클립보드의 내용물이 KiCad와 호환되지 않습니다"
 
 #: pcbnew/load_select_footprint.cpp:265
 #, c-format
@@ -29832,9 +29796,9 @@ msgid "Footprint '%s' saved."
 msgstr "풋프린트 '%s'가 저장되었습니다."
 
 #: pcbnew/load_select_footprint.cpp:441
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint library '%s' saved as '%s'."
-msgstr "%s 라이브러리의 %s 컴포넌트가 삭제되었습니다."
+msgstr "풋프린트 라이브러리 '%s'가 '%s'로 저장되었습니다."
 
 #: pcbnew/menubar_footprint_editor.cpp:68
 #: pcbnew/menubar_footprint_editor.cpp:77
@@ -29850,22 +29814,20 @@ msgid "View as &PNG..."
 msgstr "&PNG로 보기..."
 
 #: pcbnew/menubar_footprint_editor.cpp:79
-#, fuzzy
 msgid "Create a PNG file from the current view"
-msgstr "현재 레이어의 소스 파일 보이기"
+msgstr "현재 시점으로부터 PNG 파일 생성하기"
 
 #: pcbnew/menubar_footprint_editor.cpp:150 pcbnew/menubar_pcb_editor.cpp:260
 msgid "&Drawing Mode"
 msgstr "드로잉 모드 (&D)"
 
 #: pcbnew/menubar_footprint_editor.cpp:160 pcbnew/menubar_pcb_editor.cpp:280
-#, fuzzy
 msgid "&Contrast Mode"
-msgstr "고대비 모드 표시"
+msgstr "고대비 모드 (&C)"
 
 #: pcbnew/menubar_footprint_editor.cpp:208
 msgid "&Load Footprint from PCB..."
-msgstr "PCB에서 풋프린트 로드(&L)..."
+msgstr "PCB에서 풋프린트 불러오기 (&L)..."
 
 #: pcbnew/menubar_footprint_editor.cpp:209
 msgid "Load a footprint from the current board into the editor"
@@ -29877,7 +29839,7 @@ msgstr "PCB에 풋프린트 삽입 (&I)"
 
 #: pcbnew/menubar_footprint_editor.cpp:214
 msgid "Insert footprint onto current board"
-msgstr "현재 보드에 풋프린트 삽입"
+msgstr "현재 기판에 풋프린트 삽입"
 
 #: pcbnew/menubar_pcb_editor.cpp:100
 msgid "Resc&ue"
@@ -31464,6 +31426,8 @@ msgid ""
 "only supports circular vias so this via type has been changed to be a via "
 "with circular shape of %.2f mm diameter."
 msgstr ""
+"CADSTAR 비아 코드 '%s'는 정의된 원형과 다른 도형입니다. KiCad는 원형 비아만을 지원하며, 따라서 해당 비아 유형은 직경 "
+"%.2f mm의 원형 비아로 변경되었습니다."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2605
 #, c-format
@@ -32970,18 +32934,17 @@ msgid "Width constraints: min %s max %s."
 msgstr ""
 
 #: pcbnew/tools/board_inspection_tool.cpp:644
-#, fuzzy
 msgid "Via Diameter"
-msgstr "mm"
+msgstr "비아 직경"
 
 #: pcbnew/tools/board_inspection_tool.cpp:646
 msgid "Via diameter resolution for:"
-msgstr "다음을 위한 비아 지름 계산:"
+msgstr "다음을 위한 비아 직경 계산:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:672
 #, c-format
 msgid "Diameter constraints: min %s max %s."
-msgstr ""
+msgstr "직경 제한: 최소 %s 최대 %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:679
 msgid "Via Annular Width"
@@ -33002,7 +32965,7 @@ msgstr "홀 크기"
 
 #: pcbnew/tools/board_inspection_tool.cpp:720
 msgid "Hole diameter resolution for:"
-msgstr ""
+msgstr "다음을 위한 홀 직경 계산:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:742
 #, c-format
@@ -33105,7 +33068,7 @@ msgstr "보드 두께: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:467
 msgid "Min hole diameter: "
-msgstr "최소 구멍 지름: "
+msgstr "최소 홀 직경: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:477
 msgid "Impedance Control: "
