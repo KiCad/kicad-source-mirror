@@ -13,8 +13,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
-"PO-Revision-Date: 2021-08-09 09:28+0000\n"
-"Last-Translator: hokim <teamgoodaloe@gmail.com>\n"
+"PO-Revision-Date: 2021-08-09 09:51+0000\n"
+"Last-Translator: jeongsuAn <dks9467@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
 "Language: ko\n"
@@ -22824,9 +22824,8 @@ msgid "VRML Export Options"
 msgstr "사각형 설정"
 
 #: pcbnew/dialogs/dialog_filter_selection_base.cpp:22
-#, fuzzy
 msgid "Include &footprints"
-msgstr "풋프린트 이동"
+msgstr "풋프린트 포함(&f)"
 
 #: pcbnew/dialogs/dialog_filter_selection_base.cpp:25
 #, fuzzy
@@ -22839,14 +22838,12 @@ msgid "Include &locked footprints"
 msgstr "잠김 트랙 포함"
 
 #: pcbnew/dialogs/dialog_filter_selection_base.cpp:31
-#, fuzzy
 msgid "Include &drawings"
-msgstr "드로잉 포함"
+msgstr "드로잉 포함(&d)"
 
 #: pcbnew/dialogs/dialog_filter_selection_base.cpp:34
-#, fuzzy
 msgid "Include &tracks"
-msgstr "트랙 포함"
+msgstr "트랙 포함 (&t)"
 
 #: pcbnew/dialogs/dialog_filter_selection_base.cpp:37
 #, fuzzy
@@ -22854,9 +22851,8 @@ msgid "Include &board outline layer"
 msgstr "에지 레이어 포함"
 
 #: pcbnew/dialogs/dialog_filter_selection_base.cpp:40
-#, fuzzy
 msgid "Include &vias"
-msgstr "패드 포함"
+msgstr "비아 포함 (v)"
 
 #: pcbnew/dialogs/dialog_filter_selection_base.cpp:43
 #, fuzzy
