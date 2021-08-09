@@ -13,8 +13,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
-"PO-Revision-Date: 2021-08-09 13:32+0000\n"
-"Last-Translator: Uibeom Jung <wjddmlqja17@gmail.com>\n"
+"PO-Revision-Date: 2021-08-09 13:52+0000\n"
+"Last-Translator: jehunseo <benbot591@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
 "Language: ko\n"
@@ -13344,31 +13344,37 @@ msgstr ""
 "최대 허용 설계 크기: %.2f, %.2f 밀리미터 입니다.\n"
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:104
-#, c-format
+#, c-format, fuzzy
 msgid ""
 "The CADSTAR design contains variants which has no KiCad equivalent. Only the "
 "master variant ('%s') was loaded."
-msgstr ""
+msgstr "CADSTAR 디자인에는 KiCad에 해당하지 않는 변형이 포함되어 있습니다. 마스터 변형('%s')만 로드되었습니다."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:113
+#, fuzzy
 msgid ""
 "The CADSTAR design contains grouped items which has no KiCad equivalent. Any "
 "grouped items have been ungrouped."
-msgstr ""
+msgstr "CADSTAR 디자인에는 KiCad에 해당하지 않는 그룹화된 아이템이 포함되어 있습니다. 그룹화된 아이템이 그룹 해제되었습니다."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:120
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:129
+#, fuzzy
 msgid ""
 "The CADSTAR design contains re-use blocks which has no KiCad equivalent. The "
 "re-use block information has been discarded during the import."
 msgstr ""
+"CADSTAR 디자인에는 KiCad에 해당하지 않는 재사용 블록이 포함되어 있습니다. 재사용 블록이 가져오기 과정에서 삭제되었습니다."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:222
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:134
+#, fuzzy
 msgid ""
 "The CADSTAR design has been imported successfully.\n"
 "Please review the import errors and warnings (if any)."
 msgstr ""
+"CADSTAR 디자인을 성공적으로 가져왔습니다.\n"
+"가져오기 시 오류 및 경고를(있는 경우) 검토하십시오."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:276
 msgid "The CADSTAR schematic might be corrupt: there is no root sheet."
@@ -13389,14 +13395,14 @@ msgstr ""
 msgid ""
 "Symbol '%s' references part '%s' which could not be found in the library. "
 "The symbol was not loaded"
-msgstr ""
+msgstr "심볼 '%s'는 라이브러리에서 찾을 수 없는 부품 '%s'를 참조합니다. 심볼이 로드되지 않았습니다"
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:510
 #, c-format
 msgid ""
 "Symbol ID '%s' references library symbol '%s' which could not be found in "
 "the library. Did you export all items of the design?"
-msgstr ""
+msgstr "심볼 ID '%s'가 라이브러리에서 찾을 수 없는 라이브러리 심볼 '%s'를 참조합니다. 디자인의 모든 항목을 내보냈습니까?"
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:520
 #, c-format
@@ -13404,13 +13410,14 @@ msgid ""
 "Symbol ID '%s' is a signal reference or global signal but it has too many "
 "pins. The expected number of pins is 1 but %d were found."
 msgstr ""
+"심볼 ID '%s'는 시그널 레퍼런스이거나 너무 핀이 많은 글로벌 시그널입니다. 예상되는 핀 개수는 1개이나 %d개가 발견되었습니다."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:637
 #, c-format
 msgid ""
 "Symbol ID '%s' is of an unknown type. It is neither a symbol or a net "
 "power / symbol. The symbol was not loaded."
-msgstr ""
+msgstr "심볼 ID '%s'는 알 수 없는 유형입니다. 심볼이 아니거나 네트 파워 / 심볼입니다. 심볼이 로드되지 않았습니다."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:651
 #, c-format
@@ -13419,17 +13426,19 @@ msgid ""
 "supported in KiCad. When the symbol is reloaded from the library, it will "
 "revert to the original 1:1 scale."
 msgstr ""
+"심볼 '%s'는 원본 CADSTAR 회로도에서 크기가 조정되지만 KiCad에서 지원되지 않습니다. 라이브러리에서 심볼이 다시 로드되면, "
+"원본의 1:1 배율로 되돌아갑니다."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:1090
 #, c-format
 msgid ""
 "Documentation Symbol '%s' refers to symbol definition ID '%s' which does not "
 "exist in the library. The symbol was not loaded."
-msgstr ""
+msgstr "문서 심볼 '%s'는 라이브러리에 존재하지 않는 심볼 정의 ID'%s'를 참조합니다. 심볼이 로드되지 않았습니다."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:1197
 msgid "Text Variables could not be set as there is no project attached."
-msgstr ""
+msgstr "연결된 프로젝트가 없기 때문에 텍스트 변수를 설정할 수 없습니다."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:1618
 #, c-format
@@ -13843,7 +13852,7 @@ msgstr "계층 레이블 '%s'"
 
 #: eeschema/sch_text.cpp:1661 pcbnew/dialogs/panel_setup_rules.cpp:471
 msgid "Syntax Help"
-msgstr ""
+msgstr "구문 도움말"
 
 #: eeschema/sch_text_help_md.h:2
 msgid ""
@@ -14108,7 +14117,7 @@ msgstr "회로도 인쇄"
 
 #: eeschema/sheet.cpp:206
 msgid "Continue Load"
-msgstr ""
+msgstr "계속 로드"
 
 #: eeschema/sheet.cpp:207
 #, fuzzy
@@ -14425,7 +14434,7 @@ msgstr "전압(측정)"
 
 #: eeschema/sim/spice_simulator.cpp:61
 msgid "DC Sweep"
-msgstr ""
+msgstr "DC 스윕"
 
 #: eeschema/sim/spice_simulator.cpp:73
 msgid "Pole-zero"
@@ -15887,7 +15896,7 @@ msgstr ""
 
 #: eeschema/tools/ee_actions.cpp:604
 msgid "Bus Definitions..."
-msgstr ""
+msgstr "버스 정의..."
 
 #: eeschema/tools/ee_actions.cpp:604
 msgid "Manage bus definitions"
@@ -17150,7 +17159,7 @@ msgstr "컴포넌트 강조"
 
 #: gerbview/tools/gerbview_actions.cpp:123
 msgid "Highlight Attribute"
-msgstr ""
+msgstr "속성 강조"
 
 #: gerbview/tools/gerbview_actions.cpp:128
 #, fuzzy
@@ -17437,7 +17446,7 @@ msgstr ""
 
 #: kicad/dialogs/dialog_template_selector.cpp:127
 msgid "<html><h1>Template Selector</h1></html>"
-msgstr ""
+msgstr "<html><h1>템플릿 선택기</h1></html>"
 
 #: kicad/dialogs/dialog_template_selector.cpp:228
 #, fuzzy
@@ -17600,12 +17609,12 @@ msgstr "프로젝트: %s"
 
 #: kicad/kicad_manager_frame.cpp:706
 msgid "Restoring session"
-msgstr ""
+msgstr "세션 복원 중"
 
 #: kicad/kicad_manager_frame.cpp:716
 #, c-format
 msgid "Restoring \"%s\""
-msgstr ""
+msgstr "\"%s\" 복원 중"
 
 #: kicad/menubar.cpp:54
 #, fuzzy
@@ -18067,7 +18076,7 @@ msgstr "레이아웃"
 #: pagelayout_editor/dialogs/design_inspector.cpp:227
 #, c-format
 msgid "Size: %.1fx%.1fmm"
-msgstr ""
+msgstr "크기: %.1fx%.1fmm"
 
 #: pagelayout_editor/dialogs/dialog_design_inspector_base.cpp:38
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:230
@@ -18076,11 +18085,11 @@ msgstr "개수"
 
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:30
 msgid "Y start:"
-msgstr ""
+msgstr "Y 시작:"
 
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:44
 msgid "X start:"
-msgstr ""
+msgstr "X 시작:"
 
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:64
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:124
@@ -18119,11 +18128,11 @@ msgstr "왼쪽 하단"
 
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:90
 msgid "X end:"
-msgstr ""
+msgstr "X 끝:"
 
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:104
 msgid "Y end:"
-msgstr ""
+msgstr "Y 끝:"
 
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.h:72
 msgid "New Item"
@@ -19105,7 +19114,7 @@ msgstr "삭제 선택"
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1288
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1519
 msgid "Temperature rise:"
-msgstr ""
+msgstr "온도 상승:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1290
 msgid "Maximum acceptable rise in temperature"
@@ -19131,7 +19140,7 @@ msgstr "ns"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1312
 msgid "nanoseconds"
-msgstr ""
+msgstr "나노초"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1322
 msgid ""
@@ -19298,7 +19307,7 @@ msgstr ""
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1799
 msgid "Update Values"
-msgstr ""
+msgstr "값 갱신"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1807
 msgid "Note: Values are minimal values (from IPC 2221)"
@@ -20051,9 +20060,9 @@ msgid "Locked"
 msgstr "잠김"
 
 #: pcbnew/board_stackup_manager/board_stackup.cpp:306
-#, c-format
+#, c-format, fuzzy
 msgid "Dielectric %d"
-msgstr ""
+msgstr "유전체 %d"
 
 #: pcbnew/board_stackup_manager/board_stackup.cpp:526
 #, fuzzy
@@ -20110,7 +20119,7 @@ msgstr ""
 #: pcbnew/board_stackup_manager/dialog_dielectric_list_manager.cpp:96
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:111
 msgid "Loss Tg"
-msgstr ""
+msgstr "손실 Tg"
 
 #: pcbnew/board_stackup_manager/dialog_dielectric_list_manager_base.cpp:22
 #, fuzzy
@@ -20388,7 +20397,7 @@ msgstr "ENEPIG"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:48
 msgid "HAL SnPb"
-msgstr ""
+msgstr "HAL SnPb"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:49
 msgid "HAL lead-free"
@@ -21306,7 +21315,7 @@ msgstr "풋프린트 삭제"
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:55
 #: pcbnew/dialogs/dialog_netlist.cpp:88 pcbnew/dialogs/dialog_update_pcb.cpp:65
 msgid "Update PCB"
-msgstr ""
+msgstr "PCB 업데이트"
 
 #: pcbnew/dialogs/dialog_cleanup_graphics.cpp:116
 #, fuzzy
@@ -21989,7 +21998,7 @@ msgstr "1234"
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:145
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:112
 msgid "1234 mm"
-msgstr ""
+msgstr "1234 mm"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:145
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:112
@@ -22848,7 +22857,7 @@ msgstr "마커 찾기"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:101
 msgid "Restart Search"
-msgstr ""
+msgstr "다시 검색"
 
 #: pcbnew/dialogs/dialog_footprint_checker.cpp:50
 #, fuzzy
@@ -24578,7 +24587,7 @@ msgstr "패드 속성"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1652
 msgid "Modify pad"
-msgstr ""
+msgstr "패드 수정"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:2052
 #: pcbnew/dialogs/dialog_pad_properties.cpp:2198
@@ -24832,7 +24841,7 @@ msgstr "Solder mask Cmp"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:542
 msgid "Drafting notes"
-msgstr ""
+msgstr "초안"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:545
 msgid "E.C.O.1"
@@ -25032,7 +25041,7 @@ msgstr "사각형 이동"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1377
 msgid "Scaling factor:"
-msgstr ""
+msgstr "배율:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1399
 msgid "Duplicate:"
@@ -25156,7 +25165,7 @@ msgstr "드릴 마크:"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:117
 msgid "Actual size"
-msgstr ""
+msgstr "실제 크기"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:123
 msgid "Scaling:"
@@ -25405,7 +25414,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:420
 msgid "Run DRC..."
-msgstr ""
+msgstr "DRC 실행..."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:423
 #, c-format
@@ -26585,7 +26594,7 @@ msgstr "기본 선 굵기"
 
 #: pcbnew/dialogs/panel_pcbnew_display_origin_base.cpp:33
 msgid "X Axis"
-msgstr ""
+msgstr "X축"
 
 #: pcbnew/dialogs/panel_pcbnew_display_origin_base.cpp:35
 msgid "Select which the direction on the screen in which the X axis increases."
@@ -26603,7 +26612,7 @@ msgstr "기본 선 굵기"
 
 #: pcbnew/dialogs/panel_pcbnew_display_origin_base.cpp:41
 msgid "Y Axis"
-msgstr ""
+msgstr "Y축"
 
 #: pcbnew/dialogs/panel_pcbnew_display_origin_base.cpp:43
 msgid "Select which the direction on the screen in which the Y axis increases."
@@ -31840,7 +31849,7 @@ msgstr ""
 
 #: pcbnew/router/length_tuner_tool.cpp:56
 msgid "Increase Spacing"
-msgstr ""
+msgstr "간격 늘리기"
 
 #: pcbnew/router/length_tuner_tool.cpp:56
 msgid "Increase meander spacing by one step."
@@ -31848,7 +31857,7 @@ msgstr ""
 
 #: pcbnew/router/length_tuner_tool.cpp:62
 msgid "Decrease Spacing"
-msgstr ""
+msgstr "간격 줄이기"
 
 #: pcbnew/router/length_tuner_tool.cpp:62
 msgid "Decrease meander spacing by one step."
@@ -31856,7 +31865,7 @@ msgstr ""
 
 #: pcbnew/router/length_tuner_tool.cpp:68
 msgid "Increase Amplitude"
-msgstr ""
+msgstr "진폭 증가"
 
 #: pcbnew/router/length_tuner_tool.cpp:68
 msgid "Increase meander amplitude by one step."
@@ -31864,7 +31873,7 @@ msgstr ""
 
 #: pcbnew/router/length_tuner_tool.cpp:74
 msgid "Decrease Amplitude"
-msgstr ""
+msgstr "진폭 감소"
 
 #: pcbnew/router/length_tuner_tool.cpp:74
 msgid "Decrease meander amplitude by one step."
@@ -33915,7 +33924,7 @@ msgstr "드릴 및 배치 파일 옵셋 설정"
 
 #: pcbnew/tools/pcb_actions.cpp:668
 msgid "Toggle Lock"
-msgstr ""
+msgstr "잠금 토글"
 
 #: pcbnew/tools/pcb_actions.cpp:668
 #, fuzzy
@@ -34946,7 +34955,7 @@ msgstr ""
 
 #: pcbnew/widgets/appearance_controls.cpp:358
 msgid "DRC Exclusions"
-msgstr ""
+msgstr "DRC 제외"
 
 #: pcbnew/widgets/appearance_controls.cpp:358
 msgid "DRC violations which have been individually excluded"
@@ -35432,7 +35441,7 @@ msgstr "레이어 사전 설정"
 #: pcbnew/widgets/panel_selection_filter.cpp:130
 #, c-format
 msgid "Only %s"
-msgstr ""
+msgstr "%s만"
 
 #: pcbnew/widgets/panel_selection_filter_base.cpp:21
 #, fuzzy
