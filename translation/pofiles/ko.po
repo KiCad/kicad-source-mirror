@@ -14,7 +14,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
 "PO-Revision-Date: 2021-08-09 09:28+0000\n"
-"Last-Translator: Ji Yoon Choi <chichoon.choi@gmail.com>\n"
+"Last-Translator: hokim <teamgoodaloe@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
 "Language: ko\n"
@@ -19466,19 +19466,19 @@ msgstr "클래스 2"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1930
 msgid "Class 3"
-msgstr ""
+msgstr "클래스 3"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1931
 msgid "Class 4"
-msgstr ""
+msgstr "클래스 4"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1932
 msgid "Class 5"
-msgstr ""
+msgstr "클래스 5"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1933
 msgid "Class 6"
-msgstr ""
+msgstr "클래스 6"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1944
 msgid "Lines width"
@@ -19635,7 +19635,7 @@ msgstr ""
 
 #: pcb_calculator/transline_dlg_funct.cpp:157
 msgid "Specific Resistance"
-msgstr ""
+msgstr "비저항"
 
 #: pcb_calculator/transline_ident.cpp:92
 #, fuzzy
@@ -21728,11 +21728,11 @@ msgstr "컴포넌트 속성"
 
 #: pcbnew/dialogs/dialog_create_array.cpp:130
 msgid "Numerals (0,1,2,...,9,10)"
-msgstr ""
+msgstr "10진수 (0,1,2,...,9,10)"
 
 #: pcbnew/dialogs/dialog_create_array.cpp:134
 msgid "Hexadecimal (0,1,...,F,10,...)"
-msgstr ""
+msgstr "16진수 (0,1,...,F,10,...)"
 
 #: pcbnew/dialogs/dialog_create_array.cpp:138
 msgid "Alphabet, minus IOSQXZ"
@@ -21761,7 +21761,7 @@ msgstr "값 기준"
 
 #: pcbnew/dialogs/dialog_create_array.cpp:329
 msgid "horizontal count"
-msgstr ""
+msgstr "수평 개수"
 
 #: pcbnew/dialogs/dialog_create_array.cpp:330
 #, fuzzy
@@ -21784,7 +21784,7 @@ msgstr "패드 속성"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:31
 msgid "Horizontal count:"
-msgstr ""
+msgstr "수평 개수:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:35
 #: pcbnew/dialogs/dialog_create_array_base.cpp:42
@@ -21804,7 +21804,7 @@ msgstr "수직 개수:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:45
 msgid "Horizontal spacing:"
-msgstr ""
+msgstr "수평 간격:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:56
 #, fuzzy
@@ -21910,7 +21910,7 @@ msgstr "그리드 배열"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:207
 msgid "Horizontal center:"
-msgstr ""
+msgstr "수평 중심:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:218
 #, fuzzy
@@ -21961,7 +21961,7 @@ msgstr "유닛 개수:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:326
 msgid "Circular Array"
-msgstr ""
+msgstr "원형 배열"
 
 #: pcbnew/dialogs/dialog_create_array_base.h:121
 msgid "Create Array"
@@ -23078,7 +23078,7 @@ msgstr "부품:"
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:280
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:184
 msgid "Through hole"
-msgstr ""
+msgstr "스루홀"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:280
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:184
