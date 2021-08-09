@@ -13,7 +13,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
 "PO-Revision-Date: 2021-08-09 04:54+0000\n"
-"Last-Translator: 방준영 <wnsdudtkwkd8@naver.com>\n"
+"Last-Translator: jeongsuAn <dks9467@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
 "Language: ko\n"
@@ -12158,21 +12158,19 @@ msgstr "심볼 라이브러리 테이블 '%s'을 로드하는 동안 오류가 �
 #: eeschema/erc.cpp:59 eeschema/erc.cpp:76
 #, fuzzy
 msgid "Input Pin"
-msgstr "입력"
+msgstr "입력 핀"
 
 #: eeschema/erc.cpp:60 eeschema/erc.cpp:77
-#, fuzzy
 msgid "Output Pin"
-msgstr "출력"
+msgstr "출력 핀"
 
 #: eeschema/erc.cpp:61 eeschema/erc.cpp:78
 msgid "Bidirectional Pin"
 msgstr "양방향 핀"
 
 #: eeschema/erc.cpp:62 eeschema/erc.cpp:79
-#, fuzzy
 msgid "Tri-State Pin"
-msgstr "3-스테이트"
+msgstr "트라이스테이트 핀"
 
 #: eeschema/erc.cpp:63 eeschema/erc.cpp:80
 #, fuzzy
