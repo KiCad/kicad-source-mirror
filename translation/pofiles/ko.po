@@ -22850,12 +22850,11 @@ msgstr "에지 레이어 포함"
 
 #: pcbnew/dialogs/dialog_filter_selection_base.cpp:40
 msgid "Include &vias"
-msgstr "비아 포함 (v)"
+msgstr "비아 포함 (&v)"
 
 #: pcbnew/dialogs/dialog_filter_selection_base.cpp:43
-#, fuzzy
 msgid "Include &zones"
-msgstr "영역 포함"
+msgstr "영역 포함 (&z)"
 
 #: pcbnew/dialogs/dialog_filter_selection_base.h:57
 #, fuzzy
