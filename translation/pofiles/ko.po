@@ -14,7 +14,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
 "PO-Revision-Date: 2021-08-09 13:52+0000\n"
-"Last-Translator: jehunseo <benbot591@gmail.com>\n"
+"Last-Translator: Ji Yoon Choi <chichoon.choi@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
 "Language: ko\n"
@@ -222,13 +222,13 @@ msgstr "마지막 렌더링 시간 %.0f ms"
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:721
 #, c-format
 msgid "Net %s\tNetClass %s\tPadName %s"
-msgstr "Net %s\tNet클래스 %s\t패드이름 %s"
+msgstr "네트 %s\t네트클래스 %s\t패드 이름 %s"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:746
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:759
 #, c-format
 msgid "Net %s\tNetClass %s"
-msgstr "Net %s\tNet클래스 %s"
+msgstr "네트 %s\t네트클래스 %s"
 
 #: 3d-viewer/3d_rendering/3d_render_raytracing/create_scene.cpp:439
 msgid "Load Raytracing: board"
@@ -3379,11 +3379,11 @@ msgstr "대시-도트"
 
 #: common/dialogs/panel_setup_netclasses.cpp:409
 msgid "Netclass must have a name."
-msgstr "Netclass에는 이름이 있어야 합니다."
+msgstr "네트클래스에는 이름이 있어야 합니다."
 
 #: common/dialogs/panel_setup_netclasses.cpp:418
 msgid "Netclass name already in use."
-msgstr "넷클래스 이름이 이미 사용 중입니다."
+msgstr "네트클래스 이름이 이미 사용 중입니다."
 
 #: common/dialogs/panel_setup_netclasses.cpp:479
 msgid "Minimum copper clearance"
@@ -13130,12 +13130,11 @@ msgstr "라인 종류"
 
 #: eeschema/sch_line.cpp:889
 msgid "from netclass"
-msgstr "넷클래스에서"
+msgstr "네트클래스로부터"
 
 #: eeschema/sch_line.cpp:910 eeschema/sch_text.cpp:790
-#, fuzzy
 msgid "Assigned Netclass"
-msgstr "할당된 넷클래스"
+msgstr "할당된 네트클래스"
 
 #: eeschema/sch_marker.cpp:165
 #, fuzzy
@@ -13176,7 +13175,7 @@ msgstr "특별한 라이브러리 서버에 <b>로그인 </b> 하기 위한 비�
 #: eeschema/sch_plugin.cpp:163
 msgid ""
 "Enter the python symbol which implements the SCH_PLUGIN::Symbol*() functions."
-msgstr "SCH_PLUGIN::Symbol*() 함수를 실행하는 파이썬 심볼을 입력하십시오."
+msgstr "SCH_PLUGIN::Symbol*() 함수를 실행하는 python 심볼을 입력하십시오."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:251
 #: pcbnew/plugins/altium/altium_pcb.cpp:65
@@ -13447,13 +13446,15 @@ msgid ""
 "design but KiCad only supports rotation angles multiples of 90 degrees. The "
 "connecting wires will need manual fixing."
 msgstr ""
+"원본 CADSTAR 디자인에서 심볼 '%s'는 %.1f씩 회전할 수 있지만, KiCad는 90도의 배수 회전만을 지원합니다. 연결 "
+"와이어는 수동 수정이 필요할 것입니다."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:1632
 #, c-format
 msgid ""
 "Symbol '%s' references sheet ID '%s' which does not exist in the design. The "
 "symbol was not loaded."
-msgstr ""
+msgstr "심볼 '%s'는 시트 ID '%s'를 참조하지만, 이는 현재 디자인에서 존재하지 않습니다. 심볼을 불러오지 않았습니다."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:1772
 #, c-format
@@ -15660,11 +15661,11 @@ msgstr ""
 
 #: eeschema/tools/ee_actions.cpp:449
 msgid "Assign Netclass..."
-msgstr "넷클래스 할당..."
+msgstr "네트클래스 할당하기..."
 
 #: eeschema/tools/ee_actions.cpp:449
 msgid "Assign a netclass to the net of the selected wire"
-msgstr "선택한 와이어의 네트에 넷클래스를 할당"
+msgstr "선택한 와이어의 네트에 네트클래스 할당"
 
 #: eeschema/tools/ee_actions.cpp:453
 #, fuzzy
@@ -15981,9 +15982,8 @@ msgid "Scripting Console"
 msgstr ""
 
 #: eeschema/tools/ee_actions.cpp:649 pcbnew/tools/pcb_actions.cpp:773
-#, fuzzy
 msgid "Show the Python scripting console"
-msgstr "트랙 만들 때"
+msgstr "Python 스크립팅 명령 창 보이기"
 
 #: eeschema/tools/ee_actions.cpp:656
 msgid "Enter Sheet"
@@ -16332,19 +16332,19 @@ msgstr ""
 
 #: eeschema/tools/sch_editor_control.cpp:928
 msgid "Net must be labeled to assign a netclass."
-msgstr "넷클래스를 할당하려면 네트에 라벨을 지정해야 합니다."
+msgstr "네트클래스를 할당하려면 네트에 라벨을 지정해야 합니다."
 
 #: eeschema/tools/sch_editor_control.cpp:940
 msgid "Netclasses"
-msgstr "넷클래스"
+msgstr "네트클래스"
 
 #: eeschema/tools/sch_editor_control.cpp:953
 msgid "Assign Netclass"
-msgstr "넷클래스 할당"
+msgstr "네트클래스 할당"
 
 #: eeschema/tools/sch_editor_control.cpp:954
 msgid "Select netclass:"
-msgstr "넷클래스 선택:"
+msgstr "네트클래스 선택:"
 
 #: eeschema/tools/sch_editor_control.cpp:1544
 #, c-format
@@ -20006,7 +20006,7 @@ msgstr "네트 이름"
 #: pcbnew/board_connected_item.cpp:188 pcbnew/pad.cpp:873
 #: pcbnew/pcb_track.cpp:789 pcbnew/zone.cpp:591
 msgid "NetClass"
-msgstr "넷클래스"
+msgstr "네트클래스"
 
 #: pcbnew/board_item.cpp:40 pcbnew/pad.cpp:1085
 msgid "Rect"
@@ -21514,7 +21514,7 @@ msgstr "클리어런스:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:182
 msgid "Copper clearance for this zone (set to 0 to use the netclass clearance)"
-msgstr "해당 영역에 대한 구리 클리어런스 (0으로 설정하면 네트 클래스 클리어런스를 그대로 사용합니다)"
+msgstr "해당 영역에 대한 구리 클리어런스 (0으로 설정하면 네트클래스 클리어런스를 그대로 사용합니다)"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:193
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:67
@@ -23068,7 +23068,7 @@ msgid ""
 "This value can be superseded by a pad local value."
 msgstr ""
 "현재 풋프린트에 대한 모든 패드의 지역 네트 클리어런스 값을 의미합니다.\n"
-"0으로 설정될 경우, 네트 클래스 값이 사용됩니다.\n"
+"0으로 설정될 경우, 네트클래스 값이 사용됩니다.\n"
 "이 값은 패드의 지역 값으로 대체될 수 있습니다."
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:356
@@ -24905,7 +24905,7 @@ msgstr "Castellated 패드 (스루홀 전용)"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:588
 msgid "Set values to 0 to use parent footprint or netclass values."
-msgstr ""
+msgstr "상위 풋프린트나 네트클래스 값을 사용하기 위해선 해당 값을 0으로 설정하세요."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:614
 msgid ""
@@ -24913,7 +24913,7 @@ msgid ""
 "If 0, the footprint local value or the Netclass value is used."
 msgstr ""
 "이 값은 현재 패드에 대한 지역 네트 클리어런스 값입니다.\n"
-"0으로 설정될 경우, 풋프린트 지역 값 또는 네트 클래스 값이 사용됩니다."
+"0으로 설정될 경우, 풋프린트 지역 값 또는 네트클래스 값이 사용됩니다."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:627
 msgid ""
@@ -26407,15 +26407,13 @@ msgid "Capture cursor when the mouse approaches graphical control points"
 msgstr "마우스 커서가 패드 영역에 들어오면 PCB 커서 캡처 제어"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:319
-#, fuzzy
 msgid "Always show selected ratsnest"
-msgstr "항목 선택"
+msgstr "선택한 연결선 항상 표시"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:322
 #: pcbnew/tools/pcb_actions.cpp:794
-#, fuzzy
 msgid "Show ratsnest with curved lines"
-msgstr "이동 시 모듈 연결선 보이기"
+msgstr "곡선을 포함한 연결선 표시"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:329
 #, fuzzy
@@ -26711,8 +26709,8 @@ msgid ""
 "net.  If set, this is an absolute minimum which cannot be reduced by "
 "netclasses, custom rules, or other settings."
 msgstr ""
-"같은 네트에 존재하지 않는 두 개의 구리 개체 사이의 최소 클리어런스.   이 값이 설정되면, 해당 값은 절대적 최소값이 되며 네트 "
-"클래스, 사용자 지정 규칙 또는 기타 설정으로 줄일 수 없게 됩니다."
+"같은 네트에 존재하지 않는 두 개의 구리 개체 사이의 최소 클리어런스.   이 값이 설정되면, 해당 값은 절대적 최소값이 되며 "
+"네트클래스, 사용자 지정 규칙 또는 기타 설정으로 줄일 수 없게 됩니다."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:207
 msgid "Minimum track width:"
@@ -26723,8 +26721,8 @@ msgid ""
 "The minimum track width.  If set, this is an absolute minimum and cannot be "
 "reduced by netclasses, custom rules, or other settings."
 msgstr ""
-"배선의 최소 폭.   이 값이 설정되면, 해당 값은 절대적 최소값이 되며 네트 클래스, 사용자 지정 규칙 또는 기타 설정으로 줄일 수 "
-"없게 됩니다."
+"배선의 최소 폭.   이 값이 설정되면, 해당 값은 절대적 최소값이 되며 네트클래스, 사용자 지정 규칙 또는 기타 설정으로 줄일 수 없게 "
+"됩니다."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:224
 msgid "Minimum annular width:"
@@ -26735,8 +26733,8 @@ msgid ""
 "The minimum annular ring width.  If set, this is an absolute minimum and "
 "cannot be reduced by netclasses, custom rules, or other settings."
 msgstr ""
-"환형 고리의 최소 폭.   이 값이 설정되면, 해당 값은 절대적 최소값이 되며 네트 클래스, 사용자 지정 규칙 또는 기타 설정으로 줄일 "
-"수 없게 됩니다."
+"환형 고리의 최소 폭.   이 값이 설정되면, 해당 값은 절대적 최소값이 되며 네트클래스, 사용자 지정 규칙 또는 기타 설정으로 줄일 수 "
+"없게 됩니다."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:240
 msgid "Minimum via diameter:"
@@ -26747,7 +26745,7 @@ msgid ""
 "The minimum via diameter.  If set, this is an absolute minimum and cannot be "
 "reduced by netclasses, custom rules, or other settings."
 msgstr ""
-"비아 직경의 최소값.   이 값이 설정되면, 해당 값은 절대적 최소값이 되며 네트 클래스, 사용자 지정 규칙 또는 기타 설정으로 줄일 수 "
+"비아 직경의 최소값.   이 값이 설정되면, 해당 값은 절대적 최소값이 되며 네트클래스, 사용자 지정 규칙 또는 기타 설정으로 줄일 수 "
 "없게 됩니다."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:256
@@ -26789,7 +26787,7 @@ msgid ""
 "The minimum through-hole size.  If set, this is an absolute minimum and "
 "cannot be reduced by netclasses, custom rules or other settings."
 msgstr ""
-"스루홀 크기 최소값.  이 값이 설정되면, 해당 값은 절대적 최소값이 되며 네트 클래스, 사용자 지정 규칙 또는 기타 설정으로 줄일 수 "
+"스루홀 크기 최소값.  이 값이 설정되면, 해당 값은 절대적 최소값이 되며 네트클래스, 사용자 지정 규칙 또는 기타 설정으로 줄일 수 "
 "없게 됩니다."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:329
@@ -26818,8 +26816,8 @@ msgid ""
 "The minimum diameter for micro-vias.  If set, this is an absolute minimum "
 "and cannot be reduced by netclasses, custom rules, or other settings."
 msgstr ""
-"마이크로 비아에 대한 최소 직경.  이 값이 설정되면, 해당 값은 절대적 최소값이 되며 네트 클래스, 사용자 지정 규칙 또는 기타 "
-"설정으로 줄일 수 없게 됩니다."
+"마이크로 비아에 대한 최소 직경.  이 값이 설정되면, 해당 값은 절대적 최소값이 되며 네트클래스, 사용자 지정 규칙 또는 기타 설정으로 "
+"줄일 수 없게 됩니다."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:386
 msgid "Minimum uVia hole:"
@@ -26830,7 +26828,7 @@ msgid ""
 "The minimum micro-via hole size.  If set, this is an absolute minimum and "
 "cannot be reduced by netclasses, custom rules, or other settings."
 msgstr ""
-"마이크로 비아 홀의 최소 크기. 이 값이 설정되면, 해당 값은 절대적 최소값이 되며 네트 클래스, 사용자 지정 규칙 또는 기타 설정으로 "
+"마이크로 비아 홀의 최소 크기. 이 값이 설정되면, 해당 값은 절대적 최소값이 되며 네트클래스, 사용자 지정 규칙 또는 기타 설정으로 "
 "줄일 수 없게 됩니다."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:411
@@ -28066,13 +28064,13 @@ msgstr "기판 설정 마이크로 비아 제약"
 #: pcbnew/drc/drc_engine.cpp:350
 #, c-format
 msgid "netclass '%s'"
-msgstr "네트 클래스 '%s'"
+msgstr "네트클래스 '%s'"
 
 #: pcbnew/drc/drc_engine.cpp:268 pcbnew/drc/drc_engine.cpp:285
 #: pcbnew/drc/drc_engine.cpp:303
 #, c-format
 msgid "netclass '%s' (diff pair)"
-msgstr "네트 클래스 '%s' (차동 쌍)"
+msgstr "네트클래스 '%s' (차동 쌍)"
 
 #: pcbnew/drc/drc_engine.cpp:425
 msgid "keepout area"
@@ -28129,7 +28127,7 @@ msgstr "%s 확인 중."
 
 #: pcbnew/drc/drc_engine.cpp:886
 msgid "Board and netclass clearances apply only between copper items."
-msgstr "기판과 네트 클래스 클리어런스는 구리 개체 사이에만 적용됩니다."
+msgstr "기판과 네트클래스 클리어런스는 구리 개체 사이에만 적용됩니다."
 
 #: pcbnew/drc/drc_engine.cpp:930
 msgid "Keepout constraint not met."
@@ -31618,7 +31616,7 @@ msgstr ""
 #: pcbnew/plugins/kicad/pcb_parser.cpp:2308
 #, c-format
 msgid "Duplicate NETCLASS name '%s' in file '%s' at line %d, offset %d."
-msgstr "중복 NETCLASS 이름 '%s' 파일 '%s' 라인 %d, 오프셋 %d."
+msgstr "중복 네트클래스 이름 '%s' 이 파일 '%s'의 라인 %d, 오프셋 %d에서 발견되었습니다."
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:3157
 #, c-format
@@ -31735,9 +31733,9 @@ msgid "Unknown FP_SHAPE type:'%c=0x%02x' on line %d of footprint '%s'."
 msgstr ""
 
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:2466
-#, fuzzy, c-format
+#, c-format
 msgid "Duplicate NETCLASS name '%s'."
-msgstr "NETCLASS 이름 '%s'를 복제합니다."
+msgstr "네트클래스 이름 '%s'를 복제합니다."
 
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:2545
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:2556
@@ -31807,7 +31805,7 @@ msgstr "viaStyleDef %s를 찾을 수 없습니다."
 
 #: pcbnew/python/scripting/pcbnew_action_plugins.cpp:70
 msgid "Exception on python action plugin code"
-msgstr ""
+msgstr "python 액션 플러그인 코드에서의 예외 사항"
 
 #: pcbnew/python/scripting/pcbnew_action_plugins.cpp:82
 #: pcbnew/python/scripting/pcbnew_footprint_wizards.cpp:83
@@ -31827,7 +31825,7 @@ msgstr ""
 
 #: pcbnew/python/scripting/pcbnew_footprint_wizards.cpp:70
 msgid "Exception on python footprint wizard code"
-msgstr ""
+msgstr "python 풋프린트 마법사 코드에서의 예외 사항"
 
 #: pcbnew/router/length_tuner_tool.cpp:46
 #, fuzzy
@@ -31944,9 +31942,8 @@ msgid "board minimum width"
 msgstr "최소 트랙 너비"
 
 #: pcbnew/router/pns_kicad_iface.cpp:473
-#, fuzzy
 msgid "netclass 'Default'"
-msgstr "네트 이름 사용"
+msgstr "네트클래스 '기본값'"
 
 #: pcbnew/router/pns_kicad_iface.cpp:475
 msgid "user choice"
@@ -32157,9 +32154,8 @@ msgid "Specify custom track and via sizes"
 msgstr "트랙 및 비아 크기 모두 편집"
 
 #: pcbnew/router/router_tool.cpp:225
-#, fuzzy
 msgid "Track netclass width"
-msgstr "선 두께"
+msgstr "배선 네트클래스 폭"
 
 #: pcbnew/router/router_tool.cpp:227
 #, fuzzy, c-format
@@ -32167,9 +32163,8 @@ msgid "Track %s"
 msgstr "트랙 %s"
 
 #: pcbnew/router/router_tool.cpp:241
-#, fuzzy
 msgid "Via netclass values"
-msgstr "네트 이름 사용"
+msgstr "비아 네트클래스 값"
 
 #: pcbnew/router/router_tool.cpp:245 pcbnew/tools/drawing_tool.cpp:107
 #, fuzzy, c-format
@@ -32424,9 +32419,8 @@ msgid ""
 msgstr ""
 
 #: pcbnew/toolbars_pcb_editor.cpp:639
-#, fuzzy
 msgid "Track: use netclass width"
-msgstr "선 두께"
+msgstr "배선: 네트클래스 폭 사용하기"
 
 #: pcbnew/toolbars_pcb_editor.cpp:645
 #, c-format
@@ -32439,9 +32433,8 @@ msgid "Edit Pre-defined Sizes..."
 msgstr "미리 정의된 크기 편집..."
 
 #: pcbnew/toolbars_pcb_editor.cpp:691
-#, fuzzy
 msgid "Via: use netclass sizes"
-msgstr "네트 이름 사용"
+msgstr "비아: 네트클래스 크기 사용하기"
 
 #: pcbnew/toolbars_pcb_editor.cpp:714
 #, c-format
@@ -33743,7 +33736,7 @@ msgstr "플러그인 찾아보기 (&B)"
 
 #: pcbnew/tools/pcb_actions.cpp:546
 msgid "Reload all python plugins and refresh plugin menus"
-msgstr ""
+msgstr "python 플러그인을 전부 다시 로드하고 플러그인 메뉴 새로고침"
 
 #: pcbnew/tools/pcb_actions.cpp:552
 msgid "Reveal Plugin Folder in Finder"
@@ -34034,7 +34027,7 @@ msgstr "D-Codes 찾기"
 
 #: pcbnew/tools/pcb_actions.cpp:739
 msgid "Hide the ratsnest for the selected net"
-msgstr ""
+msgstr "선택한 네트의 모든 연결선 숨김"
 
 #: pcbnew/tools/pcb_actions.cpp:743
 #, fuzzy
@@ -34042,9 +34035,8 @@ msgid "Show Net"
 msgstr "모두 보이기"
 
 #: pcbnew/tools/pcb_actions.cpp:743
-#, fuzzy
 msgid "Show the ratsnest for the selected net"
-msgstr "선택된 핀에 핀 크기"
+msgstr "선택한 네트의 연결선 표시"
 
 #: pcbnew/tools/pcb_actions.cpp:748
 #, fuzzy
@@ -34057,14 +34049,12 @@ msgid "Open schematic in Eeschema"
 msgstr "회로도 열기"
 
 #: pcbnew/tools/pcb_actions.cpp:757
-#, fuzzy
 msgid "Local Ratsnest"
-msgstr "연결선 보이기"
+msgstr "지역 연결선"
 
 #: pcbnew/tools/pcb_actions.cpp:757
-#, fuzzy
 msgid "Toggle ratsnest display of selected item(s)"
-msgstr "선택된 항목 잘라내기"
+msgstr "선택한 개체에 대해 연결선 표시 전환"
 
 #: pcbnew/tools/pcb_actions.cpp:768
 #, fuzzy
@@ -34094,13 +34084,12 @@ msgid "Show Ratsnest"
 msgstr "연결선 보이기"
 
 #: pcbnew/tools/pcb_actions.cpp:789
-#, fuzzy
 msgid "Show board ratsnest"
-msgstr "모듈 연결선 보이기"
+msgstr "기판 연결선 보이기"
 
 #: pcbnew/tools/pcb_actions.cpp:794
 msgid "Curved Ratsnest Lines"
-msgstr ""
+msgstr "곡선 연결선"
 
 #: pcbnew/tools/pcb_actions.cpp:800
 #, fuzzy
@@ -34923,9 +34912,8 @@ msgid "Show footprint text marked as invisible"
 msgstr ""
 
 #: pcbnew/widgets/appearance_controls.cpp:354
-#, fuzzy
 msgid "Show unconnected nets as a ratsnest"
-msgstr "일반 연결선 보이기"
+msgstr "연결되지 않은 네트를 연결선으로 표시"
 
 #: pcbnew/widgets/appearance_controls.cpp:355
 msgid "No-Connects"
@@ -35062,31 +35050,31 @@ msgstr "네트 색상:"
 
 #: pcbnew/widgets/appearance_controls.cpp:653
 msgid "Choose when to show net and netclass colors"
-msgstr ""
+msgstr "네트와 네트클래스 색상을 언제 표시할 지 선택"
 
 #: pcbnew/widgets/appearance_controls.cpp:661
 msgid "Net and netclass colors are shown on all copper items"
-msgstr ""
+msgstr "모든 구리 개체에 대해 네트와 네트클래스 색상 표시"
 
 #: pcbnew/widgets/appearance_controls.cpp:668
 msgid "Net and netclass colors are shown on the ratsnest only"
-msgstr ""
+msgstr "연결선에 대해서만 네트와 네트클래스 색상 표시"
 
 #: pcbnew/widgets/appearance_controls.cpp:674
 msgid "Net and netclass colors are not shown"
-msgstr ""
+msgstr "네트와 네트클래스 색상 표시하지 않음"
 
 #: pcbnew/widgets/appearance_controls.cpp:682
 msgid "Ratsnest display:"
-msgstr "Ratznest 표시:"
+msgstr "연결선 표시:"
 
 #: pcbnew/widgets/appearance_controls.cpp:685
 msgid "Choose what ratsnest lines to display"
-msgstr ""
+msgstr "어떤 연결선을 표시할 지 선택"
 
 #: pcbnew/widgets/appearance_controls.cpp:693
 msgid "Ratsnest lines are shown to items on all layers"
-msgstr ""
+msgstr "모든 레이어의 개체에 연결선 표시"
 
 #: pcbnew/widgets/appearance_controls.cpp:698
 #, fuzzy
@@ -35094,9 +35082,8 @@ msgid "Visible layers"
 msgstr "방향 필터"
 
 #: pcbnew/widgets/appearance_controls.cpp:700
-#, fuzzy
 msgid "Ratsnest lines are shown to items on visible layers"
-msgstr "커퍼 레이어 텍스트 포함"
+msgstr "보이는 레이어의 개체에만 연결선 표시"
 
 #: pcbnew/widgets/appearance_controls.cpp:841
 #, fuzzy
@@ -35128,12 +35115,12 @@ msgstr "Copper Layers"
 #: pcbnew/widgets/appearance_controls.cpp:890
 #, c-format
 msgid "Click to hide ratsnest for %s"
-msgstr "%s에 대한 연결선을 숨기려면 클릭하시오"
+msgstr "%s에 대한 연결선을 숨기려면 클릭"
 
 #: pcbnew/widgets/appearance_controls.cpp:891
 #, c-format
 msgid "Click to show ratsnest for %s"
-msgstr ""
+msgstr "%s에 대한 연결선을 표시하려면 클릭"
 
 #: pcbnew/widgets/appearance_controls.cpp:897
 msgid ""
@@ -35341,12 +35328,11 @@ msgstr ""
 #: pcbnew/widgets/appearance_controls.cpp:2141
 #, c-format
 msgid "Show or hide ratsnest for nets in %s"
-msgstr "%s에서 네트의 연결선 표시 또는 숨기기"
+msgstr "%s 내의 네트 연결선 표시 또는 숨기기"
 
 #: pcbnew/widgets/appearance_controls.cpp:2172
-#, fuzzy
 msgid "Set Netclass Color"
-msgstr "비아홀 크기 전환"
+msgstr "네트클래스 색상 설정"
 
 #: pcbnew/widgets/appearance_controls.cpp:2177
 #, fuzzy, c-format
@@ -35354,14 +35340,12 @@ msgid "Highlight Nets in %s"
 msgstr "%s의 하이라이트 네트"
 
 #: pcbnew/widgets/appearance_controls.cpp:2191
-#, fuzzy
 msgid "Show All Netclasses"
-msgstr "모두 보이기"
+msgstr "모든 네트클래스 표시"
 
 #: pcbnew/widgets/appearance_controls.cpp:2194
-#, fuzzy
 msgid "Hide All Other Netclasses"
-msgstr "풋프린트 압축 만들기"
+msgstr "다른 모든 네트클래스 숨기기"
 
 #: pcbnew/widgets/appearance_controls.cpp:2248
 #, fuzzy
