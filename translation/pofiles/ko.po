@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
-"PO-Revision-Date: 2021-08-09 13:52+0000\n"
+"PO-Revision-Date: 2021-08-09 14:35+0000\n"
 "Last-Translator: Ji Yoon Choi <chichoon.choi@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
@@ -6486,7 +6486,7 @@ msgstr "CADSTAR 아카이브 파일"
 
 #: common/wildcards_and_files_ext.cpp:258
 msgid "Eagle XML schematic files"
-msgstr "이글 XML 회로도 파일"
+msgstr "Eagle XML 회로도 파일"
 
 #: common/wildcards_and_files_ext.cpp:264
 msgid "Eagle XML files"
@@ -6507,7 +6507,7 @@ msgstr "KiCad 출력된 회로 기판 파일"
 
 #: common/wildcards_and_files_ext.cpp:288
 msgid "Eagle ver. 6.x XML PCB files"
-msgstr "이글 버전 6.x XML PCB 파일"
+msgstr "Eagle 버전 6.x XML PCB 파일"
 
 #: common/wildcards_and_files_ext.cpp:293
 msgid "CADSTAR PCB Archive files"
@@ -6547,7 +6547,7 @@ msgstr "레거시 풋프린트 라이브러리 파일"
 
 #: common/wildcards_and_files_ext.cpp:347
 msgid "Eagle ver. 6.x XML library files"
-msgstr "이글 버전 6.x XML 라이브러리 파일"
+msgstr "Eagle 버전 6.x XML 라이브러리 파일"
 
 #: common/wildcards_and_files_ext.cpp:353
 msgid "Geda PCB footprint library files"
@@ -13343,41 +13343,38 @@ msgstr ""
 "최대 허용 설계 크기: %.2f, %.2f 밀리미터 입니다.\n"
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:104
-#, c-format, fuzzy
+#, c-format
 msgid ""
 "The CADSTAR design contains variants which has no KiCad equivalent. Only the "
 "master variant ('%s') was loaded."
-msgstr "CADSTAR 디자인에는 KiCad에 해당하지 않는 변형이 포함되어 있습니다. 마스터 변형('%s')만 로드되었습니다."
+msgstr "CADSTAR 디자인에는 KiCad에 대응되지 않는 변형이 포함되어 있습니다. 마스터 변형('%s')만 불러옵니다."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:113
-#, fuzzy
 msgid ""
 "The CADSTAR design contains grouped items which has no KiCad equivalent. Any "
 "grouped items have been ungrouped."
-msgstr "CADSTAR 디자인에는 KiCad에 해당하지 않는 그룹화된 아이템이 포함되어 있습니다. 그룹화된 아이템이 그룹 해제되었습니다."
+msgstr "CADSTAR 디자인에는 KiCad에 대응되지 않는 그룹화된 아이템이 포함되어 있습니다. 그룹화된 아이템은 그룹 해제되었습니다."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:120
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:129
-#, fuzzy
 msgid ""
 "The CADSTAR design contains re-use blocks which has no KiCad equivalent. The "
 "re-use block information has been discarded during the import."
 msgstr ""
-"CADSTAR 디자인에는 KiCad에 해당하지 않는 재사용 블록이 포함되어 있습니다. 재사용 블록이 가져오기 과정에서 삭제되었습니다."
+"CADSTAR 디자인에는 KiCad에 대응되지 않는 재사용 블록이 포함되어 있습니다. 재사용 블록이 불러오기 과정에서 삭제되었습니다."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:222
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:134
-#, fuzzy
 msgid ""
 "The CADSTAR design has been imported successfully.\n"
 "Please review the import errors and warnings (if any)."
 msgstr ""
-"CADSTAR 디자인을 성공적으로 가져왔습니다.\n"
-"가져오기 시 오류 및 경고를(있는 경우) 검토하십시오."
+"CADSTAR 디자인을 성공적으로 불러왔습니다.\n"
+"불러오기 시 발생한 오류와 경고를 검토하십시오 (있을 경우에)."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:276
 msgid "The CADSTAR schematic might be corrupt: there is no root sheet."
-msgstr "CADSTAR 회로도가 손상되었을 수 있습니다. 루트 시트가 없습니다."
+msgstr "CADSTAR 회로도가 손상되었을 수 있습니다: 루트 시트가 없습니다."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:353
 #, c-format
@@ -13386,22 +13383,23 @@ msgid ""
 "be found in the symbol library. The part has not been loaded into the KiCad "
 "library."
 msgstr ""
-"부품 정의 '%s'은 심볼 라이브러리에서 찾을 수 없는 심볼 '%s'('%s' 대체)를 참조합니다. 부품이 KiCad 라이브러리에 로드 "
-"되어있지 않습니다."
+"부품 정의 '%s'은 심볼 라이브러리에서 찾을 수 없는 심볼 '%s' ('%s' 대체) 를 참조합니다. KiCad 라이브러리에 부품을 "
+"불러오지 않았습니다."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:401
 #, c-format
 msgid ""
 "Symbol '%s' references part '%s' which could not be found in the library. "
 "The symbol was not loaded"
-msgstr "심볼 '%s'는 라이브러리에서 찾을 수 없는 부품 '%s'를 참조합니다. 심볼이 로드되지 않았습니다"
+msgstr "심볼 '%s'는 라이브러리에서 찾을 수 없는 부품 '%s'를 참조합니다. 심볼을 불러오지 않았습니다"
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:510
 #, c-format
 msgid ""
 "Symbol ID '%s' references library symbol '%s' which could not be found in "
 "the library. Did you export all items of the design?"
-msgstr "심볼 ID '%s'가 라이브러리에서 찾을 수 없는 라이브러리 심볼 '%s'를 참조합니다. 디자인의 모든 항목을 내보냈습니까?"
+msgstr ""
+"심볼 ID '%s'는 라이브러리에서 찾을 수 없는 라이브러리 심볼 '%s'를 참조합니다. 디자인의 모든 항목을 내보낸 것이 맞습니까?"
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:520
 #, c-format
@@ -13409,14 +13407,14 @@ msgid ""
 "Symbol ID '%s' is a signal reference or global signal but it has too many "
 "pins. The expected number of pins is 1 but %d were found."
 msgstr ""
-"심볼 ID '%s'는 시그널 레퍼런스이거나 너무 핀이 많은 글로벌 시그널입니다. 예상되는 핀 개수는 1개이나 %d개가 발견되었습니다."
+"심볼 ID '%s'는 신호 참조이거나 전역 신호입니다만, 핀 수가 너무 많습니다. 예상되는 핀 개수는 1개이나 %d개가 발견되었습니다."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:637
 #, c-format
 msgid ""
 "Symbol ID '%s' is of an unknown type. It is neither a symbol or a net "
 "power / symbol. The symbol was not loaded."
-msgstr "심볼 ID '%s'는 알 수 없는 유형입니다. 심볼이 아니거나 네트 파워 / 심볼입니다. 심볼이 로드되지 않았습니다."
+msgstr "심볼 ID '%s'는 알 수 없는 유형입니다. 심볼이 아니거나 네트 파워 / 심볼입니다. 심볼을 불러오지 않았습니다."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:651
 #, c-format
@@ -13425,15 +13423,15 @@ msgid ""
 "supported in KiCad. When the symbol is reloaded from the library, it will "
 "revert to the original 1:1 scale."
 msgstr ""
-"심볼 '%s'는 원본 CADSTAR 회로도에서 크기가 조정되지만 KiCad에서 지원되지 않습니다. 라이브러리에서 심볼이 다시 로드되면, "
-"원본의 1:1 배율로 되돌아갑니다."
+"원본 CADSTAR 회로도에서 심볼 '%s'는 크기가 조정되었지만, 이는 KiCad에서 지원되지 않습니다. 라이브러리에서 심볼을 다시 "
+"불러오면, 원본의 1:1 배율로 되돌아갑니다."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:1090
 #, c-format
 msgid ""
 "Documentation Symbol '%s' refers to symbol definition ID '%s' which does not "
 "exist in the library. The symbol was not loaded."
-msgstr "문서 심볼 '%s'는 라이브러리에 존재하지 않는 심볼 정의 ID'%s'를 참조합니다. 심볼이 로드되지 않았습니다."
+msgstr "문서 심볼 '%s'는 라이브러리에 존재하지 않는 심볼 정의 ID'%s'를 참조합니다. 심볼을 불러오지 않았습니다."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:1197
 msgid "Text Variables could not be set as there is no project attached."
@@ -13447,7 +13445,7 @@ msgid ""
 "connecting wires will need manual fixing."
 msgstr ""
 "원본 CADSTAR 디자인에서 심볼 '%s'는 %.1f씩 회전할 수 있지만, KiCad는 90도의 배수 회전만을 지원합니다. 연결 "
-"와이어는 수동 수정이 필요할 것입니다."
+"와이어는 수동 수정이 필요할 수 있습니다."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:1632
 #, c-format
@@ -13461,7 +13459,7 @@ msgstr "심볼 '%s'는 시트 ID '%s'를 참조하지만, 이는 현재 디자�
 msgid ""
 "Net %s references unknown net element %s. The net was not properly loaded "
 "and may require manual fixing."
-msgstr ""
+msgstr "네트 %s는 알 수 없는 네트 요소 %s를 참조합니다. 네트는 정상적으로 불러와지지 않았으며, 수동 수정이 필요할 수 있습니다."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:2065
 #, c-format
@@ -13470,26 +13468,28 @@ msgid ""
 "to another sheet in the design. KiCad requires all sheet symbols to be "
 "associated to a sheet, so the block was not loaded."
 msgstr ""
+"블록 ID %s (블록 이름: '%s') 는 시트 '%s' 에 그려졌으나, 디자인 상의 다른 시트에 연결되지 않았습니다. KiCad는 "
+"모든 시트 심볼이 시트와 연결되어야 하므로, 블록을 불러오지 않았습니다."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:2090
 #, c-format
 msgid ""
 "The CADSTAR schematic might be corrupt: Block %s references a child sheet "
 "but has no Figure defined."
-msgstr ""
+msgstr "CADSTAR 회로도가 손상되었을 가능성이 있습니다: 블록 %s는 하위 시트를 참조하지만 정의된 형상이 없습니다."
 
 #: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:442
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:2876
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to read file '%s'."
-msgstr "%s 파일을 만들 수 없습니다."
+msgstr "파일 '%s' 을 읽을 수 없습니다."
 
 #: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:1269
 #, c-format
 msgid ""
 "Error parsing Eagle file. Could not find '%s' instance but it is referenced "
 "in the schematic."
-msgstr ""
+msgstr "Eagle 파일을 파싱하는 중에 오류가 발생하였습니다. '%s' 인스턴스를 찾을 수 없습니다만, 회로도에서 참조되고 있습니다."
 
 #: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:1300
 #, c-format
@@ -13498,45 +13498,44 @@ msgstr "가져온 라이브러리에서 '%s'를 찾을 수 없습니다."
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:169
 msgid "Invalid symbol name"
-msgstr "잘못된 기호 이름"
+msgstr "잘못된 심볼 이름"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:179
-#, fuzzy
 msgid "Invalid library identifier"
-msgstr "풋프린트 필터"
+msgstr "잘못된 라이브러리 식별자"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:251
 msgid "Invalid parent symbol name"
-msgstr "잘못된 상위 기호 이름"
+msgstr "잘못된 상위 심볼 이름"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:260
 #, c-format
 msgid "No parent for extended symbol %s"
-msgstr "확장 기호에 대한 상위 항목이 없음 %s"
+msgstr "확장 심볼 %s에 대한 상위 항목이 없음"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:275
 msgid "Invalid symbol unit name"
-msgstr "잘못된 기호 단위 이름"
+msgstr "잘못된 심볼 유닛 이름"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:283
 #, c-format
 msgid "Invalid symbol unit name prefix %s"
-msgstr "잘못된 기호 단위 이름 접두사 %s"
+msgstr "잘못된 심볼 유닛 이름 접두사 %s"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:293
 #, c-format
 msgid "Invalid symbol unit name suffix %s"
-msgstr "잘못된 기호 단위 이름 접미사 %s"
+msgstr "잘못된 심볼 유닛 이름 접미사 %s"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:299
 #, c-format
 msgid "Invalid symbol unit number %s"
-msgstr "잘못된 기호 단위 번호 %s"
+msgstr "잘못된 심볼 유닛 번호 %s"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:307
 #, c-format
 msgid "Invalid symbol convert number %s"
-msgstr "잘못된 기호 변환 번호 %s"
+msgstr "잘못된 심볼 변환 번호 %s"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:428
 msgid "Floating point number with incorrect locale"
@@ -13547,14 +13546,12 @@ msgid "Invalid floating point number"
 msgstr "잘못된 부동 소수점 숫자"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:444
-#, fuzzy
 msgid "Missing floating point number"
-msgstr "새 풋프린트 추가"
+msgstr "부동 소수점 숫자 누락"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:749
-#, fuzzy
 msgid "Invalid pin names definition"
-msgstr "설정 저장"
+msgstr "잘못된 핀 이름 정의"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:771
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1714
@@ -13584,9 +13581,8 @@ msgid "Invalid alternate pin name"
 msgstr "올바르지 않은 대체 핀 이름"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1513
-#, fuzzy
 msgid "Invalid text string"
-msgstr "패드 모양"
+msgstr "잘못된 텍스트 문자열"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1560
 msgid "Invalid page type"
@@ -13594,38 +13590,35 @@ msgstr "잘못된 페이지 유형"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1688
 msgid "Invalid title block comment number"
-msgstr ""
+msgstr "잘못된 제목 블록 주석 번호"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1787
 msgid "Invalid sheet pin name"
 msgstr "잘못된 시트 핀 이름"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1795
-#, fuzzy
 msgid "Empty sheet pin name"
-msgstr "핀 시트 가져오기"
+msgstr "빈 시트 핀 이름"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:2246
-#, fuzzy
 msgid "Invalid symbol library name"
-msgstr "문서 라이브러리 파일 만들기 실패"
+msgstr "잘못된 심볼 라이브러리 이름"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:2266
-#, fuzzy
 msgid "Invalid symbol library ID"
-msgstr "문서 라이브러리 파일 만들기 실패"
+msgstr "잘못된 심볼 라이브러리 ID"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_plugin.cpp:1521
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:2610
-#, fuzzy, c-format
+#, c-format
 msgid "Library file '%s' not found."
-msgstr "<%s> 라이브러리 파일을 찾을 수 없습니다."
+msgstr "라이브러리 파일 '%s' 을 찾을 수 없습니다."
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_plugin.cpp:2079
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:4219
 #, c-format
 msgid "library %s does not contain a symbol named %s"
-msgstr ""
+msgstr "라이브러리 %s는 심볼 이름 %s를 포함하고 있지 않습니다"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_plugin.cpp:2247
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:4399
@@ -13635,9 +13628,9 @@ msgstr "심볼 라이브러리 '%s'가 이미 존재합니다."
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_plugin.cpp:2273
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:4425
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol library '%s' cannot be deleted."
-msgstr "%s 라이브러리를 찾을 수 없습니다."
+msgstr "심볼 라이브러리 '%s' 를 삭제할 수 없습니다."
 
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:165
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:207
@@ -13655,12 +13648,12 @@ msgstr "예상치 못한 라인의 끝"
 
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:363
 msgid "expected unquoted string"
-msgstr ""
+msgstr "예상치 못한 따옴표 없는 문자열"
 
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:871
 #, c-format
 msgid "'%s' does not appear to be an Eeschema file."
-msgstr ""
+msgstr "'%s' 는 Eeschema 파일이 아닙니다."
 
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:901
 msgid "Missing 'EELAYER END'"
@@ -13678,15 +13671,15 @@ msgstr "예상치 못한 파일의 끝"
 
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:1509
 msgid "expected 'Italics' or '~'"
-msgstr ""
+msgstr "'Italics' 또는 '~' 예상됨"
 
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:1773
 msgid "symbol field text attributes must be 3 characters wide"
-msgstr ""
+msgstr "심볼 필드 텍스트 속성은 3 글자 너비로 구성되어야 합니다"
 
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:2624
 msgid "Unexpected end of file."
-msgstr "예기치 않은 파일 끝입니다."
+msgstr "예기치 않은 파일의 끝."
 
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:2710
 #, c-format
@@ -13695,19 +13688,19 @@ msgstr "라이브러리 '%s'를 읽을 수 있는 권한이 없습니다."
 
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:2719
 msgid "symbol document library file is empty"
-msgstr ""
+msgstr "심볼 문서 라이브러리 파일이 비어 있음"
 
 #: eeschema/sch_screen.cpp:572
 #, c-format
 msgid "Setting schematic symbol '%s %s' library identifier to '%s'. "
-msgstr ""
+msgstr "회로도 심볼 '%s %s' 라이브러리 식별자를 '%s'로 설정했습니다. "
 
 #: eeschema/sch_screen.cpp:589
 #, c-format
 msgid ""
 "Schematic symbol reference '%s' library identifier is not valid.  Unable to "
 "link library symbol."
-msgstr ""
+msgstr "회로도 심볼 참조 '%s' 라이브러리 식별자는 유효하지 않습니다.  라이브러리 심볼을 연결할 수 없습니다."
 
 #: eeschema/sch_screen.cpp:605
 #, c-format
@@ -13715,16 +13708,17 @@ msgid ""
 "Symbol library '%s' not found and no fallback cache library available.  "
 "Unable to link library symbol."
 msgstr ""
+"심볼 라이브러리 '%s'를 찾을 수 없으며, 사용가능한 폴백 캐시 라이브러리가 없습니다.  라이브러리 심볼을 연결할 수 없습니다."
 
 #: eeschema/sch_screen.cpp:624
 #, c-format
 msgid "I/O error %s resolving library symbol %s"
-msgstr "I/O 오류 %s 라이브러리 기호 해결 %s"
+msgstr "I/O 오류 %s 발생 (라이브러리 기호 %s 확인 중)"
 
 #: eeschema/sch_screen.cpp:644
 #, c-format
 msgid "Falling back to cache to set symbol '%s:%s' link '%s'."
-msgstr ""
+msgstr "심볼 '%s:%s' 을 연결 '%s'로 설정하기 위해 캐시로 폴백합니다."
 
 #: eeschema/sch_screen.cpp:665
 #, c-format
@@ -13734,14 +13728,13 @@ msgstr "회로도 기호 '%s %s' 라이브러리 식별자를 '%s'으로 설정�
 #: eeschema/sch_screen.cpp:676
 #, c-format
 msgid "No library symbol found for schematic symbol '%s %s'."
-msgstr ""
+msgstr "회로도 심볼 '%s %s'의 라이브러리 심볼을 찾지 못했습니다."
 
 #: eeschema/sch_sheet.cpp:58
 msgid "Sheet name"
 msgstr "시트 이름"
 
 #: eeschema/sch_sheet.cpp:59
-#, fuzzy
 msgid "Sheet file"
 msgstr "시트 파일"
 
@@ -13750,9 +13743,8 @@ msgid "Sheet Name"
 msgstr "시트 이름"
 
 #: eeschema/sch_sheet.cpp:715
-#, fuzzy
 msgid "Hierarchical Path"
-msgstr "시트에 의한 계층구조 핀"
+msgstr "계층 경로"
 
 #: eeschema/sch_sheet.cpp:718
 msgid "File Name"
@@ -13761,7 +13753,7 @@ msgstr "파일 이름"
 #: eeschema/sch_sheet.cpp:927
 #, c-format
 msgid "Hierarchical Sheet %s"
-msgstr "계층적 시트 %s"
+msgstr "계층 시트 %s"
 
 #: eeschema/sch_sheet_path.cpp:57 include/board_item.h:378
 msgid "(Deleted Item)"
@@ -13770,7 +13762,7 @@ msgstr "(삭제된 항목)"
 #: eeschema/sch_sheet_pin.cpp:286
 #, c-format
 msgid "Hierarchical Sheet Pin %s"
-msgstr "계층적 시트 핀 %s"
+msgstr "계층 시트 핀 %s"
 
 #: eeschema/sch_symbol.cpp:1366
 msgid "Power symbol"
@@ -13781,9 +13773,8 @@ msgid "flags"
 msgstr "플래그"
 
 #: eeschema/sch_symbol.cpp:1381
-#, fuzzy
 msgid "Missing parent"
-msgstr "정렬"
+msgstr "상위 항목 존재하지 않음"
 
 #: eeschema/sch_symbol.cpp:1396
 msgid "Undefined!!!"
@@ -13810,7 +13801,7 @@ msgstr "기호 %s [%s]"
 #: eeschema/sch_text.cpp:560
 #, fuzzy
 msgid "Tri-State"
-msgstr "3-스테이트"
+msgstr "3-상태"
 
 #: eeschema/sch_text.cpp:732
 msgid "Graphic Text"
@@ -13821,9 +13812,8 @@ msgid "Label"
 msgstr "라벨"
 
 #: eeschema/sch_text.cpp:736
-#, fuzzy
 msgid "Hierarchical Sheet Pin"
-msgstr "시트에 의한 계층구조 핀"
+msgstr "계층 시트 핀"
 
 #: eeschema/sch_text.cpp:754
 msgid "Bold Italic"
@@ -13997,26 +13987,164 @@ msgid ""
 "<i>Note that markup has precedence over bus definitions.</i>\n"
 "\n"
 msgstr ""
+"<table>\n"
+"    <tr>\n"
+"        <th>마크업</th>\n"
+"        <th></th>\n"
+"        <th>결과</th>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>^{위_첨자}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp><sup>위 첨자</sup>&nbsp;</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>Driver Board^{Rev A}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>Driver Board<sup>Rev A</sup></samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>_{아래_첨자}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp><sub>아래 첨자</sub>&nbsp;</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>D_{0} - D_{15}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>D<sub>0</sub> - D<sub>15</sub></samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td> &nbsp;<br><samp>~{윗줄}</samp><br> &nbsp;<br><samp>~{CLK}</"
+"samp><br> &nbsp;<br><samp>~~</samp> </td>\n"
+"        <td></td>\n"
+"        <td> <samp><u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></"
+"samp><br> <samp>윗줄</samp><br> <samp><u>&nbsp;&nbsp;&nbsp;</u></samp><br> "
+"<samp>CLK</samp><br> <samp>&nbsp;</samp><br> <samp>~</samp> </td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${변수}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp><i>변수 값</i></samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${REVISION}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>2020.1</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${참조지정자:필드}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp><i>필드 값</i> of symbol <i>참조지정자</i></samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${R3:VALUE}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>150K</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <th>버스 정의</th>\n"
+"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp"
+";&nbsp;&nbsp;</th>\n"
+"        <th>생성된 네트</th>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>접두사[m..n]</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>접두사m to 접두사n</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>D[0..7]</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>D0, D1, D2, D3, D4, D5, D6, D7</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>{네트1 네트2 ...}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>네트1, 네트2, ...</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>{SCL SDA}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>SCL, SDA</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>접두사{네트1 네트2 ...}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>접두사.네트1, 접두사.네트2, ...</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>USB1{D+ D-}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>USB1.D+, USB1.D-</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>MEM{D[1..2] LATCH}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br> <samp>MEM.D1, MEM.D2, MEM.LATCH</samp> </td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>MEM{D_{[1..2]} ~LATCH}</samp></td>\n"
+"        <td></td>\n"
+"        <td> <samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
+"&nbsp;&nbsp;&nbsp;&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> "
+"<samp>MEM.D<sub>1</sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"</table>\n"
+"<p></p>\n"
+"<p></p>\n"
+"<i>마크업이 버스 정의보다 앞에 오는 것을 주의하세요</i>\n"
+"\n"
 
 #: eeschema/sch_validators.cpp:102
 #, c-format
 msgid "The reference designator cannot contain %s character(s)."
-msgstr ""
+msgstr "참조 지정자는 %s 문자를 포함할 수 없습니다."
 
 #: eeschema/sch_validators.cpp:106
 #, c-format
 msgid "The value field cannot contain %s character(s)."
-msgstr ""
+msgstr "값 필드는 %s 문자를 포함할 수 없습니다."
 
 #: eeschema/sch_validators.cpp:110
-#, fuzzy, c-format
+#, c-format
 msgid "The footprint field cannot contain %s character(s)."
-msgstr "<%s> 파일로 모듈을 내보냈습니다."
+msgstr "풋프린트 필드는 %s 문자를 포함할 수 없습니다."
 
 #: eeschema/sch_validators.cpp:114
 #, c-format
 msgid "The datasheet field cannot contain %s character(s)."
-msgstr ""
+msgstr "데이터시트 필드에는 %s 문자를 포함할 수 없습니다."
 
 #: eeschema/sch_validators.cpp:118
 #, c-format
@@ -17575,9 +17703,8 @@ msgid "Import CADSTAR Archive Project Files"
 msgstr "CADSTAR 아카이브 프로젝트 파일 가져오기"
 
 #: kicad/import_project.cpp:231
-#, fuzzy
 msgid "Import Eagle Project Files"
-msgstr "프로젝트 파일 저장 (&P)"
+msgstr "Eagle 프로젝트 파일 가져오기"
 
 #: kicad/kicad.cpp:169
 #, c-format
@@ -17635,11 +17762,11 @@ msgstr ""
 
 #: kicad/menubar.cpp:99
 msgid "EAGLE Project..."
-msgstr "이글 프로젝트..."
+msgstr "Eagle 프로젝트..."
 
 #: kicad/menubar.cpp:100
 msgid "Import EAGLE CAD XML schematic and board"
-msgstr ""
+msgstr "Eagle CAD XML 회로도와 기판 가져오기"
 
 #: kicad/menubar.cpp:107
 msgid "&Archive Project..."
@@ -31271,27 +31398,27 @@ msgstr "%s 라이브러리의 %s 컴포넌트가 삭제되었습니다."
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:2119
 #, c-format
 msgid "Ignoring a polygon since Eagle layer '%s' (%d) was not mapped"
-msgstr ""
+msgstr "Eagle 레이어 '%s' (%d)가 매핑되지 않았기 때문에 다각형을 무시합니다"
 
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:1693
 #, c-format
 msgid "Ignoring a wire since Eagle layer '%s' (%d) was not mapped"
-msgstr ""
+msgstr "Eagle 레이어 '%s' (%d)가 매핑되지 않았기 때문에 와이어를 무시합니다"
 
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:1866
 #, c-format
 msgid "Ignoring a text since Eagle layer '%s' (%d) was not mapped"
-msgstr ""
+msgstr "Eagle 레이어 '%s' (%d)가 매핑되지 않았기 때문에 텍스트를 무시합니다"
 
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:2004
 #, c-format
 msgid "Ignoring a rectangle since Eagle layer '%s' (%d) was not mapped"
-msgstr ""
+msgstr "Eagle 레이어 '%s' (%d)가 매핑되지 않았기 때문에 사각형을 무시합니다"
 
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:2189
 #, c-format
 msgid "Ignoring a circle since Eagle layer '%s' (%d) was not mapped"
-msgstr ""
+msgstr "Eagle 레이어 '%s' (%d)가 매핑되지 않았기 때문에 원을 무시합니다"
 
 #: pcbnew/plugins/fabmaster/fabmaster_plugin.cpp:85
 msgid "Could not read file "
