@@ -62,6 +62,8 @@ private:
     void addKnockout( BOARD_ITEM* aItem, PCB_LAYER_ID aLayer, int aGap, bool aIgnoreLineWidth,
                       SHAPE_POLY_SET& aHoles );
 
+    void addHoleKnockout( PAD* aPad, int aGap, SHAPE_POLY_SET& aHoles );
+
     void knockoutThermalReliefs( const ZONE* aZone, PCB_LAYER_ID aLayer, SHAPE_POLY_SET& aFill );
 
     void buildCopperItemClearances( const ZONE* aZone, PCB_LAYER_ID aLayer,

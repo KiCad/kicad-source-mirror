@@ -570,6 +570,20 @@ void ZONE_FILLER::addKnockout( PAD* aPad, PCB_LAYER_ID aLayer, int aGap, SHAPE_P
 
 
 /**
+ * Add a knockout for a pad's hole.
+ */
+void ZONE_FILLER::addHoleKnockout( PAD* aPad, int aGap, SHAPE_POLY_SET& aHoles )
+{
+    // Note: drill size represents finish size, which means the actual hole size is the plating
+    // thickness larger.
+    if( aPad->GetAttribute() == PAD_ATTRIB::PTH )
+        aGap += aPad->GetBoard()->GetDesignSettings().GetHolePlatingThickness();
+
+    aPad->TransformHoleWithClearanceToPolygon( aHoles, aGap, m_maxError, ERROR_OUTSIDE );
+}
+
+
+/**
  * Add a knockout for a graphic item.  The knockout is 'aGap' larger than the item (which
  * might be either the electrical clearance or the board edge clearance).
  */
@@ -691,34 +705,36 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE* aZone, PCB_LAYER_ID aLa
             {
                 if( aPad->GetBoundingBox().Intersects( zone_boundingbox ) )
                 {
-                    int gap;
+                    int  gap = 0;
+                    bool knockoutHoleClearance = true;
 
-                    // For pads having the same netcode as the zone, the net clearance has no
-                    // meaning so use the greater of the zone clearance and the thermal relief.
                     if( aPad->GetNetCode() > 0 && aPad->GetNetCode() == aZone->GetNetCode() )
-                        gap = std::max( zone_clearance, aZone->GetThermalReliefGap( aPad ) );
-                    else
-                        gap = evalRulesForItems( CLEARANCE_CONSTRAINT, aZone, aPad, aLayer );
-
-                    gap += extra_margin;
-
-                    // If the pad isn't on the current layer but has a hole, knock out the hole.
-                    if( !aPad->FlashLayer( aLayer ) )
                     {
-                        if( aPad->GetDrillSize().x == 0 && aPad->GetDrillSize().y == 0 )
-                            return;
-
-                        // Note: drill size represents finish size, which means the actual hole
-                        // size is the plating thickness larger.
-                        if( aPad->GetAttribute() == PAD_ATTRIB::PTH )
-                            gap += aPad->GetBoard()->GetDesignSettings().GetHolePlatingThickness();
-
-                        aPad->TransformHoleWithClearanceToPolygon( aHoles, gap, m_maxError,
-                                                                   ERROR_OUTSIDE );
+                        // For pads having the same netcode as the zone, the net and hole
+                        // clearances have no meanings.
+                        // So just knock out the greater of the zone's local clearance and
+                        // thermal relief.
+                        gap = std::max( zone_clearance, aZone->GetThermalReliefGap( aPad ) );
+                        knockoutHoleClearance = false;
                     }
                     else
                     {
+                        gap = evalRulesForItems( CLEARANCE_CONSTRAINT, aZone, aPad, aLayer );
+                    }
+
+                    gap += extra_margin;
+
+                    if( aPad->FlashLayer( aLayer ) )
                         addKnockout( aPad, aLayer, gap, aHoles );
+                    else if( aPad->GetDrillSize().x > 0 )
+                        addHoleKnockout( aPad, gap, aHoles );
+
+                    if( knockoutHoleClearance && aPad->GetDrillSize().x > 0 )
+                    {
+                        gap = evalRulesForItems( HOLE_CLEARANCE_CONSTRAINT, aZone, aPad, aLayer );
+                        gap += extra_margin;
+
+                        addHoleKnockout( aPad, gap, aHoles );
                     }
                 }
             };
@@ -746,29 +762,50 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE* aZone, PCB_LAYER_ID aLa
             {
                 if( aTrack->GetBoundingBox().Intersects( zone_boundingbox ) )
                 {
-                    int gap = evalRulesForItems( CLEARANCE_CONSTRAINT, aZone, aTrack, aLayer );
-
-                    gap += extra_margin;
-
                     if( aTrack->Type() == PCB_VIA_T )
                     {
                         PCB_VIA* via = static_cast<PCB_VIA*>( aTrack );
+                        int      gap = 0;
+                        bool     checkHoleClearance = true;
 
-                        if( !via->FlashLayer( aLayer ) && via->GetNetCode() != aZone->GetNetCode() )
+                        if( via->GetNetCode() > 0 && via->GetNetCode() == aZone->GetNetCode() )
                         {
-                            int radius = via->GetDrillValue() / 2 + bds.GetHolePlatingThickness();
-                            TransformCircleToPolygon( aHoles, via->GetPosition(), radius + gap,
-                                                      m_maxError, ERROR_OUTSIDE );
+                            // For pads having the same netcode as the zone, the net and hole
+                            // clearances have no meanings.
+                            // So just knock out the zone's local clearance.
+                            gap = zone_clearance;
+                            checkHoleClearance = false;
                         }
                         else
                         {
-                            via->TransformShapeWithClearanceToPolygon( aHoles, aLayer, gap,
+                            gap = evalRulesForItems( CLEARANCE_CONSTRAINT, aZone, aTrack, aLayer );
+                        }
+
+                        if( via->FlashLayer( aLayer ) )
+                        {
+                            via->TransformShapeWithClearanceToPolygon( aHoles, aLayer,
+                                                                       gap + extra_margin,
                                                                        m_maxError, ERROR_OUTSIDE );
                         }
+
+                        if( checkHoleClearance )
+                        {
+                            gap = std::max( gap, evalRulesForItems( HOLE_CLEARANCE_CONSTRAINT,
+                                                                    aZone, via, aLayer ) );
+                        }
+
+                        int radius = via->GetDrillValue() / 2 + bds.GetHolePlatingThickness();
+
+                        TransformCircleToPolygon( aHoles, via->GetPosition(),
+                                                  radius + gap + extra_margin,
+                                                  m_maxError, ERROR_OUTSIDE );
                     }
                     else
                     {
-                        aTrack->TransformShapeWithClearanceToPolygon( aHoles, aLayer, gap,
+                        int gap = evalRulesForItems( CLEARANCE_CONSTRAINT, aZone, aTrack, aLayer );
+
+                        aTrack->TransformShapeWithClearanceToPolygon( aHoles, aLayer,
+                                                                      gap + extra_margin,
                                                                       m_maxError, ERROR_OUTSIDE );
                     }
                 }

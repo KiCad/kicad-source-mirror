@@ -527,6 +527,33 @@ int BOARD_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
 }
 
 
+wxString reportMin( EDA_UNITS aUnits, DRC_CONSTRAINT& aConstraint )
+{
+    if( aConstraint.m_Value.HasMin() )
+        return StringFromValue( aUnits, aConstraint.m_Value.Min(), true );
+    else
+        return wxT( "<i>" ) + _( "undefined" ) + wxT( "</i>" );
+}
+
+
+wxString reportOpt( EDA_UNITS aUnits, DRC_CONSTRAINT& aConstraint )
+{
+    if( aConstraint.m_Value.HasOpt() )
+        return StringFromValue( aUnits, aConstraint.m_Value.Opt(), true );
+    else
+        return wxT( "<i>" ) + _( "undefined" ) + wxT( "</i>" );
+}
+
+
+wxString reportMax( EDA_UNITS aUnits, DRC_CONSTRAINT& aConstraint )
+{
+    if( aConstraint.m_Value.HasMax() )
+        return StringFromValue( aUnits, aConstraint.m_Value.Max(), true );
+    else
+        return wxT( "<i>" ) + _( "undefined" ) + wxT( "</i>" );
+}
+
+
 int BOARD_INSPECTION_TOOL::InspectConstraints( const TOOL_EVENT& aEvent )
 {
     PCB_SELECTION_TOOL*  selTool = m_toolMgr->GetTool<PCB_SELECTION_TOOL>();
@@ -580,7 +607,7 @@ int BOARD_INSPECTION_TOOL::InspectConstraints( const TOOL_EVENT& aEvent )
     }
 
     WX_HTML_REPORT_BOX* r = nullptr;
-
+    
     if( item->Type() == PCB_TRACE_T )
     {
         r = m_inspectConstraintsDialog->AddPage( _( "Track Width" ) );
@@ -600,19 +627,11 @@ int BOARD_INSPECTION_TOOL::InspectConstraints( const TOOL_EVENT& aEvent )
             auto constraint = drcEngine.EvalRules( TRACK_WIDTH_CONSTRAINT, item, nullptr,
                                                    item->GetLayer(), r );
 
-            wxString min = _( "undefined" );
-            wxString max = _( "undefined" );
-
-            if( constraint.m_Value.HasMin() )
-                min = StringFromValue( r->GetUnits(), constraint.m_Value.Min(), true );
-
-            if( constraint.m_Value.HasMax() )
-                max = StringFromValue( r->GetUnits(), constraint.m_Value.Max(), true );
-
             r->Report( "" );
-            r->Report( wxString::Format( _( "Width constraints: min %s max %s." ),
-                                         min,
-                                         max ) );
+            r->Report( wxString::Format( _( "Width constraints: min %s; opt %s; max %s." ),
+                                         reportMin( r->GetUnits(),  constraint ),
+                                         reportOpt( r->GetUnits(),  constraint ),
+                                         reportMax( r->GetUnits(),  constraint ) ) );
         }
 
         r->Flush();
@@ -638,19 +657,11 @@ int BOARD_INSPECTION_TOOL::InspectConstraints( const TOOL_EVENT& aEvent )
             auto constraint = drcEngine.EvalRules( VIA_DIAMETER_CONSTRAINT, item, nullptr,
                                                    UNDEFINED_LAYER, r );
 
-            wxString min = _( "undefined" );
-            wxString max = _( "undefined" );
-
-            if( constraint.m_Value.HasMin() )
-                min = StringFromValue( r->GetUnits(), constraint.m_Value.Min(), true );
-
-            if( constraint.m_Value.HasMax() )
-                max = StringFromValue( r->GetUnits(), constraint.m_Value.Max(), true );
-
             r->Report( "" );
-            r->Report( wxString::Format( _( "Diameter constraints: min %s max %s." ),
-                                         min,
-                                         max ) );
+            r->Report( wxString::Format( _( "Diameter constraints: min %s; opt %s; max %s." ),
+                                         reportMin( r->GetUnits(),  constraint ),
+                                         reportOpt( r->GetUnits(),  constraint ),
+                                         reportMax( r->GetUnits(),  constraint ) ) );
         }
 
         r->Flush();
@@ -673,19 +684,11 @@ int BOARD_INSPECTION_TOOL::InspectConstraints( const TOOL_EVENT& aEvent )
             auto constraint = drcEngine.EvalRules( ANNULAR_WIDTH_CONSTRAINT, item, nullptr,
                                                    UNDEFINED_LAYER, r );
 
-            wxString min = _( "undefined" );
-            wxString max = _( "undefined" );
-
-            if( constraint.m_Value.HasMin() )
-                min = StringFromValue( r->GetUnits(), constraint.m_Value.Min(), true );
-
-            if( constraint.m_Value.HasMax() )
-                max = StringFromValue( r->GetUnits(), constraint.m_Value.Max(), true );
-
             r->Report( "" );
-            r->Report( wxString::Format( _( "Annular width constraints: min %s max %s." ),
-                                         min,
-                                         max ) );
+            r->Report( wxString::Format( _( "Annular width constraints: min %s; opt %s; max %s." ),
+                                         reportMin( r->GetUnits(),  constraint ),
+                                         reportOpt( r->GetUnits(),  constraint ),
+                                         reportMax( r->GetUnits(),  constraint ) ) );
         }
 
         r->Flush();

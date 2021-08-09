@@ -540,8 +540,7 @@ bool PCB_VIA::FlashLayer( int aLayer ) const
     if( m_keepTopBottomLayer && ( aLayer == m_layer || aLayer == m_bottomLayer ) )
         return true;
 
-    return board->GetConnectivity()->IsConnectedOnLayer( this, static_cast<int>( aLayer ),
-            types );
+    return board->GetConnectivity()->IsConnectedOnLayer( this, static_cast<int>( aLayer ), types );
 }
 
 
@@ -1031,9 +1030,18 @@ std::shared_ptr<SHAPE> PCB_TRACK::GetEffectiveShape( PCB_LAYER_ID aLayer ) const
 std::shared_ptr<SHAPE> PCB_VIA::GetEffectiveShape( PCB_LAYER_ID aLayer ) const
 {
     if( FlashLayer( aLayer ) )
+    {
         return std::make_shared<SHAPE_CIRCLE>( m_Start, m_Width / 2 );
+    }
     else
-        return std::make_shared<SHAPE_CIRCLE>( m_Start, GetDrillValue() / 2 );
+    {
+        int radius = GetDrillValue() / 2;
+
+        if( GetBoard() )
+            radius += GetBoard()->GetDesignSettings().GetHolePlatingThickness();
+
+        return std::make_shared<SHAPE_CIRCLE>( m_Start, radius );
+    }
 }
 
 
