@@ -14,7 +14,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
 "PO-Revision-Date: 2021-08-09 12:06+0000\n"
-"Last-Translator: jeongsuAn <dks9467@gmail.com>\n"
+"Last-Translator: Ji Yoon Choi <chichoon.choi@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
 "Language: ko\n"
@@ -22773,27 +22773,24 @@ msgid "Include &footprints"
 msgstr "풋프린트 포함(&f)"
 
 #: pcbnew/dialogs/dialog_filter_selection_base.cpp:25
-#, fuzzy
 msgid "Include t&ext items"
-msgstr "항목 삭제"
+msgstr "텍스트 항목 포함(&e)"
 
 #: pcbnew/dialogs/dialog_filter_selection_base.cpp:28
-#, fuzzy
 msgid "Include &locked footprints"
-msgstr "잠김 트랙 포함"
+msgstr "잠긴 풋프린트 포함(&l)"
 
 #: pcbnew/dialogs/dialog_filter_selection_base.cpp:31
 msgid "Include &drawings"
-msgstr "드로잉 포함(&d)"
+msgstr "도면 포함(&d)"
 
 #: pcbnew/dialogs/dialog_filter_selection_base.cpp:34
 msgid "Include &tracks"
-msgstr "트랙 포함 (&t)"
+msgstr "배선 포함(&t)"
 
 #: pcbnew/dialogs/dialog_filter_selection_base.cpp:37
-#, fuzzy
 msgid "Include &board outline layer"
-msgstr "에지 레이어 포함"
+msgstr "기판 외곽선 레이어 포함(&b)"
 
 #: pcbnew/dialogs/dialog_filter_selection_base.cpp:40
 msgid "Include &vias"
@@ -22804,9 +22801,8 @@ msgid "Include &zones"
 msgstr "영역 포함(&z)"
 
 #: pcbnew/dialogs/dialog_filter_selection_base.h:57
-#, fuzzy
 msgid "Filter Selected Items"
-msgstr "항목 선택"
+msgstr "선택된 항목 필터링"
 
 #: pcbnew/dialogs/dialog_find.cpp:221
 msgid "Searching..."
