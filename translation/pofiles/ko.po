@@ -14,7 +14,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
 "PO-Revision-Date: 2021-08-09 13:32+0000\n"
-"Last-Translator: Ji Yoon Choi <chichoon.choi@gmail.com>\n"
+"Last-Translator: Uibeom Jung <wjddmlqja17@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
 "Language: ko\n"
@@ -13111,9 +13111,9 @@ msgid "Wire, length %s"
 msgstr "선, 길이 %s"
 
 #: eeschema/sch_line.cpp:736
-#, c-format, fuzzy
+#, c-format
 msgid "Bus, length %s"
-msgstr "버스,길이 %s"
+msgstr "버스, 길이 %s"
 
 #: eeschema/sch_line.cpp:737
 #, c-format
@@ -13125,19 +13125,17 @@ msgid "Graphical"
 msgstr "그래픽"
 
 #: eeschema/sch_line.cpp:886
-#, fuzzy
 msgid "Line Type"
-msgstr "선 삭제"
+msgstr "라인 종류"
 
 #: eeschema/sch_line.cpp:889
-#, fuzzy
 msgid "from netclass"
-msgstr "네트 코드"
+msgstr "넷클래스에서"
 
 #: eeschema/sch_line.cpp:910 eeschema/sch_text.cpp:790
 #, fuzzy
 msgid "Assigned Netclass"
-msgstr "미연결 플래그 추가"
+msgstr "할당된 넷클래스"
 
 #: eeschema/sch_marker.cpp:165
 #, fuzzy
@@ -15657,7 +15655,7 @@ msgstr "넷클래스 할당..."
 
 #: eeschema/tools/ee_actions.cpp:449
 msgid "Assign a netclass to the net of the selected wire"
-msgstr ""
+msgstr "선택한 와이어의 네트에 넷클래스를 할당"
 
 #: eeschema/tools/ee_actions.cpp:453
 #, fuzzy
@@ -16325,17 +16323,15 @@ msgstr ""
 
 #: eeschema/tools/sch_editor_control.cpp:928
 msgid "Net must be labeled to assign a netclass."
-msgstr ""
+msgstr "넷클래스를 할당하려면 네트에 라벨을 지정해야 합니다."
 
 #: eeschema/tools/sch_editor_control.cpp:940
-#, fuzzy
 msgid "Netclasses"
-msgstr "네트 코드"
+msgstr "넷클래스"
 
 #: eeschema/tools/sch_editor_control.cpp:953
-#, fuzzy
 msgid "Assign Netclass"
-msgstr "미연결 플래그 추가"
+msgstr "넷클래스 할당"
 
 #: eeschema/tools/sch_editor_control.cpp:954
 msgid "Select netclass:"
@@ -20000,9 +19996,8 @@ msgstr "네트 이름"
 
 #: pcbnew/board_connected_item.cpp:188 pcbnew/pad.cpp:873
 #: pcbnew/pcb_track.cpp:789 pcbnew/zone.cpp:591
-#, fuzzy
 msgid "NetClass"
-msgstr "네트 코드"
+msgstr "넷클래스"
 
 #: pcbnew/board_item.cpp:40 pcbnew/pad.cpp:1085
 msgid "Rect"
@@ -21532,7 +21527,6 @@ msgid ""
 msgstr ""
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:221 pcbnew/zone.cpp:1401
-#, fuzzy
 msgid "Thermal reliefs"
 msgstr "써멀"
 
@@ -21562,7 +21556,7 @@ msgstr "열 방출 스포크 너비:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:247
 msgid "Width of copper in thermal reliefs."
-msgstr ""
+msgstr "단열판의 구리 너비."
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:264
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:108
