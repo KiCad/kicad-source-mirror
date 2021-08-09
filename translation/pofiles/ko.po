@@ -12,8 +12,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
-"PO-Revision-Date: 2021-08-09 01:19+0000\n"
-"Last-Translator: 킴슨김랑기 <korearf@gmail.com>\n"
+"PO-Revision-Date: 2021-08-09 02:09+0000\n"
+"Last-Translator: Ji Yoon Choi <chichoon.choi@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
 "Language: ko\n"
@@ -11259,10 +11259,10 @@ msgid ""
 "to skip this step, you will be responsible for manually remapping the "
 "symbols."
 msgstr ""
-"이 회로도는 현재 라이브러리 기호를 로드하기 위해 프로젝트 기호 라이브러리 목록 조회 방법을 사용합니다. KiCad는 새 기호 라이브러리 "
-"테이블을 사용하도록 기존 기호를 매핑하려고 시도합니다. 다시 매핑하면 일부 프로젝트 파일이 변경되고 회로도는 이전 버전의 KiCad와 "
-"호환되지 않을 수 있습니다. 변경된 모든 파일은 변경 사항을 되돌려야 하는 경우 프로젝트 폴더의 \"remap_backup\" 폴더에 "
-"백업됩니다. 이 단계를 건너뛰도록 선택하면 기호를 수동으로 다시 매핑해야 합니다."
+"이 회로도는 현재 라이브러리 심볼을 불러오기 위해서 프로젝트 심볼 라이브러리 목록에서 참조하는 방식을 사용합니다. KiCad는 새로운 "
+"심볼 라이브러리 테이블을 사용할 수 있도록 기존의 심볼을 매핑하려고 시도합니다.  리매핑은 KiCad의 옛날 버전과 호환되지 않는 일부 "
+"프로젝트 파일과 회로도의 내용을 수정할 것입니다.  수정된 파일의 원본은 \"remap_backup\" 폴더에 백업되며, 변경점을 "
+"되돌리고 싶으면 이를 사용하세요.  이 단계를 건너뛰신다면, 사용자가 직접 수동으로 심볼을 매핑하여야 합니다."
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:210
 #, c-format
@@ -27064,6 +27064,10 @@ msgid ""
 "These items will be no longer accessible\n"
 "Do you wish to continue?"
 msgstr ""
+"풋프린트에 삭제된 레이어의 항목이 포함되어 있습니다:\n"
+"%s\n"
+"이 항목들은 더이상 접근이 불가능합니다\n"
+"계속하시겠습니까?"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:477
 msgid ""
@@ -27071,22 +27075,24 @@ msgid ""
 "items from removed layers and cannot be undone.\n"
 "Do you wish to continue?"
 msgstr ""
+"삭제된 레이어에서 다수의 개체가 발견되었습니다. 이 동작은 삭제된 레이어의 개체들을 모두 삭제하며, 되돌릴 수 없습니다.\n"
+"계속하시겠습니까?"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:653
 msgid "Layer must have a name."
-msgstr ""
+msgstr "레이어는 이름이 있어야 합니다."
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:659
 #, c-format
 msgid "%s are forbidden in layer names."
-msgstr ""
+msgstr "%s는 레이어 이름에 사용할 수 없습니다."
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:666
 msgid "Layer name \"signal\" is reserved."
-msgstr ""
+msgstr "레이어 이름 \"signal\"가 이미 사용 중입니다."
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:674
-#, fuzzy, c-format
+#, c-format
 msgid "Layer name '%s' already in use."
 msgstr "레이어 이름 '%s'가 이미 사용 중입니다."
 
@@ -27098,28 +27104,29 @@ msgid ""
 "\n"
 "Continue and delete the extra inner copper layers from the current board?"
 msgstr ""
+"불러온 설정은 현재 기판보다 구리 레이어의 개수가 적습니다 (불러온 설정 %i개, 현재 기판 %i개).\n"
+"\n"
+"현재 기판에서 여분의 내부 구리 레이어를 삭제하고 계속하시겠습니까?"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:781
 msgid "Inner Layers To Be Deleted"
-msgstr ""
+msgstr "삭제될 내부 레이어"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:816
 msgid "All user-defined layers have already been added."
-msgstr ""
+msgstr "모든 사용자 정의 레이어가 이미 추가되었습니다."
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:820
-#, fuzzy
 msgid "Add User-defined Layer"
-msgstr "사용자 그리드"
+msgstr "사용자 정의 레이어 추가"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:26
-#, fuzzy
 msgid "Add User Defined Layer..."
 msgstr "사용자 정의 레이어 추가..."
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:44
 msgid "If you want a courtyard layer for the front side of the board"
-msgstr ""
+msgstr "기판의 정면에 코트야드 레이어를 사용하고 싶은 경우"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:48
 msgid "CrtYd_Front"
@@ -27128,7 +27135,7 @@ msgstr "CrtYd_Front"
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:53
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:643
 msgid "Off-board, testing"
-msgstr ""
+msgstr "Off-board, 테스트용"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:60
 msgid "If you want a fabrication layer for the front side of the board"
@@ -27141,11 +27148,11 @@ msgstr "Fab_Front"
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:67
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:631
 msgid "Off-board, manufacturing"
-msgstr ""
+msgstr "Off-board, 제조용"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:72
 msgid "If you want an adhesive template for the front side of the board"
-msgstr ""
+msgstr "기판의 정면에 접착 템플릿을 사용하고 싶은 경우"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:76
 msgid "Adhes_Front"
@@ -27160,11 +27167,11 @@ msgstr "Adhes_Front"
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:607
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:619
 msgid "On-board, non-copper"
-msgstr ""
+msgstr "On-board, 비 구리 레이어"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:84
 msgid "If you want a solder paster layer for front side of the board"
-msgstr ""
+msgstr "기판의 정면에 솔더 페이스트 레이어를 사용하고 싶은 경우"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:88
 msgid "SoldP_Front"
@@ -27172,7 +27179,7 @@ msgstr "SoldP_Front"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:96
 msgid "If you want a silk screen layer for the front side of the board"
-msgstr ""
+msgstr "기판의 정면에 실크스크린 레이어를 사용하고 싶은 경우"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:100
 msgid "SilkS_Front"
@@ -27180,16 +27187,15 @@ msgstr "SilkS_Front"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:108
 msgid "If you want a solder mask layer for the front of the board"
-msgstr ""
+msgstr "기판의 정면에 솔더 마스크 레이어를 사용하고 싶은 경우"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:112
 msgid "Mask_Front"
 msgstr "Mask_Front"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:120
-#, fuzzy
 msgid "If you want a front copper layer"
-msgstr "커퍼 레이어 텍스트 포함"
+msgstr "정면 구리 레이어를 사용하고 싶은 경우"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:124
 msgid "Front_layer"
@@ -27197,7 +27203,7 @@ msgstr "Front_layer"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:125
 msgid "Layer name of front (top) copper layer"
-msgstr ""
+msgstr "정면 (윗면) 구리 레이어 이름"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:129
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:143
@@ -27231,7 +27237,6 @@ msgstr ""
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:535
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:549
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:567
-#, fuzzy
 msgid "signal"
 msgstr "신호"
 
@@ -27267,9 +27272,8 @@ msgstr "신호"
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:535
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:549
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:567
-#, fuzzy
 msgid "power plane"
-msgstr "전원 추가"
+msgstr "전원면"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:129
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:143
@@ -27303,7 +27307,6 @@ msgstr "전원 추가"
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:535
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:549
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:567
-#, fuzzy
 msgid "mixed"
 msgstr "혼합"
 
@@ -27339,7 +27342,6 @@ msgstr "혼합"
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:535
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:549
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:567
-#, fuzzy
 msgid "jumper"
 msgstr "점퍼"
 
@@ -27379,69 +27381,58 @@ msgid ""
 "Copper layer type for Freerouter and other external routers.\n"
 "Power plane layers are removed from Freerouter's layer menus."
 msgstr ""
+"Freerouter와 기타 외부 라우터를 위한 구리 레이어.\n"
+"전원면 레이어는 Freerouter의 레이어 메뉴에서 삭제됩니다."
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:140
-#, fuzzy
 msgid "In1"
 msgstr "In1"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:154
-#, fuzzy
 msgid "In2"
 msgstr "In2"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:168
-#, fuzzy
 msgid "In3"
 msgstr "In3"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:182
-#, fuzzy
 msgid "In4"
 msgstr "In4"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:196
-#, fuzzy
 msgid "In5"
 msgstr "In5"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:210
-#, fuzzy
 msgid "In6"
 msgstr "In6"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:224
-#, fuzzy
 msgid "In7"
 msgstr "In7"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:238
-#, fuzzy
 msgid "In8"
 msgstr "In8"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:252
-#, fuzzy
 msgid "In9"
 msgstr "In9"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:266
-#, fuzzy
 msgid "In10"
 msgstr "In10"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:280
-#, fuzzy
 msgid "In11"
 msgstr "In11"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:294
-#, fuzzy
 msgid "In12"
 msgstr "In12"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:308
-#, fuzzy
 msgid "In13"
 msgstr "In13"
 
@@ -27514,17 +27505,16 @@ msgid "In30"
 msgstr "In30"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:558
-#, fuzzy
 msgid "If you want a back copper layer"
-msgstr "커퍼 레이어 텍스트 포함"
+msgstr "후면 구리 레이어를 사용하고 싶은 경우"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:563
 msgid "Layer name of back (bottom) copper layer"
-msgstr ""
+msgstr "후면 (바닥) 구리 레이어의 이름"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:576
 msgid "If you want a solder mask layer for the back side of the board"
-msgstr ""
+msgstr "기판의 후면에 솔더 마스크 레이어를 사용하고 싶은 경우"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:580
 msgid "SoldM_Back"
@@ -27532,7 +27522,7 @@ msgstr "SoldM_Back"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:588
 msgid "If you want a silk screen layer for the back side of the board"
-msgstr ""
+msgstr "기판의 후면에 실크스크린 레이어를 사용하고 싶은 경우"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:592
 msgid "SilkS_Back"
@@ -27540,7 +27530,7 @@ msgstr "SilkS_Back"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:600
 msgid "If you want a solder paste layer for the back side of the board"
-msgstr ""
+msgstr "기판의 후면에 솔더 페이스트 레이어를 사용하고 싶은 경우"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:604
 msgid "SoldP_Back"
@@ -27548,7 +27538,7 @@ msgstr "SoldP_Back"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:612
 msgid "If you want an adhesive layer for the back side of the board"
-msgstr ""
+msgstr "기판의 후면에 접착 레이어를 사용하고 싶은 경우"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:616
 msgid "Adhes_Back"
@@ -27564,7 +27554,7 @@ msgstr "Fab_Back"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:636
 msgid "If you want a courtyard layer for the back side of the board"
-msgstr ""
+msgstr "기판의 후면에 코트야드 레이어를 사용하고 싶은 경우"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:640
 msgid "CrtYd_Back"
@@ -27572,40 +27562,38 @@ msgstr "CrtYd_Back"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:648
 msgid "If you want a board perimeter layer"
-msgstr ""
+msgstr "기판 경계 레이어를 사용하고 싶은 경우"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:652
-#, fuzzy
 msgid "Pcb_Edges"
-msgstr "에지 설치"
+msgstr "Pcb_Edges"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:655
 msgid "Board contour"
-msgstr ""
+msgstr "기판의 윤곽"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:665
 msgid "Edge_Cuts setback"
-msgstr ""
+msgstr "Edge_Cuts 오프셋"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:672
 msgid "Eco1"
-msgstr "ECO1"
+msgstr "Eco1"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:675
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:685
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:697
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:709
-#, fuzzy
 msgid "Auxiliary"
 msgstr "보조자"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:682
 msgid "Eco2"
-msgstr "ECO2"
+msgstr "Eco2"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:690
 msgid "If you want a separate layer for comments or notes"
-msgstr ""
+msgstr "주석이나 메모를 위해 별개의 레이어를 사용하고 싶은 경우"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:694
 msgid "Comments"
@@ -27613,7 +27601,7 @@ msgstr "주석"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:702
 msgid "If you want a layer for documentation drawings"
-msgstr ""
+msgstr "문서 도면에 대한 레이어를 사용하고 싶은 경우"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:706
 msgid "Drawings"
@@ -27632,9 +27620,8 @@ msgstr "사용자1"
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:779
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:789
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:799
-#, fuzzy
 msgid "User defined layer"
-msgstr "정의된 홀"
+msgstr "사용자 정의 레이어"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:726
 msgid "User2"
@@ -27672,23 +27659,25 @@ msgstr "사용자9"
 msgid ""
 "Use your board house's recommendation for solder mask clearance and minimum "
 "bridge width."
-msgstr ""
+msgstr "솔더 마스크 유격과 브릿지 최소 폭은 기판 제조 업체의 권장사항을 사용하세요."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:35
 msgid "If none is provided, setting the values to zero is suggested."
-msgstr ""
+msgstr "아무 값도 제공되지 않았다면, 0으로 설정하는 것을 권장합니다."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:58
 msgid ""
 "Global clearance between pads and the solder mask.\n"
 "This value can be superseded by local values for a footprint or a pad."
 msgstr ""
+"패드와 솔더 마스크 간의 전역 유격값입니다.\n"
+"풋프린트 또는 패드의 지역 값으로 대체될 수 있습니다."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:63
 msgid ""
 "Positive clearance means area bigger than the pad (usual for solder mask "
 "clearance)."
-msgstr ""
+msgstr "유격이 양수일 땐 영역이 패드 크기보다 큼을 의미합니다 (대부분 솔더 마스크 유격)."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:71
 msgid "Solder mask minimum bridge width:"
@@ -27701,12 +27690,16 @@ msgid ""
 "This parameter is only used to plot solder mask layers.\n"
 "Leave at 0 unless you know what you are doing."
 msgstr ""
+"두 패드 영역 사이의 최소 거리입니다.\n"
+"두 패드 영역 사이 거리가 이보다 더 가깝다면, 플로팅 중에 영역이 합쳐집니다.\n"
+"이 매개변수는 솔더 마스크 레이어를 플로트할 때만 사용됩니다.\n"
+"무엇을 하려는지 확실히 알고 있는 경우가 아니라면, 0으로 두는 것을 권장합니다."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:78
 msgid ""
 "Minimum distance between openings in the solder mask.  Pad openings closer "
 "than this distance will be plotted as a single opening."
-msgstr ""
+msgstr "솔더 마스크의 개구부 사이의 최소 거리입니다.  패드 개구부의 거리가 이보다 가까울 경우 하나로 합쳐져 플로트됩니다."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:97
 msgid ""
@@ -27722,7 +27715,7 @@ msgstr ""
 msgid ""
 "Negative clearance means area smaller than the pad (usual for solder paste "
 "clearance)."
-msgstr ""
+msgstr "유격이 음수일 땐 영역이 패드 크기보다 작음을 의미합니다 (대부분 솔더 페이스트 유격)."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:112
 msgid ""
@@ -27738,7 +27731,7 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:117
 msgid "Additional clearance as a percentage of the pad size."
-msgstr ""
+msgstr "추가 유격은 패드 사이즈에 대해 백분율로 지정됩니다."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:131
 msgid ""
@@ -27751,27 +27744,25 @@ msgid "Cancel Changes?"
 msgstr "변경을 취소 하겠습니까?"
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:350
-#, fuzzy
 msgid "DRC rules"
-msgstr "DRC 제어"
+msgstr "DRC 규칙"
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:357
 #: pcbnew/drc/drc_rule_condition.cpp:64
 msgid "ERROR:"
-msgstr "에러:"
+msgstr "오류:"
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:418
 msgid "Design rules cannot be added without a project"
-msgstr ""
+msgstr "디자인 규칙은 프로젝트 없이 추가가 불가능합니다"
 
 #: pcbnew/dialogs/panel_setup_rules_base.cpp:26
-#, fuzzy
 msgid "DRC rules:"
-msgstr "DRC 제어:"
+msgstr "DRC 규칙:"
 
 #: pcbnew/dialogs/panel_setup_rules_base.cpp:77
 msgid "Check rule syntax"
-msgstr ""
+msgstr "규칙 문법을 체크"
 
 #: pcbnew/dialogs/panel_setup_rules_help_md.h:2
 msgid ""
