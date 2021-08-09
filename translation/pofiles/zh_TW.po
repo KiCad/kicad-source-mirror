@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
-"PO-Revision-Date: 2021-08-06 21:14+0000\n"
+"PO-Revision-Date: 2021-08-10 15:22+0000\n"
 "Last-Translator: David Chen <d0123456789g@yahoo.com.tw>\n"
 "Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hant/>\n"
@@ -15077,9 +15077,9 @@ msgid "Change Visibility"
 msgstr "修改可見性"
 
 #: eeschema/tools/assign_footprints.cpp:233
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to open symbol-footprint link file '%s'."
-msgstr "未能開啟元件封裝連結檔案 \"%s\""
+msgstr "無法開啟元件－封裝連結檔案 \"%s\"。"
 
 #: eeschema/tools/backannotate.cpp:73
 msgid "Select at least one property to back annotate."
@@ -16696,9 +16696,9 @@ msgid "Loading Gerber files..."
 msgstr "載入 Gerber 檔案..."
 
 #: gerbview/files.cpp:245 gerbview/files.cpp:252
-#, fuzzy, c-format
+#, c-format
 msgid "Loading %u/%zu %s..."
-msgstr "載入 %u/%zu %s"
+msgstr "載入中 %u/%zu %s ..."
 
 #: gerbview/files.cpp:276
 #, c-format
@@ -16710,9 +16710,9 @@ msgid "Open NC (Excellon) Drill File(s)"
 msgstr "開啟 NC (Excellon) 鑽孔檔案"
 
 #: gerbview/files.cpp:471
-#, fuzzy, c-format
+#, c-format
 msgid "Zip file '%s' cannot be opened."
-msgstr "無法開啟 Zip 檔案 \"%s\""
+msgstr "無法開啟 Zip 檔案 \"%s\"。"
 
 #: gerbview/files.cpp:513
 #, fuzzy, c-format
@@ -17156,14 +17156,13 @@ msgid "Source file '%s' not found."
 msgstr "沒有找到原理圖檔案 '%s'。"
 
 #: gerbview/tools/gerbview_inspection_tool.cpp:185
-#, fuzzy
 msgid "No editor defined. Please select one."
-msgstr "沒有定義編輯器, 請選擇一個"
+msgstr "沒有定義編輯器，請選擇一個編輯器。"
 
 #: gerbview/tools/gerbview_inspection_tool.cpp:191
-#, fuzzy, c-format
+#, c-format
 msgid "No file loaded on the active layer %d."
-msgstr "沒有檔案載入到當前工作層 %d"
+msgstr "沒有檔案載入到目前的工作層 %d。"
 
 #: gerbview/tools/gerbview_selection_tool.cpp:48
 msgid "Highlight"
@@ -17487,9 +17486,8 @@ msgid "Load File to Edit"
 msgstr "開啟檔案編輯"
 
 #: kicad/kicad_manager_frame.cpp:626
-#, fuzzy
 msgid "[no project loaded]"
-msgstr "未載入任何封裝。"
+msgstr "[未載入任何專案]"
 
 #: kicad/kicad_manager_frame.cpp:671
 #, c-format
@@ -18212,9 +18210,9 @@ msgid "File \"%s\" saved."
 msgstr "檔案 \"%s\" 已儲存。"
 
 #: pagelayout_editor/files.cpp:172
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to write '%s'."
-msgstr "無法寫入 \"%s\""
+msgstr "無法寫入 \"%s\"。"
 
 #: pagelayout_editor/files.cpp:185
 msgid "Save As"
@@ -19388,9 +19386,9 @@ msgid "Do you want to load this file and replace current regulator list?"
 msgstr "您確定要載入檔案並取代目前的穩壓器列表嗎？"
 
 #: pcb_calculator/regulators_funct.cpp:162
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to read data file '%s'."
-msgstr "無法讀取資料檔案 \"%s\""
+msgstr "無法讀取資料檔案 \"%s\"。"
 
 #: pcb_calculator/regulators_funct.cpp:195
 msgid "This regulator is already in list. Aborted"
@@ -20204,14 +20202,12 @@ msgstr ""
 "損耗切線和相對介電常數將新增到約束中。"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:45
-#, fuzzy
 msgid "Add Dielectric Layer..."
-msgstr "新增電介質層"
+msgstr "新增電介質層..."
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:48
-#, fuzzy
 msgid "Remove Dielectric Layer..."
-msgstr "移除電介質層"
+msgstr "移除電介質層..."
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:72
 #: pcbnew/build_BOM_from_board.cpp:109
@@ -21093,9 +21089,9 @@ msgid "Drill holes"
 msgstr "鑽孔"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:727
-#, fuzzy, c-format
+#, c-format
 msgid "Error writing file '%s'."
-msgstr "寫入檔案 \"%s\" 時出錯"
+msgstr "寫入檔案 \"%s\" 時發生錯誤。"
 
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:117
 msgid "Board Size"
