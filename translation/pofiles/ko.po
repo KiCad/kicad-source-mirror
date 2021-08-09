@@ -13,8 +13,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
-"PO-Revision-Date: 2021-08-09 12:06+0000\n"
-"Last-Translator: Ji Yoon Choi <chichoon.choi@gmail.com>\n"
+"PO-Revision-Date: 2021-08-09 13:32+0000\n"
+"Last-Translator: jehunseo <benbot591@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
 "Language: ko\n"
@@ -10965,7 +10965,6 @@ msgstr "풋프린트 선택..."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:86
 #: eeschema/fields_grid_table.cpp:602
-#, fuzzy
 msgid "Browse for footprint"
 msgstr "풋프린트 찾기"
 
@@ -11302,9 +11301,8 @@ msgstr "심볼 다시 매핑"
 
 #: eeschema/dialogs/dialog_update_from_pcb.cpp:42
 #: pcbnew/dialogs/dialog_netlist.cpp:82 pcbnew/dialogs/dialog_update_pcb.cpp:53
-#, fuzzy
 msgid "Changes To Be Applied"
-msgstr "라벨로 바꾸기"
+msgstr "적용할 변경 사항"
 
 #: eeschema/dialogs/dialog_update_from_pcb.cpp:66
 msgid "Update Schematic"
@@ -11312,20 +11310,18 @@ msgstr "회로도 업데이트"
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:32
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:27
-#, fuzzy
 msgid ""
 "Re-link footprints to schematic symbols based on their reference designators"
-msgstr "참조 지정자를 기반으로 풋프린트를 스키매틱 기호에 다시 연결"
+msgstr "참조 지정자를 기반으로 풋프린트를 회로 기호에 재연결합니다"
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:33
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:28
-#, fuzzy
 msgid ""
 "Normally footprints are linked to their symbols via their Unique IDs.  "
 "Select this option only if you want to reset the footprint linkages based on "
 "their reference designators."
 msgstr ""
-"일반적으로 발자국은 고유 ID를 통해 기호에 연결됩니다.  참조 지정자를 기반으로 설치 공간 연결을 재설정하려는 경우에만 이 옵션을 "
+"일반적으로 발자국은 고유 ID를 통해 기호에 연결됩니다.  참조 지정자를 기반으로 설치 공간 연결을 초기화하려는 경우에만 이 옵션을 "
 "선택합니다."
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:55
@@ -11337,26 +11333,22 @@ msgid "Footprint assignments"
 msgstr "풋프린트 할당"
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:60
-#, fuzzy
 msgid ""
 "Update footprint associations of symbols whose footprints have been replaced "
 "with different footprints in PCB."
-msgstr "발자국을 PCB의 다른 발자국으로 대체한 기호의 설치 공간 연결을 업데이트합니다."
+msgstr "PCB 내 다른 풋프린트로 대체된 심볼의 풋프린트 연관성을 업데이트합니다."
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:65
-#, fuzzy
 msgid "Update symbols values that have been replaced in the PCB editor."
-msgstr "PCB 편집기에서 대체된 기호 값을 업데이트합니다."
+msgstr "PCB 편집기에서 대체된 값으로 심볼 값을 업데이트합니다."
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:69
-#, fuzzy
 msgid "Net names"
 msgstr "네트 이름"
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.h:55
-#, fuzzy
 msgid "Update Schematic from PCB"
-msgstr "새 회로도 (&S)"
+msgstr "PCB에서 회로도 업데이트"
 
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:21
 msgid "Parent symbol:"
@@ -11367,35 +11359,31 @@ msgid "Remove fields if not in parent symbol"
 msgstr "상위 기호에 없는 경우 필드 제거"
 
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:66
-#, fuzzy
 msgid "Reset fields if empty in parent symbol"
-msgstr "새 디렉토리 만들기"
+msgstr "상위 심볼이 비어 있는 경우 필드 초기화"
 
 #: eeschema/dialogs/dialog_update_symbol_fields_base.h:68
 msgid "Update Symbol Fields"
 msgstr "기호 필드 업데이트"
 
 #: eeschema/dialogs/panel_eeschema_color_settings.cpp:153
-#, fuzzy
 msgid ""
 "Some items have the same color as the background\n"
 "and they will not be seen on the screen.  Are you\n"
 "sure you want to use these colors?"
 msgstr ""
-"일부 항목에는 배경과 동일한 색상이 있습니다.\n"
-"그리고 그들은 화면에 표시되지 않습니다. 당신은\n"
+"일부 항목에는 배경과 동일한 색상이 있으며,\n"
+"이는 화면에 표시되지 않을 것입니다.\n"
 "이 색상을 사용하시겠습니까?"
 
 #: eeschema/dialogs/panel_eeschema_color_settings.cpp:207
-#, fuzzy
 msgid "(symbol editor only)"
-msgstr "라이브러리 에디터 실행"
+msgstr "(심볼 편집기만 해당)"
 
 #: eeschema/dialogs/panel_eeschema_color_settings.cpp:243
 #: pcbnew/dialogs/panel_pcbnew_color_settings.cpp:495
-#, fuzzy
 msgid "Color Preview"
-msgstr "색상 이미지"
+msgstr "색 미리보기"
 
 #: eeschema/dialogs/panel_eeschema_color_settings.cpp:405
 msgid "/path/to/sheet"
@@ -11409,19 +11397,16 @@ msgid "Appearance"
 msgstr "외형"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:28
-#, fuzzy
 msgid "S&how hidden pins"
-msgstr "숨은 핀 보이기"
+msgstr "숨겨진 핀 표시(&h)"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:31
-#, fuzzy
 msgid "Show hidden fields"
-msgstr "숨은 핀 보이기"
+msgstr "숨은 필드 표시"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:34
-#, fuzzy
 msgid "Show page limi&ts"
-msgstr "페이지 경계 보이기"
+msgstr "페이지 제한 표시(&t)"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:42
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:71
@@ -11430,19 +11415,16 @@ msgid "Selection"
 msgstr "선택"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:44
-#, fuzzy
 msgid "Draw selected text items as box"
-msgstr "선택된 항목 잘라내기"
+msgstr "선택된 텍스트 항목을 상자로 그리기"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:47
-#, fuzzy
 msgid "Draw selected child items"
-msgstr "D-Codes 항목 삭제"
+msgstr "선택된 하위 아이템 그리기"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:50
-#, fuzzy
 msgid "Fill selected shapes"
-msgstr "선택된 항목 복사"
+msgstr "선택한 도형 채우기"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:59
 msgid "&Highlight thickness:"
@@ -11459,9 +11441,8 @@ msgstr "교차-탐지"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:80
 #: pcbnew/dialogs/panel_display_options_base.cpp:76
-#, fuzzy
 msgid "Center view on cross-probed items"
-msgstr "교차 프로브 항목에 대한 중앙 보기"
+msgstr "교차 조사 항목의 중앙 보기"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:84
 #: pcbnew/dialogs/panel_display_options_base.cpp:80
@@ -11491,25 +11472,23 @@ msgid "If unchecked, mouse drag will perform move (M) operation"
 msgstr "이 옵션을 선택하지 않으면 마우스 끌기가 이동(M) 작업을 수행합니다"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:32
-#, fuzzy
 msgid "Automatically start wires on unconnected pins"
-msgstr "새 풋프린트 추가"
+msgstr "연결되지 않은 핀에서 자동으로 와이어 시작"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:33
 msgid ""
 "When enabled, you can start wiring by clicking on unconnected pins even when "
 "the wire tool is not active"
-msgstr "활성화된 경우 배선 도구가 활성화되지 않은 경우에도 연결되지 않은 핀을 클릭하여 배선을 시작할 수 있습니다"
+msgstr "활성화된 경우, 와이어 도구가 활성화되지 않은 경우에도 연결되지 않은 핀을 클릭하여 와이어링을 시작할 수 있습니다"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:41
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:21
-#, fuzzy
 msgid "Defaults for New Objects"
-msgstr "기본 형식"
+msgstr "새 오브젝트의 기본값"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:46
 msgid "Sheet border:"
-msgstr "시트 테두리:"
+msgstr "시트 경계:"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:55
 msgid "Sheet background:"
@@ -13199,7 +13178,7 @@ msgstr "특별한 라이브러리 서버에 <b>로그인 </b> 하기 위한 비�
 #: eeschema/sch_plugin.cpp:163
 msgid ""
 "Enter the python symbol which implements the SCH_PLUGIN::Symbol*() functions."
-msgstr ""
+msgstr "SCH_PLUGIN::Symbol*() 함수를 실행하는 파이썬 심볼을 입력하십시오."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:251
 #: pcbnew/plugins/altium/altium_pcb.cpp:65
@@ -13210,7 +13189,7 @@ msgstr "%s 파일을 만들 수 없습니다."
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:315
 #, c-format
 msgid "Storage file not fully parsed (%d bytes remaining)."
-msgstr ""
+msgstr "저장소 파일이 완전히 파싱되지 않았습니다(%d바이트 남음)."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:487
 #, c-format
@@ -13232,12 +13211,14 @@ msgid "Pin has unexpected electrical type."
 msgstr "핀에 예기치 않은 전기 유형이 있습니다."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:693
+#, fuzzy
 msgid "Pin has unexpected outer edge type."
-msgstr ""
+msgstr "핀에 예상치 못한 외부 모서리 타입이 있습니다."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:696
+#, fuzzy
 msgid "Pin has unexpected inner edge type."
-msgstr ""
+msgstr "핀에 예상치 못한 내부 모서리 타입이 있습니다."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:831
 #, fuzzy, c-format
@@ -13358,6 +13339,11 @@ msgid ""
 "Current Design size: %.2f, %.2f millimeters. \n"
 "Maximum permitted design size: %.2f, %.2f millimeters.\n"
 msgstr ""
+"디자인이 너무 커서 KiCad로 가져올 수 없습니다. \n"
+"다음으로 이동하여 CADSTAR의 최대 설계 크기를 줄여주세요. \n"
+"디자인 탭 -> 속성 -> 디자인 옵션 -> 최대 설계 크기. \n"
+"현재 디자인 크기: %.2f, %.2f 밀리미터. \n"
+"최대 허용 설계 크기: %.2f, %.2f 밀리미터 입니다.\n"
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:104
 #, c-format
