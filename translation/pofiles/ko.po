@@ -13,7 +13,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
 "PO-Revision-Date: 2021-08-09 04:25+0000\n"
-"Last-Translator: jeongsuAn <dks9467@gmail.com>\n"
+"Last-Translator: Ji Yoon Choi <chichoon.choi@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
 "Language: ko\n"
@@ -4877,11 +4877,11 @@ msgstr "여백"
 
 #: common/layer_id.cpp:84
 msgid "F.Courtyard"
-msgstr "F.코트야드"
+msgstr "F.Courtyard"
 
 #: common/layer_id.cpp:85
 msgid "B.Courtyard"
-msgstr "B.코트야드"
+msgstr "B.Courtyard"
 
 #: common/layer_id.cpp:86
 msgid "F.Fab"
@@ -25555,6 +25555,9 @@ msgid ""
 "The reasonable width correction value must be in a range of [-"
 "(MinTrackWidth-1), +(MinClearanceValue-1)]."
 msgstr ""
+"정확한 PostScript 출력을 위해 전역 폭 보정을 설정합니다.\n"
+"이 폭 보정은 배선의 폭과 패드, 비아 크기 오류를 보정하기 위해 설정됩니다.\n"
+"합리적인 폭 보정 값은 [-(최소배선폭-1), +(최소유격값-1)] 범위 내에 있어야 합니다."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:323
 msgid "Force A4 output"
@@ -26085,7 +26088,7 @@ msgstr "풋프린트 이동"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:69
 msgid "Raise a DRC error if a footprint courtyard overlaps this area"
-msgstr ""
+msgstr "풋프린트 코트야드가 해당 영역과 겹칠 때 DRC 오류를 발생시킵니다"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:79
 #, fuzzy
@@ -28371,15 +28374,15 @@ msgstr "제약이 적용되었습니다."
 
 #: pcbnew/drc/drc_engine.cpp:1013
 msgid "Rule applied; overrides previous constraints."
-msgstr ""
+msgstr "규칙이 적용되었습니다; 이전 제약은 재정의되었습니다."
 
 #: pcbnew/drc/drc_engine.cpp:1020
 msgid "Membership not satisfied; constraint ignored."
-msgstr ""
+msgstr "멤버십을 만족하지 못하였습니다; 제약은 무시됩니다."
 
 #: pcbnew/drc/drc_engine.cpp:1021
 msgid "Condition not satisfied; rule ignored."
-msgstr ""
+msgstr "조건을 만족하지 못하였습니다; 규칙은 무시됩니다."
 
 #: pcbnew/drc/drc_engine.cpp:1066 pcbnew/drc/drc_engine.cpp:1077
 #, c-format
@@ -28392,7 +28395,7 @@ msgstr "전기"
 
 #: pcbnew/drc/drc_item.cpp:43
 msgid "Design For Manufacturing"
-msgstr ""
+msgstr "제조를 위한 설계"
 
 #: pcbnew/drc/drc_item.cpp:44
 msgid "Schematic Parity"
@@ -28400,40 +28403,35 @@ msgstr "회로도 동등성"
 
 #: pcbnew/drc/drc_item.cpp:45
 msgid "Signal Integrity"
-msgstr ""
+msgstr "신호 무결성"
 
 #: pcbnew/drc/drc_item.cpp:49
-#, fuzzy
 msgid "Missing connection between items"
-msgstr "선택된 항목 복사"
+msgstr "개체 간의 연결 누락"
 
 #: pcbnew/drc/drc_item.cpp:53
-#, fuzzy
 msgid "Items shorting two nets"
-msgstr "두 개의 네트를 단락시키는 항목"
+msgstr "두 개의 네트를 단락시키는 개체"
 
 #: pcbnew/drc/drc_item.cpp:57
-#, fuzzy
 msgid "Items not allowed"
-msgstr "숨은 비아"
+msgstr "허용되지 않은 개체"
 
 #: pcbnew/drc/drc_item.cpp:61
 msgid "Text (or dimension) on Edge.Cuts layer"
-msgstr ""
+msgstr "Edge.Cuts 레이어의 텍스트 (또는 치수)"
 
 #: pcbnew/drc/drc_item.cpp:65
-#, fuzzy
 msgid "Clearance violation"
-msgstr "유격"
+msgstr "유격 위반"
 
 #: pcbnew/drc/drc_item.cpp:69
-#, fuzzy
 msgid "Tracks crossing"
-msgstr "트랙 미러"
+msgstr "배선 교차"
 
 #: pcbnew/drc/drc_item.cpp:73
 msgid "Board edge clearance violation"
-msgstr ""
+msgstr "기판 모서리 유격 위반"
 
 #: pcbnew/drc/drc_item.cpp:77
 msgid "Copper areas intersect"
@@ -28444,32 +28442,28 @@ msgid "Copper zone net has no pads"
 msgstr "구리 영역 네트에는 패드가 없음"
 
 #: pcbnew/drc/drc_item.cpp:85
-#, fuzzy
 msgid "Via is not connected or connected on only one layer"
-msgstr "미연결 플래그 추가"
+msgstr "비아가 연결되지 않았거나 단 하나의 레이어에만 연결됨"
 
 #: pcbnew/drc/drc_item.cpp:89
 msgid "Track has unconnected end"
-msgstr ""
+msgstr "배선에 연결되지 않은 끝이 존재"
 
 #: pcbnew/drc/drc_item.cpp:93
-#, fuzzy
 msgid "Hole clearance violation"
-msgstr "전역 패드 설정"
+msgstr "홀 유격 위반"
 
 #: pcbnew/drc/drc_item.cpp:97
 msgid "Drilled holes too close together"
-msgstr ""
+msgstr "드릴된 홀이 너무 가까움"
 
 #: pcbnew/drc/drc_item.cpp:101
-#, fuzzy
 msgid "Drilled holes co-located"
-msgstr "드릴 파일"
+msgstr "드릴된 홀이 너무 가까이 배치됨"
 
 #: pcbnew/drc/drc_item.cpp:105
-#, fuzzy
 msgid "Track width"
-msgstr "트랙 두께"
+msgstr "배선 두께"
 
 #: pcbnew/drc/drc_item.cpp:109
 msgid "Annular width"
@@ -28477,103 +28471,91 @@ msgstr "고리의 폭"
 
 #: pcbnew/drc/drc_item.cpp:113
 msgid "Drill out of range"
-msgstr "드릴 허용 범위 초과"
+msgstr "드릴 허용 범위 벗어남"
 
 #: pcbnew/drc/drc_item.cpp:117
-#, fuzzy
 msgid "Via diameter"
-msgstr "mm"
+msgstr "비아 지름"
 
 #: pcbnew/drc/drc_item.cpp:121
 msgid "Padstack is not valid"
 msgstr "패드스택이 유효하지 않음"
 
 #: pcbnew/drc/drc_item.cpp:125
-#, fuzzy
 msgid "Micro via drill out of range"
-msgstr "비아 드릴"
+msgstr "마이크로 비아 드릴 허용 범위 초과"
 
 #: pcbnew/drc/drc_item.cpp:129
 msgid "Courtyards overlap"
-msgstr ""
+msgstr "코트야드 겹침"
 
 #: pcbnew/drc/drc_item.cpp:133
 msgid "Footprint has no courtyard defined"
-msgstr ""
+msgstr "풋프린트에 코트야드 정의되지 않음"
 
 #: pcbnew/drc/drc_item.cpp:137
-#, fuzzy
 msgid "Footprint has malformed courtyard"
-msgstr "현재 보드로부터 모듈 열기"
+msgstr "풋프린트에 잘못된 코트야드가 있음"
 
 #: pcbnew/drc/drc_item.cpp:141
-#, fuzzy
 msgid "PTH inside courtyard"
-msgstr "트랙 두께"
+msgstr "코트야드 내부에 PTH 있음"
 
 #: pcbnew/drc/drc_item.cpp:145
-#, fuzzy
 msgid "NPTH inside courtyard"
-msgstr "트랙 두께"
+msgstr "코트야드 내부에 NPTH 있음"
 
 #: pcbnew/drc/drc_item.cpp:149
-#, fuzzy
 msgid "Item on a disabled layer"
-msgstr "커퍼 레이어 텍스트 포함"
+msgstr "비활성화된 레이어에 개체 존재"
 
 #: pcbnew/drc/drc_item.cpp:153
 msgid "Board has malformed outline"
 msgstr "보드에 잘못된 외곽선 존재"
 
 #: pcbnew/drc/drc_item.cpp:157
-#, fuzzy
 msgid "Duplicate footprints"
-msgstr "풋프린트 삭제"
+msgstr "중복된 풋프린트"
 
 #: pcbnew/drc/drc_item.cpp:161
-#, fuzzy
 msgid "Missing footprint"
-msgstr "새 풋프린트 추가"
+msgstr "풋프린트 누락됨"
 
 #: pcbnew/drc/drc_item.cpp:165
-#, fuzzy
 msgid "Extra footprint"
-msgstr "풋프린트"
+msgstr "여분의 풋프린트 존재"
 
 #: pcbnew/drc/drc_item.cpp:169
-#, fuzzy
 msgid "Pad net doesn't match schematic"
-msgstr "회로도로 내보내기"
+msgstr "패드 네트와 회로도가 불일치"
 
 #: pcbnew/drc/drc_item.cpp:177
-#, fuzzy
 msgid "Silkscreen clipped by solder mask"
-msgstr "Silkscreen Copper"
+msgstr "실크스크린 영역이 솔더 마스크 영역에 의해 잘림"
 
 #: pcbnew/drc/drc_item.cpp:181
-#, fuzzy
 msgid "Silkscreen overlap"
-msgstr "Silkscreen Copper"
+msgstr "실크스크린 겹침"
 
 #: pcbnew/drc/drc_item.cpp:185
 msgid "Trace length out of range"
-msgstr ""
+msgstr "추적 길이 허용 범위 벗어남"
 
 #: pcbnew/drc/drc_item.cpp:189
 msgid "Skew between traces out of range"
-msgstr ""
+msgstr "배선 간 지연이 허용 범위 벗어남"
 
 #: pcbnew/drc/drc_item.cpp:193
 msgid "Too many vias on a connection"
-msgstr ""
+msgstr "연결에 비아 너무 많음"
 
 #: pcbnew/drc/drc_item.cpp:197
 msgid "Differential pair gap out of range"
-msgstr "차동 쌍 간격이 허용 범위 초과"
+msgstr "차동 쌍 간격이 허용 범위 벗어남"
 
 #: pcbnew/drc/drc_item.cpp:201
 msgid "Differential uncoupled length too long"
-msgstr ""
+msgstr "차동 비결합 길이 너무 긺"
 
 #: pcbnew/drc/drc_rule.h:135
 #, c-format
@@ -28582,154 +28564,149 @@ msgstr "규칙 %s"
 
 #: pcbnew/drc/drc_rule_condition.cpp:52
 msgid "ERROR in expression."
-msgstr ""
+msgstr "표현식에 오류가 있습니다."
 
 #: pcbnew/drc/drc_rule_condition.cpp:100 pcbnew/drc/drc_rule_parser.cpp:60
 #: pcbnew/drc/drc_rule_parser.cpp:443
 #, c-format
 msgid "ERROR: <a href='%d:%d'>%s</a>%s"
-msgstr ""
+msgstr "오류: <a href='%d:%d'>%s</a>%s"
 
 #: pcbnew/drc/drc_rule_parser.cpp:70 pcbnew/drc/drc_rule_parser.cpp:453
 #, c-format
 msgid "ERROR: %s%s"
-msgstr ""
+msgstr "오류: %s%s"
 
 #: pcbnew/drc/drc_rule_parser.cpp:107 pcbnew/drc/drc_rule_parser.cpp:190
 #: pcbnew/drc/drc_rule_parser.cpp:345
 msgid "Missing '('."
-msgstr "누락된 '('."
+msgstr "'('가 누락되었습니다."
 
 #: pcbnew/drc/drc_rule_parser.cpp:113
 msgid "Missing version statement."
-msgstr ""
+msgstr "버전 설명이 누락되었습니다."
 
 #: pcbnew/drc/drc_rule_parser.cpp:125
 msgid "Missing version number."
-msgstr ""
+msgstr "버전 번호가 누락되었습니다."
 
 #: pcbnew/drc/drc_rule_parser.cpp:137
-#, fuzzy, c-format
+#, c-format
 msgid "Unrecognized item '%s'.| Expected version number."
-msgstr "인식할 수 없는 항목 '%s'.| 예상 버전 번호입니다."
+msgstr "인식할 수 없는 항목 '%s'.| 버전 번호로 예상됩니다."
 
 #: pcbnew/drc/drc_rule_parser.cpp:144 pcbnew/drc/drc_rule_parser.cpp:223
 #: pcbnew/drc/drc_rule_parser.cpp:365 pcbnew/drc/drc_rule_parser.cpp:386
 #: pcbnew/drc/drc_rule_parser.cpp:407 pcbnew/drc/drc_rule_parser.cpp:511
-#, fuzzy, c-format
+#, c-format
 msgid "Unrecognized item '%s'."
 msgstr "인식할 수 없는 항목 '%s'."
 
 #: pcbnew/drc/drc_rule_parser.cpp:157 pcbnew/drc/drc_rule_parser.cpp:236
 #: pcbnew/drc/drc_rule_parser.cpp:415
 msgid "Incomplete statement."
-msgstr ""
+msgstr "불완전한 선언입니다."
 
 #: pcbnew/drc/drc_rule_parser.cpp:161 pcbnew/drc/drc_rule_parser.cpp:240
 #: pcbnew/drc/drc_rule_parser.cpp:293 pcbnew/drc/drc_rule_parser.cpp:326
 #: pcbnew/drc/drc_rule_parser.cpp:419
 #, c-format
 msgid "Unrecognized item '%s'.| Expected %s."
-msgstr ""
+msgstr "인식할 수 없는 항목 '%s'.| %s로 예상됩니다."
 
 #: pcbnew/drc/drc_rule_parser.cpp:170
-#, fuzzy
 msgid "No errors found."
-msgstr "마커를 찾았습니다."
+msgstr "오류가 발견되지 않았습니다."
 
 #: pcbnew/drc/drc_rule_parser.cpp:183
 msgid "Missing rule name."
-msgstr ""
+msgstr "규칙 이름이 누락되었습니다."
 
 #: pcbnew/drc/drc_rule_parser.cpp:205
 msgid "Missing condition expression."
-msgstr ""
+msgstr "조건식이 누락되었습니다."
 
 #: pcbnew/drc/drc_rule_parser.cpp:216
 #, c-format
 msgid "Unrecognized item '%s'.| Expected quoted expression."
-msgstr ""
+msgstr "인식할 수 없는 항목 '%s'.| 인용 표현식으로 예상됩니다."
 
 #: pcbnew/drc/drc_rule_parser.cpp:249 pcbnew/drc/drc_rule_parser.cpp:322
 #: pcbnew/drc/drc_rule_parser.cpp:336 pcbnew/drc/drc_rule_parser.cpp:428
 msgid "Missing ')'."
-msgstr "누락된 ')'."
+msgstr "')'가 누락되었습니다."
 
 #: pcbnew/drc/drc_rule_parser.cpp:266
 #, c-format
 msgid "Missing constraint type.|  Expected %s."
-msgstr ""
+msgstr "제약 형식이 누락되었습니다.|  %s로 예상됩니다."
 
 #: pcbnew/drc/drc_rule_parser.cpp:356
 msgid "Missing min value."
-msgstr ""
+msgstr "최소값이 누락되었습니다."
 
 #: pcbnew/drc/drc_rule_parser.cpp:377
 msgid "Missing max value."
-msgstr ""
+msgstr "최대값이 누락되었습니다."
 
 #: pcbnew/drc/drc_rule_parser.cpp:398
 msgid "Missing opt value."
-msgstr ""
+msgstr "최적값이 누락되었습니다."
 
 #: pcbnew/drc/drc_rule_parser.cpp:477
 msgid "Missing layer name or type."
-msgstr ""
+msgstr "레이어 이름 또는 형식이 누락되었습니다."
 
 #: pcbnew/drc/drc_rule_parser.cpp:503
-#, fuzzy, c-format
+#, c-format
 msgid "Unrecognized layer '%s'."
 msgstr "인식할 수 없는 레이어 '%s'."
 
 #: pcbnew/drc/drc_test_provider_annular_width.cpp:87
 msgid "Checking via annular rings..."
-msgstr ""
+msgstr "비아 고리 확인 중..."
 
 #: pcbnew/drc/drc_test_provider_annular_width.cpp:128
 #, c-format
 msgid "(%s min annular width %s; actual %s)"
-msgstr ""
+msgstr "(%s 최소 고리 폭 %s; 실제 값 %s)"
 
 #: pcbnew/drc/drc_test_provider_annular_width.cpp:134
 #, c-format
 msgid "(%s max annular width %s; actual %s)"
-msgstr ""
+msgstr "(%s 최대 고리 폭 %s; 실제 값 %s)"
 
 #: pcbnew/drc/drc_test_provider_connectivity.cpp:75
 msgid "Checking pad, via and zone connections..."
-msgstr ""
+msgstr "패드, 비아와 영역 연결 확인 중..."
 
 #: pcbnew/drc/drc_test_provider_connectivity.cpp:149
 msgid "Checking net connections..."
 msgstr "네트 연결 확인 중..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:192
-#, fuzzy
 msgid "Gathering copper items..."
-msgstr "구리 아이템을 모으는 중..."
+msgstr "구리 개체를 모으는 중..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:208
 msgid "Checking track & via clearances..."
-msgstr "트랙과 비아 클리어런스 확인 중..."
+msgstr "트랙과 비아 유격 확인 중..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:215
-#, fuzzy
 msgid "Checking hole clearances..."
-msgstr "구멍 클리어런스 확인..."
+msgstr "홀 유격 확인 중..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:223
-#, fuzzy
 msgid "Checking pad clearances..."
-msgstr "패드 클리어런스 확인..."
+msgstr "패드 유격 확인 중..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:231
-#, fuzzy
 msgid "Checking pads..."
 msgstr "패드 확인 중..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:239
 msgid "Checking copper zone clearances..."
-msgstr ""
+msgstr "구리 영역 유격 확인 중..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:246
 msgid "Checking zones..."
@@ -28747,63 +28724,62 @@ msgstr "영역 확인 중..."
 #: pcbnew/drc/drc_test_provider_edge_clearance.cpp:100
 #: pcbnew/drc/drc_test_provider_silk_clearance.cpp:190
 #: pcbnew/drc/drc_test_provider_silk_to_mask.cpp:160
-#, fuzzy, c-format
+#, c-format
 msgid "(%s clearance %s; actual %s)"
-msgstr "(%s 클리어런스 %s; 실제 %s)"
+msgstr "(%s 유격 %s; 실제 값 %s)"
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:570
-#, fuzzy, c-format
+#, c-format
 msgid "(nets %s and %s)"
-msgstr "(네트 %s 및 %s)"
+msgstr "(네트 %s 와 %s)"
 
 #: pcbnew/drc/drc_test_provider_courtyard_clearance.cpp:85
 msgid "Checking footprint courtyard definitions..."
-msgstr ""
+msgstr "풋프린트 코트야드 정의 확인 중..."
 
 #: pcbnew/drc/drc_test_provider_courtyard_clearance.cpp:90
 msgid "Gathering footprint courtyards..."
-msgstr "풋프린트 마당 모으기..."
+msgstr "풋프린트 코트야드 모으는 중..."
 
 #: pcbnew/drc/drc_test_provider_courtyard_clearance.cpp:151
 msgid "Checking footprints for overlapping courtyards..."
-msgstr ""
+msgstr "겹치는 코트야드가 있는 지 풋프린트 확인 중..."
 
 #: pcbnew/drc/drc_test_provider_diff_pair_coupling.cpp:348
 msgid "DPs evaluated:"
-msgstr ""
+msgstr "평가된 차동 쌍:"
 
 #: pcbnew/drc/drc_test_provider_diff_pair_coupling.cpp:460
-#, fuzzy, c-format
+#, c-format
 msgid "(%s maximum uncoupled length: %s; actual: %s)"
-msgstr "(%s 최대 비결합 길이: %s, 실제: %s)"
+msgstr "(%s 최대 비결합 길이: %s, 실제 값: %s)"
 
 #: pcbnew/drc/drc_test_provider_diff_pair_coupling.cpp:494
 #, c-format
 msgid "minimum gap: %s; "
-msgstr ""
+msgstr "최소 간격: %s; "
 
 #: pcbnew/drc/drc_test_provider_diff_pair_coupling.cpp:498
 #, c-format
 msgid "maximum gap: %s; "
-msgstr ""
+msgstr "최대 간격: %s; "
 
 #: pcbnew/drc/drc_test_provider_diff_pair_coupling.cpp:501
 #, c-format
 msgid "actual: %s)"
-msgstr ""
+msgstr "실제 값: %s)"
 
 #: pcbnew/drc/drc_test_provider_disallow.cpp:70
 msgid "Checking keepouts & disallow constraints..."
-msgstr ""
+msgstr "킵아웃과 허용되지 않는 제약 조건 확인 중..."
 
 #: pcbnew/drc/drc_test_provider_edge_clearance.cpp:122
 msgid "Checking copper to board edge clearances..."
-msgstr "구리와 보드 에지 클리어런스 확인..."
+msgstr "구리와 기판 모서리 유격 확인 중..."
 
 #: pcbnew/drc/drc_test_provider_edge_clearance.cpp:127
-#, fuzzy
 msgid "Checking silk to board edge clearances..."
-msgstr "실크에서 보드 가장자리 간격 확인 중..."
+msgstr "실크에서 기판까지 모서리 유격 확인 중..."
 
 #: pcbnew/drc/drc_test_provider_hole_size.cpp:80
 #, fuzzy
@@ -30727,15 +30703,15 @@ msgstr "인식할 수 없는 레이어 '%s'"
 
 #: pcbnew/pcb_expr_evaluator.cpp:499
 msgid "Footprint's courtyard is not a single, closed shape."
-msgstr ""
+msgstr "풋프린트의 코트야드는 하나의 닫힌 도형이 될 수 없습니다."
 
 #: pcbnew/pcb_expr_evaluator.cpp:511
 msgid "Footprint has no front courtyard."
-msgstr "풋프린트에는 앞쪽 여유공간이 없습니다."
+msgstr "풋프린트에 정면 코트야드가 없습니다."
 
 #: pcbnew/pcb_expr_evaluator.cpp:528
 msgid "Footprint has no back courtyard."
-msgstr "풋프린트에는 앞쪽 여유공간이 없습니다."
+msgstr "풋프린트에 후면 코트야드가 없습니다."
 
 #: pcbnew/pcb_expr_evaluator.cpp:1059
 msgid "must be mm, in, or mil"
@@ -33006,7 +32982,7 @@ msgstr "다음을 위한 킵아웃 계산:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:765
 msgid "Report may be incomplete: some footprint courtyards are malformed."
-msgstr ""
+msgstr "기록이 불완전할 수 있습니다: 일부 풋프린트 코트야드가 잘못되었습니다."
 
 #: pcbnew/tools/board_inspection_tool.cpp:766
 msgid "Run DRC for a full analysis."
@@ -35500,11 +35476,11 @@ msgstr ""
 
 #: pcbnew/widgets/appearance_controls.cpp:1524
 msgid "Footprint courtyards on board's front"
-msgstr ""
+msgstr "기판 정면의 풋프린트 코트야드"
 
 #: pcbnew/widgets/appearance_controls.cpp:1525
 msgid "Footprint courtyards on board's back"
-msgstr ""
+msgstr "기판 후면의 풋프린트 코트야드"
 
 #: pcbnew/widgets/appearance_controls.cpp:1526
 msgid "Footprint assembly on board's front"
