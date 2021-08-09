@@ -14,7 +14,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
 "PO-Revision-Date: 2021-08-09 08:13+0000\n"
-"Last-Translator: jeongsuAn <dks9467@gmail.com>\n"
+"Last-Translator: hokim <teamgoodaloe@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
 "Language: ko\n"
@@ -13333,7 +13333,7 @@ msgstr ""
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1765
 #, c-format
 msgid "Power symbol creates a global label with name '%s'"
-msgstr "전원 심볼은 '%s'라는 이름의 전역 라벨을 생성합니다"
+msgstr "전원 심볼이 '%s'라는 이름의 전역 라벨을 생성합니다"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1882
 #, fuzzy, c-format
@@ -19522,7 +19522,7 @@ msgstr "클래스 1"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1929
 msgid "Class 2"
-msgstr ""
+msgstr "클래스 2"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1930
 msgid "Class 3"
