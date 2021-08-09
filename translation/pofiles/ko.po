@@ -14,7 +14,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
 "PO-Revision-Date: 2021-08-09 08:13+0000\n"
-"Last-Translator: hokim <teamgoodaloe@gmail.com>\n"
+"Last-Translator: Ji Yoon Choi <chichoon.choi@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
 "Language: ko\n"
@@ -12466,9 +12466,8 @@ msgid "Load Without Cache File"
 msgstr "D-Codes 파일 열기"
 
 #: eeschema/files-io.cpp:542
-#, fuzzy
 msgid "Abort"
-msgstr "중지"
+msgstr "중단"
 
 #: eeschema/files-io.cpp:557 eeschema/files-io.cpp:574
 #: pagelayout_editor/files.cpp:250 pcbnew/files.cpp:794
@@ -13341,7 +13340,7 @@ msgstr ""
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1765
 #, c-format
 msgid "Power symbol creates a global label with name '%s'"
-msgstr "전원 심볼이 '%s'라는 이름의 글로벌 라벨을 생성합니다"
+msgstr "전원 심볼은 '%s'라는 이름의 전역 라벨을 생성합니다"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1882
 #, fuzzy, c-format
@@ -30689,7 +30688,7 @@ msgstr "PCB 텍스트 '%s' (%s)"
 #: pcbnew/pcb_track.cpp:102
 #, c-format
 msgid "Blind/Buried Via %s on %s"
-msgstr "블라인드/매장된 비아 %s on %s"
+msgstr "숨겨진 비아 %s on %s"
 
 #: pcbnew/pcb_track.cpp:103
 #, c-format
@@ -30727,14 +30726,12 @@ msgid "Micro Via"
 msgstr "마이크로 비아"
 
 #: pcbnew/pcb_track.cpp:748
-#, fuzzy
 msgid "Blind/Buried Via"
-msgstr "숨은 비아"
+msgstr "숨겨진 비아"
 
 #: pcbnew/pcb_track.cpp:749
-#, fuzzy
 msgid "Through Via"
-msgstr "비아 드래그"
+msgstr "스루 비아"
 
 #: pcbnew/pcb_track.cpp:765 pcbnew/pcb_track.cpp:1148
 msgid "Drill"
@@ -30743,7 +30740,7 @@ msgstr "드릴"
 #: pcbnew/pcb_track.cpp:776
 #, c-format
 msgid "Min Annular Width: %s"
-msgstr ""
+msgstr "최소 환형 폭: %s"
 
 #: pcbnew/pcb_track.cpp:796
 msgid "NetCode"
@@ -30752,62 +30749,56 @@ msgstr "네트 코드"
 #: pcbnew/pcb_track.cpp:929
 #, c-format
 msgid "Track (arc) %s on %s, length %s"
-msgstr "트랙 (호) %s on %s, 길이 %s"
+msgstr "배선 (호) %s on %s, 길이 %s"
 
 #: pcbnew/pcb_track.cpp:930
 #, c-format
 msgid "Track %s on %s, length %s"
-msgstr "트랙 %s on %s, 길이 %s"
+msgstr "배선 %s on %s, 길이 %s"
 
 #: pcbnew/pcb_track.cpp:1112 pcbnew/pcb_track.cpp:1129
-#, fuzzy
 msgid "Origin X"
-msgstr "플로트 원점"
+msgstr "원점 X"
 
 #: pcbnew/pcb_track.cpp:1115 pcbnew/pcb_track.cpp:1132
-#, fuzzy
 msgid "Origin Y"
-msgstr "플로트 원점"
+msgstr "원점 Y"
 
 #: pcbnew/pcb_track.cpp:1151
-#, fuzzy
 msgid "Layer Top"
-msgstr "Layer 1"
+msgstr "레이어 상단"
 
 #: pcbnew/pcb_track.cpp:1153
-#, fuzzy
 msgid "Layer Bottom"
-msgstr "아래쪽에서 보기"
+msgstr "레이어 하단"
 
 #: pcbnew/pcb_track.cpp:1155
-#, fuzzy
 msgid "Via Type"
-msgstr "비아 형식"
+msgstr "비아 유형"
 
 #: pcbnew/pcbnew.cpp:260
 msgid ""
 "An error occurred attempting to load the global footprint library table.\n"
 "Please edit this global footprint library table in Preferences menu."
 msgstr ""
+"전역 풋프린트 라이브러리 테이블을 불러오는 도중 오류가 발생하였습니다.\n"
+"설정 메뉴에서 전역 풋프린트 라이브러리 테이블을 편집하세요."
 
 #: pcbnew/pcbnew_config.cpp:61
-#, fuzzy
 msgid "Action Plugins"
-msgstr "플러그인 추가"
+msgstr "플러그인 동작"
 
 #: pcbnew/pcbnew_config.cpp:62
-#, fuzzy
 msgid "Origins & Axes"
-msgstr "플로트 원점"
+msgstr "원점 & 축"
 
 #: pcbnew/pcbnew_printout.cpp:108
-#, fuzzy
 msgid "Multiple Layers"
-msgstr "복수 항목 %s%s"
+msgstr "여러 레이어"
 
 #: pcbnew/plugin.cpp:154
 msgid "Enable <b>debug</b> logging for Footprint*() functions in this PLUGIN."
-msgstr ""
+msgstr "Footprint*() 함수 로그를 얻기 위해서 현재 플러그인의 <b>디버그</b>를 활성화합니다."
 
 #: pcbnew/plugin.cpp:158
 msgid "Regular expression <b>footprint name</b> filter."
