@@ -13,7 +13,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
 "PO-Revision-Date: 2021-08-09 02:53+0000\n"
-"Last-Translator: jeongsuAn <dks9467@gmail.com>\n"
+"Last-Translator: Ji Yoon Choi <chichoon.choi@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
 "Language: ko\n"
@@ -27976,6 +27976,208 @@ msgid ""
 "        (constraint clearance (min \"1.5mm\"))\n"
 "        (condition \"A.inDiffPair('*') && !AB.isCoupledDiffPair()\"))\n"
 msgstr ""
+"### 상위 레벨 규정\n"
+"\n"
+"    (version <숫자>)\n"
+"\n"
+"    (rule <규칙_이름> <규칙_절> ...)\n"
+"\n"
+"\n"
+"<br><br>\n"
+"\n"
+"### 규칙 절\n"
+"\n"
+"    (constraint <제약_형식> ...)\n"
+"\n"
+"    (condition \"<표현>\")\n"
+"\n"
+"    (layer \"<레이어_이름>\")\n"
+"\n"
+"\n"
+"<br><br>\n"
+"\n"
+"### 제약 형식\n"
+"\n"
+" * annular_width\n"
+" * clearance\n"
+" * courtyard_clearance\n"
+" * diff\\_pair\\_gap\n"
+" * diff\\_pair\\_uncoupled\n"
+" * disallow\n"
+" * edge_clearance\n"
+" * length\n"
+" * hole\n"
+" * hole_clearance\n"
+" * silk_clearance\n"
+" * skew\n"
+" * track_width\n"
+" * via_count\n"
+"\n"
+"\n"
+"<br><br>\n"
+"\n"
+"### 개체 형식\n"
+"\n"
+" * buried_via\n"
+" * graphic\n"
+" * hole\n"
+" * micro_via\n"
+" * pad\n"
+" * text\n"
+" * track\n"
+" * via\n"
+" * zone\n"
+"\n"
+"<br>\n"
+"\n"
+"### 예시\n"
+"\n"
+"    (version 1)\n"
+"\n"
+"    (rule HV\n"
+"       (constraint clearance (min 1.5mm))\n"
+"       (condition \"A.NetClass == 'HV'\"))\n"
+"\n"
+"\n"
+"    (rule HV\n"
+"       (layer outer)\n"
+"       (constraint clearance (min 1.5mm))\n"
+"       (condition \"A.NetClass == 'HV'\"))\n"
+"\n"
+"\n"
+"    (rule HV_HV\n"
+"       # wider clearance between HV tracks\n"
+"       (constraint clearance (min \"1.5mm + 2.0mm\"))\n"
+"       (condition \"A.NetClass == 'HV' && B.NetClass == 'HV'\"))\n"
+"\n"
+"\n"
+"    (rule HV_unshielded\n"
+"       (constraint clearance (min 2mm))\n"
+"       (condition \"A.NetClass == 'HV' && !A.insideArea('Shield*')\"))\n"
+"<br><br>\n"
+"\n"
+"### 참고\n"
+"\n"
+"Version 절이 첫 번째 절이 되어야 합니다.  이는 파일의 문법 버전을 알려주며, \n"
+"훗날 규칙 파서가 자동 업데이트를 진행하는 데 도움을 줍니다.  이는\n"
+"\"1\" 로 설정되어야 합니다.\n"
+"\n"
+"규칙은 특이도에 따라 정렬되어야 합니다. 이후의 규칙이\n"
+"이전의 규칙보다 우선하며, 적절한 규칙을 찾았을 경우엔\n"
+"더이상뒤의 규칙을 체크하지 않습니다.\n"
+"\n"
+"Ctrl + /을 눌러 주석 처리 또는 해제를 할 수 있습니다.\n"
+"<br><br><br>\n"
+"\n"
+"### 표현식 함수\n"
+"\n"
+"모든 함수 매개변수는 간단한 와일드카드를 지원합니다 (`*` and `?`).\n"
+"<br><br>\n"
+"\n"
+"    A.insideCourtyard('<footprint_refdes>')\n"
+"`A`의 일부가 제시된 풋프린트의 주요 코트야드 범위 내에 있을 경우 참이 됩니다.\n"
+"<br><br>\n"
+"\n"
+"    A.insideFrontCourtyard('<footprint_refdes>')\n"
+"`A`의 일부가 제시된 풋프린트의 정면 코트야드 범위 내에 있을 경우 참이 됩니다.\n"
+"<br><br>\n"
+"\n"
+"    A.insideBackCourtyard('<footprint_refdes>')\n"
+"`A`의 일부가 제시된 풋프린트의 후면 코트야드 범위 내에 있을 경우 참이 됩니다.\n"
+"<br><br>\n"
+"\n"
+"    A.insideArea('<zone_name>')\n"
+"`A`의 일부가 제시된 영역의 테두리 내에 있을 경우 참이 됩니다.\n"
+"<br><br>\n"
+"\n"
+"    A.isPlated()\n"
+"`A`가 도금된 홀을 포함할 때 참이 됩니다.\n"
+"<br><br>\n"
+"\n"
+"    A.inDiffPair('<net_name>')\n"
+"`A`가 제시된 차동 쌍의 일부에 포함되는 네트를 가지고 있을 경우 참이 됩니다.\n"
+"`<net_name>` 는 차동 쌍의 기본 이름입니다.  예를 들면,`inDiffPair('CLK')`\n"
+"는 `CLK_P` 와 `CLK_N` 네트 안의 항목들과 대응됩니다.\n"
+"<br><br>\n"
+"\n"
+"    AB.isCoupledDiffPair()\n"
+"`A`와 `B`같은 차동 쌍의 멤버일 경우 참이 됩니다.\n"
+"<br><br>\n"
+"\n"
+"    A.memberOf('<group_name>')\n"
+"`A`가 제시된 그룹의 멤버일 경우 참이 됩니다. 중첩된 멤버십을 포함합니다.\n"
+"<br><br>\n"
+"\n"
+"    A.existsOnLayer('<layer_name>')\n"
+"`A`가 제시된 레이어에 존재할 경우 참이 됩니다.  레이어의 이름은 \n"
+"기판 설정 > 기판 편집기 레이어에 할당된 이름이거나,\n"
+"표준 명칭이 될 수 있습니다 (예시: `F.Cu`).\n"
+"\n"
+"참고: 규칙이 해당 레이어에 적용되는지 여부와 관계 없이,\n"
+"`A`가 제시된 레이어에 있을 경우 참을 반환합니다.\n"
+"후자의 경우 `(layer \"layer_name\")` 규칙 절을 사용합니다.\n"
+"<br><br><br>\n"
+"\n"
+"### 더 많은 예시들\n"
+"\n"
+"    (rule \"copper keepout\"\n"
+"       (constraint disallow track via zone)\n"
+"       (condition \"A.insideArea('zone3')\"))\n"
+"\n"
+"\n"
+"    (rule \"BGA neckdown\"\n"
+"       (constraint track_width (min 0.2mm) (opt 0.25mm))\n"
+"       (constraint clearance (min 0.05mm) (opt 0.08mm))\n"
+"       (condition \"A.insideCourtyard('U3')\"))\n"
+"\n"
+"\n"
+"    # prevent silk over tented vias\n"
+"    (rule silk_over_via\n"
+"       (constraint silk_clearance (min 0.2mm))\n"
+"       (condition \"A.Type == '*Text' && B.Type == 'Via'\"))\n"
+"\n"
+"\n"
+"    (rule \"Distance between Vias of Different Nets\"  \n"
+"        (constraint hole_to_hole (min 0.254mm))\n"
+"        (condition \"A.Type =='Via' && B.Type =='Via' && A.Net != B.Net\"))\n"
+"\n"
+"    (rule \"Clearance between Pads of Different Nets\"  \n"
+"        (constraint clearance (min 3.0mm))\n"
+"        (condition \"A.Type =='Pad' && B.Type =='Pad' && A.Net != B.Net\"))\n"
+"\n"
+"\n"
+"    (rule \"Via Hole to Track Clearance\"  \n"
+"        (constraint hole_clearance (min 0.254mm))\n"
+"        (condition \"A.Type =='Via' && B.Type =='Track'\"))\n"
+"    \n"
+"    (rule \"Pad to Track Clearance\"  \n"
+"        (constraint clearance (min 0.2mm))\n"
+"        (condition \"A.Type =='Pad' && B.Type =='Track'\"))\n"
+"\n"
+"\n"
+"    (rule \"clearance-to-1mm-cutout\"\n"
+"        (constraint clearance (min 0.8mm))\n"
+"        (condition \"A.Layer=='Edge.Cuts' && A.Thickness == 1.0mm\"))\n"
+"\n"
+"\n"
+"    (rule \"Max Drill Hole Size Mechanical\"  \n"
+"        (constraint hole (max 6.3mm))\n"
+"        (condition \"A.Pad_Type == 'NPTH, mechanical'\"))\n"
+"    \n"
+"    (rule \"Max Drill Hole Size PTH\"  \n"
+"        (constraint hole (max 6.35mm))\n"
+"        (condition \"A.Pad_Type == 'Through-hole'\"))\n"
+"\n"
+"\n"
+"    # Specify an optimal gap for a particular diff-pair\n"
+"    (rule \"dp clock gap\"\n"
+"        (constraint diff_pair_gap (opt \"0.8mm\"))\n"
+"        (condition \"A.inDiffPair('CLK') && AB.isCoupledDiffPair()\"))\n"
+"\n"
+"    # Specify a larger clearance around any diff-pair\n"
+"    (rule \"dp clearance\"\n"
+"        (constraint clearance (min \"1.5mm\"))\n"
+"        (condition \"A.inDiffPair('*') && !AB.isCoupledDiffPair()\"))\n"
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:72
 msgid "Default properties for new dimension objects:"
@@ -27984,7 +28186,7 @@ msgstr "새로운 치수 객체의 기본 속성:"
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:89
 msgid ""
 "Default units for dimensions (\"automatic\" to follow the chosen UI units)"
-msgstr ""
+msgstr "치수에 대한 기본 유닛 (\"자동\" 을 선택하면 UI가 고른 단위에 따릅니다)"
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:96
 msgid "Text position:"
@@ -27992,30 +28194,29 @@ msgstr "텍스트 위치:"
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:104
 msgid "Where to position the dimension text relative to the dimension line"
-msgstr ""
+msgstr "치수선에 대해서 치수 텍스트를 어디에 배치할 것인지 결정"
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:118
 msgid "Keep text aligned"
-msgstr ""
+msgstr "치수선에 텍스트 정렬"
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:119
 msgid "When checked, dimension text will be kept aligned with dimension lines"
-msgstr ""
+msgstr "체크할 경우, 치수 텍스트는 치수 선에 맞추어 정렬됩니다"
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:131
 msgid "How many digits of precision to show"
-msgstr ""
+msgstr "표시할 정밀도 자리수 개수"
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:147
 msgid ""
 "When checked, \"1.2300\" will be rendered as \"1.23\" even if precision is "
 "set to show more digits"
-msgstr ""
+msgstr "체크할 경우, 정밀도가 더 많은 자리수를 표시하도록 설정되어 있더라도\"1.2300\"은 \"1.23\"으로 표시됩니다"
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias.cpp:258
-#, fuzzy
 msgid "No via hole size defined."
-msgstr "라이브러리가 정의되지 않았습니다."
+msgstr "비아 홀 크기가 정의되지 않았습니다."
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias.cpp:273
 msgid "No differential pair gap defined."
@@ -28038,119 +28239,115 @@ msgid "7"
 msgstr "7"
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:99 pcbnew/pad.cpp:931
-#, fuzzy
 msgid "Hole"
 msgstr "홀"
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:140
-#, fuzzy
 msgid "Differential Pairs"
-msgstr "3D 모드로 보드 보이기"
+msgstr "차동 쌍"
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:156
 msgid "Gap"
 msgstr "간격"
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:157
-#, fuzzy
 msgid "Via Gap"
-msgstr "비아 형식"
+msgstr "비아 간격"
 
 #: pcbnew/drc/drc_engine.cpp:144 pcbnew/drc/drc_engine.cpp:186
 #: pcbnew/drc/drc_engine.cpp:216
 msgid "board setup constraints"
-msgstr ""
+msgstr "기판 설정 제약"
 
 #: pcbnew/drc/drc_engine.cpp:195
 msgid "board setup micro-via constraints"
-msgstr ""
+msgstr "기판 설정 마이크로 비아 제약"
 
 #: pcbnew/drc/drc_engine.cpp:241 pcbnew/drc/drc_engine.cpp:322
 #: pcbnew/drc/drc_engine.cpp:350
-#, fuzzy, c-format
+#, c-format
 msgid "netclass '%s'"
-msgstr "넷클래스 '%s'"
+msgstr "네트 클래스 '%s'"
 
 #: pcbnew/drc/drc_engine.cpp:268 pcbnew/drc/drc_engine.cpp:285
 #: pcbnew/drc/drc_engine.cpp:303
 #, c-format
 msgid "netclass '%s' (diff pair)"
-msgstr "넷 클래스 '%s' (차동 쌍)"
+msgstr "네트 클래스 '%s' (차동 쌍)"
 
 #: pcbnew/drc/drc_engine.cpp:425
-#, fuzzy
 msgid "keepout area"
-msgstr "트랙 삭제"
+msgstr "금지 영역"
 
 #: pcbnew/drc/drc_engine.cpp:430
-#, fuzzy, c-format
+#, c-format
 msgid "keepout area '%s'"
 msgstr "금지 영역 '%s'"
 
 #: pcbnew/drc/drc_engine.cpp:702
 msgid "Tessellating copper zones..."
-msgstr "구리 영역 바둑판모양..."
+msgstr "구리 영역 테셀레이션 중..."
 
 #: pcbnew/drc/drc_engine.cpp:801 pcbnew/drc/drc_engine.cpp:811
 #, c-format
 msgid "Local override on %s; clearance: %s."
-msgstr ""
+msgstr "%s에 대한 지역 재정의; 유격: %s."
 
 #: pcbnew/drc/drc_engine.cpp:825
-#, fuzzy, c-format
+#, c-format
 msgid "Board minimum clearance: %s."
-msgstr "보드 최소 여유 공간: %s."
+msgstr "보드 최소 유격: %s."
 
 #: pcbnew/drc/drc_engine.cpp:845
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s; clearance: %s."
-msgstr "확인 %s; 클리어런스: %s."
+msgstr "%s 확인 중; 유격: %s."
 
 #: pcbnew/drc/drc_engine.cpp:852
 #, c-format
 msgid "Checking %s; courtyard clearance: %s."
-msgstr ""
+msgstr "%s 확인 중; 코트야드 유격: %s."
 
 #: pcbnew/drc/drc_engine.cpp:859
 #, c-format
 msgid "Checking %s; silk clearance: %s."
-msgstr ""
+msgstr "%s 확인 중; 실크 유격: %s."
 
 #: pcbnew/drc/drc_engine.cpp:866
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s; hole clearance: %s."
-msgstr "확인 %s; 구멍 간극: %s."
+msgstr "%s 확인 중; 홀 유격: %s."
 
 #: pcbnew/drc/drc_engine.cpp:873
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s; edge clearance: %s."
-msgstr "확인 %s; 가장자리 간격: %s."
+msgstr "%s 확인 중; 가장자리 유격: %s."
 
 #: pcbnew/drc/drc_engine.cpp:879
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s."
-msgstr "확인%s."
+msgstr "%s 확인 중."
 
 #: pcbnew/drc/drc_engine.cpp:886
 msgid "Board and netclass clearances apply only between copper items."
-msgstr ""
+msgstr "기판과 네트 클래스 유격은 구리 개체 사이에만 적용됩니다."
 
 #: pcbnew/drc/drc_engine.cpp:930
 msgid "Keepout constraint not met."
-msgstr "keepout 제약 조건이 충족되지 않았습니다."
+msgstr "킵 아웃 제약 조건이 충족되지 않았습니다."
 
 #: pcbnew/drc/drc_engine.cpp:932
 msgid "Disallow constraint not met."
-msgstr ""
+msgstr "허용되지 않는 제약 조건이 충족되지 않았습니다."
 
 #: pcbnew/drc/drc_engine.cpp:954
 msgid "Keepout layer(s) not matched."
-msgstr ""
+msgstr "킵아웃 레이어가 일치하지 않습니다."
 
 #: pcbnew/drc/drc_engine.cpp:958 pcbnew/drc/drc_engine.cpp:979
-#, fuzzy, c-format
+#, c-format
 msgid "Rule layer '%s' not matched; rule ignored."
-msgstr "규칙 레이어 '%s' 일치하지 않음; 규칙은 무시되었습니다."
+msgstr "규칙 레이어 '%s' 일치하지 않음; 규칙이 무시되었습니다."
 
 #: pcbnew/drc/drc_engine.cpp:964 pcbnew/drc/drc_engine.cpp:984
 msgid "Rule layer not matched; rule ignored."
@@ -28158,21 +28355,20 @@ msgstr "규칙 레이어가 일치하지 않음; 규칙이 무시되었습니다
 
 #: pcbnew/drc/drc_engine.cpp:992
 msgid "Unconditional constraint applied."
-msgstr ""
+msgstr "조건 없는 제약이 적용되었습니다."
 
 #: pcbnew/drc/drc_engine.cpp:993
 msgid "Unconditional rule applied."
-msgstr ""
+msgstr "조건 없는 규칙이 적용되었습니다."
 
 #: pcbnew/drc/drc_engine.cpp:1006
-#, fuzzy, c-format
+#, c-format
 msgid "Checking rule condition '%s'."
-msgstr "규칙 조건 확인 '%s'."
+msgstr "규칙 조건 '%s' 확인 중."
 
 #: pcbnew/drc/drc_engine.cpp:1012
-#, fuzzy
 msgid "Constraint applied."
-msgstr "제약 조건이 적용됩니다."
+msgstr "제약이 적용되었습니다."
 
 #: pcbnew/drc/drc_engine.cpp:1013
 msgid "Rule applied; overrides previous constraints."
