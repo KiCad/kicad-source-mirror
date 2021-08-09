@@ -13,7 +13,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
 "PO-Revision-Date: 2021-08-09 05:46+0000\n"
-"Last-Translator: Ji Yoon Choi <chichoon.choi@gmail.com>\n"
+"Last-Translator: Uibeom Jung <wjddmlqja17@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
 "Language: ko\n"
@@ -12312,7 +12312,7 @@ msgstr "모든 연결 삭제"
 
 #: eeschema/erc_item.cpp:98
 msgid "Different net assigned to a shared pin in another unit of the symbol"
-msgstr "기호의 다른 단위에서 공유 핀에 할당된 다른 네트"
+msgstr "서로 다른 네트가 심볼의 또다른 유닛에 있는 공유 핀에 할당됨"
 
 #: eeschema/erc_item.cpp:102
 msgid "Conflict between bus alias definitions across schematic sheets"
@@ -12320,15 +12320,15 @@ msgstr "개략도 시트에서 버스 별칭 정의 간의 충돌"
 
 #: eeschema/erc_item.cpp:106
 msgid "More than one name given to this bus or net"
-msgstr "이 버스 또는 네트워크에 둘 이상의 이름이 지정되었습니다"
+msgstr "이 버스 또는 네트에 둘 이상의 이름이 지정되었습니다"
 
 #: eeschema/erc_item.cpp:110
 msgid "Net is graphically connected to a bus but not a bus member"
-msgstr "넷은 버스에 그래픽으로 연결되어 있지만 버스 회원은 연결되어 있지 않습니다"
+msgstr "네트는 버스에 그래픽적으로 연결되어 있지만 버스 구성원은 연결되어 있지 않습니다"
 
 #: eeschema/erc_item.cpp:114
 msgid "Label attached to bus item does not describe a bus"
-msgstr "버스 항목에 부착된 레이블이 버스를 설명하지 않습니다"
+msgstr "버스 항목에 부착된 라벨이 버스를 설명하지 않습니다"
 
 #: eeschema/erc_item.cpp:118
 msgid "Buses are graphically connected but share no bus members"
@@ -12336,7 +12336,7 @@ msgstr "버스는 그래픽으로 연결되어 있지만 버스 회원은 공유
 
 #: eeschema/erc_item.cpp:122
 msgid "Invalid connection between bus and net items"
-msgstr "버스와 네트 항목 간의 연결이 잘못되었습니다"
+msgstr "잘못된 버스와 네트 항목 간의 연결"
 
 #: eeschema/erc_item.cpp:126 pcbnew/drc/drc_item.cpp:173
 msgid "Unresolved text variable"
@@ -12424,7 +12424,7 @@ msgstr "회로도 파일 '%s'은 이미 열려 있습니다."
 #: eeschema/files-io.cpp:292
 #, c-format
 msgid "Schematic '%s' does not exist.  Do you wish to create it?"
-msgstr "개략도 '%s'이(가) 존재하지 않습니다. 생성하시겠습니까?"
+msgstr "회로도 '%s'이(가) 존재하지 않습니다. 생성하시겠습니까?"
 
 #: eeschema/files-io.cpp:309
 #, fuzzy
@@ -12444,7 +12444,7 @@ msgstr "회로도 파일 변경 내용이 저장되지 않았음"
 msgid ""
 "The entire schematic could not be loaded.  Errors occurred attempting to "
 "load hierarchical sheets."
-msgstr "전체 도식을 로드할 수 없습니다. 계층 시트를 로드하는 동안 오류가 발생했습니다."
+msgstr "전체 회로도를 불러올 수 없습니다. 계층 시트를 볼러오는 동안 오류가 발생했습니다."
 
 #: eeschema/files-io.cpp:410 eeschema/files-io.cpp:418
 #: eeschema/files-io.cpp:1186 eeschema/sheet.cpp:162
