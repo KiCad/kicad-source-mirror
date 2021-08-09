@@ -13,7 +13,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
 "PO-Revision-Date: 2021-08-09 02:09+0000\n"
-"Last-Translator: Ji Yoon Choi <chichoon.choi@gmail.com>\n"
+"Last-Translator: jeongsuAn <dks9467@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
 "Language: ko\n"
@@ -11773,9 +11773,8 @@ msgid "Junction dot size:"
 msgstr "접합점 크기:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:132
-#, fuzzy
 msgid "Smallest"
-msgstr "작은 모양"
+msgstr "가장 작은"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:132
 #: pcbnew/dialogs/dialog_plot_base.cpp:117
@@ -11785,12 +11784,12 @@ msgstr "작은 모양"
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:132
 #, fuzzy
 msgid "Large"
-msgstr "텍스트 세로 크기"
+msgstr "큰"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:132
 #, fuzzy
 msgid "Largest"
-msgstr "텍스트 세로 크기"
+msgstr "가장 큰"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:151
 #, fuzzy
@@ -12228,7 +12227,7 @@ msgstr ""
 #: eeschema/erc_item.cpp:42
 #, fuzzy
 msgid "Conflicts"
-msgstr "모듈 검사"
+msgstr "충돌"
 
 #: eeschema/erc_item.cpp:43 pcbnew/dialogs/panel_edit_options_base.cpp:362
 #: pcbnew/drc/drc_item.cpp:46
@@ -18889,6 +18888,7 @@ msgid "Calculate"
 msgstr "계산"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:197
+#, fuzzy
 msgid "Regulator"
 msgstr "레귤레이터"
 
@@ -19193,7 +19193,7 @@ msgstr "전기적 형식"
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1336
 #, fuzzy
 msgid "Results"
-msgstr "기본값"
+msgstr "결과"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1135
 #, fuzzy
@@ -22655,8 +22655,9 @@ msgid "Select an IDF export filename"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:25
+#, fuzzy
 msgid "*.emn"
-msgstr ""
+msgstr "*.emn"
 
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:34
 msgid "Grid reference point:"
@@ -22903,8 +22904,9 @@ msgid "Save VRML Board File"
 msgstr "보드 저장"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:26
+#, fuzzy
 msgid "*.wrl"
-msgstr ""
+msgstr "*.wrl"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:31
 #, fuzzy
@@ -23038,8 +23040,9 @@ msgid "Match case"
 msgstr "기타"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:52
+#, fuzzy
 msgid "Wrap"
-msgstr ""
+msgstr "감싸다"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:62
 msgid "Search footprint reference designators"
@@ -24642,14 +24645,13 @@ msgid "center"
 msgstr "중심"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:713
-#, fuzzy
 msgid "start"
-msgstr "%c 부분"
+msgstr "시작"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:714
 #, fuzzy
 msgid "angle"
-msgstr "사각형 추가"
+msgstr "각도"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:719
 msgid "ring"
@@ -24660,9 +24662,8 @@ msgid "circle"
 msgstr "원형"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:724
-#, fuzzy
 msgid "radius"
-msgstr "채움"
+msgstr "반지름"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:729
 #, c-format
@@ -25786,7 +25787,7 @@ msgstr "검정색"
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:21
 #, fuzzy
 msgid "Mode"
-msgstr "영역 채우기"
+msgstr "모드"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:34
 msgid "Mouse drag behavior:"
@@ -29480,11 +29481,12 @@ msgstr ""
 #: pcbnew/import_gfx/dialog_import_gfx.cpp:55
 #, fuzzy
 msgid "Centimeter"
-msgstr "가운데"
+msgstr "센티미터"
 
 #: pcbnew/import_gfx/dialog_import_gfx.cpp:56
+#, fuzzy
 msgid "Feet"
-msgstr ""
+msgstr "피트"
 
 #: pcbnew/import_gfx/dialog_import_gfx.cpp:252
 #, fuzzy
@@ -29516,7 +29518,7 @@ msgstr ""
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:43
 #, fuzzy
 msgid "Placement"
-msgstr "패드 형식"
+msgstr "배치"
 
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:48
 msgid "Interactive placement"
