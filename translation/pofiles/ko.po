@@ -14,7 +14,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
 "PO-Revision-Date: 2021-08-09 12:06+0000\n"
-"Last-Translator: Uibeom Jung <wjddmlqja17@gmail.com>\n"
+"Last-Translator: jeongsuAn <dks9467@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
 "Language: ko\n"
@@ -11287,7 +11287,7 @@ msgid "Failed to back up file '%s'.\n"
 msgstr "파일 '%s'를 백업하지 못했습니다.\n"
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:414
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to create backup folder '%s'.\n"
 msgstr "백업 폴더 '%s'을(를) 생성하지 못했습니다.\n"
 
@@ -11307,9 +11307,8 @@ msgid "Changes To Be Applied"
 msgstr "라벨로 바꾸기"
 
 #: eeschema/dialogs/dialog_update_from_pcb.cpp:66
-#, fuzzy
 msgid "Update Schematic"
-msgstr "새 회로도 (&S)"
+msgstr "회로도 업데이트"
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:32
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:27
@@ -11330,14 +11329,12 @@ msgstr ""
 "선택합니다."
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:55
-#, fuzzy
 msgid "Update references of symbols that have been changed in the PCB editor."
-msgstr "PCB 편집기에서 변경된 기호의 참조를 업데이트합니다."
+msgstr "PCB 편집기에서 변경된 심볼의 참조를 업데이트합니다."
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:59
-#, fuzzy
 msgid "Footprint assignments"
-msgstr "풋프린트 회전"
+msgstr "풋프린트 할당"
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:60
 #, fuzzy
@@ -11409,7 +11406,7 @@ msgstr "/경로/대상/시트"
 #: pcbnew/pcb_edit_frame.cpp:270 pcbnew/pcb_edit_frame.cpp:1160
 #, fuzzy
 msgid "Appearance"
-msgstr "유격"
+msgstr "외형"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:28
 #, fuzzy
@@ -11670,7 +11667,6 @@ msgstr "URL"
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:25
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:28
 #: pcbnew/dialogs/panel_display_options_base.cpp:35
-#, fuzzy
 msgid "Annotations"
 msgstr "주석"
 
@@ -11926,7 +11922,6 @@ msgstr "이 라이브러리를 추가한 후 별명 중 하나를 변경해야 �
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1007
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:908
 #: pcbnew/footprint_libraries_utils.cpp:523
-#, fuzzy
 msgid "Skip"
 msgstr "건너뛰기"
 
@@ -12553,7 +12548,6 @@ msgstr "별칭"
 #: eeschema/generate_alias_info.cpp:121 eeschema/sim/spice_simulator.cpp:83
 #: pcbnew/footprint.cpp:839 pcbnew/tools/pcb_control.cpp:1131
 #: pcbnew/zone.cpp:623
-#, fuzzy
 msgid "Unknown"
 msgstr "알 수 없음"
 
@@ -12769,7 +12763,6 @@ msgstr "네트리스트…"
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:121
 #: gerbview/menubar.cpp:174 pagelayout_editor/menubar.cpp:116
 #: pcbnew/menubar_footprint_editor.cpp:138 pcbnew/menubar_pcb_editor.cpp:244
-#, fuzzy
 msgid "&Units"
 msgstr "단위(&U)"
 
@@ -12777,9 +12770,8 @@ msgstr "단위(&U)"
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:179
 #: pagelayout_editor/menubar.cpp:169 pcbnew/menubar_footprint_editor.cpp:244
 #: pcbnew/menubar_pcb_editor.cpp:454
-#, fuzzy
 msgid "&Place"
-msgstr "노드 설치"
+msgstr "장소 (&P)"
 
 #: eeschema/menubar.cpp:287
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:180
@@ -12797,7 +12789,6 @@ msgstr "도구(&T)"
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:181
 #: pagelayout_editor/menubar.cpp:171 pcbnew/menubar_footprint_editor.cpp:247
 #: pcbnew/menubar_pcb_editor.cpp:458
-#, fuzzy
 msgid "P&references"
 msgstr "설정 (&P)"
 
@@ -12856,12 +12847,10 @@ msgid "Unconnected"
 msgstr "연결되지 않음"
 
 #: eeschema/pin_type.cpp:77
-#, fuzzy
 msgid "Inverted"
-msgstr "반전"
+msgstr "역"
 
 #: eeschema/pin_type.cpp:78
-#, fuzzy
 msgid "Clock"
 msgstr "클럭"
 
@@ -13807,7 +13796,6 @@ msgid "Undefined!!!"
 msgstr "정의되어 있지 않습니다!!!"
 
 #: eeschema/sch_symbol.cpp:1403
-#, fuzzy
 msgid "<Unknown>"
 msgstr "<알 수 없음>"
 
@@ -14274,7 +14262,6 @@ msgid "Error: simulation type doesn't support plotting!\n"
 msgstr ""
 
 #: eeschema/sim/sim_plot_frame.cpp:812 eeschema/sim/sim_plot_frame.cpp:1616
-#, fuzzy
 msgid "Signal"
 msgstr "신호"
 
@@ -14399,17 +14386,14 @@ msgid "White Background"
 msgstr "흰색"
 
 #: eeschema/sim/sim_plot_frame_base.cpp:118
-#, fuzzy
 msgid "View"
 msgstr "보기"
 
 #: eeschema/sim/sim_plot_frame_base.cpp:197
-#, fuzzy
 msgid "Signals"
 msgstr "신호"
 
 #: eeschema/sim/sim_plot_frame_base.cpp:225
-#, fuzzy
 msgid "Cursors"
 msgstr "커서"
 
@@ -14431,7 +14415,6 @@ msgid "noise [(V or A)^2/Hz]"
 msgstr ""
 
 #: eeschema/sim/sim_plot_panel.cpp:341
-#, fuzzy
 msgid "Time"
 msgstr "시간"
 
@@ -14948,7 +14931,6 @@ msgstr "심볼 라이브러리 파일 '%s'을 로드하는 동안 오류가 발�
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:122
 #: pcbnew/footprint_libraries_utils.cpp:470
 #: pcbnew/footprint_libraries_utils.cpp:1037
-#, fuzzy
 msgid "Overwrite"
 msgstr "덮어쓰기"
 
@@ -16856,12 +16838,10 @@ msgid "Graphic Layer"
 msgstr "그래픽 레이어"
 
 #: gerbview/gerber_draw_item.cpp:712
-#, fuzzy
 msgid "Clear"
-msgstr "유격"
+msgstr "지우기"
 
 #: gerbview/gerber_draw_item.cpp:713 gerbview/gerber_file_image.cpp:353
-#, fuzzy
 msgid "Polarity"
 msgstr "극성"
 
@@ -16974,9 +16954,8 @@ msgid "X2 attr"
 msgstr ""
 
 #: gerbview/gerbview_frame.cpp:1016
-#, fuzzy
 msgid "GerbView"
-msgstr "GERBVIEW 종료"
+msgstr "GerbView"
 
 #: gerbview/job_file_reader.cpp:157
 msgid "This job file uses an outdated format. Please recreate it."
@@ -17060,7 +17039,6 @@ msgid "Highlight items belonging to this net"
 msgstr ""
 
 #: gerbview/toolbars_gerber.cpp:152 gerbview/toolbars_gerber.cpp:155
-#, fuzzy
 msgid "Attr:"
 msgstr "속성:"
 
@@ -17069,7 +17047,6 @@ msgid "Highlight items with this aperture attribute"
 msgstr ""
 
 #: gerbview/toolbars_gerber.cpp:166 gerbview/toolbars_gerber.cpp:168
-#, fuzzy
 msgid "DCode:"
 msgstr "D코드:"
 
@@ -17302,7 +17279,6 @@ msgid "No file loaded on the active layer %d."
 msgstr ""
 
 #: gerbview/tools/gerbview_selection_tool.cpp:48
-#, fuzzy
 msgid "Highlight"
 msgstr "강조"
 
@@ -17338,9 +17314,8 @@ msgstr "레이어"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:78
 #: gerbview/widgets/layer_widget.cpp:558
-#, fuzzy
 msgid "Items"
-msgstr "Nb 항목"
+msgstr "항목"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:93
 msgid "DCodes"
@@ -17455,7 +17430,6 @@ msgid "Library Format"
 msgstr "라이브러리 형식"
 
 #: include/lib_table_grid.h:190
-#, fuzzy
 msgid "Active"
 msgstr "활성"
 
@@ -18128,7 +18102,6 @@ msgstr ""
 
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:64
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:124
-#, fuzzy
 msgid "Origin"
 msgstr "원본"
 
@@ -18171,7 +18144,6 @@ msgid "Y end:"
 msgstr ""
 
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.h:72
-#, fuzzy
 msgid "New Item"
 msgstr "새 항목"
 
@@ -18184,7 +18156,6 @@ msgid "An error occurred attempting to print the drawing sheet."
 msgstr "도면 시트를 인쇄하는 동안 오류가 발생했습니다."
 
 #: pagelayout_editor/dialogs/dialogs_for_printing.cpp:242
-#, fuzzy
 msgid "Printing"
 msgstr "인쇄"
 
@@ -18242,7 +18213,6 @@ msgid "Set to 0 to use default values"
 msgstr "비아홀 크기 초기화"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:183
-#, fuzzy
 msgid "Comment:"
 msgstr "주석:"
 
@@ -18262,7 +18232,6 @@ msgstr "끝 위치"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:315
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1354
-#, fuzzy
 msgid "Rotation:"
 msgstr "회전:"
 
@@ -18344,12 +18313,10 @@ msgid "Page Margins"
 msgstr "페이지 인쇄"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:501
-#, fuzzy
 msgid "Left:"
 msgstr "왼쪽:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:515
-#, fuzzy
 msgid "Right:"
 msgstr "오른쪽:"
 
@@ -18358,7 +18325,6 @@ msgid "Top:"
 msgstr ""
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:543
-#, fuzzy
 msgid "Bottom:"
 msgstr "하단:"
 
@@ -19302,7 +19268,6 @@ msgid "Top view of via"
 msgstr "위쪽에서 보기"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1508
-#, fuzzy
 msgid "Current:"
 msgstr "전류:"
 
@@ -19957,7 +19922,6 @@ msgid "GHz"
 msgstr "GHz"
 
 #: pcb_calculator/widgets/unit_selector.cpp:101
-#, fuzzy
 msgid "MHz"
 msgstr "MHz"
 
@@ -20043,7 +20007,7 @@ msgstr "네트"
 #: pcbnew/board.cpp:1195 pcbnew/pcb_draw_panel_gal.cpp:469
 #, fuzzy
 msgid "Unrouted"
-msgstr "미배선 초기화"
+msgstr "라우팅되지 않음"
 
 #: pcbnew/board_connected_item.cpp:186
 msgid "NetName"
@@ -20333,9 +20297,8 @@ msgstr "2"
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:51
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:108
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:166
-#, fuzzy
 msgid "4"
-msgstr "&4"
+msgstr "4"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:26
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:53
@@ -20540,7 +20503,7 @@ msgstr ""
 #: pcbnew/build_BOM_from_board.cpp:113
 #, fuzzy
 msgid "Designation"
-msgstr "방향"
+msgstr "명칭"
 
 #: pcbnew/build_BOM_from_board.cpp:114
 msgid "Supplier and ref"
@@ -20953,9 +20916,8 @@ msgstr "주석 재작성:"
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:178
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:140
 #: pcbnew/footprint.cpp:845
-#, fuzzy
 msgid "Front"
-msgstr "정면에서 보기"
+msgstr "앞"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:181
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:140
@@ -20983,9 +20945,8 @@ msgstr "정면에 대한 참조 지정 시작."
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:48
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:105
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:163
-#, fuzzy
 msgid "1"
-msgstr "&1"
+msgstr "1"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:215
 #, fuzzy
@@ -21116,9 +21077,8 @@ msgid "Defaults"
 msgstr "기본값"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:100
-#, fuzzy
 msgid "Design Rules"
-msgstr "PCB DRC"
+msgstr "디자인 규칙"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:101 pcbnew/router/router_tool.cpp:834
 #: pcbnew/router/router_tool.cpp:855
@@ -21219,7 +21179,6 @@ msgstr ""
 #: pcbnew/dialogs/dialog_board_statistics.cpp:365
 #: pcbnew/dialogs/dialog_board_statistics.cpp:380
 #: pcbnew/dialogs/dialog_board_statistics.cpp:404
-#, fuzzy
 msgid "Total:"
 msgstr "합계:"
 
@@ -21552,9 +21511,8 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:143
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:82
-#, fuzzy
 msgid "Fillet"
-msgstr "채움"
+msgstr "필렛"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:173
 #, fuzzy
@@ -21572,7 +21530,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:193
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:67
 msgid "Minimum width:"
-msgstr ""
+msgstr "최소 폭:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:195
 msgid "Minimum thickness of filled areas."
@@ -21767,9 +21725,8 @@ msgid "stagger"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_create_array.cpp:393
-#, fuzzy
 msgid "point count"
-msgstr "모듈 개수"
+msgstr "포인트 수"
 
 #: pcbnew/dialogs/dialog_create_array.cpp:437
 #, fuzzy
@@ -21787,12 +21744,10 @@ msgstr "수평 개수:"
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:52
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:109
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:167
-#, fuzzy
 msgid "5"
-msgstr "&5"
+msgstr "5"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:38
-#, fuzzy
 msgid "Vertical count:"
 msgstr "수직 개수:"
 
@@ -21801,12 +21756,10 @@ msgid "Horizontal spacing:"
 msgstr "수평 간격:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:56
-#, fuzzy
 msgid "Vertical spacing:"
 msgstr "수직 간격:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:67
-#, fuzzy
 msgid "Horizontal offset:"
 msgstr "수평 오프셋:"
 
@@ -21928,7 +21881,6 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:263
 #: pcbnew/dialogs/dialog_move_exact_base.cpp:52
-#, fuzzy
 msgid "Rotate:"
 msgstr "회전:"
 
@@ -22152,7 +22104,6 @@ msgstr "텍스트 위치 Y"
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:272
 #: pcbnew/dialogs/dialog_target_properties_base.cpp:39
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:150
-#, fuzzy
 msgid "Thickness:"
 msgstr "두께:"
 
@@ -22846,11 +22797,11 @@ msgstr "에지 레이어 포함"
 
 #: pcbnew/dialogs/dialog_filter_selection_base.cpp:40
 msgid "Include &vias"
-msgstr "비아 포함 (&v)"
+msgstr "비아 포함(&v)"
 
 #: pcbnew/dialogs/dialog_filter_selection_base.cpp:43
 msgid "Include &zones"
-msgstr "영역 포함 (&z)"
+msgstr "영역 포함(&z)"
 
 #: pcbnew/dialogs/dialog_filter_selection_base.h:57
 #, fuzzy
@@ -30397,8 +30348,9 @@ msgid "Error loading project footprint libraries."
 msgstr "프로젝트 풋프린트 라이브러리를 불러오는 중에 오류가 발생했습니다."
 
 #: pcbnew/pcb_dimension.cpp:299
+#, fuzzy
 msgid "Dimension"
-msgstr "치수"
+msgstr "차원"
 
 #: pcbnew/pcb_dimension.cpp:301
 msgid "Prefix"
