@@ -13,7 +13,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
 "PO-Revision-Date: 2021-08-09 05:46+0000\n"
-"Last-Translator: Uibeom Jung <wjddmlqja17@gmail.com>\n"
+"Last-Translator: 방준영 <wnsdudtkwkd8@naver.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
 "Language: ko\n"
@@ -1368,11 +1368,12 @@ msgstr "mils"
 
 #: common/base_units.cpp:451
 msgid "sq. mils"
-msgstr "sq. mils"
+msgstr "평방 -마일"
 
 #: common/base_units.cpp:453
+#, fuzzy
 msgid "cu. mils"
-msgstr "cu. mils"
+msgstr "큐. 밀스"
 
 #: common/base_units.cpp:463
 msgid "in"
@@ -10494,9 +10495,8 @@ msgstr "(선택사항; 기본값 0)"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:408
 #: eeschema/sim/spice_simulator.cpp:64
-#, fuzzy
 msgid "Transient"
-msgstr "일시적인"
+msgstr "과도적"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:413
 msgid "Spice directives:"
@@ -10505,12 +10505,11 @@ msgstr "Spice 지시문:"
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:422
 #, fuzzy
 msgid "Load directives from schematic"
-msgstr "회로도로 내보내기"
+msgstr "회로도에서 지시문 로드"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:429 pcbnew/pad.cpp:1456
-#, fuzzy
 msgid "Custom"
-msgstr "사용자 정의"
+msgstr "맞춤형"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:436
 msgid "Adjust passive symbol values (e.g. M -> Meg; 100 nF -> 100n)"
@@ -10527,7 +10526,7 @@ msgstr "호환 모드:"
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:450
 #, fuzzy
 msgid "User configuration"
-msgstr "설정 (&C)"
+msgstr "사용자 설정"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:450
 msgid "Spice"
@@ -12488,6 +12487,9 @@ msgid ""
 "\n"
 "This may cause broken symbol library links under certain conditions."
 msgstr ""
+"프로젝트 파일 기호 라이브러리 목록에 정의된 기호 라이브러리는 더 이상 지원되지 않으며 제거됩니다.\n"
+"\n"
+"이로 인해 특정 조건에서 기호 라이브러리 링크가 끊어질 수 있습니다."
 
 #: eeschema/files-io.cpp:499
 msgid "Do not show this dialog again."
@@ -12506,6 +12508,9 @@ msgid ""
 "missing symbols, either manual recovery of the schematic or recovery of the "
 "symbol cache library file and reloading the schematic is required."
 msgstr ""
+"이로 인해 특정 조건에서 도식이 깨질 수 있습니다. 도식도에 열 때 누락된 기호가 없는 경우 데이터 손실을 방지하기 위해 변경하기 전에 "
+"즉시 저장하십시오. 누락된 기호가 있는 경우 개략도를 수동으로 복구하거나 기호 캐시 라이브러리 파일을 복구하고 개략도를 다시 로드해야 "
+"합니다."
 
 #: eeschema/files-io.cpp:541
 #, fuzzy
@@ -12522,7 +12527,7 @@ msgstr "중지"
 msgid ""
 "This file was created by an older version of KiCad. It will be converted to "
 "the new format when saved."
-msgstr ""
+msgstr "이 파일은 이전 버전의 KiCad에서 만들었습니다. 저장 시 새 형식으로 변환됩니다."
 
 #: eeschema/files-io.cpp:633
 #, fuzzy
@@ -12535,16 +12540,21 @@ msgid "Insert Schematic"
 msgstr "회로도로 내보내기"
 
 #: eeschema/files-io.cpp:686
+#, fuzzy
 msgid ""
 "This operation cannot be undone.\n"
 "\n"
 "Do you want to save the current document before proceeding?"
 msgstr ""
+"이 작업은 취소할 수 없습니다.\n"
+"\n"
+"계속하기 전에 현재 문서를 저장하시겠습니까?"
 
 #: eeschema/files-io.cpp:732 pcbnew/files.cpp:163
 #: pcbnew/import_gfx/dialog_import_gfx.cpp:250
+#, fuzzy
 msgid "All supported formats|"
-msgstr ""
+msgstr "지원되는 모든 형식|"
 
 #: eeschema/files-io.cpp:734
 msgid "Import Schematic"
@@ -12564,10 +12574,13 @@ msgid ""
 "\n"
 "Make sure you have write permissions and try again."
 msgstr ""
+"폴더'%s' 만들지 못 했습니다.\n"
+"\n"
+"너와 다시 시도해 보라고 권한 쓰기가 있는지 확인하세요."
 
 #: eeschema/files-io.cpp:931
 msgid "Saving will overwrite existing files."
-msgstr ""
+msgstr "저장하면 기존 파일을 덮어씁니다."
 
 #: eeschema/files-io.cpp:932
 #, fuzzy
@@ -12579,6 +12592,8 @@ msgid ""
 "The following files will be overwritten:\n"
 "\n"
 msgstr ""
+"다음 파일을 덮어씁니다:\n"
+"\n"
 
 #: eeschema/files-io.cpp:936
 msgid "Overwrite Files"
@@ -12662,7 +12677,7 @@ msgstr "경계 상자"
 #: eeschema/lib_arc.cpp:417
 #, c-format
 msgid "Arc, radius %s"
-msgstr ""
+msgstr "호, 반지름 %s"
 
 #: eeschema/lib_circle.cpp:256
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:181
@@ -12733,7 +12748,7 @@ msgstr "위치 Y"
 #: eeschema/lib_pin.cpp:1180
 #, c-format
 msgid "Pin %s [%s, %s, %s]"
-msgstr ""
+msgstr "핀 %s [%s, %s, %s]"
 
 #: eeschema/lib_pin.cpp:1188
 #, c-format
@@ -12743,7 +12758,7 @@ msgstr "핀 %s [%s, %s]"
 #: eeschema/lib_polyline.cpp:351
 #, c-format
 msgid "Polyline, %d points"
-msgstr ""
+msgstr "폴리선, %d개 점"
 
 #: eeschema/lib_polyline.h:47
 #, fuzzy
@@ -12762,17 +12777,17 @@ msgstr "기호 %s을 라이브러리 파일 '%s'에 추가하지 못했습니다
 
 #: eeschema/libarch.cpp:110
 msgid "Unexpected exception occurred."
-msgstr ""
+msgstr "예기치 않은 예외가 발생했습니다."
 
 #: eeschema/libarch.cpp:125
 #, c-format
 msgid "Symbol %s not found in any library or cache."
-msgstr ""
+msgstr "기호 %s을(를) 라이브러리 또는 캐시에서 찾을 수 없습니다."
 
 #: eeschema/libarch.cpp:141
 #, c-format
 msgid "Errors occurred creating symbol library %s."
-msgstr ""
+msgstr "기호 라이브러리 %s을(를) 만드는 동안 오류가 발생했습니다."
 
 #: eeschema/menubar.cpp:64 kicad/menubar.cpp:63
 #: pagelayout_editor/menubar.cpp:57 pcbnew/menubar_pcb_editor.cpp:67
@@ -12787,7 +12802,7 @@ msgstr "회로도 시트 컨텐츠 삽입..."
 #: eeschema/menubar.cpp:89
 msgid ""
 "Append schematic sheet content from another project to the current sheet"
-msgstr ""
+msgstr "다른 프로젝트의 개략도 시트 내용을 현재 시트에 추가합니다"
 
 #: eeschema/menubar.cpp:97 pcbnew/menubar_footprint_editor.cpp:65
 #: pcbnew/menubar_pcb_editor.cpp:107
@@ -12846,7 +12861,7 @@ msgstr "노드 설치"
 #: pagelayout_editor/menubar.cpp:170 pcbnew/menubar_footprint_editor.cpp:245
 #: pcbnew/menubar_pcb_editor.cpp:456
 msgid "&Inspect"
-msgstr ""
+msgstr "&검사"
 
 #: eeschema/menubar.cpp:288 gerbview/menubar.cpp:225 kicad/menubar.cpp:182
 #: pcbnew/menubar_footprint_editor.cpp:246 pcbnew/menubar_pcb_editor.cpp:457
@@ -12871,11 +12886,13 @@ msgid ""
 "Multiple symbols have the same reference designator.\n"
 "Annotation must be corrected before simulating."
 msgstr ""
+"여러 기호의 기준 지정자가 동일합니다.\n"
+"시뮬레이션하기 전에 주석을 수정해야 합니다."
 
 #: eeschema/netlist_exporters/netlist_generator.cpp:125
 #, c-format
 msgid "Command error. Return code %d."
-msgstr ""
+msgstr "명령 오류입니다. 코드 %d를 반환합니다."
 
 #: eeschema/netlist_exporters/netlist_generator.cpp:130
 msgid "Success."
@@ -12883,7 +12900,7 @@ msgstr "성공."
 
 #: eeschema/netlist_exporters/netlist_generator.cpp:177
 msgid "Error: duplicate sheet names. Continue?"
-msgstr ""
+msgstr "오류: 시트 이름이 중복됩니다. 계속합니까?"
 
 #: eeschema/pin_type.cpp:56
 msgid "Free"
@@ -12950,11 +12967,11 @@ msgstr "출력"
 
 #: eeschema/pin_type.cpp:83
 msgid "Falling edge clock"
-msgstr ""
+msgstr "하강 에지 클럭"
 
 #: eeschema/pin_type.cpp:84
 msgid "NonLogic"
-msgstr ""
+msgstr "논로직"
 
 #: eeschema/project_rescue.cpp:194
 #, c-format
@@ -12997,8 +13014,9 @@ msgid "Failed to save rescue library %s."
 msgstr "복구 라이브러리 %s를 저장하는 데에 실패하였습니다."
 
 #: eeschema/project_rescue.cpp:839
+#, fuzzy
 msgid "Error occurred saving project specific symbol library table."
-msgstr ""
+msgstr "프로젝트별 기호 라이브러리 테이블을 저장하는 동안 오류가 발생했습니다."
 
 #: eeschema/sch_base_frame.cpp:218
 #, c-format
@@ -13062,7 +13080,7 @@ msgstr "찾을 수 없음"
 
 #: eeschema/sch_edit_frame.cpp:172
 msgid "The following libraries were not found:"
-msgstr ""
+msgstr "다음 라이브러리를 찾을 수 없습니다:"
 
 #: eeschema/sch_edit_frame.cpp:222
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:62
@@ -13083,11 +13101,14 @@ msgid "Save changes to '%s' before closing?"
 msgstr "닫기 전에 '%s'에 대한 변경 사항을 저장하시겠습니까?"
 
 #: eeschema/sch_edit_frame.cpp:828
+#, fuzzy
 msgid ""
 "Cannot update the PCB, because the Schematic Editor is opened in stand-alone "
 "mode. In order to create/update PCBs from schematics, launch the KiCad shell "
 "and create a project."
 msgstr ""
+"회로도 편집기가 독립 실행형 모드에서 열리기 때문에 PCB를 업데이트할 수 없습니다. 회로도에서 PCB를 생성/업데이트하려면 KiCad "
+"셸을 실행하고 프로젝트를 생성합니다."
 
 #: eeschema/sch_edit_frame.cpp:959
 #, fuzzy
@@ -13105,12 +13126,13 @@ msgid "Open Schematic"
 msgstr "새 회로도 (&S)"
 
 #: eeschema/sch_edit_frame.cpp:1056
+#, fuzzy
 msgid "Assigning footprints requires a fully annotated schematic."
-msgstr ""
+msgstr "발자국을 할당하려면 완전히 추가된 회로도가 필요합니다."
 
 #: eeschema/sch_edit_frame.cpp:1075
 msgid "Could not open CvPcb"
-msgstr ""
+msgstr "CvPcb를 열 수 없습니다"
 
 #: eeschema/sch_edit_frame.cpp:1280 eeschema/sim/sim_plot_frame.cpp:360
 #: kicad/kicad_manager_frame.cpp:622 pcbnew/footprint_edit_frame.cpp:784
@@ -13138,8 +13160,9 @@ msgid "File:"
 msgstr "파일:"
 
 #: eeschema/sch_field.cpp:515
+#, fuzzy
 msgid "<root sheet>"
-msgstr ""
+msgstr "<루트 시트>"
 
 #: eeschema/sch_field.cpp:522
 #, c-format
@@ -13156,9 +13179,9 @@ msgid "Intersheet References"
 msgstr "EESchema 설정"
 
 #: eeschema/sch_io_mgr.cpp:35 pcbnew/io_mgr.cpp:42
-#, c-format
+#, c-format, fuzzy
 msgid "Plugin \"%s\" does not implement the \"%s\" function."
-msgstr ""
+msgstr "플러그인 \"%s\"은 \"%s\" 기능을 구현하지 않습니다."
 
 #: eeschema/sch_io_mgr.cpp:36 pcbnew/io_mgr.cpp:43
 #, fuzzy, c-format
@@ -13181,14 +13204,14 @@ msgid "Vertical Bus, length %s"
 msgstr "수직 버스, 길이 %s"
 
 #: eeschema/sch_line.cpp:719
-#, c-format
+#, c-format, fuzzy
 msgid "Vertical Graphic Line, length %s"
-msgstr ""
+msgstr "세로 그래픽 라인, 길이 %s"
 
 #: eeschema/sch_line.cpp:726
-#, c-format
+#, c-format, fuzzy
 msgid "Horizontal Wire, length %s"
-msgstr ""
+msgstr "수평 선, 길이 %s"
 
 #: eeschema/sch_line.cpp:727
 #, c-format
@@ -13196,9 +13219,9 @@ msgid "Horizontal Bus, length %s"
 msgstr "수평 버스, 길이 %s"
 
 #: eeschema/sch_line.cpp:728
-#, c-format
+#, c-format, fuzzy
 msgid "Horizontal Graphic Line, length %s"
-msgstr ""
+msgstr "수평 그래픽 선, 길이 %s"
 
 #: eeschema/sch_line.cpp:735
 #, c-format
@@ -13206,9 +13229,9 @@ msgid "Wire, length %s"
 msgstr "선, 길이 %s"
 
 #: eeschema/sch_line.cpp:736
-#, c-format
+#, c-format, fuzzy
 msgid "Bus, length %s"
-msgstr ""
+msgstr "버스,길이 %s"
 
 #: eeschema/sch_line.cpp:737
 #, c-format
@@ -13255,8 +13278,9 @@ msgid "Enable <b>debug</b> logging for Symbol*() functions in this SCH_PLUGIN."
 msgstr ""
 
 #: eeschema/sch_plugin.cpp:142
+#, fuzzy
 msgid "Regular expression <b>symbol name</b> filter."
-msgstr ""
+msgstr "정규식 <b>기호 이름</b> 필터."
 
 #: eeschema/sch_plugin.cpp:146 pcbnew/plugin.cpp:162
 msgid ""
