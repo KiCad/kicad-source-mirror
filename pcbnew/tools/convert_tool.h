@@ -48,12 +48,12 @@ public:
     /**
      * Convert selected lines to a polygon, if possible.
      */
-    int LinesToPoly( const TOOL_EVENT& aEvent );
+    int CreatePolys( const TOOL_EVENT& aEvent );
 
     /**
      * Convert selected polygon-like object to graphic lines, if possible.
      */
-    int PolyToLines( const TOOL_EVENT& aEvent );
+    int CreateLines( const TOOL_EVENT& aEvent );
 
     /**
      * Convert selected segment (graphic or track) to an arc of the same type
@@ -99,6 +99,12 @@ private:
      * @return a #SHAPE_POLY_SET containing any polygons that were created.
      */
     static SHAPE_POLY_SET makePolysFromCircles( const std::deque<EDA_ITEM*>& aItems );
+
+    /**
+     * For any polygon shapes (zones, keepouts, graphic polys) in aItems, extracts
+     * the polygon outlines into the returned #SHAPE_POLY_SET.
+     */
+    static SHAPE_POLY_SET extractPolygons( const std::deque<EDA_ITEM*>& aItems );
 
     PCB_SELECTION_TOOL* m_selectionTool;
     CONDITIONAL_MENU*   m_menu;

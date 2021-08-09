@@ -88,7 +88,6 @@ bool CONVERT_TOOL::Init()
                                 && P_S_C::SameLayer();
 
     auto anyLines     = graphicLines || trackLines;
-
     auto anyPolys     = S_C::OnlyTypes( zones )
                             || P_S_C::OnlyGraphicShapeTypes( { SHAPE_T::POLY, SHAPE_T::RECT } );
 
@@ -96,11 +95,12 @@ bool CONVERT_TOOL::Init()
                          && ( P_S_C::OnlyGraphicShapeTypes( { SHAPE_T::SEGMENT } )
                                 || S_C::OnlyType( PCB_TRACE_T ) );
 
-    auto showConvert = anyPolys || anyLines || lineToArc;
+    auto showConvert       = anyPolys || anyLines || lineToArc;
+    auto canCreatePolyType = anyLines || anyPolys;
 
-    m_menu->AddItem( PCB_ACTIONS::convertToPoly, anyLines );
-    m_menu->AddItem( PCB_ACTIONS::convertToZone, anyLines );
-    m_menu->AddItem( PCB_ACTIONS::convertToKeepout, anyLines );
+    m_menu->AddItem( PCB_ACTIONS::convertToPoly, canCreatePolyType );
+    m_menu->AddItem( PCB_ACTIONS::convertToZone, canCreatePolyType );
+    m_menu->AddItem( PCB_ACTIONS::convertToKeepout, canCreatePolyType );
     m_menu->AddItem( PCB_ACTIONS::convertToLines, anyPolys );
 
     // Currently the code exists, but tracks are not really existing in footprints
@@ -117,7 +117,7 @@ bool CONVERT_TOOL::Init()
 }
 
 
-int CONVERT_TOOL::LinesToPoly( const TOOL_EVENT& aEvent )
+int CONVERT_TOOL::CreatePolys( const TOOL_EVENT& aEvent )
 {
     FOOTPRINT* parentFootprint = nullptr;
 
@@ -138,6 +138,7 @@ int CONVERT_TOOL::LinesToPoly( const TOOL_EVENT& aEvent )
                         case SHAPE_T::RECT:
                         case SHAPE_T::CIRCLE:
                         case SHAPE_T::ARC:
+                        case SHAPE_T::POLY:
                             break;
 
                         default:
@@ -148,6 +149,10 @@ int CONVERT_TOOL::LinesToPoly( const TOOL_EVENT& aEvent )
 
                     case PCB_TRACE_T:
                     case PCB_ARC_T:
+                        break;
+
+                    case PCB_ZONE_T:
+                    case PCB_FP_ZONE_T:
                         break;
 
                     default:
@@ -165,6 +170,8 @@ int CONVERT_TOOL::LinesToPoly( const TOOL_EVENT& aEvent )
     polySet.Append( makePolysFromRects( selection.GetItems() ) );
 
     polySet.Append( makePolysFromCircles( selection.GetItems() ) );
+
+    polySet.Append( extractPolygons( selection.GetItems() ) );
 
     if( polySet.IsEmpty() )
         return 0;
@@ -443,7 +450,42 @@ SHAPE_POLY_SET CONVERT_TOOL::makePolysFromCircles( const std::deque<EDA_ITEM*>& 
 }
 
 
-int CONVERT_TOOL::PolyToLines( const TOOL_EVENT& aEvent )
+SHAPE_POLY_SET CONVERT_TOOL::extractPolygons( const std::deque<EDA_ITEM*>& aItems )
+{
+    SHAPE_POLY_SET poly;
+
+    for( EDA_ITEM* item : aItems )
+    {
+        switch( item->Type() )
+        {
+        case PCB_SHAPE_T:
+            switch( static_cast<PCB_SHAPE*>( item )->GetShape() )
+            {
+            case SHAPE_T::POLY:
+                poly.Append( static_cast<PCB_SHAPE*>( item )->GetPolyShape() );
+                break;
+
+            default:
+                continue;
+            }
+
+            break;
+
+        case PCB_ZONE_T:
+        case PCB_FP_ZONE_T:
+            poly.Append( *static_cast<ZONE*>( item )->Outline() );
+            break;
+
+        default:
+            continue;
+        }
+    }
+
+    return poly;
+}
+
+
+int CONVERT_TOOL::CreateLines( const TOOL_EVENT& aEvent )
 {
     auto& selection = m_selectionTool->RequestSelection(
             []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, PCB_SELECTION_TOOL* sTool )
@@ -789,10 +831,10 @@ OPT<SEG> CONVERT_TOOL::getStartEndPoints( EDA_ITEM* aItem, int* aWidth )
 
 void CONVERT_TOOL::setTransitions()
 {
-    Go( &CONVERT_TOOL::LinesToPoly,    PCB_ACTIONS::convertToPoly.MakeEvent() );
-    Go( &CONVERT_TOOL::LinesToPoly,    PCB_ACTIONS::convertToZone.MakeEvent() );
-    Go( &CONVERT_TOOL::LinesToPoly,    PCB_ACTIONS::convertToKeepout.MakeEvent() );
-    Go( &CONVERT_TOOL::PolyToLines,    PCB_ACTIONS::convertToLines.MakeEvent() );
-    Go( &CONVERT_TOOL::PolyToLines,    PCB_ACTIONS::convertToTracks.MakeEvent() );
+    Go( &CONVERT_TOOL::CreatePolys,    PCB_ACTIONS::convertToPoly.MakeEvent() );
+    Go( &CONVERT_TOOL::CreatePolys,    PCB_ACTIONS::convertToZone.MakeEvent() );
+    Go( &CONVERT_TOOL::CreatePolys,    PCB_ACTIONS::convertToKeepout.MakeEvent() );
+    Go( &CONVERT_TOOL::CreateLines,    PCB_ACTIONS::convertToLines.MakeEvent() );
+    Go( &CONVERT_TOOL::CreateLines,    PCB_ACTIONS::convertToTracks.MakeEvent() );
     Go( &CONVERT_TOOL::SegmentToArc,   PCB_ACTIONS::convertToArc.MakeEvent() );
 }
