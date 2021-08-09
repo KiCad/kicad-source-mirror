@@ -14,7 +14,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
 "PO-Revision-Date: 2021-08-09 09:51+0000\n"
-"Last-Translator: jeongsuAn <dks9467@gmail.com>\n"
+"Last-Translator: Ji Yoon Choi <chichoon.choi@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
 "Language: ko\n"
@@ -16918,12 +16918,10 @@ msgid "Img Rot."
 msgstr "이미지 회전."
 
 #: gerbview/gerber_file_image.cpp:357
-#, fuzzy
 msgid "X Justify"
 msgstr "X 정렬"
 
 #: gerbview/gerber_file_image.cpp:360
-#, fuzzy
 msgid "Y Justify"
 msgstr "Y 정렬"
 
@@ -20000,7 +19998,7 @@ msgstr "컴포넌트 자동 배치"
 
 #: pcbnew/autorouter/autoplace_tool.cpp:95
 msgid "Autoplace components"
-msgstr "컴포넌트 자동배치"
+msgstr "컴포넌트 자동 배치"
 
 #: pcbnew/board.cpp:91
 msgid "This is the default net class."
@@ -31185,6 +31183,8 @@ msgid ""
 "and vias. KiCad only supports one single setting for both. The setting for "
 "pads has been applied."
 msgstr ""
+"CADSTAR 템플릿 '%s'는 패드와 비아의 단열판에 대해 다른 설정을 가지고 있습니다. KiCad는 패드와 비아에 공통된 설정 "
+"하나만을 지원합니다. 패드의 설정이 공통 설정으로 반영됩니다."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1882
 #, c-format
@@ -31194,6 +31194,8 @@ msgid ""
 "has been applied instead. When the template is re-filled the thermal reliefs "
 "will be removed."
 msgstr ""
+"CADSTAR 템플릿 '%s' 의 원본 디자인에는 단열판이 존재하나, KiCad는 원본 CADSTAR 설정에 대응되지 않습니다. 패드의 "
+"설정이 공통 설정으로 반영됩니다. 대신 솔리드 채우기가 적용됩니다. 템플릿이 다시 채워지면 단열판은 제거됩니다."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1918
 #, c-format
@@ -31202,6 +31204,8 @@ msgid ""
 "with such name exists. The layer has been loaded but no copper zone was "
 "created."
 msgstr ""
+"CADSTAR 레이어 '%s'는 전원면으로 정의되어 있습니다. 허나 해당 이름을 가진 네트가 존재하지 않습니다. 레이어는 불러와지지만 "
+"구리 영역은 생성되지 않습니다."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2020
 msgid ""
@@ -31210,24 +31214,26 @@ msgid ""
 "filled, or as a KiCad Track if the shape was an unfilled outline (open or "
 "closed)."
 msgstr ""
+"CADSTAR 디자인은 구리 요소를 포함하고 있으나, 이는 KiCad와 직접적으로 대응되지 않습니다. 솔리드 또는 해치로 채워져 있을 "
+"경우 KiCad 영역으로 불러와지고, 영역이 채워지지 않은 테두리라면 (열려있거나 닫혀있는 경우 모두) KiCad 배선으로 불러와집니다."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2125
 #, c-format
 msgid ""
 "The net '%s' references component ID '%s' which does not exist. This has "
 "been ignored."
-msgstr ""
+msgstr "네트 '%s' 는 컴포넌트 ID '%s'를 참조하지만, 이는 존재하지 않습니다. 따라서 무시됩니다."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2131
 #, c-format
 msgid ""
 "The net '%s' references non-existent pad index '%d' in component '%s'. This "
 "has been ignored."
-msgstr ""
+msgstr "네트 '%s' 는 존재하지 않는 패드 번호 '%d' 를 참조합니다 (컴포넌트 '%s'에서). 따라서 무시됩니다."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2281
 msgid "Text Variables could not be set as there is no project loaded."
-msgstr ""
+msgstr "불러온 프로젝트가 없기 때문에 텍스트 변수를 설정할 수 없습니다."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2388
 #, c-format
@@ -31245,6 +31251,7 @@ msgid ""
 "The shape for '%s' is Hatch filled in CADSTAR, which has no KiCad "
 "equivalent. Using solid fill instead."
 msgstr ""
+"형상 '%s'는 CADSTAR에서 해치로 채워져 있으며, 이는 KiCad에서 대응되지 않습니다. 솔리드 채우기를 대신 사용합니다."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3436
 #, c-format
@@ -31253,6 +31260,8 @@ msgid ""
 "hatches (crosshatching) 90 degrees apart. The imported hatching is "
 "crosshatched."
 msgstr ""
+"CADSTAR 해칭 코드 '%s'는 %d 개의 해치가 정의되어 있습니다. KiCad는 단 2개만의 90도 떨어져 있는 해치를 지원합니다 "
+"(크로스해칭). 불러온 해칭은 크로스해치로 변환됩니다."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3446
 #, c-format
@@ -31261,6 +31270,8 @@ msgid ""
 "KiCad only supports one width for the haching. The imported hatching uses "
 "the width defined in the first hatch definition, i.e. %.2f mm."
 msgstr ""
+"CADSTAR 해칭 코드 '%s'는 각 해치별로 다른 선 굵기를 가집니다. KiCad는 해칭에 대해 하나의 폭만을 지원합니다. 불러온 "
+"해칭은 첫 번째 해치에 정의된 폭을 사용합니다 (예: %.2fmm)."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3458
 #, c-format
@@ -31269,6 +31280,8 @@ msgid ""
 "KiCad only supports one step size for the haching. The imported hatching "
 "uses the step size defined in the first hatching definition, i.e. %.2f mm."
 msgstr ""
+"CADSTAR 해칭 코드 '%s'는 각 해치별로 다른 스텝 크기를 가집니다. KiCad는 해칭에 대해 하나의 스텝 크기를 지원합니다. "
+"불러와진 해칭은 첫 번째 해치에 정의된 스텝 크기를 사용합니다 (예: %.2fmm)."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3471
 #, c-format
@@ -31278,13 +31291,15 @@ msgid ""
 "hatching has two hatches 90 degrees apart, oriented %.1f degrees from "
 "horizontal."
 msgstr ""
+"CADSTAR 해칭 코드 '%s'는 각 해치별로 %.1f도의 각도 차이를 가집니다. KiCad는 해칭에 대해 90도 차이만을 지원합니다. "
+"불러와진 해칭은 수평으로 %.1f도 방향으로 90도 떨어져 있는 2개의 해치가 됩니다."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3544
 #, c-format
 msgid ""
 "Dimension ID %s uses a type of unit that is not supported in KiCad. "
 "Millimetres were applied instead."
-msgstr ""
+msgstr "치수 ID %s는 KiCad에서 지원하지 않는 단위 유형을 사용합니다. 밀리미터가 대신 적용됩니다."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3759
 msgid ""
@@ -31304,6 +31319,8 @@ msgid ""
 "imported. Please review the design rules as copper pours will affected by "
 "this."
 msgstr ""
+"CADSTAR 디자인에는 '간격 클래스' 가 할당된 네트가 포함되어 있습니다. KiCad는 CADSTAR의 간격 클래스에 대응하지 "
+"않으므로, 이 요소들은 불러와지지 않습니다. 구리 주입 시에 영향이 갈 수 있으니 디자인 규칙을 검토하세요."
 
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:380
 #, c-format
