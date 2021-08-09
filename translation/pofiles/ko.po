@@ -13,7 +13,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
 "PO-Revision-Date: 2021-08-09 04:41+0000\n"
-"Last-Translator: Ji Yoon Choi <chichoon.choi@gmail.com>\n"
+"Last-Translator: jeongsuAn <dks9467@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
 "Language: ko\n"
@@ -11997,7 +11997,7 @@ msgstr "건너뛰기"
 #: eeschema/dialogs/panel_sym_lib_table.cpp:529
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:908
 msgid "Add Anyway"
-msgstr "어쨌든 추가"
+msgstr "강제로 추가"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:733
 msgid ""
@@ -12044,9 +12044,8 @@ msgid ""
 msgstr ""
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:1048
-#, fuzzy
 msgid "Symbol Libraries"
-msgstr "라이브러리"
+msgstr "심볼 라이브러리"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:1070
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:1103
@@ -12089,7 +12088,7 @@ msgstr "라이브러리"
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:58
 #, fuzzy
 msgid "Global Libraries"
-msgstr "라이브러리"
+msgstr "글로벌 라이브러리"
 
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:97
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:94
