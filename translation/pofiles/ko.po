@@ -13,7 +13,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
 "PO-Revision-Date: 2021-08-09 04:41+0000\n"
-"Last-Translator: jeongsuAn <dks9467@gmail.com>\n"
+"Last-Translator: 방준영 <wnsdudtkwkd8@naver.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
 "Language: ko\n"
@@ -11541,7 +11541,7 @@ msgstr "PCB 편집기에서 강조 표시될 때 net 강조 표시"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:23
 msgid "&Restrict buses and wires to H and V orientation"
-msgstr ""
+msgstr "& 버스와 와이어를 H 및 V 방향으로 제한"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:27
 msgid "Mouse drag performs drag (G) operation"
@@ -11586,6 +11586,9 @@ msgid ""
 "If enabled, clicking on a pin select the parent symbol.\n"
 "If disabled, clicking on a pin select only the pin."
 msgstr ""
+"개략도 편집기에서:\n"
+"활성화된 경우 핀을 클릭하여 상위 기호를 선택합니다.\n"
+"비활성화된 경우 핀을 클릭하여 핀만 선택합니다."
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:84
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:140
@@ -11664,7 +11667,7 @@ msgstr "정렬 변경에 따른 필드 자동 배치 허용 (&l)"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:212
 msgid "Al&ways align autoplaced fields to the 50 mil grid"
-msgstr ""
+msgstr "자동 배치 필드를 항상 5000만 그리드에 정렬"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:219
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:103
@@ -11829,7 +11832,7 @@ msgstr "표준 비아"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:167
 msgid "Abbreviated (1..3)"
-msgstr ""
+msgstr "약어(1..3)"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:176
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:128
@@ -11878,7 +11881,7 @@ msgstr "색상 이미지"
 
 #: eeschema/dialogs/panel_sym_color_settings_base.cpp:25
 msgid "Use Eeschema color theme"
-msgstr ""
+msgstr "Eeschema 색상 테마 사용"
 
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:29
 msgid "&Default line width:"
@@ -11946,7 +11949,7 @@ msgstr "셀이 비어 있으면 테이블에서 제거할 수 없는 모든 행�
 #: eeschema/dialogs/panel_sym_lib_table.cpp:374
 #, c-format
 msgid "Illegal character '%c' in nickname '%s'"
-msgstr ""
+msgstr "별칭 '%c'의 '%s' 문자가 잘못되었습니다."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:385
 #: eeschema/dialogs/panel_sym_lib_table.cpp:426
@@ -12011,20 +12014,20 @@ msgstr ""
 msgid ""
 "Save '%s' as current KiCad format (*.kicad_sym) and replace legacy entry in "
 "table?"
-msgstr ""
+msgstr "'%s'을(를) 현재 KiCad 형식(*.kicad_sym)으로 저장하고 테이블에서 레거시 항목을 바꾸시겠습니까?"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:747
 #, c-format
 msgid ""
 "Save %d Legacy format libraries as current KiCad format (*.kicad_sym) and "
 "replace legacy entries in table?"
-msgstr ""
+msgstr "%d 레거시 형식 라이브러리를 현재 KiCad 형식(*.kicad_sym)으로 저장하고 테이블에서 레거시 항목을 바꾸시겠습니까?"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:775
 #: pcbnew/dialogs/dialog_export_step.cpp:324
 #, c-format
 msgid "File '%s' already exists. Do you want overwrite this file?"
-msgstr ""
+msgstr "'%s' 파일이 이미 있습니다. 이 파일을 덮어쓰시겠습니까?"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:778
 msgid "Migrate Library"
@@ -12042,6 +12045,8 @@ msgid ""
 "Changes must be saved or discarded before the symbol library table can be "
 "modified."
 msgstr ""
+"하나 이상의 기호 라이브러리를 수정했습니다.\n"
+"기호 라이브러리 테이블을 수정하려면 먼저 변경 사항을 저장하거나 삭제해야 합니다."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:1048
 msgid "Symbol Libraries"
@@ -12067,7 +12072,7 @@ msgstr ""
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:1104
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:1117
 msgid "File Save Error"
-msgstr ""
+msgstr "파일 저장 오류"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:1083
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:1116
@@ -12077,6 +12082,9 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
+"프로젝트별 라이브러리 테이블을 저장하는 중 오류 발생:\n"
+"\n"
+"%s"
 
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:20
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:20
@@ -12093,12 +12101,12 @@ msgstr "글로벌 라이브러리"
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:97
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:94
 msgid "Project Specific Libraries"
-msgstr ""
+msgstr "프로젝트별 라이브러리"
 
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:105
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:103
 msgid "Add empty row to table"
-msgstr ""
+msgstr "테이블에 빈 행 추가"
 
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:110
 msgid "Add existing library to table"
@@ -12116,18 +12124,20 @@ msgstr "라이브러리 이동"
 
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:145
 msgid "Path Substitutions:"
-msgstr ""
+msgstr "경로 대체:"
 
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:174
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:167
 msgid "This is a read-only table which shows pertinent environment variables."
-msgstr ""
+msgstr "관련 환경변수를 보여주는 읽기 전용 테이블입니다."
 
 #: eeschema/eeschema.cpp:273
 msgid ""
 "An error occurred attempting to load the global symbol library table.\n"
 "Please edit this global symbol library table in Preferences menu."
 msgstr ""
+"글로벌 기호 라이브러리 테이블을 로드하는 동안 오류가 발생했습니다.\n"
+"환경설정 메뉴에서 이 전역 기호 라이브러리 테이블을 편집하십시오."
 
 #: eeschema/eeschema_config.cpp:69 eeschema/eeschema_config.cpp:226
 #: gerbview/gerbview_frame.cpp:1018
@@ -12158,7 +12168,7 @@ msgstr "출력"
 
 #: eeschema/erc.cpp:61 eeschema/erc.cpp:78
 msgid "Bidirectional Pin"
-msgstr ""
+msgstr "양방향 핀"
 
 #: eeschema/erc.cpp:62 eeschema/erc.cpp:79
 #, fuzzy
@@ -12207,7 +12217,7 @@ msgstr "연결"
 
 #: eeschema/erc.cpp:269
 msgid "Unresolved text variable in drawing sheet."
-msgstr ""
+msgstr "도면 시트에서 확인되지 않은 텍스트 변수입니다."
 
 #: eeschema/erc.cpp:300
 #, c-format
