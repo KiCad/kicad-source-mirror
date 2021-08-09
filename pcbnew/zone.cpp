@@ -1232,7 +1232,11 @@ bool ZONE::BuildSmoothedPoly( SHAPE_POLY_SET& aSmoothedPoly, PCB_LAYER_ID aLayer
     }
 
     for( ZONE* zone : interactingZones )
-        aSmoothedPoly.BooleanAdd( *zone->Outline(), SHAPE_POLY_SET::PM_FAST );
+    {
+        SHAPE_POLY_SET flattened_outline = *zone->Outline();
+        flattened_outline.ClearArcs();
+        aSmoothedPoly.BooleanAdd( flattened_outline, SHAPE_POLY_SET::PM_FAST );
+    }
 
     if( aBoardOutline )
     {
