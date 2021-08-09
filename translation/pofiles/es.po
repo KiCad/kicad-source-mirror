@@ -11,8 +11,8 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
-"PO-Revision-Date: 2021-08-08 22:35+0000\n"
-"Last-Translator: Adolfo Jayme Barrientos <fitojb@ubuntu.com>\n"
+"PO-Revision-Date: 2021-08-09 02:20+0000\n"
+"Last-Translator: VicSanRoPe <vicsanrope@protonmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/kicad/"
 "master-source/es/>\n"
 "Language: es\n"
@@ -188,9 +188,9 @@ msgid "Simplifying polygons on B_Cu"
 msgstr "Simplificando polígonos de la capa de cobre"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:808
-#, fuzzy, c-format
+#, c-format
 msgid "Simplifying %d copper layers"
-msgstr "Simplificando polígonos de la capa de cobre"
+msgstr "Simplificando %d capas de cobre"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:847
 msgid "Simplify holes contours"
@@ -440,7 +440,7 @@ msgstr "Mostrar modelos 3D virtuales"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_display_options_base.cpp:36
 msgid "Board Layers"
-msgstr "Capas de placa:"
+msgstr "Capas de placa"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_display_options_base.cpp:38
 msgid "Show silkscreen layers"
@@ -5468,9 +5468,8 @@ msgid "Extracting file '%s'."
 msgstr "Extrayendo el archivo '%s'.\n"
 
 #: common/project/project_archiver.cpp:151
-#, fuzzy
 msgid "Error extracting file!"
-msgstr "¡Error al extraer el archivo!\n"
+msgstr "¡Error al extraer el archivo!"
 
 #: common/project/project_archiver.cpp:208 eeschema/dialogs/dialog_erc.cpp:760
 #: eeschema/dialogs/dialog_plot_schematic.cpp:518
@@ -15547,14 +15546,14 @@ msgid "Change %s value from '%s' to '%s'."
 msgstr "Cambiar el valor %s de %s a %s."
 
 #: eeschema/tools/backannotate.cpp:389
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot find %s pin '%s'."
-msgstr "No puede abrirse el archivo de lista redes \"%s\"."
+msgstr "No se puede encontrar %s pin '%s'."
 
 #: eeschema/tools/backannotate.cpp:532
-#, fuzzy, c-format
+#, c-format
 msgid "Change %s pin %s net label from '%s' to '%s'."
-msgstr "Cambiar huella %s de \"%s\" a \"%s\"."
+msgstr "Cambiar la etiqueta de red %s pin %s de '%s' a '%s'."
 
 #: eeschema/tools/backannotate.cpp:557
 #, fuzzy, c-format
@@ -15564,9 +15563,9 @@ msgstr ""
 "de potencia."
 
 #: eeschema/tools/backannotate.cpp:566
-#, fuzzy, c-format
+#, c-format
 msgid "Add label '%s' to %s pin %s net."
-msgstr "Etiqueta local \"%s\" (hoja \"%s\")"
+msgstr "Añadir la etiqueta '%s' a %s pin %s red."
 
 #: eeschema/tools/ee_actions.cpp:45
 msgid "Perform electrical rules check"
@@ -16023,9 +16022,8 @@ msgid "Edit Reference Designator..."
 msgstr "Editar referencia..."
 
 #: eeschema/tools/ee_actions.cpp:402
-#, fuzzy
 msgid "Displays reference designator dialog"
-msgstr "¡Valor del campo de la referencia ilegal!"
+msgstr "Muestra el diálogo de indicador de referencia"
 
 #: eeschema/tools/ee_actions.cpp:408
 msgid "Edit Value..."
@@ -16093,9 +16091,8 @@ msgstr "Actualizar huellas para incluir cualquier cambio desde la librería"
 
 # Pendiente
 #: eeschema/tools/ee_actions.cpp:449
-#, fuzzy
 msgid "Assign Netclass..."
-msgstr " utiliza la clase de red"
+msgstr "Asignar clase de red..."
 
 #: eeschema/tools/ee_actions.cpp:449
 #, fuzzy
@@ -16419,9 +16416,8 @@ msgid "Toggle display of hidden text fields"
 msgstr "Alternar visualización de capas de pasta de soldadura"
 
 #: eeschema/tools/ee_actions.cpp:643
-#, fuzzy
 msgid "Force H/V Wires and Buses"
-msgstr "Forzar dirección H, V y X  para hilos y buses"
+msgstr "Forzar cables y buses horizontales o verticales"
 
 #: eeschema/tools/ee_actions.cpp:643
 #, fuzzy
@@ -17009,9 +17005,9 @@ msgid "Deselect all"
 msgstr "Eliminar selección"
 
 #: gerbview/dialogs/dialog_select_one_pcb_layer.cpp:112
-#, fuzzy, c-format
+#, c-format
 msgid "Select Layer: %s"
-msgstr "Selección de capa:"
+msgstr "Seleccionar capa: %s"
 
 #: gerbview/dialogs/dialog_select_one_pcb_layer.cpp:171
 #: pcbnew/board_connected_item.cpp:180 pcbnew/board_connected_item.cpp:181
@@ -18449,10 +18445,9 @@ msgid "Similar files already exist in the destination folder."
 msgstr "Ya existen archivos similares en la carpeta de destino."
 
 #: kicad/tools/kicad_manager_control.cpp:272
-#, fuzzy
 msgid "A problem occurred creating new project from template."
 msgstr ""
-"¡A ocurrido un error al crear un proyecto nuevo a partir de la plantilla!"
+"Ha ocurrido un error al crear un proyecto nuevo a partir de la plantilla."
 
 #: kicad/tools/kicad_manager_control.cpp:295
 msgid "Open Existing Project"
@@ -18520,9 +18515,9 @@ msgid "%s %s opened [pid=%ld]\n"
 msgstr "%s %s abierto [pid=%ld]\n"
 
 #: libs/kiplatform/msw/environment.cpp:57
-#, fuzzy, c-format
+#, c-format
 msgid "Error code: %d"
-msgstr "Error: "
+msgstr "Código de error: %d"
 
 #: pagelayout_editor/dialogs/design_inspector.cpp:223
 #, fuzzy
@@ -18855,9 +18850,9 @@ msgid "Properties"
 msgstr "Propiedades"
 
 #: pagelayout_editor/pl_editor_frame.cpp:335
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading drawing sheet '%s'."
-msgstr "Error al cargar el editor"
+msgstr "Error al cargar la hoja de dibujo '%s'."
 
 #: pagelayout_editor/pl_editor_frame.cpp:440
 msgid "Error Init Printer info"
@@ -19133,7 +19128,7 @@ msgstr "Vref:"
 
 #: pcb_calculator/dialogs/dialog_regulator_form_base.cpp:44
 msgid "Volt"
-msgstr "Volt"
+msgstr "Voltio"
 
 #: pcb_calculator/dialogs/dialog_regulator_form_base.cpp:52
 msgid "Separate sense pin"
@@ -30629,9 +30624,9 @@ msgstr ""
 "redes '%s'."
 
 #: pcbnew/netlist_reader/netlist.cpp:205
-#, fuzzy, c-format
+#, c-format
 msgid "%s footprint ID '%s' is not valid."
-msgstr "El ID de huella \"%s\" no es válido."
+msgstr "%s ID de huella '%s' es inválido."
 
 #: pcbnew/netlist_reader/netlist.cpp:222
 #, fuzzy, c-format
@@ -32534,29 +32529,25 @@ msgid "board minimum width"
 msgstr "ancho mínimo de placa"
 
 #: pcbnew/router/pns_kicad_iface.cpp:473
-#, fuzzy
 msgid "netclass 'Default'"
-msgstr "tamaño de clase de red"
+msgstr "clase de red 'Por defecto'"
 
 #: pcbnew/router/pns_kicad_iface.cpp:475
-#, fuzzy
 msgid "user choice"
-msgstr "Guardar elección"
+msgstr "elección de usuario"
 
 #: pcbnew/router/pns_kicad_iface.cpp:1063
 #, c-format
 msgid "%s is malformed."
-msgstr ""
+msgstr "%s está mal formado."
 
 #: pcbnew/router/pns_kicad_iface.cpp:1066
-#, fuzzy
 msgid ""
 "This zone cannot be handled by the router.\n"
 "Please verify it is not a self-intersecting polygon."
 msgstr ""
-"%s\n"
-"Esta área no puede ser manejada por la herramienta de enrutado.\n"
-"Por favor, verifique que el polígono no se intersecta a si mismo."
+"Esta área no puede ser manejada por el enrutador.\n"
+"Por favor verifique que el polígono no se intersecta a si mismo."
 
 #: pcbnew/router/pns_kicad_iface.cpp:1667 pcbnew/router/router_tool.cpp:433
 msgid "Interactive Router"
@@ -32589,11 +32580,8 @@ msgid "Tuned: skew "
 msgstr "Afinado: desvío "
 
 #: pcbnew/router/pns_router.cpp:211
-#, fuzzy
 msgid "Diff pair gap is less than board minimum clearance."
-msgstr ""
-" - <b>Diámetro de vía</b> (%f %s) &lt; <b>Diámetro mínimo de vía</b> (%f "
-"%s)<br>"
+msgstr "El espaciado de par diferencial es menor al margen mínimo de la placa."
 
 #: pcbnew/router/pns_router.cpp:231
 msgid "Cannot start routing from a non-plated hole."
@@ -32618,7 +32606,7 @@ msgstr "No se puede empezar a enrutar desde un gráfico."
 
 #: pcbnew/router/pns_router.cpp:305 pcbnew/router/pns_router.cpp:361
 msgid "The routing start point violates DRC."
-msgstr ""
+msgstr "El punto inicial de enrutado infringe en el DRC."
 
 #: pcbnew/router/pns_router.cpp:313
 msgid "Cannot start a differential pair in the middle of nowhere."
@@ -32688,16 +32676,15 @@ msgstr ""
 "la pista trazada."
 
 #: pcbnew/router/router_tool.cpp:139
-#, fuzzy
 msgid "Select Layer and Place Micro Via..."
-msgstr "Seleccionar capa y situar vía pasante..."
+msgstr "Seleccionar capa y colocar micro vía..."
 
 #: pcbnew/router/router_tool.cpp:140
-#, fuzzy
 msgid ""
 "Select a layer, then add a micro via at the end of currently routed track."
 msgstr ""
-"Seleccionar una pista, entonces añadir una vía al final de la pista trazada."
+"Seleccionar una capa, después añadir una micro vía al final de la pista "
+"actualmente enrutada."
 
 #: pcbnew/router/router_tool.cpp:147
 msgid "Custom Track/Via Size..."
@@ -32717,13 +32704,12 @@ msgid "Switches posture of the currently routed track."
 msgstr "Cambia la posición de la pista activa."
 
 #: pcbnew/router/router_tool.cpp:161
-#, fuzzy
 msgid "Track Corner Mode"
-msgstr "Pista cerca de pad"
+msgstr "Modo de esquina de pista"
 
 #: pcbnew/router/router_tool.cpp:162
 msgid "Switches between sharp and rounded corners when routing tracks."
-msgstr ""
+msgstr "Alterna entre esquinas puntiagudas y redondeadas al enrutar pistas."
 
 #: pcbnew/router/router_tool.cpp:184
 msgid "Select Track/Via Width"
@@ -32790,24 +32776,24 @@ msgid "Specify custom differential pair dimensions"
 msgstr "Especificar dimensiones de par diferencial personalizadas"
 
 #: pcbnew/router/router_tool.cpp:352
-#, fuzzy, c-format
+#, c-format
 msgid "Width %s"
-msgstr "Ancho"
+msgstr "Ancho %s"
 
 #: pcbnew/router/router_tool.cpp:357
-#, fuzzy, c-format
+#, c-format
 msgid "Width %s, via gap %s"
-msgstr "Espaciado de vía:"
+msgstr "Ancho %s, espaciado de vía %s"
 
 #: pcbnew/router/router_tool.cpp:366
 #, c-format
 msgid "Width %s, gap %s"
-msgstr ""
+msgstr "Ancho %s, espaciado %s"
 
 #: pcbnew/router/router_tool.cpp:372
-#, fuzzy, c-format
+#, c-format
 msgid "Width %s, gap %s, via gap %s"
-msgstr "Espaciado de vía:"
+msgstr "Ancho %s, espaciado %s, espaciado de vía %s"
 
 #: pcbnew/router/router_tool.cpp:519
 #, c-format
@@ -32815,39 +32801,39 @@ msgid ""
 "Event file: %s\n"
 "Board dump: %s"
 msgstr ""
+"Archivo de eventos: %s\n"
+"Volcado de la placa: %s"
 
 #: pcbnew/router/router_tool.cpp:521
-#, fuzzy
 msgid "Save router log"
-msgstr "Guardar proyecto"
+msgstr "Guardar registro del enrutador"
 
 #: pcbnew/router/router_tool.cpp:521
 msgid ""
 "Would you like to save the router\n"
 "event log for debugging purposes?"
 msgstr ""
+"¿Desea guardar el registro de eventos del\n"
+"enrutador para fines de depuración?"
 
 #: pcbnew/router/router_tool.cpp:828 pcbnew/router/router_tool.cpp:850
-#, fuzzy
 msgid "Show board setup"
-msgstr "Mostrar conexiones de la placa"
+msgstr "Mostrar configuración de placa"
 
 #: pcbnew/router/router_tool.cpp:840
-#, fuzzy
 msgid ""
 "Blind/buried vias must first be enabled in Board Setup > Design Rules > "
 "Constraints."
 msgstr ""
-"Las vías ciegas/enterradas han de activarse en Configuración de placa > "
-"Reglas de diseño > Requerimientos"
+"Las vías ciegas/enterradas primero deben activarse en Configuración de placa "
+"> Reglas de diseño > Requerimientos."
 
 #: pcbnew/router/router_tool.cpp:861
-#, fuzzy
 msgid ""
 "Microvias must first be enabled in Board Setup > Design Rules > Constraints."
 msgstr ""
-"Las microvías han de ser activadas en Configuración de placa > reglas de "
-"diseño > Requerimientos"
+"Las microvías primero deben ser habilitadas en Configuración de placa > "
+"Reglas de diseño > Requerimientos."
 
 #: pcbnew/router/router_tool.cpp:990
 msgid "Tracks on Copper layers only."
@@ -32867,45 +32853,42 @@ msgid "Break Track"
 msgstr "Dividir pista"
 
 #: pcbnew/router/router_tool.cpp:1895
-#, fuzzy, c-format
+#, c-format
 msgid "Routing Diff Pair: %s"
-msgstr "Afinar desvío de par diferencial"
+msgstr "Enrutando par diferencial: %s"
 
 # ¿Podría dejarse solo como Pista? Ver contexto
 #: pcbnew/router/router_tool.cpp:1895
-#, fuzzy, c-format
+#, c-format
 msgid "Routing Track: %s"
-msgstr "Enrutar pista única"
+msgstr "Enrutando pista: %s"
 
 #: pcbnew/router/router_tool.cpp:1901
-#, fuzzy, c-format
+#, c-format
 msgid "Net Class: %s"
-msgstr "Clases de red"
+msgstr "Clase de red: %s"
 
 # ¿Podría dejarse solo como Pista? Ver contexto
 #: pcbnew/router/router_tool.cpp:1905
-#, fuzzy
 msgid "Routing Track"
-msgstr "Enrutar pista única"
+msgstr "Enrutando pista"
 
 #: pcbnew/router/router_tool.cpp:1905
-#, fuzzy
 msgid "(no net)"
-msgstr "<sin red>"
+msgstr "(sin red)"
 
 #: pcbnew/router/router_tool.cpp:1911
-#, fuzzy, c-format
+#, c-format
 msgid "Track Width: %s"
-msgstr "Ancho de pista"
+msgstr "Ancho de pista: %s"
 
 #: pcbnew/router/router_tool.cpp:1933
-#, fuzzy
 msgid "Diff Pair Gap"
 msgstr "Espaciado de par diferencial"
 
 #: pcbnew/sel_layer.cpp:294
 msgid "Warning: top and bottom layers are same."
-msgstr "Aviso: las capas superior e inferior son la misma."
+msgstr "Advertencia: las capas superior e inferior son la misma."
 
 #: pcbnew/specctra_import_export/specctra_export.cpp:138
 msgid "BOARD exported OK."
@@ -32916,21 +32899,21 @@ msgid "Unable to export, please fix and try again"
 msgstr "Imposible exportar, por favor, corrija e inténtelo de nuevo"
 
 #: pcbnew/specctra_import_export/specctra_export.cpp:1114
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol with value of '%s' has empty reference id."
-msgstr "El símbolo de valor \"%s\" tiene la referencia vacía."
+msgstr "El símbolo de valor '%s' tiene un ID de referencia vacío."
 
 #: pcbnew/specctra_import_export/specctra_export.cpp:1124
-#, fuzzy, c-format
+#, c-format
 msgid "Multiple symbols have identical reference IDs of '%s'."
-msgstr "Varios símbolos tienen idéntica referencia \"%s\"."
+msgstr "Múltiples símbolos tienen ID de referencia '%s' idénticos."
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:70
 msgid ""
 "Board may be corrupted, do not save it.\n"
 " Fix problem and try again"
 msgstr ""
-"La placa puede estar corrupta, no puede guardarse.\n"
+"La placa puede estar corrupta, no la guarde.\n"
 "Arregle el problema e inténtelo de nuevo"
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:93
@@ -32938,19 +32921,19 @@ msgid "Session file imported and merged OK."
 msgstr "Archivo Session importado y combinado correctamente."
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:166
-#, fuzzy, c-format
+#, c-format
 msgid "Session file uses invalid layer id '%s'."
-msgstr "El archivo Session utiliza un identificador de capa \"%s\" no válido"
+msgstr "El archivo Session utiliza un ID de capa '%s' inválido."
 
 # Pendiente
 #: pcbnew/specctra_import_export/specctra_import.cpp:217
 msgid "Session via padstack has no shapes"
-msgstr "La pila de pads de la vía no tiene ninguna forma asignada"
+msgstr "La pila de pads de vía no tiene formas"
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:226
-#, fuzzy, c-format
+#, c-format
 msgid "Unsupported via shape: %s."
-msgstr "Forma de vía no soportada: %s"
+msgstr "Forma de vía no soportada: %s."
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:246
 #: pcbnew/specctra_import_export/specctra_import.cpp:271
@@ -32976,14 +32959,14 @@ msgid "Session file is missing the \"library_out\" section"
 msgstr "En el archivo Session no contiene la sección \"library_out\""
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:359
-#, fuzzy, c-format
+#, c-format
 msgid "Reference '%s' not found."
-msgstr "No se ha encontrado el archivo '%s'."
+msgstr "No se ha encontrado la referencia '%s'."
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:501
-#, fuzzy, c-format
+#, c-format
 msgid "A wire_via refers to missing padstack '%s'."
-msgstr "Una pista o via hace referencia a un pad inexistente \"%s\""
+msgstr "Un cable_via hace referencia a una pila de pad faltante '%s'."
 
 #: pcbnew/toolbars_footprint_editor.cpp:91
 msgid "Load footprint from current board"
@@ -33015,36 +32998,35 @@ msgid ""
 "overridden by the board minimum width, or by the width of an existing track "
 "if the 'Use Existing Track Width' feature is enabled."
 msgstr ""
+"Seleccione el ancho por defecto para nuevas pistas. Note que este ancho "
+"puede ser remplazado por el ancho mínimo de la placa, o por el ancho de una "
+"pista existente si la función 'Usar el ancho de pista existente' está "
+"activada."
 
 #: pcbnew/toolbars_pcb_editor.cpp:532
-#, fuzzy
 msgid ""
 "When routing from an existing track use its width instead of the current "
 "width setting"
 msgstr ""
-"Ancho de pista automático: al comenzar en un pista existente, use su "
-"dimensión\n"
-"si no, use el ancho seleccionado"
+"Al enrutar desde un pista existente, use su ancho en lugar de la "
+"configuración de ancho actual"
 
 #: pcbnew/toolbars_pcb_editor.cpp:639
-#, fuzzy
 msgid "Track: use netclass width"
-msgstr "ancho de clase de red"
+msgstr "Pista: usar el ancho de clase de red"
 
 #: pcbnew/toolbars_pcb_editor.cpp:645
-#, fuzzy, c-format
+#, c-format
 msgid "Track: %s (%s)"
-msgstr "Valor %s de %s"
+msgstr "Pista: %s (%s)"
 
 #: pcbnew/toolbars_pcb_editor.cpp:654 pcbnew/toolbars_pcb_editor.cpp:722
-#, fuzzy
 msgid "Edit Pre-defined Sizes..."
 msgstr "Editar tamaños predefinidos..."
 
 #: pcbnew/toolbars_pcb_editor.cpp:691
-#, fuzzy
 msgid "Via: use netclass sizes"
-msgstr "Utilizar el tamaño de la clase de red"
+msgstr "Vía: utilizar los tamaño de las clases de red"
 
 #: pcbnew/toolbars_pcb_editor.cpp:714
 #, c-format
@@ -33056,18 +33038,16 @@ msgid "Locking"
 msgstr "Bloqueando"
 
 #: pcbnew/tools/board_editor_control.cpp:137
-#, fuzzy
 msgid "Omit extra information"
-msgstr "Información del mapa de bits"
+msgstr "Omitir información adicional"
 
 #: pcbnew/tools/board_editor_control.cpp:138
-#, fuzzy
 msgid "Omit nets"
-msgstr "&Listar Nets ..."
+msgstr "Omitir redes"
 
 #: pcbnew/tools/board_editor_control.cpp:140
 msgid "Do not prefix path with footprint UUID."
-msgstr ""
+msgstr "No prefijar la ruta con el UUID de huella."
 
 #: pcbnew/tools/board_editor_control.cpp:380
 msgid "Merge Specctra Session file:"
@@ -33078,53 +33058,46 @@ msgid "Specctra DSN File"
 msgstr "Archivo Specctra DSN"
 
 #: pcbnew/tools/board_editor_control.cpp:427
-#, fuzzy
 msgid "Export Board Netlist"
-msgstr "Exportar listado de redes"
+msgstr "Exportar el listado de redes de la placa"
 
 #: pcbnew/tools/board_editor_control.cpp:428
-#, fuzzy
 msgid "KiCad board netlist files"
-msgstr "Archivos de redes de KiCad"
+msgstr "Archivos de listado de redes de placa de KiCad"
 
 #: pcbnew/tools/board_editor_control.cpp:442
-#, fuzzy, c-format
+#, c-format
 msgid "Path `%s` is read only."
-msgstr "La librería \"%s\" es de solo lectura"
+msgstr "La ruta '%s' es de solo lectura."
 
 #: pcbnew/tools/board_editor_control.cpp:443
-#, fuzzy
 msgid "I/O Error"
-msgstr "Error"
+msgstr "Error de I/O"
 
 #: pcbnew/tools/board_editor_control.cpp:534
 #, c-format
 msgid "Orphaned net %s re-parented.\n"
-msgstr ""
+msgstr "Asignado un padre a la red huérfana %s.\n"
 
 #: pcbnew/tools/board_editor_control.cpp:591
 #: pcbnew/tools/footprint_editor_control.cpp:566
-#, fuzzy, c-format
+#, c-format
 msgid "%d duplicate IDs replaced.\n"
-msgstr ""
-"Se han encontrado %d códigos de tiempo duplicados y se han reemplazado."
+msgstr "%d ID duplicados reemplazados.\n"
 
 #: pcbnew/tools/board_editor_control.cpp:606
 #: pcbnew/tools/footprint_editor_control.cpp:581
 #, c-format
 msgid "%d potential problems repaired."
-msgstr ""
+msgstr "%d potenciales problemas reparados."
 
 #: pcbnew/tools/board_editor_control.cpp:613
-#, fuzzy
 msgid "No board problems found."
-msgstr "No se han encontrado más marcadores."
+msgstr "No se han encontrado errores en la placa."
 
 #: pcbnew/tools/board_editor_control.cpp:624
-#, fuzzy
 msgid "Updating PCB requires a fully annotated schematic."
-msgstr ""
-"Para exportar la lista de redes se necesita un esquema anotado completamente."
+msgstr "Actualizar la placa requiere de un esquema anotado completamente."
 
 #: pcbnew/tools/board_editor_control.cpp:639
 msgid ""
@@ -33137,9 +33110,8 @@ msgstr ""
 "crear un proyecto de placa desde la ventana principal de KiCad."
 
 #: pcbnew/tools/board_editor_control.cpp:1057
-#, fuzzy
 msgid "Place a footprint"
-msgstr "Guardar huella"
+msgstr "Colocar una huella"
 
 #: pcbnew/tools/board_editor_control.cpp:1162 pcbnew/tools/pcb_actions.cpp:673
 msgid "Lock"
@@ -33154,62 +33126,60 @@ msgid "Duplicate zone"
 msgstr "Duplicar zona"
 
 #: pcbnew/tools/board_inspection_tool.cpp:68
-#, fuzzy
 msgid "Net Tools"
-msgstr "Asignar a"
+msgstr "Herramientas de redes"
 
 #: pcbnew/tools/board_inspection_tool.cpp:130
-#, fuzzy, c-format
+#, c-format
 msgid "[netclass %s]"
-msgstr "tamaño de clase de red"
+msgstr "[clase de red %s]"
 
 #: pcbnew/tools/board_inspection_tool.cpp:146
-#, fuzzy, c-format
+#, c-format
 msgid "Zone connection type: %s."
-msgstr "Tipo de conexión:"
+msgstr "Tipo de conexión de zona: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:149
 #: pcbnew/tools/board_inspection_tool.cpp:183
 #: pcbnew/tools/board_inspection_tool.cpp:201 pcbnew/zone.cpp:337
 #: pcbnew/zone.cpp:352 pcbnew/zone.cpp:500 pcbnew/zone.cpp:781
-#, fuzzy
 msgid "zone"
-msgstr "Añadir zonas"
+msgstr "zona"
 
 #: pcbnew/tools/board_inspection_tool.cpp:151
 #, c-format
 msgid "Overridden by %s; connection type: %s."
-msgstr ""
+msgstr "Remplazado por %s; tipo de conexión: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:166
 #, c-format
 msgid "Pad is not a PTH pad; connection will be: %s."
-msgstr ""
+msgstr "El pad no es PTH; la conexión será: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:178
-#, fuzzy, c-format
+#, c-format
 msgid "Zone thermal relief: %s."
-msgstr "Alivio térmico"
+msgstr "Alivio térmico de zona: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:185
 #, c-format
 msgid "Overridden by %s; thermal relief: %s."
-msgstr ""
+msgstr "Remplazado por %s; alivio térmico: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:194
-#, fuzzy, c-format
+#, c-format
 msgid "Zone clearance: %s."
-msgstr "Valor aislamiento de zona:"
+msgstr "Margen de zona: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:203
 #, c-format
 msgid "Overridden by larger thermal relief from %s;clearance: %s."
-msgstr ""
+msgstr "Remplazado por un alivio térmico mayor desde %s; margen: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:212
-#, fuzzy, c-format
+#, c-format
 msgid "Clearance: %s."
-msgstr "Margen:"
+msgstr "Margen: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:232
 #: pcbnew/tools/board_inspection_tool.cpp:616
@@ -33223,71 +33193,64 @@ msgstr ""
 "personalizadas.  "
 
 #: pcbnew/tools/board_inspection_tool.cpp:254
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved clearance: %s."
-msgstr "Margen de pad:"
+msgstr "Margen resuelto: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:270
 #: pcbnew/tools/board_inspection_tool.cpp:358
-#, fuzzy
 msgid "Clearance Report"
-msgstr "Margen"
+msgstr "Informe de márgenes"
 
 #: pcbnew/tools/board_inspection_tool.cpp:284
 #: pcbnew/tools/board_inspection_tool.cpp:499
-#, fuzzy
 msgid "Edge clearance resolution for:"
-msgstr "Perímetros de margen:"
+msgstr "Resolución de margen de borde para:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:321
 #: pcbnew/tools/board_inspection_tool.cpp:509
-#, fuzzy
 msgid "Clearance resolution for:"
-msgstr "Perímetros de margen:"
+msgstr "Resolución de margen para:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:351
 msgid "Select two items for a clearance resolution report."
-msgstr ""
+msgstr "Seleccione dos elementos para un informe de resolución de margen."
 
 #: pcbnew/tools/board_inspection_tool.cpp:387
 #: pcbnew/tools/board_inspection_tool.cpp:400
 msgid "Cannot generate clearance report on empty group."
-msgstr ""
+msgstr "No se puede generar un informe de margen en un grupo vacío."
 
 #: pcbnew/tools/board_inspection_tool.cpp:444
-#, fuzzy
 msgid "Silkscreen clearance resolution for:"
-msgstr "Valor aislamiento de zona:"
+msgstr "Resolución de margen de serigrafía para:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:458
 #: pcbnew/tools/board_inspection_tool.cpp:479
-#, fuzzy
 msgid "Hole clearance resolution for:"
-msgstr "Perímetros de margen:"
+msgstr "Resolución de margen de orificios para:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:470
 #: pcbnew/tools/board_inspection_tool.cpp:491
 #, c-format
 msgid "%s not present on layer %s.  No clearance defined."
-msgstr ""
+msgstr "%s no está presente en la capa %s. No se definió un margen."
 
 #: pcbnew/tools/board_inspection_tool.cpp:533
 msgid "Items belong to the same net. Clearance is 0."
-msgstr ""
+msgstr "Los elementos pertenecen a la misma red. El margen es 0."
 
 #: pcbnew/tools/board_inspection_tool.cpp:558
 msgid "Select an item for a constraints resolution report."
-msgstr ""
+msgstr "Seleccione un elemento para un informe de restricciones de resolución."
 
 #: pcbnew/tools/board_inspection_tool.cpp:565
-#, fuzzy
 msgid "Constraints Report"
-msgstr "Informe de huellas"
+msgstr "Informe de restricciones"
 
 #: pcbnew/tools/board_inspection_tool.cpp:609
-#, fuzzy
 msgid "Track width resolution for:"
-msgstr "<h7>Corrección de ancho:</h7>"
+msgstr "Resolución de ancho de pista para:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:624
 #: pcbnew/tools/board_inspection_tool.cpp:625
@@ -33296,68 +33259,60 @@ msgstr "<h7>Corrección de ancho:</h7>"
 #: pcbnew/tools/board_inspection_tool.cpp:697
 #: pcbnew/tools/board_inspection_tool.cpp:698
 #: pcbnew/tools/board_inspection_tool.cpp:736
-#, fuzzy
 msgid "undefined"
-msgstr "No definido"
+msgstr "indefinido"
 
 #: pcbnew/tools/board_inspection_tool.cpp:634
 #, c-format
 msgid "Width constraints: min %s max %s."
-msgstr ""
+msgstr "Restricciones de ancho: mínimo %s máximo %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:644
-#, fuzzy
 msgid "Via Diameter"
 msgstr "Diámetro de vía"
 
 #: pcbnew/tools/board_inspection_tool.cpp:646
-#, fuzzy
 msgid "Via diameter resolution for:"
-msgstr "Diámetro de vía:"
+msgstr "Resolución de diámetro de vía para:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:672
 #, c-format
 msgid "Diameter constraints: min %s max %s."
-msgstr ""
+msgstr "Restricciones de diámetro: mínimo %s máximo %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:679
-#, fuzzy
 msgid "Via Annular Width"
-msgstr "Ancho de pulso:"
+msgstr "Ancho de anular de vía"
 
 #: pcbnew/tools/board_inspection_tool.cpp:681
-#, fuzzy
 msgid "Via annular width resolution for:"
-msgstr "<h7>Corrección de ancho:</h7>"
+msgstr "Resolución de ancho de anular de vía para:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:707
 #, c-format
 msgid "Annular width constraints: min %s max %s."
-msgstr ""
+msgstr "Restricciones de ancho de anular de vía: mínimo %s máximo %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:718
-#, fuzzy
 msgid "Hole Size"
-msgstr "Tamaño X orificio:"
+msgstr "Tamaño de orificio"
 
 #: pcbnew/tools/board_inspection_tool.cpp:720
 msgid "Hole diameter resolution for:"
-msgstr ""
+msgstr "Resolución de diámetro de orificio para:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:742
 #, c-format
 msgid "Hole constraint: min %s."
-msgstr ""
+msgstr "Restricción de orificios: mínimo %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:748
-#, fuzzy
 msgid "Keepouts"
-msgstr "Área restringida"
+msgstr "Áreas restringidas"
 
 #: pcbnew/tools/board_inspection_tool.cpp:750
-#, fuzzy
 msgid "Keepout resolution for:"
-msgstr "Área restringida para vías"
+msgstr "Resolución de áreas restringidas para:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:765
 msgid "Report may be incomplete: some footprint courtyards are malformed."
@@ -33367,121 +33322,103 @@ msgstr ""
 
 #: pcbnew/tools/board_inspection_tool.cpp:766
 msgid "Run DRC for a full analysis."
-msgstr ""
+msgstr "Ejecutar el DRC para un análisis completo."
 
 #: pcbnew/tools/board_inspection_tool.cpp:775
 msgid "Item <b>disallowed</b> at current location."
-msgstr ""
+msgstr "Elemento <b>no permitido</b> en la ubicación actual."
 
 #: pcbnew/tools/board_inspection_tool.cpp:777
 msgid "Item allowed at current location."
 msgstr ""
 
 #: pcbnew/tools/convert_tool.cpp:200
-#, fuzzy
 msgid "Convert shapes to polygon"
-msgstr "Convertir forma"
+msgstr "Convertir formas a polígono"
 
 #: pcbnew/tools/convert_tool.cpp:236
-#, fuzzy
 msgid "Convert shapes to zone"
-msgstr "Convertir forma"
+msgstr "Convertir formas a zona"
 
 #: pcbnew/tools/convert_tool.cpp:642
 msgid "Convert polygons to lines"
-msgstr ""
+msgstr "Convertir polígonos a líneas"
 
 #: pcbnew/tools/convert_tool.cpp:732
-#, fuzzy
 msgid "Create arc from line segment"
-msgstr "Dibujar un segmento de línea"
+msgstr "Crear un arco a partir de un segmento de línea"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:253
-#, fuzzy
 msgid "Layer Name"
-msgstr "Nombre base"
+msgstr "Nombre de capa"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:267
-#, fuzzy
 msgid "Thickness (mm)"
-msgstr "Grosor de línea (mm)"
+msgstr "Grosor (mm)"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:270
-#, fuzzy
 msgid "Thickness (mils)"
-msgstr "Grosor de línea (mm)"
+msgstr "Grosor (mils)"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:283
-#, fuzzy
 msgid "Loss Tangent"
-msgstr "Tg Pérdida"
+msgstr "Tangente de pérdida"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:351
 msgid "Insert board stackup table"
-msgstr ""
+msgstr "Inserte la tabla de apilado de placa"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:390
 msgid "BOARD CHARACTERISTICS"
 msgstr ""
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:406
-#, fuzzy
 msgid "Copper Layer Count: "
-msgstr "Número de capas de cobre:"
+msgstr "Número de capas de cobre: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:415
-#, fuzzy
 msgid "Board overall dimensions: "
-msgstr "Dibujar una dimensión"
+msgstr "Dimensiones generales de la placa: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:425
-#, fuzzy
 msgid "Min track/spacing: "
-msgstr "Espaciado mínimo de cuadrícula:"
+msgstr "Pista/espaciado mínimo: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:435
-#, fuzzy
 msgid "Copper Finish: "
-msgstr "Zonas de cobre"
+msgstr "Terminación de cobre: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:443
-#, fuzzy
 msgid "Castellated pads: "
-msgstr "Pads plateados:"
+msgstr "Pads castellados: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:451
-#, fuzzy
 msgid "Board Thickness: "
-msgstr "Grosor de la placa:"
+msgstr "Grosor de la placa: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:467
-#, fuzzy
 msgid "Min hole diameter: "
-msgstr "Taladro de vía > diámetro"
+msgstr "Diámetro mínimo de orificio: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:477
-#, fuzzy
 msgid "Impedance Control: "
-msgstr "Control de pluma:"
+msgstr "Control de impedancia: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:485
-#, fuzzy
 msgid "Plated Board Edge: "
-msgstr "Imprimir bordes de la placa"
+msgstr "Bordes de la placa revestidos: "
 
 #: pcbnew/tools/drawing_tool.cpp:75
-#, fuzzy
 msgid "Select Via Size"
-msgstr "Seleccionar archivo"
+msgstr "Seleccionar tamaño de vía"
 
 #: pcbnew/tools/drawing_tool.cpp:279 pcbnew/tools/drawing_tool.cpp:1625
 msgid "Draw a line segment"
 msgstr "Dibujar un segmento de línea"
 
 #: pcbnew/tools/drawing_tool.cpp:332 pcbnew/tools/pcb_actions.cpp:94
-#, fuzzy
 msgid "Draw a rectangle"
-msgstr "Añadir rectángulo"
+msgstr "Dibujar un rectángulo"
 
 #: pcbnew/tools/drawing_tool.cpp:384 pcbnew/tools/pcb_actions.cpp:100
 msgid "Draw a circle"
@@ -33505,9 +33442,8 @@ msgid "Draw a dimension"
 msgstr "Dibujar una dimensión"
 
 #: pcbnew/tools/drawing_tool.cpp:1154
-#, fuzzy
 msgid "No graphic items found in file."
-msgstr "No se han encontrado elementos gráficos para importar en el archivo"
+msgstr "No se han encontrado elementos gráficos en el archivo."
 
 #: pcbnew/tools/drawing_tool.cpp:1205 pcbnew/tools/drawing_tool.cpp:1276
 msgid "Place a DXF_SVG drawing"
@@ -33522,29 +33458,26 @@ msgid "Self-intersecting polygons are not allowed"
 msgstr "No se permiten los polígonos que se intersectan a si mismos"
 
 #: pcbnew/tools/drawing_tool.cpp:2571
-#, fuzzy
 msgid "Via location violates DRC."
-msgstr "Severidad de la violación"
+msgstr "Ubicación de vía infringe el DRC."
 
 #: pcbnew/tools/drawing_tool.cpp:2674
 msgid "Place via"
 msgstr "Añadir vía"
 
 #: pcbnew/tools/drc_tool.cpp:150
-#, fuzzy
 msgid "Refilling all zones..."
-msgstr "Rellenando todas las zonas...\n"
+msgstr "Rellenando todas las zonas..."
 
 #: pcbnew/tools/drc_tool.cpp:159
-#, fuzzy
 msgid "Schematic parity tests require a fully annotated schematic."
 msgstr ""
-"Para exportar la lista de redes se necesita un esquema anotado completamente."
+"Las pruebas de paridad de esquema requieren de un esquema anotado "
+"completamente."
 
 #: pcbnew/tools/drc_tool.cpp:207
-#, fuzzy
 msgid "DRC"
-msgstr "&DCR"
+msgstr "DCR"
 
 #: pcbnew/tools/edit_tool.cpp:94
 msgid "Special Tools"
@@ -33556,55 +33489,49 @@ msgid "Unable to resize arc tracks %.1f degrees or greater."
 msgstr "No se pueden redimensionar pistas de arco de %.1f grados o más."
 
 #: pcbnew/tools/edit_tool.cpp:669
-#, fuzzy
 msgid "Drag Arc Track"
-msgstr "Arrastrar Pista/Vía"
+msgstr "Arrastrar pista de arco"
 
 #: pcbnew/tools/edit_tool.cpp:805
-#, fuzzy
 msgid "Select reference point for move..."
-msgstr "Seleccione el punto de referencia para la copia..."
+msgstr "Seleccione el punto de referencia para mover..."
 
 #: pcbnew/tools/edit_tool.cpp:1159
 msgid "Edit track width/via size"
 msgstr "Editar ancho/tamaño de vía"
 
 #: pcbnew/tools/edit_tool.cpp:1194
-#, fuzzy
 msgid "At least two straight track segments must be selected."
-msgstr "No han podido respaldarse algunos de los archivos del proyecto."
+msgstr "Se deben seleccionar al menos dos segmentos rectos de pista."
 
 #: pcbnew/tools/edit_tool.cpp:1198
-#, fuzzy
 msgid "Enter fillet radius:"
-msgstr "Radio de redondeo:"
+msgstr "Ingrese el radio del filete:"
 
 #: pcbnew/tools/edit_tool.cpp:1198 pcbnew/tools/edit_tool.cpp:1361
 #: pcbnew/tools/pcb_actions.cpp:316
-#, fuzzy
 msgid "Fillet Tracks"
-msgstr "Borrar Pistas"
+msgstr "Pistas de filete"
 
 #: pcbnew/tools/edit_tool.cpp:1208
 msgid ""
 "A radius of zero was entered.\n"
 "The fillet operation was not performed."
 msgstr ""
+"Se ingresó un radio de cero.\n"
+"La operación de fileteado no fue realizada."
 
 #: pcbnew/tools/edit_tool.cpp:1368
-#, fuzzy
 msgid "Unable to fillet the selected track segments."
-msgstr "Imposible arrastrar este segmento: dos segmentos alineados"
+msgstr "No se puede filetear los segmentos de pista seleccionados."
 
 #: pcbnew/tools/edit_tool.cpp:1370
-#, fuzzy
 msgid "Some of the track segments could not be filleted."
-msgstr "No han podido respaldarse algunos de los archivos del proyecto."
+msgstr "Algunos de los segmentos de pista no pudieron ser fileteados."
 
 #: pcbnew/tools/edit_tool.cpp:1697 pcbnew/tools/pcb_actions.cpp:302
-#, fuzzy
 msgid "Change Side / Flip"
-msgstr "Cambiar Tamaño"
+msgstr "Cambiar lado / Voltear"
 
 #: pcbnew/tools/edit_tool.cpp:1998
 msgid "Move exact"
@@ -33616,33 +33543,28 @@ msgid "Duplicated %d item(s)"
 msgstr "Elemento(s) duplicado(s) %d"
 
 #: pcbnew/tools/edit_tool.cpp:2351
-#, fuzzy
 msgid "Select reference point for the copy..."
 msgstr "Seleccione el punto de referencia para la copia..."
 
 #: pcbnew/tools/edit_tool.cpp:2352 pcbnew/tools/edit_tool.cpp:2366
-#, fuzzy
 msgid "Selection copied"
-msgstr "Selección"
+msgstr "La selección fue copiada"
 
 #: pcbnew/tools/edit_tool.cpp:2353
-#, fuzzy
 msgid "Copy cancelled"
-msgstr "Copiar etiqueta"
+msgstr "La copia fue cancelada"
 
 #: pcbnew/tools/footprint_editor_control.cpp:343
 msgid "_copy"
 msgstr "_copia"
 
 #: pcbnew/tools/footprint_editor_control.cpp:586
-#, fuzzy
 msgid "No footprint problems found."
-msgstr "No se han encontrado huellas."
+msgstr "No se han encontrado problemas en las huellas."
 
 #: pcbnew/tools/group_tool.cpp:43
-#, fuzzy
 msgid "Grouping"
-msgstr "Agrupar por"
+msgstr "Agrupamiento"
 
 #: pcbnew/tools/group_tool.cpp:65
 msgid "Group is in inconsistent state:"
@@ -33650,7 +33572,7 @@ msgstr ""
 
 #: pcbnew/tools/group_tool.cpp:148
 msgid "Click on new member..."
-msgstr ""
+msgstr "Haga clic en un nuevo miembro..."
 
 #: pcbnew/tools/pad_tool.cpp:144
 msgid "Paste Pad Properties"
@@ -33680,80 +33602,68 @@ msgstr "Emplazar pad"
 #: pcbnew/tools/pad_tool.cpp:554
 #, c-format
 msgid "Pad Edit Mode.  Press %s again to exit."
-msgstr ""
+msgstr "Modo de edición de pads. Presione %s de nuevo para salir."
 
 #: pcbnew/tools/pad_tool.cpp:559
 #, c-format
 msgid "Pad Edit Mode.  Press %s to exit."
-msgstr ""
+msgstr "Modo de edición de pads. Presione %s para salir."
 
 #: pcbnew/tools/pad_tool.cpp:625
-#, fuzzy
 msgid "Edit pad shapes"
-msgstr "Descomponer pad en formas"
+msgstr "Editar las formas de pads"
 
 #: pcbnew/tools/pad_tool.cpp:732
-#, fuzzy
 msgid "Recombine pads"
-msgstr "Renumerar pads"
+msgstr "Recombinar pads"
 
 #: pcbnew/tools/pcb_actions.cpp:49
-#, fuzzy
 msgid "Convert to Polygon"
-msgstr "&Línea o polígono"
+msgstr "Convertir a un polígono"
 
 #: pcbnew/tools/pcb_actions.cpp:49
-#, fuzzy
 msgid "Creates a graphic polygon from the selection"
-msgstr "Crear un nuevo componente a partir de componente activo"
+msgstr "Crea un nuevo polígono gráfico a partir de la selección"
 
 #: pcbnew/tools/pcb_actions.cpp:54
-#, fuzzy
 msgid "Convert to Zone"
-msgstr "Convertido"
+msgstr "Convertir a zona"
 
 #: pcbnew/tools/pcb_actions.cpp:54
-#, fuzzy
 msgid "Creates a copper zone from the selection"
-msgstr "Crear un nuevo componente a partir de componente activo"
+msgstr "Crea una zona de cobre a partir de la selección"
 
 #: pcbnew/tools/pcb_actions.cpp:59
 msgid "Convert to Rule Area"
-msgstr ""
+msgstr "Convertir a área de reglas"
 
 #: pcbnew/tools/pcb_actions.cpp:59
-#, fuzzy
 msgid "Creates a rule area from the selection"
-msgstr "Crear un nuevo componente a partir de componente activo"
+msgstr "Crea un área de reglas a partir de la selección"
 
 #: pcbnew/tools/pcb_actions.cpp:64
-#, fuzzy
 msgid "Convert to Lines"
-msgstr "Volver a la an&terior"
+msgstr "Convertir a líneas"
 
 #: pcbnew/tools/pcb_actions.cpp:64
-#, fuzzy
 msgid "Creates graphic lines from the selection"
-msgstr "Borrar la capa gráfica seleccionada"
+msgstr "Crea líneas gráficas a partir de la selección"
 
 #: pcbnew/tools/pcb_actions.cpp:69
-#, fuzzy
 msgid "Convert to Arc"
-msgstr "Convertir"
+msgstr "Convertir a un arco"
 
 #: pcbnew/tools/pcb_actions.cpp:69
-#, fuzzy
 msgid "Converts selected line segment to an arc"
-msgstr "Cortar el contenido seleccionado al portapapeles"
+msgstr "Convierte los segmentos de línea a un arco"
 
 #: pcbnew/tools/pcb_actions.cpp:74
-#, fuzzy
 msgid "Convert to Tracks"
-msgstr "Pistas sin conectar"
+msgstr "Convertir a pistas"
 
 #: pcbnew/tools/pcb_actions.cpp:74
 msgid "Converts selected graphic lines to tracks"
-msgstr ""
+msgstr "Convierte las líneas gráficas seleccionadas a pistas"
 
 #: pcbnew/tools/pcb_actions.cpp:83
 msgid "Draw Line"
@@ -33772,9 +33682,8 @@ msgid "Draw a graphic polygon"
 msgstr "Dibujar un polígono gráfico"
 
 #: pcbnew/tools/pcb_actions.cpp:94
-#, fuzzy
 msgid "Draw Rectangle"
-msgstr "Arrastrar borde del rectángulo"
+msgstr "Dibujar rectángulo"
 
 #: pcbnew/tools/pcb_actions.cpp:100
 msgid "Draw Circle"
@@ -33785,52 +33694,44 @@ msgid "Draw Arc"
 msgstr "Dibujar arco"
 
 #: pcbnew/tools/pcb_actions.cpp:111
-#, fuzzy
 msgid "Add Board Characteristics"
-msgstr "Ajustar las características por defecto de los pads"
+msgstr "Añadir características de placa"
 
 #: pcbnew/tools/pcb_actions.cpp:112
 msgid "Add a board characteristics table on a graphic layer"
-msgstr ""
+msgstr "Añadir una tabla de características de placa en una capa gráfica"
 
 #: pcbnew/tools/pcb_actions.cpp:117
-#, fuzzy
 msgid "Add Stackup Table"
-msgstr "Añadir terminación"
+msgstr "Añadir una tabla de apilado"
 
 #: pcbnew/tools/pcb_actions.cpp:118
 msgid "Add a board stackup table on a graphic layer"
-msgstr ""
+msgstr "Añadir una tabla de apilado de placa en una capa gráfica"
 
 #: pcbnew/tools/pcb_actions.cpp:130
-#, fuzzy
 msgid "Add Aligned Dimension"
-msgstr "&Dimensiones"
+msgstr "Añadir una dimensión alineada"
 
 #: pcbnew/tools/pcb_actions.cpp:130
-#, fuzzy
 msgid "Add an aligned linear dimension"
-msgstr "Añadir una dimensión"
+msgstr "Añadir una dimensión linear alineada"
 
 #: pcbnew/tools/pcb_actions.cpp:135
-#, fuzzy
 msgid "Add Center Dimension"
-msgstr "&Dimensiones"
+msgstr "Añadir dimensión central"
 
 #: pcbnew/tools/pcb_actions.cpp:135
-#, fuzzy
 msgid "Add a center dimension"
-msgstr "Añadir una dimensión"
+msgstr "Añadir una dimensión central"
 
 #: pcbnew/tools/pcb_actions.cpp:140
-#, fuzzy
 msgid "Add Orthogonal Dimension"
-msgstr "Añadir una dimensión"
+msgstr "Añadir dimensión ortogonal"
 
 #: pcbnew/tools/pcb_actions.cpp:140
-#, fuzzy
 msgid "Add an orthogonal dimension"
-msgstr "Añadir una dimensión"
+msgstr "Añadir una dimensión ortogonal"
 
 #: pcbnew/tools/pcb_actions.cpp:145
 #, fuzzy
@@ -33859,14 +33760,12 @@ msgid "Add free-standing vias"
 msgstr "Añadir vías independientes"
 
 #: pcbnew/tools/pcb_actions.cpp:168
-#, fuzzy
 msgid "Add Rule Area"
-msgstr "Añadir zona de recorte"
+msgstr "Añadir área de reglas"
 
 #: pcbnew/tools/pcb_actions.cpp:168
-#, fuzzy
 msgid "Add a rule area (keepout)"
-msgstr "Añadir área restringida"
+msgstr "Añadir un área de reglas (restringida)"
 
 #: pcbnew/tools/pcb_actions.cpp:174
 msgid "Add a Zone Cutout"
@@ -33885,23 +33784,20 @@ msgid "Add a zone with the same settings as an existing zone"
 msgstr "Añadir un área con las mismas opciones que la existente"
 
 #: pcbnew/tools/pcb_actions.cpp:186
-#, fuzzy
 msgid "Import Graphics..."
-msgstr "Importar componente..."
+msgstr "Importar gráficos..."
 
 #: pcbnew/tools/pcb_actions.cpp:186
-#, fuzzy
 msgid "Import 2D drawing file"
-msgstr "Importar símbolos:"
+msgstr "Importar archivo de dibujo 2D"
 
 #: pcbnew/tools/pcb_actions.cpp:192
 msgid "Place the Footprint Anchor"
 msgstr "Situar ancla de huella"
 
 #: pcbnew/tools/pcb_actions.cpp:192
-#, fuzzy
 msgid "Set the coordinate origin point (anchor) of the footprint"
-msgstr "Situar el punto de origen de la cuadrícula"
+msgstr "Situar el punto de origen de coordenadas (ancla) de la huella"
 
 #: pcbnew/tools/pcb_actions.cpp:198
 msgid "Increase Line Width"
@@ -33936,24 +33832,20 @@ msgid "Delete the last point added to the current item"
 msgstr "Eliminar el último punto añadido al elemento activo"
 
 #: pcbnew/tools/pcb_actions.cpp:218
-#, fuzzy
 msgid "Close Outline"
-msgstr "Cerrar límite de zona"
+msgstr "Cerrar perímetro"
 
 #: pcbnew/tools/pcb_actions.cpp:218
-#, fuzzy
 msgid "Close the in progress outline"
-msgstr "Cerrar límite de zona"
+msgstr "Cerrar el perímetro en progreso"
 
 #: pcbnew/tools/pcb_actions.cpp:223
-#, fuzzy
 msgid "Limit Lines to 45 deg"
-msgstr "L&imitar líneas gráficas a 45 grados"
+msgstr "Limitar líneas a 45°"
 
 #: pcbnew/tools/pcb_actions.cpp:223
-#, fuzzy
 msgid "Limit graphic lines to H, V and 45 degrees"
-msgstr "L&imitar líneas gráficas a 45 grados"
+msgstr "Limitar líneas gráficas a horizontales, verticales, y 45°"
 
 #: pcbnew/tools/pcb_actions.cpp:230
 msgid "Design Rules Checker"
@@ -33972,33 +33864,30 @@ msgid "Opens the selected footprint in the Footprint Editor"
 msgstr "Abre la huella seleccionada en el Editor de huellas"
 
 #: pcbnew/tools/pcb_actions.cpp:247
-#, fuzzy
 msgid ""
 "Selects a footprint by reference designator and places it under the cursor "
 "for moving"
 msgstr ""
-"Selecciona una huella por referencia y la coloca bajo el cursor para "
-"desplazarla"
+"Selecciona una huella por su indicador de referencia y la coloca bajo el "
+"cursor para desplazarla"
 
 #: pcbnew/tools/pcb_actions.cpp:258
-#, fuzzy
 msgid "Move with Reference"
-msgstr "Mover referencia"
+msgstr "Mover con referencia"
 
 #: pcbnew/tools/pcb_actions.cpp:259
-#, fuzzy
 msgid "Moves the selected item(s) with a specified starting point"
-msgstr "Mueve el/los elemento/s seleccionado/s una distancia exacta"
+msgstr ""
+"Mueve el/los elemento/s seleccionado/s con un punto inicial especificado"
 
 #: pcbnew/tools/pcb_actions.cpp:264
-#, fuzzy
 msgid "Copy with Reference"
-msgstr "Mover referencia"
+msgstr "Copiar con referencia"
 
 #: pcbnew/tools/pcb_actions.cpp:265
-#, fuzzy
 msgid "Copy selected item(s) to clipboard with a specified starting point"
-msgstr "Mueve el/los elemento/s seleccionado/s una distancia exacta"
+msgstr ""
+"Copia el/los elemento/s seleccionado/s con un punto inicial especificado"
 
 #: pcbnew/tools/pcb_actions.cpp:271
 msgid "Duplicate and Increment"
@@ -34052,6 +33941,7 @@ msgstr "Actualiza el tamaño de las pistas y vías seleccionadas"
 #: pcbnew/tools/pcb_actions.cpp:316
 msgid "Adds arcs tangent to the selected straight track segments"
 msgstr ""
+"Añade la tangente del arco a los segmentos rectos de pista seleccionados"
 
 #: pcbnew/tools/pcb_actions.cpp:321
 msgid "Delete Full Track"
@@ -34066,9 +33956,8 @@ msgid "Show Footprint Tree"
 msgstr "Mostrar árbol de huellas"
 
 #: pcbnew/tools/pcb_actions.cpp:340
-#, fuzzy
 msgid "Hide Footprint Tree"
-msgstr "Mostrar árbol de huellas"
+msgstr "Ocultar árbol de huellas"
 
 #: pcbnew/tools/pcb_actions.cpp:346
 msgid "New Footprint..."
@@ -34131,14 +34020,12 @@ msgid "Footprint Properties..."
 msgstr "Propiedades de huella..."
 
 #: pcbnew/tools/pcb_actions.cpp:391
-#, fuzzy
 msgid "Edit footprint properties"
-msgstr "Editar las propiedades de la huella"
+msgstr "Editar propiedades de huella"
 
 #: pcbnew/tools/pcb_actions.cpp:396
-#, fuzzy
 msgid "Show the footprint checker window"
-msgstr "Mostrar la ventana comprobación de las reglas de diseño"
+msgstr "Muestra la ventana comprobación de huellas"
 
 #: pcbnew/tools/pcb_actions.cpp:403
 msgid "Update Footprint..."
@@ -34157,15 +34044,14 @@ msgid "Update footprints to include any changes from the library"
 msgstr "Actualizar huellas para incluir cualquier cambio desde la librería"
 
 #: pcbnew/tools/pcb_actions.cpp:415
-#, fuzzy
 msgid "Remove Unused Pads..."
-msgstr "Enumerar pads..."
+msgstr "Eliminar pads sin usar..."
 
 #: pcbnew/tools/pcb_actions.cpp:416
-#, fuzzy
 msgid ""
 "Remove or restore the unconnected inner layers on through hole pads and vias"
-msgstr "eliminar vías de pads de agujero pasante y de vías superpuestas"
+msgstr ""
+"Elimina o restaura las capas internas no conectadas en pads y vías pasantes"
 
 #: pcbnew/tools/pcb_actions.cpp:421
 msgid "Assign a different footprint from the library"
@@ -34192,9 +34078,8 @@ msgid "Edit Track & Via Properties..."
 msgstr "Editar propiedades de pistas y vías..."
 
 #: pcbnew/tools/pcb_actions.cpp:437
-#, fuzzy
 msgid "Edit track and via properties globally across board"
-msgstr "Editar propiedades globales de texto y gráficos para toda la placa"
+msgstr "Editar propiedades globales de pistas y vías para toda la placa"
 
 #: pcbnew/tools/pcb_actions.cpp:443
 msgid "Edit Text and graphics properties globally across board"
@@ -34214,17 +34099,15 @@ msgstr "Optimizar pistas y vías..."
 
 #: pcbnew/tools/pcb_actions.cpp:455
 msgid "Cleanup redundant items, shorting items, etc."
-msgstr ""
+msgstr "Limpiar elementos redundantes, en corto, etc."
 
 #: pcbnew/tools/pcb_actions.cpp:460
-#, fuzzy
 msgid "Cleanup Graphics..."
-msgstr "Gráficos..."
+msgstr "Limpiar gráficos..."
 
 #: pcbnew/tools/pcb_actions.cpp:461
-#, fuzzy
 msgid "Cleanup redundant items, etc."
-msgstr "Borrar Vias Redundantes"
+msgstr "Limpiar elementos redundantes, etc."
 
 #: pcbnew/tools/pcb_actions.cpp:468
 msgid "Add Microwave Gap"
@@ -34246,9 +34129,8 @@ msgstr ""
 "microondas"
 
 #: pcbnew/tools/pcb_actions.cpp:478
-#, fuzzy
 msgid "Add Microwave Arc Stub"
-msgstr "Añadir inducido de microondas"
+msgstr "Añadir arco de cola de microondas"
 
 #: pcbnew/tools/pcb_actions.cpp:478
 msgid "Create stub (arc) of specified size for microwave applications"
@@ -34369,27 +34251,24 @@ msgstr ""
 "valores por defecto"
 
 #: pcbnew/tools/pcb_actions.cpp:568
-#, fuzzy
 msgid "Import Netlist..."
-msgstr "Importar ajustes"
+msgstr "Importar lista de redes..."
 
 #: pcbnew/tools/pcb_actions.cpp:568
 msgid "Read netlist and update board connectivity"
-msgstr "Leear lista de redes y actualizar la conectividad de la placa"
+msgstr "Leer lista de redes y actualizar la conectividad de la placa"
 
 #: pcbnew/tools/pcb_actions.cpp:573
-#, fuzzy
 msgid "Import Specctra Session..."
-msgstr "Sesión Specctra..."
+msgstr "Importar Sesión Specctra..."
 
 #: pcbnew/tools/pcb_actions.cpp:573
 msgid "Import routed Specctra session (*.ses) file"
 msgstr "Importar archivo de enrutado Specctra Session (*.ses)"
 
 #: pcbnew/tools/pcb_actions.cpp:578
-#, fuzzy
 msgid "Export Specctra DSN..."
-msgstr "Specctra DSN..."
+msgstr "Exportar Specctra DSN..."
 
 #: pcbnew/tools/pcb_actions.cpp:578
 msgid "Export Specctra DSN routing info"
@@ -34412,14 +34291,12 @@ msgid "Generate Excellon drill file(s)"
 msgstr "Generar archivo(s) de taladrado Excellon"
 
 #: pcbnew/tools/pcb_actions.cpp:593
-#, fuzzy
 msgid "Component Placement (.pos)..."
-msgstr "Parámetros componente:"
+msgstr "Posicionamiento de componentes (.pos)..."
 
 #: pcbnew/tools/pcb_actions.cpp:594
-#, fuzzy
 msgid "Generate component placement file(s) for pick and place"
-msgstr "Generar archivo de posicionamiento de huellas para máquinas Pick&Place"
+msgstr "Generar archivo(s) de posicionamiento de componentes para Pick & Place"
 
 #: pcbnew/tools/pcb_actions.cpp:599
 msgid "Footprint Report (.rpt)..."
@@ -34442,28 +34319,24 @@ msgid "BOM..."
 msgstr "BOM..."
 
 #: pcbnew/tools/pcb_actions.cpp:610
-#, fuzzy
 msgid "Create bill of materials from board"
-msgstr "Crear una lista de materiales a partir del esquema"
+msgstr "Crear una lista de materiales a partir de la placa"
 
 #: pcbnew/tools/pcb_actions.cpp:617
 msgid "Switch Track Width to Next"
 msgstr "Cambiar al siguiente ancho de pista"
 
 #: pcbnew/tools/pcb_actions.cpp:617
-#, fuzzy
 msgid "Change track width to next pre-defined size"
-msgstr "¿Cambiar anchura de pista a toda la RED?"
+msgstr "Cambiar el ancho de pista al siguiente tamaño predefinido"
 
 #: pcbnew/tools/pcb_actions.cpp:622
-#, fuzzy
 msgid "Switch Track Width to Previous"
-msgstr "Cambiar al ancho de pista anterior"
+msgstr "Cambiar al anterior ancho de pista"
 
 #: pcbnew/tools/pcb_actions.cpp:622
-#, fuzzy
 msgid "Change track width to previous pre-defined size"
-msgstr "¿Cambiar anchura de pista a toda la RED?"
+msgstr "Cambiar el ancho de pista al anterior tamaño predefinido"
 
 #: pcbnew/tools/pcb_actions.cpp:627
 msgid "Increase Via Size"
@@ -34471,7 +34344,7 @@ msgstr "Aumentar tamaño de vía"
 
 #: pcbnew/tools/pcb_actions.cpp:627
 msgid "Change via size to next pre-defined size"
-msgstr ""
+msgstr "Cambiar el tamaño de vía al siguiente tamaño predefinido"
 
 #: pcbnew/tools/pcb_actions.cpp:632
 msgid "Decrease Via Size"
@@ -34479,7 +34352,7 @@ msgstr "Disminuir tamaño de vía"
 
 #: pcbnew/tools/pcb_actions.cpp:632
 msgid "Change via size to previous pre-defined size"
-msgstr ""
+msgstr "Cambiar el tamaño de vía al anterior tamaño predefinido"
 
 #: pcbnew/tools/pcb_actions.cpp:641
 msgid "Merge Zones"
@@ -34514,176 +34387,153 @@ msgid "Add a footprint"
 msgstr "Añadir una huella"
 
 #: pcbnew/tools/pcb_actions.cpp:661
-#, fuzzy
 msgid "Drill/Place File Origin"
-msgstr "Origen de taladrado"
+msgstr "Archivo de origen de taladrado/posicionamiento"
 
 #: pcbnew/tools/pcb_actions.cpp:662
-#, fuzzy
 msgid "Place origin point for drill files and component placement files"
-msgstr "Situar punto de origen para archivos de taladrado y posicionamiento"
+msgstr "Situar el punto de origen para archivos de taladrado y posicionamiento"
 
 #: pcbnew/tools/pcb_actions.cpp:668
 msgid "Toggle Lock"
-msgstr ""
+msgstr "Alternar bloqueo"
 
 #: pcbnew/tools/pcb_actions.cpp:668
-#, fuzzy
 msgid "Lock or unlock selected items"
-msgstr "Mueve el/los elemento/s seleccionado/s."
+msgstr "Bloquear o desbloquear los elementos seleccionados"
 
 #: pcbnew/tools/pcb_actions.cpp:673
 msgid "Prevent items from being moved and/or resized on the canvas"
 msgstr ""
+"Previene que los elementos sean movidos y/o redimensionados en el lienzo"
 
 #: pcbnew/tools/pcb_actions.cpp:678
 msgid "Allow items to be moved and/or resized on the canvas"
-msgstr ""
+msgstr "Permite que los elementos sean movidos y/o redimensionados en el lienzo"
 
 #: pcbnew/tools/pcb_actions.cpp:683
-#, fuzzy
 msgid "Group the selected items so that they are treated as a single item"
-msgstr "Mueve el/los elemento/s seleccionado/s una distancia exacta"
+msgstr ""
+"Agrupa los elementos seleccionados para que sean tratados como un solo "
+"elemento"
 
 #: pcbnew/tools/pcb_actions.cpp:688
 msgid "Ungroup"
 msgstr "Desagrupar"
 
 #: pcbnew/tools/pcb_actions.cpp:688
-#, fuzzy
 msgid "Ungroup any selected groups"
-msgstr "no se ha seleccionado una librería"
+msgstr "Desagrupa cualquier grupo seleccionado"
 
 #: pcbnew/tools/pcb_actions.cpp:693
-#, fuzzy
 msgid "Remove Items"
-msgstr "Mover elemento"
+msgstr "Eliminar elementos"
 
 #: pcbnew/tools/pcb_actions.cpp:693
-#, fuzzy
 msgid "Remove items from group"
-msgstr "¿Eliminar todos lo alias de la lista?"
+msgstr "Eliminar elementos del grupo"
 
 #: pcbnew/tools/pcb_actions.cpp:698
 msgid "Enter Group"
 msgstr "Entrar en el Grupo"
 
 #: pcbnew/tools/pcb_actions.cpp:698
-#, fuzzy
 msgid "Enter the group to edit items"
-msgstr "Introduzca el nombre del informe"
+msgstr "Entrar en el grupo para editar elementos"
 
 #: pcbnew/tools/pcb_actions.cpp:703
 msgid "Leave Group"
 msgstr "Abandonar grupo"
 
 #: pcbnew/tools/pcb_actions.cpp:703
-#, fuzzy
 msgid "Leave the current group"
-msgstr "Guardar la placa activa como..."
+msgstr "Abandonar el grupo actual"
 
 #: pcbnew/tools/pcb_actions.cpp:708
-#, fuzzy
 msgid "Append Board..."
-msgstr "&Añadir placa..."
+msgstr "Añadir a la placa..."
 
 #: pcbnew/tools/pcb_actions.cpp:708
-#, fuzzy
 msgid "Open another board and append its contents to this board"
-msgstr "Añadir otra placa a la abierta recientemente"
+msgstr "Abrir otra placa y añadir sus contenidos a esta placa"
 
 #: pcbnew/tools/pcb_actions.cpp:712
-#, fuzzy
 msgid "Highlight the selected net"
-msgstr "Resaltar red"
+msgstr "Resaltar la red seleccionada"
 
 #: pcbnew/tools/pcb_actions.cpp:717
-#, fuzzy
 msgid "Toggle Last Net Highlight"
-msgstr "Resaltar Nodo"
+msgstr "Alternar el último resaltado de red"
 
 #: pcbnew/tools/pcb_actions.cpp:717
 msgid "Toggle between last two highlighted nets"
-msgstr ""
+msgstr "Alterna entre las dos últimas redes resaltadas"
 
 #: pcbnew/tools/pcb_actions.cpp:721
-#, fuzzy
 msgid "Clear Net Highlighting"
-msgstr "Eliminar remarcado"
+msgstr "Limpiar el resaltado de redes"
 
 #: pcbnew/tools/pcb_actions.cpp:721
-#, fuzzy
 msgid "Clear any existing net highlighting"
-msgstr "Eliminar remarcado"
+msgstr "Limpiar cualquier resaltado de red existente"
 
 #: pcbnew/tools/pcb_actions.cpp:725
-#, fuzzy
 msgid "Toggle Net Highlight"
-msgstr "Resaltar Nodo"
+msgstr "Alternar resaltado de red"
 
 #: pcbnew/tools/pcb_actions.cpp:725
-#, fuzzy
 msgid "Toggle net highlighting"
-msgstr "Eliminar remarcado"
+msgstr "Alternar resaltado de red"
 
 #: pcbnew/tools/pcb_actions.cpp:732
-#, fuzzy
 msgid "Highlight all copper items on the selected net(s)"
-msgstr "Remarcar elementos de la red \"%s\""
+msgstr "Resalta todos los elementos de cobre en las redes seleccionadas"
 
 #: pcbnew/tools/pcb_actions.cpp:739
-#, fuzzy
 msgid "Hide Net"
-msgstr "Ocultar DCodes"
+msgstr "Ocultar red"
 
 #: pcbnew/tools/pcb_actions.cpp:739
-#, fuzzy
 msgid "Hide the ratsnest for the selected net"
-msgstr "Mueve el/los elemento/s seleccionado/s."
+msgstr "Oculta las líneas aéreas para la red seleccionada"
 
 #: pcbnew/tools/pcb_actions.cpp:743
-#, fuzzy
 msgid "Show Net"
-msgstr "Texto Visible"
+msgstr "Mostrar red"
 
 #: pcbnew/tools/pcb_actions.cpp:743
-#, fuzzy
 msgid "Show the ratsnest for the selected net"
-msgstr "Mueve el/los elemento/s seleccionado/s."
+msgstr "Muestra las líneas aéreas para la red seleccionada"
 
 #: pcbnew/tools/pcb_actions.cpp:748
-#, fuzzy
 msgid "Switch to Schematic Editor"
-msgstr "Editor de esquemas"
+msgstr "Cambiar al editor de esquemas"
 
 #: pcbnew/tools/pcb_actions.cpp:748
 msgid "Open schematic in Eeschema"
 msgstr "Abrir esquema en Eeschema"
 
 #: pcbnew/tools/pcb_actions.cpp:757
-#, fuzzy
 msgid "Local Ratsnest"
-msgstr "Mostrar líneas aéreas"
+msgstr "Líneas aéreas locales"
 
 #: pcbnew/tools/pcb_actions.cpp:757
-#, fuzzy
 msgid "Toggle ratsnest display of selected item(s)"
-msgstr "Mueve el/los elemento/s seleccionado/s."
+msgstr ""
+"Alterna la visualización de líneas aéreas para los elemento(s) "
+"seleccionado(s)"
 
 #: pcbnew/tools/pcb_actions.cpp:768
-#, fuzzy
 msgid "Show the net inspector"
-msgstr "&Mostrar información sobre la versión"
+msgstr "Mostrar el inspector de redes"
 
 #: pcbnew/tools/pcb_actions.cpp:778
-#, fuzzy
 msgid "Show Appearance Manager"
-msgstr "Mostrar a&dministrados de capas"
+msgstr "Mostrar el administrador de apariencia"
 
 #: pcbnew/tools/pcb_actions.cpp:778
-#, fuzzy
 msgid "Show/hide the appearance manager"
-msgstr "Mostrar u ocultar el administración de capas"
+msgstr "Mostrar/ocultar el administrador de apariencia"
 
 #: pcbnew/tools/pcb_actions.cpp:783
 msgid "Flip Board View"
@@ -34719,7 +34569,7 @@ msgstr "Pads en boceto"
 
 #: pcbnew/tools/pcb_actions.cpp:805
 msgid "Show pads in outline mode"
-msgstr "Mostrar pads en modo boceto"
+msgstr "Mostrar pads en modo contorno"
 
 #: pcbnew/tools/pcb_actions.cpp:810
 msgid "Sketch Vias"
@@ -34730,28 +34580,24 @@ msgid "Show vias in outline mode"
 msgstr "Mostrar vías en modo contorno"
 
 #: pcbnew/tools/pcb_actions.cpp:815
-#, fuzzy
 msgid "Sketch Graphic Items"
-msgstr "Elementos gráficos en boceto"
+msgstr "Bosquejar elementos gráficos"
 
 #: pcbnew/tools/pcb_actions.cpp:815
-#, fuzzy
 msgid "Show graphic items in outline mode"
-msgstr "Mostrar elementos gráficos de huellas como bocetos"
+msgstr "Mostrar elementos gráficos en modo de contorno"
 
 #: pcbnew/tools/pcb_actions.cpp:820
-#, fuzzy
 msgid "Sketch Text Items"
-msgstr "Elementos gráficos en boceto"
+msgstr "Bosquejar elementos de texto"
 
 #: pcbnew/tools/pcb_actions.cpp:820
 msgid "Show footprint texts in line mode"
 msgstr "Mostrar texto de las huellas en modo línea"
 
 #: pcbnew/tools/pcb_actions.cpp:830
-#, fuzzy
 msgid "Automatically zoom to fit"
-msgstr "Enrutar red automáticamente"
+msgstr "Zoom automático para ajustar"
 
 #: pcbnew/tools/pcb_actions.cpp:830
 msgid "Zoom to fit when changing footprint"
@@ -34778,18 +34624,16 @@ msgid "Sketch Zones"
 msgstr "Zonas en boceto"
 
 #: pcbnew/tools/pcb_actions.cpp:845
-#, fuzzy
 msgid "Show solid areas of zones in outline mode"
-msgstr "Mostrar vías en modo contorno"
+msgstr "Mostrar áreas sólidas de zonas en modo contorno"
 
 #: pcbnew/tools/pcb_actions.cpp:851
-#, fuzzy
 msgid "Toggle Zone Display"
-msgstr "No Visualizar"
+msgstr "Alternar visualización de zonas"
 
 #: pcbnew/tools/pcb_actions.cpp:852
 msgid "Cycle between showing filled zones, wireframed zones and sketched zones"
-msgstr ""
+msgstr "Alternar entre mostrar zonas rellenas, alámbicas, y esbozadas"
 
 #: pcbnew/tools/pcb_actions.cpp:860
 msgid "Switch to Component (F.Cu) layer"
@@ -35062,7 +34906,7 @@ msgstr "Distribuir horizontalmente"
 
 #: pcbnew/tools/pcb_actions.cpp:1133
 msgid "Distributes selected items along the horizontal axis"
-msgstr "Distribuye los elementos seleccionados a lo largo del eje  horizontal"
+msgstr "Distribuye los elementos seleccionados a lo largo del eje horizontal"
 
 #: pcbnew/tools/pcb_actions.cpp:1137
 msgid "Distribute Vertically"
