@@ -13,7 +13,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
 "PO-Revision-Date: 2021-08-09 04:54+0000\n"
-"Last-Translator: jeongsuAn <dks9467@gmail.com>\n"
+"Last-Translator: Uibeom Jung <wjddmlqja17@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
 "Language: ko\n"
@@ -12306,7 +12306,7 @@ msgstr "회로도의 다른 곳에서는 연결되지 않은 전역 레이블"
 
 #: eeschema/erc_item.cpp:90
 msgid "Labels are similar (lower/upper case difference only)"
-msgstr ""
+msgstr "라벨이 비슷함(소문자/대문자만 다름)"
 
 #: eeschema/erc_item.cpp:94
 #, fuzzy
