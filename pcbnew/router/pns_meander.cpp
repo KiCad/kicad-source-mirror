@@ -563,6 +563,33 @@ void MEANDERED_LINE::AddCorner( const VECTOR2I& aA, const VECTOR2I& aB )
 }
 
 
+void MEANDERED_LINE::AddArc( const SHAPE_ARC& aArc1, const SHAPE_ARC& aArc2 )
+{
+    MEANDER_SHAPE* m = new MEANDER_SHAPE( m_placer, m_width, m_dual );
+
+    m->MakeArc( aArc1, aArc2 );
+    m_last = aArc1.GetP1();
+
+    m_meanders.push_back( m );
+}
+
+
+void MEANDERED_LINE::AddArcAndPt( const SHAPE_ARC& aArc1, const VECTOR2I& aPt2 )
+{
+    SHAPE_ARC arc2( aPt2, aPt2, aPt2, 0 );
+
+    AddArc( aArc1, arc2 );
+}
+
+
+void MEANDERED_LINE::AddPtAndArc( const VECTOR2I& aPt1, const SHAPE_ARC& aArc2 )
+{
+    SHAPE_ARC arc1( aPt1, aPt1, aPt1, 0 );
+
+    AddArc( arc1, aArc2 );
+}
+
+
 void MEANDER_SHAPE::MakeCorner( const VECTOR2I& aP1, const VECTOR2I& aP2 )
 {
     SetType( MT_CORNER );
@@ -572,6 +599,18 @@ void MEANDER_SHAPE::MakeCorner( const VECTOR2I& aP1, const VECTOR2I& aP2 )
     m_shapes[1].Append( aP2 );
     m_clippedBaseSeg.A = aP1;
     m_clippedBaseSeg.B = aP1;
+}
+
+
+void MEANDER_SHAPE::MakeArc( const SHAPE_ARC& aArc1, const SHAPE_ARC& aArc2 )
+{
+    SetType( MT_CORNER );
+    m_shapes[0].Clear();
+    m_shapes[1].Clear();
+    m_shapes[0].Append( aArc1 );
+    m_shapes[1].Append( aArc2 );
+    m_clippedBaseSeg.A = aArc1.GetP1();
+    m_clippedBaseSeg.B = aArc1.GetP1();
 }
 
 

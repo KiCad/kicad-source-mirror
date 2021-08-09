@@ -222,26 +222,72 @@ bool DP_MEANDER_PLACER::Move( const VECTOR2I& aP, ITEM* aEndItem )
 
         PNS_DBG( Dbg(), AddSegment, base, GREEN, "dp-baseline" );
 
-        while( sp.indexP >= curIndexP )
+        while( sp.indexP >= curIndexP && curIndexP != -1 )
         {
-            m_result.AddCorner( tunedP.CPoint( curIndexP ), tunedN.CPoint( curIndexN ) );
-            curIndexP++;
+            if( tunedP.IsArcSegment( curIndexP ) )
+            {
+                ssize_t arcIndex = tunedP.ArcIndex( curIndexP );
+
+                m_result.AddArcAndPt( tunedP.Arc( arcIndex ), tunedN.CPoint( curIndexN ) );
+            }
+            else
+            {
+                m_result.AddCorner( tunedP.CPoint( curIndexP ), tunedN.CPoint( curIndexN ) );
+            }
+
+            curIndexP = tunedP.NextShape( curIndexP );
         }
 
-        while( sp.indexN >= curIndexN )
+        while( sp.indexN >= curIndexN && curIndexN != -1 )
         {
-            m_result.AddCorner( tunedP.CPoint( sp.indexP ), tunedN.CPoint( curIndexN ) );
-            curIndexN++;
+            if( tunedN.IsArcSegment( curIndexN ) )
+            {
+                ssize_t arcIndex = tunedN.ArcIndex( curIndexN );
+
+                m_result.AddPtAndArc( tunedP.CPoint( sp.indexP ), tunedN.Arc( arcIndex ) );
+            }
+            else
+            {
+                m_result.AddCorner( tunedP.CPoint( sp.indexP ), tunedN.CPoint( curIndexN ) );
+            }
+
+            curIndexN = tunedN.NextShape( curIndexN );
         }
 
         m_result.MeanderSegment( base );
     }
 
-    while( curIndexP < tunedP.PointCount() )
-        m_result.AddCorner( tunedP.CPoint( curIndexP++ ), tunedN.CPoint( curIndexN ) );
+    while( curIndexP < tunedP.PointCount() && curIndexP != -1 )
+    {
+        if( tunedP.IsArcSegment( curIndexP ) )
+        {
+            ssize_t arcIndex = tunedP.ArcIndex( curIndexP );
 
-    while( curIndexN < tunedN.PointCount() )
-        m_result.AddCorner( tunedP.CPoint( -1 ), tunedN.CPoint( curIndexN++ ) );
+            m_result.AddArcAndPt( tunedP.Arc( arcIndex ), tunedN.CPoint( curIndexN ) );
+        }
+        else
+        {
+            m_result.AddCorner( tunedP.CPoint( curIndexP ), tunedN.CPoint( curIndexN ) );
+        }
+
+        curIndexP = tunedP.NextShape( curIndexP );
+    }
+
+    while( curIndexN < tunedN.PointCount() && curIndexN != -1 )
+    {
+        if( tunedN.IsArcSegment( curIndexN ) )
+        {
+            ssize_t arcIndex = tunedN.ArcIndex( curIndexN );
+
+            m_result.AddPtAndArc( tunedP.CPoint( -1 ), tunedN.Arc( arcIndex ) );
+        }
+        else
+        {
+            m_result.AddCorner( tunedP.CPoint( -1 ), tunedN.CPoint( curIndexN ) );
+        }
+
+        curIndexN = tunedN.NextShape( curIndexN );
+    }
 
     long long int dpLen = origPathLength();
 

@@ -125,7 +125,17 @@ bool MEANDER_PLACER::doMove( const VECTOR2I& aP, ITEM* aEndItem, long long int a
     for( int i = 0; i < tuned.SegmentCount(); i++ )
     {
         if( tuned.IsArcSegment( i ) )
+        {
+            ssize_t arcIndex = tuned.ArcIndex( i );
+            m_result.AddArc( tuned.Arc( arcIndex ) );
+            i = tuned.NextShape( i );
+
+            // NextShape will return -1 if last shape
+            if( i < 0 )
+                i = tuned.SegmentCount();
+
             continue;
+        }
 
         const SEG s = tuned.CSegment( i );
         m_result.AddCorner( s.A );

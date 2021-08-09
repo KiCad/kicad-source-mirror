@@ -135,7 +135,7 @@ void MEANDER_PLACER_BASE::tuneLineLength( MEANDERED_LINE& aTuned, long long int 
 
     for( MEANDER_SHAPE* m : aTuned.Meanders() )
     {
-        if( m->Type() != MT_CORNER )
+        if( m->Type() != MT_CORNER && m->Type() != MT_ARC )
         {
             if( remaining >= 0 )
                 remaining -= m->MaxTunableLength() - m->BaselineLength();
@@ -169,7 +169,7 @@ void MEANDER_PLACER_BASE::tuneLineLength( MEANDERED_LINE& aTuned, long long int 
 
     for( MEANDER_SHAPE* m : aTuned.Meanders() )
     {
-        if( m->Type() != MT_CORNER && m->Type() != MT_EMPTY )
+        if( m->Type() != MT_CORNER && m->Type() != MT_ARC && m->Type() != MT_EMPTY )
         {
             if(remaining >= 0)
             {
@@ -188,7 +188,7 @@ void MEANDER_PLACER_BASE::tuneLineLength( MEANDERED_LINE& aTuned, long long int 
     {
         for( MEANDER_SHAPE* m : aTuned.Meanders() )
         {
-            if( m->Type() != MT_CORNER && m->Type() != MT_EMPTY )
+            if( m->Type() != MT_CORNER && m->Type() != MT_ARC && m->Type() != MT_EMPTY )
             {
                 m->Resize( std::max( m->Amplitude() - balance / 2,
                            (long long int) m_settings.m_minAmplitude ) );
