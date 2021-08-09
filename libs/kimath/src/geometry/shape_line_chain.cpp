@@ -760,14 +760,18 @@ int SHAPE_LINE_CHAIN::NextShape( int aPointIndex, bool aForwards ) const
     assert( m_shapes[aPointIndex].first != SHAPE_IS_PT );
 
     // Start with the assumption the point is shared
-    int arcIndex = m_shapes[aPointIndex].second;
+    auto arcIndex = [&]( int aIndex ) -> ssize_t
+                    {
+                        if( aForwards )
+                            return ArcIndex( aIndex );
+                        else
+                            return reversedArcIndex( aIndex );
+                    };
 
-    if( arcIndex == SHAPE_IS_PT || !aForwards )
-        arcIndex = m_shapes[aPointIndex].first; // Not a shared point or we are going backwards
-
+    ssize_t currentArcIdx = arcIndex( aPointIndex );
 
     // Now skip the rest of the arc
-    while( aPointIndex < lastIndex && aPointIndex >= 0 && m_shapes[aPointIndex].first == arcIndex )
+    while( aPointIndex < lastIndex && aPointIndex >= 0 && arcIndex( aPointIndex ) == currentArcIdx )
         aPointIndex += delta;
 
     if( aPointIndex == lastIndex )
@@ -778,7 +782,7 @@ int SHAPE_LINE_CHAIN::NextShape( int aPointIndex, bool aForwards ) const
             return lastIndex; // Segment between last point and the start
     }
 
-    bool indexStillOnArc = alg::pair_contains( m_shapes[aPointIndex], arcIndex );
+    bool indexStillOnArc = alg::pair_contains( m_shapes[aPointIndex], currentArcIdx );
 
     // We want the last vertex of the arc if the initial point was the start of one
     // Well-formed arcs should generate more than one point to travel above
@@ -885,8 +889,11 @@ const SHAPE_LINE_CHAIN SHAPE_LINE_CHAIN::Slice( int aStartIndex, int aEndIndex )
         aStartIndex += rv.PointCount();
     }
 
-    for( int i = aStartIndex; i <= aEndIndex && i < numPoints; i++ )
+    for( int i = aStartIndex; i <= aEndIndex && i < numPoints; i = NextShape( i ) )
     {
+        if( i == -1 )
+            return rv; // NextShape reached the end
+
         if( IsArcStart( i ) )
         {
             const SHAPE_ARC &currentArc = Arc( ArcIndex( i ) );
@@ -908,8 +915,11 @@ const SHAPE_LINE_CHAIN SHAPE_LINE_CHAIN::Slice( int aStartIndex, int aEndIndex )
                 const SHAPE_ARC& currentArc = Arc( arcIndex );
 
                 // Copy the points as arc points
-                for( ; i <= aEndIndex; i++ )
+                for( ; i <= aEndIndex && i < numPoints; i++ )
                 {
+                    if( arcIndex != ArcIndex( i ) )
+                        break;
+
                     rv.m_points.push_back( m_points[i] );
                     rv.m_shapes.push_back( { rv.m_arcs.size(), SHAPE_IS_PT } );
                     rv.m_bbox.Merge( m_points[i] );
@@ -937,9 +947,6 @@ const SHAPE_LINE_CHAIN SHAPE_LINE_CHAIN::Slice( int aStartIndex, int aEndIndex )
 
             if( isLastShape )
                 return rv;
-
-            i = nextShape;
-            i--;
         }
         else
         {

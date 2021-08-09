@@ -860,6 +860,17 @@ protected:
     }
 
     /**
+     * Return the arc index for the given segment index, looking backwards
+     */
+    ssize_t reversedArcIndex( size_t aSegment ) const
+    {
+        if( IsSharedPt( aSegment ) )
+            return m_shapes[aSegment].first;
+        else
+            return m_shapes[aSegment].second;
+    }
+
+    /**
      * Create a new Clipper path from the SHAPE_LINE_CHAIN in a given orientation
      */
     ClipperLib::Path convertToClipper( bool aRequiredOrientation,
