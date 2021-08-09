@@ -14,7 +14,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
 "PO-Revision-Date: 2021-08-09 14:35+0000\n"
-"Last-Translator: Ji Yoon Choi <chichoon.choi@gmail.com>\n"
+"Last-Translator: jeongsuAn <dks9467@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
 "Language: ko\n"
@@ -11455,9 +11455,8 @@ msgid "Highlight cross-probed nets"
 msgstr "교차 프로브 네트 강조 표시"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:90
-#, fuzzy
 msgid "Highlight nets when they are highlighted in the PCB editor"
-msgstr "PCB 편집기에서 강조 표시될 때 net 강조 표시"
+msgstr "PCB 편집기에서 강조 표시될 때 네트 강조"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:23
 msgid "&Restrict buses and wires to H and V orientation"
@@ -11587,9 +11586,8 @@ msgstr "자동 배치 필드를 항상 5000만 그리드에 정렬"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:219
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:103
-#, fuzzy
 msgid "Repeated Items"
-msgstr "항목 삭제"
+msgstr "반복 항목"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:229
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:111
@@ -11630,14 +11628,12 @@ msgid "Project field name templates:"
 msgstr "필드 이름:"
 
 #: eeschema/dialogs/panel_eeschema_template_fieldnames.cpp:77
-#, fuzzy
 msgid "Untitled Field"
-msgstr "필드 회전"
+msgstr "제목 없는 필드"
 
 #: eeschema/dialogs/panel_eeschema_template_fieldnames_base.cpp:23
-#, fuzzy
 msgid "Field name templates:"
-msgstr "필드 이름:"
+msgstr "필드 이름 템플릿:"
 
 #: eeschema/dialogs/panel_eeschema_template_fieldnames_base.cpp:45
 msgid "URL"
@@ -11783,9 +11779,8 @@ msgstr "연결"
 
 #: eeschema/dialogs/panel_sym_color_settings_base.cpp:22
 #: pagelayout_editor/dialogs/panel_pl_editor_color_settings_base.cpp:18
-#, fuzzy
 msgid "Color Theme"
-msgstr "색상 이미지"
+msgstr "색상 테마"
 
 #: eeschema/dialogs/panel_sym_color_settings_base.cpp:25
 msgid "Use Eeschema color theme"
@@ -14186,7 +14181,7 @@ msgstr "탭"
 
 #: eeschema/sch_validators.cpp:157
 msgid "space"
-msgstr ""
+msgstr "공간"
 
 #: eeschema/sch_validators.cpp:171
 msgid " or "
@@ -14526,11 +14521,11 @@ msgstr "주파수"
 
 #: eeschema/sim/sim_plot_panel.cpp:325
 msgid "Gain"
-msgstr ""
+msgstr "이득"
 
 #: eeschema/sim/sim_plot_panel.cpp:326
 msgid "Phase"
-msgstr ""
+msgstr "위상"
 
 #: eeschema/sim/sim_plot_panel.cpp:337
 msgid "noise [(V or A)^2/Hz]"
@@ -16978,7 +16973,7 @@ msgstr "AB 축"
 #: gerbview/toolbars_gerber.cpp:141
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:25
 msgid "Net:"
-msgstr ""
+msgstr "네트:"
 
 #: gerbview/gerber_draw_item.cpp:746
 #, c-format
@@ -16993,7 +16988,7 @@ msgstr ""
 #: gerbview/gerber_draw_item.cpp:758 gerbview/toolbars_gerber.cpp:124
 #: gerbview/toolbars_gerber.cpp:127
 msgid "Cmp:"
-msgstr ""
+msgstr "구성:"
 
 #: gerbview/gerber_draw_item.cpp:1019
 #, c-format
@@ -18440,7 +18435,7 @@ msgstr "오른쪽:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:529
 msgid "Top:"
-msgstr ""
+msgstr "상단:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:543
 msgid "Bottom:"
@@ -19157,7 +19152,7 @@ msgstr "분석"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:991
 msgid "Synthesize"
-msgstr ""
+msgstr "합성"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1004
 #, fuzzy
@@ -20562,9 +20557,8 @@ msgstr "OSP"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:58
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:77
-#, fuzzy
 msgid "User defined"
-msgstr "사용자 그리드"
+msgstr "사용자 정의"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:71
 msgid "Green"
@@ -20610,11 +20604,11 @@ msgstr "내비게이터"
 
 #: pcbnew/build_BOM_from_board.cpp:111
 msgid "Package"
-msgstr ""
+msgstr "패키지"
 
 #: pcbnew/build_BOM_from_board.cpp:112
 msgid "Quantity"
-msgstr ""
+msgstr "수량"
 
 #: pcbnew/build_BOM_from_board.cpp:113
 #, fuzzy
@@ -21975,7 +21969,6 @@ msgid "Horizontal center:"
 msgstr "수평 중심:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:218
-#, fuzzy
 msgid "Vertical center:"
 msgstr "수직 중심:"
 
@@ -22324,9 +22317,8 @@ msgid "Dimension Properties"
 msgstr "핀 속성"
 
 #: pcbnew/dialogs/dialog_drc.cpp:85
-#, fuzzy
 msgid "Run DRC"
-msgstr "Cvpcb 실행"
+msgstr "DRC 실행"
 
 #: pcbnew/dialogs/dialog_drc.cpp:194 pcbnew/tools/board_inspection_tool.cpp:47
 #: pcbnew/tools/zone_filler_tool.cpp:131
@@ -22436,7 +22428,6 @@ msgid "Pad names are restricted to 4 characters (including number)."
 msgstr ""
 
 #: pcbnew/dialogs/dialog_enum_pads_base.cpp:32
-#, fuzzy
 msgid "Pad name prefix:"
 msgstr "패드 이름 접두사:"
 
@@ -22687,9 +22678,8 @@ msgid "Other Options"
 msgstr "다른 옵션"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:112
-#, fuzzy
 msgid "Ignore virtual components"
-msgstr "모든 컴포넌트"
+msgstr "가상 구성 요소 무시"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:115
 msgid "Substitute similarly named models"
@@ -22780,18 +22770,16 @@ msgid "Page with frame and title block"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:88
-#, fuzzy
 msgid "Current page size"
-msgstr "플로트 용지 크기"
+msgstr "현재 페이지 크기"
 
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:88
 msgid "Board area only"
 msgstr "보드 영역만"
 
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:90
-#, fuzzy
 msgid "SVG Page Size"
-msgstr "페이지 크기"
+msgstr "SVG 페이지 크기"
 
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:95
 msgid "Print the layer(s) horizontally mirrored"
@@ -22810,9 +22798,8 @@ msgid "Print board edges on all pages"
 msgstr "보드 인쇄"
 
 #: pcbnew/dialogs/dialog_export_svg_base.h:71
-#, fuzzy
 msgid "Export SVG File"
-msgstr "SVG 파일 만들기"
+msgstr "SVG 파일 내보내기"
 
 #: pcbnew/dialogs/dialog_export_vrml.cpp:179
 msgid "Are you sure you want to overwrite the existing file?"
@@ -22840,7 +22827,7 @@ msgstr "풋프린트 이름:"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:46
 msgid "Coordinate origin options:"
-msgstr ""
+msgstr "좌표 원점 옵션:"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:53
 msgid "User defined origin:"
@@ -22878,9 +22865,8 @@ msgid "Use paths for model files in board VRML file relative to the VRML file"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_export_vrml_base.h:67
-#, fuzzy
 msgid "VRML Export Options"
-msgstr "사각형 설정"
+msgstr "VRML 내보내기 옵션"
 
 #: pcbnew/dialogs/dialog_filter_selection_base.cpp:22
 msgid "Include &footprints"
@@ -23034,9 +23020,8 @@ msgstr "참조와 값은 필수입니다."
 #: pcbnew/dialogs/panel_fp_editor_defaults.cpp:51
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:45
 #: pcbnew/fp_text_grid_table.cpp:89
-#, fuzzy
 msgid "Text Items"
-msgstr "항목 선택"
+msgstr "텍스트 항목"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:61
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:49
@@ -23048,16 +23033,14 @@ msgstr "오른쪽으로 이동 ->"
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:62
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:62
 #: pcbnew/fp_text_grid_table.cpp:98
-#, fuzzy
 msgid "X Offset"
-msgstr "옵셋"
+msgstr "X 오프셋"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:63
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:63
 #: pcbnew/fp_text_grid_table.cpp:99
-#, fuzzy
 msgid "Y Offset"
-msgstr "옵셋"
+msgstr "Y 오프셋"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:69
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:69
@@ -23077,14 +23060,12 @@ msgid "Unlock footprint"
 msgstr "풋프린트"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:195
-#, fuzzy
 msgid "Lock footprint"
-msgstr "풋프린트 이동"
+msgstr "풋프린트 잠금"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:197
-#, fuzzy
 msgid "Move and Place"
-msgstr "전체 이동 후 배치"
+msgstr "이동 및 배치"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:204
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:135
@@ -23112,7 +23093,6 @@ msgid "Change Footprint..."
 msgstr "풋프린트 변경..."
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:261
-#, fuzzy
 msgid "Edit Library Footprint..."
 msgstr "라이브러리 풋프린트 편집..."
 
@@ -26121,9 +26101,8 @@ msgid "Changing the net will also update %lu connected pads to %s."
 msgstr ""
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:370
-#, fuzzy
 msgid "Change Nets"
-msgstr "형식 바꾸기"
+msgstr "네트 변경"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:370
 #, fuzzy
@@ -26144,9 +26123,8 @@ msgid "Edit track/via properties"
 msgstr "부품 속성 편집"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:606
-#, fuzzy
 msgid "Updating nets"
-msgstr "업데이트 설정"
+msgstr "네트 업데이트"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:35
 #, fuzzy
@@ -26184,7 +26162,7 @@ msgstr "최소 펜 굵기:"
 #: pcbnew/dialogs/dialog_track_via_size_base.cpp:25
 #, fuzzy
 msgid "Track width:"
-msgstr "배선 두께:"
+msgstr "트랙 너비:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:131
 #, fuzzy
@@ -33031,9 +33009,8 @@ msgid "DRC"
 msgstr "DRC"
 
 #: pcbnew/tools/edit_tool.cpp:94
-#, fuzzy
 msgid "Special Tools"
-msgstr "스페셜1 (5 밀)"
+msgstr "특수 도구"
 
 #: pcbnew/tools/edit_tool.cpp:344
 #, c-format
@@ -35579,9 +35556,8 @@ msgid "Dimensions"
 msgstr "차원"
 
 #: pcbnew/widgets/panel_selection_filter_base.cpp:67
-#, fuzzy
 msgid "Other items"
-msgstr "기타"
+msgstr "기타 항목"
 
 #: pcbnew/zone.cpp:552
 msgid "Rule Area"
