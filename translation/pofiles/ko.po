@@ -13,7 +13,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
 "PO-Revision-Date: 2021-08-09 04:36+0000\n"
-"Last-Translator: Ji Yoon Choi <chichoon.choi@gmail.com>\n"
+"Last-Translator: jeongsuAn <dks9467@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
 "Language: ko\n"
@@ -10416,9 +10416,8 @@ msgid "(optional; default GND)"
 msgstr "(선택사항; 기본값은 GND)"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:250
-#, fuzzy
 msgid "Noise source"
-msgstr "소스 보이기 (&S)"
+msgstr "노이즈 소스"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:280
 msgid "Number of points"
@@ -10555,7 +10554,7 @@ msgstr "HSpice"
 #: eeschema/dialogs/dialog_sim_settings_base.h:140
 #, fuzzy
 msgid "Simulation settings"
-msgstr "3D 설정"
+msgstr "시뮬레이션 설정"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:79
 msgid "Diode"
@@ -10617,7 +10616,7 @@ msgstr "과도 소스를 정의할 때 인터리브된 공백 필드를 남겨�
 #: eeschema/dialogs/dialog_spice_model.cpp:1025
 #, fuzzy
 msgid "Select library"
-msgstr "작업 라이브러리 선택"
+msgstr "라이브러리 선택"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:1093
 #: eeschema/dialogs/dialog_spice_model_base.cpp:884
@@ -10677,7 +10676,7 @@ msgstr "인덕터"
 #: eeschema/dialogs/dialog_spice_model_base.cpp:41
 #, fuzzy
 msgid "Passive type"
-msgstr "수동"
+msgstr "패시브 타입"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:54
 msgid "Spice value in simulation"
@@ -10785,7 +10784,7 @@ msgstr "하강 시간:"
 #: eeschema/dialogs/dialog_spice_model_base.cpp:432
 #, fuzzy
 msgid "Pulse width:"
-msgstr "최소 펜 굵기:"
+msgstr "펄스 폭:"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:443
 msgid "Period:"
@@ -11307,7 +11306,7 @@ msgstr "%s 파일을 만들 수 없습니다."
 #: eeschema/dialogs/dialog_symbol_remap.cpp:500
 #, fuzzy
 msgid "Backup Error"
-msgstr "ERC 에러"
+msgstr "백업 오류"
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:354
 #: eeschema/dialogs/dialog_symbol_remap.cpp:504
@@ -11351,9 +11350,8 @@ msgstr "일부 프로젝트 파일을 백업할 수 없습니다."
 
 #: eeschema/dialogs/dialog_symbol_remap_base.cpp:30
 #: eeschema/dialogs/dialog_symbol_remap_base.h:51
-#, fuzzy
 msgid "Remap Symbols"
-msgstr "전원 심볼"
+msgstr "심볼 다시 매핑"
 
 #: eeschema/dialogs/dialog_update_from_pcb.cpp:42
 #: pcbnew/dialogs/dialog_netlist.cpp:82 pcbnew/dialogs/dialog_update_pcb.cpp:53
