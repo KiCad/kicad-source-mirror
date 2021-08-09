@@ -12,8 +12,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
-"PO-Revision-Date: 2021-08-09 02:53+0000\n"
-"Last-Translator: Ji Yoon Choi <chichoon.choi@gmail.com>\n"
+"PO-Revision-Date: 2021-08-09 04:25+0000\n"
+"Last-Translator: jeongsuAn <dks9467@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
 "Language: ko\n"
@@ -9054,6 +9054,7 @@ msgstr "H 정렬"
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:54
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:57
 #: eeschema/fields_grid_table.cpp:201
+#, fuzzy
 msgid "V Align"
 msgstr "V 정렬"
 
@@ -10532,28 +10533,24 @@ msgid "User configuration"
 msgstr "설정 (&C)"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:450
-#, fuzzy
 msgid "Spice"
-msgstr "&Spice"
+msgstr "Spice"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:450
-#, fuzzy
 msgid "PSpice"
-msgstr "&Spice"
+msgstr "PSpice"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:450
-#, fuzzy
 msgid "LTSpice"
-msgstr "&Spice"
+msgstr "LTSpice"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:450
 msgid "PSpice and LTSpice"
 msgstr "PSpice와 LTSpice"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:450
-#, fuzzy
 msgid "HSpice"
-msgstr "&Spice"
+msgstr "HSpice"
 
 #: eeschema/dialogs/dialog_sim_settings_base.h:140
 #, fuzzy
@@ -11008,9 +11005,8 @@ msgstr "풋프린트 이동"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:91
 #: eeschema/fields_grid_table.cpp:607 eeschema/tools/ee_actions.cpp:61
-#, fuzzy
 msgid "Show Datasheet"
-msgstr "연결선 보이기"
+msgstr "데이터 시트 보기"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:92
 #: eeschema/fields_grid_table.cpp:608
@@ -11036,8 +11032,9 @@ msgid "Field"
 msgstr "필드"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:690
+#, fuzzy
 msgid "Group By"
-msgstr "다음으로 분류"
+msgstr "그룹화"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:962
 #: eeschema/symbol_editor/symbol_editor.cpp:1216
@@ -11053,7 +11050,7 @@ msgstr "필드 이름:"
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:984
 #, fuzzy
 msgid "Add Field"
-msgstr "필드 2 추가"
+msgstr "필드 추가"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:993
 msgid "Field must have a name."
@@ -11066,7 +11063,7 @@ msgstr "\"%s\" 필드 이름이 이미 사용 중입니다."
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:31
 msgid "Group symbols"
-msgstr "심볼 분류"
+msgstr "심볼 그룹화"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:33
 msgid "Group symbols together based on common properties"
@@ -11237,9 +11234,8 @@ msgid "Spice Model..."
 msgstr "스파이스 모델..."
 
 #: eeschema/dialogs/dialog_symbol_properties_base.h:100
-#, fuzzy
 msgid "Symbol Properties"
-msgstr "모듈 속성"
+msgstr "심볼 속성"
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:58
 #, c-format
@@ -11604,8 +11600,9 @@ msgid "Toggle selected state of item(s)."
 msgstr "선택한 항목 상태를 전환합니다."
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:114
+#, fuzzy
 msgid "Alt+Shift"
-msgstr ""
+msgstr "Alt+Shift"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:118
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:174
@@ -11629,8 +11626,9 @@ msgid ""
 msgstr ""
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:170
+#, fuzzy
 msgid "Cmd+Shift"
-msgstr ""
+msgstr "Cmd+Shift"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:204
 msgid "Symbol Field Automatic Placement"
@@ -11839,8 +11837,9 @@ msgid "No error or warning"
 msgstr ""
 
 #: eeschema/dialogs/panel_setup_pinmap.cpp:174
+#, fuzzy
 msgid "Generate warning"
-msgstr ""
+msgstr "경고 생성"
 
 #: eeschema/dialogs/panel_setup_pinmap.cpp:179
 msgid "Generate error"
@@ -12490,7 +12489,7 @@ msgstr "D-Codes 파일 열기"
 #: eeschema/files-io.cpp:542
 #, fuzzy
 msgid "Abort"
-msgstr "정렬"
+msgstr "중지"
 
 #: eeschema/files-io.cpp:557 eeschema/files-io.cpp:574
 #: pagelayout_editor/files.cpp:250 pcbnew/files.cpp:794
@@ -12855,7 +12854,7 @@ msgstr ""
 
 #: eeschema/netlist_exporters/netlist_generator.cpp:130
 msgid "Success."
-msgstr ""
+msgstr "성공."
 
 #: eeschema/netlist_exporters/netlist_generator.cpp:177
 msgid "Error: duplicate sheet names. Continue?"
@@ -12892,7 +12891,7 @@ msgstr "오픈 이미터"
 #: eeschema/pin_type.cpp:62
 #, fuzzy
 msgid "Unconnected"
-msgstr "연결"
+msgstr "연결되지 않음"
 
 #: eeschema/pin_type.cpp:77
 #, fuzzy
@@ -14125,8 +14124,9 @@ msgid "space"
 msgstr ""
 
 #: eeschema/sch_validators.cpp:171
+#, fuzzy
 msgid " or "
-msgstr ""
+msgstr " 또는 "
 
 #: eeschema/sch_validators.cpp:176
 msgid ", or "
@@ -15134,7 +15134,7 @@ msgstr ""
 #: eeschema/tools/assign_footprints.cpp:223
 #, fuzzy
 msgid "Change Visibility"
-msgstr "두께 바꾸기"
+msgstr "가시성 변경"
 
 #: eeschema/tools/assign_footprints.cpp:233
 #, c-format
@@ -17563,7 +17563,7 @@ msgstr ""
 #: include/project.h:41
 #, fuzzy
 msgid "untitled"
-msgstr "무제"
+msgstr "제목 없음"
 
 #: include/widgets/infobar.h:113
 msgid "Hide this message."
@@ -17583,8 +17583,9 @@ msgid "Select Templates Directory"
 msgstr "kicad/template 디렉토리"
 
 #: kicad/dialogs/dialog_template_selector_base.cpp:29
+#, fuzzy
 msgid "Folder:"
-msgstr ""
+msgstr "폴더:"
 
 #: kicad/dialogs/dialog_template_selector_base.cpp:36
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:216
@@ -17723,7 +17724,7 @@ msgstr "프로젝트 파일"
 #: kicad/kicad_manager_frame.cpp:162
 #, fuzzy
 msgid "Editors"
-msgstr "에디터 (&E)"
+msgstr "편집기"
 
 #: kicad/kicad_manager_frame.cpp:557
 msgid "Load File to Edit"
@@ -19252,9 +19253,8 @@ msgstr ""
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1263
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1549
-#, fuzzy
 msgid "ohm-meter"
-msgstr "mm"
+msgstr "Ω•m"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1267
 msgid "Substrate relative permittivity:"
@@ -19315,7 +19315,7 @@ msgstr ""
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1632
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1730
 msgid "ohm"
-msgstr ""
+msgstr "Ω"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1357
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1636
@@ -19334,7 +19334,7 @@ msgstr "전력 손실:"
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1656
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1754
 msgid "W"
-msgstr ""
+msgstr "W"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1381
 #, fuzzy
@@ -19619,8 +19619,9 @@ msgstr ""
 
 #: pcb_calculator/eserie.cpp:322 pcb_calculator/eserie.cpp:341
 #: pcb_calculator/eserie.cpp:367
+#, fuzzy
 msgid "Exact"
-msgstr ""
+msgstr "정확히"
 
 #: pcb_calculator/eserie.cpp:350 pcb_calculator/eserie.cpp:373
 msgid "Not worth using"
@@ -19829,7 +19830,7 @@ msgstr "스트립 두께"
 #: pcb_calculator/transline_ident.cpp:131
 #: pcb_calculator/transline_ident.cpp:317
 msgid "Roughness"
-msgstr ""
+msgstr "표면 거칠기"
 
 #: pcb_calculator/transline_ident.cpp:132
 #: pcb_calculator/transline_ident.cpp:318
@@ -19838,7 +19839,7 @@ msgstr ""
 
 #: pcb_calculator/transline_ident.cpp:135
 msgid "substrate"
-msgstr ""
+msgstr "기판"
 
 #: pcb_calculator/transline_ident.cpp:136
 msgid "Relative permeability (mu) of substrate"
@@ -19854,7 +19855,7 @@ msgstr ""
 #: pcb_calculator/transline_ident.cpp:393
 #, fuzzy
 msgid "conductor"
-msgstr "홈 디렉토리 (home)"
+msgstr "도체"
 
 #: pcb_calculator/transline_ident.cpp:140
 #: pcb_calculator/transline_ident.cpp:172
@@ -19922,18 +19923,18 @@ msgstr ""
 #: pcb_calculator/transline_ident.cpp:233
 #: pcb_calculator/transline_ident.cpp:268
 msgid "TE-modes:"
-msgstr ""
+msgstr "TE-모드:"
 
 #: pcb_calculator/transline_ident.cpp:234
 #: pcb_calculator/transline_ident.cpp:269
 msgid "TM-modes:"
-msgstr ""
+msgstr "TM-모드:"
 
 #: pcb_calculator/transline_ident.cpp:238
 #: pcb_calculator/transline_ident.cpp:273
 #, fuzzy
 msgid "insulator"
-msgstr "시뮬레이터 실행 (&R)"
+msgstr "절연체"
 
 #: pcb_calculator/transline_ident.cpp:239
 #: pcb_calculator/transline_ident.cpp:274
@@ -20031,9 +20032,8 @@ msgid "Number of twists per length"
 msgstr "길이당 꼬임 수"
 
 #: pcb_calculator/transline_ident.cpp:398
-#, fuzzy
 msgid "environment"
-msgstr "Cvpcb 설정"
+msgstr "환경"
 
 #: pcb_calculator/transline_ident.cpp:399
 msgid "Relative permittivity of environment"
@@ -20082,9 +20082,8 @@ msgid "kHz"
 msgstr "kHz"
 
 #: pcb_calculator/widgets/unit_selector.cpp:129
-#, fuzzy
 msgid "rad"
-msgstr "패드"
+msgstr "rad"
 
 #: pcbnew/array_creator.cpp:198
 #, fuzzy
@@ -22727,7 +22726,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_export_step_base.cpp:38
 #, fuzzy
 msgid "Coordinates"
-msgstr "좌표 숨기기"
+msgstr "좌표"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:40
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:96
@@ -24977,7 +24976,7 @@ msgstr "오른쪽 상단"
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:276
 #, fuzzy
 msgid "Bottom left"
-msgstr "아래쪽에서 보기"
+msgstr "왼쪽 하단"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:229
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:279
@@ -35900,9 +35899,8 @@ msgid "Create a component from a bitmap for use with KiCad"
 msgstr ""
 
 #: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:12
-#, fuzzy
 msgid "bitmap2component"
-msgstr "컴포넌트 편집"
+msgstr "bitmap2component"
 
 #: resources/linux/launchers/org.kicad.eeschema.desktop.in:10
 #, fuzzy
@@ -35918,9 +35916,8 @@ msgid "Standalone schematic editor for KiCad schematics"
 msgstr ""
 
 #: resources/linux/launchers/org.kicad.eeschema.desktop.in:13
-#, fuzzy
 msgid "eeschema"
-msgstr "EESchema 종료"
+msgstr "eeschema"
 
 #: resources/linux/launchers/org.kicad.gerbview.desktop.in:11
 msgid "Gerber File Viewer"
@@ -35932,9 +35929,8 @@ msgid "View Gerber files"
 msgstr "새 거버 파일 (&G)"
 
 #: resources/linux/launchers/org.kicad.gerbview.desktop.in:13
-#, fuzzy
 msgid "gerbview"
-msgstr "GERBVIEW 종료"
+msgstr "gerbview"
 
 #: resources/linux/launchers/org.kicad.kicad.desktop.in:10
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:6
@@ -35973,9 +35969,8 @@ msgid "Standalone circuit board editor for KiCad boards"
 msgstr ""
 
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:13
-#, fuzzy
 msgid "pcbnew"
-msgstr "PCBNEW 실행"
+msgstr "pcbnew"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:13
 msgid "An EDA suite for schematic and circuit board design"
