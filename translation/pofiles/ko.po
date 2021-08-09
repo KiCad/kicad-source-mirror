@@ -14,7 +14,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
 "PO-Revision-Date: 2021-08-09 08:08+0000\n"
-"Last-Translator: hokim <teamgoodaloe@gmail.com>\n"
+"Last-Translator: jeongsuAn <dks9467@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
 "Language: ko\n"
@@ -9534,7 +9534,6 @@ msgid "Alternate pin definitions"
 msgstr "대체 핀 정의"
 
 #: eeschema/dialogs/dialog_pin_properties_base.h:101
-#, fuzzy
 msgid "Pin Properties"
 msgstr "핀 속성"
 
@@ -10477,7 +10476,6 @@ msgstr "시간 단계:"
 #: eeschema/dialogs/dialog_spice_model_base.cpp:818
 #: eeschema/dialogs/dialog_spice_model_base.cpp:869
 #: eeschema/dialogs/dialog_spice_model_base.cpp:880
-#, fuzzy
 msgid "seconds"
 msgstr "초"
 
@@ -10503,7 +10501,6 @@ msgid "Spice directives:"
 msgstr "Spice 지시문:"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:422
-#, fuzzy
 msgid "Load directives from schematic"
 msgstr "회로도에서 지시문 로드"
 
@@ -10524,7 +10521,6 @@ msgid "Compatibility mode:"
 msgstr "호환 모드:"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:450
-#, fuzzy
 msgid "User configuration"
 msgstr "사용자 설정"
 
@@ -10549,7 +10545,6 @@ msgid "HSpice"
 msgstr "HSpice"
 
 #: eeschema/dialogs/dialog_sim_settings_base.h:140
-#, fuzzy
 msgid "Simulation settings"
 msgstr "시뮬레이션 설정"
 
@@ -10570,7 +10565,6 @@ msgid "JFET"
 msgstr "JFET"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:83
-#, fuzzy
 msgid "Subcircuit"
 msgstr "서브 회로"
 
@@ -10611,7 +10605,6 @@ msgid ""
 msgstr "과도 소스를 정의할 때 인터리브된 공백 필드를 남겨둘 수 없습니다"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:1025
-#, fuzzy
 msgid "Select library"
 msgstr "라이브러리 선택"
 
@@ -10656,22 +10649,18 @@ msgstr "유형:"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:34
 #: eeschema/dialogs/dialog_spice_model_base.cpp:35
-#, fuzzy
 msgid "Resistor"
 msgstr "저항"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:36
-#, fuzzy
 msgid "Capacitor"
 msgstr "커패시터"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:37
-#, fuzzy
 msgid "Inductor"
 msgstr "인덕터"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:41
-#, fuzzy
 msgid "Passive type"
 msgstr "패시브 타입"
 
@@ -10700,7 +10689,6 @@ msgid "Select file..."
 msgstr "파일 선택..."
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:226
-#, fuzzy
 msgid "Model:"
 msgstr "모델:"
 
@@ -10709,7 +10697,6 @@ msgid "note"
 msgstr "메모"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:293
-#, fuzzy
 msgid "Model"
 msgstr "모델"
 
@@ -10718,7 +10705,6 @@ msgid "DC/AC Analysis"
 msgstr "DC/AC 분석"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:310
-#, fuzzy
 msgid "DC:"
 msgstr "직류:"
 
@@ -10747,7 +10733,6 @@ msgid "AC phase:"
 msgstr "AC 위상:"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:354
-#, fuzzy
 msgid "radians"
 msgstr "라디안"
 
@@ -10779,7 +10764,6 @@ msgid "Fall time:"
 msgstr "하강 시간:"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:432
-#, fuzzy
 msgid "Pulse width:"
 msgstr "펄스 폭:"
 
@@ -10798,7 +10782,6 @@ msgstr "DC 오프셋:"
 #: eeschema/dialogs/dialog_spice_model_base.cpp:479
 #: eeschema/dialogs/dialog_spice_model_base.cpp:687
 #: eeschema/dialogs/dialog_spice_model_base.cpp:765
-#, fuzzy
 msgid "Amplitude:"
 msgstr "진폭:"
 
@@ -10809,12 +10792,10 @@ msgstr "주파수:"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:497
 #: pcb_calculator/widgets/unit_selector.cpp:103
-#, fuzzy
 msgid "Hz"
 msgstr "Hz"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:501
-#, fuzzy
 msgid "Delay:"
 msgstr "지연:"
 
@@ -10827,7 +10808,6 @@ msgid "1/seconds"
 msgstr "1/sec"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:527
-#, fuzzy
 msgid "Sinusoidal"
 msgstr "사인 곡선"
 
@@ -10849,21 +10829,18 @@ msgstr "하강 시간 제한:"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:607
 #: eeschema/dialogs/dialog_spice_model_base.cpp:853
-#, fuzzy
 msgid "Exponential"
-msgstr "Component"
+msgstr "지수 함수"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:609
 msgid "Piece-wise linear"
 msgstr "조각별 선형"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:624
-#, fuzzy
 msgid "Time:"
 msgstr "시간:"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:633
-#, fuzzy
 msgid "second"
 msgstr "초"
 
@@ -10898,7 +10875,6 @@ msgstr "캐리어 펄스:"
 #: eeschema/dialogs/dialog_spice_model_base.cpp:738
 #: eeschema/dialogs/dialog_spice_model_base.cpp:749
 #: eeschema/dialogs/dialog_spice_model_base.cpp:829
-#, fuzzy
 msgid "degrees"
 msgstr "각도"
 
@@ -10907,7 +10883,6 @@ msgid "Signal phase:"
 msgstr "신호 펄스:"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:757
-#, fuzzy
 msgid "FM"
 msgstr "FM"
 
@@ -10966,12 +10941,10 @@ msgid "Current"
 msgstr "현재"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:921
-#, fuzzy
 msgid "Source Type"
 msgstr "소스 유형"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:929
-#, fuzzy
 msgid "Source"
 msgstr "소스"
 
@@ -10984,9 +10957,8 @@ msgid "Alternate node sequence:"
 msgstr "대체 노드 시퀀스:"
 
 #: eeschema/dialogs/dialog_spice_model_base.h:254
-#, fuzzy
 msgid "Spice Model Editor"
-msgstr "Module 에디터 열기"
+msgstr "Spice 모델 편집기"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:85
 #: eeschema/fields_grid_table.cpp:601
@@ -11006,9 +10978,8 @@ msgstr "데이터 시트 보기"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:92
 #: eeschema/fields_grid_table.cpp:608
-#, fuzzy
 msgid "Show datasheet in browser"
-msgstr "라이브러리 브라우저"
+msgstr "브라우저에서 데이터 시트 보기"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:129
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1043
@@ -11017,13 +10988,11 @@ msgstr "참조 열은 숨겨질 수 없습니다."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:225
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:235
-#, fuzzy
 msgid "Qty"
 msgstr "수량"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:687
 #: eeschema/lib_field.cpp:438 eeschema/lib_field.h:79
-#, fuzzy
 msgid "Field"
 msgstr "필드"
 
@@ -11033,17 +11002,14 @@ msgstr "그룹화"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:962
 #: eeschema/symbol_editor/symbol_editor.cpp:1216
-#, fuzzy
 msgid "Datasheet"
 msgstr "데이터 시트"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:984
-#, fuzzy
 msgid "New field name:"
-msgstr "필드 이름:"
+msgstr "새 필드 이름:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:984
-#, fuzzy
 msgid "Add Field"
 msgstr "필드 추가"
 
@@ -11074,9 +11040,8 @@ msgid "Symbol Fields Table"
 msgstr "심볼 필드"
 
 #: eeschema/dialogs/dialog_symbol_properties.cpp:139
-#, fuzzy
 msgid "Base Name"
-msgstr "네트 이름"
+msgstr "기본 이름"
 
 #: eeschema/dialogs/dialog_symbol_properties.cpp:140
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:266
@@ -11084,9 +11049,9 @@ msgid "Alternate Assignment"
 msgstr "대체 할당"
 
 #: eeschema/dialogs/dialog_symbol_properties.cpp:784
-#, fuzzy, c-format
+#, c-format
 msgid "Field name '%s' already in use."
-msgstr "\"%s\" 필드 이름이 이미 사용 중입니다."
+msgstr "필드 이름 '%s'은(는) 이미 사용 중입니다."
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:126
 msgid "Unit:"
@@ -11138,32 +11103,26 @@ msgid "Not mirrored"
 msgstr "인쇄 모드"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:156
-#, fuzzy
 msgid "Around X axis"
-msgstr "Y축 미러"
+msgstr "X축 주위 (상하) 반전"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:156
-#, fuzzy
 msgid "Around Y axis"
-msgstr "Y축 미러"
+msgstr "Y축 주위 (좌우) 반전"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:174
-#, fuzzy
 msgid "Pin Text"
-msgstr "PCB 텍스트"
+msgstr "핀 텍스트"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:176
-#, fuzzy
 msgid "Show pin numbers"
-msgstr "D-Codes 번호 보이기"
+msgstr "핀 번호 표시"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:182
-#, fuzzy
 msgid "Show pin names"
-msgstr "핀 이름 보이기"
+msgstr "핀 이름 표시"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:192
-#, fuzzy
 msgid "Attributes"
 msgstr "속성"
 
@@ -11189,9 +11148,8 @@ msgstr ""
 "기판의 위에는 표시될 필요가 없는 심볼을 추가할 때 도움이 됩니다"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:213
-#, fuzzy
 msgid "Update Symbol from Library..."
-msgstr "활성 라이브러리가 없습니다."
+msgstr "라이브러리에서 심볼 업데이트..."
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:216
 #: eeschema/tools/ee_actions.cpp:437
@@ -11211,9 +11169,8 @@ msgid "Pin Number"
 msgstr "핀 번호"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:265
-#, fuzzy
 msgid "Base Pin Name"
-msgstr "핀 이름"
+msgstr "기본 핀 이름"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:291
 msgid "Alternate Pin Assignments"
@@ -11262,9 +11219,9 @@ msgstr "프로젝트 기호 라이브러리 테이블에 라이브러리 '%s', �
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:220
 #: eeschema/dialogs/panel_sym_lib_table.cpp:765
-#, fuzzy, c-format
+#, c-format
 msgid "Library '%s' not found."
-msgstr "%s 라이브러리를 찾을 수 없습니다."
+msgstr "라이브러리 '%s'을(를) 찾을 수 없습니다."
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:237
 #, c-format
@@ -11276,14 +11233,13 @@ msgstr ""
 "%s"
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:242
-#, fuzzy
 msgid "Created project symbol library table.\n"
-msgstr "프로젝트 기호 라이브러리 테이블을 생성했습니다.\n"
+msgstr "프로젝트 심볼 라이브러리 테이블을 생성했습니다.\n"
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:264
-#, fuzzy, c-format
+#, c-format
 msgid "No symbol %s found in symbol library table."
-msgstr "%s 파일은 EESchema 라이브러리가 아닙니다."
+msgstr "기호 라이브러리 테이블에 심볼 %s이(가) 없습니다."
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:270
 #, c-format
@@ -11291,18 +11247,16 @@ msgid "Symbol %s mapped to symbol library '%s'."
 msgstr "매핑된 기호 %s 의 기호 라이브러리 '%s'."
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:279
-#, fuzzy
 msgid "Symbol library table mapping complete!"
-msgstr "기호 라이브러리 테이블 매핑 완료!"
+msgstr "심볼 라이브러리 테이블 매핑 완료!"
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:349
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot create project remap back up folder '%s'."
-msgstr "%s 파일을 만들 수 없습니다."
+msgstr "프로젝트 리매핑 백업 폴더 '%s'을(를) 만들 수 없습니다."
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:352
 #: eeschema/dialogs/dialog_symbol_remap.cpp:500
-#, fuzzy
 msgid "Backup Error"
 msgstr "백업 오류"
 
@@ -11322,9 +11276,9 @@ msgstr "복구 중단"
 #: eeschema/dialogs/dialog_symbol_remap.cpp:453
 #: eeschema/dialogs/dialog_symbol_remap.cpp:469
 #: eeschema/dialogs/dialog_symbol_remap.cpp:485
-#, fuzzy, c-format
+#, c-format
 msgid "Backing up file '%s' to '%s'."
-msgstr "컴포넌트 %s: 라이브러리에서 %s 풋프린트를 찾을 수 없습니다."
+msgstr "파일 '%s'을 '%s'로 백업중 입니다."
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:380
 #: eeschema/dialogs/dialog_symbol_remap.cpp:422
@@ -11332,14 +11286,14 @@ msgstr "컴포넌트 %s: 라이브러리에서 %s 풋프린트를 찾을 수 없
 #: eeschema/dialogs/dialog_symbol_remap.cpp:461
 #: eeschema/dialogs/dialog_symbol_remap.cpp:477
 #: eeschema/dialogs/dialog_symbol_remap.cpp:493
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to back up file '%s'.\n"
-msgstr "%s 파일을 백업하지 못함.\n"
+msgstr "파일 '%s'를 백업하지 못했습니다.\n"
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:414
 #, fuzzy, c-format
 msgid "Failed to create backup folder '%s'.\n"
-msgstr "\"%s\" 백업 폴더를 만들지 못함\n"
+msgstr "백업 폴더 '%s'을(를) 생성하지 못했습니다.\n"
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:499
 msgid "Some of the project files could not be backed up."
@@ -11451,7 +11405,6 @@ msgid "Color Preview"
 msgstr "색상 이미지"
 
 #: eeschema/dialogs/panel_eeschema_color_settings.cpp:405
-#, fuzzy
 msgid "/path/to/sheet"
 msgstr "/경로/대상/시트"
 
@@ -11480,7 +11433,6 @@ msgstr "페이지 경계 보이기"
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:42
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:71
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:184
-#, fuzzy
 msgid "Selection"
 msgstr "선택"
 
@@ -11781,7 +11733,6 @@ msgstr "핀 기호 크기:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:123
 #: eeschema/erc_item.cpp:41
-#, fuzzy
 msgid "Connections"
 msgstr "연결"
 
@@ -11836,18 +11787,15 @@ msgid "Prefix:"
 msgstr "접두어:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:180
-#, fuzzy
 msgid "["
 msgstr "["
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:183
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:153
-#, fuzzy
 msgid "Suffix:"
 msgstr "접미사:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:187
-#, fuzzy
 msgid "]"
 msgstr "]"
 
@@ -13233,7 +13181,6 @@ msgid "Graphic Line, length %s"
 msgstr "그래픽 라인, 길이 %s"
 
 #: eeschema/sch_line.cpp:883
-#, fuzzy
 msgid "Graphical"
 msgstr "그래픽"
 
@@ -13879,7 +13826,6 @@ msgid "Power symbol"
 msgstr "전원 심볼"
 
 #: eeschema/sch_symbol.cpp:1371
-#, fuzzy
 msgid "flags"
 msgstr "플래그"
 
@@ -16672,9 +16618,8 @@ msgstr "전체 선택"
 
 #: gerbview/dialogs/dialog_print_gerbview.cpp:196
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:303
-#, fuzzy
 msgid "Deselect all"
-msgstr "선택 해제"
+msgstr "전체 선택 해제"
 
 #: gerbview/dialogs/dialog_select_one_pcb_layer.cpp:112
 #, fuzzy, c-format
@@ -16719,15 +16664,16 @@ msgstr "항목 선택"
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:43
 #, fuzzy
 msgid "Sketch lines"
-msgstr "스케치"
+msgstr "선 스케치"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:46
 msgid "Sketch polygons"
 msgstr "다각형 스케치"
 
 #: gerbview/dialogs/panel_gerbview_settings_base.cpp:22
+#, fuzzy
 msgid "Full size"
-msgstr ""
+msgstr "전체 크기"
 
 #: gerbview/dialogs/panel_gerbview_settings_base.cpp:22
 msgid "Size A4"
@@ -16824,14 +16770,12 @@ msgid ""
 msgstr ""
 
 #: gerbview/files.cpp:87
-#, fuzzy
 msgid "Zip files"
 msgstr "Zip 파일"
 
 #: gerbview/files.cpp:105
-#, fuzzy
 msgid "Job files"
-msgstr "작업 파일"
+msgstr "Job 파일"
 
 #: gerbview/files.cpp:138
 msgid "Gerber files (.g* .lgr .pho)"
@@ -16944,14 +16888,12 @@ msgid "Open Zip File"
 msgstr "네트리스트 파일 열기"
 
 #: gerbview/gerber_draw_item.cpp:680
-#, fuzzy
 msgid "Attribute"
 msgstr "속성"
 
 #: gerbview/gerber_draw_item.cpp:683 gerbview/gerber_draw_item.cpp:693
-#, fuzzy
 msgid "No attribute"
-msgstr "속성"
+msgstr "속성 없음"
 
 #: gerbview/gerber_draw_item.cpp:689
 #, fuzzy, c-format
@@ -18242,7 +18184,6 @@ msgstr ""
 
 #: pagelayout_editor/dialogs/dialog_design_inspector_base.cpp:38
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:230
-#, fuzzy
 msgid "Count"
 msgstr "개수"
 
@@ -19312,7 +19253,6 @@ msgid "Pulse rise time to calculate reactance"
 msgstr ""
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1310
-#, fuzzy
 msgid "ns"
 msgstr "ns"
 
@@ -19389,12 +19329,10 @@ msgid "Capacitance:"
 msgstr "정전용량:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1417
-#, fuzzy
 msgid "pF"
 msgstr "pF"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1419
-#, fuzzy
 msgid "pico-Farad"
 msgstr "피코-패러드"
 
@@ -19407,27 +19345,22 @@ msgid "Rise time degradation for given Z0 and calculated capacitance"
 msgstr ""
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1433
-#, fuzzy
 msgid "ps"
 msgstr "ps"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1435
-#, fuzzy
 msgid "picoseconds"
 msgstr "피코초"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1439
-#, fuzzy
 msgid "Inductance:"
 msgstr "인덕턴스:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1447
-#, fuzzy
 msgid "nH"
 msgstr "nH"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1449
-#, fuzzy
 msgid "nano-Henry"
 msgstr "나노-헨리"
 
@@ -20305,7 +20238,6 @@ msgstr "잘못된 번호, 중지"
 #: pcbnew/board_stackup_manager/dialog_dielectric_list_manager.cpp:94
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:84
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:261
-#, fuzzy
 msgid "Material"
 msgstr "재료"
 
@@ -20372,7 +20304,6 @@ msgid "Options for edge card connectors."
 msgstr "에지 카드 커넥터용 옵션."
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:116
-#, fuzzy
 msgid "Core"
 msgstr "코어"
 
@@ -20541,7 +20472,6 @@ msgid "26"
 msgstr "26"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:26
-#, fuzzy
 msgid "28"
 msgstr "28"
 
@@ -20590,7 +20520,6 @@ msgid "Adjust Dielectric Thickness"
 msgstr "삭제 선택"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:46
-#, fuzzy
 msgid "ENIG"
 msgstr "ENIG (무전해 니켈 금 도금)"
 
@@ -20629,7 +20558,6 @@ msgid "Immersion gold"
 msgstr "GERBVIEW 정보"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:55
-#, fuzzy
 msgid "HT_OSP"
 msgstr "HT_OSP"
 
@@ -20803,17 +20731,14 @@ msgid "Only selected"
 msgstr "선택한 것만"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:95
-#, fuzzy
 msgid "Empty"
 msgstr "비어있음"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:96
-#, fuzzy
 msgid "Invalid"
 msgstr "유효하지 않음"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:97
-#, fuzzy
 msgid "Excluded"
 msgstr "제외"
 
@@ -21119,7 +21044,6 @@ msgstr "정면에서 보기"
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:181
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:140
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:562
-#, fuzzy
 msgid "Back"
 msgstr "뒤로 가기"
 
@@ -21410,12 +21334,10 @@ msgid "N/A"
 msgstr "N/A"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:481 pcbnew/pad.cpp:1099
-#, fuzzy
 msgid "PTH"
 msgstr "PTH"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:481 pcbnew/pad.cpp:1102
-#, fuzzy
 msgid "NPTH"
 msgstr "NPTH"
 
@@ -22188,7 +22110,6 @@ msgstr ""
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:63
 #: pcbnew/dialogs/dialog_plot_base.cpp:374
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:81
-#, fuzzy
 msgid "Units:"
 msgstr "단위:"
 
@@ -22252,9 +22173,8 @@ msgstr ""
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:163
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:170
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:127
-#, fuzzy
 msgid "0.0"
-msgstr "0.00000"
+msgstr "0.0"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:170
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:127
@@ -22342,14 +22262,12 @@ msgstr "90.0"
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:294
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:169
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:172
-#, fuzzy
 msgid "-90.0"
 msgstr "-90.0"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:295
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:172
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:173
-#, fuzzy
 msgid "180.0"
 msgstr "180.0"
 
@@ -22388,7 +22306,6 @@ msgstr "인라인"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:325
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:68
-#, fuzzy
 msgid "Manual"
 msgstr "설명서"
 
@@ -22952,7 +22869,6 @@ msgid "User defined origin:"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:109
-#, fuzzy
 msgid "meter"
 msgstr "미터"
 
@@ -24901,7 +24817,6 @@ msgid "Oval"
 msgstr "타원형"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:109
-#, fuzzy
 msgid "Rectangular"
 msgstr "직사각형"
 
@@ -25009,7 +24924,6 @@ msgstr "오른쪽 상단"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:226
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:276
-#, fuzzy
 msgid "Bottom left"
 msgstr "왼쪽 하단"
 
@@ -25783,7 +25697,6 @@ msgid "45 degree"
 msgstr "45도"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:148
-#, fuzzy
 msgid "arc"
 msgstr "호"
 
@@ -26337,7 +26250,6 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:251
 #: pcbnew/pcb_track.cpp:1091
-#, fuzzy
 msgid "Micro"
 msgstr "마이크로"
 
@@ -26378,7 +26290,6 @@ msgid "Set Unused Pad Properties"
 msgstr "패드 속성"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.cpp:26
-#, fuzzy
 msgid "&Vias"
 msgstr "비아(&V)"
 
@@ -26793,7 +26704,6 @@ msgid "Path Substitutions"
 msgstr "경로 대체"
 
 #: pcbnew/dialogs/panel_pcbnew_action_plugins_base.cpp:36
-#, fuzzy
 msgid "Icon"
 msgstr "아이콘"
 
@@ -26803,7 +26713,6 @@ msgid "Show button"
 msgstr "모두 숨기기"
 
 #: pcbnew/dialogs/panel_pcbnew_action_plugins_base.cpp:39
-#, fuzzy
 msgid "Category"
 msgstr "카테고리"
 
@@ -27031,7 +26940,6 @@ msgstr ""
 "설정으로 줄일 수 없게 됩니다."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:297
-#, fuzzy
 msgid "Holes"
 msgstr "홀"
 
@@ -27061,7 +26969,6 @@ msgstr ""
 "설정으로 줄일 수 없게 됩니다. (참고: 밀링된 구멍에는 적용되지 않습니다.)"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:354
-#, fuzzy
 msgid "uVias"
 msgstr "마이크로 비아"
 
@@ -32753,12 +32660,10 @@ msgid "Place a footprint"
 msgstr "풋프린트 이동"
 
 #: pcbnew/tools/board_editor_control.cpp:1162 pcbnew/tools/pcb_actions.cpp:673
-#, fuzzy
 msgid "Lock"
 msgstr "잠금"
 
 #: pcbnew/tools/board_editor_control.cpp:1162 pcbnew/tools/pcb_actions.cpp:678
-#, fuzzy
 msgid "Unlock"
 msgstr "잠금 해제"
 
@@ -32786,7 +32691,6 @@ msgstr "영역 연결 유형: %s."
 #: pcbnew/tools/board_inspection_tool.cpp:183
 #: pcbnew/tools/board_inspection_tool.cpp:201 pcbnew/zone.cpp:337
 #: pcbnew/zone.cpp:352 pcbnew/zone.cpp:500 pcbnew/zone.cpp:781
-#, fuzzy
 msgid "zone"
 msgstr "구역"
 
@@ -35158,9 +35062,8 @@ msgid "Show unconnected nets as a ratsnest"
 msgstr "일반 연결선 보이기"
 
 #: pcbnew/widgets/appearance_controls.cpp:355
-#, fuzzy
 msgid "No-Connects"
-msgstr "연결"
+msgstr "연결 없음"
 
 #: pcbnew/widgets/appearance_controls.cpp:355
 msgid "Show a marker on pads which have no net connected"
@@ -35750,7 +35653,6 @@ msgid "No footprints"
 msgstr "풋프린트 이동"
 
 #: pcbnew/zone.cpp:585
-#, fuzzy
 msgid "Restrictions"
 msgstr "제한"
 
@@ -35803,7 +35705,6 @@ msgid "Zone %s on %s"
 msgstr "모듈 배치 %s %s"
 
 #: pcbnew/zone.cpp:1399
-#, fuzzy
 msgid "Inherited"
 msgstr "상속"
 
