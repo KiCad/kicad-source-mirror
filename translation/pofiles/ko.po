@@ -13,8 +13,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
-"PO-Revision-Date: 2021-08-09 08:13+0000\n"
-"Last-Translator: hokim <teamgoodaloe@gmail.com>\n"
+"PO-Revision-Date: 2021-08-09 09:28+0000\n"
+"Last-Translator: jeongsuAn <dks9467@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
 "Language: ko\n"
@@ -11800,7 +11800,6 @@ msgid "No error or warning"
 msgstr "오류 또는 경고 없음"
 
 #: eeschema/dialogs/panel_setup_pinmap.cpp:174
-#, fuzzy
 msgid "Generate warning"
 msgstr "경고 생성"
 
@@ -12034,7 +12033,6 @@ msgstr "라이브러리"
 
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:61
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:58
-#, fuzzy
 msgid "Global Libraries"
 msgstr "글로벌 라이브러리"
 
@@ -12097,7 +12095,6 @@ msgid "Error loading the symbol library table '%s'."
 msgstr "심볼 라이브러리 테이블 '%s'을 로드하는 동안 오류가 발생했습니다."
 
 #: eeschema/erc.cpp:59 eeschema/erc.cpp:76
-#, fuzzy
 msgid "Input Pin"
 msgstr "입력 핀"
 
@@ -12123,7 +12120,6 @@ msgid "Free Pin"
 msgstr "라이브러리 만들기"
 
 #: eeschema/erc.cpp:65 eeschema/erc.cpp:82
-#, fuzzy
 msgid "Unspecified Pin"
 msgstr "지정되지 않은 핀"
 
@@ -12138,17 +12134,14 @@ msgid "Power Output Pin"
 msgstr "전원 출력"
 
 #: eeschema/erc.cpp:68 eeschema/erc.cpp:85
-#, fuzzy
 msgid "Open Collector"
 msgstr "오픈 컬렉터"
 
 #: eeschema/erc.cpp:69 eeschema/erc.cpp:86
-#, fuzzy
 msgid "Open Emitter"
 msgstr "오픈 이미터"
 
 #: eeschema/erc.cpp:70 eeschema/erc.cpp:87
-#, fuzzy
 msgid "No Connection"
 msgstr "연결 없음"
 
@@ -12571,7 +12564,6 @@ msgid "Unknown"
 msgstr "알 수 없음"
 
 #: eeschema/getpart.cpp:134 pcbnew/load_select_footprint.cpp:255
-#, fuzzy
 msgid "Recently Used"
 msgstr "최근 사용"
 
@@ -12606,7 +12598,6 @@ msgstr "(페이지 %s)"
 #: eeschema/lib_arc.cpp:406 eeschema/lib_bezier.cpp:344
 #: eeschema/lib_circle.cpp:253 eeschema/lib_polyline.cpp:340
 #: eeschema/lib_rectangle.cpp:196 eeschema/lib_text.cpp:352
-#, fuzzy
 msgid "Line Width"
 msgstr "선 두께"
 
@@ -12855,17 +12846,14 @@ msgid "Power input"
 msgstr "전원 입력"
 
 #: eeschema/pin_type.cpp:59
-#, fuzzy
 msgid "Power output"
 msgstr "전원 출력"
 
 #: eeschema/pin_type.cpp:60
-#, fuzzy
 msgid "Open collector"
 msgstr "오픈 컬렉터"
 
 #: eeschema/pin_type.cpp:61
-#, fuzzy
 msgid "Open emitter"
 msgstr "오픈 이미터"
 
@@ -12896,7 +12884,6 @@ msgid "Clock low"
 msgstr "낮은 클럭"
 
 #: eeschema/pin_type.cpp:82
-#, fuzzy
 msgid "Output low"
 msgstr "낮은 출력"
 
@@ -13046,7 +13033,6 @@ msgstr ""
 "셸을 실행하고 프로젝트를 생성합니다."
 
 #: eeschema/sch_edit_frame.cpp:959
-#, fuzzy
 msgid "New Schematic"
 msgstr "새로운 회로도"
 
@@ -13197,12 +13183,10 @@ msgid "Electrical Rule Check Error"
 msgstr "회로도 ERC"
 
 #: eeschema/sch_marker.h:96
-#, fuzzy
 msgid "ERC Marker"
 msgstr "ERC 마커"
 
 #: eeschema/sch_no_connect.h:97
-#, fuzzy
 msgid "No Connect"
 msgstr "연결 없음"
 
@@ -13783,7 +13767,6 @@ msgid "Sheet file"
 msgstr "시트 파일"
 
 #: eeschema/sch_sheet.cpp:708
-#, fuzzy
 msgid "Sheet Name"
 msgstr "시트 이름"
 
@@ -13793,7 +13776,6 @@ msgid "Hierarchical Path"
 msgstr "시트에 의한 계층구조 핀"
 
 #: eeschema/sch_sheet.cpp:718
-#, fuzzy
 msgid "File Name"
 msgstr "파일 이름"
 
@@ -13803,7 +13785,6 @@ msgid "Hierarchical Sheet %s"
 msgstr "계층적 시트 %s"
 
 #: eeschema/sch_sheet_path.cpp:57 include/board_item.h:378
-#, fuzzy
 msgid "(Deleted Item)"
 msgstr "(삭제된 항목)"
 
@@ -13813,7 +13794,6 @@ msgid "Hierarchical Sheet Pin %s"
 msgstr "계층적 시트 핀 %s"
 
 #: eeschema/sch_symbol.cpp:1366
-#, fuzzy
 msgid "Power symbol"
 msgstr "전원 심볼"
 
@@ -13855,7 +13835,6 @@ msgid "Tri-State"
 msgstr "3-스테이트"
 
 #: eeschema/sch_text.cpp:732
-#, fuzzy
 msgid "Graphic Text"
 msgstr "그래픽 텍스트"
 
@@ -13869,7 +13848,6 @@ msgid "Hierarchical Sheet Pin"
 msgstr "시트에 의한 계층구조 핀"
 
 #: eeschema/sch_text.cpp:754
-#, fuzzy
 msgid "Bold Italic"
 msgstr "굵은 기울임꼴"
 
@@ -14088,12 +14066,10 @@ msgid "The value of the field cannot be empty."
 msgstr "%s 라이브러리를 찾을 수 없습니다."
 
 #: eeschema/sch_validators.cpp:151
-#, fuzzy
 msgid "carriage return"
 msgstr "캐리지 리턴"
 
 #: eeschema/sch_validators.cpp:153
-#, fuzzy
 msgid "line feed"
 msgstr "줄 바꿈"
 
@@ -14107,7 +14083,6 @@ msgid "space"
 msgstr ""
 
 #: eeschema/sch_validators.cpp:171
-#, fuzzy
 msgid " or "
 msgstr " 또는 "
 
@@ -14238,7 +14213,6 @@ msgid ""
 msgstr ""
 
 #: eeschema/sim/sim_plot_frame.cpp:176
-#, fuzzy
 msgid "Run/Stop Simulation"
 msgstr "시뮬레이션 실행/중지"
 
@@ -14247,7 +14221,6 @@ msgid "Run Simulation"
 msgstr "시뮬레이터 실행"
 
 #: eeschema/sim/sim_plot_frame.cpp:178
-#, fuzzy
 msgid "Add Signals"
 msgstr "신호 추가"
 
@@ -14364,7 +14337,6 @@ msgid "Show Cursor"
 msgstr "커서 표시"
 
 #: eeschema/sim/sim_plot_frame_base.cpp:19
-#, fuzzy
 msgid "New Plot"
 msgstr "새 플롯"
 
@@ -14412,7 +14384,6 @@ msgid "Simulation"
 msgstr "시뮬레이션"
 
 #: eeschema/sim/sim_plot_frame_base.cpp:101
-#, fuzzy
 msgid "Show &Grid"
 msgstr "격자 보이기(&G)"
 
@@ -14486,7 +14457,6 @@ msgid "Temperature (swept)"
 msgstr ""
 
 #: eeschema/sim/sim_plot_panel.cpp:419
-#, fuzzy
 msgid "Voltage (measured)"
 msgstr "전압(측정)"
 
@@ -15110,7 +15080,6 @@ msgid "Select the footprint field visibility setting."
 msgstr ""
 
 #: eeschema/tools/assign_footprints.cpp:223
-#, fuzzy
 msgid "Change Visibility"
 msgstr "가시성 변경"
 
@@ -15851,9 +15820,8 @@ msgstr ""
 
 #: eeschema/tools/ee_actions.cpp:533 gerbview/tools/gerbview_actions.cpp:113
 #: pcbnew/tools/pcb_actions.cpp:712 pcbnew/tools/pcb_actions.cpp:732
-#, fuzzy
 msgid "Highlight Net"
-msgstr "네트 높이"
+msgstr "네트 강조"
 
 #: eeschema/tools/ee_actions.cpp:533
 #, fuzzy
@@ -16494,7 +16462,7 @@ msgid "Clear layer %d?"
 msgstr "%d 레이어를 지울까요?"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb.cpp:149
-#, fuzzy, c-format
+#, c-format
 msgid "Layer %d"
 msgstr "레이어 %d"
 
@@ -16587,7 +16555,6 @@ msgid "Reset"
 msgstr "초기화"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.h:81
-#, fuzzy
 msgid "Layer Selection"
 msgstr "레이어 선택"
 
@@ -16654,7 +16621,6 @@ msgid "Sketch flashed items"
 msgstr "항목 선택"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:43
-#, fuzzy
 msgid "Sketch lines"
 msgstr "선 스케치"
 
@@ -16663,7 +16629,6 @@ msgid "Sketch polygons"
 msgstr "다각형 스케치"
 
 #: gerbview/dialogs/panel_gerbview_settings_base.cpp:22
-#, fuzzy
 msgid "Full size"
 msgstr "전체 크기"
 
@@ -16692,7 +16657,6 @@ msgid "Size C"
 msgstr "C 크기"
 
 #: gerbview/dialogs/panel_gerbview_settings_base.cpp:24
-#, fuzzy
 msgid "Page Size"
 msgstr "페이지 크기"
 
@@ -16702,9 +16666,8 @@ msgid "Show page limits"
 msgstr "페이지 경계 보이기"
 
 #: gerbview/events_called_functions.cpp:179 gerbview/gerbview_frame.cpp:164
-#, fuzzy
 msgid "Layers Manager"
-msgstr "레이어 필터"
+msgstr "레이어 관리자"
 
 #: gerbview/excellon_read_drill_file.cpp:263
 #, fuzzy, c-format
@@ -16893,9 +16856,8 @@ msgid "D Code %d"
 msgstr "D 코드 %d"
 
 #: gerbview/gerber_draw_item.cpp:702
-#, fuzzy
 msgid "Graphic Layer"
-msgstr "그래픽 호 추가"
+msgstr "그래픽 레이어"
 
 #: gerbview/gerber_draw_item.cpp:712
 #, fuzzy
@@ -16944,14 +16906,12 @@ msgid "%s (D%d) on layer %d: %s"
 msgstr ""
 
 #: gerbview/gerber_file_image.cpp:340
-#, fuzzy
 msgid "Image name"
 msgstr "이미지 이름"
 
 #: gerbview/gerber_file_image.cpp:345
-#, fuzzy
 msgid "Graphic layer"
-msgstr "Draft layer"
+msgstr "그래픽 레이어"
 
 #: gerbview/gerber_file_image.cpp:349
 msgid "Img Rot."
@@ -16960,12 +16920,12 @@ msgstr "이미지 회전."
 #: gerbview/gerber_file_image.cpp:357
 #, fuzzy
 msgid "X Justify"
-msgstr "가로 맞춤"
+msgstr "X 정렬"
 
 #: gerbview/gerber_file_image.cpp:360
 #, fuzzy
 msgid "Y Justify"
-msgstr "가로 맞춤"
+msgstr "Y 정렬"
 
 #: gerbview/gerber_file_image.cpp:384
 msgid "Image Justify Offset"
@@ -17120,9 +17080,8 @@ msgid "DCode:"
 msgstr "D코드:"
 
 #: gerbview/toolbars_gerber.cpp:282
-#, fuzzy
 msgid "<No selection>"
-msgstr "글꼴 선택 (&F)"
+msgstr "<선택되지 않음>"
 
 #: gerbview/tools/gerbview_actions.cpp:39
 #, fuzzy
@@ -17229,14 +17188,12 @@ msgid "Reload all layers. All data will be reloaded"
 msgstr "레이어를 모두 지운 후 새 거버 파일 열기"
 
 #: gerbview/tools/gerbview_actions.cpp:108
-#, fuzzy
 msgid "Clear Highlight"
-msgstr "네트 높이"
+msgstr "강조 지우기"
 
 #: gerbview/tools/gerbview_actions.cpp:118
-#, fuzzy
 msgid "Highlight Component"
-msgstr "컴포넌트 편집"
+msgstr "컴포넌트 강조"
 
 #: gerbview/tools/gerbview_actions.cpp:123
 msgid "Highlight Attribute"
@@ -17297,9 +17254,8 @@ msgid "Show negative objects in ghost color"
 msgstr ""
 
 #: gerbview/tools/gerbview_actions.cpp:168
-#, fuzzy
 msgid "Show DCodes"
-msgstr "D-Codes 보이기"
+msgstr "DCode 표시"
 
 #: gerbview/tools/gerbview_actions.cpp:168
 msgid "Show dcode number"
@@ -17334,9 +17290,8 @@ msgid "Board File Name"
 msgstr "보드 파일 이름"
 
 #: gerbview/tools/gerbview_inspection_tool.cpp:147
-#, fuzzy
 msgid "D Codes"
-msgstr "D-Codes 찾기"
+msgstr "D 코드"
 
 #: gerbview/tools/gerbview_inspection_tool.cpp:175
 #, fuzzy, c-format
@@ -17426,9 +17381,8 @@ msgid "Show drawing sheet border and title block"
 msgstr "페이지 설정"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:103
-#, fuzzy
 msgid "PCB Background"
-msgstr "검정색"
+msgstr "PCB 배경"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:122
 #: pcbnew/widgets/appearance_controls.cpp:1596
@@ -17541,7 +17495,6 @@ msgid "Select Templates Directory"
 msgstr "kicad/template 디렉토리"
 
 #: kicad/dialogs/dialog_template_selector_base.cpp:29
-#, fuzzy
 msgid "Folder:"
 msgstr "폴더:"
 
@@ -17607,7 +17560,6 @@ msgid "KiCad project file"
 msgstr "KiCad 프로젝트 파일"
 
 #: kicad/files-io.cpp:66
-#, fuzzy
 msgid "Unzip Project"
 msgstr "프로젝트 압축 풀기"
 
@@ -17731,7 +17683,6 @@ msgid "Import EAGLE CAD XML schematic and board"
 msgstr ""
 
 #: kicad/menubar.cpp:107
-#, fuzzy
 msgid "&Archive Project..."
 msgstr "프로젝트 보관(&A)..."
 
@@ -17741,7 +17692,6 @@ msgid "Archive all needed project files into zip archive"
 msgstr "모든 프로젝트 파일 압축"
 
 #: kicad/menubar.cpp:112
-#, fuzzy
 msgid "&Unarchive Project..."
 msgstr "프로젝트 보관 취소(&U)..."
 
@@ -17903,7 +17853,6 @@ msgid "Rename File..."
 msgstr "파일명 변경..."
 
 #: kicad/project_tree_pane.cpp:762
-#, fuzzy
 msgid "Rename file"
 msgstr "파일 이름 바꾸기"
 
@@ -17999,9 +17948,8 @@ msgid "Edit schematic symbols"
 msgstr "회로도 기호 편집"
 
 #: kicad/tools/kicad_manager_actions.cpp:76
-#, fuzzy
 msgid "Edit PCB"
-msgstr "패드 편집"
+msgstr "PCB 편집"
 
 #: kicad/tools/kicad_manager_actions.cpp:82
 #, fuzzy
@@ -18023,9 +17971,8 @@ msgid "Convert bitmap images to schematic or PCB components"
 msgstr ""
 
 #: kicad/tools/kicad_manager_actions.cpp:99
-#, fuzzy
 msgid "Calculator Tools"
-msgstr "시뮬레이터 실행 (&R)"
+msgstr "계산기 도구"
 
 #: kicad/tools/kicad_manager_actions.cpp:99
 msgid "Run component calculations, track width calculations, etc."
@@ -18089,7 +18036,7 @@ msgstr "폴더 '%s'에 저장할 수 있는 권한이 없습니다."
 #: kicad/tools/kicad_manager_control.cpp:249
 #, fuzzy
 msgid "Overwriting files:"
-msgstr "거버 파일:"
+msgstr "파일 덮어쓰기:"
 
 #: kicad/tools/kicad_manager_control.cpp:254
 msgid "Similar files already exist in the destination folder."
@@ -18141,9 +18088,8 @@ msgstr ""
 #: kicad/tools/kicad_manager_control.cpp:629
 #: kicad/tools/kicad_manager_control.cpp:636 pcbnew/pcb_edit_frame.cpp:1447
 #: pcbnew/pcb_edit_frame.cpp:1478
-#, fuzzy
 msgid "KiCad Error"
-msgstr "에러"
+msgstr "KiCad 오류"
 
 #: kicad/tools/kicad_manager_control.cpp:636
 msgid "Application failed to load."
@@ -18196,35 +18142,31 @@ msgstr "원본"
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:128
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:225
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:278
-#, fuzzy
 msgid "Upper Right"
-msgstr "오른쪽"
+msgstr "오른쪽 상단"
 
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:68
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:128
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:226
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:279
-#, fuzzy
 msgid "Upper Left"
-msgstr "Copper Layers"
+msgstr "왼쪽 상단"
 
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:68
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:128
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:224
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:227
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:280
-#, fuzzy
 msgid "Lower Right"
-msgstr "오른쪽"
+msgstr "오른쪽 하단"
 
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:68
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:128
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:228
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:277
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:281
-#, fuzzy
 msgid "Lower Left"
-msgstr "전원 출력"
+msgstr "왼쪽 하단"
 
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:90
 msgid "X end:"
@@ -18237,7 +18179,7 @@ msgstr ""
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.h:72
 #, fuzzy
 msgid "New Item"
-msgstr "Nb 항목"
+msgstr "새 항목"
 
 #: pagelayout_editor/dialogs/dialogs_for_printing.cpp:236
 msgid "Print Drawing Sheet"
@@ -18377,9 +18319,8 @@ msgid "Apply"
 msgstr "적용"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:409
-#, fuzzy
 msgid "Item Properties"
-msgstr "속성"
+msgstr "항목 속성"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:416
 #: pcbnew/footprint_edit_frame.cpp:925
@@ -19282,7 +19223,6 @@ msgstr "전압 강하:"
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1369
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1648
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1746
-#, fuzzy
 msgid "Power loss:"
 msgstr "전력 손실:"
 
@@ -19541,7 +19481,6 @@ msgid "Class 6"
 msgstr ""
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1944
-#, fuzzy
 msgid "Lines width"
 msgstr "선 두께"
 
@@ -19563,7 +19502,6 @@ msgid "NP Pad: (diam - drill)"
 msgstr ""
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1967
-#, fuzzy
 msgid "Board Classes"
 msgstr "보드 클래스"
 
@@ -20043,12 +19981,11 @@ msgid "Create an array"
 msgstr "새 디렉토리 만들기"
 
 #: pcbnew/autorouter/ar_autoplacer.cpp:933
-#, fuzzy
 msgid "Autoplacing components..."
 msgstr "부품 자동 배치 중..."
 
 #: pcbnew/autorouter/ar_autoplacer.cpp:951
-#, fuzzy, c-format
+#, c-format
 msgid "Autoplacing %s"
 msgstr "자동 배치 %s"
 
@@ -20058,14 +19995,12 @@ msgid "Board edges must be defined on the %s layer."
 msgstr ""
 
 #: pcbnew/autorouter/autoplace_tool.cpp:89
-#, fuzzy
 msgid "Autoplace Components"
-msgstr "컴포넌트 복사"
+msgstr "컴포넌트 자동 배치"
 
 #: pcbnew/autorouter/autoplace_tool.cpp:95
-#, fuzzy
 msgid "Autoplace components"
-msgstr "컴포넌트 없음"
+msgstr "컴포넌트 자동배치"
 
 #: pcbnew/board.cpp:91
 msgid "This is the default net class."
@@ -20151,9 +20086,8 @@ msgid "and others"
 msgstr "기타"
 
 #: pcbnew/board_item.cpp:105
-#, fuzzy
 msgid "no layers"
-msgstr "Comp layer"
+msgstr "레이어 없음"
 
 #: pcbnew/board_item.cpp:197 pcbnew/pcb_track.cpp:1111
 #: pcbnew/pcb_track.cpp:1128
@@ -22660,7 +22594,6 @@ msgid "STEP files (*.stp;*.step)|*.stp;*.step"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:38
-#, fuzzy
 msgid "Coordinates"
 msgstr "좌표"
 
@@ -33494,7 +33427,6 @@ msgid "Create array"
 msgstr "어레이 생성"
 
 #: pcbnew/tools/pcb_actions.cpp:296
-#, fuzzy
 msgid "Rotate Counterclockwise"
 msgstr "시계 반대 방향으로 회전"
 
@@ -35628,9 +35560,8 @@ msgid "%s and %d more"
 msgstr ""
 
 #: pcbnew/zone.cpp:626
-#, fuzzy
 msgid "Fill Mode"
-msgstr "영역 채우기"
+msgstr "채우기 모드"
 
 #: pcbnew/zone.cpp:629
 #, fuzzy
