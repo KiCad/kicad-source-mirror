@@ -112,14 +112,9 @@ PANEL_SETUP_TRACKS_AND_VIAS::~PANEL_SETUP_TRACKS_AND_VIAS()
 
 bool PANEL_SETUP_TRACKS_AND_VIAS::TransferDataToWindow()
 {
-    if( m_trackWidthsGrid->GetNumberRows() > 0 )
-        m_trackWidthsGrid->DeleteRows( 0, m_trackWidthsGrid->GetNumberRows() );
-
-    if( m_viaSizesGrid->GetNumberRows() > 0 )
-        m_viaSizesGrid->DeleteRows( 0, m_viaSizesGrid->GetNumberRows() );
-
-    if( m_diffPairsGrid->GetNumberRows() > 0 )
-        m_diffPairsGrid->DeleteRows( 0, m_diffPairsGrid->GetNumberRows() );
+    m_trackWidthsGrid->ClearRows();
+    m_viaSizesGrid->ClearRows();
+    m_diffPairsGrid->ClearRows();
 
     // Skip the first item, which is the current netclass value
     for( unsigned ii = 1; ii < m_BrdSettings->m_TrackWidthList.size(); ii++ )

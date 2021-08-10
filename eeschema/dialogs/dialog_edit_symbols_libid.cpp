@@ -380,7 +380,7 @@ static bool sort_by_libid( const SYMBOL_CANDIDATE& candidate1, const SYMBOL_CAND
 void DIALOG_EDIT_SYMBOLS_LIBID::initDlg()
 {
     // Clear the FormBuilder rows
-    m_grid->DeleteRows( 0, m_grid->GetNumberRows() );
+    m_grid->ClearRows();
 
     m_isModified = false;
 

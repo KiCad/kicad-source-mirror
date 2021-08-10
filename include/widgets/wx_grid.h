@@ -98,6 +98,17 @@ public:
      */
     void ShowEditorOnMouseUp() { m_waitForSlowClick = true; }
 
+    /**
+     * wxWidgets recently added an ASSERT which fires if the position is greater than or equal
+     * to the number of rows (even if the delete count is 0).  Needless to say, this makes using
+     * DeleteRows for clearing a lot more cumbersome so we add a helper here.
+     */
+    void ClearRows()
+    {
+        if( GetNumberRows() )
+            DeleteRows( 0, GetNumberRows() );
+    }
+
 protected:
     /**
      * A re-implementation of wxGrid::DrawColLabel which left-aligns the first column when

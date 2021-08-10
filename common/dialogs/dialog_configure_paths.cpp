@@ -71,7 +71,7 @@ DIALOG_CONFIGURE_PATHS::DIALOG_CONFIGURE_PATHS( wxWindow* aParent, FILENAME_RESO
     m_btnMoveUp->SetBitmap( KiBitmap( BITMAPS::small_up ) );
     m_btnMoveDown->SetBitmap( KiBitmap( BITMAPS::small_down ) );
 
-    m_EnvVars->DeleteRows( 0, m_EnvVars->GetNumberRows() );
+    m_EnvVars->ClearRows();
     m_EnvVars->AppendCols( 1 );     // for the isExternal flags
     m_EnvVars->HideCol( TV_FLAG_COL );
     m_EnvVars->UseNativeColHeader( true );
@@ -96,7 +96,7 @@ DIALOG_CONFIGURE_PATHS::DIALOG_CONFIGURE_PATHS( wxWindow* aParent, FILENAME_RESO
 
     if( m_resolver )
     {
-        m_SearchPaths->DeleteRows( 0, m_SearchPaths->GetNumberRows() );
+        m_SearchPaths->ClearRows();
         m_SearchPaths->UseNativeColHeader( true );
 
         // prohibit these characters in the alias names: []{}()%~<>"='`;:.,&?/\|$

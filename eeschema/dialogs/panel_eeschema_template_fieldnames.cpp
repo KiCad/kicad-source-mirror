@@ -107,9 +107,7 @@ bool PANEL_EESCHEMA_TEMPLATE_FIELDNAMES::TransferDataToGrid()
 {
     m_grid->Freeze();
 
-    if( m_grid->GetNumberRows() )
-        m_grid->DeleteRows( 0, m_grid->GetNumberRows() );
-
+    m_grid->ClearRows();
     m_grid->AppendRows( m_fields.size() );
 
     for( int row = 0; row < m_grid->GetNumberRows(); ++row )

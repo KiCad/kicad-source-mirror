@@ -147,7 +147,7 @@ void PANEL_FP_PROPERTIES_3D_MODEL::ReloadModelsFromFootprint()
 #endif
 
     m_shapes3D_list.clear();
-    m_modelsGrid->DeleteRows( 0, m_modelsGrid->GetNumberRows() );
+    m_modelsGrid->ClearRows();
 
     wxString origPath, alias, shortPath;
     FILENAME_RESOLVER* res = m_frame->Prj().Get3DCacheManager()->GetResolver();

@@ -400,9 +400,7 @@ void FOOTPRINT_WIZARD_FRAME::ReCreateParameterList()
     wxArrayString hintsList       = footprintWizard->GetParameterHints( m_parameterGridPage );
 
     // Dimension the wxGrid
-    if( m_parameterGrid->GetNumberRows() > 0 )
-        m_parameterGrid->DeleteRows( 0, m_parameterGrid->GetNumberRows() );
-
+    m_parameterGrid->ClearRows();
     m_parameterGrid->AppendRows( namesList.size() );
 
     wxString designator, name, value, units, hint;

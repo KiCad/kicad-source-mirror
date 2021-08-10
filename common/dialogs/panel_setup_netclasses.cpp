@@ -241,9 +241,7 @@ bool PANEL_SETUP_NETCLASSES::TransferDataToWindow()
     for( const wxString& candidate : m_netNames )
         netToNetclassMap[ candidate ] = wxEmptyString;
 
-    if( m_netclassGrid->GetNumberRows() )
-        m_netclassGrid->DeleteRows( 0, m_netclassGrid->GetNumberRows() );
-
+    m_netclassGrid->ClearRows();
     m_netclassGrid->AppendRows((int) m_netclasses->GetCount() + 1 ); // + 1 for default netclass
 
     // enter the Default NETCLASS.
@@ -272,8 +270,7 @@ bool PANEL_SETUP_NETCLASSES::TransferDataToWindow()
         }
     }
 
-    if( m_membershipGrid->GetNumberRows() )
-        m_membershipGrid->DeleteRows( 0, m_membershipGrid->GetNumberRows() );
+    m_membershipGrid->ClearRows();
 
     // add currently-assigned and candidate netnames to membership lists
     for( const std::pair<const wxString, wxString>& ii : netToNetclassMap )

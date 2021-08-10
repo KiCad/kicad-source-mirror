@@ -48,7 +48,7 @@ PANEL_TEXT_VARIABLES::PANEL_TEXT_VARIABLES( wxWindow* aParent, PROJECT* aProject
     m_btnAddTextVar->SetBitmap( KiBitmap( BITMAPS::small_plus ) );
     m_btnDeleteTextVar->SetBitmap( KiBitmap( BITMAPS::small_trash ) );
 
-    m_TextVars->DeleteRows( 0, m_TextVars->GetNumberRows() );
+    m_TextVars->ClearRows();
 
     // prohibit these characters in the alias names: []{}()%~<>"='`;:.,&?/\|$
     m_nameValidator.SetStyle( wxFILTER_EXCLUDE_CHAR_LIST );

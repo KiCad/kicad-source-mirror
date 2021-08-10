@@ -903,7 +903,7 @@ void PANEL_SYM_LIB_TABLE::populateEnvironReadOnlyTable()
     std::set< wxString > unique;
 
     // clear the table
-    m_path_subs_grid->DeleteRows( 0, m_path_subs_grid->GetNumberRows() );
+    m_path_subs_grid->ClearRows();
 
     for( SYMBOL_LIB_TABLE_GRID* tbl : { global_model(), project_model() } )
     {
