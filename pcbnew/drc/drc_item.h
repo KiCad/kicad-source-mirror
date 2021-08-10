@@ -116,6 +116,7 @@ private:
         m_errorCode   = aErrorCode;
         m_errorTitle  = aTitle;
         m_settingsKey = aSettingsKey;
+        m_parent      = nullptr;
     }
 
     /// A list of all DRC_ITEM types which are valid error codes
