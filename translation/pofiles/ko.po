@@ -14,7 +14,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
 "PO-Revision-Date: 2021-08-10 08:22+0000\n"
-"Last-Translator: Ji Yoon Choi <chichoon.choi@gmail.com>\n"
+"Last-Translator: jeongsuAn <dks9467@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
 "Language: ko\n"
@@ -11392,7 +11392,6 @@ msgstr "/경로/대상/시트"
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:26
 #: pcbnew/footprint_edit_frame.cpp:240 pcbnew/footprint_edit_frame.cpp:726
 #: pcbnew/pcb_edit_frame.cpp:270 pcbnew/pcb_edit_frame.cpp:1160
-#, fuzzy
 msgid "Appearance"
 msgstr "외형"
 
@@ -11605,7 +11604,6 @@ msgid "Label increment:"
 msgstr "라벨 증분:"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:268
-#, fuzzy
 msgid "Dialog Preferences"
 msgstr "대화 기본 설정"
 
@@ -11618,14 +11616,12 @@ msgid "Keep hierarchy navigator open"
 msgstr "계층 탐색기 열기 유지"
 
 #: eeschema/dialogs/panel_eeschema_template_fieldnames.cpp:41
-#, fuzzy
 msgid "Global field name templates:"
-msgstr "필드 이름:"
+msgstr "전역 필드 이름 템플릿:"
 
 #: eeschema/dialogs/panel_eeschema_template_fieldnames.cpp:42
-#, fuzzy
 msgid "Project field name templates:"
-msgstr "필드 이름:"
+msgstr "프로젝트 필드 이름 템플릿:"
 
 #: eeschema/dialogs/panel_eeschema_template_fieldnames.cpp:77
 msgid "Untitled Field"
@@ -12497,9 +12493,8 @@ msgid "Overwrite Files"
 msgstr "파일 덮어쓰기"
 
 #: eeschema/files-io.cpp:937
-#, fuzzy
 msgid "Abort Project Save"
-msgstr "부품 가져오기"
+msgstr "프로젝트 저장 중단"
 
 #: eeschema/files-io.cpp:1113
 #, c-format
@@ -14174,7 +14169,6 @@ msgid "line feed"
 msgstr "줄 바꿈"
 
 #: eeschema/sch_validators.cpp:155
-#, fuzzy
 msgid "tab"
 msgstr "탭"
 
@@ -15035,7 +15029,7 @@ msgstr "정의 않됨!"
 #: pcbnew/fp_text.cpp:466 pcbnew/pad.cpp:1532
 #, fuzzy
 msgid "Parent"
-msgstr "현재"
+msgstr "부모"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1202
 #: pcbnew/tools/convert_tool.cpp:75
@@ -15531,7 +15525,6 @@ msgid "Add Circle"
 msgstr "원 추가"
 
 #: eeschema/tools/ee_actions.cpp:235
-#, fuzzy
 msgid "Add a circle"
 msgstr "원 추가"
 
@@ -15627,9 +15620,8 @@ msgid "Add Junction"
 msgstr "교차점 추가"
 
 #: eeschema/tools/ee_actions.cpp:299
-#, fuzzy
 msgid "Add a junction"
-msgstr "교차점 추가"
+msgstr "접합 추가"
 
 #: eeschema/tools/ee_actions.cpp:305
 #, fuzzy
@@ -15655,18 +15647,16 @@ msgid "Add Hierarchical Label"
 msgstr "계층구조 심볼 (시트) 추가"
 
 #: eeschema/tools/ee_actions.cpp:317
-#, fuzzy
 msgid "Add a hierarchical label"
-msgstr "계층구조 심볼 (시트) 추가"
+msgstr "계층 라벨 추가"
 
 #: eeschema/tools/ee_actions.cpp:323
 msgid "Add Sheet"
 msgstr "시트 추가"
 
 #: eeschema/tools/ee_actions.cpp:323
-#, fuzzy
 msgid "Add a hierarchical sheet"
-msgstr "시트에 계층구조 핀 추가"
+msgstr "계층 시트 추가"
 
 #: eeschema/tools/ee_actions.cpp:328 eeschema/tools/ee_actions.cpp:333
 #, fuzzy
@@ -16202,7 +16192,6 @@ msgid "Add Bus"
 msgstr "버스 추가"
 
 #: eeschema/tools/ee_actions.cpp:694
-#, fuzzy
 msgid "Add a bus"
 msgstr "버스 추가"
 
@@ -17110,8 +17099,9 @@ msgid "Image name: \"%s\"  Layer name: \"%s\""
 msgstr ""
 
 #: gerbview/gerbview_frame.cpp:659
+#, fuzzy
 msgid "X2 attr"
-msgstr ""
+msgstr "X2 속성"
 
 #: gerbview/gerbview_frame.cpp:1016
 msgid "GerbView"
@@ -17309,9 +17299,8 @@ msgid "Clear all layers. All data will be deleted"
 msgstr "레이어를 모두 지운 후 새 거버 파일 열기"
 
 #: gerbview/tools/gerbview_actions.cpp:98
-#, fuzzy
 msgid "Reload All Layers"
-msgstr "모든 레이어 지우기"
+msgstr "모든 레이어 다시 로드"
 
 #: gerbview/tools/gerbview_actions.cpp:99
 #, fuzzy
@@ -17390,7 +17379,7 @@ msgstr "DCode 표시"
 
 #: gerbview/tools/gerbview_actions.cpp:168
 msgid "Show dcode number"
-msgstr "D-Codes 번호 보이기"
+msgstr "D코드 번호 표시"
 
 #: gerbview/tools/gerbview_actions.cpp:173
 #, fuzzy
@@ -17517,7 +17506,7 @@ msgstr "PCB 배경"
 #: pcbnew/widgets/appearance_controls.cpp:1596
 #, fuzzy
 msgid "Show All Layers"
-msgstr "모두 보이기"
+msgstr "모든 레이어 표시"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:126
 #: pcbnew/widgets/appearance_controls.cpp:1583
@@ -17530,7 +17519,6 @@ msgstr ""
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:133
 #: pcbnew/widgets/appearance_controls.cpp:1599
-#, fuzzy
 msgid "Hide All Layers"
 msgstr "모든 레이어 지우기"
 
@@ -17618,9 +17606,8 @@ msgid "<html><h1>Template Selector</h1></html>"
 msgstr "<html><h1>템플릿 선택기</h1></html>"
 
 #: kicad/dialogs/dialog_template_selector.cpp:228
-#, fuzzy
 msgid "Select Templates Directory"
-msgstr "kicad/template 디렉토리"
+msgstr "템플릿 폴더 선택"
 
 #: kicad/dialogs/dialog_template_selector_base.cpp:29
 msgid "Folder:"
@@ -17636,19 +17623,16 @@ msgid "Validate"
 msgstr ""
 
 #: kicad/dialogs/dialog_template_selector_base.cpp:114
-#, fuzzy
 msgid "Project Template Title"
-msgstr "<"
+msgstr "프로젝트 템플릿 제목"
 
 #: kicad/dialogs/dialog_template_selector_base.h:65
-#, fuzzy
 msgid "Project Template Selector"
-msgstr "kicad/template 디렉토리"
+msgstr "프로젝트 템플릿 선택"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:108
-#, fuzzy
 msgid "Edit the project schematic"
-msgstr "회로도 인쇄"
+msgstr "프로젝트 회로도 편집"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:112
 #, fuzzy
@@ -17665,9 +17649,8 @@ msgid "Edit global and/or project PCB footprint libraries"
 msgstr "탐색할 라이브러리 선택"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:124
-#, fuzzy
 msgid "Preview Gerber files"
-msgstr "새 거버 파일 (&G)"
+msgstr "거버 파일 미리보기"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:128
 msgid "Convert bitmap images to schematic symbols or PCB footprints"
@@ -17705,9 +17688,9 @@ msgid "Target Directory"
 msgstr "타겟 디렉토리"
 
 #: kicad/files-io.cpp:82
-#, fuzzy, c-format
+#, c-format
 msgid "Unzipping project in '%s'.\n"
-msgstr "\"%s\" 에서 프로젝트 압축 해제 중\n"
+msgstr "'%s'에서 프로젝트 압축을 푸는 중입니다.\n"
 
 #: kicad/files-io.cpp:117
 msgid "Archive Project Files"
@@ -17729,7 +17712,7 @@ msgstr ""
 msgid ""
 "Error creating new directory. Please try a different path. The project "
 "cannot be imported."
-msgstr ""
+msgstr "새로운 폴더 생성 중 오류가 발생했습니다. 다른 경로를 시도하십시오. 프로젝트를 가져올 수 없습니다."
 
 #: kicad/import_project.cpp:141 kicad/import_project.cpp:160
 #, c-format
@@ -17738,6 +17721,9 @@ msgid ""
 "to '%s'\n"
 "The project cannot be imported."
 msgstr ""
+"파일 '%s'을(를)\n"
+"'%s'으로 복사할 수 없습니다\n"
+"프로젝트를 가져올 수 없습니다."
 
 #: kicad/import_project.cpp:223
 msgid "Import CADSTAR Archive Project Files"
@@ -18084,9 +18070,8 @@ msgid "Edit PCB footprints"
 msgstr "풋프린트"
 
 #: kicad/tools/kicad_manager_actions.cpp:88
-#, fuzzy
 msgid "Preview Gerber output files"
-msgstr "새 거버 파일 (&G)"
+msgstr "거버 출력 파일 미리 보기"
 
 #: kicad/tools/kicad_manager_actions.cpp:94
 #, fuzzy
@@ -18111,9 +18096,8 @@ msgid "Edit drawing sheet borders and title block"
 msgstr "페이지 설정"
 
 #: kicad/tools/kicad_manager_actions.cpp:111
-#, fuzzy
 msgid "Open Text Editor"
-msgstr "텍스트 에디터"
+msgstr "텍스트 편집기 열기"
 
 #: kicad/tools/kicad_manager_actions.cpp:111
 msgid "Launch preferred text editor"
@@ -19507,39 +19491,39 @@ msgstr "A7"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1855
 msgid "0 .. 15 V"
-msgstr ""
+msgstr "0 .. 15 V"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1856
 msgid "16 .. 30 V"
-msgstr ""
+msgstr "16 .. 30V"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1857
 msgid "31 .. 50 V"
-msgstr ""
+msgstr "31 .. 50 V"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1858
 msgid "51 .. 100 V"
-msgstr ""
+msgstr "51 .. 100V"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1859
 msgid "101 .. 150 V"
-msgstr ""
+msgstr "101 .. 150 V"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1860
 msgid "151 .. 170 V"
-msgstr ""
+msgstr "151 .. 170 V"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1861
 msgid "171 .. 250 V"
-msgstr ""
+msgstr "171 .. 250V"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1862
 msgid "251 .. 300 V"
-msgstr ""
+msgstr "251 .. 300V"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1863
 msgid "301 .. 500 V"
-msgstr ""
+msgstr "301 .. 500 V"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1864
 msgid " > 500 V"
@@ -19881,7 +19865,6 @@ msgstr "도체의 상대 투과율 (mu)"
 #: pcb_calculator/transline_ident.cpp:210
 #: pcb_calculator/transline_ident.cpp:326
 #: pcb_calculator/transline_ident.cpp:367 pcbnew/pcb_shape.cpp:576
-#, fuzzy
 msgid "Line width"
 msgstr "선 두께"
 
@@ -19891,9 +19874,8 @@ msgstr "선 두께"
 #: pcb_calculator/transline_ident.cpp:288
 #: pcb_calculator/transline_ident.cpp:330
 #: pcb_calculator/transline_ident.cpp:369
-#, fuzzy
 msgid "Line length"
-msgstr "선 삭제"
+msgstr "선 길이"
 
 #: pcb_calculator/transline_ident.cpp:149
 #: pcb_calculator/transline_ident.cpp:183
@@ -20047,7 +20029,6 @@ msgid "Relative permittivity of environment"
 msgstr ""
 
 #: pcb_calculator/transline_ident.cpp:408
-#, fuzzy
 msgid "Cable length"
 msgstr "케이블 길이"
 
@@ -20631,7 +20612,6 @@ msgid "Yellow"
 msgstr "노랑"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.h:51
-#, fuzzy
 msgid "Not specified"
 msgstr "지정하지 않음"
 
@@ -22880,9 +22860,8 @@ msgid "meter"
 msgstr "미터"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:109
-#, fuzzy
 msgid "0.1 Inch"
-msgstr "Inch"
+msgstr "0.1 인치"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:111
 msgid "VRML Units for Output Files"
@@ -33293,7 +33272,7 @@ msgstr "보드 특성 추가"
 
 #: pcbnew/tools/pcb_actions.cpp:112
 msgid "Add a board characteristics table on a graphic layer"
-msgstr ""
+msgstr "그래픽 레이어 기판의 특성 표를 추가합니다"
 
 #: pcbnew/tools/pcb_actions.cpp:117
 #, fuzzy
@@ -33317,9 +33296,8 @@ msgid "Add Center Dimension"
 msgstr "중심 치수선 추가"
 
 #: pcbnew/tools/pcb_actions.cpp:135
-#, fuzzy
 msgid "Add a center dimension"
-msgstr "치수 (&D)"
+msgstr "중심 차원 추가"
 
 #: pcbnew/tools/pcb_actions.cpp:140
 #, fuzzy
@@ -34040,9 +34018,8 @@ msgid "Add Footprint"
 msgstr "풋프린트"
 
 #: pcbnew/tools/pcb_actions.cpp:656
-#, fuzzy
 msgid "Add a footprint"
-msgstr "새 풋프린트 추가"
+msgstr "풋프린트 추가"
 
 #: pcbnew/tools/pcb_actions.cpp:661
 msgid "Drill/Place File Origin"
@@ -35608,9 +35585,8 @@ msgid "Non-copper Zone"
 msgstr "Copper"
 
 #: pcbnew/zone.cpp:561
-#, fuzzy
 msgid "Cutout"
-msgstr "유닛 삭제"
+msgstr "컷아웃"
 
 #: pcbnew/zone.cpp:570
 #, fuzzy
