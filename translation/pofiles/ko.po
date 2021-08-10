@@ -13,8 +13,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
-"PO-Revision-Date: 2021-08-09 14:35+0000\n"
-"Last-Translator: jehunseo <benbot591@gmail.com>\n"
+"PO-Revision-Date: 2021-08-10 08:22+0000\n"
+"Last-Translator: Ji Yoon Choi <chichoon.choi@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
 "Language: ko\n"
@@ -5880,7 +5880,7 @@ msgstr "그리드 속성..."
 
 #: common/tool/actions.cpp:479
 msgid "Set grid dimensions"
-msgstr "그리드 차원 설정"
+msgstr "그리드 치수 설정"
 
 #: common/tool/actions.cpp:484
 msgid "Use inches"
@@ -13794,7 +13794,6 @@ msgid "Symbol %s [%s]"
 msgstr "기호 %s [%s]"
 
 #: eeschema/sch_text.cpp:560
-#, fuzzy
 msgid "Tri-State"
 msgstr "3-상태"
 
@@ -14139,22 +14138,22 @@ msgstr "풋프린트 필드는 %s 문자를 포함할 수 없습니다."
 #: eeschema/sch_validators.cpp:114
 #, c-format
 msgid "The datasheet field cannot contain %s character(s)."
-msgstr "데이터시트 필드에는 %s 문자를 포함할 수 없습니다."
+msgstr "데이터시트 필드는 %s 문자를 포함할 수 없습니다."
 
 #: eeschema/sch_validators.cpp:118
 #, c-format
 msgid "The sheet name cannot contain %s character(s)."
-msgstr ""
+msgstr "시트 이름은 %s 문자를 포함할 수 없습니다."
 
 #: eeschema/sch_validators.cpp:122
 #, c-format
 msgid "The sheet filename cannot contain %s character(s)."
-msgstr ""
+msgstr "시트 파일명은 %s 문자를 포함할 수 없습니다."
 
 #: eeschema/sch_validators.cpp:126
 #, c-format
 msgid "The field cannot contain %s character(s)."
-msgstr ""
+msgstr "필드는 %s 문자를 포함할 수 없습니다."
 
 #: eeschema/sch_validators.cpp:138
 #, fuzzy
@@ -14193,7 +14192,7 @@ msgstr ", 또는 "
 
 #: eeschema/sch_validators.cpp:189
 msgid "The reference designator cannot contain text variable references"
-msgstr ""
+msgstr "참조 지정자는 텍스트 변수 참조를 포함할 수 없습니다"
 
 #: eeschema/sch_validators.cpp:196
 msgid "Field Validation Error"
@@ -14201,11 +14200,11 @@ msgstr "필드 검증 오류"
 
 #: eeschema/sch_validators.cpp:218
 msgid "Signal name contains '[' or ']' but is not a valid vector bus name."
-msgstr ""
+msgstr "신호 이름이 '[' 또는 ']'을 포함하지만 유효한 벡터 버스 이름이 아닙니다."
 
 #: eeschema/sch_validators.cpp:227
 msgid "Signal name contains '{' and '}' but is not a valid group bus name"
-msgstr ""
+msgstr "신호 이름이 '{'와 '}'를 포함하지만 유효한 그룹 버스 이름이 아닙니다"
 
 #: eeschema/sheet.cpp:63
 #, c-format
@@ -14214,6 +14213,8 @@ msgid ""
 "the sheet '%s' or one of its subsheets as a parent somewhere in the "
 "schematic hierarchy."
 msgstr ""
+"목적지 시트는 이미 회로도 계층 어딘가에서 '%s' 시트 또는 해당 시트의 하위 시트 중 하나를 상위 시트로 가지고 있기 때문에 시트 "
+"변경 사항은 적용될 수 없습니다."
 
 #: eeschema/sheet.cpp:84
 #, c-format
@@ -14222,12 +14223,14 @@ msgid ""
 "symbol library table.  The project this schematic belongs to must first be "
 "remapped before it can be imported into the current project."
 msgstr ""
+"회로도 '%s'는 아직 심볼 라이브러리 링크를 심볼 라이브러리 테이블에 매핑하지 않았습니다. 이것을 현재 프로젝트로 가져올 수 있도록, "
+"회로도가 포함된 프로젝트가 가장 먼저 매핑되어야 합니다."
 
 #: eeschema/sheet.cpp:147
 msgid ""
 "The entire schematic could not be loaded.  Errors occurred attempting to "
 "load hierarchical sheet schematics."
-msgstr ""
+msgstr "전체 회로도를 불러올 수 없습니다.  계층 시트 회로도를 불러오는 중에 오류가 발생하였습니다."
 
 #: eeschema/sheet.cpp:150
 #, fuzzy
@@ -14254,6 +14257,8 @@ msgid ""
 "project library table.  This may result in broken symbol library links for "
 "the loaded schematic.  Do you wish to continue?"
 msgstr ""
+"불러온 회로도에 포함된 라이브러리 이름 중의 일부가 프로젝트 라이브러리 테이블에 존재하지 않습니다.  이는 회로도의 심볼 라이브러리 "
+"링크를 손상시킵니다.  계속하시겠습니까?"
 
 #: eeschema/sheet.cpp:227 eeschema/sheet.cpp:268 eeschema/sheet.cpp:317
 #: eeschema/sheet.cpp:378
@@ -14267,6 +14272,7 @@ msgid ""
 "The project library table '%s' does not exist or cannot be read.  This may "
 "result in broken symbol links for the schematic.  Do you wish to continue?"
 msgstr ""
+"프로젝트 라이브러리 테이블 '%s' 는 존재하지 않거나 읽을 수 없습니다.  이는 회로도의 심볼 링크를 손상시킵니다.  계속하시겠습니까?"
 
 #: eeschema/sheet.cpp:313
 msgid ""
@@ -14274,6 +14280,8 @@ msgid ""
 "loaded schematic project library table.  This may result in broken symbol "
 "library links for the schematic.  Do you wish to continue?"
 msgstr ""
+"불러온 회로도에 포함된 라이브러리 이름 중의 일부가 회로도 프로젝트 라이브러리 테이블에 존재하지 않습니다. 이는 회로도의 심볼 라이브러리 "
+"링크를 손상시킵니다.  계속하시겠습니까?"
 
 #: eeschema/sheet.cpp:374
 msgid ""
@@ -14281,6 +14289,8 @@ msgid ""
 "current library table.  This conflict cannot be resolved and may result in "
 "broken symbol library links for the schematic.  Do you wish to continue?"
 msgstr ""
+"현재 라이브러리 테이블에 서로 다른 라이브러리를 가리키는 중복된 라이브러리 이름이 존재합니다.  이 충돌은 해결될 수 없으며, 회로도의 "
+"심볼 라이브러리 링크를 손상시킵니다.  계속하시겠습니까?"
 
 #: eeschema/sheet.cpp:561
 #, c-format
@@ -14293,6 +14303,13 @@ msgid ""
 "\n"
 "Do you wish to continue?"
 msgstr ""
+"파일 이름 \"%s\"는 대소문자를 구분하지 않는 파일 이름을 지원하는\n"
+"시스템의 회로도에서 이미 정의된 기존 파일 이름과 문제를 일으킬\n"
+"수 있습니다.  만약 이 프로젝트를 대소문자룰 구분하지 않는 파일\n"
+"이름을 지원하는 운영 체제에 복사할 경우 문제가 생길 가능성이\n"
+"높습니다.\n"
+"\n"
+"계속하시겠습니까?"
 
 #: eeschema/sheet.cpp:570
 msgid "Do not show this message again."
@@ -14311,7 +14328,7 @@ msgstr "변경 없음"
 #: eeschema/sim/sim_panel_base.cpp:91
 msgid ""
 "This simulation provide no plots. Please refer to console window for results"
-msgstr ""
+msgstr "이 시뮬레이션이 제공하는 플로트가 없습니다. 결과를 확인하려면 콘솔 창을 참고하세요"
 
 #: eeschema/sim/sim_plot_frame.cpp:176
 msgid "Run/Stop Simulation"
@@ -14326,7 +14343,6 @@ msgid "Add Signals"
 msgstr "신호 추가"
 
 #: eeschema/sim/sim_plot_frame.cpp:179
-#, fuzzy
 msgid "Add signals to plot"
 msgstr "플로트에 신호 추가"
 
@@ -14341,7 +14357,7 @@ msgstr "회로도 인쇄"
 
 #: eeschema/sim/sim_plot_frame.cpp:182 eeschema/sim/sim_plot_frame_base.cpp:242
 msgid "Tune"
-msgstr ""
+msgstr "조정"
 
 #: eeschema/sim/sim_plot_frame.cpp:183
 #, fuzzy
@@ -14364,7 +14380,7 @@ msgstr "Spice 시뮬레이터"
 
 #: eeschema/sim/sim_plot_frame.cpp:482 eeschema/sim/sim_plot_frame.cpp:1422
 msgid "There were errors during netlist export, aborted."
-msgstr ""
+msgstr "네트리스트 내보내기 중에 오류가 발생하였습니다. 내보내기를 중단합니다."
 
 #: eeschema/sim/sim_plot_frame.cpp:522
 #, c-format
@@ -14373,11 +14389,11 @@ msgstr "플롯%u - "
 
 #: eeschema/sim/sim_plot_frame.cpp:623
 msgid "Error: simulation type not defined!\n"
-msgstr ""
+msgstr "오류: 시뮬레이션 유형이 정의되지 않았습니다!\n"
 
 #: eeschema/sim/sim_plot_frame.cpp:629
 msgid "Error: simulation type doesn't support plotting!\n"
-msgstr ""
+msgstr "오류: 시뮬레이션 유형이 플로팅을 지원하지 않습니다!\n"
 
 #: eeschema/sim/sim_plot_frame.cpp:812 eeschema/sim/sim_plot_frame.cpp:1616
 msgid "Signal"
@@ -14408,7 +14424,7 @@ msgstr "프로젝트 저장 (&S)"
 
 #: eeschema/sim/sim_plot_frame.cpp:1470
 msgid "You need to run plot-providing simulation first."
-msgstr ""
+msgstr "플롯 제공 시뮬레이션을 먼저 실행하여야 합니다."
 
 #: eeschema/sim/sim_plot_frame.cpp:1714
 msgid ""
@@ -14428,7 +14444,7 @@ msgstr "신호 숨김"
 
 #: eeschema/sim/sim_plot_frame.cpp:1785
 msgid "Erase the signal from plot screen"
-msgstr ""
+msgstr "플롯 화면으로부터 신호 삭제"
 
 #: eeschema/sim/sim_plot_frame.cpp:1791
 msgid "Hide Cursor"
@@ -14475,7 +14491,7 @@ msgstr "SPICE 네트리스트 보기..."
 
 #: eeschema/sim/sim_plot_frame_base.cpp:75
 msgid "Shows current simulation's netlist. Useful for debugging SPICE errors."
-msgstr ""
+msgstr "현재 시뮬레이션의 네트리스트를 표시합니다. Spice 오류를 디버깅할 때 유용합니다."
 
 #: eeschema/sim/sim_plot_frame_base.cpp:80
 msgid "Settings..."
@@ -14531,7 +14547,7 @@ msgstr "위상"
 
 #: eeschema/sim/sim_plot_panel.cpp:337
 msgid "noise [(V or A)^2/Hz]"
-msgstr ""
+msgstr "노이즈 [(V or A)^2/Hz]"
 
 #: eeschema/sim/sim_plot_panel.cpp:341
 msgid "Time"
@@ -14539,7 +14555,7 @@ msgstr "시간"
 
 #: eeschema/sim/sim_plot_panel.cpp:403
 msgid "Voltage (swept)"
-msgstr ""
+msgstr "전압 (swept)"
 
 #: eeschema/sim/sim_plot_panel.cpp:407
 #, fuzzy
@@ -14548,11 +14564,11 @@ msgstr "현재 시트"
 
 #: eeschema/sim/sim_plot_panel.cpp:410
 msgid "Resistance (swept)"
-msgstr ""
+msgstr "저항 (swept)"
 
 #: eeschema/sim/sim_plot_panel.cpp:414
 msgid "Temperature (swept)"
-msgstr ""
+msgstr "온도 (swept)"
 
 #: eeschema/sim/sim_plot_panel.cpp:419
 msgid "Voltage (measured)"
@@ -14564,7 +14580,7 @@ msgstr "DC 스윕"
 
 #: eeschema/sim/spice_simulator.cpp:73
 msgid "Pole-zero"
-msgstr ""
+msgstr "극점-영점"
 
 #: eeschema/sim/spice_simulator.cpp:79
 #, fuzzy
@@ -14577,11 +14593,11 @@ msgstr "알려지지 않음!"
 
 #: eeschema/sim/spice_value.cpp:42
 msgid "Spice value cannot be empty"
-msgstr ""
+msgstr "Spice 값은 비워둘 수 없습니다"
 
 #: eeschema/sim/spice_value.cpp:47
 msgid "Invalid Spice value string"
-msgstr ""
+msgstr "유효하지 않은 Spice 값 문자열"
 
 #: eeschema/sim/spice_value.cpp:80
 #, fuzzy
@@ -14618,6 +14634,8 @@ msgid ""
 "Not all symbol libraries could be loaded.  Use the Manage Symbol\n"
 "Libraries dialog to adjust paths and add or remove libraries."
 msgstr ""
+"모든 심볼 라이브러리를 불러올 수 없었습니다.  심볼 라이브러리 관리를 이용하여\n"
+"경로를 조정하고 라이브러리를 추가하거나 삭제하세요."
 
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:70
 msgid "Symbol..."
@@ -14654,7 +14672,7 @@ msgstr "라이브러리"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:225
 msgid "Library changes are unsaved"
-msgstr ""
+msgstr "라이브러리 변경점 저장되지 않음"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:516
 msgid "Save changes to schematic before closing?"
@@ -14670,7 +14688,7 @@ msgstr "단위 %s"
 #, c-format
 msgid ""
 "Editing symbol %s from schematic.  Saving will update the schematic only."
-msgstr ""
+msgstr "회로도에서 %s 심볼을 편집합니다.  저장하면 회로도만을 업데이트합니다."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:730
 msgid "Manage symbol libraries"
@@ -14680,12 +14698,12 @@ msgstr "심볼 라이브러리 관리"
 msgid ""
 "Symbols in legacy libraries are not editable.  Use Manage Symbol Libraries "
 "to migrate to current format."
-msgstr ""
+msgstr "오래된 라이브러리의 심볼들은 편집할 수 없습니다.  심볼 라이브러리 관리를 통해 현재 형식으로 옮기십시오."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:751
 #, c-format
 msgid "Symbol %s is derived from %s.  Symbol graphics will not be editable."
-msgstr ""
+msgstr "심볼 %s 는 %s에서 파생되었습니다.  심볼 그래픽은 편집될 수 없습니다."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:755
 #, c-format
@@ -14756,6 +14774,8 @@ msgid ""
 "The current configuration does not include the library '%s'.\n"
 "Use Manage Symbol Libraries to edit the configuration."
 msgstr ""
+"현재 설정은 라이브러리 '%s' 을 포함시키지 않습니다.\n"
+"심볼 라이브러리 관리를 통해 설정을 편집하세요."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1184
 #: eeschema/symbol_viewer_frame.cpp:396
@@ -14770,6 +14790,8 @@ msgid ""
 "The library '%s' is not enabled in the current configuration.\n"
 "Use Manage Symbol Libraries to edit the configuration."
 msgstr ""
+"현재 설정은 라이브러리 '%s' 를 사용할 수 없습니다.\n"
+"심볼 라이브러리 관리를 통해 설정을 편집하세요."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1195
 #: eeschema/symbol_viewer_frame.cpp:403
@@ -14789,11 +14811,11 @@ msgstr "%s 파일은 EESchema 라이브러리가 아닙니다."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:58
 msgid "Normal save as operation"
-msgstr ""
+msgstr "일반적인 저장 수행"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:60
 msgid "Do not perform any additional operations after saving library."
-msgstr ""
+msgstr "라이브러리를 저장한 후 추가적인 작업을 수행하지 않습니다."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:63
 #, fuzzy
@@ -14806,6 +14828,9 @@ msgid ""
 "\n"
 "The original library will no longer be available for use."
 msgstr ""
+"새로운 라이브러리로 심볼 라이브러리 테이블 항목을 교체합니다.\n"
+"\n"
+"기존 라이브러리는 더이상 쓸 수 없게 됩니다."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:68
 #, fuzzy
@@ -14819,6 +14844,10 @@ msgid ""
 "The symbol library table nickname is suffixed with\n"
 "an integer to ensure no duplicate table entries."
 msgstr ""
+"전역 심볼 라이브러리 테이블에 새로운 항목을 추가합니다.\n"
+"\n"
+"심볼 라이브러리 테이블 별칭에는 접미사로 정수가 붙으며,\n"
+"이는 테이블 항목이 겹치지 않도록 합니다."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:74
 msgid "Add new project library table entry"
@@ -14831,6 +14860,10 @@ msgid ""
 "The symbol library table nickname is suffixed with\n"
 "an integer to ensure no duplicate table entries."
 msgstr ""
+"프로젝트 심볼 라이브러리 테이블에 새로운 항목을 추가합니다.\n"
+"\n"
+"심볼 라이브러리 테이블 별칭에는 접미사로 정수가 붙으며,\n"
+"이는 테이블 항목이 겹치지 않도록 합니다."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:146
 #, fuzzy
@@ -14858,11 +14891,11 @@ msgstr "작업 라이브러리 선택"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:262
 msgid "The current symbol has been modified.  Save changes?"
-msgstr ""
+msgstr "현재 심볼은 변경되었습니다.  변경점을 저장할까요?"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:409
 msgid "This new symbol has no name and cannot be created."
-msgstr ""
+msgstr "새로운 심볼은 이름이 없기 때문에 생성될 수 없습니다."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:421
 #, c-format
@@ -14872,7 +14905,7 @@ msgstr "기호 %s는 이미 라이브러리 '%s'에 존재합니다."
 #: eeschema/symbol_editor/symbol_editor.cpp:527
 #: eeschema/tools/symbol_editor_control.cpp:506
 msgid "No schematic currently open."
-msgstr ""
+msgstr "현재 열려있는 회로도가 없습니다."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:547
 #: eeschema/symbol_editor/symbol_editor.cpp:1141
@@ -14886,7 +14919,7 @@ msgstr "기호 라이브러리 '%s'는 쓸 수 없습니다."
 #: eeschema/symbol_editor/symbol_editor.cpp:549
 #: eeschema/symbol_editor/symbol_editor.cpp:1142
 msgid "You must save to a different location."
-msgstr ""
+msgstr "반드시 다른 위치에 저장하여야 합니다."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:601 include/lib_table_grid.h:183
 #: pcbnew/footprint_libraries_utils.cpp:951
@@ -14912,7 +14945,7 @@ msgstr "라이브러리가 정의되지 않았습니다."
 #: eeschema/symbol_editor/symbol_editor.cpp:654
 msgid ""
 "Derived symbols must be saved in the same library as their parent symbol."
-msgstr ""
+msgstr "파생 기호는 상위 기호와 같은 라이브러리에 저장되어야 합니다."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:673
 #, c-format
@@ -14930,6 +14963,8 @@ msgid ""
 "The symbol '%s' has been modified.\n"
 "Do you want to remove it from the library?"
 msgstr ""
+"심볼 '%s'는 변경되었습니다.\n"
+"라이브러리에서 해당 심볼을 삭제할까요?"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:743
 #, c-format
@@ -14939,6 +14974,10 @@ msgid ""
 "\n"
 "Do you wish to delete this symbol and all of its derivatives?"
 msgstr ""
+"심볼 %s는 다른 심볼을 파생하는 데에 사용되었습니다.\n"
+"이 심볼을 삭제하면 모든 파생 심볼도 함께 지워집니다.\n"
+"\n"
+"이 심볼과 모든 파생 심볼을 삭제할까요?"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:748
 #: eeschema/tools/ee_actions.cpp:143
@@ -14955,7 +14994,7 @@ msgstr "전원 심볼"
 #: pcbnew/footprint_libraries_utils.cpp:1065
 #, c-format
 msgid "Revert '%s' to last version saved?"
-msgstr ""
+msgstr "마지막으로 저장된 버전으로 '%s'를 되돌리시겠습니까?"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:960
 #, fuzzy, c-format
@@ -15033,7 +15072,7 @@ msgstr "기호 %s는 이미 라이브러리 '%s'에 존재합니다."
 
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:114
 msgid "There is no symbol selected to save."
-msgstr ""
+msgstr "저장하기 위해 선택한 심볼이 없습니다."
 
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:123
 msgid "Export Symbol"
@@ -15156,11 +15195,11 @@ msgstr "심볼 뷰어"
 
 #: eeschema/tools/assign_footprints.cpp:207
 msgid "Load Symbol Footprint Link File"
-msgstr ""
+msgstr "심볼 풋프린트 링크 파일 불러오기"
 
 #: eeschema/tools/assign_footprints.cpp:218
 msgid "Keep existing footprint field visibility"
-msgstr ""
+msgstr "이미 존재하는 풋프린트 필드 가시성 유지"
 
 #: eeschema/tools/assign_footprints.cpp:219
 #, fuzzy
@@ -15174,7 +15213,7 @@ msgstr "풋프린트 압축 만들기"
 
 #: eeschema/tools/assign_footprints.cpp:222
 msgid "Select the footprint field visibility setting."
-msgstr ""
+msgstr "풋프린트 필드 가시성 설정을 선택하세요."
 
 #: eeschema/tools/assign_footprints.cpp:223
 msgid "Change Visibility"
@@ -15187,13 +15226,15 @@ msgstr "기호-풋프린트 링크 파일 '%s'을 열지 못했습니다."
 
 #: eeschema/tools/backannotate.cpp:73
 msgid "Select at least one property to back annotate."
-msgstr ""
+msgstr "주석을 달기 위해 최소한 한 개의 속성을 선택하세요."
 
 #: eeschema/tools/backannotate.cpp:97
 msgid ""
 "Cannot fetch PCB netlist because eeschema is opened in stand-alone mode.\n"
 "You must launch the KiCad project manager and create a project."
 msgstr ""
+"Eeschema가 스탠드얼론 모드로 실행중이기 때문에 PCB 넷리스트를 불러올 수 없습니다.\n"
+"KiCad 프로젝트 매니저를 실행하여 프로젝트를 생성하여야 합니다."
 
 #: eeschema/tools/backannotate.cpp:164
 #, c-format
@@ -21541,7 +21582,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_copper_zones.cpp:362
 #: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:104
 msgid "Fillet radius:"
-msgstr "필렛 반경:"
+msgstr "모깍기 반경:"
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:503
 msgid "Thermal spoke width cannot be smaller than the minimum width."
@@ -21627,7 +21668,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:143
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:82
 msgid "Fillet"
-msgstr "필렛"
+msgstr "모깍기"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:173
 #, fuzzy
@@ -22034,9 +22075,8 @@ msgid ""
 msgstr ""
 
 #: pcbnew/dialogs/dialog_dimension_properties.cpp:280
-#, fuzzy
 msgid "Change dimension properties"
-msgstr "시트 속성"
+msgstr "치수 속성 변경"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:20
 #, fuzzy
@@ -22065,14 +22105,13 @@ msgstr "레이어:"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:67
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:87
-#, fuzzy
 msgid "Dimension Format"
-msgstr "치수 (&D)"
+msgstr "치수 유형"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:96
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:102
 msgid "Measured value of this dimension"
-msgstr ""
+msgstr "현재 치수의 측정 값"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:106
 #, fuzzy
@@ -22098,12 +22137,12 @@ msgstr "단위:"
 msgid ""
 "Units of this dimension (\"automatic\" to follow the units selected in the "
 "editor)"
-msgstr ""
+msgstr "현재 치수의 단위 (\"자동\" 을 선택하면 편집기에서 선택한 단위를 사용)"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:130
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:135
 msgid "Text to print before the dimension value"
-msgstr ""
+msgstr "치수 값 앞에 출력할 텍스트"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:139
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:108
@@ -22134,7 +22173,7 @@ msgstr "1234 (밀리미터)"
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:155
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:160
 msgid "Text to print after the dimension value"
-msgstr ""
+msgstr "치수 값 뒤에 출력할 텍스트"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:164
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:124
@@ -22189,9 +22228,8 @@ msgid ""
 msgstr ""
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:210
-#, fuzzy
 msgid "Dimension Text"
-msgstr "치수 (&D)"
+msgstr "치수 텍스트"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:219
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:110
@@ -22252,11 +22290,11 @@ msgstr "180.0"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:301
 msgid "Keep aligned with dimension"
-msgstr ""
+msgstr "치수선을 따라 정렬하기"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:302
 msgid "Automatically set the text orientation to match the dimension lines"
-msgstr ""
+msgstr "치수선에 맞추어 자동으로 텍스트를 정렬합니다"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:307
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:190
@@ -22290,16 +22328,15 @@ msgstr "설명서"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:329
 msgid "Choose how to position the text relative to the dimension line"
-msgstr ""
+msgstr "치수선을 기준으로 텍스트를 어떻게 정렬할 지 선택합니다"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:344
-#, fuzzy
 msgid "Dimension Line"
-msgstr "치수 (&D)"
+msgstr "치수선"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:353
 msgid "Thickness of the dimension lines"
-msgstr ""
+msgstr "치수선의 두께"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:367
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:135
@@ -22318,9 +22355,8 @@ msgid "Gap between the measured points and the start of the extension lines"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.h:120
-#, fuzzy
 msgid "Dimension Properties"
-msgstr "핀 속성"
+msgstr "치수 속성"
 
 #: pcbnew/dialogs/dialog_drc.cpp:85
 msgid "Run DRC"
@@ -25580,7 +25616,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_pns_diff_pair_dimensions_base.h:60
 msgid "Differential Pair Dimensions"
-msgstr ""
+msgstr "차동 쌍 치수"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings.cpp:79
 msgid "Single Track Length Tuning"
@@ -26166,9 +26202,8 @@ msgstr "최소 펜 굵기:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:117
 #: pcbnew/dialogs/dialog_track_via_size_base.cpp:25
-#, fuzzy
 msgid "Track width:"
-msgstr "트랙 너비:"
+msgstr "배선 너비:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:131
 #, fuzzy
@@ -26792,7 +26827,7 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:134
 msgid "Allow fillets outside zone outline"
-msgstr ""
+msgstr "바깥 영역 외곽선에 대해 모깍기 허용"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:149
 #, fuzzy
@@ -30442,9 +30477,8 @@ msgid "Error loading project footprint libraries."
 msgstr "프로젝트 풋프린트 라이브러리를 불러오는 중에 오류가 발생했습니다."
 
 #: pcbnew/pcb_dimension.cpp:299
-#, fuzzy
 msgid "Dimension"
-msgstr "차원"
+msgstr "치수"
 
 #: pcbnew/pcb_dimension.cpp:301
 msgid "Prefix"
@@ -32289,15 +32323,15 @@ msgstr "비아 %s"
 
 #: pcbnew/router/router_tool.cpp:313
 msgid "Select Differential Pair Dimensions"
-msgstr ""
+msgstr "차동 쌍 치수 선택"
 
 #: pcbnew/router/router_tool.cpp:330
 msgid "Use differential pair dimensions from the net class"
-msgstr ""
+msgstr "네트 클래스로부터 차동 쌍 치수 사용"
 
 #: pcbnew/router/router_tool.cpp:335
 msgid "Specify custom differential pair dimensions"
-msgstr ""
+msgstr "사용자 정의 차동 쌍 치수 지정"
 
 #: pcbnew/router/router_tool.cpp:352
 #, fuzzy, c-format
@@ -32970,9 +33004,8 @@ msgid "Draw a leader"
 msgstr "드로우 설정"
 
 #: pcbnew/tools/drawing_tool.cpp:947
-#, fuzzy
 msgid "Draw a dimension"
-msgstr "치수 (&D)"
+msgstr "치수선 그리기"
 
 #: pcbnew/tools/drawing_tool.cpp:1154
 #, fuzzy
@@ -33043,13 +33076,12 @@ msgstr ""
 
 #: pcbnew/tools/edit_tool.cpp:1198
 msgid "Enter fillet radius:"
-msgstr "필렛 반경을 입력:"
+msgstr "모깍기 반경을 입력:"
 
 #: pcbnew/tools/edit_tool.cpp:1198 pcbnew/tools/edit_tool.cpp:1361
 #: pcbnew/tools/pcb_actions.cpp:316
-#, fuzzy
 msgid "Fillet Tracks"
-msgstr "채움"
+msgstr "배선 모깍기"
 
 #: pcbnew/tools/edit_tool.cpp:1208
 msgid ""
@@ -33057,16 +33089,15 @@ msgid ""
 "The fillet operation was not performed."
 msgstr ""
 "반경에 0이 입력되었습니다.\n"
-"필렛 작업은 수행되지 않습니다."
+"모깍기 작업은 수행되지 않습니다."
 
 #: pcbnew/tools/edit_tool.cpp:1368
-#, fuzzy
 msgid "Unable to fillet the selected track segments."
-msgstr "이 세그먼트를 드래그 할 수 없습니다: 두 세그먼트가 평행합니다."
+msgstr "선택한 배선 세그먼트를 모깍기 할 수 없습니다."
 
 #: pcbnew/tools/edit_tool.cpp:1370
 msgid "Some of the track segments could not be filleted."
-msgstr ""
+msgstr "일부 배선 세그먼트를 모깍기 할 수 없습니다."
 
 #: pcbnew/tools/edit_tool.cpp:1697 pcbnew/tools/pcb_actions.cpp:302
 #, fuzzy
@@ -33274,19 +33305,16 @@ msgid "Add a board stackup table on a graphic layer"
 msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:130
-#, fuzzy
 msgid "Add Aligned Dimension"
-msgstr "치수 (&D)"
+msgstr "정렬된 치수선 추가"
 
 #: pcbnew/tools/pcb_actions.cpp:130
-#, fuzzy
 msgid "Add an aligned linear dimension"
-msgstr "치수 (&D)"
+msgstr "정렬된 선형 치수선 추가"
 
 #: pcbnew/tools/pcb_actions.cpp:135
-#, fuzzy
 msgid "Add Center Dimension"
-msgstr "치수 (&D)"
+msgstr "중심 치수선 추가"
 
 #: pcbnew/tools/pcb_actions.cpp:135
 #, fuzzy
