@@ -724,7 +724,7 @@ void BM2CMP_FRAME::exportBitmap( OUTPUT_FMT_ID aFormat )
         exportPostScriptFormat();
         break;
 
-    case KICAD_LOGO:
+    case KICAD_WKS_LOGO:
         OnExportLogo();
         break;
     }
@@ -762,7 +762,7 @@ void BM2CMP_FRAME::OnExportLogo()
     }
 
     std::string buffer;
-    ExportToBuffer( buffer, KICAD_LOGO );
+    ExportToBuffer( buffer, KICAD_WKS_LOGO );
     fputs( buffer.c_str(), outfile );
     fclose( outfile );
 }
@@ -818,7 +818,7 @@ void BM2CMP_FRAME::exportEeschemaFormat()
 
     wxFileDialog fileDlg( this, _( "Create Symbol Library" ),
                           path, wxEmptyString,
-                          LegacySymbolLibFileWildcard(),
+                          KiCadSymbolLibFileWildcard(),
                           wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
     int          diag = fileDlg.ShowModal();
@@ -827,7 +827,7 @@ void BM2CMP_FRAME::exportEeschemaFormat()
         return;
 
     fn = fileDlg.GetPath();
-    fn.SetExt( LegacySymbolLibFileExtension );
+    fn.SetExt( KiCadSymbolLibFileExtension );
     m_ConvertedFileName = fn.GetFullPath();
 
     FILE*    outfile = wxFopen( m_ConvertedFileName, wxT( "w" ) );

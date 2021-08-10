@@ -118,8 +118,8 @@ int BITMAPCONV_INFO::ConvertBitmap( potrace_bitmap_t* aPotrace_bitmap, OUTPUT_FM
 
     switch( aFormat )
     {
-    case KICAD_LOGO:
-        m_Format = KICAD_LOGO;
+    case KICAD_WKS_LOGO:
+        m_Format = KICAD_WKS_LOGO;
         m_ScaleX = PL_IU_PER_MM * 25.4 / aDpi_X;  // the conversion scale from PPI to micron
         m_ScaleY = PL_IU_PER_MM * 25.4 / aDpi_Y;  // Y axis is top to bottom
         createOutputData();
@@ -136,8 +136,8 @@ int BITMAPCONV_INFO::ConvertBitmap( potrace_bitmap_t* aPotrace_bitmap, OUTPUT_FM
 
     case EESCHEMA_FMT:
         m_Format = EESCHEMA_FMT;
-        m_ScaleX = 1000.0 / aDpi_X;       // the conversion scale from PPI to legacy IU (mil)
-        m_ScaleY = -1000.0 / aDpi_Y;      // Y axis is bottom to Top for components in libs
+        m_ScaleX = SCH_IU_PER_MM * 25.4 / aDpi_X;   // the conversion scale from PPI to eeschema iu
+        m_ScaleY = -SCH_IU_PER_MM * 25.4 / aDpi_Y;  // Y axis is bottom to Top for components in libs
         createOutputData();
         break;
 
@@ -190,8 +190,8 @@ const char* BITMAPCONV_INFO::getBoardLayerName( BMP2CMP_MOD_LAYER aChoice )
 
 void BITMAPCONV_INFO::outputDataHeader(  const char * aBrdLayerName )
 {
-    int Ypos = (int) ( m_PixmapHeight / 2 * m_ScaleY );
-    int fieldSize;             // fields text size = 60 mils
+    double Ypos = ( m_PixmapHeight / 2 * m_ScaleY );    // fields Y position in mm
+    double fieldSize;             // fields text size in mm
     char strbuf[1024];
 
     switch( m_Format )
@@ -207,7 +207,8 @@ void BITMAPCONV_INFO::outputDataHeader(  const char * aBrdLayerName )
     case PCBNEW_KICAD_MOD:
         // fields text size = 1.5 mm
         // fields text thickness = 1.5 / 5 = 0.3mm
-        sprintf( strbuf, "(module %s (layer F.Cu)\n  (at 0 0)\n", m_CmpName.c_str() );
+        sprintf( strbuf, "(footprint \"%s\" (version 20210606) (generator bitmap2component) "
+                         "(layer \"F.Cu\")\n  (at 0 0)\n", m_CmpName.c_str() );
         m_Data += strbuf;
         sprintf( strbuf, "(attr board_only exclude_from_pos_files exclude_from_bom)\n");
         m_Data += strbuf;
@@ -219,28 +220,43 @@ void BITMAPCONV_INFO::outputDataHeader(  const char * aBrdLayerName )
         m_Data += strbuf;
         break;
 
-    case KICAD_LOGO:
-        m_Data += "(polygon (pos 0 0 rbcorner) (rotate 0) (linewidth 0.01)\n";
+    case KICAD_WKS_LOGO:
+        m_Data += "(kicad_wks (version 20210606) (generator bitmap2component)\n";
+        m_Data += "  (polygon (pos 0 0 rbcorner) (rotate 0) (linewidth 0.01)\n";
         break;
 
     case EESCHEMA_FMT:
-        sprintf( strbuf, "EESchema-LIBRARY Version 2.3\n" );
-        m_Data += strbuf;
-        sprintf( strbuf, "#\n# %s\n", m_CmpName.c_str() );
-        m_Data += strbuf;
-        sprintf( strbuf, "# pixmap size w = %d, h = %d\n#\n", m_PixmapWidth, m_PixmapHeight );
+        fieldSize = 1.27;             // fields text size in mm (= 50 mils)
+        Ypos /= SCH_IU_PER_MM;
+        Ypos += fieldSize / 2;
+        // sprintf( strbuf, "# pixmap size w = %d, h = %d\n#\n", m_PixmapWidth, m_PixmapHeight );
+        sprintf( strbuf, "(kicad_symbol_lib (version 20210619) (generator bitmap2component)\n"
+                         "  (symbol \"%s\" (pin_names (offset 1.016)) (in_bom yes) (on_board yes)\n",
+                 m_CmpName.c_str() );
         m_Data += strbuf;
 
-        // print reference and value
-        fieldSize = 50;             // fields text size = 50 mils
-        Ypos += fieldSize / 2;
-        sprintf( strbuf, "DEF %s G 0 40 Y Y 1 F N\n", m_CmpName.c_str() );
+        sprintf( strbuf, "    (property \"Reference\" \"#G\" (id 0) (at 0 %g 0)\n"
+                         "      (effects (font (size %g %g)) hide)\n    )\n",
+                 -Ypos, fieldSize, fieldSize );
         m_Data += strbuf;
-        sprintf( strbuf, "F0 \"#G\" 0 %d %d H I C CNN\n", Ypos, fieldSize );
+
+        sprintf( strbuf, "    (property \"Value\" \"%s\" (id 1) (at 0 %g 0)\n"
+                         "      (effects (font (size %g %g)) hide)\n    )\n",
+                 m_CmpName.c_str(), Ypos, fieldSize, fieldSize );
         m_Data += strbuf;
-        sprintf( strbuf, "F1 \"%s\" 0 %d %d H I C CNN\n", m_CmpName.c_str(), -Ypos, fieldSize );
+
+        sprintf( strbuf, "    (property \"Footprint\" \"\" (id 2) (at 0 0 0)\n"
+                         "      (effects (font (size %g %g)) hide)\n    )\n",
+                 fieldSize, fieldSize );
         m_Data += strbuf;
-        m_Data += "DRAW\n";
+
+        sprintf( strbuf, "    (property \"Datasheet\" \"\" (id 3) (at 0 0 0)\n"
+                         "      (effects (font (size %g %g)) hide)\n    )\n",
+                 fieldSize, fieldSize  );
+        m_Data += strbuf;
+
+        sprintf( strbuf, "    (symbol \"%s_0_0\"\n", m_CmpName.c_str() );
+        m_Data += strbuf;
         break;
     }
 }
@@ -259,13 +275,14 @@ void BITMAPCONV_INFO::outputDataEnd()
         m_Data += ")\n";
         break;
 
-    case KICAD_LOGO:
-        m_Data += ")\n";
+    case KICAD_WKS_LOGO:
+        m_Data += "  )\n)\n";
         break;
 
     case EESCHEMA_FMT:
-        m_Data += "ENDDRAW\n";
-        m_Data += "ENDDEF\n";
+        m_Data += "    )\n";        // end symbol_0_0
+        m_Data += "  )\n";          // end symbol
+        m_Data += ")\n";            // end lib
         break;
     }
 }
@@ -337,8 +354,8 @@ void BITMAPCONV_INFO::outputOnePolygon( SHAPE_LINE_CHAIN& aPolygon, const char* 
     }
     break;
 
-    case KICAD_LOGO:
-        m_Data += "  (pts";
+    case KICAD_WKS_LOGO:
+        m_Data += "    (pts";
 
         // Internal units = micron, file unit = mm
         jj = 0;
@@ -366,24 +383,31 @@ void BITMAPCONV_INFO::outputOnePolygon( SHAPE_LINE_CHAIN& aPolygon, const char* 
         break;
 
     case EESCHEMA_FMT:
-        // The polygon outline thickness is fixed here to 1 mil, the minimal
-        // value in Eeschema (0 means use default thickness for graphics)
-        #define EE_LINE_THICKNESS 1
-        sprintf( strbuf, "P %d 0 0 %d", (int) aPolygon.PointCount() + 1, EE_LINE_THICKNESS );
-        m_Data += strbuf;
+        // The polygon outline thickness is fixed here to 0.01  ( 0.0 is the default thickness)
+        #define SCH_LINE_THICKNESS_MM 0.01
+        //sprintf( strbuf, "P %d 0 0 %d", (int) aPolygon.PointCount() + 1, EE_LINE_THICKNESS );
+        m_Data += "      (polyline\n        (pts\n";
 
         for( ii = 0; ii < aPolygon.PointCount(); ii++ )
         {
             currpoint = aPolygon.CPoint( ii );
-            sprintf( strbuf, " %d %d", currpoint.x - offsetX, currpoint.y - offsetY );
+            sprintf( strbuf, "          (xy %f %f)\n",
+                             ( currpoint.x - offsetX ) / SCH_IU_PER_MM,
+                             ( currpoint.y - offsetY ) / SCH_IU_PER_MM );
             m_Data += strbuf;
         }
 
         // Close polygon
-        sprintf( strbuf, " %d %d", startpoint.x - offsetX, startpoint.y - offsetY );
+        sprintf( strbuf, "          (xy %f %f)\n",
+                         ( startpoint.x - offsetX ) / SCH_IU_PER_MM,
+                         ( startpoint.y - offsetY ) / SCH_IU_PER_MM );
         m_Data += strbuf;
+        m_Data += "        )\n";        // end pts
 
-        m_Data += " F\n";
+        sprintf( strbuf, "        (stroke (width %g)) (fill (type outline))\n",
+                         SCH_LINE_THICKNESS_MM );
+        m_Data += strbuf;
+        m_Data += "      )\n";          // end polyline
         break;
     }
 }
