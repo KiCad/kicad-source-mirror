@@ -8,13 +8,14 @@
 # 방준영 <wnsdudtkwkd8@naver.com>, 2021.
 # 박기정 <pgj0334@naver.com>, 2021.
 # hokim <teamgoodaloe@gmail.com>, 2021.
+# 강명구 <mg_@kakao.com>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
-"PO-Revision-Date: 2021-08-10 15:22+0000\n"
-"Last-Translator: jeongsuAn <dks9467@gmail.com>\n"
+"PO-Revision-Date: 2021-08-10 21:56+0000\n"
+"Last-Translator: 강명구 <mg_@kakao.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
 "Language: ko\n"
@@ -11730,9 +11731,8 @@ msgid "Show own page reference"
 msgstr "자체 페이지 참조 표시"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:163
-#, fuzzy
 msgid "Standard (1,2,3)"
-msgstr "표준 비아"
+msgstr "표준 (1,2,3)"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:167
 msgid "Abbreviated (1..3)"
@@ -11867,7 +11867,7 @@ msgstr "심볼 라이브러리 '%s' 을 로드하지 못함."
 #: eeschema/dialogs/panel_sym_lib_table.cpp:462
 #, fuzzy
 msgid "Error Loading Library"
-msgstr "라이브러리 파일 저장 중 에러"
+msgstr "라이브러리 로드 중 오류 발생"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:508
 msgid "Warning: Duplicate Nickname"
@@ -12067,9 +12067,8 @@ msgid "Passive Pin"
 msgstr "수동 핀"
 
 #: eeschema/erc.cpp:64 eeschema/erc.cpp:81
-#, fuzzy
 msgid "Free Pin"
-msgstr "라이브러리 만들기"
+msgstr "핀 해제"
 
 #: eeschema/erc.cpp:65 eeschema/erc.cpp:82
 msgid "Unspecified Pin"
@@ -12165,7 +12164,7 @@ msgstr "핀 간 충돌 문제"
 #: eeschema/erc_item.cpp:70
 #, fuzzy
 msgid "Mismatch between hierarchical labels and sheet pins"
-msgstr "시트에 계층구조 핀 추가"
+msgstr "계층 레이블과 시트 핀 간의 불일치"
 
 #: eeschema/erc_item.cpp:74
 msgid "A pin with a \"no connection\" flag is connected"
@@ -12174,7 +12173,7 @@ msgstr "\"연결 없음\" 플래그가 있는 핀이 연결되어 있습니다"
 #: eeschema/erc_item.cpp:78
 #, fuzzy
 msgid "Unconnected \"no connection\" flag"
-msgstr "미연결 플래그 추가"
+msgstr "연결되지 않은 \"연결 없음\" 플래그"
 
 #: eeschema/erc_item.cpp:82
 msgid "Label not connected to anything"
@@ -12236,7 +12235,7 @@ msgstr "라이브러리 심볼 문제"
 #: eeschema/erc_item.cpp:138
 #, fuzzy
 msgid "Symbol is not annotated"
-msgstr "치수 추가"
+msgstr "기호가 주석 처리되지 않음"
 
 #: eeschema/erc_item.cpp:142
 #, fuzzy
@@ -12252,9 +12251,8 @@ msgid "Duplicate reference designators"
 msgstr "중복 참조 지정자"
 
 #: eeschema/erc_item.cpp:154
-#, fuzzy
 msgid "Bus Entry needed"
-msgstr "버스에 와이어 추가"
+msgstr "버스 Entry 필요"
 
 #: eeschema/fields_grid_table.cpp:135 eeschema/files-io.cpp:100
 #: eeschema/files-io.cpp:801
@@ -12312,12 +12310,12 @@ msgstr "회로도 '%s'이(가) 존재하지 않습니다. 생성하시겠습니�
 #: eeschema/files-io.cpp:309
 #, fuzzy
 msgid "Creating Schematic"
-msgstr "회로도 인쇄"
+msgstr "도식 생성"
 
 #: eeschema/files-io.cpp:310
 #, fuzzy
 msgid "Loading Schematic"
-msgstr "회로도 인쇄"
+msgstr "도식 로드 중"
 
 #: eeschema/files-io.cpp:370
 msgid "Schematic file changes are unsaved"
@@ -12357,12 +12355,12 @@ msgstr ""
 #: eeschema/files-io.cpp:491
 #, fuzzy
 msgid "Illegal entry found in project file symbol library list."
-msgstr "%s 파일은 EESchema 라이브러리가 아닙니다."
+msgstr "프로젝트 파일 기호 라이브러리 목록에 잘못된 항목이 있습니다."
 
 #: eeschema/files-io.cpp:492
 #, fuzzy
 msgid "Project Load Warning"
-msgstr "ERC 경고"
+msgstr "프로젝트 로드 경고"
 
 #: eeschema/files-io.cpp:495
 msgid ""
@@ -12397,9 +12395,8 @@ msgstr ""
 "합니다."
 
 #: eeschema/files-io.cpp:541
-#, fuzzy
 msgid "Load Without Cache File"
-msgstr "D-Codes 파일 열기"
+msgstr "캐시 파일 없이 불러오기"
 
 #: eeschema/files-io.cpp:542
 msgid "Abort"
@@ -12415,12 +12412,12 @@ msgstr "이 파일은 이전 버전의 KiCad에서 만들었습니다. 저장 �
 #: eeschema/files-io.cpp:633
 #, fuzzy
 msgid "Schematic is read only."
-msgstr "라이브러리가 이미 사용 중입니다."
+msgstr "회로도는 읽기 전용입니다."
 
 #: eeschema/files-io.cpp:658
 #, fuzzy
 msgid "Insert Schematic"
-msgstr "회로도로 내보내기"
+msgstr "회로도 삽입"
 
 #: eeschema/files-io.cpp:686
 #, fuzzy
