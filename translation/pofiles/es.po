@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
-"PO-Revision-Date: 2021-08-10 15:22+0000\n"
+"PO-Revision-Date: 2021-08-10 21:56+0000\n"
 "Last-Translator: VicSanRoPe <vicsanrope@protonmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/kicad/"
 "master-source/es/>\n"
@@ -18272,61 +18272,52 @@ msgid "Open an existing project"
 msgstr "Abrir un proyecto existente"
 
 #: kicad/tools/kicad_manager_actions.cpp:58
-#, fuzzy
 msgid "Close Project"
-msgstr "Nuevo proyecto"
+msgstr "Cerrar proyecto"
 
 #: kicad/tools/kicad_manager_actions.cpp:58
-#, fuzzy
 msgid "Close the current project"
-msgstr "Solo al proyecto activo"
+msgstr "Cerrar el proyecto actual"
 
 #: kicad/tools/kicad_manager_actions.cpp:64
-#, fuzzy
 msgid "Edit schematic"
 msgstr "Editar esquema"
 
 #: kicad/tools/kicad_manager_actions.cpp:70
-#, fuzzy
 msgid "Edit schematic symbols"
 msgstr "Editar símbolos de esquema"
 
 #: kicad/tools/kicad_manager_actions.cpp:76
 msgid "Edit PCB"
-msgstr "Editar PCB"
+msgstr "Editar placa"
 
 #: kicad/tools/kicad_manager_actions.cpp:82
-#, fuzzy
 msgid "Edit PCB footprints"
-msgstr "Editar huellas"
+msgstr "Editar huellas de placa"
 
 #: kicad/tools/kicad_manager_actions.cpp:88
-#, fuzzy
 msgid "Preview Gerber output files"
-msgstr "Ver archivos Gerber"
+msgstr "Previsualizar archivos de salida Gerber"
 
 #: kicad/tools/kicad_manager_actions.cpp:94
-#, fuzzy
 msgid "Image Converter"
-msgstr "Convertido"
+msgstr "Conversor de imágenes"
 
 #: kicad/tools/kicad_manager_actions.cpp:94
-#, fuzzy
 msgid "Convert bitmap images to schematic or PCB components"
-msgstr "Convertir imágenes de mapa de bits en elementos de esquema o PCB."
+msgstr "Convertir imágenes de mapa de bits en componentes de esquema o placa"
 
 #: kicad/tools/kicad_manager_actions.cpp:99
 msgid "Calculator Tools"
-msgstr "Calculadoras"
+msgstr "Herramientas de cálculo"
 
 #: kicad/tools/kicad_manager_actions.cpp:99
 msgid "Run component calculations, track width calculations, etc."
 msgstr "Cálculo de componentes, ancho de pistas, etc."
 
 #: kicad/tools/kicad_manager_actions.cpp:105
-#, fuzzy
 msgid "Edit drawing sheet borders and title block"
-msgstr "Imprimir marco y bloque de título"
+msgstr "Editar marco de borde de hoja y bloque de título"
 
 #: kicad/tools/kicad_manager_actions.cpp:111
 msgid "Open Text Editor"
@@ -18337,24 +18328,22 @@ msgid "Launch preferred text editor"
 msgstr "Abrir editor de texto preferido"
 
 #: kicad/tools/kicad_manager_control.cpp:46
-#, fuzzy
 msgid "Create a new folder for the project"
-msgstr "Crear un nuevo directorio para el proyecto"
+msgstr "Crear una nueva carpeta para el proyecto"
 
 #: kicad/tools/kicad_manager_control.cpp:86
 msgid "Create New Project"
 msgstr "Crear nuevo proyecto"
 
 #: kicad/tools/kicad_manager_control.cpp:128
-#, fuzzy
 msgid ""
 "The selected folder is not empty.  It is recommended that you create "
 "projects in their own empty folder.\n"
 "\n"
 "Do you want to continue?"
 msgstr ""
-"La carpeta seleccionada no está vacía. Se recomienda la creación de nuevos "
-"proyectos en una carpeta vacía.\n"
+"La carpeta seleccionada no está vacía. Se recomienda que cree proyectos en "
+"sus propias carpetas vacías.\n"
 "\n"
 "¿Desea continuar?"
 
@@ -18399,23 +18388,22 @@ msgid "Open Existing Project"
 msgstr "Abrir proyecto"
 
 #: kicad/tools/kicad_manager_control.cpp:475
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot copy folder '%s'."
-msgstr "No puede copiarse al archivo \"%s\"."
+msgstr "No se puede copiar la carpeta '%s'."
 
 #: kicad/tools/kicad_manager_control.cpp:518
-#, fuzzy
 msgid "Save Project To"
-msgstr "Guardar proyecto"
+msgstr "Guardar proyecto a"
 
 #: kicad/tools/kicad_manager_control.cpp:538
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Folder '%s' could not be created.\n"
 "\n"
 "Please make sure you have write permissions and try again."
 msgstr ""
-"No puede crearse la carpeta \"%s\".\n"
+"No se puede crear la carpeta '%s'.\n"
 "\n"
 "Por favor, confirme que tiene permisos de escritura e inténtelo de nuevo."
 
@@ -18424,19 +18412,16 @@ msgid "Error!"
 msgstr "¡Error!"
 
 #: kicad/tools/kicad_manager_control.cpp:606
-#, fuzzy
 msgid "Create (or open) a project to edit a schematic."
-msgstr "Craer nuevo proyecto desde una plantilla"
+msgstr "Crear (o abrir) un proyecto para editar un esquema."
 
 #: kicad/tools/kicad_manager_control.cpp:612
-#, fuzzy
 msgid "Create (or open) a project to edit a pcb."
-msgstr "Crear nuevo proyecto"
+msgstr "Crear (o abrir) un proyecto para editar una placa."
 
 #: kicad/tools/kicad_manager_control.cpp:629
-#, fuzzy
 msgid "Application failed to load:\n"
-msgstr "No ha podido cargarse Pcbnew:\n"
+msgstr "Fallo al cargar la aplicación:\n"
 
 #: kicad/tools/kicad_manager_control.cpp:629
 #: kicad/tools/kicad_manager_control.cpp:636 pcbnew/pcb_edit_frame.cpp:1447
@@ -18464,9 +18449,8 @@ msgid "Error code: %d"
 msgstr "Código de error: %d"
 
 #: pagelayout_editor/dialogs/design_inspector.cpp:223
-#, fuzzy
 msgid "Layout"
-msgstr "Diseño de PCB"
+msgstr "Diseño"
 
 #: pagelayout_editor/dialogs/design_inspector.cpp:227
 #, c-format
@@ -18475,9 +18459,8 @@ msgstr "Tamaño: %.1fx%.1fmm"
 
 #: pagelayout_editor/dialogs/dialog_design_inspector_base.cpp:38
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:230
-#, fuzzy
 msgid "Count"
-msgstr "Cantidad:"
+msgstr "Cantidad"
 
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:30
 msgid "Y start:"
@@ -18535,14 +18518,12 @@ msgid "New Item"
 msgstr "Nuevo elemento"
 
 #: pagelayout_editor/dialogs/dialogs_for_printing.cpp:236
-#, fuzzy
 msgid "Print Drawing Sheet"
-msgstr "Arrastrar hoja"
+msgstr "Imprimir hoja de dibujo"
 
 #: pagelayout_editor/dialogs/dialogs_for_printing.cpp:241
-#, fuzzy
 msgid "An error occurred attempting to print the drawing sheet."
-msgstr "A ocurrido un error al imprimir el esquema."
+msgstr "Ha ocurrido un error al intentar imprimir la hoja de dibujo."
 
 #: pagelayout_editor/dialogs/dialogs_for_printing.cpp:242
 msgid "Printing"
@@ -18561,14 +18542,12 @@ msgid "Subsequent pages only"
 msgstr "Solo siguientes páginas"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:81
-#, fuzzy
 msgid "H align:"
-msgstr "Alineación H:"
+msgstr "Alinear H:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:97
-#, fuzzy
 msgid "V align:"
-msgstr "Alineación V:"
+msgstr "Alinear V:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:125
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:424
@@ -18583,7 +18562,6 @@ msgid "Text height:"
 msgstr "Alto del texto:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:147
-#, fuzzy
 msgid "Max width:"
 msgstr "Ancho máximo:"
 
@@ -18593,7 +18571,6 @@ msgid "Set to 0 to disable this constraint"
 msgstr "Ajustar a 0 para desactivar este requerimiento"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:160
-#, fuzzy
 msgid "Max height:"
 msgstr "Altura máxima:"
 
@@ -18625,14 +18602,12 @@ msgid "Rotation:"
 msgstr "Rotación:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:322
-#, fuzzy
 msgid "Bitmap DPI:"
-msgstr "PPI del mapa de bits:"
+msgstr "PPP del mapa de bits:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:338
-#, fuzzy
 msgid "Repeat Parameters"
-msgstr "Parámetros de repetición:"
+msgstr "Repetir parámetros"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:346
 #: pcbnew/dialogs/dialog_create_array_base.cpp:254
@@ -18640,9 +18615,8 @@ msgid "Count:"
 msgstr "Cantidad:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:356
-#, fuzzy
 msgid "Step text:"
-msgstr "Paso X:"
+msgstr "Paso del texto:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:361
 msgid "Number of characters or digits to step text by for each repeat."
@@ -18651,9 +18625,8 @@ msgstr ""
 "repetición."
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:368
-#, fuzzy
 msgid "Step X:"
-msgstr "Paso Y:"
+msgstr "Paso X:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:373
 msgid "Distance on the X axis to step for each repeat."
@@ -18678,9 +18651,8 @@ msgstr "Propiedades del elemento"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:416
 #: pcbnew/footprint_edit_frame.cpp:925
-#, fuzzy
 msgid "Default Values"
-msgstr "Valores por defecto:"
+msgstr "Valores por defecto"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:452
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:351
@@ -18698,9 +18670,8 @@ msgid "Set to Default"
 msgstr "Aplicar valores por defecto"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:493
-#, fuzzy
 msgid "Page Margins"
-msgstr "Márgenes de la página:"
+msgstr "Márgenes de página"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:501
 msgid "Left:"
@@ -18724,14 +18695,12 @@ msgid "General Options"
 msgstr "Opciones generales"
 
 #: pagelayout_editor/files.cpp:55
-#, fuzzy
 msgid "Drawing Sheet File"
-msgstr "Arrastrar hoja"
+msgstr "Archivo de hoja de dibujo"
 
 #: pagelayout_editor/files.cpp:61 pagelayout_editor/files.cpp:102
-#, fuzzy
 msgid "The current drawing sheet has been modified. Save changes?"
-msgstr "Se ha modificado la placa. ¿Desea guardar los cambios?"
+msgstr "Se ha modificado la hoja de dibujo actual. ¿Guardar cambios?"
 
 #: pagelayout_editor/files.cpp:74
 #, c-format
@@ -18739,9 +18708,8 @@ msgid "File \"%s\" loaded"
 msgstr "Se ha cargado el archivo \"%s\""
 
 #: pagelayout_editor/files.cpp:121
-#, fuzzy
 msgid "Append Existing Drawing Sheet"
-msgstr "Añadir un archivo de diseño de página existente"
+msgstr "Agregar la hoja de dibujo existente"
 
 #: pagelayout_editor/files.cpp:132 pagelayout_editor/files.cpp:157
 #, c-format
@@ -18758,28 +18726,26 @@ msgid "Open"
 msgstr "Abrir"
 
 #: pagelayout_editor/files.cpp:163 pagelayout_editor/files.cpp:210
-#, fuzzy, c-format
+#, c-format
 msgid "File \"%s\" saved."
-msgstr "Se ha guardado el archivo %s"
+msgstr "Se ha guardado el archivo %s."
 
 #: pagelayout_editor/files.cpp:172
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to write '%s'."
-msgstr "No se puede escribir \"%s\""
+msgstr "No se puede escribir '%s'."
 
 #: pagelayout_editor/files.cpp:185
 msgid "Save As"
 msgstr "Guardar como"
 
 #: pagelayout_editor/files.cpp:235
-#, fuzzy
 msgid "Error reading drawing sheet"
-msgstr "Terminar la hoja de dibujo"
+msgstr "Error al leer la hoja de dibujo"
 
 #: pagelayout_editor/files.cpp:257
-#, fuzzy
 msgid "Layout file is read only."
-msgstr "La librería \"%s\" es de solo lectura"
+msgstr "El archivo de diseño es de solo lectura."
 
 #: pagelayout_editor/pl_editor_frame.cpp:100
 msgid "KiCad Drawing Sheet Editor"
@@ -18803,9 +18769,8 @@ msgid "Error Init Printer info"
 msgstr "Error de inicialización de información de la impresora"
 
 #: pagelayout_editor/pl_editor_frame.cpp:553
-#, fuzzy
 msgid "[no drawing sheet loaded]"
-msgstr "Terminar la hoja de dibujo"
+msgstr "[hoja de dibujo no cargada]"
 
 #: pagelayout_editor/pl_editor_frame.cpp:761
 #, c-format
@@ -18813,24 +18778,20 @@ msgid "coord origin: %s"
 msgstr "origen de coordenadas: %s"
 
 #: pagelayout_editor/pl_editor_frame.cpp:901
-#, fuzzy
 msgid "New drawing sheet file is unsaved"
-msgstr "El nuevo archivo de esquema no está guardado"
+msgstr "El nuevo archivo de hoja de dibujo no está guardado"
 
 #: pagelayout_editor/pl_editor_frame.cpp:905
-#, fuzzy
 msgid "Drawing sheet changes are unsaved"
-msgstr "Se ha guardado la huella \"%s\""
+msgstr "Los cambios en la hoja de dibujo no están guardados"
 
 #: pagelayout_editor/pl_editor_layout.cpp:62
-#, fuzzy
 msgid "Page Width"
-msgstr "Cambio de anchura"
+msgstr "Ancho de hoja"
 
 #: pagelayout_editor/pl_editor_layout.cpp:65
-#, fuzzy
 msgid "Page Height"
-msgstr "Alto del texto"
+msgstr "Alto de hoja"
 
 #: pagelayout_editor/toolbars_pl_editor.cpp:75
 msgid "Left Top paper corner"
@@ -18877,82 +18838,70 @@ msgid "Add Line"
 msgstr "Añadir línea"
 
 #: pagelayout_editor/tools/pl_actions.cpp:44
-#, fuzzy
 msgid "Add a line"
-msgstr "Añadir línea"
+msgstr "Añadir una línea"
 
 #: pagelayout_editor/tools/pl_actions.cpp:59
-#, fuzzy
 msgid "Add Bitmap"
-msgstr "Añadir mapa de bits..."
+msgstr "Añadir mapa de bits"
 
 #: pagelayout_editor/tools/pl_actions.cpp:59
-#, fuzzy
 msgid "Add a bitmap image"
-msgstr "Añadir imagen de mapa de bits"
+msgstr "Añadir una imagen de mapa de bits"
 
 #: pagelayout_editor/tools/pl_actions.cpp:73
-#, fuzzy
 msgid "Append Existing Drawing Sheet..."
-msgstr "Añadir un archivo de diseño de página existente"
+msgstr "Agregar una hoja de dibujo existente..."
 
 #: pagelayout_editor/tools/pl_actions.cpp:74
-#, fuzzy
 msgid "Append an existing drawing sheet file to current file"
-msgstr "Añadir un archivo de diseño de página existente al archivo activo"
+msgstr "Agregar una hoja de dibujo existente al archivo actual"
 
 #: pagelayout_editor/tools/pl_actions.cpp:82
-#, fuzzy
 msgid "Show Design Inspector"
-msgstr "&Mostrar información sobre la versión"
+msgstr "Mostrar inspector de diseño"
 
 #: pagelayout_editor/tools/pl_actions.cpp:82
-#, fuzzy
 msgid "Show the list of items in the drawing sheet"
-msgstr "Mostrar un listado de redes con nombres e identificadores"
+msgstr "Mostrar el listado de elementos en la hoja de dibujo"
 
 #: pagelayout_editor/tools/pl_actions.cpp:87
-#, fuzzy
 msgid "Page Preview Settings..."
-msgstr "Ajustes de pá&gina..."
+msgstr "Configuración de previsualización de página..."
 
 #: pagelayout_editor/tools/pl_actions.cpp:87
-#, fuzzy
 msgid "Edit preview data for page size and title block"
-msgstr "Imprimir &referencia de la hoja y bloque de título"
+msgstr ""
+"Editar los datos de previsualización para el tamaño de hoja y bloque de "
+"título"
 
 #: pagelayout_editor/tools/pl_actions.cpp:92
-#, fuzzy
 msgid "Show title block in preview mode"
-msgstr "Mostrar contornos en modo línea"
+msgstr "Mostrar el bloque de título en el modo de previsualización"
 
 #: pagelayout_editor/tools/pl_actions.cpp:93
-#, fuzzy
 msgid ""
 "Show title block in preview mode:\n"
 "text placeholders will be replaced with preview data."
 msgstr ""
-"Mostrar bloque de título en modo edición: los textos se muestran tal cual:\n"
-"los textos con formato se muestran sin cambios"
+"Mostrar el bloque de título en modo de previsualización:\n"
+"los textos marcadores de posición se remplazan con datos de previsualización."
 
 #: pagelayout_editor/tools/pl_actions.cpp:99
-#, fuzzy
 msgid "Show title block in edit mode"
-msgstr "Mostrar pistas en modo boceto"
+msgstr "Mostrar el bloque de título en el modo de edición"
 
 #: pagelayout_editor/tools/pl_actions.cpp:100
-#, fuzzy
 msgid ""
 "Show title block in edit mode:\n"
 "text placeholders are shown as ${keyword} tokens."
 msgstr ""
-"Mostrar bloque de título en modo edición: los textos se muestran tal cual:\n"
-"los textos con formato se muestran sin cambios"
+"Mostrar el bloque de título en modo de edición:\n"
+"los textos marcadores de posición se muestran como tokens ${palabra_clave} ."
 
 #: pagelayout_editor/tools/pl_edit_tool.cpp:474
-#, fuzzy
 msgid "Error writing objects to clipboard"
-msgstr "Exportar al portapapeles"
+msgstr "Error al escribir objetos al portapapeles"
 
 #: pcb_calculator/attenuators.cpp:128
 #, c-format
@@ -18960,7 +18909,6 @@ msgid "Attenuation more than %f dB"
 msgstr "Atenuación mayor de %f dB"
 
 #: pcb_calculator/attenuators/bridget_tee_formula.h:2
-#, fuzzy
 msgid ""
 "### Bridged Tee Attenuator\n"
 "__Zin__ desired input impedance in &#x2126;<br>\n"
@@ -18978,12 +18926,11 @@ msgstr ""
 "__Z<sub>0</sub> = Zin = Zout__<br><br>\n"
 "\n"
 "* __a__ atenuación en dB\n"
-"* __L = 10 <sup> a / 20 </sup> __ (la pérdida)<br><br>\n"
-"* ___R1 = Z<sub>0</sub> \\ * (L - 1) ___\n"
-"* ___R2 = Z<sub>0</sub> / (L - 1) ___"
+"* __L = 10<sup>a/20</sup>__ (la pérdida)<br><br>\n"
+"* ___R1 = Z<sub>0</sub> \\* (L - 1)___\n"
+"* ___R2 = Z<sub>0</sub> / (L - 1)___"
 
 #: pcb_calculator/attenuators/pi_formula.h:2
-#, fuzzy
 msgid ""
 "### PI Attenuator\n"
 "__Zin__ desired input impedance in &#x2126;<br>\n"
@@ -19003,14 +18950,13 @@ msgstr ""
 "__Zin = Zout__<br><br>\n"
 "\n"
 "* __a__ atenuación en dB\n"
-"* __L = 10<sup>a/20</sup> __ (la pérdida)\n"
-"* __A = (L + 1)/(L - 1)__<br><br>\n"
-"* ___R2 = (L- 1)/2 \\* &radic; ( (Zin \\* Zout) / L)___\n"
-"* ___R1 = 1/( A/Zin - 1/R2 )___\n"
-"* ___R3 = 1/ (A/Zout - 1/R2 )___"
+"* __L = 10<sup>a/20</sup>__ (la pérdida)\n"
+"* __A = (L + 1) / (L - 1)__<br><br>\n"
+"* ___R2 = (L- 1) / 2 \\* &radic; ( (Zin \\* Zout) / L)___\n"
+"* ___R1 = 1 / (A / Zin - 1 / R2)___\n"
+"* ___R3 = 1 / (A / Zout - 1 / R2)___"
 
 #: pcb_calculator/attenuators/splitter_formula.h:2
-#, fuzzy
 msgid ""
 "### Split Attenuator\n"
 "#### Attenuation is 6dB\n"
@@ -19021,15 +18967,14 @@ msgid ""
 "___R1 = R2 = R3 = Z<sub>out</sub> / 3___\n"
 msgstr ""
 "### Atenuador Dividido\n"
-"### La atenuación es de 6dB\n"
+"#### La atenuación es de 6dB\n"
 "___Z<sub>in</sub>___ impedancia de entrada deseada en &#x2126;<br>\n"
-"___Z<sub>out</sub>___ impedancia de salida deseada &#x2126;<br>\n"
+"___Z<sub>out</sub>___ impedancia de salida deseada en &#x2126;<br>\n"
 "___Z<sub>in</sub> = Z<sub>out</sub>___\n"
 "\n"
-"___R1 = R2 = R3 = Z<sub>out</sub>/3___\n"
+"___R1 = R2 = R3 = Z<sub>out</sub> / 3___\n"
 
 #: pcb_calculator/attenuators/tee_formula.h:2
-#, fuzzy
 msgid ""
 "### Tee Attenuator\n"
 "__Zin__ desired input impedance in &#x2126;<br>\n"
@@ -19051,8 +18996,9 @@ msgstr ""
 "\n"
 "* __a__atenuación en dB \n"
 "* __L = 10<sup>a/20</sup>__ (la pérdida)\n"
-"* ___A = (L + 1)/(L - 1)___<br><br>\n"
-"* ___R2 = 2&radic;(L \\* Z<sub>in</sub> \\* Z<sub>out</sub> )/(L - 1)___\n"
+"* ___A = (L + 1) / (L - 1)___<br><br>\n"
+"* ___R2 = 2 &radic; (L \\* Z<sub>in</sub> \\* Z<sub>out</sub> ) / (L - 1)"
+"___\n"
 "* ___R1 = Z<sub>in</sub> \\* A - R2___\n"
 "* ___R3 = Z<sub>out</sub> \\* A - R2___\n"
 
