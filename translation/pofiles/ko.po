@@ -13,8 +13,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
-"PO-Revision-Date: 2021-08-10 08:22+0000\n"
-"Last-Translator: jeongsuAn <dks9467@gmail.com>\n"
+"PO-Revision-Date: 2021-08-10 15:22+0000\n"
+"Last-Translator: Ji Yoon Choi <chichoon.choi@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
 "Language: ko\n"
@@ -2769,7 +2769,7 @@ msgstr "사용자 지정:"
 
 #: common/dialogs/dialog_print_generic_base.cpp:77
 msgid "Set X scale adjust for exact scale plotting"
-msgstr "정밀 스케일 플로트용 X 스케일 설정"
+msgstr "정밀 스케일 플롯용 X 스케일 설정"
 
 #: common/dialogs/dialog_print_generic_base.cpp:99
 #: eeschema/dialogs/dialog_print_using_printer_base.cpp:62
@@ -5572,12 +5572,12 @@ msgstr "인쇄…"
 
 #: common/tool/actions.cpp:109
 msgid "Plot..."
-msgstr "플로트…"
+msgstr "플롯..."
 
 #: common/tool/actions.cpp:109 pcbnew/dialogs/dialog_plot.cpp:68
 #: pcbnew/dialogs/dialog_plot_base.h:153
 msgid "Plot"
-msgstr "플로트"
+msgstr "플롯"
 
 #: common/tool/actions.cpp:115
 msgid "Close the current editor"
@@ -6503,7 +6503,7 @@ msgstr "거버 파일"
 #: common/wildcards_and_files_ext.cpp:282
 #: common/wildcards_and_files_ext.cpp:323
 msgid "KiCad printed circuit board files"
-msgstr "KiCad 출력된 회로 기판 파일"
+msgstr "KiCad 인쇄 회로 기판 파일"
 
 #: common/wildcards_and_files_ext.cpp:288
 msgid "Eagle ver. 6.x XML PCB files"
@@ -9539,11 +9539,11 @@ msgstr "핀 속성"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:109
 msgid "Plot All Pages"
-msgstr "모든 페이지 플로트"
+msgstr "모든 페이지 플롯"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:110
 msgid "Plot Current Page"
-msgstr "현재 페이지 플로트"
+msgstr "현재 페이지 플롯"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:214
 #: pcbnew/dialogs/dialog_export_svg.cpp:207
@@ -9571,7 +9571,7 @@ msgstr ""
 #: pcbnew/exporters/gen_footprints_placefile.cpp:192
 #: pcbnew/exporters/gen_footprints_placefile.cpp:201
 msgid "Plot Output Directory"
-msgstr "출력 경로 플로트"
+msgstr "출력 경로 플롯"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:276
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:59
@@ -9718,11 +9718,11 @@ msgstr "페이지 크기:"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:65
 msgid "Plot drawing sheet"
-msgstr "도면 시트 플로트"
+msgstr "도면 시트 플롯"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:67
 msgid "Plot the drawing sheet border and title block"
-msgstr "도면 시트의 테두리와 제목 블록을 플로트"
+msgstr "도면 시트의 테두리와 제목 블록을 플롯"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:76
 msgid "Black and White"
@@ -14322,7 +14322,7 @@ msgstr "변경 없음"
 #: eeschema/sim/sim_panel_base.cpp:91
 msgid ""
 "This simulation provide no plots. Please refer to console window for results"
-msgstr "이 시뮬레이션이 제공하는 플로트가 없습니다. 결과를 확인하려면 콘솔 창을 참고하세요"
+msgstr "이 시뮬레이션이 제공하는 플롯이 없습니다. 결과를 확인하려면 콘솔 창을 참고하세요"
 
 #: eeschema/sim/sim_plot_frame.cpp:176
 msgid "Run/Stop Simulation"
@@ -14338,7 +14338,7 @@ msgstr "신호 추가"
 
 #: eeschema/sim/sim_plot_frame.cpp:179
 msgid "Add signals to plot"
-msgstr "플로트에 신호 추가"
+msgstr "플롯에 신호 추가"
 
 #: eeschema/sim/sim_plot_frame.cpp:180
 msgid "Probe"
@@ -14407,14 +14407,12 @@ msgid "Save Simulation Workbook As"
 msgstr "좌표계 저장"
 
 #: eeschema/sim/sim_plot_frame.cpp:1161
-#, fuzzy
 msgid "Save Plot as Image"
-msgstr "플로트를 이미지로 저장"
+msgstr "플롯을 이미지로 저장"
 
 #: eeschema/sim/sim_plot_frame.cpp:1178
-#, fuzzy
 msgid "Save Plot Data"
-msgstr "프로젝트 저장 (&S)"
+msgstr "플롯 데이터 저장"
 
 #: eeschema/sim/sim_plot_frame.cpp:1470
 msgid "You need to run plot-providing simulation first."
@@ -16933,7 +16931,7 @@ msgstr "로딩 %u/%zu %s…"
 #: gerbview/files.cpp:276
 #, c-format
 msgid "<b>A gerber job file cannot be loaded as a plot file</b> <i>%s</i>"
-msgstr ""
+msgstr "<b>거버 작업 파일은 플롯 파일로 불러올 수 없습니다.</b> <i>%s</i>"
 
 #: gerbview/files.cpp:374
 msgid "Open NC (Excellon) Drill File(s)"
@@ -17205,14 +17203,13 @@ msgid "<No selection>"
 msgstr "<선택되지 않음>"
 
 #: gerbview/tools/gerbview_actions.cpp:39
-#, fuzzy
 msgid "Open Gerber Plot File(s)..."
-msgstr "Gerber 플롯 파일 열기..."
+msgstr "거버 플롯 파일 열기..."
 
 #: gerbview/tools/gerbview_actions.cpp:40
 msgid ""
 "Open Gerber plot file(s) on the current layer. Previous data will be deleted"
-msgstr ""
+msgstr "현재 레이어에 거버 플롯 파일을 엽니다. 이전 데이터는 삭제됩니다"
 
 #: gerbview/tools/gerbview_actions.cpp:45
 msgid "Open Excellon Drill File(s)..."
@@ -17231,7 +17228,7 @@ msgstr "Gerber 작업 파일 열기..."
 
 #: gerbview/tools/gerbview_actions.cpp:52
 msgid "Open a Gerber job file and its associated gerber plot files"
-msgstr ""
+msgstr "거버 작업 파일과, 연관된 거버 플롯 파일을 엽니다"
 
 #: gerbview/tools/gerbview_actions.cpp:57
 #, fuzzy
@@ -22757,9 +22754,9 @@ msgstr ""
 #: pcbnew/dialogs/dialog_export_svg.cpp:264 pcbnew/dialogs/dialog_plot.cpp:815
 #: pcbnew/exporters/gen_footprints_placefile.cpp:254
 #: pcbnew/exporters/gen_footprints_placefile.cpp:352
-#, fuzzy, c-format
+#, c-format
 msgid "Could not write plot files to folder '%s'."
-msgstr "%s 파일을 만들 수 없습니다."
+msgstr "폴더 '%s' 에 플롯 파일을 쓸 수 없습니다."
 
 #: pcbnew/dialogs/dialog_export_svg.cpp:291
 #, fuzzy, c-format
@@ -25217,7 +25214,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_plot.cpp:801
 msgid "No layer selected, Nothing to plot"
-msgstr "선택한 레이어가 없고, 플롯할 항목이 없음"
+msgstr "선택한 레이어가 없습니다. 아무것도 플롯하지 않았습니다"
 
 #: pcbnew/dialogs/dialog_plot.cpp:856
 #, fuzzy
@@ -25229,41 +25226,36 @@ msgid "Warning: Scale option set to a very large value"
 msgstr "경고: 배율 옵션이 매우 큰 값으로 설정됨"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:23
-#, fuzzy
 msgid "Plot format:"
-msgstr "플롯 형식:"
+msgstr "플롯 유형:"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:75
 msgid "Plot border and title block"
-msgstr ""
+msgstr "외곽선과 제목 블록을 플롯"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:80
-#, fuzzy
 msgid "Plot footprint values"
-msgstr "풋프린트 값"
+msgstr "풋프린트 값 플롯"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:84
 msgid "Plot reference designators"
 msgstr "참조 지정자를 플롯"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:88
-#, fuzzy
 msgid "Force plotting of invisible values / refs"
-msgstr "실크스크린 레이어에 모듈 숨은 텍스트 인쇄/플로트"
+msgstr "숨겨진 값 / 참조를 강제로 플롯"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:89
-#, fuzzy
 msgid "Force plot invisible footprint values and reference designators"
-msgstr "실크스크린 레이어에 모듈 숨은 텍스트 인쇄/플로트"
+msgstr "숨겨진 풋프린트 값과 참조 지정자를 강제로 플롯"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:93
-#, fuzzy
 msgid "Plot Edge.Cuts on all layers"
-msgstr "모든 레이어에 패드 인쇄/플로트"
+msgstr "Edge.Cuts를 모든 레이어에 플롯"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:94
 msgid "Do not plot the contents of the PCB edge layer on any other layers."
-msgstr ""
+msgstr "PCB 모서리 레이어의 내용물을 다른 종류의 레이어에 플롯하지 마세요."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:98
 msgid "Sketch pads on fab layers"
@@ -25275,16 +25267,16 @@ msgstr "플롯 시, F.Fab 레이어와 B.Fab 레이어에 패드 외곽선을 �
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:103
 msgid "Do not tent vias"
-msgstr ""
+msgstr "비아를 덮지 않기"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:104
 msgid "Remove soldermask on vias"
-msgstr ""
+msgstr "비아에서 솔더 마스크 제거"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:109
 msgid ""
 "Use the drill/place file origin as the coordinate origin for plotted files"
-msgstr ""
+msgstr "플로티드 파일에 대하여 드릴/배치 파일 원점을 좌표 원점으로 사용"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:113
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:234
@@ -25328,28 +25320,26 @@ msgid "Sketch"
 msgstr "스케치"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:143
-#, fuzzy
 msgid "Mirrored plot"
-msgstr "미러"
+msgstr "미러된 플롯"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:146
-#, fuzzy
 msgid "Negative plot"
-msgstr "음영 플로트"
+msgstr "음수 플롯"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:149
 msgid "Check zone fills before plotting"
-msgstr ""
+msgstr "플로팅 전에 채워진 영역을 체크"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:169
 msgid "Global solder mask min width and/or margin are not set to 0. "
-msgstr ""
+msgstr "전역 솔더 마스크 최소 폭과 (또는) 간격이 0으로 설정되지 않았습니다. "
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:173
 msgid ""
 "Most board houses expect 0 and use their constraints, especially for solder "
 "mask min width."
-msgstr ""
+msgstr "특히 솔더 마스크의 최소 폭에서, 대부분의 기판 제조 업체는 값을 0으로 생각하고 업체마다의 제약을 사용합니다."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:183
 msgid "Board setup"
@@ -25375,6 +25365,8 @@ msgid ""
 "Use Protel Gerber extensions (.GBL, .GTL, etc...)\n"
 "No longer recommended. The official extension is .gbr"
 msgstr ""
+"Protel 거버 확장자를 사용합니다 (.GBL, .GTL, 그외...)\n"
+"더이상 권장되지 않습니다. 공식 확장자는 .gbr 입니다"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:210
 #, fuzzy
@@ -25386,10 +25378,12 @@ msgid ""
 "Generate a Gerber job file that contains info about the board,\n"
 "and the list of generated Gerber plot files"
 msgstr ""
+"현재 기판의 정보와 생성된 거버 플롯 파일 목록을 포함한\n"
+"거버 작업 파일을 생성합니다"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:217
 msgid "Remove silkscreen from areas without soldermask"
-msgstr ""
+msgstr "솔더 마스크가 없는 영역에서 실크스크린 제거"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:221
 msgid "Coordinate format:"
@@ -25405,7 +25399,7 @@ msgstr "4.6, 단위 mm"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:231
 msgid "Use extended X2 format (recommended)"
-msgstr ""
+msgstr "확장된 X2 형식 사용 (권장)"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:232
 msgid ""
@@ -25414,6 +25408,10 @@ msgid ""
 "If not checked, use X1 format.\n"
 "In X1 format, these attributes are included as comments in files."
 msgstr ""
+"X2 거버 파일 형식을 사용합니다.\n"
+"거버 헤더에 주로 X2 속성을 포함하게 됩니다.\n"
+"체크하지 않으면, X1 형식을 사용하빈다.\n"
+"X1 형식에선, 이러한 속성은 파일에 주석으로 포함됩니다."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:236
 #, fuzzy
@@ -25426,16 +25424,21 @@ msgid ""
 "In X1 format, they are comments.\n"
 "Used to check connectivity in CAM tools and Gerber viewers."
 msgstr ""
+"거버 파일에 네트리스트 메타데이터와 조리개 속성을 포함합니다.\n"
+"X1 형식이라면 이들은 주석 처리됩니다.\n"
+"CAM 도구와 거버 뷰어의 연결을 확인하기 위해 사용됩니다."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:241
 msgid "Disable aperture macros (non recommended)"
-msgstr ""
+msgstr "조리개 매크로 비활성화 (권장되지 않음)"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:242
 msgid ""
 "Disable aperture macros in Gerber files\n"
 "Use *only* for broken Gerber viewers."
 msgstr ""
+"거버 파일에서 조리개 매크로를 비활성화합니다.\n"
+"손상된 거버 뷰어에서*만* 사용하세요."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:256
 msgid "Default pen size:"
@@ -25490,23 +25493,24 @@ msgid "DXF Options"
 msgstr "패드 설정"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:334
-#, fuzzy
 msgid "Plot graphic items using their contours"
-msgstr "트랙 채움 모드 보이기"
+msgstr "그래픽 개체의 윤곽선을 이용하여 플롯"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:336
 msgid "Uncheck to plot graphic items using their center lines"
-msgstr ""
+msgstr "체크를 풀면 그래픽 개체의 중앙선을 이용하여 플롯합니다"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:340
 msgid "Use KiCad font to plot texts"
-msgstr ""
+msgstr "KiCad 서체를 사용하여 텍스트 플롯"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:341
 msgid ""
 "Check to use KiCad stroke font\n"
 "Uncheck to plot single-line ASCII texts as editable text (using DXF font)"
 msgstr ""
+"KiCad 스트로크 서체를 사용하려면 체크하세요\n"
+"체크를 풀면 한 줄의 ASCII 텍스트를 편집 가능한 텍스트로 플롯합니다 (DXF 서체 사용)"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:354
 msgid "Export units:"
@@ -25514,7 +25518,7 @@ msgstr "내보내기 단위:"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:362
 msgid "The units to use for the exported DXF file"
-msgstr ""
+msgstr "내보낸 DXF 파일에서 사용되는 단위"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:372
 #, fuzzy
@@ -25530,6 +25534,8 @@ msgid ""
 "The units that are used for a SVG user units.\n"
 "Choose Millimeter when you are not sure."
 msgstr ""
+"SVG 사용자 단위에 대해 사용되는 단위입니다.\n"
+"무엇인지 모르겠다면, 밀리미터를 선택하세요."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:394
 msgid ""
@@ -25539,6 +25545,10 @@ msgid ""
 "User unit is 10^-<N> mm or 10^-<N> inch.\n"
 "Choose 6 if you are not sure."
 msgstr ""
+"SVG 사용자 단위의 크기입니다.\n"
+"숫자는 1 mm 또는 1 inch 이하의 자리수를 정의합니다.\n"
+"사용자 단위는 10^-<N> mm 또는 10^-<N> inch입니다.\n"
+"무엇인지 모르겠다면, 6을 선택하세요."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:420
 msgid "Run DRC..."
@@ -25547,7 +25557,7 @@ msgstr "DRC 실행..."
 #: pcbnew/dialogs/dialog_plot_base.cpp:423
 #, c-format
 msgid "(%d known DRC violations; %d exclusions)"
-msgstr ""
+msgstr "(%d개의 알려진 DRC 위반; %d개 제외)"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:447
 msgid "Select Fab Layers"
@@ -25573,7 +25583,7 @@ msgstr "모든 레이어 선택 해제"
 
 #: pcbnew/dialogs/dialog_pns_diff_pair_dimensions.cpp:55
 msgid "Trace gap must be greater than 0."
-msgstr ""
+msgstr "추적 간격은 0보다 커야 합니다."
 
 #: pcbnew/dialogs/dialog_pns_diff_pair_dimensions_base.cpp:32
 #: pcbnew/dialogs/dialog_pns_diff_pair_dimensions_base.cpp:43
@@ -25591,7 +25601,7 @@ msgstr "비아 간격:"
 
 #: pcbnew/dialogs/dialog_pns_diff_pair_dimensions_base.cpp:67
 msgid "Via gap same as trace gap"
-msgstr ""
+msgstr "비아 간격이 추적 간격보다 큽니다"
 
 #: pcbnew/dialogs/dialog_pns_diff_pair_dimensions_base.h:60
 msgid "Differential Pair Dimensions"
@@ -25599,31 +25609,31 @@ msgstr "차동 쌍 치수"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings.cpp:79
 msgid "Single Track Length Tuning"
-msgstr ""
+msgstr "단일 배선 길이 조율"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings.cpp:85
 msgid "Differential Pair Length Tuning"
-msgstr ""
+msgstr "차동 쌍 길이 조율"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings.cpp:91
 msgid "Differential Pair Skew Tuning"
-msgstr ""
+msgstr "차동 쌍 스큐 조율"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings.cpp:93
 msgid "Target skew:"
-msgstr "타겟 기울기:"
+msgstr "타겟 스큐:"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:22
 msgid "Length / Skew"
-msgstr "길이 / 기울기"
+msgstr "길이 / 스큐"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:30
 msgid "Tune from:"
-msgstr ""
+msgstr "조율 전:"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:46
 msgid "Tune to:"
-msgstr ""
+msgstr "조율 후:"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:62
 msgid "Constraint:"
@@ -25640,7 +25650,7 @@ msgstr "타겟 길이:"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:98
 msgid "Meandering"
-msgstr ""
+msgstr "미앤더링"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:109
 msgid "Min amplitude (Amin):"
@@ -25658,11 +25668,11 @@ msgstr "최소 간격 (s):"
 msgid ""
 "Minimum spacing between adjacent meander segments. The resulting spacing may "
 "be greater based on design rules."
-msgstr ""
+msgstr "인접한 미앤더 세그먼트간의 최소 간격입니다. 디자인 규칙에 따라 결과물의 간격은 더 커질 수 있습니다."
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:144
 msgid "Miter style:"
-msgstr ""
+msgstr "마이터 스타일:"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:148
 msgid "45 degree"
@@ -25678,19 +25688,19 @@ msgstr "마이터 반경 (r):"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.h:74
 msgid "Trace Length Tuning"
-msgstr ""
+msgstr "추적 길이 조율"
 
 #: pcbnew/dialogs/dialog_pns_settings.cpp:34
 msgid "DRC violation: highlight obstacles"
-msgstr ""
+msgstr "DRC 위반: 장애물 강조 표시"
 
 #: pcbnew/dialogs/dialog_pns_settings.cpp:35
 msgid "DRC violation: shove tracks and vias"
-msgstr ""
+msgstr "DRC 위반: 배선과 비아 밀어내기"
 
 #: pcbnew/dialogs/dialog_pns_settings.cpp:36
 msgid "DRC violation: walk around obstacles"
-msgstr ""
+msgstr "DRC 위반: 장애물 둘러보기"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:19
 msgid "Highlight collisions"
@@ -25698,12 +25708,11 @@ msgstr "충돌한 부분 강조"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:19
 msgid "Shove"
-msgstr ""
+msgstr "밀어내기"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:19
-#, fuzzy
 msgid "Walk around"
-msgstr "검정색"
+msgstr "둘러보기"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:21
 msgid "Mode"
@@ -25720,31 +25729,31 @@ msgstr "마이어 이동"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:38
 msgid "Interactive drag"
-msgstr ""
+msgstr "인터랙티브 드래그"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:47
 msgid "Free angle mode (no shove/walkaround)"
-msgstr ""
+msgstr "자유 각도 모드 (밀어내기 / 둘러보기 없음)"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:50
 msgid "Shove vias"
-msgstr ""
+msgstr "비아 밀어내기"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:52
 msgid ""
 "When disabled, vias are treated as un-movable objects and hugged instead of "
 "shoved."
-msgstr ""
+msgstr "비활성화될 경우, 비아는 움직일 수 없는 객체로 처리되며 밀어내기 대신 주위를 둘러 배선됩니다."
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:56
 msgid "Jump over obstacles"
-msgstr ""
+msgstr "장애물 뛰어넘기"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:57
 msgid ""
 "When enabled, the router tries to move colliding traces behind solid "
 "obstacles (e.g. pads) instead of \"reflecting\" back the collision"
-msgstr ""
+msgstr "활성화될 경우, 라우터는 충돌을 \"반사\"하는 대신 충돌한 배선을 장애물 뒤로 우회시킵니다"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:61
 #, fuzzy
@@ -25758,6 +25767,9 @@ msgid ""
 "Loop removal works locally (only between the start and end of the currently "
 "routed trace)."
 msgstr ""
+"라우팅 중 중복되는 부분을 삭제합니다 (예를 들어, 새 배선이 이미 존재하는 것과 같은 연결임이 확실할 경우, 이미 존재하는 배선이 "
+"삭제됩니다).\n"
+"중복 삭제는 지역적으로 이루어집니다 (현재 라우팅되는 배선의 시작과 끝 사이에서만 이루어짐)."
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:66
 #, fuzzy
@@ -25768,7 +25780,7 @@ msgstr "연결 삭제"
 msgid ""
 "When enabled, the router tries to break out pads/vias in a clean way, "
 "avoiding acute angles and jagged breakout traces."
-msgstr ""
+msgstr "활성화될 경우, 라우터는 날카로운 각이나 들쭉날쭉한 배선을 피하면서 깔끔한 방식으로 패드와 비아를 분리하도록 시도합니다."
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:71
 #, fuzzy
@@ -25779,7 +25791,7 @@ msgstr "세그먼트 병합"
 msgid ""
 "When enabled, the router attempts to merge several jagged segments into a "
 "single straight one (dragging mode)."
-msgstr ""
+msgstr "활성화될 경우, 들쭉날쭉한 세그먼트를 합쳐 하나의 올곧은 것으로 만드려고 시도합니다 (드래깅 모드)."
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:76
 msgid "Allow DRC violations"
@@ -25789,15 +25801,15 @@ msgstr "DRC 위반 허용"
 msgid ""
 "(Highlight collisions mode only) - allows one to establish a track even if "
 "is violating the DRC rules."
-msgstr ""
+msgstr "(충돌 강조 모드에서만) - DRC 규칙을 위반했더라도 배선하는 것을 허용합니다."
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:81
 msgid "Suggest track finish"
-msgstr ""
+msgstr "배선 마무리 제안"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:86
 msgid "Optimize entire track being dragged"
-msgstr ""
+msgstr "드래그된 모든 배선을 최적화"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:87
 msgid ""
@@ -25805,20 +25817,22 @@ msgid ""
 "will be optimized and re-routed when a segment is dragged.  When disabled, "
 "only the area near the segment being dragged will be optimized."
 msgstr ""
+"활성화되었을 경우, 세그먼트가 드래그되었을 때 화면에 표시되는 배선의 모든 부분이 최적화되고 재 라우팅됩니다.  비활성화될 경우, "
+"드래그된 세그먼트의 주변 영역만 최적화됩니다."
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:91
 msgid "Use mouse path to set track posture"
-msgstr ""
+msgstr "마우스 경로를 사용하여 배선 모양을 설정"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:92
 msgid ""
 "When enabled, the posture of tracks will be guided by how the mouse is moved "
 "from the starting location"
-msgstr ""
+msgstr "활성화되었을 경우, 시작 지점부터 마우스가 어떻게 움직였는지에 따라 배선의 모양이 안내됩니다"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:96
 msgid "Fix all segments on click"
-msgstr ""
+msgstr "클릭으로 모든 세그먼트 고정"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:97
 msgid ""
@@ -25826,18 +25840,20 @@ msgid ""
 "location.  When disabled, the last segment (closest to the cursor) will "
 "remain free and follow the cursor."
 msgstr ""
+"활성화되었을 경우, 모든 배선 세그먼트가 커서의 위치까지 고정됩니다.  비활성화될 경우, 마지막 세그먼트 (커서와 가장 가까운 것) 은 "
+"고정되지 않으며, 커서를 따라갑니다."
 
 #: pcbnew/dialogs/dialog_pns_settings_base.h:65
 msgid "Interactive Router Settings"
-msgstr ""
+msgstr "인터랙티브 라우터 설정"
 
 #: pcbnew/dialogs/dialog_position_relative.cpp:165
 msgid "Reset to the current distance from the reference position."
-msgstr ""
+msgstr "참조 위치에서 현재 거리를 초기화합니다."
 
 #: pcbnew/dialogs/dialog_position_relative.cpp:166
 msgid "Reset to the current angle from the reference position."
-msgstr ""
+msgstr "참조 위치에서 현재 각도를 초기화합니다."
 
 #: pcbnew/dialogs/dialog_position_relative.cpp:170
 #: pcbnew/dialogs/dialog_position_relative_base.cpp:67
@@ -25851,19 +25867,19 @@ msgstr "Y 오프셋:"
 
 #: pcbnew/dialogs/dialog_position_relative.cpp:173
 msgid "Reset to the current X offset from the reference position."
-msgstr ""
+msgstr "참조 위치에서 현재 X 오프셋을 초기화합니다."
 
 #: pcbnew/dialogs/dialog_position_relative.cpp:174
 msgid "Reset to the current Y offset from the reference position."
-msgstr ""
+msgstr "참조 위치에서 현재 Y 오프셋을 초기화합니다."
 
 #: pcbnew/dialogs/dialog_position_relative.cpp:240
 msgid "Reference location: grid origin"
-msgstr ""
+msgstr "참조 위치: 그리드 원점"
 
 #: pcbnew/dialogs/dialog_position_relative.cpp:249
 msgid "Reference location: local coordinates origin"
-msgstr ""
+msgstr "참조 위치: 지역 좌표 원점"
 
 #: pcbnew/dialogs/dialog_position_relative.cpp:255
 #, fuzzy
@@ -25895,6 +25911,8 @@ msgid ""
 "Click and select a board item.\n"
 "The anchor position will be the position of the selected item."
 msgstr ""
+"기판의 개체를 클릭하여 선택하세요.\n"
+"고정 위치는 선택한 개체의 위치가 됩니다."
 
 #: pcbnew/dialogs/dialog_position_relative_base.h:73
 #, fuzzy
@@ -25903,7 +25921,7 @@ msgstr "음영 플로트"
 
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:207
 msgid "Print according to objects tab of appearance manager"
-msgstr ""
+msgstr "외관 매니저의 객체 탭에 따라 출력"
 
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:235
 #, fuzzy
@@ -25926,23 +25944,23 @@ msgstr "풋프린트 이동"
 
 #: pcbnew/dialogs/dialog_push_pad_properties.cpp:56
 msgid "Change Pads on Identical Footprints"
-msgstr ""
+msgstr "동일한 풋프린트의 패드 교체"
 
 #: pcbnew/dialogs/dialog_push_pad_properties_base.cpp:25
 msgid "Do not modify pads having a different shape"
-msgstr ""
+msgstr "서로 다른 형상의 패드 수정하지 않기"
 
 #: pcbnew/dialogs/dialog_push_pad_properties_base.cpp:28
 msgid "Do not modify pads having different layers"
-msgstr ""
+msgstr "서로 다른 레이어의 패드 수정하지 않기"
 
 #: pcbnew/dialogs/dialog_push_pad_properties_base.cpp:31
 msgid "Do not modify pads having a different orientation"
-msgstr ""
+msgstr "서로 다른 방향의 패드 수정하지 않기"
 
 #: pcbnew/dialogs/dialog_push_pad_properties_base.cpp:34
 msgid "Do not modify pads having a different type"
-msgstr ""
+msgstr "서로 다른 유형의 패드 수정하지 않기"
 
 #: pcbnew/dialogs/dialog_push_pad_properties_base.h:51
 #, fuzzy
@@ -25980,7 +25998,7 @@ msgstr "트랙 삭제"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:54
 msgid "Prevent vias from being placed in this area"
-msgstr ""
+msgstr "비아가 이 영역에 배치되지 않도록 방지"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:58
 #, fuzzy
@@ -25989,7 +26007,7 @@ msgstr "트랙 삭제"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:59
 msgid "Raise a DRC error if a pad overlaps this area"
-msgstr ""
+msgstr "패드가 이 영역을 덮을 경우 DRC 오류 발생시키기"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:63
 #, fuzzy
@@ -25998,7 +26016,7 @@ msgstr "풋프린트 이동"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:64
 msgid "Zones will not fill copper into this area"
-msgstr ""
+msgstr "이 영역에 구리 채우지 않기"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:68
 #, fuzzy
@@ -26017,7 +26035,7 @@ msgstr "파일 이름:"
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:81
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:89
 msgid "A unique name for this rule area for use in DRC rules"
-msgstr ""
+msgstr "이 규칙 영역에 대해서 DRC 규칙에서 사용될 고유 이름"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:96
 #, fuzzy
@@ -26026,7 +26044,7 @@ msgstr "수평, 수직 또는 45도 각도로만 선 그리기"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:97
 msgid "Draw the area using horizontal, verical and 45 degree lines only"
-msgstr ""
+msgstr "이 영역에서는 수평, 수직, 45도 각도 선으로만 그리기"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.h:67
 #, fuzzy
@@ -26042,13 +26060,12 @@ msgid "To layer:"
 msgstr "이 레이어로:"
 
 #: pcbnew/dialogs/dialog_swap_layers_base.h:48
-#, fuzzy
 msgid "Swap Layers"
-msgstr "레이어"
+msgstr "레이어 뒤바꾸기"
 
 #: pcbnew/dialogs/dialog_target_properties.cpp:111
 msgid "Modified alignment target"
-msgstr ""
+msgstr "정렬 타겟의 마크 수정"
 
 #: pcbnew/dialogs/dialog_target_properties_base.cpp:50
 msgid "Shape:"
@@ -26086,6 +26103,8 @@ msgid ""
 "The text thickness is too large for the text size.\n"
 "It will be clamped."
 msgstr ""
+"텍스트의 굵기가 텍스트의 크기에 비해 너무 큽니다.\n"
+"글씨가 깨질 수 있습니다."
 
 #: pcbnew/dialogs/dialog_text_properties.cpp:359
 #, fuzzy
@@ -26094,7 +26113,7 @@ msgstr "시트 속성"
 
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:57
 msgid "Enter the text placed on selected layer."
-msgstr ""
+msgstr "선택한 레이어에 위치할 텍스트를 입력하세요."
 
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:211
 #, fuzzy
@@ -26109,17 +26128,17 @@ msgstr "풋프린트 회전"
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:346
 #, c-format
 msgid "Changing the net will also update %s pad %s to %s."
-msgstr ""
+msgstr "네트를 변경하면 %s 패드 %s 또한 %s로 업데이트됩니다."
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:355
 #, c-format
 msgid "Changing the net will also update %s pad %s and %s pad %s to %s."
-msgstr ""
+msgstr "네트를 변경하면 %s 패드 %s 와 %s 패드 %s 또한 %s로 업데이트됩니다."
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:364
 #, c-format
 msgid "Changing the net will also update %lu connected pads to %s."
-msgstr ""
+msgstr "네트를 변경하면 %lu개의 연결된 패드 또한 %s로 업데이트됩니다."
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:370
 msgid "Change Nets"
@@ -26136,7 +26155,7 @@ msgstr "비아 홀 크기는 비아 직경보다 작아야 합니다"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:400
 msgid "Via start layer and end layer cannot be the same"
-msgstr ""
+msgstr "비아의 시작 레이어와 끝 레이어는 같을 수 없습니다"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:541
 #, fuzzy
@@ -26156,7 +26175,7 @@ msgstr "새 풋프린트 추가"
 msgid ""
 "Automatically change the net of this via when the pads or zones it touches "
 "are changed"
-msgstr ""
+msgstr "붙어 있는 패드 또는 존이 변경되면 이 비아의 네트 또한 자동으로 변경됩니다"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:60
 msgid "Start point X:"
@@ -26214,7 +26233,7 @@ msgstr "비아 형식:"
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:251
 #: pcbnew/pcb_track.cpp:1089
 msgid "Through"
-msgstr ""
+msgstr "스루"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:251
 #: pcbnew/pcb_track.cpp:1091
@@ -26224,7 +26243,7 @@ msgstr "마이크로"
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:251
 #: pcbnew/pcb_track.cpp:1090
 msgid "Blind/buried"
-msgstr ""
+msgstr "블라인드/베리드"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:259
 msgid "Start layer:"
@@ -27618,14 +27637,14 @@ msgid ""
 msgstr ""
 "두 패드 영역 사이의 최소 거리입니다.\n"
 "두 패드 영역 사이 거리가 이보다 더 가깝다면, 플로팅 중에 영역이 합쳐집니다.\n"
-"이 매개변수는 솔더 마스크 레이어를 플로트할 때만 사용됩니다.\n"
+"이 매개변수는 솔더 마스크 레이어를 플롯할 때만 사용됩니다.\n"
 "무엇을 하려는지 확실히 알고 있는 경우가 아니라면, 0으로 두는 것을 권장합니다."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:78
 msgid ""
 "Minimum distance between openings in the solder mask.  Pad openings closer "
 "than this distance will be plotted as a single opening."
-msgstr "솔더 마스크의 개구부 사이의 최소 거리입니다.  패드 개구부의 거리가 이보다 가까울 경우 하나로 합쳐져 플로트됩니다."
+msgstr "솔더 마스크의 개구부 사이의 최소 거리입니다.  패드 개구부의 거리가 이보다 가까울 경우 하나로 합쳐져 플롯됩니다."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:97
 msgid ""
@@ -28463,7 +28482,7 @@ msgstr "추적 길이 허용 범위 벗어남"
 
 #: pcbnew/drc/drc_item.cpp:189
 msgid "Skew between traces out of range"
-msgstr "배선 간 지연이 허용 범위 벗어남"
+msgstr "배선 간 스큐가 허용 범위 벗어남"
 
 #: pcbnew/drc/drc_item.cpp:193
 msgid "Too many vias on a connection"
@@ -28781,7 +28800,7 @@ msgstr "(%s 최대 길이: %s, 실제 값: %s)"
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:170
 #, c-format
 msgid "(%s max skew: %s; actual: %s; average net length: %s; actual: %s)"
-msgstr "(%s 최대 지연: %s, 실제 값: %s, 평균 네트 길이: %s, 실제 값: %s)"
+msgstr "(%s 최대 스큐: %s, 실제 값: %s, 평균 네트 길이: %s, 실제 값: %s)"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:199
 #, c-format
@@ -29002,7 +29021,7 @@ msgstr "다른 이름으로 기판 파일 저장"
 
 #: pcbnew/files.cpp:282
 msgid "Printed circuit board"
-msgstr "인쇄된 회로 기판"
+msgstr "인쇄 회로 기판"
 
 #: pcbnew/files.cpp:346
 #, c-format
@@ -31967,7 +31986,7 @@ msgstr "트랙 편집"
 
 #: pcbnew/router/length_tuner_tool.cpp:51
 msgid "Stops laying the current meander."
-msgstr ""
+msgstr "현재 진행중인 미앤더 배선을 중지합니다."
 
 #: pcbnew/router/length_tuner_tool.cpp:56
 msgid "Increase Spacing"
@@ -31975,7 +31994,7 @@ msgstr "간격 늘리기"
 
 #: pcbnew/router/length_tuner_tool.cpp:56
 msgid "Increase meander spacing by one step."
-msgstr ""
+msgstr "미앤더 간격을 한 단계씩 증가시킵니다."
 
 #: pcbnew/router/length_tuner_tool.cpp:62
 msgid "Decrease Spacing"
@@ -31983,7 +32002,7 @@ msgstr "간격 줄이기"
 
 #: pcbnew/router/length_tuner_tool.cpp:62
 msgid "Decrease meander spacing by one step."
-msgstr ""
+msgstr "미앤더 간격을 한 단계씩 감소시킵니다."
 
 #: pcbnew/router/length_tuner_tool.cpp:68
 msgid "Increase Amplitude"
@@ -31991,7 +32010,7 @@ msgstr "진폭 증가"
 
 #: pcbnew/router/length_tuner_tool.cpp:68
 msgid "Increase meander amplitude by one step."
-msgstr ""
+msgstr "미앤더 진폭을 한 단계씩 증가시킵니다."
 
 #: pcbnew/router/length_tuner_tool.cpp:74
 msgid "Decrease Amplitude"
@@ -31999,7 +32018,7 @@ msgstr "진폭 감소"
 
 #: pcbnew/router/length_tuner_tool.cpp:74
 msgid "Decrease meander amplitude by one step."
-msgstr ""
+msgstr "미앤더 진폭을 한 단계씩 감소시킵니다."
 
 #: pcbnew/router/length_tuner_tool.cpp:99
 msgid "Length Tuner"
@@ -32086,7 +32105,7 @@ msgstr ""
 
 #: pcbnew/router/pns_kicad_iface.cpp:1667 pcbnew/router/router_tool.cpp:433
 msgid "Interactive Router"
-msgstr ""
+msgstr "인터랙티브 라우터"
 
 #: pcbnew/router/pns_meander_skew_placer.cpp:54
 msgid "Please select a differential pair trace you want to tune."
@@ -32098,18 +32117,19 @@ msgid ""
 "sure the names of the nets belonging to a differential pair end with either "
 "_N/_P or +/-."
 msgstr ""
+"스큐 조율을 위한 보조 차동 쌍을 찾을 수 없습니다. 차동 쌍에 속하는 네트의 이름이 _N/_P 또는 +/-으로 끝나는지 확인하세요."
 
 #: pcbnew/router/pns_meander_skew_placer.cpp:165
 msgid "Too long: skew "
-msgstr ""
+msgstr "너무 긺: 스큐 "
 
 #: pcbnew/router/pns_meander_skew_placer.cpp:168
 msgid "Too short: skew "
-msgstr ""
+msgstr "너무 짧음: 스큐 "
 
 #: pcbnew/router/pns_meander_skew_placer.cpp:171
 msgid "Tuned: skew "
-msgstr ""
+msgstr "조율됨: 스큐 "
 
 #: pcbnew/router/pns_router.cpp:211
 msgid "Diff pair gap is less than board minimum clearance."
@@ -33297,17 +33317,15 @@ msgstr "중심 치수선 추가"
 
 #: pcbnew/tools/pcb_actions.cpp:135
 msgid "Add a center dimension"
-msgstr "중심 차원 추가"
+msgstr "중심 치수선 추가"
 
 #: pcbnew/tools/pcb_actions.cpp:140
-#, fuzzy
 msgid "Add Orthogonal Dimension"
-msgstr "치수 (&D)"
+msgstr "대각 치수선 추가"
 
 #: pcbnew/tools/pcb_actions.cpp:140
-#, fuzzy
 msgid "Add an orthogonal dimension"
-msgstr "치수 (&D)"
+msgstr "대각 치수선 추가"
 
 #: pcbnew/tools/pcb_actions.cpp:145
 #, fuzzy
@@ -33315,9 +33333,8 @@ msgid "Add Leader"
 msgstr "라벨 추가"
 
 #: pcbnew/tools/pcb_actions.cpp:145
-#, fuzzy
 msgid "Add a leader dimension"
-msgstr "치수 (&D)"
+msgstr "리더 치수선 추가"
 
 #: pcbnew/tools/pcb_actions.cpp:156
 #, fuzzy
@@ -34728,20 +34745,19 @@ msgstr "3D 모드로 보드 보이기"
 
 #: pcbnew/tools/pcb_actions.cpp:1300
 msgid "Interactive Router Settings..."
-msgstr ""
+msgstr "인터랙티브 라우터 설정..."
 
 #: pcbnew/tools/pcb_actions.cpp:1300
 msgid "Open Interactive Router settings"
-msgstr ""
+msgstr "인터랙티브 라우터 설정 열기"
 
 #: pcbnew/tools/pcb_actions.cpp:1305
-#, fuzzy
 msgid "Differential Pair Dimensions..."
 msgstr "차동 쌍 치수..."
 
 #: pcbnew/tools/pcb_actions.cpp:1305
 msgid "Open Differential Pair Dimension settings"
-msgstr ""
+msgstr "차동 쌍 치수 설정 열기"
 
 #: pcbnew/tools/pcb_actions.cpp:1310
 #, fuzzy
@@ -34790,7 +34806,7 @@ msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:1346
 msgid "Tune skew of a differential pair"
-msgstr ""
+msgstr "차동 쌍의 스큐 조율"
 
 #: pcbnew/tools/pcb_actions.cpp:1355
 #, fuzzy
@@ -35564,7 +35580,7 @@ msgstr "모듈 속성"
 
 #: pcbnew/widgets/panel_selection_filter_base.cpp:63
 msgid "Dimensions"
-msgstr "차원"
+msgstr "치수"
 
 #: pcbnew/widgets/panel_selection_filter_base.cpp:67
 msgid "Other items"
@@ -35804,6 +35820,10 @@ msgid ""
 "featuring thousands of symbols, footprints, and 3D models. KiCad has minimal "
 "system requirements and runs on Linux, Windows, and macOS."
 msgstr ""
+"KiCad는 무료 오픈소스 전자 설계 자동화 (EDA) 제품군입니다. 회로도 캡쳐, 집적회로 시뮬레이션, 인쇄 회로 기판 (PCB) "
+"레이아웃, 3D 렌더링, 다양한 형식으로의 플로팅 / 데이터 내보내기 등의 기능이 있습니다. KiCad는 수천여 개의 심볼, 풋프린트, "
+"3D 모델이 포함된 높은 퀄리티의 컴포넌트 라이브러리가 포함되어 있습니다. KiCad는 최소한의 시스템 요건을 가지고 있으며, "
+"Linux, Windows와 MacOS에서 작동합니다."
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:57
 msgid "KiCad Main Window"
@@ -35811,7 +35831,7 @@ msgstr "KiCad 메인 창"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:67
 msgid "KiCad PCB Layout Editor"
-msgstr "KiCad PCB 레이아웃 편집기(&E)"
+msgstr "KiCad PCB 레이아웃 편집기"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:84
 msgid "The KiCad Developers"
@@ -35834,9 +35854,8 @@ msgid "KiCad Schematic"
 msgstr "KiCad 회로도"
 
 #: resources/linux/mime/kicad-kicad.xml.in:25
-#, fuzzy
 msgid "KiCad Printed Circuit Board"
-msgstr "보드 인쇄"
+msgstr "KiCad 인쇄 회로 기판"
 
 #, c-format
 #~ msgid "Unable to create archive file '%s'.\n"
