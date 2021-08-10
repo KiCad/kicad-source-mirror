@@ -25,12 +25,14 @@
  * Main file for the pcbnew tests to be compiled
  */
 #include <boost/test/unit_test.hpp>
+#include <kiplatform/app.h>
 
 #include <wx/init.h>
 
 
 bool init_unit_test()
 {
+    KIPLATFORM::APP::Init();
     boost::unit_test::framework::master_test_suite().p_name.value = "Pcbnew module tests";
     return wxInitialize();
 }
