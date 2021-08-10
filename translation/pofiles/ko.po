@@ -14,7 +14,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
 "PO-Revision-Date: 2021-08-10 15:22+0000\n"
-"Last-Translator: Ji Yoon Choi <chichoon.choi@gmail.com>\n"
+"Last-Translator: jeongsuAn <dks9467@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
 "Language: ko\n"
@@ -11769,9 +11769,8 @@ msgid "Generate error"
 msgstr "생성 오류"
 
 #: eeschema/dialogs/panel_setup_pinmap_base.cpp:24
-#, fuzzy
 msgid "Pin to Pin Connections"
-msgstr "연결"
+msgstr "핀과 핀 연결"
 
 #: eeschema/dialogs/panel_sym_color_settings_base.cpp:22
 #: pagelayout_editor/dialogs/panel_pl_editor_color_settings_base.cpp:18
@@ -11799,9 +11798,8 @@ msgid "Def&ault pin name size:"
 msgstr "기본 핀 이름 크기(&A):"
 
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:96
-#, fuzzy
 msgid "Show pin &electrical type"
-msgstr "전기적 형식"
+msgstr "핀과 전기 유형을 표시 (&e)"
 
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:126
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:137
@@ -11818,15 +11816,13 @@ msgstr "50"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:350
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:531
-#, fuzzy
 msgid "A library table row nickname and path cells are empty."
-msgstr "라이브러리가 이미 사용 중입니다."
+msgstr "라이브러리 테이블 행 별칭 및 경로 셀이 비어 있습니다."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:352
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:533
-#, fuzzy
 msgid "A library table row nickname cell is empty."
-msgstr "라이브러리가 이미 사용 중입니다."
+msgstr "라이브러리 테이블 행 별칭 셀이 비어 있습니다."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:354
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:535
@@ -11986,9 +11982,8 @@ msgstr ""
 
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:20
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:20
-#, fuzzy
 msgid "Libraries by Scope"
-msgstr "라이브러리"
+msgstr "범위별 라이브러리"
 
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:61
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:58
@@ -12011,9 +12006,8 @@ msgstr "기존 라이브러리를 테이블에 추가"
 
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:128
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:124
-#, fuzzy
 msgid "Remove library from table"
-msgstr "새 라이브러리"
+msgstr "테이블에서 라이브러리 제거"
 
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:135
 msgid "Migrate Libraries"
@@ -12040,9 +12034,8 @@ msgstr ""
 #: gerbview/gerbview_frame.cpp:1018
 #: pcbnew/dialogs/panel_edit_options_base.cpp:24
 #: pcbnew/footprint_edit_frame.cpp:923 pcbnew/pcbnew_config.cpp:59
-#, fuzzy
 msgid "Editing Options"
-msgstr "선 설정"
+msgstr "편집 옵션"
 
 #: eeschema/eeschema_config.cpp:100 pcbnew/pcbnew_config.cpp:83
 msgid "Error loading drawing sheet."
@@ -12083,14 +12076,12 @@ msgid "Unspecified Pin"
 msgstr "지정되지 않은 핀"
 
 #: eeschema/erc.cpp:66 eeschema/erc.cpp:83
-#, fuzzy
 msgid "Power Input Pin"
-msgstr "전원 입력"
+msgstr "전원 입력 핀"
 
 #: eeschema/erc.cpp:67 eeschema/erc.cpp:84
-#, fuzzy
 msgid "Power Output Pin"
-msgstr "전원 출력"
+msgstr "전원 출력 핀"
 
 #: eeschema/erc.cpp:68 eeschema/erc.cpp:85
 msgid "Open Collector"
@@ -12156,9 +12147,8 @@ msgid "Duplicate sheet names within a given sheet"
 msgstr "지정된 시트 내에서 시트 이름 복제"
 
 #: eeschema/erc_item.cpp:50
-#, fuzzy
 msgid "Pin not connected"
-msgstr "네트가 없습니다. (연결 안 됨)"
+msgstr "핀이 연결되지 않았습니다"
 
 #: eeschema/erc_item.cpp:54
 msgid "Input pin not driven by any Output pins"
@@ -15324,44 +15314,36 @@ msgid "Create Corner"
 msgstr "코너 만들기"
 
 #: eeschema/tools/ee_actions.cpp:69 pcbnew/tools/pcb_actions.cpp:1150
-#, fuzzy
 msgid "Create a corner"
-msgstr "새 디렉토리 만들기"
+msgstr "코너 만들기"
 
 #: eeschema/tools/ee_actions.cpp:74 pcbnew/tools/pcb_actions.cpp:1155
-#, fuzzy
 msgid "Remove Corner"
-msgstr "제거"
+msgstr "코너 제거"
 
 #: eeschema/tools/ee_actions.cpp:74 pcbnew/tools/pcb_actions.cpp:1155
-#, fuzzy
 msgid "Remove corner"
-msgstr "제거"
+msgstr "코너 제거"
 
 #: eeschema/tools/ee_actions.cpp:87
-#, fuzzy
 msgid "Select Node"
-msgstr "네트 선택"
+msgstr "노드 선택"
 
 #: eeschema/tools/ee_actions.cpp:87
-#, fuzzy
 msgid "Select a connection item under the cursor"
-msgstr "글꼴 및 글꼴 크기 선택"
+msgstr "커서 아래의 연결 항목 선택"
 
 #: eeschema/tools/ee_actions.cpp:92
-#, fuzzy
 msgid "Select Connection"
-msgstr "연결 삭제"
+msgstr "연결 선택"
 
 #: eeschema/tools/ee_actions.cpp:92
-#, fuzzy
 msgid "Select a complete connection"
-msgstr "연결 삭제"
+msgstr "전체 연결 선택"
 
 #: eeschema/tools/ee_actions.cpp:118
-#, fuzzy
 msgid "Save Library As..."
-msgstr "레이어를 다른 이름으로 저장..."
+msgstr "다른 이름으로 라이브러리 저장..."
 
 #: eeschema/tools/ee_actions.cpp:118
 msgid "Save the current library to a new file."
@@ -15376,24 +15358,20 @@ msgid "Create a new symbol"
 msgstr "새 기호 만들기"
 
 #: eeschema/tools/ee_actions.cpp:128
-#, fuzzy
 msgid "Edit Symbol"
-msgstr "라벨 편집"
+msgstr "심볼 편집"
 
 #: eeschema/tools/ee_actions.cpp:128
-#, fuzzy
 msgid "Show selected symbol on editor canvas"
-msgstr "탐색할 부품 선택"
+msgstr "편집기 캔버스에 선택한 심볼 표시"
 
 #: eeschema/tools/ee_actions.cpp:133
-#, fuzzy
 msgid "Duplicate Symbol"
-msgstr "중복"
+msgstr "중복 심볼"
 
 #: eeschema/tools/ee_actions.cpp:133
-#, fuzzy
 msgid "Make a copy of the selected symbol"
-msgstr "현재 보드 저장"
+msgstr "선택한 심볼의 복사본 만들기"
 
 #: eeschema/tools/ee_actions.cpp:138
 msgid "Save the current symbol to a different library."
@@ -15412,74 +15390,64 @@ msgid "Import Symbol..."
 msgstr "기호 가져오기..."
 
 #: eeschema/tools/ee_actions.cpp:163
-#, fuzzy
 msgid "Import a symbol to the current library"
-msgstr "현재 보드로 모듈 삽입"
+msgstr "현재 라이브러리로 심볼 가져오기"
 
 #: eeschema/tools/ee_actions.cpp:168
 msgid "Export..."
 msgstr "내보내기..."
 
 #: eeschema/tools/ee_actions.cpp:168
-#, fuzzy
 msgid "Export a symbol to a new library file"
-msgstr "현재 보드로 모듈 삽입"
+msgstr "새 라이브러리 파일로 심볼 내보내기"
 
 #: eeschema/tools/ee_actions.cpp:173
 msgid "Update Symbol Fields..."
 msgstr "기호 필드 업데이트..."
 
 #: eeschema/tools/ee_actions.cpp:173
-#, fuzzy
 msgid "Update symbol to match changes made in parent symbol"
-msgstr "새 회로도 (&S)"
+msgstr "부모 심볼의 변경 사항과 일치하도록 심볼 업데이트"
 
 #: eeschema/tools/ee_actions.cpp:178
-#, fuzzy
 msgid "Add Symbol to Schematic"
-msgstr "회로도로 내보내기"
+msgstr "회로도에 심볼 추가"
 
 #: eeschema/tools/ee_actions.cpp:183
-#, fuzzy
 msgid "Show Pin Electrical Types"
-msgstr "전기적 형식"
+msgstr "핀의 전기 유형을 표시"
 
 #: eeschema/tools/ee_actions.cpp:183
-#, fuzzy
 msgid "Annotate pins with their electrical types"
-msgstr "전기적 형식"
+msgstr "전기 유형으로 핀에 주석 달기"
 
 #: eeschema/tools/ee_actions.cpp:188
-#, fuzzy
 msgid "Show Symbol Tree"
-msgstr "연결선 보이기"
+msgstr "심볼 트리 표시"
 
 #: eeschema/tools/ee_actions.cpp:193
-#, fuzzy
 msgid "Hide Symbol Tree"
-msgstr "연결선 보이기"
+msgstr "심볼 트리 숨기기"
 
 #: eeschema/tools/ee_actions.cpp:198
 msgid "Export View as PNG..."
 msgstr "보기를 PNG로 내보내기..."
 
 #: eeschema/tools/ee_actions.cpp:198
-#, fuzzy
 msgid "Create PNG file from the current view"
-msgstr "현재 레이어의 소스 파일 보이기"
+msgstr "현재 보기에서 PNG 파일 만들기"
 
 #: eeschema/tools/ee_actions.cpp:203
 msgid "Export Symbol as SVG..."
 msgstr "기호를 SVG로 내보내기..."
 
 #: eeschema/tools/ee_actions.cpp:203
-#, fuzzy
 msgid "Create SVG file from the current symbol"
-msgstr "현재 레이어의 소스 파일 보이기"
+msgstr "현재 심볼에서 SVG 파일 생성"
 
 #: eeschema/tools/ee_actions.cpp:208
 msgid "Synchronized Pins Edit Mode"
-msgstr ""
+msgstr "동기화된 핀 편집 모드"
 
 #: eeschema/tools/ee_actions.cpp:209
 msgid ""
@@ -15487,13 +15455,15 @@ msgid ""
 "When enabled propagates all changes (except pin numbers) to other units.\n"
 "Enabled by default for multiunit parts with interchangeable units."
 msgstr ""
+"동기화된 핀 편집 모드\n"
+"활성화된 경우 모든 변경 내용(핀 번호 제외)을 다른 유닛으로 전파합니다.\n"
+"교체 가능한 유닛이 있는 다중 유닛 부품에 대해 기본적으로 활성화됩니다."
 
 #: eeschema/tools/ee_actions.cpp:220
 msgid "Add Pin"
 msgstr "핀 추가"
 
 #: eeschema/tools/ee_actions.cpp:220
-#, fuzzy
 msgid "Add a pin"
 msgstr "핀 추가"
 
@@ -15504,19 +15474,16 @@ msgstr "텍스트 추가"
 
 #: eeschema/tools/ee_actions.cpp:225 pagelayout_editor/tools/pl_actions.cpp:54
 #: pcbnew/tools/pcb_actions.cpp:124
-#, fuzzy
 msgid "Add a text item"
-msgstr "텍스트 추가"
+msgstr "텍스트 항목 추가"
 
 #: eeschema/tools/ee_actions.cpp:230 pagelayout_editor/tools/pl_actions.cpp:49
-#, fuzzy
 msgid "Add Rectangle"
-msgstr "사각형 추가"
+msgstr "직사각형 추가"
 
 #: eeschema/tools/ee_actions.cpp:230 pagelayout_editor/tools/pl_actions.cpp:49
-#, fuzzy
 msgid "Add a rectangle"
-msgstr "사각형 추가"
+msgstr "직사각형 추가"
 
 #: eeschema/tools/ee_actions.cpp:235
 msgid "Add Circle"
@@ -15531,87 +15498,76 @@ msgid "Add Arc"
 msgstr "호 추가"
 
 #: eeschema/tools/ee_actions.cpp:240
-#, fuzzy
 msgid "Add an arc"
 msgstr "호 추가"
 
 #: eeschema/tools/ee_actions.cpp:245 eeschema/tools/ee_actions.cpp:707
-#, fuzzy
 msgid "Add Lines"
 msgstr "선 추가"
 
 #: eeschema/tools/ee_actions.cpp:245 eeschema/tools/ee_actions.cpp:707
-#, fuzzy
 msgid "Add connected graphic lines"
-msgstr "그래픽 원 추가"
+msgstr "연결된 그래픽 라인 추가"
 
 #: eeschema/tools/ee_actions.cpp:250
-#, fuzzy
 msgid "Move Symbol Anchor"
-msgstr "부품 앵커 이동"
+msgstr "심볼 앵커 이동"
 
 #: eeschema/tools/ee_actions.cpp:250
 msgid "Specify a new location for the symbol anchor"
-msgstr ""
+msgstr "심볼 앵커의 새 위치 지정"
 
 #: eeschema/tools/ee_actions.cpp:255
 msgid "Finish drawing shape"
-msgstr ""
+msgstr "형상 그리기 완료"
 
 #: eeschema/tools/ee_actions.cpp:262
-#, fuzzy
 msgid "Push Pin Length"
-msgstr "선 삭제"
+msgstr "푸시 핀 길이"
 
 #: eeschema/tools/ee_actions.cpp:262
 msgid "Copy pin length to other pins in symbol"
-msgstr ""
+msgstr "핀 길이를 심볼의 다른 핀에 복사"
 
 #: eeschema/tools/ee_actions.cpp:267
-#, fuzzy
 msgid "Push Pin Name Size"
-msgstr "다른 핀에 핀 이름 크기 적용"
+msgstr "푸시 핀 이름 크기"
 
 #: eeschema/tools/ee_actions.cpp:267
 msgid "Copy pin name size to other pins in symbol"
-msgstr ""
+msgstr "핀 이름 크기를 심볼의 다른 핀에 복사"
 
 #: eeschema/tools/ee_actions.cpp:272
-#, fuzzy
 msgid "Push Pin Number Size"
-msgstr "다른 핀에 핀 번호 크기 적용"
+msgstr "푸시 핀의 번호 크기"
 
 #: eeschema/tools/ee_actions.cpp:272
 msgid "Copy pin number size to other pins in symbol"
-msgstr ""
+msgstr "핀 이름 크기를 심볼의 다른 핀에 복사"
 
 #: eeschema/tools/ee_actions.cpp:281
 msgid "Add Symbol"
 msgstr "심볼 추가"
 
 #: eeschema/tools/ee_actions.cpp:281
-#, fuzzy
 msgid "Add a symbol"
-msgstr "스터브 추가"
+msgstr "심볼 추가"
 
 #: eeschema/tools/ee_actions.cpp:287
 msgid "Add Power"
 msgstr "전원 추가"
 
 #: eeschema/tools/ee_actions.cpp:287
-#, fuzzy
 msgid "Add a power port"
-msgstr "노드 설치"
+msgstr "전원 포트 추가"
 
 #: eeschema/tools/ee_actions.cpp:293
-#, fuzzy
 msgid "Add No Connect Flag"
-msgstr "미연결 플래그 추가"
+msgstr "연결 없음 플래그 추가"
 
 #: eeschema/tools/ee_actions.cpp:293
-#, fuzzy
 msgid "Add a no-connection flag"
-msgstr "미연결 플래그 추가"
+msgstr "연결 없음 플래그 추가"
 
 #: eeschema/tools/ee_actions.cpp:299
 msgid "Add Junction"
@@ -15640,9 +15596,8 @@ msgid "Add a net label"
 msgstr "네트 라벨 추가"
 
 #: eeschema/tools/ee_actions.cpp:317
-#, fuzzy
 msgid "Add Hierarchical Label"
-msgstr "계층구조 심볼 (시트) 추가"
+msgstr "계층 라벨 추가"
 
 #: eeschema/tools/ee_actions.cpp:317
 msgid "Add a hierarchical label"
@@ -17097,7 +17052,6 @@ msgid "Image name: \"%s\"  Layer name: \"%s\""
 msgstr ""
 
 #: gerbview/gerbview_frame.cpp:659
-#, fuzzy
 msgid "X2 attr"
 msgstr "X2 속성"
 
@@ -17768,13 +17722,12 @@ msgid "Restoring \"%s\""
 msgstr "\"%s\" 복원 중"
 
 #: kicad/menubar.cpp:54
-#, fuzzy
 msgid "Clear Recent Projects"
-msgstr "회로도 열기"
+msgstr "최근 프로젝트 지우기"
 
 #: kicad/menubar.cpp:91
 msgid "Import Non-KiCad Project..."
-msgstr "비 KiCad 프로젝트 가져오기..."
+msgstr "KiCad 이외의 프로젝트 가져오기..."
 
 #: kicad/menubar.cpp:94
 msgid "CADSTAR Project..."
@@ -17811,23 +17764,20 @@ msgid "Unarchive project files from zip archive"
 msgstr "모든 프로젝트 파일 압축"
 
 #: kicad/menubar.cpp:128
-#, fuzzy
 msgid "Browse Project Files"
-msgstr "문서 파일 찾아보기"
+msgstr "프로젝트 파일 찾아보기"
 
 #: kicad/menubar.cpp:129
-#, fuzzy
 msgid "Open project directory in file browser"
-msgstr "현재 프로젝트 저장"
+msgstr "파일 브라우저에서 프로젝트 폴더 열기"
 
 #: kicad/menubar.cpp:154
 msgid "Edit Local File..."
 msgstr "로컬 파일 편집..."
 
 #: kicad/menubar.cpp:155
-#, fuzzy
 msgid "Edit local file in text editor"
-msgstr "텍스트 에디터로 열기 (&O)"
+msgstr "텍스트 편집기에서 로컬 파일 편집"
 
 #: kicad/menubar.cpp:214
 msgid "Archive all project files"
@@ -17843,23 +17793,22 @@ msgstr ""
 
 #: kicad/project_template.cpp:52
 msgid "Could open the template path!"
-msgstr ""
+msgstr "템플릿 경로를 열 수 있습니다!"
 
 #: kicad/project_template.cpp:57
 msgid "Couldn't open the meta information directory for this template!"
-msgstr ""
+msgstr "이 템플릿에 대한 메타 정보 폴더를 열 수 없습니다!"
 
 #: kicad/project_template.cpp:63
 msgid "Cound't find the meta HTML information file for this template!"
-msgstr ""
+msgstr "이 템플릿에 대한 메타 HTML 정보 파일을 찾을 수 없습니다!"
 
 #: kicad/project_template.cpp:238
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot create folder '%s'."
-msgstr "%s 파일을 만들 수 없습니다."
+msgstr "폴더 '%s'을(를) 만들 수 없습니다."
 
 #: kicad/project_tree_item.cpp:110
-#, fuzzy
 msgid ""
 "Changing file extension will change file type.\n"
 "Do you want to continue ?"
@@ -17876,19 +17825,18 @@ msgid "Unable to rename file ... "
 msgstr "파일 이름을 바꿀 수 없습니다 ... "
 
 #: kicad/project_tree_item.cpp:120
-#, fuzzy
 msgid "Permission error?"
-msgstr "권한 에러 ?"
+msgstr "권한 오류?"
 
 #: kicad/project_tree_item.cpp:136
 #, c-format
 msgid "Can not move '%s' to recycle bin."
-msgstr ""
+msgstr "휴지통으로 '%s'을(를) 이동할 수 없습니다."
 
 #: kicad/project_tree_item.cpp:139
 #, fuzzy, c-format
 msgid "Can not move '%s' to trash."
-msgstr "%s 파일을 만들 수 없습니다."
+msgstr "'%s'을(를) 휴지통으로 이동할 수 없습니다."
 
 #: kicad/project_tree_pane.cpp:256
 msgid "Directory name:"
@@ -17899,13 +17847,12 @@ msgid "Create New Directory"
 msgstr "새 디렉토리 만들기"
 
 #: kicad/project_tree_pane.cpp:707
-#, fuzzy
 msgid "Switch to this Project"
-msgstr "회로도 열기 (&L)"
+msgstr "이 프로젝트로 전환"
 
 #: kicad/project_tree_pane.cpp:708
 msgid "Close all editors, and switch to the selected project"
-msgstr ""
+msgstr "모든 편집기를 닫고 선택한 프로젝트로 전환"
 
 #: kicad/project_tree_pane.cpp:715
 msgid "New Directory..."
@@ -17944,19 +17891,16 @@ msgid "Opens the directories in the default system file manager"
 msgstr ""
 
 #: kicad/project_tree_pane.cpp:749
-#, fuzzy
 msgid "Open the file in a Text Editor"
-msgstr "텍스트 에디터로 열기 (&O)"
+msgstr "텍스트 편집기에서 파일 열기"
 
 #: kicad/project_tree_pane.cpp:751
-#, fuzzy
 msgid "Open files in a Text Editor"
-msgstr "텍스트 에디터로 열기 (&O)"
+msgstr "텍스트 편집기에서 파일 열기"
 
 #: kicad/project_tree_pane.cpp:753
-#, fuzzy
 msgid "Edit in a Text Editor"
-msgstr "텍스트 에디터로 편집 (&E)"
+msgstr "텍스트 편집기에서 편집"
 
 #: kicad/project_tree_pane.cpp:761
 msgid "Rename File..."
@@ -17971,28 +17915,24 @@ msgid "Rename Files..."
 msgstr "파일명 변경..."
 
 #: kicad/project_tree_pane.cpp:767
-#, fuzzy
 msgid "Rename files"
-msgstr "파일 이름 바꾸기"
+msgstr "파일이름 바꾸기"
 
 #: kicad/project_tree_pane.cpp:776
-#, fuzzy
 msgid "Delete the file and its content"
-msgstr "디렉토리와 그 내용 삭제 (&D)"
+msgstr "파일 및 해당 내용 삭제"
 
 #: kicad/project_tree_pane.cpp:778
-#, fuzzy
 msgid "Delete the files and their contents"
-msgstr "디렉토리와 그 내용 삭제 (&D)"
+msgstr "파일 및 해당 내용 삭제"
 
 #: kicad/project_tree_pane.cpp:793
-#, fuzzy
 msgid "Move to Trash"
-msgstr "트랙 이동"
+msgstr "휴지통으로 이동"
 
 #: kicad/project_tree_pane.cpp:807
 msgid "Print the contents of the file"
-msgstr ""
+msgstr "파일 내용 인쇄"
 
 #: kicad/project_tree_pane.cpp:869
 #, c-format
@@ -18005,53 +17945,47 @@ msgstr "파일 이름 변경"
 
 #: kicad/project_tree_pane.cpp:1190
 msgid "Network path: not monitoring folder changes"
-msgstr ""
+msgstr "네트워크 경로: 폴더 변경 사항을 모니터링하지 않음"
 
 #: kicad/project_tree_pane.cpp:1195
 msgid "Local path: monitoring folder changes"
-msgstr ""
+msgstr "로컬 경로: 폴더 변경 사항을 모니터링"
 
 #: kicad/tools/kicad_manager_actions.cpp:41
 msgid "New Project..."
 msgstr "새 프로젝트..."
 
 #: kicad/tools/kicad_manager_actions.cpp:41
-#, fuzzy
 msgid "Create new blank project"
-msgstr "새 프로젝트 만들기"
+msgstr "새 빈 프로젝트 만들기"
 
 #: kicad/tools/kicad_manager_actions.cpp:47
 msgid "New Project from Template..."
 msgstr "템플릿의 새 프로젝트..."
 
 #: kicad/tools/kicad_manager_actions.cpp:47
-#, fuzzy
 msgid "Create new project from template"
-msgstr "새 프로젝트 만들기"
+msgstr "템플릿에서 새 프로젝트 만들기"
 
 #: kicad/tools/kicad_manager_actions.cpp:52
 msgid "Open Project..."
 msgstr "프로젝트 열기..."
 
 #: kicad/tools/kicad_manager_actions.cpp:52
-#, fuzzy
 msgid "Open an existing project"
-msgstr "보드 열기"
+msgstr "기존 프로젝트 열기"
 
 #: kicad/tools/kicad_manager_actions.cpp:58
-#, fuzzy
 msgid "Close Project"
-msgstr "새 프로젝트 (&N)"
+msgstr "프로젝트 닫기"
 
 #: kicad/tools/kicad_manager_actions.cpp:58
-#, fuzzy
 msgid "Close the current project"
-msgstr "현재 프로젝트 저장"
+msgstr "현재 프로젝트 닫기"
 
 #: kicad/tools/kicad_manager_actions.cpp:64
-#, fuzzy
 msgid "Edit schematic"
-msgstr "회로도 인쇄"
+msgstr "회로도 편집"
 
 #: kicad/tools/kicad_manager_actions.cpp:70
 msgid "Edit schematic symbols"
@@ -18062,22 +17996,20 @@ msgid "Edit PCB"
 msgstr "PCB 편집"
 
 #: kicad/tools/kicad_manager_actions.cpp:82
-#, fuzzy
 msgid "Edit PCB footprints"
-msgstr "풋프린트"
+msgstr "PCB 풋프린트 편집"
 
 #: kicad/tools/kicad_manager_actions.cpp:88
 msgid "Preview Gerber output files"
 msgstr "거버 출력 파일 미리 보기"
 
 #: kicad/tools/kicad_manager_actions.cpp:94
-#, fuzzy
 msgid "Image Converter"
-msgstr "변환"
+msgstr "이미지 변환기"
 
 #: kicad/tools/kicad_manager_actions.cpp:94
 msgid "Convert bitmap images to schematic or PCB components"
-msgstr ""
+msgstr "비트맵 이미지를 회로도 또는 PCB 구성 요소로 변환"
 
 #: kicad/tools/kicad_manager_actions.cpp:99
 msgid "Calculator Tools"
@@ -18427,7 +18359,6 @@ msgstr "항목 속성"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:416
 #: pcbnew/footprint_edit_frame.cpp:925
-#, fuzzy
 msgid "Default Values"
 msgstr "기본값"
 
@@ -25723,9 +25654,8 @@ msgid "Mouse drag behavior:"
 msgstr "마우스 끌기 동작:"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:38
-#, fuzzy
 msgid "Move item"
-msgstr "마이어 이동"
+msgstr "항목 이동"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:38
 msgid "Interactive drag"
@@ -25882,7 +25812,6 @@ msgid "Reference location: local coordinates origin"
 msgstr "참조 위치: 지역 좌표 원점"
 
 #: pcbnew/dialogs/dialog_position_relative.cpp:255
-#, fuzzy
 msgid "<none selected>"
 msgstr "<선택되지 않음>"
 
@@ -25902,7 +25831,6 @@ msgid "Use Grid Origin"
 msgstr "그리드 원점 사용"
 
 #: pcbnew/dialogs/dialog_position_relative_base.cpp:41
-#, fuzzy
 msgid "Select Item..."
 msgstr "항목 선택..."
 
@@ -25977,7 +25905,6 @@ msgid "Layers:"
 msgstr "레이어:"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:41
-#, fuzzy
 msgid "Basic rules:"
 msgstr "기본 규칙:"
 
@@ -26366,7 +26293,6 @@ msgid "Show on pads and tracks"
 msgstr "영역 보이기"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:39
-#, fuzzy
 msgid "Net Names"
 msgstr "네트 이름"
 
@@ -26403,9 +26329,8 @@ msgid "Show when creating and editing tracks"
 msgstr "트랙 만들 때"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:59
-#, fuzzy
 msgid "Show always"
-msgstr "모두 보이기"
+msgstr "항상 표시"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:61
 msgid "Track Clearance"
@@ -26438,14 +26363,12 @@ msgid ""
 msgstr ""
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:29
-#, fuzzy
 msgid "Magnetic pads"
-msgstr "마그네틱 패드"
+msgstr "자기 패드"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:32
-#, fuzzy
 msgid "Magnetic graphics"
-msgstr "마그네틱 패드"
+msgstr "자기 그래픽"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:41
 msgid "Flip board items L/R (default is T/B)"
@@ -26645,9 +26568,8 @@ msgid "Options Editor..."
 msgstr "옵션 편집기..."
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:288
-#, fuzzy
 msgid "Edit options"
-msgstr "선 설정"
+msgstr "편집 옵션"
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:555
 #, c-format
@@ -26687,9 +26609,8 @@ msgid "Icon"
 msgstr "아이콘"
 
 #: pcbnew/dialogs/panel_pcbnew_action_plugins_base.cpp:37
-#, fuzzy
 msgid "Show button"
-msgstr "모두 숨기기"
+msgstr "버튼 표시"
 
 #: pcbnew/dialogs/panel_pcbnew_action_plugins_base.cpp:39
 msgid "Category"
@@ -31674,9 +31595,8 @@ msgid ""
 msgstr ""
 
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:2453
-#, fuzzy
 msgid "Library Not Found"
-msgstr "라이브러리를 찾을 수 없음"
+msgstr "라이브러리를 찾을 수 없습니다"
 
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:2479
 #, fuzzy, c-format
@@ -31917,7 +31837,7 @@ msgstr ""
 "라인: %d, 옵셋: %d"
 
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:3176
-#, fuzzy, c-format
+#, c-format
 msgid "File '%s' is empty."
 msgstr "%s 파일을 찾을 수 없습니다."
 
@@ -31980,9 +31900,8 @@ msgid "Starts laying a new track."
 msgstr ""
 
 #: pcbnew/router/length_tuner_tool.cpp:51
-#, fuzzy
 msgid "End Track"
-msgstr "트랙 편집"
+msgstr "트랙 종료"
 
 #: pcbnew/router/length_tuner_tool.cpp:51
 msgid "Stops laying the current meander."
@@ -32302,7 +32221,7 @@ msgid "Track netclass width"
 msgstr "배선 네트클래스 폭"
 
 #: pcbnew/router/router_tool.cpp:227
-#, fuzzy, c-format
+#, c-format
 msgid "Track %s"
 msgstr "트랙 %s"
 
@@ -32316,7 +32235,7 @@ msgid "Via %s, drill %s"
 msgstr "비아%s, 드릴%s"
 
 #: pcbnew/router/router_tool.cpp:249 pcbnew/tools/drawing_tool.cpp:113
-#, fuzzy, c-format
+#, c-format
 msgid "Via %s"
 msgstr "비아 %s"
 
@@ -33254,9 +33173,8 @@ msgid "Converts selected graphic lines to tracks"
 msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:83
-#, fuzzy
 msgid "Draw Line"
-msgstr "드로우 설정"
+msgstr "선 그리기"
 
 #: pcbnew/tools/pcb_actions.cpp:83
 #, fuzzy
@@ -33278,9 +33196,8 @@ msgid "Draw Rectangle"
 msgstr "사각형 추가"
 
 #: pcbnew/tools/pcb_actions.cpp:100
-#, fuzzy
 msgid "Draw Circle"
-msgstr "원"
+msgstr "원 그리기"
 
 #: pcbnew/tools/pcb_actions.cpp:106
 msgid "Draw Arc"
@@ -33347,9 +33264,8 @@ msgid "Add a filled zone"
 msgstr "패드 채움 모드 보이기"
 
 #: pcbnew/tools/pcb_actions.cpp:162
-#, fuzzy
 msgid "Add Vias"
-msgstr "패드 추가"
+msgstr "비아 추가"
 
 #: pcbnew/tools/pcb_actions.cpp:162
 #, fuzzy
@@ -33592,9 +33508,8 @@ msgid "Create a new footprint using the Footprint Wizard"
 msgstr "텍스트 에디터로 열기 (&O)"
 
 #: pcbnew/tools/pcb_actions.cpp:356
-#, fuzzy
 msgid "Edit Footprint"
-msgstr "풋프린트"
+msgstr "풋프린트 편집"
 
 #: pcbnew/tools/pcb_actions.cpp:356
 #, fuzzy
@@ -33617,9 +33532,8 @@ msgid "Copy Footprint"
 msgstr "풋프린트"
 
 #: pcbnew/tools/pcb_actions.cpp:376
-#, fuzzy
 msgid "Paste Footprint"
-msgstr "풋프린트"
+msgstr "풋프린트 붙여넣기"
 
 #: pcbnew/tools/pcb_actions.cpp:381
 msgid "Import Footprint..."
@@ -33831,7 +33745,6 @@ msgid "Add Pad"
 msgstr "패드 추가"
 
 #: pcbnew/tools/pcb_actions.cpp:519
-#, fuzzy
 msgid "Add a pad"
 msgstr "패드 추가"
 
@@ -33845,9 +33758,8 @@ msgid "Ungroups a custom-shaped pad for editing as individual graphic shapes"
 msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:532
-#, fuzzy
 msgid "Finish Pad Edit"
-msgstr "필드 편집"
+msgstr "패드 편집 완료"
 
 #: pcbnew/tools/pcb_actions.cpp:533
 msgid "Regroups all touching graphic shapes into the edited pad"
@@ -33986,18 +33898,16 @@ msgid "Change track width to previous pre-defined size"
 msgstr "트랙 두께를 변경하시겠습니까? (전체 네트)"
 
 #: pcbnew/tools/pcb_actions.cpp:627
-#, fuzzy
 msgid "Increase Via Size"
-msgstr "비아 크기"
+msgstr "비아 크기 증가"
 
 #: pcbnew/tools/pcb_actions.cpp:627
 msgid "Change via size to next pre-defined size"
 msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:632
-#, fuzzy
 msgid "Decrease Via Size"
-msgstr "비아 크기"
+msgstr "비아 크기 감소"
 
 #: pcbnew/tools/pcb_actions.cpp:632
 msgid "Change via size to previous pre-defined size"
@@ -34030,9 +33940,8 @@ msgid "Add a layer alignment target"
 msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:656
-#, fuzzy
 msgid "Add Footprint"
-msgstr "풋프린트"
+msgstr "풋프린트 추가"
 
 #: pcbnew/tools/pcb_actions.cpp:656
 msgid "Add a footprint"
@@ -34968,9 +34877,8 @@ msgid "Incomplete undo/redo operation: some items not found"
 msgstr ""
 
 #: pcbnew/widgets/appearance_controls.cpp:340
-#, fuzzy
 msgid "Show tracks"
-msgstr "트랙 이동"
+msgstr "트랙 표시"
 
 #: pcbnew/widgets/appearance_controls.cpp:341
 #, fuzzy
@@ -34988,18 +34896,16 @@ msgid "Show copper zones"
 msgstr "핀 보이기"
 
 #: pcbnew/widgets/appearance_controls.cpp:345
-#, fuzzy
 msgid "Footprints Front"
-msgstr "풋프린트"
+msgstr "풋프린트 앞면"
 
 #: pcbnew/widgets/appearance_controls.cpp:345
 msgid "Show footprints that are on board's front"
 msgstr ""
 
 #: pcbnew/widgets/appearance_controls.cpp:346
-#, fuzzy
 msgid "Footprints Back"
-msgstr "풋프린트"
+msgstr "풋프린트 뒷면"
 
 #: pcbnew/widgets/appearance_controls.cpp:346
 msgid "Show footprints that are on board's back"
@@ -35034,9 +34940,8 @@ msgid "Show all footprint text"
 msgstr "풋프린트 이동"
 
 #: pcbnew/widgets/appearance_controls.cpp:351
-#, fuzzy
 msgid "Hidden Text"
-msgstr "텍스트 추가"
+msgstr "숨겨진 텍스트"
 
 #: pcbnew/widgets/appearance_controls.cpp:351
 msgid "Show footprint text marked as invisible"
@@ -35359,49 +35264,40 @@ msgid "Footprint assembly on board's back"
 msgstr ""
 
 #: pcbnew/widgets/appearance_controls.cpp:1528
-#, fuzzy
 msgid "User defined layer 1"
-msgstr "정의된 홀"
+msgstr "사용자 정의 레이어 1"
 
 #: pcbnew/widgets/appearance_controls.cpp:1529
-#, fuzzy
 msgid "User defined layer 2"
-msgstr "정의된 홀"
+msgstr "사용자 정의 레이어 2"
 
 #: pcbnew/widgets/appearance_controls.cpp:1530
-#, fuzzy
 msgid "User defined layer 3"
-msgstr "정의된 홀"
+msgstr "사용자 정의 계층 3"
 
 #: pcbnew/widgets/appearance_controls.cpp:1531
-#, fuzzy
 msgid "User defined layer 4"
-msgstr "정의된 홀"
+msgstr "사용자 정의 레이어 4"
 
 #: pcbnew/widgets/appearance_controls.cpp:1532
-#, fuzzy
 msgid "User defined layer 5"
-msgstr "정의된 홀"
+msgstr "사용자 정의 레이어 5"
 
 #: pcbnew/widgets/appearance_controls.cpp:1533
-#, fuzzy
 msgid "User defined layer 6"
-msgstr "정의된 홀"
+msgstr "사용자 정의 레이어 6"
 
 #: pcbnew/widgets/appearance_controls.cpp:1534
-#, fuzzy
 msgid "User defined layer 7"
-msgstr "정의된 홀"
+msgstr "사용자 정의 레이어 7"
 
 #: pcbnew/widgets/appearance_controls.cpp:1535
-#, fuzzy
 msgid "User defined layer 8"
-msgstr "정의된 홀"
+msgstr "사용자 정의 레이어 8"
 
 #: pcbnew/widgets/appearance_controls.cpp:1536
-#, fuzzy
 msgid "User defined layer 9"
-msgstr "정의된 홀"
+msgstr "사용자 정의 레이어 9"
 
 #: pcbnew/widgets/appearance_controls.cpp:1574
 #, fuzzy
@@ -35429,14 +35325,12 @@ msgid "Show Only Front Assembly Layers"
 msgstr "Copper Layers"
 
 #: pcbnew/widgets/appearance_controls.cpp:1607
-#, fuzzy
 msgid "Show Only Front Layers"
-msgstr "모두 보이기"
+msgstr "전면 레이어만 표시"
 
 #: pcbnew/widgets/appearance_controls.cpp:1613
-#, fuzzy
 msgid "Show Only Inner Layers"
-msgstr "Copper Layers"
+msgstr "내부 레이어만 표시"
 
 #: pcbnew/widgets/appearance_controls.cpp:1617
 msgid "Show Only Back Layers"
@@ -35447,14 +35341,14 @@ msgid "Show Only Back Assembly Layers"
 msgstr "후면 조립 레이어만 보이기"
 
 #: pcbnew/widgets/appearance_controls.cpp:1947
-#, fuzzy, c-format
+#, c-format
 msgid "Show or hide %s"
 msgstr "표시 또는 숨기기 %s"
 
 #: pcbnew/widgets/appearance_controls.cpp:1988
 #, c-format
 msgid "Set opacity of %s"
-msgstr ""
+msgstr "%s의 불투명도 설정"
 
 #: pcbnew/widgets/appearance_controls.cpp:2141
 #, c-format
@@ -35625,9 +35519,8 @@ msgid "No copper zones"
 msgstr "핀 보이기"
 
 #: pcbnew/zone.cpp:582
-#, fuzzy
 msgid "No footprints"
-msgstr "풋프린트 이동"
+msgstr "풋프린트 없음"
 
 #: pcbnew/zone.cpp:585
 msgid "Restrictions"
