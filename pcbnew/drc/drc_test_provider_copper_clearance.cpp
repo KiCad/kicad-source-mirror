@@ -240,14 +240,14 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::Run()
         if( !reportPhase( _( "Checking copper zone clearances..." ) ) )
             return false;   // DRC cancelled
 
-            testZonesToZones();
+        testZonesToZones();
     }
     else if( !m_drcEngine->IsErrorLimitExceeded( DRCE_ZONES_INTERSECT ) )
     {
         if( !reportPhase( _( "Checking zones..." ) ) )
             return false;   // DRC cancelled
 
-            testZonesToZones();
+        testZonesToZones();
     }
 
     reportRuleStatistics();
