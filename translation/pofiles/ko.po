@@ -15,8 +15,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
-"PO-Revision-Date: 2021-08-11 12:23+0000\n"
-"Last-Translator: Uibeom Jung <wjddmlqja17@gmail.com>\n"
+"PO-Revision-Date: 2021-08-11 13:15+0000\n"
+"Last-Translator: Ji Yoon Choi <chichoon.choi@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
 "Language: ko\n"
@@ -12231,9 +12231,8 @@ msgid "Symbol is not annotated"
 msgstr "심볼이 주석 처리되지 않음"
 
 #: eeschema/erc_item.cpp:142
-#, fuzzy
 msgid "Symbol has more units than are defined"
-msgstr "기호에 정의된 것보다 더 많은 단위가 있습니다."
+msgstr "심볼에 정의된 것보다 더 많은 유닛이 있습니다"
 
 #: eeschema/erc_item.cpp:146
 msgid "Units of same symbol have different values"
@@ -12301,9 +12300,8 @@ msgid "Schematic '%s' does not exist.  Do you wish to create it?"
 msgstr "회로도 '%s'이(가) 존재하지 않습니다. 생성하시겠습니까?"
 
 #: eeschema/files-io.cpp:309
-#, fuzzy
 msgid "Creating Schematic"
-msgstr "도식 생성"
+msgstr "회로도 생성"
 
 #: eeschema/files-io.cpp:310
 #, fuzzy
@@ -12435,7 +12433,7 @@ msgstr "예기치 않은 파일 확장자: '%s'."
 #: eeschema/files-io.cpp:814 eeschema/files-io.cpp:871
 #: kicad/tools/kicad_manager_control.cpp:119
 #: kicad/tools/kicad_manager_control.cpp:216
-#, c-format, fuzzy
+#, c-format
 msgid ""
 "Folder '%s' could not be created.\n"
 "\n"
@@ -12450,7 +12448,6 @@ msgid "Saving will overwrite existing files."
 msgstr "저장하면 기존 파일을 덮어씁니다."
 
 #: eeschema/files-io.cpp:932
-#, fuzzy
 msgid "Save Warning"
 msgstr "경고 저장"
 
@@ -12601,7 +12598,6 @@ msgstr "아니요"
 
 #: eeschema/lib_pin.cpp:1045 eeschema/sch_pin.cpp:218
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1467
-#, fuzzy
 msgid "Pos X"
 msgstr "위치 X"
 
