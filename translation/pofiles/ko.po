@@ -16,7 +16,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
 "PO-Revision-Date: 2021-08-11 17:58+0000\n"
-"Last-Translator: jeongsuAn <dks9467@gmail.com>\n"
+"Last-Translator: Ji Yoon Choi <chichoon.choi@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
 "Language: ko\n"
@@ -12582,9 +12582,8 @@ msgstr "변환"
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:447
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:481
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:488
-#, fuzzy
 msgid "Yes"
-msgstr "네"
+msgstr "예"
 
 #: eeschema/lib_pin.cpp:1030 eeschema/sch_pin.cpp:207
 #: gerbview/gerber_draw_item.cpp:716 gerbview/gerber_draw_item.cpp:717
@@ -12593,7 +12592,7 @@ msgstr "네"
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:481
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:488
 msgid "No"
-msgstr "아니요"
+msgstr "아니오"
 
 #: eeschema/lib_pin.cpp:1045 eeschema/sch_pin.cpp:218
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1467
@@ -12668,9 +12667,8 @@ msgid "Import"
 msgstr "가져오기"
 
 #: eeschema/menubar.cpp:99
-#, fuzzy
 msgid "Non-KiCad Schematic..."
-msgstr "키캐드가 아닌 회로도..."
+msgstr "비 KiCad 회로도..."
 
 #: eeschema/menubar.cpp:100
 #, fuzzy
@@ -12776,9 +12774,8 @@ msgid "Power output"
 msgstr "전원 출력"
 
 #: eeschema/pin_type.cpp:60
-#, fuzzy
 msgid "Open collector"
-msgstr "컬렉터 열기"
+msgstr "오픈 컬렉터"
 
 #: eeschema/pin_type.cpp:61
 msgid "Open emitter"
@@ -12789,7 +12786,6 @@ msgid "Unconnected"
 msgstr "연결되지 않음"
 
 #: eeschema/pin_type.cpp:77
-#, fuzzy
 msgid "Inverted"
 msgstr "반전"
 
@@ -12798,9 +12794,8 @@ msgid "Clock"
 msgstr "클럭"
 
 #: eeschema/pin_type.cpp:79
-#, fuzzy
 msgid "Inverted clock"
-msgstr "반전 된 클럭"
+msgstr "반전 클럭"
 
 #: eeschema/pin_type.cpp:80
 msgid "Input low"
@@ -12819,7 +12814,6 @@ msgid "Falling edge clock"
 msgstr "하강 에지 클럭"
 
 #: eeschema/pin_type.cpp:84
-#, fuzzy
 msgid "NonLogic"
 msgstr "비로직"
 
@@ -12829,15 +12823,15 @@ msgid "Rename %s to %s"
 msgstr "%s에서 %s로 이름 바꾸기"
 
 #: eeschema/project_rescue.cpp:302 eeschema/project_rescue.cpp:462
-#, c-format, fuzzy
+#, c-format
 msgid ""
 "Cannot rescue symbol %s which is not available in any library or the cache."
-msgstr "라이브러리나 캐시에서 사용할 수 없는 기호 %s을(를) 복구할 수 없습니다."
+msgstr "심볼 %s를 복구할 수 없습니다. 어떠한 라이브러리나 캐시에서도 찾을 수 없습니다."
 
 #: eeschema/project_rescue.cpp:305 eeschema/project_rescue.cpp:468
-#, c-format, fuzzy
+#, c-format
 msgid "Rescue symbol %s found only in cache library to %s."
-msgstr "캐시 라이브러리에서만 %s에 대한 기호 %s을(를) 복구할 수 있습니다."
+msgstr "캐시 라이브러리에서만 찾을 수 있는 심볼 %s를 %s로 복구."
 
 #: eeschema/project_rescue.cpp:308 eeschema/project_rescue.cpp:474
 #, c-format
@@ -19289,7 +19283,7 @@ msgstr "상승 시간 저하:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1425
 msgid "Rise time degradation for given Z0 and calculated capacitance"
-msgstr ""
+msgstr "주어진 Z0과 계산된 정전용량에 대한 상승 시간 저하"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1433
 msgid "ps"
@@ -19317,7 +19311,7 @@ msgstr "리액턴스 :"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1455
 msgid "Inductive reactance for given rise time and calculated inductance"
-msgstr ""
+msgstr "주어진 상승 시간 및 계산된 유도용량에 대한 유도 리액턴스"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1474
 #, fuzzy
@@ -19369,7 +19363,7 @@ msgstr "기타"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1792
 msgid "Voltage > 500 V:"
-msgstr ""
+msgstr "전압 > 500V:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1799
 msgid "Update Values"
@@ -19561,6 +19555,27 @@ msgid ""
 "\tR1 | R2 |...| Rn\tresistors in parallel\n"
 "\tR1 + (R2|R3)...\t\tany combination of the above\n"
 msgstr ""
+"IEC 600063에 정의된 E-시리즈는 전자 부품에 대한 표준 수로 \n"
+"널리 사용되는 기본 시스템입니다.  사용 가능한 값은 대략\n"
+"로그 스케일을 따라 일정한 간격으로 배치되어 있습니다.\n"
+"\n"
+"\tE12: 1.0  1.2  1.5  1.8  2.2  2.7  3.3  3.9  4.7  5.6  6.8  8.2\n"
+"\tE6:  1.0   -   1.5   -   2.2   -   3.3   -   4.7   -   6.8   -\n"
+"\tE3:  1.0   -    -    -   2.2   -    -    -   4.7   -    -    -\n"
+"\tE1:  1.0   -    -    -    -    -    -    -    -    -    -    -\n"
+"\n"
+"이 계산기는 임의의 값을 생성할 수 있도록 표준 E-시리즈 컴포넌트의 \n"
+"조합을 찾아냅니다. 사용자는 0.0025 부터 4000 kΩ까지 필요한 저항을\n"
+"입력할 수 있습니다. 최대 4개의 컴포넌트를 사용하는 해답이 주어집니다.\n"
+"\n"
+"기본값으로, 요청되는 값은 항상 해답 세트에서 제외됩니다.  또한 이 컴포넌트\n"
+"값을 사용할 수 없는 경우, 추가적으로 해답에서 제외할 값을 두 개까지 지정할 수 있습니다.\n"
+"\n"
+"해답은 다음과 같은 형식으로 주어집니다.\n"
+"\n"
+"\tR1 + R2 +...+ Rn\t직렬 연결에서의 조합\n"
+"\tR1 | R2 |...| Rn\t병렬 연결에서의 조합\n"
+"\tR1 + (R2|R3)...\t\t위의 임의의 조합\n"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:251
 #, fuzzy
@@ -19595,7 +19610,7 @@ msgstr "PCB 계산기 데이터 파일을 선택하시오"
 
 #: pcb_calculator/regulators_funct.cpp:147
 msgid "Do you want to load this file and replace current regulator list?"
-msgstr ""
+msgstr "파일을 불러와서 현재의 레귤레이터 목록을 대체하시겠습니까?"
 
 #: pcb_calculator/regulators_funct.cpp:162
 #, fuzzy, c-format
@@ -19604,15 +19619,15 @@ msgstr "%s 파일을 만들 수 없습니다."
 
 #: pcb_calculator/regulators_funct.cpp:195
 msgid "This regulator is already in list. Aborted"
-msgstr ""
+msgstr "이 레귤레이터는 이미 목록에 있습니다. 동작이 중단됩니다"
 
 #: pcb_calculator/regulators_funct.cpp:312
 msgid "Vout must be greater than vref"
-msgstr ""
+msgstr "Vout은 Vref보다 커야 합니다"
 
 #: pcb_calculator/regulators_funct.cpp:318
 msgid "Vref set to 0 !"
-msgstr ""
+msgstr "Vref가 0으로 설정되었습니다!"
 
 #: pcb_calculator/regulators_funct.cpp:324
 #, fuzzy
@@ -19642,6 +19657,23 @@ msgid ""
 "__W,H__ = width and thickness in mils  \n"
 "__K__ = 0.024 for internal traces or 0.048 for external traces\n"
 msgstr ""
+"최대전류를 지정하면, 배선의 폭은 이에 맞추어 계산됩니다.\n"
+"\n"
+"배선의 폭 중 하나를 지정하면, 이를 처리할 수 있는 최대 전류가 계산됩니다. 이후, 다른 배선에서 최대 전류를 처리하기 위한 폭 또한 "
+"계산됩니다.\n"
+"\n"
+"제어 값은 볼드체로 표시됩니다.\n"
+"\n"
+"계산값은 전류 최대 35A (외부) 또는 17.5A (내부), 온도 최대 100ºC, 그리고 폭 400mil (10mm) 까지의 범위에서 "
+"유효합니다.\n"
+"\n"
+"IPC 2221에서의 수식은\n"
+"<center>__I = K * dT<sup>0.44</sup> * (W*H)<sup>0.725</sup>__</center>\n"
+"이때:  \n"
+"__I__ = 최대 전류 (A)  \n"
+"__dt__ = 주위 환경으로부터의 온도 상승 (ºC)  \n"
+"__W,H__ = 폭과 두께 (mils)  \n"
+"__K__ = 내부 배선에 대해서 0.024, 외부 배선에 대해서 0.048\n"
 
 #: pcb_calculator/transline_dlg_funct.cpp:121 pcb_calculator/via.cpp:68
 #, fuzzy
@@ -19663,7 +19695,7 @@ msgstr "삭제 선택"
 
 #: pcb_calculator/transline_ident.cpp:96
 msgid "Dielectric loss (dissipation factor)"
-msgstr ""
+msgstr "유전 손실 (유전 정접)"
 
 #: pcb_calculator/transline_ident.cpp:102
 msgid ""
@@ -19673,7 +19705,7 @@ msgstr "도체의 전기 저항성 또는 특정한 전기 저항 (Ω・m)"
 
 #: pcb_calculator/transline_ident.cpp:109
 msgid "Frequency of the input signal"
-msgstr ""
+msgstr "입력 신호의 주파수"
 
 #: pcb_calculator/transline_ident.cpp:118
 #: pcb_calculator/transline_ident.cpp:160
@@ -19714,7 +19746,7 @@ msgstr "유전체 손실:"
 #: pcb_calculator/transline_ident.cpp:352
 #: pcb_calculator/transline_ident.cpp:386
 msgid "Skin depth:"
-msgstr ""
+msgstr "표피의 깊이:"
 
 #: pcb_calculator/transline_ident.cpp:124
 #: pcb_calculator/transline_ident.cpp:166
@@ -19722,12 +19754,12 @@ msgstr ""
 #: pcb_calculator/transline_ident.cpp:311
 #: pcb_calculator/transline_ident.cpp:355
 msgid "Height of substrate"
-msgstr ""
+msgstr "기판의 높이"
 
 #: pcb_calculator/transline_ident.cpp:126
 #: pcb_calculator/transline_ident.cpp:313
 msgid "Height of box top"
-msgstr ""
+msgstr "상자의 높이"
 
 #: pcb_calculator/transline_ident.cpp:129
 #: pcb_calculator/transline_ident.cpp:168
@@ -19754,7 +19786,7 @@ msgstr "기판"
 
 #: pcb_calculator/transline_ident.cpp:136
 msgid "Relative permeability (mu) of substrate"
-msgstr ""
+msgstr "기판의 상대 투과율 (μ)"
 
 #: pcb_calculator/transline_ident.cpp:139
 #: pcb_calculator/transline_ident.cpp:171
@@ -19826,7 +19858,7 @@ msgstr "두께"
 
 #: pcb_calculator/transline_ident.cpp:229
 msgid "ZF(H10) = Ey / Hx:"
-msgstr ""
+msgstr "ZF(H10) = Ey / Hx:"
 
 #: pcb_calculator/transline_ident.cpp:233
 #: pcb_calculator/transline_ident.cpp:268
@@ -19846,15 +19878,15 @@ msgstr "절연체"
 #: pcb_calculator/transline_ident.cpp:239
 #: pcb_calculator/transline_ident.cpp:274
 msgid "Relative permeability (mu) of insulator"
-msgstr ""
+msgstr "절연체의 상대 투과율 (μ)"
 
 #: pcb_calculator/transline_ident.cpp:247
 msgid "Width of waveguide"
-msgstr ""
+msgstr "도파관의 폭"
 
 #: pcb_calculator/transline_ident.cpp:249
 msgid "Height of waveguide"
-msgstr ""
+msgstr "도파관의 높이"
 
 #: pcb_calculator/transline_ident.cpp:251
 #, fuzzy
@@ -19884,12 +19916,12 @@ msgstr "외경 (절연체)"
 #: pcb_calculator/transline_ident.cpp:302
 #, c-format
 msgid "Effective %s (even):"
-msgstr ""
+msgstr "유효 %s (even):"
 
 #: pcb_calculator/transline_ident.cpp:303
 #, c-format
 msgid "Effective %s (odd):"
-msgstr ""
+msgstr "유효 %s (odd):"
 
 #: pcb_calculator/transline_ident.cpp:304
 msgid "Conductor losses (even):"
@@ -19915,7 +19947,7 @@ msgstr "Zeven"
 
 #: pcb_calculator/transline_ident.cpp:334
 msgid "Even mode impedance (lines driven by common voltages)"
-msgstr ""
+msgstr "우수 모드 임피던스 (선로는 동일 전압에서 구동됨)"
 
 #: pcb_calculator/transline_ident.cpp:337
 msgid "Zodd"
@@ -19923,15 +19955,15 @@ msgstr "Zodd"
 
 #: pcb_calculator/transline_ident.cpp:338
 msgid "Odd mode impedance (lines driven by opposite (differential) voltages)"
-msgstr ""
+msgstr "기수 모드 임피던스 (선로는 역 (차동) 전압에서 구동됨)"
 
 #: pcb_calculator/transline_ident.cpp:357
 msgid "Distance between strip and top metal"
-msgstr ""
+msgstr "스트립 라인과"
 
 #: pcb_calculator/transline_ident.cpp:389
 msgid "Twists"
-msgstr ""
+msgstr "비틀림 수"
 
 #: pcb_calculator/transline_ident.cpp:390
 #, fuzzy
@@ -19944,7 +19976,7 @@ msgstr "환경"
 
 #: pcb_calculator/transline_ident.cpp:399
 msgid "Relative permittivity of environment"
-msgstr ""
+msgstr "환경의 상대 유전율"
 
 #: pcb_calculator/transline_ident.cpp:408
 msgid "Cable length"
@@ -19952,7 +19984,7 @@ msgstr "케이블 길이"
 
 #: pcb_calculator/via.cpp:82
 msgid "Electrical Resistivity in Ohm*m"
-msgstr ""
+msgstr "전기 저항 (Ω・m)"
 
 #: pcb_calculator/widgets/unit_selector.cpp:35
 msgid "um"
@@ -20007,7 +20039,7 @@ msgstr "자동 배치 %s"
 #: pcbnew/autorouter/autoplace_tool.cpp:68
 #, c-format
 msgid "Board edges must be defined on the %s layer."
-msgstr ""
+msgstr "기판의 모서리가 %s 레이어에 정의되어 있어야 합니다."
 
 #: pcbnew/autorouter/autoplace_tool.cpp:89
 msgid "Autoplace Components"
@@ -20019,7 +20051,7 @@ msgstr "컴포넌트 자동 배치"
 
 #: pcbnew/board.cpp:91
 msgid "This is the default net class."
-msgstr ""
+msgstr "이것은 기본 네트 클래스입니다."
 
 #: pcbnew/board.cpp:822
 msgid "PCB"
@@ -20181,7 +20213,7 @@ msgstr "재료"
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:105
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:279
 msgid "Epsilon R"
-msgstr ""
+msgstr "εR"
 
 #: pcbnew/board_stackup_manager/dialog_dielectric_list_manager.cpp:96
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:111
@@ -20195,11 +20227,11 @@ msgstr "유전체 특성:"
 
 #: pcbnew/board_stackup_manager/dialog_dielectric_list_manager_base.cpp:39
 msgid "Epsilon R:"
-msgstr ""
+msgstr "εR:"
 
 #: pcbnew/board_stackup_manager/dialog_dielectric_list_manager_base.cpp:43
 msgid "Loss Tg:"
-msgstr ""
+msgstr "탄젠트 손실:"
 
 #: pcbnew/board_stackup_manager/dialog_dielectric_list_manager_base.cpp:62
 #, fuzzy
@@ -20264,7 +20296,7 @@ msgstr ""
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:193
 #, c-format
 msgid "Too small value (min value %s %s). Aborted"
-msgstr ""
+msgstr "값이 너무 작습니다 (최소값 %s %s). 중단합니다"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:213
 msgid "All dielectric  thickness layers are locked"
