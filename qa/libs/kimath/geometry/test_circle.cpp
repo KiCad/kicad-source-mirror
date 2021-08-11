@@ -286,6 +286,38 @@ static const std::vector<CIR_CIR_VECPT_CASE> intersect_circle_cases = {
             //no points
         },
     },
+    {
+        "KiROUND overflow 1",
+        { { 44798001, -94001999 }, 200001 },
+        { { 44797999, -94001999 }, 650001 },
+        {
+            //no points
+        },
+    },
+    {
+        "KiROUND overflow 2",
+        { { 50747999, -92402001 }, 650001 },
+        { { 50748001, -92402001 }, 200001 },
+        {
+            //no points
+        },
+    },
+    {
+        "KiROUND overflow 3",
+        { { 43947999, -92402001 }, 650001 },
+        { { 43948001, -92402001 }, 200001 },
+        {
+            //no points
+        },
+    },
+    {
+        "KiROUND overflow 4",
+        { { 46497999, -94001999 }, 200001 },
+        { { 46498001, -94001999 }, 650001 },
+        {
+            //no points
+        },
+    },
 };
 // clang-format on
 

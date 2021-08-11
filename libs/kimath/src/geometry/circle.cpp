@@ -208,6 +208,8 @@ VECTOR2I CIRCLE::NearestPoint( const VECTOR2I& aP ) const
 
 std::vector<VECTOR2I> CIRCLE::Intersect( const CIRCLE& aCircle ) const
 {
+    // From https://mathworld.wolfram.com/Circle-CircleIntersection.html
+    //
     // Simplify the problem:
     // Let this circle be centered at (0,0), with radius r1
     // Let aCircle be centered at (d, 0), with radius r2
@@ -234,7 +236,7 @@ std::vector<VECTOR2I> CIRCLE::Intersect( const CIRCLE& aCircle ) const
     int64_t  r1 = Radius;
     int64_t  r2 = aCircle.Radius;
 
-    if( d > ( r1 + r2 ) || d == 0 )
+    if( d > ( r1 + r2 ) || ( d < (std::abs( r1 - r2) ) ) )
         return retval; //circles do not intersect
 
     // Equation (3)
