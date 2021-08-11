@@ -16,7 +16,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
 "PO-Revision-Date: 2021-08-11 12:23+0000\n"
-"Last-Translator: jeongsuAn <dks9467@gmail.com>\n"
+"Last-Translator: Uibeom Jung <wjddmlqja17@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
 "Language: ko\n"
@@ -33311,7 +33311,7 @@ msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:174
 msgid "Add a cutout area of an existing zone"
-msgstr ""
+msgstr "기존 영역에 새 컷아웃 영역 추가"
 
 #: pcbnew/tools/pcb_actions.cpp:180
 msgid "Add a Similar Zone"
