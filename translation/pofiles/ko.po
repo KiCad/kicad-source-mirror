@@ -16,7 +16,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
 "PO-Revision-Date: 2021-08-11 12:23+0000\n"
-"Last-Translator: Ji Yoon Choi <chichoon.choi@gmail.com>\n"
+"Last-Translator: jeongsuAn <dks9467@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
 "Language: ko\n"
@@ -12655,9 +12655,8 @@ msgstr "기호 라이브러리 %s을(를) 만드는 동안 오류가 발생했�
 
 #: eeschema/menubar.cpp:64 kicad/menubar.cpp:63
 #: pagelayout_editor/menubar.cpp:57 pcbnew/menubar_pcb_editor.cpp:67
-#, fuzzy
 msgid "Open Recent"
-msgstr "오픈 이미터"
+msgstr "최근 파일 열기"
 
 #: eeschema/menubar.cpp:88
 msgid "Insert Schematic Sheet Content..."
@@ -12874,7 +12873,7 @@ msgid ""
 "Error saving global symbol library table:\n"
 "%s"
 msgstr ""
-"전역 심볼 라이브러리 테이블 저장 오류:\n"
+"전역 심볼 라이브러리 테이블 저장 중 오류:\n"
 "%s"
 
 #: eeschema/sch_base_frame.cpp:234
@@ -12883,7 +12882,7 @@ msgid ""
 "Error saving project-specific symbol library table:\n"
 "%s"
 msgstr ""
-"프로젝트 별 심볼 라이브러리 테이블 저장 오류 :\n"
+"프로젝트별 심볼 라이브러리 테이블을 저장하는 중 오류:\n"
 "%s"
 
 #: eeschema/sch_bus_entry.cpp:420
@@ -12910,9 +12909,8 @@ msgid "Bus Entry Type"
 msgstr "버스 설정: 45도"
 
 #: eeschema/sch_connection.cpp:404
-#, fuzzy
 msgid "Connection Name"
-msgstr "연결"
+msgstr "연결 이름"
 
 #: eeschema/sch_connection.cpp:413 pcbnew/dialogs/dialog_net_inspector.cpp:76
 #: pcbnew/netinfo_item.cpp:80
@@ -12934,9 +12932,8 @@ msgstr "다음 라이브러리를 찾을 수 없습니다:"
 
 #: eeschema/sch_edit_frame.cpp:222
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:62
-#, fuzzy
 msgid "KiCad Schematic Editor"
-msgstr "회로도 애노테이션"
+msgstr "KiCad 회로도 편집기"
 
 #: eeschema/sch_edit_frame.cpp:303
 msgid "New schematic file is unsaved"
@@ -12984,9 +12981,8 @@ msgstr "CvPcb를 열 수 없습니다"
 #: eeschema/sch_edit_frame.cpp:1280 eeschema/sim/sim_plot_frame.cpp:360
 #: kicad/kicad_manager_frame.cpp:622 pcbnew/footprint_edit_frame.cpp:784
 #: pcbnew/pcb_edit_frame.cpp:1243
-#, fuzzy
 msgid "[Read Only]"
-msgstr "[%s]에 심볼 저장"
+msgstr "[읽기 전용]"
 
 #: eeschema/sch_edit_frame.cpp:1283 eeschema/sim/sim_plot_frame.cpp:363
 #: pcbnew/footprint_edit_frame.cpp:793 pcbnew/pcb_edit_frame.cpp:1246
@@ -14689,9 +14685,8 @@ msgstr ""
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:844
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:206
-#, fuzzy
 msgid "Could not open the library file."
-msgstr "라이브러리 파일이 아닙니다."
+msgstr "라이브러리 파일을 열 수 없습니다."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:914
 #, c-format
@@ -14712,7 +14707,7 @@ msgstr "탐색할 라이브러리 선택"
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:999
 #: pcbnew/footprint_libraries_utils.cpp:515
 msgid "Global"
-msgstr "전체 적용"
+msgstr "전역"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1002
 #: pcbnew/footprint_libraries_utils.cpp:518
@@ -14721,9 +14716,8 @@ msgstr "라이브러리를 추가할 라이브러리 테이블 선택:"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1003
 #: pcbnew/footprint_libraries_utils.cpp:519
-#, fuzzy
 msgid "Add To Library Table"
-msgstr "탐색할 라이브러리 선택"
+msgstr "라이브러리 테이블에 추가"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1035
 #, c-format
@@ -14742,9 +14736,8 @@ msgstr ""
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1184
 #: eeschema/symbol_viewer_frame.cpp:396
-#, fuzzy
 msgid "Library not found in symbol library table."
-msgstr "%s 파일은 EESchema 라이브러리가 아닙니다."
+msgstr "심볼 라이브러리 테이블에서 라이브러리를 찾을 수 없습니다."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1192
 #: eeschema/symbol_viewer_frame.cpp:400
@@ -14901,9 +14894,8 @@ msgid "Save in library:"
 msgstr "라이브러리에 저장:"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:645
-#, fuzzy
 msgid "No library specified.  Symbol could not be saved."
-msgstr "라이브러리가 정의되지 않았습니다."
+msgstr "지정된 라이브러리가 없습니다.  심볼을 저장할 수 없습니다."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:654
 msgid ""
@@ -14965,9 +14957,8 @@ msgid "Symbol %s not found in library '%s'."
 msgstr "%s 라이브러리의 %s 컴포넌트가 삭제되었습니다."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:989
-#, fuzzy
 msgid "No library specified."
-msgstr "라이브러리가 정의되지 않았습니다."
+msgstr "지정된 라이브러리가 없습니다."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1008
 #, c-format
@@ -15081,9 +15072,8 @@ msgid "Library '%s' not found in the Symbol Library Table."
 msgstr "%s 파일은 EESchema 라이브러리가 아닙니다."
 
 #: eeschema/symbol_editor/symbol_library_manager.cpp:402
-#, fuzzy
 msgid "Symbol not found."
-msgstr "파일을 찾을 수 없습니다."
+msgstr "심볼을 찾을 수 없습니다."
 
 #: eeschema/symbol_editor/symbol_library_manager.cpp:433
 #, c-format
@@ -22382,7 +22372,7 @@ msgstr "DRC 제어"
 
 #: pcbnew/dialogs/dialog_enum_pads_base.cpp:19
 msgid "Pad names are restricted to 4 characters (including number)."
-msgstr ""
+msgstr "패드 이름은 4자(숫자 포함)로 제한됩니다."
 
 #: pcbnew/dialogs/dialog_enum_pads_base.cpp:32
 msgid "Pad name prefix:"
@@ -22513,7 +22503,7 @@ msgstr "D-Code 보이기"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.h:86
 msgid "Update Footprints from Library"
-msgstr ""
+msgstr "라이브러리에서 풋프린트 업데이트"
 
 #: pcbnew/dialogs/dialog_export_idf.cpp:161
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:120
@@ -22578,7 +22568,7 @@ msgstr "ERC 경고"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:250
 msgid "STEP export failed!  Please save the PCB and try again"
-msgstr ""
+msgstr "STEP 내보내기 실패!  PCB를 저장하고 다시 시도하십시오"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:315
 #, c-format
@@ -22681,7 +22671,7 @@ msgstr "내보내기"
 #: pcbnew/dialogs/dialog_export_svg.cpp:214
 #: pcbnew/exporters/gen_footprints_placefile.cpp:191
 msgid "Use a relative path?"
-msgstr ""
+msgstr "상대 경로를 사용하시겠습니까?"
 
 #: pcbnew/dialogs/dialog_export_svg.cpp:224
 #: pcbnew/exporters/gen_footprints_placefile.cpp:200
@@ -23032,12 +23022,12 @@ msgstr "새 모듈 자동 배치"
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:208
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:139
 msgid "Allow 90 degree rotated placement:"
-msgstr ""
+msgstr "90도 회전 배치 허용:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:225
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:156
 msgid "Allow 180 degree rotated placement:"
-msgstr ""
+msgstr "180도 회전 배치 허용:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:249
 msgid "Update Footprint from Library..."
