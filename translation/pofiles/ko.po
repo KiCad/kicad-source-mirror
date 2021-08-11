@@ -9,13 +9,14 @@
 # 박기정 <pgj0334@naver.com>, 2021.
 # hokim <teamgoodaloe@gmail.com>, 2021.
 # 강명구 <mg_@kakao.com>, 2021.
+# 서범기 <joonhoflow@naver.com>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
 "PO-Revision-Date: 2021-08-11 12:23+0000\n"
-"Last-Translator: 박기정 <pgj0334@naver.com>\n"
+"Last-Translator: 서범기 <joonhoflow@naver.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
 "Language: ko\n"
@@ -18329,7 +18330,7 @@ msgstr "Y 증분값:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:373
 msgid "Distance on the X axis to step for each repeat."
-msgstr ""
+msgstr "각 반복에 대한 단계에 대한 X축의 거리."
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:381
 #, fuzzy
@@ -19512,15 +19513,15 @@ msgstr "최소 클리어런스"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1946
 msgid "Via: (diam - drill)"
-msgstr ""
+msgstr "비아: (직경 - 드릴)"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1947
 msgid "Plated Pad: (diam - drill)"
-msgstr ""
+msgstr "도금 패드: (직경 - 드릴)"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1948
 msgid "NP Pad: (diam - drill)"
-msgstr ""
+msgstr "비도금 패드: (직경 - 드릴)"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1967
 msgid "Board Classes"
@@ -19538,7 +19539,7 @@ msgstr "정확히"
 
 #: pcb_calculator/eserie.cpp:350 pcb_calculator/eserie.cpp:373
 msgid "Not worth using"
-msgstr ""
+msgstr "사용 가치가 없음"
 
 #: pcb_calculator/eserie_help.h:2
 msgid ""
@@ -19578,6 +19579,8 @@ msgid ""
 "No data filename to save modifications.\n"
 "Do you want to exit and abandon your changes?"
 msgstr ""
+"변경 사항을 저장하는 데이터 파일 이름이 없습니다.\n"
+"변경 사항을 취소하고 종료합니까?"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:265
 #, c-format
@@ -19585,15 +19588,17 @@ msgid ""
 "Unable to write file '%s'\n"
 "Do you want to exit and abandon your changes?"
 msgstr ""
+"파일 '%s'에 쓸 수 없습니다\n"
+"변경 사항을 취소하고 종료 하시겠습니까?"
 
 #: pcb_calculator/regulators_funct.cpp:127
 #, c-format
 msgid "PCB Calculator data file (*.%s)|*.%s"
-msgstr ""
+msgstr "PCB 계산기 데이터 파일 (*.%s)|*.%s"
 
 #: pcb_calculator/regulators_funct.cpp:131
 msgid "Select PCB Calculator Data File"
-msgstr ""
+msgstr "PCB 계산기 데이터 파일을 선택하시오"
 
 #: pcb_calculator/regulators_funct.cpp:147
 msgid "Do you want to load this file and replace current regulator list?"
