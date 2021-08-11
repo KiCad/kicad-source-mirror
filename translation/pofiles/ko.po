@@ -16,7 +16,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
 "PO-Revision-Date: 2021-08-11 13:15+0000\n"
-"Last-Translator: Ji Yoon Choi <chichoon.choi@gmail.com>\n"
+"Last-Translator: 박기정 <pgj0334@naver.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
 "Language: ko\n"
@@ -12669,14 +12669,15 @@ msgid "Import"
 msgstr "가져오기"
 
 #: eeschema/menubar.cpp:99
+#, fuzzy
 msgid "Non-KiCad Schematic..."
-msgstr "비 KiCad 회로도..."
+msgstr "키캐드가 아닌 회로도..."
 
 #: eeschema/menubar.cpp:100
 #, fuzzy
 msgid ""
 "Replace current schematic sheet with one imported from another application"
-msgstr "현재 시트만 저장"
+msgstr "현재 회로도 시트를 다른 응용 프로그램에서 가져온 것으로 교체"
 
 #: eeschema/menubar.cpp:104
 msgid "Footprint Assignments..."
@@ -12692,7 +12693,7 @@ msgstr "내보내기"
 #: eeschema/menubar.cpp:112
 #, fuzzy
 msgid "Drawing to Clipboard"
-msgstr "클립보드로 드로잉 내보내기"
+msgstr "클립보드에 그리기"
 
 #: eeschema/menubar.cpp:113 pcbnew/menubar_pcb_editor.cpp:110
 #: pcbnew/pcb_edit_frame.cpp:195
@@ -12759,8 +12760,9 @@ msgid "Error: duplicate sheet names. Continue?"
 msgstr "오류: 시트 이름이 중복됩니다. 계속합니까?"
 
 #: eeschema/pin_type.cpp:56
+#, fuzzy
 msgid "Free"
-msgstr "자유"
+msgstr "무료"
 
 #: eeschema/pin_type.cpp:57
 msgid "Unspecified"
@@ -12775,28 +12777,31 @@ msgid "Power output"
 msgstr "전원 출력"
 
 #: eeschema/pin_type.cpp:60
+#, fuzzy
 msgid "Open collector"
-msgstr "오픈 컬렉터"
+msgstr "컬렉터 열기"
 
 #: eeschema/pin_type.cpp:61
 msgid "Open emitter"
-msgstr "오픈 이미터"
+msgstr "이미터 열기"
 
 #: eeschema/pin_type.cpp:62
 msgid "Unconnected"
 msgstr "연결되지 않음"
 
 #: eeschema/pin_type.cpp:77
+#, fuzzy
 msgid "Inverted"
-msgstr "역"
+msgstr "반전"
 
 #: eeschema/pin_type.cpp:78
 msgid "Clock"
 msgstr "클럭"
 
 #: eeschema/pin_type.cpp:79
+#, fuzzy
 msgid "Inverted clock"
-msgstr "역 클럭"
+msgstr "반전 된 클럭"
 
 #: eeschema/pin_type.cpp:80
 msgid "Input low"
@@ -12815,8 +12820,9 @@ msgid "Falling edge clock"
 msgstr "하강 에지 클럭"
 
 #: eeschema/pin_type.cpp:84
+#, fuzzy
 msgid "NonLogic"
-msgstr "논로직"
+msgstr "비로직"
 
 #: eeschema/project_rescue.cpp:194
 #, c-format
@@ -12824,15 +12830,15 @@ msgid "Rename %s to %s"
 msgstr "%s에서 %s로 이름 바꾸기"
 
 #: eeschema/project_rescue.cpp:302 eeschema/project_rescue.cpp:462
-#, c-format
+#, c-format, fuzzy
 msgid ""
 "Cannot rescue symbol %s which is not available in any library or the cache."
-msgstr "심볼 %s를 복구할 수 없습니다. 어떠한 라이브러리나 캐시에서도 찾을 수 없습니다."
+msgstr "라이브러리나 캐시에서 사용할 수 없는 기호 %s을(를) 복구할 수 없습니다."
 
 #: eeschema/project_rescue.cpp:305 eeschema/project_rescue.cpp:468
-#, c-format
+#, c-format, fuzzy
 msgid "Rescue symbol %s found only in cache library to %s."
-msgstr "캐시 라이브러리에서만 찾을 수 있는 심볼 %s를 %s로 복구."
+msgstr "캐시 라이브러리에서만 %s에 대한 기호 %s을(를) 복구할 수 있습니다."
 
 #: eeschema/project_rescue.cpp:308 eeschema/project_rescue.cpp:474
 #, c-format
@@ -12845,7 +12851,7 @@ msgstr "이 프로젝트는 복구할 사항이 없습니다."
 
 #: eeschema/project_rescue.cpp:583
 msgid "No symbols were rescued."
-msgstr "아무 심볼도 복구되지 않았습니다."
+msgstr "아무 기호도 복구되지 않았습니다."
 
 #: eeschema/project_rescue.cpp:691
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:185
