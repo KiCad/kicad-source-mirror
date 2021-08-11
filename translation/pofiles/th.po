@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-01 11:31-0700\n"
-"PO-Revision-Date: 2021-08-06 21:14+0000\n"
+"PO-Revision-Date: 2021-08-11 17:58+0000\n"
 "Last-Translator: boonchai k. <kicadthai@gmail.com>\n"
 "Language-Team: Thai <https://hosted.weblate.org/projects/kicad/master-source/"
 "th/>\n"
@@ -19206,27 +19206,27 @@ msgstr "หมายเหตุ: ค่านี้เป็นค่าที�
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1833
 msgid "B1"
-msgstr ""
+msgstr "B1"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1834
 msgid "B2"
-msgstr ""
+msgstr "B2"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1835
 msgid "B3"
-msgstr ""
+msgstr "B3"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1836
 msgid "B4"
-msgstr ""
+msgstr "B4"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1838
 msgid "A6"
-msgstr ""
+msgstr "A6"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1839
 msgid "A7"
-msgstr ""
+msgstr "A7"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1855
 msgid "0 .. 15 V"
@@ -19388,6 +19388,8 @@ msgid ""
 "No data filename to save modifications.\n"
 "Do you want to exit and abandon your changes?"
 msgstr ""
+"ไม่มีชื่อไฟล์ข้อมูลที่จะบันทึกการแก้ไข\n"
+"คุณต้องการออกและละทิ้งการเปลี่ยนแปลงของคุณหรือไม่?"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:264
 #, c-format
