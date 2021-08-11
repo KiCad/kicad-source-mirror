@@ -155,7 +155,7 @@ BM2CMP_FRAME_BASE::BM2CMP_FRAME_BASE( wxWindow* parent, wxWindowID id, const wxS
 	m_buttonExportClipboard = new wxButton( m_panelRight, wxID_ANY, _("Export to Clipboard"), wxDefaultPosition, wxDefaultSize, 0 );
 	brightSizer->Add( m_buttonExportClipboard, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
-	wxString m_rbOutputFormatChoices[] = { _("Symbol (.lib file)"), _("Footprint (.kicad_mod file)"), _("Postscript (.ps file)"), _("Drawing Sheet (.kicad_wks file)") };
+	wxString m_rbOutputFormatChoices[] = { _("Symbol (.kicad_sym file)"), _("Footprint (.kicad_mod file)"), _("Postscript (.ps file)"), _("Drawing Sheet (.kicad_wks file)") };
 	int m_rbOutputFormatNChoices = sizeof( m_rbOutputFormatChoices ) / sizeof( wxString );
 	m_rbOutputFormat = new wxRadioBox( m_panelRight, wxID_ANY, _("Output Format"), wxDefaultPosition, wxDefaultSize, m_rbOutputFormatNChoices, m_rbOutputFormatChoices, 1, wxRA_SPECIFY_COLS );
 	m_rbOutputFormat->SetSelection( 0 );
