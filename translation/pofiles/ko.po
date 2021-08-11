@@ -16,7 +16,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
 "PO-Revision-Date: 2021-08-11 17:58+0000\n"
-"Last-Translator: 강명구 <mg_@kakao.com>\n"
+"Last-Translator: jeongsuAn <dks9467@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
 "Language: ko\n"
@@ -16475,18 +16475,17 @@ msgid "Image File Name"
 msgstr "이미지 파일 이름"
 
 #: eeschema/tools/symbol_editor_control.cpp:408
-#, fuzzy, c-format
+#, c-format
 msgid "Can't save file '%s'."
-msgstr "파일 '%s'을 저장할 수 없습니다."
+msgstr "파일 '%s'을(를) 저장할 수 없습니다."
 
 #: eeschema/tools/symbol_editor_control.cpp:437
 msgid "Filename:"
 msgstr "파일 이름:"
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:521
-#, fuzzy
 msgid "Edit Symbol Name"
-msgstr "라벨 편집"
+msgstr "심볼 이름 편집"
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:628
 msgid "Symbol is not derived from another symbol."
@@ -16725,9 +16724,9 @@ msgid "Layers Manager"
 msgstr "레이어 관리자"
 
 #: gerbview/excellon_read_drill_file.cpp:263
-#, fuzzy, c-format
+#, c-format
 msgid "File %s not found."
-msgstr "%s 파일을 찾을 수 없습니다."
+msgstr "파일 '%s'을(를) 찾을 수 없습니다."
 
 #: gerbview/excellon_read_drill_file.cpp:275
 msgid "No empty layers to load file into."
@@ -16796,7 +16795,6 @@ msgid "Gerber files (.g* .lgr .pho)"
 msgstr "거버 파일 (.g* .lgr .pho)"
 
 #: gerbview/files.cpp:144
-#, fuzzy
 msgid "Top layer (*.GTL)|*.GTL;*.gtl|"
 msgstr "최상위 레이어(*.GTL)|*.GTL;*.gtl|"
 
@@ -16845,18 +16843,16 @@ msgid "Bottom Pad Master (*.GPB)|*.GPB;*.gpb|"
 msgstr "하단 패드 마스터 (*.GPB)|*.GPB;*.gpb|"
 
 #: gerbview/files.cpp:173
-#, fuzzy
 msgid "Open Gerber File(s)"
-msgstr "새 거버 파일 (&G)"
+msgstr "거버 파일 열기"
 
 #: gerbview/files.cpp:230
 msgid "File not found:"
 msgstr "파일을 찾을 수 없음:"
 
 #: gerbview/files.cpp:242
-#, fuzzy
 msgid "Loading Gerber files..."
-msgstr "거버 파일 로딩 ..."
+msgstr "Gerber 파일 로드 중..."
 
 #: gerbview/files.cpp:245 gerbview/files.cpp:252
 #, c-format
@@ -16873,9 +16869,9 @@ msgid "Open NC (Excellon) Drill File(s)"
 msgstr "NC(Excellon) 드릴 파일 열기"
 
 #: gerbview/files.cpp:471
-#, fuzzy, c-format
+#, c-format
 msgid "Zip file '%s' cannot be opened."
-msgstr "%s 파일을 찾을 수 없습니다."
+msgstr "Zip 파일 '%s'을(를) 열 수 없습니다."
 
 #: gerbview/files.cpp:513
 #, c-format
@@ -16888,9 +16884,9 @@ msgid "Skipped file '%s' (gerber job file).\n"
 msgstr "파일 '%s'를 스킵합니다 (거버 작업 파일).\n"
 
 #: gerbview/files.cpp:566
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Unable to create temporary file '%s'.</b>\n"
-msgstr "<b> 임시 파일 \"%s\"을 만들 수 없습니다. </b>\n"
+msgstr "<b>임시 파일 '%s'을(를) 만들 수 없습니다.</b>\n"
 
 #: gerbview/files.cpp:596
 #, c-format
@@ -16898,9 +16894,8 @@ msgid "<b>unzipped file %s read error</b>\n"
 msgstr "<b>압축 해제된 파일 %s 읽기 오류</b>\n"
 
 #: gerbview/files.cpp:631
-#, fuzzy
 msgid "Open Zip File"
-msgstr "네트리스트 파일 열기"
+msgstr "Zip 파일 열기"
 
 #: gerbview/gerber_draw_item.cpp:680
 msgid "Attribute"
@@ -16911,7 +16906,7 @@ msgid "No attribute"
 msgstr "속성 없음"
 
 #: gerbview/gerber_draw_item.cpp:689
-#, fuzzy, c-format
+#, c-format
 msgid "D Code %d"
 msgstr "D 코드 %d"
 
@@ -16988,14 +16983,13 @@ msgid "Image Justify Offset"
 msgstr "이미지 정당화 오프셋"
 
 #: gerbview/gerber_file_image_list.cpp:186
-#, fuzzy, c-format
+#, c-format
 msgid "Graphic layer %d"
 msgstr "그래픽 레이어 %d"
 
 #: gerbview/gerbview_frame.cpp:73 gerbview/menubar.cpp:125
-#, fuzzy
 msgid "Clear Recent Zip Files"
-msgstr "압축 파일 풀기"
+msgstr "최근 Zip 파일 지우기"
 
 #: gerbview/gerbview_frame.cpp:75 gerbview/menubar.cpp:89
 msgid "Clear Recent Drill Files"
