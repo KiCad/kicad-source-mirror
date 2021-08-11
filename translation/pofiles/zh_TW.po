@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
-"PO-Revision-Date: 2021-08-10 15:22+0000\n"
+"PO-Revision-Date: 2021-08-11 17:58+0000\n"
 "Last-Translator: David Chen <d0123456789g@yahoo.com.tw>\n"
 "Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hant/>\n"
@@ -4428,7 +4428,7 @@ msgstr "載入封裝時出現錯誤："
 msgid ""
 "Duplicate library nickname '%s' found in footprint library table file line "
 "%d."
-msgstr "找到重複的庫別名 \"%s\" ，在封裝庫表文件的第 %d 行。"
+msgstr "找到重複的庫別稱 \"%s\" ，在封裝庫表文件的第 %d 行。"
 
 #: common/fp_lib_table.cpp:300
 #, c-format
@@ -4606,9 +4606,9 @@ msgid "Failed to load kiface library '%s'."
 msgstr "無法載入 kiface 庫 \"%s\"。"
 
 #: common/kiway.cpp:264
-#, fuzzy, c-format
+#, c-format
 msgid "Could not read instance name and version from kiface library '%s'."
-msgstr "無法從 kiface 庫 \"%s\" 讀取例項名和版本符號。"
+msgstr "無法從 kiface 庫 \"%s\" 讀取實例名稱和版號。"
 
 #: common/kiway.cpp:297
 #, c-format
@@ -6141,9 +6141,9 @@ msgid "Entry contains leading white space."
 msgstr "條目包含前導空格。"
 
 #: common/validators.cpp:302
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' is not a valid library identifier format."
-msgstr "符號庫識別符號 \"%s\" 無效。"
+msgstr "\"%s\" 不是一個有效的符號庫識別符。"
 
 #: common/validators.cpp:309
 msgid "Library Identifier Validation Error"
@@ -6703,9 +6703,9 @@ msgid "Symbol to Footprint links have been modified. Save changes?"
 msgstr "符號和封裝關聯已經變更。儲存變更嗎?"
 
 #: cvpcb/cvpcb_mainframe.cpp:524 cvpcb/tools/cvpcb_association_tool.cpp:207
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' is not a valid footprint."
-msgstr "\"%s\" 不是有效的封裝。"
+msgstr "\"%s\" 不是一個有效的封裝。"
 
 #: cvpcb/cvpcb_mainframe.cpp:679 eeschema/generate_alias_info.cpp:39
 #: eeschema/sch_symbol.cpp:1410 eeschema/symbol_editor/symbol_editor.cpp:1215
@@ -6896,9 +6896,9 @@ msgid "Footprint Viewer"
 msgstr "封裝瀏覽"
 
 #: cvpcb/display_footprints_frame.cpp:405
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint ID '%s' is not valid."
-msgstr "封裝 ID \"%s\" 無效。"
+msgstr "\"%s\" 不是一個有效的封裝 ID。"
 
 #: cvpcb/display_footprints_frame.cpp:420
 #, c-format
@@ -6907,9 +6907,9 @@ msgstr "在封裝庫列表中未找到 \"%s\" 庫。"
 
 #: cvpcb/display_footprints_frame.cpp:429
 #: cvpcb/display_footprints_frame.cpp:454
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint '%s' not found."
-msgstr "封裝 \"%s\" 沒有找到。"
+msgstr "找不到封裝 \"%s\" 。"
 
 #: cvpcb/display_footprints_frame.cpp:484 pcbnew/footprint.cpp:878
 #, c-format
@@ -6932,12 +6932,12 @@ msgstr ""
 "格式嗎？（如果您回答否，這些分配將被清除，您必須自己手動重新分配它們。）"
 
 #: cvpcb/readwrite_dlgs.cpp:148
-#, fuzzy, c-format
+#, c-format
 msgid "Component '%s' footprint '%s' <b>not found</b> in any library.\n"
-msgstr "元件 \"%s\" 封裝 \"%s\" 在所有庫中均 <b>沒有找到</b> .\n"
+msgstr "元件 \"%s\" 封裝 \"%s\" 在所有庫中皆 <b>找不到</b>。\n"
 
 #: cvpcb/readwrite_dlgs.cpp:155
-#, fuzzy, c-format
+#, c-format
 msgid "Component '%s' footprint '%s' was found in <b>multiple</b> libraries.\n"
 msgstr "元件 \"%s\" 封裝 \"%s\" 在 <b>多個</b> 庫中被找到。\n"
 
@@ -7225,12 +7225,10 @@ msgid "Order"
 msgstr "順序"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:51
-#, fuzzy
 msgid "Sort symbols by &X position"
 msgstr "X 方向排序元件 (&X)"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:69
-#, fuzzy
 msgid "Sort symbols by &Y position"
 msgstr "Y 方向排序元件 (&Y)"
 
@@ -7307,9 +7305,9 @@ msgid "Add Generator"
 msgstr "新增產生器"
 
 #: eeschema/dialogs/dialog_bom.cpp:391
-#, fuzzy, c-format
+#, c-format
 msgid "Nickname '%s' already in use."
-msgstr "別名 \"%s\" 已經被佔用了。"
+msgstr "別稱 \"%s\" 已被使用。"
 
 #: eeschema/dialogs/dialog_bom.cpp:420 eeschema/dialogs/dialog_netlist.cpp:685
 msgid "Generator files:"
@@ -7944,9 +7942,9 @@ msgstr "按順序放置符號的所有單元。"
 #: eeschema/generate_alias_info.cpp:81 eeschema/sch_base_frame.cpp:70
 #: eeschema/symbol_editor/symbol_editor.cpp:288
 #: eeschema/widgets/symbol_preview_widget.cpp:181
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading symbol %s from library '%s'."
-msgstr "載入符號 \"%s\" 時出錯，來自於庫 \"%s\"。"
+msgstr "載入符號 \"%s\" 時發生錯誤，來自於庫 \"%s\"。"
 
 #: eeschema/dialogs/dialog_choose_symbol.cpp:431
 msgid "No footprint specified"
@@ -8114,9 +8112,9 @@ msgid "Value may not be empty."
 msgstr "值不能是空的。"
 
 #: eeschema/dialogs/dialog_edit_symbols_libid.cpp:536
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol library identifier %s is not valid."
-msgstr "符號庫識別符號 \"%s\" 無效."
+msgstr "\"%s\" 不是一個有效的符號庫識別符。"
 
 #: eeschema/dialogs/dialog_edit_symbols_libid.cpp:633
 #, c-format
@@ -9592,7 +9590,7 @@ msgid "Schematic"
 msgstr "原理圖"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:438
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to write plot files to folder '%s'."
 msgstr "無法寫入繪製檔案到資料夾 \"%s\"。"
 
@@ -9601,9 +9599,9 @@ msgstr "無法寫入繪製檔案到資料夾 \"%s\"。"
 #: eeschema/dialogs/dialog_plot_schematic.cpp:1036
 #: eeschema/dialogs/dialog_plot_schematic.cpp:1167
 #: pcbnew/dialogs/dialog_plot.cpp:907
-#, fuzzy, c-format
+#, c-format
 msgid "Plotted to '%s'."
-msgstr "未能載入 '%s'."
+msgstr "已繪製到 \"%s\" 。"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:874
 #, c-format
@@ -10985,9 +10983,8 @@ msgid "Add Field..."
 msgstr "新增欄位..."
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.h:76
-#, fuzzy
 msgid "Symbol Fields Table"
-msgstr "符號欄位"
+msgstr "符號欄位表"
 
 #: eeschema/dialogs/dialog_symbol_properties.cpp:139
 msgid "Base Name"
@@ -10999,9 +10996,9 @@ msgid "Alternate Assignment"
 msgstr "備用關聯"
 
 #: eeschema/dialogs/dialog_symbol_properties.cpp:784
-#, fuzzy, c-format
+#, c-format
 msgid "Field name '%s' already in use."
-msgstr "欄位名稱 \"%s\" 已經在使用。"
+msgstr "欄位名稱 \"%s\" 已被使用。"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:126
 msgid "Unit:"
@@ -11190,18 +11187,18 @@ msgid "No symbol %s found in symbol library table."
 msgstr "在符號庫列表中找不到符號 \"%s\" 。"
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:270
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol %s mapped to symbol library '%s'."
-msgstr "符號 \"%s\" 對映到符號庫 \"%s\"。"
+msgstr "符號 \"%s\" 已對映到符號庫 \"%s\"。"
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:279
 msgid "Symbol library table mapping complete!"
 msgstr "符號庫列表對映完成！"
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:349
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot create project remap back up folder '%s'."
-msgstr "無法建立工程重新對映備份資料夾 \"%s\"。"
+msgstr "無法建立專案對應的備份資料夾 \"%s\"。"
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:352
 #: eeschema/dialogs/dialog_symbol_remap.cpp:500
@@ -11224,9 +11221,9 @@ msgstr "取消救援"
 #: eeschema/dialogs/dialog_symbol_remap.cpp:453
 #: eeschema/dialogs/dialog_symbol_remap.cpp:469
 #: eeschema/dialogs/dialog_symbol_remap.cpp:485
-#, fuzzy, c-format
+#, c-format
 msgid "Backing up file '%s' to '%s'."
-msgstr "備份檔案 \"%s\" 到 \"%s\"。"
+msgstr "正在備份檔案 \"%s\" 到 \"%s\"。"
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:380
 #: eeschema/dialogs/dialog_symbol_remap.cpp:422
@@ -11234,12 +11231,12 @@ msgstr "備份檔案 \"%s\" 到 \"%s\"。"
 #: eeschema/dialogs/dialog_symbol_remap.cpp:461
 #: eeschema/dialogs/dialog_symbol_remap.cpp:477
 #: eeschema/dialogs/dialog_symbol_remap.cpp:493
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to back up file '%s'.\n"
 msgstr "無法備份檔案 \"%s\"。\n"
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:414
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to create backup folder '%s'.\n"
 msgstr "無法建立備份資料夾 \"%s\"\n"
 
@@ -11769,12 +11766,12 @@ msgstr "50"
 #: eeschema/dialogs/panel_sym_lib_table.cpp:350
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:531
 msgid "A library table row nickname and path cells are empty."
-msgstr "庫錶行暱稱和路徑單元格為空。"
+msgstr "庫錶行別稱和路徑格為空。"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:352
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:533
 msgid "A library table row nickname cell is empty."
-msgstr "庫錶行暱稱單元為空。"
+msgstr "庫錶行別稱格為空。"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:354
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:535
@@ -11796,20 +11793,20 @@ msgstr "空單元格將導致從表格中刪除無效的所有行。"
 #: eeschema/dialogs/panel_sym_lib_table.cpp:374
 #, c-format
 msgid "Illegal character '%c' in nickname '%s'"
-msgstr "非法字元 '%c' 在暱稱: '%s' 中"
+msgstr "非法字元 '%c' 在別稱 \"%s\" 中"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:385
 #: eeschema/dialogs/panel_sym_lib_table.cpp:426
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:566
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:608
 msgid "Library Nickname Error"
-msgstr "庫別名錯誤"
+msgstr "庫別稱錯誤"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:415
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:596
 #, c-format
 msgid "Multiple libraries cannot share the same nickname ('%s')."
-msgstr "多個庫不能共享相同的暱稱（'%s'）。"
+msgstr "多個庫不能共享相同的別稱（\"%s\"）。"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:459 eeschema/symbol_library.cpp:550
 #, c-format
@@ -11822,18 +11819,18 @@ msgstr "載入庫時出錯"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:508
 msgid "Warning: Duplicate Nickname"
-msgstr "警告：重複的別名"
+msgstr "警告：重複的別稱"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:509
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:892
 #, c-format
 msgid "A library nicknamed '%s' already exists."
-msgstr "庫別名 '%s' 已經存在。"
+msgstr "庫別稱 \"%s\" 已經存在。"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:510
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:893
 msgid "One of the nicknames will need to be changed after adding this library."
-msgstr "在新增此庫後需要變更其中一個庫的暱稱。"
+msgstr "在新增此庫後需要變更其中一個庫的別稱。"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:529
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1007
@@ -12205,12 +12202,12 @@ msgid "Schematic Files"
 msgstr "原理圖檔案"
 
 #: eeschema/files-io.cpp:141
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error saving schematic file '%s'.\n"
 "%s"
 msgstr ""
-"儲存原理圖檔案 \"%s\" 發生錯誤。\n"
+"儲存原理圖檔案 \"%s\" 時發生錯誤。\n"
 "%s"
 
 #: eeschema/files-io.cpp:146 pcbnew/files.cpp:1018
@@ -14113,9 +14110,8 @@ msgid "Signal name contains '[' or ']' but is not a valid vector bus name."
 msgstr "訊號名稱包含 \"[\" 或 \"]\" ，但仍不是一個有效的向量匯流排名稱。"
 
 #: eeschema/sch_validators.cpp:227
-#, fuzzy
 msgid "Signal name contains '{' and '}' but is not a valid group bus name"
-msgstr "訊號名稱包含 \"[\" 或 \"]\", 但不是有效的向量匯流排名稱"
+msgstr "訊號名稱包含 \"{\" 或 \"}\" 但它不是一個有效的群組匯流排名稱"
 
 #: eeschema/sheet.cpp:63
 #, c-format
@@ -14510,7 +14506,7 @@ msgstr ""
 #: eeschema/symbol_async_loader.cpp:134
 #, c-format
 msgid "Loading library %s..."
-msgstr "正在載入庫 \"%s\" ..."
+msgstr "正在載入庫 \"%s\"..."
 
 #: eeschema/symbol_editor/lib_logger.cpp:64
 msgid ""
@@ -14614,7 +14610,7 @@ msgstr "無法開啟庫檔案。"
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:914
 #, c-format
 msgid "Loading library '%s'..."
-msgstr "正在載入庫 \"%s\" ..."
+msgstr "正在載入庫 \"%s\"..."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:988
 #: pcbnew/footprint_libraries_utils.cpp:504
@@ -14721,7 +14717,7 @@ msgid ""
 msgstr ""
 "將新條目新增到全域符號庫列表中。\n"
 "\n"
-"符號庫列表的暱稱後綴為一個整數，\n"
+"符號庫列表的別稱後綴為一個整數，\n"
 "以確保沒有重複的表條目。"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:74
@@ -14737,7 +14733,7 @@ msgid ""
 msgstr ""
 "將新條目新增到專案符號庫表。\n"
 "\n"
-"符號庫表的暱稱字尾為\n"
+"符號庫表的別稱字尾為\n"
 "一個整數，以確保沒有重複的表條目。"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:146
@@ -14798,7 +14794,7 @@ msgstr "您必須儲存到一個不同位置。"
 #: pcbnew/footprint_libraries_utils.cpp:951
 #: pcbnew/footprint_libraries_utils.cpp:1187
 msgid "Nickname"
-msgstr "別名"
+msgstr "別稱"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:612
 msgid "Save Symbol As"
@@ -15012,7 +15008,7 @@ msgstr "載入符號 \"%s\" 時出錯，來自於庫 \"%s\"。"
 #, c-format
 msgid ""
 "Duplicate library nickname '%s' found in symbol library table file line %d"
-msgstr "找到重複的庫別名 '%s' 在符號庫列表檔案中的 %d 行"
+msgstr "找到重複的庫別稱 \"%s\" 在符號庫列表檔案中的第 %d 行"
 
 #: eeschema/symbol_library.cpp:572 eeschema/symbol_tree_model_adapter.cpp:153
 #, c-format
@@ -15090,7 +15086,7 @@ msgid ""
 "Cannot fetch PCB netlist because eeschema is opened in stand-alone mode.\n"
 "You must launch the KiCad project manager and create a project."
 msgstr ""
-"無法獲取 PCB 網表，因為 eesschema 是在獨立模式下開啟的。\n"
+"無法取得 PCB 網絡表，因為 eesschema 是在獨立模式下開啟的。\n"
 "您必須啟動 KiCad 專案管理器並建立一個專案。"
 
 #: eeschema/tools/backannotate.cpp:164
@@ -16693,7 +16689,7 @@ msgstr "檔案沒有找到："
 
 #: gerbview/files.cpp:242
 msgid "Loading Gerber files..."
-msgstr "載入 Gerber 檔案..."
+msgstr "正在載入 Gerber 檔案..."
 
 #: gerbview/files.cpp:245 gerbview/files.cpp:252
 #, c-format
@@ -21523,11 +21519,11 @@ msgid "Bad numeric value for %s: %s"
 msgstr "%s 的值不是有效的數字：%s"
 
 #: pcbnew/dialogs/dialog_create_array.cpp:299
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Could not determine numbering start from '%s': expected value consistent "
 "with alphabet '%s'."
-msgstr "無法確定由 \"%s\" 開關的編號：期望值與字母表一致的 \"%s\""
+msgstr "無法確定使否由 \"%s\" 起始的編號：預期是以字母 '%s' 一致。"
 
 #: pcbnew/dialogs/dialog_create_array.cpp:307
 msgid "step value"
@@ -22482,9 +22478,9 @@ msgstr "您確定要覆蓋現有的檔案嗎？"
 
 #: pcbnew/dialogs/dialog_export_vrml.cpp:254
 #: pcbnew/plugins/altium/altium_pcb.cpp:1283
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to create folder '%s'."
-msgstr "建立檔案 \"%s\" 失敗"
+msgstr "無法建立資料夾 \"%s\" 。"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:26
 msgid "Save VRML Board File"
@@ -26182,7 +26178,7 @@ msgstr "編輯選項"
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:555
 #, c-format
 msgid "Illegal character '%c' in nickname '%s'."
-msgstr "非法字元 '%c' 在暱稱 '%s'。"
+msgstr "非法字元 '%c' 在別稱 \"%s\"。"
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:798
 #, c-format
@@ -26199,7 +26195,7 @@ msgstr "無法開啟目錄以尋找庫"
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:891
 msgid "Warning: Duplicate Nicknames"
-msgstr "警告：重複的暱稱"
+msgstr "警告：重複的別稱"
 
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:107
 msgid "Add Existing"
@@ -28485,9 +28481,9 @@ msgid "Created file '%s'."
 msgstr "已建立檔案 \"%s\"。"
 
 #: pcbnew/exporters/gerber_jobfile_writer.cpp:158
-#, fuzzy, c-format
+#, c-format
 msgid "Created Gerber job file '%s'."
-msgstr "建立 Gerber 工作檔案 \"%s\""
+msgstr "已建立 Gerber 工作檔案 \"%s\"。"
 
 #: pcbnew/exporters/gerber_jobfile_writer.cpp:575
 msgid "Board stackup settings not up to date."
@@ -28614,13 +28610,13 @@ msgstr ""
 "%s"
 
 #: pcbnew/files.cpp:1031
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error saving board file '%s'.\n"
 "Failed to rename temporary file '%s."
 msgstr ""
-"儲存電路板檔案 \"%s\" 時出錯。\n"
-"重新命名臨時檔案 \"%s\" 失敗"
+"儲存電路板檔案 \"%s\" 時發生錯誤。\n"
+"無法重新命名暫存檔 \"%s\"。"
 
 #: pcbnew/files.cpp:1143
 #, c-format
@@ -28747,9 +28743,8 @@ msgid "[from %s]"
 msgstr "(從 %s)"
 
 #: pcbnew/footprint_edit_frame.cpp:797
-#, fuzzy
 msgid "[no footprint loaded]"
-msgstr "未載入任何封裝。"
+msgstr "[未載入任何封裝]"
 
 #: pcbnew/footprint_edit_frame.cpp:853
 msgid "Updating Footprint Libraries"
@@ -28794,13 +28789,12 @@ msgid "Footprint library not enabled."
 msgstr "封裝庫未啟用。"
 
 #: pcbnew/footprint_info_impl.cpp:130
-#, fuzzy
 msgid "Fetching footprint libraries..."
-msgstr "獲取封裝庫"
+msgstr "取得封裝庫..."
 
 #: pcbnew/footprint_info_impl.cpp:159
 msgid "Loading footprints..."
-msgstr "正在載入封裝..."
+msgstr "正在載入 封裝..."
 
 #: pcbnew/footprint_libraries_utils.cpp:58
 msgid ""
@@ -28844,9 +28838,9 @@ msgid "Export Footprint"
 msgstr "匯出封裝"
 
 #: pcbnew/footprint_libraries_utils.cpp:373
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint exported to file '%s'."
-msgstr "匯出封裝到檔案 \"%s\""
+msgstr "封裝匯出已匯出至檔案 \"%s\"。"
 
 #: pcbnew/footprint_libraries_utils.cpp:462
 #, fuzzy, c-format
@@ -29193,9 +29187,9 @@ msgid "Footprints [%u items]"
 msgstr "封裝 [%u 項]"
 
 #: pcbnew/load_select_footprint.cpp:431
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint '%s' saved."
-msgstr "封裝 \"%s\" 儲存"
+msgstr "封裝 \"%s\" 已儲存。"
 
 #: pcbnew/load_select_footprint.cpp:441
 #, fuzzy, c-format
@@ -29784,9 +29778,9 @@ msgid "Footprint of %s changed: board footprint '%s', netlist footprint '%s'."
 msgstr "\"%s\" 的封裝已變更：電路板封裝 \"%s\"，網表封裝 \"%s\"。"
 
 #: pcbnew/netlist_reader/netlist.cpp:205
-#, fuzzy, c-format
+#, c-format
 msgid "%s footprint ID '%s' is not valid."
-msgstr "%s的封裝 ID \"%s\" 無效。"
+msgstr "%s 的封裝 ID \"%s\" 不是一個有效的 ID 。"
 
 #: pcbnew/netlist_reader/netlist.cpp:222
 #, c-format
@@ -29973,9 +29967,8 @@ msgid "Round Radius Ratio"
 msgstr "圓半徑比"
 
 #: pcbnew/pcb_base_frame.cpp:151
-#, fuzzy
 msgid "Error loading project footprint libraries."
-msgstr "載入工程封裝庫時出錯"
+msgstr "載入專案封裝庫時發生錯誤。"
 
 #: pcbnew/pcb_dimension.cpp:299
 msgid "Dimension"
@@ -30311,19 +30304,19 @@ msgid "'%s' was not parsed correctly."
 msgstr "覆銅區 '%s' 沒有與之連線的焊盤。"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:473
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' was not fully parsed."
-msgstr "檔案 \"%s\" 沒有被完全讀取"
+msgstr "檔案 \"%s\" 並沒有完全被解析。"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:509
-#, fuzzy, c-format
+#, c-format
 msgid "File not found: '%s'."
-msgstr "檔案沒有找到：'%s'"
+msgstr "找不到檔案：\"%s\"。"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:863
-#, fuzzy, c-format
+#, c-format
 msgid "Duplicate netclass name '%s'."
-msgstr "重複的網路類名 \"%s\""
+msgstr "重複的網路類別名稱 \"%s\"。"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1010
 #: pcbnew/plugins/altium/altium_pcb.cpp:1088
@@ -30346,19 +30339,17 @@ msgid "No 3D-models will be imported."
 msgstr "沒有 3D 模型被匯入。"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1307
-#, fuzzy, c-format
+#, c-format
 msgid "File not found: '%s'. 3D-model not imported."
-msgstr "檔案沒有找到：'%s'"
+msgstr "找不到檔案：'%s'。3D 模型並未被匯入。"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1345
-#, fuzzy
 msgid "Loading nets..."
-msgstr "載入中..."
+msgstr "正在載入 網絡..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1368
-#, fuzzy
 msgid "Loading polygons..."
-msgstr "執行多邊形填充..."
+msgstr "正在載入 多邊形..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1381
 #: pcbnew/plugins/altium/altium_pcb.cpp:1633
@@ -30369,19 +30360,16 @@ msgid ""
 msgstr "Altium 層 （%d） 上找到的 Polygon 沒有 KiCad 等效的項目。它們已被移動到 Eco1_User 圖層。"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1504
-#, fuzzy
 msgid "Loading rules..."
-msgstr "載入 Gerber 檔案..."
+msgstr "正在載入 規則..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1536
-#, fuzzy
 msgid "Loading board regions..."
-msgstr "載入 Gerber 檔案..."
+msgstr "正在載入 板子區域..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1558
-#, fuzzy
 msgid "Loading zones..."
-msgstr "載入中..."
+msgstr "正在載入 區域..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1614
 #, c-format
@@ -30396,14 +30384,12 @@ msgid "Ignored polygon shape of kind %d (not yet supported)."
 msgstr "多邊型類型 %d 已被忽略（KiCad 目前尚未支援此功能）。"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1682
-#, fuzzy
 msgid "Loading zone fills..."
-msgstr "構造覆銅填充..."
+msgstr "正在載入 填充區域..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1771
-#, fuzzy
 msgid "Loading arcs..."
-msgstr "載入中..."
+msgstr "正在載入 弧形..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1833
 #, c-format
@@ -30420,9 +30406,8 @@ msgid ""
 msgstr "Altium 層 （%d） 上找到的圓弧沒有 KiCad 等效的項目。它們已被移動到 Eco1_User 圖層。"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1911
-#, fuzzy
 msgid "Loading pads..."
-msgstr "載入中..."
+msgstr "正在載入 焊墊..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1971
 #, c-format
@@ -30484,9 +30469,8 @@ msgid "Non-copper pad %s uses an unknown pad-shape."
 msgstr "非銅的焊墊 %s 使用了不明的焊墊形狀。"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2321
-#, fuzzy
 msgid "Loading vias..."
-msgstr "載入中..."
+msgstr "正在載入 過孔..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2362
 #, c-format
@@ -30495,9 +30479,8 @@ msgid ""
 msgstr "由 %d 層至 %d 層的通孔使用了非銅層，並不支援此狀態。"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2383
-#, fuzzy
 msgid "Loading tracks..."
-msgstr "載入中..."
+msgstr "正在載入 佈線..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2431
 #, c-format
@@ -30514,9 +30497,8 @@ msgid ""
 msgstr "Altium 層 （%d） 上找到的佈線沒有 KiCad 等效的項目。它們已被移動到 Eco1_User 圖層。"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2490
-#, fuzzy
 msgid "Loading text..."
-msgstr "載入中..."
+msgstr "正在載入 文字..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2501
 #, c-format
@@ -30531,9 +30513,8 @@ msgid ""
 msgstr "Altium 層 （%d） 上找到的文字沒有 KiCad 等效的項目。它們已被移動到 Eco1_User 圖層。"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2675
-#, fuzzy
 msgid "Loading rectangles..."
-msgstr "載入 Gerber 檔案..."
+msgstr "正在載入 矩形..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2695
 #, c-format
@@ -30907,9 +30888,9 @@ msgid "<package> '%s' duplicated in <library> '%s'"
 msgstr "<包> 名稱: \"%s\" 在 eagle <庫>: \"%s\" 有重複"
 
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:1120
-#, fuzzy, c-format
+#, c-format
 msgid "No '%s' package in library '%s'."
-msgstr "沒有 \"%s\" 封裝在庫 \"%s\" 裡"
+msgstr "找不到 \"%s\" 封裝在庫 \"%s\" 裡。"
 
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:1344
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:2119
@@ -30952,14 +30933,13 @@ msgid "Invalid row size in J row %zu. Expecting 11 elements but found %zu."
 msgstr "J 行 %zu 中的行大小無效。預計有 11 個元素，但發現了 %zu。"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:294
-#, fuzzy
 msgid "Could not find units value, defaulting to mils."
-msgstr "找不到單位值，預設為 Mils"
+msgstr "找不到單位值，預設為 Mils。"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:319
-#, fuzzy, c-format
+#, c-format
 msgid "Could not find column label %s."
-msgstr "無法找到列標籤 %s"
+msgstr "找不到列標籤 %s 。"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:363
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:446
@@ -31059,9 +31039,9 @@ msgid "Expecting etch data to be on copper layer. Row found on layer '%s'"
 msgstr "期望蝕刻資料在銅層上。在圖層 \"%s\" 上找到行"
 
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:91
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot convert '%s' to an integer."
-msgstr "\"%s\" 無法轉換為整數"
+msgstr "\"%s\" 無法轉換為整數。"
 
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:229
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:877
@@ -31118,9 +31098,9 @@ msgid "Cannot create footprint library '%s'."
 msgstr "不能建立封裝庫路徑 \"%s\""
 
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:178
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint library '%s' is read only."
-msgstr "封裝庫路徑 \"%s\" 只讀"
+msgstr "封裝庫路徑 \"%s\" 是唯讀的。"
 
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:216
 #, fuzzy, c-format
@@ -31166,9 +31146,8 @@ msgid "Open cancelled by user."
 msgstr "使用者取消了開啟動作。"
 
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:2299
-#, fuzzy
 msgid "This file does not contain a PCB."
-msgstr "此檔案不包含 PCB"
+msgstr "此檔案不包含 PCB。"
 
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:2449
 #, fuzzy, c-format
@@ -31184,9 +31163,9 @@ msgid "Library Not Found"
 msgstr "未找到庫"
 
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:2479
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint file name '%s' is not valid."
-msgstr "無效的封裝檔名稱 \"%s\"。"
+msgstr "\"%s\"不是一個有效的封裝檔案名稱。"
 
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:2485
 #, c-format
@@ -31368,14 +31347,14 @@ msgid "File '%s' has an unrecognized version: %d."
 msgstr "檔案 '%s' 有一個未被識別的版本: %d。"
 
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:750
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown sheet type '%s' on line: %d."
-msgstr "未知圖框型別 \"%s\" 線上：%d"
+msgstr "未知圖框類別 \"%s\" 在第 %d 行。"
 
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:1430
-#, fuzzy, c-format
+#, c-format
 msgid "Missing '$EndMODULE' for MODULE '%s'."
-msgstr "模組 \"%s\" 缺少 '$EndMODULE'"
+msgstr "模組 \"%s\" 遺失了 '$EndMODULE'。"
 
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:1480
 #, fuzzy, c-format
@@ -31388,9 +31367,9 @@ msgid "Unknown FP_SHAPE type:'%c=0x%02x' on line %d of footprint '%s'."
 msgstr "未知 FP_SHAPE 型別：'%c=0x%02x' 線上：%d 的封裝：\"%s\""
 
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:2466
-#, fuzzy, c-format
+#, c-format
 msgid "Duplicate NETCLASS name '%s'."
-msgstr "複製網路類名稱 \"%s\""
+msgstr "重複的網路類別名稱 \"%s\"。"
 
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:2545
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:2556
@@ -31449,9 +31428,8 @@ msgid "Unknown PCad layer %u"
 msgstr "未知的 PCad 層 %u"
 
 #: pcbnew/plugins/pcad/pcb.cpp:748
-#, fuzzy
 msgid "KiCad only supports 32 signal layers."
-msgstr "KiCad 僅支援 32 個訊號層"
+msgstr "KiCad 僅支援 32 層訊號層。"
 
 #: pcbnew/plugins/pcad/pcb_via.cpp:93
 #, fuzzy
@@ -31459,9 +31437,9 @@ msgid "Unable to find library section."
 msgstr "無法找到庫檔案 %s。"
 
 #: pcbnew/plugins/pcad/pcb_via.cpp:108
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to find viaStyleDef %s."
-msgstr "沒有找到 PDF 瀏覽器 \"%s\""
+msgstr "找不到 viaStyleDef \"%s\"。"
 
 #: pcbnew/python/scripting/pcbnew_action_plugins.cpp:70
 msgid "Exception on python action plugin code"
@@ -31978,18 +31956,18 @@ msgid "Session file imported and merged OK."
 msgstr "會話檔案匯入與合併完成。"
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:166
-#, fuzzy, c-format
+#, c-format
 msgid "Session file uses invalid layer id '%s'."
-msgstr "會話檔案使用了錯誤的層標識 \"%s\""
+msgstr "Session 檔使用了錯誤的圖層 ID \"%s\"。"
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:217
 msgid "Session via padstack has no shapes"
 msgstr "過孔的焊盤槽/孔會話沒有形狀"
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:226
-#, fuzzy, c-format
+#, c-format
 msgid "Unsupported via shape: %s."
-msgstr "不支援的過孔樣式: %s"
+msgstr "不支援的過孔樣式： %s。"
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:246
 #: pcbnew/specctra_import_export/specctra_import.cpp:271
@@ -32020,9 +31998,9 @@ msgid "Reference '%s' not found."
 msgstr "未找到位號 \"%s\"。"
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:501
-#, fuzzy, c-format
+#, c-format
 msgid "A wire_via refers to missing padstack '%s'."
-msgstr "發現一個導線_過孔指向了丟失的焊盤槽/孔 \"%s\""
+msgstr "有個 wire_via 指向了遺失的 padstack \"%s\"。"
 
 #: pcbnew/toolbars_footprint_editor.cpp:91
 msgid "Load footprint from current board"
