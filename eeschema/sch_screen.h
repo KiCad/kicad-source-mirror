@@ -225,8 +225,6 @@ public:
      */
     void UpdateLocalLibSymbolLinks();
 
-    void SwapSymbolLinks( const SCH_SYMBOL* aOriginalSymbol, const SCH_SYMBOL* aNewSymbol );
-
     /**
      * Print all the items in the screen to \a aDC.
      *

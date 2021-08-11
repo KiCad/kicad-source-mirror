@@ -726,16 +726,6 @@ void SCH_SCREEN::UpdateLocalLibSymbolLinks()
 }
 
 
-void SCH_SCREEN::SwapSymbolLinks( const SCH_SYMBOL* aOriginalSymbol, const SCH_SYMBOL* aNewSymbol )
-{
-    wxCHECK( aOriginalSymbol && aNewSymbol /* && m_rtree.contains( aOriginalSymbol, true ) */,
-             /* void */ );
-
-    if( aOriginalSymbol->GetSchSymbolLibraryName() == aNewSymbol->GetSchSymbolLibraryName() )
-        return;
-}
-
-
 void SCH_SCREEN::Print( const RENDER_SETTINGS* aSettings )
 {
     // Ensure links are up to date, even if a library was reloaded for some reason:
