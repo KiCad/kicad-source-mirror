@@ -183,6 +183,10 @@ DRC_ITEM DRC_ITEM::unresolvedVariable( DRCE_UNRESOLVED_VARIABLE,
         _( "Unresolved text variable" ),
         wxT( "unresolved_variable" ) );
 
+DRC_ITEM DRC_ITEM::copperSliver( DRCE_COPPER_SLIVER,
+        _( "Copper sliver" ),
+        wxT( "copper_sliver" ) );
+
 DRC_ITEM DRC_ITEM::silkMaskClearance( DRCE_SILK_MASK_CLEARANCE,
         _( "Silkscreen clipped by solder mask" ),
         wxT( "silk_over_copper" ) );
@@ -249,6 +253,7 @@ std::vector<std::reference_wrapper<RC_ITEM>> DRC_ITEM::allItemTypes( {
             DRC_ITEM::missingCourtyard,
             DRC_ITEM::malformedCourtyard,
             DRC_ITEM::invalidOutline,
+            DRC_ITEM::copperSliver,
 
             DRC_ITEM::heading_schematic_parity,
             DRC_ITEM::duplicateFootprints,
@@ -324,6 +329,7 @@ std::shared_ptr<DRC_ITEM> DRC_ITEM::Create( int aErrorCode )
     case DRCE_EXTRA_FOOTPRINT:          return std::make_shared<DRC_ITEM>( extraFootprint );
     case DRCE_LIB_FOOTPRINT_ISSUES:     return std::make_shared<DRC_ITEM>( libFootprintIssues );
     case DRCE_UNRESOLVED_VARIABLE:      return std::make_shared<DRC_ITEM>( unresolvedVariable );
+    case DRCE_COPPER_SLIVER:            return std::make_shared<DRC_ITEM>( copperSliver );
     case DRCE_OVERLAPPING_SILK:         return std::make_shared<DRC_ITEM>( silkOverlaps );
     case DRCE_SILK_MASK_CLEARANCE:      return std::make_shared<DRC_ITEM>( silkMaskClearance );
     case DRCE_TEXT_HEIGHT:              return std::make_shared<DRC_ITEM>( textHeightOutOfRange );

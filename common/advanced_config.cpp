@@ -76,6 +76,12 @@ static const wxChar ExtraFillMargin[] = wxT( "ExtraFillMargin" );
 static const wxChar DRCEpsilon[] = wxT( "DRCEpsilon" );
 
 /**
+ * Angle and width tolerances for copper and solder mask sliver detection.
+ */
+static const wxChar DRCSliverWidthTolerance[] = wxT( "DRCSliverWidthTolerance" );
+static const wxChar DRCSliverAngleTolerance[] = wxT( "DRCSliverAngleTolerance" );
+
+/**
  * Used to calculate the actual hole size from the finish hole size.
  * IPC-6012 says 0.015-0.018mm; Cadence says at least 0.020mm for a Class 2 board and at least
  * 0.025mm for Class 3.
@@ -273,6 +279,8 @@ ADVANCED_CFG::ADVANCED_CFG()
     m_ExtraClearance            = 0.0001;
     m_DRCEpsilon                = 0.0001;   // 0.1um is small enough not to materially violate
                                             // any constraints.
+    m_SliverWidthTolerance      = 0.08;
+    m_SliverAngleTolerance      = 20.0;
 
     m_HoleWallThickness         = 0.020;    // IPC-6012 says 15-18um; Cadence says at least
                                             // 0.020 for a Class 2 board and at least 0.025
@@ -341,6 +349,12 @@ void ADVANCED_CFG::loadSettings( wxConfigBase& aCfg )
 
     configParams.push_back( new PARAM_CFG_DOUBLE( true, AC_KEYS::DRCEpsilon,
                                                   &m_DRCEpsilon, 0.0005, 0.0, 1.0 ) );
+
+    configParams.push_back( new PARAM_CFG_DOUBLE( true, AC_KEYS::DRCSliverWidthTolerance,
+                                                  &m_SliverWidthTolerance, 0.08, 0.01, 0.25 ) );
+
+    configParams.push_back( new PARAM_CFG_DOUBLE( true, AC_KEYS::DRCSliverAngleTolerance,
+                                                  &m_SliverAngleTolerance, 20.0, 1.0, 90.0 ) );
 
     configParams.push_back( new PARAM_CFG_DOUBLE( true, AC_KEYS::HoleWallThickness,
                                                   &m_HoleWallThickness, 0.020, 0.0, 1.0 ) );

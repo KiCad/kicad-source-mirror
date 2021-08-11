@@ -73,15 +73,18 @@ enum PCB_DRC_CODE {
     DRCE_PAD_TH_WITH_NO_HOLE,            // footprint has Plated Through-Hole with no hole
 
     DRCE_UNRESOLVED_VARIABLE,
+
+    DRCE_COPPER_SLIVER,
+
     DRCE_SILK_MASK_CLEARANCE,            // silkscreen clipped by mask (potentially leaving it
                                          //   over pads, exposed copper, etc.)
     DRCE_TEXT_HEIGHT,
     DRCE_TEXT_THICKNESS,
     DRCE_OVERLAPPING_SILK,               // silk to silk clearance error
+
     DRCE_LENGTH_OUT_OF_RANGE,
     DRCE_SKEW_OUT_OF_RANGE,
     DRCE_TOO_MANY_VIAS,
-
     DRCE_DIFF_PAIR_GAP_OUT_OF_RANGE,
     DRCE_DIFF_PAIR_UNCOUPLED_LENGTH_TOO_LONG,
 
@@ -172,6 +175,7 @@ private:
     static DRC_ITEM netConflict;
     static DRC_ITEM libFootprintIssues;
     static DRC_ITEM unresolvedVariable;
+    static DRC_ITEM copperSliver;
     static DRC_ITEM silkMaskClearance;
     static DRC_ITEM silkOverlaps;
     static DRC_ITEM textHeightOutOfRange;

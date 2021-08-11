@@ -102,6 +102,12 @@ public:
     double m_DRCEpsilon;
 
     /**
+     * Sliver tolerances for DRC.  Units are mm and deg.
+     */
+    double m_SliverWidthTolerance;
+    double m_SliverAngleTolerance;
+
+    /**
      * Hole wall plating thickness.  Used to determine actual hole size from finish hole size.
      * Units are mm.
      */
