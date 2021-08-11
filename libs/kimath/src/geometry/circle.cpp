@@ -236,7 +236,7 @@ std::vector<VECTOR2I> CIRCLE::Intersect( const CIRCLE& aCircle ) const
     int64_t  r1 = Radius;
     int64_t  r2 = aCircle.Radius;
 
-    if( d > ( r1 + r2 ) || ( d < (std::abs( r1 - r2) ) ) )
+    if( d > ( r1 + r2 ) || ( d < ( std::abs( r1 - r2 ) ) ) )
         return retval; //circles do not intersect
 
     // Equation (3)
