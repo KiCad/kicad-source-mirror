@@ -28,6 +28,7 @@ add_net
 addsublayer
 aligned
 allowed
+allow_soldermask_bridges
 anchor
 angle
 arc

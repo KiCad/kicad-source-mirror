@@ -388,6 +388,29 @@ void PCB_BASE_FRAME::FocusOnItem( BOARD_ITEM* aItem, PCB_LAYER_ID aLayer )
 }
 
 
+void PCB_BASE_FRAME::HideSolderMask()
+{
+    KIGFX::PCB_VIEW* view = GetCanvas()->GetView();
+
+    if( view && GetBoard()->m_SolderMask && view->HasItem( GetBoard()->m_SolderMask ) )
+        view->Remove( GetBoard()->m_SolderMask );
+}
+
+
+void PCB_BASE_FRAME::ShowSolderMask()
+{
+    KIGFX::PCB_VIEW* view = GetCanvas()->GetView();
+
+    if( view && GetBoard()->m_SolderMask )
+    {
+        if( view->HasItem( GetBoard()->m_SolderMask ) )
+            view->Remove( GetBoard()->m_SolderMask );
+
+        view->Add( GetBoard()->m_SolderMask );
+    }
+}
+
+
 void PCB_BASE_FRAME::SetPageSettings( const PAGE_INFO& aPageSettings )
 {
     m_pcb->SetPageSettings( aPageSettings );

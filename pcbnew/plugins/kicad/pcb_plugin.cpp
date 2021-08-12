@@ -1216,6 +1216,9 @@ void PCB_PLUGIN::format( const FOOTPRINT* aFootprint, int aNestLevel ) const
         if( aFootprint->GetAttributes() & FP_EXCLUDE_FROM_BOM )
             m_out->Print( 0, " exclude_from_bom" );
 
+        if( aFootprint->GetAttributes() & FP_ALLOW_SOLDERMASK_BRIDGES )
+            m_out->Print( 0, " allow_soldermask_bridges" );
+
         m_out->Print( 0, ")\n" );
     }
 

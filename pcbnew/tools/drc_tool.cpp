@@ -32,6 +32,7 @@
 #include <kiface_base.h>
 #include <dialog_drc.h>
 #include <board_commit.h>
+#include <zone.h>
 #include <board_design_settings.h>
 #include <progress_reporter.h>
 #include <drc/drc_engine.h>
@@ -209,6 +210,8 @@ void DRC_TOOL::RunTests( PROGRESS_REPORTER* aProgressReporter, bool aRefillZones
 
     m_drcRunning = false;
 
+    m_editFrame->ShowSolderMask();
+
     // update the m_drcDialog listboxes
     updatePointers();
 }
@@ -221,7 +224,7 @@ void DRC_TOOL::updatePointers()
 
     m_editFrame->ResolveDRCExclusions();
 
-    if( m_drcDialog )  // Use diag list boxes only in DRC_TOOL dialog
+    if( m_drcDialog )  // Use dialog list boxes only in DRC_TOOL dialog
     {
         m_drcDialog->SetMarkersProvider( new BOARD_DRC_ITEMS_PROVIDER( m_pcb ) );
         m_drcDialog->SetUnconnectedProvider( new RATSNEST_DRC_ITEMS_PROVIDER( m_editFrame,

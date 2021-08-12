@@ -75,8 +75,10 @@ enum PCB_DRC_CODE {
     DRCE_UNRESOLVED_VARIABLE,
 
     DRCE_COPPER_SLIVER,
+    DRCE_SOLDERMASK_BRIDGE,              // failure to maintain min soldermask web thickness
+                                         //   between copper items with different nets
 
-    DRCE_SILK_MASK_CLEARANCE,            // silkscreen clipped by mask (potentially leaving it
+    DRCE_SILK_CLEARANCE,                 // silkscreen clipped by mask (potentially leaving it
                                          //   over pads, exposed copper, etc.)
     DRCE_TEXT_HEIGHT,
     DRCE_TEXT_THICKNESS,
@@ -176,7 +178,8 @@ private:
     static DRC_ITEM libFootprintIssues;
     static DRC_ITEM unresolvedVariable;
     static DRC_ITEM copperSliver;
-    static DRC_ITEM silkMaskClearance;
+    static DRC_ITEM silkClearance;
+    static DRC_ITEM solderMaskBridge;
     static DRC_ITEM silkOverlaps;
     static DRC_ITEM textHeightOutOfRange;
     static DRC_ITEM textThicknessOutOfRange;

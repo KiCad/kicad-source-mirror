@@ -3437,9 +3437,13 @@ FOOTPRINT* PCB_PARSER::parseFOOTPRINT_unchecked( wxArrayString* aInitialComments
                     attributes |= FP_EXCLUDE_FROM_BOM;
                     break;
 
+                case T_allow_soldermask_bridges:
+                    attributes |= FP_ALLOW_SOLDERMASK_BRIDGES;
+                    break;
+
                 default:
-                    Expecting( "through_hole, smd, virtual, board_only, exclude_from_pos_files "
-                               "or exclude_from_bom" );
+                    Expecting( "through_hole, smd, virtual, board_only, exclude_from_pos_files, "
+                               "exclude_from_bom or allow_solder_mask_bridges" );
                 }
             }
 

@@ -44,6 +44,7 @@ set( QA_PCBNEW_SRCS
     drc/test_drc_courtyard_invalid.cpp
     drc/test_drc_courtyard_overlap.cpp
     drc/test_drc_regressions.cpp
+    drc/test_solder_mask_bridging.cpp
 
     plugins/altium/test_altium_rule_transformer.cpp
 

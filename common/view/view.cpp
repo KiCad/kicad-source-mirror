@@ -1567,6 +1567,14 @@ bool VIEW::IsVisible( const VIEW_ITEM* aItem ) const
 }
 
 
+bool VIEW::HasItem( const VIEW_ITEM* aItem ) const
+{
+    const VIEW_ITEM_DATA* viewData = aItem->viewPrivData();
+
+    return viewData && viewData->m_view == this;
+}
+
+
 void VIEW::Update( const VIEW_ITEM* aItem ) const
 {
     Update( aItem, ALL );

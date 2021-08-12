@@ -219,6 +219,9 @@ public:
 
     void FocusOnItem( BOARD_ITEM* aItem, PCB_LAYER_ID aLayer = UNDEFINED_LAYER );
 
+    void HideSolderMask();
+    void ShowSolderMask();
+
     // General
     virtual void ReCreateOptToolbar() override { }
     virtual void ShowChangedLanguage() override;

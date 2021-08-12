@@ -89,6 +89,7 @@
         "silk_over_copper": "error",
         "silk_overlap": "error",
         "skew_out_of_range": "error",
+        "solder_mask_bridge": "ignore",
         "too_many_vias": "error",
         "track_dangling": "warning",
         "track_width": "error",
@@ -347,7 +348,7 @@
     "pinned_symbol_libs": []
   },
   "meta": {
-    "filename": "001.04.010.1020.kicad_pro",
+    "filename": "issue5990.kicad_pro",
     "version": 1
   },
   "net_settings": {

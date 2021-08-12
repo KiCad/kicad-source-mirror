@@ -318,6 +318,7 @@ bool DIALOG_FOOTPRINT_PROPERTIES::TransferDataToWindow()
     m_solderMask.SetValue( m_footprint->GetLocalSolderMaskMargin() );
     m_solderPaste.SetValue( m_footprint->GetLocalSolderPasteMargin() );
     m_solderPasteRatio.SetDoubleValue( m_footprint->GetLocalSolderPasteMarginRatio() * 100.0 );
+    m_allowSolderMaskBridges->SetValue( m_footprint->GetAttributes() & FP_ALLOW_SOLDERMASK_BRIDGES );
 
     switch( m_footprint->GetZoneConnection() )
     {
@@ -478,6 +479,9 @@ bool DIALOG_FOOTPRINT_PROPERTIES::TransferDataFromWindow()
 
     if( m_excludeFromBOM->GetValue() )
         attributes |= FP_EXCLUDE_FROM_BOM;
+
+    if( m_allowSolderMaskBridges->GetValue() )
+        attributes |= FP_ALLOW_SOLDERMASK_BRIDGES;
 
     m_footprint->SetAttributes( attributes );
 

@@ -636,6 +636,12 @@ public:
         return m_FilledPolysList.at( aLayer );
     }
 
+    SHAPE_POLY_SET* GetFill( PCB_LAYER_ID aLayer )
+    {
+        wxASSERT( m_FilledPolysList.count( aLayer ) );
+        return &m_FilledPolysList.at( aLayer );
+    }
+
     /**
      * Create a list of triangles that "fill" the solid areas used for instance to draw
      * these solid areas on OpenGL.

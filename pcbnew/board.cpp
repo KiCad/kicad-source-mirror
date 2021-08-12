@@ -85,6 +85,18 @@ BOARD::BOARD() :
             m_layers[layer].m_type = LT_UNDEFINED;
     }
 
+    m_SolderMask = new ZONE( this );
+    m_SolderMask->SetLayerSet( LSET().set( F_Mask ).set( B_Mask ) );
+    m_SolderMask->SetOutline( new SHAPE_POLY_SET() );
+    int infinity = ( std::numeric_limits<int>::max() / 2 ) - Millimeter2iu( 1 );
+    m_SolderMask->Outline()->NewOutline();
+    m_SolderMask->Outline()->Append( VECTOR2I( -infinity, -infinity ) );
+    m_SolderMask->Outline()->Append( VECTOR2I( -infinity, +infinity ) );
+    m_SolderMask->Outline()->Append( VECTOR2I( +infinity, +infinity ) );
+    m_SolderMask->Outline()->Append( VECTOR2I( +infinity, -infinity ) );
+    m_SolderMask->SetMinThickness( 0 );
+    m_SolderMask->SetFillVersion( 6 );
+
     BOARD_DESIGN_SETTINGS& bds = GetDesignSettings();
 
     // Initialize default netclass.
@@ -111,6 +123,8 @@ BOARD::~BOARD()
         delete zone;
 
     m_zones.clear();
+
+    delete m_SolderMask;
 
     for( FOOTPRINT* footprint : m_footprints )
         delete footprint;

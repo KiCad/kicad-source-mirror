@@ -143,6 +143,11 @@ public:
     bool IsVisible( const VIEW_ITEM* aItem ) const;
 
     /**
+     * Indicates whether or not the given item has been added to the view.
+     */
+    bool HasItem( const VIEW_ITEM* aItem ) const;
+
+    /**
      * For dynamic VIEWs, inform the associated VIEW that the graphical representation of
      * this item has changed. For static views calling has no effect.
      *

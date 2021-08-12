@@ -121,7 +121,7 @@ bool DRC_TEST_PROVIDER_EDGE_CLEARANCE::Run()
         if( !reportPhase( _( "Checking copper to board edge clearances..." ) ) )
             return false;    // DRC cancelled
     }
-    else if( m_drcEngine->IsErrorLimitExceeded( DRCE_SILK_MASK_CLEARANCE ) )
+    else if( m_drcEngine->IsErrorLimitExceeded( DRCE_SILK_CLEARANCE ) )
     {
         if( !reportPhase( _( "Checking silk to board edge clearances..." ) ) )
             return false;    // DRC cancelled
@@ -230,7 +230,7 @@ bool DRC_TEST_PROVIDER_EDGE_CLEARANCE::Run()
     for( BOARD_ITEM* item : boardItems )
     {
         bool testCopper = !m_drcEngine->IsErrorLimitExceeded( DRCE_EDGE_CLEARANCE );
-        bool testSilk = !m_drcEngine->IsErrorLimitExceeded( DRCE_SILK_MASK_CLEARANCE );
+        bool testSilk = !m_drcEngine->IsErrorLimitExceeded( DRCE_SILK_CLEARANCE );
 
         if( !testCopper && !testSilk )
             break;
@@ -261,7 +261,7 @@ bool DRC_TEST_PROVIDER_EDGE_CLEARANCE::Run()
                         {
                             return testAgainstEdge( item, itemShape.get(), edge,
                                                     SILK_CLEARANCE_CONSTRAINT,
-                                                    DRCE_SILK_MASK_CLEARANCE );
+                                                    DRCE_SILK_CLEARANCE );
                         },
                         m_largestClearance ) )
                 {

@@ -87,13 +87,23 @@ public:
      */
     void Insert( BOARD_ITEM* aItem, PCB_LAYER_ID aLayer, int aWorstClearance = 0 )
     {
-        wxCHECK( aLayer != UNDEFINED_LAYER, /* void */ );
+        Insert( aItem, aLayer, aLayer, aWorstClearance );
+    }
+
+    /**
+     * Insert an item into the tree on a particular layer with a worst clearance.  Allows the
+     * source layer to be different from the tree layer.
+     */
+    void Insert( BOARD_ITEM* aItem, PCB_LAYER_ID aRefLayer, PCB_LAYER_ID aTargetLayer,
+                 int aWorstClearance )
+    {
+        wxCHECK( aTargetLayer != UNDEFINED_LAYER, /* void */ );
 
         if( aItem->Type() == PCB_FP_TEXT_T && !static_cast<FP_TEXT*>( aItem )->IsVisible() )
             return;
 
         std::vector<SHAPE*> subshapes;
-        std::shared_ptr<SHAPE> shape = aItem->GetEffectiveShape( aLayer );
+        std::shared_ptr<SHAPE> shape = aItem->GetEffectiveShape( aRefLayer );
         subshapes.clear();
 
         if( shape->HasIndexableSubshapes() )
@@ -122,7 +132,7 @@ public:
             const int        mmax[2] = { bbox.GetRight(), bbox.GetBottom() };
             ITEM_WITH_SHAPE* itemShape = new ITEM_WITH_SHAPE( aItem, subshape, shape );
 
-            m_tree[aLayer]->Insert( mmin, mmax, itemShape );
+            m_tree[aTargetLayer]->Insert( mmin, mmax, itemShape );
             m_count++;
         }
     }
@@ -194,8 +204,8 @@ public:
         EDA_RECT box = aRefItem->GetBoundingBox();
         box.Inflate( aClearance );
 
-        int min[2] = { box.GetX(),         box.GetY() };
-        int max[2] = { box.GetRight(),     box.GetBottom() };
+        int min[2] = { box.GetX(),     box.GetY() };
+        int max[2] = { box.GetRight(), box.GetBottom() };
 
         std::shared_ptr<SHAPE> refShape = aRefItem->GetEffectiveShape( aRefLayer );
 

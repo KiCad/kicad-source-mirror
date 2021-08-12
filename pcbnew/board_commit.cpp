@@ -105,6 +105,7 @@ void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry, bool a
     std::set<EDA_ITEM*> savedModules;
     PCB_SELECTION_TOOL* selTool = m_toolMgr->GetTool<PCB_SELECTION_TOOL>();
     bool                itemsDeselected = false;
+    bool                solderMaskDirty = false;
 
     std::vector<BOARD_ITEM*> bulkAddedItems;
     std::vector<BOARD_ITEM*> bulkRemovedItems;
@@ -149,6 +150,12 @@ void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry, bool a
                 savedModules.insert( ent.m_item );
                 static_cast<FOOTPRINT*>( ent.m_item )->SetLastEditTime();
             }
+        }
+
+        if( boardItem->Type() == PCB_VIA_T || boardItem->Type() == PCB_FOOTPRINT_T
+                || boardItem->IsOnLayer( F_Mask ) || boardItem->IsOnLayer( B_Mask ) )
+        {
+            solderMaskDirty = true;
         }
 
         switch( changeType )
@@ -379,7 +386,10 @@ void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry, bool a
         connectivity->ClearDynamicRatsnest();
 
         if( frame )
+        {
+            frame->HideSolderMask();
             frame->GetCanvas()->RedrawRatsnest();
+        }
 
         if( m_changes.size() > num_changes )
         {

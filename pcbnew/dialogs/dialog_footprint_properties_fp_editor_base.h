@@ -33,6 +33,7 @@ class WX_GRID;
 #include <wx/choice.h>
 #include <wx/checkbox.h>
 #include <wx/panel.h>
+#include <wx/gbsizer.h>
 #include <wx/notebook.h>
 #include <wx/dialog.h>
 
@@ -80,6 +81,7 @@ class DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE : public DIALOG_SHIM
 		wxStaticText* m_SolderMaskMarginLabel;
 		wxTextCtrl* m_SolderMaskMarginCtrl;
 		wxStaticText* m_SolderMaskMarginUnits;
+		wxCheckBox* m_allowBridges;
 		wxStaticText* m_SolderPasteMarginLabel;
 		wxTextCtrl* m_SolderPasteMarginCtrl;
 		wxStaticText* m_SolderPasteMarginUnits;
