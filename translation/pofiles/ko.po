@@ -15,8 +15,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
-"PO-Revision-Date: 2021-08-12 03:50+0000\n"
-"Last-Translator: 킴슨김랑기 <korearf@gmail.com>\n"
+"PO-Revision-Date: 2021-08-12 08:20+0000\n"
+"Last-Translator: 서범기 <joonhoflow@naver.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
 "Language: ko\n"
@@ -20263,7 +20263,7 @@ msgstr "에지 카드 커넥터:"
 
 #: pcbnew/board_stackup_manager/panel_board_finish_base.cpp:44
 msgid "Yes, bevelled"
-msgstr ""
+msgstr "예, 경 사진"
 
 #: pcbnew/board_stackup_manager/panel_board_finish_base.cpp:48
 #, fuzzy
@@ -20276,7 +20276,7 @@ msgstr "코어"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:117
 msgid "PrePreg"
-msgstr ""
+msgstr "PrePreg"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:175
 #, c-format
@@ -20290,7 +20290,7 @@ msgstr "예상되는 기판 두께를 %s로 입력하세요 (최소값은 %s입�
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:182
 msgid "Adjust not locked dielectric thickness layers"
-msgstr ""
+msgstr "잠기지 않은 유전체층의 두께를 조정하시오"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:193
 #, c-format
@@ -20299,7 +20299,7 @@ msgstr "값이 너무 작습니다 (최소값 %s %s). 중단합니다"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:213
 msgid "All dielectric  thickness layers are locked"
-msgstr ""
+msgstr "모든 유전체층의 두께가 조정되었습니다"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:279
 #, c-format, fuzzy
@@ -20348,12 +20348,12 @@ msgstr "구리"
 msgid ""
 "Incorrect value for Epsilon R (Epsilon R must be positive or null if not "
 "used)"
-msgstr ""
+msgstr "Epsilon R에 대한 잘못된 값(Epsilon R은 양수이거나 사용되지 않는 경우 null이어야 함)"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:1044
 msgid ""
 "Incorrect value for Loss tg (Loss tg must be positive or null if not used)"
-msgstr ""
+msgstr "손실 탄제트에 대한 잘못된 값(손실 탄제트값은 양수이거나 사용되지 않는 경우 null이어야 함)"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:1090
 msgid "A layer thickness is < 0. Fix it"
@@ -20459,6 +20459,8 @@ msgid ""
 "If Impedance Controlled option is set,\n"
 "Loss tangent and EpsilonR will be added to constraints."
 msgstr ""
+"임피던스 제어 옵션이 설정된 경우,\n"
+"손실 탄젠트 및 EpsilonR이 제약 조건에 추가됩니다."
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:45
 #, fuzzy
@@ -20499,7 +20501,7 @@ msgstr "HAL SnPb"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:49
 msgid "HAL lead-free"
-msgstr ""
+msgstr "HAL 무연납"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:50
 msgid "Hard gold"
@@ -20566,7 +20568,7 @@ msgstr "지정하지 않음"
 
 #: pcbnew/build_BOM_from_board.cpp:80
 msgid "Cannot export BOM: there are no footprints on the PCB."
-msgstr ""
+msgstr "BOM을 내보낼 수 없음: PCB에 풋프린트가 없습니다."
 
 #: pcbnew/build_BOM_from_board.cpp:90
 msgid "Save Bill of Materials"
@@ -20592,7 +20594,7 @@ msgstr "명칭"
 
 #: pcbnew/build_BOM_from_board.cpp:114
 msgid "Supplier and ref"
-msgstr ""
+msgstr "공급자와 참조"
 
 #: pcbnew/cleanup_item.cpp:46 pcbnew/zone_filler.cpp:104
 #, fuzzy
@@ -20625,7 +20627,7 @@ msgstr "영역 삭제"
 
 #: pcbnew/cleanup_item.cpp:52
 msgid "Remove track not connected at both ends"
-msgstr ""
+msgstr "양쪽 끝에 연결되지 않은 배선 제거"
 
 #: pcbnew/cleanup_item.cpp:53
 #, fuzzy
@@ -20716,7 +20718,7 @@ msgstr "애노테이트"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:257
 msgid "No PCB to reannotate!"
-msgstr ""
+msgstr "주석을 추가할 PCB가 없습니다!"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:269
 msgid "PCB successfully reannotated"
@@ -20726,7 +20728,7 @@ msgstr "PCB가 성공적으로 다시 주석 처리되었습니다"
 msgid ""
 "PCB annotation changes should be synchronized with schematic using the "
 "\"Update Schematic from PCB\" tool."
-msgstr ""
+msgstr "PCB 주석 변경은 \"PCB에서 회로도 업데이트\" 도구를 사용하여 회로도와 동기화해야 합니다."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:285
 #, c-format
@@ -20760,6 +20762,8 @@ msgid ""
 "\n"
 "Front footprints will start at %s"
 msgstr ""
+"\n"
+"전면 풋프린트는 %s에서 시작됩니다"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:308
 #, c-format
@@ -20781,6 +20785,8 @@ msgid ""
 "\n"
 "Front footprints starting with '%s' will have the prefix removed."
 msgstr ""
+"\n"
+"'%s'로 시작하는 전면 풋프린트는 접두사가 제거됩니다."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:323
 #, c-format
@@ -20788,6 +20794,8 @@ msgid ""
 "\n"
 "Front footprints will have '%s' inserted as a prefix."
 msgstr ""
+"\n"
+"전면 풋프린트에는 '%s'이(가) 접두사로 삽입됩니다."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:333
 #, c-format
@@ -20795,6 +20803,8 @@ msgid ""
 "\n"
 "Back footprints starting with '%s' will have the prefix removed."
 msgstr ""
+"\n"
+"'%s'로 시작하는 후면 풋프린트는 접두사가 제거됩니다."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:339
 #, c-format
@@ -20802,6 +20812,8 @@ msgid ""
 "\n"
 "Back footprints will have '%s' inserted as a prefix."
 msgstr ""
+"\n"
+"후면 풋프린트에는 접두사로 '%s'이(가) 삽입됩니다."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:347
 #, c-format
@@ -20810,6 +20822,8 @@ msgid ""
 "Prior to sorting by %s, the coordinates of which will be rounded to a %s, %s "
 "grid."
 msgstr ""
+"\n"
+"%s로 정렬하기 전에, 좌표가 %s, %s의 그리드로 반올림합니다."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:349
 #, fuzzy
@@ -20828,6 +20842,10 @@ msgid ""
 "There are %i types of reference designations\n"
 "**********************************************************\n"
 msgstr ""
+"\n"
+"\n"
+"참조 지정 유형이 %i개 있습니다.\n"
+"**********************************************************\n"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:506
 #, c-format
@@ -20846,6 +20864,9 @@ msgid ""
 "    Change Array\n"
 "***********************\n"
 msgstr ""
+"\n"
+"    배열 변경\n"
+"***********************\n"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:516
 #, fuzzy
@@ -20902,6 +20923,9 @@ msgid ""
 "PCB has %d empty or invalid reference designations.\n"
 "Recommend running DRC with 'Test footprints against schematic' checked.\n"
 msgstr ""
+"\n"
+"PCB에 %d개의 비어 있거나 잘못된 참조 지정이 있습니다.\n"
+"'회로도에 대한 풋프린트 테스트'를 선택하고 DRC를 실행하는 것을 권장합니다.\n"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:580
 #, c-format
@@ -20909,6 +20933,8 @@ msgid ""
 "\n"
 "RefDes: %s Footprint: %s:%s at %s on PCB."
 msgstr ""
+"\n"
+"참조 지정자: %s 풋프린트: %s:%s가 PCB의 %s에 있음"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:588
 msgid "Reannotate anyway?"
