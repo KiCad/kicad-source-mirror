@@ -15,8 +15,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
-"PO-Revision-Date: 2021-08-12 12:20+0000\n"
-"Last-Translator: 킴슨김랑기 <korearf@gmail.com>\n"
+"PO-Revision-Date: 2021-08-13 07:31+0000\n"
+"Last-Translator: hokim <teamgoodaloe@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
 "Language: ko\n"
@@ -21270,7 +21270,7 @@ msgstr "매립/매장:"
 #: pcbnew/dialogs/dialog_board_statistics.cpp:151
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:173
 msgid "Micro vias:"
-msgstr ""
+msgstr "마이크로 비아:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:365
 #: pcbnew/dialogs/dialog_board_statistics.cpp:380
@@ -21517,7 +21517,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:102
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:88
 msgid "Chamfer distance:"
-msgstr ""
+msgstr "모따기 거리:"
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:362
 #: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:104
@@ -21563,7 +21563,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:97
 msgid "Zone priority level:"
-msgstr ""
+msgstr "정의된 영역 우선도:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:99
 msgid ""
@@ -21603,7 +21603,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:143
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:82
 msgid "Chamfer"
-msgstr ""
+msgstr "모따기"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:143
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:82
@@ -21783,7 +21783,7 @@ msgstr "16진수 (0,1,...,F,10,...)"
 
 #: pcbnew/dialogs/dialog_create_array.cpp:138
 msgid "Alphabet, minus IOSQXZ"
-msgstr ""
+msgstr "IOSQXZ을 제외한 알파벳"
 
 #: pcbnew/dialogs/dialog_create_array.cpp:142
 msgid "Alphabet, full 26 characters"
@@ -21930,16 +21930,16 @@ msgstr "패드 번호 매기기 체계"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:131
 msgid "Primary axis numbering:"
-msgstr ""
+msgstr "주축 번호 지정:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:140
 msgid "Secondary axis numbering:"
-msgstr ""
+msgstr "보조축 번호 지정:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:159
 #: pcbnew/dialogs/dialog_create_array_base.cpp:302
 msgid "Pad numbering start:"
-msgstr ""
+msgstr "패드 번호지정 시작:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:173
 #: pcbnew/dialogs/dialog_create_array_base.cpp:309
@@ -22901,7 +22901,7 @@ msgstr "더 이상 표시할 아이템 없음"
 
 #: pcbnew/dialogs/dialog_find.cpp:347
 msgid "No hits"
-msgstr ""
+msgstr "일치하지 않음"
 
 #: pcbnew/dialogs/dialog_find.cpp:354
 #, fuzzy, c-format
@@ -24543,7 +24543,7 @@ msgstr "반경"
 #: pcbnew/dialogs/dialog_pad_properties.cpp:729
 #, c-format
 msgid "corners count %d"
-msgstr ""
+msgstr "모서리 수 %d"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:915
 #, fuzzy
@@ -25162,11 +25162,11 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_plot.cpp:696
 msgid "X scale constrained."
-msgstr ""
+msgstr "X 배율은 고정되어 있습니다."
 
 #: pcbnew/dialogs/dialog_plot.cpp:708
 msgid "Y scale constrained."
-msgstr ""
+msgstr "Y 배율은 고정되어 있습니다."
 
 #: pcbnew/dialogs/dialog_plot.cpp:724
 #, c-format
@@ -32907,7 +32907,7 @@ msgstr ""
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:390
 msgid "BOARD CHARACTERISTICS"
-msgstr ""
+msgstr "기판 특성"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:406
 msgid "Copper Layer Count: "
@@ -33240,7 +33240,7 @@ msgstr "드로우 설정"
 
 #: pcbnew/tools/pcb_actions.cpp:89
 msgid "Draw Graphic Polygon"
-msgstr ""
+msgstr "그래픽 폴리곤 그리기"
 
 #: pcbnew/tools/pcb_actions.cpp:89
 #, fuzzy
@@ -33258,7 +33258,7 @@ msgstr "원 그리기"
 
 #: pcbnew/tools/pcb_actions.cpp:106
 msgid "Draw Arc"
-msgstr ""
+msgstr "원호 그리기"
 
 #: pcbnew/tools/pcb_actions.cpp:111
 msgid "Add Board Characteristics"
@@ -33481,7 +33481,7 @@ msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:277
 msgid "Move Exactly..."
-msgstr ""
+msgstr "정확하게 이동..."
 
 #: pcbnew/tools/pcb_actions.cpp:277
 msgid "Moves the selected item(s) by an exact amount"
@@ -33790,7 +33790,7 @@ msgstr "현재 컴포넌트에 대해 필터된 풋프린트 목록만 표시"
 
 #: pcbnew/tools/pcb_actions.cpp:513
 msgid "Renumber Pads..."
-msgstr ""
+msgstr "패드 숫자 재지정..."
 
 #: pcbnew/tools/pcb_actions.cpp:514
 msgid "Renumber pads by clicking on them in the desired order"
@@ -34054,7 +34054,7 @@ msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:698
 msgid "Enter Group"
-msgstr ""
+msgstr "그룹에 들어가기"
 
 #: pcbnew/tools/pcb_actions.cpp:698
 msgid "Enter the group to edit items"
@@ -34062,7 +34062,7 @@ msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:703
 msgid "Leave Group"
-msgstr ""
+msgstr "그룹에서 나가기"
 
 #: pcbnew/tools/pcb_actions.cpp:703
 #, fuzzy
@@ -34556,7 +34556,7 @@ msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:1132
 msgid "Distribute Horizontally"
-msgstr ""
+msgstr "수평 배치"
 
 #: pcbnew/tools/pcb_actions.cpp:1133
 msgid "Distributes selected items along the horizontal axis"
@@ -34564,7 +34564,7 @@ msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:1137
 msgid "Distribute Vertically"
-msgstr ""
+msgstr "수직 배치"
 
 #: pcbnew/tools/pcb_actions.cpp:1138
 msgid "Distributes selected items along the vertical axis"
@@ -34572,7 +34572,7 @@ msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:1174
 msgid "Position Relative To..."
-msgstr ""
+msgstr "상대 위치..."
 
 #: pcbnew/tools/pcb_actions.cpp:1175
 msgid "Positions the selected item(s) by an exact amount relative to another"
@@ -34790,7 +34790,7 @@ msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:1391
 msgid "Length Tuning Settings..."
-msgstr ""
+msgstr "길이 조절 설정..."
 
 #: pcbnew/tools/pcb_actions.cpp:1392
 msgid "Sets the length tuning parameters for currently routed item."
@@ -34827,7 +34827,7 @@ msgstr "자체 교차하는 다각형은 허용되지 않습니다."
 
 #: pcbnew/tools/pcb_point_editor.cpp:543
 msgid "Drag a corner"
-msgstr ""
+msgstr "모서리 드래그"
 
 #: pcbnew/tools/pcb_point_editor.cpp:2048
 #, fuzzy
@@ -34877,11 +34877,11 @@ msgstr "가운데 맞춤"
 
 #: pcbnew/tools/placement_tool.cpp:548
 msgid "Distribute horizontally"
-msgstr ""
+msgstr "수평 배치"
 
 #: pcbnew/tools/placement_tool.cpp:675
 msgid "Distribute vertically"
-msgstr ""
+msgstr "수직 배치"
 
 #: pcbnew/tools/position_relative_tool.cpp:150
 #, fuzzy
@@ -35290,11 +35290,11 @@ msgstr "부품 내보내기"
 #: pcbnew/widgets/appearance_controls.cpp:1520
 #: pcbnew/widgets/appearance_controls.cpp:1521
 msgid "User defined meaning"
-msgstr ""
+msgstr "사용자 정의"
 
 #: pcbnew/widgets/appearance_controls.cpp:1522
 msgid "Board's perimeter definition"
-msgstr ""
+msgstr "기판 둘레 정의"
 
 #: pcbnew/widgets/appearance_controls.cpp:1523
 msgid "Board's edge setback outline"
@@ -35581,7 +35581,7 @@ msgstr "제한"
 
 #: pcbnew/zone.cpp:594 pcbnew/zone.cpp:1408
 msgid "Priority"
-msgstr ""
+msgstr "우선순위"
 
 #: pcbnew/zone.cpp:612 pcbnew/zone.cpp:872
 #, c-format
@@ -35604,7 +35604,7 @@ msgstr "행"
 
 #: pcbnew/zone.cpp:665
 msgid "Corner Count"
-msgstr ""
+msgstr "모서리 수"
 
 #: pcbnew/zone.cpp:878
 #, fuzzy, c-format
