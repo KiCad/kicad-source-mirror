@@ -16,7 +16,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
 "PO-Revision-Date: 2021-08-13 07:31+0000\n"
-"Last-Translator: hokim <teamgoodaloe@gmail.com>\n"
+"Last-Translator: Ji Yoon Choi <chichoon.choi@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
 "Language: ko\n"
@@ -14174,7 +14174,7 @@ msgstr "전체 회로도를 불러올 수 없습니다.  계층 시트 회로도
 
 #: eeschema/sheet.cpp:150
 msgid "Schematic Load Error"
-msgstr "회로도 로드 오류"
+msgstr "회로도 불러오기 오류"
 
 #: eeschema/sheet.cpp:153
 msgid "Use partial schematic"
@@ -16007,9 +16007,8 @@ msgid "Show Hidden Fields"
 msgstr "숨은 핀 보이기"
 
 #: eeschema/tools/ee_actions.cpp:639
-#, fuzzy
 msgid "Toggle display of hidden text fields"
-msgstr "Solder paste Copper"
+msgstr "비표시 텍스트 필드의 표시 전환"
 
 #: eeschema/tools/ee_actions.cpp:643
 msgid "Force H/V Wires and Buses"
@@ -17957,7 +17956,7 @@ msgstr "이미지 변환기"
 
 #: kicad/tools/kicad_manager_actions.cpp:94
 msgid "Convert bitmap images to schematic or PCB components"
-msgstr "비트맵 이미지를 회로도 또는 PCB 구성 요소로 변환"
+msgstr "비트맵 이미지를 회로도 또는 PCB 부품으로 변환"
 
 #: kicad/tools/kicad_manager_actions.cpp:99
 msgid "Calculator Tools"
@@ -19537,9 +19536,9 @@ msgstr ""
 "\tE3:  1.0   -    -    -   2.2   -    -    -   4.7   -    -    -\n"
 "\tE1:  1.0   -    -    -    -    -    -    -    -    -    -    -\n"
 "\n"
-"이 계산기는 임의의 값을 생성할 수 있도록 표준 E-시리즈 컴포넌트의 \n"
+"이 계산기는 임의의 값을 생성할 수 있도록 표준 E-시리즈 부품의 \n"
 "조합을 찾아냅니다. 사용자는 0.0025 부터 4000 kΩ까지 필요한 저항을\n"
-"입력할 수 있습니다. 최대 4개의 컴포넌트를 사용하는 해답이 주어집니다.\n"
+"입력할 수 있습니다. 최대 4개의 부품을 사용하는 해답이 주어집니다.\n"
 "\n"
 "기본값으로, 요청되는 값은 항상 해답 세트에서 제외됩니다.  또한 이 컴포넌트\n"
 "값을 사용할 수 없는 경우, 추가적으로 해답에서 제외할 값을 두 개까지 지정할 수 있습니다.\n"
@@ -20014,11 +20013,11 @@ msgstr "기판의 모서리가 %s 레이어에 정의되어 있어야 합니다.
 
 #: pcbnew/autorouter/autoplace_tool.cpp:89
 msgid "Autoplace Components"
-msgstr "컴포넌트 자동 배치"
+msgstr "부품 자동 배치"
 
 #: pcbnew/autorouter/autoplace_tool.cpp:95
 msgid "Autoplace components"
-msgstr "컴포넌트 자동 배치"
+msgstr "부품 자동 배치"
 
 #: pcbnew/board.cpp:91
 msgid "This is the default net class."
@@ -20140,24 +20139,20 @@ msgid "Top Silk Screen"
 msgstr "Silkscreen Cmp"
 
 #: pcbnew/board_stackup_manager/board_stackup.cpp:534
-#, fuzzy
 msgid "Top Solder Paste"
-msgstr "Solder paste Copper"
+msgstr "상단 솔더 페이스트"
 
 #: pcbnew/board_stackup_manager/board_stackup.cpp:542
-#, fuzzy
 msgid "Top Solder Mask"
-msgstr "Solder mask Copper"
+msgstr "상단 솔더 마스크"
 
 #: pcbnew/board_stackup_manager/board_stackup.cpp:586
-#, fuzzy
 msgid "Bottom Solder Mask"
-msgstr "Solder mask Cmp"
+msgstr "하단 솔더 마스크"
 
 #: pcbnew/board_stackup_manager/board_stackup.cpp:594
-#, fuzzy
 msgid "Bottom Solder Paste"
-msgstr "Solder paste Cmp"
+msgstr "하단 솔더 페이스트"
 
 #: pcbnew/board_stackup_manager/board_stackup.cpp:602
 #, fuzzy
@@ -20990,15 +20985,14 @@ msgstr "위치 반올림하여 정렬:"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:144
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:151
-#, fuzzy
 msgid ""
 "Component position will be rounded\n"
 "to this grid before sorting.\n"
 "This helps with misaligned parts."
 msgstr ""
-"구성 요소의 위치는 반올림됩니다\n"
-"이 그리드에 정렬 전에.\n"
-"이것은 잘못 정렬된 부품에 도움이 됩니다."
+"컴포넌트의 위치는 그리드에 대하여\n"
+"정렬 전에 반올림됩니다.\n"
+"이것은 부품이 잘못 정렬되었을 시에 도움이 됩니다."
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:163
 #, fuzzy
@@ -21159,9 +21153,8 @@ msgid "Board Finish"
 msgstr "보드 마감"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:94 pcbnew/dialogs/dialog_plot.cpp:957
-#, fuzzy
 msgid "Solder Mask/Paste"
-msgstr "Solder paste Copper"
+msgstr "솔더 마스크/페이스트"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:96
 #, fuzzy
@@ -21343,7 +21336,7 @@ msgstr "지역"
 #: pcbnew/dialogs/dialog_board_statistics.cpp:714
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:37
 msgid "Components"
-msgstr "컴포넌트"
+msgstr "부품"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:720
 msgid "Drill holes"
@@ -21363,9 +21356,8 @@ msgid "Subtract holes from board area"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:201
-#, fuzzy
 msgid "Exclude components with no pins"
-msgstr "마지막 컴포넌트 변경 포함"
+msgstr "핀이 없는 부품 제외"
 
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:232
 #, fuzzy
@@ -22662,7 +22654,7 @@ msgstr "다른 옵션"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:112
 msgid "Ignore virtual components"
-msgstr "가상 구성 요소 무시"
+msgstr "가상 부품을 무시"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:115
 msgid "Substitute similarly named models"
@@ -24393,7 +24385,7 @@ msgstr "네트리스트에 지정된 값으로 풋프린트 대체"
 
 #: pcbnew/dialogs/dialog_netlist_base.cpp:57
 msgid "Delete footprints with no components in netlist"
-msgstr "네트리스트에 컴포넌트가 없는 풋프린트 삭제"
+msgstr "네트리스트에 부품이 없는 풋프린트 삭제"
 
 #: pcbnew/dialogs/dialog_netlist_base.cpp:60
 msgid "Delete tracks shorting multiple nets"
@@ -24620,7 +24612,7 @@ msgstr "경고: 스루홀 패드에는 홀이 없습니다."
 msgid ""
 "Warning: Connector pads normally have no solder paste. Use an SMD pad "
 "instead."
-msgstr ""
+msgstr "경고: 연결 패드는 보통 솔더 페이스트가 없습니다. SMD 패드를 대신 사용하세요."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1352
 #, fuzzy
@@ -24908,14 +24900,12 @@ msgid "Back adhesive"
 msgstr "흑백 이미지"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:524
-#, fuzzy
 msgid "Front solder paste"
-msgstr "Solder paste Cmp"
+msgstr "전면 솔더 페이스트"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:527
-#, fuzzy
 msgid "Back solder paste"
-msgstr "Solder paste Cmp"
+msgstr "후면 솔더 페이스트"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:533
 #, fuzzy
@@ -24923,9 +24913,8 @@ msgid "Back silk screen"
 msgstr "Silkscreen Cmp"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:539
-#, fuzzy
 msgid "Back solder mask"
-msgstr "Solder mask Cmp"
+msgstr "후면 솔더 마스크"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:542
 msgid "Drafting notes"
@@ -34675,9 +34664,8 @@ msgid "Place Selected Footprints"
 msgstr "선택된 부품 보기"
 
 #: pcbnew/tools/pcb_actions.cpp:1274
-#, fuzzy
 msgid "Performs automatic placement of selected components"
-msgstr "자동 패키지 연결"
+msgstr "선택한 부품에 대해 자동 배치를 수행"
 
 #: pcbnew/tools/pcb_actions.cpp:1278
 #, fuzzy
@@ -34686,7 +34674,7 @@ msgstr "풋프린트"
 
 #: pcbnew/tools/pcb_actions.cpp:1279
 msgid "Performs automatic placement of components outside board area"
-msgstr ""
+msgstr "기판 영역 밖에 있는 부품에 대해 자동 배치를 수행"
 
 #: pcbnew/tools/pcb_actions.cpp:1287
 #, fuzzy
@@ -35249,14 +35237,12 @@ msgid "Adhesive on board's back"
 msgstr ""
 
 #: pcbnew/widgets/appearance_controls.cpp:1512
-#, fuzzy
 msgid "Solder paste on board's front"
-msgstr "Solder paste Copper"
+msgstr "기판 정면의 솔더 페이스트"
 
 #: pcbnew/widgets/appearance_controls.cpp:1513
-#, fuzzy
 msgid "Solder paste on board's back"
-msgstr "Solder paste Copper"
+msgstr "기판 후면의 솔더 페이스트"
 
 #: pcbnew/widgets/appearance_controls.cpp:1514
 msgid "Silkscreen on board's front"
@@ -35268,14 +35254,12 @@ msgid "Silkscreen on board's back"
 msgstr "Silkscreen Copper"
 
 #: pcbnew/widgets/appearance_controls.cpp:1516
-#, fuzzy
 msgid "Solder mask on board's front"
-msgstr "Solder mask Copper"
+msgstr "기판 정면의 솔더 마스크"
 
 #: pcbnew/widgets/appearance_controls.cpp:1517
-#, fuzzy
 msgid "Solder mask on board's back"
-msgstr "Solder mask Copper"
+msgstr "기판 후면의 솔더 마스크"
 
 #: pcbnew/widgets/appearance_controls.cpp:1518
 #, fuzzy
