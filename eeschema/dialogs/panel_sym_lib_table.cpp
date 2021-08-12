@@ -813,7 +813,7 @@ bool PANEL_SYM_LIB_TABLE::convertLibrary( const wxString& aLibrary, const wxStri
     SCH_PLUGIN::SCH_PLUGIN_RELEASER    kicadPI( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_KICAD ) );
     std::vector<LIB_SYMBOL*>           symbols;
     std::vector<LIB_SYMBOL*>           newSymbols;
-    std::map<LIB_SYMBOL*, LIB_SYMBOL*>  symbolMap;
+    std::map<LIB_SYMBOL*, LIB_SYMBOL*> symbolMap;
 
     try
     {
@@ -834,6 +834,8 @@ bool PANEL_SYM_LIB_TABLE::convertLibrary( const wxString& aLibrary, const wxStri
             if( symbol->IsAlias() )
                 continue;
 
+            symbol->SetName( EscapeString( symbol->GetName(), CTX_LIBID ) );
+
             newSymbols.push_back( new LIB_SYMBOL( *symbol ) );
             symbolMap[symbol] = newSymbols.back();
         }
@@ -843,6 +845,8 @@ bool PANEL_SYM_LIB_TABLE::convertLibrary( const wxString& aLibrary, const wxStri
         {
             if( !symbol->IsAlias() )
                 continue;
+
+            symbol->SetName( EscapeString( symbol->GetName(), CTX_LIBID ) );
 
             newSymbols.push_back( new LIB_SYMBOL( *symbol ) );
             newSymbols.back()->SetParent( symbolMap[ symbol->GetParent().lock().get() ] );
