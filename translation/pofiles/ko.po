@@ -16,7 +16,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
 "PO-Revision-Date: 2021-08-12 12:20+0000\n"
-"Last-Translator: 서범기 <joonhoflow@naver.com>\n"
+"Last-Translator: 킴슨김랑기 <korearf@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
 "Language: ko\n"
@@ -12751,7 +12751,6 @@ msgid "Error: duplicate sheet names. Continue?"
 msgstr "오류: 시트 이름이 중복됩니다. 계속합니까?"
 
 #: eeschema/pin_type.cpp:56
-#, fuzzy
 msgid "Free"
 msgstr "자유"
 
@@ -20906,7 +20905,7 @@ msgid ""
 "RefDes: %s Footprint: %s:%s at %s on PCB."
 msgstr ""
 "\n"
-"참조 지정자: %s 풋프린트: %s:%s가 PCB의 %s에 있음"
+"참조 지정자: %s 풋프린트: %s:%s가 PCB의 %s에 있음."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:588
 msgid "Reannotate anyway?"
