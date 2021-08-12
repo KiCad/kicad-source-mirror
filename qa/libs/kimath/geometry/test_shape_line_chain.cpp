@@ -290,5 +290,34 @@ BOOST_AUTO_TEST_CASE( NearestPointPt )
 }
 
 
+// Test SHAPE_LINE_CHAIN::Replace( SHAPE_LINE_CHAIN )
+BOOST_AUTO_TEST_CASE( ReplaceChain )
+{
+    BOOST_TEST_INFO( "8949 crash" );
+
+    std::vector<VECTOR2I> linePts = {
+        { 206000000, 140110000 }, { 192325020, 140110000 }, { 192325020, 113348216 },
+        { 192251784, 113274980 }, { 175548216, 113274980 }, { 175474980, 113348216 },
+        { 175474980, 136694980 }, { 160774511, 121994511 }, { 160774511, 121693501 },
+        { 160086499, 121005489 }, { 159785489, 121005489 }, { 159594511, 120814511 },
+        { 160086499, 120814511 }, { 160774511, 120126499 }, { 160774511, 119153501 },
+        { 160086499, 118465489 }, { 159113501, 118465489 }, { 158425489, 119153501 },
+        { 158425489, 119645489 }, { 157325020, 118545020 }, { 157325020, 101925020 },
+        { 208674980, 101925020 }, { 208674980, 145474980 }, { 192325020, 145474980 },
+        { 192325020, 140110000 }
+    };
+
+    SHAPE_LINE_CHAIN baseChain( linePts, false );
+    baseChain.SetWidth( 250000 );
+    BOOST_CHECK_EQUAL( baseChain.PointCount(), linePts.size() );
+
+    SHAPE_LINE_CHAIN replaceChain( { VECTOR2I( 192325020, 140110000 ) }, false );
+    BOOST_CHECK_EQUAL( replaceChain.PointCount(), 1 );
+
+    baseChain.Replace( 1, 23, replaceChain );
+
+    BOOST_CHECK_EQUAL( baseChain.PointCount(), linePts.size() - ( 23 - 1 ) );
+}
+
 
 BOOST_AUTO_TEST_SUITE_END()
