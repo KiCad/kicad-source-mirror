@@ -16,7 +16,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
 "PO-Revision-Date: 2021-08-12 12:20+0000\n"
-"Last-Translator: Ji Yoon Choi <chichoon.choi@gmail.com>\n"
+"Last-Translator: 서범기 <joonhoflow@naver.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
 "Language: ko\n"
@@ -12507,9 +12507,8 @@ msgid "No alternate body style found for symbol '%s' in library '%s'."
 msgstr "라이브러리'%s'에서 기호'%s'의 대체 스타일을 찾 을 수 없습니다."
 
 #: eeschema/hierarch.cpp:88
-#, fuzzy
 msgid "Navigator"
-msgstr "내비게이터"
+msgstr "네비게이터"
 
 #: eeschema/hierarch.cpp:269
 msgid "Root"
@@ -12853,9 +12852,8 @@ msgid "Failed to save rescue library %s."
 msgstr "복구 라이브러리 %s를 저장하는 데에 실패하였습니다."
 
 #: eeschema/project_rescue.cpp:839
-#, fuzzy
 msgid "Error occurred saving project specific symbol library table."
-msgstr "프로젝트별 기호 라이브러리 테이블을 저장하는 동안 오류가 발생했습니다."
+msgstr "프로젝트별 심볼 라이브러리 테이블을 저장하는 동안 오류가 발생했습니다."
 
 #: eeschema/sch_base_frame.cpp:218
 #, c-format
@@ -13011,9 +13009,9 @@ msgid "Plugin \"%s\" does not implement the \"%s\" function."
 msgstr "플러그인 \"%s\"은 \"%s\" 기능을 구현하지 않습니다."
 
 #: eeschema/sch_io_mgr.cpp:36 pcbnew/io_mgr.cpp:43
-#, fuzzy, c-format
+#, c-format
 msgid "Plugin type \"%s\" is not found."
-msgstr "%s 파일을 찾을 수 없습니다."
+msgstr "플러그인 타입 \"%s\"을 찾을 수 없습니다."
 
 #: eeschema/sch_io_mgr.cpp:92
 #, c-format
@@ -13036,9 +13034,9 @@ msgid "Vertical Graphic Line, length %s"
 msgstr "수직 그래픽 라인, 길이 %s"
 
 #: eeschema/sch_line.cpp:726
-#, c-format, fuzzy
+#, c-format
 msgid "Horizontal Wire, length %s"
-msgstr "수평 선, 길이 %s"
+msgstr "수평 도선, 길이 %s"
 
 #: eeschema/sch_line.cpp:727
 #, c-format
@@ -13082,9 +13080,8 @@ msgid "Assigned Netclass"
 msgstr "할당된 네트클래스"
 
 #: eeschema/sch_marker.cpp:165
-#, fuzzy
 msgid "Electrical Rule Check Error"
-msgstr "회로도 ERC"
+msgstr "전기적 규칙 검사 오류"
 
 #: eeschema/sch_marker.h:96
 msgid "ERC Marker"
@@ -13099,9 +13096,8 @@ msgid "Enable <b>debug</b> logging for Symbol*() functions in this SCH_PLUGIN."
 msgstr "이 SCH_PLUGIN에서 Symbol*() 함수에 대한 <b>debug</b> 로깅을 활성화 합니다 ."
 
 #: eeschema/sch_plugin.cpp:142
-#, fuzzy
 msgid "Regular expression <b>symbol name</b> filter."
-msgstr "정규식 <b>기호 이름</b> 필터."
+msgstr "정규 표현식 <b>기호 이름</b> 필터."
 
 #: eeschema/sch_plugin.cpp:146 pcbnew/plugin.cpp:162
 msgid ""
@@ -13124,9 +13120,9 @@ msgstr "SCH_PLUGIN::Symbol*() 함수를 실행하는 python 심볼을 입력하�
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:251
 #: pcbnew/plugins/altium/altium_pcb.cpp:65
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot open file '%s'."
-msgstr "%s 파일을 만들 수 없습니다."
+msgstr "'%s' 파일을 열 수 없습니다."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:315
 #, c-format
@@ -13139,9 +13135,9 @@ msgid "Unknown Record id: %d."
 msgstr "알 수 없는 레코드 ID: %d."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:604
-#, fuzzy, c-format
+#, c-format
 msgid "Pin's owner (%d) not found."
-msgstr "파일 이름의 소유자(%d)를 찾을 수 없습니다."
+msgstr "핀의 소유자(%d)를 찾을 수 없습니다."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:649
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1833
@@ -13161,9 +13157,9 @@ msgid "Pin has unexpected inner edge type."
 msgstr "핀에 예기치 않은 내부 모서리 타입이 있습니다."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:831
-#, fuzzy, c-format
+#, c-format
 msgid "Label's owner (%d) not found."
-msgstr "파일 이름의 소유자(%d)를 찾을 수 없습니다."
+msgstr "라벨의 소유자(%d)를 찾을 수 없습니다."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:948
 #, c-format
@@ -13171,43 +13167,43 @@ msgid "Bezier has %d control points. At least 2 are expected."
 msgstr "베지어 곡선에는 %d 개의 조절점이 있습니다. 최소 2개가 필요합니다."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1005
-#, fuzzy, c-format
+#, c-format
 msgid "Bezier's owner (%d) not found."
-msgstr "시트 항목의 소유자(%d)를 찾을 수 없습니다."
+msgstr "베지에의 소유자(%d)를 찾을 수 없습니다."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1091
-#, fuzzy, c-format
+#, c-format
 msgid "Polyline's owner (%d) not found."
-msgstr "파일 이름의 소유자(%d)를 찾을 수 없습니다."
+msgstr "폴리라인의 소유자(%d)를 찾을 수 없습니다."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1150
-#, fuzzy, c-format
+#, c-format
 msgid "Polygon's owner (%d) not found."
-msgstr "파일 이름의 소유자(%d)를 찾을 수 없습니다."
+msgstr "다각형의 소유자(%d)를 찾을 수 없습니다."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1231
-#, fuzzy, c-format
+#, c-format
 msgid "Rounded rectangle's owner (%d) not found."
-msgstr "시트 이름의 소유자(%d)를 찾을 수 없습니다."
+msgstr "모서리가 둥근 직사각형의 소유자(%d)를 찾을 수 없습니다."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1268
 msgid "Arc drawing on schematic not currently supported."
 msgstr "현재 회로도의 원호 그리기가 지원되지 않습니다."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1278
-#, fuzzy, c-format
+#, c-format
 msgid "Arc's owner (%d) not found."
-msgstr "시트 항목의 소유자(%d)를 찾을 수 없습니다."
+msgstr "호의 소유자(%d)를 찾을 수 없습니다."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1339
-#, fuzzy, c-format
+#, c-format
 msgid "Line's owner (%d) not found."
-msgstr "파일 이름의 소유자(%d)를 찾을 수 없습니다."
+msgstr "라인의 소유자(%d)를 찾을 수 없습니다."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1410
-#, fuzzy, c-format
+#, c-format
 msgid "Rectangle's owner (%d) not found."
-msgstr "시트 이름의 소유자(%d)를 찾을 수 없습니다."
+msgstr "직사각형의 소유자(%d)를 찾을 수 없습니다."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1478
 #, c-format
@@ -13229,9 +13225,9 @@ msgid "Port %s has no connections."
 msgstr "포트 %s에 연결이 없습니다."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2073
-#, fuzzy, c-format
+#, c-format
 msgid "Embedded file %s not found in storage."
-msgstr "%s 파일을 찾을 수 없습니다."
+msgstr "내장된 파일 %s이(가) 스토리지에서 찾을 수 없습니다."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2090
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2109
@@ -13255,19 +13251,19 @@ msgid "Filename's owner (%d) not found."
 msgstr "파일 이름의 소유자(%d)를 찾을 수 없습니다."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2250
-#, fuzzy, c-format
+#, c-format
 msgid "Designator's owner (%d) not found."
-msgstr "시트 항목의 소유자(%d)를 찾을 수 없습니다."
+msgstr "지정자의 소유자(%d)를 찾을 수 없습니다."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2405
-#, fuzzy, c-format
+#, c-format
 msgid "Implementation's owner (%d) not found."
-msgstr "파일 이름의 소유자(%d)를 찾을 수 없습니다."
+msgstr "구현의 소유자(%d)를 찾을 수 없습니다."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2415
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint's owner (%d) not found."
-msgstr "파일 이름의 소유자(%d)를 찾을 수 없습니다."
+msgstr "풋프린트의 소유자(%d)를 찾을 수 없습니다."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:71
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:69
@@ -14104,14 +14100,12 @@ msgid "The field cannot contain %s character(s)."
 msgstr "필드는 %s 문자를 포함할 수 없습니다."
 
 #: eeschema/sch_validators.cpp:138
-#, fuzzy
 msgid "The name of the field cannot be empty."
-msgstr "%s 라이브러리를 찾을 수 없습니다."
+msgstr "필드의 이름은 비워 둘 수 없습니다."
 
 #: eeschema/sch_validators.cpp:140
-#, fuzzy
 msgid "The value of the field cannot be empty."
-msgstr "%s 라이브러리를 찾을 수 없습니다."
+msgstr "필드의 값은 비워 둘 수 없습니다."
 
 #: eeschema/sch_validators.cpp:151
 msgid "carriage return"
@@ -14180,23 +14174,20 @@ msgid ""
 msgstr "전체 회로도를 불러올 수 없습니다.  계층 시트 회로도를 불러오는 중에 오류가 발생하였습니다."
 
 #: eeschema/sheet.cpp:150
-#, fuzzy
 msgid "Schematic Load Error"
-msgstr "회로도 계층구조 내비게이터"
+msgstr "회로도 로드 오류"
 
 #: eeschema/sheet.cpp:153
-#, fuzzy
 msgid "Use partial schematic"
-msgstr "회로도 인쇄"
+msgstr "부분적인 회로도를 사용하시오"
 
 #: eeschema/sheet.cpp:206
 msgid "Continue Load"
 msgstr "계속 로드"
 
 #: eeschema/sheet.cpp:207
-#, fuzzy
 msgid "Cancel Load"
-msgstr "취소"
+msgstr "로드 취소"
 
 #: eeschema/sheet.cpp:224
 msgid ""
@@ -14209,9 +14200,8 @@ msgstr ""
 
 #: eeschema/sheet.cpp:227 eeschema/sheet.cpp:268 eeschema/sheet.cpp:317
 #: eeschema/sheet.cpp:378
-#, fuzzy
 msgid "Continue Load Schematic"
-msgstr "새 회로도 (&S)"
+msgstr "회로도 로드 진행"
 
 #: eeschema/sheet.cpp:264
 #, c-format
@@ -14263,14 +14253,12 @@ msgid "Do not show this message again."
 msgstr "이 메시지를 다시 표시하지 마십시오."
 
 #: eeschema/sheet.cpp:571
-#, fuzzy
 msgid "Create New Sheet"
-msgstr "새 디렉토리 만들기"
+msgstr "새 시트 만들기"
 
 #: eeschema/sheet.cpp:572
-#, fuzzy
 msgid "Discard New Sheet"
-msgstr "변경 없음"
+msgstr "새로운 시트 버리기"
 
 #: eeschema/sim/sim_panel_base.cpp:91
 msgid ""
@@ -14298,9 +14286,8 @@ msgid "Probe"
 msgstr "프로브"
 
 #: eeschema/sim/sim_plot_frame.cpp:181
-#, fuzzy
 msgid "Probe signals on the schematic"
-msgstr "회로도 인쇄"
+msgstr "회로도에서의 신호 조사"
 
 #: eeschema/sim/sim_plot_frame.cpp:182 eeschema/sim/sim_plot_frame_base.cpp:242
 msgid "Tune"
@@ -14311,14 +14298,12 @@ msgid "Tune component values"
 msgstr "컴포넌트 값 조정"
 
 #: eeschema/sim/sim_plot_frame.cpp:184
-#, fuzzy
 msgid "Sim Parameters"
-msgstr "패드 속성"
+msgstr "시뮬레이션 매개변수"
 
 #: eeschema/sim/sim_plot_frame.cpp:185
-#, fuzzy
 msgid "Simulation parameters and settings"
-msgstr "3D 설정"
+msgstr "시뮬레이션 매개변수 및 설정"
 
 #: eeschema/sim/sim_plot_frame.cpp:365 eeschema/sim/sim_plot_frame_base.h:127
 msgid "Spice Simulator"
@@ -20962,35 +20947,35 @@ msgstr "풋프린트 값"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:45
 msgid "Horizontally: top left to bottom right"
-msgstr ""
+msgstr "수평적으로: 왼쪽 상단에서 오른쪽 하단"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:56
 msgid "Horizontally: top right to bottom left"
-msgstr ""
+msgstr "수평적으로: 오른쪽 상단에서 왼쪽 하단"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:67
 msgid "Horizontally: bottom left to top right"
-msgstr ""
+msgstr "수평적으로: 왼쪽 하단에서 오른쪽 상단"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:78
 msgid "Horizontally:: bottom right to top left"
-msgstr ""
+msgstr "수평적으로:: 오른쪽 하단에서 왼쪽 상단"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:86
 msgid "Vertically: top left to bottom right"
-msgstr ""
+msgstr "수직적으로: 왼쪽 상단에서 오른쪽 하단"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:97
 msgid "Vertically: top right to bottom left"
-msgstr ""
+msgstr "수직적으로: 오른쪽 상단에서 왼쪽 하단"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:108
 msgid "Vertically: bottom left to top right"
-msgstr ""
+msgstr "수직적으로: 왼쪽 하단에서 오른쪽 상단"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:119
 msgid "Vertically: bottom right to top left"
-msgstr ""
+msgstr "수직적으로: 오른쪽 하단에서 왼쪽 상단"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:132
 msgid "Based on location of:"
@@ -21006,11 +20991,15 @@ msgstr "위치 반올림하여 정렬:"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:144
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:151
+#, fuzzy
 msgid ""
 "Component position will be rounded\n"
 "to this grid before sorting.\n"
 "This helps with misaligned parts."
 msgstr ""
+"구성 요소의 위치는 반올림됩니다\n"
+"이 그리드에 정렬 전에.\n"
+"이것은 잘못 정렬된 부품에 도움이 됩니다."
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:163
 #, fuzzy
