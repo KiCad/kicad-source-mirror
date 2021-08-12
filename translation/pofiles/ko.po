@@ -15,8 +15,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
-"PO-Revision-Date: 2021-08-12 08:20+0000\n"
-"Last-Translator: 강명구 <mg_@kakao.com>\n"
+"PO-Revision-Date: 2021-08-12 12:20+0000\n"
+"Last-Translator: Ji Yoon Choi <chichoon.choi@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
 "Language: ko\n"
@@ -19921,14 +19921,12 @@ msgid "Conductor losses (odd):"
 msgstr "도체 손실 (odd):"
 
 #: pcb_calculator/transline_ident.cpp:306
-#, fuzzy
 msgid "Dielectric losses (even):"
-msgstr "유전 손실(짝수):"
+msgstr "유전 손실 (even):"
 
 #: pcb_calculator/transline_ident.cpp:307
-#, fuzzy
 msgid "Dielectric losses (odd):"
-msgstr "유전 손실(홀수):"
+msgstr "유전 손실 (odd):"
 
 #: pcb_calculator/transline_ident.cpp:333
 msgid "Zeven"
@@ -19936,7 +19934,7 @@ msgstr "Zeven"
 
 #: pcb_calculator/transline_ident.cpp:334
 msgid "Even mode impedance (lines driven by common voltages)"
-msgstr "우수 모드 임피던스 (선로는 동일 전압에서 구동됨)"
+msgstr "Even 모드 임피던스 (선로는 동일 전압에서 구동됨)"
 
 #: pcb_calculator/transline_ident.cpp:337
 msgid "Zodd"
@@ -19944,7 +19942,7 @@ msgstr "Zodd"
 
 #: pcb_calculator/transline_ident.cpp:338
 msgid "Odd mode impedance (lines driven by opposite (differential) voltages)"
-msgstr "기수 모드 임피던스 (선로는 역 (차동) 전압에서 구동됨)"
+msgstr "odd 모드 임피던스 (선로는 역 (차동) 전압에서 구동됨)"
 
 #: pcb_calculator/transline_ident.cpp:357
 msgid "Distance between strip and top metal"
@@ -20440,9 +20438,8 @@ msgid "32"
 msgstr "32"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:37
-#, fuzzy
 msgid "Impedance controlled"
-msgstr "펜 제어"
+msgstr "임피던스 제어"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:38
 msgid ""
@@ -21984,6 +21981,7 @@ msgid ""
 "Positive angles represent an anti-clockwise rotation. An angle of 0 will "
 "produce a full circle divided evenly into \"Count\" portions."
 msgstr ""
+"각도가 양수일 경우 반시계 방향 회전을 의미합니다. 각도가 0일 경우엔 완전한 원을 \"Count\" 부분으로 균등하게 분할합니다."
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:259
 msgid "How many items in the array."
@@ -22180,7 +22178,7 @@ msgstr "뒷자리 0 표시하지 않음"
 msgid ""
 "When checked, \"0.100\" will be shown as \"0.1\" even if the precision "
 "setting is higher"
-msgstr ""
+msgstr "체크할 경우, 정밀도가 더 높게 설정되어 있어도 \"0.100\" 은 \"0.1\" 로 표시됩니다"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:210
 msgid "Dimension Text"
@@ -25960,9 +25958,8 @@ msgid "Keep out tracks"
 msgstr "트랙 삭제"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:49
-#, fuzzy
 msgid "Prevent tracks from routing into this area"
-msgstr "트랙이 이 영역으로 라우팅되지 않도록 방지"
+msgstr "배선이 이 영역으로 라우팅되지 않도록 방지"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:53
 #, fuzzy
@@ -28249,7 +28246,7 @@ msgstr "기판과 네트클래스 클리어런스는 구리 개체 사이에만 
 
 #: pcbnew/drc/drc_engine.cpp:930
 msgid "Keepout constraint not met."
-msgstr "킵 아웃 제약 조건이 충족되지 않았습니다."
+msgstr "킵아웃 제약 조건이 충족되지 않았습니다."
 
 #: pcbnew/drc/drc_engine.cpp:932
 msgid "Disallow constraint not met."
@@ -31082,7 +31079,7 @@ msgid ""
 "equivalent. The area is neither a via nor route keepout area. The area was "
 "not imported."
 msgstr ""
-"CADSTAR 영역 '%s' (라이브러리 컴포넌트 '%s' 에 있음) 은 KiCad에서 대응되지 않습니다. 비아 영역도, 라우트 킵아웃 "
+"CADSTAR 영역 '%s' (라이브러리 컴포넌트 '%s' 에 있음) 은 KiCad에서 대응되지 않습니다. 비아 영역도, 라우트 금지 "
 "영역도 아닙니다. 영역은 불러와지지 않습니다."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:931
@@ -32856,9 +32853,8 @@ msgid "Hole constraint: min %s."
 msgstr ""
 
 #: pcbnew/tools/board_inspection_tool.cpp:748
-#, fuzzy
 msgid "Keepouts"
-msgstr "보존"
+msgstr "킵아웃"
 
 #: pcbnew/tools/board_inspection_tool.cpp:750
 msgid "Keepout resolution for:"
@@ -33351,9 +33347,8 @@ msgid "Add Rule Area"
 msgstr "아래로 추가"
 
 #: pcbnew/tools/pcb_actions.cpp:168
-#, fuzzy
 msgid "Add a rule area (keepout)"
-msgstr "시트 추가"
+msgstr "규칙 영역 (킵아웃) 추가"
 
 #: pcbnew/tools/pcb_actions.cpp:174
 msgid "Add a Zone Cutout"
@@ -34040,7 +34035,7 @@ msgstr "선택된 항목 잘라내기"
 
 #: pcbnew/tools/pcb_actions.cpp:673
 msgid "Prevent items from being moved and/or resized on the canvas"
-msgstr ""
+msgstr "캔버스에서 개체가 움직이거나 크기가 변형되는 것을 방지"
 
 #: pcbnew/tools/pcb_actions.cpp:678
 msgid "Allow items to be moved and/or resized on the canvas"
