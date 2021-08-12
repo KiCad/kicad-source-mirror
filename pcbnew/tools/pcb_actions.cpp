@@ -1121,15 +1121,15 @@ TOOL_ACTION PCB_ACTIONS::alignRight( "pcbnew.AlignAndDistribute.alignRight",
         _( "Align to Right" ),
         _( "Aligns selected items to the right edge" ), BITMAPS::align_items_right );
 
-TOOL_ACTION PCB_ACTIONS::alignCenterX( "pcbnew.AlignAndDistribute.alignCenterX",
-        AS_GLOBAL, 0, "",
-        _( "Align to Vertical Center" ),
-        _( "Aligns selected items to the vertical center" ), BITMAPS::align_items_middle );
+TOOL_ACTION PCB_ACTIONS::alignCenterY( "pcbnew.AlignAndDistribute.alignCenterY", AS_GLOBAL, 0, "",
+                                       _( "Align to Vertical Center" ),
+                                       _( "Aligns selected items to the vertical center" ),
+                                       BITMAPS::align_items_center );
 
-TOOL_ACTION PCB_ACTIONS::alignCenterY( "pcbnew.AlignAndDistribute.alignCenterY",
-        AS_GLOBAL, 0, "",
-        _( "Align to Horizontal Center" ),
-        _( "Aligns selected items to the horizontal center" ), BITMAPS::align_items_center );
+TOOL_ACTION PCB_ACTIONS::alignCenterX( "pcbnew.AlignAndDistribute.alignCenterX", AS_GLOBAL, 0, "",
+                                       _( "Align to Horizontal Center" ),
+                                       _( "Aligns selected items to the horizontal center" ),
+                                       BITMAPS::align_items_middle );
 
 TOOL_ACTION PCB_ACTIONS::distributeHorizontally( "pcbnew.AlignAndDistribute.distributeHorizontally",
         AS_GLOBAL, 0, "",
