@@ -16,7 +16,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
 "PO-Revision-Date: 2021-08-12 08:20+0000\n"
-"Last-Translator: 서범기 <joonhoflow@naver.com>\n"
+"Last-Translator: 킴슨김랑기 <korearf@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
 "Language: ko\n"
@@ -612,7 +612,7 @@ msgstr "두께 비활성화"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_opengl_options_base.cpp:71
 msgid "Disable vias"
-msgstr "vias 사용 안 함"
+msgstr "비아 사용 안 함"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_opengl_options_base.cpp:74
 msgid "Disable holes"
@@ -745,7 +745,7 @@ msgstr "광선 4:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_raytracing_options_base.cpp:329
 msgid "Light 8:"
-msgstr "광선8:"
+msgstr "광선 8:"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:100
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:72
@@ -1700,7 +1700,7 @@ msgstr "라이브러리 버전 정보"
 
 #: common/dialog_about/dialog_about_base.cpp:58
 msgid "&Copy Version Info"
-msgstr "버전 정보 복사(&C)"
+msgstr "버전 정보 복사 (&C)"
 
 #: common/dialog_about/dialog_about_base.cpp:59
 msgid "Copy KiCad version info to the clipboard"
@@ -1708,7 +1708,7 @@ msgstr "클립보드에 KiCad 버전 정보 복사"
 
 #: common/dialog_about/dialog_about_base.cpp:63
 msgid "&Report Bug"
-msgstr "버그 제보하기(&R)"
+msgstr "버그 제보하기 (&R)"
 
 #: common/dialog_about/dialog_about_base.cpp:64 common/tool/actions.cpp:644
 msgid "Report a problem with KiCad"
@@ -3946,7 +3946,7 @@ msgstr "그래픽 가속 활성화"
 
 #: common/eda_draw_frame.cpp:1097
 msgid "&Enable Acceleration"
-msgstr "가속 활성화(&E)"
+msgstr "가속 활성화 (&E)"
 
 #: common/eda_draw_frame.cpp:1097
 msgid "&No Thanks"
@@ -12157,7 +12157,6 @@ msgid "Conflict problem between pins"
 msgstr "핀 간 충돌 문제"
 
 #: eeschema/erc_item.cpp:70
-#, fuzzy
 msgid "Mismatch between hierarchical labels and sheet pins"
 msgstr "계층 레이블과 시트 핀 간의 불일치"
 
@@ -12471,7 +12470,6 @@ msgid "Schematic '%s' is already open."
 msgstr "회로도 '%s'이(가) 이미 열려 있습니다."
 
 #: eeschema/files-io.cpp:1122
-#, fuzzy
 msgid "Importing Schematic"
 msgstr "회로도 가져오기"
 
@@ -12670,7 +12668,6 @@ msgid "Non-KiCad Schematic..."
 msgstr "비 KiCad 회로도..."
 
 #: eeschema/menubar.cpp:100
-#, fuzzy
 msgid ""
 "Replace current schematic sheet with one imported from another application"
 msgstr "현재 회로도 시트를 다른 응용 프로그램에서 가져온 것으로 교체"
@@ -12687,7 +12684,6 @@ msgid "Export"
 msgstr "내보내기"
 
 #: eeschema/menubar.cpp:112
-#, fuzzy
 msgid "Drawing to Clipboard"
 msgstr "클립보드에 그리기"
 
@@ -12701,33 +12697,33 @@ msgstr "네트리스트…"
 #: gerbview/menubar.cpp:174 pagelayout_editor/menubar.cpp:116
 #: pcbnew/menubar_footprint_editor.cpp:138 pcbnew/menubar_pcb_editor.cpp:244
 msgid "&Units"
-msgstr "단위(&U)"
+msgstr "단위 (&U)"
 
 #: eeschema/menubar.cpp:286
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:179
 #: pagelayout_editor/menubar.cpp:169 pcbnew/menubar_footprint_editor.cpp:244
 #: pcbnew/menubar_pcb_editor.cpp:454
 msgid "&Place"
-msgstr "장소 (&P)"
+msgstr "배치 (&P)"
 
 #: eeschema/menubar.cpp:287
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:180
 #: pagelayout_editor/menubar.cpp:170 pcbnew/menubar_footprint_editor.cpp:245
 #: pcbnew/menubar_pcb_editor.cpp:456
 msgid "&Inspect"
-msgstr "&검사"
+msgstr "검사 (&I)"
 
 #: eeschema/menubar.cpp:288 gerbview/menubar.cpp:225 kicad/menubar.cpp:182
 #: pcbnew/menubar_footprint_editor.cpp:246 pcbnew/menubar_pcb_editor.cpp:457
 msgid "&Tools"
-msgstr "도구(&T)"
+msgstr "도구 (&T)"
 
 #: eeschema/menubar.cpp:289
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:181
 #: pagelayout_editor/menubar.cpp:171 pcbnew/menubar_footprint_editor.cpp:247
 #: pcbnew/menubar_pcb_editor.cpp:458
 msgid "P&references"
-msgstr "설정 (&P)"
+msgstr "설정 (&R)"
 
 #: eeschema/netlist_exporters/netlist_exporter_pspice.cpp:111
 #, c-format
@@ -12758,7 +12754,7 @@ msgstr "오류: 시트 이름이 중복됩니다. 계속합니까?"
 #: eeschema/pin_type.cpp:56
 #, fuzzy
 msgid "Free"
-msgstr "무료"
+msgstr "자유"
 
 #: eeschema/pin_type.cpp:57
 msgid "Unspecified"
@@ -12880,14 +12876,12 @@ msgstr ""
 "%s"
 
 #: eeschema/sch_bus_entry.cpp:420
-#, fuzzy
 msgid "Bus to Wire Entry"
-msgstr "버스에 버스 추가"
+msgstr "버스 - 와이어 엔트리"
 
 #: eeschema/sch_bus_entry.cpp:426
-#, fuzzy
 msgid "Bus to Bus Entry"
-msgstr "버스에 버스 추가"
+msgstr "버스 - 버스 엔트리"
 
 #: eeschema/sch_bus_entry.cpp:490 eeschema/sch_line.cpp:881
 msgid "Wire"
@@ -12898,9 +12892,8 @@ msgid "Bus"
 msgstr "버스"
 
 #: eeschema/sch_bus_entry.cpp:494
-#, fuzzy
 msgid "Bus Entry Type"
-msgstr "버스 설정: 45도"
+msgstr "버스 엔트리 유형"
 
 #: eeschema/sch_connection.cpp:404
 msgid "Connection Name"
@@ -12942,14 +12935,13 @@ msgid "Save changes to '%s' before closing?"
 msgstr "닫기 전에 '%s'에 대한 변경 사항을 저장하시겠습니까?"
 
 #: eeschema/sch_edit_frame.cpp:828
-#, fuzzy
 msgid ""
 "Cannot update the PCB, because the Schematic Editor is opened in stand-alone "
 "mode. In order to create/update PCBs from schematics, launch the KiCad shell "
 "and create a project."
 msgstr ""
 "회로도 편집기가 독립 실행형 모드에서 열리기 때문에 PCB를 업데이트할 수 없습니다. 회로도에서 PCB를 생성/업데이트하려면 KiCad "
-"셸을 실행하고 프로젝트를 생성합니다."
+"매니저를 실행하고 프로젝트를 생성합니다."
 
 #: eeschema/sch_edit_frame.cpp:959
 msgid "New Schematic"
@@ -12997,7 +12989,6 @@ msgid "File:"
 msgstr "파일:"
 
 #: eeschema/sch_field.cpp:515
-#, fuzzy
 msgid "<root sheet>"
 msgstr "<루트 시트>"
 
@@ -13011,9 +13002,8 @@ msgid "Back to Previous Selected Sheet"
 msgstr "이전에 선택한 시트로 돌아가기"
 
 #: eeschema/sch_field.cpp:556
-#, fuzzy
 msgid "Intersheet References"
-msgstr "EESchema 설정"
+msgstr "시트 간 참조"
 
 #: eeschema/sch_io_mgr.cpp:35 pcbnew/io_mgr.cpp:42
 #, c-format, fuzzy
@@ -35658,14 +35648,12 @@ msgid "Inherited"
 msgstr "상속"
 
 #: pcbnew/zone.cpp:1417
-#, fuzzy
 msgid "Min Width"
-msgstr "선 두께"
+msgstr "최소 너비"
 
 #: pcbnew/zone.cpp:1420
-#, fuzzy
 msgid "Pad Connections"
-msgstr "패드 설정"
+msgstr "패드 연결"
 
 #: pcbnew/zone_filler.cpp:105
 #, fuzzy
@@ -35698,9 +35686,8 @@ msgid "[INFO] load failed: input line too long\n"
 msgstr ""
 
 #: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:9
-#, fuzzy
 msgid "KiCad Image Converter"
-msgstr "변환"
+msgstr "KiCad 이미지 변환기"
 
 #: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:11
 msgid "Create a component from a bitmap for use with KiCad"
@@ -35711,9 +35698,8 @@ msgid "bitmap2component"
 msgstr "bitmap2component"
 
 #: resources/linux/launchers/org.kicad.eeschema.desktop.in:10
-#, fuzzy
 msgid "KiCad Schematic Editor (Standalone)"
-msgstr "회로도 애노테이션"
+msgstr "KiCad 회로도 편집기 (독립 실행형)"
 
 #: resources/linux/launchers/org.kicad.eeschema.desktop.in:11
 msgid "Schematic Capture Tool"
@@ -35721,7 +35707,7 @@ msgstr "회로도 캡쳐 도구"
 
 #: resources/linux/launchers/org.kicad.eeschema.desktop.in:12
 msgid "Standalone schematic editor for KiCad schematics"
-msgstr ""
+msgstr "KiCad 회로도용 독립 실행형 회로도 편집기"
 
 #: resources/linux/launchers/org.kicad.eeschema.desktop.in:13
 msgid "eeschema"
@@ -35732,9 +35718,8 @@ msgid "Gerber File Viewer"
 msgstr "거버 파일 뷰어"
 
 #: resources/linux/launchers/org.kicad.gerbview.desktop.in:12
-#, fuzzy
 msgid "View Gerber files"
-msgstr "새 거버 파일 (&G)"
+msgstr "거버 파일 보기"
 
 #: resources/linux/launchers/org.kicad.gerbview.desktop.in:13
 msgid "gerbview"
@@ -35754,23 +35739,20 @@ msgid "Suite of tools for schematic design and circuit board layout"
 msgstr ""
 
 #: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:9
-#, fuzzy
 msgid "KiCad PCB Calculator"
-msgstr "시뮬레이터 실행 (&R)"
+msgstr "KiCad PCB 계산기"
 
 #: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:11
 msgid "Calculator for various electronics-related computations"
 msgstr ""
 
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:10
-#, fuzzy
 msgid "KiCad PCB Editor (Standalone)"
-msgstr "에디터 (&E)"
+msgstr "KiCad PCB 편집기(독립실행형)"
 
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:11
-#, fuzzy
 msgid "PCB layout editor"
-msgstr "텍스트 에디터"
+msgstr "PCB 레이아웃 편집기"
 
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:12
 msgid "Standalone circuit board editor for KiCad boards"
@@ -35782,7 +35764,7 @@ msgstr "pcbnew"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:13
 msgid "An EDA suite for schematic and circuit board design"
-msgstr ""
+msgstr "회로도 및 회로 기판 설계를 위한 EDA 제품군"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:50
 msgid ""
