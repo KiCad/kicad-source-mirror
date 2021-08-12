@@ -168,7 +168,10 @@ FOOTPRINT::FOOTPRINT( const FOOTPRINT& aFootprint ) :
         newGroup->GetItems().clear();
 
         for( BOARD_ITEM* member : group->GetItems() )
-            newGroup->AddItem( ptrMap[ member ] );
+        {
+            if( ptrMap.count( member ) )
+                newGroup->AddItem( ptrMap[ member ] );
+        }
     }
 
     // Copy auxiliary data: 3D_Drawings info
