@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
-"PO-Revision-Date: 2021-08-10 21:56+0000\n"
+"PO-Revision-Date: 2021-08-13 21:12+0000\n"
 "Last-Translator: VicSanRoPe <vicsanrope@protonmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/kicad/"
 "master-source/es/>\n"
@@ -15977,9 +15977,8 @@ msgid "Edit Value..."
 msgstr "Editar valor..."
 
 #: eeschema/tools/ee_actions.cpp:408
-#, fuzzy
 msgid "Displays value field dialog"
-msgstr "Diálogo de propiedades de elemento"
+msgstr "Muestra el diálogo de campo de valor"
 
 #: eeschema/tools/ee_actions.cpp:414
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:255
@@ -15987,54 +15986,46 @@ msgid "Edit Footprint..."
 msgstr "Editar huella..."
 
 #: eeschema/tools/ee_actions.cpp:414
-#, fuzzy
 msgid "Displays footprint field dialog"
-msgstr "Diálogo de propiedades de elemento"
+msgstr "Muestra el diálogo de campo de huella"
 
 #: eeschema/tools/ee_actions.cpp:420
 msgid "Autoplace Fields"
 msgstr "Emplazamiento automático de campos"
 
 #: eeschema/tools/ee_actions.cpp:420
-#, fuzzy
 msgid "Runs the automatic placement algorithm on the symbol or sheet's fields"
 msgstr ""
-"Ejecuta el algoritmo de colocación automática en los campos del símbolo"
+"Ejecuta el algoritmo de colocación automática en los campos del símbolo u "
+"hoja"
 
 #: eeschema/tools/ee_actions.cpp:425
-#, fuzzy
 msgid "Change Symbols..."
-msgstr "Reasignar símbolos..."
+msgstr "Cambiar símbolos..."
 
 #: eeschema/tools/ee_actions.cpp:426
-#, fuzzy
 msgid "Assign different symbols from the library"
-msgstr "Asignar diferentes huellas desde la librería"
+msgstr "Asignar diferentes símbolos desde la librería"
 
 #: eeschema/tools/ee_actions.cpp:431
-#, fuzzy
 msgid "Update Symbols from Library..."
-msgstr "Actualizar huellas desde la librería..."
+msgstr "Actualizar símbolos desde la librería..."
 
 #: eeschema/tools/ee_actions.cpp:432
-#, fuzzy
 msgid "Update symbols to include any changes from the library"
-msgstr "Actualizar huellas para incluir cualquier cambio desde la librería"
+msgstr "Actualizar símbolos para incluir cualquier cambio desde la librería"
 
 #: eeschema/tools/ee_actions.cpp:438
-#, fuzzy
 msgid "Assign a different symbol from the library"
-msgstr "Asignar una huella diferente desde la librería"
+msgstr "Asignar una símbolo diferente desde la librería"
 
 #: eeschema/tools/ee_actions.cpp:443
-#, fuzzy
 msgid "Update Symbol..."
-msgstr "&Nuevo símbolo..."
+msgstr "Actualizar símbolo..."
 
 #: eeschema/tools/ee_actions.cpp:444
-#, fuzzy
 msgid "Update symbol to include any changes from the library"
-msgstr "Actualizar huellas para incluir cualquier cambio desde la librería"
+msgstr "Actualizar símbolos para incluir cualquier cambio desde la librería"
 
 # Pendiente
 #: eeschema/tools/ee_actions.cpp:449
@@ -16042,32 +16033,28 @@ msgid "Assign Netclass..."
 msgstr "Asignar clase de red..."
 
 #: eeschema/tools/ee_actions.cpp:449
-#, fuzzy
 msgid "Assign a netclass to the net of the selected wire"
 msgstr "Asignar una clase de red a la red del cable seleccionado"
 
 #: eeschema/tools/ee_actions.cpp:453
-#, fuzzy
 msgid "DeMorgan Conversion"
-msgstr "Mostrar como símbolo convertido \"DeMorgan\""
+msgstr "Conversión de DeMorgan"
 
 #: eeschema/tools/ee_actions.cpp:453
 msgid "Switch between DeMorgan representations"
 msgstr "Cambiar entre las representaciones de DeMorgan"
 
 #: eeschema/tools/ee_actions.cpp:458
-#, fuzzy
 msgid "DeMorgan Standard"
-msgstr "Standard"
+msgstr "Estándar de DeMorgan"
 
 #: eeschema/tools/ee_actions.cpp:458
 msgid "Switch to standard DeMorgan representation"
 msgstr "Cambiar a la representación estándar de DeMorgan"
 
 #: eeschema/tools/ee_actions.cpp:463
-#, fuzzy
 msgid "DeMorgan Alternate"
-msgstr "Eliminar (alternativo)"
+msgstr "Alternativo de DeMorgan"
 
 #: eeschema/tools/ee_actions.cpp:463
 msgid "Switch to alternate DeMorgan representation"
@@ -16078,69 +16065,60 @@ msgid "Change to Label"
 msgstr "Cambiar a etiqueta"
 
 #: eeschema/tools/ee_actions.cpp:468
-#, fuzzy
 msgid "Change existing item to a label"
-msgstr "Existen cambios en la tabla de componentes"
+msgstr "Cambiar el elemento existente a una etiqueta"
 
 #: eeschema/tools/ee_actions.cpp:473
 msgid "Change to Hierarchical Label"
 msgstr "Cambiar a etiqueta jerárquica"
 
 #: eeschema/tools/ee_actions.cpp:473
-#, fuzzy
 msgid "Change existing item to a hierarchical label"
-msgstr "Cambiar a etiqueta jerárquica"
+msgstr "Cambiar el elemento existente a una etiqueta jerárquica"
 
 #: eeschema/tools/ee_actions.cpp:478
 msgid "Change to Global Label"
 msgstr "Cambiar a etiqueta global"
 
 #: eeschema/tools/ee_actions.cpp:478
-#, fuzzy
 msgid "Change existing item to a global label"
-msgstr "Cambiar a etiqueta global"
+msgstr "Cambiar el elemento existente a una etiqueta global"
 
 #: eeschema/tools/ee_actions.cpp:483
 msgid "Change to Text"
 msgstr "Cambiar a texto"
 
 #: eeschema/tools/ee_actions.cpp:483
-#, fuzzy
 msgid "Change existing item to a text comment"
-msgstr "Existen cambios en la tabla de componentes"
+msgstr "Cambiar el elemento existente a un comentario de texto"
 
 #: eeschema/tools/ee_actions.cpp:488
 msgid "Cleanup Sheet Pins"
 msgstr "Borrar pines de hoja"
 
 #: eeschema/tools/ee_actions.cpp:488
-#, fuzzy
 msgid "Delete unreferenced sheet pins"
-msgstr "Referencia por defecto:"
+msgstr "Eliminar pines de hoja sin referencia"
 
 #: eeschema/tools/ee_actions.cpp:492 pcbnew/tools/pcb_actions.cpp:442
 msgid "Edit Text & Graphics Properties..."
 msgstr "Editar propiedades de texto y gráficos..."
 
 #: eeschema/tools/ee_actions.cpp:493
-#, fuzzy
 msgid "Edit text and graphics properties globally across schematic"
-msgstr "Editar propiedades de texto y gráficas"
+msgstr "Editar propiedades de texto y gráficos globalmente en el esquema"
 
 #: eeschema/tools/ee_actions.cpp:498
-#, fuzzy
 msgid "Symbol Properties..."
-msgstr "Propiedades del símbolo"
+msgstr "Propiedades del símbolo..."
 
 #: eeschema/tools/ee_actions.cpp:498
-#, fuzzy
 msgid "Displays symbol properties dialog"
-msgstr "Diálogo de propiedades de elemento"
+msgstr "Mostrar el diálogo de propiedades del símbolo"
 
 #: eeschema/tools/ee_actions.cpp:503
-#, fuzzy
 msgid "Pin Table..."
-msgstr "&Tabla de pines..."
+msgstr "Tabla de pines..."
 
 #: eeschema/tools/ee_actions.cpp:503
 msgid "Displays pin table for bulk editing of pins"
@@ -16178,80 +16156,70 @@ msgid "Highlight Net"
 msgstr "Resaltar red"
 
 #: eeschema/tools/ee_actions.cpp:533
-#, fuzzy
 msgid "Highlight net under cursor"
-msgstr "Resaltar red"
+msgstr "Resaltar red bajo el cursor"
 
 #: eeschema/tools/ee_actions.cpp:544
-#, fuzzy
 msgid "Highlight Nets"
-msgstr "Resaltar red"
+msgstr "Resaltar redes"
 
 #: eeschema/tools/ee_actions.cpp:544
-#, fuzzy
 msgid "Highlight wires and pins of a net"
-msgstr "Resaltar elementos pertenecientes a esta red"
+msgstr "Resaltar cables y pines de una red"
 
 #: eeschema/tools/ee_actions.cpp:550
 msgid "Edit with Symbol Editor"
 msgstr "Editar con el Editor de símbolos"
 
 #: eeschema/tools/ee_actions.cpp:550
-#, fuzzy
 msgid "Open the symbol editor to edit the symbol"
-msgstr "Abrir el explorador de símbolos"
+msgstr "Abrir el editor de símbolos para editar el símbolo"
 
 #: eeschema/tools/ee_actions.cpp:555
 msgid "Edit Symbol Fields..."
 msgstr "Editar campos de símbolos..."
 
 #: eeschema/tools/ee_actions.cpp:555
-#, fuzzy
 msgid "Bulk-edit fields of all symbols in schematic"
-msgstr "Insertar símbolo en el esquema"
+msgstr "Editar en masa los campos de todos los símbolos en el esquema"
 
 #: eeschema/tools/ee_actions.cpp:560
 msgid "Edit Symbol Library Links..."
 msgstr "Editar referencias de librerías de símbolos..."
 
 #: eeschema/tools/ee_actions.cpp:560
-#, fuzzy
 msgid "Edit links between schematic and library symbols"
-msgstr "Editar enlaces entre símbolos de esuqema y símbolos de librería"
+msgstr "Editar enlaces entre símbolos de esquema y de librería"
 
 #: eeschema/tools/ee_actions.cpp:565
 msgid "Assign Footprints..."
 msgstr "Asignar huellas..."
 
 #: eeschema/tools/ee_actions.cpp:565
-#, fuzzy
 msgid "Run footprint assignment tool"
-msgstr "Asignación de huella"
+msgstr "Ejecutar la herramienta de asignación de huellas"
 
 #: eeschema/tools/ee_actions.cpp:570
 msgid "Import Footprint Assignments..."
 msgstr "Importar asignaciones de huella..."
 
 #: eeschema/tools/ee_actions.cpp:571
-#, fuzzy
 msgid "Import symbol footprint assignments from .cmp file created by Pcbnew"
 msgstr ""
-"Importar los campos de asociación de huellas del símbolo desde el archivo ."
-"cmp de retro-importación creado por Pcbnew"
+"Importar las asociaciones de huellas del símbolo desde el archivo .cmp "
+"creado por Pcbnew"
 
 #: eeschema/tools/ee_actions.cpp:576
 msgid "Annotate Schematic..."
 msgstr "Anotar esquema..."
 
 #: eeschema/tools/ee_actions.cpp:576
-#, fuzzy
 msgid "Fill in schematic symbol reference designators"
-msgstr "Reemplazar las referencias de los componen&tes"
+msgstr "Rellenar los indicadores de referencia de los símbolos de esquema"
 
 #: eeschema/tools/ee_actions.cpp:581
-#, fuzzy
 msgid "Schematic Setup..."
-msgstr "Hoja de esquema:"
+msgstr "Configuración de esquema..."
 
 #: eeschema/tools/ee_actions.cpp:582
 msgid "Edit schematic setup including annotation styles and electrical rules"
@@ -16260,14 +16228,12 @@ msgstr ""
 "eléctricas"
 
 #: eeschema/tools/ee_actions.cpp:587
-#, fuzzy
 msgid "Edit Sheet Page Number..."
-msgstr "Editar parámetros..."
+msgstr "Editar el número de página de hoja..."
 
 #: eeschema/tools/ee_actions.cpp:588
-#, fuzzy
 msgid "Edit the page number of the current or selected sheet"
-msgstr "El texto (o valor) del campo seleccionado"
+msgstr "Editar el número de página de la hoja actual o seleccionada"
 
 #: eeschema/tools/ee_actions.cpp:592
 msgid "Rescue Symbols..."
@@ -16278,9 +16244,8 @@ msgid "Find old symbols in project and rename/rescue them"
 msgstr "Buscar símbolos antiguos en el proyecto y renombrarlos/recuperarlos"
 
 #: eeschema/tools/ee_actions.cpp:598
-#, fuzzy
 msgid "Remap Legacy Library Symbols..."
-msgstr "Reasignar símbolos..."
+msgstr "Reasignar símbolos de librería de legado..."
 
 #: eeschema/tools/ee_actions.cpp:599
 #, fuzzy
