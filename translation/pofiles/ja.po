@@ -1,11 +1,12 @@
 # Tokita, Hiroshi <tokita.hiroshi@gmail.com>, 2021.
+# Ji Yoon Choi <chichoon.choi@gmail.com>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
-"PO-Revision-Date: 2021-08-09 02:20+0000\n"
-"Last-Translator: Tokita, Hiroshi <tokita.hiroshi@gmail.com>\n"
+"PO-Revision-Date: 2021-08-13 15:17+0000\n"
+"Last-Translator: Ji Yoon Choi <chichoon.choi@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
 "Language: ja\n"
@@ -11965,7 +11966,6 @@ msgstr "不正な行の定義"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:358
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:539
-#, fuzzy
 msgid ""
 "Empty cells will result in all rows that are invalid to be removed from the "
 "table."
@@ -13640,9 +13640,8 @@ msgid "No parent for extended symbol %s"
 msgstr "親のない拡張されたシンボル %s"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:275
-#, fuzzy
 msgid "Invalid symbol unit name"
-msgstr "不正な信号名"
+msgstr "不正なシンボルユニット名"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:283
 #, c-format
@@ -14352,15 +14351,14 @@ msgstr ""
 "階層のどこかで親シートとしてサブシートの一つに持っています。"
 
 #: eeschema/sheet.cpp:84
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The schematic '%s' has not had its symbol library links remapped to the "
 "symbol library table.  The project this schematic belongs to must first be "
 "remapped before it can be imported into the current project."
 msgstr ""
-"回路図 '%s' はシンボル ライブラリー テーブルに再マップされたシンボル ライブラ"
-"リーのリンクを持っていません。  現在のプロジェクトにインポートできるよう、こ"
-"の回路図が属しているプロジェクトは最初に再マップされなければなりません。"
+"回路図 '%s' はシンボルライブラリー テーブルに再マップされたシンボルライブラリーのリンクを持っていません。  "
+"現在のプロジェクトにインポートできるよう、この回路図が属しているプロジェクトは最初に再マップされなければなりません。"
 
 #: eeschema/sheet.cpp:147
 msgid ""
@@ -16895,13 +16893,13 @@ msgstr ""
 "<b>未ロード:</b> <i>%s</i>"
 
 #: gerbview/files.cpp:42
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "\n"
 "<b>Memory was exhausted reading:</b> <i>%s</i>"
 msgstr ""
 "\n"
-"<b>未ロード:</b> <i>%s</i>"
+"<b> <i>%s</i>を読み込み中メモリー不足</b>"
 
 #: gerbview/files.cpp:87
 msgid "Zip files"
@@ -20335,9 +20333,8 @@ msgid "Enter expected board thickness in %s (min value %s)"
 msgstr "単位 %s で希望する基板の厚さを入力 (最小値は %s)"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:182
-#, fuzzy
 msgid "Adjust not locked dielectric thickness layers"
-msgstr "基板厚から誘電体厚を更新"
+msgstr "ロックされていない誘電体厚レイヤーを更新"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:193
 #, c-format
@@ -20345,9 +20342,8 @@ msgid "Too small value (min value %s %s). Aborted"
 msgstr "値が小さすぎます（最小値%s %s）。中止します"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:213
-#, fuzzy
 msgid "All dielectric  thickness layers are locked"
-msgstr "基板厚から誘電体厚を更新"
+msgstr "全ての誘電体厚レイヤーはロックされています"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:279
 #, c-format
@@ -21660,9 +21656,8 @@ msgid "Clearance:"
 msgstr "クリアランス:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:182
-#, fuzzy
 msgid "Copper clearance for this zone (set to 0 to use the netclass clearance)"
-msgstr "ネットクラスの値を使用するため、クリアランスを０に設定"
+msgstr "このゾーンの導体クリアランス（０に設定すると、ネットクラスクリアランスを使用）"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:193
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:67
@@ -22617,7 +22612,6 @@ msgid ""
 msgstr "スケールされたモデルが検出されました。  モデルのスケーリングは、機械向けのエクスポートとして信頼できるものではありません。"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:191
-#, fuzzy
 msgid "Model Scale Warning"
 msgstr "モデルスケールの警告"
 
@@ -25320,11 +25314,10 @@ msgstr ""
 "ん。 "
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:173
-#, fuzzy
 msgid ""
 "Most board houses expect 0 and use their constraints, especially for solder "
 "mask min width."
-msgstr "0 を指定し、特にハンダ マスクの最小幅に対して制約を使用します。"
+msgstr "ほとんどの基板メーカーは0 と見做して、特にハンダマスクの最小幅に対して制約を使います。"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:183
 msgid "Board setup"
@@ -28132,7 +28125,6 @@ msgid "Drilled holes too close together"
 msgstr "ドリル穴が近過ぎる"
 
 #: pcbnew/drc/drc_item.cpp:101
-#, fuzzy
 msgid "Drilled holes co-located"
 msgstr "ドリル穴が近過ぎる"
 
