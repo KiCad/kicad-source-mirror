@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
-"PO-Revision-Date: 2021-08-13 21:12+0000\n"
+"PO-Revision-Date: 2021-08-13 23:49+0000\n"
 "Last-Translator: VicSanRoPe <vicsanrope@protonmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/kicad/"
 "master-source/es/>\n"
@@ -16248,15 +16248,16 @@ msgid "Remap Legacy Library Symbols..."
 msgstr "Reasignar símbolos de librería de legado..."
 
 #: eeschema/tools/ee_actions.cpp:599
-#, fuzzy
 msgid ""
 "Remap library symbol references in legacy schematics to the symbol library "
 "table"
-msgstr "Reasignar símbolos de librerías obsoletas a la tabla de librerías"
+msgstr ""
+"Reasignar referencias de símbolos de librerías en esquemas de legado a la "
+"tabla de librerías de símbolos"
 
 #: eeschema/tools/ee_actions.cpp:604
 msgid "Bus Definitions..."
-msgstr "Definiciones de BUS..."
+msgstr "Definiciones de bus..."
 
 #: eeschema/tools/ee_actions.cpp:604
 msgid "Manage bus definitions"
@@ -16267,18 +16268,16 @@ msgid "Export Drawing to Clipboard"
 msgstr "Exportar dibujo al portapapeles"
 
 #: eeschema/tools/ee_actions.cpp:609
-#, fuzzy
 msgid "Export drawing of current sheet to clipboard"
-msgstr "Exportar al portapapeles"
+msgstr "Exportar el dibujo de la hoja actual al portapapeles"
 
 #: eeschema/tools/ee_actions.cpp:614
 msgid "Switch to PCB Editor"
-msgstr "Cambiar a editor de PCB"
+msgstr "Cambiar a editor de placas"
 
 #: eeschema/tools/ee_actions.cpp:614
-#, fuzzy
 msgid "Open PCB in board editor"
-msgstr "Editor de librerías"
+msgstr "Abrir la placa en el editor de placas"
 
 #: eeschema/tools/ee_actions.cpp:619
 msgid "Export Netlist..."
@@ -16294,47 +16293,40 @@ msgid "Generate BOM..."
 msgstr "Generar BOM..."
 
 #: eeschema/tools/ee_actions.cpp:624
-#, fuzzy
 msgid "Generate a bill of materials for the current schematic"
-msgstr "Crear una lista de materiales a partir del esquema activo"
+msgstr "Generar una lista de materiales para el esquema actual"
 
 #: eeschema/tools/ee_actions.cpp:629
-#, fuzzy
 msgid "Highlight on PCB"
-msgstr "Resaltar red"
+msgstr "Resaltar en la placa"
 
 #: eeschema/tools/ee_actions.cpp:629
-#, fuzzy
 msgid "Highlight corresponding items in PCB editor"
-msgstr "Resaltar elementos pertenecientes a esta red"
+msgstr "Resaltar elementos correspondientes en el editor de placas"
 
 #: eeschema/tools/ee_actions.cpp:634
 msgid "Show Hidden Pins"
 msgstr "Mostrar pines ocultos"
 
 #: eeschema/tools/ee_actions.cpp:634
-#, fuzzy
 msgid "Toggle display of hidden pins"
-msgstr "Mostrar pines ocultos"
+msgstr "Alternar la visualización de pines ocultos"
 
 #: eeschema/tools/ee_actions.cpp:639
-#, fuzzy
 msgid "Show Hidden Fields"
-msgstr "Mostrar pines ocultos"
+msgstr "Mostrar campos ocultos"
 
 #: eeschema/tools/ee_actions.cpp:639
-#, fuzzy
 msgid "Toggle display of hidden text fields"
-msgstr "Alternar visualización de capas de pasta de soldadura"
+msgstr "Alternar la visualización de campos de texto ocultos"
 
 #: eeschema/tools/ee_actions.cpp:643
 msgid "Force H/V Wires and Buses"
 msgstr "Forzar cables y buses horizontales o verticales"
 
 #: eeschema/tools/ee_actions.cpp:643
-#, fuzzy
 msgid "Switch H & V only mode for new wires and buses"
-msgstr "Orientación HV para líneas y buses"
+msgstr "Alternar el modo de solo H/V para nuevas líneas y buses"
 
 #: eeschema/tools/ee_actions.cpp:649 pcbnew/tools/pcb_actions.cpp:773
 msgid "Scripting Console"
@@ -16349,33 +16341,28 @@ msgid "Enter Sheet"
 msgstr "Entrar en la hoja"
 
 #: eeschema/tools/ee_actions.cpp:656
-#, fuzzy
 msgid "Display the selected sheet's contents in the schematic editor"
-msgstr "El estilo del texto seleccionado en el esquema"
+msgstr "Muestra los contenidos de la hoja seleccionada en el editor de esquemas"
 
 #: eeschema/tools/ee_actions.cpp:662
 msgid "Leave Sheet"
 msgstr "Abandonar hoja"
 
 #: eeschema/tools/ee_actions.cpp:662
-#, fuzzy
 msgid "Display the parent sheet in the schematic editor"
-msgstr "Mostrar la hoja principal en la ventana de Eeschema"
+msgstr "Mostrar la hoja padre en el editor de esquema"
 
 #: eeschema/tools/ee_actions.cpp:667
-#, fuzzy
 msgid "Hierarchy Navigator"
-msgstr "Mostrar Explorador de jerarquía"
+msgstr "Navegador de jerarquía"
 
 #: eeschema/tools/ee_actions.cpp:667
-#, fuzzy
 msgid "Show schematic sheet hierarchy"
-msgstr "Explorar jerarquía"
+msgstr "Mostrar la jerarquía de hojas de esquema"
 
 #: eeschema/tools/ee_actions.cpp:672
-#, fuzzy
 msgid "Navigate to page"
-msgstr "Ajustar a la página"
+msgstr "Navegar a la página"
 
 #: eeschema/tools/ee_actions.cpp:679
 msgid "Add Junctions to Selection where needed"
@@ -17550,18 +17537,16 @@ msgid "Show flashed items in outline mode"
 msgstr "Mostrar elementos gráficos en modo boceto"
 
 #: gerbview/tools/gerbview_actions.cpp:156
-#, fuzzy
 msgid "Sketch Polygons"
-msgstr "Polígonos en boceto"
+msgstr "Bosquejar polígonos"
 
 #: gerbview/tools/gerbview_actions.cpp:156
 msgid "Show polygons in outline mode"
 msgstr "Mostrar polígonos en modo boceto"
 
 #: gerbview/tools/gerbview_actions.cpp:162
-#, fuzzy
 msgid "Ghost Negative Objects"
-msgstr "Mostrar los objetos &negativos"
+msgstr "Difuminar los objetos negativos"
 
 #: gerbview/tools/gerbview_actions.cpp:162
 msgid "Show negative objects in ghost color"
