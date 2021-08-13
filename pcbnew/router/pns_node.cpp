@@ -989,8 +989,6 @@ const LINE NODE::AssembleLine( LINKED_ITEM* aSeg, int* aOriginSegmentIndex,
 
         if( li && prev_seg != li )
         {
-            int segIdxIncrement = 1;
-
             if( li->Kind() == ITEM::ARC_T )
             {
                 const ARC*       arc = static_cast<const ARC*>( li );
@@ -1001,13 +999,6 @@ const LINE NODE::AssembleLine( LINKED_ITEM* aSeg, int* aOriginSegmentIndex,
                 ssize_t lastShape = nSegs ? line.ArcIndex( static_cast<ssize_t>( nSegs ) - 1 ) : -1;
 
                 line.Append( arcReversed[i] ? sa->Reversed() : *sa );
-
-                segIdxIncrement = line.PointCount() - nSegs - 1;
-
-                // Are we adding an arc after an arc? add the hidden segment if the arcs overlap.
-                // If they don't overlap, don't add this, as it will have been added as a segment.
-                if( lastShape >= 0 && last == line.CPoint( nSegs ) )
-                    segIdxIncrement++;
             }
 
             pl.Link( li );
@@ -1017,11 +1008,9 @@ const LINE NODE::AssembleLine( LINKED_ITEM* aSeg, int* aOriginSegmentIndex,
             {
                 wxASSERT( n < line.SegmentCount() ||
                           ( n == line.SegmentCount() && li->Kind() == ITEM::SEGMENT_T ) );
-                *aOriginSegmentIndex = n;
+                *aOriginSegmentIndex = line.PointCount() - 1;
                 originSet = true;
             }
-
-            n += segIdxIncrement;
         }
 
         prev_seg = li;
