@@ -15,8 +15,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
-"PO-Revision-Date: 2021-08-13 15:17+0000\n"
-"Last-Translator: 서범기 <joonhoflow@naver.com>\n"
+"PO-Revision-Date: 2021-08-13 17:18+0000\n"
+"Last-Translator: Ji Yoon Choi <chichoon.choi@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
 "Language: ko\n"
@@ -462,7 +462,7 @@ msgstr "솔더 페이스트 레이어 표시"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_display_options_base.cpp:47
 msgid "Show adhesive layers"
-msgstr "접착제 레이어 표시"
+msgstr "접착면 레이어 표시"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_display_options_base.cpp:54
 msgid "User Layers (not shown in realistic mode)"
@@ -1232,7 +1232,7 @@ msgstr "비트"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:104
 msgid "Output Parameters"
-msgstr "출력 매개 변수"
+msgstr "출력 매개변수"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:109
 msgid "Lock height/width ratio"
@@ -1251,7 +1251,7 @@ msgstr "300"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:149
 msgid "Load Bitmap"
-msgstr "비트맵 로드"
+msgstr "비트맵 불러오기"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:152
 msgid "Export to File"
@@ -1331,7 +1331,7 @@ msgid ""
 "layer (but will be marked invisible)."
 msgstr ""
 "윤곽선을 그릴 기판 레이어를 선택합니다.\n"
-"참조 지정자와 값은 항상 실크 스크린 레이어에 배치됩니다 (단, 보이지 않음으로 표시됩니다)."
+"참조 지정자와 값은 항상 실크 스크린 레이어에 배치됩니다 (단, 숨겨짐으로 설정됩니다)."
 
 #: bitmap2component/bitmap2cmp_gui_base.h:100
 #: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:10
@@ -1548,9 +1548,7 @@ msgstr "설명"
 msgid ""
 "The KiCad EDA Suite is a set of open source applications for the creation of "
 "electronic schematics and printed circuit boards."
-msgstr ""
-"KiCad EDA Suite는 전자 회로도 및 인쇄 회로 기판 생성을 위한 오픈 소스 애플리"
-"케이션 세트입니다."
+msgstr "KiCad EDA 제품군은 전자 회로도 및 인쇄 회로 기판 생성을 위한 오픈 소스 애플리케이션 세트입니다."
 
 #: common/dialog_about/AboutDialog_main.cpp:134
 msgid "KiCad on the web"
@@ -1586,7 +1584,7 @@ msgstr "KiCad 포럼 - "
 
 #: common/dialog_about/AboutDialog_main.cpp:187
 msgid "The complete KiCad EDA Suite is released under the"
-msgstr "전체 KiCad EDA Suite는"
+msgstr "전체 KiCad EDA 제품군은 이하의 라이선스를 바탕으로 제공됩니다"
 
 #: common/dialog_about/AboutDialog_main.cpp:189
 msgid "GNU General Public License (GPL) version 3 or any later version"
@@ -2523,7 +2521,7 @@ msgstr "다른 시트로 내보내기"
 
 #: common/dialogs/dialog_page_settings_base.cpp:134
 msgid "Title Block Parameters"
-msgstr "제목 블록 매개 변수"
+msgstr "제목 블록 매개변수"
 
 #: common/dialogs/dialog_page_settings_base.cpp:144
 #, c-format
@@ -5224,7 +5222,7 @@ msgstr "인식할 수 없는 문자 '%c'"
 
 #: common/libeval_compiler/libeval_compiler.cpp:827
 msgid "Unknown parent of function parameters"
-msgstr "알 수 없는 함수 매개 변수의 상위 항목"
+msgstr "함수 매개변수의 알 수 없는 상위 항목"
 
 #: common/libeval_compiler/libeval_compiler.cpp:846
 msgid "Unknown parent of property"
@@ -5345,7 +5343,7 @@ msgstr "'%s' 매개변수 '%s' 누락"
 #: common/plugins/cadstar/cadstar_archive_parser.h:48
 #, c-format
 msgid "Unknown Parameter '%s' in '%s'"
-msgstr "알 수 없는 매개변수 '%s'의 '%s'"
+msgstr "알 수 없는 매개변수 '%s' ('%s' 에서 발견)"
 
 #: common/plugins/cadstar/cadstar_archive_parser.h:51
 #, c-format
@@ -18253,9 +18251,8 @@ msgid "Bitmap DPI:"
 msgstr "비트맵 DPI:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:338
-#, fuzzy
 msgid "Repeat Parameters"
-msgstr "부품 가져오기"
+msgstr "매개변수 반복"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:346
 #: pcbnew/dialogs/dialog_create_array_base.cpp:254
@@ -18823,7 +18820,7 @@ msgstr "감쇠기"
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1500
 #: pcbnew/footprint_wizard_frame.cpp:198
 msgid "Parameters"
-msgstr "매개 변수"
+msgstr "매개변수"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:292
 msgid "Attenuation:"
@@ -19041,9 +19038,8 @@ msgid "Zcommon = Zeven / 2"
 msgstr "Zcommon = Zeven / 2"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:920
-#, fuzzy
 msgid "Physical Parameters"
-msgstr "전기적 형식"
+msgstr "물리적 매개변수"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:988
 msgid "Analyze"
@@ -19054,9 +19050,8 @@ msgid "Synthesize"
 msgstr "합성"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1004
-#, fuzzy
 msgid "Electrical Parameters"
-msgstr "전기적 형식"
+msgstr "전기적 매개변수"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1055
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1336
@@ -19170,7 +19165,7 @@ msgid ""
 msgstr ""
 "주의:\n"
 "비아 패드 직경 >= 클리어런스 홀 직경.\n"
-"일부 매개 변수는 구리 영역 내의 비아에 대해서 계산될 수 없습니다."
+"일부 매개변수는 구리 영역 내의 비아에 대해서 계산될 수 없습니다."
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1345
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1624
@@ -21823,9 +21818,8 @@ msgid "point count"
 msgstr "포인트 수"
 
 #: pcbnew/dialogs/dialog_create_array.cpp:437
-#, fuzzy
 msgid "Bad parameters"
-msgstr "패드 속성"
+msgstr "부적절한 매개변수"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:31
 msgid "Horizontal count:"
@@ -24908,14 +24902,12 @@ msgstr ""
 "레이어 또한 반전됩니다."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:518
-#, fuzzy
 msgid "Front adhesive"
-msgstr "정면에서 보기"
+msgstr "정면 접착면"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:521
-#, fuzzy
 msgid "Back adhesive"
-msgstr "흑백 이미지"
+msgstr "후면 접착면"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:524
 msgid "Front solder paste"
@@ -27063,7 +27055,7 @@ msgstr "Off-board, 제조용"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:72
 msgid "If you want an adhesive template for the front side of the board"
-msgstr "기판의 정면에 접착 템플릿을 사용하고 싶은 경우"
+msgstr "기판의 정면에 접착면 템플릿을 사용하고 싶은 경우"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:76
 msgid "Adhes_Front"
@@ -29446,7 +29438,7 @@ msgstr "풋프린트 마법사"
 
 #: pcbnew/footprint_wizard_frame.cpp:328
 msgid "Parameter"
-msgstr "매개 변수"
+msgstr "매개변수"
 
 #: pcbnew/footprint_wizard_frame.cpp:572
 #, c-format
@@ -31550,7 +31542,7 @@ msgstr "알 수 없는 토큰 '%s'"
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:354
 #, c-format
 msgid "Element token contains %d parameters."
-msgstr "원소 토큰이 %d개의 매개 변수를 포함하고 있습니다."
+msgstr "원소 토큰이 %d개의 매개변수를 포함하고 있습니다."
 
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:982
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:2581
@@ -34666,7 +34658,7 @@ msgstr "모든 영역 채우기 삭제"
 
 #: pcbnew/tools/pcb_actions.cpp:1265
 msgid "Remove copper fill from all zones"
-msgstr ""
+msgstr "모든 영역의 구리 채우기를 삭제"
 
 #: pcbnew/tools/pcb_actions.cpp:1273
 #, fuzzy
@@ -34729,16 +34721,15 @@ msgstr "네트 높이"
 
 #: pcbnew/tools/pcb_actions.cpp:1310
 msgid "Switch router to highlight mode"
-msgstr ""
+msgstr "라우터를 강조 모드로 전환"
 
 #: pcbnew/tools/pcb_actions.cpp:1315
-#, fuzzy
 msgid "Router Shove Mode"
-msgstr "텍스트 모듈 회전"
+msgstr "라우터 밀어내기 모드"
 
 #: pcbnew/tools/pcb_actions.cpp:1315
 msgid "Switch router to shove mode"
-msgstr ""
+msgstr "라우터를 밀어내기 모드로 전환"
 
 #: pcbnew/tools/pcb_actions.cpp:1320
 #, fuzzy
@@ -34747,7 +34738,7 @@ msgstr "검정색"
 
 #: pcbnew/tools/pcb_actions.cpp:1320
 msgid "Switch router to walkaround mode"
-msgstr ""
+msgstr "라우터를 순회 모드로 전환"
 
 #: pcbnew/tools/pcb_actions.cpp:1325
 #, fuzzy
@@ -34784,7 +34775,7 @@ msgstr "현재 레이어를 다른 이름으로 저장..."
 #: pcbnew/tools/pcb_actions.cpp:1361 pcbnew/tools/pcb_actions.cpp:1367
 msgid ""
 "Splits the track segment into two segments connected at the cursor position."
-msgstr ""
+msgstr "배선 세그먼트를 커서 위치에 연결된 두 개의 세그먼트로 분리합니다."
 
 #: pcbnew/tools/pcb_actions.cpp:1391
 msgid "Length Tuning Settings..."
@@ -34792,7 +34783,7 @@ msgstr "길이 조절 설정..."
 
 #: pcbnew/tools/pcb_actions.cpp:1392
 msgid "Sets the length tuning parameters for currently routed item."
-msgstr ""
+msgstr "현재 라우팅된 항목의 길이 조율 매개변수를 설정합니다."
 
 #: pcbnew/tools/pcb_control.cpp:493
 #, fuzzy
@@ -34809,6 +34800,8 @@ msgid ""
 "Error loading board.\n"
 "%s"
 msgstr ""
+"기판 불러오기 중 오류.\n"
+"%s"
 
 #: pcbnew/tools/pcb_control.cpp:1106
 #, fuzzy
@@ -34839,7 +34832,7 @@ msgstr "세그먼트 편집"
 
 #: pcbnew/tools/pcb_point_editor.cpp:2157
 msgid "Remove a zone/polygon corner"
-msgstr ""
+msgstr "영역/다각형 모서리를 삭제"
 
 #: pcbnew/tools/pcb_selection_tool.cpp:71
 msgid "Select"
@@ -34923,11 +34916,11 @@ msgstr "D-Codes 보이기"
 
 #: pcbnew/tools/zone_filler_tool.cpp:137
 msgid "Zone fills may be inaccurate.  DRC rules contain errors."
-msgstr ""
+msgstr "영역 채우기는 정확하지 않을 수 있습니다.  DRC 규칙은 오류를 포함합니다."
 
 #: pcbnew/undo_redo.cpp:541
 msgid "Incomplete undo/redo operation: some items not found"
-msgstr ""
+msgstr "완료되지 않은 실행 취소/다시 실행 동작: 일부 항목을 찾을 수 없습니다"
 
 #: pcbnew/widgets/appearance_controls.cpp:340
 msgid "Show tracks"
@@ -34954,7 +34947,7 @@ msgstr "풋프린트 앞면"
 
 #: pcbnew/widgets/appearance_controls.cpp:345
 msgid "Show footprints that are on board's front"
-msgstr ""
+msgstr "기판의 정면에 있는 풋프린트 표시"
 
 #: pcbnew/widgets/appearance_controls.cpp:346
 msgid "Footprints Back"
@@ -34962,7 +34955,7 @@ msgstr "풋프린트 뒷면"
 
 #: pcbnew/widgets/appearance_controls.cpp:346
 msgid "Show footprints that are on board's back"
-msgstr ""
+msgstr "기판의 후면에 있는 풋프린트 표시"
 
 #: pcbnew/widgets/appearance_controls.cpp:347
 msgid "Through-hole Pads"
@@ -34996,7 +34989,7 @@ msgstr "숨겨진 텍스트"
 
 #: pcbnew/widgets/appearance_controls.cpp:351
 msgid "Show footprint text marked as invisible"
-msgstr ""
+msgstr "숨겨진 풋프린트 텍스트를 표시"
 
 #: pcbnew/widgets/appearance_controls.cpp:354
 msgid "Show unconnected nets as a ratsnest"
@@ -35008,7 +35001,7 @@ msgstr "연결 없음"
 
 #: pcbnew/widgets/appearance_controls.cpp:355
 msgid "Show a marker on pads which have no net connected"
-msgstr ""
+msgstr "네트에 연결되지 않은 패드의 마커를 표시"
 
 #: pcbnew/widgets/appearance_controls.cpp:356
 #, fuzzy
@@ -35017,7 +35010,7 @@ msgstr "경고"
 
 #: pcbnew/widgets/appearance_controls.cpp:356
 msgid "DRC violations with a Warning severity"
-msgstr ""
+msgstr "심각도가 '경고' 인 DRC 위반"
 
 #: pcbnew/widgets/appearance_controls.cpp:357
 msgid "DRC Errors"
@@ -35025,7 +35018,7 @@ msgstr "DRC 오류"
 
 #: pcbnew/widgets/appearance_controls.cpp:357
 msgid "DRC violations with an Error severity"
-msgstr ""
+msgstr "심각도가 '오류' 인 DRC 위반"
 
 #: pcbnew/widgets/appearance_controls.cpp:358
 msgid "DRC Exclusions"
@@ -35033,11 +35026,11 @@ msgstr "DRC 제외"
 
 #: pcbnew/widgets/appearance_controls.cpp:358
 msgid "DRC violations which have been individually excluded"
-msgstr ""
+msgstr "개별적으로 제외된 DRC 위반"
 
 #: pcbnew/widgets/appearance_controls.cpp:359
 msgid "Show footprint and text origins as a cross"
-msgstr ""
+msgstr "풋프린트와 텍스트 원점을 십자로 표시"
 
 #: pcbnew/widgets/appearance_controls.cpp:360
 #, fuzzy
@@ -35071,9 +35064,8 @@ msgid "Front Layers"
 msgstr "Draft layer"
 
 #: pcbnew/widgets/appearance_controls.cpp:393
-#, fuzzy
 msgid "Front Assembly View"
-msgstr "정면에서 보기"
+msgstr "정면에서 조립체 보기"
 
 #: pcbnew/widgets/appearance_controls.cpp:396
 #, fuzzy
@@ -35081,9 +35073,8 @@ msgid "Back Layers"
 msgstr "Draft layer"
 
 #: pcbnew/widgets/appearance_controls.cpp:399
-#, fuzzy
 msgid "Back Assembly View"
-msgstr "후면에서 보기"
+msgstr "후면에서 조립체 보기"
 
 #: pcbnew/widgets/appearance_controls.cpp:439
 #, fuzzy
@@ -35101,7 +35092,7 @@ msgstr "비활성 레이어:"
 
 #: pcbnew/widgets/appearance_controls.cpp:597
 msgid "Inactive layers will be shown in full color"
-msgstr ""
+msgstr "활성화되지 않은 레이어를 풀 컬러로 표시"
 
 #: pcbnew/widgets/appearance_controls.cpp:601
 #, fuzzy
@@ -35110,7 +35101,7 @@ msgstr "지름"
 
 #: pcbnew/widgets/appearance_controls.cpp:603
 msgid "Inactive layers will be dimmed"
-msgstr ""
+msgstr "활성화되지 않은 레이어를 흐리게 표시"
 
 #: pcbnew/widgets/appearance_controls.cpp:607
 msgid "Hide"
@@ -35118,7 +35109,7 @@ msgstr "숨김"
 
 #: pcbnew/widgets/appearance_controls.cpp:609
 msgid "Inactive layers will be hidden"
-msgstr ""
+msgstr "비활성화한 레이어는 숨겨짐"
 
 #: pcbnew/widgets/appearance_controls.cpp:619
 #, fuzzy
@@ -35211,11 +35202,11 @@ msgstr "%s에 대한 연결선을 표시하려면 클릭"
 #: pcbnew/widgets/appearance_controls.cpp:897
 msgid ""
 "Double click (or middle click) to change color; right click for more actions"
-msgstr ""
+msgstr "더블 클릭 (또는 가운데 클릭) 으로 색상 변경; 우클릭으로 다른 동작 선택"
 
 #: pcbnew/widgets/appearance_controls.cpp:1399
 msgid "Double click or middle click for color change, right click for menu"
-msgstr ""
+msgstr "더블 클릭 또는 가운데 클릭으로 색상 변경, 우클릭으로 메뉴 열기"
 
 #: pcbnew/widgets/appearance_controls.cpp:1406
 msgid "Show or hide this layer"
@@ -35238,11 +35229,11 @@ msgstr "Copper layer"
 
 #: pcbnew/widgets/appearance_controls.cpp:1510
 msgid "Adhesive on board's front"
-msgstr ""
+msgstr "기판 정면의 접착면"
 
 #: pcbnew/widgets/appearance_controls.cpp:1511
 msgid "Adhesive on board's back"
-msgstr ""
+msgstr "기판 후면의 접착면"
 
 #: pcbnew/widgets/appearance_controls.cpp:1512
 msgid "Solder paste on board's front"
@@ -35254,12 +35245,11 @@ msgstr "기판 후면의 솔더 페이스트"
 
 #: pcbnew/widgets/appearance_controls.cpp:1514
 msgid "Silkscreen on board's front"
-msgstr ""
+msgstr "기판 정면의 실크스크린"
 
 #: pcbnew/widgets/appearance_controls.cpp:1515
-#, fuzzy
 msgid "Silkscreen on board's back"
-msgstr "Silkscreen Copper"
+msgstr "기판 후면의 실크스크린"
 
 #: pcbnew/widgets/appearance_controls.cpp:1516
 msgid "Solder mask on board's front"
@@ -35290,7 +35280,7 @@ msgstr "기판 둘레 정의"
 
 #: pcbnew/widgets/appearance_controls.cpp:1523
 msgid "Board's edge setback outline"
-msgstr ""
+msgstr "기판의 모서리 오프셋 외곽선"
 
 #: pcbnew/widgets/appearance_controls.cpp:1524
 msgid "Footprint courtyards on board's front"
@@ -35302,11 +35292,11 @@ msgstr "기판 후면의 풋프린트 코트야드"
 
 #: pcbnew/widgets/appearance_controls.cpp:1526
 msgid "Footprint assembly on board's front"
-msgstr ""
+msgstr "기판 정면의 풋프린트 조립체"
 
 #: pcbnew/widgets/appearance_controls.cpp:1527
 msgid "Footprint assembly on board's back"
-msgstr ""
+msgstr "기판 후면의 풋프린트 조립체"
 
 #: pcbnew/widgets/appearance_controls.cpp:1528
 msgid "User defined layer 1"
@@ -35365,9 +35355,8 @@ msgid "Hide All Non Copper Layers"
 msgstr "Copper Layers"
 
 #: pcbnew/widgets/appearance_controls.cpp:1605
-#, fuzzy
 msgid "Show Only Front Assembly Layers"
-msgstr "Copper Layers"
+msgstr "정면 조립 레이어만 보이기"
 
 #: pcbnew/widgets/appearance_controls.cpp:1607
 msgid "Show Only Front Layers"
@@ -35459,7 +35448,7 @@ msgstr "설정 (&P)"
 msgid ""
 "The current color theme is read-only.  Create a new theme in Preferences to "
 "enable color editing."
-msgstr ""
+msgstr "현재 색상 테마는 읽기 전용입니다.  설정에서 새로운 테마를 만들어 색상 편집을 허용하세요."
 
 #: pcbnew/widgets/appearance_controls_base.cpp:46
 msgid "Objects"
@@ -35527,7 +35516,7 @@ msgstr "기타 항목"
 
 #: pcbnew/zone.cpp:552
 msgid "Rule Area"
-msgstr ""
+msgstr "규칙 영역"
 
 #: pcbnew/zone.cpp:554
 #, fuzzy
@@ -35578,7 +35567,7 @@ msgstr "우선순위"
 #: pcbnew/zone.cpp:612 pcbnew/zone.cpp:872
 #, c-format
 msgid "%s and %d more"
-msgstr ""
+msgstr "%s 와 %d 이상"
 
 #: pcbnew/zone.cpp:626
 msgid "Fill Mode"
@@ -35642,7 +35631,7 @@ msgstr "격리된 구리 섬 제거 중..."
 
 #: pcbnew/zone_filler.cpp:426
 msgid "Zone fills are out-of-date. Refill?"
-msgstr ""
+msgstr "영역 채우기가 오래되었습니다. 다시 채울까요?"
 
 #: pcbnew/zone_filler.cpp:428
 msgid "Refill"
@@ -35654,11 +35643,11 @@ msgstr "채우지 않고 계속"
 
 #: pcbnew/zone_filler.cpp:439
 msgid "Performing polygon fills..."
-msgstr ""
+msgstr "다각형 채우기 수행중..."
 
 #: plugins/3d/vrml/vrml.cpp:219
 msgid "[INFO] load failed: input line too long\n"
-msgstr ""
+msgstr "[INFO] 불러오기 실패: 입력 행이 너무 깁니다\n"
 
 #: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:9
 msgid "KiCad Image Converter"
@@ -35666,7 +35655,7 @@ msgstr "KiCad 이미지 변환기"
 
 #: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:11
 msgid "Create a component from a bitmap for use with KiCad"
-msgstr ""
+msgstr "비트맵으로부터 KiCad용 부품 생성"
 
 #: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:12
 msgid "bitmap2component"
@@ -35707,11 +35696,11 @@ msgstr "키캐드"
 
 #: resources/linux/launchers/org.kicad.kicad.desktop.in:11
 msgid "EDA Suite"
-msgstr ""
+msgstr "EDA 제품군"
 
 #: resources/linux/launchers/org.kicad.kicad.desktop.in:12
 msgid "Suite of tools for schematic design and circuit board layout"
-msgstr ""
+msgstr "회로도 디자인 및 회로 기판 레이아웃을 위한 도구 모음"
 
 #: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:9
 msgid "KiCad PCB Calculator"
@@ -35719,7 +35708,7 @@ msgstr "KiCad PCB 계산기"
 
 #: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:11
 msgid "Calculator for various electronics-related computations"
-msgstr ""
+msgstr "여러 전자 관련 계산을 위한 계산기"
 
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:10
 msgid "KiCad PCB Editor (Standalone)"
@@ -35731,7 +35720,7 @@ msgstr "PCB 레이아웃 편집기"
 
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:12
 msgid "Standalone circuit board editor for KiCad boards"
-msgstr ""
+msgstr "KiCad 기판을 위한 스탠드얼론 회로 기판 편집기"
 
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:13
 msgid "pcbnew"
