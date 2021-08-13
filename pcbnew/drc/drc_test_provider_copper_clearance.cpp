@@ -345,8 +345,7 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testTrackAgainstItem( PCB_TRACK* track,
 
         if( holeShape )
         {
-            constraint = m_drcEngine->EvalRules( HOLE_CLEARANCE_CONSTRAINT, other, track,
-                                                 track->GetLayer() );
+            constraint = m_drcEngine->EvalRules( HOLE_CLEARANCE_CONSTRAINT, other, track, layer );
             clearance = constraint.GetValue().Min();
 
             if( clearance > 0 && trackShape->Collide( holeShape.get(),
@@ -437,7 +436,8 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testItemAgainstZones( BOARD_ITEM* aItem
                 }
 
                 if( zoneTree->QueryColliding( itemBBox, itemShape.get(), aLayer,
-                                              clearance - m_drcEpsilon, &actual, &pos ) )
+                                              std::max( 0, clearance - m_drcEpsilon ),
+                                              &actual, &pos ) )
                 {
                     std::shared_ptr<DRC_ITEM> drce = DRC_ITEM::Create( DRCE_CLEARANCE );
 
@@ -481,7 +481,8 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testItemAgainstZones( BOARD_ITEM* aItem
                     clearance = constraint.GetValue().Min();
 
                     if( zoneTree->QueryColliding( itemBBox, holeShape.get(), aLayer,
-                                                  clearance - m_drcEpsilon, &actual, &pos ) )
+                                                  std::max( 0, clearance - m_drcEpsilon ),
+                                                  &actual, &pos ) )
                     {
                         std::shared_ptr<DRC_ITEM> drce = DRC_ITEM::Create( DRCE_HOLE_CLEARANCE );
 
