@@ -47,6 +47,28 @@ public:
 
         if( glXSwapIntervalEXT && glXQueryDrawable && dpy && drawable )
         {
+            if( aVal < 0 )
+            {
+                if( !GLX_EXT_swap_control_tear )
+                {
+                    aVal = 0;
+                }
+                else
+                {
+                    // Even though the extensions might be available,
+                    // we need to be sure that late/adaptive swaps are
+                    // enabled on the drawable.
+
+                    unsigned lateSwapsEnabled;
+                    glXQueryDrawable( dpy, drawable, GLX_LATE_SWAPS_TEAR_EXT, &lateSwapsEnabled );
+
+                    if( !lateSwapsEnabled )
+                    {
+                        aVal = 0;
+                    }
+                }
+            }
+
             unsigned clampedInterval;
             glXSwapIntervalEXT( dpy, drawable, aVal );
             glXQueryDrawable( dpy, drawable, GLX_SWAP_INTERVAL_EXT, &clampedInterval );
