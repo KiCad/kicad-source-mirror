@@ -70,7 +70,7 @@ PANEL_SETUP_MASK_AND_PASTE_BASE::PANEL_SETUP_MASK_AND_PASTE_BASE( wxWindow* pare
 	m_maskMarginUnits->Wrap( -1 );
 	fgGridSolderMaskSizer->Add( m_maskMarginUnits, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
-	m_maskMinWidthLabel = new wxStaticText( this, wxID_ANY, _("Solder mask minimum bridge width:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_maskMinWidthLabel = new wxStaticText( this, wxID_ANY, _("Solder mask minimum web width:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_maskMinWidthLabel->Wrap( -1 );
 	m_maskMinWidthLabel->SetToolTip( _("Min. dist between 2 pad areas.\nTwo pad areas nearer than this value will be merged during plotting.\nThis parameter is only used to plot solder mask layers.\nLeave at 0 unless you know what you are doing.") );
 
