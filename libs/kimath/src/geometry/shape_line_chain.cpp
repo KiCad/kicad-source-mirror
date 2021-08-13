@@ -1057,6 +1057,12 @@ void SHAPE_LINE_CHAIN::Append( const SHAPE_ARC& aArc )
 
 void SHAPE_LINE_CHAIN::Insert( size_t aVertex, const VECTOR2I& aP )
 {
+    if( aVertex == m_points.size() )
+    {
+        Append( aP );
+        return;
+    }
+
     wxCHECK( aVertex < m_points.size(), /* void */ );
 
     if( aVertex > 0 && IsPtOnArc( aVertex ) )

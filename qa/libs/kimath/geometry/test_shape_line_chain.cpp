@@ -317,6 +317,11 @@ BOOST_AUTO_TEST_CASE( ReplaceChain )
     baseChain.Replace( 1, 23, replaceChain );
 
     BOOST_CHECK_EQUAL( baseChain.PointCount(), linePts.size() - ( 23 - 1 ) );
+
+    // Replacing the last point in a chain is special-cased
+    baseChain.Replace( baseChain.PointCount() - 1, baseChain.PointCount() - 1, VECTOR2I( -1, -1 ) );
+
+    BOOST_CHECK_EQUAL( baseChain.CLastPoint(), VECTOR2I( -1, -1 ) );
 }
 
 

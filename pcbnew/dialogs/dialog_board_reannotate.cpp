@@ -645,9 +645,8 @@ bool DIALOG_BOARD_REANNOTATE::BuildFootprintList( std::vector<RefDesInfo>& aBadR
     bool annotateBack  = m_AnnotateBack->GetValue();  // Unless only doing front
     bool skipLocked    = m_ExcludeLocked->GetValue();
 
-    int          errorcount = 0;
-    unsigned int backstartrefdes;
-    size_t       firstnum = 0;
+    int    errorcount = 0;
+    size_t firstnum   = 0;
 
     m_frontFootprints.clear();
     m_backFootprints.clear();
