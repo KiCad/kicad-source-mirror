@@ -269,7 +269,7 @@ void DRC_RULES_PARSER::parseConstraint( DRC_RULE* aRule )
     case T_clearance:           constraint.m_Type = CLEARANCE_CONSTRAINT;                break;
     case T_hole_clearance:      constraint.m_Type = HOLE_CLEARANCE_CONSTRAINT;           break;
     case T_edge_clearance:      constraint.m_Type = EDGE_CLEARANCE_CONSTRAINT;           break;
-    case T_hole:                constraint.m_Type = HOLE_SIZE_CONSTRAINT;                break;
+    case T_hole_size:           constraint.m_Type = HOLE_SIZE_CONSTRAINT;                break;
     case T_hole_to_hole:        constraint.m_Type = HOLE_TO_HOLE_CONSTRAINT;             break;
     case T_courtyard_clearance: constraint.m_Type = COURTYARD_CLEARANCE_CONSTRAINT;      break;
     case T_silk_clearance:      constraint.m_Type = SILK_CLEARANCE_CONSTRAINT;           break;
@@ -283,7 +283,7 @@ void DRC_RULES_PARSER::parseConstraint( DRC_RULE* aRule )
     case T_diff_pair_uncoupled: constraint.m_Type = DIFF_PAIR_MAX_UNCOUPLED_CONSTRAINT;  break;
     default:
         msg.Printf( _( "Unrecognized item '%s'.| Expected %s." ), FromUTF8(),
-                    "'clearance', 'hole_clearance', 'edge_clearance', 'hole', hole_to_hole',"
+                    "'clearance', 'hole_clearance', 'edge_clearance', 'hole_size', hole_to_hole',"
                     "'courtyard_clearance', 'silk_clearance', 'track_width', 'annular_width', "
                     "'disallow', 'length', 'skew', 'diff_pair_gap' or 'diff_pair_uncoupled'." );
         reportError( msg );

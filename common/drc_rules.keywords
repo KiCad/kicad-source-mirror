@@ -8,6 +8,7 @@ disallow
 footprint
 graphic
 hole
+hole_size
 hole_to_hole
 inner
 layer

@@ -20,20 +20,20 @@
 
 ### Constraint Types
 
- * annular_width
+ * annular\_width
  * clearance
  * courtyard_clearance
  * diff\_pair\_gap
  * diff\_pair\_uncoupled
  * disallow
- * edge_clearance
+ * edge\_clearance
  * length
- * hole
- * hole_clearance
- * silk_clearance
+ * hole\_clearance
+ * hole\_size
+ * silk\_clearance
  * skew
- * track_width
- * via_count
+ * track\_width
+ * via\_count
 
 
 <br><br>
@@ -183,11 +183,11 @@ For the latter use a `(layer "layer_name")` clause in the rule.
 
 
     (rule "Max Drill Hole Size Mechanical"  
-        (constraint hole (max 6.3mm))
+        (constraint hole_size (max 6.3mm))
         (condition "A.Pad_Type == 'NPTH, mechanical'"))
     
     (rule "Max Drill Hole Size PTH"  
-        (constraint hole (max 6.35mm))
+        (constraint hole_size (max 6.35mm))
         (condition "A.Pad_Type == 'Through-hole'"))
 
 
