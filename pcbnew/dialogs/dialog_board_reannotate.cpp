@@ -23,6 +23,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <algorithm>
 #include <base_units.h>
 #include <bitmaps.h>
 #include <board_commit.h>
@@ -34,6 +35,7 @@
 #include <kiface_i.h>
 #include <mail_type.h>
 #include <pcbnew_settings.h>
+#include <refdes_utils.h>
 #include <sstream>
 #include <tool/tool_manager.h>
 #include <tool/grid_menu.h>
@@ -233,6 +235,32 @@ void DIALOG_BOARD_REANNOTATE::FilterPrefix( wxTextCtrl* aPrefix )
     aPrefix->Clear();
     tmps.pop_back();
     aPrefix->AppendText( tmps );
+}
+
+
+RefDesTypeStr* DIALOG_BOARD_REANNOTATE::GetOrBuildRefDesInfo( const wxString& aRefDesPrefix,
+                                                              unsigned int    aStartRefDes )
+{
+    unsigned int requiredLastRef = ( aStartRefDes == 0 ? 1 : aStartRefDes ) - 1;
+
+    for( size_t i = 0; i < m_refDesTypes.size(); i++ ) // See if it is in the types array
+    {
+        if( m_refDesTypes[i].RefDesType == aRefDesPrefix ) // Found it!
+        {
+            m_refDesTypes[i].LastUsedRefDes = std::max( m_refDesTypes[i].LastUsedRefDes,
+                                                        requiredLastRef );
+
+            return &m_refDesTypes[i];
+        }
+    }
+
+    // Wasn't in the types array so add it
+    RefDesTypeStr newtype;
+    newtype.RefDesType = aRefDesPrefix;
+    newtype.LastUsedRefDes = requiredLastRef;
+    m_refDesTypes.push_back( newtype );
+
+    return &m_refDesTypes.back();
 }
 
 
@@ -739,7 +767,8 @@ bool DIALOG_BOARD_REANNOTATE::BuildFootprintList( std::vector<RefDesInfo>& aBadR
 
     m_refDesTypes.clear();
     m_changeArray.clear();
-    backstartrefdes = wxAtoi( m_BackRefDesStart->GetValue() );
+
+    BuildUnavailableRefsList();
 
     if( !m_frontFootprints.empty() )
     {
@@ -749,8 +778,8 @@ bool DIALOG_BOARD_REANNOTATE::BuildFootprintList( std::vector<RefDesInfo>& aBadR
 
     if( !m_backFootprints.empty() )
     {
-        BuildChangeArray( m_backFootprints, backstartrefdes, m_BackPrefix->GetValue(),
-                          m_RemoveBackPrefix->GetValue(), aBadRefDes );
+        BuildChangeArray( m_backFootprints, wxAtoi( m_BackRefDesStart->GetValue() ),
+                          m_BackPrefix->GetValue(), m_RemoveBackPrefix->GetValue(), aBadRefDes );
     }
 
     if( !m_changeArray.empty() )
@@ -788,17 +817,38 @@ bool DIALOG_BOARD_REANNOTATE::BuildFootprintList( std::vector<RefDesInfo>& aBadR
     return ( 0 == errorcount );
 }
 
+void DIALOG_BOARD_REANNOTATE::BuildUnavailableRefsList()
+{
+    std::vector<RefDesInfo> excludedFootprints;
+
+    for( RefDesInfo fpData : m_frontFootprints )
+    {
+        if( fpData.Action == Exclude )
+            excludedFootprints.push_back( fpData );
+    }
+
+    for( RefDesInfo fpData : m_backFootprints )
+    {
+        if( fpData.Action == Exclude )
+            excludedFootprints.push_back( fpData );
+    }
+
+    for( RefDesInfo fpData : excludedFootprints )
+    {
+        if( fpData.Action == Exclude )
+        {
+            RefDesTypeStr* refDesInfo = GetOrBuildRefDesInfo( fpData.RefDesType );
+            refDesInfo->UnavailableRefs.insert( UTIL::GetRefDesNumber( fpData.RefDesString ) );
+        }
+    }
+}
+
 
 void DIALOG_BOARD_REANNOTATE::BuildChangeArray( std::vector<RefDesInfo>& aFootprints,
                                                 unsigned int aStartRefDes, const wxString& aPrefix,
                                                 bool aRemovePrefix,
                                                 std::vector<RefDesInfo>& aBadRefDes )
 {
-    size_t        i;
-    RefDesChange  change;
-    RefDesTypeStr newtype;
-
-    wxString refdestype;
     size_t   prefixsize = aPrefix.size();
 
     bool haveprefix = ( 0 != prefixsize );         // Do I have a prefix?
@@ -813,12 +863,15 @@ void DIALOG_BOARD_REANNOTATE::BuildChangeArray( std::vector<RefDesInfo>& aFootpr
 
     if( 0 != aStartRefDes ) // Initialize the change array if present
     {
-    	for( i = 0; i < m_refDesTypes.size(); i++ )
-            m_refDesTypes[i].RefDesCount = aStartRefDes;
+    	for( size_t i = 0; i < m_refDesTypes.size(); i++ )
+            m_refDesTypes[i].LastUsedRefDes = aStartRefDes;
     }
+
 
     for( RefDesInfo fpData : aFootprints )
     {
+        RefDesChange change;
+
         change.Uuid            = fpData.Uuid;
         change.Action          = fpData.Action;
         change.OldRefDesString = fpData.RefDesString;
@@ -837,7 +890,6 @@ void DIALOG_BOARD_REANNOTATE::BuildChangeArray( std::vector<RefDesInfo>& aFootpr
 
         if( change.Action == UpdateRefDes )
         {
-            refdestype    = fpData.RefDesType;
             prefixpresent = ( 0 == fpData.RefDesType.find( aPrefix ) );
 
             if( addprefix && !prefixpresent )
@@ -846,22 +898,14 @@ void DIALOG_BOARD_REANNOTATE::BuildChangeArray( std::vector<RefDesInfo>& aFootpr
             if( aRemovePrefix && prefixpresent ) // If there is a prefix remove it
                 fpData.RefDesType.erase( 0, prefixsize );
 
-            for( i = 0; i < m_refDesTypes.size(); i++ ) // See if it is in the types array
-            {
-                if( m_refDesTypes[i].RefDesType == fpData.RefDesType ) // Found it!
-                    break;
-            }
+            RefDesTypeStr* refDesInfo = GetOrBuildRefDesInfo( fpData.RefDesType, aStartRefDes );
+            unsigned int  newRefDesNumber = refDesInfo->LastUsedRefDes + 1;
 
-            // Wasn't in the types array so add it
-            if( i == m_refDesTypes.size() )
-            {
-                newtype.RefDesType  = fpData.RefDesType;
-                newtype.RefDesCount = ( aStartRefDes == 0 ? 1 : aStartRefDes );
-                m_refDesTypes.push_back( newtype );
-            }
+            while( refDesInfo->UnavailableRefs.count( newRefDesNumber ) )
+                newRefDesNumber++;
 
-            change.NewRefDes = m_refDesTypes[i].RefDesType
-                               + std::to_string( m_refDesTypes[i].RefDesCount++ );
+            change.NewRefDes = refDesInfo->RefDesType + std::to_string( newRefDesNumber );
+            refDesInfo->LastUsedRefDes = newRefDesNumber;
         }
 
         m_changeArray.push_back( change );

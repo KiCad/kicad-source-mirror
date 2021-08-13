@@ -92,7 +92,8 @@ struct RefDesInfo
 struct RefDesTypeStr
 {
     wxString     RefDesType;
-    unsigned int RefDesCount;
+    unsigned int LastUsedRefDes;
+    std::set<unsigned int> UnavailableRefs;
 };
 
 
@@ -159,6 +160,9 @@ private:
     /// @return true if success, false if errors
     bool BuildFootprintList( std::vector<RefDesInfo>& aBadRefDes );
 
+    /// Build list of unavailable references. E.g. unselected footprints or locked footprints.
+    void BuildUnavailableRefsList();
+
     /// Scan through the footprint arrays and create the from -> to array.
     void BuildChangeArray( std::vector<RefDesInfo>& aFootprints, unsigned int aStartRefDes,
                            const wxString& aPrefix, bool aRemovePrefix,
@@ -179,6 +183,10 @@ private:
 
     /// Check to make sure the prefix (if there is one) is properly constructed.
     void FilterPrefix( wxTextCtrl* aPrefix );
+
+    /// Get the structure representing the information currently held for aRefDesPrefix or create one
+    /// if it doesn't exist
+    RefDesTypeStr* GetOrBuildRefDesInfo( const wxString& aRefDesPrefix, unsigned int aStartRefDes = 0 );
 
     PCB_EDIT_FRAME*  m_frame;
     FOOTPRINTS       m_footprints;
