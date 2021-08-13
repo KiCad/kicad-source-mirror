@@ -1084,7 +1084,11 @@ void EE_SELECTION_TOOL::GuessSelectionCandidates( EE_COLLECTOR& collector, const
 
     for( EDA_ITEM* item : collector )
     {
-        int dist = EuclideanNorm( item->GetBoundingBox().GetCenter() - (wxPoint) aPos );
+        int dist = EuclideanNorm( item->GetBoundingBox().GetCenter() - wxPoint( aPos ) );
+
+        // For wires, if we hit one of the endpoints, consider that perfect
+        if( item->Type() == SCH_LINE_T && ( item->GetFlags() & ( STARTPOINT | ENDPOINT ) ) )
+            dist = 0;
 
         if( dist < closestDist )
         {
