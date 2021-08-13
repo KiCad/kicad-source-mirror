@@ -16,7 +16,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
 "PO-Revision-Date: 2021-08-13 07:31+0000\n"
-"Last-Translator: Ji Yoon Choi <chichoon.choi@gmail.com>\n"
+"Last-Translator: 서범기 <joonhoflow@naver.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
 "Language: ko\n"
@@ -13003,7 +13003,7 @@ msgid "Intersheet References"
 msgstr "시트 간 참조"
 
 #: eeschema/sch_io_mgr.cpp:35 pcbnew/io_mgr.cpp:42
-#, c-format, fuzzy
+#, c-format
 msgid "Plugin \"%s\" does not implement the \"%s\" function."
 msgstr "플러그인 \"%s\"은 \"%s\" 기능을 구현하지 않습니다."
 
@@ -13043,7 +13043,7 @@ msgid "Horizontal Bus, length %s"
 msgstr "수평 버스, 길이 %s"
 
 #: eeschema/sch_line.cpp:728
-#, c-format, fuzzy
+#, c-format
 msgid "Horizontal Graphic Line, length %s"
 msgstr "수평 그래픽 선, 길이 %s"
 
@@ -13219,7 +13219,7 @@ msgid "Power symbol creates a global label with name '%s'"
 msgstr "전원 심볼은 '%s'라는 이름의 전역 라벨을 생성합니다"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1882
-#, fuzzy, c-format
+#, c-format
 msgid "Port %s has no connections."
 msgstr "포트 %s에 연결이 없습니다."
 
@@ -20904,7 +20904,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:588
 msgid "Reannotate anyway?"
-msgstr ""
+msgstr "다시 주석을 달까요?"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:777
 msgid "Aborted: too many errors"
@@ -21097,7 +21097,7 @@ msgstr "뒷면 접두사:"
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:255
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:260
 msgid "Optional prefix for solder side reference designations (e.g. B_)"
-msgstr ""
+msgstr "납땜면의 참조 지정자에 대한 선택적 접두사(예: B_)"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:264
 #, fuzzy
