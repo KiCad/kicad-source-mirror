@@ -16,7 +16,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
 "PO-Revision-Date: 2021-08-13 15:17+0000\n"
-"Last-Translator: Ji Yoon Choi <chichoon.choi@gmail.com>\n"
+"Last-Translator: 박기정 <pgj0334@naver.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
 "Language: ko\n"
@@ -13238,12 +13238,12 @@ msgid "File not found %s."
 msgstr "파일을 찾을 수 없습니다 %s."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2185
-#, fuzzy, c-format
+#, c-format
 msgid "Sheetname's owner (%d) not found."
 msgstr "시트 이름의 소유자(%d)를 찾을 수 없습니다."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2212
-#, fuzzy, c-format
+#, c-format
 msgid "Filename's owner (%d) not found."
 msgstr "파일 이름의 소유자(%d)를 찾을 수 없습니다."
 
@@ -14336,9 +14336,8 @@ msgid "noname"
 msgstr "이름 없음"
 
 #: eeschema/sim/sim_plot_frame.cpp:1143
-#, fuzzy
 msgid "Save Simulation Workbook As"
-msgstr "좌표계 저장"
+msgstr "시뮬레이션 통합 문서 저장"
 
 #: eeschema/sim/sim_plot_frame.cpp:1161
 msgid "Save Plot as Image"
