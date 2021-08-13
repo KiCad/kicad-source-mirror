@@ -19,6 +19,8 @@ inner
 layer
 length
 max
+mechanical_clearance
+mechanical_hole_clearance
 micro_via
 min
 min_resolved_spokes

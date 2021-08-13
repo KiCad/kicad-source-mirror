@@ -301,6 +301,8 @@ void PANEL_SETUP_RULES::onScintillaCharAdded( wxStyledTextEvent &aEvent )
                      "hole_clearance|"
                      "hole_size|"
                      "hole_to_hole|"
+                     "mechanical_clearance|"
+                     "mechanical_hole_clearance|"
                      "min_resolved_spokes|"
                      "silk_clearance|"
                      "skew|"

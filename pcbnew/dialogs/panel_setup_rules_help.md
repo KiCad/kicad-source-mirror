@@ -30,6 +30,8 @@
  * length
  * hole\_clearance
  * hole\_size
+ * mechanical\_clearance
+ * mechanical\_hole\_clearance
  * min\_resolved\_spokes
  * silk\_clearance
  * skew
@@ -42,7 +44,7 @@
  * via\_diameter
  * zone\_connection
 
-
+Note: `clearance` and `hole_clearance` rules are not run against items of the same net; `mechanical_clearance` and `mechanical_hole_clearance` rules are.
 <br>
 
 ### Item Types
@@ -230,3 +232,8 @@ For the latter use a `(layer "layer_name")` clause in the rule.
     # Require all four thermal relief spokes to connect to parent zone
     (rule fully_spoked_pads
         (constraint min_resolved_spokes 4))
+
+    # Prevent solder wicking from SMD pads
+    (rule holes_in_pads
+        (constraint mechanical_hole_clearance (min 0.2mm))
+        (condition "B.Pad_Type == 'SMD'"))

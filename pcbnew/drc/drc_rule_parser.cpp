@@ -256,9 +256,11 @@ void DRC_RULES_PARSER::parseConstraint( DRC_RULE* aRule )
     if( (int) token == DSN_RIGHT || token == T_EOF )
     {
         msg.Printf( _( "Missing constraint type.|  Expected %s." ),
-                    "clearance, hole_clearance, edge_clearance, hole, hole_to_hole, "
-                    "courtyard_clearance, silk_clearance, track_width, annular_width, via_diameter, "
-                    "disallow, length, skew, via_count, diff_pair_gap or diff_pair_uncoupled" );
+                    "clearance, hole_clearance, edge_clearance, mechanical_clearance, "
+                    "mechanical_hole_clearance, courtyard_clearance, silk_clearance, hole_size, "
+                    "hole_to_hole, track_width, annular_width, via_diameter, disallow, "
+                    "zone_connection, thermal_relief_gap, thermal_spoke_width, min_resolved_spokes, "
+                    "length, skew, via_count, diff_pair_gap or diff_pair_uncoupled" );
         reportError( msg );
         return;
     }
@@ -288,13 +290,15 @@ void DRC_RULES_PARSER::parseConstraint( DRC_RULE* aRule )
     case T_via_count:                 c.m_Type = VIA_COUNT_CONSTRAINT;                 break;
     case T_diff_pair_gap:             c.m_Type = DIFF_PAIR_GAP_CONSTRAINT;             break;
     case T_diff_pair_uncoupled:       c.m_Type = DIFF_PAIR_MAX_UNCOUPLED_CONSTRAINT;   break;
+    case T_mechanical_clearance:      c.m_Type = MECHANICAL_CLEARANCE_CONSTRAINT;      break;
+    case T_mechanical_hole_clearance: c.m_Type = MECHANICAL_HOLE_CLEARANCE_CONSTRAINT; break;
     default:
         msg.Printf( _( "Unrecognized item '%s'.| Expected %s." ), FromUTF8(),
-                    "clearance, hole_clearance, edge_clearance, hole_size, hole_to_hole, "
-                    "courtyard_clearance, silk_clearance, text_height, text_thickness, "
-                    "track_width, annular_width, via_diameter, zone_connection, "
-                    "thermal_relief_gap, thermal_spoke_width, min_resolved_spokes, "
-                    "disallow, length, skew, diff_pair_gap or diff_pair_uncoupled." );
+                    "clearance, hole_clearance, edge_clearance, mechanical_clearance, "
+                    "mechanical_hole_clearance, courtyard_clearance, silk_clearance, hole_size, "
+                    "hole_to_hole, track_width, annular_width, disallow, zone_connection, "
+                    "thermal_relief_gap, thermal_spoke_width, min_resolved_spokes, length, skew, "
+                    "via_count, via_diameter, diff_pair_gap or diff_pair_uncoupled" );
         reportError( msg );
     }
 
@@ -362,7 +366,7 @@ void DRC_RULES_PARSER::parseConstraint( DRC_RULE* aRule )
 
         default:
             msg.Printf( _( "Unrecognized item '%s'.| Expected %s." ), FromUTF8(),
-                        "'solid', 'thermal_reliefs' or 'none'." );
+                        "solid, thermal_reliefs or none." );
             reportError( msg );
             break;
         }

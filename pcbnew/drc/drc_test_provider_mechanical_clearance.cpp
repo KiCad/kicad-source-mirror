@@ -1,0 +1,503 @@
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2021 KiCad Developers.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
+#include <common.h>
+#include <board_design_settings.h>
+#include <footprint.h>
+#include <pad.h>
+#include <pcb_track.h>
+#include <zone.h>
+
+#include <geometry/seg.h>
+#include <geometry/shape_segment.h>
+
+#include <drc/drc_engine.h>
+#include <drc/drc_rtree.h>
+#include <drc/drc_item.h>
+#include <drc/drc_rule.h>
+#include <drc/drc_test_provider_clearance_base.h>
+
+/*
+    Mechanical clearance test.
+
+    Errors generated:
+    - DRCE_MECHANICAL_CLEARANCE
+    - DRCE_MECHANICAL_HOLE_CLEARANCE
+*/
+
+class DRC_TEST_PROVIDER_MECHANICAL_CLEARANCE : public DRC_TEST_PROVIDER_CLEARANCE_BASE
+{
+public:
+    DRC_TEST_PROVIDER_MECHANICAL_CLEARANCE () :
+            DRC_TEST_PROVIDER_CLEARANCE_BASE()
+    {
+    }
+
+    virtual ~DRC_TEST_PROVIDER_MECHANICAL_CLEARANCE()
+    {
+    }
+
+    virtual bool Run() override;
+
+    virtual const wxString GetName() const override
+    {
+        return "mechanical_clearance";
+    };
+
+    virtual const wxString GetDescription() const override
+    {
+        return "Tests item clearances irrespective of nets";
+    }
+
+    virtual std::set<DRC_CONSTRAINT_T> GetConstraintTypes() const override;
+
+private:
+    bool testItemAgainstItem( BOARD_ITEM* item, SHAPE* itemShape, PCB_LAYER_ID layer,
+                              BOARD_ITEM* other );
+
+    void testItemAgainstZones( BOARD_ITEM* aItem, PCB_LAYER_ID aLayer );
+
+private:
+    DRC_RTREE                m_itemTree;
+    std::vector<BOARD_ITEM*> m_items;
+    std::vector<ZONE*>       m_zones;
+};
+
+
+bool DRC_TEST_PROVIDER_MECHANICAL_CLEARANCE::Run()
+{
+    m_board = m_drcEngine->GetBoard();
+    m_itemTree.clear();
+    m_zones.clear();
+    m_items.clear();
+
+    DRC_CONSTRAINT worstConstraint;
+
+    if( m_drcEngine->QueryWorstConstraint( MECHANICAL_CLEARANCE_CONSTRAINT, worstConstraint ) )
+        m_largestClearance = worstConstraint.GetValue().Min();
+
+    if( m_drcEngine->QueryWorstConstraint( MECHANICAL_HOLE_CLEARANCE_CONSTRAINT, worstConstraint ) )
+        m_largestClearance = std::max( m_largestClearance, worstConstraint.GetValue().Min() );
+
+    if( m_largestClearance <= 0 )
+    {
+        reportAux( "No Clearance constraints found. Tests not run." );
+        return true;   // continue with other tests
+    }
+
+    for( ZONE* zone : m_board->Zones() )
+    {
+        if( !zone->GetIsRuleArea() )
+        {
+            m_zones.push_back( zone );
+            m_largestClearance = std::max( m_largestClearance, zone->GetLocalClearance() );
+        }
+    }
+
+    for( FOOTPRINT* footprint : m_board->Footprints() )
+    {
+        for( PAD* pad : footprint->Pads() )
+            m_largestClearance = std::max( m_largestClearance, pad->GetLocalClearance() );
+
+        for( ZONE* zone : footprint->Zones() )
+        {
+            if( !zone->GetIsRuleArea() )
+            {
+                m_zones.push_back( zone );
+                m_largestClearance = std::max( m_largestClearance, zone->GetLocalClearance() );
+            }
+        }
+    }
+
+    reportAux( "Worst clearance : %d nm", m_largestClearance );
+
+    // This is the number of tests between 2 calls to the progress bar
+    size_t delta = 50;
+    size_t count = 0;
+    size_t ii = 0;
+
+    auto countItems =
+            [&]( BOARD_ITEM* item ) -> bool
+            {
+                ++count;
+                return true;
+            };
+
+    auto addToItemTree =
+            [&]( BOARD_ITEM* item ) -> bool
+            {
+                if( !reportProgress( ii++, count, delta ) )
+                    return false;
+
+                m_items.push_back( item );
+
+                LSET layers = item->GetLayerSet();
+
+                // Special-case pad holes which pierce all the copper layers
+                if( item->Type() == PCB_PAD_T )
+                {
+                    PAD* pad = static_cast<PAD*>( item );
+
+                    if( pad->GetDrillSizeX() > 0 && pad->GetDrillSizeY() > 0 )
+                        layers |= LSET::AllCuMask();
+                }
+
+                for( PCB_LAYER_ID layer : layers.Seq() )
+                    m_itemTree.Insert( item, layer, m_largestClearance );
+
+                return true;
+            };
+
+    if( !reportPhase( _( "Gathering items..." ) ) )
+        return false;   // DRC cancelled
+
+    static const std::vector<KICAD_T> itemTypes = {
+        PCB_TRACE_T, PCB_ARC_T, PCB_VIA_T, PCB_PAD_T, PCB_SHAPE_T, PCB_FP_SHAPE_T,
+        PCB_TEXT_T, PCB_FP_TEXT_T, PCB_DIMENSION_T, PCB_DIM_ALIGNED_T, PCB_DIM_LEADER_T,
+        PCB_DIM_CENTER_T,  PCB_DIM_RADIAL_T, PCB_DIM_ORTHOGONAL_T
+    };
+
+    forEachGeometryItem( itemTypes, LSET::AllLayersMask(), countItems );
+    forEachGeometryItem( itemTypes, LSET::AllLayersMask(), addToItemTree );
+
+    std::map< std::pair<BOARD_ITEM*, BOARD_ITEM*>, int> checkedPairs;
+
+    auto testItem =
+            [&]( BOARD_ITEM* item, PCB_LAYER_ID layer )
+            {
+                std::shared_ptr<SHAPE> itemShape = item->GetEffectiveShape( layer );
+
+                m_itemTree.QueryColliding( item, layer, layer,
+                        // Filter:
+                        [&]( BOARD_ITEM* other ) -> bool
+                        {
+                            BOARD_ITEM* a = item;
+                            BOARD_ITEM* b = other;
+
+                            // store canonical order so we don't collide in both directions
+                            // (a:b and b:a)
+                            if( static_cast<void*>( a ) > static_cast<void*>( b ) )
+                                std::swap( a, b );
+
+                            if( checkedPairs.count( { a, b } ) )
+                            {
+                                return false;
+                            }
+                            else
+                            {
+                                checkedPairs[ { a, b } ] = 1;
+                                return true;
+                            }
+                        },
+                        // Visitor:
+                        [&]( BOARD_ITEM* other ) -> bool
+                        {
+                            return testItemAgainstItem( item, itemShape.get(), layer, other );
+                        },
+                        m_largestClearance );
+
+                testItemAgainstZones( item, layer );
+            };
+
+    if( !m_drcEngine->IsErrorLimitExceeded( DRCE_CLEARANCE )
+            || !m_drcEngine->IsErrorLimitExceeded( DRCE_HOLE_CLEARANCE ) )
+    {
+        if( !reportPhase( _( "Checking mechanical clearances..." ) ) )
+            return false;   // DRC cancelled
+
+        ii = 0;
+
+        for( BOARD_ITEM* item : m_items )
+        {
+            if( !reportProgress( ii++, m_board->Tracks().size(), delta ) )
+                break;
+
+            for( PCB_LAYER_ID layer : item->GetLayerSet().Seq() )
+                testItem( item, layer );
+        }
+    }
+
+    reportRuleStatistics();
+
+    return true;
+}
+
+
+bool DRC_TEST_PROVIDER_MECHANICAL_CLEARANCE::testItemAgainstItem( BOARD_ITEM* item,
+                                                                  SHAPE* itemShape,
+                                                                  PCB_LAYER_ID layer,
+                                                                  BOARD_ITEM* other )
+{
+    bool           testClearance = !m_drcEngine->IsErrorLimitExceeded( DRCE_CLEARANCE );
+    bool           testHoles = !m_drcEngine->IsErrorLimitExceeded( DRCE_HOLE_CLEARANCE );
+    DRC_CONSTRAINT constraint;
+    int            clearance = 0;
+    int            actual;
+    VECTOR2I       pos;
+
+    std::shared_ptr<SHAPE> otherShape = DRC_ENGINE::GetShape( other, layer );
+
+    if( testClearance )
+    {
+        constraint = m_drcEngine->EvalRules( MECHANICAL_CLEARANCE_CONSTRAINT, item, other, layer );
+        clearance = constraint.GetValue().Min();
+    }
+
+    if( clearance > 0 )
+    {
+        if( itemShape->Collide( otherShape.get(), clearance, &actual, &pos ) )
+        {
+            std::shared_ptr<DRC_ITEM> drce = DRC_ITEM::Create( DRCE_CLEARANCE );
+
+            m_msg.Printf( _( "(%s clearance %s; actual %s)" ),
+                          constraint.GetName(),
+                          MessageTextFromValue( userUnits(), clearance ),
+                          MessageTextFromValue( userUnits(), actual ) );
+
+            drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + m_msg );
+            drce->SetItems( item, other );
+            drce->SetViolatingRule( constraint.GetParentRule() );
+
+            reportViolation( drce, (wxPoint) pos );
+        }
+    }
+
+    if( testHoles )
+    {
+        std::unique_ptr<SHAPE_SEGMENT> itemHoleShape;
+        std::unique_ptr<SHAPE_SEGMENT> otherHoleShape;
+        clearance = 0;
+
+        if( item->Type() == PCB_VIA_T )
+        {
+            PCB_VIA* via = static_cast<PCB_VIA*>( item );
+            pos = via->GetPosition();
+
+            if( via->GetLayerSet().Contains( layer ) )
+                itemHoleShape.reset( new SHAPE_SEGMENT( pos, pos, via->GetDrill() ) );
+        }
+        else if( item->Type() == PCB_PAD_T )
+        {
+            PAD* pad = static_cast<PAD*>( item );
+
+            if( pad->GetDrillSize().x )
+                itemHoleShape.reset( new SHAPE_SEGMENT( *pad->GetEffectiveHoleShape() ) );
+        }
+
+        if( other->Type() == PCB_VIA_T )
+        {
+            PCB_VIA* via = static_cast<PCB_VIA*>( other );
+            pos = via->GetPosition();
+
+            if( via->GetLayerSet().Contains( layer ) )
+                otherHoleShape.reset( new SHAPE_SEGMENT( pos, pos, via->GetDrill() ) );
+        }
+        else if( other->Type() == PCB_PAD_T )
+        {
+            PAD* pad = static_cast<PAD*>( other );
+
+            if( pad->GetDrillSize().x )
+                otherHoleShape.reset( new SHAPE_SEGMENT( *pad->GetEffectiveHoleShape() ) );
+        }
+
+        if( itemHoleShape || otherHoleShape )
+        {
+            constraint = m_drcEngine->EvalRules( MECHANICAL_HOLE_CLEARANCE_CONSTRAINT, other, item,
+                                                 layer );
+            clearance = constraint.GetValue().Min();
+        }
+
+        if( clearance > 0 && itemHoleShape && itemHoleShape->Collide( otherShape.get(), clearance,
+                                                                      &actual, &pos ) )
+        {
+            std::shared_ptr<DRC_ITEM> drce = DRC_ITEM::Create( DRCE_HOLE_CLEARANCE );
+
+            m_msg.Printf( _( "(%s clearance %s; actual %s)" ),
+                          constraint.GetName(),
+                          MessageTextFromValue( userUnits(), clearance ),
+                          MessageTextFromValue( userUnits(), actual ) );
+
+            drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + m_msg );
+            drce->SetItems( item, other );
+            drce->SetViolatingRule( constraint.GetParentRule() );
+
+            reportViolation( drce, (wxPoint) pos );
+        }
+
+        if( clearance > 0 && otherHoleShape && otherHoleShape->Collide( itemShape, clearance,
+                                                                        &actual, &pos ) )
+        {
+            std::shared_ptr<DRC_ITEM> drce = DRC_ITEM::Create( DRCE_HOLE_CLEARANCE );
+
+            m_msg.Printf( _( "(%s clearance %s; actual %s)" ),
+                          constraint.GetName(),
+                          MessageTextFromValue( userUnits(), clearance ),
+                          MessageTextFromValue( userUnits(), actual ) );
+
+            drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + m_msg );
+            drce->SetItems( item, other );
+            drce->SetViolatingRule( constraint.GetParentRule() );
+
+            reportViolation( drce, (wxPoint) pos );
+        }
+    }
+
+    return true;
+}
+
+
+void DRC_TEST_PROVIDER_MECHANICAL_CLEARANCE::testItemAgainstZones( BOARD_ITEM* aItem,
+                                                                   PCB_LAYER_ID aLayer )
+{
+    for( ZONE* zone : m_zones )
+    {
+        if( !zone->GetLayerSet().test( aLayer ) )
+            continue;
+
+        if( aItem->GetBoundingBox().Intersects( zone->GetCachedBoundingBox() ) )
+        {
+            bool testClearance = !m_drcEngine->IsErrorLimitExceeded( DRCE_CLEARANCE );
+            bool testHoles = !m_drcEngine->IsErrorLimitExceeded( DRCE_HOLE_CLEARANCE );
+
+            if( !testClearance && !testHoles )
+                return;
+
+            DRC_RTREE*     zoneTree = m_board->m_CopperZoneRTrees[ zone ].get();
+            EDA_RECT       itemBBox = aItem->GetBoundingBox();
+            DRC_CONSTRAINT constraint;
+            int            clearance = -1;
+            int            actual;
+            VECTOR2I       pos;
+
+            if( testClearance )
+            {
+                constraint = m_drcEngine->EvalRules( MECHANICAL_CLEARANCE_CONSTRAINT, aItem, zone,
+                                                     aLayer );
+                clearance = constraint.GetValue().Min();
+            }
+
+            if( clearance > 0 )
+            {
+                std::shared_ptr<SHAPE> itemShape = aItem->GetEffectiveShape( aLayer );
+
+                if( aItem->Type() == PCB_PAD_T )
+                {
+                    PAD* pad = static_cast<PAD*>( aItem );
+
+                    if( !pad->FlashLayer( aLayer ) )
+                    {
+                        if( pad->GetDrillSize().x == 0 && pad->GetDrillSize().y == 0 )
+                            continue;
+
+                        const SHAPE_SEGMENT* hole = pad->GetEffectiveHoleShape();
+                        int                  size = hole->GetWidth();
+
+                        // Note: drill size represents finish size, which means the actual hole
+                        // size is the plating thickness larger.
+                        if( pad->GetAttribute() == PAD_ATTRIB::PTH )
+                            size += m_board->GetDesignSettings().GetHolePlatingThickness();
+
+                        itemShape = std::make_shared<SHAPE_SEGMENT>( hole->GetSeg(), size );
+                    }
+                }
+
+                if( zoneTree->QueryColliding( itemBBox, itemShape.get(), aLayer, clearance,
+                                              &actual, &pos ) )
+                {
+                    std::shared_ptr<DRC_ITEM> drce = DRC_ITEM::Create( DRCE_CLEARANCE );
+
+                    m_msg.Printf( _( "(%s clearance %s; actual %s)" ),
+                                  constraint.GetName(),
+                                  MessageTextFromValue( userUnits(), clearance ),
+                                  MessageTextFromValue( userUnits(), actual ) );
+
+                    drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + m_msg );
+                    drce->SetItems( aItem, zone );
+                    drce->SetViolatingRule( constraint.GetParentRule() );
+
+                    reportViolation( drce, (wxPoint) pos );
+                }
+            }
+
+            if( testHoles && ( aItem->Type() == PCB_VIA_T || aItem->Type() == PCB_PAD_T ) )
+            {
+                std::unique_ptr<SHAPE_SEGMENT> holeShape;
+
+                if( aItem->Type() == PCB_VIA_T )
+                {
+                    PCB_VIA* via = static_cast<PCB_VIA*>( aItem );
+                    pos = via->GetPosition();
+
+                    if( via->GetLayerSet().Contains( aLayer ) )
+                        holeShape.reset( new SHAPE_SEGMENT( pos, pos, via->GetDrill() ) );
+                }
+                else if( aItem->Type() == PCB_PAD_T )
+                {
+                    PAD* pad = static_cast<PAD*>( aItem );
+
+                    if( pad->GetDrillSize().x )
+                        holeShape.reset( new SHAPE_SEGMENT( *pad->GetEffectiveHoleShape() ) );
+                }
+
+                if( holeShape )
+                {
+                    constraint = m_drcEngine->EvalRules( MECHANICAL_HOLE_CLEARANCE_CONSTRAINT,
+                                                         aItem, zone, aLayer );
+                    clearance = constraint.GetValue().Min();
+
+                    if( clearance > 0 && zoneTree->QueryColliding( itemBBox, holeShape.get(),
+                                                                   aLayer, clearance, &actual,
+                                                                   &pos ) )
+                    {
+                        std::shared_ptr<DRC_ITEM> drce = DRC_ITEM::Create( DRCE_HOLE_CLEARANCE );
+
+                        m_msg.Printf( _( "(%s clearance %s; actual %s)" ),
+                                      constraint.GetName(),
+                                      MessageTextFromValue( userUnits(), clearance ),
+                                      MessageTextFromValue( userUnits(), actual ) );
+
+                        drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + m_msg );
+                        drce->SetItems( aItem, zone );
+                        drce->SetViolatingRule( constraint.GetParentRule() );
+
+                        reportViolation( drce, (wxPoint) pos );
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+
+
+std::set<DRC_CONSTRAINT_T> DRC_TEST_PROVIDER_MECHANICAL_CLEARANCE::GetConstraintTypes() const
+{
+    return { MECHANICAL_CLEARANCE_CONSTRAINT, MECHANICAL_HOLE_CLEARANCE_CONSTRAINT };
+}
+
+
+namespace detail
+{
+    static DRC_REGISTER_TEST_PROVIDER<DRC_TEST_PROVIDER_MECHANICAL_CLEARANCE> dummy;
+}
