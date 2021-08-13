@@ -16,7 +16,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
 "PO-Revision-Date: 2021-08-13 15:17+0000\n"
-"Last-Translator: 박기정 <pgj0334@naver.com>\n"
+"Last-Translator: 서범기 <joonhoflow@naver.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
 "Language: ko\n"
@@ -21106,6 +21106,8 @@ msgid ""
 "Do not re-annotate this type \n"
 "of reference (R means R*)"
 msgstr ""
+"참조에서 이 유형에 다시 주석 달지 마시오\n"
+"(R은 R*을 의미함)"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:290
 msgid "Reference Designators"
@@ -21113,7 +21115,7 @@ msgstr "참조 지정자"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.h:106
 msgid "Geographical Reannotation"
-msgstr ""
+msgstr "지리적 재주석"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:52
 msgid "Board Setup"
@@ -21135,7 +21137,7 @@ msgstr "Module 에디터"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:90
 msgid "Physical Stackup"
-msgstr ""
+msgstr "물리적 스택업"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:93
 msgid "Board Finish"
@@ -21182,6 +21184,8 @@ msgid ""
 "Error importing settings from board:\n"
 "Associated project file %s could not be loaded"
 msgstr ""
+"보드에서 설정 가져오기 오류:\n"
+"연결된 프로젝트 파일 %s을(를) 로드할 수 없습니다"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:198 pcbnew/files.cpp:614
 #: pcbnew/tools/pcb_control.cpp:1022
@@ -21303,6 +21307,8 @@ msgid ""
 "PCB statistics report\n"
 "====================="
 msgstr ""
+"PCB 통계 보고서\n"
+"======================="
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:650
 msgid "Date"
@@ -21341,7 +21347,7 @@ msgstr "보드 크기"
 
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:198
 msgid "Subtract holes from board area"
-msgstr ""
+msgstr "기판 영역에서 홀 부분들을 뺍니다"
 
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:201
 msgid "Exclude components with no pins"
@@ -21411,14 +21417,14 @@ msgstr "그래픽"
 
 #: pcbnew/dialogs/dialog_cleanup_graphics_base.cpp:22
 msgid "Merge lines into rectangles"
-msgstr ""
+msgstr "선을 직사각형에 병합"
 
 #: pcbnew/dialogs/dialog_cleanup_graphics_base.cpp:23
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:23
 msgid ""
 "remove track segments connecting nodes belonging to different nets (short "
 "circuit)"
-msgstr ""
+msgstr "다른 네트에 속한 노드에 연결되는 배선 세그먼트(회로의 단락)를 삭제"
 
 #: pcbnew/dialogs/dialog_cleanup_graphics_base.cpp:27
 #, fuzzy
@@ -21455,11 +21461,11 @@ msgstr "스루홀 패드와 겹쳐진 비아에서의 비아 삭제"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:32
 msgid "Delete vias connected on only one layer"
-msgstr ""
+msgstr "하나의 레이어에만 연결된 비아 삭제"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:35
 msgid "&Merge co-linear tracks"
-msgstr ""
+msgstr "&동일선상의 배선 병합"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:36
 msgid "merge aligned track segments, and remove null segments"
@@ -21481,7 +21487,7 @@ msgstr "패드 내부의 트랙 삭제"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:46
 msgid "Delete tracks that have both start and end positions inside of a pad"
-msgstr ""
+msgstr "패드 내부에 시작점과 끝점이 모두 있는 배선 삭제"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.h:57
 #, fuzzy
@@ -21490,7 +21496,7 @@ msgstr "트랙 및 비아"
 
 #: pcbnew/dialogs/dialog_constraints_reporter_base.h:45
 msgid "Constraints Resolution Report"
-msgstr ""
+msgstr "제약 해결 보고서"
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:360
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:149
@@ -21506,7 +21512,7 @@ msgstr "모깍기 반경:"
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:503
 msgid "Thermal spoke width cannot be smaller than the minimum width."
-msgstr ""
+msgstr "써멀 스포크 너비는 최소 너비보다 작을 수 없습니다."
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:532
 #: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:256
@@ -21541,7 +21547,7 @@ msgstr "영역 이름:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:90
 msgid "A unique name for this zone to identify it for DRC"
-msgstr ""
+msgstr "DRC에서 식별하기 위한 이 영역의 고유 이름"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:97
 msgid "Zone priority level:"
@@ -21555,11 +21561,15 @@ msgid ""
 "* If its priority is higher, its outlines are removed from the other zone.\n"
 "* If its priority is equal, a DRC error is set."
 msgstr ""
+"영역들은 우선 순위에 따라 채워집니다, 레벨 3은 레벨 2보다 우선 순위가 높습니다.\n"
+"한 영역이 다른 영역 안에 있을 경우:\n"
+"* 우선 순위가 높은 경우: 윤곽선이 다른 영역에서 제거됩니다.\n"
+"* 우선 순위가 동일한 경우: DRC 오류가 설정됩니다."
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:120
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:51
 msgid "Constrain outline to H, V and 45 degrees"
-msgstr ""
+msgstr "윤곽을 H, V 및 45도로 제한"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:126
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:107
@@ -21570,17 +21580,17 @@ msgstr "외곽선 표시:"
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:61
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:111 pcbnew/zone.cpp:622
 msgid "Hatched"
-msgstr ""
+msgstr "해치됨"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:130
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:61
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:111
 msgid "Fully hatched"
-msgstr ""
+msgstr "완전히 해치됨"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:139
 msgid "Corner smoothing:"
-msgstr ""
+msgstr "모서리 다듬기:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:143
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:82
@@ -21612,7 +21622,7 @@ msgstr "최소 폭:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:195
 msgid "Minimum thickness of filled areas."
-msgstr ""
+msgstr "채워진 영역의 최소 두께."
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:215
 msgid "Pad connections:"
