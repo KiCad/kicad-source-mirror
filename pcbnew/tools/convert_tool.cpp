@@ -249,6 +249,11 @@ int CONVERT_TOOL::CreatePolys( const TOOL_EVENT& aEvent )
 
 SHAPE_POLY_SET CONVERT_TOOL::makePolysFromSegs( const std::deque<EDA_ITEM*>& aItems )
 {
+    // TODO: This code has a somewhat-similar purpose to ConvertOutlineToPolygon but is slightly
+    // different, so this remains a separate algorithm.  It might be nice to analyze the dfiferences
+    // in requirements and refactor this.
+    const int chainingEpsilon = Millimeter2iu( 0.02 );
+
     SHAPE_POLY_SET poly;
 
     // Stores pairs of (anchor, item) where anchor == 0 -> SEG.A, anchor == 1 -> SEG.B
@@ -256,13 +261,31 @@ SHAPE_POLY_SET CONVERT_TOOL::makePolysFromSegs( const std::deque<EDA_ITEM*>& aIt
     std::set<EDA_ITEM*> used;
     std::deque<EDA_ITEM*> toCheck;
 
+    auto closeEnough =
+            []( VECTOR2I aLeft, VECTOR2I aRight, unsigned aLimit )
+            {
+                return ( aLeft - aRight ).SquaredEuclideanNorm() <= SEG::Square( aLimit );
+            };
+
+    auto findInsertionPoint =
+            [&]( VECTOR2I aPoint ) -> VECTOR2I
+            {
+                for( const auto& candidatePair : connections )
+                {
+                    if( closeEnough( aPoint, candidatePair.first, chainingEpsilon ) )
+                        return candidatePair.first;
+                }
+
+                return aPoint;
+            };
+
     for( EDA_ITEM* item : aItems )
     {
         if( OPT<SEG> seg = getStartEndPoints( item, nullptr ) )
         {
             toCheck.push_back( item );
-            connections[seg->A].emplace_back( std::make_pair( 0, item ) );
-            connections[seg->B].emplace_back( std::make_pair( 1, item ) );
+            connections[findInsertionPoint( seg->A )].emplace_back( std::make_pair( 0, item ) );
+            connections[findInsertionPoint( seg->B )].emplace_back( std::make_pair( 1, item ) );
         }
     }
 
