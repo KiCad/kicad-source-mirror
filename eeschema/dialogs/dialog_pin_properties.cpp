@@ -254,6 +254,22 @@ bool DIALOG_PIN_PROPERTIES::TransferDataToWindow()
 
     m_dummyPin->SetVisible( m_pin->IsVisible() );
 
+    bool hasMultiUnit    = m_pin->GetParent()->GetUnitCount() > 1;
+    bool enableUnitScope = m_pin->GetParent()->UnitsLocked();
+
+    m_checkApplyToAllParts->Enable( !m_frame->m_SyncPinEdit && enableUnitScope && hasMultiUnit );
+
+    wxString toolTip;
+
+    if( !hasMultiUnit )
+        toolTip = _( "This symbol only has one unit. This control has no effect." );
+    else if( m_frame->m_SyncPinEdit )
+        toolTip = _( "Synchronized pin edit mode is enabled. This control has no effect." );
+    else if( !enableUnitScope )
+        toolTip = _( "All units in this symbol are interchangeable. This control has no effect." );
+
+    m_checkApplyToAllParts->SetToolTip( toolTip );
+
     for( const std::pair<const wxString, LIB_PIN::ALT>& alt : m_pin->GetAlternates() )
         m_alternatesDataModel->AppendRow( alt.second );
 
