@@ -269,6 +269,7 @@ void DRC_RULES_PARSER::parseConstraint( DRC_RULE* aRule )
     case T_clearance:           constraint.m_Type = CLEARANCE_CONSTRAINT;                break;
     case T_hole_clearance:      constraint.m_Type = HOLE_CLEARANCE_CONSTRAINT;           break;
     case T_edge_clearance:      constraint.m_Type = EDGE_CLEARANCE_CONSTRAINT;           break;
+    case T_hole:  // legacy token
     case T_hole_size:           constraint.m_Type = HOLE_SIZE_CONSTRAINT;                break;
     case T_hole_to_hole:        constraint.m_Type = HOLE_TO_HOLE_CONSTRAINT;             break;
     case T_courtyard_clearance: constraint.m_Type = COURTYARD_CLEARANCE_CONSTRAINT;      break;
