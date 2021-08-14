@@ -114,6 +114,16 @@ bool PANEL_3D_COLORS::TransferDataToWindow()
                 return COLOR4D( src.r, src.g, src.b, src.a );
             };
 
+    m_backgroundTop->SetSupportsOpacity( false );
+    m_backgroundBottom->SetSupportsOpacity( false );
+    m_silkscreenTop->SetSupportsOpacity( false );
+    m_silkscreenBottom->SetSupportsOpacity( false );
+    m_solderMaskTop->SetBackgroundColour( *wxWHITE );
+    m_solderMaskBottom->SetBackgroundColour( *wxWHITE );
+    m_solderPaste->SetSupportsOpacity( false );
+    m_surfaceFinish->SetSupportsOpacity( false );
+    m_boardBody->SetBackgroundColour( *wxWHITE );
+
     m_backgroundTop->SetSwatchColor( to_COLOR4D( m_boardAdapter.m_BgColorTop ), false );
     m_backgroundBottom->SetSwatchColor( to_COLOR4D( m_boardAdapter.m_BgColorBot ), false );
     m_silkscreenTop->SetSwatchColor( to_COLOR4D( m_boardAdapter.m_SilkScreenColorTop ), false );

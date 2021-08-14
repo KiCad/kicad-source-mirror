@@ -30,7 +30,7 @@
 
 
 ///! Update the schema version whenever a migration is required
-const int colorsSchemaVersion = 2;
+const int colorsSchemaVersion = 3;
 
 
 COLOR_SETTINGS::COLOR_SETTINGS( const wxString& aFilename ) :
@@ -224,6 +224,26 @@ COLOR_SETTINGS::COLOR_SETTINGS( const wxString& aFilename ) :
                 nlohmann::json::json_pointer ptr( "/board/via_hole");
 
                 ( *m_internals )[ptr] = COLOR4D( 0.5, 0.4, 0, 0.8 ).ToWxString( wxC2S_CSS_SYNTAX );
+
+                return true;
+            } );
+
+    registerMigration( 2, 3,
+            [&]()
+            {
+                // We don't support opacity in some 3D colors but some versions of 5.99 let
+                // you set it.
+
+                for( wxString path : { "3d_viewer.background_top",
+                                       "3d_viewer.background_bottom",
+                                       "3d_viewer.copper",
+                                       "3d_viewer.silkscreen_top",
+                                       "3d_viewer.silkscreen_bottom",
+                                       "3d_viewer.solderpaste" } )
+                {
+                    if( OPT<COLOR4D> optval = Get<COLOR4D>( path ) )
+                        Set( path, optval->WithAlpha( 1.0 ) );
+                }
 
                 return true;
             } );
