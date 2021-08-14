@@ -474,6 +474,10 @@ void SCH_ALTIUM_PLUGIN::ParseFileHeader( const CFB::CompoundFileReader& aReader 
         case ALTIUM_SCH_RECORD::NOTE:
             ParseNote( properties );
             break;
+        case ALTIUM_SCH_RECORD::COMPILE_MASK:
+            m_reporter->Report( _( "Compile Mask on schematic currently not supported." ),
+                                RPT_SEVERITY_ERROR );
+            break;
         case ALTIUM_SCH_RECORD::RECORD_215:
             break;
         case ALTIUM_SCH_RECORD::RECORD_216:

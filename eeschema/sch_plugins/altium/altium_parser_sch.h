@@ -89,6 +89,7 @@ enum class ALTIUM_SCH_RECORD
     RECORD_47           = 47,
     RECORD_48           = 48,
     NOTE                = 209,
+    COMPILE_MASK        = 211,
     RECORD_215          = 215,
     RECORD_216          = 216,
     RECORD_217          = 217,
