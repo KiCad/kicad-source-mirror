@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
-"PO-Revision-Date: 2021-08-14 04:30+0000\n"
+"PO-Revision-Date: 2021-08-14 04:40+0000\n"
 "Last-Translator: Ji Yoon Choi <chichoon.choi@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
@@ -1328,7 +1328,7 @@ msgid ""
 "The reference designator and value are always placed on the silk screen "
 "layer (but will be marked invisible)."
 msgstr ""
-"윤곽선을 그릴 기판 레이어를 선택합니다.\n"
+"외곽선을 그릴 기판 레이어를 선택합니다.\n"
 "참조 지정자와 값은 항상 실크 스크린 레이어에 배치됩니다 (단, 숨겨짐으로 설정됩니다)."
 
 #: bitmap2component/bitmap2cmp_gui_base.h:100
@@ -3607,7 +3607,7 @@ msgstr "출력 메시지"
 #: pcbnew/dialogs/dialog_drc_base.cpp:147
 #: pcbnew/dialogs/dialog_footprint_checker_base.cpp:32
 msgid "Show:"
-msgstr "보이기:"
+msgstr "표시:"
 
 #: common/dialogs/wx_html_report_panel_base.cpp:35
 #: eeschema/dialogs/dialog_erc_base.cpp:70 eeschema/lib_item.cpp:57
@@ -5855,11 +5855,11 @@ msgstr "그리드 원점 설정"
 
 #: common/tool/actions.cpp:474
 msgid "Show Grid"
-msgstr "그리드 보이기"
+msgstr "그리드 표시"
 
 #: common/tool/actions.cpp:474
 msgid "Display grid dots or lines in the edit window"
-msgstr "편집 창에 그리드 점 및 선 보이기"
+msgstr "편집 창에 그리드 점 및 선 표시"
 
 #: common/tool/actions.cpp:479
 msgid "Grid Properties..."
@@ -5922,7 +5922,7 @@ msgstr "로컬 좌표계 초기화"
 
 #: common/tool/actions.cpp:520
 msgid "Always Show Cursor"
-msgstr "커서 항상 보이기"
+msgstr "커서 항상 표시"
 
 #: common/tool/actions.cpp:520
 msgid "Display crosshairs even in selection tool"
@@ -5966,7 +5966,7 @@ msgstr "두 점 사이의 거리를 인터랙티브하게 계측"
 
 #: common/tool/actions.cpp:555
 msgid "Show 3D viewer window"
-msgstr "3D 뷰어 창 보이기"
+msgstr "3D 뷰어 창 표시"
 
 #: common/tool/actions.cpp:560 eeschema/symbol_viewer_frame.cpp:102
 #: eeschema/symbol_viewer_frame.cpp:921
@@ -7624,7 +7624,7 @@ msgstr ""
 "\n"
 "***주의사항 (Windows 사용자 전용):***\n"
 "* 기본값으로, 명령줄은 숨겨진 콘솔 창에서 실행되고, 출력값은 \"플러그인 정보\" 필드에 리디렉션됩니다. 실행되고 있는 명령을 창에 "
-"보이기 위해서는, \"콘솔 창 보이기\" 체크박스를 체크하세요. *\n"
+"보이기 위해서는, \"콘솔 창 표시\" 체크박스를 체크하세요. *\n"
 "\n"
 "생성 버튼을 클릭하면 다음과 같은 행동이 실행됩니다 :\n"
 "\n"
@@ -8052,7 +8052,7 @@ msgstr "구문 도움말"
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:39
 #: pcbnew/dialogs/panel_setup_rules_base.cpp:34
 msgid "Show syntax help window"
-msgstr "문법 도움말 창 보이기"
+msgstr "문법 도움말 창 표시"
 
 #: eeschema/dialogs/dialog_edit_label_base.cpp:106
 #: eeschema/dialogs/dialog_spice_model_base.cpp:240
@@ -8659,7 +8659,7 @@ msgstr "채우지 마십시오"
 
 #: eeschema/dialogs/dialog_lib_edit_draw_item_base.cpp:39
 msgid "Fill with body outline color"
-msgstr "바디 윤곽선 색상으로 채우기"
+msgstr "바디 외곽선 색상으로 채우기"
 
 #: eeschema/dialogs/dialog_lib_edit_draw_item_base.cpp:39
 msgid "Fill with body background color"
@@ -9509,7 +9509,7 @@ msgstr "그래픽 스타일:"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:154
 msgid "&Visible"
-msgstr "보이기 (&V)"
+msgstr "가시성 (&V)"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:161
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:190
@@ -14417,7 +14417,7 @@ msgstr "시뮬레이션"
 
 #: eeschema/sim/sim_plot_frame_base.cpp:101
 msgid "Show &Grid"
-msgstr "격자 보이기(&G)"
+msgstr "격자 표시 (&G)"
 
 #: eeschema/sim/sim_plot_frame_base.cpp:105
 msgid "Show &Legend"
@@ -15190,7 +15190,7 @@ msgstr "심볼 검사기"
 
 #: eeschema/tools/ee_actions.cpp:50
 msgid "Show the symbol checker window"
-msgstr "심볼 검사기 창 보이기"
+msgstr "심볼 검사기 창 표시"
 
 #: eeschema/tools/ee_actions.cpp:55
 msgid "Simulator..."
@@ -15918,7 +15918,7 @@ msgstr "PCB 편집기에서 대응하는 개체 강조"
 
 #: eeschema/tools/ee_actions.cpp:634
 msgid "Show Hidden Pins"
-msgstr "숨은 핀 보이기"
+msgstr "숨은 핀 표시"
 
 #: eeschema/tools/ee_actions.cpp:634
 msgid "Toggle display of hidden pins"
@@ -15946,7 +15946,7 @@ msgstr "스크립팅 콘솔"
 
 #: eeschema/tools/ee_actions.cpp:649 pcbnew/tools/pcb_actions.cpp:773
 msgid "Show the Python scripting console"
-msgstr "Python 스크립팅 콘솔 창 보이기"
+msgstr "Python 스크립팅 콘솔 창 표시"
 
 #: eeschema/tools/ee_actions.cpp:656
 msgid "Enter Sheet"
@@ -16522,7 +16522,7 @@ msgstr "레이어"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:30
 msgid "Show D codes"
-msgstr "D-Code 보이기"
+msgstr "D-Code 표시"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:38
 msgid "Drawing Mode"
@@ -16575,7 +16575,7 @@ msgstr "페이지 크기"
 #: gerbview/dialogs/panel_gerbview_settings_base.cpp:28
 #: pcbnew/dialogs/panel_edit_options_base.cpp:364
 msgid "Show page limits"
-msgstr "페이지 경계 보이기"
+msgstr "페이지 경계 표시"
 
 #: gerbview/events_called_functions.cpp:179 gerbview/gerbview_frame.cpp:164
 msgid "Layers Manager"
@@ -17041,7 +17041,7 @@ msgstr "소스 표시..."
 
 #: gerbview/tools/gerbview_actions.cpp:76
 msgid "Show source file for the current layer"
-msgstr "현재 레이어의 소스 파일 보이기"
+msgstr "현재 레이어의 소스 파일 표시"
 
 #: gerbview/tools/gerbview_actions.cpp:81
 msgid "Export to PCB Editor..."
@@ -17121,7 +17121,7 @@ msgstr "다각형 스케치"
 
 #: gerbview/tools/gerbview_actions.cpp:156
 msgid "Show polygons in outline mode"
-msgstr "개요 모드에서 다각형 보이기"
+msgstr "외곽선 모드에서 다각형 표시"
 
 #: gerbview/tools/gerbview_actions.cpp:162
 msgid "Ghost Negative Objects"
@@ -17140,9 +17140,8 @@ msgid "Show dcode number"
 msgstr "D코드 번호 표시"
 
 #: gerbview/tools/gerbview_actions.cpp:173
-#, fuzzy
 msgid "Show in Differential Mode"
-msgstr "3D 모드로 보드 보이기"
+msgstr "차동 모드로 표시"
 
 #: gerbview/tools/gerbview_actions.cpp:173
 msgid "Show layers in diff (compare) mode"
@@ -17279,9 +17278,8 @@ msgid "Hide All Layers"
 msgstr "모든 레이어 지우기"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:137
-#, fuzzy
 msgid "Sort Layers if X2 Mode"
-msgstr "3D 모드로 보드 보이기"
+msgstr "X2 모드일 경우 레이어 정렬"
 
 #: gerbview/widgets/layer_widget.cpp:128
 #, fuzzy
@@ -18048,9 +18046,8 @@ msgid "Printing"
 msgstr "인쇄"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:31
-#, fuzzy
 msgid "Show on all pages"
-msgstr "영역 보이기"
+msgstr "모든 페이지에 표시"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:31
 #, fuzzy
@@ -18389,7 +18386,7 @@ msgstr "디자인 검사기 표시"
 
 #: pagelayout_editor/tools/pl_actions.cpp:82
 msgid "Show the list of items in the drawing sheet"
-msgstr "도면 시트에 존재하는 개체 목록 보이기"
+msgstr "도면 시트에 존재하는 개체 목록 표시"
 
 #: pagelayout_editor/tools/pl_actions.cpp:87
 msgid "Page Preview Settings..."
@@ -21434,13 +21431,13 @@ msgid ""
 msgstr ""
 "영역들은 우선 순위에 따라 채워집니다, 레벨 3은 레벨 2보다 우선 순위가 높습니다.\n"
 "한 영역이 다른 영역 안에 있을 경우:\n"
-"* 우선 순위가 높은 경우: 윤곽선이 다른 영역에서 제거됩니다.\n"
+"* 우선 순위가 높은 경우: 외곽선이 다른 영역에서 제거됩니다.\n"
 "* 우선 순위가 동일한 경우: DRC 오류가 설정됩니다."
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:120
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:51
 msgid "Constrain outline to H, V and 45 degrees"
-msgstr "윤곽을 H, V 및 45도로 제한"
+msgstr "외곽선을 수평, 수직 또는 45도 각도로 제한"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:126
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:107
@@ -21613,9 +21610,8 @@ msgid "Choose what to do with unconnected copper islands"
 msgstr "연결되지 않은 고립 영역으로 할 일을 선택"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:339
-#, fuzzy
 msgid "Below area limit"
-msgstr "페이지 경계 보이기"
+msgstr "영역 제한 이하"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:345
 msgid "Minimum island size:"
@@ -21776,9 +21772,8 @@ msgid "From start value"
 msgstr "풋프린트 값"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:121
-#, fuzzy
 msgid "Initial Pad Number"
-msgstr "패드 번호 보이기"
+msgstr "첫 번째 패드 번호"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:125
 msgid "Continuous (1, 2, 3...)"
@@ -22399,9 +22394,8 @@ msgid "Update/reset fabrication attributes"
 msgstr "기판 제조 속성 업데이트/초기화"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:110
-#, fuzzy
 msgid "Update/reset 3D models"
-msgstr "D-Code 보이기"
+msgstr "3D 모델 업데이트/초기화"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.h:86
 msgid "Update Footprints from Library"
@@ -22545,9 +22539,8 @@ msgid "Overwrite old file"
 msgstr "오래된 파일 덮어쓰기"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:123
-#, fuzzy
 msgid "Board outline chaining tolerance:"
-msgstr "보드 파일:"
+msgstr "기판 외곽선 연결 허용치:"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:127
 msgid "Tight (0.001 mm)"
@@ -22813,9 +22806,8 @@ msgid "Search other text items"
 msgstr "풋프린트 이동"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:74
-#, fuzzy
 msgid "Search DRC markers"
-msgstr "D-Codes 보이기"
+msgstr "DRC 마커 검색"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:98
 #, fuzzy
@@ -23264,7 +23256,7 @@ msgstr "불러올 수 없는 python 스크립트:"
 
 #: pcbnew/dialogs/dialog_footprint_wizard_list_base.cpp:84
 msgid "Show Trace"
-msgstr "트레이스 보이기"
+msgstr "트레이스 표시"
 
 #: pcbnew/dialogs/dialog_footprint_wizard_list_base.cpp:98
 msgid "Update Python Modules"
@@ -24175,7 +24167,7 @@ msgstr "보고서 파일"
 
 #: pcbnew/dialogs/dialog_net_inspector_base.cpp:44
 msgid "Show zero pad nets"
-msgstr "패드가 0개인 네트 보이기"
+msgstr "패드가 0개인 네트 표시"
 
 #: pcbnew/dialogs/dialog_net_inspector_base.cpp:48
 msgid "Group by:"
@@ -25862,9 +25854,8 @@ msgid "A unique name for this rule area for use in DRC rules"
 msgstr "이 규칙 영역에 대해서 DRC 규칙에서 사용될 고유 이름"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:96
-#, fuzzy
 msgid "Constrain outline to H, V and 45 deg"
-msgstr "수평, 수직 또는 45도 각도로만 선 그리기"
+msgstr "외곽선을 수평, 수직 또는 45도 각도로 제한"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:97
 msgid "Draw the area using horizontal, verical and 45 degree lines only"
@@ -26170,9 +26161,8 @@ msgid "Do not show"
 msgstr "숨기기"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:37
-#, fuzzy
 msgid "Show on pads"
-msgstr "영역 보이기"
+msgstr "패드에 표시"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:37
 #, fuzzy
@@ -26180,9 +26170,8 @@ msgid "Show on tracks"
 msgstr "트랙 이동"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:37
-#, fuzzy
 msgid "Show on pads and tracks"
-msgstr "영역 보이기"
+msgstr "패드와 배선에 표시"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:39
 msgid "Net Names"
@@ -26194,13 +26183,12 @@ msgstr "패드와 (또는) 배선의 네트 이름을 표시하거나 숨깁니�
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:45
 #: pcbnew/tools/pcb_actions.cpp:825
-#, fuzzy
 msgid "Show pad numbers"
-msgstr "패드 번호 보이기"
+msgstr "패드 번호 표시"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:49
 msgid "Show pad <no net> indicator"
-msgstr "패드의 <네트 없음> 표시기 보이기"
+msgstr "패드의 <네트 없음> 표시기 표시"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:57
 msgid "Clearance Outlines"
@@ -26238,7 +26226,7 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:67
 msgid "Show pad clearance"
-msgstr "패드 클리어런스 보이기"
+msgstr "패드 클리어런스 표시"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:86
 msgid "Highlight nets when they are highlighted in the schematic editor"
@@ -32199,9 +32187,8 @@ msgstr ""
 "저장하시겠습니까?"
 
 #: pcbnew/router/router_tool.cpp:828 pcbnew/router/router_tool.cpp:850
-#, fuzzy
 msgid "Show board setup"
-msgstr "모듈 연결선 보이기"
+msgstr "기판 설정 표시"
 
 #: pcbnew/router/router_tool.cpp:840
 msgid ""
@@ -33169,9 +33156,8 @@ msgid "Add Filled Zone"
 msgstr "필드 1 추가"
 
 #: pcbnew/tools/pcb_actions.cpp:156
-#, fuzzy
 msgid "Add a filled zone"
-msgstr "패드 채움 모드 보이기"
+msgstr "채워진 영역 추가"
 
 #: pcbnew/tools/pcb_actions.cpp:162
 msgid "Add Vias"
@@ -33263,14 +33249,12 @@ msgid "Delete the last point added to the current item"
 msgstr "현재 개체의 마지막으로 추가된 점 삭제"
 
 #: pcbnew/tools/pcb_actions.cpp:218
-#, fuzzy
 msgid "Close Outline"
-msgstr "영역 채움 설정"
+msgstr "외곽선 닫기"
 
 #: pcbnew/tools/pcb_actions.cpp:218
-#, fuzzy
 msgid "Close the in progress outline"
-msgstr "영역 채움 설정"
+msgstr "작성중인 외곽선을 닫습니다"
 
 #: pcbnew/tools/pcb_actions.cpp:223
 msgid "Limit Lines to 45 deg"
@@ -33287,7 +33271,7 @@ msgstr "디자인 규칙 검사기"
 
 #: pcbnew/tools/pcb_actions.cpp:230
 msgid "Show the design rules checker window"
-msgstr "디자인 규칙 검사기 창 보이기"
+msgstr "디자인 규칙 검사기 창 표시"
 
 #: pcbnew/tools/pcb_actions.cpp:239
 #, fuzzy
@@ -33391,7 +33375,7 @@ msgstr "선택된 항목 잘라내기"
 
 #: pcbnew/tools/pcb_actions.cpp:335
 msgid "Show Footprint Tree"
-msgstr "풋프린트 트리 보이기"
+msgstr "풋프린트 트리 표시"
 
 #: pcbnew/tools/pcb_actions.cpp:340
 msgid "Hide Footprint Tree"
@@ -33471,7 +33455,7 @@ msgstr "풋프린트 속성 편집"
 
 #: pcbnew/tools/pcb_actions.cpp:396
 msgid "Show the footprint checker window"
-msgstr "풋프린트 검사기 창 보이기"
+msgstr "풋프린트 검사기 창 표시"
 
 #: pcbnew/tools/pcb_actions.cpp:403
 msgid "Update Footprint..."
@@ -33969,9 +33953,8 @@ msgid "Hide the ratsnest for the selected net"
 msgstr "선택한 네트의 모든 연결선 숨김"
 
 #: pcbnew/tools/pcb_actions.cpp:743
-#, fuzzy
 msgid "Show Net"
-msgstr "모두 보이기"
+msgstr "네트 표시"
 
 #: pcbnew/tools/pcb_actions.cpp:743
 msgid "Show the ratsnest for the selected net"
@@ -34019,11 +34002,11 @@ msgstr "기판을 반대편 시점으로 보기"
 
 #: pcbnew/tools/pcb_actions.cpp:789
 msgid "Show Ratsnest"
-msgstr "연결선 보이기"
+msgstr "연결선 표시"
 
 #: pcbnew/tools/pcb_actions.cpp:789
 msgid "Show board ratsnest"
-msgstr "기판 연결선 보이기"
+msgstr "기판 연결선 표시"
 
 #: pcbnew/tools/pcb_actions.cpp:794
 msgid "Curved Ratsnest Lines"
@@ -34034,36 +34017,32 @@ msgid "Sketch Tracks"
 msgstr "배선 스케치"
 
 #: pcbnew/tools/pcb_actions.cpp:800
-#, fuzzy
 msgid "Show tracks in outline mode"
-msgstr "트랙 채움 모드 보이기"
+msgstr "외곽선 모드에서 배선 표시"
 
 #: pcbnew/tools/pcb_actions.cpp:805
 msgid "Sketch Pads"
 msgstr "패드 스케치"
 
 #: pcbnew/tools/pcb_actions.cpp:805
-#, fuzzy
 msgid "Show pads in outline mode"
-msgstr "패드 채움 모드 보이기"
+msgstr "외곽선 모드에서 패드 표시"
 
 #: pcbnew/tools/pcb_actions.cpp:810
 msgid "Sketch Vias"
 msgstr "비아 스케치"
 
 #: pcbnew/tools/pcb_actions.cpp:810
-#, fuzzy
 msgid "Show vias in outline mode"
-msgstr "패드 채움 모드 보이기"
+msgstr "외곽선 모드에서 비아 표시"
 
 #: pcbnew/tools/pcb_actions.cpp:815
 msgid "Sketch Graphic Items"
 msgstr "그래픽 개체 스케치"
 
 #: pcbnew/tools/pcb_actions.cpp:815
-#, fuzzy
 msgid "Show graphic items in outline mode"
-msgstr "트랙 채움 모드 보이기"
+msgstr "외곽선 모드에서 그래픽 개체 표시"
 
 #: pcbnew/tools/pcb_actions.cpp:820
 msgid "Sketch Text Items"
@@ -34089,9 +34068,8 @@ msgid "Fill Zones"
 msgstr "영역 채우기"
 
 #: pcbnew/tools/pcb_actions.cpp:835
-#, fuzzy
 msgid "Show filled areas of zones"
-msgstr "모듈 연결선 보이기"
+msgstr "영역의 채워진 구역 표시"
 
 #: pcbnew/tools/pcb_actions.cpp:840
 #, fuzzy
@@ -34100,16 +34078,15 @@ msgstr "영역 삭제"
 
 #: pcbnew/tools/pcb_actions.cpp:840
 msgid "Show only zone boundaries"
-msgstr "영역 경계만 보이기"
+msgstr "영역 경계만 표시"
 
 #: pcbnew/tools/pcb_actions.cpp:845
 msgid "Sketch Zones"
 msgstr "영역 스케치"
 
 #: pcbnew/tools/pcb_actions.cpp:845
-#, fuzzy
 msgid "Show solid areas of zones in outline mode"
-msgstr "플로트 모드 선 두께 설정"
+msgstr "외곽선 모드에서 영역 내의 솔리드 구역 표시"
 
 #: pcbnew/tools/pcb_actions.cpp:851
 #, fuzzy
@@ -34287,14 +34264,12 @@ msgid "Make the current layer more transparent"
 msgstr "현재 레이어를 더 투명하게 만들기"
 
 #: pcbnew/tools/pcb_actions.cpp:1065
-#, fuzzy
 msgid "Show Board Statistics"
-msgstr "모듈 연결선 보이기"
+msgstr "기판의 통계 표시"
 
 #: pcbnew/tools/pcb_actions.cpp:1065
-#, fuzzy
 msgid "Shows board statistics"
-msgstr "모듈 연결선 보이기"
+msgstr "기판의 통계 표시"
 
 #: pcbnew/tools/pcb_actions.cpp:1069
 msgid "Clearance Resolution..."
@@ -34312,7 +34287,7 @@ msgstr "제약 조건 해결..."
 
 #: pcbnew/tools/pcb_actions.cpp:1076
 msgid "Show constraints resolution for the selected object"
-msgstr "선택한 객체에 대한 제약 해결 보이기"
+msgstr "선택한 객체에 대한 제약 해결 표시"
 
 #: pcbnew/tools/pcb_actions.cpp:1082
 msgid "Geographical Reannotate..."
@@ -34532,14 +34507,12 @@ msgid "Route tracks"
 msgstr "트랙 이동"
 
 #: pcbnew/tools/pcb_actions.cpp:1294
-#, fuzzy
 msgid "Route Differential Pair"
-msgstr "3D 모드로 보드 보이기"
+msgstr "차동 쌍 라우트"
 
 #: pcbnew/tools/pcb_actions.cpp:1294
-#, fuzzy
 msgid "Route differential pairs"
-msgstr "3D 모드로 보드 보이기"
+msgstr "차동 쌍 라우트"
 
 #: pcbnew/tools/pcb_actions.cpp:1300
 msgid "Interactive Router Settings..."
@@ -34750,9 +34723,8 @@ msgid "Fill Zone(s)"
 msgstr "영역 채우기"
 
 #: pcbnew/tools/zone_filler_tool.cpp:124
-#, fuzzy
 msgid "Show DRC rules"
-msgstr "D-Codes 보이기"
+msgstr "DRC 규칙 표시"
 
 #: pcbnew/tools/zone_filler_tool.cpp:137
 msgid "Zone fills may be inaccurate.  DRC rules contain errors."
@@ -34767,9 +34739,8 @@ msgid "Show tracks"
 msgstr "트랙 표시"
 
 #: pcbnew/widgets/appearance_controls.cpp:341
-#, fuzzy
 msgid "Show all vias"
-msgstr "모두 보이기"
+msgstr "모든 비아 표시"
 
 #: pcbnew/widgets/appearance_controls.cpp:342
 msgid "Show all pads"
@@ -34801,7 +34772,7 @@ msgstr "스루홀 패드"
 
 #: pcbnew/widgets/appearance_controls.cpp:347
 msgid "Show through-hole pads"
-msgstr "스루홀 패드 보이기"
+msgstr "스루홀 패드 표시"
 
 #: pcbnew/widgets/appearance_controls.cpp:348
 msgid "Show footprint values"
@@ -34813,7 +34784,7 @@ msgstr "참조"
 
 #: pcbnew/widgets/appearance_controls.cpp:349
 msgid "Show footprint references"
-msgstr "풋프린트 참조 보이기"
+msgstr "풋프린트 참조 표시"
 
 #: pcbnew/widgets/appearance_controls.cpp:350
 msgid "Show all footprint text"
@@ -35167,7 +35138,7 @@ msgstr "모든 비 구리 레이어 숨기기"
 
 #: pcbnew/widgets/appearance_controls.cpp:1605
 msgid "Show Only Front Assembly Layers"
-msgstr "정면 조립 레이어만 보이기"
+msgstr "정면 조립 레이어만 표시"
 
 #: pcbnew/widgets/appearance_controls.cpp:1607
 msgid "Show Only Front Layers"
@@ -35179,11 +35150,11 @@ msgstr "내부 레이어만 표시"
 
 #: pcbnew/widgets/appearance_controls.cpp:1617
 msgid "Show Only Back Layers"
-msgstr "후면 레이어만 보이기"
+msgstr "후면 레이어만 표시"
 
 #: pcbnew/widgets/appearance_controls.cpp:1620
 msgid "Show Only Back Assembly Layers"
-msgstr "후면 조립 레이어만 보이기"
+msgstr "후면 조립 레이어만 표시"
 
 #: pcbnew/widgets/appearance_controls.cpp:1947
 #, c-format
