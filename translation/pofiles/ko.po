@@ -15,8 +15,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
-"PO-Revision-Date: 2021-08-14 04:40+0000\n"
-"Last-Translator: Ji Yoon Choi <chichoon.choi@gmail.com>\n"
+"PO-Revision-Date: 2021-08-14 05:50+0000\n"
+"Last-Translator: 서범기 <joonhoflow@naver.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
 "Language: ko\n"
@@ -17148,9 +17148,8 @@ msgid "Show layers in diff (compare) mode"
 msgstr "레이어를 diff (비교) 모드로 표시"
 
 #: gerbview/tools/gerbview_actions.cpp:178
-#, fuzzy
 msgid "Flip Gerber View"
-msgstr "플립 거버 뷰"
+msgstr "거버 뷰 뒤집기"
 
 #: gerbview/tools/gerbview_actions.cpp:178
 msgid "Show as mirror image"
@@ -17161,18 +17160,17 @@ msgid "None of the Gerber layers contain any data"
 msgstr "데이터를 가진 거버 레이어가 없습니다"
 
 #: gerbview/tools/gerbview_control.cpp:119
-#, fuzzy
 msgid "Board File Name"
-msgstr "보드 파일 이름"
+msgstr "기판 파일 이름"
 
 #: gerbview/tools/gerbview_inspection_tool.cpp:147
 msgid "D Codes"
 msgstr "D 코드"
 
 #: gerbview/tools/gerbview_inspection_tool.cpp:175
-#, fuzzy, c-format
+#, c-format
 msgid "Source file '%s' not found."
-msgstr "%s 파일을 찾을 수 없습니다."
+msgstr "소스 파일 '%s'을 찾을 수 없습니다."
 
 #: gerbview/tools/gerbview_inspection_tool.cpp:185
 msgid "No editor defined. Please select one."
@@ -17249,9 +17247,8 @@ msgid "Drawing Sheet"
 msgstr "도면 시트"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:101
-#, fuzzy
 msgid "Show drawing sheet border and title block"
-msgstr "페이지 설정"
+msgstr "도면 시트 여백 및 제목 블록 표시"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:103
 msgid "PCB Background"
@@ -17259,7 +17256,6 @@ msgstr "PCB 배경"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:122
 #: pcbnew/widgets/appearance_controls.cpp:1596
-#, fuzzy
 msgid "Show All Layers"
 msgstr "모든 레이어 표시"
 
@@ -17282,9 +17278,8 @@ msgid "Sort Layers if X2 Mode"
 msgstr "X2 모드일 경우 레이어 정렬"
 
 #: gerbview/widgets/layer_widget.cpp:128
-#, fuzzy
 msgid "Change Layer Color for"
-msgstr "Copper layer"
+msgstr "레이어 색상 변경"
 
 #: gerbview/widgets/layer_widget.cpp:178
 msgid "Change Render Color for"
@@ -17314,14 +17309,12 @@ msgid "Reset all colors in this theme to the KiCad defaults"
 msgstr "이 테마의 모든 색상을 KiCad 기본값으로 되돌리기"
 
 #: include/filehistory.h:54
-#, fuzzy
 msgid "Clear Recent Files"
-msgstr "새 거버 파일 (&G)"
+msgstr "최근 파일 지우기"
 
 #: include/kiway_player.h:242
-#, fuzzy
 msgid "This file is already open."
-msgstr "이 파일은 라이브러리 파일이 아닙니다."
+msgstr "이 파일은 이미 열려 있습니다."
 
 #: include/lib_table_grid.h:184
 msgid "Library Path"
@@ -17389,18 +17382,16 @@ msgid "Edit the project schematic"
 msgstr "프로젝트 회로도 편집"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:112
-#, fuzzy
 msgid "Edit global and/or project schematic symbol libraries"
-msgstr "탐색할 라이브러리 선택"
+msgstr "전역 및/또는 프로젝트 회로도 심볼 라이브러리 편집"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:116
 msgid "Edit the project PCB design"
 msgstr "프로젝트의 PCB 디자인 편집"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:120
-#, fuzzy
 msgid "Edit global and/or project PCB footprint libraries"
-msgstr "탐색할 라이브러리 선택"
+msgstr "전역 및/또는 프로젝트 PCB 풋프린트 라이브러리 편집"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:124
 msgid "Preview Gerber files"
