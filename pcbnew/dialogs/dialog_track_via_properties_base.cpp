@@ -41,7 +41,7 @@ DIALOG_TRACK_VIA_PROPERTIES_BASE::DIALOG_TRACK_VIA_PROPERTIES_BASE( wxWindow* pa
 	m_sbCommonSizer->Add( bSizerNetWidgets, 5, wxEXPAND|wxRIGHT, 10 );
 
 	m_staticline1 = new wxStaticLine( m_sbCommonSizer->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	m_sbCommonSizer->Add( m_staticline1, 0, wxEXPAND|wxBOTTOM|wxRIGHT, 5 );
+	m_sbCommonSizer->Add( m_staticline1, 0, wxEXPAND|wxTOP|wxBOTTOM|wxRIGHT, 5 );
 
 	m_lockedCbox = new wxCheckBox( m_sbCommonSizer->GetStaticBox(), wxID_ANY, _("Locked"), wxDefaultPosition, wxDefaultSize, wxCHK_3STATE );
 	m_sbCommonSizer->Add( m_lockedCbox, 0, wxALL, 5 );
@@ -154,99 +154,103 @@ DIALOG_TRACK_VIA_PROPERTIES_BASE::DIALOG_TRACK_VIA_PROPERTIES_BASE( wxWindow* pa
 	fgTrackRightSizer->Add( m_TrackLayerCtrl, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
 
 
-	m_sbTrackSizer->Add( fgTrackRightSizer, 4, wxLEFT|wxEXPAND, 10 );
+	m_sbTrackSizer->Add( fgTrackRightSizer, 4, wxEXPAND|wxRIGHT, 10 );
 
 
 	m_MainSizer->Add( m_sbTrackSizer, 0, wxEXPAND|wxRIGHT|wxLEFT, 10 );
 
 	m_sbViaSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Vias") ), wxHORIZONTAL );
 
-	wxFlexGridSizer* fgViaLeftSizer;
-	fgViaLeftSizer = new wxFlexGridSizer( 6, 3, 4, 5 );
-	fgViaLeftSizer->AddGrowableCol( 1 );
-	fgViaLeftSizer->SetFlexibleDirection( wxBOTH );
-	fgViaLeftSizer->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+	wxFlexGridSizer* viaLeftColumn;
+	viaLeftColumn = new wxFlexGridSizer( 6, 3, 4, 5 );
+	viaLeftColumn->AddGrowableCol( 1 );
+	viaLeftColumn->SetFlexibleDirection( wxBOTH );
+	viaLeftColumn->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
 	m_ViaXLabel = new wxStaticText( m_sbViaSizer->GetStaticBox(), wxID_ANY, _("Position X:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_ViaXLabel->Wrap( -1 );
-	fgViaLeftSizer->Add( m_ViaXLabel, 0, wxALIGN_CENTER_VERTICAL, 3 );
+	viaLeftColumn->Add( m_ViaXLabel, 0, wxALIGN_CENTER_VERTICAL, 3 );
 
 	m_ViaXCtrl = new wxTextCtrl( m_sbViaSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgViaLeftSizer->Add( m_ViaXCtrl, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL, 3 );
+	viaLeftColumn->Add( m_ViaXCtrl, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL, 3 );
 
 	m_ViaXUnit = new wxStaticText( m_sbViaSizer->GetStaticBox(), wxID_ANY, _("Unit"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_ViaXUnit->Wrap( -1 );
-	fgViaLeftSizer->Add( m_ViaXUnit, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 3 );
+	viaLeftColumn->Add( m_ViaXUnit, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 3 );
 
 	m_ViaYLabel = new wxStaticText( m_sbViaSizer->GetStaticBox(), wxID_ANY, _("Position Y:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_ViaYLabel->Wrap( -1 );
-	fgViaLeftSizer->Add( m_ViaYLabel, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM, 5 );
+	viaLeftColumn->Add( m_ViaYLabel, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM, 5 );
 
 	m_ViaYCtrl = new wxTextCtrl( m_sbViaSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgViaLeftSizer->Add( m_ViaYCtrl, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxEXPAND, 5 );
+	viaLeftColumn->Add( m_ViaYCtrl, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxEXPAND, 5 );
 
 	m_ViaYUnit = new wxStaticText( m_sbViaSizer->GetStaticBox(), wxID_ANY, _("Unit"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_ViaYUnit->Wrap( -1 );
-	fgViaLeftSizer->Add( m_ViaYUnit, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT, 5 );
+	viaLeftColumn->Add( m_ViaYUnit, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT, 5 );
 
 	m_DesignRuleVias = new wxStaticText( m_sbViaSizer->GetStaticBox(), wxID_ANY, _("Pre-defined sizes:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_DesignRuleVias->Wrap( -1 );
-	fgViaLeftSizer->Add( m_DesignRuleVias, 0, wxALIGN_CENTER_VERTICAL|wxTOP, 5 );
+	viaLeftColumn->Add( m_DesignRuleVias, 0, wxALIGN_CENTER_VERTICAL|wxTOP, 5 );
 
 	wxArrayString m_DesignRuleViasCtrlChoices;
 	m_DesignRuleViasCtrl = new wxChoice( m_sbViaSizer->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_DesignRuleViasCtrlChoices, 0 );
 	m_DesignRuleViasCtrl->SetSelection( 0 );
-	fgViaLeftSizer->Add( m_DesignRuleViasCtrl, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxTOP, 5 );
+	viaLeftColumn->Add( m_DesignRuleViasCtrl, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxTOP, 5 );
 
 	m_DesignRuleViasUnit = new wxStaticText( m_sbViaSizer->GetStaticBox(), wxID_ANY, _("Unit"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_DesignRuleViasUnit->Wrap( -1 );
-	fgViaLeftSizer->Add( m_DesignRuleViasUnit, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxTOP, 5 );
+	viaLeftColumn->Add( m_DesignRuleViasUnit, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxTOP, 5 );
 
 	m_ViaDiameterLabel = new wxStaticText( m_sbViaSizer->GetStaticBox(), wxID_ANY, _("Via diameter:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_ViaDiameterLabel->Wrap( -1 );
-	fgViaLeftSizer->Add( m_ViaDiameterLabel, 0, wxALIGN_CENTER_VERTICAL, 5 );
+	viaLeftColumn->Add( m_ViaDiameterLabel, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_ViaDiameterCtrl = new wxTextCtrl( m_sbViaSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgViaLeftSizer->Add( m_ViaDiameterCtrl, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
+	viaLeftColumn->Add( m_ViaDiameterCtrl, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
 
 	m_ViaDiameterUnit = new wxStaticText( m_sbViaSizer->GetStaticBox(), wxID_ANY, _("Unit"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_ViaDiameterUnit->Wrap( -1 );
-	fgViaLeftSizer->Add( m_ViaDiameterUnit, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+	viaLeftColumn->Add( m_ViaDiameterUnit, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 	m_ViaDrillLabel = new wxStaticText( m_sbViaSizer->GetStaticBox(), wxID_ANY, _("Via hole:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_ViaDrillLabel->Wrap( -1 );
-	fgViaLeftSizer->Add( m_ViaDrillLabel, 0, wxALIGN_CENTER_VERTICAL, 5 );
+	viaLeftColumn->Add( m_ViaDrillLabel, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_ViaDrillCtrl = new wxTextCtrl( m_sbViaSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgViaLeftSizer->Add( m_ViaDrillCtrl, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
+	viaLeftColumn->Add( m_ViaDrillCtrl, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
 
 	m_ViaDrillUnit = new wxStaticText( m_sbViaSizer->GetStaticBox(), wxID_ANY, _("Unit"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_ViaDrillUnit->Wrap( -1 );
-	fgViaLeftSizer->Add( m_ViaDrillUnit, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+	viaLeftColumn->Add( m_ViaDrillUnit, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 
-	fgViaLeftSizer->Add( 0, 0, 1, wxEXPAND, 5 );
+	viaLeftColumn->Add( 0, 0, 1, wxEXPAND, 5 );
 
 	m_viaNetclass = new wxCheckBox( m_sbViaSizer->GetStaticBox(), wxID_ANY, _("Use net class sizes"), wxDefaultPosition, wxDefaultSize, 0 );
-	fgViaLeftSizer->Add( m_viaNetclass, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM, 5 );
+	viaLeftColumn->Add( m_viaNetclass, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM, 5 );
 
 
-	fgViaLeftSizer->Add( 0, 0, 1, wxEXPAND, 5 );
+	viaLeftColumn->Add( 0, 0, 1, wxEXPAND, 5 );
 
 
-	m_sbViaSizer->Add( fgViaLeftSizer, 5, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	m_sbViaSizer->Add( viaLeftColumn, 5, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 
 
-	m_sbViaSizer->Add( 0, 0, 0, wxEXPAND|wxRIGHT|wxLEFT, 10 );
+	m_sbViaSizer->Add( 0, 0, 0, wxEXPAND|wxRIGHT|wxLEFT, 15 );
 
-	wxGridBagSizer* gbViaRightSizer;
-	gbViaRightSizer = new wxGridBagSizer( 0, 0 );
-	gbViaRightSizer->SetFlexibleDirection( wxBOTH );
-	gbViaRightSizer->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+	wxBoxSizer* viaRightColumn;
+	viaRightColumn = new wxBoxSizer( wxVERTICAL );
+
+	wxFlexGridSizer* fgSizer4;
+	fgSizer4 = new wxFlexGridSizer( 0, 2, 0, 0 );
+	fgSizer4->AddGrowableCol( 1 );
+	fgSizer4->SetFlexibleDirection( wxBOTH );
+	fgSizer4->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
 	m_ViaTypeLabel = new wxStaticText( m_sbViaSizer->GetStaticBox(), wxID_ANY, _("Via type:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_ViaTypeLabel->Wrap( -1 );
-	gbViaRightSizer->Add( m_ViaTypeLabel, wxGBPosition( 0, 0 ), wxGBSpan( 1, 1 ), wxEXPAND|wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	fgSizer4->Add( m_ViaTypeLabel, 0, wxBOTTOM|wxALIGN_CENTER_VERTICAL, 5 );
 
 	wxString m_ViaTypeChoiceChoices[] = { _("Through"), _("Micro"), _("Blind/buried") };
 	int m_ViaTypeChoiceNChoices = sizeof( m_ViaTypeChoiceChoices ) / sizeof( wxString );
@@ -254,32 +258,40 @@ DIALOG_TRACK_VIA_PROPERTIES_BASE::DIALOG_TRACK_VIA_PROPERTIES_BASE( wxWindow* pa
 	m_ViaTypeChoice->SetSelection( 0 );
 	m_ViaTypeChoice->Enable( false );
 
-	gbViaRightSizer->Add( m_ViaTypeChoice, wxGBPosition( 0, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 3 );
+	fgSizer4->Add( m_ViaTypeChoice, 0, wxBOTTOM|wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
 
 	m_ViaStartLayerLabel = new wxStaticText( m_sbViaSizer->GetStaticBox(), wxID_ANY, _("Start layer:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_ViaStartLayerLabel->Wrap( -1 );
-	gbViaRightSizer->Add( m_ViaStartLayerLabel, wxGBPosition( 1, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+	fgSizer4->Add( m_ViaStartLayerLabel, 0, wxRIGHT|wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_ViaStartLayer = new PCB_LAYER_BOX_SELECTOR( m_sbViaSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, 0 );
-	gbViaRightSizer->Add( m_ViaStartLayer, wxGBPosition( 1, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
+	fgSizer4->Add( m_ViaStartLayer, 0, wxEXPAND, 5 );
 
 	m_ViaEndLayerLabel1 = new wxStaticText( m_sbViaSizer->GetStaticBox(), wxID_ANY, _("End layer:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_ViaEndLayerLabel1->Wrap( -1 );
-	gbViaRightSizer->Add( m_ViaEndLayerLabel1, wxGBPosition( 2, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+	fgSizer4->Add( m_ViaEndLayerLabel1, 0, wxRIGHT|wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_ViaEndLayer = new PCB_LAYER_BOX_SELECTOR( m_sbViaSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, 0 );
-	gbViaRightSizer->Add( m_ViaEndLayer, wxGBPosition( 2, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
+	fgSizer4->Add( m_ViaEndLayer, 0, wxEXPAND, 5 );
 
 
-	gbViaRightSizer->AddGrowableCol( 1 );
+	viaRightColumn->Add( fgSizer4, 0, wxEXPAND|wxBOTTOM|wxRIGHT, 5 );
 
-	m_sbViaSizer->Add( gbViaRightSizer, 4, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	m_annularRingsLabel = new wxStaticText( m_sbViaSizer->GetStaticBox(), wxID_ANY, _("Annular rings:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_annularRingsLabel->Wrap( -1 );
+	viaRightColumn->Add( m_annularRingsLabel, 0, wxTOP, 10 );
+
+	wxString m_annularRingsCtrlChoices[] = { _("All copper layers"), _("Start, end, and connected layers"), _("Connected layers only") };
+	int m_annularRingsCtrlNChoices = sizeof( m_annularRingsCtrlChoices ) / sizeof( wxString );
+	m_annularRingsCtrl = new wxChoice( m_sbViaSizer->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_annularRingsCtrlNChoices, m_annularRingsCtrlChoices, 0 );
+	m_annularRingsCtrl->SetSelection( 0 );
+	viaRightColumn->Add( m_annularRingsCtrl, 0, wxEXPAND|wxTOP|wxBOTTOM|wxRIGHT, 5 );
+
+
+	m_sbViaSizer->Add( viaRightColumn, 4, wxEXPAND|wxRIGHT, 5 );
 
 
 	m_MainSizer->Add( m_sbViaSizer, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 10 );
-
-
-	m_MainSizer->Add( 0, 0, 1, wxEXPAND, 5 );
 
 	m_StdButtons = new wxStdDialogButtonSizer();
 	m_StdButtonsOK = new wxButton( this, wxID_OK );

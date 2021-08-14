@@ -90,6 +90,17 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParen
     bool hasLocked = false;
     bool hasUnlocked = false;
 
+    auto getAnnularRingSelection =
+            []( const PCB_VIA* via ) -> int
+            {
+                if( !via->GetRemoveUnconnected() )
+                    return 0;
+                else if( via->GetKeepTopBottom() )
+                    return 1;
+                else
+                    return 2;
+            };
+
     // Look for values that are common for every item that is selected
     for( EDA_ITEM* item : m_items )
     {
@@ -168,6 +179,7 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParen
                     m_ViaStartLayer->SetLayerSelection( v->TopLayer() );
                     m_ViaEndLayer->SetLayerSelection( v->BottomLayer() );
                     m_viaNotFree->SetValue( !v->GetIsFree() );
+                    m_annularRingsCtrl->SetSelection( getAnnularRingSelection( v ) );
                 }
                 else        // check if values are the same for every selected via
                 {
@@ -201,6 +213,14 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParen
                         m_ViaEndLayer->SetUndefinedLayerName( INDETERMINATE_STATE );
                         m_ViaEndLayer->Resync();
                         m_ViaEndLayer->SetLayerSelection( UNDEFINED_LAYER );
+                    }
+
+                    if( m_annularRingsCtrl->GetSelection() != getAnnularRingSelection( v ) )
+                    {
+                        if( m_annularRingsCtrl->GetStrings().size() < 4 )
+                            m_annularRingsCtrl->AppendString( INDETERMINATE_STATE );
+
+                        m_annularRingsCtrl->SetSelection( 3 );
                     }
                 }
 
@@ -271,18 +291,10 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParen
 
         switch( viaType )
         {
-        case VIATYPE::THROUGH:
-            m_ViaTypeChoice->SetSelection( 0 );
-            break;
-        case VIATYPE::MICROVIA:
-            m_ViaTypeChoice->SetSelection( 1 );
-            break;
-        case VIATYPE::BLIND_BURIED:
-            m_ViaTypeChoice->SetSelection( 2 );
-            break;
-        case VIATYPE::NOT_DEFINED:
-            m_ViaTypeChoice->SetSelection( wxNOT_FOUND );
-            break;
+        case VIATYPE::THROUGH:      m_ViaTypeChoice->SetSelection( 0 );           break;
+        case VIATYPE::MICROVIA:     m_ViaTypeChoice->SetSelection( 1 );           break;
+        case VIATYPE::BLIND_BURIED: m_ViaTypeChoice->SetSelection( 2 );           break;
+        case VIATYPE::NOT_DEFINED:  m_ViaTypeChoice->SetSelection( wxNOT_FOUND ); break;
         }
 
         m_ViaStartLayer->Enable( viaType != VIATYPE::THROUGH );
@@ -494,6 +506,23 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataFromWindow()
 
                 if (endLayer != UNDEFINED_LAYER )
                     v->SetBottomLayer( endLayer );
+
+                switch( m_annularRingsCtrl->GetSelection() )
+                {
+                case 0:
+                    v->SetRemoveUnconnected( false );
+                    break;
+                case 1:
+                    v->SetRemoveUnconnected( true );
+                    v->SetKeepTopBottom( true );
+                    break;
+                case 2:
+                    v->SetRemoveUnconnected( true );
+                    v->SetKeepTopBottom( false );
+                    break;
+                default:
+                    break;
+                }
 
                 v->SanitizeLayers();
 
