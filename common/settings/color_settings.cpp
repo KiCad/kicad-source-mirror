@@ -238,12 +238,12 @@ COLOR_SETTINGS::COLOR_SETTINGS( const wxString& aFilename ) :
                 // We don't support opacity in some 3D colors but some versions of 5.99 let
                 // you set it.
 
-                for( wxString path : { "3d_viewer.background_top",
-                                       "3d_viewer.background_bottom",
-                                       "3d_viewer.copper",
-                                       "3d_viewer.silkscreen_top",
-                                       "3d_viewer.silkscreen_bottom",
-                                       "3d_viewer.solderpaste" } )
+                for( std::string path : { "3d_viewer.background_top",
+                                          "3d_viewer.background_bottom",
+                                          "3d_viewer.copper",
+                                          "3d_viewer.silkscreen_top",
+                                          "3d_viewer.silkscreen_bottom",
+                                          "3d_viewer.solderpaste" } )
                 {
                     if( OPT<COLOR4D> optval = Get<COLOR4D>( path ) )
                         Set( path, optval->WithAlpha( 1.0 ) );
