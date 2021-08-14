@@ -65,6 +65,7 @@ public:
     void OnDeleteAlternate( wxCommandEvent& event ) override;
     void OnSize( wxSizeEvent& event ) override;
     void OnUpdateUI( wxUpdateUIEvent& event ) override;
+    void onUpdateUIInfo( wxUpdateUIEvent& event ) override;
 
 protected:
     void adjustGridColumns( int aWidth );
