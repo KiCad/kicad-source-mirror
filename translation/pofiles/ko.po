@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
-"PO-Revision-Date: 2021-08-14 09:20+0000\n"
+"PO-Revision-Date: 2021-08-14 11:58+0000\n"
 "Last-Translator: Ji Yoon Choi <chichoon.choi@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
@@ -15013,7 +15013,7 @@ msgstr "심볼을 찾을 수 없습니다."
 #: eeschema/symbol_editor/symbol_library_manager.cpp:433
 #, c-format
 msgid "Error loading symbol %s from library '%s'. (%s)"
-msgstr "심볼 %s을 불러오는 중에 라이브러리 '%s'에서 오류가 발생했습니다. (%s)"
+msgstr "심볼 %s을(를) 불러오는 중에 라이브러리 '%s'에서 오류가 발생했습니다. (%s)"
 
 #: eeschema/symbol_editor/symbol_library_manager.cpp:619
 #, c-format
@@ -15028,7 +15028,7 @@ msgstr "라이브러리 '%s'을 열거할 수 없습니다."
 #: eeschema/symbol_editor/symbol_library_manager.cpp:1053
 #, c-format
 msgid "Error saving symbol %s to library '%s'."
-msgstr "심볼 %s을 라이브러리 '%s'에 저장하는 동안 오류가 발생했습니다."
+msgstr "심볼 %s을(를) 라이브러리 '%s'에 저장하는 동안 오류가 발생했습니다."
 
 #: eeschema/symbol_lib_table.cpp:229
 #, c-format
@@ -22224,12 +22224,12 @@ msgstr ""
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:374
 #, c-format
 msgid "Update footprint %s from '%s' to '%s'"
-msgstr "풋프린트 %s을 '%s'에서 '%s'로 업데이트"
+msgstr "풋프린트 %s을(를) '%s'에서 '%s'(으)로 업데이트"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:381
 #, c-format
 msgid "Change footprint %s from '%s' to '%s'"
-msgstr "풋프린트 %s을 '%s'에서 '%s'로 변경"
+msgstr "풋프린트 %s을(를) '%s'에서 '%s'(으)로 변경"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:391
 msgid "*** footprint not found ***"
@@ -28770,7 +28770,7 @@ msgstr "PCB '%s' 불러오는 중 메모리 부족이 발생하였습니다"
 #: pcbnew/files.cpp:834
 #, c-format
 msgid "Error saving footprint %s to project specific library."
-msgstr "프로젝트의 특정 라이브러리에 풋프린트 %s을 저장하는 동안 오류가 발생했습니다."
+msgstr "프로젝트의 특정 라이브러리에 풋프린트 %s을(를) 저장하는 동안 오류가 발생했습니다."
 
 #: pcbnew/files.cpp:863
 msgid "Error saving project specific footprint library table."
@@ -29674,12 +29674,12 @@ msgstr "%s를 업데이트할 수 없습니다 (풋프린트 '%s'를 찾을 수 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:226
 #, c-format
 msgid "Change %s footprint from '%s' to '%s'."
-msgstr "풋프린트 %s을 '%s'에서 '%s'로 변경합니다."
+msgstr "풋프린트 %s을(를) '%s'에서 '%s'(으)로 변경합니다."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:238
 #, c-format
 msgid "Changed %s footprint from '%s' to '%s'."
-msgstr "풋프린트 %s을 '%s'에서 '%s'로 변경하였습니다."
+msgstr "풋프린트 %s을(를) '%s'에서 '%s'(으)로 변경하였습니다."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:265
 #, c-format
@@ -29744,7 +29744,7 @@ msgstr "%s에 'BOM에서 제외' 제작 속성이 제거되었습니다."
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:450
 #, c-format
 msgid "Disconnect %s pin %s."
-msgstr "%s 핀 %s을 분리합니다."
+msgstr "%s 핀 %s을(를) 분리합니다."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:456
 #, c-format
@@ -29759,7 +29759,7 @@ msgstr "심볼 %s 핀 %s에 대한 네트를 찾을 수 없습니다."
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:516
 #, c-format
 msgid "Add net %s."
-msgstr "네트 %s을 추가합니다."
+msgstr "네트 %s을(를) 추가합니다."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:526
 #, c-format
@@ -29779,7 +29779,7 @@ msgstr "%s 핀 %s를 %s에 연결합니다."
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:552
 #, c-format
 msgid "Connected %s pin %s to %s."
-msgstr "%s 핀 %s을 %s에 연결했습니다."
+msgstr "%s 핀 %s을(를) %s에 연결했습니다."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:631
 #, c-format
@@ -29864,7 +29864,7 @@ msgstr "사용하지 않은 풋프린트 %s 를 제거할 수 없습니다 (잠�
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1059
 #, c-format
 msgid "Remove unused footprint %s."
-msgstr "사용하지 않은 풋프린트 %s을 제거합니다."
+msgstr "사용하지 않은 풋프린트 %s을(를) 제거합니다."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1064
 #, c-format
@@ -29874,7 +29874,7 @@ msgstr "사용하지 않은 풋프린트 %s를 제거했습니다."
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1095
 #, c-format
 msgid "Removed unused net %s."
-msgstr "사용하지 않은 네트 %s을 제거했습니다."
+msgstr "사용하지 않은 네트 %s을(를) 제거했습니다."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1103
 msgid "Update netlist"
