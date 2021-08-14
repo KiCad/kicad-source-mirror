@@ -16,7 +16,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
 "PO-Revision-Date: 2021-08-14 12:30+0000\n"
-"Last-Translator: Ji Yoon Choi <chichoon.choi@gmail.com>\n"
+"Last-Translator: 서범기 <joonhoflow@naver.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
 "Language: ko\n"
@@ -17203,9 +17203,9 @@ msgid "Highlight Aperture Type \"%s\""
 msgstr "조리개 유형 \"%s\" 강조"
 
 #: gerbview/tools/gerbview_selection_tool.cpp:96
-#, fuzzy, c-format
+#, c-format
 msgid "Highlight DCode D%d"
-msgstr "하이라이트 D코드 D%d"
+msgstr "D코드 강조 표시 D%d"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:77
 #: gerbview/widgets/layer_widget.cpp:536
@@ -17934,7 +17934,7 @@ msgid "Application failed to load."
 msgstr "응용 프로그램 불러오기에 실패하였습니다."
 
 #: kicad/tools/kicad_manager_control.cpp:702
-#, c-format, fuzzy
+#, c-format
 msgid "%s closed [pid=%d]\n"
 msgstr "%s 닫힘 [pid=%d]\n"
 
@@ -21430,7 +21430,6 @@ msgid "Fill type:"
 msgstr "채우기 유형:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:275
-#, fuzzy
 msgid "Solid fill"
 msgstr "솔리드 채우기"
 
@@ -33580,7 +33579,7 @@ msgstr "모양 관리자 표시"
 
 #: pcbnew/tools/pcb_actions.cpp:778
 msgid "Show/hide the appearance manager"
-msgstr "외관 매니저를 표시/숨기기"
+msgstr "모양 관리자 표시/숨기기"
 
 #: pcbnew/tools/pcb_actions.cpp:783
 msgid "Flip Board View"
@@ -33640,7 +33639,7 @@ msgstr "텍스트 개체 스케치"
 
 #: pcbnew/tools/pcb_actions.cpp:820
 msgid "Show footprint texts in line mode"
-msgstr "선 모드에서 풋프린트 텍스트 표시"
+msgstr "라인 모드에서 풋프린트 텍스트 표시"
 
 #: pcbnew/tools/pcb_actions.cpp:830
 msgid "Automatically zoom to fit"
@@ -33648,10 +33647,9 @@ msgstr "화면에 맞게 자동으로 확대/축소"
 
 #: pcbnew/tools/pcb_actions.cpp:830
 msgid "Zoom to fit when changing footprint"
-msgstr "풋프린트 수정 중에 화면에 맞게 채우기"
+msgstr "풋프린트 변경 시 맞게 확대/축소"
 
 #: pcbnew/tools/pcb_actions.cpp:835
-#, fuzzy
 msgid "Fill Zones"
 msgstr "영역 채우기"
 
@@ -33661,7 +33659,7 @@ msgstr "영역의 채워진 구역 표시"
 
 #: pcbnew/tools/pcb_actions.cpp:840
 msgid "Wireframe Zones"
-msgstr "영역을 와이어프레임으로 표시"
+msgstr "와이어프레임 영역"
 
 #: pcbnew/tools/pcb_actions.cpp:840
 msgid "Show only zone boundaries"
@@ -34011,7 +34009,6 @@ msgid "Remove items from the selection by type"
 msgstr "선택한 항목에서 특정 유형의 항목 제거"
 
 #: pcbnew/tools/pcb_actions.cpp:1248 pcbnew/tools/zone_filler_tool.cpp:198
-#, fuzzy
 msgid "Fill Zone"
 msgstr "영역 채우기"
 
