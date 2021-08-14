@@ -16,7 +16,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
 "PO-Revision-Date: 2021-08-14 04:30+0000\n"
-"Last-Translator: 서범기 <joonhoflow@naver.com>\n"
+"Last-Translator: Ji Yoon Choi <chichoon.choi@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
 "Language: ko\n"
@@ -17105,7 +17105,7 @@ msgstr "선 스케치"
 
 #: gerbview/tools/gerbview_actions.cpp:144
 msgid "Show lines in outline mode"
-msgstr "개요 모드에서 선 표시"
+msgstr "외곽선 모드에서 선 표시"
 
 #: gerbview/tools/gerbview_actions.cpp:150
 msgid "Sketch Flashed Items"
