@@ -16,7 +16,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
 "PO-Revision-Date: 2021-08-14 12:21+0000\n"
-"Last-Translator: Ji Yoon Choi <chichoon.choi@gmail.com>\n"
+"Last-Translator: 서범기 <joonhoflow@naver.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
 "Language: ko\n"
@@ -33505,48 +33505,40 @@ msgid "Open another board and append its contents to this board"
 msgstr "다른 기판를 열어 해당 기판의 내용을 이 기판에 추가"
 
 #: pcbnew/tools/pcb_actions.cpp:712
-#, fuzzy
 msgid "Highlight the selected net"
-msgstr "네트 높이"
+msgstr "선택한 네트 강조"
 
 #: pcbnew/tools/pcb_actions.cpp:717
-#, fuzzy
 msgid "Toggle Last Net Highlight"
-msgstr "네트 높이"
+msgstr "마지막 네트 강조 표시 전환"
 
 #: pcbnew/tools/pcb_actions.cpp:717
 msgid "Toggle between last two highlighted nets"
 msgstr "마지막의 두 강조된 네트 간 전환"
 
 #: pcbnew/tools/pcb_actions.cpp:721
-#, fuzzy
 msgid "Clear Net Highlighting"
-msgstr "네트 높이"
+msgstr "네트 강조 표시 삭제"
 
 #: pcbnew/tools/pcb_actions.cpp:721
-#, fuzzy
 msgid "Clear any existing net highlighting"
-msgstr "네트 높이"
+msgstr "기존 네트 강조 표시 지우기"
 
 #: pcbnew/tools/pcb_actions.cpp:725
-#, fuzzy
 msgid "Toggle Net Highlight"
-msgstr "네트 높이"
+msgstr "네트 강조 표시 전환"
 
 #: pcbnew/tools/pcb_actions.cpp:725
-#, fuzzy
 msgid "Toggle net highlighting"
-msgstr "네트 높이"
+msgstr "네트 강조 표시 전환"
 
 #: pcbnew/tools/pcb_actions.cpp:732
-#, fuzzy
 msgid "Highlight all copper items on the selected net(s)"
-msgstr "네트 높이"
+msgstr "선택한 네트의 모든 구리 항목을 강조 표시"
 
 #: pcbnew/tools/pcb_actions.cpp:739
-#, fuzzy
 msgid "Hide Net"
-msgstr "D-Codes 찾기"
+msgstr "네트 숨기기"
 
 #: pcbnew/tools/pcb_actions.cpp:739
 msgid "Hide the ratsnest for the selected net"
@@ -33561,14 +33553,12 @@ msgid "Show the ratsnest for the selected net"
 msgstr "선택한 네트의 연결선 표시"
 
 #: pcbnew/tools/pcb_actions.cpp:748
-#, fuzzy
 msgid "Switch to Schematic Editor"
-msgstr "EESchema (회로도 에디터)"
+msgstr "회로도 편집기로 전환"
 
 #: pcbnew/tools/pcb_actions.cpp:748
-#, fuzzy
 msgid "Open schematic in Eeschema"
-msgstr "회로도 열기"
+msgstr "Eeschema에서 회로도 열기"
 
 #: pcbnew/tools/pcb_actions.cpp:757
 msgid "Local Ratsnest"
@@ -33583,9 +33573,8 @@ msgid "Show the net inspector"
 msgstr "네트 검사기 표시"
 
 #: pcbnew/tools/pcb_actions.cpp:778
-#, fuzzy
 msgid "Show Appearance Manager"
-msgstr "드로우 레이어 미러"
+msgstr "모양 관리자 표시"
 
 #: pcbnew/tools/pcb_actions.cpp:778
 msgid "Show/hide the appearance manager"
