@@ -16,7 +16,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
 "PO-Revision-Date: 2021-08-14 03:57+0000\n"
-"Last-Translator: 서범기 <joonhoflow@naver.com>\n"
+"Last-Translator: jehunseo <benbot591@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
 "Language: ko\n"
@@ -58,7 +58,7 @@ msgstr "경로 구성"
 
 #: 3d-viewer/3d_cache/dialogs/dialog_select_3d_model_base.h:63
 msgid "Select 3D Model"
-msgstr "3D모델선택"
+msgstr "3D 모델 선택"
 
 #: 3d-viewer/3d_cache/dialogs/panel_preview_3d_model_base.cpp:21
 #: common/dialogs/dialog_print_generic_base.cpp:56
@@ -128,7 +128,7 @@ msgstr "회전"
 
 #: 3d-viewer/3d_cache/dialogs/panel_preview_3d_model_base.cpp:111
 msgid "Offset"
-msgstr "옵셋"
+msgstr "오프셋"
 
 #: 3d-viewer/3d_cache/dialogs/panel_preview_3d_model_base.cpp:156
 msgid "Opacity"
@@ -167,9 +167,7 @@ msgstr "로드 된 풋 프린트 없음."
 msgid ""
 "Footprint outline is missing or malformed. Run Footprint Checker for a full "
 "analysis."
-msgstr ""
-"풋프린트 윤곽이 없거나 잘못되었음. 전체 분석을 위해 풋프린트 검사기를 실행합"
-"니다."
+msgstr "풋프린트 외곽선이 없거나 잘못되었음. 전체 분석을 위해 풋프린트 검사기를 실행합니다."
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:507
 msgid "Board outline is missing or malformed. Run DRC for a full analysis."
