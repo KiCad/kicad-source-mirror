@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-01 11:31-0700\n"
-"PO-Revision-Date: 2021-08-11 17:58+0000\n"
+"PO-Revision-Date: 2021-08-15 03:30+0000\n"
 "Last-Translator: boonchai k. <kicadthai@gmail.com>\n"
 "Language-Team: Thai <https://hosted.weblate.org/projects/kicad/master-source/"
 "th/>\n"
@@ -18946,7 +18946,7 @@ msgstr "ผลลัพธ์"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1135
 msgid "TransLine"
-msgstr ""
+msgstr "สายส่ง"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1152
 msgid "Finished hole diameter (D):"
@@ -18982,7 +18982,7 @@ msgstr "เส้นผ่าศูนย์กลางของระยะห
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1220
 msgid "Z0:"
-msgstr ""
+msgstr "Z0:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1222
 msgid "Characteristic impedance of conductor"
@@ -19033,7 +19033,7 @@ msgstr "เวลาเพิ่มขึ้นของพัลส์ในก
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1310
 msgid "ns"
-msgstr ""
+msgstr "ns"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1312
 msgid "nanoseconds"
@@ -19078,7 +19078,7 @@ msgstr "พลังงานสูญหาย:"
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1656
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1754
 msgid "W"
-msgstr ""
+msgstr "W"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1381
 msgid "Thermal resistance:"
@@ -19106,7 +19106,7 @@ msgstr "ค่าความจุ:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1417
 msgid "pF"
-msgstr ""
+msgstr "pF"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1419
 msgid "pico-Farad"
@@ -19122,7 +19122,7 @@ msgstr "การเสื่อมสภาพเวลาขาขึ้น �
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1433
 msgid "ps"
-msgstr ""
+msgstr "ps"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1435
 msgid "picoseconds"
@@ -19134,7 +19134,7 @@ msgstr "ความเหนี่ยวนำ:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1447
 msgid "nH"
-msgstr ""
+msgstr "nH"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1449
 msgid "nano-Henry"
@@ -19280,6 +19280,14 @@ msgid ""
 "*  A7 - External Component lead termination, with conformal coating (any "
 "elevation)"
 msgstr ""
+"* B1 - ตัวนำภายใน\n"
+"* B2 - ตัวนำภายนอก ไม่เคลือบผิว จากระดับน้ำทะเลถึงระยะ 3050 ม.\n"
+"* B3 - ตัวนำภายนอก ไม่เคลือบผิว เหนือระยะ 3050 m\n"
+"* B4 - ตัวนำภายนอกพร้อมเคลือบโพลีเมอร์ถาวร (ทุกระดับความสูง)\n"
+"* A5 - ตัวนำภายนอกพร้อมการเคลือบตามรูปแบบเหนือชุดประกอบ (ทุกระดับความสูง)\n"
+"* A6 - หยุดด้วยตะกั่วกับอุปกรณ์ภายนอก ไม่เคลือบผิว\n"
+"* A7 - หยุดด้วยตะกั่วกับอุปกรณ์ภายนอก "
+"พร้อมการเคลือบตามรูปแบบ(ทุกระดับความสูง)"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1884
 msgid "Electrical Spacing"
@@ -19378,6 +19386,28 @@ msgid ""
 "\tR1 | R2 |...| Rn\tresistors in parallel\n"
 "\tR1 + (R2|R3)...\t\tany combination of the above\n"
 msgstr ""
+"E-series ที่กำหนดใน IEC 60063 เป็นระบบที่ต้องการอย่างกว้างขวาง\n"
+"ตัวเลขสำหรับชิ้นส่วนอิเล็กทรอนิกส์ ค่าที่ใช้ได้จะอยู่ที่ประมาณ\n"
+"เว้นระยะเท่ากันในระดับลอการิทึม\n"
+"\n"
+"E12: 1.0 1.2 1.5 1.8 2.2 2.7 3.3 3.9 4.7 5.6 6.8 8.2\n"
+"E6: 1.0 - 1.5 - 2.2 - 3.3 - 4.7 - 6.8 -\n"
+"E3: 1.0 - - - 2.2 - - - 4.7 - - -\n"
+"E1: 1.0 - - - - - - - - - - -\n"
+"\n"
+"เครื่องคิดเลขนี้ค้นหาการรวมกันของส่วนประกอบ E-series มาตรฐานกับ\n"
+"สร้างมูลค่าตามอำเภอใจ คุณสามารถป้อนความต้านทานที่ต้องการได้ตั้งแต่ 0.0025 ถึ"
+"ง 4000 kΩ\n"
+"โซลูชันที่ใช้ส่วนประกอบมากถึง 4 ตัวจะได้รับ\n"
+"\n"
+"โดยค่าเริ่มต้น ค่าคำขอจะถูกแยกออกจากชุดโซลูชันเสมอ นอกจากนี้ยังสามารถระบุ\n"
+"ค่าเพิ่มเติมสูงสุดสองค่าที่จะแยกออกจากโซลูชันหากไม่มีค่าส่วนประกอบเหล่านี้\n"
+"\n"
+"โซลูชันมีให้ในรูปแบบต่อไปนี้:\n"
+"\n"
+"R1 + R2 +...+ ตัวต้านทาน Rn ในอนุกรม\n"
+"R1 | R2 |...| ตัวต้านทาน Rn แบบขนาน\n"
+"R1 + (R2|R3)... ใดๆ ก็ตามข้างต้น\n"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:250
 msgid "Write Data Failed"
@@ -19397,40 +19427,42 @@ msgid ""
 "Unable to write file '%s'\n"
 "Do you want to exit and abandon your changes?"
 msgstr ""
+"ไม่สามารถเขียนไฟล์ '%s'\n"
+"คุณต้องการออกและละทิ้งการเปลี่ยนแปลงหรือไม่?"
 
 #: pcb_calculator/regulators_funct.cpp:129
 #, c-format
 msgid "PCB Calculator data file (*.%s)|*.%s"
-msgstr ""
+msgstr "ไฟล์ข้อมูลเครื่องคิดเลขพีซีบี (*.%s)|*.%s"
 
 #: pcb_calculator/regulators_funct.cpp:133
 msgid "Select PCB Calculator Data File"
-msgstr ""
+msgstr "เลือกไฟล์ข้อมูลเครื่องคิดเลขพีซีบี"
 
 #: pcb_calculator/regulators_funct.cpp:148
 msgid "Do you want to load this file and replace current regulator list?"
-msgstr ""
+msgstr "คุณต้องการโหลดไฟล์นี้และแทนที่รายการควบคุมเดิมหรือไม่?"
 
 #: pcb_calculator/regulators_funct.cpp:164
 #, c-format
 msgid "Unable to read data file '%s'."
-msgstr ""
+msgstr "ไม่สามารถอ่านไฟล์ข้อมูล '%s'"
 
 #: pcb_calculator/regulators_funct.cpp:196
 msgid "This regulator is already in list. Aborted"
-msgstr ""
+msgstr "ผู้กำกับนี้มีอยู่แล้วในรายการ ยกเลิกทั้งหมด"
 
 #: pcb_calculator/regulators_funct.cpp:304
 msgid "Vout must be greater than vref"
-msgstr ""
+msgstr "Vout ต้องมากกว่า Vref"
 
 #: pcb_calculator/regulators_funct.cpp:310
 msgid "Vref set to 0 !"
-msgstr ""
+msgstr "Vref ตั้งค่าเป็น 0!"
 
 #: pcb_calculator/regulators_funct.cpp:316
 msgid "Incorrect value for R1 R2"
-msgstr ""
+msgstr "ค่า R1 R2 ไม่ถูกต้อง"
 
 #: pcb_calculator/tracks_width_versus_current_formula.h:2
 msgid ""
@@ -19455,36 +19487,53 @@ msgid ""
 "__W,H__ = width and thickness in mils  \n"
 "__K__ = 0.024 for internal traces or 0.048 for external traces\n"
 msgstr ""
+"หากคุณระบุกระแสสูงสุด ความกว้างของลายทองแดงจะถูกคำนวณให้เหมาะสม\n"
+"\n"
+"หากคุณระบุความกว้างของลายทองแดง สามารถคำนวณกระแสสูงสุดได้ "
+"ความกว้างลายทองแดงอื่นที่รองรับกระแสปริมาณนี จะถูกคำนวนไปด้วย\n"
+"\n"
+"ค่าควบคุมจะแสดงเป็นตัวหนา\n"
+"\n"
+"การคำนวณใช้ได้กับกระแสสูงสุด 35 A (ภายนอก) หรือ 17.5 A (ภายใน) "
+"อุณหภูมิเพิ่มขึ้นสูงสุด 100 ºC และความกว้างสูงสุด 400 มิล(10 มม.)\n"
+"\n"
+"สูตรจาก IPC 2221 คือ\n"
+"<center>__I = K * dT<sup>0.44</sup> * (W*H)<sup>0.725</sup>__</center>\n"
+"โดยที่:\n"
+"__I__ = กระแสสูงสุดใน A\n"
+"__dt__ = อุณหภูมิเพิ่มขึ้นเหนือสภาพแวดล้อมใน ºC\n"
+"__W,H__ = ความกว้างและความหนา หน่วยเป็น มิล (1/1000นิ้ว)\n"
+"__K__ = 0.024 สำหรับลายทองแดงภายในหรือ 0.048 สำหรับลายทองแดงด้านนอก\n"
 
 #: pcb_calculator/transline_dlg_funct.cpp:126 pcb_calculator/via.cpp:68
 msgid "Relative Dielectric Constants"
-msgstr ""
+msgstr "ค่าคงที่อิเล็กทริกสัมพัทธ์"
 
 #: pcb_calculator/transline_dlg_funct.cpp:149
 msgid "Dielectric Loss Factor"
-msgstr ""
+msgstr "ปัจจัยการสูญเสียอิเล็กทริก"
 
 #: pcb_calculator/transline_dlg_funct.cpp:172
 msgid "Specific Resistance"
-msgstr ""
+msgstr "ความต้านทานจำเพาะ"
 
 #: pcb_calculator/transline_ident.cpp:111
 msgid "Substrate relative permittivity (dielectric constant)"
-msgstr ""
+msgstr "การอนุญาติของพื้นผิวสัมพัทธ์ (ค่าคงที่ไดอิเล็กตริก)"
 
 #: pcb_calculator/transline_ident.cpp:115
 msgid "Dielectric loss (dissipation factor)"
-msgstr ""
+msgstr "การสูญเสียอิเล็กทริก (ปัจจัยการกระจาย)"
 
 #: pcb_calculator/transline_ident.cpp:121
 msgid ""
 "Electrical resistivity or specific electrical resistance of conductor "
 "(ohm*meter)"
-msgstr ""
+msgstr "ความต้านทานไฟฟ้าหรือความต้านทานไฟฟ้าจำเพาะของตัวนำ (โอห์ม*เมตร)"
 
 #: pcb_calculator/transline_ident.cpp:127
 msgid "Frequency of the input signal"
-msgstr ""
+msgstr "ความถี่ของสัญญาณอินพุต"
 
 #: pcb_calculator/transline_ident.cpp:136
 #: pcb_calculator/transline_ident.cpp:176
@@ -19495,7 +19544,7 @@ msgstr ""
 #: pcb_calculator/transline_ident.cpp:389
 #, c-format
 msgid "Effective %s:"
-msgstr ""
+msgstr "ประสิทธิผล %s:"
 
 #: pcb_calculator/transline_ident.cpp:137
 #: pcb_calculator/transline_ident.cpp:177
@@ -19505,7 +19554,7 @@ msgstr ""
 #: pcb_calculator/transline_ident.cpp:357
 #: pcb_calculator/transline_ident.cpp:390
 msgid "Conductor losses:"
-msgstr ""
+msgstr "การสูญเสียในตัวนํา:"
 
 #: pcb_calculator/transline_ident.cpp:138
 #: pcb_calculator/transline_ident.cpp:178
@@ -19515,7 +19564,7 @@ msgstr ""
 #: pcb_calculator/transline_ident.cpp:358
 #: pcb_calculator/transline_ident.cpp:391
 msgid "Dielectric losses:"
-msgstr ""
+msgstr "การสูญเสียในไดอิเล็กทริก:"
 
 #: pcb_calculator/transline_ident.cpp:139
 #: pcb_calculator/transline_ident.cpp:179
@@ -19524,7 +19573,7 @@ msgstr ""
 #: pcb_calculator/transline_ident.cpp:359
 #: pcb_calculator/transline_ident.cpp:392
 msgid "Skin depth:"
-msgstr ""
+msgstr "ความลึกของผิว:"
 
 #: pcb_calculator/transline_ident.cpp:142
 #: pcb_calculator/transline_ident.cpp:182
@@ -19532,12 +19581,12 @@ msgstr ""
 #: pcb_calculator/transline_ident.cpp:321
 #: pcb_calculator/transline_ident.cpp:362
 msgid "Height of substrate"
-msgstr ""
+msgstr "ความสูงของพื้น"
 
 #: pcb_calculator/transline_ident.cpp:144
 #: pcb_calculator/transline_ident.cpp:323
 msgid "Height of box top"
-msgstr ""
+msgstr "ความสูงของกล่องด้านบน"
 
 #: pcb_calculator/transline_ident.cpp:147
 #: pcb_calculator/transline_ident.cpp:184
@@ -19545,25 +19594,25 @@ msgstr ""
 #: pcb_calculator/transline_ident.cpp:325
 #: pcb_calculator/transline_ident.cpp:367
 msgid "Strip thickness"
-msgstr ""
+msgstr "ความหนาของแถบ"
 
 #: pcb_calculator/transline_ident.cpp:149
 #: pcb_calculator/transline_ident.cpp:327
 msgid "Roughness"
-msgstr ""
+msgstr "ความหยาบ"
 
 #: pcb_calculator/transline_ident.cpp:150
 #: pcb_calculator/transline_ident.cpp:328
 msgid "Conductor roughness"
-msgstr ""
+msgstr "ความหยาบของตัวนํา"
 
 #: pcb_calculator/transline_ident.cpp:152
 msgid "substrate"
-msgstr ""
+msgstr "พื้น"
 
 #: pcb_calculator/transline_ident.cpp:153
 msgid "Relative permeability (mu) of substrate"
-msgstr ""
+msgstr "การซึมผ่านสัมพัทธ์ (mu) ของซับสเตรต"
 
 #: pcb_calculator/transline_ident.cpp:155
 #: pcb_calculator/transline_ident.cpp:186
@@ -19574,7 +19623,7 @@ msgstr ""
 #: pcb_calculator/transline_ident.cpp:369
 #: pcb_calculator/transline_ident.cpp:398
 msgid "conductor"
-msgstr ""
+msgstr "ตัวนำ"
 
 #: pcb_calculator/transline_ident.cpp:156
 #: pcb_calculator/transline_ident.cpp:187
@@ -19585,7 +19634,7 @@ msgstr ""
 #: pcb_calculator/transline_ident.cpp:370
 #: pcb_calculator/transline_ident.cpp:399
 msgid "Relative permeability (mu) of conductor"
-msgstr ""
+msgstr "การซึมผ่านสัมพัทธ์ (mu) ของตัวนำ"
 
 #: pcb_calculator/transline_ident.cpp:160
 #: pcb_calculator/transline_ident.cpp:191
@@ -19593,7 +19642,7 @@ msgstr ""
 #: pcb_calculator/transline_ident.cpp:335
 #: pcb_calculator/transline_ident.cpp:373 pcbnew/pcb_shape.cpp:576
 msgid "Line width"
-msgstr ""
+msgstr "ความกว้างของเส้น"
 
 #: pcb_calculator/transline_ident.cpp:162
 #: pcb_calculator/transline_ident.cpp:195
@@ -19602,7 +19651,7 @@ msgstr ""
 #: pcb_calculator/transline_ident.cpp:339
 #: pcb_calculator/transline_ident.cpp:375
 msgid "Line length"
-msgstr ""
+msgstr "ความยาวลายเส้น"
 
 #: pcb_calculator/transline_ident.cpp:165
 #: pcb_calculator/transline_ident.cpp:198
@@ -19612,7 +19661,7 @@ msgstr ""
 #: pcb_calculator/transline_ident.cpp:378
 #: pcb_calculator/transline_ident.cpp:415
 msgid "Characteristic impedance"
-msgstr ""
+msgstr "คุณลักษณะอิมพีแดนซ์"
 
 #: pcb_calculator/transline_ident.cpp:168
 #: pcb_calculator/transline_ident.cpp:201
@@ -19623,54 +19672,54 @@ msgstr ""
 #: pcb_calculator/transline_ident.cpp:381
 #: pcb_calculator/transline_ident.cpp:418
 msgid "Electrical length"
-msgstr ""
+msgstr "ความยาวทางไฟฟ้า"
 
 #: pcb_calculator/transline_ident.cpp:193
 #: pcb_calculator/transline_ident.cpp:226
 #: pcb_calculator/transline_ident.cpp:337
 msgid "Gap width"
-msgstr ""
+msgstr "ระยะห่างช่อง"
 
 #: pcb_calculator/transline_ident.cpp:243
 msgid "ZF(H10) = Ey / Hx:"
-msgstr ""
+msgstr "ZF(H10) = Ey / Hx:"
 
 #: pcb_calculator/transline_ident.cpp:247
 #: pcb_calculator/transline_ident.cpp:280
 msgid "TE-modes:"
-msgstr ""
+msgstr "TE-modes:"
 
 #: pcb_calculator/transline_ident.cpp:248
 #: pcb_calculator/transline_ident.cpp:281
 msgid "TM-modes:"
-msgstr ""
+msgstr "TM-modes:"
 
 #: pcb_calculator/transline_ident.cpp:251
 #: pcb_calculator/transline_ident.cpp:284
 msgid "insulator"
-msgstr ""
+msgstr "ฉนวน"
 
 #: pcb_calculator/transline_ident.cpp:252
 #: pcb_calculator/transline_ident.cpp:285
 msgid "Relative permeability (mu) of insulator"
-msgstr ""
+msgstr "การซึมผ่านสัมพัทธ์ (mu) ของฉนวน"
 
 #: pcb_calculator/transline_ident.cpp:259
 msgid "Width of waveguide"
-msgstr ""
+msgstr "ความกว้างของท่อนำคลื่น"
 
 #: pcb_calculator/transline_ident.cpp:261
 msgid "Height of waveguide"
-msgstr ""
+msgstr "ความสูงของท่อนำคลื่น"
 
 #: pcb_calculator/transline_ident.cpp:263
 msgid "Waveguide length"
-msgstr ""
+msgstr "ความยาวท่อนำคลื่น"
 
 #: pcb_calculator/transline_ident.cpp:292
 #: pcb_calculator/transline_ident.cpp:406
 msgid "Din"
-msgstr ""
+msgstr "Din"
 
 #: pcb_calculator/transline_ident.cpp:293
 #: pcb_calculator/transline_ident.cpp:407
