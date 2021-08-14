@@ -17120,9 +17120,8 @@ msgid "Sketch Polygons"
 msgstr "다각형 스케치"
 
 #: gerbview/tools/gerbview_actions.cpp:156
-#, fuzzy
 msgid "Show polygons in outline mode"
-msgstr "패드 채움 모드 보이기"
+msgstr "개요 모드에서 다각형 보이기"
 
 #: gerbview/tools/gerbview_actions.cpp:162
 msgid "Ghost Negative Objects"
