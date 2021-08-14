@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
-"PO-Revision-Date: 2021-08-14 05:50+0000\n"
+"PO-Revision-Date: 2021-08-14 06:20+0000\n"
 "Last-Translator: 서범기 <joonhoflow@naver.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
@@ -17549,18 +17549,16 @@ msgid "&Archive Project..."
 msgstr "프로젝트 보관(&A)..."
 
 #: kicad/menubar.cpp:108
-#, fuzzy
 msgid "Archive all needed project files into zip archive"
-msgstr "모든 프로젝트 파일 압축"
+msgstr "필요한 모든 프로젝트 파일을 zip 아카이브에 보관합니다"
 
 #: kicad/menubar.cpp:112
 msgid "&Unarchive Project..."
 msgstr "프로젝트 보관 취소(&U)..."
 
 #: kicad/menubar.cpp:113 kicad/menubar.cpp:218
-#, fuzzy
 msgid "Unarchive project files from zip archive"
-msgstr "모든 프로젝트 파일 압축"
+msgstr "zip 아카이브에서 프로젝트 파일 압축 해제"
 
 #: kicad/menubar.cpp:128
 msgid "Browse Project Files"
@@ -17633,7 +17631,7 @@ msgid "Can not move '%s' to recycle bin."
 msgstr "휴지통으로 '%s'을(를) 이동할 수 없습니다."
 
 #: kicad/project_tree_item.cpp:139
-#, fuzzy, c-format
+#, c-format
 msgid "Can not move '%s' to trash."
 msgstr "'%s'을(를) 휴지통으로 이동할 수 없습니다."
 
@@ -17819,9 +17817,8 @@ msgid "Run component calculations, track width calculations, etc."
 msgstr "컴포넌트 계산, 배선 폭 계산 등을 실행합니다."
 
 #: kicad/tools/kicad_manager_actions.cpp:105
-#, fuzzy
 msgid "Edit drawing sheet borders and title block"
-msgstr "페이지 설정"
+msgstr "도면 시트 테두리와 제목 블록 편집"
 
 #: kicad/tools/kicad_manager_actions.cpp:111
 msgid "Open Text Editor"
@@ -17832,14 +17829,12 @@ msgid "Launch preferred text editor"
 msgstr "선호하는 텍스트 편집기 열기"
 
 #: kicad/tools/kicad_manager_control.cpp:46
-#, fuzzy
 msgid "Create a new folder for the project"
-msgstr "새 디렉토리 만들기"
+msgstr "프로젝트에 새로운 폴더 생성"
 
 #: kicad/tools/kicad_manager_control.cpp:86
-#, fuzzy
 msgid "Create New Project"
-msgstr "새 디렉토리 만들기"
+msgstr "새 프로젝트 생성"
 
 #: kicad/tools/kicad_manager_control.cpp:128
 msgid ""
@@ -17865,9 +17860,8 @@ msgid "No project template was selected.  Cannot generate new project."
 msgstr "프로젝트 템플릿을 선택하지 않았습니다.  새로운 프로젝트를 생성할 수 없습니다."
 
 #: kicad/tools/kicad_manager_control.cpp:182
-#, fuzzy
 msgid "New Project Folder"
-msgstr "새 프로젝트 (&N)"
+msgstr "새로운 프로젝트 폴더"
 
 #: kicad/tools/kicad_manager_control.cpp:228
 #: kicad/tools/kicad_manager_control.cpp:547
@@ -17876,7 +17870,6 @@ msgid "Insufficient permissions to write to folder '%s'."
 msgstr "폴더 '%s'에 저장할 수 있는 권한이 없습니다."
 
 #: kicad/tools/kicad_manager_control.cpp:249
-#, fuzzy
 msgid "Overwriting files:"
 msgstr "파일 덮어쓰기:"
 
@@ -17889,19 +17882,17 @@ msgid "A problem occurred creating new project from template."
 msgstr "템플릿에서 새 프로젝트를 만드는 데 문제가 발생했습니다."
 
 #: kicad/tools/kicad_manager_control.cpp:295
-#, fuzzy
 msgid "Open Existing Project"
-msgstr "보드 열기"
+msgstr "기존 프로젝트 열기"
 
 #: kicad/tools/kicad_manager_control.cpp:475
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot copy folder '%s'."
-msgstr "%s 파일을 만들 수 없습니다."
+msgstr "폴더 '%s' 을(를) 복사할 수 없습니다."
 
 #: kicad/tools/kicad_manager_control.cpp:518
-#, fuzzy
 msgid "Save Project To"
-msgstr "프로젝트 저장 (&S)"
+msgstr "프로젝트 저장"
 
 #: kicad/tools/kicad_manager_control.cpp:538
 #, c-format
@@ -18041,14 +18032,12 @@ msgid "Show on all pages"
 msgstr "모든 페이지에 표시"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:31
-#, fuzzy
 msgid "First page only"
-msgstr "페이지 인쇄 %d"
+msgstr "첫 페이지만"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:31
-#, fuzzy
 msgid "Subsequent pages only"
-msgstr "현재 시트만 저장"
+msgstr "후속 페이지만"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:81
 msgid "H align:"
@@ -18084,9 +18073,8 @@ msgid "Max height:"
 msgstr "최대 높이:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:176
-#, fuzzy
 msgid "Set to 0 to use default values"
-msgstr "비아홀 크기 초기화"
+msgstr "기본값을 사용하려면 0으로 설정하십시오"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:183
 msgid "Comment:"
@@ -18125,27 +18113,24 @@ msgid "Count:"
 msgstr "개수:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:356
-#, fuzzy
 msgid "Step text:"
-msgstr "X 증분값:"
+msgstr "단계 텍스트:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:361
 msgid "Number of characters or digits to step text by for each repeat."
 msgstr "각 반복마다 텍스트 상에서 증가시킬 글자 또는 자릿수의 증가량을 지정합니다."
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:368
-#, fuzzy
 msgid "Step X:"
-msgstr "Y 증분값:"
+msgstr "X 단계:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:373
 msgid "Distance on the X axis to step for each repeat."
 msgstr "각 반복에 대한 단계에 대한 X축의 거리."
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:381
-#, fuzzy
 msgid "Step Y:"
-msgstr "Y 증분값:"
+msgstr "Y 단계:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:386
 msgid "Distance to step on Y axis for each repeat."
@@ -18177,14 +18162,12 @@ msgid "Text thickness:"
 msgstr "텍스트 두께:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:486
-#, fuzzy
 msgid "Set to Default"
-msgstr "비아홀 크기 초기화"
+msgstr "기본값으로 설정"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:493
-#, fuzzy
 msgid "Page Margins"
-msgstr "페이지 인쇄"
+msgstr "페이지 여백"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:501
 msgid "Left:"
@@ -18212,9 +18195,8 @@ msgid "Drawing Sheet File"
 msgstr "도면 시트 파일"
 
 #: pagelayout_editor/files.cpp:61 pagelayout_editor/files.cpp:102
-#, fuzzy
 msgid "The current drawing sheet has been modified. Save changes?"
-msgstr "현재 회로도가 수정되었습니다.\t변경 사항을 저장할까요?"
+msgstr "현재 도면 시트가 수정되었습니다. 변경 사항을 저장할까요?"
 
 #: pagelayout_editor/files.cpp:74
 #, c-format
@@ -18933,14 +18915,12 @@ msgid "Finished hole diameter (D):"
 msgstr "완성된 홀 직경 (D):"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1166
-#, fuzzy
 msgid "Plating thickness (T):"
 msgstr "도금 두께(T):"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1178
-#, fuzzy
 msgid "Via length:"
-msgstr "핀 길이:"
+msgstr "비아 길이:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1180
 msgid "Via length is the board thickness for through hole vias"
@@ -18988,9 +18968,8 @@ msgid "Substrate relative permittivity:"
 msgstr "기판 상대 유전율:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1269
-#, fuzzy
 msgid "Relative dielectric constant (epsilon r)"
-msgstr "삭제 선택"
+msgstr "비유전율 (엡실론 r)"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1288
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1519
@@ -19064,7 +19043,6 @@ msgid "W"
 msgstr "W"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1381
-#, fuzzy
 msgid "Thermal resistance:"
 msgstr "열 저항:"
 
@@ -19081,7 +19059,6 @@ msgid "Estimated ampacity:"
 msgstr "예상 전류용량:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1397
-#, fuzzy
 msgid "Based on temperature rise"
 msgstr "온도 상승에 따라"
 
@@ -19134,9 +19111,8 @@ msgid "Inductive reactance for given rise time and calculated inductance"
 msgstr "주어진 상승 시간 및 계산된 유도용량에 대한 유도 리액턴스"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1474
-#, fuzzy
 msgid "Top view of via"
-msgstr "위쪽에서 보기"
+msgstr "비아의 평면도"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1508
 msgid "Current:"
@@ -19147,14 +19123,12 @@ msgid "Conductor length:"
 msgstr "도체 길이:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1542
-#, fuzzy
 msgid "Copper resistivity:"
 msgstr "구리 저항:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1569
-#, fuzzy
 msgid "External Layer Traces"
-msgstr "기타"
+msgstr "외부 레이어 추적"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1577
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1675
@@ -19177,9 +19151,8 @@ msgid "mm ^ 2"
 msgstr "mm²"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1667
-#, fuzzy
 msgid "Internal Layer Traces"
-msgstr "기타"
+msgstr "내부 레이어 추적"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1792
 msgid "Voltage > 500 V:"
@@ -19278,9 +19251,8 @@ msgstr ""
 "*  A7 - 외부 부품 납 마감, 등각 코팅됨 (모든 높이 가능)"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1884
-#, fuzzy
 msgid "Electrical Spacing"
-msgstr "전기적 형식"
+msgstr "전기적 간격"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1903
 msgid "Note: Values are minimal values"
@@ -19398,7 +19370,6 @@ msgstr ""
 "\tR1 + (R2|R3)...\t\t위의 임의의 조합\n"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:251
-#, fuzzy
 msgid "Write Data Failed"
 msgstr "데이터 쓰기 실패"
 
@@ -19433,9 +19404,9 @@ msgid "Do you want to load this file and replace current regulator list?"
 msgstr "파일을 불러와서 현재의 레귤레이터 목록을 대체하시겠습니까?"
 
 #: pcb_calculator/regulators_funct.cpp:162
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to read data file '%s'."
-msgstr "%s 파일을 만들 수 없습니다."
+msgstr "'%s' 데이터 파일을 읽을 수 없습니다."
 
 #: pcb_calculator/regulators_funct.cpp:195
 msgid "This regulator is already in list. Aborted"
@@ -19450,9 +19421,8 @@ msgid "Vref set to 0 !"
 msgstr "Vref가 0으로 설정되었습니다!"
 
 #: pcb_calculator/regulators_funct.cpp:324
-#, fuzzy
 msgid "Incorrect value for R1 R2"
-msgstr "잘못된 번호, 중지"
+msgstr "R1 R2에 대한 잘못된 값"
 
 #: pcb_calculator/tracks_width_versus_current_formula.h:2
 msgid ""
@@ -19496,9 +19466,8 @@ msgstr ""
 "__K__ = 내부 배선에 대해서 0.024, 외부 배선에 대해서 0.048\n"
 
 #: pcb_calculator/transline_dlg_funct.cpp:121 pcb_calculator/via.cpp:68
-#, fuzzy
 msgid "Relative Dielectric Constants"
-msgstr "삭제 선택"
+msgstr "비유전율"
 
 #: pcb_calculator/transline_dlg_funct.cpp:139
 msgid "Dielectric Loss Factor"
@@ -19534,7 +19503,7 @@ msgstr "입력 신호의 주파수"
 #: pcb_calculator/transline_ident.cpp:265
 #: pcb_calculator/transline_ident.cpp:349
 #: pcb_calculator/transline_ident.cpp:383
-#, fuzzy, c-format
+#, c-format
 msgid "Effective %s:"
 msgstr "유효 %s:"
 
@@ -19555,9 +19524,8 @@ msgstr "도체 손실:"
 #: pcb_calculator/transline_ident.cpp:267
 #: pcb_calculator/transline_ident.cpp:351
 #: pcb_calculator/transline_ident.cpp:385
-#, fuzzy
 msgid "Dielectric losses:"
-msgstr "유전체 손실:"
+msgstr "유전 손실:"
 
 #: pcb_calculator/transline_ident.cpp:121
 #: pcb_calculator/transline_ident.cpp:163
@@ -19586,7 +19554,6 @@ msgstr "상자의 높이"
 #: pcb_calculator/transline_ident.cpp:202
 #: pcb_calculator/transline_ident.cpp:315
 #: pcb_calculator/transline_ident.cpp:360
-#, fuzzy
 msgid "Strip thickness"
 msgstr "스트립 두께"
 
@@ -19665,16 +19632,14 @@ msgstr "특성 임피던스"
 #: pcb_calculator/transline_ident.cpp:342
 #: pcb_calculator/transline_ident.cpp:375
 #: pcb_calculator/transline_ident.cpp:414
-#, fuzzy
 msgid "Electrical length"
-msgstr "전기적 형식"
+msgstr "전기적 길이"
 
 #: pcb_calculator/transline_ident.cpp:178
 #: pcb_calculator/transline_ident.cpp:212
 #: pcb_calculator/transline_ident.cpp:328
-#, fuzzy
 msgid "Gap width"
-msgstr "두께"
+msgstr "갭 너비"
 
 #: pcb_calculator/transline_ident.cpp:229
 msgid "ZF(H10) = Ey / Hx:"
@@ -19709,7 +19674,6 @@ msgid "Height of waveguide"
 msgstr "도파관의 높이"
 
 #: pcb_calculator/transline_ident.cpp:251
-#, fuzzy
 msgid "Waveguide length"
 msgstr "도파관 길이"
 
@@ -19784,7 +19748,6 @@ msgid "Twists"
 msgstr "비틀림 수"
 
 #: pcb_calculator/transline_ident.cpp:390
-#, fuzzy
 msgid "Number of twists per length"
 msgstr "길이당 꼬임 수"
 
@@ -19841,9 +19804,8 @@ msgid "rad"
 msgstr "rad"
 
 #: pcbnew/array_creator.cpp:198
-#, fuzzy
 msgid "Create an array"
-msgstr "새 디렉토리 만들기"
+msgstr "배열 생성"
 
 #: pcbnew/autorouter/ar_autoplacer.cpp:933
 msgid "Autoplacing components..."
@@ -19911,7 +19873,6 @@ msgid "Nets"
 msgstr "네트"
 
 #: pcbnew/board.cpp:1195 pcbnew/pcb_draw_panel_gal.cpp:469
-#, fuzzy
 msgid "Unrouted"
 msgstr "라우팅되지 않음"
 
@@ -19934,17 +19895,14 @@ msgstr "베지어 곡선"
 
 #: pcbnew/board_item.cpp:44 pcbnew/dialogs/dialog_pad_properties.cpp:2146
 #: pcbnew/pcb_shape.cpp:539
-#, fuzzy
 msgid "Polygon"
 msgstr "다각형"
 
 #: pcbnew/board_item.cpp:83
-#, fuzzy
 msgid "all copper layers"
-msgstr "Copper layer"
+msgstr "모근 구리 레이어"
 
 #: pcbnew/board_item.cpp:97
-#, fuzzy
 msgid "and others"
 msgstr "기타"
 
@@ -19976,14 +19934,13 @@ msgid "Locked"
 msgstr "잠김"
 
 #: pcbnew/board_stackup_manager/board_stackup.cpp:306
-#, c-format, fuzzy
+#, c-format
 msgid "Dielectric %d"
 msgstr "유전체 %d"
 
 #: pcbnew/board_stackup_manager/board_stackup.cpp:526
-#, fuzzy
 msgid "Top Silk Screen"
-msgstr "Silkscreen Cmp"
+msgstr "상단 실크스크린"
 
 #: pcbnew/board_stackup_manager/board_stackup.cpp:534
 msgid "Top Solder Paste"
@@ -20002,14 +19959,12 @@ msgid "Bottom Solder Paste"
 msgstr "하단 솔더 페이스트"
 
 #: pcbnew/board_stackup_manager/board_stackup.cpp:602
-#, fuzzy
 msgid "Bottom Silk Screen"
-msgstr "Silkscreen Cmp"
+msgstr "하단 실크스크린"
 
 #: pcbnew/board_stackup_manager/dialog_dielectric_list_manager.cpp:48
-#, fuzzy
 msgid "Incorrect value for Epsilon R"
-msgstr "잘못된 번호, 중지"
+msgstr "엡실론 R에 대한 잘못된 값"
 
 #: pcbnew/board_stackup_manager/dialog_dielectric_list_manager.cpp:54
 #, fuzzy
