@@ -475,8 +475,7 @@ void SCH_ALTIUM_PLUGIN::ParseFileHeader( const CFB::CompoundFileReader& aReader 
             ParseNote( properties );
             break;
         case ALTIUM_SCH_RECORD::COMPILE_MASK:
-            m_reporter->Report( _( "Compile Mask on schematic currently not supported." ),
-                                RPT_SEVERITY_ERROR );
+            m_reporter->Report( _( "Compile mask not currently supported." ), RPT_SEVERITY_ERROR );
             break;
         case ALTIUM_SCH_RECORD::RECORD_215:
             break;
@@ -743,7 +742,8 @@ void SCH_ALTIUM_PLUGIN::ParsePin( const std::map<wxString, wxString>& aPropertie
 }
 
 
-void SetTextPositioning( EDA_TEXT* text, ASCH_LABEL_JUSTIFICATION justification, ASCH_RECORD_ORIENTATION orientation )
+void SetTextPositioning( EDA_TEXT* text, ASCH_LABEL_JUSTIFICATION justification,
+                         ASCH_RECORD_ORIENTATION orientation )
 {
     int    vjustify, hjustify;
     double angle = TEXT_ANGLE_HORIZ;
@@ -1297,7 +1297,7 @@ void SCH_ALTIUM_PLUGIN::ParseArc( const std::map<wxString, wxString>& aPropertie
 
     if( elem.ownerpartid == ALTIUM_COMPONENT_NONE )
     {
-        m_reporter->Report( _( "Arc drawing on schematic not currently supported." ),
+        m_reporter->Report( _( "Arcs on schematic not currently supported." ),
                             RPT_SEVERITY_ERROR );
     }
     else
@@ -1333,7 +1333,7 @@ void SCH_ALTIUM_PLUGIN::ParseArc( const std::map<wxString, wxString>& aPropertie
         {
             if( fmod( 360.0 + elem.endAngle - elem.startAngle, 360.0 ) > 180.0 )
             {
-                m_reporter->Report( _( "Arcs in Symbols cannot exceed 180 degrees." ),
+                m_reporter->Report( _( "Arcs in symbols cannot exceed 180 degrees." ),
                                     RPT_SEVERITY_ERROR );
                 return;
             }
