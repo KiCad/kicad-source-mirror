@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
-"PO-Revision-Date: 2021-08-14 06:20+0000\n"
+"PO-Revision-Date: 2021-08-14 07:34+0000\n"
 "Last-Translator: 서범기 <joonhoflow@naver.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
@@ -19967,9 +19967,8 @@ msgid "Incorrect value for Epsilon R"
 msgstr "엡실론 R에 대한 잘못된 값"
 
 #: pcbnew/board_stackup_manager/dialog_dielectric_list_manager.cpp:54
-#, fuzzy
 msgid "Incorrect value for Loss Tangent"
-msgstr "잘못된 번호, 중지"
+msgstr "손실 탄젠트에 대한 잘못된 값"
 
 #: pcbnew/board_stackup_manager/dialog_dielectric_list_manager.cpp:94
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:84
@@ -19989,7 +19988,6 @@ msgid "Loss Tg"
 msgstr "손실 Tg"
 
 #: pcbnew/board_stackup_manager/dialog_dielectric_list_manager_base.cpp:22
-#, fuzzy
 msgid "Dielectric material characteristics:"
 msgstr "유전체 특성:"
 
@@ -20002,31 +20000,26 @@ msgid "Loss Tg:"
 msgstr "탄젠트 손실:"
 
 #: pcbnew/board_stackup_manager/dialog_dielectric_list_manager_base.cpp:62
-#, fuzzy
 msgid "Available materials:"
-msgstr "BOM:"
+msgstr "사용 가능한 재료:"
 
 #: pcbnew/board_stackup_manager/dialog_dielectric_list_manager_base.h:58
-#, fuzzy
 msgid "Dielectric Materials"
-msgstr "전기적 형식"
+msgstr "유전체"
 
 #: pcbnew/board_stackup_manager/panel_board_finish_base.cpp:20
 msgid "Has castellated pads"
 msgstr "카스텔레이티드 패드가 있음"
 
 #: pcbnew/board_stackup_manager/panel_board_finish_base.cpp:23
-#, fuzzy
 msgid "Plated board edge"
-msgstr "보드 인쇄"
+msgstr "도금 패드 가장자리"
 
 #: pcbnew/board_stackup_manager/panel_board_finish_base.cpp:31
-#, fuzzy
 msgid "Copper finish:"
-msgstr "구리 마감:"
+msgstr "구리 마무리:"
 
 #: pcbnew/board_stackup_manager/panel_board_finish_base.cpp:40
-#, fuzzy
 msgid "Edge card connectors:"
 msgstr "에지 카드 커넥터:"
 
@@ -20035,7 +20028,6 @@ msgid "Yes, bevelled"
 msgstr "예, 경 사진"
 
 #: pcbnew/board_stackup_manager/panel_board_finish_base.cpp:48
-#, fuzzy
 msgid "Options for edge card connectors."
 msgstr "에지 카드 커넥터용 옵션."
 
@@ -20076,28 +20068,24 @@ msgid "Layer '%s' (sublayer %d/%d)"
 msgstr "레이어 '%s' (서브레이어 %d/%d)"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:294
-#, fuzzy
 msgid "Add Dielectric Layer"
 msgstr "유전체층 추가"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:295
 #: pcbnew/dialogs/panel_setup_layers.cpp:821
-#, fuzzy
 msgid "Select layer to add:"
 msgstr "추가할 레이어 선택:"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:340
-#, c-format, fuzzy
+#, c-format
 msgid "Layer '%s' sublayer %d/%d"
 msgstr "레이어 '%s' 하위 레이어 %d/%d"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:350
-#, fuzzy
 msgid "Remove Dielectric Layer"
-msgstr "삭제 선택"
+msgstr "유전체층 제거"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:351
-#, fuzzy
 msgid "Select layer to remove:"
 msgstr "제거할 레이어 선택:"
 
@@ -20132,7 +20120,6 @@ msgstr "레이어 두께가 < 0입니다. 수정하세요"
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:49
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:501
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:276
-#, fuzzy
 msgid "Copper layers:"
 msgstr "구리 층:"
 
@@ -20231,12 +20218,10 @@ msgstr ""
 "손실 탄젠트 및 EpsilonR이 제약 조건에 추가됩니다."
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:45
-#, fuzzy
 msgid "Add Dielectric Layer..."
 msgstr "유전체 레이어 추가..."
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:48
-#, fuzzy
 msgid "Remove Dielectric Layer..."
 msgstr "유전체 층 제거..."
 
@@ -20246,14 +20231,12 @@ msgid "Id"
 msgstr "Id"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:132
-#, fuzzy
 msgid "Board thickness from stackup:"
-msgstr "보드 파일:"
+msgstr "스택업에서 기판 두께:"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:139
-#, fuzzy
 msgid "Adjust Dielectric Thickness"
-msgstr "삭제 선택"
+msgstr "유전체 두께 조정"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:46
 msgid "ENIG"
@@ -20276,9 +20259,8 @@ msgid "Hard gold"
 msgstr "Hard gold"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:51
-#, fuzzy
 msgid "Immersion tin"
-msgstr "GERBVIEW 정보"
+msgstr "무전해 주석"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:52
 msgid "Immersion nickel"
@@ -20289,9 +20271,8 @@ msgid "Immersion silver"
 msgstr "치환 은도금"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:54
-#, fuzzy
 msgid "Immersion gold"
-msgstr "GERBVIEW 정보"
+msgstr "무전해 금"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:55
 msgid "HT_OSP"
@@ -20343,9 +20324,8 @@ msgid "Save Bill of Materials"
 msgstr "BOM 저장"
 
 #: pcbnew/build_BOM_from_board.cpp:110
-#, fuzzy
 msgid "Designator"
-msgstr "내비게이터"
+msgstr "지정자"
 
 #: pcbnew/build_BOM_from_board.cpp:111
 msgid "Package"
@@ -20356,9 +20336,8 @@ msgid "Quantity"
 msgstr "수량"
 
 #: pcbnew/build_BOM_from_board.cpp:113
-#, fuzzy
 msgid "Designation"
-msgstr "명칭"
+msgstr "지정"
 
 #: pcbnew/build_BOM_from_board.cpp:114
 msgid "Supplier and ref"
@@ -20370,42 +20349,36 @@ msgid "Checking zone fills..."
 msgstr "영역 채우기 확인 중..."
 
 #: pcbnew/cleanup_item.cpp:47
-#, fuzzy
 msgid "Remove track shorting two nets"
-msgstr "두 개의 네트를 단락시키는 트랙 제거"
+msgstr "두 개의 네트를 단락시키는 배선 제거"
 
 #: pcbnew/cleanup_item.cpp:48
 msgid "Remove via shorting two nets"
 msgstr "두 개의 네트를 단락시켜 제거"
 
 #: pcbnew/cleanup_item.cpp:49
-#, fuzzy
 msgid "Remove redundant via"
-msgstr "중복 비아 삭제"
+msgstr "중복된 비아 삭제"
 
 #: pcbnew/cleanup_item.cpp:50
-#, fuzzy
 msgid "Remove duplicate track"
-msgstr "중복 비아 삭제"
+msgstr "중복된 배선 제거"
 
 #: pcbnew/cleanup_item.cpp:51
-#, fuzzy
 msgid "Merge co-linear tracks"
-msgstr "영역 삭제"
+msgstr "동일 선상의 배선 병합"
 
 #: pcbnew/cleanup_item.cpp:52
 msgid "Remove track not connected at both ends"
 msgstr "양쪽 끝에 연결되지 않은 배선 제거"
 
 #: pcbnew/cleanup_item.cpp:53
-#, fuzzy
 msgid "Remove via connected on fewer than two layers"
 msgstr "2개 미만의 레이어에서 연결된 비아 제거"
 
 #: pcbnew/cleanup_item.cpp:54
-#, fuzzy
 msgid "Remove zero-length track"
-msgstr "중복 비아 삭제"
+msgstr "길이가 0인 배선 제거"
 
 #: pcbnew/cleanup_item.cpp:55
 msgid "Remove track inside pad"
@@ -20416,19 +20389,16 @@ msgid "Remove zero-size graphic"
 msgstr "크기가 0인 그래픽 제거"
 
 #: pcbnew/cleanup_item.cpp:59
-#, fuzzy
 msgid "Remove duplicated graphic"
-msgstr "중복 비아 삭제"
+msgstr "중복된 그래픽 제거"
 
 #: pcbnew/cleanup_item.cpp:60
-#, fuzzy
 msgid "Convert lines to rectangle"
-msgstr "사각형 이동"
+msgstr "선을 직사각형으로 변환"
 
 #: pcbnew/cleanup_item.cpp:64
-#, fuzzy
 msgid "Unknown cleanup action"
-msgstr "마지막 수정 되돌리기"
+msgstr "알 수 없는 정리 작업"
 
 #: pcbnew/convert_drawsegment_list_to_polygon.cpp:414
 #: pcbnew/convert_drawsegment_list_to_polygon.cpp:566
@@ -20440,17 +20410,16 @@ msgstr "(자체 교차)"
 
 #: pcbnew/convert_drawsegment_list_to_polygon.cpp:574
 #: pcbnew/convert_drawsegment_list_to_polygon.cpp:819
-#, fuzzy
 msgid "(not a closed shape)"
-msgstr "(닫힌 모양이 아님)"
+msgstr "(닫혀 있지 않은 모양)"
 
 #: pcbnew/cross-probing.cpp:169
-#, fuzzy, c-format
+#, c-format
 msgid "%s pin %s not found"
-msgstr "%s 핀 %s을 찾을 수 없음"
+msgstr "%s 핀 %s을(를) 찾을 수 없음"
 
 #: pcbnew/cross-probing.cpp:192
-#, c-format, fuzzy
+#, c-format
 msgid "Selecting all from sheet \"%s\""
 msgstr "시트 \"%s\"에서 모두 선택"
 
@@ -20463,9 +20432,8 @@ msgid "Only back"
 msgstr "오직 후면"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:89
-#, fuzzy
 msgid "Only selected"
-msgstr "선택한 것만"
+msgstr "선택한것만"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:95
 msgid "Empty"
@@ -20542,9 +20510,8 @@ msgstr ""
 "백 풋프린트는 %s에서 시작합니다."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:309
-#, fuzzy
 msgid "the last front footprint + 1"
-msgstr "현재 프린터로 인쇄"
+msgstr "표면의 마지막 풋프린트 + 1"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:317
 #, c-format
@@ -20593,9 +20560,8 @@ msgstr ""
 "%s로 정렬하기 전에, 좌표가 %s, %s의 그리드로 반올림합니다."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:349
-#, fuzzy
 msgid "footprint location"
-msgstr "글꼴 선택 (&F)"
+msgstr "풋프린트 위치"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:350
 msgid "reference designator location"
@@ -20636,7 +20602,6 @@ msgstr ""
 "***********************\n"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:516
-#, fuzzy
 msgid " will be ignored"
 msgstr " 무시됩니다"
 
@@ -20649,13 +20614,13 @@ msgstr ""
 "풋프린트 없음"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:535
-#, c-format, fuzzy
+#, c-format
 msgid ""
 "\n"
 "*********** Sort on %s ***********"
 msgstr ""
 "\n"
-"*********** 정렬 %s ***********"
+"*********** %s에서 정렬 ***********"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:536
 msgid "Footprint Coordinates"
@@ -20736,9 +20701,8 @@ msgid "Footprint not found in changelist"
 msgstr "변경 목록에서 풋프린트를 찾을 수 없음"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:30
-#, fuzzy
 msgid "Footprint Order"
-msgstr "풋프린트 값"
+msgstr "풋프린트 순서"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:45
 msgid "Horizontally: top left to bottom right"
@@ -20796,9 +20760,8 @@ msgstr ""
 "이것은 부품이 잘못 정렬되었을 시에 도움이 됩니다."
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:163
-#, fuzzy
 msgid "Reannotation Scope"
-msgstr "치수 속성"
+msgstr "재주석 범위"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:170
 msgid "Reannotate:"
@@ -20840,9 +20803,8 @@ msgid "1"
 msgstr "1"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:215
-#, fuzzy
 msgid "Default is 1"
-msgstr "기본값"
+msgstr "기본값은 1입니다"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:220
 msgid "Back reference start:"
@@ -20903,9 +20865,8 @@ msgid "Optional prefix for solder side reference designations (e.g. B_)"
 msgstr "납땜면의 참조 지정자에 대한 선택적 접두사(예: B_)"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:264
-#, fuzzy
 msgid "Exclude locked footprints"
-msgstr "잠김 트랙 포함"
+msgstr "잠긴 풋프린트 제외"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:265
 msgid "Locked footprints will not be reannotated"
@@ -20936,18 +20897,16 @@ msgid "Board Setup"
 msgstr "보드 설정"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:53
-#, fuzzy
 msgid "Import Settings from Another Board..."
-msgstr "다른 보드에서 설정 가져오기..."
+msgstr "다른 기판에서 설정 가져오기..."
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:80
 msgid "Board Stackup"
 msgstr "보드 스택업"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:88
-#, fuzzy
 msgid "Board Editor Layers"
-msgstr "Module 에디터"
+msgstr "기판 편집기 레이어"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:90
 msgid "Physical Stackup"
@@ -20962,9 +20921,8 @@ msgid "Solder Mask/Paste"
 msgstr "솔더 마스크/페이스트"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:96
-#, fuzzy
 msgid "Text & Graphics"
-msgstr "그래픽"
+msgstr "텍스트 & 그래픽"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:97
 msgid "Defaults"
@@ -20976,15 +20934,13 @@ msgstr "디자인 규칙"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:101 pcbnew/router/router_tool.cpp:834
 #: pcbnew/router/router_tool.cpp:855
-#, fuzzy
 msgid "Constraints"
-msgstr "풋프린트"
+msgstr "제약"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:102 pcbnew/edit_track_width.cpp:178
 #: pcbnew/edit_track_width.cpp:198
-#, fuzzy
 msgid "Pre-defined Sizes"
-msgstr "펜 크기"
+msgstr "사전 정의된 크기"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:104
 #: pcbnew/dialogs/dialog_constraints_reporter.cpp:54
@@ -21017,15 +20973,13 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:91
 #: pcbnew/dialogs/dialog_board_statistics.cpp:686
-#, fuzzy
 msgid "Front Side"
-msgstr "정면에서 보기"
+msgstr "정면"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:93
 #: pcbnew/dialogs/dialog_board_statistics.cpp:686
-#, fuzzy
 msgid "Back Side"
-msgstr "후면에서 보기"
+msgstr "후면"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:95
 #: pcbnew/dialogs/dialog_board_statistics.cpp:686
@@ -21112,9 +21066,8 @@ msgid "NPTH"
 msgstr "NPTH"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:628
-#, fuzzy
 msgid "Save Report File"
-msgstr "프로젝트 파일 저장 (&P)"
+msgstr "보고서 파일 저장"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:649
 msgid ""
@@ -21168,14 +21121,12 @@ msgid "Exclude components with no pins"
 msgstr "핀이 없는 부품 제외"
 
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:232
-#, fuzzy
 msgid "X Size"
-msgstr "크기"
+msgstr "X 크기"
 
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:233
-#, fuzzy
 msgid "Y Size"
-msgstr "크기"
+msgstr "Y 크기"
 
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:234
 msgid "Plated"
@@ -21186,14 +21137,12 @@ msgid "Via/Pad"
 msgstr "비아/패드"
 
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:236
-#, fuzzy
 msgid "Start Layer"
-msgstr "Draft layer"
+msgstr "레이어 시작"
 
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:237
-#, fuzzy
 msgid "Stop Layer"
-msgstr "Top Layer"
+msgstr "Layer 중단"
 
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:258
 msgid "Drill Holes"
@@ -21201,7 +21150,6 @@ msgstr "드릴 홀"
 
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:265
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:214
-#, fuzzy
 msgid "Generate Report File..."
 msgstr "보고서 파일 생성..."
 
@@ -21214,9 +21162,8 @@ msgid "No footprint selected"
 msgstr "선택된 풋프린트 없음"
 
 #: pcbnew/dialogs/dialog_cleanup_graphics.cpp:46
-#, fuzzy
 msgid "Update Footprint"
-msgstr "풋프린트 삭제"
+msgstr "풋프린트 업데이트"
 
 #: pcbnew/dialogs/dialog_cleanup_graphics.cpp:46
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:55
@@ -21225,9 +21172,8 @@ msgid "Update PCB"
 msgstr "PCB 업데이트"
 
 #: pcbnew/dialogs/dialog_cleanup_graphics.cpp:116
-#, fuzzy
 msgid "Graphics cleanup"
-msgstr "그래픽"
+msgstr "그래픽 정리"
 
 #: pcbnew/dialogs/dialog_cleanup_graphics_base.cpp:22
 msgid "Merge lines into rectangles"
@@ -21241,9 +21187,8 @@ msgid ""
 msgstr "다른 네트에 속한 노드에 연결되는 배선 세그먼트 (회로의 단락) 를 삭제"
 
 #: pcbnew/dialogs/dialog_cleanup_graphics_base.cpp:27
-#, fuzzy
 msgid "Delete redundant graphics"
-msgstr "중복 비아 삭제"
+msgstr "중복 그래픽 삭제"
 
 #: pcbnew/dialogs/dialog_cleanup_graphics_base.cpp:37
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:57
@@ -21251,23 +21196,20 @@ msgid "Changes To Be Applied:"
 msgstr "적용할 변경 사항:"
 
 #: pcbnew/dialogs/dialog_cleanup_graphics_base.h:53
-#, fuzzy
 msgid "Cleanup Graphics"
-msgstr "그래픽 추가"
+msgstr "그래픽 정리"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:150
 msgid "Board cleanup"
 msgstr "보드 정리"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:22
-#, fuzzy
 msgid "Delete &tracks connecting different nets"
-msgstr "다른 네트를 연결하는 트랙 삭제(&T)"
+msgstr "다른 네트를 연결하는 &배선 삭제"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:27
-#, fuzzy
 msgid "&Delete redundant vias"
-msgstr "중복 비아 삭제"
+msgstr "&중복 비아 삭제"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:28
 msgid "remove vias on through hole pads and superimposed vias"
@@ -21290,9 +21232,8 @@ msgid "Delete tracks unconnected at one end"
 msgstr "한쪽 끝에서 연결되지 않은 트랙 삭제"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:41
-#, fuzzy
 msgid "delete tracks having at least one dangling end"
-msgstr "적어도 하나의 댕글링 엔드가 있는 트랙 삭제"
+msgstr "끝이 연결없이 매달린 배선이 하나 이상 있을 경우 삭제"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:45
 #, fuzzy
