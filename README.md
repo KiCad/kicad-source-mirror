@@ -12,9 +12,12 @@ libraries, see our [Website](https://kicad.org/) and our [Forum](https://forum.k
 
 ## Build state
 
-[<img alt="Jenkins" src="https://img.shields.io/jenkins/build?jobUrl=https%3A%2F%2Fjenkins.simonrichter.eu%2Fview%2FKiCad%2520Status%2Fjob%2Flinux-kicad-head%2F&label=Linux%2C%20amd64&style=plastic">](https://jenkins.simonrichter.eu/view/KiCad%20Status/job/linux-kicad-head/)
-[<img alt="Jenkins" src="https://img.shields.io/jenkins/build?jobUrl=https%3A%2F%2Fjenkins.simonrichter.eu%2Fview%2FKiCad%2520Status%2Fjob%2Fwindows-kicad-msvc-head%2F&label=Windows%2C%20MSVC&style=plastic">](https://jenkins.simonrichter.eu/view/KiCad%20Status/job/windows-kicad-msvc-head/)
-[<img alt="Jenkins" src="https://img.shields.io/jenkins/build?jobUrl=https%3A%2F%2Fjenkins.simonrichter.eu%2Fview%2FKiCad%2520Status%2Fjob%2Fwindows-kicad-msys2-pipeline%2F&label=%28Windows%2C%20MSYS2%29%20Nightly%20Build&style=plastic">](https://jenkins.simonrichter.eu/view/KiCad%20Status/job/windows-kicad-msys2-pipeline/)
+KiCad uses a host of CI resources.
+
+GitLab CI pipeline status can be viewed for Linux and Windows builds of the latest commits.
+
+Additional status is available for builds:
+[<img alt="Jenkins" src="https://img.shields.io/jenkins/build?jobUrl=https%3A%2F%2Fjenkins.simonrichter.eu%2Fjob%2Fwindows-kicad-ps-pipeline%2F&label=Windows%2C%20MSVC%Nightly&style=plastic">](https://jenkins.simonrichter.eu/job/windows-kicad-ps-pipeline/)
 
 ## Release status
 [![latest released version(s)](https://repology.org/badge/latest-versions/kicad.svg)](https://repology.org/project/kicad/versions)
