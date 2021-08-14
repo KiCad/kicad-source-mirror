@@ -74,6 +74,10 @@ void ScriptingSetPcbEditFrame( PCB_EDIT_FRAME* aPcbEditFrame )
 
 BOARD* LoadBoard( wxString& aFileName )
 {
+    // Loading a new board is not possible if running inside KiCad
+    if( s_PcbEditFrame )
+        return nullptr;
+
     if( aFileName.EndsWith( KiCadPcbFileExtension ) )
         return LoadBoard( aFileName, IO_MGR::KICAD_SEXP );
     else if( aFileName.EndsWith( LegacyPcbFileExtension ) )
@@ -88,9 +92,16 @@ SETTINGS_MANAGER* GetSettingsManager()
 {
     if( !s_SettingsManager )
     {
-        // Ensure wx system settings stuff is available
-        static_cast<void>( wxTheApp );
-        s_SettingsManager = new SETTINGS_MANAGER( true );
+        if( s_PcbEditFrame )
+        {
+            s_SettingsManager = s_PcbEditFrame->GetSettingsManager();
+        }
+        else
+        {
+            // Ensure wx system settings stuff is available
+            static_cast<void>( wxTheApp );
+            s_SettingsManager = new SETTINGS_MANAGER( true );
+        }
     }
 
     return s_SettingsManager;
@@ -117,6 +128,9 @@ PROJECT* GetDefaultProject()
 
 BOARD* LoadBoard( wxString& aFileName, IO_MGR::PCB_FILE_T aFormat )
 {
+    // Loading a new board is not possible if running inside KiCad
+    wxASSERT( !s_PcbEditFrame );
+
     wxFileName pro = aFileName;
     pro.SetExt( ProjectFileExtension );
     pro.MakeAbsolute();
@@ -179,6 +193,10 @@ BOARD* LoadBoard( wxString& aFileName, IO_MGR::PCB_FILE_T aFormat )
 
 BOARD* CreateEmptyBoard()
 {
+    // Creating a new board is not possible if running inside KiCad
+    if( s_PcbEditFrame )
+        return nullptr;
+
     BOARD* brd = new BOARD();
 
     brd->SetProject( GetDefaultProject() );
@@ -192,14 +210,21 @@ bool SaveBoard( wxString& aFileName, BOARD* aBoard, IO_MGR::PCB_FILE_T aFormat )
     aBoard->BuildConnectivity();
     aBoard->SynchronizeNetsAndNetClasses();
 
-    IO_MGR::Save( aFormat, aFileName, aBoard, nullptr );
+    try
+    {
+        IO_MGR::Save( aFormat, aFileName, aBoard, nullptr );
+    }
+    catch( ... )
+    {
+        return false;
+    }
 
     wxFileName pro = aFileName;
     pro.SetExt( ProjectFileExtension );
     pro.MakeAbsolute();
     wxString projectPath = pro.GetFullPath();
 
-    GetSettingsManager()->SaveProject( pro.GetFullPath() );
+    GetSettingsManager()->SaveProjectAs( pro.GetFullPath() );
 
     return true;
 }

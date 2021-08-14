@@ -54,8 +54,13 @@ SETTINGS_MANAGER* GetSettingsManager();
  */
 BOARD* CreateEmptyBoard();
 
-// Boards can be saved only as .kicad_pcb file format,
-// so no option to choose the file format.
+/**
+ * Saves a copy of the given board and its associated project to the given path.
+ * Boards can only be saved in KiCad native format.
+ * @param aFileName is the full path to save a copy to.
+ * @param aBoard is a pointer to a loaded BOARD to save.
+ * @return true if the save was completed.
+ */
 bool SaveBoard( wxString& aFileName, BOARD* aBoard );
 
 /**
