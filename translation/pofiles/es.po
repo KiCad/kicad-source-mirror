@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
-"PO-Revision-Date: 2021-08-13 23:49+0000\n"
+"PO-Revision-Date: 2021-08-15 03:29+0000\n"
 "Last-Translator: VicSanRoPe <vicsanrope@protonmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/kicad/"
 "master-source/es/>\n"
@@ -17533,6 +17533,7 @@ msgid "Sketch Flashed Items"
 msgstr "Elementos gráficos en boceto"
 
 #: gerbview/tools/gerbview_actions.cpp:150
+#, fuzzy
 msgid "Show flashed items in outline mode"
 msgstr "Mostrar elementos gráficos en modo boceto"
 
@@ -18079,16 +18080,14 @@ msgid "Create New Directory"
 msgstr "Crear carpeta nueva"
 
 #: kicad/project_tree_pane.cpp:707
-#, fuzzy
 msgid "Switch to this Project"
-msgstr "Cambiar a e&ste proyecto"
+msgstr "Cambiar a este proyecto"
 
 #: kicad/project_tree_pane.cpp:708
 msgid "Close all editors, and switch to the selected project"
 msgstr "Cerrar y cambiar al proyecto seleccionado"
 
 #: kicad/project_tree_pane.cpp:715
-#, fuzzy
 msgid "New Directory..."
 msgstr "Nueva carpeta..."
 
@@ -18105,23 +18104,20 @@ msgid "Reveals the directory in a Finder window"
 msgstr "Revela el directorio en una ventana de Finder"
 
 #: kicad/project_tree_pane.cpp:727
-#, fuzzy
 msgid "Open Directory in File Explorer"
-msgstr "Abrir carpeta de proyecto en el explorador"
+msgstr "Abrir carpeta en el explorador de archivos"
 
 #: kicad/project_tree_pane.cpp:728 pcbnew/tools/pcb_actions.cpp:554
 msgid "Opens the directory in the default system file manager"
 msgstr "Abre el directorio en el gestor de archivos del sistema"
 
 #: kicad/project_tree_pane.cpp:735
-#, fuzzy
 msgid "Reveals the directories in a Finder window"
-msgstr "Abrir carpeta de proyecto en el explorador"
+msgstr "Revela las carpetas en una ventana de Finder"
 
 #: kicad/project_tree_pane.cpp:737
-#, fuzzy
 msgid "Open Directories in File Explorer"
-msgstr "Abrir carpeta de proyecto en el explorador"
+msgstr "Abrir carpetas en el explorador de archivos"
 
 #: kicad/project_tree_pane.cpp:738
 msgid "Opens the directories in the default system file manager"
@@ -18132,53 +18128,44 @@ msgid "Open the file in a Text Editor"
 msgstr "Abrir el archivo con un editor de texto"
 
 #: kicad/project_tree_pane.cpp:751
-#, fuzzy
 msgid "Open files in a Text Editor"
-msgstr "Abrir el archivo con un editor de texto"
+msgstr "Abrir archivos en un editor de texto"
 
 #: kicad/project_tree_pane.cpp:753
-#, fuzzy
 msgid "Edit in a Text Editor"
-msgstr "Abrir en &editor de texto"
+msgstr "Editar en un editor de texto"
 
 #: kicad/project_tree_pane.cpp:761
-#, fuzzy
 msgid "Rename File..."
-msgstr "&Renombrar Archivo..."
+msgstr "Renombrar archivo..."
 
 #: kicad/project_tree_pane.cpp:762
 msgid "Rename file"
 msgstr "Renombrar archivo"
 
 #: kicad/project_tree_pane.cpp:766
-#, fuzzy
 msgid "Rename Files..."
-msgstr "&Renombrar Archivo..."
+msgstr "Renombrar archivos..."
 
 #: kicad/project_tree_pane.cpp:767
-#, fuzzy
 msgid "Rename files"
-msgstr "Renombrar archivo"
+msgstr "Renombrar archivos"
 
 #: kicad/project_tree_pane.cpp:776
-#, fuzzy
 msgid "Delete the file and its content"
-msgstr "Eliminar la carpeta y todo su contenido"
+msgstr "Eliminar el archivo y sus contenidos"
 
 #: kicad/project_tree_pane.cpp:778
-#, fuzzy
 msgid "Delete the files and their contents"
-msgstr "Eliminar la carpeta y todo su contenido"
+msgstr "Eliminar los archivos y sus contenidos"
 
 #: kicad/project_tree_pane.cpp:793
-#, fuzzy
 msgid "Move to Trash"
-msgstr "Pistas sin conectar"
+msgstr "Mover a la papelera"
 
 #: kicad/project_tree_pane.cpp:807
-#, fuzzy
 msgid "Print the contents of the file"
-msgstr "Genera el archivo con la lista de redes"
+msgstr "Imprimir los contenidos del archivo"
 
 #: kicad/project_tree_pane.cpp:869
 #, c-format
@@ -19059,9 +19046,8 @@ msgid "Calculate"
 msgstr "Calcular"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:197
-#, fuzzy
 msgid "Regulator"
-msgstr "Regulador:"
+msgstr "Regulador"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:204
 msgid "Regulators data file:"
@@ -19111,19 +19097,16 @@ msgid "Tee"
 msgstr "Tee"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:265
-#, fuzzy
 msgid "Bridged tee"
-msgstr "Tee puenteada"
+msgstr "T puenteada"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:265
-#, fuzzy
 msgid "Resistive splitter"
 msgstr "Divisor resistivo"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:267
-#, fuzzy
 msgid "Attenuators"
-msgstr "Atenuadores:"
+msgstr "Atenuadores"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:284
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1144
@@ -19133,9 +19116,8 @@ msgid "Parameters"
 msgstr "Parámetros"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:292
-#, fuzzy
 msgid "Attenuation:"
-msgstr "Atenuación"
+msgstr "Atenuación:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:299
 msgid "dB"
@@ -19146,78 +19128,64 @@ msgid "Zin:"
 msgstr "Zin:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:314
-#, fuzzy
 msgid "Zout:"
-msgstr "Zout"
+msgstr "Zout:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:374
-#, fuzzy
 msgid "R3:"
-msgstr "3:"
+msgstr "R3:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:426
 msgid "RF Attenuators"
 msgstr "Atenuadores RF"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:435
-#, fuzzy
 msgid "Inputs"
-msgstr "Entrada"
+msgstr "Entradas"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:443
-#, fuzzy
 msgid "Required resistance:"
-msgstr "Resistencia:"
+msgstr "Resistencia requerida:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:454
-#, fuzzy
 msgid "Exclude value 1:"
-msgstr "Excluir Isletas (Pads)"
+msgstr "Excluir valor 1:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:465
-#, fuzzy
 msgid "Exclude value 2:"
-msgstr "Excluir Isletas (Pads)"
+msgstr "Excluir valor 2:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:485
-#, fuzzy
 msgid "E1"
-msgstr "E"
+msgstr "E1"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:488
-#, fuzzy
 msgid "E3"
-msgstr "E"
+msgstr "E3"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:491
-#, fuzzy
 msgid "E6"
-msgstr "E"
+msgstr "E6"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:495
-#, fuzzy
 msgid "E12"
-msgstr "12"
+msgstr "E12"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:505
-#, fuzzy
 msgid "Solutions"
-msgstr "Resolución:"
+msgstr "Soluciones"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:513
-#, fuzzy
 msgid "Simple solution:"
-msgstr "Resolución:"
+msgstr "Solución simple:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:533
-#, fuzzy
 msgid "3R solution:"
-msgstr "Resolución:"
+msgstr "Solución 3R:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:553
-#, fuzzy
 msgid "4R solution:"
-msgstr "Resolución:"
+msgstr "Solución 4R:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:613
 msgid "E-Series"
@@ -19269,7 +19237,6 @@ msgid "Coplanar wave guide"
 msgstr "Guía de ondas coplanar"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:692
-#, fuzzy
 msgid "Coplanar wave guide w/ ground plane"
 msgstr "Guía de ondas coplanar con plano de masa"
 
@@ -19294,9 +19261,8 @@ msgid "Twisted Pair"
 msgstr "Par entrelazado"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:694
-#, fuzzy
 msgid "Transmission Line Type"
-msgstr "Tipo línea transmisión:"
+msgstr "Tipo de línea de transmisión"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:711
 msgid "Substrate Parameters"
@@ -19319,7 +19285,7 @@ msgstr "..."
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:738
 #, fuzzy
 msgid "Tan delta:"
-msgstr "Incremento trapezoidal:"
+msgstr "Delta de tangente:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:757
 msgid "Rho:"
@@ -20045,7 +20011,6 @@ msgstr "Alto del sustrato"
 
 #: pcb_calculator/transline_ident.cpp:126
 #: pcb_calculator/transline_ident.cpp:313
-#, fuzzy
 msgid "Height of box top"
 msgstr "Alto de la tapa de la caja"
 
@@ -20054,7 +20019,6 @@ msgstr "Alto de la tapa de la caja"
 #: pcb_calculator/transline_ident.cpp:202
 #: pcb_calculator/transline_ident.cpp:315
 #: pcb_calculator/transline_ident.cpp:360
-#, fuzzy
 msgid "Strip thickness"
 msgstr "Grosor de la tira"
 
@@ -21916,9 +21880,8 @@ msgid "Thermal reliefs"
 msgstr "Alivios térmicos"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:221 pcbnew/zone.cpp:1403
-#, fuzzy
 msgid "Reliefs for PTH"
-msgstr "Alivios para pasantes únicamente"
+msgstr "Alivios para pasantes revestidos"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:227
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:750
@@ -22322,9 +22285,8 @@ msgid "Measured value of this dimension"
 msgstr "Valor medido para esta dimensión"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:106
-#, fuzzy
 msgid "Override value"
-msgstr "Valor actual"
+msgstr "Remplazar valor"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:107
 msgid ""
@@ -24555,9 +24517,8 @@ msgid "Track Length"
 msgstr "Longitud de pista"
 
 #: pcbnew/dialogs/dialog_net_inspector.cpp:82
-#, fuzzy
 msgid "Die Length"
-msgstr "Longitud de línea"
+msgstr "Longitud del chip"
 
 #: pcbnew/dialogs/dialog_net_inspector.cpp:83
 msgid "Total Length"
@@ -24746,7 +24707,6 @@ msgid "Solid shape"
 msgstr "Forma sólida"
 
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:120
-#, fuzzy
 msgid "HatchBorder pattern"
 msgstr "Patrón de borde rayado"
 
@@ -24932,9 +24892,8 @@ msgstr ""
 
 # Pendiente de contexto
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1326
-#, fuzzy
 msgid "Too large value for pad delta size."
-msgstr "Valor demasiado grande para incremento del pad"
+msgstr "Valor demasiado grande para incremento de tamaño del pad."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1335
 msgid "Warning: Through hole pad has no hole."
@@ -25209,9 +25168,8 @@ msgid ":"
 msgstr ":"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:459
-#, fuzzy
 msgid "Specify pad to die length"
-msgstr "Distancia pad matriz:"
+msgstr "Especifique la longitud de pad a chip"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:494
 msgid ""
@@ -26262,9 +26220,8 @@ msgid "Do not modify pads having a different type"
 msgstr "No modificar pads con tipo diferente"
 
 #: pcbnew/dialogs/dialog_push_pad_properties_base.h:51
-#, fuzzy
 msgid "Push Pad Properties"
-msgstr "Aplicar propiedades de pad"
+msgstr "Empujar propiedades de pad"
 
 #: pcbnew/dialogs/dialog_rule_area_properties.cpp:153
 msgid "No layers selected."
@@ -27852,9 +27809,8 @@ msgid "Drawings"
 msgstr "Dibujos"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:716
-#, fuzzy
 msgid "User1"
-msgstr "Usuario"
+msgstr "User1"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:719
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:729
@@ -27869,44 +27825,36 @@ msgid "User defined layer"
 msgstr "Capa definida por el usuario"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:726
-#, fuzzy
 msgid "User2"
-msgstr "Usuario"
+msgstr "User2"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:736
-#, fuzzy
 msgid "User3"
-msgstr "Usuario"
+msgstr "User3"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:746
-#, fuzzy
 msgid "User4"
-msgstr "Usuario"
+msgstr "User4"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:756
-#, fuzzy
 msgid "User5"
-msgstr "Usuario"
+msgstr "User5"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:766
-#, fuzzy
 msgid "User6"
-msgstr "Usuario"
+msgstr "User6"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:776
-#, fuzzy
 msgid "User7"
-msgstr "Usuario"
+msgstr "User7"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:786
-#, fuzzy
 msgid "User8"
-msgstr "Usuario"
+msgstr "User8"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:796
-#, fuzzy
 msgid "User9"
-msgstr "Usuario"
+msgstr "User9"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:29
 msgid ""
@@ -28543,9 +28491,8 @@ msgid "Via diameter"
 msgstr "Diámetro de vía"
 
 #: pcbnew/drc/drc_item.cpp:121
-#, fuzzy
 msgid "Padstack is not valid"
-msgstr "Padstack inválido"
+msgstr "Apilado de pad inválido"
 
 #: pcbnew/drc/drc_item.cpp:125
 msgid "Micro via drill out of range"
@@ -29716,7 +29663,7 @@ msgstr "Error al cargar la huella %s desde la librería '%s'."
 
 #: pcbnew/generate_footprint_info.cpp:121
 msgid "doc url"
-msgstr ""
+msgstr "URL de documentación"
 
 #: pcbnew/import_gfx/dialog_import_gfx.cpp:55
 msgid "Centimeter"
@@ -30603,7 +30550,6 @@ msgid "Edge connector"
 msgstr "Conector de borde"
 
 #: pcbnew/pad.cpp:1447
-#, fuzzy
 msgid "NPTH, mechanical"
 msgstr "NPTH, mecánico"
 
@@ -30986,7 +30932,7 @@ msgstr "Mapeado desconocido de la capa '%s' de Altium."
 #: pcbnew/plugins/altium/altium_parser_pcb.cpp:788
 #, c-format
 msgid "Pads6 stream has unexpected length for subrecord 6: %d."
-msgstr ""
+msgstr "El flujo Pads6 tiene una longitud inesperada para el subregistro 6: %d."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:75
 msgid "Error reading file: cannot determine length."
@@ -31532,6 +31478,10 @@ msgid ""
 "filled, or as a KiCad Track if the shape was an unfilled outline (open or "
 "closed)."
 msgstr ""
+"El diseño de CADSTAR contiene elementos de COBRE, que no tienen un "
+"equivalente directo en KiCad. Estos han sido importados como una zona de "
+"KiCad si son de relleno sólido o rallado, o como una pista de KiCad si la "
+"forma era un contorno sin rellenar (abierto o cerrado)."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2125
 #, c-format
@@ -31574,6 +31524,8 @@ msgid ""
 "The shape for '%s' is Hatch filled in CADSTAR, which has no KiCad "
 "equivalent. Using solid fill instead."
 msgstr ""
+"La forma para '%s' es de relleno rallado en CADSTAR, que no tiene "
+"equivalente de KiCad. Usando en su lugar un relleno sólido."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3436
 #, c-format
@@ -31582,6 +31534,9 @@ msgid ""
 "hatches (crosshatching) 90 degrees apart. The imported hatching is "
 "crosshatched."
 msgstr ""
+"El código de rallado '%s' de CADSTAR tiene %d rallados definidos. KiCad solo "
+"soporta 2 rallados (cruzados) a una separación de 90°. El rallado importado "
+"es cruzado."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3446
 #, c-format
@@ -31590,6 +31545,10 @@ msgid ""
 "KiCad only supports one width for the haching. The imported hatching uses "
 "the width defined in the first hatch definition, i.e. %.2f mm."
 msgstr ""
+"El código de rallado '%s' de CADSTAR tiene anchos de línea distintos para "
+"cada rallado. KiCad solo soporta un ancho para el rallado. El rallado "
+"importado usa el ancho definido en la primera definición de rallado, es "
+"decir: %.2f mm."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3458
 #, c-format
@@ -31598,6 +31557,10 @@ msgid ""
 "KiCad only supports one step size for the haching. The imported hatching "
 "uses the step size defined in the first hatching definition, i.e. %.2f mm."
 msgstr ""
+"El código de rallado '%s' de CADSTAR tiene tamaños de paso distintos para "
+"cada rallado. KiCad solo soporta un tamaño de paso para el rallado. El "
+"rallado importado usa el tamaño de paso definido en la primera definición de "
+"rallado, es decir: %.2f mm."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3471
 #, c-format
@@ -31607,6 +31570,10 @@ msgid ""
 "hatching has two hatches 90 degrees apart, oriented %.1f degrees from "
 "horizontal."
 msgstr ""
+"El código de rallado '%s' de CADSTAR tiene rallados con una diferencia de "
+"ángulo de %.1f°. KiCad solo soporta el rallado a 90° de separación. El "
+"rallado importado usa dos rallados a 90° de separación, orientado a %.1f° de "
+"la horizontal."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3544
 #, c-format
