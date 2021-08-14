@@ -366,7 +366,7 @@ int PANEL_KICAD2STEP::RunConverter()
 
     if( out_fname.FileExists() && !m_params.m_overwrite )
     {
-        ReportMessage( _( "** Output already exists.\n"
+        ReportMessage( _( "** Output already exists. Export aborted. **\n"
                           "Enable the force overwrite flag to overwrite it." ) );
 
         return -1;
@@ -404,7 +404,7 @@ int PANEL_KICAD2STEP::RunConverter()
 
             if( !res )
             {
-                ReportMessage( _( "\n**Error building STEP board model. Abort export **\n" ) );
+                ReportMessage( _( "\n** Error building STEP board model. Export aborted. **\n" ) );
                 return -1;
             }
 
@@ -419,23 +419,19 @@ int PANEL_KICAD2STEP::RunConverter()
 
             if( !res )
             {
-                ReportMessage( _( "\nError Write STEP file\n" ) );
+                ReportMessage( _( "\n** Error writing STEP file. **\n" ) );
                 return -1;
             }
         }
         catch( const Standard_Failure& e )
         {
-            wxString err = e.GetMessageString();
-            wxMessageBox( err, _( "Export Error" ) );
-
-            ReportMessage( wxString::Format( _( "\nExport Error: %s\n" ), err ) );
-            ReportMessage( _( "\n*** Abort export ***\n" ) );
+            ReportMessage( e.GetMessageString() );
+            ReportMessage( _( "\n** Error exporting STEP file. Export aborted. **\n" ) );
             return -1;
         }
         catch( ... )
         {
-            wxMessageBox( _( "(no exception information)" ), _( "Unknown error" ) );
-            ReportMessage( _( "\nUnknown error\n*** Abort export ***\n" ) );
+            ReportMessage( _( "\n** Error exporting STEP file. Export aborted. **\n" ) );
             return -1;
         }
     }
@@ -444,7 +440,7 @@ int PANEL_KICAD2STEP::RunConverter()
     msgs << msgs_from_opencascade.str();
     ReportMessage( msgs );
 
-    ReportMessage( wxString::Format( _( "\nStep file '%s' created\n\n" ), outfile ) );
+    ReportMessage( wxString::Format( _( "\nSTEP file '%s' created.\n" ), outfile ) );
 
     errs << errors_from_opencascade.str();
     ReportMessage( errs );
@@ -464,10 +460,6 @@ int PANEL_KICAD2STEP::RunConverter()
         {
             msg = _( "STEP file has been created, but there are warnings." );
         }
-    }
-    else    // No error messages: the file is expected OK
-    {
-        msg.Printf( _( "STEP file:\n%s\nhas been created successfully." ), outfile );
     }
 
     ReportMessage( msg );

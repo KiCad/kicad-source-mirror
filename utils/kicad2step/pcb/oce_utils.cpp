@@ -1150,8 +1150,8 @@ bool PCBMODEL::getModelLabel( const std::string& aFileName, TRIPLET aScale, TDF_
         else // Substitution is not allowed
         {
             if( aErrorMessage )
-                aErrorMessage->Printf( "Cannot add a VRML model data to a Step file.\n",
-                                       aFileName );
+                aErrorMessage->Printf( "Cannot add a VRML model to a STEP file.\n", aFileName );
+
             return false;
         }
 
