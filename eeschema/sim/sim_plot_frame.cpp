@@ -110,10 +110,6 @@ private:
 };
 
 
-// Store the path of saved workbooks during the session
-wxString SIM_PLOT_FRAME::m_savedWorkbooksPath;
-
-
 SIM_PLOT_FRAME::SIM_PLOT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
         SIM_PLOT_FRAME_BASE( aParent ),
         m_lastSimPlot( nullptr ),
@@ -151,9 +147,6 @@ SIM_PLOT_FRAME::SIM_PLOT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     setIconsForMenuItems();
 
     m_simulator->Init();
-
-    if( m_savedWorkbooksPath.IsEmpty() )
-        m_savedWorkbooksPath = Prj().GetProjectPath();
 
     m_reporter = new SIM_THREAD_REPORTER( this );
     m_simulator->SetReporter( m_reporter );
@@ -964,8 +957,7 @@ bool SIM_PLOT_FRAME::loadWorkbook( const wxString& aPath )
 
             if( !file.GetNextLine().ToLong( &traceType ) )
             {
-                DISPLAY_LOAD_ERROR( "Error loading workbook: Line %d is not an integer."
-                        );
+                DISPLAY_LOAD_ERROR( "Error loading workbook: Line %d is not an integer." );
                 file.Close();
 
                 return false;
@@ -996,6 +988,12 @@ bool SIM_PLOT_FRAME::loadWorkbook( const wxString& aPath )
     }
 
     file.Close();
+
+    wxFileName filename( aPath );
+    filename.MakeRelativeTo( Prj().GetProjectPath() );
+
+    // Remember the loaded workbook filename.
+    m_simulator->Settings()->SetWorkbookFilename( filename.GetFullPath() );
 
     // Successfully loading a workbook does not count as modifying it.
     m_workbook->ClrModified();
@@ -1058,13 +1056,46 @@ bool SIM_PLOT_FRAME::saveWorkbook( const wxString& aPath )
     bool res = file.Write();
     file.Close();
 
-    // Store the filename of the last saved workbook. It will be used to restore the simulation if
-    // the frame is closed and then opened again.
+    // Store the filename of the last saved workbook.
     if( res )
-        m_simulator->Settings()->SetWorkbookFilename( filename.GetFullName() );
+    {
+        filename.MakeRelativeTo( Prj().GetProjectPath() );
+        m_simulator->Settings()->SetWorkbookFilename( filename.GetFullPath() );
+    }
 
     m_workbook->ClrModified();
     return res;
+}
+
+
+wxString SIM_PLOT_FRAME::getDefaultFilename()
+{
+    wxFileName filename = m_simulator->Settings()->GetWorkbookFilename();
+
+    if( filename.GetName().IsEmpty() )
+    {
+        if( Prj().GetProjectName().IsEmpty() )
+        {
+            filename.SetName( _( "noname" ) );
+            filename.SetExt( WorkbookFileExtension );
+        }
+        else
+        {
+            filename.SetName( Prj().GetProjectName() );
+            filename.SetExt( WorkbookFileExtension );
+        }
+    }
+
+    return filename.GetFullName();
+}
+
+
+wxString SIM_PLOT_FRAME::getDefaultPath()
+{
+    wxFileName path = m_simulator->Settings()->GetWorkbookFilename();
+
+    path.Normalize( wxPATH_NORM_ALL, Prj().GetProjectPath() );
+    return path.GetPath();
 }
 
 
@@ -1094,13 +1125,12 @@ void SIM_PLOT_FRAME::menuNewPlot( wxCommandEvent& aEvent )
 
 void SIM_PLOT_FRAME::menuOpenWorkbook( wxCommandEvent& event )
 {
-    wxFileDialog openDlg( this, _( "Open simulation workbook" ), m_savedWorkbooksPath, "",
+    wxFileDialog openDlg( this, _( "Open simulation workbook" ), getDefaultPath(), "",
                           WorkbookFileWildcard(), wxFD_OPEN | wxFD_FILE_MUST_EXIST );
 
     if( openDlg.ShowModal() == wxID_CANCEL )
         return;
 
-    m_savedWorkbooksPath = openDlg.GetDirectory();
     loadWorkbook( openDlg.GetPath() );
 }
 
@@ -1124,32 +1154,14 @@ void SIM_PLOT_FRAME::menuSaveWorkbook( wxCommandEvent& event )
 
 void SIM_PLOT_FRAME::menuSaveWorkbookAs( wxCommandEvent& event )
 {
-    wxFileName defaultFilename = m_simulator->Settings()->GetWorkbookFilename();
-
-    if( defaultFilename.GetName().IsEmpty() )
-    {
-        if( Prj().GetProjectName().IsEmpty() )
-        {
-            defaultFilename.SetName( _( "noname" ) );
-            defaultFilename.SetExt( WorkbookFileExtension );
-        }
-        else
-        {
-            defaultFilename.SetName( Prj().GetProjectName() );
-            defaultFilename.SetExt( WorkbookFileExtension );
-        }
-    }
-
-    wxFileDialog saveAsDlg( this, _( "Save Simulation Workbook As" ), m_savedWorkbooksPath,
-                            defaultFilename.GetFullPath(), WorkbookFileWildcard(),
+    wxFileDialog saveAsDlg( this, _( "Save Simulation Workbook As" ), getDefaultPath(),
+                            getDefaultFilename(), WorkbookFileWildcard(),
                             wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
     if( saveAsDlg.ShowModal() == wxID_CANCEL )
         return;
 
-    m_savedWorkbooksPath = saveAsDlg.GetDirectory();
-
-    saveWorkbook( saveAsDlg.GetPath() );
+    saveWorkbook( Prj().AbsolutePath( saveAsDlg.GetPath() ) );
 }
 
 

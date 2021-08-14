@@ -219,6 +219,16 @@ private:
     bool saveWorkbook( const wxString& aPath );
 
     /**
+     * Return the default filename (with extension) to be used in file browser dialog.
+     */
+    wxString getDefaultFilename();
+
+    /**
+     * Return the default path to be used in file browser dialog.
+     */
+    wxString getDefaultPath();
+
+    /**
      * Return the currently opened plot panel (or NULL if there is none).
      */
     SIM_PANEL_BASE* getCurrentPlotWindow() const
@@ -356,9 +366,6 @@ private:
     ///< imagelists used to add a small colored icon to signal names
     ///< and cursors name, the same color as the corresponding signal traces
     wxImageList* m_signalsIconColorList;
-
-    ///< A string to store the path of saved workbooks during a session
-    static wxString m_savedWorkbooksPath;
 
     // Variables for temporary storage:
     int m_splitterLeftRightSashPosition;
