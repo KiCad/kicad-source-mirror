@@ -16,7 +16,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
 "PO-Revision-Date: 2021-08-14 03:57+0000\n"
-"Last-Translator: 킴슨김랑기 <korearf@gmail.com>\n"
+"Last-Translator: hokim <teamgoodaloe@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
 "Language: ko\n"
@@ -14427,14 +14427,12 @@ msgid "Show &Legend"
 msgstr "&범례 표시"
 
 #: eeschema/sim/sim_plot_frame_base.cpp:111
-#, fuzzy
 msgid "Dotted Current/Phase"
-msgstr "현재 값"
+msgstr "점선 전류/위상"
 
 #: eeschema/sim/sim_plot_frame_base.cpp:115
-#, fuzzy
 msgid "White Background"
-msgstr "흰색"
+msgstr "흰 바탕"
 
 #: eeschema/sim/sim_plot_frame_base.cpp:118
 msgid "View"
@@ -14474,9 +14472,8 @@ msgid "Voltage (swept)"
 msgstr "전압 (swept)"
 
 #: eeschema/sim/sim_plot_panel.cpp:407
-#, fuzzy
 msgid "Current (swept)"
-msgstr "현재 시트"
+msgstr "전류 (swept)"
 
 #: eeschema/sim/sim_plot_panel.cpp:410
 msgid "Resistance (swept)"
