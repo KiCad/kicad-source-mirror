@@ -15,8 +15,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
-"PO-Revision-Date: 2021-08-14 12:21+0000\n"
-"Last-Translator: 서범기 <joonhoflow@naver.com>\n"
+"PO-Revision-Date: 2021-08-14 12:30+0000\n"
+"Last-Translator: Ji Yoon Choi <chichoon.choi@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
 "Language: ko\n"
@@ -290,7 +290,7 @@ msgstr "OpenGL 불러오기: 레이어"
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:439
 #, c-format
 msgid "Loading %s..."
-msgstr "%s를 불러오는 중입니다..."
+msgstr "%s을(를) 불러오는 중입니다..."
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:50
 msgid "Export Current View as PNG..."
@@ -1411,7 +1411,7 @@ msgstr "환경 변수 확장 실패: '%c'가 %u 위치의 '%s'에 없습니다."
 #: common/common.cpp:320
 #, c-format
 msgid "Cannot make path '%s' absolute with respect to '%s'."
-msgstr "경로 '%s'를 '%s'에 대하여 절대적으로 만들 수 없습니다."
+msgstr "경로 '%s'을(를) '%s'에 대하여 절대적으로 만들 수 없습니다."
 
 #: common/common.cpp:339
 #, c-format
@@ -1825,7 +1825,7 @@ msgstr ""
 #: common/dialogs/dialog_configure_paths.cpp:371
 #, c-format
 msgid "The name %s is reserved, and cannot be used here"
-msgstr "이름 %s는 예약되어 있으며 여기에 사용할 수 없습니다"
+msgstr "이름 %s은(는) 예약되어 있으며 여기에 사용할 수 없습니다"
 
 #: common/dialogs/dialog_configure_paths.cpp:514
 msgid "File Browser..."
@@ -2355,7 +2355,7 @@ msgstr "세로"
 #: common/dialogs/dialog_page_settings.cpp:467
 #, c-format
 msgid "Drawing sheet file '%s' not found."
-msgstr "도면 시트 파일 '%s'를 찾을 수 없습니다."
+msgstr "도면 시트 파일 '%s'을(를) 찾을 수 없습니다."
 
 #: common/dialogs/dialog_page_settings.cpp:539
 msgid "the translation for paper size must preserve original spellings"
@@ -3651,12 +3651,12 @@ msgstr "OpenGL을 사용할 수 없음"
 #: common/drawing_sheet/drawing_sheet_reader.cpp:890
 #, c-format
 msgid "Drawing sheet '%s' not found."
-msgstr "도면 시트 파일 '%s'를 찾을 수 없습니다."
+msgstr "도면 시트 파일 '%s'을(를) 찾을 수 없습니다."
 
 #: common/drawing_sheet/drawing_sheet_reader.cpp:900
 #, c-format
 msgid "Drawing sheet '%s' could not be opened."
-msgstr "도면 시트 파일 '%s'를 찾을 수 없습니다."
+msgstr "도면 시트 파일 '%s'를을(를) 찾을 수 없습니다."
 
 #: common/drawing_sheet/drawing_sheet_reader.cpp:913
 #, c-format
@@ -3782,7 +3782,7 @@ msgstr "예기치 않은 오류 %s"
 #: common/dsnlexer.cpp:349
 #, c-format
 msgid "%s is a duplicate"
-msgstr "%s는 복제됨"
+msgstr "%s은(는) 중복되어 있습니다"
 
 #: common/dsnlexer.cpp:357
 #, c-format
@@ -4470,7 +4470,7 @@ msgstr "fp-lib-table 파일에는 '%s'라는 라이브러리가 없습니다."
 #: eeschema/symbol_lib_table.cpp:507
 #, c-format
 msgid "Cannot create global library table path '%s'."
-msgstr "전역 라이브러리 테이블 경로 '%s'를 만들 수 없음."
+msgstr "전역 라이브러리 테이블 경로 '%s'을(를) 만들 수 없습니다."
 
 #: common/gestfich.cpp:190
 #, c-format
@@ -4498,7 +4498,7 @@ msgid ""
 "\n"
 "Unknown file type."
 msgstr ""
-"'%s'를 인쇄할 수 없습니다.\n"
+"'%s'을(를) 인쇄할 수 없습니다.\n"
 "\n"
 "알 수 없는 파일 형식입니다."
 
@@ -5298,7 +5298,7 @@ msgstr "단위 '%s'가 'mil'로 끝나지 않습니다."
 #: common/plugins/altium/altium_parser.cpp:251
 #, c-format
 msgid "Cannot convert '%s' to double."
-msgstr "'%s'를 두배로 변환할 수 없습니다."
+msgstr "'%s'을(를) 두 배로 변환할 수 없습니다."
 
 #: common/plugins/cadstar/cadstar_archive_parser.cpp:2328
 #, c-format
@@ -6101,7 +6101,7 @@ msgid ""
 "Do you want to access the KiCad online help?"
 msgstr ""
 "도움말 파일 '%s' 또는\n"
-"'%s'를 찾을 수 없습니다.\n"
+"'%s'을(를) 찾을 수 없습니다.\n"
 "KiCad 온라인 도움말에 액세스하시겠습니까?"
 
 #: common/tool/common_control.cpp:220 common/tool/common_control.cpp:240
@@ -6357,12 +6357,12 @@ msgstr "설정 초기화"
 #: common/widgets/unit_binder.cpp:213
 #, c-format
 msgid "%s must be at least %s."
-msgstr "%s는 최소 %s여야 합니다."
+msgstr "%s은(는) 최소 %s여야 합니다."
 
 #: common/widgets/unit_binder.cpp:228
 #, c-format
 msgid "%s must be less than %s."
-msgstr "%s는 %s보다 작아야 합니다."
+msgstr "%s은(는) %s보다 작아야 합니다."
 
 #: common/widgets/widget_hotkey_list.cpp:96
 msgid "Press a new hotkey, or press Esc to cancel..."
@@ -7187,7 +7187,7 @@ msgstr "%s와 %s 가 같은 항목에 연결되어 있습니다; %s 는 네트�
 #, c-format
 msgid ""
 "Net %s is graphically connected to bus %s but is not a member of that bus"
-msgstr "네트 %s는 버스 %s에 시각적으로 연결되어 있지만 해당 버스의 멤버가 아닙니다"
+msgstr "네트 %s은(는) 버스 %s에 시각적으로 연결되어 있지만 해당 버스의 멤버가 아닙니다"
 
 #: eeschema/connection_graph.cpp:2877
 #, c-format
@@ -7847,22 +7847,22 @@ msgstr "수정"
 #: eeschema/dialogs/dialog_change_symbols.cpp:516
 #, c-format
 msgid "Update symbol %s from '%s' to '%s'"
-msgstr "심볼 %s를 '%s'에서 '%s'로 수정"
+msgstr "심볼 %s을(를) '%s'에서 '%s'(으)로 업데이트"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:523
 #, c-format
 msgid "Update symbols %s from '%s' to '%s'"
-msgstr "심볼 %s를 '%s'에서 '%s'로 수정"
+msgstr "심볼 %s을(를) '%s'에서 '%s'(으)로 업데이트"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:533
 #, c-format
 msgid "Change symbol %s from '%s' to '%s'"
-msgstr "심볼 %s를 '%s'에서 '%s'로 변경"
+msgstr "심볼 %s을(를) '%s'에서 '%s'(으)로 변경"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:540
 #, c-format
 msgid "Change symbols %s from '%s' to '%s'"
-msgstr "심볼 %s를 '%s'에서 '%s'로 변경"
+msgstr "심볼 %s을(를) '%s'에서 '%s'(으)로 변경"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:551
 msgid "*** symbol not found ***"
@@ -8620,7 +8620,7 @@ msgstr ""
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:115
 #, c-format
 msgid "Cannot copy global symbol library table file '%s' to '%s'."
-msgstr "전역 심볼 라이브러리 테이블 파일 '%s'를 '%s'에 복사할 수 없음."
+msgstr "전역 심볼 라이브러리 테이블 파일 '%s'을(를) '%s'에 복사할 수 없음."
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:132
 #, c-format
@@ -10068,7 +10068,7 @@ msgid ""
 "Project file %s could not be loaded."
 msgstr ""
 "프로젝트 세팅을 가져오는 도중 오류가 발생하였습니다:\n"
-"프로젝트 파일 %s는 불러올 수 없습니다."
+"프로젝트 파일 %s은(는) 불러올 수 없습니다."
 
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:66
 msgid "Connection type:"
@@ -10159,7 +10159,7 @@ msgstr "'%s' 이 이미 있습니다."
 #: eeschema/dialogs/dialog_sheet_properties.cpp:472
 #, c-format
 msgid "Link '%s' to this file?"
-msgstr "'%s'를 이 파일에 연결할까요?"
+msgstr "'%s'을(를) 이 파일에 연결할까요?"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:512
 #, c-format
@@ -11270,7 +11270,7 @@ msgstr "파일 '%s'을 '%s'로 백업중 입니다."
 #: eeschema/dialogs/dialog_symbol_remap.cpp:493
 #, c-format
 msgid "Failed to back up file '%s'.\n"
-msgstr "파일 '%s'를 백업하지 못했습니다.\n"
+msgstr "파일 '%s'을(를) 백업하지 못했습니다.\n"
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:414
 #, c-format
@@ -12258,7 +12258,7 @@ msgid ""
 "Error saving schematic file '%s'.\n"
 "Failed to rename temporary file '%s'."
 msgstr ""
-"회로도 파일 '%s'를 저장하는 중 오류 발생.\n"
+"회로도 파일 '%s'을(를) 저장하는 중 오류 발생.\n"
 "임시 파일 '%s'의 이름을 바꾸지 못함."
 
 #: eeschema/files-io.cpp:169 pcbnew/files.cpp:1036
@@ -12308,7 +12308,7 @@ msgstr "전체 회로도를 불러올 수 없습니다. 계층 시트를 불러�
 #: eeschema/files-io.cpp:1186 eeschema/sheet.cpp:162
 #, c-format
 msgid "Error loading schematic '%s'."
-msgstr "회로도 '%s'를 불러오는 중에 오류가 발생했습니다."
+msgstr "회로도 '%s'을(를) 불러오는 중에 오류가 발생했습니다."
 
 #: eeschema/files-io.cpp:426
 #, c-format
@@ -12318,7 +12318,7 @@ msgstr "회로도 '%s' 불러오는 중에 메모리가 부족합니다."
 #: eeschema/files-io.cpp:440 eeschema/files-io.cpp:1189 eeschema/sheet.cpp:165
 #, c-format
 msgid "Failed to load '%s'."
-msgstr "'%s'를 불러오기 실패하였습니다."
+msgstr "'%s'을(를) 불러오기 실패하였습니다."
 
 #: eeschema/files-io.cpp:453
 msgid ""
@@ -12808,17 +12808,17 @@ msgstr "%s에서 %s로 이름 바꾸기"
 #, c-format
 msgid ""
 "Cannot rescue symbol %s which is not available in any library or the cache."
-msgstr "심볼 %s를 복구할 수 없습니다. 어떠한 라이브러리나 캐시에서도 찾을 수 없습니다."
+msgstr "심볼 %s을(를) 복구할 수 없습니다. 어떠한 라이브러리나 캐시에서도 찾을 수 없습니다."
 
 #: eeschema/project_rescue.cpp:305 eeschema/project_rescue.cpp:468
 #, c-format
 msgid "Rescue symbol %s found only in cache library to %s."
-msgstr "캐시 라이브러리에서만 찾을 수 있는 심볼 %s를 %s로 복구."
+msgstr "캐시 라이브러리에서만 찾을 수 있는 심볼 %s을(를) %s(으)로 복구."
 
 #: eeschema/project_rescue.cpp:308 eeschema/project_rescue.cpp:474
 #, c-format
 msgid "Rescue modified symbol %s to %s"
-msgstr "심볼 %s를 %s로 수정하여 복구"
+msgstr "심볼 %s을(를) %s(으)로 수정하여 복구"
 
 #: eeschema/project_rescue.cpp:568
 msgid "This project has nothing to rescue."
@@ -12837,7 +12837,7 @@ msgstr "심볼 라이브러리 파일 '%s'을 만들지 못했습니다."
 #: eeschema/project_rescue.cpp:815
 #, c-format
 msgid "Failed to save rescue library %s."
-msgstr "복구 라이브러리 %s를 저장하는 데에 실패하였습니다."
+msgstr "복구 라이브러리 %s을(를) 저장하는 데에 실패하였습니다."
 
 #: eeschema/project_rescue.cpp:839
 msgid "Error occurred saving project specific symbol library table."
@@ -13318,7 +13318,7 @@ msgstr ""
 msgid ""
 "Symbol '%s' references part '%s' which could not be found in the library. "
 "The symbol was not loaded"
-msgstr "심볼 '%s'는 라이브러리에서 찾을 수 없는 부품 '%s'를 참조합니다. 심볼을 불러오지 않았습니다"
+msgstr "심볼 '%s'은(는) 라이브러리에서 찾을 수 없는 부품 '%s'을(를) 참조합니다. 심볼을 불러오지 않았습니다"
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:510
 #, c-format
@@ -13326,7 +13326,8 @@ msgid ""
 "Symbol ID '%s' references library symbol '%s' which could not be found in "
 "the library. Did you export all items of the design?"
 msgstr ""
-"심볼 ID '%s'는 라이브러리에서 찾을 수 없는 라이브러리 심볼 '%s'를 참조합니다. 디자인의 모든 항목을 내보낸 것이 맞습니까?"
+"심볼 ID '%s'은(는) 라이브러리에서 찾을 수 없는 라이브러리 심볼 '%s'을(를) 참조합니다. 디자인의 모든 항목을 내보낸 것이 "
+"맞습니까?"
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:520
 #, c-format
@@ -13358,7 +13359,7 @@ msgstr ""
 msgid ""
 "Documentation Symbol '%s' refers to symbol definition ID '%s' which does not "
 "exist in the library. The symbol was not loaded."
-msgstr "문서 심볼 '%s'는 라이브러리에 존재하지 않는 심볼 정의 ID'%s'를 참조합니다. 심볼을 불러오지 않았습니다."
+msgstr "문서 심볼 '%s'은(는) 라이브러리에 존재하지 않는 심볼 정의 ID'%s'을(를) 참조합니다. 심볼을 불러오지 않았습니다."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:1197
 msgid "Text Variables could not be set as there is no project attached."
@@ -13379,14 +13380,15 @@ msgstr ""
 msgid ""
 "Symbol '%s' references sheet ID '%s' which does not exist in the design. The "
 "symbol was not loaded."
-msgstr "심볼 '%s'는 시트 ID '%s'를 참조하지만, 이는 현재 디자인에서 존재하지 않습니다. 심볼을 불러오지 않았습니다."
+msgstr "심볼 '%s'은(는) 시트 ID '%s'를 참조하지만, 이는 현재 디자인에서 존재하지 않습니다. 심볼을 불러오지 않았습니다."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:1772
 #, c-format
 msgid ""
 "Net %s references unknown net element %s. The net was not properly loaded "
 "and may require manual fixing."
-msgstr "네트 %s는 알 수 없는 네트 요소 %s를 참조합니다. 네트는 정상적으로 불러와지지 않았으며, 수동 수정이 필요할 수 있습니다."
+msgstr ""
+"네트 %s은(는) 알 수 없는 네트 요소 %s을(를) 참조합니다. 네트는 정상적으로 불러와지지 않았으며, 수동 수정이 필요할 수 있습니다."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:2065
 #, c-format
@@ -13403,7 +13405,7 @@ msgstr ""
 msgid ""
 "The CADSTAR schematic might be corrupt: Block %s references a child sheet "
 "but has no Figure defined."
-msgstr "CADSTAR 회로도가 손상되었을 가능성이 있습니다: 블록 %s는 하위 시트를 참조하지만 정의된 형상이 없습니다."
+msgstr "CADSTAR 회로도가 손상되었을 가능성이 있습니다: 블록 %s은(는) 하위 시트를 참조하지만 정의된 형상이 없습니다."
 
 #: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:442
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:2876
@@ -13421,7 +13423,7 @@ msgstr "Eagle 파일을 파싱하는 중에 오류가 발생하였습니다. '%s
 #: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:1300
 #, c-format
 msgid "Could not find '%s' in the imported library."
-msgstr "가져온 라이브러리에서 '%s'를 찾을 수 없습니다."
+msgstr "가져온 라이브러리에서 '%s'을(를) 찾을 수 없습니다."
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:169
 msgid "Invalid symbol name"
@@ -13545,7 +13547,7 @@ msgstr "라이브러리 파일 '%s' 을 찾을 수 없습니다."
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:4219
 #, c-format
 msgid "library %s does not contain a symbol named %s"
-msgstr "라이브러리 %s는 심볼 이름 %s를 포함하고 있지 않습니다"
+msgstr "라이브러리 %s은(는) 심볼 이름 %s을(를) 포함하고 있지 않습니다"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_plugin.cpp:2247
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:4399
@@ -13584,7 +13586,7 @@ msgstr "'%s' 는 Eeschema 파일이 아닙니다."
 
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:901
 msgid "Missing 'EELAYER END'"
-msgstr "'EELAYER END'를 찾을 수 없습니다"
+msgstr "'EELAYER END'을(를) 찾을 수 없습니다"
 
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:949
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:1217
@@ -13611,7 +13613,7 @@ msgstr "예기치 않은 파일의 끝."
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:2710
 #, c-format
 msgid "Insufficient permissions to read library '%s'."
-msgstr "라이브러리 '%s'를 읽을 수 있는 권한이 없습니다."
+msgstr "라이브러리 '%s'을(를) 읽을 수 있는 권한이 없습니다."
 
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:2719
 msgid "symbol document library file is empty"
@@ -13635,7 +13637,7 @@ msgid ""
 "Symbol library '%s' not found and no fallback cache library available.  "
 "Unable to link library symbol."
 msgstr ""
-"심볼 라이브러리 '%s'를 찾을 수 없으며, 사용가능한 폴백 캐시 라이브러리가 없습니다.  라이브러리 심볼을 연결할 수 없습니다."
+"심볼 라이브러리 '%s'을(를) 찾을 수 없으며, 사용가능한 폴백 캐시 라이브러리가 없습니다.  라이브러리 심볼을 연결할 수 없습니다."
 
 #: eeschema/sch_screen.cpp:624
 #, c-format
@@ -14796,7 +14798,7 @@ msgstr "새로운 심볼은 이름이 없기 때문에 생성될 수 없습니�
 #: eeschema/symbol_editor/symbol_editor.cpp:421
 #, c-format
 msgid "Symbol '%s' already exists in library '%s'."
-msgstr "심볼 %s는 이미 라이브러리 '%s'에 존재합니다."
+msgstr "심볼 '%s'은(는) 이미 라이브러리 '%s'에 존재합니다."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:527
 #: eeschema/tools/symbol_editor_control.cpp:506
@@ -14868,7 +14870,7 @@ msgid ""
 "\n"
 "Do you wish to delete this symbol and all of its derivatives?"
 msgstr ""
-"심볼 %s는 다른 심볼을 파생하는 데에 사용되었습니다.\n"
+"심볼 %s은(는) 다른 심볼을 파생하는 데에 사용되었습니다.\n"
 "이 심볼을 삭제하면 모든 파생 심볼도 함께 지워집니다.\n"
 "\n"
 "이 심볼과 모든 파생 심볼을 삭제할까요?"
@@ -14886,7 +14888,7 @@ msgstr "심볼 유지"
 #: pcbnew/footprint_libraries_utils.cpp:1065
 #, c-format
 msgid "Revert '%s' to last version saved?"
-msgstr "마지막으로 저장된 버전으로 '%s'를 되돌리시겠습니까?"
+msgstr "마지막으로 저장된 버전으로 '%s'을(를) 되돌리시겠습니까?"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:960
 #, c-format
@@ -14946,7 +14948,7 @@ msgstr "심볼 가져오기"
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:79
 #, c-format
 msgid "Cannot import symbol library '%s'."
-msgstr "심볼 라이브러리 '%s'를 가져올 수 없습니다."
+msgstr "심볼 라이브러리 '%s'을(를) 가져올 수 없습니다."
 
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:86
 #, c-format
@@ -14957,7 +14959,7 @@ msgstr "심볼 라이브러리 파일 '%s'이 비어 있습니다."
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:152
 #, c-format
 msgid "Symbol %s already exists in library '%s'."
-msgstr "심볼 %s는 이미 라이브러리 '%s'에 존재합니다."
+msgstr "심볼 %s은(는) 이미 라이브러리 '%s'에 존재합니다."
 
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:114
 msgid "There is no symbol selected to save."
@@ -14984,12 +14986,12 @@ msgstr "덮어쓰기"
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:167
 #, c-format
 msgid "Insufficient permissions to save library '%s'."
-msgstr "라이브러리 '%s'를 저장할 수 있는 권한이 없습니다."
+msgstr "라이브러리 '%s'을(를) 저장할 수 있는 권한이 없습니다."
 
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:187
 #, c-format
 msgid "Error creating symbol library '%s'."
-msgstr "심볼 라이브러리 '%s'를 만드는 동안 오류가 발생했습니다."
+msgstr "심볼 라이브러리 '%s'을(를) 만드는 동안 오류가 발생했습니다."
 
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:194
 #, c-format
@@ -15039,7 +15041,7 @@ msgstr "중복 라이브러리 별명 '%s'이 풋프린트 라이브러리 테�
 #: eeschema/symbol_library.cpp:572 eeschema/symbol_tree_model_adapter.cpp:153
 #, c-format
 msgid "Error loading symbol library '%s'."
-msgstr "심볼 라이브러리 '%s'를 불러오는 중에 오류가 발생했습니다."
+msgstr "심볼 라이브러리 '%s'을(를) 불러오는 중에 오류가 발생했습니다."
 
 #: eeschema/symbol_tree_synchronizing_adapter.cpp:259
 msgid "(failed to load)"
@@ -15173,7 +15175,7 @@ msgstr "%s 핀 %s 네트 라벨을 '%s'에서 '%s'로 변경합니다."
 #: eeschema/tools/backannotate.cpp:557
 #, c-format
 msgid "Net %s cannot be changed to %s because it is driven by a power pin."
-msgstr "네트 %s는 전원 핀에 의해 구동되고 있기 때문에, %s로 교체될 수 없습니다."
+msgstr "네트 %s은(는) 전원 핀에 의해 구동되고 있기 때문에, %s(으)로 교체될 수 없습니다."
 
 #: eeschema/tools/backannotate.cpp:566
 #, c-format
@@ -16739,7 +16741,7 @@ msgstr "파일 '%s' 를 스킵합니다 (알 수 없는 유형).\n"
 #: gerbview/files.cpp:525
 #, c-format
 msgid "Skipped file '%s' (gerber job file).\n"
-msgstr "파일 '%s'를 스킵합니다 (거버 작업 파일).\n"
+msgstr "파일 '%s'을(를) 스킵합니다 (거버 작업 파일).\n"
 
 #: gerbview/files.cpp:566
 #, c-format
@@ -20480,7 +20482,7 @@ msgid ""
 "Any reference types %s will not be annotated."
 msgstr ""
 "\n"
-"참조 유형 %s는 주석 처리되지 않습니다."
+"참조 유형 %s은(는) 주석 처리되지 않습니다."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:295
 msgid ""
@@ -23644,7 +23646,7 @@ msgstr "풋프린트"
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:59
 #, c-format
 msgid "Error occurred writing empty footprint library table '%s'."
-msgstr "빈 풋프린트 라이브러리 테이블 '%s'를 쓰는 동안 오류가 발생했습니다."
+msgstr "빈 풋프린트 라이브러리 테이블 '%s'을(를) 쓰는 동안 오류가 발생했습니다."
 
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:73
 msgid "Please select a footprint library table file."
@@ -23658,7 +23660,7 @@ msgstr "'%s'은 유효한 풋프린트 라이브러리 테이블이 아닙니다
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:106
 #, c-format
 msgid "Cannot create library table path '%s'."
-msgstr "라이브러리 테이블 경로 '%s'를 생성할 수 없습니다."
+msgstr "라이브러리 테이블 경로 '%s'을(를) 생성할 수 없습니다."
 
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:114
 #, c-format
@@ -26572,7 +26574,7 @@ msgstr "레이어는 이름이 있어야 합니다."
 #: pcbnew/dialogs/panel_setup_layers.cpp:659
 #, c-format
 msgid "%s are forbidden in layer names."
-msgstr "%s는 레이어 이름에 사용할 수 없습니다."
+msgstr "%s은(는) 레이어 이름에 사용할 수 없습니다."
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:666
 msgid "Layer name \"signal\" is reserved."
@@ -28529,7 +28531,7 @@ msgstr "'%s' 파일 생성됨."
 #: pcbnew/exporters/gerber_jobfile_writer.cpp:158
 #, c-format
 msgid "Created Gerber job file '%s'."
-msgstr "거버 작업 파일 '%s'를 생성하였습니다."
+msgstr "거버 작업 파일 '%s'을(를) 생성하였습니다."
 
 #: pcbnew/exporters/gerber_jobfile_writer.cpp:575
 msgid "Board stackup settings not up to date."
@@ -28568,7 +28570,7 @@ msgstr "인쇄 회로 기판"
 #: pcbnew/files.cpp:346
 #, c-format
 msgid "Recovery file '%s' not found."
-msgstr "복구 파일 '%s'를 찾을 수 없습니다."
+msgstr "복구 파일 '%s'을(를) 찾을 수 없습니다."
 
 #: pcbnew/files.cpp:351
 #, c-format
@@ -28619,7 +28621,7 @@ msgstr "PCB 생성"
 #: pcbnew/files.cpp:706 pcbnew/files.cpp:716
 #, c-format
 msgid "Error loading PCB '%s'."
-msgstr "PCB '%s'를 불러오는 중에 오류가 발생했습니다."
+msgstr "PCB '%s'을(를) 불러오는 중에 오류가 발생했습니다."
 
 #: pcbnew/files.cpp:725
 #, c-format
@@ -28781,7 +28783,7 @@ msgstr "풋프린트 변경사항이 저장되지 않았습니다"
 #: pcbnew/footprint_edit_frame.cpp:468
 #, c-format
 msgid "Editing %s from board.  Saving will update the board only."
-msgstr "%s를 기판에서 수정 중입니다.  저장하면 기판만을 업데이트합니다."
+msgstr "%s을(를) 기판에서 수정 중입니다.  저장하면 기판만을 업데이트합니다."
 
 #: pcbnew/footprint_edit_frame.cpp:763
 #, c-format
@@ -28948,7 +28950,7 @@ msgstr "풋프린트 이름이 특정되지 않았습니다.  풋프린트는 �
 #: pcbnew/footprint_libraries_utils.cpp:1033
 #, c-format
 msgid "Footprint %s already exists in %s."
-msgstr "풋프린트 %s는 이미 %s에 존재합니다."
+msgstr "풋프린트 %s은(는) 이미 %s에 존재합니다."
 
 #: pcbnew/footprint_libraries_utils.cpp:1049
 #, c-format
@@ -29503,12 +29505,12 @@ msgstr "패키지"
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:140
 #, c-format
 msgid "Cannot add %s (no footprint assigned)."
-msgstr "%s를 추가할 수 없습니다 (할당된 풋프린트 없음)."
+msgstr "%s을(를) 추가할 수 없습니다 (할당된 풋프린트 없음)."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:152
 #, c-format
 msgid "Cannot add %s (footprint '%s' not found)."
-msgstr "%s를 추가할 수 없습니다 (풋프린트 '%s'를 찾을 수 없음)."
+msgstr "%s을(를) 추가할 수 없습니다 (풋프린트 '%s'을(를) 찾을 수 없음)."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:162
 #, c-format
@@ -29523,12 +29525,12 @@ msgstr "%s가 추가되었습니다 (풋프린트 '%s')."
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:204
 #, c-format
 msgid "Cannot update %s (no footprint assigned)."
-msgstr "%s를 업데이트할 수 없습니다 (할당된 풋프린트 없음)."
+msgstr "%s을(를) 업데이트할 수 없습니다 (할당된 풋프린트 없음)."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:216
 #, c-format
 msgid "Cannot update %s (footprint '%s' not found)."
-msgstr "%s를 업데이트할 수 없습니다 (풋프린트 '%s'를 찾을 수 없음)."
+msgstr "%s을(를) 업데이트할 수 없습니다 (풋프린트 '%s'을(를) 찾을 수 없음)."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:226
 #, c-format
@@ -29543,22 +29545,22 @@ msgstr "풋프린트 %s을(를) '%s'에서 '%s'(으)로 변경하였습니다."
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:265
 #, c-format
 msgid "Change %s reference designator to %s."
-msgstr "참조 지정자 %s를 %s로 변경합니다."
+msgstr "참조 지정자 %s을(를) %s(으)로 변경합니다."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:271
 #, c-format
 msgid "Changed %s reference designator to %s."
-msgstr "참조 지정자 %s를 %s로 변경하였습니다."
+msgstr "참조 지정자 %s을(를) %s(으)로 변경하였습니다."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:287
 #, c-format
 msgid "Change %s value from %s to %s."
-msgstr "값 %s를 %s에서 %s로 변경합니다."
+msgstr "값 %s을(를) %s에서 %s(으)로 변경합니다."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:294
 #, c-format
 msgid "Changed %s value from %s to %s."
-msgstr "값 %s를 %s에서 %s로 변경하였습니다."
+msgstr "값 %s을(를) %s에서 %s(으)로 변경하였습니다."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:316
 #, c-format
@@ -29623,7 +29625,7 @@ msgstr "네트 %s을(를) 추가합니다."
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:526
 #, c-format
 msgid "Reconnect %s pin %s from %s to %s."
-msgstr "%s 핀 %s를 %s에서 %s로 재연결합니다."
+msgstr "%s 핀 %s을(를) %s에서 %s(으)로 재연결합니다."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:534
 #, c-format
@@ -29633,7 +29635,7 @@ msgstr "%s 핀 %s가 %s에서 %s로 재연결되었습니다."
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:545
 #, c-format
 msgid "Connect %s pin %s to %s."
-msgstr "%s 핀 %s를 %s에 연결합니다."
+msgstr "%s 핀 %s을(를) %s에 연결합니다."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:552
 #, c-format
@@ -29658,7 +29660,7 @@ msgstr "비아가 알 수 없는 네트 (%s) 에 연결되었습니다."
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:702
 #, c-format
 msgid "Reconnect copper zone '%s' from %s to %s."
-msgstr "구리 영역 '%s'를 %s에서 %s로 다시 연결합니다."
+msgstr "구리 영역 '%s'을(를) %s에서 %s(으)로 다시 연결합니다."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:709
 #, c-format
@@ -29688,17 +29690,17 @@ msgstr "레이어 %s의 (%s, %s) 구리 영역에는 연결된 패드가 없습�
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:826
 #, c-format
 msgid "Remove single pad net %s."
-msgstr "단일 패드 네트 %s를 제거합니다."
+msgstr "단일 패드 네트 %s을(를) 제거합니다."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:832
 #, c-format
 msgid "Removed single pad net %s."
-msgstr "단일 패드 네트 %s를 제거하였습니다."
+msgstr "단일 패드 네트 %s을(를) 제거하였습니다."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:891
 #, c-format
 msgid "%s pad %s not found in %s."
-msgstr "%s 패드 %s를 %s에서 찾을 수 없습니다."
+msgstr "%s 패드 %s을(를) %s에서 찾을 수 없습니다."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:942
 #, c-format
@@ -29728,7 +29730,7 @@ msgstr "사용하지 않은 풋프린트 %s을(를) 제거합니다."
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1064
 #, c-format
 msgid "Removed unused footprint %s."
-msgstr "사용하지 않은 풋프린트 %s를 제거했습니다."
+msgstr "사용하지 않은 풋프린트 %s을(를) 제거했습니다."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1095
 #, c-format
@@ -30465,7 +30467,7 @@ msgstr "패드 불러오는 중..."
 #: pcbnew/plugins/altium/altium_pcb.cpp:1971
 #, c-format
 msgid "Footprint %s pad %s is not marked as multilayer, but is a TH pad."
-msgstr "풋프린트 %s 패드 %s는 다중 레이어로 마크되지 않았으나, TH 패드입니다."
+msgstr "풋프린트 %s 패드 %s은(는) 다중 레이어로 마크되지 않았으나, TH 패드입니다."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1991
 #, c-format
@@ -30477,22 +30479,22 @@ msgstr "풋프린트 %s 패드 %s에 사각형 홀이 존재합니다 (아직 �
 msgid ""
 "Footprint %s pad %s has a hole-rotation of %f degrees. KiCad only supports "
 "90 degree rotations."
-msgstr "풋프린트 %s 패드 %s는 %f도로 회전된 홀이 존재합니다. KiCad는 90도 회전만을 지원합니다."
+msgstr "풋프린트 %s 패드 %s은(는) %f도로 회전된 홀이 존재합니다. KiCad는 90도 회전만을 지원합니다."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2027
 #, c-format
 msgid "Footprint %s pad %s uses a hole of unknown kind %d."
-msgstr "풋프린트 %s 패드 %s는 알 수 없는 종류 %d 홀을 사용합니다."
+msgstr "풋프린트 %s 패드 %s은(는) 알 수 없는 종류 %d 홀을 사용합니다."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2045
 #, c-format
 msgid "Footprint %s pad %s uses a complex pad stack (not yet supported.)"
-msgstr "풋프린트 %s 패드 %s는 복잡한 패드 스택을 사용합니다 (아직 지원되지 않음)"
+msgstr "풋프린트 %s 패드 %s은(는) 복잡한 패드 스택을 사용합니다 (아직 지원되지 않음)"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2079
 #, c-format
 msgid "Footprint %s pad %s uses an unknown pad-shape."
-msgstr "풋프린트 %s 패드 %s는 알 수 없는 패드 형태를 사용합니다."
+msgstr "풋프린트 %s 패드 %s은(는) 알 수 없는 패드 형태를 사용합니다."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2138
 #, c-format
@@ -30500,8 +30502,8 @@ msgid ""
 "Non-copper pad %s found on an Altium layer (%d) with no KiCad equivalent. It "
 "has been moved to KiCad layer Eco1_User."
 msgstr ""
-"KiCad에 대응되지 않는 비 구리 패드 %s를 Altium 레이어 (%d) 에서 발견하였습니다. KiCad 레이어 Eco1_User로 "
-"이동되었습니다."
+"KiCad에 대응되지 않는 비 구리 패드 %s을(를) Altium 레이어 (%d) 에서 발견하였습니다. KiCad 레이어 "
+"Eco1_User로 이동되었습니다."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2147
 #, c-format
@@ -30521,7 +30523,7 @@ msgstr "비 구리 패드 %s에 복잡한 패드 스택을 사용합니다 (아�
 #: pcbnew/plugins/altium/altium_pcb.cpp:2312
 #, c-format
 msgid "Non-copper pad %s uses an unknown pad-shape."
-msgstr "비 구리 패드 %s는 알 수 없는 패드 형태를 사용합니다."
+msgstr "비 구리 패드 %s은(는) 알 수 없는 패드 형태를 사용합니다."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2321
 msgid "Loading vias..."
@@ -30631,7 +30633,7 @@ msgstr "레이어 스택에 예기치 않은 레이어 '%s'가 있습니다."
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:616
 #, c-format
 msgid "Design rule %s was not found. This was ignored."
-msgstr "디자인 규칙 %s를 찾을 수 없습니다. 이는 무시되었습니다."
+msgstr "디자인 규칙 %s을(를) 찾을 수 없습니다. 이는 무시되었습니다."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:647
 msgid ""
@@ -30677,20 +30679,20 @@ msgstr "CADSTAR 패드 정의 '%s' 불러오기 오류가 발생하였습니다:
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1216
 #, c-format
 msgid "Unable to find group ID %s in the group definitions."
-msgstr "그룹 ID %s를 그룹 정의에서 찾을 수 없습니다."
+msgstr "그룹 ID %s을(를) 그룹 정의에서 찾을 수 없습니다."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1222
 #, c-format
 msgid ""
 "Unable to find sub group %s in the group map (parent group ID=%s, Name=%s)."
-msgstr "그룹 맵에서 서브 그룹 %s를 찾을 수 없습니다 (상위 그룹 ID=%s, 이름=%s)."
+msgstr "그룹 맵에서 서브 그룹 %s을(를) 찾을 수 없습니다 (상위 그룹 ID=%s, 이름=%s)."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1297
 #, c-format
 msgid ""
 "Dimension ID %s is an angled dimension, which has no KiCad equivalent. An "
 "aligned dimension was loaded instead."
-msgstr "치수 ID %s는 각이 있는 치수로, KiCad에서 대응되지 않습니다. 정렬된 치수를 대신 불러옵니다."
+msgstr "치수 ID %s은(는) 각이 있는 치수로, KiCad에서 대응되지 않습니다. 정렬된 치수를 대신 불러옵니다."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1308
 #, c-format
@@ -30699,8 +30701,8 @@ msgid ""
 "are not yet supported in KiCad. The dimension object was imported with an "
 "internal dimension style instead."
 msgstr ""
-"치수 ID %s는 CADSTAR에서 '외부' 스타일을 포함합니다. 외부 치수 스타일은 KiCad에서 지원하지 않습니다. 치수 객체는 내부 "
-"치수 스타일로 불러옵니다."
+"치수 ID %s은(는) CADSTAR에서 '외부' 스타일을 포함합니다. 외부 치수 스타일은 KiCad에서 지원하지 않습니다. 치수 객체는 "
+"내부 치수 스타일로 불러옵니다."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1364
 #, c-format
@@ -30712,7 +30714,7 @@ msgstr "예기치 않은 치수 유형 (ID %s). 이는 불러와지지 않습니
 msgid ""
 "Dimension %s is an angular dimension which has no KiCad equivalent. The "
 "object was not imported."
-msgstr "치수 %s는 각이 있는 치수로, KiCad에서 대응되지 않습니다. 이 객체는 불러와지지 않습니다."
+msgstr "치수 %s은(는) 각이 있는 치수로, KiCad에서 대응되지 않습니다. 이 객체는 불러와지지 않습니다."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1539
 #, c-format
@@ -30734,7 +30736,7 @@ msgstr "CADSTAR 영역 '%s'는 KiCad에서 대응되지 않습니다. 순수 �
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1575
 #, c-format
 msgid "Unable to find component '%s' in the library(Symdef ID: '%s')"
-msgstr "라이브러리에서 컴포넌트 '%s'를 찾을 수 없습니다 (Symdef ID: '%s')"
+msgstr "라이브러리에서 컴포넌트 '%s'을(를) 찾을 수 없습니다 (Symdef ID: '%s')"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1693
 #, c-format
@@ -30836,7 +30838,7 @@ msgstr ""
 msgid ""
 "The net '%s' references component ID '%s' which does not exist. This has "
 "been ignored."
-msgstr "네트 '%s' 는 컴포넌트 ID '%s'를 참조하지만, 이는 존재하지 않습니다. 따라서 무시됩니다."
+msgstr "네트 '%s'은(는) 컴포넌트 ID '%s'을(를) 참조하지만, 이는 존재하지 않습니다. 따라서 무시됩니다."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2131
 #, c-format
@@ -30913,7 +30915,7 @@ msgstr ""
 msgid ""
 "Dimension ID %s uses a type of unit that is not supported in KiCad. "
 "Millimetres were applied instead."
-msgstr "치수 ID %s는 KiCad에서 지원하지 않는 단위 유형을 사용합니다. 밀리미터가 대신 적용됩니다."
+msgstr "치수 ID %s은(는) KiCad에서 지원하지 않는 단위 유형을 사용합니다. 밀리미터가 대신 적용됩니다."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3759
 msgid ""
@@ -31154,7 +31156,7 @@ msgstr "풋프린트 라이브러리 '%s'을(를) 삭제할 수 없습니다."
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:172
 #, c-format
 msgid "Cannot create footprint library '%s'."
-msgstr "풋프린트 라이브러리 '%s'를 만들 수 없습니다."
+msgstr "풋프린트 라이브러리 '%s'을(를) 만들 수 없습니다."
 
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:178
 #, c-format
@@ -31320,7 +31322,7 @@ msgstr ""
 #: pcbnew/plugins/kicad/pcb_parser.cpp:3491
 #, c-format
 msgid "Cannot handle footprint text type %s"
-msgstr "풋프린트 텍스트 유형 %s를 처리할 수 없습니다"
+msgstr "풋프린트 텍스트 유형 %s을(를) 처리할 수 없습니다"
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:4085
 #, c-format
@@ -31426,7 +31428,7 @@ msgstr "알 수 없는 FP_SHAPE 유형:'%c=0x%02x' 가 행: %d 풋프린트: '%s
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:2466
 #, c-format
 msgid "Duplicate NETCLASS name '%s'."
-msgstr "네트클래스 이름 '%s'를 복제합니다."
+msgstr "네트클래스 이름 '%s'을(를) 복제합니다."
 
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:2545
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:2556
@@ -31991,7 +31993,7 @@ msgstr "'%s' 값의 심볼은 참조 id가 비어있습니다."
 #: pcbnew/specctra_import_export/specctra_export.cpp:1124
 #, c-format
 msgid "Multiple symbols have identical reference IDs of '%s'."
-msgstr "다수의 심볼이 동일한 참조 ID '%s'를 가지고 있습니다."
+msgstr "다수의 심볼이 동일한 참조 ID '%s'을(를) 가지고 있습니다."
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:70
 msgid ""
@@ -32008,7 +32010,7 @@ msgstr "세션 파일 불러오기 및 합치기 완료."
 #: pcbnew/specctra_import_export/specctra_import.cpp:166
 #, c-format
 msgid "Session file uses invalid layer id '%s'."
-msgstr "세션 파일이 유효하지 않은 레이어 id '%s'를 사용합니다."
+msgstr "세션 파일이 유효하지 않은 레이어 id '%s'을(를) 사용합니다."
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:217
 msgid "Session via padstack has no shapes"
@@ -32028,7 +32030,7 @@ msgstr "지원되지 않는 비아 형상: %s"
 #: pcbnew/specctra_import_export/specctra_import.cpp:280
 #, c-format
 msgid "Session file uses invalid layer id \"%s\""
-msgstr "세션 파일이 유효하지 않은 레이어 id '%s'를 사용합니다"
+msgstr "세션 파일이 유효하지 않은 레이어 id '%s'을(를) 사용합니다"
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:326
 msgid "Session file is missing the \"session\" section"
@@ -32050,7 +32052,7 @@ msgstr "참조 '%s'을(를) 찾을 수 없습니다."
 #: pcbnew/specctra_import_export/specctra_import.cpp:501
 #, c-format
 msgid "A wire_via refers to missing padstack '%s'."
-msgstr "wire_via가 누락된 패드스택 '%s'를 참조합니다."
+msgstr "wire_via가 누락된 패드스택 '%s'을(를) 참조합니다."
 
 #: pcbnew/toolbars_footprint_editor.cpp:91
 msgid "Load footprint from current board"
@@ -32674,12 +32676,12 @@ msgstr "패드 배치"
 #: pcbnew/tools/pad_tool.cpp:554
 #, c-format
 msgid "Pad Edit Mode.  Press %s again to exit."
-msgstr "패드 편집 모드.  %s를 다시 눌러 종료하세요."
+msgstr "패드 편집 모드.  %s을(를) 다시 눌러 종료하세요."
 
 #: pcbnew/tools/pad_tool.cpp:559
 #, c-format
 msgid "Pad Edit Mode.  Press %s to exit."
-msgstr "패드 편집 모드.  %s를 눌러 종료하세요."
+msgstr "패드 편집 모드.  %s을(를) 눌러 종료하세요."
 
 #: pcbnew/tools/pad_tool.cpp:625
 msgid "Edit pad shapes"
@@ -34244,32 +34246,27 @@ msgid "Position Relative"
 msgstr "상대 위치"
 
 #: pcbnew/tools/position_relative_tool.cpp:171
-#, fuzzy
 msgid "Click on reference item..."
-msgstr "참조 항목을 클릭하십시오 ..."
+msgstr "참조 항목을 선택..."
 
 #: pcbnew/tools/zone_create_helper.cpp:176
 msgid "Add a zone cutout"
 msgstr "영역 컷아웃을 추가"
 
 #: pcbnew/tools/zone_create_helper.cpp:215
-#, fuzzy
 msgid "Add a zone"
 msgstr "영역 추가"
 
 #: pcbnew/tools/zone_create_helper.cpp:246
-#, fuzzy
 msgid "Add a graphical polygon"
-msgstr "그래픽 선 또는 다각형 추가"
+msgstr "그래픽 다각형 추가"
 
 #: pcbnew/tools/zone_filler_tool.cpp:77
-#, fuzzy
 msgid "Checking Zones"
-msgstr "모듈 검사"
+msgstr "영역 확인 중"
 
 #: pcbnew/tools/zone_filler_tool.cpp:83 pcbnew/tools/zone_filler_tool.cpp:150
 #: pcbnew/tools/zone_filler_tool.cpp:203
-#, fuzzy
 msgid "Fill Zone(s)"
 msgstr "영역 채우기"
 
