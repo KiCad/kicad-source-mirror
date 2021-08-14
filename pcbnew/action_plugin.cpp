@@ -32,6 +32,7 @@
 #include "action_plugin.h"
 #include "bitmaps.h"
 #include "bitmap_store.h"
+#include <pgm_base.h>
 
 
 ACTION_PLUGIN::~ACTION_PLUGIN()
@@ -159,19 +160,25 @@ void ACTION_PLUGINS::register_action( ACTION_PLUGIN* aAction )
         }
     }
 
-    // Load icon if supplied
-    wxString icon_file_name = aAction->GetIconFileName( GetBitmapStore()->IsDarkTheme() );
+    wxASSERT( PgmOrNull() );    // PgmOrNull() returning nullptr should never happen,
+                                // but it sometimes happens on msys2 build
 
-    if( !icon_file_name.IsEmpty() )
+    if( PgmOrNull() )           // Hack for msys2. Must be removed when the root cause is fixed
     {
-        {
-            wxLogNull eat_errors;
-            aAction->iconBitmap.LoadFile( icon_file_name, wxBITMAP_TYPE_PNG );
-        }
+        // Load icon if supplied
+        wxString icon_file_name = aAction->GetIconFileName( GetBitmapStore()->IsDarkTheme() );
 
-        if ( !aAction->iconBitmap.IsOk() )
+        if( !icon_file_name.IsEmpty() )
         {
-            wxLogVerbose( "Failed to load icon " + icon_file_name + " for action plugin " );
+            {
+                wxLogNull eat_errors;
+                aAction->iconBitmap.LoadFile( icon_file_name, wxBITMAP_TYPE_PNG );
+            }
+
+            if ( !aAction->iconBitmap.IsOk() )
+            {
+                wxLogVerbose( "Failed to load icon " + icon_file_name + " for action plugin " );
+            }
         }
     }
 
