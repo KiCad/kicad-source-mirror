@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
-"PO-Revision-Date: 2021-08-13 17:18+0000\n"
+"PO-Revision-Date: 2021-08-14 03:57+0000\n"
 "Last-Translator: Ji Yoon Choi <chichoon.choi@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
@@ -1616,7 +1616,7 @@ msgstr "3D 모델"
 
 #: common/dialog_about/AboutDialog_main.cpp:671
 msgid "Symbols by"
-msgstr "기호"
+msgstr "심볼 by"
 
 #: common/dialog_about/AboutDialog_main.cpp:678
 msgid "Footprints by"
@@ -2252,9 +2252,7 @@ msgstr "이전 버전에서 라이브러리 구성 가져오기"
 msgid ""
 "When checked, the symbol and footprint library tables from the previous "
 "version will be imported into this version"
-msgstr ""
-"선택하면 이전 버전의 기호 및 풋프린트 라이브러리 테이블을 이 버전으로 가져옵"
-"니다"
+msgstr "선택하면 이전 버전의 심볼 및 풋프린트 라이브러리 테이블을 이 버전으로 가져옵니다"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:69
 msgid "Start with default settings"
@@ -2621,7 +2619,7 @@ msgstr "중복된 경우에도 기존 참조 지정자를 유지함"
 
 #: common/dialogs/dialog_paste_special_base.cpp:22
 msgid "Clear reference designators on all pasted symbols"
-msgstr "붙여넣은 모든 기호의 참조 지정자 지우기"
+msgstr "붙여넣은 모든 심볼의 참조 지정자 지우기"
 
 #: common/dialogs/dialog_paste_special_base.cpp:24
 msgid "Paste Options"
@@ -3804,7 +3802,7 @@ msgstr "종료되지 않은 구분 문자열"
 
 #: common/dsnlexer.cpp:714
 msgid "String delimiter must be a single character of ', \", or $"
-msgstr "문자열 구분 기호는 ', \", $의 단일 문자여야 함"
+msgstr "문자열 구분자는 ', \" 또는 $의 단일 문자여야 함"
 
 #: common/eda_base_frame.cpp:453
 msgid "&About KiCad"
@@ -4077,7 +4075,7 @@ msgstr "회로도 필드"
 
 #: common/eda_item.cpp:284
 msgid "Schematic Symbol"
-msgstr "회로도 기호"
+msgstr "회로도 심볼"
 
 #: common/eda_item.cpp:285
 msgid "Sheet Pin"
@@ -5019,7 +5017,7 @@ msgstr "시트 핀"
 
 #: common/layer_id.cpp:127
 msgid "No-connect symbols"
-msgstr "연결 안 함 기호"
+msgstr "미연결 심볼"
 
 #: common/layer_id.cpp:128
 msgid "ERC warnings"
@@ -6488,7 +6486,7 @@ msgstr "Eagle XML파일"
 
 #: common/wildcards_and_files_ext.cpp:270
 msgid "KiCad netlist files"
-msgstr "KiCad 넷리스트 파일"
+msgstr "KiCad 네트리스트 파일"
 
 #: common/wildcards_and_files_ext.cpp:276 gerbview/files.cpp:49
 msgid "Gerber files"
@@ -6613,7 +6611,7 @@ msgstr "Spice 라이브러리 파일"
 
 #: common/wildcards_and_files_ext.cpp:457
 msgid "SPICE netlist file"
-msgstr "SPICE 넷리스트 파일"
+msgstr "SPICE 네트리스트 파일"
 
 #: common/wildcards_and_files_ext.cpp:463
 msgid "CadStar netlist file"
@@ -7023,7 +7021,7 @@ msgstr "선택한 풋프린트를 풋프린트 뷰어에서 보기"
 
 #: cvpcb/tools/cvpcb_actions.cpp:60
 msgid "Manage Footprint Association Files"
-msgstr "풋프린트 할당 파일 관리"
+msgstr "풋프린트 관련성 파일 관리"
 
 #: cvpcb/tools/cvpcb_actions.cpp:61
 msgid ""
@@ -7265,11 +7263,11 @@ msgstr "순서"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:51
 msgid "Sort symbols by &X position"
-msgstr "&X 위치에 따라 기호 정렬"
+msgstr "&X 위치에 따라 심볼 정렬"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:69
 msgid "Sort symbols by &Y position"
-msgstr "&Y 위치에 따라 기호 정렬"
+msgstr "&Y 위치에 따라 심볼 정렬"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:84
 msgid "Keep existing annotations"
@@ -7989,7 +7987,7 @@ msgstr "심볼의 모든 유닛을 순차적으로 배치합니다."
 #: eeschema/widgets/symbol_preview_widget.cpp:181
 #, c-format
 msgid "Error loading symbol %s from library '%s'."
-msgstr "기호 %s을 로드하는 중 라이브러리 '%s'에서 오류 발생."
+msgstr "심볼 %s을 로드하는 중 라이브러리 '%s'에서 오류 발생."
 
 #: eeschema/dialogs/dialog_choose_symbol.cpp:431
 msgid "No footprint specified"
@@ -8001,7 +7999,7 @@ msgstr "잘못된 풋프린트 지정"
 
 #: eeschema/dialogs/dialog_choose_symbol.cpp:528
 msgid "No symbol selected"
-msgstr "선택된 기호 없음"
+msgstr "선택된 심볼 없음"
 
 #: eeschema/dialogs/dialog_edit_label.cpp:104
 msgid "Global Label Properties"
@@ -8231,7 +8229,7 @@ msgid ""
 "Replace current symbols fields by fields from the new library.\n"
 "Warning: fields \"Value\" and \"Footprints\" will be therefore replaced."
 msgstr ""
-"현재 기호 필드를 새 라이브러리의 필드로 바꿉니다.\n"
+"현재 심볼 필드를 새 라이브러리의 필드로 바꿉니다.\n"
 "경고: 따라서 \"값\" 및 \"풋프린트\" 필드가 대체됩니다."
 
 #: eeschema/dialogs/dialog_edit_symbols_libid_base.h:57
@@ -8271,7 +8269,7 @@ msgstr "오류, 경고 및 예외"
 #: eeschema/dialogs/dialog_erc.cpp:302
 #, c-format
 msgid "%d symbol(s) require annotation.<br><br>"
-msgstr "%d개의 기호(들)에 주석이 필요합니다.<br><br>"
+msgstr "%d개의 심볼에 주석이 필요합니다.<br><br>"
 
 #: eeschema/dialogs/dialog_erc.cpp:306
 msgid "-------- ERC cancelled by user.<br><br>"
@@ -8488,7 +8486,7 @@ msgstr "필터"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:82
 msgid "Filter other symbol fields by name:"
-msgstr "이름으로 다른 기호 필드 필터링:"
+msgstr "이름으로 다른 심볼 필드 필터링:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:94
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:72
@@ -8497,11 +8495,11 @@ msgstr "상위 참조 지정자로 항목 필터링:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:102
 msgid "Filter items by parent symbol library id:"
-msgstr "상위 기호 라이브러리 ID로 항목 필터링:"
+msgstr "상위 심볼 라이브러리 ID로 항목 필터링:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:108
 msgid "Filter items by parent symbol type:"
-msgstr "상위 기호 유형별로 항목 필터링:"
+msgstr "상위 심볼 유형별로 항목 필터링:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:111
 msgid "Non-power symbols"
@@ -8620,7 +8618,7 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
-"'%s' 는 올바른 기호 라이브러리 테이블이 아닙니다.\n"
+"'%s' 는 올바른 심볼 라이브러리 테이블이 아닙니다.\n"
 "\n"
 "%s"
 
@@ -8815,7 +8813,7 @@ msgstr "핀 테이블"
 
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:66
 msgid "(Power symbol value field text cannot be changed.)"
-msgstr "(전원 기호 값 필드 텍스트를 변경할 수 없습니다.)"
+msgstr "(전원 심볼 값 필드 텍스트는 변경할 수 없습니다.)"
 
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:95
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:233
@@ -8869,7 +8867,7 @@ msgstr "텍스트 항목 속성"
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:33
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:123
 msgid "Symbol name:"
-msgstr "기호 이름:"
+msgstr "심볼 이름:"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:35
 msgid ""
@@ -8881,7 +8879,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:42
 msgid "Derive from existing symbol:"
-msgstr "기존 기호에서 파생:"
+msgstr "기존 심볼에서 파생:"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:46
 #: eeschema/dialogs/dialog_line_wire_bus_properties_base.cpp:68
@@ -8963,7 +8961,7 @@ msgstr "내부 핀 이름"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.h:74
 msgid "New Symbol"
-msgstr "새 기호"
+msgstr "새 심볼"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:232
 #: eeschema/dialogs/dialog_symbol_properties.cpp:562
@@ -9099,7 +9097,7 @@ msgstr "키워드:"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:145
 msgid "Derive from symbol:"
-msgstr "기호에서 파생:"
+msgstr "다음 심볼에서 파생:"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:149
 msgid "<None>"
@@ -9129,11 +9127,11 @@ msgstr "대체 바디 스타일 (드 모르간) 존재"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:169
 msgid "Check this option if the symbol has an alternate body style (De Morgan)"
-msgstr "기호에 대체 바디 스타일이 있는 경우 이 옵션을 확인합니다(De Morgan)"
+msgstr "심볼에 대체 바디 스타일이 있는 경우 이 옵션을 확인합니다 (드 모르간)"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:173
 msgid "Define as power symbol"
-msgstr "전원 기호로 정의"
+msgstr "전원 심볼으로 정의"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:174
 msgid ""
@@ -9153,7 +9151,7 @@ msgstr "유닛 개수:"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:189
 msgid "Enter the number of units for a symbol that contains more than one unit"
-msgstr "두 개 이상의 단위가 포함된 기호의 단위 수를 입력합니다"
+msgstr "두 개 이상의 유닛이 포함된 심볼의 유닛 수를 입력합니다"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:199
 msgid "All units are interchangeable"
@@ -9414,7 +9412,7 @@ msgstr "오류: 제목을 입력해야 합니다"
 
 #: eeschema/dialogs/dialog_netlist.cpp:712
 msgid "Do not forget to choose a title for this netlist control page"
-msgstr "이 넷리스트 제어 페이지의 제목을 선택하는 것을 잊지 마십시오"
+msgstr "이 네트리스트 제어 페이지의 제목을 선택하는 것을 잊지 마십시오"
 
 #: eeschema/dialogs/dialog_netlist_base.cpp:39
 msgid "Add Generator..."
@@ -9883,7 +9881,7 @@ msgstr "이 심볼의 인스턴스:"
 
 #: eeschema/dialogs/dialog_rescue_each_base.cpp:55
 msgid "Cached Symbol:"
-msgstr "캐시된 기호:"
+msgstr "캐시된 심볼:"
 
 #: eeschema/dialogs/dialog_rescue_each_base.cpp:76
 msgid "Library Symbol:"
@@ -10496,7 +10494,7 @@ msgstr "Spice 지시문:"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:422
 msgid "Load directives from schematic"
-msgstr "회로도에서 지시문 로드"
+msgstr "회로도에서 지시문 불러오기"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:429 pcbnew/pad.cpp:1456
 msgid "Custom"
@@ -11143,11 +11141,11 @@ msgstr "라이브러리에서 심볼 업데이트..."
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:216
 #: eeschema/tools/ee_actions.cpp:437
 msgid "Change Symbol..."
-msgstr "기호 변경..."
+msgstr "심볼 변경..."
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:219
 msgid "Edit Symbol..."
-msgstr "기호 편집..."
+msgstr "심볼 편집..."
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:225
 msgid "Edit Library Symbol..."
@@ -11204,7 +11202,7 @@ msgstr ""
 #: eeschema/dialogs/dialog_symbol_remap.cpp:210
 #, c-format
 msgid "Adding library '%s', file '%s' to project symbol library table."
-msgstr "프로젝트 기호 라이브러리 테이블에 라이브러리 '%s', 파일 '%s'을 추가합니다."
+msgstr "프로젝트 심볼 라이브러리 테이블에 라이브러리 '%s', 파일 '%s'을 추가합니다."
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:220
 #: eeschema/dialogs/panel_sym_lib_table.cpp:765
@@ -11218,7 +11216,7 @@ msgid ""
 "Failed to write project symbol library table. Error:\n"
 "  %s"
 msgstr ""
-"프로젝트 기호 라이브러리 테이블을 쓰지 못했습니다. 오류:\n"
+"프로젝트 심볼 라이브러리 테이블을 쓰지 못했습니다. 오류:\n"
 "%s"
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:242
@@ -11228,12 +11226,12 @@ msgstr "프로젝트 심볼 라이브러리 테이블을 생성했습니다.\n"
 #: eeschema/dialogs/dialog_symbol_remap.cpp:264
 #, c-format
 msgid "No symbol %s found in symbol library table."
-msgstr "기호 라이브러리 테이블에 심볼 %s이(가) 없습니다."
+msgstr "심볼 라이브러리 테이블에 심볼 %s이(가) 없습니다."
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:270
 #, c-format
 msgid "Symbol %s mapped to symbol library '%s'."
-msgstr "매핑된 기호 %s 의 기호 라이브러리 '%s'."
+msgstr "심볼 %s가 심볼 라이브러리 '%s' 에 매핑되었습니다."
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:279
 msgid "Symbol library table mapping complete!"
@@ -11306,7 +11304,7 @@ msgstr "회로도 업데이트"
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:27
 msgid ""
 "Re-link footprints to schematic symbols based on their reference designators"
-msgstr "참조 지정자를 기반으로 풋프린트를 회로 기호에 재연결합니다"
+msgstr "참조 지정자를 기반으로 풋프린트를 회로 심볼에 재연결합니다"
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:33
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:28
@@ -11315,7 +11313,7 @@ msgid ""
 "Select this option only if you want to reset the footprint linkages based on "
 "their reference designators."
 msgstr ""
-"일반적으로 발자국은 고유 ID를 통해 기호에 연결됩니다.  참조 지정자를 기반으로 설치 공간 연결을 초기화하려는 경우에만 이 옵션을 "
+"일반적으로 풋프린트는 고유 ID를 통해 심볼에 연결됩니다.  참조 지정자를 기반으로 풋프린트 연결을 초기화하려는 경우에만 이 옵션을 "
 "선택합니다."
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:55
@@ -11330,7 +11328,7 @@ msgstr "풋프린트 할당"
 msgid ""
 "Update footprint associations of symbols whose footprints have been replaced "
 "with different footprints in PCB."
-msgstr "PCB 내 다른 풋프린트로 대체된 심볼의 풋프린트 연관성을 업데이트합니다."
+msgstr "PCB 내 다른 풋프린트로 대체된 심볼의 풋프린트 관련성을 업데이트합니다."
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:65
 msgid "Update symbols values that have been replaced in the PCB editor."
@@ -11346,11 +11344,11 @@ msgstr "PCB에서 회로도 업데이트"
 
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:21
 msgid "Parent symbol:"
-msgstr "상위 기호:"
+msgstr "상위 심볼:"
 
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:61
 msgid "Remove fields if not in parent symbol"
-msgstr "상위 기호에 없는 경우 필드 제거"
+msgstr "상위 심볼에 없는 경우 필드 제거"
 
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:66
 msgid "Reset fields if empty in parent symbol"
@@ -11358,7 +11356,7 @@ msgstr "상위 심볼이 비어 있는 경우 필드 초기화"
 
 #: eeschema/dialogs/dialog_update_symbol_fields_base.h:68
 msgid "Update Symbol Fields"
-msgstr "기호 필드 업데이트"
+msgstr "심볼 필드 업데이트"
 
 #: eeschema/dialogs/panel_eeschema_color_settings.cpp:153
 msgid ""
@@ -11488,7 +11486,7 @@ msgstr "시트 배경:"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:73
 msgid "Clicking on a pin selects the symbol"
-msgstr "핀을 클릭하면 기호가 선택됩니다"
+msgstr "핀을 클릭하면 심볼이 선택됩니다"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:74
 msgid ""
@@ -11497,8 +11495,8 @@ msgid ""
 "If disabled, clicking on a pin select only the pin."
 msgstr ""
 "개략도 편집기에서:\n"
-"활성화된 경우 핀을 클릭하여 상위 기호를 선택합니다.\n"
-"비활성화된 경우 핀을 클릭하여 핀만 선택합니다."
+"활성화된 경우, 핀을 클릭하여 상위 심볼을 선택합니다.\n"
+"비활성화된 경우, 핀을 클릭하여 핀만 선택합니다."
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:84
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:140
@@ -11563,11 +11561,11 @@ msgstr "Cmd+Shift"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:204
 msgid "Symbol Field Automatic Placement"
-msgstr "기호 필드 자동 배치"
+msgstr "심볼 필드 자동 배치"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:206
 msgid "A&utomatically place symbol fields"
-msgstr "A & 자동 배치 기호 필드"
+msgstr "심볼 필드를 자동으로 배치 (&A)"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:209
 msgid "A&llow field autoplace to change justification"
@@ -11603,7 +11601,7 @@ msgstr "대화 기본 설정"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:270
 msgid "Show footprint previews in Symbol Chooser"
-msgstr "기호 선택기에서 풋프린트 미리 보기 표시"
+msgstr "심볼 선택기에서 풋프린트 미리 보기 표시"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:273
 msgid "Keep hierarchy navigator open"
@@ -11682,7 +11680,7 @@ msgstr "기본 선 두께:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:105
 msgid "Pin symbol size:"
-msgstr "핀 기호 크기:"
+msgstr "핀 심볼 크기:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:123
 #: eeschema/erc_item.cpp:41
@@ -11930,8 +11928,8 @@ msgid ""
 "Changes must be saved or discarded before the symbol library table can be "
 "modified."
 msgstr ""
-"하나 이상의 기호 라이브러리를 수정했습니다.\n"
-"기호 라이브러리 테이블을 수정하려면 먼저 변경 사항을 저장하거나 삭제해야 합니다."
+"하나 이상의 심볼 라이브러리를 수정했습니다.\n"
+"심볼 라이브러리 테이블을 수정하려면 먼저 변경 사항을 저장하거나 삭제해야 합니다."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:1048
 msgid "Symbol Libraries"
@@ -12019,7 +12017,7 @@ msgid ""
 "Please edit this global symbol library table in Preferences menu."
 msgstr ""
 "글로벌 기호 라이브러리 테이블을 로드하는 동안 오류가 발생했습니다.\n"
-"환경설정 메뉴에서 이 전역 기호 라이브러리 테이블을 편집하십시오."
+"환경설정 메뉴에서 이 전역 심볼 라이브러리 테이블을 편집하십시오."
 
 #: eeschema/eeschema_config.cpp:69 eeschema/eeschema_config.cpp:226
 #: gerbview/gerbview_frame.cpp:1018
@@ -12178,7 +12176,7 @@ msgstr "라벨이 비슷함(소문자/대문자만 다름)"
 
 #: eeschema/erc_item.cpp:94
 msgid "Different footprint assigned in another unit of the symbol"
-msgstr "기호의 다른 유닛에 다른 풋프린트가 할당됨"
+msgstr "심볼의 다른 유닛에 다른 풋프린트가 할당됨"
 
 #: eeschema/erc_item.cpp:98
 msgid "Different net assigned to a shared pin in another unit of the symbol"
@@ -12230,7 +12228,7 @@ msgstr "심볼에 정의된 것보다 더 많은 유닛이 있습니다"
 
 #: eeschema/erc_item.cpp:146
 msgid "Units of same symbol have different values"
-msgstr "동일한 기호의 단위가 다른 값을 가집니다"
+msgstr "동일한 심볼의 유닛이 다른 값을 가집니다"
 
 #: eeschema/erc_item.cpp:150
 msgid "Duplicate reference designators"
@@ -12338,7 +12336,7 @@ msgstr ""
 
 #: eeschema/files-io.cpp:491
 msgid "Illegal entry found in project file symbol library list."
-msgstr "프로젝트 파일 기호 라이브러리 목록에 잘못된 항목이 있습니다."
+msgstr "프로젝트 파일 심볼 라이브러리 목록에 잘못된 항목이 있습니다."
 
 #: eeschema/files-io.cpp:492
 msgid "Project Load Warning"
@@ -12351,9 +12349,9 @@ msgid ""
 "\n"
 "This may cause broken symbol library links under certain conditions."
 msgstr ""
-"프로젝트 파일 기호 라이브러리 목록에 정의된 기호 라이브러리는 더 이상 지원되지 않으며 제거됩니다.\n"
+"프로젝트 파일 심볼 라이브러리 목록에 정의된 심볼 라이브러리는 더 이상 지원되지 않으며 제거됩니다.\n"
 "\n"
-"이로 인해 특정 조건에서 기호 라이브러리 링크가 끊어질 수 있습니다."
+"이로 인해 특정 조건에서 심볼 라이브러리 연결이 끊어질 수 있습니다."
 
 #: eeschema/files-io.cpp:499
 msgid "Do not show this dialog again."
@@ -12362,7 +12360,7 @@ msgstr "이 대화 상자를 다시 표시하지 마십시오."
 #: eeschema/files-io.cpp:528
 #, c-format
 msgid "The project symbol library cache file '%s' was not found."
-msgstr "프로젝트 기호 라이브러리 캐시 파일 '%s'을 찾을 수 없습니다."
+msgstr "프로젝트 심볼 라이브러리 캐시 파일 '%s'을 찾을 수 없습니다."
 
 #: eeschema/files-io.cpp:530
 msgid ""
@@ -12372,9 +12370,9 @@ msgid ""
 "missing symbols, either manual recovery of the schematic or recovery of the "
 "symbol cache library file and reloading the schematic is required."
 msgstr ""
-"이로 인해 특정 조건에서 도식이 깨질 수 있습니다. 도식도에 열 때 누락된 기호가 없는 경우 데이터 손실을 방지하기 위해 변경하기 전에 "
-"즉시 저장하십시오. 누락된 기호가 있는 경우 개략도를 수동으로 복구하거나 기호 캐시 라이브러리 파일을 복구하고 개략도를 다시 로드해야 "
-"합니다."
+"이로 인해 특정 조건에서 회로도가 손상될 수 있습니다. 회로도를 열었을 때 누락된 심볼이 없을 경우, 데이터 손실을 방지하기 위해 수정 "
+"전 즉시 저장하십시오.  누락된 심볼이 있을 경우, 수동으로 회로도를 복구하거나 심볼 캐시 라이브러리 파일을 복구한 후 회로도를 다시 "
+"불러올 필요가 있습니다."
 
 #: eeschema/files-io.cpp:541
 msgid "Load Without Cache File"
@@ -12490,17 +12488,17 @@ msgstr "최근에 사용"
 #: eeschema/getpart.cpp:152
 #, c-format
 msgid "Choose Power Symbol (%d items loaded)"
-msgstr "전원 기호 선택 (%d개 항목 로드됨)"
+msgstr "전원 심볼 선택 (%d개 항목 불러옴)"
 
 #: eeschema/getpart.cpp:154 eeschema/symbol_viewer_frame.cpp:854
 #, c-format
 msgid "Choose Symbol (%d items loaded)"
-msgstr "기호 선택 (%d개 항목 로드됨)"
+msgstr "심볼 선택 (%d개 항목 불러옴)"
 
 #: eeschema/getpart.cpp:248
 #, c-format
 msgid "No alternate body style found for symbol '%s' in library '%s'."
-msgstr "라이브러리'%s'에서 기호'%s'의 대체 스타일을 찾 을 수 없습니다."
+msgstr "라이브러리 '%s'에서 심볼 '%s'의 대체 바디 스타일을 찾을 수 없습니다."
 
 #: eeschema/hierarch.cpp:88
 msgid "Navigator"
@@ -12623,7 +12621,7 @@ msgstr "그래픽 텍스트 '%s'"
 #: eeschema/libarch.cpp:101
 #, c-format
 msgid "Failed to add symbol %s to library file '%s'."
-msgstr "기호 %s을 라이브러리 파일 '%s'에 추가하지 못했습니다."
+msgstr "심볼 %s을 라이브러리 파일 '%s'에 추가하지 못했습니다."
 
 #: eeschema/libarch.cpp:110
 msgid "Unexpected exception occurred."
@@ -12632,12 +12630,12 @@ msgstr "예기치 않은 예외가 발생했습니다."
 #: eeschema/libarch.cpp:125
 #, c-format
 msgid "Symbol %s not found in any library or cache."
-msgstr "기호 %s을(를) 라이브러리 또는 캐시에서 찾을 수 없습니다."
+msgstr "심볼 %s을 라이브러리 또는 캐시에서 찾을 수 없습니다."
 
 #: eeschema/libarch.cpp:141
 #, c-format
 msgid "Errors occurred creating symbol library %s."
-msgstr "기호 라이브러리 %s을(를) 만드는 동안 오류가 발생했습니다."
+msgstr "심볼 라이브러리 %s을 만드는 동안 오류가 발생했습니다."
 
 #: eeschema/menubar.cpp:64 kicad/menubar.cpp:63
 #: pagelayout_editor/menubar.cpp:57 pcbnew/menubar_pcb_editor.cpp:67
@@ -12730,7 +12728,7 @@ msgid ""
 "Multiple symbols have the same reference designator.\n"
 "Annotation must be corrected before simulating."
 msgstr ""
-"여러 기호의 기준 지정자가 동일합니다.\n"
+"여러 심볼의 참조 지정자가 동일합니다.\n"
 "시뮬레이션하기 전에 주석을 수정해야 합니다."
 
 #: eeschema/netlist_exporters/netlist_generator.cpp:125
@@ -12833,13 +12831,13 @@ msgstr "이 프로젝트는 복구할 사항이 없습니다."
 
 #: eeschema/project_rescue.cpp:583
 msgid "No symbols were rescued."
-msgstr "아무 기호도 복구되지 않았습니다."
+msgstr "아무 심볼도 복구되지 않았습니다."
 
 #: eeschema/project_rescue.cpp:691
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:185
 #, c-format
 msgid "Failed to create symbol library file '%s'."
-msgstr "기호 라이브러리 파일 '%s'을 만들지 못했습니다."
+msgstr "심볼 라이브러리 파일 '%s'을 만들지 못했습니다."
 
 #: eeschema/project_rescue.cpp:815
 #, c-format
@@ -12933,8 +12931,8 @@ msgid ""
 "mode. In order to create/update PCBs from schematics, launch the KiCad shell "
 "and create a project."
 msgstr ""
-"회로도 편집기가 독립 실행형 모드에서 열리기 때문에 PCB를 업데이트할 수 없습니다. 회로도에서 PCB를 생성/업데이트하려면 KiCad "
-"매니저를 실행하고 프로젝트를 생성합니다."
+"회로도 편집기가 스탠드얼론 모드에서 열려 있기 때문에 PCB를 업데이트할 수 없습니다. 회로도에서 PCB를 생성/업데이트하려면 KiCad "
+"매니저를 실행하여 프로젝트를 생성하세요."
 
 #: eeschema/sch_edit_frame.cpp:959
 msgid "New Schematic"
@@ -13001,7 +12999,7 @@ msgstr "시트 간 참조"
 #: eeschema/sch_io_mgr.cpp:35 pcbnew/io_mgr.cpp:42
 #, c-format
 msgid "Plugin \"%s\" does not implement the \"%s\" function."
-msgstr "플러그인 \"%s\"은 \"%s\" 기능을 구현하지 않습니다."
+msgstr "플러그인 \"%s\" 에는 \"%s\" 기능이 구현되어 있지 않습니다."
 
 #: eeschema/sch_io_mgr.cpp:36 pcbnew/io_mgr.cpp:43
 #, c-format
@@ -13092,7 +13090,7 @@ msgstr "이 SCH_PLUGIN에서 Symbol*() 함수에 대한 <b>debug</b> 로깅을 �
 
 #: eeschema/sch_plugin.cpp:142
 msgid "Regular expression <b>symbol name</b> filter."
-msgstr "정규 표현식 <b>기호 이름</b> 필터."
+msgstr "정규 표현식으로 <b>심볼 이름</b> 을 필터링합니다."
 
 #: eeschema/sch_plugin.cpp:146 pcbnew/plugin.cpp:162
 msgid ""
@@ -13647,7 +13645,7 @@ msgstr ""
 #: eeschema/sch_screen.cpp:624
 #, c-format
 msgid "I/O error %s resolving library symbol %s"
-msgstr "I/O 오류 %s 발생 (라이브러리 기호 %s 확인 중)"
+msgstr "I/O 오류 %s 발생 (라이브러리 심볼 %s 확인 중)"
 
 #: eeschema/sch_screen.cpp:644
 #, c-format
@@ -13657,7 +13655,7 @@ msgstr "심볼 '%s:%s' 을 연결 '%s'로 설정하기 위해 캐시로 폴백�
 #: eeschema/sch_screen.cpp:665
 #, c-format
 msgid "Setting schematic symbol '%s %s' library identifier to '%s'."
-msgstr "회로도 기호 '%s %s' 라이브러리 식별자를 '%s'으로 설정합니다."
+msgstr "회로도 심볼 '%s %s'의 라이브러리 식별자를 '%s'으로 설정합니다."
 
 #: eeschema/sch_screen.cpp:676
 #, c-format
@@ -13730,7 +13728,7 @@ msgstr "%s에서 심볼을 찾을 수 없음!"
 #: eeschema/sch_symbol.cpp:1620
 #, c-format
 msgid "Symbol %s [%s]"
-msgstr "기호 %s [%s]"
+msgstr "심볼 %s [%s]"
 
 #: eeschema/sch_text.cpp:560
 msgid "Tri-State"
@@ -14569,7 +14567,7 @@ msgstr "PNG로 보기..."
 
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:72
 msgid "Symbol as SVG..."
-msgstr "SVG로 기호..."
+msgstr "심볼을 SVG로 내보내기..."
 
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:76
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:98
@@ -14715,7 +14713,7 @@ msgstr ""
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1195
 #: eeschema/symbol_viewer_frame.cpp:403
 msgid "Symbol library not enabled."
-msgstr "기호 라이브러리가 활성화되지 않았습니다."
+msgstr "심볼 라이브러리가 활성화되지 않았습니다."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1383
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1438
@@ -14796,7 +14794,7 @@ msgstr "라이브러리 선택"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:160
 msgid "[no symbol loaded]"
-msgstr "[기호가 로드되지 않음]"
+msgstr "[불러온 심볼 없음]"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:188
 #, fuzzy
@@ -14819,7 +14817,7 @@ msgstr "새로운 심볼은 이름이 없기 때문에 생성될 수 없습니�
 #: eeschema/symbol_editor/symbol_editor.cpp:421
 #, c-format
 msgid "Symbol '%s' already exists in library '%s'."
-msgstr "기호 %s는 이미 라이브러리 '%s'에 존재합니다."
+msgstr "심볼 %s는 이미 라이브러리 '%s'에 존재합니다."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:527
 #: eeschema/tools/symbol_editor_control.cpp:506
@@ -14833,7 +14831,7 @@ msgstr "현재 열려있는 회로도가 없습니다."
 #: eeschema/tools/symbol_editor_control.cpp:265
 #, c-format
 msgid "Symbol library '%s' is not writeable."
-msgstr "기호 라이브러리 '%s'는 쓸 수 없습니다."
+msgstr "심볼 라이브러리 '%s'는 쓸 수 없습니다."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:549
 #: eeschema/symbol_editor/symbol_editor.cpp:1142
@@ -14863,12 +14861,12 @@ msgstr "지정된 라이브러리가 없습니다.  심볼을 저장할 수 없�
 #: eeschema/symbol_editor/symbol_editor.cpp:654
 msgid ""
 "Derived symbols must be saved in the same library as their parent symbol."
-msgstr "파생 기호는 상위 기호와 같은 라이브러리에 저장되어야 합니다."
+msgstr "파생 심볼은 상위 심볼과 같은 라이브러리에 저장되어야 합니다."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:673
 #, c-format
 msgid "Symbol '%s' already exists in library '%s'"
-msgstr "기호 '%s'는 이미 라이브러리 '%s'에 존재합니다"
+msgstr "심볼 '%s'는 이미 라이브러리 '%s'에 존재합니다"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:702
 #, fuzzy, c-format
@@ -14931,7 +14929,7 @@ msgstr "'%s' 라이브러리를 다른 이름으로 저장..."
 #: eeschema/symbol_editor/symbol_editor.cpp:1047
 #, c-format
 msgid "Failed to save changes to symbol library file '%s'."
-msgstr "기호 라이브러리 파일 '%s'에 대한 변경 사항을 저장하지 못했습니다."
+msgstr "심볼 라이브러리 파일 '%s'에 대한 변경 사항을 저장하지 못했습니다."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1049
 msgid "Error Saving Library"
@@ -14940,7 +14938,7 @@ msgstr "라이브러리 파일 저장 중 오류가 발생하였습니다"
 #: eeschema/symbol_editor/symbol_editor.cpp:1092
 #, c-format
 msgid "Symbol library file '%s' saved."
-msgstr "기호 라이브러리 파일 '%s'이 저장됨."
+msgstr "심볼 라이브러리 파일 '%s'이 저장되었습니다."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1192
 msgid "Undefined!"
@@ -14973,18 +14971,18 @@ msgstr "심볼 가져오기"
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:79
 #, c-format
 msgid "Cannot import symbol library '%s'."
-msgstr "기호 라이브러리 '%s'를 가져올 수 없습니다."
+msgstr "심볼 라이브러리 '%s'를 가져올 수 없습니다."
 
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:86
 #, c-format
 msgid "Symbol library file '%s' is empty."
-msgstr "기호 라이브러리 파일 '%s'이 비어 있습니다."
+msgstr "심볼 라이브러리 파일 '%s'이 비어 있습니다."
 
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:96
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:152
 #, c-format
 msgid "Symbol %s already exists in library '%s'."
-msgstr "기호 %s는 이미 라이브러리 '%s'에 존재합니다."
+msgstr "심볼 %s는 이미 라이브러리 '%s'에 존재합니다."
 
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:114
 msgid "There is no symbol selected to save."
@@ -15040,12 +15038,12 @@ msgstr "심볼을 찾을 수 없습니다."
 #: eeschema/symbol_editor/symbol_library_manager.cpp:433
 #, c-format
 msgid "Error loading symbol %s from library '%s'. (%s)"
-msgstr "기호 %s을 로드하는 동안 라이브러리 '%s'에서 오류가 발생했습니다. (%s)"
+msgstr "심볼 %s을 불러오는 중에 라이브러리 '%s'에서 오류가 발생했습니다. (%s)"
 
 #: eeschema/symbol_editor/symbol_library_manager.cpp:619
 #, c-format
 msgid "Cannot load symbol '%s' from library '%s'."
-msgstr "기호 '%s'을 로드하는 중 라이브러리 '%s'에서 오류 발생."
+msgstr "심볼 '%s'을 라이브러리 '%s'에서 불러올 수 없습니다."
 
 #: eeschema/symbol_editor/symbol_library_manager.cpp:775
 #, c-format
@@ -15055,7 +15053,7 @@ msgstr "라이브러리 '%s'을 열거할 수 없습니다."
 #: eeschema/symbol_editor/symbol_library_manager.cpp:1053
 #, c-format
 msgid "Error saving symbol %s to library '%s'."
-msgstr "기호 %s을 라이브러리 '%s'에 저장하는 동안 오류가 발생했습니다."
+msgstr "심볼 %s을 라이브러리 '%s'에 저장하는 동안 오류가 발생했습니다."
 
 #: eeschema/symbol_lib_table.cpp:229
 #, c-format
@@ -15135,7 +15133,7 @@ msgstr "가시성 변경"
 #: eeschema/tools/assign_footprints.cpp:233
 #, c-format
 msgid "Failed to open symbol-footprint link file '%s'."
-msgstr "기호-풋프린트 링크 파일 '%s'을 열지 못했습니다."
+msgstr "심볼-풋프린트 연결 파일 '%s'을 열지 못했습니다."
 
 #: eeschema/tools/backannotate.cpp:73
 msgid "Select at least one property to back annotate."
@@ -15146,13 +15144,13 @@ msgid ""
 "Cannot fetch PCB netlist because eeschema is opened in stand-alone mode.\n"
 "You must launch the KiCad project manager and create a project."
 msgstr ""
-"Eeschema가 스탠드얼론 모드로 실행 중이기 때문에 PCB 넷리스트를 불러올 수 없습니다.\n"
+"Eeschema가 스탠드얼론 모드로 실행 중이기 때문에 PCB 네트리스트를 불러올 수 없습니다.\n"
 "KiCad 프로젝트 매니저를 실행하여 프로젝트를 생성하여야 합니다."
 
 #: eeschema/tools/backannotate.cpp:164
 #, c-format
 msgid "Footprint '%s' has no assigned symbol."
-msgstr "패키지 외형\"%s\"에 지정한 기호가 없습니다."
+msgstr "풋프린트 '%s' 에는 할당된 심볼이 없습니다."
 
 #: eeschema/tools/backannotate.cpp:196
 #, fuzzy, c-format
@@ -15162,7 +15160,7 @@ msgstr "컴포넌트 %s: 라이브러리에서 %s 풋프린트를 찾을 수 없
 #: eeschema/tools/backannotate.cpp:261
 #, c-format
 msgid "Cannot find symbol for footprint '%s'."
-msgstr "풋프린트 '%s'에 대한 기호를 찾을 수 없습니다."
+msgstr "풋프린트 '%s'에 대한 심볼을 찾을 수 없습니다."
 
 #: eeschema/tools/backannotate.cpp:290
 #, c-format
@@ -15282,11 +15280,11 @@ msgstr "현재 라이브러리를 새 파일에 저장합니다."
 
 #: eeschema/tools/ee_actions.cpp:123
 msgid "New Symbol..."
-msgstr "새로운 기호..."
+msgstr "새로운 심볼..."
 
 #: eeschema/tools/ee_actions.cpp:123
 msgid "Create a new symbol"
-msgstr "새 기호 만들기"
+msgstr "새로운 심볼 생성"
 
 #: eeschema/tools/ee_actions.cpp:128
 msgid "Edit Symbol"
@@ -15306,11 +15304,11 @@ msgstr "선택한 심볼의 복사본 만들기"
 
 #: eeschema/tools/ee_actions.cpp:138
 msgid "Save the current symbol to a different library."
-msgstr "현재 기호를 다른 라이브러리에 저장합니다."
+msgstr "현재 심볼을 다른 라이브러리에 저장합니다."
 
 #: eeschema/tools/ee_actions.cpp:143
 msgid "Remove the selected symbol from its library"
-msgstr "라이브러리에서 선택한 기호 제거"
+msgstr "라이브러리에서 선택한 심볼 제거"
 
 #: eeschema/tools/ee_actions.cpp:158
 msgid "Paste Symbol"
@@ -15318,7 +15316,7 @@ msgstr "붙여넣기 심볼"
 
 #: eeschema/tools/ee_actions.cpp:163
 msgid "Import Symbol..."
-msgstr "기호 가져오기..."
+msgstr "심볼 가져오기..."
 
 #: eeschema/tools/ee_actions.cpp:163
 msgid "Import a symbol to the current library"
@@ -15334,7 +15332,7 @@ msgstr "새 라이브러리 파일로 심볼 내보내기"
 
 #: eeschema/tools/ee_actions.cpp:173
 msgid "Update Symbol Fields..."
-msgstr "기호 필드 업데이트..."
+msgstr "심볼 필드 업데이트..."
 
 #: eeschema/tools/ee_actions.cpp:173
 msgid "Update symbol to match changes made in parent symbol"
@@ -15370,7 +15368,7 @@ msgstr "현재 보기에서 PNG 파일 만들기"
 
 #: eeschema/tools/ee_actions.cpp:203
 msgid "Export Symbol as SVG..."
-msgstr "기호를 SVG로 내보내기..."
+msgstr "심볼을 SVG로 내보내기..."
 
 #: eeschema/tools/ee_actions.cpp:203
 msgid "Create SVG file from the current symbol"
@@ -15669,7 +15667,7 @@ msgstr "심볼 또는 시트의 필드에 대해 자동 배치 알고리즘을 �
 
 #: eeschema/tools/ee_actions.cpp:425
 msgid "Change Symbols..."
-msgstr "기호 변경..."
+msgstr "심볼 변경..."
 
 #: eeschema/tools/ee_actions.cpp:426
 msgid "Assign different symbols from the library"
@@ -15691,7 +15689,7 @@ msgstr "하나의 라이브러리 파일에 풋프린트 압축 또는 추가"
 
 #: eeschema/tools/ee_actions.cpp:443
 msgid "Update Symbol..."
-msgstr "기호 업데이트..."
+msgstr "심볼 업데이트..."
 
 #: eeschema/tools/ee_actions.cpp:444
 msgid "Update symbol to include any changes from the library"
@@ -15786,7 +15784,7 @@ msgstr "부품 속성 편집"
 
 #: eeschema/tools/ee_actions.cpp:498
 msgid "Symbol Properties..."
-msgstr "기호 속성..."
+msgstr "심볼 속성..."
 
 #: eeschema/tools/ee_actions.cpp:498
 #, fuzzy
@@ -15864,7 +15862,7 @@ msgstr "회로도 인쇄"
 
 #: eeschema/tools/ee_actions.cpp:560
 msgid "Edit Symbol Library Links..."
-msgstr "기호 라이브러리 링크 편집..."
+msgstr "심볼 라이브러리 링크 편집..."
 
 #: eeschema/tools/ee_actions.cpp:560
 msgid "Edit links between schematic and library symbols"
@@ -15893,7 +15891,7 @@ msgstr "회로도 주석 달기..."
 
 #: eeschema/tools/ee_actions.cpp:576
 msgid "Fill in schematic symbol reference designators"
-msgstr "회로도 기호 참조 지정자 채우기"
+msgstr "회로도 심볼 참조 지정자 채우기"
 
 #: eeschema/tools/ee_actions.cpp:581
 msgid "Schematic Setup..."
@@ -15960,7 +15958,7 @@ msgstr "Module 에디터 열기"
 
 #: eeschema/tools/ee_actions.cpp:619
 msgid "Export Netlist..."
-msgstr "넷리스트 내보내기..."
+msgstr "네트리스트 내보내기..."
 
 #: eeschema/tools/ee_actions.cpp:619
 msgid "Export file containing netlist in one of several formats"
@@ -16158,7 +16156,7 @@ msgstr "그리드에 요소 정렬"
 
 #: eeschema/tools/ee_inspection_tool.cpp:217
 msgid "Symbol Warnings"
-msgstr "기호 경고"
+msgstr "심볼 경고"
 
 #: eeschema/tools/ee_inspection_tool.cpp:248
 #, c-format
@@ -16315,7 +16313,7 @@ msgstr "라이브러리 에디터 실행"
 
 #: eeschema/tools/sch_edit_tool.cpp:101
 msgid "no symbol selected"
-msgstr "선택한 기호 없음"
+msgstr "선택한 심볼이 없습니다"
 
 #: eeschema/tools/sch_edit_tool.cpp:110
 #, fuzzy
@@ -16426,7 +16424,7 @@ msgstr "레이어가 선택되지 않았습니다."
 #: eeschema/tools/symbol_editor_control.cpp:386
 #: eeschema/tools/symbol_editor_control.cpp:426
 msgid "No symbol to export"
-msgstr "내보낼 기호 없음"
+msgstr "내보낼 심볼이 없습니다"
 
 #: eeschema/tools/symbol_editor_control.cpp:397
 msgid "Image File Name"
@@ -17922,7 +17920,7 @@ msgstr "회로도 편집"
 
 #: kicad/tools/kicad_manager_actions.cpp:70
 msgid "Edit schematic symbols"
-msgstr "회로도 기호 편집"
+msgstr "회로도 심볼 편집"
 
 #: kicad/tools/kicad_manager_actions.cpp:76
 msgid "Edit PCB"
@@ -29979,12 +29977,12 @@ msgstr "값 %s를 %s에서 %s로 변경하였습니다."
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:316
 #, c-format
 msgid "Update %s symbol association from %s to %s."
-msgstr "%s 기호 연결을 %s에서 %s로 업데이트합니다."
+msgstr "%s 심볼 관련성을 %s에서 %s로 업데이트합니다."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:323
 #, c-format
 msgid "Updated %s symbol association from %s to %s."
-msgstr "%s 기호 연결을 %s에서 %s로 업데이트하였습니다."
+msgstr "%s 심볼 관련성을 %s에서 %s로 업데이트하였습니다."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:339
 #, c-format
@@ -30205,7 +30203,7 @@ msgstr "네트리스트의 심볼 네트 영역에서 네트 이름을 파싱할
 #: pcbnew/netlist_reader/legacy_netlist_reader.cpp:246
 #, c-format
 msgid "Cannot find symbol %s in footprint filter section of netlist."
-msgstr "넷리스트의 풋프린트 필터 영역에서 기호 %s 를 찾을 수 없습니다."
+msgstr "네트리스트의 풋프린트 필터 영역에서 심볼 %s 를 찾을 수 없습니다."
 
 #: pcbnew/netlist_reader/netlist.cpp:67
 #, c-format
