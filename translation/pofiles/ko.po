@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
-"PO-Revision-Date: 2021-08-14 11:58+0000\n"
+"PO-Revision-Date: 2021-08-14 12:16+0000\n"
 "Last-Translator: 서범기 <joonhoflow@naver.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
@@ -33133,9 +33133,8 @@ msgid "Swap Layers..."
 msgstr "레이어 교체..."
 
 #: pcbnew/tools/pcb_actions.cpp:431
-#, fuzzy
 msgid "Move tracks or drawings from one layer to another"
-msgstr "커퍼 레이어의 트랙 또는 다른 레이어의 드로잉 스왑"
+msgstr "한 레이어에서 다른 레이어로 배선 또는 도면 이동"
 
 #: pcbnew/tools/pcb_actions.cpp:436
 msgid "Edit Track & Via Properties..."
@@ -33150,7 +33149,6 @@ msgid "Edit Text and graphics properties globally across board"
 msgstr "기판 전체의 텍스트와 그래픽 속성을 편집"
 
 #: pcbnew/tools/pcb_actions.cpp:448
-#, fuzzy
 msgid "Global Deletions..."
 msgstr "전역 삭제..."
 
@@ -33167,7 +33165,6 @@ msgid "Cleanup redundant items, shorting items, etc."
 msgstr "중복된 항목, 잘못된 항목 등을 정리합니다."
 
 #: pcbnew/tools/pcb_actions.cpp:460
-#, fuzzy
 msgid "Cleanup Graphics..."
 msgstr "그래픽 정리..."
 
@@ -33176,47 +33173,40 @@ msgid "Cleanup redundant items, etc."
 msgstr "중복된 항목 등을 정리합니다."
 
 #: pcbnew/tools/pcb_actions.cpp:468
-#, fuzzy
 msgid "Add Microwave Gap"
-msgstr "선 이동"
+msgstr "마이크로웨이브 간격 추가"
 
 #: pcbnew/tools/pcb_actions.cpp:468
 msgid "Create gap of specified length for microwave applications"
 msgstr "마이크로웨이브 어플리케이션용 지정 길이 간격 만들기"
 
 #: pcbnew/tools/pcb_actions.cpp:473
-#, fuzzy
 msgid "Add Microwave Stub"
-msgstr "선 이동"
+msgstr "마이크로웨이브 스텁 추가"
 
 #: pcbnew/tools/pcb_actions.cpp:473
 msgid "Create stub of specified length for microwave applications"
 msgstr "마이크로웨이브 어플리케이션용 지정 길이 스터브 만들기"
 
 #: pcbnew/tools/pcb_actions.cpp:478
-#, fuzzy
 msgid "Add Microwave Arc Stub"
-msgstr "호 스터브 추가"
+msgstr "마이크로웨이브 호 스텁 추가"
 
 #: pcbnew/tools/pcb_actions.cpp:478
-#, fuzzy
 msgid "Create stub (arc) of specified size for microwave applications"
-msgstr "마이크로웨이브 어플리케이션용 지정 길이 스터브 (호) 만들기"
+msgstr "마이크로웨이브 애플리케이션을 위해 지정된 크기의 스텁(호) 생성"
 
 #: pcbnew/tools/pcb_actions.cpp:483
-#, fuzzy
 msgid "Add Microwave Polygonal Shape"
-msgstr "다각형 추가"
+msgstr "마이크로웨이브 다각형 모양 추가"
 
 #: pcbnew/tools/pcb_actions.cpp:483
-#, fuzzy
 msgid "Create a microwave polygonal shape from a list of vertices"
-msgstr "마이크로웨이브 어플리케이션용 지정 길이 다각형 만들기"
+msgstr "정점목록에서 마이크로파 다각형 모양 만들기"
 
 #: pcbnew/tools/pcb_actions.cpp:488
-#, fuzzy
 msgid "Add Microwave Line"
-msgstr "선 이동"
+msgstr "마이크로웨이브 라인 추가"
 
 #: pcbnew/tools/pcb_actions.cpp:488
 msgid "Create line of specified length for microwave applications"
@@ -33263,9 +33253,8 @@ msgid "Add a pad"
 msgstr "패드 추가"
 
 #: pcbnew/tools/pcb_actions.cpp:525
-#, fuzzy
 msgid "Edit Pad as Graphic Shapes"
-msgstr "부품 속성 편집"
+msgstr "패드를 그래픽 모양으로 편집"
 
 #: pcbnew/tools/pcb_actions.cpp:526
 msgid "Ungroups a custom-shaped pad for editing as individual graphic shapes"
@@ -33304,9 +33293,8 @@ msgid "Reveals the plugins folder in a Finder window"
 msgstr "파인더 창에서 플러그인 폴더를 표시"
 
 #: pcbnew/tools/pcb_actions.cpp:562
-#, fuzzy
 msgid "Board Setup..."
-msgstr "보드 설정..."
+msgstr "기판 설정..."
 
 #: pcbnew/tools/pcb_actions.cpp:563
 msgid "Edit board setup including layers, design rules and various defaults"
@@ -33321,7 +33309,6 @@ msgid "Read netlist and update board connectivity"
 msgstr "네트리스트를 읽어들여 기판 연결 정보를 업데이트"
 
 #: pcbnew/tools/pcb_actions.cpp:573
-#, fuzzy
 msgid "Import Specctra Session..."
 msgstr "스펙트라 세션 가져오기..."
 
@@ -33330,7 +33317,6 @@ msgid "Import routed Specctra session (*.ses) file"
 msgstr "라우트된 Specctra session (*.ses) 파일 가져오기"
 
 #: pcbnew/tools/pcb_actions.cpp:578
-#, fuzzy
 msgid "Export Specctra DSN..."
 msgstr "스펙트라 DSN 내보내기..."
 
@@ -33339,9 +33325,8 @@ msgid "Export Specctra DSN routing info"
 msgstr "Specctra DSN 라우팅 정보 내보내기"
 
 #: pcbnew/tools/pcb_actions.cpp:583
-#, fuzzy
 msgid "Gerbers (.gbr)..."
-msgstr "거버(.gbr)..."
+msgstr "거버 (.gbr)..."
 
 #: pcbnew/tools/pcb_actions.cpp:583
 msgid "Generate Gerbers for fabrication"
@@ -33368,9 +33353,8 @@ msgid "Footprint Report (.rpt)..."
 msgstr "풋프린터 보고서(.rpt)..."
 
 #: pcbnew/tools/pcb_actions.cpp:600
-#, fuzzy
 msgid "Create report of all footprints from current board"
-msgstr "PCB 리포트 작성 (풋크린트 리포트)"
+msgstr "현재 기판에서 모든 풋프린트에 대한 보고서 만들기"
 
 #: pcbnew/tools/pcb_actions.cpp:605
 msgid "IPC-D-356 Netlist File..."
@@ -33385,29 +33369,24 @@ msgid "BOM..."
 msgstr "부품 목록..."
 
 #: pcbnew/tools/pcb_actions.cpp:610
-#, fuzzy
 msgid "Create bill of materials from board"
-msgstr "보드에서 자재 명세서 생성"
+msgstr "기판에서 BOM (Bill of materials)을 생성"
 
 #: pcbnew/tools/pcb_actions.cpp:617
-#, fuzzy
 msgid "Switch Track Width to Next"
-msgstr "트랙 두께 선택"
+msgstr "배선 폭을 다음과 같이 변경"
 
 #: pcbnew/tools/pcb_actions.cpp:617
-#, fuzzy
 msgid "Change track width to next pre-defined size"
-msgstr "트랙 두께를 변경하시겠습니까? (전체 네트)"
+msgstr "배선 너비를 미리 정의된 다음 크기로 변경"
 
 #: pcbnew/tools/pcb_actions.cpp:622
-#, fuzzy
 msgid "Switch Track Width to Previous"
-msgstr "트랙 두께 선택"
+msgstr "배선 너비를 이전으로 전환"
 
 #: pcbnew/tools/pcb_actions.cpp:622
-#, fuzzy
 msgid "Change track width to previous pre-defined size"
-msgstr "트랙 두께를 변경하시겠습니까? (전체 네트)"
+msgstr "배선 너비를 사전 정의된 이전 크기로 변경"
 
 #: pcbnew/tools/pcb_actions.cpp:627
 msgid "Increase Via Size"
@@ -33426,14 +33405,12 @@ msgid "Change via size to previous pre-defined size"
 msgstr "이전의 이미 지정된 값으로 비아 크기를 변경합니다"
 
 #: pcbnew/tools/pcb_actions.cpp:641
-#, fuzzy
 msgid "Merge Zones"
-msgstr "영역 삭제"
+msgstr "병합 영역"
 
 #: pcbnew/tools/pcb_actions.cpp:641
-#, fuzzy
 msgid "Merge zones"
-msgstr "영역 이동"
+msgstr "영역 병합"
 
 #: pcbnew/tools/pcb_actions.cpp:645
 msgid "Duplicate Zone onto Layer..."
@@ -33464,18 +33441,16 @@ msgid "Drill/Place File Origin"
 msgstr "드릴/배치 파일의 원점"
 
 #: pcbnew/tools/pcb_actions.cpp:662
-#, fuzzy
 msgid "Place origin point for drill files and component placement files"
-msgstr "드릴 및 배치 파일 옵셋 설정"
+msgstr "드릴 파일과 부품 배치 파일로 원점 배치"
 
 #: pcbnew/tools/pcb_actions.cpp:668
 msgid "Toggle Lock"
 msgstr "잠금 토글"
 
 #: pcbnew/tools/pcb_actions.cpp:668
-#, fuzzy
 msgid "Lock or unlock selected items"
-msgstr "선택된 항목 잘라내기"
+msgstr "선택한 항목 잠금 또는 잠금 해제"
 
 #: pcbnew/tools/pcb_actions.cpp:673
 msgid "Prevent items from being moved and/or resized on the canvas"
@@ -33486,23 +33461,20 @@ msgid "Allow items to be moved and/or resized on the canvas"
 msgstr "캔버스상의 개체 움직이기와 크기 변환을 허용"
 
 #: pcbnew/tools/pcb_actions.cpp:683
-#, fuzzy
 msgid "Group the selected items so that they are treated as a single item"
-msgstr "선택된 항목 잘라내기"
+msgstr "선택한 항목을 단일 항목으로 처리하도록 그룹화"
 
 #: pcbnew/tools/pcb_actions.cpp:688
 msgid "Ungroup"
 msgstr "그룹 해제"
 
 #: pcbnew/tools/pcb_actions.cpp:688
-#, fuzzy
 msgid "Ungroup any selected groups"
 msgstr "선택한 그룹의 그룹 해제"
 
 #: pcbnew/tools/pcb_actions.cpp:693
-#, fuzzy
 msgid "Remove Items"
-msgstr "텍스트 이동"
+msgstr "항목 제거"
 
 #: pcbnew/tools/pcb_actions.cpp:693
 msgid "Remove items from group"
@@ -33521,18 +33493,16 @@ msgid "Leave Group"
 msgstr "그룹에서 나가기"
 
 #: pcbnew/tools/pcb_actions.cpp:703
-#, fuzzy
 msgid "Leave the current group"
-msgstr "현재 시트만 저장"
+msgstr "현재 그룹에서 나가기"
 
 #: pcbnew/tools/pcb_actions.cpp:708
 msgid "Append Board..."
 msgstr "보드 추가…"
 
 #: pcbnew/tools/pcb_actions.cpp:708
-#, fuzzy
 msgid "Open another board and append its contents to this board"
-msgstr "현재 보드 모듈 업데이트"
+msgstr "다른 기판를 열고 해당 내용을 이 기판에 추가"
 
 #: pcbnew/tools/pcb_actions.cpp:712
 #, fuzzy
