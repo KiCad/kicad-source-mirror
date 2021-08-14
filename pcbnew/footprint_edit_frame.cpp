@@ -75,7 +75,7 @@
 #include <widgets/lib_tree.h>
 #include <widgets/paged_dialog.h>
 #include <widgets/panel_selection_filter.h>
-#include <widgets/progress_reporter.h>
+#include <widgets/wx_progress_reporters.h>
 #include <wildcards_and_files_ext.h>
 #include <wx/filedlg.h>
 #include <wx/treebook.h>

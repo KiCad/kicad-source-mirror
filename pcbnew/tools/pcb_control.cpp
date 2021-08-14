@@ -55,7 +55,7 @@
 #include <tool/tool_manager.h>
 #include <footprint_viewer_frame.h>
 #include <footprint_edit_frame.h>
-#include <widgets/progress_reporter.h>
+#include <widgets/wx_progress_reporters.h>
 #include <widgets/infobar.h>
 #include <wx/hyperlink.h>
 

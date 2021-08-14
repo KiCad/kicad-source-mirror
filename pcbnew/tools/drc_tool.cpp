@@ -32,7 +32,7 @@
 #include <dialog_drc.h>
 #include <board_commit.h>
 #include <board_design_settings.h>
-#include <widgets/progress_reporter.h>
+#include <progress_reporter.h>
 #include <drc/drc_engine.h>
 #include <drc/drc_results_provider.h>
 #include <netlist_reader/pcb_netlist.h>

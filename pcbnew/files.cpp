@@ -47,7 +47,7 @@
 #include <kiplatform/app.h>
 #include <widgets/appearance_controls.h>
 #include <widgets/infobar.h>
-#include <widgets/progress_reporter.h>
+#include <widgets/wx_progress_reporters.h>
 #include <settings/settings_manager.h>
 #include <paths.h>
 #include <project/project_file.h>

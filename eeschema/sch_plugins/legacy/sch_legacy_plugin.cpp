@@ -39,7 +39,7 @@
 #include <richio.h>
 #include <trace_helpers.h>
 #include <trigo.h>
-#include <widgets/progress_reporter.h>
+#include <progress_reporter.h>
 #include <general.h>
 #include <sch_bitmap.h>
 #include <sch_bus_entry.h>

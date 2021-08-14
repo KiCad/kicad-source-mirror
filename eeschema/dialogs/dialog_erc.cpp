@@ -54,7 +54,7 @@
 
 DIALOG_ERC::DIALOG_ERC( SCH_EDIT_FRAME* parent ) :
         DIALOG_ERC_BASE( parent ),
-        PROGRESS_REPORTER( 1 ),
+        PROGRESS_REPORTER_BASE( 1 ),
         m_parent( parent ),
         m_running( false ),
         m_ercRun( false ),
@@ -143,7 +143,7 @@ bool DIALOG_ERC::updateUI()
 void DIALOG_ERC::AdvancePhase( const wxString& aMessage )
 {
     // Will also call Report( aMessage ):
-    PROGRESS_REPORTER::AdvancePhase( aMessage );
+    PROGRESS_REPORTER_BASE::AdvancePhase( aMessage );
     SetCurrentProgress( 0.0 );
 }
 

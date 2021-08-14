@@ -229,7 +229,7 @@ set( COMMON_WIDGET_SRCS
     widgets/msgpanel.cpp
     widgets/number_badge.cpp
     widgets/paged_dialog.cpp
-    widgets/progress_reporter.cpp
+    widgets/progress_reporter_base.cpp
     widgets/split_button.cpp
     widgets/stepped_slider.cpp
     widgets/text_ctrl_eval.cpp
@@ -241,6 +241,7 @@ set( COMMON_WIDGET_SRCS
     widgets/wx_busy_indicator.cpp
     widgets/wx_ellipsized_static_text.cpp
     widgets/wx_grid.cpp
+    widgets/wx_progress_reporters.cpp
     )
 
 set( COMMON_DRAWING_SHEET_SRCS

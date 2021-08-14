@@ -23,13 +23,13 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef __ZONE_FILLER_H
-#define __ZONE_FILLER_H
+#ifndef ZONE_FILLER_H
+#define ZONE_FILLER_H
 
 #include <vector>
 #include <zone.h>
 
-class WX_PROGRESS_REPORTER;
+class PROGRESS_REPORTER;
 class BOARD;
 class COMMIT;
 class SHAPE_POLY_SET;
@@ -43,7 +43,6 @@ public:
     ~ZONE_FILLER();
 
     void SetProgressReporter( PROGRESS_REPORTER* aReporter );
-    void InstallNewProgressReporter( wxWindow* aParent, const wxString& aTitle, int aNumPhases );
 
     /**
      * Fills the given list of zones.  Invalidates connectivity - it is up to the caller to obtain
@@ -126,8 +125,6 @@ private:
     bool                  m_brdOutlinesValid;   // true if m_boardOutline is well-formed
     COMMIT*               m_commit;
     PROGRESS_REPORTER*    m_progressReporter;
-
-    std::unique_ptr<WX_PROGRESS_REPORTER> m_uniqueReporter;
 
     int                   m_maxError;
     int                   m_worstClearance;

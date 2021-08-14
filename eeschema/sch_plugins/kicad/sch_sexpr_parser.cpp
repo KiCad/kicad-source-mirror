@@ -55,7 +55,7 @@
 #include <sch_plugins/kicad/sch_sexpr_parser.h>
 #include <template_fieldnames.h>
 #include <trigo.h>
-#include <widgets/progress_reporter.h>
+#include <progress_reporter.h>
 
 
 using namespace TSCHEMATIC_T;

@@ -23,7 +23,7 @@
 #include <core/wx_stl_compat.h>
 #include <symbol_async_loader.h>
 #include <symbol_lib_table.h>
-#include <widgets/progress_reporter.h>
+#include <progress_reporter.h>
 
 
 SYMBOL_ASYNC_LOADER::SYMBOL_ASYNC_LOADER( const std::vector<wxString>& aNicknames,

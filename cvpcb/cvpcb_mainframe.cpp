@@ -39,7 +39,7 @@
 #include <tool/editor_conditions.h>
 #include <tool/tool_dispatcher.h>
 #include <tool/tool_manager.h>
-#include <widgets/progress_reporter.h>
+#include <widgets/wx_progress_reporters.h>
 #include <wx/statline.h>
 #include <wx/stattext.h>
 

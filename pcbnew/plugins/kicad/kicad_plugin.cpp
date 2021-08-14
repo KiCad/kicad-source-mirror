@@ -47,7 +47,7 @@
 #include <plugins/kicad/pcb_parser.h>
 #include <trace_helpers.h>
 #include <pcb_track.h>
-#include <widgets/progress_reporter.h>
+#include <progress_reporter.h>
 #include <wildcards_and_files_ext.h>
 #include <wx/dir.h>
 #include <wx/log.h>

@@ -61,7 +61,7 @@
 #include <tools/ee_inspection_tool.h>
 #include <paths.h>
 #include <wx_filename.h>  // For ::ResolvePossibleSymlinks
-#include <widgets/progress_reporter.h>
+#include <widgets/wx_progress_reporters.h>
 
 bool SCH_EDIT_FRAME::SaveEEFile( SCH_SHEET* aSheet, bool aSaveUnderNewName )
 {

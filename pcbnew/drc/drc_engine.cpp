@@ -24,7 +24,7 @@
  */
 
 #include <reporter.h>
-#include <widgets/progress_reporter.h>
+#include <progress_reporter.h>
 #include <string_utils.h>
 #include <board_design_settings.h>
 #include <drc/drc_engine.h>

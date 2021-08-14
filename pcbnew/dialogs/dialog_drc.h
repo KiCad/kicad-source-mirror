@@ -32,7 +32,7 @@
 #include <pcb_marker.h>
 #include <board.h>
 #include <dialog_drc_base.h>
-#include <widgets/progress_reporter.h>
+#include <widgets/progress_reporter_base.h>
 
 
 class BOARD_DESIGN_SETTINGS;
@@ -41,7 +41,7 @@ class BOARD_DESIGN_SETTINGS;
 #define DIALOG_DRC_WINDOW_NAME "DialogDrcWindowName"
 
 class
-DIALOG_DRC: public DIALOG_DRC_BASE, PROGRESS_REPORTER
+DIALOG_DRC: public DIALOG_DRC_BASE, PROGRESS_REPORTER_BASE
 {
 public:
     /// Constructors

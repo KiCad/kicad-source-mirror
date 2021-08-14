@@ -31,7 +31,7 @@
 #include <kiway.h>
 #include <lib_id.h>
 #include <wildcards_and_files_ext.h>
-#include <widgets/progress_reporter.h>
+#include <progress_reporter.h>
 #include <wx/textfile.h>
 #include <wx/txtstrm.h>
 #include <wx/wfstream.h>

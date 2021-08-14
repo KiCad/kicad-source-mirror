@@ -33,7 +33,7 @@
 #include <zones.h>
 #include <zones_functions_for_undo_redo.h>
 #include <connectivity/connectivity_data.h>
-#include <widgets/progress_reporter.h>
+#include <widgets/wx_progress_reporters.h>
 #include <zone_filler.h>
 
 
@@ -136,7 +136,10 @@ void PCB_EDIT_FRAME::Edit_Zone_Params( ZONE* aZone )
             ZONE_FILLER filler( GetBoard(), &commit );
             wxString    title = wxString::Format( _( "Refill %d Zones" ),
                                                   (int) zones_to_refill.size() );
-            filler.InstallNewProgressReporter( this, title, 4 );
+
+            std::unique_ptr<WX_PROGRESS_REPORTER> reporter;
+            reporter = std::make_unique<WX_PROGRESS_REPORTER>( this, title, 4 );
+            filler.SetProgressReporter( reporter.get() );
 
             if( !filler.Fill( zones_to_refill ) )
             {

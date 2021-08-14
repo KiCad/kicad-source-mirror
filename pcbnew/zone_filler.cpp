@@ -39,7 +39,7 @@
 #include <connectivity/connectivity_data.h>
 #include <convert_basic_shapes_to_polygon.h>
 #include <board_commit.h>
-#include <widgets/progress_reporter.h>
+#include <progress_reporter.h>
 #include <geometry/shape_poly_set.h>
 #include <geometry/convex_hull.h>
 #include <geometry/geometry_utils.h>
@@ -66,14 +66,6 @@ ZONE_FILLER::ZONE_FILLER(  BOARD* aBoard, COMMIT* aCommit ) :
 
 ZONE_FILLER::~ZONE_FILLER()
 {
-}
-
-
-void ZONE_FILLER::InstallNewProgressReporter( wxWindow* aParent, const wxString& aTitle,
-                                              int aNumPhases )
-{
-    m_uniqueReporter = std::make_unique<WX_PROGRESS_REPORTER>( aParent, aTitle, aNumPhases );
-    SetProgressReporter( m_uniqueReporter.get() );
 }
 
 

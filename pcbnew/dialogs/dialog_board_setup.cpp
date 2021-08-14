@@ -38,7 +38,7 @@
 #include <settings/settings_manager.h>
 #include <widgets/infobar.h>
 #include <widgets/resettable_panel.h>
-#include <widgets/progress_reporter.h>
+#include <widgets/wx_progress_reporters.h>
 #include <wildcards_and_files_ext.h>
 
 #include "dialog_board_setup.h"

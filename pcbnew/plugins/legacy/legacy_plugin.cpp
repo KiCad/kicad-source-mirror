@@ -88,7 +88,7 @@
 #include <trigo.h>
 #include <confirm.h>
 #include <math/util.h>      // for KiROUND
-#include <widgets/progress_reporter.h>
+#include <progress_reporter.h>
 
 typedef LEGACY_PLUGIN::BIU      BIU;
 

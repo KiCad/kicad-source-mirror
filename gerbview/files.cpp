@@ -33,7 +33,7 @@
 #include <gerber_file_image_list.h>
 #include <excellon_image.h>
 #include <wildcards_and_files_ext.h>
-#include <widgets/progress_reporter.h>
+#include <widgets/wx_progress_reporters.h>
 #include "widgets/gerbview_layer_widget.h"
 
 // HTML Messages used more than one time:

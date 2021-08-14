@@ -35,7 +35,7 @@
 #include <pad.h>
 #include <board_commit.h>
 #include <connectivity/connectivity_data.h>
-#include <widgets/progress_reporter.h>
+#include <progress_reporter.h>
 
 #include "ar_autoplacer.h"
 #include "ar_matrix.h"

@@ -47,7 +47,7 @@ using namespace std::placeholders;
 #include <pcbnew_settings.h>
 #include <view/view_controls.h>
 #include <widgets/lib_tree.h>
-#include <widgets/progress_reporter.h>
+#include <widgets/wx_progress_reporters.h>
 #include <dialog_pad_properties.h>
 
 #include "fp_tree_model_adapter.h"

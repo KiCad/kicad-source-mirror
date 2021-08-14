@@ -35,7 +35,7 @@
 #include <sch_plugins/legacy/sch_legacy_plugin.h>
 #include <symbol_lib_table.h>
 #include <symbol_async_loader.h>
-#include <widgets/progress_reporter.h>
+#include <progress_reporter.h>
 #include <list>
 #include <locale_io.h>
 #include <wx/log.h>

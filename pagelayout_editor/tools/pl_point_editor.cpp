@@ -36,7 +36,7 @@ using namespace std::placeholders;
 #include <status_popup.h>
 #include <drawing_sheet/ds_draw_item.h>
 #include <drawing_sheet/ds_data_item.h>
-#include <widgets/progress_reporter.h>
+#include <progress_reporter.h>
 
 #include "pl_editor_frame.h"
 #include "pl_editor_id.h"

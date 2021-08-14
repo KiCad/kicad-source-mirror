@@ -67,7 +67,7 @@
 #include <widgets/app_progress_dialog.h>
 #include <widgets/infobar.h>
 #include <widgets/lib_tree.h>
-#include <widgets/progress_reporter.h>
+#include <widgets/wx_progress_reporters.h>
 #include <widgets/symbol_tree_pane.h>
 #include <wildcards_and_files_ext.h>
 #include <panel_sym_lib_table.h>

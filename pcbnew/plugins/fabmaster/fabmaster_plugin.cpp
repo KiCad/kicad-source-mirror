@@ -29,7 +29,7 @@
 
 #include "fabmaster_plugin.h"
 #include <board.h>
-#include <widgets/progress_reporter.h>
+#include <progress_reporter.h>
 #include <common.h>
 #include <macros.h>
 

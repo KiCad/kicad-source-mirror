@@ -52,7 +52,7 @@
 #include <wx/mstream.h>
 #include <wx/wfstream.h>
 #include <wx/zstream.h>
-#include <widgets/progress_reporter.h>
+#include <progress_reporter.h>
 
 
 void ParseAltiumPcb( BOARD* aBoard, const wxString& aFileName, PROGRESS_REPORTER* aProgressReporter,

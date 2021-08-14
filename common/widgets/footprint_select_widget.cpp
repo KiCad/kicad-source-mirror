@@ -23,7 +23,7 @@
 #include <project.h>
 #include <widgets/footprint_choice.h>
 #include <widgets/footprint_select_widget.h>
-#include <widgets/progress_reporter.h>
+#include <progress_reporter.h>
 #include <footprint_info_impl.h>
 #include <wx/wupdlock.h>
 

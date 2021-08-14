@@ -57,7 +57,7 @@
 #include <math/util.h>                           // KiROUND, Clamp
 #include <string_utils.h>
 #include <wx/log.h>
-#include <widgets/progress_reporter.h>
+#include <progress_reporter.h>
 
 using namespace PCB_KEYS_T;
 

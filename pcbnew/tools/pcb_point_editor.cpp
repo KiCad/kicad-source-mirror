@@ -45,7 +45,7 @@ using namespace std::placeholders;
 #include <pad.h>
 #include <zone.h>
 #include <connectivity/connectivity_data.h>
-#include <widgets/progress_reporter.h>
+#include <progress_reporter.h>
 
 
 // Few constants to avoid using bare numbers for point indices

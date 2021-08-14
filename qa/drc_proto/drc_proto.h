@@ -26,7 +26,7 @@
 
 #include <string>
 
-#include <widgets/progress_reporter.h>
+#include <widgets/progress_reporter_base.h>
 #include <reporter.h>
 #include <core/optional.h>
 #include <netlist_reader/pcb_netlist.h>
@@ -94,11 +94,11 @@ private:
     std::mutex m_lock;
 };
 
-class CONSOLE_PROGRESS_REPORTER : public PROGRESS_REPORTER
+class CONSOLE_PROGRESS_REPORTER : public PROGRESS_REPORTER_BASE
 {
 public:
     CONSOLE_PROGRESS_REPORTER( CONSOLE_LOG* log ) :
-        PROGRESS_REPORTER( 0 ),
+        PROGRESS_REPORTER_BASE( 0 ),
         m_log( log ) {};
     ~CONSOLE_PROGRESS_REPORTER() {};
 

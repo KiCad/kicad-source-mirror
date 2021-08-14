@@ -25,7 +25,7 @@
  */
 
 #include <connectivity/connectivity_algo.h>
-#include <widgets/progress_reporter.h>
+#include <progress_reporter.h>
 #include <geometry/geometry_utils.h>
 #include <board_commit.h>
 

@@ -39,7 +39,7 @@
 #include <wx/wupdlock.h>
 #include <widgets/appearance_controls.h>
 #include <widgets/ui_common.h>
-#include <widgets/progress_reporter.h>
+#include <widgets/progress_reporter_base.h>
 #include <dialogs/wx_html_report_box.h>
 #include <dialogs/panel_setup_rules_base.h>
 #include <tools/drc_tool.h>
@@ -49,7 +49,7 @@
 
 DIALOG_DRC::DIALOG_DRC( PCB_EDIT_FRAME* aEditorFrame, wxWindow* aParent ) :
         DIALOG_DRC_BASE( aParent ),
-        PROGRESS_REPORTER( 1 ),
+        PROGRESS_REPORTER_BASE( 1 ),
         m_running( false ),
         m_cancelled( false ),
         m_drcRun( false ),
@@ -167,7 +167,7 @@ bool DIALOG_DRC::updateUI()
 
 void DIALOG_DRC::AdvancePhase( const wxString& aMessage )
 {
-    PROGRESS_REPORTER::AdvancePhase( aMessage );
+    PROGRESS_REPORTER_BASE::AdvancePhase( aMessage );
     SetCurrentProgress( 0.0 );
 
     m_messages->Report( aMessage );

@@ -67,7 +67,7 @@ Load() TODO's
 #include <properties.h>
 #include <trigo.h>
 #include <math/util.h>      // for KiROUND
-#include <widgets/progress_reporter.h>
+#include <progress_reporter.h>
 
 #include <board.h>
 #include <board_design_settings.h>

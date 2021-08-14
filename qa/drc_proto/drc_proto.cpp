@@ -44,7 +44,7 @@
 #include <connectivity/connectivity_algo.h>
 
 #include <reporter.h>
-#include <widgets/progress_reporter.h>
+#include <widgets/progress_reporter_base.h>
 
 #include <project.h>
 #include <settings/settings_manager.h>

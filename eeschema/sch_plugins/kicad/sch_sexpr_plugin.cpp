@@ -61,7 +61,7 @@
 #include <ee_selection.h>
 #include <string_utils.h>
 #include <wx_filename.h>       // for ::ResolvePossibleSymlinks()
-#include <widgets/progress_reporter.h>
+#include <progress_reporter.h>
 
 
 using namespace TSCHEMATIC_T;

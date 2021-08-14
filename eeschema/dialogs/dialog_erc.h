@@ -30,17 +30,17 @@
 #include <lib_pin.h>        // For PINTYPE_COUNT definition
 
 #include <dialog_erc_base.h>
-#include <widgets/progress_reporter.h>
+#include <widgets/progress_reporter_base.h>
 #include <erc_settings.h>
 
 
-class DIALOG_ERC : public DIALOG_ERC_BASE, PROGRESS_REPORTER
+class DIALOG_ERC : public DIALOG_ERC_BASE, PROGRESS_REPORTER_BASE
 {
 public:
     DIALOG_ERC( SCH_EDIT_FRAME* parent );
     ~DIALOG_ERC();
 
-    // PROGRESS_REPORTER calls
+    // PROGRESS_REPORTER_BASE calls
     bool updateUI() override;
     void AdvancePhase( const wxString& aMessage ) override;
     void Report( const wxString& aMessage ) override;

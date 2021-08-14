@@ -25,7 +25,7 @@
 #include <board_commit.h>
 #include <tools/pcb_actions.h>
 #include <widgets/infobar.h>
-#include <widgets/progress_reporter.h>
+#include <widgets/wx_progress_reporters.h>
 
 #include "ar_autoplacer.h"
 #include "autoplace_tool.h"
