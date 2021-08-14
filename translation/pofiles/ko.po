@@ -16,7 +16,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
 "PO-Revision-Date: 2021-08-14 12:16+0000\n"
-"Last-Translator: 서범기 <joonhoflow@naver.com>\n"
+"Last-Translator: Ji Yoon Choi <chichoon.choi@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
 "Language: ko\n"
@@ -30998,7 +30998,7 @@ msgstr "단위 값을 찾을 수 없습니다. 기본값인 mils로 대체됩니
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:319
 #, c-format
 msgid "Could not find column label %s."
-msgstr "열 라밸 %s을 찾을 수 없습니다."
+msgstr "열 라벨 %s을(를) 찾을 수 없습니다."
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:363
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:446
