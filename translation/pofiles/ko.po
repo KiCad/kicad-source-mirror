@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
-"PO-Revision-Date: 2021-08-14 12:16+0000\n"
+"PO-Revision-Date: 2021-08-14 12:21+0000\n"
 "Last-Translator: Ji Yoon Choi <chichoon.choi@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
@@ -33502,7 +33502,7 @@ msgstr "보드 추가…"
 
 #: pcbnew/tools/pcb_actions.cpp:708
 msgid "Open another board and append its contents to this board"
-msgstr "다른 기판를 열고 해당 내용을 이 기판에 추가"
+msgstr "다른 기판를 열어 해당 기판의 내용을 이 기판에 추가"
 
 #: pcbnew/tools/pcb_actions.cpp:712
 #, fuzzy
@@ -33588,9 +33588,8 @@ msgid "Show Appearance Manager"
 msgstr "드로우 레이어 미러"
 
 #: pcbnew/tools/pcb_actions.cpp:778
-#, fuzzy
 msgid "Show/hide the appearance manager"
-msgstr "드로우 레이어 미러"
+msgstr "외관 매니저를 표시/숨기기"
 
 #: pcbnew/tools/pcb_actions.cpp:783
 msgid "Flip Board View"
@@ -33649,18 +33648,16 @@ msgid "Sketch Text Items"
 msgstr "텍스트 개체 스케치"
 
 #: pcbnew/tools/pcb_actions.cpp:820
-#, fuzzy
 msgid "Show footprint texts in line mode"
-msgstr "플로트 모드 선 두께 설정"
+msgstr "선 모드에서 풋프린트 텍스트 표시"
 
 #: pcbnew/tools/pcb_actions.cpp:830
 msgid "Automatically zoom to fit"
 msgstr "화면에 맞게 자동으로 확대/축소"
 
 #: pcbnew/tools/pcb_actions.cpp:830
-#, fuzzy
 msgid "Zoom to fit when changing footprint"
-msgstr "풋프린트 이동"
+msgstr "풋프린트 수정 중에 화면에 맞게 채우기"
 
 #: pcbnew/tools/pcb_actions.cpp:835
 #, fuzzy
@@ -33672,9 +33669,8 @@ msgid "Show filled areas of zones"
 msgstr "영역의 채워진 구역 표시"
 
 #: pcbnew/tools/pcb_actions.cpp:840
-#, fuzzy
 msgid "Wireframe Zones"
-msgstr "영역 삭제"
+msgstr "영역을 와이어프레임으로 표시"
 
 #: pcbnew/tools/pcb_actions.cpp:840
 msgid "Show only zone boundaries"
@@ -33689,9 +33685,8 @@ msgid "Show solid areas of zones in outline mode"
 msgstr "외곽선 모드에서 영역 내의 솔리드 구역 표시"
 
 #: pcbnew/tools/pcb_actions.cpp:851
-#, fuzzy
 msgid "Toggle Zone Display"
-msgstr "표시하지 않기"
+msgstr "영역 표시 전환"
 
 #: pcbnew/tools/pcb_actions.cpp:852
 msgid "Cycle between showing filled zones, wireframed zones and sketched zones"
@@ -33834,34 +33829,28 @@ msgid "Switch to Previous Layer"
 msgstr "이전 레이어로 스위치"
 
 #: pcbnew/tools/pcb_actions.cpp:1040
-#, fuzzy
 msgid "Toggle Layer"
-msgstr "Top Layer"
+msgstr "레이어 전환"
 
 #: pcbnew/tools/pcb_actions.cpp:1040
-#, fuzzy
 msgid "Switch between layers in active layer pair"
-msgstr "레이어쌍 선택"
+msgstr "활성화된 레이어 쌍 간 레이어 전환"
 
 #: pcbnew/tools/pcb_actions.cpp:1047
-#, fuzzy
 msgid "Increase Layer Opacity"
-msgstr "레이어 삭제"
+msgstr "레이어 투명도 증가"
 
 #: pcbnew/tools/pcb_actions.cpp:1047
-#, fuzzy
 msgid "Make the current layer less transparent"
-msgstr "현재 레이어를 덜 투명하게 만들기"
+msgstr "현재 레이어를 덜 투명하게 하기"
 
 #: pcbnew/tools/pcb_actions.cpp:1054
-#, fuzzy
 msgid "Decrease Layer Opacity"
-msgstr "레이어 삭제"
+msgstr "레이어 투명도 감소"
 
 #: pcbnew/tools/pcb_actions.cpp:1054
-#, fuzzy
 msgid "Make the current layer more transparent"
-msgstr "현재 레이어를 더 투명하게 만들기"
+msgstr "현재 레이어를 더 투명하게 하기"
 
 #: pcbnew/tools/pcb_actions.cpp:1065
 msgid "Show Board Statistics"
@@ -33881,9 +33870,8 @@ msgid ""
 msgstr "선택한 두 객체에 대하여 활성화된 레이어의 클리어런스 해상도를 표시"
 
 #: pcbnew/tools/pcb_actions.cpp:1075
-#, fuzzy
 msgid "Constraints Resolution..."
-msgstr "제약 조건 해결..."
+msgstr "제약 해결..."
 
 #: pcbnew/tools/pcb_actions.cpp:1076
 msgid "Show constraints resolution for the selected object"
@@ -33898,18 +33886,16 @@ msgid "Reannotate PCB in geographical order"
 msgstr "PCB를 위치 순으로 다시 주석 처리합니다"
 
 #: pcbnew/tools/pcb_actions.cpp:1087
-#, fuzzy
 msgid "Repair Board"
-msgstr "보드 비우기"
+msgstr "기판 복구"
 
 #: pcbnew/tools/pcb_actions.cpp:1088
 msgid "Run various diagnostics and attempt to repair board"
 msgstr "다양한 진단을 실행하여 기판 수리를 시도합니다"
 
 #: pcbnew/tools/pcb_actions.cpp:1093
-#, fuzzy
 msgid "Repair Footprint"
-msgstr "풋프린트"
+msgstr "풋프린트 복구"
 
 #: pcbnew/tools/pcb_actions.cpp:1094
 msgid "Run various diagnostics and attempt to repair footprint"
@@ -33988,9 +33974,8 @@ msgid "Positions the selected item(s) by an exact amount relative to another"
 msgstr "선택한 항목을 다른 항목의 위치에 정확한 양만큼 상대적으로 배치"
 
 #: pcbnew/tools/pcb_actions.cpp:1212
-#, fuzzy
 msgid "Select/Expand Connection"
-msgstr "연결 삭제"
+msgstr "연결 선택/확장"
 
 #: pcbnew/tools/pcb_actions.cpp:1213
 msgid ""
@@ -33999,27 +33984,24 @@ msgid ""
 msgstr "접합, 패드 또는 전체 연결에 대한 연결 선택 또는 기존 선택 확장"
 
 #: pcbnew/tools/pcb_actions.cpp:1218
-#, fuzzy
 msgid "Select All Tracks in Net"
-msgstr "트랙 크기 모두 편집"
+msgstr "네트의 모든 배선 선택"
 
 #: pcbnew/tools/pcb_actions.cpp:1219
 msgid "Selects all tracks & vias belonging to the same net."
 msgstr "같은 네트에 속한 모든 배선 & 비아를 선택합니다."
 
 #: pcbnew/tools/pcb_actions.cpp:1223
-#, fuzzy
 msgid "Deselect All Tracks in Net"
-msgstr "트랙 크기 모두 편집"
+msgstr "네트의 모든 배선 선택 해제"
 
 #: pcbnew/tools/pcb_actions.cpp:1224
 msgid "Deselects all tracks & vias belonging to the same net."
 msgstr "같은 네트에 속한 모든 배선 & 비아를 선택 해제합니다."
 
 #: pcbnew/tools/pcb_actions.cpp:1229
-#, fuzzy
 msgid "Selects all footprints and tracks in the schematic sheet"
-msgstr "모든 연결 삭제"
+msgstr "회로도 시트의 모든 배선과 풋프린트 선택"
 
 #: pcbnew/tools/pcb_actions.cpp:1234
 msgid "Items in Same Hierarchical Sheet"
@@ -34030,14 +34012,12 @@ msgid "Selects all footprints and tracks in the same schematic sheet"
 msgstr "같은 회로도 시트에 속한 모든 풋프린트와 배선을 선택합니다"
 
 #: pcbnew/tools/pcb_actions.cpp:1240
-#, fuzzy
 msgid "Filter Selected Items..."
 msgstr "선택한 항목 필터링..."
 
 #: pcbnew/tools/pcb_actions.cpp:1240
-#, fuzzy
 msgid "Remove items from the selection by type"
-msgstr "확대 선택"
+msgstr "선택한 항목에서 특정 유형의 항목 제거"
 
 #: pcbnew/tools/pcb_actions.cpp:1248 pcbnew/tools/zone_filler_tool.cpp:198
 #, fuzzy
@@ -34045,27 +34025,22 @@ msgid "Fill Zone"
 msgstr "영역 채우기"
 
 #: pcbnew/tools/pcb_actions.cpp:1248
-#, fuzzy
 msgid "Update copper fill of selected zone(s)"
-msgstr "선택된 부품 보기"
+msgstr "선택한 영역의 구리 채우기 업데이트"
 
 #: pcbnew/tools/pcb_actions.cpp:1254 pcbnew/tools/zone_filler_tool.cpp:144
-#, fuzzy
 msgid "Fill All Zones"
-msgstr "영역 채우기"
+msgstr "모든 영역 채우기"
 
 #: pcbnew/tools/pcb_actions.cpp:1254
-#, fuzzy
 msgid "Update copper fill of all zones"
-msgstr "영역 채우기"
+msgstr "모든 영역의 구리 채우기를 업데이트"
 
 #: pcbnew/tools/pcb_actions.cpp:1259 pcbnew/tools/zone_filler_tool.cpp:235
-#, fuzzy
 msgid "Unfill Zone"
-msgstr "영역 채우기"
+msgstr "영역 채우기 제거"
 
 #: pcbnew/tools/pcb_actions.cpp:1259
-#, fuzzy
 msgid "Remove copper fill from selected zone(s)"
 msgstr "선택한 영역에서 구리 채우기 제거"
 
@@ -34078,32 +34053,28 @@ msgid "Remove copper fill from all zones"
 msgstr "모든 영역의 구리 채우기를 삭제"
 
 #: pcbnew/tools/pcb_actions.cpp:1273
-#, fuzzy
 msgid "Place Selected Footprints"
-msgstr "선택된 부품 보기"
+msgstr "선택한 풋프린트 배치"
 
 #: pcbnew/tools/pcb_actions.cpp:1274
 msgid "Performs automatic placement of selected components"
 msgstr "선택한 부품에 대해 자동 배치를 수행"
 
 #: pcbnew/tools/pcb_actions.cpp:1278
-#, fuzzy
 msgid "Place Off-Board Footprints"
-msgstr "풋프린트"
+msgstr "기판 밖의 풋프린트 배치"
 
 #: pcbnew/tools/pcb_actions.cpp:1279
 msgid "Performs automatic placement of components outside board area"
 msgstr "기판 영역 밖에 있는 부품에 대해 자동 배치를 수행"
 
 #: pcbnew/tools/pcb_actions.cpp:1287
-#, fuzzy
 msgid "Route Single Track"
-msgstr "단일 페이지"
+msgstr "단일 배선 라우트"
 
 #: pcbnew/tools/pcb_actions.cpp:1287
-#, fuzzy
 msgid "Route tracks"
-msgstr "트랙 이동"
+msgstr "배선 라우트"
 
 #: pcbnew/tools/pcb_actions.cpp:1294
 msgid "Route Differential Pair"
@@ -34130,9 +34101,8 @@ msgid "Open Differential Pair Dimension settings"
 msgstr "차동 쌍 치수 설정 열기"
 
 #: pcbnew/tools/pcb_actions.cpp:1310
-#, fuzzy
 msgid "Router Highlight Mode"
-msgstr "네트 높이"
+msgstr "라우터 강조 모드"
 
 #: pcbnew/tools/pcb_actions.cpp:1310
 msgid "Switch router to highlight mode"
@@ -34147,23 +34117,20 @@ msgid "Switch router to shove mode"
 msgstr "라우터를 밀어내기 모드로 전환"
 
 #: pcbnew/tools/pcb_actions.cpp:1320
-#, fuzzy
 msgid "Router Walkaround Mode"
-msgstr "검정색"
+msgstr "라우터 순회 모드"
 
 #: pcbnew/tools/pcb_actions.cpp:1320
 msgid "Switch router to walkaround mode"
 msgstr "라우터를 순회 모드로 전환"
 
 #: pcbnew/tools/pcb_actions.cpp:1325
-#, fuzzy
 msgid "Set Layer Pair..."
 msgstr "레이어 쌍 설정..."
 
 #: pcbnew/tools/pcb_actions.cpp:1325
-#, fuzzy
 msgid "Change active layer pair for routing"
-msgstr "레이어쌍 선택"
+msgstr "라우팅을 위한 활성화된 레이어 쌍 변경"
 
 #: pcbnew/tools/pcb_actions.cpp:1332
 msgid "Tune length of a single track"
@@ -34199,7 +34166,6 @@ msgid "Sets the length tuning parameters for currently routed item."
 msgstr "현재 라우팅된 항목의 길이 조율 매개변수를 설정합니다."
 
 #: pcbnew/tools/pcb_control.cpp:493
-#, fuzzy
 msgid "Item locked."
 msgstr "항목이 잠겨 있습니다."
 
@@ -34217,9 +34183,8 @@ msgstr ""
 "%s"
 
 #: pcbnew/tools/pcb_control.cpp:1106
-#, fuzzy
 msgid "Selected Items"
-msgstr "항목 선택"
+msgstr "선택한 항목"
 
 #: pcbnew/tools/pcb_control.cpp:1123
 msgid "Footprint Name"
@@ -34234,9 +34199,8 @@ msgid "Drag a corner"
 msgstr "모서리 드래그"
 
 #: pcbnew/tools/pcb_point_editor.cpp:2048
-#, fuzzy
 msgid "Add a zone corner"
-msgstr "영역 추가"
+msgstr "영역 모서리 추가"
 
 #: pcbnew/tools/pcb_point_editor.cpp:2086
 msgid "Split segment"
@@ -34287,9 +34251,8 @@ msgid "Distribute vertically"
 msgstr "수직 배치"
 
 #: pcbnew/tools/position_relative_tool.cpp:150
-#, fuzzy
 msgid "Position Relative"
-msgstr "음영 플로트"
+msgstr "상대 위치"
 
 #: pcbnew/tools/position_relative_tool.cpp:171
 #, fuzzy
