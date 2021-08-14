@@ -28,6 +28,7 @@
 #include <board.h>
 #include <i18n_utility.h>       // For _HKI definition
 #include "stackup_predefined_prms.h"
+#include <string_utils.h>               // for Double2Str()
 
 
 BOARD_STACKUP_ITEM::BOARD_STACKUP_ITEM( BOARD_STACKUP_ITEM_TYPE aType )
@@ -284,8 +285,8 @@ bool BOARD_STACKUP_ITEM::IsThicknessEditable() const
 wxString BOARD_STACKUP_ITEM::FormatEpsilonR( int aDielectricSubLayer ) const
 {
     // return a wxString to print/display Epsilon R
-    wxString txt;
-    txt.Printf( "%.2f", GetEpsilonR( aDielectricSubLayer ) );
+    // note: we do not want scientific notation
+    wxString txt = Double2Str( GetEpsilonR( aDielectricSubLayer ) );
     return txt;
 }
 
@@ -293,8 +294,8 @@ wxString BOARD_STACKUP_ITEM::FormatEpsilonR( int aDielectricSubLayer ) const
 wxString BOARD_STACKUP_ITEM::FormatLossTangent( int aDielectricSubLayer ) const
 {
     // return a wxString to print/display Loss Tangent
-    wxString txt;
-    txt.Printf( "%g", GetLossTangent( aDielectricSubLayer ) );
+    // note: we do not want scientific notation
+    wxString txt = Double2Str( GetLossTangent( aDielectricSubLayer ) );
     return txt;
 }
 

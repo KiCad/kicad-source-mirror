@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2009-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2009-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -30,6 +30,7 @@
 #include "stackup_predefined_prms.h"
 #include "dielectric_material.h"
 #include <core/arraydim.h>
+#include <string_utils.h>               // for Double2Str()
 
 
 // A list of available substrate material
@@ -71,8 +72,8 @@ static DIELECTRIC_SUBSTRATE silkscreenMaterial[]  =
 wxString DIELECTRIC_SUBSTRATE::FormatEpsilonR()
 {
     // return a wxString to print/display Epsilon R
-    wxString txt;
-    txt.Printf( "%.1f", m_EpsilonR );
+    // note: we do not want scientific notation
+    wxString txt = Double2Str( m_EpsilonR );
     return txt;
 }
 
@@ -80,8 +81,8 @@ wxString DIELECTRIC_SUBSTRATE::FormatEpsilonR()
 wxString DIELECTRIC_SUBSTRATE::FormatLossTangent()
 {
     // return a wxString to print/display Loss Tangent
-    wxString txt;
-    txt.Printf( "%g", m_LossTangent );
+    // note: we do not want scientific notation
+    wxString txt = Double2Str( m_LossTangent );
     return txt;
 }
 

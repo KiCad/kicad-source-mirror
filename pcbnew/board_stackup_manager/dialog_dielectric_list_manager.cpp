@@ -27,6 +27,7 @@ DIALOG_DIELECTRIC_MATERIAL::DIALOG_DIELECTRIC_MATERIAL( wxWindow* aParent,
         m_materialList( aMaterialList )
 {
     initMaterialList();
+    m_sdbSizerOK->SetDefault();
 }
 
 DIALOG_DIELECTRIC_MATERIAL::~DIALOG_DIELECTRIC_MATERIAL()
