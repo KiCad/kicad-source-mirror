@@ -16,7 +16,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
 "PO-Revision-Date: 2021-08-14 03:57+0000\n"
-"Last-Translator: Ji Yoon Choi <chichoon.choi@gmail.com>\n"
+"Last-Translator: 서범기 <joonhoflow@naver.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
 "Language: ko\n"
@@ -14397,9 +14397,8 @@ msgid "Add Signals..."
 msgstr "신호 추가..."
 
 #: eeschema/sim/sim_plot_frame_base.cpp:65
-#, fuzzy
 msgid "Probe from schematics"
-msgstr "회로도 인쇄"
+msgstr "회로도에서 검사"
 
 #: eeschema/sim/sim_plot_frame_base.cpp:69
 msgid "Tune Component Value"
@@ -14426,9 +14425,8 @@ msgid "Show &Grid"
 msgstr "격자 보이기(&G)"
 
 #: eeschema/sim/sim_plot_frame_base.cpp:105
-#, fuzzy
 msgid "Show &Legend"
-msgstr "그리드 보이기"
+msgstr "&범례 표시"
 
 #: eeschema/sim/sim_plot_frame_base.cpp:111
 #, fuzzy
@@ -14503,9 +14501,8 @@ msgid "Pole-zero"
 msgstr "극점-영점"
 
 #: eeschema/sim/spice_simulator.cpp:79
-#, fuzzy
 msgid "Transfer function"
-msgstr "교차점"
+msgstr "전달 함수"
 
 #: eeschema/sim/spice_simulator.cpp:83
 msgid "UNKNOWN!"
@@ -14520,18 +14517,17 @@ msgid "Invalid Spice value string"
 msgstr "유효하지 않은 Spice 값 문자열"
 
 #: eeschema/sim/spice_value.cpp:80
-#, fuzzy
 msgid "Invalid unit prefix"
-msgstr "패드 모양"
+msgstr "잘못된 단위 접두사"
 
 #: eeschema/sim/spice_value.cpp:259
 msgid "Please, fill required fields"
 msgstr "필요한 필드를 채워주세요"
 
 #: eeschema/sim/spice_value.cpp:277
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' is not a valid Spice value."
-msgstr "%s 파일은 EESchema 라이브러리가 아닙니다."
+msgstr "'%s'은(는) 유효한 Spice 값이 아닙니다."
 
 #: eeschema/symbol_async_loader.cpp:126
 #, c-format
@@ -14575,9 +14571,8 @@ msgid "Library Editor"
 msgstr "라이브러리 편집기"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:112
-#, fuzzy
 msgid "KiCad Symbol Editor"
-msgstr "라이브러리 에디터 실행"
+msgstr "KiCad 심볼 편집기"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:148
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:908
@@ -14661,9 +14656,8 @@ msgstr "글로벌 라이브러리 표에 라이브러리를 추가 하겠습니�
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:989
 #: pcbnew/footprint_libraries_utils.cpp:505
-#, fuzzy
 msgid "Add To Global Library Table"
-msgstr "탐색할 라이브러리 선택"
+msgstr "전역 라이브러리 테이블에 추가"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:999
 #: pcbnew/footprint_libraries_utils.cpp:515
@@ -14722,9 +14716,8 @@ msgstr "전역 라이브러리 테이블 저장 오류."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1384
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1439
-#, fuzzy
 msgid "Error saving project library table."
-msgstr "%s 파일은 EESchema 라이브러리가 아닙니다."
+msgstr "프로젝트 라이브러리 테이블을 저장하는 동안 오류가 발생했습니다."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:58
 msgid "Normal save as operation"
@@ -14735,9 +14728,8 @@ msgid "Do not perform any additional operations after saving library."
 msgstr "라이브러리를 저장한 후 추가적인 작업을 수행하지 않습니다."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:63
-#, fuzzy
 msgid "Replace library table entry"
-msgstr "새 라이브러리"
+msgstr "라이브러리 테이블 항목 대체"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:64
 msgid ""
@@ -14750,9 +14742,8 @@ msgstr ""
 "기존 라이브러리는 더이상 쓸 수 없게 됩니다."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:68
-#, fuzzy
 msgid "Add new global library table entry"
-msgstr "탐색할 라이브러리 선택"
+msgstr "새로운 전역 라이브러리 테이블 항목 추가"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:69
 msgid ""
@@ -14783,28 +14774,24 @@ msgstr ""
 "이는 테이블 항목이 겹치지 않도록 합니다."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:146
-#, fuzzy
 msgid "[from schematic]"
-msgstr "회로도 인쇄"
+msgstr "[회로도에서]"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:156
-#, fuzzy
 msgid "[Read Only Library]"
-msgstr "라이브러리 선택"
+msgstr "[읽기 전용 라이브러리]"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:160
 msgid "[no symbol loaded]"
 msgstr "[불러온 심볼 없음]"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:188
-#, fuzzy
 msgid "No symbol libraries are loaded."
-msgstr "라이브러리가 로드되지 않았습니다."
+msgstr "심볼 라이브러리가 로드되지 않습니다."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:214
-#, fuzzy
 msgid "Select Symbol Library"
-msgstr "작업 라이브러리 선택"
+msgstr "심볼 라이브러리 선택"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:262
 msgid "The current symbol has been modified.  Save changes?"
@@ -14845,9 +14832,8 @@ msgid "Nickname"
 msgstr "별칭"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:612
-#, fuzzy
 msgid "Save Symbol As"
-msgstr "전원 심볼"
+msgstr "다른 이름으로 심볼 저장"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:613
 #: pcbnew/footprint_libraries_utils.cpp:963
@@ -14869,9 +14855,9 @@ msgid "Symbol '%s' already exists in library '%s'"
 msgstr "심볼 '%s'는 이미 라이브러리 '%s'에 존재합니다"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:702
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol name '%s' already in use."
-msgstr "'%s' 이름은 이미 사용 중입니다."
+msgstr "심볼 이름 '%s'이(가) 이미 사용 중입니다."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:732
 #, c-format
@@ -14897,14 +14883,12 @@ msgstr ""
 
 #: eeschema/symbol_editor/symbol_editor.cpp:748
 #: eeschema/tools/ee_actions.cpp:143
-#, fuzzy
 msgid "Delete Symbol"
-msgstr "라이브러리 선택"
+msgstr "심볼 삭제"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:749
-#, fuzzy
 msgid "Keep Symbol"
-msgstr "전원 심볼"
+msgstr "심볼 유지"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:892
 #: pcbnew/footprint_libraries_utils.cpp:1065
@@ -14913,9 +14897,9 @@ msgid "Revert '%s' to last version saved?"
 msgstr "마지막으로 저장된 버전으로 '%s'를 되돌리시겠습니까?"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:960
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol %s not found in library '%s'."
-msgstr "%s 라이브러리의 %s 컴포넌트가 삭제되었습니다."
+msgstr "심볼 %s이(가) 라이브러리 '%s'에서 찾을 수 없습니다."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:989
 msgid "No library specified."
@@ -14947,9 +14931,8 @@ msgstr "정의 않됨!"
 #: eeschema/symbol_editor/symbol_editor.cpp:1193
 #: eeschema/symbol_viewer_frame.cpp:368 pcbnew/fp_shape.cpp:343
 #: pcbnew/fp_text.cpp:466 pcbnew/pad.cpp:1532
-#, fuzzy
 msgid "Parent"
-msgstr "부모"
+msgstr "상위"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1202
 #: pcbnew/tools/convert_tool.cpp:75
@@ -15017,9 +15000,9 @@ msgid "Error creating symbol library '%s'."
 msgstr "심볼 라이브러리 '%s'를 만드는 동안 오류가 발생했습니다."
 
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:194
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol %s saved to library '%s'."
-msgstr "%s 라이브러리의 %s 컴포넌트가 삭제되었습니다."
+msgstr "심볼 %s이(가) 라이브러리 '%s'에 저장되었습니다."
 
 #: eeschema/symbol_editor/symbol_library_manager.cpp:106
 #: eeschema/symbol_tree_model_adapter.cpp:105
@@ -15027,9 +15010,9 @@ msgid "Errors loading symbols:"
 msgstr "심볼 로드 중 오류 발생:"
 
 #: eeschema/symbol_editor/symbol_library_manager.cpp:176
-#, fuzzy, c-format
+#, c-format
 msgid "Library '%s' not found in the Symbol Library Table."
-msgstr "%s 파일은 EESchema 라이브러리가 아닙니다."
+msgstr "라이브러리 '%s'이(가) 심볼 라이브러리 테이블에서 찾을 수 없습니다."
 
 #: eeschema/symbol_editor/symbol_library_manager.cpp:402
 msgid "Symbol not found."
@@ -15067,14 +15050,12 @@ msgid "Error loading symbol library '%s'."
 msgstr "심볼 라이브러리 '%s'를 로드하는 동안 오류가 발생했습니다."
 
 #: eeschema/symbol_tree_synchronizing_adapter.cpp:259
-#, fuzzy
 msgid "(failed to load)"
-msgstr "열기 실패"
+msgstr "(로드 실패)"
 
 #: eeschema/symbol_viewer_frame.cpp:116
-#, fuzzy
 msgid "KiCad Symbol Library Viewer"
-msgstr "문서 라이브러리 파일 만들기 실패"
+msgstr "KiCad 심볼 라이브러리 뷰어"
 
 #: eeschema/symbol_viewer_frame.cpp:463
 #, c-format
@@ -15086,19 +15067,16 @@ msgid "[no library selected]"
 msgstr "[선택된 라이브러리 없음]"
 
 #: eeschema/toolbars_symbol_viewer.cpp:51
-#, fuzzy
 msgid "Choose symbol"
-msgstr "전원 심볼"
+msgstr "심볼 선택"
 
 #: eeschema/toolbars_symbol_viewer.cpp:55
-#, fuzzy
 msgid "Display previous symbol"
-msgstr "이전 부품 표시"
+msgstr "이전 심볼 표시"
 
 #: eeschema/toolbars_symbol_viewer.cpp:59
-#, fuzzy
 msgid "Display next symbol"
-msgstr "다음 부품 표시"
+msgstr "다음 심볼 표시"
 
 #: eeschema/toolbars_symbol_viewer.cpp:108
 msgid "Symbol Viewer"
@@ -15113,14 +15091,12 @@ msgid "Keep existing footprint field visibility"
 msgstr "이미 존재하는 풋프린트 필드 가시성 유지"
 
 #: eeschema/tools/assign_footprints.cpp:219
-#, fuzzy
 msgid "Show all footprint fields"
-msgstr "풋프린트 이동"
+msgstr "모든 풋프린트 필드 표시"
 
 #: eeschema/tools/assign_footprints.cpp:220
-#, fuzzy
 msgid "Hide all footprint fields"
-msgstr "풋프린트 압축 만들기"
+msgstr "모든 풋프린트 필드 숨기기"
 
 #: eeschema/tools/assign_footprints.cpp:222
 msgid "Select the footprint field visibility setting."
@@ -15153,9 +15129,9 @@ msgid "Footprint '%s' has no assigned symbol."
 msgstr "풋프린트 '%s' 에는 할당된 심볼이 없습니다."
 
 #: eeschema/tools/backannotate.cpp:196
-#, fuzzy, c-format
+#, c-format
 msgid "Footprints '%s' and '%s' linked to same symbol."
-msgstr "컴포넌트 %s: 라이브러리에서 %s 풋프린트를 찾을 수 없습니다."
+msgstr "풋프린트 '%s'와 '%s'가 같은 심볼에 링크되어 있습니다."
 
 #: eeschema/tools/backannotate.cpp:261
 #, c-format
@@ -15213,9 +15189,8 @@ msgid "Add label '%s' to %s pin %s net."
 msgstr "'%s' 라벨을 %s 핀 %s 네트에 추가합니다."
 
 #: eeschema/tools/ee_actions.cpp:45
-#, fuzzy
 msgid "Perform electrical rules check"
-msgstr "회로도 ERC"
+msgstr "전기적 규칙 검사 수행"
 
 #: eeschema/tools/ee_actions.cpp:50
 msgid "Symbol Checker"
@@ -15234,9 +15209,8 @@ msgid "Simulate circuit in SPICE"
 msgstr "Spice에서 회로 시뮬레이션"
 
 #: eeschema/tools/ee_actions.cpp:61
-#, fuzzy
 msgid "Opens the datasheet in a browser"
-msgstr "라이브러리 브라우저"
+msgstr "브라우저에서 데이터시트를 엽니다"
 
 #: eeschema/tools/ee_actions.cpp:69 pcbnew/tools/pcb_actions.cpp:1150
 msgid "Create Corner"
@@ -15507,14 +15481,12 @@ msgid "Add a junction"
 msgstr "접합 추가"
 
 #: eeschema/tools/ee_actions.cpp:305
-#, fuzzy
 msgid "Add Wire to Bus Entry"
-msgstr "버스에 와이어 추가"
+msgstr "버스 항목에 배선 추가"
 
 #: eeschema/tools/ee_actions.cpp:305
-#, fuzzy
 msgid "Add a wire entry to a bus"
-msgstr "버스에 와이어 추가"
+msgstr "버스에 배선 항목 추가"
 
 #: eeschema/tools/ee_actions.cpp:311
 msgid "Add Label"
@@ -15541,22 +15513,18 @@ msgid "Add a hierarchical sheet"
 msgstr "계층 시트 추가"
 
 #: eeschema/tools/ee_actions.cpp:328 eeschema/tools/ee_actions.cpp:333
-#, fuzzy
 msgid "Import Sheet Pin"
-msgstr "핀 시트 가져오기"
+msgstr "시트 핀 가져오기"
 
 #: eeschema/tools/ee_actions.cpp:328 eeschema/tools/ee_actions.cpp:333
-#, fuzzy
 msgid "Import a hierarchical sheet pin"
-msgstr "시트에 계층구조 핀 추가"
+msgstr "계층 시트 핀 가져오기"
 
 #: eeschema/tools/ee_actions.cpp:339
-#, fuzzy
 msgid "Add Global Label"
 msgstr "전역 라벨 추가"
 
 #: eeschema/tools/ee_actions.cpp:339
-#, fuzzy
 msgid "Add a global label"
 msgstr "전역 라벨 추가"
 
@@ -15585,9 +15553,8 @@ msgid "Repeat Last Item"
 msgstr "마지막 개체를 반복하기"
 
 #: eeschema/tools/ee_actions.cpp:368
-#, fuzzy
 msgid "Duplicates the last drawn item"
-msgstr "선택된 항목 잘라내기"
+msgstr "마지막으로 그린 항목 복제"
 
 #: eeschema/tools/ee_actions.cpp:372 pcbnew/tools/pcb_actions.cpp:290
 msgid "Rotate Clockwise"
@@ -15610,18 +15577,16 @@ msgid "Mirror Vertically"
 msgstr "수직 방향 반전"
 
 #: eeschema/tools/ee_actions.cpp:384
-#, fuzzy
 msgid "Flips selected item(s) from top to bottom"
-msgstr "선택된 항목 복사"
+msgstr "선택된 아이템의 상하 반전"
 
 #: eeschema/tools/ee_actions.cpp:390
 msgid "Mirror Horizontally"
 msgstr "수평 방향 반전"
 
 #: eeschema/tools/ee_actions.cpp:390
-#, fuzzy
 msgid "Flips selected item(s) from left to right"
-msgstr "선택된 항목 복사"
+msgstr "선택된 아이템의 좌우 반전"
 
 #: eeschema/tools/ee_actions.cpp:396 pcbnew/tools/pcb_actions.cpp:327
 msgid "Properties..."
@@ -15653,9 +15618,8 @@ msgid "Edit Footprint..."
 msgstr "풋프린트 편집..."
 
 #: eeschema/tools/ee_actions.cpp:414
-#, fuzzy
 msgid "Displays footprint field dialog"
-msgstr "풋프린트 필터"
+msgstr "풋프린트 필드 대화 표시"
 
 #: eeschema/tools/ee_actions.cpp:420
 msgid "Autoplace Fields"
@@ -15674,18 +15638,16 @@ msgid "Assign different symbols from the library"
 msgstr "라이브러리로부터 다른 심볼을 할당"
 
 #: eeschema/tools/ee_actions.cpp:431
-#, fuzzy
 msgid "Update Symbols from Library..."
-msgstr "활성 라이브러리가 없습니다."
+msgstr "라리브러리에서 심볼 업데이트..."
 
 #: eeschema/tools/ee_actions.cpp:432
 msgid "Update symbols to include any changes from the library"
 msgstr "라이브러리의 변경점을 포함시키기 위해 심볼 업데이트"
 
 #: eeschema/tools/ee_actions.cpp:438
-#, fuzzy
 msgid "Assign a different symbol from the library"
-msgstr "하나의 라이브러리 파일에 풋프린트 압축 또는 추가"
+msgstr "라이브러리에서 다른 심볼 할당"
 
 #: eeschema/tools/ee_actions.cpp:443
 msgid "Update Symbol..."
@@ -15732,29 +15694,24 @@ msgid "Change to Label"
 msgstr "라벨로 바꾸기"
 
 #: eeschema/tools/ee_actions.cpp:468
-#, fuzzy
 msgid "Change existing item to a label"
-msgstr "라벨로 바꾸기"
+msgstr "기존 항목을 라벨로 변경"
 
 #: eeschema/tools/ee_actions.cpp:473
-#, fuzzy
 msgid "Change to Hierarchical Label"
-msgstr "라벨로 바꾸기"
+msgstr "계층 라벨로 변경"
 
 #: eeschema/tools/ee_actions.cpp:473
-#, fuzzy
 msgid "Change existing item to a hierarchical label"
-msgstr "라벨로 바꾸기"
+msgstr "기존 항목을 계층 라벨로 변경"
 
 #: eeschema/tools/ee_actions.cpp:478
-#, fuzzy
 msgid "Change to Global Label"
 msgstr "전역 라벨로 바꾸기"
 
 #: eeschema/tools/ee_actions.cpp:478
-#, fuzzy
 msgid "Change existing item to a global label"
-msgstr "전역 라벨로 바꾸기"
+msgstr "기존 항목을 전역 라벨로 변경"
 
 #: eeschema/tools/ee_actions.cpp:483
 msgid "Change to Text"
@@ -15765,9 +15722,8 @@ msgid "Change existing item to a text comment"
 msgstr "존재하는 개체를 텍스트 주석으로 변환"
 
 #: eeschema/tools/ee_actions.cpp:488
-#, fuzzy
 msgid "Cleanup Sheet Pins"
-msgstr "핀 시트 비우기"
+msgstr "시트 핀 비우기"
 
 #: eeschema/tools/ee_actions.cpp:488
 msgid "Delete unreferenced sheet pins"
@@ -15778,18 +15734,16 @@ msgid "Edit Text & Graphics Properties..."
 msgstr "텍스트 및 그래픽 속성 편집..."
 
 #: eeschema/tools/ee_actions.cpp:493
-#, fuzzy
 msgid "Edit text and graphics properties globally across schematic"
-msgstr "부품 속성 편집"
+msgstr "회로도 전체에서 전역적으로 텍스트 및 그래픽 속성 편집"
 
 #: eeschema/tools/ee_actions.cpp:498
 msgid "Symbol Properties..."
 msgstr "심볼 속성..."
 
 #: eeschema/tools/ee_actions.cpp:498
-#, fuzzy
 msgid "Displays symbol properties dialog"
-msgstr "부품 속성 편집"
+msgstr "심볼 속성 대화 상자 표시"
 
 #: eeschema/tools/ee_actions.cpp:503
 msgid "Pin Table..."
@@ -15829,14 +15783,12 @@ msgid "Highlight Net"
 msgstr "네트 강조"
 
 #: eeschema/tools/ee_actions.cpp:533
-#, fuzzy
 msgid "Highlight net under cursor"
-msgstr "네트 높이"
+msgstr "커서 아래 네트 강조"
 
 #: eeschema/tools/ee_actions.cpp:544
-#, fuzzy
 msgid "Highlight Nets"
-msgstr "네트 높이"
+msgstr "네트 강조"
 
 #: eeschema/tools/ee_actions.cpp:544
 msgid "Highlight wires and pins of a net"
@@ -15847,18 +15799,16 @@ msgid "Edit with Symbol Editor"
 msgstr "심볼 편집기로 편집"
 
 #: eeschema/tools/ee_actions.cpp:550
-#, fuzzy
 msgid "Open the symbol editor to edit the symbol"
-msgstr "라이브러리 브라우저"
+msgstr "심볼 편집을 위해 심볼 편집기를 엽니다"
 
 #: eeschema/tools/ee_actions.cpp:555
 msgid "Edit Symbol Fields..."
 msgstr "심볼 필드 편집..."
 
 #: eeschema/tools/ee_actions.cpp:555
-#, fuzzy
 msgid "Bulk-edit fields of all symbols in schematic"
-msgstr "회로도 인쇄"
+msgstr "회로도에 있는 모든 심볼의 필드 일괄 편집"
 
 #: eeschema/tools/ee_actions.cpp:560
 msgid "Edit Symbol Library Links..."
@@ -15873,9 +15823,8 @@ msgid "Assign Footprints..."
 msgstr "풋프린트 할당..."
 
 #: eeschema/tools/ee_actions.cpp:565
-#, fuzzy
 msgid "Run footprint assignment tool"
-msgstr "풋프린트 회전"
+msgstr "풋프린트 할당 도구 실행"
 
 #: eeschema/tools/ee_actions.cpp:570
 msgid "Import Footprint Assignments..."
@@ -15918,9 +15867,8 @@ msgid "Find old symbols in project and rename/rescue them"
 msgstr "프로젝트에서 오래된 심볼을 찾아, 이름을 바꾸거나 복구합니다"
 
 #: eeschema/tools/ee_actions.cpp:598
-#, fuzzy
 msgid "Remap Legacy Library Symbols..."
-msgstr "다른 이름으로 저장 (&S)..."
+msgstr "이전 형식의 라이브러리 심볼을 매핑 ..."
 
 #: eeschema/tools/ee_actions.cpp:599
 msgid ""
@@ -15937,24 +15885,20 @@ msgid "Manage bus definitions"
 msgstr "버스 정의 관리"
 
 #: eeschema/tools/ee_actions.cpp:609
-#, fuzzy
 msgid "Export Drawing to Clipboard"
-msgstr "클립보드로 드로잉 내보내기"
+msgstr "도면을 클립보드로내보내기"
 
 #: eeschema/tools/ee_actions.cpp:609
-#, fuzzy
 msgid "Export drawing of current sheet to clipboard"
-msgstr "클립보드로 드로잉 내보내기"
+msgstr "현재 시트의 도면을 클립보드로 내보내기"
 
 #: eeschema/tools/ee_actions.cpp:614
-#, fuzzy
 msgid "Switch to PCB Editor"
-msgstr "Module 에디터 열기"
+msgstr "PCB 편집기로 전환"
 
 #: eeschema/tools/ee_actions.cpp:614
-#, fuzzy
 msgid "Open PCB in board editor"
-msgstr "Module 에디터 열기"
+msgstr "보드 편집기에서 PCB 열기"
 
 #: eeschema/tools/ee_actions.cpp:619
 msgid "Export Netlist..."
@@ -15973,28 +15917,24 @@ msgid "Generate a bill of materials for the current schematic"
 msgstr "현재 회로도에 대한 BOM 생성"
 
 #: eeschema/tools/ee_actions.cpp:629
-#, fuzzy
 msgid "Highlight on PCB"
-msgstr "네트 높이"
+msgstr "PCB에 강조"
 
 #: eeschema/tools/ee_actions.cpp:629
 msgid "Highlight corresponding items in PCB editor"
 msgstr "PCB 편집기에서 대응하는 개체 강조"
 
 #: eeschema/tools/ee_actions.cpp:634
-#, fuzzy
 msgid "Show Hidden Pins"
 msgstr "숨은 핀 보이기"
 
 #: eeschema/tools/ee_actions.cpp:634
-#, fuzzy
 msgid "Toggle display of hidden pins"
-msgstr "숨은 핀 보이기"
+msgstr "숨겨진 핀 표시 전환"
 
 #: eeschema/tools/ee_actions.cpp:639
-#, fuzzy
 msgid "Show Hidden Fields"
-msgstr "숨은 핀 보이기"
+msgstr "숨겨진 필드 표시"
 
 #: eeschema/tools/ee_actions.cpp:639
 msgid "Toggle display of hidden text fields"
@@ -16005,9 +15945,8 @@ msgid "Force H/V Wires and Buses"
 msgstr "버스와 도선 수평/수직 배치 강제하기"
 
 #: eeschema/tools/ee_actions.cpp:643
-#, fuzzy
 msgid "Switch H & V only mode for new wires and buses"
-msgstr "와이어 및 버스 종횡 방향"
+msgstr "새 전선 및 버스에 대한 H & V 전용 모드 전환"
 
 #: eeschema/tools/ee_actions.cpp:649 pcbnew/tools/pcb_actions.cpp:773
 msgid "Scripting Console"
@@ -16022,33 +15961,28 @@ msgid "Enter Sheet"
 msgstr "시트로 들어가기"
 
 #: eeschema/tools/ee_actions.cpp:656
-#, fuzzy
 msgid "Display the selected sheet's contents in the schematic editor"
-msgstr "텍스트 에디터로 열기 (&O)"
+msgstr "회로도 편집기에서 선택한 시트의 내용을 표시합니다"
 
 #: eeschema/tools/ee_actions.cpp:662
 msgid "Leave Sheet"
 msgstr "시트 나가기"
 
 #: eeschema/tools/ee_actions.cpp:662
-#, fuzzy
 msgid "Display the parent sheet in the schematic editor"
-msgstr "회로도 인쇄"
+msgstr "회로도 편집기의 상위 시트를 표시합니다"
 
 #: eeschema/tools/ee_actions.cpp:667
-#, fuzzy
 msgid "Hierarchy Navigator"
-msgstr "회로도 계층구조 내비게이터"
+msgstr "계층 내비게이터"
 
 #: eeschema/tools/ee_actions.cpp:667
-#, fuzzy
 msgid "Show schematic sheet hierarchy"
-msgstr "회로도 저장"
+msgstr "회로도 시트 계층을 표시합니다"
 
 #: eeschema/tools/ee_actions.cpp:672
-#, fuzzy
 msgid "Navigate to page"
-msgstr "페이지에 맞추기"
+msgstr "페이지로 이동"
 
 #: eeschema/tools/ee_actions.cpp:679
 msgid "Add Junctions to Selection where needed"
@@ -16059,9 +15993,8 @@ msgid "Add Wire"
 msgstr "와이어 추가"
 
 #: eeschema/tools/ee_actions.cpp:687
-#, fuzzy
 msgid "Add a wire"
-msgstr "와이어 추가"
+msgstr "도선 추가"
 
 #: eeschema/tools/ee_actions.cpp:694
 msgid "Add Bus"
@@ -16082,37 +16015,32 @@ msgid "Break a wire out of a bus"
 msgstr "버스에서 도선 끊기"
 
 #: eeschema/tools/ee_actions.cpp:713
-#, fuzzy
 msgid "Finish Wire or Bus"
-msgstr "와이어 마침"
+msgstr "도선 또는 버스 종료"
 
 #: eeschema/tools/ee_actions.cpp:713
 msgid "Complete drawing at current segment"
 msgstr "현재 세그먼트 그리기 완료"
 
 #: eeschema/tools/ee_actions.cpp:718
-#, fuzzy
 msgid "Finish Wire"
-msgstr "와이어 끊기"
+msgstr "도선 종료"
 
 #: eeschema/tools/ee_actions.cpp:718
 msgid "Complete wire with current segment"
 msgstr "현재 세그먼트에서 도선 작성 완료"
 
 #: eeschema/tools/ee_actions.cpp:723
-#, fuzzy
 msgid "Finish Bus"
-msgstr "버스 끊기"
+msgstr "버스 종료"
 
 #: eeschema/tools/ee_actions.cpp:723
-#, fuzzy
 msgid "Complete bus with current segment"
-msgstr "현재 시트 다시 읽기(&R)"
+msgstr "현재 세그먼트에서 버스 종료"
 
 #: eeschema/tools/ee_actions.cpp:728
-#, fuzzy
 msgid "Finish Lines"
-msgstr "행"
+msgstr "라인 종료"
 
 #: eeschema/tools/ee_actions.cpp:728
 msgid "Complete connected lines with current segment"
@@ -16126,31 +16054,26 @@ msgstr "이동"
 
 #: eeschema/tools/ee_actions.cpp:737 pagelayout_editor/tools/pl_actions.cpp:68
 #: pcbnew/tools/pcb_actions.cpp:253
-#, fuzzy
 msgid "Moves the selected item(s)"
-msgstr "선택된 항목 잘라내기"
+msgstr "선택된 항목(들) 이동"
 
 #: eeschema/tools/ee_actions.cpp:742 pcbnew/tools/edit_tool.cpp:1085
 msgid "Drag"
 msgstr "드래그"
 
 #: eeschema/tools/ee_actions.cpp:742
-#, fuzzy
 msgid "Drags the selected item(s)"
-msgstr "선택된 항목 잘라내기"
+msgstr "선택된 항목(들) 드래그"
 
 #: eeschema/tools/ee_actions.cpp:746
-#, fuzzy
 msgid "Move Activate"
-msgstr "마이어 이동"
+msgstr "이동 활성화"
 
 #: eeschema/tools/ee_actions.cpp:750
-#, fuzzy
 msgid "Symbol Move Activate"
-msgstr "모듈 속성"
+msgstr "심볼 이동 활성화"
 
 #: eeschema/tools/ee_actions.cpp:754
-#, fuzzy
 msgid "Align Elements to Grid"
 msgstr "그리드에 요소 정렬"
 
@@ -16247,14 +16170,12 @@ msgid "<b>Off grid pin %s</b> %s at location <b>(%.3f, %.3f)</b> in unit %c."
 msgstr "<b>그리드에서 벗어난 핀 %s</b> %s가 위치 <b>(%.3f, %.3f)</b> 에서 발견되었습니다 (유닛 %c)."
 
 #: eeschema/tools/ee_inspection_tool.cpp:417
-#, fuzzy
 msgid "No symbol issues found."
-msgstr "파일을 찾을 수 없습니다."
+msgstr "심볼 문제가 발견되지 않았습니다."
 
 #: eeschema/tools/ee_inspection_tool.cpp:495
-#, fuzzy
 msgid "No datasheet defined."
-msgstr "라이브러리가 정의되지 않았습니다."
+msgstr "정의된 데이터시트가 없습니다."
 
 #: eeschema/tools/ee_selection_tool.cpp:1593
 #: pagelayout_editor/tools/pl_selection_tool.cpp:633
@@ -16286,9 +16207,8 @@ msgstr "'%s'에서 이미지를 로드할 수 없습니다."
 
 #: eeschema/tools/sch_drawing_tools.cpp:643
 #: eeschema/tools/sch_drawing_tools.cpp:1149
-#, fuzzy
 msgid "No new hierarchical labels found."
-msgstr "새 전역 라벨을 찾을 수 없습니다."
+msgstr "새 계층 라벨을 찾을 수 없습니다."
 
 #: eeschema/tools/sch_drawing_tools.cpp:728
 msgid "Junction location contains no joinable wires and/or pins."
@@ -16307,18 +16227,16 @@ msgid "Press <ESC> to cancel sheet creation."
 msgstr "<ESC>를 눌러 시트 생성을 취소하세요."
 
 #: eeschema/tools/sch_edit_tool.cpp:81
-#, fuzzy
 msgid "Symbol Unit"
-msgstr "라이브러리 에디터 실행"
+msgstr "심볼 단위"
 
 #: eeschema/tools/sch_edit_tool.cpp:101
 msgid "no symbol selected"
 msgstr "선택한 심볼이 없습니다"
 
 #: eeschema/tools/sch_edit_tool.cpp:110
-#, fuzzy
 msgid "symbol is not multi-unit"
-msgstr "치수 추가"
+msgstr "심볼은 다중 단위가 아닙니다"
 
 #: eeschema/tools/sch_edit_tool.cpp:853
 msgid "Label value cannot go below zero"
@@ -16332,7 +16250,7 @@ msgstr "편집 %s 필드"
 
 #: eeschema/tools/sch_edit_tool.cpp:1085
 #: eeschema/tools/symbol_editor_edit_tool.cpp:525
-#, fuzzy, c-format
+#, c-format
 msgid "Edit '%s' Field"
 msgstr "'%s' 필드 편집"
 
@@ -16350,9 +16268,8 @@ msgid "Enter page number for sheet path%s"
 msgstr "시트 경로 %s의 페이지 번호를 입력하세요"
 
 #: eeschema/tools/sch_edit_tool.cpp:1707
-#, fuzzy
 msgid "Edit Sheet Page Number"
-msgstr "패드 번호 보이기"
+msgstr "시트 페이지 번호 편집"
 
 #: eeschema/tools/sch_editor_control.cpp:445
 msgid "Reached end of schematic."
@@ -16417,9 +16334,8 @@ msgid "Press <ESC> to cancel move."
 msgstr "<ESC>를 눌러 이동을 취소하세요."
 
 #: eeschema/tools/symbol_editor_control.cpp:163
-#, fuzzy
 msgid "No symbol library selected."
-msgstr "레이어가 선택되지 않았습니다."
+msgstr "선택한 심볼 라이브러리가 없습니다."
 
 #: eeschema/tools/symbol_editor_control.cpp:386
 #: eeschema/tools/symbol_editor_control.cpp:426
@@ -16453,9 +16369,8 @@ msgid "This position is already occupied by another pin, in unit %d."
 msgstr "유닛 %d 안의 해당 위치에 이미 다른 핀이 존재합니다."
 
 #: eeschema/tools/symbol_editor_pin_tool.cpp:236
-#, fuzzy
 msgid "Place Pin Anyway"
-msgstr "라이브러리 만들기"
+msgstr "핀을 배치하십시오"
 
 #: eeschema/widgets/tuner_slider_base.cpp:24
 msgid " X "
