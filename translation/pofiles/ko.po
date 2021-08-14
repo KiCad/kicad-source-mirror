@@ -16,7 +16,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
 "PO-Revision-Date: 2021-08-14 04:30+0000\n"
-"Last-Translator: Ji Yoon Choi <chichoon.choi@gmail.com>\n"
+"Last-Translator: 서범기 <joonhoflow@naver.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
 "Language: ko\n"
@@ -16400,9 +16400,8 @@ msgstr "자동 레이어 할당"
 #: gerbview/dialogs/dialog_layers_select_to_pcb.cpp:339
 #: gerbview/dialogs/dialog_layers_select_to_pcb.cpp:393
 #: gerbview/dialogs/dialog_select_one_pcb_layer.cpp:155
-#, fuzzy
 msgid "Hole data"
-msgstr "홀"
+msgstr "홀 데이터"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb.cpp:434
 msgid ""
@@ -16495,7 +16494,7 @@ msgid "Deselect all"
 msgstr "전체 선택 해제"
 
 #: gerbview/dialogs/dialog_select_one_pcb_layer.cpp:112
-#, fuzzy, c-format
+#, c-format
 msgid "Select Layer: %s"
 msgstr "레이어 선택: %s"
 
@@ -16610,7 +16609,7 @@ msgid "Tool definition '%c' not supported"
 msgstr "도구 정의 '%c'는 지원되지 않습니다"
 
 #: gerbview/excellon_read_drill_file.cpp:664
-#, fuzzy, c-format
+#, c-format
 msgid "Tool %d not defined"
 msgstr "도구 %d 정의되지 않음"
 
@@ -16855,9 +16854,8 @@ msgid "Clear Recent Drill Files"
 msgstr "최근에 불러온 드릴 파일 목록 삭제"
 
 #: gerbview/gerbview_frame.cpp:77 gerbview/menubar.cpp:107
-#, fuzzy
 msgid "Clear Recent Job Files"
-msgstr "새 거버 파일 (&G)"
+msgstr "최근 작업 파일 지우기"
 
 #: gerbview/gerbview_frame.cpp:94
 #: resources/linux/launchers/org.kicad.gerbview.desktop.in:10
@@ -16870,14 +16868,13 @@ msgid "Gerber Viewer"
 msgstr "거버 뷰어"
 
 #: gerbview/gerbview_frame.cpp:617
-#, fuzzy, c-format
+#, c-format
 msgid "Drawing layer %d not in use"
-msgstr "사용하지 않는 도면층 %d"
+msgstr "사용하지 않는 도면 레이어 %d"
 
 #: gerbview/gerbview_frame.cpp:634
-#, fuzzy
 msgid "(with X2 attributes)"
-msgstr "속성"
+msgstr "(X2 속성)"
 
 #: gerbview/gerbview_frame.cpp:643
 #, c-format
@@ -16897,34 +16894,28 @@ msgid "This job file uses an outdated format. Please recreate it."
 msgstr "이 작업 파일은 오래된 형식을 사용합니다. 재작성해 주세요."
 
 #: gerbview/job_file_reader.cpp:193
-#, fuzzy
 msgid "Open Gerber Job File"
-msgstr "새 거버 파일 (&G)"
+msgstr "거버 작업 파일 열기"
 
 #: gerbview/menubar.cpp:67
-#, fuzzy
 msgid "Open Recent Gerber File"
-msgstr "새 거버 파일 (&G)"
+msgstr "최근 거버 파일 열기"
 
 #: gerbview/menubar.cpp:71
-#, fuzzy
 msgid "Clear Recent Gerber Files"
-msgstr "새 거버 파일 (&G)"
+msgstr "최근 거버 파일 지우기"
 
 #: gerbview/menubar.cpp:85
-#, fuzzy
 msgid "Open Recent Drill File"
-msgstr "새 거버 파일 (&G)"
+msgstr "최근 드릴 파일 열기"
 
 #: gerbview/menubar.cpp:103
-#, fuzzy
 msgid "Open Recent Job File"
-msgstr "새 거버 파일 (&G)"
+msgstr "최근 작업 파일 열기"
 
 #: gerbview/menubar.cpp:121
-#, fuzzy
 msgid "Open Recent Zip File"
-msgstr "압축 파일 풀기"
+msgstr "최근 압축 파일 열기"
 
 #: gerbview/readgerb.cpp:63
 #, c-format
@@ -17013,16 +17004,14 @@ msgid ""
 msgstr "현재 레이어에 Excellon 드릴 파일을 엽니다. 이전 데이터는 사라집니다"
 
 #: gerbview/tools/gerbview_actions.cpp:51
-#, fuzzy
 msgid "Open Gerber Job File..."
-msgstr "Gerber 작업 파일 열기..."
+msgstr "거버 작업 파일 열기..."
 
 #: gerbview/tools/gerbview_actions.cpp:52
 msgid "Open a Gerber job file and its associated gerber plot files"
 msgstr "거버 작업 파일과, 연관된 거버 플롯 파일을 엽니다"
 
 #: gerbview/tools/gerbview_actions.cpp:57
-#, fuzzy
 msgid "Open Zip Archive File..."
 msgstr "Zip 아카이브 파일 열기..."
 
@@ -17031,16 +17020,14 @@ msgid "Open a zipped archive (Gerber and Drill) file"
 msgstr "압축된 아카이브 (거버와 드릴) 파일 열기"
 
 #: gerbview/tools/gerbview_actions.cpp:63
-#, fuzzy
 msgid "Show Layers Manager"
-msgstr "드로우 레이어 미러"
+msgstr "레이어 관리자 표시"
 
 #: gerbview/tools/gerbview_actions.cpp:64
 msgid "Show or hide the layer manager"
 msgstr "레이어 매니저 표시 또는 숨기기"
 
 #: gerbview/tools/gerbview_actions.cpp:69
-#, fuzzy
 msgid "List DCodes..."
 msgstr "디코드 목록..."
 
@@ -17049,7 +17036,6 @@ msgid "List D-codes defined in Gerber files"
 msgstr "거버 파일에 정의된 D-code 목록"
 
 #: gerbview/tools/gerbview_actions.cpp:75
-#, fuzzy
 msgid "Show Source..."
 msgstr "소스 표시..."
 
@@ -17058,7 +17044,6 @@ msgid "Show source file for the current layer"
 msgstr "현재 레이어의 소스 파일 보이기"
 
 #: gerbview/tools/gerbview_actions.cpp:81
-#, fuzzy
 msgid "Export to PCB Editor..."
 msgstr "PCB 편집기로 내보내기..."
 
@@ -17067,33 +17052,28 @@ msgid "Export data as a KiCad PCB file"
 msgstr "KiCad PCB 파일로 데이터 내보내기"
 
 #: gerbview/tools/gerbview_actions.cpp:87
-#, fuzzy
 msgid "Clear Current Layer..."
 msgstr "현재 레이어 지우기..."
 
 #: gerbview/tools/gerbview_actions.cpp:87
-#, fuzzy
 msgid "Clear the selected graphic layer"
-msgstr "드로우 레이어 삭제"
+msgstr "선택한 그래픽 레이어 지우기"
 
 #: gerbview/tools/gerbview_actions.cpp:92
-#, fuzzy
 msgid "Clear All Layers"
 msgstr "모든 레이어 지우기"
 
 #: gerbview/tools/gerbview_actions.cpp:93
-#, fuzzy
 msgid "Clear all layers. All data will be deleted"
-msgstr "레이어를 모두 지운 후 새 거버 파일 열기"
+msgstr "모든 레이어 지우기. 모든 데이터가 삭제됩니다"
 
 #: gerbview/tools/gerbview_actions.cpp:98
 msgid "Reload All Layers"
 msgstr "모든 레이어 다시 불러오기"
 
 #: gerbview/tools/gerbview_actions.cpp:99
-#, fuzzy
 msgid "Reload all layers. All data will be reloaded"
-msgstr "레이어를 모두 지운 후 새 거버 파일 열기"
+msgstr "모든 레이어를 재로드합니다. 모든 데이터가 재로드됩니다"
 
 #: gerbview/tools/gerbview_actions.cpp:108
 msgid "Clear Highlight"
@@ -17108,28 +17088,24 @@ msgid "Highlight Attribute"
 msgstr "속성 강조"
 
 #: gerbview/tools/gerbview_actions.cpp:128
-#, fuzzy
 msgid "Highlight DCode"
-msgstr "네트 높이"
+msgstr "D코드 강조"
 
 #: gerbview/tools/gerbview_actions.cpp:134
-#, fuzzy
 msgid "Next Layer"
-msgstr "세그먼트 레이어"
+msgstr "다음 레이어"
 
 #: gerbview/tools/gerbview_actions.cpp:139
-#, fuzzy
 msgid "Previous Layer"
-msgstr "이전 버전 (&P)"
+msgstr "이전 레이어"
 
 #: gerbview/tools/gerbview_actions.cpp:144
 msgid "Sketch Lines"
 msgstr "선 스케치"
 
 #: gerbview/tools/gerbview_actions.cpp:144
-#, fuzzy
 msgid "Show lines in outline mode"
-msgstr "플로트 모드 선 두께 설정"
+msgstr "개요 모드에서 선 표시"
 
 #: gerbview/tools/gerbview_actions.cpp:150
 msgid "Sketch Flashed Items"
