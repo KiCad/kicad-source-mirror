@@ -601,7 +601,7 @@ bool FILENAME_RESOLVER::readPathList()
 
 
 bool FILENAME_RESOLVER::WritePathList( const wxString& aDir, const wxString& aFilename,
-                                       bool aWriteFullList )
+                                       bool aResolvePaths )
 {
     if( aDir.empty() )
     {
@@ -617,9 +617,10 @@ bool FILENAME_RESOLVER::WritePathList( const wxString& aDir, const wxString& aFi
 
     std::list<SEARCH_PATH>::const_iterator sPL = m_paths.begin();
 
-    // skip all ${ENV_VAR} alias names
-    if( !aWriteFullList )
+    if( !aResolvePaths )
     {
+        // skip all ${ENV_VAR} alias names
+
         while( sPL != m_paths.end()
                 && ( sPL->m_Alias.StartsWith( "${" ) || sPL->m_Alias.StartsWith( "$(" ) ) )
         {
@@ -652,10 +653,17 @@ bool FILENAME_RESOLVER::WritePathList( const wxString& aDir, const wxString& aFi
     {
         tstr = sPL->m_Alias.ToUTF8();
         cfgFile << "\"" << tstr.size() << ":" << tstr << "\",";
-        tstr = sPL->m_Pathvar.ToUTF8();
+
+        if( aResolvePaths )
+            tstr = ResolvePath( sPL->m_Pathvar ).ToUTF8();
+        else
+            tstr = sPL->m_Pathvar.ToUTF8();
+
         cfgFile << "\"" << tstr.size() << ":" << tstr << "\",";
+
         tstr = sPL->m_Description.ToUTF8();
         cfgFile << "\"" << tstr.size() << ":" << tstr << "\"\n";
+
         ++sPL;
     }
 

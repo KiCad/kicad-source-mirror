@@ -91,9 +91,9 @@ public:
 
     /**
      * Write the current path list to a config file.
-     * @param aWriteFullList indicates whether env vars should also be written out or not
+     * @param aResolvePaths indicates whether env vars should also be written out or not
      */
-    bool WritePathList( const wxString& aDir, const wxString& aFilename, bool aWriteFullList );
+    bool WritePathList( const wxString& aDir, const wxString& aFilename, bool aResolvePaths );
 
     /**
      * Determines the full path of the given file name.
