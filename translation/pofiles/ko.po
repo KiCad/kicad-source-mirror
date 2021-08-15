@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
-"PO-Revision-Date: 2021-08-14 15:54+0000\n"
+"PO-Revision-Date: 2021-08-15 03:29+0000\n"
 "Last-Translator: 서범기 <joonhoflow@naver.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
@@ -3867,7 +3867,7 @@ msgstr "문서 파일 '%s'을(를) 찾을 수 없음"
 #: common/eda_doc.cpp:200
 #, c-format
 msgid "Unknown MIME type for doc file '%s'"
-msgstr "문서 파일 '%s'에 대한 알 수 없는 MIME 유형"
+msgstr "문서 파일 '%s'에 대한 알 수 없는 MIME유형"
 
 #: common/eda_draw_frame.cpp:141 common/tool/actions.cpp:484
 #: pagelayout_editor/pl_editor_frame.cpp:158
@@ -11828,7 +11828,7 @@ msgstr "셀이 비어 있으면 테이블에서 제거할 수 없는 모든 행�
 #: eeschema/dialogs/panel_sym_lib_table.cpp:374
 #, c-format
 msgid "Illegal character '%c' in nickname '%s'"
-msgstr "잘못된 문자 '%c'가 별칭 '%s' 에서 발견됨"
+msgstr "잘못된 문자 '%c'이(가) 별칭 '%s' 에서 발견됨"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:385
 #: eeschema/dialogs/panel_sym_lib_table.cpp:426
@@ -16152,7 +16152,8 @@ msgid ""
 "<b>Off grid pin %s</b> %s at location <b>(%.3f, %.3f)</b> in unit %c of "
 "converted."
 msgstr ""
-"<b>그리드에서 벗어난 핀 %s</b> %s이(가) 위치 <b>(%.3f, %.3f)</b> 에서 발견되었습니다 (유닛 %c로 변환됨)."
+"<b>그리드에서 벗어난 핀 %s</b> %s이(가) 위치 <b>(%.3f, %.3f)</b> 에서 발견되었습니다 (유닛 %c(으)로 "
+"변환됨)."
 
 #: eeschema/tools/ee_inspection_tool.cpp:394
 #, c-format
@@ -16609,7 +16610,7 @@ msgstr "도구 정의 모양을 찾을 수 없음"
 #: gerbview/excellon_read_drill_file.cpp:583
 #, c-format
 msgid "Tool definition '%c' not supported"
-msgstr "도구 정의 '%c'는 지원되지 않습니다"
+msgstr "도구 정의 '%c'은(는) 지원되지 않습니다"
 
 #: gerbview/excellon_read_drill_file.cpp:664
 #, c-format
@@ -26203,7 +26204,7 @@ msgstr "편집 옵션"
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:555
 #, c-format
 msgid "Illegal character '%c' in nickname '%s'."
-msgstr "허용되지 않는 문자 '%c' 가 별칭 '%s' 에서 발견되었습니다."
+msgstr "허용되지 않는 문자 '%c'이(가) 별칭 '%s' 에서 발견되었습니다."
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:798
 #, c-format
@@ -31415,12 +31416,12 @@ msgstr "MODULE '%s'에 대한 '$EndMODULE'이 누락되었습니다."
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:1480
 #, c-format
 msgid "Unknown padshape '%c=0x%02x' on line: %d of footprint: '%s'."
-msgstr "알 수 없는 패드 형상 '%c=0x%02x' 가 행: %d 풋프린트: '%s' 에서 발견되었습니다."
+msgstr "알 수 없는 패드 형상 '%c=0x%02x' 이(가) 행: %d 풋프린트: '%s' 에서 발견되었습니다."
 
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:1685
 #, c-format
 msgid "Unknown FP_SHAPE type:'%c=0x%02x' on line %d of footprint '%s'."
-msgstr "알 수 없는 FP_SHAPE 유형:'%c=0x%02x' 가 행: %d 풋프린트: '%s' 에서 발견되었습니다."
+msgstr "알 수 없는 FP_SHAPE 유형:'%c=0x%02x'이(가) 행: %d 풋프린트: '%s' 에서 발견되었습니다."
 
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:2466
 #, c-format
