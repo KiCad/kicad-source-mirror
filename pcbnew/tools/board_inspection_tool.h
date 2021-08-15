@@ -37,29 +37,6 @@
 class CONNECTIVITY_DATA;
 
 
-class DIALOG_INSPECTION_REPORTER : public DIALOG_HTML_REPORTER
-{
-public:
-    DIALOG_INSPECTION_REPORTER( PCB_EDIT_FRAME* aFrame ) :
-            DIALOG_HTML_REPORTER( aFrame ),
-            m_frame( aFrame )
-    {
-        m_sdbSizerOK->SetDefault();
-        SetInitialFocus( m_sdbSizerOK );
-    }
-
-    void OnErrorLinkClicked( wxHtmlLinkEvent& event ) override;
-
-    void OnOK( wxCommandEvent& event ) override
-    {
-        Close();
-    }
-
-protected:
-    PCB_EDIT_FRAME* m_frame;
-};
-
-
 /**
  * Tool for pcb inspection.
  */
@@ -172,7 +149,7 @@ private:
     std::unique_ptr<DIALOG_NET_INSPECTOR> m_listNetsDialog;
     DIALOG_NET_INSPECTOR::SETTINGS        m_listNetsDialogSettings;
 
-    std::unique_ptr<DIALOG_INSPECTION_REPORTER>  m_inspectClearanceDialog;
+    std::unique_ptr<DIALOG_CONSTRAINTS_REPORTER> m_inspectClearanceDialog;
     std::unique_ptr<DIALOG_CONSTRAINTS_REPORTER> m_inspectConstraintsDialog;
 };
 

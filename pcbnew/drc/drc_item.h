@@ -39,7 +39,7 @@ enum PCB_DRC_CODE {
     DRCE_TEXT_ON_EDGECUTS,               // text or dimension on Edge.Cuts layer
     DRCE_CLEARANCE,                      // items are too close together
     DRCE_TRACKS_CROSSING,                // tracks are crossing
-    DRCE_COPPER_EDGE_CLEARANCE,          // a copper item is too close to the board edge
+    DRCE_EDGE_CLEARANCE,                 // a copper item is too close to the board edge
     DRCE_ZONES_INTERSECT,                // copper area outlines intersect
     DRCE_ZONE_HAS_EMPTY_NET,             // copper area has a net but no pads in nets, which is suspicious
     DRCE_DANGLING_VIA,                   // via which isn't connected to anything
@@ -134,7 +134,7 @@ private:
     static DRC_ITEM textOnEdgeCuts;
     static DRC_ITEM clearance;
     static DRC_ITEM tracksCrossing;
-    static DRC_ITEM copperEdgeClearance;
+    static DRC_ITEM edgeClearance;
     static DRC_ITEM zonesIntersect;
     static DRC_ITEM zoneHasEmptyNet;
     static DRC_ITEM viaDangling;

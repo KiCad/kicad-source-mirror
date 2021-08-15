@@ -149,14 +149,7 @@ static bool insideFootprintCourtyard( BOARD_ITEM* aItem, const EDA_RECT& aItemBB
 {
     SHAPE_POLY_SET footprintCourtyard;
 
-    if( aSide == F_Cu )
-        footprintCourtyard = aFootprint->GetPolyCourtyardFront();
-    else if( aSide == B_Cu )
-        footprintCourtyard = aFootprint->GetPolyCourtyardBack();
-    else if( aFootprint->IsFlipped() )
-        footprintCourtyard = aFootprint->GetPolyCourtyardBack();
-    else
-        footprintCourtyard = aFootprint->GetPolyCourtyardFront();
+    footprintCourtyard = aFootprint->GetPolyCourtyard( aSide );
 
     if( aItem->Type() == PCB_ZONE_T || aItem->Type() == PCB_FP_ZONE_T )
     {
@@ -503,7 +496,7 @@ static void insideArea( LIBEVAL::CONTEXT* aCtx, void* self )
 
                     if( ( area->GetLayerSet() & LSET::FrontMask() ).any() )
                     {
-                        SHAPE_POLY_SET courtyard = footprint->GetPolyCourtyardFront();
+                        SHAPE_POLY_SET courtyard = footprint->GetPolyCourtyard( F_CrtYd );
 
                         if( courtyard.OutlineCount() == 0 )
                         {
@@ -520,7 +513,7 @@ static void insideArea( LIBEVAL::CONTEXT* aCtx, void* self )
 
                     if( ( area->GetLayerSet() & LSET::BackMask() ).any() )
                     {
-                        SHAPE_POLY_SET courtyard = footprint->GetPolyCourtyardBack();
+                        SHAPE_POLY_SET courtyard = footprint->GetPolyCourtyard( B_CrtYd );
 
                         if( courtyard.OutlineCount() == 0 )
                         {

@@ -35,7 +35,7 @@
     Board edge clearance test. Checks all items for their mechanical clearances against the board
     edge.
     Errors generated:
-    - DRCE_COPPER_EDGE_CLEARANCE
+    - DRCE_EDGE_CLEARANCE
 
     TODO:
     - separate holes to edge check
@@ -118,7 +118,7 @@ bool DRC_TEST_PROVIDER_EDGE_CLEARANCE::testAgainstEdge( BOARD_ITEM* item, SHAPE*
 
 bool DRC_TEST_PROVIDER_EDGE_CLEARANCE::Run()
 {
-    if( !m_drcEngine->IsErrorLimitExceeded( DRCE_COPPER_EDGE_CLEARANCE ) )
+    if( !m_drcEngine->IsErrorLimitExceeded( DRCE_EDGE_CLEARANCE ) )
     {
         if( !reportPhase( _( "Checking copper to board edge clearances..." ) ) )
             return false;    // DRC cancelled
@@ -230,7 +230,7 @@ bool DRC_TEST_PROVIDER_EDGE_CLEARANCE::Run()
 
     for( BOARD_ITEM* item : boardItems )
     {
-        bool testCopper = !m_drcEngine->IsErrorLimitExceeded( DRCE_COPPER_EDGE_CLEARANCE );
+        bool testCopper = !m_drcEngine->IsErrorLimitExceeded( DRCE_EDGE_CLEARANCE );
         bool testSilk = !m_drcEngine->IsErrorLimitExceeded( DRCE_SILK_MASK_CLEARANCE );
 
         if( !testCopper && !testSilk )
@@ -250,7 +250,7 @@ bool DRC_TEST_PROVIDER_EDGE_CLEARANCE::Run()
                         {
                             return testAgainstEdge( item, itemShape.get(), edge,
                                                     EDGE_CLEARANCE_CONSTRAINT,
-                                                    DRCE_COPPER_EDGE_CLEARANCE );
+                                                    DRCE_EDGE_CLEARANCE );
                         },
                         m_largestClearance );
             }

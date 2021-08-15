@@ -185,8 +185,7 @@ int PLACEFILE_GERBER_WRITER::CreatePlaceFile( wxString& aFullFilename, PCB_LAYER
         {
             gbr_metadata.SetApertureAttrib( GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_CMP_COURTYARD );
 
-            const SHAPE_POLY_SET& courtyard = onBack ? footprint->GetPolyCourtyardBack()
-                                                     : footprint->GetPolyCourtyardFront();
+            const SHAPE_POLY_SET& courtyard = footprint->GetPolyCourtyard( aLayer );
 
             for( int ii = 0; ii < courtyard.OutlineCount(); ii++ )
             {

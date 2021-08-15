@@ -969,10 +969,10 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
                     {
                         const FOOTPRINT* footprint = static_cast<const FOOTPRINT*>( a );
 
-                        if( !footprint->GetPolyCourtyardFront().IsEmpty() )
+                        if( !footprint->GetPolyCourtyard( F_CrtYd ).IsEmpty() )
                             itemLayers |= LSET::FrontMask();
 
-                        if( !footprint->GetPolyCourtyardBack().IsEmpty() )
+                        if( !footprint->GetPolyCourtyard( B_CrtYd ).IsEmpty() )
                             itemLayers |= LSET::BackMask();
                     }
 

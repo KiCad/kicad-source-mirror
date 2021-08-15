@@ -17,7 +17,7 @@ DIALOG_CONSTRAINTS_REPORTER_BASE::DIALOG_CONSTRAINTS_REPORTER_BASE( wxWindow* pa
 	bMainSizer = new wxBoxSizer( wxVERTICAL );
 
 	m_notebook = new wxNotebook( this, wxID_ANY, wxDefaultPosition, wxSize( -1,-1 ), 0 );
-	m_notebook->SetMinSize( wxSize( 480,360 ) );
+	m_notebook->SetMinSize( wxSize( 550,480 ) );
 
 
 	bMainSizer->Add( m_notebook, 1, wxEXPAND|wxRIGHT|wxLEFT, 10 );

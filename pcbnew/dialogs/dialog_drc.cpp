@@ -452,7 +452,7 @@ void DIALOG_DRC::OnDRCItemRClick( wxDataViewEvent& aEvent )
     }
 
     if( rcItem->GetErrorCode() == DRCE_CLEARANCE
-            || rcItem->GetErrorCode() == DRCE_COPPER_EDGE_CLEARANCE )
+            || rcItem->GetErrorCode() == DRCE_EDGE_CLEARANCE )
     {
         menu.Append( 3, _( "Run clearance resolution tool..." ) );
     }

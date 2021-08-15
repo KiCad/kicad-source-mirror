@@ -40,14 +40,6 @@
 #include <drc/drc_item.h>
 #include <pad.h>
 
-void DIALOG_INSPECTION_REPORTER::OnErrorLinkClicked( wxHtmlLinkEvent& event )
-{
-    if( event.GetLinkInfo().GetHref() == "boardsetup" )
-        m_frame->ShowBoardSetupDialog( _( "Rules" ) );
-    else if( event.GetLinkInfo().GetHref() == "drc" )
-        m_frame->GetToolManager()->RunAction( PCB_ACTIONS::runDRC, true );
-}
-
 
 BOARD_INSPECTION_TOOL::BOARD_INSPECTION_TOOL() :
         PCB_TOOL_BASE( "pcbnew.InspectionTool" ),
@@ -87,8 +79,8 @@ bool BOARD_INSPECTION_TOOL::Init()
     auto netSubMenu = std::make_shared<NET_CONTEXT_MENU>();
     netSubMenu->SetTool( this );
 
-    static KICAD_T connectedTypes[] = { PCB_TRACE_T, PCB_VIA_T, PCB_ARC_T, PCB_PAD_T,
-                                        PCB_ZONE_T, EOT };
+    static KICAD_T connectedTypes[] = { PCB_TRACE_T, PCB_VIA_T, PCB_ARC_T, PCB_PAD_T, PCB_ZONE_T,
+                                        EOT };
 
     CONDITIONAL_MENU& menu = selectionTool->GetToolMenu().GetMenu();
 
@@ -134,83 +126,11 @@ wxString BOARD_INSPECTION_TOOL::getItemDescription( BOARD_ITEM* aItem )
 };
 
 
-void BOARD_INSPECTION_TOOL::reportZoneConnection( ZONE* aZone, PAD* aPad, REPORTER* r )
+void reportCompileError( REPORTER* r )
 {
-    ENUM_MAP<ZONE_CONNECTION> connectionEnum = ENUM_MAP<ZONE_CONNECTION>::Instance();
-    wxString                  source;
-    ZONE_CONNECTION           connection = aZone->GetPadConnection( aPad, &source );
-
     r->Report( "" );
-
-    r->Report( wxString::Format( _( "Zone connection type: %s." ),
-                                 connectionEnum.ToString( aZone->GetPadConnection() ) ) );
-
-    if( source != _( "zone" ) )
-    {
-        r->Report( wxString::Format( _( "Overridden by %s; connection type: %s." ),
-                                     source,
-                                     connectionEnum.ToString( connection ) ) );
-    }
-
-    // Resolve complex connection types into simple types
-    if( connection == ZONE_CONNECTION::THT_THERMAL )
-    {
-        if( aPad->GetAttribute() == PAD_ATTRIB::PTH )
-        {
-            connection = ZONE_CONNECTION::THERMAL;
-        }
-        else
-        {
-            connection = ZONE_CONNECTION::FULL;
-            r->Report( wxString::Format( _( "Pad is not a PTH pad; connection will be: %s." ),
-                                         connectionEnum.ToString( ZONE_CONNECTION::FULL ) ) );
-        }
-    }
-
-    r->Report( "" );
-
-    // Process simple connection types
-    if( connection == ZONE_CONNECTION::THERMAL )
-    {
-        int gap = aZone->GetThermalReliefGap();
-
-        r->Report( wxString::Format( _( "Zone thermal relief: %s." ),
-                                     StringFromValue( r->GetUnits(), gap, true ) ) );
-
-        gap = aZone->GetThermalReliefGap( aPad, &source );
-
-        if( source != _( "zone" ) )
-        {
-            r->Report( wxString::Format( _( "Overridden by %s; thermal relief: %s." ),
-                                         source,
-                                         StringFromValue( r->GetUnits(), gap, true ) ) );
-        }
-    }
-    else if( connection == ZONE_CONNECTION::NONE )
-    {
-        int clearance = aZone->GetLocalClearance();
-
-        r->Report( wxString::Format( _( "Zone clearance: %s." ),
-                                     StringFromValue( r->GetUnits(), clearance, true ) ) );
-
-        if( aZone->GetThermalReliefGap( aPad ) > clearance )
-        {
-            clearance = aZone->GetThermalReliefGap( aPad, &source );
-
-            if( source != _( "zone" ) )
-            {
-                r->Report( wxString::Format( _( "Overridden by larger thermal relief from %s;"
-                                                "clearance: %s." ),
-                                             source,
-                                             StringFromValue( r->GetUnits(), clearance, true ) ) );
-            }
-        }
-    }
-    else
-    {
-        r->Report( wxString::Format( _( "Clearance: %s." ),
-                                     StringFromValue( r->GetUnits(), 0, true ) ) );
-    }
+    r->Report( _( "Report incomplete: could not compile custom design rules.  " )
+               + "<a href='boardsetup'>" + _( "Show design rules." ) + "</a>" );
 }
 
 
@@ -227,9 +147,7 @@ void BOARD_INSPECTION_TOOL::reportClearance( DRC_CONSTRAINT_T aClearanceType, PC
     }
     catch( PARSE_ERROR& )
     {
-        r->Report( "" );
-        r->Report( _( "Report incomplete: could not compile custom design rules.  " )
-                   + "<a href='boardsetup'>" + _( "Show design rules." ) + "</a>" );
+        reportCompileError( r );
         return;
     }
 
@@ -244,10 +162,9 @@ void BOARD_INSPECTION_TOOL::reportClearance( DRC_CONSTRAINT_T aClearanceType, PC
         footprint->BuildPolyCourtyards();
     }
 
-    auto constraint = drcEngine.EvalRules( aClearanceType, aA, aB, aLayer, r );
-    int  clearance = constraint.m_Value.Min();
-
-    wxString clearanceStr = StringFromValue( r->GetUnits(), clearance, true );
+    DRC_CONSTRAINT constraint = drcEngine.EvalRules( aClearanceType, aA, aB, aLayer, r );
+    int            clearance = constraint.m_Value.Min();
+    wxString       clearanceStr = StringFromValue( r->GetUnits(), clearance, true );
 
     r->Report( "" );
     r->Report( wxString::Format( _( "Resolved clearance: %s." ), clearanceStr ) );
@@ -265,7 +182,7 @@ void BOARD_INSPECTION_TOOL::InspectDRCError( const std::shared_ptr<RC_ITEM>& aDR
 
     if( m_inspectClearanceDialog == nullptr )
     {
-        m_inspectClearanceDialog = std::make_unique<DIALOG_INSPECTION_REPORTER>( m_frame );
+        m_inspectClearanceDialog = std::make_unique<DIALOG_CONSTRAINTS_REPORTER>( m_frame );
         m_inspectClearanceDialog->SetTitle( _( "Clearance Report" ) );
 
         m_inspectClearanceDialog->Connect( wxEVT_CLOSE_WINDOW,
@@ -273,13 +190,11 @@ void BOARD_INSPECTION_TOOL::InspectDRCError( const std::shared_ptr<RC_ITEM>& aDR
                     nullptr, this );
     }
 
-    WX_HTML_REPORT_BOX* r = m_inspectClearanceDialog->m_Reporter;
-    r->SetUnits( m_frame->GetUserUnits() );
-    r->Clear();
+    WX_HTML_REPORT_BOX* r = m_inspectClearanceDialog->AddPage( _( "Clearance" ) );
 
     switch( aDRCItem->GetErrorCode() )
     {
-    case DRCE_COPPER_EDGE_CLEARANCE:
+    case DRCE_EDGE_CLEARANCE:
         r->Report( "<h7>" + _( "Edge clearance resolution for:" ) + "</h7>" );
 
         r->Report( wxString::Format( "<ul><li>%s</li><li>%s</li></ul>",
@@ -350,29 +265,8 @@ int BOARD_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
         return 0;
     }
 
-    if( m_inspectClearanceDialog == nullptr )
-    {
-        m_inspectClearanceDialog = std::make_unique<DIALOG_INSPECTION_REPORTER>( m_frame );
-        m_inspectClearanceDialog->SetTitle( _( "Clearance Report" ) );
-
-        m_inspectClearanceDialog->Connect( wxEVT_CLOSE_WINDOW,
-                    wxCommandEventHandler( BOARD_INSPECTION_TOOL::onInspectClearanceDialogClosed ),
-                    nullptr, this );
-    }
-
-    WX_HTML_REPORT_BOX* r = m_inspectClearanceDialog->m_Reporter;
-    r->SetUnits( m_frame->GetUserUnits() );
-    r->Clear();
-
     BOARD_ITEM* a = static_cast<BOARD_ITEM*>( selection.GetItem( 0 ) );
     BOARD_ITEM* b = static_cast<BOARD_ITEM*>( selection.GetItem( 1 ) );
-
-    auto hasHole =
-            []( BOARD_ITEM* aItem )
-            {
-                PAD* pad = dynamic_cast<PAD*>( aItem );
-                return pad && pad->GetDrillSizeX() > 0 && pad->GetDrillSizeY() > 0;
-            };
 
     wxCHECK( a && b, 0 );
 
@@ -405,121 +299,325 @@ int BOARD_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
     // a and b could be null after group tests above.
     wxCHECK( a && b, 0 );
 
-    PCB_LAYER_ID layer;
-    LSET         intersection = a->GetLayerSet() & b->GetLayerSet();
+    if( m_inspectClearanceDialog == nullptr )
+    {
+        m_inspectClearanceDialog = std::make_unique<DIALOG_CONSTRAINTS_REPORTER>( m_frame );
+        m_inspectClearanceDialog->SetTitle( _( "Clearance Report" ) );
 
-    if( intersection.any() && !intersection.Contains( m_frame->GetActiveLayer() ) )
-        layer = intersection.Seq().front();
-    else
-        layer = m_frame->GetActiveLayer();
+        m_inspectClearanceDialog->Connect( wxEVT_CLOSE_WINDOW,
+                    wxCommandEventHandler( BOARD_INSPECTION_TOOL::onInspectClearanceDialogClosed ),
+                    nullptr, this );
+    }
+
+    WX_HTML_REPORT_BOX*   r = nullptr;
+    EDA_UNITS             units = m_frame->GetUserUnits();
+
+    m_inspectClearanceDialog->DeleteAllPages();
 
     if( a->Type() != PCB_ZONE_T && b->Type() == PCB_ZONE_T )
         std::swap( a, b );
     else if( !a->IsConnected() && b->IsConnected() )
         std::swap( a, b );
 
-    if( layer == F_SilkS || layer == B_SilkS )
-    {
-        r->Report( "<h7>" + _( "Silkscreen clearance resolution for:" ) + "</h7>" );
+    PCB_LAYER_ID          active = m_frame->GetActiveLayer();
+    LSET                  layerIntersection = a->GetLayerSet() & b->GetLayerSet();
+    LSET                  copperIntersection = layerIntersection & LSET::AllCuMask();
+    BOARD_CONNECTED_ITEM* ac = dynamic_cast<BOARD_CONNECTED_ITEM*>( a );
+    BOARD_CONNECTED_ITEM* bc = dynamic_cast<BOARD_CONNECTED_ITEM*>( b );
+    ZONE*                 zone = dynamic_cast<ZONE*>( a );
+    PAD*                  pad = dynamic_cast<PAD*>( b );
+    FOOTPRINT*            aFP = dynamic_cast<FOOTPRINT*>( a );
+    FOOTPRINT*            bFP = dynamic_cast<FOOTPRINT*>( b );
 
+    DRC_ENGINE     drcEngine( m_frame->GetBoard(), &m_frame->GetBoard()->GetDesignSettings() );
+    bool           compileError = false;
+    DRC_CONSTRAINT constraint;
+    int            clearance = 0;
+
+    try
+    {
+        drcEngine.InitEngine( m_frame->GetDesignRulesPath() );
+    }
+    catch( PARSE_ERROR& )
+    {
+        compileError = true;
+    }
+
+    for( ZONE* z : m_frame->GetBoard()->Zones() )
+        z->CacheBoundingBox();
+
+    for( FOOTPRINT* f : m_frame->GetBoard()->Footprints() )
+    {
+        for( ZONE* z : f->Zones() )
+            z->CacheBoundingBox();
+
+        f->BuildPolyCourtyards();
+    }
+
+    auto hasHole =
+            []( BOARD_ITEM* aItem )
+            {
+                PAD* pad = dynamic_cast<PAD*>( aItem );
+
+                if( pad && pad->GetDrillSizeX() > 0 && pad->GetDrillSizeY() > 0 )
+                    return true;
+
+                PCB_VIA* via = dynamic_cast<PCB_VIA*>( aItem );
+
+                if( via )
+                    return true;
+
+                return false;
+            };
+
+    if( copperIntersection.any() && zone && pad && zone->GetNetCode() == pad->GetNetCode() )
+    {
+        PCB_LAYER_ID layer = active;
+        wxString     source;
+
+        if( !zone->IsOnLayer( active ) )
+            layer = zone->GetLayerSet().Seq().front();
+
+        r = m_inspectClearanceDialog->AddPage( _( "Zone" ) );
+
+        r->Report( "<h7>" + _( "Zone connection resolution for:" ) + "</h7>" );
         r->Report( wxString::Format( "<ul><li>%s %s</li><li>%s</li><li>%s</li></ul>",
                                      _( "Layer" ),
                                      EscapeHTML( m_frame->GetBoard()->GetLayerName( layer ) ),
                                      EscapeHTML( getItemDescription( a ) ),
                                      EscapeHTML( getItemDescription( b ) ) ) );
 
-        reportClearance( SILK_CLEARANCE_CONSTRAINT, layer, a, b, r );
-    }
-    else if( !( a->GetLayerSet() & LSET( 3, layer, Edge_Cuts, Margin ) ).any() )
-    {
-        if( hasHole( a ) )
-        {
-            r->Report( "<h7>" + _( "Hole clearance resolution for:" ) + "</h7>" );
+        ZONE_CONNECTION zoneConnection = zone->GetPadConnection( pad );
 
+        if( zoneConnection == ZONE_CONNECTION::THERMAL )
+        {
+            int gap = zone->GetThermalReliefGap();
+
+            r->Report( "" );
+            r->Report( wxString::Format( _( "Zone thermal relief: %s." ),
+                                         StringFromValue( r->GetUnits(), gap, true ) ) );
+
+            gap = zone->GetThermalReliefGap( pad, &source );
+
+            if( source != _( "zone" ) )
+            {
+                r->Report( wxString::Format( _( "Overridden by %s; thermal relief: %s." ),
+                                             source,
+                                             StringFromValue( r->GetUnits(), gap, true ) ) );
+            }
+        }
+        else if( zoneConnection == ZONE_CONNECTION::NONE )
+        {
+            clearance = zone->GetLocalClearance();
+
+            r->Report( "" );
+            r->Report( wxString::Format( _( "Zone clearance: %s." ),
+                                         StringFromValue( r->GetUnits(), clearance, true ) ) );
+
+            if( zone->GetThermalReliefGap( pad ) > clearance )
+            {
+                clearance = zone->GetThermalReliefGap( pad, &source );
+
+                if( source != _( "zone" ) )
+                {
+                    r->Report( wxString::Format( _( "Overridden by larger thermal relief from %s;"
+                                                    "clearance: %s." ),
+                                                 source,
+                                                 StringFromValue( r->GetUnits(), clearance, true ) ) );
+                }
+            }
+
+            if( compileError )
+                reportCompileError( r );
+
+            r->Report( "" );
+            r->Report( wxString::Format( _( "Clearance: %s." ),
+                                         StringFromValue( units, 0, true ) ) );
+        }
+        else
+        {
+            if( compileError )
+                reportCompileError( r );
+
+            // Report a 0 clearance for solid connections
+            r->Report( "" );
+            r->Report( wxString::Format( _( "Clearance: %s." ),
+                                         StringFromValue( units, 0, true ) ) );
+        }
+
+        r->Flush();
+    }
+    else if( copperIntersection.any() && !aFP && !bFP )
+    {
+        PCB_LAYER_ID layer = active;
+
+        if( !copperIntersection.test( layer ) )
+            layer = copperIntersection.Seq().front();
+
+        r = m_inspectClearanceDialog->AddPage( m_frame->GetBoard()->GetLayerName( layer ) );
+
+        r->Report( "<h7>" + _( "Clearance resolution for:" ) + "</h7>" );
+        r->Report( wxString::Format( "<ul><li>%s %s</li><li>%s</li><li>%s</li></ul>",
+                                     _( "Layer" ),
+                                     EscapeHTML( m_frame->GetBoard()->GetLayerName( layer ) ),
+                                     EscapeHTML( getItemDescription( a ) ),
+                                     EscapeHTML( getItemDescription( b ) ) ) );
+
+        if( ac && bc && ac->GetNetCode() > 0 && ac->GetNetCode() == bc->GetNetCode() )
+        {
+            // Same nets....
+            r->Report( _( "Items belong to the same net. Clearance is 0." ) );
+        }
+        else
+        {
+            // Different nets (or one or both unconnected)....
+            constraint = drcEngine.EvalRules( CLEARANCE_CONSTRAINT, a, b, layer, r );
+            clearance = constraint.m_Value.Min();
+
+            if( compileError )
+                reportCompileError( r );
+
+            r->Report( "" );
+            r->Report( wxString::Format( _( "Resolved clearance: %s." ),
+                                         StringFromValue( units, clearance, true ) ) );
+        }
+
+        r->Flush();
+    }
+
+    for( PCB_LAYER_ID layer : { F_SilkS, B_SilkS } )
+    {
+        if( layerIntersection.test( layer ) )
+        {
+            r = m_inspectClearanceDialog->AddPage( m_frame->GetBoard()->GetLayerName( layer ) );
+
+            r->Report( "<h7>" + _( "Silkscreen clearance resolution for:" ) + "</h7>" );
             r->Report( wxString::Format( "<ul><li>%s %s</li><li>%s</li><li>%s</li></ul>",
                                          _( "Layer" ),
                                          EscapeHTML( m_frame->GetBoard()->GetLayerName( layer ) ),
                                          EscapeHTML( getItemDescription( a ) ),
                                          EscapeHTML( getItemDescription( b ) ) ) );
 
-            reportClearance( HOLE_CLEARANCE_CONSTRAINT, layer, a, b, r );
-        }
-        else
-        {
-            r->Report( wxString::Format( _( "%s not present on layer %s.  No clearance defined." ),
-                                         a->GetSelectMenuText( r->GetUnits() ),
-                                         m_frame->GetBoard()->GetLayerName( layer ) ) );
+            constraint = drcEngine.EvalRules( SILK_CLEARANCE_CONSTRAINT, a, b, layer, r );
+            clearance = constraint.m_Value.Min();
+
+            if( compileError )
+                reportCompileError( r );
+
+            r->Report( "" );
+            r->Report( wxString::Format( _( "Resolved clearance: %s." ),
+                                         StringFromValue( units, clearance, true ) ) );
+
+            r->Flush();
         }
     }
-    else if( !( b->GetLayerSet() & LSET( 3, layer, Edge_Cuts, Margin ) ).any() )
-    {
-        if( hasHole( b ) )
-        {
-            r->Report( "<h7>" + _( "Hole clearance resolution for:" ) + "</h7>" );
 
+    for( PCB_LAYER_ID layer : { F_CrtYd, B_CrtYd } )
+    {
+        bool aCourtyard = aFP && !aFP->GetPolyCourtyard( layer ).IsEmpty();
+        bool bCourtyard = bFP && !bFP->GetPolyCourtyard( layer ).IsEmpty();
+
+        if( aCourtyard && bCourtyard )
+        {
+            r = m_inspectClearanceDialog->AddPage( m_frame->GetBoard()->GetLayerName( layer ) );
+
+            r->Report( "<h7>" + _( "Courtyard clearance resolution for:" ) + "</h7>" );
             r->Report( wxString::Format( "<ul><li>%s %s</li><li>%s</li><li>%s</li></ul>",
                                          _( "Layer" ),
                                          EscapeHTML( m_frame->GetBoard()->GetLayerName( layer ) ),
-                                         EscapeHTML( getItemDescription( b ) ),
-                                         EscapeHTML( getItemDescription( a ) ) ) );
+                                         EscapeHTML( getItemDescription( a ) ),
+                                         EscapeHTML( getItemDescription( b ) ) ) );
 
-            reportClearance( HOLE_CLEARANCE_CONSTRAINT, layer, b, a, r );
-        }
-        else
-        {
-            r->Report( wxString::Format( _( "%s not present on layer %s.  No clearance defined." ),
-                                         b->GetSelectMenuText( r->GetUnits() ),
-                                         m_frame->GetBoard()->GetLayerName( layer ) ) );
+            constraint = drcEngine.EvalRules( COURTYARD_CLEARANCE_CONSTRAINT, a, b, layer, r );
+            clearance = constraint.m_Value.Min();
+
+            if( compileError )
+                reportCompileError( r );
+
+            r->Report( "" );
+            r->Report( wxString::Format( _( "Resolved clearance: %s." ),
+                                         StringFromValue( units, clearance, true ) ) );
+
+            r->Flush();
         }
     }
-    else if( a->GetLayer() == Edge_Cuts || a->GetLayer() == Margin
-                || b->GetLayer() == Edge_Cuts || b->GetLayer() == Margin )
+
+    if( hasHole( a ) || hasHole( b ) )
     {
-        r->Report( "<h7>" + _( "Edge clearance resolution for:" ) + "</h7>" );
+        PCB_LAYER_ID layer = UNDEFINED_LAYER;
 
-        r->Report( wxString::Format( "<ul><li>%s</li><li>%s</li></ul>",
-                                     EscapeHTML( getItemDescription( a ) ),
-                                     EscapeHTML( getItemDescription( b ) ) ) );
+        if( hasHole( a ) && b->IsOnLayer( active ) && IsCopperLayer( active ) )
+            layer = active;
+        else if( hasHole( b ) && a->IsOnLayer( active ) && IsCopperLayer( active ) )
+            layer = active;
+        else if( hasHole( a ) && IsCopperLayer( b->GetLayer() ) )
+            layer = b->GetLayer();
+        else if( hasHole( b ) && IsCopperLayer( a->GetLayer() ) )
+            layer = a->GetLayer();
 
-        reportClearance( EDGE_CLEARANCE_CONSTRAINT, layer, a, b, r );
+        if( layer >= 0 )
+        {
+            r = m_inspectClearanceDialog->AddPage( _( "Hole" ) );
+
+            r->Report( "<h7>" + _( "Hole clearance resolution for:" ) + "</h7>" );
+            r->Report( wxString::Format( "<ul><li>%s %s</li><li>%s</li><li>%s</li></ul>",
+                                         _( "Layer" ),
+                                         EscapeHTML( m_frame->GetBoard()->GetLayerName( layer ) ),
+                                         EscapeHTML( getItemDescription( a ) ),
+                                         EscapeHTML( getItemDescription( b ) ) ) );
+
+            constraint = drcEngine.EvalRules( HOLE_CLEARANCE_CONSTRAINT, a, b, layer, r );
+            clearance = constraint.m_Value.Min();
+
+            if( compileError )
+                reportCompileError( r );
+
+            r->Report( "" );
+            r->Report( wxString::Format( _( "Resolved clearance: %s." ),
+                                         StringFromValue( units, clearance, true ) ) );
+
+            r->Flush();
+        }
     }
-    else
+
+    for( PCB_LAYER_ID edgeLayer : { Edge_Cuts, Margin } )
     {
-        r->Report( "<h7>" + _( "Clearance resolution for:" ) + "</h7>" );
+        PCB_LAYER_ID layer = UNDEFINED_LAYER;
 
-        r->Report( wxString::Format( "<ul><li>%s %s</li><li>%s</li><li>%s</li></ul>",
-                                     _( "Layer" ),
-                                     EscapeHTML( m_frame->GetBoard()->GetLayerName( layer ) ),
-                                     EscapeHTML( getItemDescription( a ) ),
-                                     EscapeHTML( getItemDescription( b ) ) ) );
+        if( a->IsOnLayer( edgeLayer ) && b->IsOnLayer( active ) && IsCopperLayer( active ) )
+            layer = active;
+        else if( b->IsOnLayer( edgeLayer ) && a->IsOnLayer( active ) && IsCopperLayer( active ) )
+            layer = active;
+        else if( a->IsOnLayer( edgeLayer ) && IsCopperLayer( b->GetLayer() ) )
+            layer = b->GetLayer();
+        else if( b->IsOnLayer( edgeLayer ) && IsCopperLayer( a->GetLayer() ) )
+            layer = a->GetLayer();
 
-        BOARD_CONNECTED_ITEM* ac = a->IsConnected() ?
-                                   static_cast<BOARD_CONNECTED_ITEM*>( a ) : nullptr;
-        BOARD_CONNECTED_ITEM* bc = b->IsConnected() ?
-                                   static_cast<BOARD_CONNECTED_ITEM*>( b ) : nullptr;
-
-        if( ac && bc && ac->GetNetCode() > 0 && ac->GetNetCode() == bc->GetNetCode() )
+        if( layer >= 0 )
         {
-            // Same nets....
+            wxString layerName = m_frame->GetBoard()->GetLayerName( edgeLayer );
+            r = m_inspectClearanceDialog->AddPage( layerName + wxS( " " ) + _( "Clearance" ) );
 
-            if( ac->Type() == PCB_ZONE_T && bc->Type() == PCB_PAD_T )
-            {
-                reportZoneConnection( static_cast<ZONE*>( ac ), static_cast<PAD*>( bc ), r );
-            }
-            else
-            {
-                r->Report( "" );
-                r->Report( _( "Items belong to the same net. Clearance is 0." ) );
-            }
-        }
-        else
-        {
-            // Different nets (or one or both unconnected)....
-            reportClearance( CLEARANCE_CONSTRAINT, layer, a, b, r );
+            r->Report( "<h7>" + _( "Edge clearance resolution for:" ) + "</h7>" );
+            r->Report( wxString::Format( "<ul><li>%s %s</li><li>%s</li><li>%s</li></ul>",
+                                         _( "Layer" ),
+                                         EscapeHTML( m_frame->GetBoard()->GetLayerName( layer ) ),
+                                         EscapeHTML( getItemDescription( a ) ),
+                                         EscapeHTML( getItemDescription( b ) ) ) );
+
+            constraint = drcEngine.EvalRules( EDGE_CLEARANCE_CONSTRAINT, a, b, layer, r );
+            clearance = constraint.m_Value.Min();
+
+            if( compileError )
+                reportCompileError( r );
+
+            r->Report( "" );
+            r->Report( wxString::Format( _( "Resolved clearance: %s." ),
+                                         StringFromValue( units, clearance, true ) ) );
+
+            r->Flush();
         }
     }
-
-    r->Flush();
 
     m_inspectClearanceDialog->Raise();
     m_inspectClearanceDialog->Show( true );
@@ -556,6 +654,8 @@ wxString reportMax( EDA_UNITS aUnits, DRC_CONSTRAINT& aConstraint )
 
 int BOARD_INSPECTION_TOOL::InspectConstraints( const TOOL_EVENT& aEvent )
 {
+#define EVAL_RULES( constraint, a, b, layer, r ) drcEngine.EvalRules( constraint, a, b, layer, r )
+
     PCB_SELECTION_TOOL*  selTool = m_toolMgr->GetTool<PCB_SELECTION_TOOL>();
     const PCB_SELECTION& selection = selTool->GetSelection();
 
@@ -570,18 +670,18 @@ int BOARD_INSPECTION_TOOL::InspectConstraints( const TOOL_EVENT& aEvent )
         m_inspectConstraintsDialog = std::make_unique<DIALOG_CONSTRAINTS_REPORTER>( m_frame );
         m_inspectConstraintsDialog->SetTitle( _( "Constraints Report" ) );
 
-        m_inspectConstraintsDialog->Connect(
-                wxEVT_CLOSE_WINDOW,
+        m_inspectConstraintsDialog->Connect( wxEVT_CLOSE_WINDOW,
                 wxCommandEventHandler( BOARD_INSPECTION_TOOL::onInspectConstraintsDialogClosed ),
                 nullptr, this );
     }
 
     m_inspectConstraintsDialog->DeleteAllPages();
 
-    BOARD_ITEM* item = static_cast<BOARD_ITEM*>( selection.GetItem( 0 ) );
-    DRC_ENGINE  drcEngine( m_frame->GetBoard(), &m_frame->GetBoard()->GetDesignSettings() );
-    bool        courtyardError = false;
-    bool        compileError = false;
+    BOARD_ITEM*    item = static_cast<BOARD_ITEM*>( selection.GetItem( 0 ) );
+    DRC_ENGINE     drcEngine( m_frame->GetBoard(), &m_frame->GetBoard()->GetDesignSettings() );
+    DRC_CONSTRAINT constraint;
+    bool           courtyardError = false;
+    bool           compileError = false;
 
     try
     {
@@ -616,23 +716,16 @@ int BOARD_INSPECTION_TOOL::InspectConstraints( const TOOL_EVENT& aEvent )
         r->Report( "<ul><li>" + EscapeHTML( getItemDescription( item ) ) + "</li></ul>" );
         r->Report( "" );
 
-        if( compileError )
-        {
-            r->Report( "" );
-            r->Report( _( "Report incomplete: could not compile custom design rules.  " )
-                       + "<a href='boardsetup'>" + _( "Show design rules." ) + "</a>" );
-        }
-        else
-        {
-            auto constraint = drcEngine.EvalRules( TRACK_WIDTH_CONSTRAINT, item, nullptr,
-                                                   item->GetLayer(), r );
+        constraint = EVAL_RULES( TRACK_WIDTH_CONSTRAINT, item, nullptr, item->GetLayer(), r );
 
-            r->Report( "" );
-            r->Report( wxString::Format( _( "Width constraints: min %s; opt %s; max %s." ),
-                                         reportMin( r->GetUnits(),  constraint ),
-                                         reportOpt( r->GetUnits(),  constraint ),
-                                         reportMax( r->GetUnits(),  constraint ) ) );
-        }
+        if( compileError )
+            reportCompileError( r );
+
+        r->Report( "" );
+        r->Report( wxString::Format( _( "Width constraints: min %s; opt %s; max %s." ),
+                                     reportMin( r->GetUnits(),  constraint ),
+                                     reportOpt( r->GetUnits(),  constraint ),
+                                     reportMax( r->GetUnits(),  constraint ) ) );
 
         r->Flush();
     }
@@ -645,24 +738,17 @@ int BOARD_INSPECTION_TOOL::InspectConstraints( const TOOL_EVENT& aEvent )
         r->Report( "<ul><li>" + EscapeHTML( getItemDescription( item ) ) + "</li></ul>" );
         r->Report( "" );
 
-        if( compileError )
-        {
-            r->Report( "" );
-            r->Report( _( "Report incomplete: could not compile custom design rules.  " )
-                       + "<a href='boardsetup'>" + _( "Show design rules." ) + "</a>" );
-        }
-        else
-        {
-            // PADSTACKS TODO: once we have padstacks we'll need to run this per-layer....
-            auto constraint = drcEngine.EvalRules( VIA_DIAMETER_CONSTRAINT, item, nullptr,
-                                                   UNDEFINED_LAYER, r );
+        // PADSTACKS TODO: once we have padstacks we'll need to run this per-layer....
+        constraint = EVAL_RULES( VIA_DIAMETER_CONSTRAINT, item, nullptr, UNDEFINED_LAYER, r );
 
-            r->Report( "" );
-            r->Report( wxString::Format( _( "Diameter constraints: min %s; opt %s; max %s." ),
-                                         reportMin( r->GetUnits(),  constraint ),
-                                         reportOpt( r->GetUnits(),  constraint ),
-                                         reportMax( r->GetUnits(),  constraint ) ) );
-        }
+        if( compileError )
+            reportCompileError( r );
+
+        r->Report( "" );
+        r->Report( wxString::Format( _( "Diameter constraints: min %s; opt %s; max %s." ),
+                                     reportMin( r->GetUnits(),  constraint ),
+                                     reportOpt( r->GetUnits(),  constraint ),
+                                     reportMax( r->GetUnits(),  constraint ) ) );
 
         r->Flush();
 
@@ -672,24 +758,17 @@ int BOARD_INSPECTION_TOOL::InspectConstraints( const TOOL_EVENT& aEvent )
         r->Report( "<ul><li>" + EscapeHTML( getItemDescription( item ) ) + "</li></ul>" );
         r->Report( "" );
 
-        if( compileError )
-        {
-            r->Report( "" );
-            r->Report( _( "Report incomplete: could not compile custom design rules.  " )
-                       + "<a href='boardsetup'>" + _( "Show design rules." ) + "</a>" );
-        }
-        else
-        {
-            // PADSTACKS TODO: once we have padstacks we'll need to run this per-layer....
-            auto constraint = drcEngine.EvalRules( ANNULAR_WIDTH_CONSTRAINT, item, nullptr,
-                                                   UNDEFINED_LAYER, r );
+        // PADSTACKS TODO: once we have padstacks we'll need to run this per-layer....
+        constraint = EVAL_RULES( ANNULAR_WIDTH_CONSTRAINT, item, nullptr, UNDEFINED_LAYER, r );
 
-            r->Report( "" );
-            r->Report( wxString::Format( _( "Annular width constraints: min %s; opt %s; max %s." ),
-                                         reportMin( r->GetUnits(),  constraint ),
-                                         reportOpt( r->GetUnits(),  constraint ),
-                                         reportMax( r->GetUnits(),  constraint ) ) );
-        }
+        if( compileError )
+            reportCompileError( r );
+
+        r->Report( "" );
+        r->Report( wxString::Format( _( "Annular width constraints: min %s; opt %s; max %s." ),
+                                     reportMin( r->GetUnits(),  constraint ),
+                                     reportOpt( r->GetUnits(),  constraint ),
+                                     reportMax( r->GetUnits(),  constraint ) ) );
 
         r->Flush();
     }
@@ -703,26 +782,19 @@ int BOARD_INSPECTION_TOOL::InspectConstraints( const TOOL_EVENT& aEvent )
         r->Report( "<ul><li>" + EscapeHTML( getItemDescription( item ) ) + "</li></ul>" );
         r->Report( "" );
 
+        // PADSTACKS TODO: once we have padstacks we'll need to run this per-layer....
+        constraint = EVAL_RULES( HOLE_SIZE_CONSTRAINT, item, nullptr, UNDEFINED_LAYER, r );
+
         if( compileError )
-        {
-            r->Report( "" );
-            r->Report( _( "Report incomplete: could not compile custom design rules.  " )
-                       + "<a href='boardsetup'>" + _( "Show design rules." ) + "</a>" );
-        }
-        else
-        {
-            // PADSTACKS TODO: once we have padstacks we'll need to run this per-layer....
-            auto constraint = drcEngine.EvalRules( HOLE_SIZE_CONSTRAINT, item, nullptr,
-                                                   UNDEFINED_LAYER, r );
+            reportCompileError( r );
 
-            wxString min = _( "undefined" );
+        wxString min = _( "undefined" );
 
-            if( constraint.m_Value.HasMin() )
-                min = StringFromValue( r->GetUnits(), constraint.m_Value.Min(), true );
+        if( constraint.m_Value.HasMin() )
+            min = StringFromValue( r->GetUnits(), constraint.m_Value.Min(), true );
 
-            r->Report( "" );
-            r->Report( wxString::Format( _( "Hole constraint: min %s." ), min ) );
-        }
+        r->Report( "" );
+        r->Report( wxString::Format( _( "Hole constraint: min %s." ), min ) );
 
         r->Flush();
     }
@@ -733,31 +805,24 @@ int BOARD_INSPECTION_TOOL::InspectConstraints( const TOOL_EVENT& aEvent )
     r->Report( "<ul><li>" + EscapeHTML( getItemDescription( item ) ) + "</li></ul>" );
     r->Report( "" );
 
+    constraint = EVAL_RULES( DISALLOW_CONSTRAINT, item, nullptr, item->GetLayer(), r );
+
     if( compileError )
+        reportCompileError( r );
+
+    if( courtyardError )
     {
         r->Report( "" );
-        r->Report( _( "Report incomplete: could not compile custom design rules.  " )
-                   + "<a href='boardsetup'>" + _( "Show design rules." ) + "</a>" );
+        r->Report( _( "Report may be incomplete: some footprint courtyards are malformed." )
+                   + "  <a href='drc'>" + _( "Run DRC for a full analysis." ) + "</a>" );
     }
+
+    r->Report( "" );
+
+    if( constraint.m_DisallowFlags )
+        r->Report( _( "Item <b>disallowed</b> at current location." ) );
     else
-    {
-        if( courtyardError )
-        {
-            r->Report( "" );
-            r->Report( _( "Report may be incomplete: some footprint courtyards are malformed." )
-                       + "  <a href='drc'>" + _( "Run DRC for a full analysis." ) + "</a>" );
-        }
-
-        auto constraint = drcEngine.EvalRules( DISALLOW_CONSTRAINT, item, nullptr, item->GetLayer(),
-                                               r );
-
-        r->Report( "" );
-
-        if( constraint.m_DisallowFlags )
-            r->Report( _( "Item <b>disallowed</b> at current location." ) );
-        else
-            r->Report( _( "Item allowed at current location." ) );
-    }
+        r->Report( _( "Item allowed at current location." ) );
 
     r->Flush();
 

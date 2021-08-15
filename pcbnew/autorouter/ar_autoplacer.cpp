@@ -340,8 +340,8 @@ void AR_AUTOPLACER::buildFpAreas( FOOTPRINT* aFootprint, int aFpClearance )
     m_fpAreaBottom.RemoveAllContours();
 
     aFootprint->BuildPolyCourtyards();
-    m_fpAreaTop = aFootprint->GetPolyCourtyardFront();
-    m_fpAreaBottom = aFootprint->GetPolyCourtyardBack();
+    m_fpAreaTop = aFootprint->GetPolyCourtyard( F_CrtYd );
+    m_fpAreaBottom = aFootprint->GetPolyCourtyard( B_CrtYd );
 
     LSET layerMask;
 
