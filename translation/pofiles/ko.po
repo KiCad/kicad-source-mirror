@@ -15,8 +15,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
-"PO-Revision-Date: 2021-08-15 03:29+0000\n"
-"Last-Translator: 서범기 <joonhoflow@naver.com>\n"
+"PO-Revision-Date: 2021-08-15 04:13+0000\n"
+"Last-Translator: Ji Yoon Choi <chichoon.choi@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
 "Language: ko\n"
@@ -618,20 +618,20 @@ msgstr "홀 사용 안 함"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_raytracing_options_base.cpp:27
 msgid "Procedural textures (slow)"
-msgstr "절차적 질감(느림)"
+msgstr "절차적 질감 (느림)"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_raytracing_options_base.cpp:31
 msgid "Add floor (slow)"
-msgstr "층 추가(느림)"
+msgstr "층 추가 (느림)"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_raytracing_options_base.cpp:35
 msgid "Anti-aliasing (slow)"
-msgstr "안티-앨리어싱(느림)"
+msgstr "안티-앨리어싱 (느림)"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_raytracing_options_base.cpp:39
 msgid ""
 "Screen space ambient occlusions and global illumination reflections (slow)"
-msgstr "화면 공간 주변 막힘 및 전역 조명 반사(느림)"
+msgstr "화면 공간 주변 막힘 및 전역 조명 반사 (느림)"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_raytracing_options_base.cpp:54
 msgid "Number of Samples"
@@ -802,7 +802,7 @@ msgstr "중심 피벗 회전"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:43
 msgid "Center pivot rotation (middle mouse click)"
-msgstr "중앙 피벗 회전(중간 마우스 클릭)"
+msgstr "중앙 피벗 회전 (중간 마우스 클릭)"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:48
 msgid "Rotate X Clockwise"
@@ -1774,7 +1774,7 @@ msgstr "불투명도 :"
 
 #: common/dialogs/dialog_color_picker_base.cpp:185
 msgid "Preview (old/new):"
-msgstr "미리보기(이전/신규):"
+msgstr "미리보기 (이전/신규):"
 
 #: common/dialogs/dialog_color_picker_base.cpp:210
 msgid "Reset to Default"
@@ -1925,7 +1925,7 @@ msgstr ""
 #: common/dialogs/dialog_global_lib_table_config.cpp:49
 #, c-format
 msgid "Copy default global %s library table (recommended)"
-msgstr "기본 전역 %s 라이브러리 테이블 복사(권장)"
+msgstr "기본 전역 %s 라이브러리 테이블 복사 (권장)"
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:51
 #, c-format
@@ -2137,15 +2137,14 @@ msgstr "잘못된 배율 번호"
 #, c-format
 msgid ""
 "This scale results in an image which is too small (%.2f mm or %.1f mil)."
-msgstr "이 배율은 너무 작은 이미지를 생성합니다(%.2f mm 또는 %.1f mil)."
+msgstr "이 배율은 너무 작은 이미지를 생성합니다 (%.2f mm 또는 %.1f mil)."
 
 #: common/dialogs/dialog_image_editor.cpp:93
 #, c-format
 msgid ""
 "This scale results in an image which is very large (%.1f mm or %.2f in). Are "
 "you sure?"
-msgstr ""
-"이 배율은 매우 큰 이미지를 생성합니다(%.1f mm 또는 %.2f in). 확실한가요?"
+msgstr "이 배율은 매우 큰 이미지를 생성합니다 (%.1f mm 또는 %.2f in). 계속하시겠습니까?"
 
 #: common/dialogs/dialog_image_editor_base.cpp:33
 msgid "Grey"
@@ -2167,9 +2166,7 @@ msgstr "잠긴 항목 건너뛰기"
 msgid ""
 "Remove locked items from the selection and only apply the operation to the "
 "unlocked items (if any)."
-msgstr ""
-"선택 항목에서 잠긴 항목을 제거하고 잠금 해제 된 항목 (있는 경우)에만 작업을 "
-"적용합니다."
+msgstr "선택 항목에서 잠긴 항목을 제거하고 잠금 해제 된 항목 (있는 경우) 에만 작업을 적용합니다."
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:30
 #, c-format
@@ -2220,7 +2217,7 @@ msgstr "KiCad %s에 오신 것을 환영합니다!"
 
 #: common/dialogs/dialog_migrate_settings.cpp:61
 msgid "Import settings from a previous version (none found)"
-msgstr "이전 버전에서 설정을 가져오기(찾을 수 없음)"
+msgstr "이전 버전에서 설정을 가져오기 (찾을 수 없음)"
 
 #: common/dialogs/dialog_migrate_settings.cpp:123
 msgid "Select Settings Path"
@@ -3072,7 +3069,7 @@ msgstr "유지할 최대 백업 :"
 
 #: common/dialogs/panel_common_settings_base.cpp:256
 msgid "How many backup files total to keep (set to 0 for no limit)"
-msgstr "보관할 총 백업 파일 수(무제한의 경우 0으로 설정)"
+msgstr "보관할 총 백업 파일 수 (무제한의 경우 0으로 설정)"
 
 #: common/dialogs/panel_common_settings_base.cpp:263
 msgid "Maximum backups per day:"
@@ -3080,7 +3077,7 @@ msgstr "일일 최대 백업 수:"
 
 #: common/dialogs/panel_common_settings_base.cpp:265
 msgid "How many backup files to keep each day (set to 0 for no limit)"
-msgstr "매일 보관할 백업 파일 수(무제한의 경우 0으로 설정)"
+msgstr "매일 보관할 백업 파일 수 (무제한의 경우 0으로 설정)"
 
 #: common/dialogs/panel_common_settings_base.cpp:272
 msgid "Minimum time between backups:"
@@ -3090,7 +3087,7 @@ msgstr "백업 사이의 최소 시간:"
 msgid ""
 "Number of minutes since the last backup before another will be created the "
 "next time you save (set to 0 for no minimum)"
-msgstr "저장할 때 마지막 백업이 생성되기 전의 분(최소 0으로 설정)"
+msgstr "저장할 때 마지막 백업이 생성되기 전의 분 (최소 0으로 설정)"
 
 #: common/dialogs/panel_common_settings_base.cpp:285
 msgid "Maximum total backup size:"
@@ -3100,9 +3097,7 @@ msgstr "최대 총 백업 크기:"
 msgid ""
 "If the total size of backup files grows above this limit, old backups will "
 "be deleted (set to 0 for no limit)"
-msgstr ""
-"백업 파일의 총 크기가 이 제한을 초과하면 오래된 백업이 삭제됩니다(제한이 없"
-"는 경우 0으로 설정)"
+msgstr "백업 파일의 총 크기가 이 제한을 초과하면 오래된 백업이 삭제됩니다 (제한이 없는 경우 0으로 설정)"
 
 #: common/dialogs/panel_common_settings_base.cpp:294
 msgid "MB"
@@ -3230,7 +3225,7 @@ msgstr "선택한 개체를 드래그 합니다. 그렇지 않으면 선택 사�
 
 #: common/dialogs/panel_mouse_settings_base.cpp:103
 msgid "Drag any object (selected or not)"
-msgstr "개체 드래그(선택 여부)"
+msgstr "개체 드래그 (선택 여부)"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:112
 msgid "Middle button drag:"
@@ -4311,7 +4306,7 @@ msgstr "수직 위치 맞춤"
 msgid ""
 "The base path of locally installed system footprint libraries (.pretty "
 "folders)."
-msgstr "로컬로 설치된 시스템 풋프린트 라이브러리(.pretty 폴더)의 기본 경로."
+msgstr "지역적으로 설치된 시스템 풋프린트 라이브러리 (.pretty 폴더) 의 기본 경로."
 
 #: common/env_vars.cpp:73
 msgid "The base path of system footprint 3D shapes (.3Dshapes folders)."
@@ -4339,8 +4334,8 @@ msgid ""
 "For instance, ${KIPRJMOD}/libs/footprints.pretty can be defined as a folder "
 "containing a project specific footprint library named footprints.pretty."
 msgstr ""
-"KiCad에서 내부적으로 정의(편집 불가)하며, 현재 불러온 프로젝트 파일의 절대 경로로 설정됩니다. 이 환경 변수는 현재 불러온 "
-"프로젝트와 관련된 파일 및 경로를 정의하는 데 사용할 수 있습니다. 예를 들어 ${KIPRJMOD}/libs/"
+"KiCad에서 내부적으로 정의되어 있으며, (편집 불가), 현재 불러온 프로젝트 파일의 절대 경로로 설정됩니다. 이 환경 변수는 현재 "
+"불러온 프로젝트와 관련된 파일 및 경로를 정의하는 데 사용할 수 있습니다. 예를 들어 ${KIPRJMOD}/libs/"
 "footprints.pretty는 Footprints.pretty라는 프로젝트별 풋프린트 라이브러리를 포함하는 폴더로 정의할 수 있습니다."
 
 #: common/env_vars.cpp:88
@@ -4424,7 +4419,7 @@ msgstr "기존 경로:"
 
 #: common/filename_resolver.cpp:487
 msgid "Bad alias (duplicate name)"
-msgstr "잘못된 별칭(중복 이름)"
+msgstr "잘못된 별칭 (중복된 이름)"
 
 #: common/filename_resolver.cpp:610
 msgid "3D configuration directory is unknown"
@@ -4657,7 +4652,7 @@ msgstr "누락되었습니다.\n"
 
 #: common/kiway.cpp:303
 msgid "Perhaps a shared library (.dll or .so) file is missing.\n"
-msgstr "공유 라이브러리(.dll 또는 .so) 파일이 누락된것 같습니다.\n"
+msgstr "공유 라이브러리 (.dll 또는 .so) 파일이 누락된것 같습니다.\n"
 
 #: common/kiway.cpp:305
 msgid ""
@@ -5262,11 +5257,11 @@ msgstr "기본 편집기를 선택해야 합니다"
 
 #: common/pgm_base.cpp:186
 msgid "Executable file (*.exe)|*.exe"
-msgstr "실행 파일(*.exe)|*.exe"
+msgstr "실행 파일 (*.exe)|*.exe"
 
 #: common/pgm_base.cpp:188
 msgid "Executable file (*)|*"
-msgstr "실행 파일(*)|*"
+msgstr "실행 파일 (*)|*"
 
 #: common/pgm_base.cpp:198
 msgid "Select Preferred Editor"
@@ -5406,7 +5401,7 @@ msgstr "파일 추출 오류!"
 #: pcbnew/exporters/gerber_jobfile_writer.cpp:152
 #, c-format
 msgid "Failed to create file '%s'."
-msgstr "파일 '%s'을(를) 만들지 못했습니다."
+msgstr "파일 '%s'의 생성에 실패하였습니다."
 
 #: common/project/project_archiver.cpp:254
 #, c-format
@@ -5421,7 +5416,7 @@ msgstr "'%s' 파일을 백업하지 못함."
 #: common/project/project_archiver.cpp:290
 #, c-format
 msgid "Zip archive '%s' created (%s uncompressed, %s compressed)."
-msgstr "Zip 아카이브 '%s'이(가) 생성되었습니다(%s 비압축, %s 압축)."
+msgstr "Zip 아카이브 '%s'이(가) 생성되었습니다 (%s 비압축, %s 압축)."
 
 #: common/rc_item.cpp:350
 msgid "Excluded "
@@ -6912,7 +6907,7 @@ msgid ""
 "\n"
 "Please choose the assignment."
 msgstr ""
-"회로도 네트리스트에서의 풋프린트 할당과 심볼 풋프린트 관련성 파일(.cmp) 이 충돌합니다.\n"
+"회로도 네트리스트에서의 풋프린트 할당과 심볼 풋프린트 관련성 파일 (.cmp) 이 충돌합니다.\n"
 "\n"
 "할당 항목을 선택하세요."
 
@@ -8394,7 +8389,7 @@ msgstr "보고서 파일 '%s' 생성됨."
 #: eeschema/dialogs/dialog_erc.cpp:773
 #, c-format
 msgid "ERC report (%s, Encoding UTF8)\n"
-msgstr "ERC 보고(%s, UTF8 인코딩)\n"
+msgstr "ERC 보고 (%s, UTF8 인코딩)\n"
 
 #: eeschema/dialogs/dialog_erc.cpp:788
 #, c-format
@@ -9472,7 +9467,7 @@ msgstr "핀 번호 (&b):"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:44
 msgid "Pin number: 1 to 4 ASCII letters and/or digits"
-msgstr "핀 번호: 1 ~ 4개의 ASCII 문자와 (또는) 숫자"
+msgstr "핀 번호: 1 ~ 4개의 ASCII 문자 또는 숫자"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:51
 msgid "&X position:"
@@ -11449,11 +11444,11 @@ msgstr "버스와 와이어를 H 및 V 방향으로 제한 (&R)"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:27
 msgid "Mouse drag performs drag (G) operation"
-msgstr "마우스를 끌면 끌기(G) 작업이 수행됩니다"
+msgstr "마우스를 끌면 끌기 (G) 작업이 수행됩니다"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:28
 msgid "If unchecked, mouse drag will perform move (M) operation"
-msgstr "이 옵션을 선택하지 않으면 마우스 끌기가 이동(M) 작업을 수행합니다"
+msgstr "이 옵션을 선택하지 않으면 마우스 끌기가 이동 (M) 작업을 수행합니다"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:32
 msgid "Automatically start wires on unconnected pins"
@@ -11505,7 +11500,7 @@ msgid ""
 "Left click (and drag) actions depend on 3 modifier keys:\n"
 "Alt, Shift and Ctrl."
 msgstr ""
-"좌클릭(및 끌기) 동작은 3개의 수정자 키에 따라 달라집니다.\n"
+"좌클릭 (및 끌기) 동작은 3개의 수정자 키에 따라 달라집니다.\n"
 "Alt, Shift 및 Ctrl입니다."
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:102
@@ -11546,7 +11541,7 @@ msgid ""
 "Left click (and drag) actions depend on 3 modifier keys:\n"
 "Alt, Shift and Cmd."
 msgstr ""
-"좌클릭(및 끌기) 동작은 3개의 수정자 키에 따라 달라집니다.\n"
+"좌클릭 (및 끌기) 동작은 3개의 수정자 키에 따라 달라집니다.\n"
 "Alt, Shift 및 Cmd."
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:170
@@ -11720,7 +11715,7 @@ msgstr "표준 (1,2,3)"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:167
 msgid "Abbreviated (1..3)"
-msgstr "약어(1..3)"
+msgstr "약어 (1..3)"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:176
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:128
@@ -11884,21 +11879,22 @@ msgid ""
 "Select one or more rows containing libraries in Legacy format (*.lib) to "
 "save as current KiCad format (*.kicad_sym)."
 msgstr ""
-"기존 형식(*.lib)의 라이브러리가 포함된 행을 하나 이상 선택하여 현재 KiCad 형식(*.kicad_sym)으로 저장합니다."
+"오래된 형식 (*.lib) 의 라이브러리가 포함된 행을 하나 이상 선택하여 현재 KiCad 형식 (*.kicad_sym) 으로 저장합니다."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:741
 #, c-format
 msgid ""
 "Save '%s' as current KiCad format (*.kicad_sym) and replace legacy entry in "
 "table?"
-msgstr "'%s'을(를) 현재 KiCad 형식(*.kicad_sym)으로 저장하고 테이블에서 레거시 항목을 바꾸시겠습니까?"
+msgstr "'%s'을(를) 현재 KiCad 형식 (*.kicad_sym) 으로 저장하고 테이블에서 레거시 항목을 바꾸시겠습니까?"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:747
 #, c-format
 msgid ""
 "Save %d Legacy format libraries as current KiCad format (*.kicad_sym) and "
 "replace legacy entries in table?"
-msgstr "%d 레거시 형식 라이브러리를 현재 KiCad 형식(*.kicad_sym)으로 저장하고 테이블에서 레거시 항목을 바꾸시겠습니까?"
+msgstr ""
+"%d개의 오래된 형식 라이브러리를 현재 KiCad 형식 (*.kicad_sym) 으로 저장하고 테이블에서 오래된 항목을 교체하시겠습니까?"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:775
 #: pcbnew/dialogs/dialog_export_step.cpp:324
@@ -12166,7 +12162,7 @@ msgstr "회로도의 다른 곳에서는 연결되지 않은 전역 레이블"
 
 #: eeschema/erc_item.cpp:90
 msgid "Labels are similar (lower/upper case difference only)"
-msgstr "라벨이 비슷함(소문자/대문자만 다름)"
+msgstr "라벨이 비슷함 (소문자/대문자만 다름)"
 
 #: eeschema/erc_item.cpp:94
 msgid "Different footprint assigned in another unit of the symbol"
@@ -13114,7 +13110,7 @@ msgstr "'%s' 파일을 열 수 없습니다."
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:315
 #, c-format
 msgid "Storage file not fully parsed (%d bytes remaining)."
-msgstr "저장소 파일이 완전히 파싱되지 않았습니다(%d바이트 남음)."
+msgstr "저장소 파일이 완전히 파싱되지 않았습니다 (%d바이트 남음)."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:487
 #, c-format
@@ -13124,7 +13120,7 @@ msgstr "알 수 없는 레코드 ID: %d."
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:604
 #, c-format
 msgid "Pin's owner (%d) not found."
-msgstr "핀의 소유자(%d)를 찾을 수 없습니다."
+msgstr "핀의 소유자 (%d) 를 찾을 수 없습니다."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:649
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1833
@@ -13146,7 +13142,7 @@ msgstr "핀에 예기치 않은 내부 모서리 타입이 있습니다."
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:831
 #, c-format
 msgid "Label's owner (%d) not found."
-msgstr "라벨의 소유자(%d)를 찾을 수 없습니다."
+msgstr "라벨의 소유자 (%d) 를 찾을 수 없습니다."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:948
 #, c-format
@@ -13156,22 +13152,22 @@ msgstr "베지어 곡선에는 %d 개의 조절점이 있습니다. 최소 2개�
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1005
 #, c-format
 msgid "Bezier's owner (%d) not found."
-msgstr "베지에의 소유자(%d)를 찾을 수 없습니다."
+msgstr "베지에의 소유자 (%d) 를 찾을 수 없습니다."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1091
 #, c-format
 msgid "Polyline's owner (%d) not found."
-msgstr "폴리라인의 소유자(%d)를 찾을 수 없습니다."
+msgstr "폴리라인의 소유자 (%d) 를 찾을 수 없습니다."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1150
 #, c-format
 msgid "Polygon's owner (%d) not found."
-msgstr "다각형의 소유자(%d)를 찾을 수 없습니다."
+msgstr "다각형의 소유자 (%d) 를 찾을 수 없습니다."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1231
 #, c-format
 msgid "Rounded rectangle's owner (%d) not found."
-msgstr "모서리가 둥근 직사각형의 소유자(%d)를 찾을 수 없습니다."
+msgstr "모서리가 둥근 직사각형의 소유자 (%d) 를 찾을 수 없습니다."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1268
 msgid "Arc drawing on schematic not currently supported."
@@ -13180,22 +13176,22 @@ msgstr "현재 회로도의 원호 그리기가 지원되지 않습니다."
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1278
 #, c-format
 msgid "Arc's owner (%d) not found."
-msgstr "호의 소유자(%d)를 찾을 수 없습니다."
+msgstr "호의 소유자 (%d) 를 찾을 수 없습니다."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1339
 #, c-format
 msgid "Line's owner (%d) not found."
-msgstr "라인의 소유자(%d)를 찾을 수 없습니다."
+msgstr "선의 소유자 (%d) 를 찾을 수 없습니다."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1410
 #, c-format
 msgid "Rectangle's owner (%d) not found."
-msgstr "직사각형의 소유자(%d)를 찾을 수 없습니다."
+msgstr "직사각형의 소유자 (%d) 를 찾을 수 없습니다."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1478
 #, c-format
 msgid "Sheet entry's owner (%d) not found."
-msgstr "시트 항목의 소유자(%d)를 찾을 수 없습니다."
+msgstr "시트 항목의 소유자 (%d) 를 찾을 수 없습니다."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1724
 msgid "Power Port has unknown style, use bar instead."
@@ -13214,7 +13210,7 @@ msgstr "포트 %s에 연결이 없습니다."
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2073
 #, c-format
 msgid "Embedded file %s not found in storage."
-msgstr "내장된 파일 %s이(가) 스토리지에서 찾을 수 없습니다."
+msgstr "내장된 파일 %s을 저장소에서 찾을 수 없습니다."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2090
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2109
@@ -13230,27 +13226,27 @@ msgstr "파일을 찾을 수 없습니다 %s."
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2185
 #, c-format
 msgid "Sheetname's owner (%d) not found."
-msgstr "시트 이름의 소유자(%d)를 찾을 수 없습니다."
+msgstr "시트 이름의 소유자 (%d) 를 찾을 수 없습니다."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2212
 #, c-format
 msgid "Filename's owner (%d) not found."
-msgstr "파일 이름의 소유자(%d)를 찾을 수 없습니다."
+msgstr "파일 이름의 소유자 (%d) 를 찾을 수 없습니다."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2250
 #, c-format
 msgid "Designator's owner (%d) not found."
-msgstr "지정자의 소유자(%d)를 찾을 수 없습니다."
+msgstr "지정자의 소유자 (%d) 를 찾을 수 없습니다."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2405
 #, c-format
 msgid "Implementation's owner (%d) not found."
-msgstr "구현의 소유자(%d)를 찾을 수 없습니다."
+msgstr "구현의 소유자 (%d) 를 찾을 수 없습니다."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2415
 #, c-format
 msgid "Footprint's owner (%d) not found."
-msgstr "풋프린트의 소유자(%d)를 찾을 수 없습니다."
+msgstr "풋프린트의 소유자 (%d) 를 찾을 수 없습니다."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:71
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:69
@@ -14485,7 +14481,7 @@ msgstr "온도 (swept)"
 
 #: eeschema/sim/sim_plot_panel.cpp:419
 msgid "Voltage (measured)"
-msgstr "전압(측정)"
+msgstr "전압 (측정됨)"
 
 #: eeschema/sim/spice_simulator.cpp:61
 msgid "DC Sweep"
@@ -15354,7 +15350,7 @@ msgid ""
 "Enabled by default for multiunit parts with interchangeable units."
 msgstr ""
 "동기화된 핀 편집 모드\n"
-"활성화된 경우 모든 변경 내용(핀 번호 제외)을 다른 유닛으로 전파합니다.\n"
+"활성화된 경우 모든 변경 내용 (핀 번호 제외) 을 다른 유닛으로 전파합니다.\n"
 "교체 가능한 유닛이 있는 다중 유닛 부품에 대해 기본적으로 활성화됩니다."
 
 #: eeschema/tools/ee_actions.cpp:220
@@ -35015,7 +35011,7 @@ msgstr "여러 전자 관련 계산을 위한 계산기"
 
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:10
 msgid "KiCad PCB Editor (Standalone)"
-msgstr "KiCad PCB 편집기(독립실행형)"
+msgstr "KiCad PCB 편집기 (스탠드얼론)"
 
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:11
 msgid "PCB layout editor"
