@@ -16,7 +16,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
 "PO-Revision-Date: 2021-08-15 06:42+0000\n"
-"Last-Translator: Ji Yoon Choi <chichoon.choi@gmail.com>\n"
+"Last-Translator: 서범기 <joonhoflow@naver.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
 "Language: ko\n"
@@ -25416,7 +25416,7 @@ msgstr "배선 마무리 제안"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:86
 msgid "Optimize entire track being dragged"
-msgstr "드래그된 모든 배선을 최적화"
+msgstr "드래그된 모든 배선 최적화"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:87
 msgid ""
@@ -25424,8 +25424,8 @@ msgid ""
 "will be optimized and re-routed when a segment is dragged.  When disabled, "
 "only the area near the segment being dragged will be optimized."
 msgstr ""
-"활성화되었을 경우, 세그먼트가 드래그되었을 때 화면에 표시되는 배선의 모든 부분이 최적화되고 재 라우팅됩니다.  비활성화될 경우, "
-"드래그된 세그먼트의 주변 영역만 최적화됩니다."
+"활성화되었을 경우, 세그먼트가 드래그되었을 때 화면에 표시되는 배선의 모든 부분이 최적화되고 재 라우팅됩니다. 비활성화될 경우, 드래그된 "
+"세그먼트의 주변 영역만 최적화됩니다."
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:91
 msgid "Use mouse path to set track posture"
