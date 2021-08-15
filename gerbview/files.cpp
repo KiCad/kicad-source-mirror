@@ -51,7 +51,6 @@ void GERBVIEW_FRAME::OnGbrFileHistory( wxCommandEvent& event )
 
     if( !fn.IsEmpty() )
     {
-        Erase_Current_DrawLayer( false );
         LoadGerberFiles( fn );
     }
 }
@@ -70,7 +69,6 @@ void GERBVIEW_FRAME::OnDrlFileHistory( wxCommandEvent& event )
 
     if( !fn.IsEmpty() )
     {
-        Erase_Current_DrawLayer( false );
         LoadExcellonFiles( fn );
     }
 }
@@ -89,7 +87,6 @@ void GERBVIEW_FRAME::OnZipFileHistory( wxCommandEvent& event )
 
     if( !filename.IsEmpty() )
     {
-        Erase_Current_DrawLayer( false );
         LoadZipArchiveFile( filename );
     }
 }
@@ -284,13 +281,12 @@ bool GERBVIEW_FRAME::LoadListOfGerberAndDrillFiles( const wxString& aPath,
         // Make sure we have a layer available to load into
         layer = getNextAvailableLayer( layer );
 
-        if( layer == NO_AVAILABLE_LAYERS && ii < aFilenameList.GetCount() - 1 )
+        if( layer == NO_AVAILABLE_LAYERS )
         {
             success = false;
             reporter.Report( MSG_NO_MORE_LAYER, RPT_SEVERITY_ERROR );
 
             // Report the name of not loaded files:
-            ii += 1;
             while( ii < aFilenameList.GetCount() )
             {
                 filename = aFilenameList[ii++];
@@ -425,32 +421,36 @@ bool GERBVIEW_FRAME::LoadExcellonFiles( const wxString& aFullFileName )
 
         m_lastFileName = filename.GetFullPath();
 
-        SetActiveLayer( layer, false );
+        layer = getNextAvailableLayer( layer );
 
-        if( Read_EXCELLON_File( filename.GetFullPath() ) )
+        if( layer == NO_AVAILABLE_LAYERS )
         {
-            // Update the list of recent drill files.
-            UpdateFileHistory( filename.GetFullPath(), &m_drillFileHistory );
+            success = false;
+            reporter.Report( MSG_NO_MORE_LAYER, RPT_SEVERITY_ERROR );
 
-            layer = getNextAvailableLayer( layer );
-
-            if( layer == NO_AVAILABLE_LAYERS && ii < filenamesList.GetCount()-1 )
+            // Report the name of not loaded files:
+            while( ii < filenamesList.GetCount() )
             {
-                success = false;
-                reporter.Report( MSG_NO_MORE_LAYER, RPT_SEVERITY_ERROR );
-
-                // Report the name of not loaded files:
-                ii += 1;
-                while( ii < filenamesList.GetCount() )
-                {
-                    filename = filenamesList[ii++];
-                    wxString txt = wxString::Format( MSG_NOT_LOADED, filename.GetFullName() );
-                    reporter.Report( txt, RPT_SEVERITY_ERROR );
-                }
-                break;
+                filename = filenamesList[ii++];
+                wxString txt = wxString::Format( MSG_NOT_LOADED, filename.GetFullName() );
+                reporter.Report( txt, RPT_SEVERITY_ERROR );
             }
-
+            break;
+        }
+        else
+        {
             SetActiveLayer( layer, false );
+
+            if( Read_EXCELLON_File( filename.GetFullPath() ) )
+            {
+                // Update the list of recent drill files.
+                UpdateFileHistory( filename.GetFullPath(), &m_drillFileHistory );
+            }
+            else
+            {
+                wxString txt = wxString::Format( MSG_NOT_LOADED, filename.GetFullName() );
+                reporter.Report( txt, RPT_SEVERITY_ERROR );
+            }
         }
     }
 
