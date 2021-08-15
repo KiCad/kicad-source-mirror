@@ -85,7 +85,7 @@ private:
 bool DRC_TEST_PROVIDER_SILK_CLEARANCE::Run()
 {
     // This is the number of tests between 2 calls to the progress bar
-    const int delta = 2000;
+    const int delta = 500;
 
     if( m_drcEngine->IsErrorLimitExceeded( DRCE_OVERLAPPING_SILK ) )
     {
@@ -109,11 +109,21 @@ bool DRC_TEST_PROVIDER_SILK_CLEARANCE::Run()
     DRC_RTREE silkTree;
     DRC_RTREE targetTree;
     int       ii = 0;
-    int       targets = 0;
+    int       items = 0;
+
+    auto countItems =
+            [&]( BOARD_ITEM* item ) -> bool
+            {
+                ++items;
+                return true;
+            };
 
     auto addToSilkTree =
-            [&silkTree]( BOARD_ITEM* item ) -> bool
+            [&]( BOARD_ITEM* item ) -> bool
             {
+                if( !reportProgress( ii++, items, delta ) )
+                    return false;
+
                 for( PCB_LAYER_ID layer : { F_SilkS, B_SilkS } )
                 {
                     if( item->IsOnLayer( layer ) )
@@ -123,17 +133,10 @@ bool DRC_TEST_PROVIDER_SILK_CLEARANCE::Run()
                 return true;
             };
 
-    auto countTargets =
-            [&targets]( BOARD_ITEM* item ) -> bool
-            {
-                ++targets;
-                return true;
-            };
-
     auto addToTargetTree =
             [&]( BOARD_ITEM* item ) -> bool
             {
-                if( !reportProgress( ii++, targets, delta ) )
+                if( !reportProgress( ii++, items, delta ) )
                     return false;
 
                 for( PCB_LAYER_ID layer : item->GetLayerSet().Seq() )
@@ -142,7 +145,45 @@ bool DRC_TEST_PROVIDER_SILK_CLEARANCE::Run()
                 return true;
             };
 
-    auto checkClearance =
+    forEachGeometryItem( s_allBasicItems, LSET( 2, F_SilkS, B_SilkS ), countItems );
+
+    forEachGeometryItem( s_allBasicItems,
+                         LSET::FrontMask() | LSET::BackMask() | LSET( 2, Edge_Cuts, Margin ),
+                         countItems );
+
+    forEachGeometryItem( s_allBasicItems, LSET( 2, F_SilkS, B_SilkS ), addToSilkTree );
+
+    forEachGeometryItem( s_allBasicItems,
+                         LSET::FrontMask() | LSET::BackMask() | LSET( 2, Edge_Cuts, Margin ),
+                         addToTargetTree );
+
+    reportAux( _("Testing %d silkscreen features against %d board items."),
+               silkTree.size(),
+               targetTree.size() );
+
+    const std::vector<DRC_RTREE::LAYER_PAIR> layerPairs =
+    {
+        DRC_RTREE::LAYER_PAIR( F_SilkS, F_SilkS ),
+        DRC_RTREE::LAYER_PAIR( F_SilkS, F_Mask ),
+        DRC_RTREE::LAYER_PAIR( F_SilkS, F_Adhes ),
+        DRC_RTREE::LAYER_PAIR( F_SilkS, F_Paste ),
+        DRC_RTREE::LAYER_PAIR( F_SilkS, F_CrtYd ),
+        DRC_RTREE::LAYER_PAIR( F_SilkS, F_Fab ),
+        DRC_RTREE::LAYER_PAIR( F_SilkS, F_Cu ),
+        DRC_RTREE::LAYER_PAIR( F_SilkS, Edge_Cuts ),
+        DRC_RTREE::LAYER_PAIR( F_SilkS, Margin ),
+        DRC_RTREE::LAYER_PAIR( B_SilkS, B_SilkS ),
+        DRC_RTREE::LAYER_PAIR( B_SilkS, B_Mask ),
+        DRC_RTREE::LAYER_PAIR( B_SilkS, B_Adhes ),
+        DRC_RTREE::LAYER_PAIR( B_SilkS, B_Paste ),
+        DRC_RTREE::LAYER_PAIR( B_SilkS, B_CrtYd ),
+        DRC_RTREE::LAYER_PAIR( B_SilkS, B_Fab ),
+        DRC_RTREE::LAYER_PAIR( B_SilkS, B_Cu ),
+        DRC_RTREE::LAYER_PAIR( B_SilkS, Edge_Cuts ),
+        DRC_RTREE::LAYER_PAIR( B_SilkS, Margin )
+    };
+
+    targetTree.QueryCollidingPairs( &silkTree, layerPairs,
             [&]( const DRC_RTREE::LAYER_PAIR& aLayers, DRC_RTREE::ITEM_WITH_SHAPE* aRefItem,
                  DRC_RTREE::ITEM_WITH_SHAPE* aTestItem, bool* aCollisionDetected ) -> bool
             {
@@ -204,50 +245,12 @@ bool DRC_TEST_PROVIDER_SILK_CLEARANCE::Run()
                 }
 
                 return true;
-            };
-
-    forEachGeometryItem( s_allBasicItems, LSET( 2, F_SilkS, B_SilkS ), addToSilkTree );
-    forEachGeometryItem( s_allBasicItems,
-                         LSET::FrontMask() | LSET::BackMask() | LSET( 2, Edge_Cuts, Margin ),
-                         countTargets );
-
-    targets *= 2;  // One for adding to RTree; one for testing
-
-    forEachGeometryItem( s_allBasicItems,
-                         LSET::FrontMask() | LSET::BackMask() | LSET( 2, Edge_Cuts, Margin ),
-                         addToTargetTree );
-
-    reportAux( _("Testing %d silkscreen features against %d board items."),
-               silkTree.size(),
-               targetTree.size() );
-
-    const std::vector<DRC_RTREE::LAYER_PAIR> layerPairs =
-    {
-        DRC_RTREE::LAYER_PAIR( F_SilkS, F_SilkS ),
-        DRC_RTREE::LAYER_PAIR( F_SilkS, F_Mask ),
-        DRC_RTREE::LAYER_PAIR( F_SilkS, F_Adhes ),
-        DRC_RTREE::LAYER_PAIR( F_SilkS, F_Paste ),
-        DRC_RTREE::LAYER_PAIR( F_SilkS, F_CrtYd ),
-        DRC_RTREE::LAYER_PAIR( F_SilkS, F_Fab ),
-        DRC_RTREE::LAYER_PAIR( F_SilkS, F_Cu ),
-        DRC_RTREE::LAYER_PAIR( F_SilkS, Edge_Cuts ),
-        DRC_RTREE::LAYER_PAIR( F_SilkS, Margin ),
-        DRC_RTREE::LAYER_PAIR( B_SilkS, B_SilkS ),
-        DRC_RTREE::LAYER_PAIR( B_SilkS, B_Mask ),
-        DRC_RTREE::LAYER_PAIR( B_SilkS, B_Adhes ),
-        DRC_RTREE::LAYER_PAIR( B_SilkS, B_Paste ),
-        DRC_RTREE::LAYER_PAIR( B_SilkS, B_CrtYd ),
-        DRC_RTREE::LAYER_PAIR( B_SilkS, B_Fab ),
-        DRC_RTREE::LAYER_PAIR( B_SilkS, B_Cu ),
-        DRC_RTREE::LAYER_PAIR( B_SilkS, Edge_Cuts ),
-        DRC_RTREE::LAYER_PAIR( B_SilkS, Margin )
-    };
-
-    targetTree.QueryCollidingPairs( &silkTree, layerPairs, checkClearance, m_largestClearance,
-                                    [&]( int aCount, int aSize ) -> bool
-                                    {
-                                        return reportProgress( ++ii, targets, delta );
-                                    } );
+            },
+            m_largestClearance,
+            [&]( int aCount, int aSize ) -> bool
+            {
+                return reportProgress( aCount, aSize, delta );
+            } );
 
     reportRuleStatistics();
 
