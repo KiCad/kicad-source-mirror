@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
-"PO-Revision-Date: 2021-08-15 03:29+0000\n"
+"PO-Revision-Date: 2021-08-15 19:24+0000\n"
 "Last-Translator: VicSanRoPe <vicsanrope@protonmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/kicad/"
 "master-source/es/>\n"
@@ -807,27 +807,27 @@ msgstr "Rotación de pivote central (clic con el botón central del ratón)"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:48
 msgid "Rotate X Clockwise"
-msgstr "Girar X en sentido horario"
+msgstr "Rotar X en sentido horario"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:53
 msgid "Rotate X Counterclockwise"
-msgstr "Girar X en sentido anti horario"
+msgstr "Rotar X en sentido antihorario"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:58
 msgid "Rotate Y Clockwise"
-msgstr "Girar Y en sentido horario"
+msgstr "Rotar Y en sentido horario"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:63
 msgid "Rotate Y Counterclockwise"
-msgstr "Girar Y en sentido anti horario"
+msgstr "Rotar Y en sentido antihorario"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:68
 msgid "Rotate Z Clockwise"
-msgstr "Girar Z en sentido horario"
+msgstr "Rotar Z en sentido horario"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:73
 msgid "Rotate Z Counterclockwise"
-msgstr "Girar Z en sentido anti horario"
+msgstr "Rotar Z en sentido antihorario"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:79
 msgid "Move board Left"
@@ -1932,14 +1932,11 @@ msgid ""
 "of the options below.  If you are not sure which option to select, please\n"
 "use the default selection."
 msgstr ""
-"Se ha ejecutado por primera vez KiCad utilizando la nueva tabla de "
-"bibliotecas %s\n"
-"para acceder a las bibliotecas. Para que KiCad tenga acceso a las "
-"bibliotecas %s,\n"
-"debe configurar la tabla global %s. Seleccione una de las opciones "
-"siguientes.\n"
-"Si no sabe con certeza qué opción seleccionar, utilice la selección "
-"predeterminada."
+"Se ha ejecutado por primera vez KiCad utilizando la nueva tabla de\n"
+"bibliotecas %s para acceder a las bibliotecas. Para que KiCad tenga\n"
+"acceso a las bibliotecas %s, debe configurar la tabla global %s.\n"
+"Seleccione una de las opciones siguientes. Si no sabe con certeza qué\n"
+"opción seleccionar, utilice la selección predeterminada."
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:49
 #, c-format
@@ -4941,7 +4938,7 @@ msgstr "Edge.Cuts"
 
 #: common/layer_id.cpp:81 pcbnew/dialogs/panel_setup_layers_base.cpp:662
 msgid "Margin"
-msgstr "Margen"
+msgstr "Margin"
 
 #: common/layer_id.cpp:84
 msgid "F.Courtyard"
@@ -5127,7 +5124,7 @@ msgstr "Cursor"
 
 #: common/layer_id.cpp:135
 msgid "Highlighted items"
-msgstr "Elementos resaltados:"
+msgstr "Elementos resaltados"
 
 #: common/layer_id.cpp:136
 msgid "Hidden items"
@@ -5711,11 +5708,11 @@ msgstr "Duplicar"
 
 #: common/tool/actions.cpp:181
 msgid "Duplicates the selected item(s)"
-msgstr "Duplica el/los elemento/s seleccionado/s."
+msgstr "Duplica el/los elemento(s) seleccionado(s)"
 
 #: common/tool/actions.cpp:192
 msgid "Deletes selected item(s)"
-msgstr "Elimina el/los elemento/s seleccionado/s."
+msgstr "Elimina el/los elemento(s) seleccionado(s)"
 
 #: common/tool/actions.cpp:197
 msgid "Interactive Delete Tool"
@@ -5829,16 +5826,16 @@ msgstr "Zoom menos en el cursor"
 #: common/tool/actions.cpp:315 common/widgets/mathplot.cpp:1761
 #: eeschema/sim/sim_plot_frame_base.cpp:87
 msgid "Zoom In"
-msgstr "Zoom +"
+msgstr "Más zoom"
 
 #: common/tool/actions.cpp:321 common/widgets/mathplot.cpp:1762
 #: eeschema/sim/sim_plot_frame_base.cpp:91
 msgid "Zoom Out"
-msgstr "Zoom menos"
+msgstr "Menos zoom"
 
 #: common/tool/actions.cpp:333
 msgid "Zoom to Selection"
-msgstr "Zoom selección"
+msgstr "Zoom a selección"
 
 #: common/tool/actions.cpp:346
 msgid "Cursor Up"
@@ -5874,19 +5871,19 @@ msgstr "Cursor derecha rápido"
 
 #: common/tool/actions.cpp:395
 msgid "Click"
-msgstr "Click"
+msgstr "Clic"
 
 #: common/tool/actions.cpp:395
 msgid "Performs left mouse button click"
-msgstr "Ejecuta click de botón izquierdo"
+msgstr "Ejecuta clic de botón izquierdo"
 
 #: common/tool/actions.cpp:401
 msgid "Double-click"
-msgstr "Doble click"
+msgstr "Doble clic"
 
 #: common/tool/actions.cpp:401
 msgid "Performs left mouse button double-click"
-msgstr "Ejecuta doble click de botón izquierdo"
+msgstr "Ejecuta doble clic de botón izquierdo"
 
 #: common/tool/actions.cpp:407
 msgid "Pin Library"
@@ -8511,8 +8508,8 @@ msgstr "Cambie la gravedad a Error para todas las infracciones de '%s'"
 #: pcbnew/dialogs/dialog_drc.cpp:468 pcbnew/dialogs/dialog_drc.cpp:475
 msgid "Violation severities can also be edited in the Board Setup... dialog"
 msgstr ""
-"La gravedad de la infracción también se puede editar en el cuadro de diálogo "
-"Configuración de placa ..."
+"La gravedad de la infracción también se puede editar en el diálogo de "
+"Configuración de placa..."
 
 #: eeschema/dialogs/dialog_erc.cpp:518 pcbnew/dialogs/dialog_drc.cpp:473
 #, c-format
@@ -8538,7 +8535,7 @@ msgstr "Editar la gravedad de las infracciones..."
 
 #: eeschema/dialogs/dialog_erc.cpp:536
 msgid "Open the Schematic Setup... dialog"
-msgstr "Abra el cuadro de diálogo Configuración de esquema..."
+msgstr "Abrir el diálogo de Configuración de esquema..."
 
 #: eeschema/dialogs/dialog_erc.cpp:628
 #: eeschema/dialogs/dialog_schematic_setup.cpp:73
@@ -14111,7 +14108,6 @@ msgid "Syntax Help"
 msgstr "Ayuda de sintaxis"
 
 #: eeschema/sch_text_help_md.h:2
-#, fuzzy
 msgid ""
 "<table>\n"
 "    <tr>\n"
@@ -14260,14 +14256,14 @@ msgstr ""
 "        <th>Resultado</th>\n"
 "    </tr>\n"
 "    <tr>\n"
-"        <td>&nbsp;<br><samp>^{superíndice}</samp></td>\n"
+"        <td>&nbsp;<br><samp>^{superíndice</samp></td>\n"
 "        <td></td>\n"
 "        <td>&nbsp;<br><samp><sup>superíndice</sup>&nbsp;</samp></td>\n"
 "    </tr>\n"
 "    <tr>\n"
-"        <td>&nbsp;<br><samp>Placa Driver^{Rev A}</samp></td>\n"
+"        <td>&nbsp;<br><samp>Placa controladora^{Rev A}</samp></td>\n"
 "        <td></td>\n"
-"        <td>&nbsp;<br><samp>Placa Driver<sup>Rev A</sup></samp></td>\n"
+"        <td>&nbsp;<br><samp>Placa controladora<sup>Rev A</sup></samp></td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td><br></td>\n"
@@ -14280,19 +14276,18 @@ msgstr ""
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>D_{0} - D_{15}</samp></td>\n"
 "        <td></td>\n"
-"        <td>&nbsp;<br><samp>D<sub>0</sub> - D<sub>31</sub></samp></td>\n"
+"        <td>&nbsp;<br><samp>D<sub>0</sub> - D<sub>15</sub></samp></td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td></td>\n"
 "    </tr>\n"
 "    <tr>\n"
-"        <td> &nbsp;<br><samp>~barra superior</samp><br> &nbsp;"
-"<br><samp>~CLK</samp><br> &nbsp;<br><samp>~~</samp> </td>\n"
+"        <td> &nbsp;<br><samp>~{barra superior}</samp><br> "
+"&nbsp;<br><samp>~{CLK}</samp><br> &nbsp;<br><samp>~~</samp> </td>\n"
 "        <td></td>\n"
-"        <td> <samp><u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
-"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> <samp>barra superior</"
-"samp><br> <samp><u>&nbsp;&nbsp;&nbsp;</u></samp><br> <samp>CLK</samp><br> "
-"<samp>&nbsp;</samp><br> <samp>~</samp> </td>\n"
+"        <td> <samp><u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></"
+"samp><br> <samp>barra superior</samp><br> <samp><u>&nbsp;&nbsp;&nbsp;</u></"
+"samp><br> <samp>CLK</samp><br> <samp>&nbsp;</samp><br> <samp>~</samp> </td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td><br></td>\n"
@@ -14300,7 +14295,7 @@ msgstr ""
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>${variable}</samp></td>\n"
 "        <td></td>\n"
-"        <td>&nbsp;<br><samp><i>valor_de_la_variable</i></samp></td>\n"
+"        <td>&nbsp;<br><samp><i>valor_de_variable</i></samp></td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>${REVISION}</samp></td>\n"
@@ -14311,10 +14306,10 @@ msgstr ""
 "        <td><br></td>\n"
 "    </tr>\n"
 "    <tr>\n"
-"        <td>&nbsp;<br><samp>${refdes:campo}</samp></td>\n"
+"        <td>&nbsp;<br><samp>${referencia:campo}</samp></td>\n"
 "        <td></td>\n"
-"        <td>&nbsp;<br><samp><i>valor_de_campo</i> del símbolo <i>refdes</i></"
-"samp></td>\n"
+"        <td>&nbsp;<br><samp><i>valoro_de_campo</i> del símbolo "
+"<i>referencia</i></samp></td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>${R3:VALUE}</samp></td>\n"
@@ -14328,15 +14323,15 @@ msgstr ""
 "        <td><br></td>\n"
 "    </tr>\n"
 "    <tr>\n"
-"        <th>Definición de Bus</th>\n"
-"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
-"&nbsp;&nbsp;&nbsp;</th>\n"
-"        <th>Redes Resultantes</th>\n"
+"        <th>Definición de bus</th>\n"
+"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp"
+";&nbsp;&nbsp;</th>\n"
+"        <th>Redes resultantes</th>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>prefijo[m..n]</samp></td>\n"
 "        <td></td>\n"
-"        <td>&nbsp;<br><samp>prefijom a prefijon</samp></td>\n"
+"        <td>&nbsp;<br><samp>prefijom to prefijon</samp></td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>D[0..7]</samp></td>\n"
@@ -14346,16 +14341,16 @@ msgstr ""
 "    <tr>\n"
 "        <td><br></td>\n"
 "    </tr>\n"
-"    <tr><samp>\n"
-"            <td>&nbsp;<br><samp>{net1 net2 ...}</samp></td>\n"
-"            <td></td>\n"
-"            <td>&nbsp;<br><samp>net1, net2, ...</samp></td>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>{red1 red2 ...}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>red1, red2, ...</samp></td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>{SCL SDA}</samp></td>\n"
 "        <td></td>\n"
 "        <td>&nbsp;<br><samp>SCL, SDA</samp></td>\n"
-"    </tr></samp>\n"
+"    </tr>\n"
 "    <tr>\n"
 "        <td><br></td>\n"
 "    </tr>\n"
@@ -14365,9 +14360,9 @@ msgstr ""
 "        <td>&nbsp;<br><samp>prefijo.net1, prefijo.net2, ...</samp></td>\n"
 "    </tr>\n"
 "    <tr>\n"
-"        <td>&nbsp;<br><samp>USB1{DP DM}</samp></td>\n"
+"        <td>&nbsp;<br><samp>USB1{D+ D-}</samp></td>\n"
 "        <td></td>\n"
-"        <td>&nbsp;<br><samp>USB1.DP, USB1.DM</samp></td>\n"
+"        <td>&nbsp;<br><samp>USB1.D+, USB1.D-</samp></td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td><br></td>\n"
@@ -14380,12 +14375,19 @@ msgstr ""
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>MEM{D_{[1..2]} ~LATCH}</samp></td>\n"
 "        <td></td>\n"
-"        <td> <samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
-"&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <u>&nbsp;&nbsp;&nbsp;&nbsp;"
-"&nbsp;</u></samp><br> <samp>MEM.D<sub>1</sub>, MEM.D<sub>2</sub>, MEM.LATCH</"
-"samp> </td>\n"
+"        <td> <samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
+"&nbsp;&nbsp;&nbsp;&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> "
+"<samp>MEM.D<sub>1</sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
 "    </tr>\n"
 "</table>\n"
+"<p></p>\n"
+"<p></p>\n"
+"<i>Note que el marcado tiene precedencia sobre las definiciones de bus.</i>\n"
+"\n"
 
 #: eeschema/sch_validators.cpp:102
 #, c-format
@@ -15774,7 +15776,7 @@ msgstr "Añadir un arco"
 
 #: eeschema/tools/ee_actions.cpp:245 eeschema/tools/ee_actions.cpp:707
 msgid "Add Lines"
-msgstr "Añadir Líneas"
+msgstr "Añadir líneas"
 
 #: eeschema/tools/ee_actions.cpp:245 eeschema/tools/ee_actions.cpp:707
 msgid "Add connected graphic lines"
@@ -15826,7 +15828,7 @@ msgstr "Añadir un símbolo"
 
 #: eeschema/tools/ee_actions.cpp:287
 msgid "Add Power"
-msgstr "Añadir Alimentación"
+msgstr "Añadir alimentación"
 
 #: eeschema/tools/ee_actions.cpp:287
 msgid "Add a power port"
@@ -15926,7 +15928,7 @@ msgstr "Duplica el último elemento dibujado"
 
 #: eeschema/tools/ee_actions.cpp:372 pcbnew/tools/pcb_actions.cpp:290
 msgid "Rotate Clockwise"
-msgstr "Girar en sentido horario"
+msgstr "Rotar en sentido horario"
 
 #: eeschema/tools/ee_actions.cpp:372 pcbnew/tools/pcb_actions.cpp:290
 msgid "Rotates selected item(s) clockwise"
@@ -16290,7 +16292,7 @@ msgstr ""
 
 #: eeschema/tools/ee_actions.cpp:624
 msgid "Generate BOM..."
-msgstr "Generar BOM..."
+msgstr "Generar lista de materiales..."
 
 #: eeschema/tools/ee_actions.cpp:624
 msgid "Generate a bill of materials for the current schematic"
@@ -16378,7 +16380,7 @@ msgstr "Añadir un cable"
 
 #: eeschema/tools/ee_actions.cpp:694
 msgid "Add Bus"
-msgstr "Añadir Bus"
+msgstr "Añadir bus"
 
 #: eeschema/tools/ee_actions.cpp:694
 msgid "Add a bus"
@@ -16446,14 +16448,12 @@ msgid "Drags the selected item(s)"
 msgstr "Mueve el/los elemento/s seleccionado/s"
 
 #: eeschema/tools/ee_actions.cpp:746
-#, fuzzy
 msgid "Move Activate"
-msgstr "Mover elemento"
+msgstr "Activar mover"
 
 #: eeschema/tools/ee_actions.cpp:750
-#, fuzzy
 msgid "Symbol Move Activate"
-msgstr "Mover elemento"
+msgstr "Activar mover símbolo"
 
 #: eeschema/tools/ee_actions.cpp:754
 msgid "Align Elements to Grid"
@@ -17238,7 +17238,7 @@ msgstr "Capa gráfica"
 
 #: gerbview/gerber_file_image.cpp:349
 msgid "Img Rot."
-msgstr "Girar imagen"
+msgstr "Rotación de imagen"
 
 #: gerbview/gerber_file_image.cpp:357
 msgid "X Justify"
@@ -17528,14 +17528,12 @@ msgid "Show lines in outline mode"
 msgstr "Mostrar vías en modo contorno"
 
 #: gerbview/tools/gerbview_actions.cpp:150
-#, fuzzy
 msgid "Sketch Flashed Items"
-msgstr "Elementos gráficos en boceto"
+msgstr "Bosquejar elementos destellados"
 
 #: gerbview/tools/gerbview_actions.cpp:150
-#, fuzzy
 msgid "Show flashed items in outline mode"
-msgstr "Mostrar elementos gráficos en modo boceto"
+msgstr "Mostrar elementos destellados en modo boceto"
 
 #: gerbview/tools/gerbview_actions.cpp:156
 msgid "Sketch Polygons"
@@ -19254,7 +19252,7 @@ msgstr "Línea Microstrip acoplada"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:692
 msgid "Stripline"
-msgstr "Stripline"
+msgstr "Línea Stripline"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:692
 msgid "Twisted Pair"
@@ -19283,7 +19281,6 @@ msgstr "..."
 
 # Pendiente de contexto
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:738
-#, fuzzy
 msgid "Tan delta:"
 msgstr "Delta de tangente:"
 
@@ -20112,13 +20109,11 @@ msgstr "ZF(H10) = Ey / Hx:"
 
 #: pcb_calculator/transline_ident.cpp:233
 #: pcb_calculator/transline_ident.cpp:268
-#, fuzzy
 msgid "TE-modes:"
 msgstr "Modos TE:"
 
 #: pcb_calculator/transline_ident.cpp:234
 #: pcb_calculator/transline_ident.cpp:269
-#, fuzzy
 msgid "TM-modes:"
 msgstr "Modos TM:"
 
@@ -20507,7 +20502,7 @@ msgstr "Núcleo"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:117
 msgid "PrePreg"
-msgstr "PrePreg"
+msgstr "Preimpregnado"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:175
 #, c-format
@@ -22249,9 +22244,8 @@ msgid "Change dimension properties"
 msgstr "Cambiar propiedades de dimensiones"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:20
-#, fuzzy
 msgid "Leader Format"
-msgstr "Formato de los ceros:"
+msgstr "Formato de directriz"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:37
 msgid "Text frame:"
@@ -22259,9 +22253,8 @@ msgstr "Marco de texto:"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:39
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:47
-#, fuzzy
 msgid "Draw a shape around the leader text"
-msgstr "Dibuja una forma alrededor del texto guía"
+msgstr "Dibuja una forma alrededor del texto directriz"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:51
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:74
@@ -28185,6 +28178,218 @@ msgid ""
 "        (constraint clearance (min \"1.5mm\"))\n"
 "        (condition \"A.inDiffPair('*') && !AB.isCoupledDiffPair()\"))\n"
 msgstr ""
+"### Cláusulas de nivel superior\n"
+"\n"
+"    (version <number>)\n"
+"\n"
+"    (rule <rule_name> <rule_clause> ...)\n"
+"\n"
+"\n"
+"<br><br>\n"
+"\n"
+"### Cláusulas de reglas\n"
+"\n"
+"    (constraint <constraint_type> ...)\n"
+"\n"
+"    (condition \"<expression>\")\n"
+"\n"
+"    (layer \"<layer_name>\")\n"
+"\n"
+"\n"
+"<br><br>\n"
+"\n"
+"### Tipos de requerimientos\n"
+"\n"
+" * annular_width\n"
+" * clearance\n"
+" * courtyard_clearance\n"
+" * diff\\_pair\\_gap\n"
+" * diff\\_pair\\_uncoupled\n"
+" * disallow\n"
+" * edge_clearance\n"
+" * length\n"
+" * hole\n"
+" * hole_clearance\n"
+" * silk_clearance\n"
+" * skew\n"
+" * track_width\n"
+" * via_count\n"
+"\n"
+"\n"
+"<br><br>\n"
+"\n"
+"### Tipos de elementos\n"
+"\n"
+" * buried_via\n"
+" * graphic\n"
+" * hole\n"
+" * micro_via\n"
+" * pad\n"
+" * text\n"
+" * track\n"
+" * via\n"
+" * zone\n"
+"\n"
+"<br>\n"
+"\n"
+"### Ejemplos\n"
+"\n"
+"    (version 1)\n"
+"\n"
+"    (rule HV\n"
+"       (constraint clearance (min 1.5mm))\n"
+"       (condition \"A.NetClass == 'HV'\"))\n"
+"\n"
+"\n"
+"    (rule HV\n"
+"       (layer outer)\n"
+"       (constraint clearance (min 1.5mm))\n"
+"       (condition \"A.NetClass == 'HV'\"))\n"
+"\n"
+"\n"
+"    (rule HV_HV\n"
+"       # wider clearance between HV tracks\n"
+"       (constraint clearance (min \"1.5mm + 2.0mm\"))\n"
+"       (condition \"A.NetClass == 'HV' && B.NetClass == 'HV'\"))\n"
+"\n"
+"\n"
+"    (rule HV_unshielded\n"
+"       (constraint clearance (min 2mm))\n"
+"       (condition \"A.NetClass == 'HV' && !A.insideArea('Shield*')\"))\n"
+"<br><br>\n"
+"\n"
+"### Notas\n"
+"\n"
+"La cláusula de versión tiene que ser la primera cláusula.\n"
+"Indica la versión de sintaxis del archivo para que analizadores de\n"
+"reglas futuros puedan realizar actualizaciones automáticas.\n"
+"Debería ser fijado a \"1\".\n"
+"\n"
+"Las reglas deberían ser ordenadas por especificidad.\n"
+"Las reglas posteriores tienen precedencia sobre las reglas anteriores;\n"
+"una vez que se encuentra una regla coincidente, no se comprobarán más reglas."
+"\n"
+"\n"
+"Use Ctrl+/ para comentar o descomentar la(s) línea(s).\n"
+"<br><br><br>\n"
+"\n"
+"### Funciones de expresión\n"
+"\n"
+"Todos los parámetros de funciones soportan comodines simples (`*` y `?`).\n"
+"<br><br>\n"
+"\n"
+"    A.insideCourtyard('<footprint_refdes>')\n"
+"Verdadero si alguna parte de `A`se encuentra dentro del patio de la huella "
+"principal dada.\n"
+"<br><br>\n"
+"\n"
+"    A.insideFrontCourtyard('<footprint_refdes>')\n"
+"Verdadero si alguna parte de `A`se encuentra dentro del patio de la huella "
+"frontal dada.\n"
+"<br><br>\n"
+"\n"
+"    A.insideBackCourtyard('<footprint_refdes>')\n"
+"Verdadero si alguna parte de `A`se encuentra dentro del patio de la huella "
+"trasera dada.\n"
+"<br><br>\n"
+"\n"
+"    A.insideArea('<zone_name>')\n"
+"Verdadero si alguna parte de `A`se encuentra dentro del contorno de la zona "
+"dada.\n"
+"<br><br>\n"
+"\n"
+"    A.isPlated()\n"
+"Verdadero si `A` tiene un orificio revestido.\n"
+"<br><br>\n"
+"\n"
+"    A.inDiffPair('<net_name>')\n"
+"Verdadero si `A` tiene una red que es parte del par diferencial especificado."
+"\n"
+"`<net_name>` es el nombre base del par diferencial. Por ejemplo, "
+"`inDiffPair('CLK')`\n"
+"coincide con los elementos en las redes `CLK_P` y `CLK_N`.\n"
+"<br><br>\n"
+"\n"
+"    AB.isCoupledDiffPair()\n"
+"Verdadero si `A` y `B` son miembros del mismo par diferencial.\n"
+"<br><br>\n"
+"\n"
+"    A.memberOf('<group_name>')\n"
+"Verdadero si `A` es un miembro del grupo dado. Incluye membresía anidada.\n"
+"<br><br>\n"
+"\n"
+"    A.existsOnLayer('<layer_name>')\n"
+"Verdadero si`A` existe en la capa dada. El nombre de la capa puede ser el "
+"asignado\n"
+"en Configuración de placa > Capas del editor de placas, o el nombre canónico "
+"(ej: `F.Cu`).\n"
+"\n"
+"Note: esto devuelve verdadero si `A`está en la capa dada, independientemente "
+"de\n"
+"si la regla está siendo evaluada en esa capa o no.\n"
+"Para lo último, use la cláusula `(layer \"layer_name\")` en la regla.\n"
+"<br><br><br>\n"
+"\n"
+"### Más ejemplos\n"
+"\n"
+"    (rule \"copper keepout\"\n"
+"       (constraint disallow track via zone)\n"
+"       (condition \"A.insideArea('zone3')\"))\n"
+"\n"
+"\n"
+"    (rule \"BGA neckdown\"\n"
+"       (constraint track_width (min 0.2mm) (opt 0.25mm))\n"
+"       (constraint clearance (min 0.05mm) (opt 0.08mm))\n"
+"       (condition \"A.insideCourtyard('U3')\"))\n"
+"\n"
+"\n"
+"    # Previene serigrafía sobre vías teñidas\n"
+"    (rule silk_over_via\n"
+"       (constraint silk_clearance (min 0.2mm))\n"
+"       (condition \"A.Type == '*Text' && B.Type == 'Via'\"))\n"
+"\n"
+"\n"
+"    (rule \"Distance between Vias of Different Nets\"  \n"
+"        (constraint hole_to_hole (min 0.254mm))\n"
+"        (condition \"A.Type =='Via' && B.Type =='Via' && A.Net != B.Net\"))\n"
+"\n"
+"    (rule \"Clearance between Pads of Different Nets\"  \n"
+"        (constraint clearance (min 3.0mm))\n"
+"        (condition \"A.Type =='Pad' && B.Type =='Pad' && A.Net != B.Net\"))\n"
+"\n"
+"\n"
+"    (rule \"Via Hole to Track Clearance\"  \n"
+"        (constraint hole_clearance (min 0.254mm))\n"
+"        (condition \"A.Type =='Via' && B.Type =='Track'\"))\n"
+"    \n"
+"    (rule \"Pad to Track Clearance\"  \n"
+"        (constraint clearance (min 0.2mm))\n"
+"        (condition \"A.Type =='Pad' && B.Type =='Track'\"))\n"
+"\n"
+"\n"
+"    (rule \"clearance-to-1mm-cutout\"\n"
+"        (constraint clearance (min 0.8mm))\n"
+"        (condition \"A.Layer=='Edge.Cuts' && A.Thickness == 1.0mm\"))\n"
+"\n"
+"\n"
+"    (rule \"Max Drill Hole Size Mechanical\"  \n"
+"        (constraint hole (max 6.3mm))\n"
+"        (condition \"A.Pad_Type == 'NPTH, mechanical'\"))\n"
+"    \n"
+"    (rule \"Max Drill Hole Size PTH\"  \n"
+"        (constraint hole (max 6.35mm))\n"
+"        (condition \"A.Pad_Type == 'Through-hole'\"))\n"
+"\n"
+"\n"
+"    # Especifica un espacio óptimo para un par diferencial particular\n"
+"    (rule \"dp clock gap\"\n"
+"        (constraint diff_pair_gap (opt \"0.8mm\"))\n"
+"        (condition \"A.inDiffPair('CLK') && AB.isCoupledDiffPair()\"))\n"
+"\n"
+"    # Especifica un margen mayor alrededor de cualquier par diferencial\n"
+"    (rule \"dp clearance\"\n"
+"        (constraint clearance (min \"1.5mm\"))\n"
+"        (condition \"A.inDiffPair('*') && !AB.isCoupledDiffPair()\"))\n"
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:72
 msgid "Default properties for new dimension objects:"
@@ -31751,7 +31956,7 @@ msgstr "Cantidad inválida de tokens. Se esperaban 8 pero se encontraron %zu."
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1449
 #, c-format
 msgid "Invalid format for record_tag string '%s' in row %zu."
-msgstr ""
+msgstr "Formato inválido para la cadena record_tag '%s' en la fila %zu."
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1420
 #, c-format
@@ -31786,6 +31991,8 @@ msgstr "No se puede encontrar el pad personalizado '%s'."
 #, c-format
 msgid "Expecting etch data to be on copper layer. Row found on layer '%s'"
 msgstr ""
+"Se esperaba que los datos de grabado estén en la capa de cobre. Se encontró "
+"la fila en la capa '%s'"
 
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:91
 #, c-format
@@ -31995,11 +32202,11 @@ msgid "%d is not a valid layer count"
 msgstr "%d no es un número de capas válido"
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:2308
-#, fuzzy, c-format
+#, c-format
 msgid "Duplicate NETCLASS name '%s' in file '%s' at line %d, offset %d."
 msgstr ""
-"Nombre de Clase de red \"%s\" duplicado en el archivo \"%s\" en la línea %d, "
-"posición %d"
+"Nombre de clase de red '%s' duplicado en el archivo '%s' en la línea %d, "
+"posición %d."
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:3157
 #, c-format
@@ -32842,7 +33049,7 @@ msgstr "Vía: %s (%s)"
 
 #: pcbnew/tools/board_editor_control.cpp:114
 msgid "Locking"
-msgstr "Bloqueando"
+msgstr "Bloqueo"
 
 #: pcbnew/tools/board_editor_control.cpp:137
 msgid "Omit extra information"
@@ -33240,9 +33447,8 @@ msgid "Place a text"
 msgstr "Escribir texto"
 
 #: pcbnew/tools/drawing_tool.cpp:934
-#, fuzzy
 msgid "Draw a leader"
-msgstr "Dibujar una línea"
+msgstr "Dibujar una directriz"
 
 #: pcbnew/tools/drawing_tool.cpp:947
 msgid "Draw a dimension"
@@ -33541,14 +33747,12 @@ msgid "Add an orthogonal dimension"
 msgstr "Añadir una dimensión ortogonal"
 
 #: pcbnew/tools/pcb_actions.cpp:145
-#, fuzzy
 msgid "Add Leader"
-msgstr "Añadir etiqueta"
+msgstr "Añadir directriz"
 
 #: pcbnew/tools/pcb_actions.cpp:145
-#, fuzzy
 msgid "Add a leader dimension"
-msgstr "Añadir una dimensión"
+msgstr "Añadir una dimensión directriz"
 
 #: pcbnew/tools/pcb_actions.cpp:156
 msgid "Add Filled Zone"
@@ -33723,7 +33927,7 @@ msgstr "Crear matriz"
 
 #: pcbnew/tools/pcb_actions.cpp:296
 msgid "Rotate Counterclockwise"
-msgstr "Girar en sentido anti horario"
+msgstr "Rotar en sentido antihorario"
 
 #: pcbnew/tools/pcb_actions.cpp:296
 msgid "Rotates selected item(s) counterclockwise"
@@ -34123,7 +34327,7 @@ msgstr "Generar archivo de listado de redes IPC-D-356"
 
 #: pcbnew/tools/pcb_actions.cpp:610
 msgid "BOM..."
-msgstr "BOM..."
+msgstr "Lista de materiales..."
 
 #: pcbnew/tools/pcb_actions.cpp:610
 msgid "Create bill of materials from board"
@@ -35670,9 +35874,8 @@ msgid "Filled Area"
 msgstr "Área rellena"
 
 #: pcbnew/zone.cpp:641
-#, fuzzy
 msgid "HatchBorder Lines"
-msgstr "Rayado"
+msgstr "Líneas de borde rayado"
 
 #: pcbnew/zone.cpp:665
 msgid "Corner Count"
