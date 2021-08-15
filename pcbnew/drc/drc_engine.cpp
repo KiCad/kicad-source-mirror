@@ -40,7 +40,7 @@
 #include <geometry/shape.h>
 #include <geometry/shape_segment.h>
 #include <geometry/shape_null.h>
-#include <convert_basic_shapes_to_polygon.h>
+
 
 void drcPrintDebugMessage( int level, const wxString& msg, const char *function, int line )
 {
@@ -580,70 +580,43 @@ void DRC_ENGINE::loadRules( const wxFileName& aPath )
 
 void DRC_ENGINE::compileRules()
 {
-    ReportAux( wxString::Format( "Compiling Rules (%d rules): ",
-                                 (int) m_rules.size() ) );
+    ReportAux( wxString::Format( "Compiling Rules (%d rules): ", (int) m_rules.size() ) );
+
+    std::set<DRC_CONSTRAINT_T> constraintTypes;
 
     for( DRC_TEST_PROVIDER* provider : m_testProviders )
     {
-        ReportAux( wxString::Format( "- Provider: '%s': ", provider->GetName() ) );
-        drc_dbg( 7, "do prov %s", provider->GetName() );
+        for( DRC_CONSTRAINT_T constraintType : provider->GetConstraintTypes() )
+            constraintTypes.insert( constraintType );
+    }
 
-        for( DRC_CONSTRAINT_T id : provider->GetConstraintTypes() )
+    for( DRC_CONSTRAINT_T constraintType : constraintTypes )
+    {
+        if( m_constraintMap.find( constraintType ) == m_constraintMap.end() )
+            m_constraintMap[ constraintType ] = new std::vector<DRC_ENGINE_CONSTRAINT*>();
+
+        for( DRC_RULE* rule : m_rules )
         {
-            drc_dbg( 7, "do id %d", id );
+            DRC_RULE_CONDITION* condition = nullptr;
 
-            if( m_constraintMap.find( id ) == m_constraintMap.end() )
-                m_constraintMap[ id ] = new std::vector<DRC_ENGINE_CONSTRAINT*>();
-
-            for( DRC_RULE* rule : m_rules )
+            if( rule->m_Condition && !rule->m_Condition->GetExpression().IsEmpty() )
             {
-                DRC_RULE_CONDITION* condition = nullptr;
-                bool compileOk = false;
-                std::vector<DRC_CONSTRAINT> matchingConstraints;
-                drc_dbg( 7, "Scan provider %s, rule %s",  provider->GetName(), rule->m_Name );
+                condition = rule->m_Condition;
+                condition->Compile( nullptr, 0, 0 ); // fixme
+            }
 
-                if( rule->m_Condition && !rule->m_Condition->GetExpression().IsEmpty() )
+            for( const DRC_CONSTRAINT& constraint : rule->m_Constraints )
+            {
+                if( constraint.m_Type == constraintType )
                 {
-                    condition = rule->m_Condition;
-                    compileOk = condition->Compile( nullptr, 0, 0 ); // fixme
-                }
+                    DRC_ENGINE_CONSTRAINT* engineConstraint = new DRC_ENGINE_CONSTRAINT;
 
-                for( const DRC_CONSTRAINT& constraint : rule->m_Constraints )
-                {
-                    drc_dbg(7, "scan constraint id %d\n", constraint.m_Type );
+                    engineConstraint->layerTest = rule->m_LayerCondition;
+                    engineConstraint->condition = condition;
 
-                    if( constraint.m_Type != id )
-                        continue;
-
-                    DRC_ENGINE_CONSTRAINT* rcons = new DRC_ENGINE_CONSTRAINT;
-
-                    rcons->layerTest = rule->m_LayerCondition;
-                    rcons->condition = condition;
-
-                    matchingConstraints.push_back( constraint );
-
-                    rcons->constraint = constraint;
-                    rcons->parentRule = rule;
-                    m_constraintMap[ id ]->push_back( rcons );
-                }
-
-                if( !matchingConstraints.empty() )
-                {
-                    ReportAux( wxString::Format( "   |- Rule: '%s' ",
-                                                 rule->m_Name ) );
-
-                    if( condition )
-                    {
-                        ReportAux( wxString::Format( "       |- condition: '%s' compile: %s",
-                                                     condition->GetExpression(),
-                                                     compileOk ? "OK" : "ERROR" ) );
-                    }
-
-                    for (const DRC_CONSTRAINT& constraint : matchingConstraints )
-                    {
-                        ReportAux( wxString::Format( "       |- constraint: %s",
-                                                     formatConstraint( constraint ) ) );
-                    }
+                    engineConstraint->constraint = constraint;
+                    engineConstraint->parentRule = rule;
+                    m_constraintMap[ constraintType ]->push_back( engineConstraint );
                 }
             }
         }
@@ -1018,6 +991,8 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
                 case TRACK_WIDTH_CONSTRAINT:
                 case ANNULAR_WIDTH_CONSTRAINT:
                 case VIA_DIAMETER_CONSTRAINT:
+                case TEXT_HEIGHT_CONSTRAINT:
+                case TEXT_THICKNESS_CONSTRAINT:
                 {
                     if( aReporter )
                     {

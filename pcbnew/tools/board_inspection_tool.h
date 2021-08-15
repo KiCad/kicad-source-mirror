@@ -29,6 +29,7 @@
 #include <dialogs/dialog_HTML_reporter_base.h>
 #include <dialogs/dialog_constraints_reporter.h>
 #include <drc/drc_rule.h>
+#include <drc/drc_engine.h>
 #include <pcb_edit_frame.h>
 #include <rc_item.h>
 #include <tools/pcb_actions.h>
@@ -106,7 +107,6 @@ public:
     }
 
 private:
-
     ///< Recalculate dynamic ratsnest for the current selection.
     void calculateSelectionRatsnest( const VECTOR2I& aDelta );
 
@@ -128,24 +128,27 @@ private:
     void onInspectClearanceDialogClosed( wxCommandEvent& aEvent );
     void onInspectConstraintsDialogClosed( wxCommandEvent& aEvent );
 
-    void reportZoneConnection( ZONE* aZone, PAD* aPad, REPORTER* r );
-
-    void reportClearance( DRC_CONSTRAINT_T aClearanceType, PCB_LAYER_ID aLayer, BOARD_ITEM* aA,
-                          BOARD_ITEM* aB, REPORTER* r );
+    DRC_ENGINE makeDRCEngine( bool* aCompileError, bool* aCourtyardError = nullptr );
 
     wxString getItemDescription( BOARD_ITEM* aItem );
 
+    void reportCompileError( REPORTER* r );
+    void reportHeader( const wxString& aTitle, BOARD_ITEM* a, REPORTER* r );
+    void reportHeader( const wxString& aTitle, BOARD_ITEM* a, BOARD_ITEM* b, REPORTER* r );
+    void reportHeader( const wxString& aTitle, BOARD_ITEM* a, BOARD_ITEM* b, PCB_LAYER_ID aLayer,
+                       REPORTER* r );
+
 private:
-    PCB_EDIT_FRAME* m_frame;    // Pointer to the currently used edit frame.
+    PCB_EDIT_FRAME*     m_frame;    // Pointer to the currently used edit frame.
 
-    bool m_probingSchToPcb;     // Recursion guard when cross-probing to Eeschema
-    std::set<int> m_currentlyHighlighted; // Active net being highlighted, or -1 when off
-    std::set<int> m_lastHighlighted;      // Used for toggling between last two highlighted nets
+    bool                m_probingSchToPcb;      // Recursion guard when cross-probing to Eeschema
+    std::set<int>       m_currentlyHighlighted; // Active net being highlighted, or -1 when off
+    std::set<int>       m_lastHighlighted;      // For toggling between last two highlighted nets
 
-    CONNECTIVITY_DATA* m_dynamicData;      // Cached connectivity data from the selection
+    CONNECTIVITY_DATA*  m_dynamicData;      // Cached connectivity data from the selection
 
-    std::unique_ptr<DIALOG_NET_INSPECTOR> m_listNetsDialog;
-    DIALOG_NET_INSPECTOR::SETTINGS        m_listNetsDialogSettings;
+    std::unique_ptr<DIALOG_NET_INSPECTOR>        m_listNetsDialog;
+    DIALOG_NET_INSPECTOR::SETTINGS               m_listNetsDialogSettings;
 
     std::unique_ptr<DIALOG_CONSTRAINTS_REPORTER> m_inspectClearanceDialog;
     std::unique_ptr<DIALOG_CONSTRAINTS_REPORTER> m_inspectConstraintsDialog;
