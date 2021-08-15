@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-01 11:31-0700\n"
-"PO-Revision-Date: 2021-08-15 03:30+0000\n"
+"PO-Revision-Date: 2021-08-16 06:17+0000\n"
 "Last-Translator: boonchai k. <kicadthai@gmail.com>\n"
 "Language-Team: Thai <https://hosted.weblate.org/projects/kicad/master-source/"
 "th/>\n"
@@ -19724,99 +19724,104 @@ msgstr "Din"
 #: pcb_calculator/transline_ident.cpp:293
 #: pcb_calculator/transline_ident.cpp:407
 msgid "Inner diameter (conductor)"
-msgstr ""
+msgstr "เส้นผ่านศูนย์กลางภายใน (ตัวนำ)"
 
 #: pcb_calculator/transline_ident.cpp:295
 #: pcb_calculator/transline_ident.cpp:409
+#, fuzzy
 msgid "Dout"
-msgstr ""
+msgstr "Dout"
 
 #: pcb_calculator/transline_ident.cpp:296
 #: pcb_calculator/transline_ident.cpp:410
 msgid "Outer diameter (insulator)"
-msgstr ""
+msgstr "เส้นผ่านศูนย์กลางภายนอก (ฉนวน)"
 
 #: pcb_calculator/transline_ident.cpp:312
 #, c-format
 msgid "Effective %s (even):"
-msgstr ""
+msgstr "มีประสิทธิภาพ %s (คู่):"
 
 #: pcb_calculator/transline_ident.cpp:313
 #, c-format
 msgid "Effective %s (odd):"
-msgstr ""
+msgstr "มีประสิทธิภาพ %s (คี่):"
 
 #: pcb_calculator/transline_ident.cpp:314
 msgid "Conductor losses (even):"
-msgstr ""
+msgstr "การสูญเสียในตัวนำ (คู่):"
 
 #: pcb_calculator/transline_ident.cpp:315
 msgid "Conductor losses (odd):"
-msgstr ""
+msgstr "การสูญเสียในตัวนำ (คี่):"
 
 #: pcb_calculator/transline_ident.cpp:316
 msgid "Dielectric losses (even):"
-msgstr ""
+msgstr "การสูญเสียในอิเล็กทริก (คู่):"
 
 #: pcb_calculator/transline_ident.cpp:317
 msgid "Dielectric losses (odd):"
-msgstr ""
+msgstr "การสูญเสียในอิเล็กทริก (คี่):"
 
 #: pcb_calculator/transline_ident.cpp:342
+#, fuzzy
 msgid "Zeven"
-msgstr ""
+msgstr "Zeven"
 
 #: pcb_calculator/transline_ident.cpp:343
 msgid "Even mode impedance (lines driven by common voltages)"
-msgstr ""
+msgstr "อิมพีแดนซ์โหมดคู่ (เส้นขับเคลื่อนด้วยแรงดันไฟฟ้าทั่วไป)"
 
 #: pcb_calculator/transline_ident.cpp:345
+#, fuzzy
 msgid "Zodd"
-msgstr ""
+msgstr "Zodd"
 
 #: pcb_calculator/transline_ident.cpp:346
 msgid "Odd mode impedance (lines driven by opposite (differential) voltages)"
-msgstr ""
+msgstr "อิมพีแดนซ์โหมดคี่ (ขับเคลื่อนด้วยแรงดันไฟฟ้าตรงข้าม (ชนิดแตกต่าง))"
 
 #: pcb_calculator/transline_ident.cpp:364
 msgid "Distance between strip and top metal"
-msgstr ""
+msgstr "ระยะระหว่างแถบกับโลหะด้านบน"
 
 #: pcb_calculator/transline_ident.cpp:395
 msgid "Twists"
-msgstr ""
+msgstr "บิดเกลียว"
 
 #: pcb_calculator/transline_ident.cpp:396
 msgid "Number of twists per length"
-msgstr ""
+msgstr "จำนวนบิดเกลียวต่อความยาว"
 
 #: pcb_calculator/transline_ident.cpp:402
 msgid "environment"
-msgstr ""
+msgstr "สิ่งแวดล้อม"
 
 #: pcb_calculator/transline_ident.cpp:403
 msgid "Relative permittivity of environment"
-msgstr ""
+msgstr "ความอนุญาตสัมพัทธ์ของสภาพแวดล้อม"
 
 #: pcb_calculator/transline_ident.cpp:412
 msgid "Cable length"
-msgstr ""
+msgstr "ความยาวสายเคเบิล"
 
 #: pcb_calculator/via.cpp:82
 msgid "Electrical Resistivity in Ohm*m"
-msgstr ""
+msgstr "ความต้านทานไฟฟ้าในหน่วยโอห์ม*m"
 
 #: pcb_calculator/widgets/unit_selector.cpp:35
+#, fuzzy
 msgid "um"
-msgstr ""
+msgstr "um"
 
 #: pcb_calculator/widgets/unit_selector.cpp:36
+#, fuzzy
 msgid "cm"
-msgstr ""
+msgstr "cm"
 
 #: pcb_calculator/widgets/unit_selector.cpp:37
 msgid "mil"
-msgstr ""
+msgstr "มิล"
 
 #: pcb_calculator/widgets/unit_selector.cpp:38
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:48
@@ -19824,53 +19829,55 @@ msgstr ""
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:67
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:99
 msgid "inch"
-msgstr ""
+msgstr "นิ้ว"
 
 #: pcb_calculator/widgets/unit_selector.cpp:100
 msgid "GHz"
-msgstr ""
+msgstr "GHz"
 
 #: pcb_calculator/widgets/unit_selector.cpp:101
 msgid "MHz"
-msgstr ""
+msgstr "MHz"
 
 #: pcb_calculator/widgets/unit_selector.cpp:102
+#, fuzzy
 msgid "kHz"
-msgstr ""
+msgstr "kHz"
 
 #: pcb_calculator/widgets/unit_selector.cpp:129
+#, fuzzy
 msgid "rad"
-msgstr ""
+msgstr "rad"
 
 #: pcbnew/array_creator.cpp:197
 msgid "Create an array"
-msgstr ""
+msgstr "สร้างอาร์เรย์"
 
 #: pcbnew/autorouter/ar_autoplacer.cpp:933
 msgid "Autoplacing components..."
-msgstr ""
+msgstr "กำลังวางอุปกรณ์อัตโนมัติ..."
 
 #: pcbnew/autorouter/ar_autoplacer.cpp:951
 #, c-format
 msgid "Autoplacing %s"
-msgstr ""
+msgstr "กำลังวาง %s"
 
 #: pcbnew/autorouter/autoplace_tool.cpp:68
 #, c-format
 msgid "Board edges must be defined on the %s layer."
-msgstr ""
+msgstr "ต้องกำหนดขอบพีซีบอร์ด บนเลเยอร์ %s"
 
 #: pcbnew/autorouter/autoplace_tool.cpp:89
 msgid "Autoplace Components"
-msgstr ""
+msgstr "จัดวางอุปกรณ์อัตโนมัติ"
 
 #: pcbnew/autorouter/autoplace_tool.cpp:95
 msgid "Autoplace components"
-msgstr ""
+msgstr "จัดวางอุปกรณ์อัตโนมัติ"
 
 #: pcbnew/board.cpp:91
 msgid "This is the default net class."
-msgstr ""
+msgstr "นี่คือค่าเน็คคลาสเริ่มต้น"
 
 #: pcbnew/board.cpp:822
 msgid "PCB"
@@ -19882,7 +19889,7 @@ msgstr "พีซีบี"
 #: pcbnew/tools/pcb_control.cpp:1136 pcbnew/widgets/appearance_controls.cpp:342
 #: pcbnew/widgets/panel_selection_filter_base.cpp:47
 msgid "Pads"
-msgstr ""
+msgstr "แพ็ด"
 
 #: pcbnew/board.cpp:1183 pcbnew/dialogs/dialog_board_statistics.cpp:678
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:156
@@ -19895,69 +19902,70 @@ msgstr ""
 #: pcbnew/widgets/appearance_controls.cpp:341
 #: pcbnew/widgets/panel_selection_filter_base.cpp:43
 msgid "Vias"
-msgstr ""
+msgstr "เวีย"
 
 #: pcbnew/board.cpp:1186 pcbnew/pcb_draw_panel_gal.cpp:460
 msgid "Track Segments"
-msgstr ""
+msgstr "บางส่วนของแทร็ค"
 
 #: pcbnew/board.cpp:1189 pcbnew/pcb_draw_panel_gal.cpp:463
 msgid "Nodes"
-msgstr ""
+msgstr "โนด"
 
 #: pcbnew/board.cpp:1192 pcbnew/pcb_draw_panel_gal.cpp:466
 #: pcbnew/widgets/appearance_controls_base.cpp:62
 #: pcbnew/widgets/appearance_controls_base.cpp:156
 msgid "Nets"
-msgstr ""
+msgstr "เน็ท"
 
 #: pcbnew/board.cpp:1195 pcbnew/pcb_draw_panel_gal.cpp:469
 msgid "Unrouted"
-msgstr ""
+msgstr "ยกเลิกลายเส้น"
 
 #: pcbnew/board_connected_item.cpp:186
 msgid "NetName"
-msgstr ""
+msgstr "ชื่อเน็ต"
 
 #: pcbnew/board_connected_item.cpp:188 pcbnew/pad.cpp:873
 #: pcbnew/pcb_track.cpp:789 pcbnew/zone.cpp:591
 msgid "NetClass"
-msgstr ""
+msgstr "เน็ทคลาส"
 
 #: pcbnew/board_item.cpp:40 pcbnew/pad.cpp:1085
+#, fuzzy
 msgid "Rect"
-msgstr ""
+msgstr "Rect"
 
 #: pcbnew/board_item.cpp:43
 msgid "Bezier Curve"
-msgstr ""
+msgstr "เส้นโค้งเบซิเย่ร์"
 
 #: pcbnew/board_item.cpp:44 pcbnew/dialogs/dialog_pad_properties.cpp:2146
 #: pcbnew/pcb_shape.cpp:539
 msgid "Polygon"
-msgstr ""
+msgstr "รูปหลายเหลี่ยม"
 
 #: pcbnew/board_item.cpp:83
 msgid "all copper layers"
-msgstr ""
+msgstr "ชั้นทองแดงทั้งหมด"
 
 #: pcbnew/board_item.cpp:97
 msgid "and others"
-msgstr ""
+msgstr "และอื่น ๆ"
 
 #: pcbnew/board_item.cpp:105
 msgid "no layers"
-msgstr ""
+msgstr "ไม่มีเลเยอร์"
 
 #: pcbnew/board_item.cpp:197 pcbnew/pcb_track.cpp:1111
 #: pcbnew/pcb_track.cpp:1128
 msgid "Position X"
-msgstr ""
+msgstr "ตำแหน่ง X"
 
 #: pcbnew/board_item.cpp:199 pcbnew/pcb_track.cpp:1114
 #: pcbnew/pcb_track.cpp:1131
 msgid "Position Y"
-msgstr ""
+msgstr "ตำแหน่ง Y"
 
 #: pcbnew/board_item.cpp:203 pcbnew/dialogs/dialog_copper_zones_base.cpp:146
 #: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:156
@@ -19970,186 +19978,194 @@ msgstr ""
 #: pcbnew/pcb_dimension.cpp:349 pcbnew/pcb_shape.cpp:508
 #: pcbnew/pcb_text.cpp:118 pcbnew/pcb_track.cpp:811 pcbnew/zone.cpp:598
 msgid "Locked"
-msgstr ""
+msgstr "ถูกล็อค"
 
 #: pcbnew/board_stackup_manager/board_stackup.cpp:306
 #, c-format
 msgid "Dielectric %d"
-msgstr ""
+msgstr "ไดอิเล็กทริก %d"
 
 #: pcbnew/board_stackup_manager/board_stackup.cpp:526
+#, fuzzy
 msgid "Top Silk Screen"
-msgstr ""
+msgstr "Top Silk Screen"
 
 #: pcbnew/board_stackup_manager/board_stackup.cpp:534
+#, fuzzy
 msgid "Top Solder Paste"
-msgstr ""
+msgstr "Top Solder Paste"
 
 #: pcbnew/board_stackup_manager/board_stackup.cpp:542
+#, fuzzy
 msgid "Top Solder Mask"
-msgstr ""
+msgstr "Top Solder Mask"
 
 #: pcbnew/board_stackup_manager/board_stackup.cpp:586
+#, fuzzy
 msgid "Bottom Solder Mask"
-msgstr ""
+msgstr "Bottom Solder Mask"
 
 #: pcbnew/board_stackup_manager/board_stackup.cpp:594
+#, fuzzy
 msgid "Bottom Solder Paste"
-msgstr ""
+msgstr "Bottom Solder Paste"
 
 #: pcbnew/board_stackup_manager/board_stackup.cpp:602
+#, fuzzy
 msgid "Bottom Silk Screen"
-msgstr ""
+msgstr "Bottom Silk Screen"
 
 #: pcbnew/board_stackup_manager/dialog_dielectric_list_manager.cpp:48
 msgid "Incorrect value for Epsilon R"
-msgstr ""
+msgstr "ค่าเอ็บซิลอน R ไม่ถูกต้อง"
 
 #: pcbnew/board_stackup_manager/dialog_dielectric_list_manager.cpp:54
 msgid "Incorrect value for Loss Tangent"
-msgstr ""
+msgstr "ค่าที่ไม่ถูกต้อง การสูญเสียแทนเจนต์"
 
 #: pcbnew/board_stackup_manager/dialog_dielectric_list_manager.cpp:94
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:84
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:261
 msgid "Material"
-msgstr ""
+msgstr "วัสดุ"
 
 #: pcbnew/board_stackup_manager/dialog_dielectric_list_manager.cpp:95
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:105
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:279
 msgid "Epsilon R"
-msgstr ""
+msgstr "เอปซิลอน R"
 
 #: pcbnew/board_stackup_manager/dialog_dielectric_list_manager.cpp:96
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:111
 msgid "Loss Tg"
-msgstr ""
+msgstr "การสูญเสีย Tg"
 
 #: pcbnew/board_stackup_manager/dialog_dielectric_list_manager_base.cpp:22
 msgid "Dielectric material characteristics:"
-msgstr ""
+msgstr "คุณลักษณะไดอิเล็กทริกของวัสดุ:"
 
 #: pcbnew/board_stackup_manager/dialog_dielectric_list_manager_base.cpp:39
 msgid "Epsilon R:"
-msgstr ""
+msgstr "เอปซิลอน R:"
 
 #: pcbnew/board_stackup_manager/dialog_dielectric_list_manager_base.cpp:43
 msgid "Loss Tg:"
-msgstr ""
+msgstr "การสูญเสีย Tg:"
 
 #: pcbnew/board_stackup_manager/dialog_dielectric_list_manager_base.cpp:62
 msgid "Available materials:"
-msgstr ""
+msgstr "วัสดุที่มีอยู่:"
 
 #: pcbnew/board_stackup_manager/dialog_dielectric_list_manager_base.h:58
 msgid "Dielectric Materials"
-msgstr ""
+msgstr "วัสดุไดอิเล็กทริก"
 
 #: pcbnew/board_stackup_manager/panel_board_finish_base.cpp:20
 msgid "Has castellated pads"
-msgstr ""
+msgstr "มีแพ็ดที่ถูกล้อม"
 
 #: pcbnew/board_stackup_manager/panel_board_finish_base.cpp:23
 msgid "Plated board edge"
-msgstr ""
+msgstr "ชุบขอบบอร์ด"
 
 #: pcbnew/board_stackup_manager/panel_board_finish_base.cpp:31
 msgid "Copper finish:"
-msgstr ""
+msgstr "ทองแดงเสร็จ:"
 
 #: pcbnew/board_stackup_manager/panel_board_finish_base.cpp:40
 msgid "Edge card connectors:"
-msgstr ""
+msgstr "คอนเน็กเตอร์ชนิดบอร์ดเสียบ:"
 
 #: pcbnew/board_stackup_manager/panel_board_finish_base.cpp:44
 msgid "Yes, bevelled"
-msgstr ""
+msgstr "ใช่, เอียง"
 
 #: pcbnew/board_stackup_manager/panel_board_finish_base.cpp:48
 msgid "Options for edge card connectors."
-msgstr ""
+msgstr "ทางเลือกสำหรับคอนเน็กเตอร์บอร์ดเสียบ"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:114
 msgid "Core"
-msgstr ""
+msgstr "แก่น"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:115
 msgid "PrePreg"
-msgstr ""
+msgstr "พรีเพก"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:197
 #, c-format
 msgid "Layer '%s' (sublayer %d/%d)"
-msgstr ""
+msgstr "เลเยอร์ '%s' (ชั้นย่อย %d/%d)"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:212
 msgid "Add Dielectric Layer"
-msgstr ""
+msgstr "เพิ่มเลเยอร์ไดอิเล็กทริก"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:213
 #: pcbnew/dialogs/panel_setup_layers.cpp:821
 msgid "Select layer to add:"
-msgstr ""
+msgstr "เลือกเลเยอร์จะเพิ่ม:"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:258
 #, c-format
 msgid "Layer '%s' sublayer %d/%d"
-msgstr ""
+msgstr "เลเยอร์ '%s' เลเยอร์ย่อย %d/%d"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:268
 msgid "Remove Dielectric Layer"
-msgstr ""
+msgstr "ลบไดอิเล็กตริกเลเยอร์"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:269
 msgid "Select layer to remove:"
-msgstr ""
+msgstr "เลือกเลเยอร์ที่จะนำออก:"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:454
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:1193
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:1408
 #, c-format
 msgid "Custom (%s)"
-msgstr ""
+msgstr "กําหนดเอง (%s)"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:654
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:173
 msgid "Copper"
-msgstr ""
+msgstr "ทองแดง"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:953
 msgid ""
 "Incorrect value for Epsilon R (Epsilon R must be positive or null if not "
 "used)"
 msgstr ""
+"ค่าที่ไม่ถูกต้องสำหรับเอ็ปซิลอน R (ค่าต้องเป็นค่าบวกหรือค่าว่างหากไม่ได้ใช้)"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:973
 msgid ""
 "Incorrect value for Loss tg (Loss tg must be positive or null if not used)"
 msgstr ""
+"ค่าที่ไม่ถูกต้องสำหรับการสูญเสีย Tg (ค่าต้องเป็นบวกหรือค่าว่างหากไม่ได้ใช้)"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:1020
 msgid "A layer thickness is < 0. Fix it"
-msgstr ""
+msgstr "ความหนาของเลเยอร์คือ < 0 ต้องแก้ไข"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:20
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:49
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:501
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:276
 msgid "Copper layers:"
-msgstr ""
+msgstr "ชั้นทองแดง:"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:22
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:30
 msgid "Select the number of copper layers in the stackup"
-msgstr ""
+msgstr "เลือกจํานวนเลเยอร์ทองแดงในสแต็คอัพ"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:26
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:49
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:106
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:164
 msgid "2"
-msgstr ""
+msgstr "2"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:26
 #: pcbnew/dialogs/dialog_create_array_base.cpp:258
@@ -20157,233 +20173,241 @@ msgstr ""
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:108
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:166
 msgid "4"
-msgstr ""
+msgstr "4"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:26
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:53
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:110
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:168
 msgid "6"
-msgstr ""
+msgstr "6"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:26
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:55
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:112
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:170
 msgid "8"
-msgstr ""
+msgstr "8"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:26
 msgid "10"
-msgstr ""
+msgstr "10"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:26
 msgid "12"
-msgstr ""
+msgstr "12"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:26
 msgid "14"
-msgstr ""
+msgstr "14"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:26
 msgid "16"
-msgstr ""
+msgstr "16"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:26
 msgid "18"
-msgstr ""
+msgstr "18"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:26
 msgid "20"
-msgstr ""
+msgstr "20"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:26
 msgid "22"
-msgstr ""
+msgstr "22"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:26
 msgid "24"
-msgstr ""
+msgstr "24"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:26
 msgid "26"
-msgstr ""
+msgstr "26"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:26
 msgid "28"
-msgstr ""
+msgstr "28"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:26
 msgid "30"
-msgstr ""
+msgstr "30"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:26
 msgid "32"
-msgstr ""
+msgstr "32"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:37
 msgid "Impedance controlled"
-msgstr ""
+msgstr "ควบคุมอิมพีแดนซ์"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:38
 msgid ""
 "If Impedance Controlled option is set,\n"
 "Loss tangent and EpsilonR will be added to constraints."
 msgstr ""
+"หากตั้งค่าตัวเลือกควบคุมอิมพีแดนซ์\n"
+"การสูญเสียแทนเจนต์และเอ็ปซิลอน R จะถูกเพิ่มเข้าไปในข้อจำกัด"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:45
 msgid "Add Dielectric Layer..."
-msgstr ""
+msgstr "เพิ่มเลเยอร์ไดอิเล็กตริก..."
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:48
 msgid "Remove Dielectric Layer..."
-msgstr ""
+msgstr "นำออกเลเยอร์ไดอิเล็กตริก..."
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:72
 #: pcbnew/build_BOM_from_board.cpp:109
 msgid "Id"
-msgstr ""
+msgstr "Id"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:132
 msgid "Board thickness from stackup:"
-msgstr ""
+msgstr "ความหนาของบอร์ดจากสแต็กอัพ:"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:46
+#, fuzzy
 msgid "ENIG"
-msgstr ""
+msgstr "ENIG"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:47
 msgid "ENEPIG"
-msgstr ""
+msgstr "ENEPIG"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:48
+#, fuzzy
 msgid "HAL SnPb"
-msgstr ""
+msgstr "HAL SnPb"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:49
 msgid "HAL lead-free"
-msgstr ""
+msgstr "HAL ไร้ตะกั่ว"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:50
 msgid "Hard gold"
-msgstr ""
+msgstr "ทองแข็ง"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:51
 msgid "Immersion tin"
-msgstr ""
+msgstr "ชุบดีบุก"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:52
 msgid "Immersion nickel"
-msgstr ""
+msgstr "ชุบนิกเกิล"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:53
 msgid "Immersion silver"
-msgstr ""
+msgstr "ชุบเงิน"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:54
 msgid "Immersion gold"
-msgstr ""
+msgstr "ชุบทอง"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:55
+#, fuzzy
 msgid "HT_OSP"
-msgstr ""
+msgstr "HT_OSP"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:56
+#, fuzzy
 msgid "OSP"
-msgstr ""
+msgstr "OSP"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:58
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:77
 msgid "User defined"
-msgstr ""
+msgstr "ผู้ใช้กำหนดเอง"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:71
 msgid "Green"
-msgstr ""
+msgstr "เขียว"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:72
 msgid "Red"
-msgstr ""
+msgstr "แดง"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:73
 msgid "Blue"
-msgstr ""
+msgstr "น้ำเงิน"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:74
 msgid "Black"
-msgstr ""
+msgstr "ดำ"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:75
 msgid "White"
-msgstr ""
+msgstr "ขาว"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:76
 msgid "Yellow"
-msgstr ""
+msgstr "เหลือง"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.h:51
 msgid "Not specified"
-msgstr ""
+msgstr "ไม่ระบุ"
 
 #: pcbnew/build_BOM_from_board.cpp:80
 msgid "Cannot export BOM: there are no footprints on the PCB."
-msgstr ""
+msgstr "ไม่สามารถส่งออก BOM: ไม่มีฟุ้ทพรินท์บนพีซีบี"
 
 #: pcbnew/build_BOM_from_board.cpp:90
 msgid "Save Bill of Materials"
-msgstr ""
+msgstr "บันทึกรายการวัสดุ"
 
 #: pcbnew/build_BOM_from_board.cpp:110
+#, fuzzy
 msgid "Designator"
-msgstr ""
+msgstr "Designator"
 
 #: pcbnew/build_BOM_from_board.cpp:111
 msgid "Package"
-msgstr ""
+msgstr "แพ็คเกจ"
 
 #: pcbnew/build_BOM_from_board.cpp:112
 msgid "Quantity"
-msgstr ""
+msgstr "ปริมาณ"
 
 #: pcbnew/build_BOM_from_board.cpp:113
+#, fuzzy
 msgid "Designation"
-msgstr ""
+msgstr "Designation"
 
 #: pcbnew/build_BOM_from_board.cpp:114
 msgid "Supplier and ref"
-msgstr ""
+msgstr "ซัพพลายเออร์และผู้อ้างอิง"
 
 #: pcbnew/cleanup_item.cpp:46 pcbnew/zone_filler.cpp:104
 msgid "Checking zone fills..."
-msgstr ""
+msgstr "กำลังตรวจสอบการระบายโซน..."
 
 #: pcbnew/cleanup_item.cpp:47
 msgid "Remove track shorting two nets"
-msgstr ""
+msgstr "ลบแทร็คที่ลัดวงจรระหว่างเน็ต"
 
 #: pcbnew/cleanup_item.cpp:48
 msgid "Remove via shorting two nets"
-msgstr ""
+msgstr "นำออกเวียที่ลัดวงจรระหว่างเน็ท"
 
 #: pcbnew/cleanup_item.cpp:49
 msgid "Remove redundant via"
-msgstr ""
+msgstr "นำออกเวียซ้ำซ้อน"
 
 #: pcbnew/cleanup_item.cpp:50
 msgid "Remove duplicate track"
-msgstr ""
+msgstr "นำออกแทร็คซ้ำ"
 
 #: pcbnew/cleanup_item.cpp:51
 msgid "Merge co-linear tracks"
-msgstr ""
+msgstr "รวมแทร็คร่วมกัน"
 
 #: pcbnew/cleanup_item.cpp:52
 msgid "Remove track not connected at both ends"
-msgstr ""
+msgstr "นำออกแทร็คที่ไม่เชื่อมต่อทั้งสองด้าน"
 
 #: pcbnew/cleanup_item.cpp:53
 msgid "Remove via connected on fewer than two layers"
-msgstr ""
+msgstr "นำเวียที่เชื่อมต่อน้อยกว่าสองเลเยอร์ออก"
 
 #: pcbnew/cleanup_item.cpp:54
 msgid "Remove zero-length track"
