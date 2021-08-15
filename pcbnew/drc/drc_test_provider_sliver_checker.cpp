@@ -90,8 +90,9 @@ bool DRC_TEST_PROVIDER_SLIVER_CHECKER::Run()
     int    widthTolerance = Millimeter2iu( ADVANCED_CFG::GetCfg().m_SliverWidthTolerance );
     double angleTolerance = ADVANCED_CFG::GetCfg().m_SliverAngleTolerance;
     int    testLength = widthTolerance / ( 2 * sin( DEG2RAD( angleTolerance / 2 ) ) );
+    LSET   copperLayers = m_drcEngine->GetBoard()->GetEnabledLayers() & LSET::AllCuMask();
 
-    for( PCB_LAYER_ID layer : LSET::AllCuMask().Seq() )
+    for( PCB_LAYER_ID layer : copperLayers.Seq() )
     {
         if( m_drcEngine->IsErrorLimitExceeded( DRCE_COPPER_SLIVER ) )
             continue;
