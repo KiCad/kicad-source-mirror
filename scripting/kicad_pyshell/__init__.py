@@ -10,21 +10,35 @@ or shown, as per user requirements.
 IF makePcbnewShellWindow() is called again, a second/third shell window
 can be created.
 
+Note:
+**DO NOT** import pcbnew module if not called from Pcbnew: on msys2 it creates a serious issue:
+the python script import is broken because the pcbnew application is not running, and for instance
+Pgm() returns a nullptr and Kicad crashes when Pgm is invoked.
+
 """
+
 import wx
 import sys
 import os
 
 from wx.py import crust, version, dispatcher
 
-from .kicad_pyeditor import KiCadEditorNotebookFrame, KiCadEditorNotebook
-
-import pcbnew
+from .kicad_pyeditor import KiCadEditorNotebookFrame
+from .kicad_pyeditor import KiCadEditorNotebook
 
 class KiCadPyShell(KiCadEditorNotebookFrame):
-   
+    isPcbframe = False      # is True only if the board editor is open,
+                            # i.e. if Pcbnew application exists
+
     def __init__(self, parent):
         KiCadEditorNotebookFrame.__init__(self, parent)
+
+        # Search if a pcbnew frame is open, because import pcbnew can be made only if it exists.
+        # frame names are "SchematicFrame" and "PcbFrame"
+        frame = wx.FindWindowByName( "PcbFrame" )
+
+        if frame is not None:
+            isPcbframe = True
 
     def _setup_startup(self):
         """Initialise the startup script."""
@@ -65,7 +79,18 @@ class KiCadPyShell(KiCadEditorNotebookFrame):
         module.__dict__['__builtins__'] = builtins
         namespace = module.__dict__.copy()
 
-        self.config_dir = pcbnew.SETTINGS_MANAGER.GetUserSettingsPath()
+        '''
+        Import pcbnew **only** if the board editor exists, to avoid strange behavior if not.
+        pcbnew.SETTINGS_MANAGER should be in fact called only if the python console is created
+        from the board editor, and if created from schematic editor, should use something like
+        eeschema.SETTINGS_MANAGER
+        '''
+        if self.isPcbframe:
+            import pcbnew
+            self.config_dir = pcbnew.SETTINGS_MANAGER.GetUserSettingsPath()
+        else:
+            self.config_dir = ""
+
         self.dataDir = self.config_dir
 
         self._setup_startup()
@@ -76,6 +101,7 @@ class KiCadPyShell(KiCadEditorNotebookFrame):
                                         "PyShell_pcbnew.cfg")
         self.config = wx.FileConfig(localFilename=self.config_file)
         self.config.SetRecordDefaults(True)
+
         self.autoSaveSettings = False
         self.autoSaveHistory = False
         self.LoadSettings()
@@ -213,6 +239,8 @@ def makePcbnewShellWindow(parentid):
     Returns:
     The handle to the new window.
     """
-    
+
     parent = wx.FindWindowById( parentid )
+
+    frmname = parent.GetName()
     return KiCadPyShell(parent)
