@@ -15,8 +15,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
-"PO-Revision-Date: 2021-08-15 04:13+0000\n"
-"Last-Translator: 서범기 <joonhoflow@naver.com>\n"
+"PO-Revision-Date: 2021-08-15 06:42+0000\n"
+"Last-Translator: Ji Yoon Choi <chichoon.choi@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
 "Language: ko\n"
@@ -175,7 +175,7 @@ msgstr "기판 외곽선이 없거나 잘못되었음. 전체 분석을 위해 D
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:227
 msgid "Create tracks and vias"
-msgstr "트랙 및 비아 생성"
+msgstr "배선 및 비아 생성"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:687
 msgid "Create zones"
@@ -3176,8 +3176,7 @@ msgstr "개체를 이동하는 동안 자동으로 팬"
 msgid ""
 "When drawing a track or moving an item, pan when approaching the edge of the "
 "display."
-msgstr ""
-"트랙을 그리거나 항목을 이동할 때 디스플레이 가장자리에 접근할 때 이동합니다."
+msgstr "배선을 그리거나 항목을 이동할 때, 디스플레이 가장자리에 접근하면 화면을 이동합니다."
 
 #: common/dialogs/panel_mouse_settings_base.cpp:38
 msgid "Use zoom acceleration"
@@ -3378,7 +3377,7 @@ msgstr "최소 구리 클리어런스"
 
 #: common/dialogs/panel_setup_netclasses.cpp:480
 msgid "Minimum track width"
-msgstr "최소 트랙 너비"
+msgstr "최소 배선 폭"
 
 #: common/dialogs/panel_setup_netclasses.cpp:481
 msgid "Via pad diameter"
@@ -3398,7 +3397,7 @@ msgstr "마이크로비아 도금 구멍 직경"
 
 #: common/dialogs/panel_setup_netclasses.cpp:485
 msgid "Differential pair track width"
-msgstr "차동 쌍 트랙 폭"
+msgstr "차동 쌍 배선 폭"
 
 #: common/dialogs/panel_setup_netclasses.cpp:486
 msgid "Differential pair gap"
@@ -3438,7 +3437,7 @@ msgstr "클리어런스"
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:195
 #: pcbnew/tools/board_inspection_tool.cpp:607
 msgid "Track Width"
-msgstr "트랙 두께"
+msgstr "배선 폭"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:45
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1491
@@ -3974,7 +3973,7 @@ msgstr "영역"
 
 #: common/eda_item.cpp:259 pcbnew/pcb_track.cpp:686
 msgid "Track"
-msgstr "트랙"
+msgstr "배선"
 
 #: common/eda_item.cpp:260 pcbnew/dialogs/dialog_board_statistics.cpp:483
 #: pcbnew/pcb_track.cpp:750
@@ -4241,7 +4240,7 @@ msgstr "맨 위"
 #: eeschema/fields_grid_table.cpp:520
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:101
 msgid "Bottom"
-msgstr "아래"
+msgstr "하단"
 
 #: common/eda_text.cpp:669
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:90
@@ -5112,7 +5111,7 @@ msgstr "스루홀 패드"
 #: pcbnew/widgets/appearance_controls.cpp:340
 #: pcbnew/widgets/panel_selection_filter_base.cpp:39
 msgid "Tracks"
-msgstr "트랙"
+msgstr "배선"
 
 #: common/layer_id.cpp:153
 msgid "Through vias"
@@ -5598,7 +5597,7 @@ msgstr "클립보드로 선택한 항목 잘라내기"
 
 #: common/tool/actions.cpp:160
 msgid "Copy selected item(s) to clipboard"
-msgstr "클립보드로 선택한 아이템 복사"
+msgstr "클립보드로 선택한 항목 복사"
 
 #: common/tool/actions.cpp:166
 msgid "Paste items(s) from clipboard"
@@ -5606,7 +5605,7 @@ msgstr "클립보드로부터 항목 붙여넣기"
 
 #: common/tool/actions.cpp:172
 msgid "Select all items on screen"
-msgstr "화면상의 모든 아이템 선택"
+msgstr "화면상의 모든 항목 선택"
 
 #: common/tool/actions.cpp:176
 msgid "Paste Special..."
@@ -8166,7 +8165,7 @@ msgstr "%u 링크가 매핑 됨, %u 을 찾을 수 없음"
 #: eeschema/dialogs/dialog_edit_symbols_libid.cpp:654
 #, c-format
 msgid "All %u link(s) resolved"
-msgstr "모든 %u 링크(들) 해결됨"
+msgstr "모든 %u개의 링크가 해결되었습니다"
 
 #: eeschema/dialogs/dialog_edit_symbols_libid.cpp:685
 msgid "Invalid symbol library identifier"
@@ -11400,7 +11399,7 @@ msgstr "선택된 텍스트 항목을 상자로 그리기"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:47
 msgid "Draw selected child items"
-msgstr "선택된 하위 아이템 그리기"
+msgstr "선택된 하위 항목 그리기"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:50
 msgid "Fill selected shapes"
@@ -13275,7 +13274,7 @@ msgstr "CADSTAR 디자인에는 KiCad에 대응되지 않는 변형이 포함되
 msgid ""
 "The CADSTAR design contains grouped items which has no KiCad equivalent. Any "
 "grouped items have been ungrouped."
-msgstr "CADSTAR 디자인에는 KiCad에 대응되지 않는 그룹화된 아이템이 포함되어 있습니다. 그룹화된 아이템은 그룹 해제되었습니다."
+msgstr "CADSTAR 디자인에는 KiCad에 대응되지 않는 그룹화된 항목이 포함되어 있습니다. 그룹화된 항목은 그룹 해제되었습니다."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:120
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:129
@@ -15553,7 +15552,7 @@ msgstr "시계 방향으로 회전"
 
 #: eeschema/tools/ee_actions.cpp:372 pcbnew/tools/pcb_actions.cpp:290
 msgid "Rotates selected item(s) clockwise"
-msgstr "선택한 항목(들) 시계 방향으로 회전"
+msgstr "선택한 항목을 시계 방향으로 회전"
 
 #: eeschema/tools/ee_actions.cpp:378 pcbnew/tools/edit_tool.cpp:1477
 msgid "Rotate"
@@ -15561,7 +15560,7 @@ msgstr "회전"
 
 #: eeschema/tools/ee_actions.cpp:378
 msgid "Rotates selected item(s) counter-clockwise"
-msgstr "선택한 항목(들) 반시계 방향으로 회전"
+msgstr "선택한 항목을 반시계 방향으로 회전"
 
 #: eeschema/tools/ee_actions.cpp:384
 msgid "Mirror Vertically"
@@ -15569,7 +15568,7 @@ msgstr "수직 방향 반전"
 
 #: eeschema/tools/ee_actions.cpp:384
 msgid "Flips selected item(s) from top to bottom"
-msgstr "선택된 아이템의 상하 반전"
+msgstr "선택한 항목을 상하 반전"
 
 #: eeschema/tools/ee_actions.cpp:390
 msgid "Mirror Horizontally"
@@ -15577,7 +15576,7 @@ msgstr "수평 방향 반전"
 
 #: eeschema/tools/ee_actions.cpp:390
 msgid "Flips selected item(s) from left to right"
-msgstr "선택된 아이템의 좌우 반전"
+msgstr "선택한 항목을 좌우 반전"
 
 #: eeschema/tools/ee_actions.cpp:396 pcbnew/tools/pcb_actions.cpp:327
 msgid "Properties..."
@@ -16046,7 +16045,7 @@ msgstr "이동"
 #: eeschema/tools/ee_actions.cpp:737 pagelayout_editor/tools/pl_actions.cpp:68
 #: pcbnew/tools/pcb_actions.cpp:253
 msgid "Moves the selected item(s)"
-msgstr "선택된 항목(들) 이동"
+msgstr "선택된 항목 이동"
 
 #: eeschema/tools/ee_actions.cpp:742 pcbnew/tools/edit_tool.cpp:1085
 msgid "Drag"
@@ -16054,7 +16053,7 @@ msgstr "드래그"
 
 #: eeschema/tools/ee_actions.cpp:742
 msgid "Drags the selected item(s)"
-msgstr "선택된 항목(들) 드래그"
+msgstr "선택된 항목 드래그"
 
 #: eeschema/tools/ee_actions.cpp:746
 msgid "Move Activate"
@@ -16654,11 +16653,11 @@ msgstr "거버 파일 (.g* .lgr .pho)"
 
 #: gerbview/files.cpp:144
 msgid "Top layer (*.GTL)|*.GTL;*.gtl|"
-msgstr "최상위 레이어(*.GTL)|*.GTL;*.gtl|"
+msgstr "상단 레이어 (*.GTL)|*.GTL;*.gtl|"
 
 #: gerbview/files.cpp:145
 msgid "Bottom layer (*.GBL)|*.GBL;*.gbl|"
-msgstr "최하단 레이어(*.GBL)|*.GBL;*.gbl|"
+msgstr "하단 레이어 (*.GBL)|*.GBL;*.gbl|"
 
 #: gerbview/files.cpp:146
 msgid "Bottom solder resist (*.GBS)|*.GBS;*.gbs|"
@@ -16670,11 +16669,11 @@ msgstr "상단 솔더 레지스트 (*.GTS)|*.GTS;*.gts|"
 
 #: gerbview/files.cpp:148
 msgid "Bottom overlay (*.GBO)|*.GBO;*.gbo|"
-msgstr "최하단 오버레이(*.GBO)|*.GBO;*.gbo|"
+msgstr "하단 오버레이 (*.GBO)|*.GBO;*.gbo|"
 
 #: gerbview/files.cpp:149
 msgid "Top overlay (*.GTO)|*.GTO;*.gto|"
-msgstr "최상단 오버레이(*.GBO)|*.GBO;*.gbo|"
+msgstr "상단 오버레이 (*.GBO)|*.GBO;*.gbo|"
 
 #: gerbview/files.cpp:150
 msgid "Bottom paste (*.GBP)|*.GBP;*.gbp|"
@@ -16724,7 +16723,7 @@ msgstr "<b>거버 작업 파일은 플롯 파일로 불러올 수 없습니다.<
 
 #: gerbview/files.cpp:374
 msgid "Open NC (Excellon) Drill File(s)"
-msgstr "NC(Excellon) 드릴 파일 열기"
+msgstr "NC (Excellon) 드릴 파일 열기"
 
 #: gerbview/files.cpp:471
 #, c-format
@@ -17911,11 +17910,11 @@ msgstr "오류!"
 
 #: kicad/tools/kicad_manager_control.cpp:606
 msgid "Create (or open) a project to edit a schematic."
-msgstr "회로도를 편집할 프로젝트를 생성(또는 열기)합니다."
+msgstr "회로도를 편집할 프로젝트를 생성 (또는 열기) 합니다."
 
 #: kicad/tools/kicad_manager_control.cpp:612
 msgid "Create (or open) a project to edit a pcb."
-msgstr "PCB를 편집할 프로젝트를 생성(또는 열기)합니다."
+msgstr "PCB를 편집할 프로젝트를 생성 (또는 열기) 합니다."
 
 #: kicad/tools/kicad_manager_control.cpp:629
 msgid "Application failed to load:\n"
@@ -18327,7 +18326,7 @@ msgid ""
 "which are not on all page are displayed"
 msgstr ""
 "페이지 1 또는 다른 페이지를 시뮬레이션 함으로써 모든 페이지에 존재하지 않는\n"
-"아이템들이 어떻게 표시될 지 나타냅니다"
+"항목들이 어떻게 표시될 지 나타냅니다"
 
 #: pagelayout_editor/tools/pl_actions.cpp:44
 msgid "Add Line"
@@ -18915,7 +18914,7 @@ msgstr "완성된 홀 직경 (D):"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1166
 msgid "Plating thickness (T):"
-msgstr "도금 두께(T):"
+msgstr "도금 두께 (T):"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1178
 msgid "Via length:"
@@ -19132,7 +19131,7 @@ msgstr "외부 레이어 추적"
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1577
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1675
 msgid "Trace width:"
-msgstr "트랙 두께:"
+msgstr "배선 두께:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1591
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1689
@@ -20103,12 +20102,12 @@ msgstr "구리"
 msgid ""
 "Incorrect value for Epsilon R (Epsilon R must be positive or null if not "
 "used)"
-msgstr "Epsilon R에 대한 잘못된 값(Epsilon R은 양수이거나 사용되지 않는 경우 null이어야 함)"
+msgstr "Epsilon R에 대한 잘못된 값 (Epsilon R은 양수이거나 사용되지 않는 경우 null이어야 함)"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:1044
 msgid ""
 "Incorrect value for Loss tg (Loss tg must be positive or null if not used)"
-msgstr "손실 탄제트에 대한 잘못된 값(손실 탄제트값은 양수이거나 사용되지 않는 경우 null이어야 함)"
+msgstr "손실 탄젠트에 대한 잘못된 값 (손실 탄젠트값은 양수이거나 사용되지 않는 경우 null이어야 함)"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:1090
 msgid "A layer thickness is < 0. Fix it"
@@ -20703,35 +20702,35 @@ msgstr "풋프린트 순서"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:45
 msgid "Horizontally: top left to bottom right"
-msgstr "수평적으로: 왼쪽 상단에서 오른쪽 하단"
+msgstr "수평으로: 왼쪽 상단에서 오른쪽 하단"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:56
 msgid "Horizontally: top right to bottom left"
-msgstr "수평적으로: 오른쪽 상단에서 왼쪽 하단"
+msgstr "수평으로: 오른쪽 상단에서 왼쪽 하단"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:67
 msgid "Horizontally: bottom left to top right"
-msgstr "수평적으로: 왼쪽 하단에서 오른쪽 상단"
+msgstr "수평으로: 왼쪽 하단에서 오른쪽 상단"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:78
 msgid "Horizontally:: bottom right to top left"
-msgstr "수평적으로:: 오른쪽 하단에서 왼쪽 상단"
+msgstr "수평으로:: 오른쪽 하단에서 왼쪽 상단"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:86
 msgid "Vertically: top left to bottom right"
-msgstr "수직적으로: 왼쪽 상단에서 오른쪽 하단"
+msgstr "수직으로: 왼쪽 상단에서 오른쪽 하단"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:97
 msgid "Vertically: top right to bottom left"
-msgstr "수직적으로: 오른쪽 상단에서 왼쪽 하단"
+msgstr "수직으로: 오른쪽 상단에서 왼쪽 하단"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:108
 msgid "Vertically: bottom left to top right"
-msgstr "수직적으로: 왼쪽 하단에서 오른쪽 상단"
+msgstr "수직으로: 왼쪽 하단에서 오른쪽 상단"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:119
 msgid "Vertically: bottom right to top left"
-msgstr "수직적으로: 오른쪽 하단에서 왼쪽 상단"
+msgstr "수직으로: 오른쪽 하단에서 왼쪽 상단"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:132
 msgid "Based on location of:"
@@ -20850,7 +20849,7 @@ msgstr "전면 접두사:"
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:244
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:249
 msgid "Optional prefix for component side reference designations (e.g. F_)"
-msgstr "구성 요소 측면 참조 지정을 위한 옵션 접두사(예: F_)"
+msgstr "구성 요소 측면 참조 지정을 위한 옵션 접두사 (예: F_)"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:253
 msgid "Back prefix:"
@@ -20859,7 +20858,7 @@ msgstr "뒷면 접두사:"
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:255
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:260
 msgid "Optional prefix for solder side reference designations (e.g. B_)"
-msgstr "납땜면의 참조 지정자에 대한 선택적 접두사(예: B_)"
+msgstr "납땜면의 참조 지정자에 대한 선택적 접두사 (예: B_)"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:264
 msgid "Exclude locked footprints"
@@ -20878,7 +20877,7 @@ msgid ""
 "Do not re-annotate this type \n"
 "of reference (R means R*)"
 msgstr ""
-"참조에서 이 유형에 다시 주석 달지 마시오\n"
+"이 유형의 참조에 다시 주석을 달지 마십시오.\n"
 "(R은 R*을 의미함)"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:290
@@ -21226,7 +21225,7 @@ msgstr "할당된 배션 세그먼트를 병합하고, 빈 세그먼트 제거"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:40
 msgid "Delete tracks unconnected at one end"
-msgstr "한쪽 끝에서 연결되지 않은 트랙 삭제"
+msgstr "한쪽 끝이 연결되지 않은 배선 삭제"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:41
 msgid "delete tracks having at least one dangling end"
@@ -22555,7 +22554,7 @@ msgstr "VRML 내보내기 옵션"
 
 #: pcbnew/dialogs/dialog_filter_selection_base.cpp:22
 msgid "Include &footprints"
-msgstr "풋프린트 포함(&f)"
+msgstr "풋프린트 포함 (&f)"
 
 #: pcbnew/dialogs/dialog_filter_selection_base.cpp:25
 msgid "Include t&ext items"
@@ -22563,7 +22562,7 @@ msgstr "텍스트 항목 포함 (&e)"
 
 #: pcbnew/dialogs/dialog_filter_selection_base.cpp:28
 msgid "Include &locked footprints"
-msgstr "잠긴 풋프린트 포 함(&l)"
+msgstr "잠긴 풋프린트 포함 (&l)"
 
 #: pcbnew/dialogs/dialog_filter_selection_base.cpp:31
 msgid "Include &drawings"
@@ -22600,7 +22599,7 @@ msgstr "%s을(를) 찾을 수 없음"
 
 #: pcbnew/dialogs/dialog_find.cpp:345
 msgid "No more items to show"
-msgstr "더 이상 표시할 아이템 없음"
+msgstr "더 이상 표시할 항목 없음"
 
 #: pcbnew/dialogs/dialog_find.cpp:347
 msgid "No hits"
@@ -23227,7 +23226,7 @@ msgstr "상대 경로를 만들 수 없습니다 (타겟 볼륨이 파일 볼륨
 #: pcbnew/dialogs/dialog_gendrill.cpp:391
 #, c-format
 msgid "Could not write drill and/or map files to folder '%s'."
-msgstr "'%s' 폴더에 드릴과 (또는) 맵 파일을 쓸 수 없습니다."
+msgstr "'%s' 폴더에 드릴 또는 맵 파일을 쓸 수 없습니다."
 
 #: pcbnew/dialogs/dialog_gendrill.cpp:440
 msgid "Save Drill Report File"
@@ -23858,11 +23857,11 @@ msgstr "가져온 레이어의 매핑 편집"
 
 #: pcbnew/dialogs/dialog_layer_selection_base.cpp:120
 msgid "Top/Front layer:"
-msgstr "윗면/정면 레이어:"
+msgstr "상단/정면 레이어:"
 
 #: pcbnew/dialogs/dialog_layer_selection_base.cpp:159
 msgid "Bottom/Back layer:"
-msgstr "바닥/후면 레이어:"
+msgstr "하단/후면 레이어:"
 
 #: pcbnew/dialogs/dialog_layer_selection_base.h:50
 msgid "Select Layer"
@@ -25266,11 +25265,11 @@ msgstr "미앤더링"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:109
 msgid "Min amplitude (Amin):"
-msgstr "최소 진폭(Amin):"
+msgstr "최소 진폭 (Amin):"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:120
 msgid "Max amplitude (Amax):"
-msgstr "최대 진폭(Amax):"
+msgstr "최대 진폭 (Amax):"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:131
 msgid "Min spacing (s):"
@@ -25364,7 +25363,7 @@ msgstr "장애물 뛰어넘기"
 msgid ""
 "When enabled, the router tries to move colliding traces behind solid "
 "obstacles (e.g. pads) instead of \"reflecting\" back the collision"
-msgstr "활성화될 경우, 라우터는 충돌을 \"반사\"하는 대신 충돌한 배선을 장애물 뒤로 우회시킵니다"
+msgstr "활성화될 경우, 라우터는 충돌을 \"반사\"하는 대신 충돌한 배선을 장애물 (예시: 패드) 뒤로 우회시킵니다"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:61
 msgid "Remove redundant tracks"
@@ -25640,7 +25639,7 @@ msgstr "규칙 영역 속성"
 
 #: pcbnew/dialogs/dialog_swap_layers.cpp:48
 msgid "Move items on:"
-msgstr "위에 있는 아이템을 이동:"
+msgstr "위에 있는 항목을 이동:"
 
 #: pcbnew/dialogs/dialog_swap_layers.cpp:49
 msgid "To layer:"
@@ -26056,7 +26055,7 @@ msgstr "Ctrl+Shift"
 #: pcbnew/dialogs/panel_edit_options_base.cpp:157
 #: pcbnew/dialogs/panel_edit_options_base.cpp:238
 msgid "Highlight net (for pads or tracks)."
-msgstr "하이라이트 네트(패드 또는 배선용)."
+msgstr "네트 강조 (패드 또는 배선용)."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:203
 msgid "Shift+Cmd"
@@ -26082,7 +26081,7 @@ msgstr "마우스가 패드 영역에 들어갈 때 커서 캡처"
 #: pcbnew/dialogs/panel_edit_options_base.cpp:274
 #: pcbnew/dialogs/panel_edit_options_base.cpp:288
 msgid "When creating tracks"
-msgstr "트랙 만들 때"
+msgstr "배선 생성 시"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:282
 msgid "Snap to tracks:"
@@ -26141,7 +26140,7 @@ msgstr "배선과 45도 연결을 유지하면서 배선 세그먼트를 드래�
 #: pcbnew/dialogs/panel_edit_options_base.cpp:350
 #: pcbnew/tools/pcb_actions.cpp:1380
 msgid "Drag (free angle)"
-msgstr "드래그(자유 각도)"
+msgstr "드래그 (자유 각도)"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:351
 #: pcbnew/tools/pcb_actions.cpp:1381
@@ -26379,7 +26378,7 @@ msgid ""
 "When enabled, the distance between copper layers will be included in track "
 "length calculations for tracks with vias.  When disabled, via stackup height "
 "is ignored."
-msgstr "활성화되면, 구리 레이어간의 거리가 비아가 있는 트랙의 길이 계산에 포함됩니다.  비활성화되면, 비아 스택업 높이는 무시됩니다."
+msgstr "활성화되면, 구리 레이어간의 거리가 비아가 있는 배선의 길이 계산에 포함됩니다.  비활성화되면, 비아 스택업 높이는 무시됩니다."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:191
 msgid "Minimum clearance:"
@@ -26686,7 +26685,7 @@ msgstr "Front_layer"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:125
 msgid "Layer name of front (top) copper layer"
-msgstr "정면 (윗면) 구리 레이어 이름"
+msgstr "정면 (상단) 구리 레이어 이름"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:129
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:143
@@ -28167,7 +28166,7 @@ msgstr "구리 개체를 모으는 중..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:208
 msgid "Checking track & via clearances..."
-msgstr "트랙과 비아 클리어런스 확인 중..."
+msgstr "배선과 비아 클리어런스 확인 중..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:215
 msgid "Checking hole clearances..."
@@ -30920,7 +30919,7 @@ msgid ""
 msgstr ""
 "CADSTAR 디자인은 '네트 클래스' 가 할당된 네트를 포함합니다. KiCad는 CADSTAR의 네트 클래스와 호환되는 클래스를 갖고 "
 "있지 않기 때문에, 해당 요소들은 가져올 수 없습니다. 참고: KiCad의 '네트 클래스' 버전은 CADSTAR의 '네트 라우터 코드' "
-"와 더 비슷합니다 (모든 네트에 대해 가져오기 됨)."
+"와 더 비슷합니다 (모든 네트에 대해 가져오기 된)."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3769
 msgid ""
@@ -30951,27 +30950,27 @@ msgstr "'%s' 패키지가 라이브러리 '%s'에 없습니다."
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:2119
 #, c-format
 msgid "Ignoring a polygon since Eagle layer '%s' (%d) was not mapped"
-msgstr "Eagle 레이어 '%s' (%d)가 매핑되지 않았기 때문에 다각형을 무시합니다"
+msgstr "Eagle 레이어 '%s' (%d) 이(가) 매핑되지 않았기 때문에 다각형을 무시합니다"
 
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:1693
 #, c-format
 msgid "Ignoring a wire since Eagle layer '%s' (%d) was not mapped"
-msgstr "Eagle 레이어 '%s' (%d)가 매핑되지 않았기 때문에 와이어를 무시합니다"
+msgstr "Eagle 레이어 '%s' (%d) 이(가) 매핑되지 않았기 때문에 와이어를 무시합니다"
 
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:1866
 #, c-format
 msgid "Ignoring a text since Eagle layer '%s' (%d) was not mapped"
-msgstr "Eagle 레이어 '%s' (%d)가 매핑되지 않았기 때문에 텍스트를 무시합니다"
+msgstr "Eagle 레이어 '%s' (%d) 이(가) 매핑되지 않았기 때문에 텍스트를 무시합니다"
 
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:2004
 #, c-format
 msgid "Ignoring a rectangle since Eagle layer '%s' (%d) was not mapped"
-msgstr "Eagle 레이어 '%s' (%d)가 매핑되지 않았기 때문에 사각형을 무시합니다"
+msgstr "Eagle 레이어 '%s' (%d) 이(가) 매핑되지 않았기 때문에 사각형을 무시합니다"
 
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:2189
 #, c-format
 msgid "Ignoring a circle since Eagle layer '%s' (%d) was not mapped"
-msgstr "Eagle 레이어 '%s' (%d)가 매핑되지 않았기 때문에 원을 무시합니다"
+msgstr "Eagle 레이어 '%s' (%d) 이(가) 매핑되지 않았기 때문에 원을 무시합니다"
 
 #: pcbnew/plugins/fabmaster/fabmaster_plugin.cpp:85
 msgid "Could not read file "
@@ -31522,7 +31521,7 @@ msgstr "새로운 배선을 시작합니다."
 
 #: pcbnew/router/length_tuner_tool.cpp:51
 msgid "End Track"
-msgstr "트랙 종료"
+msgstr "배선 종료"
 
 #: pcbnew/router/length_tuner_tool.cpp:51
 msgid "Stops laying the current meander."
@@ -31796,7 +31795,7 @@ msgstr "배선 코너 모드"
 
 #: pcbnew/router/router_tool.cpp:162
 msgid "Switches between sharp and rounded corners when routing tracks."
-msgstr "트랙을 라우팅하면서 모서리를 날카로운 모양과 둥근 모양 간 전환합니다."
+msgstr "배선을 라우팅하면서 모서리를 날카로운 모양과 둥근 모양 간 전환합니다."
 
 #: pcbnew/router/router_tool.cpp:184
 msgid "Select Track/Via Width"
@@ -31834,7 +31833,7 @@ msgstr "배선 네트클래스 폭"
 #: pcbnew/router/router_tool.cpp:227
 #, c-format
 msgid "Track %s"
-msgstr "트랙 %s"
+msgstr "배선 %s"
 
 #: pcbnew/router/router_tool.cpp:241
 msgid "Via netclass values"
@@ -31933,7 +31932,7 @@ msgstr "강제 드래그"
 #: pcbnew/router/router_tool.cpp:1825 pcbnew/tools/pcb_actions.cpp:1360
 #: pcbnew/tools/pcb_actions.cpp:1366
 msgid "Break Track"
-msgstr "트랙 끊기"
+msgstr "배선 끊기"
 
 #: pcbnew/router/router_tool.cpp:1895
 #, c-format
@@ -31943,7 +31942,7 @@ msgstr "라우팅 차동 쌍: %s"
 #: pcbnew/router/router_tool.cpp:1895
 #, c-format
 msgid "Routing Track: %s"
-msgstr "라우팅 트랙: %s"
+msgstr "라우팅 배선: %s"
 
 #: pcbnew/router/router_tool.cpp:1901
 #, c-format
@@ -32094,7 +32093,7 @@ msgstr "배선: 네트클래스 폭 사용하기"
 #: pcbnew/toolbars_pcb_editor.cpp:645
 #, c-format
 msgid "Track: %s (%s)"
-msgstr "트랙: %s (%s)"
+msgstr "배선: %s (%s)"
 
 #: pcbnew/toolbars_pcb_editor.cpp:654 pcbnew/toolbars_pcb_editor.cpp:722
 msgid "Edit Pre-defined Sizes..."
@@ -33190,7 +33189,7 @@ msgstr "마이크로웨이브 호 스텁 추가"
 
 #: pcbnew/tools/pcb_actions.cpp:478
 msgid "Create stub (arc) of specified size for microwave applications"
-msgstr "마이크로웨이브 애플리케이션을 위해 지정된 크기의 스텁(호) 생성"
+msgstr "고주파 애플리케이션을 위해 지정된 크기의 스텁(호) 생성"
 
 #: pcbnew/tools/pcb_actions.cpp:483
 msgid "Add Microwave Polygonal Shape"
@@ -33346,7 +33345,7 @@ msgstr "선택 및 배치를 위한 부품 배치 파일 생성"
 
 #: pcbnew/tools/pcb_actions.cpp:599
 msgid "Footprint Report (.rpt)..."
-msgstr "풋프린터 보고서(.rpt)..."
+msgstr "풋프린터 보고서 (.rpt)..."
 
 #: pcbnew/tools/pcb_actions.cpp:600
 msgid "Create report of all footprints from current board"
@@ -33366,7 +33365,7 @@ msgstr "부품 목록..."
 
 #: pcbnew/tools/pcb_actions.cpp:610
 msgid "Create bill of materials from board"
-msgstr "기판에서 BOM (Bill of materials)을 생성"
+msgstr "기판에서 BOM (Bill of materials) 을 생성"
 
 #: pcbnew/tools/pcb_actions.cpp:617
 msgid "Switch Track Width to Next"
@@ -34276,7 +34275,7 @@ msgstr "완료되지 않은 실행 취소/다시 실행 동작: 일부 항목을
 
 #: pcbnew/widgets/appearance_controls.cpp:340
 msgid "Show tracks"
-msgstr "트랙 표시"
+msgstr "배선 표시"
 
 #: pcbnew/widgets/appearance_controls.cpp:341
 msgid "Show all vias"
@@ -34962,7 +34961,7 @@ msgstr "bitmap2component"
 
 #: resources/linux/launchers/org.kicad.eeschema.desktop.in:10
 msgid "KiCad Schematic Editor (Standalone)"
-msgstr "KiCad 회로도 편집기 (독립 실행형)"
+msgstr "KiCad 회로도 편집기 (스탠드얼론)"
 
 #: resources/linux/launchers/org.kicad.eeschema.desktop.in:11
 msgid "Schematic Capture Tool"
@@ -34970,7 +34969,7 @@ msgstr "회로도 캡쳐 도구"
 
 #: resources/linux/launchers/org.kicad.eeschema.desktop.in:12
 msgid "Standalone schematic editor for KiCad schematics"
-msgstr "KiCad 회로도용 독립 실행형 회로도 편집기"
+msgstr "KiCad 회로도용 스탠드얼론 회로도 편집기"
 
 #: resources/linux/launchers/org.kicad.eeschema.desktop.in:13
 msgid "eeschema"
