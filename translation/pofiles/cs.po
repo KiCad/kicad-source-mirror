@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
-"PO-Revision-Date: 2021-08-15 06:42+0000\n"
+"PO-Revision-Date: 2021-08-15 09:00+0000\n"
 "Last-Translator: Jan Straka <bach@email.cz>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/"
 "master-source/cs/>\n"
@@ -13303,9 +13303,9 @@ msgid "Pin has unexpected inner edge type."
 msgstr "Vývod má neočekávaný typ vnitřního okraje."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:831
-#, fuzzy, c-format
+#, c-format
 msgid "Label's owner (%d) not found."
-msgstr "Soubor '%s' nenalezen."
+msgstr "Vlastník označení (%d) nebyl nalezen."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:948
 #, c-format
@@ -13313,19 +13313,19 @@ msgid "Bezier has %d control points. At least 2 are expected."
 msgstr "Bezierova křivka má %d řídicích bodů. Očekává se nejméně 2."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1005
-#, fuzzy, c-format
+#, c-format
 msgid "Bezier's owner (%d) not found."
-msgstr "Reference '%s' nenalezena."
+msgstr "Vlastník Bezier (%d) nebyl nalezen."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1091
-#, fuzzy, c-format
+#, c-format
 msgid "Polyline's owner (%d) not found."
-msgstr "Soubor '%s' nenalezen."
+msgstr "Vlastník křivky (%d) nebyl nalezen."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1150
-#, fuzzy, c-format
+#, c-format
 msgid "Polygon's owner (%d) not found."
-msgstr "Soubor '%s' nenalezen."
+msgstr "Vlastník polygonu (%d) nebyl nalezen."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1231
 #, fuzzy, c-format
@@ -13338,24 +13338,24 @@ msgid "Arc drawing on schematic not currently supported."
 msgstr "Aktuálně není otevřeno žádné schéma."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1278
-#, fuzzy, c-format
+#, c-format
 msgid "Arc's owner (%d) not found."
-msgstr "Reference '%s' nenalezena."
+msgstr "Vlastník oblouku (%d) nebyl nalezen."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1339
-#, fuzzy, c-format
+#, c-format
 msgid "Line's owner (%d) not found."
-msgstr "Soubor '%s' nenalezen."
+msgstr "Vlastník řádku (%d) nebyl nalezen."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1410
-#, fuzzy, c-format
+#, c-format
 msgid "Rectangle's owner (%d) not found."
-msgstr "Reference '%s' nenalezena."
+msgstr "Vlastník obdélníku (%d) nebyl nalezen."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1478
-#, fuzzy, c-format
+#, c-format
 msgid "Sheet entry's owner (%d) not found."
-msgstr "Reference '%s' nenalezena."
+msgstr "Vlastník listu (%d) nebyl nalezen."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1724
 msgid "Power Port has unknown style, use bar instead."
@@ -13367,9 +13367,9 @@ msgid "Power symbol creates a global label with name '%s'"
 msgstr "Symbol moci vytváří globální štítek s názvem „%s“"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1882
-#, fuzzy, c-format
+#, c-format
 msgid "Port %s has no connections."
-msgstr "Připojení plošek:"
+msgstr "Port %s nemá žádné připojení."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2073
 #, c-format
@@ -13388,14 +13388,14 @@ msgid "File not found %s."
 msgstr "Soubor nenalezen %s."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2185
-#, fuzzy, c-format
+#, c-format
 msgid "Sheetname's owner (%d) not found."
-msgstr "Reference '%s' nenalezena."
+msgstr "Vlastník názvu listu (%d) nebyl nalezen."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2212
-#, fuzzy, c-format
+#, c-format
 msgid "Filename's owner (%d) not found."
-msgstr "Soubor '%s' nenalezen."
+msgstr "Vlastník názvu souboru (%d) nebyl nalezen."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2250
 #, fuzzy, c-format
@@ -31843,9 +31843,8 @@ msgid "existing track"
 msgstr "Při vytváření spojů"
 
 #: pcbnew/router/pns_kicad_iface.cpp:464 pcbnew/router/pns_kicad_iface.cpp:477
-#, fuzzy
 msgid "board minimum width"
-msgstr "Minimální šířka:"
+msgstr "deska minimální šířka"
 
 #: pcbnew/router/pns_kicad_iface.cpp:473
 #, fuzzy
@@ -32192,9 +32191,9 @@ msgid "Routing Track: %s"
 msgstr "Propojit jednotlivý spoj"
 
 #: pcbnew/router/router_tool.cpp:1901
-#, fuzzy, c-format
+#, c-format
 msgid "Net Class: %s"
-msgstr "Nový alias:"
+msgstr "Třída sítě: %s"
 
 #: pcbnew/router/router_tool.cpp:1905
 #, fuzzy
