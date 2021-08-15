@@ -2,10 +2,10 @@
 Provides the backend for a basic python editor in KiCad.
 
 This takes most code from PyShell/PyCrust but adapts it to the KiCad
-environment where the Python doesn't create a frame but instead hooks 
+environment where the Python doesn't create a frame but instead hooks
 into the existing KIWAY_PLAYER
 
-Original PyCrust code used from 
+Original PyCrust code used from
 https://github.com/wxWidgets/Phoenix/tree/master/wx/py
 '''
 
@@ -71,15 +71,13 @@ ID_FINDPREVIOUS = KiNewId()
 ID_SHOWTOOLS = KiNewId()
 ID_HIDEFOLDINGMARGIN = KiNewId()
 
-import pcbnew
-
 INTRO = "KiCad - Python Shell"
 
 class KiCadPyFrame():
-    
+
     def __init__(self, parent):
         """Create a Frame instance."""
-        
+
         self.parent = parent
         self.parent.CreateStatusBar()
         self.parent.SetStatusText('Frame')
@@ -90,7 +88,7 @@ class KiCadPyFrame():
         self.findDlg = None
         self.findData = wx.FindReplaceData()
         self.findData.SetFlags(wx.FR_DOWN)
-        
+
         self.parent.Bind(wx.EVT_CLOSE, self.OnClose)
         self.parent.Bind(wx.EVT_ICONIZE, self.OnIconize)
 
@@ -173,7 +171,7 @@ class KiCadPyFrame():
 
         # Options
         m = self.optionsMenu = wx.Menu()
-        
+
         self.historyMenu = wx.Menu()
         self.historyMenu.Append(ID_SAVEHISTORY, '&Autosave History',
                  'Automatically save history on close', wx.ITEM_CHECK)
@@ -264,7 +262,7 @@ class KiCadPyFrame():
         self.parent.Bind(wx.EVT_MENU, self.OnFindPrevious, id=ID_FINDPREVIOUS)
         self.parent.Bind(wx.EVT_MENU, self.OnToggleTools, id=ID_SHOWTOOLS)
         self.parent.Bind(wx.EVT_MENU, self.OnHideFoldingMargin, id=ID_HIDEFOLDINGMARGIN)
-        
+
         self.parent.Bind(wx.EVT_UPDATE_UI, self.OnUpdateMenu, id=ID_NEW)
         self.parent.Bind(wx.EVT_UPDATE_UI, self.OnUpdateMenu, id=ID_OPEN)
         self.parent.Bind(wx.EVT_UPDATE_UI, self.OnUpdateMenu, id=ID_REVERT)
@@ -307,12 +305,12 @@ class KiCadPyFrame():
         self.parent.Bind(wx.EVT_UPDATE_UI, self.OnUpdateMenu, id=ID_FINDPREVIOUS)
         self.parent.Bind(wx.EVT_UPDATE_UI, self.OnUpdateMenu, id=ID_SHOWTOOLS)
         self.parent.Bind(wx.EVT_UPDATE_UI, self.OnUpdateMenu, id=ID_HIDEFOLDINGMARGIN)
-        
+
         self.parent.Bind(wx.EVT_ACTIVATE, self.OnActivate)
         self.parent.Bind(wx.EVT_FIND, self.OnFindNext)
         self.parent.Bind(wx.EVT_FIND_NEXT, self.OnFindNext)
         self.parent.Bind(wx.EVT_FIND_CLOSE, self.OnFindClose)
-        
+
     def OnShowLineNumbers(self, event):
         win = wx.Window.FindFocus()
         if hasattr(win, 'lineNumbers'):
@@ -702,7 +700,7 @@ class KiCadPyFrame():
 
 class KiCadEditorFrame(KiCadPyFrame):
     def __init__(self, parent=None, id=-1, title='KiCad Python'):
-        
+
         """Create EditorFrame instance."""
         KiCadPyFrame.__init__(self, parent)
         self.buffers = {}
@@ -1009,7 +1007,7 @@ class KiCadEditorNotebookFrame(KiCadEditorFrame):
             self.bufferCreate(path)
         cancel = False
         return cancel
-    
+
 
 class KiCadEditorNotebook(wx.Notebook):
     """A notebook containing a page for each editor."""
