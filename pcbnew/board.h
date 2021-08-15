@@ -1084,6 +1084,7 @@ public:
     std::map< std::pair<BOARD_ITEM*, BOARD_ITEM*>, bool > m_InsideFCourtyardCache;
     std::map< std::pair<BOARD_ITEM*, BOARD_ITEM*>, bool > m_InsideBCourtyardCache;
     std::map< std::pair<BOARD_ITEM*, BOARD_ITEM*>, bool > m_InsideAreaCache;
+    std::map< wxString, LSET >                            m_LayerExpressionCache;
 
     std::map< ZONE*, std::unique_ptr<DRC_RTREE> >         m_CopperZoneRTrees;
 

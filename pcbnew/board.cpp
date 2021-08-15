@@ -198,6 +198,7 @@ void BOARD::IncrementTimeStamp()
         m_InsideCourtyardCache.clear();
         m_InsideFCourtyardCache.clear();
         m_InsideBCourtyardCache.clear();
+        m_LayerExpressionCache.clear();
     }
 
     m_CopperZoneRTrees.clear();
