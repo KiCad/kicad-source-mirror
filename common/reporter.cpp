@@ -201,9 +201,14 @@ bool STATUSBAR_REPORTER::HasMessage() const
 }
 
 
+INFOBAR_REPORTER::~INFOBAR_REPORTER()
+{
+}
+
+
 REPORTER& INFOBAR_REPORTER::Report( const wxString& aText, SEVERITY aSeverity )
 {
-    m_message    = aText;
+    m_message.reset( new wxString( aText ) );
     m_severity   = aSeverity;
     m_messageSet = true;
 
@@ -213,7 +218,7 @@ REPORTER& INFOBAR_REPORTER::Report( const wxString& aText, SEVERITY aSeverity )
 
 bool INFOBAR_REPORTER::HasMessage() const
 {
-    return !m_message.IsEmpty();
+    return m_message && !m_message->IsEmpty();
 }
 
 
@@ -240,11 +245,11 @@ void INFOBAR_REPORTER::Finalize()
         case RPT_SEVERITY_IGNORE:    icon = wxICON_INFORMATION; break;
     }
 
-    if( m_message.EndsWith( "\n" ) )
-        m_message = m_message.Left( m_message.Length() - 1 );
+    if( m_message->EndsWith( "\n" ) )
+        *m_message = m_message->Left( m_message->Length() - 1 );
 
     if( HasMessage() )
-        m_infoBar->QueueShowMessage( m_message, icon );
+        m_infoBar->QueueShowMessage( *m_message, icon );
     else
         m_infoBar->QueueDismiss();
 }

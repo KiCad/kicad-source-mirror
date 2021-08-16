@@ -26,6 +26,7 @@
 #ifndef UI_COMMON_H
 #define UI_COMMON_H
 
+#include "report_severity.h"      // enum SEVERITY
 #include <wx/string.h>
 #include <wx/font.h>
 
@@ -75,17 +76,16 @@ bool EnsureTextCtrlWidth( wxTextCtrl* aCtrl, const wxString* aString = nullptr )
 void SelectReferenceNumber( wxTextEntry* aTextEntry );
 
 /**
- * Checks if a input control has focus
+ * Check if a input control has focus.
  *
  * @param aFocus Control that has focus, if null, wxWidgets will be queried
  */
 bool IsInputControlFocused( wxWindow* aFocus = nullptr );
 
 /**
- * Checks if a input control has focus
+ * Check if a input control has focus.
  *
  * @param aFocus Control that test if editable
- *
  * @return True if control is input and editable OR control is not a input. False if control is
  *         input and not editable.
  */
@@ -94,18 +94,6 @@ bool IsInputControlEditable( wxWindow* aControl );
 bool IsModalDialogFocused();
 
 }
-
-// Note: On windows, SEVERITY_ERROR collides with a system declaration,
-// so we used RPT_SEVERITY _xxx instead of SEVERITY _xxx
-enum SEVERITY {
-    RPT_SEVERITY_UNDEFINED = 0x00,
-    RPT_SEVERITY_INFO      = 0x01,
-    RPT_SEVERITY_EXCLUSION = 0x02,
-    RPT_SEVERITY_ACTION    = 0x04,
-    RPT_SEVERITY_WARNING   = 0x08,
-    RPT_SEVERITY_ERROR     = 0x10,
-    RPT_SEVERITY_IGNORE    = 0x20
-};
 
 SEVERITY SeverityFromString( const wxString& aSeverity );
 

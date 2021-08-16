@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2013 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 2013-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2013 Wayne Stambaugh <stambaughw@gmail.com>
+ * Copyright (C) 2013-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,17 +25,23 @@
 #ifndef _REPORTER_H_
 #define _REPORTER_H_
 
+#include <memory>
+
 #include <eda_units.h>
-#include <wx/string.h>
-#include <widgets/ui_common.h>
+#include <widgets/report_severity.h>
 
 /**
  * @file reporter.h
  * @author Wayne Stambaugh
  * @note A special thanks to Dick Hollenbeck who came up with the idea that inspired
  *       me to write this.
+ * @warning Do not add any dependencies to wxWidgets (or any other third party UI library )
+ *          to the REPORTER object.  All wxWidgets objects should be defined by pointer or
+ *          reference and forward declared so that using reporters in low level KiCad objects
+ *          will not require pulling in wxWidgets to building them.
  */
 
+class wxString;
 class wxStatusBar;
 class wxTextCtrl;
 class WX_HTML_REPORT_PANEL;
@@ -108,9 +114,6 @@ public:
     REPORTER& Report( const char* aText, SEVERITY aSeverity = RPT_SEVERITY_UNDEFINED );
 
     REPORTER& operator <<( const wxString& aText ) { return Report( aText ); }
-    REPORTER& operator <<( const wxChar* aText ) { return Report( wxString( aText ) ); }
-    REPORTER& operator <<( wxChar aChar ) { return Report( wxString( aChar ) ); }
-    REPORTER& operator <<( const char* aText ) { return Report( aText ); }
 
     /**
      * Returns true if the reporter client is non-empty.
@@ -133,8 +136,6 @@ public:
  */
 class WX_TEXT_CTRL_REPORTER : public REPORTER
 {
-    wxTextCtrl* m_textCtrl;
-
 public:
     WX_TEXT_CTRL_REPORTER( wxTextCtrl* aTextCtrl ) :
         REPORTER(),
@@ -150,6 +151,9 @@ public:
                       SEVERITY aSeverity = RPT_SEVERITY_UNDEFINED ) override;
 
     bool HasMessage() const override;
+
+private:
+    wxTextCtrl* m_textCtrl;
 };
 
 
@@ -158,8 +162,6 @@ public:
  */
 class WX_STRING_REPORTER : public REPORTER
 {
-    wxString* m_string;
-
 public:
     WX_STRING_REPORTER( wxString* aString ) :
         REPORTER(),
@@ -174,6 +176,9 @@ public:
     REPORTER& Report( const wxString& aText, SEVERITY aSeverity = RPT_SEVERITY_UNDEFINED ) override;
 
     bool HasMessage() const override;
+
+private:
+    wxString* m_string;
 };
 
 
@@ -182,8 +187,6 @@ public:
  */
 class WX_HTML_PANEL_REPORTER : public REPORTER
 {
-    WX_HTML_REPORT_PANEL* m_panel;
-
 public:
     WX_HTML_PANEL_REPORTER( WX_HTML_REPORT_PANEL* aPanel ) :
         REPORTER(),
@@ -205,6 +208,9 @@ public:
                           SEVERITY aSeverity = RPT_SEVERITY_UNDEFINED ) override;
 
     bool HasMessage() const override;
+
+private:
+    WX_HTML_REPORT_PANEL* m_panel;
 };
 
 
@@ -313,10 +319,11 @@ public:
             : REPORTER(),
               m_messageSet( false ),
               m_infoBar( aInfoBar ),
-              m_message( wxEmptyString ),
               m_severity( RPT_SEVERITY_UNDEFINED )
     {
     }
+
+    virtual ~INFOBAR_REPORTER();
 
     REPORTER& Report( const wxString& aText,
                       SEVERITY aSeverity = RPT_SEVERITY_UNDEFINED ) override;
@@ -329,10 +336,10 @@ public:
     void Finalize();
 
 private:
-    bool        m_messageSet;
-    WX_INFOBAR* m_infoBar;
-    wxString    m_message;
-    SEVERITY    m_severity;
+    bool                      m_messageSet;
+    WX_INFOBAR*               m_infoBar;
+    std::unique_ptr<wxString> m_message;
+    SEVERITY                  m_severity;
 };
 
 #endif     // _REPORTER_H_
