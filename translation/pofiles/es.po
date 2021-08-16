@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
-"PO-Revision-Date: 2021-08-16 06:17+0000\n"
+"PO-Revision-Date: 2021-08-17 02:20+0000\n"
 "Last-Translator: VicSanRoPe <vicsanrope@protonmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/kicad/"
 "master-source/es/>\n"
@@ -2224,7 +2224,7 @@ msgid ""
 "Override locks and apply the operation on all the items selected.\n"
 "Any locked items will remain locked after the operation is complete."
 msgstr ""
-"Desestrimar bloqueos y aplicar la operación a todos los elementos "
+"Desestimar bloqueos y aplicar la operación a todos los elementos "
 "seleccionados.\n"
 "Todos los elementos bloqueados lo seguirán estando al finalizar la operación."
 
@@ -2979,7 +2979,7 @@ msgstr "Antialiasing rápido"
 #: common/dialogs/panel_common_settings_base.cpp:77
 #: common/dialogs/panel_common_settings_base.cpp:87
 msgid "High Quality Antialiasing"
-msgstr "Antialiasing alta calidad"
+msgstr "Antialiasing de alta calidad"
 
 #: common/dialogs/panel_common_settings_base.cpp:83
 msgid "Fallback graphics:"
@@ -3008,7 +3008,7 @@ msgstr "Interfaz de usuario"
 
 #: common/dialogs/panel_common_settings_base.cpp:161
 msgid "Icon scale:"
-msgstr "Escala de icono:"
+msgstr "Escala de íconos:"
 
 #: common/dialogs/panel_common_settings_base.cpp:170
 #: common/dialogs/panel_common_settings_base.cpp:181
@@ -3025,11 +3025,11 @@ msgstr "Escala del lienzo:"
 
 #: common/dialogs/panel_common_settings_base.cpp:184
 msgid "Show icons in menus"
-msgstr "Mostrar iconos en menús"
+msgstr "Mostrar íconos en menús"
 
 #: common/dialogs/panel_common_settings_base.cpp:187
 msgid "Icon theme:"
-msgstr "Tema de iconos:"
+msgstr "Tema de íconos:"
 
 #: common/dialogs/panel_common_settings_base.cpp:191
 msgid "Light"
@@ -7898,11 +7898,11 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_bus_manager.cpp:43
 msgid "Bus Definitions"
-msgstr "Definiciones de BUS"
+msgstr "Definiciones de bus"
 
 #: eeschema/dialogs/dialog_bus_manager.cpp:60
 msgid "Bus Aliases"
-msgstr "Alias de BUS"
+msgstr "Alias de bus"
 
 #: eeschema/dialogs/dialog_bus_manager.cpp:70
 msgid "Alias Name"
@@ -7923,11 +7923,11 @@ msgstr "Nombre del miembro"
 
 #: eeschema/dialogs/dialog_bus_manager.cpp:185
 msgid "Bus Alias Name"
-msgstr "Nombre de alias del BUS"
+msgstr "Nombre de alias del bus"
 
 #: eeschema/dialogs/dialog_bus_manager.cpp:186
 msgid "Net or Bus Name"
-msgstr "Nombre red o BUS"
+msgstr "Nombre de red o bus"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:66
 msgid "Change all symbols in schematic"
@@ -16263,7 +16263,7 @@ msgstr "Definiciones de bus..."
 
 #: eeschema/tools/ee_actions.cpp:604
 msgid "Manage bus definitions"
-msgstr "Gestionar las definiciones de Bus"
+msgstr "Gestionar las definiciones de bus"
 
 #: eeschema/tools/ee_actions.cpp:609
 msgid "Export Drawing to Clipboard"
@@ -33040,7 +33040,7 @@ msgstr "Editar tamaños predefinidos..."
 
 #: pcbnew/toolbars_pcb_editor.cpp:691
 msgid "Via: use netclass sizes"
-msgstr "Vía: utilizar los tamaño de las clases de red"
+msgstr "Vía: utilizar los tamaños de las clases de red"
 
 #: pcbnew/toolbars_pcb_editor.cpp:714
 #, c-format
@@ -33724,7 +33724,7 @@ msgstr "Añadir una tabla de apilado de placa en una capa gráfica"
 
 #: pcbnew/tools/pcb_actions.cpp:130
 msgid "Add Aligned Dimension"
-msgstr "Añadir una dimensión alineada"
+msgstr "Añadir dimensión alineada"
 
 #: pcbnew/tools/pcb_actions.cpp:130
 msgid "Add an aligned linear dimension"
