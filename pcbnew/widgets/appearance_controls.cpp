@@ -371,6 +371,7 @@ static std::set<int> s_allowedInFpEditor =
             LAYER_PADS_TH,
             LAYER_MOD_VALUES,
             LAYER_MOD_REFERENCES,
+            LAYER_MOD_TEXT_FR,
             LAYER_MOD_TEXT_INVISIBLE,
             LAYER_GRID
         };
