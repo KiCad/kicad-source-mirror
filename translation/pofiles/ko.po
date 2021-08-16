@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
-"PO-Revision-Date: 2021-08-16 06:17+0000\n"
+"PO-Revision-Date: 2021-08-16 07:38+0000\n"
 "Last-Translator: Ji Yoon Choi <chichoon.choi@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
@@ -156,7 +156,7 @@ msgstr "기판 외곽선 생성"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:457
 msgid "Create layers"
-msgstr "레이어 만들기"
+msgstr "레이어 생성"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:482
 #: pcbnew/dialogs/dialog_footprint_checker.cpp:104
@@ -167,11 +167,11 @@ msgstr "불러온 풋프린트가 없습니다."
 msgid ""
 "Footprint outline is missing or malformed. Run Footprint Checker for a full "
 "analysis."
-msgstr "풋프린트 외곽선이 없거나 잘못되었음. 전체 분석을 위해 풋프린트 검사기를 실행합니다."
+msgstr "풋프린트 외곽선이 없거나 잘못되었습니다. 전체 분석을 위해 풋프린트 검사기를 실행합니다."
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:507
 msgid "Board outline is missing or malformed. Run DRC for a full analysis."
-msgstr "기판 외곽선이 없거나 잘못되었음. 전체 분석을 위해 DRC를 실행합니다."
+msgstr "기판 외곽선이 없거나 잘못되었습니다. 전체 분석을 위해 DRC를 실행합니다."
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:227
 msgid "Create tracks and vias"
@@ -183,7 +183,7 @@ msgstr "영역 만들기"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:757
 msgid "Simplifying copper layers polygons"
-msgstr "구리 층 다각형 단순화"
+msgstr "구리 레이어 다각형 단순화"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:767
 msgid "Simplifying polygons on F_Cu"
@@ -196,7 +196,7 @@ msgstr "B_Cu 다각형 단순화"
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:808
 #, c-format
 msgid "Simplifying %d copper layers"
-msgstr "%d 구리 층 단순화"
+msgstr "%d 구리 레이어 단순화"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:847
 msgid "Simplify holes contours"
@@ -204,7 +204,7 @@ msgstr "구멍 윤곽 단순화"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:876
 msgid "Build Tech layers"
-msgstr "기술 계층 생성"
+msgstr "기술 레이어 생성"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1051
 msgid "Build BVH for holes and vias"
@@ -464,11 +464,11 @@ msgstr "접착면 레이어 표시"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_display_options_base.cpp:54
 msgid "User Layers (not shown in realistic mode)"
-msgstr "사용자 계층(실제 모드에는 표시되지 않음)"
+msgstr "사용자 레이어(실제 모드에는 표시되지 않음)"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_display_options_base.cpp:56
 msgid "Show comments and drawings layers"
-msgstr "설명 및 도면층 표시"
+msgstr "주석 및 도면 레이어 표시"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_display_options_base.cpp:59
 msgid "Show ECO layers"
@@ -622,7 +622,7 @@ msgstr "절차적 질감 (느림)"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_raytracing_options_base.cpp:31
 msgid "Add floor (slow)"
-msgstr "층 추가 (느림)"
+msgstr "바닥면 추가 (느림)"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_raytracing_options_base.cpp:35
 msgid "Anti-aliasing (slow)"
@@ -3343,7 +3343,7 @@ msgstr "트랙패드 기본값으로 재설정"
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:730 pcbnew/zone.cpp:621
 #: pcbnew/zone.cpp:1402
 msgid "Solid"
-msgstr "꽉찬"
+msgstr "실선"
 
 #: common/dialogs/panel_setup_netclasses.cpp:87
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:318
@@ -3724,7 +3724,7 @@ msgstr "반복 횟수"
 
 #: common/drawing_sheet/ds_draw_item.cpp:147
 msgid "Repeat Label Increment"
-msgstr "레이블 증분 반복"
+msgstr "라벨 증분 반복"
 
 #: common/drawing_sheet/ds_draw_item.cpp:153
 msgid "Repeat Position Increment"
@@ -4059,7 +4059,7 @@ msgstr "전역 라벨"
 
 #: common/eda_item.cpp:282 eeschema/sch_text.cpp:735
 msgid "Hierarchical Label"
-msgstr "계층 레이블"
+msgstr "계층 라벨"
 
 #: common/eda_item.cpp:283
 msgid "Schematic Field"
@@ -4942,7 +4942,7 @@ msgstr "전역 라벨"
 #: common/layer_id.cpp:111
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:46
 msgid "Hierarchical labels"
-msgstr "계층구조 레이블"
+msgstr "계층구조 라벨"
 
 #: common/layer_id.cpp:112
 msgid "Pin numbers"
@@ -5058,11 +5058,11 @@ msgstr "도면 시트"
 
 #: common/layer_id.cpp:142
 msgid "Footprints front"
-msgstr "풋프린트 앞면"
+msgstr "전면의 풋프린트"
 
 #: common/layer_id.cpp:143
 msgid "Footprints back"
-msgstr "풋프린트 뒷면"
+msgstr "후면의 풋프린트"
 
 #: common/layer_id.cpp:144
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:28
@@ -5082,11 +5082,11 @@ msgstr "참조 지정자"
 
 #: common/layer_id.cpp:146
 msgid "Footprint text front"
-msgstr "풋프린트 텍스트 앞면"
+msgstr "전면의 풋프린트 텍스트"
 
 #: common/layer_id.cpp:147
 msgid "Footprint text back"
-msgstr "풋프린트 텍스트 뒷면"
+msgstr "후면의 풋프린트 텍스트"
 
 #: common/layer_id.cpp:148
 msgid "Hidden text"
@@ -5094,11 +5094,11 @@ msgstr "숨겨진 텍스트"
 
 #: common/layer_id.cpp:149
 msgid "SMD pads front"
-msgstr "SMD 패드 앞면"
+msgstr "전면의 SMD 패드"
 
 #: common/layer_id.cpp:150
 msgid "SMD pads back"
-msgstr "SMD 패드 뒷면"
+msgstr "후면의 SMD 패드"
 
 #: common/layer_id.cpp:151
 msgid "Through-hole pads"
@@ -5911,7 +5911,7 @@ msgstr "극 좌표계와 데카르트 좌표계 간 전환"
 
 #: common/tool/actions.cpp:514
 msgid "Reset Local Coordinates"
-msgstr "로컬 좌표계 초기화"
+msgstr "지역 좌표계 초기화"
 
 #: common/tool/actions.cpp:520
 msgid "Always Show Cursor"
@@ -7185,12 +7185,12 @@ msgstr "네트 %s은(는) 버스 %s에 시각적으로 연결되어 있지만 �
 #: eeschema/connection_graph.cpp:2877
 #, c-format
 msgid "Sheet pin %s has no matching hierarchical label inside the sheet"
-msgstr "시트 핀 %s에는 시트 내부에 일치하는 계층 레이블이 없음"
+msgstr "시트 핀 %s에는 시트 내부에 일치하는 계층 라벨이 없습니다"
 
 #: eeschema/connection_graph.cpp:2894
 #, c-format
 msgid "Hierarchical label %s has no matching sheet pin in the parent sheet"
-msgstr "계층 라벨 %s에는 상위 시트 내부에 일치하는 시트 핀이 없음"
+msgstr "계층 라벨 %s에는 상위 시트 내부에 일치하는 시트 핀이 없습니다"
 
 #: eeschema/cross-probing.cpp:265 pcbnew/cross-probing.cpp:171
 #, c-format
@@ -8013,7 +8013,7 @@ msgstr "텍스트 속성"
 
 #: eeschema/dialogs/dialog_edit_label.cpp:348
 msgid "Label requires non-empty text."
-msgstr "레이블에는 비어 있지 않은 텍스트가 필요합니다."
+msgstr "라벨에는 비어 있지 않은 텍스트가 필요합니다."
 
 #: eeschema/dialogs/dialog_edit_label_base.cpp:26
 #: eeschema/dialogs/dialog_edit_label_base.cpp:72
@@ -9638,7 +9638,7 @@ msgstr "'%s'에 플롯됨.\n"
 #: eeschema/dialogs/dialog_plot_schematic.cpp:1250
 #, c-format
 msgid "Falling back to user path '%s'."
-msgstr "사용자 경로 '%s'(으)로 폴백 합니다."
+msgstr "사용자 경로 '%s'(으)로 대체합니다."
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:1271
 #: eeschema/dialogs/dialog_plot_schematic.cpp:1311
@@ -9710,7 +9710,7 @@ msgstr "흑백 처리"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:82
 msgid "Plot background color"
-msgstr "플롯 배경색"
+msgstr "배경색을 플롯"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:83
 msgid "Plot the background color if the output format supports it"
@@ -10209,7 +10209,7 @@ msgstr "페이지 번호:"
 
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:184
 msgid "Hierarchical path:"
-msgstr "계층적 경로:"
+msgstr "계층 경로:"
 
 #: eeschema/dialogs/dialog_sheet_properties_base.h:79
 msgid "Sheet Properties"
@@ -11966,7 +11966,7 @@ msgstr "범위별 라이브러리"
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:61
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:58
 msgid "Global Libraries"
-msgstr "글로벌 라이브러리"
+msgstr "전역 라이브러리"
 
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:97
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:94
@@ -12141,7 +12141,7 @@ msgstr "핀 간 충돌 문제"
 
 #: eeschema/erc_item.cpp:70
 msgid "Mismatch between hierarchical labels and sheet pins"
-msgstr "계층 레이블과 시트 핀 간의 불일치"
+msgstr "계층 라벨과 시트 핀 간의 불일치"
 
 #: eeschema/erc_item.cpp:74
 msgid "A pin with a \"no connection\" flag is connected"
@@ -12153,11 +12153,11 @@ msgstr "연결되지 않은 \"연결 없음\" 플래그"
 
 #: eeschema/erc_item.cpp:82
 msgid "Label not connected to anything"
-msgstr "아무것도 연결되지 않은 레이블"
+msgstr "아무것도 연결되지 않은 라벨"
 
 #: eeschema/erc_item.cpp:86
 msgid "Global label not connected anywhere else in the schematic"
-msgstr "회로도의 다른 곳에서는 연결되지 않은 전역 레이블"
+msgstr "회로도의 다른 곳에서는 연결되지 않은 전역 라벨"
 
 #: eeschema/erc_item.cpp:90
 msgid "Labels are similar (lower/upper case difference only)"
@@ -13642,7 +13642,7 @@ msgstr "I/O 오류 %s 발생 (라이브러리 심볼 %s 확인 중)"
 #: eeschema/sch_screen.cpp:644
 #, c-format
 msgid "Falling back to cache to set symbol '%s:%s' link '%s'."
-msgstr "심볼 '%s:%s'을(를) 연결 '%s'(으)로 설정하기 위해 캐시로 폴백합니다."
+msgstr "심볼 '%s:%s'을(를) 연결 '%s'(으)로 설정하기 위해 캐시로 대체합니다."
 
 #: eeschema/sch_screen.cpp:665
 #, c-format
@@ -13762,7 +13762,7 @@ msgstr "전역 라벨 '%s'"
 #: eeschema/sch_text.cpp:1645
 #, c-format
 msgid "Hierarchical Label '%s'"
-msgstr "계층 레이블 '%s'"
+msgstr "계층 라벨 '%s'"
 
 #: eeschema/sch_text.cpp:1661 pcbnew/dialogs/panel_setup_rules.cpp:471
 msgid "Syntax Help"
@@ -14642,7 +14642,7 @@ msgstr "라이브러리 로딩 '%s'…"
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:988
 #: pcbnew/footprint_libraries_utils.cpp:504
 msgid "Add the library to the global library table?"
-msgstr "글로벌 라이브러리 표에 라이브러리를 추가 하겠습니까?"
+msgstr "전역 라이브러리 표에 라이브러리를 추가 하겠습니까?"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:989
 #: pcbnew/footprint_libraries_utils.cpp:505
@@ -16229,7 +16229,7 @@ msgstr "심볼은 다중 단위가 아닙니다"
 
 #: eeschema/tools/sch_edit_tool.cpp:853
 msgid "Label value cannot go below zero"
-msgstr "레이블 값은 0보다 작아서는 안 됨"
+msgstr "라벨 값은 0보다 작아서는 안 됩니다"
 
 #: eeschema/tools/sch_edit_tool.cpp:1081 eeschema/tools/sch_edit_tool.cpp:1083
 #: eeschema/tools/symbol_editor_edit_tool.cpp:523
@@ -16414,7 +16414,7 @@ msgstr "레이어 선택:"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:79
 msgid "Copper layers count:"
-msgstr "구리 층 카운트:"
+msgstr "구리 레이어 카운트:"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:83
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:84
@@ -20048,7 +20048,7 @@ msgstr "예상되는 기판 두께를 %s(으)로 입력하세요 (최소값은 %
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:182
 msgid "Adjust not locked dielectric thickness layers"
-msgstr "잠기지 않은 유전체층의 두께를 조정"
+msgstr "잠기지 않은 유전체 레이어의 두께를 조정"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:193
 #, c-format
@@ -20057,7 +20057,7 @@ msgstr "값이 너무 작습니다 (최소값 %s %s). 중단합니다"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:213
 msgid "All dielectric  thickness layers are locked"
-msgstr "모든 유전체층의 두께가 조정되었습니다"
+msgstr "모든 유전체 두께 레이어가 잠겨 있습니다"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:279
 #, c-format
@@ -20066,7 +20066,7 @@ msgstr "레이어 '%s' (서브레이어 %d/%d)"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:294
 msgid "Add Dielectric Layer"
-msgstr "유전체층 추가"
+msgstr "유전체 레이어 추가"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:295
 #: pcbnew/dialogs/panel_setup_layers.cpp:821
@@ -20080,7 +20080,7 @@ msgstr "레이어 '%s' 하위 레이어 %d/%d"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:350
 msgid "Remove Dielectric Layer"
-msgstr "유전체층 제거"
+msgstr "유전체 레이어 제거"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:351
 msgid "Select layer to remove:"
@@ -20118,7 +20118,7 @@ msgstr "레이어 두께가 < 0입니다. 수정하세요"
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:501
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:276
 msgid "Copper layers:"
-msgstr "구리 층:"
+msgstr "구리 레이어:"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:22
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:30
@@ -20220,7 +20220,7 @@ msgstr "유전체 레이어 추가..."
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:48
 msgid "Remove Dielectric Layer..."
-msgstr "유전체 층 제거..."
+msgstr "유전체 레이어 제거..."
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:72
 #: pcbnew/build_BOM_from_board.cpp:109
@@ -20503,11 +20503,11 @@ msgid ""
 "Back footprints will start at %s."
 msgstr ""
 "\n"
-"백 풋프린트는 %s에서 시작합니다."
+"후면의 풋프린트는 %s에서 시작합니다."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:309
 msgid "the last front footprint + 1"
-msgstr "표면의 마지막 풋프린트 + 1"
+msgstr "전면의 마지막 풋프린트 + 1"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:317
 #, c-format
@@ -20680,7 +20680,7 @@ msgid ""
 msgstr ""
 "\n"
 "\n"
-"전면 풋프린트"
+"전면의 풋프린트"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:811
 msgid ""
@@ -20767,7 +20767,7 @@ msgstr "주석 재작성:"
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:140
 #: pcbnew/footprint.cpp:845
 msgid "Front"
-msgstr "앞"
+msgstr "전면"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:181
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:140
@@ -20777,11 +20777,11 @@ msgstr "뒤로 가기"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:208
 msgid "Front reference start:"
-msgstr "정면 참조 시작:"
+msgstr "전면 참조 시작:"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:210
 msgid "Starting reference designation for front."
-msgstr "정면에 대한 참조 지정 시작."
+msgstr "전면에 대한 참조 지정 시작."
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:214
 #: pcbnew/dialogs/dialog_create_array_base.cpp:93
@@ -20810,25 +20810,25 @@ msgstr "후면 참조 시작:"
 msgid ""
 "Blank continues from front or enter a number greater than the highest "
 "reference designation on the front."
-msgstr "공백으로 비워둠으로써 정면의 값을 계속 사용하거나, 전면의 가장 큰 참조 지정자보다 큰 값을 입력하세요."
+msgstr "공백으로 비워둠으로써 전면의 값을 계속 사용하거나, 전면의 가장 큰 참조 지정자보다 큰 값을 입력하세요."
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:227
 msgid ""
 "Leave blank or zero, or enter a number greater than the highest reference "
 "designation on the front."
-msgstr "공백 또는 0으로 남겨 놓거나, 정면의 가장 큰 참조 지정자보다 큰 값을 입력하세요."
+msgstr "공백 또는 0으로 남겨 놓거나, 전면의 가장 큰 참조 지정자보다 큰 값을 입력하세요."
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:232
 msgid "Remove front prefix"
-msgstr "정면 접두사를 삭제"
+msgstr "전면 접두사를 삭제"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:233
 msgid ""
 "If checked will remove the front side prefix\n"
 "in the front prefix box if present"
 msgstr ""
-"체크할 경우, 정면 접두사 박스에 값이 존재할 때\n"
-"정면 접두사를 삭제합니다"
+"체크할 경우, 전면 접두사 박스에 값이 존재할 때\n"
+"전면 접두사를 삭제합니다"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:237
 msgid "Remove back prefix"
@@ -20853,7 +20853,7 @@ msgstr "구성 요소 측면 참조 지정을 위한 옵션 접두사 (예: F_)"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:253
 msgid "Back prefix:"
-msgstr "뒷면 접두사:"
+msgstr "후면 접두사:"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:255
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:260
@@ -20970,7 +20970,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_board_statistics.cpp:91
 #: pcbnew/dialogs/dialog_board_statistics.cpp:686
 msgid "Front Side"
-msgstr "정면"
+msgstr "전면"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:93
 #: pcbnew/dialogs/dialog_board_statistics.cpp:686
@@ -22442,7 +22442,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:512
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:286
 msgid "Technical layers:"
-msgstr "기술 계층:"
+msgstr "기술 레이어:"
 
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:82
 msgid "Print Mode"
@@ -22921,7 +22921,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:701
 msgid ""
 "Note: solder mask and paste values are used only for pads on copper layers."
-msgstr "참고: 솔더 마스크와 페이스트 값은 구리 층의 패드에만 이용됩니다."
+msgstr "참고: 솔더 마스크와 페이스트의 값은 구리 레이어의 패드에만 이용됩니다."
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:404
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:305
@@ -23148,7 +23148,7 @@ msgstr "형식"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:60
 msgid "Separate files for front, back"
-msgstr "정면과 후면을 별도의 파일로 분리"
+msgstr "전면과 후면을 별도의 파일로 분리"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:60
 msgid "Single file for board"
@@ -23857,7 +23857,7 @@ msgstr "가져온 레이어의 매핑 편집"
 
 #: pcbnew/dialogs/dialog_layer_selection_base.cpp:120
 msgid "Top/Front layer:"
-msgstr "상단/정면 레이어:"
+msgstr "상단/전면 레이어:"
 
 #: pcbnew/dialogs/dialog_layer_selection_base.cpp:159
 msgid "Bottom/Back layer:"
@@ -24194,7 +24194,7 @@ msgstr "후면 (미러 처리됨)"
 #: pcbnew/dialogs/dialog_pad_properties.cpp:485
 #: pcbnew/dialogs/dialog_text_properties.cpp:235
 msgid "front side"
-msgstr "정면"
+msgstr "전면"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:694
 msgid "width"
@@ -24582,7 +24582,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:518
 msgid "Front adhesive"
-msgstr "정면 접착면"
+msgstr "전면 접착면"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:521
 msgid "Back adhesive"
@@ -24598,7 +24598,7 @@ msgstr "후면 솔더 페이스트"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:533
 msgid "Back silk screen"
-msgstr "실크 스크린 후면"
+msgstr "후면 실크 스크린"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:539
 msgid "Back solder mask"
@@ -25498,7 +25498,7 @@ msgstr "참조 항목: <선택하지 않음>"
 
 #: pcbnew/dialogs/dialog_position_relative_base.cpp:35
 msgid "Use Local Origin"
-msgstr "로컬 원점 사용"
+msgstr "지역 원점 사용"
 
 #: pcbnew/dialogs/dialog_position_relative_base.cpp:38
 msgid "Use Grid Origin"
@@ -26608,7 +26608,7 @@ msgstr "사용자 정의 레이어 추가..."
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:44
 msgid "If you want a courtyard layer for the front side of the board"
-msgstr "기판의 정면에 코트야드 레이어를 사용하고 싶은 경우"
+msgstr "기판의 전면에 코트야드 레이어를 사용하고 싶은 경우"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:48
 msgid "CrtYd_Front"
@@ -26621,7 +26621,7 @@ msgstr "Off-board, 테스트용"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:60
 msgid "If you want a fabrication layer for the front side of the board"
-msgstr "기판의 정면에 기판 제조 레이어를 사용하고 싶은 경우"
+msgstr "기판의 전면에 기판 제조 레이어를 사용하고 싶은 경우"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:64
 msgid "Fab_Front"
@@ -26634,7 +26634,7 @@ msgstr "Off-board, 제조용"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:72
 msgid "If you want an adhesive template for the front side of the board"
-msgstr "기판의 정면에 접착면 템플릿을 사용하고 싶은 경우"
+msgstr "기판의 전면에 접착면 템플릿을 사용하고 싶은 경우"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:76
 msgid "Adhes_Front"
@@ -26653,7 +26653,7 @@ msgstr "On-board, 비 구리 레이어"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:84
 msgid "If you want a solder paster layer for front side of the board"
-msgstr "기판의 정면에 솔더 페이스트 레이어를 사용하고 싶은 경우"
+msgstr "기판의 전면에 솔더 페이스트 레이어를 사용하고 싶은 경우"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:88
 msgid "SoldP_Front"
@@ -26661,7 +26661,7 @@ msgstr "SoldP_Front"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:96
 msgid "If you want a silk screen layer for the front side of the board"
-msgstr "기판의 정면에 실크스크린 레이어를 사용하고 싶은 경우"
+msgstr "기판의 전면에 실크스크린 레이어를 사용하고 싶은 경우"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:100
 msgid "SilkS_Front"
@@ -26669,7 +26669,7 @@ msgstr "SilkS_Front"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:108
 msgid "If you want a solder mask layer for the front of the board"
-msgstr "기판의 정면에 솔더 마스크 레이어를 사용하고 싶은 경우"
+msgstr "기판의 전면에 솔더 마스크 레이어를 사용하고 싶은 경우"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:112
 msgid "Mask_Front"
@@ -26677,7 +26677,7 @@ msgstr "Mask_Front"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:120
 msgid "If you want a front copper layer"
-msgstr "정면 구리 레이어를 사용하고 싶은 경우"
+msgstr "전면 구리 레이어를 사용하고 싶은 경우"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:124
 msgid "Front_layer"
@@ -26685,7 +26685,7 @@ msgstr "Front_layer"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:125
 msgid "Layer name of front (top) copper layer"
-msgstr "정면 (상단) 구리 레이어 이름"
+msgstr "전면 (상단) 구리 레이어 이름"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:129
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:143
@@ -27557,7 +27557,7 @@ msgstr ""
 "<br><br>\n"
 "\n"
 "    A.insideFrontCourtyard('<footprint_refdes>')\n"
-"`A`의 일부가 제시된 풋프린트의 정면 코트야드 범위 내에 있을 경우 참이 됩니다.\n"
+"`A`의 일부가 제시된 풋프린트의 전면 코트야드 범위 내에 있을 경우 참이 됩니다.\n"
 "<br><br>\n"
 "\n"
 "    A.insideBackCourtyard('<footprint_refdes>')\n"
@@ -28474,7 +28474,7 @@ msgstr "컴포넌트 수: %d."
 #: pcbnew/exporters/gen_footprints_placefile.cpp:438
 #, c-format
 msgid "Back (bottom side) placement file: '%s'."
-msgstr "후면 (하단) 배치 파일: '%s'."
+msgstr "후면 (바닥면) 배치 파일: '%s'."
 
 #: pcbnew/exporters/gen_footprints_placefile.cpp:307
 #: pcbnew/exporters/gen_footprints_placefile.cpp:448
@@ -29348,7 +29348,7 @@ msgstr "풋프린트 관련성 (.cmp) 파일..."
 
 #: pcbnew/menubar_pcb_editor.cpp:141
 msgid "Export footprint association file (*.cmp) for schematic back annotation"
-msgstr "회로도 뒷면 주석을 위해 풋프린트 관련성 파일 (*.cmp) 내보내기"
+msgstr "회로도 후면 주석을 위해 풋프린트 관련성 파일 (*.cmp) 내보내기"
 
 #: pcbnew/menubar_pcb_editor.cpp:143
 msgid "Hyperlynx..."
@@ -30114,7 +30114,7 @@ msgstr "풋프린트의 코트야드는 하나의 닫힌 도형이 될 수 없�
 
 #: pcbnew/pcb_expr_evaluator.cpp:511
 msgid "Footprint has no front courtyard."
-msgstr "풋프린트에 정면 코트야드가 없습니다."
+msgstr "풋프린트에 전면 코트야드가 없습니다."
 
 #: pcbnew/pcb_expr_evaluator.cpp:528
 msgid "Footprint has no back courtyard."
@@ -32444,7 +32444,7 @@ msgstr "기판 특성"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:406
 msgid "Copper Layer Count: "
-msgstr "구리 층 수: "
+msgstr "구리 레이어 수: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:415
 msgid "Board overall dimensions: "
@@ -34291,15 +34291,15 @@ msgstr "구리 영역 표시"
 
 #: pcbnew/widgets/appearance_controls.cpp:345
 msgid "Footprints Front"
-msgstr "풋프린트 앞면"
+msgstr "전면의 풋프린트"
 
 #: pcbnew/widgets/appearance_controls.cpp:345
 msgid "Show footprints that are on board's front"
-msgstr "기판의 정면에 있는 풋프린트 표시"
+msgstr "기판의 전면에 있는 풋프린트 표시"
 
 #: pcbnew/widgets/appearance_controls.cpp:346
 msgid "Footprints Back"
-msgstr "풋프린트 뒷면"
+msgstr "후면의 풋프린트"
 
 #: pcbnew/widgets/appearance_controls.cpp:346
 msgid "Show footprints that are on board's back"
@@ -34400,11 +34400,11 @@ msgstr "내부 구리 레이어"
 
 #: pcbnew/widgets/appearance_controls.cpp:390
 msgid "Front Layers"
-msgstr "정면 레이어"
+msgstr "전면 레이어"
 
 #: pcbnew/widgets/appearance_controls.cpp:393
 msgid "Front Assembly View"
-msgstr "정면에서 조립체 보기"
+msgstr "전면에서 조립체 보기"
 
 #: pcbnew/widgets/appearance_controls.cpp:396
 msgid "Back Layers"
@@ -34544,7 +34544,7 @@ msgstr "이 레이어 표시 또는 숨기기"
 
 #: pcbnew/widgets/appearance_controls.cpp:1482
 msgid "Front copper layer"
-msgstr "정면 구리 레이어"
+msgstr "전면 구리 레이어"
 
 #: pcbnew/widgets/appearance_controls.cpp:1483
 msgid "Back copper layer"
@@ -34556,7 +34556,7 @@ msgstr "내부 구리 레이어"
 
 #: pcbnew/widgets/appearance_controls.cpp:1510
 msgid "Adhesive on board's front"
-msgstr "기판 정면의 접착면"
+msgstr "기판 전면의 접착면"
 
 #: pcbnew/widgets/appearance_controls.cpp:1511
 msgid "Adhesive on board's back"
@@ -34564,7 +34564,7 @@ msgstr "기판 후면의 접착면"
 
 #: pcbnew/widgets/appearance_controls.cpp:1512
 msgid "Solder paste on board's front"
-msgstr "기판 정면의 솔더 페이스트"
+msgstr "기판 전면의 솔더 페이스트"
 
 #: pcbnew/widgets/appearance_controls.cpp:1513
 msgid "Solder paste on board's back"
@@ -34572,7 +34572,7 @@ msgstr "기판 후면의 솔더 페이스트"
 
 #: pcbnew/widgets/appearance_controls.cpp:1514
 msgid "Silkscreen on board's front"
-msgstr "기판 정면의 실크스크린"
+msgstr "기판 전면의 실크스크린"
 
 #: pcbnew/widgets/appearance_controls.cpp:1515
 msgid "Silkscreen on board's back"
@@ -34580,7 +34580,7 @@ msgstr "기판 후면의 실크스크린"
 
 #: pcbnew/widgets/appearance_controls.cpp:1516
 msgid "Solder mask on board's front"
-msgstr "기판 정면의 솔더 마스크"
+msgstr "기판 전면의 솔더 마스크"
 
 #: pcbnew/widgets/appearance_controls.cpp:1517
 msgid "Solder mask on board's back"
@@ -34609,7 +34609,7 @@ msgstr "기판의 모서리 오프셋 외곽선"
 
 #: pcbnew/widgets/appearance_controls.cpp:1524
 msgid "Footprint courtyards on board's front"
-msgstr "기판 정면의 풋프린트 코트야드"
+msgstr "기판 전면의 풋프린트 코트야드"
 
 #: pcbnew/widgets/appearance_controls.cpp:1525
 msgid "Footprint courtyards on board's back"
@@ -34617,7 +34617,7 @@ msgstr "기판 후면의 풋프린트 코트야드"
 
 #: pcbnew/widgets/appearance_controls.cpp:1526
 msgid "Footprint assembly on board's front"
-msgstr "기판 정면의 풋프린트 조립체"
+msgstr "기판 전면의 풋프린트 조립체"
 
 #: pcbnew/widgets/appearance_controls.cpp:1527
 msgid "Footprint assembly on board's back"
@@ -34633,7 +34633,7 @@ msgstr "사용자 정의 레이어 2"
 
 #: pcbnew/widgets/appearance_controls.cpp:1530
 msgid "User defined layer 3"
-msgstr "사용자 정의 계층 3"
+msgstr "사용자 정의 레이어 3"
 
 #: pcbnew/widgets/appearance_controls.cpp:1531
 msgid "User defined layer 4"
@@ -34677,7 +34677,7 @@ msgstr "모든 비 구리 레이어 숨기기"
 
 #: pcbnew/widgets/appearance_controls.cpp:1605
 msgid "Show Only Front Assembly Layers"
-msgstr "정면 조립 레이어만 표시"
+msgstr "전면 조립 레이어만 표시"
 
 #: pcbnew/widgets/appearance_controls.cpp:1607
 msgid "Show Only Front Layers"
