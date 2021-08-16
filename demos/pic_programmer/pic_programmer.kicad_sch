@@ -1,4 +1,4 @@
-(kicad_sch (version 20210406) (generator eeschema)
+(kicad_sch (version 20210621) (generator eeschema)
 
   (uuid 2e45d1d2-c73f-46e5-98d6-3a9dc360bff5)
 
@@ -411,88 +411,6 @@
         )
       )
       (symbol "CP_1_1"
-        (pin passive line (at 0 3.81 270) (length 2.794)
-          (name "~" (effects (font (size 1.016 1.016))))
-          (number "1" (effects (font (size 1.016 1.016))))
-        )
-        (pin passive line (at 0 -3.81 90) (length 2.794)
-          (name "~" (effects (font (size 1.016 1.016))))
-          (number "2" (effects (font (size 1.016 1.016))))
-        )
-      )
-    )
-    (symbol "pic_programmer_schlib:CP_1" (pin_numbers hide) (pin_names (offset 0.254)) (in_bom yes) (on_board yes)
-      (property "Reference" "C" (id 0) (at 0.635 2.54 0)
-        (effects (font (size 1.27 1.27)) (justify left))
-      )
-      (property "Value" "CP" (id 1) (at 0.635 -2.54 0)
-        (effects (font (size 1.27 1.27)) (justify left))
-      )
-      (property "Footprint" "" (id 2) (at 0.9652 -3.81 0)
-        (effects (font (size 0.762 0.762)))
-      )
-      (property "Datasheet" "" (id 3) (at 0 0 0)
-        (effects (font (size 1.524 1.524)))
-      )
-      (property "ki_fp_filters" "CP* Elko* TantalC* C*elec c_elec* SMD*_Pol" (id 4) (at 0 0 0)
-        (effects (font (size 1.27 1.27)) hide)
-      )
-      (symbol "CP_1_0_1"
-        (rectangle (start -2.286 1.016) (end 2.286 0.508)
-          (stroke (width 0.1524)) (fill (type none))
-        )
-        (rectangle (start -1.778 2.286) (end -0.762 2.286)
-          (stroke (width 0)) (fill (type none))
-        )
-        (rectangle (start -1.27 1.778) (end -1.27 2.794)
-          (stroke (width 0)) (fill (type none))
-        )
-        (rectangle (start 2.286 -0.508) (end -2.286 -1.016)
-          (stroke (width 0)) (fill (type outline))
-        )
-      )
-      (symbol "CP_1_1_1"
-        (pin passive line (at 0 3.81 270) (length 2.794)
-          (name "~" (effects (font (size 1.016 1.016))))
-          (number "1" (effects (font (size 1.016 1.016))))
-        )
-        (pin passive line (at 0 -3.81 90) (length 2.794)
-          (name "~" (effects (font (size 1.016 1.016))))
-          (number "2" (effects (font (size 1.016 1.016))))
-        )
-      )
-    )
-    (symbol "pic_programmer_schlib:CP_2" (pin_numbers hide) (pin_names (offset 0.254)) (in_bom yes) (on_board yes)
-      (property "Reference" "C" (id 0) (at 0.635 2.54 0)
-        (effects (font (size 1.27 1.27)) (justify left))
-      )
-      (property "Value" "CP" (id 1) (at 0.635 -2.54 0)
-        (effects (font (size 1.27 1.27)) (justify left))
-      )
-      (property "Footprint" "" (id 2) (at 0.9652 -3.81 0)
-        (effects (font (size 0.762 0.762)))
-      )
-      (property "Datasheet" "" (id 3) (at 0 0 0)
-        (effects (font (size 1.524 1.524)))
-      )
-      (property "ki_fp_filters" "CP* Elko* TantalC* C*elec c_elec* SMD*_Pol" (id 4) (at 0 0 0)
-        (effects (font (size 1.27 1.27)) hide)
-      )
-      (symbol "CP_2_0_1"
-        (rectangle (start -2.286 1.016) (end 2.286 0.508)
-          (stroke (width 0.1524)) (fill (type none))
-        )
-        (rectangle (start -1.778 2.286) (end -0.762 2.286)
-          (stroke (width 0)) (fill (type none))
-        )
-        (rectangle (start -1.27 1.778) (end -1.27 2.794)
-          (stroke (width 0)) (fill (type none))
-        )
-        (rectangle (start 2.286 -0.508) (end -2.286 -1.016)
-          (stroke (width 0)) (fill (type outline))
-        )
-      )
-      (symbol "CP_2_1_1"
         (pin passive line (at 0 3.81 270) (length 2.794)
           (name "~" (effects (font (size 1.016 1.016))))
           (number "1" (effects (font (size 1.016 1.016))))
@@ -959,128 +877,6 @@
         )
       )
       (symbol "LED_1_1"
-        (pin passive line (at -5.08 0 0) (length 3.81)
-          (name "K" (effects (font (size 1.016 1.016))))
-          (number "1" (effects (font (size 1.016 1.016))))
-        )
-        (pin passive line (at 5.08 0 180) (length 3.81)
-          (name "A" (effects (font (size 1.016 1.016))))
-          (number "2" (effects (font (size 1.016 1.016))))
-        )
-      )
-    )
-    (symbol "pic_programmer_schlib:LED_1" (pin_names (offset 1.016) hide) (in_bom yes) (on_board yes)
-      (property "Reference" "D" (id 0) (at 0 2.54 0)
-        (effects (font (size 1.27 1.27)))
-      )
-      (property "Value" "LED" (id 1) (at 0 -2.54 0)
-        (effects (font (size 1.27 1.27)))
-      )
-      (property "Footprint" "" (id 2) (at 0 0 0)
-        (effects (font (size 1.524 1.524)))
-      )
-      (property "Datasheet" "" (id 3) (at 0 0 0)
-        (effects (font (size 1.524 1.524)))
-      )
-      (property "ki_fp_filters" "LED-3MM LED-5MM LED-10MM LED-0603 LED-0805 LED-1206 LEDV" (id 4) (at 0 0 0)
-        (effects (font (size 1.27 1.27)) hide)
-      )
-      (symbol "LED_1_0_1"
-        (polyline
-          (pts
-            (xy -1.27 1.27)
-            (xy -1.27 -1.27)
-          )
-          (stroke (width 0.254)) (fill (type none))
-        )
-        (polyline
-          (pts
-            (xy -2.032 -0.635)
-            (xy -3.175 -1.651)
-            (xy -3.048 -1.016)
-          )
-          (stroke (width 0)) (fill (type none))
-        )
-        (polyline
-          (pts
-            (xy -1.651 -1.016)
-            (xy -2.794 -2.032)
-            (xy -2.667 -1.397)
-          )
-          (stroke (width 0)) (fill (type none))
-        )
-        (polyline
-          (pts
-            (xy -1.27 0)
-            (xy 1.27 1.27)
-            (xy 1.27 -1.27)
-            (xy -1.27 0)
-          )
-          (stroke (width 0.1524)) (fill (type outline))
-        )
-      )
-      (symbol "LED_1_1_1"
-        (pin passive line (at -5.08 0 0) (length 3.81)
-          (name "K" (effects (font (size 1.016 1.016))))
-          (number "1" (effects (font (size 1.016 1.016))))
-        )
-        (pin passive line (at 5.08 0 180) (length 3.81)
-          (name "A" (effects (font (size 1.016 1.016))))
-          (number "2" (effects (font (size 1.016 1.016))))
-        )
-      )
-    )
-    (symbol "pic_programmer_schlib:LED_2" (pin_names (offset 1.016) hide) (in_bom yes) (on_board yes)
-      (property "Reference" "D" (id 0) (at 0 2.54 0)
-        (effects (font (size 1.27 1.27)))
-      )
-      (property "Value" "LED" (id 1) (at 0 -2.54 0)
-        (effects (font (size 1.27 1.27)))
-      )
-      (property "Footprint" "" (id 2) (at 0 0 0)
-        (effects (font (size 1.524 1.524)))
-      )
-      (property "Datasheet" "" (id 3) (at 0 0 0)
-        (effects (font (size 1.524 1.524)))
-      )
-      (property "ki_fp_filters" "LED-3MM LED-5MM LED-10MM LED-0603 LED-0805 LED-1206 LEDV" (id 4) (at 0 0 0)
-        (effects (font (size 1.27 1.27)) hide)
-      )
-      (symbol "LED_2_0_1"
-        (polyline
-          (pts
-            (xy -1.27 1.27)
-            (xy -1.27 -1.27)
-          )
-          (stroke (width 0.254)) (fill (type none))
-        )
-        (polyline
-          (pts
-            (xy -2.032 -0.635)
-            (xy -3.175 -1.651)
-            (xy -3.048 -1.016)
-          )
-          (stroke (width 0)) (fill (type none))
-        )
-        (polyline
-          (pts
-            (xy -1.651 -1.016)
-            (xy -2.794 -2.032)
-            (xy -2.667 -1.397)
-          )
-          (stroke (width 0)) (fill (type none))
-        )
-        (polyline
-          (pts
-            (xy -1.27 0)
-            (xy 1.27 1.27)
-            (xy 1.27 -1.27)
-            (xy -1.27 0)
-          )
-          (stroke (width 0.1524)) (fill (type outline))
-        )
-      )
-      (symbol "LED_2_1_1"
         (pin passive line (at -5.08 0 0) (length 3.81)
           (name "K" (effects (font (size 1.016 1.016))))
           (number "1" (effects (font (size 1.016 1.016))))
@@ -3433,7 +3229,7 @@
     (pin "2" (uuid 0b84be7f-ff97-47b2-948d-dedc667529eb))
   )
 
-  (symbol (lib_name "pic_programmer_schlib:LED_1") (lib_id "pic_programmer_schlib:LED") (at 105.41 176.53 90) (unit 1)
+  (symbol (lib_id "pic_programmer_schlib:LED") (at 105.41 176.53 90) (unit 1)
     (in_bom yes) (on_board yes)
     (uuid 00000000-0000-0000-0000-0000442a5084)
     (property "Reference" "D9" (id 0) (at 102.87 176.53 0))
@@ -3469,7 +3265,7 @@
     (pin "2" (uuid 3e28d33b-e400-4567-bf5a-890328a27697))
   )
 
-  (symbol (lib_name "pic_programmer_schlib:LED_2") (lib_id "pic_programmer_schlib:LED") (at 194.31 88.9 90) (unit 1)
+  (symbol (lib_id "pic_programmer_schlib:LED") (at 194.31 88.9 90) (unit 1)
     (in_bom yes) (on_board yes)
     (uuid 00000000-0000-0000-0000-00004639b9ea)
     (property "Reference" "D12" (id 0) (at 191.77 88.9 0)
@@ -3543,7 +3339,7 @@
     (pin "2" (uuid c709b076-a593-4753-9cf5-29cdb36bfe76))
   )
 
-  (symbol (lib_name "pic_programmer_schlib:CP_1") (lib_id "pic_programmer_schlib:CP") (at 49.53 175.26 0) (unit 1)
+  (symbol (lib_id "pic_programmer_schlib:CP") (at 49.53 175.26 0) (unit 1)
     (in_bom yes) (on_board yes)
     (uuid 00000000-0000-0000-0000-0000442a501d)
     (property "Reference" "C2" (id 0) (at 50.8 172.72 0)
@@ -3562,7 +3358,7 @@
     (pin "2" (uuid bea98637-b041-4d44-98e0-22a803e4cdf4))
   )
 
-  (symbol (lib_name "pic_programmer_schlib:CP_2") (lib_id "pic_programmer_schlib:CP") (at 81.28 175.26 0) (unit 1)
+  (symbol (lib_id "pic_programmer_schlib:CP") (at 81.28 175.26 0) (unit 1)
     (in_bom yes) (on_board yes)
     (uuid 00000000-0000-0000-0000-0000442a5056)
     (property "Reference" "C1" (id 0) (at 82.55 172.72 0)
@@ -3899,7 +3695,7 @@
 
   (sheet_instances
     (path "/" (page "1"))
-    (path "/00000000-0000-0000-0000-00004804a5e2/" (page "2"))
+    (path "/00000000-0000-0000-0000-00004804a5e2" (page "2"))
   )
 
   (symbol_instances
@@ -3908,6 +3704,9 @@
     )
     (path "/00000000-0000-0000-0000-0000442a5893"
       (reference "#FLG09") (unit 1) (value "PWR_FLAG") (footprint "")
+    )
+    (path "/00000000-0000-0000-0000-00004804a5e2/00000000-0000-0000-0000-00005558fa28"
+      (reference "#FLG047") (unit 1) (value "PWR_FLAG") (footprint "")
     )
     (path "/00000000-0000-0000-0000-00004639bb04"
       (reference "#PWR01") (unit 1) (value "VCC") (footprint "")
@@ -4014,6 +3813,39 @@
     (path "/00000000-0000-0000-0000-0000442a4d38"
       (reference "#PWR035") (unit 1) (value "GND") (footprint "")
     )
+    (path "/00000000-0000-0000-0000-00004804a5e2/00000000-0000-0000-0000-0000442a8794"
+      (reference "#PWR036") (unit 1) (value "GND") (footprint "")
+    )
+    (path "/00000000-0000-0000-0000-00004804a5e2/00000000-0000-0000-0000-0000443cca5d"
+      (reference "#PWR037") (unit 1) (value "GND") (footprint "")
+    )
+    (path "/00000000-0000-0000-0000-00004804a5e2/00000000-0000-0000-0000-0000443697c7"
+      (reference "#PWR038") (unit 1) (value "GND") (footprint "")
+    )
+    (path "/00000000-0000-0000-0000-00004804a5e2/00000000-0000-0000-0000-0000443697c3"
+      (reference "#PWR039") (unit 1) (value "GND") (footprint "")
+    )
+    (path "/00000000-0000-0000-0000-00004804a5e2/00000000-0000-0000-0000-0000442aa147"
+      (reference "#PWR040") (unit 1) (value "GND") (footprint "")
+    )
+    (path "/00000000-0000-0000-0000-00004804a5e2/00000000-0000-0000-0000-0000442aa138"
+      (reference "#PWR041") (unit 1) (value "GND") (footprint "")
+    )
+    (path "/00000000-0000-0000-0000-00004804a5e2/00000000-0000-0000-0000-0000442a896a"
+      (reference "#PWR042") (unit 1) (value "GND") (footprint "")
+    )
+    (path "/00000000-0000-0000-0000-00004804a5e2/00000000-0000-0000-0000-0000442a8838"
+      (reference "#PWR043") (unit 1) (value "GND") (footprint "")
+    )
+    (path "/00000000-0000-0000-0000-00004804a5e2/00000000-0000-0000-0000-0000442a820f"
+      (reference "#PWR044") (unit 1) (value "GND") (footprint "")
+    )
+    (path "/00000000-0000-0000-0000-00004804a5e2/00000000-0000-0000-0000-0000442a8205"
+      (reference "#PWR045") (unit 1) (value "GND") (footprint "")
+    )
+    (path "/00000000-0000-0000-0000-00004804a5e2/00000000-0000-0000-0000-000052c92629"
+      (reference "#PWR046") (unit 1) (value "GND") (footprint "")
+    )
     (path "/00000000-0000-0000-0000-00005a230fb8"
       (reference "#PWR047") (unit 1) (value "GND") (footprint "")
     )
@@ -4055,6 +3887,12 @@
     )
     (path "/00000000-0000-0000-0000-0000442a58b1"
       (reference "C5") (unit 1) (value "10nF") (footprint "Capacitor_THT:C_Disc_D5.1mm_W3.2mm_P5.00mm")
+    )
+    (path "/00000000-0000-0000-0000-00004804a5e2/00000000-0000-0000-0000-0000442aa12b"
+      (reference "C6") (unit 1) (value "100nF") (footprint "Capacitor_THT:C_Disc_D5.1mm_W3.2mm_P5.00mm")
+    )
+    (path "/00000000-0000-0000-0000-00004804a5e2/00000000-0000-0000-0000-0000442aa145"
+      (reference "C7") (unit 1) (value "100nF") (footprint "Capacitor_THT:C_Disc_D5.1mm_W3.2mm_P5.00mm")
     )
     (path "/00000000-0000-0000-0000-0000464ad280"
       (reference "C9") (unit 1) (value "220nF") (footprint "Capacitor_THT:C_Disc_D5.1mm_W3.2mm_P5.00mm")
@@ -4106,6 +3944,12 @@
     )
     (path "/00000000-0000-0000-0000-0000442a4fe7"
       (reference "P1") (unit 1) (value "CONN_2") (footprint "TerminalBlock_Altech:Altech_AK300_1x02_P5.00mm_45-Degree")
+    )
+    (path "/00000000-0000-0000-0000-00004804a5e2/00000000-0000-0000-0000-00004436967e"
+      (reference "P2") (unit 1) (value "SUPP28") (footprint "Package_DIP:DIP-28_W7.62mm_Socket_LongPads")
+    )
+    (path "/00000000-0000-0000-0000-00004804a5e2/00000000-0000-0000-0000-0000442a88ed"
+      (reference "P3") (unit 1) (value "SUPP40") (footprint "footprints:40tex-Ell600")
     )
     (path "/00000000-0000-0000-0000-000054020bea"
       (reference "P101") (unit 1) (value "CONN_1") (footprint "MountingHole:MountingHole_4.3mm_M4")
@@ -4200,6 +4044,9 @@
     (path "/00000000-0000-0000-0000-0000443d0101"
       (reference "RV1") (unit 1) (value "1K") (footprint "footprints:RV2X4")
     )
+    (path "/00000000-0000-0000-0000-00004804a5e2/00000000-0000-0000-0000-0000442a87f7"
+      (reference "U1") (unit 1) (value "24Cxx") (footprint "Package_DIP:DIP-8_W7.62mm_Socket_LongPads")
+    )
     (path "/00000000-0000-0000-0000-0000442a4cc8"
       (reference "U2") (unit 1) (value "74HC125") (footprint "Package_DIP:DIP-14_W7.62mm_LongPads")
     )
@@ -4217,57 +4064,6 @@
     )
     (path "/00000000-0000-0000-0000-0000442a5e20"
       (reference "U4") (unit 1) (value "LT1373") (footprint "Package_DIP:DIP-8_W7.62mm_LongPads")
-    )
-    (path "/00000000-0000-0000-0000-00004804a5e2/00000000-0000-0000-0000-00005558fa28"
-      (reference "#FLG047") (unit 1) (value "PWR_FLAG") (footprint "")
-    )
-    (path "/00000000-0000-0000-0000-00004804a5e2/00000000-0000-0000-0000-0000442a8794"
-      (reference "#PWR036") (unit 1) (value "GND") (footprint "")
-    )
-    (path "/00000000-0000-0000-0000-00004804a5e2/00000000-0000-0000-0000-0000443cca5d"
-      (reference "#PWR037") (unit 1) (value "GND") (footprint "")
-    )
-    (path "/00000000-0000-0000-0000-00004804a5e2/00000000-0000-0000-0000-0000443697c7"
-      (reference "#PWR038") (unit 1) (value "GND") (footprint "")
-    )
-    (path "/00000000-0000-0000-0000-00004804a5e2/00000000-0000-0000-0000-0000443697c3"
-      (reference "#PWR039") (unit 1) (value "GND") (footprint "")
-    )
-    (path "/00000000-0000-0000-0000-00004804a5e2/00000000-0000-0000-0000-0000442aa147"
-      (reference "#PWR040") (unit 1) (value "GND") (footprint "")
-    )
-    (path "/00000000-0000-0000-0000-00004804a5e2/00000000-0000-0000-0000-0000442aa138"
-      (reference "#PWR041") (unit 1) (value "GND") (footprint "")
-    )
-    (path "/00000000-0000-0000-0000-00004804a5e2/00000000-0000-0000-0000-0000442a896a"
-      (reference "#PWR042") (unit 1) (value "GND") (footprint "")
-    )
-    (path "/00000000-0000-0000-0000-00004804a5e2/00000000-0000-0000-0000-0000442a8838"
-      (reference "#PWR043") (unit 1) (value "GND") (footprint "")
-    )
-    (path "/00000000-0000-0000-0000-00004804a5e2/00000000-0000-0000-0000-0000442a820f"
-      (reference "#PWR044") (unit 1) (value "GND") (footprint "")
-    )
-    (path "/00000000-0000-0000-0000-00004804a5e2/00000000-0000-0000-0000-0000442a8205"
-      (reference "#PWR045") (unit 1) (value "GND") (footprint "")
-    )
-    (path "/00000000-0000-0000-0000-00004804a5e2/00000000-0000-0000-0000-000052c92629"
-      (reference "#PWR046") (unit 1) (value "GND") (footprint "")
-    )
-    (path "/00000000-0000-0000-0000-00004804a5e2/00000000-0000-0000-0000-0000442aa12b"
-      (reference "C6") (unit 1) (value "100nF") (footprint "Capacitor_THT:C_Disc_D5.1mm_W3.2mm_P5.00mm")
-    )
-    (path "/00000000-0000-0000-0000-00004804a5e2/00000000-0000-0000-0000-0000442aa145"
-      (reference "C7") (unit 1) (value "100nF") (footprint "Capacitor_THT:C_Disc_D5.1mm_W3.2mm_P5.00mm")
-    )
-    (path "/00000000-0000-0000-0000-00004804a5e2/00000000-0000-0000-0000-00004436967e"
-      (reference "P2") (unit 1) (value "SUPP28") (footprint "Package_DIP:DIP-28_W7.62mm_Socket_LongPads")
-    )
-    (path "/00000000-0000-0000-0000-00004804a5e2/00000000-0000-0000-0000-0000442a88ed"
-      (reference "P3") (unit 1) (value "SUPP40") (footprint "footprints:40tex-Ell600")
-    )
-    (path "/00000000-0000-0000-0000-00004804a5e2/00000000-0000-0000-0000-0000442a87f7"
-      (reference "U1") (unit 1) (value "24Cxx") (footprint "Package_DIP:DIP-8_W7.62mm_Socket_LongPads")
     )
     (path "/00000000-0000-0000-0000-00004804a5e2/00000000-0000-0000-0000-0000442a81a7"
       (reference "U5") (unit 1) (value "PIC_18_PINS") (footprint "Package_DIP:DIP-18_W7.62mm_Socket_LongPads")

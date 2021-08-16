@@ -1,4 +1,6 @@
-(kicad_sch (version 20210126) (generator eeschema)
+(kicad_sch (version 20210621) (generator eeschema)
+
+  (uuid f461a5d8-fc6d-4642-8e2f-877b228249af)
 
   (paper "A4")
 
@@ -403,14 +405,6 @@
         )
         (polyline
           (pts
-            (xy -1.27 1.27)
-            (xy 1.27 0)
-            (xy -1.27 -1.27)
-          )
-          (stroke (width 0)) (fill (type outline))
-        )
-        (polyline
-          (pts
             (xy 1.651 -1.016)
             (xy 2.794 -2.032)
             (xy 2.667 -1.397)
@@ -424,6 +418,14 @@
             (xy 3.048 -1.016)
           )
           (stroke (width 0)) (fill (type none))
+        )
+        (polyline
+          (pts
+            (xy -1.27 1.27)
+            (xy 1.27 0)
+            (xy -1.27 -1.27)
+          )
+          (stroke (width 0)) (fill (type outline))
         )
       )
       (symbol "LED_1_1"

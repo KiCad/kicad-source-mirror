@@ -112,7 +112,8 @@
         "min_track_width": 0.19999999999999998,
         "min_via_annular_width": 0.049999999999999996,
         "min_via_annulus": 0.05,
-        "min_via_diameter": 0.8999999999999999
+        "min_via_diameter": 0.8999999999999999,
+        "use_height_for_length_calcs": true
       },
       "track_widths": [
         0.0,
@@ -397,7 +398,7 @@
       }
     ],
     "meta": {
-      "version": 0
+      "version": 1
     },
     "net_colors": null
   },
