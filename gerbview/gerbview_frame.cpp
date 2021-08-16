@@ -450,21 +450,14 @@ void GERBVIEW_FRAME::ApplyDisplaySettingsToGAL()
 }
 
 
-int GERBVIEW_FRAME::getNextAvailableLayer( int aLayer ) const
+int GERBVIEW_FRAME::getNextAvailableLayer() const
 {
-    int layer = aLayer;
-
     for( unsigned i = 0; i < ImagesMaxCount(); ++i )
     {
-        const GERBER_FILE_IMAGE* gerber = GetGbrImage( layer );
+        const GERBER_FILE_IMAGE* gerber = GetGbrImage( i );
 
         if( gerber == nullptr )    // this graphic layer is available: use it
-            return layer;
-
-        ++layer;                // try next graphic layer
-
-        if( layer >= (int)ImagesMaxCount() )
-            layer = 0;
+            return i;
     }
 
     return NO_AVAILABLE_LAYERS;

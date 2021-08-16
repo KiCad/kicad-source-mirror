@@ -190,14 +190,13 @@ public:
     int GetActiveLayer() const { return m_activeLayer; }
 
     /**
-     * Find the next empty layer starting at \a aLayer and returns it to the caller.
+     * Find the next empty layer.
      *
      * If no empty layers are found, #NO_AVAILABLE_LAYERS is return.
      *
-     * @param aLayer The first layer to search.
      * @return The first empty layer found or #NO_AVAILABLE_LAYERS.
      */
-    int getNextAvailableLayer( int aLayer = 0 ) const;
+    int getNextAvailableLayer() const;
 
     /**
      * Update the currently "selected" layer within the #GERBER_LAYER_WIDGET.

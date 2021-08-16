@@ -279,7 +279,7 @@ bool GERBVIEW_FRAME::LoadListOfGerberAndDrillFiles( const wxString& aPath,
 
 
         // Make sure we have a layer available to load into
-        layer = getNextAvailableLayer( layer );
+        layer = getNextAvailableLayer();
 
         if( layer == NO_AVAILABLE_LAYERS )
         {
@@ -421,7 +421,7 @@ bool GERBVIEW_FRAME::LoadExcellonFiles( const wxString& aFullFileName )
 
         m_lastFileName = filename.GetFullPath();
 
-        layer = getNextAvailableLayer( layer );
+        layer = getNextAvailableLayer();
 
         if( layer == NO_AVAILABLE_LAYERS )
         {
@@ -649,7 +649,7 @@ bool GERBVIEW_FRAME::unarchiveFiles( const wxString& aFullFileName, REPORTER* aR
                     foundX2Gerbers = true;
             }
 
-            layer = getNextAvailableLayer( layer );
+            layer = getNextAvailableLayer();
             SetActiveLayer( layer, false );
         }
     }
