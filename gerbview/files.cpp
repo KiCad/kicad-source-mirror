@@ -114,48 +114,17 @@ void GERBVIEW_FRAME::OnClearJobFileHistory( wxCommandEvent& aEvent )
 }
 
 
-bool GERBVIEW_FRAME::LoadGerberFiles( const wxString& aFullFileName )
+bool GERBVIEW_FRAME::LoadFileOrShowDialog( const wxString& aFileName,
+                                           const wxString& dialogFiletypes,
+                                           const wxString& dialogTitle, const int filetype )
 {
     static int lastGerberFileWildcard = 0;
-    wxString   filetypes;
     wxArrayString filenamesList;
-    wxFileName filename = aFullFileName;
+    wxFileName    filename = aFileName;
     wxString currentPath;
 
     if( !filename.IsOk() )
     {
-        /* Standard gerber filetypes
-         * (See http://en.wikipedia.org/wiki/Gerber_File)
-         * The .gbr (.pho in legacy files) extension is the default used in Pcbnew; however
-         * there are a lot of other extensions used for gerber files.  Because the first letter
-         * is usually g, we accept g* as extension.
-         * (Mainly internal copper layers do not have specific extension, and filenames are like
-         * *.g1, *.g2 *.gb1 ...)
-         * Now (2014) Ucamco (the company which manages the Gerber format) encourages use of .gbr
-         * only and the Gerber X2 file format.
-         */
-        filetypes = _( "Gerber files (.g* .lgr .pho)" );
-        filetypes << wxT("|");
-        filetypes += wxT("*.g*;*.G*;*.pho;*.PHO" );
-        filetypes << wxT("|");
-
-        /* Special gerber filetypes */
-        filetypes += _( "Top layer" ) + AddFileExtListToFilter( { "GTL" } ) + wxT( "|" );
-        filetypes += _( "Bottom layer" ) + AddFileExtListToFilter( { "GBL" } ) + wxT( "|" );
-        filetypes += _( "Bottom solder resist" ) + AddFileExtListToFilter( { "GBS" } ) + wxT( "|" );
-        filetypes += _( "Top solder resist" ) + AddFileExtListToFilter( { "GTS" } ) + wxT( "|" );
-        filetypes += _( "Bottom overlay" ) + AddFileExtListToFilter( { "GBO" } ) + wxT( "|" );
-        filetypes += _( "Top overlay" ) + AddFileExtListToFilter( { "GTO" } ) + wxT( "|" );
-        filetypes += _( "Bottom paste" ) + AddFileExtListToFilter( { "GBP" } ) + wxT( "|" );
-        filetypes += _( "Top paste" ) + AddFileExtListToFilter( { "GTP" } ) + wxT( "|" );
-        filetypes += _( "Keep-out layer" ) + AddFileExtListToFilter( { "GKO" } ) + wxT( "|" );
-        filetypes += _( "Mechanical layers" ) + AddFileExtListToFilter( { "GM1", "GM2", "GM3", "GM4", "GM5", "GM6", "GM7", "GM8", "GM9" } ) + wxT( "|" );
-        filetypes += _( "Top Pad Master" ) + AddFileExtListToFilter( { "GPT" } ) + wxT( "|" );
-        filetypes += _( "Bottom Pad Master" ) + AddFileExtListToFilter( { "GPB" } ) + wxT( "|" );
-
-        // All filetypes
-        filetypes += AllFilesWildcard();
-
         // Use the current working directory if the file name path does not exist.
         if( filename.DirExists() )
             currentPath = filename.GetPath();
@@ -169,8 +138,7 @@ bool GERBVIEW_FRAME::LoadGerberFiles( const wxString& aFullFileName )
                 currentPath.RemoveLast();
         }
 
-        wxFileDialog dlg( this, _( "Open Gerber File(s)" ), currentPath, filename.GetFullName(),
-                          filetypes,
+        wxFileDialog dlg( this, dialogTitle, currentPath, filename.GetFullName(), dialogFiletypes,
                           wxFD_OPEN | wxFD_FILE_MUST_EXIST | wxFD_MULTIPLE | wxFD_CHANGE_DIR );
         dlg.SetFilterIndex( lastGerberFileWildcard );
 
@@ -183,18 +151,17 @@ bool GERBVIEW_FRAME::LoadGerberFiles( const wxString& aFullFileName )
     }
     else
     {
-        filenamesList.Add( aFullFileName );
-        m_mruPath = currentPath = filename.GetPath();
+        filenamesList.Add( aFileName );
+        currentPath = filename.GetPath();
+        m_mruPath = currentPath;
     }
-
 
     // Set the busy cursor
     wxBusyCursor wait;
 
     bool isFirstFile = GetImagesList()->GetLoadedImageCount() == 0;
 
-    // 0 is gerber files
-    std::vector<int> fileTypesVec( filenamesList.Count(), 0 );
+    std::vector<int> fileTypesVec( filenamesList.Count(), filetype );
     bool success = LoadListOfGerberAndDrillFiles( currentPath, filenamesList, &fileTypesVec );
 
     // Auto zoom is only applied if there is only one file loaded
@@ -204,6 +171,62 @@ bool GERBVIEW_FRAME::LoadGerberFiles( const wxString& aFullFileName )
     }
 
     return success;
+}
+
+
+bool GERBVIEW_FRAME::LoadGerberFiles( const wxString& aFileName )
+{
+    wxString   filetypes;
+    wxFileName filename = aFileName;
+
+    /* Standard gerber filetypes
+     * (See http://en.wikipedia.org/wiki/Gerber_File)
+     * The .gbr (.pho in legacy files) extension is the default used in Pcbnew; however
+     * there are a lot of other extensions used for gerber files.  Because the first letter
+     * is usually g, we accept g* as extension.
+     * (Mainly internal copper layers do not have specific extension, and filenames are like
+     * *.g1, *.g2 *.gb1 ...)
+     * Now (2014) Ucamco (the company which manages the Gerber format) encourages use of .gbr
+     * only and the Gerber X2 file format.
+     */
+    filetypes = _( "Gerber files (.g* .lgr .pho)" );
+    filetypes << wxT( "|" );
+    filetypes += wxT( "*.g*;*.G*;*.pho;*.PHO" );
+    filetypes << wxT( "|" );
+
+    /* Special gerber filetypes */
+    filetypes += _( "Top layer" ) + AddFileExtListToFilter( { "GTL" } ) + wxT( "|" );
+    filetypes += _( "Bottom layer" ) + AddFileExtListToFilter( { "GBL" } ) + wxT( "|" );
+    filetypes += _( "Bottom solder resist" ) + AddFileExtListToFilter( { "GBS" } ) + wxT( "|" );
+    filetypes += _( "Top solder resist" ) + AddFileExtListToFilter( { "GTS" } ) + wxT( "|" );
+    filetypes += _( "Bottom overlay" ) + AddFileExtListToFilter( { "GBO" } ) + wxT( "|" );
+    filetypes += _( "Top overlay" ) + AddFileExtListToFilter( { "GTO" } ) + wxT( "|" );
+    filetypes += _( "Bottom paste" ) + AddFileExtListToFilter( { "GBP" } ) + wxT( "|" );
+    filetypes += _( "Top paste" ) + AddFileExtListToFilter( { "GTP" } ) + wxT( "|" );
+    filetypes += _( "Keep-out layer" ) + AddFileExtListToFilter( { "GKO" } ) + wxT( "|" );
+    filetypes += _( "Mechanical layers" )
+                 + AddFileExtListToFilter(
+                         { "GM1", "GM2", "GM3", "GM4", "GM5", "GM6", "GM7", "GM8", "GM9" } )
+                 + wxT( "|" );
+    filetypes += _( "Top Pad Master" ) + AddFileExtListToFilter( { "GPT" } ) + wxT( "|" );
+    filetypes += _( "Bottom Pad Master" ) + AddFileExtListToFilter( { "GPB" } ) + wxT( "|" );
+
+    // All filetypes
+    filetypes += AllFilesWildcard();
+
+    // 0 = gerber files
+    return LoadFileOrShowDialog( aFileName, filetypes, _( "Open Gerber File(s)" ), 0 );
+}
+
+
+bool GERBVIEW_FRAME::LoadExcellonFiles( const wxString& aFileName )
+{
+    wxString filetypes = DrillFileWildcard();
+    filetypes << wxT( "|" );
+    filetypes += AllFilesWildcard();
+
+    // 1 = drill files
+    return LoadFileOrShowDialog( aFileName, filetypes, _( "Open NC (Excellon) Drill File(s)" ), 1 );
 }
 
 
@@ -388,62 +411,6 @@ bool GERBVIEW_FRAME::LoadListOfGerberAndDrillFiles( const wxString&      aPath,
 }
 
 
-bool GERBVIEW_FRAME::LoadExcellonFiles( const wxString& aFullFileName )
-{
-    wxString   filetypes;
-    wxArrayString filenamesList;
-    wxFileName filename = aFullFileName;
-    wxString currentPath;
-
-    if( !filename.IsOk() )
-    {
-        filetypes = DrillFileWildcard();
-        filetypes << wxT( "|" );
-
-        /* All filetypes */
-        filetypes += AllFilesWildcard();
-
-        /* Use the current working directory if the file name path does not exist. */
-        if( filename.DirExists() )
-            currentPath = filename.GetPath();
-        else
-            currentPath = m_mruPath;
-
-        wxFileDialog dlg( this, _( "Open NC (Excellon) Drill File(s)" ),
-                          currentPath, filename.GetFullName(), filetypes,
-                          wxFD_OPEN | wxFD_FILE_MUST_EXIST | wxFD_MULTIPLE | wxFD_CHANGE_DIR );
-
-        if( dlg.ShowModal() == wxID_CANCEL )
-            return false;
-
-        dlg.GetPaths( filenamesList );
-        currentPath = wxGetCwd();
-        m_mruPath = currentPath;
-    }
-    else
-    {
-        filenamesList.Add( aFullFileName );
-        currentPath = filename.GetPath();
-        m_mruPath = currentPath;
-    }
-
-    // Set the busy cursor
-    wxBusyCursor wait;
-
-    bool isFirstFile = GetImagesList()->GetLoadedImageCount() == 0;
-
-    // 1 is drill files
-    std::vector<int> fileTypesVec( filenamesList.Count(), 1 );
-    bool success = LoadListOfGerberAndDrillFiles( currentPath, filenamesList, &fileTypesVec );
-
-    // Auto zoom is only applied if there is only one file loaded
-    if( isFirstFile )
-    {
-        Zoom_Automatique( false );
-    }
-
-    return success;
-}
 
 
 bool GERBVIEW_FRAME::unarchiveFiles( const wxString& aFullFileName, REPORTER* aReporter )

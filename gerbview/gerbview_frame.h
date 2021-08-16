@@ -301,6 +301,16 @@ public:
     bool unarchiveFiles( const wxString& aFullFileName, REPORTER* aReporter = nullptr );
 
     /**
+     * Load a given file or selected file(s), if the filename is empty.
+     *
+     * @param aFileName - file name with full path to open or empty string.
+     *                    if empty string: a dialog will be opened to select one or
+     *                    a set of files
+     * @return true if file was opened successfully.
+     */
+    bool LoadAutodetectedFiles( const wxString& aFileName );
+
+    /**
      * Load a given Gerber file or selected file(s), if the filename is empty.
      *
      * @param aFileName - file name with full path to open or empty string.
@@ -484,6 +494,19 @@ private:
     void OnClearZipFileHistory( wxCommandEvent& aEvent );
     void OnClearDrlFileHistory( wxCommandEvent& aEvent );
     void OnClearGbrFileHistory( wxCommandEvent& aEvent );
+
+    /**
+     * Loads the file provided or shows a dialog to get the file(s) from the user.
+     *
+     * @param aFileName Name of the file to open. Shows a dialog if not specified.
+     * @param dialogFiletypes File extensions to pass to the dialog if necessary
+     * @param dialogTitle Dialog title to use if necessary
+     * @param filetype Type of file for parsing, 0 = gerber, 1 = drill, 2 = autodetect
+     *
+     * @return true if success opening all files, false otherwise
+     */
+    bool LoadFileOrShowDialog( const wxString& aFileName, const wxString& dialogFiletypes,
+                               const wxString& dialogTitle, const int filetype );
 
     // The Tool Framework initialization
     void setupTools();
