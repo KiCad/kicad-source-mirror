@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
-"PO-Revision-Date: 2021-08-15 19:24+0000\n"
+"PO-Revision-Date: 2021-08-16 06:17+0000\n"
 "Last-Translator: VicSanRoPe <vicsanrope@protonmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/kicad/"
 "master-source/es/>\n"
@@ -3368,15 +3368,15 @@ msgstr "Zoom:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:207
 msgid "Pan up/down:"
-msgstr "Panorámica arriba/abajo:"
+msgstr "Mover arriba/abajo:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:223
 msgid "Pan left/right:"
-msgstr "Panorámica izquierda/derecha:"
+msgstr "Mover izquierda/derecha:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:257
 msgid "Pan left/right with horizontal movement"
-msgstr "Panorámica izquierda/derecha con movimiento horizontal"
+msgstr "Mover izquierda/derecha con movimiento horizontal"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:258
 msgid ""
@@ -5006,7 +5006,7 @@ msgstr "Buses"
 
 #: common/layer_id.cpp:107
 msgid "Bus junctions"
-msgstr "Uniones de BUS"
+msgstr "Uniones de bus"
 
 #: common/layer_id.cpp:108
 msgid "Junctions"
@@ -5786,7 +5786,7 @@ msgstr ""
 
 #: common/tool/actions.cpp:255
 msgid "Next Marker"
-msgstr "Siguiente marcador"
+msgstr "Marcador siguiente"
 
 #: common/tool/actions.cpp:255
 msgid "Go to next marker in Checker window"
@@ -11648,7 +11648,7 @@ msgstr "Rellenar formas seleccionadas"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:59
 msgid "&Highlight thickness:"
-msgstr "Resaltar grosor:"
+msgstr "Grosor de resaltado:"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:70
 msgid "(highlight color can be edited in the \"Colors\" page)"
@@ -16275,7 +16275,7 @@ msgstr "Exportar el dibujo de la hoja actual al portapapeles"
 
 #: eeschema/tools/ee_actions.cpp:614
 msgid "Switch to PCB Editor"
-msgstr "Cambiar a editor de placas"
+msgstr "Cambiar al editor de placas"
 
 #: eeschema/tools/ee_actions.cpp:614
 msgid "Open PCB in board editor"
