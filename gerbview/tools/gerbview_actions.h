@@ -76,6 +76,7 @@ public:
     static TOOL_ACTION layerChanged;        // notification
 
     // Files
+    static TOOL_ACTION openAutodetected;
     static TOOL_ACTION openGerber;
     static TOOL_ACTION openDrillFile;
     static TOOL_ACTION openJobFile;

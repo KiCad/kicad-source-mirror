@@ -50,6 +50,7 @@ public:
     int ReloadAllLayers( const TOOL_EVENT& aEvent );
 
     // Files
+    int OpenAutodetected( const TOOL_EVENT& aEvent );
     int OpenGerber( const TOOL_EVENT& aEvent );
     int OpenDrillFile( const TOOL_EVENT& aEvent );
     int OpenJobFile( const TOOL_EVENT& aEvent );

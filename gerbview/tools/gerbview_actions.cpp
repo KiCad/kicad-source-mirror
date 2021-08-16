@@ -34,16 +34,22 @@
 
 // GERBVIEW_CONTROL
 //
+TOOL_ACTION GERBVIEW_ACTIONS::openAutodetected( "gerbview.Control.openAutodetected",
+        AS_GLOBAL, 0, "",
+        _( "Open Autodetected File(s)..." ),
+        _( "Open Autodetected file(s) on a new layer." ),
+        BITMAPS::load_gerber );
+
 TOOL_ACTION GERBVIEW_ACTIONS::openGerber( "gerbview.Control.openGerber",
         AS_GLOBAL, 0, "",
         _( "Open Gerber Plot File(s)..." ),
-        _( "Open Gerber plot file(s) on the current layer. Previous data will be deleted" ),
+        _( "Open Gerber plot file(s) on a new layer." ),
         BITMAPS::load_gerber );
 
 TOOL_ACTION GERBVIEW_ACTIONS::openDrillFile( "gerbview.Control.openDrillFile",
         AS_GLOBAL, 0, "",
         _( "Open Excellon Drill File(s)..." ),
-        _( "Open Excellon drill file(s) on the current layer. Previous data will be deleted" ),
+        _( "Open Excellon drill file(s) on a new layer." ),
         BITMAPS::load_drill );
 
 TOOL_ACTION GERBVIEW_ACTIONS::openJobFile( "gerbview.Control.openJobFile",

@@ -72,6 +72,7 @@ void GERBVIEW_FRAME::ReCreateMenuBar()
         recentGbrFiles.AddFilesToMenu();
     }
 
+    fileMenu->Add( GERBVIEW_ACTIONS::openAutodetected );
     fileMenu->Add( GERBVIEW_ACTIONS::openGerber );
     wxMenuItem* gbrItem = fileMenu->Add( openRecentGbrMenu );
     RegisterUIUpdateHandler( gbrItem->GetId(), FileHistoryCond( recentGbrFiles) );

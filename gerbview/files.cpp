@@ -164,13 +164,22 @@ bool GERBVIEW_FRAME::LoadFileOrShowDialog( const wxString& aFileName,
     std::vector<int> fileTypesVec( filenamesList.Count(), filetype );
     bool success = LoadListOfGerberAndDrillFiles( currentPath, filenamesList, &fileTypesVec );
 
-    // Auto zoom is only applied if there is only one file loaded
+    // Auto zoom / sort is only applied when no other files have been loaded
     if( isFirstFile )
     {
+        SortLayersByFileExtension();
         Zoom_Automatique( false );
     }
 
     return success;
+}
+
+
+bool GERBVIEW_FRAME::LoadAutodetectedFiles( const wxString& aFileName )
+{
+    // 2 = autodetect files
+    return LoadFileOrShowDialog( aFileName, AllFilesWildcard(), _( "Open Autodetected File(s)" ),
+                                 2 );
 }
 
 

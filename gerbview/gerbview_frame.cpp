@@ -270,25 +270,13 @@ bool GERBVIEW_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
                 GERBER_FILE_IMAGE_LIST::GetGerberLayerFromFilename( aFileSet[i], fnameLayer,
                                                                     fnameExtensionMatched );
 
-                if( fnameLayer == GERBER_ORDER_ENUM::GERBER_LAYER_UNKNOWN )
-                {
-                    if( EXCELLON_IMAGE::TestFileIsExcellon( aFileSet[i] ) )
-                    {
-                        fnameLayer = GERBER_ORDER_ENUM::GERBER_DRILL;
-                    }
-                    else if( GERBER_FILE_IMAGE::TestFileIsRS274( aFileSet[i] ) )
-                    {
-                        // If we have no way to know what layer it is, just guess
-                        fnameLayer = GERBER_ORDER_ENUM::GERBER_TOP_COPPER;
-                    }
-                }
-
                 switch( fnameLayer )
                 {
                 case GERBER_ORDER_ENUM::GERBER_DRILL:
                     LoadExcellonFiles( aFileSet[i] );
                     break;
                 case GERBER_ORDER_ENUM::GERBER_LAYER_UNKNOWN:
+                    LoadAutodetectedFiles( aFileSet[i] );
                     break;
                 default:
                     LoadGerberFiles( aFileSet[i] );

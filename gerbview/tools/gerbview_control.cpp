@@ -51,6 +51,14 @@ void GERBVIEW_CONTROL::Reset( RESET_REASON aReason )
 }
 
 
+int GERBVIEW_CONTROL::OpenAutodetected( const TOOL_EVENT& aEvent )
+{
+    m_frame->LoadAutodetectedFiles( wxEmptyString );
+
+    return 0;
+}
+
+
 int GERBVIEW_CONTROL::OpenGerber( const TOOL_EVENT& aEvent )
 {
     m_frame->LoadGerberFiles( wxEmptyString );
@@ -423,6 +431,7 @@ int GERBVIEW_CONTROL::UpdateMessagePanel( const TOOL_EVENT& aEvent )
 
 void GERBVIEW_CONTROL::setTransitions()
 {
+    Go( &GERBVIEW_CONTROL::OpenAutodetected,   GERBVIEW_ACTIONS::openAutodetected.MakeEvent() );
     Go( &GERBVIEW_CONTROL::OpenGerber,         GERBVIEW_ACTIONS::openGerber.MakeEvent() );
     Go( &GERBVIEW_CONTROL::OpenDrillFile,      GERBVIEW_ACTIONS::openDrillFile.MakeEvent() );
     Go( &GERBVIEW_CONTROL::OpenJobFile,        GERBVIEW_ACTIONS::openJobFile.MakeEvent() );

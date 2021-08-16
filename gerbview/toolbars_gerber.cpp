@@ -60,6 +60,7 @@ void GERBVIEW_FRAME::ReCreateHToolbar()
     // Set up toolbar
     m_mainToolBar->Add( GERBVIEW_ACTIONS::clearAllLayers );
     m_mainToolBar->Add( GERBVIEW_ACTIONS::reloadAllLayers );
+    m_mainToolBar->Add( GERBVIEW_ACTIONS::openAutodetected );
     m_mainToolBar->Add( GERBVIEW_ACTIONS::openGerber );
     m_mainToolBar->Add( GERBVIEW_ACTIONS::openDrillFile );
 
