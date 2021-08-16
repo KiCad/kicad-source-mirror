@@ -91,7 +91,7 @@ if( NOT NGSPICE_BUILD_VERSION )
             share/ngspice/include/ngspice
         )
 
-    if( NOT NGSPICE_CONFIG_H-NOTFOUND )
+    if( NOT ${NGSPICE_CONFIG_H} STREQUAL "NGSPICE_CONFIG_H-NOTFOUND" )
         message( STATUS "ngspice configuration file ${NGSPICE_CONFIG_H} found." )
         set( NGSPICE_HAVE_CONFIG_H "1" CACHE STRING "ngspice/config.h header found." )
     endif()
