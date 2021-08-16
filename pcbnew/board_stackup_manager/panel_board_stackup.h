@@ -64,7 +64,7 @@ struct BOARD_STACKUP_ROW_UI_ITEM
     wxControl*      m_EpsilonCtrl;      // control shown in column 8
     wxControl*      m_LossTgCtrl;       // control shown in column 9
 
-    wxColour        m_UserColor;        // User-specified color (if any)
+    COLOR4D         m_UserColor;        // User-specified color (if any)
 
     BOARD_STACKUP_ROW_UI_ITEM( BOARD_STACKUP_ITEM* aItem, int aSubItem = 1 ) :
         m_Item( aItem ),
@@ -79,8 +79,7 @@ struct BOARD_STACKUP_ROW_UI_ITEM
         m_ThicknessLockCtrl( nullptr ),
         m_ColorCtrl( nullptr ),
         m_EpsilonCtrl( nullptr ),
-        m_LossTgCtrl( nullptr ),
-        m_UserColor( wxNullColour )
+        m_LossTgCtrl( nullptr )
     {}
 };
 
@@ -88,8 +87,7 @@ struct BOARD_STACKUP_ROW_UI_ITEM
 class PANEL_SETUP_BOARD_STACKUP : public PANEL_SETUP_BOARD_STACKUP_BASE
 {
 public:
-    PANEL_SETUP_BOARD_STACKUP( PAGED_DIALOG* aParent,
-                               PCB_EDIT_FRAME* aFrame,
+    PANEL_SETUP_BOARD_STACKUP( PAGED_DIALOG* aParent, PCB_EDIT_FRAME* aFrame,
                                PANEL_SETUP_LAYERS* aPanelLayers );
     ~PANEL_SETUP_BOARD_STACKUP();
 

@@ -85,12 +85,12 @@ public:
         return m_colorName;
     }
 
-    wxColor GetColor( BOARD_STACKUP_ITEM_TYPE aItemType ) const
+    KIGFX::COLOR4D GetColor( BOARD_STACKUP_ITEM_TYPE aItemType ) const
     {
         if( aItemType == BS_ITEM_TYPE_SOLDERMASK )
-            return m_color.WithAlpha( DEFAULT_SOLDERMASK_OPACITY ).ToColour();
+            return m_color.WithAlpha( DEFAULT_SOLDERMASK_OPACITY );
         else
-            return m_color.WithAlpha( 1.0 ).ToColour();
+            return m_color.WithAlpha( 1.0 );
     }
 
 private:
@@ -104,26 +104,41 @@ private:
  * @return a wxArray of standard copper finish names.
  * @param aTranslate = false for the initial names, true for translated names
  */
-wxArrayString GetCopperFinishStandardList( bool aTranslate );
+wxArrayString GetStandardCopperFinishes( bool aTranslate );
 
 /**
  * @return a list of standard FAB_LAYER_COLOR items for silkscreen and solder mask.
  */
-const FAB_LAYER_COLOR* GetColorStandardList();
+const FAB_LAYER_COLOR* GetStandardColors( BOARD_STACKUP_ITEM_TYPE aType );
 
 /**
  * @return the count of colors in ColorStandardList
  */
-int GetColorStandardListCount();
+int GetStandardColorCount( BOARD_STACKUP_ITEM_TYPE aType );
 
 /**
  * @return the index of the user defined color in ColorStandardList
  */
-int GetColorUserDefinedListIdx();
+int GetColorUserDefinedListIdx( BOARD_STACKUP_ITEM_TYPE aType );
 
-inline wxColour GetDefaultUserColor( BOARD_STACKUP_ITEM_TYPE aType )
+inline KIGFX::COLOR4D GetDefaultUserColor( BOARD_STACKUP_ITEM_TYPE aType )
 {
-    return GetColorStandardList()[GetColorUserDefinedListIdx()].GetColor( aType );
+    return GetStandardColors( aType )[GetColorUserDefinedListIdx( aType )].GetColor( aType );
+}
+
+inline KIGFX::COLOR4D GetStandardColor( BOARD_STACKUP_ITEM_TYPE aType, int aIdx )
+{
+    return GetStandardColors( aType )[ aIdx ].GetColor( aType );
+}
+
+inline const wxString& GetStandardColorName( BOARD_STACKUP_ITEM_TYPE aType, int aIdx )
+{
+    return GetStandardColors( aType )[ aIdx ].GetName();
+}
+
+inline bool IsCustomColorIdx( BOARD_STACKUP_ITEM_TYPE aType, int aIdx )
+{
+    return aIdx == GetColorUserDefinedListIdx( aType );
 }
 
 

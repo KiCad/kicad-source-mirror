@@ -28,7 +28,6 @@
 #include <board.h>
 #include <i18n_utility.h>       // For _HKI definition
 #include "stackup_predefined_prms.h"
-#include <string_utils.h>               // for Double2Str()
 
 
 BOARD_STACKUP_ITEM::BOARD_STACKUP_ITEM( BOARD_STACKUP_ITEM_TYPE aType )
@@ -98,8 +97,7 @@ void BOARD_STACKUP_ITEM::AddDielectricPrms( int aDielectricPrmsIdx )
     // add a DIELECTRIC_PRMS item to m_DielectricPrmsList
     DIELECTRIC_PRMS new_prms;
 
-    m_DielectricPrmsList.emplace( m_DielectricPrmsList.begin() + aDielectricPrmsIdx,
-                                  new_prms );
+    m_DielectricPrmsList.emplace( m_DielectricPrmsList.begin() + aDielectricPrmsIdx, new_prms );
 }
 
 
@@ -107,9 +105,12 @@ void BOARD_STACKUP_ITEM::RemoveDielectricPrms( int aDielectricPrmsIdx )
 {
     // Remove a DIELECTRIC_PRMS item from m_DielectricPrmsList if possible
 
-    if( GetSublayersCount() < 2 || aDielectricPrmsIdx < 0
+    if( GetSublayersCount() < 2
+            || aDielectricPrmsIdx < 0
             || aDielectricPrmsIdx >= GetSublayersCount() )
+    {
         return;
+    }
 
     m_DielectricPrmsList.erase( m_DielectricPrmsList.begin() + aDielectricPrmsIdx );
 }
@@ -220,16 +221,14 @@ void BOARD_STACKUP_ITEM::SetMaterial( const wxString& aName, int aDielectricSubL
 bool BOARD_STACKUP_ITEM::HasEpsilonRValue() const
 {
     return m_Type == BS_ITEM_TYPE_DIELECTRIC
-           || m_Type == BS_ITEM_TYPE_SOLDERMASK
-           //|| m_Type == BS_ITEM_TYPE_SILKSCREEN
-            ;
+            || m_Type == BS_ITEM_TYPE_SOLDERMASK;
 };
 
 
 bool BOARD_STACKUP_ITEM::HasLossTangentValue() const
 {
     return m_Type == BS_ITEM_TYPE_DIELECTRIC
-           || m_Type == BS_ITEM_TYPE_SOLDERMASK;
+            || m_Type == BS_ITEM_TYPE_SOLDERMASK;
 };
 
 
@@ -242,43 +241,25 @@ bool BOARD_STACKUP_ITEM::HasMaterialValue( int aDielectricSubLayer ) const
 
 bool BOARD_STACKUP_ITEM::IsMaterialEditable() const
 {
-    // The material is editable only for dielectric
-    return m_Type == BS_ITEM_TYPE_DIELECTRIC ||
-           m_Type == BS_ITEM_TYPE_SOLDERMASK ||
-           m_Type == BS_ITEM_TYPE_SILKSCREEN;
+    return m_Type == BS_ITEM_TYPE_DIELECTRIC
+            || m_Type == BS_ITEM_TYPE_SOLDERMASK
+            || m_Type == BS_ITEM_TYPE_SILKSCREEN;
 }
 
 
 bool BOARD_STACKUP_ITEM::IsColorEditable() const
 {
-    return m_Type == BS_ITEM_TYPE_SOLDERMASK || m_Type == BS_ITEM_TYPE_SILKSCREEN;
+    return m_Type == BS_ITEM_TYPE_DIELECTRIC
+            || m_Type == BS_ITEM_TYPE_SOLDERMASK
+            || m_Type == BS_ITEM_TYPE_SILKSCREEN;
 }
 
 
 bool BOARD_STACKUP_ITEM::IsThicknessEditable() const
 {
-    switch( m_Type )
-    {
-    case BS_ITEM_TYPE_COPPER:
-        return true;
-
-    case BS_ITEM_TYPE_DIELECTRIC:
-        return true;
-
-    case BS_ITEM_TYPE_SOLDERMASK:
-        return true;
-
-    case BS_ITEM_TYPE_SOLDERPASTE:
-        return false;
-
-    case BS_ITEM_TYPE_SILKSCREEN:
-        return false;
-
-    default:
-        break;
-    }
-
-    return false;
+    return m_Type == BS_ITEM_TYPE_COPPER
+            || m_Type == BS_ITEM_TYPE_DIELECTRIC
+            || m_Type == BS_ITEM_TYPE_SOLDERMASK;
 }
 
 
@@ -333,7 +314,7 @@ BOARD_STACKUP::BOARD_STACKUP( const BOARD_STACKUP& aOther )
 
     // All items in aOther.m_list have to be duplicated, because aOther.m_list
     // manage pointers to these items
-    for( auto item : aOther.m_list )
+    for( BOARD_STACKUP_ITEM* item : aOther.m_list )
     {
         BOARD_STACKUP_ITEM* dup_item = new BOARD_STACKUP_ITEM( *item );
         Add( dup_item );
@@ -354,7 +335,7 @@ BOARD_STACKUP& BOARD_STACKUP::operator=( const BOARD_STACKUP& aOther )
 
     // All items in aOther.m_list have to be duplicated, because aOther.m_list
     // manage pointers to these items
-    for( auto item : aOther.m_list )
+    for( BOARD_STACKUP_ITEM* item : aOther.m_list )
     {
         BOARD_STACKUP_ITEM* dup_item = new BOARD_STACKUP_ITEM( *item );
         Add( dup_item );
@@ -366,7 +347,7 @@ BOARD_STACKUP& BOARD_STACKUP::operator=( const BOARD_STACKUP& aOther )
 
 void BOARD_STACKUP::RemoveAll()
 {
-    for( auto item : m_list )
+    for( BOARD_STACKUP_ITEM* item : m_list )
         delete item;
 
     m_list.clear();
@@ -387,7 +368,7 @@ int BOARD_STACKUP::BuildBoardThicknessFromStackup() const
     // return the board thickness from the thickness of BOARD_STACKUP_ITEM list
     int thickness = 0;
 
-    for( auto item : m_list )
+    for( BOARD_STACKUP_ITEM* item : m_list )
     {
         if( item->IsThicknessEditable() && item->IsEnabled() )
             thickness += item->GetThickness();
@@ -645,8 +626,10 @@ void BOARD_STACKUP::FormatBoardStackup( OUTPUTFORMATTER* aFormatter,
                            aFormatter->Quotew( item->GetTypeName() ).c_str() );
 
         if( item->IsColorEditable() && IsPrmSpecified( item->GetColor() ) )
+        {
             aFormatter->Print( 0, " (color %s)",
                                aFormatter->Quotew( item->GetColor() ).c_str() );
+        }
 
         for( int idx = 0; idx < item->GetSublayersCount(); idx++ )
         {
@@ -683,15 +666,19 @@ void BOARD_STACKUP::FormatBoardStackup( OUTPUTFORMATTER* aFormatter,
 
     // Other infos about board, related to layers and other fabrication specifications
     if( IsPrmSpecified( m_FinishType ) )
+    {
         aFormatter->Print( nest_level, "(copper_finish %s)\n",
                            aFormatter->Quotew( m_FinishType ).c_str() );
+    }
 
     aFormatter->Print( nest_level, "(dielectric_constraints %s)\n",
                        m_HasDielectricConstrains ? "yes" : "no" );
 
     if( m_EdgeConnectorConstraints > 0 )
+    {
         aFormatter->Print( nest_level, "(edge_connector %s)\n",
                            m_EdgeConnectorConstraints > 1 ? "bevelled": "yes" );
+    }
 
     if( m_CastellatedPads )
         aFormatter->Print( nest_level, "(castellated_pads yes)\n" );

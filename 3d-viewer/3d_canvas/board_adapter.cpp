@@ -605,32 +605,7 @@ void BOARD_ADAPTER::InitSettings( REPORTER* aStatusReporter, REPORTER* aWarningR
 
             case BS_ITEM_TYPE_DIELECTRIC:
             {
-                KIGFX::COLOR4D  layerColor = COLOR4D::UNSPECIFIED;
-                const wxString& materialName = stackupItem->GetMaterial();
-
-                if( materialName.StartsWith( "FR4" ) )
-                {
-                    layerColor = findColor( "FR4 natural", g_BoardColors );
-                }
-                else if( materialName.IsSameAs( "PTFE" )
-                      || materialName.IsSameAs( "Teflon" ) )
-                {
-                    layerColor = findColor( "PTFE natural", g_BoardColors );
-                }
-                else if( materialName.IsSameAs( "Polyimide" )
-                      || materialName.IsSameAs( "Kapton" ) )
-                {
-                    layerColor = findColor( "Polyimide", g_BoardColors );
-                }
-                else if( materialName.IsSameAs( "Al" ) )
-                {
-                    layerColor = findColor( "Aluminum", g_BoardColors );
-                }
-                else    // A default color value for unknown dielectric material
-                        // (i.e. an exotic name entered by hand)
-                {
-                    layerColor = findColor( "FR4 natural", g_BoardColors );
-                }
+                KIGFX::COLOR4D layerColor = findColor( colorName, g_BoardColors );
 
                 if( bodyColor == COLOR4D( 0, 0, 0, 0 ) )
                     bodyColor = layerColor;

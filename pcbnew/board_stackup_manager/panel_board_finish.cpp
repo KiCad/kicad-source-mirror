@@ -39,7 +39,7 @@ PANEL_SETUP_BOARD_FINISH::PANEL_SETUP_BOARD_FINISH( PAGED_DIALOG* aParent, BOARD
     m_brdSettings = &m_board->GetDesignSettings();
 
     // Get the translated list of choices and init m_choiceFinish
-    wxArrayString finish_list = GetCopperFinishStandardList( true );
+    wxArrayString finish_list = GetStandardCopperFinishes( true );
     m_choiceFinish->Append( finish_list );
     m_choiceFinish->SetSelection( 0 );      // Will be correctly set later
 
@@ -61,7 +61,7 @@ void PANEL_SETUP_BOARD_FINISH::synchronizeWithBoard()
     m_cbEgdesPlated->SetValue( brd_stackup.m_EdgePlating );
 
     // find the choice depending on the initial finish setting
-    wxArrayString initial_finish_list = GetCopperFinishStandardList( false );
+    wxArrayString initial_finish_list = GetStandardCopperFinishes( false );
     unsigned idx;
 
     for( idx = 0; idx < initial_finish_list.GetCount(); idx++ )
@@ -82,7 +82,7 @@ bool PANEL_SETUP_BOARD_FINISH::TransferDataFromWindow()
 {
     BOARD_STACKUP& brd_stackup = m_brdSettings->GetStackupDescriptor();
 
-    wxArrayString finish_list = GetCopperFinishStandardList( false );
+    wxArrayString finish_list = GetStandardCopperFinishes( false );
     int finish = m_choiceFinish->GetSelection() >= 0 ? m_choiceFinish->GetSelection() : 0;
     brd_stackup.m_FinishType = finish_list[finish];
 

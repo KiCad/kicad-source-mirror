@@ -29,11 +29,10 @@
 #include <i18n_utility.h>       // _HKI definition
 #include "stackup_predefined_prms.h"
 
-// A list of copper finish standard type names
-// They are standard names in .gbdjob files, so avoid changing them or
-// ensure they are compatible with .gbrjob file spec.
-// These names are in fact usual copper finish names.
-static wxString CopperFinishType[] =
+// A list of copper finish standard type names.
+// They are standard names in .gbdjob files, so avoid changing them or ensure they are
+// compatible with .gbrjob file spec.
+static wxString copperFinishType[] =
 {
     NotSpecifiedPrm(),            // Not specified, not in .gbrjob file
     _HKI( "ENIG" ),               // used in .gbrjob file
@@ -52,13 +51,12 @@ static wxString CopperFinishType[] =
 };
 
 
-// A list of available colors for solder mask and silkscreen
-// These names are used in .gbrjob file, so they are not fully free.
-// Use only what is allowed in .gbrjob files.
-// for other colors (user defined), the defined value is the
-// html color syntax in .kicad_pcb files
-// and R<integer>G<integer>B<integer> In gbrjob file.
-static FAB_LAYER_COLOR solderMaskColors[]  =
+// A list of available colors for solder mask and silkscreen.
+// These names are used in .gbrjob file, so they are not fully free.  Use only what is allowed in
+// .gbrjob files.
+// For other colors (user defined), the defined value is the html color syntax in .kicad_pcb files
+// and R<integer>G<integer>B<integer> in .gbrjob file.
+static FAB_LAYER_COLOR gbrjobColors[]  =
 {
     { NotSpecifiedPrm(),      wxColor(  80,  80,  80 ) },  // Not specified, not in .gbrjob file
     { _HKI( "Green" ),        wxColor(  60, 150,  80 ) },  // used in .gbrjob file
@@ -68,35 +66,61 @@ static FAB_LAYER_COLOR solderMaskColors[]  =
     { _HKI( "Black" ),        wxColor(  20,  20,  20 ) },  // used in .gbrjob file
     { _HKI( "White" ),        wxColor( 200, 200, 200 ) },  // used in .gbrjob file
     { _HKI( "Yellow" ),       wxColor( 128, 128,   0 ) },  // used in .gbrjob file
-    { _HKI( "User defined" ), wxColor( 128, 128, 128 ) }   // free. the name is a dummy name here
+    { _HKI( "User defined" ), wxColor( 128, 128, 128 ) }   // Free; the name is a dummy name here
 };
 
 
-wxArrayString GetCopperFinishStandardList( bool aTranslate )
+// These are used primarily as a source for the 3D renderer.  They are not (at present) written
+// to the .gbrjob file.
+static FAB_LAYER_COLOR dielectricColors[] =
+{
+    { NotSpecifiedPrm(),          wxColor(  80,  80,  80, 255 ) },
+    { _HKI( "FR4 natural" ),      wxColor( 109, 116,  75, 212 ) },
+    { _HKI( "PTFE natural" ),     wxColor( 252, 252, 250, 230 ) },
+    { _HKI( "Polyimide" ),        wxColor( 205, 130,   0, 170 ) },
+    { _HKI( "Phenolic natural" ), wxColor(  92,  17,   6, 230 ) },
+    { _HKI( "Aluminum" ),         wxColor( 213, 213, 213, 255 ) },
+    { _HKI( "User defined" ),     wxColor( 128, 128, 128, 212 ) }
+};
+
+
+wxArrayString GetStandardCopperFinishes( bool aTranslate )
 {
     wxArrayString list;
 
-    for( unsigned ii = 0; ii < arrayDim( CopperFinishType ); ii++ )
-        list.Add( aTranslate ? wxGetTranslation( CopperFinishType[ii] ) : CopperFinishType[ii] );
+    for( unsigned ii = 0; ii < arrayDim( copperFinishType ); ii++ )
+        list.Add( aTranslate ? wxGetTranslation( copperFinishType[ii] ) : copperFinishType[ii] );
 
     return list;
 }
 
 
-const FAB_LAYER_COLOR* GetColorStandardList()
+const FAB_LAYER_COLOR* GetStandardColors( BOARD_STACKUP_ITEM_TYPE aType )
 {
-    return solderMaskColors;
+    switch( aType )
+    {
+    case BS_ITEM_TYPE_SILKSCREEN: return gbrjobColors;
+    case BS_ITEM_TYPE_SOLDERMASK: return gbrjobColors;
+    case BS_ITEM_TYPE_DIELECTRIC: return dielectricColors;
+    default:                      return nullptr;
+    }
 }
 
 
-int GetColorStandardListCount()
+int GetStandardColorCount( BOARD_STACKUP_ITEM_TYPE aType )
 {
-    return arrayDim( solderMaskColors );
+    switch( aType )
+    {
+    case BS_ITEM_TYPE_SILKSCREEN: return arrayDim( gbrjobColors );
+    case BS_ITEM_TYPE_SOLDERMASK: return arrayDim( gbrjobColors );
+    case BS_ITEM_TYPE_DIELECTRIC: return arrayDim( dielectricColors );
+    default:                      return 0;
+    }
 }
 
 
-int GetColorUserDefinedListIdx()
+int GetColorUserDefinedListIdx( BOARD_STACKUP_ITEM_TYPE aType )
 {
     // this is the last item in list
-    return GetColorStandardListCount() - 1;
+    return GetStandardColorCount( aType ) - 1;
 }
