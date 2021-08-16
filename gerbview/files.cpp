@@ -192,7 +192,9 @@ bool GERBVIEW_FRAME::LoadGerberFiles( const wxString& aFullFileName )
 
     bool isFirstFile = GetImagesList()->GetLoadedImageCount() == 0;
 
-    bool success = LoadListOfGerberAndDrillFiles( currentPath, filenamesList );
+    // 0 is gerber files
+    std::vector<int> fileTypesVec( filenamesList.Count(), 0 );
+    bool success = LoadListOfGerberAndDrillFiles( currentPath, filenamesList, &fileTypesVec );
 
     // Auto zoom is only applied if there is only one file loaded
     if( isFirstFile )
@@ -259,8 +261,7 @@ bool GERBVIEW_FRAME::LoadListOfGerberAndDrillFiles( const wxString& aPath,
 
         if( !progress && ( aFilenameList.GetCount() > 1 ) )
         {
-            progress = std::make_unique<WX_PROGRESS_REPORTER>( this,
-                                                               _( "Loading Gerber files..." ), 1,
+            progress = std::make_unique<WX_PROGRESS_REPORTER>( this, _( "Loading files..." ), 1,
                                                                false );
             progress->SetMaxProgress( aFilenameList.GetCount() - 1 );
             progress->Report( wxString::Format( _("Loading %u/%zu %s..." ),
@@ -303,7 +304,7 @@ bool GERBVIEW_FRAME::LoadListOfGerberAndDrillFiles( const wxString& aPath,
         {
             if( aFileType && ( *aFileType )[ii] == 1 )
             {
-                if( LoadExcellonFiles( filename.GetFullPath() ) )
+                if( Read_EXCELLON_File( filename.GetFullPath() ) )
                 {
                     UpdateFileHistory( filename.GetFullPath(), &m_drillFileHistory );
 
@@ -404,70 +405,20 @@ bool GERBVIEW_FRAME::LoadExcellonFiles( const wxString& aFullFileName )
         m_mruPath = currentPath;
     }
 
-    // Read Excellon drill files: each file is loaded on a new GerbView layer
-    bool success = true;
-    int layer = GetActiveLayer();
+    // Set the busy cursor
+    wxBusyCursor wait;
 
-    // Manage errors when loading files
-    wxString msg;
-    WX_STRING_REPORTER reporter( &msg );
+    bool isFirstFile = GetImagesList()->GetLoadedImageCount() == 0;
 
-    for( unsigned ii = 0; ii < filenamesList.GetCount(); ii++ )
+    // 1 is drill files
+    std::vector<int> fileTypesVec( filenamesList.Count(), 1 );
+    bool success = LoadListOfGerberAndDrillFiles( currentPath, filenamesList, &fileTypesVec );
+
+    // Auto zoom is only applied if there is only one file loaded
+    if( isFirstFile )
     {
-        filename = filenamesList[ii];
-
-        if( !filename.IsAbsolute() )
-            filename.SetPath( currentPath );
-
-        m_lastFileName = filename.GetFullPath();
-
-        layer = getNextAvailableLayer();
-
-        if( layer == NO_AVAILABLE_LAYERS )
-        {
-            success = false;
-            reporter.Report( MSG_NO_MORE_LAYER, RPT_SEVERITY_ERROR );
-
-            // Report the name of not loaded files:
-            while( ii < filenamesList.GetCount() )
-            {
-                filename = filenamesList[ii++];
-                wxString txt = wxString::Format( MSG_NOT_LOADED, filename.GetFullName() );
-                reporter.Report( txt, RPT_SEVERITY_ERROR );
-            }
-            break;
-        }
-        else
-        {
-            SetActiveLayer( layer, false );
-
-            if( Read_EXCELLON_File( filename.GetFullPath() ) )
-            {
-                // Update the list of recent drill files.
-                UpdateFileHistory( filename.GetFullPath(), &m_drillFileHistory );
-            }
-            else
-            {
-                wxString txt = wxString::Format( MSG_NOT_LOADED, filename.GetFullName() );
-                reporter.Report( txt, RPT_SEVERITY_ERROR );
-            }
-        }
+        Zoom_Automatique( false );
     }
-
-    if( !success )
-    {
-        HTML_MESSAGE_BOX mbox( this, _( "Errors" ) );
-        mbox.ListSet( msg );
-        mbox.ShowModal();
-    }
-
-    Zoom_Automatique( false );
-
-    // Synchronize layers tools with actual active layer:
-    ReFillLayerWidget();
-    SetActiveLayer( GetActiveLayer() );
-    m_LayersManager->UpdateLayerIcons();
-    syncLayerBox();
 
     return success;
 }

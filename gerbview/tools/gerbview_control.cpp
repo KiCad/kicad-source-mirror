@@ -54,7 +54,6 @@ void GERBVIEW_CONTROL::Reset( RESET_REASON aReason )
 int GERBVIEW_CONTROL::OpenGerber( const TOOL_EVENT& aEvent )
 {
     m_frame->LoadGerberFiles( wxEmptyString );
-    // loadListOfGerberAndDrillFiles() refreshes the canvas
 
     return 0;
 }
@@ -63,7 +62,6 @@ int GERBVIEW_CONTROL::OpenGerber( const TOOL_EVENT& aEvent )
 int GERBVIEW_CONTROL::OpenDrillFile( const TOOL_EVENT& aEvent )
 {
     m_frame->LoadExcellonFiles( wxEmptyString );
-    canvas()->Refresh();
 
     return 0;
 }
