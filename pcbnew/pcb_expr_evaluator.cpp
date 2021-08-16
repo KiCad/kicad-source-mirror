@@ -98,8 +98,8 @@ static void existsOnLayer( LIBEVAL::CONTEXT* aCtx, void *self )
         return;
     }
 
-    wxString     layerName = arg->AsString();
-    wxPGChoices& layerMap = ENUM_MAP<PCB_LAYER_ID>::Instance().Choices();
+    const wxString& layerName = arg->AsString();
+    wxPGChoices&    layerMap = ENUM_MAP<PCB_LAYER_ID>::Instance().Choices();
 
     if( aCtx->HasErrorCallback() )
     {
@@ -881,24 +881,39 @@ public:
         LIBEVAL::VALUE( double( aLayer ) )
     {};
 
-    virtual bool EqualTo( const VALUE* b ) const override
+    virtual bool EqualTo( LIBEVAL::CONTEXT* aCtx, const VALUE* b ) const override
     {
         // For boards with user-defined layer names there will be 2 entries for each layer
         // in the ENUM_MAP: one for the canonical layer name and one for the user layer name.
         // We need to check against both.
 
-        wxPGChoices& layerMap = ENUM_MAP<PCB_LAYER_ID>::Instance().Choices();
-        PCB_LAYER_ID layerId = ToLAYER_ID( (int) AsDouble() );
+        wxPGChoices&                 layerMap = ENUM_MAP<PCB_LAYER_ID>::Instance().Choices();
+        const wxString&              layerName = b->AsString();
+        BOARD*                       board = static_cast<PCB_EXPR_CONTEXT*>( aCtx )->GetBoard();
+        std::unique_lock<std::mutex> cacheLock( board->m_CachesMutex );
+        auto                         i = board->m_LayerExpressionCache.find( layerName );
+        LSET                         mask;
 
-        for( unsigned ii = 0; ii < layerMap.GetCount(); ++ii )
+        if( i == board->m_LayerExpressionCache.end() )
         {
-            wxPGChoiceEntry& entry = layerMap[ii];
+            for( unsigned ii = 0; ii < layerMap.GetCount(); ++ii )
+            {
+                wxPGChoiceEntry& entry = layerMap[ii];
 
-            if( entry.GetValue() == layerId && entry.GetText().Matches( b->AsString() ) )
-                return true;
+                if( entry.GetText().Matches( layerName ) )
+                    mask.set( ToLAYER_ID( entry.GetValue() ) );
+            }
+
+            board->m_LayerExpressionCache[ layerName ] = mask;
+        }
+        else
+        {
+            mask = i->second;
         }
 
-        return false;
+        PCB_LAYER_ID layerId = ToLAYER_ID( (int) AsDouble() );
+
+        return mask.test( layerId );
     }
 };
 
@@ -982,6 +997,17 @@ LIBEVAL::VALUE PCB_EXPR_NETNAME_REF::GetValue( LIBEVAL::CONTEXT* aCtx )
 }
 
 
+LIBEVAL::VALUE PCB_EXPR_TYPE_REF::GetValue( LIBEVAL::CONTEXT* aCtx )
+{
+    BOARD_ITEM* item = GetObject( aCtx );
+
+    if( !item )
+        return LIBEVAL::VALUE();
+
+    return LIBEVAL::VALUE( ENUM_MAP<KICAD_T>::Instance().ToString( item->Type() ) );
+}
+
+
 LIBEVAL::FUNC_CALL_REF PCB_EXPR_UCODE::CreateFuncCall( const wxString& aName )
 {
     PCB_EXPR_BUILTIN_FUNCTIONS& registry = PCB_EXPR_BUILTIN_FUNCTIONS::Instance();
@@ -1013,6 +1039,15 @@ std::unique_ptr<LIBEVAL::VAR_REF> PCB_EXPR_UCODE::CreateVarRef( const wxString& 
             return std::make_unique<PCB_EXPR_NETNAME_REF>( 0 );
         else if( aVar == "B" )
             return std::make_unique<PCB_EXPR_NETNAME_REF>( 1 );
+        else
+            return nullptr;
+    }
+    else if( aField.CmpNoCase( "Type" ) == 0 )
+    {
+        if( aVar == "A" )
+            return std::make_unique<PCB_EXPR_TYPE_REF>( 0 );
+        else if( aVar == "B" )
+            return std::make_unique<PCB_EXPR_TYPE_REF>( 1 );
         else
             return nullptr;
     }
@@ -1069,6 +1104,15 @@ std::unique_ptr<LIBEVAL::VAR_REF> PCB_EXPR_UCODE::CreateVarRef( const wxString& 
         vref->SetType( LIBEVAL::VT_PARSE_ERROR );
 
     return std::move( vref );
+}
+
+
+BOARD* PCB_EXPR_CONTEXT::GetBoard() const
+{
+    if( m_items[0] )
+        return m_items[0]->GetBoard();
+
+    return nullptr;
 }
 
 

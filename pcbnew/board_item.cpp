@@ -47,10 +47,24 @@ wxString BOARD_ITEM::ShowShape( SHAPE_T aShape )
 }
 
 
-BOARD* BOARD_ITEM::GetBoard() const
+const BOARD* BOARD_ITEM::GetBoard() const
 {
     if( Type() == PCB_T )
-        return (BOARD*) this;
+        return static_cast<const BOARD*>( this );
+
+    BOARD_ITEM* parent = GetParent();
+
+    if( parent )
+        return parent->GetBoard();
+
+    return nullptr;
+}
+
+
+BOARD* BOARD_ITEM::GetBoard()
+{
+    if( Type() == PCB_T )
+        return static_cast<BOARD*>( this );
 
     BOARD_ITEM* parent = GetParent();
 
@@ -72,7 +86,7 @@ bool BOARD_ITEM::IsLocked() const
 
 wxString BOARD_ITEM::GetLayerName() const
 {
-    BOARD*  board = GetBoard();
+    const BOARD* board = GetBoard();
 
     if( board )
         return board->GetLayerName( m_layer );
@@ -84,8 +98,8 @@ wxString BOARD_ITEM::GetLayerName() const
 
 wxString BOARD_ITEM::layerMaskDescribe() const
 {
-    BOARD* board = GetBoard();
-    LSET   layers = GetLayerSet();
+    const BOARD* board = GetBoard();
+    LSET         layers = GetLayerSet();
 
     // Try to be smart and useful.  Check all copper first.
     if( layers[F_Cu] && layers[B_Cu] )

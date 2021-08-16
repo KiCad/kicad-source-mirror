@@ -215,7 +215,7 @@ bool PAD::FlashLayer( int aLayer ) const
     if( aLayer == UNDEFINED_LAYER )
         return true;
 
-    BOARD* board = GetBoard();
+    const BOARD* board = GetBoard();
 
     if( !board )
         return false;
@@ -316,8 +316,8 @@ void PAD::BuildEffectiveShapes( PCB_LAYER_ID aLayer ) const
     if( !m_shapesDirty )
         return;
 
-    BOARD* board = GetBoard();
-    int    maxError = board ? board->GetDesignSettings().m_MaxError : ARC_HIGH_DEF;
+    const BOARD* board = GetBoard();
+    int          maxError = board ? board->GetDesignSettings().m_MaxError : ARC_HIGH_DEF;
 
     m_effectiveShape = std::make_shared<SHAPE_COMPOUND>();
     m_effectiveHoleShape = nullptr;
@@ -489,8 +489,8 @@ void PAD::BuildEffectivePolygon() const
     if( !m_polyDirty )
         return;
 
-    BOARD* board = GetBoard();
-    int    maxError = board ? board->GetDesignSettings().m_MaxError : ARC_HIGH_DEF;
+    const BOARD* board = GetBoard();
+    int          maxError = board ? board->GetDesignSettings().m_MaxError : ARC_HIGH_DEF;
 
     // Polygon
     m_effectivePolygon = std::make_shared<SHAPE_POLY_SET>();
@@ -719,7 +719,7 @@ int PAD::GetSolderMaskMargin() const
 
         if( margin == 0 )
         {
-            BOARD* brd = GetBoard();
+            const BOARD* brd = GetBoard();
 
             if( brd )
                 margin = brd->GetDesignSettings().m_SolderMaskMargin;
@@ -1234,7 +1234,7 @@ double PAD::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
 
     PCB_PAINTER*         painter = static_cast<PCB_PAINTER*>( aView->GetPainter() );
     PCB_RENDER_SETTINGS* renderSettings = painter->GetSettings();
-    BOARD*               board = GetBoard();
+    const BOARD*         board = GetBoard();
     LSET                 visible = LSET::AllLayersMask();
 
     // Meta control for hiding all pads

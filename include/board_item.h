@@ -309,7 +309,8 @@ public:
     /**
      * Return the #BOARD in which this #BOARD_ITEM resides, or NULL if none.
      */
-    virtual BOARD* GetBoard() const;
+    virtual const BOARD* GetBoard() const;
+    virtual BOARD* GetBoard();
 
     /**
      * Return the name of the PCB layer on which the item resides.

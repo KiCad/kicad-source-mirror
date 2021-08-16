@@ -231,7 +231,7 @@ DRC_RULE* DRC_RULES_PARSER::parseDRC_RULE()
 
         default:
             msg.Printf( _( "Unrecognized item '%s'.| Expected %s." ), FromUTF8(),
-                           "'constraint', 'condition', 'disallow'" );
+                           "constraint, condition or disallow" );
             reportError( msg );
             parseUnknown();
         }
@@ -246,51 +246,55 @@ DRC_RULE* DRC_RULES_PARSER::parseDRC_RULE()
 
 void DRC_RULES_PARSER::parseConstraint( DRC_RULE* aRule )
 {
-    DRC_CONSTRAINT constraint;
-
-    int       value;
-    wxString  msg;
+    DRC_CONSTRAINT c;
+    int            value;
+    wxString       msg;
 
     T token = NextTok();
 
     if( (int) token == DSN_RIGHT || token == T_EOF )
     {
         msg.Printf( _( "Missing constraint type.|  Expected %s." ),
-                    "'clearance', 'hole_clearance', 'edge_clearance', 'hole', 'hole_to_hole', "
-                    "'courtyard_clearance', 'silk_clearance', 'track_width', 'annular_width', "
-                    "'disallow', 'length', 'skew', 'via_count', 'diff_pair_gap' or "
-                    "'diff_pair_uncoupled'" );
+                    "clearance, hole_clearance, edge_clearance, hole, hole_to_hole, "
+                    "courtyard_clearance, silk_clearance, track_width, annular_width, "
+                    "disallow, length, skew, via_count, diff_pair_gap or diff_pair_uncoupled" );
         reportError( msg );
         return;
     }
 
     switch( token )
     {
-    case T_clearance:           constraint.m_Type = CLEARANCE_CONSTRAINT;                break;
-    case T_hole_clearance:      constraint.m_Type = HOLE_CLEARANCE_CONSTRAINT;           break;
-    case T_edge_clearance:      constraint.m_Type = EDGE_CLEARANCE_CONSTRAINT;           break;
+    case T_clearance:                 c.m_Type = CLEARANCE_CONSTRAINT;                 break;
+    case T_hole_clearance:            c.m_Type = HOLE_CLEARANCE_CONSTRAINT;            break;
+    case T_edge_clearance:            c.m_Type = EDGE_CLEARANCE_CONSTRAINT;            break;
     case T_hole:  // legacy token
-    case T_hole_size:           constraint.m_Type = HOLE_SIZE_CONSTRAINT;                break;
-    case T_hole_to_hole:        constraint.m_Type = HOLE_TO_HOLE_CONSTRAINT;             break;
-    case T_courtyard_clearance: constraint.m_Type = COURTYARD_CLEARANCE_CONSTRAINT;      break;
-    case T_silk_clearance:      constraint.m_Type = SILK_CLEARANCE_CONSTRAINT;           break;
-    case T_track_width:         constraint.m_Type = TRACK_WIDTH_CONSTRAINT;              break;
-    case T_annular_width:       constraint.m_Type = ANNULAR_WIDTH_CONSTRAINT;            break;
-    case T_disallow:            constraint.m_Type = DISALLOW_CONSTRAINT;                 break;
-    case T_length:              constraint.m_Type = LENGTH_CONSTRAINT;                   break;
-    case T_skew:                constraint.m_Type = SKEW_CONSTRAINT;                     break;
-    case T_via_count:           constraint.m_Type = VIA_COUNT_CONSTRAINT;                break;
-    case T_diff_pair_gap:       constraint.m_Type = DIFF_PAIR_GAP_CONSTRAINT;            break;
-    case T_diff_pair_uncoupled: constraint.m_Type = DIFF_PAIR_MAX_UNCOUPLED_CONSTRAINT;  break;
+    case T_hole_size:                 c.m_Type = HOLE_SIZE_CONSTRAINT;                 break;
+    case T_hole_to_hole:              c.m_Type = HOLE_TO_HOLE_CONSTRAINT;              break;
+    case T_courtyard_clearance:       c.m_Type = COURTYARD_CLEARANCE_CONSTRAINT;       break;
+    case T_silk_clearance:            c.m_Type = SILK_CLEARANCE_CONSTRAINT;            break;
+    case T_track_width:               c.m_Type = TRACK_WIDTH_CONSTRAINT;               break;
+    case T_annular_width:             c.m_Type = ANNULAR_WIDTH_CONSTRAINT;             break;
+    case T_disallow:                  c.m_Type = DISALLOW_CONSTRAINT;                  break;
+    case T_length:                    c.m_Type = LENGTH_CONSTRAINT;                    break;
+    case T_skew:                      c.m_Type = SKEW_CONSTRAINT;                      break;
+    case T_via_count:                 c.m_Type = VIA_COUNT_CONSTRAINT;                 break;
+    case T_diff_pair_gap:             c.m_Type = DIFF_PAIR_GAP_CONSTRAINT;             break;
+    case T_diff_pair_uncoupled:       c.m_Type = DIFF_PAIR_MAX_UNCOUPLED_CONSTRAINT;   break;
     default:
         msg.Printf( _( "Unrecognized item '%s'.| Expected %s." ), FromUTF8(),
-                    "'clearance', 'hole_clearance', 'edge_clearance', 'hole_size', hole_to_hole',"
-                    "'courtyard_clearance', 'silk_clearance', 'track_width', 'annular_width', "
-                    "'disallow', 'length', 'skew', 'diff_pair_gap' or 'diff_pair_uncoupled'." );
+                    "clearance, hole_clearance, edge_clearance, hole_size, hole_to_hole, "
+                    "courtyard_clearance, silk_clearance, track_width, annular_width, "
+                    "disallow, length, skew, diff_pair_gap or diff_pair_uncoupled." );
         reportError( msg );
     }
 
-    if( constraint.m_Type == DISALLOW_CONSTRAINT )
+    if( aRule->FindConstraint( c.m_Type ) )
+    {
+        msg.Printf( _( "Rule already has a '%s' constraint." ), FromUTF8() );
+        reportError( msg );
+    }
+
+    if( c.m_Type == DISALLOW_CONSTRAINT )
     {
         for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
         {
@@ -299,16 +303,16 @@ void DRC_RULES_PARSER::parseConstraint( DRC_RULE* aRule )
 
             switch( token )
             {
-            case T_track:      constraint.m_DisallowFlags |= DRC_DISALLOW_TRACKS;     break;
-            case T_via:        constraint.m_DisallowFlags |= DRC_DISALLOW_VIAS;       break;
-            case T_micro_via:  constraint.m_DisallowFlags |= DRC_DISALLOW_MICRO_VIAS; break;
-            case T_buried_via: constraint.m_DisallowFlags |= DRC_DISALLOW_BB_VIAS;    break;
-            case T_pad:        constraint.m_DisallowFlags |= DRC_DISALLOW_PADS;       break;
-            case T_zone:       constraint.m_DisallowFlags |= DRC_DISALLOW_ZONES;      break;
-            case T_text:       constraint.m_DisallowFlags |= DRC_DISALLOW_TEXTS;      break;
-            case T_graphic:    constraint.m_DisallowFlags |= DRC_DISALLOW_GRAPHICS;   break;
-            case T_hole:       constraint.m_DisallowFlags |= DRC_DISALLOW_HOLES;      break;
-            case T_footprint:  constraint.m_DisallowFlags |= DRC_DISALLOW_FOOTPRINTS; break;
+            case T_track:      c.m_DisallowFlags |= DRC_DISALLOW_TRACKS;     break;
+            case T_via:        c.m_DisallowFlags |= DRC_DISALLOW_VIAS;       break;
+            case T_micro_via:  c.m_DisallowFlags |= DRC_DISALLOW_MICRO_VIAS; break;
+            case T_buried_via: c.m_DisallowFlags |= DRC_DISALLOW_BB_VIAS;    break;
+            case T_pad:        c.m_DisallowFlags |= DRC_DISALLOW_PADS;       break;
+            case T_zone:       c.m_DisallowFlags |= DRC_DISALLOW_ZONES;      break;
+            case T_text:       c.m_DisallowFlags |= DRC_DISALLOW_TEXTS;      break;
+            case T_graphic:    c.m_DisallowFlags |= DRC_DISALLOW_GRAPHICS;   break;
+            case T_hole:       c.m_DisallowFlags |= DRC_DISALLOW_HOLES;      break;
+            case T_footprint:  c.m_DisallowFlags |= DRC_DISALLOW_FOOTPRINTS; break;
 
             case T_EOF:
                 reportError( _( "Missing ')'." ) );
@@ -316,8 +320,8 @@ void DRC_RULES_PARSER::parseConstraint( DRC_RULE* aRule )
 
             default:
                 msg.Printf( _( "Unrecognized item '%s'.| Expected %s." ), FromUTF8(),
-                            "'track', 'via', 'micro_via', 'buried_via', 'pad', 'zone', 'text', "
-                            "'graphic', 'hole' or 'footprint'." );
+                            "track, via, micro_via, buried_via, pad, zone, text, graphic, hole "
+                            "or footprint." );
                 reportError( msg );
                 break;
             }
@@ -326,7 +330,7 @@ void DRC_RULES_PARSER::parseConstraint( DRC_RULE* aRule )
         if( (int) CurTok() != DSN_RIGHT )
             reportError( _( "Missing ')'." ) );
 
-        aRule->AddConstraint( constraint );
+        aRule->AddConstraint( c );
         return;
     }
 
@@ -349,12 +353,11 @@ void DRC_RULES_PARSER::parseConstraint( DRC_RULE* aRule )
             }
 
             parseValueWithUnits( FromUTF8(), value );
-            constraint.m_Value.SetMin( value );
+            c.m_Value.SetMin( value );
 
             if( (int) NextTok() != DSN_RIGHT )
             {
-                reportError( wxString::Format( _( "Unrecognized item '%s'." ),
-                                               FromUTF8() ) );
+                reportError( wxString::Format( _( "Unrecognized item '%s'." ), FromUTF8() ) );
                 parseUnknown();
             }
 
@@ -370,12 +373,11 @@ void DRC_RULES_PARSER::parseConstraint( DRC_RULE* aRule )
             }
 
             parseValueWithUnits( FromUTF8(), value );
-            constraint.m_Value.SetMax( value );
+            c.m_Value.SetMax( value );
 
             if( (int) NextTok() != DSN_RIGHT )
             {
-                reportError( wxString::Format( _( "Unrecognized item '%s'." ),
-                                               FromUTF8() ) );
+                reportError( wxString::Format( _( "Unrecognized item '%s'." ), FromUTF8() ) );
                 parseUnknown();
             }
 
@@ -391,12 +393,11 @@ void DRC_RULES_PARSER::parseConstraint( DRC_RULE* aRule )
             }
 
             parseValueWithUnits( FromUTF8(), value );
-            constraint.m_Value.SetOpt( value );
+            c.m_Value.SetOpt( value );
 
             if( (int) NextTok() != DSN_RIGHT )
             {
-                reportError( wxString::Format( _( "Unrecognized item '%s'." ),
-                                               FromUTF8() ) );
+                reportError( wxString::Format( _( "Unrecognized item '%s'." ), FromUTF8() ) );
                 parseUnknown();
             }
 
@@ -409,7 +410,7 @@ void DRC_RULES_PARSER::parseConstraint( DRC_RULE* aRule )
         default:
             msg.Printf( _( "Unrecognized item '%s'.| Expected %s." ),
                         FromUTF8(),
-                        "'min', 'max', 'opt'" );
+                        "min, max or opt" );
             reportError( msg );
             parseUnknown();
         }
@@ -418,7 +419,7 @@ void DRC_RULES_PARSER::parseConstraint( DRC_RULE* aRule )
     if( (int) CurTok() != DSN_RIGHT )
         reportError( _( "Missing ')'." ) );
 
-    aRule->AddConstraint( constraint );
+    aRule->AddConstraint( c );
 }
 
 
@@ -486,8 +487,7 @@ LSET DRC_RULES_PARSER::parseLayer()
 
         if( !retVal.any() )
         {
-            reportError( wxString::Format( _( "Unrecognized layer '%s'." ),
-                                           layerName ) );
+            reportError( wxString::Format( _( "Unrecognized layer '%s'." ), layerName ) );
             retVal.set( Rescue );
         }
     }

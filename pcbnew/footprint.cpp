@@ -681,7 +681,7 @@ const EDA_RECT FOOTPRINT::GetBoundingBox() const
 
 const EDA_RECT FOOTPRINT::GetBoundingBox( bool aIncludeText, bool aIncludeInvisibleText ) const
 {
-    BOARD* board = GetBoard();
+    const BOARD* board = GetBoard();
 
     if( board )
     {
@@ -786,7 +786,7 @@ const EDA_RECT FOOTPRINT::GetBoundingBox( bool aIncludeText, bool aIncludeInvisi
 
 SHAPE_POLY_SET FOOTPRINT::GetBoundingHull() const
 {
-    BOARD* board = GetBoard();
+    const BOARD* board = GetBoard();
 
     if( board )
     {
@@ -1349,7 +1349,7 @@ const BOX2I FOOTPRINT::ViewBBox() const
 
     // Add the Clearance shape size: (shape around the pads when the clearance is shown.  Not
     // optimized, but the draw cost is small (perhaps smaller than optimization).
-    BOARD* board = GetBoard();
+    const BOARD* board = GetBoard();
 
     if( board )
     {

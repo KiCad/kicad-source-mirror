@@ -206,8 +206,8 @@ void PAD::addPadPrimitivesToPolygon( SHAPE_POLY_SET* aMergedPolygon, PCB_LAYER_I
 void PAD::MergePrimitivesAsPolygon( SHAPE_POLY_SET* aMergedPolygon, PCB_LAYER_ID aLayer,
                                     ERROR_LOC aErrorLoc ) const
 {
-    BOARD* board = GetBoard();
-    int    maxError = board ? board->GetDesignSettings().m_MaxError: ARC_HIGH_DEF;
+    const BOARD* board = GetBoard();
+    int          maxError = board ? board->GetDesignSettings().m_MaxError : ARC_HIGH_DEF;
 
     aMergedPolygon->RemoveAllContours();
 

@@ -742,7 +742,7 @@ void PCB_PAINTER::draw( const PCB_ARC* aArc, int aLayer )
 
 void PCB_PAINTER::draw( const PCB_VIA* aVia, int aLayer )
 {
-    BOARD*                 board = aVia->GetBoard();
+    const BOARD*           board = aVia->GetBoard();
     BOARD_DESIGN_SETTINGS& bds = board->GetDesignSettings();
     COLOR4D                color = m_pcbSettings.GetColor( aVia, aLayer );
     VECTOR2D               center( aVia->GetStart() );
@@ -897,7 +897,7 @@ void PCB_PAINTER::draw( const PCB_VIA* aVia, int aLayer )
 
 void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
 {
-    BOARD*                 board = aPad->GetBoard();
+    const BOARD*           board = aPad->GetBoard();
     BOARD_DESIGN_SETTINGS& bds = board->GetDesignSettings();
     COLOR4D                color = m_pcbSettings.GetColor( aPad, aLayer );
 

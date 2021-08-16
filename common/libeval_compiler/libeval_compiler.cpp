@@ -109,7 +109,7 @@ static const wxString formatOpName( int op )
 }
 
 
-bool VALUE::EqualTo( const VALUE* b ) const
+bool VALUE::EqualTo( CONTEXT* aCtx, const VALUE* b ) const
 {
     if( m_type == VT_UNDEFINED || b->m_type == VT_UNDEFINED )
         return false;
@@ -130,12 +130,12 @@ bool VALUE::EqualTo( const VALUE* b ) const
 }
 
 
-bool VALUE::NotEqualTo( const VALUE* b ) const
+bool VALUE::NotEqualTo( CONTEXT* aCtx, const VALUE* b ) const
 {
     if( m_type == VT_UNDEFINED || b->m_type == VT_UNDEFINED )
         return false;
 
-    return !EqualTo( b );
+    return !EqualTo( aCtx, b );
 }
 
 
@@ -1162,10 +1162,10 @@ void UOP::Exec( CONTEXT* ctx )
             result = arg1Value > arg2Value ? 1 : 0;
             break;
         case TR_OP_EQUAL:
-            result = arg1 && arg2 && arg1->EqualTo( arg2 ) ? 1 : 0;
+            result = arg1 && arg2 && arg1->EqualTo( ctx, arg2 ) ? 1 : 0;
             break;
         case TR_OP_NOT_EQUAL:
-            result = arg1 && arg2 && arg1->NotEqualTo( arg2 ) ? 1 : 0;
+            result = arg1 && arg2 && arg1->NotEqualTo( ctx, arg2 ) ? 1 : 0;
             break;
         case TR_OP_BOOL_AND:
             result = arg1Value != 0.0 && arg2Value != 0.0 ? 1 : 0;

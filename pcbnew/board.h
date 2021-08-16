@@ -211,7 +211,7 @@ public:
 
     void IncrementTimeStamp();
 
-    int GetTimeStamp() { return m_timeStamp; }
+    int GetTimeStamp() const { return m_timeStamp; }
 
     /**
      * Find out if the board is being used to hold a single footprint for editing/viewing.

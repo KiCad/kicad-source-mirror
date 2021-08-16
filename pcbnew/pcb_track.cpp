@@ -526,7 +526,7 @@ bool PCB_VIA::FlashLayer( int aLayer ) const
     if( aLayer == UNDEFINED_LAYER )
         return true;
 
-    BOARD* board = GetBoard();
+    const BOARD* board = GetBoard();
 
     if( !board )
         return false;
@@ -583,9 +583,8 @@ double PCB_TRACK::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
 
 const BOX2I PCB_TRACK::ViewBBox() const
 {
-    BOX2I bbox = GetBoundingBox();
-
-    BOARD* board = GetBoard();
+    BOX2I        bbox = GetBoundingBox();
+    const BOARD* board = GetBoard();
 
     if( board )
         bbox.Inflate( 2 * board->GetDesignSettings().GetBiggestClearanceValue() );
@@ -619,7 +618,7 @@ double PCB_VIA::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
 
     PCB_PAINTER*         painter = static_cast<PCB_PAINTER*>( aView->GetPainter() );
     PCB_RENDER_SETTINGS* renderSettings = painter->GetSettings();
-    BOARD*               board = GetBoard();
+    const BOARD*         board = GetBoard();
     LSET                 visible = LSET::AllLayersMask();
 
     // Meta control for hiding all vias
@@ -813,7 +812,7 @@ void PCB_TRACK::GetMsgPanelInfoBase_Common( EDA_DRAW_FRAME* aFrame,
 
 wxString PCB_VIA::layerMaskDescribe() const
 {
-    BOARD*       board = GetBoard();
+    const BOARD* board = GetBoard();
     PCB_LAYER_ID top_layer;
     PCB_LAYER_ID bottom_layer;
 

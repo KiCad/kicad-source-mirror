@@ -1181,9 +1181,9 @@ bool ZONE::BuildSmoothedPoly( SHAPE_POLY_SET& aSmoothedPoly, PCB_LAYER_ID aLayer
         return true;
     }
 
-    BOARD* board = GetBoard();
-    int    maxError = ARC_HIGH_DEF;
-    bool   keepExternalFillets = false;
+    const BOARD* board = GetBoard();
+    int          maxError = ARC_HIGH_DEF;
+    bool         keepExternalFillets = false;
 
     if( board )
     {
@@ -1294,8 +1294,8 @@ void ZONE::TransformSmoothedOutlineToPolygon( SHAPE_POLY_SET& aCornerBuffer, int
     // holes are linked to the main outline, so only one polygon is created.
     if( aClearance )
     {
-        BOARD* board = GetBoard();
-        int maxError = ARC_HIGH_DEF;
+        const BOARD* board = GetBoard();
+        int          maxError = ARC_HIGH_DEF;
 
         if( board )
             maxError = board->GetDesignSettings().m_MaxError;

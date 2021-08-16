@@ -32,7 +32,7 @@
 
 #include <libeval_compiler/libeval_compiler.h>
 
-
+class BOARD;
 class BOARD_ITEM;
 
 class PCB_EXPR_VAR_REF;
@@ -64,6 +64,8 @@ public:
         m_items[0] = a;
         m_items[1] = b;
     }
+
+    BOARD* GetBoard() const;
 
     BOARD_ITEM* GetItem( int index ) const
     {
@@ -137,6 +139,20 @@ class PCB_EXPR_NETNAME_REF : public PCB_EXPR_VAR_REF
 {
 public:
     PCB_EXPR_NETNAME_REF( int aItemIndex ) :
+        PCB_EXPR_VAR_REF( aItemIndex )
+    {
+        SetType( LIBEVAL::VT_STRING );
+        //printf("*** CreateVarRef %p %d\n", this, aItemIndex );
+    }
+
+    LIBEVAL::VALUE GetValue( LIBEVAL::CONTEXT* aCtx ) override;
+};
+
+
+class PCB_EXPR_TYPE_REF : public PCB_EXPR_VAR_REF
+{
+public:
+    PCB_EXPR_TYPE_REF( int aItemIndex ) :
         PCB_EXPR_VAR_REF( aItemIndex )
     {
         SetType( LIBEVAL::VT_STRING );

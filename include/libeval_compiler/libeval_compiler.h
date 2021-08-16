@@ -216,10 +216,10 @@ public:
         return m_valueStr;
     }
 
-    virtual bool EqualTo( const VALUE* b ) const;
+    virtual bool EqualTo( CONTEXT* aCtx, const VALUE* b ) const;
 
     // NB: this is not an inverse of EqualTo as they both return false for undefined values.
-    virtual bool NotEqualTo( const VALUE* b ) const;
+    virtual bool NotEqualTo( CONTEXT* aCtx, const VALUE* b ) const;
 
     VAR_TYPE_T GetType() const { return m_type; };
 
@@ -274,15 +274,12 @@ public:
 
     virtual ~CONTEXT()
     {
-        for( VALUE* value : m_ownedValues )
-            delete value;
     }
 
     VALUE* AllocValue()
     {
-        VALUE* value = new VALUE();
-        m_ownedValues.push_back( value );
-        return value;
+        m_ownedValues.emplace_back();
+        return &m_ownedValues.back();
     }
 
     void Push( VALUE* v )
@@ -316,7 +313,7 @@ public:
     void ReportError( const wxString& aErrorMsg );
 
 private:
-    std::vector<VALUE*> m_ownedValues;
+    std::vector<VALUE>  m_ownedValues;
     VALUE*              m_stack[100];       // std::stack not performant enough
     int                 m_stackPtr;
 

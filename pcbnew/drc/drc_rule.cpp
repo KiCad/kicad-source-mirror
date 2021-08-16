@@ -49,11 +49,14 @@ void DRC_RULE::AddConstraint( DRC_CONSTRAINT& aConstraint )
     m_Constraints.push_back( aConstraint );
 }
 
+
 OPT<DRC_CONSTRAINT> DRC_RULE::FindConstraint( DRC_CONSTRAINT_T aType )
 {
-    for( auto &c : m_Constraints)
+    for( DRC_CONSTRAINT& c : m_Constraints)
+    {
         if( c.m_Type == aType )
             return c;
+    }
 
     return OPT<DRC_CONSTRAINT>();
 }
