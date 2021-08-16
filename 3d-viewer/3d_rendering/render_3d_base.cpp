@@ -44,11 +44,12 @@
 const wxChar* RENDER_3D_BASE::m_logTrace = wxT( "KI_TRACE_3D_RENDER" );
 
 
-RENDER_3D_BASE::RENDER_3D_BASE( BOARD_ADAPTER& aBoardAdapter, CAMERA& aCamera ) :
+RENDER_3D_BASE::RENDER_3D_BASE( EDA_3D_CANVAS* aCanvas, BOARD_ADAPTER& aBoardAdapter, CAMERA& aCamera ) :
         m_boardAdapter( aBoardAdapter ),
         m_camera( aCamera )
 {
     wxLogTrace( m_logTrace, wxT( "RENDER_3D_BASE::RENDER_3D_BASE" ) );
+    m_canvas                = aCanvas;
     m_is_opengl_initialized = false;
     m_windowSize            = wxSize( -1, -1 );
     m_reloadRequested       = true;

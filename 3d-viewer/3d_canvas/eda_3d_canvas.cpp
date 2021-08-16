@@ -126,8 +126,8 @@ EDA_3D_CANVAS::EDA_3D_CANVAS( wxWindow* aParent, const int* aAttribList,
 
     m_is_currently_painting.clear();
 
-    m_3d_render_raytracing = new RENDER_3D_RAYTRACE( m_boardAdapter, m_camera );
-    m_3d_render_ogl_legacy = new RENDER_3D_LEGACY( m_boardAdapter, m_camera );
+    m_3d_render_raytracing = new RENDER_3D_RAYTRACE( this, m_boardAdapter, m_camera );
+    m_3d_render_ogl_legacy = new RENDER_3D_LEGACY( this, m_boardAdapter, m_camera );
 
     wxASSERT( m_3d_render_raytracing != nullptr );
     wxASSERT( m_3d_render_ogl_legacy != nullptr );

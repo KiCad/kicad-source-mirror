@@ -29,6 +29,7 @@
 #include <kiface_i.h>
 #include <tools/eda_3d_controller.h>
 #include "eda_3d_actions.h"
+#include <3d_rendering/legacy/render_3d_legacy.h>
 
 
 bool EDA_3D_CONTROLLER::Init()
@@ -217,11 +218,23 @@ int EDA_3D_CONTROLLER::ToggleVisibility( const TOOL_EVENT& aEvent )
     case FL_RENDER_RAYTRACING_REFRACTIONS:
     case FL_RENDER_RAYTRACING_REFLECTIONS:
     case FL_RENDER_RAYTRACING_ANTI_ALIASING:
+        if( m_boardAdapter->GetRenderEngine() == RENDER_ENGINE::OPENGL_LEGACY )
+            m_canvas->Request_refresh();
+        else
+            m_canvas->RenderRaytracingRequest();
+
+        break;
+
     case FL_FP_ATTRIBUTES_NORMAL:
     case FL_FP_ATTRIBUTES_NORMAL_INSERT:
     case FL_FP_ATTRIBUTES_VIRTUAL:
+        // Loading 3D shapes can be needed if not yet loaded
         if( m_boardAdapter->GetRenderEngine() == RENDER_ENGINE::OPENGL_LEGACY )
+        {
+            RENDER_3D_LEGACY* render = static_cast< RENDER_3D_LEGACY* > ( m_canvas->GetCurrentRender() );
+            render->Load3dModelsIfNeeded();
             m_canvas->Request_refresh();
+        }
         else
             m_canvas->RenderRaytracingRequest();
 

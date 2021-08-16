@@ -58,7 +58,7 @@ typedef std::map< wxString, MODEL_3D* > MAP_3DMODEL;
 class RENDER_3D_LEGACY : public RENDER_3D_BASE
 {
 public:
-    explicit RENDER_3D_LEGACY( BOARD_ADAPTER& aAdapter, CAMERA& aCamera );
+    explicit RENDER_3D_LEGACY( EDA_3D_CANVAS* aCanvas, BOARD_ADAPTER& aAdapter, CAMERA& aCamera );
 
     ~RENDER_3D_LEGACY();
 
@@ -71,6 +71,11 @@ public:
     {
         m_currentRollOverItem = aRollOverItem;
     }
+
+    /**
+     * Load footprint models if they are not already loaded, i.e. if m_3dModelMap is empty
+     */
+    void Load3dModelsIfNeeded();
 
 private:
     OPENGL_RENDER_LIST* generateHoles( const LIST_OBJECT2D& aListHolesObject2d,

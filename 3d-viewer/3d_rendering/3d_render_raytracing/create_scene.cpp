@@ -880,7 +880,7 @@ void RENDER_3D_RAYTRACE::Reload( REPORTER* aStatusReporter, REPORTER* aWarningRe
     if( aStatusReporter )
         aStatusReporter->Report( _( "Loading 3D models..." ) );
 
-    loadModels( m_objectContainer, aOnlyLoadCopperAndShapes );
+    load3DModels( m_objectContainer, aOnlyLoadCopperAndShapes );
 
 #ifdef PRINT_STATISTICS_3D_VIEWER
     unsigned stats_endLoad3DmodelsTime = GetRunningMicroSecs();
@@ -1283,10 +1283,17 @@ void RENDER_3D_RAYTRACE::addPadsAndVias()
 }
 
 
-void RENDER_3D_RAYTRACE::loadModels( CONTAINER_3D& aDstContainer, bool aSkipMaterialInformation )
+void RENDER_3D_RAYTRACE::load3DModels( CONTAINER_3D& aDstContainer, bool aSkipMaterialInformation )
 {
     if( !m_boardAdapter.GetBoard() )
         return;
+
+    if( !m_boardAdapter.GetFlag( FL_FP_ATTRIBUTES_NORMAL )
+      && !m_boardAdapter.GetFlag( FL_FP_ATTRIBUTES_NORMAL_INSERT )
+      && !m_boardAdapter.GetFlag( FL_FP_ATTRIBUTES_VIRTUAL ) )
+    {
+        return;
+    }
 
     // Go for all footprints
     for( FOOTPRINT* fp : m_boardAdapter.GetBoard()->Footprints() )

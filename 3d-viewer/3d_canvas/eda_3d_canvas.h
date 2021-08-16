@@ -97,6 +97,11 @@ public:
     }
 
     /**
+     * @return the current render ( a RENDER_3D_RAYTRACE* or a RENDER_3D_LEGACY* render )
+     */
+    RENDER_3D_BASE* GetCurrentRender() const { return m_3d_render; }
+
+    /**
      * Request to render the current view in Raytracing mode.
      */
     void RenderRaytracingRequest();
@@ -270,7 +275,6 @@ private:
     bool                   m_opengl_supports_raytracing;
     bool                   m_render_raytracing_was_requested;
 
-    CONTAINER_3D           m_3DShapes_container;      // Holds 3D shapes from footprints
     ACCELERATOR_3D*        m_accelerator3DShapes;    // used for mouse over searching
 
     BOARD_ITEM*            m_currentRollOverItem;

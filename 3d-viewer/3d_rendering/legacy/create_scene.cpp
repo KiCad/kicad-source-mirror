@@ -30,6 +30,8 @@
 #include <trigo.h>
 #include <project.h>
 #include <profile.h>        // To use GetRunningMicroSecs or another profiling utility
+#include <eda_3d_canvas.h>
+#include <eda_3d_viewer_frame.h>
 
 
 void RENDER_3D_LEGACY::addObjectTriangles( const FILLED_CIRCLE_2D* aFilledCircle,
@@ -864,6 +866,24 @@ void RENDER_3D_LEGACY::generateViasAndPads()
             delete layerTriangles;
         }
     }
+}
+
+
+void RENDER_3D_LEGACY::Load3dModelsIfNeeded()
+{
+    if( m_3dModelMap.size() > 0 )
+        return;
+
+    wxFrame* frame = dynamic_cast<EDA_3D_VIEWER_FRAME*>( m_canvas->GetParent() );
+
+    if( frame )
+    {
+        STATUSBAR_REPORTER activityReporter( frame->GetStatusBar(),
+                                             (int) EDA_3D_VIEWER_STATUSBAR::ACTIVITY );
+        load3dModels( &activityReporter );
+    }
+    else
+        load3dModels( nullptr );
 }
 
 

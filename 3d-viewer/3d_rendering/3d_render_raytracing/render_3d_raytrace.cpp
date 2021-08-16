@@ -44,8 +44,8 @@
 #include <wx/log.h>
 
 
-RENDER_3D_RAYTRACE::RENDER_3D_RAYTRACE( BOARD_ADAPTER& aAdapter, CAMERA& aCamera ) :
-    RENDER_3D_BASE( aAdapter, aCamera ),
+RENDER_3D_RAYTRACE::RENDER_3D_RAYTRACE( EDA_3D_CANVAS* aCanvas, BOARD_ADAPTER& aAdapter, CAMERA& aCamera ) :
+    RENDER_3D_BASE( aCanvas, aAdapter, aCamera ),
     m_postShaderSsao( aCamera )
 {
     wxLogTrace( m_logTrace, wxT( "RENDER_3D_RAYTRACE::RENDER_3D_RAYTRACE" ) );

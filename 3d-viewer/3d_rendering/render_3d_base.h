@@ -42,7 +42,7 @@
 class RENDER_3D_BASE
 {
 public:
-    explicit RENDER_3D_BASE( BOARD_ADAPTER& aBoardAdapter, CAMERA& aCamera );
+    explicit RENDER_3D_BASE( EDA_3D_CANVAS* aCanvas, BOARD_ADAPTER& aBoardAdapter, CAMERA& aCamera );
 
     virtual ~RENDER_3D_BASE() = 0;
 
@@ -97,6 +97,9 @@ protected:
      * Return a created busy indicator, if a factory has been set, else a null pointer.
      */
     std::unique_ptr<BUSY_INDICATOR> CreateBusyIndicator() const;
+
+    ///< the canvas to disply the scene
+    EDA_3D_CANVAS* m_canvas;
 
     ///< Settings reference in use for this render.
     BOARD_ADAPTER& m_boardAdapter;

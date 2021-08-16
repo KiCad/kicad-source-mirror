@@ -39,8 +39,8 @@
  */
 #define UNITS3D_TO_UNITSPCB (IU_PER_MM)
 
-RENDER_3D_LEGACY::RENDER_3D_LEGACY( BOARD_ADAPTER& aAdapter, CAMERA& aCamera ) :
-        RENDER_3D_BASE( aAdapter, aCamera )
+RENDER_3D_LEGACY::RENDER_3D_LEGACY( EDA_3D_CANVAS* aCanvas, BOARD_ADAPTER& aAdapter, CAMERA& aCamera ) :
+        RENDER_3D_BASE( aCanvas, aAdapter, aCamera )
 {
     wxLogTrace( m_logTrace, wxT( "RENDER_3D_LEGACY::RENDER_3D_LEGACY" ) );
 
