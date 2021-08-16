@@ -15,8 +15,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
-"PO-Revision-Date: 2021-08-15 06:42+0000\n"
-"Last-Translator: 서범기 <joonhoflow@naver.com>\n"
+"PO-Revision-Date: 2021-08-16 06:17+0000\n"
+"Last-Translator: Ji Yoon Choi <chichoon.choi@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
 "Language: ko\n"
@@ -1905,7 +1905,7 @@ msgstr "별명"
 #: common/dialogs/dialog_global_lib_table_config.cpp:39
 #, c-format
 msgid "Configure Global %s Library Table"
-msgstr "글로벌 %s 라이브러리 테이블 설정"
+msgstr "전역 %s 라이브러리 테이블 설정"
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:42
 #, c-format
@@ -1918,7 +1918,7 @@ msgid ""
 msgstr ""
 "KiCad는 라이브러리에 액세스하기 위해 새로운 %s 라이브러리 테이블을\n"
 "사용하여 처음으로 실행되었습니다.  KiCad가 %s 라이브러리에 액세스하려면\n"
-"글로벌 %s 라이브러리 테이블을 구성해야 합니다.\n"
+"전역 %s 라이브러리 테이블을 구성해야 합니다.\n"
 "아래 옵션 중 하나를 선택하십시오.\n"
 "어떤 옵션을 선택해야 할지 잘 모르겠으면 기본 선택 항목을 선택하십시오."
 
@@ -6019,7 +6019,7 @@ msgstr "PCB의 수정사항을 회로도에 반영하여 업데이트"
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:490
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:389
 msgid "Configure Paths..."
-msgstr "경로 설정..."
+msgstr "경로 구성..."
 
 #: common/tool/actions.cpp:596
 msgid "Edit path configuration environment variables"
@@ -6689,7 +6689,7 @@ msgid ""
 msgstr ""
 "CvPcb가 처음 구동되었으며, 풋프린트를 검색하기 위한 새로운 풋프린트 라이브러리 테이블 방식을 사용할 수 있습니다.\n"
 "CvPcb는 여러분의 홈 폴더에 기본 테이블을 복사하거나 빈 테이블을 생성합니다.\n"
-"당신은 먼저 KiCad에 기본적으로 포함되지 않은 풋프린트 라이브러리를 포함시키기 위하여 라이브러리 테이블을 설정하여야 합니다.\n"
+"당신은 먼저 KiCad에 기본적으로 포함되지 않은 풋프린트 라이브러리를 포함시키기 위하여 라이브러리 테이블을 구성하여야 합니다.\n"
 "자세한 내용은 CvPcb 공식 문서의 \"풋프린트 라이브러리 테이블\" 섹션을 참고하세요."
 
 #: cvpcb/cvpcb.cpp:187
