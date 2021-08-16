@@ -682,6 +682,26 @@ void GERBER_DRAW_ITEM::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_
     msg = GERBER_FILE_IMAGE_LIST::GetImagesList().GetDisplayName( GetLayer(), true );
     aList.emplace_back( _( "Graphic Layer" ), msg );
 
+    // Display item position
+    auto xStart = To_User_Unit( aFrame->GetUserUnits(), m_Start.x );
+    auto yStart = To_User_Unit( aFrame->GetUserUnits(), m_Start.y );
+    auto xEnd   = To_User_Unit( aFrame->GetUserUnits(), m_End.x );
+    auto yEnd   = To_User_Unit( aFrame->GetUserUnits(), m_End.y );
+
+    if( m_Flashed )
+    {
+        msg.Printf( wxT( "(%.4f, %.4f)" ), xStart, yStart );
+        aList.emplace_back( MSG_PANEL_ITEM( _( "Position" ), msg, BLUE ) );
+    }
+    else
+    {
+        msg.Printf( wxT( "(%.4f, %.4f)" ), xStart, yStart );
+        aList.emplace_back( MSG_PANEL_ITEM( _( "Start" ), msg, BLUE ) );
+
+        msg.Printf( wxT( "(%.4f, %.4f)" ), xEnd, yEnd );
+        aList.emplace_back( MSG_PANEL_ITEM( _( "End" ), msg, BLUE ) );
+    }
+
     // Display item rotation
     // The full rotation is Image rotation + m_lyrRotation
     // but m_lyrRotation is specific to this object

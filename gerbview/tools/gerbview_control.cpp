@@ -464,4 +464,5 @@ void GERBVIEW_CONTROL::setTransitions()
     Go( &GERBVIEW_CONTROL::UpdateMessagePanel, EVENTS::SelectedEvent );
     Go( &GERBVIEW_CONTROL::UpdateMessagePanel, EVENTS::UnselectedEvent );
     Go( &GERBVIEW_CONTROL::UpdateMessagePanel, EVENTS::ClearedEvent );
+    Go( &GERBVIEW_CONTROL::UpdateMessagePanel, ACTIONS::updateUnits.MakeEvent() );
 }
