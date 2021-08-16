@@ -39,8 +39,8 @@
 
 // HTML Messages used more than one time:
 #define MSG_NO_MORE_LAYER _( "<b>No more available layers</b> in GerbView to load files" )
-#define MSG_NOT_LOADED _( "\n<b>Not loaded:</b> <i>%s</i>" )
-#define MSG_OOM _( "\n<b>Memory was exhausted reading:</b> <i>%s</i>" )
+#define MSG_NOT_LOADED _( "<b>Not loaded:</b> <i>%s</i>" )
+#define MSG_OOM _( "<b>Memory was exhausted reading:</b> <i>%s</i>" )
 
 
 void GERBVIEW_FRAME::OnGbrFileHistory( wxCommandEvent& event )
@@ -527,7 +527,7 @@ bool GERBVIEW_FRAME::unarchiveFiles( const wxString& aFullFileName, REPORTER* aR
             //We cannot read a gerber job file as a gerber plot file: skip it
             if( aReporter )
             {
-                msg.Printf( _( "Skipped file '%s' (gerber job file).\n" ), entry->GetName() );
+                msg.Printf( _( "Skipped file '%s' (gerber job file)." ), entry->GetName() );
                 aReporter->Report( msg, RPT_SEVERITY_WARNING );
             }
 
@@ -572,7 +572,7 @@ bool GERBVIEW_FRAME::unarchiveFiles( const wxString& aFullFileName, REPORTER* aR
 
                 if( aReporter )
                 {
-                    msg.Printf( _( "<b>Unable to create temporary file '%s'.</b>\n"),
+                    msg.Printf( _( "<b>Unable to create temporary file '%s'.</b>" ),
                                 unzipped_tempfile );
                     aReporter->Report( msg, RPT_SEVERITY_ERROR );
                 }
@@ -597,7 +597,7 @@ bool GERBVIEW_FRAME::unarchiveFiles( const wxString& aFullFileName, REPORTER* aR
             {
                 if( aReporter )
                 {
-                    msg.Printf( _( "Skipped file '%s' (unknown type).\n" ), entry->GetName() );
+                    msg.Printf( _( "Skipped file '%s' (unknown type)." ), entry->GetName() );
                     aReporter->Report( msg, RPT_SEVERITY_WARNING );
                 }
             }
@@ -634,7 +634,7 @@ bool GERBVIEW_FRAME::unarchiveFiles( const wxString& aFullFileName, REPORTER* aR
 
             if( aReporter )
             {
-                msg.Printf( _("<b>unzipped file %s read error</b>\n"), unzipped_tempfile );
+                msg.Printf( _( "<b>unzipped file %s read error</b>" ), unzipped_tempfile );
                 aReporter->Report( msg, RPT_SEVERITY_ERROR );
             }
         }
