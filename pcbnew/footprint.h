@@ -485,9 +485,10 @@ public:
      * @note Names may not be unique depending on how the footprint was created.
      *
      * @param aPadName the pad name to find.
+     * @param aSearchAfterMe = not nullptr to find a pad living after aAfterMe
      * @return the first matching named #PAD is returned or NULL if not found.
      */
-    PAD* FindPadByName( const wxString& aPadName ) const;
+    PAD* FindPadByName( const wxString& aPadName, PAD* aSearchAfterMe = nullptr ) const;
 
     /**
      * Get a pad at \a aPosition on \a aLayerMask in the footprint.

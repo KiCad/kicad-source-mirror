@@ -1009,11 +1009,19 @@ bool FOOTPRINT::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy )
 }
 
 
-PAD* FOOTPRINT::FindPadByName( const wxString& aPadName ) const
+PAD* FOOTPRINT::FindPadByName( const wxString& aPadName, PAD* aSearchAfterMe ) const
 {
+    bool can_select = aSearchAfterMe ? false : true;
+
     for( PAD* pad : m_pads )
     {
-        if( pad->GetName() == aPadName )
+        if( !can_select && pad == aSearchAfterMe )
+        {
+            can_select = true;
+            continue;
+        }
+
+        if( can_select && pad->GetName() == aPadName )
             return pad;
     }
 
