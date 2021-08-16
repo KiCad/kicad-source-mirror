@@ -67,13 +67,12 @@ public:
      *
      * @param aPath is the base path for the filenames if they are relative
      * @param aFilenameList is a list of filenames to load
-     * @param aFileType is a list of type of files to load (0 = Gerber, 1 = NC drill)
-     * if nullptr, files are expected Gerber type.
+     * @param aFileType is a list of type of files to load (0 = Gerber, 1 = NC drill, 2 Autodetect)
+     *        Successfully autodetected files will have their type changed
      * @return true if every file loaded successfully
      */
-    bool LoadListOfGerberAndDrillFiles( const wxString& aPath,
-                                        const wxArrayString& aFilenameList,
-                                        const std::vector<int>* aFileType = nullptr );
+    bool LoadListOfGerberAndDrillFiles( const wxString& aPath, const wxArrayString& aFilenameList,
+                                        std::vector<int>* aFileType );
 
     // Virtual basic functions:
     void ReCreateHToolbar() override;

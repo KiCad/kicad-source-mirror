@@ -22,6 +22,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <wx/debug.h>
 #include <wx/filedlg.h>
 #include <wx/wfstream.h>
 #include <wx/zipstrm.h>
@@ -206,10 +207,13 @@ bool GERBVIEW_FRAME::LoadGerberFiles( const wxString& aFullFileName )
 }
 
 
-bool GERBVIEW_FRAME::LoadListOfGerberAndDrillFiles( const wxString& aPath,
-                                            const wxArrayString& aFilenameList,
-                                            const std::vector<int>* aFileType )
+bool GERBVIEW_FRAME::LoadListOfGerberAndDrillFiles( const wxString&      aPath,
+                                                    const wxArrayString& aFilenameList,
+                                                    std::vector<int>*    aFileType )
 {
+    wxCHECK_MSG( aFilenameList.Count() == aFileType->size(), false,
+                 "Mismatch in file names and file types count" );
+
     wxFileName filename;
 
     // Read gerber files: each file is loaded on a new GerbView layer
@@ -302,8 +306,33 @@ bool GERBVIEW_FRAME::LoadListOfGerberAndDrillFiles( const wxString& aPath,
 
         try
         {
-            if( aFileType && ( *aFileType )[ii] == 1 )
+            // 2 = Autodetect
+            if( ( *aFileType )[ii] == 2 )
             {
+                if( EXCELLON_IMAGE::TestFileIsExcellon( filename.GetFullPath() ) )
+                    ( *aFileType )[ii] = 1;
+                else if( GERBER_FILE_IMAGE::TestFileIsRS274( filename.GetFullPath() ) )
+                    ( *aFileType )[ii] = 0;
+            }
+
+            switch( ( *aFileType )[ii] )
+            {
+            case 0:
+
+                if( Read_GERBER_File( filename.GetFullPath() ) )
+                {
+                    UpdateFileHistory( filename.GetFullPath() );
+
+                    if( firstLoadedLayer == NO_AVAILABLE_LAYERS )
+                    {
+                        firstLoadedLayer = layer;
+                    }
+                }
+
+                break;
+
+            case 1:
+
                 if( Read_EXCELLON_File( filename.GetFullPath() ) )
                 {
                     UpdateFileHistory( filename.GetFullPath(), &m_drillFileHistory );
@@ -314,18 +343,11 @@ bool GERBVIEW_FRAME::LoadListOfGerberAndDrillFiles( const wxString& aPath,
                         firstLoadedLayer = layer;
                     }
                 }
-            }
-            else
-            {
-                if( Read_GERBER_File( filename.GetFullPath() ) )
-                {
-                    UpdateFileHistory( filename.GetFullPath() );
 
-                    if( firstLoadedLayer == NO_AVAILABLE_LAYERS )
-                    {
-                        firstLoadedLayer = layer;
-                    }
-                }
+                break;
+            default:
+                wxString txt = wxString::Format( MSG_NOT_LOADED, filename.GetFullName() );
+                reporter.Report( txt, RPT_SEVERITY_ERROR );
             }
         }
         catch( const std::bad_alloc& )

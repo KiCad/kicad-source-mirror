@@ -226,7 +226,9 @@ bool GERBVIEW_FRAME::LoadGerberJobFile( const wxString& aFullFileName )
 
             wxArrayString& gbrfiles = gbjReader.GetGerberFiles();
 
-            success = LoadListOfGerberAndDrillFiles( currentPath, gbrfiles );
+            // 0 = Gerber file type
+            std::vector<int> fileTypesVec( gbrfiles.Count(), 0 );
+            success = LoadListOfGerberAndDrillFiles( currentPath, gbrfiles, &fileTypesVec );
 
             Zoom_Automatique( false );
         }
