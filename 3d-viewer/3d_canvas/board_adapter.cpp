@@ -550,10 +550,17 @@ void BOARD_ADAPTER::InitSettings( REPORTER* aStatusReporter, REPORTER* aWarningR
         auto findColor =
                 []( const wxString& aColorName, const CUSTOM_COLORS_LIST& aColorSet )
                 {
-                    for( const CUSTOM_COLOR_ITEM& color : aColorSet )
+                    if( aColorName.StartsWith( "#" ) )
                     {
-                        if( color.m_ColorName == aColorName )
-                            return color.m_Color;
+                        return KIGFX::COLOR4D( wxColour( aColorName ) );
+                    }
+                    else
+                    {
+                        for( const CUSTOM_COLOR_ITEM& color : aColorSet )
+                        {
+                            if( color.m_ColorName == aColorName )
+                                return color.m_Color;
+                        }
                     }
 
                     return KIGFX::COLOR4D();
