@@ -1,12 +1,9 @@
-/**
- * @file dialog_non_copper_zones_properties.cpp
- */
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2014 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -43,9 +40,9 @@ private:
     ZONE_SETTINGS*  m_ptr;
     ZONE_SETTINGS   m_settings;     // working copy of zone settings
     UNIT_BINDER     m_minWidth;
-    UNIT_BINDER     m_gridStyleRotation;
-    UNIT_BINDER     m_gridStyleThickness;
-    UNIT_BINDER     m_gridStyleGap;
+    UNIT_BINDER     m_hatchRotation;
+    UNIT_BINDER     m_hatchWidth;
+    UNIT_BINDER     m_hatchGap;
     int             m_cornerSmoothingType;
     UNIT_BINDER     m_cornerRadius;
 
@@ -74,9 +71,9 @@ DIALOG_NON_COPPER_ZONES_EDITOR::DIALOG_NON_COPPER_ZONES_EDITOR( PCB_BASE_FRAME* 
                                                                 ZONE_SETTINGS* aSettings ) :
     DIALOG_NONCOPPER_ZONES_PROPERTIES_BASE( aParent ),
     m_minWidth( aParent, m_MinWidthLabel, m_MinWidthCtrl, m_MinWidthUnits ),
-    m_gridStyleRotation( aParent, m_staticTextGrindOrient, m_tcGridStyleOrientation, m_staticTextRotUnits ),
-    m_gridStyleThickness( aParent, m_staticTextStyleThickness, m_tcGridStyleThickness, m_GridStyleThicknessUnits),
-    m_gridStyleGap( aParent, m_staticTextGridGap, m_tcGridStyleGap, m_GridStyleGapUnits ),
+    m_hatchRotation( aParent, m_hatchOrientLabel, m_hatchOrientCtrl, m_hatchOrientUnits ),
+    m_hatchWidth( aParent, m_hatchWidthLabel, m_hatchWidthCtrl, m_hatchWidthUnits),
+    m_hatchGap( aParent, m_hatchGapLabel, m_hatchGapCtrl, m_hatchGapUnits ),
     m_cornerSmoothingType( ZONE_SETTINGS::SMOOTHING_UNDEFINED ),
     m_cornerRadius( aParent, m_cornerRadiusLabel, m_cornerRadiusCtrl, m_cornerRadiusUnits )
 {
@@ -132,8 +129,8 @@ bool DIALOG_NON_COPPER_ZONES_EDITOR::TransferDataToWindow()
     default:                            m_GridStyleCtrl->SetSelection( 0 ); break;
     }
 
-    m_gridStyleRotation.SetUnits( EDA_UNITS::DEGREES );
-    m_gridStyleRotation.SetValue( m_settings.m_HatchOrientation * 10 ); // IU is decidegree
+    m_hatchRotation.SetUnits( EDA_UNITS::DEGREES );
+    m_hatchRotation.SetValue( m_settings.m_HatchOrientation * 10 ); // IU is decidegree
 
     // Gives a reasonable value to grid style parameters, if currently there are no defined
     // parameters for grid pattern thickness and gap (if the value is 0)
@@ -143,17 +140,17 @@ bool DIALOG_NON_COPPER_ZONES_EDITOR::TransferDataToWindow()
     // or 1.5 mm
     int bestvalue = m_settings.m_HatchThickness;
 
-    if( bestvalue <= 0 )     // No defined value for m_hatchThickness
+    if( bestvalue <= 0 )     // No defined value for m_hatchWidth
         bestvalue = std::max( m_settings.m_ZoneMinThickness * 4, Millimeter2iu( 1.0 ) );
 
-    m_gridStyleThickness.SetValue( std::max( bestvalue, m_settings.m_ZoneMinThickness ) );
+    m_hatchWidth.SetValue( std::max( bestvalue, m_settings.m_ZoneMinThickness ) );
 
     bestvalue = m_settings.m_HatchGap;
 
     if( bestvalue <= 0 )     // No defined value for m_hatchGap
         bestvalue = std::max( m_settings.m_ZoneMinThickness * 6, Millimeter2iu( 1.5 ) );
 
-    m_gridStyleGap.SetValue( std::max( bestvalue, m_settings.m_ZoneMinThickness ) );
+    m_hatchGap.SetValue( std::max( bestvalue, m_settings.m_ZoneMinThickness ) );
 
     m_spinCtrlSmoothLevel->SetValue( m_settings.m_HatchSmoothingLevel );
     m_spinCtrlSmoothValue->SetValue( m_settings.m_HatchSmoothingValue );
@@ -169,10 +166,12 @@ bool DIALOG_NON_COPPER_ZONES_EDITOR::TransferDataToWindow()
 void DIALOG_NON_COPPER_ZONES_EDITOR::OnStyleSelection( wxCommandEvent& event )
 {
     bool enable = m_GridStyleCtrl->GetSelection() >= 1;
-    m_tcGridStyleThickness->Enable( enable );
-    m_tcGridStyleGap->Enable( enable );
-    m_tcGridStyleOrientation->Enable( enable );
+    m_hatchRotation.Enable( enable );
+    m_hatchWidth.Enable( enable );
+    m_hatchGap.Enable( enable );
+    m_smoothLevelLabel->Enable( enable );
     m_spinCtrlSmoothLevel->Enable( enable );
+    m_smoothValueLabel->Enable( enable );
     m_spinCtrlSmoothValue->Enable( enable );
 }
 
@@ -198,7 +197,7 @@ bool DIALOG_NON_COPPER_ZONES_EDITOR::TransferDataFromWindow()
     m_settings.SetCornerRadius( m_settings.GetCornerSmoothingType() == ZONE_SETTINGS::SMOOTHING_NONE
                                 ? 0 : m_cornerRadius.GetValue() );
 
-    if( !m_gridStyleRotation.Validate( -1800, 1800 ) )
+    if( !m_hatchRotation.Validate( -1800, 1800 ) )
         return false;
 
     m_settings.m_ZoneMinThickness = m_minWidth.GetValue();
@@ -220,17 +219,17 @@ bool DIALOG_NON_COPPER_ZONES_EDITOR::TransferDataFromWindow()
     {
         int minThickness = m_minWidth.GetValue();
 
-        if( !m_gridStyleThickness.Validate( minThickness, INT_MAX ) )
+        if( !m_hatchWidth.Validate( minThickness, INT_MAX ) )
             return false;
 
-        if( !m_gridStyleGap.Validate( minThickness, INT_MAX ) )
+        if( !m_hatchGap.Validate( minThickness, INT_MAX ) )
             return false;
     }
 
 
-    m_settings.m_HatchOrientation = m_gridStyleRotation.GetValue() / 10.0; // value is returned in deci-degree
-    m_settings.m_HatchThickness = m_gridStyleThickness.GetValue();
-    m_settings.m_HatchGap = m_gridStyleGap.GetValue();
+    m_settings.m_HatchOrientation = m_hatchRotation.GetValue() / 10.0; // value is returned in deci-degree
+    m_settings.m_HatchThickness = m_hatchWidth.GetValue();
+    m_settings.m_HatchGap = m_hatchGap.GetValue();
     m_settings.m_HatchSmoothingLevel = m_spinCtrlSmoothLevel->GetValue();
     m_settings.m_HatchSmoothingValue = m_spinCtrlSmoothValue->GetValue();
 

@@ -62,7 +62,7 @@ DIALOG_NONCOPPER_ZONES_PROPERTIES_BASE::DIALOG_NONCOPPER_ZONES_PROPERTIES_BASE( 
 	int m_OutlineDisplayCtrlNChoices = sizeof( m_OutlineDisplayCtrlChoices ) / sizeof( wxString );
 	m_OutlineDisplayCtrl = new wxChoice( sbShape->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_OutlineDisplayCtrlNChoices, m_OutlineDisplayCtrlChoices, 0 );
 	m_OutlineDisplayCtrl->SetSelection( 0 );
-	gbSizer1->Add( m_OutlineDisplayCtrl, wxGBPosition( 2, 1 ), wxGBSpan( 1, 1 ), wxALL|wxEXPAND, 5 );
+	gbSizer1->Add( m_OutlineDisplayCtrl, wxGBPosition( 2, 1 ), wxGBSpan( 1, 1 ), wxALL|wxEXPAND|wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_MinWidthLabel = new wxStaticText( sbShape->GetStaticBox(), wxID_ANY, _("Minimum width:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_MinWidthLabel->Wrap( -1 );
@@ -75,7 +75,7 @@ DIALOG_NONCOPPER_ZONES_PROPERTIES_BASE::DIALOG_NONCOPPER_ZONES_PROPERTIES_BASE( 
 	m_MinWidthUnits->Wrap( -1 );
 	gbSizer1->Add( m_MinWidthUnits, wxGBPosition( 3, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT, 5 );
 
-	m_staticTextSmoothing = new wxStaticText( sbShape->GetStaticBox(), wxID_ANY, _("Outline smooth:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextSmoothing = new wxStaticText( sbShape->GetStaticBox(), wxID_ANY, _("Corner smoothing:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextSmoothing->Wrap( -1 );
 	gbSizer1->Add( m_staticTextSmoothing, wxGBPosition( 4, 0 ), wxGBSpan( 1, 1 ), wxBOTTOM|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
 
@@ -102,7 +102,7 @@ DIALOG_NONCOPPER_ZONES_PROPERTIES_BASE::DIALOG_NONCOPPER_ZONES_PROPERTIES_BASE( 
 	sbShape->Add( gbSizer1, 0, wxEXPAND, 5 );
 
 
-	bSizerMiddle->Add( sbShape, 1, wxEXPAND, 5 );
+	bSizerMiddle->Add( sbShape, 0, wxEXPAND, 5 );
 
 	wxStaticBoxSizer* sbFill;
 	sbFill = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Fill") ), wxVERTICAL );
@@ -115,77 +115,77 @@ DIALOG_NONCOPPER_ZONES_PROPERTIES_BASE::DIALOG_NONCOPPER_ZONES_PROPERTIES_BASE( 
 
 	m_staticTextGridFillType = new wxStaticText( sbFill->GetStaticBox(), wxID_ANY, _("Fill type:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextGridFillType->Wrap( -1 );
-	fgSizer1->Add( m_staticTextGridFillType, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+	fgSizer1->Add( m_staticTextGridFillType, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
 
-	wxString m_GridStyleCtrlChoices[] = { _("Solid shape"), _("HatchBorder pattern") };
+	wxString m_GridStyleCtrlChoices[] = { _("Solid fill"), _("Hatch pattern") };
 	int m_GridStyleCtrlNChoices = sizeof( m_GridStyleCtrlChoices ) / sizeof( wxString );
 	m_GridStyleCtrl = new wxChoice( sbFill->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_GridStyleCtrlNChoices, m_GridStyleCtrlChoices, 0 );
 	m_GridStyleCtrl->SetSelection( 0 );
-	fgSizer1->Add( m_GridStyleCtrl, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
+	fgSizer1->Add( m_GridStyleCtrl, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND|wxALIGN_CENTER_VERTICAL, 5 );
 
 
 	fgSizer1->Add( 0, 0, 1, wxEXPAND, 5 );
 
-	m_staticTextGrindOrient = new wxStaticText( sbFill->GetStaticBox(), wxID_ANY, _("Orientation:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticTextGrindOrient->Wrap( -1 );
-	fgSizer1->Add( m_staticTextGrindOrient, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+	m_hatchOrientLabel = new wxStaticText( sbFill->GetStaticBox(), wxID_ANY, _("Orientation:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_hatchOrientLabel->Wrap( -1 );
+	fgSizer1->Add( m_hatchOrientLabel, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
-	m_tcGridStyleOrientation = new wxTextCtrl( sbFill->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer1->Add( m_tcGridStyleOrientation, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
+	m_hatchOrientCtrl = new wxTextCtrl( sbFill->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer1->Add( m_hatchOrientCtrl, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND|wxALIGN_CENTER_VERTICAL, 5 );
 
-	m_staticTextRotUnits = new wxStaticText( sbFill->GetStaticBox(), wxID_ANY, _("degree"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticTextRotUnits->Wrap( -1 );
-	fgSizer1->Add( m_staticTextRotUnits, 0, wxTOP|wxBOTTOM|wxRIGHT, 5 );
+	m_hatchOrientUnits = new wxStaticText( sbFill->GetStaticBox(), wxID_ANY, _("degree"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_hatchOrientUnits->Wrap( -1 );
+	fgSizer1->Add( m_hatchOrientUnits, 0, wxBOTTOM|wxRIGHT|wxALIGN_CENTER_VERTICAL, 5 );
 
-	m_staticTextStyleThickness = new wxStaticText( sbFill->GetStaticBox(), wxID_ANY, _("Hatch width:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticTextStyleThickness->Wrap( -1 );
-	fgSizer1->Add( m_staticTextStyleThickness, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+	m_hatchWidthLabel = new wxStaticText( sbFill->GetStaticBox(), wxID_ANY, _("Hatch width:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_hatchWidthLabel->Wrap( -1 );
+	fgSizer1->Add( m_hatchWidthLabel, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
-	m_tcGridStyleThickness = new wxTextCtrl( sbFill->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer1->Add( m_tcGridStyleThickness, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
+	m_hatchWidthCtrl = new wxTextCtrl( sbFill->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer1->Add( m_hatchWidthCtrl, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND|wxALIGN_CENTER_VERTICAL, 5 );
 
-	m_GridStyleThicknessUnits = new wxStaticText( sbFill->GetStaticBox(), wxID_ANY, _("units"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_GridStyleThicknessUnits->Wrap( -1 );
-	fgSizer1->Add( m_GridStyleThicknessUnits, 0, wxTOP|wxBOTTOM|wxRIGHT, 5 );
+	m_hatchWidthUnits = new wxStaticText( sbFill->GetStaticBox(), wxID_ANY, _("units"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_hatchWidthUnits->Wrap( -1 );
+	fgSizer1->Add( m_hatchWidthUnits, 0, wxBOTTOM|wxRIGHT|wxALIGN_CENTER_VERTICAL, 5 );
 
-	m_staticTextGridGap = new wxStaticText( sbFill->GetStaticBox(), wxID_ANY, _("Hatch gap:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticTextGridGap->Wrap( -1 );
-	fgSizer1->Add( m_staticTextGridGap, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+	m_hatchGapLabel = new wxStaticText( sbFill->GetStaticBox(), wxID_ANY, _("Hatch gap:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_hatchGapLabel->Wrap( -1 );
+	fgSizer1->Add( m_hatchGapLabel, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
 
-	m_tcGridStyleGap = new wxTextCtrl( sbFill->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer1->Add( m_tcGridStyleGap, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
+	m_hatchGapCtrl = new wxTextCtrl( sbFill->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer1->Add( m_hatchGapCtrl, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND|wxALIGN_CENTER_VERTICAL, 5 );
 
-	m_GridStyleGapUnits = new wxStaticText( sbFill->GetStaticBox(), wxID_ANY, _("units"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_GridStyleGapUnits->Wrap( -1 );
-	fgSizer1->Add( m_GridStyleGapUnits, 0, wxTOP|wxBOTTOM|wxRIGHT, 5 );
+	m_hatchGapUnits = new wxStaticText( sbFill->GetStaticBox(), wxID_ANY, _("units"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_hatchGapUnits->Wrap( -1 );
+	fgSizer1->Add( m_hatchGapUnits, 0, wxBOTTOM|wxRIGHT|wxALIGN_CENTER_VERTICAL, 5 );
 
-	m_staticTextGridSmoothingLevel = new wxStaticText( sbFill->GetStaticBox(), wxID_ANY, _("Smoothing effort:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticTextGridSmoothingLevel->Wrap( -1 );
-	m_staticTextGridSmoothingLevel->SetToolTip( _("Value of smoothing effort\n0 = no smoothing\n1 = chamfer\n2 = round corners\n3 = round corners (finer shape)") );
+	m_smoothLevelLabel = new wxStaticText( sbFill->GetStaticBox(), wxID_ANY, _("Smoothing effort:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_smoothLevelLabel->Wrap( -1 );
+	m_smoothLevelLabel->SetToolTip( _("Value of smoothing effort\n0 = no smoothing\n1 = chamfer\n2 = round corners\n3 = round corners (finer shape)") );
 
-	fgSizer1->Add( m_staticTextGridSmoothingLevel, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+	fgSizer1->Add( m_smoothLevelLabel, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_spinCtrlSmoothLevel = new wxSpinCtrl( sbFill->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, 3, 0 );
-	fgSizer1->Add( m_spinCtrlSmoothLevel, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
+	fgSizer1->Add( m_spinCtrlSmoothLevel, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND|wxALIGN_CENTER_VERTICAL, 5 );
 
 
 	fgSizer1->Add( 0, 0, 1, wxEXPAND, 5 );
 
-	m_staticTextGridSmootingVal = new wxStaticText( sbFill->GetStaticBox(), wxID_ANY, _("Smooth amount:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticTextGridSmootingVal->Wrap( -1 );
-	m_staticTextGridSmootingVal->SetToolTip( _("Ratio between smoothed corners size and the gap between lines\n0 = no smoothing\n1.0 = max radius/chamfer size (half gap value)") );
+	m_smoothValueLabel = new wxStaticText( sbFill->GetStaticBox(), wxID_ANY, _("Smoothing amount:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_smoothValueLabel->Wrap( -1 );
+	m_smoothValueLabel->SetToolTip( _("Ratio between smoothed corners size and the gap between lines\n0 = no smoothing\n1.0 = max radius/chamfer size (half gap value)") );
 
-	fgSizer1->Add( m_staticTextGridSmootingVal, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+	fgSizer1->Add( m_smoothValueLabel, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT, 5 );
 
 	m_spinCtrlSmoothValue = new wxSpinCtrlDouble( sbFill->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, 1, 0.1, 0.1 );
 	m_spinCtrlSmoothValue->SetDigits( 2 );
-	fgSizer1->Add( m_spinCtrlSmoothValue, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
+	fgSizer1->Add( m_spinCtrlSmoothValue, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 
 	sbFill->Add( fgSizer1, 0, wxEXPAND, 5 );
 
 
-	bSizerMiddle->Add( sbFill, 1, wxEXPAND|wxTOP|wxBOTTOM, 10 );
+	bSizerMiddle->Add( sbFill, 0, wxEXPAND|wxTOP|wxBOTTOM, 10 );
 
 
 	m_UpperSizer->Add( bSizerMiddle, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 10 );
