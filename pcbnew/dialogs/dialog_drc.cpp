@@ -189,7 +189,7 @@ void DIALOG_DRC::syncCheckboxes()
 
 void DIALOG_DRC::OnErrorLinkClicked( wxHtmlLinkEvent& event )
 {
-    m_frame->ShowBoardSetupDialog( _( "Rules" ) );
+    m_frame->ShowBoardSetupDialog( _( "Custom Rules" ) );
 }
 
 
