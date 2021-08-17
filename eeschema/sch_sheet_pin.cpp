@@ -97,7 +97,7 @@ bool SCH_SHEET_PIN::operator==( const SCH_SHEET_PIN* aPin ) const
 
 int SCH_SHEET_PIN::GetPenWidth() const
 {
-    return 1;
+    return 0;
 }
 
 

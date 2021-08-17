@@ -341,7 +341,7 @@ COLOR4D SCH_PAINTER::getRenderColor( const EDA_ITEM* aItem, int aLayer, bool aDr
 
 float SCH_PAINTER::getLineWidth( const LIB_ITEM* aItem, bool aDrawingShadows ) const
 {
-    float width = (float) std::max( aItem->GetPenWidth(), m_schSettings.GetDefaultPenWidth() );
+    float width = (float) aItem->GetEffectivePenWidth( &m_schSettings );
 
     if( aItem->IsSelected() && aDrawingShadows )
         width += getShadowWidth();

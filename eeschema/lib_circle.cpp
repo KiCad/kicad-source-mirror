@@ -174,12 +174,10 @@ void LIB_CIRCLE::Plot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
     }
 
     bool already_filled = m_fill == FILL_TYPE::FILLED_WITH_BG_BODYCOLOR;
-    int  pen_size = GetPenWidth();
+    int  pen_size = GetEffectivePenWidth( aPlotter->RenderSettings() );
 
     if( !already_filled || pen_size > 0 )
     {
-        pen_size = std::max( pen_size, aPlotter->RenderSettings()->GetMinPenWidth() );
-
         aPlotter->SetColor( aPlotter->RenderSettings()->GetLayerColor( LAYER_DEVICE ) );
         aPlotter->Circle( pos, GetRadius() * 2, already_filled ? FILL_TYPE::NO_FILL : m_fill,
                           pen_size );
@@ -189,11 +187,7 @@ void LIB_CIRCLE::Plot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
 
 int LIB_CIRCLE::GetPenWidth() const
 {
-    // Historically 0 meant "default width" and negative numbers meant "don't stroke".
-    if( m_Width < 0 && GetFillMode() != FILL_TYPE::NO_FILL )
-        return 0;
-    else
-        return std::max( m_Width, 1 );
+    return m_Width;
 }
 
 
@@ -201,7 +195,7 @@ void LIB_CIRCLE::print( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset
                         void* aData, const TRANSFORM& aTransform )
 {
     bool forceNoFill = static_cast<bool>( aData );
-    int  penWidth = GetPenWidth();
+    int  penWidth = GetEffectivePenWidth( aSettings );
 
     if( forceNoFill && m_fill != FILL_TYPE::NO_FILL && penWidth == 0 )
         return;
@@ -212,8 +206,6 @@ void LIB_CIRCLE::print( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset
 
     if( forceNoFill || m_fill == FILL_TYPE::NO_FILL )
     {
-        penWidth = std::max( penWidth, aSettings->GetDefaultPenWidth() );
-
         GRCircle( nullptr, DC, pos1.x, pos1.y, GetRadius(), penWidth, color );
     }
     else

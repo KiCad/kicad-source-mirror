@@ -272,12 +272,10 @@ void LIB_ARC::Plot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
     }
 
     bool already_filled = m_fill == FILL_TYPE::FILLED_WITH_BG_BODYCOLOR;
-    int  pen_size = GetPenWidth();
+    int  pen_size = GetEffectivePenWidth( aPlotter->RenderSettings() );
 
     if( !already_filled || pen_size > 0 )
     {
-        pen_size = std::max( pen_size, aPlotter->RenderSettings()->GetMinPenWidth() );
-
         aPlotter->SetColor( aPlotter->RenderSettings()->GetLayerColor( LAYER_DEVICE ) );
         aPlotter->Arc( pos, -t2, -t1, m_Radius, already_filled ? FILL_TYPE::NO_FILL : m_fill,
                        pen_size );
@@ -287,11 +285,7 @@ void LIB_ARC::Plot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
 
 int LIB_ARC::GetPenWidth() const
 {
-    // Historically 0 meant "default width" and negative numbers meant "don't stroke".
-    if( m_Width < 0 && GetFillMode() != FILL_TYPE::NO_FILL )
-        return 0;
-    else
-        return std::max( m_Width, 1 );
+    return m_Width;
 }
 
 
@@ -299,14 +293,14 @@ void LIB_ARC::print( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset, v
                      const TRANSFORM& aTransform )
 {
     bool forceNoFill = static_cast<bool>( aData );
-    int  penWidth = GetPenWidth();
+    int  penWidth = GetEffectivePenWidth( aSettings );
 
     if( forceNoFill && m_fill != FILL_TYPE::NO_FILL && penWidth == 0 )
         return;
 
     wxDC*   DC = aSettings->GetPrintDC();
     wxPoint pos1, pos2, posc;
-    COLOR4D color   = aSettings->GetLayerColor( LAYER_DEVICE );
+    COLOR4D color = aSettings->GetLayerColor( LAYER_DEVICE );
 
     pos1 = aTransform.TransformCoordinate( m_ArcEnd ) + aOffset;
     pos2 = aTransform.TransformCoordinate( m_ArcStart ) + aOffset;
@@ -323,8 +317,6 @@ void LIB_ARC::print( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset, v
 
     if( forceNoFill || m_fill == FILL_TYPE::NO_FILL )
     {
-        penWidth = std::max( penWidth, aSettings->GetDefaultPenWidth() );
-
         GRArc1( nullptr, DC, pos1.x, pos1.y, pos2.x, pos2.y, posc.x, posc.y, penWidth, color );
     }
     else

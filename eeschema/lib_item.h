@@ -143,6 +143,19 @@ public:
 
     virtual int GetPenWidth() const = 0;
 
+    virtual int GetEffectivePenWidth( const RENDER_SETTINGS* aSettings ) const
+    {
+        // For historical reasons, a stored value of 0 means "default width" and negative
+        // numbers meant "don't stroke".
+
+        if( GetPenWidth() < 0 && GetFillMode() != FILL_TYPE::NO_FILL )
+            return 0;
+        else if( GetPenWidth() == 0 )
+            return aSettings->GetDefaultPenWidth();
+        else
+            return std::max( GetPenWidth(), aSettings->GetMinPenWidth() );
+    }
+
     LIB_SYMBOL* GetParent() const
     {
         return (LIB_SYMBOL*) m_parent;

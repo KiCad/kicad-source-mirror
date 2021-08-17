@@ -136,12 +136,10 @@ void LIB_RECTANGLE::Plot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
     }
 
     bool already_filled = m_fill == FILL_TYPE::FILLED_WITH_BG_BODYCOLOR;
-    int  pen_size = GetPenWidth();
+    int  pen_size = GetEffectivePenWidth( aPlotter->RenderSettings() );
 
     if( !already_filled || pen_size > 0 )
     {
-        pen_size = std::max( pen_size, aPlotter->RenderSettings()->GetMinPenWidth() );
-
         aPlotter->SetColor( aPlotter->RenderSettings()->GetLayerColor( LAYER_DEVICE ) );
         aPlotter->Rect( pos, end, already_filled ? FILL_TYPE::NO_FILL : m_fill, pen_size );
     }
@@ -150,11 +148,7 @@ void LIB_RECTANGLE::Plot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
 
 int LIB_RECTANGLE::GetPenWidth() const
 {
-    // Historically 0 meant "default width" and negative numbers meant "don't stroke".
-    if( m_Width < 0 && GetFillMode() != FILL_TYPE::NO_FILL )
-        return 0;
-    else
-        return std::max( m_Width, 1 );
+    return m_Width;
 }
 
 
@@ -162,7 +156,7 @@ void LIB_RECTANGLE::print( const RENDER_SETTINGS* aSettings, const wxPoint& aOff
                            void* aData, const TRANSFORM& aTransform )
 {
     bool forceNoFill = static_cast<bool>( aData );
-    int  penWidth = GetPenWidth();
+    int  penWidth = GetEffectivePenWidth( aSettings );
 
     if( forceNoFill && m_fill != FILL_TYPE::NO_FILL && penWidth == 0 )
         return;
@@ -174,7 +168,6 @@ void LIB_RECTANGLE::print( const RENDER_SETTINGS* aSettings, const wxPoint& aOff
 
     if( forceNoFill || m_fill == FILL_TYPE::NO_FILL )
     {
-        penWidth = std::max( penWidth, aSettings->GetDefaultPenWidth() );
         GRRect( nullptr, DC, pt1.x, pt1.y, pt2.x, pt2.y, penWidth, color );
     }
     else
