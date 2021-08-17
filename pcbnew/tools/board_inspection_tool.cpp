@@ -487,7 +487,11 @@ int BOARD_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
 
     for( PCB_LAYER_ID layer : { F_SilkS, B_SilkS } )
     {
-        if( layerIntersection.test( layer ) )
+        PCB_LAYER_ID correspondingMask = IsFrontLayer( layer ) ? F_Mask : B_Mask;
+
+        if( ( a->IsOnLayer( layer ) && b->IsOnLayer( layer ) )
+                || ( a->IsOnLayer( layer ) && b->IsOnLayer( correspondingMask ) )
+                || ( b->IsOnLayer( layer ) && a->IsOnLayer( correspondingMask ) ) )
         {
             r = m_inspectClearanceDialog->AddPage( m_frame->GetBoard()->GetLayerName( layer ) );
 
@@ -617,6 +621,16 @@ int BOARD_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
 
             r->Flush();
         }
+    }
+
+    if( m_inspectClearanceDialog->GetPageCount() == 0 )
+    {
+        r = m_inspectClearanceDialog->AddPage( _( "Clearance" ) );
+        r->Report( "<h7>" + _( "Items share no relevant layers:" ) + "</h7>" );
+        r->Report( wxString::Format( "<ul><li>%s</li><li>%s</li></ul>",
+                                     EscapeHTML( getItemDescription( a ) ),
+                                     EscapeHTML( getItemDescription( b ) ) ) );
+        r->Flush();
     }
 
     m_inspectClearanceDialog->Raise();

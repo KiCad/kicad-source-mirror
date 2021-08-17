@@ -107,6 +107,8 @@ public:
     void SetViolatingRule ( DRC_RULE *aRule ) { m_violatingRule = aRule; }
     DRC_RULE* GetViolatingRule() const { return m_violatingRule; }
 
+    wxString GetViolatingRuleDesc() const override;
+
     void SetViolatingTest( DRC_TEST_PROVIDER *aProvider ) { m_violatingTest = aProvider; }
     DRC_TEST_PROVIDER* GetViolatingTest() const { return m_violatingTest; }
 

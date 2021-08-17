@@ -1070,6 +1070,21 @@ void PCB_EDIT_FRAME::SetActiveLayer( PCB_LAYER_ID aLayer )
 
 void PCB_EDIT_FRAME::onBoardLoaded()
 {
+    // JEY TODO: move this global to the board
+    ENUM_MAP<PCB_LAYER_ID>& layerEnum = ENUM_MAP<PCB_LAYER_ID>::Instance();
+
+    layerEnum.Choices().Clear();
+    layerEnum.Undefined( UNDEFINED_LAYER );
+
+    for( LSEQ seq = LSET::AllLayersMask().Seq(); seq; ++seq )
+    {
+        // Canonical name
+        layerEnum.Map( *seq, LSET::Name( *seq ) );
+
+        // User name
+        layerEnum.Map( *seq, GetBoard()->GetLayerName( *seq ) );
+    }
+
     DRC_TOOL* drcTool = m_toolManager->GetTool<DRC_TOOL>();
 
     try

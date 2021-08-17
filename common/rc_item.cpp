@@ -109,13 +109,14 @@ wxString RC_ITEM::ShowReport( EDA_UNITS aUnits, SEVERITY aSeverity,
     // Note: some customers machine-process these.  So:
     // 1) don't translate
     // 2) try not to re-order or change syntax
-    // 3) report numeric error code (which should be more stable) in addition to message
+    // 3) report settings key (which should be more stable) in addition to message
 
     if( mainItem && auxItem )
     {
-        return wxString::Format( wxT( "[%s]: %s %s\n    %s: %s\n    %s: %s\n" ),
+        return wxString::Format( wxT( "[%s]: %s\n    %s; %s\n    %s: %s\n    %s: %s\n" ),
                                  GetSettingsKey(),
                                  GetErrorMessage(),
+                                 GetViolatingRuleDesc(),
                                  severity,
                                  ShowCoord( aUnits, mainItem->GetPosition() ),
                                  mainItem->GetSelectMenuText( aUnits ),
@@ -124,18 +125,20 @@ wxString RC_ITEM::ShowReport( EDA_UNITS aUnits, SEVERITY aSeverity,
     }
     else if( mainItem )
     {
-        return wxString::Format( wxT( "[%s]: %s %s\n    %s: %s\n" ),
+        return wxString::Format( wxT( "[%s]: %s\n    %s; %s\n    %s: %s\n" ),
                                  GetSettingsKey(),
                                  GetErrorMessage(),
+                                 GetViolatingRuleDesc(),
                                  severity,
                                  ShowCoord( aUnits, mainItem->GetPosition() ),
                                  mainItem->GetSelectMenuText( aUnits ) );
     }
     else
     {
-        return wxString::Format( wxT( "[%s]: %s %s\n" ),
+        return wxString::Format( wxT( "[%s]: %s\n    %s; %s\n" ),
                                  GetSettingsKey(),
                                  GetErrorMessage(),
+                                 GetViolatingRuleDesc(),
                                  severity );
     }
 }

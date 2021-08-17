@@ -26,6 +26,7 @@
 #include "wx/html/m_templ.h"
 #include "wx/html/styleparams.h"
 #include <drc/drc_item.h>
+#include <drc/drc_rule.h>
 #include <board.h>
 
 
@@ -297,8 +298,6 @@ std::shared_ptr<DRC_ITEM> DRC_ITEM::Create( int aErrorCode )
         wxFAIL_MSG( "Unknown DRC error code" );
         return nullptr;
     }
-
-    return nullptr;
 }
 
 
@@ -314,4 +313,12 @@ std::shared_ptr<DRC_ITEM> DRC_ITEM::Create( const wxString& aErrorKey )
     return nullptr;
 }
 
+
+wxString DRC_ITEM::GetViolatingRuleDesc() const
+{
+    if( m_violatingRule )
+        return wxString::Format( _( "Rule: %s" ), m_violatingRule->m_Name );
+
+    return wxEmptyString;
+}
 

@@ -45,7 +45,10 @@ public:
     void OnErrorLinkClicked( wxHtmlLinkEvent& event );
 
     void DeleteAllPages();
+
     WX_HTML_REPORT_BOX* AddPage( const wxString& pageTitle );
+
+    int GetPageCount() const;
 
 protected:
     PCB_EDIT_FRAME* m_frame;

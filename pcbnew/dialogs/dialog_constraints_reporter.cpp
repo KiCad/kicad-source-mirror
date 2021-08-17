@@ -80,3 +80,9 @@ WX_HTML_REPORT_BOX* DIALOG_CONSTRAINTS_REPORTER::AddPage( const wxString& aTitle
     return reporter;
 }
 
+
+int DIALOG_CONSTRAINTS_REPORTER::GetPageCount() const
+{
+    return m_notebook->GetPageCount();
+}
+

@@ -152,6 +152,11 @@ public:
         return m_settingsKey;
     }
 
+    virtual wxString GetViolatingRuleDesc() const
+    {
+        return wxEmptyString;
+    }
+
     /**
      * Format a coordinate or position to text.
      */
