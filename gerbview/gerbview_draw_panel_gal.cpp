@@ -189,8 +189,9 @@ void GERBVIEW_DRAW_PANEL_GAL::SetTopLayer( int aLayer )
 
     for( int i = 0; i < GERBER_DRAWLAYERS_COUNT; ++i )
     {
-        m_view->SetLayerOrder( GERBER_DCODE_LAYER( GERBER_DRAW_LAYER( i ) ), 2 * i );
-        m_view->SetLayerOrder( GERBER_DRAW_LAYER( i ), ( 2 * i ) + 1 );
+        m_view->SetLayerOrder( GERBER_DCODE_LAYER( GERBER_DRAW_LAYER( i ) ),
+                               GERBER_DRAW_LAYER( 2 * i ) );
+        m_view->SetLayerOrder( GERBER_DRAW_LAYER( i ), GERBER_DRAW_LAYER( ( 2 * i ) + 1 ) );
     }
 
     m_view->SetTopLayer( aLayer );
