@@ -1079,7 +1079,7 @@ SCH_SHEET* SCH_LEGACY_PLUGIN::loadSheet( LINE_READER& aReader )
                 // Can be empty fields.
                 parseQuotedString( text, aReader, line, &line, true );
 
-                sheetPin->SetText( text );
+                sheetPin->SetText( ConvertToNewOverbarNotation( text ) );
 
                 if( line == nullptr )
                     THROW_IO_ERROR( _( "unexpected end of line" ) );
@@ -3069,14 +3069,12 @@ void SCH_LEGACY_PLUGIN_CACHE::loadField( std::unique_ptr<LIB_SYMBOL>& aSymbol,
 
     parseQuotedString( text, aReader, line, &line, true );
 
-    field->SetText( text );
-
     // Doctor the *.lib file field which has a "~" in blank fields.  New saves will
     // not save like this.
     if( text.size() == 1 && text[0] == '~' )
         field->SetText( wxEmptyString );
     else
-        field->SetText( text );
+        field->SetText( ConvertToNewOverbarNotation( text ) );
 
     wxPoint pos;
 
@@ -3385,7 +3383,11 @@ LIB_TEXT* SCH_LEGACY_PLUGIN_CACHE::loadText( std::unique_ptr<LIB_SYMBOL>& aSymbo
 
     // If quoted string loading fails, load as not quoted string.
     if( *line == '"' )
+    {
         parseQuotedString( str, aReader, line, &line );
+
+        str = ConvertToNewOverbarNotation( str );
+    }
     else
     {
         parseUnquotedString( str, aReader, line, &line );
@@ -3610,8 +3612,17 @@ LIB_PIN* SCH_LEGACY_PLUGIN_CACHE::loadPin( std::unique_ptr<LIB_SYMBOL>& aSymbol,
     }
 
 
-    LIB_PIN* pin = new LIB_PIN( aSymbol.get(), name, number, orientation, pinType, length,
-            nameTextSize, numberTextSize, convert, position, unit );
+    LIB_PIN* pin = new LIB_PIN( aSymbol.get(),
+                                ConvertToNewOverbarNotation( name ),
+                                ConvertToNewOverbarNotation( number ),
+                                orientation,
+                                pinType,
+                                length,
+                                nameTextSize,
+                                numberTextSize,
+                                convert,
+                                position,
+                                unit );
 
     // Optional
     if( tokens.HasMoreTokens() )       /* Special Symbol defined */
