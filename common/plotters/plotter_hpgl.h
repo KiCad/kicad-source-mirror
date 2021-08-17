@@ -26,9 +26,7 @@
 #pragma once
 
 #include <list>
-#include <vector>
 
-#include <math/box2.h>
 #include <plotter.h>
 
 

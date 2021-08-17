@@ -23,13 +23,10 @@
  * @brief specialized plotter for GERBER files format
  */
 
-#include <eda_base_frame.h>
-#include <fill_type.h>
 #include <string_utils.h>
 #include <convert_basic_shapes_to_polygon.h>
 #include <macros.h>
 #include <math/util.h>      // for KiROUND
-#include <render_settings.h>
 #include <trigo.h>
 #include <wx/log.h>
 

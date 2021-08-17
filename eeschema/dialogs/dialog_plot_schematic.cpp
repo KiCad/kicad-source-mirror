@@ -31,7 +31,9 @@
 #include <eeschema_settings.h>
 #include <kiface_i.h>
 #include <locale_io.h>
-#include <plotters_specific.h>
+#include "../../common/plotters/plotter_hpgl.h"
+#include "../../common/plotters/plotter_dxf.h"
+#include "../../common/plotters/plotters_pslike.h"
 #include <reporter.h>
 #include <trace_helpers.h>
 #include <settings/settings_manager.h>
@@ -119,7 +121,6 @@ DIALOG_PLOT_SCHEMATIC::DIALOG_PLOT_SCHEMATIC( SCH_EDIT_FRAME* parent )
 }
 
 
-// Initialize the dialog options:
 void DIALOG_PLOT_SCHEMATIC::initDlg()
 {
     auto cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );

@@ -25,7 +25,6 @@
 #include <bitset>                             // for bitset, operator&, __bi...
 #include <math.h>                             // for abs
 #include <stddef.h>                           // for NULL, size_t
-#include <vector>                             // for vector, __vector_base<>...
 
 #include <geometry/seg.h>                     // for SEG
 #include <geometry/shape_circle.h>
@@ -36,17 +35,14 @@
 #include <macros.h>
 #include <math/util.h>                        // for KiROUND, Clamp
 #include <math/vector2d.h>                    // for VECTOR2I
-#include <plotter.h>
-#include <plotters_specific.h>
+#include "../common/plotters/plotter_gerber.h"
 #include <trigo.h>
 
 #include <board_design_settings.h>            // for BOARD_DESIGN_SETTINGS
 #include <core/typeinfo.h>                    // for dyn_cast, PCB_DIMENSION_T
-#include <outline_mode.h>
-#include <gal/color4d.h>                      // for COLOR4D, operator!=
 #include <gbr_metadata.h>
 #include <gbr_netlist_metadata.h>             // for GBR_NETLIST_METADATA
-#include <layer_ids.h>  // for LSET, IsCopperLayer
+#include <layer_ids.h>                        // for LSET, IsCopperLayer
 #include <pad_shapes.h>                       // for PAD_ATTRIB::NPTH
 #include <pcbplot.h>
 #include <pcb_plot_params.h>                  // for PCB_PLOT_PARAMS, PCB_PL...
@@ -148,18 +144,21 @@ void BRDITEMS_PLOTTER::PlotPad( const PAD* aPad, const COLOR4D& aColor, OUTLINE_
             break;
 
         case PAD_ATTRIB::PTH :       // Pad through hole, a hole is also expected
-            gbr_metadata.SetApertureAttrib( GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_COMPONENTPAD );
+            gbr_metadata.SetApertureAttrib(
+                    GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_COMPONENTPAD );
             break;
 
         case PAD_ATTRIB::CONN:       // Connector pads, no solder paste but with solder mask.
             if( plotOnExternalCopperLayer )
-                gbr_metadata.SetApertureAttrib( GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_CONNECTORPAD );
+                gbr_metadata.SetApertureAttrib(
+                        GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_CONNECTORPAD );
             break;
 
         case PAD_ATTRIB::SMD:        // SMD pads (on external copper layer only)
                                      // with solder paste and mask
             if( plotOnExternalCopperLayer )
-                gbr_metadata.SetApertureAttrib( GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_SMDPAD_CUDEF );
+                gbr_metadata.SetApertureAttrib(
+                        GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_SMDPAD_CUDEF );
             break;
         }
 
@@ -169,28 +168,34 @@ void BRDITEMS_PLOTTER::PlotPad( const PAD* aPad, const COLOR4D& aColor, OUTLINE_
         {
         case PAD_PROP::BGA:          // Only applicable to outer layers
             if( plotOnExternalCopperLayer )
-                gbr_metadata.SetApertureAttrib( GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_BGAPAD_CUDEF );
+                gbr_metadata.SetApertureAttrib(
+                        GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_BGAPAD_CUDEF );
             break;
 
         case PAD_PROP::FIDUCIAL_GLBL:
-            gbr_metadata.SetApertureAttrib( GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_FIDUCIAL_GLBL );
+            gbr_metadata.SetApertureAttrib(
+                    GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_FIDUCIAL_GLBL );
             break;
 
         case PAD_PROP::FIDUCIAL_LOCAL:
-            gbr_metadata.SetApertureAttrib( GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_FIDUCIAL_LOCAL );
+            gbr_metadata.SetApertureAttrib(
+                    GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_FIDUCIAL_LOCAL );
             break;
 
         case PAD_PROP::TESTPOINT:    // Only applicable to outer layers
             if( plotOnExternalCopperLayer )
-                gbr_metadata.SetApertureAttrib( GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_TESTPOINT );
+                gbr_metadata.SetApertureAttrib(
+                        GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_TESTPOINT );
             break;
 
         case PAD_PROP::HEATSINK:
-            gbr_metadata.SetApertureAttrib( GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_HEATSINKPAD );
+            gbr_metadata.SetApertureAttrib(
+                    GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_HEATSINKPAD );
             break;
 
         case PAD_PROP::CASTELLATED:
-            gbr_metadata.SetApertureAttrib( GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_CASTELLATEDPAD );
+            gbr_metadata.SetApertureAttrib(
+                    GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_CASTELLATEDPAD );
             break;
 
         case PAD_PROP::NONE:
@@ -240,7 +245,8 @@ void BRDITEMS_PLOTTER::PlotPad( const PAD* aPad, const COLOR4D& aColor, OUTLINE_
         // (i.e. for a pad at pos 0,0, rot 0.0). Needed to use aperture macros,
         // to be able to create a pattern common to all trapezoid pads having the same shape
         wxPoint coord[4];
-        // Order is lower left, lower right, upper right, upper left
+
+        // Order is lower left, lower right, upper right, upper left.
         wxSize half_size = aPad->GetSize()/2;
         wxSize trap_delta = aPad->GetDelta()/2;
 
@@ -265,6 +271,7 @@ void BRDITEMS_PLOTTER::PlotPad( const PAD* aPad, const COLOR4D& aColor, OUTLINE_
                                     aPad->GetOrientation(), aPlotMode, &gbr_metadata );
             break;
         }
+
         KI_FALLTHROUGH;
 
     default:
@@ -363,6 +370,7 @@ void BRDITEMS_PLOTTER::PlotBoardGraphicItems()
         }
     }
 }
+
 
 void BRDITEMS_PLOTTER::PlotFootprintTextItem( const FP_TEXT* aTextMod, const COLOR4D& aColor )
 {
@@ -766,7 +774,8 @@ void BRDITEMS_PLOTTER::PlotFilledAreas( const ZONE* aZone, const SHAPE_POLY_SET&
         // be set as conductor
         if( aZone->GetNetname().IsEmpty() )
         {
-            gbr_metadata.SetApertureAttrib( GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_NONCONDUCTOR );
+            gbr_metadata.SetApertureAttrib(
+                    GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_NONCONDUCTOR );
         }
         else
         {
@@ -985,8 +994,8 @@ void BRDITEMS_PLOTTER::PlotPcbShape( const PCB_SHAPE* aShape )
 }
 
 
-void BRDITEMS_PLOTTER::plotOneDrillMark( PAD_DRILL_SHAPE_T aDrillShape, const wxPoint &aDrillPos,
-                                         const wxSize& aDrillSize, const wxSize &aPadSize,
+void BRDITEMS_PLOTTER::plotOneDrillMark( PAD_DRILL_SHAPE_T aDrillShape, const wxPoint& aDrillPos,
+                                         const wxSize& aDrillSize, const wxSize& aPadSize,
                                          double aOrientation, int aSmallDrill )
 {
     wxSize drillSize = aDrillSize;

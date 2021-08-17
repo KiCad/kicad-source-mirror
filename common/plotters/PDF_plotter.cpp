@@ -35,7 +35,6 @@
 
 #include <advanced_config.h>
 #include <macros.h>
-#include <render_settings.h>
 #include <trigo.h>
 
 #include "plotters_pslike.h"

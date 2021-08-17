@@ -92,7 +92,6 @@
  */
 
 #include <base64.h>
-#include <eda_base_frame.h>
 #include <eda_rect.h>
 #include <string_utils.h>
 #include <macros.h>
@@ -100,7 +99,6 @@
 
 #include <cstdint>
 #include <wx/mstream.h>
-#include <render_settings.h>
 
 #include "plotters_pslike.h"
 

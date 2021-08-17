@@ -27,13 +27,9 @@
  * @brief Functions to create drill files in gerber X2 format.
  */
 
-#include <vector>
-
-#include <plotter.h>
-#include <plotters_specific.h>
+#include "../../common/plotters/plotter_gerber.h"
 #include <string_utils.h>
 #include <locale_io.h>
-#include <pcb_edit_frame.h>
 #include <board.h>
 #include <footprint.h>
 #include <pcb_track.h>
@@ -206,16 +202,19 @@ int GERBER_WRITER::createDrillFile( wxString& aFullFilename, bool aIsNpth,
 
             if( pad->GetProperty() == PAD_PROP::CASTELLATED )
             {
-                gbr_metadata.SetApertureAttrib( GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_CASTELLATEDDRILL );
+                gbr_metadata.SetApertureAttrib(
+                        GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_CASTELLATEDDRILL );
             }
             else
             {
                 // Good practice of oblong pad holes (slots) is to use a specific aperture for
                 // routing, not used in drill commands.
                 if( hole_descr.m_Hole_Shape )
-                    gbr_metadata.SetApertureAttrib( GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_CMP_OBLONG_DRILL );
+                    gbr_metadata.SetApertureAttrib(
+                            GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_CMP_OBLONG_DRILL );
                 else
-                    gbr_metadata.SetApertureAttrib( GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_CMP_DRILL );
+                    gbr_metadata.SetApertureAttrib(
+                            GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_CMP_DRILL );
             }
 
             // Add object attribute: component reference to pads (mainly useful for users)

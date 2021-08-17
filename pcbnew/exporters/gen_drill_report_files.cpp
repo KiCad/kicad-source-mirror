@@ -27,7 +27,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <plotter.h>
 #include <plotters_specific.h>
 #include <eda_item.h>
 #include <gr_text.h>
@@ -109,8 +108,7 @@ bool GENDRILL_WRITER_BASE::genDrillMapFile( const wxString& aFullFileName, PLOT_
         plotter->SetPageSettings( page_info );
         plotter->SetViewport( offset, IU_PER_MILS / 10, scale, false );
     }
-    break;
-
+        break;
 
     default:
         wxASSERT( false );
@@ -479,8 +477,7 @@ unsigned GENDRILL_WRITER_BASE::printToolSummary( OUTPUTFORMATTER& out, bool aSum
         if( !aSummaryNPTH && tool.m_Hole_NotPlated )
             continue;
 
-        // List the tool number assigned to each drill,
-        // in mm then in inches.
+        // List the tool number assigned to each drill in mm then in inches.
         int tool_number = ii+1;
         out.Print( 0, "    T%d  %2.3fmm  %2.4f\"  ", tool_number,
                    diameter_in_mm( tool.m_Diameter ),

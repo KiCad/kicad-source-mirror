@@ -25,8 +25,6 @@
 
 #pragma once
 
-#include <vector>
-#include <math/box2.h>
 #include <plotter.h>
 
 
@@ -61,7 +59,7 @@ public:
     }
 
     /**
-     * Opens the DXF plot with a skeleton header.
+     * Open the DXF plot with a skeleton header.
      */
     virtual bool StartPlot() override;
     virtual bool EndPlot() override;

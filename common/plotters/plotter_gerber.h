@@ -26,9 +26,6 @@
 
 #pragma once
 
-#include <vector>
-#include <math/box2.h>
-
 #include <plotter.h>
 #include "gbr_plotter_apertures.h"
 

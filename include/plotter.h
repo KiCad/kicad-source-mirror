@@ -428,7 +428,7 @@ public:
                        bool                        aItalic,
                        bool                        aBold,
                        bool                        aMultilineAllowed = false,
-                       void* aData = nullptr );
+                       void*                       aData = nullptr );
 
     /**
      * Draw a marker (used for the drill map).
