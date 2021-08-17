@@ -94,63 +94,63 @@ void PlotDrawingSheet( PLOTTER* plotter, const PROJECT* aProject, const TITLE_BL
         switch( item->Type() )
         {
         case WSG_LINE_T:
-            {
-                DS_DRAW_ITEM_LINE* line = (DS_DRAW_ITEM_LINE*) item;
-                plotter->SetCurrentLineWidth( std::max( line->GetPenWidth(), defaultPenWidth ) );
-                plotter->MoveTo( line->GetStart() );
-                plotter->FinishTo( line->GetEnd() );
-            }
+        {
+            DS_DRAW_ITEM_LINE* line = (DS_DRAW_ITEM_LINE*) item;
+            plotter->SetCurrentLineWidth( std::max( line->GetPenWidth(), defaultPenWidth ) );
+            plotter->MoveTo( line->GetStart() );
+            plotter->FinishTo( line->GetEnd() );
+        }
             break;
 
         case WSG_RECT_T:
-            {
-                DS_DRAW_ITEM_RECT* rect = (DS_DRAW_ITEM_RECT*) item;
-                int penWidth = std::max( rect->GetPenWidth(), defaultPenWidth );
-                plotter->Rect( rect->GetStart(), rect->GetEnd(), FILL_TYPE::NO_FILL, penWidth );
-            }
+        {
+            DS_DRAW_ITEM_RECT* rect = (DS_DRAW_ITEM_RECT*) item;
+            int penWidth = std::max( rect->GetPenWidth(), defaultPenWidth );
+            plotter->Rect( rect->GetStart(), rect->GetEnd(), FILL_TYPE::NO_FILL, penWidth );
+        }
             break;
 
         case WSG_TEXT_T:
-            {
-                DS_DRAW_ITEM_TEXT* text = (DS_DRAW_ITEM_TEXT*) item;
-                int penWidth = std::max( text->GetEffectiveTextPenWidth(), defaultPenWidth );
-                plotter->Text( text->GetTextPos(), plotColor, text->GetShownText(),
-                               text->GetTextAngle(), text->GetTextSize(), text->GetHorizJustify(),
-                               text->GetVertJustify(), penWidth, text->IsItalic(), text->IsBold(),
-                               text->IsMultilineAllowed() );
-            }
+        {
+            DS_DRAW_ITEM_TEXT* text = (DS_DRAW_ITEM_TEXT*) item;
+            int penWidth = std::max( text->GetEffectiveTextPenWidth(), defaultPenWidth );
+            plotter->Text( text->GetTextPos(), plotColor, text->GetShownText(),
+                           text->GetTextAngle(), text->GetTextSize(), text->GetHorizJustify(),
+                           text->GetVertJustify(), penWidth, text->IsItalic(), text->IsBold(),
+                           text->IsMultilineAllowed() );
+        }
             break;
 
         case WSG_POLY_T:
+        {
+            DS_DRAW_ITEM_POLYPOLYGONS* poly = (DS_DRAW_ITEM_POLYPOLYGONS*) item;
+            int penWidth = std::max( poly->GetPenWidth(), defaultPenWidth );
+            std::vector<wxPoint> points;
+
+            for( int idx = 0; idx < poly->GetPolygons().OutlineCount(); ++idx )
             {
-                DS_DRAW_ITEM_POLYPOLYGONS* poly = (DS_DRAW_ITEM_POLYPOLYGONS*) item;
-                int penWidth = std::max( poly->GetPenWidth(), defaultPenWidth );
-                std::vector<wxPoint> points;
+                points.clear();
+                SHAPE_LINE_CHAIN& outline = poly->GetPolygons().Outline( idx );
 
-                for( int idx = 0; idx < poly->GetPolygons().OutlineCount(); ++idx )
-                {
-                    points.clear();
-                    SHAPE_LINE_CHAIN& outline = poly->GetPolygons().Outline( idx );
+                for( int ii = 0; ii < outline.PointCount(); ii++ )
+                    points.emplace_back( outline.CPoint( ii ).x, outline.CPoint( ii ).y );
 
-                    for( int ii = 0; ii < outline.PointCount(); ii++ )
-                        points.emplace_back( outline.CPoint( ii ).x, outline.CPoint( ii ).y );
-
-                    plotter->PlotPoly( points, FILL_TYPE::FILLED_SHAPE, penWidth );
-                }
+                plotter->PlotPoly( points, FILL_TYPE::FILLED_SHAPE, penWidth );
             }
+        }
             break;
 
         case WSG_BITMAP_T:
-            {
-                DS_DRAW_ITEM_BITMAP* drawItem = (DS_DRAW_ITEM_BITMAP*) item;
-                DS_DATA_ITEM_BITMAP* bitmap = (DS_DATA_ITEM_BITMAP*) drawItem->GetPeer();
+        {
+            DS_DRAW_ITEM_BITMAP* drawItem = (DS_DRAW_ITEM_BITMAP*) item;
+            DS_DATA_ITEM_BITMAP* bitmap = (DS_DATA_ITEM_BITMAP*) drawItem->GetPeer();
 
-                if( bitmap->m_ImageBitmap == nullptr )
-                    break;
+            if( bitmap->m_ImageBitmap == nullptr )
+                break;
 
-                bitmap->m_ImageBitmap->PlotImage( plotter, drawItem->GetPosition(), plotColor,
+            bitmap->m_ImageBitmap->PlotImage( plotter, drawItem->GetPosition(), plotColor,
                                                   PLOTTER::USE_DEFAULT_LINE_WIDTH );
-            }
+        }
             break;
 
         default:

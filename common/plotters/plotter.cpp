@@ -47,6 +47,7 @@
 #include <bezier_curves.h>
 #include <math/util.h>      // for KiROUND
 
+
 PLOTTER::PLOTTER( )
 {
     m_plotScale = 1;
@@ -58,16 +59,17 @@ PLOTTER::PLOTTER( )
     m_outputFile = nullptr;
     m_colorMode = false;          // Starts as a BW plot
     m_negativeMode = false;
+
     // Temporary init to avoid not initialized vars, will be set later
     m_IUsPerDecimil = 1;        // will be set later to the actual value
     m_iuPerDeviceUnit = 1;        // will be set later to the actual value
     m_renderSettings = nullptr;
 }
 
+
 PLOTTER::~PLOTTER()
 {
-    // Emergency cleanup, but closing the file is
-    // usually made in EndPlot().
+    // Emergency cleanup, but closing the file is usually made in EndPlot().
     if( m_outputFile )
         fclose( m_outputFile );
 }
@@ -79,8 +81,7 @@ bool PLOTTER::OpenFile( const wxString& aFullFilename )
 
     wxASSERT( !m_outputFile );
 
-    // Open the file in text mode (not suitable for all plotters
-    // but only for most of them
+    // Open the file in text mode (not suitable for all plotters but only for most of them.
     m_outputFile = wxFopen( m_filename, wxT( "wt" ) );
 
     if( m_outputFile == nullptr )
@@ -172,6 +173,7 @@ void PLOTTER::Arc( const wxPoint& centre, double StAngle, double EndAngle, int r
         std::swap( StAngle, EndAngle );
 
     SetCurrentLineWidth( width );
+
     /* Please NOTE the different sign due to Y-axis flip */
     start.x = centre.x + KiROUND( cosdecideg( radius, -StAngle ) );
     start.y = centre.y + KiROUND( sindecideg( radius, -StAngle ) );
@@ -236,7 +238,7 @@ void PLOTTER::BezierCurve( const wxPoint& aStart, const wxPoint& aControl1,
 }
 
 
-void PLOTTER::PlotImage(const wxImage & aImage, const wxPoint& aPos, double aScaleFactor )
+void PLOTTER::PlotImage(const wxImage& aImage, const wxPoint& aPos, double aScaleFactor )
 {
     wxSize size( aImage.GetWidth() * aScaleFactor, aImage.GetHeight() * aScaleFactor );
 
@@ -356,6 +358,7 @@ void PLOTTER::Marker( const wxPoint& position, int diametre, unsigned aShapeId )
         0014,  // +
         0040,  // Sq
         0020,  // Lz
+
         // Two simple shapes
         0103,  // X O
         0017,  // X +
@@ -367,6 +370,7 @@ void PLOTTER::Marker( const wxPoint& position, int diametre, unsigned aShapeId )
         0054,  // + Sq
         0034,  // + Lz
         0060,  // Sq Lz
+
         // Three simple shapes
         0117,  // X O +
         0143,  // X O Sq
@@ -377,14 +381,17 @@ void PLOTTER::Marker( const wxPoint& position, int diametre, unsigned aShapeId )
         0154,  // O + Sq
         0134,  // O + Lz
         0074,  // + Sq Lz
+
         // Four simple shapes
         0174,  // O Sq Lz +
         0163,  // X O Sq Lz
         0157,  // X O Sq +
         0137,  // X O Lz +
         0077,  // X Sq Lz +
+
         // This draws *everything *
         0177,  // X O Sq Lz +
+
         // Here we use the single bars... so the cross is forbidden
         0110,  // O -
         0104,  // O |
@@ -407,6 +414,7 @@ void PLOTTER::Marker( const wxPoint& position, int diametre, unsigned aShapeId )
         0170,  // O Sq Lz -
         0164,  // O Sq Lz |
         0161,  // O Sq Lz /
+
         // Last resort: the backlash component (easy to confound)
         0102,  // \ O
         0042,  // \ Sq
@@ -416,6 +424,7 @@ void PLOTTER::Marker( const wxPoint& position, int diametre, unsigned aShapeId )
         0062,  // \ Sq Lz
         0162   // \ O Sq Lz
     };
+
     if( aShapeId >= MARKER_COUNT )
     {
         // Fallback shape

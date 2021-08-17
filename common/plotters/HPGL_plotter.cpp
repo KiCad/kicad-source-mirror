@@ -24,10 +24,10 @@
 
 /**
  * @file HPGL_plotter.cpp
- * @brief Kicad: specialized plotter for HPGL files format
+ * @brief KiCad plotter for HPGL file format.
  * Since this plot engine is mostly intended for import in external programs,
  * sadly HPGL/2 isn't supported a lot... some of the primitives use overlapped
- * strokes to fill the shape
+ * strokes to fill the shape.
  */
 
 /* Some HPGL commands:
@@ -195,7 +195,6 @@
 
 #include <cstdio>
 
-#include <eda_base_frame.h>
 #include <fill_type.h>
 #include <string_utils.h>
 #include <convert_basic_shapes_to_polygon.h>
@@ -206,7 +205,7 @@
 
 
 /// Compute the distance between two DPOINT points.
-static double dpoint_dist( DPOINT a, DPOINT b );
+static double dpoint_dist( const DPOINT& a, const DPOINT& b );
 
 
 // The hpgl command to close a polygon def, fill it and plot outline:
@@ -215,9 +214,11 @@ static double dpoint_dist( DPOINT a, DPOINT b );
 // EP;   draws the polygon outline. It usually gives a better look to the filled polygon
 static const char hpgl_end_polygon_cmd[] = "PM 2; FP; EP;\n";
 
+
 // HPGL scale factor (1 Plotter Logical Unit = 1/40mm = 25 micrometers)
 // PLUsPERDECIMIL = (25.4 / 10000) / 0.025
 static const double PLUsPERDECIMIL = 0.1016;
+
 
 HPGL_PLOTTER::HPGL_PLOTTER()
         : arcTargetChordLength( 0 ),
@@ -232,6 +233,7 @@ HPGL_PLOTTER::HPGL_PLOTTER()
     SetPenDiameter( 0.0 );
 }
 
+
 void HPGL_PLOTTER::SetViewport( const wxPoint& aOffset, double aIusPerDecimil,
                                 double aScale, bool aMirror )
 {
@@ -240,7 +242,7 @@ void HPGL_PLOTTER::SetViewport( const wxPoint& aOffset, double aIusPerDecimil,
     m_IUsPerDecimil   = aIusPerDecimil;
     m_iuPerDeviceUnit = PLUsPERDECIMIL / aIusPerDecimil;
 
-    /* Compute the paper size in IUs */
+    // Compute the paper size in IUs.
     m_paperSize   = m_pageInfo.GetSizeMils();
     m_paperSize.x *= 10.0 * aIusPerDecimil;
     m_paperSize.y *= 10.0 * aIusPerDecimil;
@@ -331,6 +333,7 @@ bool HPGL_PLOTTER::EndPlot()
                     fputs( "PU;", m_outputFile );
                     pen_up = true;
                 }
+
                 fprintf( m_outputFile, "SP%d;", item.pen );
                 current_pen = item.pen;
             }
@@ -428,11 +431,11 @@ void HPGL_PLOTTER::Circle( const wxPoint& centre, int diameter, FILL_TYPE fill, 
         // Draw the filled area
         MoveTo( centre );
         startOrAppendItem( center_dev, wxString::Format( "PM 0;CI %g,%g;%s", radius, chord_degrees,
-                                               hpgl_end_polygon_cmd ) );
+                                                         hpgl_end_polygon_cmd ) );
         m_current_item->lift_before = true;
         m_current_item->pen_returns = true;
-        m_current_item->bbox.Merge(
-                BOX2D( center_dev - radius, VECTOR2D( 2 * radius, 2 * radius ) ) );
+        m_current_item->bbox.Merge( BOX2D( center_dev - radius,
+                                           VECTOR2D( 2 * radius, 2 * radius ) ) );
         PenFinish();
     }
 
@@ -442,8 +445,8 @@ void HPGL_PLOTTER::Circle( const wxPoint& centre, int diameter, FILL_TYPE fill, 
         startOrAppendItem( center_dev, wxString::Format( "CI %g,%g;", radius, chord_degrees ) );
         m_current_item->lift_before = true;
         m_current_item->pen_returns = true;
-        m_current_item->bbox.Merge(
-                BOX2D( center_dev - radius, VECTOR2D( 2 * radius, 2 * radius ) ) );
+        m_current_item->bbox.Merge( BOX2D( center_dev - radius,
+                                           VECTOR2D( 2 * radius, 2 * radius ) ) );
         PenFinish();
     }
 }
@@ -526,14 +529,7 @@ void HPGL_PLOTTER::PenTo( const wxPoint& pos, char plume )
     else if( plume == 'D' )
     {
         m_penState = 'D';
-        startOrAppendItem(
-            lastpos_dev,
-            wxString::Format(
-                "PA %.0f,%.0f;",
-                pos_dev.x,
-                pos_dev.y
-            )
-        );
+        startOrAppendItem( lastpos_dev, wxString::Format( "PA %.0f,%.0f;", pos_dev.x, pos_dev.y ) );
         m_current_item->loc_end = pos_dev;
         m_current_item->bbox.Merge( pos_dev );
     }
@@ -607,11 +603,11 @@ void HPGL_PLOTTER::Arc( const wxPoint& centre, double StAngle, double EndAngle, 
     DPOINT  cmap_dev = userToDeviceCoordinates( cmap );
 
     startOrAppendItem( cmap_dev, wxString::Format( "AA %.0f,%.0f,%.0f,%g", centre_dev.x,
-                                         centre_dev.y, angle, chord_degrees ) );
+                                                   centre_dev.y, angle, chord_degrees ) );
 
     // TODO We could compute the final position and full bounding box instead...
-    m_current_item->bbox.Merge(
-             BOX2D( centre_dev - radius_dev, VECTOR2D( radius_dev * 2, radius_dev * 2 ) ) );
+    m_current_item->bbox.Merge( BOX2D( centre_dev - radius_dev,
+                                       VECTOR2D( radius_dev * 2, radius_dev * 2 ) ) );
     m_current_item->lift_after = true;
     flushItem();
 }
@@ -676,10 +672,11 @@ void HPGL_PLOTTER::FlashPadCircle( const wxPoint& pos, int diametre,
         // A filled polygon uses always the current point to start the polygon.
         // Gives a correct current starting point for the circle
         MoveTo( wxPoint( pos.x+radius, pos.y ) );
+
         // Plot filled area and its outline
         startOrAppendItem( userToDeviceCoordinates( wxPoint( pos.x + radius, pos.y ) ),
-                wxString::Format( "PM 0; PA %.0f,%.0f;CI %.0f;%s", pos_dev.x, pos_dev.y, rsize,
-                        hpgl_end_polygon_cmd ) );
+                           wxString::Format( "PM 0; PA %.0f,%.0f;CI %.0f;%s",
+                                             pos_dev.x, pos_dev.y, rsize, hpgl_end_polygon_cmd ) );
         m_current_item->lift_before = true;
         m_current_item->pen_returns = true;
     }
@@ -719,6 +716,7 @@ void HPGL_PLOTTER::FlashPadRect( const wxPoint& pos, const wxSize& padsize,
     corners.emplace_back( - dx, + dy );
     corners.emplace_back( + dx, + dy );
     corners.emplace_back( + dx, - dy );
+
     // Close polygon
     corners.emplace_back( - dx, - dy );
 
@@ -742,8 +740,7 @@ void HPGL_PLOTTER::FlashPadRoundRect( const wxPoint& aPadPos, const wxSize& aSiz
 
     if( aTraceMode == FILLED )
     {
-        // in filled mode, the pen diameter is removed from size
-        // to keep the pad size
+        // In filled mode, the pen diameter is removed from size to keep the pad size.
         size.x -= KiROUND( penDiameter ) / 2;
         size.x = std::max( size.x, 0);
         size.y -= KiROUND( penDiameter ) / 2;
@@ -770,9 +767,9 @@ void HPGL_PLOTTER::FlashPadRoundRect( const wxPoint& aPadPos, const wxSize& aSiz
     PlotPoly( cornerList, aTraceMode == FILLED ? FILL_TYPE::FILLED_SHAPE : FILL_TYPE::NO_FILL );
 }
 
-void HPGL_PLOTTER::FlashPadCustom( const wxPoint& aPadPos, const wxSize& aSize,
-                                   double aOrient, SHAPE_POLY_SET* aPolygons,
-                                   OUTLINE_MODE aTraceMode, void* aData )
+
+void HPGL_PLOTTER::FlashPadCustom( const wxPoint& aPadPos, const wxSize& aSize, double aOrient,
+                                   SHAPE_POLY_SET* aPolygons, OUTLINE_MODE aTraceMode, void* aData )
 {
     std::vector< wxPoint > cornerList;
 
@@ -823,7 +820,7 @@ void HPGL_PLOTTER::FlashRegularPolygon( const wxPoint& aShapePos, int aRadius, i
 }
 
 
-bool HPGL_PLOTTER::startItem( DPOINT location )
+bool HPGL_PLOTTER::startItem( const DPOINT& location )
 {
     return startOrAppendItem( location, wxEmptyString );
 }
@@ -835,7 +832,7 @@ void HPGL_PLOTTER::flushItem()
 }
 
 
-bool HPGL_PLOTTER::startOrAppendItem( DPOINT location, wxString const& content )
+bool HPGL_PLOTTER::startOrAppendItem( const DPOINT& location, wxString const& content )
 {
     if( m_current_item == nullptr )
     {
@@ -874,7 +871,7 @@ void HPGL_PLOTTER::sortItems( std::list<HPGL_ITEM>& items )
     //  2) Within the items for one pen, avoid bouncing back and forth around
     //      the page; items should be sequenced with nearby items.
     //
-    // This is essentially a variant of the Travelling Salesman Problem where
+    // This is essentially a variant of the Traveling Salesman Problem where
     // the cities are themselves edges that must be traversed. This is of course
     // a famously NP-Hard problem and this particular variant has a monstrous
     // number of "cities". For now, we're using a naive nearest-neighbor search,
@@ -897,8 +894,7 @@ void HPGL_PLOTTER::sortItems( std::list<HPGL_ITEM>& items )
 
         for( auto search_it = best_it; search_it != items.end(); search_it++ )
         {
-            // Immediately forget an item as "best" if another one is a better
-            // pen match
+            // Immediately forget an item as "best" if another one is a better pen match
             if( best_it->pen != last_item.pen && search_it->pen == last_item.pen )
             {
                 best_it = search_it;
@@ -944,7 +940,7 @@ const char* HPGL_PLOTTER::lineTypeCommand( PLOT_DASH_TYPE linetype )
 }
 
 
-static double dpoint_dist( DPOINT a, DPOINT b )
+static double dpoint_dist( const DPOINT& a, const DPOINT& b )
 {
     DPOINT diff = a - b;
     return sqrt( diff.x * diff.x + diff.y * diff.y );

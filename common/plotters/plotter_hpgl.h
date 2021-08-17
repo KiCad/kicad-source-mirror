@@ -47,10 +47,11 @@ public:
         return wxString( wxT( "plt" ) );
     }
 
-    /// Set the target length of chords used to draw approximated circles and
-    /// arcs.
-    ///
-    /// @param chord_len - chord length in IUs
+    /**
+     * Set the target length of chords used to draw approximated circles and arcs.
+     *
+     * @param chord_len the chord length in IUs.
+     */
     void SetTargetChordLength( double chord_len );
 
     /// Switch to the user coordinate system
@@ -143,24 +144,26 @@ public:
                                       void* aData ) override;
 
 protected:
-    /// Start a new HPGL_ITEM if necessary, keeping the current one if it exists.
-    ///
-    /// @param location is the location of the item.
-    ///
-    /// @return whether a new item was made.
-    bool startItem( DPOINT location );
+    /**
+     * Start a new HPGL_ITEM if necessary, keeping the current one if it exists.
+     *
+     * @param location is the location of the item.
+     * @return whether a new item was made.
+     */
+    bool startItem( const DPOINT& location );
 
     /// Flush the current HPGL_ITEM and clear out the current item pointer.
     void flushItem();
 
-    /// Start a new HPGL_ITEM with the given string if necessary, or append the
-    /// string to the current item.
-    ///
-    /// @param location is the location of the item, if a new one is made.
-    /// @param content is the content substring.
-    ///
-    /// @return whether a new item was made
-    bool startOrAppendItem( DPOINT location, const wxString& content );
+    /**
+     * Start a new HPGL_ITEM with the given string if necessary, or append the
+     * string to the current item.
+     *
+     * @param location is the location of the item, if a new one is made.
+     * @param content is the content substring.
+     * @return whether a new item was made.
+     */
+    bool startOrAppendItem( const DPOINT& location, const wxString& content );
 
     int            penSpeed;
     int            penNumber;

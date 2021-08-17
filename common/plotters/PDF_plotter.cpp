@@ -363,7 +363,7 @@ void PDF_PLOTTER::PenTo( const wxPoint& pos, char plume )
 }
 
 
-void PDF_PLOTTER::PlotImage( const wxImage & aImage, const wxPoint& aPos, double aScaleFactor )
+void PDF_PLOTTER::PlotImage( const wxImage& aImage, const wxPoint& aPos, double aScaleFactor )
 {
     wxASSERT( workFile );
     wxSize pix_size( aImage.GetWidth(), aImage.GetHeight() );
@@ -663,8 +663,7 @@ bool PDF_PLOTTER::StartPlot()
        that they must have the bit 7 set) */
     fputs( "%PDF-1.5\n%\200\201\202\203\n", m_outputFile );
 
-    /* Allocate an entry for the page tree root, it will go in every page
-       parent entry */
+    /* Allocate an entry for the page tree root, it will go in every page parent entry */
     pageTreeHandle = allocPdfObject();
 
     /* In the same way, the font resource dictionary is used by every page
