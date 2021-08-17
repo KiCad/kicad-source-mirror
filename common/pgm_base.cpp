@@ -198,7 +198,7 @@ const wxString PGM_BASE::AskUserForPreferredEditor( const wxString& aDefaultEdit
 }
 
 
-bool PGM_BASE::InitPgm( bool aHeadless )
+bool PGM_BASE::InitPgm( bool aHeadless, bool aSkipPyInit )
 {
     wxString pgm_name = wxFileName( App().argv[0] ).GetName().Lower();
 
@@ -272,7 +272,10 @@ bool PGM_BASE::InitPgm( bool aHeadless )
 
     ReadPdfBrowserInfos();      // needs GetCommonSettings()
 
-    m_python_scripting = std::make_unique<SCRIPTING>();
+    // Create the python scripting stuff
+    // Skip it fot applications that do not use it
+    if( !aSkipPyInit )
+        m_python_scripting = std::make_unique<SCRIPTING>();
 
 #ifdef __WXMAC__
     // Always show filters on Open dialog to be able to choose plugin

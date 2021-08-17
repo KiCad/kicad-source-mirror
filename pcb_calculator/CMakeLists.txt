@@ -1,3 +1,5 @@
+add_definitions(-DPCB_CALCULATOR_BUILD)
+
 include_directories( BEFORE ${INC_BEFORE} )
 include_directories(
     dialogs

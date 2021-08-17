@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2004-2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2008-2015 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -269,9 +269,11 @@ public:
      * @note Do not initialize anything relating to DSOs or projects.
      *
      * @param aHeadless If true, run in headless mode (e.g. for unit tests)
+     * @param aSkipPyInit If true, do not init python stuff.
+     * Useful in application that do not use python, to disable python dependency at run time
      * @return true if success, false if failure and program is to terminate.
      */
-    bool InitPgm( bool aHeadless = false );
+    bool InitPgm( bool aHeadless = false, bool aSkipPyInit = false );
 
     // The PGM_* classes can have difficulties at termination if they
     // are not destroyed soon enough.  Relying on a static destructor can be
