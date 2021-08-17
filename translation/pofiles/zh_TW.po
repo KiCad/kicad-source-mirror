@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
-"PO-Revision-Date: 2021-08-11 17:58+0000\n"
+"PO-Revision-Date: 2021-08-18 10:34+0000\n"
 "Last-Translator: David Chen <d0123456789g@yahoo.com.tw>\n"
 "Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hant/>\n"
@@ -13490,9 +13490,8 @@ msgid "Invalid page type"
 msgstr "過孔直徑無效"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1688
-#, fuzzy
 msgid "Invalid title block comment number"
-msgstr "無效的標題區塊註釋號碼"
+msgstr "無效的標題區註解編號"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1787
 #, fuzzy
@@ -30420,11 +30419,11 @@ msgid "Footprint %s pad %s has a square hole (not yet supported)."
 msgstr "焊盤 \"%s\"（封裝 %s）有一個方孔（KiCad 目前尚未支援此功能）。"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2013
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Footprint %s pad %s has a hole-rotation of %f degrees. KiCad only supports "
 "90 degree rotations."
-msgstr "焊盤 \"%s\"（封裝 %s）有 %f 度的孔旋轉。KiCad 僅支援 90 度角"
+msgstr "封裝 \"%s\" 的焊盤 \"%s\" 有 %f 度的孔旋轉。KiCad 僅支援 90 度角旋轉。"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2027
 #, c-format
@@ -31076,14 +31075,14 @@ msgstr "刪除資料夾 \"%s\" 所需的權限不足。"
 
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:990
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:2589
-#, fuzzy, c-format
+#, c-format
 msgid "Library folder '%s' has unexpected sub-folders."
-msgstr "庫目錄 \"%s\" 有非預期的的子目錄。"
+msgstr "庫目錄 \"%s\" 有非預期的子目錄。"
 
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:1009
-#, fuzzy, c-format
+#, c-format
 msgid "Unexpected file '%s' found in library '%s'."
-msgstr "在庫路徑 \"%s\" 中找到了非預期的檔案 \"%s\"。"
+msgstr "非預期的檔案 \"%s\"在 \"%s\" 庫中被找到。"
 
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:1028
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:2626
@@ -31178,9 +31177,9 @@ msgid "Cannot overwrite library path '%s'."
 msgstr "不能覆蓋庫路徑 \"%s\"。"
 
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:2608
-#, fuzzy, c-format
+#, c-format
 msgid "Unexpected file '%s' found in library path '%s'."
-msgstr "在庫路徑 \"%s\" 中找到了非預期的檔案 \"%s\"。"
+msgstr "非預期的檔案 \"%s\"在庫路徑 \"%s\" 中被找到。"
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:176
 #, c-format
