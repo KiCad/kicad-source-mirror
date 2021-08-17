@@ -14,7 +14,6 @@
         <property name="file">panel_eeschema_editing_options_base</property>
         <property name="first_id">1000</property>
         <property name="help_provider">none</property>
-        <property name="image_path_wrapper_function_name"></property>
         <property name="indent_with_spaces"></property>
         <property name="internationalize">1</property>
         <property name="name">PanelEeschemaEditingOptionsBase</property>
@@ -26,7 +25,6 @@
         <property name="skip_php_events">1</property>
         <property name="skip_python_events">1</property>
         <property name="ui_table">UI</property>
-        <property name="use_array_enum">0</property>
         <property name="use_enum">1</property>
         <property name="use_microsoft_bom">0</property>
         <object class="Panel" expanded="1">
@@ -294,7 +292,7 @@
                                         <property name="permission">none</property>
                                         <object class="sizeritem" expanded="1">
                                             <property name="border">5</property>
-                                            <property name="flag">wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT</property>
+                                            <property name="flag">wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT</property>
                                             <property name="proportion">0</property>
                                             <object class="wxStaticText" expanded="1">
                                                 <property name="BottomDockable">1</property>
@@ -355,7 +353,7 @@
                                         </object>
                                         <object class="sizeritem" expanded="1">
                                             <property name="border">5</property>
-                                            <property name="flag">wxALL</property>
+                                            <property name="flag">wxBOTTOM|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL</property>
                                             <property name="proportion">1</property>
                                             <object class="CustomControl" expanded="1">
                                                 <property name="BottomDockable">1</property>
@@ -478,7 +476,7 @@
                                         </object>
                                         <object class="sizeritem" expanded="1">
                                             <property name="border">5</property>
-                                            <property name="flag">wxALL</property>
+                                            <property name="flag">wxBOTTOM|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL</property>
                                             <property name="proportion">1</property>
                                             <object class="CustomControl" expanded="1">
                                                 <property name="BottomDockable">1</property>

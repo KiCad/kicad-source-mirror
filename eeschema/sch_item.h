@@ -181,9 +181,9 @@ public:
     }
 
 private:
-    int m_width;
+    int            m_width;
     PLOT_DASH_TYPE m_plotstyle;
-    COLOR4D m_color;
+    COLOR4D        m_color;
 };
 
 

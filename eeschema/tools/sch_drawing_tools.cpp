@@ -1336,7 +1336,7 @@ int SCH_DRAWING_TOOLS::DrawSheet( const TOOL_EVENT& aEvent )
                                    static_cast<wxPoint>( cursorPos ) );
             sheet->SetFlags( IS_NEW | IS_RESIZING );
             sheet->SetScreen( nullptr );
-            sheet->SetBorderWidth( cfg->m_Drawing.default_line_thickness );
+            sheet->SetBorderWidth( Mils2iu( cfg->m_Drawing.default_line_thickness ) );
             sheet->SetBorderColor( cfg->m_Drawing.default_sheet_border_color );
             sheet->SetBackgroundColor( cfg->m_Drawing.default_sheet_background_color );
             sheet->GetFields()[ SHEETNAME ].SetText( "Untitled Sheet" );

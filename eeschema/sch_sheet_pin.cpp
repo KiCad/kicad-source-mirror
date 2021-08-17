@@ -35,6 +35,7 @@
 #include <sch_sheet.h>
 #include <sch_sheet_pin.h>
 #include <sch_painter.h>
+#include <schematic.h>
 #include <trigo.h>
 
 
@@ -97,7 +98,10 @@ bool SCH_SHEET_PIN::operator==( const SCH_SHEET_PIN* aPin ) const
 
 int SCH_SHEET_PIN::GetPenWidth() const
 {
-    return 0;
+    if( Schematic() )
+        return Schematic()->Settings().m_DefaultLineWidth;
+
+    return DEFAULT_LINE_THICKNESS;
 }
 
 
