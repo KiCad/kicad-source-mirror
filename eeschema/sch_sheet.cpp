@@ -987,9 +987,13 @@ void SCH_SHEET::Plot( PLOTTER* aPlotter ) const
     int penWidth = std::max( GetPenWidth(), aPlotter->RenderSettings()->GetMinPenWidth() );
     aPlotter->Rect( m_pos, m_pos + m_size, FILL_TYPE::NO_FILL, penWidth );
 
-    /* Draw texts : SheetLabel */
+    // Plot Sheet pins
     for( SCH_SHEET_PIN* sheetPin : m_pins )
         sheetPin->Plot( aPlotter );
+
+    // Plot the fields
+    for( const SCH_FIELD& field : m_fields )
+        field.Plot( aPlotter );
 }
 
 
