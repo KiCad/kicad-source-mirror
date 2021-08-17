@@ -203,7 +203,7 @@ void GERBER_FILE_IMAGE::ResetDefaultValues()
     m_FmtLen.x   = m_FmtLen.y = 3 + 4;              // Initialize default format len = 3+4
 
     m_Iterpolation = GERB_INTERPOL_LINEAR_1X;       // Linear, 90 arc, Circ.
-    m_360Arc_enbl  = false;                         // 360 deg circular
+    m_360Arc_enbl  = true;                          // 360 deg circular mode (G75) selected as default
                                                     // interpolation disable
     m_AsArcG74G75Cmd = false;                       // false until a G74 or G75 command is found
     m_Current_Tool = 0;                             // Current Dcode selected
