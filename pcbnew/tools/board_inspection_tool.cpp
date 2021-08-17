@@ -357,9 +357,9 @@ int BOARD_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
     auto hasHole =
             []( BOARD_ITEM* aItem )
             {
-                PAD* pad = dynamic_cast<PAD*>( aItem );
+                PAD* tmpPad = dynamic_cast<PAD*>( aItem );
 
-                if( pad && pad->GetDrillSizeX() > 0 && pad->GetDrillSizeY() > 0 )
+                if( tmpPad && tmpPad->GetDrillSizeX() > 0 && tmpPad->GetDrillSizeY() > 0 )
                     return true;
 
                 PCB_VIA* via = dynamic_cast<PCB_VIA*>( aItem );
