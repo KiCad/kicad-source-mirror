@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-01 11:31-0700\n"
-"PO-Revision-Date: 2021-08-16 06:17+0000\n"
+"PO-Revision-Date: 2021-08-20 12:40+0000\n"
 "Last-Translator: boonchai k. <kicadthai@gmail.com>\n"
 "Language-Team: Thai <https://hosted.weblate.org/projects/kicad/master-source/"
 "th/>\n"
@@ -20411,27 +20411,27 @@ msgstr "นำเวียที่เชื่อมต่อน้อยกว
 
 #: pcbnew/cleanup_item.cpp:54
 msgid "Remove zero-length track"
-msgstr ""
+msgstr "ลบแทร็กมีความยาวเป็นศูนย์"
 
 #: pcbnew/cleanup_item.cpp:55
 msgid "Remove track inside pad"
-msgstr ""
+msgstr "ลบแทร็กภายในแพ็ด"
 
 #: pcbnew/cleanup_item.cpp:58
 msgid "Remove zero-size graphic"
-msgstr ""
+msgstr "ลบกราฟิกขนาดศูนย์"
 
 #: pcbnew/cleanup_item.cpp:59
 msgid "Remove duplicated graphic"
-msgstr ""
+msgstr "ลบกราฟิกที่ซ้ำกัน"
 
 #: pcbnew/cleanup_item.cpp:60
 msgid "Convert lines to rectangle"
-msgstr ""
+msgstr "แปลงเส้นเป็นรูปสี่เหลี่ยมผืนผ้า"
 
 #: pcbnew/cleanup_item.cpp:64
 msgid "Unknown cleanup action"
-msgstr ""
+msgstr "การล้างที่ไม่รู้จัก"
 
 #: pcbnew/convert_drawsegment_list_to_polygon.cpp:414
 #: pcbnew/convert_drawsegment_list_to_polygon.cpp:566
@@ -20439,64 +20439,66 @@ msgstr ""
 #: pcbnew/convert_drawsegment_list_to_polygon.cpp:850
 #: pcbnew/convert_drawsegment_list_to_polygon.cpp:864
 msgid "(self-intersecting)"
-msgstr ""
+msgstr "(ตัดกันเอง)"
 
 #: pcbnew/convert_drawsegment_list_to_polygon.cpp:574
 #: pcbnew/convert_drawsegment_list_to_polygon.cpp:819
 msgid "(not a closed shape)"
-msgstr ""
+msgstr "(ไม่ใช่รูปร่างปิด)"
 
 #: pcbnew/cross-probing.cpp:169
 #, c-format
 msgid "%s pin %s not found"
-msgstr ""
+msgstr "%s ขา %s ไม่พบ"
 
 #: pcbnew/cross-probing.cpp:192
 #, c-format
 msgid "Selecting all from sheet \"%s\""
-msgstr ""
+msgstr "เลือกทั้งหมดจากชีต \"%s\""
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:87
 msgid "Only front"
-msgstr ""
+msgstr "ด้านหน้าเท่านั้น"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:88
 msgid "Only back"
-msgstr ""
+msgstr "ด้านหลังเท่านั้น"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:89
 msgid "Only selected"
-msgstr ""
+msgstr "เลือกเท่านั้น"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:95
 msgid "Empty"
-msgstr ""
+msgstr "ว่างเปล่า"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:96
 msgid "Invalid"
-msgstr ""
+msgstr "ไม่ถูกต้อง"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:97
 msgid "Excluded"
-msgstr ""
+msgstr "ไม่รวม"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:112
 msgid "Reannotate PCB"
-msgstr ""
+msgstr "ทำอธิบายประกอบพีซีบีอีกครั้ง"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:257
 msgid "No PCB to reannotate!"
-msgstr ""
+msgstr "ไม่มีพีซีบีทำอธิบายประกอบใหม่!"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:269
 msgid "PCB successfully reannotated"
-msgstr ""
+msgstr "ทำหมายเหตุประกอบพีซีบีเรียบร้อยแล้ว"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:270
 msgid ""
 "PCB annotation changes should be synchronized with schematic using the "
 "\"Update Schematic from PCB\" tool."
 msgstr ""
+"การเปลี่ยนแปลงคำอธิบายประกอบพีซีบี ควรสอดคล้องกับวงจร โดยใช้เครื่องมือ \"อ"
+"ัปเดตวงจรจากพีซีบี\""
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:285
 #, c-format
@@ -20504,6 +20506,8 @@ msgid ""
 "\n"
 "%s footprints will be reannotated."
 msgstr ""
+"\n"
+"%s ฟุ้ทพรินท์จะถูกทำอธิบายประกอบอีกครั้ง"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:290
 #, c-format
@@ -20511,6 +20515,8 @@ msgid ""
 "\n"
 "Any reference types %s will not be annotated."
 msgstr ""
+"\n"
+"การอ้างอิงประเภทใด %s จะไม่ถูกใส่ทำอธิบายประกอบ"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:295
 msgid ""
