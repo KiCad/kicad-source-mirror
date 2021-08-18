@@ -77,6 +77,8 @@ private:
 
     void testItemAgainstZones( BOARD_ITEM* aItem, PCB_LAYER_ID aLayer );
 
+    void testZoneLayer( ZONE* aZone, PCB_LAYER_ID aLayer );
+
 private:
     DRC_RTREE                m_itemTree;
     std::vector<BOARD_ITEM*> m_items;
@@ -237,9 +239,169 @@ bool DRC_TEST_PROVIDER_MECHANICAL_CLEARANCE::Run()
         }
     }
 
+    count = 0;
+    forEachGeometryItem( { PCB_ZONE_T, PCB_FP_ZONE_T }, LSET::AllCuMask(),
+            [&]( BOARD_ITEM* item ) -> bool
+            {
+                for( PCB_LAYER_ID layer : item->GetLayerSet().Seq() )
+                {
+                    if( IsCopperLayer( layer ) )
+                        count++;
+                }
+
+                return true;
+            } );
+
+    ii = 0;
+    forEachGeometryItem( { PCB_ZONE_T, PCB_FP_ZONE_T }, LSET::AllCuMask(),
+            [&]( BOARD_ITEM* item ) -> bool
+            {
+                for( PCB_LAYER_ID layer : item->GetLayerSet().Seq() )
+                {
+                    if( IsCopperLayer( layer ) )
+                    {
+                        if( !reportProgress( ii++, count, delta ) )
+                            return false;
+
+                        testZoneLayer( static_cast<ZONE*>( item ), layer );
+                    }
+                }
+
+                return true;
+            } );
+
     reportRuleStatistics();
 
     return true;
+}
+
+
+void DRC_TEST_PROVIDER_MECHANICAL_CLEARANCE::testZoneLayer( ZONE* aZone, PCB_LAYER_ID aLayer )
+{
+    int                    epsilon = m_board->GetDesignSettings().GetDRCEpsilon();
+    SHAPE_POLY_SET         fill = aZone->GetFilledPolysList( aLayer );
+    DRC_CONSTRAINT         constraint;
+    int                    clearance;
+
+    constraint = m_drcEngine->EvalRules( MECHANICAL_CLEARANCE_CONSTRAINT, aZone, nullptr, aLayer );
+    clearance = constraint.GetValue().Min();
+
+    if( clearance - epsilon <= 0 )
+        return;
+
+    // Turn fractured fill into outlines and holes
+    fill.Simplify( SHAPE_POLY_SET::PM_FAST );
+
+    for( int outlineIdx = 0; outlineIdx < fill.OutlineCount(); ++outlineIdx )
+    {
+        SHAPE_LINE_CHAIN* firstOutline = &fill.Outline( outlineIdx );
+
+        // Step one: outline to outline clearance violations
+
+        for( int ii = outlineIdx + 1; ii < fill.OutlineCount(); ++ii )
+        {
+            SHAPE_LINE_CHAIN* secondOutline = &fill.Outline( ii );
+
+            for( int jj = 0; jj < secondOutline->SegmentCount(); ++jj )
+            {
+                SEG      secondSeg = secondOutline->Segment( jj );
+                int      actual;
+                VECTOR2I pos;
+
+                if( firstOutline->Collide( secondSeg, clearance - epsilon, &actual, &pos ) )
+                {
+                    std::shared_ptr<DRC_ITEM> drce = DRC_ITEM::Create( DRCE_CLEARANCE );
+
+                    m_msg.Printf( _( "(%s clearance %s; actual %s)" ),
+                                  constraint.GetName(),
+                                  MessageTextFromValue( userUnits(), clearance ),
+                                  MessageTextFromValue( userUnits(), actual ) );
+
+                    drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + m_msg );
+                    drce->SetItems( aZone );
+                    drce->SetViolatingRule( constraint.GetParentRule() );
+
+                    reportViolation( drce, (wxPoint) pos );
+                }
+            }
+        }
+
+        // Step two: interior hole clearance violations
+
+        for( int holeIdx = 0; holeIdx < fill.HoleCount( outlineIdx ); ++holeIdx )
+        {
+            SHAPE_LINE_CHAIN hole = fill.Hole( outlineIdx, holeIdx );
+            int              count = hole.SegmentCount();
+            int              distanceBackToStart = 0;
+
+            std::vector< std::pair<VECTOR2I, int> > collisions;
+
+            for( int ii = 0; ii < count; ++ii )
+            {
+                SEG seg = hole.Segment( ii );
+
+                // We don't want to collide with neighboring segments within clearance distance,
+                // so we first need to set the firstCandidate and lastCandidate bounds of our
+                // search.
+                int firstCandidate = ii + 1;
+                int lastCandidate = count - 1;
+                int dist = 0;
+
+                while( firstCandidate < count && dist < clearance * 2 )
+                    dist += hole.Segment( firstCandidate++ ).Length();
+
+                dist = distanceBackToStart;
+
+                while( lastCandidate >= firstCandidate && dist < clearance * 2 )
+                    dist += hole.Segment( lastCandidate-- ).Length();
+
+                // Now run the collision between seg and each seg in the candidate range.
+                for( int jj = firstCandidate; jj <= lastCandidate; ++jj )
+                {
+                    SEG candidate = hole.Segment( jj );
+                    int actual;
+
+                    if( seg.Collide( candidate, clearance - epsilon, &actual ) )
+                    {
+                        VECTOR2I firstPoint = seg.NearestPoint( candidate );
+                        VECTOR2I secondPoint = candidate.NearestPoint( seg );
+                        VECTOR2I pos = ( firstPoint + secondPoint ) / 2;
+
+                        if( !collisions.empty() &&
+                                ( pos - collisions.back().first ).EuclideanNorm() < clearance * 2 )
+                        {
+                            if( actual < collisions.back().second )
+                            {
+                                collisions.back().first = pos;
+                                collisions.back().second = actual;
+                            }
+                            continue;
+                        }
+
+                        collisions.push_back( { pos, actual } );
+                    }
+                }
+
+                distanceBackToStart += seg.Length();
+            }
+
+            for( std::pair<VECTOR2I, int> collision : collisions )
+            {
+                std::shared_ptr<DRC_ITEM> drce = DRC_ITEM::Create( DRCE_CLEARANCE );
+
+                m_msg.Printf( _( "(%s clearance %s; actual %s)" ),
+                              constraint.GetName(),
+                              MessageTextFromValue( userUnits(), clearance ),
+                              MessageTextFromValue( userUnits(), collision.second ) );
+
+                drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + m_msg );
+                drce->SetItems( aZone );
+                drce->SetViolatingRule( constraint.GetParentRule() );
+
+                reportViolation( drce, (wxPoint) collision.first );
+            }
+        }
+    }
 }
 
 
