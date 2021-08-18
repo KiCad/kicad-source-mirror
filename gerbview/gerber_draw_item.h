@@ -278,6 +278,8 @@ public:
                                              * redundancy for these parameters
                                              */
 
+    // This polygon is to draw this item (mainly GBR_POLYGON), according to layer parameters
+    SHAPE_POLY_SET   m_AbsolutePolygon;     // the polygon to draw, in absolute coordinates
 private:
     // These values are used to draw this item, according to gerber layers parameters
     // Because they can change inside a gerber image, they are stored here

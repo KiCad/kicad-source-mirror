@@ -281,30 +281,31 @@ void GERBVIEW_PAINTER::draw( /*const*/ GERBER_DRAW_ITEM* aItem, int aLayer )
         if( !isFilled )
             m_gal->SetLineWidth( m_gerbviewSettings.m_outlineWidth );
 
-        std::vector<VECTOR2I> pts = aItem->m_Polygon.COutline( 0 ).CPoints();
+        if( aItem->m_AbsolutePolygon.OutlineCount() == 0 )
+        {
+            std::vector<VECTOR2I> pts = aItem->m_Polygon.COutline( 0 ).CPoints();
 
-        for( auto& pt : pts )
-            pt = aItem->GetABPosition( pt );
+            for( auto& pt : pts )
+                pt = aItem->GetABPosition( pt );
 
-
-        SHAPE_POLY_SET   absolutePolygon;
-        SHAPE_LINE_CHAIN chain( pts );
-        chain.SetClosed( true );
-        absolutePolygon.AddOutline( chain );
+            SHAPE_LINE_CHAIN chain( pts );
+            chain.SetClosed( true );
+            aItem->m_AbsolutePolygon.AddOutline( chain );
+        }
 
         // Degenerated polygons (having < 3 points) are drawn as lines
         // to avoid issues in draw polygon functions
-        if( !isFilled || absolutePolygon.COutline( 0 ).PointCount() < 3 )
-            m_gal->DrawPolyline( absolutePolygon.COutline( 0 ) );
+        if( !isFilled || aItem->m_AbsolutePolygon.COutline( 0 ).PointCount() < 3 )
+            m_gal->DrawPolyline( aItem->m_AbsolutePolygon.COutline( 0 ) );
         else
         {
             // On Opengl, a not convex filled polygon is usually drawn by using triangles as primitives.
             // CacheTriangulation() can create basic triangle primitives to draw the polygon solid shape
             // on Opengl
-            if( m_gal->IsOpenGlEngine() )
-                absolutePolygon.CacheTriangulation();
+            if( m_gal->IsOpenGlEngine() && !aItem->m_AbsolutePolygon.IsTriangulationUpToDate() )
+                aItem->m_AbsolutePolygon.CacheTriangulation();
 
-            m_gal->DrawPolygon( absolutePolygon );
+            m_gal->DrawPolygon( aItem->m_AbsolutePolygon );
         }
 
         break;
