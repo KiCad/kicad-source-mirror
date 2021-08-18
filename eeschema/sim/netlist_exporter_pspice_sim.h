@@ -50,6 +50,7 @@ public:
             NETLIST_EXPORTER_PSPICE( aSchematic )
     {
     }
+    virtual ~NETLIST_EXPORTER_PSPICE_SIM() {}
 
     /**
      * Return name of Spice dataset for a specific plot.

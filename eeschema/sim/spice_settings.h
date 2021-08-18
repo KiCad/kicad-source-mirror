@@ -87,6 +87,7 @@ class NGSPICE_SIMULATOR_SETTINGS : public SPICE_SIMULATOR_SETTINGS
 {
 public:
     NGSPICE_SIMULATOR_SETTINGS( JSON_SETTINGS* aParent, const std::string& aPath );
+    virtual ~NGSPICE_SIMULATOR_SETTINGS() {}
 
     bool operator==( const SPICE_SIMULATOR_SETTINGS& aRhs ) const override;
 
