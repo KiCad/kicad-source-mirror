@@ -992,8 +992,8 @@ int PCB_CONTROL::placeBoardItems( std::vector<BOARD_ITEM*>& aItems, bool aIsNew,
     // Select the items that should be selected
     m_toolMgr->RunAction( PCB_ACTIONS::selectItems, true, &itemsToSel );
 
-    // Reannotate duplicate footprints
-    if( aReannotateDuplicates )
+    // Reannotate duplicate footprints (make sense only in board editor )
+    if( aReannotateDuplicates && m_frame->IsType( FRAME_PCB_EDITOR ) )
         m_toolMgr->GetTool<BOARD_REANNOTATE_TOOL>()->ReannotateDuplicatesInSelection();
 
     for( BOARD_ITEM* item : aItems )

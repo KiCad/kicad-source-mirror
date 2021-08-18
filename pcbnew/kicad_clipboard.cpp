@@ -126,17 +126,38 @@ void CLIPBOARD_IO::SaveSelection( const PCB_SELECTION& aSelected, bool isFootpri
             // correct
             partialFootprint.Add( clone );
 
+            // A list of not added items, when adding items to the footprint
+            // some FP_TEXT (reference and value) cannot be added to the footprint
+            std::vector<BOARD_ITEM*> skipped_items;
+
             if( group )
             {
                 static_cast<PCB_GROUP*>( clone )->RunOnDescendants(
                         [&]( BOARD_ITEM* descendant )
                         {
-                            partialFootprint.Add( descendant );
+                            // One cannot add a text reference or value to a given footprint:
+                            // only one is allowed. So add only FP_TEXT::TEXT_is_DIVERS
+                            bool can_add = true;
+
+                            if( const FP_TEXT* text = dyn_cast<const FP_TEXT*>( descendant ) )
+                            {
+                                if( text->GetType() != FP_TEXT::TEXT_is_DIVERS )
+                                    can_add = false;
+                            }
+
+                            if( can_add )
+                                partialFootprint.Add( descendant );
+                            else
+                                skipped_items.push_back( descendant );
                         } );
             }
 
             // locate the reference point at (0, 0) in the copied items
             clone->Move( (wxPoint) -refPoint );
+
+            // Now delete items, duplicated but not added:
+            for( BOARD_ITEM* skp_item : skipped_items )
+                delete skp_item;
         }
 
         // Set the new relative internal local coordinates of copied items

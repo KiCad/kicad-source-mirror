@@ -516,7 +516,7 @@ void FOOTPRINT::Add( BOARD_ITEM* aBoardItem, ADD_MODE aMode )
     {
     case PCB_FP_TEXT_T:
         // Only user text can be added this way.
-        assert( static_cast<FP_TEXT*>( aBoardItem )->GetType() == FP_TEXT::TEXT_is_DIVERS );
+        wxASSERT( static_cast<FP_TEXT*>( aBoardItem )->GetType() == FP_TEXT::TEXT_is_DIVERS );
         KI_FALLTHROUGH;
 
     case PCB_FP_SHAPE_T:
@@ -2048,7 +2048,7 @@ void FOOTPRINT::BuildPolyCourtyards( OUTLINE_ERROR_HANDLER* aErrorHandler )
 
 void FOOTPRINT::SwapData( BOARD_ITEM* aImage )
 {
-    assert( aImage->Type() == PCB_FOOTPRINT_T );
+    wxASSERT( aImage->Type() == PCB_FOOTPRINT_T );
 
     std::swap( *((FOOTPRINT*) this), *((FOOTPRINT*) aImage) );
 }
