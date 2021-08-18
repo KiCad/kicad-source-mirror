@@ -15,8 +15,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
-"PO-Revision-Date: 2021-08-16 07:38+0000\n"
-"Last-Translator: Ji Yoon Choi <chichoon.choi@gmail.com>\n"
+"PO-Revision-Date: 2021-08-18 13:35+0000\n"
+"Last-Translator: 킴슨김랑기 <korearf@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
 "Language: ko\n"
@@ -1367,7 +1367,7 @@ msgstr "mils"
 
 #: common/base_units.cpp:451
 msgid "sq. mils"
-msgstr "평방 -마일"
+msgstr "sq. mils"
 
 #: common/base_units.cpp:453
 msgid "cu. mils"
