@@ -100,7 +100,7 @@
 #include <cstdint>
 #include <wx/mstream.h>
 
-#include "plotters_pslike.h"
+#include <plotters/plotters_pslike.h>
 
 
 /**

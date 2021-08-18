@@ -22,7 +22,7 @@
  */
 
 #include <sch_draw_panel.h>
-#include <plotter.h>
+#include <plotters/plotter.h>
 #include <trigo.h>
 #include <bezier_curves.h>
 #include <base_units.h>

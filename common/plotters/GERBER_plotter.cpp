@@ -32,8 +32,8 @@
 
 #include <build_version.h>
 
-#include "plotter_gerber.h"
-#include "gbr_plotter_aperture_macros.h"
+#include <plotters/plotter_gerber.h>
+#include <plotters/gbr_plotter_aperture_macros.h>
 
 #include <gbr_metadata.h>
 

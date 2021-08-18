@@ -32,7 +32,7 @@
  */
 
 #include <gr_basic.h>
-#include <plotter.h>
+#include <plotters/plotter.h>
 #include <trigo.h>
 
 #include <basic_gal.h>

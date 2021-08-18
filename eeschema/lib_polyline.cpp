@@ -23,8 +23,7 @@
  */
 
 #include <sch_draw_panel.h>
-#include <eda_draw_frame.h>
-#include <plotter.h>
+#include <plotters/plotter.h>
 #include <trigo.h>
 #include <base_units.h>
 #include <widgets/msgpanel.h>

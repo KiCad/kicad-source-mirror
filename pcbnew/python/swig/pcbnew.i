@@ -113,7 +113,7 @@ HANDLE_EXCEPTIONS(PLUGIN::FootprintDelete)
 
 %include <plotcontroller.h>
 %include <pcb_plot_params.h>
-%include <plotter.h>
+%include <plotters/plotter.h>
 %include <exporters/export_d356.h>
 %include <exporters/export_vrml.h>
 %include <exporters/gendrill_file_writer_base.h>

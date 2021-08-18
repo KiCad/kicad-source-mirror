@@ -28,11 +28,10 @@
 
 #include <bitmap_base.h>
 #include <eda_rect.h>     // for EDA_RECT
-#include <gal/color4d.h>  // for COLOR4D
 #include <gr_basic.h>
-#include <math/util.h>      // for KiROUND
+#include <math/util.h>    // for KiROUND
 #include <memory>         // for make_unique, unique_ptr
-#include <plotter.h>
+#include <plotters/plotter.h>
 #include <richio.h>
 #include <wx/bitmap.h>    // for wxBitmap
 #include <wx/mstream.h>

@@ -31,7 +31,7 @@
 #ifndef __DIALOG_PLOT_SCHEMATIC__
 #define __DIALOG_PLOT_SCHEMATIC__
 
-#include <plotter.h>
+#include <plotters/plotter.h>
 #include <dialog_plot_schematic_base.h>
 #include <widgets/unit_binder.h>
 

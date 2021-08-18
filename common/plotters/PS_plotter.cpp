@@ -32,7 +32,7 @@
 #include <math/util.h>      // for KiROUND
 #include <trigo.h>
 
-#include "plotters_pslike.h"
+#include <plotters/plotters_pslike.h>
 
 
 /* Forward declaration of the font width metrics

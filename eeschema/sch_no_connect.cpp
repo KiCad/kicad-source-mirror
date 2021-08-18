@@ -28,7 +28,7 @@
  */
 
 #include <sch_draw_panel.h>
-#include <plotter.h>
+#include <plotters/plotter.h>
 #include <bitmaps.h>
 #include <schematic.h>
 #include <sch_no_connect.h>

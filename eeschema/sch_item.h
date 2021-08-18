@@ -27,16 +27,12 @@
 
 #include <unordered_map>
 #include <unordered_set>
-#include <vector>
 
 #include <eda_item.h>
-#include <plotter.h>      // for PLOT_DASH_TYPE definition
-
-#include <gal/color4d.h>
+#include <plotters/plotter.h>      // for PLOT_DASH_TYPE definition
 
 #include <default_values.h>
 #include <sch_sheet_path.h>
-#include <render_settings.h>
 #include <netclass.h>
 
 class CONNECTION_GRAPH;

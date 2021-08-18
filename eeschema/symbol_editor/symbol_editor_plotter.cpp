@@ -25,7 +25,7 @@
 #include <sch_painter.h>
 #include <symbol_edit_frame.h>
 #include <locale_io.h>
-#include "../../common/plotters/plotters_pslike.h"
+#include <plotters/plotters_pslike.h>
 
 void SYMBOL_EDIT_FRAME::SVGPlotSymbol( const wxString& aFullFileName )
 {

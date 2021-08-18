@@ -27,7 +27,7 @@
  * @brief Functions to create drill files in gerber X2 format.
  */
 
-#include "../../common/plotters/plotter_gerber.h"
+#include <plotters/plotter_gerber.h>
 #include <string_utils.h>
 #include <locale_io.h>
 #include <board.h>

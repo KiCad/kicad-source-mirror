@@ -23,7 +23,10 @@
  */
 
 #include <eda_item.h>
-#include <plotters_specific.h>
+#include <plotters/plotter_dxf.h>
+#include <plotters/plotter_hpgl.h>
+#include <plotters/plotters_pslike.h>
+#include <plotters/plotter_gerber.h>
 #include <drawing_sheet/ds_data_item.h>
 #include <drawing_sheet/ds_draw_item.h>
 #include <drawing_sheet/ds_painter.h>

@@ -27,8 +27,7 @@
 
 #include <common.h>
 #include <sch_draw_panel.h>
-#include <plotter.h>
-#include <gr_text.h>
+#include <plotters/plotter.h>
 #include <trigo.h>
 #include <base_units.h>
 #include <widgets/msgpanel.h>

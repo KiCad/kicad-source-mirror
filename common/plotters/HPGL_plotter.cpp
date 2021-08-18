@@ -200,7 +200,7 @@
 #include <math/util.h>      // for KiROUND
 #include <trigo.h>
 
-#include "plotter_hpgl.h"
+#include <plotters/plotter_hpgl.h>
 
 
 /// Compute the distance between two DPOINT points.

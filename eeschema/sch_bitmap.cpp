@@ -27,7 +27,7 @@
  */
 
 #include <sch_draw_panel.h>
-#include <plotter.h>
+#include <plotters/plotter.h>
 #include <settings/color_settings.h>
 #include <bitmaps.h>
 #include <base_units.h>

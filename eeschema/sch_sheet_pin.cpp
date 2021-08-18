@@ -27,9 +27,8 @@
 #include <bitmaps.h>
 #include <general.h>
 #include <geometry/shape_line_chain.h>
-#include <gr_text.h>
 #include <string_utils.h>
-#include <plotter.h>
+#include <plotters/plotter.h>
 #include <sch_draw_panel.h>
 #include <sch_edit_frame.h>
 #include <sch_sheet.h>

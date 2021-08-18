@@ -35,7 +35,7 @@
 #include <macros.h>
 #include <math/util.h>                        // for KiROUND, Clamp
 #include <math/vector2d.h>                    // for VECTOR2I
-#include "../common/plotters/plotter_gerber.h"
+#include <plotters/plotter_gerber.h>
 #include <trigo.h>
 
 #include <board_design_settings.h>            // for BOARD_DESIGN_SETTINGS

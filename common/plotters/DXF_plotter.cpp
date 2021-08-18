@@ -25,7 +25,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include "plotter_dxf.h"
+#include <plotters/plotter_dxf.h>
 #include <macros.h>
 #include <string_utils.h>
 #include <convert_basic_shapes_to_polygon.h>

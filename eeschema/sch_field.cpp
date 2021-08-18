@@ -34,9 +34,8 @@
 #include <wx/menu.h>
 #include <common.h>     // for ExpandTextVars
 #include <eda_item.h>
-#include <gr_text.h>
 #include <sch_edit_frame.h>
-#include <plotter.h>
+#include <plotters/plotter.h>
 #include <bitmaps.h>
 #include <core/mirror.h>
 #include <kiway.h>

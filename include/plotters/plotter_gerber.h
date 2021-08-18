@@ -26,7 +26,7 @@
 
 #pragma once
 
-#include <plotter.h>
+#include "plotter.h"
 #include "gbr_plotter_apertures.h"
 
 class SHAPE_ARC;

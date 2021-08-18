@@ -25,7 +25,7 @@
 #include <bitmaps.h>
 #include <core/mirror.h>
 #include <sch_painter.h>
-#include <plotter.h>
+#include <plotters/plotter.h>
 #include <sch_line.h>
 #include <sch_edit_frame.h>
 #include <settings/color_settings.h>

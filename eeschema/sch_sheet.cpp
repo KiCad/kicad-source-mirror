@@ -25,10 +25,9 @@
 #include <bitmaps.h>
 #include <core/mirror.h>
 #include <sch_draw_panel.h>
-#include <gr_text.h>
 #include <trigo.h>
 #include <sch_edit_frame.h>
-#include <plotter.h>
+#include <plotters/plotter.h>
 #include <string_utils.h>
 #include <widgets/msgpanel.h>
 #include <math/util.h>      // for KiROUND

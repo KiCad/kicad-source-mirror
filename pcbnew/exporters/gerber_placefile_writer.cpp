@@ -27,7 +27,7 @@
 
 #include <vector>
 
-#include "../../common/plotters/plotter_gerber.h"
+#include <plotters/plotter_gerber.h>
 #include <string_utils.h>
 #include <locale_io.h>
 #include <macros.h>

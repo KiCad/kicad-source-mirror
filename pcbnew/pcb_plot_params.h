@@ -23,8 +23,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <outline_mode.h>
-#include <plotter.h>
+#include <plotters/plotter.h>
 #include <layer_ids.h>
 
 class COLOR_SETTINGS;

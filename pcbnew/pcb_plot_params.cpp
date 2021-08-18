@@ -28,7 +28,7 @@
 #include <math/util.h> // for KiROUND
 #include <pcb_plot_params.h>
 #include <pcb_plot_params_parser.h>
-#include <plotter.h>
+#include <plotters/plotter.h>
 #include <settings/color_settings.h>
 
 

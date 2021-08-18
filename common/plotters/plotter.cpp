@@ -37,11 +37,9 @@
  * is not handled here.
  */
 
-#include <fill_type.h>
-#include <vector>
 #include <trigo.h>
 #include <eda_item.h>
-#include <plotter.h>
+#include <plotters/plotter.h>
 #include <geometry/shape_line_chain.h>
 #include <geometry/geometry_utils.h>
 #include <bezier_curves.h>

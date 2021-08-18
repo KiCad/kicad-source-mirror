@@ -24,7 +24,7 @@
  */
 
 #include <sch_draw_panel.h>
-#include <plotter.h>
+#include <plotters/plotter.h>
 #include <sch_screen.h>
 #include <richio.h>
 #include <general.h>

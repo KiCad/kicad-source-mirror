@@ -27,7 +27,7 @@
  * @file pcbnew/pcbplot.cpp
  */
 
-#include <plotter.h>
+#include <plotters/plotter.h>
 #include <pcbplot.h>
 #include <base_units.h>
 #include <locale_io.h>

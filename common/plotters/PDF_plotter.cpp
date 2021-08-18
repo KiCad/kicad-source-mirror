@@ -37,7 +37,7 @@
 #include <macros.h>
 #include <trigo.h>
 
-#include "plotters_pslike.h"
+#include <plotters/plotters_pslike.h>
 
 
 std::string PDF_PLOTTER::encodeStringForPlotter( const wxString& aText )

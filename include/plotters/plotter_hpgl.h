@@ -27,7 +27,7 @@
 
 #include <list>
 
-#include <plotter.h>
+#include "plotter.h"
 
 
 class HPGL_PLOTTER : public PLOTTER

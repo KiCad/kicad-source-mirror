@@ -29,7 +29,7 @@
 #include <sch_draw_panel.h>
 #include <trigo.h>
 #include <common.h>
-#include <plotter.h>
+#include <plotters/plotter.h>
 #include <bitmaps.h>
 #include <core/mirror.h>
 #include <geometry/shape_rect.h>

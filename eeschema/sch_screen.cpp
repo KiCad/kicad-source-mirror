@@ -36,7 +36,7 @@
 #include <id.h>
 #include <string_utils.h>
 #include <kiway.h>
-#include <plotter.h>
+#include <plotters/plotter.h>
 #include <project.h>
 #include <reporter.h>
 #include <sch_draw_panel.h>

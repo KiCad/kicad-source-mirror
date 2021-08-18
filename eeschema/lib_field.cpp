@@ -23,11 +23,10 @@
  */
 
 #include <eda_item.h>
-#include <gr_text.h>
 #include <string_utils.h>
 #include <sch_draw_panel.h>
 #include <eda_draw_frame.h>
-#include <plotter.h>
+#include <plotters/plotter.h>
 #include <trigo.h>
 #include <base_units.h>
 #include <widgets/msgpanel.h>

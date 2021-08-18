@@ -35,7 +35,7 @@
  * and the CNC-7 manual.
  */
 
-#include <plotter.h>
+#include <plotters/plotter.h>
 #include <string_utils.h>
 #include <locale_io.h>
 #include <macros.h>

@@ -44,7 +44,7 @@
 #include <lib_rectangle.h>
 #include <lib_text.h>
 #include <math/util.h>
-#include <plotter.h>
+#include <plotters/plotter.h>
 #include <sch_bitmap.h>
 #include <sch_bus_entry.h>
 #include <sch_symbol.h>

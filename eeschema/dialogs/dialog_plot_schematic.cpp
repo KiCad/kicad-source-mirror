@@ -31,9 +31,9 @@
 #include <eeschema_settings.h>
 #include <kiface_i.h>
 #include <locale_io.h>
-#include "../../common/plotters/plotter_hpgl.h"
-#include "../../common/plotters/plotter_dxf.h"
-#include "../../common/plotters/plotters_pslike.h"
+#include <plotters/plotter_hpgl.h>
+#include <plotters/plotter_dxf.h>
+#include <plotters/plotters_pslike.h>
 #include <reporter.h>
 #include <trace_helpers.h>
 #include <settings/settings_manager.h>

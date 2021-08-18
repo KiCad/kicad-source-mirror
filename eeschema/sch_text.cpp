@@ -30,7 +30,7 @@
 
 #include <sch_symbol.h>
 #include <sch_edit_frame.h>
-#include <plotter.h>
+#include <plotters/plotter.h>
 #include <widgets/msgpanel.h>
 #include <gal/stroke_font.h>
 #include <bitmaps.h>
