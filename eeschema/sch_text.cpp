@@ -53,27 +53,29 @@ using KIGFX::SCH_RENDER_SETTINGS;
 
 bool IncrementLabelMember( wxString& name, int aIncrement )
 {
-    int  ii, nn;
-    long number = 0;
-
-    ii = name.Len() - 1;
-    nn = 0;
-
-    // No number found, but simply repeating the same label is valid
-
-    if( !wxIsdigit( name.GetChar( ii ) ) )
+    if( name.IsEmpty() )
         return true;
+
+    int  ii = name.Len() - 1;
+
+    // Ignore formatting constructs
+    if( name.GetChar( ii ) == '}' )
+        ii--;
+
+    wxString digits;
 
     while( ii >= 0 && wxIsdigit( name.GetChar( ii ) ) )
     {
+        digits = name.GetChar( ii ) + digits;
         ii--;
-        nn++;
     }
 
-    ii++; /* digits are starting at ii position */
-    wxString litt_number = name.Right( nn );
+    if( digits.IsEmpty() )
+        return true;
 
-    if( litt_number.ToLong( &number ) )
+    long number = 0;
+
+    if( digits.ToLong( &number ) )
     {
         number += aIncrement;
 
@@ -81,7 +83,7 @@ bool IncrementLabelMember( wxString& name, int aIncrement )
 
         if( number > -1 )
         {
-            name.Remove( ii );
+            name.Remove( ii + 1 );
             name << number;
             return true;
         }
