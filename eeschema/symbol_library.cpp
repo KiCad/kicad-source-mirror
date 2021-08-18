@@ -150,7 +150,9 @@ void SYMBOL_LIB::GetSymbols( std::vector<LIB_SYMBOL*>& aSymbols ) const
 
     std::sort( aSymbols.begin(), aSymbols.end(),
             [](LIB_SYMBOL *lhs, LIB_SYMBOL *rhs) -> bool
-                { return lhs->GetName() < rhs->GetName(); });
+            {
+                return lhs->GetName() < rhs->GetName();
+            } );
 }
 
 
