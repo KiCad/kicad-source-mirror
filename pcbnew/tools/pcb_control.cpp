@@ -659,7 +659,7 @@ static void pasteFootprintItemsToFootprintEditor( FOOTPRINT* aClipFootprint, BOA
             if( text->GetType() != FP_TEXT::TEXT_is_DIVERS )
                 continue;
 
-            text->SetTextAngle( aClipFootprint->GetOrientation() );
+            text->SetTextAngle( text->GetTextAngle() + aClipFootprint->GetOrientation() );
 
             text->SetParent( nullptr );
             text->SetLocalCoord();
