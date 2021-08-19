@@ -449,6 +449,10 @@ void C3D_RENDER_RAYTRACING::reload( REPORTER *aStatusTextReporter )
          ++ii )
     {
         PCB_LAYER_ID layer_id = static_cast<PCB_LAYER_ID>(ii->first);
+        const CBVHCONTAINER2D *container2d = static_cast<const CBVHCONTAINER2D *>(ii->second);
+
+        if( !container2d )
+            continue;
 
         // Mask kayers are not processed here because they are a special case
         if( (layer_id == B_Mask) || (layer_id == F_Mask) )
@@ -509,7 +513,6 @@ void C3D_RENDER_RAYTRACING::reload( REPORTER *aStatusTextReporter )
             break;
         }
 
-        const CBVHCONTAINER2D *container2d = static_cast<const CBVHCONTAINER2D *>(ii->second);
         const LIST_OBJECT2D &listObject2d = container2d->GetList();
 
         for( LIST_OBJECT2D::const_iterator itemOnLayer = listObject2d.begin();
@@ -654,6 +657,9 @@ void C3D_RENDER_RAYTRACING::reload( REPORTER *aStatusTextReporter )
 
             const CBVHCONTAINER2D *containerLayer2d =
                     static_cast<const CBVHCONTAINER2D *>(ii->second);
+
+            if( !containerLayer2d )
+                continue;
 
             // Only get the Solder mask layers
             if( !((layer_id == B_Mask) || (layer_id == F_Mask)) )
