@@ -222,8 +222,6 @@ public:
 
     void SetPolyShape( const SHAPE_POLY_SET& aShape ) { m_poly = aShape; }
 
-    void SetBezierPoints( const std::vector<wxPoint>& aPoints ) { m_bezierPoints = aPoints; }
-
     /**
      * Rebuild the m_BezierPoints vertex list that approximate the Bezier curve
      * by a list of segments.

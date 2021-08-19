@@ -629,7 +629,7 @@ void DRC_ENGINE::RunTests( EDA_UNITS aUnits, bool aReportAllTrackErrors, bool aT
         zone->CacheBoundingBox();
         zone->CacheTriangulation();
 
-        if( !zone->GetIsRuleArea() )
+        if( ( zone->GetLayerSet() & LSET::AllCuMask() ).any() && !zone->GetIsRuleArea() )
             copperZones.push_back( zone );
     }
 
@@ -640,7 +640,7 @@ void DRC_ENGINE::RunTests( EDA_UNITS aUnits, bool aReportAllTrackErrors, bool aT
             zone->CacheBoundingBox();
             zone->CacheTriangulation();
 
-            if( !zone->GetIsRuleArea() )
+            if( ( zone->GetLayerSet() & LSET::AllCuMask() ).any() && !zone->GetIsRuleArea() )
                 copperZones.push_back( zone );
         }
 

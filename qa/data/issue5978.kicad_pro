@@ -316,7 +316,7 @@
     "pinned_symbol_libs": []
   },
   "meta": {
-    "filename": "hole_pad_clearance.kicad_pro",
+    "filename": "issue5978.kicad_pro",
     "version": 1
   },
   "net_settings": {
@@ -376,7 +376,7 @@
       }
     ],
     "meta": {
-      "version": 0
+      "version": 1
     },
     "net_colors": null
   },

@@ -98,7 +98,7 @@ private:
     DRC_RTREE          m_copperTree;
     int                m_drcEpsilon;
 
-    std::vector<ZONE*> m_zones;
+    std::vector<ZONE*> m_copperZones;
 };
 
 
@@ -121,13 +121,13 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::Run()
 
     m_drcEpsilon = m_board->GetDesignSettings().GetDRCEpsilon();
 
-    m_zones.clear();
+    m_copperZones.clear();
 
     for( ZONE* zone : m_board->Zones() )
     {
-        if( !zone->GetIsRuleArea() )
+        if( ( zone->GetLayerSet() & LSET::AllCuMask() ).any() && !zone->GetIsRuleArea() )
         {
-            m_zones.push_back( zone );
+            m_copperZones.push_back( zone );
             m_largestClearance = std::max( m_largestClearance, zone->GetLocalClearance() );
         }
     }
@@ -139,9 +139,9 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::Run()
 
         for( ZONE* zone : footprint->Zones() )
         {
-            if( !zone->GetIsRuleArea() )
+            if( ( zone->GetLayerSet() & LSET::AllCuMask() ).any() && !zone->GetIsRuleArea() )
             {
-                m_zones.push_back( zone );
+                m_copperZones.push_back( zone );
                 m_largestClearance = std::max( m_largestClearance, zone->GetLocalClearance() );
             }
         }
@@ -201,7 +201,7 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::Run()
     forEachGeometryItem( itemTypes, LSET::AllCuMask(), countItems );
     forEachGeometryItem( itemTypes, LSET::AllCuMask(), addToCopperTree );
 
-    reportAux( "Testing %d copper items and %d zones...", count, m_zones.size() );
+    reportAux( "Testing %d copper items and %d zones...", count, m_copperZones.size() );
 
     if( !m_drcEngine->IsErrorLimitExceeded( DRCE_CLEARANCE ) )
     {
@@ -377,7 +377,7 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testTrackAgainstItem( PCB_TRACK* track,
 void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testItemAgainstZones( BOARD_ITEM* aItem,
                                                                PCB_LAYER_ID aLayer )
 {
-    for( ZONE* zone : m_zones )
+    for( ZONE* zone : m_copperZones )
     {
         if( !zone->GetLayerSet().test( aLayer ) )
             continue;
@@ -840,34 +840,34 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testZonesToZones()
     {
         PCB_LAYER_ID layer = static_cast<PCB_LAYER_ID>( layer_id );
         std::vector<SHAPE_POLY_SET> smoothed_polys;
-        smoothed_polys.resize( m_zones.size() );
+        smoothed_polys.resize( m_copperZones.size() );
 
         // Skip over layers not used on the current board
         if( !m_board->IsLayerEnabled( layer ) )
             continue;
 
-        for( size_t ii = 0; ii < m_zones.size(); ii++ )
+        for( size_t ii = 0; ii < m_copperZones.size(); ii++ )
         {
-            if( m_zones[ii]->IsOnLayer( layer ) )
-                m_zones[ii]->BuildSmoothedPoly( smoothed_polys[ii], layer, boardOutline );
+            if( m_copperZones[ii]->IsOnLayer( layer ) )
+                m_copperZones[ii]->BuildSmoothedPoly( smoothed_polys[ii], layer, boardOutline );
         }
 
         // iterate through all areas
-        for( size_t ia = 0; ia < m_zones.size(); ia++ )
+        for( size_t ia = 0; ia < m_copperZones.size(); ia++ )
         {
-            if( !reportProgress( layer_id * m_zones.size() + ia, B_Cu * m_zones.size(), delta ) )
+            if( !reportProgress( layer_id * m_copperZones.size() + ia, B_Cu * m_copperZones.size(), delta ) )
                 break;
 
-            ZONE* zoneRef = m_zones[ia];
+            ZONE* zoneRef = m_copperZones[ia];
 
             if( !zoneRef->IsOnLayer( layer ) )
                 continue;
 
             // If we are testing a single zone, then iterate through all other zones
             // Otherwise, we have already tested the zone combination
-            for( size_t ia2 = ia + 1; ia2 < m_zones.size(); ia2++ )
+            for( size_t ia2 = ia + 1; ia2 < m_copperZones.size(); ia2++ )
             {
-                ZONE* zoneToTest = m_zones[ia2];
+                ZONE* zoneToTest = m_copperZones[ia2];
 
                 if( zoneRef == zoneToTest )
                     continue;

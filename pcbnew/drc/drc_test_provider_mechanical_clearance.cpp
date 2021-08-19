@@ -22,15 +22,16 @@
  */
 
 #include <common.h>
+#include <macros.h>
 #include <board_design_settings.h>
 #include <footprint.h>
 #include <pad.h>
 #include <pcb_track.h>
+#include <pcb_shape.h>
 #include <zone.h>
-
+#include <advanced_config.h>
 #include <geometry/seg.h>
 #include <geometry/shape_segment.h>
-
 #include <drc/drc_engine.h>
 #include <drc/drc_rtree.h>
 #include <drc/drc_item.h>
@@ -77,7 +78,10 @@ private:
 
     void testItemAgainstZones( BOARD_ITEM* aItem, PCB_LAYER_ID aLayer );
 
-    void testZoneLayer( ZONE* aZone, PCB_LAYER_ID aLayer );
+    void testShapeLineChain( const SHAPE_LINE_CHAIN& aOutline, int aLineWidth,
+                             BOARD_ITEM* aParentItem, DRC_CONSTRAINT& aConstraint );
+
+    void testZoneLayer( ZONE* aZone, PCB_LAYER_ID aLayer, DRC_CONSTRAINT& aConstraint );
 
 private:
     DRC_RTREE                m_itemTree;
@@ -93,6 +97,7 @@ bool DRC_TEST_PROVIDER_MECHANICAL_CLEARANCE::Run()
     m_zones.clear();
     m_items.clear();
 
+    int            errorMax = m_board->GetDesignSettings().m_MaxError;
     DRC_CONSTRAINT worstConstraint;
 
     if( m_drcEngine->QueryWorstConstraint( MECHANICAL_CLEARANCE_CONSTRAINT, worstConstraint ) )
@@ -231,7 +236,7 @@ bool DRC_TEST_PROVIDER_MECHANICAL_CLEARANCE::Run()
 
         for( BOARD_ITEM* item : m_items )
         {
-            if( !reportProgress( ii++, m_board->Tracks().size(), delta ) )
+            if( !reportProgress( ii++, m_items.size(), delta ) )
                 break;
 
             for( PCB_LAYER_ID layer : item->GetLayerSet().Seq() )
@@ -240,20 +245,41 @@ bool DRC_TEST_PROVIDER_MECHANICAL_CLEARANCE::Run()
     }
 
     count = 0;
-    forEachGeometryItem( { PCB_ZONE_T, PCB_FP_ZONE_T }, LSET::AllCuMask(),
+    forEachGeometryItem( { PCB_ZONE_T, PCB_FP_ZONE_T, PCB_SHAPE_T, PCB_FP_SHAPE_T },
+            LSET::AllCuMask(),
             [&]( BOARD_ITEM* item ) -> bool
             {
-                for( PCB_LAYER_ID layer : item->GetLayerSet().Seq() )
+                PCB_SHAPE* shape = dynamic_cast<PCB_SHAPE*>( item );
+                ZONE*      zone = dynamic_cast<ZONE*>( item );
+
+                if( shape )
                 {
-                    if( IsCopperLayer( layer ) )
-                        count++;
+                    switch( shape->GetShape() )
+                    {
+                    case SHAPE_T::POLY:
+                    case SHAPE_T::BEZIER:
+                    case SHAPE_T::ARC:
+                        if( IsCopperLayer( shape->GetLayer() ) )
+                            count++;
+
+                        break;
+
+                    default:
+                        break;
+                    }
+                }
+
+                if( zone )
+                {
+                    count += ( item->GetLayerSet() & LSET::AllCuMask() ).count();
                 }
 
                 return true;
             } );
 
     ii = 0;
-    forEachGeometryItem( { PCB_ZONE_T, PCB_FP_ZONE_T }, LSET::AllCuMask(),
+    forEachGeometryItem( { PCB_ZONE_T, PCB_FP_ZONE_T, PCB_SHAPE_T, PCB_FP_SHAPE_T },
+            LSET::AllCuMask(),
             [&]( BOARD_ITEM* item ) -> bool
             {
                 for( PCB_LAYER_ID layer : item->GetLayerSet().Seq() )
@@ -263,7 +289,66 @@ bool DRC_TEST_PROVIDER_MECHANICAL_CLEARANCE::Run()
                         if( !reportProgress( ii++, count, delta ) )
                             return false;
 
-                        testZoneLayer( static_cast<ZONE*>( item ), layer );
+                        PCB_SHAPE*     shape = dynamic_cast<PCB_SHAPE*>( item );
+                        ZONE*          zone = dynamic_cast<ZONE*>( item );
+                        DRC_CONSTRAINT c = m_drcEngine->EvalRules( MECHANICAL_CLEARANCE_CONSTRAINT,
+                                                                   item, nullptr, layer );
+
+                        if( shape )
+                        {
+                            switch( shape->GetShape() )
+                            {
+                            case SHAPE_T::POLY:
+                                testShapeLineChain( shape->GetPolyShape().Outline( 0 ),
+                                                    shape->GetWidth(), item, c );
+                                break;
+
+                            case SHAPE_T::BEZIER:
+                            {
+                                SHAPE_LINE_CHAIN asPoly;
+
+                                shape->RebuildBezierToSegmentsPointsList( shape->GetWidth() );
+
+                                for( const wxPoint& pt : shape->GetBezierPoints() )
+                                    asPoly.Append( pt );
+
+                                testShapeLineChain( asPoly, shape->GetWidth(), item, c );
+                                break;
+                            }
+
+                            case SHAPE_T::ARC:
+                            {
+                                SHAPE_LINE_CHAIN asPoly;
+
+                                wxPoint center = shape->GetCenter();
+                                double  angle  = -shape->GetArcAngle();
+                                double  r      = shape->GetRadius();
+                                int     steps  = GetArcToSegmentCount( r, errorMax, angle / 10.0 );
+
+                                asPoly.Append( shape->GetStart() );
+
+                                for( int step = 1; step <= steps; ++step )
+                                {
+                                    double rotation = ( angle * step ) / steps;
+
+                                    wxPoint pt = shape->GetStart();
+                                    RotatePoint( &pt, center, rotation );
+                                    asPoly.Append( pt );
+                                }
+
+                                testShapeLineChain( asPoly, shape->GetWidth(), item, c );
+                                break;
+                            }
+
+                            default:
+                                UNIMPLEMENTED_FOR( shape->SHAPE_T_asString() );
+                            }
+                        }
+
+                        if( zone )
+                        {
+                            testZoneLayer( static_cast<ZONE*>( item ), layer, c );
+                        }
                     }
                 }
 
@@ -276,15 +361,154 @@ bool DRC_TEST_PROVIDER_MECHANICAL_CLEARANCE::Run()
 }
 
 
-void DRC_TEST_PROVIDER_MECHANICAL_CLEARANCE::testZoneLayer( ZONE* aZone, PCB_LAYER_ID aLayer )
+void DRC_TEST_PROVIDER_MECHANICAL_CLEARANCE::testShapeLineChain( const SHAPE_LINE_CHAIN& aOutline,
+                                                                 int aLineWidth,
+                                                                 BOARD_ITEM* aParentItem,
+                                                                 DRC_CONSTRAINT& aConstraint )
 {
-    int                    epsilon = m_board->GetDesignSettings().GetDRCEpsilon();
-    SHAPE_POLY_SET         fill = aZone->GetFilledPolysList( aLayer );
-    DRC_CONSTRAINT         constraint;
-    int                    clearance;
+    // We don't want to collide with neighboring segments forming a curve until the concavity
+    // approaches 180 degrees.
+    double angleTolerance = DEG2RAD( 180.0 - ADVANCED_CFG::GetCfg().m_SliverAngleTolerance );
+    int    epsilon = m_board->GetDesignSettings().GetDRCEpsilon();
+    int    count = aOutline.SegmentCount();
+    int    clearance = aConstraint.GetValue().Min();
 
-    constraint = m_drcEngine->EvalRules( MECHANICAL_CLEARANCE_CONSTRAINT, aZone, nullptr, aLayer );
-    clearance = constraint.GetValue().Min();
+    // Trigonometry is not cheap; cache seg angles
+    std::vector<double> angles;
+    angles.reserve( count );
+
+    auto angleDiff =
+            []( double a, double b ) -> double
+            {
+                if( a > b )
+                    std::swap( a, b );
+
+                double diff = b - a;
+
+                if( diff > M_PI )
+                    return 2 * M_PI - diff;
+                else
+                    return diff;
+            };
+
+    for( int ii = 0; ii < count; ++ii )
+    {
+        const SEG& seg = aOutline.CSegment( ii );
+
+        // NB: don't store angles of really short segments (which could point anywhere)
+
+        if( seg.SquaredLength() > SEG::Square( epsilon * 2 ) )
+        {
+            angles.push_back( ( seg.B - seg.A ).Angle() );
+        }
+        else if( ii > 0 )
+        {
+            angles.push_back( angles.back() );
+        }
+        else
+        {
+            for( int jj = 1; jj < count; ++jj )
+            {
+                const SEG& following = aOutline.CSegment( jj );
+
+                if( following.SquaredLength() > SEG::Square( epsilon * 2 ) || jj == count - 1 )
+                {
+                    angles.push_back( ( following.B - following.A ).Angle() );
+                    break;
+                }
+            }
+        }
+    }
+
+    // Find collisions before reporting so that we can condense them into fewer reports.
+    std::vector< std::pair<VECTOR2I, int> > collisions;
+
+    for( int ii = 0; ii < count; ++ii )
+    {
+        const SEG seg = aOutline.CSegment( ii );
+        double    segAngle = angles[ ii ];
+
+        // Exclude segments on either side of us until we reach the angle tolerance
+        int firstCandidate = ii + 1;
+        int lastCandidate = count - 1;
+
+        while( firstCandidate < count )
+        {
+            if( angleDiff( segAngle, angles[ firstCandidate ] ) < angleTolerance )
+                firstCandidate++;
+            else
+                break;
+        }
+
+        if( aOutline.IsClosed() )
+        {
+            if( ii > 0 )
+                lastCandidate = ii - 1;
+
+            while( lastCandidate != std::min( firstCandidate, count - 1 ) )
+            {
+                if( angleDiff( segAngle, angles[ lastCandidate ] ) < angleTolerance )
+                    lastCandidate = ( lastCandidate == 0 ) ? count - 1 : lastCandidate - 1;
+                else
+                    break;
+            }
+        }
+
+        // Now run the collision between seg and each candidate seg in the candidate range.
+        if( lastCandidate < ii )
+            lastCandidate = count - 1;
+
+        for( int jj = firstCandidate; jj <= lastCandidate; ++jj )
+        {
+            const SEG candidate = aOutline.CSegment( jj );
+            int       actual;
+
+            if( seg.Collide( candidate, clearance + aLineWidth - epsilon, &actual ) )
+            {
+                VECTOR2I firstPoint = seg.NearestPoint( candidate );
+                VECTOR2I secondPoint = candidate.NearestPoint( seg );
+                VECTOR2I pos = ( firstPoint + secondPoint ) / 2;
+
+                if( !collisions.empty() &&
+                        ( pos - collisions.back().first ).EuclideanNorm() < clearance * 2 )
+                {
+                    if( actual < collisions.back().second )
+                    {
+                        collisions.back().first = pos;
+                        collisions.back().second = actual;
+                    }
+                    continue;
+                }
+
+                collisions.push_back( { pos, actual } );
+            }
+        }
+    }
+
+    for( std::pair<VECTOR2I, int> collision : collisions )
+    {
+        std::shared_ptr<DRC_ITEM> drce = DRC_ITEM::Create( DRCE_CLEARANCE );
+
+        m_msg.Printf( _( "(%s clearance %s; actual %s)" ),
+                      aConstraint.GetName(),
+                      MessageTextFromValue( userUnits(), clearance ),
+                      MessageTextFromValue( userUnits(), collision.second ) );
+
+        drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + m_msg );
+        drce->SetItems( aParentItem );
+        drce->SetViolatingRule( aConstraint.GetParentRule() );
+
+        reportViolation( drce, (wxPoint) collision.first );
+    }
+}
+
+
+void DRC_TEST_PROVIDER_MECHANICAL_CLEARANCE::testZoneLayer( ZONE* aZone, PCB_LAYER_ID aLayer,
+                                                            DRC_CONSTRAINT& aConstraint )
+{
+    int            epsilon = m_board->GetDesignSettings().GetDRCEpsilon();
+    int            clearance = aConstraint.GetValue().Min();
+    SHAPE_POLY_SET fill = aZone->GetFilledPolysList( aLayer );
 
     if( clearance - epsilon <= 0 )
         return;
@@ -313,13 +537,13 @@ void DRC_TEST_PROVIDER_MECHANICAL_CLEARANCE::testZoneLayer( ZONE* aZone, PCB_LAY
                     std::shared_ptr<DRC_ITEM> drce = DRC_ITEM::Create( DRCE_CLEARANCE );
 
                     m_msg.Printf( _( "(%s clearance %s; actual %s)" ),
-                                  constraint.GetName(),
+                                  aConstraint.GetName(),
                                   MessageTextFromValue( userUnits(), clearance ),
                                   MessageTextFromValue( userUnits(), actual ) );
 
                     drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + m_msg );
                     drce->SetItems( aZone );
-                    drce->SetViolatingRule( constraint.GetParentRule() );
+                    drce->SetViolatingRule( aConstraint.GetParentRule() );
 
                     reportViolation( drce, (wxPoint) pos );
                 }
@@ -330,76 +554,7 @@ void DRC_TEST_PROVIDER_MECHANICAL_CLEARANCE::testZoneLayer( ZONE* aZone, PCB_LAY
 
         for( int holeIdx = 0; holeIdx < fill.HoleCount( outlineIdx ); ++holeIdx )
         {
-            SHAPE_LINE_CHAIN hole = fill.Hole( outlineIdx, holeIdx );
-            int              count = hole.SegmentCount();
-            int              distanceBackToStart = 0;
-
-            std::vector< std::pair<VECTOR2I, int> > collisions;
-
-            for( int ii = 0; ii < count; ++ii )
-            {
-                SEG seg = hole.Segment( ii );
-
-                // We don't want to collide with neighboring segments within clearance distance,
-                // so we first need to set the firstCandidate and lastCandidate bounds of our
-                // search.
-                int firstCandidate = ii + 1;
-                int lastCandidate = count - 1;
-                int dist = 0;
-
-                while( firstCandidate < count && dist < clearance * 2 )
-                    dist += hole.Segment( firstCandidate++ ).Length();
-
-                dist = distanceBackToStart;
-
-                while( lastCandidate >= firstCandidate && dist < clearance * 2 )
-                    dist += hole.Segment( lastCandidate-- ).Length();
-
-                // Now run the collision between seg and each seg in the candidate range.
-                for( int jj = firstCandidate; jj <= lastCandidate; ++jj )
-                {
-                    SEG candidate = hole.Segment( jj );
-                    int actual;
-
-                    if( seg.Collide( candidate, clearance - epsilon, &actual ) )
-                    {
-                        VECTOR2I firstPoint = seg.NearestPoint( candidate );
-                        VECTOR2I secondPoint = candidate.NearestPoint( seg );
-                        VECTOR2I pos = ( firstPoint + secondPoint ) / 2;
-
-                        if( !collisions.empty() &&
-                                ( pos - collisions.back().first ).EuclideanNorm() < clearance * 2 )
-                        {
-                            if( actual < collisions.back().second )
-                            {
-                                collisions.back().first = pos;
-                                collisions.back().second = actual;
-                            }
-                            continue;
-                        }
-
-                        collisions.push_back( { pos, actual } );
-                    }
-                }
-
-                distanceBackToStart += seg.Length();
-            }
-
-            for( std::pair<VECTOR2I, int> collision : collisions )
-            {
-                std::shared_ptr<DRC_ITEM> drce = DRC_ITEM::Create( DRCE_CLEARANCE );
-
-                m_msg.Printf( _( "(%s clearance %s; actual %s)" ),
-                              constraint.GetName(),
-                              MessageTextFromValue( userUnits(), clearance ),
-                              MessageTextFromValue( userUnits(), collision.second ) );
-
-                drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + m_msg );
-                drce->SetItems( aZone );
-                drce->SetViolatingRule( constraint.GetParentRule() );
-
-                reportViolation( drce, (wxPoint) collision.first );
-            }
+            testShapeLineChain( fill.Hole( outlineIdx, holeIdx ), 0, aZone, aConstraint );
         }
     }
 }
@@ -547,6 +702,7 @@ void DRC_TEST_PROVIDER_MECHANICAL_CLEARANCE::testItemAgainstZones( BOARD_ITEM* a
             DRC_RTREE*     zoneTree = m_board->m_CopperZoneRTrees[ zone ].get();
             EDA_RECT       itemBBox = aItem->GetBoundingBox();
             DRC_CONSTRAINT constraint;
+            bool           colliding;
             int            clearance = -1;
             int            actual;
             VECTOR2I       pos;
@@ -583,8 +739,18 @@ void DRC_TEST_PROVIDER_MECHANICAL_CLEARANCE::testItemAgainstZones( BOARD_ITEM* a
                     }
                 }
 
-                if( zoneTree->QueryColliding( itemBBox, itemShape.get(), aLayer, clearance,
-                                              &actual, &pos ) )
+                if( zoneTree )
+                {
+                    colliding = zoneTree->QueryColliding( itemBBox, itemShape.get(), aLayer,
+                                                          clearance, &actual, &pos );
+                }
+                else
+                {
+                    colliding = zone->Outline()->Collide( itemShape.get(), clearance, &actual,
+                                                          &pos );
+                }
+
+                if( colliding )
                 {
                     std::shared_ptr<DRC_ITEM> drce = DRC_ITEM::Create( DRCE_CLEARANCE );
 

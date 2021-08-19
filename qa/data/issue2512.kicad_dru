@@ -1,0 +1,11 @@
+(version 1)
+#(rule mine
+#	(condition "A.NetName == 'GND'")
+#	(constraint clearance (min 2mm)))
+
+(rule "SilkZoneOverPads"
+  (condition "A.Type == 'zone' && A.existsOnLayer('*.Silkscreen') && B.existsOnLayer('*.Mask')")
+  (constraint silk_clearance (min -0.1mm)))
+
+(rule mech
+	(constraint mechanical_clearance (min 0.1mm)))
