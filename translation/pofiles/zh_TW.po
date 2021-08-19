@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
-"PO-Revision-Date: 2021-08-18 10:34+0000\n"
+"PO-Revision-Date: 2021-08-20 12:40+0000\n"
 "Last-Translator: David Chen <d0123456789g@yahoo.com.tw>\n"
 "Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hant/>\n"
@@ -30950,19 +30950,19 @@ msgstr "找不到列標籤 %s 。"
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1589
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1668
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1735
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid row size in row %zu. Expecting %zu elements but found %zu."
-msgstr "%zu 行中的行大小無效。預期有 %zu 個元素，但發現 %zu 個"
+msgstr "%zu 行中的行大小無效。預期有 %zu 個元素，卻找到  %zu 個。"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:498
-#, fuzzy, c-format
+#, c-format
 msgid "Expecting drill size value but found %s!%s!%s in row %zu."
-msgstr "預期鑽頭尺寸值，但找到了 %s!%s!%s，位於行 %zu"
+msgstr "預期鑽頭尺寸數值，但找到了 %s!%s!%s，位於行 %zu。"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:546
-#, fuzzy, c-format
+#, c-format
 msgid "Expecting pad size values but found %s : %s in row %zu."
-msgstr "期望焊盤尺寸值，但找到了%s : %s，位於行 %zu"
+msgstr "期望焊盤尺寸值，卻找到了%s : %s，位於行 %zu"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:568
 #, fuzzy, c-format
