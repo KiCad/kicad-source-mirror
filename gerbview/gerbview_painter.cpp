@@ -258,7 +258,7 @@ void GERBVIEW_PAINTER::draw( /*const*/ GERBER_DRAW_ITEM* aItem, int aLayer )
     if( aItem->IsBrightened() )
         color = COLOR4D( 0.0, 1.0, 0.0, 0.75 );
 
-    m_gal->SetNegativeDrawMode( isNegative );
+    m_gal->SetNegativeDrawMode( isNegative && ! m_gerbviewSettings.IsShowNegativeItems() );
     m_gal->SetStrokeColor( color );
     m_gal->SetFillColor( color );
     m_gal->SetIsFill( isFilled );
@@ -426,6 +426,7 @@ void GERBVIEW_PAINTER::draw( /*const*/ GERBER_DRAW_ITEM* aItem, int aLayer )
         wxASSERT_MSG( false, "GERBER_DRAW_ITEM shape is unknown!" );
         break;
     }
+    m_gal->SetNegativeDrawMode( false );
 
     // Enable for bounding box debugging
     #if 0
