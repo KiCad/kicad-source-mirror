@@ -741,7 +741,8 @@ bool DRC_TEST_PROVIDER_CONNECTION_WIDTH::Run()
 
                         for( auto& [ zone, rtree ] : board->m_CopperZoneRTreeCache )
                         {
-                            if( !rtree->GetObjectsAt( location, aLayer, aMinWidth ).empty()
+                            if( rtree
+                                    && !rtree->GetObjectsAt( location, aLayer, aMinWidth ).empty()
                                     && zone->HitTestFilledArea( aLayer, location, aMinWidth ) )
                             {
                                 contributingItems.push_back( zone );
