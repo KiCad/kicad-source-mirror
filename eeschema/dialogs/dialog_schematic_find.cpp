@@ -68,8 +68,6 @@ DIALOG_SCH_FIND::DIALOG_SCH_FIND( SCH_EDIT_FRAME* aParent, wxFindReplaceData* aD
     m_buttonFind->SetDefault();
     SetInitialFocus( m_comboFind );
 
-    SetPosition( aPosition );
-
     // Adjust the height of the dialog to prevent controls from being hidden when
     // switching between the find and find/replace modes of the dialog.  This ignores
     // the users preferred height if any of the controls would be hidden.
