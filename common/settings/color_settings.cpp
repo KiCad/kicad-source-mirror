@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2020 Jon Evans <jon@craftyjon.com>
- * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -65,7 +65,7 @@ COLOR_SETTINGS::COLOR_SETTINGS( const wxString& aFilename ) :
                                             &m_overrideSchItemColors, false ) );
 
     m_params.emplace_back( new PARAM<bool>( "3d_viewer.use_board_stackup_colors",
-                                            &m_overrideSchItemColors, true ) );
+                                            &m_useBoardStackupColors, true ) );
 
 #define CLR( x, y ) \
     wxASSERT( s_defaultTheme.count( y ) ); \
