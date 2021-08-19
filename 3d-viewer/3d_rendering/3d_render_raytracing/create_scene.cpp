@@ -236,8 +236,10 @@ void RENDER_3D_RAYTRACE::createObject( CONTAINER_3D& aDstContainer, const OBJECT
 
 
 void RENDER_3D_RAYTRACE::createItemsFromContainer( const BVH_CONTAINER_2D* aContainer2d,
-        PCB_LAYER_ID aLayer_id, const MATERIAL* aMaterialLayer, const SFVEC3F& aLayerColor,
-        float aLayerZOffset )
+                                                   PCB_LAYER_ID aLayer_id,
+                                                   const MATERIAL* aMaterialLayer,
+                                                   const SFVEC3F& aLayerColor,
+                                                   float aLayerZOffset )
 {
     if( aContainer2d == nullptr )
         return;
@@ -247,11 +249,8 @@ void RENDER_3D_RAYTRACE::createItemsFromContainer( const BVH_CONTAINER_2D* aCont
     if( listObject2d.size() == 0 )
         return;
 
-    for( LIST_OBJECT2D::const_iterator itemOnLayer = listObject2d.begin();
-         itemOnLayer != listObject2d.end(); ++itemOnLayer )
+    for( const OBJECT_2D* object2d_A : listObject2d )
     {
-        const OBJECT_2D* object2d_A = static_cast<const OBJECT_2D*>( *itemOnLayer );
-
         // not yet used / implemented (can be used in future to clip the objects in the
         // board borders
         OBJECT_2D* object2d_C = CSGITEM_FULL;
@@ -262,7 +261,7 @@ void RENDER_3D_RAYTRACE::createItemsFromContainer( const BVH_CONTAINER_2D* aCont
 
         // Subtract holes but not in SolderPaste
         // (can be added as an option in future)
-        if( !( ( aLayer_id == B_Paste ) || ( aLayer_id == F_Paste ) ) )
+        if( !( aLayer_id == B_Paste || aLayer_id == F_Paste ) )
         {
             // Check if there are any layerhole that intersects this object
             // Eg: a segment is cut by a via hole or THT hole.
@@ -270,33 +269,19 @@ void RENDER_3D_RAYTRACE::createItemsFromContainer( const BVH_CONTAINER_2D* aCont
 
             if( layerHolesMap.find( aLayer_id ) != layerHolesMap.end() )
             {
-                MAP_CONTAINER_2D_BASE::const_iterator ii_hole = layerHolesMap.find( aLayer_id );
+                const BVH_CONTAINER_2D* holes2d = layerHolesMap.at( aLayer_id );
 
-                const BVH_CONTAINER_2D* containerLayerHoles2d =
-                        static_cast<const BVH_CONTAINER_2D*>( ii_hole->second );
+                CONST_LIST_OBJECT2D intersecting;
 
-                CONST_LIST_OBJECT2D intersectionList;
-                containerLayerHoles2d->GetListObjectsIntersects( object2d_A->GetBBox(),
-                                                                 intersectionList );
+                holes2d->GetIntersectingObjects( object2d_A->GetBBox(), intersecting );
 
-                if( !intersectionList.empty() )
-                {
-                    for( CONST_LIST_OBJECT2D::const_iterator holeOnLayer = intersectionList.begin();
-                         holeOnLayer != intersectionList.end(); ++holeOnLayer )
-                    {
-                        const OBJECT_2D* hole2d = static_cast<const OBJECT_2D*>( *holeOnLayer );
-
-                        //if( object2d_A->Intersects( hole2d->GetBBox() ) )
-                        //if( object2d_A->GetBBox().Intersects( hole2d->GetBBox() ) )
-                        object2d_B->push_back( hole2d );
-                    }
-                }
+                for( const OBJECT_2D* hole2d : intersecting )
+                    object2d_B->push_back( hole2d );
             }
 
-            // Check if there are any THT that intersects this object
-            // If we're processing a silk screen layer and the flag is set, then
-            // clip the silk screening at the outer edge of the annular ring, rather
-            // than the at the outer edge of the copper plating.
+            // Check if there are any THT that intersects this object. If we're processing a silk
+            // layer and the flag is set, then clip the silk at the outer edge of the annular ring,
+            // rather than the at the outer edge of the copper plating.
             const BVH_CONTAINER_2D& throughHoleOuter =
                     ( m_boardAdapter.GetFlag( FL_CLIP_SILK_ON_VIA_ANNULUS )
                             && m_boardAdapter.GetFlag( FL_USE_REALISTIC_MODE )
@@ -306,71 +291,44 @@ void RENDER_3D_RAYTRACE::createItemsFromContainer( const BVH_CONTAINER_2D* aCont
 
             if( !throughHoleOuter.GetList().empty() )
             {
-                CONST_LIST_OBJECT2D intersectionList;
+                CONST_LIST_OBJECT2D intersecting;
 
-                throughHoleOuter.GetListObjectsIntersects( object2d_A->GetBBox(),
-                                                           intersectionList );
+                throughHoleOuter.GetIntersectingObjects( object2d_A->GetBBox(), intersecting );
 
-                if( !intersectionList.empty() )
-                {
-                    for( CONST_LIST_OBJECT2D::const_iterator hole = intersectionList.begin();
-                         hole != intersectionList.end(); ++hole )
-                    {
-                        const OBJECT_2D* hole2d = static_cast<const OBJECT_2D*>( *hole );
-
-                        //if( object2d_A->Intersects( hole2d->GetBBox() ) )
-                        //if( object2d_A->GetBBox().Intersects( hole2d->GetBBox() ) )
-                        object2d_B->push_back( hole2d );
-                    }
-                }
+                for( const OBJECT_2D* hole2d : intersecting )
+                    object2d_B->push_back( hole2d );
             }
         }
 
         if( !m_antioutlineBoard2dObjects->GetList().empty() )
         {
-            CONST_LIST_OBJECT2D intersectionList;
+            CONST_LIST_OBJECT2D intersecting;
 
-            m_antioutlineBoard2dObjects->GetListObjectsIntersects( object2d_A->GetBBox(),
-                                                                   intersectionList );
+            m_antioutlineBoard2dObjects->GetIntersectingObjects( object2d_A->GetBBox(),
+                                                                 intersecting );
 
-            if( !intersectionList.empty() )
-            {
-                for( const OBJECT_2D* obj : intersectionList )
-                {
-                    object2d_B->push_back( obj );
-                }
-            }
+            for( const OBJECT_2D* obj : intersecting )
+                object2d_B->push_back( obj );
         }
 
         const MAP_CONTAINER_2D_BASE& mapLayers = m_boardAdapter.GetLayerMap();
 
         if( m_boardAdapter.GetFlag( FL_SUBTRACT_MASK_FROM_SILK )
-          && m_boardAdapter.GetFlag( FL_USE_REALISTIC_MODE )
-          && ( ( ( aLayer_id == B_SilkS ) && ( mapLayers.find( B_Mask ) != mapLayers.end() ) )
-             || ( ( aLayer_id == F_SilkS )
-                && ( mapLayers.find( F_Mask ) != mapLayers.end() ) ) ) )
+            && m_boardAdapter.GetFlag( FL_USE_REALISTIC_MODE )
+            && (    ( aLayer_id == B_SilkS && mapLayers.find( B_Mask ) != mapLayers.end() )
+                 || ( aLayer_id == F_SilkS && mapLayers.find( F_Mask ) != mapLayers.end() ) ) )
         {
             const PCB_LAYER_ID layerMask_id = ( aLayer_id == B_SilkS ) ? B_Mask : F_Mask;
 
-            const BVH_CONTAINER_2D* containerMaskLayer2d =
-                    static_cast<const BVH_CONTAINER_2D*>( mapLayers.at( layerMask_id ) );
+            const BVH_CONTAINER_2D* containerMaskLayer2d = mapLayers.at( layerMask_id );
 
-            CONST_LIST_OBJECT2D intersectionList;
+            CONST_LIST_OBJECT2D intersecting;
 
             if( containerMaskLayer2d ) // can be null if B_Mask or F_Mask is not shown
-                containerMaskLayer2d->GetListObjectsIntersects( object2d_A->GetBBox(),
-                                                                intersectionList );
+                containerMaskLayer2d->GetIntersectingObjects( object2d_A->GetBBox(), intersecting );
 
-            if( !intersectionList.empty() )
-            {
-                for( CONST_LIST_OBJECT2D::const_iterator objOnLayer = intersectionList.begin();
-                     objOnLayer != intersectionList.end(); ++objOnLayer )
-                {
-                    const OBJECT_2D* obj2d = static_cast<const OBJECT_2D*>( *objOnLayer );
-
-                    object2d_B->push_back( obj2d );
-                }
-            }
+            for( const OBJECT_2D* obj2d : intersecting )
+                object2d_B->push_back( obj2d );
         }
 
         if( object2d_B->empty() )
@@ -468,75 +426,56 @@ void RENDER_3D_RAYTRACE::Reload( REPORTER* aStatusReporter, REPORTER* aWarningRe
             antiboardPoly.BooleanSubtract( boardPolyCopy, SHAPE_POLY_SET::PM_FAST );
             antiboardPoly.Fracture( SHAPE_POLY_SET::PM_FAST );
 
-            for( int iOutlinePolyIdx = 0; iOutlinePolyIdx < antiboardPoly.OutlineCount();
-                 iOutlinePolyIdx++ )
+            for( int ii = 0; ii < antiboardPoly.OutlineCount(); ii++ )
             {
-                ConvertPolygonToBlocks( antiboardPoly,
-                        *m_antioutlineBoard2dObjects, m_boardAdapter.BiuTo3dUnits(), -1.0f,
-                        *dynamic_cast<const BOARD_ITEM*>( m_boardAdapter.GetBoard() ),
-                        iOutlinePolyIdx );
+                ConvertPolygonToBlocks( antiboardPoly, *m_antioutlineBoard2dObjects,
+                                        m_boardAdapter.BiuTo3dUnits(), -1.0f,
+                                        *m_boardAdapter.GetBoard(), ii );
             }
 
             m_antioutlineBoard2dObjects->BuildBVH();
 
             boardPolyCopy.Fracture( SHAPE_POLY_SET::PM_FAST );
 
-            for( int iOutlinePolyIdx = 0; iOutlinePolyIdx < outlineCount; iOutlinePolyIdx++ )
+            for( int ii = 0; ii < outlineCount; ii++ )
             {
                 ConvertPolygonToBlocks( boardPolyCopy, *m_outlineBoard2dObjects,
-                                       m_boardAdapter.BiuTo3dUnits(), divFactor,
-                                       *dynamic_cast<const BOARD_ITEM*>( m_boardAdapter.GetBoard() ),
-                                       iOutlinePolyIdx );
+                                        m_boardAdapter.BiuTo3dUnits(), divFactor,
+                                        *m_boardAdapter.GetBoard(), ii );
             }
 
             if( m_boardAdapter.GetFlag( FL_SHOW_BOARD_BODY ) )
             {
                 const LIST_OBJECT2D& listObjects = m_outlineBoard2dObjects->GetList();
 
-                for( LIST_OBJECT2D::const_iterator object2d_iterator = listObjects.begin();
-                     object2d_iterator != listObjects.end(); ++object2d_iterator )
+                for( const OBJECT_2D* object2d_A : listObjects )
                 {
-                    const OBJECT_2D* object2d_A =
-                            static_cast<const OBJECT_2D*>( *object2d_iterator );
-
                     std::vector<const OBJECT_2D*>* object2d_B = new std::vector<const OBJECT_2D*>();
 
                     // Check if there are any THT that intersects this outline object part
                     if( !m_boardAdapter.GetThroughHoleOds().GetList().empty() )
                     {
-                        CONST_LIST_OBJECT2D intersectionList;
-                        m_boardAdapter.GetThroughHoleOds().GetListObjectsIntersects(
-                                object2d_A->GetBBox(), intersectionList );
+                        const BVH_CONTAINER_2D& throughHoles = m_boardAdapter.GetThroughHoleOds();
+                        CONST_LIST_OBJECT2D     intersecting;
 
-                        if( !intersectionList.empty() )
+                        throughHoles.GetIntersectingObjects( object2d_A->GetBBox(), intersecting );
+
+                        for( const OBJECT_2D* hole : intersecting )
                         {
-                            for( CONST_LIST_OBJECT2D::const_iterator hole =
-                                            intersectionList.begin();
-                                 hole != intersectionList.end(); ++hole )
-                            {
-                                const OBJECT_2D* hole2d = static_cast<const OBJECT_2D*>( *hole );
-
-                                if( object2d_A->Intersects( hole2d->GetBBox() ) )
-                                    //if( object2d_A->GetBBox().Intersects( hole2d->GetBBox() ) )
-                                    object2d_B->push_back( hole2d );
-                            }
+                            if( object2d_A->Intersects( hole->GetBBox() ) )
+                                object2d_B->push_back( hole );
                         }
                     }
 
                     if( !m_antioutlineBoard2dObjects->GetList().empty() )
                     {
-                        CONST_LIST_OBJECT2D intersectionList;
+                        CONST_LIST_OBJECT2D intersecting;
 
-                        m_antioutlineBoard2dObjects->GetListObjectsIntersects(
-                                object2d_A->GetBBox(), intersectionList );
+                        m_antioutlineBoard2dObjects->GetIntersectingObjects( object2d_A->GetBBox(),
+                                                                             intersecting );
 
-                        if( !intersectionList.empty() )
-                        {
-                            for( const OBJECT_2D* obj : intersectionList )
-                            {
-                                object2d_B->push_back( obj );
-                            }
-                        }
+                        for( const OBJECT_2D* obj : intersecting )
+                            object2d_B->push_back( obj );
                     }
 
                     if( object2d_B->empty() )
@@ -548,30 +487,28 @@ void RENDER_3D_RAYTRACE::Reload( REPORTER* aStatusReporter, REPORTER* aWarningRe
                     if( object2d_B == CSGITEM_EMPTY )
                     {
                         LAYER_ITEM* objPtr = new LAYER_ITEM( object2d_A,
-                                m_boardAdapter.GetLayerBottomZPos( F_Cu ),
-                                m_boardAdapter.GetLayerBottomZPos( B_Cu ) );
+                                                        m_boardAdapter.GetLayerBottomZPos( F_Cu ),
+                                                        m_boardAdapter.GetLayerBottomZPos( B_Cu ) );
 
                         objPtr->SetMaterial( &m_materials.m_EpoxyBoard );
-                        objPtr->SetColor(
-                                ConvertSRGBToLinear( (SFVEC3F) m_boardAdapter.m_BoardBodyColor ) );
+                        objPtr->SetColor( ConvertSRGBToLinear( m_boardAdapter.m_BoardBodyColor ) );
                         m_objectContainer.Add( objPtr );
                     }
                     else
                     {
 
-                        LAYER_ITEM_2D* itemCSG2d =
-                                new LAYER_ITEM_2D( object2d_A, object2d_B, CSGITEM_FULL,
-                                                   (const BOARD_ITEM&) *m_boardAdapter.GetBoard() );
+                        LAYER_ITEM_2D* itemCSG2d = new LAYER_ITEM_2D( object2d_A, object2d_B,
+                                                                      CSGITEM_FULL,
+                                                                      *m_boardAdapter.GetBoard() );
 
                         m_containerWithObjectsToDelete.Add( itemCSG2d );
 
                         LAYER_ITEM* objPtr = new LAYER_ITEM( itemCSG2d,
-                                m_boardAdapter.GetLayerBottomZPos( F_Cu ),
-                                m_boardAdapter.GetLayerBottomZPos( B_Cu ) );
+                                                        m_boardAdapter.GetLayerBottomZPos( F_Cu ),
+                                                        m_boardAdapter.GetLayerBottomZPos( B_Cu ) );
 
                         objPtr->SetMaterial( &m_materials.m_EpoxyBoard );
-                        objPtr->SetColor(
-                                ConvertSRGBToLinear( (SFVEC3F) m_boardAdapter.m_BoardBodyColor ) );
+                        objPtr->SetColor( ConvertSRGBToLinear( m_boardAdapter.m_BoardBodyColor ) );
                         m_objectContainer.Add( objPtr );
                     }
                 }
@@ -586,24 +523,18 @@ void RENDER_3D_RAYTRACE::Reload( REPORTER* aStatusReporter, REPORTER* aWarningRe
                 {
                     const LIST_OBJECT2D& holeList = m_boardAdapter.GetThroughHoleOds().GetList();
 
-                    for( LIST_OBJECT2D::const_iterator hole = holeList.begin();
-                         hole != holeList.end(); ++hole )
+                    for( const OBJECT_2D* hole2d : holeList )
                     {
-                        const OBJECT_2D* hole2d = static_cast<const OBJECT_2D*>( *hole );
-
                         if( !m_antioutlineBoard2dObjects->GetList().empty() )
                         {
-                            CONST_LIST_OBJECT2D intersectionList;
+                            CONST_LIST_OBJECT2D intersecting;
 
-                            m_antioutlineBoard2dObjects->GetListObjectsIntersects(
-                                    hole2d->GetBBox(), intersectionList );
+                            m_antioutlineBoard2dObjects->GetIntersectingObjects( hole2d->GetBBox(),
+                                                                                 intersecting );
 
-                            if( !intersectionList.empty() )
-                            {
-                                // Do not add cylinder if it intersects the edge of the board
-
+                            // Do not add cylinder if it intersects the edge of the board
+                            if( !intersecting.empty() )
                                 continue;
-                            }
                         }
 
                         switch( hole2d->GetObjectType() )
@@ -618,8 +549,7 @@ void RENDER_3D_RAYTRACE::Reload( REPORTER* aStatusReporter, REPORTER* aWarningRe
                                     radius );
 
                             objPtr->SetMaterial( &m_materials.m_EpoxyBoard );
-                            objPtr->SetColor( ConvertSRGBToLinear(
-                                    (SFVEC3F) m_boardAdapter.m_BoardBodyColor ) );
+                            objPtr->SetColor( ConvertSRGBToLinear( m_boardAdapter.m_BoardBodyColor ) );
 
                             m_objectContainer.Add( objPtr );
                         }
@@ -638,20 +568,24 @@ void RENDER_3D_RAYTRACE::Reload( REPORTER* aStatusReporter, REPORTER* aWarningRe
         aStatusReporter->Report( _( "Load Raytracing: layers" ) );
 
     // Add layers maps (except B_Mask and F_Mask)
-    for( MAP_CONTAINER_2D_BASE::const_iterator ii = m_boardAdapter.GetLayerMap().begin();
-         ii != m_boardAdapter.GetLayerMap().end(); ++ii )
+    for( auto entry : m_boardAdapter.GetLayerMap() )
     {
-        PCB_LAYER_ID layer_id = static_cast<PCB_LAYER_ID>( ii->first );
+        PCB_LAYER_ID            layer_id = entry.first;
+        const BVH_CONTAINER_2D* container2d = entry.second;
+
+        // Only process layers that exist
+        if( !container2d )
+            continue;
 
         if( aOnlyLoadCopperAndShapes && !IsCopperLayer( layer_id ) )
             continue;
 
         // Mask layers are not processed here because they are a special case
-        if( ( layer_id == B_Mask ) || ( layer_id == F_Mask ) )
+        if( layer_id == B_Mask || layer_id == F_Mask )
             continue;
 
         MATERIAL* materialLayer = &m_materials.m_SilkS;
-        SFVEC3F    layerColor    = SFVEC3F( 0.0f, 0.0f, 0.0f );
+        SFVEC3F   layerColor    = SFVEC3F( 0.0f, 0.0f, 0.0f );
 
         switch( layer_id )
         {
@@ -667,6 +601,7 @@ void RENDER_3D_RAYTRACE::Reload( REPORTER* aStatusReporter, REPORTER* aWarningRe
                 layerColor = m_boardAdapter.m_SolderPasteColor;
             else
                 layerColor = m_boardAdapter.GetLayerColor( layer_id );
+
             break;
 
         case B_SilkS:
@@ -676,7 +611,9 @@ void RENDER_3D_RAYTRACE::Reload( REPORTER* aStatusReporter, REPORTER* aWarningRe
                 layerColor = m_boardAdapter.m_SilkScreenColorBot;
             else
                 layerColor = m_boardAdapter.GetLayerColor( layer_id );
+
             break;
+
         case F_SilkS:
             materialLayer = &m_materials.m_SilkS;
 
@@ -684,6 +621,7 @@ void RENDER_3D_RAYTRACE::Reload( REPORTER* aStatusReporter, REPORTER* aWarningRe
                 layerColor = m_boardAdapter.m_SilkScreenColorTop;
             else
                 layerColor = m_boardAdapter.GetLayerColor( layer_id );
+
             break;
 
         case Dwgs_User:
@@ -711,13 +649,13 @@ void RENDER_3D_RAYTRACE::Reload( REPORTER* aStatusReporter, REPORTER* aWarningRe
                     layerColor = m_boardAdapter.m_CopperColor;
             }
             else
+            {
                 layerColor = m_boardAdapter.GetLayerColor( layer_id );
+            }
 
             materialLayer = &m_materials.m_NonPlatedCopper;
             break;
         }
-
-        const BVH_CONTAINER_2D* container2d = static_cast<const BVH_CONTAINER_2D*>( ii->second );
 
         createItemsFromContainer( container2d, layer_id, materialLayer, layerColor, 0.0f );
     } // for each layer on map
@@ -738,24 +676,23 @@ void RENDER_3D_RAYTRACE::Reload( REPORTER* aStatusReporter, REPORTER* aWarningRe
     if( !aOnlyLoadCopperAndShapes )
     {
         // Add Mask layer
-        // Solder mask layers are "negative" layers so the elements that we have
-        // (in the container) should remove the board outline.
-        // We will check for all objects in the outline if it intersects any object
-        // in the layer container and also any hole.
-        if( m_boardAdapter.GetFlag( FL_SOLDERMASK )
-          && ( m_outlineBoard2dObjects->GetList().size() >= 1 ) )
+        // Solder mask layers are "negative" layers so the elements that we have in the container
+        // should remove the board outline. We will check for all objects in the outline if it
+        // intersects any object in the layer container and also any hole.
+        if( m_boardAdapter.GetFlag( FL_SOLDERMASK ) && !m_outlineBoard2dObjects->GetList().empty() )
         {
             const MATERIAL* materialLayer = &m_materials.m_SolderMask;
 
-            for( MAP_CONTAINER_2D_BASE::const_iterator ii = m_boardAdapter.GetLayerMap().begin();
-                 ii != m_boardAdapter.GetLayerMap().end(); ++ii )
+            for( auto entry : m_boardAdapter.GetLayerMap() )
             {
-                PCB_LAYER_ID layer_id = static_cast<PCB_LAYER_ID>( ii->first );
+                PCB_LAYER_ID            layer_id = entry.first;
+                const BVH_CONTAINER_2D* container2d = entry.second;
 
-                const BVH_CONTAINER_2D* containerLayer2d =
-                        static_cast<const BVH_CONTAINER_2D*>( ii->second );
+                // Only process layers that exist
+                if( !container2d )
+                    continue;
 
-                // Only get the Solder mask layers
+                // Only get the Solder mask layers (and only if the board has them)
                 if( !( layer_id == B_Mask || layer_id == F_Mask ) )
                     continue;
 
@@ -777,58 +714,35 @@ void RENDER_3D_RAYTRACE::Reload( REPORTER* aStatusReporter, REPORTER* aWarningRe
                 const float zLayerMax = m_boardAdapter.GetLayerTopZPos( layer_id );
 
                 // Get the outline board objects
-                const LIST_OBJECT2D& listObjects = m_outlineBoard2dObjects->GetList();
-
-                for( LIST_OBJECT2D::const_iterator object2d_iterator = listObjects.begin();
-                        object2d_iterator != listObjects.end(); ++object2d_iterator )
+                for( const OBJECT_2D* object2d_A : m_outlineBoard2dObjects->GetList() )
                 {
-                    const OBJECT_2D* object2d_A =
-                            static_cast<const OBJECT_2D*>( *object2d_iterator );
-
                     std::vector<const OBJECT_2D*>* object2d_B = new std::vector<const OBJECT_2D*>();
 
                     // Check if there are any THT that intersects this outline object part
                     if( !m_boardAdapter.GetThroughHoleOds().GetList().empty() )
                     {
+                        const BVH_CONTAINER_2D& throughHoles = m_boardAdapter.GetThroughHoleOds();
+                        CONST_LIST_OBJECT2D     intersecting;
 
-                        CONST_LIST_OBJECT2D intersectionList;
+                        throughHoles.GetIntersectingObjects( object2d_A->GetBBox(), intersecting );
 
-                        m_boardAdapter.GetThroughHoleOds().GetListObjectsIntersects(
-                                object2d_A->GetBBox(), intersectionList );
-
-                        if( !intersectionList.empty() )
+                        for( const OBJECT_2D* hole : intersecting )
                         {
-                            for( CONST_LIST_OBJECT2D::const_iterator hole =
-                                            intersectionList.begin();
-                                 hole != intersectionList.end(); ++hole )
-                            {
-                                const OBJECT_2D* hole2d = static_cast<const OBJECT_2D*>( *hole );
-
-                                if( object2d_A->Intersects( hole2d->GetBBox() ) )
-                                    object2d_B->push_back( hole2d );
-                            }
+                            if( object2d_A->Intersects( hole->GetBBox() ) )
+                                object2d_B->push_back( hole );
                         }
                     }
 
-                    // Check if there are any objects in the layer to subtract with the
-                    // current object
-                    if( !containerLayer2d->GetList().empty() )
+                    // Check if there are any objects in the layer to subtract with the current
+                    // object
+                    if( !container2d->GetList().empty() )
                     {
-                        CONST_LIST_OBJECT2D intersectionList;
+                        CONST_LIST_OBJECT2D intersecting;
 
-                        containerLayer2d->GetListObjectsIntersects(
-                                object2d_A->GetBBox(), intersectionList );
+                        container2d->GetIntersectingObjects( object2d_A->GetBBox(), intersecting );
 
-                        if( !intersectionList.empty() )
-                        {
-                            for( CONST_LIST_OBJECT2D::const_iterator obj = intersectionList.begin();
-                                    obj != intersectionList.end(); ++obj )
-                            {
-                                const OBJECT_2D* obj2d = static_cast<const OBJECT_2D*>( *obj );
-
-                                object2d_B->push_back( obj2d );
-                            }
-                        }
+                        for( const OBJECT_2D* obj : intersecting )
+                            object2d_B->push_back( obj );
                     }
 
                     if( object2d_B->empty() )
@@ -853,9 +767,9 @@ void RENDER_3D_RAYTRACE::Reload( REPORTER* aStatusReporter, REPORTER* aWarningRe
                     }
                     else
                     {
-                        LAYER_ITEM_2D* itemCSG2d =
-                                new LAYER_ITEM_2D( object2d_A, object2d_B, CSGITEM_FULL,
-                                                   object2d_A->GetBoardItem() );
+                        LAYER_ITEM_2D* itemCSG2d = new LAYER_ITEM_2D( object2d_A, object2d_B,
+                                                                      CSGITEM_FULL,
+                                                                      object2d_A->GetBoardItem() );
 
                         m_containerWithObjectsToDelete.Add( itemCSG2d );
 
@@ -919,8 +833,7 @@ void RENDER_3D_RAYTRACE::Reload( REPORTER* aStatusReporter, REPORTER* aWarningRe
                     const SFVEC3F v2 = SFVEC3F( v1.x, v3.y, v1.z );
                     const SFVEC3F v4 = SFVEC3F( v3.x, v1.y, v1.z );
 
-                    SFVEC3F backgroundColor = ConvertSRGBToLinear(
-                            static_cast<SFVEC3F>( m_boardAdapter.m_BgColorTop ) );
+                    SFVEC3F backgroundColor = ConvertSRGBToLinear( m_boardAdapter.m_BgColorTop );
 
                     TRIANGLE* newTriangle1 = new TRIANGLE( v1, v2, v3 );
                     TRIANGLE* newTriangle2 = new TRIANGLE( v3, v4, v1 );
@@ -928,8 +841,8 @@ void RENDER_3D_RAYTRACE::Reload( REPORTER* aStatusReporter, REPORTER* aWarningRe
                     m_objectContainer.Add( newTriangle1 );
                     m_objectContainer.Add( newTriangle2 );
 
-                    newTriangle1->SetMaterial( (const MATERIAL*) &m_materials.m_Floor );
-                    newTriangle2->SetMaterial( (const MATERIAL*) &m_materials.m_Floor );
+                    newTriangle1->SetMaterial( &m_materials.m_Floor );
+                    newTriangle2->SetMaterial( &m_materials.m_Floor );
 
                     newTriangle1->SetColor( backgroundColor );
                     newTriangle2->SetColor( backgroundColor );
@@ -948,8 +861,8 @@ void RENDER_3D_RAYTRACE::Reload( REPORTER* aStatusReporter, REPORTER* aWarningRe
                     m_objectContainer.Add( newTriangle3 );
                     m_objectContainer.Add( newTriangle4 );
 
-                    newTriangle3->SetMaterial( (const MATERIAL*) &m_materials.m_Floor );
-                    newTriangle4->SetMaterial( (const MATERIAL*) &m_materials.m_Floor );
+                    newTriangle3->SetMaterial( &m_materials.m_Floor );
+                    newTriangle4->SetMaterial( &m_materials.m_Floor );
 
                     newTriangle3->SetColor( backgroundColor );
                     newTriangle4->SetColor( backgroundColor );
@@ -1037,7 +950,7 @@ void RENDER_3D_RAYTRACE::insertHole( const PCB_VIA* aVia )
                  - m_boardAdapter.GetCopperThickness();
 
     const SFVEC2F center = SFVEC2F( aVia->GetStart().x * m_boardAdapter.BiuTo3dUnits(),
-            -aVia->GetStart().y * m_boardAdapter.BiuTo3dUnits() );
+                                    -aVia->GetStart().y * m_boardAdapter.BiuTo3dUnits() );
 
     RING_2D* ring = new RING_2D( center, radiusBUI * m_boardAdapter.BiuTo3dUnits(),
                                  ( radiusBUI + m_boardAdapter.GetHolePlatingThickness() )
@@ -1050,7 +963,7 @@ void RENDER_3D_RAYTRACE::insertHole( const PCB_VIA* aVia )
     objPtr->SetMaterial( &m_materials.m_Copper );
 
     if( m_boardAdapter.GetFlag( FL_USE_REALISTIC_MODE ) )
-        objPtr->SetColor( ConvertSRGBToLinear( (SFVEC3F) m_boardAdapter.m_CopperColor ) );
+        objPtr->SetColor( ConvertSRGBToLinear( m_boardAdapter.m_CopperColor ) );
     else if( aVia->GetViaType() == VIATYPE::MICROVIA )
         objPtr->SetColor( ConvertSRGBToLinear( m_boardAdapter.GetItemColor( LAYER_VIA_MICROVIA ) ) );
     else if( aVia->GetViaType() == VIATYPE::BLIND_BURIED )
@@ -1069,7 +982,7 @@ void RENDER_3D_RAYTRACE::insertHole( const PAD* aPad )
     SFVEC3F objColor;
 
     if( m_boardAdapter.GetFlag( FL_USE_REALISTIC_MODE ) )
-        objColor = (SFVEC3F) m_boardAdapter.m_CopperColor;
+        objColor = m_boardAdapter.m_CopperColor;
     else
         objColor = m_boardAdapter.GetItemColor( LAYER_PADS_TH );
 
@@ -1106,8 +1019,8 @@ void RENDER_3D_RAYTRACE::insertHole( const PAD* aPad )
         // it will use instead a CSG of two circles.
         if( object2d_A && !m_antioutlineBoard2dObjects->GetList().empty() )
         {
-            m_antioutlineBoard2dObjects->GetListObjectsIntersects( object2d_A->GetBBox(),
-                                                                   antiOutlineIntersectionList );
+            m_antioutlineBoard2dObjects->GetIntersectingObjects( object2d_A->GetBBox(),
+                                                                 antiOutlineIntersectionList );
         }
 
         if( !antiOutlineIntersectionList.empty() )
@@ -1120,8 +1033,8 @@ void RENDER_3D_RAYTRACE::insertHole( const PAD* aPad )
             std::vector<const OBJECT_2D*>* object2d_B = new std::vector<const OBJECT_2D*>();
             object2d_B->push_back( innerCircle );
 
-            LAYER_ITEM_2D* itemCSG2d =
-                    new LAYER_ITEM_2D( outterCircle, object2d_B, CSGITEM_FULL, *aPad );
+            LAYER_ITEM_2D* itemCSG2d = new LAYER_ITEM_2D( outterCircle, object2d_B, CSGITEM_FULL,
+                                                          *aPad );
 
             m_containerWithObjectsToDelete.Add( itemCSG2d );
             m_containerWithObjectsToDelete.Add( innerCircle );
@@ -1170,8 +1083,7 @@ void RENDER_3D_RAYTRACE::insertHole( const PAD* aPad )
         std::vector<const OBJECT_2D*>* object2d_B = new std::vector<const OBJECT_2D*>();
         object2d_B->push_back( innerSeg );
 
-        LAYER_ITEM_2D* itemCSG2d =
-                new LAYER_ITEM_2D( outerSeg, object2d_B, CSGITEM_FULL, *aPad );
+        LAYER_ITEM_2D* itemCSG2d = new LAYER_ITEM_2D( outerSeg, object2d_B, CSGITEM_FULL, *aPad );
 
         m_containerWithObjectsToDelete.Add( itemCSG2d );
         m_containerWithObjectsToDelete.Add( innerSeg );
@@ -1181,9 +1093,8 @@ void RENDER_3D_RAYTRACE::insertHole( const PAD* aPad )
 
         if( object2d_A && !m_antioutlineBoard2dObjects->GetList().empty() )
         {
-
-            m_antioutlineBoard2dObjects->GetListObjectsIntersects( object2d_A->GetBBox(),
-                                                                   antiOutlineIntersectionList );
+            m_antioutlineBoard2dObjects->GetIntersectingObjects( object2d_A->GetBBox(),
+                                                                 antiOutlineIntersectionList );
         }
     }
 
@@ -1195,30 +1106,20 @@ void RENDER_3D_RAYTRACE::insertHole( const PAD* aPad )
         // It will use the non inflated holes
         if( !m_boardAdapter.GetThroughHoleIds().GetList().empty() )
         {
-            CONST_LIST_OBJECT2D intersectionList;
-            m_boardAdapter.GetThroughHoleIds().GetListObjectsIntersects(
-                    object2d_A->GetBBox(), intersectionList );
+            CONST_LIST_OBJECT2D intersecting;
 
-            if( !intersectionList.empty() )
+            m_boardAdapter.GetThroughHoleIds().GetIntersectingObjects( object2d_A->GetBBox(),
+                                                                       intersecting );
+
+            for( const OBJECT_2D* hole2d : intersecting )
             {
-                for( CONST_LIST_OBJECT2D::const_iterator hole = intersectionList.begin();
-                     hole != intersectionList.end(); ++hole )
-                {
-                    const OBJECT_2D* hole2d = static_cast<const OBJECT_2D*>( *hole );
-
-                    if( object2d_A->Intersects( hole2d->GetBBox() ) )
-                        object2d_B->push_back( hole2d );
-                }
+                if( object2d_A->Intersects( hole2d->GetBBox() ) )
+                    object2d_B->push_back( hole2d );
             }
         }
 
-        if( !antiOutlineIntersectionList.empty() )
-        {
-            for( const OBJECT_2D* obj : antiOutlineIntersectionList )
-            {
-                object2d_B->push_back( obj );
-            }
-        }
+        for( const OBJECT_2D* obj : antiOutlineIntersectionList )
+            object2d_B->push_back( obj );
 
         if( object2d_B->empty() )
         {
@@ -1237,7 +1138,7 @@ void RENDER_3D_RAYTRACE::insertHole( const PAD* aPad )
         else
         {
             LAYER_ITEM_2D* itemCSG2d = new LAYER_ITEM_2D( object2d_A, object2d_B, CSGITEM_FULL,
-                    (const BOARD_ITEM&) *aPad );
+                                                          *aPad );
 
             m_containerWithObjectsToDelete.Add( itemCSG2d );
 
@@ -1275,9 +1176,7 @@ void RENDER_3D_RAYTRACE::addPadsAndVias()
         for( PAD* pad : footprint->Pads() )
         {
             if( pad->GetAttribute() != PAD_ATTRIB::NPTH )
-            {
                 insertHole( pad );
-            }
         }
     }
 }

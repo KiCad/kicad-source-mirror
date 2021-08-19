@@ -65,8 +65,8 @@ CONTAINER_2D::CONTAINER_2D() : CONTAINER_2D_BASE( OBJECT_2D_TYPE::CONTAINER )
 }
 
 
-void CONTAINER_2D::GetListObjectsIntersects( const BBOX_2D& aBBox,
-                                             CONST_LIST_OBJECT2D& aOutList ) const
+void CONTAINER_2D::GetIntersectingObjects( const BBOX_2D& aBBox,
+                                           CONST_LIST_OBJECT2D& aOutList ) const
 {
     /// @todo Determine what to do with this code.
 }
@@ -299,8 +299,8 @@ bool BVH_CONTAINER_2D::recursiveIntersectAny( const BVH_CONTAINER_NODE_2D* aNode
 }
 
 
-void BVH_CONTAINER_2D::GetListObjectsIntersects( const BBOX_2D& aBBox,
-                                                 CONST_LIST_OBJECT2D& aOutList ) const
+void BVH_CONTAINER_2D::GetIntersectingObjects( const BBOX_2D& aBBox,
+                                               CONST_LIST_OBJECT2D& aOutList ) const
 {
     wxASSERT( aBBox.IsInitialized() == true );
     wxASSERT( m_isInitialized == true );

@@ -71,8 +71,8 @@ public:
      * @param aBBox The bounding box to test.
      * @param aOutList The list of objects that intersects the bounding box.
      */
-    virtual void GetListObjectsIntersects( const BBOX_2D& aBBox,
-                                           CONST_LIST_OBJECT2D& aOutList ) const = 0;
+    virtual void GetIntersectingObjects( const BBOX_2D& aBBox,
+                                         CONST_LIST_OBJECT2D& aOutList ) const = 0;
 
     /**
      * Intersect and check if a segment ray hits a object or is inside it.
@@ -96,8 +96,8 @@ class CONTAINER_2D : public CONTAINER_2D_BASE
 public:
     CONTAINER_2D();
 
-    void GetListObjectsIntersects( const BBOX_2D& aBBox,
-                                   CONST_LIST_OBJECT2D& aOutList ) const override;
+    void GetIntersectingObjects( const BBOX_2D& aBBox,
+                                 CONST_LIST_OBJECT2D& aOutList ) const override;
 
     bool IntersectAny( const RAYSEG2D& aSegRay ) const override;
 };
@@ -123,8 +123,8 @@ public:
 
     void Clear() override;
 
-    void GetListObjectsIntersects( const BBOX_2D& aBBox,
-                                   CONST_LIST_OBJECT2D& aOutList ) const override;
+    void GetIntersectingObjects( const BBOX_2D& aBBox,
+                                 CONST_LIST_OBJECT2D& aOutList ) const override;
 
     bool IntersectAny( const RAYSEG2D& aSegRay ) const override;
 
