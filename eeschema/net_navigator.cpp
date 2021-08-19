@@ -458,7 +458,7 @@ void SCH_EDIT_FRAME::onResizeNetNavigator( wxSizeEvent& aEvent )
 
     wxAuiPaneInfo& netNavigatorPane = m_auimgr.GetPane( NetNavigatorPaneName() );
 
-    if( m_netNavigator->IsShown() )
+    if( m_netNavigator->IsShownOnScreen() )
     {
         cfg->m_AuiPanels.net_nav_panel_float_size  = netNavigatorPane.floating_size;
 

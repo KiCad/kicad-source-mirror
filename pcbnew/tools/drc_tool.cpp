@@ -113,7 +113,7 @@ int DRC_TOOL::ShowDRCDialog( const TOOL_EVENT& aEvent )
 bool DRC_TOOL::IsDRCDialogShown()
 {
     if( m_drcDialog )
-        return m_drcDialog->IsShown();
+        return m_drcDialog->IsShownOnScreen();
 
     return false;
 }
@@ -257,7 +257,7 @@ int DRC_TOOL::CrossProbe( const TOOL_EVENT& aEvent )
 
         if( selection.GetSize() == 1 && selection.Front()->Type() == PCB_MARKER_T )
         {
-            if( !m_drcDialog->IsShown() )
+            if( !m_drcDialog->IsShownOnScreen() )
                 m_drcDialog->Show( true );
 
             m_drcDialog->SelectMarker( static_cast<PCB_MARKER*>( selection.Front() ) );

@@ -163,7 +163,7 @@ int EE_INSPECTION_TOOL::CrossProbe( const TOOL_EVENT& aEvent )
 
         if( dlg )
         {
-            if( !dlg->IsShown() )
+            if( !dlg->IsShownOnScreen() )
             {
                 dlg->Show( true );
                 dlg->Raise();

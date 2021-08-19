@@ -242,7 +242,7 @@ void SYMBOL_PREVIEW_WIDGET::DisplaySymbol( const LIB_ID& aSymbolID, int aUnit, i
         m_itemBBox = m_previewItem->GetUnitBoundingBox( settings->m_ShowUnit,
                                                         settings->m_ShowConvert );
 
-        if( !m_preview->IsShown() )
+        if( !m_preview->IsShownOnScreen() )
         {
             m_preview->Show();
 

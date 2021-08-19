@@ -1034,7 +1034,7 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName, bool addToHistory,
     if( m_infoBar->GetMessageType() == WX_INFOBAR::MESSAGE_TYPE::OUTDATED_SAVE )
         m_infoBar->Dismiss();
 
-    if( m_infoBar->IsShown() && m_infoBar->HasCloseButton() )
+    if( m_infoBar->IsShownOnScreen() && m_infoBar->HasCloseButton() )
         m_infoBar->Dismiss();
 
     GetScreen()->SetContentModified( false );

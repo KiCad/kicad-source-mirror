@@ -293,7 +293,7 @@ bool EDA_BASE_FRAME::ProcessEvent( wxEvent& aEvent )
     if( Pgm().m_Quitting )
         return true;
 
-    if( !m_isClosing && m_supportsAutoSave && IsShown() && IsActive()
+    if( !m_isClosing && m_supportsAutoSave && IsShownOnScreen() && IsActive()
             && m_autoSavePending != isAutoSaveRequired()
             && GetAutoSaveInterval() > 0 )
     {

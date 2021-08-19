@@ -140,7 +140,7 @@ void IMPORT_PROJ_HELPER::ImportIndividualFile( KICAD_T aFT, int aImportedFileTyp
     std::string packet = StrPrintf( "%d\n%s", aImportedFileType, TO_UTF8( appImportFile ) );
     frame->Kiway().ExpressMail( frame_type, MAIL_IMPORT_FILE, packet, m_frame );
 
-    if( !frame->IsShown() )
+    if( !frame->IsShownOnScreen() )
         frame->Show( true );
 
     // On Windows, Raise() does not bring the window on screen, when iconized

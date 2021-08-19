@@ -77,7 +77,7 @@ void SCH_SEARCH_PANE::onSchChanged( wxCommandEvent& event )
 
 void SCH_SEARCH_PANE::OnSchItemsAdded( SCHEMATIC& aBoard, std::vector<SCH_ITEM*>& aBoardItems )
 {
-    if( !IsShown() )
+    if( !IsShownOnScreen() )
         return;
 
     RefreshSearch();
@@ -86,7 +86,7 @@ void SCH_SEARCH_PANE::OnSchItemsAdded( SCHEMATIC& aBoard, std::vector<SCH_ITEM*>
 
 void SCH_SEARCH_PANE::OnSchItemsRemoved( SCHEMATIC& aBoard, std::vector<SCH_ITEM*>& aBoardItems )
 {
-    if( !IsShown() )
+    if( !IsShownOnScreen() )
         return;
 
     RefreshSearch();
@@ -95,7 +95,7 @@ void SCH_SEARCH_PANE::OnSchItemsRemoved( SCHEMATIC& aBoard, std::vector<SCH_ITEM
 
 void SCH_SEARCH_PANE::OnSchItemsChanged( SCHEMATIC& aBoard, std::vector<SCH_ITEM*>& aBoardItems )
 {
-    if( !IsShown() )
+    if( !IsShownOnScreen() )
         return;
 
     RefreshSearch();

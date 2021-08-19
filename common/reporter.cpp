@@ -257,7 +257,7 @@ void INFOBAR_REPORTER::Finalize()
         return;
 
     // Short circuit if the message is empty and it is already hidden
-    if( !HasMessage() && !m_infoBar->IsShown() )
+    if( !HasMessage() && !m_infoBar->IsShownOnScreen() )
         return;
 
     int icon = wxICON_NONE;

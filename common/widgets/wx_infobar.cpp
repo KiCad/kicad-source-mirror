@@ -186,7 +186,7 @@ void WX_INFOBAR::ShowMessage( const wxString& aMessage, int aFlags, MESSAGE_TYPE
 
 void WX_INFOBAR::Dismiss()
 {
-    if( !IsShown() )
+    if( !IsShownOnScreen() )
         return;
 
     // Don't do anything if we requested the UI update
@@ -270,7 +270,7 @@ void WX_INFOBAR::AddButton( wxButton* aButton )
 #endif // __WXMAC__
     sizer->Add( aButton, wxSizerFlags().Centre().Border( wxRIGHT ) );
 
-    if( IsShown() )
+    if( IsShownOnScreen() )
         sizer->Layout();
 }
 
@@ -283,7 +283,7 @@ void WX_INFOBAR::AddButton( wxHyperlinkCtrl* aHypertextButton )
 
     sizer->Add( aHypertextButton, wxSizerFlags().Centre().Border( wxRIGHT ) );
 
-    if( IsShown() )
+    if( IsShownOnScreen() )
         sizer->Layout();
 }
 

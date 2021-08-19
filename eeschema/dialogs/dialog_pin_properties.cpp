@@ -414,7 +414,7 @@ void DIALOG_PIN_PROPERTIES::OnPaintShowPanel( wxPaintEvent& event )
 
 void DIALOG_PIN_PROPERTIES::OnPropertiesChange( wxCommandEvent& event )
 {
-    if( !IsShown() )   // do nothing at init time
+    if( !IsShownOnScreen() )   // do nothing at init time
         return;
 
     m_dummyPin->SetName( m_textPinName->GetValue() );

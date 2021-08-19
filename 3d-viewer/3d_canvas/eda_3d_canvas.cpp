@@ -364,7 +364,7 @@ void EDA_3D_CANVAS::DoRePaint()
     // therefore with invalid board.
     // This is dependent of the platform.
     // Especially on OSX, but also on Windows, it frequently happens
-    if( !GetParent()->GetParent()->IsShown() )
+    if( !GetParent()->GetParent()->IsShownOnScreen() )
         return; // The parent board editor frame is no more alive
 
     wxString err_messages;

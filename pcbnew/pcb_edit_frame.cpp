@@ -1824,7 +1824,7 @@ int PCB_EDIT_FRAME::TestStandalone()
     if( !frame )
         return -1;
 
-    if( !frame->IsShown() )
+    if( !frame->IsShownOnScreen() )
     {
         wxFileName fn( Prj().GetProjectPath(), Prj().GetProjectName(),
                        KiCadSchematicFileExtension );
@@ -1966,8 +1966,8 @@ void PCB_EDIT_FRAME::RunEeschema()
         if( !frame )
             return;
 
-        if( !frame->IsShown() ) // the frame exists, (created by the dialog field editor)
-                                // but no project loaded.
+        if( !frame->IsShownOnScreen() ) // the frame exists, (created by the dialog field editor)
+                                        // but no project loaded.
         {
             frame->OpenProjectFiles( std::vector<wxString>( 1, schematic.GetFullPath() ) );
             frame->Show( true );
@@ -2471,7 +2471,7 @@ bool PCB_EDIT_FRAME::PropertiesShown()
 
 void PCB_EDIT_FRAME::onSize( wxSizeEvent& aEvent )
 {
-    if( IsShown() )
+    if( IsShownOnScreen() )
     {
         // We only need this until the frame is done resizing and the final client size is
         // established.

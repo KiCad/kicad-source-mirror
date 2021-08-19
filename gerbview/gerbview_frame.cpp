@@ -240,7 +240,7 @@ bool GERBVIEW_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
     // Ensure the frame is shown when opening the file(s), to avoid issues (crash) on GAL
     // when trying to change the view if it is not fully initialized.
     // It happens when starting GerbView with a gerber job file to load
-    if( !IsShown() )
+    if( !IsShownOnScreen() )
         Show();
 
     // The current project path is also a valid command parameter.  Check if a single path

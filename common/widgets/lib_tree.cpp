@@ -681,10 +681,10 @@ void LIB_TREE::onIdle( wxIdleEvent& aEvent )
     bool    mouseOverWindow = false;
     wxPoint screenPos = wxGetMousePosition();
 
-    if( m_tree_ctrl->IsShown() )
+    if( m_tree_ctrl->IsShownOnScreen() )
         mouseOverWindow |= m_tree_ctrl->GetScreenRect().Contains( screenPos );
 
-    if( m_previewWindow && m_previewWindow->IsShown() )
+    if( m_previewWindow && m_previewWindow->IsShownOnScreen() )
         mouseOverWindow |= m_previewWindow->GetScreenRect().Contains( screenPos );
 
     if( m_previewDisabled || topLevelFocus != topLevelParent || !mouseOverWindow )
@@ -737,7 +737,7 @@ void LIB_TREE::onHoverTimer( wxTimerEvent& aEvent )
 {
     hidePreview();
 
-    if( !m_tree_ctrl->IsShown() || m_previewDisabled )
+    if( !m_tree_ctrl->IsShownOnScreen() || m_previewDisabled )
         return;
 
     wxDataViewItem    item;

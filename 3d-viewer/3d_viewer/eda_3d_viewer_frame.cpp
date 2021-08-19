@@ -438,9 +438,8 @@ void EDA_3D_VIEWER_FRAME::OnCloseWindow( wxCloseEvent &event )
 {
     wxLogTrace( m_logTrace, wxT( "EDA_3D_VIEWER_FRAME::OnCloseWindow" ) );
 
-    // Do not show the layer manager during closing to avoid flicker
-    // on some platforms (Windows) that generate useless redraw of items in
-    // the Layer Manager
+    // Do not show the layer manager during closing to avoid flicker on some platforms (Windows)
+    // that generate useless redraw of items in the Layer Manager
     if( m_auimgr.GetPane( wxS( "LayersManager" ) ).IsShown() )
         m_auimgr.GetPane( wxS( "LayersManager" ) ).Show( false );
 

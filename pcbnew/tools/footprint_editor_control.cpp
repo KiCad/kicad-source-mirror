@@ -301,7 +301,7 @@ int FOOTPRINT_EDITOR_CONTROL::SaveAs( const TOOL_EVENT& aEvent )
             // Get rid of the save-will-update-board-only (or any other dismissable warning)
             WX_INFOBAR* infobar = m_frame->GetInfoBar();
 
-            if( infobar->IsShown() && infobar->HasCloseButton() )
+            if( infobar->IsShownOnScreen() && infobar->HasCloseButton() )
                 infobar->Dismiss();
 
             canvas()->ForceRefresh();
@@ -677,7 +677,7 @@ void FOOTPRINT_EDITOR_CONTROL::CrossProbe( const PCB_MARKER* aMarker )
     if( !m_checkerDialog )
         m_checkerDialog = new DIALOG_FOOTPRINT_CHECKER( m_frame );
 
-    if( !m_checkerDialog->IsShown() )
+    if( !m_checkerDialog->IsShownOnScreen() )
         m_checkerDialog->Show( true );
 
     m_checkerDialog->SelectMarker( aMarker );

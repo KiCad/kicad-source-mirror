@@ -148,6 +148,6 @@ void SCH_PREVIEW_PANEL::Refresh( bool aEraseBackground, const wxRect* aRect )
 
 void SCH_PREVIEW_PANEL::onPaint( wxPaintEvent& aEvent )
 {
-    if( IsShown() )
+    if( IsShownOnScreen() )
         EDA_DRAW_PANEL_GAL::onPaint( aEvent );
 }

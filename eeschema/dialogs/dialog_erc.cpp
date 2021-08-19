@@ -152,7 +152,7 @@ void DIALOG_ERC::UpdateAnnotationWarning()
     if( m_parent->CheckAnnotate( []( ERCE_T, const wxString&, SCH_REFERENCE*, SCH_REFERENCE* )
                                  { } ) )
     {
-        if( !m_infoBar->IsShown() )
+        if( !m_infoBar->IsShownOnScreen() )
         {
             wxHyperlinkCtrl* button = new wxHyperlinkCtrl( m_infoBar, wxID_ANY,
                                                            _( "Show Annotation dialog" ),
@@ -174,7 +174,7 @@ void DIALOG_ERC::UpdateAnnotationWarning()
     }
     else
     {
-        if( m_infoBar->IsShown() )
+        if( m_infoBar->IsShownOnScreen() )
         {
             m_infoBar->RemoveAllButtons();
             m_infoBar->Hide();

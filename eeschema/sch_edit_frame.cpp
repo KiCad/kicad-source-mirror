@@ -432,7 +432,7 @@ void SCH_EDIT_FRAME::OnResizeHierarchyNavigator( wxSizeEvent& aEvent )
     EESCHEMA_SETTINGS* cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
     wxAuiPaneInfo&     hierarchy_pane = m_auimgr.GetPane( SchematicHierarchyPaneName() );
 
-    if( cfg && m_hierarchy->IsShown() )
+    if( cfg && m_hierarchy->IsShownOnScreen() )
     {
         cfg->m_AuiPanels.hierarchy_panel_float_width  = hierarchy_pane.floating_size.x;
         cfg->m_AuiPanels.hierarchy_panel_float_height = hierarchy_pane.floating_size.y;
