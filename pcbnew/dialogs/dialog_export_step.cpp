@@ -116,6 +116,7 @@ DIALOG_EXPORT_STEP::DIALOG_EXPORT_STEP( PCB_EDIT_FRAME* aParent, const wxString&
     m_sdbSizerOK->SetLabel( _( "Export" ) );
     m_sdbSizer->Layout();
 
+
     // Build default output file name
     wxString path = m_parent->GetLastPath( LAST_PATH_STEP );
 

@@ -181,9 +181,9 @@ const wxString PGM_BASE::AskUserForPreferredEditor( const wxString& aDefaultEdit
 {
     // Create a mask representing the executable files in the current platform
 #ifdef __WINDOWS__
-    wxString mask( _( "Executable file (*.exe)|*.exe" ) );
+    wxString mask( _( "Executable file" ) + wxT( " (*.exe)|*.exe" ) );
 #else
-    wxString mask( _( "Executable file (*)|*" ) );
+    wxString mask( _( "Executable file" ) + wxT( " (*)|*" ) );
 #endif
 
     // Extract the path, name and extension from the default editor (even if the editor's

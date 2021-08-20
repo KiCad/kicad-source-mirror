@@ -55,7 +55,7 @@
 S3D_PLUGIN_MANAGER::S3D_PLUGIN_MANAGER()
 {
     // create the initial file filter list entry
-    m_FileFilters.push_back( _( "All Files (*.*)|*.*" ) );
+    m_FileFilters.push_back( _( "All Files" ) + wxT( " (*.*)|*.*" ) );
 
     // discover and load plugins
     loadPlugins();
