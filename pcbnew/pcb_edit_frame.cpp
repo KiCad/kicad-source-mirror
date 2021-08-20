@@ -99,6 +99,7 @@
 #include <widgets/appearance_controls.h>
 #include <widgets/infobar.h>
 #include <widgets/panel_selection_filter.h>
+#include <widgets/wx_aui_utils.h>
 #include <kiplatform/app.h>
 
 #include <action_plugin.h>
@@ -292,17 +293,7 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
         if( settings->m_AuiPanels.right_panel_width > 0 )
         {
             wxAuiPaneInfo& layersManager = m_auimgr.GetPane( "LayersManager" );
-
-            // wxAUI hack: force width by setting MinSize() and then Fixed()
-            // thanks to ZenJu http://trac.wxwidgets.org/ticket/13180
-            layersManager.MinSize( settings->m_AuiPanels.right_panel_width, -1 );
-            layersManager.Fixed();
-            m_auimgr.Update();
-
-            // now make it resizable again
-            layersManager.MinSize( 180, -1 );
-            layersManager.Resizable();
-            m_auimgr.Update();
+            SetAuiPaneSize( m_auimgr, layersManager, settings->m_AuiPanels.right_panel_width, -1 );
         }
 
         m_appearancePanel->SetTabIndex( settings->m_AuiPanels.appearance_panel_tab );

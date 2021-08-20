@@ -46,6 +46,8 @@
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>
 #include <tools/pcb_selection_tool.h>
+#include <widgets/appearance_controls.h>
+#include <widgets/wx_aui_utils.h>
 #include <wx/wupdlock.h>
 #include <wx/dcmemory.h>
 #include <wx/choice.h>
@@ -751,11 +753,23 @@ void PCB_EDIT_FRAME::ReCreateLayerBox( bool aForceResizeToolbar )
 
 void PCB_EDIT_FRAME::ToggleLayersManager()
 {
+    PCBNEW_SETTINGS* settings      = GetPcbNewSettings();
+    wxAuiPaneInfo&   layersManager = m_auimgr.GetPane( "LayersManager" );
+
     // show auxiliary Vertical layers and visibility manager toolbar
     m_show_layer_manager_tools = !m_show_layer_manager_tools;
-    m_auimgr.GetPane( "LayersManager" ).Show( m_show_layer_manager_tools );
+    layersManager.Show( m_show_layer_manager_tools );
     m_auimgr.GetPane( "SelectionFilter" ).Show( m_show_layer_manager_tools );
-    m_auimgr.Update();
+
+    if( m_show_layer_manager_tools )
+    {
+        SetAuiPaneSize( m_auimgr, layersManager, settings->m_AuiPanels.right_panel_width, -1 );
+    }
+    else
+    {
+        settings->m_AuiPanels.right_panel_width = m_appearancePanel->GetSize().x;
+        m_auimgr.Update();
+    }
 }
 
 

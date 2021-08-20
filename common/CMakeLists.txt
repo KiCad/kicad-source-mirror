@@ -238,6 +238,7 @@ set( COMMON_WIDGET_SRCS
     widgets/widget_save_restore.cpp
     widgets/widget_hotkey_list.cpp
     widgets/wx_aui_art_providers.cpp
+    widgets/wx_aui_utils.cpp
     widgets/wx_busy_indicator.cpp
     widgets/wx_ellipsized_static_text.cpp
     widgets/wx_grid.cpp
