@@ -79,17 +79,17 @@ private:
     void OnOutputDirectoryBrowseClicked( wxCommandEvent& event ) override;
     void OnGenerate( wxCommandEvent& event ) override;
 
-	void onUpdateUIUnits( wxUpdateUIEvent& event ) override
+    void onUpdateUIUnits( wxUpdateUIEvent& event ) override
     {
         m_radioBoxUnits->Enable( m_rbFormat->GetSelection() != 2 );
     }
 
-	void onUpdateUIFileOpt( wxUpdateUIEvent& event ) override
+    void onUpdateUIFileOpt( wxUpdateUIEvent& event ) override
     {
         m_radioBoxFilesCount->Enable( m_rbFormat->GetSelection() != 2 );
     }
 
-	void onUpdateUIOnlySMD( wxUpdateUIEvent& event ) override
+    void onUpdateUIOnlySMD( wxUpdateUIEvent& event ) override
     {
         if( m_rbFormat->GetSelection() == 2 )
         {
@@ -102,7 +102,7 @@ private:
         }
     }
 
-	void onUpdateUIExcludeTH( wxUpdateUIEvent& event ) override
+    void onUpdateUIExcludeTH( wxUpdateUIEvent& event ) override
     {
         if( m_rbFormat->GetSelection() == 2 )
         {
@@ -115,7 +115,7 @@ private:
         }
     }
 
-	void onUpdateUIincludeBoardEdge( wxUpdateUIEvent& event ) override
+    void onUpdateUIincludeBoardEdge( wxUpdateUIEvent& event ) override
     {
         m_cbIncludeBoardEdge->Enable( m_rbFormat->GetSelection() == 2 );
     }
