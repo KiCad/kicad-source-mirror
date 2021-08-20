@@ -779,6 +779,15 @@ bool SETTINGS_MANAGER::LoadProject( const wxString& aFullPath, bool aSetActive )
         PROJECT* oldProject = m_projects.begin()->second;
         unloadProjectFile( oldProject, false );
         m_projects.erase( m_projects.begin() );
+
+        auto it = std::find_if( m_projects_list.begin(), m_projects_list.end(),
+                                [&]( const std::unique_ptr<PROJECT>& ptr )
+                                {
+                                    return ptr.get() == oldProject;
+                                } );
+
+        wxASSERT( it != m_projects_list.end() );
+        m_projects_list.erase( it );
     }
 
     wxLogTrace( traceSettings, "Load project %s", fullPath );
@@ -859,8 +868,8 @@ bool SETTINGS_MANAGER::UnloadProject( PROJECT* aProject, bool aSave )
 PROJECT& SETTINGS_MANAGER::Prj() const
 {
     // No MDI yet:  First project in the list is the active project
-    wxASSERT_MSG( m_projects.size(), "no project in list" );
-    return *m_projects.begin()->second;
+    wxASSERT_MSG( m_projects_list.size(), "no project in list" );
+    return *m_projects_list.begin()->get();
 }
 
 
