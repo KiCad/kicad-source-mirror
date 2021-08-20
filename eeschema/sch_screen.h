@@ -99,6 +99,14 @@ public:
 
     SCHEMATIC* Schematic() const;
 
+    /**
+     * Gets the full RTree, usually for iterating.
+     * N.B. The iteration order of the RTree is not readily apparent and will change
+     * if/when you add or move items and the RTree is re-balanced.  Any exposure of the
+     * RTree contents to the user MUST be sorted before being presented.  See SCH_SEXPR_PLUGIN::Format
+     * or SCH_EDITOR_CONTROL::nextMatch for examples.
+     * @return Complete RTree of the screen's items
+     */
     EE_RTREE& Items() { return m_rtree; }
     const EE_RTREE& Items() const { return m_rtree; }
 

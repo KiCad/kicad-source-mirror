@@ -242,11 +242,24 @@ public:
         return EE_TYPE( m_tree, aType, aRect );
     }
 
+    /**
+     * Returns a read/write iterator that points to the first
+     * element in the %EE_RTREE
+     * N.B. The iteration order of the RTree is not readily apparent and will change
+     * if/when you add or move items and the RTree is re-balanced.  Any exposure of the
+     * RTree contents to the user MUST be sorted before being presented.  See SCH_SEXPR_PLUGIN::Format
+     * or SCH_EDITOR_CONTROL::nextMatch for examples.
+     * @return Complete RTree of the screen's items
+     */
     iterator begin()
     {
         return m_tree->begin();
     }
 
+    /**
+     * Returns a read/write iterator that points to one past the last
+     * element in the %EE_RTREE
+     */
     iterator end()
     {
         return m_tree->end();
