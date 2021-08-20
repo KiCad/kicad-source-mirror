@@ -305,8 +305,30 @@ SCH_ITEM* SCH_EDITOR_CONTROL::nextMatch( SCH_SCREEN* aScreen, SCH_SHEET_PATH* aS
             aAfter = static_cast<SCH_ITEM*>( aAfter->GetParent() );
     }
 
+    std::vector<SCH_ITEM*> sorted_items;
 
     for( SCH_ITEM* item : aScreen->Items() )
+    {
+        sorted_items.push_back( item );
+    }
+
+    std::sort( sorted_items.begin(), sorted_items.end(),
+            [&]( SCH_ITEM* a, SCH_ITEM* b )
+            {
+                if( a->GetPosition().x == b->GetPosition().x )
+                {
+                    // Ensure deterministic sort
+                    if( a->GetPosition().y == b->GetPosition().y )
+                        return a->m_Uuid < b->m_Uuid;
+
+                    return a->GetPosition().y < b->GetPosition().y;
+                }
+                else
+                    return a->GetPosition().x < b->GetPosition().x;
+            }
+        );
+
+    for( SCH_ITEM* item : sorted_items )
     {
         if( item == aAfter )
         {
