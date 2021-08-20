@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-07-19 08:40-0700\n"
+"POT-Creation-Date: 2021-08-20 11:53-0700\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -102,6 +102,10 @@ msgstr "Simplify holes contours"
 msgid "Build Tech layers"
 msgstr "Build Tech layers"
 
+#, c-format
+msgid "Build Tech layer %d"
+msgstr "Build Tech layer %d"
+
 msgid "Build BVH for holes and vias"
 msgstr "Build BVH for holes and vias"
 
@@ -157,6 +161,10 @@ msgid "Load OpenGL: layers"
 msgstr "Load OpenGL: layers"
 
 #, c-format
+msgid "Load OpenGL layer %d"
+msgstr "Load OpenGL layer %d"
+
+#, c-format
 msgid "Loading %s..."
 msgstr "Loading %s..."
 
@@ -208,11 +216,26 @@ msgstr "Copy 3D image to clipboard"
 msgid "Render current view using Raytracing"
 msgstr "Render current view using Raytracing"
 
-msgid "Background top:"
-msgstr "Background top:"
+msgid "Environment Colors"
+msgstr "Environment Colors"
 
-msgid "Background bottom:"
-msgstr "Background bottom:"
+msgid "Background gradient start:"
+msgstr "Background gradient start:"
+
+msgid "Background gradient end:"
+msgstr "Background gradient end:"
+
+msgid "Solder paste:"
+msgstr "Solder paste:"
+
+msgid "Board Colors"
+msgstr "Board Colors"
+
+msgid "Use board stackup colors"
+msgstr "Use board stackup colors"
+
+msgid "Use colors:"
+msgstr "Use colors:"
 
 msgid "Silkscreen top:"
 msgstr "Silkscreen top:"
@@ -226,17 +249,11 @@ msgstr "Solder mask top:"
 msgid "Solder mask bottom:"
 msgstr "Solder mask bottom:"
 
-msgid "Solder paste:"
-msgstr "Solder paste:"
-
 msgid "Copper/surface finish:"
 msgstr "Copper/surface finish:"
 
 msgid "Board body:"
 msgstr "Board body:"
-
-msgid "Load Colors from Board Stackup"
-msgstr "Load Colors from Board Stackup"
 
 msgid "3D Model Visibility"
 msgstr "3D Model Visibility"
@@ -769,8 +786,8 @@ msgstr "Export to File"
 msgid "Export to Clipboard"
 msgstr "Export to Clipboard"
 
-msgid "Symbol (.lib file)"
-msgstr "Symbol (.lib file)"
+msgid "Symbol (.kicad_sym file)"
+msgstr "Symbol (.kicad_sym file)"
 
 msgid "Footprint (.kicad_mod file)"
 msgstr "Footprint (.kicad_mod file)"
@@ -1142,8 +1159,8 @@ msgstr ""
 "the external environment variable(s) from your system."
 
 #, c-format
-msgid "The name %s is reserved, and cannot be used here"
-msgstr "The name %s is reserved, and cannot be used here"
+msgid "The name %s is reserved, and cannot be used."
+msgstr "The name %s is reserved, and cannot be used."
 
 msgid "File Browser..."
 msgstr "File Browser…"
@@ -2432,16 +2449,16 @@ msgstr ""
 msgid "The auto save file could not be renamed to the board file name."
 msgstr "The auto save file could not be renamed to the board file name."
 
-msgid "Doc Files"
-msgstr "Doc Files"
+msgid "Documentation File"
+msgstr "Documentation File"
 
 #, c-format
-msgid "Doc File '%s' not found"
-msgstr "Doc File '%s' not found"
+msgid "Documentation file '%s' not found."
+msgstr "Documentation file '%s' not found."
 
 #, c-format
-msgid "Unknown MIME type for doc file '%s'"
-msgstr "Unknown MIME type for doc file '%s'"
+msgid "Unknown MIME type for documentation file '%s'"
+msgstr "Unknown MIME type for documentation file '%s'"
 
 msgid "Inches"
 msgstr "Inches"
@@ -4155,6 +4172,10 @@ msgid "Reset to Defaults"
 msgstr "Reset to Defaults"
 
 #, c-format
+msgid "Reset %s to Defaults"
+msgstr "Reset %s to Defaults"
+
+#, c-format
 msgid "%s must be at least %s."
 msgstr "%s must be at least %s."
 
@@ -4368,6 +4389,9 @@ msgstr "Gerber job file"
 msgid "Specctra DSN file"
 msgstr "Specctra DSN file"
 
+msgid "Specctra Session file"
+msgstr "Specctra Session file"
+
 msgid "IPC-D-356 Test Files"
 msgstr "IPC-D-356 Test Files"
 
@@ -4379,6 +4403,9 @@ msgstr "PNG file"
 
 msgid "Jpeg file"
 msgstr "Jpeg file"
+
+msgid "Hotkey file"
+msgstr "Hotkey file"
 
 #, c-format
 msgid "Equivalence file '%s' could not be found in the default search paths."
@@ -4907,8 +4934,8 @@ msgstr "Add Generator"
 msgid "Nickname '%s' already in use."
 msgstr "Nickname '%s' already in use."
 
-msgid "Generator files:"
-msgstr "Generator files:"
+msgid "Generator File"
+msgstr "Generator File"
 
 msgid "Generator file name not found."
 msgstr "Generator file name not found."
@@ -5497,100 +5524,6 @@ msgstr "Invalid footprint specified"
 msgid "No symbol selected"
 msgstr "No symbol selected"
 
-msgid "Global Label Properties"
-msgstr "Global Label Properties"
-
-msgid "Hierarchical Label Properties"
-msgstr "Hierarchical Label Properties"
-
-msgid "Label Properties"
-msgstr "Label Properties"
-
-msgid "Hierarchical Sheet Pin Properties"
-msgstr "Hierarchical Sheet Pin Properties"
-
-msgid "Text Properties"
-msgstr "Text Properties"
-
-msgid "Label requires non-empty text."
-msgstr "Label requires non-empty text."
-
-msgid "Label:"
-msgstr "Label:"
-
-msgid "Enter the text to be used within the schematic"
-msgstr "Enter the text to be used within the schematic"
-
-msgid "Text:"
-msgstr "Text:"
-
-msgid "Text Size:"
-msgstr "Text Size:"
-
-msgid "Syntax help"
-msgstr "Syntax help"
-
-msgid "Show syntax help window"
-msgstr "Show syntax help window"
-
-msgid "Note:"
-msgstr "Note:"
-
-msgid ""
-"The margins around the text are controlled by the text offset ratio\n"
-"in Schematic Setup > General > Formatting."
-msgstr ""
-"The margins around the text are controlled by the text offset ratio\n"
-"in Schematic Setup > General > Formatting."
-
-msgid "Align right"
-msgstr "Align right"
-
-msgid "Align bottom"
-msgstr "Align bottom"
-
-msgid "Align left"
-msgstr "Align left"
-
-msgid "Align top"
-msgstr "Align top"
-
-msgid "Justification"
-msgstr "Justification"
-
-msgid "Bold and italic"
-msgstr "Bold and italic"
-
-msgid "Style"
-msgstr "Style"
-
-msgid "Input"
-msgstr "Input"
-
-msgid "Output"
-msgstr "Output"
-
-msgid "Bidirectional"
-msgstr "Bidirectional"
-
-msgid "Tri-state"
-msgstr "Tri-state"
-
-msgid "Passive"
-msgstr "Passive"
-
-msgid "Shape"
-msgstr "Shape"
-
-msgid "Text Editor"
-msgstr "Text Editor"
-
-msgid "Illegal reference designator value!"
-msgstr "Illegal reference designator value!"
-
-msgid "Value may not be empty."
-msgstr "Value may not be empty."
-
 #, c-format
 msgid "Symbol library identifier %s is not valid."
 msgstr "Symbol library identifier %s is not valid."
@@ -5814,6 +5747,12 @@ msgstr "Delete Markers"
 msgid "Electrical Rules Checker"
 msgstr "Electrical Rules Checker"
 
+msgid "Illegal reference designator value!"
+msgstr "Illegal reference designator value!"
+
+msgid "Value may not be empty."
+msgstr "Value may not be empty."
+
 msgid "Other symbol fields"
 msgstr "Other symbol fields"
 
@@ -5954,30 +5893,6 @@ msgstr "Color:"
 msgid "Junction Properties"
 msgstr "Junction Properties"
 
-msgid "Read Only"
-msgstr "Read Only"
-
-msgid "Do not fill"
-msgstr "Do not fill"
-
-msgid "Fill with body outline color"
-msgstr "Fill with body outline color"
-
-msgid "Fill with body background color"
-msgstr "Fill with body background color"
-
-msgid "Fill Style"
-msgstr "Fill Style"
-
-msgid "Common to all &units in symbol"
-msgstr "Common to all &units in symbol"
-
-msgid "Common to all body &styles (DeMorgan)"
-msgstr "Common to all body &styles (DeMorgan)"
-
-msgid "Drawing Properties"
-msgstr "Drawing Properties"
-
 msgid "Number"
 msgstr "Number"
 
@@ -6005,6 +5920,9 @@ msgstr "X Position"
 msgid "Y Position"
 msgstr "Y Position"
 
+msgid "Read Only"
+msgstr "Read Only"
+
 msgid "Save changes?"
 msgstr "Save changes?"
 
@@ -6019,36 +5937,6 @@ msgstr "0"
 
 msgid "Pin Table"
 msgstr "Pin Table"
-
-msgid "(Power symbol value field text cannot be changed.)"
-msgstr "(Power symbol value field text cannot be changed.)"
-
-msgid "Position X:"
-msgstr "Position X:"
-
-msgid "Horizontal"
-msgstr "Horizontal"
-
-msgid "Vertical"
-msgstr "Vertical"
-
-msgid "Position Y:"
-msgstr "Position Y:"
-
-msgid "H Align:"
-msgstr "H Align:"
-
-msgid "V Align:"
-msgstr "V Align:"
-
-msgid "Common to all units"
-msgstr "Common to all units"
-
-msgid "Common to all body styles"
-msgstr "Common to all body styles"
-
-msgid "Text Item Properties"
-msgstr "Text Item Properties"
 
 msgid "Symbol name:"
 msgstr "Symbol name:"
@@ -6124,6 +6012,27 @@ msgstr "Pin name inside"
 
 msgid "New Symbol"
 msgstr "New Symbol"
+
+msgid "Do not fill"
+msgstr "Do not fill"
+
+msgid "Fill with body outline color"
+msgstr "Fill with body outline color"
+
+msgid "Fill with body background color"
+msgstr "Fill with body background color"
+
+msgid "Fill Style"
+msgstr "Fill Style"
+
+msgid "Common to all &units in symbol"
+msgstr "Common to all &units in symbol"
+
+msgid "Common to all body &styles (DeMorgan)"
+msgstr "Common to all body &styles (DeMorgan)"
+
+msgid "Drawing Properties"
+msgstr "Drawing Properties"
 
 msgid "References must start with a letter."
 msgstr "References must start with a letter."
@@ -6322,6 +6231,39 @@ msgstr "Edit Spice Model…"
 msgid "Library Symbol Properties"
 msgstr "Library Symbol Properties"
 
+msgid "Text:"
+msgstr "Text:"
+
+msgid "(Power symbol value field text cannot be changed.)"
+msgstr "(Power symbol value field text cannot be changed.)"
+
+msgid "Position X:"
+msgstr "Position X:"
+
+msgid "Horizontal"
+msgstr "Horizontal"
+
+msgid "Vertical"
+msgstr "Vertical"
+
+msgid "Position Y:"
+msgstr "Position Y:"
+
+msgid "H Align:"
+msgstr "H Align:"
+
+msgid "V Align:"
+msgstr "V Align:"
+
+msgid "Common to all units"
+msgstr "Common to all units"
+
+msgid "Common to all body styles"
+msgstr "Common to all body styles"
+
+msgid "Text Item Properties"
+msgstr "Text Item Properties"
+
 msgid "Leave unchanged"
 msgstr "Leave unchanged"
 
@@ -6415,11 +6357,11 @@ msgstr "Exporting netlist requires a fully annotated schematic."
 msgid "This plugin already exists."
 msgstr "This plugin already exists."
 
-msgid "Error. You must provide a command String"
-msgstr "Error. You must provide a command String"
+msgid "You must provide a netlist generator command string"
+msgstr "You must provide a netlist generator command string"
 
-msgid "Error. You must provide a Title"
-msgstr "Error. You must provide a Title"
+msgid "You must provide a netlist generator title"
+msgstr "You must provide a netlist generator title"
 
 msgid "Do not forget to choose a title for this netlist control page"
 msgstr "Do not forget to choose a title for this netlist control page"
@@ -6445,8 +6387,41 @@ msgstr "Script Generator Properties"
 msgid "Alternate Pin Name"
 msgstr "Alternate Pin Name"
 
+msgid "Synchronized pins edit mode, and this pin is new"
+msgstr "Synchronized pins edit mode, and this pin is new"
+
+msgid ""
+"Similar pins will be automatically added to other units, if this pin is not "
+"common to all units"
+msgstr ""
+"Similar pins will be automatically added to other units, if this pin is not "
+"common to all units"
+
+msgid "Synchronized pins edit mode"
+msgstr "Synchronized pins edit mode"
+
+msgid ""
+"Similar pins at the same location will be edited. Pin number of other pins "
+"will be not modified"
+msgstr ""
+"Similar pins at the same location will be edited. Pin number of other pins "
+"will be not modified"
+
 msgid "Alternate pin assignments are not available for DeMorgan symbols."
 msgstr "Alternate pin assignments are not available for DeMorgan symbols."
+
+msgid "This symbol only has one unit. This control has no effect."
+msgstr "This symbol only has one unit. This control has no effect."
+
+msgid ""
+"Synchronized pin edit mode is enabled.\n"
+"Similar pins will be edited, regardless this option."
+msgstr ""
+"Synchronized pin edit mode is enabled.\n"
+"Similar pins will be edited, regardless this option."
+
+msgid "If checked, this pin will exist in all units."
+msgstr "If checked, this pin will exist in all units."
 
 msgid "Alternate pin definitions must have a name."
 msgstr "Alternate pin definitions must have a name."
@@ -6460,6 +6435,9 @@ msgstr ""
 "This pin is not on a %d mils grid which will make it\n"
 "difficult to connect to in the schematic.\n"
 "Do you want to continue?"
+
+msgid "info"
+msgstr "info"
 
 msgid "Pin &name:"
 msgstr "Pin &name:"
@@ -6881,6 +6859,27 @@ msgstr ""
 "Error importing settings from project:\n"
 "Project file %s could not be loaded."
 
+msgid "Input"
+msgstr "Input"
+
+msgid "Output"
+msgstr "Output"
+
+msgid "Bidirectional"
+msgstr "Bidirectional"
+
+msgid "Tri-state"
+msgstr "Tri-state"
+
+msgid "Passive"
+msgstr "Passive"
+
+msgid "Syntax help"
+msgstr "Syntax help"
+
+msgid "Show syntax help window"
+msgstr "Show syntax help window"
+
 msgid "Connection type:"
 msgstr "Connection type:"
 
@@ -6982,6 +6981,9 @@ msgstr "A sheet must have a file specified."
 
 msgid "Hierarchical path: "
 msgstr "Hierarchical path: "
+
+msgid "Style"
+msgstr "Style"
 
 msgid "Border width:"
 msgstr "Border width:"
@@ -7304,6 +7306,9 @@ msgstr "Select file…"
 
 msgid "Model:"
 msgstr "Model:"
+
+msgid "Note:"
+msgstr "Note:"
 
 msgid "note"
 msgstr "note"
@@ -7732,6 +7737,61 @@ msgstr "Some of the project files could not be backed up."
 msgid "Remap Symbols"
 msgstr "Remap Symbols"
 
+msgid "Global Label Properties"
+msgstr "Global Label Properties"
+
+msgid "Hierarchical Label Properties"
+msgstr "Hierarchical Label Properties"
+
+msgid "Label Properties"
+msgstr "Label Properties"
+
+msgid "Hierarchical Sheet Pin Properties"
+msgstr "Hierarchical Sheet Pin Properties"
+
+msgid "Text Properties"
+msgstr "Text Properties"
+
+msgid "Label requires non-empty text."
+msgstr "Label requires non-empty text."
+
+msgid "Label:"
+msgstr "Label:"
+
+msgid "Enter the text to be used within the schematic"
+msgstr "Enter the text to be used within the schematic"
+
+msgid "Text Size:"
+msgstr "Text Size:"
+
+msgid ""
+"The margins around the text are controlled by the text offset ratio\n"
+"in Schematic Setup > General > Formatting."
+msgstr ""
+"The margins around the text are controlled by the text offset ratio\n"
+"in Schematic Setup > General > Formatting."
+
+msgid "Align right"
+msgstr "Align right"
+
+msgid "Align bottom"
+msgstr "Align bottom"
+
+msgid "Align left"
+msgstr "Align left"
+
+msgid "Align top"
+msgstr "Align top"
+
+msgid "Justification"
+msgstr "Justification"
+
+msgid "Bold and italic"
+msgstr "Bold and italic"
+
+msgid "Shape"
+msgstr "Shape"
+
 msgid "Changes To Be Applied"
 msgstr "Changes To Be Applied"
 
@@ -8005,6 +8065,12 @@ msgstr "Text offset ratio:"
 msgid "Percentage of the text size to offset text above or below wire or bus"
 msgstr "Percentage of the text size to offset text above or below wire or bus"
 
+msgid "Global label size:"
+msgstr "Global label size:"
+
+msgid "Percentage of the text size to use as space around a global label"
+msgstr "Percentage of the text size to use as space around a global label"
+
 msgid "Default line thickness:"
 msgstr "Default line thickness:"
 
@@ -8071,8 +8137,11 @@ msgstr "Pin to Pin Connections"
 msgid "Color Theme"
 msgstr "Color Theme"
 
-msgid "Use Eeschema color theme"
-msgstr "Use Eeschema color theme"
+msgid "Use schematic editor color theme"
+msgstr "Use schematic editor color theme"
+
+msgid "Use theme:"
+msgstr "Use theme:"
 
 msgid "&Default line width:"
 msgstr "&Default line width:"
@@ -9080,6 +9149,9 @@ msgstr "Cannot open file '%s'."
 msgid "Storage file not fully parsed (%d bytes remaining)."
 msgstr "Storage file not fully parsed (%d bytes remaining)."
 
+msgid "Compile mask not currently supported."
+msgstr "Compile mask not currently supported."
+
 #, c-format
 msgid "Unknown Record id: %d."
 msgstr "Unknown Record id: %d."
@@ -9124,12 +9196,15 @@ msgstr "Polygon's owner (%d) not found."
 msgid "Rounded rectangle's owner (%d) not found."
 msgstr "Rounded rectangle's owner (%d) not found."
 
-msgid "Arc drawing on schematic not currently supported."
-msgstr "Arc drawing on schematic not currently supported."
+msgid "Arcs on schematic not currently supported."
+msgstr "Arcs on schematic not currently supported."
 
 #, c-format
 msgid "Arc's owner (%d) not found."
 msgstr "Arc's owner (%d) not found."
+
+msgid "Arcs in symbols cannot exceed 180 degrees."
+msgstr "Arcs in symbols cannot exceed 180 degrees."
 
 #, c-format
 msgid "Line's owner (%d) not found."
@@ -9490,15 +9565,15 @@ msgid "symbol document library file is empty"
 msgstr "symbol document library file is empty"
 
 #, c-format
-msgid "Setting schematic symbol '%s %s' library identifier to '%s'. "
-msgstr "Setting schematic symbol '%s %s' library identifier to '%s'. "
+msgid "Setting schematic symbol '%s %s' library identifier to '%s'."
+msgstr "Setting schematic symbol '%s %s' library identifier to '%s'."
 
 #, c-format
 msgid ""
-"Schematic symbol reference '%s' library identifier is not valid.  Unable to "
+"Schematic symbol reference '%s' library identifier is not valid. Unable to "
 "link library symbol."
 msgstr ""
-"Schematic symbol reference '%s' library identifier is not valid.  Unable to "
+"Schematic symbol reference '%s' library identifier is not valid. Unable to "
 "link library symbol."
 
 #, c-format
@@ -9516,10 +9591,6 @@ msgstr "I/O error %s resolving library symbol %s"
 #, c-format
 msgid "Falling back to cache to set symbol '%s:%s' link '%s'."
 msgstr "Falling back to cache to set symbol '%s:%s' link '%s'."
-
-#, c-format
-msgid "Setting schematic symbol '%s %s' library identifier to '%s'."
-msgstr "Setting schematic symbol '%s %s' library identifier to '%s'."
 
 #, c-format
 msgid "No library symbol found for schematic symbol '%s %s'."
@@ -10479,6 +10550,9 @@ msgstr "This new symbol has no name and cannot be created."
 msgid "Symbol '%s' already exists in library '%s'."
 msgstr "Symbol '%s' already exists in library '%s'."
 
+msgid "Overwrite"
+msgstr "Overwrite"
+
 msgid "No schematic currently open."
 msgstr "No schematic currently open."
 
@@ -10605,9 +10679,6 @@ msgstr "Export Symbol"
 #, c-format
 msgid "Error occurred attempting to load symbol library file '%s'."
 msgstr "Error occurred attempting to load symbol library file '%s'."
-
-msgid "Overwrite"
-msgstr "Overwrite"
 
 #, c-format
 msgid "Insufficient permissions to save library '%s'."
@@ -11432,9 +11503,6 @@ msgstr "Symbol Move Activate"
 msgid "Align Elements to Grid"
 msgstr "Align Elements to Grid"
 
-msgid "Symbol Warnings"
-msgstr "Symbol Warnings"
-
 #, c-format
 msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%.3f, %.3f)</b> conflicts with "
@@ -11453,43 +11521,43 @@ msgstr ""
 
 #, c-format
 msgid ""
-"<b>Duplicate pin %s</b> %s at location <b>(%.3f, %.3f)</b> conflicts with "
-"pin %s%s at location <b>(%.3f, %.3f)</b>."
+"<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b> conflicts with pin %s"
+"%s at location <b>(%s, %s)</b>."
 msgstr ""
-"<b>Duplicate pin %s</b> %s at location <b>(%.3f, %.3f)</b> conflicts with "
-"pin %s%s at location <b>(%.3f, %.3f)</b>."
+"<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b> conflicts with pin %s"
+"%s at location <b>(%s, %s)</b>."
 
 #, c-format
 msgid ""
-"<b>Duplicate pin %s</b> %s at location <b>(%.3f, %.3f)</b> conflicts with "
-"pin %s%s at location <b>(%.3f, %.3f)</b> in units %c and %c."
+"<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b> conflicts with pin %s"
+"%s at location <b>(%s, %s)</b> in units %c and %c."
 msgstr ""
-"<b>Duplicate pin %s</b> %s at location <b>(%.3f, %.3f)</b> conflicts with "
-"pin %s%s at location <b>(%.3f, %.3f)</b> in units %c and %c."
+"<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b> conflicts with pin %s"
+"%s at location <b>(%s, %s)</b> in units %c and %c."
 
 #, c-format
 msgid ""
-"<b>Hidden power pin %s</b> %s at location <b>(%.3f, %.3f)</b> of converted."
+"Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b> of converted."
 msgstr ""
-"<b>Hidden power pin %s</b> %s at location <b>(%.3f, %.3f)</b> of converted."
+"Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b> of converted."
 
 #, c-format
 msgid ""
-"<b>Hidden power pin %s</b> %s at location <b>(%.3f, %.3f)</b> in unit %c of "
-"converted."
+"Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b> in unit %c "
+"of converted."
 msgstr ""
-"<b>Hidden power pin %s</b> %s at location <b>(%.3f, %.3f)</b> in unit %c of "
-"converted."
+"Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b> in unit %c "
+"of converted."
 
 #, c-format
-msgid "<b>Hidden power pin %s</b> %s at location <b>(%.3f, %.3f)</b>."
-msgstr "<b>Hidden power pin %s</b> %s at location <b>(%.3f, %.3f)</b>."
+msgid "Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b>."
+msgstr "Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b>."
 
 #, c-format
 msgid ""
-"<b>Hidden power pin %s</b> %s at location <b>(%.3f, %.3f)</b> in unit %c."
+"Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b> in unit %c."
 msgstr ""
-"<b>Hidden power pin %s</b> %s at location <b>(%.3f, %.3f)</b> in unit %c."
+"Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b> in unit %c."
 
 msgid ""
 "(Hidden power pins will drive their pin names on to any connected nets.)"
@@ -11497,28 +11565,30 @@ msgstr ""
 "(Hidden power pins will drive their pin names on to any connected nets.)"
 
 #, c-format
-msgid "<b>Off grid pin %s</b> %s at location <b>(%.3f, %.3f)</b> of converted."
-msgstr ""
-"<b>Off grid pin %s</b> %s at location <b>(%.3f, %.3f)</b> of converted."
+msgid "<b>Off grid pin %s</b> %s at location <b>(%s, %s)</b> of converted."
+msgstr "<b>Off grid pin %s</b> %s at location <b>(%s, %s)</b> of converted."
 
 #, c-format
 msgid ""
-"<b>Off grid pin %s</b> %s at location <b>(%.3f, %.3f)</b> in unit %c of "
+"<b>Off grid pin %s</b> %s at location <b>(%.3s, %.3s)</b> in unit %c of "
 "converted."
 msgstr ""
-"<b>Off grid pin %s</b> %s at location <b>(%.3f, %.3f)</b> in unit %c of "
+"<b>Off grid pin %s</b> %s at location <b>(%.3s, %.3s)</b> in unit %c of "
 "converted."
 
 #, c-format
-msgid "<b>Off grid pin %s</b> %s at location <b>(%.3f, %.3f)</b>."
-msgstr "<b>Off grid pin %s</b> %s at location <b>(%.3f, %.3f)</b>."
+msgid "<b>Off grid pin %s</b> %s at location <b>(%s, %s)</b>."
+msgstr "<b>Off grid pin %s</b> %s at location <b>(%s, %s)</b>."
 
 #, c-format
-msgid "<b>Off grid pin %s</b> %s at location <b>(%.3f, %.3f)</b> in unit %c."
-msgstr "<b>Off grid pin %s</b> %s at location <b>(%.3f, %.3f)</b> in unit %c."
+msgid "<b>Off grid pin %s</b> %s at location <b>(%s, %s)</b> in unit %c."
+msgstr "<b>Off grid pin %s</b> %s at location <b>(%s, %s)</b> in unit %c."
 
 msgid "No symbol issues found."
 msgstr "No symbol issues found."
+
+msgid "Symbol Warnings"
+msgstr "Symbol Warnings"
 
 msgid "No datasheet defined."
 msgstr "No datasheet defined."
@@ -11602,6 +11672,9 @@ msgstr "Error: duplicate sub-sheet names found in current sheet."
 msgid "Net must be labeled to assign a netclass."
 msgstr "Net must be labeled to assign a netclass."
 
+msgid "Bus must have at least one member to assign a netclass to members."
+msgstr "Bus must have at least one member to assign a netclass to members."
+
 msgid "Netclasses"
 msgstr "Netclasses"
 
@@ -11649,8 +11722,8 @@ msgstr "Image File Name"
 msgid "Can't save file '%s'."
 msgstr "Can't save file '%s'."
 
-msgid "Filename:"
-msgstr "Filename:"
+msgid "SVG File Name"
+msgstr "SVG File Name"
 
 msgid "Edit Symbol Name"
 msgstr "Edit Symbol Name"
@@ -11773,6 +11846,69 @@ msgstr "Sketch lines"
 
 msgid "Sketch polygons"
 msgstr "Sketch polygons"
+
+msgid "File Format"
+msgstr "File Format"
+
+msgid "These parameters are usually specified in files, but not always."
+msgstr "These parameters are usually specified in files, but not always."
+
+msgid "File units"
+msgstr "File units"
+
+msgid "No leading zeros (TZ format)"
+msgstr "No leading zeros (TZ format)"
+
+msgid "No trailing zeros (LZ format)"
+msgstr "No trailing zeros (LZ format)"
+
+msgid "Zero format"
+msgstr "Zero format"
+
+msgid ""
+"Integers in files can have their zeros stripped.\n"
+"No leading zeros format means the leading zeros are stripped\n"
+"No trailing zeros  format means the trainling zeros are stripped"
+msgstr ""
+"Integers in files can have their zeros stripped.\n"
+"No leading zeros format means the leading zeros are stripped\n"
+"No trailing zeros  format means the trainling zeros are stripped"
+
+msgid "Coordinates Format"
+msgstr "Coordinates Format"
+
+msgid "The coordinates format is not specified in Excellon format."
+msgstr "The coordinates format is not specified in Excellon format."
+
+msgid "(The decimal format does not use these settings)"
+msgstr "(The decimal format does not use these settings)"
+
+msgid "Usually: 3:3 in mm and 2:4 in inches"
+msgstr "Usually: 3:3 in mm and 2:4 in inches"
+
+msgid "Format for mm"
+msgstr "Format for mm"
+
+msgid "2"
+msgstr "2"
+
+msgid "3"
+msgstr "3"
+
+msgid "4"
+msgstr "4"
+
+msgid "5"
+msgstr "5"
+
+msgid "6"
+msgstr "6"
+
+msgid ":"
+msgstr ":"
+
+msgid "Format for inches"
+msgstr "Format for inches"
 
 msgid "Full size"
 msgstr "Full size"
@@ -12037,6 +12173,9 @@ msgstr "X2 attr"
 msgid "GerbView"
 msgstr "GerbView"
 
+msgid "Excellon Options"
+msgstr "Excellon Options"
+
 msgid "This job file uses an outdated format. Please recreate it."
 msgstr "This job file uses an outdated format. Please recreate it."
 
@@ -12059,8 +12198,8 @@ msgid "Open Recent Zip File"
 msgstr "Open Recent Zip File"
 
 #, c-format
-msgid "File \"%s\" not found"
-msgstr "File “%s” not found"
+msgid "File '%s' not found"
+msgstr "File '%s' not found"
 
 msgid ""
 "Warning: this file has no D-Code definition\n"
@@ -12706,6 +12845,12 @@ msgstr "New Project from Template..."
 msgid "Create new project from template"
 msgstr "Create new project from template"
 
+msgid "Open Demo Project..."
+msgstr "Open Demo Project..."
+
+msgid "Open a demo project"
+msgstr "Open a demo project"
+
 msgid "Open Project..."
 msgstr "Open Project..."
 
@@ -13262,9 +13407,6 @@ msgstr ""
 
 msgid "Data file error."
 msgstr "Data file error."
-
-msgid "Bad or missing parameters!"
-msgstr "Bad or missing parameters!"
 
 msgid "Vref:"
 msgstr "Vref:"
@@ -14299,20 +14441,17 @@ msgstr "Epsilon R"
 msgid "Loss Tg"
 msgstr "Loss Tg"
 
-msgid "Dielectric material characteristics:"
-msgstr "Dielectric material characteristics:"
-
 msgid "Epsilon R:"
 msgstr "Epsilon R:"
 
 msgid "Loss Tg:"
 msgstr "Loss Tg:"
 
-msgid "Available materials:"
-msgstr "Available materials:"
+msgid "Common materials:"
+msgstr "Common materials:"
 
-msgid "Dielectric Materials"
-msgstr "Dielectric Materials"
+msgid "Dielectric Material Characteristics"
+msgstr "Dielectric Material Characteristics"
 
 msgid "Has castellated pads"
 msgstr "Has castellated pads"
@@ -14403,15 +14542,6 @@ msgstr "Copper layers:"
 
 msgid "Select the number of copper layers in the stackup"
 msgstr "Select the number of copper layers in the stackup"
-
-msgid "2"
-msgstr "2"
-
-msgid "4"
-msgstr "4"
-
-msgid "6"
-msgstr "6"
 
 msgid "8"
 msgstr "8"
@@ -14521,6 +14651,9 @@ msgstr "Red"
 
 msgid "Blue"
 msgstr "Blue"
+
+msgid "Purple"
+msgstr "Purple"
 
 msgid "Black"
 msgstr "Black"
@@ -15363,8 +15496,8 @@ msgstr ""
 msgid "Clearance between pads in the same net and filled areas."
 msgstr "Clearance between pads in the same net and filled areas."
 
-msgid "Thermal relief spoke width:"
-msgstr "Thermal relief spoke width:"
+msgid "Thermal spoke width:"
+msgstr "Thermal spoke width:"
 
 msgid "Width of copper in thermal reliefs."
 msgstr "Width of copper in thermal reliefs."
@@ -15487,9 +15620,6 @@ msgstr "Bad parameters"
 
 msgid "Horizontal count:"
 msgstr "Horizontal count:"
-
-msgid "5"
-msgstr "5"
 
 msgid "Vertical count:"
 msgstr "Vertical count:"
@@ -15785,9 +15915,6 @@ msgstr "Dimension Properties"
 
 msgid "Run DRC"
 msgstr "Run DRC"
-
-msgid "Rules"
-msgstr "Rules"
 
 msgid "DRC incomplete: could not compile custom design rules.  "
 msgstr "DRC incomplete: could not compile custom design rules.  "
@@ -16265,6 +16392,9 @@ msgstr "Run Checks"
 msgid "Footprint Checker"
 msgstr "Footprint Checker"
 
+msgid "3D Models"
+msgstr "3D Models"
+
 msgid "Footprint can be freely moved and oriented on the canvas."
 msgstr "Footprint can be freely moved and oriented on the canvas."
 
@@ -16276,10 +16406,6 @@ msgstr ""
 "Footprint is locked: it cannot be freely moved and oriented on the canvas "
 "and can only be selected when the 'Locked items' checkbox is enabled in the "
 "selection filter."
-
-#, c-format
-msgid "Invalid filename: %s"
-msgstr "Invalid filename: %s"
 
 msgid "Text items must have some content."
 msgstr "Text items must have some content."
@@ -16465,12 +16591,6 @@ msgstr "Thermal relief"
 
 msgid "Clearance Overrides and Settings"
 msgstr "Clearance Overrides and Settings"
-
-msgid "3D Model(s)"
-msgstr "3D Model(s)"
-
-msgid "3D Models"
-msgstr "3D Models"
 
 msgid ""
 "The library ID and footprint ID currently assigned.  Use “Change Footprint…” "
@@ -17060,6 +17180,9 @@ msgstr "Modified group"
 msgid "Group name:"
 msgstr "Group name:"
 
+msgid "Prevents group from being moved on canvas"
+msgstr "Prevents group from being moved on canvas"
+
 msgid "Group members:"
 msgstr "Group members:"
 
@@ -17331,20 +17454,8 @@ msgstr "Import Netlist"
 msgid "Outline style:"
 msgstr "Outline style:"
 
-msgid "Outline smooth:"
-msgstr "Outline smooth:"
-
-msgid "Solid shape"
-msgstr "Solid shape"
-
-msgid "HatchBorder pattern"
-msgstr "HatchBorder pattern"
-
 msgid "degree"
 msgstr "degree"
-
-msgid "Smooth amount:"
-msgstr "Smooth amount:"
 
 msgid "Non Copper Zones Properties"
 msgstr "Non Copper Zones Properties"
@@ -17505,9 +17616,6 @@ msgstr "Warning: Castellated property is for PTH pads."
 
 msgid "Warning: BGA property is for SMD pads."
 msgstr "Warning: BGA property is for SMD pads."
-
-msgid "Error: Corner size not a number."
-msgstr "Error: Corner size not a number."
 
 msgid "Error: Negative corner size."
 msgstr "Error: Negative corner size."
@@ -17670,9 +17778,6 @@ msgstr "Hole size X:"
 msgid "Offset shape from hole"
 msgstr "Offset shape from hole"
 
-msgid ":"
-msgstr ":"
-
 msgid "Specify pad to die length"
 msgstr "Specify pad to die length"
 
@@ -17802,6 +17907,9 @@ msgstr "Pad connection:"
 
 msgid "From parent footprint"
 msgstr "From parent footprint"
+
+msgid "Thermal relief spoke width:"
+msgstr "Thermal relief spoke width:"
 
 msgid "Custom pad shape in zone:"
 msgstr "Custom pad shape in zone:"
@@ -18677,6 +18785,12 @@ msgstr "Start layer:"
 msgid "End layer:"
 msgstr "End layer:"
 
+msgid "Annular rings:"
+msgstr "Annular rings:"
+
+msgid "Start, end, and connected layers"
+msgstr "Start, end, and connected layers"
+
 msgid "Track & Via Properties"
 msgstr "Track & Via Properties"
 
@@ -18984,6 +19098,18 @@ msgstr "Add Existing"
 msgid "Path Substitutions"
 msgstr "Path Substitutions"
 
+msgid "File not found"
+msgstr "File not found"
+
+msgid "Unable to open file"
+msgstr "Unable to open file"
+
+msgid "Unknown error"
+msgstr "Unknown error"
+
+msgid "3D Model(s)"
+msgstr "3D Model(s)"
+
 msgid "Icon"
 msgstr "Icon"
 
@@ -19157,8 +19283,8 @@ msgstr ""
 "The minimum via diameter.  If set, this is an absolute minimum and cannot be "
 "reduced by netclasses, custom rules, or other settings."
 
-msgid "Copper hole clearance:"
-msgstr "Copper hole clearance:"
+msgid "Copper to hole clearance:"
+msgstr "Copper to hole clearance:"
 
 msgid ""
 "The minimum clearance between a hole and an unassociated copper item.  If "
@@ -19169,8 +19295,8 @@ msgstr ""
 "set, this is an absolute minimum and cannot be reduced by custom rules or "
 "other settings."
 
-msgid "Copper edge clearance:"
-msgstr "Copper edge clearance:"
+msgid "Copper to edge clearance:"
+msgstr "Copper to edge clearance:"
 
 msgid ""
 "The minimum clearance between the board edge and any copper item.  If set, "
@@ -19602,8 +19728,8 @@ msgstr ""
 "Positive clearance means area bigger than the pad (usual for solder mask "
 "clearance)."
 
-msgid "Solder mask minimum bridge width:"
-msgstr "Solder mask minimum bridge width:"
+msgid "Solder mask minimum web width:"
+msgstr "Solder mask minimum web width:"
 
 msgid ""
 "Min. dist between 2 pad areas.\n"
@@ -19701,20 +19827,20 @@ msgid ""
 "\n"
 "### Constraint Types\n"
 "\n"
-" * annular_width\n"
+" * annular\\_width\n"
 " * clearance\n"
 " * courtyard_clearance\n"
 " * diff\\_pair\\_gap\n"
 " * diff\\_pair\\_uncoupled\n"
 " * disallow\n"
-" * edge_clearance\n"
+" * edge\\_clearance\n"
 " * length\n"
-" * hole\n"
-" * hole_clearance\n"
-" * silk_clearance\n"
+" * hole\\_clearance\n"
+" * hole\\_size\n"
+" * silk\\_clearance\n"
 " * skew\n"
-" * track_width\n"
-" * via_count\n"
+" * track\\_width\n"
+" * via\\_count\n"
 "\n"
 "\n"
 "<br><br>\n"
@@ -19867,11 +19993,11 @@ msgid ""
 "\n"
 "\n"
 "    (rule \"Max Drill Hole Size Mechanical\"  \n"
-"        (constraint hole (max 6.3mm))\n"
+"        (constraint hole_size (max 6.3mm))\n"
 "        (condition \"A.Pad_Type == 'NPTH, mechanical'\"))\n"
 "    \n"
 "    (rule \"Max Drill Hole Size PTH\"  \n"
-"        (constraint hole (max 6.35mm))\n"
+"        (constraint hole_size (max 6.35mm))\n"
 "        (condition \"A.Pad_Type == 'Through-hole'\"))\n"
 "\n"
 "\n"
@@ -19907,20 +20033,20 @@ msgstr ""
 "\n"
 "### Constraint Types\n"
 "\n"
-" * annular_width\n"
+" * annular\\_width\n"
 " * clearance\n"
 " * courtyard_clearance\n"
 " * diff\\_pair\\_gap\n"
 " * diff\\_pair\\_uncoupled\n"
 " * disallow\n"
-" * edge_clearance\n"
+" * edge\\_clearance\n"
 " * length\n"
-" * hole\n"
-" * hole_clearance\n"
-" * silk_clearance\n"
+" * hole\\_clearance\n"
+" * hole\\_size\n"
+" * silk\\_clearance\n"
 " * skew\n"
-" * track_width\n"
-" * via_count\n"
+" * track\\_width\n"
+" * via\\_count\n"
 "\n"
 "\n"
 "<br><br>\n"
@@ -20073,11 +20199,11 @@ msgstr ""
 "\n"
 "\n"
 "    (rule \"Max Drill Hole Size Mechanical\"  \n"
-"        (constraint hole (max 6.3mm))\n"
+"        (constraint hole_size (max 6.3mm))\n"
 "        (condition \"A.Pad_Type == 'NPTH, mechanical'\"))\n"
 "    \n"
 "    (rule \"Max Drill Hole Size PTH\"  \n"
-"        (constraint hole (max 6.35mm))\n"
+"        (constraint hole_size (max 6.35mm))\n"
 "        (condition \"A.Pad_Type == 'Through-hole'\"))\n"
 "\n"
 "\n"
@@ -20130,9 +20256,6 @@ msgstr "No differential pair gap defined."
 msgid "Pre-defined track and via dimensions:"
 msgstr "Pre-defined track and via dimensions:"
 
-msgid "3"
-msgstr "3"
-
 msgid "7"
 msgstr "7"
 
@@ -20150,6 +20273,18 @@ msgstr "Via Gap"
 
 msgid "board setup constraints"
 msgstr "board setup constraints"
+
+msgid "board setup constraints silk"
+msgstr "board setup constraints silk"
+
+msgid "board setup constraints hole"
+msgstr "board setup constraints hole"
+
+msgid "board setup constraints edge"
+msgstr "board setup constraints edge"
+
+msgid "board setup constraints courtyard"
+msgstr "board setup constraints courtyard"
 
 msgid "board setup micro-via constraints"
 msgstr "board setup micro-via constraints"
@@ -20181,24 +20316,19 @@ msgid "Board minimum clearance: %s."
 msgstr "Board minimum clearance: %s."
 
 #, c-format
-msgid "Checking %s; clearance: %s."
-msgstr "Checking %s; clearance: %s."
+msgid "Checking %s clearance: %s."
+msgstr "Checking %s clearance: %s."
+
+msgid "undefined"
+msgstr "undefined"
 
 #, c-format
-msgid "Checking %s; courtyard clearance: %s."
-msgstr "Checking %s; courtyard clearance: %s."
+msgid "Checking %s %s: %s."
+msgstr "Checking %s %s: %s."
 
 #, c-format
-msgid "Checking %s; silk clearance: %s."
-msgstr "Checking %s; silk clearance: %s."
-
-#, c-format
-msgid "Checking %s; hole clearance: %s."
-msgstr "Checking %s; hole clearance: %s."
-
-#, c-format
-msgid "Checking %s; edge clearance: %s."
-msgstr "Checking %s; edge clearance: %s."
+msgid "Checking %s: min %s; opt %s; max %s."
+msgstr "Checking %s: min %s; opt %s; max %s."
 
 #, c-format
 msgid "Checking %s."
@@ -20376,6 +20506,10 @@ msgid "Differential uncoupled length too long"
 msgstr "Differential uncoupled length too long"
 
 #, c-format
+msgid "Rule: %s"
+msgstr "Rule: %s"
+
+#, c-format
 msgid "rule %s"
 msgstr "rule %s"
 
@@ -20433,6 +20567,10 @@ msgstr "Missing ')'."
 #, c-format
 msgid "Missing constraint type.|  Expected %s."
 msgstr "Missing constraint type.|  Expected %s."
+
+#, c-format
+msgid "Rule already has a '%s' constraint."
+msgstr "Rule already has a '%s' constraint."
 
 msgid "Missing min value."
 msgstr "Missing min value."
@@ -21428,8 +21566,8 @@ msgstr "Stub Size:"
 msgid "Arc Stub Radius Value:"
 msgstr "Arc Stub Radius Value:"
 
-msgid "Create microwave footprint"
-msgstr "Create microwave footprint"
+msgid "Create Microwave Footprint"
+msgstr "Create Microwave Footprint"
 
 msgid "Angle in degrees:"
 msgstr "Angle in degrees:"
@@ -21458,23 +21596,17 @@ msgstr "Requested length can't be represented"
 msgid "Component Value:"
 msgstr "Component Value:"
 
-msgid "Complex shape"
-msgstr "Complex shape"
-
-msgid "Read Shape Description File..."
-msgstr "Read Shape Description File…"
+msgid "Complex Shape"
+msgstr "Complex Shape"
 
 msgid "Symmetrical"
 msgstr "Symmetrical"
 
-msgid "Shape Option"
-msgstr "Shape Option"
+msgid "Read Shape Description File..."
+msgstr "Read Shape Description File…"
 
-msgid "Read descr shape file"
-msgstr "Read descr shape file"
-
-msgid "File not found"
-msgstr "File not found"
+msgid "Shape Description File"
+msgstr "Shape Description File"
 
 msgid "Shape has a null size."
 msgstr "Shape has a null size."
@@ -23647,8 +23779,8 @@ msgstr "Omit nets"
 msgid "Do not prefix path with footprint UUID."
 msgstr "Do not prefix path with footprint UUID."
 
-msgid "Merge Specctra Session file:"
-msgstr "Merge Specctra Session file:"
+msgid "Specctra Session File"
+msgstr "Specctra Session File"
 
 msgid "Specctra DSN File"
 msgstr "Specctra DSN File"
@@ -23712,41 +23844,6 @@ msgstr "Net Tools"
 msgid "[netclass %s]"
 msgstr "[netclass %s]"
 
-#, c-format
-msgid "Zone connection type: %s."
-msgstr "Zone connection type: %s."
-
-msgid "zone"
-msgstr "zone"
-
-#, c-format
-msgid "Overridden by %s; connection type: %s."
-msgstr "Overridden by %s; connection type: %s."
-
-#, c-format
-msgid "Pad is not a PTH pad; connection will be: %s."
-msgstr "Pad is not a PTH pad; connection will be: %s."
-
-#, c-format
-msgid "Zone thermal relief: %s."
-msgstr "Zone thermal relief: %s."
-
-#, c-format
-msgid "Overridden by %s; thermal relief: %s."
-msgstr "Overridden by %s; thermal relief: %s."
-
-#, c-format
-msgid "Zone clearance: %s."
-msgstr "Zone clearance: %s."
-
-#, c-format
-msgid "Overridden by larger thermal relief from %s;clearance: %s."
-msgstr "Overridden by larger thermal relief from %s;clearance: %s."
-
-#, c-format
-msgid "Clearance: %s."
-msgstr "Clearance: %s."
-
 msgid "Report incomplete: could not compile custom design rules.  "
 msgstr "Report incomplete: could not compile custom design rules.  "
 
@@ -23769,18 +23866,46 @@ msgstr "Select two items for a clearance resolution report."
 msgid "Cannot generate clearance report on empty group."
 msgstr "Cannot generate clearance report on empty group."
 
+msgid "Zone connection resolution for:"
+msgstr "Zone connection resolution for:"
+
+#, c-format
+msgid "Zone thermal relief: %s."
+msgstr "Zone thermal relief: %s."
+
+msgid "zone"
+msgstr "zone"
+
+#, c-format
+msgid "Overridden by %s; thermal relief: %s."
+msgstr "Overridden by %s; thermal relief: %s."
+
+#, c-format
+msgid "Zone clearance: %s."
+msgstr "Zone clearance: %s."
+
+#, c-format
+msgid "Overridden by larger thermal relief from %s;clearance: %s."
+msgstr "Overridden by larger thermal relief from %s;clearance: %s."
+
+#, c-format
+msgid "Clearance: %s."
+msgstr "Clearance: %s."
+
+msgid "Items belong to the same net. Clearance is 0."
+msgstr "Items belong to the same net. Clearance is 0."
+
 msgid "Silkscreen clearance resolution for:"
 msgstr "Silkscreen clearance resolution for:"
+
+msgid "Courtyard clearance resolution for:"
+msgstr "Courtyard clearance resolution for:"
 
 msgid "Hole clearance resolution for:"
 msgstr "Hole clearance resolution for:"
 
-#, c-format
-msgid "%s not present on layer %s.  No clearance defined."
-msgstr "%s not present on layer %s.  No clearance defined."
-
-msgid "Items belong to the same net. Clearance is 0."
-msgstr "Items belong to the same net. Clearance is 0."
+msgid "Items share no relevant layers:"
+msgstr "Items share no relevant layers:"
 
 msgid "Select an item for a constraints resolution report."
 msgstr "Select an item for a constraints resolution report."
@@ -23791,12 +23916,9 @@ msgstr "Constraints Report"
 msgid "Track width resolution for:"
 msgstr "Track width resolution for:"
 
-msgid "undefined"
-msgstr "undefined"
-
 #, c-format
-msgid "Width constraints: min %s max %s."
-msgstr "Width constraints: min %s max %s."
+msgid "Width constraints: min %s; opt %s; max %s."
+msgstr "Width constraints: min %s; opt %s; max %s."
 
 msgid "Via Diameter"
 msgstr "Via Diameter"
@@ -23805,8 +23927,8 @@ msgid "Via diameter resolution for:"
 msgstr "Via diameter resolution for:"
 
 #, c-format
-msgid "Diameter constraints: min %s max %s."
-msgstr "Diameter constraints: min %s max %s."
+msgid "Diameter constraints: min %s; opt %s; max %s."
+msgstr "Diameter constraints: min %s; opt %s; max %s."
 
 msgid "Via Annular Width"
 msgstr "Via Annular Width"
@@ -23815,8 +23937,8 @@ msgid "Via annular width resolution for:"
 msgstr "Via annular width resolution for:"
 
 #, c-format
-msgid "Annular width constraints: min %s max %s."
-msgstr "Annular width constraints: min %s max %s."
+msgid "Annular width constraints: min %s; opt %s; max %s."
+msgstr "Annular width constraints: min %s; opt %s; max %s."
 
 msgid "Hole Size"
 msgstr "Hole Size"
@@ -23845,6 +23967,9 @@ msgstr "Item <b>disallowed</b> at current location."
 
 msgid "Item allowed at current location."
 msgstr "Item allowed at current location."
+
+msgid "Create from Selection"
+msgstr "Create from Selection"
 
 msgid "Convert shapes to polygon"
 msgstr "Convert shapes to polygon"
@@ -24008,8 +24133,8 @@ msgstr "Select reference point for the copy…"
 msgid "Selection copied"
 msgstr "Selection copied"
 
-msgid "Copy cancelled"
-msgstr "Copy cancelled"
+msgid "Copy canceled"
+msgstr "Copy canceled"
 
 msgid "_copy"
 msgstr "_copy"
@@ -24060,41 +24185,41 @@ msgstr "Edit pad shapes"
 msgid "Recombine pads"
 msgstr "Recombine pads"
 
-msgid "Convert to Polygon"
-msgstr "Convert to Polygon"
+msgid "Create Polygon from Selection"
+msgstr "Create Polygon from Selection"
 
 msgid "Creates a graphic polygon from the selection"
 msgstr "Creates a graphic polygon from the selection"
 
-msgid "Convert to Zone"
-msgstr "Convert to Zone"
+msgid "Create Zone from Selection"
+msgstr "Create Zone from Selection"
 
 msgid "Creates a copper zone from the selection"
 msgstr "Creates a copper zone from the selection"
 
-msgid "Convert to Rule Area"
-msgstr "Convert to Rule Area"
+msgid "Create Rule Area from Selection"
+msgstr "Create Rule Area from Selection"
 
 msgid "Creates a rule area from the selection"
 msgstr "Creates a rule area from the selection"
 
-msgid "Convert to Lines"
-msgstr "Convert to Lines"
+msgid "Create Lines from Selection"
+msgstr "Create Lines from Selection"
 
 msgid "Creates graphic lines from the selection"
 msgstr "Creates graphic lines from the selection"
 
-msgid "Convert to Arc"
-msgstr "Convert to Arc"
+msgid "Create Arc from Selection"
+msgstr "Create Arc from Selection"
 
-msgid "Converts selected line segment to an arc"
-msgstr "Converts selected line segment to an arc"
+msgid "Creates an arc from the selected line segment"
+msgstr "Creates an arc from the selected line segment"
 
-msgid "Convert to Tracks"
-msgstr "Convert to Tracks"
+msgid "Create Tracks from Selection"
+msgstr "Create Tracks from Selection"
 
-msgid "Converts selected graphic lines to tracks"
-msgstr "Converts selected graphic lines to tracks"
+msgid "Creates tracks from the selected graphic lines"
+msgstr "Creates tracks from the selected graphic lines"
 
 msgid "Draw Line"
 msgstr "Draw Line"
@@ -24783,30 +24908,29 @@ msgstr "Automatically zoom to fit"
 msgid "Zoom to fit when changing footprint"
 msgstr "Zoom to fit when changing footprint"
 
-msgid "Fill Zones"
-msgstr "Fill Zones"
+msgid "Draw Zone Fills"
+msgstr "Draw Zone Fills"
 
 msgid "Show filled areas of zones"
 msgstr "Show filled areas of zones"
 
-msgid "Wireframe Zones"
-msgstr "Wireframe Zones"
+msgid "Draw Zone Outlines"
+msgstr "Draw Zone Outlines"
 
 msgid "Show only zone boundaries"
 msgstr "Show only zone boundaries"
 
-msgid "Sketch Zones"
-msgstr "Sketch Zones"
+msgid "Draw Zone Fill Fracture Borders"
+msgstr "Draw Zone Fill Fracture Borders"
 
-msgid "Show solid areas of zones in outline mode"
-msgstr "Show solid areas of zones in outline mode"
+msgid "Draw Zone Fill Triangulation"
+msgstr "Draw Zone Fill Triangulation"
 
 msgid "Toggle Zone Display"
 msgstr "Toggle Zone Display"
 
-msgid "Cycle between showing filled zones, wireframed zones and sketched zones"
-msgstr ""
-"Cycle between showing filled zones, wireframed zones and sketched zones"
+msgid "Cycle between showing zone fills and just their outlines"
+msgstr "Cycle between showing zone fills and just their outlines"
 
 msgid "Switch to Component (F.Cu) layer"
 msgstr "Switch to Component (F.Cu) layer"
@@ -25167,6 +25291,17 @@ msgstr "Length Tuning Settings…"
 msgid "Sets the length tuning parameters for currently routed item."
 msgstr "Sets the length tuning parameters for currently routed item."
 
+msgid "Don't show again"
+msgstr "Don't show again"
+
+#, c-format
+msgid ""
+"Not all zones are filled. Use Edit > Fill All Zones (%s) if you wish to see "
+"all fills."
+msgstr ""
+"Not all zones are filled. Use Edit > Fill All Zones (%s) if you wish to see "
+"all fills."
+
 msgid "Item locked."
 msgstr "Item locked."
 
@@ -25255,6 +25390,9 @@ msgstr "Fill Zone(s)"
 
 msgid "Show DRC rules"
 msgstr "Show DRC rules"
+
+msgid "Rules"
+msgstr "Rules"
 
 msgid "Zone fills may be inaccurate.  DRC rules contain errors."
 msgstr "Zone fills may be inaccurate.  DRC rules contain errors."
@@ -25870,6 +26008,704 @@ msgstr "KiCad Schematic"
 
 msgid "KiCad Printed Circuit Board"
 msgstr "KiCad Printed Circuit Board"
+
+#~ msgid "Background top:"
+#~ msgstr "Background top:"
+
+#~ msgid "Background bottom:"
+#~ msgstr "Background bottom:"
+
+#~ msgid "Load Colors from Board Stackup"
+#~ msgstr "Load Colors from Board Stackup"
+
+#~ msgid "Symbol (.lib file)"
+#~ msgstr "Symbol (.lib file)"
+
+#, c-format
+#~ msgid "The name %s is reserved, and cannot be used here"
+#~ msgstr "The name %s is reserved, and cannot be used here"
+
+#~ msgid "Doc Files"
+#~ msgstr "Doc Files"
+
+#, c-format
+#~ msgid "Doc File '%s' not found"
+#~ msgstr "Doc File '%s' not found"
+
+#, c-format
+#~ msgid "Unknown MIME type for doc file '%s'"
+#~ msgstr "Unknown MIME type for doc file '%s'"
+
+#~ msgid "Generator files:"
+#~ msgstr "Generator files:"
+
+#~ msgid "Text Editor"
+#~ msgstr "Text Editor"
+
+#~ msgid "Error. You must provide a command String"
+#~ msgstr "Error. You must provide a command String"
+
+#~ msgid "Error. You must provide a Title"
+#~ msgstr "Error. You must provide a Title"
+
+#~ msgid "Use Eeschema color theme"
+#~ msgstr "Use Eeschema color theme"
+
+#~ msgid "Arc drawing on schematic not currently supported."
+#~ msgstr "Arc drawing on schematic not currently supported."
+
+#, c-format
+#~ msgid "Setting schematic symbol '%s %s' library identifier to '%s'. "
+#~ msgstr "Setting schematic symbol '%s %s' library identifier to '%s'. "
+
+#, c-format
+#~ msgid ""
+#~ "Schematic symbol reference '%s' library identifier is not valid.  Unable "
+#~ "to link library symbol."
+#~ msgstr ""
+#~ "Schematic symbol reference '%s' library identifier is not valid.  Unable "
+#~ "to link library symbol."
+
+#, c-format
+#~ msgid ""
+#~ "<b>Duplicate pin %s</b> %s at location <b>(%.3f, %.3f)</b> conflicts with "
+#~ "pin %s%s at location <b>(%.3f, %.3f)</b>."
+#~ msgstr ""
+#~ "<b>Duplicate pin %s</b> %s at location <b>(%.3f, %.3f)</b> conflicts with "
+#~ "pin %s%s at location <b>(%.3f, %.3f)</b>."
+
+#, c-format
+#~ msgid ""
+#~ "<b>Duplicate pin %s</b> %s at location <b>(%.3f, %.3f)</b> conflicts with "
+#~ "pin %s%s at location <b>(%.3f, %.3f)</b> in units %c and %c."
+#~ msgstr ""
+#~ "<b>Duplicate pin %s</b> %s at location <b>(%.3f, %.3f)</b> conflicts with "
+#~ "pin %s%s at location <b>(%.3f, %.3f)</b> in units %c and %c."
+
+#, c-format
+#~ msgid ""
+#~ "<b>Hidden power pin %s</b> %s at location <b>(%.3f, %.3f)</b> of "
+#~ "converted."
+#~ msgstr ""
+#~ "<b>Hidden power pin %s</b> %s at location <b>(%.3f, %.3f)</b> of "
+#~ "converted."
+
+#, c-format
+#~ msgid ""
+#~ "<b>Hidden power pin %s</b> %s at location <b>(%.3f, %.3f)</b> in unit %c "
+#~ "of converted."
+#~ msgstr ""
+#~ "<b>Hidden power pin %s</b> %s at location <b>(%.3f, %.3f)</b> in unit %c "
+#~ "of converted."
+
+#, c-format
+#~ msgid "<b>Hidden power pin %s</b> %s at location <b>(%.3f, %.3f)</b>."
+#~ msgstr "<b>Hidden power pin %s</b> %s at location <b>(%.3f, %.3f)</b>."
+
+#, c-format
+#~ msgid ""
+#~ "<b>Hidden power pin %s</b> %s at location <b>(%.3f, %.3f)</b> in unit %c."
+#~ msgstr ""
+#~ "<b>Hidden power pin %s</b> %s at location <b>(%.3f, %.3f)</b> in unit %c."
+
+#, c-format
+#~ msgid ""
+#~ "<b>Off grid pin %s</b> %s at location <b>(%.3f, %.3f)</b> of converted."
+#~ msgstr ""
+#~ "<b>Off grid pin %s</b> %s at location <b>(%.3f, %.3f)</b> of converted."
+
+#, c-format
+#~ msgid ""
+#~ "<b>Off grid pin %s</b> %s at location <b>(%.3f, %.3f)</b> in unit %c of "
+#~ "converted."
+#~ msgstr ""
+#~ "<b>Off grid pin %s</b> %s at location <b>(%.3f, %.3f)</b> in unit %c of "
+#~ "converted."
+
+#, c-format
+#~ msgid "<b>Off grid pin %s</b> %s at location <b>(%.3f, %.3f)</b>."
+#~ msgstr "<b>Off grid pin %s</b> %s at location <b>(%.3f, %.3f)</b>."
+
+#, c-format
+#~ msgid ""
+#~ "<b>Off grid pin %s</b> %s at location <b>(%.3f, %.3f)</b> in unit %c."
+#~ msgstr ""
+#~ "<b>Off grid pin %s</b> %s at location <b>(%.3f, %.3f)</b> in unit %c."
+
+#~ msgid "Filename:"
+#~ msgstr "Filename:"
+
+#, c-format
+#~ msgid "File \"%s\" not found"
+#~ msgstr "File “%s” not found"
+
+#~ msgid "Bad or missing parameters!"
+#~ msgstr "Bad or missing parameters!"
+
+#~ msgid "Dielectric material characteristics:"
+#~ msgstr "Dielectric material characteristics:"
+
+#~ msgid "Available materials:"
+#~ msgstr "Available materials:"
+
+#~ msgid "Dielectric Materials"
+#~ msgstr "Dielectric Materials"
+
+#, c-format
+#~ msgid "Invalid filename: %s"
+#~ msgstr "Invalid filename: %s"
+
+#~ msgid "Outline smooth:"
+#~ msgstr "Outline smooth:"
+
+#~ msgid "Solid shape"
+#~ msgstr "Solid shape"
+
+#~ msgid "HatchBorder pattern"
+#~ msgstr "HatchBorder pattern"
+
+#~ msgid "Smooth amount:"
+#~ msgstr "Smooth amount:"
+
+#~ msgid "Error: Corner size not a number."
+#~ msgstr "Error: Corner size not a number."
+
+#~ msgid "Copper hole clearance:"
+#~ msgstr "Copper hole clearance:"
+
+#~ msgid "Copper edge clearance:"
+#~ msgstr "Copper edge clearance:"
+
+#~ msgid "Solder mask minimum bridge width:"
+#~ msgstr "Solder mask minimum bridge width:"
+
+#~ msgid ""
+#~ "### Top-level Clauses\n"
+#~ "\n"
+#~ "    (version <number>)\n"
+#~ "\n"
+#~ "    (rule <rule_name> <rule_clause> ...)\n"
+#~ "\n"
+#~ "\n"
+#~ "<br><br>\n"
+#~ "\n"
+#~ "### Rule Clauses\n"
+#~ "\n"
+#~ "    (constraint <constraint_type> ...)\n"
+#~ "\n"
+#~ "    (condition \"<expression>\")\n"
+#~ "\n"
+#~ "    (layer \"<layer_name>\")\n"
+#~ "\n"
+#~ "\n"
+#~ "<br><br>\n"
+#~ "\n"
+#~ "### Constraint Types\n"
+#~ "\n"
+#~ " * annular_width\n"
+#~ " * clearance\n"
+#~ " * courtyard_clearance\n"
+#~ " * diff\\_pair\\_gap\n"
+#~ " * diff\\_pair\\_uncoupled\n"
+#~ " * disallow\n"
+#~ " * edge_clearance\n"
+#~ " * length\n"
+#~ " * hole\n"
+#~ " * hole_clearance\n"
+#~ " * silk_clearance\n"
+#~ " * skew\n"
+#~ " * track_width\n"
+#~ " * via_count\n"
+#~ "\n"
+#~ "\n"
+#~ "<br><br>\n"
+#~ "\n"
+#~ "### Item Types\n"
+#~ "\n"
+#~ " * buried_via\n"
+#~ " * graphic\n"
+#~ " * hole\n"
+#~ " * micro_via\n"
+#~ " * pad\n"
+#~ " * text\n"
+#~ " * track\n"
+#~ " * via\n"
+#~ " * zone\n"
+#~ "\n"
+#~ "<br>\n"
+#~ "\n"
+#~ "### Examples\n"
+#~ "\n"
+#~ "    (version 1)\n"
+#~ "\n"
+#~ "    (rule HV\n"
+#~ "       (constraint clearance (min 1.5mm))\n"
+#~ "       (condition \"A.NetClass == 'HV'\"))\n"
+#~ "\n"
+#~ "\n"
+#~ "    (rule HV\n"
+#~ "       (layer outer)\n"
+#~ "       (constraint clearance (min 1.5mm))\n"
+#~ "       (condition \"A.NetClass == 'HV'\"))\n"
+#~ "\n"
+#~ "\n"
+#~ "    (rule HV_HV\n"
+#~ "       # wider clearance between HV tracks\n"
+#~ "       (constraint clearance (min \"1.5mm + 2.0mm\"))\n"
+#~ "       (condition \"A.NetClass == 'HV' && B.NetClass == 'HV'\"))\n"
+#~ "\n"
+#~ "\n"
+#~ "    (rule HV_unshielded\n"
+#~ "       (constraint clearance (min 2mm))\n"
+#~ "       (condition \"A.NetClass == 'HV' && !A.insideArea('Shield*')\"))\n"
+#~ "<br><br>\n"
+#~ "\n"
+#~ "### Notes\n"
+#~ "\n"
+#~ "Version clause must be the first clause.  It indicates the syntax version "
+#~ "of the file so that \n"
+#~ "future rules parsers can perform automatic updates.  It should be\n"
+#~ "set to \"1\".\n"
+#~ "\n"
+#~ "Rules should be ordered by specificity.  Later rules take\n"
+#~ "precedence over earlier rules; once a matching rule is found\n"
+#~ "no further rules will be checked.\n"
+#~ "\n"
+#~ "Use Ctrl+/ to comment or uncomment line(s).\n"
+#~ "<br><br><br>\n"
+#~ "\n"
+#~ "### Expression functions\n"
+#~ "\n"
+#~ "All function parameters support simple wildcards (`*` and `?`).\n"
+#~ "<br><br>\n"
+#~ "\n"
+#~ "    A.insideCourtyard('<footprint_refdes>')\n"
+#~ "True if any part of `A` lies within the given footprint's principal "
+#~ "courtyard.\n"
+#~ "<br><br>\n"
+#~ "\n"
+#~ "    A.insideFrontCourtyard('<footprint_refdes>')\n"
+#~ "True if any part of `A` lies within the given footprint's front "
+#~ "courtyard.\n"
+#~ "<br><br>\n"
+#~ "\n"
+#~ "    A.insideBackCourtyard('<footprint_refdes>')\n"
+#~ "True if any part of `A` lies within the given footprint's back "
+#~ "courtyard.\n"
+#~ "<br><br>\n"
+#~ "\n"
+#~ "    A.insideArea('<zone_name>')\n"
+#~ "True if any part of `A` lies within the given zone's outline.\n"
+#~ "<br><br>\n"
+#~ "\n"
+#~ "    A.isPlated()\n"
+#~ "True if `A` has a hole which is plated.\n"
+#~ "<br><br>\n"
+#~ "\n"
+#~ "    A.inDiffPair('<net_name>')\n"
+#~ "True if `A` has net that is part of the specified differential pair.\n"
+#~ "`<net_name>` is the base name of the differential pair.  For example, "
+#~ "`inDiffPair('CLK')`\n"
+#~ "matches items in the `CLK_P` and `CLK_N` nets.\n"
+#~ "<br><br>\n"
+#~ "\n"
+#~ "    AB.isCoupledDiffPair()\n"
+#~ "True if `A` and `B` are members of the same diff pair.\n"
+#~ "<br><br>\n"
+#~ "\n"
+#~ "    A.memberOf('<group_name>')\n"
+#~ "True if `A` is a member of the given group. Includes nested membership.\n"
+#~ "<br><br>\n"
+#~ "\n"
+#~ "    A.existsOnLayer('<layer_name>')\n"
+#~ "True if `A` exists on the given layer.  The layer name can be\n"
+#~ "either the name assigned in Board Setup > Board Editor Layers or\n"
+#~ "the canonical name (ie: `F.Cu`).\n"
+#~ "\n"
+#~ "NB: this returns true if `A` is on the given layer, independently\n"
+#~ "of whether or not the rule is being evaluated for that layer.\n"
+#~ "For the latter use a `(layer \"layer_name\")` clause in the rule.\n"
+#~ "<br><br><br>\n"
+#~ "\n"
+#~ "### More Examples\n"
+#~ "\n"
+#~ "    (rule \"copper keepout\"\n"
+#~ "       (constraint disallow track via zone)\n"
+#~ "       (condition \"A.insideArea('zone3')\"))\n"
+#~ "\n"
+#~ "\n"
+#~ "    (rule \"BGA neckdown\"\n"
+#~ "       (constraint track_width (min 0.2mm) (opt 0.25mm))\n"
+#~ "       (constraint clearance (min 0.05mm) (opt 0.08mm))\n"
+#~ "       (condition \"A.insideCourtyard('U3')\"))\n"
+#~ "\n"
+#~ "\n"
+#~ "    # prevent silk over tented vias\n"
+#~ "    (rule silk_over_via\n"
+#~ "       (constraint silk_clearance (min 0.2mm))\n"
+#~ "       (condition \"A.Type == '*Text' && B.Type == 'Via'\"))\n"
+#~ "\n"
+#~ "\n"
+#~ "    (rule \"Distance between Vias of Different Nets\"  \n"
+#~ "        (constraint hole_to_hole (min 0.254mm))\n"
+#~ "        (condition \"A.Type =='Via' && B.Type =='Via' && A.Net != B.Net"
+#~ "\"))\n"
+#~ "\n"
+#~ "    (rule \"Clearance between Pads of Different Nets\"  \n"
+#~ "        (constraint clearance (min 3.0mm))\n"
+#~ "        (condition \"A.Type =='Pad' && B.Type =='Pad' && A.Net != B.Net"
+#~ "\"))\n"
+#~ "\n"
+#~ "\n"
+#~ "    (rule \"Via Hole to Track Clearance\"  \n"
+#~ "        (constraint hole_clearance (min 0.254mm))\n"
+#~ "        (condition \"A.Type =='Via' && B.Type =='Track'\"))\n"
+#~ "    \n"
+#~ "    (rule \"Pad to Track Clearance\"  \n"
+#~ "        (constraint clearance (min 0.2mm))\n"
+#~ "        (condition \"A.Type =='Pad' && B.Type =='Track'\"))\n"
+#~ "\n"
+#~ "\n"
+#~ "    (rule \"clearance-to-1mm-cutout\"\n"
+#~ "        (constraint clearance (min 0.8mm))\n"
+#~ "        (condition \"A.Layer=='Edge.Cuts' && A.Thickness == 1.0mm\"))\n"
+#~ "\n"
+#~ "\n"
+#~ "    (rule \"Max Drill Hole Size Mechanical\"  \n"
+#~ "        (constraint hole (max 6.3mm))\n"
+#~ "        (condition \"A.Pad_Type == 'NPTH, mechanical'\"))\n"
+#~ "    \n"
+#~ "    (rule \"Max Drill Hole Size PTH\"  \n"
+#~ "        (constraint hole (max 6.35mm))\n"
+#~ "        (condition \"A.Pad_Type == 'Through-hole'\"))\n"
+#~ "\n"
+#~ "\n"
+#~ "    # Specify an optimal gap for a particular diff-pair\n"
+#~ "    (rule \"dp clock gap\"\n"
+#~ "        (constraint diff_pair_gap (opt \"0.8mm\"))\n"
+#~ "        (condition \"A.inDiffPair('CLK') && AB.isCoupledDiffPair()\"))\n"
+#~ "\n"
+#~ "    # Specify a larger clearance around any diff-pair\n"
+#~ "    (rule \"dp clearance\"\n"
+#~ "        (constraint clearance (min \"1.5mm\"))\n"
+#~ "        (condition \"A.inDiffPair('*') && !AB.isCoupledDiffPair()\"))\n"
+#~ msgstr ""
+#~ "### Top-level Clauses\n"
+#~ "\n"
+#~ "    (version <number>)\n"
+#~ "\n"
+#~ "    (rule <rule_name> <rule_clause> ...)\n"
+#~ "\n"
+#~ "\n"
+#~ "<br><br>\n"
+#~ "\n"
+#~ "### Rule Clauses\n"
+#~ "\n"
+#~ "    (constraint <constraint_type> ...)\n"
+#~ "\n"
+#~ "    (condition \"<expression>\")\n"
+#~ "\n"
+#~ "    (layer \"<layer_name>\")\n"
+#~ "\n"
+#~ "\n"
+#~ "<br><br>\n"
+#~ "\n"
+#~ "### Constraint Types\n"
+#~ "\n"
+#~ " * annular_width\n"
+#~ " * clearance\n"
+#~ " * courtyard_clearance\n"
+#~ " * diff\\_pair\\_gap\n"
+#~ " * diff\\_pair\\_uncoupled\n"
+#~ " * disallow\n"
+#~ " * edge_clearance\n"
+#~ " * length\n"
+#~ " * hole\n"
+#~ " * hole_clearance\n"
+#~ " * silk_clearance\n"
+#~ " * skew\n"
+#~ " * track_width\n"
+#~ " * via_count\n"
+#~ "\n"
+#~ "\n"
+#~ "<br><br>\n"
+#~ "\n"
+#~ "### Item Types\n"
+#~ "\n"
+#~ " * buried_via\n"
+#~ " * graphic\n"
+#~ " * hole\n"
+#~ " * micro_via\n"
+#~ " * pad\n"
+#~ " * text\n"
+#~ " * track\n"
+#~ " * via\n"
+#~ " * zone\n"
+#~ "\n"
+#~ "<br>\n"
+#~ "\n"
+#~ "### Examples\n"
+#~ "\n"
+#~ "    (version 1)\n"
+#~ "\n"
+#~ "    (rule HV\n"
+#~ "       (constraint clearance (min 1.5mm))\n"
+#~ "       (condition \"A.NetClass == 'HV'\"))\n"
+#~ "\n"
+#~ "\n"
+#~ "    (rule HV\n"
+#~ "       (layer outer)\n"
+#~ "       (constraint clearance (min 1.5mm))\n"
+#~ "       (condition \"A.NetClass == 'HV'\"))\n"
+#~ "\n"
+#~ "\n"
+#~ "    (rule HV_HV\n"
+#~ "       # wider clearance between HV tracks\n"
+#~ "       (constraint clearance (min \"1.5mm + 2.0mm\"))\n"
+#~ "       (condition \"A.NetClass == 'HV' && B.NetClass == 'HV'\"))\n"
+#~ "\n"
+#~ "\n"
+#~ "    (rule HV_unshielded\n"
+#~ "       (constraint clearance (min 2mm))\n"
+#~ "       (condition \"A.NetClass == 'HV' && !A.insideArea('Shield*')\"))\n"
+#~ "<br><br>\n"
+#~ "\n"
+#~ "### Notes\n"
+#~ "\n"
+#~ "Version clause must be the first clause.  It indicates the syntax version "
+#~ "of the file so that \n"
+#~ "future rules parsers can perform automatic updates.  It should be\n"
+#~ "set to \"1\".\n"
+#~ "\n"
+#~ "Rules should be ordered by specificity.  Later rules take\n"
+#~ "precedence over earlier rules; once a matching rule is found\n"
+#~ "no further rules will be checked.\n"
+#~ "\n"
+#~ "Use Ctrl+/ to comment or uncomment line(s).\n"
+#~ "<br><br><br>\n"
+#~ "\n"
+#~ "### Expression functions\n"
+#~ "\n"
+#~ "All function parameters support simple wildcards (`*` and `?`).\n"
+#~ "<br><br>\n"
+#~ "\n"
+#~ "    A.insideCourtyard('<footprint_refdes>')\n"
+#~ "True if any part of `A` lies within the given footprint's principal "
+#~ "courtyard.\n"
+#~ "<br><br>\n"
+#~ "\n"
+#~ "    A.insideFrontCourtyard('<footprint_refdes>')\n"
+#~ "True if any part of `A` lies within the given footprint's front "
+#~ "courtyard.\n"
+#~ "<br><br>\n"
+#~ "\n"
+#~ "    A.insideBackCourtyard('<footprint_refdes>')\n"
+#~ "True if any part of `A` lies within the given footprint's back "
+#~ "courtyard.\n"
+#~ "<br><br>\n"
+#~ "\n"
+#~ "    A.insideArea('<zone_name>')\n"
+#~ "True if any part of `A` lies within the given zone's outline.\n"
+#~ "<br><br>\n"
+#~ "\n"
+#~ "    A.isPlated()\n"
+#~ "True if `A` has a hole which is plated.\n"
+#~ "<br><br>\n"
+#~ "\n"
+#~ "    A.inDiffPair('<net_name>')\n"
+#~ "True if `A` has net that is part of the specified differential pair.\n"
+#~ "`<net_name>` is the base name of the differential pair.  For example, "
+#~ "`inDiffPair('CLK')`\n"
+#~ "matches items in the `CLK_P` and `CLK_N` nets.\n"
+#~ "<br><br>\n"
+#~ "\n"
+#~ "    AB.isCoupledDiffPair()\n"
+#~ "True if `A` and `B` are members of the same diff pair.\n"
+#~ "<br><br>\n"
+#~ "\n"
+#~ "    A.memberOf('<group_name>')\n"
+#~ "True if `A` is a member of the given group. Includes nested membership.\n"
+#~ "<br><br>\n"
+#~ "\n"
+#~ "    A.existsOnLayer('<layer_name>')\n"
+#~ "True if `A` exists on the given layer.  The layer name can be\n"
+#~ "either the name assigned in Board Setup > Board Editor Layers or\n"
+#~ "the canonical name (ie: `F.Cu`).\n"
+#~ "\n"
+#~ "NB: this returns true if `A` is on the given layer, independently\n"
+#~ "of whether or not the rule is being evaluated for that layer.\n"
+#~ "For the latter use a `(layer \"layer_name\")` clause in the rule.\n"
+#~ "<br><br><br>\n"
+#~ "\n"
+#~ "### More Examples\n"
+#~ "\n"
+#~ "    (rule \"copper keepout\"\n"
+#~ "       (constraint disallow track via zone)\n"
+#~ "       (condition \"A.insideArea('zone3')\"))\n"
+#~ "\n"
+#~ "\n"
+#~ "    (rule \"BGA neckdown\"\n"
+#~ "       (constraint track_width (min 0.2mm) (opt 0.25mm))\n"
+#~ "       (constraint clearance (min 0.05mm) (opt 0.08mm))\n"
+#~ "       (condition \"A.insideCourtyard('U3')\"))\n"
+#~ "\n"
+#~ "\n"
+#~ "    # prevent silk over tented vias\n"
+#~ "    (rule silk_over_via\n"
+#~ "       (constraint silk_clearance (min 0.2mm))\n"
+#~ "       (condition \"A.Type == '*Text' && B.Type == 'Via'\"))\n"
+#~ "\n"
+#~ "\n"
+#~ "    (rule \"Distance between Vias of Different Nets\"  \n"
+#~ "        (constraint hole_to_hole (min 0.254mm))\n"
+#~ "        (condition \"A.Type =='Via' && B.Type =='Via' && A.Net != B.Net"
+#~ "\"))\n"
+#~ "\n"
+#~ "    (rule \"Clearance between Pads of Different Nets\"  \n"
+#~ "        (constraint clearance (min 3.0mm))\n"
+#~ "        (condition \"A.Type =='Pad' && B.Type =='Pad' && A.Net != B.Net"
+#~ "\"))\n"
+#~ "\n"
+#~ "\n"
+#~ "    (rule \"Via Hole to Track Clearance\"  \n"
+#~ "        (constraint hole_clearance (min 0.254mm))\n"
+#~ "        (condition \"A.Type =='Via' && B.Type =='Track'\"))\n"
+#~ "    \n"
+#~ "    (rule \"Pad to Track Clearance\"  \n"
+#~ "        (constraint clearance (min 0.2mm))\n"
+#~ "        (condition \"A.Type =='Pad' && B.Type =='Track'\"))\n"
+#~ "\n"
+#~ "\n"
+#~ "    (rule \"clearance-to-1mm-cutout\"\n"
+#~ "        (constraint clearance (min 0.8mm))\n"
+#~ "        (condition \"A.Layer=='Edge.Cuts' && A.Thickness == 1.0mm\"))\n"
+#~ "\n"
+#~ "\n"
+#~ "    (rule \"Max Drill Hole Size Mechanical\"  \n"
+#~ "        (constraint hole (max 6.3mm))\n"
+#~ "        (condition \"A.Pad_Type == 'NPTH, mechanical'\"))\n"
+#~ "    \n"
+#~ "    (rule \"Max Drill Hole Size PTH\"  \n"
+#~ "        (constraint hole (max 6.35mm))\n"
+#~ "        (condition \"A.Pad_Type == 'Through-hole'\"))\n"
+#~ "\n"
+#~ "\n"
+#~ "    # Specify an optimal gap for a particular diff-pair\n"
+#~ "    (rule \"dp clock gap\"\n"
+#~ "        (constraint diff_pair_gap (opt \"0.8mm\"))\n"
+#~ "        (condition \"A.inDiffPair('CLK') && AB.isCoupledDiffPair()\"))\n"
+#~ "\n"
+#~ "    # Specify a larger clearance around any diff-pair\n"
+#~ "    (rule \"dp clearance\"\n"
+#~ "        (constraint clearance (min \"1.5mm\"))\n"
+#~ "        (condition \"A.inDiffPair('*') && !AB.isCoupledDiffPair()\"))\n"
+
+#, c-format
+#~ msgid "Checking %s; clearance: %s."
+#~ msgstr "Checking %s; clearance: %s."
+
+#, c-format
+#~ msgid "Checking %s; courtyard clearance: %s."
+#~ msgstr "Checking %s; courtyard clearance: %s."
+
+#, c-format
+#~ msgid "Checking %s; silk clearance: %s."
+#~ msgstr "Checking %s; silk clearance: %s."
+
+#, c-format
+#~ msgid "Checking %s; hole clearance: %s."
+#~ msgstr "Checking %s; hole clearance: %s."
+
+#, c-format
+#~ msgid "Checking %s; edge clearance: %s."
+#~ msgstr "Checking %s; edge clearance: %s."
+
+#~ msgid "Create microwave footprint"
+#~ msgstr "Create microwave footprint"
+
+#~ msgid "Complex shape"
+#~ msgstr "Complex shape"
+
+#~ msgid "Shape Option"
+#~ msgstr "Shape Option"
+
+#~ msgid "Read descr shape file"
+#~ msgstr "Read descr shape file"
+
+#~ msgid "Merge Specctra Session file:"
+#~ msgstr "Merge Specctra Session file:"
+
+#, c-format
+#~ msgid "Zone connection type: %s."
+#~ msgstr "Zone connection type: %s."
+
+#, c-format
+#~ msgid "Overridden by %s; connection type: %s."
+#~ msgstr "Overridden by %s; connection type: %s."
+
+#, c-format
+#~ msgid "Pad is not a PTH pad; connection will be: %s."
+#~ msgstr "Pad is not a PTH pad; connection will be: %s."
+
+#, c-format
+#~ msgid "%s not present on layer %s.  No clearance defined."
+#~ msgstr "%s not present on layer %s.  No clearance defined."
+
+#, c-format
+#~ msgid "Width constraints: min %s max %s."
+#~ msgstr "Width constraints: min %s max %s."
+
+#, c-format
+#~ msgid "Diameter constraints: min %s max %s."
+#~ msgstr "Diameter constraints: min %s max %s."
+
+#, c-format
+#~ msgid "Annular width constraints: min %s max %s."
+#~ msgstr "Annular width constraints: min %s max %s."
+
+#~ msgid "Copy cancelled"
+#~ msgstr "Copy cancelled"
+
+#~ msgid "Convert to Polygon"
+#~ msgstr "Convert to Polygon"
+
+#~ msgid "Convert to Zone"
+#~ msgstr "Convert to Zone"
+
+#~ msgid "Convert to Rule Area"
+#~ msgstr "Convert to Rule Area"
+
+#~ msgid "Convert to Lines"
+#~ msgstr "Convert to Lines"
+
+#~ msgid "Convert to Arc"
+#~ msgstr "Convert to Arc"
+
+#~ msgid "Converts selected line segment to an arc"
+#~ msgstr "Converts selected line segment to an arc"
+
+#~ msgid "Convert to Tracks"
+#~ msgstr "Convert to Tracks"
+
+#~ msgid "Converts selected graphic lines to tracks"
+#~ msgstr "Converts selected graphic lines to tracks"
+
+#~ msgid "Fill Zones"
+#~ msgstr "Fill Zones"
+
+#~ msgid "Wireframe Zones"
+#~ msgstr "Wireframe Zones"
+
+#~ msgid "Sketch Zones"
+#~ msgstr "Sketch Zones"
+
+#~ msgid "Show solid areas of zones in outline mode"
+#~ msgstr "Show solid areas of zones in outline mode"
+
+#~ msgid ""
+#~ "Cycle between showing filled zones, wireframed zones and sketched zones"
+#~ msgstr ""
+#~ "Cycle between showing filled zones, wireframed zones and sketched zones"
 
 #~ msgid "Your OpenGL version is not supported. Minimum required is 1.5"
 #~ msgstr "Your OpenGL version is not supported. Minimum required is 1.5"
@@ -29153,9 +29989,6 @@ msgstr "KiCad Printed Circuit Board"
 
 #~ msgid "Thermal clearance:"
 #~ msgstr "Thermal clearance:"
-
-#~ msgid "Thermal spoke width:"
-#~ msgstr "Thermal spoke width:"
 
 #~ msgid "Local Clearance and Settings"
 #~ msgstr "Local Clearance and Settings"
