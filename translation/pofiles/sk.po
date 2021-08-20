@@ -6,16 +6,16 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-08-20 11:53-0700\n"
-"PO-Revision-Date: 2021-03-11 21:06+0000\n"
+"PO-Revision-Date: 2021-08-20 19:52+0000\n"
 "Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
-"Language-Team: Slovak <https://hosted.weblate.org/projects/kicad/master-"
-"source/sk/>\n"
+"Language-Team: Slovak <https://hosted.weblate.org/projects/kicad/"
+"master-source/sk/>\n"
 "Language: sk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 4.5.2-dev\n"
+"X-Generator: Weblate 4.8-dev\n"
 "X-Poedit-Basepath: /home/slavko/projekty/svn/kicad-20100408\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-SearchPath-0: pcbnew\n"
@@ -23363,8 +23363,7 @@ msgstr "Varovanie o uložení projektu"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:254
 msgid "STEP export failed!  Please save the PCB and try again"
-msgstr ""
-"KROKOVÝ export zlyhal! Uložte dosku s plošnými spojmi a skúste to znova"
+msgstr "STEP export zlyhal! Uložte dosku s plošnými spojmi a skúste to znova"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:319
 #, fuzzy, c-format
@@ -23377,7 +23376,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_export_step.cpp:331
 msgid "STEP Export"
-msgstr "KROK Export"
+msgstr "STEP Export"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:28
 msgid "Select a STEP export filename"
@@ -23385,7 +23384,7 @@ msgstr "Vyberte STEP exportovaný názov súboru"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:28
 msgid "STEP files (*.stp;*.step)|*.stp;*.step"
-msgstr "Súbory STEP (* .stp; *. Krok) | * .stp; *. Krok"
+msgstr "Súbory STEP (* .stp; *. step) | * .stp; *. step"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:38
 msgid "Coordinates"
@@ -23465,7 +23464,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_export_step_base.h:75
 msgid "Export STEP"
-msgstr "Export KROK"
+msgstr "Export STEP"
 
 #: pcbnew/dialogs/dialog_export_svg.cpp:214
 #: pcbnew/exporters/gen_footprints_placefile.cpp:192
@@ -30475,7 +30474,7 @@ msgstr "Exportujte reprezentáciu 3D dosky IDF"
 
 #: pcbnew/menubar_pcb_editor.cpp:136
 msgid "STEP..."
-msgstr "KROK ..."
+msgstr "STEP..."
 
 #: pcbnew/menubar_pcb_editor.cpp:136
 msgid "Export STEP 3D board representation"
