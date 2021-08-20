@@ -7,16 +7,16 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-08-20 11:53-0700\n"
-"PO-Revision-Date: 2021-06-05 08:33+0000\n"
-"Last-Translator: Allan Nordhøy <epost@anotheragency.no>\n"
-"Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/master-"
-"source/sv/>\n"
+"PO-Revision-Date: 2021-08-20 19:52+0000\n"
+"Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
+"Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/"
+"master-source/sv/>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.7-dev\n"
+"X-Generator: Weblate 4.8-dev\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-Basepath: J:\\kicad-winbuilder-3.4\\src\\kicad\n"
 "X-Poedit-SourceCharset: iso-8859-1\n"
@@ -5426,7 +5426,7 @@ msgstr "Ingen standardredigerare hittades, du måste välja den"
 
 #: common/pgm_base.cpp:184
 msgid "Executable file (*.exe)|*.exe"
-msgstr "Körbar fil (* .exe) | * .exe"
+msgstr "Körbar fil (*.exe)|*.exe"
 
 #: common/pgm_base.cpp:186
 msgid "Executable file (*)|*"
@@ -12284,31 +12284,30 @@ msgid "Add Anyway"
 msgstr "Lägg till ändå"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:733
-#, fuzzy
 msgid ""
 "Select one or more rows containing libraries in Legacy format (*.lib) to "
 "save as current KiCad format (*.kicad_sym)."
 msgstr ""
 "Välj en eller flera tabellrader som innehåller äldre bibliotek för att spara "
-"som aktuellt format (* .kicad_sym)."
+"som aktuellt format (*.kicad_sym)."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:741
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Save '%s' as current KiCad format (*.kicad_sym) and replace legacy entry in "
 "table?"
 msgstr ""
-"Spara '%s' som aktuellt format (* .kicad_sym) och ersätta äldre post i "
+"Spara '%s' som aktuellt format (*.kicad_sym) och ersätta äldre post i "
 "tabellen?"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:747
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Save %d Legacy format libraries as current KiCad format (*.kicad_sym) and "
 "replace legacy entries in table?"
 msgstr ""
-"Spara %d äldre bibliotek som aktuellt format (* .kicad_sym) och ersätta "
-"äldre poster i tabellen?"
+"Spara %d äldre bibliotek som aktuellt format (*.kicad_sym) och ersätta äldre "
+"poster i tabellen?"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:775
 #: pcbnew/dialogs/dialog_export_step.cpp:328
@@ -17431,52 +17430,51 @@ msgstr "Gerber-filer (.g * .lgr .pho)"
 
 #: gerbview/files.cpp:144
 msgid "Top layer (*.GTL)|*.GTL;*.gtl|"
-msgstr "Toppskikt (* .GTL) | * .GTL; *. Gtl |"
+msgstr "Toppskikt (*.GTL)|*.GTL; *.gtl|"
 
 #: gerbview/files.cpp:145
 msgid "Bottom layer (*.GBL)|*.GBL;*.gbl|"
-msgstr "Nedre lagret (* .GBL) | * .GBL; *. Gbl |"
+msgstr "Nedre lagret (*.GBL)|*.GBL;*.gbl|"
 
 #: gerbview/files.cpp:146
 msgid "Bottom solder resist (*.GBS)|*.GBS;*.gbs|"
-msgstr "Motstånd mot bottenlödning (* .GBS) | * .GBS; *. Gbs |"
+msgstr "Motstånd mot bottenlödning (*.GBS)|*.GBS;*.gbs|"
 
 #: gerbview/files.cpp:147
 msgid "Top solder resist (*.GTS)|*.GTS;*.gts|"
-msgstr "Motstånd mot topplödning (* .GTS) | * .GTS; *. Gts |"
+msgstr "Motstånd mot topplödning (*.GTS)|*.GTS;*.gts|"
 
 #: gerbview/files.cpp:148
 msgid "Bottom overlay (*.GBO)|*.GBO;*.gbo|"
-msgstr "Nedre överlägg (* .GBO) | * .GBO; *. Gbo |"
+msgstr "Nedre överlägg (*.GBO)|*.GBO;*.gbo|"
 
 #: gerbview/files.cpp:149
 msgid "Top overlay (*.GTO)|*.GTO;*.gto|"
-msgstr "Överlagring (* .GTO) | * .GTO; *. Gto |"
+msgstr "Överlagring (*.GTO)|*.GTO;*.gto|"
 
 #: gerbview/files.cpp:150
 msgid "Bottom paste (*.GBP)|*.GBP;*.gbp|"
-msgstr "Nedre klistra in (* .GBP) | * .GBP; *. Gbp |"
+msgstr "Nedre klistra in (*.GBP)|*.GBP;*.gbp|"
 
 #: gerbview/files.cpp:151
 msgid "Top paste (*.GTP)|*.GTP;*.gtp|"
-msgstr "Topplim (* .GTP) | * .GTP; *. Gtp |"
+msgstr "Topplim (*.GTP)|*.GTP;*.gtp|"
 
 #: gerbview/files.cpp:152
 msgid "Keep-out layer (*.GKO)|*.GKO;*.gko|"
-msgstr "Keep-out-lager (* .GKO) | * .GKO; *. Gko |"
+msgstr "Keep-out-lager (*.GKO)|*.GKO;*.Gko|"
 
 #: gerbview/files.cpp:153
 msgid "Mechanical layers (*.GMx)|*.GM1;*.gm1;*.GM2;*.gm2;*.GM3;*.gm3|"
-msgstr ""
-"Mekaniska lager (* .GMx) | * .GM1; *. Gm1; *. GM2; *. Gm2; *. GM3; *. Gm3 |"
+msgstr "Mekaniska lager (*.GMx)|*.GM1;*.gm1;*.GM2;*.gm2;*.GM3;*.gm3|"
 
 #: gerbview/files.cpp:154
 msgid "Top Pad Master (*.GPT)|*.GPT;*.gpt|"
-msgstr "Top Pad Master (* .GPT) | * .GPT; *. Gpt |"
+msgstr "Top Pad Master (*.GPT)|*.GPT;*.gpt|"
 
 #: gerbview/files.cpp:155
 msgid "Bottom Pad Master (*.GPB)|*.GPB;*.gpb|"
-msgstr "Bottom Pad Master (* .GPB) | * .GPB; *. Gpb |"
+msgstr "Bottom Pad Master (*.GPB)|*.GPB;*.gpb|"
 
 #: gerbview/files.cpp:173
 msgid "Open Gerber File(s)"
@@ -18347,7 +18345,7 @@ msgstr "Importera CADSTAR-projekt ..."
 
 #: kicad/menubar.cpp:103
 msgid "Import CADSTAR Archive Schematic and PCB (*.csa, *.cpa)"
-msgstr "Importera CADSTAR-arkivschemat och PCB (* .csa, * .cpa)"
+msgstr "Importera CADSTAR-arkivschemat och PCB (*.csa, *.cpa)"
 
 #: kicad/menubar.cpp:107
 #, fuzzy
@@ -20296,7 +20294,7 @@ msgstr ""
 #: pcb_calculator/regulators_funct.cpp:127
 #, c-format
 msgid "PCB Calculator data file (*.%s)|*.%s"
-msgstr "PCB Calculator-datafil (*. %s) | *. %s"
+msgstr "PCB Calculator-datafil (*.%s)|*.%s"
 
 #: pcb_calculator/regulators_funct.cpp:130
 msgid "Select PCB Calculator Data File"
@@ -23235,7 +23233,7 @@ msgstr "Välj ett IDF-exportfilnamn"
 
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:25
 msgid "*.emn"
-msgstr "* .emn"
+msgstr "*.emn"
 
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:34
 msgid "Grid reference point:"
@@ -23300,7 +23298,7 @@ msgstr "Välj ett STEP-exportfilnamn"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:28
 msgid "STEP files (*.stp;*.step)|*.stp;*.step"
-msgstr "STEG-filer (* .stp; *. Step) | * .stp; *. Step"
+msgstr "STEG-filer (*.stp;*.step)|*.stp;*.step"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:38
 #, fuzzy
@@ -23479,7 +23477,7 @@ msgstr "Spara VRML-kortfil"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:26
 msgid "*.wrl"
-msgstr "* .wrl"
+msgstr "*.wrl"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:31
 msgid "Footprint 3D model path:"
@@ -30375,7 +30373,7 @@ msgstr "Footprint Association (.cmp) -fil ..."
 #: pcbnew/menubar_pcb_editor.cpp:141
 msgid "Export footprint association file (*.cmp) for schematic back annotation"
 msgstr ""
-"Exportera associeringsfil för fotavtryck (* .cmp) för schematisk anteckning"
+"Exportera associeringsfil för fotavtryck (*.cmp) för schematisk anteckning"
 
 #: pcbnew/menubar_pcb_editor.cpp:143
 msgid "Hyperlynx..."
@@ -34543,7 +34541,7 @@ msgstr "Specctra Session ..."
 
 #: pcbnew/tools/pcb_actions.cpp:572
 msgid "Import routed Specctra session (*.ses) file"
-msgstr "Importera dirigerad Specctra-session (* .ses) -fil"
+msgstr "Importera dirigerad Specctra-session (*.ses) -fil"
 
 #: pcbnew/tools/pcb_actions.cpp:577
 #, fuzzy
