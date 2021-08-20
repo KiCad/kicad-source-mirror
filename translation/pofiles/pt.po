@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-20 11:53-0700\n"
+"POT-Creation-Date: 2021-08-20 13:14-0700\n"
 "PO-Revision-Date: 2021-05-09 22:09+0000\n"
 "Last-Translator: ssantos <ssantos@web.de>\n"
 "Language-Team: Portuguese <https://hosted.weblate.org/projects/kicad/master-"
@@ -39,8 +39,9 @@ msgstr ""
 "X-Poedit-SearchPath-14: tools\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
-msgid "All Files (*.*)|*.*"
-msgstr "Todos ficheiros (*.*)|*.*"
+#, fuzzy
+msgid "All Files"
+msgstr "Todos os ficheiros"
 
 #: 3d-viewer/3d_cache/dialogs/dialog_select_3d_model.cpp:94
 #, c-format
@@ -1740,27 +1741,27 @@ msgstr "Time Auxiliar de Desenvolvimento"
 msgid "Additional Contributions By"
 msgstr "Contribuições adicionais por"
 
-#: common/dialog_about/AboutDialog_main.cpp:624
+#: common/dialog_about/AboutDialog_main.cpp:671
 msgid "Others"
 msgstr "Outros"
 
-#: common/dialog_about/AboutDialog_main.cpp:644
+#: common/dialog_about/AboutDialog_main.cpp:691
 msgid "KiCad Librarian Team"
 msgstr "Time KiCad para bibliotecas"
 
-#: common/dialog_about/AboutDialog_main.cpp:659
+#: common/dialog_about/AboutDialog_main.cpp:706
 msgid "3D models by"
 msgstr "Modelos 3D por"
 
-#: common/dialog_about/AboutDialog_main.cpp:671
+#: common/dialog_about/AboutDialog_main.cpp:718
 msgid "Symbols by"
 msgstr "Símbolos por"
 
-#: common/dialog_about/AboutDialog_main.cpp:678
+#: common/dialog_about/AboutDialog_main.cpp:725
 msgid "Footprints by"
 msgstr "Footprints por"
 
-#: common/dialog_about/AboutDialog_main.cpp:691
+#: common/dialog_about/AboutDialog_main.cpp:738
 msgid "Icons by"
 msgstr "Ícones por"
 
@@ -5628,13 +5629,10 @@ msgstr ""
 msgid "No default editor found, you must choose it"
 msgstr "Editor padrão não encontrado, você deve escolhê-lo"
 
-#: common/pgm_base.cpp:184
-msgid "Executable file (*.exe)|*.exe"
-msgstr "Ficheiro executável (*.exe)|*.exe"
-
-#: common/pgm_base.cpp:186
-msgid "Executable file (*)|*"
-msgstr "Ficheiro executável (*)|*"
+#: common/pgm_base.cpp:184 common/pgm_base.cpp:186
+#, fuzzy
+msgid "Executable file"
+msgstr "Ficheiros executáveis ("
 
 #: common/pgm_base.cpp:196
 msgid "Select Preferred Editor"
@@ -7280,7 +7278,7 @@ msgstr "Ficheiros de Associação entre Símbolo e Footprint (.equ)"
 #: eeschema/dialogs/dialog_bus_manager.cpp:74
 #: eeschema/dialogs/dialog_bus_manager.cpp:108
 #: eeschema/dialogs/dialog_spice_model_base.cpp:651
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1011
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1012
 #: pcbnew/footprint_libraries_utils.cpp:524
 msgid "Add"
 msgstr "Adicionar"
@@ -10382,7 +10380,7 @@ msgid "Electrical Rules"
 msgstr "Verificador de Regras Elétricas (ERC)"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:75
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1003
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1004
 #: pcbnew/dialogs/dialog_board_statistics.cpp:668
 #: pcbnew/footprint_libraries_utils.cpp:516
 msgid "Project"
@@ -12494,7 +12492,7 @@ msgid "One of the nicknames will need to be changed after adding this library."
 msgstr "Selecione a Tabela de Bibliotecas para adicionar a biblioteca:"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:529
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1010
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1011
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:908
 #: pcbnew/footprint_libraries_utils.cpp:523
 msgid "Skip"
@@ -12526,7 +12524,7 @@ msgid ""
 msgstr ""
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:775
-#: pcbnew/dialogs/dialog_export_step.cpp:328
+#: pcbnew/dialogs/dialog_export_step.cpp:329
 #, c-format
 msgid "File '%s' already exists. Do you want overwrite this file?"
 msgstr "Ficheiro '%s' já existe. Deseja sobrescrever este ficheiro?"
@@ -12571,8 +12569,8 @@ msgstr ""
 #: eeschema/dialogs/panel_sym_lib_table.cpp:1075
 #: eeschema/dialogs/panel_sym_lib_table.cpp:1088
 #: eeschema/sch_base_frame.cpp:219 eeschema/sch_base_frame.cpp:236
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1390
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1445
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1391
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1446
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:1104
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:1117
 msgid "File Save Error"
@@ -15215,7 +15213,7 @@ msgid "KiCad Symbol Editor"
 msgstr "Editor de Símbolos"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:148
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:911
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:912
 #: eeschema/symbol_library.cpp:489 eeschema/symbol_tree_model_adapter.cpp:66
 msgid "Loading Symbol Libraries"
 msgstr "Carregando biblioteca de símbolos"
@@ -15240,41 +15238,41 @@ msgstr "Salvar alterações em \"%s\" antes de fechar?"
 msgid "Unit %s"
 msgstr "Unidade %s"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:721
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:722
 #, c-format
 msgid ""
 "Editing symbol %s from schematic.  Saving will update the schematic only."
 msgstr ""
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:730
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:731
 #, fuzzy
 msgid "Manage symbol libraries"
 msgstr "Gerenciar Bibliotecas de Símbolos..."
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:741
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:742
 msgid ""
 "Symbols in legacy libraries are not editable.  Use Manage Symbol Libraries "
 "to migrate to current format."
 msgstr ""
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:751
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:752
 #, c-format
 msgid "Symbol %s is derived from %s.  Symbol graphics will not be editable."
 msgstr ""
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:755
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:756
 #, fuzzy, c-format
 msgid "Open %s"
 msgstr ""
 "\n"
 "Abrir \"%s\"\n"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:826
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:827
 #, fuzzy, c-format
 msgid "Library '%s' already exists."
 msgstr "A biblioteca %s já existe."
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:834
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:835
 #, fuzzy, c-format
 msgid ""
 "Could not create the library file '%s'.\n"
@@ -15283,49 +15281,49 @@ msgstr ""
 "Não foi possível criar o ficheiro de biblioteca '%s'.\n"
 "Verifique a permissão de gravação."
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:844
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:845
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:211
 msgid "Could not open the library file."
 msgstr "Não foi possível abrir o ficheiro de biblioteca."
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:917
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:918
 #, fuzzy, c-format
 msgid "Loading library '%s'..."
 msgstr "Carregando biblioteca \"%s\""
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:991
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:992
 #: pcbnew/footprint_libraries_utils.cpp:504
 #, fuzzy
 msgid "Add the library to the global library table?"
 msgstr "Criar uma tabela de biblioteca %s global vazia"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:992
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:993
 #: pcbnew/footprint_libraries_utils.cpp:505
 #, fuzzy
 msgid "Add To Global Library Table"
 msgstr "Adicionar à Tabela de Bibliotecas"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1002
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1003
 #: pcbnew/footprint_libraries_utils.cpp:515
 msgid "Global"
 msgstr "Global"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1005
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1006
 #: pcbnew/footprint_libraries_utils.cpp:518
 msgid "Choose the Library Table to add the library to:"
 msgstr "Selecione a Tabela de Bibliotecas para adicionar a biblioteca:"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1006
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1007
 #: pcbnew/footprint_libraries_utils.cpp:519
 msgid "Add To Library Table"
 msgstr "Adicionar à Tabela de Bibliotecas"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1038
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1039
 #, fuzzy, c-format
 msgid "Failed to save backup to '%s'."
 msgstr "Falha ao salvar o backup em \"%s\""
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1184
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1185
 #: eeschema/symbol_viewer_frame.cpp:392
 #, fuzzy, c-format
 msgid ""
@@ -15336,12 +15334,12 @@ msgstr ""
 "\"%s\".\n"
 "Utilize \"Gerenciar Bibliotecas de Símbolos\" para editar a configuração."
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1187
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1188
 #: eeschema/symbol_viewer_frame.cpp:395
 msgid "Library not found in symbol library table."
 msgstr "Biblioteca não encontrada na tabela de biblioteca de símbolos."
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1195
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1196
 #: eeschema/symbol_viewer_frame.cpp:399
 #, fuzzy, c-format
 msgid ""
@@ -15352,13 +15350,13 @@ msgstr ""
 "na configuração atual.  Utilize \"Gerenciar Bibliotecas de Símbolos\" para\n"
 "editar a configuração."
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1198
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1199
 #: eeschema/symbol_viewer_frame.cpp:402
 msgid "Symbol library not enabled."
 msgstr "Biblioteca de símbolos não habilitada."
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1387
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1442
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1388
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1443
 #, fuzzy
 msgid "Error saving global library table."
 msgstr ""
@@ -15366,8 +15364,8 @@ msgstr ""
 "\n"
 "%s"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1388
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1443
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1389
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1444
 #, fuzzy
 msgid "Error saving project library table."
 msgstr ""
@@ -17552,52 +17550,64 @@ msgid "Gerber files (.g* .lgr .pho)"
 msgstr "Ficheiros Gerber (.g* .lgr .pho)"
 
 #: gerbview/files.cpp:144
-msgid "Top layer (*.GTL)|*.GTL;*.gtl|"
-msgstr "Camada Superior (*.GTL)|*.GTL;*.gtl|"
+#, fuzzy
+msgid "Top layer"
+msgstr "Para a camada:"
 
 #: gerbview/files.cpp:145
-msgid "Bottom layer (*.GBL)|*.GBL;*.gbl|"
-msgstr "Camada inferior (*.GBL)|*.GBL;*.gbl|"
+#, fuzzy
+msgid "Bottom layer"
+msgstr "Camada Inferior/Traseira:"
 
 #: gerbview/files.cpp:146
-msgid "Bottom solder resist (*.GBS)|*.GBS;*.gbs|"
-msgstr "Bottom solder resist (*.GBS)|*.GBS;*.gbs|"
+#, fuzzy
+msgid "Bottom solder resist"
+msgstr "Pasta de Solda Inferior"
 
 #: gerbview/files.cpp:147
-msgid "Top solder resist (*.GTS)|*.GTS;*.gts|"
-msgstr "Máscara de solda superior (*.GTS)|*.GTS;*.gts|"
+#, fuzzy
+msgid "Top solder resist"
+msgstr "Pasta de Solda Superior"
 
 #: gerbview/files.cpp:148
-msgid "Bottom overlay (*.GBO)|*.GBO;*.gbo|"
-msgstr "Sobreposição inferior (*.GBO)|*.GBO;*.gbo|"
+#, fuzzy
+msgid "Bottom overlay"
+msgstr "Máscara de Solda Inferior"
 
 #: gerbview/files.cpp:149
-msgid "Top overlay (*.GTO)|*.GTO;*.gto|"
-msgstr "Top overlay (*.GTO)|*.GTO;*.gto|"
+#, fuzzy
+msgid "Top overlay"
+msgstr "Máscara de Solda Superior"
 
 #: gerbview/files.cpp:150
-msgid "Bottom paste (*.GBP)|*.GBP;*.gbp|"
-msgstr "Pasta de solda inferior (*.GBP)|*.GBP;*.gto|"
+#, fuzzy
+msgid "Bottom paste"
+msgstr "Nada para colar"
 
 #: gerbview/files.cpp:151
-msgid "Top paste (*.GTP)|*.GTP;*.gtp|"
-msgstr "Pasta superior (*.GTP)|*.GTP;*.gtp|"
+#, fuzzy
+msgid "Top paste"
+msgstr "Pasta de Solda Superior"
 
 #: gerbview/files.cpp:152
-msgid "Keep-out layer (*.GKO)|*.GKO;*.gko|"
-msgstr "Camada isolamento (*.GTP)|*.GTP;*.gtp|"
+#, fuzzy
+msgid "Keep-out layer"
+msgstr "Afastar vias"
 
 #: gerbview/files.cpp:153
-msgid "Mechanical layers (*.GMx)|*.GM1;*.gm1;*.GM2;*.gm2;*.GM3;*.gm3|"
-msgstr "Camadas mecânicas (*.GMx)|*.GM1;*.gm1;*.GM2;*.gm2;*.GM3;*.gm3|"
+#, fuzzy
+msgid "Mechanical layers"
+msgstr "Camadas técnicas:"
 
 #: gerbview/files.cpp:154
-msgid "Top Pad Master (*.GPT)|*.GPT;*.gpt|"
-msgstr "Top Pad Master (*.GPT)|*.GPT;*.gpt|"
+#, fuzzy
+msgid "Top Pad Master"
+msgstr "Pasta de Solda Superior"
 
 #: gerbview/files.cpp:155
-msgid "Bottom Pad Master (*.GPB)|*.GPB;*.gpb|"
-msgstr "Bottom Pad Master (*.GPB)|*.GPB;*.gpb|"
+#, fuzzy
+msgid "Bottom Pad Master"
+msgstr "Pasta de Solda Inferior"
 
 #: gerbview/files.cpp:173
 msgid "Open Gerber File(s)"
@@ -20412,8 +20422,8 @@ msgstr ""
 "Gostaria de sair e cancelar as alterações?"
 
 #: pcb_calculator/regulators_funct.cpp:127
-#, c-format
-msgid "PCB Calculator data file (*.%s)|*.%s"
+#, fuzzy
+msgid "PCB Calculator data file"
 msgstr "Ficheiro de dados da Calculadora de PCI (*%s)|*.%s"
 
 #: pcb_calculator/regulators_funct.cpp:130
@@ -23420,25 +23430,25 @@ msgstr "Unidades de Saída:"
 msgid "Export IDFv3"
 msgstr "Exportar IDFv3"
 
-#: pcbnew/dialogs/dialog_export_step.cpp:188
+#: pcbnew/dialogs/dialog_export_step.cpp:189
 msgid "Non-unity scaled models:"
 msgstr ""
 
-#: pcbnew/dialogs/dialog_export_step.cpp:190
+#: pcbnew/dialogs/dialog_export_step.cpp:191
 msgid ""
 "Scaled models detected.  Model scaling is not reliable for mechanical export."
 msgstr ""
 
-#: pcbnew/dialogs/dialog_export_step.cpp:192
+#: pcbnew/dialogs/dialog_export_step.cpp:193
 #, fuzzy
 msgid "Model Scale Warning"
 msgstr "Alerta no Carregamento do Projeto"
 
-#: pcbnew/dialogs/dialog_export_step.cpp:254
+#: pcbnew/dialogs/dialog_export_step.cpp:255
 msgid "STEP export failed!  Please save the PCB and try again"
 msgstr "Falha na exportação do STEP! Por favor salve a PCI e tente novamente"
 
-#: pcbnew/dialogs/dialog_export_step.cpp:319
+#: pcbnew/dialogs/dialog_export_step.cpp:320
 #, fuzzy, c-format
 msgid ""
 "Board outline is missing or not closed using %.3f mm tolerance.\n"
@@ -23447,7 +23457,7 @@ msgstr ""
 "O contorno do Footprint está malformado. Execute o Footprint Checker para "
 "uma análise completa."
 
-#: pcbnew/dialogs/dialog_export_step.cpp:331
+#: pcbnew/dialogs/dialog_export_step.cpp:332
 msgid "STEP Export"
 msgstr "Exportar STEP"
 
@@ -36904,6 +36914,51 @@ msgstr "Editar Esquema Eletrônico"
 msgid "KiCad Printed Circuit Board"
 msgstr "Ficheiros de placa de circuito impresso do KiCad"
 
+#~ msgid "All Files (*.*)|*.*"
+#~ msgstr "Todos ficheiros (*.*)|*.*"
+
+#~ msgid "Executable file (*.exe)|*.exe"
+#~ msgstr "Ficheiro executável (*.exe)|*.exe"
+
+#~ msgid "Executable file (*)|*"
+#~ msgstr "Ficheiro executável (*)|*"
+
+#~ msgid "Top layer (*.GTL)|*.GTL;*.gtl|"
+#~ msgstr "Camada Superior (*.GTL)|*.GTL;*.gtl|"
+
+#~ msgid "Bottom layer (*.GBL)|*.GBL;*.gbl|"
+#~ msgstr "Camada inferior (*.GBL)|*.GBL;*.gbl|"
+
+#~ msgid "Bottom solder resist (*.GBS)|*.GBS;*.gbs|"
+#~ msgstr "Bottom solder resist (*.GBS)|*.GBS;*.gbs|"
+
+#~ msgid "Top solder resist (*.GTS)|*.GTS;*.gts|"
+#~ msgstr "Máscara de solda superior (*.GTS)|*.GTS;*.gts|"
+
+#~ msgid "Bottom overlay (*.GBO)|*.GBO;*.gbo|"
+#~ msgstr "Sobreposição inferior (*.GBO)|*.GBO;*.gbo|"
+
+#~ msgid "Top overlay (*.GTO)|*.GTO;*.gto|"
+#~ msgstr "Top overlay (*.GTO)|*.GTO;*.gto|"
+
+#~ msgid "Bottom paste (*.GBP)|*.GBP;*.gbp|"
+#~ msgstr "Pasta de solda inferior (*.GBP)|*.GBP;*.gto|"
+
+#~ msgid "Top paste (*.GTP)|*.GTP;*.gtp|"
+#~ msgstr "Pasta superior (*.GTP)|*.GTP;*.gtp|"
+
+#~ msgid "Keep-out layer (*.GKO)|*.GKO;*.gko|"
+#~ msgstr "Camada isolamento (*.GTP)|*.GTP;*.gtp|"
+
+#~ msgid "Mechanical layers (*.GMx)|*.GM1;*.gm1;*.GM2;*.gm2;*.GM3;*.gm3|"
+#~ msgstr "Camadas mecânicas (*.GMx)|*.GM1;*.gm1;*.GM2;*.gm2;*.GM3;*.gm3|"
+
+#~ msgid "Top Pad Master (*.GPT)|*.GPT;*.gpt|"
+#~ msgstr "Top Pad Master (*.GPT)|*.GPT;*.gpt|"
+
+#~ msgid "Bottom Pad Master (*.GPB)|*.GPB;*.gpb|"
+#~ msgstr "Bottom Pad Master (*.GPB)|*.GPB;*.gpb|"
+
 #, fuzzy
 #~ msgid "Background top:"
 #~ msgstr "Cor de fundo"
@@ -42370,9 +42425,6 @@ msgstr "Ficheiros de placa de circuito impresso do KiCad"
 
 #~ msgid "Could not load symbol \"%s\" from library \"%s\"."
 #~ msgstr "Não foi possível carregar o símbolo \"%s\" da biblioteca \"%s\"."
-
-#~ msgid "Nothing to paste"
-#~ msgstr "Nada para colar"
 
 #~ msgid "Match %i of %i: %s of %s in sheet %s"
 #~ msgstr "Correspondência %i de %i: %s de %s na folha %s"

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-20 11:53-0700\n"
+"POT-Creation-Date: 2021-08-20 13:14-0700\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -12,8 +12,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 2.0.7\n"
 
-msgid "All Files (*.*)|*.*"
-msgstr "All Files (*.*)|*.*"
+msgid "All Files"
+msgstr "All Files"
 
 #, c-format
 msgid "All supported files (%s)"
@@ -3387,11 +3387,8 @@ msgstr "Type mismatch between %lf and '%s'"
 msgid "No default editor found, you must choose it"
 msgstr "No default editor found, you must choose it"
 
-msgid "Executable file (*.exe)|*.exe"
-msgstr "Executable file (*.exe)|*.exe"
-
-msgid "Executable file (*)|*"
-msgstr "Executable file (*)|*"
+msgid "Executable file"
+msgstr "Executable file"
 
 msgid "Select Preferred Editor"
 msgstr "Select Preferred Editor"
@@ -11997,41 +11994,41 @@ msgstr "Job files"
 msgid "Gerber files (.g* .lgr .pho)"
 msgstr "Gerber files (.g* .lgr .pho)"
 
-msgid "Top layer (*.GTL)|*.GTL;*.gtl|"
-msgstr "Top layer (*.GTL)|*.GTL;*.gtl|"
+msgid "Top layer"
+msgstr "Top layer"
 
-msgid "Bottom layer (*.GBL)|*.GBL;*.gbl|"
-msgstr "Bottom layer (*.GBL)|*.GBL;*.gbl|"
+msgid "Bottom layer"
+msgstr "Bottom layer"
 
-msgid "Bottom solder resist (*.GBS)|*.GBS;*.gbs|"
-msgstr "Bottom solder resist (*.GBS)|*.GBS;*.gbs|"
+msgid "Bottom solder resist"
+msgstr "Bottom solder resist"
 
-msgid "Top solder resist (*.GTS)|*.GTS;*.gts|"
-msgstr "Top solder resist (*.GTS)|*.GTS;*.gts|"
+msgid "Top solder resist"
+msgstr "Top solder resist"
 
-msgid "Bottom overlay (*.GBO)|*.GBO;*.gbo|"
-msgstr "Bottom overlay (*.GBO)|*.GBO;*.gbo|"
+msgid "Bottom overlay"
+msgstr "Bottom overlay"
 
-msgid "Top overlay (*.GTO)|*.GTO;*.gto|"
-msgstr "Top overlay (*.GTO)|*.GTO;*.gto|"
+msgid "Top overlay"
+msgstr "Top overlay"
 
-msgid "Bottom paste (*.GBP)|*.GBP;*.gbp|"
-msgstr "Bottom paste (*.GBP)|*.GBP;*.gbp|"
+msgid "Bottom paste"
+msgstr "Bottom paste"
 
-msgid "Top paste (*.GTP)|*.GTP;*.gtp|"
-msgstr "Top paste (*.GTP)|*.GTP;*.gtp|"
+msgid "Top paste"
+msgstr "Top paste"
 
-msgid "Keep-out layer (*.GKO)|*.GKO;*.gko|"
-msgstr "Keep-out layer (*.GKO)|*.GKO;*.gko|"
+msgid "Keep-out layer"
+msgstr "Keep-out layer"
 
-msgid "Mechanical layers (*.GMx)|*.GM1;*.gm1;*.GM2;*.gm2;*.GM3;*.gm3|"
-msgstr "Mechanical layers (*.GMx)|*.GM1;*.gm1;*.GM2;*.gm2;*.GM3;*.gm3|"
+msgid "Mechanical layers"
+msgstr "Mechanical layers"
 
-msgid "Top Pad Master (*.GPT)|*.GPT;*.gpt|"
-msgstr "Top Pad Master (*.GPT)|*.GPT;*.gpt|"
+msgid "Top Pad Master"
+msgstr "Top Pad Master"
 
-msgid "Bottom Pad Master (*.GPB)|*.GPB;*.gpb|"
-msgstr "Bottom Pad Master (*.GPB)|*.GPB;*.gpb|"
+msgid "Bottom Pad Master"
+msgstr "Bottom Pad Master"
 
 msgid "Open Gerber File(s)"
 msgstr "Open Gerber File(s)"
@@ -14065,9 +14062,8 @@ msgstr ""
 "Unable to write file '%s'\n"
 "Do you want to exit and abandon your changes?"
 
-#, c-format
-msgid "PCB Calculator data file (*.%s)|*.%s"
-msgstr "PCB Calculator data file (*.%s)|*.%s"
+msgid "PCB Calculator data file"
+msgstr "PCB Calculator data file"
 
 msgid "Select PCB Calculator Data File"
 msgstr "Select PCB Calculator Data File"
@@ -26008,6 +26004,55 @@ msgstr "KiCad Schematic"
 
 msgid "KiCad Printed Circuit Board"
 msgstr "KiCad Printed Circuit Board"
+
+#~ msgid "All Files (*.*)|*.*"
+#~ msgstr "All Files (*.*)|*.*"
+
+#~ msgid "Executable file (*.exe)|*.exe"
+#~ msgstr "Executable file (*.exe)|*.exe"
+
+#~ msgid "Executable file (*)|*"
+#~ msgstr "Executable file (*)|*"
+
+#~ msgid "Top layer (*.GTL)|*.GTL;*.gtl|"
+#~ msgstr "Top layer (*.GTL)|*.GTL;*.gtl|"
+
+#~ msgid "Bottom layer (*.GBL)|*.GBL;*.gbl|"
+#~ msgstr "Bottom layer (*.GBL)|*.GBL;*.gbl|"
+
+#~ msgid "Bottom solder resist (*.GBS)|*.GBS;*.gbs|"
+#~ msgstr "Bottom solder resist (*.GBS)|*.GBS;*.gbs|"
+
+#~ msgid "Top solder resist (*.GTS)|*.GTS;*.gts|"
+#~ msgstr "Top solder resist (*.GTS)|*.GTS;*.gts|"
+
+#~ msgid "Bottom overlay (*.GBO)|*.GBO;*.gbo|"
+#~ msgstr "Bottom overlay (*.GBO)|*.GBO;*.gbo|"
+
+#~ msgid "Top overlay (*.GTO)|*.GTO;*.gto|"
+#~ msgstr "Top overlay (*.GTO)|*.GTO;*.gto|"
+
+#~ msgid "Bottom paste (*.GBP)|*.GBP;*.gbp|"
+#~ msgstr "Bottom paste (*.GBP)|*.GBP;*.gbp|"
+
+#~ msgid "Top paste (*.GTP)|*.GTP;*.gtp|"
+#~ msgstr "Top paste (*.GTP)|*.GTP;*.gtp|"
+
+#~ msgid "Keep-out layer (*.GKO)|*.GKO;*.gko|"
+#~ msgstr "Keep-out layer (*.GKO)|*.GKO;*.gko|"
+
+#~ msgid "Mechanical layers (*.GMx)|*.GM1;*.gm1;*.GM2;*.gm2;*.GM3;*.gm3|"
+#~ msgstr "Mechanical layers (*.GMx)|*.GM1;*.gm1;*.GM2;*.gm2;*.GM3;*.gm3|"
+
+#~ msgid "Top Pad Master (*.GPT)|*.GPT;*.gpt|"
+#~ msgstr "Top Pad Master (*.GPT)|*.GPT;*.gpt|"
+
+#~ msgid "Bottom Pad Master (*.GPB)|*.GPB;*.gpb|"
+#~ msgstr "Bottom Pad Master (*.GPB)|*.GPB;*.gpb|"
+
+#, c-format
+#~ msgid "PCB Calculator data file (*.%s)|*.%s"
+#~ msgstr "PCB Calculator data file (*.%s)|*.%s"
 
 #~ msgid "Background top:"
 #~ msgstr "Background top:"

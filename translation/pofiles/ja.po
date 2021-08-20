@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-20 11:53-0700\n"
+"POT-Creation-Date: 2021-08-20 13:14-0700\n"
 "PO-Revision-Date: 2021-08-13 15:17+0000\n"
 "Last-Translator: Ji Yoon Choi <chichoon.choi@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/master-"
@@ -21,8 +21,9 @@ msgstr ""
 "X-Poedit-SearchPath-0: .\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
-msgid "All Files (*.*)|*.*"
-msgstr "全てのファイル (*.*)|*.*"
+#, fuzzy
+msgid "All Files"
+msgstr "全てのファイル"
 
 #: 3d-viewer/3d_cache/dialogs/dialog_select_3d_model.cpp:94
 #, c-format
@@ -1645,27 +1646,27 @@ msgstr "リード開発の引退者"
 msgid "Additional Contributions By"
 msgstr "追加の貢献"
 
-#: common/dialog_about/AboutDialog_main.cpp:624
+#: common/dialog_about/AboutDialog_main.cpp:671
 msgid "Others"
 msgstr "その他"
 
-#: common/dialog_about/AboutDialog_main.cpp:644
+#: common/dialog_about/AboutDialog_main.cpp:691
 msgid "KiCad Librarian Team"
 msgstr "KiCadライブラリアンチーム"
 
-#: common/dialog_about/AboutDialog_main.cpp:659
+#: common/dialog_about/AboutDialog_main.cpp:706
 msgid "3D models by"
 msgstr "3D モデル by"
 
-#: common/dialog_about/AboutDialog_main.cpp:671
+#: common/dialog_about/AboutDialog_main.cpp:718
 msgid "Symbols by"
 msgstr "シンボル by"
 
-#: common/dialog_about/AboutDialog_main.cpp:678
+#: common/dialog_about/AboutDialog_main.cpp:725
 msgid "Footprints by"
 msgstr "フットプリント by"
 
-#: common/dialog_about/AboutDialog_main.cpp:691
+#: common/dialog_about/AboutDialog_main.cpp:738
 msgid "Icons by"
 msgstr "アイコン by"
 
@@ -5349,13 +5350,10 @@ msgid "No default editor found, you must choose it"
 msgstr ""
 "デフォルトのエディターが見つかりません。エディターを指定する必要があります"
 
-#: common/pgm_base.cpp:184
-msgid "Executable file (*.exe)|*.exe"
-msgstr "実行ファイル (*.exe)|*.exe"
-
-#: common/pgm_base.cpp:186
-msgid "Executable file (*)|*"
-msgstr "実行ファイル (*)|*"
+#: common/pgm_base.cpp:184 common/pgm_base.cpp:186
+#, fuzzy
+msgid "Executable file"
+msgstr "実行ファイル ("
 
 #: common/pgm_base.cpp:196
 msgid "Select Preferred Editor"
@@ -6952,7 +6950,7 @@ msgstr "シンボル フットプリント関連付けファイル (*.equ)"
 #: eeschema/dialogs/dialog_bus_manager.cpp:74
 #: eeschema/dialogs/dialog_bus_manager.cpp:108
 #: eeschema/dialogs/dialog_spice_model_base.cpp:651
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1011
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1012
 #: pcbnew/footprint_libraries_utils.cpp:524
 msgid "Add"
 msgstr "追加"
@@ -10134,7 +10132,7 @@ msgid "Electrical Rules"
 msgstr "エレクトリカル ルール"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:75
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1003
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1004
 #: pcbnew/dialogs/dialog_board_statistics.cpp:668
 #: pcbnew/footprint_libraries_utils.cpp:516
 msgid "Project"
@@ -12151,7 +12149,7 @@ msgstr ""
 "このライブラリを追加した後、ニックネームの1つを変更する必要があります。"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:529
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1010
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1011
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:908
 #: pcbnew/footprint_libraries_utils.cpp:523
 msgid "Skip"
@@ -12189,7 +12187,7 @@ msgstr ""
 "ルのエントリーと置き換えますか?"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:775
-#: pcbnew/dialogs/dialog_export_step.cpp:328
+#: pcbnew/dialogs/dialog_export_step.cpp:329
 #, c-format
 msgid "File '%s' already exists. Do you want overwrite this file?"
 msgstr "ファイル '%s' は既に存在します。このファイルを上書きしますか？"
@@ -12233,8 +12231,8 @@ msgstr ""
 #: eeschema/dialogs/panel_sym_lib_table.cpp:1075
 #: eeschema/dialogs/panel_sym_lib_table.cpp:1088
 #: eeschema/sch_base_frame.cpp:219 eeschema/sch_base_frame.cpp:236
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1390
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1445
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1391
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1446
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:1104
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:1117
 msgid "File Save Error"
@@ -14931,7 +14929,7 @@ msgid "KiCad Symbol Editor"
 msgstr "KiCad シンボル エディター"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:148
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:911
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:912
 #: eeschema/symbol_library.cpp:489 eeschema/symbol_tree_model_adapter.cpp:66
 msgid "Loading Symbol Libraries"
 msgstr "シンボル ライブラリーをロード中"
@@ -14955,18 +14953,18 @@ msgstr "閉じる前に回路図の変更を保存しますか?"
 msgid "Unit %s"
 msgstr "ユニット %s"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:721
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:722
 #, c-format
 msgid ""
 "Editing symbol %s from schematic.  Saving will update the schematic only."
 msgstr ""
 "回路図のシンボル %s を編集します。保存すると、回路図のみが更新されます。"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:730
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:731
 msgid "Manage symbol libraries"
 msgstr "シンボル ライブラリーを管理"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:741
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:742
 msgid ""
 "Symbols in legacy libraries are not editable.  Use Manage Symbol Libraries "
 "to migrate to current format."
@@ -14974,24 +14972,24 @@ msgstr ""
 "以前の形式のライブラリーのシンボルは編集できません。 現在の形式に移行するに"
 "は、 シンボル ライブラリーの管理を使用します。"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:751
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:752
 #, c-format
 msgid "Symbol %s is derived from %s.  Symbol graphics will not be editable."
 msgstr ""
 "シンボル %s は %s から派生しています。シンボルのグラフィックは編集できませ"
 "ん。"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:755
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:756
 #, c-format
 msgid "Open %s"
 msgstr "%s を開く"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:826
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:827
 #, c-format
 msgid "Library '%s' already exists."
 msgstr "ライブラリー '%s' は既に存在します。"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:834
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:835
 #, c-format
 msgid ""
 "Could not create the library file '%s'.\n"
@@ -15000,47 +14998,47 @@ msgstr ""
 "ライブラリー ファイル '%s' を作成できません。\n"
 "書き込み権限を確認して、再度試してください。"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:844
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:845
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:211
 msgid "Could not open the library file."
 msgstr "ライブラリー ファイルを開くことができません。"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:917
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:918
 #, c-format
 msgid "Loading library '%s'..."
 msgstr "ライブラリー '%s' をロードしています..."
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:991
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:992
 #: pcbnew/footprint_libraries_utils.cpp:504
 msgid "Add the library to the global library table?"
 msgstr "ライブラリーをグローバル ライブラリー テーブルを追加しますか?"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:992
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:993
 #: pcbnew/footprint_libraries_utils.cpp:505
 msgid "Add To Global Library Table"
 msgstr "グローバル ライブラリー テーブルへ追加"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1002
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1003
 #: pcbnew/footprint_libraries_utils.cpp:515
 msgid "Global"
 msgstr "グローバル"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1005
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1006
 #: pcbnew/footprint_libraries_utils.cpp:518
 msgid "Choose the Library Table to add the library to:"
 msgstr "ライブラリーを追加するライブラリー テーブルを選択:"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1006
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1007
 #: pcbnew/footprint_libraries_utils.cpp:519
 msgid "Add To Library Table"
 msgstr "ライブラリー テーブルへ追加"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1038
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1039
 #, c-format
 msgid "Failed to save backup to '%s'."
 msgstr "バックアップを '%s' に保存するのに失敗しました。"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1184
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1185
 #: eeschema/symbol_viewer_frame.cpp:392
 #, c-format
 msgid ""
@@ -15050,12 +15048,12 @@ msgstr ""
 "現在の設定はシンボル ライブラリー \"%s\" を含んでいません。\n"
 "設定を編集するには シンボル ライブラリーの管理 を使用して下さい。"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1187
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1188
 #: eeschema/symbol_viewer_frame.cpp:395
 msgid "Library not found in symbol library table."
 msgstr "ライブラリーがシンボル ライブラリー テーブルに見つかりません。"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1195
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1196
 #: eeschema/symbol_viewer_frame.cpp:399
 #, c-format
 msgid ""
@@ -15065,18 +15063,18 @@ msgstr ""
 "ライブラリー '%s' は現在の設定では有効ではありません。\n"
 "設定を編集するには シンボル ライブラリーの管理 を使用して下さい。"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1198
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1199
 #: eeschema/symbol_viewer_frame.cpp:402
 msgid "Symbol library not enabled."
 msgstr "シンボル ライブラリーが有効になっていません。"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1387
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1442
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1388
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1443
 msgid "Error saving global library table."
 msgstr "グローバル ライブラリー テーブルの保存中にエラーが発生しました。"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1388
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1443
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1389
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1444
 msgid "Error saving project library table."
 msgstr "プロジェクト ライブラリー テーブルの保存中にエラーが発生しました。"
 
@@ -17196,52 +17194,64 @@ msgid "Gerber files (.g* .lgr .pho)"
 msgstr "ガーバー ファイル (.g*, .lgr, .pho)"
 
 #: gerbview/files.cpp:144
-msgid "Top layer (*.GTL)|*.GTL;*.gtl|"
-msgstr "表面レイヤー (*.GTL)|*.GTL;*.gtl|"
+#, fuzzy
+msgid "Top layer"
+msgstr "移動先レイヤー:"
 
 #: gerbview/files.cpp:145
-msgid "Bottom layer (*.GBL)|*.GBL;*.gbl|"
-msgstr "裏面レイヤー (*.GBL)|*.GBL;*.gbl|"
+#, fuzzy
+msgid "Bottom layer"
+msgstr "下面/裏面レイヤー"
 
 #: gerbview/files.cpp:146
-msgid "Bottom solder resist (*.GBS)|*.GBS;*.gbs|"
-msgstr "裏面レジスト (*.GBS)|*.GBS;*.gbs|"
+#, fuzzy
+msgid "Bottom solder resist"
+msgstr "裏面層ハンダ ペースト"
 
 #: gerbview/files.cpp:147
-msgid "Top solder resist (*.GTS)|*.GTS;*.gts|"
-msgstr "表面レジスト (*.GTS)|*.GTS;*.gts|"
+#, fuzzy
+msgid "Top solder resist"
+msgstr "表面層ハンダ ペースト"
 
 #: gerbview/files.cpp:148
-msgid "Bottom overlay (*.GBO)|*.GBO;*.gbo|"
-msgstr "裏面オーバーレイ (*.GBO)|*.GBO;*.gbo|"
+#, fuzzy
+msgid "Bottom overlay"
+msgstr "裏面層ハンダ マスク"
 
 #: gerbview/files.cpp:149
-msgid "Top overlay (*.GTO)|*.GTO;*.gto|"
-msgstr "表面オーバーレイ (*.GTO)|*.GTO;*.gto|"
+#, fuzzy
+msgid "Top overlay"
+msgstr "表面層ハンダ マスク"
 
 #: gerbview/files.cpp:150
-msgid "Bottom paste (*.GBP)|*.GBP;*.gbp|"
-msgstr "裏面ペースト (*.GBP)|*.GBP;*.gbp|"
+#, fuzzy
+msgid "Bottom paste"
+msgstr "ペーストするものがありません"
 
 #: gerbview/files.cpp:151
-msgid "Top paste (*.GTP)|*.GTP;*.gtp|"
-msgstr "表面ペースト (*.GTP)|*.GTP;*.gtp|"
+#, fuzzy
+msgid "Top paste"
+msgstr "表面層ハンダ ペースト"
 
 #: gerbview/files.cpp:152
-msgid "Keep-out layer (*.GKO)|*.GKO;*.gko|"
-msgstr "キープアウト レイヤー (*.GKO)|*.GKO;*.gko|"
+#, fuzzy
+msgid "Keep-out layer"
+msgstr "外側のレイヤーを維持(&o)"
 
 #: gerbview/files.cpp:153
-msgid "Mechanical layers (*.GMx)|*.GM1;*.gm1;*.GM2;*.gm2;*.GM3;*.gm3|"
-msgstr "メカニカル レイヤー (*.GMx)|*.GM1;*.gm1;*.GM2;*.gm2;*.GM3;*.gm3|"
+#, fuzzy
+msgid "Mechanical layers"
+msgstr "テクニカル レイヤー:"
 
 #: gerbview/files.cpp:154
-msgid "Top Pad Master (*.GPT)|*.GPT;*.gpt|"
-msgstr "表面パッド マスター (*.GPT)|*.GPT;*.gpt|"
+#, fuzzy
+msgid "Top Pad Master"
+msgstr "表面層ハンダ ペースト"
 
 #: gerbview/files.cpp:155
-msgid "Bottom Pad Master (*.GPB)|*.GPB;*.gpb|"
-msgstr "裏面パッド マスター (*.GPB)|*.GPB;*.gpb|"
+#, fuzzy
+msgid "Bottom Pad Master"
+msgstr "裏面層ハンダ ペースト"
 
 #: gerbview/files.cpp:173
 msgid "Open Gerber File(s)"
@@ -19966,8 +19976,8 @@ msgstr ""
 "変更を破棄して終了しますか？"
 
 #: pcb_calculator/regulators_funct.cpp:127
-#, c-format
-msgid "PCB Calculator data file (*.%s)|*.%s"
+#, fuzzy
+msgid "PCB Calculator data file"
 msgstr "PCB 電卓データ ファイル (*.%s)|*.%s"
 
 #: pcb_calculator/regulators_funct.cpp:130
@@ -22865,26 +22875,26 @@ msgstr "出力単位"
 msgid "Export IDFv3"
 msgstr "IDFv3のエクスポート"
 
-#: pcbnew/dialogs/dialog_export_step.cpp:188
+#: pcbnew/dialogs/dialog_export_step.cpp:189
 msgid "Non-unity scaled models:"
 msgstr "スケールが不統一のモデル:"
 
-#: pcbnew/dialogs/dialog_export_step.cpp:190
+#: pcbnew/dialogs/dialog_export_step.cpp:191
 msgid ""
 "Scaled models detected.  Model scaling is not reliable for mechanical export."
 msgstr ""
 "スケールされたモデルが検出されました。  モデルのスケーリングは、機械向けのエ"
 "クスポートとして信頼できるものではありません。"
 
-#: pcbnew/dialogs/dialog_export_step.cpp:192
+#: pcbnew/dialogs/dialog_export_step.cpp:193
 msgid "Model Scale Warning"
 msgstr "モデルスケールの警告"
 
-#: pcbnew/dialogs/dialog_export_step.cpp:254
+#: pcbnew/dialogs/dialog_export_step.cpp:255
 msgid "STEP export failed!  Please save the PCB and try again"
 msgstr "STEP のエクスポートに失敗しました！基板を保存して、再実行して下さい"
 
-#: pcbnew/dialogs/dialog_export_step.cpp:319
+#: pcbnew/dialogs/dialog_export_step.cpp:320
 #, c-format
 msgid ""
 "Board outline is missing or not closed using %.3f mm tolerance.\n"
@@ -22893,7 +22903,7 @@ msgstr ""
 "基板外形がないか、%.3f mm の許容誤差で閉じられていません。\n"
 "完全な解析のためにDRCを実行してください。"
 
-#: pcbnew/dialogs/dialog_export_step.cpp:331
+#: pcbnew/dialogs/dialog_export_step.cpp:332
 msgid "STEP Export"
 msgstr "STEP エクスポート"
 
@@ -35730,6 +35740,51 @@ msgstr "KiCad 回路図ファイル"
 msgid "KiCad Printed Circuit Board"
 msgstr "KiCad プリント基板ファイル"
 
+#~ msgid "All Files (*.*)|*.*"
+#~ msgstr "全てのファイル (*.*)|*.*"
+
+#~ msgid "Executable file (*.exe)|*.exe"
+#~ msgstr "実行ファイル (*.exe)|*.exe"
+
+#~ msgid "Executable file (*)|*"
+#~ msgstr "実行ファイル (*)|*"
+
+#~ msgid "Top layer (*.GTL)|*.GTL;*.gtl|"
+#~ msgstr "表面レイヤー (*.GTL)|*.GTL;*.gtl|"
+
+#~ msgid "Bottom layer (*.GBL)|*.GBL;*.gbl|"
+#~ msgstr "裏面レイヤー (*.GBL)|*.GBL;*.gbl|"
+
+#~ msgid "Bottom solder resist (*.GBS)|*.GBS;*.gbs|"
+#~ msgstr "裏面レジスト (*.GBS)|*.GBS;*.gbs|"
+
+#~ msgid "Top solder resist (*.GTS)|*.GTS;*.gts|"
+#~ msgstr "表面レジスト (*.GTS)|*.GTS;*.gts|"
+
+#~ msgid "Bottom overlay (*.GBO)|*.GBO;*.gbo|"
+#~ msgstr "裏面オーバーレイ (*.GBO)|*.GBO;*.gbo|"
+
+#~ msgid "Top overlay (*.GTO)|*.GTO;*.gto|"
+#~ msgstr "表面オーバーレイ (*.GTO)|*.GTO;*.gto|"
+
+#~ msgid "Bottom paste (*.GBP)|*.GBP;*.gbp|"
+#~ msgstr "裏面ペースト (*.GBP)|*.GBP;*.gbp|"
+
+#~ msgid "Top paste (*.GTP)|*.GTP;*.gtp|"
+#~ msgstr "表面ペースト (*.GTP)|*.GTP;*.gtp|"
+
+#~ msgid "Keep-out layer (*.GKO)|*.GKO;*.gko|"
+#~ msgstr "キープアウト レイヤー (*.GKO)|*.GKO;*.gko|"
+
+#~ msgid "Mechanical layers (*.GMx)|*.GM1;*.gm1;*.GM2;*.gm2;*.GM3;*.gm3|"
+#~ msgstr "メカニカル レイヤー (*.GMx)|*.GM1;*.gm1;*.GM2;*.gm2;*.GM3;*.gm3|"
+
+#~ msgid "Top Pad Master (*.GPT)|*.GPT;*.gpt|"
+#~ msgstr "表面パッド マスター (*.GPT)|*.GPT;*.gpt|"
+
+#~ msgid "Bottom Pad Master (*.GPB)|*.GPB;*.gpb|"
+#~ msgstr "裏面パッド マスター (*.GPB)|*.GPB;*.gpb|"
+
 #~ msgid "Background top:"
 #~ msgstr "背景上端:"
 
@@ -44435,9 +44490,6 @@ msgstr "KiCad プリント基板ファイル"
 #~ msgid "Delete Bus Entry"
 #~ msgstr "バス エントリーを削除"
 
-#~ msgid "Nothing to paste"
-#~ msgstr "ペーストするものがありません"
-
 #~ msgid "Match %i of %i: %s of %s in sheet %s"
 #~ msgstr "一致 %i - %i: %s - %s シート %s"
 
@@ -51565,9 +51617,6 @@ msgstr "KiCad プリント基板ファイル"
 
 #~ msgid "Top/Front layer"
 #~ msgstr "上面/表面レイヤー"
-
-#~ msgid "Bottom/Back layer"
-#~ msgstr "下面/裏面レイヤー"
 
 #~ msgid "Preset Layer Groupings"
 #~ msgstr "プリセットレイヤーのグループ"

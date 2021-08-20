@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-20 11:53-0700\n"
+"POT-Creation-Date: 2021-08-20 13:14-0700\n"
 "PO-Revision-Date: 2021-03-19 16:01+0000\n"
 "Last-Translator: radix <neutrino@gmx.co.uk>\n"
 "Language-Team: Slovenian <https://hosted.weblate.org/projects/kicad/master-"
@@ -26,8 +26,9 @@ msgstr ""
 "X-Poedit-SearchPath-5: common\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
-msgid "All Files (*.*)|*.*"
-msgstr "Vse datoteke (*. *) | *. *"
+#, fuzzy
+msgid "All Files"
+msgstr "Vse datoteke"
 
 #: 3d-viewer/3d_cache/dialogs/dialog_select_3d_model.cpp:94
 #, c-format
@@ -1702,27 +1703,27 @@ msgstr "Vodilni razvojni alumni"
 msgid "Additional Contributions By"
 msgstr "Dodatni prispevki avtorja"
 
-#: common/dialog_about/AboutDialog_main.cpp:624
+#: common/dialog_about/AboutDialog_main.cpp:671
 msgid "Others"
 msgstr "Drugi"
 
-#: common/dialog_about/AboutDialog_main.cpp:644
+#: common/dialog_about/AboutDialog_main.cpp:691
 msgid "KiCad Librarian Team"
 msgstr "Bibliotekarska ekipa KiCad"
 
-#: common/dialog_about/AboutDialog_main.cpp:659
+#: common/dialog_about/AboutDialog_main.cpp:706
 msgid "3D models by"
 msgstr "3D modeli avtorja"
 
-#: common/dialog_about/AboutDialog_main.cpp:671
+#: common/dialog_about/AboutDialog_main.cpp:718
 msgid "Symbols by"
 msgstr "Simboli"
 
-#: common/dialog_about/AboutDialog_main.cpp:678
+#: common/dialog_about/AboutDialog_main.cpp:725
 msgid "Footprints by"
 msgstr "Odtisi stopinj"
 
-#: common/dialog_about/AboutDialog_main.cpp:691
+#: common/dialog_about/AboutDialog_main.cpp:738
 msgid "Icons by"
 msgstr "Ikone avtorja"
 
@@ -5474,13 +5475,10 @@ msgstr ""
 msgid "No default editor found, you must choose it"
 msgstr "Privzetega urejevalnika ni bilo mogoče najti, izbrati ga morate"
 
-#: common/pgm_base.cpp:184
-msgid "Executable file (*.exe)|*.exe"
-msgstr "Izvršljiva datoteka (* .exe) | * .exe"
-
-#: common/pgm_base.cpp:186
-msgid "Executable file (*)|*"
-msgstr "Izvršljiva datoteka (*) | *"
+#: common/pgm_base.cpp:184 common/pgm_base.cpp:186
+#, fuzzy
+msgid "Executable file"
+msgstr "Izvršljive datoteke ("
 
 #: common/pgm_base.cpp:196
 msgid "Select Preferred Editor"
@@ -7084,7 +7082,7 @@ msgstr "Datoteke združenja Symbol Footprint Association (.equ)"
 #: eeschema/dialogs/dialog_bus_manager.cpp:74
 #: eeschema/dialogs/dialog_bus_manager.cpp:108
 #: eeschema/dialogs/dialog_spice_model_base.cpp:651
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1011
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1012
 #: pcbnew/footprint_libraries_utils.cpp:524
 msgid "Add"
 msgstr "Dodaj"
@@ -10272,7 +10270,7 @@ msgid "Electrical Rules"
 msgstr "Električna pravila"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:75
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1003
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1004
 #: pcbnew/dialogs/dialog_board_statistics.cpp:668
 #: pcbnew/footprint_libraries_utils.cpp:516
 msgid "Project"
@@ -12321,7 +12319,7 @@ msgid "One of the nicknames will need to be changed after adding this library."
 msgstr "Po dodajanju te knjižnice bo treba spremeniti enega od vzdevkov."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:529
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1010
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1011
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:908
 #: pcbnew/footprint_libraries_utils.cpp:523
 msgid "Skip"
@@ -12360,7 +12358,7 @@ msgstr ""
 "zamenjajte stare vnose v tabeli?"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:775
-#: pcbnew/dialogs/dialog_export_step.cpp:328
+#: pcbnew/dialogs/dialog_export_step.cpp:329
 #, c-format
 msgid "File '%s' already exists. Do you want overwrite this file?"
 msgstr "Datoteka '%s' že obstaja. Ali želite prepisati to datoteko?"
@@ -12405,8 +12403,8 @@ msgstr ""
 #: eeschema/dialogs/panel_sym_lib_table.cpp:1075
 #: eeschema/dialogs/panel_sym_lib_table.cpp:1088
 #: eeschema/sch_base_frame.cpp:219 eeschema/sch_base_frame.cpp:236
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1390
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1445
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1391
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1446
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:1104
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:1117
 msgid "File Save Error"
@@ -15188,7 +15186,7 @@ msgid "KiCad Symbol Editor"
 msgstr "Urejevalnik simbolov"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:148
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:911
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:912
 #: eeschema/symbol_library.cpp:489 eeschema/symbol_tree_model_adapter.cpp:66
 msgid "Loading Symbol Libraries"
 msgstr "Nalaganje knjižnic simbolov"
@@ -15212,17 +15210,17 @@ msgstr "Ali želite shraniti spremembe v shemo, preden zaprete?"
 msgid "Unit %s"
 msgstr "Enota %s"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:721
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:722
 #, c-format
 msgid ""
 "Editing symbol %s from schematic.  Saving will update the schematic only."
 msgstr "Urejanje simbola %s iz sheme. Shranjevanje bo posodobilo samo shemo."
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:730
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:731
 msgid "Manage symbol libraries"
 msgstr "Upravljanje knjižnic simbolov"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:741
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:742
 msgid ""
 "Symbols in legacy libraries are not editable.  Use Manage Symbol Libraries "
 "to migrate to current format."
@@ -15230,22 +15228,22 @@ msgstr ""
 "Simbolov v starejših knjižnicah ni mogoče urejati. Za prehod na trenutno "
 "obliko uporabite Upravljanje knjižnic simbolov."
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:751
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:752
 #, c-format
 msgid "Symbol %s is derived from %s.  Symbol graphics will not be editable."
 msgstr "Simbol %s izhaja iz %s. Grafike simbolov ne bo mogoče urejati."
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:755
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:756
 #, c-format
 msgid "Open %s"
 msgstr "Odpri %s"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:826
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:827
 #, fuzzy, c-format
 msgid "Library '%s' already exists."
 msgstr "Knjižnica %s že obstaja."
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:834
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:835
 #, fuzzy, c-format
 msgid ""
 "Could not create the library file '%s'.\n"
@@ -15254,47 +15252,47 @@ msgstr ""
 "Datoteke knjižnice '%s' ni bilo mogoče ustvariti.\n"
 "Preverite dovoljenje za pisanje."
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:844
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:845
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:211
 msgid "Could not open the library file."
 msgstr "Datoteke knjižnice ni bilo mogoče odpreti."
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:917
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:918
 #, fuzzy, c-format
 msgid "Loading library '%s'..."
 msgstr "Nalaganje knjižnice \"%s\""
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:991
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:992
 #: pcbnew/footprint_libraries_utils.cpp:504
 msgid "Add the library to the global library table?"
 msgstr "Želite knjižnico dodati v tabelo globalne knjižnice?"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:992
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:993
 #: pcbnew/footprint_libraries_utils.cpp:505
 msgid "Add To Global Library Table"
 msgstr "Dodaj v tabelo globalne knjižnice"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1002
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1003
 #: pcbnew/footprint_libraries_utils.cpp:515
 msgid "Global"
 msgstr "Globalno"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1005
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1006
 #: pcbnew/footprint_libraries_utils.cpp:518
 msgid "Choose the Library Table to add the library to:"
 msgstr "Izberite tabelo knjižnice, v katero želite dodati knjižnico:"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1006
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1007
 #: pcbnew/footprint_libraries_utils.cpp:519
 msgid "Add To Library Table"
 msgstr "Dodaj v tabelo knjižnice"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1038
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1039
 #, fuzzy, c-format
 msgid "Failed to save backup to '%s'."
 msgstr "Varnostne kopije ni bilo mogoče shraniti v »%s«"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1184
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1185
 #: eeschema/symbol_viewer_frame.cpp:392
 #, c-format
 msgid ""
@@ -15304,12 +15302,12 @@ msgstr ""
 "Trenutna konfiguracija ne vključuje knjižnice '%s'.\n"
 "Za urejanje konfiguracije uporabite Upravljanje knjižnic simbolov."
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1187
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1188
 #: eeschema/symbol_viewer_frame.cpp:395
 msgid "Library not found in symbol library table."
 msgstr "Knjižnice ni mogoče najti v tabeli knjižnice simbolov."
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1195
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1196
 #: eeschema/symbol_viewer_frame.cpp:399
 #, c-format
 msgid ""
@@ -15319,13 +15317,13 @@ msgstr ""
 "Knjižnica '%s' v trenutni konfiguraciji ni omogočena.\n"
 "Za urejanje konfiguracije uporabite Upravljanje knjižnic simbolov."
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1198
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1199
 #: eeschema/symbol_viewer_frame.cpp:402
 msgid "Symbol library not enabled."
 msgstr "Knjižnica simbolov ni omogočena."
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1387
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1442
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1388
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1443
 #, fuzzy
 msgid "Error saving global library table."
 msgstr ""
@@ -15333,8 +15331,8 @@ msgstr ""
 "\n"
 "%s"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1388
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1443
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1389
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1444
 #, fuzzy
 msgid "Error saving project library table."
 msgstr ""
@@ -17488,53 +17486,64 @@ msgid "Gerber files (.g* .lgr .pho)"
 msgstr "Datoteke Gerber (.g * .lgr .pho)"
 
 #: gerbview/files.cpp:144
-msgid "Top layer (*.GTL)|*.GTL;*.gtl|"
-msgstr "Zgornja plast (* .GTL) | * .GTL; *. Gtl |"
+#, fuzzy
+msgid "Top layer"
+msgstr "Za plast:"
 
 #: gerbview/files.cpp:145
-msgid "Bottom layer (*.GBL)|*.GBL;*.gbl|"
-msgstr "Spodnja plast (* .GBL) | * .GBL; *. Gbl |"
+#, fuzzy
+msgid "Bottom layer"
+msgstr "Spodnji / zadnji sloj:"
 
 #: gerbview/files.cpp:146
-msgid "Bottom solder resist (*.GBS)|*.GBS;*.gbs|"
-msgstr "Spodnji upor za spajkanje (* .GBS) | * .GBS; *. Gbs |"
+#, fuzzy
+msgid "Bottom solder resist"
+msgstr "Spodnja spajkalna pasta"
 
 #: gerbview/files.cpp:147
-msgid "Top solder resist (*.GTS)|*.GTS;*.gts|"
-msgstr "Upor gornje spajke (* .GTS) | * .GTS; *. Gts |"
+#, fuzzy
+msgid "Top solder resist"
+msgstr "Top spajkalna pasta"
 
 #: gerbview/files.cpp:148
-msgid "Bottom overlay (*.GBO)|*.GBO;*.gbo|"
-msgstr "Prekrivanje od spodaj (* .GBO) | * .GBO; *. Gbo |"
+#, fuzzy
+msgid "Bottom overlay"
+msgstr "Spodnja maska za spajkanje"
 
 #: gerbview/files.cpp:149
-msgid "Top overlay (*.GTO)|*.GTO;*.gto|"
-msgstr "Vrh prekrivanja (* .GTO) | * .GTO; *. Gto |"
+#, fuzzy
+msgid "Top overlay"
+msgstr "Top spajka maska"
 
 #: gerbview/files.cpp:150
-msgid "Bottom paste (*.GBP)|*.GBP;*.gbp|"
-msgstr "Spodnja pasta (* .GBP) | * .GBP; *. Gbp |"
+#, fuzzy
+msgid "Bottom paste"
+msgstr "Ni elementov za shranjevanje"
 
 #: gerbview/files.cpp:151
-msgid "Top paste (*.GTP)|*.GTP;*.gtp|"
-msgstr "Vrhnja pasta (* .GTP) | * .GTP; *. Gtp |"
+#, fuzzy
+msgid "Top paste"
+msgstr "Top spajkalna pasta"
 
 #: gerbview/files.cpp:152
-msgid "Keep-out layer (*.GKO)|*.GKO;*.gko|"
-msgstr "Nadaljevalni sloj (* .GKO) | * .GKO; *. Gko |"
+#, fuzzy
+msgid "Keep-out layer"
+msgstr "Izogibajte se viasom"
 
 #: gerbview/files.cpp:153
-msgid "Mechanical layers (*.GMx)|*.GM1;*.gm1;*.GM2;*.gm2;*.GM3;*.gm3|"
-msgstr ""
-"Mehanske plasti (* .GMx) | * .GM1; *. Gm1; *. GM2; *. Gm2; *. GM3; *. Gm3 |"
+#, fuzzy
+msgid "Mechanical layers"
+msgstr "Tehnične plasti:"
 
 #: gerbview/files.cpp:154
-msgid "Top Pad Master (*.GPT)|*.GPT;*.gpt|"
-msgstr "Top Pad Master (* .GPT) | * .GPT; *. Gpt |"
+#, fuzzy
+msgid "Top Pad Master"
+msgstr "Top spajkalna pasta"
 
 #: gerbview/files.cpp:155
-msgid "Bottom Pad Master (*.GPB)|*.GPB;*.gpb|"
-msgstr "Spodnja ploščica (* .GPB) | * .GPB; *. Gpb |"
+#, fuzzy
+msgid "Bottom Pad Master"
+msgstr "Spodnja spajkalna pasta"
 
 #: gerbview/files.cpp:173
 msgid "Open Gerber File(s)"
@@ -20349,8 +20358,8 @@ msgstr ""
 "Ali želite zapustiti in opustiti svojo spremembo?"
 
 #: pcb_calculator/regulators_funct.cpp:127
-#, c-format
-msgid "PCB Calculator data file (*.%s)|*.%s"
+#, fuzzy
+msgid "PCB Calculator data file"
 msgstr "Podatkovna datoteka kalkulatorja PCB (*. %s) | *. %s"
 
 #: pcb_calculator/regulators_funct.cpp:130
@@ -23326,25 +23335,25 @@ msgstr "Izhodne enote"
 msgid "Export IDFv3"
 msgstr "Izvozi IDFv3"
 
-#: pcbnew/dialogs/dialog_export_step.cpp:188
+#: pcbnew/dialogs/dialog_export_step.cpp:189
 msgid "Non-unity scaled models:"
 msgstr ""
 
-#: pcbnew/dialogs/dialog_export_step.cpp:190
+#: pcbnew/dialogs/dialog_export_step.cpp:191
 msgid ""
 "Scaled models detected.  Model scaling is not reliable for mechanical export."
 msgstr ""
 
-#: pcbnew/dialogs/dialog_export_step.cpp:192
+#: pcbnew/dialogs/dialog_export_step.cpp:193
 #, fuzzy
 msgid "Model Scale Warning"
 msgstr "Opozorilo o shranjevanju projekta"
 
-#: pcbnew/dialogs/dialog_export_step.cpp:254
+#: pcbnew/dialogs/dialog_export_step.cpp:255
 msgid "STEP export failed!  Please save the PCB and try again"
 msgstr "Izvoz STEP ni uspel! Shranite tiskano vezje in poskusite znova"
 
-#: pcbnew/dialogs/dialog_export_step.cpp:319
+#: pcbnew/dialogs/dialog_export_step.cpp:320
 #, fuzzy, c-format
 msgid ""
 "Board outline is missing or not closed using %.3f mm tolerance.\n"
@@ -23353,7 +23362,7 @@ msgstr ""
 "Oblika plošče manjka ali je napačno oblikovana. Zaženite DRC za popolno "
 "analizo."
 
-#: pcbnew/dialogs/dialog_export_step.cpp:331
+#: pcbnew/dialogs/dialog_export_step.cpp:332
 msgid "STEP Export"
 msgstr "KORAK Izvoz"
 
@@ -36454,6 +36463,53 @@ msgstr "Uredi shemo"
 msgid "KiCad Printed Circuit Board"
 msgstr "Datoteke tiskanih vezij KiCad"
 
+#~ msgid "All Files (*.*)|*.*"
+#~ msgstr "Vse datoteke (*. *) | *. *"
+
+#~ msgid "Executable file (*.exe)|*.exe"
+#~ msgstr "Izvršljiva datoteka (* .exe) | * .exe"
+
+#~ msgid "Executable file (*)|*"
+#~ msgstr "Izvršljiva datoteka (*) | *"
+
+#~ msgid "Top layer (*.GTL)|*.GTL;*.gtl|"
+#~ msgstr "Zgornja plast (* .GTL) | * .GTL; *. Gtl |"
+
+#~ msgid "Bottom layer (*.GBL)|*.GBL;*.gbl|"
+#~ msgstr "Spodnja plast (* .GBL) | * .GBL; *. Gbl |"
+
+#~ msgid "Bottom solder resist (*.GBS)|*.GBS;*.gbs|"
+#~ msgstr "Spodnji upor za spajkanje (* .GBS) | * .GBS; *. Gbs |"
+
+#~ msgid "Top solder resist (*.GTS)|*.GTS;*.gts|"
+#~ msgstr "Upor gornje spajke (* .GTS) | * .GTS; *. Gts |"
+
+#~ msgid "Bottom overlay (*.GBO)|*.GBO;*.gbo|"
+#~ msgstr "Prekrivanje od spodaj (* .GBO) | * .GBO; *. Gbo |"
+
+#~ msgid "Top overlay (*.GTO)|*.GTO;*.gto|"
+#~ msgstr "Vrh prekrivanja (* .GTO) | * .GTO; *. Gto |"
+
+#~ msgid "Bottom paste (*.GBP)|*.GBP;*.gbp|"
+#~ msgstr "Spodnja pasta (* .GBP) | * .GBP; *. Gbp |"
+
+#~ msgid "Top paste (*.GTP)|*.GTP;*.gtp|"
+#~ msgstr "Vrhnja pasta (* .GTP) | * .GTP; *. Gtp |"
+
+#~ msgid "Keep-out layer (*.GKO)|*.GKO;*.gko|"
+#~ msgstr "Nadaljevalni sloj (* .GKO) | * .GKO; *. Gko |"
+
+#~ msgid "Mechanical layers (*.GMx)|*.GM1;*.gm1;*.GM2;*.gm2;*.GM3;*.gm3|"
+#~ msgstr ""
+#~ "Mehanske plasti (* .GMx) | * .GM1; *. Gm1; *. GM2; *. Gm2; *. GM3; *. Gm3 "
+#~ "|"
+
+#~ msgid "Top Pad Master (*.GPT)|*.GPT;*.gpt|"
+#~ msgstr "Top Pad Master (* .GPT) | * .GPT; *. Gpt |"
+
+#~ msgid "Bottom Pad Master (*.GPB)|*.GPB;*.gpb|"
+#~ msgstr "Spodnja ploščica (* .GPB) | * .GPB; *. Gpb |"
+
 #, fuzzy
 #~ msgid "Background top:"
 #~ msgstr "Ozadje"
@@ -39893,10 +39949,6 @@ msgstr "Datoteke tiskanih vezij KiCad"
 #, fuzzy
 #~ msgid "Delete Bus Entry"
 #~ msgstr "briši vodilo"
-
-#, fuzzy
-#~ msgid "Nothing to paste"
-#~ msgstr "Ni elementov za shranjevanje"
 
 #, fuzzy
 #~ msgid "Match %i of %i: %s in sheet %s"
