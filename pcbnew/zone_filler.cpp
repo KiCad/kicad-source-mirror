@@ -600,10 +600,9 @@ void ZONE_FILLER::knockoutThermalReliefs( const ZONE* aZone, PCB_LAYER_ID aLayer
     {
         for( PAD* pad : footprint->Pads() )
         {
-            if( !pad->IsOnLayer( aLayer ) )
-                continue;
-
-            if( pad->GetNetCode() != aZone->GetNetCode() || pad->GetNetCode() <= 0 )
+            if( !pad->IsOnLayer( aLayer )
+                    || pad->GetNetCode() != aZone->GetNetCode()
+                    || pad->GetNetCode() <= 0 )
             {
                 aNoConnectionPads.push_back( pad );
                 continue;

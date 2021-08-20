@@ -37,6 +37,16 @@ DRC_RULE::DRC_RULE() :
 }
 
 
+DRC_RULE::DRC_RULE( const wxString& aName ) :
+        m_Unary( false ),
+        m_Implicit( false ),
+        m_Name( aName ),
+        m_LayerCondition( LSET::AllLayersMask() ),
+        m_Condition( nullptr )
+{
+}
+
+
 DRC_RULE::~DRC_RULE()
 {
     delete m_Condition;

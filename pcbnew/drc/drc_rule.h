@@ -89,6 +89,8 @@ class DRC_RULE
 {
 public:
     DRC_RULE();
+    DRC_RULE( const wxString& aName );
+
     virtual ~DRC_RULE();
 
     virtual bool AppliesTo( const BOARD_ITEM* a, const BOARD_ITEM* b = nullptr ) const
