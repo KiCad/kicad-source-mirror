@@ -16,7 +16,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-08-20 11:53-0700\n"
 "PO-Revision-Date: 2021-08-21 00:58+0000\n"
-"Last-Translator: Ji Yoon Choi <chichoon.choi@gmail.com>\n"
+"Last-Translator: 킴슨김랑기 <korearf@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
 "Language: ko\n"
@@ -213,9 +213,9 @@ msgid "Build Tech layers"
 msgstr "기술 레이어 생성"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:909
-#, fuzzy, c-format
+#, c-format
 msgid "Build Tech layer %d"
-msgstr "기술 레이어 생성"
+msgstr "기술 레이어 생성 %d"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1054
 msgid "Build BVH for holes and vias"
@@ -3915,7 +3915,7 @@ msgstr "자동 저장 파일의 이름을 보드 파일 이름으로 바꿀 수 
 #: common/eda_doc.cpp:140
 #, fuzzy
 msgid "Documentation File"
-msgstr "문서 파일: "
+msgstr "문서 파일:"
 
 #: common/eda_doc.cpp:150
 #, fuzzy, c-format
