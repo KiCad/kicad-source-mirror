@@ -392,8 +392,8 @@ void DIALOG_SIM_SETTINGS::updateDCSources( wxChar aType, wxChoice* aSource )
 {
     wxString prevSelection;
 
-    if( aSource->GetCount() )
-        aSource->GetString( aSource->GetSelection() );
+    if( !aSource->IsEmpty() )
+        prevSelection = aSource->GetString( aSource->GetSelection() );
 
     std::vector<wxString> sourcesList;
     bool                  enableSrcSelection = true;
