@@ -425,6 +425,8 @@ int SCH_EDITOR_CONTROL::FindNext( const TOOL_EVENT& aEvent )
         SCH_SHEET_LIST schematic = m_frame->Schematic().GetSheets();
         SCH_SCREENS    screens( m_frame->Schematic().Root() );
 
+        screens.BuildClientSheetPathList();
+
         for( SCH_SCREEN* screen = screens.GetFirst(); screen; screen = screens.GetNext() )
         {
             if( afterScreen )
@@ -435,24 +437,26 @@ int SCH_EDITOR_CONTROL::FindNext( const TOOL_EVENT& aEvent )
                 continue;
             }
 
-            SCH_SHEET_PATH* sheet = schematic.FindSheetForScreen( screen );
+            for( SCH_SHEET_PATH sheet : screen->GetClientSheetPaths() )
+            {
+                item = nextMatch( screen, &sheet, nullptr, data );
 
-            item = nextMatch( screen, sheet, nullptr, data );
+                if( item )
+                {
+                    m_frame->Schematic().SetCurrentSheet( sheet );
+                    m_frame->GetCurrentSheet().UpdateAllScreenReferences();
+
+                    screen->TestDanglingEnds();
+
+                    m_frame->SetScreen( screen );
+                    UpdateFind( ACTIONS::updateFind.MakeEvent() );
+
+                    break;
+                }
+            }
 
             if( item )
-            {
-                wxCHECK_MSG( sheet, 0, "Sheet not found for " + screen->GetFileName() );
-
-                m_frame->Schematic().SetCurrentSheet( *sheet );
-                m_frame->GetCurrentSheet().UpdateAllScreenReferences();
-
-                screen->TestDanglingEnds();
-
-                m_frame->SetScreen( screen );
-                UpdateFind( ACTIONS::updateFind.MakeEvent() );
-
                 break;
-            }
         }
     }
 
