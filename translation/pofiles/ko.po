@@ -15,8 +15,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-19 08:40-0700\n"
-"PO-Revision-Date: 2021-08-18 13:35+0000\n"
-"Last-Translator: 킴슨김랑기 <korearf@gmail.com>\n"
+"PO-Revision-Date: 2021-08-20 12:04+0000\n"
+"Last-Translator: hokim <teamgoodaloe@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
 "Language: ko\n"
@@ -63,7 +63,7 @@ msgstr "3D 모델 선택"
 #: 3d-viewer/3d_cache/dialogs/panel_preview_3d_model_base.cpp:21
 #: common/dialogs/dialog_print_generic_base.cpp:56
 msgid "Scale"
-msgstr "스케일"
+msgstr "배율"
 
 #: 3d-viewer/3d_cache/dialogs/panel_preview_3d_model_base.cpp:29
 #: 3d-viewer/3d_cache/dialogs/panel_preview_3d_model_base.cpp:74
@@ -200,7 +200,7 @@ msgstr "%d 구리 레이어 단순화"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:847
 msgid "Simplify holes contours"
-msgstr "구멍 윤곽 단순화"
+msgstr "홀 윤곽 단순화"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:876
 msgid "Build Tech layers"
@@ -208,7 +208,7 @@ msgstr "기술 레이어 생성"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1051
 msgid "Build BVH for holes and vias"
-msgstr "구멍과 비아용 BVH 생성"
+msgstr "홀과 비아용 BVH 생성"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:410
 msgid "Your OpenGL version is not supported. Minimum required is 1.5."
@@ -274,7 +274,7 @@ msgstr "OpenGL 불러오기: 기판"
 
 #: 3d-viewer/3d_rendering/legacy/create_scene.cpp:481
 msgid "Load OpenGL: holes and vias"
-msgstr "OpenGL 불러오기: 구멍 및 비아"
+msgstr "OpenGL 불러오기: 홀 및 비아"
 
 #: 3d-viewer/3d_rendering/legacy/create_scene.cpp:547
 msgid "Load OpenGL: layers"
@@ -294,11 +294,11 @@ msgstr "%s을(를) 불러오는 중입니다..."
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:50
 msgid "Export Current View as PNG..."
-msgstr "현재 보기를 PNG로 내보내기..."
+msgstr "현재 화면을 PNG로 내보내기..."
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:55
 msgid "Export Current View as JPEG..."
-msgstr "현재보기를 JPEG로 내보내기 ..."
+msgstr "현재 화면을 JPEG로 내보내기 ..."
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:61
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:235 common/hotkey_store.cpp:85
@@ -570,7 +570,7 @@ msgstr "롤오버 시 항목 강조"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_opengl_options_base.cpp:37
 msgid "Anti-aliasing:"
-msgstr "안티앨리어싱:"
+msgstr "안티-앨리어싱:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_opengl_options_base.cpp:41
 msgid "Disabled"
@@ -602,7 +602,7 @@ msgstr "이동 중"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_opengl_options_base.cpp:65
 msgid "Disable anti-aliasing"
-msgstr "앤티 앨리어싱 비활성화"
+msgstr "안티-앨리어싱 비활성화"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_opengl_options_base.cpp:68
 msgid "Disable thickness"
@@ -610,11 +610,11 @@ msgstr "두께 비활성화"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_opengl_options_base.cpp:71
 msgid "Disable vias"
-msgstr "비아 사용 안 함"
+msgstr "비아 비활성화"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_opengl_options_base.cpp:74
 msgid "Disable holes"
-msgstr "홀 사용 안 함"
+msgstr "홀 비활성화"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_raytracing_options_base.cpp:27
 msgid "Procedural textures (slow)"
@@ -830,19 +830,19 @@ msgstr "시계 반대 방향으로 Z 회전"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:79
 msgid "Move board Left"
-msgstr "보드 왼쪽으로 이동"
+msgstr "기판을 왼쪽으로 이동"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:85
 msgid "Move board Right"
-msgstr "보드 오른쪽으로 이동"
+msgstr "기판을 오른쪽으로 이동"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:91
 msgid "Move board Up"
-msgstr "위로 보드 이동"
+msgstr "기판을 위로 이동"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:97
 msgid "Move board Down"
-msgstr "보드 아래로 이동"
+msgstr "기판을 아래로 이동"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:103
 msgid "Home view"
@@ -950,7 +950,7 @@ msgstr "SMD 3D 모델로 전환"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:219
 msgid "Toggle 3D models with 'Surface mount' attribute"
-msgstr "'표면 실장'속성으로 3D 모델 전환"
+msgstr "'표면 실장' 속성으로 3D 모델 전환"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:225
 msgid "Toggle Virtual 3D models"
@@ -958,7 +958,7 @@ msgstr "가상 3D 모델로 전환"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:225
 msgid "Toggle 3D models with 'Virtual' attribute"
-msgstr "'가상'속성으로 3D 모델 전환"
+msgstr "'가상' 속성으로 3D 모델 전환"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:230
 msgid "Show Model Bounding Boxes"
@@ -970,7 +970,7 @@ msgstr "현실적 모드 전환"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:240
 msgid "Toggle board body display"
-msgstr "보드 본체 표시 전환"
+msgstr "기판 본체 표시 전환"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:245
 msgid "Show 3D Axis"
@@ -1120,7 +1120,7 @@ msgstr "mm"
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:757
 #: pcbnew/dialogs/dialog_plot_base.cpp:378
 msgid "Inch"
-msgstr "인치"
+msgstr "Inch"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:159
 msgid "DPI"
@@ -1144,7 +1144,7 @@ msgstr "클립보드로 내보낼 수 없음"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:742
 msgid "Create Logo File"
-msgstr "로고 파일 작성"
+msgstr "로고 파일 생성"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:759
 #: bitmap2component/bitmap2cmp_gui.cpp:799
@@ -1411,7 +1411,7 @@ msgstr "환경 변수 확장 실패: '%c'이(가) %u 위치의 '%s'에 없습니
 #: common/common.cpp:320
 #, c-format
 msgid "Cannot make path '%s' absolute with respect to '%s'."
-msgstr "경로 '%s'을(를) '%s'에 대하여 절대적으로 만들 수 없습니다."
+msgstr "경로 '%s'을(를) '%s'에 대해 절대 경로로 만들 수 없습니다."
 
 #: common/common.cpp:339
 #, c-format
@@ -1554,7 +1554,7 @@ msgstr "웹상의 KiCad"
 
 #: common/dialog_about/AboutDialog_main.cpp:140
 msgid "The official KiCad website - "
-msgstr "공식 KiCad 웹 사이트 - "
+msgstr "KiCad 공식 웹 사이트 - "
 
 #: common/dialog_about/AboutDialog_main.cpp:144
 msgid "Developer website - "
@@ -1590,15 +1590,15 @@ msgstr "GNU 일반 공공 라이센스 (GPL) 버전 3 또는 이후 버전"
 
 #: common/dialog_about/AboutDialog_main.cpp:208
 msgid "Lead Development Team"
-msgstr "개발팀장"
+msgstr "리드 개발팀"
 
 #: common/dialog_about/AboutDialog_main.cpp:209
 msgid "Lead Development Alumni"
-msgstr "개발팀장 동문"
+msgstr "리드 개발 동문"
 
 #: common/dialog_about/AboutDialog_main.cpp:210
 msgid "Additional Contributions By"
-msgstr "추가 기부자"
+msgstr "추가 기여자"
 
 #: common/dialog_about/AboutDialog_main.cpp:624
 msgid "Others"
@@ -1610,11 +1610,11 @@ msgstr "KiCad 사서팀"
 
 #: common/dialog_about/AboutDialog_main.cpp:659
 msgid "3D models by"
-msgstr "3D 모델"
+msgstr "3D 모델 작성자"
 
 #: common/dialog_about/AboutDialog_main.cpp:671
 msgid "Symbols by"
-msgstr "심볼 by"
+msgstr "심볼 작성자"
 
 #: common/dialog_about/AboutDialog_main.cpp:678
 msgid "Footprints by"
@@ -1622,7 +1622,7 @@ msgstr "풋프린트 작성자"
 
 #: common/dialog_about/AboutDialog_main.cpp:691
 msgid "Icons by"
-msgstr "아이콘"
+msgstr "아이콘 작성자"
 
 #: common/dialog_about/dialog_about.cpp:90
 #, c-format
@@ -1660,7 +1660,7 @@ msgstr "번역가"
 
 #: common/dialog_about/dialog_about.cpp:137
 msgid "Packagers"
-msgstr "포장업자"
+msgstr "패키지 작성자"
 
 #: common/dialog_about/dialog_about.cpp:140
 msgid "License"
@@ -1728,7 +1728,7 @@ msgstr "RGB"
 
 #: common/dialogs/dialog_color_picker_base.cpp:46
 msgid "Red:"
-msgstr "빨강:"
+msgstr "빨간색:"
 
 #: common/dialogs/dialog_color_picker_base.cpp:50
 msgid "Green:"
@@ -2674,7 +2674,7 @@ msgid ""
 "Warning: Scale option set to a very large value.\n"
 " Clamped to %f"
 msgstr ""
-"경고: 스케일 옵션이 매우 큰 값으로 설정됩니다.\n"
+"경고: 배율 옵션이 매우 큰 값으로 설정됩니다.\n"
 " %f에 고정됨"
 
 #: common/dialogs/dialog_print_generic.cpp:127
@@ -2985,7 +2985,7 @@ msgstr "자동"
 
 #: common/dialogs/panel_common_settings_base.cpp:173
 msgid "Canvas scale:"
-msgstr "캔버스 스케일:"
+msgstr "캔버스 배율:"
 
 #: common/dialogs/panel_common_settings_base.cpp:184
 msgid "Show icons in menus"
@@ -10288,7 +10288,7 @@ msgstr "선형"
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:29
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:268
 msgid "Frequency scale"
-msgstr "주파수 스케일"
+msgstr "주파수 배율"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:43
 msgid "Number of points:"
