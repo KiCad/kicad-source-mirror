@@ -7,16 +7,16 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-08-20 11:53-0700\n"
-"PO-Revision-Date: 2021-03-19 16:01+0000\n"
+"PO-Revision-Date: 2021-08-20 19:52+0000\n"
 "Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
-"Language-Team: Danish <https://hosted.weblate.org/projects/kicad/master-"
-"source/da/>\n"
+"Language-Team: Danish <https://hosted.weblate.org/projects/kicad/"
+"master-source/da/>\n"
 "Language: da\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.5.2-dev\n"
+"X-Generator: Weblate 4.8-dev\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
 msgid "All Files (*.*)|*.*"
@@ -23282,7 +23282,7 @@ msgstr "Advarsel om projektbesparelse"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:254
 msgid "STEP export failed!  Please save the PCB and try again"
-msgstr "TRIN-eksport mislykkedes! Gem PCB, og prøv igen"
+msgstr "STEP-eksport mislykkedes! Gem PCB, og prøv igen"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:319
 #, fuzzy, c-format
@@ -23293,7 +23293,7 @@ msgstr "Print omrids mangler eller er forkert. Kør DRC for en fuld analyse."
 
 #: pcbnew/dialogs/dialog_export_step.cpp:331
 msgid "STEP Export"
-msgstr "TRIN Eksport"
+msgstr "STEP Eksport"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:28
 msgid "Select a STEP export filename"
@@ -23301,7 +23301,7 @@ msgstr "Vælg et STEP-eksportfilnavn"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:28
 msgid "STEP files (*.stp;*.step)|*.stp;*.step"
-msgstr "TRIN-filer (* .stp; *. Trin) | * .stp; *. Trin"
+msgstr "STEP-filer (* .stp; *. step) | * .stp; *. step"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:38
 #, fuzzy
@@ -23382,7 +23382,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_export_step_base.h:75
 msgid "Export STEP"
-msgstr "Eksporter TRIN"
+msgstr "Eksporter STEP"
 
 #: pcbnew/dialogs/dialog_export_svg.cpp:214
 #: pcbnew/exporters/gen_footprints_placefile.cpp:192
@@ -30364,7 +30364,7 @@ msgstr "Eksport af IDF 3D-kortrepræsentation"
 
 #: pcbnew/menubar_pcb_editor.cpp:136
 msgid "STEP..."
-msgstr "TRIN..."
+msgstr "STEP..."
 
 #: pcbnew/menubar_pcb_editor.cpp:136
 msgid "Export STEP 3D board representation"
