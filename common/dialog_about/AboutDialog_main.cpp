@@ -505,7 +505,6 @@ static void buildKicadAboutBanner( EDA_BASE_FRAME* aParent, ABOUT_APP_INFO& aInf
 
     /* The translators
      * As category the language to which the translation was done is used
-     * and as icon the national flag of the corresponding country.
      */
     aInfo.AddTranslator( new CONTRIBUTOR( "Robert Buj",
                                           wxEmptyString,
@@ -532,6 +531,14 @@ static void buildKicadAboutBanner( EDA_BASE_FRAME* aParent, ABOUT_APP_INFO& aInf
                                           wxEmptyString,
                                           "Polish (PL)" ) );
     aInfo.AddTranslator( new CONTRIBUTOR( "Kerusey Karyu",
+                                          wxEmptyString,
+                                          wxEmptyString,
+                                          "Polish (PL)" ) );
+    aInfo.AddTranslator( new CONTRIBUTOR( "Mark Roszko",
+                                          wxEmptyString,
+                                          wxEmptyString,
+                                          "Polish (PL)" ) );
+    aInfo.AddTranslator( new CONTRIBUTOR( "ZbeeGin",
                                           wxEmptyString,
                                           wxEmptyString,
                                           "Polish (PL)" ) );
@@ -583,6 +590,56 @@ static void buildKicadAboutBanner( EDA_BASE_FRAME* aParent, ABOUT_APP_INFO& aInf
                                           wxEmptyString,
                                           wxEmptyString,
                                           "Japanese (JA)" ) );
+
+    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "킴슨김랑기" ),
+                                          wxEmptyString,
+                                          wxEmptyString,
+                                          "Korean (KO)" ) );
+    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Ji Yoon Choi" ),
+                                          wxEmptyString,
+                                          wxEmptyString,
+                                          "Korean (KO)" ) );
+    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "jeongsuAn" ),
+                                          wxEmptyString,
+                                          wxEmptyString,
+                                          "Korean (KO)" ) );
+    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "이상수" ),
+                                          wxEmptyString,
+                                          wxEmptyString,
+                                          "Korean (KO)" ) );
+    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "jehunseo" ),
+                                          wxEmptyString,
+                                          wxEmptyString,
+                                          "Korean (KO)" ) );
+    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Uibeom Jung" ),
+                                          wxEmptyString,
+                                          wxEmptyString,
+                                          "Korean (KO)" ) );
+    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "박준언" ),
+                                          wxEmptyString,
+                                          wxEmptyString,
+                                          "Korean (KO)" ) );
+    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "방준영" ),
+                                          wxEmptyString,
+                                          wxEmptyString,
+                                          "Korean (KO)" ) );
+    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "박기정" ),
+                                          wxEmptyString,
+                                          wxEmptyString,
+                                          "Korean (KO)" ) );
+    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "hokim" ),
+                                          wxEmptyString,
+                                          wxEmptyString,
+                                          "Korean (KO)" ) );
+    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "강명구" ),
+                                          wxEmptyString,
+                                          wxEmptyString,
+                                          "Korean (KO)" ) );
+    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "서범기" ),
+                                          wxEmptyString,
+                                          wxEmptyString,
+                                          "Korean (KO)" ) );
+
     aInfo.AddTranslator( new CONTRIBUTOR( "Manolis Stefanis",
                                           wxEmptyString,
                                           wxEmptyString,
