@@ -425,7 +425,7 @@ int BOARD_EDITOR_CONTROL::ExportNetlist( const TOOL_EVENT& aEvent )
     fn.SetExt( "pcb_net" );
 
     wxFileDialog dlg( m_frame, _( "Export Board Netlist" ), fn.GetPath(), fn.GetFullName(),
-                      _( "KiCad board netlist files" ) + wxT( " (*.pcb_net)|*.pcb_net" ),
+                      _( "KiCad board netlist files" ) + AddFileExtListToFilter( { "pcb_net" } ),
                       wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
     dlg.SetExtraControlCreator( &NETLIST_OPTIONS_HELPER::Create );

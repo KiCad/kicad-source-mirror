@@ -141,18 +141,18 @@ bool GERBVIEW_FRAME::LoadGerberFiles( const wxString& aFullFileName )
         filetypes << wxT("|");
 
         /* Special gerber filetypes */
-        filetypes += _( "Top layer" ) + wxT( " (*.GTL)|*.GTL;*.gtl|" );
-        filetypes += _( "Bottom layer" ) + wxT( " (*.GBL)|*.GBL;*.gbl|" );
-        filetypes += _( "Bottom solder resist" ) + wxT( " (*.GBS)|*.GBS;*.gbs|" );
-        filetypes += _( "Top solder resist" ) + wxT( " (*.GTS)|*.GTS;*.gts|" );
-        filetypes += _( "Bottom overlay" ) + wxT( " (*.GBO)|*.GBO;*.gbo|" );
-        filetypes += _( "Top overlay" ) + wxT( " (*.GTO)|*.GTO;*.gto|" );
-        filetypes += _( "Bottom paste" ) + wxT( " (*.GBP)|*.GBP;*.gbp|" );
-        filetypes += _( "Top paste" ) + wxT( " (*.GTP)|*.GTP;*.gtp|" );
-        filetypes += _( "Keep-out layer" ) + wxT( " (*.GKO)|*.GKO;*.gko|" );
-        filetypes += _( "Mechanical layers" ) + wxT( " (*.GMx)|*.GM1;*.gm1;*.GM2;*.gm2;*.GM3;*.gm3|" );
-        filetypes += _( "Top Pad Master" ) + wxT( " (*.GPT)|*.GPT;*.gpt|" );
-        filetypes += _( "Bottom Pad Master" ) + wxT( " (*.GPB)|*.GPB;*.gpb|" );
+        filetypes += _( "Top layer" ) + AddFileExtListToFilter( { "GTL" } );
+        filetypes += _( "Bottom layer" ) + AddFileExtListToFilter( { "GBL" } );
+        filetypes += _( "Bottom solder resist" ) + AddFileExtListToFilter( { "GBS" } );
+        filetypes += _( "Top solder resist" ) + AddFileExtListToFilter( { "GTS" } );
+        filetypes += _( "Bottom overlay" ) + AddFileExtListToFilter( { "GBO" } );
+        filetypes += _( "Top overlay" ) + AddFileExtListToFilter( { "GTO" } );
+        filetypes += _( "Bottom paste" ) + AddFileExtListToFilter( { "GBP" } );
+        filetypes += _( "Top paste" ) + AddFileExtListToFilter( { "GTP" } );
+        filetypes += _( "Keep-out layer" ) + AddFileExtListToFilter( { "GKO" } );
+        filetypes += _( "Mechanical layers" ) + AddFileExtListToFilter( { "GM1", "GM2", "GM3", "GM4", "GM5", "GM6", "GM7", "GM8", "GM9" } );
+        filetypes += _( "Top Pad Master" ) + AddFileExtListToFilter( { "GPT" } );
+        filetypes += _( "Bottom Pad Master" ) + AddFileExtListToFilter( { "GPB" } );
 
         // All filetypes
         filetypes += AllFilesWildcard();

@@ -25,6 +25,7 @@
 #include <wx/choicdlg.h>
 #include <wx/stdpaths.h>
 #include <wx/process.h>
+#include <wx/string.h>
 
 #include <pgm_base.h>
 #include <board.h>
@@ -39,6 +40,7 @@
 #include <project/project_file.h> // LAST_PATH_TYPE
 #include <reporter.h>
 #include <widgets/text_ctrl_eval.h>
+#include <wildcards_and_files_ext.h>
 #include <filename_resolver.h>
 
 class DIALOG_EXPORT_STEP: public DIALOG_EXPORT_STEP_BASE
@@ -116,7 +118,6 @@ DIALOG_EXPORT_STEP::DIALOG_EXPORT_STEP( PCB_EDIT_FRAME* aParent, const wxString&
     m_sdbSizerOK->SetLabel( _( "Export" ) );
     m_sdbSizer->Layout();
 
-
     // Build default output file name
     wxString path = m_parent->GetLastPath( LAST_PATH_STEP );
 
@@ -127,7 +128,19 @@ DIALOG_EXPORT_STEP::DIALOG_EXPORT_STEP( PCB_EDIT_FRAME* aParent, const wxString&
         path = brdFile.GetFullPath();
     }
 
-    m_filePickerSTEP->SetPath( path );
+    // Reset this picker bc wxFormBuilder doesn't allow untranslated strings
+    wxSizerItem* sizer_item = bSizerTop->GetItem( 1UL );
+    wxWindow* widget = sizer_item->GetWindow();
+    bSizerTop->Hide( widget );
+    widget->Destroy();
+
+    m_filePickerSTEP = new wxFilePickerCtrl( this, wxID_ANY, wxEmptyString,
+            _( "Select a STEP export filename" ), _( "STEP files" ) + AddFileExtListToFilter( { "STEP", "STP" } ), wxDefaultPosition,
+            wxSize( -1, -1 ), wxFLP_SAVE | wxFLP_USE_TEXTCTRL );
+    bSizerTop->Add( m_filePickerSTEP, 1, wxTOP|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
+
+    Layout();
+    bSizerSTEPFile->Fit( this );
 
     SetFocus();
 

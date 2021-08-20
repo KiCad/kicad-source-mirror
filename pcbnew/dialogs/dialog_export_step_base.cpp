@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.9.0 Jun  3 2020)
+// C++ code generated with wxFormBuilder (version 3.9.0 Apr 22 2021)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -15,17 +15,15 @@ DIALOG_EXPORT_STEP_BASE::DIALOG_EXPORT_STEP_BASE( wxWindow* parent, wxWindowID i
 {
 	this->SetSizeHints( wxDefaultSize, wxDefaultSize );
 
-	wxBoxSizer* bSizerSTEPFile;
 	bSizerSTEPFile = new wxBoxSizer( wxVERTICAL );
 
-	wxBoxSizer* bSizerTop;
 	bSizerTop = new wxBoxSizer( wxHORIZONTAL );
 
 	m_txtBrdFile = new wxStaticText( this, wxID_ANY, _("File:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_txtBrdFile->Wrap( -1 );
 	bSizerTop->Add( m_txtBrdFile, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxLEFT, 5 );
 
-	m_filePickerSTEP = new wxFilePickerCtrl( this, wxID_ANY, wxEmptyString, _("Select a STEP export filename"), _("STEP files (*.stp;*.step)|*.stp;*.step"), wxDefaultPosition, wxSize( -1,-1 ), wxFLP_SAVE|wxFLP_USE_TEXTCTRL );
+	m_filePickerSTEP = new wxFilePickerCtrl( this, wxID_ANY, wxEmptyString, _("temp"), _("temp"), wxDefaultPosition, wxSize( -1,-1 ), wxFLP_SAVE|wxFLP_USE_TEXTCTRL );
 	bSizerTop->Add( m_filePickerSTEP, 1, wxTOP|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
 
 

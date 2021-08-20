@@ -59,7 +59,7 @@
                 <property name="minimum_size">-1,-1</property>
                 <property name="name">bSizerSTEPFile</property>
                 <property name="orient">wxVERTICAL</property>
-                <property name="permission">none</property>
+                <property name="permission">protected</property>
                 <object class="sizeritem" expanded="1">
                     <property name="border">10</property>
                     <property name="flag">wxEXPAND|wxALL</property>
@@ -68,7 +68,7 @@
                         <property name="minimum_size"></property>
                         <property name="name">bSizerTop</property>
                         <property name="orient">wxHORIZONTAL</property>
-                        <property name="permission">none</property>
+                        <property name="permission">protected</property>
                         <object class="sizeritem" expanded="0">
                             <property name="border">5</property>
                             <property name="flag">wxALIGN_CENTER_VERTICAL|wxTOP|wxLEFT</property>
@@ -165,7 +165,7 @@
                                 <property name="max_size"></property>
                                 <property name="maximize_button">0</property>
                                 <property name="maximum_size"></property>
-                                <property name="message">Select a STEP export filename</property>
+                                <property name="message">temp</property>
                                 <property name="min_size"></property>
                                 <property name="minimize_button">0</property>
                                 <property name="minimum_size">-1,-1</property>
@@ -189,7 +189,7 @@
                                 <property name="validator_type">wxDefaultValidator</property>
                                 <property name="validator_variable"></property>
                                 <property name="value"></property>
-                                <property name="wildcard">STEP files (*.stp;*.step)|*.stp;*.step</property>
+                                <property name="wildcard">temp</property>
                                 <property name="window_extra_style"></property>
                                 <property name="window_name"></property>
                                 <property name="window_style"></property>
