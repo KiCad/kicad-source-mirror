@@ -158,7 +158,7 @@ SYMBOL_EDIT_FRAME::SYMBOL_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     ReCreateOptToolbar();
 
     updateTitle();
-    DisplaySymbolDatasheet();
+    UpdateSymbolMsgPanelInfo();
     RebuildSymbolUnitsList();
 
     m_auimgr.SetManagedWindow( this );
@@ -629,6 +629,7 @@ void SYMBOL_EDIT_FRAME::OnSelectUnit( wxCommandEvent& event )
 
     m_toolManager->ResetTools( TOOL_BASE::MODEL_RELOAD );
     RebuildView();
+    UpdateSymbolMsgPanelInfo();
 }
 
 
@@ -1330,7 +1331,7 @@ void SYMBOL_EDIT_FRAME::LoadSymbolFromSchematic( SCH_SYMBOL* aSymbol )
     updateTitle();
     RebuildSymbolUnitsList();
     SetShowDeMorgan( GetCurSymbol()->HasConversion() );
-    DisplaySymbolDatasheet();
+    UpdateSymbolMsgPanelInfo();
     Refresh();
 }
 

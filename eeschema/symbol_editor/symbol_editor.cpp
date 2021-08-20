@@ -365,7 +365,7 @@ bool SYMBOL_EDIT_FRAME::LoadOneLibrarySymbolAux( LIB_SYMBOL* aEntry, const wxStr
 
     // Display the document information based on the entry selected just in
     // case the entry is an alias.
-    DisplaySymbolDatasheet();
+    UpdateMsgPanel();
     Refresh();
 
     return true;
@@ -727,7 +727,7 @@ void SYMBOL_EDIT_FRAME::UpdateAfterSymbolProperties( wxString* aOldName )
     RebuildSymbolUnitsList();
     SetShowDeMorgan( GetCurSymbol()->Flatten()->HasConversion() );
     updateTitle();
-    DisplaySymbolDatasheet();
+    UpdateMsgPanel();
 
     RebuildView();
     OnModify();
@@ -1184,7 +1184,7 @@ bool SYMBOL_EDIT_FRAME::saveAllLibraries( bool aRequireConfirmation )
 }
 
 
-void SYMBOL_EDIT_FRAME::DisplaySymbolDatasheet()
+void SYMBOL_EDIT_FRAME::UpdateSymbolMsgPanelInfo()
 {
     EDA_DRAW_FRAME::ClearMsgPanel();
 

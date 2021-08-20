@@ -549,7 +549,7 @@ void SYMBOL_EDITOR_EDIT_TOOL::editFieldProperties( LIB_FIELD* aField )
         updateItem( aField, true );
         m_frame->GetCanvas()->Refresh();
         m_frame->OnModify();
-        m_frame->DisplaySymbolDatasheet();
+        m_frame->UpdateSymbolMsgPanelInfo();
     }
 }
 

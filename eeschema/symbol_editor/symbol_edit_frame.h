@@ -229,7 +229,7 @@ public:
 
     void ClearMsgPanel() override
     {
-        DisplaySymbolDatasheet();
+        UpdateSymbolMsgPanelInfo();
     }
 
     bool IsSymbolFromSchematic() const { return m_isSymbolFromSchematic; }
@@ -239,7 +239,7 @@ public:
     /**
      * Display the documentation of the selected symbol.
      */
-    void DisplaySymbolDatasheet();
+    void UpdateSymbolMsgPanelInfo();
 
     // General editing
     /**
