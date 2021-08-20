@@ -962,7 +962,13 @@ void SCH_SCREEN::GetSheets( std::vector<SCH_ITEM*>* aItems ) const
             []( EDA_ITEM* a, EDA_ITEM* b ) -> bool
             {
                 if( a->GetPosition().x == b->GetPosition().x )
+                {
+                    // Ensure deterministic sort
+                    if( a->GetPosition().y == b->GetPosition().y )
+                        return a->m_Uuid < b->m_Uuid;
+
                     return a->GetPosition().y < b->GetPosition().y;
+                }
                 else
                     return a->GetPosition().x < b->GetPosition().x;
             } );
