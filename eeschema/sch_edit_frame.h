@@ -499,10 +499,13 @@ public:
      *               current screen only.
      * @param aSaveUnderNewName Controls how the file is to be saved;: using  previous name
      *                          or under a new name.
+     * @param aCreateProject will be filled with the user's choice of whether to create a new
+     *                       project file if aSaveUnderNewName is true.  This value will not be
+     *                       changed if aSaveUnderNewName is false.
      * @return True if the file has been saved.
      */
-    bool SaveEEFile( SCH_SHEET* aSheet, bool aSaveUnderNewName = false );
-
+    bool SaveEEFile( SCH_SHEET* aSheet, bool aSaveUnderNewName = false,
+                     bool* aCreateProject = nullptr );
 
     /**
      * Check if any of the screens has unsaved changes and asks the user whether to save or

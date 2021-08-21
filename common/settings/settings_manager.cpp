@@ -939,6 +939,12 @@ void SETTINGS_MANAGER::SaveProjectAs( const wxString& aFullPath )
     wxFileName fn( aFullPath );
 
     PROJECT_FILE* project = m_project_files.at( oldName );
+
+    // Ensure read-only flags are copied; this allows doing a "Save As" on a standalong board/sch
+    // without creating project files if the checkbox is turned off
+    project->SetReadOnly( Prj().IsReadOnly() );
+    Prj().GetLocalSettings().SetReadOnly( Prj().IsReadOnly() );
+
     project->SetFilename( fn.GetName() );
     project->SaveToFile( fn.GetPath() );
 

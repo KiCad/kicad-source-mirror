@@ -63,7 +63,42 @@
 #include <wx_filename.h>  // For ::ResolvePossibleSymlinks
 #include <widgets/wx_progress_reporters.h>
 
-bool SCH_EDIT_FRAME::SaveEEFile( SCH_SHEET* aSheet, bool aSaveUnderNewName )
+
+///< Helper widget to select whether a new project should be created for a file when saving
+class CREATE_PROJECT_CHECKBOX : public wxPanel
+{
+public:
+    CREATE_PROJECT_CHECKBOX( wxWindow* aParent )
+            : wxPanel( aParent )
+    {
+        m_cbCreateProject = new wxCheckBox( this, wxID_ANY,
+                                            _( "Create a new project for this schematic" ) );
+        m_cbCreateProject->SetValue( false );
+        m_cbCreateProject->SetToolTip( _( "Creating a project will enable features such as "
+                                          "text variables, net classes, and ERC exclusions" ) );
+
+        wxBoxSizer* sizer = new wxBoxSizer( wxHORIZONTAL );
+        sizer->Add( m_cbCreateProject, 0, wxALL, 8 );
+
+        SetSizerAndFit( sizer );
+    }
+
+    bool GetValue() const
+    {
+        return m_cbCreateProject->GetValue();
+    }
+
+    static wxWindow* Create( wxWindow* aParent )
+    {
+        return new CREATE_PROJECT_CHECKBOX( aParent );
+    }
+
+protected:
+    wxCheckBox* m_cbCreateProject;
+};
+
+
+bool SCH_EDIT_FRAME::SaveEEFile( SCH_SHEET* aSheet, bool aSaveUnderNewName, bool* aCreateProject )
 {
     wxString msg;
     wxFileName schematicFileName;
@@ -101,6 +136,9 @@ bool SCH_EDIT_FRAME::SaveEEFile( SCH_SHEET* aSheet, bool aSaveUnderNewName )
                           schematicFileName.GetFullName(), KiCadSchematicFileWildcard(),
                           wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
+        // Add a "Create a project" checkbox in standalone mode and one isn't loaded
+        dlg.SetExtraControlCreator( &CREATE_PROJECT_CHECKBOX::Create );
+
         if( dlg.ShowModal() == wxID_CANCEL )
             return false;
 
@@ -108,6 +146,14 @@ bool SCH_EDIT_FRAME::SaveEEFile( SCH_SHEET* aSheet, bool aSaveUnderNewName )
 
         if( schematicFileName.GetExt().IsEmpty() )
             schematicFileName.SetExt( KiCadSchematicFileExtension );
+
+        wxWindow* extraControl = dlg.GetExtraControl();
+
+        if( aCreateProject )
+        {
+            wxASSERT( extraControl );
+            *aCreateProject = static_cast<CREATE_PROJECT_CHECKBOX*>( extraControl )->GetValue();
+        }
     }
 
     // Write through symlinks, don't replace them
@@ -216,7 +262,9 @@ void SCH_EDIT_FRAME::Save_File( bool doSaveAs )
 {
     if( doSaveAs )
     {
-        if( SaveEEFile( nullptr, true ) )
+        bool createProject = false;
+
+        if( SaveEEFile( nullptr, true, &createProject ) )
         {
             SCH_SCREEN* screen = GetScreen();
 
@@ -232,7 +280,7 @@ void SCH_EDIT_FRAME::Save_File( bool doSaveAs )
 
             if( fn.IsDirWritable() && !fn.FileExists() )
             {
-                Prj().SetReadOnly( false );
+                Prj().SetReadOnly( !createProject );
                 GetSettingsManager()->SaveProjectAs( fn.GetFullPath() );
             }
         }
@@ -783,8 +831,9 @@ bool SCH_EDIT_FRAME::SaveProject()
     wxString msg;
     SCH_SCREEN* screen;
     SCH_SCREENS screens( Schematic().Root() );
-    bool success = true;
-    bool updateFileType = false;
+    bool        success          = true;
+    bool        updateFileType   = false;
+    bool        createNewProject = false;
 
     // I want to see it in the debugger, show me the string!  Can't do that with wxFileName.
     wxString    fileName = Prj().AbsolutePath( Schematic().Root().GetFileName() );
@@ -793,13 +842,16 @@ bool SCH_EDIT_FRAME::SaveProject()
     // If this a new schematic without a project and we are in the stand alone mode.  All new
     // sheets that are not loaded from an existing file will have to be saved to a new path
     // along with the root sheet.
-    if( Prj().GetProjectFullName().IsEmpty() )
+    if( Prj().IsNullProject() )
     {
         // This should only be possible in stand alone mode.
         wxCHECK( Kiface().IsSingle(), false );
 
         wxFileDialog dlg( this, _( "Schematic Files" ), fn.GetPath(), fn.GetFullName(),
                           KiCadSchematicFileWildcard(), wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
+
+        // Add a "Create a project" checkbox in standalone mode and one isn't loaded
+        dlg.SetExtraControlCreator( &CREATE_PROJECT_CHECKBOX::Create );
 
         if( dlg.ShowModal() == wxID_CANCEL )
             return false;
@@ -824,6 +876,9 @@ bool SCH_EDIT_FRAME::SaveProject()
 
         Schematic().Root().SetFileName( newFileName.GetFullName() );
         Schematic().RootScreen()->SetFileName( newFileName.GetFullPath() );
+
+        if( wxWindow* extraControl = dlg.GetExtraControl() )
+            createNewProject = static_cast<CREATE_PROJECT_CHECKBOX*>( extraControl )->GetValue();
 
         // Set the base path to all new sheets.
         for( size_t i = 0; i < screens.GetCount(); i++ )
@@ -1011,7 +1066,16 @@ bool SCH_EDIT_FRAME::SaveProject()
     }
 
     if( !Prj().IsNullProject() )
-        Pgm().GetSettingsManager().SaveProject();
+    {
+        GetSettingsManager()->SaveProject();
+    }
+    else
+    {
+        Prj().SetReadOnly( !createNewProject );
+        wxFileName projectPath( Schematic().GetFileName() );
+        projectPath.SetExt( ProjectFileExtension );
+        GetSettingsManager()->SaveProjectAs( projectPath.GetFullPath() );
+    }
 
     if( !Kiface().IsSingle() )
     {

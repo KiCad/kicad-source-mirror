@@ -212,7 +212,7 @@ public:
     {
         m_cbCreateProject = new wxCheckBox( this, wxID_ANY,
                                             _( "Create a new project for this board" ) );
-        m_cbCreateProject->SetValue( false );
+        m_cbCreateProject->SetValue( true );
         m_cbCreateProject->SetToolTip( _( "Creating a project will enable features such as "
                                           "design rules, net classes, and layer presets" ) );
 
