@@ -52,10 +52,6 @@ bool PANEL_3D_DISPLAY_OPTIONS::TransferDataToWindow()
     m_checkBoxBoardBody->SetValue( m_settings.GetFlag( FL_SHOW_BOARD_BODY ) );
     m_checkBoxAreas->SetValue( m_settings.GetFlag( FL_ZONE ) );
 
-    m_checkBox3DshapesTH->SetValue( m_settings.GetFlag( FL_FP_ATTRIBUTES_NORMAL ) );
-    m_checkBox3DshapesSMD->SetValue( m_settings.GetFlag( FL_FP_ATTRIBUTES_NORMAL_INSERT ) );
-    m_checkBox3DshapesVirtual->SetValue( m_settings.GetFlag( FL_FP_ATTRIBUTES_VIRTUAL ) );
-
     m_checkBoxSilkscreen->SetValue( m_settings.GetFlag( FL_SILKSCREEN ) );
     m_checkBoxSolderMask->SetValue( m_settings.GetFlag( FL_SOLDERMASK ) );
     m_checkBoxSolderpaste->SetValue( m_settings.GetFlag( FL_SOLDERPASTE ) );
@@ -108,11 +104,6 @@ bool PANEL_3D_DISPLAY_OPTIONS::TransferDataFromWindow()
     case 1: m_settings.SetMaterialMode( MATERIAL_MODE::DIFFUSE_ONLY ); break;
     case 2: m_settings.SetMaterialMode( MATERIAL_MODE::CAD_MODE );     break;
     }
-
-    // Set 3D shapes visibility
-    m_settings.SetFlag( FL_FP_ATTRIBUTES_NORMAL, m_checkBox3DshapesTH->GetValue() );
-    m_settings.SetFlag( FL_FP_ATTRIBUTES_NORMAL_INSERT, m_checkBox3DshapesSMD->GetValue() );
-    m_settings.SetFlag( FL_FP_ATTRIBUTES_VIRTUAL, m_checkBox3DshapesVirtual->GetValue() );
 
     // Set Layer visibility
     m_settings.SetFlag( FL_SILKSCREEN, m_checkBoxSilkscreen->GetValue() );

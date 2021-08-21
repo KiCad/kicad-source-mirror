@@ -432,6 +432,9 @@ set( BMAPS_MID
     show_mod_edge
     show_ratsnest
     showtrack
+    show_other
+    show_tht
+    show_smt
     show_zone
     show_zone_disable
     show_zone_outline_only

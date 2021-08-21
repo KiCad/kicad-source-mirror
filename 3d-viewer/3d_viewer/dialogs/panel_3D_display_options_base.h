@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.9.0 Jun  3 2020)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -36,9 +36,6 @@ class PANEL_3D_DISPLAY_OPTIONS_BASE : public wxPanel
 	private:
 
 	protected:
-		wxCheckBox* m_checkBox3DshapesTH;
-		wxCheckBox* m_checkBox3DshapesSMD;
-		wxCheckBox* m_checkBox3DshapesVirtual;
 		wxCheckBox* m_checkBoxSilkscreen;
 		wxCheckBox* m_checkBoxSolderMask;
 		wxCheckBox* m_checkBoxSolderpaste;

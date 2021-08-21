@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.9.0 Jun  3 2020)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -16,21 +16,6 @@ PANEL_3D_DISPLAY_OPTIONS_BASE::PANEL_3D_DISPLAY_OPTIONS_BASE( wxWindow* parent, 
 
 	wxBoxSizer* bSizeLeft;
 	bSizeLeft = new wxBoxSizer( wxVERTICAL );
-
-	wxStaticBoxSizer* sbModelVisibility;
-	sbModelVisibility = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("3D Model Visibility") ), wxVERTICAL );
-
-	m_checkBox3DshapesTH = new wxCheckBox( sbModelVisibility->GetStaticBox(), wxID_ANY, _("Show 3D through hole models"), wxDefaultPosition, wxDefaultSize, 0 );
-	sbModelVisibility->Add( m_checkBox3DshapesTH, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
-
-	m_checkBox3DshapesSMD = new wxCheckBox( sbModelVisibility->GetStaticBox(), wxID_ANY, _("Show 3D SMD models"), wxDefaultPosition, wxDefaultSize, 0 );
-	sbModelVisibility->Add( m_checkBox3DshapesSMD, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
-
-	m_checkBox3DshapesVirtual = new wxCheckBox( sbModelVisibility->GetStaticBox(), wxID_ANY, _("Show 3D virtual models"), wxDefaultPosition, wxDefaultSize, 0 );
-	sbModelVisibility->Add( m_checkBox3DshapesVirtual, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
-
-
-	bSizeLeft->Add( sbModelVisibility, 0, wxEXPAND|wxALL, 5 );
 
 	wxStaticBoxSizer* sbBoardLayers;
 	sbBoardLayers = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Board Layers") ), wxVERTICAL );
