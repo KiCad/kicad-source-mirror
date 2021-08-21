@@ -99,7 +99,7 @@ static void existsOnLayer( LIBEVAL::CONTEXT* aCtx, void *self )
     }
 
     result->SetDeferredEval(
-            [item, arg, &aCtx]() -> double
+            [item, arg, aCtx]() -> double
             {
                 const wxString& layerName = arg->AsString();
                 wxPGChoices& layerMap = ENUM_MAP<PCB_LAYER_ID>::Instance().Choices();
@@ -242,7 +242,7 @@ static void insideCourtyard( LIBEVAL::CONTEXT* aCtx, void* self )
         return;
 
     auto insideFootprint =
-            [&context]( BOARD_ITEM* item, const EDA_RECT& itemBBox,
+            [context]( BOARD_ITEM* item, const EDA_RECT& itemBBox,
                         std::shared_ptr<SHAPE>& itemShape, FOOTPRINT* footprint ) -> bool
             {
                 if( !footprint )
@@ -264,7 +264,7 @@ static void insideCourtyard( LIBEVAL::CONTEXT* aCtx, void* self )
             };
 
     result->SetDeferredEval(
-            [item, arg, &context, &insideFootprint]() -> double
+            [item, arg, context, &insideFootprint]() -> double
             {
                 BOARD*                 board = item->GetBoard();
                 EDA_RECT               itemBBox;
@@ -329,7 +329,7 @@ static void insideFrontCourtyard( LIBEVAL::CONTEXT* aCtx, void* self )
         return;
 
     auto insideFootprint =
-            [&context]( BOARD_ITEM* item, const EDA_RECT& itemBBox,
+            [context]( BOARD_ITEM* item, const EDA_RECT& itemBBox,
                         std::shared_ptr<SHAPE>& itemShape, FOOTPRINT* footprint ) -> bool
             {
                 if( !footprint )
@@ -351,7 +351,7 @@ static void insideFrontCourtyard( LIBEVAL::CONTEXT* aCtx, void* self )
             };
 
     result->SetDeferredEval(
-            [item, arg, &context, &insideFootprint]() -> double
+            [item, arg, context, &insideFootprint]() -> double
             {
                 BOARD*                 board = item->GetBoard();
                 EDA_RECT               itemBBox;
@@ -415,7 +415,7 @@ static void insideBackCourtyard( LIBEVAL::CONTEXT* aCtx, void* self )
         return;
 
     auto insideFootprint =
-            [&context]( BOARD_ITEM* item, const EDA_RECT& itemBBox,
+            [context]( BOARD_ITEM* item, const EDA_RECT& itemBBox,
                         std::shared_ptr<SHAPE>& itemShape, FOOTPRINT* footprint ) -> bool
             {
                 if( !footprint )
@@ -437,7 +437,7 @@ static void insideBackCourtyard( LIBEVAL::CONTEXT* aCtx, void* self )
             };
 
     result->SetDeferredEval(
-            [item, arg, &context, &insideFootprint]() -> double
+            [item, arg, context, &insideFootprint]() -> double
             {
                 BOARD*                 board = item->GetBoard();
                 EDA_RECT               itemBBox;
@@ -502,7 +502,7 @@ static void insideArea( LIBEVAL::CONTEXT* aCtx, void* self )
         return;
 
     auto itemIsInsideArea =
-            [&context]( BOARD_ITEM* item, ZONE* area, const EDA_RECT& itemBBox ) -> bool
+            [context]( BOARD_ITEM* item, ZONE* area, const EDA_RECT& itemBBox ) -> bool
             {
                 BOARD*                 board = area->GetBoard();
                 std::shared_ptr<SHAPE> shape;
@@ -641,7 +641,7 @@ static void insideArea( LIBEVAL::CONTEXT* aCtx, void* self )
             };
 
     result->SetDeferredEval(
-            [item, arg, &context, &checkArea]() -> double
+            [item, arg, context, &checkArea]() -> double
             {
                 BOARD* board = item->GetBoard();
                 EDA_RECT itemBBox;
