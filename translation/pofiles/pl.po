@@ -5,18 +5,18 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-20 13:14-0700\n"
-"PO-Revision-Date: 2021-07-23 08:32+0000\n"
+"POT-Creation-Date: 2021-08-20 11:53-0700\n"
+"PO-Revision-Date: 2021-08-22 15:31+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
-"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/master-"
-"source/pl/>\n"
+"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/"
+"master-source/pl/>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.7.2-dev\n"
+"X-Generator: Weblate 4.8.1-dev\n"
 "X-Poedit-Basepath: ../../../kicad-source-mirror\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SearchPath-0: .\n"
@@ -199,9 +199,9 @@ msgid "Build Tech layers"
 msgstr "Budowanie warstw technicznych"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:909
-#, fuzzy, c-format
+#, c-format
 msgid "Build Tech layer %d"
-msgstr "Budowanie warstw technicznych"
+msgstr "Budowanie warstwy technicznej %d"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1054
 msgid "Build BVH for holes and vias"
@@ -278,9 +278,9 @@ msgid "Load OpenGL: layers"
 msgstr "Ładowanie OpenGL: warstwy"
 
 #: 3d-viewer/3d_rendering/legacy/create_scene.cpp:562
-#, fuzzy, c-format
+#, c-format
 msgid "Load OpenGL layer %d"
-msgstr "Ładowanie OpenGL: warstwy"
+msgstr "Ładowanie warstwy OpenGL %d"
 
 #: 3d-viewer/3d_rendering/legacy/create_scene.cpp:914
 #: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:430
@@ -389,38 +389,32 @@ msgid "Render current view using Raytracing"
 msgstr "Renderuj bieżący widok z użyciem raytracingu"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:23
-#, fuzzy
 msgid "Environment Colors"
-msgstr "Zmienne środowiskowe"
+msgstr "Kolory otoczenia"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:30
-#, fuzzy
 msgid "Background gradient start:"
-msgstr "Dolne oznaczenia rozpoczynają się od:"
+msgstr "Początkowy kolor gradientu tła:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:37
-#, fuzzy
 msgid "Background gradient end:"
-msgstr "Tło w kolorze białym"
+msgstr "Końcowy kolor gradientu tła:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:50
 msgid "Solder paste:"
 msgstr "Pasta na górze:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:64
-#, fuzzy
 msgid "Board Colors"
-msgstr "Kolor ciała płytki"
+msgstr "Kolory płytki"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:66
-#, fuzzy
 msgid "Use board stackup colors"
-msgstr "Wstaw tabelę ze stosem warstw"
+msgstr "Użyj kolorów ze stosu warstw"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:69
-#, fuzzy
 msgid "Use colors:"
-msgstr "Kolory sieci:"
+msgstr "Użyj kolorów:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:77
 msgid "Silkscreen top:"
@@ -1301,9 +1295,8 @@ msgid "Export to Clipboard"
 msgstr "Eksportuj do schowka"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:158
-#, fuzzy
 msgid "Symbol (.kicad_sym file)"
-msgstr "Symbol (plik .lib)"
+msgstr "Symbol (plik .kicad_sym)"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:158
 msgid "Footprint (.kicad_mod file)"
@@ -1879,9 +1872,9 @@ msgstr ""
 "będących w konflikcie lub usunąć je z systemu."
 
 #: common/dialogs/dialog_configure_paths.cpp:374
-#, fuzzy, c-format
+#, c-format
 msgid "The name %s is reserved, and cannot be used."
-msgstr "Nazwa %s jest zarezerwowana i może być użyta w tym miejscu"
+msgstr "Nazwa %s jest zarezerwowana i nie może być użyta."
 
 #: common/dialogs/dialog_configure_paths.cpp:517
 msgid "File Browser..."
@@ -3951,17 +3944,16 @@ msgstr ""
 "Nie można zmienić nazwy pliku automatycznej kopii zapasowej na właściwą."
 
 #: common/eda_doc.cpp:140
-#, fuzzy
 msgid "Documentation File"
-msgstr "Dokumentacja"
+msgstr "Plik z dokumentacją"
 
 #: common/eda_doc.cpp:150
-#, fuzzy, c-format
+#, c-format
 msgid "Documentation file '%s' not found."
-msgstr "Plik ze schematem '%s' nie został znaleziony."
+msgstr "Plik z dokumentacją '%s' nie został znaleziony."
 
 #: common/eda_doc.cpp:193
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown MIME type for documentation file '%s'"
 msgstr "Nieznany typ MIME dla pliku dokumentacji '%s'"
 
@@ -6479,9 +6471,9 @@ msgid "Reset to Defaults"
 msgstr "Resetuj do domyślnych"
 
 #: common/widgets/paged_dialog.cpp:367
-#, fuzzy, c-format
+#, c-format
 msgid "Reset %s to Defaults"
-msgstr "Resetuj do domyślnych"
+msgstr "Resetuj %s do domyślnych"
 
 #: common/widgets/unit_binder.cpp:217
 #, c-format
@@ -6769,9 +6761,8 @@ msgid "Specctra DSN file"
 msgstr "Plik Specctra DSN"
 
 #: common/wildcards_and_files_ext.cpp:521
-#, fuzzy
 msgid "Specctra Session file"
-msgstr "Połącz plik Specctra Session:"
+msgstr "Plik Specctra Session"
 
 #: common/wildcards_and_files_ext.cpp:528
 msgid "IPC-D-356 Test Files"
@@ -6790,9 +6781,8 @@ msgid "Jpeg file"
 msgstr "Plik JPEG"
 
 #: common/wildcards_and_files_ext.cpp:554
-#, fuzzy
 msgid "Hotkey file"
-msgstr "Lista skrótów klawiszowych"
+msgstr "Plik z listą skrótów klawiszowych"
 
 #: cvpcb/auto_associate.cpp:105
 #, c-format
@@ -7522,9 +7512,8 @@ msgid "Nickname '%s' already in use."
 msgstr "Nazwa skrótowa '%s' już jest używana."
 
 #: eeschema/dialogs/dialog_bom.cpp:420 eeschema/dialogs/dialog_netlist.cpp:690
-#, fuzzy
 msgid "Generator File"
-msgstr "Generator plików:"
+msgstr "Plik generatora"
 
 #: eeschema/dialogs/dialog_bom.cpp:439
 msgid "Generator file name not found."
@@ -9492,14 +9481,12 @@ msgid "This plugin already exists."
 msgstr "Ta wtyczka już istnieje."
 
 #: eeschema/dialogs/dialog_netlist.cpp:666
-#, fuzzy
 msgid "You must provide a netlist generator command string"
-msgstr "Błąd. Musisz wypełnić pole Polecenie netlisty"
+msgstr "Musisz podać ciąg poleceń generatora listy sieci"
 
 #: eeschema/dialogs/dialog_netlist.cpp:672
-#, fuzzy
 msgid "You must provide a netlist generator title"
-msgstr "Błąd. Musisz wypełnić pole Tytuł"
+msgstr "Musisz podać nazwę generatora listy sieci"
 
 #: eeschema/dialogs/dialog_netlist.cpp:718
 msgid "Do not forget to choose a title for this netlist control page"
@@ -9540,18 +9527,18 @@ msgid "Alternate Pin Name"
 msgstr "Alternatywna nazwa pinu"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:145
-#, fuzzy
 msgid "Synchronized pins edit mode, and this pin is new"
-msgstr "Tryb zsynchronizowanej edycji pinów"
+msgstr "Tryb zsynchronizowanej edycji pinów, a ten pin jest nowy"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:146
 msgid ""
 "Similar pins will be automatically added to other units, if this pin is not "
 "common to all units"
 msgstr ""
+"Podobne piny zostaną dodane automatycznie do innych jednostek, jeśli ten pin "
+"nie jest wspólny dla wszystkich jednostek"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:151
-#, fuzzy
 msgid "Synchronized pins edit mode"
 msgstr "Tryb zsynchronizowanej edycji pinów"
 
@@ -9560,6 +9547,8 @@ msgid ""
 "Similar pins at the same location will be edited. Pin number of other pins "
 "will be not modified"
 msgstr ""
+"Zmienione będą podobne piny w tej samej lokalizacji. Liczba pinów innych "
+"pinów nie zostanie zmodyfikowana"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:206
 #: eeschema/dialogs/dialog_symbol_properties.cpp:334
@@ -9568,17 +9557,19 @@ msgstr "Alternatywne definicje pinów nie są dostępne w symbolach DeMorgan."
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:282
 msgid "This symbol only has one unit. This control has no effect."
-msgstr ""
+msgstr "Ten symbol ma tylko jedną jednostkę. Kontrola nie da żadnego efektu."
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:284
 msgid ""
 "Synchronized pin edit mode is enabled.\n"
 "Similar pins will be edited, regardless this option."
 msgstr ""
+"Zsynchronizowany tryb edycji pinów jest włączony.\n"
+"Podobne piny będą zmieniane, niezależnie od tej opcji."
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:287
 msgid "If checked, this pin will exist in all units."
-msgstr ""
+msgstr "Jeśli zaznaczone, ten pin będzie występował we wszystkich jednostkach."
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:308
 msgid "Alternate pin definitions must have a name."
@@ -9598,7 +9589,7 @@ msgstr ""
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:32
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:36
 msgid "info"
-msgstr ""
+msgstr "informacja"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:57
 msgid "Pin &name:"
@@ -11992,16 +11983,14 @@ msgstr ""
 "połączenia lub magistrali"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:79
-#, fuzzy
 msgid "Global label size:"
-msgstr "Etykiety globalne"
+msgstr "Rozmiar etykiet globalnych:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:81
-#, fuzzy
 msgid "Percentage of the text size to use as space around a global label"
 msgstr ""
-"Procent rozmiaru tekstu względem przesunięcia tekstu powyżej lub poniżej "
-"połączenia lub magistrali"
+"Procent rozmiaru tekstu do wykorzystania jako przestrzeń wokół etykiety "
+"globalnej"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:107
 msgid "Default line thickness:"
@@ -12097,14 +12086,12 @@ msgid "Color Theme"
 msgstr "Motyw kolorystyczny"
 
 #: eeschema/dialogs/panel_sym_color_settings_base.cpp:25
-#, fuzzy
 msgid "Use schematic editor color theme"
-msgstr "Użyj motywu kolorów Eeschema"
+msgstr "Użyj motywu kolorów edytora schematów"
 
 #: eeschema/dialogs/panel_sym_color_settings_base.cpp:31
-#, fuzzy
 msgid "Use theme:"
-msgstr "Czas narastania:"
+msgstr "Użyj motywu:"
 
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:29
 msgid "&Default line width:"
@@ -13510,9 +13497,8 @@ msgid "Storage file not fully parsed (%d bytes remaining)."
 msgstr "Zapisany plik nie został przetworzony w pełni (pozostało %d bajtów)."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:478
-#, fuzzy
 msgid "Compile mask not currently supported."
-msgstr "Rysowanie łuków na schemacie nie jest obecnie obsługiwane."
+msgstr "Kompilowana maska nie jest obecnie obsługiwana."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:491
 #, c-format
@@ -13574,7 +13560,6 @@ msgid "Rounded rectangle's owner (%d) not found."
 msgstr "Właściciel zaokrąglonego prostokąta (%d) nie został znaleziony."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1300
-#, fuzzy
 msgid "Arcs on schematic not currently supported."
 msgstr "Rysowanie łuków na schemacie nie jest obecnie obsługiwane."
 
@@ -13585,7 +13570,7 @@ msgstr "Właściciel łuku (%d) nie został znaleziony."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1336
 msgid "Arcs in symbols cannot exceed 180 degrees."
-msgstr ""
+msgstr "Łuki w symbolach nie mogą przekraczać 180 stopni."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1376
 #, c-format
@@ -14060,13 +14045,13 @@ msgstr ""
 "Ustawianie symbolowi na schemacie '%s %s' identyfikatora biblioteki '%s'."
 
 #: eeschema/sch_screen.cpp:599
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Schematic symbol reference '%s' library identifier is not valid. Unable to "
 "link library symbol."
 msgstr ""
-"Identyfikator biblioteki odnośnika symbolu na schemacie '%s' jest "
-"nieprawidłowy. Nie można połączyć z symbolem biblioteki."
+"Identyfikator biblioteki '%s' w symbolu na schemacie jest nieprawidłowy. Nie "
+"można połączyć symbolu biblioteki."
 
 #: eeschema/sch_screen.cpp:615
 #, c-format
@@ -16572,52 +16557,51 @@ msgstr ""
 "skonwertowanej %c."
 
 #: eeschema/tools/ee_inspection_tool.cpp:284
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b> conflicts with pin %s"
 "%s at location <b>(%s, %s)</b>."
 msgstr ""
-"<b>Zdublowany pin %s</b> %s na pozycji <b>(%.3f, %.3f)</b> jest w konflikcie "
-"z pinem %s%s na pozycji <b>(%.3f, %.3f)</b>."
+"<b>Zdublowany pin %s</b> %s na pozycji <b>(%s, %s)</b> jest w konflikcie z "
+"pinem %s%s na pozycji <b>(%s, %s)</b>."
 
 #: eeschema/tools/ee_inspection_tool.cpp:297
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b> conflicts with pin %s"
 "%s at location <b>(%s, %s)</b> in units %c and %c."
 msgstr ""
-"<b>Zdublowany pin %s</b> %s na pozycji <b>(%.3f, %.3f)</b> jest w konflikcie "
-"z pinem %s%s na pozycji <b>(%.3f, %.3f)</b> w jednostkach %c oraz %c."
+"<b>Zdublowany pin %s</b> %s na pozycji <b>(%s, %s)</b> jest w konflikcie z "
+"pinem %s%s na pozycji <b>(%s, %s)</b> w jednostkach %c oraz %c."
 
 #: eeschema/tools/ee_inspection_tool.cpp:335
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b> of converted."
 msgstr ""
-"<b>Ukryty pin zasilający %s</b> %s na pozycji <b>(%.3f, %.3f)</b> w symbolu "
+"<b>Ukryty pin zasilający %s</b> %s na pozycji <b>(%s, %s)</b> w symbolu "
 "skonwertowanym."
 
 #: eeschema/tools/ee_inspection_tool.cpp:344
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b> in unit %c "
 "of converted."
 msgstr ""
-"<b>Ukryty pin zasilający %s</b> %s na pozycji <b>(%.3f, %.3f)</b> w symbolu "
-"%c skonwertowanym."
+"<b>Ukryty pin zasilający %s</b> %s na pozycji <b>(%s, %s)</b> w symbolu %c "
+"skonwertowanym."
 
 #: eeschema/tools/ee_inspection_tool.cpp:357
-#, fuzzy, c-format
+#, c-format
 msgid "Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b>."
-msgstr "<b>Ukryty pin zasilający %s</b> %s na pozycji <b>(%.3f, %.3f)</b>."
+msgstr "<b>Ukryty pin zasilający %s</b> %s na pozycji <b>(%s, %s)</b>."
 
 #: eeschema/tools/ee_inspection_tool.cpp:365
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b> in unit %c."
 msgstr ""
-"<b>Ukryty pin zasilający %s</b> %s na pozycji <b>(%.3f, %.3f)</b> w "
-"jednostce %c."
+"<b>Ukryty pin zasilający %s</b> %s na pozycji <b>(%s, %s)</b> w jednostce %c."
 
 #: eeschema/tools/ee_inspection_tool.cpp:376
 msgid ""
@@ -16627,31 +16611,30 @@ msgstr ""
 "sieci.)"
 
 #: eeschema/tools/ee_inspection_tool.cpp:389
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Off grid pin %s</b> %s at location <b>(%s, %s)</b> of converted."
 msgstr ""
-"<b>Pin poza siatką %s</b> %s na pozycji <b>(%.3f, %.3f)</b> w symbolu "
+"<b>Pin poza siatką %s</b> %s na pozycji <b>(%s, %s)</b> w symbolu "
 "skonwertowanym."
 
 #: eeschema/tools/ee_inspection_tool.cpp:398
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Off grid pin %s</b> %s at location <b>(%.3s, %.3s)</b> in unit %c of "
 "converted."
 msgstr ""
-"<b>Pin poza siatką %s</b> %s na pozycji <b>(%.3f, %.3f)</b> w symbolu %c "
+"<b>Pin poza siatką %s</b> %s na pozycji <b>(%.3s, %.3s)</b> w symbolu %c "
 "skonwertowanym."
 
 #: eeschema/tools/ee_inspection_tool.cpp:411
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Off grid pin %s</b> %s at location <b>(%s, %s)</b>."
-msgstr "<b>Pin poza siatką %s</b> %s na pozycji <b>(%.3f, %.3f)</b>."
+msgstr "<b>Pin poza siatką %s</b> %s na pozycji <b>(%s, %s)</b>."
 
 #: eeschema/tools/ee_inspection_tool.cpp:419
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Off grid pin %s</b> %s at location <b>(%s, %s)</b> in unit %c."
-msgstr ""
-"<b>Pin poza siatką %s</b> %s na pozycji <b>(%.3f, %.3f)</b> w symbolu %c."
+msgstr "<b>Pin poza siatką %s</b> %s na pozycji <b>(%s, %s)</b> w symbolu %c."
 
 #: eeschema/tools/ee_inspection_tool.cpp:436
 msgid "No symbol issues found."
@@ -16780,9 +16763,10 @@ msgid "Net must be labeled to assign a netclass."
 msgstr "Sieci muszą być nazwane by je dołączyć do klas sieci."
 
 #: eeschema/tools/sch_editor_control.cpp:962
-#, fuzzy
 msgid "Bus must have at least one member to assign a netclass to members."
-msgstr "Sieci muszą być nazwane by je dołączyć do klas sieci."
+msgstr ""
+"Magistrala musi mieć co najmniej jednego członka, aby przypisać im klasę "
+"sieci."
 
 #: eeschema/tools/sch_editor_control.cpp:988
 msgid "Netclasses"
@@ -16846,9 +16830,8 @@ msgid "Can't save file '%s'."
 msgstr "Nie można zapisać pliku '%s'."
 
 #: eeschema/tools/symbol_editor_control.cpp:436
-#, fuzzy
 msgid "SVG File Name"
-msgstr "Nazwa pliku"
+msgstr "Nazwa pliku SVG"
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:518
 msgid "Edit Symbol Name"
@@ -17050,29 +17033,26 @@ msgid "Sketch polygons"
 msgstr "Zarysy stref"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:18
-#, fuzzy
 msgid "File Format"
-msgstr "Format pliku mapy wierceń"
+msgstr "Format pliku"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:20
 msgid "These parameters are usually specified in files, but not always."
-msgstr ""
+msgstr "Te parametry są zwykle określone w plikach, ale nie zawsze."
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:29
-#, fuzzy
 msgid "File units"
-msgstr "jednostki"
+msgstr "Jednostki pliku"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:33
 msgid "No leading zeros (TZ format)"
-msgstr ""
+msgstr "Bez zer wiodących (format TZ)"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:33
 msgid "No trailing zeros (LZ format)"
-msgstr ""
+msgstr "Bez zer końcowych (format LZ)"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:35
-#, fuzzy
 msgid "Zero format"
 msgstr "Format zer"
 
@@ -17082,28 +17062,29 @@ msgid ""
 "No leading zeros format means the leading zeros are stripped\n"
 "No trailing zeros  format means the trainling zeros are stripped"
 msgstr ""
+"Liczbom całkowitym w plikach można usunąć zbędne zera.\n"
+"Format z brakiem wiodących zer oznacza, że wiodące zera są usuwane\n"
+"Format z brakiem  zer końcowych oznacza, że zera na końcu są usuwane"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:51
-#, fuzzy
 msgid "Coordinates Format"
-msgstr "Format współrzędnych:"
+msgstr "Format współrzędnych"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:53
 msgid "The coordinates format is not specified in Excellon format."
-msgstr ""
+msgstr "Format współrzędnych nie jest określony w formacie Excellon."
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:57
 msgid "(The decimal format does not use these settings)"
-msgstr ""
+msgstr "(Format dziesiętny nie korzysta z tych ustawień)"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:61
 msgid "Usually: 3:3 in mm and 2:4 in inches"
-msgstr ""
+msgstr "Zwykle: 3:3 dla milimetrów i 2:4 dla cali"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:70
-#, fuzzy
 msgid "Format for mm"
-msgstr "Format"
+msgstr "Format dla mm"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:74
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:84
@@ -17171,9 +17152,8 @@ msgid ":"
 msgstr ":"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:90
-#, fuzzy
 msgid "Format for inches"
-msgstr "Właściwości formatowania"
+msgstr "Format dla cali"
 
 #: gerbview/dialogs/panel_gerbview_settings_base.cpp:22
 msgid "Full size"
@@ -17539,9 +17519,8 @@ msgid "GerbView"
 msgstr "GerbView"
 
 #: gerbview/gerbview_frame.cpp:1023
-#, fuzzy
 msgid "Excellon Options"
-msgstr "Opcje wtyczki"
+msgstr "Opcje Excellon"
 
 #: gerbview/job_file_reader.cpp:157
 msgid "This job file uses an outdated format. Please recreate it."
@@ -17573,9 +17552,9 @@ msgid "Open Recent Zip File"
 msgstr "Otwórz ostatnio używane archiwum ZIP"
 
 #: gerbview/readgerb.cpp:63
-#, fuzzy, c-format
+#, c-format
 msgid "File '%s' not found"
-msgstr "Nie znaleziono pliku '%s'."
+msgstr "Nie znaleziono pliku '%s'"
 
 #: gerbview/readgerb.cpp:88
 msgid ""
@@ -18438,14 +18417,12 @@ msgid "Create new project from template"
 msgstr "Tworzy nowy projekt na podstawie szablonu"
 
 #: kicad/tools/kicad_manager_actions.cpp:52
-#, fuzzy
 msgid "Open Demo Project..."
-msgstr "Otwórz projekt..."
+msgstr "Otwórz projekt pokazowy..."
 
 #: kicad/tools/kicad_manager_actions.cpp:52
-#, fuzzy
 msgid "Open a demo project"
-msgstr "Otwiera istniejący projekt"
+msgstr "Otwiera projekt pokazowy"
 
 #: kicad/tools/kicad_manager_actions.cpp:58
 msgid "Open Project..."
@@ -20692,14 +20669,12 @@ msgid "Loss Tg:"
 msgstr "Loss Tg:"
 
 #: pcbnew/board_stackup_manager/dialog_dielectric_list_manager_base.cpp:60
-#, fuzzy
 msgid "Common materials:"
-msgstr "Wspólny dla wszystkich części"
+msgstr "Materiały wspólne:"
 
 #: pcbnew/board_stackup_manager/dialog_dielectric_list_manager_base.h:57
-#, fuzzy
 msgid "Dielectric Material Characteristics"
-msgstr "Charakterystyka materiału dielektrycznego:"
+msgstr "Charakterystyka materiału dielektrycznego"
 
 #: pcbnew/board_stackup_manager/panel_board_finish_base.cpp:20
 msgid "Has castellated pads"
@@ -24497,9 +24472,8 @@ msgid "Group name:"
 msgstr "Nazwa grupy:"
 
 #: pcbnew/dialogs/dialog_group_properties_base.cpp:39
-#, fuzzy
 msgid "Prevents group from being moved on canvas"
-msgstr "Zapobiegaj przenoszeniu i/lub zmianie rozmiaru elementów na kanwie"
+msgstr "Zapobiegaj przenoszeniu elementów na kanwie"
 
 #: pcbnew/dialogs/dialog_group_properties_base.cpp:43
 msgid "Group members:"
@@ -26648,14 +26622,12 @@ msgid "End layer:"
 msgstr "Końcowa warstwa:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:280
-#, fuzzy
 msgid "Annular rings:"
-msgstr "Szerokość okręgu"
+msgstr "Szerokość okręgu:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:284
-#, fuzzy
 msgid "Start, end, and connected layers"
-msgstr "%s, %s oraz połączone warstwy"
+msgstr "Początek, koniec, oraz połączone warstwy"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.h:114
 msgid "Track & Via Properties"
@@ -27085,14 +27057,12 @@ msgid "File not found"
 msgstr "Nie znaleziono pliku"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:380
-#, fuzzy
 msgid "Unable to open file"
-msgstr "nie można otworzyć pliku"
+msgstr "Nie można otworzyć pliku"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:385
-#, fuzzy
 msgid "Unknown error"
-msgstr "Nieznana Metoda"
+msgstr "Nieznany błąd"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model_base.cpp:38
 msgid "3D Model(s)"
@@ -27318,7 +27288,6 @@ msgstr ""
 "lub inne ustawienia."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:256
-#, fuzzy
 msgid "Copper to hole clearance:"
 msgstr "Prześwit wobec otworu:"
 
@@ -27333,7 +27302,6 @@ msgstr ""
 "pomocą reguł niestandardowych lub innych ustawień."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:272
-#, fuzzy
 msgid "Copper to edge clearance:"
 msgstr "Prześwit wobec krawędzi:"
 
@@ -28073,7 +28041,6 @@ msgstr ""
 "(zwykle dla prześwitu soldermaski)."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:73
-#, fuzzy
 msgid "Solder mask minimum web width:"
 msgstr "Minimalna szerokość brzegowa soldermaski:"
 
@@ -28170,7 +28137,6 @@ msgid "Check rule syntax"
 msgstr "Sprawdź składnię reguł"
 
 #: pcbnew/dialogs/panel_setup_rules_help_md.h:2
-#, fuzzy
 msgid ""
 "### Top-level Clauses\n"
 "\n"
@@ -28463,8 +28429,8 @@ msgstr ""
 "Klauzula wersji musi być pierwszą klauzulą.  Oznacza ona wersję składni "
 "zastosowanej w pliku, \n"
 "wobec czego przyszłe parsery będą mogły przeprowadzać automatyczne "
-"aktualizacje.  Obecnie\n"
-"powinna być ustawiona na \"1\".\n"
+"aktualizacje.  Obecnie powinna \n"
+"być ustawiona na \"1\".\n"
 "\n"
 "Reguły powinny być uporządkowane według szczegółowości.  Dalsze reguły \n"
 "mają pierwszeństwo nad regułami wcześniejszymi; jak tylko odnaleziona \n"
@@ -28527,8 +28493,8 @@ msgstr ""
 "\n"
 "UWAGA: Zwraca prawdę, jeśli `A` znajduje się na danej warstwie, \n"
 "niezależnie czy reguła jest oceniana dla tej warstwy.\n"
-"W tym ostatnim przypadku użyj w regule klauzuli `(layer \"nazwa_warstwy"
-"\")`.\n"
+"W tym ostatnim przypadku użyj w regule klauzuli `(layer \"nazwa_warstwy\")`."
+"\n"
 "<br><br><br>\n"
 "\n"
 "### Więcej przykładów\n"
@@ -28671,24 +28637,20 @@ msgid "board setup constraints"
 msgstr "restrykcje w konfiguracji płytki"
 
 #: pcbnew/drc/drc_engine.cpp:175
-#, fuzzy
 msgid "board setup constraints silk"
-msgstr "restrykcje w konfiguracji płytki"
+msgstr "restrykcje w konfiguracji płytki dla opisów"
 
 #: pcbnew/drc/drc_engine.cpp:181
-#, fuzzy
 msgid "board setup constraints hole"
-msgstr "restrykcje w konfiguracji płytki"
+msgstr "restrykcje w konfiguracji płytki dla otworów"
 
 #: pcbnew/drc/drc_engine.cpp:186
-#, fuzzy
 msgid "board setup constraints edge"
-msgstr "restrykcje w konfiguracji płytki"
+msgstr "restrykcje w konfiguracji płytki dla krawędzi"
 
 #: pcbnew/drc/drc_engine.cpp:191
-#, fuzzy
 msgid "board setup constraints courtyard"
-msgstr "restrykcje w konfiguracji płytki"
+msgstr "restrykcje w konfiguracji płytki dla pól zajętości"
 
 #: pcbnew/drc/drc_engine.cpp:198
 msgid "board setup micro-via constraints"
@@ -28730,9 +28692,9 @@ msgid "Board minimum clearance: %s."
 msgstr "Minimalny prześwit płytki: %s."
 
 #: pcbnew/drc/drc_engine.cpp:849
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s clearance: %s."
-msgstr "Sprawdzanie %s; prześwit: %s."
+msgstr "Sprawdzanie %s prześwit: %s."
 
 #: pcbnew/drc/drc_engine.cpp:861 pcbnew/drc/drc_engine.cpp:862
 #: pcbnew/drc/drc_engine.cpp:863 pcbnew/tools/board_inspection_tool.cpp:647
@@ -28743,14 +28705,14 @@ msgid "undefined"
 msgstr "niezdefiniowany"
 
 #: pcbnew/drc/drc_engine.cpp:878
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s %s: %s."
-msgstr "Sprawdzam %s."
+msgstr "Sprawdzam %s %s: %s."
 
 #: pcbnew/drc/drc_engine.cpp:894
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s: min %s; opt %s; max %s."
-msgstr "Ponowne łączenie %s pin %s z %s do %s."
+msgstr "Sprawdzanie %s: min %s; optymalnie %s; maks %s."
 
 #: pcbnew/drc/drc_engine.cpp:905
 #, c-format
@@ -28987,9 +28949,9 @@ msgid "Differential uncoupled length too long"
 msgstr "Zbyt długa para różnicowa"
 
 #: pcbnew/drc/drc_item.cpp:320
-#, fuzzy, c-format
+#, c-format
 msgid "Rule: %s"
-msgstr "Reguły"
+msgstr "Reguła: %s"
 
 #: pcbnew/drc/drc_rule.h:135
 #, c-format
@@ -29076,9 +29038,9 @@ msgid "Missing constraint type.|  Expected %s."
 msgstr "Brak typu restrykcji.|  Spodziewano się %s."
 
 #: pcbnew/drc/drc_rule_parser.cpp:293
-#, fuzzy, c-format
+#, c-format
 msgid "Rule already has a '%s' constraint."
-msgstr "Strefa z regułami '%s' nie zezwala na prowadzenie ścieżek."
+msgstr "Reguła aktualnie posiada ograniczenie '%s'."
 
 #: pcbnew/drc/drc_rule_parser.cpp:351
 msgid "Missing min value."
@@ -30409,7 +30371,6 @@ msgstr "Promień łuku czopu:"
 
 #: pcbnew/microwave/microwave_footprint.cpp:80
 #: pcbnew/microwave/microwave_footprint.cpp:95
-#, fuzzy
 msgid "Create Microwave Footprint"
 msgstr "Utwórz footprint dla aplikacji mikrofalowej"
 
@@ -30450,7 +30411,6 @@ msgid "Component Value:"
 msgstr "Wartość:"
 
 #: pcbnew/microwave/microwave_polygon.cpp:111
-#, fuzzy
 msgid "Complex Shape"
 msgstr "Kształt złożony"
 
@@ -30463,9 +30423,8 @@ msgid "Read Shape Description File..."
 msgstr "Wczytaj opis kształtu z pliku..."
 
 #: pcbnew/microwave/microwave_polygon.cpp:210
-#, fuzzy
 msgid "Shape Description File"
-msgstr "Wczytaj opis kształtu z pliku..."
+msgstr "Wczytaj opis kształtu z pliku"
 
 #: pcbnew/microwave/microwave_polygon.cpp:314
 msgid "Shape has a null size."
@@ -33256,9 +33215,8 @@ msgid "Do not prefix path with footprint UUID."
 msgstr "Nie poprzedzaj ścieżki identyfikatorem UUID footprintu."
 
 #: pcbnew/tools/board_editor_control.cpp:378
-#, fuzzy
 msgid "Specctra Session File"
-msgstr "Połącz plik Specctra Session:"
+msgstr "Plik Specctra Session"
 
 #: pcbnew/tools/board_editor_control.cpp:403
 msgid "Specctra DSN File"
@@ -33382,9 +33340,8 @@ msgid "Cannot generate clearance report on empty group."
 msgstr "Nie można wygenerować raportu o prześwitach dla pustej grupy."
 
 #: pcbnew/tools/board_inspection_tool.cpp:383
-#, fuzzy
 msgid "Zone connection resolution for:"
-msgstr "Analiza prześwitu dla otworów:"
+msgstr "Analiza połączeń ze strefami:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:397
 #, c-format
@@ -33427,9 +33384,8 @@ msgid "Silkscreen clearance resolution for:"
 msgstr "Analiza prześwitu warstwy opisowej dla:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:528
-#, fuzzy
 msgid "Courtyard clearance resolution for:"
-msgstr "Analiza prześwitu dla:"
+msgstr "Analiza prześwitu dla pól zajętości:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:566
 msgid "Hole clearance resolution for:"
@@ -33437,7 +33393,7 @@ msgstr "Analiza prześwitu dla otworów:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:629
 msgid "Items share no relevant layers:"
-msgstr ""
+msgstr "Elementy nie mające wspólnych warstw:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:678
 msgid "Select an item for a constraints resolution report."
@@ -33452,9 +33408,9 @@ msgid "Track width resolution for:"
 msgstr "Analiza szerokości ścieżki dla:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:739
-#, fuzzy, c-format
+#, c-format
 msgid "Width constraints: min %s; opt %s; max %s."
-msgstr "Restrykcje szerokości: min %s maks %s."
+msgstr "Restrykcje szerokości: min %s; optymalnie %s; maks %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:749
 msgid "Via Diameter"
@@ -33465,9 +33421,9 @@ msgid "Via diameter resolution for:"
 msgstr "Analiza szerokości przelotek dla:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:762
-#, fuzzy, c-format
+#, c-format
 msgid "Diameter constraints: min %s; opt %s; max %s."
-msgstr "Restrykcje rozmiaru: min %s maks %s."
+msgstr "Restrykcje rozmiaru: min %s; optymalnie %s; maks %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:769
 msgid "Via Annular Width"
@@ -33478,9 +33434,9 @@ msgid "Via annular width resolution for:"
 msgstr "Analiza szerokości pierścieni przelotki dla:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:782
-#, fuzzy, c-format
+#, c-format
 msgid "Annular width constraints: min %s; opt %s; max %s."
-msgstr "Restrykcje w szerokości pierścienia: min %s maks %s."
+msgstr "Restrykcje w szerokości pierścienia: min %s; optymalnie %s; maks %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:793
 msgid "Hole Size"
@@ -33521,9 +33477,8 @@ msgid "Item allowed at current location."
 msgstr "Element dozwolony w bieżącej lokalizacji."
 
 #: pcbnew/tools/convert_tool.cpp:76
-#, fuzzy
 msgid "Create from Selection"
-msgstr "Usuń z zaznaczenia"
+msgstr "Utwórz z zaznaczenia"
 
 #: pcbnew/tools/convert_tool.cpp:207
 msgid "Convert shapes to polygon"
@@ -33743,7 +33698,6 @@ msgid "Selection copied"
 msgstr "Skopiowano zaznaczenie"
 
 #: pcbnew/tools/edit_tool.cpp:2425
-#, fuzzy
 msgid "Copy canceled"
 msgstr "Kopiowanie przerwane"
 
@@ -33811,60 +33765,52 @@ msgid "Recombine pads"
 msgstr "Ponownie połącz pola"
 
 #: pcbnew/tools/pcb_actions.cpp:48
-#, fuzzy
 msgid "Create Polygon from Selection"
-msgstr "Tworzy graficzną strefę z zaznaczenia"
+msgstr "Utwórz kształt z zaznaczenia"
 
 #: pcbnew/tools/pcb_actions.cpp:48
 msgid "Creates a graphic polygon from the selection"
-msgstr "Tworzy graficzną strefę z zaznaczenia"
+msgstr "Tworzy graficzny kształt z zaznaczenia"
 
 #: pcbnew/tools/pcb_actions.cpp:53
-#, fuzzy
 msgid "Create Zone from Selection"
-msgstr "Usuń z zaznaczenia"
+msgstr "Utwórz strefę z zaznaczenia"
 
 #: pcbnew/tools/pcb_actions.cpp:53
 msgid "Creates a copper zone from the selection"
-msgstr "Tworzy strefę miedzi z zaznaczenia"
+msgstr "Utwórz strefę miedzi z zaznaczenia"
 
 #: pcbnew/tools/pcb_actions.cpp:58
-#, fuzzy
 msgid "Create Rule Area from Selection"
-msgstr "Tworzy strefę z regułami na podstawie zaznaczenia"
+msgstr "Utwórz strefę z regułami z zaznaczenia"
 
 #: pcbnew/tools/pcb_actions.cpp:58
 msgid "Creates a rule area from the selection"
 msgstr "Tworzy strefę z regułami na podstawie zaznaczenia"
 
 #: pcbnew/tools/pcb_actions.cpp:63
-#, fuzzy
 msgid "Create Lines from Selection"
-msgstr "Tworzy graficzne linie z zaznaczenia"
+msgstr "Utwórz graficzne linie z zaznaczenia"
 
 #: pcbnew/tools/pcb_actions.cpp:63
 msgid "Creates graphic lines from the selection"
 msgstr "Tworzy graficzne linie z zaznaczenia"
 
 #: pcbnew/tools/pcb_actions.cpp:68
-#, fuzzy
 msgid "Create Arc from Selection"
-msgstr "Usuń z zaznaczenia"
+msgstr "Utwórz łuk z zaznaczenia"
 
 #: pcbnew/tools/pcb_actions.cpp:68
-#, fuzzy
 msgid "Creates an arc from the selected line segment"
-msgstr "Utwórz łuk z segmentu linii"
+msgstr "Tworzy łuk z zaznaczonego segmentu linii"
 
 #: pcbnew/tools/pcb_actions.cpp:73
-#, fuzzy
 msgid "Create Tracks from Selection"
-msgstr "Tworzy graficzne linie z zaznaczenia"
+msgstr "Utwórz ścieżkę z zaznaczenia"
 
 #: pcbnew/tools/pcb_actions.cpp:73
-#, fuzzy
 msgid "Creates tracks from the selected graphic lines"
-msgstr "Czyści zawartość zaznaczonej warstwy rysunkowej"
+msgstr "Tworzy ścieżki z zaznaczonych linii graficznych"
 
 #: pcbnew/tools/pcb_actions.cpp:82
 msgid "Draw Line"
@@ -34787,18 +34733,16 @@ msgid "Zoom to fit when changing footprint"
 msgstr "Powiększ by zmieścić podczas zmiany footprintu"
 
 #: pcbnew/tools/pcb_actions.cpp:834
-#, fuzzy
 msgid "Draw Zone Fills"
-msgstr "Plik z ramką arkusza"
+msgstr "Rysuj wypełnienia stref"
 
 #: pcbnew/tools/pcb_actions.cpp:834
 msgid "Show filled areas of zones"
 msgstr "Pokaż wypełnione obszary w strefach"
 
 #: pcbnew/tools/pcb_actions.cpp:839
-#, fuzzy
 msgid "Draw Zone Outlines"
-msgstr "Obrys strefy"
+msgstr "Rysuj obrys stref"
 
 #: pcbnew/tools/pcb_actions.cpp:839
 msgid "Show only zone boundaries"
@@ -34806,22 +34750,19 @@ msgstr "Pokaż tylko linie brzegowe stref"
 
 #: pcbnew/tools/pcb_actions.cpp:844
 msgid "Draw Zone Fill Fracture Borders"
-msgstr ""
+msgstr "Rysuj granice załamań stref wypełnienia"
 
 #: pcbnew/tools/pcb_actions.cpp:849
 msgid "Draw Zone Fill Triangulation"
-msgstr ""
+msgstr "Rysuj triangulację wypełnienia strefy"
 
 #: pcbnew/tools/pcb_actions.cpp:855
 msgid "Toggle Zone Display"
 msgstr "Przełącz wyświetlanie stref"
 
 #: pcbnew/tools/pcb_actions.cpp:856
-#, fuzzy
 msgid "Cycle between showing zone fills and just their outlines"
-msgstr ""
-"Przełącza pomiędzy pokazywaniem stref wypełnionych, ramek stref oraz zarysów "
-"stref"
+msgstr "Przełącza pomiędzy pokazywaniem stref wypełnionych a zarysów stref"
 
 #: pcbnew/tools/pcb_actions.cpp:864
 msgid "Switch to Component (F.Cu) layer"
@@ -35309,7 +35250,6 @@ msgid "Sets the length tuning parameters for currently routed item."
 msgstr "Ustawia parametry dostrajania dla obecnie prowadzonej ścieżki."
 
 #: pcbnew/tools/pcb_control.cpp:214
-#, fuzzy
 msgid "Don't show again"
 msgstr "Nie pokazuj ponownie"
 
@@ -35319,6 +35259,8 @@ msgid ""
 "Not all zones are filled. Use Edit > Fill All Zones (%s) if you wish to see "
 "all fills."
 msgstr ""
+"Nie wszystkie strefy są wypełnione. Użyj opcji Edycja > Wypełnij wszystkie "
+"strefy (%s), jeśli chcesz zobaczyć wszystkie wypełnienia."
 
 #: pcbnew/tools/pcb_control.cpp:551
 msgid "Item locked."
