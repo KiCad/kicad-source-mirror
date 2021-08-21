@@ -974,11 +974,14 @@ int ROUTER_TOOL::handleLayerSwitch( const TOOL_EVENT& aEvent, bool aForceVia )
     m_lastTargetLayer = targetLayer;
 
     if( m_router->RoutingInProgress() )
+    {
         updateEndItem( aEvent );
+        m_router->Move( m_endSnapPoint, m_endItem );
+    }
     else
+    {
         updateStartItem( aEvent );
-
-    m_router->Move( m_endSnapPoint, m_endItem );        // refresh
+    }
 
     return 0;
 }
