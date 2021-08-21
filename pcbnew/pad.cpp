@@ -688,7 +688,7 @@ int PAD::GetLocalClearanceOverrides( wxString* aSource ) const
 int PAD::GetLocalClearance( wxString* aSource ) const
 {
     if( aSource )
-        *aSource = wxString::Format( _( "pad %s" ), GetName() );
+        *aSource = _( "pad" );
 
     return m_localClearance;
 }

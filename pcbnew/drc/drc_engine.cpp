@@ -782,49 +782,69 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
     bool a_is_non_copper = a && ( !a->IsOnCopperLayer() || isKeepoutZone( a, false ) );
     bool b_is_non_copper = b && ( !b->IsOnCopperLayer() || isKeepoutZone( b, false ) );
 
-    const DRC_CONSTRAINT* constraintRef = nullptr;
-    bool                  implicit = false;
+    DRC_CONSTRAINT constraint;
+    constraint.m_Type = aConstraintType;
 
     // Local overrides take precedence over everything *except* board min clearance
-    if( aConstraintType == CLEARANCE_CONSTRAINT )
+    if( aConstraintType == CLEARANCE_CONSTRAINT || aConstraintType == HOLE_CLEARANCE_CONSTRAINT )
     {
-        int overrideA = 0;
-        int overrideB = 0;
+        int override = 0;
 
-        if( ac && !b_is_non_copper && ac->GetLocalClearanceOverrides( nullptr ) > 0 )
+        if( ac && !b_is_non_copper )
         {
-            overrideA = ac->GetLocalClearanceOverrides( &m_msg );
-
-            REPORT( "" )
-            REPORT( wxString::Format( _( "Local override on %s; clearance: %s." ),
-                                      EscapeHTML( a->GetSelectMenuText( UNITS ) ),
-                                      REPORT_VALUE( overrideA ) ) )
-        }
-
-        if( bc && !a_is_non_copper && bc->GetLocalClearanceOverrides( nullptr ) > 0 )
-        {
-            overrideB = bc->GetLocalClearanceOverrides( &m_msg );
-
-            REPORT( "" )
-            REPORT( wxString::Format( _( "Local override on %s; clearance: %s." ),
-                                      EscapeHTML( b->GetSelectMenuText( UNITS ) ),
-                                      REPORT_VALUE( overrideB ) ) )
-        }
-
-        if( overrideA || overrideB )
-        {
-            int override = std::max( overrideA, overrideB );
-
-            if( override < m_designSettings->m_MinClearance )
+            if( int overrideA = ac->GetLocalClearanceOverrides( nullptr ) > 0 )
             {
-                override = m_designSettings->m_MinClearance;
-
                 REPORT( "" )
-                REPORT( wxString::Format( _( "Board minimum clearance: %s." ),
-                                          REPORT_VALUE( override ) ) )
+                REPORT( wxString::Format( _( "Local override on %s; clearance: %s." ),
+                                          EscapeHTML( a->GetSelectMenuText( UNITS ) ),
+                                          REPORT_VALUE( overrideA ) ) )
+
+                override = ac->GetLocalClearanceOverrides( &m_msg );
+            }
+        }
+
+        if( bc && !a_is_non_copper )
+        {
+            if( int overrideB = bc->GetLocalClearanceOverrides( nullptr ) > 0 )
+            {
+                REPORT( "" )
+                REPORT( wxString::Format( _( "Local override on %s; clearance: %s." ),
+                                          EscapeHTML( b->GetSelectMenuText( UNITS ) ),
+                                          EscapeHTML( REPORT_VALUE( overrideB ) ) ) )
+
+                if( overrideB > override )
+                    override = bc->GetLocalClearanceOverrides( &m_msg );
+            }
+        }
+
+        if( override )
+        {
+            if( aConstraintType == CLEARANCE_CONSTRAINT )
+            {
+                if( override < m_designSettings->m_MinClearance )
+                {
+                    override = m_designSettings->m_MinClearance;
+                    m_msg = _( "board minimum" );
+
+                    REPORT( "" )
+                    REPORT( wxString::Format( _( "Board minimum clearance: %s." ),
+                                              REPORT_VALUE( override ) ) )
+                }
+            }
+            else
+            {
+                if( override < m_designSettings->m_HoleClearance )
+                {
+                    override = m_designSettings->m_HoleClearance;
+                    m_msg = _( "board minimum hole" );
+
+                    REPORT( "" )
+                    REPORT( wxString::Format( _( "Board minimum hole clearance: %s." ),
+                                              REPORT_VALUE( override ) ) )
+                }
             }
 
-            DRC_CONSTRAINT constraint( aConstraintType, m_msg );
+            constraint.SetName( m_msg );
             constraint.m_Value.SetMin( override );
             return constraint;
         }
@@ -833,7 +853,7 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
     auto processConstraint =
             [&]( const DRC_ENGINE_CONSTRAINT* c ) -> bool
             {
-                implicit = c->parentRule && c->parentRule->m_Implicit;
+                bool implicit = c->parentRule && c->parentRule->m_Implicit;
 
                 REPORT( "" )
 
@@ -1021,7 +1041,7 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
                     REPORT( implicit ? _( "Unconditional constraint applied." )
                                      : _( "Unconditional rule applied." ) );
 
-                    constraintRef = &c->constraint;
+                    constraint = c->constraint;
                     return true;
                 }
                 else
@@ -1041,7 +1061,22 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
                         REPORT( implicit ? _( "Constraint applied." )
                                          : _( "Rule applied; overrides previous constraints." ) )
 
-                        constraintRef = &c->constraint;
+                        if( c->constraint.m_Value.HasMin() )
+                            constraint.m_Value.SetMin( c->constraint.m_Value.Min() );
+
+                        if( c->constraint.m_Value.HasOpt() )
+                            constraint.m_Value.SetOpt( c->constraint.m_Value.Opt() );
+
+                        if( c->constraint.m_Value.HasMax() )
+                            constraint .m_Value.SetMax( c->constraint.m_Value.Max() );
+
+                        // While the expectation would be to OR the disallow flags, we've already
+                        // masked them down to aItem's type -- so we're really only looking for a
+                        // boolean here.
+                        constraint.m_DisallowFlags = c->constraint.m_DisallowFlags;
+
+                        constraint.SetParentRule( c->constraint.GetParentRule() );
+
                         return true;
                     }
                     else
@@ -1077,14 +1112,15 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
         }
     }
 
-    bool explicitConstraintFound = constraintRef && !implicit;
+    if( constraint.GetParentRule() && !constraint.GetParentRule()->m_Implicit )
+        return constraint;
 
     // Unfortunately implicit rules don't work for local clearances (such as zones) because
     // they have to be max'ed with netclass values (which are already implicit rules), and our
     // rule selection paradigm is "winner takes all".
-    if( aConstraintType == CLEARANCE_CONSTRAINT && !explicitConstraintFound )
+    if( aConstraintType == CLEARANCE_CONSTRAINT )
     {
-        int global = constraintRef ? constraintRef->m_Value.Min() : 0;
+        int global = constraint.m_Value.Min();
         int localA = ac ? ac->GetLocalClearance( nullptr ) : 0;
         int localB = bc ? bc->GetLocalClearance( nullptr ) : 0;
         int clearance = global;
@@ -1113,16 +1149,20 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
 
         if( localA > global || localB > global )
         {
-            DRC_CONSTRAINT constraint( CLEARANCE_CONSTRAINT, m_msg );
+            constraint.SetName( m_msg );
             constraint.m_Value.SetMin( clearance );
             return constraint;
         }
     }
+    else if( constraint.GetParentRule() )
+    {
+        return constraint;
+    }
 
-    static DRC_CONSTRAINT nullConstraint( NULL_CONSTRAINT );
-    nullConstraint.m_DisallowFlags = 0;
+    constraint.m_Type = NULL_CONSTRAINT;
+    constraint.m_DisallowFlags = 0;
 
-    return constraintRef ? *constraintRef : nullConstraint;
+    return constraint;
 
 #undef REPORT
 #undef UNITS

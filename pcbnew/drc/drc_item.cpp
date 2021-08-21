@@ -318,7 +318,7 @@ wxString DRC_ITEM::GetViolatingRuleDesc() const
 {
     if( m_violatingRule )
         return wxString::Format( _( "Rule: %s" ), m_violatingRule->m_Name );
-
-    return wxEmptyString;
+    else
+        return _("Local override" );
 }
 

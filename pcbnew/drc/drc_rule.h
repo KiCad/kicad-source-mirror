@@ -125,6 +125,8 @@ class DRC_CONSTRAINT
     void SetParentRule( DRC_RULE *aParentRule ) { m_parentRule = aParentRule; }
     DRC_RULE* GetParentRule() const { return m_parentRule; }
 
+    void SetName( const wxString& aName ) { m_name = aName; }
+
     wxString GetName() const
     {
         if( m_parentRule )
