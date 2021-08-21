@@ -1093,23 +1093,8 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
     {
         std::vector<DRC_ENGINE_CONSTRAINT*>* ruleset = m_constraintMap[ aConstraintType ];
 
-        if( aReporter )
-        {
-            // We want to see all results so process in "natural" order
-            for( int ii = 0; ii < (int) ruleset->size(); ++ii )
-            {
-                processConstraint( ruleset->at( ii ) );
-            }
-        }
-        else
-        {
-            // Last matching rule wins, so process in reverse order and quit when match found
-            for( int ii = (int) ruleset->size() - 1; ii >= 0; --ii )
-            {
-                if( processConstraint( ruleset->at( ii ) ) )
-                    break;
-            }
-        }
+        for( int ii = 0; ii < (int) ruleset->size(); ++ii )
+            processConstraint( ruleset->at( ii ) );
     }
 
     if( constraint.GetParentRule() && !constraint.GetParentRule()->m_Implicit )
