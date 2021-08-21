@@ -87,20 +87,15 @@ XNODE* NETLIST_EXPORTER_XML::makeRoot( unsigned aCtl )
 
 
 /// Holder for multi-unit symbol fields
-struct COMP_FIELDS
-{
-    wxString value;
-    wxString datasheet;
-    wxString footprint;
-
-    std::map< wxString, wxString >   f;
-};
 
 
 void NETLIST_EXPORTER_XML::addSymbolFields( XNODE* aNode, SCH_SYMBOL* aSymbol,
                                             SCH_SHEET_PATH* aSheet )
 {
-    COMP_FIELDS fields;
+    wxString                     value;
+    wxString                     datasheet;
+    wxString                     footprint;
+    std::map<wxString, wxString> userFields;
 
     if( aSymbol->GetUnitCount() > 1 )
     {
@@ -111,7 +106,7 @@ void NETLIST_EXPORTER_XML::addSymbolFields( XNODE* aNode, SCH_SYMBOL* aSymbol,
         // any non blank fields in all units and use the first non-blank field
         // for each unique field name.
 
-        wxString    ref = aSymbol->GetRef( aSheet );
+        wxString ref = aSymbol->GetRef( aSheet );
 
         SCH_SHEET_LIST sheetList = m_schematic->GetSheets();
         int minUnit = aSymbol->GetUnit();
@@ -133,24 +128,24 @@ void NETLIST_EXPORTER_XML::addSymbolFields( XNODE* aNode, SCH_SYMBOL* aSymbol,
                 // remark: IsVoid() returns true for empty strings or the "~" string (empty
                 // field value)
                 if( !symbol2->GetValue( &sheetList[i], m_resolveTextVars ).IsEmpty()
-                        && ( unit < minUnit || fields.value.IsEmpty() ) )
+                        && ( unit < minUnit || value.IsEmpty() ) )
                 {
-                    fields.value = symbol2->GetValue( &sheetList[i], m_resolveTextVars );
+                    value = symbol2->GetValue( &sheetList[i], m_resolveTextVars );
                 }
 
                 if( !symbol2->GetFootprint( &sheetList[i], m_resolveTextVars ).IsEmpty()
-                        && ( unit < minUnit || fields.footprint.IsEmpty() ) )
+                        && ( unit < minUnit || footprint.IsEmpty() ) )
                 {
-                    fields.footprint = symbol2->GetFootprint( &sheetList[i], m_resolveTextVars );
+                    footprint = symbol2->GetFootprint( &sheetList[i], m_resolveTextVars );
                 }
 
                 if( !symbol2->GetField( DATASHEET_FIELD )->IsVoid()
-                        && ( unit < minUnit || fields.datasheet.IsEmpty() ) )
+                        && ( unit < minUnit || datasheet.IsEmpty() ) )
                 {
                     if( m_resolveTextVars )
-                        fields.datasheet = symbol2->GetField( DATASHEET_FIELD )->GetShownText();
+                        datasheet = symbol2->GetField( DATASHEET_FIELD )->GetShownText();
                     else
-                        fields.datasheet = symbol2->GetField( DATASHEET_FIELD )->GetText();
+                        datasheet = symbol2->GetField( DATASHEET_FIELD )->GetText();
                 }
 
                 for( int ii = MANDATORY_FIELDS; ii < symbol2->GetFieldCount(); ++ii )
@@ -158,12 +153,12 @@ void NETLIST_EXPORTER_XML::addSymbolFields( XNODE* aNode, SCH_SYMBOL* aSymbol,
                     const SCH_FIELD& f = symbol2->GetFields()[ ii ];
 
                     if( f.GetText().size()
-                        && ( unit < minUnit || fields.f.count( f.GetName() ) == 0 ) )
+                        && ( unit < minUnit || userFields.count( f.GetName() ) == 0 ) )
                     {
                         if( m_resolveTextVars )
-                            fields.f[ f.GetName() ] = f.GetShownText();
+                            userFields[ f.GetName() ] = f.GetShownText();
                         else
-                            fields.f[ f.GetName() ] = f.GetText();
+                            userFields[ f.GetName() ] = f.GetText();
                     }
                 }
 
@@ -173,13 +168,13 @@ void NETLIST_EXPORTER_XML::addSymbolFields( XNODE* aNode, SCH_SYMBOL* aSymbol,
     }
     else
     {
-        fields.value = aSymbol->GetValue( aSheet, m_resolveTextVars );
-        fields.footprint = aSymbol->GetFootprint( aSheet, m_resolveTextVars );
+        value = aSymbol->GetValue( aSheet, m_resolveTextVars );
+        footprint = aSymbol->GetFootprint( aSheet, m_resolveTextVars );
 
         if( m_resolveTextVars )
-            fields.datasheet = aSymbol->GetField( DATASHEET_FIELD )->GetShownText();
+            datasheet = aSymbol->GetField( DATASHEET_FIELD )->GetShownText();
         else
-            fields.datasheet = aSymbol->GetField( DATASHEET_FIELD )->GetText();
+            datasheet = aSymbol->GetField( DATASHEET_FIELD )->GetText();
 
         for( int ii = MANDATORY_FIELDS; ii < aSymbol->GetFieldCount(); ++ii )
         {
@@ -188,37 +183,36 @@ void NETLIST_EXPORTER_XML::addSymbolFields( XNODE* aNode, SCH_SYMBOL* aSymbol,
             if( f.GetText().size() )
             {
                 if( m_resolveTextVars )
-                    fields.f[ f.GetName() ] = f.GetShownText();
+                    userFields[ f.GetName() ] = f.GetShownText();
                 else
-                    fields.f[ f.GetName() ] = f.GetText();
+                    userFields[ f.GetName() ] = f.GetText();
             }
         }
     }
 
     // Do not output field values blank in netlist:
-    if( fields.value.size() )
-        aNode->AddChild( node( "value", fields.value ) );
+    if( value.size() )
+        aNode->AddChild( node( "value", UnescapeString( value ) ) );
     else    // value field always written in netlist
         aNode->AddChild( node( "value", "~" ) );
 
-    if( fields.footprint.size() )
-        aNode->AddChild( node( "footprint", fields.footprint ) );
+    if( footprint.size() )
+        aNode->AddChild( node( "footprint", UnescapeString( footprint ) ) );
 
-    if( fields.datasheet.size() )
-        aNode->AddChild( node( "datasheet", fields.datasheet ) );
+    if( datasheet.size() )
+        aNode->AddChild( node( "datasheet", UnescapeString( datasheet ) ) );
 
-    if( fields.f.size() )
+    if( userFields.size() )
     {
         XNODE* xfields;
         aNode->AddChild( xfields = node( "fields" ) );
 
         // non MANDATORY fields are output alphabetically
-        for( std::map< wxString, wxString >::const_iterator it = fields.f.begin();
-             it != fields.f.end();  ++it )
+        for( const std::pair<const wxString, wxString>& f : userFields )
         {
-            XNODE*  xfield;
-            xfields->AddChild( xfield = node( "field", it->second ) );
-            xfield->AddAttribute( "name", it->first );
+            XNODE* xfield = node( "f", UnescapeString( f.second ) );
+            xfield->AddAttribute( "name", UnescapeString( f.first ) );
+            xfields->AddChild( xfield );
         }
     }
 }
