@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.9.0 Jun  3 2020)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -85,7 +85,7 @@ DIALOG_PRINT_GENERIC_BASE::DIALOG_PRINT_GENERIC_BASE( wxWindow* parent, wxWindow
 	bRightCol->Add( bScaleSizer, 0, wxALL|wxEXPAND, 5 );
 
 
-	m_bUpperSizer->Add( bRightCol, 1, wxEXPAND, 5 );
+	m_bUpperSizer->Add( bRightCol, 0, wxEXPAND, 5 );
 
 
 	bMainSizer->Add( m_bUpperSizer, 1, wxEXPAND|wxALL, 5 );

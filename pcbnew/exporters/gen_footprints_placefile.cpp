@@ -159,6 +159,8 @@ private:
     static int m_fileOpt;
     static int m_fileFormat;
     static bool m_includeBoardEdge;
+    static bool m_excludeTHOpt;
+    static bool m_onlySMDOpt;
 };
 
 
@@ -166,6 +168,8 @@ private:
 int DIALOG_GEN_FOOTPRINT_POSITION::m_fileOpt = 0;
 int DIALOG_GEN_FOOTPRINT_POSITION::m_fileFormat = 0;
 bool DIALOG_GEN_FOOTPRINT_POSITION::m_includeBoardEdge = false;
+bool DIALOG_GEN_FOOTPRINT_POSITION::m_excludeTHOpt = false;
+bool DIALOG_GEN_FOOTPRINT_POSITION::m_onlySMDOpt = false;
 
 
 void DIALOG_GEN_FOOTPRINT_POSITION::initDialog()
@@ -188,6 +192,8 @@ void DIALOG_GEN_FOOTPRINT_POSITION::initDialog()
     m_rbFormat->SetSelection( m_fileFormat );
     m_cbIncludeBoardEdge->SetValue( m_includeBoardEdge );
     m_useDrillPlaceOrigin->SetValue( cfg->m_PlaceFile.use_aux_origin );
+    m_onlySMD->SetValue( m_onlySMDOpt );
+    m_excludeTH->SetValue( m_excludeTHOpt );
 
     // Update sizes and sizers:
     m_messagesPanel->MsgPanelSetMinSize( wxSize( -1, 160 ) );
@@ -230,6 +236,8 @@ void DIALOG_GEN_FOOTPRINT_POSITION::OnGenerate( wxCommandEvent& event )
     m_fileOpt = m_radioBoxFilesCount->GetSelection();
     m_fileFormat = m_rbFormat->GetSelection();
     m_includeBoardEdge = m_cbIncludeBoardEdge->GetValue();
+    m_onlySMDOpt = m_onlySMD->GetValue();
+    m_excludeTHOpt = m_excludeTH->GetValue();
 
     auto cfg = m_parent->GetPcbNewSettings();
     m_units  = m_radioBoxUnits->GetSelection() == 0 ? EDA_UNITS::INCHES : EDA_UNITS::MILLIMETRES;
