@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-20 13:14-0700\n"
-"PO-Revision-Date: 2021-08-14 10:41+0200\n"
+"POT-Creation-Date: 2021-08-21 08:12+0200\n"
+"PO-Revision-Date: 2021-08-21 08:12+0200\n"
 "Last-Translator: \n"
 "Language-Team: jp-charras\n"
 "Language: fr_FR\n"
@@ -31,9 +31,8 @@ msgstr ""
 "X-Poedit-SearchPath-13: resources/linux/metainfo\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
-#, fuzzy
 msgid "All Files"
-msgstr "Tous les fichiers"
+msgstr "Tous les Fichiers"
 
 #: 3d-viewer/3d_cache/dialogs/dialog_select_3d_model.cpp:94
 #, c-format
@@ -397,38 +396,32 @@ msgid "Render current view using Raytracing"
 msgstr "Rendu de la vue en cours en utilisant le Raytracing"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:23
-#, fuzzy
 msgid "Environment Colors"
-msgstr "Variables d'Environnement"
+msgstr "Couleurs d'Environnement"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:30
-#, fuzzy
 msgid "Background gradient start:"
-msgstr "Début de référence pour le dessous :"
+msgstr "Début du dégradé d’arrière-plan:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:37
-#, fuzzy
 msgid "Background gradient end:"
-msgstr "Fond Blanc"
+msgstr "Fin du dégradé d’arrière-plan:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:50
 msgid "Solder paste:"
 msgstr "Pâte à souder:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:64
-#, fuzzy
 msgid "Board Colors"
-msgstr "Couleur du Corps du PCB"
+msgstr "Couleur du PCB"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:66
-#, fuzzy
 msgid "Use board stackup colors"
-msgstr "Insérer la table du \"stackup\" du PCB"
+msgstr "Utiliser les couleurs du \"stackup\" du PCB"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:69
-#, fuzzy
 msgid "Use colors:"
-msgstr "Couleur de nets:"
+msgstr "Utiliser les couleurs :"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:77
 msgid "Silkscreen top:"
@@ -1126,7 +1119,7 @@ msgstr "Changer l'affichage les couches ECO"
 #: pcbnew/dialogs/dialog_create_array_base.cpp:225
 #: pcbnew/dialogs/dialog_create_array_base.cpp:237
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:48
-#: pcbnew/dialogs/dialog_export_step_base.cpp:67
+#: pcbnew/dialogs/dialog_export_step_base.cpp:65
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:67
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:109
 #: pcbnew/dialogs/dialog_move_exact_base.cpp:31
@@ -2745,7 +2738,7 @@ msgstr "Prévisualisation"
 #: pcbnew/dialogs/dialog_board_statistics.cpp:135
 #: pcbnew/dialogs/dialog_drc.cpp:86 pcbnew/dialogs/dialog_drc.cpp:268
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:160
-#: pcbnew/dialogs/dialog_export_step.cpp:115
+#: pcbnew/dialogs/dialog_export_step.cpp:117
 #: pcbnew/dialogs/dialog_export_svg.cpp:97
 #: pcbnew/dialogs/dialog_find_base.cpp:104
 #: pcbnew/dialogs/dialog_footprint_checker.cpp:51
@@ -3227,7 +3220,7 @@ msgid ""
 "pcbnew with previously open files"
 msgstr ""
 "Si activé, le lancement d’un projet lancera également des outils tels que "
-"eeschema et pcbnew avec les fichiers précédemment ouverts"
+"Eeschema et PcbNew avec les fichiers précédemment ouverts"
 
 #: common/dialogs/panel_hotkeys_editor.cpp:78
 msgid "Type filter text"
@@ -5413,9 +5406,8 @@ msgid "No default editor found, you must choose it"
 msgstr "Pas d'éditeur par défaut trouvé, vous devez en choisir un"
 
 #: common/pgm_base.cpp:184 common/pgm_base.cpp:186
-#, fuzzy
 msgid "Executable file"
-msgstr "Fichiers exécutables ("
+msgstr "Fichier exécutable"
 
 #: common/pgm_base.cpp:196
 msgid "Select Preferred Editor"
@@ -5547,11 +5539,11 @@ msgstr "Erreur en extrayant le fichier!"
 #: pcbnew/dialogs/dialog_gendrill.cpp:466 pcbnew/dialogs/dialog_plot.cpp:912
 #: pcbnew/exporters/export_footprint_associations.cpp:83
 #: pcbnew/exporters/export_gencad.cpp:253
-#: pcbnew/exporters/gen_footprints_placefile.cpp:276
-#: pcbnew/exporters/gen_footprints_placefile.cpp:297
-#: pcbnew/exporters/gen_footprints_placefile.cpp:394
-#: pcbnew/exporters/gen_footprints_placefile.cpp:439
-#: pcbnew/exporters/gen_footprints_placefile.cpp:541
+#: pcbnew/exporters/gen_footprints_placefile.cpp:294
+#: pcbnew/exporters/gen_footprints_placefile.cpp:315
+#: pcbnew/exporters/gen_footprints_placefile.cpp:412
+#: pcbnew/exporters/gen_footprints_placefile.cpp:458
+#: pcbnew/exporters/gen_footprints_placefile.cpp:560
 #: pcbnew/exporters/gendrill_Excellon_writer.cpp:117
 #: pcbnew/exporters/gendrill_file_writer_base.cpp:344
 #: pcbnew/exporters/gendrill_gerber_writer.cpp:101
@@ -8876,8 +8868,8 @@ msgstr "Numéros de pins:"
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:170
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:64
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:85
-#: pcbnew/dialogs/dialog_export_step_base.cpp:77
-#: pcbnew/dialogs/dialog_export_step_base.cpp:92
+#: pcbnew/dialogs/dialog_export_step_base.cpp:75
+#: pcbnew/dialogs/dialog_export_step_base.cpp:90
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:77
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:92
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:153
@@ -9729,8 +9721,8 @@ msgstr "Tracer Page Courante"
 #: eeschema/dialogs/dialog_plot_schematic.cpp:215
 #: pcbnew/dialogs/dialog_export_svg.cpp:207
 #: pcbnew/dialogs/dialog_gendrill.cpp:296 pcbnew/dialogs/dialog_plot.cpp:381
-#: pcbnew/exporters/gen_footprints_placefile.cpp:185
-#: pcbnew/exporters/gen_footprints_placefile.cpp:519
+#: pcbnew/exporters/gen_footprints_placefile.cpp:203
+#: pcbnew/exporters/gen_footprints_placefile.cpp:538
 msgid "Select Output Directory"
 msgstr "Sélection du Répertoire de Sortie"
 
@@ -9749,8 +9741,8 @@ msgstr ""
 #: pcbnew/dialogs/dialog_export_svg.cpp:225
 #: pcbnew/dialogs/dialog_gendrill.cpp:307
 #: pcbnew/dialogs/dialog_gendrill.cpp:314 pcbnew/dialogs/dialog_plot.cpp:400
-#: pcbnew/exporters/gen_footprints_placefile.cpp:193
-#: pcbnew/exporters/gen_footprints_placefile.cpp:203
+#: pcbnew/exporters/gen_footprints_placefile.cpp:211
+#: pcbnew/exporters/gen_footprints_placefile.cpp:221
 msgid "Plot Output Directory"
 msgstr "Répertoire de Sortie des Tracés"
 
@@ -12321,7 +12313,7 @@ msgstr ""
 "remplacer les entrées anciennes dans la table ?"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:775
-#: pcbnew/dialogs/dialog_export_step.cpp:329
+#: pcbnew/dialogs/dialog_export_step.cpp:342
 #, c-format
 msgid "File '%s' already exists. Do you want overwrite this file?"
 msgstr "Le fichier: '%s' existe déjà. Voulez-vous remplacer ce fichier?"
@@ -13118,7 +13110,7 @@ msgid "Footprint Assignments..."
 msgstr "Attribution des Empreintes..."
 
 #: eeschema/menubar.cpp:110 eeschema/symbol_editor/menubar_symbol_editor.cpp:68
-#: pcbnew/dialogs/dialog_export_step.cpp:116
+#: pcbnew/dialogs/dialog_export_step.cpp:118
 #: pcbnew/dialogs/dialog_export_svg.cpp:96
 #: pcbnew/menubar_footprint_editor.cpp:74 pcbnew/menubar_pcb_editor.cpp:126
 msgid "Export"
@@ -13370,7 +13362,7 @@ msgstr "Editeur de Schématique KiCad"
 msgid "New schematic file is unsaved"
 msgstr "Le nouveau fichier schématique n'est pas sauvé"
 
-#: eeschema/sch_edit_frame.cpp:657 eeschema/sim/sim_plot_frame.cpp:1577
+#: eeschema/sch_edit_frame.cpp:657 eeschema/sim/sim_plot_frame.cpp:1589
 #: eeschema/symbol_editor/symbol_editor.cpp:1129
 #: pagelayout_editor/pl_editor_frame.cpp:375
 #: pcbnew/footprint_edit_frame.cpp:626 pcbnew/pcb_edit_frame.cpp:806
@@ -13409,13 +13401,13 @@ msgstr "L'appairage des empreintes nécessite un schéma complètement numérot�
 msgid "Could not open CvPcb"
 msgstr "Ne peut pas ouvrir CvPcb"
 
-#: eeschema/sch_edit_frame.cpp:1260 eeschema/sim/sim_plot_frame.cpp:360
+#: eeschema/sch_edit_frame.cpp:1260 eeschema/sim/sim_plot_frame.cpp:353
 #: kicad/kicad_manager_frame.cpp:622 pcbnew/footprint_edit_frame.cpp:788
 #: pcbnew/pcb_edit_frame.cpp:1251
 msgid "[Read Only]"
 msgstr "[Lecture Seule]"
 
-#: eeschema/sch_edit_frame.cpp:1263 eeschema/sim/sim_plot_frame.cpp:363
+#: eeschema/sch_edit_frame.cpp:1263 eeschema/sim/sim_plot_frame.cpp:356
 #: pcbnew/footprint_edit_frame.cpp:797 pcbnew/pcb_edit_frame.cpp:1254
 msgid "[Unsaved]"
 msgstr "[Non sauvé]"
@@ -13429,7 +13421,7 @@ msgstr "[pas de schématique chargée]"
 msgid "Highlighted net: %s"
 msgstr "Net en Surbrillance: %s"
 
-#: eeschema/sch_field.cpp:189 pcbnew/dialogs/dialog_export_step_base.cpp:24
+#: eeschema/sch_field.cpp:189 pcbnew/dialogs/dialog_export_step_base.cpp:22
 msgid "File:"
 msgstr "Fichier:"
 
@@ -13584,9 +13576,8 @@ msgstr ""
 "Le fichier de stockage n’a pas été entièrement analysé (%d octets restant)."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:478
-#, fuzzy
 msgid "Compile mask not currently supported."
-msgstr "Le dessin d’arc sur le schéma n’est actuellement pas pris en charge."
+msgstr "Masque de compilation non pris en charge actuellement."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:491
 #, c-format
@@ -13646,9 +13637,8 @@ msgid "Rounded rectangle's owner (%d) not found."
 msgstr "Propriétaire du rectangle arrondi (%d) introuvable."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1300
-#, fuzzy
 msgid "Arcs on schematic not currently supported."
-msgstr "Le dessin d’arc sur le schéma n’est actuellement pas pris en charge."
+msgstr "Arcs dans le schéma non pris en charge actuellement."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1310
 #, c-format
@@ -13656,9 +13646,8 @@ msgid "Arc's owner (%d) not found."
 msgstr "Propriétaire d’arc (%d) introuvable."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1336
-#, fuzzy
 msgid "Arcs in symbols cannot exceed 180 degrees."
-msgstr "Les arcs dans les Symboles ne peuvent pas dépasser 180 degrés."
+msgstr "Les arcs dans les symboles ne peuvent pas dépasser 180 degrés."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1376
 #, c-format
@@ -14780,96 +14769,96 @@ msgstr ""
 "Cette simulation ne fournit aucun tracé. SVP se référer à la fenêtre des "
 "messages pour les résultats"
 
-#: eeschema/sim/sim_plot_frame.cpp:176
+#: eeschema/sim/sim_plot_frame.cpp:169
 msgid "Run/Stop Simulation"
 msgstr "Lancer/Stopper Simulation"
 
-#: eeschema/sim/sim_plot_frame.cpp:177 eeschema/sim/sim_plot_frame_base.cpp:55
+#: eeschema/sim/sim_plot_frame.cpp:170 eeschema/sim/sim_plot_frame_base.cpp:55
 msgid "Run Simulation"
 msgstr "Lancer la Simulation"
 
-#: eeschema/sim/sim_plot_frame.cpp:178
+#: eeschema/sim/sim_plot_frame.cpp:171
 msgid "Add Signals"
 msgstr "Ajouter Signaux"
 
-#: eeschema/sim/sim_plot_frame.cpp:179
+#: eeschema/sim/sim_plot_frame.cpp:172
 msgid "Add signals to plot"
 msgstr "Ajouter des signaux à tracer"
 
-#: eeschema/sim/sim_plot_frame.cpp:180
+#: eeschema/sim/sim_plot_frame.cpp:173
 msgid "Probe"
 msgstr "Sonde"
 
-#: eeschema/sim/sim_plot_frame.cpp:181
+#: eeschema/sim/sim_plot_frame.cpp:174
 msgid "Probe signals on the schematic"
 msgstr "Sonde de signaux dans la schématique"
 
-#: eeschema/sim/sim_plot_frame.cpp:182 eeschema/sim/sim_plot_frame_base.cpp:242
+#: eeschema/sim/sim_plot_frame.cpp:175 eeschema/sim/sim_plot_frame_base.cpp:242
 msgid "Tune"
 msgstr "Ajustage"
 
-#: eeschema/sim/sim_plot_frame.cpp:183
+#: eeschema/sim/sim_plot_frame.cpp:176
 msgid "Tune component values"
 msgstr "Ajuster les valeurs du composant"
 
-#: eeschema/sim/sim_plot_frame.cpp:184
+#: eeschema/sim/sim_plot_frame.cpp:177
 msgid "Sim Parameters"
 msgstr "Paramètres Sim"
 
-#: eeschema/sim/sim_plot_frame.cpp:185
+#: eeschema/sim/sim_plot_frame.cpp:178
 msgid "Simulation parameters and settings"
 msgstr "Paramètres et réglages de simulation"
 
-#: eeschema/sim/sim_plot_frame.cpp:365 eeschema/sim/sim_plot_frame_base.h:127
+#: eeschema/sim/sim_plot_frame.cpp:358 eeschema/sim/sim_plot_frame_base.h:127
 msgid "Spice Simulator"
 msgstr "Simulateur Spice"
 
-#: eeschema/sim/sim_plot_frame.cpp:482 eeschema/sim/sim_plot_frame.cpp:1422
+#: eeschema/sim/sim_plot_frame.cpp:475 eeschema/sim/sim_plot_frame.cpp:1434
 msgid "There were errors during netlist export, aborted."
 msgstr "Il y a eu des erreurs lors de l'exportation de netlist, abandon."
 
-#: eeschema/sim/sim_plot_frame.cpp:522
+#: eeschema/sim/sim_plot_frame.cpp:515
 #, c-format
 msgid "Plot%u - "
 msgstr "Tracé%u - "
 
-#: eeschema/sim/sim_plot_frame.cpp:623
+#: eeschema/sim/sim_plot_frame.cpp:616
 msgid "Error: simulation type not defined!\n"
 msgstr "Erreur : type de simulation non défini !\n"
 
-#: eeschema/sim/sim_plot_frame.cpp:629
+#: eeschema/sim/sim_plot_frame.cpp:622
 msgid "Error: simulation type doesn't support plotting!\n"
 msgstr "Erreur : le type de simulation ne prend pas en charge le tracé!\n"
 
-#: eeschema/sim/sim_plot_frame.cpp:812 eeschema/sim/sim_plot_frame.cpp:1616
+#: eeschema/sim/sim_plot_frame.cpp:805 eeschema/sim/sim_plot_frame.cpp:1628
 msgid "Signal"
 msgstr "Signal"
 
-#: eeschema/sim/sim_plot_frame.cpp:1097
-msgid "Open simulation workbook"
-msgstr "Ouvrir le classeur de travail de simulation"
-
-#: eeschema/sim/sim_plot_frame.cpp:1133
+#: eeschema/sim/sim_plot_frame.cpp:1079
 msgid "noname"
 msgstr "sansnom"
 
-#: eeschema/sim/sim_plot_frame.cpp:1143
+#: eeschema/sim/sim_plot_frame.cpp:1128
+msgid "Open simulation workbook"
+msgstr "Ouvrir le classeur de travail de simulation"
+
+#: eeschema/sim/sim_plot_frame.cpp:1157
 msgid "Save Simulation Workbook As"
 msgstr "Sauver Classeur de Travail de Simulation Sous"
 
-#: eeschema/sim/sim_plot_frame.cpp:1161
+#: eeschema/sim/sim_plot_frame.cpp:1173
 msgid "Save Plot as Image"
 msgstr "Sauver Tracé comme Fichier Image"
 
-#: eeschema/sim/sim_plot_frame.cpp:1178
+#: eeschema/sim/sim_plot_frame.cpp:1190
 msgid "Save Plot Data"
 msgstr "Sauver Données de Tracé"
 
-#: eeschema/sim/sim_plot_frame.cpp:1470
+#: eeschema/sim/sim_plot_frame.cpp:1482
 msgid "You need to run plot-providing simulation first."
 msgstr "Vous devez exécuter la simulation en premier."
 
-#: eeschema/sim/sim_plot_frame.cpp:1714
+#: eeschema/sim/sim_plot_frame.cpp:1726
 msgid ""
 "\n"
 "\n"
@@ -14881,19 +14870,19 @@ msgstr ""
 "Résultats de simulation:\n"
 "\n"
 
-#: eeschema/sim/sim_plot_frame.cpp:1785
+#: eeschema/sim/sim_plot_frame.cpp:1797
 msgid "Hide Signal"
 msgstr "Masquer le Signal"
 
-#: eeschema/sim/sim_plot_frame.cpp:1785
+#: eeschema/sim/sim_plot_frame.cpp:1797
 msgid "Erase the signal from plot screen"
 msgstr "Supprimer le signal de l’écran de tracé"
 
-#: eeschema/sim/sim_plot_frame.cpp:1791
+#: eeschema/sim/sim_plot_frame.cpp:1803
 msgid "Hide Cursor"
 msgstr "Masquer le Curseur"
 
-#: eeschema/sim/sim_plot_frame.cpp:1793
+#: eeschema/sim/sim_plot_frame.cpp:1805
 msgid "Show Cursor"
 msgstr "Afficher le Curseur"
 
@@ -17373,64 +17362,52 @@ msgid "Gerber files (.g* .lgr .pho)"
 msgstr "Fichiers Gerber (.g* .lgr .pho)"
 
 #: gerbview/files.cpp:144
-#, fuzzy
 msgid "Top layer"
-msgstr "Vers couche:"
+msgstr "Couche dessus"
 
 #: gerbview/files.cpp:145
-#, fuzzy
 msgid "Bottom layer"
-msgstr "Couche inférieure:"
+msgstr "Couche dessous"
 
 #: gerbview/files.cpp:146
-#, fuzzy
 msgid "Bottom solder resist"
-msgstr "Pâte à Souder Dessous"
+msgstr "Masque soudure dessous"
 
 #: gerbview/files.cpp:147
-#, fuzzy
 msgid "Top solder resist"
-msgstr "Pâte à Souder Dessus"
+msgstr "Masque soudure composant"
 
 #: gerbview/files.cpp:148
-#, fuzzy
 msgid "Bottom overlay"
-msgstr "Masque de Soudure Dessous"
+msgstr "Overlay dessous"
 
 #: gerbview/files.cpp:149
-#, fuzzy
 msgid "Top overlay"
-msgstr "Masque de Soudure Dessus"
+msgstr "Overlay dessus"
 
 #: gerbview/files.cpp:150
-#, fuzzy
 msgid "Bottom paste"
-msgstr "Pas d'élément à coller"
+msgstr "Pâte à souder dessous"
 
 #: gerbview/files.cpp:151
-#, fuzzy
 msgid "Top paste"
-msgstr "Pâte à Souder Dessus"
+msgstr "Pâte à souder dessus"
 
 #: gerbview/files.cpp:152
-#, fuzzy
 msgid "Keep-out layer"
-msgstr "Garder les couches &extérieures"
+msgstr "Couche de \"Keep-out\""
 
 #: gerbview/files.cpp:153
-#, fuzzy
 msgid "Mechanical layers"
-msgstr "Couches Techniques:"
+msgstr "Couches mécaniques"
 
 #: gerbview/files.cpp:154
-#, fuzzy
 msgid "Top Pad Master"
-msgstr "Pâte à Souder Dessus"
+msgstr "Pad Maitre Dessus"
 
 #: gerbview/files.cpp:155
-#, fuzzy
 msgid "Bottom Pad Master"
-msgstr "Pâte à Souder Dessous"
+msgstr "Pad Maitre Dessous"
 
 #: gerbview/files.cpp:173
 msgid "Open Gerber File(s)"
@@ -20177,9 +20154,8 @@ msgstr ""
 "Voulez vous sortir et abandonner vos changements?"
 
 #: pcb_calculator/regulators_funct.cpp:127
-#, fuzzy
 msgid "PCB Calculator data file"
-msgstr "Fichier de données PCB Calculator (*.%s)|*.%s"
+msgstr "Fichier de données PCB Calculator"
 
 #: pcb_calculator/regulators_funct.cpp:130
 msgid "Select PCB Calculator Data File"
@@ -20577,7 +20553,7 @@ msgstr "mil"
 
 #: pcb_calculator/widgets/unit_selector.cpp:38
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:48
-#: pcbnew/dialogs/dialog_export_step_base.cpp:67
+#: pcbnew/dialogs/dialog_export_step_base.cpp:65
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:67
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:99
 msgid "inch"
@@ -22596,7 +22572,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:114
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:44
-#: pcbnew/dialogs/dialog_export_step_base.cpp:63
+#: pcbnew/dialogs/dialog_export_step_base.cpp:61
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:63
 #: pcbnew/dialogs/dialog_plot_base.cpp:374
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:81
@@ -23088,12 +23064,12 @@ msgid "Adjust automatically"
 msgstr "Ajuster automatiquement"
 
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:60
-#: pcbnew/dialogs/dialog_export_step_base.cpp:73
+#: pcbnew/dialogs/dialog_export_step_base.cpp:71
 msgid "X position:"
 msgstr "Position X:"
 
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:81
-#: pcbnew/dialogs/dialog_export_step_base.cpp:88
+#: pcbnew/dialogs/dialog_export_step_base.cpp:86
 msgid "Y position:"
 msgstr "Position Y:"
 
@@ -23105,26 +23081,34 @@ msgstr "Unités de Sortie"
 msgid "Export IDFv3"
 msgstr "Exportation IDFv3"
 
-#: pcbnew/dialogs/dialog_export_step.cpp:189
+#: pcbnew/dialogs/dialog_export_step.cpp:138
+msgid "Select a STEP export filename"
+msgstr "Sélectionner le nom du fichier export STEP"
+
+#: pcbnew/dialogs/dialog_export_step.cpp:138
+msgid "STEP files"
+msgstr "Fichiers STEP"
+
+#: pcbnew/dialogs/dialog_export_step.cpp:202
 msgid "Non-unity scaled models:"
 msgstr "Modèles à l’échelle non unitaire :"
 
-#: pcbnew/dialogs/dialog_export_step.cpp:191
+#: pcbnew/dialogs/dialog_export_step.cpp:204
 msgid ""
 "Scaled models detected.  Model scaling is not reliable for mechanical export."
 msgstr ""
 "Modèles à échelle non unitaire détectés.  La mise à l’échelle du modèle "
 "n’est pas fiable pour l’exportation mécanique."
 
-#: pcbnew/dialogs/dialog_export_step.cpp:193
+#: pcbnew/dialogs/dialog_export_step.cpp:206
 msgid "Model Scale Warning"
 msgstr "Avertissement d’Echelle du Modèle"
 
-#: pcbnew/dialogs/dialog_export_step.cpp:255
+#: pcbnew/dialogs/dialog_export_step.cpp:268
 msgid "STEP export failed!  Please save the PCB and try again"
 msgstr "L'export STEP a échoué.SVP enregistrer le C.I. et essayez à nouveau"
 
-#: pcbnew/dialogs/dialog_export_step.cpp:320
+#: pcbnew/dialogs/dialog_export_step.cpp:333
 #, c-format
 msgid ""
 "Board outline is missing or not closed using %.3f mm tolerance.\n"
@@ -23134,108 +23118,104 @@ msgstr ""
 "de %.3f mm.\n"
 "Exécuter le DRC pour une analyse complète."
 
-#: pcbnew/dialogs/dialog_export_step.cpp:332
+#: pcbnew/dialogs/dialog_export_step.cpp:345
 msgid "STEP Export"
 msgstr "Export STEP"
 
-#: pcbnew/dialogs/dialog_export_step_base.cpp:28
-msgid "Select a STEP export filename"
-msgstr "Sélectionner le nom du fichier export STEP"
+#: pcbnew/dialogs/dialog_export_step_base.cpp:26
+msgid "temp"
+msgstr "temp"
 
-#: pcbnew/dialogs/dialog_export_step_base.cpp:28
-msgid "STEP files (*.stp;*.step)|*.stp;*.step"
-msgstr "Fichiers STEP (*.stp;*.step)|*.stp;*.step"
-
-#: pcbnew/dialogs/dialog_export_step_base.cpp:38
+#: pcbnew/dialogs/dialog_export_step_base.cpp:36
 msgid "Coordinates"
 msgstr "Coordonnées"
 
-#: pcbnew/dialogs/dialog_export_step_base.cpp:40
+#: pcbnew/dialogs/dialog_export_step_base.cpp:38
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:96
 #: pcbnew/dialogs/panel_pcbnew_display_origin_base.cpp:23
 msgid "Drill/place file origin"
 msgstr "Origine des coord de perçage/placement"
 
-#: pcbnew/dialogs/dialog_export_step_base.cpp:43
+#: pcbnew/dialogs/dialog_export_step_base.cpp:41
 #: pcbnew/dialogs/panel_pcbnew_display_origin_base.cpp:23
 msgid "Grid origin"
 msgstr "Origine grille"
 
-#: pcbnew/dialogs/dialog_export_step_base.cpp:46
+#: pcbnew/dialogs/dialog_export_step_base.cpp:44
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:44
 msgid "User defined origin"
 msgstr "Origine définie par l'utilisateur"
 
-#: pcbnew/dialogs/dialog_export_step_base.cpp:49
+#: pcbnew/dialogs/dialog_export_step_base.cpp:47
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:44
 msgid "Board center origin"
 msgstr "Origine au centre du pcb"
 
-#: pcbnew/dialogs/dialog_export_step_base.cpp:56
+#: pcbnew/dialogs/dialog_export_step_base.cpp:54
 msgid "User Defined Origin"
 msgstr "Origine Définie par l'Utilisateur"
 
-#: pcbnew/dialogs/dialog_export_step_base.cpp:110
+#: pcbnew/dialogs/dialog_export_step_base.cpp:108
 msgid "Other Options"
 msgstr "Autres Options"
 
-#: pcbnew/dialogs/dialog_export_step_base.cpp:112
+#: pcbnew/dialogs/dialog_export_step_base.cpp:110
 msgid "Ignore virtual components"
 msgstr "Ignorer les components virtuels"
 
-#: pcbnew/dialogs/dialog_export_step_base.cpp:115
+#: pcbnew/dialogs/dialog_export_step_base.cpp:113
 msgid "Substitute similarly named models"
 msgstr "Remplacer les modèles portant le même nom"
 
-#: pcbnew/dialogs/dialog_export_step_base.cpp:116
+#: pcbnew/dialogs/dialog_export_step_base.cpp:114
 msgid "Replace VRML models with STEP models of the same name"
 msgstr "Remplacer les modèles VRML par des modèles STEP du même nom"
 
-#: pcbnew/dialogs/dialog_export_step_base.cpp:120
+#: pcbnew/dialogs/dialog_export_step_base.cpp:118
 msgid "Overwrite old file"
 msgstr "Ecraser ancien fichier"
 
-#: pcbnew/dialogs/dialog_export_step_base.cpp:123
+#: pcbnew/dialogs/dialog_export_step_base.cpp:121
 msgid "Board outline chaining tolerance:"
 msgstr "Tolérance de chaînage du contour du PCB :"
 
-#: pcbnew/dialogs/dialog_export_step_base.cpp:127
+#: pcbnew/dialogs/dialog_export_step_base.cpp:125
 msgid "Tight (0.001 mm)"
 msgstr "Serré  (0.001 mm)"
 
-#: pcbnew/dialogs/dialog_export_step_base.cpp:127
+#: pcbnew/dialogs/dialog_export_step_base.cpp:125
 msgid "Standard (0.01 mm)"
 msgstr "Standard (0.01 mm)"
 
-#: pcbnew/dialogs/dialog_export_step_base.cpp:127
+#: pcbnew/dialogs/dialog_export_step_base.cpp:125
 msgid "Loose (0.1 mm)"
 msgstr "Lâche (0,1 mm)"
 
-#: pcbnew/dialogs/dialog_export_step_base.cpp:131
+#: pcbnew/dialogs/dialog_export_step_base.cpp:129
 msgid ""
 "Tolerance sets the distance between two points that are considered joined."
 msgstr ""
 "La tolérance définit la distance entre deux points considérés comme joints."
 
-#: pcbnew/dialogs/dialog_export_step_base.h:75
+#: pcbnew/dialogs/dialog_export_step_base.h:77
 msgid "Export STEP"
 msgstr "Export STEP"
 
 #: pcbnew/dialogs/dialog_export_svg.cpp:214
-#: pcbnew/exporters/gen_footprints_placefile.cpp:192
+#: pcbnew/exporters/gen_footprints_placefile.cpp:210
 msgid "Use a relative path?"
 msgstr "Utiliser un chemin relatif?"
 
 #: pcbnew/dialogs/dialog_export_svg.cpp:224
-#: pcbnew/exporters/gen_footprints_placefile.cpp:201
+#: pcbnew/exporters/gen_footprints_placefile.cpp:219
 msgid ""
 "Cannot make path relative (target volume different from board file volume)!"
 msgstr ""
 "Ne peut générer un chemin relatif (disque cible différent du disque du C.I.)"
 
 #: pcbnew/dialogs/dialog_export_svg.cpp:264 pcbnew/dialogs/dialog_plot.cpp:815
-#: pcbnew/exporters/gen_footprints_placefile.cpp:258
-#: pcbnew/exporters/gen_footprints_placefile.cpp:356
+#: pcbnew/exporters/gen_footprints_placefile.cpp:276
+#: pcbnew/exporters/gen_footprints_placefile.cpp:374
 #, c-format
 msgid "Could not write plot files to folder '%s'."
 msgstr "Impossible d'écrire les fichiers de tracés dans le répertoire '%s'."
@@ -23995,19 +23975,23 @@ msgstr ""
 "Crée un fichier seulement contenant toutes les empreintes à placer\n"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:74
+msgid "Include only SMD footprints"
+msgstr "Inclure uniquement empreintes SMD"
+
+#: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:77
 msgid "Exclude all footprints with through hole pads"
 msgstr "Exclure toutes les empreintes avec pads traversants"
 
-#: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:77
+#: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:80
 msgid "Include board edge layer"
 msgstr "Inclure couche contour pcb"
 
-#: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:80
+#: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:83
 #: pcbnew/dialogs/dialog_plot_base.cpp:108
 msgid "Use drill/place file origin"
 msgstr "Utiliser origine de perçage/placement"
 
-#: pcbnew/dialogs/dialog_gen_footprint_position_file_base.h:73
+#: pcbnew/dialogs/dialog_gen_footprint_position_file_base.h:75
 msgid "Generate Placement Files"
 msgstr "Générer Fichier Placement des Composants"
 
@@ -26563,7 +26547,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.h:67
 msgid "Rule Area Properties"
-msgstr "Propriétés de la Zone avec Règles"
+msgstr "Propriétés de la Zone à Règles"
 
 #: pcbnew/dialogs/dialog_swap_layers.cpp:48
 msgid "Move items on:"
@@ -26760,14 +26744,12 @@ msgid "End layer:"
 msgstr "Dernière Couche:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:280
-#, fuzzy
 msgid "Annular rings:"
-msgstr "Largeur des anneaux"
+msgstr "Largeur des anneaux:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:284
-#, fuzzy
 msgid "Start, end, and connected layers"
-msgstr "%s, %s et couches connectées"
+msgstr "Début, fin, et couches connectées"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.h:114
 msgid "Track & Via Properties"
@@ -29090,9 +29072,9 @@ msgid "Differential uncoupled length too long"
 msgstr "Longueur de Paire non couplée trop longue"
 
 #: pcbnew/drc/drc_item.cpp:320
-#, fuzzy, c-format
+#, c-format
 msgid "Rule: %s"
-msgstr "Règles"
+msgstr "Règle: %s"
 
 #: pcbnew/drc/drc_rule.h:135
 #, c-format
@@ -29179,9 +29161,9 @@ msgid "Missing constraint type.|  Expected %s."
 msgstr "Type de contrainte manquant.|  %s attendu."
 
 #: pcbnew/drc/drc_rule_parser.cpp:293
-#, fuzzy, c-format
+#, c-format
 msgid "Rule already has a '%s' constraint."
-msgstr "La zone de règle '%s' interdit les pistes."
+msgstr "La règle a déjà une contrainte '%s'."
 
 #: pcbnew/drc/drc_rule_parser.cpp:351
 msgid "Missing min value."
@@ -29535,48 +29517,48 @@ msgstr "Echec en VRML Export: Impossible d'ajouter les trous aux contours."
 msgid "Generate Position File"
 msgstr "Générer Fichier Position des Empreintes"
 
-#: pcbnew/exporters/gen_footprints_placefile.cpp:282
-#: pcbnew/exporters/gen_footprints_placefile.cpp:403
+#: pcbnew/exporters/gen_footprints_placefile.cpp:300
+#: pcbnew/exporters/gen_footprints_placefile.cpp:421
 #, c-format
 msgid "Front (top side) placement file: '%s'."
 msgstr "Fichier placement côté composant (dessus): '%s'."
 
-#: pcbnew/exporters/gen_footprints_placefile.cpp:285
-#: pcbnew/exporters/gen_footprints_placefile.cpp:307
-#: pcbnew/exporters/gen_footprints_placefile.cpp:407
-#: pcbnew/exporters/gen_footprints_placefile.cpp:451
+#: pcbnew/exporters/gen_footprints_placefile.cpp:303
+#: pcbnew/exporters/gen_footprints_placefile.cpp:325
+#: pcbnew/exporters/gen_footprints_placefile.cpp:425
+#: pcbnew/exporters/gen_footprints_placefile.cpp:470
 #, c-format
 msgid "Component count: %d."
 msgstr "Nombre de composants: %d."
 
-#: pcbnew/exporters/gen_footprints_placefile.cpp:304
-#: pcbnew/exporters/gen_footprints_placefile.cpp:448
+#: pcbnew/exporters/gen_footprints_placefile.cpp:322
+#: pcbnew/exporters/gen_footprints_placefile.cpp:467
 #, c-format
 msgid "Back (bottom side) placement file: '%s'."
 msgstr "Fichier placement côté soudure (dessous): '%s'."
 
-#: pcbnew/exporters/gen_footprints_placefile.cpp:311
-#: pcbnew/exporters/gen_footprints_placefile.cpp:458
+#: pcbnew/exporters/gen_footprints_placefile.cpp:329
+#: pcbnew/exporters/gen_footprints_placefile.cpp:477
 #, c-format
 msgid "Full component count: %d."
 msgstr "Nombre total de composants: %d."
 
-#: pcbnew/exporters/gen_footprints_placefile.cpp:314
-#: pcbnew/exporters/gen_footprints_placefile.cpp:412
-#: pcbnew/exporters/gen_footprints_placefile.cpp:462
+#: pcbnew/exporters/gen_footprints_placefile.cpp:332
+#: pcbnew/exporters/gen_footprints_placefile.cpp:430
+#: pcbnew/exporters/gen_footprints_placefile.cpp:481
 msgid "File generation successful."
 msgstr "Le fichier a été créé correctement."
 
-#: pcbnew/exporters/gen_footprints_placefile.cpp:340
+#: pcbnew/exporters/gen_footprints_placefile.cpp:358
 msgid "No footprint for automated placement."
 msgstr "Pas d'empreinte pour placement automatisé."
 
-#: pcbnew/exporters/gen_footprints_placefile.cpp:401
+#: pcbnew/exporters/gen_footprints_placefile.cpp:419
 #, c-format
 msgid "Placement file: '%s'."
 msgstr "Fichier placement: '%s'."
 
-#: pcbnew/exporters/gen_footprints_placefile.cpp:535
+#: pcbnew/exporters/gen_footprints_placefile.cpp:554
 #, c-format
 msgid ""
 "Footprint report file created:\n"
@@ -29585,7 +29567,7 @@ msgstr ""
 "Fichier rapport sur empreintes créé:\n"
 "'%s'."
 
-#: pcbnew/exporters/gen_footprints_placefile.cpp:536
+#: pcbnew/exporters/gen_footprints_placefile.cpp:555
 msgid "Footprint Report"
 msgstr "Rapport sur Empreintes"
 
@@ -33497,9 +33479,8 @@ msgid "Cannot generate clearance report on empty group."
 msgstr "Impossible de générer un rapport d’isolation sur un groupe vide."
 
 #: pcbnew/tools/board_inspection_tool.cpp:383
-#, fuzzy
 msgid "Zone connection resolution for:"
-msgstr "Résolution d'isolation des trous pour:"
+msgstr "Résolution de connexion de zone pour :"
 
 #: pcbnew/tools/board_inspection_tool.cpp:397
 #, c-format
@@ -33542,9 +33523,8 @@ msgid "Silkscreen clearance resolution for:"
 msgstr "Résolution d'isolation de sérigraphie pour:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:528
-#, fuzzy
 msgid "Courtyard clearance resolution for:"
-msgstr "Résolution d'isolation pour:"
+msgstr "Résolution d'isolation de zone d'occupation pour:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:566
 msgid "Hole clearance resolution for:"
@@ -33552,7 +33532,7 @@ msgstr "Résolution d'isolation des trous pour:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:629
 msgid "Items share no relevant layers:"
-msgstr ""
+msgstr "Eléments ne partageant aucune couche pertinente :"
 
 #: pcbnew/tools/board_inspection_tool.cpp:678
 msgid "Select an item for a constraints resolution report."
@@ -33636,23 +33616,23 @@ msgstr "Élément <b>refusé<b> à l’emplacement actuel."
 msgid "Item allowed at current location."
 msgstr "Article autorisé à l’emplacement actuel."
 
-#: pcbnew/tools/convert_tool.cpp:76
+#: pcbnew/tools/convert_tool.cpp:76 pcbnew/tools/convert_tool_essais.cpp:76
 msgid "Create from Selection"
 msgstr "Créer à partir de la Sélection"
 
-#: pcbnew/tools/convert_tool.cpp:207
+#: pcbnew/tools/convert_tool.cpp:207 pcbnew/tools/convert_tool_essais.cpp:207
 msgid "Convert shapes to polygon"
 msgstr "Convertir les formes en zone"
 
-#: pcbnew/tools/convert_tool.cpp:243
+#: pcbnew/tools/convert_tool.cpp:243 pcbnew/tools/convert_tool_essais.cpp:243
 msgid "Convert shapes to zone"
 msgstr "Convertir les formes en zone"
 
-#: pcbnew/tools/convert_tool.cpp:707
+#: pcbnew/tools/convert_tool.cpp:707 pcbnew/tools/convert_tool_essais.cpp:702
 msgid "Convert polygons to lines"
 msgstr "Convertir les polygones en lignes"
 
-#: pcbnew/tools/convert_tool.cpp:797
+#: pcbnew/tools/convert_tool.cpp:797 pcbnew/tools/convert_tool_essais.cpp:792
 msgid "Create arc from line segment"
 msgstr "Créer arc à partir du segment"
 
@@ -36129,7 +36109,7 @@ msgstr "Autorise la sélection des éléments verrouillés."
 
 #: pcbnew/widgets/panel_selection_filter_base.cpp:59
 msgid "Rule Areas"
-msgstr "Surface avec Règles"
+msgstr "Surface à Règles"
 
 #: pcbnew/widgets/panel_selection_filter_base.cpp:63
 msgid "Dimensions"
@@ -36141,7 +36121,7 @@ msgstr "Autres éléments"
 
 #: pcbnew/zone.cpp:552
 msgid "Rule Area"
-msgstr "Surface avec Règles"
+msgstr "Surface à Règles"
 
 #: pcbnew/zone.cpp:554
 msgid "Copper Zone"
@@ -36217,7 +36197,7 @@ msgstr "Zone de découpe sur %s"
 #: pcbnew/zone.cpp:883
 #, c-format
 msgid "Rule Area on %s"
-msgstr "Surface avec Règles sur %s"
+msgstr "Surface à Règles sur %s"
 
 #: pcbnew/zone.cpp:885
 #, c-format
@@ -36264,6 +36244,11 @@ msgstr "Exécution de remplissage des polygones..."
 msgid "[INFO] load failed: input line too long\n"
 msgstr "[INFO] chargement échouée: ligne d’entrée trop longue\n"
 
+#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:5
+#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:12
+msgid "bitmap2component"
+msgstr "bitmap2component"
+
 #: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:9
 msgid "KiCad Image Converter"
 msgstr "Convertisseur d'Image KiCad"
@@ -36274,9 +36259,10 @@ msgstr ""
 "Créer un composant à partir d’une image bitmap pour une utilisation avec "
 "KiCad"
 
-#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:12
-msgid "bitmap2component"
-msgstr "bitmap2component"
+#: resources/linux/launchers/org.kicad.eeschema.desktop.in:5
+#: resources/linux/launchers/org.kicad.eeschema.desktop.in:13
+msgid "eeschema"
+msgstr "eeschema"
 
 #: resources/linux/launchers/org.kicad.eeschema.desktop.in:10
 msgid "KiCad Schematic Editor (Standalone)"
@@ -36290,9 +36276,10 @@ msgstr "Outil de Capture Schématique"
 msgid "Standalone schematic editor for KiCad schematics"
 msgstr "Editeur de schématique indépendant pour les schémas KiCad"
 
-#: resources/linux/launchers/org.kicad.eeschema.desktop.in:13
-msgid "eeschema"
-msgstr "eeschema"
+#: resources/linux/launchers/org.kicad.gerbview.desktop.in:5
+#: resources/linux/launchers/org.kicad.gerbview.desktop.in:13
+msgid "gerbview"
+msgstr "gerbview"
 
 #: resources/linux/launchers/org.kicad.gerbview.desktop.in:11
 msgid "Gerber File Viewer"
@@ -36302,9 +36289,9 @@ msgstr "Visionneuse de fichiers Gerber"
 msgid "View Gerber files"
 msgstr "Visualiser fichiers Gerber"
 
-#: resources/linux/launchers/org.kicad.gerbview.desktop.in:13
-msgid "gerbview"
-msgstr "gerbview"
+#: resources/linux/launchers/org.kicad.kicad.desktop.in:5
+msgid "kicad"
+msgstr "kicad"
 
 #: resources/linux/launchers/org.kicad.kicad.desktop.in:10
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:6
@@ -36319,6 +36306,10 @@ msgstr "Suite CAO Electronique"
 msgid "Suite of tools for schematic design and circuit board layout"
 msgstr "Suite d’outils pour la conception schématique et des circuits imprimés"
 
+#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:5
+msgid "pcbcalculator"
+msgstr "pcbcalculator"
+
 #: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:9
 msgid "KiCad PCB Calculator"
 msgstr "Calculateur pour PCB KiCad"
@@ -36326,6 +36317,11 @@ msgstr "Calculateur pour PCB KiCad"
 #: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:11
 msgid "Calculator for various electronics-related computations"
 msgstr "Calculatrice pour divers calculs liés à l’électronique"
+
+#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:5
+#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:13
+msgid "pcbnew"
+msgstr "pcbnew"
 
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:10
 msgid "KiCad PCB Editor (Standalone)"
@@ -36338,10 +36334,6 @@ msgstr "Éditeur de circuit imprimé"
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:12
 msgid "Standalone circuit board editor for KiCad boards"
 msgstr "Éditeur indépendant de circuits imprimés pour les C.I. KiCad"
-
-#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:13
-msgid "pcbnew"
-msgstr "pcbnew"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:13
 msgid "An EDA suite for schematic and circuit board design"
@@ -36441,14 +36433,8 @@ msgstr "Fichier Circuit Imprimé KiCad"
 #~ msgid "Bottom Pad Master (*.GPB)|*.GPB;*.gpb|"
 #~ msgstr "Bottom Pad Master (*.GPB)|*.GPB;*.gpb|"
 
-#~ msgid "Background top:"
-#~ msgstr "Couleur de fond, haut d'écran:"
-
-#~ msgid "Background bottom:"
-#~ msgstr "Couleur de fond, bas d'écran:"
-
-#~ msgid "Load Colors from Board Stackup"
-#~ msgstr "Importer Couleurs du \"Stackup\" Physique"
+#~ msgid "STEP files (*.stp;*.step)|*.stp;*.step"
+#~ msgstr "Fichiers STEP (*.stp;*.step)|*.stp;*.step"
 
 #~ msgid "Outline smooth:"
 #~ msgstr "Lissage des contours:"
@@ -36462,28 +36448,27 @@ msgstr "Fichier Circuit Imprimé KiCad"
 #~ msgid "Smooth amount:"
 #~ msgstr "Importance de lissage:"
 
-#, c-format
 #~ msgid "Zone connection type: %s."
 #~ msgstr "Type de connexion de zone: %s."
 
-#, c-format
 #~ msgid "Overridden by %s; connection type: %s."
 #~ msgstr "Remplacé par %s; type de connexion : %s."
 
-#, c-format
 #~ msgid "Pad is not a PTH pad; connection will be: %s."
 #~ msgstr ""
 #~ "Le pad n’est pas un pad métallisé traversant; la connexion sera : %s."
 
-#, c-format
 #~ msgid "%s not present on layer %s.  No clearance defined."
 #~ msgstr "%s pnon présent sur la couche %s.  Aucune isolation définie."
 
-#~ msgid "kicad"
-#~ msgstr "kicad"
+#~ msgid "Background top:"
+#~ msgstr "Couleur de fond, haut d'écran:"
 
-#~ msgid "pcbcalculator"
-#~ msgstr "pcbcalculator"
+#~ msgid "Background bottom:"
+#~ msgstr "Couleur de fond, bas d'écran:"
+
+#~ msgid "Load Colors from Board Stackup"
+#~ msgstr "Importer Couleurs du \"Stackup\" Physique"
 
 #~ msgid ""
 #~ "All units in this symbol are interchangeable. This control has no effect."
@@ -39312,9 +39297,6 @@ msgstr "Fichier Circuit Imprimé KiCad"
 
 #~ msgid "temp3"
 #~ msgstr "temp3"
-
-#~ msgid "temp"
-#~ msgstr "temp"
 
 #~ msgid " X:"
 #~ msgstr " X:"
