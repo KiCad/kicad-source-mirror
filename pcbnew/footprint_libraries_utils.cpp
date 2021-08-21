@@ -686,6 +686,9 @@ void PCB_EDIT_FRAME::ExportFootprintsToLibrary( bool aStoreInNewLib, const wxStr
         if( !nickname )     // Aborted
             return;
 
+        bool map = IsOK( this, wxString::Format( _( "Update footprints on board to refer to %s?" ),
+                                                 nickname ) );
+
         prj.SetRString( PROJECT::PCB_LIB_NICKNAME, nickname );
 
         for( FOOTPRINT* footprint : GetBoard()->Footprints() )
@@ -708,6 +711,13 @@ void PCB_EDIT_FRAME::ExportFootprintsToLibrary( bool aStoreInNewLib, const wxStr
             {
                 DisplayError( this, ioe.What() );
             }
+
+            if( map )
+            {
+                LIB_ID id = footprint->GetFPID();
+                id.SetLibNickname( nickname );
+                footprint->SetFPID( id );
+            }
         }
     }
     else
@@ -721,6 +731,17 @@ void PCB_EDIT_FRAME::ExportFootprintsToLibrary( bool aStoreInNewLib, const wxStr
 
         if( aLibPath )
             *aLibPath = libPath;
+
+        wxString libNickname;
+        bool     map = IsOK( this, _( "Update footprints on board to refer to new library?" ) );
+
+        if( map )
+        {
+            const LIB_TABLE_ROW* row = Prj().PcbFootprintLibs()->FindRowByURI( libPath );
+
+            if( row )
+                libNickname = row->GetNickName();
+        }
 
         IO_MGR::PCB_FILE_T piType = IO_MGR::KICAD_SEXP;
         PLUGIN::RELEASER   pi( IO_MGR::PluginFind( piType ) );
@@ -742,6 +763,13 @@ void PCB_EDIT_FRAME::ExportFootprintsToLibrary( bool aStoreInNewLib, const wxStr
             catch( const IO_ERROR& ioe )
             {
                 DisplayError( this, ioe.What() );
+            }
+
+            if( map )
+            {
+                LIB_ID id = footprint->GetFPID();
+                id.SetLibNickname( libNickname );
+                footprint->SetFPID( id );
             }
         }
     }
