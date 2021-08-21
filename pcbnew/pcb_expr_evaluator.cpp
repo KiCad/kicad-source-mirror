@@ -242,22 +242,22 @@ static void insideCourtyard( LIBEVAL::CONTEXT* aCtx, void* self )
         return;
 
     auto insideFootprint =
-            [context]( BOARD_ITEM* item, const EDA_RECT& itemBBox,
-                        std::shared_ptr<SHAPE>& itemShape, FOOTPRINT* footprint ) -> bool
+            [context]( BOARD_ITEM* aItem, const EDA_RECT& aItemBBox,
+                        std::shared_ptr<SHAPE>& aItemShape, FOOTPRINT* aFootprint ) -> bool
             {
-                if( !footprint )
+                if( !aFootprint )
                     return false;
 
-                BOARD*                              board = item->GetBoard();
+                BOARD*                              board = aItem->GetBoard();
                 std::unique_lock<std::mutex>        cacheLock( board->m_CachesMutex );
-                std::pair<BOARD_ITEM*, BOARD_ITEM*> key( footprint, item );
+                std::pair<BOARD_ITEM*, BOARD_ITEM*> key( aFootprint, aItem );
                 auto                                i = board->m_InsideCourtyardCache.find( key );
 
                 if( i != board->m_InsideCourtyardCache.end() )
                     return i->second;
 
-                bool res = insideFootprintCourtyard( item, itemBBox, itemShape, context,
-                                                     footprint );
+                bool res = insideFootprintCourtyard( aItem, aItemBBox, aItemShape, context,
+                                                     aFootprint );
 
                 board->m_InsideCourtyardCache[ key ] = res;
                 return res;
@@ -329,22 +329,22 @@ static void insideFrontCourtyard( LIBEVAL::CONTEXT* aCtx, void* self )
         return;
 
     auto insideFootprint =
-            [context]( BOARD_ITEM* item, const EDA_RECT& itemBBox,
-                        std::shared_ptr<SHAPE>& itemShape, FOOTPRINT* footprint ) -> bool
+            [context]( BOARD_ITEM* aItem, const EDA_RECT& aItemBBox,
+                        std::shared_ptr<SHAPE>& aItemShape, FOOTPRINT* aFootprint ) -> bool
             {
-                if( !footprint )
+                if( !aFootprint )
                     return false;
 
-                BOARD*                              board = item->GetBoard();
+                BOARD*                              board = aItem->GetBoard();
                 std::unique_lock<std::mutex>        cacheLock( board->m_CachesMutex );
-                std::pair<BOARD_ITEM*, BOARD_ITEM*> key( footprint, item );
+                std::pair<BOARD_ITEM*, BOARD_ITEM*> key( aFootprint, aItem );
                 auto                                i = board->m_InsideFCourtyardCache.find( key );
 
                 if( i != board->m_InsideFCourtyardCache.end() )
                     return i->second;
 
-                bool res = insideFootprintCourtyard( item, itemBBox, itemShape, context,
-                                                     footprint, F_Cu );
+                bool res = insideFootprintCourtyard( aItem, aItemBBox, aItemShape, context,
+                                                     aFootprint, F_Cu );
 
                 board->m_InsideFCourtyardCache[ key ] = res;
                 return res;
@@ -415,22 +415,22 @@ static void insideBackCourtyard( LIBEVAL::CONTEXT* aCtx, void* self )
         return;
 
     auto insideFootprint =
-            [context]( BOARD_ITEM* item, const EDA_RECT& itemBBox,
-                        std::shared_ptr<SHAPE>& itemShape, FOOTPRINT* footprint ) -> bool
+            [context]( BOARD_ITEM* aItem, const EDA_RECT& aItemBBox,
+                        std::shared_ptr<SHAPE>& aItemShape, FOOTPRINT* aFootprint ) -> bool
             {
-                if( !footprint )
+                if( !aFootprint )
                     return false;
 
-                BOARD*                              board = item->GetBoard();
+                BOARD*                              board = aItem->GetBoard();
                 std::unique_lock<std::mutex>        cacheLock( board->m_CachesMutex );
-                std::pair<BOARD_ITEM*, BOARD_ITEM*> key( footprint, item );
+                std::pair<BOARD_ITEM*, BOARD_ITEM*> key( aFootprint, aItem );
                 auto                                i = board->m_InsideBCourtyardCache.find( key );
 
                 if( i != board->m_InsideBCourtyardCache.end() )
                     return i->second;
 
-                bool res = insideFootprintCourtyard( item, itemBBox, itemShape, context,
-                                                     footprint, B_Cu );
+                bool res = insideFootprintCourtyard( aItem, aItemBBox, aItemShape, context,
+                                                     aFootprint, B_Cu );
 
                 board->m_InsideBCourtyardCache[ key ] = res;
                 return res;
@@ -502,33 +502,33 @@ static void insideArea( LIBEVAL::CONTEXT* aCtx, void* self )
         return;
 
     auto itemIsInsideArea =
-            [context]( BOARD_ITEM* item, ZONE* area, const EDA_RECT& itemBBox ) -> bool
+            [context]( BOARD_ITEM* aItem, ZONE* aArea, const EDA_RECT& aItemBBox ) -> bool
             {
-                BOARD*                 board = area->GetBoard();
+                BOARD*                 board = aArea->GetBoard();
                 std::shared_ptr<SHAPE> shape;
 
-                if( !area->GetCachedBoundingBox().Intersects( itemBBox ) )
+                if( !aArea->GetCachedBoundingBox().Intersects( aItemBBox ) )
                     return false;
 
                 // Collisions include touching, so we need to deflate outline by enough to
                 // exclude touching.  This is particularly important for detecting copper fills
                 // as they will be exactly touching along the entire border.
-                SHAPE_POLY_SET areaOutline = *area->Outline();
+                SHAPE_POLY_SET areaOutline = *aArea->Outline();
                 areaOutline.Deflate( board->GetDesignSettings().GetDRCEpsilon(), 0,
                                      SHAPE_POLY_SET::ALLOW_ACUTE_CORNERS );
 
-                if( item->GetFlags() & HOLE_PROXY )
+                if( aItem->GetFlags() & HOLE_PROXY )
                 {
-                    if( item->Type() == PCB_PAD_T )
+                    if( aItem->Type() == PCB_PAD_T )
                     {
-                        PAD*                 pad = static_cast<PAD*>( item );
+                        PAD*                 pad = static_cast<PAD*>( aItem );
                         const SHAPE_SEGMENT* holeShape = pad->GetEffectiveHoleShape();
 
                         return areaOutline.Collide( holeShape );
                     }
-                    else if( item->Type() == PCB_VIA_T )
+                    else if( aItem->Type() == PCB_VIA_T )
                     {
-                        PCB_VIA*           via = static_cast<PCB_VIA*>( item );
+                        PCB_VIA*           via = static_cast<PCB_VIA*>( aItem );
                         const SHAPE_CIRCLE holeShape( via->GetPosition(), via->GetDrillValue() );
 
                         return areaOutline.Collide( &holeShape );
@@ -537,9 +537,9 @@ static void insideArea( LIBEVAL::CONTEXT* aCtx, void* self )
                     return false;
                 }
 
-                if( item->Type() == PCB_FOOTPRINT_T )
+                if( aItem->Type() == PCB_FOOTPRINT_T )
                 {
-                    FOOTPRINT* footprint = static_cast<FOOTPRINT*>( item );
+                    FOOTPRINT* footprint = static_cast<FOOTPRINT*>( aItem );
 
                     if( ( footprint->GetFlags() & MALFORMED_COURTYARDS ) != 0 )
                     {
@@ -552,7 +552,7 @@ static void insideArea( LIBEVAL::CONTEXT* aCtx, void* self )
                         return false;
                     }
 
-                    if( ( area->GetLayerSet() & LSET::FrontMask() ).any() )
+                    if( ( aArea->GetLayerSet() & LSET::FrontMask() ).any() )
                     {
                         SHAPE_POLY_SET courtyard = footprint->GetPolyCourtyard( F_CrtYd );
 
@@ -569,7 +569,7 @@ static void insideArea( LIBEVAL::CONTEXT* aCtx, void* self )
                         }
                     }
 
-                    if( ( area->GetLayerSet() & LSET::BackMask() ).any() )
+                    if( ( aArea->GetLayerSet() & LSET::BackMask() ).any() )
                     {
                         SHAPE_POLY_SET courtyard = footprint->GetPolyCourtyard( B_CrtYd );
 
@@ -589,9 +589,9 @@ static void insideArea( LIBEVAL::CONTEXT* aCtx, void* self )
                     return false;
                 }
 
-                if( item->Type() == PCB_ZONE_T || item->Type() == PCB_FP_ZONE_T )
+                if( aItem->Type() == PCB_ZONE_T || aItem->Type() == PCB_FP_ZONE_T )
                 {
-                    ZONE* zone = static_cast<ZONE*>( item );
+                    ZONE* zone = static_cast<ZONE*>( aItem );
 
                     if( !zone->IsFilled() )
                         return false;
@@ -602,9 +602,9 @@ static void insideArea( LIBEVAL::CONTEXT* aCtx, void* self )
 
                     if( zoneRTree )
                     {
-                        for( PCB_LAYER_ID layer : area->GetLayerSet().Seq() )
+                        for( PCB_LAYER_ID layer : aArea->GetLayerSet().Seq() )
                         {
-                            if( zoneRTree->QueryColliding( itemBBox, &areaOutline, layer ) )
+                            if( zoneRTree->QueryColliding( aItemBBox, &areaOutline, layer ) )
                                 return true;
                         }
                     }
@@ -614,27 +614,27 @@ static void insideArea( LIBEVAL::CONTEXT* aCtx, void* self )
                 else
                 {
                     if( !shape )
-                        shape = item->GetEffectiveShape( context->GetLayer() );
+                        shape = aItem->GetEffectiveShape( context->GetLayer() );
 
                     return areaOutline.Collide( shape.get() );
                 }
             };
 
     auto checkArea =
-            [&itemIsInsideArea]( BOARD_ITEM* item, const EDA_RECT& itemBBox, ZONE* area ) -> bool
+            [&itemIsInsideArea]( BOARD_ITEM* aItem, const EDA_RECT& aItemBBox, ZONE* aArea ) -> bool
             {
-                if( !area || area == item || area->GetParent() == item )
+                if( !aArea || aArea == aItem || aArea->GetParent() == aItem )
                     return false;
 
-                BOARD*                              board = area->GetBoard();
+                BOARD*                              board = aArea->GetBoard();
                 std::unique_lock<std::mutex>        cacheLock( board->m_CachesMutex );
-                std::pair<BOARD_ITEM*, BOARD_ITEM*> key( area, item );
+                std::pair<BOARD_ITEM*, BOARD_ITEM*> key( aArea, aItem );
                 auto                                i = board->m_InsideAreaCache.find( key );
 
                 if( i != board->m_InsideAreaCache.end() )
                     return i->second;
 
-                bool isInside = itemIsInsideArea( item, area, itemBBox );
+                bool isInside = itemIsInsideArea( aItem, aArea, aItemBBox );
 
                 board->m_InsideAreaCache[ key ] = isInside;
                 return isInside;
