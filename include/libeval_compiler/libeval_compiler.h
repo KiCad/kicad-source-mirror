@@ -187,20 +187,23 @@ public:
     VALUE() :
         m_type( VT_UNDEFINED ),
         m_valueDbl( 0 ),
-        m_stringIsWildcard( false )
+        m_stringIsWildcard( false ),
+        m_isDeferredDbl( false )
     {};
 
     VALUE( const wxString& aStr, bool aIsWildcard = false ) :
         m_type( VT_STRING ),
         m_valueDbl( 0 ),
         m_valueStr( aStr ),
-        m_stringIsWildcard( aIsWildcard )
+        m_stringIsWildcard( aIsWildcard ),
+        m_isDeferredDbl( false )
     {};
 
     VALUE( const double aVal ) :
         m_type( VT_NUMERIC ),
         m_valueDbl( aVal ),
-        m_stringIsWildcard( false )
+        m_stringIsWildcard( false ),
+        m_isDeferredDbl( false )
     {};
 
     virtual ~VALUE()
@@ -208,6 +211,12 @@ public:
 
     virtual double AsDouble() const
     {
+        if( m_isDeferredDbl )
+        {
+            m_valueDbl = m_lambdaDbl();
+            m_isDeferredDbl = false;
+        }
+
         return m_valueDbl;
     }
 
@@ -229,6 +238,13 @@ public:
         m_valueDbl = aValue;
     }
 
+    void SetDeferredEval( std::function<double()> aLambda )
+    {
+        m_type = VT_NUMERIC;
+        m_lambdaDbl = aLambda;
+        m_isDeferredDbl = true;
+    }
+
     void Set( const wxString& aValue )
     {
         m_type = VT_STRING;
@@ -245,10 +261,13 @@ public:
     }
 
 private:
-    VAR_TYPE_T  m_type;
-    double      m_valueDbl;
-    wxString    m_valueStr;
-    bool        m_stringIsWildcard;
+    VAR_TYPE_T     m_type;
+    mutable double m_valueDbl;
+    wxString       m_valueStr;
+    bool           m_stringIsWildcard;
+
+    mutable bool            m_isDeferredDbl;
+    std::function<double()> m_lambdaDbl;
 };
 
 class VAR_REF
