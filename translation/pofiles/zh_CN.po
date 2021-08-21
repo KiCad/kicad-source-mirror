@@ -14,7 +14,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-08-20 11:53-0700\n"
 "PO-Revision-Date: 2021-08-27 08:25+0000\n"
-"Last-Translator: CloverGit <w991593239@163.com>\n"
+"Last-Translator: Eric <spice2wolf@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -9343,7 +9343,7 @@ msgstr "已同步引脚编辑模式，此引脚是新的"
 msgid ""
 "Similar pins will be automatically added to other units, if this pin is not "
 "common to all units"
-msgstr ""
+msgstr "相似引脚会被自动添加到其他单元，前提是这个引脚不是所有单元通用的"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:151
 msgid "Synchronized pins edit mode"
@@ -9353,7 +9353,7 @@ msgstr "已同步引脚编辑模式"
 msgid ""
 "Similar pins at the same location will be edited. Pin number of other pins "
 "will be not modified"
-msgstr ""
+msgstr "相同位置的类似引脚将被编辑。其他引脚的引脚编号将不会被修改"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:206
 #: eeschema/dialogs/dialog_symbol_properties.cpp:334
@@ -9362,17 +9362,19 @@ msgstr "备用引脚分配对德摩根等效符号不可用。"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:282
 msgid "This symbol only has one unit. This control has no effect."
-msgstr ""
+msgstr "这个符号只有一个单位。此控件没有效果。"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:284
 msgid ""
 "Synchronized pin edit mode is enabled.\n"
 "Similar pins will be edited, regardless this option."
 msgstr ""
+"已启用同步的引脚编辑模式。\n"
+"不管这个选项是否启用，类似的引脚将被编辑。"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:287
 msgid "If checked, this pin will exist in all units."
-msgstr ""
+msgstr "如果勾选，此引脚将存在于所有单元。"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:308
 msgid "Alternate pin definitions must have a name."
@@ -9392,7 +9394,7 @@ msgstr ""
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:32
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:36
 msgid "info"
-msgstr ""
+msgstr "信息"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:57
 msgid "Pin &name:"
@@ -13208,9 +13210,8 @@ msgid "Storage file not fully parsed (%d bytes remaining)."
 msgstr "存储文件没有被完全解析 （%d 字节剩余）。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:478
-#, fuzzy
 msgid "Compile mask not currently supported."
-msgstr "尚不支持在原理图上绘制圆弧。"
+msgstr "尚不支持在原理图上编译阻剂。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:491
 #, c-format
@@ -13280,7 +13281,7 @@ msgstr "找不到圆弧所有者 (%d)。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1336
 msgid "Arcs in symbols cannot exceed 180 degrees."
-msgstr ""
+msgstr "符号中的圆弧角度不能超过 180 度。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1376
 #, c-format
@@ -16208,11 +16209,11 @@ msgid ""
 msgstr "信息：<b>隐藏的电源引脚 %s</b>%s 位于转换的位置 <b>(%s,%s)</b>。"
 
 #: eeschema/tools/ee_inspection_tool.cpp:344
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b> in unit %c "
 "of converted."
-msgstr "信息：<b>隐藏的电源引脚%s</b>%s，位于转换的单元 %c 中的位置 <b>(%s,%s)。"
+msgstr "信息：<b>隐藏的电源引脚%s</b>%s，位于 <b>(%s, %s)</b>，此坐标在转换后的单元 %c 中。"
 
 #: eeschema/tools/ee_inspection_tool.cpp:357
 #, c-format
@@ -16647,7 +16648,7 @@ msgstr "文件格式"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:20
 msgid "These parameters are usually specified in files, but not always."
-msgstr ""
+msgstr "这些参数通常在文件中指定，但并不总是如此。"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:29
 msgid "File units"
@@ -16655,11 +16656,11 @@ msgstr "文件单元"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:33
 msgid "No leading zeros (TZ format)"
-msgstr ""
+msgstr "无前导零 (TZ 符号)"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:33
 msgid "No trailing zeros (LZ format)"
-msgstr ""
+msgstr "无拖尾零 (LZ 格式)"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:35
 msgid "Zero format"
@@ -16671,6 +16672,9 @@ msgid ""
 "No leading zeros format means the leading zeros are stripped\n"
 "No trailing zeros  format means the trainling zeros are stripped"
 msgstr ""
+"可以去掉文件中的整数的零。\n"
+"无前导零格式意味着前导零被剥离\n"
+"无拖尾零格式意味着拖尾零被剥离"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:51
 msgid "Coordinates Format"
@@ -16678,15 +16682,15 @@ msgstr "坐标格式"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:53
 msgid "The coordinates format is not specified in Excellon format."
-msgstr ""
+msgstr "此坐标格式未在 Excellon 格式中被指定。"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:57
 msgid "(The decimal format does not use these settings)"
-msgstr ""
+msgstr "（十进制格式不使用这些设置）"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:61
 msgid "Usually: 3:3 in mm and 2:4 in inches"
-msgstr ""
+msgstr "通常情况：3:3 毫米和2:4 英寸"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:70
 msgid "Format for mm"
@@ -26017,9 +26021,8 @@ msgid "Annular rings:"
 msgstr "环形圈："
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:284
-#, fuzzy
 msgid "Start, end, and connected layers"
-msgstr "%s, %s 和连接的图层"
+msgstr "启动、结束和连接层"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.h:114
 msgid "Track & Via Properties"
@@ -26426,14 +26429,12 @@ msgid "File not found"
 msgstr "文件未找到"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:380
-#, fuzzy
 msgid "Unable to open file"
 msgstr "无法打开文件"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:385
-#, fuzzy
 msgid "Unknown error"
-msgstr "未知方法"
+msgstr "未知错误"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model_base.cpp:38
 msgid "3D Model(s)"
@@ -26648,9 +26649,8 @@ msgstr ""
 "他设置减少。"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:256
-#, fuzzy
 msgid "Copper to hole clearance:"
-msgstr "铜孔间隙:"
+msgstr "铜孔间隙："
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:261
 msgid ""
@@ -26662,9 +26662,8 @@ msgstr ""
 "规则或其他设置减少。"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:272
-#, fuzzy
 msgid "Copper to edge clearance:"
-msgstr "铜边缘间隙:"
+msgstr "铜边缘间隙："
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:277
 msgid ""
@@ -27384,9 +27383,8 @@ msgstr "正间隙是指比焊盘面积大的区域(通常用于焊料掩膜间�
 
 # 绿油桥宽：
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:73
-#, fuzzy
 msgid "Solder mask minimum web width:"
-msgstr "阻焊（绿油）最小桥宽："
+msgstr "阻焊剂最小网宽："
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:75
 msgid ""
@@ -27956,24 +27954,20 @@ msgid "board setup constraints"
 msgstr "电路板设置约束"
 
 #: pcbnew/drc/drc_engine.cpp:175
-#, fuzzy
 msgid "board setup constraints silk"
-msgstr "电路板设置约束"
+msgstr "电路板设置约束丝印"
 
 #: pcbnew/drc/drc_engine.cpp:181
-#, fuzzy
 msgid "board setup constraints hole"
-msgstr "电路板设置约束"
+msgstr "电路板设置约束孔"
 
 #: pcbnew/drc/drc_engine.cpp:186
-#, fuzzy
 msgid "board setup constraints edge"
-msgstr "电路板设置约束"
+msgstr "电路板设置约束边缘"
 
 #: pcbnew/drc/drc_engine.cpp:191
-#, fuzzy
 msgid "board setup constraints courtyard"
-msgstr "电路板设置约束"
+msgstr "电路板设置约束空间层"
 
 #: pcbnew/drc/drc_engine.cpp:198
 msgid "board setup micro-via constraints"
@@ -28015,9 +28009,9 @@ msgid "Board minimum clearance: %s."
 msgstr "板最小间隙：%s。"
 
 #: pcbnew/drc/drc_engine.cpp:849
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s clearance: %s."
-msgstr "检查 %s；间隙：%s。"
+msgstr "正检查 %s间隙%s。"
 
 #: pcbnew/drc/drc_engine.cpp:861 pcbnew/drc/drc_engine.cpp:862
 #: pcbnew/drc/drc_engine.cpp:863 pcbnew/tools/board_inspection_tool.cpp:647
@@ -28033,9 +28027,9 @@ msgid "Checking %s %s: %s."
 msgstr "正检查 %s %s: %s。"
 
 #: pcbnew/drc/drc_engine.cpp:894
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s: min %s; opt %s; max %s."
-msgstr "重新连接 %s 的引脚 %s 从 %s 到 %s。"
+msgstr "正检查 %s：最小 %s；最优 %s；最大 %s。"
 
 #: pcbnew/drc/drc_engine.cpp:905
 #, c-format
@@ -28360,9 +28354,9 @@ msgid "Missing constraint type.|  Expected %s."
 msgstr "缺少约束类型。|  应为 %s。"
 
 #: pcbnew/drc/drc_rule_parser.cpp:293
-#, fuzzy, c-format
+#, c-format
 msgid "Rule already has a '%s' constraint."
-msgstr "规则区域 '%s' 不允许布线。"
+msgstr "规则已经有 '%s' 约束。"
 
 #: pcbnew/drc/drc_rule_parser.cpp:351
 msgid "Missing min value."
@@ -29664,7 +29658,6 @@ msgstr "圆弧短截线半径值："
 
 #: pcbnew/microwave/microwave_footprint.cpp:80
 #: pcbnew/microwave/microwave_footprint.cpp:95
-#, fuzzy
 msgid "Create Microwave Footprint"
 msgstr "创建微波封装"
 
@@ -29705,7 +29698,6 @@ msgid "Component Value:"
 msgstr "元件值："
 
 #: pcbnew/microwave/microwave_polygon.cpp:111
-#, fuzzy
 msgid "Complex Shape"
 msgstr "复合样式"
 
@@ -29718,9 +29710,8 @@ msgid "Read Shape Description File..."
 msgstr "阅读样式描述文件..."
 
 #: pcbnew/microwave/microwave_polygon.cpp:210
-#, fuzzy
 msgid "Shape Description File"
-msgstr "阅读样式描述文件..."
+msgstr "形状描述文件"
 
 #: pcbnew/microwave/microwave_polygon.cpp:314
 msgid "Shape has a null size."
@@ -32394,9 +32385,8 @@ msgid "Do not prefix path with footprint UUID."
 msgstr "不要在路径名称前添加封装 UUID。"
 
 #: pcbnew/tools/board_editor_control.cpp:378
-#, fuzzy
 msgid "Specctra Session File"
-msgstr "合并布线器会话文件:"
+msgstr "Specctra 会话文件"
 
 #: pcbnew/tools/board_editor_control.cpp:403
 msgid "Specctra DSN File"
@@ -32517,9 +32507,8 @@ msgid "Cannot generate clearance report on empty group."
 msgstr "无法为空组合生成间隙报告。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:383
-#, fuzzy
 msgid "Zone connection resolution for:"
-msgstr "孔间隙解像度，用于:"
+msgstr "区域连接解像度，用于："
 
 #: pcbnew/tools/board_inspection_tool.cpp:397
 #, c-format
@@ -32562,9 +32551,8 @@ msgid "Silkscreen clearance resolution for:"
 msgstr "丝印层间隙解析适用于:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:528
-#, fuzzy
 msgid "Courtyard clearance resolution for:"
-msgstr "间隙解析适用于:"
+msgstr "空间层间隙解像度，适用于："
 
 #: pcbnew/tools/board_inspection_tool.cpp:566
 msgid "Hole clearance resolution for:"
@@ -32572,7 +32560,7 @@ msgstr "孔间隙解像度，用于:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:629
 msgid "Items share no relevant layers:"
-msgstr ""
+msgstr "项目不共享任何相关层："
 
 #: pcbnew/tools/board_inspection_tool.cpp:678
 msgid "Select an item for a constraints resolution report."
@@ -32587,9 +32575,9 @@ msgid "Track width resolution for:"
 msgstr "布线宽度解析适用于:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:739
-#, fuzzy, c-format
+#, c-format
 msgid "Width constraints: min %s; opt %s; max %s."
-msgstr "宽度约束：最小 %s 最大 %s。"
+msgstr "宽度约束：最小 %s；最优 %s；最大 %s。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:749
 msgid "Via Diameter"
@@ -32600,9 +32588,9 @@ msgid "Via diameter resolution for:"
 msgstr "过孔直径解析适用于:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:762
-#, fuzzy, c-format
+#, c-format
 msgid "Diameter constraints: min %s; opt %s; max %s."
-msgstr "直径约束：最小 %s 最大 %s。"
+msgstr "直径约束：最小 %s；最优 %s；最大 %s。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:769
 msgid "Via Annular Width"
@@ -32613,9 +32601,9 @@ msgid "Via annular width resolution for:"
 msgstr "过孔环形宽度解析适用于:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:782
-#, fuzzy, c-format
+#, c-format
 msgid "Annular width constraints: min %s; opt %s; max %s."
-msgstr "环形宽度约束：最小 %s 最大 %s。"
+msgstr "环形宽度约束：最小 %s；最优 %s；最大 %s。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:793
 msgid "Hole Size"
@@ -32655,9 +32643,8 @@ msgid "Item allowed at current location."
 msgstr "当前位置允许的项目。"
 
 #: pcbnew/tools/convert_tool.cpp:76
-#, fuzzy
 msgid "Create from Selection"
-msgstr "从选区删除"
+msgstr "从选区创建"
 
 #: pcbnew/tools/convert_tool.cpp:207
 msgid "Convert shapes to polygon"
@@ -32875,9 +32862,8 @@ msgid "Selection copied"
 msgstr "选择已复制"
 
 #: pcbnew/tools/edit_tool.cpp:2425
-#, fuzzy
 msgid "Copy canceled"
-msgstr "复制已取消"
+msgstr "已取消复制"
 
 #: pcbnew/tools/footprint_editor_control.cpp:344
 msgid "_copy"
@@ -32943,25 +32929,22 @@ msgid "Recombine pads"
 msgstr "重新组合焊盘"
 
 #: pcbnew/tools/pcb_actions.cpp:48
-#, fuzzy
 msgid "Create Polygon from Selection"
-msgstr "根据所选内容创建图形多边形"
+msgstr "从所选内容创建图形多边形"
 
 #: pcbnew/tools/pcb_actions.cpp:48
 msgid "Creates a graphic polygon from the selection"
 msgstr "根据所选内容创建图形多边形"
 
 #: pcbnew/tools/pcb_actions.cpp:53
-#, fuzzy
 msgid "Create Zone from Selection"
-msgstr "从选区删除"
+msgstr "从所选创建区域"
 
 #: pcbnew/tools/pcb_actions.cpp:53
 msgid "Creates a copper zone from the selection"
 msgstr "从所选内容创建覆铜区"
 
 #: pcbnew/tools/pcb_actions.cpp:58
-#, fuzzy
 msgid "Create Rule Area from Selection"
 msgstr "从所选内容创建规则区域"
 
@@ -32970,7 +32953,6 @@ msgid "Creates a rule area from the selection"
 msgstr "从所选内容创建规则区域"
 
 #: pcbnew/tools/pcb_actions.cpp:63
-#, fuzzy
 msgid "Create Lines from Selection"
 msgstr "从所选内容创建图形线"
 
@@ -32979,24 +32961,20 @@ msgid "Creates graphic lines from the selection"
 msgstr "从所选内容创建图形线"
 
 #: pcbnew/tools/pcb_actions.cpp:68
-#, fuzzy
 msgid "Create Arc from Selection"
-msgstr "从选区删除"
+msgstr "从所选内容创建圆弧"
 
 #: pcbnew/tools/pcb_actions.cpp:68
-#, fuzzy
 msgid "Creates an arc from the selected line segment"
-msgstr "从线段创建圆弧"
+msgstr "从所选线段创建圆弧"
 
 #: pcbnew/tools/pcb_actions.cpp:73
-#, fuzzy
 msgid "Create Tracks from Selection"
-msgstr "从所选内容创建图形线"
+msgstr "从所选内容创建线路"
 
 #: pcbnew/tools/pcb_actions.cpp:73
-#, fuzzy
 msgid "Creates tracks from the selected graphic lines"
-msgstr "清除选定的图形图层"
+msgstr "从选定的图形线创建线路"
 
 #: pcbnew/tools/pcb_actions.cpp:82
 msgid "Draw Line"
@@ -33910,18 +33888,16 @@ msgid "Zoom to fit when changing footprint"
 msgstr "更改封装时缩放至适合大小"
 
 #: pcbnew/tools/pcb_actions.cpp:834
-#, fuzzy
 msgid "Draw Zone Fills"
-msgstr "绘制线"
+msgstr "绘制区域填充"
 
 #: pcbnew/tools/pcb_actions.cpp:834
 msgid "Show filled areas of zones"
 msgstr "显示覆铜的填充区域"
 
 #: pcbnew/tools/pcb_actions.cpp:839
-#, fuzzy
 msgid "Draw Zone Outlines"
-msgstr "覆铜轮廓"
+msgstr "绘制区域轮廓"
 
 #: pcbnew/tools/pcb_actions.cpp:839
 msgid "Show only zone boundaries"
@@ -33929,20 +33905,19 @@ msgstr "仅显示覆铜边界"
 
 #: pcbnew/tools/pcb_actions.cpp:844
 msgid "Draw Zone Fill Fracture Borders"
-msgstr ""
+msgstr "绘制区域填充裂缝边界"
 
 #: pcbnew/tools/pcb_actions.cpp:849
 msgid "Draw Zone Fill Triangulation"
-msgstr ""
+msgstr "绘制区域填充三角剖分"
 
 #: pcbnew/tools/pcb_actions.cpp:855
 msgid "Toggle Zone Display"
 msgstr "切换覆铜显示"
 
 #: pcbnew/tools/pcb_actions.cpp:856
-#, fuzzy
 msgid "Cycle between showing zone fills and just their outlines"
-msgstr "在显示填充覆铜、线框覆铜和草图覆铜之间循环"
+msgstr "循环显示区域填充和及它们的轮廓"
 
 #: pcbnew/tools/pcb_actions.cpp:864
 msgid "Switch to Component (F.Cu) layer"
@@ -34417,7 +34392,6 @@ msgid "Sets the length tuning parameters for currently routed item."
 msgstr "设置当前布线项长度调整参数。"
 
 #: pcbnew/tools/pcb_control.cpp:214
-#, fuzzy
 msgid "Don't show again"
 msgstr "不再显示"
 
@@ -34426,7 +34400,7 @@ msgstr "不再显示"
 msgid ""
 "Not all zones are filled. Use Edit > Fill All Zones (%s) if you wish to see "
 "all fills."
-msgstr ""
+msgstr "不是所有区域都被填充。如你希望看到所有区域被填充，请使用“编辑” > “填充所有的区域”(%s)。"
 
 #: pcbnew/tools/pcb_control.cpp:551
 msgid "Item locked."
