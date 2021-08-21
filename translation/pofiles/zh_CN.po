@@ -12,9 +12,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-20 13:14-0700\n"
-"PO-Revision-Date: 2021-08-16 06:17+0000\n"
-"Last-Translator: Rigo Ligo <rigoligo03@gmail.com>\n"
+"POT-Creation-Date: 2021-08-20 11:53-0700\n"
+"PO-Revision-Date: 2021-08-21 03:44+0000\n"
+"Last-Translator: Eric <spice2wolf@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -201,9 +201,9 @@ msgid "Build Tech layers"
 msgstr "构造工艺层"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:909
-#, fuzzy, c-format
+#, c-format
 msgid "Build Tech layer %d"
-msgstr "构造工艺层"
+msgstr "构造工艺层 %d"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1054
 msgid "Build BVH for holes and vias"
@@ -280,9 +280,9 @@ msgid "Load OpenGL: layers"
 msgstr "载入 OpenGL：层"
 
 #: 3d-viewer/3d_rendering/legacy/create_scene.cpp:562
-#, fuzzy, c-format
+#, c-format
 msgid "Load OpenGL layer %d"
-msgstr "载入 OpenGL：层"
+msgstr "载入 OpenGL 层 %d"
 
 #: 3d-viewer/3d_rendering/legacy/create_scene.cpp:914
 #: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:430
@@ -391,38 +391,32 @@ msgid "Render current view using Raytracing"
 msgstr "使用光线追踪渲染当前视图"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:23
-#, fuzzy
 msgid "Environment Colors"
-msgstr "环境变量"
+msgstr "环境色彩"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:30
-#, fuzzy
 msgid "Background gradient start:"
-msgstr "底层工位起点："
+msgstr "背景梯度起点："
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:37
-#, fuzzy
 msgid "Background gradient end:"
-msgstr "白色背景"
+msgstr "背景梯度终点："
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:50
 msgid "Solder paste:"
 msgstr "焊膏："
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:64
-#, fuzzy
 msgid "Board Colors"
 msgstr "基板颜色"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:66
-#, fuzzy
 msgid "Use board stackup colors"
-msgstr "插入电路板压层表"
+msgstr "使用电路板堆叠颜色"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:69
-#, fuzzy
 msgid "Use colors:"
-msgstr "网络颜色："
+msgstr "使用颜色："
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:77
 msgid "Silkscreen top:"
@@ -1296,9 +1290,8 @@ msgid "Export to Clipboard"
 msgstr "导出到剪贴板"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:158
-#, fuzzy
 msgid "Symbol (.kicad_sym file)"
-msgstr "符号 （.lib 文件）"
+msgstr "符号 (.kicad_sym 文件)"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:158
 msgid "Footprint (.kicad_mod file)"
@@ -1866,9 +1859,9 @@ msgstr ""
 "或从系统中删除外部环境变量。"
 
 #: common/dialogs/dialog_configure_paths.cpp:374
-#, fuzzy, c-format
+#, c-format
 msgid "The name %s is reserved, and cannot be used."
-msgstr "名称 %s 是保留的，不能在此处使用"
+msgstr "名称 %s 是保留的，不能使用。"
 
 #: common/dialogs/dialog_configure_paths.cpp:517
 msgid "File Browser..."
@@ -3884,17 +3877,16 @@ msgid "The auto save file could not be renamed to the board file name."
 msgstr "自动保存文件不能重命名为电路板文件名称。"
 
 #: common/eda_doc.cpp:140
-#, fuzzy
 msgid "Documentation File"
-msgstr "文档"
+msgstr "文档文件"
 
 #: common/eda_doc.cpp:150
-#, fuzzy, c-format
+#, c-format
 msgid "Documentation file '%s' not found."
-msgstr "没有找到原理图文件 '%s'。"
+msgstr "没有找到文档文件 '%s'。"
 
 #: common/eda_doc.cpp:193
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown MIME type for documentation file '%s'"
 msgstr "文档文件 \"%s\" 的 MIME 类型未知"
 
@@ -6384,9 +6376,9 @@ msgid "Reset to Defaults"
 msgstr "重置为默认值"
 
 #: common/widgets/paged_dialog.cpp:367
-#, fuzzy, c-format
+#, c-format
 msgid "Reset %s to Defaults"
-msgstr "重置为默认值"
+msgstr "重置 %s 为默认值"
 
 #: common/widgets/unit_binder.cpp:217
 #, c-format
@@ -6672,9 +6664,8 @@ msgid "Specctra DSN file"
 msgstr "Specctra DSN 文件"
 
 #: common/wildcards_and_files_ext.cpp:521
-#, fuzzy
 msgid "Specctra Session file"
-msgstr "合并布线器会话文件:"
+msgstr "Specctra 会话文件"
 
 #: common/wildcards_and_files_ext.cpp:528
 msgid "IPC-D-356 Test Files"
@@ -6693,9 +6684,8 @@ msgid "Jpeg file"
 msgstr "JPEG 文件"
 
 #: common/wildcards_and_files_ext.cpp:554
-#, fuzzy
 msgid "Hotkey file"
-msgstr "快捷键列表"
+msgstr "快捷键文件"
 
 #: cvpcb/auto_associate.cpp:105
 #, c-format
@@ -7387,9 +7377,8 @@ msgid "Nickname '%s' already in use."
 msgstr "别名 \"%s\" 已经被占用了。"
 
 #: eeschema/dialogs/dialog_bom.cpp:420 eeschema/dialogs/dialog_netlist.cpp:690
-#, fuzzy
 msgid "Generator File"
-msgstr "生成钻孔文件："
+msgstr "生成器文件"
 
 #: eeschema/dialogs/dialog_bom.cpp:439
 msgid "Generator file name not found."
@@ -9301,14 +9290,12 @@ msgid "This plugin already exists."
 msgstr "此插件已存在。"
 
 #: eeschema/dialogs/dialog_netlist.cpp:666
-#, fuzzy
 msgid "You must provide a netlist generator command string"
-msgstr "错误。你必须提供一个命令字符串"
+msgstr "你必须提供网表生成器命令字符串"
 
 #: eeschema/dialogs/dialog_netlist.cpp:672
-#, fuzzy
 msgid "You must provide a netlist generator title"
-msgstr "错误。你必须提供一个标题"
+msgstr "你必须提供网表生成器标题"
 
 #: eeschema/dialogs/dialog_netlist.cpp:718
 msgid "Do not forget to choose a title for this netlist control page"
@@ -9349,9 +9336,8 @@ msgid "Alternate Pin Name"
 msgstr "备用引脚号"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:145
-#, fuzzy
 msgid "Synchronized pins edit mode, and this pin is new"
-msgstr "同步引脚编辑模式"
+msgstr "已同步引脚编辑模式，此引脚是新的"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:146
 msgid ""
@@ -9360,9 +9346,8 @@ msgid ""
 msgstr ""
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:151
-#, fuzzy
 msgid "Synchronized pins edit mode"
-msgstr "同步引脚编辑模式"
+msgstr "已同步引脚编辑模式"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:152
 msgid ""
@@ -11761,14 +11746,12 @@ msgid "Percentage of the text size to offset text above or below wire or bus"
 msgstr "在导线或母线上方或下方偏移文字的文字大小百分比"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:79
-#, fuzzy
 msgid "Global label size:"
-msgstr "全局标签"
+msgstr "全局标签尺寸："
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:81
-#, fuzzy
 msgid "Percentage of the text size to use as space around a global label"
-msgstr "在导线或母线上方或下方偏移文字的文字大小百分比"
+msgstr "用作全局标签周围空间文本大小的百分比"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:107
 msgid "Default line thickness:"
@@ -11864,14 +11847,12 @@ msgid "Color Theme"
 msgstr "颜色主题"
 
 #: eeschema/dialogs/panel_sym_color_settings_base.cpp:25
-#, fuzzy
 msgid "Use schematic editor color theme"
-msgstr "使用 Eesschema 颜色主题"
+msgstr "使用原理图编辑器颜色主题"
 
 #: eeschema/dialogs/panel_sym_color_settings_base.cpp:31
-#, fuzzy
 msgid "Use theme:"
-msgstr "上升时间："
+msgstr "使用主题："
 
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:29
 msgid "&Default line width:"
@@ -13289,9 +13270,8 @@ msgid "Rounded rectangle's owner (%d) not found."
 msgstr "找不到圆角矩形的所有者（%d）。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1300
-#, fuzzy
 msgid "Arcs on schematic not currently supported."
-msgstr "尚不支持在原理图上绘制圆弧。"
+msgstr "尚不支持在原理图上的圆弧。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1310
 #, c-format
@@ -13744,7 +13724,7 @@ msgid "Setting schematic symbol '%s %s' library identifier to '%s'."
 msgstr "正将原理图符号 '%s %s' 库标识符设置为 '%s'。"
 
 #: eeschema/sch_screen.cpp:599
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Schematic symbol reference '%s' library identifier is not valid. Unable to "
 "link library symbol."
@@ -16206,49 +16186,44 @@ msgstr ""
 "<b>(%.3f, %.3f)</b>, 冲突区域在转换后的单元 %c 和 %c。"
 
 #: eeschema/tools/ee_inspection_tool.cpp:284
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b> conflicts with pin %s"
 "%s at location <b>(%s, %s)</b>."
-msgstr ""
-"<b>重复引脚%s</b>%s，位置 <b>(%.3f, %.3f)</b>，和引脚 %s%s冲突，后者位于 "
-"<b>(%.3f, %.3f)</b>。"
+msgstr "<b>重复引脚%s</b> %s，位置 <b>(%s, %s)</b>，和引脚 %s%s冲突，后者位于 <b>(%s,%s)</b>。"
 
 #: eeschema/tools/ee_inspection_tool.cpp:297
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b> conflicts with pin %s"
 "%s at location <b>(%s, %s)</b> in units %c and %c."
 msgstr ""
-"<b>重复引脚 %s</b>%s，位置 <b>(%.3f, %.3f)</b>，和引脚 %s%s冲突，后者位于 "
-"<b>(%.3f, %.3f)</b>，冲突区域在单元 %c 和 %c。"
+"<b>重复引脚 %s</b> %s，位置 <b>(%s, %s)</b>，和引脚 %s%s冲突，后者位于 <b>(%s, %s)</b>，冲突区域在单元 "
+"%c 和 %c。"
 
 #: eeschema/tools/ee_inspection_tool.cpp:335
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b> of converted."
-msgstr "<b>隐藏的电源引脚 %s</b>%s 位于转换的位置 <b>(%.3f, %.3f)</b>。"
+msgstr "信息：<b>隐藏的电源引脚 %s</b>%s 位于转换的位置 <b>(%s,%s)</b>。"
 
 #: eeschema/tools/ee_inspection_tool.cpp:344
 #, fuzzy, c-format
 msgid ""
 "Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b> in unit %c "
 "of converted."
-msgstr ""
-"<b>隐藏的电源引脚%s</b>%s，位于 <b>(%.3f, %.3f)</b>，此坐标在转换后的符号 %c "
-"中。"
+msgstr "信息：<b>隐藏的电源引脚%s</b>%s，位于转换的单元 %c 中的位置 <b>(%s,%s)。"
 
 #: eeschema/tools/ee_inspection_tool.cpp:357
-#, fuzzy, c-format
+#, c-format
 msgid "Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b>."
-msgstr "<b>隐藏的电源引脚 %s</b> %s 在位置 <b>(%.3f, %.3f)</b>。"
+msgstr "信息：<b>隐藏的电源引脚 %s</b> %s，位于<b>(%s, %s)</b>。"
 
 #: eeschema/tools/ee_inspection_tool.cpp:365
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b> in unit %c."
-msgstr ""
-"<b>隐藏的电源引脚%s</b>%s，于位置 <b>(%.3f, %.3f)</b>，此坐标在符号 %c 中。"
+msgstr "信息：<b>隐藏的电源引脚%s</b>%s，位于 <b>(%s, %s)</b>，此坐标在单元 %c 中。"
 
 #: eeschema/tools/ee_inspection_tool.cpp:376
 msgid ""
@@ -16256,29 +16231,26 @@ msgid ""
 msgstr "（隐藏的电源引脚会将其引脚名称驱动到任何连接的网络上。）"
 
 #: eeschema/tools/ee_inspection_tool.cpp:389
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Off grid pin %s</b> %s at location <b>(%s, %s)</b> of converted."
-msgstr "<b>网格外引脚 %s</b>%s 位于转换的位置 <b>(%.3f, %.3f)</b>。"
+msgstr "<b>网格外引脚 %s</b>%s 位于转换的位置 <b>(%s, %s)</b>。"
 
 #: eeschema/tools/ee_inspection_tool.cpp:398
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Off grid pin %s</b> %s at location <b>(%.3s, %.3s)</b> in unit %c of "
 "converted."
-msgstr ""
-"<b>网格外引脚%s</b>%s，于位置 <b>(%.3f, %.3f)</b>，此坐标在转换后的单元 %c "
-"中。"
+msgstr "<b>网格外引脚%s</b>%s，位于 <b>(%.3s, %.3s)</b>，此坐标在转换后的单元 %c 中。"
 
 #: eeschema/tools/ee_inspection_tool.cpp:411
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Off grid pin %s</b> %s at location <b>(%s, %s)</b>."
-msgstr "<b>网格外引脚 %s</b> %s，位于 <b>(%.3f, %.3f)</b>。"
+msgstr "<b>网格外引脚 %s</b> %s，位于 <b>(%s,%s)</b>。"
 
 #: eeschema/tools/ee_inspection_tool.cpp:419
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Off grid pin %s</b> %s at location <b>(%s, %s)</b> in unit %c."
-msgstr ""
-"<b>网格外引脚%s</b>%s，于位置 <b>(%.3f, %.3f)</b>，此坐标在单元 %c 中。"
+msgstr "<b>网格外引脚%s</b>%s，位于 <b>(%s,%s )</b>，此坐标在单元 %c 中。"
 
 #: eeschema/tools/ee_inspection_tool.cpp:436
 msgid "No symbol issues found."
@@ -16405,9 +16377,8 @@ msgid "Net must be labeled to assign a netclass."
 msgstr "网络必须标记才能关联网络类。"
 
 #: eeschema/tools/sch_editor_control.cpp:962
-#, fuzzy
 msgid "Bus must have at least one member to assign a netclass to members."
-msgstr "网络必须标记才能关联网络类。"
+msgstr "总线必须至少有一个成员才能将一个网络类分配给多个成员。"
 
 #: eeschema/tools/sch_editor_control.cpp:988
 msgid "Netclasses"
@@ -16470,9 +16441,8 @@ msgid "Can't save file '%s'."
 msgstr "无法保存文件 \"%s\"。"
 
 #: eeschema/tools/symbol_editor_control.cpp:436
-#, fuzzy
 msgid "SVG File Name"
-msgstr "文件名称"
+msgstr "SVG 文件名称"
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:518
 msgid "Edit Symbol Name"
@@ -16672,18 +16642,16 @@ msgid "Sketch polygons"
 msgstr "多边形草图"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:18
-#, fuzzy
 msgid "File Format"
-msgstr "映射文件格式"
+msgstr "文件格式"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:20
 msgid "These parameters are usually specified in files, but not always."
 msgstr ""
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:29
-#, fuzzy
 msgid "File units"
-msgstr "单元"
+msgstr "文件单元"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:33
 msgid "No leading zeros (TZ format)"
@@ -16694,9 +16662,8 @@ msgid "No trailing zeros (LZ format)"
 msgstr ""
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:35
-#, fuzzy
 msgid "Zero format"
-msgstr "零的格式"
+msgstr "Zero 格式"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:37
 msgid ""
@@ -16706,9 +16673,8 @@ msgid ""
 msgstr ""
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:51
-#, fuzzy
 msgid "Coordinates Format"
-msgstr "坐标格式："
+msgstr "坐标格式"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:53
 msgid "The coordinates format is not specified in Excellon format."
@@ -16723,9 +16689,8 @@ msgid "Usually: 3:3 in mm and 2:4 in inches"
 msgstr ""
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:70
-#, fuzzy
 msgid "Format for mm"
-msgstr "格式"
+msgstr "毫米格式"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:74
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:84
@@ -16793,9 +16758,8 @@ msgid ":"
 msgstr "："
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:90
-#, fuzzy
 msgid "Format for inches"
-msgstr "格式偏好设置"
+msgstr "英寸格式"
 
 #: gerbview/dialogs/panel_gerbview_settings_base.cpp:22
 msgid "Full size"
@@ -17159,9 +17123,8 @@ msgid "GerbView"
 msgstr "GerbView"
 
 #: gerbview/gerbview_frame.cpp:1023
-#, fuzzy
 msgid "Excellon Options"
-msgstr "颜色选项"
+msgstr "Excellon 选项"
 
 #: gerbview/job_file_reader.cpp:157
 msgid "This job file uses an outdated format. Please recreate it."
@@ -17192,9 +17155,9 @@ msgid "Open Recent Zip File"
 msgstr "打开最近的 Zip 文件"
 
 #: gerbview/readgerb.cpp:63
-#, fuzzy, c-format
+#, c-format
 msgid "File '%s' not found"
-msgstr "找不到文件 '%s'。"
+msgstr "未找到文件 '%s'"
 
 #: gerbview/readgerb.cpp:88
 msgid ""
@@ -18039,14 +18002,12 @@ msgid "Create new project from template"
 msgstr "从模板新建工程"
 
 #: kicad/tools/kicad_manager_actions.cpp:52
-#, fuzzy
 msgid "Open Demo Project..."
-msgstr "打开工程..."
+msgstr "打开演示工程..."
 
 #: kicad/tools/kicad_manager_actions.cpp:52
-#, fuzzy
 msgid "Open a demo project"
-msgstr "打开一个现有工程"
+msgstr "打开一个演示工程"
 
 #: kicad/tools/kicad_manager_actions.cpp:58
 msgid "Open Project..."
@@ -20275,14 +20236,12 @@ msgid "Loss Tg:"
 msgstr "Loss Tg（损耗切线）:"
 
 #: pcbnew/board_stackup_manager/dialog_dielectric_list_manager_base.cpp:60
-#, fuzzy
 msgid "Common materials:"
-msgstr "适用于所有单元"
+msgstr "常规材料："
 
 #: pcbnew/board_stackup_manager/dialog_dielectric_list_manager_base.h:57
-#, fuzzy
 msgid "Dielectric Material Characteristics"
-msgstr "电介质材料特性："
+msgstr "电介质材料特性"
 
 #: pcbnew/board_stackup_manager/panel_board_finish_base.cpp:20
 msgid "Has castellated pads"
@@ -23990,9 +23949,8 @@ msgid "Group name:"
 msgstr "组合名称："
 
 #: pcbnew/dialogs/dialog_group_properties_base.cpp:39
-#, fuzzy
 msgid "Prevents group from being moved on canvas"
-msgstr "防止项目在画布上移动和/或调整大小"
+msgstr "防止组在画布上被移动"
 
 #: pcbnew/dialogs/dialog_group_properties_base.cpp:43
 msgid "Group members:"
@@ -26055,9 +26013,8 @@ msgid "End layer:"
 msgstr "结束层："
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:280
-#, fuzzy
 msgid "Annular rings:"
-msgstr "环形宽度"
+msgstr "环形圈："
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:284
 #, fuzzy
@@ -28071,9 +28028,9 @@ msgid "undefined"
 msgstr "未定义"
 
 #: pcbnew/drc/drc_engine.cpp:878
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s %s: %s."
-msgstr "检查 %s。"
+msgstr "正检查 %s %s: %s。"
 
 #: pcbnew/drc/drc_engine.cpp:894
 #, fuzzy, c-format
@@ -28314,9 +28271,9 @@ msgid "Differential uncoupled length too long"
 msgstr "差分未耦合长度太长"
 
 #: pcbnew/drc/drc_item.cpp:320
-#, fuzzy, c-format
+#, c-format
 msgid "Rule: %s"
-msgstr "规则"
+msgstr "规则：%s"
 
 #: pcbnew/drc/drc_rule.h:135
 #, c-format
