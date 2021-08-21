@@ -14,11 +14,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-20 13:14-0700\n"
-"PO-Revision-Date: 2021-08-20 12:25+0000\n"
-"Last-Translator: hokim <teamgoodaloe@gmail.com>\n"
-"Language-Team: Korean <https://hosted.weblate.org/projects/kicad/master-"
-"source/ko/>\n"
+"POT-Creation-Date: 2021-08-20 11:53-0700\n"
+"PO-Revision-Date: 2021-08-21 00:58+0000\n"
+"Last-Translator: Ji Yoon Choi <chichoon.choi@gmail.com>\n"
+"Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
+"master-source/ko/>\n"
 "Language: ko\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -292,9 +292,9 @@ msgid "Load OpenGL: layers"
 msgstr "OpenGL 불러오기: 레이어"
 
 #: 3d-viewer/3d_rendering/legacy/create_scene.cpp:562
-#, fuzzy, c-format
+#, c-format
 msgid "Load OpenGL layer %d"
-msgstr "OpenGL 불러오기: 레이어"
+msgstr "OpenGL 레이어 %d 불러오기"
 
 #: 3d-viewer/3d_rendering/legacy/create_scene.cpp:914
 #: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:430
@@ -403,38 +403,32 @@ msgid "Render current view using Raytracing"
 msgstr "레이트레이싱으로 현재 뷰 렌더링"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:23
-#, fuzzy
 msgid "Environment Colors"
-msgstr "환경 변수"
+msgstr "환경 색상"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:30
-#, fuzzy
 msgid "Background gradient start:"
-msgstr "후면 참조 시작:"
+msgstr "후면 그래디언트 시작점:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:37
-#, fuzzy
 msgid "Background gradient end:"
-msgstr "흑백 이미지"
+msgstr "후면 그래디언트 끝점:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:50
 msgid "Solder paste:"
 msgstr "솔더 페이스트:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:64
-#, fuzzy
 msgid "Board Colors"
-msgstr "보드 본체 색상"
+msgstr "기판 색상"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:66
-#, fuzzy
 msgid "Use board stackup colors"
-msgstr "기판 스택업 테이블 삽입"
+msgstr "기판 스택업 색상 사용"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:69
-#, fuzzy
 msgid "Use colors:"
-msgstr "네트 색상:"
+msgstr "다음의 색상 사용:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:77
 msgid "Silkscreen top:"
@@ -1309,9 +1303,8 @@ msgid "Export to Clipboard"
 msgstr "클립보드로 내보내기"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:158
-#, fuzzy
 msgid "Symbol (.kicad_sym file)"
-msgstr "심볼 (.lib 파일)"
+msgstr "심볼 (.kicad_sym 파일)"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:158
 msgid "Footprint (.kicad_mod file)"
@@ -1878,9 +1871,9 @@ msgstr ""
 "외부 환경 변수를 시스템에서 제거하십시오."
 
 #: common/dialogs/dialog_configure_paths.cpp:374
-#, fuzzy, c-format
+#, c-format
 msgid "The name %s is reserved, and cannot be used."
-msgstr "이름 %s은(는) 예약되어 있으며 여기에 사용할 수 없습니다"
+msgstr "이름 %s은(는) 예약되어 있어, 사용할 수 없습니다"
 
 #: common/dialogs/dialog_configure_paths.cpp:517
 msgid "File Browser..."
@@ -13886,13 +13879,11 @@ msgid "Setting schematic symbol '%s %s' library identifier to '%s'."
 msgstr "회로도 심볼 '%s %s'의 라이브러리 식별자를 '%s'(으)로 설정합니다."
 
 #: eeschema/sch_screen.cpp:599
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Schematic symbol reference '%s' library identifier is not valid. Unable to "
 "link library symbol."
-msgstr ""
-"회로도 심볼 참조 '%s' 라이브러리 식별자는 유효하지 않습니다.  라이브러리 심볼"
-"을 연결할 수 없습니다."
+msgstr "회로도 심볼 참조 '%s' 라이브러리 식별자는 유효하지 않습니다. 라이브러리 심볼을 연결할 수 없습니다."
 
 #: eeschema/sch_screen.cpp:615
 #, c-format
