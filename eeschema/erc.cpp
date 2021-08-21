@@ -486,8 +486,8 @@ int ERC_TESTER::TestPinToPin()
                 // if this net needs a power driver
                 if( !needsDriver ||
                     ( !needsDriver->IsVisible() && refPin->IsVisible() ) ||
-                    ( ispowerNet != needsDriver->IsPowerConnection() &&
-                      ispowerNet == refPin->IsPowerConnection() ) )
+                    ( ispowerNet != ( needsDriver->GetType() == ELECTRICAL_PINTYPE::PT_POWER_IN ) &&
+                      ispowerNet == ( refType == ELECTRICAL_PINTYPE::PT_POWER_IN ) ) )
                 {
                     needsDriver = refPin;
                 }
