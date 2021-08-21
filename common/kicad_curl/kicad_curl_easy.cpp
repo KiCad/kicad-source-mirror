@@ -28,8 +28,13 @@
 #include <cstdarg>
 #include <cstddef>
 #include <exception>
-#include <ki_exception.h>   // THROW_IO_ERROR
 #include <sstream>
+#include <wx/app.h>
+
+#include <build_version.h>
+#include <ki_exception.h>   // THROW_IO_ERROR
+#include <kiplatform/app.h>
+#include <pgm_base.h>
 
 
 static size_t write_callback( void* contents, size_t size, size_t nmemb, void* userp )
@@ -62,6 +67,28 @@ KICAD_CURL_EASY::KICAD_CURL_EASY() :
 
     curl_easy_setopt( m_CURL, CURLOPT_WRITEFUNCTION, write_callback );
     curl_easy_setopt( m_CURL, CURLOPT_WRITEDATA, (void*) &m_buffer );
+
+    wxPlatformInfo platformInfo;
+    wxString application( Pgm().App().GetAppName() );
+    wxString version( GetBuildVersion() );
+    wxString platform = "(" + wxGetOsDescription() + ";" + platformInfo.GetArchName();
+
+#if defined( KICAD_BUILD_ARCH_X64 )
+    platform << ";64-bit";
+#elif defined( KICAD_BUILD_ARCH_X86 )
+    platform << ";32-bit";
+#elif defined( KICAD_BUILD_ARCH_ARM )
+    platform << ";ARM 32-bit";
+#elif defined( KICAD_BUILD_ARCH_ARM64 )
+    platform << ";ARM 64-bit";
+#endif
+
+    platform << ")";
+
+    wxString user_agent = "KiCad/" + version + " " + platform + " " + application;
+
+    user_agent << "/" << GetBuildDate();
+    setOption<const char*>( CURLOPT_USERAGENT, user_agent.ToStdString().c_str() );
 }
 
 
