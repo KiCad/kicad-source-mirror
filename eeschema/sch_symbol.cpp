@@ -784,7 +784,7 @@ void SCH_SYMBOL::UpdateFields( const SCH_SHEET_PATH* aPath, bool aUpdateStyle, b
 
             if( id == REFERENCE_FIELD && aPath )
             {
-                if( aResetOtherFields )
+                if( aResetRef )
                     SetRef( aPath, m_part->GetReferenceField().GetText() );
                 else if( aUpdateRef )
                     SetRef( aPath, libField->GetText() );
@@ -792,14 +792,14 @@ void SCH_SYMBOL::UpdateFields( const SCH_SHEET_PATH* aPath, bool aUpdateStyle, b
             else if( id == VALUE_FIELD )
             {
                 if( aResetOtherFields )
-                    SetValue( UnescapeString( m_lib_id.GetLibItemName() ) ); // alias-specific value
+                    SetValue( aPath, UnescapeString( m_lib_id.GetLibItemName() ) ); // alias-specific value
                 else
-                    SetValue( UnescapeString( libField->GetText() ) );
+                    SetValue( aPath, UnescapeString( libField->GetText() ) );
             }
             else if( id == FOOTPRINT_FIELD )
             {
                 if( aResetOtherFields || aUpdateOtherFields )
-                    SetFootprint( libField->GetText() );
+                    SetFootprint( aPath, libField->GetText() );
             }
             else if( id == DATASHEET_FIELD )
             {
