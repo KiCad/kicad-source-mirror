@@ -27,7 +27,9 @@
 #include <algorithm>
 #include <set>
 
-using namespace std;
+#include <wx/settings.h>
+#include <wx/stattext.h>
+
 
 extern APIIMPORT wxPGGlobalVarsClass* wxPGGlobalVars;
 
@@ -41,13 +43,21 @@ PROPERTIES_PANEL::PROPERTIES_PANEL( wxWindow* aParent, EDA_BASE_FRAME* aFrame )
     if( !wxPGGlobalVars )
         wxPGInitResourceModule();
 
+    m_caption = new wxStaticText( this, wxID_ANY, _( "No objects selected" ), wxDefaultPosition,
+                                  wxDefaultSize, 0 );
+    mainSizer->Add( m_caption, 0, wxALL | wxEXPAND, 5 );
+
     m_grid = new wxPropertyGrid( this, wxID_ANY, wxDefaultPosition, wxSize( 300, 400 ),
-            wxPG_AUTO_SORT | wxPG_SPLITTER_AUTO_CENTER | wxPG_DEFAULT_STYLE );
+                                 wxPG_AUTO_SORT | wxPG_DEFAULT_STYLE );
     m_grid->SetUnspecifiedValueAppearance( wxPGCell( wxT( "<...>" ) ) );
     mainSizer->Add( m_grid, 1, wxALL | wxEXPAND, 5 );
 
+    m_grid->SetCellDisabledTextColour( wxSystemSettings::GetColour( wxSYS_COLOUR_GRAYTEXT ) );
+
     SetSizer( mainSizer );
     Layout();
+
+    m_grid->CenterSplitter();
 
     Connect( wxEVT_PG_CHANGED, wxPropertyGridEventHandler( PROPERTIES_PANEL::valueChanged ), NULL, this );
     Connect( wxEVT_PG_CHANGING, wxPropertyGridEventHandler( PROPERTIES_PANEL::valueChanging ), NULL, this );
@@ -61,19 +71,34 @@ void PROPERTIES_PANEL::update( const SELECTION& aSelection )
     m_displayed.clear();
 
     if( aSelection.Empty() )
+    {
+        m_caption->SetLabel( _( "No objects selected" ) );
         return;
+    }
 
     // Get all the selected types
-    set<TYPE_ID> types;
+    std::set<TYPE_ID> types;
 
     for( EDA_ITEM* item : aSelection )
         types.insert( TYPE_HASH( *item ) );
 
     wxCHECK( !types.empty(), /* void */ );
+
+    if( aSelection.Size() > 1 )
+    {
+        m_caption->SetLabel( _( "Multiple objects selected" ) );
+    }
+    else
+    {
+        // TODO: Plain-language descriptive noun function in EDA_ITEM classes
+        // TODO: Need to override this in PCB editor vs. schematic
+        m_caption->SetLabel( aSelection.Front()->GetClass() );
+    }
+
     PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
     propMgr.SetUnits( m_frame->GetUserUnits() );
 
-    set<PROPERTY_BASE*> commonProps;
+    std::set<PROPERTY_BASE*> commonProps;
     const PROPERTY_LIST& allProperties = propMgr.GetProperties( *types.begin() );
     copy( allProperties.begin(), allProperties.end(), inserter( commonProps, commonProps.begin() ) );
 

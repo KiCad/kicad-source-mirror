@@ -32,6 +32,7 @@
 class EDA_BASE_FRAME;
 class SELECTION;
 class PROPERTY_BASE;
+class wxStaticText;
 
 class PROPERTIES_PANEL : public wxPanel
 {
@@ -71,6 +72,7 @@ protected:
     std::vector<PROPERTY_BASE*> m_displayed;
     wxPropertyGrid* m_grid;
     EDA_BASE_FRAME* m_frame;
+    wxStaticText* m_caption;
 };
 
 #endif /* PROPERTIES_PANEL_H */
