@@ -792,7 +792,9 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
 
         if( ac && !b_is_non_copper )
         {
-            if( int overrideA = ac->GetLocalClearanceOverrides( nullptr ) > 0 )
+            int overrideA = ac->GetLocalClearanceOverrides( nullptr );
+
+            if( overrideA > 0 )
             {
                 REPORT( "" )
                 REPORT( wxString::Format( _( "Local override on %s; clearance: %s." ),
@@ -805,7 +807,9 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
 
         if( bc && !a_is_non_copper )
         {
-            if( int overrideB = bc->GetLocalClearanceOverrides( nullptr ) > 0 )
+            int overrideB = bc->GetLocalClearanceOverrides( nullptr );
+
+            if( overrideB > 0 )
             {
                 REPORT( "" )
                 REPORT( wxString::Format( _( "Local override on %s; clearance: %s." ),
