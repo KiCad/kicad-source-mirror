@@ -1143,13 +1143,12 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
             return constraint;
         }
     }
-    else if( constraint.GetParentRule() )
-    {
-        return constraint;
-    }
 
-    constraint.m_Type = NULL_CONSTRAINT;
-    constraint.m_DisallowFlags = 0;
+    if( !constraint.GetParentRule() )
+    {
+        constraint.m_Type = NULL_CONSTRAINT;
+        constraint.m_DisallowFlags = 0;
+    }
 
     return constraint;
 
