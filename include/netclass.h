@@ -62,7 +62,7 @@ public:
         return wxT( "NETCLASS" );
     }
 
-    const wxString& GetName() const { return m_Name; }
+    const wxString GetName() const { return m_Name; }
     void SetName( const wxString& aName ) { m_Name = aName; }
 
     /**
