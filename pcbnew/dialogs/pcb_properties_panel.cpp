@@ -28,6 +28,7 @@
 #include <board_connected_item.h>
 #include <pg_properties.h>
 #include <pcb_shape.h>
+#include <settings/color_settings.h>
 
 
 PCB_PROPERTIES_PANEL::PCB_PROPERTIES_PANEL( wxWindow* aParent, PCB_EDIT_FRAME* aFrame )
@@ -50,6 +51,29 @@ void PCB_PROPERTIES_PANEL::UpdateData()
 
 wxPGProperty* PCB_PROPERTIES_PANEL::createPGProperty( const PROPERTY_BASE* aProperty ) const
 {
+    if( aProperty->TypeHash() == TYPE_HASH( PCB_LAYER_ID ) )
+    {
+        wxASSERT( aProperty->HasChoices() );
+
+        PGPROPERTY_COLORENUM* ret = new PGPROPERTY_COLORENUM( wxPG_LABEL, wxPG_LABEL,
+                const_cast<wxPGChoices&>( aProperty->Choices() ) );
+
+        ret->SetColorFunc(
+                [&]( const wxString& aChoice ) -> wxColour
+                {
+                    PCB_LAYER_ID l = ENUM_MAP<PCB_LAYER_ID>::Instance().ToEnum( aChoice );
+                    wxASSERT( IsPcbLayer( l ) );
+                    return m_frame->GetColorSettings()->GetColor( l ).ToColour();
+                } );
+
+        ret->SetLabel( aProperty->Name() );
+        ret->SetName( aProperty->Name() );
+        ret->Enable( !aProperty->IsReadOnly() );
+        ret->SetClientData( const_cast<PROPERTY_BASE*>( aProperty ) );
+
+        return ret;
+    }
+
     return PGPropertyFactory( aProperty );
 }
 
@@ -83,29 +107,9 @@ void PCB_PROPERTIES_PANEL::updateLists( const BOARD* aBoard )
     for( LSEQ layerSeq = aBoard->GetEnabledLayers().UIOrder(); layerSeq; ++layerSeq )
         layersAll.Add( LSET::Name( *layerSeq ), *layerSeq );
 
-    m_propMgr.GetProperty( TYPE_HASH( BOARD_ITEM ), _( "Layer" ) )->SetChoices( layersAll );
-
-
-    // Regenerate non-copper layers
-    for( LSEQ layerSeq = LSET( LSET::AllNonCuMask() & aBoard->GetEnabledLayers() ).UIOrder(); layerSeq; ++layerSeq )
-        layersNonCu.Add( LSET::Name( *layerSeq ), *layerSeq );
-
-    m_propMgr.GetProperty( TYPE_HASH( PCB_SHAPE ), _( "Layer" ) )->SetChoices( layersNonCu );
-
-
-    // Regenerate copper layers
-    for( LSEQ layerSeq = LSET( LSET::AllCuMask() & aBoard->GetEnabledLayers() ).UIOrder(); layerSeq; ++layerSeq )
-        layersCu.Add( LSET::Name( *layerSeq ), *layerSeq );
-
-    m_propMgr.GetProperty( TYPE_HASH( BOARD_CONNECTED_ITEM ), _( "Layer" ) )->SetChoices( layersCu );
-
-
-    // Regenerate non-copper layers
-    for( LSEQ layerSeq = LSET( LSET::AllNonCuMask() & aBoard->GetEnabledLayers() ).UIOrder(); layerSeq; ++layerSeq )
-        layersNonCu.Add( LSET::Name( *layerSeq ), *layerSeq );
-
-    m_propMgr.GetProperty( TYPE_HASH( PCB_SHAPE ), _( "Layer" ) )->SetChoices( layersNonCu );
-
+    m_propMgr.GetProperty( TYPE_HASH( BOARD_ITEM ), _HKI( "Layer" ) )->SetChoices( layersAll );
+    m_propMgr.GetProperty( TYPE_HASH( PCB_SHAPE ), _HKI( "Layer" ) )->SetChoices( layersAll );
+    m_propMgr.GetProperty( TYPE_HASH( BOARD_CONNECTED_ITEM ), _HKI( "Layer" ) )->SetChoices( layersAll );
 
     // Regenerate nets
     for( const auto& netinfo : aBoard->GetNetInfo().NetsByNetcode() )

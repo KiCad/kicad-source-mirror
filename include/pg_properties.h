@@ -109,4 +109,34 @@ protected:
     double m_scale;
 };
 
+
+///> A wxEnumProperty that displays a color next to the enum value
+class PGPROPERTY_COLORENUM : public wxEnumProperty
+{
+public:
+    PGPROPERTY_COLORENUM( const wxString& aLabel, wxString& aName, const wxPGChoices& aChoices,
+                          int aValue = 0 ) :
+            wxEnumProperty( aLabel, aName, const_cast<wxPGChoices&>( aChoices ), aValue ),
+            m_colorFunc( []( const wxString& aChoice ) { return wxNullColour; } )
+    {
+    }
+
+    wxSize OnMeasureImage( int aItem = -1 ) const override;
+
+    void OnCustomPaint( wxDC& aDC, const wxRect& aRect, wxPGPaintData& aPaintData ) override;
+
+    void SetColorFunc( std::function<wxColour( const wxString& aChoice )> aFunc )
+    {
+        m_colorFunc = aFunc;
+    }
+
+    wxColour GetColor( const wxString& aChoice )
+    {
+        return m_colorFunc( aChoice );
+    }
+
+protected:
+    std::function<wxColour( const wxString& aChoice )> m_colorFunc;
+};
+
 #endif /* PG_PROPERTIES_H */

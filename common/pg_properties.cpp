@@ -27,6 +27,7 @@
 #include <validators.h>
 #include <convert_to_biu.h>
 #include <property.h>
+#include <widgets/color_swatch.h>
 
 // reg-ex describing a signed valid value with a unit
 static const wxChar REGEX_SIGNED_DISTANCE[] = wxT( "([-+]?[0-9]+[\\.?[0-9]*) *(mm|in)*" );
@@ -274,4 +275,31 @@ wxString PGPROPERTY_ANGLE::ValueToString( wxVariant& aVariant, int aArgFlags ) c
 {
     wxCHECK( aVariant.GetType() == wxPG_VARIANT_TYPE_DOUBLE, wxEmptyString );
     return wxString::Format( wxT("%g\u00B0"), aVariant.GetDouble() / m_scale );
+}
+
+
+wxSize PGPROPERTY_COLORENUM::OnMeasureImage( int aItem ) const
+{
+    // TODO(JE) calculate size from window metrics?
+    return wxSize( 16, 12 );
+}
+
+
+void PGPROPERTY_COLORENUM::OnCustomPaint( wxDC& aDC, const wxRect& aRect,
+                                          wxPGPaintData& aPaintData )
+{
+    int index = aPaintData.m_choiceItem;
+
+    if( index < 0 )
+        index = GetIndex();
+
+    wxString layer = GetChoices().GetLabel( index );
+    wxColour color = GetColor( layer );
+
+    if( color == wxNullColour )
+        return;
+
+    aDC.SetPen( *wxTRANSPARENT_PEN );
+    aDC.SetBrush( wxBrush( color ) );
+    aDC.DrawRectangle( aRect );
 }
