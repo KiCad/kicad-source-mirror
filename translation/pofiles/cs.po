@@ -14,17 +14,17 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-20 13:14-0700\n"
-"PO-Revision-Date: 2021-08-15 09:00+0000\n"
+"POT-Creation-Date: 2021-08-20 11:53-0700\n"
+"PO-Revision-Date: 2021-08-27 08:25+0000\n"
 "Last-Translator: Jan Straka <bach@email.cz>\n"
-"Language-Team: Czech <https://hosted.weblate.org/projects/kicad/master-"
-"source/cs/>\n"
+"Language-Team: Czech <https://hosted.weblate.org/projects/kicad/"
+"master-source/cs/>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 4.8-dev\n"
+"X-Generator: Weblate 4.8.1-dev\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-Basepath: .\n"
 
@@ -203,9 +203,9 @@ msgid "Build Tech layers"
 msgstr "Sestavuji tech. vrstvy"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:909
-#, fuzzy, c-format
+#, c-format
 msgid "Build Tech layer %d"
-msgstr "Sestavuji tech. vrstvy"
+msgstr "Sestavuji tech vrstvu %d"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1054
 msgid "Build BVH for holes and vias"
@@ -282,9 +282,9 @@ msgid "Load OpenGL: layers"
 msgstr "Načítání OpenGL: vrstvy"
 
 #: 3d-viewer/3d_rendering/legacy/create_scene.cpp:562
-#, fuzzy, c-format
+#, c-format
 msgid "Load OpenGL layer %d"
-msgstr "Načítání OpenGL: vrstvy"
+msgstr "Načítání OpenGL vrstva %d"
 
 #: 3d-viewer/3d_rendering/legacy/create_scene.cpp:914
 #: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:430
@@ -393,9 +393,8 @@ msgid "Render current view using Raytracing"
 msgstr "Rendrování aktuálního pohledu pomocí Raytracingu"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:23
-#, fuzzy
 msgid "Environment Colors"
-msgstr "Proměnné prostředí"
+msgstr "Barvy prostředí"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:30
 #, fuzzy
@@ -412,9 +411,8 @@ msgid "Solder paste:"
 msgstr "Pájecí pasta:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:64
-#, fuzzy
 msgid "Board Colors"
-msgstr "Barva těla desky"
+msgstr "Barva desky"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:66
 #, fuzzy
@@ -422,9 +420,8 @@ msgid "Use board stackup colors"
 msgstr "omezení nastavení desky"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:69
-#, fuzzy
 msgid "Use colors:"
-msgstr "Barva sítě:"
+msgstr "Použít barvy:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:77
 msgid "Silkscreen top:"
@@ -1306,9 +1303,8 @@ msgid "Export to Clipboard"
 msgstr "Export do schránky"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:158
-#, fuzzy
 msgid "Symbol (.kicad_sym file)"
-msgstr "Symbol (.lib soubor)"
+msgstr "Symbol (.kicad_sym soubor)"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:158
 msgid "Footprint (.kicad_mod file)"
@@ -1879,9 +1875,9 @@ msgstr ""
 "nebo odeberte definice proměnné externího prostředí z vašeho systému."
 
 #: common/dialogs/dialog_configure_paths.cpp:374
-#, fuzzy, c-format
+#, c-format
 msgid "The name %s is reserved, and cannot be used."
-msgstr "Název %s je vyhrazen a nelze jej zde použít"
+msgstr "Název %s je vyhrazen a nelze jej zde použít."
 
 #: common/dialogs/dialog_configure_paths.cpp:517
 msgid "File Browser..."
@@ -3736,9 +3732,9 @@ msgid "Drawing sheet '%s' could not be opened."
 msgstr "List kreslení '%s' nelze otevřít."
 
 #: common/drawing_sheet/drawing_sheet_reader.cpp:913
-#, fuzzy, c-format
+#, c-format
 msgid "Drawing sheet '%s' was not fully read."
-msgstr "Soubor '%s' nebyl zcela načten."
+msgstr "Výkresový list '%s' nebyl zcela načten."
 
 #: common/drawing_sheet/ds_data_item.cpp:370
 #: common/drawing_sheet/ds_draw_item.cpp:122 common/eda_text.cpp:667
@@ -3782,9 +3778,8 @@ msgstr "Obrázek"
 
 #: common/drawing_sheet/ds_data_model_io.cpp:92
 #: common/drawing_sheet/ds_data_model_io.cpp:121
-#, fuzzy
 msgid "Error writing drawing sheet file"
-msgstr "Vykreslit ohraničení stránky"
+msgstr "Chyba při zápisu souboru výkresu"
 
 #: common/drawing_sheet/ds_draw_item.cpp:136
 msgid "First Page Only"
@@ -3935,19 +3930,18 @@ msgid "The auto save file could not be renamed to the board file name."
 msgstr "Automaticky uložený soubor nelze přejmenovat na název souboru desky."
 
 #: common/eda_doc.cpp:140
-#, fuzzy
 msgid "Documentation File"
-msgstr "Soubor dokumentace:"
+msgstr "Soubor dokumentace"
 
 #: common/eda_doc.cpp:150
-#, fuzzy, c-format
+#, c-format
 msgid "Documentation file '%s' not found."
-msgstr "Soubor schématu \"%s\" nenalezen."
+msgstr "Soubor dokumentace '%s' nenalezen."
 
 #: common/eda_doc.cpp:193
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown MIME type for documentation file '%s'"
-msgstr "Neznámý MIME typ souboru dokumentace '%s'"
+msgstr "Neznámý MIME typ pro soubor dokumentace '%s'"
 
 #: common/eda_draw_frame.cpp:141 common/tool/actions.cpp:487
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:27
@@ -5194,14 +5188,12 @@ msgid "Hidden text"
 msgstr "Skrytý text"
 
 #: common/layer_id.cpp:149
-#, fuzzy
 msgid "SMD pads front"
-msgstr "Plošky nahoře"
+msgstr "SMD plošky nahoře"
 
 #: common/layer_id.cpp:150
-#, fuzzy
 msgid "SMD pads back"
-msgstr "Plošky dole"
+msgstr "SMD plošky dole"
 
 #: common/layer_id.cpp:151
 msgid "Through-hole pads"
@@ -6450,9 +6442,9 @@ msgid "Reset to Defaults"
 msgstr "Obnovit výchozí"
 
 #: common/widgets/paged_dialog.cpp:367
-#, fuzzy, c-format
+#, c-format
 msgid "Reset %s to Defaults"
-msgstr "Obnovit výchozí"
+msgstr "Obnovit %s na výchozí"
 
 #: common/widgets/unit_binder.cpp:217
 #, c-format
@@ -6740,9 +6732,8 @@ msgid "Specctra DSN file"
 msgstr "Soubor Specctra DSN"
 
 #: common/wildcards_and_files_ext.cpp:521
-#, fuzzy
 msgid "Specctra Session file"
-msgstr "Připojit soubor Specctra:"
+msgstr "Soubor relace Specctra"
 
 #: common/wildcards_and_files_ext.cpp:528
 msgid "IPC-D-356 Test Files"
@@ -6761,9 +6752,8 @@ msgid "Jpeg file"
 msgstr "Jpeg soubory"
 
 #: common/wildcards_and_files_ext.cpp:554
-#, fuzzy
 msgid "Hotkey file"
-msgstr "Seznam kl. zkratek"
+msgstr "Soubor kl. zkratek"
 
 #: cvpcb/auto_associate.cpp:105
 #, c-format
@@ -7237,24 +7227,24 @@ msgid "%d duplicate time stamps were found and replaced."
 msgstr "%d duplicitní časová razítka byly nalezena a nahrazena."
 
 #: eeschema/annotate.cpp:284
-#, fuzzy, c-format
+#, c-format
 msgid "Updated %s (unit %s) from %s to %s."
-msgstr "Aktualizováno %s (jednotka %s) z %s na %s"
+msgstr "Aktualizováno %s (jednotka %s) z %s na %s."
 
 #: eeschema/annotate.cpp:292
-#, fuzzy, c-format
+#, c-format
 msgid "Updated %s from %s to %s."
-msgstr "Aktualizováno %s na %s z %s"
+msgstr "Aktualizováno %s z %s na %s."
 
 #: eeschema/annotate.cpp:302
-#, fuzzy, c-format
+#, c-format
 msgid "Annotated %s (unit %s) as %s."
-msgstr "Očíslováno %s (jednotka %s) jako %s"
+msgstr "Očíslováno %s (jednotka %s) jako %s."
 
 #: eeschema/annotate.cpp:309
-#, fuzzy, c-format
+#, c-format
 msgid "Annotated %s as %s."
-msgstr "Očíslování %s jako %s"
+msgstr "Očíslování %s jako %s."
 
 #: eeschema/annotate.cpp:326
 msgid "Annotation complete."
@@ -7473,9 +7463,8 @@ msgid "Nickname '%s' already in use."
 msgstr "Přezdívka \"%s\" se již používá."
 
 #: eeschema/dialogs/dialog_bom.cpp:420 eeschema/dialogs/dialog_netlist.cpp:690
-#, fuzzy
 msgid "Generator File"
-msgstr "Soubory generátoru:"
+msgstr "Soubory generátoru"
 
 #: eeschema/dialogs/dialog_bom.cpp:439
 msgid "Generator file name not found."
@@ -11907,9 +11896,8 @@ msgstr ""
 "Procento velikosti textu k odsazení textu nad nebo pod vodičem nebo sběrnicí"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:79
-#, fuzzy
 msgid "Global label size:"
-msgstr "Globální označení"
+msgstr "Globální označení velikost:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:81
 #, fuzzy
@@ -12016,9 +12004,8 @@ msgid "Use schematic editor color theme"
 msgstr "Použijte barevné téma Eeschema"
 
 #: eeschema/dialogs/panel_sym_color_settings_base.cpp:31
-#, fuzzy
 msgid "Use theme:"
-msgstr "Doba náběhu:"
+msgstr "Použít motiv:"
 
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:29
 msgid "&Default line width:"
@@ -13763,9 +13750,9 @@ msgid "Invalid symbol unit name"
 msgstr "Neplatné jméno signálu"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:283
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid symbol unit name prefix %s"
-msgstr "Neplatný prefix jednotky"
+msgstr "Neplatný název jednotky prefix %s"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:293
 #, c-format
@@ -14456,11 +14443,10 @@ msgid "Field Validation Error"
 msgstr "Chyba ověření pole"
 
 #: eeschema/sch_validators.cpp:218
-#, fuzzy
 msgid "Signal name contains '[' or ']' but is not a valid vector bus name."
 msgstr ""
-"Název signálu obsahuje znaky '[' or ']', ale nejedná se o platný název "
-"sběrnice"
+"Název signálu obsahuje znaky '[' or ']', ale není platný název vektoru "
+"sběrnice."
 
 #: eeschema/sch_validators.cpp:227
 #, fuzzy
@@ -16438,51 +16424,51 @@ msgstr ""
 "vývodem %s%s na místě <b>(%.3f, %.3f)</b> v jednotkách %c a %c převedených."
 
 #: eeschema/tools/ee_inspection_tool.cpp:284
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b> conflicts with pin %s"
 "%s at location <b>(%s, %s)</b>."
 msgstr ""
-"<b>Duplicitní vývod %s</b> %s na místě <b>(%.3f, %.3f)</b> v rozporu s "
-"vývodem %s%s na místě <b>(%.3f, %.3f)</b>."
+"<b>Duplicitní vývod %s</b> %s na místě <b>(%s, %s)</b> v rozporu s vývodem "
+"%s%s na místě <b>(%s, %s)</b>."
 
 #: eeschema/tools/ee_inspection_tool.cpp:297
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b> conflicts with pin %s"
 "%s at location <b>(%s, %s)</b> in units %c and %c."
 msgstr ""
-"<b>Duplicitní vývod %s</b> %s na místě <b>(%.3f, %.3f)</b> v rozporu s "
-"vývodem %s%s na místě <b>(%.3f, %.3f)</b>v jednotkách %c a %c."
+"<b>Duplicitní vývod %s</b> %s na místě <b>(%s, %s)</b> v rozporu s vývodem "
+"%s%s na místě <b>(%s, %s)</b> v jednotkách %c a %c."
 
 #: eeschema/tools/ee_inspection_tool.cpp:335
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b> of converted."
 msgstr ""
-"<b>Skrytý napájecí vývod %s</b> %s na pozici <b>(%.3f, %.3f)</b> převeden."
+"Info: <b>Skrytý napájecí vývod %s</b> %s na pozici <b>(%s, %s)</b> převeden."
 
 #: eeschema/tools/ee_inspection_tool.cpp:344
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b> in unit %c "
 "of converted."
 msgstr ""
-"<b>Skrytý napájecí vývod %s</b> %s na pozici <b>(%.3f, %.3f)</b>v jednotce "
-"%c převedeného."
+"Info: <b>Skrytý napájecí vývod %s</b> %s na pozici <b>(%s, %s)</b>v jednotce "
+"%c převeden."
 
 #: eeschema/tools/ee_inspection_tool.cpp:357
-#, fuzzy, c-format
+#, c-format
 msgid "Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b>."
-msgstr "<b>Skrytý napájecí vývod %s</b> %s na pozici <b>(%.3f, %.3f)</b>."
+msgstr "Info: <b>Skrytý napájecí vývod %s</b> %s na pozici <b>(%s, %s)</b>."
 
 #: eeschema/tools/ee_inspection_tool.cpp:365
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b> in unit %c."
 msgstr ""
-"<b>Skrytý napájecí vývod %s</b> %s na pozici <b>(%.3f, %.3f)</b> v jednotce "
-"%c."
+"Info: <b>Skrytý napájecí vývod %s</b> %s na pozici <b>(%s, %s)</b> v "
+"jednotce %c."
 
 #: eeschema/tools/ee_inspection_tool.cpp:376
 msgid ""
@@ -16490,10 +16476,9 @@ msgid ""
 msgstr ""
 
 #: eeschema/tools/ee_inspection_tool.cpp:389
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Off grid pin %s</b> %s at location <b>(%s, %s)</b> of converted."
-msgstr ""
-"<b>Vývod mimo mřížku %s</b> %s na pozici <b>(%.3f, %.3f)</b> převedeno."
+msgstr "<b>Vývod mimo mřížku %s</b> %s na pozici <b>(%s, %s)</b> převedeno."
 
 #: eeschema/tools/ee_inspection_tool.cpp:398
 #, fuzzy, c-format
@@ -16501,19 +16486,18 @@ msgid ""
 "<b>Off grid pin %s</b> %s at location <b>(%.3s, %.3s)</b> in unit %c of "
 "converted."
 msgstr ""
-"<b>Vývod mimo mřížku %s</b> %s na pozici <b>(%.3f, %.3f)</b>v jednotce %c "
+"<b>Vývod mimo mřížku %s</b> %s na pozici <b>(%s, %s)</b> v jednotce %c "
 "převedeno."
 
 #: eeschema/tools/ee_inspection_tool.cpp:411
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Off grid pin %s</b> %s at location <b>(%s, %s)</b>."
-msgstr "<b>Vývod mimo mřížku %s</b> %s na pozici <b>(%.3f, %.3f)</b>."
+msgstr "<b>Vývod mimo mřížku %s</b> %s na pozici <b>(%s, %s)</b>."
 
 #: eeschema/tools/ee_inspection_tool.cpp:419
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Off grid pin %s</b> %s at location <b>(%s, %s)</b> in unit %c."
-msgstr ""
-"<b>Vývod mimo mřížku %s</b> %s na pozici <b>(%.3f, %.3f)</b> v jednotce %c."
+msgstr "<b>Vývod mimo mřížku %s</b> %s na pozici <b>(%s, %s)</b> v jednotce %c."
 
 #: eeschema/tools/ee_inspection_tool.cpp:436
 msgid "No symbol issues found."
@@ -16598,9 +16582,9 @@ msgstr "Upravit %s pole"
 
 #: eeschema/tools/sch_edit_tool.cpp:1094
 #: eeschema/tools/symbol_editor_edit_tool.cpp:522
-#, fuzzy, c-format
+#, c-format
 msgid "Edit '%s' Field"
-msgstr "Upravit %s pole"
+msgstr "Upravit '%s' pole"
 
 #: eeschema/tools/sch_edit_tool.cpp:1652
 msgid "There are no unreferenced pins in this sheet to remove."
@@ -16707,9 +16691,8 @@ msgid "Can't save file '%s'."
 msgstr "Nelze uložit soubor '%s'."
 
 #: eeschema/tools/symbol_editor_control.cpp:436
-#, fuzzy
 msgid "SVG File Name"
-msgstr "Název souboru"
+msgstr "Název SVG souboru"
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:518
 msgid "Edit Symbol Name"
@@ -16913,18 +16896,16 @@ msgid "Sketch polygons"
 msgstr "Mnohoúhelníky v režimu obrysů"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:18
-#, fuzzy
 msgid "File Format"
-msgstr "Formát souboru:"
+msgstr "Formát souboru"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:20
 msgid "These parameters are usually specified in files, but not always."
 msgstr ""
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:29
-#, fuzzy
 msgid "File units"
-msgstr "jednotky"
+msgstr "Jednotky souborů"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:33
 msgid "No leading zeros (TZ format)"
@@ -16935,7 +16916,6 @@ msgid "No trailing zeros (LZ format)"
 msgstr ""
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:35
-#, fuzzy
 msgid "Zero format"
 msgstr "Formát nul"
 
@@ -16947,7 +16927,6 @@ msgid ""
 msgstr ""
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:51
-#, fuzzy
 msgid "Coordinates Format"
 msgstr "Formát souřadnic"
 
@@ -16964,9 +16943,8 @@ msgid "Usually: 3:3 in mm and 2:4 in inches"
 msgstr ""
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:70
-#, fuzzy
 msgid "Format for mm"
-msgstr "Formát"
+msgstr "Formát pro mm"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:74
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:84
@@ -17034,9 +17012,8 @@ msgid ":"
 msgstr ":"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:90
-#, fuzzy
 msgid "Format for inches"
-msgstr "Vlastnosti formátování"
+msgstr "Formát pro palce"
 
 #: gerbview/dialogs/panel_gerbview_settings_base.cpp:22
 msgid "Full size"
@@ -17433,9 +17410,9 @@ msgid "Open Recent Zip File"
 msgstr "Otevřít poslední soubor ZIP"
 
 #: gerbview/readgerb.cpp:63
-#, fuzzy, c-format
+#, c-format
 msgid "File '%s' not found"
-msgstr "Soubor '%s' nenalezen."
+msgstr "Soubor '%s' nenalezen"
 
 #: gerbview/readgerb.cpp:88
 msgid ""
@@ -20497,14 +20474,12 @@ msgid "Loss Tg:"
 msgstr "Loss Tg:"
 
 #: pcbnew/board_stackup_manager/dialog_dielectric_list_manager_base.cpp:60
-#, fuzzy
 msgid "Common materials:"
-msgstr "Společné pro všechny jednotky"
+msgstr "Společné materiály:"
 
 #: pcbnew/board_stackup_manager/dialog_dielectric_list_manager_base.h:57
-#, fuzzy
 msgid "Dielectric Material Characteristics"
-msgstr "Dielektrické vlastnosti materiálu:"
+msgstr "Dielektrické vlastnosti materiálu"
 
 #: pcbnew/board_stackup_manager/panel_board_finish_base.cpp:20
 msgid "Has castellated pads"
@@ -20539,9 +20514,9 @@ msgid "PrePreg"
 msgstr "Prepreg"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:176
-#, fuzzy, c-format
+#, c-format
 msgid "Enter board thickness in %s"
-msgstr "šířka a tloušťka v mils"
+msgstr "Zadejte tloušťku desky v %s"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:179
 #, c-format
@@ -26404,9 +26379,8 @@ msgid "End layer:"
 msgstr "Koncová vrstva:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:280
-#, fuzzy
 msgid "Annular rings:"
-msgstr "Šířka prstence"
+msgstr "Kroužky prstence:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:284
 #, fuzzy
@@ -32650,9 +32624,8 @@ msgid "Do not prefix path with footprint UUID."
 msgstr ""
 
 #: pcbnew/tools/board_editor_control.cpp:378
-#, fuzzy
 msgid "Specctra Session File"
-msgstr "Připojit soubor Specctra:"
+msgstr "Soubor relace Specctra"
 
 #: pcbnew/tools/board_editor_control.cpp:403
 msgid "Specctra DSN File"
@@ -35655,7 +35628,7 @@ msgstr "Vytvořit komponentu z bitmapy pro použití s KiCadem"
 
 #: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:12
 msgid "bitmap2component"
-msgstr "Převod obrázků"
+msgstr "bitmap2component"
 
 #: resources/linux/launchers/org.kicad.eeschema.desktop.in:10
 msgid "KiCad Schematic Editor (Standalone)"
@@ -35672,7 +35645,7 @@ msgstr "Samostatný editor schémat pro KiCad schémata"
 
 #: resources/linux/launchers/org.kicad.eeschema.desktop.in:13
 msgid "eeschema"
-msgstr "Editor schémat"
+msgstr "eeschema"
 
 #: resources/linux/launchers/org.kicad.gerbview.desktop.in:11
 msgid "Gerber File Viewer"
@@ -35684,7 +35657,7 @@ msgstr "Zobrazit soubory Gerber"
 
 #: resources/linux/launchers/org.kicad.gerbview.desktop.in:13
 msgid "gerbview"
-msgstr "Prohlížeč gerber"
+msgstr "gerbview"
 
 #: resources/linux/launchers/org.kicad.kicad.desktop.in:10
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:6
@@ -35721,7 +35694,7 @@ msgstr ""
 
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:13
 msgid "pcbnew"
-msgstr "Editor DPS"
+msgstr "pcbnew"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:13
 msgid "An EDA suite for schematic and circuit board design"
