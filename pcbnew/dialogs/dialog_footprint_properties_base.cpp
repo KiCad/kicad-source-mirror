@@ -314,15 +314,7 @@ DIALOG_FOOTPRINT_PROPERTIES_BASE::DIALOG_FOOTPRINT_PROPERTIES_BASE( wxWindow* pa
 
 	m_staticTextInfo = new wxStaticText( sbSizerLocalProperties->GetStaticBox(), wxID_ANY, _("Set values to 0 to use Board Setup values."), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextInfo->Wrap( -1 );
-	sbSizerLocalProperties->Add( m_staticTextInfo, 0, wxLEFT|wxRIGHT, 5 );
-
-	m_staticTextInfoValPos = new wxStaticText( sbSizerLocalProperties->GetStaticBox(), wxID_ANY, _("Positive clearance means area bigger than the pad (usual for mask clearance)."), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticTextInfoValPos->Wrap( -1 );
-	sbSizerLocalProperties->Add( m_staticTextInfoValPos, 0, wxLEFT|wxRIGHT|wxTOP, 5 );
-
-	m_staticTextInfoValNeg = new wxStaticText( sbSizerLocalProperties->GetStaticBox(), wxID_ANY, _("Negative clearance means area smaller than the pad (usual for paste clearance)."), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticTextInfoValNeg->Wrap( -1 );
-	sbSizerLocalProperties->Add( m_staticTextInfoValNeg, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
+	sbSizerLocalProperties->Add( m_staticTextInfo, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 	wxGridBagSizer* gbSizer2;
 	gbSizer2 = new wxGridBagSizer( 4, 0 );
@@ -343,7 +335,7 @@ DIALOG_FOOTPRINT_PROPERTIES_BASE::DIALOG_FOOTPRINT_PROPERTIES_BASE( wxWindow* pa
 	m_NetClearanceUnits->Wrap( -1 );
 	gbSizer2->Add( m_NetClearanceUnits, wxGBPosition( 0, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
-	m_SolderMaskMarginLabel = new wxStaticText( sbSizerLocalProperties->GetStaticBox(), wxID_ANY, _("Solder mask clearance:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_SolderMaskMarginLabel = new wxStaticText( sbSizerLocalProperties->GetStaticBox(), wxID_ANY, _("Solder mask expansion:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_SolderMaskMarginLabel->Wrap( -1 );
 	m_SolderMaskMarginLabel->SetToolTip( _("This is the local clearance between pads and the solder mask for this footprint.\nThis value can be superseded by a pad local value.\nIf 0, the global value is used.") );
 
@@ -376,14 +368,14 @@ DIALOG_FOOTPRINT_PROPERTIES_BASE::DIALOG_FOOTPRINT_PROPERTIES_BASE( wxWindow* pa
 	m_PasteMarginRatioLabel->Wrap( -1 );
 	m_PasteMarginRatioLabel->SetToolTip( _("This is the local clearance ratio in percent between pads and the solder paste for this footprint.\nA value of 10 means the clearance value is 10 percent of the pad size.\nThis value can be superseded by a pad local value.\nThe final clearance value is the sum of this value and the clearance value.\nA negative value means a smaller mask size than pad size.") );
 
-	gbSizer2->Add( m_PasteMarginRatioLabel, wxGBPosition( 6, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+	gbSizer2->Add( m_PasteMarginRatioLabel, wxGBPosition( 6, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 	m_PasteMarginRatioCtrl = new TEXT_CTRL_EVAL( sbSizerLocalProperties->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	gbSizer2->Add( m_PasteMarginRatioCtrl, wxGBPosition( 6, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
+	gbSizer2->Add( m_PasteMarginRatioCtrl, wxGBPosition( 6, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxBOTTOM, 5 );
 
 	m_PasteMarginRatioUnits = new wxStaticText( sbSizerLocalProperties->GetStaticBox(), wxID_ANY, _("%"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_PasteMarginRatioUnits->Wrap( -1 );
-	gbSizer2->Add( m_PasteMarginRatioUnits, wxGBPosition( 6, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+	gbSizer2->Add( m_PasteMarginRatioUnits, wxGBPosition( 6, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 
 	sbSizerLocalProperties->Add( gbSizer2, 1, wxEXPAND|wxTOP|wxBOTTOM, 10 );

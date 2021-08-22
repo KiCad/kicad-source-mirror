@@ -186,8 +186,9 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS( JSON_SETTINGS* aParent, const std:
     m_UseHeightForLengthCalcs = true;
 
     // Global mask margins:
-    m_SolderMaskMargin  = Millimeter2iu( DEFAULT_SOLDERMASK_CLEARANCE );
+    m_SolderMaskExpansion = Millimeter2iu( DEFAULT_SOLDERMASK_EXPANSION );
     m_SolderMaskMinWidth = Millimeter2iu( DEFAULT_SOLDERMASK_MIN_WIDTH );
+    m_SolderMaskToCopperClearance = Millimeter2iu( DEFAULT_SOLDERMASK_TO_COPPER_CLEARANCE );
 
     // Solder paste margin absolute value
     m_SolderPasteMargin = Millimeter2iu( DEFAULT_SOLDERPASTE_CLEARANCE );
@@ -609,8 +610,12 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS( JSON_SETTINGS* aParent, const std:
                 }
             }, {} ) );
 
-    m_params.emplace_back( new PARAM_SCALED<int>( "rules.max_error", &m_MaxError, ARC_HIGH_DEF,
-            Millimeter2iu( 0.0001 ), Millimeter2iu( 1.0 ), MM_PER_IU ) );
+    m_params.emplace_back( new PARAM_SCALED<int>( "rules.max_error",
+            &m_MaxError, ARC_HIGH_DEF, Millimeter2iu( 0.0001 ), Millimeter2iu( 1.0 ), MM_PER_IU ) );
+
+    m_params.emplace_back( new PARAM_SCALED<int>( "rules.solder_mask_to_copper_clearance",
+            &m_SolderMaskToCopperClearance, Millimeter2iu( DEFAULT_SOLDERMASK_TO_COPPER_CLEARANCE ),
+            Millimeter2iu( 0.0 ), Millimeter2iu( 25.0 ), MM_PER_IU ) );
 
     // TODO: replace with zones_fill_version parameter and migrate zones_use_no_outline?
     m_params.emplace_back( new PARAM_LAMBDA<bool>( "zones_use_no_outline",
@@ -636,7 +641,7 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS( JSON_SETTINGS* aParent, const std:
                 // The parameters are removed, so we just have to manually load them here and
                 // they will get saved with the board
                 if( OPT<double> optval = Get<double>( "rules.solder_mask_clearance" ) )
-                    m_SolderMaskMargin = static_cast<int>( *optval * IU_PER_MM );
+                    m_SolderMaskExpansion = static_cast<int>( *optval * IU_PER_MM );
 
                 if( OPT<double> optval = Get<double>( "rules.solder_mask_min_width" ) )
                     m_SolderMaskMinWidth = static_cast<int>( *optval * IU_PER_MM );
@@ -714,13 +719,14 @@ void BOARD_DESIGN_SETTINGS::initFromOther( const BOARD_DESIGN_SETTINGS& aOther )
     m_DRCSeverities          = aOther.m_DRCSeverities;
     m_DrcExclusions          = aOther.m_DrcExclusions;
     m_ZoneFillVersion        = aOther.m_ZoneFillVersion;
-    m_ZoneKeepExternalFillets= aOther.m_ZoneKeepExternalFillets;
-    m_MaxError               = aOther.m_MaxError;
-    m_SolderMaskMargin       = aOther.m_SolderMaskMargin;
-    m_SolderMaskMinWidth     = aOther.m_SolderMaskMinWidth;
-    m_SolderPasteMargin      = aOther.m_SolderPasteMargin;
-    m_SolderPasteMarginRatio = aOther.m_SolderPasteMarginRatio;
-    m_DefaultFPTextItems     = aOther.m_DefaultFPTextItems;
+    m_ZoneKeepExternalFillets     = aOther.m_ZoneKeepExternalFillets;
+    m_MaxError                    = aOther.m_MaxError;
+    m_SolderMaskExpansion         = aOther.m_SolderMaskExpansion;
+    m_SolderMaskMinWidth          = aOther.m_SolderMaskMinWidth;
+    m_SolderMaskToCopperClearance = aOther.m_SolderMaskToCopperClearance;
+    m_SolderPasteMargin           = aOther.m_SolderPasteMargin;
+    m_SolderPasteMarginRatio      = aOther.m_SolderPasteMarginRatio;
+    m_DefaultFPTextItems          = aOther.m_DefaultFPTextItems;
 
     std::copy( std::begin( aOther.m_LineThickness ), std::end( aOther.m_LineThickness ),
                std::begin( m_LineThickness ) );

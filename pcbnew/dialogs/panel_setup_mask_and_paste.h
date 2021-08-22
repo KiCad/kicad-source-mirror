@@ -41,8 +41,9 @@ private:
     PCB_EDIT_FRAME*         m_Frame;
     BOARD_DESIGN_SETTINGS*  m_BrdSettings;
 
-    UNIT_BINDER             m_maskMargin;
+    UNIT_BINDER             m_maskExpansion;
     UNIT_BINDER             m_maskMinWidth;
+    UNIT_BINDER             m_maskToCopperClearance;
     UNIT_BINDER             m_pasteMargin;
     UNIT_BINDER             m_pasteMarginRatio;
 

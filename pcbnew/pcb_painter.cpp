@@ -1079,7 +1079,7 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
         {
         case F_Mask:
         case B_Mask:
-            margin.x = margin.y = aPad->GetSolderMaskMargin();
+            margin.x = margin.y = aPad->GetSolderMaskExpansion();
             break;
 
         case F_Paste:

@@ -50,28 +50,24 @@
 #define DEFAULT_COPPER_TEXT_WIDTH     0.30
 #define DEFAULT_TEXT_WIDTH            0.15
 
-#define DEFAULT_DIMENSION_ARROW_LENGTH 50 // mils, for legacy purposes
-#define DEFAULT_DIMENSION_EXTENSION_OFFSET 0.5
+#define DEFAULT_DIMENSION_ARROW_LENGTH         50 // mils, for legacy purposes
+#define DEFAULT_DIMENSION_EXTENSION_OFFSET     0.5
 
 // Board thickness, mainly for 3D view:
-#define DEFAULT_BOARD_THICKNESS_MM    1.6
+#define DEFAULT_BOARD_THICKNESS_MM             1.6
 
-#define DEFAULT_PCB_EDGE_THICKNESS    0.15
+#define DEFAULT_PCB_EDGE_THICKNESS             0.15
 
 // soldermask to pad clearance. The default is 0 because usually board houses
-// create a clearance depending on their fab process:
-// mask material, color, price ...
-#define DEFAULT_SOLDERMASK_CLEARANCE  0.0
+// create a clearance depending on their fab process: mask material, color, price, etc.
+#define DEFAULT_SOLDERMASK_EXPANSION           0.0
 
-// DEFAULT_SOLDERMASK_MIN_WIDTH is only used in Gerber files: soldermask minimum size.
-// Set to 0, because using non 0 value creates an annoying issue in Gerber files:
-// pads are no longer identified as pads (Flashed items or regions)
-// Therefore solder mask min width must be used only in specific cases
-// for instance for home made boards
-#define DEFAULT_SOLDERMASK_MIN_WIDTH  0.0
+#define DEFAULT_SOLDERMASK_TO_COPPER_CLEARANCE 0.0
 
-#define DEFAULT_SOLDERPASTE_CLEARANCE 0.0
-#define DEFAULT_SOLDERPASTE_RATIO     0.0
+#define DEFAULT_SOLDERMASK_MIN_WIDTH           0.0
+
+#define DEFAULT_SOLDERPASTE_CLEARANCE          0.0
+#define DEFAULT_SOLDERPASTE_RATIO              0.0
 
 #define DEFAULT_CUSTOMTRACKWIDTH      0.2
 #define DEFAULT_CUSTOMDPAIRWIDTH      0.125
@@ -713,12 +709,15 @@ public:
     int        m_MaxError;
 
     // Global mask margins:
-    int        m_SolderMaskMargin;          // Solder mask margin
-    int        m_SolderMaskMinWidth;        // Solder mask min width (2 areas closer than this
-                                            // width are merged)
-    int        m_SolderPasteMargin;         // Solder paste margin absolute value
-    double     m_SolderPasteMarginRatio;    // Solder mask margin ratio value of pad size
-                                            // The final margin is the sum of these 2 values
+    int        m_SolderMaskExpansion;         // Solder mask inflation around the pad or via
+    int        m_SolderMaskMinWidth;          // Solder mask min width (2 areas closer than this
+                                              //   width are merged)
+    int        m_SolderMaskToCopperClearance; // Min distance allowed from copper to a mask
+                                              //   aperture of another net
+
+    int        m_SolderPasteMargin;           // Solder paste margin absolute value
+    double     m_SolderPasteMarginRatio;      // Solder mask margin ratio value of pad size
+                                              // The final margin is the sum of these 2 values
 
     // Variables used in footprint editing (default value in item/footprint creation)
     std::vector<TEXT_ITEM_INFO> m_DefaultFPTextItems;

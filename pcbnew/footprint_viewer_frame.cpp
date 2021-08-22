@@ -196,7 +196,7 @@ FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent
 
     // Don't show the default board solder mask clearance in the footprint viewer.  Only the
     // footprint or pad clearance setting should be shown if it is not 0.
-    GetBoard()->GetDesignSettings().m_SolderMaskMargin = 0;
+    GetBoard()->GetDesignSettings().m_SolderMaskExpansion = 0;
 
     // Ensure all layers and items are visible:
     GetBoard()->SetVisibleAlls();

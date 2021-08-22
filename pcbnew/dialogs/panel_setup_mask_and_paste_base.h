@@ -47,7 +47,11 @@ class PANEL_SETUP_MASK_AND_PASTE_BASE : public wxPanel
 		wxStaticText* m_maskMinWidthLabel;
 		wxTextCtrl* m_maskMinWidthCtrl;
 		wxStaticText* m_maskMinWidthUnits;
+		wxStaticText* m_maskToCopperClearanceLabel;
+		wxTextCtrl* m_maskToCopperClearanceCtrl;
+		wxStaticText* m_maskToCopperClearanceUnits;
 		wxCheckBox* m_allowBridges;
+		wxCheckBox* m_tentVias;
 		wxStaticText* m_pasteMarginLabel;
 		wxTextCtrl* m_pasteMarginCtrl;
 		wxStaticText* m_pasteMarginUnits;

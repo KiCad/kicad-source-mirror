@@ -212,8 +212,6 @@ DIALOG_PAD_PROPERTIES::DIALOG_PAD_PROPERTIES( PCB_BASE_FRAME* aParent, PAD* aPad
     infoFont.SetStyle( wxFONTSTYLE_ITALIC );
     m_nonCopperNote->SetFont( infoFont );
     m_staticTextInfoPaste->SetFont( infoFont );
-    m_staticTextInfoNegVal->SetFont( infoFont );
-    m_staticTextInfoPosValue->SetFont( infoFont );
     m_staticTextPrimitiveListWarning->SetFont( infoFont );
 
     // Do not allow locking items in the footprint editor

@@ -170,8 +170,6 @@ class DIALOG_PAD_PROPERTIES_BASE : public DIALOG_SHIM
 		wxStaticText* m_staticTextFabProperty;
 		wxChoice* m_choiceFabProperty;
 		wxPanel* m_localSettingsPanel;
-		wxStaticText* m_staticTextInfoPosValue;
-		wxStaticText* m_staticTextInfoNegVal;
 		wxStaticText* m_clearanceLabel;
 		wxTextCtrl* m_clearanceCtrl;
 		wxStaticText* m_clearanceUnits;

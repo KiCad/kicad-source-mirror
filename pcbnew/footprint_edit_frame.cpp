@@ -148,9 +148,9 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     // pad specific clearance will be shown.
     GetBoard()->GetDesignSettings().GetDefault()->SetClearance( 0 );
 
-    // Don't show the default board solder mask clearance in the footprint editor.  Only the
-    // footprint or pad clearance setting should be shown if it is not 0.
-    GetBoard()->GetDesignSettings().m_SolderMaskMargin = 0;
+    // Don't show the default board solder mask expansion in the footprint editor.  Only the
+    // footprint or pad mask expansions settings should be shown.
+    GetBoard()->GetDesignSettings().m_SolderMaskExpansion = 0;
 
     // restore the last footprint from the project, if any
     restoreLastFootprint();

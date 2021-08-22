@@ -108,8 +108,6 @@ DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR(
 #endif
 
     infoFont.SetStyle( wxFONTSTYLE_ITALIC );
-    m_staticTextInfoValNeg->SetFont( infoFont );
-    m_staticTextInfoValPos->SetFont( infoFont );
     m_staticTextInfoCopper->SetFont( infoFont );
     m_staticTextInfoPaste->SetFont( infoFont );
 

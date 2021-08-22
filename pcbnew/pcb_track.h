@@ -352,6 +352,9 @@ public:
     VIATYPE GetViaType() const { return m_viaType; }
     void SetViaType( VIATYPE aViaType ) { m_viaType = aViaType; }
 
+    bool IsTented() const;
+    int GetSolderMaskExpansion() const;
+
     bool IsOnLayer( PCB_LAYER_ID aLayer ) const override;
 
     virtual LSET GetLayerSet() const override;

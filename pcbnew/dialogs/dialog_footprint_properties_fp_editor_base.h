@@ -73,8 +73,6 @@ class DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE : public DIALOG_SHIM
 		wxCheckBox* m_excludeFromBOM;
 		wxPanel* m_PanelClearances;
 		wxStaticText* m_staticTextInfo;
-		wxStaticText* m_staticTextInfoValPos;
-		wxStaticText* m_staticTextInfoValNeg;
 		wxStaticText* m_NetClearanceLabel;
 		wxTextCtrl* m_NetClearanceCtrl;
 		wxStaticText* m_NetClearanceUnits;

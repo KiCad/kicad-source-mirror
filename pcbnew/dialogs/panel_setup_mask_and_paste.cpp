@@ -32,8 +32,10 @@
 PANEL_SETUP_MASK_AND_PASTE::PANEL_SETUP_MASK_AND_PASTE( PAGED_DIALOG* aParent,
                                                         PCB_EDIT_FRAME* aFrame ) :
         PANEL_SETUP_MASK_AND_PASTE_BASE( aParent->GetTreebook() ),
-        m_maskMargin( aFrame, m_maskMarginLabel, m_maskMarginCtrl, m_maskMarginUnits ),
+        m_maskExpansion( aFrame, m_maskMarginLabel, m_maskMarginCtrl, m_maskMarginUnits ),
         m_maskMinWidth( aFrame, m_maskMinWidthLabel, m_maskMinWidthCtrl, m_maskMinWidthUnits ),
+        m_maskToCopperClearance( aFrame, m_maskToCopperClearanceLabel, m_maskToCopperClearanceCtrl,
+                                 m_maskToCopperClearanceUnits ),
         m_pasteMargin( aFrame, m_pasteMarginLabel, m_pasteMarginCtrl, m_pasteMarginUnits ),
         m_pasteMarginRatio( aFrame, m_pasteMarginRatioLabel, m_pasteMarginRatioCtrl,
                             m_pasteMarginRatioUnits )
@@ -52,8 +54,11 @@ PANEL_SETUP_MASK_AND_PASTE::PANEL_SETUP_MASK_AND_PASTE( PAGED_DIALOG* aParent,
 
 bool PANEL_SETUP_MASK_AND_PASTE::TransferDataToWindow()
 {
-    m_maskMargin.SetValue( m_BrdSettings->m_SolderMaskMargin );
+    m_maskExpansion.SetValue( m_BrdSettings->m_SolderMaskExpansion );
     m_maskMinWidth.SetValue( m_BrdSettings->m_SolderMaskMinWidth );
+    m_maskToCopperClearance.SetValue( m_BrdSettings->m_SolderMaskToCopperClearance );
+    m_tentVias->SetValue( m_Frame->GetBoard()->GetTentVias() );
+
     m_pasteMargin.SetValue( m_BrdSettings->m_SolderPasteMargin );
     m_pasteMarginRatio.SetDoubleValue( m_BrdSettings->m_SolderPasteMarginRatio * 100.0 );
 
@@ -64,8 +69,11 @@ bool PANEL_SETUP_MASK_AND_PASTE::TransferDataToWindow()
 bool PANEL_SETUP_MASK_AND_PASTE::TransferDataFromWindow()
 {
     // These are all stored in project file, not board, so no need for OnModify()
-    m_BrdSettings->m_SolderMaskMargin = m_maskMargin.GetValue();
+    m_BrdSettings->m_SolderMaskExpansion = m_maskExpansion.GetValue();
     m_BrdSettings->m_SolderMaskMinWidth = m_maskMinWidth.GetValue();
+    m_BrdSettings->m_SolderMaskToCopperClearance = m_maskToCopperClearance.GetValue();
+    m_Frame->GetBoard()->SetTentVias( m_tentVias->GetValue() );
+
     m_BrdSettings->m_SolderPasteMargin = m_pasteMargin.GetValue();
     m_BrdSettings->m_SolderPasteMarginRatio = m_pasteMarginRatio.GetDoubleValue() / 100.0;
 

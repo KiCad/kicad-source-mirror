@@ -357,35 +357,55 @@ SEARCH_RESULT PCB_TRACK::Visit( INSPECTOR inspector, void* testData, const KICAD
 }
 
 
-bool PCB_VIA::IsOnLayer( PCB_LAYER_ID layer_number ) const
+bool PCB_VIA::IsTented() const
 {
-    PCB_LAYER_ID bottom_layer, top_layer;
+    const BOARD* board = GetBoard();
 
-    LayerPair( &top_layer, &bottom_layer );
-
-    wxASSERT( top_layer <= bottom_layer );
-
-    if( top_layer <= layer_number && layer_number <= bottom_layer )
-        return true;
+    if( board )
+        return board->GetTentVias();
     else
-        return false;
+        return true;
+}
+
+
+int PCB_VIA::GetSolderMaskExpansion() const
+{
+    const BOARD* board = GetBoard();
+
+    if( board )
+        return board->GetDesignSettings().m_SolderMaskExpansion;
+    else
+        return 0;
+}
+
+
+bool PCB_VIA::IsOnLayer( PCB_LAYER_ID aLayer ) const
+{
+    return GetLayerSet().test( aLayer );
 }
 
 
 LSET PCB_VIA::GetLayerSet() const
 {
-    if( GetViaType() == VIATYPE::THROUGH )
-        return LSET::AllCuMask();
-
-    // VIA_BLIND_BURIED or VIA_MICRVIA:
-
     LSET layermask;
 
-    wxASSERT( m_layer <= m_bottomLayer );
+    if( GetViaType() == VIATYPE::THROUGH )
+        layermask = LSET::AllCuMask();
+    else
+        wxASSERT( m_layer <= m_bottomLayer );
 
     // PCB_LAYER_IDs are numbered from front to back, this is top to bottom.
     for( int id = m_layer; id <= m_bottomLayer; ++id )
         layermask.set( id );
+
+    if( !IsTented() )
+    {
+        if( layermask.test( F_Cu ) )
+            layermask.set( F_Mask );
+
+        if( layermask.test( B_Cu ) )
+            layermask.set( B_Mask );
+    }
 
     return layermask;
 }

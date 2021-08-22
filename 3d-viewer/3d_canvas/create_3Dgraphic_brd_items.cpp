@@ -540,8 +540,8 @@ void BOARD_ADAPTER::addPadsWithClearance( const FOOTPRINT* aFootprint,
         {
         case F_Mask:
         case B_Mask:
-            margin.x += pad->GetSolderMaskMargin();
-            margin.y += pad->GetSolderMaskMargin();
+            margin.x += pad->GetSolderMaskExpansion();
+            margin.y += pad->GetSolderMaskExpansion();
             break;
 
         case F_Paste:

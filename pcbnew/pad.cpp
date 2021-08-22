@@ -725,7 +725,7 @@ int PAD::GetLocalClearance( wxString* aSource ) const
 }
 
 
-int PAD::GetSolderMaskMargin() const
+int PAD::GetSolderMaskExpansion() const
 {
     // The pad inherits the margin only to calculate a default shape,
     // therefore only if it is also a copper layer
@@ -736,7 +736,7 @@ int PAD::GetSolderMaskMargin() const
     if( !isOnCopperLayer )
         return 0;
 
-    int     margin = m_localSolderMaskMargin;
+    int margin = m_localSolderMaskMargin;
 
     FOOTPRINT* parentFootprint = GetParent();
 
@@ -753,7 +753,7 @@ int PAD::GetSolderMaskMargin() const
             const BOARD* brd = GetBoard();
 
             if( brd )
-                margin = brd->GetDesignSettings().m_SolderMaskMargin;
+                margin = brd->GetDesignSettings().m_SolderMaskExpansion;
         }
     }
 
@@ -1362,7 +1362,7 @@ const BOX2I PAD::ViewBBox() const
 {
     // Bounding box includes soldermask too. Remember mask and/or paste
     // margins can be < 0
-    int solderMaskMargin       = std::max( GetSolderMaskMargin(), 0 );
+    int solderMaskMargin       = std::max( GetSolderMaskExpansion(), 0 );
     VECTOR2I solderPasteMargin = VECTOR2D( GetSolderPasteMargin() );
     EDA_RECT bbox              = GetBoundingBox();
 

@@ -88,9 +88,9 @@ DISPLAY_FOOTPRINTS_FRAME::DISPLAY_FOOTPRINTS_FRAME( KIWAY* aKiway, wxWindow* aPa
                                                   EDA_DRAW_PANEL_GAL::GAL_FALLBACK );
     SetCanvas( gal_drawPanel );
 
-    // Don't show the default board solder mask clearance.  Only the
-    // footprint or pad clearance setting should be shown if it is not 0.
-    GetBoard()->GetDesignSettings().m_SolderMaskMargin = 0;
+    // Don't show the default board solder mask expansion.  Only the footprint or pad expansion
+    // settings should be shown.
+    GetBoard()->GetDesignSettings().m_SolderMaskExpansion = 0;
 
     LoadSettings( config() );
 

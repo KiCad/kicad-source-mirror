@@ -2295,8 +2295,8 @@ void FOOTPRINT::TransformPadsWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuff
         {
         case F_Mask:
         case B_Mask:
-            clearance.x += pad->GetSolderMaskMargin();
-            clearance.y += pad->GetSolderMaskMargin();
+            clearance.x += pad->GetSolderMaskExpansion();
+            clearance.y += pad->GetSolderMaskExpansion();
             break;
 
         case F_Paste:

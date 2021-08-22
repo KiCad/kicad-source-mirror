@@ -1039,7 +1039,7 @@ void LEGACY_PLUGIN::loadSETUP()
         else if( TESTLINE( "Pad2MaskClearance" ) )
         {
             BIU tmp = biuParse( line + SZ( "Pad2MaskClearance" ) );
-            bds.m_SolderMaskMargin = tmp;
+            bds.m_SolderMaskExpansion = tmp;
         }
         else if( TESTLINE( "SolderMaskMinWidth" ) )
         {

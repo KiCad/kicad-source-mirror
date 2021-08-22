@@ -288,7 +288,7 @@ void PlotStandardLayer( BOARD* aBoard, PLOTTER* aPlotter, LSET aLayerMask,
                 width_adj = itemplotter.getFineWidthAdj();
 
             if( onSolderMaskLayer )
-                margin.x = margin.y = pad->GetSolderMaskMargin();
+                margin.x = margin.y = pad->GetSolderMaskExpansion();
 
             if( onSolderPasteLayer )
                 margin = pad->GetSolderPasteMargin();
@@ -524,9 +524,8 @@ void PlotStandardLayer( BOARD* aBoard, PLOTTER* aPlotter, LSET aLayerMask,
         int via_margin = 0;
         double width_adj = 0;
 
-        // If the current layer is a solder mask, use the global mask clearance for vias
         if( aLayerMask[B_Mask] || aLayerMask[F_Mask] )
-            via_margin = aBoard->GetDesignSettings().m_SolderMaskMargin;
+            via_margin = via->GetSolderMaskExpansion();
 
         if( ( aLayerMask & LSET::AllCuMask() ).any() )
             width_adj = itemplotter.getFineWidthAdj();
@@ -880,13 +879,12 @@ void PlotSolderMaskLayer( BOARD *aBoard, PLOTTER* aPlotter, LSET aLayerMask,
         // Plot vias on solder masks, if aPlotOpt.GetPlotViaOnMaskLayer() is true,
         if( aPlotOpt.GetPlotViaOnMaskLayer() )
         {
-            // The current layer is a solder mask, use the global mask clearance for vias
-            int via_clearance = aBoard->GetDesignSettings().m_SolderMaskMargin;
-            int via_margin = via_clearance + inflate;
-
             for( PCB_TRACK* track : aBoard->Tracks() )
             {
                 const PCB_VIA* via = dyn_cast<const PCB_VIA*>( track );
+                int            via_clearance = via->GetSolderMaskExpansion();
+                int            via_margin = via_clearance + inflate;
+
 
                 if( !via )
                     continue;
@@ -913,8 +911,8 @@ void PlotSolderMaskLayer( BOARD *aBoard, PLOTTER* aPlotter, LSET aLayerMask,
         }
 
         // Add filled zone areas.
-#if 0   // Set to 1 if a solder mask margin must be applied to zones on solder mask
-        int zone_margin = aBoard->GetDesignSettings().m_SolderMaskMargin;
+#if 0   // Set to 1 if a solder mask expansion must be applied to zones on solder mask
+        int zone_margin = aBoard->GetDesignSettings().m_SolderMaskExpansion;
 #else
         int zone_margin = 0;
 #endif

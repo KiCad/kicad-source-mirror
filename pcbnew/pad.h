@@ -448,7 +448,7 @@ public:
     int GetLocalClearanceOverrides( wxString* aSource ) const override;
 
     /**
-     * @return the margin for the solder mask layer
+     * @return the expansion for the solder mask layer
      *
      * Usually > 0 (mask shape bigger than pad).  For pads **not** on copper layers, the value
      * is the local value because there is no default shape to build.  For pads also on copper
@@ -457,7 +457,7 @@ public:
      *  2 if 0, the parent footprint value
      *  3 if 0, the global value
      */
-    int GetSolderMaskMargin() const;
+    int GetSolderMaskExpansion() const;
 
     /**
      * Usually < 0 (mask shape smaller than pad)because the margin can be dependent on the pad
