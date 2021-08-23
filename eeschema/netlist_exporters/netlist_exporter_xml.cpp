@@ -210,7 +210,7 @@ void NETLIST_EXPORTER_XML::addSymbolFields( XNODE* aNode, SCH_SYMBOL* aSymbol,
         // non MANDATORY fields are output alphabetically
         for( const std::pair<const wxString, wxString>& f : userFields )
         {
-            XNODE* xfield = node( "f", UnescapeString( f.second ) );
+            XNODE* xfield = node( "field", UnescapeString( f.second ) );
             xfield->AddAttribute( "name", UnescapeString( f.first ) );
             xfields->AddChild( xfield );
         }
