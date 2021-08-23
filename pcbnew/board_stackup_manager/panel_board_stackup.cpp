@@ -97,13 +97,13 @@ PANEL_SETUP_BOARD_STACKUP::PANEL_SETUP_BOARD_STACKUP( PAGED_DIALOG* aParent, PCB
     m_colorIconsSize = dc.GetTextExtent( "XXXX" );
 
     // Calculates a good size for wxTextCtrl to enter Epsilon R and Loss tan
-    // ("0.000000" + margins)
-    m_numericFieldsSize = dc.GetTextExtent( "X.XXXXXX" );
+    // ("0.0000000" + margins)
+    m_numericFieldsSize = dc.GetTextExtent( "X.XXXXXXX" );
     m_numericFieldsSize.y = -1;     // Use default for the vertical size
 
     // Calculates a minimal size for wxTextCtrl to enter a dim with units
     // ("000.0000000 mils" + margins)
-    m_numericTextCtrlSize = dc.GetTextExtent( "XXX.XXXXXX mils" );
+    m_numericTextCtrlSize = dc.GetTextExtent( "XXX.XXXXXXX mils" );
     m_numericTextCtrlSize.y = -1;     // Use default for the vertical size
 
     // The grid column containing the lock checkbox is kept to a minimal
@@ -412,15 +412,17 @@ void PANEL_SETUP_BOARD_STACKUP::onExportToClipboard( wxCommandEvent& event )
 
 wxColor PANEL_SETUP_BOARD_STACKUP::GetSelectedColor( int aRow ) const
 {
-    wxBitmapComboBox* choice = dynamic_cast<wxBitmapComboBox*>( m_rowUiItemsList[aRow].m_ColorCtrl );
+    const BOARD_STACKUP_ROW_UI_ITEM& row = m_rowUiItemsList[aRow];
+    const BOARD_STACKUP_ITEM*        item = row.m_Item;
+    const wxBitmapComboBox*          choice = dynamic_cast<wxBitmapComboBox*>( row.m_ColorCtrl );
     wxASSERT( choice );
 
     int idx = choice ? choice->GetSelection() : 0;
 
     if( idx != GetColorUserDefinedListIdx() ) // a standard color is selected
-        return GetColorStandardList()[idx].m_Color;
-
-    return m_rowUiItemsList[aRow].m_UserColor;
+        return GetColorStandardList()[idx].GetColor( item->GetType() );
+    else
+        return m_rowUiItemsList[aRow].m_UserColor;
 }
 
 
@@ -472,7 +474,8 @@ void PANEL_SETUP_BOARD_STACKUP::updateCopperLayerCount()
 
 void PANEL_SETUP_BOARD_STACKUP::synchronizeWithBoard( bool aFullSync )
 {
-    const BOARD_STACKUP& brd_stackup = m_brdSettings->GetStackupDescriptor();
+    const BOARD_STACKUP&   brd_stackup = m_brdSettings->GetStackupDescriptor();
+    const FAB_LAYER_COLOR* color_list = GetColorStandardList();
 
     if( aFullSync )
     {
@@ -526,41 +529,38 @@ void PANEL_SETUP_BOARD_STACKUP::synchronizeWithBoard( bool aFullSync )
         if( item->IsColorEditable() )
         {
             auto bm_combo = dynamic_cast<wxBitmapComboBox*>( ui_row_item.m_ColorCtrl );
-            int  color_idx = 0;
 
             if( item->GetColor().StartsWith( "#" ) )  // User defined color
             {
-                wxColour color( item->GetColor() );
-                ui_row_item.m_UserColor = color;
-                color_idx = GetColorUserDefinedListIdx();
+                ui_row_item.m_UserColor = wxColour( item->GetColor() );
 
                 if( bm_combo )      // Update user color shown in the wxBitmapComboBox
                 {
-                    wxString label = wxString::Format( _( "Custom (%s)" ),
-                                                       color.GetAsString( wxC2S_HTML_SYNTAX ) );
-
-                    bm_combo->SetString( color_idx, label );
+                    bm_combo->SetString( GetColorUserDefinedListIdx(), item->GetColor() );
                     wxBitmap layerbmp( m_colorSwatchesSize.x, m_colorSwatchesSize.y );
-                    LAYER_SELECTOR::DrawColorSwatch( layerbmp, COLOR4D(), COLOR4D( color ) );
-                    bm_combo->SetItemBitmap( color_idx, layerbmp );
+                    LAYER_SELECTOR::DrawColorSwatch( layerbmp, COLOR4D(),
+                                                     wxColour( item->GetColor() ) );
+                    bm_combo->SetItemBitmap( GetColorUserDefinedListIdx(), layerbmp );
+                    bm_combo->SetSelection( GetColorUserDefinedListIdx() );
                 }
             }
             else
             {
-                const FAB_LAYER_COLOR* color_list = GetColorStandardList();
-
-                for( int ii = 0; ii < GetColorStandardListCount(); ii++ )
+                if( bm_combo )
                 {
-                    if( color_list[ii].m_ColorName == item->GetColor() )
+                    // Note: don't use bm_combo->FindString() because the combo strings are
+                    // translated.
+                    for( int ii = 0; ii < GetColorStandardListCount(); ii++ )
                     {
-                        color_idx = ii;
-                        break;
+                        if( color_list[ii].GetName() == item->GetColor() )
+                        {
+                            bm_combo->SetSelection( ii );
+                            break;
+                        }
                     }
                 }
             }
 
-            if( bm_combo )
-                bm_combo->SetSelection( color_idx );
         }
 
         if( item->HasEpsilonRValue() )
@@ -785,33 +785,32 @@ BOARD_STACKUP_ROW_UI_ITEM PANEL_SETUP_BOARD_STACKUP::createRowData( int aRow,
 
     if( item->IsColorEditable() )
     {
-        int color_idx      = 0;
-        int user_color_idx = GetColorUserDefinedListIdx();
-
-        // Always init the user-defined color for a row
-        ui_row_item.m_UserColor = GetColorStandardList()[user_color_idx].m_Color;
-
         if( item->GetColor().StartsWith( "#" ) )  // User defined color
+            ui_row_item.m_UserColor = wxColour( item->GetColor() );
+        else
+            ui_row_item.m_UserColor = GetDefaultUserColor( item->GetType() );
+
+        wxBitmapComboBox* bm_combo = createColorBox( item, row );
+        m_fgGridSizer->Add( bm_combo, 1, wxLEFT|wxRIGHT|wxALIGN_CENTER_VERTICAL|wxEXPAND, 2 );
+
+        if( item->GetColor().StartsWith( "#" ) )
         {
-            wxColour color( item->GetColor() );
-            ui_row_item.m_UserColor = color;
-            color_idx = user_color_idx;
+            bm_combo->SetString( GetColorUserDefinedListIdx(), item->GetColor() );
+            bm_combo->SetSelection( GetColorUserDefinedListIdx() );
         }
         else
         {
+            // Note: don't use bm_combo->FindString() because the combo strings are translated.
             for( int ii = 0; ii < GetColorStandardListCount(); ii++ )
             {
-                if( color_list[ii].m_ColorName == item->GetColor() )
+                if( color_list[ii].GetName() == item->GetColor() )
                 {
-                    color_idx = ii;
+                    bm_combo->SetSelection( ii );
                     break;
                 }
             }
         }
 
-        wxBitmapComboBox* bm_combo = createBmComboBox( item, row );
-        m_fgGridSizer->Add( bm_combo, 0, wxLEFT|wxRIGHT|wxALIGN_CENTER_VERTICAL, 2 );
-        bm_combo->SetSelection( color_idx );
         ui_row_item.m_ColorCtrl = bm_combo;
     }
     else
@@ -1116,7 +1115,7 @@ bool PANEL_SETUP_BOARD_STACKUP::transferDataFromUIToStackup()
                 }
                 else
                 {
-                    item->SetColor( color_list[idx].m_ColorName );
+                    item->SetColor( color_list[idx].GetName() );
                 }
             }
         }
@@ -1240,34 +1239,31 @@ void PANEL_SETUP_BOARD_STACKUP::onColorSelected( wxCommandEvent& event )
 
     int row = item_id - ID_ITEM_COLOR;
 
-    if( GetColorStandardListCount()-1 == idx )   // Set user color is the last option in list
+    if( idx == GetColorStandardListCount() - 1 )   // Set user color is the last option in list
     {
-        wxColour userColour = m_rowUiItemsList[row].m_UserColor;
-        COLOR4D  currentColor( userColour.IsOk() ? userColour : COLOR4D( 0.5, 0.5, 0.5, 1.0 ) );
-        COLOR4D  defaultColor( GetColorStandardList()[GetColorUserDefinedListIdx()].m_Color );
+        DIALOG_COLOR_PICKER dlg( this, m_rowUiItemsList[row].m_UserColor, true, nullptr,
+                                 GetDefaultUserColor( m_rowUiItemsList[row].m_Item->GetType() ) );
 
-        DIALOG_COLOR_PICKER dlg( this, currentColor, false, nullptr, defaultColor );
-
+#ifdef __WXGTK__
         // Give a time-slice to close the menu before opening the dialog.
         // (Only matters on some versions of GTK.)
         wxSafeYield();
+#endif
 
         if( dlg.ShowModal() == wxID_OK )
         {
             wxBitmapComboBox* combo = static_cast<wxBitmapComboBox*>( FindWindowById( item_id ) );
-
-            wxColour color = dlg.GetColor().ToColour();
+            wxColour          color = dlg.GetColor().ToColour();
 
             m_rowUiItemsList[row].m_UserColor = color;
 
-            wxString label = wxString::Format( _( "Custom (%s)" ),
-                                               color.GetAsString( wxC2S_HTML_SYNTAX ) );
-
-            combo->SetString( idx, label );
+            combo->SetString( idx, color.GetAsString( wxC2S_HTML_SYNTAX ) );
 
             wxBitmap layerbmp( m_colorSwatchesSize.x, m_colorSwatchesSize.y );
             LAYER_SELECTOR::DrawColorSwatch( layerbmp, COLOR4D( 0, 0, 0, 0 ), COLOR4D( color ) );
             combo->SetItemBitmap( combo->GetCount()-1, layerbmp );
+
+            combo->SetSelection( idx );
         }
     }
 
@@ -1447,35 +1443,38 @@ void PANEL_SETUP_BOARD_STACKUP::updateIconColor( int aRow )
 }
 
 
-wxBitmapComboBox* PANEL_SETUP_BOARD_STACKUP::createBmComboBox( BOARD_STACKUP_ITEM* aStackupItem,
-                                                               int aRow )
+wxBitmapComboBox* PANEL_SETUP_BOARD_STACKUP::createColorBox( BOARD_STACKUP_ITEM* aStackupItem,
+                                                             int aRow )
 {
     wxBitmapComboBox* combo = new wxBitmapComboBox( m_scGridWin, ID_ITEM_COLOR + aRow,
                                                     wxEmptyString, wxDefaultPosition,
                                                     wxDefaultSize, 0, nullptr, wxCB_READONLY );
 
     // Fills the combo box with choice list + bitmaps
-    const FAB_LAYER_COLOR* color_list = GetColorStandardList();
+    const FAB_LAYER_COLOR*  color_list = GetColorStandardList();
+    BOARD_STACKUP_ITEM_TYPE itemType = aStackupItem ? aStackupItem->GetType()
+                                                    : BS_ITEM_TYPE_SILKSCREEN;
 
     for( int ii = 0; ii < GetColorStandardListCount(); ii++ )
     {
-        const FAB_LAYER_COLOR& item = color_list[ii];
-
-        wxColor curr_color = item.m_Color;
+        wxColor  curr_color;
         wxString label;
 
         // Defined colors have a name, the user color uses the HTML notation ( i.e. #FF0000)
-        if( GetColorStandardListCount()-1 > (int)combo->GetCount() )
-        {
-            label = wxGetTranslation( item.m_ColorName );
-        }
-        else    // Append the user color, if specified, else add a default user color
+        if( ii == GetColorUserDefinedListIdx() )
         {
             if( aStackupItem && aStackupItem->GetColor().StartsWith( "#" ) )
                 curr_color = wxColour( aStackupItem->GetColor() );
+            else
+                curr_color = color_list[ii].GetColor( itemType );
 
-            label = wxString::Format( _( "Custom (%s)" ),
-                                      curr_color.GetAsString( wxC2S_HTML_SYNTAX ) );
+            label = _( curr_color.GetAsString( wxC2S_HTML_SYNTAX ) );
+        }
+        else    // Append the user color, if specified, else add a default user color
+        {
+            curr_color = color_list[ii].GetColor( itemType );
+
+            label = wxGetTranslation( color_list[ii].GetName() );
         }
 
         wxBitmap layerbmp( m_colorSwatchesSize.x, m_colorSwatchesSize.y );
@@ -1506,6 +1505,12 @@ wxBitmapComboBox* PANEL_SETUP_BOARD_STACKUP::createBmComboBox( BOARD_STACKUP_ITE
     combo->Connect( wxEVT_COMMAND_COMBOBOX_SELECTED,
                     wxCommandEventHandler( PANEL_SETUP_BOARD_STACKUP::onColorSelected ),
                     nullptr, this );
+
+    combo->Bind( wxEVT_COMBOBOX_DROPDOWN,
+            [combo]( wxCommandEvent& aEvent )
+            {
+                combo->SetString( combo->GetCount() - 1, _( "Custom..." ) );
+            } );
 
     return combo;
 }

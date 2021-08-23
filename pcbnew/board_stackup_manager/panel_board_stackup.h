@@ -221,7 +221,7 @@ private:
      * can be nullptr
      * @param aRow = the row index in the wxFlexGridSizer (used to build a wxWidget unique id)
      */
-    wxBitmapComboBox* createBmComboBox( BOARD_STACKUP_ITEM* aStackupItem, int aRow );
+    wxBitmapComboBox* createColorBox( BOARD_STACKUP_ITEM* aStackupItem, int aRow );
 
     /**
      * disconnect event handlers connected to wxControl items

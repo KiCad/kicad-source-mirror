@@ -1474,7 +1474,18 @@ void PCB_PARSER::parseBoardStackup()
 
                     case T_color:
                         NeedSYMBOL();
-                        item->SetColor( FromUTF8() );
+                        name = FromUTF8();
+
+                        // Older versions didn't always store opacity with colors
+                        if( name.StartsWith( "#" ) && name.Length() < 9 )
+                        {
+                            if( item->GetType() == BS_ITEM_TYPE_SOLDERMASK )
+                                name += "FF";
+                            else
+                                name += "D3";
+                        }
+
+                        item->SetColor( name );
                         NeedRIGHT();
                         break;
 

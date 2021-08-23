@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2009-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2009-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -36,6 +36,9 @@
 
 #include <layer_ids.h>
 #include <i18n_utility.h>       // For _HKI definition
+#include <gal/color4d.h>
+
+#include <board_stackup_manager/board_stackup.h>
 
 // Keyword used in file to identify the dielectric layer type
 #define KEY_CORE "core"
@@ -44,8 +47,7 @@
 #define KEY_COPPER "copper"
 
 // key string used for not specified parameters
-// Can be translated in dialogs, and is also a keyword
-// outside dialogs
+// Can be translated in dialogs, and is also a keyword outside dialogs
 wxString inline NotSpecifiedPrm()
 {
     return _HKI( "Not specified" );
@@ -58,6 +60,8 @@ wxString inline NotSpecifiedPrm()
  */
 bool IsPrmSpecified( const wxString& aPrmValue );
 
+#define DEFAULT_SOLDERMASK_OPACITY 0.83
+
 // A reasonable Epsilon R value for solder mask dielectric
 #define DEFAULT_EPSILON_R_SOLDERMASK 3.3
 
@@ -65,16 +69,34 @@ bool IsPrmSpecified( const wxString& aPrmValue );
 #define DEFAULT_EPSILON_R_SILKSCREEN 1.0
 
 // A minor struct to handle color in gerber job file and dialog
-struct FAB_LAYER_COLOR
+class FAB_LAYER_COLOR
 {
-    wxString m_ColorName;   // the name (in job file) of the color
-                            // User values are the HTML coding #rrggbb hexa value.
-    wxColor m_Color;        // the color in r,g,b values (0..255)
-
-    FAB_LAYER_COLOR() {}
-    FAB_LAYER_COLOR( const wxString& aColorName, const wxColor& aColor )
-        : m_ColorName( aColorName ), m_Color( aColor )
+public:
+    FAB_LAYER_COLOR()
     {}
+
+    FAB_LAYER_COLOR( const wxString& aColorName, const wxColor& aColor ) :
+        m_colorName( aColorName ),
+        m_color( aColor )
+    {}
+
+    const wxString& GetName() const
+    {
+        return m_colorName;
+    }
+
+    wxColor GetColor( BOARD_STACKUP_ITEM_TYPE aItemType ) const
+    {
+        if( aItemType == BS_ITEM_TYPE_SOLDERMASK )
+            return m_color.WithAlpha( DEFAULT_SOLDERMASK_OPACITY ).ToColour();
+        else
+            return m_color.WithAlpha( 1.0 ).ToColour();
+    }
+
+private:
+    wxString       m_colorName;   // the name (in job file) of the color
+                                  // User values are the HTML coding #rrggbbaa hexadecimal value.
+    KIGFX::COLOR4D m_color;
 };
 
 
@@ -98,5 +120,11 @@ int GetColorStandardListCount();
  * @return the index of the user defined color in ColorStandardList
  */
 int GetColorUserDefinedListIdx();
+
+inline wxColour GetDefaultUserColor( BOARD_STACKUP_ITEM_TYPE aType )
+{
+    return GetColorStandardList()[GetColorUserDefinedListIdx()].GetColor( aType );
+}
+
 
 #endif      // #ifndef STACKUP_PREDEFINED_PRMS_H
