@@ -45,7 +45,7 @@
     # GetCustomShapeAsPolygon() is the old accessor to get custom shapes
     def GetCustomShapeAsPolygon(self, layer=UNDEFINED_LAYER):
         polygon_set = SHAPE_POLY_SET()
-        self.MergePrimitivesAsPolygon(polygon_set, layer)
+        self.MergePrimitivesAsPolygon(polygon_set)
         return polygon_set
     %}
 }
