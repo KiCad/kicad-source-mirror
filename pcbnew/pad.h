@@ -278,13 +278,12 @@ public:
      * @note The results are relative to the pad position, orientation 0.
      *
      * @param aMergedPolygon will store the final polygon
-     * @param aLayer is the layer to take in account, as the exact shape can depend on the layer
      * @param aErrorLoc is used when a circle (or arc) is approximated by segments
      *  = ERROR_INSIDE to build a polygon inside the arc/circle (usual shape to raw/plot)
      *  = ERROR_OUIDE to build a polygon outside the arc/circle
      * (for instance when building a clearance area)
      */
-    void MergePrimitivesAsPolygon( SHAPE_POLY_SET* aMergedPolygon, PCB_LAYER_ID aLayer,
+    void MergePrimitivesAsPolygon( SHAPE_POLY_SET* aMergedPolygon,
                                    ERROR_LOC aErrorLoc = ERROR_INSIDE ) const;
 
     /**
@@ -667,8 +666,8 @@ public:
 
 
 private:
-    void addPadPrimitivesToPolygon( SHAPE_POLY_SET* aMergedPolygon, PCB_LAYER_ID aLayer,
-                                    int aError, ERROR_LOC aErrorLoc ) const;
+    void addPadPrimitivesToPolygon( SHAPE_POLY_SET* aMergedPolygon, int aError,
+                                    ERROR_LOC aErrorLoc ) const;
 
 private:
     wxString      m_name;               // Pad name (pin number in schematic)
@@ -677,7 +676,7 @@ private:
 
     wxPoint       m_pos;                // Pad Position on board
 
-    PAD_SHAPE   m_padShape;           // Shape: PAD_SHAPE::CIRCLE, PAD_SHAPE::RECT,
+    PAD_SHAPE     m_padShape;           // Shape: PAD_SHAPE::CIRCLE, PAD_SHAPE::RECT,
                                         //   PAD_SHAPE::OVAL, PAD_SHAPE::TRAPEZOID,
                                         //   PAD_SHAPE::ROUNDRECT, PAD_SHAPE_POLYGON
     /*
@@ -719,8 +718,8 @@ private:
                                             //   size, default 0.25
     int               m_chamferPositions;   // The positions of the chamfers (at orient 0)
 
-    PAD_SHAPE       m_anchorPadShape;     // For custom shaped pads: shape of pad anchor,
-                                          //   PAD_SHAPE::RECT, PAD_SHAPE::CIRCLE
+    PAD_SHAPE         m_anchorPadShape;     // For custom shaped pads: shape of pad anchor,
+                                            //   PAD_SHAPE::RECT, PAD_SHAPE::CIRCLE
 
     /*
      * Most of the time the hole is the center of the shape (m_Offset = 0). But some designers
@@ -743,7 +742,7 @@ private:
 
     PAD_ATTRIB  m_attribute;        // PAD_ATTRIB_NORMAL, PAD_ATTRIB::SMD, PAD_ATTRIB::CONN,
                                     //   PAD_ATTRIB::NPTH
-    PAD_PROP  m_property;         // Property in fab files (BGA, FIDUCIAL, TESTPOINT, etc.)
+    PAD_PROP    m_property;         // Property in fab files (BGA, FIDUCIAL, TESTPOINT, etc.)
 
     double      m_orient;           // in 1/10 degrees
 

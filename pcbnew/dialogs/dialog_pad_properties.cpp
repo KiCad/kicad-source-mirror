@@ -1400,7 +1400,7 @@ bool DIALOG_PAD_PROPERTIES::padValuesOK()
     if( m_dummyPad->GetShape() == PAD_SHAPE::CUSTOM )
     {
         SHAPE_POLY_SET mergedPolygon;
-        m_dummyPad->MergePrimitivesAsPolygon( &mergedPolygon, UNDEFINED_LAYER );
+        m_dummyPad->MergePrimitivesAsPolygon( &mergedPolygon );
 
         if( mergedPolygon.OutlineCount() > 1 )
             error_msgs.Add( _( "Error: Custom pad shape must resolve to a single polygon." ) );

@@ -185,13 +185,16 @@ void PAD::DeletePrimitivesList()
 }
 
 
-void PAD::addPadPrimitivesToPolygon( SHAPE_POLY_SET* aMergedPolygon, PCB_LAYER_ID aLayer,
-                                     int aError, ERROR_LOC aErrorLoc ) const
+void PAD::addPadPrimitivesToPolygon( SHAPE_POLY_SET* aMergedPolygon, int aError,
+                                     ERROR_LOC aErrorLoc ) const
 {
     SHAPE_POLY_SET polyset;
 
     for( const std::shared_ptr<PCB_SHAPE>& primitive : m_editPrimitives )
-        primitive->TransformShapeWithClearanceToPolygon( polyset, aLayer, 0, aError, aErrorLoc );
+    {
+        primitive->TransformShapeWithClearanceToPolygon( polyset, UNDEFINED_LAYER, 0, aError,
+                                                         aErrorLoc );
+    }
 
     polyset.Simplify( SHAPE_POLY_SET::PM_FAST );
 
@@ -203,8 +206,7 @@ void PAD::addPadPrimitivesToPolygon( SHAPE_POLY_SET* aMergedPolygon, PCB_LAYER_I
     }
 }
 
-void PAD::MergePrimitivesAsPolygon( SHAPE_POLY_SET* aMergedPolygon, PCB_LAYER_ID aLayer,
-                                    ERROR_LOC aErrorLoc ) const
+void PAD::MergePrimitivesAsPolygon( SHAPE_POLY_SET* aMergedPolygon, ERROR_LOC aErrorLoc ) const
 {
     const BOARD* board = GetBoard();
     int          maxError = board ? board->GetDesignSettings().m_MaxError : ARC_HIGH_DEF;
@@ -229,14 +231,14 @@ void PAD::MergePrimitivesAsPolygon( SHAPE_POLY_SET* aMergedPolygon, PCB_LAYER_ID
         break;
     }
 
-    addPadPrimitivesToPolygon( aMergedPolygon, aLayer, maxError, aErrorLoc );
+    addPadPrimitivesToPolygon( aMergedPolygon, maxError, aErrorLoc );
 }
 
 
 bool PAD::GetBestAnchorPosition( VECTOR2I& aPos )
 {
     SHAPE_POLY_SET poly;
-    addPadPrimitivesToPolygon( &poly, UNDEFINED_LAYER, ARC_LOW_DEF, ERROR_INSIDE );
+    addPadPrimitivesToPolygon( &poly, ARC_LOW_DEF, ERROR_INSIDE );
 
     if( poly.OutlineCount() > 1 )
         return false;

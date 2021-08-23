@@ -449,7 +449,7 @@ void PlotStandardLayer( BOARD* aBoard, PLOTTER* aPlotter, LSET aLayerMask,
                 // so build a similar pad shape, and inflate/deflate the polygonal shape
                 PAD dummy( *pad );
                 SHAPE_POLY_SET shape;
-                pad->MergePrimitivesAsPolygon( &shape, UNDEFINED_LAYER );
+                pad->MergePrimitivesAsPolygon( &shape );
 
                 // Shape polygon can have holes so use InflateWithLinkedHoles(), not Inflate()
                 // which can create bad shapes if margin.x is < 0

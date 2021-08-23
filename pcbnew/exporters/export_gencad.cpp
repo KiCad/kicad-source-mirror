@@ -609,7 +609,7 @@ static void CreatePadsShapesSection( FILE* aFile, BOARD* aPcb )
                 fprintf( aFile, " POLYGON %g\n", pad->GetDrillSize().x / SCALE_FACTOR );
 
                 SHAPE_POLY_SET outline;
-                pad->MergePrimitivesAsPolygon( &outline, UNDEFINED_LAYER );
+                pad->MergePrimitivesAsPolygon( &outline );
 
                 for( int jj = 0; jj < outline.OutlineCount(); ++jj )
                 {

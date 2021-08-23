@@ -404,7 +404,7 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testItemAgainstZones( BOARD_ITEM* aItem
             int            actual;
             VECTOR2I       pos;
 
-            if( testClearance )
+            if( zoneTree && testClearance )
             {
                 constraint = m_drcEngine->EvalRules( CLEARANCE_CONSTRAINT, aItem, zone, aLayer );
                 clearance = constraint.GetValue().Min();

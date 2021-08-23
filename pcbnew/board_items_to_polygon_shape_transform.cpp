@@ -652,7 +652,7 @@ void PAD::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
     case PAD_SHAPE::CUSTOM:
     {
         SHAPE_POLY_SET outline;
-        MergePrimitivesAsPolygon( &outline, aLayer, aErrorLoc );
+        MergePrimitivesAsPolygon( &outline, aErrorLoc );
         outline.Rotate( -DECIDEG2RAD( m_orient ) );
         outline.Move( VECTOR2I( m_pos ) );
 

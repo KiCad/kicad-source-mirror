@@ -2340,7 +2340,7 @@ bool FABMASTER::loadFootprints( BOARD* aBoard )
                                 }
 
                                 SHAPE_POLY_SET mergedPolygon;
-                                newpad->MergePrimitivesAsPolygon( &mergedPolygon, UNDEFINED_LAYER );
+                                newpad->MergePrimitivesAsPolygon( &mergedPolygon );
 
                                 if( mergedPolygon.OutlineCount() > 1 )
                                 {
