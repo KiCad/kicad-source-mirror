@@ -1750,10 +1750,13 @@ void SCH_SEXPR_PLUGIN_CACHE::saveDcmInfoAsFields( LIB_SYMBOL* aSymbol, OUTPUTFOR
 
         for( auto filter : fpFilters )
         {
+            // Spaces are not handled in fp filter names so escape spaces if any
+            wxString curr_filter = EscapeString( filter, ESCAPE_CONTEXT::CTX_NO_SPACE );
+
             if( tmp.IsEmpty() )
-                tmp = filter;
+                tmp = curr_filter;
             else
-                tmp += " " + filter;
+                tmp += " " + curr_filter;
         }
 
         LIB_FIELD description( -1, wxString( "ki_fp_filters" ) );

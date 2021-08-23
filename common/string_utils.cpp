@@ -211,6 +211,15 @@ wxString EscapeString( const wxString& aSource, ESCAPE_CONTEXT aContext )
             else
                 converted += c;
         }
+        else if( aContext == CTX_NO_SPACE )
+        {
+            if( c == ' ' )
+                converted += "{space}";
+            else if( c == '{' )
+                converted += "{brace}";
+            else
+                converted += c;
+        }
         else
             converted += c;
     }

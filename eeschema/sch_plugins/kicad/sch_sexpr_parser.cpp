@@ -851,7 +851,10 @@ LIB_FIELD* SCH_SEXPR_PARSER::parseProperty( std::unique_ptr<LIB_SYMBOL>& aSymbol
         wxStringTokenizer tokenizer( value );
 
         while( tokenizer.HasMoreTokens() )
-            filters.Add( tokenizer.GetNextToken() );
+        {
+            wxString curr_token = UnescapeString( tokenizer.GetNextToken() );
+            filters.Add( curr_token );
+        }
 
         aSymbol->SetFPFilters( filters );
         return nullptr;
