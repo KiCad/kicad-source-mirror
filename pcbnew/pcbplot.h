@@ -28,6 +28,7 @@
 #include <pcb_plot_params.h>
 #include <settings/color_settings.h>
 #include <settings/settings_manager.h>
+#include <board_item.h>
 
 class PLOTTER;
 class PCB_TEXT;
@@ -105,6 +106,7 @@ public:
      * Plot items like text and graphics but not tracks and footprints.
      */
     void PlotBoardGraphicItems();
+    void PlotPcbGraphicItem( const BOARD_ITEM* item );
 
     /**
      * Draw a drill mark for pads and vias.

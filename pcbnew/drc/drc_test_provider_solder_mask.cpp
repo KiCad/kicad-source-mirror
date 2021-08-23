@@ -153,8 +153,6 @@ void DRC_TEST_PROVIDER_SOLDER_MASK::addItemToRTrees( BOARD_ITEM* item )
     }
     else
     {
-        // JEY TODO: plotter doesn't currently expand graphics by web thickness...
-
         for( PCB_LAYER_ID layer : { F_Mask, B_Mask } )
         {
             if( item->IsOnLayer( layer ) )
