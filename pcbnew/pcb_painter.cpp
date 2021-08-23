@@ -989,9 +989,9 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
 
             if( m_pcbSettings.m_padNumbers )
             {
-                const wxString& padName = aPad->GetName();
+                const wxString& padNumber = aPad->GetNumber();
                 textpos.y = -textpos.y;
-                double tsize = 1.5 * padsize.x / padName.Length();
+                double tsize = 1.5 * padsize.x / padNumber.Length();
                 tsize = std::min( tsize, size );
 
                 // Use a smaller text size to handle interline, pen size..
@@ -1001,7 +1001,7 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
 
                 m_gal->SetGlyphSize( numsize );
                 m_gal->SetLineWidth( numsize.x / 12.0 );
-                m_gal->BitmapText( padName, textpos, 0.0 );
+                m_gal->BitmapText( padNumber, textpos, 0.0 );
             }
 
             m_gal->Restore();

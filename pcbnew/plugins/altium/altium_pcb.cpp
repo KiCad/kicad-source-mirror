@@ -2103,7 +2103,7 @@ void ALTIUM_PCB::ParsePads6Data( const CFB::CompoundFileReader& aReader,
         PAD* pad = new PAD( footprint );
         footprint->Add( pad, ADD_MODE::APPEND );
 
-        pad->SetName( elem.name );
+        pad->SetNumber( elem.name );
         pad->SetNetCode( GetNetCode( elem.net ) );
         pad->SetLocked( elem.is_locked );
 

@@ -133,7 +133,7 @@ FOOTPRINT* MICROWAVE_TOOL::createFootprint( MICROWAVE_FOOTPRINT_SHAPE aFootprint
         break;
 
     case MICROWAVE_FOOTPRINT_SHAPE::STUB:     //Stub :
-        pad->SetName( wxT( "1" ) );
+        pad->SetNumber( wxT( "1" ) );
         pad = *( it + 1 );
         pad->SetY0( -( gap_size + pad->GetSize().y ) / 2 );
         pad->SetSize( wxSize( pad->GetSize().x, gap_size ) );
@@ -200,7 +200,6 @@ FOOTPRINT* MICROWAVE_TOOL::createBaseFootprint( const wxString& aValue,
 
     // Create 2 pads used in gaps and stubs.  The gap is between these 2 pads
     // the stub is the pad 2
-    wxString Line;
     int pad_num = 1;
 
     while( aPadCount-- )
@@ -217,8 +216,7 @@ FOOTPRINT* MICROWAVE_TOOL::createBaseFootprint( const wxString& aValue,
         pad->SetAttribute( PAD_ATTRIB::SMD );
         pad->SetLayerSet( F_Cu );
 
-        Line.Printf( wxT( "%d" ), pad_num );
-        pad->SetName( Line );
+        pad->SetNumber( wxString::Format( wxT( "%d" ), pad_num ) );
         pad_num++;
     }
 

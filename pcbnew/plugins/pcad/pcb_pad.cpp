@@ -263,7 +263,7 @@ void PCB_PAD::AddToFootprint( FOOTPRINT* aFootprint, int aRotation, bool aEncaps
             // actually this is a thru-hole pad
             pad->SetLayerSet( LSET::AllCuMask() | LSET( 2, B_Mask, F_Mask ) );
 
-        pad->SetName( m_name.text );
+        pad->SetNumber( m_name.text );
 
         if( padShapeName == wxT( "Oval" )
             || padShapeName == wxT( "Ellipse" )

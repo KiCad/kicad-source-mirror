@@ -39,7 +39,7 @@ void FROM_TO_CACHE::buildEndpointList( )
         for( PAD* pad : footprint->Pads() )
         {
             FT_ENDPOINT ent;
-            ent.name = footprint->GetReference() + "-" + pad->GetName();
+            ent.name = footprint->GetReference() + "-" + pad->GetNumber();
             ent.parent = pad;
             m_ftEndpoints.push_back( ent );
             ent.name = footprint->GetReference();
@@ -140,7 +140,7 @@ int FROM_TO_CACHE::cacheFromToPaths( const wxString& aFrom, const wxString& aTo 
         int count = 0;
         auto netName = path.from->GetNetname();
 
-        wxString fromName = path.from->GetParent()->GetReference() + "-" + path.from->GetName();
+        wxString fromName = path.from->GetParent()->GetReference() + "-" + path.from->GetNumber();
 
         const KICAD_T onlyRouting[] = { PCB_PAD_T, PCB_ARC_T, PCB_VIA_T, PCB_TRACE_T, EOT };
 
@@ -157,7 +157,7 @@ int FROM_TO_CACHE::cacheFromToPaths( const wxString& aFrom, const wxString& aTo 
 
             const PAD *pad = static_cast<const PAD*>( pitem );
 
-            wxString toName = pad->GetParent()->GetReference() + "-" + pad->GetName();
+            wxString toName = pad->GetParent()->GetReference() + "-" + pad->GetNumber();
 
 
             for ( const auto& endpoint : m_ftEndpoints )

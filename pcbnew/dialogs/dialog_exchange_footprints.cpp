@@ -520,8 +520,8 @@ void PCB_EDIT_FRAME::ExchangeFootprint( FOOTPRINT* aExisting, FOOTPRINT* aNew,
         if( !pad->IsOnCopperLayer() )
             continue;
 
-        // Pads with no name are never connected to a net
-        if( pad->GetName().IsEmpty() )
+        // Pads with no numbers are never connected to a net
+        if( pad->GetNumber().IsEmpty() )
             continue;
 
         // Search for a similar pad on a copper layer, to reuse net info
@@ -529,7 +529,7 @@ void PCB_EDIT_FRAME::ExchangeFootprint( FOOTPRINT* aExisting, FOOTPRINT* aNew,
 
         while( true )
         {
-            pad_model = aExisting->FindPadByName( pad->GetName(), last_pad );
+            pad_model = aExisting->FindPadByNumber( pad->GetNumber(), last_pad );
 
             if( !pad_model )
                 break;

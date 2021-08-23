@@ -29,35 +29,34 @@
 #include <footprint.h>
 
 /**
- * Simple class that sequentially provides names from an #ARRAY_OPTIONS
- * object, making sure that they do not conflict with names already existing
- * in a #FOOTPRINT.
+ * Simple class that sequentially provides numbers from an #ARRAY_OPTIONS object, making sure
+ * that they do not conflict with numbers already existing in a #FOOTPRINT.
  */
-class ARRAY_PAD_NAME_PROVIDER
+class ARRAY_PAD_NUMBER_PROVIDER
 {
 public:
     /**
-     * @param aFootprint the footprint to gather existing names from (nullptr for no footprint)
-     * @oaram aArrayOpts the array options that provide the candidate names
+     * @param aFootprint the footprint to gather existing numbers from (nullptr for no footprint)
+     * @oaram aArrayOpts the array options that provide the candidate numbers
      */
-    ARRAY_PAD_NAME_PROVIDER( const FOOTPRINT* aFootprint, const ARRAY_OPTIONS& aArrayOpts );
+    ARRAY_PAD_NUMBER_PROVIDER( const FOOTPRINT* aFootprint, const ARRAY_OPTIONS& aArrayOpts );
 
     /**
      * Get the next available pad name.
      */
-    wxString GetNextPadName();
+    wxString GetNextPadNumber();
 
 private:
     /**
-     * Get the next name from a given index/list combo
+     * Get the next number from a given index/list combo
      * @param  aIndex    index to start at, will be updated
-     * @param  aExisting the set of existing names to skip
-     * @return           the first name found that's not in aExisting
+     * @param  aExisting the set of existing numbers to skip
+     * @return           the first number found that's not in aExisting
      */
-    wxString getNextName( int& aIndex, const std::set<wxString>& aExisting );
+    wxString getNextNumber( int& aIndex, const std::set<wxString>& aExisting );
 
     const ARRAY_OPTIONS& m_arrayOpts;
-    std::set<wxString>   m_existing_pad_names;
+    std::set<wxString>   m_existing_pad_numbers;
     int                  m_current_pad_index;
 };
 

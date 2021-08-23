@@ -462,7 +462,7 @@ int BOARD_EDITOR_CONTROL::ExportNetlist( const TOOL_EVENT& aEvent )
 
             if( !netname.IsEmpty() )
             {
-                component->AddNet( pad->GetName(), netname, pad->GetPinFunction(),
+                component->AddNet( pad->GetNumber(), netname, pad->GetPinFunction(),
                                    pad->GetPinType() );
             }
         }

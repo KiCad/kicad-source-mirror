@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2018 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2018-2021 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,14 +21,9 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file test_array_pad_name_provider.cpp
- * Test suite for the #ARRAY_PAD_NAME_PROVIDER class
- */
-
 #include <qa_utils/wx_utils/unit_test_utils.h>
 
-#include <array_pad_name_provider.h> // UUT
+#include <array_pad_number_provider.h> // UUT
 
 #include <common.h> // make_unique
 
@@ -46,7 +41,7 @@ static std::unique_ptr<FOOTPRINT> FootprintWithPads( const std::vector<wxString>
     {
         std::unique_ptr<PAD> pad = std::make_unique<PAD>( footprint.get() );
 
-        pad->SetName( name );
+        pad->SetNumber( name );
 
         footprint->Add( pad.release() );
     }
@@ -57,7 +52,7 @@ static std::unique_ptr<FOOTPRINT> FootprintWithPads( const std::vector<wxString>
 /**
  * Declare the test suite
  */
-BOOST_AUTO_TEST_SUITE( ArrayPadNameProv )
+BOOST_AUTO_TEST_SUITE( ArrayPadNumberProv )
 
 
 struct APNP_CASE
@@ -66,7 +61,7 @@ struct APNP_CASE
     bool                           m_using_footprint;
     std::vector<wxString>          m_existing_pads;
     std::unique_ptr<ARRAY_OPTIONS> m_arr_opts;
-    std::vector<wxString>          m_exp_arr_names;
+    std::vector<wxString>          m_expected_numbers;
 };
 
 
@@ -117,21 +112,20 @@ std::vector<APNP_CASE> GetFootprintAPNPCases()
 
 
 /**
- * Check that an #ARRAY_PAD_NAME_PROVIDER provides the right names
+ * Check that an #ARRAY_PAD_NUMBER_PROVIDER provides the right names
  * @param aProvider the provider
  * @param aExpNames ordered list of expected names
  */
-void CheckPadNameProvider( ARRAY_PAD_NAME_PROVIDER& aProvider, std::vector<wxString> aExpNames )
+void CheckPadNumberProvider( ARRAY_PAD_NUMBER_PROVIDER& aProvider,
+                             std::vector<wxString> aExpectedNumbers )
 {
-    std::vector<wxString> got_names;
+    std::vector<wxString> got_numbers;
 
-    for( unsigned i = 0; i < aExpNames.size(); ++i )
-    {
-        got_names.push_back( aProvider.GetNextPadName() );
-    }
+    for( unsigned i = 0; i < aExpectedNumbers.size(); ++i )
+        got_numbers.push_back( aProvider.GetNextPadNumber() );
 
-    BOOST_CHECK_EQUAL_COLLECTIONS(
-            aExpNames.begin(), aExpNames.end(), got_names.begin(), got_names.end() );
+    BOOST_CHECK_EQUAL_COLLECTIONS( aExpectedNumbers.begin(), aExpectedNumbers.end(),
+                                   got_numbers.begin(), got_numbers.end() );
 }
 
 
@@ -146,9 +140,9 @@ BOOST_AUTO_TEST_CASE( FootprintCases )
             if( c.m_using_footprint )
                 footprint = FootprintWithPads( c.m_existing_pads );
 
-            ARRAY_PAD_NAME_PROVIDER apnp( footprint.get(), *c.m_arr_opts );
+            ARRAY_PAD_NUMBER_PROVIDER apnp( footprint.get(), *c.m_arr_opts );
 
-            CheckPadNameProvider( apnp, c.m_exp_arr_names );
+            CheckPadNumberProvider( apnp, c.m_expected_numbers );
         }
     }
 }

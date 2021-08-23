@@ -269,7 +269,7 @@ set( PCBNEW_CLASS_SRCS
 
     action_plugin.cpp
     array_creator.cpp
-    array_pad_name_provider.cpp
+    array_pad_number_provider.cpp
     build_BOM_from_board.cpp
     cleanup_item.cpp
     convert_drawsegment_list_to_polygon.cpp
@@ -294,11 +294,8 @@ set( PCBNEW_CLASS_SRCS
     load_select_footprint.cpp
     menubar_footprint_editor.cpp
     menubar_pcb_editor.cpp
-    pad_naming.cpp
     pcb_base_edit_frame.cpp
     pcb_layer_box_selector.cpp
-#    pcb_draw_panel_gal.cpp
-#    pcb_view.cpp
     pcb_edit_frame.cpp
     pcbnew_config.cpp
     pcbnew_printout.cpp

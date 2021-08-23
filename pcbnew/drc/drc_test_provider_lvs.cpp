@@ -132,7 +132,10 @@ void DRC_TEST_PROVIDER_LVS::testFootprints( NETLIST& aNetlist )
                 if( m_drcEngine->IsErrorLimitExceeded( DRCE_NET_CONFLICT ) )
                     break;
 
-                const COMPONENT_NET& sch_net = component->GetNet( pad->GetName() );
+                if( !pad->CanHaveNumber() )
+                    continue;
+
+                const COMPONENT_NET& sch_net = component->GetNet( pad->GetNumber() );
                 const wxString&      pcb_netname = pad->GetNetname();
 
                 if( !pcb_netname.IsEmpty() && sch_net.GetPinName().IsEmpty() )
@@ -174,7 +177,7 @@ void DRC_TEST_PROVIDER_LVS::testFootprints( NETLIST& aNetlist )
 
                 const COMPONENT_NET& sch_net = component->GetNet( jj );
 
-                if( !footprint->FindPadByName( sch_net.GetPinName() ) )
+                if( !footprint->FindPadByNumber( sch_net.GetPinName() ) )
                 {
                     m_msg.Printf( _( "No pad found for pin %s in schematic." ),
                                   sch_net.GetPinName() );

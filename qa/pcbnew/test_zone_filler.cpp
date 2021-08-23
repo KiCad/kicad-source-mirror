@@ -61,7 +61,7 @@ BOOST_FIXTURE_TEST_CASE( BasicZoneFills, ZONE_FILL_TEST_FIXTURE )
 
     for( PAD* pad : m_board->Footprints()[0]->Pads() )
     {
-        if( pad->GetName() == "2" || pad->GetName() == "4" || pad->GetName() == "6" )
+        if( pad->GetNumber() == "2" || pad->GetNumber() == "4" || pad->GetNumber() == "6" )
             pad->SetSize( pad->GetSize() + wxSize( delta, delta ) );
     }
 
@@ -110,17 +110,17 @@ BOOST_FIXTURE_TEST_CASE( BasicZoneFills, ZONE_FILL_TEST_FIXTURE )
                     PAD*        pad_b = dynamic_cast<PAD*>( item_b );
                     PCB_TRACK*  trk_b = dynamic_cast<PCB_TRACK*>( item_b );
 
-                    if(      pad_a && pad_a->GetName() == "2" ) foundPad2Error = true;
-                    else if( pad_a && pad_a->GetName() == "4" ) foundPad4Error = true;
-                    else if( pad_a && pad_a->GetName() == "6" ) foundPad6Error = true;
-                    else if( pad_b && pad_b->GetName() == "2" ) foundPad2Error = true;
-                    else if( pad_b && pad_b->GetName() == "4" ) foundPad4Error = true;
-                    else if( pad_b && pad_b->GetName() == "6" ) foundPad6Error = true;
-                    else if( trk_a && trk_a->m_Uuid == arc8 )   foundArc8Error = true;
-                    else if( trk_a && trk_a->m_Uuid == arc12 )  foundArc12Error = true;
-                    else if( trk_b && trk_b->m_Uuid == arc8 )   foundArc8Error = true;
-                    else if( trk_b && trk_b->m_Uuid == arc12 )  foundArc12Error = true;
-                    else                                        foundOtherError = true;
+                    if(      pad_a && pad_a->GetNumber() == "2" ) foundPad2Error = true;
+                    else if( pad_a && pad_a->GetNumber() == "4" ) foundPad4Error = true;
+                    else if( pad_a && pad_a->GetNumber() == "6" ) foundPad6Error = true;
+                    else if( pad_b && pad_b->GetNumber() == "2" ) foundPad2Error = true;
+                    else if( pad_b && pad_b->GetNumber() == "4" ) foundPad4Error = true;
+                    else if( pad_b && pad_b->GetNumber() == "6" ) foundPad6Error = true;
+                    else if( trk_a && trk_a->m_Uuid == arc8 )     foundArc8Error = true;
+                    else if( trk_a && trk_a->m_Uuid == arc12 )    foundArc12Error = true;
+                    else if( trk_b && trk_b->m_Uuid == arc8 )     foundArc8Error = true;
+                    else if( trk_b && trk_b->m_Uuid == arc12 )    foundArc12Error = true;
+                    else                                          foundOtherError = true;
                 }
             } );
 

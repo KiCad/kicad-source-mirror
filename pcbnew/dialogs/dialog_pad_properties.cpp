@@ -115,7 +115,7 @@ void PCB_BASE_FRAME::ShowPadPropertiesDialog( PAD* aPad )
             PAD_TOOL* padTools = m_toolManager->GetTool<PAD_TOOL>();
 
             if( padTools )
-                padTools->SetLastPadName( aPad->GetName() );
+                padTools->SetLastPadNumber( aPad->GetNumber() );
         }
     }
 }
@@ -515,7 +515,7 @@ void DIALOG_PAD_PROPERTIES::initValues()
 
     m_FlippedWarningSizer->Show( m_isFlipped );
 
-    m_PadNumCtrl->SetValue( m_dummyPad->GetName() );
+    m_PadNumCtrl->SetValue( m_dummyPad->GetNumber() );
     m_PadNetSelector->SetSelectedNetcode( m_dummyPad->GetNetCode() );
 
     // Display current pad parameters units:
@@ -981,7 +981,7 @@ void DIALOG_PAD_PROPERTIES::PadTypeSelected( wxCommandEvent& event )
     }
     else if( m_PadNumCtrl->GetValue().IsEmpty() && m_currentPad )
     {
-        m_PadNumCtrl->ChangeValue( m_currentPad->GetName() );
+        m_PadNumCtrl->ChangeValue( m_currentPad->GetNumber() );
         m_PadNetSelector->SetSelectedNetcode( m_currentPad->GetNetCode() );
     }
 
@@ -1583,7 +1583,7 @@ bool DIALOG_PAD_PROPERTIES::TransferDataFromWindow()
     m_currentPad->SetRemoveUnconnected( m_padMaster->GetRemoveUnconnected() );
     m_currentPad->SetKeepTopBottom( m_padMaster->GetKeepTopBottom() );
 
-    m_currentPad->SetName( m_padMaster->GetName() );
+    m_currentPad->SetNumber( m_padMaster->GetNumber() );
 
     int padNetcode = NETINFO_LIST::UNCONNECTED;
 
@@ -1779,7 +1779,7 @@ bool DIALOG_PAD_PROPERTIES::transferDataToPad( PAD* aPad )
         aPad->SetPadToDieLength( 0 );
 
     aPad->SetOrientation( m_OrientValue * 10.0 );
-    aPad->SetName( m_PadNumCtrl->GetValue() );
+    aPad->SetNumber( m_PadNumCtrl->GetValue() );
     aPad->SetNetCode( m_PadNetSelector->GetSelectedNetcode() );
 
     int chamfers = 0;
@@ -1848,7 +1848,7 @@ bool DIALOG_PAD_PROPERTIES::transferDataToPad( PAD* aPad )
     case PAD_ATTRIB::NPTH:
         // Mechanical purpose only:
         // no net name, no pad name allowed
-        aPad->SetName( wxEmptyString );
+        aPad->SetNumber( wxEmptyString );
         aPad->SetNetCode( NETINFO_LIST::UNCONNECTED );
         break;
 

@@ -123,11 +123,15 @@ public:
     bool IsFlipped() const;
 
     /**
-     * Set the pad name (sometimes called pad number, although it can be an array reference
-     * like AA12).
+     * Set the pad number (note that it can be alphanumeric, such as the array reference "AA12").
      */
-    void SetName( const wxString& aName ) { m_name = aName; }
-    const wxString& GetName() const { return m_name; }
+    void SetNumber( const wxString& aNumber ) { m_number = aNumber; }
+    const wxString& GetNumber() const { return m_number; }
+
+    /**
+     * Indicates whether or not the pad can have a number.  (NPTH and SMD aperture pads can not.)
+     */
+    bool CanHaveNumber() const;
 
     /**
      * Set the pad function (pin name in schematic)
@@ -148,7 +152,7 @@ public:
     bool SameLogicalPadAs( const PAD* other ) const
     {
         // hide tricks behind sensible API
-        return GetParent() == other->GetParent() && m_name == other->m_name;
+        return GetParent() == other->GetParent() && m_number == other->m_number;
     }
 
     /**
@@ -670,7 +674,7 @@ private:
                                     ERROR_LOC aErrorLoc ) const;
 
 private:
-    wxString      m_name;               // Pad name (pin number in schematic)
+    wxString      m_number;             // Pad name (pin number in schematic)
     wxString      m_pinFunction;        // Pin name in schematic
     wxString      m_pinType;            // Pin electrical type in schematic
 

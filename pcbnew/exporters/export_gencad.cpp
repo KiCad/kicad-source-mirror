@@ -793,7 +793,7 @@ static void CreateShapesSection( FILE* aFile, BOARD* aPcb )
              * all pads need to be marked as TOP to use the padstack information correctly.
              */
             layer = "TOP";
-            pinname = pad->GetName();
+            pinname = pad->GetNumber();
 
             if( pinname.IsEmpty() )
                 pinname = wxT( "none" );
@@ -944,7 +944,7 @@ static void CreateSignalsSection( FILE* aFile, BOARD* aPcb )
 
                 msg.Printf( wxT( "NODE \"%s\" \"%s\"" ),
                             escapeString( footprint->GetReference() ),
-                            escapeString( pad->GetName() ) );
+                            escapeString( pad->GetNumber() ) );
 
                 fputs( TO_UTF8( msg ), aFile );
                 fputs( "\n", aFile );

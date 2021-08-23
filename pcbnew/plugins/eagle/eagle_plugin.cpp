@@ -1139,7 +1139,7 @@ void EAGLE_PLUGIN::loadElements( wxXmlNode* aElements )
         // update the nets within the pads of the clone
         for( PAD* pad : footprint->Pads() )
         {
-            wxString pn_key = makeKey( e.name, pad->GetName() );
+            wxString pn_key = makeKey( e.name, pad->GetNumber() );
 
             NET_MAP_CITER ni = m_pads_to_nets.find( pn_key );
             if( ni != m_pads_to_nets.end() )
@@ -2247,7 +2247,7 @@ void EAGLE_PLUGIN::packageHole( FOOTPRINT* aFootprint, wxXmlNode* aTree, bool aC
     // Mechanical purpose only:
     // no offset, no net name, no pad name allowed
     // pad->SetOffset( wxPoint( 0, 0 ) );
-    // pad->SetName( wxEmptyString );
+    // pad->SetNumber( wxEmptyString );
 
     wxPoint padpos( kicad_x( e.x ), kicad_y( e.y ) );
 
@@ -2347,7 +2347,7 @@ void EAGLE_PLUGIN::packageSMD( FOOTPRINT* aFootprint, wxXmlNode* aTree ) const
 
 void EAGLE_PLUGIN::transferPad( const EPAD_COMMON& aEaglePad, PAD* aPad ) const
 {
-    aPad->SetName( FROM_UTF8( aEaglePad.name.c_str() ) );
+    aPad->SetNumber( FROM_UTF8( aEaglePad.name.c_str() ) );
 
     // pad's "Position" is not relative to the footprint's,
     // whereas Pos0 is relative to the footprint's but is the unrotated coordinate.

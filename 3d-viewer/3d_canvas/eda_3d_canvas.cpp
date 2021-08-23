@@ -721,7 +721,7 @@ void EDA_3D_CANVAS::OnMouseMove( wxMouseEvent& event )
                     reporter.Report( wxString::Format( _( "Net %s\tNetClass %s\tPadName %s" ),
                                                        pad->GetNet()->GetNetname(),
                                                        pad->GetNet()->GetNetClassName(),
-                                                       pad->GetName() ) );
+                                                       pad->GetNumber() ) );
                 }
             }
                 break;

@@ -24,11 +24,10 @@
 
 #include "array_creator.h"
 
-#include <array_pad_name_provider.h>
+#include <array_pad_number_provider.h>
 #include <board_commit.h>
 #include <pcb_group.h>
-#include <pad_naming.h>
-
+#include <pad.h>
 #include <dialogs/dialog_create_array.h>
 
 /**
@@ -69,7 +68,7 @@ void ARRAY_CREATOR::Invoke()
 
     BOARD_COMMIT commit( &m_parent );
 
-    ARRAY_PAD_NAME_PROVIDER pad_name_provider( fp, *array_opts );
+    ARRAY_PAD_NUMBER_PROVIDER pad_number_provider( fp, *array_opts );
 
     for ( int i = 0; i < m_selection.Size(); ++i )
     {
@@ -185,10 +184,10 @@ void ARRAY_CREATOR::Invoke()
                 {
                     PAD& pad = static_cast<PAD&>( *this_item );
 
-                    if( PAD_NAMING::PadCanHaveName( pad ) )
+                    if( pad.CanHaveNumber() )
                     {
-                        wxString newName = pad_name_provider.GetNextPadName();
-                        pad.SetName( newName );
+                        wxString newNumber = pad_number_provider.GetNextPadNumber();
+                        pad.SetNumber( newNumber );
                     }
                 }
             }

@@ -235,7 +235,7 @@ int PLACEFILE_GERBER_WRITER::CreatePlaceFile( wxString& aFullFilename, PCB_LAYER
                 gbr_metadata.SetApertureAttrib(
                         GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_PAD1_POSITION );
 
-                gbr_metadata.SetPadName( pad1->GetName(), allowUtf8, true );
+                gbr_metadata.SetPadName( pad1->GetNumber(), allowUtf8, true );
 
                 gbr_metadata.SetPadPinFunction( pad1->GetPinFunction(), allowUtf8, true );
 
@@ -276,7 +276,7 @@ int PLACEFILE_GERBER_WRITER::CreatePlaceFile( wxString& aFullFilename, PCB_LAYER
                 if( !pad->IsOnLayer( aLayer ) )
                     continue;
 
-                gbr_metadata.SetPadName( pad->GetName(), allowUtf8, true );
+                gbr_metadata.SetPadName( pad->GetNumber(), allowUtf8, true );
 
                 gbr_metadata.SetPadPinFunction( pad->GetPinFunction(), allowUtf8, true );
 
@@ -336,7 +336,7 @@ void PLACEFILE_GERBER_WRITER::findPads1( std::vector<PAD*>& aPadList, FOOTPRINT*
         if( !pad->IsOnLayer( m_layer ) )
             continue;
 
-        if( pad->GetName() == "1" || pad->GetName() == "A1")
+        if( pad->GetNumber() == "1" || pad->GetNumber() == "A1")
             aPadList.push_back( pad );
     }
 }

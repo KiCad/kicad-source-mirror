@@ -108,7 +108,7 @@ static void build_pad_testpoints( BOARD *aPcb, std::vector <D356_RECORD>& aRecor
             if( rk.access != -1 )
             {
                 rk.netname = pad->GetNetname();
-                rk.pin = pad->GetName();
+                rk.pin = pad->GetNumber();
                 rk.refdes = footprint->GetReference();
                 rk.midpoint = false; // XXX MAYBE need to be computed (how?)
                 const wxSize& drill = pad->GetDrillSize();

@@ -16,12 +16,18 @@
     # SetPadName() is the old name for PAD::SetName()
     # define it for compatibility
     def SetPadName(self, aName):
-        return self.SetName(aName)
+        return self.SetNumber(aName)
+
+    def SetName(self, aName):
+        return self.SetNumber(aName)
 
     # GetPadName() is the old name for PAD::GetName()
     # define it for compatibility
     def GetPadName(self):
-        return self.GetName()
+        return self.GetNumber()
+
+    def GetName(self):
+        return self.GetNumber()
 
     # AddPrimitive() is the old name for D_PAD::AddPrimitivePoly(),
     # PAD::AddPrimitiveSegment(), PAD::AddPrimitiveCircle(),

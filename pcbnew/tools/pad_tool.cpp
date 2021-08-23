@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2017-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -40,7 +40,6 @@
 #include <tools/pcb_selection_conditions.h>
 #include <tools/edit_tool.h>
 #include <dialogs/dialog_enum_pads.h>
-#include <pad_naming.h>
 #include <widgets/infobar.h>
 
 PAD_TOOL::PAD_TOOL() :
@@ -58,7 +57,7 @@ PAD_TOOL::~PAD_TOOL()
 void PAD_TOOL::Reset( RESET_REASON aReason )
 {
     if( aReason == MODEL_RELOAD )
-        m_lastPadName = wxT( "1" );
+        m_lastPadNumber = wxT( "1" );
 
     m_padCopied = false;
     m_editPad = niluuid;
@@ -301,7 +300,7 @@ int PAD_TOOL::EnumeratePads( const TOOL_EVENT& aEvent )
     VECTOR2I oldCursorPos;  // store the previous mouse cursor position, during mouse drag
     std::list<PAD*> selectedPads;
     BOARD_COMMIT commit( frame() );
-    std::map<wxString, std::pair<int, wxString>> oldNames;
+    std::map<wxString, std::pair<int, wxString>> oldNumbers;
     bool isFirstPoint = true;   // used to be sure oldCursorPos will be initialized at least once.
 
     STATUS_TEXT_POPUP statusPopup( frame() );
@@ -389,10 +388,10 @@ int PAD_TOOL::EnumeratePads( const TOOL_EVENT& aEvent )
                     else
                         newval = seqPadNum++;
 
-                    wxString newName = wxString::Format( wxT( "%s%d" ), padPrefix, newval );
-                    oldNames[newName] = { newval, pad->GetName() };
-                    pad->SetName( newName );
-                    SetLastPadName( newName );
+                    wxString newNumber = wxString::Format( wxT( "%s%d" ), padPrefix, newval );
+                    oldNumbers[newNumber] = { newval, pad->GetNumber() };
+                    pad->SetNumber( newNumber );
+                    SetLastPadNumber( newNumber );
                     pad->SetSelected();
                     getView()->Update( pad );
 
@@ -408,15 +407,15 @@ int PAD_TOOL::EnumeratePads( const TOOL_EVENT& aEvent )
                 // ... or restore the old name if it was enumerated and clicked again
                 else if( pad->IsSelected() && evt->IsClick( BUT_LEFT ) )
                 {
-                    auto it = oldNames.find( pad->GetName() );
-                    wxASSERT( it != oldNames.end() );
+                    auto it = oldNumbers.find( pad->GetNumber() );
+                    wxASSERT( it != oldNumbers.end() );
 
-                    if( it != oldNames.end() )
+                    if( it != oldNumbers.end() )
                     {
                         storedPadNumbers.push_back( it->second.first );
-                        pad->SetName( it->second.second );
-                        SetLastPadName( it->second.second );
-                        oldNames.erase( it );
+                        pad->SetNumber( it->second.second );
+                        SetLastPadNumber( it->second.second );
+                        oldNumbers.erase( it );
 
                         int newval = storedPadNumbers.front();
 
@@ -484,12 +483,12 @@ int PAD_TOOL::PlacePad( const TOOL_EVENT& aEvent )
 
             pad->ImportSettingsFrom( *(m_frame->GetDesignSettings().m_Pad_Master.get()) );
 
-            if( PAD_NAMING::PadCanHaveName( *pad ) )
+            if( pad->CanHaveNumber() )
             {
-                wxString padName = m_padTool->GetLastPadName();
-                padName = m_board->GetFirstFootprint()->GetNextPadName( padName );
-                pad->SetName( padName );
-                m_padTool->SetLastPadName( padName );
+                wxString padNumber = m_padTool->GetLastPadNumber();
+                padNumber = m_board->GetFirstFootprint()->GetNextPadNumber( padNumber );
+                pad->SetNumber( padNumber );
+                m_padTool->SetLastPadNumber( padNumber );
             }
 
             return std::unique_ptr<BOARD_ITEM>( pad );

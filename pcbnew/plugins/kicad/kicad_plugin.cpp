@@ -1415,7 +1415,7 @@ void PCB_IO::format( const PAD* aPad, int aNestLevel ) const
     }
 
     m_out->Print( aNestLevel, "(pad %s %s %s",
-                  m_out->Quotew( aPad->GetName() ).c_str(),
+                  m_out->Quotew( aPad->GetNumber() ).c_str(),
                   type,
                   shape );
 

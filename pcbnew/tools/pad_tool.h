@@ -59,8 +59,8 @@ public:
      */
     int EditPad( const TOOL_EVENT& aEvent );
 
-    wxString GetLastPadName() const { return m_lastPadName; }
-    void SetLastPadName( const wxString& aPadName ) { m_lastPadName = aPadName; }
+    wxString GetLastPadNumber() const { return m_lastPadNumber; }
+    void SetLastPadNumber( const wxString& aPadNumber ) { m_lastPadNumber = aPadNumber; }
 
 private:
     ///< Bind handlers to corresponding TOOL_ACTIONs.
@@ -78,7 +78,7 @@ private:
     PCB_LAYER_ID explodePad( PAD* aPad );
     void recombinePad( PAD* aPad );
 
-    wxString       m_lastPadName;
+    wxString       m_lastPadNumber;
     bool           m_padCopied;    // Indicates there are valid settings in the Master Pad object
 
     bool           m_wasHighContrast;

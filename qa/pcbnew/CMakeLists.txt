@@ -35,7 +35,7 @@ set( QA_PCBNEW_SRCS
     test_array_pad_name_provider.cpp
     test_graphics_import_mgr.cpp
     test_lset.cpp
-    test_pad_naming.cpp
+    test_pad_numbering.cpp
     test_libeval_compiler.cpp
     test_tracks_cleaner.cpp
     test_zone_filler.cpp

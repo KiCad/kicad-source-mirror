@@ -21,13 +21,13 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <array_pad_name_provider.h>
+#include <array_pad_number_provider.h>
 
 #include <pad.h>
 
 
-ARRAY_PAD_NAME_PROVIDER::ARRAY_PAD_NAME_PROVIDER( const FOOTPRINT* aFootprint,
-                                                  const ARRAY_OPTIONS& aArrayOpts )
+ARRAY_PAD_NUMBER_PROVIDER::ARRAY_PAD_NUMBER_PROVIDER( const FOOTPRINT* aFootprint,
+                                                      const ARRAY_OPTIONS& aArrayOpts )
         : m_arrayOpts( aArrayOpts )
 {
     // start by numbering the first new item
@@ -46,27 +46,28 @@ ARRAY_PAD_NAME_PROVIDER::ARRAY_PAD_NAME_PROVIDER( const FOOTPRINT* aFootprint,
         {
             // reserve the name of each existing pad
             for( PAD* pad : aFootprint->Pads() )
-                m_existing_pad_names.insert( pad->GetName() );
+                m_existing_pad_numbers.insert( pad->GetNumber() );
         }
     }
 }
 
 
-wxString ARRAY_PAD_NAME_PROVIDER::GetNextPadName()
+wxString ARRAY_PAD_NUMBER_PROVIDER::GetNextPadNumber()
 {
-    return getNextName( m_current_pad_index, m_existing_pad_names );
+    return getNextNumber( m_current_pad_index, m_existing_pad_numbers );
 }
 
 
-wxString ARRAY_PAD_NAME_PROVIDER::getNextName( int& aIndex, const std::set<wxString>& aExisting )
+wxString ARRAY_PAD_NUMBER_PROVIDER::getNextNumber( int& aIndex,
+                                                   const std::set<wxString>& aExisting )
 {
-    wxString next_name;
+    wxString next_number;
 
     do
     {
-        next_name = m_arrayOpts.GetItemNumber( aIndex );
+        next_number = m_arrayOpts.GetItemNumber( aIndex );
         aIndex++;
-    } while( aExisting.count( next_name ) != 0 );
+    } while( aExisting.count( next_number ) != 0 );
 
-    return next_name;
+    return next_number;
 }

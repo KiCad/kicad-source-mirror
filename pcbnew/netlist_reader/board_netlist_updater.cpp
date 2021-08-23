@@ -412,7 +412,7 @@ bool BOARD_NETLIST_UPDATER::updateComponentPadConnections( FOOTPRINT* aFootprint
     // At this point, the component footprint is updated.  Now update the nets.
     for( PAD* pad : aFootprint->Pads() )
     {
-        const COMPONENT_NET& net = aNewComponent->GetNet( pad->GetName() );
+        const COMPONENT_NET& net = aNewComponent->GetNet( pad->GetNumber() );
 
         wxString pinFunction;
         wxString pinType;
@@ -451,23 +451,23 @@ bool BOARD_NETLIST_UPDATER::updateComponentPadConnections( FOOTPRINT* aFootprint
                 {
                     msg.Printf( _( "Disconnect %s pin %s." ),
                                 aFootprint->GetReference(),
-                                pad->GetName() );
+                                pad->GetNumber() );
                 }
                 else
                 {
                     msg.Printf( _( "Disconnected %s pin %s." ),
                                 aFootprint->GetReference(),
-                                pad->GetName() );
+                                pad->GetNumber() );
                 }
 
                 m_reporter->Report( msg, RPT_SEVERITY_ACTION );
             }
-            else if( m_warnForNoNetPads && pad->IsOnCopperLayer() && !pad->GetName().IsEmpty() )
+            else if( m_warnForNoNetPads && pad->IsOnCopperLayer() && !pad->GetNumber().IsEmpty() )
             {
                 // pad is connectable but has no net found in netlist
                 msg.Printf( _( "No net found for symbol %s pin %s." ),
                             aFootprint->GetReference(),
-                            pad->GetName() );
+                            pad->GetNumber() );
                 m_reporter->Report( msg, RPT_SEVERITY_WARNING);
             }
 
@@ -529,7 +529,7 @@ bool BOARD_NETLIST_UPDATER::updateComponentPadConnections( FOOTPRINT* aFootprint
                     {
                         msg.Printf( _( "Reconnect %s pin %s from %s to %s."),
                                     aFootprint->GetReference(),
-                                    pad->GetName(),
+                                    pad->GetNumber(),
                                     UnescapeString( pad->GetNetname() ),
                                     UnescapeString( netName ) );
                     }
@@ -537,7 +537,7 @@ bool BOARD_NETLIST_UPDATER::updateComponentPadConnections( FOOTPRINT* aFootprint
                     {
                         msg.Printf( _( "Reconnected %s pin %s from %s to %s."),
                                     aFootprint->GetReference(),
-                                    pad->GetName(),
+                                    pad->GetNumber(),
                                     UnescapeString( pad->GetNetname() ),
                                     UnescapeString( netName ) );
                     }
@@ -548,15 +548,14 @@ bool BOARD_NETLIST_UPDATER::updateComponentPadConnections( FOOTPRINT* aFootprint
                     {
                         msg.Printf( _( "Connect %s pin %s to %s."),
                                     aFootprint->GetReference(),
-                                    pad->GetName(),
+                                    pad->GetNumber(),
                                     UnescapeString( netName ) );
                     }
                     else
                     {
                         msg.Printf( _( "Connected %s pin %s to %s."),
-
                                     aFootprint->GetReference(),
-                                    pad->GetName(),
+                                    pad->GetNumber(),
                                     UnescapeString( netName ) );
                     }
                 }
@@ -873,7 +872,7 @@ bool BOARD_NETLIST_UPDATER::testConnectivity( NETLIST& aNetlist,
     // wrong or missing.
 
     wxString msg;
-    wxString padname;
+    wxString padNumber;
 
     for( int i = 0; i < (int) aNetlist.GetCount(); i++ )
     {
@@ -886,16 +885,15 @@ bool BOARD_NETLIST_UPDATER::testConnectivity( NETLIST& aNetlist,
         // Explore all pins/pads in component
         for( unsigned jj = 0; jj < component->GetNetCount(); jj++ )
         {
-            const COMPONENT_NET& net = component->GetNet( jj );
-            padname = net.GetPinName();
+            padNumber = component->GetNet( jj ).GetPinName();
 
-            if( footprint->FindPadByName( padname ) )
+            if( footprint->FindPadByNumber( padNumber ) )
                 continue;   // OK, pad found
 
             // not found: bad footprint, report error
             msg.Printf( _( "%s pad %s not found in %s." ),
                         component->GetReference(),
-                        padname,
+                        padNumber,
                         footprint->GetFPID().Format().wx_str() );
             m_reporter->Report( msg, RPT_SEVERITY_ERROR );
             ++m_errorCount;

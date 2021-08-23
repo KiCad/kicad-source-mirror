@@ -1344,16 +1344,15 @@ void LEGACY_PLUGIN::loadPAD( FOOTPRINT* aFootprint )
             // e.g. "Sh "A2" C 520 520 0 0 900"
             // or   "Sh "1" R 157 1378 0 0 900"
 
-            // mypadname is LATIN1/CRYLIC for BOARD_FORMAT_VERSION 1,
-            // but for BOARD_FORMAT_VERSION 2, it is UTF8 from disk.
-            // So we have to go through two code paths.  Moving forward
-            // padnames will be in UTF8 on disk, as are all KiCad strings on disk.
-            char        mypadname[50];
+            // mypadnumber is LATIN1/CRYLIC for BOARD_FORMAT_VERSION 1, but for
+            // BOARD_FORMAT_VERSION 2, it is UTF8 from disk.
+            // Moving forward padnumbers will be in UTF8 on disk, as are all KiCad strings on disk.
+            char        mypadnumber[50];
 
             data = line + SZ( "Sh" ) + 1;   // +1 skips trailing whitespace
 
             // +1 trailing whitespace.
-            data = data + ReadDelimitedText( mypadname, data, sizeof(mypadname) ) + 1;
+            data = data + ReadDelimitedText( mypadnumber, data, sizeof( mypadnumber ) ) + 1;
 
             while( isSpace( *data ) )
                 ++data;
@@ -1381,28 +1380,26 @@ void LEGACY_PLUGIN::loadPAD( FOOTPRINT* aFootprint )
             }
 
             // go through a wxString to establish a universal character set properly
-            wxString    padname;
+            wxString    padNumber;
 
             if( m_loading_format_version == 1 )
             {
                 // add 8 bit bytes, file format 1 was KiCad font type byte,
                 // simply promote those 8 bit bytes up into UNICODE. (subset of LATIN1)
-                const unsigned char* cp = (unsigned char*) mypadname;
+                const unsigned char* cp = (unsigned char*) mypadnumber;
 
                 while( *cp )
-                {
-                    padname += *cp++;  // unsigned, ls 8 bits only
-                }
+                    padNumber += *cp++;  // unsigned, ls 8 bits only
             }
             else
             {
                 // version 2, which is UTF8.
-                padname = FROM_UTF8( mypadname );
+                padNumber = FROM_UTF8( mypadnumber );
             }
 
             // chances are both were ASCII, but why take chances?
 
-            pad->SetName( padname );
+            pad->SetNumber( padNumber );
             pad->SetShape( static_cast<PAD_SHAPE>( padshape ) );
             pad->SetSize( wxSize( size_x, size_y ) );
             pad->SetDelta( wxSize( delta_x, delta_y ) );

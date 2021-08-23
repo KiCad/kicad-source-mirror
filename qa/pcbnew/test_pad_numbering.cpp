@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,10 +22,9 @@
  */
 
 #include <qa_utils/wx_utils/unit_test_utils.h>
-
 #include <board.h>
 #include <footprint.h>
-#include <pad_naming.h>
+#include <pad.h>
 
 struct PAD_FIXTURE
 {
@@ -70,21 +69,21 @@ struct PAD_FIXTURE
 };
 
 
-BOOST_FIXTURE_TEST_SUITE( PadNaming, PAD_FIXTURE )
+BOOST_FIXTURE_TEST_SUITE( PadNumbering, PAD_FIXTURE )
 
 /**
  * Check what gets names and what doesn't
  */
-BOOST_AUTO_TEST_CASE( CanName )
+BOOST_AUTO_TEST_CASE( CanNumber )
 {
     auto npth = MakeNPTH();
-    BOOST_CHECK_EQUAL( false, PAD_NAMING::PadCanHaveName( npth ) );
+    BOOST_CHECK_EQUAL( false, npth.CanHaveNumber() );
 
     auto aperture = MakeAperture();
-    BOOST_CHECK_EQUAL( false, PAD_NAMING::PadCanHaveName( aperture ) );
+    BOOST_CHECK_EQUAL( false, aperture.CanHaveNumber() );
 
     auto smd = MakeSmd();
-    BOOST_CHECK_EQUAL( true, PAD_NAMING::PadCanHaveName( smd ) );
+    BOOST_CHECK_EQUAL( true, smd.CanHaveNumber() );
 }
 
 

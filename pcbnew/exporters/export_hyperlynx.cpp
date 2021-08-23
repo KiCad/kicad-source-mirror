@@ -448,7 +448,7 @@ bool HYPERLYNX_EXPORTER::writeNetObjects( const std::vector<BOARD_ITEM*>& aObjec
                 if( ref.IsEmpty() )
                     ref = "EMPTY";
 
-                wxString padName = pad->GetName();
+                wxString padName = pad->GetNumber();
 
                 if( padName.IsEmpty() )
                     padName = "1";

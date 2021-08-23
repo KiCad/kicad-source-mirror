@@ -159,7 +159,7 @@ void PCB_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
         footprint = pcb->FindFootprintByReference( modName );
 
         if( footprint )
-            pad = footprint->FindPadByName( pinName );
+            pad = footprint->FindPadByNumber( pinName );
 
         if( pad )
             netcode = pad->GetNetCode();
@@ -434,7 +434,7 @@ std::string FormatProbeItem( BOARD_ITEM* aItem )
     case PCB_PAD_T:
     {
         footprint = static_cast<FOOTPRINT*>( aItem->GetParent() );
-        wxString pad = static_cast<PAD*>( aItem )->GetName();
+        wxString pad = static_cast<PAD*>( aItem )->GetNumber();
 
         return StrPrintf( "$PART: \"%s\" $PAD: \"%s\"", TO_UTF8( footprint->GetReference() ),
                           TO_UTF8( pad ) );
@@ -535,7 +535,7 @@ void PCB_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
 
                 if( !netname.IsEmpty() )
                 {
-                    component->AddNet( pad->GetName(), netname, pad->GetPinFunction(),
+                    component->AddNet( pad->GetNumber(), netname, pad->GetPinFunction(),
                                        pad->GetPinType() );
                 }
             }

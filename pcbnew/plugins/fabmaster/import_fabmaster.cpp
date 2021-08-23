@@ -2240,7 +2240,7 @@ bool FABMASTER::loadFootprints( BOARD* aBoard )
                     else
                         newpad->SetY( pin->pin_y );
 
-                    newpad->SetName( pin->pin_number );
+                    newpad->SetNumber( pin->pin_number );
 
                     if( padstack == pads.end() )
                     {

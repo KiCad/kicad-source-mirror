@@ -733,7 +733,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadLibraryCoppers( const SYMDEF_PCB& aComponen
             PAD* pad = new PAD( aFootprint );
             pad->SetAttribute( PAD_ATTRIB::SMD );
             pad->SetLayerSet( LSET( 1, copperLayer ) );
-            pad->SetName( anchorPad.Identifier.IsEmpty()
+            pad->SetNumber( anchorPad.Identifier.IsEmpty()
                                   ? wxString::Format( wxT( "%ld" ), anchorPad.ID )
                                   : anchorPad.Identifier );
 
@@ -774,7 +774,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadLibraryCoppers( const SYMDEF_PCB& aComponen
                 if( associatedPad.PCBonlyPad )
                 {
                     PAD* assocPad = getPadReference( aFootprint, padID );
-                    assocPad->SetName( pad->GetName() );
+                    assocPad->SetNumber( pad->GetNumber() );
                     ++numRenames;
                 }
             }
@@ -938,8 +938,7 @@ PAD* CADSTAR_PCB_ARCHIVE_LOADER::getKiCadPad( const COMPONENT_PAD& aCadstarPad, 
 
     pad->SetLayerSet( padLayerSet );
 
-
-    pad->SetName( aCadstarPad.Identifier.IsEmpty() ?
+    pad->SetNumber( aCadstarPad.Identifier.IsEmpty() ?
                           wxString::Format( wxT( "%ld" ), aCadstarPad.ID ) :
                           aCadstarPad.Identifier );
 
@@ -1605,7 +1604,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadComponents()
                     if( pinName.empty() )
                         pinName = wxString::Format( wxT( "%ld" ), pin.ID );
 
-                    getPadReference( footprint, pin.ID )->SetName( pinName );
+                    getPadReference( footprint, pin.ID )->SetNumber( pinName );
                 }
             }
         }
@@ -1634,13 +1633,13 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadComponents()
 
                 // Find the pad in the footprint definition
                 PAD*     kiPad = getPadReference( footprint, padEx.ID );
-                wxString padName = kiPad->GetName();
+                wxString padNumber = kiPad->GetNumber();
 
                 if( kiPad )
                     delete kiPad;
 
                 kiPad = getKiCadPad( csPad, footprint );
-                kiPad->SetName( padName );
+                kiPad->SetNumber( padNumber );
 
                 // Change the pointer in the footprint to the newly created pad
                 getPadReference( footprint, padEx.ID ) = kiPad;

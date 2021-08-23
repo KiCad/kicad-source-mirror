@@ -106,9 +106,9 @@ void BRDITEMS_PLOTTER::PlotPad( const PAD* aPad, const COLOR4D& aColor, OUTLINE_
 
         const bool useUTF8 = false;
         const bool useQuoting = false;
-        gbr_metadata.SetPadName( aPad->GetName(), useUTF8, useQuoting );
+        gbr_metadata.SetPadName( aPad->GetNumber(), useUTF8, useQuoting );
 
-        if( !aPad->GetName().IsEmpty() )
+        if( !aPad->GetNumber().IsEmpty() )
             gbr_metadata.SetPadPinFunction( aPad->GetPinFunction(), useUTF8, useQuoting );
 
         gbr_metadata.SetNetName( aPad->GetNetname() );
@@ -116,7 +116,7 @@ void BRDITEMS_PLOTTER::PlotPad( const PAD* aPad, const COLOR4D& aColor, OUTLINE_
         // Some pads are mechanical pads ( through hole or smd )
         // when this is the case, they have no pad name and/or are not plated.
         // In this case gerber files have slightly different attributes.
-        if( aPad->GetAttribute() == PAD_ATTRIB::NPTH || aPad->GetName().IsEmpty() )
+        if( aPad->GetAttribute() == PAD_ATTRIB::NPTH || aPad->GetNumber().IsEmpty() )
             gbr_metadata.m_NetlistMetadata.m_NotInNet = true;
 
         if( !plotOnExternalCopperLayer )

@@ -375,12 +375,12 @@ std::string PLACE_FILE_EXPORTER::GenReportData()
         std::sort( sortedPads.begin(), sortedPads.end(),
                    []( PAD* a, PAD* b ) -> bool
                    {
-                       return StrNumCmp( a->GetName(), b->GetName(), true ) < 0;
+                       return StrNumCmp( a->GetNumber(), b->GetNumber(), true ) < 0;
                    });
 
         for( PAD* pad : sortedPads )
         {
-            sprintf( line, "$PAD \"%s\"\n", TO_UTF8( pad->GetName() ) );
+            sprintf( line, "$PAD \"%s\"\n", TO_UTF8( pad->GetNumber() ) );
             buffer += line;
 
             int layer = 0;

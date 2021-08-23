@@ -3927,7 +3927,7 @@ PAD* PCB_PARSER::parsePAD( FOOTPRINT* aParent )
     pad->SetKeepTopBottom( false );
 
     NeedSYMBOLorNUMBER();
-    pad->SetName( FromUTF8() );
+    pad->SetNumber( FromUTF8() );
 
     T token = NextTok();
 
@@ -4395,6 +4395,13 @@ PAD* PCB_PARSER::parsePAD( FOOTPRINT* aParent )
                        "clearance, tstamp, primitives, remove_unused_layers, keep_end_layers, "
                        "pinfunction, pintype, zone_connect, thermal_width, or thermal_gap" );
         }
+    }
+
+    if( !pad->CanHaveNumber() )
+    {
+        // At some point it was possible to assign a number to aperture pads so we need to clean
+        // those out here.
+        pad->SetNumber( wxEmptyString );
     }
 
     return pad.release();

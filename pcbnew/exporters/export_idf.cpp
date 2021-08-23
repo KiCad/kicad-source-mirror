@@ -337,7 +337,7 @@ static void idf_export_footprint( BOARD* aPcb, FOOTPRINT* aFootprint, IDF3_BOARD
                 kplate = IDF3::PTH;
 
             // hole type
-            tstr = TO_UTF8( pad->GetName() );
+            tstr = TO_UTF8( pad->GetNumber() );
 
             if( tstr.empty() || !tstr.compare( "0" ) || !tstr.compare( "~" )
                 || ( kplate == IDF3::NPTH )

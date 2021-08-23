@@ -113,7 +113,7 @@ PAD::PAD( const PAD& aOther ) :
     SetPadToDieLength( aOther.GetPadToDieLength() );
     SetPosition( aOther.GetPosition() );
     SetPos0( aOther.GetPos0() );
-    SetName( aOther.GetName() );
+    SetNumber( aOther.GetNumber() );
     SetPinFunction( aOther.GetPinFunction() );
     SetSubRatsnest( aOther.GetSubRatsnest() );
     m_effectiveBoundingRadius = aOther.m_effectiveBoundingRadius;
@@ -131,7 +131,7 @@ PAD& PAD::operator=( const PAD &aOther )
     SetPadToDieLength( aOther.GetPadToDieLength() );
     SetPosition( aOther.GetPosition() );
     SetPos0( aOther.GetPos0() );
-    SetName( aOther.GetName() );
+    SetNumber( aOther.GetNumber() );
     SetPinFunction( aOther.GetPinFunction() );
     SetSubRatsnest( aOther.GetSubRatsnest() );
     m_effectiveBoundingRadius = aOther.m_effectiveBoundingRadius;
@@ -139,6 +139,20 @@ PAD& PAD::operator=( const PAD &aOther )
     m_keepTopBottomLayer = aOther.m_keepTopBottomLayer;
 
     return *this;
+}
+
+
+bool PAD::CanHaveNumber() const
+{
+    // Aperture pads don't get a number
+    if( IsAperturePad() )
+        return false;
+
+    // NPTH pads don't get numbers
+    if( GetAttribute() == PAD_ATTRIB::NPTH )
+        return false;
+
+    return true;
 }
 
 
@@ -857,7 +871,7 @@ void PAD::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& 
     if( parentFootprint )
         aList.emplace_back( _( "Footprint" ), parentFootprint->GetReference() );
 
-    aList.emplace_back( _( "Pad" ), m_name );
+    aList.emplace_back( _( "Pad" ), m_number );
 
     if( !GetPinFunction().IsEmpty() )
         aList.emplace_back( _( "Pin Name" ), GetPinFunction() );
@@ -1106,7 +1120,7 @@ wxString PAD::ShowPadAttr() const
 
 wxString PAD::GetSelectMenuText( EDA_UNITS aUnits ) const
 {
-    if( GetName().IsEmpty() )
+    if( GetNumber().IsEmpty() )
     {
         if( GetAttribute() == PAD_ATTRIB::SMD || GetAttribute() == PAD_ATTRIB::CONN )
         {
@@ -1125,14 +1139,14 @@ wxString PAD::GetSelectMenuText( EDA_UNITS aUnits ) const
         if( GetAttribute() == PAD_ATTRIB::SMD || GetAttribute() == PAD_ATTRIB::CONN )
         {
             return wxString::Format( _( "Pad %s of %s on %s" ),
-                                     GetName(),
+                                     GetNumber(),
                                      GetParent()->GetReference(),
                                      layerMaskDescribe() );
         }
         else
         {
             return wxString::Format( _( "Through hole pad %s of %s" ),
-                                     GetName(),
+                                     GetNumber(),
                                      GetParent()->GetReference() );
         }
     }
@@ -1221,7 +1235,7 @@ void PAD::ViewGetLayers( int aLayers[], int& aCount ) const
         wxString msg;
         msg.Printf( wxT( "footprint %s, pad %s: could not find valid layer for pad" ),
                 GetParent() ? GetParent()->GetReference() : "<null>",
-                GetName().IsEmpty() ? "(unnamed)" : GetName() );
+                GetNumber().IsEmpty() ? "(unnumbered)" : GetNumber() );
         wxLogWarning( msg );
     }
 #endif
@@ -1476,7 +1490,7 @@ static struct PAD_DESC
         propMgr.AddProperty( shape );
 
         propMgr.AddProperty( new PROPERTY<PAD, wxString>( _HKI( "Pad Number" ),
-                    &PAD::SetName, &PAD::GetName ) );
+                    &PAD::SetNumber, &PAD::GetNumber ) );
         propMgr.AddProperty( new PROPERTY<PAD, wxString>( _HKI( "Pin Name" ),
                     &PAD::SetPinFunction, &PAD::GetPinFunction ) );
         propMgr.AddProperty( new PROPERTY<PAD, wxString>( _HKI( "Pin Type" ),
