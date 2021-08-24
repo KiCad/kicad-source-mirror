@@ -1383,7 +1383,13 @@ bool LINE_PLACER::FixRoute( const VECTOR2I& aP, ITEM* aEndItem, bool aForceFinis
         setInitialDirection( d_last );
         m_currentStart = ( m_placingVia || fixAll ) ? p_last : p_pre_last;
 
-        m_fixedTail.AddStage( m_p_start, m_currentLayer, m_placingVia, m_direction, m_currentNode );
+        VECTOR2I ps;
+        if( m_tail.SegmentCount() )
+            ps = m_tail.CPoint( 0 );
+        else
+            ps = m_p_start;
+
+        m_fixedTail.AddStage( ps, m_currentLayer, m_placingVia, m_direction, m_currentNode );
 
         m_startItem = nullptr;
         m_placingVia = false;
