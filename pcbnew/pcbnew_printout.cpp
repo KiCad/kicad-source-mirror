@@ -141,7 +141,9 @@ void PCBNEW_PRINTOUT::setupViewLayers( KIGFX::VIEW& aView, const LSET& aLayerSet
     }
 
     RENDER_SETTINGS* renderSettings = aView.GetPainter()->GetSettings();
-    COLOR4D          backgroundColor = renderSettings->GetLayerColor( LAYER_PCB_BACKGROUND );
+    // A color to do not print objects on some layers, when the layer must be enabled
+    // to print some other objects
+    COLOR4D invisible_color( 0.0, 0.0, 0.0, 0.0 );
 
     if( m_pcbnewSettings.m_AsItemCheckboxes )
     {
@@ -151,7 +153,7 @@ void PCBNEW_PRINTOUT::setupViewLayers( KIGFX::VIEW& aView, const LSET& aLayerSet
                     if( m_board->IsElementVisible( aLayer ) )
                         aView.SetLayerVisible( aLayer, true );
                     else
-                        renderSettings->SetLayerColor( aLayer, backgroundColor );
+                        renderSettings->SetLayerColor( aLayer, invisible_color );
                 };
 
         setVisibility( LAYER_MOD_FR );
@@ -183,16 +185,15 @@ void PCBNEW_PRINTOUT::setupViewLayers( KIGFX::VIEW& aView, const LSET& aLayerSet
     }
     else
     {
-        // Enable pad layers corresponding to the selected copper layers
-        if( aLayerSet.test( F_Cu ) )
-            aView.SetLayerVisible( LAYER_PAD_FR, true );
-        else
-            renderSettings->SetLayerColor( LAYER_PAD_FR, backgroundColor );
+        // Draw layers that must be not visible on printing are set to an invisible layer
+        // LAYER_PAD_FR, LAYER_PAD_BK and LAYER_PADS_TH must be enabled to print pads on
+        // technical layers, but not the pad on copper layer(s) if they are not enabled
 
-        if( aLayerSet.test( B_Cu ) )
-            aView.SetLayerVisible( LAYER_PAD_BK, true );
-        else
-            renderSettings->SetLayerColor( LAYER_PAD_BK, backgroundColor );
+        if( !aLayerSet.test( F_Cu ) )
+            renderSettings->SetLayerColor( LAYER_PAD_FR, invisible_color );
+
+        if( !aLayerSet.test( B_Cu ) )
+            renderSettings->SetLayerColor( LAYER_PAD_BK, invisible_color );
 
         // Enable items on copper layers, but do not draw holes
         for( GAL_LAYER_ID layer : { LAYER_PADS_TH, LAYER_VIA_THROUGH } )
@@ -200,15 +201,18 @@ void PCBNEW_PRINTOUT::setupViewLayers( KIGFX::VIEW& aView, const LSET& aLayerSet
             if( ( aLayerSet & LSET::AllCuMask() ).any() )   // Items visible on any copper layer
                 aView.SetLayerVisible( layer, true );
             else
-                renderSettings->SetLayerColor( layer, backgroundColor );
+                renderSettings->SetLayerColor( layer, invisible_color );
         }
 
         // Keep certain items always enabled/disabled and just rely on the layer visibility
+        // Note LAYER_PAD_FR, LAYER_PAD_BK, LAYER_PADS_TH are enabled here because paths must
+        // be drawn on some other (technical) layers.
         const int alwaysEnabled[] =
                 {
                     LAYER_MOD_TEXT_FR, LAYER_MOD_TEXT_BK, LAYER_MOD_FR, LAYER_MOD_BK,
                     LAYER_MOD_VALUES, LAYER_MOD_REFERENCES, LAYER_TRACKS, LAYER_ZONES, LAYER_PADS,
-                    LAYER_VIAS, LAYER_VIA_MICROVIA, LAYER_VIA_BBLIND
+                    LAYER_VIAS, LAYER_VIA_MICROVIA, LAYER_VIA_BBLIND,
+                    LAYER_PAD_FR, LAYER_PAD_BK, LAYER_PADS_TH
                 };
 
         for( int layer : alwaysEnabled )
