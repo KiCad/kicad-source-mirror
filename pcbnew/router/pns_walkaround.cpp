@@ -244,6 +244,12 @@ WALKAROUND::WALKAROUND_STATUS WALKAROUND::Route( const LINE& aInitialPath, LINE&
 
     while( m_iteration < m_iterationLimit )
     {
+        if( path_cw.PointCount() == 0 )
+            s_cw = STUCK; // cw path is empty, can't continue
+
+        if( path_ccw.PointCount() == 0 )
+            s_ccw = STUCK; // ccw path is empty, can't continue
+
         if( s_cw != STUCK )
             s_cw = singleStep( path_cw, true );
 
