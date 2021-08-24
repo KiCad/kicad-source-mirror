@@ -4,17 +4,17 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-20 13:14-0700\n"
-"PO-Revision-Date: 2021-07-31 11:56+0000\n"
+"POT-Creation-Date: 2021-08-20 11:53-0700\n"
+"PO-Revision-Date: 2021-08-27 08:25+0000\n"
 "Last-Translator: Triyan W. Nugroho <triyan.wn@gmail.com>\n"
-"Language-Team: Indonesian <https://hosted.weblate.org/projects/kicad/master-"
-"source/id/>\n"
+"Language-Team: Indonesian <https://hosted.weblate.org/projects/kicad/"
+"master-source/id/>\n"
 "Language: id\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.7.2-dev\n"
+"X-Generator: Weblate 4.8.1-dev\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
 #, fuzzy
@@ -171,19 +171,17 @@ msgid "Simplifying copper layers polygons"
 msgstr "Menyederhanakan poligon lapisan tembaga"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:766
-#, fuzzy
 msgid "Simplifying polygons on F_Cu"
-msgstr "Menyederhanakan poligon lapisan tembaga"
+msgstr "Menyederhanakan poligon pada F_Cu"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:777
-#, fuzzy
 msgid "Simplifying polygons on B_Cu"
-msgstr "Menyederhanakan poligon lapisan tembaga"
+msgstr "Menyederhanakan poligon pada B_Cu"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:807
-#, fuzzy, c-format
+#, c-format
 msgid "Simplifying %d copper layers"
-msgstr "Menyederhanakan poligon lapisan tembaga"
+msgstr "Menyederhanakan %d lapisan tembaga"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:846
 msgid "Simplify holes contours"
@@ -233,9 +231,8 @@ msgstr "Muat Raytracing: lapisan"
 
 #: 3d-viewer/3d_rendering/3d_render_raytracing/create_scene.cpp:795
 #: 3d-viewer/3d_rendering/legacy/create_scene.cpp:650
-#, fuzzy
 msgid "Loading 3D models..."
-msgstr "Memuat model 3D"
+msgstr "Memuat model 3D..."
 
 #: 3d-viewer/3d_rendering/3d_render_raytracing/create_scene.cpp:934
 #: 3d-viewer/3d_rendering/legacy/create_scene.cpp:660
@@ -264,7 +261,7 @@ msgstr ""
 
 #: 3d-viewer/3d_rendering/legacy/create_scene.cpp:450
 msgid "Load OpenGL: board"
-msgstr ""
+msgstr "Muat OpenGL: papan sirkuit"
 
 #: 3d-viewer/3d_rendering/legacy/create_scene.cpp:483
 msgid "Load OpenGL: holes and vias"
@@ -275,9 +272,9 @@ msgid "Load OpenGL: layers"
 msgstr "Muat OpenGL: lapisan"
 
 #: 3d-viewer/3d_rendering/legacy/create_scene.cpp:562
-#, fuzzy, c-format
+#, c-format
 msgid "Load OpenGL layer %d"
-msgstr "Muat OpenGL: lapisan"
+msgstr "Muat lapisan OpenGL %d"
 
 #: 3d-viewer/3d_rendering/legacy/create_scene.cpp:914
 #: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:430
@@ -287,9 +284,9 @@ msgstr "Muat OpenGL: lapisan"
 #: pcbnew/plugins/fabmaster/fabmaster_plugin.cpp:75
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:2288
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:449
-#, fuzzy, c-format
+#, c-format
 msgid "Loading %s..."
-msgstr "Memuat %s"
+msgstr "Memuat %s..."
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:50
 msgid "Export Current View as PNG..."
@@ -2818,7 +2815,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_copper_zones.cpp:195
 #: pcbnew/footprint_viewer_frame.cpp:142 pcbnew/footprint_viewer_frame.cpp:157
 msgid "Filter"
-msgstr ""
+msgstr "Penyaring"
 
 #: common/dialogs/eda_list_dialog_base.cpp:22
 msgid "Items:"
@@ -3157,7 +3154,7 @@ msgstr ""
 
 #: common/dialogs/panel_hotkeys_editor.cpp:78
 msgid "Type filter text"
-msgstr ""
+msgstr "Teks tipe penyaring"
 
 #: common/dialogs/panel_hotkeys_editor.cpp:120
 msgid "Undo All Changes"
@@ -3547,12 +3544,12 @@ msgstr ""
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:108
 msgid "Net class filter:"
-msgstr ""
+msgstr "Penyaring kelas net:"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:125
 #: pcbnew/dialogs/dialog_net_inspector_base.cpp:28
 msgid "Net name filter:"
-msgstr ""
+msgstr "Penyaring nama net:"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:140
 #: pcbnew/widgets/appearance_controls.cpp:856
@@ -3561,7 +3558,7 @@ msgstr ""
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:146
 msgid "Apply Filters"
-msgstr ""
+msgstr "Terapkan Penyaring"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:156
 msgid "Assign Net Class"
@@ -6411,7 +6408,7 @@ msgstr ""
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:625
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:664
 msgid "Filter:"
-msgstr ""
+msgstr "Penyaring:"
 
 #: common/widgets/paged_dialog.cpp:71 common/widgets/paged_dialog.cpp:374
 #: eeschema/dialogs/dialog_bom_base.cpp:115
@@ -6800,7 +6797,7 @@ msgstr "Simbol: Penetapan Footprint"
 
 #: cvpcb/cvpcb_mainframe.cpp:110
 msgid "Filtered Footprints"
-msgstr ""
+msgstr "Footprint Tersaring"
 
 #: cvpcb/cvpcb_mainframe.cpp:144
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:105
@@ -6846,12 +6843,12 @@ msgstr ""
 
 #: cvpcb/cvpcb_mainframe.cpp:728
 msgid "No Filtering"
-msgstr ""
+msgstr "Tanpa Penyaring"
 
 #: cvpcb/cvpcb_mainframe.cpp:730
 #, c-format
 msgid "Filtered by %s"
-msgstr ""
+msgstr "Disaring berdasar %s"
 
 #: cvpcb/cvpcb_mainframe.cpp:744
 #, c-format
@@ -7085,7 +7082,7 @@ msgstr ""
 
 #: cvpcb/toolbars_cvpcb.cpp:75
 msgid "Footprint Filters:"
-msgstr ""
+msgstr "Penyaring Footprint:"
 
 #: cvpcb/tools/cvpcb_actions.cpp:52
 msgid "View selected footprint"
@@ -7149,45 +7146,45 @@ msgstr ""
 
 #: cvpcb/tools/cvpcb_actions.cpp:121
 msgid "Delete association"
-msgstr ""
+msgstr "Hapus asosiasi"
 
 #: cvpcb/tools/cvpcb_actions.cpp:122
 msgid "Delete selected footprint associations"
-msgstr ""
+msgstr "Hapus asosiasi footprint yang dipilih"
 
 #: cvpcb/tools/cvpcb_actions.cpp:127 cvpcb/tools/cvpcb_actions.cpp:128
 msgid "Delete all footprint associations"
-msgstr ""
+msgstr "Hapus semua asosiasi footprint"
 
 #: cvpcb/tools/cvpcb_actions.cpp:135
 msgid "Use symbol footprint filters"
-msgstr "Gunakan filter footprint simbol"
+msgstr "Gunakan penyaring footprint simbol"
 
 #: cvpcb/tools/cvpcb_actions.cpp:136
 msgid "Filter footprint list by footprint filters defined in the symbol"
 msgstr ""
-"Filter daftar footprint dengan filter footprint yang didefinisikan pada "
+"Saring daftar footprint berdasar penyaring footprint yang didefinisikan pada "
 "simbol"
 
 #: cvpcb/tools/cvpcb_actions.cpp:142
 msgid "Filter by pin count"
-msgstr ""
+msgstr "Saring berdasar jumlah pin"
 
 #: cvpcb/tools/cvpcb_actions.cpp:143
 msgid "Filter footprint list by pin count"
-msgstr ""
+msgstr "Saring daftar footprint berdasar jumlah pin"
 
 #: cvpcb/tools/cvpcb_actions.cpp:149
 msgid "Filter by library"
-msgstr ""
+msgstr "Saring berdasar pustaka"
 
 #: cvpcb/tools/cvpcb_actions.cpp:150
 msgid "Filter footprint list by library"
-msgstr ""
+msgstr "Saring daftar footprint berdasar pustaka"
 
 #: cvpcb/tools/cvpcb_association_tool.cpp:257
 msgid "Delete all associations?"
-msgstr ""
+msgstr "Hapus semua asosiasi?"
 
 #: eeschema/annotate.cpp:159
 #, c-format
@@ -8255,12 +8252,11 @@ msgstr ""
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:74
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:52
 msgid "Filters"
-msgstr ""
+msgstr "Penyaring"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:82
-#, fuzzy
 msgid "Filter other symbol fields by name:"
-msgstr "Bidang simbol yang lain"
+msgstr "Saring bidang simbol yang lain berdasar nama:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:94
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:72
@@ -8273,7 +8269,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:108
 msgid "Filter items by parent symbol type:"
-msgstr ""
+msgstr "Saring item berdasar tipe simbol induk:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:111
 msgid "Non-power symbols"
@@ -8286,7 +8282,7 @@ msgstr ""
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:123
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:51
 msgid "Filter items by net:"
-msgstr ""
+msgstr "Saring item berdasar net:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:135
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:84
@@ -8725,11 +8721,11 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:625
 msgid "Add Footprint Filter"
-msgstr ""
+msgstr "Tambah Penyaring Footprint"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:664
 msgid "Edit Footprint Filter"
-msgstr ""
+msgstr "Sunting Penyaring Footprint"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:30
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:24
@@ -8948,19 +8944,19 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:293
 msgid "Add footprint filter"
-msgstr ""
+msgstr "Tambah penyaring footprint"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:298
 msgid "Edit footprint filter"
-msgstr ""
+msgstr "Sunting penyaring footprint"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:306
 msgid "Delete footprint filter"
-msgstr ""
+msgstr "Hapus penyaring footprint"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:320
 msgid "Footprint Filters"
-msgstr ""
+msgstr "Penyaring Footprint"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:333
 msgid "Edit Spice Model..."
@@ -13004,7 +13000,7 @@ msgstr ""
 
 #: eeschema/sch_plugin.cpp:142
 msgid "Regular expression <b>symbol name</b> filter."
-msgstr ""
+msgstr "Penyaring ekspresi reguler <b>nama simbol</b>."
 
 #: eeschema/sch_plugin.cpp:146 pcbnew/plugin.cpp:162
 msgid ""
@@ -21097,6 +21093,8 @@ msgid ""
 "Pattern to filter net names in filtered list.\n"
 "Only net names matching this pattern are displayed."
 msgstr ""
+"Pola untuk menyaring nama net pada daftar tersaring.\n"
+"Hanya nama net yang sesuai dengan pola ini yang akan ditampilkan."
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:55
 #, fuzzy
@@ -22373,9 +22371,8 @@ msgid "Include &zones"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_filter_selection_base.h:56
-#, fuzzy
 msgid "Filter Selected Items"
-msgstr "Hapus Beberapa Item"
+msgstr "Saring Item-item Terpilih"
 
 #: pcbnew/dialogs/dialog_find.cpp:227
 msgid "Searching..."
@@ -22464,6 +22461,9 @@ msgid ""
 "and can only be selected when the 'Locked items' checkbox is enabled in the "
 "selection filter."
 msgstr ""
+"Footprint terkunci: footprint tidak bisa dipindahkan dan diorientasikan "
+"secara bebas pada kanvas dan hanya dapat dipilih jika kotak cek 'Item "
+"terkunci' diaktifkan pada penyaring pilihan."
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:395
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:323
@@ -23189,7 +23189,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:55
 msgid "Filter Settings"
-msgstr ""
+msgstr "Setelan Penyaring"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:57
 msgid "Locked graphics"
@@ -23226,7 +23226,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:86
 msgid "Layer Filter"
-msgstr ""
+msgstr "Penyaring Lapisan"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:102
 msgid "Current layer:"
@@ -23319,11 +23319,11 @@ msgstr ""
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:60
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:71
 msgid "Filter items by layer:"
-msgstr ""
+msgstr "Saring item berdasar lapisan:"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:78
 msgid "Filter items by parent footprint library id:"
-msgstr ""
+msgstr "Saring item berdasar id pustaka footprint induk:"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:103
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:90
@@ -23355,11 +23355,11 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:39
 msgid "Filter Items"
-msgstr ""
+msgstr "Saring Item"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:57
 msgid "Filter items by net class:"
-msgstr ""
+msgstr "Saring item berdasar kelas net:"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:115
 msgid "Set to net class values:"
