@@ -58,6 +58,7 @@
 #include <string_utils.h>
 #include <wx/log.h>
 #include <progress_reporter.h>
+#include <board_stackup_manager/stackup_predefined_prms.h>
 
 using namespace PCB_KEYS_T;
 
@@ -1476,13 +1477,17 @@ void PCB_PARSER::parseBoardStackup()
                         NeedSYMBOL();
                         name = FromUTF8();
 
-                        // Older versions didn't always store opacity with colors
-                        if( name.StartsWith( "#" ) && name.Length() < 9 )
+                        // Older versions didn't store opacity with custom colors
+                        if( name.StartsWith( "#" ) && m_requiredVersion < 20210824 )
                         {
+                            KIGFX::COLOR4D color( name );
+
                             if( item->GetType() == BS_ITEM_TYPE_SOLDERMASK )
-                                name += "FF";
+                                color = color.WithAlpha( DEFAULT_SOLDERMASK_OPACITY );
                             else
-                                name += "D3";
+                                color = color.WithAlpha( 1.0 );
+
+                            name = color.ToColour().GetAsString( wxC2S_HTML_SYNTAX );
                         }
 
                         item->SetColor( name );
