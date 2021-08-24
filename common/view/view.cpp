@@ -302,6 +302,8 @@ VIEW::VIEW( bool aIsDynamic ) :
         m_layers[ii].renderingOrder = ii;
         m_layers[ii].visible        = true;
         m_layers[ii].displayOnly    = false;
+        m_layers[ii].diffLayer      = false;
+        m_layers[ii].hasNegatives   = false;
         m_layers[ii].target         = TARGET_CACHED;
     }
 
@@ -995,10 +997,24 @@ void VIEW::redrawRect( const BOX2I& aRect )
 
             m_gal->SetTarget( l->target );
             m_gal->SetLayerDepth( l->renderingOrder );
+
+            // Differential layer also work for the negatives, since both special layer types
+            // will composite on separate layers (at least in Cairo)
+            if( l->diffLayer )
+                m_gal->StartDiffLayer();
+            else if( l->hasNegatives )
+                m_gal->StartNegativesLayer();
+
+
             l->items->Query( aRect, drawFunc );
 
             if( m_useDrawPriority )
                 drawFunc.deferredDraw();
+
+            if( l->diffLayer )
+                m_gal->EndDiffLayer();
+            else if( l->hasNegatives )
+                m_gal->EndNegativesLayer();
         }
     }
 }
@@ -1142,10 +1158,9 @@ void VIEW::Redraw()
         recti.SetMaximum();
 
     redrawRect( recti );
+
     // All targets were redrawn, so nothing is dirty
-    markTargetClean( TARGET_CACHED );
-    markTargetClean( TARGET_NONCACHED );
-    markTargetClean( TARGET_OVERLAY );
+    MarkClean();
 
 #ifdef KICAD_GAL_PROFILE
     totalRealTime.Stop();

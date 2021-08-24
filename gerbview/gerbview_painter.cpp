@@ -66,9 +66,6 @@ void GERBVIEW_RENDER_SETTINGS::LoadColors( const COLOR_SETTINGS* aSettings )
         if( baseColor == COLOR4D::UNSPECIFIED )
             baseColor = aSettings->m_Palette[ ( palette_idx++ ) % palette_size ];
 
-        if( m_diffMode )
-            baseColor.a = 0.75;
-
         m_layerColors[i] = baseColor;
         m_layerColorsHi[i] = baseColor.Brightened( 0.5 );
         m_layerColorsSel[i] = baseColor.Brightened( 0.8 );

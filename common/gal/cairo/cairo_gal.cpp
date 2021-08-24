@@ -925,6 +925,32 @@ void CAIRO_GAL_BASE::SetNegativeDrawMode( bool aSetting )
 }
 
 
+void CAIRO_GAL::StartDiffLayer()
+{
+    SetTarget( TARGET_TEMP );
+    ClearTarget( TARGET_TEMP );
+}
+
+
+void CAIRO_GAL::EndDiffLayer()
+{
+    m_compositor->DrawBuffer( m_tempBuffer, m_mainBuffer, CAIRO_OPERATOR_ADD );
+}
+
+
+void CAIRO_GAL::StartNegativesLayer()
+{
+    SetTarget( TARGET_TEMP );
+    ClearTarget( TARGET_TEMP );
+}
+
+
+void CAIRO_GAL::EndNegativesLayer()
+{
+    m_compositor->DrawBuffer( m_tempBuffer, m_mainBuffer, CAIRO_OPERATOR_OVER );
+}
+
+
 void CAIRO_GAL_BASE::DrawCursor( const VECTOR2D& aCursorPosition )
 {
     m_cursorPosition = aCursorPosition;
@@ -1222,6 +1248,7 @@ CAIRO_GAL::CAIRO_GAL( GAL_DISPLAY_OPTIONS& aDisplayOptions, wxWindow* aParent,
     // Initialise compositing state
     m_mainBuffer = 0;
     m_overlayBuffer = 0;
+    m_tempBuffer = 0;
     m_validCompositor = false;
     SetTarget( TARGET_NONCACHED );
 
@@ -1391,6 +1418,7 @@ void CAIRO_GAL::SetTarget( RENDER_TARGET aTarget )
     case TARGET_CACHED:
     case TARGET_NONCACHED: m_compositor->SetBuffer( m_mainBuffer );    break;
     case TARGET_OVERLAY:   m_compositor->SetBuffer( m_overlayBuffer ); break;
+    case TARGET_TEMP:      m_compositor->SetBuffer( m_tempBuffer );    break;
     }
 
     m_currentTarget = aTarget;
@@ -1415,6 +1443,7 @@ void CAIRO_GAL::ClearTarget( RENDER_TARGET aTarget )
     case TARGET_CACHED:
     case TARGET_NONCACHED: m_compositor->SetBuffer( m_mainBuffer );    break;
     case TARGET_OVERLAY:   m_compositor->SetBuffer( m_overlayBuffer ); break;
+    case TARGET_TEMP:      m_compositor->SetBuffer( m_tempBuffer );    break;
     }
 
     m_compositor->ClearBuffer( COLOR4D::BLACK );
@@ -1498,6 +1527,7 @@ void CAIRO_GAL::setCompositor()
     // Prepare buffers
     m_mainBuffer = m_compositor->CreateBuffer();
     m_overlayBuffer = m_compositor->CreateBuffer();
+    m_tempBuffer = m_compositor->CreateBuffer();
 
     m_validCompositor = true;
 }

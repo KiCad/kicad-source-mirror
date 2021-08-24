@@ -1739,6 +1739,20 @@ bool OPENGL_GAL::HasTarget( RENDER_TARGET aTarget )
 }
 
 
+void OPENGL_GAL::StartDiffLayer()
+{
+    m_currentManager->EndDrawing();
+}
+
+
+void OPENGL_GAL::EndDiffLayer()
+{
+    glBlendFunc( GL_SRC_ALPHA, GL_ONE );
+    m_currentManager->EndDrawing();
+    glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
+}
+
+
 bool OPENGL_GAL::SetNativeCursorStyle( KICURSOR aCursor )
 {
     // Store the current cursor type and get the wxCursor for it

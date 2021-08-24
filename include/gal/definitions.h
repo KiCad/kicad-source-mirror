@@ -48,6 +48,7 @@ enum RENDER_TARGET
     TARGET_CACHED = 0,      ///< Main rendering target (cached)
     TARGET_NONCACHED,       ///< Auxiliary rendering target (noncached)
     TARGET_OVERLAY,         ///< Items that may change while the view stays the same (noncached)
+    TARGET_TEMP,            ///< Temporary target for drawing in separate layer
     TARGETS_NUMBER          ///< Number of available rendering targets
 };
 } // namespace KIGFX

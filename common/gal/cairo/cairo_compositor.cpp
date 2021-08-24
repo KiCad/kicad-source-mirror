@@ -142,6 +142,29 @@ void CAIRO_COMPOSITOR::ClearBuffer( const COLOR4D& aColor )
 }
 
 
+void CAIRO_COMPOSITOR::DrawBuffer( unsigned int aSourceHandle, unsigned int aDestHandle,
+                                   cairo_operator_t op )
+{
+    wxASSERT_MSG( aSourceHandle <= usedBuffers() && aDestHandle <= usedBuffers(),
+                  wxT( "Tried to use a not existing buffer" ) );
+
+    // Reset the transformation matrix, so it is possible to composite images using
+    // screen coordinates instead of world coordinates
+    cairo_get_matrix( m_mainContext, &m_matrix );
+    cairo_identity_matrix( m_mainContext );
+
+    // Draw the selected buffer contents
+    cairo_t* ct = cairo_create( m_buffers[aDestHandle - 1].surface );
+    cairo_set_operator( ct, op );
+    cairo_set_source_surface( ct, m_buffers[aSourceHandle - 1].surface, 0.0, 0.0 );
+    cairo_paint( ct );
+    cairo_destroy( ct );
+
+    // Restore the transformation matrix
+    cairo_set_matrix( m_mainContext, &m_matrix );
+}
+
+
 void CAIRO_COMPOSITOR::DrawBuffer( unsigned int aBufferHandle )
 {
     wxASSERT_MSG( aBufferHandle <= usedBuffers(), wxT( "Tried to use a not existing buffer" ) );

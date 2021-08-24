@@ -33,6 +33,7 @@
 #include <gerber_file_image_list.h>
 #include <excellon_image.h>
 #include <wildcards_and_files_ext.h>
+#include <view/view.h>
 #include <widgets/wx_progress_reporters.h>
 #include "widgets/gerbview_layer_widget.h"
 
@@ -292,6 +293,9 @@ bool GERBVIEW_FRAME::LoadListOfGerberAndDrillFiles( const wxString& aPath,
                 else if( Read_GERBER_File( filename.GetFullPath() ) )
                 {
                     UpdateFileHistory( m_lastFileName );
+
+                    GetCanvas()->GetView()->SetLayerHasNegatives(
+                            GERBER_DRAW_LAYER( layer ), GetGbrImage( layer )->HasNegativeItems() );
 
                     layer = getNextAvailableLayer( layer );
 
@@ -584,6 +588,10 @@ bool GERBVIEW_FRAME::unarchiveFiles( const wxString& aFullFileName, REPORTER* aR
         {
             // Read gerber files: each file is loaded on a new GerbView layer
             read_ok = Read_GERBER_File( unzipped_tempfile );
+
+            if( read_ok )
+                GetCanvas()->GetView()->SetLayerHasNegatives(
+                        GERBER_DRAW_LAYER( layer ), GetGbrImage( layer )->HasNegativeItems() );
         }
         else // if( curr_ext == "drl" )
         {

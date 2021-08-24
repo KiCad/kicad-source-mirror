@@ -818,6 +818,38 @@ public:
      */
     virtual void SetNegativeDrawMode( bool aSetting ) {};
 
+    /**
+     * Begins rendering of a differential layer. Used by gerbview's differential mode.
+     *
+     * Differential layers have their drawn objects blended onto the lower layers
+     * differently so we need to end drawing of current objects and start a new
+     * set to be completed with a different blend mode.
+     */
+    virtual void StartDiffLayer() {};
+
+    /**
+     * Ends rendering of a differential layer. Objects drawn after the StartDiffLayer()
+     * will be drawn and composited with a differential blend mode, then drawing is
+     * returned to normal.
+     */
+    virtual void EndDiffLayer() {};
+
+    /**
+     * Begins rendering in a new layer that will be copied to the main
+     * layer in EndNegativesLayer().
+     *
+     * For Cairo, layers with negative items need a new layer so when
+     * negative layers _CLEAR sections it doesn't delete drawings on layers
+     * below them. No-op in OpenGL
+     */
+    virtual void StartNegativesLayer(){};
+
+    /**
+     * Ends rendering of a negatives layer and draws it to the main layer.
+     * No-op in OpenGL.
+     */
+    virtual void EndNegativesLayer(){};
+
     // -------------
     // Grid methods
     // -------------

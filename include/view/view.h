@@ -36,6 +36,7 @@
 #include <gal/definitions.h>
 
 #include <view/view_overlay.h>
+#include <view/view.h>
 
 class EDA_ITEM;
 
@@ -409,6 +410,42 @@ public:
         return m_layers.at( aLayer ).visible;
     }
 
+    /**
+     * Set the whether the layer should drawn differentially.
+     *
+     * @param aLayer is the layer to set to be draw differentially
+     * @param aDiff is the layer diff'ing state.
+     */
+    inline void SetLayerDiff( int aLayer, bool aDiff = true )
+    {
+        wxCHECK( aLayer < (int) m_layers.size(), /*void*/ );
+
+        if( m_layers[aLayer].diffLayer != aDiff )
+        {
+            // Target has to be redrawn after changing its layers' diff status
+            MarkTargetDirty( m_layers[aLayer].target );
+            m_layers[aLayer].diffLayer = aDiff;
+        }
+    }
+
+    /**
+     * Set the status of negatives presense in a particular layer.
+     *
+     * @param aLayer is the layer to set as containing negatives (or not).
+     * @param aNegatives is the layer negatives state.
+     */
+    inline void SetLayerHasNegatives( int aLayer, bool aNegatives = true )
+    {
+        wxCHECK( aLayer < (int) m_layers.size(), /*void*/ );
+
+        if( m_layers[aLayer].hasNegatives != aNegatives )
+        {
+            // Target has to be redrawn after changing a layers' negatives
+            MarkTargetDirty( m_layers[aLayer].target );
+            m_layers[aLayer].hasNegatives = aNegatives;
+        }
+    }
+
     inline void SetLayerDisplayOnly( int aLayer, bool aDisplayOnly = true )
     {
         wxCHECK( aLayer < (int) m_layers.size(), /*void*/ );
@@ -600,6 +637,15 @@ public:
     }
 
     /**
+     * Force redraw of view on the next rendering.
+     */
+    void MarkClean()
+    {
+        for( int i = 0; i < TARGETS_NUMBER; ++i )
+            m_dirtyTargets[i] = false;
+    }
+
+    /**
      * Add an item to a list of items that are going to be refreshed upon the next frame rendering.
      *
      * @param aItem is the item to be refreshed.
@@ -684,6 +730,8 @@ protected:
     {
         bool                    visible;         ///< Is the layer to be rendered?
         bool                    displayOnly;     ///< Is the layer display only?
+        bool                    diffLayer;       ///< Layer should be drawn differentially over lower layers
+        bool                    hasNegatives;    ///< Layer should be drawn separately to not delete lower layers
         std::shared_ptr<VIEW_RTREE> items;       ///< R-tree indexing all items on this layer.
         int                     renderingOrder;  ///< Rendering order of this layer.
         int                     id;              ///< Layer ID.

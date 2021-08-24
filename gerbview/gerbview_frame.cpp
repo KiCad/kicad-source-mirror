@@ -534,6 +534,38 @@ void GERBVIEW_FRAME::SortLayersByX2Attributes()
     GetCanvas()->Refresh();
 }
 
+void GERBVIEW_FRAME::UpdateDiffLayers()
+{
+    auto target = GetCanvas()->GetBackend() == GERBVIEW_DRAW_PANEL_GAL::GAL_TYPE::GAL_TYPE_OPENGL
+                          ? KIGFX::TARGET_CACHED
+                          : KIGFX::TARGET_NONCACHED;
+    auto view = GetCanvas()->GetView();
+
+    int lastVisibleLayer = -1;
+    for( int i = 0; i < GERBER_DRAWLAYERS_COUNT; i++ )
+    {
+        view->SetLayerDiff( GERBER_DRAW_LAYER( i ), m_DisplayOptions.m_DiffMode );
+        // Caching doesn't work with layered rendering of diff'd layers
+        view->SetLayerTarget( GERBER_DRAW_LAYER( i ),
+                              m_DisplayOptions.m_DiffMode ? KIGFX::TARGET_NONCACHED : target );
+        //We want the last visible layer, but deprioritize the active layer unless it's the only layer
+        if( ( lastVisibleLayer == -1 )
+            || ( view->IsLayerVisible( GERBER_DRAW_LAYER( i ) ) && i != GetActiveLayer() ) )
+            lastVisibleLayer = i;
+    }
+
+    //We don't want to diff the last visible layer onto the background, etc.
+    if( lastVisibleLayer != -1 )
+    {
+        view->SetLayerTarget( GERBER_DRAW_LAYER( lastVisibleLayer ), target );
+        view->SetLayerDiff( GERBER_DRAW_LAYER( lastVisibleLayer ), false );
+    }
+
+    view->RecacheAllItems();
+    view->MarkDirty();
+    view->UpdateAllItems( KIGFX::ALL );
+}
+
 
 void GERBVIEW_FRAME::UpdateDisplayOptions( const GBR_DISPLAY_OPTIONS& aOptions )
 {
@@ -543,12 +575,16 @@ void GERBVIEW_FRAME::UpdateDisplayOptions( const GBR_DISPLAY_OPTIONS& aOptions )
                               aOptions.m_DisplayLinesFill );
     bool update_polygons =  ( m_DisplayOptions.m_DisplayPolygonsFill !=
                               aOptions.m_DisplayPolygonsFill );
+    bool update_diff_mode = ( m_DisplayOptions.m_DiffMode != aOptions.m_DiffMode );
+
+    auto view = GetCanvas()->GetView();
 
     m_DisplayOptions = aOptions;
 
     applyDisplaySettingsToGAL();
 
-    auto view = GetCanvas()->GetView();
+    if( update_diff_mode )
+        UpdateDiffLayers();
 
     if( update_flashed )
     {
@@ -818,6 +854,9 @@ void GERBVIEW_FRAME::SetLayerColor( int aLayer, const COLOR4D& aColor )
 void GERBVIEW_FRAME::SetActiveLayer( int aLayer, bool doLayerWidgetUpdate )
 {
     m_activeLayer = aLayer;
+
+    if( m_DisplayOptions.m_DiffMode )
+        UpdateDiffLayers();
 
     if( doLayerWidgetUpdate )
         m_LayersManager->SelectLayer( aLayer );

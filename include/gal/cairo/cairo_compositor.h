@@ -71,6 +71,15 @@ public:
     /// @copydoc COMPOSITOR::ClearBuffer()
     virtual void ClearBuffer( const COLOR4D& aColor ) override;
 
+    /**
+     * Paints source to destination using the cairo operator. Useful for differential mode.
+     *
+     * @param aSourceHandle Source buffer to paint
+     * @param aDestHandle Destination buffer to paint on to
+     * @param op Painting operation
+     */
+    void DrawBuffer( unsigned int aSourceHandle, unsigned int aDestHandle, cairo_operator_t op );
+
     /// @copydoc COMPOSITOR::DrawBuffer()
     virtual void DrawBuffer( unsigned int aBufferHandle ) override;
 

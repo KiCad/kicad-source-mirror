@@ -86,6 +86,9 @@ bool PANEL_GERBVIEW_DISPLAY_OPTIONS::TransferDataFromWindow()
 
     m_galOptsPanel->TransferDataFromWindow();
 
+    if( displayOptions.m_DiffMode )
+        m_Parent->UpdateDiffLayers();
+
     // Apply changes to the GAL
     auto view = m_Parent->GetCanvas()->GetView();
     auto painter = static_cast<KIGFX::GERBVIEW_PAINTER*>( view->GetPainter() );

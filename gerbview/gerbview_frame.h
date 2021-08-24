@@ -346,6 +346,12 @@ public:
     void SortLayersByX2Attributes();
 
     /**
+     * Update each layers' differential option. Needed when diff mode changes or the active layer
+     * changes (due to changing rendering order) which matters for diff mode but not otherwise.
+     */
+    void UpdateDiffLayers();
+
+    /**
      * Update the display options and refreshes the view as needed.
      *
      * @param aOptions is the new options to apply

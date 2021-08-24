@@ -241,6 +241,12 @@ public:
     /// @copydoc GAL::SetNegativeDrawMode()
     void SetNegativeDrawMode( bool aSetting ) override {}
 
+    /// @copydoc GAL::StartDiffLayer()
+    void StartDiffLayer() override;
+    //
+    /// @copydoc GAL::EndDiffLayer()
+    void EndDiffLayer() override;
+
     void ComputeWorldScreenMatrix() override;
 
     // -------

@@ -389,6 +389,18 @@ public:
 
     void ClearTarget( RENDER_TARGET aTarget ) override;
 
+    /// @copydoc GAL::StartDiffLayer()
+    void StartDiffLayer() override;
+
+    /// @copydoc GAL::EndDiffLayer()
+    void EndDiffLayer() override;
+
+    /// @copydoc GAL::StartNegativesLayer()
+    void StartNegativesLayer() override;
+
+    /// @copydoc GAL::EndNegativesLayer()
+    void EndNegativesLayer() override;
+
     /**
      * Post an event to m_paint_listener.
      *
@@ -461,6 +473,8 @@ protected:
     std::shared_ptr<CAIRO_COMPOSITOR> m_compositor;  ///< Object for layers compositing
     unsigned int        m_mainBuffer;          ///< Handle to the main buffer
     unsigned int        m_overlayBuffer;       ///< Handle to the overlay buffer
+    unsigned int        m_tempBuffer;          ///< Handle to the temp buffer
+    unsigned int        m_savedBuffer;         ///< Handle to buffer to restore after rendering to temp buffer
     RENDER_TARGET       m_currentTarget;       ///< Current rendering target
     bool                m_validCompositor;     ///< Compositor initialization flag
 
