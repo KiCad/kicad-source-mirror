@@ -10,8 +10,8 @@ if( KICAD_SPICE )
     set( INC_AFTER ${INC_AFTER} ${NGSPICE_INCLUDE_DIR} )
 
     # Find out the exact libngspice file name
-    get_filename_component( NGSPICE_DLL_REALPATH "${NGSPICE_DLL}" REALPATH )
-    get_filename_component( NGSPICE_DLL_FILE "${NGSPICE_DLL_REALPATH}" NAME )
+    get_filename_component( NGSPICE_DLL_ABSPATH "${NGSPICE_DLL}" ABSOLUTE )
+    get_filename_component( NGSPICE_DLL_FILE "${NGSPICE_DLL_ABSPATH}" NAME )
 
     set_property( SOURCE sim/ngspice.cpp
         APPEND PROPERTY COMPILE_DEFINITIONS
