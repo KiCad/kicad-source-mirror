@@ -477,9 +477,13 @@ public:
     void NewProject();
     void LoadProject();
 
-    void Save_File( bool doSaveAs = false );
-
-    bool SaveProject();
+    /**
+     * Saves the currently-open schematic (including its hierarchy) and associated project
+     * @param aSaveAs is true to perform a Save As operation (rename the schematic and project).
+     *                This may only be done in standalone mode.
+     * @return true if the schematic was saved
+     */
+    bool SaveProject( bool aSaveAs = false );
 
     bool OpenProjectFiles( const std::vector<wxString>& aFileSet, int aCtl = 0 ) override;
 
@@ -491,21 +495,6 @@ public:
      * @return True if the schematic was imported properly.
      */
     bool AppendSchematic();
-
-    /**
-     * Save \a aSheet to a schematic file.
-     *
-     * @param aSheet is the #SCH_SHEET object to save.  A NULL pointer saves the
-     *               current screen only.
-     * @param aSaveUnderNewName Controls how the file is to be saved;: using  previous name
-     *                          or under a new name.
-     * @param aCreateProject will be filled with the user's choice of whether to create a new
-     *                       project file if aSaveUnderNewName is true.  This value will not be
-     *                       changed if aSaveUnderNewName is false.
-     * @return True if the file has been saved.
-     */
-    bool SaveEEFile( SCH_SHEET* aSheet, bool aSaveUnderNewName = false,
-                     bool* aCreateProject = nullptr );
 
     /**
      * Check if any of the screens has unsaved changes and asks the user whether to save or
@@ -905,6 +894,15 @@ private:
      *  @param aFileType SCH_FILE_T value for file type
      */
     bool importFile( const wxString& aFileName, int aFileType );
+
+    /**
+     * Save \a aSheet to a schematic file.
+     *
+     * @param aSheet is the #SCH_SHEET object to save.
+     * @param aSavePath is the full path of the destination file
+     * @return True if the file has been saved.
+     */
+    bool saveSchematicFile( SCH_SHEET* aSheet, const wxString& aSavePath );
 
     /**
      * Fill a map of uuid -> reference from the currently loaded schematic.

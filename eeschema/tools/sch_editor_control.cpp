@@ -86,7 +86,7 @@ int SCH_EDITOR_CONTROL::Save( const TOOL_EVENT& aEvent )
 
 int SCH_EDITOR_CONTROL::SaveAs( const TOOL_EVENT& aEvent )
 {
-    m_frame->Save_File( true );
+    m_frame->SaveProject( true );
     return 0;
 }
 
@@ -2033,6 +2033,7 @@ void SCH_EDITOR_CONTROL::setTransitions()
     Go( &SCH_EDITOR_CONTROL::Open,                  ACTIONS::open.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::Save,                  ACTIONS::save.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::SaveAs,                ACTIONS::saveAs.MakeEvent() );
+    Go( &SCH_EDITOR_CONTROL::SaveAs,                ACTIONS::saveCopyAs.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::ShowSchematicSetup,    EE_ACTIONS::schematicSetup.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::PageSetup,             ACTIONS::pageSettings.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::Print,                 ACTIONS::print.MakeEvent() );

@@ -81,7 +81,11 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     }
 
     fileMenu->Add( ACTIONS::save );
-    fileMenu->Add( ACTIONS::saveAs );
+
+    if( Kiface().IsSingle() )
+        fileMenu->Add( ACTIONS::saveAs );
+    else
+        fileMenu->Add( ACTIONS::saveCopyAs );
 
     fileMenu->AppendSeparator();
 
