@@ -613,8 +613,6 @@ void DIALOG_FOOTPRINT_PROPERTIES::adjustGridColumns( int aWidth )
 
     // Update the width of the 3D panel
     m_3dPanel->AdjustGridColumnWidths( aWidth );
-
-    Layout();
 }
 
 
