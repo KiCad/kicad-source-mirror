@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-08-20 11:53-0700\n"
-"PO-Revision-Date: 2021-08-22 15:31+0000\n"
+"PO-Revision-Date: 2021-08-27 08:25+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/"
 "master-source/pl/>\n"
@@ -19591,7 +19591,7 @@ msgstr "Średnica przelotki:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1194
 msgid "Diameter of pad surrounding via (annular ring)"
-msgstr "Średnica pola otaczającego przelotkę (annular ring)"
+msgstr "Średnica pola otaczającego przelotkę (pierścienia)"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1206
 msgid "Clearance hole diameter:"
@@ -26623,7 +26623,7 @@ msgstr "Końcowa warstwa:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:280
 msgid "Annular rings:"
-msgstr "Szerokość okręgu:"
+msgstr "Szerokość pierścienia:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:284
 msgid "Start, end, and connected layers"
@@ -28858,7 +28858,7 @@ msgstr "Szerokość ścieżki"
 
 #: pcbnew/drc/drc_item.cpp:110
 msgid "Annular width"
-msgstr "Szerokość okręgu"
+msgstr "Szerokość pierścienia"
 
 #: pcbnew/drc/drc_item.cpp:114
 msgid "Drill out of range"
@@ -33427,7 +33427,7 @@ msgstr "Restrykcje rozmiaru: min %s; optymalnie %s; maks %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:769
 msgid "Via Annular Width"
-msgstr "Szerokość impulsu"
+msgstr "Szerokość pierścienia przelotki"
 
 #: pcbnew/tools/board_inspection_tool.cpp:771
 msgid "Via annular width resolution for:"
