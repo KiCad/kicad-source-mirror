@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-01 11:31-0700\n"
-"PO-Revision-Date: 2021-08-20 12:40+0000\n"
+"PO-Revision-Date: 2021-08-27 08:25+0000\n"
 "Last-Translator: boonchai k. <kicadthai@gmail.com>\n"
 "Language-Team: Thai <https://hosted.weblate.org/projects/kicad/master-source/"
 "th/>\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.8-dev\n"
+"X-Generator: Weblate 4.8.1-dev\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
 msgid "All Files (*.*)|*.*"
@@ -3955,15 +3955,15 @@ msgstr "มาร์คเกอร์บนบอร์ด"
 
 #: common/eda_item.cpp:261
 msgid "Aligned Dimension"
-msgstr "ระบุขนาดจัดเรียงแล้ว"
+msgstr "จัดเรียงค่ามิติ"
 
 #: common/eda_item.cpp:262
 msgid "Orthogonal Dimension"
-msgstr "ระบุขนาดแนวทแยง"
+msgstr "ค่ามิติตามแนวทแยง"
 
 #: common/eda_item.cpp:263
 msgid "Center Dimension"
-msgstr "ระบุขนาดกึ่งกลาง"
+msgstr "ค่ามิติอยู่กึ่งกลาง"
 
 #: common/eda_item.cpp:264 pcbnew/pcb_dimension.cpp:1041
 msgid "Leader"
@@ -5815,7 +5815,7 @@ msgstr "คุณสมบัติกริด…"
 
 #: common/tool/actions.cpp:479
 msgid "Set grid dimensions"
-msgstr "ตั้งขนาดกริด"
+msgstr "กำหนดมิติของกริด"
 
 #: common/tool/actions.cpp:484
 msgid "Use inches"
@@ -13967,9 +13967,9 @@ msgid ""
 msgstr ""
 "<table>\n"
 "    <tr>\n"
-"        <th>Markup</th>\n"
+"        <th>มาร์คอัพ</th>\n"
 "        <th></th>\n"
-"        <th>Result</th>\n"
+"        <th>ผลลัพธ์</th>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>^{superscript}</samp></td>\n"
@@ -14039,10 +14039,10 @@ msgstr ""
 "        <td><br></td>\n"
 "    </tr>\n"
 "    <tr>\n"
-"        <th>Bus Definition</th>\n"
+"        <th>ข้อกำหนดบัส</th>\n"
 "        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp"
 ";&nbsp;&nbsp;</th>\n"
-"        <th>Resultant Nets</th>\n"
+"        <th>เน็ทผลลัพธ์</th>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>prefix[m..n]</samp></td>\n"
@@ -16864,7 +16864,7 @@ msgstr "เน็ท:"
 #: gerbview/gerber_draw_item.cpp:739
 #, c-format
 msgid "Cmp: %s  Pad: %s"
-msgstr "Cmp: %s  Pad: %s"
+msgstr "อุปกรณ์:%s แพ็ด:%s"
 
 #: gerbview/gerber_draw_item.cpp:743
 #, c-format
@@ -16874,7 +16874,7 @@ msgstr "Cmp: %s  Pad: %s  Fct :%s"
 #: gerbview/gerber_draw_item.cpp:751 gerbview/toolbars_gerber.cpp:122
 #: gerbview/toolbars_gerber.cpp:125
 msgid "Cmp:"
-msgstr "Cmp:"
+msgstr "อุปกรณ์:"
 
 #: gerbview/gerber_draw_item.cpp:1010
 #, c-format
@@ -16948,11 +16948,11 @@ msgstr "ชื่อรูป: \"%s\" ชื่อเลเยอร์: \"%s\""
 
 #: gerbview/gerbview_frame.cpp:655
 msgid "X2 attr"
-msgstr ""
+msgstr "X2 แอทริ"
 
 #: gerbview/gerbview_frame.cpp:1014
 msgid "GerbView"
-msgstr "GerbView"
+msgstr "เกิร์บวิว"
 
 #: gerbview/job_file_reader.cpp:157
 msgid "This job file uses an outdated format. Please recreate it."
@@ -17035,7 +17035,7 @@ msgstr "เน้นรายการที่เป็นของเน็ต
 
 #: gerbview/toolbars_gerber.cpp:150 gerbview/toolbars_gerber.cpp:153
 msgid "Attr:"
-msgstr "Attr:"
+msgstr "แอทริ:"
 
 #: gerbview/toolbars_gerber.cpp:152
 msgid "Highlight items with this aperture attribute"
@@ -17043,7 +17043,7 @@ msgstr "แสดงรายการเน้นด้วยคุณลัก
 
 #: gerbview/toolbars_gerber.cpp:164 gerbview/toolbars_gerber.cpp:166
 msgid "DCode:"
-msgstr "DCode:"
+msgstr "ดีโค้ด:"
 
 #: gerbview/toolbars_gerber.cpp:279
 msgid "<No selection>"
@@ -17190,7 +17190,7 @@ msgstr "แสดงรูปหลายเหลี่ยมในโหมด
 
 #: gerbview/tools/gerbview_actions.cpp:162
 msgid "Ghost Negative Objects"
-msgstr ""
+msgstr "วัตถุเชิงลบผี"
 
 #: gerbview/tools/gerbview_actions.cpp:162
 msgid "Show negative objects in ghost color"
@@ -18492,6 +18492,15 @@ msgid ""
 "* ___R1 = Z<sub>0</sub> \\* (L - 1)___\n"
 "* ___R2 = Z<sub>0</sub> / (L - 1)___"
 msgstr ""
+"### Bridged Tee Attenuator - ลดทอนแบบทีบริดจ์\n"
+"__Zin__ desired input impedance in &#x2126;<br>\n"
+"__Zout__ desired output impedance<br>\n"
+"__Z<sub>0</sub> = Zin = Zout__<br><br>\n"
+"\n"
+"* __a__ attenuation in dB\n"
+"* __L = 10<sup>a/20</sup>__ (the loss)<br><br>\n"
+"* ___R1 = Z<sub>0</sub> \\* (L - 1)___\n"
+"* ___R2 = Z<sub>0</sub> / (L - 1)___"
 
 #: pcb_calculator/attenuators/pi_formula.h:2
 msgid ""
@@ -18507,6 +18516,17 @@ msgid ""
 "* ___R1 = 1 / (A / Zin - 1 / R2)___\n"
 "* ___R3 = 1 / (A / Zout - 1 / R2)___"
 msgstr ""
+"### PI Attenuator - ลดทอนแบบไพน์\n"
+"__Zin__ desired input impedance in &#x2126;<br>\n"
+"__Zout__ desired output impedance<br>\n"
+"__Zin = Zout__<br><br>\n"
+"\n"
+"* __a__ attenuation in dB\n"
+"* __L = 10<sup>a/20</sup>__ (the loss)\n"
+"* __A = (L + 1) / (L - 1)__<br><br>\n"
+"* ___R2 = (L- 1) / 2 \\* &radic; ( (Zin \\* Zout) / L)___\n"
+"* ___R1 = 1 / (A / Zin - 1 / R2)___\n"
+"* ___R3 = 1 / (A / Zout - 1 / R2)___"
 
 #: pcb_calculator/attenuators/splitter_formula.h:2
 msgid ""
@@ -18518,6 +18538,13 @@ msgid ""
 "\n"
 "___R1 = R2 = R3 = Z<sub>out</sub> / 3___\n"
 msgstr ""
+"### Split Attenuator -- ลดทอนแบบแยก\n"
+"#### Attenuation is 6dB\n"
+"___Z<sub>in</sub>___ desired input impedance in &#x2126;<br>\n"
+"___Z<sub>out</sub>___ desired output impedance in &#x2126;<br>\n"
+"___Z<sub>in</sub> = Z<sub>out</sub>___\n"
+"\n"
+"___R1 = R2 = R3 = Z<sub>out</sub> / 3___\n"
 
 #: pcb_calculator/attenuators/tee_formula.h:2
 msgid ""
@@ -18534,6 +18561,18 @@ msgid ""
 "* ___R1 = Z<sub>in</sub> \\* A - R2___\n"
 "* ___R3 = Z<sub>out</sub> \\* A - R2___\n"
 msgstr ""
+"### Tee Attenuator--ลดทอนแบบตัวที\n"
+"__Zin__ desired input impedance in &#x2126;<br>\n"
+"__Zout__ desired output impedance<br>\n"
+"__Zin = Zout__<br><br>\n"
+"\n"
+"* __a__ attenuation in dB\n"
+"* __L = 10<sup>a/20</sup>__ (the loss)\n"
+"* ___A = (L + 1) / (L - 1)___<br><br>\n"
+"* ___R2 = 2 &radic; (L \\* Z<sub>in</sub> \\* Z<sub>out</sub> ) / (L - 1)"
+"___\n"
+"* ___R1 = Z<sub>in</sub> \\* A - R2___\n"
+"* ___R3 = Z<sub>out</sub> \\* A - R2___\n"
 
 #: pcb_calculator/datafile_read_write.cpp:76
 msgid "Data file error."
@@ -18547,7 +18586,7 @@ msgstr "พารามิเตอร์ไม่ถูกต้องหรื
 #: pcb_calculator/dialogs/dialog_regulator_form_base.cpp:37
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:139
 msgid "Vref:"
-msgstr ""
+msgstr "Vref:"
 
 #: pcb_calculator/dialogs/dialog_regulator_form_base.cpp:44
 msgid "Volt"
@@ -18564,12 +18603,12 @@ msgstr "เรกูเลเตอร์ 3 ขา"
 #: pcb_calculator/dialogs/dialog_regulator_form_base.cpp:61
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:155
 msgid "Iadj:"
-msgstr ""
+msgstr "Iadj:"
 
 #: pcb_calculator/dialogs/dialog_regulator_form_base.cpp:68
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:164
 msgid "uA"
-msgstr ""
+msgstr "ไมโครแอมป์"
 
 #: pcb_calculator/dialogs/dialog_regulator_form_base.h:60
 msgid "Regulator Parameters"
@@ -18603,7 +18642,7 @@ msgstr "สูตร"
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:97
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:352
 msgid "R1:"
-msgstr ""
+msgstr "R1:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:104
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:118
@@ -18616,11 +18655,11 @@ msgstr "กิโลโอห์ม"
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:111
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:363
 msgid "R2:"
-msgstr ""
+msgstr "R2:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:125
 msgid "Vout:"
-msgstr ""
+msgstr "Vout:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:141
 msgid ""
@@ -18718,15 +18757,15 @@ msgstr "เดซิเบล"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:303
 msgid "Zin:"
-msgstr ""
+msgstr "Zin:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:314
 msgid "Zout:"
-msgstr ""
+msgstr "Zout:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:374
 msgid "R3:"
-msgstr ""
+msgstr "R3:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:426
 msgid "RF Attenuators"
@@ -18750,19 +18789,19 @@ msgstr "ไม่รวมค่า 2:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:485
 msgid "E1"
-msgstr ""
+msgstr "อี1"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:488
 msgid "E3"
-msgstr ""
+msgstr "อี3"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:491
 msgid "E6"
-msgstr ""
+msgstr "อี6"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:495
 msgid "E12"
-msgstr ""
+msgstr "อี12"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:505
 msgid "Solutions"
@@ -18863,7 +18902,7 @@ msgstr "พารามิเตอร์ของซับสเตรท"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:719
 msgid "Er:"
-msgstr ""
+msgstr "อีอาร์:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:729
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:748
@@ -18876,11 +18915,11 @@ msgstr "..."
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:738
 msgid "Tan delta:"
-msgstr ""
+msgstr "แทนเดลต้า:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:757
 msgid "Rho:"
-msgstr ""
+msgstr "โรห์:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:759
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1247
@@ -18889,27 +18928,27 @@ msgstr "ความต้านทานจำเพาะเป็นโอห
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:778
 msgid "H:"
-msgstr ""
+msgstr "H:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:790
 msgid "H_t:"
-msgstr ""
+msgstr "H_t:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:802
 msgid "T:"
-msgstr ""
+msgstr "T:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:814
 msgid "Rough:"
-msgstr ""
+msgstr "Rough:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:826
 msgid "Insulator mu:"
-msgstr ""
+msgstr "มิวของฉนวน:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:838
 msgid "Conductor mu:"
-msgstr ""
+msgstr "มิวของตัวนำ:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:857
 msgid "Component Parameters"
@@ -18917,11 +18956,11 @@ msgstr "พารามิเตอร์คอมโพเนนต์"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:895
 msgid "Zdiff = Zodd * 2"
-msgstr ""
+msgstr "Zdiff = Zodd * 2"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:901
 msgid "Zcommon = Zeven / 2"
-msgstr ""
+msgstr "Zcommon = Zeven / 2"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:920
 msgid "Physical Parameters"
@@ -19687,12 +19726,12 @@ msgstr "ZF(H10) = Ey / Hx:"
 #: pcb_calculator/transline_ident.cpp:247
 #: pcb_calculator/transline_ident.cpp:280
 msgid "TE-modes:"
-msgstr "TE-modes:"
+msgstr "ทีอี-โหมด:"
 
 #: pcb_calculator/transline_ident.cpp:248
 #: pcb_calculator/transline_ident.cpp:281
 msgid "TM-modes:"
-msgstr "TM-modes:"
+msgstr "ทีเอ็ม-โหมด:"
 
 #: pcb_calculator/transline_ident.cpp:251
 #: pcb_calculator/transline_ident.cpp:284
@@ -19728,7 +19767,6 @@ msgstr "เส้นผ่านศูนย์กลางภายใน (ต�
 
 #: pcb_calculator/transline_ident.cpp:295
 #: pcb_calculator/transline_ident.cpp:409
-#, fuzzy
 msgid "Dout"
 msgstr "Dout"
 
@@ -19764,7 +19802,6 @@ msgid "Dielectric losses (odd):"
 msgstr "การสูญเสียในอิเล็กทริก (คี่):"
 
 #: pcb_calculator/transline_ident.cpp:342
-#, fuzzy
 msgid "Zeven"
 msgstr "Zeven"
 
@@ -19773,7 +19810,6 @@ msgid "Even mode impedance (lines driven by common voltages)"
 msgstr "อิมพีแดนซ์โหมดคู่ (เส้นขับเคลื่อนด้วยแรงดันไฟฟ้าทั่วไป)"
 
 #: pcb_calculator/transline_ident.cpp:345
-#, fuzzy
 msgid "Zodd"
 msgstr "Zodd"
 
@@ -19810,14 +19846,12 @@ msgid "Electrical Resistivity in Ohm*m"
 msgstr "ความต้านทานไฟฟ้าในหน่วยโอห์ม*m"
 
 #: pcb_calculator/widgets/unit_selector.cpp:35
-#, fuzzy
 msgid "um"
-msgstr "um"
+msgstr "ไมโครเมตร"
 
 #: pcb_calculator/widgets/unit_selector.cpp:36
-#, fuzzy
 msgid "cm"
-msgstr "cm"
+msgstr "ซม."
 
 #: pcb_calculator/widgets/unit_selector.cpp:37
 msgid "mil"
@@ -19840,14 +19874,12 @@ msgid "MHz"
 msgstr "MHz"
 
 #: pcb_calculator/widgets/unit_selector.cpp:102
-#, fuzzy
 msgid "kHz"
-msgstr "kHz"
+msgstr "เคเฮิร์ซ"
 
 #: pcb_calculator/widgets/unit_selector.cpp:129
-#, fuzzy
 msgid "rad"
-msgstr "rad"
+msgstr "แรด"
 
 #: pcbnew/array_creator.cpp:197
 msgid "Create an array"
@@ -19932,7 +19964,6 @@ msgid "NetClass"
 msgstr "เน็ทคลาส"
 
 #: pcbnew/board_item.cpp:40 pcbnew/pad.cpp:1085
-#, fuzzy
 msgid "Rect"
 msgstr "Rect"
 
@@ -19986,34 +20017,28 @@ msgid "Dielectric %d"
 msgstr "ไดอิเล็กทริก %d"
 
 #: pcbnew/board_stackup_manager/board_stackup.cpp:526
-#, fuzzy
 msgid "Top Silk Screen"
-msgstr "Top Silk Screen"
+msgstr "ซิลค์สกรีนด้านบน"
 
 #: pcbnew/board_stackup_manager/board_stackup.cpp:534
-#, fuzzy
 msgid "Top Solder Paste"
-msgstr "Top Solder Paste"
+msgstr "โซลเดอร์เพสต์ด้านบน"
 
 #: pcbnew/board_stackup_manager/board_stackup.cpp:542
-#, fuzzy
 msgid "Top Solder Mask"
-msgstr "Top Solder Mask"
+msgstr "โซลเดอร์มาสก์ด้านบน"
 
 #: pcbnew/board_stackup_manager/board_stackup.cpp:586
-#, fuzzy
 msgid "Bottom Solder Mask"
-msgstr "Bottom Solder Mask"
+msgstr "โซลเดอร์มาสก์ด้านล่าง"
 
 #: pcbnew/board_stackup_manager/board_stackup.cpp:594
-#, fuzzy
 msgid "Bottom Solder Paste"
-msgstr "Bottom Solder Paste"
+msgstr "โซลเดอร์เพสต์ด้านล่าง"
 
 #: pcbnew/board_stackup_manager/board_stackup.cpp:602
-#, fuzzy
 msgid "Bottom Silk Screen"
-msgstr "Bottom Silk Screen"
+msgstr "ซิลค์สกรีนด้านล่าง"
 
 #: pcbnew/board_stackup_manager/dialog_dielectric_list_manager.cpp:48
 msgid "Incorrect value for Epsilon R"
@@ -20267,18 +20292,16 @@ msgid "Board thickness from stackup:"
 msgstr "ความหนาของบอร์ดจากสแต็กอัพ:"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:46
-#, fuzzy
 msgid "ENIG"
-msgstr "ENIG"
+msgstr "ชุบทอง"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:47
 msgid "ENEPIG"
 msgstr "ENEPIG"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:48
-#, fuzzy
 msgid "HAL SnPb"
-msgstr "HAL SnPb"
+msgstr "HAL ดีบุก-ตะกั่ว"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:49
 msgid "HAL lead-free"
@@ -20305,14 +20328,12 @@ msgid "Immersion gold"
 msgstr "ชุบทอง"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:55
-#, fuzzy
 msgid "HT_OSP"
-msgstr "HT_OSP"
+msgstr "HT สารอินทรีย์"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:56
-#, fuzzy
 msgid "OSP"
-msgstr "OSP"
+msgstr "โอเอสพี"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:58
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:77
@@ -20356,9 +20377,8 @@ msgid "Save Bill of Materials"
 msgstr "บันทึกรายการวัสดุ"
 
 #: pcbnew/build_BOM_from_board.cpp:110
-#, fuzzy
 msgid "Designator"
-msgstr "Designator"
+msgstr "ตัวออกแบบ"
 
 #: pcbnew/build_BOM_from_board.cpp:111
 msgid "Package"
@@ -20369,9 +20389,8 @@ msgid "Quantity"
 msgstr "ปริมาณ"
 
 #: pcbnew/build_BOM_from_board.cpp:113
-#, fuzzy
 msgid "Designation"
-msgstr "Designation"
+msgstr "การกำหนด"
 
 #: pcbnew/build_BOM_from_board.cpp:114
 msgid "Supplier and ref"
@@ -20523,6 +20542,8 @@ msgid ""
 "\n"
 "Locked footprints will not be annotated"
 msgstr ""
+"\n"
+"ฟุ้ทพรินท์ที่ล็อคจะไม่ใส่คําอธิบายประกอบ"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:299
 #, c-format
@@ -20530,6 +20551,8 @@ msgid ""
 "\n"
 "Front footprints will start at %s"
 msgstr ""
+"\n"
+"ฟุ้ทพรินท์ด้านหน้าจะเริ่มที่ %s"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:308
 #, c-format
@@ -20537,10 +20560,12 @@ msgid ""
 "\n"
 "Back footprints will start at %s."
 msgstr ""
+"\n"
+"ฟุ้ทพรินท์ด้านหลังจะเริ่มที่ %s"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:309
 msgid "the last front footprint + 1"
-msgstr ""
+msgstr "ฟุ้ทพรินท์ด้านหน้าสุดท้าย + 1"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:317
 #, c-format
@@ -20548,6 +20573,8 @@ msgid ""
 "\n"
 "Front footprints starting with '%s' will have the prefix removed."
 msgstr ""
+"\n"
+"ฟุ้ทพรินท์ด้านหน้าขึ้นต้นด้วย '%s' จะถูกลบคำนำหน้าออก"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:323
 #, c-format
@@ -20555,6 +20582,8 @@ msgid ""
 "\n"
 "Front footprints will have '%s' inserted as a prefix."
 msgstr ""
+"\n"
+"ฟุ้ทพรินท์ด้านหน้าจะมี '%s' เป็นคำนำหน้า"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:333
 #, c-format
@@ -20562,6 +20591,8 @@ msgid ""
 "\n"
 "Back footprints starting with '%s' will have the prefix removed."
 msgstr ""
+"\n"
+"ฟุ้ทพรินท์ด้านหลังที่เริ่มด้วย '%s' จะลบคํานําหน้าออก"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:339
 #, c-format
@@ -20569,6 +20600,8 @@ msgid ""
 "\n"
 "Back footprints will have '%s' inserted as a prefix."
 msgstr ""
+"\n"
+"ฟุ้ทพรินท์ด้านหลังจะมี '%s' เป็นคำนำหน้า"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:347
 #, c-format
@@ -20577,14 +20610,16 @@ msgid ""
 "Prior to sorting by %s, the coordinates of which will be rounded to a %s, %s "
 "grid."
 msgstr ""
+"\n"
+"ก่อนที่จะเรียงลำดับตาม %s พิกัดจะถูกปัดเศษเป็น %s, %s ตาราง"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:349
 msgid "footprint location"
-msgstr ""
+msgstr "ที่ตั้งฟุ้ทพรินท์"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:350
 msgid "reference designator location"
-msgstr ""
+msgstr "ตำแหน่งอักษรอ้างอิง"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:492
 #, c-format
@@ -20594,6 +20629,10 @@ msgid ""
 "There are %i types of reference designations\n"
 "**********************************************************\n"
 msgstr ""
+"\n"
+"\n"
+"มีประเภทอักษรอ้างอิงจำนวน %i ชนิด\n"
+"******************************************************** ********\n"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:506
 #, c-format
@@ -20602,6 +20641,9 @@ msgid ""
 "Excluding: %s from reannotation\n"
 "\n"
 msgstr ""
+"\n"
+"ไม่รวม: %s จากการทำซ้ำอธิบายประกอบ\n"
+"\n"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:509
 msgid ""
@@ -20609,16 +20651,21 @@ msgid ""
 "    Change Array\n"
 "***********************\n"
 msgstr ""
+"\n"
+"    เปลี่ยนอาร์เรย์\n"
+"*****************************\n"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:516
 msgid " will be ignored"
-msgstr ""
+msgstr " จะถูกละเลย"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:529
 msgid ""
 "\n"
 "No footprints"
 msgstr ""
+"\n"
+"ไม่มีฟุ้ทพรินท์"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:535
 #, c-format
@@ -20626,14 +20673,16 @@ msgid ""
 "\n"
 "*********** Sort on %s ***********"
 msgstr ""
+"\n"
+"*********** เรียงตาม %s ***********"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:536
 msgid "Footprint Coordinates"
-msgstr ""
+msgstr "พิกัดฟุ้ทพรินท์"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:537
 msgid "Reference Designator Coordinates"
-msgstr ""
+msgstr "พิกัดตัวออกแบบอ้างอิง"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:539
 #, c-format
@@ -20641,6 +20690,8 @@ msgid ""
 "\n"
 "Sort Code %d"
 msgstr ""
+"\n"
+"เรียงรหัส %d"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:543
 #, c-format
@@ -20648,6 +20699,8 @@ msgid ""
 "\n"
 "%d %s UUID: [%s], X, Y: %s, Rounded X, Y, %s"
 msgstr ""
+"\n"
+"%d %s UUID: [%s], X, Y: %s, X โค้งมน, Y, %s"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:574
 #, c-format
@@ -20656,6 +20709,9 @@ msgid ""
 "PCB has %d empty or invalid reference designations.\n"
 "Recommend running DRC with 'Test footprints against schematic' checked.\n"
 msgstr ""
+"\n"
+"พีซีบีมีอักษรอ้างอิงไม่ถูกต้อง หรือว่างเปล่า จำนวน %d\n"
+"แนะนำให้เรียกใช้ DRC โดยเลือก 'ทดสอบฟุ้ทพรินท์กับวงจร' อีกครั้ง\n"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:580
 #, c-format
@@ -20663,14 +20719,16 @@ msgid ""
 "\n"
 "RefDes: %s Footprint: %s:%s at %s on PCB."
 msgstr ""
+"\n"
+"RefDes: %s Footprint: %s: %s ที่ %s บนพีซีบี"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:588
 msgid "Reannotate anyway?"
-msgstr ""
+msgstr "ทำอธิบายประกอบซ้ำ?"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:777
 msgid "Aborted: too many errors"
-msgstr ""
+msgstr "ยกเลิก: มีข้อผิดพลาดมากเกินไป"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:810
 msgid ""
@@ -20678,6 +20736,9 @@ msgid ""
 "\n"
 "Front Footprints"
 msgstr ""
+"\n"
+"\n"
+"ฟุ้ทพรินท์ด้านหน้า"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:811
 msgid ""
@@ -20685,58 +20746,61 @@ msgid ""
 "\n"
 "Back Footprints"
 msgstr ""
+"\n"
+"\n"
+"ฟุ้ทพรินท์ด้านหลัง"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:882
 msgid "Footprint not found in changelist"
-msgstr ""
+msgstr "ไม่พบฟุ้ทพรินท์ในรายการการเปลี่ยนแปลง"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:30
 msgid "Footprint Order"
-msgstr ""
+msgstr "ลําดับฟุ้ทพรินท์"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:45
 msgid "Horizontally: top left to bottom right"
-msgstr ""
+msgstr "แนวนอน: บนซ้ายไปขวาล่าง"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:56
 msgid "Horizontally: top right to bottom left"
-msgstr ""
+msgstr "แนวนอน: บนขวาไปซ้ายล่าง"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:67
 msgid "Horizontally: bottom left to top right"
-msgstr ""
+msgstr "แนวนอน: จากล่างซ้ายไปด้านบนขวา"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:78
 msgid "Horizontally:: bottom right to top left"
-msgstr ""
+msgstr "แนวนอน:: จากขวาล่างไปซ้ายบน"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:86
 msgid "Vertically: top left to bottom right"
-msgstr ""
+msgstr "แนวตั้ง: บนซ้ายไปขวาล่าง"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:97
 msgid "Vertically: top right to bottom left"
-msgstr ""
+msgstr "แนวตั้ง: บนขวาไปซ้ายล่าง"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:108
 msgid "Vertically: bottom left to top right"
-msgstr ""
+msgstr "แนวตั้ง: จากล่างซ้ายไปด้านบนขวา"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:119
 msgid "Vertically: bottom right to top left"
-msgstr ""
+msgstr "แนวตั้ง: จากขวาล่างไปซ้ายบน"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:132
 msgid "Based on location of:"
-msgstr ""
+msgstr "ขึ้นอยู่กับตำแหน่งของ:"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:136
 msgid "Reference Designator"
-msgstr ""
+msgstr "อักษรอ้างอิง"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:142
 msgid "Round locations to:"
-msgstr ""
+msgstr "ปัดเศษตำแหน่งเป็น:"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:144
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:151
@@ -20745,34 +20809,37 @@ msgid ""
 "to this grid before sorting.\n"
 "This helps with misaligned parts."
 msgstr ""
+"ตำแหน่งอุปกรณ์จะถูกปัด\n"
+"ให้เป็นไปตามกริดก่อนเรียงลำดับ\n"
+"การทำเช่นนี้จะช่วยอุปกรณ์ที่เดิมไม่อยู่บนกริดมาก่อน"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:163
 msgid "Reannotation Scope"
-msgstr ""
+msgstr "ขอบเขตการทำอธิบายประกอบซ้ำ"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:170
 msgid "Reannotate:"
-msgstr ""
+msgstr "ทำอธิบายประกอบซ้ำ:"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:178
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:140
 #: pcbnew/footprint.cpp:845
 msgid "Front"
-msgstr ""
+msgstr "ด้านหน้า"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:181
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:140
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:562
 msgid "Back"
-msgstr ""
+msgstr "ด้านหลัง"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:208
 msgid "Front reference start:"
-msgstr ""
+msgstr "เริ่มต้นอักษรอ้างอิงด้านหน้า:"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:210
 msgid "Starting reference designation for front."
-msgstr ""
+msgstr "กําลังเริ่มต้นการกําหนดการอ้างอิงสําหรับด้านหน้า"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:214
 #: pcbnew/dialogs/dialog_create_array_base.cpp:93
@@ -20787,147 +20854,156 @@ msgstr ""
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:105
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:163
 msgid "1"
-msgstr ""
+msgstr "1"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:215
 msgid "Default is 1"
-msgstr ""
+msgstr "ค่าเริ่มต้นคือ1"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:220
 msgid "Back reference start:"
-msgstr ""
+msgstr "เริ่มต้นอักษรอ้างอิงด้านหลัง:"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:222
 msgid ""
 "Blank continues from front or enter a number greater than the highest "
 "reference designation on the front."
 msgstr ""
+"ช่องว่างดำเนินการต่อจากด้านหน้า หรือป้อนตัวเลขที่มากกว่าอักษรอิงสูงสุด "
+"จากด้านหน้า"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:227
 msgid ""
 "Leave blank or zero, or enter a number greater than the highest reference "
 "designation on the front."
 msgstr ""
+"เว้นว่างไว้หรือเป็นศูนย์ หรือป้อนตัวเลขที่มากกว่าอักษรอิงสูงสุดที่ด้านหน้า"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:232
 msgid "Remove front prefix"
-msgstr ""
+msgstr "ลบคำนําหน้าด้านหน้าออก"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:233
 msgid ""
 "If checked will remove the front side prefix\n"
 "in the front prefix box if present"
 msgstr ""
+"หากทำเครื่องหมาย จะเป็นการลบ คำนำด้านหน้า\n"
+"ในกล่องคำนำหน้าถ้ามี"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:237
 msgid "Remove back prefix"
-msgstr ""
+msgstr "ลบคำนำหน้าด้านหลัง"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:238
 msgid ""
 "If checked will remove the Back side prefix\n"
 "in the back prefix box if present"
 msgstr ""
+"หากเลือกจะลบคำนำหน้าด้านหลัง\n"
+"ในกล่องคำนำหน้าหลัง ถ้ามี"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:242
 msgid "Front prefix:"
-msgstr ""
+msgstr "คำนำด้านหน้า:"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:244
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:249
 msgid "Optional prefix for component side reference designations (e.g. F_)"
-msgstr ""
+msgstr "ทางเลือก คำนำหน้า ค่าอ้างอิงอุปกรณ์ (เช่น F_)"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:253
 msgid "Back prefix:"
-msgstr ""
+msgstr "คํานําหน้าด้านหลัง:"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:255
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:260
 msgid "Optional prefix for solder side reference designations (e.g. B_)"
-msgstr ""
+msgstr "ทางเลือก คำนำหน้า ตัวอักษรอ้างอิงด้านบัดกรี (เช่น B_)"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:264
 msgid "Exclude locked footprints"
-msgstr ""
+msgstr "ไม่รวมฟุ้ทพรินท์ที่ล็อกไว้"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:265
 msgid "Locked footprints will not be reannotated"
-msgstr ""
+msgstr "ฟุ้ทพรินท์ที่ล็อกจะไม่ทำอธิบายประกอบซ้ำ"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:269
 msgid "Exclude references:"
-msgstr ""
+msgstr "ไม่รวมอักษรอ้างอิง:"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:271
 msgid ""
 "Do not re-annotate this type \n"
 "of reference (R means R*)"
 msgstr ""
+"ไม่ต้องทำคําอธิบายประกอบชนิดนี้ใหม่ \n"
+"ของตัวอ้างอิง (R หมายถึง R*)"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:290
 msgid "Reference Designators"
-msgstr ""
+msgstr "อักษรอ้างอิง"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.h:106
 msgid "Geographical Reannotation"
-msgstr ""
+msgstr "ทำอธิบายประกอบตามตำแหน่งจัดวาง"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:52
 msgid "Board Setup"
-msgstr ""
+msgstr "การตั้งค่าบอร์ด"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:53
 msgid "Import Settings from Another Board..."
-msgstr ""
+msgstr "นำเข้าการตั้งค่าจากบอร์ดอื่น..."
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:80
 msgid "Board Stackup"
-msgstr ""
+msgstr "บอร์ดสแต็คอัพ"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:88
 msgid "Board Editor Layers"
-msgstr ""
+msgstr "ตัวแก้ไขเลเยอร์ของบอร์ด"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:90
 msgid "Physical Stackup"
-msgstr ""
+msgstr "สแต็คอัพทางกายภาพ"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:93
 msgid "Board Finish"
-msgstr ""
+msgstr "บอร์ดสำเร็จ"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:94 pcbnew/dialogs/dialog_plot.cpp:957
 msgid "Solder Mask/Paste"
-msgstr ""
+msgstr "โซลเดอร์มาส์ก/เพสต์"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:96
 msgid "Text & Graphics"
-msgstr ""
+msgstr "ข้อความและกราฟิก"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:97
 msgid "Defaults"
-msgstr ""
+msgstr "ค่าเริ่มต้น"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:100
 msgid "Design Rules"
-msgstr ""
+msgstr "กฎการออกแบบ"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:101 pcbnew/router/router_tool.cpp:834
 #: pcbnew/router/router_tool.cpp:855
 msgid "Constraints"
-msgstr ""
+msgstr "ข้อจํากัด"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:102 pcbnew/edit_track_width.cpp:178
 #: pcbnew/edit_track_width.cpp:198
 msgid "Pre-defined Sizes"
-msgstr ""
+msgstr "ขนาดที่กําหนดไว้ล่วงหน้า"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:104
 #: pcbnew/dialogs/dialog_constraints_reporter.cpp:54
 #: pcbnew/pcb_edit_frame.cpp:1633
 msgid "Custom Rules"
-msgstr ""
+msgstr "กฎที่กำหนดเอง"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:178
 #, c-format
@@ -20935,11 +21011,13 @@ msgid ""
 "Error importing settings from board:\n"
 "Associated project file %s could not be loaded"
 msgstr ""
+"เกิดความผิดพลาดนำเข้าการตั้งค่าจากบอร์ด:\n"
+"ไฟล์โปรเจ็คที่เกี่ยวข้อง %s อ่านไม่ได้"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:198 pcbnew/files.cpp:614
 #: pcbnew/tools/pcb_control.cpp:1022
 msgid "Loading PCB"
-msgstr ""
+msgstr "กำลังโหลดพีซีบี"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:220
 #, c-format
@@ -20947,66 +21025,68 @@ msgid ""
 "Error loading board file:\n"
 "%s"
 msgstr ""
+"เกิดข้อผิดพลาดโหลดไฟล์บอร์ด:\n"
+"%s"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:91
 #: pcbnew/dialogs/dialog_board_statistics.cpp:686
 msgid "Front Side"
-msgstr ""
+msgstr "ด้านหน้า"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:93
 #: pcbnew/dialogs/dialog_board_statistics.cpp:686
 msgid "Back Side"
-msgstr ""
+msgstr "ด้านหลัง"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:95
 #: pcbnew/dialogs/dialog_board_statistics.cpp:686
 msgid "Total"
-msgstr ""
+msgstr "ทั้งหมด"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:102
 msgid "Area:"
-msgstr ""
+msgstr "พื้นที่:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:139
 msgid "THT:"
-msgstr ""
+msgstr "ทีเอชที:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:140
 #: pcbnew/dialogs/dialog_board_statistics.cpp:144
 msgid "SMD:"
-msgstr ""
+msgstr "เอสเอ็มดี:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:143
 msgid "Through hole:"
-msgstr ""
+msgstr "รูเจาะทะลุ:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:145
 msgid "Connector:"
-msgstr ""
+msgstr "ตัวเชื่อมต่อ:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:146
 msgid "NPTH:"
-msgstr ""
+msgstr "ไม่พีทีเอช:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:149
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:165
 msgid "Through vias:"
-msgstr ""
+msgstr "เวียเจาะทะลุ:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:150
 msgid "Blind/buried:"
-msgstr ""
+msgstr "ชนิดบอด/ฝัง:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:151
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:173
 msgid "Micro vias:"
-msgstr ""
+msgstr "ไมโครเวีย:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:365
 #: pcbnew/dialogs/dialog_board_statistics.cpp:380
 #: pcbnew/dialogs/dialog_board_statistics.cpp:404
 msgid "Total:"
-msgstr ""
+msgstr "ทั้งหมด:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:423
 #: pcbnew/dialogs/dialog_board_statistics.cpp:424
@@ -21015,269 +21095,275 @@ msgstr ""
 #: pcbnew/dialogs/dialog_board_statistics.cpp:667
 #: pcbnew/dialogs/dialog_board_statistics.cpp:668
 msgid "unknown"
-msgstr ""
+msgstr "ไม่รู้จัก"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:453
 msgid "Round"
-msgstr ""
+msgstr "โค้งมน"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:456
 msgid "Slot"
-msgstr ""
+msgstr "สล็อต"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:459
 msgid "???"
-msgstr ""
+msgstr "???"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:464
 #: pcbnew/dialogs/dialog_board_statistics.cpp:469
 msgid "N/A"
-msgstr ""
+msgstr "ไม่มี"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:481 pcbnew/pad.cpp:1099
 msgid "PTH"
-msgstr ""
+msgstr "พีทีเอช"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:481 pcbnew/pad.cpp:1102
 msgid "NPTH"
-msgstr ""
+msgstr "ไม่พีทีเอช"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:628
 msgid "Save Report File"
-msgstr ""
+msgstr "บันทึกไฟล์รายงาน"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:649
 msgid ""
 "PCB statistics report\n"
 "====================="
 msgstr ""
+"รายงานสถิติพีซีบี\n"
+"====================="
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:650
 msgid "Date"
-msgstr ""
+msgstr "วันที่"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:652
 msgid "Board name"
-msgstr ""
+msgstr "ชื่อบอร์ด"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:655
 msgid "Board"
-msgstr ""
+msgstr "บอร์ด"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:661
 #: pcbnew/dialogs/dialog_board_statistics.cpp:668
 msgid "Area"
-msgstr ""
+msgstr "พื้นที่"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:714
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:37
 msgid "Components"
-msgstr ""
+msgstr "อุปกรณ์"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:720
 msgid "Drill holes"
-msgstr ""
+msgstr "เจาะรู"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:727
 #, c-format
 msgid "Error writing file '%s'."
-msgstr ""
+msgstr "เกิดข้อผิดพลาดเขียนไฟล์ '%s'"
 
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:117
 msgid "Board Size"
-msgstr ""
+msgstr "ขนาดบอร์ด"
 
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:198
 msgid "Subtract holes from board area"
-msgstr ""
+msgstr "ลบรูเจาะออกจากพื้นที่บอร์ด"
 
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:201
 msgid "Exclude components with no pins"
-msgstr ""
+msgstr "ไม่รวมอุปกรณ์ที่ไม่มีขา"
 
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:232
 msgid "X Size"
-msgstr ""
+msgstr "ขนาด X"
 
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:233
 msgid "Y Size"
-msgstr ""
+msgstr "ขนาด Y"
 
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:234
 msgid "Plated"
-msgstr ""
+msgstr "เคลือบ"
 
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:235
 msgid "Via/Pad"
-msgstr ""
+msgstr "เวีย/แพ็ด"
 
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:236
 msgid "Start Layer"
-msgstr ""
+msgstr "เลเยอร์เริ่มต้น"
 
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:237
 msgid "Stop Layer"
-msgstr ""
+msgstr "เลเยอร์สิ้นสุด"
 
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:258
 msgid "Drill Holes"
-msgstr ""
+msgstr "เจาะรู"
 
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:265
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:214
 msgid "Generate Report File..."
-msgstr ""
+msgstr "สร้างไฟล์รายงาน..."
 
 #: pcbnew/dialogs/dialog_board_statistics_base.h:66
 msgid "Board Statistics"
-msgstr ""
+msgstr "สถิติของบอร์ด"
 
 #: pcbnew/dialogs/dialog_choose_footprint.cpp:229
 msgid "No footprint selected"
-msgstr ""
+msgstr "ไม่เลือกฟุ้ทพรินท์"
 
 #: pcbnew/dialogs/dialog_cleanup_graphics.cpp:46
 msgid "Update Footprint"
-msgstr ""
+msgstr "ปรับปรุงฟุ้ทพรินท์"
 
 #: pcbnew/dialogs/dialog_cleanup_graphics.cpp:46
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:55
 #: pcbnew/dialogs/dialog_netlist.cpp:88 pcbnew/dialogs/dialog_update_pcb.cpp:65
 msgid "Update PCB"
-msgstr ""
+msgstr "ปรับปรุงพีซีบี"
 
 #: pcbnew/dialogs/dialog_cleanup_graphics.cpp:116
 msgid "Graphics cleanup"
-msgstr ""
+msgstr "การล้างกราฟิก"
 
 #: pcbnew/dialogs/dialog_cleanup_graphics_base.cpp:22
 msgid "Merge lines into rectangles"
-msgstr ""
+msgstr "รวมเส้นเป็นสี่เหลี่ยม"
 
 #: pcbnew/dialogs/dialog_cleanup_graphics_base.cpp:23
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:23
 msgid ""
 "remove track segments connecting nodes belonging to different nets (short "
 "circuit)"
-msgstr ""
+msgstr "ลบแทร็กที่เชื่อมต่อโหนด ของเน็ตอื่น (ไฟฟ้าลัดวงจร)"
 
 #: pcbnew/dialogs/dialog_cleanup_graphics_base.cpp:27
 msgid "Delete redundant graphics"
-msgstr ""
+msgstr "การลบกราฟิกที่ซ้ําซ้อน"
 
 #: pcbnew/dialogs/dialog_cleanup_graphics_base.cpp:37
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:57
 msgid "Changes To Be Applied:"
-msgstr ""
+msgstr "การเปลี่ยนแปลงที่จะนําไปใช้:"
 
 #: pcbnew/dialogs/dialog_cleanup_graphics_base.h:53
 msgid "Cleanup Graphics"
-msgstr ""
+msgstr "ล้างกราฟิก"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:150
 msgid "Board cleanup"
-msgstr ""
+msgstr "ล้างบอร์ด"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:22
 msgid "Delete &tracks connecting different nets"
-msgstr ""
+msgstr "ลบแทร็กเชื่อมต่อต่างเน็ต"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:27
 msgid "&Delete redundant vias"
-msgstr ""
+msgstr "ลบเวียซ้ำซ้อน"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:28
 msgid "remove vias on through hole pads and superimposed vias"
-msgstr ""
+msgstr "ลบเวียออกจากแพ็ดเจาะทะลุ และเวียทับซ้อน"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:32
 msgid "Delete vias connected on only one layer"
-msgstr ""
+msgstr "ลบเวียที่เชื่อมต่อกับเลเยอร์เดียวเท่านั้น"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:35
 msgid "&Merge co-linear tracks"
-msgstr ""
+msgstr "รวมแทร็คที่มีเส้นตรงร่วมกัน"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:36
 msgid "merge aligned track segments, and remove null segments"
-msgstr ""
+msgstr "รวมแทร็คที่อยู่ในแนวเซ็กเมนต์เดียวกัน และนำเซ็กเมนต์ว่างออก"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:40
 msgid "Delete tracks unconnected at one end"
-msgstr ""
+msgstr "ลบแทร็กที่ไม่ได้เชื่อมต่อที่ปลายด้านหนึ่ง"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:41
 msgid "delete tracks having at least one dangling end"
-msgstr ""
+msgstr "ลบแทร็กที่มีปลายห้อยอย่างน้อยหนึ่งอัน"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:45
 msgid "Delete tracks fully inside pads"
-msgstr ""
+msgstr "ลบแทร็กทั้งหมดภายในแพ็ด"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:46
 msgid "Delete tracks that have both start and end positions inside of a pad"
-msgstr ""
+msgstr "ลบแทร็กที่มีทั้งตำแหน่งเริ่มต้นและสิ้นสุดภายในแพ็ด"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.h:57
 msgid "Cleanup Tracks and Vias"
-msgstr ""
+msgstr "ทำความสะอาดแทร็คและเวีย"
 
 #: pcbnew/dialogs/dialog_constraints_reporter_base.h:45
 msgid "Constraints Resolution Report"
-msgstr ""
+msgstr "รายงานการแก้ไขข้อจำกัด"
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:280
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:172
 #: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:102
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:88
 msgid "Chamfer distance:"
-msgstr ""
+msgstr "ระยะลบมุม:"
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:282
 #: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:104
 msgid "Fillet radius:"
-msgstr ""
+msgstr "รัศมีโค้ง:"
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:394
 msgid "Thermal spoke width cannot be smaller than the minimum width."
-msgstr ""
+msgstr "ขนาดความกว้างกิ่งเทอร์มอล เล็กกว่าความกว้างน้อยสุดไม่ได้"
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:422
 #: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:256
 msgid "No layer selected."
-msgstr ""
+msgstr "ไม่ได้เลือกเลเยอร์"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:41
 msgid "Hide nets matching:"
-msgstr ""
+msgstr "ซ่อนเน็ทที่ตรงกัน:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:46
 msgid ""
 "Pattern to filter net names in filtered list.\n"
 "Net names matching this pattern are not displayed."
 msgstr ""
+"รูปแบบเพื่อกรองชื่อเน็ทในรายการ\n"
+"ชื่อเน็ทที่ตรงกันจะไม่แสดงที่นี่"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:51
 msgid "Show nets matching:"
-msgstr ""
+msgstr "แสดงเน็ทที่ตรงกัน:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:55
 msgid "*"
-msgstr ""
+msgstr "*"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:56
 msgid ""
 "Pattern to filter net names in filtered list.\n"
 "Only net names matching this pattern are displayed."
 msgstr ""
+"รูปแบบเพื่อกรองชื่อเน็ทจากรายการ\n"
+"เฉพาะชื่อเน็ทที่ตรงกันจะแสดงที่นี่"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:66
 msgid "Show all nets"
-msgstr ""
+msgstr "แสดงเน็ททั้งหมด"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:72
 msgid "Sort nets by pad count"
-msgstr ""
+msgstr "เรียงเน็ทโดยจำนวนแพ็ด"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:80
 msgid ""
@@ -21285,18 +21371,21 @@ msgid ""
 "in an unconnected \n"
 "copper island."
 msgstr ""
+"ไม่มีเน็ทในผลลัพธ์\n"
+"ในบริเวณไม่เชื่อมต่อ\n"
+"เกาะทองแดง"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:111
 msgid "Zone name:"
-msgstr ""
+msgstr "ชื่อโซน:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:113
 msgid "A unique name for this zone to identify it for DRC"
-msgstr ""
+msgstr "ชื่อไม่ซ้ําสําหรับโซน เพื่อระบุเขตสําหรับดีอาร์ซี"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:120
 msgid "Zone priority level:"
-msgstr ""
+msgstr "ระดับความสําคัญโซน:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:122
 msgid ""
@@ -21306,139 +21395,147 @@ msgid ""
 "* If its priority is higher, its outlines are removed from the other zone.\n"
 "* If its priority is equal, a DRC error is set."
 msgstr ""
+"โซนจะถูกระบายตามระดับความสําคัญ ระดับ 3 มีสูงกว่าระดับ 2\n"
+"หากโซนอยู่ภายในโซนอื่น:\n"
+"* ถ้าลําดับความสําคัญสูงกว่า โครงร่างจะถูกลบออกจากโซนอื่น\n"
+"* ถ้าลําดับความสําคัญเท่ากัน จะเกิดข้อผิดพลาดบนดีอาร์ซี"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:143
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:51
 msgid "Constrain outline to H, V and 45 degrees"
-msgstr ""
+msgstr "กำหนดโครงร่างเป็น H, V และ 45 องศา"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:149
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:107
 msgid "Outline display:"
-msgstr ""
+msgstr "การแสดงเค้าร่าง:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:153
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:61
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:111 pcbnew/zone.cpp:622
 msgid "Hatched"
-msgstr ""
+msgstr "เส้นตาข่าย"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:153
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:61
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:111
 msgid "Fully hatched"
-msgstr ""
+msgstr "ตาข่ายทึบ"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:162
 msgid "Corner smoothing:"
-msgstr ""
+msgstr "การปรับมุมให้เรียบ:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:166
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:82
 msgid "Chamfer"
-msgstr ""
+msgstr "ลบมุม"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:166
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:82
 msgid "Fillet"
-msgstr ""
+msgstr "รัศมีโค้ง"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:196
 msgid "Electrical Properties"
-msgstr ""
+msgstr "คุณสมบัติทางไฟฟ้า"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:203
 msgid "Clearance:"
-msgstr ""
+msgstr "ระยะห่าง:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:205
 msgid "Copper clearance for this zone (set to 0 to use the netclass clearance)"
-msgstr ""
+msgstr "ระยะห่างทองแดงสำหรับโซนนี้ (ตั้งค่าเป็น 0 เพื่อใช้ระยะห่างตามเน็ทคลาส)"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:216
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:67
 msgid "Minimum width:"
-msgstr ""
+msgstr "ความกว้างขั้นต่ำ:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:218
 msgid "Minimum thickness of filled areas."
-msgstr ""
+msgstr "ความหนาต่ําสุดของพื้นที่ระบายเต็ม"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:238
 msgid "Pad connections:"
-msgstr ""
+msgstr "การเชื่อมต่อแพ็ด:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:240
 msgid ""
 "Default pad connection type to zone.\n"
 "This setting can be overridden by local  pad settings"
 msgstr ""
+"ค่าตั้งต้น การเชื่อมต่อแพ็ดไปยังโซน\n"
+"การตั้งค่านี้สามารถแทนที่ได้ โดยการตั้งค่าแพ็ดในเครื่อง"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:244 pcbnew/zone.cpp:1401
 msgid "Thermal reliefs"
-msgstr ""
+msgstr "แพ็ดระบายความร้อน"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:244 pcbnew/zone.cpp:1403
 msgid "Reliefs for PTH"
-msgstr ""
+msgstr "การระบายสำหรับพีทีเอช"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:250
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:750
 msgid "Thermal relief gap:"
-msgstr ""
+msgstr "ระยะห่างแพ็ดระบายความร้อน:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:252
 msgid ""
 "The distance that will be kept clear between the filled area of the zone and "
 "a pad connected by thermal relief spokes."
 msgstr ""
+"ระยะห่างที่รักษาไว้เพื่อเป็นขอบเขตระหว่างบริเวณระบายทึบและแพ็ดที่เชื่อมต่อ "
+"กับกิ่งระบายความร้อน"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:257
 msgid "Clearance between pads in the same net and filled areas."
-msgstr ""
+msgstr "ระยะห่างระหว่างแพ็ดในเน็ทเดียวกัน และพื้นที่ระบายเต็ม"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:265
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:739
 msgid "Thermal relief spoke width:"
-msgstr ""
+msgstr "ความกว้างของซี่ล้อระบายความร้อน:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:270
 msgid "Width of copper in thermal reliefs."
-msgstr ""
+msgstr "ความกว้างของทองแดงในการระบายความร้อน"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:287
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:108
 #: pcbnew/tools/pcb_actions.cpp:1248
 msgid "Fill"
-msgstr ""
+msgstr "เติม"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:294
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:116
 msgid "Fill type:"
-msgstr ""
+msgstr "ประเภทเติม:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:298
 msgid "Solid fill"
-msgstr ""
+msgstr "การเติมแบบทึบ"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:298
 msgid "Hatch pattern"
-msgstr ""
+msgstr "รูปแบบการตีเส้น"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:315
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:140
 msgid "Hatch width:"
-msgstr ""
+msgstr "ความกว้างเส้นตีทึบ:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:326
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:151
 msgid "Hatch gap:"
-msgstr ""
+msgstr "ช่องว่างเส้นตี:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:337
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:162
 msgid "Smoothing effort:"
-msgstr ""
+msgstr "ความพยายามให้ราบเรียบ:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:339
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:164
@@ -21449,10 +21546,15 @@ msgid ""
 "2 = round corners\n"
 "3 = round corners (finer shape)"
 msgstr ""
+"ระดับค่าของความพยายามราบเรียบ\n"
+"0 = ไม่มีการปรับให้เรียบ\n"
+"1 = ลบมุม\n"
+"2 = มุมมน\n"
+"3 = มุมมน (ละเอียดมากขึ้น)"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:346
 msgid "Smoothing amount:"
-msgstr ""
+msgstr "ปริมาณการปรับให้เรียบ:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:348
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:176
@@ -21461,61 +21563,66 @@ msgid ""
 "0 = no smoothing\n"
 "1.0 = max radius/chamfer size (half gap value)"
 msgstr ""
+"อัตราส่วนระหว่าง ขนาดมุมเรียบและช่องว่างระหว่างเส้น\n"
+"0 = ไม่มีการปรับให้เรียบ\n"
+"1.0 = รัศมีสูงสุด/ขนาดลบมุม (ค่าครึ่งช่องว่าง)"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:356
 msgid "Remove islands:"
-msgstr ""
+msgstr "ลบเกาะ:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:358
 msgid "Choose what to do with unconnected copper islands"
-msgstr ""
+msgstr "เลือกว่าจะทำอย่างไรกับเกาะทองแดงที่ไม่เชื่อมต่อ"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:362
 msgid "Below area limit"
-msgstr ""
+msgstr "ต่ำกว่าค่าจำกัดพื้นที่"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:368
 msgid "Minimum island size:"
-msgstr ""
+msgstr "ขนาดเกาะขั้นต่ำ:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:371
 msgid "Isolated islands smaller than this will be removed"
-msgstr ""
+msgstr "เกาะแยกที่มีขนาดเล็กกว่านี้จะถูกลบออก"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:400
 msgid "Export Settings to Other Zones"
-msgstr ""
+msgstr "ส่งออกการตั้งค่าไปยังโซนอื่น"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:401
 msgid ""
 "Export this zone setup (excluding layer and net selection) to all other "
 "copper zones."
 msgstr ""
+"ส่งออกการตั้งค่าโซนนี้ (ยกเว้นการเลือกเลเยอร์และเน็ต) ไปยังโซนทองแดงอื่นๆ "
+"ทั้งหมด"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.h:145
 msgid "Copper Zone Properties"
-msgstr ""
+msgstr "คุณสมบัติของโซนทองแดง"
 
 #: pcbnew/dialogs/dialog_create_array.cpp:130
 msgid "Numerals (0,1,2,...,9,10)"
-msgstr ""
+msgstr "ตัวเลข (0,1,2,...,9,10)"
 
 #: pcbnew/dialogs/dialog_create_array.cpp:134
 msgid "Hexadecimal (0,1,...,F,10,...)"
-msgstr ""
+msgstr "เลขฐานสิบหก (0,1,...,F,10,...)"
 
 #: pcbnew/dialogs/dialog_create_array.cpp:138
 msgid "Alphabet, minus IOSQXZ"
-msgstr ""
+msgstr "ตัวอักษร, ลบ IOSQXZ"
 
 #: pcbnew/dialogs/dialog_create_array.cpp:142
 msgid "Alphabet, full 26 characters"
-msgstr ""
+msgstr "ตัวอักษร,เต็ม 26 ตัว"
 
 #: pcbnew/dialogs/dialog_create_array.cpp:263
 #, c-format
 msgid "Bad numeric value for %s: %s"
-msgstr ""
+msgstr "ค่าตัวเลขไม่ถูกต้องสำหรับ %s: %s"
 
 #: pcbnew/dialogs/dialog_create_array.cpp:299
 #, c-format
@@ -21523,34 +21630,36 @@ msgid ""
 "Could not determine numbering start from '%s': expected value consistent "
 "with alphabet '%s'."
 msgstr ""
+"ไม่สามารถกำหนดหมายเลขเริ่มต้นจาก '%s': ค่าที่คาดหมายว่าสอดคล้องกับตัวอักษร "
+"'%s'"
 
 #: pcbnew/dialogs/dialog_create_array.cpp:307
 msgid "step value"
-msgstr ""
+msgstr "ค่าขั้นบันได"
 
 #: pcbnew/dialogs/dialog_create_array.cpp:329
 msgid "horizontal count"
-msgstr ""
+msgstr "นับแนวนอน"
 
 #: pcbnew/dialogs/dialog_create_array.cpp:330
 msgid "vertical count"
-msgstr ""
+msgstr "นับแนวตั้ง"
 
 #: pcbnew/dialogs/dialog_create_array.cpp:338
 msgid "stagger"
-msgstr ""
+msgstr "เยื้องไปมา"
 
 #: pcbnew/dialogs/dialog_create_array.cpp:393
 msgid "point count"
-msgstr ""
+msgstr "นับจุด"
 
 #: pcbnew/dialogs/dialog_create_array.cpp:437
 msgid "Bad parameters"
-msgstr ""
+msgstr "พารามิเตอร์ไม่ถูกต้อง"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:31
 msgid "Horizontal count:"
-msgstr ""
+msgstr "นับแนวนอน:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:35
 #: pcbnew/dialogs/dialog_create_array_base.cpp:42
@@ -21560,184 +21669,188 @@ msgstr ""
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:109
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:167
 msgid "5"
-msgstr ""
+msgstr "5"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:38
 msgid "Vertical count:"
-msgstr ""
+msgstr "นับแนวตั้ง:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:45
 msgid "Horizontal spacing:"
-msgstr ""
+msgstr "ระยะห่างแนวนอน:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:56
 msgid "Vertical spacing:"
-msgstr ""
+msgstr "ระยะห่างแนวตั้ง:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:67
 msgid "Horizontal offset:"
-msgstr ""
+msgstr "ออฟเซ็ตแนวนอน:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:78
 msgid "Vertical offset:"
-msgstr ""
+msgstr "ออฟเซ็ตแนวตั้ง:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:89
 msgid "Stagger:"
-msgstr ""
+msgstr "เยื้องไปมา:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:96
 msgid "Rows"
-msgstr ""
+msgstr "แถว"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:96
 msgid "Columns"
-msgstr ""
+msgstr "คอลัมน์"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:98
 msgid "Stagger Type"
-msgstr ""
+msgstr "ชนิดเยื้องไปมา"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:110
 msgid "Horizontal, then vertical"
-msgstr ""
+msgstr "แนวนอน แล้วแนวตั้ง"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:110
 msgid "Vertical, then horizontal"
-msgstr ""
+msgstr "แนวตั้ง แล้วแนวนอน"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:112
 msgid "Numbering Direction"
-msgstr ""
+msgstr "ทิศทางลําดับเลข"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:116
 msgid "Reverse numbering on alternate rows/columns"
-msgstr ""
+msgstr "ย้อนกลับการนับในแถว/คอลัมน์อื่น"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:119
 #: pcbnew/dialogs/dialog_create_array_base.cpp:281
 msgid "Use first free number"
-msgstr ""
+msgstr "ใช้หมายเลขแรกฟรี"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:119
 #: pcbnew/dialogs/dialog_create_array_base.cpp:281
 msgid "From start value"
-msgstr ""
+msgstr "จากค่าเริ่มต้น"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:121
 msgid "Initial Pad Number"
-msgstr ""
+msgstr "หมายเลขแพ็ดเริ่มต้น"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:125
 msgid "Continuous (1, 2, 3...)"
-msgstr ""
+msgstr "ต่อเนื่อง (1, 2, 3...)"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:125
 msgid "Coordinate (A1, A2, ... B1, ...)"
-msgstr ""
+msgstr "พิกัด (A1, A2, ... B1, ...)"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:127
 msgid "Pad Numbering Scheme"
-msgstr ""
+msgstr "แบบแผนการนับหมายเลขแพ็ด"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:131
 msgid "Primary axis numbering:"
-msgstr ""
+msgstr "การกำหนดหมายเลขบนแกนปฐมภูมิ:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:140
 msgid "Secondary axis numbering:"
-msgstr ""
+msgstr "การกำหนดหมายเลขบนแกนทุติยภูมิ:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:159
 #: pcbnew/dialogs/dialog_create_array_base.cpp:302
 msgid "Pad numbering start:"
-msgstr ""
+msgstr "เริ่มการนับหมายเลขแพ็ด:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:173
 #: pcbnew/dialogs/dialog_create_array_base.cpp:309
 msgid "Pad numbering skip:"
-msgstr ""
+msgstr "ข้ามการนับหมายเลขแพ็ด:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:197
 msgid "Grid Array"
-msgstr ""
+msgstr "กริดอาเรย์"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:207
 msgid "Horizontal center:"
-msgstr ""
+msgstr "กึ่งกลางตามแนวนอน:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:218
 msgid "Vertical center:"
-msgstr ""
+msgstr "กึ่งกลางแนวตั้ง:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:229
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1244
 msgid "Radius:"
-msgstr ""
+msgstr "รัศมี:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:246
 msgid ""
 "Positive angles represent an anti-clockwise rotation. An angle of 0 will "
 "produce a full circle divided evenly into \"Count\" portions."
 msgstr ""
+"ค่ามุมเป็นบวกหมายถึงหมุนทวนเข็ม ค่ามุมเป็น 0 จะวาดวงกลมเต็มวง "
+"และแบ่งเท่าๆกันด้วยค่า \"นับ\""
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:259
 msgid "How many items in the array."
-msgstr ""
+msgstr "มีจำนวนเท่าใดในอาเรย์"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:263
 #: pcbnew/dialogs/dialog_move_exact_base.cpp:52
 msgid "Rotate:"
-msgstr ""
+msgstr "หมุน:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:269
 msgid ""
 "Rotate the item as well as move it - multi-selections will be rotated "
 "together"
-msgstr ""
+msgstr "หมุนรายการและย้าย - การเลือกหลายรายการจะถูกหมุนไปด้วยกัน"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:279
 msgid "Numbering Options"
-msgstr ""
+msgstr "ตัวเลือกการนับเลข"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:283
 msgid "Initial Pad Number:"
-msgstr ""
+msgstr "หมายเลขแพ็ดเริ่มต้น:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:287
 msgid "Pad Numbering:"
-msgstr ""
+msgstr "หมายเลขแพ็ด:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:326
 msgid "Circular Array"
-msgstr ""
+msgstr "อาร์เรย์แบบวงกลม"
 
 #: pcbnew/dialogs/dialog_create_array_base.h:121
 msgid "Create Array"
-msgstr ""
+msgstr "สร้างอาร์เรย์"
 
 #: pcbnew/dialogs/dialog_dimension_properties.cpp:199
 msgid ""
 "This item was on a non-existing or forbidden layer.\n"
 "It has been moved to the first allowed layer."
 msgstr ""
+"สิ่งนี้อยู่ในเลเยอร์ที่ไม่มี หรือถูกห้าม\n"
+"มันถูกย้ายไปเลเยอร์แรกที่ยอมได้"
 
 #: pcbnew/dialogs/dialog_dimension_properties.cpp:280
 msgid "Change dimension properties"
-msgstr ""
+msgstr "เปลี่ยนคุณสมบัติการวัดมิติ"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:20
 msgid "Leader Format"
-msgstr ""
+msgstr "รูปแบบเส้นนำ"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:37
 msgid "Text frame:"
-msgstr ""
+msgstr "กรอบข้อความ:"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:39
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:47
 msgid "Draw a shape around the leader text"
-msgstr ""
+msgstr "การวาดรูปร่างรอบข้อความตัวต้นแบบ"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:51
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:74
@@ -21748,26 +21861,26 @@ msgstr ""
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:92
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:149
 msgid "Layer:"
-msgstr ""
+msgstr "เลเยอร์:"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:67
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:87
 msgid "Dimension Format"
-msgstr ""
+msgstr "รูปแบบกำหนดมิติ"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:96
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:102
 msgid "Measured value of this dimension"
-msgstr ""
+msgstr "ค่าที่วัดได้จากเครื่องมือมิติ"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:106
 msgid "Override value"
-msgstr ""
+msgstr "แทนที่ค่า"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:107
 msgid ""
 "When checked, the actual measurement is ignored and any value can be entered"
-msgstr ""
+msgstr "เมื่อเลือก ค่าจริงจะถูกละเว้น และคุณสามารถป้อนค่าใดๆได้"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:114
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:44
@@ -21776,61 +21889,61 @@ msgstr ""
 #: pcbnew/dialogs/dialog_plot_base.cpp:374
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:81
 msgid "Units:"
-msgstr ""
+msgstr "หน่วย:"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:116
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:124
 msgid ""
 "Units of this dimension (\"automatic\" to follow the units selected in the "
 "editor)"
-msgstr ""
+msgstr "หน่วยของมิติ (\"อัตโนมัติ\" เพื่อใช้หน่วยเดียวกับเครื่องมือแก้ไข)"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:130
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:135
 msgid "Text to print before the dimension value"
-msgstr ""
+msgstr "ข้อความที่จะพิมพ์ก่อนค่ามิติ"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:139
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:108
 msgid "Units format:"
-msgstr ""
+msgstr "รูปแบบหน่วย:"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:141
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:149
 msgid "Choose how to display the units"
-msgstr ""
+msgstr "เลือกวิธีการแสดงหน่วย"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:145
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:112
 msgid "1234"
-msgstr ""
+msgstr "1234"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:145
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:112
 msgid "1234 mm"
-msgstr ""
+msgstr "1234 มม."
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:145
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:112
 msgid "1234 (mm)"
-msgstr ""
+msgstr "1234 (มม)"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:155
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:160
 msgid "Text to print after the dimension value"
-msgstr ""
+msgstr "ข้อความที่จะพิมพ์หลังค่ามิติ"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:164
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:124
 #: pcbnew/dialogs/dialog_plot_base.cpp:389
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:123
 msgid "Precision:"
-msgstr ""
+msgstr "ความละเอียด:"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:166
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:174
 msgid "Choose how many digits of precision to display"
-msgstr ""
+msgstr "เลือกจำนวนตัวเลขเพื่อแสดงความละเอียด"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:170
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:292
@@ -21838,177 +21951,178 @@ msgstr ""
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:170
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:127
 msgid "0.0"
-msgstr ""
+msgstr "0.0"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:170
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:127
 msgid "0.00"
-msgstr ""
+msgstr "0.00"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:170
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:127
 msgid "0.000"
-msgstr ""
+msgstr "0.000"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:170
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:127
 msgid "0.0000"
-msgstr ""
+msgstr "0.0000"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:170
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:127
 msgid "0.00000"
-msgstr ""
+msgstr "0.00000"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:178
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:146
 msgid "Suppress trailing zeroes"
-msgstr ""
+msgstr "ไม่ใส่เลขศูนย์ต่อท้าย"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:179
 msgid ""
 "When checked, \"0.100\" will be shown as \"0.1\" even if the precision "
 "setting is higher"
 msgstr ""
+"เมื่อเลือก \"0.100\" จะแสดงเป็น \"0.1\" แม้ว่าการตั้งค่าความแม่นยําจะสูงกว่า"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:210
 msgid "Dimension Text"
-msgstr ""
+msgstr "ข้อความมิติ"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:219
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:110
 msgid "Text width"
-msgstr ""
+msgstr "ความกว้างข้อความ"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:235
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:178
 msgid "Text pos X"
-msgstr ""
+msgstr "ตำแหน่งข้อความ X"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:248
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:129
 msgid "Text height"
-msgstr ""
+msgstr "ความสูงข้อความ"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:261
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:199
 msgid "Text pos Y"
-msgstr ""
+msgstr "ตำแหน่งข้อความ Y"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:272
 #: pcbnew/dialogs/dialog_target_properties_base.cpp:39
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:150
 msgid "Thickness:"
-msgstr ""
+msgstr "ความหนา:"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:274
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:152
 msgid "Text thickness"
-msgstr ""
+msgstr "ความหนาข้อความ"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:287
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:165
 msgid "Text orientation"
-msgstr ""
+msgstr "การจัดเรียงข้อความ"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:293
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:166
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:171
 msgid "90.0"
-msgstr ""
+msgstr "90.0"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:294
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:169
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:172
 msgid "-90.0"
-msgstr ""
+msgstr "-90.0"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:295
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:172
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:173
 msgid "180.0"
-msgstr ""
+msgstr "180.0"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:301
 msgid "Keep aligned with dimension"
-msgstr ""
+msgstr "จัดให้สอดคล้องกับค่ามิติ"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:302
 msgid "Automatically set the text orientation to match the dimension lines"
-msgstr ""
+msgstr "ตั้งค่าการวางแนวข้อความโดยอัตโนมัติให้ตรงกับเส้นมิติ"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:307
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:190
 msgid "Mirror text"
-msgstr ""
+msgstr "สะท้อนข้อความ"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:311
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:140
 msgid "Justification:"
-msgstr ""
+msgstr "จัดพอเหมาะ:"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:321
 msgid "Position mode:"
-msgstr ""
+msgstr "โหมดตําแหน่ง:"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:325
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:100
 msgid "Outside"
-msgstr ""
+msgstr "ข้างนอก"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:325
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:100
 msgid "Inline"
-msgstr ""
+msgstr "ในเส้น"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:325
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:68
 msgid "Manual"
-msgstr ""
+msgstr "ด้วยตนเอง"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:329
 msgid "Choose how to position the text relative to the dimension line"
-msgstr ""
+msgstr "เลือกวิธีการจัดตําแหน่งข้อความให้สัมพันธ์กับเส้นมิติ"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:344
 msgid "Dimension Line"
-msgstr ""
+msgstr "เส้นมิติ"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:353
 msgid "Thickness of the dimension lines"
-msgstr ""
+msgstr "ความหนาของเส้นมิติ"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:367
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:135
 msgid "Arrow length:"
-msgstr ""
+msgstr "ความยาวลูกศร:"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:378
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:151
 msgid "Extension line offset:"
-msgstr ""
+msgstr "ออฟเซตของเส้นส่วนขยาย:"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:380
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:385
 msgid "Gap between the measured points and the start of the extension lines"
-msgstr ""
+msgstr "ช่องว่างระหว่างจุดที่วัดได้และจุดเริ่มต้นของรายการส่วนขยาย"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.h:120
 msgid "Dimension Properties"
-msgstr ""
+msgstr "คุณสมบัติมิติ"
 
 #: pcbnew/dialogs/dialog_drc.cpp:85
 msgid "Run DRC"
-msgstr ""
+msgstr "เรียกใช้ DRC"
 
 #: pcbnew/dialogs/dialog_drc.cpp:194 pcbnew/tools/board_inspection_tool.cpp:47
 #: pcbnew/tools/zone_filler_tool.cpp:131
 msgid "Rules"
-msgstr ""
+msgstr "กฎ"
 
 #: pcbnew/dialogs/dialog_drc.cpp:227
 msgid "DRC incomplete: could not compile custom design rules.  "
-msgstr ""
+msgstr "DRC ไม่สมบูรณ์: ไม่สามารถตรวจกฎการออกแบบที่กำหนดเอง  "
 
 #: pcbnew/dialogs/dialog_drc.cpp:229 pcbnew/tools/board_inspection_tool.cpp:233
 #: pcbnew/tools/board_inspection_tool.cpp:617
@@ -22017,53 +22131,53 @@ msgstr ""
 #: pcbnew/tools/board_inspection_tool.cpp:728
 #: pcbnew/tools/board_inspection_tool.cpp:758
 msgid "Show design rules."
-msgstr ""
+msgstr "แสดงกฎการออกแบบ"
 
 #: pcbnew/dialogs/dialog_drc.cpp:262
 msgid "-------- DRC cancelled by user.<br><br>"
-msgstr ""
+msgstr "-------- DRC ถูกยกเลิกโดยผู้ใช้<br><br>"
 
 #: pcbnew/dialogs/dialog_drc.cpp:264
 msgid "Done.<br><br>"
-msgstr ""
+msgstr "เรียบร้อย<br><br>"
 
 #: pcbnew/dialogs/dialog_drc.cpp:459
 msgid "Run clearance resolution tool..."
-msgstr ""
+msgstr "เรียกใช้เครื่องมือแก้ปัญหาระยะห่าง..."
 
 #: pcbnew/dialogs/dialog_drc.cpp:486
 msgid "Open the Board Setup... dialog"
-msgstr ""
+msgstr "เปิดการตั้งค่าบอร์ด... การสนทนา"
 
 #: pcbnew/dialogs/dialog_drc.cpp:661
 #, c-format
 msgid "Report file '%s' created<br>"
-msgstr ""
+msgstr "สร้างแฟ้มรายงาน '%s' <br>"
 
 #: pcbnew/dialogs/dialog_drc.cpp:666
 #, c-format
 msgid "Unable to create report file '%s'<br>"
-msgstr ""
+msgstr "ไม่สามารถสร้างไฟล์รายงาน '%s'<br>"
 
 #: pcbnew/dialogs/dialog_drc.cpp:892
 msgid "Do you wish to delete excluded markers as well?"
-msgstr ""
+msgstr "คุณต้องการลบเครื่องหมายที่ยกเว้นด้วยหรือไม่?"
 
 #: pcbnew/dialogs/dialog_drc.cpp:895
 msgid "Delete exclusions"
-msgstr ""
+msgstr "ลบข้อยกเว้น"
 
 #: pcbnew/dialogs/dialog_drc.cpp:966
 msgid "not run"
-msgstr ""
+msgstr "ไม่ทำงาน"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:27
 msgid "Refill all zones before performing DRC"
-msgstr ""
+msgstr "เติมทุกโซนก่อน ทำDRC"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:30
 msgid "Report all errors for each track"
-msgstr ""
+msgstr "รายงานข้อผิดพลาดทั้งหมดสําหรับแต่ละแทร็ค"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:31
 msgid ""
@@ -22073,94 +22187,98 @@ msgid ""
 "If unselected, only the first DRC violation will be reported for each track "
 "connection."
 msgstr ""
+"หากเลือก จะมีรายงานการละเมิด DRC ทั้งหมดของแทร็ก "
+"อาจช้าสำหรับการออกแบบที่ซับซ้อน\n"
+"\n"
+"หากไม่เลือก ระบบจะรายงานเฉพาะการละเมิด DRC ครั้งแรกสำหรับแต่ละแทร็ก"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:41
 msgid "Test for parity between PCB and schematic"
-msgstr ""
+msgstr "ทดสอบความเท่าเทียมกันระหว่างพีซีบีและวงจร"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:77
 msgid "Tests Running..."
-msgstr ""
+msgstr "ทดสอบการทํางาน..."
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:105
 #, c-format
 msgid "Violations (%d)"
-msgstr ""
+msgstr "การละเมิด (%d)"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:117
 #, c-format
 msgid "Unconnected Items (%d)"
-msgstr ""
+msgstr "รายการที่ไม่ได้เชื่อมต่อ (%d)"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:129
 #, c-format
 msgid "Schematic Parity (%d)"
-msgstr ""
+msgstr "เท่าเทียมกับวงจร (%d)"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:192
 #: pcbnew/dialogs/dialog_footprint_checker_base.cpp:79
 msgid "Delete Marker"
-msgstr ""
+msgstr "ลบเครื่องหมาย"
 
 #: pcbnew/dialogs/dialog_drc_base.h:102
 msgid "DRC Control"
-msgstr ""
+msgstr "การควบคุม DRC"
 
 #: pcbnew/dialogs/dialog_enum_pads_base.cpp:19
 msgid "Pad names are restricted to 4 characters (including number)."
-msgstr ""
+msgstr "ชื่อแพ็ดจำกัดไว้ที่ 4 ตัวอักษร(รวมหมายเลข)"
 
 #: pcbnew/dialogs/dialog_enum_pads_base.cpp:32
 msgid "Pad name prefix:"
-msgstr ""
+msgstr "คำนำหน้าชื่อแพ็ด:"
 
 #: pcbnew/dialogs/dialog_enum_pads_base.cpp:47
 msgid "First pad number:"
-msgstr ""
+msgstr "หมายเลขแพ็ดแรก:"
 
 #: pcbnew/dialogs/dialog_enum_pads_base.h:51
 msgid "Pad Enumeration Settings"
-msgstr ""
+msgstr "การตั้งค่าการแจงนับแพ็ด"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:74
 msgid "Change Footprints"
-msgstr ""
+msgstr "เปลี่ยนฟุ้ทพรินท์"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:75
 msgid "Change all footprints on board"
-msgstr ""
+msgstr "เปลี่ยนฟุ้ทพรินท์ทั้งหมดบนบอร์ด"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:76
 msgid "Change selected footprint(s)"
-msgstr ""
+msgstr "เปลี่ยนฟุ้ทพรินท์ที่เลือก"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:77
 msgid "Change footprints matching reference designator:"
-msgstr ""
+msgstr "เปลี่ยนฟุ้ทพรินท์ตรงกับอักษรอ้างอิง:"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:78
 msgid "Change footprints matching value:"
-msgstr ""
+msgstr "เปลี่ยนฟุ้ทพรินท์ตรงกับค่า:"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:79
 msgid "Change footprints with library id:"
-msgstr ""
+msgstr "เปลี่ยนฟุ้ทพรินท์ด้วยไอดีไลบรารี:"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:80
 msgid "Update text layers and visibilities"
-msgstr ""
+msgstr "ปรับปรุงเลเยอร์ข้อความและการมองเห็น"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:81
 msgid "Update text sizes, styles and positions"
-msgstr ""
+msgstr "ปรับปรุงขนาดข้อความ,สไตล์และตำแหน่ง"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:82
 msgid "Update fabrication attributes"
-msgstr ""
+msgstr "อัพเดทคุณลักษณะการผลิต"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:83
 msgid "Update 3D models"
-msgstr ""
+msgstr "ปรับปรุงโมเดล 3 มิติ"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:87
 msgid ""
@@ -22169,135 +22287,140 @@ msgid ""
 "or the user made changes to the library footprint and wants to propagate "
 "them back to the PCB."
 msgstr ""
+"อัพเดต/รีเซ็ตข้อความ: มีสองกรณีที่คำอธิบายนี้จำเป็นต้องครอบคลุม: "
+"ผู้ใช้ทำการแทนที่ฟุ้ทพรินท์บนพีซีบีและต้องการลบออก "
+"หรือผู้ใช้ทำการเปลี่ยนแปลงฟุ้ทพรินท์ไลบรารีและต้องการส่กลับไปยังพีซีบี"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:374
 #, c-format
 msgid "Update footprint %s from '%s' to '%s'"
-msgstr ""
+msgstr "ปรับปรุงฟุ้ทพรินท์ %s จาก '%s' เป็น '%s'"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:381
 #, c-format
 msgid "Change footprint %s from '%s' to '%s'"
-msgstr ""
+msgstr "เปลี่ยนฟุ้ทพรินท์ %s จาก '%s' เป็น '%s'"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:391
 msgid "*** footprint not found ***"
-msgstr ""
+msgstr "*** ไม่พบฟุ้ทพรินท์ ***"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:24
 msgid "Update all footprints on board"
-msgstr ""
+msgstr "ปรับปรุงฟุ้ทพรินท์ทั้งหมดบนบอร์ด"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:27
 msgid "Update selected footprint(s)"
-msgstr ""
+msgstr "ปรับปรุงฟุ้ทพรินท์ที่เลือก"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:30
 msgid "Update footprints matching reference designator:"
-msgstr ""
+msgstr "ปรับปรุงฟุ้ทพรินท์ที่ตรงกับอักษรอ้างอิง:"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:38
 msgid "Update footprints matching value:"
-msgstr ""
+msgstr "ปรับปรุงฟุ้ทพรินท์ตรงกับค่า:"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:44
 msgid "Update footprints with library id:"
-msgstr ""
+msgstr "เปลี่ยนฟุ้ทพรินท์ด้วยไอดีไลบรารี:"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:73
 msgid "New footprint library id:"
-msgstr ""
+msgstr "ฟุ้ทพรินท์ไลบรารีไอดีใหม่:"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:96
 msgid "Remove text items which are not in library footprint"
-msgstr ""
+msgstr "นำออกข้อความที่ไม่มีในฟุ้ทพรินท์ไลบรารี"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:101
 msgid "Update/reset text layers and visibilities"
-msgstr ""
+msgstr "อัปเดต/รีเซ็ต เลเยอร์ข้อความและการมองเห็น"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:104
 msgid "Update/reset text sizes, styles and positions"
-msgstr ""
+msgstr "อัปเดต/รีเซ็ตขนาดข้อความ รูปแบบ และตำแหน่ง"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:107
 msgid "Update/reset fabrication attributes"
-msgstr ""
+msgstr "อัพเดทคุณลักษณะการผลิต"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:110
 msgid "Update/reset 3D models"
-msgstr ""
+msgstr "อัปเดต/รีเซ็ตโมเดล 3 มิติ"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.h:86
 msgid "Update Footprints from Library"
-msgstr ""
+msgstr "ปรับปรุงฟุ้ทพรินท์จากไลบรารี"
 
 #: pcbnew/dialogs/dialog_export_idf.cpp:161
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:120
 #, c-format
 msgid "File %s already exists."
-msgstr ""
+msgstr "ไฟล์ %s มีอยู่แล้ว"
 
 #: pcbnew/dialogs/dialog_export_idf.cpp:223
 #, c-format
 msgid "Unable to create %s"
-msgstr ""
+msgstr "ไม่สามารถสร้าง %s"
 
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:21
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:22
 msgid "File name:"
-msgstr ""
+msgstr "ชื่อไฟล์:"
 
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:25
 msgid "Select an IDF export filename"
-msgstr ""
+msgstr "เลือกชื่อไฟล์ส่งออก IDF"
 
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:25
 msgid "*.emn"
-msgstr ""
+msgstr "*.emn"
 
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:34
 msgid "Grid reference point:"
-msgstr ""
+msgstr "จุดอ้างอิงกริด:"
 
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:38
 msgid "Adjust automatically"
-msgstr ""
+msgstr "ปรับปรุงโดยอัตโนมัติ"
 
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:60
 #: pcbnew/dialogs/dialog_export_step_base.cpp:73
 msgid "X position:"
-msgstr ""
+msgstr "ตําแหน่ง X:"
 
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:81
 #: pcbnew/dialogs/dialog_export_step_base.cpp:88
 msgid "Y position:"
-msgstr ""
+msgstr "ตําแหน่ง Y:"
 
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:104
 msgid "Output Units"
-msgstr ""
+msgstr "หน่วยเอาท์พุท"
 
 #: pcbnew/dialogs/dialog_export_idf_base.h:61
 msgid "Export IDFv3"
-msgstr ""
+msgstr "ส่งออก IDFv3"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:187
 msgid "Non-unity scaled models:"
-msgstr ""
+msgstr "โมเดลที่ไม่เป็นเอกภาพ:"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:189
 msgid ""
 "Scaled models detected.  Model scaling is not reliable for mechanical export."
 msgstr ""
+"ตรวจพบโมเดลที่ปรับขนาดแล้ว "
+"มาตราส่วนแบบจำลองไม่น่าเชื่อถือสำหรับการส่งออกทางกล"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:191
 msgid "Model Scale Warning"
-msgstr ""
+msgstr "คำเตือนมาตราส่วนแบบจำลอง"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:250
 msgid "STEP export failed!  Please save the PCB and try again"
-msgstr ""
+msgstr "การส่งออก STEP ล้มเหลว!  กรุณาบันทึก PCB แล้วลองอีกครั้ง"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:315
 #, c-format
@@ -22305,115 +22428,119 @@ msgid ""
 "Board outline is missing or not closed using %.3f mm tolerance.\n"
 "Run DRC for a full analysis."
 msgstr ""
+"รูปร่างบอร์ดขาดหายไปหรือไม่เป็นรูปปิดโดยใช้พิกัดความผิดพลาด %.3f มม.\n"
+"เรียกใช้ DRC เพื่อการวิเคราะห์แบบเต็ม"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:327
 msgid "STEP Export"
-msgstr ""
+msgstr "ส่งออกชนิด STEP"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:28
 msgid "Select a STEP export filename"
-msgstr ""
+msgstr "เลือกชื่อไฟล์การส่งออก STEP"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:28
 msgid "STEP files (*.stp;*.step)|*.stp;*.step"
-msgstr ""
+msgstr "ไฟล์ STEP (*.stp;*.step)|*.stp;*.step"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:38
 msgid "Coordinates"
-msgstr ""
+msgstr "พิกัด"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:40
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:96
 #: pcbnew/dialogs/panel_pcbnew_display_origin_base.cpp:23
 msgid "Drill/place file origin"
-msgstr ""
+msgstr "เจาะ/วางต้นทางของไฟล์"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:43
 #: pcbnew/dialogs/panel_pcbnew_display_origin_base.cpp:23
 msgid "Grid origin"
-msgstr ""
+msgstr "จุดกำเนิดกริด"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:46
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:44
 msgid "User defined origin"
-msgstr ""
+msgstr "ผู้ใช้กำหนดกริด"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:49
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:44
 msgid "Board center origin"
-msgstr ""
+msgstr "จุดกำเนิดศูนย์กลางบอร์ด"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:56
 msgid "User Defined Origin"
-msgstr ""
+msgstr "ผู้ใช้กำหนดจุดกำเนิดเอง"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:110
 msgid "Other Options"
-msgstr ""
+msgstr "ตัวเลือกอื่น"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:112
 msgid "Ignore virtual components"
-msgstr ""
+msgstr "ละเว้นอุปกรณ์เสมือน"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:115
 msgid "Substitute similarly named models"
-msgstr ""
+msgstr "แทนที่โมเดลที่มีชื่อคล้ายกัน"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:116
 msgid "Replace VRML models with STEP models of the same name"
-msgstr ""
+msgstr "แทนที่โมเดล VRML ด้วย STEP ที่มีชื่อเดียวกัน"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:120
 msgid "Overwrite old file"
-msgstr ""
+msgstr "เขียนทับไฟล์เก่า"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:123
 msgid "Board outline chaining tolerance:"
-msgstr ""
+msgstr "รูปร่างบอร์ดผูกมัดระยะผิดพลาด:"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:127
 msgid "Tight (0.001 mm)"
-msgstr ""
+msgstr "แน่น (0.001 มม.)"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:127
 msgid "Standard (0.01 mm)"
-msgstr ""
+msgstr "มาตรฐาน (0.01 มม.)"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:127
 msgid "Loose (0.1 mm)"
-msgstr ""
+msgstr "หลวม (0.1 มม.)"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:131
 msgid ""
 "Tolerance sets the distance between two points that are considered joined."
-msgstr ""
+msgstr "ระยะคลาดเคลื่อน ทำให้ระยะห่างระหว่างจุดสองจุด ถือว่าเชื่อมต่อกัน"
 
 #: pcbnew/dialogs/dialog_export_step_base.h:75
 msgid "Export STEP"
-msgstr ""
+msgstr "ส่งออก STEP"
 
 #: pcbnew/dialogs/dialog_export_svg.cpp:214
 #: pcbnew/exporters/gen_footprints_placefile.cpp:191
 msgid "Use a relative path?"
-msgstr ""
+msgstr "ใช้เส้นทางสัมพัทธ์?"
 
 #: pcbnew/dialogs/dialog_export_svg.cpp:224
 #: pcbnew/exporters/gen_footprints_placefile.cpp:200
 msgid ""
 "Cannot make path relative (target volume different from board file volume)!"
 msgstr ""
+"ไม่สามารถทําให้เส้นทางสัมพันธ์กันได้ "
+"(ไดรฟ์ข้อมูลเป้าหมายแตกต่างจากไดรฟ์ข้อมูลแฟ้มบอร์ด)!"
 
 #: pcbnew/dialogs/dialog_export_svg.cpp:264 pcbnew/dialogs/dialog_plot.cpp:815
 #: pcbnew/exporters/gen_footprints_placefile.cpp:254
 #: pcbnew/exporters/gen_footprints_placefile.cpp:353
 #, c-format
 msgid "Could not write plot files to folder '%s'."
-msgstr ""
+msgstr "ไม่สามารถเขียนไฟล์พล็อตไปยังโฟลเดอร์ '%s'"
 
 #: pcbnew/dialogs/dialog_export_svg.cpp:291
 #, c-format
 msgid "Exported '%s'."
-msgstr ""
+msgstr "ส่งออก '%s'"
 
 #: pcbnew/dialogs/dialog_export_svg.cpp:296
 #: pcbnew/exporters/gen_footprints_placefile.cpp:272
@@ -22421,43 +22548,45 @@ msgstr ""
 #: pcbnew/exporters/gen_footprints_placefile.cpp:532
 #, c-format
 msgid "Unable to create '%s'."
-msgstr ""
+msgstr "ไม่สามารถสร้าง '%s'"
 
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:29
 msgid ""
 "Enter a filename if you do not want to use default file names\n"
 "Can be used only when printing the current sheet"
 msgstr ""
+"ป้อนชื่อไฟล์หากคุณไม่ต้องการใช้ชื่อไฟล์เริ่มต้น\n"
+"ใช้ได้เฉพาะเมื่อพิมพ์แผ่นงานปัจจุบัน"
 
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:63
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:512
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:286
 msgid "Technical layers:"
-msgstr ""
+msgstr "เลเยอร์เทคนิคคัล:"
 
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:82
 msgid "Print Mode"
-msgstr ""
+msgstr "โหมดการพิมพ์"
 
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:84
 msgid "Export as black elements on a white background"
-msgstr ""
+msgstr "ส่งออกเป็นองค์ประกอบสีดําบนพื้นหลังสีขาว"
 
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:88
 msgid "Page with frame and title block"
-msgstr ""
+msgstr "หน้าที่มีกรอบและบล็อคชื่อเรื่อง"
 
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:88
 msgid "Current page size"
-msgstr ""
+msgstr "ขนาดหน้าปัจจุบัน"
 
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:88
 msgid "Board area only"
-msgstr ""
+msgstr "พื้นที่บอร์ดเท่านั้น"
 
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:90
 msgid "SVG Page Size"
-msgstr ""
+msgstr "ขนาดหน้า SVG"
 
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:95
 msgid "Print the layer(s) horizontally mirrored"
