@@ -40,10 +40,8 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 	m_LayerListFlexGridSizer->SetFlexibleDirection( wxHORIZONTAL );
 	m_LayerListFlexGridSizer->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
-	m_CrtYdFrontCheckBox = new wxCheckBox( m_LayersListPanel, ID_CRTYDFRONTCHECKBOX, wxEmptyString, wxDefaultPosition, wxSize( -1,-1 ), 0 );
-	m_CrtYdFrontCheckBox->SetToolTip( _("If you want a courtyard layer for the front side of the board") );
 
-	m_LayerListFlexGridSizer->Add( m_CrtYdFrontCheckBox, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_CENTER_HORIZONTAL|wxLEFT, 5 );
+	m_LayerListFlexGridSizer->Add( 0, 0, 1, wxEXPAND, 5 );
 
 	m_CrtYdFrontName = new wxTextCtrl( m_LayersListPanel, wxID_ANY, _("CrtYd_Front"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_CrtYdFrontName->SetMinSize( wxSize( 160,-1 ) );
@@ -632,10 +630,8 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 	m_FabBackStaticText->Wrap( -1 );
 	m_LayerListFlexGridSizer->Add( m_FabBackStaticText, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
-	m_CrtYdBackCheckBox = new wxCheckBox( m_LayersListPanel, ID_CRTYDBACKCHECKBOX, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_CrtYdBackCheckBox->SetToolTip( _("If you want a courtyard layer for the back side of the board") );
 
-	m_LayerListFlexGridSizer->Add( m_CrtYdBackCheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+	m_LayerListFlexGridSizer->Add( 0, 0, 1, wxEXPAND, 5 );
 
 	m_CrtYdBackName = new wxTextCtrl( m_LayersListPanel, wxID_ANY, _("CrtYd_Back"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_LayerListFlexGridSizer->Add( m_CrtYdBackName, 0, wxEXPAND|wxRIGHT, 5 );
@@ -644,10 +640,8 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 	m_CrtYdBackStaticText->Wrap( -1 );
 	m_LayerListFlexGridSizer->Add( m_CrtYdBackStaticText, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
 
-	m_PCBEdgesCheckBox = new wxCheckBox( m_LayersListPanel, ID_PCBEDGESCHECKBOX, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_PCBEdgesCheckBox->SetToolTip( _("If you want a board perimeter layer") );
 
-	m_LayerListFlexGridSizer->Add( m_PCBEdgesCheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+	m_LayerListFlexGridSizer->Add( 0, 0, 1, wxEXPAND, 5 );
 
 	m_PCBEdgesName = new wxTextCtrl( m_LayersListPanel, wxID_ANY, _("Pcb_Edges"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_LayerListFlexGridSizer->Add( m_PCBEdgesName, 0, wxEXPAND|wxRIGHT, 5 );
@@ -656,8 +650,8 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 	m_PCBEdgesStaticText->Wrap( -1 );
 	m_LayerListFlexGridSizer->Add( m_PCBEdgesStaticText, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
-	m_MarginCheckBox = new wxCheckBox( m_LayersListPanel, ID_MARGINCHECKBOX, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_LayerListFlexGridSizer->Add( m_MarginCheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+
+	m_LayerListFlexGridSizer->Add( 0, 0, 1, wxEXPAND, 5 );
 
 	m_MarginName = new wxTextCtrl( m_LayersListPanel, wxID_ANY, _("Margin"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_LayerListFlexGridSizer->Add( m_MarginName, 0, wxEXPAND|wxRIGHT, 5 );
@@ -816,7 +810,6 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 
 	// Connect Events
 	m_addUserDefinedLayerButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::addUserDefinedLayer ), NULL, this );
-	m_CrtYdFrontCheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::DenyChangeCheckBox ), NULL, this );
 	m_FabFrontCheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::OnCheckBox ), NULL, this );
 	m_AdhesFrontCheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::OnCheckBox ), NULL, this );
 	m_SoldPFrontCheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::OnCheckBox ), NULL, this );
@@ -859,9 +852,6 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 	m_SoldPBackCheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::OnCheckBox ), NULL, this );
 	m_AdhesBackCheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::OnCheckBox ), NULL, this );
 	m_FabBackCheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::OnCheckBox ), NULL, this );
-	m_CrtYdBackCheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::DenyChangeCheckBox ), NULL, this );
-	m_PCBEdgesCheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::DenyChangeCheckBox ), NULL, this );
-	m_MarginCheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::DenyChangeCheckBox ), NULL, this );
 	m_Eco1CheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::OnCheckBox ), NULL, this );
 	m_Eco2CheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::OnCheckBox ), NULL, this );
 	m_CommentsCheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::OnCheckBox ), NULL, this );
@@ -881,7 +871,6 @@ PANEL_SETUP_LAYERS_BASE::~PANEL_SETUP_LAYERS_BASE()
 {
 	// Disconnect Events
 	m_addUserDefinedLayerButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::addUserDefinedLayer ), NULL, this );
-	m_CrtYdFrontCheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::DenyChangeCheckBox ), NULL, this );
 	m_FabFrontCheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::OnCheckBox ), NULL, this );
 	m_AdhesFrontCheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::OnCheckBox ), NULL, this );
 	m_SoldPFrontCheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::OnCheckBox ), NULL, this );
@@ -924,9 +913,6 @@ PANEL_SETUP_LAYERS_BASE::~PANEL_SETUP_LAYERS_BASE()
 	m_SoldPBackCheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::OnCheckBox ), NULL, this );
 	m_AdhesBackCheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::OnCheckBox ), NULL, this );
 	m_FabBackCheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::OnCheckBox ), NULL, this );
-	m_CrtYdBackCheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::DenyChangeCheckBox ), NULL, this );
-	m_PCBEdgesCheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::DenyChangeCheckBox ), NULL, this );
-	m_MarginCheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::DenyChangeCheckBox ), NULL, this );
 	m_Eco1CheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::OnCheckBox ), NULL, this );
 	m_Eco2CheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::OnCheckBox ), NULL, this );
 	m_CommentsCheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::OnCheckBox ), NULL, this );
