@@ -271,11 +271,19 @@ static const std::vector<CIR_CIR_VECPT_CASE> intersect_circle_cases = {
         },
     },
     {
-        "tangent aligned",
+        "tangent aligned, external",
         { { 10, 10 }, 20 },
         { { 10, 50 }, 20 },
         {
             { 10, 30 },
+        },
+    },
+    {
+        "tangent aligned, internal",
+        { { 10, 10 }, 40 },
+        { { 10, 30 }, 20 },
+        {
+            { 10, 50 },
         },
     },
     {
@@ -314,6 +322,14 @@ static const std::vector<CIR_CIR_VECPT_CASE> intersect_circle_cases = {
         "KiROUND overflow 4",
         { { 46497999, -94001999 }, 200001 },
         { { 46498001, -94001999 }, 650001 },
+        {
+            //no points
+        },
+    },
+    {
+        "Co-centered, same radius", // Exercise d=0
+        { { 205999999, 136367974 }, 3742026 },
+        { { 205999999, 136367974 }, 3742026 },
         {
             //no points
         },

@@ -239,6 +239,9 @@ std::vector<VECTOR2I> CIRCLE::Intersect( const CIRCLE& aCircle ) const
     if( d > ( r1 + r2 ) || ( d < ( std::abs( r1 - r2 ) ) ) )
         return retval; //circles do not intersect
 
+    if( d == 0 )
+        return retval; // circles are co-centered. Don't return intersection points
+
     // Equation (3)
     int64_t x = ( ( d * d ) + ( r1 * r1 ) - ( r2 * r2 ) ) / ( int64_t( 2 ) * d );
     int64_t r1sqMinusXsq = ( r1 * r1 ) - ( x * x );
