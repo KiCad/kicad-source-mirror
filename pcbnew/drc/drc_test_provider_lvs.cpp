@@ -96,7 +96,7 @@ void DRC_TEST_PROVIDER_LVS::testFootprints( NETLIST& aNetlist )
 
         auto ins = footprints.insert( footprint );
 
-        if( !ins.second )
+        if( !ins.second && !( footprint->GetAttributes() & FP_BOARD_ONLY ) )
         {
             std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_DUPLICATE_FOOTPRINT );
             drcItem->SetItems( footprint, *ins.first );
