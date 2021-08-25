@@ -97,22 +97,22 @@
 # mc: - HatchBorder = tratteggio (thanks t.me/kicadit)
 # mc: - constraints = vincoli
 # mc: - BOM - Distinta base
-# mc: - sweep = TT 
+# mc: - sweep = TT
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-20 13:14-0700\n"
-"PO-Revision-Date: 2021-08-06 08:09+0200\n"
-"Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
-"Language-Team: Italian <https://hosted.weblate.org/projects/kicad/master-"
-"source/it/>\n"
+"POT-Creation-Date: 2021-08-20 11:53-0700\n"
+"PO-Revision-Date: 2021-08-27 08:25+0000\n"
+"Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
+"Language-Team: Italian <https://hosted.weblate.org/projects/kicad/"
+"master-source/it/>\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.7-dev\n"
+"X-Generator: Weblate 4.8.1-dev\n"
 "X-Poedit-Basepath: /home/marco/git/github/kicad/kicad-source-mirror\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SearchPath-0: kicad\n"
@@ -14149,7 +14149,7 @@ msgid ""
 "Schematic symbol reference '%s' library identifier is not valid. Unable to "
 "link library symbol."
 msgstr ""
-"L'identificatore del simbolo schema di libreria '%s' non è valido.  "
+"L'identificatore del simbolo schema di libreria '%s' non è valido. "
 "Impossibile collegare il simbolo di libreria."
 
 #: eeschema/sch_screen.cpp:615
@@ -25663,7 +25663,7 @@ msgstr "Verifica riempimento zone prima della tracciatura"
 #: pcbnew/dialogs/dialog_plot_base.cpp:169
 msgid "Global solder mask min width and/or margin are not set to 0. "
 msgstr ""
-"Margine e/o larghezza minima maschera di saldatura globale non sono a 0."
+"Margine e/o larghezza minima maschera di saldatura globale non sono a 0. "
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:173
 msgid ""
