@@ -151,7 +151,7 @@ typedef std::unordered_set<SCH_ITEM*> SCH_ITEM_SET;
 class STROKE_PARAMS
 {
 public:
-    STROKE_PARAMS( int aWidth = Mils2iu( DEFAULT_LINE_THICKNESS ),
+    STROKE_PARAMS( int aWidth = Mils2iu( DEFAULT_LINE_WIDTH_MILS ),
                    PLOT_DASH_TYPE aPlotStyle = PLOT_DASH_TYPE::DEFAULT,
                    const COLOR4D& aColor = COLOR4D::UNSPECIFIED ) :
             m_width( aWidth ),

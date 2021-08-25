@@ -38,9 +38,9 @@ const int schSettingsSchemaVersion = 1;
 
 SCHEMATIC_SETTINGS::SCHEMATIC_SETTINGS( JSON_SETTINGS* aParent, const std::string& aPath ) :
         NESTED_SETTINGS( "schematic", schSettingsSchemaVersion, aParent, aPath ),
-        m_DefaultLineWidth( DEFAULT_LINE_THICKNESS * IU_PER_MILS ),
-        m_DefaultWireThickness( DEFAULT_WIRE_THICKNESS * IU_PER_MILS ),
-        m_DefaultBusThickness( DEFAULT_BUS_THICKNESS * IU_PER_MILS ),
+        m_DefaultLineWidth( DEFAULT_LINE_WIDTH_MILS * IU_PER_MILS ),
+        m_DefaultWireThickness( DEFAULT_WIRE_WIDTH_MILS * IU_PER_MILS ),
+        m_DefaultBusThickness( DEFAULT_BUS_WIDTH_MILS * IU_PER_MILS ),
         m_DefaultTextSize( DEFAULT_TEXT_SIZE * IU_PER_MILS ),
         m_LabelSizeRatio( DEFAULT_LABEL_SIZE_RATIO ),
         m_TextOffsetRatio( DEFAULT_TEXT_OFFSET_RATIO ),
@@ -59,11 +59,11 @@ SCHEMATIC_SETTINGS::SCHEMATIC_SETTINGS( JSON_SETTINGS* aParent, const std::strin
     EESCHEMA_SETTINGS* appSettings = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
 
     int defaultLineThickness =
-            appSettings ? appSettings->m_Drawing.default_line_thickness : DEFAULT_LINE_THICKNESS;
+            appSettings ? appSettings->m_Drawing.default_line_thickness : DEFAULT_LINE_WIDTH_MILS;
     int defaultWireThickness =
-            appSettings ? appSettings->m_Drawing.default_wire_thickness : DEFAULT_WIRE_THICKNESS;
+            appSettings ? appSettings->m_Drawing.default_wire_thickness : DEFAULT_WIRE_WIDTH_MILS;
     int defaultBusThickness =
-            appSettings ? appSettings->m_Drawing.default_bus_thickness : DEFAULT_BUS_THICKNESS;
+            appSettings ? appSettings->m_Drawing.default_bus_thickness : DEFAULT_BUS_WIDTH_MILS;
     int defaultTextSize =
             appSettings ? appSettings->m_Drawing.default_text_size : DEFAULT_TEXT_SIZE;
     int defaultPinSymbolSize =

@@ -143,7 +143,7 @@ SYMBOL_VIEWER_FRAME::SYMBOL_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAM
 
     GetRenderSettings()->m_ShowHiddenText = true;
     GetRenderSettings()->m_ShowHiddenPins = true;
-    GetRenderSettings()->SetDefaultPenWidth( DEFAULT_LINE_THICKNESS * IU_PER_MILS );
+    GetRenderSettings()->SetDefaultPenWidth( DEFAULT_LINE_WIDTH_MILS * IU_PER_MILS );
 
     setupTools();
     setupUIConditions();

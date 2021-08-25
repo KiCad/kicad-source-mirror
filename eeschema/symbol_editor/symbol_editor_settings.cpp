@@ -47,7 +47,7 @@ SYMBOL_EDITOR_SETTINGS::SYMBOL_EDITOR_SETTINGS() :
     SetLegacyFilename( "eeschema" );
 
     m_params.emplace_back( new PARAM<int>( "defaults.line_width",
-                           &m_Defaults.line_width, DEFAULT_LINE_THICKNESS ) );
+                           &m_Defaults.line_width, DEFAULT_LINE_WIDTH_MILS ) );
 
     m_params.emplace_back( new PARAM<int>( "defaults.text_size",
                            &m_Defaults.text_size, DEFAULT_TEXT_SIZE ) );

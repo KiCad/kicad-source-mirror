@@ -120,7 +120,7 @@ EESCHEMA_SETTINGS::EESCHEMA_SETTINGS() :
             &m_AutoplaceFields.align_to_grid, true ) );
 
     m_params.emplace_back( new PARAM<int>( "drawing.default_bus_thickness",
-            &m_Drawing.default_bus_thickness, DEFAULT_BUS_THICKNESS ) );
+            &m_Drawing.default_bus_thickness, DEFAULT_BUS_WIDTH_MILS ) );
 
     m_params.emplace_back( new PARAM<int>( "drawing.default_junction_size",
             &m_Drawing.default_junction_size, DEFAULT_JUNCTION_DIAM ) );
@@ -128,11 +128,11 @@ EESCHEMA_SETTINGS::EESCHEMA_SETTINGS() :
     m_params.emplace_back( new PARAM<int>( "drawing.pin_symbol_size",
             &m_Drawing.pin_symbol_size, DEFAULT_TEXT_SIZE / 2 ) );
 
-    m_params.emplace_back(
-            new PARAM<double>( "drawing.text_offset_ratio", &m_Drawing.text_offset_ratio, 0.08 ) );
+    m_params.emplace_back( new PARAM<double>( "drawing.text_offset_ratio",
+            &m_Drawing.text_offset_ratio, 0.08 ) );
 
     m_params.emplace_back( new PARAM<int>( "drawing.default_line_thickness",
-            &m_Drawing.default_line_thickness, DEFAULT_LINE_THICKNESS ) );
+            &m_Drawing.default_line_thickness, DEFAULT_LINE_WIDTH_MILS ) );
 
     m_params.emplace_back( new PARAM<int>( "drawing.default_repeat_offset_x",
             &m_Drawing.default_repeat_offset_x, 0 ) );
@@ -141,10 +141,10 @@ EESCHEMA_SETTINGS::EESCHEMA_SETTINGS() :
             &m_Drawing.default_repeat_offset_y, 100 ) );
 
     m_params.emplace_back( new PARAM<int>( "drawing.default_wire_thickness",
-            &m_Drawing.default_wire_thickness, DEFAULT_WIRE_THICKNESS ) );
+            &m_Drawing.default_wire_thickness, DEFAULT_WIRE_WIDTH_MILS ) );
 
-    m_params.emplace_back( new PARAM<int>(
-            "drawing.default_text_size", &m_Drawing.default_text_size, DEFAULT_TEXT_SIZE ) );
+    m_params.emplace_back( new PARAM<int>( "drawing.default_text_size",
+            &m_Drawing.default_text_size, DEFAULT_TEXT_SIZE ) );
 
     m_params.emplace_back( new PARAM<wxString>( "drawing.field_names",
             &m_Drawing.field_names, "" ) );

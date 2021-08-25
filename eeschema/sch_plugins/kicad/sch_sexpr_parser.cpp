@@ -477,7 +477,7 @@ void SCH_SEXPR_PARSER::parseStroke( STROKE_PARAMS& aStroke )
     wxCHECK_RET( CurTok() == T_stroke,
                  wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as a stroke." ) );
 
-    aStroke.SetWidth( Mils2iu( DEFAULT_LINE_THICKNESS ) );
+    aStroke.SetWidth( Mils2iu( DEFAULT_LINE_WIDTH_MILS ) );
     aStroke.SetPlotStyle( PLOT_DASH_TYPE::DEFAULT );
     aStroke.SetColor( COLOR4D::UNSPECIFIED );
 

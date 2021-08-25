@@ -182,7 +182,7 @@ int SCH_BUS_WIRE_ENTRY::GetPenWidth() const
     if( Schematic() )
         return std::max( Schematic()->Settings().m_DefaultWireThickness, 1 );
 
-    return DEFAULT_WIRE_THICKNESS;
+    return Mils2iu( DEFAULT_WIRE_WIDTH_MILS );
 }
 
 
@@ -199,7 +199,7 @@ int SCH_BUS_BUS_ENTRY::GetPenWidth() const
     if( Schematic() )
         return std::max( Schematic()->Settings().m_DefaultBusThickness, 1 );
 
-    return DEFAULT_BUS_THICKNESS;
+    return Mils2iu( DEFAULT_BUS_WIDTH_MILS );
 }
 
 

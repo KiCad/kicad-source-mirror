@@ -81,12 +81,12 @@ SCH_RENDER_SETTINGS::SCH_RENDER_SETTINGS() :
         m_OverrideItemColors( false ),
         m_LabelSizeRatio( DEFAULT_LABEL_SIZE_RATIO ),
         m_TextOffsetRatio( DEFAULT_TEXT_OFFSET_RATIO ),
-        m_DefaultWireThickness( DEFAULT_WIRE_THICKNESS * IU_PER_MILS ),
-        m_DefaultBusThickness( DEFAULT_BUS_THICKNESS * IU_PER_MILS ),
+        m_DefaultWireThickness( DEFAULT_WIRE_WIDTH_MILS * IU_PER_MILS ),
+        m_DefaultBusThickness( DEFAULT_BUS_WIDTH_MILS * IU_PER_MILS ),
         m_PinSymbolSize( DEFAULT_TEXT_SIZE * IU_PER_MILS / 2 ),
         m_JunctionSize( DEFAULT_JUNCTION_DIAM * IU_PER_MILS )
 {
-    SetDefaultPenWidth( DEFAULT_LINE_THICKNESS * IU_PER_MILS );
+    SetDefaultPenWidth( DEFAULT_LINE_WIDTH_MILS * IU_PER_MILS );
 
     m_minPenWidth = ADVANCED_CFG::GetCfg().m_MinPlotPenWidth * IU_PER_MM;
 }

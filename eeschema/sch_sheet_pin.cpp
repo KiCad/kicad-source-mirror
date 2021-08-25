@@ -100,7 +100,7 @@ int SCH_SHEET_PIN::GetPenWidth() const
     if( Schematic() )
         return Schematic()->Settings().m_DefaultLineWidth;
 
-    return DEFAULT_LINE_THICKNESS;
+    return Mils2iu( DEFAULT_LINE_WIDTH_MILS );
 }
 
 

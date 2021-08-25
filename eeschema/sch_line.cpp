@@ -47,9 +47,9 @@ SCH_LINE::SCH_LINE( const wxPoint& pos, int layer ) :
 
     switch( layer )
     {
-    default: m_layer = LAYER_NOTES; break;
+    default:         m_layer = LAYER_NOTES; break;
     case LAYER_WIRE: m_layer = LAYER_WIRE;  break;
-    case LAYER_BUS: m_layer = LAYER_BUS;   break;
+    case LAYER_BUS:  m_layer = LAYER_BUS;   break;
     }
 }
 
@@ -287,7 +287,7 @@ int SCH_LINE::GetPenWidth() const
         if( Schematic() )
             return Schematic()->Settings().m_DefaultLineWidth;
 
-        return DEFAULT_LINE_THICKNESS;
+        return Mils2iu( DEFAULT_LINE_WIDTH_MILS );
 
     case LAYER_WIRE:
         if( m_stroke.GetWidth() > 0 )
@@ -299,7 +299,7 @@ int SCH_LINE::GetPenWidth() const
         if( Schematic() )
             return Schematic()->Settings().m_DefaultWireThickness;
 
-        return DEFAULT_WIRE_THICKNESS;
+        return Mils2iu( DEFAULT_WIRE_WIDTH_MILS );
 
     case LAYER_BUS:
         if( m_stroke.GetWidth() > 0 )
@@ -311,7 +311,7 @@ int SCH_LINE::GetPenWidth() const
         if( Schematic() )
             return Schematic()->Settings().m_DefaultBusThickness;
 
-        return DEFAULT_BUS_THICKNESS;
+        return Mils2iu( DEFAULT_BUS_WIDTH_MILS );
     }
 }
 

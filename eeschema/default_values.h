@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2020 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2016-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -42,13 +42,13 @@
 #define DEFAULTSELECTIONTHICKNESS 3
 
 ///< The default line width in mils. (can be changed in preference menu)
-#define DEFAULT_LINE_THICKNESS 6
+#define DEFAULT_LINE_WIDTH_MILS 6
 
 ///< The default wire width in mils. (can be changed in preference menu)
-#define DEFAULT_WIRE_THICKNESS 6
+#define DEFAULT_WIRE_WIDTH_MILS 6
 
 ///< The default bus width in mils. (can be changed in preference menu)
-#define DEFAULT_BUS_THICKNESS 12
+#define DEFAULT_BUS_WIDTH_MILS 12
 
 ///< The default noconnect size in mils.
 #define DEFAULT_NOCONNECT_SIZE 48
