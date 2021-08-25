@@ -73,6 +73,17 @@ static wxColor pasteColor( 200, 200, 200 );
 static void drawBitmap( wxBitmap& aBitmap, wxColor aColor );
 
 
+wxString getColourAsHexString( const wxColour aColour )
+{
+    // NB: wxWidgets 3.0's color.GetAsString( wxC2S_HTML_SYNTAX ) pukes on alpha
+    return wxString::Format( wxT("#%02X%02X%02X%02X" ),
+                             aColour.Red(),
+                             aColour.Green(),
+                             aColour.Blue(),
+                             aColour.Alpha() );
+}
+
+
 PANEL_SETUP_BOARD_STACKUP::PANEL_SETUP_BOARD_STACKUP( PAGED_DIALOG* aParent, PCB_EDIT_FRAME* aFrame,
                                                       PANEL_SETUP_LAYERS* aPanelLayers ):
         PANEL_SETUP_BOARD_STACKUP_BASE( aParent->GetTreebook() ),
@@ -1110,8 +1121,8 @@ bool PANEL_SETUP_BOARD_STACKUP::transferDataFromUIToStackup()
 
                 if( idx == GetColorUserDefinedListIdx() )
                 {
-                    wxColour color = ui_item.m_UserColor;
-                    item->SetColor( color.GetAsString( wxC2S_HTML_SYNTAX ) );
+                    // NB: wxWidgets 3.0's color.GetAsString( wxC2S_HTML_SYNTAX ) pukes on alpha
+                    item->SetColor( getColourAsHexString( ui_item.m_UserColor ) );
                 }
                 else
                 {
@@ -1257,7 +1268,8 @@ void PANEL_SETUP_BOARD_STACKUP::onColorSelected( wxCommandEvent& event )
 
             m_rowUiItemsList[row].m_UserColor = color;
 
-            combo->SetString( idx, color.GetAsString( wxC2S_HTML_SYNTAX ) );
+            // NB: wxWidgets 3.0's color.GetAsString( wxC2S_HTML_SYNTAX ) pukes on alpha
+            combo->SetString( idx, getColourAsHexString( color ) );
 
             wxBitmap layerbmp( m_colorSwatchesSize.x, m_colorSwatchesSize.y );
             LAYER_SELECTOR::DrawColorSwatch( layerbmp, COLOR4D( 0, 0, 0, 0 ), COLOR4D( color ) );
@@ -1460,21 +1472,19 @@ wxBitmapComboBox* PANEL_SETUP_BOARD_STACKUP::createColorBox( BOARD_STACKUP_ITEM*
         wxColor  curr_color;
         wxString label;
 
-        // Defined colors have a name, the user color uses the HTML notation ( i.e. #FF0000)
-        if( ii == GetColorUserDefinedListIdx() )
+        // Defined colors have a name, the user color uses HTML notation ( i.e. #FF000080)
+        if( ii == GetColorUserDefinedListIdx()
+                && aStackupItem && aStackupItem->GetColor().StartsWith( "#" ) )
         {
-            if( aStackupItem && aStackupItem->GetColor().StartsWith( "#" ) )
-                curr_color = wxColour( aStackupItem->GetColor() );
-            else
-                curr_color = color_list[ii].GetColor( itemType );
+            curr_color = wxColour( aStackupItem->GetColor() );
 
-            label = _( curr_color.GetAsString( wxC2S_HTML_SYNTAX ) );
+            // NB: wxWidgets 3.0's color.GetAsString( wxC2S_HTML_SYNTAX ) pukes on alpha
+            label = getColourAsHexString( curr_color );
         }
-        else    // Append the user color, if specified, else add a default user color
+        else
         {
             curr_color = color_list[ii].GetColor( itemType );
-
-            label = wxGetTranslation( color_list[ii].GetName() );
+            label = _( color_list[ii].GetName() );
         }
 
         wxBitmap layerbmp( m_colorSwatchesSize.x, m_colorSwatchesSize.y );

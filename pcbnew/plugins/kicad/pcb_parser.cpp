@@ -1487,7 +1487,14 @@ void PCB_PARSER::parseBoardStackup()
                             else
                                 color = color.WithAlpha( 1.0 );
 
-                            name = color.ToColour().GetAsString( wxC2S_HTML_SYNTAX );
+                            wxColour wx_color = color.ToColour();
+
+                            // Open-code wxColour::GetAsString() because 3.0 doesn't handle rgba
+                            name.Printf( wxT("#%02X%02X%02X%02X" ),
+                                         wx_color.Red(),
+                                         wx_color.Green(),
+                                         wx_color.Blue(),
+                                         wx_color.Alpha() );
                         }
 
                         item->SetColor( name );
