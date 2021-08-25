@@ -162,8 +162,13 @@ BOARD_ADAPTER::BOARD_ADAPTER() :
 #define ADD_COLOR( list, r, g, b, a, name ) \
     list.push_back( CUSTOM_COLOR_ITEM( r/255.0, g/255.0, b/255.0, a, name ) )
 
-        ADD_COLOR( g_SilkscreenColors, 241, 241, 241, 1.0, "White" );
-        ADD_COLOR( g_SilkscreenColors,   4,  18,  21, 1.0, "Dark" );
+        ADD_COLOR( g_SilkscreenColors,  20,  51,  36, 1.0, "Green" );
+        ADD_COLOR( g_SilkscreenColors, 181,  19,  21, 1.0, "Red" );
+        ADD_COLOR( g_SilkscreenColors,   2,  59, 162, 1.0, "Blue" );
+        ADD_COLOR( g_SilkscreenColors,  11,  11,  11, 1.0, "Black" );
+        ADD_COLOR( g_SilkscreenColors, 245, 245, 245, 1.0, "White" );
+        ADD_COLOR( g_SilkscreenColors,  32,   2,  53, 1.0, "Purple" );
+        ADD_COLOR( g_SilkscreenColors, 194,  195,  0, 1.0, "Yellow" );
 
         ADD_COLOR( g_MaskColors,  20,  51,  36, 0.83, "Green" );
         ADD_COLOR( g_MaskColors,  91, 168,  12, 0.83, "Light Green" );
@@ -179,6 +184,7 @@ BOARD_ADAPTER::BOARD_ADAPTER() :
         ADD_COLOR( g_MaskColors, 245, 245, 245, 0.83, "White" );
         ADD_COLOR( g_MaskColors,  32,   2,  53, 0.83, "Purple" );
         ADD_COLOR( g_MaskColors, 119,  31,  91, 0.83, "Light Purple" );
+        ADD_COLOR( g_MaskColors, 194,  195,  0, 0.83, "Yellow" );
 
         ADD_COLOR( g_PasteColors, 128, 128, 128, 1.0, "Grey" );
         ADD_COLOR( g_PasteColors,  90,  90,  90, 1.0, "Dark Grey" );
@@ -584,7 +590,6 @@ void BOARD_ADAPTER::InitSettings( REPORTER* aStatusReporter, REPORTER* aWarningR
                     m_SilkScreenColorTop = to_SFVEC4F( findColor( colorName, g_SilkscreenColors ) );
                 else
                     m_SilkScreenColorBot = to_SFVEC4F( findColor( colorName, g_SilkscreenColors ) );
-
                 break;
 
             case BS_ITEM_TYPE_SOLDERMASK:
@@ -597,7 +602,7 @@ void BOARD_ADAPTER::InitSettings( REPORTER* aStatusReporter, REPORTER* aWarningR
 
             case BS_ITEM_TYPE_DIELECTRIC:
             {
-                KIGFX::COLOR4D  layerColor = COLOR4D::CLEAR;
+                KIGFX::COLOR4D  layerColor = COLOR4D::UNSPECIFIED;
                 const wxString& materialName = stackupItem->GetMaterial();
 
                 if( materialName.StartsWith( "FR4" ) )
@@ -617,6 +622,11 @@ void BOARD_ADAPTER::InitSettings( REPORTER* aStatusReporter, REPORTER* aWarningR
                 else if( materialName.IsSameAs( "Al" ) )
                 {
                     layerColor = findColor( "Aluminum", g_BoardColors );
+                }
+                else    // A default color value for unknown dielectric material
+                        // (i.e. an exotic name entered by hand)
+                {
+                    layerColor = findColor( "FR4 natural", g_BoardColors );
                 }
 
                 if( bodyColor == COLOR4D( 0, 0, 0, 0 ) )

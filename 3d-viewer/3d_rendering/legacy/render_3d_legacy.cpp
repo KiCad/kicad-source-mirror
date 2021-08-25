@@ -674,9 +674,13 @@ bool RENDER_3D_LEGACY::Redraw( bool aIsMoving, REPORTER* aStatusReporter,
         if( ( layer_id == B_Mask ) || ( layer_id == F_Mask ) )
             continue;
 
-        // Do not show inner layers when it is displaying the board and board body is full opaque
+        // Do not show inner layers when it is displaying the board and board body is opaque
+        // enough: the time to create inner layers can be *really significant*.
+        // So avoid creating them is they are not very visible
+        const double opacity_min = 0.8;
+
         if( m_boardAdapter.GetFlag( FL_SHOW_BOARD_BODY ) &&
-            ( m_boardAdapter.m_BoardBodyColor.a > 0.99f ) )
+            ( m_boardAdapter.m_BoardBodyColor.a > opacity_min ) )
         {
             if( ( layer_id > F_Cu ) && ( layer_id < B_Cu ) )
                 continue;
