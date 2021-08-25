@@ -96,6 +96,8 @@ PCB_PLOT_PARAMS::PCB_PLOT_PARAMS()
     m_includeGerberNetlistInfo   = true;
     m_createGerberJobFile        = true;
     m_gerberPrecision            = gbrDefaultPrecision;
+    m_dashedLineDashRatio        = 5.0;
+    m_dashedLineGapRatio         = 3.0;
 
     // we used 0.1mils for SVG step before, but nm precision is more accurate, so we use nm
     m_svgPrecision               = SVG_PRECISION_DEFAULT;
@@ -166,91 +168,79 @@ void PCB_PLOT_PARAMS::SetSvgPrecision( unsigned aPrecision, bool aUseInch )
 void PCB_PLOT_PARAMS::Format( OUTPUTFORMATTER* aFormatter,
                               int aNestLevel, int aControl ) const
 {
-    const char* falseStr = getTokenName( T_false );
-    const char* trueStr = getTokenName( T_true );
+    auto printBool =
+            []( bool aBool ) -> const char*
+            {
+                return aBool ? "true" : "false";
+            };
 
-    aFormatter->Print( aNestLevel, "(%s\n", getTokenName( T_pcbplotparams ) );
+    aFormatter->Print( aNestLevel, "(pcbplotparams\n" );
 
-    aFormatter->Print( aNestLevel+1, "(%s 0x%s)\n", getTokenName( T_layerselection ),
+    aFormatter->Print( aNestLevel+1, "(layerselection 0x%s)\n",
                        m_layerSelection.FmtHex().c_str() );
 
-    aFormatter->Print( aNestLevel+1, "(%s %s)\n", getTokenName( T_disableapertmacros ),
-                       m_gerberDisableApertMacros ? trueStr : falseStr );
+    aFormatter->Print( aNestLevel+1, "(disableapertmacros %s)\n", 
+                       printBool( m_gerberDisableApertMacros ) );
 
-    aFormatter->Print( aNestLevel+1, "(%s %s)\n", getTokenName( T_usegerberextensions ),
-                       m_useGerberProtelExtensions ? trueStr : falseStr );
+    aFormatter->Print( aNestLevel+1, "(usegerberextensions %s)\n",
+                       printBool( m_useGerberProtelExtensions) );
 
-    aFormatter->Print( aNestLevel+1, "(%s %s)\n", getTokenName( T_usegerberattributes ),
-                       GetUseGerberX2format() ? trueStr : falseStr );
+    aFormatter->Print( aNestLevel+1, "(usegerberattributes %s)\n",
+                       printBool( GetUseGerberX2format()) );
 
-    aFormatter->Print( aNestLevel+1, "(%s %s)\n", getTokenName( T_usegerberadvancedattributes ),
-                       GetIncludeGerberNetlistInfo() ? trueStr : falseStr );
+    aFormatter->Print( aNestLevel+1, "(usegerberadvancedattributes %s)\n",
+                       printBool( GetIncludeGerberNetlistInfo()) );
 
-    aFormatter->Print( aNestLevel+1, "(%s %s)\n", getTokenName( T_creategerberjobfile ),
-                       GetCreateGerberJobFile() ? trueStr : falseStr );
+    aFormatter->Print( aNestLevel+1, "(creategerberjobfile %s)\n",
+                       printBool( GetCreateGerberJobFile()) );
 
     // save this option only if it is not the default value,
     // to avoid incompatibility with older Pcbnew version
     if( m_gerberPrecision != gbrDefaultPrecision )
-        aFormatter->Print( aNestLevel+1, "(%s %d)\n",
-                           getTokenName( T_gerberprecision ), m_gerberPrecision );
+        aFormatter->Print( aNestLevel+1, "(gerberprecision %d)\n", m_gerberPrecision );
+
+    aFormatter->Print( aNestLevel+1, "(dashed_line_dash_ratio %f)\n", GetDashedLineDashRatio() );
+    aFormatter->Print( aNestLevel+1, "(dashed_line_gap_ratio %f)\n", GetDashedLineGapRatio() );
 
     // SVG options
-    aFormatter->Print( aNestLevel+1, "(%s %s)\n", getTokenName( T_svguseinch ),
-                       m_svgUseInch ? trueStr : falseStr );
-    aFormatter->Print( aNestLevel+1, "(%s %d)\n", getTokenName( T_svgprecision ),
-                       m_svgPrecision );
+    aFormatter->Print( aNestLevel+1, "(svguseinch %s)\n", printBool( m_svgUseInch ) );
+    aFormatter->Print( aNestLevel+1, "(svgprecision %d)\n", m_svgPrecision );
 
-    aFormatter->Print( aNestLevel+1, "(%s %s)\n", getTokenName( T_excludeedgelayer ),
-                       m_excludeEdgeLayer ? trueStr : falseStr );
-    aFormatter->Print( aNestLevel+1, "(%s %s)\n", getTokenName( T_plotframeref ),
-                       m_plotFrameRef ? trueStr : falseStr );
-    aFormatter->Print( aNestLevel+1, "(%s %s)\n", getTokenName( T_viasonmask ),
-                       m_plotViaOnMaskLayer ? trueStr : falseStr );
-    aFormatter->Print( aNestLevel+1, "(%s %d)\n", getTokenName( T_mode ),
-                       GetPlotMode() == SKETCH ? 2 : 1 );       // Value 0 (LINE mode) no more used
-    aFormatter->Print( aNestLevel+1, "(%s %s)\n", getTokenName( T_useauxorigin ),
-                       m_useAuxOrigin ? trueStr : falseStr );
+    aFormatter->Print( aNestLevel+1, "(excludeedgelayer %s)\n", printBool( m_excludeEdgeLayer ) );
+    aFormatter->Print( aNestLevel+1, "(plotframeref %s)\n", printBool( m_plotFrameRef ) );
+    aFormatter->Print( aNestLevel+1, "(viasonmask %s)\n", printBool( m_plotViaOnMaskLayer ) );
+    aFormatter->Print( aNestLevel+1, "(mode %d)\n", GetPlotMode() == SKETCH ? 2 : 1 );
+    aFormatter->Print( aNestLevel+1, "(useauxorigin %s)\n", printBool( m_useAuxOrigin ) );
 
     // HPGL options
-    aFormatter->Print( aNestLevel+1, "(%s %d)\n", getTokenName( T_hpglpennumber ),
-                       m_HPGLPenNum );
-    aFormatter->Print( aNestLevel+1, "(%s %d)\n", getTokenName( T_hpglpenspeed ),
-                       m_HPGLPenSpeed );
-    aFormatter->Print( aNestLevel+1, "(%s %f)\n", getTokenName( T_hpglpendiameter ),
-                       m_HPGLPenDiam );
+    aFormatter->Print( aNestLevel+1, "(hpglpennumber %d)\n", m_HPGLPenNum );
+    aFormatter->Print( aNestLevel+1, "(hpglpenspeed %d)\n", m_HPGLPenSpeed );
+    aFormatter->Print( aNestLevel+1, "(hpglpendiameter %f)\n", m_HPGLPenDiam );
 
     // DXF options
     aFormatter->Print( aNestLevel+1, "(%s %s)\n", getTokenName( T_dxfpolygonmode ),
-                       m_DXFplotPolygonMode ? trueStr : falseStr );
+                       printBool( m_DXFplotPolygonMode ) );
     aFormatter->Print( aNestLevel+1, "(%s %s)\n", getTokenName( T_dxfimperialunits ),
-                       m_DXFplotUnits == DXF_UNITS::INCHES ? trueStr : falseStr );
+                       printBool( m_DXFplotUnits == DXF_UNITS::INCHES ) );
     aFormatter->Print( aNestLevel+1, "(%s %s)\n", getTokenName( T_dxfusepcbnewfont ),
-                       m_textMode == PLOT_TEXT_MODE::NATIVE ? falseStr : trueStr );
+                       printBool( m_textMode != PLOT_TEXT_MODE::NATIVE ) );
 
     aFormatter->Print( aNestLevel+1, "(%s %s)\n", getTokenName( T_psnegative ),
-                       m_negative ? trueStr : falseStr );
+                       printBool( m_negative ) );
     aFormatter->Print( aNestLevel+1, "(%s %s)\n", getTokenName( T_psa4output ),
-                       m_A4Output ? trueStr : falseStr );
-    aFormatter->Print( aNestLevel+1, "(%s %s)\n", getTokenName( T_plotreference ),
-                       m_plotReference ? trueStr : falseStr );
-    aFormatter->Print( aNestLevel+1, "(%s %s)\n", getTokenName( T_plotvalue ),
-                       m_plotValue ? trueStr : falseStr );
-    aFormatter->Print( aNestLevel+1, "(%s %s)\n", getTokenName( T_plotinvisibletext ),
-                       m_plotInvisibleText ? trueStr : falseStr );
-    aFormatter->Print( aNestLevel+1, "(%s %s)\n", getTokenName( T_sketchpadsonfab ),
-                       m_sketchPadsOnFabLayers ? trueStr : falseStr );
-    aFormatter->Print( aNestLevel+1, "(%s %s)\n", getTokenName( T_subtractmaskfromsilk ),
-                       m_subtractMaskFromSilk ? trueStr : falseStr );
-    aFormatter->Print( aNestLevel+1, "(%s %d)\n", getTokenName( T_outputformat ),
-                       static_cast<int>( m_format ) );
-    aFormatter->Print( aNestLevel+1, "(%s %s)\n", getTokenName( T_mirror ),
-                       m_mirror ? trueStr : falseStr );
-    aFormatter->Print( aNestLevel+1, "(%s %d)\n", getTokenName( T_drillshape ),
-                       m_drillMarks );
-    aFormatter->Print( aNestLevel+1, "(%s %d)\n", getTokenName( T_scaleselection ),
-                       m_scaleSelection );
-    aFormatter->Print( aNestLevel+1, "(%s \"%s\")", getTokenName( T_outputdirectory ),
+                       printBool( m_A4Output ) );
+    aFormatter->Print( aNestLevel+1, "(plotreference %s)\n", printBool( m_plotReference ) );
+    aFormatter->Print( aNestLevel+1, "(plotvalue %s)\n", printBool( m_plotValue ) );
+    aFormatter->Print( aNestLevel+1, "(plotinvisibletext %s)\n", printBool( m_plotInvisibleText ) );
+    aFormatter->Print( aNestLevel+1, "(sketchpadsonfab %s)\n",
+                       printBool( m_sketchPadsOnFabLayers ) );
+    aFormatter->Print( aNestLevel+1, "(subtractmaskfromsilk %s)\n",
+                       printBool( m_subtractMaskFromSilk ) );
+    aFormatter->Print( aNestLevel+1, "(outputformat %d)\n", static_cast<int>( m_format ) );
+    aFormatter->Print( aNestLevel+1, "(mirror %s)\n", printBool( m_mirror ) );
+    aFormatter->Print( aNestLevel+1, "(drillshape %d)\n", m_drillMarks );
+    aFormatter->Print( aNestLevel+1, "(scaleselection %d)\n", m_scaleSelection );
+    aFormatter->Print( aNestLevel+1, "(outputdirectory \"%s\")", 
                        (const char*) m_outputDirectory.utf8_str() );
     aFormatter->Print( 0, "\n" );
     aFormatter->Print( aNestLevel, ")\n" );
@@ -284,6 +274,12 @@ bool PCB_PLOT_PARAMS::IsSameAs( const PCB_PLOT_PARAMS &aPcbPlotParams ) const
         return false;
 
     if( m_gerberPrecision != aPcbPlotParams.m_gerberPrecision )
+        return false;
+
+    if( m_dashedLineDashRatio != aPcbPlotParams.m_dashedLineDashRatio )
+        return false;
+
+    if( m_dashedLineGapRatio != aPcbPlotParams.m_dashedLineGapRatio )
         return false;
 
     if( m_excludeEdgeLayer != aPcbPlotParams.m_excludeEdgeLayer )
@@ -473,6 +469,14 @@ void PCB_PLOT_PARAMS_PARSER::Parse( PCB_PLOT_PARAMS* aPcbPlotParams )
         case T_gerberprecision:
             aPcbPlotParams->m_gerberPrecision = parseInt( gbrDefaultPrecision - 1,
                                                           gbrDefaultPrecision);
+            break;
+
+        case T_dashed_line_dash_ratio:
+            aPcbPlotParams->m_dashedLineDashRatio = parseDouble();
+            break;
+
+        case T_dashed_line_gap_ratio:
+            aPcbPlotParams->m_dashedLineGapRatio = parseDouble();
             break;
 
         case T_svgprecision:

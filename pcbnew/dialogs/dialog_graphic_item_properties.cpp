@@ -78,6 +78,8 @@ private:
         finishDialogSettings();
     }
 
+    void onFilledCheckbox( wxCommandEvent& event ) override;
+
     bool Validate() override;
 };
 
@@ -132,6 +134,11 @@ DIALOG_GRAPHIC_ITEM_PROPERTIES::DIALOG_GRAPHIC_ITEM_PROPERTIES( PCB_BASE_EDIT_FR
         m_LayerSelectionCtrl->SetNotAllowedLayerSet( forbiddenLayers );
     }
 
+    for( const std::pair<const PLOT_DASH_TYPE, lineTypeStruct>& typeEntry : lineTypeNames )
+        m_lineStyleCombo->Append( typeEntry.second.name, KiBitmap( typeEntry.second.bitmap ) );
+
+    m_lineStyleCombo->Append( DEFAULT_STYLE );
+
     m_LayerSelectionCtrl->SetLayersHotkeys( false );
     m_LayerSelectionCtrl->SetBoardFrame( m_parent );
     m_LayerSelectionCtrl->Resync();
@@ -148,6 +155,29 @@ void PCB_BASE_EDIT_FRAME::ShowGraphicItemPropertiesDialog( BOARD_ITEM* aItem )
 
     DIALOG_GRAPHIC_ITEM_PROPERTIES dlg( this, aItem );
     dlg.ShowQuasiModal();
+}
+
+
+void DIALOG_GRAPHIC_ITEM_PROPERTIES::onFilledCheckbox( wxCommandEvent& event )
+{
+    if( m_filledCtrl->GetValue() )
+    {
+        m_lineStyleCombo->SetSelection( 0 );
+        m_lineStyleLabel->Enable( false );
+        m_lineStyleCombo->Enable( false );
+    }
+    else
+    {
+        int style = static_cast<int>( m_item->GetStroke().GetPlotStyle() );
+
+        if( style == -1 )
+            m_lineStyleCombo->SetStringSelection( DEFAULT_STYLE );
+        else if( style < (int) lineTypeNames.size() )
+            m_lineStyleCombo->SetSelection( style );
+
+        m_lineStyleLabel->Enable( true );
+        m_lineStyleCombo->Enable( true );
+    }
 }
 
 
@@ -254,7 +284,17 @@ bool DIALOG_GRAPHIC_ITEM_PROPERTIES::TransferDataToWindow()
 
     m_filledCtrl->SetValue( m_item->IsFilled() );
     m_locked->SetValue( m_item->IsLocked() );
-    m_thickness.SetValue( m_item->GetWidth() );
+
+    m_thickness.SetValue( m_item->GetStroke().GetWidth() );
+
+    int style = static_cast<int>( m_item->GetStroke().GetPlotStyle() );
+
+    if( style == -1 )
+        m_lineStyleCombo->SetStringSelection( DEFAULT_STYLE );
+    else if( style < (int) lineTypeNames.size() )
+        m_lineStyleCombo->SetSelection( style );
+    else
+        wxFAIL_MSG( "Line type not found in the type lookup map" );
 
     m_LayerSelectionCtrl->SetLayerSelection( m_item->GetLayer() );
 
@@ -340,7 +380,17 @@ bool DIALOG_GRAPHIC_ITEM_PROPERTIES::TransferDataFromWindow()
     m_item->SetLocked( m_locked->GetValue() );
 
     STROKE_PARAMS stroke = m_item->GetStroke();
+
     stroke.SetWidth( m_thickness.GetValue() );
+
+    auto it = lineTypeNames.begin();
+    std::advance( it, m_lineStyleCombo->GetSelection() );
+
+    if( it == lineTypeNames.end() )
+        stroke.SetPlotStyle( PLOT_DASH_TYPE::DEFAULT );
+    else
+        stroke.SetPlotStyle( it->first );
+
     m_item->SetStroke( stroke );
 
     m_item->SetLayer( ToLAYER_ID( layer ) );

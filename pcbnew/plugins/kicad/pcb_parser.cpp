@@ -114,7 +114,7 @@ void PCB_PARSER::checkpoint()
     if( m_progressReporter )
     {
         TIME_PT curTime = CLOCK::now();
-        unsigned curLine = m_lineReader->LineNumber();
+        unsigned curLine = reader->LineNumber();
         auto delta = std::chrono::duration_cast<TIMEOUT>( curTime - m_lastProgressTime );
 
         if( delta > std::chrono::milliseconds( 100 ) )
@@ -2639,10 +2639,20 @@ PCB_SHAPE* PCB_PARSER::parsePCB_SHAPE()
             NeedRIGHT();
             break;
 
-        case T_width:
+        case T_width:       // legacy token
             stroke.SetWidth( parseBoardUnits( T_width ) );
             NeedRIGHT();
             break;
+
+        case T_stroke:
+        {
+            STROKE_PARAMS_PARSER strokeParser( reader, IU_PER_MM );
+            strokeParser.SyncLineReaderWith( *this );
+
+            strokeParser.ParseStroke( stroke );
+            SyncLineReaderWith( strokeParser );
+            break;
+        }
 
         case T_tstamp:
             NextTok();
@@ -3936,10 +3946,20 @@ FP_SHAPE* PCB_PARSER::parseFP_SHAPE()
             NeedRIGHT();
             break;
 
-        case T_width:
+        case T_width:       // legacy token
             stroke.SetWidth( parseBoardUnits( T_width ) );
             NeedRIGHT();
             break;
+
+        case T_stroke:
+        {
+            STROKE_PARAMS_PARSER strokeParser( reader, IU_PER_MM );
+            strokeParser.SyncLineReaderWith( *this );
+
+            strokeParser.ParseStroke( stroke );
+            SyncLineReaderWith( strokeParser );
+            break;
+        }
 
         case T_tstamp:
             NextTok();

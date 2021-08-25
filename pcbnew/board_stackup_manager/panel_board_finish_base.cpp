@@ -53,7 +53,7 @@ PANEL_SETUP_BOARD_FINISH_BASE::PANEL_SETUP_BOARD_FINISH_BASE( wxWindow* parent, 
 	bMargins->Add( fgSizer2, 1, wxEXPAND|wxTOP, 10 );
 
 
-	bMainSizer->Add( bMargins, 1, wxEXPAND, 10 );
+	bMainSizer->Add( bMargins, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 
 
 	this->SetSizer( bMainSizer );

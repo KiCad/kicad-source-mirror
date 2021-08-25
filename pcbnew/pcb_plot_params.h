@@ -195,6 +195,12 @@ public:
     void        SetHPGLPenNum( int aVal ) { m_HPGLPenNum = aVal; }
     int         GetHPGLPenNum() const { return m_HPGLPenNum; }
 
+    void        SetDashedLineDashRatio( double aVal ) { m_dashedLineDashRatio = aVal; }
+    double      GetDashedLineDashRatio() const { return m_dashedLineDashRatio; }
+
+    void        SetDashedLineGapRatio( double aVal ) { m_dashedLineGapRatio = aVal; }
+    double      GetDashedLineGapRatio() const { return m_dashedLineGapRatio; }
+
 private:
     friend class PCB_PLOT_PARAMS_PARSER;
 
@@ -336,6 +342,9 @@ private:
     int         m_HPGLPenSpeed;         ///< HPGL only: pen speed, always in cm/s (1 to 99 cm/s)
     double      m_HPGLPenDiam;          ///< HPGL only: pen diameter in MILS, useful to fill areas
                                         ///< However, it is in mm in hpgl files.
+
+    double      m_dashedLineDashRatio;
+    double      m_dashedLineGapRatio;
 
     /// Pointer to active color settings to be used for plotting
     COLOR_SETTINGS* m_colors;

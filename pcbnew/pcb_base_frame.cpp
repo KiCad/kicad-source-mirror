@@ -167,6 +167,17 @@ void PCB_BASE_FRAME::SetBoard( BOARD* aBoard, PROGRESS_REPORTER* aReporter )
         delete m_pcb;
         m_pcb = aBoard;
 
+        if( GetBoard() && GetCanvas() )
+        {
+            RENDER_SETTINGS* rs = GetCanvas()->GetView()->GetPainter()->GetSettings();
+
+            if( rs )
+            {
+                rs->SetDashLengthRatio( GetBoard()->GetPlotOptions().GetDashedLineDashRatio() );
+                rs->SetGapLengthRatio( GetBoard()->GetPlotOptions().GetDashedLineGapRatio() );
+            }
+        }
+
         wxCommandEvent e( BOARD_CHANGED );
         ProcessEventLocally( e );
     }

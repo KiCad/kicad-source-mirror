@@ -22,6 +22,7 @@
 #define KICAD_DIALOG_BOARD_SETUP_H
 
 #include <widgets/paged_dialog.h>
+#include "panel_setup_formatting.h"
 
 class PCB_EDIT_FRAME;
 class PANEL_SETUP_CONSTRAINTS;
@@ -51,6 +52,7 @@ protected:
     PANEL_SETUP_CONSTRAINTS*         m_constraints;
     PANEL_SETUP_LAYERS*              m_layers;
     PANEL_SETUP_TEXT_AND_GRAPHICS*   m_textAndGraphics;
+    PANEL_SETUP_FORMATTING*          m_formatting;
     PANEL_SETUP_NETCLASSES*          m_netclasses;
     PANEL_SETUP_RULES*               m_rules;
     PANEL_SETUP_TRACKS_AND_VIAS*     m_tracksAndVias;

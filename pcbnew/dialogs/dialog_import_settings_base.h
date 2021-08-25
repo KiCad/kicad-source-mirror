@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.9.0 Nov  1 2020)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -41,9 +41,9 @@ class DIALOG_IMPORT_SETTINGS_BASE : public DIALOG_SHIM
 		wxBoxSizer* m_MainSizer;
 		wxTextCtrl* m_filePathCtrl;
 		wxBitmapButton* m_browseButton;
-		wxButton* m_selectAllButton;
 		wxStaticLine* m_staticline1;
 		wxBoxSizer* m_buttonsSizer;
+		wxButton* m_selectAllButton;
 		wxStdDialogButtonSizer* m_sdbSizer1;
 		wxButton* m_sdbSizer1OK;
 		wxButton* m_sdbSizer1Cancel;
@@ -56,12 +56,13 @@ class DIALOG_IMPORT_SETTINGS_BASE : public DIALOG_SHIM
 
 	public:
 		wxCheckBox* m_LayersOpt;
+		wxCheckBox* m_MaskAndPasteOpt;
 		wxCheckBox* m_TextAndGraphicsOpt;
+		wxCheckBox* m_FormattingOpt;
 		wxCheckBox* m_ConstraintsOpt;
 		wxCheckBox* m_TracksAndViasOpt;
-		wxCheckBox* m_MaskAndPasteOpt;
-		wxCheckBox* m_SeveritiesOpt;
 		wxCheckBox* m_NetclassesOpt;
+		wxCheckBox* m_SeveritiesOpt;
 
 		DIALOG_IMPORT_SETTINGS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Import Settings"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 		~DIALOG_IMPORT_SETTINGS_BASE();

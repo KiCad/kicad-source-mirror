@@ -925,9 +925,9 @@ void PCB_PLUGIN::format( const PCB_SHAPE* aShape, int aNestLevel ) const
         return;
     };
 
-    formatLayer( aShape );
+    m_out->Print( 0, "\n" );
 
-    m_out->Print( 0, " (width %s)", FormatInternalUnits( aShape->GetWidth() ).c_str() );
+    aShape->GetStroke().Format( m_out, aNestLevel + 1 );
 
     // The filled flag represents if a solid fill is present on circles, rectangles and polygons
     if( ( aShape->GetShape() == SHAPE_T::POLY )
@@ -939,6 +939,8 @@ void PCB_PLUGIN::format( const PCB_SHAPE* aShape, int aNestLevel ) const
         else
             m_out->Print( 0, " (fill none)" );
     }
+
+    formatLayer( aShape );
 
     m_out->Print( 0, " (tstamp %s)", TO_UTF8( aShape->m_Uuid.AsString() ) );
 
@@ -1058,9 +1060,9 @@ void PCB_PLUGIN::format( const FP_SHAPE* aFPShape, int aNestLevel ) const
         return;
     };
 
-    formatLayer( aFPShape );
+    m_out->Print( 0, "\n" );
 
-    m_out->Print( 0, " (width %s)", FormatInternalUnits( aFPShape->GetWidth() ).c_str() );
+    aFPShape->GetStroke().Format( m_out, aNestLevel + 1 );
 
     // The filled flag represents if a solid fill is present on circles, rectangles and polygons
     if( ( aFPShape->GetShape() == SHAPE_T::POLY )
@@ -1072,6 +1074,8 @@ void PCB_PLUGIN::format( const FP_SHAPE* aFPShape, int aNestLevel ) const
         else
             m_out->Print( 0, " (fill none)" );
     }
+
+    formatLayer( aFPShape );
 
     m_out->Print( 0, " (tstamp %s)", TO_UTF8( aFPShape->m_Uuid.AsString() ) );
 
@@ -2334,7 +2338,7 @@ BOARD* PCB_PLUGIN::DoLoad( LINE_READER& aReader, BOARD* aAppendToMe, const PROPE
 
     m_parser->SetLineReader( &aReader );
     m_parser->SetBoard( aAppendToMe );
-    m_parser->SetProgressReporter( aProgressReporter, &aReader, aLineCount );
+    m_parser->SetProgressReporter( aProgressReporter, aLineCount );
 
     BOARD* board;
 

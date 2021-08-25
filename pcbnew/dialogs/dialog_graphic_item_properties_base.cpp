@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.0-4761b0c5)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -21,7 +21,7 @@ DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE::DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE( wxWind
 	wxBoxSizer* bUpperSizer;
 	bUpperSizer = new wxBoxSizer( wxVERTICAL );
 
-	m_sizerLeft = new wxGridBagSizer( 5, 5 );
+	m_sizerLeft = new wxGridBagSizer( 5, 3 );
 	m_sizerLeft->SetFlexibleDirection( wxBOTH );
 	m_sizerLeft->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 	m_sizerLeft->SetEmptyCellSize( wxSize( 5,5 ) );
@@ -131,72 +131,67 @@ DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE::DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE( wxWind
 	m_sizerLeft->Add( m_BezierPointC2YUnit, wxGBPosition( 6, 5 ), wxGBSpan( 1, 1 ), wxRIGHT|wxALIGN_CENTER_VERTICAL, 5 );
 
 
-	bUpperSizer->Add( m_sizerLeft, 1, wxEXPAND, 20 );
+	bUpperSizer->Add( m_sizerLeft, 0, wxEXPAND, 20 );
 
-	wxBoxSizer* bUpperRightSizer;
-	bUpperRightSizer = new wxBoxSizer( wxVERTICAL );
+	wxBoxSizer* bMiddleSizer;
+	bMiddleSizer = new wxBoxSizer( wxVERTICAL );
 
-	wxFlexGridSizer* fgUpperRightGridSizer;
-	fgUpperRightGridSizer = new wxFlexGridSizer( 0, 3, 3, 0 );
-	fgUpperRightGridSizer->AddGrowableCol( 1 );
-	fgUpperRightGridSizer->SetFlexibleDirection( wxBOTH );
-	fgUpperRightGridSizer->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+	wxGridBagSizer* gbSizer2;
+	gbSizer2 = new wxGridBagSizer( 5, 0 );
+	gbSizer2->SetFlexibleDirection( wxBOTH );
+	gbSizer2->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
 	m_angleLabel = new wxStaticText( this, wxID_ANY, _("Arc angle:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_angleLabel->Wrap( -1 );
-	fgUpperRightGridSizer->Add( m_angleLabel, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxLEFT, 5 );
+	gbSizer2->Add( m_angleLabel, wxGBPosition( 0, 0 ), wxGBSpan( 1, 1 ), wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_angleCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgUpperRightGridSizer->Add( m_angleCtrl, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
+	gbSizer2->Add( m_angleCtrl, wxGBPosition( 0, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxEXPAND|wxTOP|wxBOTTOM, 5 );
 
 	m_angleUnits = new wxStaticText( this, wxID_ANY, _("deg"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_angleUnits->Wrap( -1 );
-	fgUpperRightGridSizer->Add( m_angleUnits, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT, 5 );
+	gbSizer2->Add( m_angleUnits, wxGBPosition( 0, 2 ), wxGBSpan( 1, 1 ), wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_locked = new wxCheckBox( this, wxID_ANY, _("Locked"), wxDefaultPosition, wxDefaultSize, 0 );
-	fgUpperRightGridSizer->Add( m_locked, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
-
-
-	fgUpperRightGridSizer->Add( 0, 0, 1, wxEXPAND, 5 );
-
-
-	fgUpperRightGridSizer->Add( 0, 0, 1, wxEXPAND, 5 );
+	gbSizer2->Add( m_locked, wxGBPosition( 1, 0 ), wxGBSpan( 1, 1 ), wxRIGHT|wxLEFT, 5 );
 
 	m_filledCtrl = new wxCheckBox( this, wxID_ANY, _("Filled shape"), wxDefaultPosition, wxDefaultSize, 0 );
-	fgUpperRightGridSizer->Add( m_filledCtrl, 0, wxTOP|wxLEFT, 5 );
-
-
-	fgUpperRightGridSizer->Add( 0, 0, 1, wxEXPAND, 5 );
-
-
-	fgUpperRightGridSizer->Add( 0, 0, 1, wxEXPAND, 5 );
+	gbSizer2->Add( m_filledCtrl, wxGBPosition( 2, 0 ), wxGBSpan( 1, 2 ), wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 	m_thicknessLabel = new wxStaticText( this, wxID_ANY, _("Line width:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_thicknessLabel->Wrap( -1 );
-	fgUpperRightGridSizer->Add( m_thicknessLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+	gbSizer2->Add( m_thicknessLabel, wxGBPosition( 3, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT|wxLEFT, 5 );
 
 	m_thicknessCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgUpperRightGridSizer->Add( m_thicknessCtrl, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxLEFT|wxRIGHT, 5 );
+	gbSizer2->Add( m_thicknessCtrl, wxGBPosition( 3, 1 ), wxGBSpan( 1, 1 ), wxEXPAND|wxALIGN_CENTER_VERTICAL|wxTOP, 5 );
 
 	m_thicknessUnits = new wxStaticText( this, wxID_ANY, _("unit"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_thicknessUnits->Wrap( -1 );
-	fgUpperRightGridSizer->Add( m_thicknessUnits, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+	gbSizer2->Add( m_thicknessUnits, wxGBPosition( 3, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT|wxLEFT, 5 );
+
+	m_lineStyleLabel = new wxStaticText( this, wxID_ANY, _("Line style:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_lineStyleLabel->Wrap( -1 );
+	gbSizer2->Add( m_lineStyleLabel, wxGBPosition( 4, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+
+	m_lineStyleCombo = new wxBitmapComboBox( this, wxID_ANY, _("Combo!"), wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_READONLY );
+	m_lineStyleCombo->SetMinSize( wxSize( 210,-1 ) );
+
+	gbSizer2->Add( m_lineStyleCombo, wxGBPosition( 4, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxEXPAND, 5 );
 
 	m_LayerLabel = new wxStaticText( this, wxID_ANY, _("Layer:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_LayerLabel->Wrap( -1 );
-	fgUpperRightGridSizer->Add( m_LayerLabel, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT, 5 );
+	gbSizer2->Add( m_LayerLabel, wxGBPosition( 5, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
 	m_LayerSelectionCtrl = new PCB_LAYER_BOX_SELECTOR( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, 0 );
-	fgUpperRightGridSizer->Add( m_LayerSelectionCtrl, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 3 );
+	gbSizer2->Add( m_LayerSelectionCtrl, wxGBPosition( 5, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
 
 
-	fgUpperRightGridSizer->Add( 0, 0, 1, wxEXPAND, 5 );
+	gbSizer2->AddGrowableCol( 1 );
+
+	bMiddleSizer->Add( gbSizer2, 1, wxEXPAND|wxTOP|wxBOTTOM, 5 );
 
 
-	bUpperRightSizer->Add( fgUpperRightGridSizer, 0, wxEXPAND|wxTOP, 5 );
-
-
-	bUpperSizer->Add( bUpperRightSizer, 0, wxEXPAND, 5 );
+	bUpperSizer->Add( bMiddleSizer, 0, wxEXPAND, 5 );
 
 
 	bMainSizer->Add( bUpperSizer, 1, wxEXPAND|wxALL, 5 );
@@ -223,6 +218,7 @@ DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE::DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE( wxWind
 	// Connect Events
 	this->Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE::OnClose ) );
 	this->Connect( wxEVT_INIT_DIALOG, wxInitDialogEventHandler( DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE::OnInitDlg ) );
+	m_filledCtrl->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE::onFilledCheckbox ), NULL, this );
 }
 
 DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE::~DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE()
@@ -230,5 +226,6 @@ DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE::~DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE()
 	// Disconnect Events
 	this->Disconnect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE::OnClose ) );
 	this->Disconnect( wxEVT_INIT_DIALOG, wxInitDialogEventHandler( DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE::OnInitDlg ) );
+	m_filledCtrl->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE::onFilledCheckbox ), NULL, this );
 
 }

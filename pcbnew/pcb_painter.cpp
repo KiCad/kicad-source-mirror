@@ -84,6 +84,9 @@ PCB_RENDER_SETTINGS::PCB_RENDER_SETTINGS()
     for( unsigned int i = 0; i < arrayDim( m_sketchMode ); ++i )
         m_sketchMode[i] = false;
 
+    SetDashLengthRatio( 5 );
+    SetGapLengthRatio( 3 );
+
     update();
 }
 
@@ -1353,6 +1356,7 @@ void PCB_PAINTER::draw( const PCB_SHAPE* aShape, int aLayer )
     const COLOR4D& color = m_pcbSettings.GetColor( aShape, aShape->GetLayer() );
     bool           sketch = m_pcbSettings.m_sketchGraphics;
     int            thickness = getLineThickness( aShape->GetWidth() );
+    PLOT_DASH_TYPE lineStyle = aShape->GetStroke().GetPlotStyle();
 
     if( sketch )
     {
@@ -1364,131 +1368,120 @@ void PCB_PAINTER::draw( const PCB_SHAPE* aShape, int aLayer )
     m_gal->SetFillColor( color );
     m_gal->SetStrokeColor( color );
 
-    switch( aShape->GetShape() )
+    if( lineStyle <= PLOT_DASH_TYPE::FIRST_TYPE )
     {
-    case SHAPE_T::SEGMENT:
-        if( sketch )
+        switch( aShape->GetShape() )
         {
-            m_gal->DrawSegment( aShape->GetStart(), aShape->GetEnd(), thickness );
-        }
-        else
+        case SHAPE_T::SEGMENT:
+            if( sketch )
+            {
+                m_gal->DrawSegment( aShape->GetStart(), aShape->GetEnd(), thickness );
+            }
+            else
+            {
+                m_gal->SetIsFill( true );
+                m_gal->SetIsStroke( false );
+
+                m_gal->DrawSegment( aShape->GetStart(), aShape->GetEnd(), thickness );
+            }
+
+            break;
+
+        case SHAPE_T::RECT:
         {
-            m_gal->SetIsFill( true );
-            m_gal->SetIsStroke( false );
+            std::vector<wxPoint> pts = aShape->GetRectCorners();
 
-            m_gal->DrawSegment( aShape->GetStart(), aShape->GetEnd(), thickness );
-        }
-
-        break;
-
-    case SHAPE_T::RECT:
-    {
-        std::vector<wxPoint> pts = aShape->GetRectCorners();
-
-        if( sketch )
-        {
-            m_gal->DrawSegment( pts[0], pts[1], thickness );
-            m_gal->DrawSegment( pts[1], pts[2], thickness );
-            m_gal->DrawSegment( pts[2], pts[3], thickness );
-            m_gal->DrawSegment( pts[3], pts[0], thickness );
-        }
-        else
-        {
-            m_gal->SetIsFill( true );
-            m_gal->SetIsStroke( false );
-
-            if( thickness > 0 )
+            if( sketch )
             {
                 m_gal->DrawSegment( pts[0], pts[1], thickness );
                 m_gal->DrawSegment( pts[1], pts[2], thickness );
                 m_gal->DrawSegment( pts[2], pts[3], thickness );
                 m_gal->DrawSegment( pts[3], pts[0], thickness );
             }
-
-            if( aShape->IsFilled() )
+            else
             {
-                SHAPE_POLY_SET poly;
-                poly.NewOutline();
+                m_gal->SetIsFill( true );
+                m_gal->SetIsStroke( false );
 
-                for( const wxPoint& pt : pts )
-                    poly.Append( pt );
+                if( thickness > 0 )
+                {
+                    m_gal->DrawSegment( pts[0], pts[1], thickness );
+                    m_gal->DrawSegment( pts[1], pts[2], thickness );
+                    m_gal->DrawSegment( pts[2], pts[3], thickness );
+                    m_gal->DrawSegment( pts[3], pts[0], thickness );
+                }
 
-                m_gal->DrawPolygon( poly );
+                if( aShape->IsFilled() )
+                {
+                    SHAPE_POLY_SET poly;
+                    poly.NewOutline();
+
+                    for( const wxPoint& pt : pts )
+                        poly.Append( pt );
+
+                    m_gal->DrawPolygon( poly );
+                }
             }
+
+            break;
         }
 
-        break;
-    }
-
-    case SHAPE_T::ARC:
-    {
-        double startAngle;
-        double endAngle;
-        aShape->CalcArcAngles( startAngle, endAngle );
-
-        if( sketch )
+        case SHAPE_T::ARC:
         {
-            m_gal->DrawArcSegment( aShape->GetCenter(), aShape->GetRadius(),
-                                   DEG2RAD( startAngle ), DEG2RAD( endAngle ), thickness,
-                                   m_maxError );
+            double startAngle;
+            double endAngle;
+            aShape->CalcArcAngles( startAngle, endAngle );
+
+            if( sketch )
+            {
+                m_gal->DrawArcSegment( aShape->GetCenter(), aShape->GetRadius(),
+                                       DEG2RAD( startAngle ), DEG2RAD( endAngle ), thickness,
+                                       m_maxError );
+            }
+            else
+            {
+                m_gal->SetIsFill( true );
+                m_gal->SetIsStroke( false );
+
+                m_gal->DrawArcSegment( aShape->GetCenter(), aShape->GetRadius(),
+                                       DEG2RAD( startAngle ), DEG2RAD( endAngle ), thickness,
+                                       m_maxError );
+            }
+            break;
         }
-        else
-        {
-            m_gal->SetIsFill( true );
-            m_gal->SetIsStroke( false );
 
-            m_gal->DrawArcSegment( aShape->GetCenter(), aShape->GetRadius(),
-                                   DEG2RAD( startAngle ), DEG2RAD( endAngle ), thickness,
-                                   m_maxError );
-        }
-        break;
-    }
+        case SHAPE_T::CIRCLE:
+            if( sketch )
+            {
+                m_gal->DrawCircle( aShape->GetStart(), aShape->GetRadius() - thickness / 2 );
+                m_gal->DrawCircle( aShape->GetStart(), aShape->GetRadius() + thickness / 2 );
+            }
+            else
+            {
+                m_gal->SetIsFill( aShape->IsFilled() );
+                m_gal->SetIsStroke( thickness > 0 );
+                m_gal->SetLineWidth( thickness );
 
-    case SHAPE_T::CIRCLE:
-        if( sketch )
-        {
-            m_gal->DrawCircle( aShape->GetStart(), aShape->GetRadius() - thickness / 2 );
-            m_gal->DrawCircle( aShape->GetStart(), aShape->GetRadius() + thickness / 2 );
-        }
-        else
-        {
-            m_gal->SetIsFill( aShape->IsFilled() );
-            m_gal->SetIsStroke( thickness > 0 );
-            m_gal->SetLineWidth( thickness );
-
-            m_gal->DrawCircle( aShape->GetStart(), aShape->GetRadius() );
-        }
-        break;
-
-    case SHAPE_T::POLY:
-    {
-        SHAPE_POLY_SET&  shape = const_cast<PCB_SHAPE*>( aShape )->GetPolyShape();
-        const FOOTPRINT* parentFootprint = aShape->GetParentFootprint();
-
-        if( shape.OutlineCount() == 0 )
+                m_gal->DrawCircle( aShape->GetStart(), aShape->GetRadius() );
+            }
             break;
 
-        if( parentFootprint )
+        case SHAPE_T::POLY:
         {
-            m_gal->Save();
-            m_gal->Translate( parentFootprint->GetPosition() );
-            m_gal->Rotate( -parentFootprint->GetOrientationRadians() );
-        }
+            SHAPE_POLY_SET&  shape = const_cast<PCB_SHAPE*>( aShape )->GetPolyShape();
+            const FOOTPRINT* parentFootprint = aShape->GetParentFootprint();
 
-        if( sketch )
-        {
-            for( int ii = 0; ii < shape.Outline( 0 ).SegmentCount(); ++ii )
+            if( shape.OutlineCount() == 0 )
+                break;
+
+            if( parentFootprint )
             {
-                SEG seg = shape.Outline( 0 ).Segment( ii );
-                m_gal->DrawSegment( seg.A, seg.B, thickness );
+                m_gal->Save();
+                m_gal->Translate( parentFootprint->GetPosition() );
+                m_gal->Rotate( -parentFootprint->GetOrientationRadians() );
             }
-        }
-        else
-        {
-            m_gal->SetIsFill( true );
-            m_gal->SetIsStroke( false );
 
-            if( thickness > 0 )
+            if( sketch )
             {
                 for( int ii = 0; ii < shape.Outline( 0 ).SegmentCount(); ++ii )
                 {
@@ -1496,61 +1489,97 @@ void PCB_PAINTER::draw( const PCB_SHAPE* aShape, int aLayer )
                     m_gal->DrawSegment( seg.A, seg.B, thickness );
                 }
             }
-
-            if( aShape->IsFilled() )
+            else
             {
-                // On Opengl, a not convex filled polygon is usually drawn by using triangles
-                // as primitives. CacheTriangulation() can create basic triangle primitives to
-                // draw the polygon solid shape on Opengl.  GLU tessellation is much slower, so
-                // currently we are using our tessellation.
-                if( m_gal->IsOpenGlEngine() && !shape.IsTriangulationUpToDate() )
-                    shape.CacheTriangulation();
+                m_gal->SetIsFill( true );
+                m_gal->SetIsStroke( false );
 
-                m_gal->DrawPolygon( shape );
+                if( thickness > 0 )
+                {
+                    for( int ii = 0; ii < shape.Outline( 0 ).SegmentCount(); ++ii )
+                    {
+                        SEG seg = shape.Outline( 0 ).Segment( ii );
+                        m_gal->DrawSegment( seg.A, seg.B, thickness );
+                    }
+                }
+
+                if( aShape->IsFilled() )
+                {
+                    // On Opengl, a not convex filled polygon is usually drawn by using triangles
+                    // as primitives. CacheTriangulation() can create basic triangle primitives to
+                    // draw the polygon solid shape on Opengl.  GLU tessellation is much slower,
+                    // so currently we are using our tessellation.
+                    if( m_gal->IsOpenGlEngine() && !shape.IsTriangulationUpToDate() )
+                        shape.CacheTriangulation();
+
+                    m_gal->DrawPolygon( shape );
+                }
             }
+
+            if( parentFootprint )
+                m_gal->Restore();
+
+            break;
         }
 
-        if( parentFootprint )
-            m_gal->Restore();
+        case SHAPE_T::BEZIER:
+            if( sketch )
+            {
+                std::vector<VECTOR2D> output;
+                std::vector<VECTOR2D> pointCtrl;
 
-        break;
-    }
+                pointCtrl.push_back( aShape->GetStart() );
+                pointCtrl.push_back( aShape->GetBezierC1() );
+                pointCtrl.push_back( aShape->GetBezierC2() );
+                pointCtrl.push_back( aShape->GetEnd() );
 
-    case SHAPE_T::BEZIER:
-        if( sketch )
-        {
-            std::vector<VECTOR2D> output;
-            std::vector<VECTOR2D> pointCtrl;
+                BEZIER_POLY converter( pointCtrl );
+                converter.GetPoly( output, thickness );
 
-            pointCtrl.push_back( aShape->GetStart() );
-            pointCtrl.push_back( aShape->GetBezierC1() );
-            pointCtrl.push_back( aShape->GetBezierC2() );
-            pointCtrl.push_back( aShape->GetEnd() );
-
-            BEZIER_POLY converter( pointCtrl );
-            converter.GetPoly( output, thickness );
-
-            for( unsigned ii = 0; ii + 1 < output.size(); ++ii )
-                m_gal->DrawSegment( output[ii], output[ii+1], thickness );
-        }
-        else
-        {
+                for( unsigned ii = 0; ii + 1 < output.size(); ++ii )
+                    m_gal->DrawSegment( output[ii], output[ii+1], thickness );
+            }
+            else
+            {
             m_gal->SetIsFill( aShape->IsFilled() );
             m_gal->SetIsStroke( thickness > 0 );
             m_gal->SetLineWidth( thickness );
 
-            // Use thickness as filter value to convert the curve to polyline when the curve
-            // is not supported
-            m_gal->DrawCurve( VECTOR2D( aShape->GetStart() ),
-                              VECTOR2D( aShape->GetBezierC1() ),
-                              VECTOR2D( aShape->GetBezierC2() ),
-                              VECTOR2D( aShape->GetEnd() ), thickness );
+                // Use thickness as filter value to convert the curve to polyline when the curve
+                // is not supported
+                m_gal->DrawCurve( VECTOR2D( aShape->GetStart() ),
+                                  VECTOR2D( aShape->GetBezierC1() ),
+                                  VECTOR2D( aShape->GetBezierC2() ),
+                                  VECTOR2D( aShape->GetEnd() ), thickness );
+            }
+
+            break;
+
+        case SHAPE_T::LAST:
+            break;
+        }
+    }
+    else
+    {
+        if( !sketch )
+        {
+            m_gal->SetIsFill( true );
+            m_gal->SetIsStroke( false );
         }
 
-        break;
+        std::vector<SHAPE*> shapes = aShape->MakeEffectiveShapes( true );
 
-    case SHAPE_T::LAST:
-        break;
+        for( SHAPE* shape : shapes )
+        {
+            STROKE_PARAMS::Stroke( shape, lineStyle, thickness, &m_pcbSettings,
+                                   [&]( const wxPoint& a, const wxPoint& b )
+                                   {
+                                       m_gal->DrawSegment( a, b, thickness );
+                                   } );
+        }
+
+        for( SHAPE* shape : shapes )
+            delete shape;
     }
 }
 

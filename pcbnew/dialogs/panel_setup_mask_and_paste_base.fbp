@@ -335,8 +335,8 @@
                         </object>
                         <object class="sizeritem" expanded="1">
                             <property name="border">5</property>
-                            <property name="flag">wxEXPAND|wxTOP</property>
-                            <property name="proportion">1</property>
+                            <property name="flag">wxEXPAND|wxTOP|wxBOTTOM</property>
+                            <property name="proportion">0</property>
                             <object class="wxGridBagSizer" expanded="1">
                                 <property name="empty_cell_size"></property>
                                 <property name="flexible_direction">wxBOTH</property>

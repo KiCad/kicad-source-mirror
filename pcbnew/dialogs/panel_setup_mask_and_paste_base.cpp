@@ -129,7 +129,7 @@ PANEL_SETUP_MASK_AND_PASTE_BASE::PANEL_SETUP_MASK_AND_PASTE_BASE( wxWindow* pare
 	gbSizer1->Add( m_pasteMarginRatioUnits, wxGBPosition( 7, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
 
-	bSizer3->Add( gbSizer1, 1, wxEXPAND|wxTOP, 5 );
+	bSizer3->Add( gbSizer1, 0, wxEXPAND|wxTOP|wxBOTTOM, 5 );
 
 	m_staticTextInfoPaste = new wxStaticText( this, wxID_ANY, _("Note: Solder paste clearances (absolute and relative) are added to determine the final clearance."), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextInfoPaste->Wrap( -1 );

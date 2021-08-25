@@ -77,7 +77,6 @@ public:
         m_board( nullptr ),
         m_resetKIIDs( false ),
         m_progressReporter( nullptr ),
-        m_lineReader( nullptr ),
         m_lastProgressTime( std::chrono::steady_clock::now() ),
         m_lineCount( 0 )
     {
@@ -108,11 +107,9 @@ public:
             m_resetKIIDs = true;
     }
 
-    void SetProgressReporter( PROGRESS_REPORTER* aProgressReporter, const LINE_READER* aLineReader,
-                              unsigned aLineCount )
+    void SetProgressReporter( PROGRESS_REPORTER* aProgressReporter, unsigned aLineCount )
     {
         m_progressReporter = aProgressReporter;
-        m_lineReader = aLineReader;
         m_lastProgressTime = std::chrono::steady_clock::now();
         m_lineCount = aLineCount;
     }
@@ -389,7 +386,6 @@ private:
     bool                m_showLegacyZoneWarning;
 
     PROGRESS_REPORTER*  m_progressReporter;  ///< optional; may be nullptr
-    const LINE_READER*  m_lineReader;        ///< for progress reporting
     TIME_PT             m_lastProgressTime;  ///< for progress reporting
     unsigned            m_lineCount;         ///< for progress reporting
 

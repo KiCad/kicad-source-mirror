@@ -84,7 +84,7 @@ bool DIALOG_IMPORT_SETTINGS::UpdateImportSettingsButton()
     bool buttonEnableState = ( m_LayersOpt->IsChecked() || m_MaskAndPasteOpt->IsChecked()
                                || m_ConstraintsOpt->IsChecked() || m_NetclassesOpt->IsChecked()
                                || m_SeveritiesOpt->IsChecked() || m_TextAndGraphicsOpt->IsChecked()
-                               || m_TracksAndViasOpt->IsChecked() );
+                               || m_FormattingOpt->IsChecked() || m_TracksAndViasOpt->IsChecked() );
 
     m_sdbSizer1OK->Enable( buttonEnableState );
 
@@ -140,6 +140,7 @@ void DIALOG_IMPORT_SETTINGS::OnSelectAll( wxCommandEvent& event )
     // Select or deselect all options based on internal flag
     m_LayersOpt->SetValue( m_showSelectAllOnBtn );
     m_TextAndGraphicsOpt->SetValue( m_showSelectAllOnBtn );
+    m_FormattingOpt->SetValue( m_showSelectAllOnBtn );
     m_ConstraintsOpt->SetValue( m_showSelectAllOnBtn );
     m_NetclassesOpt->SetValue( m_showSelectAllOnBtn );
     m_TracksAndViasOpt->SetValue( m_showSelectAllOnBtn );

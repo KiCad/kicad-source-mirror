@@ -220,56 +220,56 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS( JSON_SETTINGS* aParent, const std:
     m_params.emplace_back( new PARAM<bool>( "rules.use_height_for_length_calcs",
             &m_UseHeightForLengthCalcs, true ) );
 
-    m_params.emplace_back( new PARAM_SCALED<int>( "rules.min_clearance", &m_MinClearance,
-            Millimeter2iu( DEFAULT_MINCLEARANCE ), Millimeter2iu( 0.01 ), Millimeter2iu( 25.0 ),
-            MM_PER_IU ) );
+    m_params.emplace_back( new PARAM_SCALED<int>( "rules.min_clearance",
+            &m_MinClearance, Millimeter2iu( DEFAULT_MINCLEARANCE ),
+            Millimeter2iu( 0.01 ), Millimeter2iu( 25.0 ), MM_PER_IU ) );
 
-    m_params.emplace_back( new PARAM_SCALED<int>( "rules.min_track_width", &m_TrackMinWidth,
-            Millimeter2iu( DEFAULT_TRACKMINWIDTH ), Millimeter2iu( 0.01 ), Millimeter2iu( 25.0 ),
-            MM_PER_IU ) );
+    m_params.emplace_back( new PARAM_SCALED<int>( "rules.min_track_width",
+            &m_TrackMinWidth, Millimeter2iu( DEFAULT_TRACKMINWIDTH ),
+            Millimeter2iu( 0.01 ), Millimeter2iu( 25.0 ), MM_PER_IU ) );
 
     m_params.emplace_back( new PARAM_SCALED<int>( "rules.min_via_annular_width",
-            &m_ViasMinAnnularWidth, Millimeter2iu( DEFAULT_VIASMINSIZE ), Millimeter2iu( 0.01 ),
-            Millimeter2iu( 25.0 ), MM_PER_IU ) );
+            &m_ViasMinAnnularWidth, Millimeter2iu( DEFAULT_VIASMINSIZE ),
+            Millimeter2iu( 0.01 ), Millimeter2iu( 25.0 ), MM_PER_IU ) );
 
-    m_params.emplace_back( new PARAM_SCALED<int>( "rules.min_via_diameter", &m_ViasMinSize,
-            Millimeter2iu( DEFAULT_VIASMINSIZE ), Millimeter2iu( 0.01 ), Millimeter2iu( 25.0 ),
-            MM_PER_IU ) );
+    m_params.emplace_back( new PARAM_SCALED<int>( "rules.min_via_diameter",
+            &m_ViasMinSize, Millimeter2iu( DEFAULT_VIASMINSIZE ),
+            Millimeter2iu( 0.01 ), Millimeter2iu( 25.0 ), MM_PER_IU ) );
 
     m_params.emplace_back( new PARAM_SCALED<int>( "rules.min_through_hole_diameter",
-            &m_MinThroughDrill, Millimeter2iu( DEFAULT_MINTHROUGHDRILL ), Millimeter2iu( 0.01 ),
-            Millimeter2iu( 25.0 ), MM_PER_IU ) );
+            &m_MinThroughDrill, Millimeter2iu( DEFAULT_MINTHROUGHDRILL ),
+            Millimeter2iu( 0.01 ), Millimeter2iu( 25.0 ), MM_PER_IU ) );
 
     m_params.emplace_back( new PARAM_SCALED<int>( "rules.min_microvia_diameter",
-            &m_MicroViasMinSize, Millimeter2iu( DEFAULT_MICROVIASMINSIZE ), Millimeter2iu( 0.01 ),
-            Millimeter2iu( 10.0 ), MM_PER_IU ) );
+            &m_MicroViasMinSize, Millimeter2iu( DEFAULT_MICROVIASMINSIZE ),
+            Millimeter2iu( 0.01 ), Millimeter2iu( 10.0 ), MM_PER_IU ) );
 
-    m_params.emplace_back( new PARAM_SCALED<int>( "rules.min_microvia_drill", &m_MicroViasMinDrill,
-            Millimeter2iu( DEFAULT_MICROVIASMINDRILL ), Millimeter2iu( 0.01 ),
-            Millimeter2iu( 10.0 ), MM_PER_IU ) );
+    m_params.emplace_back( new PARAM_SCALED<int>( "rules.min_microvia_drill",
+            &m_MicroViasMinDrill, Millimeter2iu( DEFAULT_MICROVIASMINDRILL ),
+            Millimeter2iu( 0.01 ), Millimeter2iu( 10.0 ), MM_PER_IU ) );
 
-    m_params.emplace_back( new PARAM_SCALED<int>( "rules.min_hole_to_hole", &m_HoleToHoleMin,
-            Millimeter2iu( DEFAULT_HOLETOHOLEMIN ), Millimeter2iu( 0.00 ), Millimeter2iu( 10.0 ),
-            MM_PER_IU ) );
+    m_params.emplace_back( new PARAM_SCALED<int>( "rules.min_hole_to_hole",
+            &m_HoleToHoleMin, Millimeter2iu( DEFAULT_HOLETOHOLEMIN ),
+            Millimeter2iu( 0.00 ), Millimeter2iu( 10.0 ), MM_PER_IU ) );
 
-    m_params.emplace_back( new PARAM_SCALED<int>( "rules.min_hole_clearance", &m_HoleClearance,
-            Millimeter2iu( DEFAULT_HOLECLEARANCE ), Millimeter2iu( 0.00 ), Millimeter2iu( 100.0 ),
-            MM_PER_IU ) );
+    m_params.emplace_back( new PARAM_SCALED<int>( "rules.min_hole_clearance",
+            &m_HoleClearance, Millimeter2iu( DEFAULT_HOLECLEARANCE ),
+            Millimeter2iu( 0.00 ), Millimeter2iu( 100.0 ), MM_PER_IU ) );
 
-    m_params.emplace_back( new PARAM_SCALED<int>( "rules.min_silk_clearance", &m_SilkClearance,
-            Millimeter2iu( DEFAULT_SILKCLEARANCE ), Millimeter2iu( 0.00 ), Millimeter2iu( 100.0 ),
-            MM_PER_IU ) );
+    m_params.emplace_back( new PARAM_SCALED<int>( "rules.min_silk_clearance",
+            &m_SilkClearance, Millimeter2iu( DEFAULT_SILKCLEARANCE ),
+            Millimeter2iu( 0.00 ), Millimeter2iu( 100.0 ), MM_PER_IU ) );
 
     m_params.emplace_back( new PARAM<int>( "rules.min_resolved_spokes",
             &m_MinResolvedSpokes, DEFAULT_MINRESOLVEDSPOKES, 0, 4 ) );
 
-    m_params.emplace_back( new PARAM_SCALED<int>( "rules.min_text_height", &m_MinSilkTextHeight,
-            Millimeter2iu( DEFAULT_SILK_TEXT_SIZE * 0.8 ), Millimeter2iu( 0.00 ),
-            Millimeter2iu( 100.0 ), MM_PER_IU ) );
+    m_params.emplace_back( new PARAM_SCALED<int>( "rules.min_text_height",
+            &m_MinSilkTextHeight, Millimeter2iu( DEFAULT_SILK_TEXT_SIZE * 0.8 ),
+            Millimeter2iu( 0.00 ), Millimeter2iu( 100.0 ), MM_PER_IU ) );
 
-    m_params.emplace_back( new PARAM_SCALED<int>( "rules.min_text_thickness", &m_MinSilkTextThickness,
-            Millimeter2iu( DEFAULT_SILK_TEXT_WIDTH * 0.8 ), Millimeter2iu( 0.00 ),
-            Millimeter2iu( 25.0 ), MM_PER_IU ) );
+    m_params.emplace_back( new PARAM_SCALED<int>( "rules.min_text_thickness",
+            &m_MinSilkTextThickness, Millimeter2iu( DEFAULT_SILK_TEXT_WIDTH * 0.8 ),
+            Millimeter2iu( 0.00 ), Millimeter2iu( 25.0 ), MM_PER_IU ) );
 
     // Note: a clearance of -0.01 is a flag indicating we should use the legacy (pre-6.0) method
     // based on the edge cut thicknesses.

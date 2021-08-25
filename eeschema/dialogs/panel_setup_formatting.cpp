@@ -185,4 +185,10 @@ void PANEL_SETUP_FORMATTING::ImportSettingsFrom( SCHEMATIC_SETTINGS& aSettings )
 
     wxString labelSizeRatio = wxString::Format( "%f", aSettings.m_LabelSizeRatio * 100.0 );
     m_labelSizeRatioCtrl->SetValue( labelSizeRatio );
+
+    m_dashLengthCtrl->SetValue( StringFromValue( EDA_UNITS::UNSCALED,
+                                                 aSettings.m_DashedLineDashRatio ) );
+
+    m_gapLengthCtrl->SetValue( StringFromValue( EDA_UNITS::UNSCALED,
+                                                aSettings.m_DashedLineGapRatio ) );
 }
