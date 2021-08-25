@@ -58,6 +58,12 @@ static wxSearchCtrl* CreateTextFilterBox( wxWindow* aParent, const wxString& aDe
 
     search_widget->SetDescriptiveText( aDescriptiveText );
 
+#ifdef __WXGTK__
+    // wxSearchCtrl vertical height is not calculated correctly on some GTK setups
+    // See https://gitlab.com/kicad/code/kicad/-/issues/9019
+    search_widget->SetMinSize( wxSize( -1, aParent->GetTextExtent( wxT( "qb" ) ).y + 10 ) );
+#endif
+
     return search_widget;
 }
 

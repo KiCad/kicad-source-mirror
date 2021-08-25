@@ -58,16 +58,14 @@ LIB_TREE::LIB_TREE( wxWindow* aParent, LIB_TABLE* aLibTable,
 
         m_query_ctrl->ShowCancelButton( true );
 
+#ifdef __WXGTK__
+        // wxSearchCtrl vertical height is not calculated correctly on some GTK setups
+        // See https://gitlab.com/kicad/code/kicad/-/issues/9019
+        m_query_ctrl->SetMinSize( wxSize( -1, GetTextExtent( wxT( "qb" ) ).y + 10 ) );
+#endif
+
         m_debounceTimer = new wxTimer( this );
 
-// Additional visual cue for GTK, which hides the placeholder text on focus
-#ifdef __WXGTK__
-        wxStaticBitmap* bitmap = new wxStaticBitmap( this, wxID_ANY,
-                                                     wxArtProvider::GetBitmap( wxART_FIND,
-                                                                               wxART_FRAME_ICON ) );
-
-        search_sizer->Add( bitmap, 0, wxALIGN_CENTER | wxRIGHT, 5 );
-#endif
         search_sizer->Add( m_query_ctrl, 1, wxEXPAND, 5 );
 
         sizer->Add( search_sizer, 0, wxEXPAND, 5 );

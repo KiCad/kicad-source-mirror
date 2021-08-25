@@ -161,6 +161,13 @@ FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent
                "A term which is a number will also match against the pad count." ) );
     fpSizer->Add( m_fpFilter, 0, wxEXPAND, 5 );
 
+#ifdef __WXGTK__
+    // wxSearchCtrl vertical height is not calculated correctly on some GTK setups
+    // See https://gitlab.com/kicad/code/kicad/-/issues/9019
+    m_libFilter->SetMinSize( wxSize( -1, GetTextExtent( wxT( "qb" ) ).y + 10 ) );
+    m_fpFilter->SetMinSize( wxSize( -1, GetTextExtent( wxT( "qb" ) ).y + 10 ) );
+#endif
+
     m_fpList = new wxListBox( fpPanel, ID_MODVIEW_FOOTPRINT_LIST, wxDefaultPosition, wxDefaultSize,
                               0, nullptr, wxLB_HSCROLL | wxNO_BORDER );
     fpSizer->Add( m_fpList, 1, wxEXPAND, 5 );
