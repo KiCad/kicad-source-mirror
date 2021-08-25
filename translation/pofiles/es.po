@@ -6,21 +6,22 @@
 # Adolfo Jayme Barrientos <fitojb@ubuntu.com>, 2021.
 # Iñigo <ifs@elektroquark.com>, 2021.
 # VicSanRoPe <vicsanrope@protonmail.com>, 2021.
+# ZbeeGin <zbeegin@op.pl>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-20 13:14-0700\n"
-"PO-Revision-Date: 2021-08-17 02:20+0000\n"
-"Last-Translator: VicSanRoPe <vicsanrope@protonmail.com>\n"
-"Language-Team: Spanish <https://hosted.weblate.org/projects/kicad/master-"
-"source/es/>\n"
+"POT-Creation-Date: 2021-08-20 11:53-0700\n"
+"PO-Revision-Date: 2021-08-27 08:25+0000\n"
+"Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
+"Language-Team: Spanish <https://hosted.weblate.org/projects/kicad/"
+"master-source/es/>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.8-dev\n"
+"X-Generator: Weblate 4.8.1-dev\n"
 "X-Poedit-Basepath: ../Git/kicad\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -1883,9 +1884,9 @@ msgstr ""
 "entradas conflictivas en las variables de entorno de su sistema."
 
 #: common/dialogs/dialog_configure_paths.cpp:374
-#, fuzzy, c-format
+#, c-format
 msgid "The name %s is reserved, and cannot be used."
-msgstr "El nombre %s está reservado, y no puede utilizarse aquí"
+msgstr "El nombre %s está reservado, y no puede utilizarse aquí."
 
 #: common/dialogs/dialog_configure_paths.cpp:517
 msgid "File Browser..."
@@ -16610,52 +16611,51 @@ msgstr ""
 "convertido."
 
 #: eeschema/tools/ee_inspection_tool.cpp:284
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b> conflicts with pin %s"
 "%s at location <b>(%s, %s)</b>."
 msgstr ""
-"<b>Pin %s duplicado</b> %s en la posición <b>(%.3f, %.3f)</b> en conflicto "
-"con pin %s%s en la posición <b>(%.3f, %.3f)</b>."
+"<b>Pin %s duplicado</b> %s en la posición <b>(%s, %s)</b> en conflicto con "
+"pin %s%s en la posición <b>(%s, %s)</b>."
 
 #: eeschema/tools/ee_inspection_tool.cpp:297
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b> conflicts with pin %s"
 "%s at location <b>(%s, %s)</b> in units %c and %c."
 msgstr ""
-"<b>Pin %s duplicado</b> %s en la posición <b>(%.3f, %.3f)</b> en conflicto "
-"con pin %s%s en la posición <b>(%.3f, %.3f)</b> en las unidades %c y %c."
+"<b>Pin %s duplicado</b> %s en la posición <b>(%s, %s)</b> en conflicto con "
+"pin %s%s en la posición <b>(%s, %s)</b> en las unidades %c y %c."
 
 #: eeschema/tools/ee_inspection_tool.cpp:335
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b> of converted."
 msgstr ""
-"<b>Pin de potencia %s oculto</b> %s en la posición <b>(%.3f, %.3f)</b> del "
+"<b>Pin de potencia %s oculto</b> %s en la posición <b>(%s, %s)</b> del "
 "convertido."
 
 #: eeschema/tools/ee_inspection_tool.cpp:344
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b> in unit %c "
 "of converted."
 msgstr ""
-"<b>Pin de potencia %s oculto</b> %s en la posición <b>(%.3f, %.3f)</b> en la "
+"<b>Pin de potencia %s oculto</b> %s en la posición <b>(%s, %s)</b> en la "
 "unidad %c del convertido."
 
 #: eeschema/tools/ee_inspection_tool.cpp:357
-#, fuzzy, c-format
+#, c-format
 msgid "Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b>."
-msgstr ""
-"<b>Pin de potencia %s oculto</b> %s en la posición <b>(%.3f, %.3f)</b>."
+msgstr "<b>Pin de potencia %s oculto</b> %s en la posición <b>(%s, %s)</b>."
 
 #: eeschema/tools/ee_inspection_tool.cpp:365
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b> in unit %c."
 msgstr ""
-"<b>Pin de potencia %s oculto</b> %s en la posición <b>(%.3f, %.3f)</b> en la "
+"<b>Pin de potencia %s oculto</b> %s en la posición <b>(%s, %s)</b> en la "
 "unidad %c."
 
 #: eeschema/tools/ee_inspection_tool.cpp:376
@@ -16665,33 +16665,32 @@ msgstr ""
 "(Los pines de potencia ocultos asignarán sus nombres a las redes conectadas.)"
 
 #: eeschema/tools/ee_inspection_tool.cpp:389
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Off grid pin %s</b> %s at location <b>(%s, %s)</b> of converted."
 msgstr ""
-"<b>Pin %s fuera de la cuadrícula</b> %s en la posición <b>(%.3f, %.3f)</b> "
-"del convertido."
+"<b>Pin %s fuera de la cuadrícula</b> %s en la posición <b>(%s, %s)</b> del "
+"convertido."
 
 #: eeschema/tools/ee_inspection_tool.cpp:398
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Off grid pin %s</b> %s at location <b>(%.3s, %.3s)</b> in unit %c of "
 "converted."
 msgstr ""
-"<b>Pin %s fuera de la cuadrícula</b> %s en la posición <b>(%.3f, %.3f)</b> "
+"<b>Pin %s fuera de la cuadrícula</b> %s en la posición <b>(%.3s, %.3s)</b> "
 "en la unidad %c del convertido."
 
 #: eeschema/tools/ee_inspection_tool.cpp:411
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Off grid pin %s</b> %s at location <b>(%s, %s)</b>."
-msgstr ""
-"<b>Pin %s fuera de la cuadrícula</b> %s en la posición <b>(%.3f, %.3f)</b>."
+msgstr "<b>Pin %s fuera de la cuadrícula</b> %s en la posición <b>(%s, %s)</b>."
 
 #: eeschema/tools/ee_inspection_tool.cpp:419
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Off grid pin %s</b> %s at location <b>(%s, %s)</b> in unit %c."
 msgstr ""
-"<b>Pin %s fuera de la cuadrícula</b> %s en la posición <b>(%.3f, %.3f)</b> "
-"en la unidad %c."
+"<b>Pin %s fuera de la cuadrícula</b> %s en la posición <b>(%s, %s)</b> en la "
+"unidad %c."
 
 #: eeschema/tools/ee_inspection_tool.cpp:436
 msgid "No symbol issues found."
@@ -20755,9 +20754,8 @@ msgid "Common materials:"
 msgstr "Común a las Unidades"
 
 #: pcbnew/board_stackup_manager/dialog_dielectric_list_manager_base.h:57
-#, fuzzy
 msgid "Dielectric Material Characteristics"
-msgstr "Características del material dieléctrico:"
+msgstr "Características del material dieléctrico"
 
 #: pcbnew/board_stackup_manager/panel_board_finish_base.cpp:20
 msgid "Has castellated pads"
@@ -26714,9 +26712,8 @@ msgid "End layer:"
 msgstr "Capa final:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:280
-#, fuzzy
 msgid "Annular rings:"
-msgstr "Ancho de anular"
+msgstr "Ancho de anular:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:284
 #, fuzzy
