@@ -246,11 +246,6 @@ public:
     void ClearFindReplaceStatus();
 
     /**
-     * Get the find criteria (as set by the dialog).
-     */
-    wxFindReplaceData* GetFindReplaceData();
-
-    /**
      * Notification that the Find dialog has closed.
      */
     void OnFindDialogClose();

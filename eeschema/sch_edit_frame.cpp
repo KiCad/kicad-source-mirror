@@ -836,18 +836,6 @@ void SCH_EDIT_FRAME::OnUpdatePCB( wxCommandEvent& event )
 }
 
 
-wxFindReplaceData* SCH_EDIT_FRAME::GetFindReplaceData()
-{
-    if( m_findReplaceDialog && m_findReplaceDialog->IsVisible()
-            && !m_findReplaceData->GetFindString().IsEmpty() )
-    {
-        return m_findReplaceData;
-    }
-
-    return nullptr;
-}
-
-
 HIERARCHY_NAVIG_DLG* SCH_EDIT_FRAME::FindHierarchyNavigator()
 {
     wxWindow* navigator = wxWindow::FindWindowByName( HIERARCHY_NAVIG_DLG_WNAME );

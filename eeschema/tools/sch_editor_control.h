@@ -207,7 +207,7 @@ private:
      * @return pointer to the next search item found or NULL if nothing found
      */
     SCH_ITEM* nextMatch( SCH_SCREEN* aScreen, SCH_SHEET_PATH* aSheet, SCH_ITEM* aAfter,
-                         wxFindReplaceData* aData );
+                         wxFindReplaceData& aData );
 
 private:
     bool      m_probingPcbToSch; // Recursion guard when cross-probing to PcbNew

@@ -245,12 +245,12 @@ int SCH_EDITOR_CONTROL::NavigateHierarchy( const TOOL_EVENT& aEvent )
 
 int SCH_EDITOR_CONTROL::UpdateFind( const TOOL_EVENT& aEvent )
 {
-    wxFindReplaceData* data = m_frame->GetFindReplaceData();
+    wxFindReplaceData& data = m_frame->GetFindReplaceData();
 
     auto visit =
             [&]( EDA_ITEM* aItem, SCH_SHEET_PATH* aSheet )
             {
-                if( data && aItem->Matches( *data, aSheet ) )
+                if( aItem->Matches( data, aSheet ) )
                 {
                     aItem->SetForceVisible( true );
                     m_selectionTool->BrightenItem( aItem );
@@ -293,7 +293,7 @@ int SCH_EDITOR_CONTROL::UpdateFind( const TOOL_EVENT& aEvent )
 
 
 SCH_ITEM* SCH_EDITOR_CONTROL::nextMatch( SCH_SCREEN* aScreen, SCH_SHEET_PATH* aSheet,
-                                         SCH_ITEM* aAfter, wxFindReplaceData* aData )
+                                         SCH_ITEM* aAfter, wxFindReplaceData& aData )
 {
     bool past_item = true;
 
@@ -336,10 +336,10 @@ SCH_ITEM* SCH_EDITOR_CONTROL::nextMatch( SCH_SCREEN* aScreen, SCH_SHEET_PATH* aS
         }
         else if( past_item )
         {
-            if( aData == &g_markersOnly && item->Type() == SCH_MARKER_T )
+            if( &aData == &g_markersOnly && item->Type() == SCH_MARKER_T )
                 return item;
 
-            if( item->Matches( *aData, aSheet ) )
+            if( item->Matches( aData, aSheet ) )
                 return item;
 
             if( item->Type() == SCH_SYMBOL_T )
@@ -348,13 +348,13 @@ SCH_ITEM* SCH_EDITOR_CONTROL::nextMatch( SCH_SCREEN* aScreen, SCH_SHEET_PATH* aS
 
                 for( SCH_FIELD& field : cmp->GetFields() )
                 {
-                    if( field.Matches( *aData, aSheet ) )
+                    if( field.Matches( aData, aSheet ) )
                         return &field;
                 }
 
                 for( SCH_PIN* pin : cmp->GetPins() )
                 {
-                    if( pin->Matches( *aData, aSheet ) )
+                    if( pin->Matches( aData, aSheet ) )
                         return pin;
                 }
             }
@@ -365,13 +365,13 @@ SCH_ITEM* SCH_EDITOR_CONTROL::nextMatch( SCH_SCREEN* aScreen, SCH_SHEET_PATH* aS
 
                 for( SCH_FIELD& field : sheet->GetFields() )
                 {
-                    if( field.Matches( *aData, aSheet ) )
+                    if( field.Matches( aData, aSheet ) )
                         return &field;
                 }
 
                 for( SCH_SHEET_PIN* pin : sheet->GetPins() )
                 {
-                    if( pin->Matches( *aData, aSheet ) )
+                    if( pin->Matches( aData, aSheet ) )
                         return pin;
                 }
             }
@@ -387,21 +387,20 @@ int SCH_EDITOR_CONTROL::FindNext( const TOOL_EVENT& aEvent )
     // A timer during which a subsequent FindNext will result in a wrap-around
     static wxTimer wrapAroundTimer;
 
-    wxFindReplaceData* data = m_frame->GetFindReplaceData();
+    wxFindReplaceData& data = m_frame->GetFindReplaceData();
 
     if( aEvent.IsAction( &ACTIONS::findNextMarker ) )
     {
-        if( data )
-            g_markersOnly.SetFlags( data->GetFlags() );
+        g_markersOnly.SetFlags( data.GetFlags() );
 
-        data = &g_markersOnly;
+        data = g_markersOnly;
     }
-    else if( !data )
+    else if( data.GetFindString().IsEmpty() )
     {
         return FindAndReplace( ACTIONS::find.MakeEvent() );
     }
 
-    bool          searchAllSheets = !( data->GetFlags() & FR_CURRENT_SHEET_ONLY );
+    bool          searchAllSheets = !( data.GetFlags() & FR_CURRENT_SHEET_ONLY );
     EE_SELECTION& selection       = m_selectionTool->GetSelection();
     SCH_SCREEN*   afterScreen     = m_frame->GetScreen();
     SCH_ITEM*     afterItem       = dynamic_cast<SCH_ITEM*>( selection.Front() );
@@ -483,25 +482,25 @@ int SCH_EDITOR_CONTROL::FindNext( const TOOL_EVENT& aEvent )
 
 bool SCH_EDITOR_CONTROL::HasMatch()
 {
-    wxFindReplaceData* data = m_frame->GetFindReplaceData();
+    wxFindReplaceData& data = m_frame->GetFindReplaceData();
     EDA_ITEM*          item = m_selectionTool->GetSelection().Front();
 
-    return data && item && item->Matches( *data, &m_frame->GetCurrentSheet() );
+    return item && item->Matches( data, &m_frame->GetCurrentSheet() );
 }
 
 
 int SCH_EDITOR_CONTROL::ReplaceAndFindNext( const TOOL_EVENT& aEvent )
 {
-    wxFindReplaceData* data = m_frame->GetFindReplaceData();
+    wxFindReplaceData& data = m_frame->GetFindReplaceData();
     EDA_ITEM*          item = m_selectionTool->GetSelection().Front();
     SCH_SHEET_PATH*    sheet = &m_frame->GetCurrentSheet();
 
-    if( !data )
+    if( data.GetFindString().IsEmpty() )
         return FindAndReplace( ACTIONS::find.MakeEvent() );
 
-    if( item && item->Matches( *data, sheet ) )
+    if( item && item->Matches( data, sheet ) )
     {
-        if( item->Replace( *data, sheet ) )
+        if( item->Replace( data, sheet ) )
         {
             m_frame->UpdateItem( item );
             m_frame->GetCurrentSheet().UpdateAllScreenReferences();
@@ -517,10 +516,10 @@ int SCH_EDITOR_CONTROL::ReplaceAndFindNext( const TOOL_EVENT& aEvent )
 
 int SCH_EDITOR_CONTROL::ReplaceAll( const TOOL_EVENT& aEvent )
 {
-    wxFindReplaceData* data = m_frame->GetFindReplaceData();
+    wxFindReplaceData& data = m_frame->GetFindReplaceData();
     bool               modified = false;
 
-    if( !data )
+    if( data.GetFindString().IsEmpty() )
         return FindAndReplace( ACTIONS::find.MakeEvent() );
 
     SCH_SHEET_LIST schematic = m_frame->Schematic().GetSheets();
@@ -532,7 +531,7 @@ int SCH_EDITOR_CONTROL::ReplaceAll( const TOOL_EVENT& aEvent )
 
         for( EDA_ITEM* item = nextMatch( screen, sheet, nullptr, data ); item;  )
         {
-            if( item->Replace( *data, sheet ) )
+            if( item->Replace( data, sheet ) )
             {
                 m_frame->UpdateItem( item );
                 modified = true;
