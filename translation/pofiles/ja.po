@@ -4,17 +4,17 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-20 13:14-0700\n"
-"PO-Revision-Date: 2021-08-13 15:17+0000\n"
-"Last-Translator: Ji Yoon Choi <chichoon.choi@gmail.com>\n"
-"Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/master-"
-"source/ja/>\n"
+"POT-Creation-Date: 2021-08-20 11:53-0700\n"
+"PO-Revision-Date: 2021-08-27 08:25+0000\n"
+"Last-Translator: Tokita, Hiroshi <tokita.hiroshi@gmail.com>\n"
+"Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
+"master-source/ja/>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.8-dev\n"
+"X-Generator: Weblate 4.8.1-dev\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-Basepath: Source/kicad-master\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -196,9 +196,9 @@ msgid "Build Tech layers"
 msgstr "ビルド Tech レイヤー"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:909
-#, fuzzy, c-format
+#, c-format
 msgid "Build Tech layer %d"
-msgstr "ビルド Tech レイヤー"
+msgstr "テクニカルレイヤー %d をビルド"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1054
 msgid "Build BVH for holes and vias"
@@ -276,9 +276,9 @@ msgid "Load OpenGL: layers"
 msgstr "読み込み OpenGL: レイヤー"
 
 #: 3d-viewer/3d_rendering/legacy/create_scene.cpp:562
-#, fuzzy, c-format
+#, c-format
 msgid "Load OpenGL layer %d"
-msgstr "読み込み OpenGL: レイヤー"
+msgstr "OpenGL レイヤー%d を読み込み"
 
 #: 3d-viewer/3d_rendering/legacy/create_scene.cpp:914
 #: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:430
@@ -387,38 +387,32 @@ msgid "Render current view using Raytracing"
 msgstr "レイトレーシングを使って現在のビューをレンダリング"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:23
-#, fuzzy
 msgid "Environment Colors"
-msgstr "環境変数"
+msgstr "環境色"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:30
-#, fuzzy
 msgid "Background gradient start:"
-msgstr "裏面の開始リファレンス番号:"
+msgstr "背景のグラデーションの開始:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:37
-#, fuzzy
 msgid "Background gradient end:"
-msgstr "背景色を白に変更"
+msgstr "背景のグラデーションの終了:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:50
 msgid "Solder paste:"
 msgstr "ハンダ ペースト:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:64
-#, fuzzy
 msgid "Board Colors"
-msgstr "基板本体の色"
+msgstr "基板の色"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:66
-#, fuzzy
 msgid "Use board stackup colors"
-msgstr "基板スタックアップの表を挿入します"
+msgstr "基板スタックアップの色を使用"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:69
-#, fuzzy
 msgid "Use colors:"
-msgstr "ネットのカラー表示:"
+msgstr "色を指定:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:77
 msgid "Silkscreen top:"
@@ -1296,9 +1290,8 @@ msgid "Export to Clipboard"
 msgstr "クリップボードにエクスポート"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:158
-#, fuzzy
 msgid "Symbol (.kicad_sym file)"
-msgstr "シンボル (.libファイル)"
+msgstr "シンボル (.kicad_symファイル)"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:158
 msgid "Footprint (.kicad_mod file)"
@@ -1364,9 +1357,8 @@ msgid ""
 "The reference designator and value are always placed on the silk screen "
 "layer (but will be marked invisible)."
 msgstr ""
-"外形を配置する基板のレイヤーを選択する。\n"
-"リファレンス指定子と定数は常にシルクスクリーン レイヤー上に置かれます。(不可"
-"視としてマークされます)"
+"外形線を配置する基板のレイヤーを選択します。\n"
+"リファレンス指定子と定数は常にシルクスクリーン レイヤー上に置かれます。(非表示としてマークされます)."
 
 #: bitmap2component/bitmap2cmp_gui_base.h:100
 #: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:10
@@ -1869,9 +1861,9 @@ msgstr ""
 "削除して下さい。"
 
 #: common/dialogs/dialog_configure_paths.cpp:374
-#, fuzzy, c-format
+#, c-format
 msgid "The name %s is reserved, and cannot be used."
-msgstr "名前 %s は予約されており、ここで使用することはできません"
+msgstr "名前 %s は予約されており、使用することはできません。"
 
 #: common/dialogs/dialog_configure_paths.cpp:517
 msgid "File Browser..."
@@ -3924,19 +3916,18 @@ msgid "The auto save file could not be renamed to the board file name."
 msgstr "自動保存ファイルを基板ファイル名にリネームできませんでした。"
 
 #: common/eda_doc.cpp:140
-#, fuzzy
 msgid "Documentation File"
-msgstr "ドキュメントファイル名"
+msgstr "ドキュメントファイル"
 
 #: common/eda_doc.cpp:150
-#, fuzzy, c-format
+#, c-format
 msgid "Documentation file '%s' not found."
-msgstr "回路図ファイル '%s' が見つかりません。"
+msgstr "ドキュメントファイル '%s' が見つかりません。"
 
 #: common/eda_doc.cpp:193
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown MIME type for documentation file '%s'"
-msgstr "ドキュメント ファイル '%s' のMIME タイプが不明です"
+msgstr "ドキュメントファイル '%s' のMIME タイプが不明です"
 
 #: common/eda_draw_frame.cpp:141 common/tool/actions.cpp:487
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:27
@@ -6446,9 +6437,9 @@ msgid "Reset to Defaults"
 msgstr "デフォルト値にリセット"
 
 #: common/widgets/paged_dialog.cpp:367
-#, fuzzy, c-format
+#, c-format
 msgid "Reset %s to Defaults"
-msgstr "デフォルト値にリセット"
+msgstr "%s をデフォルトに戻す"
 
 #: common/widgets/unit_binder.cpp:217
 #, c-format
@@ -6736,9 +6727,8 @@ msgid "Specctra DSN file"
 msgstr "Specctra DSN ファイル"
 
 #: common/wildcards_and_files_ext.cpp:521
-#, fuzzy
 msgid "Specctra Session file"
-msgstr "Spectra セッションファイルをマージ:"
+msgstr "Spectra セッションファイル"
 
 #: common/wildcards_and_files_ext.cpp:528
 msgid "IPC-D-356 Test Files"
@@ -6757,9 +6747,8 @@ msgid "Jpeg file"
 msgstr "Jpeg ファイル"
 
 #: common/wildcards_and_files_ext.cpp:554
-#, fuzzy
 msgid "Hotkey file"
-msgstr "ホットキー リスト"
+msgstr "ホットキー ファイル"
 
 #: cvpcb/auto_associate.cpp:105
 #, c-format
@@ -7479,9 +7468,8 @@ msgid "Nickname '%s' already in use."
 msgstr "ニックネーム '%s' は既に使われています。"
 
 #: eeschema/dialogs/dialog_bom.cpp:420 eeschema/dialogs/dialog_netlist.cpp:690
-#, fuzzy
 msgid "Generator File"
-msgstr "ファイルを生成"
+msgstr "ジェネレーターファイル"
 
 #: eeschema/dialogs/dialog_bom.cpp:439
 msgid "Generator file name not found."
@@ -9439,14 +9427,12 @@ msgid "This plugin already exists."
 msgstr "このプラグインは既に存在します。"
 
 #: eeschema/dialogs/dialog_netlist.cpp:666
-#, fuzzy
 msgid "You must provide a netlist generator command string"
-msgstr "エラー: コマンド文字列を設定する必要があります"
+msgstr "ネットリストジェネレーターのコマンド文字列を指定する必要があります"
 
 #: eeschema/dialogs/dialog_netlist.cpp:672
-#, fuzzy
 msgid "You must provide a netlist generator title"
-msgstr "エラー: タイトルを設定してください"
+msgstr "ネットリストジェネレーターのタイトルを指定する必要があります"
 
 #: eeschema/dialogs/dialog_netlist.cpp:718
 msgid "Do not forget to choose a title for this netlist control page"
@@ -9489,20 +9475,18 @@ msgid "Alternate Pin Name"
 msgstr "代替ピン名:"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:145
-#, fuzzy
 msgid "Synchronized pins edit mode, and this pin is new"
-msgstr "ピン同期編集モード"
+msgstr "同期ピン編集モード、新しいピンです"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:146
 msgid ""
 "Similar pins will be automatically added to other units, if this pin is not "
 "common to all units"
-msgstr ""
+msgstr "このピンがすべてのユニットで共通ではない場合、同様のピンが他のユニットに自動的に追加されます"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:151
-#, fuzzy
 msgid "Synchronized pins edit mode"
-msgstr "ピン同期編集モード"
+msgstr "同期ピン編集モード"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:152
 msgid ""
@@ -11930,16 +11914,12 @@ msgstr ""
 "サイズのパーセンテージ"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:79
-#, fuzzy
 msgid "Global label size:"
-msgstr "グローバル ラベル"
+msgstr "グローバル ラベル サイズ:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:81
-#, fuzzy
 msgid "Percentage of the text size to use as space around a global label"
-msgstr ""
-"ワイヤーまたはバスの上下にあるテキストをオフセットするために使われるテキスト "
-"サイズのパーセンテージ"
+msgstr "グローバルラベル周辺の余白のテキストサイズに対する割合"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:107
 msgid "Default line thickness:"
@@ -12035,14 +12015,12 @@ msgid "Color Theme"
 msgstr "カラー テーマ"
 
 #: eeschema/dialogs/panel_sym_color_settings_base.cpp:25
-#, fuzzy
 msgid "Use schematic editor color theme"
-msgstr "Eeschema カラー テーマを使用"
+msgstr "回路図エディター カラー テーマを使用"
 
 #: eeschema/dialogs/panel_sym_color_settings_base.cpp:31
-#, fuzzy
 msgid "Use theme:"
-msgstr "立ち上がり時間:"
+msgstr "テーマを使用:"
 
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:29
 msgid "&Default line width:"
@@ -13426,9 +13404,8 @@ msgid "Storage file not fully parsed (%d bytes remaining)."
 msgstr "ストレージファイルは完全に読み込まれていません(%d バイト残っています)."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:478
-#, fuzzy
 msgid "Compile mask not currently supported."
-msgstr "回路図への円弧の描画は現在サポートされていません。"
+msgstr "コンパイルマスクは現在サポートされていません。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:491
 #, c-format
@@ -13488,9 +13465,8 @@ msgid "Rounded rectangle's owner (%d) not found."
 msgstr "角を丸めた矩形のオーナー(%d) が見つかりません。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1300
-#, fuzzy
 msgid "Arcs on schematic not currently supported."
-msgstr "回路図への円弧の描画は現在サポートされていません。"
+msgstr "回路図での円弧は現在サポートされていません。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1310
 #, c-format
@@ -13967,13 +13943,11 @@ msgid "Setting schematic symbol '%s %s' library identifier to '%s'."
 msgstr "回路図シンボル '%s %s' のライブラリー識別子を '%s' へセットします。"
 
 #: eeschema/sch_screen.cpp:599
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Schematic symbol reference '%s' library identifier is not valid. Unable to "
 "link library symbol."
-msgstr ""
-"回路図シンボル リファレンス '%s' ライブラリー識別子は無効です。  ライブラ"
-"リー シンボルをリンクできません。"
+msgstr "回路図シンボル リファレンス '%s' のライブラリー識別子は無効です。 ライブラリー シンボルをリンクできません。"
 
 #: eeschema/sch_screen.cpp:615
 #, c-format
@@ -16482,50 +16456,44 @@ msgstr ""
 "<b>(%.3f, %.3f)</b> (変換シンボルのユニット %c と %c)"
 
 #: eeschema/tools/ee_inspection_tool.cpp:284
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b> conflicts with pin %s"
 "%s at location <b>(%s, %s)</b>."
-msgstr ""
-"<b>重複ピン %s</b> \"%s\" 位置 <b>(%.3f, %.3f)</b> 衝突ピン %s%s 位置 "
-"<b>(%.3f, %.3f)</b>"
+msgstr "<b>重複ピン %s</b> \"%s\" 位置 <b>(%s, %s)</b> 衝突ピン %s%s 位置 <b>(%s, %s)</b>."
 
 #: eeschema/tools/ee_inspection_tool.cpp:297
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b> conflicts with pin %s"
 "%s at location <b>(%s, %s)</b> in units %c and %c."
 msgstr ""
-"<b>重複ピン %s</b> \"%s\" 位置 <b>(%.3f, %.3f)</b> 衝突ピン %s%s 位置 "
-"<b>(%.3f, %.3f)</b> (ユニット %c と %c)"
+"<b>重複ピン %s</b> \"%s\" 位置 <b>(%s, %s)</b> 衝突ピン %s%s 位置 <b>(%s, %s)</b> (ユニット "
+"%c と %c)."
 
 #: eeschema/tools/ee_inspection_tool.cpp:335
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b> of converted."
-msgstr ""
-"<b>グリッドから外れたピン %s</b> %s 位置 <b>(%.3f, %.3f)</b> (変換シンボル)"
+msgstr "<b>グリッドから外れたピン %s</b> %s 位置 <b>(%s, %s)</b> (変換シンボル)."
 
 #: eeschema/tools/ee_inspection_tool.cpp:344
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b> in unit %c "
 "of converted."
-msgstr ""
-"<b>グリッドから外れたピン %s</b> %s 位置 <b>(%.3f, %.3f)</b> (変換シンボルの"
-"ユニット %c)"
+msgstr "<b>グリッドから外れたピン %s</b> %s 位置 <b>(%s, %s)</b> (変換シンボルのユニット %c)."
 
 #: eeschema/tools/ee_inspection_tool.cpp:357
-#, fuzzy, c-format
+#, c-format
 msgid "Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b>."
-msgstr "<b>グリッドから外れたピン %s</b> %s 位置 <b>(%.3f, %.3f)</b>"
+msgstr "<b>グリッドから外れたピン %s</b> %s 位置 <b>(%s, %s)</b>."
 
 #: eeschema/tools/ee_inspection_tool.cpp:365
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b> in unit %c."
-msgstr ""
-"<b>グリッドから外れたピン %s</b> %s 位置 <b>(%.3f, %.3f)</b> (ユニット %c)"
+msgstr "<b>グリッドから外れたピン %s</b> %s 位置 <b>(%s, %s)</b> (ユニット %c)."
 
 #: eeschema/tools/ee_inspection_tool.cpp:376
 msgid ""
@@ -16533,31 +16501,26 @@ msgid ""
 msgstr " "
 
 #: eeschema/tools/ee_inspection_tool.cpp:389
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Off grid pin %s</b> %s at location <b>(%s, %s)</b> of converted."
-msgstr ""
-"<b>グリッドから外れたピン %s</b> \"%s\" 位置 <b>(%.3f, %.3f)</b> (変換シンボ"
-"ル)"
+msgstr "<b>グリッドから外れたピン %s</b> \"%s\" 位置 <b>(%s, %s)</b> (変換シンボル)."
 
 #: eeschema/tools/ee_inspection_tool.cpp:398
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Off grid pin %s</b> %s at location <b>(%.3s, %.3s)</b> in unit %c of "
 "converted."
-msgstr ""
-"<b>グリッドから外れたピン %s</b> %s 位置 <b>(%.3f, %.3f)</b> (変換シンボルの"
-"ユニット %c)"
+msgstr "<b>グリッドから外れたピン %s</b> %s 位置 <b>(%.3s, %.3s)</b> (変換シンボルのユニット %c)."
 
 #: eeschema/tools/ee_inspection_tool.cpp:411
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Off grid pin %s</b> %s at location <b>(%s, %s)</b>."
-msgstr "<b>グリッドから外れたピン %s</b> %s 位置 <b>(%.3f, %.3f)</b>"
+msgstr "<b>グリッドから外れたピン %s</b> %s 位置 <b>(%s, %s)</b>."
 
 #: eeschema/tools/ee_inspection_tool.cpp:419
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Off grid pin %s</b> %s at location <b>(%s, %s)</b> in unit %c."
-msgstr ""
-"<b>グリッドから外れたピン %s</b> %s 位置 <b>(%.3f, %.3f)</b> (ユニット %c)"
+msgstr "<b>グリッドから外れたピン %s</b> %s 位置 <b>(%s, %s)</b> (ユニット %c)."
 
 #: eeschema/tools/ee_inspection_tool.cpp:436
 msgid "No symbol issues found."
@@ -16684,9 +16647,8 @@ msgid "Net must be labeled to assign a netclass."
 msgstr "ネットクラスを割り当てるには、ネットへのラベル付けが必要です。"
 
 #: eeschema/tools/sch_editor_control.cpp:962
-#, fuzzy
 msgid "Bus must have at least one member to assign a netclass to members."
-msgstr "ネットクラスを割り当てるには、ネットへのラベル付けが必要です。"
+msgstr "ネットクラスをメンバーに割り当てるには、バスには少なくとも１つのメンバー必要です。"
 
 #: eeschema/tools/sch_editor_control.cpp:988
 msgid "Netclasses"
@@ -16750,9 +16712,8 @@ msgid "Can't save file '%s'."
 msgstr "ファイル '%s' を保存できません。"
 
 #: eeschema/tools/symbol_editor_control.cpp:436
-#, fuzzy
 msgid "SVG File Name"
-msgstr "ファイル名"
+msgstr "SVGファイル名"
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:518
 msgid "Edit Symbol Name"
@@ -16954,18 +16915,16 @@ msgid "Sketch polygons"
 msgstr "ポリゴンをスケッチ モードで表示"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:18
-#, fuzzy
 msgid "File Format"
-msgstr "ファイル形式:"
+msgstr "ファイル形式"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:20
 msgid "These parameters are usually specified in files, but not always."
 msgstr ""
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:29
-#, fuzzy
 msgid "File units"
-msgstr "単位"
+msgstr "ファイルの単位"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:33
 msgid "No leading zeros (TZ format)"
@@ -16976,9 +16935,8 @@ msgid "No trailing zeros (LZ format)"
 msgstr ""
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:35
-#, fuzzy
 msgid "Zero format"
-msgstr "ゼロの扱い"
+msgstr "ゼロのフォーマット"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:37
 msgid ""
@@ -16988,9 +16946,8 @@ msgid ""
 msgstr ""
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:51
-#, fuzzy
 msgid "Coordinates Format"
-msgstr "座標フォーマット"
+msgstr "座標のフォーマット"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:53
 msgid "The coordinates format is not specified in Excellon format."
@@ -17005,9 +16962,8 @@ msgid "Usually: 3:3 in mm and 2:4 in inches"
 msgstr ""
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:70
-#, fuzzy
 msgid "Format for mm"
-msgstr "フォーマット"
+msgstr "mm向けのフォーマット"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:74
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:84
@@ -17075,9 +17031,8 @@ msgid ":"
 msgstr ":"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:90
-#, fuzzy
 msgid "Format for inches"
-msgstr "フォーマット選択"
+msgstr "inch向けのフォーマット"
 
 #: gerbview/dialogs/panel_gerbview_settings_base.cpp:22
 msgid "Full size"
@@ -17445,9 +17400,8 @@ msgid "GerbView"
 msgstr "GerbView"
 
 #: gerbview/gerbview_frame.cpp:1023
-#, fuzzy
 msgid "Excellon Options"
-msgstr "アイコン オプション"
+msgstr "Excellon オプション"
 
 #: gerbview/job_file_reader.cpp:157
 msgid "This job file uses an outdated format. Please recreate it."
@@ -17479,9 +17433,9 @@ msgid "Open Recent Zip File"
 msgstr "最近開いた Zip ファイルを開く"
 
 #: gerbview/readgerb.cpp:63
-#, fuzzy, c-format
+#, c-format
 msgid "File '%s' not found"
-msgstr "ファイル '%s' が見つかりません。"
+msgstr "ファイル '%s' が見つかりません"
 
 #: gerbview/readgerb.cpp:88
 msgid ""
@@ -18341,14 +18295,12 @@ msgid "Create new project from template"
 msgstr "テンプレートから新規プロジェクトを作成"
 
 #: kicad/tools/kicad_manager_actions.cpp:52
-#, fuzzy
 msgid "Open Demo Project..."
-msgstr "プロジェクトを開く..."
+msgstr "デモプロジェクトを開く..."
 
 #: kicad/tools/kicad_manager_actions.cpp:52
-#, fuzzy
 msgid "Open a demo project"
-msgstr "最近開いたプロジェクトを開く"
+msgstr "デモプロジェクトを開く"
 
 #: kicad/tools/kicad_manager_actions.cpp:58
 msgid "Open Project..."
@@ -20583,14 +20535,12 @@ msgid "Loss Tg:"
 msgstr "損失正接:"
 
 #: pcbnew/board_stackup_manager/dialog_dielectric_list_manager_base.cpp:60
-#, fuzzy
 msgid "Common materials:"
-msgstr "全てのユニットで統一化"
+msgstr "一般的な素材:"
 
 #: pcbnew/board_stackup_manager/dialog_dielectric_list_manager_base.h:57
-#, fuzzy
 msgid "Dielectric Material Characteristics"
-msgstr "誘電体材料特性:"
+msgstr "誘電体材料特性"
 
 #: pcbnew/board_stackup_manager/panel_board_finish_base.cpp:20
 msgid "Has castellated pads"
@@ -26466,14 +26416,12 @@ msgid "End layer:"
 msgstr "終了レイヤー:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:280
-#, fuzzy
 msgid "Annular rings:"
-msgstr "アニュラー幅"
+msgstr "アニュラーリング:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:284
-#, fuzzy
 msgid "Start, end, and connected layers"
-msgstr "%s, %s および接続されたレイヤー"
+msgstr "始点, 終点, および接続されたレイヤー"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.h:114
 msgid "Track & Via Properties"
@@ -26893,14 +26841,12 @@ msgid "File not found"
 msgstr "ファイルが見つかりません"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:380
-#, fuzzy
 msgid "Unable to open file"
-msgstr "ファイルを開くことができませんでした"
+msgstr "ファイルを開けませんでした"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:385
-#, fuzzy
 msgid "Unknown error"
-msgstr "不明なメソッド"
+msgstr "不明なエラー"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model_base.cpp:38
 msgid "3D Model(s)"
@@ -27105,9 +27051,8 @@ msgid ""
 msgstr ""
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:256
-#, fuzzy
 msgid "Copper to hole clearance:"
-msgstr "導体穴クリアランス:"
+msgstr "導体から穴のクリアランス:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:261
 msgid ""
@@ -27117,9 +27062,8 @@ msgid ""
 msgstr ""
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:272
-#, fuzzy
 msgid "Copper to edge clearance:"
-msgstr "導体端クリアランス:"
+msgstr "導体から基板端クリアランス:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:277
 msgid ""
@@ -28211,24 +28155,20 @@ msgid "board setup constraints"
 msgstr "基板セットアップの制約"
 
 #: pcbnew/drc/drc_engine.cpp:175
-#, fuzzy
 msgid "board setup constraints silk"
-msgstr "基板セットアップの制約"
+msgstr "基板セットアップのシルク印刷の制約"
 
 #: pcbnew/drc/drc_engine.cpp:181
-#, fuzzy
 msgid "board setup constraints hole"
-msgstr "基板セットアップの制約"
+msgstr "基板セットアップの穴の制約"
 
 #: pcbnew/drc/drc_engine.cpp:186
-#, fuzzy
 msgid "board setup constraints edge"
-msgstr "基板セットアップの制約"
+msgstr "基板セットアップの基板端の制約"
 
 #: pcbnew/drc/drc_engine.cpp:191
-#, fuzzy
 msgid "board setup constraints courtyard"
-msgstr "基板セットアップの制約"
+msgstr "基板セットアップのコートヤードの制約"
 
 #: pcbnew/drc/drc_engine.cpp:198
 msgid "board setup micro-via constraints"
@@ -28270,9 +28210,9 @@ msgid "Board minimum clearance: %s."
 msgstr "最小クリアランス: %s."
 
 #: pcbnew/drc/drc_engine.cpp:849
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s clearance: %s."
-msgstr "%s をチェックしています; クリアランス: %s"
+msgstr "%s のクリアランスをチェックしています: %s."
 
 #: pcbnew/drc/drc_engine.cpp:861 pcbnew/drc/drc_engine.cpp:862
 #: pcbnew/drc/drc_engine.cpp:863 pcbnew/tools/board_inspection_tool.cpp:647
@@ -28283,14 +28223,14 @@ msgid "undefined"
 msgstr "未定義"
 
 #: pcbnew/drc/drc_engine.cpp:878
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s %s: %s."
-msgstr "%s をチェックしています。"
+msgstr "%s の %sをチェックしています: %s."
 
 #: pcbnew/drc/drc_engine.cpp:894
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s: min %s; opt %s; max %s."
-msgstr "%s ピン %s を %s から %s に再接続します。"
+msgstr "%s をチェック: 最小 %s; 最適 %s; 最大 %s."
 
 #: pcbnew/drc/drc_engine.cpp:905
 #, c-format
@@ -28526,9 +28466,9 @@ msgid "Differential uncoupled length too long"
 msgstr "差動の非結合長が長すぎる"
 
 #: pcbnew/drc/drc_item.cpp:320
-#, fuzzy, c-format
+#, c-format
 msgid "Rule: %s"
-msgstr "ルール"
+msgstr "ルール: %s"
 
 #: pcbnew/drc/drc_rule.h:135
 #, c-format
@@ -29936,7 +29876,6 @@ msgstr "円弧スタブの半径:"
 
 #: pcbnew/microwave/microwave_footprint.cpp:80
 #: pcbnew/microwave/microwave_footprint.cpp:95
-#, fuzzy
 msgid "Create Microwave Footprint"
 msgstr "マイクロ波用のフットプリントを作成"
 
@@ -29977,7 +29916,6 @@ msgid "Component Value:"
 msgstr "コンポーネント定数:"
 
 #: pcbnew/microwave/microwave_polygon.cpp:111
-#, fuzzy
 msgid "Complex Shape"
 msgstr "複雑な形状"
 
@@ -29990,9 +29928,8 @@ msgid "Read Shape Description File..."
 msgstr "形状記述ファイルを読み込み..."
 
 #: pcbnew/microwave/microwave_polygon.cpp:210
-#, fuzzy
 msgid "Shape Description File"
-msgstr "形状記述ファイルを読み込み..."
+msgstr "形状記述ファイル"
 
 #: pcbnew/microwave/microwave_polygon.cpp:314
 msgid "Shape has a null size."
@@ -32757,9 +32694,8 @@ msgid "Do not prefix path with footprint UUID."
 msgstr "パスの前にフットプリントのUUIDを付けない。"
 
 #: pcbnew/tools/board_editor_control.cpp:378
-#, fuzzy
 msgid "Specctra Session File"
-msgstr "Specctra セッション (&S)"
+msgstr "Specctra セッション ファイル"
 
 #: pcbnew/tools/board_editor_control.cpp:403
 msgid "Specctra DSN File"
@@ -32882,9 +32818,8 @@ msgid "Cannot generate clearance report on empty group."
 msgstr "空のグループに対するクリアランスレポートを生成できません。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:383
-#, fuzzy
 msgid "Zone connection resolution for:"
-msgstr "穴のクリアランスの解決:"
+msgstr "ゾーンの接続の解決:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:397
 #, c-format
@@ -32928,9 +32863,8 @@ msgid "Silkscreen clearance resolution for:"
 msgstr "シルクスクリーン クリアランスの解決:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:528
-#, fuzzy
 msgid "Courtyard clearance resolution for:"
-msgstr "クリアランスの解決:"
+msgstr "コートヤードのクリアランスの解決:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:566
 msgid "Hole clearance resolution for:"
@@ -32953,9 +32887,9 @@ msgid "Track width resolution for:"
 msgstr "配線幅の解決:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:739
-#, fuzzy, c-format
+#, c-format
 msgid "Width constraints: min %s; opt %s; max %s."
-msgstr "幅の制約: 最小 %s 最大 %s."
+msgstr "幅の制約: 最小 %s; 最適 %s; 最大 %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:749
 msgid "Via Diameter"
@@ -32966,9 +32900,9 @@ msgid "Via diameter resolution for:"
 msgstr "ビアの直径の解決:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:762
-#, fuzzy, c-format
+#, c-format
 msgid "Diameter constraints: min %s; opt %s; max %s."
-msgstr "直径の制約: 最小 %s 最大 %s."
+msgstr "直径の制約: 最小 %s; 最適 %s; 最大 %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:769
 msgid "Via Annular Width"
@@ -32979,9 +32913,9 @@ msgid "Via annular width resolution for:"
 msgstr "ビアのアニュラー幅の解決:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:782
-#, fuzzy, c-format
+#, c-format
 msgid "Annular width constraints: min %s; opt %s; max %s."
-msgstr "アニュラー幅の制約: 最小 %s 最大 %s."
+msgstr "アニュラー幅の制約: 最小 %s; 最適 %s; 最大 %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:793
 msgid "Hole Size"
@@ -33023,9 +32957,8 @@ msgid "Item allowed at current location."
 msgstr "アイテムはこの場所で許可されています。"
 
 #: pcbnew/tools/convert_tool.cpp:76
-#, fuzzy
 msgid "Create from Selection"
-msgstr "選択から除外"
+msgstr "選択領域から作成"
 
 #: pcbnew/tools/convert_tool.cpp:207
 msgid "Convert shapes to polygon"
@@ -33243,7 +33176,6 @@ msgid "Selection copied"
 msgstr "選択対象をコピーしました"
 
 #: pcbnew/tools/edit_tool.cpp:2425
-#, fuzzy
 msgid "Copy canceled"
 msgstr "コピーはキャンセルされました"
 
@@ -33311,25 +33243,22 @@ msgid "Recombine pads"
 msgstr "パッドを再結合"
 
 #: pcbnew/tools/pcb_actions.cpp:48
-#, fuzzy
 msgid "Create Polygon from Selection"
-msgstr "選択対象から図形ポリゴンを作成"
+msgstr "選択対象からポリゴンを作成"
 
 #: pcbnew/tools/pcb_actions.cpp:48
 msgid "Creates a graphic polygon from the selection"
 msgstr "選択対象から図形ポリゴンを作成"
 
 #: pcbnew/tools/pcb_actions.cpp:53
-#, fuzzy
 msgid "Create Zone from Selection"
-msgstr "選択から除外"
+msgstr "選択対象からゾーンを作成"
 
 #: pcbnew/tools/pcb_actions.cpp:53
 msgid "Creates a copper zone from the selection"
 msgstr "選択対象から導体ゾーン作成"
 
 #: pcbnew/tools/pcb_actions.cpp:58
-#, fuzzy
 msgid "Create Rule Area from Selection"
 msgstr "選択対象からルールエリアを作成"
 
@@ -33338,33 +33267,28 @@ msgid "Creates a rule area from the selection"
 msgstr "選択対象からルールエリアを作成"
 
 #: pcbnew/tools/pcb_actions.cpp:63
-#, fuzzy
 msgid "Create Lines from Selection"
-msgstr "選択対象から図形ラインを作成"
+msgstr "選択対象からラインを作成"
 
 #: pcbnew/tools/pcb_actions.cpp:63
 msgid "Creates graphic lines from the selection"
 msgstr "選択対象から図形ラインを作成"
 
 #: pcbnew/tools/pcb_actions.cpp:68
-#, fuzzy
 msgid "Create Arc from Selection"
-msgstr "選択から除外"
+msgstr "選択対象から円弧を作成"
 
 #: pcbnew/tools/pcb_actions.cpp:68
-#, fuzzy
 msgid "Creates an arc from the selected line segment"
-msgstr "線セグメントから円弧を作成"
+msgstr "選択された線セグメントから円弧を作成"
 
 #: pcbnew/tools/pcb_actions.cpp:73
-#, fuzzy
 msgid "Create Tracks from Selection"
-msgstr "選択対象から図形ラインを作成"
+msgstr "選択対象から配線を作成"
 
 #: pcbnew/tools/pcb_actions.cpp:73
-#, fuzzy
 msgid "Creates tracks from the selected graphic lines"
-msgstr "選択されたグラフィック レイヤーをクリアー"
+msgstr "選択された図形ラインから配線を作成"
 
 #: pcbnew/tools/pcb_actions.cpp:82
 msgid "Draw Line"
@@ -34281,18 +34205,16 @@ msgid "Zoom to fit when changing footprint"
 msgstr "フットプリントの変更に合わせてズーム"
 
 #: pcbnew/tools/pcb_actions.cpp:834
-#, fuzzy
 msgid "Draw Zone Fills"
-msgstr "ゾーン塗り潰しを表示 (&F)"
+msgstr "ゾーンの塗りつぶしを描画"
 
 #: pcbnew/tools/pcb_actions.cpp:834
 msgid "Show filled areas of zones"
 msgstr "ゾーンの塗り潰し領域を表示"
 
 #: pcbnew/tools/pcb_actions.cpp:839
-#, fuzzy
 msgid "Draw Zone Outlines"
-msgstr "ゾーンの外枠"
+msgstr "ゾーンの外枠を描画"
 
 #: pcbnew/tools/pcb_actions.cpp:839
 msgid "Show only zone boundaries"
