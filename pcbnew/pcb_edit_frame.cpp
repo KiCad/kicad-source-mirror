@@ -1544,11 +1544,21 @@ void PCB_EDIT_FRAME::ShowFootprintPropertiesDialog( FOOTPRINT* aFootprint )
     if( aFootprint == nullptr )
         return;
 
-    DIALOG_FOOTPRINT_PROPERTIES dlg( this, aFootprint );
+    DIALOG_FOOTPRINT_PROPERTIES::FP_PROPS_RETVALUE retvalue;
 
-    // We use quasi modal to allow displaying help dialogs.
-    dlg.ShowQuasiModal();
-    DIALOG_FOOTPRINT_PROPERTIES::FP_PROPS_RETVALUE retvalue = dlg.GetReturnValue();
+    /*
+     * Make sure dlg is destroyed before GetCanvas->Refresh is called
+     * later or the refresh will try to modify its properties since
+     * they share a GL context.
+     */
+    {
+        DIALOG_FOOTPRINT_PROPERTIES dlg( this, aFootprint );
+
+        // We use quasi modal to allow displaying help dialogs.
+        dlg.ShowQuasiModal();
+        retvalue = dlg.GetReturnValue();
+    }
+
     /*
      * retvalue =
      *   FP_PROPS_UPDATE_FP to show Update Footprints dialog
