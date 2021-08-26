@@ -120,7 +120,7 @@
 
 // Default drawing sheet (sizes are in mm)
 extern const char defaultDrawingSheet[] =
-    "(drawing_sheet\n"
+    "(page_layout\n"
     "(setup (textsize 1.5 1.5) (linewidth 0.15) (textlinewidth 0.15)\n"
     "(left_margin 10)(right_margin 10)(top_margin 10)(bottom_margin 10))\n"
     "(rect (comment \"rect around the title block\") (linewidth 0.15) (start 110 34) (end 2 2) )\n"
@@ -155,7 +155,7 @@ extern const char defaultDrawingSheet[] =
     ")\n";
 
 extern const char emptyDrawingSheet[] =
-    "(drawing_sheet\n"
+    "(page_layout\n"
     "(setup (textsize 1.5 1.5)(linewidth 0.15)(textlinewidth 0.15)\n"
     "(left_margin 10)(right_margin 10)(top_margin 10)(bottom_margin 10))\n"
     "(line (name segm1:Line) (start 0 0) (end 0 0))\n"
