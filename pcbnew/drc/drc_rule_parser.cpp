@@ -256,7 +256,7 @@ void DRC_RULES_PARSER::parseConstraint( DRC_RULE* aRule )
     {
         msg.Printf( _( "Missing constraint type.|  Expected %s." ),
                     "clearance, hole_clearance, edge_clearance, hole, hole_to_hole, "
-                    "courtyard_clearance, silk_clearance, track_width, annular_width, "
+                    "courtyard_clearance, silk_clearance, track_width, annular_width, via_diameter, "
                     "disallow, length, skew, via_count, diff_pair_gap or diff_pair_uncoupled" );
         reportError( msg );
         return;
@@ -274,6 +274,7 @@ void DRC_RULES_PARSER::parseConstraint( DRC_RULE* aRule )
     case T_silk_clearance:            c.m_Type = SILK_CLEARANCE_CONSTRAINT;            break;
     case T_track_width:               c.m_Type = TRACK_WIDTH_CONSTRAINT;               break;
     case T_annular_width:             c.m_Type = ANNULAR_WIDTH_CONSTRAINT;             break;
+    case T_via_diameter:              c.m_Type = VIA_DIAMETER_CONSTRAINT;              break;
     case T_disallow:                  c.m_Type = DISALLOW_CONSTRAINT;                  break;
     case T_length:                    c.m_Type = LENGTH_CONSTRAINT;                    break;
     case T_skew:                      c.m_Type = SKEW_CONSTRAINT;                      break;
@@ -283,7 +284,7 @@ void DRC_RULES_PARSER::parseConstraint( DRC_RULE* aRule )
     default:
         msg.Printf( _( "Unrecognized item '%s'.| Expected %s." ), FromUTF8(),
                     "clearance, hole_clearance, edge_clearance, hole_size, hole_to_hole, "
-                    "courtyard_clearance, silk_clearance, track_width, annular_width, "
+                    "courtyard_clearance, silk_clearance, track_width, annular_width, via_diameter, "
                     "disallow, length, skew, diff_pair_gap or diff_pair_uncoupled." );
         reportError( msg );
     }
