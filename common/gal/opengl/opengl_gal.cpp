@@ -372,6 +372,8 @@ void OPENGL_GAL::PostPaint( wxPaintEvent& aEvent )
 
 bool OPENGL_GAL::updatedGalDisplayOptions( const GAL_DISPLAY_OPTIONS& aOptions )
 {
+    GAL_CONTEXT_LOCKER lock( this );
+
     bool refresh = false;
 
     if( m_options.gl_antialiasing_mode != m_compositor->GetAntialiasingMode() )
