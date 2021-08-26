@@ -146,6 +146,7 @@ DSNLEXER::~DSNLEXER()
     }
 }
 
+
 void DSNLEXER::SetSpecctraMode( bool aMode )
 {
     specctraMode = aMode;
@@ -159,6 +160,16 @@ void DSNLEXER::SetSpecctraMode( bool aMode )
         space_in_quoted_tokens = false;
         stringDelimiter = '"';
     }
+}
+
+
+void DSNLEXER::InitParserState()
+{
+    curTok  = DSN_NONE;
+    prevTok = DSN_NONE;
+    commentsAreTokens = false;
+
+    curOffset = 0;
 }
 
 

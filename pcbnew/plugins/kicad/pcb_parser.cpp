@@ -637,6 +637,9 @@ BOARD_ITEM* PCB_PARSER::Parse()
 
     token = CurTok();
 
+    if( token == -1 )   // EOF
+        Unexpected( token );
+
     if( token != T_LEFT )
         Expecting( T_LEFT );
 

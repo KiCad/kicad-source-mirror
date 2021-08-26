@@ -132,6 +132,13 @@ public:
     virtual ~DSNLEXER();
 
     /**
+     * Reinit variables used during parsing, to ensure od states are not used in a new parsing
+     * must be called before parsing a new file after parsing an old file to avoid
+     * starting with some variables in a non initial state
+     */
+    void InitParserState();
+
+    /**
      * Usable only for DSN lexers which share the same #LINE_READER.
      *
      * Synchronizes the pointers handling the data read by the #LINE_READER.  Allows 2
