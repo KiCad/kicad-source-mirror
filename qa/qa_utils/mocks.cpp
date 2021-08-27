@@ -497,19 +497,6 @@ int PCB_SELECTION_TOOL::selectSameSheet( const TOOL_EVENT& aEvent )
 }
 
 
-void PCB_SELECTION_TOOL::findCallback( BOARD_ITEM* aItem )
-{
-
-}
-
-
-int PCB_SELECTION_TOOL::find( const TOOL_EVENT& aEvent )
-{
-
-    return 0;
-}
-
-
 /**
  * Function itemIsIncludedByFilter()
  *
