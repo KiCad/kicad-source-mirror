@@ -440,7 +440,7 @@ void DS_DATA_MODEL_IO::formatRepeatParameters( DS_DATA_ITEM* aItem ) const
 void DS_DATA_MODEL_IO::formatOptions( DS_DATA_ITEM* aItem ) const
 {
     if( aItem->GetPage1Option() == FIRST_PAGE_ONLY )
-        m_out->Print( 0, " (option page1only)", getTokenName(T_page1only ) );
+        m_out->Print( 0, " (option page1only)" );
     else if( aItem->GetPage1Option() == SUBSEQUENT_PAGES )
         m_out->Print( 0, " (option notonpage1)" );
 }
