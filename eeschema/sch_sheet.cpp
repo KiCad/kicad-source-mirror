@@ -1165,8 +1165,8 @@ int SCH_SHEET::ComparePageNum( const wxString& aPageNumberA, const wxString& aPa
     else if( isIntegerPageB )
         return 1; // A > B
 
-    // If not numeric, then sort as strings
-    int result = aPageNumberA.Cmp( aPageNumberB );
+    // If not numeric, then sort as strings using natural sort
+    int result = StrNumCmp( aPageNumberA, aPageNumberB );
 
     if( result > 0 )
         return 1; // A > B

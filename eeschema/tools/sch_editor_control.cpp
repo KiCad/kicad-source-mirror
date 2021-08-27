@@ -402,13 +402,14 @@ int SCH_EDITOR_CONTROL::FindNext( const TOOL_EVENT& aEvent )
 
     bool          searchAllSheets = !( data.GetFlags() & FR_CURRENT_SHEET_ONLY );
     EE_SELECTION& selection       = m_selectionTool->GetSelection();
-    SCH_SCREEN*   afterScreen     = m_frame->GetScreen();
     SCH_ITEM*     afterItem       = dynamic_cast<SCH_ITEM*>( selection.Front() );
     SCH_ITEM*     item            = nullptr;
 
+    SCH_SHEET_PATH* afterSheet    = &m_frame->GetCurrentSheet();
+
     if( wrapAroundTimer.IsRunning() )
     {
-        afterScreen = nullptr;
+        afterSheet = nullptr;
         afterItem = nullptr;
         wrapAroundTimer.Stop();
         m_frame->ClearFindReplaceStatus();
@@ -416,42 +417,62 @@ int SCH_EDITOR_CONTROL::FindNext( const TOOL_EVENT& aEvent )
 
     m_selectionTool->ClearSelection();
 
-    if( afterScreen || !searchAllSheets )
+    if( afterSheet || !searchAllSheets )
         item = nextMatch( m_frame->GetScreen(), &m_frame->GetCurrentSheet(), afterItem, data );
 
     if( !item && searchAllSheets )
     {
-        SCH_SHEET_LIST schematic = m_frame->Schematic().GetSheets();
-        SCH_SCREENS    screens( m_frame->Schematic().Root() );
+        SCH_SCREENS                  screens( m_frame->Schematic().Root() );
+        std::vector<SCH_SHEET_PATH*> paths;
 
         screens.BuildClientSheetPathList();
 
         for( SCH_SCREEN* screen = screens.GetFirst(); screen; screen = screens.GetNext() )
         {
-            if( afterScreen )
+
+            for( SCH_SHEET_PATH& sheet : screen->GetClientSheetPaths() )
             {
-                if( afterScreen == screen )
-                    afterScreen = nullptr;
+                paths.push_back( &sheet );
+            }
+        }
+
+        std::sort( paths.begin(), paths.end(), [] ( const SCH_SHEET_PATH* lhs, const SCH_SHEET_PATH* rhs ) -> bool
+                {
+                    int retval = lhs->ComparePageNumAndName( *rhs );
+
+                    if( retval < 0 )
+                        return true;
+                    else if( retval > 0 )
+                        return false;
+                    else /// Enforce strict ordering.  If the name and number are the same, we use UUIDs
+                        return lhs->GetCurrentHash() < rhs->GetCurrentHash();
+                } );
+
+        for( SCH_SHEET_PATH* sheet : paths )
+        {
+            if( afterSheet )
+            {
+                if( afterSheet->GetPageNumber() == sheet->GetPageNumber() )
+                    afterSheet = nullptr;
 
                 continue;
             }
 
-            for( SCH_SHEET_PATH sheet : screen->GetClientSheetPaths() )
+            SCH_SCREEN* screen = sheet->LastScreen();
+
+            item = nextMatch( screen, sheet, nullptr, data );
+
+            if( item )
             {
-                item = nextMatch( screen, &sheet, nullptr, data );
+                m_frame->Schematic().SetCurrentSheet( *sheet );
+                m_frame->GetCurrentSheet().UpdateAllScreenReferences();
 
-                if( item )
-                {
-                    m_frame->Schematic().SetCurrentSheet( sheet );
-                    m_frame->GetCurrentSheet().UpdateAllScreenReferences();
+                screen->TestDanglingEnds();
 
-                    screen->TestDanglingEnds();
+                m_frame->SetScreen( screen );
+                UpdateFind( ACTIONS::updateFind.MakeEvent() );
 
-                    m_frame->SetScreen( screen );
-                    UpdateFind( ACTIONS::updateFind.MakeEvent() );
-
-                    break;
-                }
+                break;
             }
 
             if( item )
