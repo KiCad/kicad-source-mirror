@@ -5,8 +5,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-20 13:14-0700\n"
-"PO-Revision-Date: 2021-08-20 12:40+0000\n"
+"POT-Creation-Date: 2021-08-20 11:53-0700\n"
+"PO-Revision-Date: 2021-08-27 08:25+0000\n"
 "Last-Translator: David Chen <d0123456789g@yahoo.com.tw>\n"
 "Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hant/>\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.8-dev\n"
+"X-Generator: Weblate 4.8.1-dev\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-Basepath: ../../../../../Downloads/kicad-master\n"
@@ -31347,7 +31347,7 @@ msgstr "預期鑽頭尺寸數值，但找到了 %s!%s!%s，位於行 %zu。"
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:546
 #, c-format
 msgid "Expecting pad size values but found %s : %s in row %zu."
-msgstr "期望焊盤尺寸值，卻找到了%s : %s，位於行 %zu"
+msgstr "預期焊盤尺寸值，卻找到了%s : %s，位於行 %zu。"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:568
 #, fuzzy, c-format
