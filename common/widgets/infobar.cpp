@@ -60,10 +60,15 @@ WX_INFOBAR::WX_INFOBAR( wxWindow* aParent, wxAuiManager* aMgr, wxWindowID aWinid
         SetBackgroundColour( wxColour( 28, 27, 20 ) );
     else
         SetBackgroundColour( wxColour( 255, 249, 189 ) );
-#endif
 
+    // Infobar is broken on Mac without the effects
     SetShowHideEffects( wxSHOW_EFFECT_ROLL_TO_BOTTOM, wxSHOW_EFFECT_ROLL_TO_TOP );
     SetEffectDuration( 300 );
+#else
+    // Infobar freezes canvas on Windows with the effect, and GTK looks bad with it
+    SetShowHideEffects( wxSHOW_EFFECT_NONE, wxSHOW_EFFECT_NONE );
+#endif
+
 
     // The infobar seems to start too small, so increase its height
     int sx, sy;

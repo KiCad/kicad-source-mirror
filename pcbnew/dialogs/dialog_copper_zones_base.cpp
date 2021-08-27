@@ -16,8 +16,6 @@ DIALOG_COPPER_ZONE_BASE::DIALOG_COPPER_ZONE_BASE( wxWindow* parent, wxWindowID i
 	m_MainBoxSizer = new wxBoxSizer( wxVERTICAL );
 
 	m_copperZoneInfo = new wxInfoBar( this );
-	m_copperZoneInfo->SetShowHideEffects( wxSHOW_EFFECT_NONE, wxSHOW_EFFECT_NONE );
-	m_copperZoneInfo->SetEffectDuration( 500 );
 	m_MainBoxSizer->Add( m_copperZoneInfo, 0, wxBOTTOM|wxEXPAND, 5 );
 
 	wxBoxSizer* m_OptionsBoxSizer;
