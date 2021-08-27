@@ -12,17 +12,17 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-20 13:14-0700\n"
-"PO-Revision-Date: 2021-06-20 16:33+0000\n"
+"POT-Creation-Date: 2021-08-20 11:53-0700\n"
+"PO-Revision-Date: 2021-08-28 04:15+0000\n"
 "Last-Translator: Jonathan Haas <haasjona@gmail.com>\n"
-"Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
-"source/de/>\n"
+"Language-Team: German <https://hosted.weblate.org/projects/kicad/"
+"master-source/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.7\n"
+"X-Generator: Weblate 4.8.1-dev\n"
 "X-Poedit-Basepath: ../../../../../../mnt/kicad\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -193,22 +193,20 @@ msgstr "Flächen erstellen"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:756
 msgid "Simplifying copper layers polygons"
-msgstr "Vereinfachung von Polygonen auf Kupferlagen"
+msgstr "Polygone auf Kupferlagen vereinfachen"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:766
-#, fuzzy
 msgid "Simplifying polygons on F_Cu"
-msgstr "Vereinfachung von Polygonen auf Kupferlagen"
+msgstr "Polygone auf F_Cu vereinfachen"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:777
-#, fuzzy
 msgid "Simplifying polygons on B_Cu"
-msgstr "Vereinfachung von Polygonen auf Kupferlagen"
+msgstr "Polygone auf B_Cu vereinfachen"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:807
-#, fuzzy, c-format
+#, c-format
 msgid "Simplifying %d copper layers"
-msgstr "Vereinfachung von Polygonen auf Kupferlagen"
+msgstr "%d Kupferlagen vereinfachen"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:846
 msgid "Simplify holes contours"
@@ -219,19 +217,18 @@ msgid "Build Tech layers"
 msgstr "Erstelle technische Lagen"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:909
-#, fuzzy, c-format
+#, c-format
 msgid "Build Tech layer %d"
-msgstr "Erstelle technische Lagen"
+msgstr "Erstelle technische Lage %d"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1054
 msgid "Build BVH for holes and vias"
 msgstr "Erstelle BVH für Löcher und Vias"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:410
-#, fuzzy
 msgid "Your OpenGL version is not supported. Minimum required is 1.5."
 msgstr ""
-"Ihre OpenGL-Version wird nicht unterstützt. Minimal erforderlich ist 1.5"
+"Ihre OpenGL-Version wird nicht unterstützt. Minimal erforderlich ist 1.5."
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:531
 #, c-format
@@ -259,9 +256,8 @@ msgstr "Lade Raytracing: Lagen"
 
 #: 3d-viewer/3d_rendering/3d_render_raytracing/create_scene.cpp:795
 #: 3d-viewer/3d_rendering/legacy/create_scene.cpp:650
-#, fuzzy
 msgid "Loading 3D models..."
-msgstr "3D-Modelle laden"
+msgstr "3D-Modelle laden..."
 
 #: 3d-viewer/3d_rendering/3d_render_raytracing/create_scene.cpp:934
 #: 3d-viewer/3d_rendering/legacy/create_scene.cpp:660
@@ -301,9 +297,9 @@ msgid "Load OpenGL: layers"
 msgstr "Lade OpenGL: Lagen"
 
 #: 3d-viewer/3d_rendering/legacy/create_scene.cpp:562
-#, fuzzy, c-format
+#, c-format
 msgid "Load OpenGL layer %d"
-msgstr "Lade OpenGL: Lagen"
+msgstr "Lade OpenGL-Lage %d"
 
 #: 3d-viewer/3d_rendering/legacy/create_scene.cpp:914
 #: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:430
@@ -313,9 +309,9 @@ msgstr "Lade OpenGL: Lagen"
 #: pcbnew/plugins/fabmaster/fabmaster_plugin.cpp:75
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:2288
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:449
-#, fuzzy, c-format
+#, c-format
 msgid "Loading %s..."
-msgstr "Lade %s"
+msgstr "Lade %s..."
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:50
 msgid "Export Current View as PNG..."
@@ -412,69 +408,56 @@ msgid "Render current view using Raytracing"
 msgstr "Wiedergabe der aktuellen Ansicht unter Benutzung von Raytracing"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:23
-#, fuzzy
 msgid "Environment Colors"
-msgstr "Umgebungsvariablen"
+msgstr "Umgebungsfarben"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:30
-#, fuzzy
 msgid "Background gradient start:"
-msgstr "Start Referenz hinten:"
+msgstr "Hintergrund-Farbverlauf Start:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:37
-#, fuzzy
 msgid "Background gradient end:"
-msgstr "Hintergrund Weiß"
+msgstr "Hintergrund-Farbverlauf Ende:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:50
-#, fuzzy
 msgid "Solder paste:"
-msgstr "Lötpaste oben"
+msgstr "Lotpaste:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:64
-#, fuzzy
 msgid "Board Colors"
-msgstr "Farbe des Platinenkörpers"
+msgstr "Platinenfarben"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:66
-#, fuzzy
 msgid "Use board stackup colors"
-msgstr "Platinen-Lagenaufbau-Tabelle einfügen"
+msgstr "Farben des Platinen-Lageaufbaus benutzen"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:69
-#, fuzzy
 msgid "Use colors:"
-msgstr "Netzfarben:"
+msgstr "Farben benutzen:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:77
-#, fuzzy
 msgid "Silkscreen top:"
-msgstr "Bestückungsdruck"
+msgstr "Bestückungsdruck oben:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:84
-#, fuzzy
 msgid "Silkscreen bottom:"
-msgstr "Farbe des Bestückungsdrucks"
+msgstr "Bestückungsdruck unten:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:97
-#, fuzzy
 msgid "Solder mask top:"
-msgstr "Farbe der Lötstoppmaske"
+msgstr "Lötstoppmaske oben:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:104
-#, fuzzy
 msgid "Solder mask bottom:"
-msgstr "Farbe der Lötstoppmaske"
+msgstr "Lötstoppmaske unten:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:117
-#, fuzzy
 msgid "Copper/surface finish:"
-msgstr "Kupferoberfläche:"
+msgstr "Kupfer/Oberflächenbeschichtung:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:130
-#, fuzzy
 msgid "Board body:"
-msgstr "Platinenkörper erstellen"
+msgstr "Platinenkörper:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_display_options_base.cpp:21
 msgid "3D Model Visibility"
@@ -547,9 +530,8 @@ msgid "Subtract soldermask from silkscreen"
 msgstr "Lötstoppmaske vom Bestückungsdruck subtrahieren"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_display_options_base.cpp:86
-#, fuzzy
 msgid "Clip silkscreen at via annuli"
-msgstr "Bestückungsdruck auf Via-Ringfläche aussparen"
+msgstr "Bestückungsdruck auf Via-Ringflächen aussparen"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_display_options_base.cpp:89
 msgid "Use bare copper color for unplated copper"
@@ -562,24 +544,20 @@ msgstr ""
 "Kupfer. (Langsam)"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_display_options_base.cpp:97
-#, fuzzy
 msgid "Material properties:"
-msgstr "Materialeigenschaften"
+msgstr "Materialeigenschaften:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_display_options_base.cpp:101
-#, fuzzy
 msgid "Realistic"
-msgstr "Realistischer Modus"
+msgstr "Realistisch"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_display_options_base.cpp:101
-#, fuzzy
 msgid "Solid colors"
-msgstr "Auswahlfarbe:"
+msgstr "Volltonfarben"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_display_options_base.cpp:101
-#, fuzzy
 msgid "CAD colors"
-msgstr "Farben"
+msgstr "CAD-Farben"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_display_options_base.cpp:114
 msgid "Camera Options"
@@ -611,9 +589,8 @@ msgstr "Animationsgeschwindigkeit:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_opengl_options_base.cpp:23
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_raytracing_options_base.cpp:21
-#, fuzzy
 msgid "Rendering Options"
-msgstr "Render Optionen"
+msgstr "Rendering-Optionen"
 
 # Einen Bereich (gezeichnete Elemente) umgebendes Rechteck.
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_opengl_options_base.cpp:25
@@ -625,9 +602,8 @@ msgid "Show copper thickness"
 msgstr "Kupferstärke einblenden"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_opengl_options_base.cpp:31
-#, fuzzy
 msgid "Highlight items on rollover"
-msgstr "Hervorgehobene Elemente"
+msgstr "Elemente beim Rollover hervorheben"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_opengl_options_base.cpp:37
 msgid "Anti-aliasing:"
@@ -680,27 +656,22 @@ msgid "Disable holes"
 msgstr "Löcher ausschalten"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_raytracing_options_base.cpp:27
-#, fuzzy
 msgid "Procedural textures (slow)"
-msgstr "Prozedurale Texturen"
+msgstr "Prozedurale Texturen (langsam)"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_raytracing_options_base.cpp:31
-#, fuzzy
 msgid "Add floor (slow)"
-msgstr "Ebene hinzufügen"
+msgstr "Boden hinzufügen (langsam)"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_raytracing_options_base.cpp:35
-#, fuzzy
 msgid "Anti-aliasing (slow)"
-msgstr "Anti-Aliasing"
+msgstr "Anti-Aliasing (langsam)"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_raytracing_options_base.cpp:39
-#, fuzzy
 msgid ""
 "Screen space ambient occlusions and global illumination reflections (slow)"
 msgstr ""
-"Anwenden von Screen Space Ambient Occlusion und globale "
-"Beleuchtungsreflexionen (langsam)"
+"Screen Space Ambient Occlusions und globale Beleuchtungsreflexionen (langsam)"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_raytracing_options_base.cpp:54
 msgid "Number of Samples"
@@ -780,55 +751,45 @@ msgstr "Licht von unten:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_raytracing_options_base.cpp:187
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_raytracing_options_base.cpp:204
-#, fuzzy
 msgid "Elevation (deg)"
-msgstr "Vertikalwinkel in Grad"
+msgstr "Höhe (Grad)"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_raytracing_options_base.cpp:191
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_raytracing_options_base.cpp:208
-#, fuzzy
 msgid "Azimuth (deg)"
-msgstr "Azimut in Grad"
+msgstr "Azimut (Grad)"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_raytracing_options_base.cpp:212
-#, fuzzy
 msgid "Light 1:"
-msgstr "Hell"
+msgstr "Licht 1:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_raytracing_options_base.cpp:230
-#, fuzzy
 msgid "Light 5:"
-msgstr "Hell"
+msgstr "Licht 5:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_raytracing_options_base.cpp:245
-#, fuzzy
 msgid "Light 2:"
-msgstr "Hell"
+msgstr "Licht 2:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_raytracing_options_base.cpp:263
-#, fuzzy
 msgid "Light 6:"
-msgstr "Hell"
+msgstr "Licht 6:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_raytracing_options_base.cpp:278
-#, fuzzy
 msgid "Light 3:"
-msgstr "Hell"
+msgstr "Licht 3:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_raytracing_options_base.cpp:296
-#, fuzzy
 msgid "Light 7:"
-msgstr "Hell"
+msgstr "Licht 7:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_raytracing_options_base.cpp:311
-#, fuzzy
 msgid "Light 4:"
-msgstr "Hell"
+msgstr "Licht 4:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_raytracing_options_base.cpp:329
-#, fuzzy
 msgid "Light 8:"
-msgstr "Hell"
+msgstr "Licht 8:"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:98
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:72
@@ -860,11 +821,9 @@ msgstr "Dateiname für 3D-Grafik"
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:681
 #: common/eda_base_frame.cpp:1051 common/eda_base_frame.cpp:1056
 #: pcbnew/plugins/altium/altium_pcb.cpp:1461
-#, fuzzy, c-format
+#, c-format
 msgid "Insufficient permissions to save file '%s'."
-msgstr ""
-"Ungenügende Berechtigungen vorhanden zum speichern der Datei\n"
-"%s"
+msgstr "Ungenügende Berechtigungen um Datei '%s' zu speichern."
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:682 common/confirm.cpp:130
 #: common/confirm.cpp:264 common/dialogs/panel_setup_severities.cpp:43
@@ -1002,27 +961,24 @@ msgid "3D Grid 1mm"
 msgstr "3D-Rasterabstand 1 mm"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:187
-#, fuzzy
 msgid "Render Realistic Materials"
-msgstr "Dielektrische Materialien"
+msgstr "Realistische Materialien rendern"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:188
 msgid "Use all material properties from each 3D model file"
 msgstr "Benutzt alle Materialeigenschaften der jeweiligen 3D-Modell-Datei"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:194
-#, fuzzy
 msgid "Render Solid Colors"
-msgstr "Render Schatten"
+msgstr "Volltonfarben rendern"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:195
 msgid "Use only the diffuse color property from model 3D model file"
 msgstr "Benutze nur die diffuse Farbeinstellung aus der 3D-Modell-Datei"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:201
-#, fuzzy
 msgid "Render CAD Colors"
-msgstr "Definierte Farben"
+msgstr "CAD-Farben rendern"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:202
 msgid "Use a CAD color style based on the diffuse color of the material"
@@ -1254,9 +1210,9 @@ msgstr "Logodatei erstellen"
 #: bitmap2component/bitmap2cmp_gui.cpp:799
 #: bitmap2component/bitmap2cmp_gui.cpp:838
 #: bitmap2component/bitmap2cmp_gui.cpp:877
-#, fuzzy, c-format
+#, c-format
 msgid "File '%s' could not be created."
-msgstr "Konnte die Datei \"%s\" nicht erstellen."
+msgstr "Konnte die Datei '%s' nicht erstellen."
 
 #: bitmap2component/bitmap2cmp_gui.cpp:779
 msgid "Create PostScript File"
@@ -1365,9 +1321,8 @@ msgid "Export to Clipboard"
 msgstr "Export in Zwischenablage"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:158
-#, fuzzy
 msgid "Symbol (.kicad_sym file)"
-msgstr "Symbol (.lib-Datei)"
+msgstr "Symbol (.kicad_sym-Datei)"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:158
 msgid "Footprint (.kicad_mod file)"
