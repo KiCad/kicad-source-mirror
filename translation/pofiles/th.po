@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-01 11:31-0700\n"
-"PO-Revision-Date: 2021-08-27 08:25+0000\n"
+"PO-Revision-Date: 2021-08-28 04:15+0000\n"
 "Last-Translator: boonchai k. <kicadthai@gmail.com>\n"
 "Language-Team: Thai <https://hosted.weblate.org/projects/kicad/master-source/"
 "th/>\n"
@@ -22590,197 +22590,199 @@ msgstr "ขนาดหน้า SVG"
 
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:95
 msgid "Print the layer(s) horizontally mirrored"
-msgstr ""
+msgstr "พิมพ์เลเยอร์ที่ทำมิเรอร์ในแนวนอน"
 
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:99
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:254
 msgid "Print one page per layer"
-msgstr ""
+msgstr "พิมพ์หนึ่งหน้าต่อเลเยอร์"
 
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:105
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:260
 msgid "Print board edges on all pages"
-msgstr ""
+msgstr "พิมพ์ขอบบอร์ดทุกหน้า"
 
 #: pcbnew/dialogs/dialog_export_svg_base.h:71
 msgid "Export SVG File"
-msgstr ""
+msgstr "ส่งออกไฟล์ SVG"
 
 #: pcbnew/dialogs/dialog_export_vrml.cpp:179
 msgid "Are you sure you want to overwrite the existing file?"
-msgstr ""
+msgstr "คุณแน่ใจหรือไม่ว่าต้องการเขียนทับไฟล์ที่มีอยู่?"
 
 #: pcbnew/dialogs/dialog_export_vrml.cpp:254
 #: pcbnew/plugins/altium/altium_pcb.cpp:1284
 #, c-format
 msgid "Failed to create folder '%s'."
-msgstr ""
+msgstr "ไม่สามารถสร้างโฟลเดอร์ '%s'"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:26
 msgid "Save VRML Board File"
-msgstr ""
+msgstr "บันทึกไฟล์บอร์ด VRML"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:26
 msgid "*.wrl"
-msgstr ""
+msgstr "*.wrl"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:31
 msgid "Footprint 3D model path:"
-msgstr ""
+msgstr "เส้นทางโมเดลฟุ้ทพรินท์ 3D:"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:46
 msgid "Coordinate origin options:"
-msgstr ""
+msgstr "พิกัดตัวเลือกต้นทาง:"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:53
 msgid "User defined origin:"
-msgstr ""
+msgstr "ผู้ใช้กำหนดจุดกำเนิด:"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:109
 msgid "meter"
-msgstr ""
+msgstr "เมตร"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:109
 msgid "0.1 Inch"
-msgstr ""
+msgstr "0.1 นิ้ว"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:111
 msgid "VRML Units for Output Files"
-msgstr ""
+msgstr "หน่วย VRML สำหรับไฟล์เอาต์พุต"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:124
 msgid "Copy 3D model files to 3D model path"
-msgstr ""
+msgstr "คัดลอกไฟล์โมเดล 3 มิติไปยังเส้นทางโมเดล 3 มิติ"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:125
 msgid ""
 "If checked: copy 3D models to the destination folder\n"
 "If not checked: Embed 3D models in the VRML board file"
 msgstr ""
+"หากเลือก: คัดลอกโมเดล 3 มิติไปยังโฟลเดอร์ปลายทาง\n"
+"หากไม่เลือก: ฝังโมเดล 3 มิติในไฟล์บอร์ด VRML"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:129
 msgid "Use relative paths to model files in board VRML file"
-msgstr ""
+msgstr "ใช้เส้นทางสัมพัทธ์ไปยังไฟล์โมเดลในบอร์ด VRML"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:130
 msgid "Use paths for model files in board VRML file relative to the VRML file"
-msgstr ""
+msgstr "ใช้เส้นทางไปยังไฟล์โมเดล สำหรับบอร์ด VRML ชนิดสัมพันธ์กับไฟล์"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.h:67
 msgid "VRML Export Options"
-msgstr ""
+msgstr "ตัวเลือกการส่งออก VRML"
 
 #: pcbnew/dialogs/dialog_filter_selection_base.cpp:22
 msgid "Include &footprints"
-msgstr ""
+msgstr "รวมฟุ้ทพรินท์"
 
 #: pcbnew/dialogs/dialog_filter_selection_base.cpp:25
 msgid "Include t&ext items"
-msgstr ""
+msgstr "รวมรายการข้อความ"
 
 #: pcbnew/dialogs/dialog_filter_selection_base.cpp:28
 msgid "Include &locked footprints"
-msgstr ""
+msgstr "รวมฟุ้ทพรินท์ที่ล็อก"
 
 #: pcbnew/dialogs/dialog_filter_selection_base.cpp:31
 msgid "Include &drawings"
-msgstr ""
+msgstr "รวมแบบวาดเขียน"
 
 #: pcbnew/dialogs/dialog_filter_selection_base.cpp:34
 msgid "Include &tracks"
-msgstr ""
+msgstr "รวมแทร็ค"
 
 #: pcbnew/dialogs/dialog_filter_selection_base.cpp:37
 msgid "Include &board outline layer"
-msgstr ""
+msgstr "รวมเลเยอร์เค้าร่างบอร์ด"
 
 #: pcbnew/dialogs/dialog_filter_selection_base.cpp:40
 msgid "Include &vias"
-msgstr ""
+msgstr "รวมเวีย"
 
 #: pcbnew/dialogs/dialog_filter_selection_base.cpp:43
 msgid "Include &zones"
-msgstr ""
+msgstr "รวมโซน"
 
 #: pcbnew/dialogs/dialog_filter_selection_base.h:57
 msgid "Filter Selected Items"
-msgstr ""
+msgstr "กรองรายการที่เลือก"
 
 #: pcbnew/dialogs/dialog_find.cpp:221
 msgid "Searching..."
-msgstr ""
+msgstr "กำลังค้นหา..."
 
 #: pcbnew/dialogs/dialog_find.cpp:337
 #, c-format
 msgid "'%s' not found"
-msgstr ""
+msgstr "'%s' ไม่พบ"
 
 #: pcbnew/dialogs/dialog_find.cpp:345
 msgid "No more items to show"
-msgstr ""
+msgstr "ไม่มีรายการที่จะแสดงอีก"
 
 #: pcbnew/dialogs/dialog_find.cpp:347
 msgid "No hits"
-msgstr ""
+msgstr "ไม่มีรูเจาะ"
 
 #: pcbnew/dialogs/dialog_find.cpp:354
 #, c-format
 msgid "'%s' found"
-msgstr ""
+msgstr "'%s' พบ"
 
 #: pcbnew/dialogs/dialog_find.cpp:357
 #, c-format
 msgid "Hit(s): %ld / %lu"
-msgstr ""
+msgstr "เจาะ: %ld / %lu"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:28
 msgid "Search for:"
-msgstr ""
+msgstr "ค้นหา:"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:43
 msgid "Match case"
-msgstr ""
+msgstr "จับคู่เคส"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:52
 msgid "Wrap"
-msgstr ""
+msgstr "ห่อหุ้ม"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:62
 msgid "Search footprint reference designators"
-msgstr ""
+msgstr "ค้นหาอักษรอ้างอิงของฟุ้ทพรินท์"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:66
 msgid "Search footprint values"
-msgstr ""
+msgstr "ค้นหาค่าฟุ้ทพรินท์"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:70
 msgid "Search other text items"
-msgstr ""
+msgstr "ค้นหารายการข้อความอื่นๆ"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:74
 msgid "Search DRC markers"
-msgstr ""
+msgstr "ค้นหาเครื่องหมาย DRC"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:98
 msgid "Find Previous"
-msgstr ""
+msgstr "ค้นหาก่อนหน้า"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:101
 msgid "Restart Search"
-msgstr ""
+msgstr "เริ่มการค้นหาใหม่"
 
 #: pcbnew/dialogs/dialog_footprint_checker.cpp:50
 msgid "Run Checks"
-msgstr ""
+msgstr "เรียกใช้การตรวจสอบ"
 
 #: pcbnew/dialogs/dialog_footprint_checker_base.h:71
 #: pcbnew/tools/pcb_actions.cpp:396
 msgid "Footprint Checker"
-msgstr ""
+msgstr "ตัวตรวจสอบฟุ้ทพรินท์"
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:333
 msgid "Footprint can be freely moved and oriented on the canvas."
-msgstr ""
+msgstr "ฟุ้ทพรินท์สามารถเคลื่อนย้ายได้อย่างอิสระและจัดวางแนวบนผืนผ้าใบ"
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:335
 msgid ""
@@ -22788,27 +22790,30 @@ msgid ""
 "and can only be selected when the 'Locked items' checkbox is enabled in the "
 "selection filter."
 msgstr ""
+"ฟุ้ทพรินท์ถูกล็อค: ไม่สามารถเคลื่อนย้ายได้อย่างอิสระและวางบนแนวผืนผ้าใบ "
+"และสามารถเลือกได้เฉพาะเมื่อเปิดใช้งานช่องกาเครื่องหมาย 'รายการที่ถูกล็อค' "
+"ในตัวกรองการเลือก"
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:483
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:386
 #, c-format
 msgid "Invalid filename: %s"
-msgstr ""
+msgstr "ชื่อไฟล์ไม่ถูกต้อง: %s"
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:641
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:577
 msgid "Text items must have some content."
-msgstr ""
+msgstr "รายการข้อความต้องมีเนื้อหาบางส่วน"
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:783
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:713
 msgid "Modify footprint properties"
-msgstr ""
+msgstr "แก้ไขคุณสมบัติฟุ้ทพรินท์"
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:835
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:784
 msgid "Reference and value are mandatory."
-msgstr ""
+msgstr "ค่าอ้างอิงและมูลค่าเป็นสิ่งบังคับ"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:53
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:53
@@ -22816,25 +22821,25 @@ msgstr ""
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:45
 #: pcbnew/fp_text_grid_table.cpp:89
 msgid "Text Items"
-msgstr ""
+msgstr "รายการข้อความ"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:61
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:49
 #: pcbnew/fp_text_grid_table.cpp:97
 msgid "Keep Upright"
-msgstr ""
+msgstr "ตั้งตรง"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:62
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:62
 #: pcbnew/fp_text_grid_table.cpp:98
 msgid "X Offset"
-msgstr ""
+msgstr "ออฟเซต X"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:63
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:63
 #: pcbnew/fp_text_grid_table.cpp:99
 msgid "Y Offset"
-msgstr ""
+msgstr "ออฟเซต Y"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:69
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:69
@@ -22842,102 +22847,102 @@ msgstr ""
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:53
 #: pcbnew/fp_text_grid_table.cpp:109
 msgid "Reference designator"
-msgstr ""
+msgstr "อักษรอ้างอิง"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:136
 msgid "Side:"
-msgstr ""
+msgstr "ด้านข้าง:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:195
 msgid "Unlock footprint"
-msgstr ""
+msgstr "ปลดล็อกฟุ้ทพรินท์"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:195
 msgid "Lock footprint"
-msgstr ""
+msgstr "ล็อคฟุ้ทพรินท์"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:197
 msgid "Move and Place"
-msgstr ""
+msgstr "ย้ายและวาง"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:204
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:135
 msgid "Auto-placement Rules"
-msgstr ""
+msgstr "กฎการวางตำแหน่งอัตโนมัติ"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:208
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:139
 msgid "Allow 90 degree rotated placement:"
-msgstr ""
+msgstr "อนุญาตให้วางแบบหมุนได้ 90 องศา:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:225
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:156
 msgid "Allow 180 degree rotated placement:"
-msgstr ""
+msgstr "อนุญาตให้วางแบบหมุนได้ 180 องศา:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:249
 msgid "Update Footprint from Library..."
-msgstr ""
+msgstr "ปรับปรุงฟุ้ทพรินท์จากไลบรารี..."
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:252
 #: pcbnew/tools/pcb_actions.cpp:421
 msgid "Change Footprint..."
-msgstr ""
+msgstr "เปลี่ยนฟุ้ทพรินท์..."
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:261
 msgid "Edit Library Footprint..."
-msgstr ""
+msgstr "แก้ไขไลนรารีฟุ้ทพรินท์..."
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:271
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:175
 msgid "Fabrication Attributes"
-msgstr ""
+msgstr "คุณลักษณะการผลิต"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:276
 msgid "Component:"
-msgstr ""
+msgstr "อุปกรณ์:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:280
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:184
 msgid "Through hole"
-msgstr ""
+msgstr "รูเจาะทะลุ"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:280
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:184
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:40 pcbnew/pad.cpp:1100
 #: pcbnew/pad.cpp:1445
 msgid "SMD"
-msgstr ""
+msgstr "SMD"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:280
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:184
 msgid "Other"
-msgstr ""
+msgstr "อื่น"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:289
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:193
 msgid "Not in schematic"
-msgstr ""
+msgstr "ไม่อยู่ในวงจร"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:292
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:196
 msgid "Exclude from position files"
-msgstr ""
+msgstr "แยกออกจากไฟล์ตำแหน่ง"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:295
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:199
 msgid "Exclude from BOM"
-msgstr ""
+msgstr "แยกออกจาก BOM"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:317
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:218
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:585
 msgid "Clearances"
-msgstr ""
+msgstr "ระยะห่าง"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:319
 msgid "Set values to 0 to use Board Setup values."
-msgstr ""
+msgstr "ตั้งค่าเป็น 0 เพื่อใช้ค่ากำหนดสำหรับบอร์ด"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:325
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:226
@@ -22945,6 +22950,7 @@ msgstr ""
 msgid ""
 "Positive clearance means area bigger than the pad (usual for mask clearance)."
 msgstr ""
+"ค่าระยะห่างเป็นบวก หมายถึงบริเวณใหญ่กว่าขนาดแพ็ด (ปกติสำหรับโซลเดอร์มาสก์)"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:331
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:232
@@ -22952,13 +22958,13 @@ msgstr ""
 msgid ""
 "Negative clearance means area smaller than the pad (usual for paste "
 "clearance)."
-msgstr ""
+msgstr "ค่าระยะห่างเป็นลบหมายถึงพื้นที่เล็กกว่าแพ็ด (ปกติสำหรับโซลเดอร์เพสต์)"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:343
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:244
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:612
 msgid "Pad clearance:"
-msgstr ""
+msgstr "ระยะห่างแพ็ด:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:345
 msgid ""
@@ -22966,13 +22972,16 @@ msgid ""
 "If 0, the Netclass values are used\n"
 "This value can be superseded by a pad local value."
 msgstr ""
+"นี่คือค่าระยะห่างสำหรับทุกแพ็ดของฟุ้ทพรินท์\n"
+"ถ้า 0,จะใช้ค่าจากเน็ตคลาส\n"
+"ค่าเหล่านี้ถูกทับซ้อนได้จากค่าท้องถิ่นของแพ็ด"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:356
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:257
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:625
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:56
 msgid "Solder mask clearance:"
-msgstr ""
+msgstr "ระยะห่างโซลเดอร์มาส์ก:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:358
 msgid ""
@@ -22981,13 +22990,16 @@ msgid ""
 "This value can be superseded by a pad local value.\n"
 "If 0, the global value is used."
 msgstr ""
+"นี่คือค่าระยะห่างท้องถิ่น ระหว่างแพ็ดและโซลเดอร์มาสก์ของฟุ้ทพรินท์\n"
+"ค่านี้ถูกทับโดยค่าจากแพ็ดได้\n"
+"ถ้าเป็น 0, จะใช้ค่าระยะห่างจากส่วนกลาง"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:369
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:270
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:638
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:95
 msgid "Solder paste absolute clearance:"
-msgstr ""
+msgstr "ค่าระยะห่างสัมบูรณ์ของโซลเดอร์เพสต์:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:371
 msgid ""
