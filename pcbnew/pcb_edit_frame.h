@@ -40,6 +40,7 @@ class PCB_TARGET;
 class PCB_GROUP;
 class PCB_DIMENSION_BASE;
 class DRC;
+class DIALOG_FIND;
 class DIALOG_PLOT;
 class ZONE;
 class GENERAL_COLLECTOR;
@@ -119,6 +120,16 @@ public:
     void ExecuteRemoteCommand( const char* cmdline ) override;
 
     void KiwayMailIn( KIWAY_EXPRESS& aEvent ) override;
+
+    /**
+     * Show the Find dialog.
+     */
+    void ShowFindDialog();
+
+    /**
+     * Find the next item using our existing search parameters.
+     */
+    void FindNext();
 
     /**
      * Open a dialog frame to create plot and drill files relative to the current board.
@@ -767,6 +778,8 @@ private:
      * option.
      */
     TOOL_ACTION* m_exportNetlistAction;
+
+    DIALOG_FIND* m_findDialog;
 };
 
 #endif  // __PCB_EDIT_FRAME_H__

@@ -59,6 +59,9 @@ public:
     int PageSettings( const TOOL_EVENT& aEvent );
     int Plot( const TOOL_EVENT& aEvent );
 
+    int Find( const TOOL_EVENT& aEvent );
+    int FindNext( const TOOL_EVENT& aEvent );
+
     int BoardSetup( const TOOL_EVENT& aEvent );
     int ImportNetlist( const TOOL_EVENT& aEvent );
     int ImportSpecctraSession( const TOOL_EVENT& aEvent );

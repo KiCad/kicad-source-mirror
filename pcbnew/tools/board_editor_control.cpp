@@ -351,6 +351,20 @@ int BOARD_EDITOR_CONTROL::Plot( const TOOL_EVENT& aEvent )
 }
 
 
+int BOARD_EDITOR_CONTROL::Find( const TOOL_EVENT& aEvent )
+{
+    m_frame->ShowFindDialog();
+    return 0;
+}
+
+
+int BOARD_EDITOR_CONTROL::FindNext( const TOOL_EVENT& aEvent )
+{
+    m_frame->FindNext();
+    return 0;
+}
+
+
 int BOARD_EDITOR_CONTROL::BoardSetup( const TOOL_EVENT& aEvent )
 {
     getEditFrame<PCB_EDIT_FRAME>()->ShowBoardSetupDialog();
@@ -1501,6 +1515,9 @@ void BOARD_EDITOR_CONTROL::setTransitions()
     Go( &BOARD_EDITOR_CONTROL::SaveCopyAs,             ACTIONS::saveCopyAs.MakeEvent() );
     Go( &BOARD_EDITOR_CONTROL::PageSettings,           ACTIONS::pageSettings.MakeEvent() );
     Go( &BOARD_EDITOR_CONTROL::Plot,                   ACTIONS::plot.MakeEvent() );
+
+    Go( &BOARD_EDITOR_CONTROL::Find,                   ACTIONS::find.MakeEvent() );
+    Go( &BOARD_EDITOR_CONTROL::FindNext,               ACTIONS::findNext.MakeEvent() );
 
     Go( &BOARD_EDITOR_CONTROL::BoardSetup,             PCB_ACTIONS::boardSetup.MakeEvent() );
     Go( &BOARD_EDITOR_CONTROL::ImportNetlist,          PCB_ACTIONS::importNetlist.MakeEvent() );

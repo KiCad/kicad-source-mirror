@@ -63,6 +63,11 @@ public:
         m_highlightCallback = aCallback;
     }
 
+    /**
+     * Finds the next item
+     */
+    void FindNext() { search( true ); }
+
 protected:
     void OnClose( wxCloseEvent& event ) override;
     void OnCloseButtonClick( wxCommandEvent& aEvent ) override;

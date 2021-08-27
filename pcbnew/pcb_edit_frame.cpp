@@ -35,6 +35,7 @@
 #include <pcb_layer_box_selector.h>
 #include <footprint_edit_frame.h>
 #include <dialog_plot.h>
+#include <dialog_find.h>
 #include <dialog_footprint_properties.h>
 #include <dialogs/dialog_exchange_footprints.h>
 #include <dialog_board_setup.h>
@@ -173,7 +174,7 @@ END_EVENT_TABLE()
 PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     PCB_BASE_EDIT_FRAME( aKiway, aParent, FRAME_PCB_EDITOR, wxT( "PCB Editor" ), wxDefaultPosition,
                          wxDefaultSize, KICAD_DEFAULT_DRAWFRAME_STYLE, PCB_EDIT_FRAME_NAME ),
-    m_exportNetlistAction( nullptr )
+    m_exportNetlistAction( nullptr ), m_findDialog( nullptr )
 {
     m_maximizeByDefault = true;
     m_showBorderAndTitleBlock = true;   // true to display sheet references
@@ -1308,6 +1309,32 @@ void PCB_EDIT_FRAME::SwitchCanvas( EDA_DRAW_PANEL_GAL::GAL_TYPE aCanvasType )
 {
     // switches currently used canvas (Cairo / OpenGL).
     PCB_BASE_FRAME::SwitchCanvas( aCanvasType );
+}
+
+
+void PCB_EDIT_FRAME::ShowFindDialog()
+{
+    if( !m_findDialog )
+    {
+        m_findDialog = new DIALOG_FIND( this );
+        m_findDialog->SetCallback( std::bind( &PCB_SELECTION_TOOL::FindItem,
+                                              m_toolManager->GetTool<PCB_SELECTION_TOOL>(), _1 ) );
+    }
+
+    m_findDialog->Show( true );
+}
+
+
+void PCB_EDIT_FRAME::FindNext()
+{
+    if( !m_findDialog )
+    {
+        m_findDialog = new DIALOG_FIND( this );
+        m_findDialog->SetCallback( std::bind( &PCB_SELECTION_TOOL::FindItem,
+                                              m_toolManager->GetTool<PCB_SELECTION_TOOL>(), _1 ) );
+    }
+
+    m_findDialog->FindNext();
 }
 
 

@@ -41,7 +41,6 @@ using namespace std::placeholders;
 #include <pcb_marker.h>
 #include <zone.h>
 #include <collectors.h>
-#include <dialog_find.h>
 #include <dialog_filter_selection.h>
 #include <dialogs/dialog_locked_items_query.h>
 #include <class_draw_panel_gal.h>
@@ -1466,7 +1465,7 @@ int PCB_SELECTION_TOOL::selectSameSheet( const TOOL_EVENT& aEvent )
 }
 
 
-void PCB_SELECTION_TOOL::findCallback( BOARD_ITEM* aItem )
+void PCB_SELECTION_TOOL::FindItem( BOARD_ITEM* aItem )
 {
     bool cleared = false;
 
@@ -1492,16 +1491,6 @@ void PCB_SELECTION_TOOL::findCallback( BOARD_ITEM* aItem )
     }
 
     m_frame->GetCanvas()->ForceRefresh();
-}
-
-
-int PCB_SELECTION_TOOL::find( const TOOL_EVENT& aEvent )
-{
-    DIALOG_FIND dlg( m_frame );
-    dlg.SetCallback( std::bind( &PCB_SELECTION_TOOL::findCallback, this, _1 ) );
-    dlg.ShowModal();
-
-    return 0;
 }
 
 
@@ -2653,8 +2642,6 @@ void PCB_SELECTION_TOOL::setTransitions()
     Go( &PCB_SELECTION_TOOL::UnselectItem,        PCB_ACTIONS::unselectItem.MakeEvent() );
     Go( &PCB_SELECTION_TOOL::UnselectItems,       PCB_ACTIONS::unselectItems.MakeEvent() );
     Go( &PCB_SELECTION_TOOL::SelectionMenu,       PCB_ACTIONS::selectionMenu.MakeEvent() );
-
-    Go( &PCB_SELECTION_TOOL::find,                ACTIONS::find.MakeEvent() );
 
     Go( &PCB_SELECTION_TOOL::filterSelection,     PCB_ACTIONS::filterSelection.MakeEvent() );
     Go( &PCB_SELECTION_TOOL::expandConnection,    PCB_ACTIONS::selectConnection.MakeEvent() );
