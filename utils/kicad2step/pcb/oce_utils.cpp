@@ -600,27 +600,28 @@ bool PCBMODEL::AddPadHole( const KICADPAD* aPad )
 }
 
 
-bool PCBMODEL::AddComponent( const std::string& aFileName, const std::string& aRefDes,
+bool PCBMODEL::AddComponent( const std::string& aFileNameUTF8, const std::string& aRefDes,
                              bool aBottom, DOUBLET aPosition, double aRotation,
                              TRIPLET aOffset, TRIPLET aOrientation, TRIPLET aScale,
                              bool aSubstituteModels )
 {
-    if( aFileName.empty() )
+    if( aFileNameUTF8.empty() )
     {
         ReportMessage( wxString::Format( "No model defined for component %s.\n", aRefDes ) );
         return false;
     }
 
+    wxString fileName( wxString::FromUTF8( aFileNameUTF8 ) );
     ReportMessage( wxString::Format( "Add component %s.\n", aRefDes ) );
 
     // first retrieve a label
     TDF_Label lmodel;
     wxString errorMessage;
 
-    if( !getModelLabel( aFileName, aScale, lmodel, aSubstituteModels, &errorMessage ) )
+    if( !getModelLabel( aFileNameUTF8, aScale, lmodel, aSubstituteModels, &errorMessage ) )
     {
         if( errorMessage.IsEmpty() )
-            ReportMessage( wxString::Format( "No model for filename '%s'.\n", aFileName ) );
+            ReportMessage( wxString::Format( "No model for filename '%s'.\n", fileName ) );
         else
             ReportMessage( errorMessage );
 
@@ -632,7 +633,7 @@ bool PCBMODEL::AddComponent( const std::string& aFileName, const std::string& aR
 
     if( !getModelLocation( aBottom, aPosition, aRotation, aOffset, aOrientation, toploc ) )
     {
-        ReportMessage( wxString::Format( "No location data for filename '%s'.\n", aFileName ) );
+        ReportMessage( wxString::Format( "No location data for filename '%s'.\n", fileName ) );
         return false;
     }
 
@@ -642,7 +643,7 @@ bool PCBMODEL::AddComponent( const std::string& aFileName, const std::string& aR
     if( llabel.IsNull() )
     {
         ReportMessage( wxString::Format( "Could not add component with filename '%s'.\n",
-                                         aFileName ) );
+                                         fileName ) );
         return false;
     }
 
@@ -978,10 +979,10 @@ bool PCBMODEL::WriteSTEP( const wxString& aFileName )
 }
 
 
-bool PCBMODEL::getModelLabel( const std::string& aFileName, TRIPLET aScale, TDF_Label& aLabel,
+bool PCBMODEL::getModelLabel( const std::string& aFileNameUTF8, TRIPLET aScale, TDF_Label& aLabel,
                               bool aSubstituteModels, wxString* aErrorMessage )
 {
-    std::string model_key = aFileName + "_" + std::to_string( aScale.x )
+    std::string model_key = aFileNameUTF8 + "_" + std::to_string( aScale.x )
                             + "_" + std::to_string( aScale.y ) + "_" + std::to_string( aScale.z );
 
     MODEL_MAP::const_iterator mm = m_models.find( model_key );
@@ -997,39 +998,42 @@ bool PCBMODEL::getModelLabel( const std::string& aFileName, TRIPLET aScale, TDF_
     Handle( TDocStd_Document )  doc;
     m_app->NewDocument( "MDTV-XCAF", doc );
 
-    FormatType modelFmt = fileType( aFileName.c_str() );
+    wxString fileName( wxString::FromUTF8( aFileNameUTF8 ) );
+    FormatType modelFmt = fileType( aFileNameUTF8.c_str() );
 
     switch( modelFmt )
     {
     case FMT_IGES:
-        if( !readIGES( doc, aFileName.c_str() ) )
+        if( !readIGES( doc, aFileNameUTF8.c_str() ) )
         {
-            ReportMessage( wxString::Format( "readIGES() failed on filename '%s'.\n", aFileName ) );
+            ReportMessage( wxString::Format( "readIGES() failed on filename '%s'.\n", fileName ) );
             return false;
         }
         break;
 
     case FMT_STEP:
-        if( !readSTEP( doc, aFileName.c_str() ) )
+        if( !readSTEP( doc, aFileNameUTF8.c_str() ) )
         {
-            ReportMessage( wxString::Format( "readSTEP() failed on filename '%s'.\n", aFileName ) );
+            ReportMessage( wxString::Format( "readSTEP() failed on filename '%s'.\n", fileName ) );
             return false;
         }
         break;
 
     case FMT_STEPZ:
     {
-        wxFFileInputStream ifile( aFileName );
-        wxFileName         outFile( aFileName );
+        // To export a compressed step file (.stpz or .stp.gz file), the best way is to
+        // decaompress it in a temporaty file and load this temporary file
+        wxFFileInputStream ifile( fileName );
+        wxFileName         outFile( fileName );
 
         outFile.SetPath( wxStandardPaths::Get().GetTempDir() );
-        outFile.SetExt( "STEP" );
-
+        outFile.SetExt( "step" );
         wxFileOffset size = ifile.GetLength();
 
         if( size == wxInvalidOffset )
         {
-            ReportMessage( wxString::Format( "readSTEP() failed on filename '%s'.\n", aFileName ) );
+            ReportMessage( wxString::Format( "getModelLabel() failed on filename '%s'.\n",
+                                             fileName ) );
             return false;
         }
 
@@ -1052,6 +1056,7 @@ bool PCBMODEL::getModelLabel( const std::string& aFileName, TRIPLET aScale, TDF_
             }
             catch( ... )
             {
+                ReportMessage( wxString::Format( "failed to decompress '%s'.\n", fileName ) );
             }
 
             if( expanded.empty() )
@@ -1075,6 +1080,12 @@ bool PCBMODEL::getModelLabel( const std::string& aFileName, TRIPLET aScale, TDF_
             delete[] buffer;
             ofile.Close();
 
+            if( success )
+            {
+                std::string altFileNameUTF8 = outFile.GetFullPath().utf8_string();
+                success = getModelLabel( altFileNameUTF8, TRIPLET( 1.0, 1.0, 1.0 ), aLabel, false );
+            }
+
             return success;
         }
 
@@ -1093,7 +1104,7 @@ bool PCBMODEL::getModelLabel( const std::string& aFileName, TRIPLET aScale, TDF_
          */
         if( aSubstituteModels )
         {
-            wxFileName wrlName( aFileName );
+            wxFileName wrlName( fileName );
 
             wxString basePath = wrlName.GetPath();
             wxString baseName = wrlName.GetName();
@@ -1114,6 +1125,7 @@ bool PCBMODEL::getModelLabel( const std::string& aFileName, TRIPLET aScale, TDF_
             alts.Add( "stpZ" );
             alts.Add( "STPZ" );
             alts.Add( "step.gz" );
+            alts.Add( "stp.gz" );
 
             // IGES files
             alts.Add( "iges" );
@@ -1129,7 +1141,7 @@ bool PCBMODEL::getModelLabel( const std::string& aFileName, TRIPLET aScale, TDF_
 
                 if( altFile.IsOk() && altFile.FileExists() )
                 {
-                    std::string altFileName = altFile.GetFullPath().ToStdString();
+                    std::string altFileNameUTF8 = altFile.GetFullPath().utf8_string();
 
                     // When substituting a STEP/IGS file for VRML, do not apply the VRML scaling
                     // to the new STEP model.  This process of auto-substitution is janky as all
@@ -1138,7 +1150,7 @@ bool PCBMODEL::getModelLabel( const std::string& aFileName, TRIPLET aScale, TDF_
                     // named "model.wrl" and "model.stp" referring to different parts.
                     // TODO: Fix model handling in v7.  Default models should only be STP.
                     //       Have option to override this in DISPLAY.
-                    if( getModelLabel( altFileName, TRIPLET( 1.0, 1.0, 1.0 ), aLabel, false ) )
+                    if( getModelLabel( altFileNameUTF8, TRIPLET( 1.0, 1.0, 1.0 ), aLabel, false ) )
                     {
                         return true;
                     }
@@ -1168,13 +1180,13 @@ bool PCBMODEL::getModelLabel( const std::string& aFileName, TRIPLET aScale, TDF_
     if( aLabel.IsNull() )
     {
         ReportMessage( wxString::Format( "Could not transfer model data from file '%s'.\n",
-                                         aFileName  ) );
+                                         fileName  ) );
         return false;
     }
 
     // attach the PART NAME ( base filename: note that in principle
     // different models may have the same base filename )
-    wxFileName afile( aFileName.c_str() );
+    wxFileName afile( fileName );
     std::string pname( afile.GetName().ToUTF8() );
     TCollection_ExtendedString partname( pname.c_str() );
     TDataStd_Name::Set( aLabel, partname );
