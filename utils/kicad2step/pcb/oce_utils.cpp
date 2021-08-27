@@ -83,6 +83,8 @@
 #include <gp_Pnt.hxx>
 #include <Geom_BezierCurve.hxx>
 
+#include <macros.h>
+
 static constexpr double USER_PREC = 1e-4;
 static constexpr double USER_ANGLE_PREC = 1e-6;
 
@@ -611,7 +613,7 @@ bool PCBMODEL::AddComponent( const std::string& aFileNameUTF8, const std::string
         return false;
     }
 
-    wxString fileName( wxString::FromUTF8( aFileNameUTF8 ) );
+    wxString fileName( wxString::FromUTF8( aFileNameUTF8.c_str() ) );
     ReportMessage( wxString::Format( "Add component %s.\n", aRefDes ) );
 
     // first retrieve a label
@@ -998,7 +1000,7 @@ bool PCBMODEL::getModelLabel( const std::string& aFileNameUTF8, TRIPLET aScale, 
     Handle( TDocStd_Document )  doc;
     m_app->NewDocument( "MDTV-XCAF", doc );
 
-    wxString fileName( wxString::FromUTF8( aFileNameUTF8 ) );
+    wxString fileName( wxString::FromUTF8( aFileNameUTF8.c_str() ) );
     FormatType modelFmt = fileType( aFileNameUTF8.c_str() );
 
     switch( modelFmt )
@@ -1082,7 +1084,7 @@ bool PCBMODEL::getModelLabel( const std::string& aFileNameUTF8, TRIPLET aScale, 
 
             if( success )
             {
-                std::string altFileNameUTF8 = outFile.GetFullPath().utf8_string();
+                std::string altFileNameUTF8 = TO_UTF8( outFile.GetFullPath() );
                 success = getModelLabel( altFileNameUTF8, TRIPLET( 1.0, 1.0, 1.0 ), aLabel, false );
             }
 
@@ -1141,7 +1143,7 @@ bool PCBMODEL::getModelLabel( const std::string& aFileNameUTF8, TRIPLET aScale, 
 
                 if( altFile.IsOk() && altFile.FileExists() )
                 {
-                    std::string altFileNameUTF8 = altFile.GetFullPath().utf8_string();
+                    std::string altFileNameUTF8 = TO_UTF8( altFile.GetFullPath() );
 
                     // When substituting a STEP/IGS file for VRML, do not apply the VRML scaling
                     // to the new STEP model.  This process of auto-substitution is janky as all
