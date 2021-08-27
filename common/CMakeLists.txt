@@ -253,7 +253,7 @@ set( COMMON_DRAWING_SHEET_SRCS
     drawing_sheet/ds_draw_item.cpp
     drawing_sheet/ds_proxy_undo_item.cpp
     drawing_sheet/ds_proxy_view_item.cpp
-    drawing_sheet/drawing_sheet_reader.cpp
+    drawing_sheet/drawing_sheet_parser.cpp
     )
 
 set( COMMON_PREVIEW_ITEMS_SRCS
@@ -669,10 +669,10 @@ make_lexer(
 # and title_block_reader_keywords.cpp.
 make_lexer(
     common
-    drawing_sheet/drawing_sheet_reader.keywords
-    drawing_sheet/drawing_sheet_reader_lexer.h
-    drawing_sheet/drawing_sheet_reader_keywords.cpp
-    TB_READER_T
+    drawing_sheet/drawing_sheet.keywords
+    drawing_sheet/drawing_sheet_lexer.h
+    drawing_sheet/drawing_sheet_keywords.cpp
+    DRAWINGSHEET_T
     )
 
 # This one gets made only when testing.

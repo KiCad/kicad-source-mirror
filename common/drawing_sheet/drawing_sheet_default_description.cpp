@@ -24,7 +24,7 @@
  */
 
 /*
- * keyword used in drawing sheet are listed in drawing_sheet_reader.keywords file
+ * keyword used in drawing sheet are listed in drawing_sheet.keywords file
  */
 
 /*

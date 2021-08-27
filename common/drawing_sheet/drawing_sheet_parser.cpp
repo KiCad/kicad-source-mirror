@@ -23,32 +23,28 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <wx/ffile.h>
+#include <wx/log.h>
 #include <eda_item.h>
 #include <locale_io.h>
 #include <string_utils.h>
 #include <drawing_sheet/ds_data_item.h>
 #include <drawing_sheet/ds_data_model.h>
-#include <drawing_sheet/ds_draw_item.h>
 #include <drawing_sheet/ds_painter.h>
-#include <drawing_sheet/drawing_sheet_reader_lexer.h>
-#include <wx/ffile.h>
-#include <wx/log.h>
+#include <drawing_sheet/drawing_sheet_lexer.h>
+#include <drawing_sheet/ds_file_versions.h>
 
-#include <wx/file.h>
-#include <wx/mstream.h>
-
-
-using namespace TB_READER_T;
+using namespace DRAWINGSHEET_T;
 
 /**
- * DRAWING_SHEET_READER_PARSER
+ * DRAWING_SHEET_PARSER
  * holds data and functions pertinent to parsing a S-expression file
  * for a DS_DATA_MODEL.
  */
-class DRAWING_SHEET_READER_PARSER : public DRAWING_SHEET_READER_LEXER
+class DRAWING_SHEET_PARSER : public DRAWING_SHEET_LEXER
 {
 public:
-    DRAWING_SHEET_READER_PARSER( const char* aLine, const wxString& aSource );
+    DRAWING_SHEET_PARSER( const char* aLine, const wxString& aSource );
     void Parse( DS_DATA_MODEL* aLayout );
 
 private:
@@ -117,9 +113,9 @@ private:
 
 // PCB_PLOT_PARAMS_PARSER
 
-DRAWING_SHEET_READER_PARSER::DRAWING_SHEET_READER_PARSER( const char* aLine,
-                                                          const wxString& aSource ) :
-        DRAWING_SHEET_READER_LEXER( aLine, aSource ),
+DRAWING_SHEET_PARSER::DRAWING_SHEET_PARSER( const char* aLine,
+                                            const wxString& aSource ) :
+        DRAWING_SHEET_LEXER( aLine, aSource ),
         m_requiredVersion( 0 )
 {
 }
@@ -199,7 +195,7 @@ wxString convertLegacyVariableRefs( const wxString& aTextbase )
 }
 
 
-void DRAWING_SHEET_READER_PARSER::Parse( DS_DATA_MODEL* aLayout )
+void DRAWING_SHEET_PARSER::Parse( DS_DATA_MODEL* aLayout )
 {
     DS_DATA_ITEM* item;
     LOCALE_IO     toggle;
@@ -259,13 +255,13 @@ void DRAWING_SHEET_READER_PARSER::Parse( DS_DATA_MODEL* aLayout )
     }
 }
 
-void DRAWING_SHEET_READER_PARSER::parseHeader( T aHeaderType )
+void DRAWING_SHEET_PARSER::parseHeader( T aHeaderType )
 {
     // The older files had no versioning and their first token after the initial left parenthesis
     // was a `page_layout` or `drawing_sheet` token. The newer files have versions and have a
     // `kicad_wks` token instead.
 
-    if( aHeaderType == T_kicad_wks )
+    if( aHeaderType == T_kicad_wks || aHeaderType == T_drawing_sheet )
     {
         NeedLEFT();
 
@@ -274,6 +270,10 @@ void DRAWING_SHEET_READER_PARSER::parseHeader( T aHeaderType )
         if( tok == T_version )
         {
             m_requiredVersion = parseInt();
+
+            if( m_requiredVersion > SEXPR_WORKSHEET_FILE_VERSION )
+                throw FUTURE_FORMAT_ERROR( FromUTF8() );
+
             NeedRIGHT();
         }
         else
@@ -296,7 +296,7 @@ void DRAWING_SHEET_READER_PARSER::parseHeader( T aHeaderType )
     }
 }
 
-void DRAWING_SHEET_READER_PARSER::parseSetup( DS_DATA_MODEL* aLayout )
+void DRAWING_SHEET_PARSER::parseSetup( DS_DATA_MODEL* aLayout )
 {
     for( T token = NextTok(); token != T_RIGHT && token != EOF; token = NextTok() )
     {
@@ -353,7 +353,7 @@ void DRAWING_SHEET_READER_PARSER::parseSetup( DS_DATA_MODEL* aLayout )
 }
 
 
-void DRAWING_SHEET_READER_PARSER::parsePolygon( DS_DATA_ITEM_POLYGONS * aItem )
+void DRAWING_SHEET_PARSER::parsePolygon( DS_DATA_ITEM_POLYGONS * aItem )
 {
     for( T token = NextTok(); token != T_RIGHT && token != EOF; token = NextTok() )
     {
@@ -421,7 +421,7 @@ void DRAWING_SHEET_READER_PARSER::parsePolygon( DS_DATA_ITEM_POLYGONS * aItem )
     aItem->SetBoundingBox();
 }
 
-void DRAWING_SHEET_READER_PARSER::parsePolyOutline( DS_DATA_ITEM_POLYGONS * aItem )
+void DRAWING_SHEET_PARSER::parsePolyOutline( DS_DATA_ITEM_POLYGONS * aItem )
 {
     DPOINT corner;
 
@@ -447,7 +447,7 @@ void DRAWING_SHEET_READER_PARSER::parsePolyOutline( DS_DATA_ITEM_POLYGONS * aIte
 }
 
 
-void DRAWING_SHEET_READER_PARSER::parseBitmap( DS_DATA_ITEM_BITMAP * aItem )
+void DRAWING_SHEET_PARSER::parseBitmap( DS_DATA_ITEM_BITMAP * aItem )
 {
     BITMAP_BASE* image = new BITMAP_BASE;
     aItem->m_ImageBitmap = image;
@@ -509,7 +509,7 @@ void DRAWING_SHEET_READER_PARSER::parseBitmap( DS_DATA_ITEM_BITMAP * aItem )
     }
 }
 
-void DRAWING_SHEET_READER_PARSER::readPngdata( DS_DATA_ITEM_BITMAP * aItem )
+void DRAWING_SHEET_PARSER::readPngdata( DS_DATA_ITEM_BITMAP * aItem )
 {
     std::string tmp;
 
@@ -543,7 +543,7 @@ void DRAWING_SHEET_READER_PARSER::readPngdata( DS_DATA_ITEM_BITMAP * aItem )
 }
 
 
-void DRAWING_SHEET_READER_PARSER::readOption( DS_DATA_ITEM * aItem )
+void DRAWING_SHEET_PARSER::readOption( DS_DATA_ITEM * aItem )
 {
     for( T token = NextTok(); token != T_RIGHT && token != EOF; token = NextTok() )
     {
@@ -557,7 +557,7 @@ void DRAWING_SHEET_READER_PARSER::readOption( DS_DATA_ITEM * aItem )
 }
 
 
-void DRAWING_SHEET_READER_PARSER::parseGraphic( DS_DATA_ITEM * aItem )
+void DRAWING_SHEET_PARSER::parseGraphic( DS_DATA_ITEM * aItem )
 {
     for( T token = NextTok(); token != T_RIGHT && token != EOF; token = NextTok() )
     {
@@ -627,7 +627,7 @@ void DRAWING_SHEET_READER_PARSER::parseGraphic( DS_DATA_ITEM * aItem )
 }
 
 
-void DRAWING_SHEET_READER_PARSER::parseText( DS_DATA_ITEM_TEXT* aItem )
+void DRAWING_SHEET_PARSER::parseText( DS_DATA_ITEM_TEXT* aItem )
 {
     if( m_requiredVersion < 20210606 )
         aItem->m_TextBase = ConvertToNewOverbarNotation( aItem->m_TextBase );
@@ -769,7 +769,7 @@ void DRAWING_SHEET_READER_PARSER::parseText( DS_DATA_ITEM_TEXT* aItem )
 }
 
 // parse an expression like " 25 1 ltcorner)"
-void DRAWING_SHEET_READER_PARSER::parseCoordinate( POINT_COORD& aCoord)
+void DRAWING_SHEET_PARSER::parseCoordinate( POINT_COORD& aCoord)
 {
     aCoord.m_Pos.x = parseDouble();
     aCoord.m_Pos.y = parseDouble();
@@ -787,7 +787,7 @@ void DRAWING_SHEET_READER_PARSER::parseCoordinate( POINT_COORD& aCoord)
     }
 }
 
-int DRAWING_SHEET_READER_PARSER::parseInt()
+int DRAWING_SHEET_PARSER::parseInt()
 {
     T token = NextTok();
 
@@ -797,7 +797,7 @@ int DRAWING_SHEET_READER_PARSER::parseInt()
     return atoi( CurText() );
 }
 
-int DRAWING_SHEET_READER_PARSER::parseInt( int aMin, int aMax )
+int DRAWING_SHEET_PARSER::parseInt( int aMin, int aMax )
 {
     int val = parseInt();
 
@@ -810,7 +810,7 @@ int DRAWING_SHEET_READER_PARSER::parseInt( int aMin, int aMax )
 }
 
 
-double DRAWING_SHEET_READER_PARSER::parseDouble()
+double DRAWING_SHEET_PARSER::parseDouble()
 {
     T token = NextTok();
 
@@ -857,7 +857,7 @@ void DS_DATA_MODEL::SetPageLayout( const char* aPageLayout, bool Append, const w
     if( ! Append )
         ClearList();
 
-    DRAWING_SHEET_READER_PARSER lp_parser( aPageLayout, wxT( "Sexpr_string" ) );
+    DRAWING_SHEET_PARSER lp_parser( aPageLayout, wxT( "Sexpr_string" ) );
 
     try
     {
@@ -920,7 +920,7 @@ bool DS_DATA_MODEL::LoadDrawingSheet( const wxString& aFullFileName, bool Append
         if( ! Append )
             ClearList();
 
-        DRAWING_SHEET_READER_PARSER pl_parser( buffer.get(), fullFileName );
+        DRAWING_SHEET_PARSER pl_parser( buffer.get(), fullFileName );
 
         try
         {
