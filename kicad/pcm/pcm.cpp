@@ -18,10 +18,13 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// kicad_curl_easy.h *must be* included before any wxWidgets header to avoid conflicts
+// at least on Windows/msys2
+#include "kicad_curl/kicad_curl_easy.h"
+
 #include "pcm.h"
 #include "core/wx_stl_compat.h"
 #include "kicad_build_version.h"
-#include "kicad_curl/kicad_curl_easy.h"
 #include "paths.h"
 #include "pgm_base.h"
 #include "picosha2.h"
@@ -472,9 +475,9 @@ void PLUGIN_CONTENT_MANAGER::preparePackage( PCM_PACKAGE& aPackage )
         auto parse_major_minor = []( const wxString& version )
         {
             wxStringTokenizer tokenizer( version, "." );
-            int               major = wxAtoi( tokenizer.GetNextToken() );
-            int               minor = wxAtoi( tokenizer.GetNextToken() );
-            return std::tuple<int, int>( major, minor );
+            int               ver_major = wxAtoi( tokenizer.GetNextToken() );
+            int               ver_minor = wxAtoi( tokenizer.GetNextToken() );
+            return std::tuple<int, int>( ver_major, ver_minor );
         };
 
         if( parse_major_minor( ver.kicad_version ) > m_kicad_version )

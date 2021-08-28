@@ -22,6 +22,9 @@
  * or you may write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
+// kicad_curl_easy.h must be included before wxWidgets because on Windows (msys2), there are
+// collision with wx headers and curl.h defs
+#include <kicad_curl/kicad_curl_easy.h>
 
 #include <bitmaps.h>
 #include <build_version.h>
@@ -36,7 +39,6 @@
 #include <tool/common_control.h>
 #include <id.h>
 #include <kiface_i.h>
-#include <kicad_curl/kicad_curl_easy.h>
 #include <dialogs/dialog_configure_paths.h>
 #include <eda_doc.h>
 #include <wx/msgdlg.h>

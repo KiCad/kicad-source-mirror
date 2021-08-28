@@ -17,9 +17,11 @@
  * You should have received a copy of the GNU General Public License along
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+// kicad_curl_easy.h **must be** included before any wxWidgets header to avoid conflicts
+// at least on Windows/msys2
+#include "kicad_curl/kicad_curl_easy.h"
 
 #include "pcm_task_manager.h"
-#include "kicad_curl/kicad_curl_easy.h"
 #include "paths.h"
 #include "picosha2.h"
 #include "reporter.h"
@@ -46,13 +48,13 @@ void PCM_TASK_MANAGER::DownloadAndInstall( const PCM_PACKAGE& aPackage, const wx
         file_path.AppendDir( "cache" );
         file_path.SetFullName( wxString::Format( "%s_v%s.zip", aPackage.identifier, aVersion ) );
 
-        auto pkgver = std::find_if( aPackage.versions.begin(), aPackage.versions.end(),
+        auto find_pkgver = std::find_if( aPackage.versions.begin(), aPackage.versions.end(),
                                     [&aVersion]( const PACKAGE_VERSION& pv )
                                     {
                                         return pv.version == aVersion;
                                     } );
 
-        wxASSERT_MSG( pkgver != aPackage.versions.end(), "Package version not found" );
+        wxASSERT_MSG( find_pkgver != aPackage.versions.end(), "Package version not found" );
 
         if( !wxDirExists( file_path.GetPath() )
             && !wxFileName::Mkdir( file_path.GetPath(), wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL ) )
@@ -61,19 +63,19 @@ void PCM_TASK_MANAGER::DownloadAndInstall( const PCM_PACKAGE& aPackage, const wx
             return;
         }
 
-        int code = downloadFile( file_path.GetFullPath(), pkgver->download_url.get() );
+        int code = downloadFile( file_path.GetFullPath(), find_pkgver->download_url.get() );
 
         if( code == CURLE_OK )
         {
             PCM_TASK install_task = [aPackage, aVersion, aRepositoryId, file_path, this]()
             {
-                auto pkgver = std::find_if( aPackage.versions.begin(), aPackage.versions.end(),
+                auto get_pkgver = std::find_if( aPackage.versions.begin(), aPackage.versions.end(),
                                             [&aVersion]( const PACKAGE_VERSION& pv )
                                             {
                                                 return pv.version == aVersion;
                                             } );
 
-                const boost::optional<wxString>& hash = pkgver->download_sha256;
+                const boost::optional<wxString>& hash = get_pkgver->download_sha256;
                 bool                             hash_match = true;
 
                 if( hash )
@@ -100,7 +102,7 @@ void PCM_TASK_MANAGER::DownloadAndInstall( const PCM_PACKAGE& aPackage, const wx
 
                     if( extract( file_path.GetFullPath(), aPackage.identifier ) )
                     {
-                        m_pcm->MarkInstalled( aPackage, pkgver->version, aRepositoryId );
+                        m_pcm->MarkInstalled( aPackage, get_pkgver->version, aRepositoryId );
                         // TODO register libraries.
                     }
                     else

@@ -105,8 +105,6 @@ void PANEL_PACKAGES_VIEW::SetData( const std::vector<PACKAGE_VIEW_DATA>& aPackag
 
     ClearData();
 
-    wxSizer* sizer = m_packageListWindow->GetSizer();
-
     for( const PACKAGE_VIEW_DATA& data : aPackageData )
     {
         PANEL_PACKAGE* package_panel =

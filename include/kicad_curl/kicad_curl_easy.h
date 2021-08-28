@@ -25,7 +25,7 @@
 #define KICAD_CURL_EASY_H_
 
 /*
- * KICAD_CURL_EASY.h must included before wxWidgets because on Windows,
+ * KICAD_CURL_EASY.h must be included before wxWidgets headers because on Windows,
  * kicad_curl.h does not include curl.h, because wxWidgets ends up including windows.h
  * before winsocks2.h inside curl and curl.h causes build warnings if included before and wxxxx.h
  *

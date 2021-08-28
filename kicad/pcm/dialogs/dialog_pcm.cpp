@@ -18,12 +18,15 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// kicad_curl_easy.h **must be** included before any wxWidgets header to avoid conflicts
+// at least on Windows/msys2
+#include "kicad_curl/kicad_curl_easy.h"
+
 #include "dialog_pcm.h"
 #include "bitmaps.h"
 #include "dialog_manage_repositories.h"
 #include "grid_tricks.h"
 #include "ki_exception.h"
-#include "kicad_curl/kicad_curl_easy.h"
 #include "kicad_settings.h"
 #include "pcm_task_manager.h"
 #include "pgm_base.h"
