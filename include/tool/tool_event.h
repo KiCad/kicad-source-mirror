@@ -444,7 +444,7 @@ public:
     template<typename T>
     void SetParameter(T aParam)
     {
-        m_param = (void*) aParam;
+        m_param = reinterpret_cast<void*>( aParam );
     }
 
     OPT<int> GetCommandId() const

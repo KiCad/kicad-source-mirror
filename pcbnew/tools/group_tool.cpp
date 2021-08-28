@@ -279,10 +279,10 @@ int GROUP_TOOL::Group( const TOOL_EVENT& aEvent )
         for( EDA_ITEM* item : selection )
         {
             group->AddItem( static_cast<BOARD_ITEM*>( item ) );
-            undoList.PushItem( ITEM_PICKER( nullptr, item, UNDO_REDO::GROUP ) );
+            undoList.PushItem( ITEM_PICKER( nullptr, item, UNDO_REDO::REGROUP ) );
         }
 
-        m_frame->SaveCopyInUndoList( undoList, UNDO_REDO::GROUP );
+        m_frame->SaveCopyInUndoList( undoList, UNDO_REDO::REGROUP );
     }
 
     selTool->ClearSelection();

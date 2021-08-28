@@ -284,7 +284,7 @@ void PCB_BASE_EDIT_FRAME::SaveCopyInUndoList( const PICKED_ITEMS_LIST& aItemsLis
         case UNDO_REDO::NEWITEM:
         case UNDO_REDO::DELETED:
         case UNDO_REDO::PAGESETTINGS:
-        case UNDO_REDO::GROUP:
+        case UNDO_REDO::REGROUP:
         case UNDO_REDO::UNGROUP:
             break;
 
@@ -489,13 +489,13 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
 
             break;
 
-        case UNDO_REDO::GROUP:
+        case UNDO_REDO::REGROUP:
             aList->SetPickedItemStatus( UNDO_REDO::UNGROUP, ii );
             static_cast<BOARD_ITEM*>( eda_item )->SetParentGroup( nullptr );
             break;
 
         case UNDO_REDO::UNGROUP:
-            aList->SetPickedItemStatus( UNDO_REDO::GROUP, ii );
+            aList->SetPickedItemStatus( UNDO_REDO::REGROUP, ii );
 
             if( group )
                 group->AddItem( static_cast<BOARD_ITEM*>( eda_item ) );
