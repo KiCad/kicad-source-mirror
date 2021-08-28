@@ -15,8 +15,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-08-20 11:53-0700\n"
-"PO-Revision-Date: 2021-08-21 02:25+0000\n"
-"Last-Translator: Ji Yoon Choi <chichoon.choi@gmail.com>\n"
+"PO-Revision-Date: 2021-08-28 04:15+0000\n"
+"Last-Translator: Uibeom Jung <wjddmlqja17@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
 "Language: ko\n"
@@ -24,7 +24,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.8-dev\n"
+"X-Generator: Weblate 4.8.1-dev\n"
 "X-Poedit-Country: KOREA, REPUBLIC OF\n"
 "X-Poedit-Basepath: f:\\kicad-dev\n"
 "X-Poedit-KeywordsList: _\n"
@@ -20450,7 +20450,7 @@ msgstr "에지 카드 커넥터:"
 
 #: pcbnew/board_stackup_manager/panel_board_finish_base.cpp:44
 msgid "Yes, bevelled"
-msgstr "예, 경 사진"
+msgstr "예, 경사진"
 
 #: pcbnew/board_stackup_manager/panel_board_finish_base.cpp:48
 msgid "Options for edge card connectors."
@@ -28666,7 +28666,7 @@ msgstr "비아 환형 고리 확인 중..."
 #: pcbnew/drc/drc_test_provider_annular_width.cpp:128
 #, c-format
 msgid "(%s min annular width %s; actual %s)"
-msgstr "(%s 최소 환형 폭 %s; 실제 값 %s)"
+msgstr "(%s 최소 랜드 폭 %s; 실제 값 %s)"
 
 #: pcbnew/drc/drc_test_provider_annular_width.cpp:134
 #, c-format
@@ -32977,7 +32977,7 @@ msgstr "다음을 위한 비아 환형 폭 계산:"
 #: pcbnew/tools/board_inspection_tool.cpp:782
 #, c-format
 msgid "Annular width constraints: min %s; opt %s; max %s."
-msgstr "환형 폭 제약: 최소 %s; 최적 %s; 최대 %s."
+msgstr "랜드 폭 제약: 최소 %s; 최적 %s; 최대 %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:793
 msgid "Hole Size"
@@ -35594,7 +35594,7 @@ msgstr "비트맵으로부터 KiCad용 부품 생성"
 
 #: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:12
 msgid "bitmap2component"
-msgstr "bitmap2component"
+msgstr "bitmap을 구성요소로"
 
 #: resources/linux/launchers/org.kicad.eeschema.desktop.in:10
 msgid "KiCad Schematic Editor (Standalone)"
