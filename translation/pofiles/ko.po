@@ -16,7 +16,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-08-20 11:53-0700\n"
 "PO-Revision-Date: 2021-08-28 04:15+0000\n"
-"Last-Translator: Uibeom Jung <wjddmlqja17@gmail.com>\n"
+"Last-Translator: hokim <teamgoodaloe@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
 "Language: ko\n"
@@ -5018,7 +5018,7 @@ msgstr "계층구조 라벨"
 
 #: common/layer_id.cpp:112
 msgid "Pin numbers"
-msgstr "펜 번호"
+msgstr "핀 번호"
 
 #: common/layer_id.cpp:113
 msgid "Pin names"
@@ -5315,7 +5315,7 @@ msgstr "'%s'에 대한 단위 누락| (%s)"
 #: common/libeval_compiler/libeval_compiler.cpp:1126
 #, c-format
 msgid "Type mismatch between '%s' and %lf"
-msgstr "'%s'와 %lf 사이의 유형 불일치"
+msgstr "'%s'와 %lf 간의 유형 불일치"
 
 #: common/libeval_compiler/libeval_compiler.cpp:1132
 #, c-format
@@ -5363,7 +5363,7 @@ msgstr "단위 '%s'이(가) 'mil'로 끝나지 않습니다."
 #: common/plugins/altium/altium_parser.cpp:255
 #, c-format
 msgid "Cannot convert '%s' to double."
-msgstr "'%s'을(를) 두 배로 변환할 수 없습니다."
+msgstr "'%s'을(를) double로 변환할 수 없습니다."
 
 #: common/plugins/cadstar/cadstar_archive_parser.cpp:2328
 #, c-format
@@ -5393,22 +5393,22 @@ msgstr "노드 '%s'이(가) '%s'에 없음"
 #: common/plugins/cadstar/cadstar_archive_parser.h:42
 #, c-format
 msgid "Unknown node '%s' in '%s'"
-msgstr "알 수 없는 노드 '%s' ('%s'에 있음)"
+msgstr "알 수 없는 노드 '%s'이(가) '%s'에 있음"
 
 #: common/plugins/cadstar/cadstar_archive_parser.h:45
 #, c-format
 msgid "Missing Parameter '%s' in '%s'"
-msgstr "'%s' 매개변수 '%s' 누락"
+msgstr "매개변수 '%s'이(가) '%s'에 없음"
 
 #: common/plugins/cadstar/cadstar_archive_parser.h:48
 #, c-format
 msgid "Unknown Parameter '%s' in '%s'"
-msgstr "알 수 없는 매개변수 '%s' ('%s' 에 있음)"
+msgstr "알 수 없는 매개변수 '%s'이(가) '%s' 에 있음"
 
 #: common/plugins/cadstar/cadstar_archive_parser.h:51
 #, c-format
 msgid "Unable to parse '%s' in '%s'"
-msgstr "'%s'에서 '%s' 구문 분석 할 수 없음"
+msgstr "구문 분석 할 수 없는 '%s'이(가) '%s'에 있음"
 
 #: common/plugins/eagle/eagle_parser.cpp:121
 #, c-format
@@ -5435,7 +5435,7 @@ msgstr "아카이브 파일을 열 수 없음."
 
 #: common/project/project_archiver.cpp:100
 msgid "Invalid archive file format."
-msgstr "잘못된 보관 파일 형식."
+msgstr "잘못된 아카이브 파일 형식."
 
 #: common/project/project_archiver.cpp:111
 #, c-format
@@ -5530,7 +5530,7 @@ msgstr "KiCad 기본값"
 
 #: common/settings/color_settings.cpp:389
 msgid "KiCad Classic"
-msgstr "KiCad 모범"
+msgstr "KiCad 클래식"
 
 #: common/template_fieldnames.cpp:72 eeschema/sch_sheet.cpp:59
 #, c-format
@@ -5540,12 +5540,12 @@ msgstr "필드%d"
 #: common/tool/action_menu.cpp:209 common/tool/action_menu.cpp:214
 #, c-format
 msgid "Close %s"
-msgstr "닫기 %s"
+msgstr "%s 닫기"
 
 #: common/tool/action_menu.cpp:228
 #, c-format
 msgid "Quit %s"
-msgstr "종료 %s"
+msgstr "%s 종료"
 
 #: common/tool/actions.cpp:43
 msgid "New..."
@@ -5699,7 +5699,7 @@ msgstr "선택한 항목 복제"
 
 #: common/tool/actions.cpp:192
 msgid "Deletes selected item(s)"
-msgstr "선택된 항목 삭제"
+msgstr "선택한 항목 삭제"
 
 #: common/tool/actions.cpp:197
 msgid "Interactive Delete Tool"
@@ -5830,11 +5830,11 @@ msgstr "커서 아래로"
 
 #: common/tool/actions.cpp:358
 msgid "Cursor Left"
-msgstr "왼쪽 커서"
+msgstr "커서 왼쪽으로"
 
 #: common/tool/actions.cpp:364
 msgid "Cursor Right"
-msgstr "오른쪽 커서"
+msgstr "커서 오른쪽으로"
 
 #: common/tool/actions.cpp:371
 msgid "Cursor Up Fast"
@@ -5850,7 +5850,7 @@ msgstr "커서 왼쪽으로 빠르게 이동"
 
 #: common/tool/actions.cpp:389
 msgid "Cursor Right Fast"
-msgstr "커서 오른족으로 빠르게 이동"
+msgstr "커서 오른쪽으로 빠르게 이동"
 
 #: common/tool/actions.cpp:395
 msgid "Click"
@@ -5858,15 +5858,15 @@ msgstr "클릭"
 
 #: common/tool/actions.cpp:395
 msgid "Performs left mouse button click"
-msgstr "왼쪽 마우스 버튼 클릭과 같이 동작"
+msgstr "왼쪽 마우스 버튼 클릭 실행"
 
 #: common/tool/actions.cpp:401
 msgid "Double-click"
-msgstr "두 번 클릭"
+msgstr "더블 클릭"
 
 #: common/tool/actions.cpp:401
 msgid "Performs left mouse button double-click"
-msgstr "왼쪽 마우스 버튼 더블 클릭과 같이 동작"
+msgstr "왼쪽 마우스 버튼 더블 클릭 실행"
 
 #: common/tool/actions.cpp:409
 msgid "Pin Library"
@@ -8636,7 +8636,7 @@ msgstr "핀 번호"
 #: eeschema/dialogs/dialog_symbol_properties.cpp:141
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:267
 msgid "Electrical Type"
-msgstr "전기 형식"
+msgstr "전기 유형"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:54
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:48
