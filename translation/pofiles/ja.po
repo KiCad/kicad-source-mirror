@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-08-20 11:53-0700\n"
-"PO-Revision-Date: 2021-08-27 08:25+0000\n"
+"PO-Revision-Date: 2021-08-28 15:22+0000\n"
 "Last-Translator: Tokita, Hiroshi <tokita.hiroshi@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -33106,7 +33106,7 @@ msgstr "DRC"
 
 #: pcbnew/tools/edit_tool.cpp:92
 msgid "Special Tools"
-msgstr "スペシャル ツール"
+msgstr "特殊ツール"
 
 #: pcbnew/tools/edit_tool.cpp:344
 #, c-format
