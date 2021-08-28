@@ -25,15 +25,15 @@
 #define KICAD_CURL_EASY_H_
 
 /*
- * KICAD_CURL_EASY.h must be included before wxWidgets headers because on Windows,
- * kicad_curl.h does not include curl.h, because wxWidgets ends up including windows.h
- * before winsocks2.h inside curl and curl.h causes build warnings if included before and wxxxx.h
+ * curl.h, and therefore kicad_curl.h must be included before wxWidgets headers because on Windows,
+ * wxWidgets ends up including windows.h before winsocks2.h
+ * curl and curl.h causes build warnings if included before any wxxxx.h
  *
- * so including kicad_curl.h could be needed in a few sources
+ * So kicad_curl_easy.h does not include curl.h to avoid constraints,
+ * and including kicad_curl.h could be needed in a few sources
  */
 
 #include <functional>
-#include <kicad_curl/kicad_curl.h>
 #include <memory>
 #include <ostream>
 #include <string>
@@ -138,6 +138,9 @@ public:
 
     bool SetOutputStream( const std::ostream* aOutput );
 
+    CURL* GetCurl() { return m_CURL; }
+
+
 private:
     /**
      * Function setOption
@@ -150,7 +153,7 @@ private:
     template <typename T>
     int setOption( int aOption, T aArg );
 
-    static int xferinfo( void*, curl_off_t, curl_off_t, curl_off_t, curl_off_t );
+    //static int xferinfo( void*, curl_off_t, curl_off_t, curl_off_t, curl_off_t );
 
     CURL*                          m_CURL;
     curl_slist*                    m_headers;

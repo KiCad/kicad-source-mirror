@@ -18,8 +18,9 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// kicad_curl_easy.h *must be* included before any wxWidgets header to avoid conflicts
+// kicad_curl.h *must be* included before any wxWidgets header to avoid conflicts
 // at least on Windows/msys2
+#include <kicad_curl/kicad_curl.h>
 #include "kicad_curl/kicad_curl_easy.h"
 
 #include "pcm.h"

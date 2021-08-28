@@ -22,6 +22,9 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+// kicad_curl_easy.h **must be** included before any wxWidgets header to avoid conflicts
+// at least on Windows/msys2
+#include <kicad_curl/kicad_curl.h>
 #include <kicad_curl/kicad_curl_easy.h>
 
 #include <cstdarg>
@@ -71,6 +74,23 @@ static size_t stream_write_callback( void* contents, size_t size, size_t nmemb, 
     return realsize;
 }
 
+
+static int xferinfo( void* p, curl_off_t dltotal, curl_off_t dlnow, curl_off_t ultotal,
+                              curl_off_t ulnow )
+{
+    CURL_PROGRESS* progress = (CURL_PROGRESS*) p;
+    curl_off_t     curtime = 0;
+
+    curl_easy_getinfo( progress->curl->GetCurl(), CURLINFO_TOTAL_TIME_T, &curtime );
+
+    if( curtime - progress->last_run_time >= progress->interval )
+    {
+        progress->last_run_time = curtime;
+        return progress->callback( dltotal, dlnow, ultotal, ulnow );
+    }
+
+    return CURLE_OK;
+}
 
 KICAD_CURL_EASY::KICAD_CURL_EASY() : m_headers( nullptr )
 {
@@ -203,23 +223,6 @@ std::string KICAD_CURL_EASY::Escape( const std::string& aUrl )
     return ret;
 }
 
-
-int KICAD_CURL_EASY::xferinfo( void* p, curl_off_t dltotal, curl_off_t dlnow, curl_off_t ultotal,
-                               curl_off_t ulnow )
-{
-    CURL_PROGRESS* progress = (CURL_PROGRESS*) p;
-    curl_off_t     curtime = 0;
-
-    curl_easy_getinfo( progress->curl->m_CURL, CURLINFO_TOTAL_TIME_T, &curtime );
-
-    if( curtime - progress->last_run_time >= progress->interval )
-    {
-        progress->last_run_time = curtime;
-        return progress->callback( dltotal, dlnow, ultotal, ulnow );
-    }
-
-    return CURLE_OK;
-}
 
 
 bool KICAD_CURL_EASY::SetTransferCallback( const TRANSFER_CALLBACK& aCallback, size_t aInterval )

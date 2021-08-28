@@ -19,6 +19,7 @@
  */
 // kicad_curl_easy.h **must be** included before any wxWidgets header to avoid conflicts
 // at least on Windows/msys2
+#include <kicad_curl/kicad_curl.h>
 #include "kicad_curl/kicad_curl_easy.h"
 
 #include "pcm_task_manager.h"
