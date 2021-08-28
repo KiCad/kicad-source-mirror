@@ -46,6 +46,8 @@ KICADFOOTPRINT::KICADFOOTPRINT( KICADPCB* aParent )
     m_parent = aParent;
     m_side = LAYER_NONE;
     m_rotation = 0.0;
+    m_smd = false;
+    m_tht = false;
     m_virtual = false;
 
     return;
@@ -142,6 +144,9 @@ bool KICADFOOTPRINT::Read( SEXPR::SEXPR* aEntry )
             else if( symname == "model" )
                 result = parseModel( child );
         }
+
+        if( !m_smd && !m_tht )
+            m_virtual = true;
 
         return result;
     }
@@ -281,7 +286,11 @@ bool KICADFOOTPRINT::parseAttribute( SEXPR::SEXPR* data )
     else if( child->IsString() )
         text = child->GetString();
 
-    if( text == "virtual" )
+    if( text == "smd" )
+        m_smd = true;
+    else if( text == "through_hole" )
+        m_tht = true;
+    else if( text == "virtual" )
         m_virtual = true;
 
     return true;

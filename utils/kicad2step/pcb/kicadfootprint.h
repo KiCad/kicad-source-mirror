@@ -69,6 +69,8 @@ private:
     std::string m_refdes;
     DOUBLET     m_position;
     double      m_rotation; // rotation (radians)
+    bool        m_smd;      // true for a SMD component
+    bool        m_tht;      // true for a through-hole component
     bool        m_virtual;  // true for a virtual (usually mechanical) component
 
     std::vector< KICADPAD* >    m_pads;
