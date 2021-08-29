@@ -824,6 +824,8 @@ void FOOTPRINT_VIEWER_FRAME::CommonSettingsChanged( bool aEnvVarsChanged, bool a
 {
     PCB_BASE_FRAME::CommonSettingsChanged( aEnvVarsChanged, aTextVarsChanged );
 
+    GetCanvas()->ForceRefresh();
+
     if( aEnvVarsChanged )
         ReCreateLibraryList();
 }

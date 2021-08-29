@@ -354,7 +354,7 @@ bool DIALOG_SHEET_PROPERTIES::TransferDataFromWindow()
     {
         wxPanel temp( this );
         temp.Hide();
-        PANEL_EESCHEMA_COLOR_SETTINGS prefs( m_frame, &temp );
+        PANEL_EESCHEMA_COLOR_SETTINGS prefs( &temp );
         wxString checkboxLabel = prefs.m_optOverrideColors->GetLabel();
 
         KIDIALOG dlg( this, _( "Note: item colors are overridden in the current color theme." ),

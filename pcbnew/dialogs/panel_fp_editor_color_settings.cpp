@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2020 Jon Evans <jon@craftyjon.com>
- * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -20,41 +20,38 @@
 
 #include <regex>
 
-#include <board.h>
-#include <footprint_edit_frame.h>
-#include <footprint_editor_settings.h>
-#include <gal/gal_display_options.h>
-#include <layer_ids.h>
-#include <panel_fp_editor_color_settings.h>
+#include <pgm_base.h>
 #include <settings/settings_manager.h>
+#include <footprint_editor_settings.h>
+#include <layer_ids.h>
+#include <page_info.h>
+#include <title_block.h>
+#include <panel_fp_editor_color_settings.h>
 
 
-PANEL_FP_EDITOR_COLOR_SETTINGS::PANEL_FP_EDITOR_COLOR_SETTINGS( FOOTPRINT_EDIT_FRAME* aFrame,
-                                                                wxWindow* aParent )
-        : PANEL_COLOR_SETTINGS( aParent ),
-          m_frame( aFrame ),
-          m_page( nullptr ),
-          m_titleBlock( nullptr )
+PANEL_FP_EDITOR_COLOR_SETTINGS::PANEL_FP_EDITOR_COLOR_SETTINGS( wxWindow* aParent ) :
+        PANEL_COLOR_SETTINGS( aParent ),
+        m_page( nullptr ),
+        m_titleBlock( nullptr )
 {
      // Currently this only applies to eeschema
     m_optOverrideColors->Hide();
 
     m_colorNamespace = "board";
 
-    SETTINGS_MANAGER* mgr = m_frame->GetSettingsManager();
-
-    FOOTPRINT_EDITOR_SETTINGS* settings = mgr->GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>();
-    COLOR_SETTINGS*            current  = mgr->GetColorSettings( settings->m_ColorTheme );
+    SETTINGS_MANAGER&          mgr = Pgm().GetSettingsManager();
+    FOOTPRINT_EDITOR_SETTINGS* settings = mgr.GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>();
+    COLOR_SETTINGS*            current  = mgr.GetColorSettings( settings->m_ColorTheme );
 
     // Store the current settings before reloading below
     current->Store();
-    mgr->SaveColorSettings( current, "board" );
+    mgr.SaveColorSettings( current, "board" );
 
     m_optOverrideColors->SetValue( current->GetOverrideSchItemColors() );
 
     m_currentSettings = new COLOR_SETTINGS( *current );
 
-    mgr->ReloadColorSettings();
+    mgr.ReloadColorSettings();
     createThemeList( settings->m_ColorTheme );
 
     m_validLayers.push_back( F_Cu );
@@ -78,8 +75,6 @@ PANEL_FP_EDITOR_COLOR_SETTINGS::PANEL_FP_EDITOR_COLOR_SETTINGS( FOOTPRINT_EDIT_F
     m_backgroundLayer = LAYER_PCB_BACKGROUND;
 
     m_colorsMainSizer->Insert( 0, 10, 0, 0, wxEXPAND, 5 );
-
-    createSwatches();
 }
 
 
@@ -93,8 +88,8 @@ PANEL_FP_EDITOR_COLOR_SETTINGS::~PANEL_FP_EDITOR_COLOR_SETTINGS()
 
 bool PANEL_FP_EDITOR_COLOR_SETTINGS::TransferDataFromWindow()
 {
-    SETTINGS_MANAGER*          settingsMgr = m_frame->GetSettingsManager();
-    FOOTPRINT_EDITOR_SETTINGS* settings = settingsMgr->GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>();
+    SETTINGS_MANAGER&          settingsMgr = Pgm().GetSettingsManager();
+    FOOTPRINT_EDITOR_SETTINGS* settings = settingsMgr.GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>();
     settings->m_ColorTheme = m_currentSettings->GetFilename();
 
     return true;
@@ -124,11 +119,9 @@ void PANEL_FP_EDITOR_COLOR_SETTINGS::createSwatches()
                    return LayerName( a ) < LayerName( b );
                } );
 
-    BOARD* board = m_frame->GetBoard();
-
-    createSwatch( F_Cu, board ? board->GetLayerName( F_Cu ) : LayerName( F_Cu ) );
+    createSwatch( F_Cu, LayerName( F_Cu ) );
     createSwatch( In1_Cu, _( "Internal Layers" ) );
-    createSwatch( B_Cu, board ? board->GetLayerName( B_Cu ) : LayerName( B_Cu ) );
+    createSwatch( B_Cu, LayerName( B_Cu ) );
 
     for( GAL_LAYER_ID layer : galLayers )
         createSwatch( layer, LayerName( layer ) );

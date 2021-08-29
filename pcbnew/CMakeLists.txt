@@ -29,6 +29,7 @@ include_directories(
     ./dialogs
     ./autorouter
     ${CMAKE_SOURCE_DIR}/3d-viewer
+    ${CMAKE_SOURCE_DIR}/3d-viewer/dialogs
     ${CMAKE_SOURCE_DIR}/common
     ${CMAKE_SOURCE_DIR}/common/dialogs
     ./exporters

@@ -21,31 +21,29 @@
 * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
 */
 
-#include <eeschema_settings.h>
-#include <symbol_edit_frame.h>
-#include <symbol_editor_settings.h>
-#include <sch_painter.h>
+#include <pgm_base.h>
 #include <settings/settings_manager.h>
+#include <symbol_editor_settings.h>
 #include "panel_sym_color_settings.h"
 
 
-PANEL_SYM_COLOR_SETTINGS::PANEL_SYM_COLOR_SETTINGS( SYMBOL_EDIT_FRAME* aFrame,
-                                                    wxWindow* aWindow )
-        : PANEL_SYM_COLOR_SETTINGS_BASE( aWindow ), m_frame( aFrame )
+PANEL_SYM_COLOR_SETTINGS::PANEL_SYM_COLOR_SETTINGS( wxWindow* aWindow ) :
+        PANEL_SYM_COLOR_SETTINGS_BASE( aWindow )
 {
 }
 
 
 bool PANEL_SYM_COLOR_SETTINGS::TransferDataToWindow()
 {
-    SYMBOL_EDITOR_SETTINGS* cfg = m_frame->GetSettings();
+    SETTINGS_MANAGER&       mgr = Pgm().GetSettingsManager();
+    SYMBOL_EDITOR_SETTINGS* cfg = mgr.GetAppSettings<SYMBOL_EDITOR_SETTINGS>();
 
     if( cfg->m_UseEeschemaColorSettings )
         m_eeschemaRB->SetValue( true );
     else
         m_themeRB->SetValue( true );
 
-    COLOR_SETTINGS* current = m_frame->GetSettingsManager()->GetColorSettings( cfg->m_ColorTheme );
+    COLOR_SETTINGS* current = mgr.GetColorSettings( cfg->m_ColorTheme );
 
     int width    = 0;
     int height   = 0;
@@ -53,7 +51,7 @@ bool PANEL_SYM_COLOR_SETTINGS::TransferDataToWindow()
 
     m_themes->Clear();
 
-    for( COLOR_SETTINGS* settings : m_frame->GetSettingsManager()->GetColorSettingsList() )
+    for( COLOR_SETTINGS* settings : mgr.GetColorSettingsList() )
     {
         int pos = m_themes->Append( settings->GetName(), static_cast<void*>( settings ) );
 
@@ -74,25 +72,18 @@ bool PANEL_SYM_COLOR_SETTINGS::TransferDataToWindow()
 
 bool PANEL_SYM_COLOR_SETTINGS::TransferDataFromWindow()
 {
-    SETTINGS_MANAGER* mgr = m_frame->GetSettingsManager();
-    int               sel = m_themes->GetSelection();
-    COLOR_SETTINGS*   colors = static_cast<COLOR_SETTINGS*>( m_themes->GetClientData( sel ) );
+    SETTINGS_MANAGER&       mgr = Pgm().GetSettingsManager();
+    SYMBOL_EDITOR_SETTINGS* cfg = mgr.GetAppSettings<SYMBOL_EDITOR_SETTINGS>();
 
-    SYMBOL_EDITOR_SETTINGS* cfg = mgr->GetAppSettings<SYMBOL_EDITOR_SETTINGS>();
     cfg->m_UseEeschemaColorSettings = m_eeschemaRB->GetValue();
 
-    if( cfg->m_UseEeschemaColorSettings )
+    if( !cfg->m_UseEeschemaColorSettings )
     {
-        EESCHEMA_SETTINGS* eecfg = mgr->GetAppSettings<EESCHEMA_SETTINGS>();
-        colors = mgr->GetColorSettings( eecfg->m_ColorTheme );
-    }
-    else
-    {
+        int             sel = m_themes->GetSelection();
+        COLOR_SETTINGS* colors = static_cast<COLOR_SETTINGS*>( m_themes->GetClientData( sel ) );
+
         cfg->m_ColorTheme = colors->GetFilename();
     }
-
-    RENDER_SETTINGS* settings = m_frame->GetCanvas()->GetView()->GetPainter()->GetSettings();
-    settings->LoadColors( colors );
 
     return true;
 }

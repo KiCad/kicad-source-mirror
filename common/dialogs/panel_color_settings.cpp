@@ -184,14 +184,21 @@ void PANEL_COLOR_SETTINGS::OnThemeChanged( wxCommandEvent& event )
 
 void PANEL_COLOR_SETTINGS::updateSwatches()
 {
-    bool    isReadOnly = m_currentSettings->IsReadOnly();
-    COLOR4D background = m_currentSettings->GetColor( m_backgroundLayer );
-
-    for( std::pair<int, COLOR_SWATCH*> pair : m_swatches )
+    if( m_swatches.empty() )
     {
-        pair.second->SetSwatchBackground( background );
-        pair.second->SetSwatchColor( m_currentSettings->GetColor( pair.first ), false );
-        pair.second->SetReadOnly( isReadOnly );
+        createSwatches();
+    }
+    else
+    {
+        bool    isReadOnly = m_currentSettings->IsReadOnly();
+        COLOR4D background = m_currentSettings->GetColor( m_backgroundLayer );
+
+        for( std::pair<int, COLOR_SWATCH*> pair : m_swatches )
+        {
+            pair.second->SetSwatchBackground( background );
+            pair.second->SetSwatchColor( m_currentSettings->GetColor( pair.first ), false );
+            pair.second->SetReadOnly( isReadOnly );
+        }
     }
 }
 

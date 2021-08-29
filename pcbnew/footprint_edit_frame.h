@@ -274,11 +274,6 @@ public:
     void AddFootprintToBoard( FOOTPRINT* aFootprint ) override;
 
     /**
-     * Allow footprint editor to install its preferences panel into the preferences dialog.
-     */
-    void InstallPreferences( PAGED_DIALOG* aParent, PANEL_HOTKEYS_EDITOR* aHotkeysPanel ) override;
-
-    /**
      * Update visible items after a language change.
      */
     void ShowChangedLanguage() override;

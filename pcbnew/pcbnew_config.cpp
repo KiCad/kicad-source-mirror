@@ -25,12 +25,6 @@
  */
 
 #include <pcb_edit_frame.h>
-#include <panel_hotkeys_editor.h>
-#include <panel_edit_options.h>
-#include <panel_pcbnew_color_settings.h>
-#include <panel_display_options.h>
-#include <panel_pcbnew_action_plugins.h>
-#include <panel_pcbnew_display_origin.h>
 #include <tool/tool_manager.h>
 #include <tools/pcb_selection_tool.h>
 #include <board_design_settings.h>
@@ -44,24 +38,7 @@
 #include <project/net_settings.h>
 #include <project/project_file.h>
 #include <project/project_local_settings.h>
-#include <wx/treebook.h>
 
-
-
-void PCB_EDIT_FRAME::InstallPreferences( PAGED_DIALOG* aParent,
-                                         PANEL_HOTKEYS_EDITOR* aHotkeysPanel )
-{
-    wxTreebook* book = aParent->GetTreebook();
-
-    book->AddPage( new wxPanel( book ), _( "PCB Editor" ) );
-    book->AddSubPage( new PANEL_DISPLAY_OPTIONS( this, aParent ), _( "Display Options" ) );
-    book->AddSubPage( new PANEL_EDIT_OPTIONS( this, aParent ), _( "Editing Options" ) );
-    book->AddSubPage( new PANEL_PCBNEW_COLOR_SETTINGS( this, book ), _( "Colors" ) );
-    book->AddSubPage( new PANEL_PCBNEW_ACTION_PLUGINS( this, aParent ), _( "Action Plugins" ) );
-    book->AddSubPage( new PANEL_PCBNEW_DISPLAY_ORIGIN( this, aParent ), _( "Origins & Axes" ) );
-
-    aHotkeysPanel->AddHotKeys( GetToolManager() );
-}
 
 
 bool PCB_EDIT_FRAME::LoadProjectSettings()

@@ -740,8 +740,12 @@ void SYMBOL_VIEWER_FRAME::CommonSettingsChanged( bool aEnvVarsChanged, bool aTex
 {
     SCH_BASE_FRAME::CommonSettingsChanged( aEnvVarsChanged, aTextVarsChanged );
 
+    auto cfg = Pgm().GetSettingsManager().GetAppSettings<EESCHEMA_SETTINGS>();
+    GetGalDisplayOptions().ReadWindowSettings( cfg->m_LibViewPanel.window );
+
     GetCanvas()->GetGAL()->SetAxesColor( m_colorSettings->GetColor( LAYER_SCHEMATIC_GRID_AXES ) );
     GetCanvas()->GetGAL()->DrawGrid();
+    GetCanvas()->ForceRefresh();
 
     if( aEnvVarsChanged )
         ReCreateLibList();

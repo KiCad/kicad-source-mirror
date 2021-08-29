@@ -1725,7 +1725,17 @@ void PCB_EDIT_FRAME::CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVars
 
     GetAppearancePanel()->OnColorThemeChanged();
 
-    // Netclass definitions could have changed, either by us or by Eeschema
+    auto* painter = static_cast<KIGFX::PCB_PAINTER*>( GetCanvas()->GetView()->GetPainter() );
+    auto* renderSettings = painter->GetSettings();
+    renderSettings->LoadDisplayOptions( GetDisplayOptions(), ShowPageLimits() );
+    SetElementVisibility( LAYER_NO_CONNECTS, GetDisplayOptions().m_DisplayPadNoConnects );
+    SetElementVisibility( LAYER_RATSNEST, GetDisplayOptions().m_ShowGlobalRatsnest );
+
+    auto cfg = Pgm().GetSettingsManager().GetAppSettings<PCBNEW_SETTINGS>();
+    GetGalDisplayOptions().ReadWindowSettings( cfg->m_Window );
+
+    // Netclass definitions could have changed, either by us or by Eeschema, so we need to
+    // recompile the implicit rules
     DRC_TOOL*   drcTool = m_toolManager->GetTool<DRC_TOOL>();
     WX_INFOBAR* infobar = GetInfoBar();
 
@@ -1753,6 +1763,15 @@ void PCB_EDIT_FRAME::CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVars
         infobar->ShowMessage( _( "Could not compile custom design rules." ), wxICON_ERROR,
                               WX_INFOBAR::MESSAGE_TYPE::DRC_RULES_ERROR );
     }
+
+    GetCanvas()->GetView()->UpdateAllItemsConditionally( KIGFX::REPAINT,
+            []( KIGFX::VIEW_ITEM* aItem ) -> bool
+            {
+                return dynamic_cast<RATSNEST_VIEW_ITEM*>( aItem );
+            } );
+
+    GetCanvas()->GetView()->MarkTargetDirty( KIGFX::TARGET_NONCACHED );
+    GetCanvas()->ForceRefresh();
 
     // Update the environment variables in the Python interpreter
     if( aEnvVarsChanged )

@@ -30,9 +30,9 @@ class WX_GRID;
 ///////////////////////////////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////////////////////////////////
-/// Class PANEL_EESCHEMA_TEMPLATE_FIELDNAMES_BASE
+/// Class PANEL_TEMPLATE_FIELDNAMES_BASE
 ///////////////////////////////////////////////////////////////////////////////
-class PANEL_EESCHEMA_TEMPLATE_FIELDNAMES_BASE : public wxPanel
+class PANEL_TEMPLATE_FIELDNAMES_BASE : public wxPanel
 {
 	private:
 
@@ -52,8 +52,8 @@ class PANEL_EESCHEMA_TEMPLATE_FIELDNAMES_BASE : public wxPanel
 
 	public:
 
-		PANEL_EESCHEMA_TEMPLATE_FIELDNAMES_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
-		~PANEL_EESCHEMA_TEMPLATE_FIELDNAMES_BASE();
+		PANEL_TEMPLATE_FIELDNAMES_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
+		~PANEL_TEMPLATE_FIELDNAMES_BASE();
 
 };
 

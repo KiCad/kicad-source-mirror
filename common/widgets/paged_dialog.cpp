@@ -128,10 +128,7 @@ void PAGED_DIALOG::finishInitialization()
     m_treebook->GetTreeCtrl()->InvalidateBestSize();
 
     for( size_t i = 0; i < m_treebook->GetPageCount(); ++i )
-    {
-        m_treebook->ExpandNode( i );
         m_treebook->GetPage( i )->Layout();
-    }
 
     m_treebook->Layout();
     m_treebook->Fit();

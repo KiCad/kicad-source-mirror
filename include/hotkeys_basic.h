@@ -93,7 +93,7 @@ wxString AddHotkeyName(  const wxString& aText, int aHotKey,
  * @param aToolMgr the tool manager holding the registered actions from which the hotkeys
  *                 will be harvested.
  */
-void DisplayHotkeyList( EDA_BASE_FRAME* aFrame, TOOL_MANAGER* aToolMgr );
+void DisplayHotkeyList( EDA_BASE_FRAME* aFrame );
 
 /**
  * Reads a hotkey config file into a map.
@@ -105,7 +105,7 @@ void ReadHotKeyConfig( const wxString& aFileName, std::map<std::string, int>& aH
 /**
  * Update the hotkeys config file with the hotkeys from the given actions map.
  */
-int WriteHotKeyConfig( const std::map<std::string, TOOL_ACTION*>& aActionMap );
+int WriteHotKeyConfig( const std::vector<TOOL_ACTION*>& aActions );
 
 /**
  * Read hotkey configuration for a given app.

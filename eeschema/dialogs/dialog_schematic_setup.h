@@ -25,7 +25,7 @@
 
 class SCH_EDIT_FRAME;
 class PANEL_SETUP_SEVERITIES;
-class PANEL_EESCHEMA_TEMPLATE_FIELDNAMES;
+class PANEL_TEMPLATE_FIELDNAMES;
 class PANEL_SETUP_FORMATTING;
 class PANEL_SETUP_PINMAP;
 class PANEL_TEXT_VARIABLES;
@@ -42,17 +42,17 @@ public:
 protected:
     void OnAuxiliaryAction( wxCommandEvent& event ) override;
 
-    SCH_EDIT_FRAME*                     m_frame;
+    SCH_EDIT_FRAME*             m_frame;
 
-    PANEL_SETUP_FORMATTING*             m_formatting;
-    PANEL_EESCHEMA_TEMPLATE_FIELDNAMES* m_fieldNameTemplates;
-    PANEL_SETUP_PINMAP*                 m_pinMap;
-    PANEL_SETUP_SEVERITIES*             m_severities;
-    PANEL_SETUP_NETCLASSES*             m_netclasses;
-    PANEL_TEXT_VARIABLES*               m_textVars;
-    std::shared_ptr<ERC_ITEM>           m_pinToPinError;
+    PANEL_SETUP_FORMATTING*     m_formatting;
+    PANEL_TEMPLATE_FIELDNAMES*  m_fieldNameTemplates;
+    PANEL_SETUP_PINMAP*         m_pinMap;
+    PANEL_SETUP_SEVERITIES*     m_severities;
+    PANEL_SETUP_NETCLASSES*     m_netclasses;
+    PANEL_TEXT_VARIABLES*       m_textVars;
+    std::shared_ptr<ERC_ITEM>   m_pinToPinError;
 
-    std::vector<bool>                   m_macHack;
+    std::vector<bool>           m_macHack;
 
     // event handlers
     void OnPageChange( wxBookCtrlEvent& event );

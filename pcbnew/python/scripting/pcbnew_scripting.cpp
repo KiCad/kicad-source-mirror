@@ -112,7 +112,12 @@ static void pcbnewRunPythonMethodWithReturnedString( const char* aMethodName, wx
     Py_DECREF( localDict );
 
     if( PyErr_Occurred() )
-        wxLogMessage( PyErrStringWithTraceback() );
+    {
+        if( strcmp( aMethodName, "pcbnew.GetWizardsBackTrace" ) == 0 )
+            aNames = PyErrStringWithTraceback();
+        else
+            wxLogMessage( PyErrStringWithTraceback() );
+    }
 }
 
 

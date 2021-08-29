@@ -62,6 +62,7 @@ protected:
 
     void OnColorChanged( wxCommandEvent& aEvent );
 
+    virtual void createSwatches() = 0;
     void updateSwatches();
 
     /**

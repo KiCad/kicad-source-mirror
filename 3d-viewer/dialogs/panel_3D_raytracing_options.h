@@ -31,7 +31,7 @@
 class PANEL_3D_RAYTRACING_OPTIONS : public PANEL_3D_RAYTRACING_OPTIONS_BASE
 {
 public:
-    explicit PANEL_3D_RAYTRACING_OPTIONS( EDA_3D_VIEWER_FRAME* aFrame, wxWindow* aParent );
+    explicit PANEL_3D_RAYTRACING_OPTIONS( wxWindow* aParent );
 
     void ResetPanel() override;
 
@@ -42,10 +42,6 @@ public:
     bool TransferDataToWindow() override;
 
     void TransferColorDataToWindow();
-
-private:
-    BOARD_ADAPTER& m_settings;
-    EDA_3D_CANVAS* m_canvas;
 };
 
 

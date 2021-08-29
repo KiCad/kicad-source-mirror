@@ -22,13 +22,15 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <eda_draw_frame.h>
 #include <dialogs/dialog_unit_entry.h>
 
 
 WX_UNIT_ENTRY_DIALOG::WX_UNIT_ENTRY_DIALOG( EDA_DRAW_FRAME* aParent, const wxString& aLabel,
-        const wxString& aCaption, const long long& aDefaultValue )
-        : WX_UNIT_ENTRY_DIALOG_BASE( ( wxWindow* ) aParent, wxID_ANY, aCaption ),
-          m_unit_binder( aParent, m_label, m_textCtrl, m_unit_label, true )
+                                            const wxString& aCaption,
+                                            const long long& aDefaultValue ) :
+        WX_UNIT_ENTRY_DIALOG_BASE( ( wxWindow* ) aParent, wxID_ANY, aCaption ),
+        m_unit_binder( aParent, m_label, m_textCtrl, m_unit_label, true )
 {
     m_label->SetLabel( aLabel );
     m_unit_binder.SetValue( aDefaultValue );

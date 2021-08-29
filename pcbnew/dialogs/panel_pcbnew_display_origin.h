@@ -27,20 +27,15 @@
 
 #include "panel_pcbnew_display_origin_base.h"
 
-class PAGED_DIALOG;
-
 
 class PANEL_PCBNEW_DISPLAY_ORIGIN : public PANEL_PCBNEW_DISPLAY_ORIGIN_BASE
 {
 public:
-    PANEL_PCBNEW_DISPLAY_ORIGIN( PCB_EDIT_FRAME* aFrame, PAGED_DIALOG* aWindow );
+    PANEL_PCBNEW_DISPLAY_ORIGIN( wxWindow* aParent );
 
 protected:
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
-
-private:
-    PCB_EDIT_FRAME* m_Frame;
 };
 
 

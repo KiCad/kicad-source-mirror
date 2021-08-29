@@ -21,16 +21,16 @@
 #define PANEL_EESCHEMA_DEFUALT_FIELDS_H
 
 #include <template_fieldnames.h>
-#include "panel_eeschema_template_fieldnames_base.h"
+#include "panel_template_fieldnames_base.h"
 
 class SCH_EDIT_FRAME;
 
 
-class PANEL_EESCHEMA_TEMPLATE_FIELDNAMES : public PANEL_EESCHEMA_TEMPLATE_FIELDNAMES_BASE
+class PANEL_TEMPLATE_FIELDNAMES : public PANEL_TEMPLATE_FIELDNAMES_BASE
 {
 public:
-    PANEL_EESCHEMA_TEMPLATE_FIELDNAMES( SCH_EDIT_FRAME* aFrame, wxWindow* aWindow, bool aGlobal );
-    ~PANEL_EESCHEMA_TEMPLATE_FIELDNAMES() override;
+    PANEL_TEMPLATE_FIELDNAMES( wxWindow* aWindow, TEMPLATES* aProjectTemplateMgr );
+    ~PANEL_TEMPLATE_FIELDNAMES() override;
 
     void ImportSettingsFrom( TEMPLATES* templateMgr );
 
@@ -67,11 +67,12 @@ private:
     bool TransferDataFromGrid();
 
 protected:
-    SCH_EDIT_FRAME*     m_frame;
+    TEMPLATES*          m_templateMgr;
     TEMPLATE_FIELDNAMES m_fields;
-    bool                m_global;   // Editing global (vs. project) fieldname templates
+    bool                m_global;        // Editing global (vs. project) fieldname templates
 
     int                 m_checkboxColWidth;
+    TEMPLATES           m_templateMgrInstance;
 };
 
 

@@ -18,26 +18,23 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <gerbview.h>
-#include <gerbview_frame.h>
+#include <pgm_base.h>
+#include <settings/settings_manager.h>
 #include <gerbview_settings.h>
 
 #include "panel_gerbview_excellon_settings.h"
-#include <widgets/paged_dialog.h>
 
 
-PANEL_GERBVIEW_EXCELLON_SETTINGS::PANEL_GERBVIEW_EXCELLON_SETTINGS(
-            GERBVIEW_FRAME *aFrame, wxWindow* aWindow ) :
-        PANEL_GERBVIEW_EXCELLON_SETTINGS_BASE( aWindow, wxID_ANY ),
-        m_Parent( aFrame )
+PANEL_GERBVIEW_EXCELLON_SETTINGS::PANEL_GERBVIEW_EXCELLON_SETTINGS( wxWindow* aParent ) :
+        PANEL_GERBVIEW_EXCELLON_SETTINGS_BASE( aParent, wxID_ANY )
 {
 }
 
 
 bool PANEL_GERBVIEW_EXCELLON_SETTINGS::TransferDataToWindow( )
 {
-    GERBVIEW_SETTINGS* config = static_cast<GERBVIEW_SETTINGS*>( m_Parent->config() );
-    EXCELLON_DEFAULTS curr_settings;
+    GERBVIEW_SETTINGS* config = Pgm().GetSettingsManager().GetAppSettings<GERBVIEW_SETTINGS>();
+    EXCELLON_DEFAULTS  curr_settings;
     config->GetExcellonDefaults( curr_settings );
 
     applySettingsToPanel( curr_settings );
@@ -48,7 +45,7 @@ bool PANEL_GERBVIEW_EXCELLON_SETTINGS::TransferDataToWindow( )
 
 bool PANEL_GERBVIEW_EXCELLON_SETTINGS::TransferDataFromWindow()
 {
-    GERBVIEW_SETTINGS* config = static_cast<GERBVIEW_SETTINGS*>( m_Parent->config() );
+    GERBVIEW_SETTINGS* config = Pgm().GetSettingsManager().GetAppSettings<GERBVIEW_SETTINGS>();
 
     config->m_ExcellonDefaults.m_UnitsMM = m_rbUnits->GetSelection() != 0;
     config->m_ExcellonDefaults.m_LeadingZero = m_rbZeroFormat->GetSelection();

@@ -40,6 +40,7 @@
 #include <gestfich.h>
 #include <paths.h>
 #include <pcbnew_settings.h>
+#include <footprint_editor_settings.h>
 #include <settings/settings_manager.h>
 #include <class_draw_panel_gal.h>
 #include <fp_lib_table.h>
@@ -49,10 +50,21 @@
 #include <footprint_preview_panel.h>
 #include <footprint_info_impl.h>
 #include <dialogs/dialog_configure_paths.h>
+#include <dialog_global_fp_lib_table_config.h>
+#include <panel_display_options.h>
+#include <panel_edit_options.h>
+#include <panel_fp_editor_defaults.h>
+#include <panel_fp_editor_color_settings.h>
+#include <panel_pcbnew_color_settings.h>
+#include <panel_pcbnew_action_plugins.h>
+#include <panel_pcbnew_display_origin.h>
+#include <panel_3D_display_options.h>
+#include <panel_3D_opengl_options.h>
+#include <panel_3D_raytracing_options.h>
+#include <panel_3D_colors.h>
 #include <python_scripting.h>
 
 #include "invoke_pcb_dialog.h"
-#include "dialog_global_fp_lib_table_config.h"
 #include <wildcards_and_files_ext.h>
 
 
@@ -129,6 +141,87 @@ static struct IFACE : public KIFACE_BASE
             InvokePcbLibTableEditor( aKiway, aParent );
             // Dialog has completed; nothing to return.
             return nullptr;
+
+        case PANEL_FP_DISPLAY_OPTIONS:
+        {
+            SETTINGS_MANAGER&  mgr = Pgm().GetSettingsManager();
+            APP_SETTINGS_BASE* cfg = mgr.GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>();
+
+            return new PANEL_DISPLAY_OPTIONS( aParent, cfg );
+        }
+
+        case PANEL_FP_EDIT_OPTIONS:
+            return new PANEL_EDIT_OPTIONS( aParent, true );
+
+        case PANEL_FP_DEFAULT_VALUES:
+        {
+            EDA_BASE_FRAME* unitsProvider = aKiway->Player( FRAME_FOOTPRINT_EDITOR, false );
+
+            if( !unitsProvider )
+                unitsProvider = aKiway->Player( FRAME_FOOTPRINT_VIEWER, false );
+
+            if( !unitsProvider )
+                unitsProvider = aKiway->Player( FRAME_PCB_EDITOR, false );
+
+            if( !unitsProvider )
+            {
+                // If we can't find an eeschema frame we'll have to make do with the units
+                // defined in whatever FRAME we _can_ find.
+                for( unsigned i = 0; !unitsProvider && i < KIWAY_PLAYER_COUNT;  ++i )
+                    unitsProvider = aKiway->Player( (FRAME_T) i, false );
+            }
+
+            if( !unitsProvider )
+            {
+                wxWindow* manager = wxFindWindowByName( KICAD_MANAGER_FRAME_NAME );
+                unitsProvider = static_cast<EDA_BASE_FRAME*>( manager );
+            }
+
+            return new PANEL_FP_EDITOR_DEFAULTS( aParent, unitsProvider );
+        }
+
+        case PANEL_FP_COLORS:
+            return new PANEL_FP_EDITOR_COLOR_SETTINGS( aParent );
+
+        case PANEL_PCB_DISPLAY_OPTIONS:
+        {
+            SETTINGS_MANAGER&  mgr = Pgm().GetSettingsManager();
+            APP_SETTINGS_BASE* cfg = mgr.GetAppSettings<PCBNEW_SETTINGS>();
+
+            return new PANEL_DISPLAY_OPTIONS( aParent, cfg );
+        }
+
+        case PANEL_PCB_EDIT_OPTIONS:
+            return new PANEL_EDIT_OPTIONS( aParent, false );
+
+        case PANEL_PCB_COLORS:
+        {
+            BOARD*          board = nullptr;
+            EDA_BASE_FRAME* boardProvider = aKiway->Player( FRAME_PCB_EDITOR, false );
+
+            if( boardProvider )
+                board = static_cast<PCB_EDIT_FRAME*>( boardProvider )->GetBoard();
+
+            return new PANEL_PCBNEW_COLOR_SETTINGS( aParent, board );
+        }
+
+        case PANEL_PCB_ACTION_PLUGINS:
+            return new PANEL_PCBNEW_ACTION_PLUGINS( aParent );
+
+        case PANEL_PCB_ORIGINS_AXES:
+            return new PANEL_PCBNEW_DISPLAY_ORIGIN( aParent );
+
+        case PANEL_3DV_DISPLAY_OPTIONS:
+            return new PANEL_3D_DISPLAY_OPTIONS( aParent );
+
+        case PANEL_3DV_OPENGL:
+            return new PANEL_3D_OPENGL_OPTIONS( aParent );
+
+        case PANEL_3DV_RAYTRACING:
+            return new PANEL_3D_RAYTRACING_OPTIONS( aParent );
+
+        case PANEL_3DV_COLORS:
+            return new PANEL_3D_COLORS( aParent );
 
         default:
             return nullptr;

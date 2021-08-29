@@ -18,16 +18,12 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <pcb_edit_frame.h>
-#include <pcb_display_options.h>
+#include <pgm_base.h>
+#include <settings/settings_manager.h>
 #include <pcbnew_settings.h>
 #include <config_map.h>
 #include <panel_display_options.h>
-#include <pcb_view.h>
-#include <pcb_painter.h>
-#include <widgets/paged_dialog.h>
 #include <widgets/gal_options_panel.h>
-#include <wx/treebook.h>
 
 
 static const UTIL::CFG_MAP<PCB_DISPLAY_OPTIONS::TRACE_CLEARANCE_DISPLAY_MODE_T> traceClearanceSelectMap =
@@ -40,40 +36,36 @@ static const UTIL::CFG_MAP<PCB_DISPLAY_OPTIONS::TRACE_CLEARANCE_DISPLAY_MODE_T> 
 };
 
 
-PANEL_DISPLAY_OPTIONS::PANEL_DISPLAY_OPTIONS( PCB_BASE_FRAME* aFrame, PAGED_DIALOG* aParent ) :
-    PANEL_DISPLAY_OPTIONS_BASE( aParent->GetTreebook() ),
-    m_frame( aFrame )
+PANEL_DISPLAY_OPTIONS::PANEL_DISPLAY_OPTIONS( wxWindow* aParent, APP_SETTINGS_BASE* aAppSettings ) :
+    PANEL_DISPLAY_OPTIONS_BASE( aParent ),
+    m_isPCBEdit( dynamic_cast<PCBNEW_SETTINGS*>( aAppSettings ) != nullptr )
 {
-    m_galOptsPanel = new GAL_OPTIONS_PANEL( this, m_frame );
+    m_galOptsPanel = new GAL_OPTIONS_PANEL( this, aAppSettings );
     m_galOptionsSizer->Add( m_galOptsPanel, 1, wxEXPAND, 0 );
 
-    m_optionsBook->SetSelection( dynamic_cast<PCB_EDIT_FRAME*>( m_frame ) ? 1 : 0 );
+    m_optionsBook->SetSelection( m_isPCBEdit ? 1 : 0 );
 }
 
 
 bool PANEL_DISPLAY_OPTIONS::TransferDataToWindow()
 {
-    PCB_EDIT_FRAME* pcbEdit = dynamic_cast<PCB_EDIT_FRAME*>( m_frame );
-
-    if( pcbEdit )
+    if( m_isPCBEdit )
     {
-        const PCB_DISPLAY_OPTIONS& displ_opts = pcbEdit->GetDisplayOptions();
+        SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
+        PCBNEW_SETTINGS*  cfg = mgr.GetAppSettings<PCBNEW_SETTINGS>();
 
         m_OptDisplayTracksClearance->SetSelection( UTIL::GetConfigForVal(
-                traceClearanceSelectMap, displ_opts.m_ShowTrackClearanceMode ) );
+                                                        traceClearanceSelectMap,
+                                                        cfg->m_Display.m_ShowTrackClearanceMode ) );
 
-        m_OptDisplayPadClearence->SetValue( displ_opts.m_DisplayPadClearance );
-        m_OptDisplayPadNumber->SetValue( displ_opts.m_DisplayPadNum );
-        m_OptDisplayPadNoConn->SetValue( pcbEdit->IsElementVisible( LAYER_NO_CONNECTS ) );
-        m_ShowNetNamesOption->SetSelection( displ_opts.m_DisplayNetNamesMode );
-
-        m_live3Drefresh->SetValue( displ_opts.m_Live3DRefresh );
-
-        CROSS_PROBING_SETTINGS& crossProbing = pcbEdit->GetPcbNewSettings()->m_CrossProbing;
-
-        m_checkCrossProbeCenter->SetValue( crossProbing.center_on_items );
-        m_checkCrossProbeZoom->SetValue( crossProbing.zoom_to_fit );
-        m_checkCrossProbeAutoHighlight->SetValue( crossProbing.auto_highlight );
+        m_OptDisplayPadClearence->SetValue( cfg->m_Display.m_DisplayPadClearance );
+        m_OptDisplayPadNumber->SetValue( cfg->m_Display.m_DisplayPadNum );
+        m_OptDisplayPadNoConn->SetValue( cfg->m_Display.m_DisplayPadNoConnects );
+        m_ShowNetNamesOption->SetSelection( cfg->m_Display.m_DisplayNetNamesMode );
+        m_live3Drefresh->SetValue( cfg->m_Display.m_Live3DRefresh );
+        m_checkCrossProbeCenter->SetValue( cfg->m_CrossProbing.center_on_items );
+        m_checkCrossProbeZoom->SetValue( cfg->m_CrossProbing.zoom_to_fit );
+        m_checkCrossProbeAutoHighlight->SetValue( cfg->m_CrossProbing.auto_highlight );
     }
 
     m_galOptsPanel->TransferDataToWindow();
@@ -89,56 +81,24 @@ bool PANEL_DISPLAY_OPTIONS::TransferDataFromWindow()
 {
     m_galOptsPanel->TransferDataFromWindow();
 
-    // Apply changes to the GAL
-    KIGFX::VIEW* view = m_frame->GetCanvas()->GetView();
-    KIGFX::PCB_PAINTER* painter = static_cast<KIGFX::PCB_PAINTER*>( view->GetPainter() );
-    KIGFX::PCB_RENDER_SETTINGS* settings = painter->GetSettings();
-
-    PCB_EDIT_FRAME* pcbEdit = dynamic_cast<PCB_EDIT_FRAME*>( m_frame );
-
-    if( pcbEdit )
+    if( m_isPCBEdit )
     {
-        PCB_DISPLAY_OPTIONS displ_opts = pcbEdit->GetDisplayOptions();
+        SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
+        PCBNEW_SETTINGS*  cfg = mgr.GetAppSettings<PCBNEW_SETTINGS>();
 
-        displ_opts.m_ShowTrackClearanceMode = UTIL::GetValFromConfig(
-                traceClearanceSelectMap, m_OptDisplayTracksClearance->GetSelection() );
+        cfg->m_Display.m_ShowTrackClearanceMode = UTIL::GetValFromConfig(
+                                                    traceClearanceSelectMap,
+                                                    m_OptDisplayTracksClearance->GetSelection() );
 
-        displ_opts.m_DisplayPadClearance = m_OptDisplayPadClearence->GetValue();
-        displ_opts.m_DisplayPadNum = m_OptDisplayPadNumber->GetValue();
-
-        pcbEdit->SetElementVisibility( LAYER_NO_CONNECTS, m_OptDisplayPadNoConn->GetValue() );
-        displ_opts.m_DisplayPadNoConnects = m_OptDisplayPadNoConn->GetValue();
-
-        displ_opts.m_DisplayNetNamesMode = m_ShowNetNamesOption->GetSelection();
-        displ_opts.m_Live3DRefresh       = m_live3Drefresh->GetValue();
-
-        pcbEdit->SetDisplayOptions( displ_opts );
-        settings->LoadDisplayOptions( displ_opts, pcbEdit->ShowPageLimits() );
-        pcbEdit->SetElementVisibility( LAYER_RATSNEST, displ_opts.m_ShowGlobalRatsnest );
-
-        CROSS_PROBING_SETTINGS& crossProbing = pcbEdit->GetPcbNewSettings()->m_CrossProbing;
-
-        crossProbing.center_on_items = m_checkCrossProbeCenter->GetValue();
-        crossProbing.zoom_to_fit     = m_checkCrossProbeZoom->GetValue();
-        crossProbing.auto_highlight  = m_checkCrossProbeAutoHighlight->GetValue();
-
-        // Mark items with clearance display for repaint
-        view->UpdateAllItemsConditionally( KIGFX::REPAINT,
-                []( KIGFX::VIEW_ITEM* aItem ) -> bool
-                {
-                    if( EDA_ITEM* item = dynamic_cast<EDA_ITEM*>( aItem ) )
-                    {
-                        return( item->Type() == PCB_TRACE_T ||
-                                item->Type() == PCB_ARC_T ||
-                                item->Type() == PCB_VIA_T ||
-                                item->Type() == PCB_PAD_T );
-                    }
-
-                    return false;
-                } );
+        cfg->m_Display.m_DisplayPadClearance = m_OptDisplayPadClearence->GetValue();
+        cfg->m_Display.m_DisplayPadNum = m_OptDisplayPadNumber->GetValue();
+        cfg->m_Display.m_DisplayPadNoConnects = m_OptDisplayPadNoConn->GetValue();
+        cfg->m_Display.m_DisplayNetNamesMode = m_ShowNetNamesOption->GetSelection();
+        cfg->m_Display.m_Live3DRefresh = m_live3Drefresh->GetValue();
+        cfg->m_CrossProbing.center_on_items = m_checkCrossProbeCenter->GetValue();
+        cfg->m_CrossProbing.zoom_to_fit = m_checkCrossProbeZoom->GetValue();
+        cfg->m_CrossProbing.auto_highlight = m_checkCrossProbeAutoHighlight->GetValue();
     }
-
-    view->MarkTargetDirty( KIGFX::TARGET_NONCACHED );
 
     return true;
 }

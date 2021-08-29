@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2009 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,18 +22,18 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <sch_edit_frame.h>
-#include <sch_painter.h>
+#include <pgm_base.h>
+#include <settings/settings_manager.h>
+#include <eeschema_settings.h>
 #include <panel_eeschema_display_options.h>
 #include <widgets/gal_options_panel.h>
-#include <sch_junction.h>
+#include <widgets/ui_common.h>
 
-PANEL_EESCHEMA_DISPLAY_OPTIONS::PANEL_EESCHEMA_DISPLAY_OPTIONS( SCH_EDIT_FRAME* aFrame,
-                                                                wxWindow* aWindow ) :
-        PANEL_EESCHEMA_DISPLAY_OPTIONS_BASE( aWindow ),
-        m_frame( aFrame )
+PANEL_EESCHEMA_DISPLAY_OPTIONS::PANEL_EESCHEMA_DISPLAY_OPTIONS( wxWindow* aParent,
+                                                                APP_SETTINGS_BASE* aAppSettings ) :
+        PANEL_EESCHEMA_DISPLAY_OPTIONS_BASE( aParent )
 {
-    m_galOptsPanel = new GAL_OPTIONS_PANEL( this, m_frame );
+    m_galOptsPanel = new GAL_OPTIONS_PANEL( this, aAppSettings );
 
     m_galOptionsSizer->Add( m_galOptsPanel, 1, wxEXPAND, 0 );
 
@@ -43,7 +43,8 @@ PANEL_EESCHEMA_DISPLAY_OPTIONS::PANEL_EESCHEMA_DISPLAY_OPTIONS( SCH_EDIT_FRAME* 
 
 bool PANEL_EESCHEMA_DISPLAY_OPTIONS::TransferDataToWindow()
 {
-    EESCHEMA_SETTINGS* cfg = m_frame->eeconfig();
+    SETTINGS_MANAGER&  mgr = Pgm().GetSettingsManager();
+    EESCHEMA_SETTINGS* cfg = mgr.GetAppSettings<EESCHEMA_SETTINGS>();
 
     m_checkShowHiddenPins->SetValue( cfg->m_Appearance.show_hidden_pins );
     m_checkShowHiddenFields->SetValue( cfg->m_Appearance.show_hidden_fields );
@@ -66,7 +67,8 @@ bool PANEL_EESCHEMA_DISPLAY_OPTIONS::TransferDataToWindow()
 
 bool PANEL_EESCHEMA_DISPLAY_OPTIONS::TransferDataFromWindow()
 {
-    EESCHEMA_SETTINGS* cfg = m_frame->eeconfig();
+    SETTINGS_MANAGER&  mgr = Pgm().GetSettingsManager();
+    EESCHEMA_SETTINGS* cfg = mgr.GetAppSettings<EESCHEMA_SETTINGS>();
 
     cfg->m_Appearance.show_hidden_pins = m_checkShowHiddenPins->GetValue();
     cfg->m_Appearance.show_hidden_fields = m_checkShowHiddenFields->GetValue();
@@ -80,14 +82,6 @@ bool PANEL_EESCHEMA_DISPLAY_OPTIONS::TransferDataFromWindow()
     cfg->m_CrossProbing.center_on_items = m_checkCrossProbeCenter->GetValue();
     cfg->m_CrossProbing.zoom_to_fit     = m_checkCrossProbeZoom->GetValue();
     cfg->m_CrossProbing.auto_highlight  = m_checkCrossProbeAutoHighlight->GetValue();
-
-    // Update canvas
-    m_frame->GetRenderSettings()->m_ShowHiddenPins = m_checkShowHiddenPins->GetValue();
-    m_frame->GetRenderSettings()->m_ShowHiddenText = m_checkShowHiddenFields->GetValue();
-    m_frame->GetRenderSettings()->SetShowPageLimits( cfg->m_Appearance.show_page_limits );
-    m_frame->GetCanvas()->GetView()->MarkDirty();
-    m_frame->GetCanvas()->GetView()->UpdateAllItems( KIGFX::REPAINT );
-    m_frame->GetCanvas()->Refresh();
 
     m_galOptsPanel->TransferDataFromWindow();
 

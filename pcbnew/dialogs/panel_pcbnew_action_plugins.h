@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2018 Andrew Lutsenko, anlutsenko at gmail dot com
- * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -23,7 +23,7 @@
 class PANEL_PCBNEW_ACTION_PLUGINS : public PANEL_PCBNEW_ACTION_PLUGINS_BASE
 {
 public:
-    PANEL_PCBNEW_ACTION_PLUGINS ( PCB_EDIT_FRAME* aFrame, PAGED_DIALOG* aWindow );
+    PANEL_PCBNEW_ACTION_PLUGINS ( wxWindow* aParent );
 
     bool TransferDataFromWindow() override;
     bool TransferDataToWindow() override;
@@ -71,7 +71,6 @@ private:
         COLUMN_PATH
     };
 
-    PCB_EDIT_FRAME*    m_frame;
     wxBitmap m_genericIcon;
 
     void SwapRows( int aRowA, int aRowB );

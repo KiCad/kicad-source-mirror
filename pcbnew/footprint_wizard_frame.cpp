@@ -135,6 +135,7 @@ FOOTPRINT_WIZARD_FRAME::FOOTPRINT_WIZARD_FRAME( KIWAY* aKiway, wxWindow* aParent
     PCB_DISPLAY_OPTIONS disp_opts = GetDisplayOptions();
 
     disp_opts.m_DisplayPadClearance = true;
+    disp_opts.m_DisplayPadNoConnects = false;
     disp_opts.m_DisplayPadNum  = true;
     SetDisplayOptions( disp_opts );
 

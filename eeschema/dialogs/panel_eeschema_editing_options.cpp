@@ -22,20 +22,18 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <sch_edit_frame.h>
+#include <pgm_base.h>
 #include <settings/settings_manager.h>
 #include <settings/color_settings.h>
-#include <painter.h>
 #include <eeschema_settings.h>
 #include "panel_eeschema_editing_options.h"
 
 
-PANEL_EESCHEMA_EDITING_OPTIONS::PANEL_EESCHEMA_EDITING_OPTIONS( SCH_EDIT_FRAME* aFrame,
-                                                                wxWindow* aWindow ) :
+PANEL_EESCHEMA_EDITING_OPTIONS::PANEL_EESCHEMA_EDITING_OPTIONS( wxWindow* aWindow,
+                                                                EDA_BASE_FRAME* aUnitsProvider ) :
         PANEL_EESCHEMA_EDITING_OPTIONS_BASE( aWindow ),
-        m_frame( aFrame ),
-        m_hPitch( aFrame, m_hPitchLabel, m_hPitchCtrl, m_hPitchUnits ),
-        m_vPitch( aFrame, m_vPitchLabel, m_vPitchCtrl, m_vPitchUnits )
+        m_hPitch( aUnitsProvider, m_hPitchLabel, m_hPitchCtrl, m_hPitchUnits ),
+        m_vPitch( aUnitsProvider, m_vPitchLabel, m_vPitchCtrl, m_vPitchUnits )
 {
     // Make the color swatch show "Clear Color" instead
     m_borderColorSwatch->SetDefaultColor( COLOR4D::UNSPECIFIED );
@@ -51,13 +49,14 @@ PANEL_EESCHEMA_EDITING_OPTIONS::PANEL_EESCHEMA_EDITING_OPTIONS( SCH_EDIT_FRAME* 
 
 bool PANEL_EESCHEMA_EDITING_OPTIONS::TransferDataToWindow()
 {
-    EESCHEMA_SETTINGS* cfg = m_frame->eeconfig();
+    SETTINGS_MANAGER&  mgr = Pgm().GetSettingsManager();
+    EESCHEMA_SETTINGS* cfg = mgr.GetAppSettings<EESCHEMA_SETTINGS>();
 
     m_hPitch.SetValue( Mils2iu( cfg->m_Drawing.default_repeat_offset_x ) );
     m_vPitch.SetValue( Mils2iu( cfg->m_Drawing.default_repeat_offset_y ) );
     m_spinLabelRepeatStep->SetValue( cfg->m_Drawing.repeat_label_increment );
 
-    COLOR_SETTINGS* settings = m_frame->GetColorSettings();
+    COLOR_SETTINGS* settings = mgr.GetColorSettings();
     COLOR4D         schematicBackground = settings->GetColor( LAYER_SCHEMATIC_BACKGROUND );
 
     m_borderColorSwatch->SetSwatchBackground( schematicBackground );
@@ -85,7 +84,8 @@ bool PANEL_EESCHEMA_EDITING_OPTIONS::TransferDataToWindow()
 
 bool PANEL_EESCHEMA_EDITING_OPTIONS::TransferDataFromWindow()
 {
-    EESCHEMA_SETTINGS* cfg = m_frame->eeconfig();
+    SETTINGS_MANAGER&  mgr = Pgm().GetSettingsManager();
+    EESCHEMA_SETTINGS* cfg = mgr.GetAppSettings<EESCHEMA_SETTINGS>();
 
     cfg->m_Drawing.default_sheet_border_color = m_borderColorSwatch->GetSwatchColor();
     cfg->m_Drawing.default_sheet_background_color = m_backgroundColorSwatch->GetSwatchColor();
@@ -106,8 +106,6 @@ bool PANEL_EESCHEMA_EDITING_OPTIONS::TransferDataFromWindow()
     cfg->m_Selection.select_pin_selects_symbol = m_cbPinSelectionOpt->GetValue();
 
     cfg->m_Drawing.auto_start_wires = m_cbAutoStartWires->GetValue();
-
-    m_frame->SaveProjectSettings();
 
     return true;
 }

@@ -27,8 +27,10 @@
 #include <board_commit.h>
 #include <footprint.h>
 #include <pcb_draw_panel_gal.h>
+#include <pgm_base.h>
+#include <settings/settings_manager.h>
 #include <pcbnew_settings.h>
-
+#include <footprint_editor_settings.h>
 #include <tools/pcb_grid_helper.h>
 #include <tools/pcb_selection_tool.h>
 #include <tools/pcb_actions.h>
@@ -322,10 +324,12 @@ PCB_SELECTION& PCB_TOOL_BASE::selection()
 
 bool PCB_TOOL_BASE::Is45Limited() const
 {
+    SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
+
     if( frame()->IsType( FRAME_PCB_EDITOR ) )
-        return frame()->Settings().m_PcbUse45DegreeLimit;
+        return mgr.GetAppSettings<PCBNEW_SETTINGS>()->m_Use45DegreeLimit;
     else
-        return frame()->Settings().m_FpeditUse45DegreeLimit;
+        return mgr.GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>()->m_Use45Limit;
 }
 
 

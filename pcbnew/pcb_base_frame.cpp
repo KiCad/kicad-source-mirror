@@ -59,6 +59,8 @@
 #include "cleanup_item.h"
 #include <zoom_defines.h>
 
+using KIGFX::RENDER_SETTINGS;
+using KIGFX::PCB_RENDER_SETTINGS;
 
 wxDEFINE_EVENT( BOARD_CHANGED, wxCommandEvent );
 
@@ -842,7 +844,11 @@ void PCB_BASE_FRAME::CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVars
 {
     EDA_DRAW_FRAME::CommonSettingsChanged( aEnvVarsChanged, aTextVarsChanged );
 
-    GetCanvas()->GetView()->GetPainter()->GetSettings()->LoadColors( GetColorSettings() );
+    RENDER_SETTINGS*     settings = GetCanvas()->GetView()->GetPainter()->GetSettings();
+    PCB_RENDER_SETTINGS* renderSettings = static_cast<KIGFX::PCB_RENDER_SETTINGS*>( settings );
+
+    renderSettings->LoadColors( GetColorSettings() );
+    renderSettings->LoadDisplayOptions( GetDisplayOptions(), ShowPageLimits() );
     GetCanvas()->GetView()->UpdateAllItems( KIGFX::COLOR );
 
     RecreateToolbars();

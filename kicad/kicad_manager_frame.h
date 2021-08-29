@@ -137,8 +137,6 @@ public:
      */
     void OnChangeWatchedPaths( wxCommandEvent& aEvent );
 
-    void InstallPreferences( PAGED_DIALOG* aParent, PANEL_HOTKEYS_EDITOR* aHotkeysPanel ) override;
-
     const wxString GetProjectFileName() const;
 
     bool IsProjectActive();

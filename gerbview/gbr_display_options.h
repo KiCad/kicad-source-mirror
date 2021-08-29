@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012-2016 Jean-Pierre Charras  jp.charras at wanadoo.fr
- * Copyright (C) 1992-2016 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,14 +22,10 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file gbr_display_options.h
- * @brief Class GBR_DISPLAY_OPTIONS is a helper class to handle display options
- * (filling modes and afew other options
- */
+#ifndef GBR_DISPLAY_OPTIONS_H
+#define GBR_DISPLAY_OPTIONS_H
 
-#ifndef CLASS_GBR_DISPLAY_OPTIONS_H
-#define CLASS_GBR_DISPLAY_OPTIONS_H
+using KIGFX::COLOR4D;
 
 /**
  * @note Some of these parameters are used only for printing, some others only
@@ -74,4 +70,4 @@ public:
     }
 };
 
-#endif    // #ifndef CLASS_GBR_DISPLAY_OPTIONS_H
+#endif    // GBR_DISPLAY_OPTIONS_H

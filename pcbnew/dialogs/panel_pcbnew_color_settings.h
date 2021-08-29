@@ -21,22 +21,17 @@
 #ifndef PANEL_PCBNEW_COLOR_SETTINGS_H_
 #define PANEL_PCBNEW_COLOR_SETTINGS_H_
 
-#include <gal/color4d.h>
-#include <layer_ids.h>
 #include <dialogs/panel_color_settings.h>
 
-class COLOR_SETTINGS;
 class PAGE_INFO;
-class PCB_EDIT_FRAME;
 class FOOTPRINT_PREVIEW_PANEL;
 class TITLE_BLOCK;
-class DS_PROXY_VIEW_ITEM;
 
 
 class PANEL_PCBNEW_COLOR_SETTINGS : public PANEL_COLOR_SETTINGS
 {
 public:
-    PANEL_PCBNEW_COLOR_SETTINGS( PCB_EDIT_FRAME* aFrame, wxWindow* aParent );
+    PANEL_PCBNEW_COLOR_SETTINGS( wxWindow* aParent, BOARD* aBoard );
 
     ~PANEL_PCBNEW_COLOR_SETTINGS() override;
 
@@ -51,6 +46,8 @@ protected:
     void onNewThemeSelected() override;
     void onColorChanged() override;
 
+    void createSwatches() override;
+
     enum COLOR_CONTEXT_ID
     {
         ID_COPY = wxID_HIGHEST + 1,
@@ -60,16 +57,14 @@ protected:
 
 private:
     void createPreviewItems();
-    void createSwatches();
 
     void updatePreview();
     void zoomFitPreview();
 
-    PCB_EDIT_FRAME*          m_frame;
-
     FOOTPRINT_PREVIEW_PANEL* m_preview;
     PAGE_INFO*               m_page;
     TITLE_BLOCK*             m_titleBlock;
+    BOARD*                   m_board;
 };
 
 

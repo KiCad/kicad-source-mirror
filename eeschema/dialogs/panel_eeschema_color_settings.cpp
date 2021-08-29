@@ -54,10 +54,8 @@ std::set<int> g_excludedLayers =
         };
 
 
-PANEL_EESCHEMA_COLOR_SETTINGS::PANEL_EESCHEMA_COLOR_SETTINGS( SCH_BASE_FRAME* aFrame,
-                                                              wxWindow* aParent ) :
+PANEL_EESCHEMA_COLOR_SETTINGS::PANEL_EESCHEMA_COLOR_SETTINGS( wxWindow* aParent ) :
         PANEL_COLOR_SETTINGS( aParent ),
-        m_frame( aFrame ),
         m_preview( nullptr ),
         m_page( nullptr ),
         m_titleBlock( nullptr ),
@@ -67,9 +65,6 @@ PANEL_EESCHEMA_COLOR_SETTINGS::PANEL_EESCHEMA_COLOR_SETTINGS( SCH_BASE_FRAME* aF
     m_colorNamespace = "schematic";
 
     SETTINGS_MANAGER&  mgr = Pgm().GetSettingsManager();
-
-    mgr.ReloadColorSettings();
-
     COMMON_SETTINGS*   common_settings = Pgm().GetCommonSettings();
     EESCHEMA_SETTINGS* app_settings = mgr.GetAppSettings<EESCHEMA_SETTINGS>();
     COLOR_SETTINGS*    current = mgr.GetColorSettings( app_settings->m_ColorTheme );
@@ -94,26 +89,10 @@ PANEL_EESCHEMA_COLOR_SETTINGS::PANEL_EESCHEMA_COLOR_SETTINGS( SCH_BASE_FRAME* aF
 
     m_backgroundLayer = LAYER_SCHEMATIC_BACKGROUND;
 
-    createSwatches();
-
     m_galDisplayOptions.ReadConfig( *common_settings, app_settings->m_Window, this );
     m_galDisplayOptions.m_forceDisplayCursor = false;
 
-    auto type = static_cast<EDA_DRAW_PANEL_GAL::GAL_TYPE>( app_settings->m_Graphics.canvas_type );
-
-    m_preview = new SCH_PREVIEW_PANEL( this, wxID_ANY, wxDefaultPosition, wxSize( -1, -1 ),
-                                       m_galDisplayOptions, type );
-    m_preview->SetStealsFocus( false );
-    m_preview->ShowScrollbars( wxSHOW_SB_NEVER, wxSHOW_SB_NEVER );
-    m_preview->GetGAL()->SetAxesEnabled( false );
-
-    m_colorsMainSizer->Add( 10, 0, 0, wxEXPAND, 5 );
-    m_colorsMainSizer->Add( m_preview, 1, wxALL | wxEXPAND, 5 );
-    m_colorsMainSizer->Add( 10, 0, 0, wxEXPAND, 5 );
-
-    createPreviewItems();
-    updatePreview();
-    zoomFitPreview();
+    m_galType = static_cast<EDA_DRAW_PANEL_GAL::GAL_TYPE>( app_settings->m_Graphics.canvas_type );
 }
 
 
@@ -135,8 +114,6 @@ bool PANEL_EESCHEMA_COLOR_SETTINGS::TransferDataFromWindow()
 
     if( !saveCurrentTheme( true ) )
         return false;
-
-    m_frame->GetCanvas()->GetView()->GetPainter()->GetSettings()->LoadColors( m_currentSettings );
 
     SETTINGS_MANAGER& settingsMgr = Pgm().GetSettingsManager();
     EESCHEMA_SETTINGS* app_settings = settingsMgr.GetAppSettings<EESCHEMA_SETTINGS>();
@@ -231,6 +208,22 @@ void PANEL_EESCHEMA_COLOR_SETTINGS::createSwatches()
     int min_width = m_colorsGridSizer->GetMinSize().x;
     const int margin = 20;  // A margin around the sizer
     m_colorsListWindow->SetMinSize( wxSize( min_width + margin, -1 ) );
+
+    m_preview = new SCH_PREVIEW_PANEL( this, wxID_ANY, wxDefaultPosition, wxSize( -1, -1 ),
+                                       m_galDisplayOptions, m_galType );
+    m_preview->SetStealsFocus( false );
+    m_preview->ShowScrollbars( wxSHOW_SB_NEVER, wxSHOW_SB_NEVER );
+    m_preview->GetGAL()->SetAxesEnabled( false );
+
+    m_colorsMainSizer->Add( 10, 0, 0, wxEXPAND, 5 );
+    m_colorsMainSizer->Add( m_preview, 1, wxALL | wxEXPAND, 5 );
+    m_colorsMainSizer->Add( 10, 0, 0, wxEXPAND, 5 );
+
+    m_colorsMainSizer->Layout();
+
+    createPreviewItems();
+    updatePreview();
+    zoomFitPreview();
 }
 
 
@@ -495,18 +488,21 @@ void PANEL_EESCHEMA_COLOR_SETTINGS::updatePreview()
 
 void PANEL_EESCHEMA_COLOR_SETTINGS::zoomFitPreview()
 {
-    KIGFX::VIEW* view = m_preview->GetView();
+    if( m_preview )
+    {
+        KIGFX::VIEW* view = m_preview->GetView();
 
-    view->SetScale( 1.0 );
-    VECTOR2D screenSize = view->ToWorld( m_preview->GetClientSize(), false );
+        view->SetScale( 1.0 );
+        VECTOR2D screenSize = view->ToWorld( m_preview->GetClientSize(), false );
 
-    VECTOR2I psize( m_page->GetWidthIU(), m_page->GetHeightIU() );
-    double scale = view->GetScale() / std::max( fabs( psize.x / screenSize.x ),
-                                                fabs( psize.y / screenSize.y ) );
+        VECTOR2I psize( m_page->GetWidthIU(), m_page->GetHeightIU() );
+        double scale = view->GetScale() / std::max( fabs( psize.x / screenSize.x ),
+                                                    fabs( psize.y / screenSize.y ) );
 
-    view->SetScale( scale * m_galDisplayOptions.m_scaleFactor * 0.8 /* margin */ );
-    view->SetCenter( m_drawingSheet->ViewBBox().Centre() );
-    m_preview->ForceRefresh();
+        view->SetScale( scale * m_galDisplayOptions.m_scaleFactor * 0.8 /* margin */ );
+        view->SetCenter( m_drawingSheet->ViewBBox().Centre() );
+        m_preview->ForceRefresh();
+    }
 }
 
 

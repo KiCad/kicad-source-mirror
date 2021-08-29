@@ -22,33 +22,24 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <board_design_settings.h>
-#include <board.h>
+#include <pgm_base.h>
+#include <settings/settings_manager.h>
+#include <pcbnew_settings.h>
 #include <panel_pcbnew_display_origin.h>
-#include <pcb_edit_frame.h>
-#include <pcb_painter.h>
-#include <pcb_view.h>
-#include <pcbnew_id.h>
-#include <widgets/paged_dialog.h>
-
-#include <wx/treebook.h>
 
 
-PANEL_PCBNEW_DISPLAY_ORIGIN::PANEL_PCBNEW_DISPLAY_ORIGIN(
-        PCB_EDIT_FRAME* aFrame, PAGED_DIALOG* aParent )
-        : PANEL_PCBNEW_DISPLAY_ORIGIN_BASE( aParent->GetTreebook() ),
-          m_Frame( aFrame )
+PANEL_PCBNEW_DISPLAY_ORIGIN::PANEL_PCBNEW_DISPLAY_ORIGIN( wxWindow* aParent ) :
+        PANEL_PCBNEW_DISPLAY_ORIGIN_BASE( aParent )
 {
 }
 
 
 bool PANEL_PCBNEW_DISPLAY_ORIGIN::TransferDataToWindow()
 {
-    const PCB_DISPLAY_OPTIONS& displ_opts = m_Frame->GetDisplayOptions();
+    PCBNEW_SETTINGS* cfg = Pgm().GetSettingsManager().GetAppSettings<PCBNEW_SETTINGS>();
+    int              origin = 0;
 
-    int origin = 0;
-
-    switch( displ_opts.m_DisplayOrigin )
+    switch( cfg->m_Display.m_DisplayOrigin )
     {
     case PCB_DISPLAY_OPTIONS::PCB_ORIGIN_PAGE: origin = 0; break;
     case PCB_DISPLAY_OPTIONS::PCB_ORIGIN_AUX:  origin = 1; break;
@@ -56,8 +47,8 @@ bool PANEL_PCBNEW_DISPLAY_ORIGIN::TransferDataToWindow()
     }
 
     m_DisplayOrigin->SetSelection( origin );
-    m_XAxisDirection->SetSelection( displ_opts.m_DisplayInvertXAxis ? 1 : 0 );
-    m_YAxisDirection->SetSelection( displ_opts.m_DisplayInvertYAxis ? 0 : 1 );
+    m_XAxisDirection->SetSelection( cfg->m_Display.m_DisplayInvertXAxis ? 1 : 0 );
+    m_YAxisDirection->SetSelection( cfg->m_Display.m_DisplayInvertYAxis ? 0 : 1 );
 
     return true;
 }
@@ -65,19 +56,17 @@ bool PANEL_PCBNEW_DISPLAY_ORIGIN::TransferDataToWindow()
 
 bool PANEL_PCBNEW_DISPLAY_ORIGIN::TransferDataFromWindow()
 {
-    PCB_DISPLAY_OPTIONS displ_opts = m_Frame->GetDisplayOptions();
+    PCBNEW_SETTINGS* cfg = Pgm().GetSettingsManager().GetAppSettings<PCBNEW_SETTINGS>();
 
     switch( m_DisplayOrigin->GetSelection() )
     {
-    case 0: displ_opts.m_DisplayOrigin = PCB_DISPLAY_OPTIONS::PCB_ORIGIN_PAGE; break;
-    case 1: displ_opts.m_DisplayOrigin = PCB_DISPLAY_OPTIONS::PCB_ORIGIN_AUX;  break;
-    case 2: displ_opts.m_DisplayOrigin = PCB_DISPLAY_OPTIONS::PCB_ORIGIN_GRID; break;
+    case 0: cfg->m_Display.m_DisplayOrigin = PCB_DISPLAY_OPTIONS::PCB_ORIGIN_PAGE; break;
+    case 1: cfg->m_Display.m_DisplayOrigin = PCB_DISPLAY_OPTIONS::PCB_ORIGIN_AUX;  break;
+    case 2: cfg->m_Display.m_DisplayOrigin = PCB_DISPLAY_OPTIONS::PCB_ORIGIN_GRID; break;
     }
 
-    displ_opts.m_DisplayInvertXAxis = m_XAxisDirection->GetSelection() != 0;
-    displ_opts.m_DisplayInvertYAxis = m_YAxisDirection->GetSelection() == 0;
-
-    m_Frame->SetDisplayOptions( displ_opts );
+    cfg->m_Display.m_DisplayInvertXAxis = m_XAxisDirection->GetSelection() != 0;
+    cfg->m_Display.m_DisplayInvertYAxis = m_YAxisDirection->GetSelection() == 0;
 
     return true;
 }

@@ -82,9 +82,13 @@ FOOTPRINT_EDITOR_SETTINGS::FOOTPRINT_EDITOR_SETTINGS() :
     m_params.emplace_back( new PARAM<bool>( "editing.magnetic_graphics",
             &m_MagneticItems.graphics, true ) );
 
-    m_params.emplace_back( new PARAM<bool>( "editing.polar_coords", &m_PolarCoords, false ) );
+    m_params.emplace_back( new PARAM<bool>( "editing.polar_coords",
+            &m_PolarCoords, false ) );
 
-    m_params.emplace_back( new PARAM<bool>( "editing.use_45_degree_limit",
+    m_params.emplace_back( new PARAM<int>( "editing.rotation_angle",
+            &m_RotationAngle, 900, 1, 900 ) );
+
+    m_params.emplace_back( new PARAM<bool>( "editing.fp_use_45_degree_limit",
             &m_Use45Limit, false ) );
 
     m_params.emplace_back( new PARAM<bool>( "pcb_display.text_fill",

@@ -26,22 +26,18 @@
 #include <panel_pcbnew_action_plugins.h>
 #include <pcb_edit_frame.h>
 #include <python/scripting/pcbnew_scripting.h>
+#include <pcb_scripting_tool.h>
 #include <pcbnew_settings.h>
-#include <tool/tool_manager.h>
-#include <tools/pcb_actions.h>
 #include <widgets/grid_icon_text_helpers.h>
 #include <widgets/paged_dialog.h>
 #include <widgets/wx_grid.h>
 
-#include <wx/treebook.h>
 
 
 #define GRID_CELL_MARGIN 4
 
-PANEL_PCBNEW_ACTION_PLUGINS::PANEL_PCBNEW_ACTION_PLUGINS( PCB_EDIT_FRAME* aFrame,
-                                                          PAGED_DIALOG* aWindow ) :
-        PANEL_PCBNEW_ACTION_PLUGINS_BASE( aWindow->GetTreebook() ),
-        m_frame( aFrame )
+PANEL_PCBNEW_ACTION_PLUGINS::PANEL_PCBNEW_ACTION_PLUGINS( wxWindow* aParent ) :
+        PANEL_PCBNEW_ACTION_PLUGINS_BASE( aParent )
 {
     m_genericIcon = KiBitmap( BITMAPS::puzzle_piece );
     m_grid->PushEventHandler( new GRID_TRICKS( m_grid ) );
@@ -142,7 +138,7 @@ void PANEL_PCBNEW_ACTION_PLUGINS::SwapRows( int aRowA, int aRowB )
 
 void PANEL_PCBNEW_ACTION_PLUGINS::OnReloadButtonClick( wxCommandEvent& event )
 {
-    m_frame->GetToolManager()->RunAction( PCB_ACTIONS::pluginsReload, true );
+    SCRIPTING_TOOL::ReloadPlugins();
     TransferDataToWindow();
 }
 
@@ -174,7 +170,7 @@ bool PANEL_PCBNEW_ACTION_PLUGINS::TransferDataToWindow()
 
     m_grid->ClearRows();
 
-    const auto& orderedPlugins = m_frame->GetOrderedActionPlugins();
+    const auto& orderedPlugins = PCB_EDIT_FRAME::GetOrderedActionPlugins();
     m_grid->AppendRows( orderedPlugins.size() );
 
     for( size_t row = 0; row < orderedPlugins.size(); row++ )
@@ -189,10 +185,10 @@ bool PANEL_PCBNEW_ACTION_PLUGINS::TransferDataToWindow()
         m_grid->SetCellRenderer( row, COLUMN_VISIBLE, new wxGridCellBoolRenderer() );
         m_grid->SetCellAlignment( row, COLUMN_VISIBLE, wxALIGN_CENTER, wxALIGN_CENTER );
 
-        bool showButton = m_frame->GetActionPluginButtonVisible( ap->GetPluginPath(),
-                                                                 ap->GetShowToolbarButton() );
+        bool show = PCB_EDIT_FRAME::GetActionPluginButtonVisible( ap->GetPluginPath(),
+                                                                  ap->GetShowToolbarButton() );
 
-        m_grid->SetCellValue( row, COLUMN_VISIBLE, showButton ? wxT( "1" ) : wxEmptyString );
+        m_grid->SetCellValue( row, COLUMN_VISIBLE, show ? wxT( "1" ) : wxEmptyString );
 
         m_grid->SetCellValue( row, COLUMN_NAME, ap->GetName() );
         m_grid->SetCellValue( row, COLUMN_CATEGORY, ap->GetCategoryName() );
@@ -217,25 +213,32 @@ bool PANEL_PCBNEW_ACTION_PLUGINS::TransferDataToWindow()
 
     // Show errors button should be disabled if there are no errors.
     wxString trace;
-    pcbnewGetWizardsBackTrace( trace );
+
+    if( ACTION_PLUGINS::GetActionsCount() )
+        pcbnewGetWizardsBackTrace( trace );
+
     if( trace.empty() )
     {
         m_showErrorsButton->Disable();
         m_showErrorsButton->Hide();
+        m_reloadButton->Disable();
     }
     else
     {
         m_showErrorsButton->Enable();
         m_showErrorsButton->Show();
+        m_reloadButton->Enable();
     }
 
     return true;
 }
 
+
 void PANEL_PCBNEW_ACTION_PLUGINS::OnOpenDirectoryButtonClick( wxCommandEvent& event )
 {
-    m_frame->GetToolManager()->RunAction( PCB_ACTIONS::pluginsShowFolder, true );
+    SCRIPTING_TOOL::ShowPluginFolder();
 }
+
 
 void PANEL_PCBNEW_ACTION_PLUGINS::OnShowErrorsButtonClick( wxCommandEvent& event )
 {

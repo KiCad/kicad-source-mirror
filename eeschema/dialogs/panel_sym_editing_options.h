@@ -23,19 +23,17 @@
 #include <widgets/unit_binder.h>
 #include "panel_sym_editing_options_base.h"
 
-class SYMBOL_EDIT_FRAME;
+class EDA_BASE_FRAME;
 
 
 class PANEL_SYM_EDITING_OPTIONS : public PANEL_SYM_EDITING_OPTIONS_BASE
 {
 public:
-    PANEL_SYM_EDITING_OPTIONS( SYMBOL_EDIT_FRAME* aFrame, wxWindow* aWindow );
+    PANEL_SYM_EDITING_OPTIONS( wxWindow* aWindow, EDA_BASE_FRAME* aUnitsProvider );
 
 private:
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
-
-    SYMBOL_EDIT_FRAME* m_frame;
 
     UNIT_BINDER        m_lineWidth;
     UNIT_BINDER        m_textSize;

@@ -372,12 +372,6 @@ void TOOL_MANAGER::PostEvent( const TOOL_EVENT& aEvent )
 }
 
 
-const std::map<std::string, TOOL_ACTION*>& TOOL_MANAGER::GetActions() const
-{
-    return m_actionMgr->GetActions();
-}
-
-
 int TOOL_MANAGER::GetHotKey( const TOOL_ACTION& aAction ) const
 {
     return m_actionMgr->GetHotKey( aAction );

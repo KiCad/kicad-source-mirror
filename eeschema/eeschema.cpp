@@ -39,6 +39,7 @@
 #include <kiway.h>
 #include <sim/sim_plot_frame.h>
 #include <settings/settings_manager.h>
+#include <symbol_editor_settings.h>
 #include <sexpr/sexpr.h>
 #include <sexpr/sexpr_parser.h>
 #include <kiface_ids.h>
@@ -48,6 +49,12 @@
 
 #include <schematic.h>
 #include <connection_graph.h>
+#include <panel_template_fieldnames.h>
+#include <panel_eeschema_color_settings.h>
+#include <panel_sym_color_settings.h>
+#include <panel_eeschema_editing_options.h>
+#include <panel_sym_editing_options.h>
+#include <dialogs/panel_gal_display_options.h>
 
 // The main sheet of the project
 SCH_SHEET*  g_RootSheet = nullptr;
@@ -166,6 +173,85 @@ static struct IFACE : public KIFACE_BASE
             InvokeSchEditSymbolLibTable( aKiway, aParent );
             // Dialog has completed; nothing to return.
             return nullptr;
+
+        case PANEL_SYM_DISPLAY_OPTIONS:
+        {
+            SETTINGS_MANAGER&  mgr = Pgm().GetSettingsManager();
+            APP_SETTINGS_BASE* cfg = mgr.GetAppSettings<SYMBOL_EDITOR_SETTINGS>();
+
+            return new PANEL_GAL_DISPLAY_OPTIONS( aParent, cfg );
+        }
+
+        case PANEL_SYM_EDIT_OPTIONS:
+        {
+            EDA_BASE_FRAME* unitsProvider = aKiway->Player( FRAME_SCH_SYMBOL_EDITOR, false );
+
+            if( !unitsProvider )
+                unitsProvider = aKiway->Player( FRAME_SCH_VIEWER, false );
+
+            if( !unitsProvider )
+                unitsProvider = aKiway->Player( FRAME_SCH, false );
+
+            if( !unitsProvider )
+            {
+                // If we can't find an eeschema unitsProvider we'll have to make do with the units
+                // defined in whatever FRAME we _can_ find.
+                for( unsigned i = 0; !unitsProvider && i < KIWAY_PLAYER_COUNT; ++i )
+                    unitsProvider = aKiway->Player( (FRAME_T) i, false );
+            }
+
+            if( !unitsProvider )
+            {
+                wxWindow* manager = wxFindWindowByName( KICAD_MANAGER_FRAME_NAME );
+                unitsProvider = static_cast<EDA_BASE_FRAME*>( manager );
+            }
+
+            return new PANEL_SYM_EDITING_OPTIONS( aParent, unitsProvider );
+        }
+
+        case PANEL_SYM_COLORS:
+            return new PANEL_SYM_COLOR_SETTINGS( aParent );
+
+        case PANEL_SCH_DISPLAY_OPTIONS:
+        {
+            SETTINGS_MANAGER&  mgr = Pgm().GetSettingsManager();
+            APP_SETTINGS_BASE* cfg = mgr.GetAppSettings<EESCHEMA_SETTINGS>();
+
+            return new PANEL_GAL_DISPLAY_OPTIONS( aParent, cfg );
+        }
+
+        case PANEL_SCH_EDIT_OPTIONS:
+        {
+            EDA_BASE_FRAME* unitsProvider = aKiway->Player( FRAME_SCH, false );
+
+            if( !unitsProvider )
+                unitsProvider = aKiway->Player( FRAME_SCH_SYMBOL_EDITOR, false );
+
+            if( !unitsProvider )
+                unitsProvider = aKiway->Player( FRAME_SCH_VIEWER, false );
+
+            if( !unitsProvider )
+            {
+                // If we can't find an eeschema frame we'll have to make do with the units
+                // defined in whatever FRAME we _can_ find.
+                for( unsigned i = 0; !unitsProvider && i < KIWAY_PLAYER_COUNT;  ++i )
+                    unitsProvider = aKiway->Player( (FRAME_T) i, false );
+            }
+
+            if( !unitsProvider )
+            {
+                wxWindow* manager = wxFindWindowByName( KICAD_MANAGER_FRAME_NAME );
+                unitsProvider = static_cast<EDA_BASE_FRAME*>( manager );
+            }
+
+            return new PANEL_EESCHEMA_EDITING_OPTIONS( aParent, unitsProvider );
+        }
+
+        case PANEL_SCH_COLORS:
+            return new PANEL_EESCHEMA_COLOR_SETTINGS( aParent );
+
+        case PANEL_SCH_FIELD_NAME_TEMPLATES:
+            return new PANEL_TEMPLATE_FIELDNAMES( aParent, nullptr );
 
         default:
             return nullptr;

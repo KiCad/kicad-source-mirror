@@ -44,6 +44,9 @@ public:
     ///< Basic initialization
     bool Init() override;
 
+    static void ReloadPlugins();
+    static void ShowPluginFolder();
+
 private:
 
     ///< Reload Python plugins and reset toolbar (if in pcbnew)
@@ -51,7 +54,7 @@ private:
 
     ///< Call LoadPlugins method of the scripting module with apropriate paths
     ///< Must be called under PyLOCK
-    void callLoadPlugins();
+    static void callLoadPlugins();
 
     ///< Open the user's plugin folder in the system browser
     int showPluginFolder( const TOOL_EVENT& aEvent );

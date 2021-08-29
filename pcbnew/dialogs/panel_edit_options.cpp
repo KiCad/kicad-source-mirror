@@ -22,25 +22,22 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <pgm_base.h>
 #include <string_utils.h>
-#include <panel_edit_options.h>
-#include <pcb_edit_frame.h>
-#include <pcb_painter.h>
-#include <pcb_view.h>
+#include <settings/settings_manager.h>
 #include <pcbnew_settings.h>
-#include <ratsnest/ratsnest_view_item.h>
-#include <widgets/paged_dialog.h>
-#include <footprint_edit_frame.h>
-#include <wx/treebook.h>
+#include <footprint_editor_settings.h>
+#include <panel_edit_options.h>
 
 
-PANEL_EDIT_OPTIONS::PANEL_EDIT_OPTIONS( PCB_BASE_EDIT_FRAME* aFrame, PAGED_DIALOG* aParent ) :
-        PANEL_EDIT_OPTIONS_BASE( aParent->GetTreebook() ), m_frame( aFrame )
+PANEL_EDIT_OPTIONS::PANEL_EDIT_OPTIONS( wxWindow* aParent, bool isFootprintEditor ) :
+        PANEL_EDIT_OPTIONS_BASE( aParent ),
+        m_isFootprintEditor( isFootprintEditor )
 {
-    m_magneticPads->Show( dynamic_cast<FOOTPRINT_EDIT_FRAME*>( m_frame ) != nullptr );
-    m_magneticGraphics->Show( dynamic_cast<FOOTPRINT_EDIT_FRAME*>( m_frame ) != nullptr );
-    m_flipLeftRight->Show( dynamic_cast<PCB_EDIT_FRAME*>( m_frame ) != nullptr );
-    m_allowFreePads->Show( dynamic_cast<PCB_EDIT_FRAME*>( m_frame ) != nullptr );
+    m_magneticPads->Show( m_isFootprintEditor );
+    m_magneticGraphics->Show( m_isFootprintEditor );
+    m_flipLeftRight->Show( !m_isFootprintEditor );
+    m_allowFreePads->Show( !m_isFootprintEditor );
 
 #ifdef __WXOSX_MAC__
     m_mouseCmdsOSX->Show( true );
@@ -50,53 +47,48 @@ PANEL_EDIT_OPTIONS::PANEL_EDIT_OPTIONS( PCB_BASE_EDIT_FRAME* aFrame, PAGED_DIALO
     m_mouseCmdsOSX->Show( false );
 #endif
 
-    m_optionsBook->SetSelection( dynamic_cast<PCB_EDIT_FRAME*>( m_frame ) ? 1 : 0 );
+    m_optionsBook->SetSelection( isFootprintEditor ? 0 : 1 );
 }
 
 
 bool PANEL_EDIT_OPTIONS::TransferDataToWindow()
 {
-    const PCB_DISPLAY_OPTIONS& displ_opts = m_frame->GetDisplayOptions();
-    const PCBNEW_SETTINGS&     general_opts = m_frame->Settings();
+    SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
 
-    wxString rotationAngle;
-    rotationAngle = AngleToStringDegrees( (double) m_frame->GetRotationAngle() );
-    m_rotationAngle->SetValue( rotationAngle );
-
-    if( dynamic_cast<PCB_EDIT_FRAME*>( m_frame ) )
+    if( m_isFootprintEditor )
     {
-        const MAGNETIC_SETTINGS& mag_opts = general_opts.m_MagneticItems;
+        FOOTPRINT_EDITOR_SETTINGS* cfg = mgr.GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>();
+
+        m_rotationAngle->SetValue( AngleToStringDegrees( (double) cfg->m_RotationAngle ) );
+        m_magneticPads->SetValue( cfg->m_MagneticItems.pads == MAGNETIC_OPTIONS::CAPTURE_ALWAYS );
+        m_magneticGraphics->SetValue( cfg->m_MagneticItems.graphics );
+        m_cbFpGraphic45Mode->SetValue( cfg->m_Use45Limit );
+    }
+    else
+    {
+        PCBNEW_SETTINGS* cfg = mgr.GetAppSettings<PCBNEW_SETTINGS>();
+
+        m_rotationAngle->SetValue( AngleToStringDegrees( (double) cfg->m_RotationAngle ) );
+        m_magneticPadChoice->SetSelection( static_cast<int>( cfg->m_MagneticItems.pads ) );
+        m_magneticTrackChoice->SetSelection( static_cast<int>( cfg->m_MagneticItems.tracks ) );
+        m_magneticGraphicsChoice->SetSelection( !cfg->m_MagneticItems.graphics );
+        m_flipLeftRight->SetValue( cfg->m_FlipLeftRight );
+        m_cbPcbGraphic45Mode->SetValue( cfg->m_Use45DegreeLimit );
 
         /* Set display options */
-        m_OptDisplayCurvedRatsnestLines->SetValue( displ_opts.m_DisplayRatsnestLinesCurved );
-        m_showSelectedRatsnest->SetValue( displ_opts.m_ShowModuleRatsnest );
+        m_OptDisplayCurvedRatsnestLines->SetValue( cfg->m_Display.m_DisplayRatsnestLinesCurved );
+        m_showSelectedRatsnest->SetValue( cfg->m_Display.m_ShowModuleRatsnest );
 
-        m_magneticPadChoice->SetSelection( static_cast<int>( mag_opts.pads ) );
-        m_magneticTrackChoice->SetSelection( static_cast<int>( mag_opts.tracks ) );
-        m_magneticGraphicsChoice->SetSelection( !mag_opts.graphics );
-
-        m_flipLeftRight->SetValue( general_opts.m_FlipLeftRight );
-
-        switch( general_opts.m_TrackDragAction )
+        switch( cfg->m_TrackDragAction )
         {
         case TRACK_DRAG_ACTION::MOVE:            m_rbTrackDragMove->SetValue( true ); break;
         case TRACK_DRAG_ACTION::DRAG:            m_rbTrackDrag45->SetValue( true );   break;
         case TRACK_DRAG_ACTION::DRAG_FREE_ANGLE: m_rbTrackDragFree->SetValue( true ); break;
         }
 
-        m_showPageLimits->SetValue( m_frame->ShowPageLimits() );
-        m_autoRefillZones->SetValue( general_opts.m_AutoRefillZones );
-        m_allowFreePads->SetValue( general_opts.m_AllowFreePads );
-
-        m_cbPcbGraphic45Mode->SetValue( general_opts.m_PcbUse45DegreeLimit );
-    }
-    else if( dynamic_cast<FOOTPRINT_EDIT_FRAME*>( m_frame ) )
-    {
-        const MAGNETIC_SETTINGS* mag_opts = m_frame->GetMagneticItemsSettings();
-
-        m_magneticPads->SetValue( mag_opts->pads == MAGNETIC_OPTIONS::CAPTURE_ALWAYS );
-        m_magneticGraphics->SetValue( mag_opts->graphics );
-        m_cbFpGraphic45Mode->SetValue( general_opts.m_FpeditUse45DegreeLimit );
+        m_showPageLimits->SetValue( cfg->m_ShowPageLimits );
+        m_autoRefillZones->SetValue( cfg->m_AutoRefillZones );
+        m_allowFreePads->SetValue( cfg->m_AllowFreePads );
     }
 
    return true;
@@ -105,65 +97,47 @@ bool PANEL_EDIT_OPTIONS::TransferDataToWindow()
 
 bool PANEL_EDIT_OPTIONS::TransferDataFromWindow()
 {
-    PCB_DISPLAY_OPTIONS displ_opts = m_frame->GetDisplayOptions();
+    SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
 
-    m_frame->SetRotationAngle( wxRound( 10.0 * wxAtof( m_rotationAngle->GetValue() ) ) );
-
-    if( dynamic_cast<PCB_EDIT_FRAME*>( m_frame ) )
+    if( m_isFootprintEditor )
     {
-        PCBNEW_SETTINGS&   pcbnewSettings = m_frame->Settings();
-        MAGNETIC_SETTINGS& mag_opts = pcbnewSettings.m_MagneticItems;
+        FOOTPRINT_EDITOR_SETTINGS* cfg = mgr.GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>();
 
-        displ_opts.m_DisplayRatsnestLinesCurved = m_OptDisplayCurvedRatsnestLines->GetValue();
-        displ_opts.m_ShowModuleRatsnest = m_showSelectedRatsnest->GetValue();
+        cfg->m_RotationAngle = wxRound( 10.0 * wxAtof( m_rotationAngle->GetValue() ) );
 
-        mag_opts.pads = static_cast<MAGNETIC_OPTIONS>( m_magneticPadChoice->GetSelection() );
-        mag_opts.tracks = static_cast<MAGNETIC_OPTIONS>( m_magneticTrackChoice->GetSelection() );
-        mag_opts.graphics = !m_magneticGraphicsChoice->GetSelection();
+        cfg->m_MagneticItems.pads = m_magneticPads->GetValue() ? MAGNETIC_OPTIONS::CAPTURE_ALWAYS
+                                                               : MAGNETIC_OPTIONS::NO_EFFECT;
+        cfg->m_MagneticItems.graphics = m_magneticGraphics->GetValue();
 
-        pcbnewSettings.m_FlipLeftRight = m_flipLeftRight->GetValue();
-        pcbnewSettings.m_AutoRefillZones = m_autoRefillZones->GetValue();
-        pcbnewSettings.m_AllowFreePads = m_allowFreePads->GetValue();
+        cfg->m_Use45Limit = m_cbFpGraphic45Mode->GetValue();
+    }
+    else
+    {
+        PCBNEW_SETTINGS* cfg = mgr.GetAppSettings<PCBNEW_SETTINGS>();
 
-        m_frame->SetShowPageLimits( m_showPageLimits->GetValue() );
+        cfg->m_Display.m_DisplayRatsnestLinesCurved = m_OptDisplayCurvedRatsnestLines->GetValue();
+        cfg->m_Display.m_ShowModuleRatsnest = m_showSelectedRatsnest->GetValue();
+
+        cfg->m_RotationAngle = wxRound( 10.0 * wxAtof( m_rotationAngle->GetValue() ) );
+
+        cfg->m_MagneticItems.pads = static_cast<MAGNETIC_OPTIONS>( m_magneticPadChoice->GetSelection() );
+        cfg->m_MagneticItems.tracks = static_cast<MAGNETIC_OPTIONS>( m_magneticTrackChoice->GetSelection() );
+        cfg->m_MagneticItems.graphics = !m_magneticGraphicsChoice->GetSelection();
+
+        cfg->m_FlipLeftRight = m_flipLeftRight->GetValue();
+        cfg->m_AutoRefillZones = m_autoRefillZones->GetValue();
+        cfg->m_AllowFreePads = m_allowFreePads->GetValue();
+        cfg->m_ShowPageLimits = m_showPageLimits->GetValue();
 
         if( m_rbTrackDragMove->GetValue() )
-            pcbnewSettings.m_TrackDragAction = TRACK_DRAG_ACTION::MOVE;
+            cfg->m_TrackDragAction = TRACK_DRAG_ACTION::MOVE;
         else if( m_rbTrackDrag45->GetValue() )
-            pcbnewSettings.m_TrackDragAction = TRACK_DRAG_ACTION::DRAG;
+            cfg->m_TrackDragAction = TRACK_DRAG_ACTION::DRAG;
         else if( m_rbTrackDragFree->GetValue() )
-            pcbnewSettings.m_TrackDragAction = TRACK_DRAG_ACTION::DRAG_FREE_ANGLE;
+            cfg->m_TrackDragAction = TRACK_DRAG_ACTION::DRAG_FREE_ANGLE;
 
-        pcbnewSettings.m_PcbUse45DegreeLimit = m_cbPcbGraphic45Mode->GetValue();
+        cfg->m_Use45DegreeLimit = m_cbPcbGraphic45Mode->GetValue();
     }
-    else if( dynamic_cast<FOOTPRINT_EDIT_FRAME*>( m_frame ) )
-    {
-        MAGNETIC_SETTINGS* mag_opts = m_frame->GetMagneticItemsSettings();
-
-        mag_opts->pads = m_magneticPads->GetValue() ? MAGNETIC_OPTIONS::CAPTURE_ALWAYS
-                                                    : MAGNETIC_OPTIONS::NO_EFFECT;
-        mag_opts->graphics = m_magneticGraphics->GetValue();
-
-        m_frame->Settings().m_FpeditUse45DegreeLimit = m_cbFpGraphic45Mode->GetValue();
-    }
-
-
-    // Apply changes to the GAL
-    KIGFX::VIEW*                view = m_frame->GetCanvas()->GetView();
-    KIGFX::PCB_PAINTER*         painter = static_cast<KIGFX::PCB_PAINTER*>( view->GetPainter() );
-    KIGFX::PCB_RENDER_SETTINGS* settings = painter->GetSettings();
-
-    m_frame->SetDisplayOptions( displ_opts, false );
-    settings->LoadDisplayOptions( displ_opts, m_frame->ShowPageLimits() );
-
-    view->UpdateAllItemsConditionally( KIGFX::REPAINT,
-                                       []( KIGFX::VIEW_ITEM* aItem ) -> bool
-                                       {
-                                           return dynamic_cast<RATSNEST_VIEW_ITEM*>( aItem );
-                                       } );
-    view->MarkTargetDirty( KIGFX::TARGET_NONCACHED );
-
-    m_frame->GetCanvas()->Refresh();
 
     return true;
 }

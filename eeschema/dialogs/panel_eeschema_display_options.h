@@ -17,28 +17,26 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef KICAD_PANEL_EESCHEMA_DISPLAY_OPTIONS_H
-#define KICAD_PANEL_EESCHEMA_DISPLAY_OPTIONS_H
+#ifndef PANEL_EESCHEMA_DISPLAY_OPTIONS_H
+#define PANEL_EESCHEMA_DISPLAY_OPTIONS_H
 
-#include <widgets/unit_binder.h>
 #include "panel_eeschema_display_options_base.h"
 
-class SCH_EDIT_FRAME;
+class APP_SETTINGS_BASE;
 class GAL_OPTIONS_PANEL;
 
 
 class PANEL_EESCHEMA_DISPLAY_OPTIONS : public PANEL_EESCHEMA_DISPLAY_OPTIONS_BASE
 {
 public:
-    PANEL_EESCHEMA_DISPLAY_OPTIONS( SCH_EDIT_FRAME* aFrame, wxWindow* aWindow );
+    PANEL_EESCHEMA_DISPLAY_OPTIONS( wxWindow* aParent, APP_SETTINGS_BASE* aAppSettings );
 
 private:
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
 
-    SCH_EDIT_FRAME*    m_frame;
     GAL_OPTIONS_PANEL* m_galOptsPanel;
 };
 
 
-#endif //KICAD_PANEL_EESCHEMA_DISPLAY_OPTIONS_H
+#endif // PANEL_EESCHEMA_DISPLAY_OPTIONS_H

@@ -36,7 +36,6 @@
 #include <kiway.h>
 #include <kiway_express.h>
 #include <launch_ext.h>
-#include <panel_hotkeys_editor.h>
 #include <reporter.h>
 #include <project/project_local_settings.h>
 #include <sch_file_versions.h>
@@ -677,13 +676,6 @@ void KICAD_MANAGER_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
     wxCHECK( settings, /*void*/);
 
     settings->m_LeftWinWidth = m_leftWin->GetSize().x;
-}
-
-
-void KICAD_MANAGER_FRAME::InstallPreferences( PAGED_DIALOG* aParent,
-                                              PANEL_HOTKEYS_EDITOR* aHotkeysPanel  )
-{
-    aHotkeysPanel->AddHotKeys( GetToolManager() );
 }
 
 

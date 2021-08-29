@@ -33,7 +33,6 @@
 #include <gerbview_settings.h>
 #include <gal/graphics_abstraction_layer.h>
 #include <drawing_sheet/ds_proxy_view_item.h>
-#include <settings/common_settings.h>
 #include <settings/settings_manager.h>
 #include <tool/tool_manager.h>
 #include <tool/action_toolbar.h>
@@ -52,13 +51,7 @@
 #include <base_screen.h>
 #include <gerbview_painter.h>
 #include <widgets/msgpanel.h>
-#include <widgets/paged_dialog.h>
-#include <dialogs/panel_gerbview_settings.h>
-#include <dialogs/panel_gerbview_display_options.h>
-#include <dialogs/panel_gerbview_excellon_settings.h>
-#include <panel_hotkeys_editor.h>
 #include <wx/wupdlock.h>
-#include <wx/treebook.h>
 
 #include "widgets/gbr_layer_box_selector.h"
 #include "widgets/gerbview_layer_widget.h"
@@ -1051,23 +1044,6 @@ void GERBVIEW_FRAME::ActivateGalCanvas()
 }
 
 
-void GERBVIEW_FRAME::InstallPreferences( PAGED_DIALOG* aParent,
-                                         PANEL_HOTKEYS_EDITOR* aHotkeysPanel )
-{
-    wxTreebook* book = aParent->GetTreebook();
-
-    book->AddPage( new wxPanel( book ), _( "GerbView" ) );
-    book->AddSubPage( new PANEL_GERBVIEW_DISPLAY_OPTIONS( this, book ),
-                      _( "Display Options" ) );
-    book->AddSubPage( new PANEL_GERBVIEW_SETTINGS( this, book ), _( "Editing Options" ) );
-    book->AddSubPage( new PANEL_GERBVIEW_EXCELLON_SETTINGS( this, book ),
-                      _( "Excellon Options" ) );
-
-    aHotkeysPanel->AddHotKeys( GetToolManager() );
-}
-
-
-
 void GERBVIEW_FRAME::setupTools()
 {
     // Create the manager and dispatcher & route draw panel events to the dispatcher
@@ -1195,6 +1171,23 @@ void GERBVIEW_FRAME::setupUIConditions()
 void GERBVIEW_FRAME::CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVarsChanged )
 {
     EDA_DRAW_FRAME::CommonSettingsChanged( aEnvVarsChanged, aTextVarsChanged );
+
+    GERBVIEW_SETTINGS* cfg = static_cast<GERBVIEW_SETTINGS*>( config() );
+    SetPageSettings( PAGE_INFO( cfg->m_Appearance.page_type ) );
+
+    if( cfg->m_Display.m_DiffMode )
+        UpdateDiffLayers();
+
+    // Apply changes to the GAL
+    auto painter = static_cast<KIGFX::GERBVIEW_PAINTER*>( GetCanvas()->GetView()->GetPainter() );
+    auto settings = painter->GetSettings();
+    settings->LoadDisplayOptions( GetDisplayOptions() );
+
+    SetElementVisibility( LAYER_DCODES, GetDisplayOptions().m_DisplayDCodes );
+
+    GetCanvas()->GetView()->MarkTargetDirty( KIGFX::TARGET_NONCACHED );
+    GetCanvas()->GetView()->UpdateAllItems( KIGFX::REPAINT );
+    GetCanvas()->ForceRefresh();
 
     RecreateToolbars();
     Layout();

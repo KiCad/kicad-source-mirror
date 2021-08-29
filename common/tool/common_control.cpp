@@ -256,7 +256,7 @@ int COMMON_CONTROL::ShowHelp( const TOOL_EVENT& aEvent )
 
 int COMMON_CONTROL::ListHotKeys( const TOOL_EVENT& aEvent )
 {
-    DisplayHotkeyList( m_frame, m_toolMgr );
+    DisplayHotkeyList( m_frame );
     return 0;
 }
 

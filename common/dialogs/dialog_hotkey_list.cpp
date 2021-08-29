@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
- * Copyright (C) 2018-2020 Kicad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018-2021 Kicad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,22 +22,22 @@
  */
 
 #include <dialogs/dialog_hotkey_list.h>
-
+#include <kiface_base.h>
 #include <panel_hotkeys_editor.h>
 #include <widgets/ui_common.h>
 
 #include <wx/sizer.h>
 #include <wx/button.h>
 
-
-DIALOG_LIST_HOTKEYS::DIALOG_LIST_HOTKEYS( EDA_BASE_FRAME* aParent, TOOL_MANAGER* aToolMgr ):
+DIALOG_LIST_HOTKEYS::DIALOG_LIST_HOTKEYS( EDA_BASE_FRAME* aParent ):
     DIALOG_SHIM( aParent, wxID_ANY, _( "Hotkey List" ) )
 {
     const int   margin = KIUI::GetStdMargin();
     wxBoxSizer* main_sizer = new wxBoxSizer( wxVERTICAL );
 
     m_hk_list = new PANEL_HOTKEYS_EDITOR( aParent, this, true );
-    m_hk_list->AddHotKeys( aToolMgr );
+
+    Kiface().GetActions( m_hk_list->ActionsList() );
 
     main_sizer->Add( m_hk_list, 1, wxTOP | wxLEFT | wxRIGHT | wxEXPAND, margin );
 

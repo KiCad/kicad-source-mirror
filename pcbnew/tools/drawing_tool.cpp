@@ -27,6 +27,8 @@
 
 #include <pgm_base.h>
 #include <settings/settings_manager.h>
+#include <pcbnew_settings.h>
+#include <footprint_editor_settings.h>
 #include <dialogs/dialog_text_properties.h>
 #include <dialogs/dialog_track_via_size.h>
 #include <geometry/geometry_utils.h>
@@ -255,12 +257,13 @@ void DRAWING_TOOL::updateStatusBar() const
 {
     if( m_frame )
     {
-        bool constrained;
+        SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
+        bool              constrained;
 
         if( m_frame->IsType( FRAME_PCB_EDITOR ) )
-            constrained = m_frame->Settings().m_PcbUse45DegreeLimit;
+            constrained = mgr.GetAppSettings<PCBNEW_SETTINGS>()->m_Use45DegreeLimit;
         else
-            constrained = m_frame->Settings().m_FpeditUse45DegreeLimit;
+            constrained = mgr.GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>()->m_Use45Limit;
 
         m_frame->DisplayConstraintsMsg(
                 constrained ? _( "Constrain to H, V, 45" ) : wxString( "" ) );
@@ -1396,14 +1399,20 @@ int DRAWING_TOOL::SetAnchor( const TOOL_EVENT& aEvent )
 
 int DRAWING_TOOL::ToggleLine45degMode( const TOOL_EVENT& toolEvent )
 {
-    if( m_frame->IsType( FRAME_PCB_EDITOR ) )
-        m_frame->Settings().m_PcbUse45DegreeLimit = !m_frame->Settings().m_PcbUse45DegreeLimit;
+#define TOGGLE( a ) a = !a
+
+    SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
+
+    if( frame()->IsType( FRAME_PCB_EDITOR ) )
+        TOGGLE( mgr.GetAppSettings<PCBNEW_SETTINGS>()->m_Use45DegreeLimit );
     else
-        m_frame->Settings().m_FpeditUse45DegreeLimit = !m_frame->Settings().m_FpeditUse45DegreeLimit;
+        TOGGLE( mgr.GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>()->m_Use45Limit );
 
     updateStatusBar();
 
     return 0;
+
+#undef TOGGLE
 }
 
 

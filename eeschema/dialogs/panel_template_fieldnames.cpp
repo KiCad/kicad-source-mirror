@@ -22,24 +22,53 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <pgm_base.h>
+#include <settings/settings_manager.h>
+#include <eeschema_settings.h>
 #include <widgets/wx_grid.h>
 #include <template_fieldnames.h>
 #include <grid_tricks.h>
-#include <sch_edit_frame.h>
 #include <bitmaps.h>
-#include <schematic.h>
-#include <panel_eeschema_template_fieldnames.h>
-#include <kiface_base.h>
+#include <macros.h>
+#include <panel_template_fieldnames.h>
 
-PANEL_EESCHEMA_TEMPLATE_FIELDNAMES::PANEL_EESCHEMA_TEMPLATE_FIELDNAMES( SCH_EDIT_FRAME* aFrame,
-                                                                        wxWindow* aWindow,
-                                                                        bool aGlobal ) :
-        PANEL_EESCHEMA_TEMPLATE_FIELDNAMES_BASE( aWindow ),
-        m_frame( aFrame ),
-        m_global( aGlobal )
+PANEL_TEMPLATE_FIELDNAMES::PANEL_TEMPLATE_FIELDNAMES( wxWindow* aWindow,
+                                                      TEMPLATES* aProjectTemplateMgr ) :
+        PANEL_TEMPLATE_FIELDNAMES_BASE( aWindow )
 {
-    m_title->SetLabel( aGlobal ? _( "Global field name templates:" )
-                               : _( "Project field name templates:" ) );
+    if( aProjectTemplateMgr )
+    {
+        m_title->SetLabel( _( "Project field name templates:" ) );
+        m_global = false;
+        m_templateMgr = aProjectTemplateMgr;
+    }
+    else
+    {
+        m_title->SetLabel( _( "Global field name templates:" ) );
+        m_global = true;
+        m_templateMgr = &m_templateMgrInstance;
+
+        EESCHEMA_SETTINGS* cfg = Pgm().GetSettingsManager().GetAppSettings<EESCHEMA_SETTINGS>();
+
+        if( cfg )
+        {
+            // Read global fieldname templates
+            wxString templateFieldNames = cfg->m_Drawing.field_names;
+
+            if( !templateFieldNames.IsEmpty() )
+            {
+                TEMPLATE_FIELDNAMES_LEXER  field_lexer( TO_UTF8( templateFieldNames ) );
+
+                try
+                {
+                    m_templateMgr->Parse( &field_lexer, true );
+                }
+                catch( const IO_ERROR& )
+                {
+                }
+            }
+        }
+    }
 
     m_addFieldButton->SetBitmap( KiBitmap( BITMAPS::small_plus ) );
     m_deleteFieldButton->SetBitmap( KiBitmap( BITMAPS::small_trash ) );
@@ -51,23 +80,22 @@ PANEL_EESCHEMA_TEMPLATE_FIELDNAMES::PANEL_EESCHEMA_TEMPLATE_FIELDNAMES( SCH_EDIT
 }
 
 
-PANEL_EESCHEMA_TEMPLATE_FIELDNAMES::~PANEL_EESCHEMA_TEMPLATE_FIELDNAMES()
+PANEL_TEMPLATE_FIELDNAMES::~PANEL_TEMPLATE_FIELDNAMES()
 {
     // Delete the GRID_TRICKS.
     m_grid->PopEventHandler( true );
 }
 
 
-bool PANEL_EESCHEMA_TEMPLATE_FIELDNAMES::TransferDataToWindow()
+bool PANEL_TEMPLATE_FIELDNAMES::TransferDataToWindow()
 {
-    SCHEMATIC& schematic = m_frame->Schematic();
+    m_fields = m_templateMgr->GetTemplateFieldNames( true );
 
-    m_fields = schematic.Settings().m_TemplateFieldNames.GetTemplateFieldNames( m_global );
     return TransferDataToGrid();
 }
 
 
-void PANEL_EESCHEMA_TEMPLATE_FIELDNAMES::OnAddButtonClick( wxCommandEvent& event )
+void PANEL_TEMPLATE_FIELDNAMES::OnAddButtonClick( wxCommandEvent& event )
 {
     if( !m_grid->CommitPendingChanges() )
         return;
@@ -86,7 +114,7 @@ void PANEL_EESCHEMA_TEMPLATE_FIELDNAMES::OnAddButtonClick( wxCommandEvent& event
 }
 
 
-void PANEL_EESCHEMA_TEMPLATE_FIELDNAMES::OnDeleteButtonClick( wxCommandEvent& event )
+void PANEL_TEMPLATE_FIELDNAMES::OnDeleteButtonClick( wxCommandEvent& event )
 {
     if( !m_grid->CommitPendingChanges() )
         return;
@@ -113,7 +141,7 @@ void PANEL_EESCHEMA_TEMPLATE_FIELDNAMES::OnDeleteButtonClick( wxCommandEvent& ev
 }
 
 
-bool PANEL_EESCHEMA_TEMPLATE_FIELDNAMES::TransferDataToGrid()
+bool PANEL_TEMPLATE_FIELDNAMES::TransferDataToGrid()
 {
     m_grid->Freeze();
 
@@ -145,7 +173,7 @@ bool PANEL_EESCHEMA_TEMPLATE_FIELDNAMES::TransferDataToGrid()
 }
 
 
-bool PANEL_EESCHEMA_TEMPLATE_FIELDNAMES::TransferDataFromGrid()
+bool PANEL_TEMPLATE_FIELDNAMES::TransferDataFromGrid()
 {
     if( !m_grid->CommitPendingChanges() )
         return false;
@@ -161,27 +189,25 @@ bool PANEL_EESCHEMA_TEMPLATE_FIELDNAMES::TransferDataFromGrid()
 }
 
 
-bool PANEL_EESCHEMA_TEMPLATE_FIELDNAMES::TransferDataFromWindow()
+bool PANEL_TEMPLATE_FIELDNAMES::TransferDataFromWindow()
 {
     if( !TransferDataFromGrid() )
         return false;
 
-    SCHEMATIC& schematic = m_frame->Schematic();
-
-    schematic.Settings().m_TemplateFieldNames.DeleteAllFieldNameTemplates( m_global );
+    m_templateMgr->DeleteAllFieldNameTemplates( m_global );
 
     for( const TEMPLATE_FIELDNAME& field : m_fields )
-        schematic.Settings().m_TemplateFieldNames.AddTemplateFieldName( field, m_global );
+        m_templateMgr->AddTemplateFieldName( field, m_global );
 
     if( m_global )
     {
-        auto* cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
+        EESCHEMA_SETTINGS* cfg = Pgm().GetSettingsManager().GetAppSettings<EESCHEMA_SETTINGS>();
 
         if( cfg )
         {
             // Save global fieldname templates
             STRING_FORMATTER sf;
-            schematic.Settings().m_TemplateFieldNames.Format( &sf, 0, true );
+            m_templateMgr->Format( &sf, 0, true );
 
             wxString record = FROM_UTF8( sf.GetString().c_str() );
             record.Replace( wxT("\n"), wxT(""), true );   // strip all newlines
@@ -195,7 +221,7 @@ bool PANEL_EESCHEMA_TEMPLATE_FIELDNAMES::TransferDataFromWindow()
 }
 
 
-void PANEL_EESCHEMA_TEMPLATE_FIELDNAMES::AdjustGridColumns( int aWidth )
+void PANEL_TEMPLATE_FIELDNAMES::AdjustGridColumns( int aWidth )
 {
     if( aWidth <= 0 )
         return;
@@ -209,7 +235,7 @@ void PANEL_EESCHEMA_TEMPLATE_FIELDNAMES::AdjustGridColumns( int aWidth )
 }
 
 
-void PANEL_EESCHEMA_TEMPLATE_FIELDNAMES::OnSizeGrid( wxSizeEvent& event )
+void PANEL_TEMPLATE_FIELDNAMES::OnSizeGrid( wxSizeEvent& event )
 {
     AdjustGridColumns( event.GetSize().GetX() );
 
@@ -217,7 +243,7 @@ void PANEL_EESCHEMA_TEMPLATE_FIELDNAMES::OnSizeGrid( wxSizeEvent& event )
 }
 
 
-void PANEL_EESCHEMA_TEMPLATE_FIELDNAMES::ImportSettingsFrom( TEMPLATES* templateMgr )
+void PANEL_TEMPLATE_FIELDNAMES::ImportSettingsFrom( TEMPLATES* templateMgr )
 {
     m_fields = templateMgr->GetTemplateFieldNames( m_global );
     TransferDataToGrid();

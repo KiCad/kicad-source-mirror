@@ -418,11 +418,15 @@ void SCH_BASE_FRAME::CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVars
 {
     EDA_DRAW_FRAME::CommonSettingsChanged( aEnvVarsChanged, aTextVarsChanged );
 
-    EESCHEMA_SETTINGS* cfg = Pgm().GetSettingsManager().GetAppSettings<EESCHEMA_SETTINGS>();
-    m_colorSettings = Pgm().GetSettingsManager().GetColorSettings( cfg->m_ColorTheme );
+    COLOR_SETTINGS* colorSettings = GetColorSettings();
+
+    GetCanvas()->GetView()->GetPainter()->GetSettings()->LoadColors( colorSettings );
+    GetCanvas()->GetGAL()->SetAxesColor( colorSettings->GetColor( LAYER_SCHEMATIC_GRID_AXES ) );
+    GetCanvas()->GetGAL()->DrawGrid();
 
     GetCanvas()->GetView()->UpdateAllItems( KIGFX::ALL );
-    GetCanvas()->Refresh();
+    GetCanvas()->GetView()->RecacheAllItems();
+    GetCanvas()->GetView()->MarkTargetDirty( KIGFX::TARGET_NONCACHED );
 }
 
 
@@ -430,9 +434,19 @@ COLOR_SETTINGS* SCH_BASE_FRAME::GetColorSettings() const
 {
     if( !m_colorSettings )
     {
-        SETTINGS_MANAGER&  settingsManager = Pgm().GetSettingsManager();
-        EESCHEMA_SETTINGS* cfg = settingsManager.GetAppSettings<EESCHEMA_SETTINGS>();
-        COLOR_SETTINGS*    colorSettings = settingsManager.GetColorSettings( cfg->m_ColorTheme );
+        SETTINGS_MANAGER&  mgr = Pgm().GetSettingsManager();
+        EESCHEMA_SETTINGS* cfg = mgr.GetAppSettings<EESCHEMA_SETTINGS>();
+        wxString           colorTheme = cfg->m_ColorTheme;
+
+        if( IsType( FRAME_SCH_SYMBOL_EDITOR ) )
+        {
+            SYMBOL_EDITOR_SETTINGS* symCfg = mgr.GetAppSettings<SYMBOL_EDITOR_SETTINGS>();
+
+            if( !symCfg->m_UseEeschemaColorSettings )
+                colorTheme = symCfg->m_ColorTheme;
+        }
+
+        COLOR_SETTINGS* colorSettings = mgr.GetColorSettings( colorTheme );
 
         const_cast<SCH_BASE_FRAME*>( this )->m_colorSettings = colorSettings;
     }

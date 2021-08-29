@@ -22,28 +22,26 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <pgm_base.h>
+#include <settings/settings_manager.h>
+#include <eda_3d_viewer_settings.h>
 #include "panel_3D_raytracing_options.h"
-#include <3d_canvas/board_adapter.h>
-#include <3d_viewer/eda_3d_viewer_frame.h>
-#include <3d_viewer/tools/eda_3d_controller.h>
-#include <bitmaps.h>
-#include <tool/tool_manager.h>
 
 
-PANEL_3D_RAYTRACING_OPTIONS::PANEL_3D_RAYTRACING_OPTIONS( EDA_3D_VIEWER_FRAME* aFrame,
-                                                          wxWindow* aParent ) :
-        PANEL_3D_RAYTRACING_OPTIONS_BASE( aParent ),
-        m_settings( aFrame->GetAdapter() ),
-        m_canvas( aFrame->GetCanvas() )
+PANEL_3D_RAYTRACING_OPTIONS::PANEL_3D_RAYTRACING_OPTIONS( wxWindow* aParent ) :
+        PANEL_3D_RAYTRACING_OPTIONS_BASE( aParent )
 {
 }
 
 
 void PANEL_3D_RAYTRACING_OPTIONS::ResetPanel()
 {
-    m_settings.m_RtCameraLightColor = SFVEC3F( 0.2f );
-    m_settings.m_RtLightColorTop = SFVEC3F( 0.247f );
-    m_settings.m_RtLightColorBottom = SFVEC3F( 0.247f );
+    SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
+    EDA_3D_VIEWER_SETTINGS* cfg = mgr.GetAppSettings<EDA_3D_VIEWER_SETTINGS>();
+
+    cfg->m_Render.raytrace_lightColorCamera = COLOR4D( 0.2, 0.2, 0.2, 1.0 );
+    cfg->m_Render.raytrace_lightColorTop = COLOR4D( 0.247, 0.247, 0.247, 1.0 );
+    cfg->m_Render.raytrace_lightColorBottom = COLOR4D( 0.247, 0.247, 0.247, 1.0 );
 
     const std::vector<int> default_elevation =
     {
@@ -55,14 +53,10 @@ void PANEL_3D_RAYTRACING_OPTIONS::ResetPanel()
         45, 135, 225, 315, 45, 135, 225, 315,
     };
 
-    for( size_t i = 0; i < m_settings.m_RtLightSphericalCoords.size(); ++i )
+    for( size_t i = 0; i < 8; ++i )
     {
-        m_settings.m_RtLightColor[i] = SFVEC3F( 0.168f );
-
-        m_settings.m_RtLightSphericalCoords[i].x =
-                ( (float) default_elevation[i] + 90.0f ) / 180.0f;
-
-        m_settings.m_RtLightSphericalCoords[i].y = (float) default_azimuth[i] / 180.0f;
+        cfg->m_Render.raytrace_lightElevation[i] = default_elevation[i];
+        cfg->m_Render.raytrace_lightAzimuth[i] = default_azimuth[i];
     }
 
     TransferColorDataToWindow();
@@ -71,91 +65,83 @@ void PANEL_3D_RAYTRACING_OPTIONS::ResetPanel()
 
 void PANEL_3D_RAYTRACING_OPTIONS::TransferColorDataToWindow()
 {
-    auto transfer_color = [] ( const SFVEC3F& aSource, COLOR_SWATCH *aTarget )
-    {
-        aTarget->SetSupportsOpacity( false );
-        aTarget->SetDefaultColor( KIGFX::COLOR4D( 0.5, 0.5, 0.5, 1.0 ) );
-        aTarget->SetSwatchColor( COLOR4D( aSource.r, aSource.g, aSource.b, 1.0 ), false );
-    };
+    SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
+    EDA_3D_VIEWER_SETTINGS* cfg = mgr.GetAppSettings<EDA_3D_VIEWER_SETTINGS>();
 
-    transfer_color( m_settings.m_RtCameraLightColor, m_colourPickerCameraLight );
-    transfer_color( m_settings.m_RtLightColorTop, m_colourPickerTopLight );
-    transfer_color( m_settings.m_RtLightColorBottom, m_colourPickerBottomLight );
+    auto transfer_color =
+            []( COLOR4D aColor, COLOR_SWATCH *aTarget )
+            {
+                aTarget->SetSupportsOpacity( false );
+                aTarget->SetDefaultColor( KIGFX::COLOR4D( 0.5, 0.5, 0.5, 1.0 ) );
+                aTarget->SetSwatchColor( aColor, false );
+            };
 
-    transfer_color( m_settings.m_RtLightColor[0], m_colourPickerLight1 );
-    transfer_color( m_settings.m_RtLightColor[1], m_colourPickerLight2 );
-    transfer_color( m_settings.m_RtLightColor[2], m_colourPickerLight3 );
-    transfer_color( m_settings.m_RtLightColor[3], m_colourPickerLight4 );
+    auto transfer_value =
+            []( wxTextCtrl* aCtrl, int aValue )
+            {
+                aCtrl->SetValue( StringFromValue( EDA_UNITS::UNSCALED, aValue ) );
+            };
 
-    transfer_color( m_settings.m_RtLightColor[4], m_colourPickerLight5 );
-    transfer_color( m_settings.m_RtLightColor[5], m_colourPickerLight6 );
-    transfer_color( m_settings.m_RtLightColor[6], m_colourPickerLight7 );
-    transfer_color( m_settings.m_RtLightColor[7], m_colourPickerLight8 );
+    transfer_color( cfg->m_Render.raytrace_lightColorCamera, m_colourPickerCameraLight );
+    transfer_color( cfg->m_Render.raytrace_lightColorTop, m_colourPickerTopLight );
+    transfer_color( cfg->m_Render.raytrace_lightColorBottom, m_colourPickerBottomLight );
 
-    m_spinCtrlLightElevation1->SetValue(
-            (int)( m_settings.m_RtLightSphericalCoords[0].x * 180.0f - 90.0f ) );
-    m_spinCtrlLightElevation2->SetValue(
-            (int)( m_settings.m_RtLightSphericalCoords[1].x * 180.0f - 90.0f ) );
-    m_spinCtrlLightElevation3->SetValue(
-            (int)( m_settings.m_RtLightSphericalCoords[2].x * 180.0f - 90.0f ) );
-    m_spinCtrlLightElevation4->SetValue(
-            (int)( m_settings.m_RtLightSphericalCoords[3].x * 180.0f - 90.0f ) );
-    m_spinCtrlLightElevation5->SetValue(
-            (int)( m_settings.m_RtLightSphericalCoords[4].x * 180.0f - 90.0f ) );
-    m_spinCtrlLightElevation6->SetValue(
-            (int)( m_settings.m_RtLightSphericalCoords[5].x * 180.0f - 90.0f ) );
-    m_spinCtrlLightElevation7->SetValue(
-            (int)( m_settings.m_RtLightSphericalCoords[6].x * 180.0f - 90.0f ) );
-    m_spinCtrlLightElevation8->SetValue(
-            (int)( m_settings.m_RtLightSphericalCoords[7].x * 180.0f - 90.0f ) );
+    transfer_color( cfg->m_Render.raytrace_lightColor[0], m_colourPickerLight1 );
+    transfer_color( cfg->m_Render.raytrace_lightColor[1], m_colourPickerLight2 );
+    transfer_color( cfg->m_Render.raytrace_lightColor[2], m_colourPickerLight3 );
+    transfer_color( cfg->m_Render.raytrace_lightColor[3], m_colourPickerLight4 );
 
-    m_spinCtrlLightAzimuth1->SetValue(
-            (int)( m_settings.m_RtLightSphericalCoords[0].y * 180.0f ) );
-    m_spinCtrlLightAzimuth2->SetValue(
-            (int)( m_settings.m_RtLightSphericalCoords[1].y * 180.0f ) );
-    m_spinCtrlLightAzimuth3->SetValue(
-            (int)( m_settings.m_RtLightSphericalCoords[2].y * 180.0f ) );
-    m_spinCtrlLightAzimuth4->SetValue(
-            (int)( m_settings.m_RtLightSphericalCoords[3].y * 180.0f ) );
-    m_spinCtrlLightAzimuth5->SetValue(
-            (int)( m_settings.m_RtLightSphericalCoords[4].y * 180.0f ) );
-    m_spinCtrlLightAzimuth6->SetValue(
-            (int)( m_settings.m_RtLightSphericalCoords[5].y * 180.0f ) );
-    m_spinCtrlLightAzimuth7->SetValue(
-            (int)( m_settings.m_RtLightSphericalCoords[6].y * 180.0f ) );
-    m_spinCtrlLightAzimuth8->SetValue(
-            (int)( m_settings.m_RtLightSphericalCoords[7].y * 180.0f ) );
+    transfer_color( cfg->m_Render.raytrace_lightColor[4], m_colourPickerLight5 );
+    transfer_color( cfg->m_Render.raytrace_lightColor[5], m_colourPickerLight6 );
+    transfer_color( cfg->m_Render.raytrace_lightColor[6], m_colourPickerLight7 );
+    transfer_color( cfg->m_Render.raytrace_lightColor[7], m_colourPickerLight8 );
+
+    transfer_value( m_lightElevation1, cfg->m_Render.raytrace_lightElevation[0] );
+    transfer_value( m_lightElevation2, cfg->m_Render.raytrace_lightElevation[1] );
+    transfer_value( m_lightElevation3, cfg->m_Render.raytrace_lightElevation[2] );
+    transfer_value( m_lightElevation4, cfg->m_Render.raytrace_lightElevation[3] );
+    transfer_value( m_lightElevation5, cfg->m_Render.raytrace_lightElevation[4] );
+    transfer_value( m_lightElevation6, cfg->m_Render.raytrace_lightElevation[5] );
+    transfer_value( m_lightElevation7, cfg->m_Render.raytrace_lightElevation[6] );
+    transfer_value( m_lightElevation8, cfg->m_Render.raytrace_lightElevation[7] );
+
+    transfer_value( m_lightAzimuth1, cfg->m_Render.raytrace_lightAzimuth[0] );
+    transfer_value( m_lightAzimuth2, cfg->m_Render.raytrace_lightAzimuth[1] );
+    transfer_value( m_lightAzimuth3, cfg->m_Render.raytrace_lightAzimuth[2] );
+    transfer_value( m_lightAzimuth4, cfg->m_Render.raytrace_lightAzimuth[3] );
+    transfer_value( m_lightAzimuth5, cfg->m_Render.raytrace_lightAzimuth[4] );
+    transfer_value( m_lightAzimuth6, cfg->m_Render.raytrace_lightAzimuth[5] );
+    transfer_value( m_lightAzimuth7, cfg->m_Render.raytrace_lightAzimuth[6] );
+    transfer_value( m_lightAzimuth8, cfg->m_Render.raytrace_lightAzimuth[7] );
 }
 
 
 bool PANEL_3D_RAYTRACING_OPTIONS::TransferDataToWindow()
 {
-    m_checkBoxRaytracing_renderShadows->SetValue(
-            m_settings.GetFlag( FL_RENDER_RAYTRACING_SHADOWS ) );
-    m_checkBoxRaytracing_addFloor->SetValue( m_settings.GetFlag( FL_RENDER_RAYTRACING_BACKFLOOR ) );
-    m_checkBoxRaytracing_showRefractions->SetValue(
-            m_settings.GetFlag( FL_RENDER_RAYTRACING_REFRACTIONS ) );
-    m_checkBoxRaytracing_showReflections->SetValue(
-            m_settings.GetFlag( FL_RENDER_RAYTRACING_REFLECTIONS ) );
-    m_checkBoxRaytracing_postProcessing->SetValue(
-            m_settings.GetFlag( FL_RENDER_RAYTRACING_POST_PROCESSING ) );
-    m_checkBoxRaytracing_antiAliasing->SetValue(
-            m_settings.GetFlag( FL_RENDER_RAYTRACING_ANTI_ALIASING ) );
-    m_checkBoxRaytracing_proceduralTextures->SetValue(
-            m_settings.GetFlag( FL_RENDER_RAYTRACING_PROCEDURAL_TEXTURES ) );
+    SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
+    EDA_3D_VIEWER_SETTINGS* cfg = mgr.GetAppSettings<EDA_3D_VIEWER_SETTINGS>();
 
-    m_spinCtrl_NrSamples_Shadows->SetValue( m_settings.m_RtShadowSampleCount );
-    m_spinCtrl_NrSamples_Reflections->SetValue( m_settings.m_RtReflectionSampleCount );
-    m_spinCtrl_NrSamples_Refractions->SetValue( m_settings.m_RtRefractionSampleCount );
+    m_cbRaytracing_renderShadows->SetValue( cfg->m_Render.raytrace_shadows );
+    m_cbRaytracing_addFloor->SetValue( cfg->m_Render.raytrace_backfloor );
+    m_cbRaytracing_showRefractions->SetValue( cfg->m_Render.raytrace_refractions );
+    m_cbRaytracing_showReflections->SetValue( cfg->m_Render.raytrace_reflections );
+    m_cbRaytracing_postProcessing->SetValue( cfg->m_Render.raytrace_post_processing );
+    m_cbRaytracing_antiAliasing->SetValue( cfg->m_Render.raytrace_anti_aliasing );
+    m_cbRaytracing_proceduralTextures->SetValue( cfg->m_Render.raytrace_procedural_textures );
 
-    m_spinCtrlDouble_SpreadFactor_Shadows->SetValue( m_settings.m_RtSpreadShadows * 100.0f );
-    m_spinCtrlDouble_SpreadFactor_Reflections->SetValue(
-            m_settings.m_RtSpreadReflections * 100.0f );
-    m_spinCtrlDouble_SpreadFactor_Refractions->SetValue(
-            m_settings.m_RtSpreadRefractions * 100.0f );
+    m_numSamples_Shadows->SetValue( cfg->m_Render.raytrace_nrsamples_shadows );
+    m_numSamples_Reflections->SetValue( cfg->m_Render.raytrace_nrsamples_reflections );
+    m_numSamples_Refractions->SetValue( cfg->m_Render.raytrace_nrsamples_refractions );
 
-    m_spinCtrlRecursiveLevel_Reflections->SetValue( m_settings.m_RtRecursiveReflectionCount );
-    m_spinCtrlRecursiveLevel_Refractions->SetValue( m_settings.m_RtRecursiveRefractionCount );
+    m_spreadFactor_Shadows->SetValue( StringFromValue( EDA_UNITS::PERCENT,
+                                                       cfg->m_Render.raytrace_spread_shadows * 100.0f ) );
+    m_spreadFactor_Reflections->SetValue( StringFromValue( EDA_UNITS::PERCENT,
+                                                           cfg->m_Render.raytrace_spread_reflections * 100.0f ) );
+    m_spreadFactor_Refractions->SetValue( StringFromValue( EDA_UNITS::PERCENT,
+                                                           cfg->m_Render.raytrace_spread_refractions * 100.0f ) );
+
+    m_recursiveLevel_Reflections->SetValue( cfg->m_Render.raytrace_recursivelevel_reflections );
+    m_recursiveLevel_Refractions->SetValue( cfg->m_Render.raytrace_recursivelevel_refractions );
 
     TransferColorDataToWindow();
 
@@ -165,89 +151,67 @@ bool PANEL_3D_RAYTRACING_OPTIONS::TransferDataToWindow()
 
 bool PANEL_3D_RAYTRACING_OPTIONS::TransferDataFromWindow()
 {
-    m_settings.SetFlag( FL_RENDER_RAYTRACING_SHADOWS,
-                        m_checkBoxRaytracing_renderShadows->GetValue() );
-    m_settings.SetFlag( FL_RENDER_RAYTRACING_BACKFLOOR,
-                        m_checkBoxRaytracing_addFloor->GetValue() );
-    m_settings.SetFlag( FL_RENDER_RAYTRACING_REFRACTIONS,
-                        m_checkBoxRaytracing_showRefractions->GetValue() );
-    m_settings.SetFlag( FL_RENDER_RAYTRACING_REFLECTIONS,
-                        m_checkBoxRaytracing_showReflections->GetValue() );
-    m_settings.SetFlag( FL_RENDER_RAYTRACING_POST_PROCESSING,
-                        m_checkBoxRaytracing_postProcessing->GetValue() );
-    m_settings.SetFlag( FL_RENDER_RAYTRACING_ANTI_ALIASING,
-                        m_checkBoxRaytracing_antiAliasing->GetValue() );
-    m_settings.SetFlag( FL_RENDER_RAYTRACING_PROCEDURAL_TEXTURES,
-                        m_checkBoxRaytracing_proceduralTextures->GetValue() );
+    SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
+    EDA_3D_VIEWER_SETTINGS* cfg = mgr.GetAppSettings<EDA_3D_VIEWER_SETTINGS>();
 
-    m_settings.m_RtShadowSampleCount = m_spinCtrl_NrSamples_Shadows->GetValue();
-    m_settings.m_RtReflectionSampleCount = m_spinCtrl_NrSamples_Reflections->GetValue();
-    m_settings.m_RtRefractionSampleCount= m_spinCtrl_NrSamples_Refractions->GetValue();
+    cfg->m_Render.raytrace_shadows = m_cbRaytracing_renderShadows->GetValue();
+    cfg->m_Render.raytrace_backfloor = m_cbRaytracing_addFloor->GetValue();
+    cfg->m_Render.raytrace_refractions = m_cbRaytracing_showRefractions->GetValue();
+    cfg->m_Render.raytrace_reflections = m_cbRaytracing_showReflections->GetValue();
+    cfg->m_Render.raytrace_post_processing = m_cbRaytracing_postProcessing->GetValue();
+    cfg->m_Render.raytrace_anti_aliasing = m_cbRaytracing_antiAliasing->GetValue();
+    cfg->m_Render.raytrace_procedural_textures = m_cbRaytracing_proceduralTextures->GetValue();
 
-    m_settings.m_RtSpreadShadows =
-            static_cast<float>( m_spinCtrlDouble_SpreadFactor_Shadows->GetValue() ) / 100.0f;
-    m_settings.m_RtSpreadReflections =
-            static_cast<float>( m_spinCtrlDouble_SpreadFactor_Reflections->GetValue() ) / 100.0f;
-    m_settings.m_RtSpreadRefractions =
-            static_cast<float>( m_spinCtrlDouble_SpreadFactor_Refractions->GetValue() ) / 100.0f;
+    cfg->m_Render.raytrace_nrsamples_shadows = m_numSamples_Shadows->GetValue();
+    cfg->m_Render.raytrace_nrsamples_reflections = m_numSamples_Reflections->GetValue();
+    cfg->m_Render.raytrace_nrsamples_refractions = m_numSamples_Refractions->GetValue();
 
-    m_settings.m_RtRecursiveReflectionCount = m_spinCtrlRecursiveLevel_Reflections->GetValue();
-    m_settings.m_RtRecursiveRefractionCount = m_spinCtrlRecursiveLevel_Refractions->GetValue();
+    cfg->m_Render.raytrace_spread_shadows =
+            DoubleValueFromString( EDA_UNITS::PERCENT, m_spreadFactor_Shadows->GetValue() ) / 100.0f;
+    cfg->m_Render.raytrace_spread_reflections =
+            DoubleValueFromString( EDA_UNITS::PERCENT, m_spreadFactor_Reflections->GetValue() ) / 100.0f;
+    cfg->m_Render.raytrace_spread_refractions =
+            DoubleValueFromString( EDA_UNITS::PERCENT, m_spreadFactor_Refractions->GetValue() ) / 100.0f;
 
-    auto transfer_color = [] ( SFVEC3F& aTarget, COLOR_SWATCH *aSource )
-    {
-        const COLOR4D color = aSource->GetSwatchColor();
+    cfg->m_Render.raytrace_recursivelevel_reflections = m_recursiveLevel_Reflections->GetValue();
+    cfg->m_Render.raytrace_recursivelevel_refractions = m_recursiveLevel_Refractions->GetValue();
 
-        aTarget = SFVEC3F( color.r, color.g, color.b );
-    };
+    cfg->m_Render.raytrace_lightColorCamera = m_colourPickerCameraLight->GetSwatchColor();
+    cfg->m_Render.raytrace_lightColorTop = m_colourPickerTopLight->GetSwatchColor();
+    cfg->m_Render.raytrace_lightColorBottom = m_colourPickerBottomLight->GetSwatchColor();
 
-    transfer_color( m_settings.m_RtCameraLightColor, m_colourPickerCameraLight );
-    transfer_color( m_settings.m_RtLightColorTop, m_colourPickerTopLight );
-    transfer_color( m_settings.m_RtLightColorBottom, m_colourPickerBottomLight );
+    cfg->m_Render.raytrace_lightColor[0] = m_colourPickerLight1->GetSwatchColor();
+    cfg->m_Render.raytrace_lightColor[1] = m_colourPickerLight2->GetSwatchColor();
+    cfg->m_Render.raytrace_lightColor[2] = m_colourPickerLight3->GetSwatchColor();
+    cfg->m_Render.raytrace_lightColor[3] = m_colourPickerLight4->GetSwatchColor();
+    cfg->m_Render.raytrace_lightColor[4] = m_colourPickerLight5->GetSwatchColor();
+    cfg->m_Render.raytrace_lightColor[5] = m_colourPickerLight6->GetSwatchColor();
+    cfg->m_Render.raytrace_lightColor[6] = m_colourPickerLight7->GetSwatchColor();
+    cfg->m_Render.raytrace_lightColor[7] = m_colourPickerLight8->GetSwatchColor();
 
-    transfer_color( m_settings.m_RtLightColor[0], m_colourPickerLight1 );
-    transfer_color( m_settings.m_RtLightColor[1], m_colourPickerLight2 );
-    transfer_color( m_settings.m_RtLightColor[2], m_colourPickerLight3 );
-    transfer_color( m_settings.m_RtLightColor[3], m_colourPickerLight4 );
-    transfer_color( m_settings.m_RtLightColor[4], m_colourPickerLight5 );
-    transfer_color( m_settings.m_RtLightColor[5], m_colourPickerLight6 );
-    transfer_color( m_settings.m_RtLightColor[6], m_colourPickerLight7 );
-    transfer_color( m_settings.m_RtLightColor[7], m_colourPickerLight8 );
+    auto get_value =
+            []( wxTextCtrl* aCtrl )
+            {
+                return DoubleValueFromString( EDA_UNITS::UNSCALED, aCtrl->GetValue() );
+            };
 
-    m_settings.m_RtLightSphericalCoords[0].x =
-            ( m_spinCtrlLightElevation1->GetValue() + 90.0f ) / 180.0f;
-    m_settings.m_RtLightSphericalCoords[1].x =
-            ( m_spinCtrlLightElevation2->GetValue() + 90.0f ) / 180.0f;
-    m_settings.m_RtLightSphericalCoords[2].x =
-            ( m_spinCtrlLightElevation3->GetValue() + 90.0f ) / 180.0f;
-    m_settings.m_RtLightSphericalCoords[3].x =
-            ( m_spinCtrlLightElevation4->GetValue() + 90.0f ) / 180.0f;
-    m_settings.m_RtLightSphericalCoords[4].x =
-            ( m_spinCtrlLightElevation5->GetValue() + 90.0f ) / 180.0f;
-    m_settings.m_RtLightSphericalCoords[5].x =
-            ( m_spinCtrlLightElevation6->GetValue() + 90.0f ) / 180.0f;
-    m_settings.m_RtLightSphericalCoords[6].x =
-            ( m_spinCtrlLightElevation7->GetValue() + 90.0f ) / 180.0f;
-    m_settings.m_RtLightSphericalCoords[7].x =
-            ( m_spinCtrlLightElevation8->GetValue() + 90.0f ) / 180.0f;
+    cfg->m_Render.raytrace_lightElevation[0] = get_value( m_lightElevation1 );
+    cfg->m_Render.raytrace_lightElevation[1] = get_value( m_lightElevation2 );
+    cfg->m_Render.raytrace_lightElevation[2] = get_value( m_lightElevation3 );
+    cfg->m_Render.raytrace_lightElevation[3] = get_value( m_lightElevation4 );
+    cfg->m_Render.raytrace_lightElevation[4] = get_value( m_lightElevation5 );
+    cfg->m_Render.raytrace_lightElevation[5] = get_value( m_lightElevation6 );
+    cfg->m_Render.raytrace_lightElevation[6] = get_value( m_lightElevation7 );
+    cfg->m_Render.raytrace_lightElevation[7] = get_value( m_lightElevation8 );
 
-    m_settings.m_RtLightSphericalCoords[0].y = m_spinCtrlLightAzimuth1->GetValue() / 180.0f;
-    m_settings.m_RtLightSphericalCoords[1].y = m_spinCtrlLightAzimuth2->GetValue() / 180.0f;
-    m_settings.m_RtLightSphericalCoords[2].y = m_spinCtrlLightAzimuth3->GetValue() / 180.0f;
-    m_settings.m_RtLightSphericalCoords[3].y = m_spinCtrlLightAzimuth4->GetValue() / 180.0f;
-    m_settings.m_RtLightSphericalCoords[4].y = m_spinCtrlLightAzimuth5->GetValue() / 180.0f;
-    m_settings.m_RtLightSphericalCoords[5].y = m_spinCtrlLightAzimuth6->GetValue() / 180.0f;
-    m_settings.m_RtLightSphericalCoords[6].y = m_spinCtrlLightAzimuth7->GetValue() / 180.0f;
-    m_settings.m_RtLightSphericalCoords[7].y = m_spinCtrlLightAzimuth8->GetValue() / 180.0f;
-
-    for( size_t i = 0; i < m_settings.m_RtLightSphericalCoords.size(); ++i )
-    {
-        m_settings.m_RtLightSphericalCoords[i].x =
-                glm::clamp( m_settings.m_RtLightSphericalCoords[i].x, 0.0f, 1.0f );
-
-        m_settings.m_RtLightSphericalCoords[i].y =
-                glm::clamp( m_settings.m_RtLightSphericalCoords[i].y, 0.0f, 2.0f );
-    }
+    cfg->m_Render.raytrace_lightAzimuth[0] = get_value( m_lightAzimuth1 );
+    cfg->m_Render.raytrace_lightAzimuth[1] = get_value( m_lightAzimuth2 );
+    cfg->m_Render.raytrace_lightAzimuth[2] = get_value( m_lightAzimuth3 );
+    cfg->m_Render.raytrace_lightAzimuth[3] = get_value( m_lightAzimuth4 );
+    cfg->m_Render.raytrace_lightAzimuth[4] = get_value( m_lightAzimuth5 );
+    cfg->m_Render.raytrace_lightAzimuth[5] = get_value( m_lightAzimuth6 );
+    cfg->m_Render.raytrace_lightAzimuth[6] = get_value( m_lightAzimuth7 );
+    cfg->m_Render.raytrace_lightAzimuth[7] = get_value( m_lightAzimuth8 );
 
     return true;
 }

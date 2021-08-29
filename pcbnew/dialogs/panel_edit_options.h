@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2010-2014 Jean-Pierre Charras, jean-pierre.charras at wanadoo.fr
- * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,21 +27,18 @@
 
 #include "panel_edit_options_base.h"
 
-class PAGED_DIALOG;
-class PCB_BASE_EDIT_FRAME;
-
 
 class PANEL_EDIT_OPTIONS : public PANEL_EDIT_OPTIONS_BASE
 {
 public:
-    PANEL_EDIT_OPTIONS( PCB_BASE_EDIT_FRAME* aFrame, PAGED_DIALOG* aWindow );
+    PANEL_EDIT_OPTIONS( wxWindow* aParent, bool isFootprintEditor );
 
 protected:
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
 
 private:
-    PCB_BASE_EDIT_FRAME* m_frame;
+    bool m_isFootprintEditor;
 };
 
 

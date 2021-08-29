@@ -23,19 +23,18 @@
 #include <widgets/unit_binder.h>
 #include "panel_eeschema_editing_options_base.h"
 
-class SCH_EDIT_FRAME;
+class EDA_BASE_FRAME;
 
 
 class PANEL_EESCHEMA_EDITING_OPTIONS : public PANEL_EESCHEMA_EDITING_OPTIONS_BASE
 {
 public:
-    PANEL_EESCHEMA_EDITING_OPTIONS( SCH_EDIT_FRAME* aFrame, wxWindow* aWindow );
+    PANEL_EESCHEMA_EDITING_OPTIONS( wxWindow* aWindow, EDA_BASE_FRAME* aUnitsProvider );
 
 private:
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
 
-    SCH_EDIT_FRAME* m_frame;
     UNIT_BINDER     m_hPitch;
     UNIT_BINDER     m_vPitch;
 };

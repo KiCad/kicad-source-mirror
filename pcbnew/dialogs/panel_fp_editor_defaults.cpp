@@ -21,17 +21,16 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <widgets/paged_dialog.h>
-#include <footprint_edit_frame.h>
+#include <pgm_base.h>
+#include <settings/settings_manager.h>
 #include <footprint_editor_settings.h>
 #include <widgets/wx_grid.h>
+#include <widgets/paged_dialog.h>
 #include <grid_tricks.h>
-
+#include <eda_base_frame.h>
 #include <panel_fp_editor_defaults.h>
 #include <grid_layer_box_helpers.h>
 #include <bitmaps.h>
-
-#include <wx/treebook.h>
 #include <confirm.h>
 
 class TEXT_ITEMS_GRID_TABLE : public wxGridTableBase
@@ -170,13 +169,15 @@ enum
 };
 
 
-PANEL_FP_EDITOR_DEFAULTS::PANEL_FP_EDITOR_DEFAULTS( FOOTPRINT_EDIT_FRAME* aFrame,
-                                                    PAGED_DIALOG* aParent) :
-        PANEL_FP_EDITOR_DEFAULTS_BASE( aParent->GetTreebook() ),
-        m_brdSettings( aFrame->GetDesignSettings() ),
-        m_frame( aFrame ),
-        m_parent( aParent )
+PANEL_FP_EDITOR_DEFAULTS::PANEL_FP_EDITOR_DEFAULTS( wxWindow* aParent,
+                                                    EDA_BASE_FRAME* aUnitsProvider ) :
+        PANEL_FP_EDITOR_DEFAULTS_BASE( aParent )
 {
+    if( aUnitsProvider )
+        m_units = aUnitsProvider->GetUserUnits();
+
+    m_parent = static_cast<PAGED_DIALOG*>( aParent->GetParent() );
+
     m_textItemsGrid->SetDefaultRowSize( m_textItemsGrid->GetDefaultRowSize() + 4 );
     m_graphicsGrid->SetDefaultRowSize( m_graphicsGrid->GetDefaultRowSize() + 4 );
 
@@ -191,8 +192,8 @@ PANEL_FP_EDITOR_DEFAULTS::PANEL_FP_EDITOR_DEFAULTS( FOOTPRINT_EDIT_FRAME* aFrame
     m_textItemsGrid->SetColAttr( 1, attr );
 
     attr = new wxGridCellAttr;
-    attr->SetRenderer( new GRID_CELL_LAYER_RENDERER( m_frame ) );
-    attr->SetEditor( new GRID_CELL_LAYER_SELECTOR( m_frame, {} ) );
+    attr->SetRenderer( new GRID_CELL_LAYER_RENDERER( nullptr ) );
+    attr->SetEditor( new GRID_CELL_LAYER_SELECTOR( nullptr, {} ) );
     m_textItemsGrid->SetColAttr( 2, attr );
 
     // Work around a bug in wxWidgets where it fails to recalculate the grid height
@@ -219,15 +220,18 @@ bool PANEL_FP_EDITOR_DEFAULTS::TransferDataToWindow()
     wxColour disabledColour = wxSystemSettings::GetColour( wxSYS_COLOUR_BACKGROUND );
 
 #define SET_MILS_CELL( row, col, val ) \
-    m_graphicsGrid->SetCellValue( row, col, StringFromValue( m_frame->GetUserUnits(), val, true ) )
+    m_graphicsGrid->SetCellValue( row, col, StringFromValue( m_units, val, true ) )
 
 #define DISABLE_CELL( row, col ) \
     m_graphicsGrid->SetReadOnly( row, col ); \
     m_graphicsGrid->SetCellBackgroundColour( row, col, disabledColour );
 
+    SETTINGS_MANAGER&          mgr = Pgm().GetSettingsManager();
+    FOOTPRINT_EDITOR_SETTINGS* cfg = mgr.GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>();
+
     for( int i = 0; i < ROW_COUNT; ++i )
     {
-        SET_MILS_CELL( i, COL_LINE_THICKNESS, m_brdSettings.m_LineThickness[ i ] );
+        SET_MILS_CELL( i, COL_LINE_THICKNESS, cfg->m_DesignSettings.m_LineThickness[ i ] );
 
         if( i == ROW_EDGES || i == ROW_COURTYARD )
         {
@@ -238,10 +242,10 @@ bool PANEL_FP_EDITOR_DEFAULTS::TransferDataToWindow()
         }
         else
         {
-            SET_MILS_CELL( i, COL_TEXT_WIDTH, m_brdSettings.m_TextSize[ i ].x );
-            SET_MILS_CELL( i, COL_TEXT_HEIGHT, m_brdSettings.m_TextSize[ i ].y );
-            SET_MILS_CELL( i, COL_TEXT_THICKNESS, m_brdSettings.m_TextThickness[ i ] );
-            m_graphicsGrid->SetCellValue( i, COL_TEXT_ITALIC, m_brdSettings.m_TextItalic[ i ] ? "1" : "" );
+            SET_MILS_CELL( i, COL_TEXT_WIDTH, cfg->m_DesignSettings.m_TextSize[ i ].x );
+            SET_MILS_CELL( i, COL_TEXT_HEIGHT, cfg->m_DesignSettings.m_TextSize[ i ].y );
+            SET_MILS_CELL( i, COL_TEXT_THICKNESS, cfg->m_DesignSettings.m_TextThickness[ i ] );
+            m_graphicsGrid->SetCellValue( i, COL_TEXT_ITALIC, cfg->m_DesignSettings.m_TextItalic[ i ] ? "1" : "" );
 
             auto attr = new wxGridCellAttr;
             attr->SetRenderer( new wxGridCellBoolRenderer() );
@@ -252,11 +256,11 @@ bool PANEL_FP_EDITOR_DEFAULTS::TransferDataToWindow()
     }
 
     // Footprint defaults
-    m_textItemsGrid->GetTable()->AppendRows( m_brdSettings.m_DefaultFPTextItems.size() );
+    m_textItemsGrid->GetTable()->AppendRows( cfg->m_DesignSettings.m_DefaultFPTextItems.size() );
 
-    for( size_t i = 0; i < m_brdSettings.m_DefaultFPTextItems.size(); ++i )
+    for( size_t i = 0; i < cfg->m_DesignSettings.m_DefaultFPTextItems.size(); ++i )
     {
-        TEXT_ITEM_INFO item = m_brdSettings.m_DefaultFPTextItems[i];
+        TEXT_ITEM_INFO item = cfg->m_DesignSettings.m_DefaultFPTextItems[i];
 
         m_textItemsGrid->GetTable()->SetValue( i, 0, item.m_Text );
         m_textItemsGrid->GetTable()->SetValueAsBool( i, 1, item.m_Visible );
@@ -306,8 +310,7 @@ bool PANEL_FP_EDITOR_DEFAULTS::Show( bool aShow )
 
 int PANEL_FP_EDITOR_DEFAULTS::getGridValue( int aRow, int aCol )
 {
-    return ValueFromString( m_frame->GetUserUnits(),
-                            m_graphicsGrid->GetCellValue( aRow, aCol ) );
+    return ValueFromString( m_units, m_graphicsGrid->GetCellValue( aRow, aCol ) );
 }
 
 
@@ -340,24 +343,27 @@ bool PANEL_FP_EDITOR_DEFAULTS::TransferDataFromWindow()
     if( !validateData() )
         return false;
 
+    SETTINGS_MANAGER&          mgr = Pgm().GetSettingsManager();
+    FOOTPRINT_EDITOR_SETTINGS* cfg = mgr.GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>();
+
     for( int i = 0; i < ROW_COUNT; ++i )
     {
-        m_brdSettings.m_LineThickness[ i ] = getGridValue( i, COL_LINE_THICKNESS );
+        cfg->m_DesignSettings.m_LineThickness[ i ] = getGridValue( i, COL_LINE_THICKNESS );
 
         if( i == ROW_EDGES || i == ROW_COURTYARD )
             continue;
 
-        m_brdSettings.m_TextSize[ i ] = wxSize( getGridValue( i, COL_TEXT_WIDTH ),
-                                                getGridValue( i, COL_TEXT_HEIGHT ) );
-        m_brdSettings.m_TextThickness[ i ] = getGridValue( i, COL_TEXT_THICKNESS );
+        cfg->m_DesignSettings.m_TextSize[ i ] = wxSize( getGridValue( i, COL_TEXT_WIDTH ),
+                                                        getGridValue( i, COL_TEXT_HEIGHT ) );
+        cfg->m_DesignSettings.m_TextThickness[ i ] = getGridValue( i, COL_TEXT_THICKNESS );
 
         wxString msg = m_graphicsGrid->GetCellValue( i, COL_TEXT_ITALIC );
-        m_brdSettings.m_TextItalic[ i ] = wxGridCellBoolEditor::IsTrueValue( msg );
+        cfg->m_DesignSettings.m_TextItalic[ i ] = wxGridCellBoolEditor::IsTrueValue( msg );
     }
 
     // Footprint defaults
     wxGridTableBase* table = m_textItemsGrid->GetTable();
-    m_brdSettings.m_DefaultFPTextItems.clear();
+    cfg->m_DesignSettings.m_DefaultFPTextItems.clear();
 
     for( int i = 0; i < m_textItemsGrid->GetNumberRows(); ++i )
     {
@@ -365,13 +371,8 @@ bool PANEL_FP_EDITOR_DEFAULTS::TransferDataFromWindow()
         bool     visible = table->GetValueAsBool( i, 1 );
         int      layer = (int) table->GetValueAsLong( i, 2 );
 
-        m_brdSettings.m_DefaultFPTextItems.emplace_back( text, visible, layer );
+        cfg->m_DesignSettings.m_DefaultFPTextItems.emplace_back( text, visible, layer );
     }
-
-    m_frame->GetDesignSettings() = m_brdSettings;
-
-    if( FOOTPRINT_EDITOR_SETTINGS* cfg = m_frame->GetSettings() )
-        cfg->m_DesignSettings = m_brdSettings;
 
     return true;
 }

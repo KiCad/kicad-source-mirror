@@ -31,6 +31,8 @@
 #include <gestfich.h>
 #include <pgm_base.h>
 #include <settings/settings_manager.h>
+#include <dialogs/panel_gal_display_options.h>
+#include <dialogs/panel_pl_editor_color_settings.h>
 
 #include "pl_editor_frame.h"
 #include "pl_editor_settings.h"
@@ -56,11 +58,18 @@ static struct IFACE : public KIFACE_BASE
         switch( aClassId )
         {
         case FRAME_PL_EDITOR:
+            return new PL_EDITOR_FRAME( aKiway, aParent );
+
+        case PANEL_DS_DISPLAY_OPTIONS:
         {
-            PL_EDITOR_FRAME* frame = new PL_EDITOR_FRAME( aKiway, aParent );
-            return frame;
-            break;
+            SETTINGS_MANAGER&  mgr = Pgm().GetSettingsManager();
+            APP_SETTINGS_BASE* cfg = mgr.GetAppSettings<PL_EDITOR_SETTINGS>();
+
+            return new PANEL_GAL_DISPLAY_OPTIONS( aParent, cfg );
         }
+
+        case PANEL_DS_COLORS:
+            return new PANEL_PL_EDITOR_COLOR_SETTINGS( aParent );
 
         default:
             ;

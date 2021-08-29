@@ -22,16 +22,15 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include "panel_3D_opengl_options.h"
+#include <pgm_base.h>
+#include <settings/settings_manager.h>
+#include <eda_3d_viewer_settings.h>
 #include <widgets/color_swatch.h>
-#include <3d_canvas/board_adapter.h>
-#include <3d_viewer/eda_3d_viewer_frame.h>
-#include <3d_viewer/tools/eda_3d_controller.h>
+#include "panel_3D_opengl_options.h"
 
-PANEL_3D_OPENGL_OPTIONS::PANEL_3D_OPENGL_OPTIONS( EDA_3D_VIEWER_FRAME* aFrame, wxWindow* aParent ) :
-        PANEL_3D_OPENGL_OPTIONS_BASE( aParent ),
-        m_settings( aFrame->GetAdapter() ),
-        m_canvas( aFrame->GetCanvas() )
+
+PANEL_3D_OPENGL_OPTIONS::PANEL_3D_OPENGL_OPTIONS( wxWindow* aParent ) :
+        PANEL_3D_OPENGL_OPTIONS_BASE( aParent )
 {
     m_selectionColorSwatch->SetDefaultColor( COLOR4D( 0.0, 1.0, 0.0, 1.0 ) );
     m_selectionColorSwatch->SetSupportsOpacity( false );
@@ -40,25 +39,19 @@ PANEL_3D_OPENGL_OPTIONS::PANEL_3D_OPENGL_OPTIONS( EDA_3D_VIEWER_FRAME* aFrame, w
 
 bool PANEL_3D_OPENGL_OPTIONS::TransferDataToWindow()
 {
-    m_checkBoxCuThickness->SetValue( m_settings.GetFlag( FL_RENDER_OPENGL_COPPER_THICKNESS ) );
-    m_checkBoxBoundingBoxes->SetValue( m_settings.GetFlag( FL_RENDER_OPENGL_SHOW_MODEL_BBOX ) );
-    m_checkBoxHighlightOnRollOver->SetValue( m_settings.GetFlag( FL_HIGHLIGHT_ROLLOVER_ITEM ) );
+    EDA_3D_VIEWER_SETTINGS* cfg = Pgm().GetSettingsManager().GetAppSettings<EDA_3D_VIEWER_SETTINGS>();
 
-    m_choiceAntiAliasing->SetSelection( static_cast<int>( m_settings.GetAntiAliasingMode() ) );
-    m_selectionColorSwatch->SetSwatchColor( COLOR4D( m_settings.m_OpenGlSelectionColor.r,
-                                                     m_settings.m_OpenGlSelectionColor.g,
-                                                     m_settings.m_OpenGlSelectionColor.b,
-                                                     1.0 ),
-                                            false );
+    m_checkBoxCuThickness->SetValue( cfg->m_Render.opengl_copper_thickness );
+    m_checkBoxBoundingBoxes->SetValue( cfg->m_Render.opengl_show_model_bbox );
+    m_checkBoxHighlightOnRollOver->SetValue( cfg->m_Render.opengl_highlight_on_rollover );
 
-    m_checkBoxDisableAAMove->SetValue(
-            m_settings.GetFlag( FL_RENDER_OPENGL_AA_DISABLE_ON_MOVE ) );
-    m_checkBoxDisableMoveThickness->SetValue(
-            m_settings.GetFlag( FL_RENDER_OPENGL_THICKNESS_DISABLE_ON_MOVE ) );
-    m_checkBoxDisableMoveVias->SetValue(
-            m_settings.GetFlag( FL_RENDER_OPENGL_VIAS_DISABLE_ON_MOVE ) );
-    m_checkBoxDisableMoveHoles->SetValue(
-            m_settings.GetFlag( FL_RENDER_OPENGL_HOLES_DISABLE_ON_MOVE ) );
+    m_choiceAntiAliasing->SetSelection( cfg->m_Render.opengl_AA_mode );
+    m_selectionColorSwatch->SetSwatchColor( cfg->m_Render.opengl_selection_color, false );
+
+    m_checkBoxDisableAAMove->SetValue( cfg->m_Render.opengl_AA_disableOnMove );
+    m_checkBoxDisableMoveThickness->SetValue( cfg->m_Render.opengl_thickness_disableOnMove );
+    m_checkBoxDisableMoveVias->SetValue( cfg->m_Render.opengl_vias_disableOnMove );
+    m_checkBoxDisableMoveHoles->SetValue( cfg->m_Render.opengl_holes_disableOnMove );
 
     return true;
 }
@@ -66,24 +59,19 @@ bool PANEL_3D_OPENGL_OPTIONS::TransferDataToWindow()
 
 bool PANEL_3D_OPENGL_OPTIONS::TransferDataFromWindow()
 {
-    m_settings.SetFlag( FL_RENDER_OPENGL_COPPER_THICKNESS, m_checkBoxCuThickness->GetValue() );
-    m_settings.SetFlag( FL_RENDER_OPENGL_SHOW_MODEL_BBOX, m_checkBoxBoundingBoxes->GetValue() );
-    m_settings.SetFlag( FL_HIGHLIGHT_ROLLOVER_ITEM, m_checkBoxHighlightOnRollOver->GetValue() );
+    EDA_3D_VIEWER_SETTINGS* cfg = Pgm().GetSettingsManager().GetAppSettings<EDA_3D_VIEWER_SETTINGS>();
 
-    m_settings.SetAntiAliasingMode(
-            static_cast<ANTIALIASING_MODE>( m_choiceAntiAliasing->GetSelection() ) );
-    m_settings.m_OpenGlSelectionColor = SFVEC3F( m_selectionColorSwatch->GetSwatchColor().r,
-                                                 m_selectionColorSwatch->GetSwatchColor().g,
-                                                 m_selectionColorSwatch->GetSwatchColor().b );
+    cfg->m_Render.opengl_copper_thickness = m_checkBoxCuThickness->GetValue();
+    cfg->m_Render.opengl_show_model_bbox = m_checkBoxBoundingBoxes->GetValue();
+    cfg->m_Render.opengl_highlight_on_rollover = m_checkBoxHighlightOnRollOver->GetValue();
 
-    m_settings.SetFlag( FL_RENDER_OPENGL_AA_DISABLE_ON_MOVE,
-                        m_checkBoxDisableAAMove->GetValue() );
-    m_settings.SetFlag( FL_RENDER_OPENGL_THICKNESS_DISABLE_ON_MOVE,
-                        m_checkBoxDisableMoveThickness->GetValue() );
-    m_settings.SetFlag( FL_RENDER_OPENGL_VIAS_DISABLE_ON_MOVE,
-                        m_checkBoxDisableMoveVias->GetValue() );
-    m_settings.SetFlag( FL_RENDER_OPENGL_HOLES_DISABLE_ON_MOVE,
-                        m_checkBoxDisableMoveHoles->GetValue() );
+    cfg->m_Render.opengl_AA_mode = m_choiceAntiAliasing->GetSelection();
+    cfg->m_Render.opengl_selection_color = m_selectionColorSwatch->GetSwatchColor();
+
+    cfg->m_Render.opengl_AA_disableOnMove = m_checkBoxDisableAAMove->GetValue();
+    cfg->m_Render.opengl_thickness_disableOnMove = m_checkBoxDisableMoveThickness->GetValue();
+    cfg->m_Render.opengl_vias_disableOnMove = m_checkBoxDisableMoveVias->GetValue();
+    cfg->m_Render.opengl_holes_disableOnMove = m_checkBoxDisableMoveHoles->GetValue();
 
     return true;
 }

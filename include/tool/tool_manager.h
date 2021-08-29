@@ -178,8 +178,6 @@ public:
         return RunAction( aAction, aNow, (void*) NULL );
     }
 
-    const std::map<std::string, TOOL_ACTION*>& GetActions() const;
-
     /**
      * Send a cancel event to the tool currently at the top of the tool stack.
      */

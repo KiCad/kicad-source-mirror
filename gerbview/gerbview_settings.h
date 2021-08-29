@@ -26,7 +26,7 @@
 
 #include <settings/app_settings.h>
 #include <excellon_defaults.h>
-
+#include <gbr_display_options.h>
 
 class GERBVIEW_SETTINGS : public APP_SETTINGS_BASE
 {
@@ -57,6 +57,8 @@ public:
 public:
 
     APPEARANCE m_Appearance;
+
+    GBR_DISPLAY_OPTIONS m_Display;
 
     int m_BoardLayersCount;
 

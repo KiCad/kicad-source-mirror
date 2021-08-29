@@ -26,6 +26,7 @@
 
 #include <kiway.h>
 #include <bin_mod.h>
+#include <tool/action_manager.h>
 
 
 /**
@@ -111,6 +112,12 @@ public:
     /// Only for DSO specific 'non-library' files.
     /// (The library search path is in the PROJECT class.)
     SEARCH_STACK&       KifaceSearch()                { return m_bm.m_search; }
+
+    void GetActions( std::vector<TOOL_ACTION*>& aActions ) const override
+    {
+        for( TOOL_ACTION* action : ACTION_MANAGER::GetActionList() )
+            aActions.push_back( action );
+    }
 
 private:
     KIWAY::FACE_T       m_id;

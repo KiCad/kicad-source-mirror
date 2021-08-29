@@ -17,26 +17,21 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <eda_draw_frame.h>
-#include <view/view.h>
 #include <widgets/gal_options_panel.h>
 #include <widgets/paged_dialog.h>
 
 #include <dialogs/panel_gal_display_options.h>
 
-#include <wx/treebook.h>
 
-
-PANEL_GAL_DISPLAY_OPTIONS::PANEL_GAL_DISPLAY_OPTIONS( EDA_DRAW_FRAME* aFrame,
-                                                      PAGED_DIALOG* aParent ) :
-    wxPanel( aParent->GetTreebook(), wxID_ANY ),
-    m_frame( aFrame )
+PANEL_GAL_DISPLAY_OPTIONS::PANEL_GAL_DISPLAY_OPTIONS( wxWindow* aParent,
+                                                      APP_SETTINGS_BASE* aAppSettings ) :
+    wxPanel( aParent, wxID_ANY )
 {
     auto mainSizer = new wxBoxSizer( wxHORIZONTAL );
     SetSizer( mainSizer );
 
     // install GAL options pane
-    m_galOptsPanel = new GAL_OPTIONS_PANEL( this, m_frame );
+    m_galOptsPanel = new GAL_OPTIONS_PANEL( this, aAppSettings );
     mainSizer->Add( m_galOptsPanel, 1, wxEXPAND | wxLEFT, 5 );
 
     // a spacer to take up the other half of the width
@@ -55,12 +50,5 @@ bool PANEL_GAL_DISPLAY_OPTIONS::TransferDataToWindow()
 bool PANEL_GAL_DISPLAY_OPTIONS::TransferDataFromWindow()
 {
     m_galOptsPanel->TransferDataFromWindow();
-
-    // refresh view
-    KIGFX::VIEW* view = m_frame->GetCanvas()->GetView();
-    view->RecacheAllItems();
-    view->MarkTargetDirty( KIGFX::TARGET_NONCACHED );
-    m_frame->GetCanvas()->Refresh();
-
     return true;
 }

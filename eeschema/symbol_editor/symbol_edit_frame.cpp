@@ -1102,8 +1102,14 @@ void SYMBOL_EDIT_FRAME::CommonSettingsChanged( bool aEnvVarsChanged, bool aTextV
 {
     SCH_BASE_FRAME::CommonSettingsChanged( aEnvVarsChanged, aTextVarsChanged );
 
-    GetCanvas()->GetGAL()->SetAxesColor( m_colorSettings->GetColor( LAYER_SCHEMATIC_GRID_AXES ) );
-    GetCanvas()->GetGAL()->DrawGrid();
+    SETTINGS_MANAGER*       mgr = GetSettingsManager();
+    SYMBOL_EDITOR_SETTINGS* cfg = mgr->GetAppSettings<SYMBOL_EDITOR_SETTINGS>();
+
+    GetRenderSettings()->m_ShowPinsElectricalType = cfg->m_ShowPinElectricalType;
+
+    GetGalDisplayOptions().ReadWindowSettings( cfg->m_Window );
+
+    GetCanvas()->ForceRefresh();
 
     RecreateToolbars();
 

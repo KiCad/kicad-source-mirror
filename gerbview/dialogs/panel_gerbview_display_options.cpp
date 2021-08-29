@@ -18,22 +18,34 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <gerbview.h>
-#include <gerbview_frame.h>
-#include <class_draw_panel_gal.h>
-#include <view/view.h>
-#include <gerbview_painter.h>
-#include <gal/gal_display_options.h>
+#include <vector>
+#include <core/arraydim.h>
+#include <pgm_base.h>
+#include <settings/settings_manager.h>
+#include <gerbview_settings.h>
 #include <widgets/gal_options_panel.h>
 #include "panel_gerbview_display_options.h"
 
 
-PANEL_GERBVIEW_DISPLAY_OPTIONS::PANEL_GERBVIEW_DISPLAY_OPTIONS( GERBVIEW_FRAME *aFrame,
-                                                                wxWindow* aWindow ) :
-    PANEL_GERBVIEW_DISPLAY_OPTIONS_BASE( aWindow, wxID_ANY ),
-    m_Parent( aFrame )
+/// List of page sizes
+static const wxChar* gerberPageSizeList[] =
 {
-    m_galOptsPanel = new GAL_OPTIONS_PANEL( this, m_Parent );
+    wxT( "GERBER" ),    // index 0: full size page selection
+    wxT( "A4" ),
+    wxT( "A3" ),
+    wxT( "A2" ),
+    wxT( "A" ),
+    wxT( "B" ),
+    wxT( "C" ),
+};
+
+
+PANEL_GERBVIEW_DISPLAY_OPTIONS::PANEL_GERBVIEW_DISPLAY_OPTIONS( wxWindow* aParent ) :
+    PANEL_GERBVIEW_DISPLAY_OPTIONS_BASE( aParent, wxID_ANY )
+{
+    GERBVIEW_SETTINGS* cfg = Pgm().GetSettingsManager().GetAppSettings<GERBVIEW_SETTINGS>();
+
+    m_galOptsPanel = new GAL_OPTIONS_PANEL( this, cfg );
     m_galOptionsSizer->Add( m_galOptsPanel, 0, wxEXPAND | wxLEFT, 5 );
 }
 
@@ -42,14 +54,26 @@ bool PANEL_GERBVIEW_DISPLAY_OPTIONS::TransferDataToWindow( )
 {
     m_galOptsPanel->TransferDataToWindow();
 
-    // Show Option Draw Lines. We use DisplayPcbTrackFill as Lines draw option
-    m_OptDisplayLines->SetValue( !m_Parent->GetDisplayOptions().m_DisplayLinesFill );
-    m_OptDisplayFlashedItems->SetValue( !m_Parent->GetDisplayOptions().m_DisplayFlashedItemsFill );
+    GERBVIEW_SETTINGS* cfg = Pgm().GetSettingsManager().GetAppSettings<GERBVIEW_SETTINGS>();
 
     // Show Option Draw polygons
-    m_OptDisplayPolygons->SetValue( !m_Parent->GetDisplayOptions().m_DisplayPolygonsFill );
+    m_OptDisplayPolygons->SetValue( !cfg->m_Display.m_DisplayPolygonsFill );
 
-    m_OptDisplayDCodes->SetValue( m_Parent->IsElementVisible( LAYER_DCODES ) );
+    // Show Option Draw Lines. We use DisplayPcbTrackFill as Lines draw option
+    m_OptDisplayLines->SetValue( !cfg->m_Display.m_DisplayLinesFill );
+    m_OptDisplayFlashedItems->SetValue( !cfg->m_Display.m_DisplayFlashedItemsFill );
+    m_OptDisplayDCodes->SetValue( cfg->m_Display.m_DisplayDCodes );
+
+    for( unsigned i = 0;  i < arrayDim( gerberPageSizeList );  ++i )
+    {
+        if( gerberPageSizeList[i] == cfg->m_Appearance.page_type )
+        {
+            m_PageSize->SetSelection( i );
+            break;
+        }
+    }
+
+    m_ShowPageLimitsOpt->SetValue( cfg->m_Display.m_DisplayPageLimits );
 
     return true;
 }
@@ -57,49 +81,17 @@ bool PANEL_GERBVIEW_DISPLAY_OPTIONS::TransferDataToWindow( )
 
 bool PANEL_GERBVIEW_DISPLAY_OPTIONS::TransferDataFromWindow()
 {
-    GBR_DISPLAY_OPTIONS displayOptions = m_Parent->GetDisplayOptions();
-
-    bool needs_repaint = false, option;
-
-    option = !m_OptDisplayLines->GetValue();
-
-    if( option != displayOptions.m_DisplayLinesFill )
-        needs_repaint = true;
-
-    displayOptions.m_DisplayLinesFill = option;
-
-    option = !m_OptDisplayFlashedItems->GetValue();
-
-    if( option != m_Parent->GetDisplayOptions().m_DisplayFlashedItemsFill )
-        needs_repaint = true;
-
-    displayOptions.m_DisplayFlashedItemsFill = option;
-
-    option = !m_OptDisplayPolygons->GetValue();
-
-    if( option != displayOptions.m_DisplayPolygonsFill )
-        needs_repaint = true;
-
-    displayOptions.m_DisplayPolygonsFill = option;
-
-    m_Parent->SetElementVisibility( LAYER_DCODES, m_OptDisplayDCodes->GetValue() );
+    GERBVIEW_SETTINGS* cfg = Pgm().GetSettingsManager().GetAppSettings<GERBVIEW_SETTINGS>();
 
     m_galOptsPanel->TransferDataFromWindow();
 
-    if( displayOptions.m_DiffMode )
-        m_Parent->UpdateDiffLayers();
+    cfg->m_Display.m_DisplayLinesFill = !m_OptDisplayLines->GetValue();
+    cfg->m_Display.m_DisplayFlashedItemsFill = !m_OptDisplayFlashedItems->GetValue();
+    cfg->m_Display.m_DisplayPolygonsFill = !m_OptDisplayPolygons->GetValue();
+    cfg->m_Display.m_DisplayDCodes = m_OptDisplayDCodes->GetValue();
 
-    // Apply changes to the GAL
-    auto view = m_Parent->GetCanvas()->GetView();
-    auto painter = static_cast<KIGFX::GERBVIEW_PAINTER*>( view->GetPainter() );
-    auto settings = painter->GetSettings();
-    settings->LoadDisplayOptions( displayOptions );
-    view->MarkTargetDirty( KIGFX::TARGET_NONCACHED );
-
-    if( needs_repaint )
-        view->UpdateAllItems( KIGFX::REPAINT );
-
-    m_Parent->GetCanvas()->Refresh();
+    cfg->m_Appearance.page_type = gerberPageSizeList[ m_PageSize->GetSelection() ];
+    cfg->m_Display.m_DisplayPageLimits = m_ShowPageLimitsOpt->GetValue();
 
     return true;
 }

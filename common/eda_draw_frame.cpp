@@ -297,6 +297,17 @@ void EDA_DRAW_FRAME::CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVars
 
     m_galDisplayOptions.ReadCommonConfig( *settings, this );
 
+#ifndef __WXMAC__
+    EDA_DRAW_PANEL_GAL::GAL_TYPE canvasType = EDA_DRAW_PANEL_GAL::GAL_TYPE_NONE;
+    APP_SETTINGS_BASE* cfg = Kiface().KifaceSettings();
+
+    if( cfg )
+        canvasType = static_cast<EDA_DRAW_PANEL_GAL::GAL_TYPE>( cfg->m_Graphics.canvas_type );
+
+    if( canvasType != GetCanvas()->GetBackend() )
+        GetCanvas()->SwitchBackend( canvasType );
+#endif
+
     // Notify all tools the preferences have changed
     if( m_toolManager )
         m_toolManager->RunAction( ACTIONS::updatePreferences, true );

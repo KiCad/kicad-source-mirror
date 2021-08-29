@@ -27,31 +27,30 @@
 #include <pgm_base.h>
 
 
-PANEL_3D_COLORS::PANEL_3D_COLORS( EDA_3D_VIEWER_FRAME* aFrame, wxWindow* aParent ) :
-        PANEL_3D_COLORS_BASE( aParent ),
-        m_boardAdapter( aFrame->GetAdapter() )
+PANEL_3D_COLORS::PANEL_3D_COLORS( wxWindow* aParent ) :
+        PANEL_3D_COLORS_BASE( aParent )
 {
-    m_backgroundTop->SetDefaultColor( m_boardAdapter.g_DefaultBackgroundTop );
-    m_backgroundBottom->SetDefaultColor( m_boardAdapter.g_DefaultBackgroundBot );
+    m_backgroundTop->SetDefaultColor( BOARD_ADAPTER::g_DefaultBackgroundTop );
+    m_backgroundBottom->SetDefaultColor( BOARD_ADAPTER::g_DefaultBackgroundBot );
 
-    m_silkscreenTop->SetUserColors( &m_boardAdapter.g_SilkscreenColors );
-    m_silkscreenTop->SetDefaultColor( m_boardAdapter.g_DefaultSilkscreen );
-    m_silkscreenBottom->SetUserColors( &m_boardAdapter.g_SilkscreenColors );
-    m_silkscreenBottom->SetDefaultColor( m_boardAdapter.g_DefaultSilkscreen );
+    m_silkscreenTop->SetUserColors( &BOARD_ADAPTER::g_SilkscreenColors );
+    m_silkscreenTop->SetDefaultColor( BOARD_ADAPTER::g_DefaultSilkscreen );
+    m_silkscreenBottom->SetUserColors( &BOARD_ADAPTER::g_SilkscreenColors );
+    m_silkscreenBottom->SetDefaultColor( BOARD_ADAPTER::g_DefaultSilkscreen );
 
-    m_solderMaskTop->SetUserColors( &m_boardAdapter.g_MaskColors );
-    m_solderMaskTop->SetDefaultColor( m_boardAdapter.g_DefaultSolderMask );
-    m_solderMaskBottom->SetUserColors( &m_boardAdapter.g_MaskColors );
-    m_solderMaskBottom->SetDefaultColor( m_boardAdapter.g_DefaultSolderMask );
+    m_solderMaskTop->SetUserColors( &BOARD_ADAPTER::g_MaskColors );
+    m_solderMaskTop->SetDefaultColor( BOARD_ADAPTER::g_DefaultSolderMask );
+    m_solderMaskBottom->SetUserColors( &BOARD_ADAPTER::g_MaskColors );
+    m_solderMaskBottom->SetDefaultColor( BOARD_ADAPTER::g_DefaultSolderMask );
 
-    m_solderPaste->SetUserColors( &m_boardAdapter.g_PasteColors );
-    m_solderPaste->SetDefaultColor( m_boardAdapter.g_DefaultSolderPaste );
+    m_solderPaste->SetUserColors( &BOARD_ADAPTER::g_PasteColors );
+    m_solderPaste->SetDefaultColor( BOARD_ADAPTER::g_DefaultSolderPaste );
 
-    m_surfaceFinish->SetUserColors( &m_boardAdapter.g_FinishColors );
-    m_surfaceFinish->SetDefaultColor( m_boardAdapter.g_DefaultSurfaceFinish );
+    m_surfaceFinish->SetUserColors( &BOARD_ADAPTER::g_FinishColors );
+    m_surfaceFinish->SetDefaultColor( BOARD_ADAPTER::g_DefaultSurfaceFinish );
 
-    m_boardBody->SetUserColors( &m_boardAdapter.g_BoardColors );
-    m_boardBody->SetDefaultColor( m_boardAdapter.g_DefaultBoardBody );
+    m_boardBody->SetUserColors( &BOARD_ADAPTER::g_BoardColors );
+    m_boardBody->SetDefaultColor( BOARD_ADAPTER::g_DefaultBoardBody );
 }
 
 

@@ -73,8 +73,6 @@ public:
 
     wxWindow* GetToolCanvas() const override { return m_canvas; }
 
-    void InstallPreferences( PAGED_DIALOG* aParent, PANEL_HOTKEYS_EDITOR* aHotkeysPanel ) override;
-
     /**
      * Request reloading the 3D view.
      *

@@ -22,13 +22,17 @@
  * or you may write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
+
+#include <pgm_base.h>
+#include <settings/settings_manager.h>
+#include <footprint_editor_settings.h>
 #include <pcb_edit_frame.h>
 #include <layer_ids.h>
 #include <settings/color_settings.h>
-
 #include <board.h>
 #include <pcb_layer_box_selector.h>
 #include <tools/pcb_actions.h>
+
 
 // translate aLayer to its action
 static TOOL_ACTION* layer2action( PCB_LAYER_ID aLayer )
@@ -136,33 +140,44 @@ void PCB_LAYER_BOX_SELECTOR::Resync()
 // Returns true if the layer id is enabled (i.e. is it should be displayed)
 bool PCB_LAYER_BOX_SELECTOR::isLayerEnabled( int aLayer ) const
 {
-    BOARD* board = m_boardFrame->GetBoard();
-
-    return board->IsLayerEnabled( ToLAYER_ID( aLayer ) );
+    return getEnabledLayers().test( aLayer );
 }
 
 
 LSET PCB_LAYER_BOX_SELECTOR::getEnabledLayers() const
 {
-    BOARD* board = m_boardFrame->GetBoard();
+    static LSET footprintEditorLayers = LSET::AllLayersMask() & ~LSET::ForbiddenFootprintLayers();
 
-    return board->GetEnabledLayers();
+    if( m_boardFrame )
+        return m_boardFrame->GetBoard()->GetEnabledLayers();
+    else
+        return footprintEditorLayers;
 }
 
 
 // Returns a color index from the layer id
 COLOR4D PCB_LAYER_BOX_SELECTOR::getLayerColor( int aLayer ) const
 {
-    wxASSERT( m_boardFrame );
+    if( m_boardFrame )
+    {
+        return m_boardFrame->GetColorSettings()->GetColor( aLayer );
+    }
+    else
+    {
+        SETTINGS_MANAGER&          mgr = Pgm().GetSettingsManager();
+        FOOTPRINT_EDITOR_SETTINGS* settings = mgr.GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>();
+        COLOR_SETTINGS*            current  = mgr.GetColorSettings( settings->m_ColorTheme );
 
-    return m_boardFrame->GetColorSettings()->GetColor( aLayer );
+        return current->GetColor( aLayer );
+    }
 }
 
 
 // Returns the name of the layer id
 wxString PCB_LAYER_BOX_SELECTOR::getLayerName( int aLayer ) const
 {
-    BOARD* board = m_boardFrame->GetBoard();
-
-    return board->GetLayerName( ToLAYER_ID( aLayer ) );
+    if( m_boardFrame )
+        return m_boardFrame->GetBoard()->GetLayerName( ToLAYER_ID( aLayer ) );
+    else
+        return BOARD::GetStandardLayerName( ToLAYER_ID( aLayer ) );
 }

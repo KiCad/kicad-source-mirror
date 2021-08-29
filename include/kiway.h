@@ -131,6 +131,7 @@ class PGM_BASE;
 class KIWAY;
 class KIWAY_PLAYER;
 class wxTopLevelWindow;
+class TOOL_ACTION;
 
 
 /**
@@ -227,6 +228,11 @@ struct KIFACE
      * @return the requested object which must be cast into the known type.
      */
     virtual void* IfaceOrAddress( int aDataId ) = 0;
+
+    /**
+     * Append this Kiface's registered actions to the given list.
+     */
+    virtual void GetActions( std::vector<TOOL_ACTION*>& aActions ) const = 0;
 };
 
 
@@ -348,6 +354,11 @@ public:
      */
     virtual void ExpressMail( FRAME_T aDestination, MAIL_T aCommand, std::string& aPayload,
                               wxWindow* aSource = nullptr );
+
+    /**
+     * Append all registered actions to the given list.
+     */
+    virtual void GetActions( std::vector<TOOL_ACTION*>& aActions ) const;
 
     /**
      * Return the #PROJECT associated with this KIWAY.

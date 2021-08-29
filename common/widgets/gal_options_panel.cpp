@@ -32,6 +32,7 @@
 
 #include <ignore.h>
 #include <widgets/gal_options_panel.h>
+#include <settings/app_settings.h>
 #include <eda_draw_frame.h>
 
 #include <config_map.h>
@@ -65,10 +66,9 @@ static const UTIL::CFG_MAP<KIGFX::GRID_SNAPPING> gridSnapConfigVals =
 };
 
 
-GAL_OPTIONS_PANEL::GAL_OPTIONS_PANEL( wxWindow* aParent, EDA_DRAW_FRAME* aDrawFrame ) :
+GAL_OPTIONS_PANEL::GAL_OPTIONS_PANEL( wxWindow* aParent, APP_SETTINGS_BASE* aAppSettings ) :
     wxPanel( aParent, wxID_ANY ),
-    m_drawFrame( aDrawFrame ),
-    m_galOptions( aDrawFrame->GetGalDisplayOptions() )
+    m_cfg( aAppSettings )
 {
     // the main sizer that holds "columns" of settings
     m_mainSizer = new wxBoxSizer( wxHORIZONTAL );
@@ -215,27 +215,21 @@ GAL_OPTIONS_PANEL::GAL_OPTIONS_PANEL( wxWindow* aParent, EDA_DRAW_FRAME* aDrawFr
 bool GAL_OPTIONS_PANEL::TransferDataToWindow()
 {
 #ifndef __WXMAC__
-    if( m_drawFrame->GetCanvas()->GetBackend() == EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL )
+    auto canvasType = static_cast<EDA_DRAW_PANEL_GAL::GAL_TYPE>( m_cfg->m_Graphics.canvas_type );
+
+    if( canvasType == EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL )
         m_renderingEngine->SetSelection( 0 );
     else
         m_renderingEngine->SetSelection( 1 );
-#else
-    ignore_unused( m_drawFrame );
 #endif
 
-    m_gridSnapOptions->SetSelection( UTIL::GetConfigForVal( gridSnapConfigVals,
-                                                            m_galOptions.m_gridSnapping ) );
+    m_gridSnapOptions->SetSelection( m_cfg->m_Window.grid.snap );
+    m_gridStyle->SetSelection( m_cfg->m_Window.grid.style );
+    m_gridLineWidth->SetValue( m_cfg->m_Window.grid.line_width );
+    m_gridMinSpacing->SetValue( m_cfg->m_Window.grid.min_spacing );
 
-    m_gridStyle->SetSelection( UTIL::GetConfigForVal( gridStyleSelectMap,
-                                                      m_galOptions.m_gridStyle ) );
-
-    m_gridLineWidth->SetValue( m_galOptions.m_gridLineWidth );
-
-    m_gridMinSpacing->SetValue( m_galOptions.m_gridMinSpacing );
-
-    m_cursorShape->SetSelection( m_galOptions.m_fullscreenCursor );
-
-    m_forceCursorDisplay->SetValue( m_galOptions.m_forceDisplayCursor );
+    m_cursorShape->SetSelection( m_cfg->m_Window.cursor.fullscreen_cursor );
+    m_forceCursorDisplay->SetValue( m_cfg->m_Window.cursor.always_show_cursor );
 
     return true;
 }
@@ -243,28 +237,18 @@ bool GAL_OPTIONS_PANEL::TransferDataToWindow()
 
 bool GAL_OPTIONS_PANEL::TransferDataFromWindow()
 {
-    m_galOptions.m_gridSnapping = UTIL::GetValFromConfig( gridSnapConfigVals,
-                                                          m_gridSnapOptions->GetSelection() );
+    m_cfg->m_Window.grid.snap = m_gridSnapOptions->GetSelection();
+    m_cfg->m_Window.grid.style = m_gridStyle->GetSelection();
+    m_cfg->m_Window.grid.line_width = m_gridLineWidth->GetValue();
+    m_cfg->m_Window.grid.min_spacing = m_gridMinSpacing->GetValue();
 
-    m_galOptions.m_gridStyle = UTIL::GetValFromConfig( gridStyleSelectMap,
-                                                       m_gridStyle->GetSelection() );
-
-    m_galOptions.m_gridLineWidth = m_gridLineWidth->GetValue();
-
-    m_galOptions.m_gridMinSpacing = m_gridMinSpacing->GetValue();
-
-    m_galOptions.m_fullscreenCursor = m_cursorShape->GetSelection();
-
-    m_galOptions.m_forceDisplayCursor = m_forceCursorDisplay->GetValue();
+    m_cfg->m_Window.cursor.fullscreen_cursor = m_cursorShape->GetSelection();
+    m_cfg->m_Window.cursor.always_show_cursor = m_forceCursorDisplay->GetValue();
 
 #ifndef __WXMAC__
-    EDA_DRAW_PANEL_GAL::GAL_TYPE wantedType = m_renderingEngine->GetSelection() == 0 ?
+    m_cfg->m_Graphics.canvas_type = m_renderingEngine->GetSelection() == 0 ?
                                                     EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL :
                                                     EDA_DRAW_PANEL_GAL::GAL_TYPE_CAIRO;
-    EDA_DRAW_PANEL_GAL::GAL_TYPE currentType = m_drawFrame->GetCanvas()->GetBackend();
-
-    if( wantedType != currentType )
-        m_drawFrame->GetCanvas()->SwitchBackend( wantedType );
 #endif
 
     return true;

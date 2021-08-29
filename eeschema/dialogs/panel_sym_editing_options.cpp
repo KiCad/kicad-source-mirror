@@ -22,29 +22,27 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <symbol_edit_frame.h>
-#include <sch_painter.h>
+#include <pgm_base.h>
 #include <settings/settings_manager.h>
 #include <symbol_editor/symbol_editor_settings.h>
-
 #include "panel_sym_editing_options.h"
 
 
-PANEL_SYM_EDITING_OPTIONS::PANEL_SYM_EDITING_OPTIONS( SYMBOL_EDIT_FRAME* aFrame,
-                                                      wxWindow* aWindow ) :
+PANEL_SYM_EDITING_OPTIONS::PANEL_SYM_EDITING_OPTIONS( wxWindow* aWindow,
+                                                      EDA_BASE_FRAME* aUnitsProvider ) :
         PANEL_SYM_EDITING_OPTIONS_BASE( aWindow ),
-        m_frame( aFrame ),
-        m_lineWidth( aFrame, m_lineWidthLabel, m_lineWidthCtrl, m_lineWidthUnits ),
-        m_textSize( aFrame, m_textSizeLabel, m_textSizeCtrl, m_textSizeUnits ),
-        m_pinLength( aFrame, m_pinLengthLabel, m_pinLengthCtrl, m_pinLengthUnits ),
-        m_pinNameSize( aFrame, m_pinNameSizeLabel, m_pinNameSizeCtrl, m_pinNameSizeUnits ),
-        m_pinNumberSize( aFrame, m_pinNumSizeLabel, m_pinNumSizeCtrl, m_pinNumSizeUnits )
+        m_lineWidth( aUnitsProvider, m_lineWidthLabel, m_lineWidthCtrl, m_lineWidthUnits ),
+        m_textSize( aUnitsProvider, m_textSizeLabel, m_textSizeCtrl, m_textSizeUnits ),
+        m_pinLength( aUnitsProvider, m_pinLengthLabel, m_pinLengthCtrl, m_pinLengthUnits ),
+        m_pinNameSize( aUnitsProvider, m_pinNameSizeLabel, m_pinNameSizeCtrl, m_pinNameSizeUnits ),
+        m_pinNumberSize( aUnitsProvider, m_pinNumSizeLabel, m_pinNumSizeCtrl, m_pinNumSizeUnits )
 {}
 
 
 bool PANEL_SYM_EDITING_OPTIONS::TransferDataToWindow()
 {
-    SYMBOL_EDITOR_SETTINGS* settings = m_frame->GetSettings();
+    SETTINGS_MANAGER&       mgr = Pgm().GetSettingsManager();
+    SYMBOL_EDITOR_SETTINGS* settings = mgr.GetAppSettings<SYMBOL_EDITOR_SETTINGS>();
 
     m_lineWidth.SetValue( Mils2iu( settings->m_Defaults.line_width ) );
     m_textSize.SetValue( Mils2iu( settings->m_Defaults.text_size ) );
@@ -53,8 +51,7 @@ bool PANEL_SYM_EDITING_OPTIONS::TransferDataToWindow()
     m_pinNameSize.SetValue( Mils2iu( settings->m_Defaults.pin_name_size ) );
     m_choicePinDisplacement->SetSelection( settings->m_Repeat.pin_step == 50 ? 1 : 0 );
     m_spinRepeatLabel->SetValue( settings->m_Repeat.label_delta );
-
-    m_cbShowPinElectricalType->SetValue( m_frame->GetRenderSettings()->m_ShowPinsElectricalType );
+    m_cbShowPinElectricalType->SetValue( settings->m_ShowPinElectricalType );
 
     return true;
 }
@@ -62,7 +59,8 @@ bool PANEL_SYM_EDITING_OPTIONS::TransferDataToWindow()
 
 bool PANEL_SYM_EDITING_OPTIONS::TransferDataFromWindow()
 {
-    SYMBOL_EDITOR_SETTINGS* settings = m_frame->GetSettings();
+    SETTINGS_MANAGER&       mgr = Pgm().GetSettingsManager();
+    SYMBOL_EDITOR_SETTINGS* settings = mgr.GetAppSettings<SYMBOL_EDITOR_SETTINGS>();
 
     settings->m_Defaults.line_width = Iu2Mils( (int) m_lineWidth.GetValue() );
     settings->m_Defaults.text_size = Iu2Mils( (int) m_textSize.GetValue() );
@@ -71,9 +69,7 @@ bool PANEL_SYM_EDITING_OPTIONS::TransferDataFromWindow()
     settings->m_Defaults.pin_name_size = Iu2Mils( (int) m_pinNameSize.GetValue() );
     settings->m_Repeat.label_delta = m_spinRepeatLabel->GetValue();
     settings->m_Repeat.pin_step = m_choicePinDisplacement->GetSelection() == 1 ? 50 : 100;
-
-    m_frame->GetRenderSettings()->m_ShowPinsElectricalType = m_cbShowPinElectricalType->GetValue();
-    m_frame->GetCanvas()->Refresh();
+    settings->m_ShowPinElectricalType = m_cbShowPinElectricalType->GetValue();
 
     return true;
 }

@@ -70,7 +70,7 @@ public:
      */
     HOTKEY_STORE();
 
-    void Init( std::vector<TOOL_MANAGER*> aToolManagerList, bool aIncludeReadOnlyCmds );
+    void Init( std::vector<TOOL_ACTION*> aActionsList, bool aIncludeReadOnlyCmds );
 
     static wxString GetAppName( TOOL_ACTION* aAction );
     static wxString GetSectionName( TOOL_ACTION* aAction );

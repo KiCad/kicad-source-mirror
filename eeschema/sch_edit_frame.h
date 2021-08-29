@@ -785,11 +785,6 @@ public:
     void RecalculateConnections( SCH_CLEANUP_FLAGS aCleanupFlags );
 
     /**
-     * Allow Eeschema to install its preferences panels into the preferences dialog.
-     */
-    void InstallPreferences( PAGED_DIALOG* aParent, PANEL_HOTKEYS_EDITOR* aHotkeysPanel ) override;
-
-    /**
      * Called after the preferences dialog is run.
      */
     void CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVarsChanged ) override;

@@ -23,7 +23,10 @@
  */
 
 
-#include "pcbnew_settings.h"
+#include <pgm_base.h>
+#include <settings/settings_manager.h>
+#include <pcbnew_settings.h>
+#include <footprint_editor_settings.h>
 #include <board.h>
 #include <pcb_base_frame.h>
 #include <tool/selection.h>
@@ -185,8 +188,10 @@ bool PCB_EDITOR_CONDITIONS::zoneDisplayModeFunc( const SELECTION& aSelection, PC
 
 bool PCB_EDITOR_CONDITIONS::get45degModeFunc( const SELECTION& aSelection, PCB_BASE_FRAME* aFrame )
 {
+    SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
+
     if( aFrame->IsType( FRAME_PCB_EDITOR ) )
-        return aFrame->Settings().m_PcbUse45DegreeLimit;
+        return mgr.GetAppSettings<PCBNEW_SETTINGS>()->m_Use45DegreeLimit;
     else
-        return aFrame->Settings().m_FpeditUse45DegreeLimit;
+        return mgr.GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>()->m_Use45Limit;
 }

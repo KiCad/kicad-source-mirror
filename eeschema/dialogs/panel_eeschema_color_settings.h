@@ -22,15 +22,11 @@
 #ifndef PANEL_EESCHEMA_COLOR_SETTINGS_H_
 #define PANEL_EESCHEMA_COLOR_SETTINGS_H_
 
-#include <gal/color4d.h>
-#include <gal/gal_display_options.h>
-#include <layer_ids.h>
 #include <dialogs/panel_color_settings.h>
+#include <class_draw_panel_gal.h>
 
-class COLOR_SETTINGS;
-class SCH_BASE_FRAME;
 class PAGE_INFO;
-class SCH_ITEM;
+class EDA_ITEM;
 class SCH_PREVIEW_PANEL;
 class TITLE_BLOCK;
 class DS_PROXY_VIEW_ITEM;
@@ -39,7 +35,7 @@ class DS_PROXY_VIEW_ITEM;
 class PANEL_EESCHEMA_COLOR_SETTINGS : public PANEL_COLOR_SETTINGS
 {
 public:
-    PANEL_EESCHEMA_COLOR_SETTINGS( SCH_BASE_FRAME* aFrame, wxWindow* aParent );
+    PANEL_EESCHEMA_COLOR_SETTINGS( wxWindow* aParent );
 
     ~PANEL_EESCHEMA_COLOR_SETTINGS() override;
 
@@ -59,23 +55,23 @@ protected:
 
     bool saveCurrentTheme( bool aValidate ) override;
 
-private:
-    SCH_BASE_FRAME*            m_frame;
-
-    SCH_PREVIEW_PANEL*         m_preview;
-    PAGE_INFO*                 m_page;
-    TITLE_BLOCK*               m_titleBlock;
-    DS_PROXY_VIEW_ITEM*        m_drawingSheet;
-    std::vector<EDA_ITEM*>     m_previewItems;
-
-    KIGFX::GAL_DISPLAY_OPTIONS m_galDisplayOptions;
+    void createSwatches() override;
 
 private:
     void createPreviewItems();
-    void createSwatches();
 
     void updatePreview();
     void zoomFitPreview();
+
+private:
+    SCH_PREVIEW_PANEL*           m_preview;
+    PAGE_INFO*                   m_page;
+    TITLE_BLOCK*                 m_titleBlock;
+    DS_PROXY_VIEW_ITEM*          m_drawingSheet;
+    std::vector<EDA_ITEM*>       m_previewItems;
+
+    KIGFX::GAL_DISPLAY_OPTIONS   m_galDisplayOptions;
+    EDA_DRAW_PANEL_GAL::GAL_TYPE m_galType;
 };
 
 

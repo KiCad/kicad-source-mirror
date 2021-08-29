@@ -24,19 +24,17 @@
 #include <wx/panel.h>
 
 class GAL_OPTIONS_PANEL;
-class EDA_DRAW_FRAME;
-class PAGED_DIALOG;
+
 
 class PANEL_GAL_DISPLAY_OPTIONS : public wxPanel
 {
 public:
-    PANEL_GAL_DISPLAY_OPTIONS( EDA_DRAW_FRAME* aFrame, PAGED_DIALOG* aParent );
+    PANEL_GAL_DISPLAY_OPTIONS( wxWindow* aParent, APP_SETTINGS_BASE* aAppSettings );
 
 private:
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
 
-    EDA_DRAW_FRAME*     m_frame;
     GAL_OPTIONS_PANEL*  m_galOptsPanel;
 };
 

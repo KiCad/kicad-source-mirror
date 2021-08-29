@@ -43,7 +43,7 @@ class PANEL_HOTKEYS_EDITOR : public RESETTABLE_PANEL
 public:
     PANEL_HOTKEYS_EDITOR( EDA_BASE_FRAME* aFrame, wxWindow* aWindow, bool aReadOnly );
 
-    void AddHotKeys( TOOL_MANAGER* aToolMgr );
+    std::vector<TOOL_ACTION*>& ActionsList() { return m_actions; }
 
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
@@ -54,6 +54,8 @@ public:
     {
         return _( "Reset all hotkeys to the built-in KiCad defaults" );
     }
+
+    bool Show( bool show ) override;
 
 private:
     /**
@@ -87,7 +89,7 @@ protected:
     EDA_BASE_FRAME*            m_frame;
     bool                       m_readOnly;
 
-    std::vector<TOOL_MANAGER*> m_toolManagers;
+    std::vector<TOOL_ACTION*>  m_actions;
     HOTKEY_STORE               m_hotkeyStore;
     WIDGET_HOTKEY_LIST*        m_hotkeyListCtrl;
 };

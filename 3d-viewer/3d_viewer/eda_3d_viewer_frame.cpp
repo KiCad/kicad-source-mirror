@@ -28,7 +28,6 @@
 #include <wx/wupdlock.h>
 #include <wx/clipbrd.h>
 #include <wx/filedlg.h>
-#include <wx/treebook.h>
 #include "eda_3d_viewer_frame.h"
 #include <eda_3d_viewer_settings.h>
 #include <3d_viewer_id.h>
@@ -49,12 +48,6 @@
 #include <tool/tool_dispatcher.h>
 #include <tool/action_toolbar.h>
 #include <widgets/infobar.h>
-#include <widgets/paged_dialog.h>
-#include <dialogs/panel_3D_display_options.h>
-#include <dialogs/panel_3D_opengl_options.h>
-#include <dialogs/panel_3D_raytracing_options.h>
-#include <dialogs/panel_3D_colors.h>
-#include <panel_hotkeys_editor.h>
 #include <wildcards_and_files_ext.h>
 
 /**
@@ -225,21 +218,6 @@ void EDA_3D_VIEWER_FRAME::setupUIConditions()
 
 #undef FlagCheck
 #undef GridSizeCheck
-}
-
-
-void EDA_3D_VIEWER_FRAME::InstallPreferences( PAGED_DIALOG* aParent,
-                                              PANEL_HOTKEYS_EDITOR* aHotkeysPanel )
-{
-    wxTreebook* book = aParent->GetTreebook();
-
-    book->AddPage( new wxPanel( book ), _( "3D Viewer" ) );
-    book->AddSubPage( new PANEL_3D_DISPLAY_OPTIONS( this, book ), _( "General" ) );
-    book->AddSubPage( new PANEL_3D_OPENGL_OPTIONS( this, book ), _( "Realtime Renderer" ) );
-    book->AddSubPage( new PANEL_3D_RAYTRACING_OPTIONS( this, book ), _( "Raytracing Renderer" ) );
-    book->AddSubPage( new PANEL_3D_COLORS( this, book ), _( "Colors" ) );
-
-    aHotkeysPanel->AddHotKeys( GetToolManager() );
 }
 
 
@@ -632,6 +610,7 @@ void EDA_3D_VIEWER_FRAME::CommonSettingsChanged( bool aEnvVarsChanged, bool aTex
     ReCreateMainToolbar();
 
     loadCommonSettings();
+    LoadSettings( Pgm().GetSettingsManager().GetAppSettings<EDA_3D_VIEWER_SETTINGS>() );
 
     NewDisplay( true );
 }

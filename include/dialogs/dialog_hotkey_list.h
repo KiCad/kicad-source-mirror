@@ -32,7 +32,6 @@
 
 #include <dialog_shim.h>
 
-class TOOL_MANAGER;
 class PANEL_HOTKEYS_EDITOR;
 
 
@@ -48,7 +47,7 @@ public:
      *
      * @param aParent the parent frame
      */
-    DIALOG_LIST_HOTKEYS( EDA_BASE_FRAME* aParent, TOOL_MANAGER* aToolManager );
+    DIALOG_LIST_HOTKEYS( EDA_BASE_FRAME* aParent );
 
 protected:
 

@@ -21,30 +21,28 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef KICAD_PANEL_GERBVIEW_DISPLAY_OPTIONS_H
-#define KICAD_PANEL_GERBVIEW_DISPLAY_OPTIONS_H
+#ifndef PANEL_GERBVIEW_DISPLAY_OPTIONS_H
+#define PANEL_GERBVIEW_DISPLAY_OPTIONS_H
 
 #include "panel_gerbview_display_options_base.h"
 
 
-class GERBVIEW_FRAME;
 class GAL_OPTIONS_PANEL;
 
 
 class PANEL_GERBVIEW_DISPLAY_OPTIONS : public PANEL_GERBVIEW_DISPLAY_OPTIONS_BASE
 {
 public:
-    PANEL_GERBVIEW_DISPLAY_OPTIONS( GERBVIEW_FRAME* aFrame, wxWindow* aWindow );
+    PANEL_GERBVIEW_DISPLAY_OPTIONS( wxWindow* aParent );
     ~PANEL_GERBVIEW_DISPLAY_OPTIONS() {};
 
 private:
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
 
-    GERBVIEW_FRAME*    m_Parent;
     GAL_OPTIONS_PANEL* m_galOptsPanel;
 };
 
 
 
-#endif //KICAD_PANEL_GERBVIEW_DISPLAY_OPTIONS_H
+#endif // PANEL_GERBVIEW_DISPLAY_OPTIONS_H

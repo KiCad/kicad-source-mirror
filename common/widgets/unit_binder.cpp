@@ -37,7 +37,7 @@
 wxDEFINE_EVENT( DELAY_FOCUS, wxCommandEvent );
 
 
-UNIT_BINDER::UNIT_BINDER( EDA_DRAW_FRAME* aParent, wxStaticText* aLabel, wxWindow* aValueCtrl,
+UNIT_BINDER::UNIT_BINDER( EDA_BASE_FRAME* aParent, wxStaticText* aLabel, wxWindow* aValueCtrl,
                           wxStaticText* aUnitLabel, bool allowEval ) :
         m_frame( aParent ),
         m_label( aLabel ),

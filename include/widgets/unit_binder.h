@@ -32,6 +32,7 @@
 #include <libeval/numeric_evaluator.h>
 #include <wx/event.h>
 
+class EDA_BASE_FRAME;
 class EDA_DRAW_FRAME;
 class wxTextEntry;
 class wxSpinButton;
@@ -43,7 +44,7 @@ class UNIT_BINDER : public wxEvtHandler
 public:
 
     /**
-     * @param aParent is the parent EDA_DRAW_FRAME.
+     * @param aParent is the parent EDA_BASE_FRAME, used to fetch units and coordinate systems.
      * @param aLabel is the static text used to label the text input widget (note: the label
      *               text, trimmed of its colon, will also be used in error messages)
      * @param aValueCtrl is the control used to edit or display the given value (wxTextCtrl,
@@ -52,7 +53,7 @@ public:
      * Can be nullptr.
      * @param aAllowEval indicates \a aTextInput's content should be eval'ed before storing
      */
-    UNIT_BINDER( EDA_DRAW_FRAME* aParent,
+    UNIT_BINDER( EDA_BASE_FRAME* aParent,
                  wxStaticText* aLabel, wxWindow* aValueCtrl, wxStaticText* aUnitLabel,
                  bool aAllowEval = true );
 
@@ -200,7 +201,7 @@ protected:
      */
     double setPrecision( double aValue, bool aValueUsesUserUnits );
 
-    EDA_DRAW_FRAME*   m_frame;
+    EDA_BASE_FRAME*   m_frame;
 
     ///< The bound widgets
     wxStaticText*     m_label;

@@ -1475,6 +1475,15 @@ void SCH_EDIT_FRAME::CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVars
 
     ShowAllIntersheetRefs( settings.m_IntersheetRefsShow );
 
+    auto cfg = Pgm().GetSettingsManager().GetAppSettings<EESCHEMA_SETTINGS>();
+    GetGalDisplayOptions().ReadWindowSettings( cfg->m_Window );
+
+    GetRenderSettings()->m_ShowHiddenPins = cfg->m_Appearance.show_hidden_pins;
+    GetRenderSettings()->m_ShowHiddenText = cfg->m_Appearance.show_hidden_fields;
+    GetRenderSettings()->SetShowPageLimits( cfg->m_Appearance.show_page_limits );
+
+    GetCanvas()->ForceRefresh();
+
     RecreateToolbars();
     Layout();
     SendSizeEvent();

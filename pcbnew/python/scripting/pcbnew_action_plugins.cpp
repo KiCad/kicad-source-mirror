@@ -22,6 +22,9 @@
  */
 
 #include "pcbnew_action_plugins.h"
+#include <pgm_base.h>
+#include <settings/settings_manager.h>
+#include <pcbnew_settings.h>
 #include <bitmaps.h>
 #include <board.h>
 #include <board_commit.h>
@@ -432,6 +435,8 @@ void PCB_EDIT_FRAME::AddActionPluginTools()
 
 std::vector<ACTION_PLUGIN*> PCB_EDIT_FRAME::GetOrderedActionPlugins()
 {
+    PCBNEW_SETTINGS* cfg = Pgm().GetSettingsManager().GetAppSettings<PCBNEW_SETTINGS>();
+
     std::vector<ACTION_PLUGIN*> plugins;
     std::vector<ACTION_PLUGIN*> orderedPlugins;
 
@@ -439,7 +444,7 @@ std::vector<ACTION_PLUGIN*> PCB_EDIT_FRAME::GetOrderedActionPlugins()
         plugins.push_back( ACTION_PLUGINS::GetAction( i ) );
 
     // First add plugins that have entries in settings
-    for( const auto& pair : m_settings->m_VisibleActionPlugins )
+    for( const auto& pair : cfg->m_VisibleActionPlugins )
     {
         auto loc = std::find_if( plugins.begin(), plugins.end(),
                 [pair] ( ACTION_PLUGIN* plugin )
@@ -465,9 +470,9 @@ std::vector<ACTION_PLUGIN*> PCB_EDIT_FRAME::GetOrderedActionPlugins()
 bool PCB_EDIT_FRAME::GetActionPluginButtonVisible( const wxString& aPluginPath,
                                                    bool aPluginDefault )
 {
-    auto& settings = m_settings->m_VisibleActionPlugins;
+    PCBNEW_SETTINGS* cfg = Pgm().GetSettingsManager().GetAppSettings<PCBNEW_SETTINGS>();
 
-    for( const auto& entry : settings )
+    for( const auto& entry : cfg->m_VisibleActionPlugins )
     {
         if( entry.first == aPluginPath )
             return entry.second;

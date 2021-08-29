@@ -22,18 +22,14 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <pgm_base.h>
+#include <settings/settings_manager.h>
+#include <eda_3d_viewer_settings.h>
 #include "panel_3D_display_options.h"
-#include <3d_canvas/board_adapter.h>
-#include <3d_viewer/eda_3d_viewer_frame.h>
-#include <3d_viewer/tools/eda_3d_controller.h>
-#include <tool/tool_manager.h>
 
 
-PANEL_3D_DISPLAY_OPTIONS::PANEL_3D_DISPLAY_OPTIONS( EDA_3D_VIEWER_FRAME* aFrame, wxWindow* aParent ) :
-        PANEL_3D_DISPLAY_OPTIONS_BASE( aParent ),
-        m_frame( aFrame ),
-        m_settings( aFrame->GetAdapter() ),
-        m_canvas( aFrame->GetCanvas() )
+PANEL_3D_DISPLAY_OPTIONS::PANEL_3D_DISPLAY_OPTIONS( wxWindow* aParent ) :
+        PANEL_3D_DISPLAY_OPTIONS_BASE( aParent )
 {
 }
 
@@ -47,38 +43,30 @@ void PANEL_3D_DISPLAY_OPTIONS::OnCheckEnableAnimation( wxCommandEvent& event )
 
 bool PANEL_3D_DISPLAY_OPTIONS::TransferDataToWindow()
 {
+    EDA_3D_VIEWER_SETTINGS* cfg = Pgm().GetSettingsManager().GetAppSettings<EDA_3D_VIEWER_SETTINGS>();
+
     // Check/uncheck checkboxes
-    m_checkBoxRealisticMode->SetValue( m_settings.GetFlag( FL_USE_REALISTIC_MODE ) );
-    m_checkBoxBoardBody->SetValue( m_settings.GetFlag( FL_SHOW_BOARD_BODY ) );
-    m_checkBoxAreas->SetValue( m_settings.GetFlag( FL_ZONE ) );
+    m_checkBoxRealisticMode->SetValue( cfg->m_Render.realistic );
+    m_checkBoxBoardBody->SetValue( cfg->m_Render.show_board_body );
+    m_checkBoxAreas->SetValue( cfg->m_Render.show_zones );
+    m_checkBoxSilkscreen->SetValue( cfg->m_Render.show_silkscreen );
+    m_checkBoxSolderMask->SetValue( cfg->m_Render.show_soldermask );
+    m_checkBoxSolderpaste->SetValue( cfg->m_Render.show_solderpaste );
+    m_checkBoxAdhesive->SetValue( cfg->m_Render.show_adhesive );
+    m_checkBoxComments->SetValue( cfg->m_Render.show_comments );
+    m_checkBoxECO->SetValue( cfg->m_Render.show_eco );
+    m_checkBoxSubtractMaskFromSilk->SetValue( cfg->m_Render.subtract_mask_from_silk );
+    m_checkBoxClipSilkOnViaAnnulus->SetValue( cfg->m_Render.clip_silk_on_via_annulus );
+    m_checkBoxRenderPlatedPadsAsPlated->SetValue( cfg->m_Render.renderPlatedPadsAsPlated );
 
-    m_checkBoxSilkscreen->SetValue( m_settings.GetFlag( FL_SILKSCREEN ) );
-    m_checkBoxSolderMask->SetValue( m_settings.GetFlag( FL_SOLDERMASK ) );
-    m_checkBoxSolderpaste->SetValue( m_settings.GetFlag( FL_SOLDERPASTE ) );
-    m_checkBoxAdhesive->SetValue( m_settings.GetFlag( FL_ADHESIVE ) );
-    m_checkBoxComments->SetValue( m_settings.GetFlag( FL_COMMENTS ) );
-    m_checkBoxECO->SetValue( m_settings.GetFlag( FL_ECO ) );
-    m_checkBoxSubtractMaskFromSilk->SetValue( m_settings.GetFlag( FL_SUBTRACT_MASK_FROM_SILK ) );
-    m_checkBoxClipSilkOnViaAnnulus->SetValue( m_settings.GetFlag( FL_CLIP_SILK_ON_VIA_ANNULUS ) );
-    m_checkBoxRenderPlatedPadsAsPlated->SetValue(
-            m_settings.GetFlag( FL_RENDER_PLATED_PADS_AS_PLATED ) );
-
-    switch( m_settings.GetMaterialMode() )
-    {
-    default:
-    case MATERIAL_MODE::NORMAL:       m_materialProperties->SetSelection( 0 ); break;
-    case MATERIAL_MODE::DIFFUSE_ONLY: m_materialProperties->SetSelection( 1 ); break;
-    case MATERIAL_MODE::CAD_MODE:     m_materialProperties->SetSelection( 2 ); break;
-    }
+    m_materialProperties->SetSelection( cfg->m_Render.material_mode );
 
     // Camera Options
-    m_checkBoxEnableAnimation->SetValue( m_canvas->GetAnimationEnabled() );
-    m_sliderAnimationSpeed->SetValue( m_canvas->GetMovingSpeedMultiplier() );
-    m_staticAnimationSpeed->Enable( m_canvas->GetAnimationEnabled() );
-    m_sliderAnimationSpeed->Enable( m_canvas->GetAnimationEnabled() );
-
-    EDA_3D_CONTROLLER* ctrlTool = m_frame->GetToolManager()->GetTool<EDA_3D_CONTROLLER>();
-    m_spinCtrlRotationAngle->SetValue( ctrlTool->GetRotationIncrement() );
+    m_checkBoxEnableAnimation->SetValue( cfg->m_Camera.animation_enabled );
+    m_sliderAnimationSpeed->SetValue( cfg->m_Camera.moving_speed_multiplier );
+    m_staticAnimationSpeed->Enable( cfg->m_Camera.animation_enabled );
+    m_sliderAnimationSpeed->Enable( cfg->m_Camera.animation_enabled );
+    m_spinCtrlRotationAngle->SetValue( cfg->m_Camera.rotation_increment );
 
     return true;
 }
@@ -86,41 +74,32 @@ bool PANEL_3D_DISPLAY_OPTIONS::TransferDataToWindow()
 
 bool PANEL_3D_DISPLAY_OPTIONS::TransferDataFromWindow()
 {
+    EDA_3D_VIEWER_SETTINGS* cfg = Pgm().GetSettingsManager().GetAppSettings<EDA_3D_VIEWER_SETTINGS>();
+
     // Set render mode
-    m_settings.SetFlag( FL_USE_REALISTIC_MODE, m_checkBoxRealisticMode->GetValue() );
+    cfg->m_Render.realistic = m_checkBoxRealisticMode->GetValue();
 
     // Set visibility of items
-    m_settings.SetFlag( FL_SHOW_BOARD_BODY, m_checkBoxBoardBody->GetValue() );
-    m_settings.SetFlag( FL_ZONE, m_checkBoxAreas->GetValue() );
-    m_settings.SetFlag( FL_SUBTRACT_MASK_FROM_SILK, m_checkBoxSubtractMaskFromSilk->GetValue() );
-    m_settings.SetFlag( FL_CLIP_SILK_ON_VIA_ANNULUS, m_checkBoxClipSilkOnViaAnnulus->GetValue() );
-    m_settings.SetFlag( FL_RENDER_PLATED_PADS_AS_PLATED,
-                        m_checkBoxRenderPlatedPadsAsPlated->GetValue() );
+    cfg->m_Render.show_board_body = m_checkBoxBoardBody->GetValue();
+    cfg->m_Render.show_zones = m_checkBoxAreas->GetValue();
+    cfg->m_Render.subtract_mask_from_silk = m_checkBoxSubtractMaskFromSilk->GetValue();
+    cfg->m_Render.clip_silk_on_via_annulus = m_checkBoxClipSilkOnViaAnnulus->GetValue();
+    cfg->m_Render.renderPlatedPadsAsPlated = m_checkBoxRenderPlatedPadsAsPlated->GetValue();
 
-    switch( m_materialProperties->GetSelection() )
-    {
-    default:
-    case 0: m_settings.SetMaterialMode( MATERIAL_MODE::NORMAL );       break;
-    case 1: m_settings.SetMaterialMode( MATERIAL_MODE::DIFFUSE_ONLY ); break;
-    case 2: m_settings.SetMaterialMode( MATERIAL_MODE::CAD_MODE );     break;
-    }
+    cfg->m_Render.material_mode = m_materialProperties->GetSelection();
 
     // Set Layer visibility
-    m_settings.SetFlag( FL_SILKSCREEN, m_checkBoxSilkscreen->GetValue() );
-    m_settings.SetFlag( FL_SOLDERMASK, m_checkBoxSolderMask->GetValue() );
-    m_settings.SetFlag( FL_SOLDERPASTE, m_checkBoxSolderpaste->GetValue() );
-    m_settings.SetFlag( FL_ADHESIVE, m_checkBoxAdhesive->GetValue() );
-    m_settings.SetFlag( FL_COMMENTS, m_checkBoxComments->GetValue() );
-    m_settings.SetFlag( FL_ECO, m_checkBoxECO->GetValue( ) );
+    cfg->m_Render.show_silkscreen = m_checkBoxSilkscreen->GetValue();
+    cfg->m_Render.show_soldermask = m_checkBoxSolderMask->GetValue();
+    cfg->m_Render.show_solderpaste = m_checkBoxSolderpaste->GetValue();
+    cfg->m_Render.show_adhesive = m_checkBoxAdhesive->GetValue();
+    cfg->m_Render.show_comments = m_checkBoxComments->GetValue();
+    cfg->m_Render.show_eco = m_checkBoxECO->GetValue( );
 
     // Camera Options
-    m_canvas->SetAnimationEnabled( m_checkBoxEnableAnimation->GetValue());
-    m_canvas->SetMovingSpeedMultiplier( m_sliderAnimationSpeed->GetValue());
-
-    EDA_3D_CONTROLLER* ctrlTool = m_frame->GetToolManager()->GetTool<EDA_3D_CONTROLLER>();
-    ctrlTool->SetRotationIncrement( m_spinCtrlRotationAngle->GetValue() );
-
-    // The 3D scene will be rebuilt by the caller
+    cfg->m_Camera.animation_enabled = m_checkBoxEnableAnimation->GetValue();
+    cfg->m_Camera.moving_speed_multiplier = m_sliderAnimationSpeed->GetValue();
+    cfg->m_Camera.rotation_increment = m_spinCtrlRotationAngle->GetValue();
 
     return true;
 }

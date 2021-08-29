@@ -7,11 +7,11 @@
 
 #include "widgets/wx_grid.h"
 
-#include "panel_eeschema_template_fieldnames_base.h"
+#include "panel_template_fieldnames_base.h"
 
 ///////////////////////////////////////////////////////////////////////////
 
-PANEL_EESCHEMA_TEMPLATE_FIELDNAMES_BASE::PANEL_EESCHEMA_TEMPLATE_FIELDNAMES_BASE( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style, const wxString& name ) : wxPanel( parent, id, pos, size, style, name )
+PANEL_TEMPLATE_FIELDNAMES_BASE::PANEL_TEMPLATE_FIELDNAMES_BASE( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style, const wxString& name ) : wxPanel( parent, id, pos, size, style, name )
 {
 	wxBoxSizer* bPanelSizer;
 	bPanelSizer = new wxBoxSizer( wxHORIZONTAL );
@@ -85,16 +85,16 @@ PANEL_EESCHEMA_TEMPLATE_FIELDNAMES_BASE::PANEL_EESCHEMA_TEMPLATE_FIELDNAMES_BASE
 	bPanelSizer->Fit( this );
 
 	// Connect Events
-	m_grid->Connect( wxEVT_SIZE, wxSizeEventHandler( PANEL_EESCHEMA_TEMPLATE_FIELDNAMES_BASE::OnSizeGrid ), NULL, this );
-	m_addFieldButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_EESCHEMA_TEMPLATE_FIELDNAMES_BASE::OnAddButtonClick ), NULL, this );
-	m_deleteFieldButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_EESCHEMA_TEMPLATE_FIELDNAMES_BASE::OnDeleteButtonClick ), NULL, this );
+	m_grid->Connect( wxEVT_SIZE, wxSizeEventHandler( PANEL_TEMPLATE_FIELDNAMES_BASE::OnSizeGrid ), NULL, this );
+	m_addFieldButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_TEMPLATE_FIELDNAMES_BASE::OnAddButtonClick ), NULL, this );
+	m_deleteFieldButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_TEMPLATE_FIELDNAMES_BASE::OnDeleteButtonClick ), NULL, this );
 }
 
-PANEL_EESCHEMA_TEMPLATE_FIELDNAMES_BASE::~PANEL_EESCHEMA_TEMPLATE_FIELDNAMES_BASE()
+PANEL_TEMPLATE_FIELDNAMES_BASE::~PANEL_TEMPLATE_FIELDNAMES_BASE()
 {
 	// Disconnect Events
-	m_grid->Disconnect( wxEVT_SIZE, wxSizeEventHandler( PANEL_EESCHEMA_TEMPLATE_FIELDNAMES_BASE::OnSizeGrid ), NULL, this );
-	m_addFieldButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_EESCHEMA_TEMPLATE_FIELDNAMES_BASE::OnAddButtonClick ), NULL, this );
-	m_deleteFieldButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_EESCHEMA_TEMPLATE_FIELDNAMES_BASE::OnDeleteButtonClick ), NULL, this );
+	m_grid->Disconnect( wxEVT_SIZE, wxSizeEventHandler( PANEL_TEMPLATE_FIELDNAMES_BASE::OnSizeGrid ), NULL, this );
+	m_addFieldButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_TEMPLATE_FIELDNAMES_BASE::OnAddButtonClick ), NULL, this );
+	m_deleteFieldButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_TEMPLATE_FIELDNAMES_BASE::OnDeleteButtonClick ), NULL, this );
 
 }

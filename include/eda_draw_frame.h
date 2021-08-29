@@ -31,7 +31,6 @@
 #include <gal/gal_display_options.h>
 #include <gal/color4d.h>
 #include <class_draw_panel_gal.h>
-#include <origin_transforms.h>
 #include <kiid.h>
 #include "hotkeys_basic.h"
 
@@ -157,13 +156,6 @@ public:
      * @return The nearest half-grid position.
      */
     wxPoint GetNearestHalfGridPosition( const wxPoint& aPosition ) const;
-
-    /**
-     * Return a reference to the default ORIGIN_TRANSFORMS object
-     */
-    virtual ORIGIN_TRANSFORMS& GetOriginTransforms()
-    { return m_originTransforms; }
-
 
     virtual const TITLE_BLOCK& GetTitleBlock() const = 0;
     virtual void SetTitleBlock( const TITLE_BLOCK& aTitleBlock ) = 0;
@@ -531,9 +523,6 @@ private:
 
     ///< This the frame's interface to setting GAL display options.
     KIGFX::GAL_DISPLAY_OPTIONS  m_galDisplayOptions;
-
-    ///< Default display origin transforms object.
-    ORIGIN_TRANSFORMS           m_originTransforms;
 };
 
 #endif  // DRAW_FRAME_H_

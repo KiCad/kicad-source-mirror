@@ -22,11 +22,15 @@
  */
 
 #include <grid_layer_box_helpers.h>
-
+#include <pgm_base.h>
+#include <settings/settings_manager.h>
+#include <settings/color_settings.h>
+#include <footprint_editor_settings.h>
 #include <board.h>
 #include <pcb_edit_frame.h>
 #include <pcb_layer_box_selector.h>
 #include <settings/color_settings.h>
+#include <widgets/layer_box_selector.h>
 #include <wx/textctrl.h>
 
 
@@ -47,7 +51,8 @@ GRID_CELL_LAYER_RENDERER::~GRID_CELL_LAYER_RENDERER()
 void GRID_CELL_LAYER_RENDERER::Draw( wxGrid& aGrid, wxGridCellAttr& aAttr, wxDC& aDC,
                                      const wxRect& aRect, int aRow, int aCol, bool isSelected )
 {
-    int value = aGrid.GetTable()->GetValueAsLong( aRow, aCol );
+    int             value = aGrid.GetTable()->GetValueAsLong( aRow, aCol );
+    COLOR_SETTINGS* cs = nullptr;
 
     wxRect rect = aRect;
     rect.Inflate( -1 );
@@ -55,19 +60,36 @@ void GRID_CELL_LAYER_RENDERER::Draw( wxGrid& aGrid, wxGridCellAttr& aAttr, wxDC&
     // erase background
     wxGridCellRenderer::Draw( aGrid, aAttr, aDC, aRect, aRow, aCol, isSelected );
 
+    if( m_frame )
+    {
+        cs = m_frame->GetColorSettings();
+    }
+    else
+    {
+        SETTINGS_MANAGER&          mgr = Pgm().GetSettingsManager();
+        FOOTPRINT_EDITOR_SETTINGS* settings = mgr.GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>();
+        cs = mgr.GetColorSettings( settings->m_ColorTheme );
+    }
+
     // draw the swatch
     wxBitmap bitmap( 14, 14 );
-    COLOR_SETTINGS* cs = m_frame->GetColorSettings();
     LAYER_SELECTOR::DrawColorSwatch( bitmap,
                                      cs->GetColor( ToLAYER_ID( LAYER_PCB_BACKGROUND ) ),
                                      cs->GetColor( ToLAYER_ID( value ) ) );
     aDC.DrawBitmap( bitmap, rect.GetLeft() + 4, rect.GetTop() + 3, true );
 
     // draw the text
-    wxString text = m_frame->GetBoard()->GetLayerName( ToLAYER_ID( value ) );
+    PCB_LAYER_ID layer = ToLAYER_ID( value );
+    wxString     layerName;
+
+    if( m_frame )
+        layerName = m_frame->GetBoard()->GetLayerName( layer );
+    else
+        layerName = BOARD::GetStandardLayerName( layer );
+
     rect.SetLeft( rect.GetLeft() + bitmap.GetWidth() + 8 );
     SetTextColoursAndFont( aGrid, aAttr, aDC, isSelected );
-    aGrid.DrawTextRectangle( aDC, text, rect, wxALIGN_LEFT, wxALIGN_CENTRE );
+    aGrid.DrawTextRectangle( aDC, layerName, rect, wxALIGN_LEFT, wxALIGN_CENTRE );
 }
 
 
@@ -78,7 +100,9 @@ void GRID_CELL_LAYER_RENDERER::Draw( wxGrid& aGrid, wxGridCellAttr& aAttr, wxDC&
 
 
 GRID_CELL_LAYER_SELECTOR::GRID_CELL_LAYER_SELECTOR( PCB_BASE_FRAME* aFrame, LSET aMask ) :
-        m_frame( aFrame ), m_mask( aMask ), m_value( 0 )
+        m_frame( aFrame ),
+        m_mask( aMask ),
+        m_value( 0 )
 {
 }
 
@@ -106,7 +130,14 @@ void GRID_CELL_LAYER_SELECTOR::Create( wxWindow* aParent, wxWindowID aId,
 wxString GRID_CELL_LAYER_SELECTOR::GetValue() const
 {
     if( LayerBox()->GetLayerSelection() != UNDEFINED_LAYER )
-        return m_frame->GetBoard()->GetLayerName( ToLAYER_ID( LayerBox()->GetLayerSelection() ) );
+    {
+        PCB_LAYER_ID layer = ToLAYER_ID( LayerBox()->GetLayerSelection() );
+
+        if( m_frame )
+            return m_frame->GetBoard()->GetLayerName( layer );
+        else
+            return BOARD::GetStandardLayerName( layer );
+    }
 
     return wxEmptyString;
 }
@@ -145,10 +176,10 @@ void GRID_CELL_LAYER_SELECTOR::BeginEdit( int aRow, int aCol, wxGrid* aGrid )
 
     // Footprints are defined in a global context and may contain layers not enabled
     // on the current board.  Check and display all layers if so.
-    bool currentLayerEnabled = m_frame->GetBoard()->IsLayerEnabled( ToLAYER_ID( m_value ) );
-    LayerBox()->ShowNonActivatedLayers( !currentLayerEnabled );
-    LayerBox()->Resync();
+    if( m_frame && !m_frame->GetBoard()->IsLayerEnabled( ToLAYER_ID( m_value ) ) )
+        LayerBox()->ShowNonActivatedLayers( true );
 
+    LayerBox()->Resync();
     LayerBox()->SetLayerSelection( m_value );
     LayerBox()->SetFocus();
 

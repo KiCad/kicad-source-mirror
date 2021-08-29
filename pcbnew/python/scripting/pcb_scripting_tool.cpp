@@ -24,7 +24,6 @@
 #include "pcb_scripting_tool.h"
 
 #include <action_plugin.h>
-#include <gestfich.h>
 #include <kiface_ids.h>
 #include <kiway.h>
 #include <macros.h>
@@ -75,12 +74,22 @@ bool SCRIPTING_TOOL::Init()
 }
 
 
+void SCRIPTING_TOOL::ReloadPlugins()
+{
+    // Reload Python plugins if they are newer than the already loaded, and load new plugins
+    // Remove all action plugins so that we don't keep references to old versions
+    ACTION_PLUGINS::UnloadAll();
+
+    PyLOCK lock;
+    callLoadPlugins();
+}
+
+
 int SCRIPTING_TOOL::reloadPlugins( const TOOL_EVENT& aEvent )
 {
-    if( !m_isFootprintEditor )
-        // Reload Python plugins if they are newer than the already loaded, and load new plugins
-        // Remove all action plugins so that we don't keep references to old versions
-        ACTION_PLUGINS::UnloadAll();
+    // Reload Python plugins if they are newer than the already loaded, and load new plugins
+    // Remove all action plugins so that we don't keep references to old versions
+    ACTION_PLUGINS::UnloadAll();
 
     {
         PyLOCK lock;
@@ -121,18 +130,22 @@ pcbnew.LoadPlugins( sys_path, user_path, third_party_path )
 }
 
 
-int SCRIPTING_TOOL::showPluginFolder( const TOOL_EVENT& aEvent )
+void SCRIPTING_TOOL::ShowPluginFolder()
 {
     wxString pluginpath( SCRIPTING::PyPluginsPath( SCRIPTING::PATH_TYPE::USER ) );
     LaunchExternal( pluginpath );
+}
 
+
+int SCRIPTING_TOOL::showPluginFolder( const TOOL_EVENT& aEvent )
+{
+    ShowPluginFolder();
     return 0;
 }
 
 
 void SCRIPTING_TOOL::setTransitions()
 {
-
     Go( &SCRIPTING_TOOL::reloadPlugins,     PCB_ACTIONS::pluginsReload.MakeEvent() );
     Go( &SCRIPTING_TOOL::showPluginFolder,  PCB_ACTIONS::pluginsShowFolder.MakeEvent() );
 }

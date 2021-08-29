@@ -106,9 +106,15 @@ PANEL_HOTKEYS_EDITOR::PANEL_HOTKEYS_EDITOR( EDA_BASE_FRAME* aFrame, wxWindow* aW
 }
 
 
-void PANEL_HOTKEYS_EDITOR::AddHotKeys( TOOL_MANAGER* aToolMgr )
+bool PANEL_HOTKEYS_EDITOR::Show( bool show )
 {
-    m_toolManagers.push_back( aToolMgr );
+    if( show && m_hotkeyStore.GetSections().empty() )
+    {
+        m_hotkeyStore.Init( m_actions, m_readOnly );
+        return m_hotkeyListCtrl->TransferDataToControl();
+    }
+
+    return RESETTABLE_PANEL::Show( show );
 }
 
 
@@ -165,8 +171,9 @@ void PANEL_HOTKEYS_EDITOR::installButtons( wxSizer* aSizer )
 
 bool PANEL_HOTKEYS_EDITOR::TransferDataToWindow()
 {
-    m_hotkeyStore.Init( m_toolManagers, m_readOnly );
-    return m_hotkeyListCtrl->TransferDataToControl();
+    // Deferred to Show() for performance when opening preferences
+
+    return true;
 }
 
 
@@ -178,9 +185,7 @@ bool PANEL_HOTKEYS_EDITOR::TransferDataFromWindow()
     if( m_readOnly )
         return true;
 
-    // save the hotkeys
-    for( TOOL_MANAGER* toolMgr : m_toolManagers )
-        WriteHotKeyConfig( toolMgr->GetActions() );
+    WriteHotKeyConfig( m_actions );
 
     return true;
 }

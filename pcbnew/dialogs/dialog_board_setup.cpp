@@ -111,7 +111,10 @@ DIALOG_BOARD_SETUP::DIALOG_BOARD_SETUP( PCB_EDIT_FRAME* aFrame ) :
     m_treebook->AddSubPage( m_severities, _( "Violation Severity" ) );
 
     for( size_t i = 0; i < m_treebook->GetPageCount(); ++i )
+    {
+        m_treebook->ExpandNode( i );
    	    m_macHack.push_back( true );
+    }
 
     m_treebook->SetMinSize( wxSize( -1, 480 ) );
 

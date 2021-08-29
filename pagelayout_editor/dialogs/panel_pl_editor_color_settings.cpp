@@ -19,18 +19,12 @@
 
 #include <pgm_base.h>
 #include <settings/settings_manager.h>
-#include <painter.h>
-#include <view/view.h>
-
+#include <pl_editor_settings.h>
 #include "panel_pl_editor_color_settings.h"
-#include "pl_editor_frame.h"
-#include "pl_editor_settings.h"
 
 
-PANEL_PL_EDITOR_COLOR_SETTINGS::PANEL_PL_EDITOR_COLOR_SETTINGS( PL_EDITOR_FRAME* aFrame,
-                                                                wxWindow* aWindow )
-        : PANEL_PL_EDITOR_COLOR_SETTINGS_BASE( aWindow ),
-          m_frame( aFrame )
+PANEL_PL_EDITOR_COLOR_SETTINGS::PANEL_PL_EDITOR_COLOR_SETTINGS( wxWindow* aParent ) :
+        PANEL_PL_EDITOR_COLOR_SETTINGS_BASE( aParent )
 {
 }
 
@@ -68,15 +62,12 @@ bool PANEL_PL_EDITOR_COLOR_SETTINGS::TransferDataToWindow()
 
 bool PANEL_PL_EDITOR_COLOR_SETTINGS::TransferDataFromWindow()
 {
-    SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
-    int               sel = m_themes->GetSelection();
-    COLOR_SETTINGS*   colors = static_cast<COLOR_SETTINGS*>( m_themes->GetClientData( sel ) );
-
+    SETTINGS_MANAGER&   mgr = Pgm().GetSettingsManager();
     PL_EDITOR_SETTINGS* cfg = mgr.GetAppSettings<PL_EDITOR_SETTINGS>();
-    cfg->m_ColorTheme = colors->GetFilename();
+    int                 sel = m_themes->GetSelection();
+    COLOR_SETTINGS*     colors = static_cast<COLOR_SETTINGS*>( m_themes->GetClientData( sel ) );
 
-    RENDER_SETTINGS* settings = m_frame->GetCanvas()->GetView()->GetPainter()->GetSettings();
-    settings->LoadColors( colors );
+    cfg->m_ColorTheme = colors->GetFilename();
 
     return true;
 }

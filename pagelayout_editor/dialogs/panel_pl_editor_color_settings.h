@@ -22,19 +22,16 @@
 
 #include "panel_pl_editor_color_settings_base.h"
 
-class PL_EDITOR_FRAME;
 
 class PANEL_PL_EDITOR_COLOR_SETTINGS : public PANEL_PL_EDITOR_COLOR_SETTINGS_BASE
 {
 public:
-    PANEL_PL_EDITOR_COLOR_SETTINGS( PL_EDITOR_FRAME* aFrame, wxWindow* aWindow );
+    PANEL_PL_EDITOR_COLOR_SETTINGS( wxWindow* aParent );
 
 private:
     bool TransferDataToWindow() override;
 
     bool TransferDataFromWindow() override;
-
-    PL_EDITOR_FRAME* m_frame;
 };
 
 

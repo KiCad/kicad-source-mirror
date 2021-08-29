@@ -27,11 +27,8 @@
 #include <pgm_base.h>
 #include <bitmaps.h>
 #include <core/arraydim.h>
-#include <eda_item.h>
 #include <drawing_sheet/ds_data_item.h>
 #include <drawing_sheet/ds_data_model.h>
-#include <widgets/paged_dialog.h>
-#include <dialogs/panel_gal_display_options.h>
 #include <panel_hotkeys_editor.h>
 #include <confirm.h>
 #include <kiplatform/app.h>
@@ -45,10 +42,7 @@
 #include <tool/common_tools.h>
 #include <tool/picker_tool.h>
 #include <tool/zoom_tool.h>
-#include <widgets/infobar.h>
 #include <settings/settings_manager.h>
-
-#include "dialogs/panel_pl_editor_color_settings.h"
 #include "pl_editor_frame.h"
 #include "pl_editor_id.h"
 #include "pl_editor_settings.h"
@@ -478,20 +472,6 @@ const BOX2I PL_EDITOR_FRAME::GetDocumentExtents( bool aIncludeAllVisible ) const
 }
 
 
-void PL_EDITOR_FRAME::InstallPreferences( PAGED_DIALOG* aParent,
-                                          PANEL_HOTKEYS_EDITOR* aHotkeysPanel  )
-{
-    wxTreebook* book = aParent->GetTreebook();
-
-    book->AddPage( new wxPanel( book ), _( "Drawing Sheet Editor" ) );
-    book->AddSubPage( new PANEL_GAL_DISPLAY_OPTIONS( this, aParent ), _( "Display Options" ) );
-    book->AddSubPage( new PANEL_PL_EDITOR_COLOR_SETTINGS( this, aParent->GetTreebook() ),
-                      _( "Colors" ) );
-
-    aHotkeysPanel->AddHotKeys( GetToolManager() );
-}
-
-
 void PL_EDITOR_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
 {
     EDA_DRAW_FRAME::LoadSettings( aCfg );
@@ -625,7 +605,7 @@ void PL_EDITOR_FRAME::CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVar
     GetCanvas()->GetView()->GetPainter()->GetSettings()->LoadColors( colors );
 
     GetCanvas()->GetView()->UpdateAllItems( KIGFX::COLOR );
-    GetCanvas()->Refresh();
+    GetCanvas()->ForceRefresh();
 
     RecreateToolbars();
     Layout();

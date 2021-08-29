@@ -32,7 +32,7 @@
 #include <project/net_settings.h>
 #include <settings/settings_manager.h>
 #include "dialog_schematic_setup.h"
-#include "panel_eeschema_template_fieldnames.h"
+#include "panel_template_fieldnames.h"
 #include <wx/treebook.h>
 
 
@@ -42,11 +42,15 @@ DIALOG_SCHEMATIC_SETUP::DIALOG_SCHEMATIC_SETUP( SCH_EDIT_FRAME* aFrame ) :
         m_frame( aFrame ),
         m_severities( nullptr )
 {
-    PROJECT_FILE& project = aFrame->Prj().GetProjectFile();
-    SCHEMATIC&    schematic = aFrame->Schematic();
+    PROJECT_FILE&       project = aFrame->Prj().GetProjectFile();
+    SCHEMATIC&          schematic = aFrame->Schematic();
+    SCHEMATIC_SETTINGS& settings = schematic.Settings();
 
     m_formatting = new PANEL_SETUP_FORMATTING( m_treebook, aFrame );
-    m_fieldNameTemplates = new PANEL_EESCHEMA_TEMPLATE_FIELDNAMES( aFrame, m_treebook, false );
+
+    m_fieldNameTemplates = new PANEL_TEMPLATE_FIELDNAMES( m_treebook,
+                                                          &settings.m_TemplateFieldNames );
+
     m_pinMap = new PANEL_SETUP_PINMAP( m_treebook, aFrame );
 
     m_pinToPinError = ERC_ITEM::Create( ERCE_PIN_TO_PIN_WARNING );
@@ -76,7 +80,10 @@ DIALOG_SCHEMATIC_SETUP::DIALOG_SCHEMATIC_SETUP( SCH_EDIT_FRAME* aFrame ) :
     m_treebook->AddSubPage( m_textVars, _( "Text Variables" ) );
 
     for( size_t i = 0; i < m_treebook->GetPageCount(); ++i )
+    {
+        m_treebook->ExpandNode( i );
    	    m_macHack.push_back( true );
+    }
 
 	// Connect Events
 	m_treebook->Connect( wxEVT_TREEBOOK_PAGE_CHANGED,
@@ -163,7 +170,6 @@ void DIALOG_SCHEMATIC_SETUP::OnAuxiliaryAction( wxCommandEvent& event )
 
     PROJECT*      otherPrj = m_frame->GetSettingsManager()->GetProject( projectFn.GetFullPath() );
     SCHEMATIC     otherSch( otherPrj );
-    TEMPLATES     templateMgr;
     PROJECT_FILE& file = otherPrj->GetProjectFile();
 
     wxASSERT( file.m_SchematicSettings );

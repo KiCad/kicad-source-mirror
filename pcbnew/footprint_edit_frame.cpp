@@ -37,10 +37,6 @@
 #include <board.h>
 #include <footprint.h>
 #include <confirm.h>
-#include <dialogs/panel_fp_editor_color_settings.h>
-#include <dialogs/panel_fp_editor_defaults.h>
-#include <dialogs/panel_display_options.h>
-#include <dialogs/panel_edit_options.h>
 #include <footprint_edit_frame.h>
 #include <footprint_editor_settings.h>
 #include <footprint_info_impl.h>
@@ -51,7 +47,6 @@
 #include <kiplatform/app.h>
 #include <kiway.h>
 #include <macros.h>
-#include <panel_hotkeys_editor.h>
 #include <pcb_draw_panel_gal.h>
 #include <pcb_edit_frame.h>
 #include <pcbnew.h>
@@ -71,14 +66,11 @@
 #include <tools/group_tool.h>
 #include <tools/position_relative_tool.h>
 #include <widgets/appearance_controls.h>
-#include <widgets/infobar.h>
 #include <widgets/lib_tree.h>
-#include <widgets/paged_dialog.h>
 #include <widgets/panel_selection_filter.h>
 #include <widgets/wx_progress_reporters.h>
 #include <wildcards_and_files_ext.h>
 #include <wx/filedlg.h>
-#include <wx/treebook.h>
 #include <widgets/wx_aui_utils.h>
 
 BEGIN_EVENT_TABLE( FOOTPRINT_EDIT_FRAME, PCB_BASE_FRAME )
@@ -988,21 +980,6 @@ void FOOTPRINT_EDIT_FRAME::OnDisplayOptionsChanged()
 }
 
 
-void FOOTPRINT_EDIT_FRAME::InstallPreferences( PAGED_DIALOG* aParent,
-                                               PANEL_HOTKEYS_EDITOR* aHotkeysPanel )
-{
-    wxTreebook* book = aParent->GetTreebook();
-
-    book->AddPage( new wxPanel( book ), _( "Footprint Editor" ) );
-    book->AddSubPage( new PANEL_DISPLAY_OPTIONS( this, aParent ), _( "Display Options" ) );
-    book->AddSubPage( new PANEL_EDIT_OPTIONS( this, aParent ), _( "Editing Options" ) );
-    book->AddSubPage( new PANEL_FP_EDITOR_COLOR_SETTINGS( this, book ), _( "Colors" ) );
-    book->AddSubPage( new PANEL_FP_EDITOR_DEFAULTS( this, aParent ), _( "Default Values" ) );
-
-    aHotkeysPanel->AddHotKeys( GetToolManager() );
-}
-
-
 void FOOTPRINT_EDIT_FRAME::setupTools()
 {
     // Create the manager and dispatcher & route draw panel events to the dispatcher
@@ -1201,7 +1178,11 @@ void FOOTPRINT_EDIT_FRAME::CommonSettingsChanged( bool aEnvVarsChanged, bool aTe
 {
     PCB_BASE_EDIT_FRAME::CommonSettingsChanged( aEnvVarsChanged, aTextVarsChanged );
 
+    auto cfg = Pgm().GetSettingsManager().GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>();
+    GetGalDisplayOptions().ReadWindowSettings( cfg->m_Window );
+
     GetCanvas()->GetView()->UpdateAllLayersColor();
+    GetCanvas()->GetView()->MarkTargetDirty( KIGFX::TARGET_NONCACHED );
     GetCanvas()->ForceRefresh();
 
     UpdateUserInterface();

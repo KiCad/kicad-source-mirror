@@ -316,9 +316,9 @@ int KeyCodeFromKeyName( const wxString& keyname )
 /*
  * Displays the hotkeys registered with the given tool manager.
  */
-void DisplayHotkeyList( EDA_BASE_FRAME* aParent, TOOL_MANAGER* aToolManager )
+void DisplayHotkeyList( EDA_BASE_FRAME* aParent )
 {
-    DIALOG_LIST_HOTKEYS dlg( aParent, aToolManager );
+    DIALOG_LIST_HOTKEYS dlg( aParent );
     dlg.ShowModal();
 }
 
@@ -361,7 +361,7 @@ void ReadHotKeyConfig( const wxString& aFileName, std::map<std::string, int>& aH
 }
 
 
-int WriteHotKeyConfig( const std::map<std::string, TOOL_ACTION*>& aActionMap )
+int WriteHotKeyConfig( const std::vector<TOOL_ACTION*>& aActions )
 {
     std::map<std::string, int> hotkeys;
     wxFileName fn( "user" );
@@ -373,16 +373,15 @@ int WriteHotKeyConfig( const std::map<std::string, TOOL_ACTION*>& aActionMap )
     ReadHotKeyConfig( fn.GetFullPath(), hotkeys );
 
     // Overlay the current app's hotkey definitions onto the map
-    for( const auto& ii : aActionMap )
-        hotkeys[ ii.first ] = ii.second->GetHotKey();
+    for( const TOOL_ACTION* action : aActions )
+        hotkeys[ action->GetName() ] = action->GetHotKey();
 
     // Write entire hotkey set
     wxFFileOutputStream outStream( fn.GetFullPath() );
     wxTextOutputStream  txtStream( outStream, wxEOL_UNIX );
 
-    for( const auto& ii : hotkeys )
-        txtStream << wxString::Format( "%s\t%s", ii.first,
-                                       KeyNameFromKeyCode( ii.second ) ) << endl;
+    for( const std::pair<const std::string, int>& entry : hotkeys )
+        txtStream << entry.first << "\t" << KeyNameFromKeyCode( entry.second ) << endl;
 
     txtStream.Flush();
     outStream.Close();

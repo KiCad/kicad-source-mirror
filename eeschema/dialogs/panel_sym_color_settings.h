@@ -26,13 +26,11 @@
 
 #include "panel_sym_color_settings_base.h"
 
-class SYMBOL_EDIT_FRAME;
-
 
 class PANEL_SYM_COLOR_SETTINGS : public PANEL_SYM_COLOR_SETTINGS_BASE
 {
 public:
-    PANEL_SYM_COLOR_SETTINGS( SYMBOL_EDIT_FRAME* aFrame, wxWindow* aWindow );
+    PANEL_SYM_COLOR_SETTINGS( wxWindow* aWindow );
 
 protected:
     void OnThemeChanged( wxCommandEvent& event ) override;
@@ -41,8 +39,6 @@ private:
     bool TransferDataToWindow() override;
 
     bool TransferDataFromWindow() override;
-
-    SYMBOL_EDIT_FRAME* m_frame;
 };
 
 #endif

@@ -90,35 +90,28 @@ HOTKEY_STORE::HOTKEY_STORE()
 }
 
 
-void HOTKEY_STORE::Init( std::vector<TOOL_MANAGER*> aToolManagerList, bool aIncludeReadOnlyCmds )
+void HOTKEY_STORE::Init( std::vector<TOOL_ACTION*> aActionsList, bool aIncludeReadOnlyCmds )
 {
-    m_toolManagers = std::move( aToolManagerList );
-
-    // Collect all action maps into a single master map.  This will re-group everything
-    // and collect duplicates together
     std::map<std::string, HOTKEY> masterMap;
 
-    for( TOOL_MANAGER* toolMgr : m_toolManagers )
+    for( TOOL_ACTION* action : aActionsList )
     {
-        for( const std::pair<const std::string, TOOL_ACTION*>& entry : toolMgr->GetActions() )
+        // Internal actions probably shouldn't be allowed hotkeys
+        if( action->GetLabel().IsEmpty() )
+            continue;
+
+        if( !ADVANCED_CFG::GetCfg().m_ExtraZoneDisplayModes )
         {
-            // Internal actions probably shouldn't be allowed hotkeys
-            if( entry.second->GetLabel().IsEmpty() )
-                continue;
-
-            if( !ADVANCED_CFG::GetCfg().m_ExtraZoneDisplayModes )
+            if( action->GetName() == "pcbnew.Control.zoneDisplayOutlines"
+                    || action->GetName() == "pcbnew.Control.zoneDisplayTesselation" )
             {
-                if( entry.second->GetName() == "pcbnew.Control.zoneDisplayOutlines"
-                        || entry.second->GetName() == "pcbnew.Control.zoneDisplayTesselation" )
-                {
-                    continue;
-                }
+                continue;
             }
-
-            HOTKEY& hotkey = masterMap[ entry.first ];
-            hotkey.m_Actions.push_back( entry.second );
-            hotkey.m_EditKeycode = entry.second->GetHotKey();
         }
+
+        HOTKEY& hotkey = masterMap[ action->GetName() ];
+        hotkey.m_Actions.push_back( action );
+        hotkey.m_EditKeycode = action->GetHotKey();
     }
 
     wxString        currentApp;

@@ -26,15 +26,13 @@
 #include "panel_gerbview_excellon_settings_base.h"
 
 
-class GERBVIEW_FRAME;
-class GAL_OPTIONS_PANEL;
 struct EXCELLON_DEFAULTS;
 
 
 class PANEL_GERBVIEW_EXCELLON_SETTINGS : public PANEL_GERBVIEW_EXCELLON_SETTINGS_BASE
 {
 public:
-    PANEL_GERBVIEW_EXCELLON_SETTINGS( GERBVIEW_FRAME* aFrame, wxWindow* aWindow );
+    PANEL_GERBVIEW_EXCELLON_SETTINGS( wxWindow* aParent );
     ~PANEL_GERBVIEW_EXCELLON_SETTINGS() {};
 
 private:
@@ -43,7 +41,5 @@ private:
     void ResetPanel() override;
 
     void applySettingsToPanel( const EXCELLON_DEFAULTS& aSettings );
-
-    GERBVIEW_FRAME*    m_Parent;
 };
 
