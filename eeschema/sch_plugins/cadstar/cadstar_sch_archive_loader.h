@@ -137,7 +137,8 @@ private:
             const GATE_ID& aGateID, LIB_SYMBOL* aSymbol );
 
     void loadLibrarySymbolShapeVertices( const std::vector<VERTEX>& aCadstarVertices,
-            wxPoint aSymbolOrigin, LIB_SYMBOL* aSymbol, int aGateNumber );
+                                         wxPoint aSymbolOrigin, LIB_SYMBOL* aSymbol,
+                                         int aGateNumber, int aLineThickness );
 
     void applyToLibraryFieldAttribute( const ATTRIBUTE_LOCATION& aCadstarAttrLoc,
             wxPoint aSymbolOrigin, LIB_FIELD* aKiCadField );

@@ -1211,12 +1211,15 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadSymDefIntoLibrary( const SYMDEF_ID& aSymdef
     for( std::pair<FIGURE_ID, FIGURE> figPair : symbol.Figures )
     {
         FIGURE fig = figPair.second;
+        int    lineThickness = getLineThickness( fig.LineCodeID );
 
-        loadLibrarySymbolShapeVertices( fig.Shape.Vertices, symbol.Origin, aSymbol, gateNumber );
+        loadLibrarySymbolShapeVertices( fig.Shape.Vertices, symbol.Origin, aSymbol, gateNumber,
+                                            lineThickness );
 
         for( CUTOUT c : fig.Shape.Cutouts )
         {
-            loadLibrarySymbolShapeVertices( c.Vertices, symbol.Origin, aSymbol, gateNumber );
+            loadLibrarySymbolShapeVertices( c.Vertices, symbol.Origin, aSymbol, gateNumber,
+                                            lineThickness );
         }
     }
 
@@ -1497,7 +1500,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadSymDefIntoLibrary( const SYMDEF_ID& aSymdef
 
 void CADSTAR_SCH_ARCHIVE_LOADER::loadLibrarySymbolShapeVertices(
         const std::vector<VERTEX>& aCadstarVertices, wxPoint aSymbolOrigin, LIB_SYMBOL* aSymbol,
-        int aGateNumber )
+        int aGateNumber, int aLineThickness )
 {
     const VERTEX* prev = &aCadstarVertices.at( 0 );
     const VERTEX* cur;
@@ -1561,6 +1564,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadLibrarySymbolShapeVertices(
         }
 
         segment->SetUnit( aGateNumber );
+        segment->SetWidth( aLineThickness );
         aSymbol->AddDrawItem( segment );
 
         prev = cur;
