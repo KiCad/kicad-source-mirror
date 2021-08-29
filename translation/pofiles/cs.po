@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-08-20 11:53-0700\n"
-"PO-Revision-Date: 2021-08-27 08:25+0000\n"
+"PO-Revision-Date: 2021-08-30 11:35+0000\n"
 "Last-Translator: Jan Straka <bach@email.cz>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/"
 "master-source/cs/>\n"
@@ -2660,6 +2660,8 @@ msgid ""
 "Finds the next available reference designator for any designators that "
 "already exist in the design."
 msgstr ""
+"Najít následující dostupné reference pro všechny označení existující v "
+"návrhu."
 
 #: common/dialogs/dialog_paste_special.cpp:44
 #, c-format
@@ -28990,9 +28992,8 @@ msgid "Created Gerber job file '%s'."
 msgstr "Vytvořit Gerber job soubor '%s'."
 
 #: pcbnew/exporters/gerber_jobfile_writer.cpp:575
-#, fuzzy
 msgid "Board stackup settings not up to date."
-msgstr "Tloušťka desky %s je mimo rozsah"
+msgstr "Nastavení vrstvení desky není aktuální."
 
 #: pcbnew/files.cpp:144
 msgid "All KiCad Board Files"
@@ -29945,9 +29946,8 @@ msgid "Read Shape Description File..."
 msgstr "Načíst soubor popisu tvaru..."
 
 #: pcbnew/microwave/microwave_polygon.cpp:210
-#, fuzzy
 msgid "Shape Description File"
-msgstr "Načíst soubor popisu tvaru..."
+msgstr "Soubor popisu tvaru"
 
 #: pcbnew/microwave/microwave_polygon.cpp:314
 msgid "Shape has a null size."
@@ -30858,12 +30858,13 @@ msgstr "Duplicitní název třídy spojů '%s'."
 #: pcbnew/plugins/altium/altium_pcb.cpp:1229
 #: pcbnew/plugins/altium/altium_pcb.cpp:1309
 #: pcbnew/plugins/altium/altium_pcb.cpp:1334
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Dimension found on an Altium layer (%d) with no KiCad equivalent. It has "
 "been moved to KiCad layer Eco1_User."
 msgstr ""
-"Polygon na vrstvě Altium %d nemá ekvivalent KiCadu. Místo toho to ignorujte"
+"Rozměr na vrstvě Altium (%d) nemá ekvivalent KiCadu. Místo toho byl přesunut "
+"na vrstvu ECO1_USER."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1377
 #: pcbnew/plugins/altium/altium_pcb.cpp:1384
@@ -30893,12 +30894,13 @@ msgstr "Provádím vyplnění polygonů..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1519
 #: pcbnew/plugins/altium/altium_pcb.cpp:1770
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Polygon found on an Altium layer (%d) with no KiCad equivalent. It has been "
 "moved to KiCad layer Eco1_User."
 msgstr ""
-"Polygon na vrstvě Altium %d nemá ekvivalent KiCadu. Místo toho to ignorujte"
+"Polygon na vrstvě Altium (%d) nemá ekvivalent KiCadu. Místo toho byl "
+"přesunut na vrstvu ECO1_USER."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1641
 #, fuzzy
@@ -30916,12 +30918,13 @@ msgid "Loading zones..."
 msgstr "Načítání..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1751
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Zone found on an Altium layer (%d) with no KiCad equivalent. It has been "
 "moved to KiCad layer Eco1_User."
 msgstr ""
-"Polygon na vrstvě Altium %d nemá ekvivalent KiCadu. Místo toho to ignorujte"
+"Zóna nalezená na vrstvě Altium (%d) nemá ekvivalent KiCadu. Místo toho byla "
+"přesunuta na vrstvu ECO1_USER."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1805
 #, c-format
