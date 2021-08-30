@@ -155,6 +155,26 @@ bool SCH_EDIT_TOOL::Init()
                 return !m_frame->GetScreen()->Items().empty();
             };
 
+    auto sheetHasUndefinedPins =
+            [ this ] ( const SELECTION& aSel )
+            {
+                if( aSel.Size() != 1 )
+                    return false;
+
+                if( !aSel.HasType( SCH_SHEET_T ) )
+                    return false;
+
+                SCH_ITEM* item = dynamic_cast<SCH_ITEM*>( aSel.Front() );
+
+                wxCHECK( item, false );
+
+                SCH_SHEET* sheet = dynamic_cast<SCH_SHEET*>( item );
+
+                wxCHECK( sheet, false );
+
+                return sheet->HasUndefinedPins();
+            };
+
     auto anyTextTool =
             [ this ] ( const SELECTION& aSel )
             {
@@ -371,7 +391,7 @@ bool SCH_EDIT_TOOL::Init()
     selToolMenu.AddItem( EE_ACTIONS::toHLabel,         toHLabelCondition, 200 );
     selToolMenu.AddItem( EE_ACTIONS::toGLabel,         toGLabelCondition, 200 );
     selToolMenu.AddItem( EE_ACTIONS::toText,           toTextlCondition, 200 );
-    selToolMenu.AddItem( EE_ACTIONS::cleanupSheetPins, singleSheetCondition, 250 );
+    selToolMenu.AddItem( EE_ACTIONS::cleanupSheetPins, sheetHasUndefinedPins, 250 );
 
     selToolMenu.AddSeparator( 300 );
     selToolMenu.AddItem( ACTIONS::cut,                 E_C::IdleSelection, 300 );
@@ -1637,14 +1657,8 @@ int SCH_EDIT_TOOL::CleanupSheetPins( const TOOL_EVENT& aEvent )
     EE_SELECTION& selection = m_selectionTool->RequestSelection( EE_COLLECTOR::SheetsOnly );
     SCH_SHEET*    sheet = (SCH_SHEET*) selection.Front();
 
-    if( !sheet )
+    if( !sheet || !sheet->HasUndefinedPins() )
         return 0;
-
-    if( !sheet->HasUndefinedPins() )
-    {
-        DisplayInfoMessage( m_frame, _( "There are no unreferenced pins in this sheet to remove." ) );
-        return 0;
-    }
 
     if( !IsOK( m_frame, _( "Do you wish to delete the unreferenced pins from this sheet?" ) ) )
         return 0;
