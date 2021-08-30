@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-20 13:14-0700\n"
+"POT-Creation-Date: 2021-08-30 14:45-0700\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -254,18 +254,6 @@ msgstr "Copper/surface finish:"
 
 msgid "Board body:"
 msgstr "Board body:"
-
-msgid "3D Model Visibility"
-msgstr "3D Model Visibility"
-
-msgid "Show 3D through hole models"
-msgstr "Show 3D through hole models"
-
-msgid "Show 3D SMD models"
-msgstr "Show 3D SMD models"
-
-msgid "Show 3D virtual models"
-msgstr "Show 3D virtual models"
 
 msgid "Board Layers"
 msgstr "Board Layers"
@@ -626,20 +614,20 @@ msgstr "Use a CAD color style based on the diffuse color of the material"
 msgid "Toggle Through Hole 3D models"
 msgstr "Toggle Through Hole 3D models"
 
-msgid "Toggle 3D models with 'Through hole' attribute"
-msgstr "Toggle 3D models with 'Through hole' attribute"
+msgid "Toggle 3D models for 'Through hole' type components"
+msgstr "Toggle 3D models for 'Through hole' type components"
 
 msgid "Toggle SMD 3D models"
 msgstr "Toggle SMD 3D models"
 
-msgid "Toggle 3D models with 'Surface mount' attribute"
-msgstr "Toggle 3D models with 'Surface mount' attribute"
+msgid "Toggle 3D models for 'Surface mount' type components"
+msgstr "Toggle 3D models for 'Surface mount' type components"
 
-msgid "Toggle Virtual 3D models"
-msgstr "Toggle Virtual 3D models"
+msgid "Toggle Other 3D models"
+msgstr "Toggle Other 3D models"
 
-msgid "Toggle 3D models with 'Virtual' attribute"
-msgstr "Toggle 3D models with 'Virtual' attribute"
+msgid "Toggle 3D models for 'Other' type components"
+msgstr "Toggle 3D models for 'Other' type components"
 
 msgid "Show Model Bounding Boxes"
 msgstr "Show Model Bounding Boxes"
@@ -2717,6 +2705,13 @@ msgstr ""
 "folder."
 
 msgid ""
+"A directory containing 3rd party plugins, libraries and other downloadable "
+"content."
+msgstr ""
+"A directory containing 3rd party plugins, libraries and other downloadable "
+"content."
+
+msgid ""
 "Internally defined by KiCad (cannot be edited) and is set to the absolute "
 "path of the currently loaded project file.  This environment variable can be "
 "used to define files and paths relative to the currently loaded project.  "
@@ -3458,9 +3453,6 @@ msgstr "Invalid Arc with radius %f and angle %f"
 
 msgid "Error loading project footprint library table."
 msgstr "Error loading project footprint library table."
-
-msgid "Failed to output data."
-msgstr "Failed to output data."
 
 msgid "Could not open archive file."
 msgstr "Could not open archive file."
@@ -8487,36 +8479,15 @@ msgstr "Bus Entry needed"
 msgid "Schematic Files"
 msgstr "Schematic Files"
 
-#, c-format
+msgid "Create a new project for this schematic"
+msgstr "Create a new project for this schematic"
+
 msgid ""
-"Error saving schematic file '%s'.\n"
-"%s"
+"Creating a project will enable features such as text variables, net classes, "
+"and ERC exclusions"
 msgstr ""
-"Error saving schematic file '%s'.\n"
-"%s"
-
-#, c-format
-msgid "Failed to create temporary file '%s'."
-msgstr "Failed to create temporary file '%s'."
-
-#, c-format
-msgid ""
-"Error saving schematic file '%s'.\n"
-"Failed to rename temporary file '%s'."
-msgstr ""
-"Error saving schematic file '%s'.\n"
-"Failed to rename temporary file '%s'."
-
-#, c-format
-msgid "Failed to rename temporary file '%s'."
-msgstr "Failed to rename temporary file '%s'."
-
-#, c-format
-msgid "File '%s' saved."
-msgstr "File '%s' saved."
-
-msgid "File write operation failed."
-msgstr "File write operation failed."
+"Creating a project will enable features such as text variables, net classes, "
+"and ERC exclusions"
 
 #, c-format
 msgid "Schematic file '%s' is already open."
@@ -8637,6 +8608,37 @@ msgstr "Import Schematic"
 #, c-format
 msgid "Unexpected file extension: '%s'."
 msgstr "Unexpected file extension: '%s'."
+
+#, c-format
+msgid ""
+"Error saving schematic file '%s'.\n"
+"%s"
+msgstr ""
+"Error saving schematic file '%s'.\n"
+"%s"
+
+#, c-format
+msgid "Failed to create temporary file '%s'."
+msgstr "Failed to create temporary file '%s'."
+
+#, c-format
+msgid ""
+"Error saving schematic file '%s'.\n"
+"Failed to rename temporary file '%s'."
+msgstr ""
+"Error saving schematic file '%s'.\n"
+"Failed to rename temporary file '%s'."
+
+#, c-format
+msgid "Failed to rename temporary file '%s'."
+msgstr "Failed to rename temporary file '%s'."
+
+#, c-format
+msgid "File '%s' saved."
+msgstr "File '%s' saved."
+
+msgid "File write operation failed."
+msgstr "File write operation failed."
 
 #, c-format
 msgid ""
@@ -10181,11 +10183,11 @@ msgstr "Error: simulation type doesn't support plotting!\n"
 msgid "Signal"
 msgstr "Signal"
 
-msgid "Open simulation workbook"
-msgstr "Open simulation workbook"
-
 msgid "noname"
 msgstr "noname"
+
+msgid "Open simulation workbook"
+msgstr "Open simulation workbook"
 
 msgid "Save Simulation Workbook As"
 msgstr "Save Simulation Workbook As"
@@ -11641,9 +11643,6 @@ msgstr "Edit %s Field"
 msgid "Edit '%s' Field"
 msgstr "Edit '%s' Field"
 
-msgid "There are no unreferenced pins in this sheet to remove."
-msgstr "There are no unreferenced pins in this sheet to remove."
-
 msgid "Do you wish to delete the unreferenced pins from this sheet?"
 msgstr "Do you wish to delete the unreferenced pins from this sheet?"
 
@@ -12516,6 +12515,9 @@ msgstr "Hide this message."
 msgid "Reset all settings on this page to their default"
 msgstr "Reset all settings on this page to their default"
 
+msgid "Failed to output data"
+msgstr "Failed to output data"
+
 msgid "<html><h1>Template Selector</h1></html>"
 msgstr "<html><h1>Template Selector</h1></html>"
 
@@ -12564,6 +12566,9 @@ msgid ""
 msgstr ""
 "Edit drawing sheet borders and title blocks for use in schematics and PCB "
 "designs"
+
+msgid "Manage downloadable packages from KiCad and 3rd party repositories"
+msgstr "Manage downloadable packages from KiCad and 3rd party repositories"
 
 msgid "KiCad project file"
 msgstr "KiCad project file"
@@ -12707,6 +12712,340 @@ msgstr "Reveal project folder in Finder"
 
 msgid "Open project directory in file explorer"
 msgstr "Open project directory in file explorer"
+
+msgid "Please enter fully qualified repository url"
+msgstr "Please enter fully qualified repository url"
+
+msgid "Add repository"
+msgstr "Add repository"
+
+msgid "Manage Repositores"
+msgstr "Manage Repositores"
+
+#, c-format
+msgid "Plugins (%d)"
+msgstr "Plugins (%d)"
+
+#, c-format
+msgid "Libraries (%d)"
+msgstr "Libraries (%d)"
+
+#, c-format
+msgid "Color themes (%d)"
+msgstr "Color themes (%d)"
+
+#, c-format
+msgid "Repository (%d)"
+msgstr "Repository (%d)"
+
+msgid "Install"
+msgstr "Install"
+
+msgid "Uninstall"
+msgstr "Uninstall"
+
+msgid ""
+"Are you sure you want to close the package manager and discard pending "
+"changes?"
+msgstr ""
+"Are you sure you want to close the package manager and discard pending "
+"changes?"
+
+msgid "Plugin and Content Manager"
+msgstr "Plugin and Content Manager"
+
+msgid "Choose package file"
+msgstr "Choose package file"
+
+#, c-format
+msgid "Pending (%d)"
+msgstr "Pending (%d)"
+
+#, c-format
+msgid "Installed (%d)"
+msgstr "Installed (%d)"
+
+msgid "Manage"
+msgstr "Manage"
+
+msgid "Action"
+msgstr "Action"
+
+msgid "Package"
+msgstr "Package"
+
+msgid "Repository"
+msgstr "Repository"
+
+msgid "Discard action"
+msgstr "Discard action"
+
+msgid "Install from file..."
+msgstr "Install from file..."
+
+msgid "Apply changes"
+msgstr "Apply changes"
+
+msgid "Discard changes"
+msgstr "Discard changes"
+
+msgid "Plugin And Content Manager"
+msgstr "Plugin And Content Manager"
+
+#, c-format
+msgid "Downloaded %lld/%lld Kb"
+msgstr "Downloaded %lld/%lld Kb"
+
+msgid "All downloads finished"
+msgstr "All downloads finished"
+
+msgid "Download progress"
+msgstr "Download progress"
+
+msgid "Waiting..."
+msgstr "Waiting..."
+
+msgid "Overall progress"
+msgstr "Overall progress"
+
+msgid "Details"
+msgstr "Details"
+
+msgid "Applying package changes"
+msgstr "Applying package changes"
+
+msgid "Pending install"
+msgstr "Pending install"
+
+msgid "Pending uninstall"
+msgstr "Pending uninstall"
+
+msgid "Metadata"
+msgstr "Metadata"
+
+#, c-format
+msgid "Package identifier: %s\n"
+msgstr "Package identifier: %s\n"
+
+#, c-format
+msgid "License: %s\n"
+msgstr "License: %s\n"
+
+#, c-format
+msgid "Tags: %s\n"
+msgstr "Tags: %s\n"
+
+msgid "Author"
+msgstr "Author"
+
+msgid "Maintainer"
+msgstr "Maintainer"
+
+msgid "Resources"
+msgstr "Resources"
+
+msgid "Pick a package on the left panel to view it's description."
+msgstr "Pick a package on the left panel to view it's description."
+
+msgid "Package download url is not specified"
+msgstr "Package download url is not specified"
+
+msgid "Error downloading package"
+msgstr "Error downloading package"
+
+msgid "Save package"
+msgstr "Save package"
+
+msgid "Downloading package"
+msgstr "Downloading package"
+
+msgid ""
+"Integrity of the downloaded package could not be verified, hash does not "
+"match. Are you sure you want to keep this file?"
+msgstr ""
+"Integrity of the downloaded package could not be verified, hash does not "
+"match. Are you sure you want to keep this file?"
+
+msgid "Keep downloaded file"
+msgstr "Keep downloaded file"
+
+msgid ""
+"This package version is incompatible with your kicad version or platform. "
+"Are you sure you want to install it anyway?"
+msgstr ""
+"This package version is incompatible with your kicad version or platform. "
+"Are you sure you want to install it anyway?"
+
+msgid "Install package"
+msgstr "Install package"
+
+msgid "Show all versions"
+msgstr "Show all versions"
+
+msgid "Dl Size"
+msgstr "Dl Size"
+
+msgid "Inst Size"
+msgstr "Inst Size"
+
+msgid "Comp"
+msgstr "Comp"
+
+msgid "Download"
+msgstr "Download"
+
+msgid "Versions"
+msgstr "Versions"
+
+#, c-format
+msgid "schema file '%s' not found"
+msgstr "schema file '%s' not found"
+
+#, c-format
+msgid "Error loading schema: %s"
+msgstr "Error loading schema: %s"
+
+#, c-format
+msgid "Error loading installed packages list: %s"
+msgstr "Error loading installed packages list: %s"
+
+#, c-format
+msgid "Downloading %lld/%lld Kb"
+msgstr "Downloading %lld/%lld Kb"
+
+msgid "Download is too large."
+msgstr "Download is too large."
+
+msgid "Fetching repository"
+msgstr "Fetching repository"
+
+msgid "Unable to load repository url"
+msgstr "Unable to load repository url"
+
+#, c-format
+msgid ""
+"Unable to parse repository:\n"
+"\n"
+"%s"
+msgstr ""
+"Unable to parse repository:\n"
+"\n"
+"%s"
+
+msgid "Fetching repository packages"
+msgstr "Fetching repository packages"
+
+msgid "Unable to load repository packages url."
+msgstr "Unable to load repository packages url."
+
+msgid "Packages hash doesn't match. Repository may be corrupted."
+msgstr "Packages hash doesn't match. Repository may be corrupted."
+
+#, c-format
+msgid ""
+"Unable to parse packages metadata:\n"
+"\n"
+"%s"
+msgstr ""
+"Unable to parse packages metadata:\n"
+"\n"
+"%s"
+
+msgid ""
+"Packages cache for current repository is corrupted, it will be redownloaded."
+msgstr ""
+"Packages cache for current repository is corrupted, it will be redownloaded."
+
+msgid "Downloading resources"
+msgstr "Downloading resources"
+
+msgid ""
+"Resources file hash doesn't match and will not be used. Repository may be "
+"corrupted."
+msgstr ""
+"Resources file hash doesn't match and will not be used. Repository may be "
+"corrupted."
+
+msgid "Local file"
+msgstr "Local file"
+
+msgid "Unable to create download directory!"
+msgstr "Unable to create download directory!"
+
+#, c-format
+msgid ""
+"Downloaded archive hash for package %s does not match repository entry. This "
+"may indicate a problem with the package, if the issue persists report this "
+"to repository maintainers."
+msgstr ""
+"Downloaded archive hash for package %s does not match repository entry. This "
+"may indicate a problem with the package, if the issue persists report this "
+"to repository maintainers."
+
+#, c-format
+msgid "Extracting package '%s'."
+msgstr "Extracting package '%s'."
+
+#, c-format
+msgid "Removing downloaded archive '%s'."
+msgstr "Removing downloaded archive '%s'."
+
+#, c-format
+msgid "Downloading package url: '%s'"
+msgstr "Downloading package url: '%s'"
+
+#, c-format
+msgid ""
+"Failed to download url %s\n"
+"%s"
+msgstr ""
+"Failed to download url %s\n"
+"%s"
+
+msgid "Aborting package installation."
+msgstr "Aborting package installation."
+
+#, c-format
+msgid ""
+"Unable to parse package metadata:\n"
+"\n"
+"%s"
+msgstr ""
+"Unable to parse package metadata:\n"
+"\n"
+"%s"
+
+msgid "Archive does not contain a valid metadata.json file"
+msgstr "Archive does not contain a valid metadata.json file"
+
+msgid "Archive metadata must have a single version defined"
+msgstr "Archive metadata must have a single version defined"
+
+#, c-format
+msgid ""
+"Package with identifier %s is already installed, you must first uninstall "
+"this package."
+msgstr ""
+"Package with identifier %s is already installed, you must first uninstall "
+"this package."
+
+#, c-format
+msgid "Removing directory %s"
+msgstr "Removing directory %s"
+
+#, c-format
+msgid "Failed to remove directory %s"
+msgstr "Failed to remove directory %s"
+
+#, c-format
+msgid "Package %s uninstalled"
+msgstr "Package %s uninstalled"
+
+msgid "Aborting remaining tasks."
+msgstr "Aborting remaining tasks."
+
+msgid "Done."
+msgstr "Done."
 
 msgid "Could open the template path!"
 msgstr "Could open the template path!"
@@ -12889,6 +13228,9 @@ msgstr "Run component calculations, track width calculations, etc."
 
 msgid "Edit drawing sheet borders and title block"
 msgstr "Edit drawing sheet borders and title block"
+
+msgid "Run Plugin and Content Manager"
+msgstr "Run Plugin and Content Manager"
 
 msgid "Open Text Editor"
 msgstr "Open Text Editor"
@@ -14511,10 +14853,6 @@ msgstr "Remove Dielectric Layer"
 msgid "Select layer to remove:"
 msgstr "Select layer to remove:"
 
-#, c-format
-msgid "Custom (%s)"
-msgstr "Custom (%s)"
-
 msgid "Copper"
 msgstr "Copper"
 
@@ -14532,6 +14870,9 @@ msgstr ""
 
 msgid "A layer thickness is < 0. Fix it"
 msgstr "A layer thickness is < 0. Fix it"
+
+msgid "Custom..."
+msgstr "Custom..."
 
 msgid "Copper layers:"
 msgstr "Copper layers:"
@@ -14671,9 +15012,6 @@ msgstr "Save Bill of Materials"
 
 msgid "Designator"
 msgstr "Designator"
-
-msgid "Package"
-msgstr "Package"
 
 msgid "Quantity"
 msgstr "Quantity"
@@ -16117,6 +16455,12 @@ msgstr "Output Units"
 msgid "Export IDFv3"
 msgstr "Export IDFv3"
 
+msgid "Select a STEP export filename"
+msgstr "Select a STEP export filename"
+
+msgid "STEP files"
+msgstr "STEP files"
+
 msgid "Non-unity scaled models:"
 msgstr "Non-unity scaled models:"
 
@@ -16142,11 +16486,8 @@ msgstr ""
 msgid "STEP Export"
 msgstr "STEP Export"
 
-msgid "Select a STEP export filename"
-msgstr "Select a STEP export filename"
-
-msgid "STEP files (*.stp;*.step)|*.stp;*.step"
-msgstr "STEP files (*.stp;*.step)|*.stp;*.step"
+msgid "temp"
+msgstr "temp"
 
 msgid "Coordinates"
 msgstr "Coordinates"
@@ -16731,8 +17072,8 @@ msgstr "ASCII"
 msgid "CSV"
 msgstr "CSV"
 
-msgid "Gerber (very experimental)"
-msgstr "Gerber (very experimental)"
+msgid "Gerber (experimental)"
+msgstr "Gerber (experimental)"
 
 msgid "Format"
 msgstr "Format"
@@ -16752,6 +17093,9 @@ msgid ""
 msgstr ""
 "Creates 2 files: one for each board side or\n"
 "Creates only one file containing all footprints to place\n"
+
+msgid "Include only SMD footprints"
+msgstr "Include only SMD footprints"
 
 msgid "Exclude all footprints with through hole pads"
 msgstr "Exclude all footprints with through hole pads"
@@ -17055,9 +17399,6 @@ msgstr "Filter items by layer:"
 
 msgid "Filter items by parent footprint library id:"
 msgstr "Filter items by parent footprint library id:"
-
-msgid "Action"
-msgstr "Action"
 
 msgid "Set to specified values:"
 msgstr "Set to specified values:"
@@ -19370,10 +19711,6 @@ msgid "Use the Physical Stackup page to change the number of copper layers."
 msgstr "Use the Physical Stackup page to change the number of copper layers."
 
 #, c-format
-msgid "The %s layer is mandatory."
-msgstr "The %s layer is mandatory."
-
-#, c-format
 msgid ""
 "Footprints have some items on removed layers:\n"
 "%s\n"
@@ -19431,9 +19768,6 @@ msgstr "Add User-defined Layer"
 
 msgid "Add User Defined Layer..."
 msgstr "Add User Defined Layer..."
-
-msgid "If you want a courtyard layer for the front side of the board"
-msgstr "If you want a courtyard layer for the front side of the board"
 
 msgid "CrtYd_Front"
 msgstr "CrtYd_Front"
@@ -19631,14 +19965,8 @@ msgstr "If you want a fabrication layer for the back side of the board"
 msgid "Fab_Back"
 msgstr "Fab_Back"
 
-msgid "If you want a courtyard layer for the back side of the board"
-msgstr "If you want a courtyard layer for the back side of the board"
-
 msgid "CrtYd_Back"
 msgstr "CrtYd_Back"
-
-msgid "If you want a board perimeter layer"
-msgstr "If you want a board perimeter layer"
 
 msgid "Pcb_Edges"
 msgstr "Pcb_Edges"
@@ -19837,6 +20165,7 @@ msgid ""
 " * skew\n"
 " * track\\_width\n"
 " * via\\_count\n"
+" * via\\_diameter\n"
 "\n"
 "\n"
 "<br><br>\n"
@@ -20043,6 +20372,7 @@ msgstr ""
 " * skew\n"
 " * track\\_width\n"
 " * via\\_count\n"
+" * via\\_diameter\n"
 "\n"
 "\n"
 "<br><br>\n"
@@ -20307,9 +20637,19 @@ msgstr "Tessellating copper zones..."
 msgid "Local override on %s; clearance: %s."
 msgstr "Local override on %s; clearance: %s."
 
+msgid "board minimum"
+msgstr "board minimum"
+
 #, c-format
 msgid "Board minimum clearance: %s."
 msgstr "Board minimum clearance: %s."
+
+msgid "board minimum hole"
+msgstr "board minimum hole"
+
+#, c-format
+msgid "Board minimum hole clearance: %s."
+msgstr "Board minimum hole clearance: %s."
 
 #, c-format
 msgid "Checking %s clearance: %s."
@@ -20504,6 +20844,9 @@ msgstr "Differential uncoupled length too long"
 #, c-format
 msgid "Rule: %s"
 msgstr "Rule: %s"
+
+msgid "Local override"
+msgstr "Local override"
 
 #, c-format
 msgid "rule %s"
@@ -21176,6 +21519,13 @@ msgstr "Footprint '%s' deleted from library '%s'"
 
 msgid "No footprints to export!"
 msgstr "No footprints to export!"
+
+#, c-format
+msgid "Update footprints on board to refer to %s?"
+msgstr "Update footprints on board to refer to %s?"
+
+msgid "Update footprints on board to refer to new library?"
+msgstr "Update footprints on board to refer to new library?"
 
 msgid "No board currently open."
 msgstr "No board currently open."
@@ -21898,15 +22248,11 @@ msgstr ""
 "file: '%s'\n"
 "line: %d"
 
-#, c-format
-msgid "pad %s"
-msgstr "pad %s"
+msgid "pad"
+msgstr "pad"
 
 msgid "parent footprint"
 msgstr "parent footprint"
-
-msgid "pad"
-msgstr "pad"
 
 msgid "Pin Name"
 msgstr "Pin Name"
@@ -26004,6 +26350,484 @@ msgstr "KiCad Schematic"
 
 msgid "KiCad Printed Circuit Board"
 msgstr "KiCad Printed Circuit Board"
+
+#~ msgid "3D Model Visibility"
+#~ msgstr "3D Model Visibility"
+
+#~ msgid "Show 3D through hole models"
+#~ msgstr "Show 3D through hole models"
+
+#~ msgid "Show 3D SMD models"
+#~ msgstr "Show 3D SMD models"
+
+#~ msgid "Show 3D virtual models"
+#~ msgstr "Show 3D virtual models"
+
+#~ msgid "Toggle 3D models with 'Through hole' attribute"
+#~ msgstr "Toggle 3D models with 'Through hole' attribute"
+
+#~ msgid "Toggle 3D models with 'Surface mount' attribute"
+#~ msgstr "Toggle 3D models with 'Surface mount' attribute"
+
+#~ msgid "Toggle Virtual 3D models"
+#~ msgstr "Toggle Virtual 3D models"
+
+#~ msgid "Toggle 3D models with 'Virtual' attribute"
+#~ msgstr "Toggle 3D models with 'Virtual' attribute"
+
+#~ msgid "Failed to output data."
+#~ msgstr "Failed to output data."
+
+#~ msgid "There are no unreferenced pins in this sheet to remove."
+#~ msgstr "There are no unreferenced pins in this sheet to remove."
+
+#, c-format
+#~ msgid "Custom (%s)"
+#~ msgstr "Custom (%s)"
+
+#~ msgid "STEP files (*.stp;*.step)|*.stp;*.step"
+#~ msgstr "STEP files (*.stp;*.step)|*.stp;*.step"
+
+#~ msgid "Gerber (very experimental)"
+#~ msgstr "Gerber (very experimental)"
+
+#, c-format
+#~ msgid "The %s layer is mandatory."
+#~ msgstr "The %s layer is mandatory."
+
+#~ msgid "If you want a courtyard layer for the front side of the board"
+#~ msgstr "If you want a courtyard layer for the front side of the board"
+
+#~ msgid "If you want a courtyard layer for the back side of the board"
+#~ msgstr "If you want a courtyard layer for the back side of the board"
+
+#~ msgid "If you want a board perimeter layer"
+#~ msgstr "If you want a board perimeter layer"
+
+#~ msgid ""
+#~ "### Top-level Clauses\n"
+#~ "\n"
+#~ "    (version <number>)\n"
+#~ "\n"
+#~ "    (rule <rule_name> <rule_clause> ...)\n"
+#~ "\n"
+#~ "\n"
+#~ "<br><br>\n"
+#~ "\n"
+#~ "### Rule Clauses\n"
+#~ "\n"
+#~ "    (constraint <constraint_type> ...)\n"
+#~ "\n"
+#~ "    (condition \"<expression>\")\n"
+#~ "\n"
+#~ "    (layer \"<layer_name>\")\n"
+#~ "\n"
+#~ "\n"
+#~ "<br><br>\n"
+#~ "\n"
+#~ "### Constraint Types\n"
+#~ "\n"
+#~ " * annular\\_width\n"
+#~ " * clearance\n"
+#~ " * courtyard_clearance\n"
+#~ " * diff\\_pair\\_gap\n"
+#~ " * diff\\_pair\\_uncoupled\n"
+#~ " * disallow\n"
+#~ " * edge\\_clearance\n"
+#~ " * length\n"
+#~ " * hole\\_clearance\n"
+#~ " * hole\\_size\n"
+#~ " * silk\\_clearance\n"
+#~ " * skew\n"
+#~ " * track\\_width\n"
+#~ " * via\\_count\n"
+#~ "\n"
+#~ "\n"
+#~ "<br><br>\n"
+#~ "\n"
+#~ "### Item Types\n"
+#~ "\n"
+#~ " * buried_via\n"
+#~ " * graphic\n"
+#~ " * hole\n"
+#~ " * micro_via\n"
+#~ " * pad\n"
+#~ " * text\n"
+#~ " * track\n"
+#~ " * via\n"
+#~ " * zone\n"
+#~ "\n"
+#~ "<br>\n"
+#~ "\n"
+#~ "### Examples\n"
+#~ "\n"
+#~ "    (version 1)\n"
+#~ "\n"
+#~ "    (rule HV\n"
+#~ "       (constraint clearance (min 1.5mm))\n"
+#~ "       (condition \"A.NetClass == 'HV'\"))\n"
+#~ "\n"
+#~ "\n"
+#~ "    (rule HV\n"
+#~ "       (layer outer)\n"
+#~ "       (constraint clearance (min 1.5mm))\n"
+#~ "       (condition \"A.NetClass == 'HV'\"))\n"
+#~ "\n"
+#~ "\n"
+#~ "    (rule HV_HV\n"
+#~ "       # wider clearance between HV tracks\n"
+#~ "       (constraint clearance (min \"1.5mm + 2.0mm\"))\n"
+#~ "       (condition \"A.NetClass == 'HV' && B.NetClass == 'HV'\"))\n"
+#~ "\n"
+#~ "\n"
+#~ "    (rule HV_unshielded\n"
+#~ "       (constraint clearance (min 2mm))\n"
+#~ "       (condition \"A.NetClass == 'HV' && !A.insideArea('Shield*')\"))\n"
+#~ "<br><br>\n"
+#~ "\n"
+#~ "### Notes\n"
+#~ "\n"
+#~ "Version clause must be the first clause.  It indicates the syntax version "
+#~ "of the file so that \n"
+#~ "future rules parsers can perform automatic updates.  It should be\n"
+#~ "set to \"1\".\n"
+#~ "\n"
+#~ "Rules should be ordered by specificity.  Later rules take\n"
+#~ "precedence over earlier rules; once a matching rule is found\n"
+#~ "no further rules will be checked.\n"
+#~ "\n"
+#~ "Use Ctrl+/ to comment or uncomment line(s).\n"
+#~ "<br><br><br>\n"
+#~ "\n"
+#~ "### Expression functions\n"
+#~ "\n"
+#~ "All function parameters support simple wildcards (`*` and `?`).\n"
+#~ "<br><br>\n"
+#~ "\n"
+#~ "    A.insideCourtyard('<footprint_refdes>')\n"
+#~ "True if any part of `A` lies within the given footprint's principal "
+#~ "courtyard.\n"
+#~ "<br><br>\n"
+#~ "\n"
+#~ "    A.insideFrontCourtyard('<footprint_refdes>')\n"
+#~ "True if any part of `A` lies within the given footprint's front "
+#~ "courtyard.\n"
+#~ "<br><br>\n"
+#~ "\n"
+#~ "    A.insideBackCourtyard('<footprint_refdes>')\n"
+#~ "True if any part of `A` lies within the given footprint's back "
+#~ "courtyard.\n"
+#~ "<br><br>\n"
+#~ "\n"
+#~ "    A.insideArea('<zone_name>')\n"
+#~ "True if any part of `A` lies within the given zone's outline.\n"
+#~ "<br><br>\n"
+#~ "\n"
+#~ "    A.isPlated()\n"
+#~ "True if `A` has a hole which is plated.\n"
+#~ "<br><br>\n"
+#~ "\n"
+#~ "    A.inDiffPair('<net_name>')\n"
+#~ "True if `A` has net that is part of the specified differential pair.\n"
+#~ "`<net_name>` is the base name of the differential pair.  For example, "
+#~ "`inDiffPair('CLK')`\n"
+#~ "matches items in the `CLK_P` and `CLK_N` nets.\n"
+#~ "<br><br>\n"
+#~ "\n"
+#~ "    AB.isCoupledDiffPair()\n"
+#~ "True if `A` and `B` are members of the same diff pair.\n"
+#~ "<br><br>\n"
+#~ "\n"
+#~ "    A.memberOf('<group_name>')\n"
+#~ "True if `A` is a member of the given group. Includes nested membership.\n"
+#~ "<br><br>\n"
+#~ "\n"
+#~ "    A.existsOnLayer('<layer_name>')\n"
+#~ "True if `A` exists on the given layer.  The layer name can be\n"
+#~ "either the name assigned in Board Setup > Board Editor Layers or\n"
+#~ "the canonical name (ie: `F.Cu`).\n"
+#~ "\n"
+#~ "NB: this returns true if `A` is on the given layer, independently\n"
+#~ "of whether or not the rule is being evaluated for that layer.\n"
+#~ "For the latter use a `(layer \"layer_name\")` clause in the rule.\n"
+#~ "<br><br><br>\n"
+#~ "\n"
+#~ "### More Examples\n"
+#~ "\n"
+#~ "    (rule \"copper keepout\"\n"
+#~ "       (constraint disallow track via zone)\n"
+#~ "       (condition \"A.insideArea('zone3')\"))\n"
+#~ "\n"
+#~ "\n"
+#~ "    (rule \"BGA neckdown\"\n"
+#~ "       (constraint track_width (min 0.2mm) (opt 0.25mm))\n"
+#~ "       (constraint clearance (min 0.05mm) (opt 0.08mm))\n"
+#~ "       (condition \"A.insideCourtyard('U3')\"))\n"
+#~ "\n"
+#~ "\n"
+#~ "    # prevent silk over tented vias\n"
+#~ "    (rule silk_over_via\n"
+#~ "       (constraint silk_clearance (min 0.2mm))\n"
+#~ "       (condition \"A.Type == '*Text' && B.Type == 'Via'\"))\n"
+#~ "\n"
+#~ "\n"
+#~ "    (rule \"Distance between Vias of Different Nets\"  \n"
+#~ "        (constraint hole_to_hole (min 0.254mm))\n"
+#~ "        (condition \"A.Type =='Via' && B.Type =='Via' && A.Net != B.Net"
+#~ "\"))\n"
+#~ "\n"
+#~ "    (rule \"Clearance between Pads of Different Nets\"  \n"
+#~ "        (constraint clearance (min 3.0mm))\n"
+#~ "        (condition \"A.Type =='Pad' && B.Type =='Pad' && A.Net != B.Net"
+#~ "\"))\n"
+#~ "\n"
+#~ "\n"
+#~ "    (rule \"Via Hole to Track Clearance\"  \n"
+#~ "        (constraint hole_clearance (min 0.254mm))\n"
+#~ "        (condition \"A.Type =='Via' && B.Type =='Track'\"))\n"
+#~ "    \n"
+#~ "    (rule \"Pad to Track Clearance\"  \n"
+#~ "        (constraint clearance (min 0.2mm))\n"
+#~ "        (condition \"A.Type =='Pad' && B.Type =='Track'\"))\n"
+#~ "\n"
+#~ "\n"
+#~ "    (rule \"clearance-to-1mm-cutout\"\n"
+#~ "        (constraint clearance (min 0.8mm))\n"
+#~ "        (condition \"A.Layer=='Edge.Cuts' && A.Thickness == 1.0mm\"))\n"
+#~ "\n"
+#~ "\n"
+#~ "    (rule \"Max Drill Hole Size Mechanical\"  \n"
+#~ "        (constraint hole_size (max 6.3mm))\n"
+#~ "        (condition \"A.Pad_Type == 'NPTH, mechanical'\"))\n"
+#~ "    \n"
+#~ "    (rule \"Max Drill Hole Size PTH\"  \n"
+#~ "        (constraint hole_size (max 6.35mm))\n"
+#~ "        (condition \"A.Pad_Type == 'Through-hole'\"))\n"
+#~ "\n"
+#~ "\n"
+#~ "    # Specify an optimal gap for a particular diff-pair\n"
+#~ "    (rule \"dp clock gap\"\n"
+#~ "        (constraint diff_pair_gap (opt \"0.8mm\"))\n"
+#~ "        (condition \"A.inDiffPair('CLK') && AB.isCoupledDiffPair()\"))\n"
+#~ "\n"
+#~ "    # Specify a larger clearance around any diff-pair\n"
+#~ "    (rule \"dp clearance\"\n"
+#~ "        (constraint clearance (min \"1.5mm\"))\n"
+#~ "        (condition \"A.inDiffPair('*') && !AB.isCoupledDiffPair()\"))\n"
+#~ msgstr ""
+#~ "### Top-level Clauses\n"
+#~ "\n"
+#~ "    (version <number>)\n"
+#~ "\n"
+#~ "    (rule <rule_name> <rule_clause> ...)\n"
+#~ "\n"
+#~ "\n"
+#~ "<br><br>\n"
+#~ "\n"
+#~ "### Rule Clauses\n"
+#~ "\n"
+#~ "    (constraint <constraint_type> ...)\n"
+#~ "\n"
+#~ "    (condition \"<expression>\")\n"
+#~ "\n"
+#~ "    (layer \"<layer_name>\")\n"
+#~ "\n"
+#~ "\n"
+#~ "<br><br>\n"
+#~ "\n"
+#~ "### Constraint Types\n"
+#~ "\n"
+#~ " * annular\\_width\n"
+#~ " * clearance\n"
+#~ " * courtyard_clearance\n"
+#~ " * diff\\_pair\\_gap\n"
+#~ " * diff\\_pair\\_uncoupled\n"
+#~ " * disallow\n"
+#~ " * edge\\_clearance\n"
+#~ " * length\n"
+#~ " * hole\\_clearance\n"
+#~ " * hole\\_size\n"
+#~ " * silk\\_clearance\n"
+#~ " * skew\n"
+#~ " * track\\_width\n"
+#~ " * via\\_count\n"
+#~ "\n"
+#~ "\n"
+#~ "<br><br>\n"
+#~ "\n"
+#~ "### Item Types\n"
+#~ "\n"
+#~ " * buried_via\n"
+#~ " * graphic\n"
+#~ " * hole\n"
+#~ " * micro_via\n"
+#~ " * pad\n"
+#~ " * text\n"
+#~ " * track\n"
+#~ " * via\n"
+#~ " * zone\n"
+#~ "\n"
+#~ "<br>\n"
+#~ "\n"
+#~ "### Examples\n"
+#~ "\n"
+#~ "    (version 1)\n"
+#~ "\n"
+#~ "    (rule HV\n"
+#~ "       (constraint clearance (min 1.5mm))\n"
+#~ "       (condition \"A.NetClass == 'HV'\"))\n"
+#~ "\n"
+#~ "\n"
+#~ "    (rule HV\n"
+#~ "       (layer outer)\n"
+#~ "       (constraint clearance (min 1.5mm))\n"
+#~ "       (condition \"A.NetClass == 'HV'\"))\n"
+#~ "\n"
+#~ "\n"
+#~ "    (rule HV_HV\n"
+#~ "       # wider clearance between HV tracks\n"
+#~ "       (constraint clearance (min \"1.5mm + 2.0mm\"))\n"
+#~ "       (condition \"A.NetClass == 'HV' && B.NetClass == 'HV'\"))\n"
+#~ "\n"
+#~ "\n"
+#~ "    (rule HV_unshielded\n"
+#~ "       (constraint clearance (min 2mm))\n"
+#~ "       (condition \"A.NetClass == 'HV' && !A.insideArea('Shield*')\"))\n"
+#~ "<br><br>\n"
+#~ "\n"
+#~ "### Notes\n"
+#~ "\n"
+#~ "Version clause must be the first clause.  It indicates the syntax version "
+#~ "of the file so that \n"
+#~ "future rules parsers can perform automatic updates.  It should be\n"
+#~ "set to \"1\".\n"
+#~ "\n"
+#~ "Rules should be ordered by specificity.  Later rules take\n"
+#~ "precedence over earlier rules; once a matching rule is found\n"
+#~ "no further rules will be checked.\n"
+#~ "\n"
+#~ "Use Ctrl+/ to comment or uncomment line(s).\n"
+#~ "<br><br><br>\n"
+#~ "\n"
+#~ "### Expression functions\n"
+#~ "\n"
+#~ "All function parameters support simple wildcards (`*` and `?`).\n"
+#~ "<br><br>\n"
+#~ "\n"
+#~ "    A.insideCourtyard('<footprint_refdes>')\n"
+#~ "True if any part of `A` lies within the given footprint's principal "
+#~ "courtyard.\n"
+#~ "<br><br>\n"
+#~ "\n"
+#~ "    A.insideFrontCourtyard('<footprint_refdes>')\n"
+#~ "True if any part of `A` lies within the given footprint's front "
+#~ "courtyard.\n"
+#~ "<br><br>\n"
+#~ "\n"
+#~ "    A.insideBackCourtyard('<footprint_refdes>')\n"
+#~ "True if any part of `A` lies within the given footprint's back "
+#~ "courtyard.\n"
+#~ "<br><br>\n"
+#~ "\n"
+#~ "    A.insideArea('<zone_name>')\n"
+#~ "True if any part of `A` lies within the given zone's outline.\n"
+#~ "<br><br>\n"
+#~ "\n"
+#~ "    A.isPlated()\n"
+#~ "True if `A` has a hole which is plated.\n"
+#~ "<br><br>\n"
+#~ "\n"
+#~ "    A.inDiffPair('<net_name>')\n"
+#~ "True if `A` has net that is part of the specified differential pair.\n"
+#~ "`<net_name>` is the base name of the differential pair.  For example, "
+#~ "`inDiffPair('CLK')`\n"
+#~ "matches items in the `CLK_P` and `CLK_N` nets.\n"
+#~ "<br><br>\n"
+#~ "\n"
+#~ "    AB.isCoupledDiffPair()\n"
+#~ "True if `A` and `B` are members of the same diff pair.\n"
+#~ "<br><br>\n"
+#~ "\n"
+#~ "    A.memberOf('<group_name>')\n"
+#~ "True if `A` is a member of the given group. Includes nested membership.\n"
+#~ "<br><br>\n"
+#~ "\n"
+#~ "    A.existsOnLayer('<layer_name>')\n"
+#~ "True if `A` exists on the given layer.  The layer name can be\n"
+#~ "either the name assigned in Board Setup > Board Editor Layers or\n"
+#~ "the canonical name (ie: `F.Cu`).\n"
+#~ "\n"
+#~ "NB: this returns true if `A` is on the given layer, independently\n"
+#~ "of whether or not the rule is being evaluated for that layer.\n"
+#~ "For the latter use a `(layer \"layer_name\")` clause in the rule.\n"
+#~ "<br><br><br>\n"
+#~ "\n"
+#~ "### More Examples\n"
+#~ "\n"
+#~ "    (rule \"copper keepout\"\n"
+#~ "       (constraint disallow track via zone)\n"
+#~ "       (condition \"A.insideArea('zone3')\"))\n"
+#~ "\n"
+#~ "\n"
+#~ "    (rule \"BGA neckdown\"\n"
+#~ "       (constraint track_width (min 0.2mm) (opt 0.25mm))\n"
+#~ "       (constraint clearance (min 0.05mm) (opt 0.08mm))\n"
+#~ "       (condition \"A.insideCourtyard('U3')\"))\n"
+#~ "\n"
+#~ "\n"
+#~ "    # prevent silk over tented vias\n"
+#~ "    (rule silk_over_via\n"
+#~ "       (constraint silk_clearance (min 0.2mm))\n"
+#~ "       (condition \"A.Type == '*Text' && B.Type == 'Via'\"))\n"
+#~ "\n"
+#~ "\n"
+#~ "    (rule \"Distance between Vias of Different Nets\"  \n"
+#~ "        (constraint hole_to_hole (min 0.254mm))\n"
+#~ "        (condition \"A.Type =='Via' && B.Type =='Via' && A.Net != B.Net"
+#~ "\"))\n"
+#~ "\n"
+#~ "    (rule \"Clearance between Pads of Different Nets\"  \n"
+#~ "        (constraint clearance (min 3.0mm))\n"
+#~ "        (condition \"A.Type =='Pad' && B.Type =='Pad' && A.Net != B.Net"
+#~ "\"))\n"
+#~ "\n"
+#~ "\n"
+#~ "    (rule \"Via Hole to Track Clearance\"  \n"
+#~ "        (constraint hole_clearance (min 0.254mm))\n"
+#~ "        (condition \"A.Type =='Via' && B.Type =='Track'\"))\n"
+#~ "    \n"
+#~ "    (rule \"Pad to Track Clearance\"  \n"
+#~ "        (constraint clearance (min 0.2mm))\n"
+#~ "        (condition \"A.Type =='Pad' && B.Type =='Track'\"))\n"
+#~ "\n"
+#~ "\n"
+#~ "    (rule \"clearance-to-1mm-cutout\"\n"
+#~ "        (constraint clearance (min 0.8mm))\n"
+#~ "        (condition \"A.Layer=='Edge.Cuts' && A.Thickness == 1.0mm\"))\n"
+#~ "\n"
+#~ "\n"
+#~ "    (rule \"Max Drill Hole Size Mechanical\"  \n"
+#~ "        (constraint hole_size (max 6.3mm))\n"
+#~ "        (condition \"A.Pad_Type == 'NPTH, mechanical'\"))\n"
+#~ "    \n"
+#~ "    (rule \"Max Drill Hole Size PTH\"  \n"
+#~ "        (constraint hole_size (max 6.35mm))\n"
+#~ "        (condition \"A.Pad_Type == 'Through-hole'\"))\n"
+#~ "\n"
+#~ "\n"
+#~ "    # Specify an optimal gap for a particular diff-pair\n"
+#~ "    (rule \"dp clock gap\"\n"
+#~ "        (constraint diff_pair_gap (opt \"0.8mm\"))\n"
+#~ "        (condition \"A.inDiffPair('CLK') && AB.isCoupledDiffPair()\"))\n"
+#~ "\n"
+#~ "    # Specify a larger clearance around any diff-pair\n"
+#~ "    (rule \"dp clearance\"\n"
+#~ "        (constraint clearance (min \"1.5mm\"))\n"
+#~ "        (condition \"A.inDiffPair('*') && !AB.isCoupledDiffPair()\"))\n"
+
+#, c-format
+#~ msgid "pad %s"
+#~ msgstr "pad %s"
 
 #~ msgid "All Files (*.*)|*.*"
 #~ msgstr "All Files (*.*)|*.*"
@@ -35584,9 +36408,6 @@ msgstr "KiCad Printed Circuit Board"
 
 #~ msgid "temp3"
 #~ msgstr "temp3"
-
-#~ msgid "temp"
-#~ msgstr "temp"
 
 #~ msgid "Info: "
 #~ msgstr "Info: "

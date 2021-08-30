@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-30 14:05+0200\n"
+"POT-Creation-Date: 2021-08-30 14:45-0700\n"
 "PO-Revision-Date: 2021-08-30 17:10+0200\n"
 "Last-Translator: \n"
 "Language-Team: jp-charras\n"
@@ -16809,37 +16809,33 @@ msgstr "pas de symbole sélectionné"
 msgid "symbol is not multi-unit"
 msgstr "le symbole n'est pas multi-unité"
 
-#: eeschema/tools/sch_edit_tool.cpp:862
+#: eeschema/tools/sch_edit_tool.cpp:875
 msgid "Label value cannot go below zero"
 msgstr "La valeur du label ne peut pas descendre en dessous de zéro"
 
-#: eeschema/tools/sch_edit_tool.cpp:1090 eeschema/tools/sch_edit_tool.cpp:1092
+#: eeschema/tools/sch_edit_tool.cpp:1103 eeschema/tools/sch_edit_tool.cpp:1105
 #: eeschema/tools/symbol_editor_edit_tool.cpp:520
 #, c-format
 msgid "Edit %s Field"
 msgstr "Édition Champ %s"
 
-#: eeschema/tools/sch_edit_tool.cpp:1094
+#: eeschema/tools/sch_edit_tool.cpp:1107
 #: eeschema/tools/symbol_editor_edit_tool.cpp:522
 #, c-format
 msgid "Edit '%s' Field"
 msgstr "Édition Champ '%s'"
 
-#: eeschema/tools/sch_edit_tool.cpp:1652
-msgid "There are no unreferenced pins in this sheet to remove."
-msgstr "Il n'y a pas de pins non référencées à supprimer dans cette feuille."
-
-#: eeschema/tools/sch_edit_tool.cpp:1656
+#: eeschema/tools/sch_edit_tool.cpp:1663
 msgid "Do you wish to delete the unreferenced pins from this sheet?"
 msgstr ""
 "Souhaitez-vous supprimer les pin de feuille non référencées de cette feuille?"
 
-#: eeschema/tools/sch_edit_tool.cpp:1716
+#: eeschema/tools/sch_edit_tool.cpp:1723
 #, c-format
 msgid "Enter page number for sheet path%s"
 msgstr "Entrez le numéro de page pour le chemin hiérarchique de la feuille %s"
 
-#: eeschema/tools/sch_edit_tool.cpp:1719
+#: eeschema/tools/sch_edit_tool.cpp:1726
 msgid "Edit Sheet Page Number"
 msgstr "Editer Numéro de Page de la Feuille"
 
@@ -18351,39 +18347,39 @@ msgstr "Ajout dépot"
 msgid "Manage Repositores"
 msgstr "Gérer les Dépots"
 
-#: kicad/pcm/dialogs/dialog_pcm.cpp:49
+#: kicad/pcm/dialogs/dialog_pcm.cpp:50
 #, c-format
 msgid "Plugins (%d)"
 msgstr "Plugins (%d)"
 
-#: kicad/pcm/dialogs/dialog_pcm.cpp:50
+#: kicad/pcm/dialogs/dialog_pcm.cpp:51
 #, c-format
 msgid "Libraries (%d)"
 msgstr "Librairies (%d)"
 
-#: kicad/pcm/dialogs/dialog_pcm.cpp:51
+#: kicad/pcm/dialogs/dialog_pcm.cpp:52
 #, c-format
 msgid "Color themes (%d)"
 msgstr "Thèmes de couleurs (%d)"
 
-#: kicad/pcm/dialogs/dialog_pcm.cpp:77 kicad/pcm/dialogs/dialog_pcm.cpp:312
+#: kicad/pcm/dialogs/dialog_pcm.cpp:79 kicad/pcm/dialogs/dialog_pcm.cpp:315
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:51
 #, c-format
 msgid "Repository (%d)"
 msgstr "Dépôt (%d)"
 
-#: kicad/pcm/dialogs/dialog_pcm.cpp:94 kicad/pcm/dialogs/panel_package.cpp:70
+#: kicad/pcm/dialogs/dialog_pcm.cpp:96 kicad/pcm/dialogs/panel_package.cpp:70
 #: kicad/pcm/dialogs/panel_package.cpp:74
 #: kicad/pcm/dialogs/panel_package_base.cpp:67
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:108
 msgid "Install"
 msgstr "Installer"
 
-#: kicad/pcm/dialogs/dialog_pcm.cpp:103 kicad/pcm/dialogs/panel_package.cpp:78
+#: kicad/pcm/dialogs/dialog_pcm.cpp:105 kicad/pcm/dialogs/panel_package.cpp:78
 msgid "Uninstall"
 msgstr "Désinstaller"
 
-#: kicad/pcm/dialogs/dialog_pcm.cpp:158
+#: kicad/pcm/dialogs/dialog_pcm.cpp:160
 msgid ""
 "Are you sure you want to close the package manager and discard pending "
 "changes?"
@@ -18391,22 +18387,22 @@ msgstr ""
 "Voulez-vous vraiment fermer le gestionnaire de paquets et ignorer les "
 "modifications en attente ?"
 
-#: kicad/pcm/dialogs/dialog_pcm.cpp:160
+#: kicad/pcm/dialogs/dialog_pcm.cpp:162
 #: kicad/tools/kicad_manager_actions.cpp:118
 msgid "Plugin and Content Manager"
 msgstr "Gestionnaire de Plugin et de Contenu"
 
-#: kicad/pcm/dialogs/dialog_pcm.cpp:233
+#: kicad/pcm/dialogs/dialog_pcm.cpp:235
 msgid "Choose package file"
 msgstr "Choisir fichier paquet"
 
-#: kicad/pcm/dialogs/dialog_pcm.cpp:327
+#: kicad/pcm/dialogs/dialog_pcm.cpp:330
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:117
 #, c-format
 msgid "Pending (%d)"
 msgstr "En attente (%d)"
 
-#: kicad/pcm/dialogs/dialog_pcm.cpp:362
+#: kicad/pcm/dialogs/dialog_pcm.cpp:365
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:60
 #, c-format
 msgid "Installed (%d)"
@@ -34061,23 +34057,23 @@ msgstr "Élément <b>refusé<b> à l’emplacement actuel."
 msgid "Item allowed at current location."
 msgstr "Article autorisé à l’emplacement actuel."
 
-#: pcbnew/tools/convert_tool.cpp:76 pcbnew/tools/convert_tool_essais.cpp:76
+#: pcbnew/tools/convert_tool.cpp:76
 msgid "Create from Selection"
 msgstr "Créer à partir de la Sélection"
 
-#: pcbnew/tools/convert_tool.cpp:207 pcbnew/tools/convert_tool_essais.cpp:207
+#: pcbnew/tools/convert_tool.cpp:207
 msgid "Convert shapes to polygon"
 msgstr "Convertir les formes en zone"
 
-#: pcbnew/tools/convert_tool.cpp:243 pcbnew/tools/convert_tool_essais.cpp:243
+#: pcbnew/tools/convert_tool.cpp:243
 msgid "Convert shapes to zone"
 msgstr "Convertir les formes en zone"
 
-#: pcbnew/tools/convert_tool.cpp:707 pcbnew/tools/convert_tool_essais.cpp:702
+#: pcbnew/tools/convert_tool.cpp:707
 msgid "Convert polygons to lines"
 msgstr "Convertir les polygones en lignes"
 
-#: pcbnew/tools/convert_tool.cpp:797 pcbnew/tools/convert_tool_essais.cpp:792
+#: pcbnew/tools/convert_tool.cpp:797
 msgid "Create arc from line segment"
 msgstr "Créer arc à partir du segment"
 
@@ -36689,11 +36685,6 @@ msgstr "Exécution de remplissage des polygones..."
 msgid "[INFO] load failed: input line too long\n"
 msgstr "[INFO] chargement échouée: ligne d’entrée trop longue\n"
 
-#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:5
-#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:12
-msgid "bitmap2component"
-msgstr "bitmap2component"
-
 #: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:9
 msgid "KiCad Image Converter"
 msgstr "Convertisseur d'Image KiCad"
@@ -36704,10 +36695,9 @@ msgstr ""
 "Créer un composant à partir d’une image bitmap pour une utilisation avec "
 "KiCad"
 
-#: resources/linux/launchers/org.kicad.eeschema.desktop.in:5
-#: resources/linux/launchers/org.kicad.eeschema.desktop.in:13
-msgid "eeschema"
-msgstr "eeschema"
+#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:12
+msgid "bitmap2component"
+msgstr "bitmap2component"
 
 #: resources/linux/launchers/org.kicad.eeschema.desktop.in:10
 msgid "KiCad Schematic Editor (Standalone)"
@@ -36721,10 +36711,9 @@ msgstr "Outil de Capture Schématique"
 msgid "Standalone schematic editor for KiCad schematics"
 msgstr "Editeur de schématique indépendant pour les schémas KiCad"
 
-#: resources/linux/launchers/org.kicad.gerbview.desktop.in:5
-#: resources/linux/launchers/org.kicad.gerbview.desktop.in:13
-msgid "gerbview"
-msgstr "gerbview"
+#: resources/linux/launchers/org.kicad.eeschema.desktop.in:13
+msgid "eeschema"
+msgstr "eeschema"
 
 #: resources/linux/launchers/org.kicad.gerbview.desktop.in:11
 msgid "Gerber File Viewer"
@@ -36734,9 +36723,9 @@ msgstr "Visionneuse de fichiers Gerber"
 msgid "View Gerber files"
 msgstr "Visualiser fichiers Gerber"
 
-#: resources/linux/launchers/org.kicad.kicad.desktop.in:5
-msgid "kicad"
-msgstr "kicad"
+#: resources/linux/launchers/org.kicad.gerbview.desktop.in:13
+msgid "gerbview"
+msgstr "gerbview"
 
 #: resources/linux/launchers/org.kicad.kicad.desktop.in:10
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:6
@@ -36751,10 +36740,6 @@ msgstr "Suite CAO Electronique"
 msgid "Suite of tools for schematic design and circuit board layout"
 msgstr "Suite d’outils pour la conception schématique et des circuits imprimés"
 
-#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:5
-msgid "pcbcalculator"
-msgstr "pcbcalculator"
-
 #: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:9
 msgid "KiCad PCB Calculator"
 msgstr "Calculateur pour PCB KiCad"
@@ -36762,11 +36747,6 @@ msgstr "Calculateur pour PCB KiCad"
 #: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:11
 msgid "Calculator for various electronics-related computations"
 msgstr "Calculatrice pour divers calculs liés à l’électronique"
-
-#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:5
-#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:13
-msgid "pcbnew"
-msgstr "pcbnew"
 
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:10
 msgid "KiCad PCB Editor (Standalone)"
@@ -36779,6 +36759,10 @@ msgstr "Éditeur de circuit imprimé"
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:12
 msgid "Standalone circuit board editor for KiCad boards"
 msgstr "Éditeur indépendant de circuits imprimés pour les C.I. KiCad"
+
+#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:13
+msgid "pcbnew"
+msgstr "pcbnew"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:13
 msgid "An EDA suite for schematic and circuit board design"
@@ -36832,6 +36816,16 @@ msgstr "Schématique KiCad"
 #: resources/linux/mime/kicad-kicad.xml.in:25
 msgid "KiCad Printed Circuit Board"
 msgstr "Fichier Circuit Imprimé KiCad"
+
+#~ msgid "There are no unreferenced pins in this sheet to remove."
+#~ msgstr ""
+#~ "Il n'y a pas de pins non référencées à supprimer dans cette feuille."
+
+#~ msgid "kicad"
+#~ msgstr "kicad"
+
+#~ msgid "pcbcalculator"
+#~ msgstr "pcbcalculator"
 
 #~ msgid "3D Model Visibility"
 #~ msgstr "Visibilité modèles 3D"
