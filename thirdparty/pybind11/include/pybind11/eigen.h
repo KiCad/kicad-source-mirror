@@ -189,20 +189,20 @@ template <typename Type_> struct EigenProps {
     static constexpr bool show_f_contiguous = !show_c_contiguous && show_order && requires_col_major;
 
     static constexpr auto descriptor =
-        _("numpy.ndarray[") + npy_format_descriptor<Scalar>::name +
-        _("[")  + _<fixed_rows>(_<(size_t) rows>(), _("m")) +
-        _(", ") + _<fixed_cols>(_<(size_t) cols>(), _("n")) +
-        _("]") +
+        _x("numpy.ndarray[") + npy_format_descriptor<Scalar>::name +
+        _x("[")  + _x<fixed_rows>(_x<(size_t) rows>(), _x("m")) +
+        _x(", ") + _x<fixed_cols>(_x<(size_t) cols>(), _x("n")) +
+        _x("]") +
         // For a reference type (e.g. Ref<MatrixXd>) we have other constraints that might need to be
         // satisfied: writeable=True (for a mutable reference), and, depending on the map's stride
         // options, possibly f_contiguous or c_contiguous.  We include them in the descriptor output
         // to provide some hint as to why a TypeError is occurring (otherwise it can be confusing to
         // see that a function accepts a 'numpy.ndarray[float64[3,2]]' and an error message that you
         // *gave* a numpy.ndarray of the right type and dimensions.
-        _<show_writeable>(", flags.writeable", "") +
-        _<show_c_contiguous>(", flags.c_contiguous", "") +
-        _<show_f_contiguous>(", flags.f_contiguous", "") +
-        _("]");
+        _x<show_writeable>(", flags.writeable", "") +
+        _x<show_c_contiguous>(", flags.c_contiguous", "") +
+        _x<show_f_contiguous>(", flags.f_contiguous", "") +
+        _x("]");
 };
 
 // Casts an Eigen type to numpy array.  If given a base, the numpy array references the src data,
@@ -590,8 +590,8 @@ struct type_caster<Type, enable_if_t<is_eigen_sparse<Type>::value>> {
         ).release();
     }
 
-    PYBIND11_TYPE_CASTER(Type, _<(Type::IsRowMajor) != 0>("scipy.sparse.csr_matrix[", "scipy.sparse.csc_matrix[")
-            + npy_format_descriptor<Scalar>::name + _("]"));
+    PYBIND11_TYPE_CASTER(Type, _x<(Type::IsRowMajor) != 0>("scipy.sparse.csr_matrix[", "scipy.sparse.csc_matrix[")
+            + npy_format_descriptor<Scalar>::name + _x("]"));
 };
 
 PYBIND11_NAMESPACE_END(detail)

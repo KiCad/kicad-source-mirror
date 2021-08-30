@@ -59,7 +59,7 @@ public:
         return PyComplex_FromDoubles((double) src.real(), (double) src.imag());
     }
 
-    PYBIND11_TYPE_CASTER(std::complex<T>, _("complex"));
+    PYBIND11_TYPE_CASTER(std::complex<T>, _x("complex"));
 };
 PYBIND11_NAMESPACE_END(detail)
 PYBIND11_NAMESPACE_END(PYBIND11_NAMESPACE)
