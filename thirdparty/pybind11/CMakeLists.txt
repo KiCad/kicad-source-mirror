@@ -125,7 +125,8 @@ set(PYBIND11_HEADERS
     include/pybind11/pybind11.h
     include/pybind11/pytypes.h
     include/pybind11/stl.h
-    include/pybind11/stl_bind.h)
+    include/pybind11/stl_bind.h
+    include/pybind11/stl/filesystem.h)
 
 # Compare with grep and warn if mismatched
 if(PYBIND11_MASTER_PROJECT AND NOT CMAKE_VERSION VERSION_LESS 3.12)
@@ -201,6 +202,12 @@ if(PYBIND11_INSTALL)
   set(PYBIND11_CMAKECONFIG_INSTALL_DIR
       "${CMAKE_INSTALL_DATAROOTDIR}/cmake/${PROJECT_NAME}"
       CACHE STRING "install path for pybind11Config.cmake")
+
+  if(IS_ABSOLUTE "${CMAKE_INSTALL_INCLUDEDIR}")
+    set(pybind11_INCLUDEDIR "${CMAKE_INSTALL_FULL_INCLUDEDIR}")
+  else()
+    set(pybind11_INCLUDEDIR "\$\{PACKAGE_PREFIX_DIR\}/${CMAKE_INSTALL_INCLUDEDIR}")
+  endif()
 
   configure_package_config_file(
     tools/${PROJECT_NAME}Config.cmake.in "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Config.cmake"

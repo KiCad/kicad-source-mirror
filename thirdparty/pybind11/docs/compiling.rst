@@ -70,6 +70,19 @@ that is supported via a ``build_ext`` command override; it will only affect
         ext_modules=ext_modules
     )
 
+If you have single-file extension modules that are directly stored in the
+Python source tree (``foo.cpp`` in the same directory as where a ``foo.py``
+would be located), you can also generate ``Pybind11Extensions`` using
+``setup_helpers.intree_extensions``: ``intree_extensions(["path/to/foo.cpp",
+...])`` returns a list of ``Pybind11Extensions`` which can be passed to
+``ext_modules``, possibly after further customizing their attributes
+(``libraries``, ``include_dirs``, etc.).  By doing so, a ``foo.*.so`` extension
+module will be generated and made available upon installation.
+
+``intree_extension`` will automatically detect if you are using a ``src``-style
+layout (as long as no namespace packages are involved), but you can also
+explicitly pass ``package_dir`` to it (as in ``setuptools.setup``).
+
 Since pybind11 does not require NumPy when building, a light-weight replacement
 for NumPy's parallel compilation distutils tool is included. Use it like this:
 
@@ -93,7 +106,7 @@ to a memory dependent number.
 If you are developing rapidly and have a lot of C++ files, you may want to
 avoid rebuilding files that have not changed. For simple cases were you are
 using ``pip install -e .`` and do not have local headers, you can skip the
-rebuild if a object file is newer than it's source (headers are not checked!)
+rebuild if an object file is newer than its source (headers are not checked!)
 with the following:
 
 .. code-block:: python
@@ -149,7 +162,7 @@ Your ``pyproject.toml`` file will likely look something like this:
     and ``pyproject.toml`` are not even contained in the wheel, so this high
     Pip requirement is only for source builds, and will not affect users of
     your binary wheels. If you are building SDists and wheels, then
-    `pypa-build`_ is the recommended offical tool.
+    `pypa-build`_ is the recommended official tool.
 
 .. _PEP 517: https://www.python.org/dev/peps/pep-0517/
 .. _cibuildwheel: https://cibuildwheel.readthedocs.io
@@ -411,7 +424,7 @@ existing targets instead:
 
 .. code-block:: cmake
 
-    cmake_minumum_required(VERSION 3.15...3.19)
+    cmake_minimum_required(VERSION 3.15...3.19)
     project(example LANGUAGES CXX)
 
     find_package(Python COMPONENTS Interpreter Development REQUIRED)
@@ -516,7 +529,7 @@ Instead of setting properties, you can set ``CMAKE_*`` variables to initialize t
     compiler flags are provided to ensure high quality code generation. In
     contrast to the ``pybind11_add_module()`` command, the CMake interface
     provides a *composable* set of targets to ensure that you retain flexibility.
-    It can be expecially important to provide or set these properties; the
+    It can be especially important to provide or set these properties; the
     :ref:`FAQ <faq:symhidden>` contains an explanation on why these are needed.
 
 .. versionadded:: 2.6

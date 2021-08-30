@@ -231,17 +231,17 @@ struct value_and_holder {
         return reinterpret_cast<V *&>(vh[0]);
     }
     // True if this `value_and_holder` has a non-null value pointer
-    explicit operator bool() const { return value_ptr(); }
+    explicit operator bool() const { return value_ptr() != nullptr; }
 
     template <typename H> H &holder() const {
         return reinterpret_cast<H &>(vh[1]);
     }
     bool holder_constructed() const {
         return inst->simple_layout
-            ? inst->simple_holder_constructed
-            : inst->nonsimple.status[index] & instance::status_holder_constructed;
+                   ? inst->simple_holder_constructed
+                   : (inst->nonsimple.status[index] & instance::status_holder_constructed) != 0u;
     }
-    void set_holder_constructed(bool v = true) {
+    void set_holder_constructed(bool v = true) const {
         if (inst->simple_layout)
             inst->simple_holder_constructed = v;
         else if (v)
@@ -252,9 +252,9 @@ struct value_and_holder {
     bool instance_registered() const {
         return inst->simple_layout
             ? inst->simple_instance_registered
-            : inst->nonsimple.status[index] & instance::status_instance_registered;
+            : ((inst->nonsimple.status[index] & instance::status_instance_registered) != 0);
     }
-    void set_instance_registered(bool v = true) {
+    void set_instance_registered(bool v = true) const {
         if (inst->simple_layout)
             inst->simple_instance_registered = v;
         else if (v)
@@ -397,7 +397,7 @@ PYBIND11_NOINLINE inline void instance::allocate_layout() {
     owned = true;
 }
 
-PYBIND11_NOINLINE inline void instance::deallocate_layout() {
+PYBIND11_NOINLINE inline void instance::deallocate_layout() const {
     if (!simple_layout)
         PyMem_Free(nonsimple.values_and_holders);
 }
@@ -657,12 +657,6 @@ public:
     PYBIND11_NOINLINE bool load_impl(handle src, bool convert) {
         if (!src) return false;
         if (!typeinfo) return try_load_foreign_module_local(src);
-        if (src.is_none()) {
-            // Defer accepting None to other overloads (if we aren't in convert mode):
-            if (!convert) return false;
-            value = nullptr;
-            return true;
-        }
 
         auto &this_ = static_cast<ThisT &>(*this);
         this_.check_holder_compat();
@@ -676,7 +670,7 @@ public:
             return true;
         }
         // Case 2: We have a derived class
-        else if (PyType_IsSubtype(srctype, typeinfo->type)) {
+        if (PyType_IsSubtype(srctype, typeinfo->type)) {
             auto &bases = all_type_info(srctype);
             bool no_cpp_mi = typeinfo->simple_type;
 
@@ -693,7 +687,7 @@ public:
             // Case 2b: the python type inherits from multiple C++ bases.  Check the bases to see if
             // we can find an exact match (or, for a simple C++ type, an inherited match); if so, we
             // can safely reinterpret_cast to the relevant pointer.
-            else if (bases.size() > 1) {
+            if (bases.size() > 1) {
                 for (auto base : bases) {
                     if (no_cpp_mi ? PyType_IsSubtype(base->type, typeinfo->type) : base->type == typeinfo->type) {
                         this_.load_value(reinterpret_cast<instance *>(src.ptr())->get_value_and_holder(base));
@@ -731,7 +725,19 @@ public:
         }
 
         // Global typeinfo has precedence over foreign module_local
-        return try_load_foreign_module_local(src);
+        if (try_load_foreign_module_local(src)) {
+           return true;
+        }
+
+        // Custom converters didn't take None, now we convert None to nullptr.
+        if (src.is_none()) {
+           // Defer accepting None to other overloads (if we aren't in convert mode):
+           if (!convert) return false;
+           value = nullptr;
+           return true;
+        }
+
+        return false;
     }
 
 
@@ -859,7 +865,7 @@ template <typename type> class type_caster_base : public type_caster_generic {
     using itype = intrinsic_t<type>;
 
 public:
-    static constexpr auto name = _x<type>();
+    static constexpr auto name = _<type>();
 
     type_caster_base() : type_caster_base(typeid(type)) { }
     explicit type_caster_base(const std::type_info &info) : type_caster_generic(info) { }

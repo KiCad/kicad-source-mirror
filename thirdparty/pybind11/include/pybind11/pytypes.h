@@ -319,11 +319,15 @@ PYBIND11_NAMESPACE_BEGIN(detail)
 inline std::string error_string();
 PYBIND11_NAMESPACE_END(detail)
 
+#if defined(_MSC_VER)
+#  pragma warning(push)
+#  pragma warning(disable: 4275 4251) // warning C4275: An exported class was derived from a class that wasn't exported. Can be ignored when derived from a STL class.
+#endif
 /// Fetch and hold an error which was already set in Python.  An instance of this is typically
 /// thrown to propagate python-side errors back through C++ which can either be caught manually or
 /// else falls back to the function dispatcher (which then raises the captured error back to
 /// python).
-class error_already_set : public std::runtime_error {
+class PYBIND11_EXPORT_EXCEPTION error_already_set : public std::runtime_error {
 public:
     /// Constructs a new exception from the current Python error indicator, if any.  The current
     /// Python error indicator will be cleared.
@@ -341,16 +345,17 @@ public:
     /// error variables (but the `.what()` string is still available).
     void restore() { PyErr_Restore(m_type.release().ptr(), m_value.release().ptr(), m_trace.release().ptr()); }
 
-    /// If it is impossible to raise the currently-held error, such as in destructor, we can write
-    /// it out using Python's unraisable hook (sys.unraisablehook). The error context should be
-    /// some object whose repr() helps identify the location of the error. Python already knows the
-    /// type and value of the error, so there is no need to repeat that. For example, __func__ could
-    /// be helpful. After this call, the current object no longer stores the error variables,
-    /// and neither does Python.
+    /// If it is impossible to raise the currently-held error, such as in a destructor, we can write
+    /// it out using Python's unraisable hook (`sys.unraisablehook`). The error context should be
+    /// some object whose `repr()` helps identify the location of the error. Python already knows the
+    /// type and value of the error, so there is no need to repeat that. After this call, the current
+    /// object no longer stores the error variables, and neither does Python.
     void discard_as_unraisable(object err_context) {
         restore();
         PyErr_WriteUnraisable(err_context.ptr());
     }
+    /// An alternate version of `discard_as_unraisable()`, where a string provides information on the
+    /// location of the error. For example, `__func__` could be helpful.
     void discard_as_unraisable(const char *err_context) {
         discard_as_unraisable(reinterpret_steal<object>(PYBIND11_FROM_STRING(err_context)));
     }
@@ -362,7 +367,9 @@ public:
     /// Check if the currently trapped error type matches the given Python exception class (or a
     /// subclass thereof).  May also be passed a tuple to search for any exception class matches in
     /// the given tuple.
-    bool matches(handle exc) const { return PyErr_GivenExceptionMatches(m_type.ptr(), exc.ptr()); }
+    bool matches(handle exc) const {
+        return (PyErr_GivenExceptionMatches(m_type.ptr(), exc.ptr()) != 0);
+    }
 
     const object& type() const { return m_type; }
     const object& value() const { return m_value; }
@@ -371,6 +378,9 @@ public:
 private:
     object m_type, m_value, m_trace;
 };
+#if defined(_MSC_VER)
+#  pragma warning(pop)
+#endif
 
 /** \defgroup python_builtins _
     Unless stated otherwise, the following C++ functions behave the same
@@ -433,19 +443,17 @@ inline object getattr(handle obj, const char *name) {
 inline object getattr(handle obj, handle name, handle default_) {
     if (PyObject *result = PyObject_GetAttr(obj.ptr(), name.ptr())) {
         return reinterpret_steal<object>(result);
-    } else {
-        PyErr_Clear();
-        return reinterpret_borrow<object>(default_);
     }
+    PyErr_Clear();
+    return reinterpret_borrow<object>(default_);
 }
 
 inline object getattr(handle obj, const char *name, handle default_) {
     if (PyObject *result = PyObject_GetAttrString(obj.ptr(), name)) {
         return reinterpret_steal<object>(result);
-    } else {
-        PyErr_Clear();
-        return reinterpret_borrow<object>(default_);
     }
+    PyErr_Clear();
+    return reinterpret_borrow<object>(default_);
 }
 
 inline void setattr(handle obj, handle name, handle value) {
@@ -478,6 +486,43 @@ inline handle get_function(handle value) {
     return value;
 }
 
+// Reimplementation of python's dict helper functions to ensure that exceptions
+// aren't swallowed (see #2862)
+
+// copied from cpython _PyDict_GetItemStringWithError
+inline PyObject * dict_getitemstring(PyObject *v, const char *key)
+{
+#if PY_MAJOR_VERSION >= 3
+    PyObject *kv = nullptr, *rv = nullptr;
+    kv = PyUnicode_FromString(key);
+    if (kv == NULL) {
+        throw error_already_set();
+    }
+
+    rv = PyDict_GetItemWithError(v, kv);
+    Py_DECREF(kv);
+    if (rv == NULL && PyErr_Occurred()) {
+        throw error_already_set();
+    }
+    return rv;
+#else
+    return PyDict_GetItemString(v, key);
+#endif
+}
+
+inline PyObject * dict_getitem(PyObject *v, PyObject *key)
+{
+#if PY_MAJOR_VERSION >= 3
+    PyObject *rv = PyDict_GetItemWithError(v, key);
+    if (rv == NULL && PyErr_Occurred()) {
+        throw error_already_set();
+    }
+    return rv;
+#else
+    return PyDict_GetItem(v, key);
+#endif
+}
+
 // Helper aliases/functions to support implicit casting of values given to python accessors/methods.
 // When given a pyobject, this simply returns the pyobject as-is; for other C++ type, the value goes
 // through pybind11::cast(obj) to convert it to an `object`.
@@ -489,6 +534,10 @@ object object_or_cast(T &&o);
 // Match a PyObject*, which we want to convert directly to handle via its converting constructor
 inline handle object_or_cast(PyObject *ptr) { return ptr; }
 
+#if defined(_MSC_VER) && _MSC_VER < 1920
+#  pragma warning(push)
+#  pragma warning(disable: 4522) // warning C4522: multiple assignment operators specified
+#endif
 template <typename Policy>
 class accessor : public object_api<accessor<Policy>> {
     using key_type = typename Policy::key_type;
@@ -496,7 +545,7 @@ class accessor : public object_api<accessor<Policy>> {
 public:
     accessor(handle obj, key_type key) : obj(obj), key(std::move(key)) { }
     accessor(const accessor &) = default;
-    accessor(accessor &&) = default;
+    accessor(accessor &&) noexcept = default;
 
     // accessor overload required to override default assignment operator (templates are not allowed
     // to replace default compiler-generated assignments).
@@ -537,6 +586,9 @@ private:
     key_type key;
     mutable object cache;
 };
+#if defined(_MSC_VER) && _MSC_VER < 1920
+#  pragma warning(pop)
+#endif
 
 PYBIND11_NAMESPACE_BEGIN(accessor_policies)
 struct obj_attr {
@@ -721,7 +773,11 @@ protected:
     dict_readonly(handle obj, ssize_t pos) : obj(obj), pos(pos) { increment(); }
 
     reference dereference() const { return {key, value}; }
-    void increment() { if (!PyDict_Next(obj.ptr(), &pos, &key, &value)) { pos = -1; } }
+    void increment() {
+        if (PyDict_Next(obj.ptr(), &pos, &key, &value) == 0) {
+            pos = -1;
+        }
+    }
     bool equal(const dict_readonly &b) const { return pos == b.pos; }
 
 private:
@@ -747,10 +803,9 @@ inline bool PyIterable_Check(PyObject *obj) {
     if (iter) {
         Py_DECREF(iter);
         return true;
-    } else {
-        PyErr_Clear();
-        return false;
     }
+    PyErr_Clear();
+    return false;
 }
 
 inline bool PyNone_Check(PyObject *o) { return o == Py_None; }
@@ -804,7 +859,7 @@ PYBIND11_NAMESPACE_END(detail)
         Name(handle h, borrowed_t) : Parent(h, borrowed_t{}) { } \
         Name(handle h, stolen_t) : Parent(h, stolen_t{}) { } \
         PYBIND11_DEPRECATED("Use py::isinstance<py::python_type>(obj) instead") \
-        bool check() const { return m_ptr != nullptr && (bool) CheckFun(m_ptr); } \
+        bool check() const { return m_ptr != nullptr && (CheckFun(m_ptr) != 0); } \
         static bool check_(handle h) { return h.ptr() != nullptr && CheckFun(h.ptr()); } \
         template <typename Policy_> \
         Name(const ::pybind11::detail::accessor<Policy_> &a) : Name(object(a)) { }
@@ -973,10 +1028,10 @@ public:
         if (PyUnicode_Check(m_ptr)) {
             temp = reinterpret_steal<object>(PyUnicode_AsUTF8String(m_ptr));
             if (!temp)
-                pybind11_fail("Unable to extract string contents! (encoding issue)");
+                throw error_already_set();
         }
-        char *buffer;
-        ssize_t length;
+        char *buffer = nullptr;
+        ssize_t length = 0;
         if (PYBIND11_BYTES_AS_STRING_AND_SIZE(temp.ptr(), &buffer, &length))
             pybind11_fail("Unable to extract string contents! (invalid type)");
         return std::string(buffer, (size_t) length);
@@ -1031,8 +1086,8 @@ public:
     explicit bytes(const pybind11::str &s);
 
     operator std::string() const {
-        char *buffer;
-        ssize_t length;
+        char *buffer = nullptr;
+        ssize_t length = 0;
         if (PYBIND11_BYTES_AS_STRING_AND_SIZE(m_ptr, &buffer, &length))
             pybind11_fail("Unable to extract bytes contents!");
         return std::string(buffer, (size_t) length);
@@ -1049,8 +1104,8 @@ inline bytes::bytes(const pybind11::str &s) {
         if (!temp)
             pybind11_fail("Unable to extract string contents! (encoding issue)");
     }
-    char *buffer;
-    ssize_t length;
+    char *buffer = nullptr;
+    ssize_t length = 0;
     if (PYBIND11_BYTES_AS_STRING_AND_SIZE(temp.ptr(), &buffer, &length))
         pybind11_fail("Unable to extract string contents! (invalid type)");
     auto obj = reinterpret_steal<object>(PYBIND11_BYTES_FROM_STRING_AND_SIZE(buffer, length));
@@ -1060,8 +1115,8 @@ inline bytes::bytes(const pybind11::str &s) {
 }
 
 inline str::str(const bytes& b) {
-    char *buffer;
-    ssize_t length;
+    char *buffer = nullptr;
+    ssize_t length = 0;
     if (PYBIND11_BYTES_AS_STRING_AND_SIZE(b.ptr(), &buffer, &length))
         pybind11_fail("Unable to extract bytes contents!");
     auto obj = reinterpret_steal<object>(PyUnicode_FromStringAndSize(buffer, (ssize_t) length));
@@ -1118,14 +1173,14 @@ public:
     bool_() : object(Py_False, borrowed_t{}) { }
     // Allow implicit conversion from and to `bool`:
     bool_(bool value) : object(value ? Py_True : Py_False, borrowed_t{}) { }
-    operator bool() const { return m_ptr && PyLong_AsLong(m_ptr) != 0; }
+    operator bool() const { return (m_ptr != nullptr) && PyLong_AsLong(m_ptr) != 0; }
 
 private:
     /// Return the truth value of an object -- always returns a new reference
     static PyObject *raw_bool(PyObject *op) {
         const auto value = PyObject_IsTrue(op);
         if (value == -1) return nullptr;
-        return handle(value ? Py_True : Py_False).inc_ref().ptr();
+        return handle(value != 0 ? Py_True : Py_False).inc_ref().ptr();
     }
 };
 
@@ -1144,10 +1199,8 @@ Unsigned as_unsigned(PyObject *o) {
         unsigned long v = PyLong_AsUnsignedLong(o);
         return v == (unsigned long) -1 && PyErr_Occurred() ? (Unsigned) -1 : (Unsigned) v;
     }
-    else {
-        unsigned long long v = PyLong_AsUnsignedLongLong(o);
-        return v == (unsigned long long) -1 && PyErr_Occurred() ? (Unsigned) -1 : (Unsigned) v;
-    }
+    unsigned long long v = PyLong_AsUnsignedLongLong(o);
+    return v == (unsigned long long) -1 && PyErr_Occurred() ? (Unsigned) -1 : (Unsigned) v;
 }
 PYBIND11_NAMESPACE_END(detail)
 
@@ -1501,7 +1554,7 @@ public:
         detail::any_container<ssize_t> shape,
         detail::any_container<ssize_t> strides) {
         return memoryview::from_buffer(
-            const_cast<void*>(ptr), itemsize, format, shape, strides, true);
+            const_cast<void *>(ptr), itemsize, format, std::move(shape), std::move(strides), true);
     }
 
     template<typename T>
@@ -1558,7 +1611,7 @@ inline memoryview memoryview::from_buffer(
     size_t ndim = shape->size();
     if (ndim != strides->size())
         pybind11_fail("memoryview: shape length doesn't match strides length");
-    ssize_t size = ndim ? 1 : 0;
+    ssize_t size = ndim != 0u ? 1 : 0;
     for (size_t i = 0; i < ndim; ++i)
         size *= (*shape)[i];
     Py_buffer view;
