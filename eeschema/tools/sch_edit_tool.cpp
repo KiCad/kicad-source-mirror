@@ -155,12 +155,6 @@ bool SCH_EDIT_TOOL::Init()
                 return !m_frame->GetScreen()->Items().empty();
             };
 
-    auto sheetTool =
-            [ this ] ( const SELECTION& aSel )
-            {
-                return ( m_frame->IsCurrentTool( EE_ACTIONS::drawSheet ) );
-            };
-
     auto anyTextTool =
             [ this ] ( const SELECTION& aSel )
             {
