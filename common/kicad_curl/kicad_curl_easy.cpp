@@ -81,7 +81,7 @@ static int xferinfo( void* p, curl_off_t dltotal, curl_off_t dlnow, curl_off_t u
     CURL_PROGRESS* progress = (CURL_PROGRESS*) p;
     curl_off_t     curtime = 0;
 
-    curl_easy_getinfo( progress->curl->GetCurl(), CURLINFO_TOTAL_TIME_T, &curtime );
+    curl_easy_getinfo( progress->curl->GetCurl(), CURLINFO_TOTAL_TIME, &curtime );
 
     if( curtime - progress->last_run_time >= progress->interval )
     {
