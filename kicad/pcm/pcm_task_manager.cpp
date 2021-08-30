@@ -98,7 +98,7 @@ void PCM_TASK_MANAGER::DownloadAndInstall( const PCM_PACKAGE& aPackage, const wx
                 }
                 else
                 {
-                    m_reporter->Report( wxString::Format( _( "Extracting package %s. " ),
+                    m_reporter->Report( wxString::Format( _( "Extracting package '%s'." ),
                                                           aPackage.identifier ) );
 
                     if( extract( file_path.GetFullPath(), aPackage.identifier ) )
@@ -113,7 +113,7 @@ void PCM_TASK_MANAGER::DownloadAndInstall( const PCM_PACKAGE& aPackage, const wx
                     }
                 }
 
-                m_reporter->Report( wxString::Format( _( "Removing downloaded archive %s. " ),
+                m_reporter->Report( wxString::Format( _( "Removing downloaded archive '%s'." ),
                                                       file_path.GetFullName() ) );
                 wxRemoveFile( file_path.GetFullPath() );
             };
@@ -154,7 +154,7 @@ int PCM_TASK_MANAGER::downloadFile( const wxString& aFilePath, const wxString& u
     curl.SetFollowRedirects( true );
     curl.SetTransferCallback( callback, 250000L );
 
-    m_reporter->Report( wxString::Format( _( "Downloading package url: %s" ), url ) );
+    m_reporter->Report( wxString::Format( _( "Downloading package url: '%s'" ), url ) );
 
     int code = curl.Perform();
 

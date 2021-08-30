@@ -44,7 +44,8 @@
 
 #define GRID_CELL_MARGIN 4
 
-
+// Notes: These strings are static, so wxGetTranslation must be called to display the
+// transalted text
 static std::vector<std::pair<PCM_PACKAGE_TYPE, wxString>> PACKAGE_TYPE_LIST = {
     { PT_PLUGIN, _( "Plugins (%d)" ) },
     { PT_LIBRARY, _( "Libraries (%d)" ) },
@@ -70,7 +71,8 @@ DIALOG_PCM::DIALOG_PCM( wxWindow* parent ) : DIALOG_PCM_BASE( parent )
     for( const auto& entry : PACKAGE_TYPE_LIST )
     {
         PANEL_PACKAGES_VIEW* panel = new PANEL_PACKAGES_VIEW( m_contentNotebook, m_pcm );
-        m_contentNotebook->AddPage( panel, wxString::Format( std::get<1>( entry ), 0 ) );
+        wxString msg = wxGetTranslation( std::get<1>( entry ) );
+        m_contentNotebook->AddPage( panel, wxString::Format( msg, 0 ) );
         m_repositoryContentPanels.insert( { std::get<0>( entry ), panel } );
     }
 
@@ -305,7 +307,8 @@ void DIALOG_PCM::setRepositoryData( const wxString& aRepositoryId )
             PCM_PACKAGE_TYPE type = PACKAGE_TYPE_LIST[i].first;
             m_repositoryContentPanels[type]->SetData( data[type], m_callback );
             m_contentNotebook->SetPageText(
-                    i, wxString::Format( PACKAGE_TYPE_LIST[i].second, (int) data[type].size() ) );
+                    i, wxString::Format( wxGetTranslation( PACKAGE_TYPE_LIST[i].second ),
+                                         (int) data[type].size() ) );
         }
 
         m_dialogNotebook->SetPageText(

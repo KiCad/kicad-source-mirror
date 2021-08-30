@@ -75,7 +75,10 @@ PLUGIN_CONTENT_MANAGER::PLUGIN_CONTENT_MANAGER( wxWindow* aParent ) : m_dialog( 
     }
     catch( std::exception& e )
     {
-        wxLogError( wxString::Format( _( "Error loading schema: %s" ), e.what() ) );
+        if( !schema_file.FileExists() )
+            wxLogError( wxString::Format( _( "schema file '%s' not found" ), schema_file.GetFullPath() ) );
+        else
+            wxLogError( wxString::Format( _( "Error loading schema: %s" ), e.what() ) );
     }
 
     // Load currently installed packages
