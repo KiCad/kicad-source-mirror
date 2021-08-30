@@ -414,10 +414,12 @@ SCENEGRAPH* S3D_PLUGIN_MANAGER::Load3DModel( const wxString& aFileName, std::str
     ext_to_find.MakeLower();
 #endif
 
-    // When the extension is .gz, the actual extension should be .stp.gz;
-    // So ensure is ext is the expected extension
-    if( ext_to_find == "gz" && aFileName.Lower().EndsWith( ".stp.gz" ) )
-        ext_to_find = "stp.gz";
+    // .gz files are compressed versions that may have additional information in the previous extension
+    if( ext_to_find == "gz" )
+    {
+        wxFileName second( raw.GetName() );
+        ext_to_find = second.GetExt() + ".gz";
+    }
 
     std::pair < std::multimap< const wxString, KICAD_PLUGIN_LDR_3D* >::iterator,
         std::multimap< const wxString, KICAD_PLUGIN_LDR_3D* >::iterator > items;
