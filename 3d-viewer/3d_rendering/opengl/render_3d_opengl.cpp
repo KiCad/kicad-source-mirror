@@ -169,7 +169,7 @@ void RENDER_3D_OPENGL::setupMaterials()
 {
     m_materials = {};
 
-    if( m_boardAdapter.GetFlag( FL_USE_REALISTIC_MODE ) )
+    if( m_boardAdapter.m_Cfg->m_Render.realistic )
     {
         // http://devernay.free.fr/cours/opengl/materials.html
 
@@ -328,7 +328,7 @@ void RENDER_3D_OPENGL::setLayerMaterial( PCB_LAYER_ID aLayerID )
         // Convert Opacity to Transparency
         m_materials.m_SolderMask.m_Transparency = 1.0f - layerColor.a;
 
-        if( m_boardAdapter.GetFlag( FL_USE_REALISTIC_MODE ) )
+        if( m_boardAdapter.m_Cfg->m_Render.realistic )
         {
             m_materials.m_SolderMask.m_Ambient = m_materials.m_SolderMask.m_Diffuse * 0.3f;
 
@@ -395,7 +395,7 @@ SFVEC4F RENDER_3D_OPENGL::getLayerColor( PCB_LAYER_ID aLayerID )
 {
     SFVEC4F layerColor = m_boardAdapter.GetLayerColor( aLayerID );
 
-    if( m_boardAdapter.GetFlag( FL_USE_REALISTIC_MODE ) )
+    if( m_boardAdapter.m_Cfg->m_Render.realistic )
     {
         switch( aLayerID )
         {
@@ -563,16 +563,16 @@ bool RENDER_3D_OPENGL::Redraw( bool aIsMoving, REPORTER* aStatusReporter,
         reload( aStatusReporter, aWarningReporter );
 
         // generate a new 3D grid as the size of the board may had changed
-        m_lastGridType = m_boardAdapter.GetGridType();
+        m_lastGridType = static_cast<GRID3D_TYPE>( m_boardAdapter.m_Cfg->m_Render.grid_type );
         generate3dGrid( m_lastGridType );
     }
     else
     {
         // Check if grid was changed
-        if( m_boardAdapter.GetGridType() != m_lastGridType )
+        if( m_boardAdapter.m_Cfg->m_Render.grid_type != m_lastGridType )
         {
             // and generate a new one
-            m_lastGridType = m_boardAdapter.GetGridType();
+            m_lastGridType = static_cast<GRID3D_TYPE>( m_boardAdapter.m_Cfg->m_Render.grid_type );
             generate3dGrid( m_lastGridType );
         }
     }
@@ -586,7 +586,7 @@ bool RENDER_3D_OPENGL::Redraw( bool aIsMoving, REPORTER* aStatusReporter,
     glEnable( GL_NORMALIZE ); // This allow OpenGL to normalize the normals after transformations
     glViewport( 0, 0, m_windowSize.x, m_windowSize.y );
 
-    if( m_boardAdapter.GetFlag( FL_RENDER_OPENGL_AA_DISABLE_ON_MOVE ) && aIsMoving )
+    if( aIsMoving && m_boardAdapter.m_Cfg->m_Render.opengl_AA_disableOnMove )
         glDisable( GL_MULTISAMPLE );
     else
         glEnable( GL_MULTISAMPLE );
@@ -627,13 +627,9 @@ bool RENDER_3D_OPENGL::Redraw( bool aIsMoving, REPORTER* aStatusReporter,
         float zpos;
 
         if( cameraPos.z > 0.0f )
-        {
             zpos = glm::max( cameraPos.z, 0.5f ) + cameraPos.z * cameraPos.z;
-        }
         else
-        {
             zpos = glm::min( cameraPos.z,-0.5f ) - cameraPos.z * cameraPos.z;
-        }
 
         // This is a point light.
         const GLfloat headlight_pos[] = { cameraPos.x, cameraPos.y, zpos, 1.0f };
@@ -641,16 +637,13 @@ bool RENDER_3D_OPENGL::Redraw( bool aIsMoving, REPORTER* aStatusReporter,
         glLightfv( GL_LIGHT0, GL_POSITION, headlight_pos );
     }
 
-    const bool drawMiddleSegments = !( aIsMoving &&
-                                    m_boardAdapter.GetFlag( FL_RENDER_OPENGL_THICKNESS_DISABLE_ON_MOVE ) );
+    bool skipThickness = aIsMoving && m_boardAdapter.m_Cfg->m_Render.opengl_thickness_disableOnMove;
+    bool skipRenderHoles = aIsMoving && m_boardAdapter.m_Cfg->m_Render.opengl_holes_disableOnMove;
+    bool skipRenderVias = aIsMoving && m_boardAdapter.m_Cfg->m_Render.opengl_vias_disableOnMove;
 
-    const bool skipRenderHoles = aIsMoving &&
-                                 m_boardAdapter.GetFlag( FL_RENDER_OPENGL_HOLES_DISABLE_ON_MOVE );
+    bool drawMiddleSegments = !skipThickness;
 
-    const bool skipRenderVias = aIsMoving &&
-                                m_boardAdapter.GetFlag( FL_RENDER_OPENGL_VIAS_DISABLE_ON_MOVE );
-
-    if( m_boardAdapter.GetFlag( FL_USE_REALISTIC_MODE ) )
+    if( m_boardAdapter.m_Cfg->m_Render.realistic )
     {
         // Draw vias and pad holes with copper material
         setLayerMaterial( B_Cu );
@@ -680,8 +673,8 @@ bool RENDER_3D_OPENGL::Redraw( bool aIsMoving, REPORTER* aStatusReporter,
         // So avoid creating them is they are not very visible
         const double opacity_min = 0.8;
 
-        if( m_boardAdapter.GetFlag( FL_SHOW_BOARD_BODY ) &&
-            ( m_boardAdapter.m_BoardBodyColor.a > opacity_min ) )
+        if( m_boardAdapter.m_Cfg->m_Render.show_board_body
+                && m_boardAdapter.m_BoardBodyColor.a > opacity_min )
         {
             if( ( layer_id > F_Cu ) && ( layer_id < B_Cu ) )
                 continue;
@@ -693,21 +686,26 @@ bool RENDER_3D_OPENGL::Redraw( bool aIsMoving, REPORTER* aStatusReporter,
 
         if( ( layer_id >= F_Cu ) && ( layer_id <= B_Cu ) )
         {
-            if( !m_boardAdapter.GetFlag( FL_USE_REALISTIC_MODE ) ||
-                !( m_boardAdapter.GetFlag( FL_RENDER_PLATED_PADS_AS_PLATED ) &&
-                   m_boardAdapter.GetFlag( FL_USE_REALISTIC_MODE ) ) )
-                setLayerMaterial( layer_id );
-            else
+            if( m_boardAdapter.m_Cfg->m_Render.renderPlatedPadsAsPlated
+                    && m_boardAdapter.m_Cfg->m_Render.realistic )
+            {
                 setCopperMaterial();
+            }
+            else
+            {
+                setLayerMaterial( layer_id );
+            }
 
             if( skipRenderHoles )
             {
                 pLayerDispList->DrawAllCameraCulled( m_camera.GetPos().z, drawMiddleSegments );
 
                 // Draw copper plated pads
-                if( ( ( layer_id == F_Cu ) || ( layer_id == B_Cu ) ) &&
-                    ( m_platedPadsFront || m_platedPadsBack ) )
+                if( ( layer_id == F_Cu || layer_id == B_Cu )
+                        && ( m_platedPadsFront || m_platedPadsBack ) )
+                {
                     setPlatedCopperAndDepthOffset( layer_id );
+                }
 
                 if( layer_id == F_Cu && m_platedPadsFront )
                 {
@@ -814,33 +812,32 @@ bool RENDER_3D_OPENGL::Redraw( bool aIsMoving, REPORTER* aStatusReporter,
             setLayerMaterial( layer_id );
 
             OPENGL_RENDER_LIST* throughHolesOuter =
-                    m_boardAdapter.GetFlag( FL_CLIP_SILK_ON_VIA_ANNULUS )
-                        && m_boardAdapter.GetFlag( FL_USE_REALISTIC_MODE )
-                        && ( layer_id == B_SilkS || layer_id == F_SilkS )
-                            ? m_outerThroughHoleRings
-                            : m_outerThroughHoles;
+                        m_boardAdapter.m_Cfg->m_Render.clip_silk_on_via_annulus
+                        && m_boardAdapter.m_Cfg->m_Render.realistic
+                        && ( layer_id == B_SilkS || layer_id == F_SilkS ) ? m_outerThroughHoleRings
+                                                                          : m_outerThroughHoles;
 
             if( throughHolesOuter )
             {
-                throughHolesOuter->ApplyScalePosition(
-                        pLayerDispList->GetZBot(),
-                        pLayerDispList->GetZTop() - pLayerDispList->GetZBot() );
+                throughHolesOuter->ApplyScalePosition( pLayerDispList->GetZBot(),
+                                                       pLayerDispList->GetZTop()
+                                                               - pLayerDispList->GetZBot() );
             }
 
             OPENGL_RENDER_LIST* anti_board = m_antiBoard;
 
             if( anti_board )
             {
-                anti_board->ApplyScalePosition(
-                        pLayerDispList->GetZBot(),
-                        pLayerDispList->GetZTop() - pLayerDispList->GetZBot() );
+                anti_board->ApplyScalePosition( pLayerDispList->GetZBot(),
+                                                pLayerDispList->GetZTop()
+                                                        - pLayerDispList->GetZBot() );
             }
 
             if( !skipRenderHoles
-              && m_boardAdapter.GetFlag( FL_SUBTRACT_MASK_FROM_SILK )
-              && m_boardAdapter.GetFlag( FL_USE_REALISTIC_MODE )
-              && ( ( layer_id == B_SilkS && m_layers.find( B_Mask ) != m_layers.end() )
-                 || ( layer_id == F_SilkS && m_layers.find( F_Mask ) != m_layers.end() ) ) )
+                    && m_boardAdapter.m_Cfg->m_Render.subtract_mask_from_silk
+                    && m_boardAdapter.m_Cfg->m_Render.realistic
+                    && (   ( layer_id == B_SilkS && m_layers.find( B_Mask ) != m_layers.end() )
+                        || ( layer_id == F_SilkS && m_layers.find( F_Mask ) != m_layers.end() ) ) )
             {
                 const PCB_LAYER_ID layerMask_id = (layer_id == B_SilkS) ? B_Mask : F_Mask;
 
@@ -880,13 +877,11 @@ bool RENDER_3D_OPENGL::Redraw( bool aIsMoving, REPORTER* aStatusReporter,
     render3dModels( true, false );
 
     // Display board body
-    if( m_boardAdapter.GetFlag( FL_SHOW_BOARD_BODY ) )
-    {
+    if( m_boardAdapter.m_Cfg->m_Render.show_board_body )
         renderBoardBody( skipRenderHoles );
-    }
 
     // Display transparent mask layers
-    if( m_boardAdapter.GetFlag( FL_SOLDERMASK ) )
+    if( m_boardAdapter.m_Cfg->m_Render.show_soldermask )
     {
         // add a depth buffer offset, it will help to hide some artifacts
         // on silkscreen where the SolderMask is removed
@@ -949,7 +944,7 @@ bool RENDER_3D_OPENGL::Redraw( bool aIsMoving, REPORTER* aStatusReporter,
     glDepthMask( GL_TRUE );
 
     // Render Grid
-    if( m_boardAdapter.GetGridType() != GRID3D_TYPE::NONE )
+    if( m_boardAdapter.m_Cfg->m_Render.grid_type != GRID3D_TYPE::NONE )
     {
         glDisable( GL_LIGHTING );
 
@@ -960,7 +955,7 @@ bool RENDER_3D_OPENGL::Redraw( bool aIsMoving, REPORTER* aStatusReporter,
     }
 
     // Render 3D arrows
-    if( m_boardAdapter.GetFlag( FL_AXIS ) )
+    if( m_boardAdapter.m_Cfg->m_Render.show_axis )
         render3dArrows();
 
     // Return back to the original viewport (this is important if we want
@@ -1186,12 +1181,12 @@ void RENDER_3D_OPENGL::render3dModelsSelected( bool aRenderTopOrBot, bool aRende
     {
         bool highlight = false;
 
-        if( m_boardAdapter.GetFlag( FL_USE_SELECTION ) )
+        if( m_boardAdapter.m_IsBoardView )
         {
             if( fp->IsSelected() )
                 highlight = true;
 
-            if( m_boardAdapter.GetFlag( FL_HIGHLIGHT_ROLLOVER_ITEM ) && fp == m_currentRollOverItem )
+            if( m_boardAdapter.m_Cfg->m_Render.opengl_highlight_on_rollover )
                 highlight = true;
 
             if( aRenderSelectedOnly != highlight )
@@ -1214,7 +1209,7 @@ void RENDER_3D_OPENGL::render3dModelsSelected( bool aRenderTopOrBot, bool aRende
 
 void RENDER_3D_OPENGL::render3dModels( bool aRenderTopOrBot, bool aRenderTransparentOnly )
 {
-    if( m_boardAdapter.GetFlag( FL_USE_SELECTION ) )
+    if( m_boardAdapter.m_IsBoardView )
         render3dModelsSelected( aRenderTopOrBot, aRenderTransparentOnly, true );
 
     render3dModelsSelected( aRenderTopOrBot, aRenderTransparentOnly, false );
@@ -1227,6 +1222,8 @@ void RENDER_3D_OPENGL::renderFootprint( const FOOTPRINT* aFootprint, bool aRende
     if( !aFootprint->Models().empty() )
     {
         const double zpos = m_boardAdapter.GetFootprintZPos( aFootprint->IsFlipped() );
+        SFVEC3F selColor = m_boardAdapter.GetColor( m_boardAdapter.m_Cfg->m_Render.opengl_selection_color );
+
 
         glPushMatrix();
 
@@ -1287,15 +1284,14 @@ void RENDER_3D_OPENGL::renderFootprint( const FOOTPRINT* aFootprint, bool aRende
                     {
                         modelPtr->DrawTransparent( sM.m_Opacity,
                                                    aFootprint->IsSelected() || aIsSelected,
-                                                   m_boardAdapter.m_OpenGlSelectionColor );
+                                                   selColor );
                     }
                     else
                     {
-                        modelPtr->DrawOpaque( aFootprint->IsSelected() || aIsSelected,
-                                              m_boardAdapter.m_OpenGlSelectionColor );
+                        modelPtr->DrawOpaque( aFootprint->IsSelected() || aIsSelected, selColor );
                     }
 
-                    if( m_boardAdapter.GetFlag( FL_RENDER_OPENGL_SHOW_MODEL_BBOX ) )
+                    if( m_boardAdapter.m_Cfg->m_Render.opengl_show_model_bbox )
                     {
                         glEnable( GL_BLEND );
                         glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );

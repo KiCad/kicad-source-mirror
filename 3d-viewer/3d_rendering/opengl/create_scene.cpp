@@ -451,7 +451,7 @@ void RENDER_3D_OPENGL::reload( REPORTER* aStatusReporter, REPORTER* aWarningRepo
     // Create Board
     m_board = createBoard( m_boardAdapter.GetBoardPoly(), &m_boardAdapter.GetThroughHoleIds() );
 
-    if( m_boardAdapter.GetFlag( FL_USE_REALISTIC_MODE ) )
+    if( m_boardAdapter.m_Cfg->m_Render.realistic )
     {
         m_antiBoardPolys.RemoveAllContours();
         m_antiBoardPolys.NewOutline();
@@ -483,7 +483,7 @@ void RENDER_3D_OPENGL::reload( REPORTER* aStatusReporter, REPORTER* aWarningRepo
 
     SHAPE_POLY_SET outerPolyTHT = m_boardAdapter.GetThroughHoleOdPolys();
 
-    if( m_boardAdapter.GetFlag( FL_USE_REALISTIC_MODE ) )
+    if( m_boardAdapter.m_Cfg->m_Render.realistic )
         outerPolyTHT.BooleanIntersection( m_boardAdapter.GetBoardPoly(),
                                           SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
 
@@ -495,8 +495,8 @@ void RENDER_3D_OPENGL::reload( REPORTER* aStatusReporter, REPORTER* aWarningRepo
             m_boardAdapter.GetThroughHoleViaOds().GetList(),
             m_boardAdapter.GetThroughHoleViaOdPolys(), 1.0f, 0.0f, false );
 
-    if( m_boardAdapter.GetFlag( FL_CLIP_SILK_ON_VIA_ANNULUS ) &&
-        m_boardAdapter.GetFlag( FL_USE_REALISTIC_MODE ) )
+    if( m_boardAdapter.m_Cfg->m_Render.clip_silk_on_via_annulus &&
+        m_boardAdapter.m_Cfg->m_Render.realistic )
     {
         m_outerThroughHoleRings = generateHoles(
                 m_boardAdapter.GetThroughHoleAnnularRings().GetList(),
@@ -557,8 +557,10 @@ void RENDER_3D_OPENGL::reload( REPORTER* aStatusReporter, REPORTER* aWarningRepo
             continue;
 
         if( aStatusReporter )
-            aStatusReporter->Report( wxString::Format(
-                                     _( "Load OpenGL layer %d" ), (int)layer_id ) );
+        {
+            aStatusReporter->Report( wxString::Format( _( "Load OpenGL layer %d" ),
+                                                       (int) layer_id ) );
+        }
 
         const BVH_CONTAINER_2D* container2d = ii.second;
 
@@ -571,12 +573,12 @@ void RENDER_3D_OPENGL::reload( REPORTER* aStatusReporter, REPORTER* aWarningRepo
         {
             polyListSubtracted = *map_poly.at( layer_id );;
 
-            if( m_boardAdapter.GetFlag( FL_USE_REALISTIC_MODE ) )
+            if( m_boardAdapter.m_Cfg->m_Render.realistic )
             {
                 polyListSubtracted.BooleanIntersection( m_boardAdapter.GetBoardPoly(),
                                                         SHAPE_POLY_SET::PM_FAST );
 
-                if( ( layer_id != B_Mask ) && ( layer_id != F_Mask ) )
+                if( layer_id != B_Mask && layer_id != F_Mask )
                 {
                     polyListSubtracted.BooleanSubtract( m_boardAdapter.GetThroughHoleOdPolys(),
                                                         SHAPE_POLY_SET::PM_FAST );
@@ -585,7 +587,7 @@ void RENDER_3D_OPENGL::reload( REPORTER* aStatusReporter, REPORTER* aWarningRepo
                             SHAPE_POLY_SET::PM_FAST );
                 }
 
-                if( m_boardAdapter.GetFlag( FL_SUBTRACT_MASK_FROM_SILK ) )
+                if( m_boardAdapter.m_Cfg->m_Render.subtract_mask_from_silk )
                 {
                     if( layer_id == B_SilkS && map_poly.find( B_Mask ) != map_poly.end() )
                     {
@@ -611,8 +613,8 @@ void RENDER_3D_OPENGL::reload( REPORTER* aStatusReporter, REPORTER* aWarningRepo
 
     }
 
-    if( m_boardAdapter.GetFlag( FL_RENDER_PLATED_PADS_AS_PLATED ) &&
-        m_boardAdapter.GetFlag( FL_USE_REALISTIC_MODE ) )
+    if( m_boardAdapter.m_Cfg->m_Render.renderPlatedPadsAsPlated
+            && m_boardAdapter.m_Cfg->m_Render.realistic )
     {
         if( m_boardAdapter.GetFrontPlatedPadPolys() )
         {
@@ -652,8 +654,7 @@ void RENDER_3D_OPENGL::reload( REPORTER* aStatusReporter, REPORTER* aWarningRepo
     if( aStatusReporter )
     {
         // Calculation time in seconds
-        const double calculation_time = (double)( GetRunningMicroSecs() -
-                                                  stats_startReloadTime) / 1e6;
+        double calculation_time = (double)( GetRunningMicroSecs() - stats_startReloadTime) / 1e6;
 
         aStatusReporter->Report( wxString::Format( _( "Reload time %.3f s" ), calculation_time ) );
     }
@@ -674,10 +675,10 @@ void RENDER_3D_OPENGL::addTopAndBottomTriangles( TRIANGLE_DISPLAY_LIST* aDst, co
 }
 
 
-void RENDER_3D_OPENGL::getLayerZPos( PCB_LAYER_ID aLayerID, float& aOutZtop, float& aOutZbot ) const
+void RENDER_3D_OPENGL::getLayerZPos( PCB_LAYER_ID aLayer, float& aOutZtop, float& aOutZbot ) const
 {
-    aOutZbot = m_boardAdapter.GetLayerBottomZPos( aLayerID );
-    aOutZtop = m_boardAdapter.GetLayerTopZPos( aLayerID );
+    aOutZbot = m_boardAdapter.GetLayerBottomZPos( aLayer );
+    aOutZtop = m_boardAdapter.GetLayerTopZPos( aLayer );
 
     if( aOutZtop < aOutZbot )
     {
@@ -732,13 +733,11 @@ void RENDER_3D_OPENGL::generateViasAndPads()
 
     if( m_boardAdapter.GetViaCount() > 0 )
     {
-        const unsigned int reserve_nr_triangles_estimation =
-                m_boardAdapter.GetCircleSegmentCount(
-                        m_boardAdapter.GetAverageViaHoleDiameter() ) * 8 *
-                        m_boardAdapter.GetViaCount();
+        float        averageDiameter = m_boardAdapter.GetAverageViaHoleDiameter();
+        unsigned int averageSegCount = m_boardAdapter.GetCircleSegmentCount( averageDiameter );
+        unsigned int trianglesEstimate = averageSegCount * 8 * m_boardAdapter.GetViaCount();
 
-        TRIANGLE_DISPLAY_LIST* layerTriangleVIA =
-                new TRIANGLE_DISPLAY_LIST( reserve_nr_triangles_estimation );
+        TRIANGLE_DISPLAY_LIST* layerTriangleVIA = new TRIANGLE_DISPLAY_LIST( trianglesEstimate );
 
         // Insert plated vertical holes inside the board
 
@@ -811,29 +810,27 @@ void RENDER_3D_OPENGL::generateViasAndPads()
         // Subtract the holes
         tht_outer_holes_poly.BooleanSubtract( tht_inner_holes_poly, SHAPE_POLY_SET::PM_FAST );
 
-        if( m_boardAdapter.GetFlag( FL_USE_REALISTIC_MODE ) )
+        if( m_boardAdapter.m_Cfg->m_Render.realistic )
             tht_outer_holes_poly.BooleanSubtract( m_antiBoardPolys, SHAPE_POLY_SET::PM_FAST );
 
         CONTAINER_2D holesContainer;
 
         ConvertPolygonToTriangles( tht_outer_holes_poly, holesContainer,
-                                   m_boardAdapter.BiuTo3dUnits(),
-                                   (const BOARD_ITEM &)*m_boardAdapter.GetBoard() );
+                                   m_boardAdapter.BiuTo3dUnits(), *m_boardAdapter.GetBoard() );
 
-        const LIST_OBJECT2D& listHolesObject2d = holesContainer.GetList();
+        const LIST_OBJECT2D& holes2D = holesContainer.GetList();
 
-        if( listHolesObject2d.size() > 0 )
+        if( holes2D.size() > 0 )
         {
             float layer_z_top, layer_z_bot, dummy;
 
             getLayerZPos( F_Cu, layer_z_top, dummy );
             getLayerZPos( B_Cu, dummy, layer_z_bot );
 
-            TRIANGLE_DISPLAY_LIST* layerTriangles =
-                    new TRIANGLE_DISPLAY_LIST( listHolesObject2d.size() );
+            TRIANGLE_DISPLAY_LIST* layerTriangles = new TRIANGLE_DISPLAY_LIST( holes2D.size() );
 
             // Convert the list of objects(triangles) to triangle layer structure
-            for( const OBJECT_2D* itemOnLayer : listHolesObject2d )
+            for( const OBJECT_2D* itemOnLayer : holes2D )
             {
                 const OBJECT_2D* object2d_A = itemOnLayer;
 
@@ -889,9 +886,9 @@ void RENDER_3D_OPENGL::load3dModels( REPORTER* aStatusReporter )
     if( !m_boardAdapter.GetBoard() )
         return;
 
-    if( !m_boardAdapter.GetFlag( FL_FP_ATTRIBUTES_NORMAL )
-      && !m_boardAdapter.GetFlag( FL_FP_ATTRIBUTES_NORMAL_INSERT )
-      && !m_boardAdapter.GetFlag( FL_FP_ATTRIBUTES_VIRTUAL ) )
+    if( !m_boardAdapter.m_Cfg->m_Render.show_footprints_normal
+          && !m_boardAdapter.m_Cfg->m_Render.show_footprints_insert
+          && !m_boardAdapter.m_Cfg->m_Render.show_footprints_virtual )
     {
         return;
     }
@@ -899,35 +896,34 @@ void RENDER_3D_OPENGL::load3dModels( REPORTER* aStatusReporter )
     // Go for all footprints
     for( const FOOTPRINT* footprint : m_boardAdapter.GetBoard()->Footprints() )
     {
-        for( const FP_3DMODEL& model : footprint->Models() )
+        for( const FP_3DMODEL& fp_model : footprint->Models() )
         {
-            if( model.m_Show && !model.m_Filename.empty() )
+            if( fp_model.m_Show && !fp_model.m_Filename.empty() )
             {
                 if( aStatusReporter )
                 {
-                    // Display the short filename of the 3D model loaded:
+                    // Display the short filename of the 3D fp_model loaded:
                     // (the full name is usually too long to be displayed)
-                    wxFileName fn( model.m_Filename );
+                    wxFileName fn( fp_model.m_Filename );
                     aStatusReporter->Report( wxString::Format( _( "Loading %s..." ),
                                                                fn.GetFullName() ) );
                 }
 
-                // Check if the model is not present in our cache map
+                // Check if the fp_model is not present in our cache map
                 // (Not already loaded in memory)
-                if( m_3dModelMap.find( model.m_Filename ) == m_3dModelMap.end() )
+                if( m_3dModelMap.find( fp_model.m_Filename ) == m_3dModelMap.end() )
                 {
                     // It is not present, try get it from cache
                     const S3DMODEL* modelPtr =
-                            m_boardAdapter.Get3dCacheManager()->GetModel( model.m_Filename );
+                            m_boardAdapter.Get3dCacheManager()->GetModel( fp_model.m_Filename );
 
                     // only add it if the return is not NULL
                     if( modelPtr )
                     {
-                        MATERIAL_MODE materialMode = m_boardAdapter.GetMaterialMode();
-                        MODEL_3D* ogl_model = new MODEL_3D( *modelPtr, materialMode );
+                        int       materialMode = m_boardAdapter.m_Cfg->m_Render.material_mode;
+                        MODEL_3D* model = new MODEL_3D( *modelPtr, (MATERIAL_MODE) materialMode );
 
-                        if( ogl_model )
-                            m_3dModelMap[ model.m_Filename ] = ogl_model;
+                        m_3dModelMap[ fp_model.m_Filename ] = model;
                     }
                 }
             }

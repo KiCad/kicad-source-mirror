@@ -67,6 +67,9 @@ const wxChar *BOARD_ADAPTER::m_logTrace = wxT( "KI_TRACE_EDA_CINFO3D_VISU" );
 
 
 BOARD_ADAPTER::BOARD_ADAPTER() :
+        m_Cfg( nullptr ),
+        m_IsBoardView( true ),
+        m_MousewheelPanning( true ),
         m_board( nullptr ),
         m_3dModelManager( nullptr ),
         m_colors( nullptr ),
@@ -75,15 +78,8 @@ BOARD_ADAPTER::BOARD_ADAPTER() :
 {
     wxLogTrace( m_logTrace, wxT( "BOARD_ADAPTER::BOARD_ADAPTER" ) );
 
-    m_gridType = GRID3D_TYPE::NONE;
-    m_antiAliasingMode = ANTIALIASING_MODE::AA_8X;
-    m_drawFlags.resize( FL_LAST, false );
-
     if( PgmOrNull() )
         m_colors = Pgm().GetSettingsManager().GetColorSettings();
-
-    m_renderEngine = RENDER_ENGINE::OPENGL;
-    m_materialMode = MATERIAL_MODE::NORMAL;
 
     m_boardPos = wxPoint();
     m_boardSize = wxSize();
@@ -109,27 +105,6 @@ BOARD_ADAPTER::BOARD_ADAPTER() :
     m_averageHoleDiameter = 0.0f;
     m_averageTrackWidth = 0.0f;
 
-    SetFlag( FL_USE_REALISTIC_MODE, true );
-    SetFlag( FL_FP_ATTRIBUTES_NORMAL, true );
-    SetFlag( FL_SHOW_BOARD_BODY, true );
-    SetFlag( FL_CLIP_SILK_ON_VIA_ANNULUS, false );
-    SetFlag( FL_FP_ATTRIBUTES_NORMAL, true );
-    SetFlag( FL_FP_ATTRIBUTES_NORMAL_INSERT, true );
-    SetFlag( FL_FP_ATTRIBUTES_VIRTUAL, true );
-    SetFlag( FL_ZONE, true );
-    SetFlag( FL_SILKSCREEN, true );
-    SetFlag( FL_SOLDERMASK, true );
-    SetFlag( FL_SUBTRACT_MASK_FROM_SILK, false );
-
-    SetFlag( FL_RENDER_OPENGL_COPPER_THICKNESS, true );
-    SetFlag( FL_RENDER_OPENGL_AA_DISABLE_ON_MOVE, false );
-    SetFlag( FL_RENDER_OPENGL_THICKNESS_DISABLE_ON_MOVE, false );
-    SetFlag( FL_RENDER_OPENGL_VIAS_DISABLE_ON_MOVE, false );
-    SetFlag( FL_RENDER_OPENGL_HOLES_DISABLE_ON_MOVE, false );
-
-    SetFlag( FL_USE_SELECTION, true );
-    SetFlag( FL_HIGHLIGHT_ROLLOVER_ITEM, true );
-
     m_BgColorBot         = SFVEC4F( 0.4, 0.4, 0.5, 1.0 );
     m_BgColorTop         = SFVEC4F( 0.8, 0.8, 0.9, 1.0 );
     m_BoardBodyColor     = SFVEC4F( 0.4, 0.4, 0.5, 0.9 );
@@ -145,18 +120,6 @@ BOARD_ADAPTER::BOARD_ADAPTER() :
 
     m_frontPlatedPadPolys = nullptr;
     m_backPlatedPadPolys = nullptr;
-
-    // Avoid raytracing options not initialized:
-    m_RtShadowSampleCount = 0;
-    m_RtReflectionSampleCount = 0;
-    m_RtRefractionSampleCount = 0;
-
-    m_RtSpreadShadows = 0.0;
-    m_RtSpreadReflections = 0.0;
-    m_RtSpreadRefractions = 0.0;
-
-    m_RtRecursiveReflectionCount = 0;
-    m_RtRecursiveRefractionCount = 0;
 
     if( !g_ColorsLoaded )
     {
@@ -242,50 +205,37 @@ bool BOARD_ADAPTER::Is3dLayerEnabled( PCB_LAYER_ID aLayer ) const
     {
     case B_Adhes:
     case F_Adhes:
-        return GetFlag( FL_ADHESIVE );
+        return m_Cfg->m_Render.show_adhesive;
 
     case B_Paste:
     case F_Paste:
-        return GetFlag( FL_SOLDERPASTE );
+        return m_Cfg->m_Render.show_solderpaste;
 
     case B_SilkS:
     case F_SilkS:
-        return GetFlag( FL_SILKSCREEN );
+        return m_Cfg->m_Render.show_silkscreen;
 
     case B_Mask:
     case F_Mask:
-        return GetFlag( FL_SOLDERMASK );
+        return m_Cfg->m_Render.show_soldermask;
 
     case Dwgs_User:
     case Cmts_User:
-        if( GetFlag( FL_USE_REALISTIC_MODE ) )
-            return false;
-
-        return GetFlag( FL_COMMENTS );
+        return !m_Cfg->m_Render.realistic && m_Cfg->m_Render.show_comments;
 
     case Eco1_User:
     case Eco2_User:
-        if( GetFlag( FL_USE_REALISTIC_MODE ) )
-            return false;
-
-        return GetFlag( FL_ECO );
+        return !m_Cfg->m_Render.realistic && m_Cfg->m_Render.show_eco;
 
     case Edge_Cuts:
-        if( GetFlag( FL_SHOW_BOARD_BODY ) || GetFlag( FL_USE_REALISTIC_MODE ) )
-            return false;
-
-        return true;
+        return !m_Cfg->m_Render.realistic && !m_Cfg->m_Render.show_board_body;
 
     case Margin:
-        if( GetFlag( FL_USE_REALISTIC_MODE ) )
-            return false;
-
-        return true;
+        return !m_Cfg->m_Render.realistic;
 
     case B_Cu:
     case F_Cu:
-        return m_board ? m_board->IsLayerVisible( aLayer ) || GetFlag( FL_USE_REALISTIC_MODE )
-                       : true;
+        return !m_board || m_board->IsLayerVisible( aLayer ) || m_Cfg->m_Render.realistic;
 
     default:
         // the layer is an internal copper layer, used the visibility
@@ -294,30 +244,14 @@ bool BOARD_ADAPTER::Is3dLayerEnabled( PCB_LAYER_ID aLayer ) const
 }
 
 
-bool BOARD_ADAPTER::GetFlag( DISPLAY3D_FLG aFlag ) const
-{
-    wxASSERT( aFlag < FL_LAST );
-
-    return m_drawFlags[aFlag];
-}
-
-
-void BOARD_ADAPTER::SetFlag( DISPLAY3D_FLG aFlag, bool aState )
-{
-    wxASSERT( aFlag < FL_LAST );
-
-    m_drawFlags[aFlag] = aState;
-}
-
-
 bool BOARD_ADAPTER::IsFootprintShown( FOOTPRINT_ATTR_T aFPAttributes ) const
 {
     if( aFPAttributes & FP_SMD )
-        return GetFlag( FL_FP_ATTRIBUTES_NORMAL_INSERT );
+        return m_Cfg->m_Render.show_footprints_insert;
     else if( aFPAttributes & FP_THROUGH_HOLE )
-        return GetFlag( FL_FP_ATTRIBUTES_NORMAL );
+        return m_Cfg->m_Render.show_footprints_normal;
     else
-        return GetFlag( FL_FP_ATTRIBUTES_VIRTUAL );
+        return m_Cfg->m_Render.show_footprints_virtual;
 }
 
 
@@ -361,30 +295,24 @@ void BOARD_ADAPTER::InitSettings( REPORTER* aStatusReporter, REPORTER* aWarningR
 
     wxString msg;
 
-    const bool succeedToGetBoardPolygon = createBoardPolygon( &msg );
+    const bool haveOutline = createBoardPolygon( &msg );
 
     if( aWarningReporter )
     {
-        if( !succeedToGetBoardPolygon )
+        if( !haveOutline )
             aWarningReporter->Report( msg, RPT_SEVERITY_WARNING );
         else
             aWarningReporter->Report( wxEmptyString );
     }
 
-    // Calculates the board bounding box (board outlines + items)
-    // to ensure any item, even outside the board outlines can be seen
-    bool boardEdgesOnly = true;
-
-    if( ( m_board && m_board->IsFootprintHolder() ) || !GetFlag( FL_USE_REALISTIC_MODE )
-            || !succeedToGetBoardPolygon )
-    {
-        boardEdgesOnly = false;
-    }
-
     EDA_RECT bbbox;
 
     if( m_board )
-        bbbox = m_board->ComputeBoundingBox( boardEdgesOnly );
+    {
+        bbbox = m_board->ComputeBoundingBox( !m_board->IsFootprintHolder()
+                                                 && m_Cfg->m_Render.realistic
+                                                 && haveOutline );
+    }
 
     // Gives a non null size to avoid issues in zoom / scale calculations
     if( ( bbbox.GetWidth() == 0 ) && ( bbbox.GetHeight() == 0 ) )
@@ -720,14 +648,14 @@ float BOARD_ADAPTER::GetFootprintZPos( bool aIsFlipped ) const
 {
     if( aIsFlipped )
     {
-        if( GetFlag( FL_SOLDERPASTE ) )
+        if( m_Cfg->m_Render.show_solderpaste )
             return m_layerZcoordBottom[B_SilkS];
         else
             return m_layerZcoordBottom[B_Paste];
     }
     else
     {
-        if( GetFlag( FL_SOLDERPASTE ) )
+        if( m_Cfg->m_Render.show_solderpaste )
             return m_layerZcoordTop[F_SilkS];
         else
             return m_layerZcoordTop[F_Paste];
@@ -754,4 +682,17 @@ SFVEC4F BOARD_ADAPTER::GetItemColor( int aItemId ) const
 SFVEC4F BOARD_ADAPTER::GetColor( const COLOR4D& aColor ) const
 {
     return SFVEC4F( aColor.r, aColor.g, aColor.b, aColor.a );
+}
+
+
+SFVEC2F BOARD_ADAPTER::GetSphericalCoord( int i ) const
+{
+    SFVEC2F sphericalCoord =
+            SFVEC2F( ( m_Cfg->m_Render.raytrace_lightElevation[i] + 90.0f ) / 180.0f,
+                       m_Cfg->m_Render.raytrace_lightAzimuth[i] / 180.0f );
+
+    sphericalCoord.x = glm::clamp( sphericalCoord.x, 0.0f, 1.0f );
+    sphericalCoord.y = glm::clamp( sphericalCoord.y, 0.0f, 2.0f );
+
+    return sphericalCoord;
 }

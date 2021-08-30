@@ -34,6 +34,7 @@
 #include "../3d_enums.h"
 #include "../3d_cache/3d_cache.h"
 #include "../common_ogl/ogl_attr_list.h"
+#include "../3d_viewer/eda_3d_viewer_settings.h"
 
 #include <layer_ids.h>
 #include <pad.h>
@@ -51,10 +52,10 @@
 class COLOR_SETTINGS;
 
 /// A type that stores a container of 2d objects for each layer id
-typedef std::map< PCB_LAYER_ID, BVH_CONTAINER_2D *> MAP_CONTAINER_2D_BASE;
+typedef std::map<PCB_LAYER_ID, BVH_CONTAINER_2D*> MAP_CONTAINER_2D_BASE;
 
 /// A type that stores polysets for each layer id
-typedef std::map< PCB_LAYER_ID, SHAPE_POLY_SET *> MAP_POLY;
+typedef std::map<PCB_LAYER_ID, SHAPE_POLY_SET*> MAP_POLY;
 
 /// This defines the range that all coord will have to be rendered.
 /// It will use this value to convert to a normalized value between
@@ -89,22 +90,6 @@ public:
     {
         return m_3dModelManager;
     }
-
-    /**
-     * Get a configuration status of a flag.
-     *
-     * @param aFlag the flag to get the status.
-     * @return true if flag is set, false if not.
-     */
-    bool GetFlag( DISPLAY3D_FLG aFlag ) const ;
-
-    /**
-     * Set the status of a flag.
-     *
-     * @param aFlag the flag to set the status
-     * @param aState status to set.
-     */
-    void SetFlag( DISPLAY3D_FLG aFlag, bool aState );
 
     /**
      * Check if a layer is enabled.
@@ -248,72 +233,6 @@ public:
     float GetFootprintZPos( bool aIsFlipped ) const ;
 
     /**
-     * Get the current grid.
-     *
-     * @return space type of the grid.
-     */
-    GRID3D_TYPE GetGridType() const noexcept
-    {
-        return m_gridType;
-    }
-
-    /**
-     * Set the current grid.
-     *
-     * @param aGridType the type space of the grid.
-     */
-    void SetGridType( GRID3D_TYPE aGridType ) noexcept
-    {
-        m_gridType = aGridType;
-    }
-
-    /**
-     * Get the current antialiasing mode value.
-     *
-     * @return antialiasing mode value
-     */
-    ANTIALIASING_MODE GetAntiAliasingMode() const { return m_antiAliasingMode; }
-
-    /**
-     * Set the current antialiasing mode value.
-     *
-     * @param aAAmode antialiasing mode value.
-     */
-    void SetAntiAliasingMode( ANTIALIASING_MODE aAAmode ) { m_antiAliasingMode = aAAmode; }
-
-    /**
-     * @param aRenderEngine the render engine mode selected.
-     */
-    void SetRenderEngine( RENDER_ENGINE aRenderEngine ) noexcept
-    {
-        m_renderEngine = aRenderEngine;
-    }
-
-    /**
-     * @return render engine on use.
-     */
-    RENDER_ENGINE GetRenderEngine() const noexcept
-    {
-        return m_renderEngine;
-    }
-
-    /**
-     * @param aMaterialMode the render material mode.
-     */
-    void SetMaterialMode( MATERIAL_MODE aMaterialMode ) noexcept
-    {
-        m_materialMode = aMaterialMode;
-    }
-
-    /**
-     * @return material rendering mode.
-     */
-    MATERIAL_MODE GetMaterialMode() const noexcept
-    {
-        return m_materialMode;
-    }
-
-    /**
      * Get the current polygon of the epoxy board.
      *
      * @return the shape polygon
@@ -344,6 +263,8 @@ public:
      * @return the color in SFVEC3F format
      */
     SFVEC4F GetColor( const COLOR4D& aColor ) const;
+
+    SFVEC2F GetSphericalCoord( int i ) const;
 
     /**
      * Get the top z position.
@@ -464,8 +385,6 @@ public:
 
     /**
      * Get number of vias in this board.
-     *
-     * @return number of vias.
      */
     unsigned int GetViaCount() const noexcept
     {
@@ -474,8 +393,6 @@ public:
 
     /**
      * Get number of holes in this board.
-     *
-     * @return number of holes.
      */
     unsigned int GetHoleCount() const noexcept
     {
@@ -624,6 +541,10 @@ public:
     static KIGFX::COLOR4D       g_DefaultBoardBody;
 
 public:
+    EDA_3D_VIEWER_SETTINGS*     m_Cfg;
+    bool                        m_IsBoardView;
+    bool                        m_MousewheelPanning;
+
     SFVEC4F m_BgColorBot;         ///< background bottom color
     SFVEC4F m_BgColorTop;         ///< background top color
     SFVEC4F m_BoardBodyColor;     ///< in realistic mode: FR4 board color
@@ -634,142 +555,71 @@ public:
     SFVEC4F m_SilkScreenColorTop; ///< in realistic mode: SilkScreen color ( top )
     SFVEC4F m_CopperColor;        ///< in realistic mode: copper color
 
-    SFVEC3F m_OpenGlSelectionColor;
-
-    // Raytracing light colors
-    SFVEC3F m_RtCameraLightColor;
-    SFVEC3F m_RtLightColorTop;
-    SFVEC3F m_RtLightColorBottom;
-
-    std::vector<SFVEC3F> m_RtLightColor;
-    std::vector<SFVEC2F> m_RtLightSphericalCoords;
-
-    // Raytracing options
-    int m_RtShadowSampleCount;
-    int m_RtReflectionSampleCount;
-    int m_RtRefractionSampleCount;
-    int m_RtRecursiveReflectionCount;
-    int m_RtRecursiveRefractionCount;
-
-    float m_RtSpreadShadows;
-    float m_RtSpreadReflections;
-    float m_RtSpreadRefractions;
-
 private:
-    BOARD*              m_board;
-    S3D_CACHE*          m_3dModelManager;
-    COLOR_SETTINGS*     m_colors;
+    BOARD*            m_board;
+    S3D_CACHE*        m_3dModelManager;
+    COLOR_SETTINGS*   m_colors;
 
-    std::vector< bool > m_drawFlags;
-    GRID3D_TYPE         m_gridType;
-    RENDER_ENGINE       m_renderEngine;
-    MATERIAL_MODE       m_materialMode;
-    ANTIALIASING_MODE   m_antiAliasingMode;
+    wxPoint           m_boardPos;          ///< Board center position in board internal units.
+    wxSize            m_boardSize;         ///< Board size in board internal units.
+    SFVEC3F           m_boardCenter;       ///< 3D center position of the board in 3D units.
+    BBOX_3D           m_boardBoundingBox;  ///< 3D bounding box of the board in 3D units.
 
-
-    wxPoint m_boardPos;          ///< Board center position in board internal units.
-    wxSize  m_boardSize;         ///< Board size in board internal units.
-    SFVEC3F m_boardCenter;       ///< 3D center position of the board in 3D units.
-    BBOX_3D m_boardBoundingBox;  ///< 3D bounding box of the board in 3D units.
-
-
-    ///< Polygon contours for each layer.
+    ///< Amalgamated polygon contours for various types of items
     MAP_POLY          m_layers_poly;
 
     SHAPE_POLY_SET*   m_frontPlatedPadPolys;
     SHAPE_POLY_SET*   m_backPlatedPadPolys;
 
-    ///< Polygon contours for hole outer diameters for each layer.
-    MAP_POLY          m_layerHoleOdPolys;
+    MAP_POLY          m_layerHoleOdPolys;               ///< Hole outer diameters (per layer)
+    MAP_POLY          m_layerHoleIdPolys;               ///< Hole inner diameters (per layer)
 
-    ///< Polygon contours for hole inner diameters for each layer.
-    MAP_POLY          m_layerHoleIdPolys;
+    SHAPE_POLY_SET    m_nonPlatedThroughHoleOdPolys;    ///< NPTH outer diameters
+    SHAPE_POLY_SET    m_throughHoleOdPolys;             ///< PTH outer diameters
+    SHAPE_POLY_SET    m_throughHoleViaOdPolys;          ///< Via hole outer diameters
+    SHAPE_POLY_SET    m_throughHoleAnnularRingPolys;    ///< Via annular ring outer diameters
 
-    ///< Polygon contours for non plated through hole outer diameters.
-    SHAPE_POLY_SET    m_nonPlatedThroughHoleOdPolys;
+    SHAPE_POLY_SET    m_board_poly;                     ///< Board outline polygon.
 
-    ///< Polygon contours for through hole outer diameters.
-    SHAPE_POLY_SET    m_throughHoleOdPolys;
-
-    ///< Polygon contours for through holes via outer diameters.
-    SHAPE_POLY_SET    m_throughHoleViaOdPolys;
-
-    ///< Polygon contours for through hole via annular rings.
-    SHAPE_POLY_SET    m_throughHoleAnnularRingPolys;
-
-    SHAPE_POLY_SET    m_board_poly;       ///< Board outline polygon.
-
-    MAP_CONTAINER_2D_BASE  m_layerMap;    ///< 2D elements for each layer.
-
+    MAP_CONTAINER_2D_BASE  m_layerMap;                  ///< 2D elements for each layer.
+    MAP_CONTAINER_2D_BASE  m_layerHoleMap;              ///< Holes for each layer.
 
     BVH_CONTAINER_2D* m_platedPadsFront;
     BVH_CONTAINER_2D* m_platedPadsBack;
 
-    ///< The holes per each layer.
-    MAP_CONTAINER_2D_BASE  m_layerHoleMap;
+    BVH_CONTAINER_2D  m_throughHoleOds;                ///< List of PTH outer diameters
+    BVH_CONTAINER_2D  m_throughHoleIds;                ///< List of PTH inner diameters
+    BVH_CONTAINER_2D  m_throughHoleAnnularRings;       ///< List of via annular rings
+    BVH_CONTAINER_2D  m_throughHoleViaOds;             ///< List of via hole outer diameters
+    BVH_CONTAINER_2D  m_throughHoleViaIds;             ///< List of via hole inner diameters
 
-    ///< List of through holes with the radius of the hole inflated with the copper thickness.
-    BVH_CONTAINER_2D   m_throughHoleOds;
+    unsigned int      m_copperLayersCount;
 
-    ///< List of plated through hole annular rings.
-    BVH_CONTAINER_2D   m_throughHoleAnnularRings;
+    double            m_biuTo3Dunits;       ///< Scale factor to convert board internal units to
+                                            ///< 3D units normalized between -1.0 and 1.0.
 
-    ///< List of through hole inner diameters.
-    BVH_CONTAINER_2D   m_throughHoleIds;
+    std::array<float, PCB_LAYER_ID_COUNT> m_layerZcoordTop;    ///< Top (End) Z position of each
+                                                               ///< layer in 3D units.
 
-    ///< List of through hole vias with the radius of the hole inflated with the copper thickness.
-    BVH_CONTAINER_2D   m_throughHoleViaOds;
+    std::array<float, PCB_LAYER_ID_COUNT> m_layerZcoordBottom; ///< Bottom (Start) Z position of
+                                                               ///< each layer in 3D units.
 
-    ///< List of through hole via inner diameters.
-    BVH_CONTAINER_2D   m_throughHoleViaIds;
+    float             m_copperThickness3DU;
+    float             m_epoxyThickness3DU;
+    float             m_nonCopperLayerThickness3DU;
+    float             m_solderPasteLayerThickness3DU;
 
-    ///< Number of copper layers actually used by the board.
-    unsigned int m_copperLayersCount;
-
-    ///< Scale factor to convert board internal units to 3D units normalized between -1.0 and 1.0.
-    double m_biuTo3Dunits;
-
-    ///< Top (End) Z position of each layer in 3D units.
-    std::array<float, PCB_LAYER_ID_COUNT>  m_layerZcoordTop;
-
-    ///< Bottom (Start) Z position of each layer in 3D units.
-    std::array<float, PCB_LAYER_ID_COUNT>  m_layerZcoordBottom;
-
-    ///< Copper thickness in 3D units.
-    float  m_copperThickness3DU;
-
-    ///< Epoxy thickness in 3D units.
-    float  m_epoxyThickness3DU;
-
-    ///< Non copper layers thickness in 3D units.
-    float  m_nonCopperLayerThickness3DU;
-
-    ///< solder paste layers thickness in 3D units.
-    float  m_solderPasteLayerThickness3DU;
-
-    ///< Number of tracks in the board.
-    unsigned int m_trackCount;
-
-    ///< Track average width.
-    float        m_averageTrackWidth;
-
-    ///< Number of through hole vias in the board.
-    unsigned int m_viaCount;
-
-    ///< Computed average diameter of the via holes in 3D units.
-    float        m_averageViaHoleDiameter;
-
-    ///< Number of holes in the board.
-    unsigned int m_holeCount;
-
-    ///< Computed average diameter of the holes in 3D units.
-    float        m_averageHoleDiameter;
+    unsigned int      m_trackCount;
+    float             m_averageTrackWidth;
+    unsigned int      m_viaCount;
+    float             m_averageViaHoleDiameter;
+    unsigned int      m_holeCount;
+    float             m_averageHoleDiameter;
 
     /**
-     *  Trace mask used to enable or disable the trace output of this class.
-     *  The debug output can be turned on by setting the WXTRACE environment variable to
-     *  "KI_TRACE_EDA_CINFO3D_VISU".  See the wxWidgets documentation on wxLogTrace for
-     *  more information.
+     * Trace mask used to enable or disable debug output for this class. Output can be turned
+     * on by setting the WXTRACE environment variable to "KI_TRACE_EDA_CINFO3D_VISU". See the
+     * wxWidgets documentation on wxLogTrace for more information.
      */
     static const wxChar* m_logTrace;
 

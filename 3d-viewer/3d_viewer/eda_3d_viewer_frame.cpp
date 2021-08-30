@@ -101,20 +101,19 @@ EDA_3D_VIEWER_FRAME::EDA_3D_VIEWER_FRAME( KIWAY *aKiway, PCB_BASE_FRAME *aParent
     wxStatusBar *status_bar = CreateStatusBar( arrayDim( status_dims ) );
     SetStatusWidths( arrayDim( status_dims ), status_dims );
 
-    m_canvas = new EDA_3D_CANVAS( this,
-                                  OGL_ATT_LIST::GetAttributesList( m_boardAdapter.GetAntiAliasingMode() ),
-                                  m_boardAdapter, m_currentCamera,
-                                  Prj().Get3DCacheManager() );
+    SETTINGS_MANAGER&       mgr = Pgm().GetSettingsManager();
+    EDA_3D_VIEWER_SETTINGS* cfg = mgr.GetAppSettings<EDA_3D_VIEWER_SETTINGS>();
+    ANTIALIASING_MODE       aaMode = static_cast<ANTIALIASING_MODE>( cfg->m_Render.opengl_AA_mode );
 
-    auto config = Pgm().GetSettingsManager().GetAppSettings<EDA_3D_VIEWER_SETTINGS>();
-    LoadSettings( config );
+    m_canvas = new EDA_3D_CANVAS( this, OGL_ATT_LIST::GetAttributesList( aaMode ),
+                                  m_boardAdapter, m_currentCamera, Prj().Get3DCacheManager() );
 
-    // Some settings need the canvas
+    LoadSettings( cfg );
     loadCommonSettings();
 
     // Create the manager
     m_toolManager = new TOOL_MANAGER;
-    m_toolManager->SetEnvironment( GetBoard(), nullptr, nullptr, config, this );
+    m_toolManager->SetEnvironment( GetBoard(), nullptr, nullptr, cfg, this );
 
     m_actions = new EDA_3D_ACTIONS();
     m_toolDispatcher = new TOOL_DISPATCHER( m_toolManager );
@@ -128,7 +127,7 @@ EDA_3D_VIEWER_FRAME::EDA_3D_VIEWER_FRAME( KIWAY *aKiway, PCB_BASE_FRAME *aParent
     setupUIConditions();
 
     if( EDA_3D_CONTROLLER* ctrlTool = GetToolManager()->GetTool<EDA_3D_CONTROLLER>() )
-        ctrlTool->SetRotationIncrement( config->m_Camera.rotation_increment );
+        ctrlTool->SetRotationIncrement( cfg->m_Camera.rotation_increment );
 
     // Run the viewer control tool, it is supposed to be always active
     m_toolManager->InvokeTool( "3DViewer.Control" );
@@ -182,39 +181,59 @@ void EDA_3D_VIEWER_FRAME::setupUIConditions()
     EDA_3D_CONDITIONS cond( &m_boardAdapter );
 
 // Helper to define check conditions
-#define FlagCheck( x )     ACTION_CONDITIONS().Check( cond.Flag( x ) )
 #define GridSizeCheck( x ) ACTION_CONDITIONS().Check( cond.GridSize( x ) )
 
-    auto raytracingCondition =
+    auto raytracing =
             [this]( const SELECTION& aSel )
             {
-                return m_boardAdapter.GetRenderEngine() != RENDER_ENGINE::OPENGL;
+                return m_boardAdapter.m_Cfg->m_Render.engine != RENDER_ENGINE::OPENGL;
+            };
+    auto showTH =
+            [this]( const SELECTION& aSel )
+            {
+                return m_boardAdapter.m_Cfg->m_Render.show_footprints_normal;
+            };
+    auto showSMD =
+            [this]( const SELECTION& aSel )
+            {
+                return m_boardAdapter.m_Cfg->m_Render.show_footprints_insert;
+            };
+    auto showVirtual =
+            [this]( const SELECTION& aSel )
+            {
+                return m_boardAdapter.m_Cfg->m_Render.show_footprints_virtual;
+            };
+    auto showBBoxes =
+            [this]( const SELECTION& aSel )
+            {
+                return m_boardAdapter.m_Cfg->m_Render.opengl_show_model_bbox;
+            };
+    auto showAxes =
+            [this]( const SELECTION& aSel )
+            {
+                return m_boardAdapter.m_Cfg->m_Render.show_axis;
+            };
+    auto ortho =
+            [this]( const SELECTION& )
+            {
+                return m_currentCamera.GetProjection() == PROJECTION_TYPE::ORTHO;
             };
 
-    RegisterUIUpdateHandler( ID_RENDER_CURRENT_VIEW,
-                             ACTION_CONDITIONS().Check( raytracingCondition ) );
+    RegisterUIUpdateHandler( ID_RENDER_CURRENT_VIEW,   ACTION_CONDITIONS().Check( raytracing ) );
 
-    mgr->SetConditions( EDA_3D_ACTIONS::showTHT,     FlagCheck( FL_FP_ATTRIBUTES_NORMAL ) );
-    mgr->SetConditions( EDA_3D_ACTIONS::showSMD,     FlagCheck( FL_FP_ATTRIBUTES_NORMAL_INSERT ) );
-    mgr->SetConditions( EDA_3D_ACTIONS::showVirtual, FlagCheck( FL_FP_ATTRIBUTES_VIRTUAL ) );
+    mgr->SetConditions( EDA_3D_ACTIONS::showTHT,       ACTION_CONDITIONS().Check( showTH ) );
+    mgr->SetConditions( EDA_3D_ACTIONS::showSMD,       ACTION_CONDITIONS().Check( showSMD ) );
+    mgr->SetConditions( EDA_3D_ACTIONS::showVirtual,   ACTION_CONDITIONS().Check( showVirtual ) );
 
-    mgr->SetConditions( EDA_3D_ACTIONS::showBBoxes, FlagCheck( FL_RENDER_OPENGL_SHOW_MODEL_BBOX ) );
-    mgr->SetConditions( EDA_3D_ACTIONS::showAxis,   FlagCheck( FL_AXIS ) );
+    mgr->SetConditions( EDA_3D_ACTIONS::showBBoxes,    ACTION_CONDITIONS().Check( showBBoxes ) );
+    mgr->SetConditions( EDA_3D_ACTIONS::showAxis,      ACTION_CONDITIONS().Check( showAxes ) );
 
     mgr->SetConditions( EDA_3D_ACTIONS::noGrid,        GridSizeCheck( GRID3D_TYPE::NONE ) );
     mgr->SetConditions( EDA_3D_ACTIONS::show10mmGrid,  GridSizeCheck( GRID3D_TYPE::GRID_10MM ) );
     mgr->SetConditions( EDA_3D_ACTIONS::show5mmGrid,   GridSizeCheck( GRID3D_TYPE::GRID_5MM ) );
     mgr->SetConditions( EDA_3D_ACTIONS::show2_5mmGrid, GridSizeCheck( GRID3D_TYPE::GRID_2P5MM ) );
     mgr->SetConditions( EDA_3D_ACTIONS::show1mmGrid,   GridSizeCheck( GRID3D_TYPE::GRID_1MM ) );
-
-
-    auto orthoCondition =
-            [this]( const SELECTION& )
-            {
-                return m_currentCamera.GetProjection() == PROJECTION_TYPE::ORTHO;
-            };
-
-    mgr->SetConditions( EDA_3D_ACTIONS::toggleOrtho, ACTION_CONDITIONS().Check( orthoCondition ) );
+    mgr->SetConditions( EDA_3D_ACTIONS::toggleOrtho,   ACTION_CONDITIONS().Check( ortho ) );
 
 #undef FlagCheck
 #undef GridSizeCheck
@@ -243,14 +262,14 @@ void EDA_3D_VIEWER_FRAME::NewDisplay( bool aForceImmediateRedraw )
 void EDA_3D_VIEWER_FRAME::Redraw()
 {
     // Only update in OpenGL for an interactive interaction
-    if( m_boardAdapter.GetRenderEngine() == RENDER_ENGINE::OPENGL )
+    if( m_boardAdapter.m_Cfg->m_Render.engine == RENDER_ENGINE::OPENGL )
         m_canvas->Request_refresh( true );
 }
 
 
 void EDA_3D_VIEWER_FRAME::refreshRender()
 {
-    if( m_boardAdapter.GetRenderEngine() == RENDER_ENGINE::OPENGL )
+    if( m_boardAdapter.m_Cfg->m_Render.engine == RENDER_ENGINE::OPENGL )
         m_canvas->Request_refresh();
     else
         NewDisplay( true );
@@ -327,18 +346,18 @@ void EDA_3D_VIEWER_FRAME::Process_Special_Functions( wxCommandEvent &event )
 
 void EDA_3D_VIEWER_FRAME::OnRenderEngineSelection( wxCommandEvent &event )
 {
-    const RENDER_ENGINE old_engine = m_boardAdapter.GetRenderEngine();
+    int old_engine = m_boardAdapter.m_Cfg->m_Render.engine;
 
     if( old_engine == RENDER_ENGINE::OPENGL )
-        m_boardAdapter.SetRenderEngine( RENDER_ENGINE::RAYTRACING );
+        m_boardAdapter.m_Cfg->m_Render.engine = RENDER_ENGINE::RAYTRACING;
     else
-        m_boardAdapter.SetRenderEngine( RENDER_ENGINE::OPENGL );
+        m_boardAdapter.m_Cfg->m_Render.engine = RENDER_ENGINE::OPENGL;
 
     wxLogTrace( m_logTrace, "EDA_3D_VIEWER_FRAME::OnRenderEngineSelection type %s ",
-                ( m_boardAdapter.GetRenderEngine() == RENDER_ENGINE::RAYTRACING ) ? "raytracing" :
-                                                                                    "realtime" );
+                m_boardAdapter.m_Cfg->m_Render.engine == RENDER_ENGINE::RAYTRACING ? "raytracing"
+                                                                                   : "realtime" );
 
-    if( old_engine != m_boardAdapter.GetRenderEngine() )
+    if( old_engine != m_boardAdapter.m_Cfg->m_Render.engine )
         RenderEngineChanged();
 }
 
@@ -348,7 +367,7 @@ void EDA_3D_VIEWER_FRAME::OnDisableRayTracing( wxCommandEvent& aEvent )
     wxLogTrace( m_logTrace, "EDA_3D_VIEWER_FRAME::%s disabling ray tracing.", __WXFUNCTION__ );
 
     m_disable_ray_tracing = true;
-    m_boardAdapter.SetRenderEngine( RENDER_ENGINE::OPENGL );
+    m_boardAdapter.m_Cfg->m_Render.engine = RENDER_ENGINE::OPENGL;
 }
 
 
@@ -392,88 +411,7 @@ void EDA_3D_VIEWER_FRAME::LoadSettings( APP_SETTINGS_BASE *aCfg )
 
     if( cfg )
     {
-        m_boardAdapter.m_RtCameraLightColor =
-                m_boardAdapter.GetColor( cfg->m_Render.raytrace_lightColorCamera );
-        m_boardAdapter.m_RtLightColorTop =
-                m_boardAdapter.GetColor( cfg->m_Render.raytrace_lightColorTop );
-        m_boardAdapter.m_RtLightColorBottom =
-                m_boardAdapter.GetColor( cfg->m_Render.raytrace_lightColorBottom );
-
-        m_boardAdapter.m_RtLightColor.resize( cfg->m_Render.raytrace_lightColor.size() );
-        m_boardAdapter.m_RtLightSphericalCoords.resize( cfg->m_Render.raytrace_lightColor.size() );
-
-        for( size_t i = 0; i < cfg->m_Render.raytrace_lightColor.size(); ++i )
-        {
-            m_boardAdapter.m_RtLightColor[i] =
-                    m_boardAdapter.GetColor( cfg->m_Render.raytrace_lightColor[i] );
-
-            SFVEC2F sphericalCoord =
-                    SFVEC2F( ( cfg->m_Render.raytrace_lightElevation[i] + 90.0f ) / 180.0f,
-                             cfg->m_Render.raytrace_lightAzimuth[i] / 180.0f );
-
-            sphericalCoord.x = glm::clamp( sphericalCoord.x, 0.0f, 1.0f );
-            sphericalCoord.y = glm::clamp( sphericalCoord.y, 0.0f, 2.0f );
-
-            m_boardAdapter.m_RtLightSphericalCoords[i] = sphericalCoord;
-        }
-
-#define TRANSFER_SETTING( flag, field ) m_boardAdapter.SetFlag( flag, cfg->m_Render.field )
-
-        TRANSFER_SETTING( FL_USE_REALISTIC_MODE,      realistic );
-        TRANSFER_SETTING( FL_SUBTRACT_MASK_FROM_SILK, subtract_mask_from_silk );
-
-        // OpenGL options
-        TRANSFER_SETTING( FL_RENDER_OPENGL_COPPER_THICKNESS,          opengl_copper_thickness );
-        TRANSFER_SETTING( FL_RENDER_OPENGL_SHOW_MODEL_BBOX,           opengl_show_model_bbox );
-        TRANSFER_SETTING( FL_HIGHLIGHT_ROLLOVER_ITEM,                 opengl_highlight_on_rollover );
-        TRANSFER_SETTING( FL_RENDER_OPENGL_AA_DISABLE_ON_MOVE,        opengl_AA_disableOnMove );
-        TRANSFER_SETTING( FL_RENDER_OPENGL_THICKNESS_DISABLE_ON_MOVE, opengl_thickness_disableOnMove );
-        TRANSFER_SETTING( FL_RENDER_OPENGL_VIAS_DISABLE_ON_MOVE,      opengl_vias_disableOnMove );
-        TRANSFER_SETTING( FL_RENDER_OPENGL_HOLES_DISABLE_ON_MOVE,     opengl_holes_disableOnMove );
-
-        // Raytracing options
-        TRANSFER_SETTING( FL_RENDER_RAYTRACING_SHADOWS,             raytrace_shadows );
-        TRANSFER_SETTING( FL_RENDER_RAYTRACING_BACKFLOOR,           raytrace_backfloor );
-        TRANSFER_SETTING( FL_RENDER_RAYTRACING_REFRACTIONS,         raytrace_refractions );
-        TRANSFER_SETTING( FL_RENDER_RAYTRACING_REFLECTIONS,         raytrace_reflections );
-        TRANSFER_SETTING( FL_RENDER_RAYTRACING_POST_PROCESSING,     raytrace_post_processing );
-        TRANSFER_SETTING( FL_RENDER_RAYTRACING_ANTI_ALIASING,       raytrace_anti_aliasing );
-        TRANSFER_SETTING( FL_RENDER_RAYTRACING_PROCEDURAL_TEXTURES, raytrace_procedural_textures );
-
-        TRANSFER_SETTING( FL_AXIS,                            show_axis );
-        TRANSFER_SETTING( FL_FP_ATTRIBUTES_NORMAL,            show_footprints_normal );
-        TRANSFER_SETTING( FL_FP_ATTRIBUTES_NORMAL_INSERT,     show_footprints_insert );
-        TRANSFER_SETTING( FL_FP_ATTRIBUTES_VIRTUAL,           show_footprints_virtual );
-        TRANSFER_SETTING( FL_ZONE,                            show_zones );
-        TRANSFER_SETTING( FL_ADHESIVE,                        show_adhesive );
-        TRANSFER_SETTING( FL_SILKSCREEN,                      show_silkscreen );
-        TRANSFER_SETTING( FL_SOLDERMASK,                      show_soldermask );
-        TRANSFER_SETTING( FL_SOLDERPASTE,                     show_solderpaste );
-        TRANSFER_SETTING( FL_COMMENTS,                        show_comments );
-        TRANSFER_SETTING( FL_ECO,                             show_eco );
-        TRANSFER_SETTING( FL_SHOW_BOARD_BODY,                 show_board_body );
-        TRANSFER_SETTING( FL_CLIP_SILK_ON_VIA_ANNULUS,        clip_silk_on_via_annulus );
-        TRANSFER_SETTING( FL_RENDER_PLATED_PADS_AS_PLATED,    renderPlatedPadsAsPlated );
-
-        m_boardAdapter.SetGridType( static_cast<GRID3D_TYPE>( cfg->m_Render.grid_type ) );
-        m_boardAdapter.SetAntiAliasingMode(
-                static_cast<ANTIALIASING_MODE>( cfg->m_Render.opengl_AA_mode ) );
-
-        m_boardAdapter.m_OpenGlSelectionColor =
-                m_boardAdapter.GetColor( cfg->m_Render.opengl_selection_color );
-
-        m_boardAdapter.m_RtShadowSampleCount = cfg->m_Render.raytrace_nrsamples_shadows;
-        m_boardAdapter.m_RtReflectionSampleCount = cfg->m_Render.raytrace_nrsamples_reflections;
-        m_boardAdapter.m_RtRefractionSampleCount = cfg->m_Render.raytrace_nrsamples_refractions;
-
-        m_boardAdapter.m_RtSpreadShadows = cfg->m_Render.raytrace_spread_shadows;
-        m_boardAdapter.m_RtSpreadReflections = cfg->m_Render.raytrace_spread_reflections;
-        m_boardAdapter.m_RtSpreadRefractions = cfg->m_Render.raytrace_spread_refractions;
-
-        m_boardAdapter.m_RtRecursiveRefractionCount =
-                cfg->m_Render.raytrace_recursivelevel_refractions;
-        m_boardAdapter.m_RtRecursiveReflectionCount =
-                cfg->m_Render.raytrace_recursivelevel_reflections;
+        m_boardAdapter.m_Cfg = cfg;
 
         // When opening the 3D viewer, we use the opengl mode, not the ray tracing engine
         // because the ray tracing is very time consumming, and can be seen as not working
@@ -484,10 +422,8 @@ void EDA_3D_VIEWER_FRAME::LoadSettings( APP_SETTINGS_BASE *aCfg )
                                 "EDA_3D_VIEWER_FRAME::LoadSettings render setting Ray Trace" :
                                 "EDA_3D_VIEWER_FRAME::LoadSettings render setting OpenGL" );
 #else
-        m_boardAdapter.SetRenderEngine( RENDER_ENGINE::OPENGL );
+        m_boardAdapter.m_Cfg->m_Render.engine = RENDER_ENGINE::OPENGL;
 #endif
-
-        m_boardAdapter.SetMaterialMode( static_cast<MATERIAL_MODE>( cfg->m_Render.material_mode ) );
 
         m_canvas->SetAnimationEnabled( cfg->m_Camera.animation_enabled );
         m_canvas->SetMovingSpeedMultiplier( cfg->m_Camera.moving_speed_multiplier );
@@ -506,95 +442,18 @@ void EDA_3D_VIEWER_FRAME::SaveSettings( APP_SETTINGS_BASE *aCfg )
 
     wxLogTrace( m_logTrace, "EDA_3D_VIEWER_FRAME::SaveSettings" );
 
-    wxLogTrace( m_logTrace, m_boardAdapter.GetRenderEngine() == RENDER_ENGINE::RAYTRACING ?
+    wxLogTrace( m_logTrace, m_boardAdapter.m_Cfg->m_Render.engine == RENDER_ENGINE::RAYTRACING ?
                             "EDA_3D_VIEWER_FRAME::SaveSettings render setting Ray Trace" :
                             "EDA_3D_VIEWER_FRAME::SaveSettings render setting OpenGL" );
 
     if( cfg )
     {
-        auto save_color =
-                [] ( const SFVEC3F& aSource, COLOR4D& aTarget )
-                {
-                    aTarget = COLOR4D( aSource.r, aSource.g, aSource.b, 1.0 );
-                };
-
-        save_color( m_boardAdapter.m_RtCameraLightColor, cfg->m_Render.raytrace_lightColorCamera );
-        save_color( m_boardAdapter.m_RtLightColorTop, cfg->m_Render.raytrace_lightColorTop );
-        save_color( m_boardAdapter.m_RtLightColorBottom, cfg->m_Render.raytrace_lightColorBottom );
-
-        for( size_t i = 0; i < cfg->m_Render.raytrace_lightColor.size(); ++i )
-        {
-            save_color( m_boardAdapter.m_RtLightColor[i], cfg->m_Render.raytrace_lightColor[i] );
-
-            cfg->m_Render.raytrace_lightElevation[i] =
-                    (int)( m_boardAdapter.m_RtLightSphericalCoords[i].x * 180.0f - 90.0f );
-            cfg->m_Render.raytrace_lightAzimuth[i] =
-                    (int)( m_boardAdapter.m_RtLightSphericalCoords[i].y * 180.0f );
-        }
-
-        cfg->m_Render.raytrace_nrsamples_shadows = m_boardAdapter.m_RtShadowSampleCount;
-        cfg->m_Render.raytrace_nrsamples_reflections = m_boardAdapter.m_RtReflectionSampleCount;
-        cfg->m_Render.raytrace_nrsamples_refractions = m_boardAdapter.m_RtRefractionSampleCount;
-
-        cfg->m_Render.raytrace_spread_shadows = m_boardAdapter.m_RtSpreadShadows;
-        cfg->m_Render.raytrace_spread_reflections = m_boardAdapter.m_RtSpreadReflections;
-        cfg->m_Render.raytrace_spread_refractions = m_boardAdapter.m_RtSpreadRefractions;
-
-        cfg->m_Render.raytrace_recursivelevel_refractions =
-                m_boardAdapter.m_RtRecursiveRefractionCount;
-        cfg->m_Render.raytrace_recursivelevel_reflections =
-                m_boardAdapter.m_RtRecursiveReflectionCount;
-
-#define TRANSFER_SETTING( field, flag ) cfg->m_Render.field = m_boardAdapter.GetFlag( flag )
-
-        cfg->m_Render.engine         = static_cast<int>( m_boardAdapter.GetRenderEngine() );
-        cfg->m_Render.grid_type      = static_cast<int>( m_boardAdapter.GetGridType() );
-        cfg->m_Render.material_mode  = static_cast<int>( m_boardAdapter.GetMaterialMode() );
-        cfg->m_Render.opengl_AA_mode = static_cast<int>( m_boardAdapter.GetAntiAliasingMode() );
-
-        save_color( m_boardAdapter.m_OpenGlSelectionColor, cfg->m_Render.opengl_selection_color );
-
         cfg->m_Camera.animation_enabled       = m_canvas->GetAnimationEnabled();
         cfg->m_Camera.moving_speed_multiplier = m_canvas->GetMovingSpeedMultiplier();
         cfg->m_Camera.projection_mode         = m_canvas->GetProjectionMode();
 
         if( EDA_3D_CONTROLLER* ctrlTool = GetToolManager()->GetTool<EDA_3D_CONTROLLER>() )
             cfg->m_Camera.rotation_increment = ctrlTool->GetRotationIncrement();
-
-        TRANSFER_SETTING( opengl_AA_disableOnMove,        FL_RENDER_OPENGL_AA_DISABLE_ON_MOVE );
-        TRANSFER_SETTING( opengl_copper_thickness,        FL_RENDER_OPENGL_COPPER_THICKNESS );
-        TRANSFER_SETTING( opengl_show_model_bbox,         FL_RENDER_OPENGL_SHOW_MODEL_BBOX );
-        TRANSFER_SETTING( opengl_highlight_on_rollover,   FL_HIGHLIGHT_ROLLOVER_ITEM );
-        TRANSFER_SETTING( opengl_thickness_disableOnMove, FL_RENDER_OPENGL_THICKNESS_DISABLE_ON_MOVE );
-        TRANSFER_SETTING( opengl_vias_disableOnMove,      FL_RENDER_OPENGL_VIAS_DISABLE_ON_MOVE );
-        TRANSFER_SETTING( opengl_holes_disableOnMove,     FL_RENDER_OPENGL_HOLES_DISABLE_ON_MOVE );
-
-        TRANSFER_SETTING( raytrace_anti_aliasing,       FL_RENDER_RAYTRACING_ANTI_ALIASING );
-        TRANSFER_SETTING( raytrace_backfloor,           FL_RENDER_RAYTRACING_BACKFLOOR );
-        TRANSFER_SETTING( raytrace_post_processing,     FL_RENDER_RAYTRACING_POST_PROCESSING );
-        TRANSFER_SETTING( raytrace_procedural_textures, FL_RENDER_RAYTRACING_PROCEDURAL_TEXTURES );
-        TRANSFER_SETTING( raytrace_reflections,         FL_RENDER_RAYTRACING_REFLECTIONS );
-        TRANSFER_SETTING( raytrace_refractions,         FL_RENDER_RAYTRACING_REFRACTIONS );
-        TRANSFER_SETTING( raytrace_shadows,             FL_RENDER_RAYTRACING_SHADOWS );
-
-        TRANSFER_SETTING( realistic,                FL_USE_REALISTIC_MODE );
-        TRANSFER_SETTING( show_adhesive,            FL_ADHESIVE );
-        TRANSFER_SETTING( show_axis,                FL_AXIS );
-        TRANSFER_SETTING( show_board_body,          FL_SHOW_BOARD_BODY );
-        TRANSFER_SETTING( clip_silk_on_via_annulus, FL_CLIP_SILK_ON_VIA_ANNULUS );
-        TRANSFER_SETTING( renderPlatedPadsAsPlated, FL_RENDER_PLATED_PADS_AS_PLATED );
-        TRANSFER_SETTING( show_comments,            FL_COMMENTS );
-        TRANSFER_SETTING( show_eco,                 FL_ECO );
-        TRANSFER_SETTING( show_footprints_insert,   FL_FP_ATTRIBUTES_NORMAL_INSERT );
-        TRANSFER_SETTING( show_footprints_normal,   FL_FP_ATTRIBUTES_NORMAL );
-        TRANSFER_SETTING( show_footprints_virtual,  FL_FP_ATTRIBUTES_VIRTUAL );
-        TRANSFER_SETTING( show_silkscreen,          FL_SILKSCREEN );
-        TRANSFER_SETTING( show_soldermask,          FL_SOLDERMASK );
-        TRANSFER_SETTING( show_solderpaste,         FL_SOLDERPASTE );
-        TRANSFER_SETTING( show_zones,               FL_ZONE );
-        TRANSFER_SETTING( subtract_mask_from_silk,  FL_SUBTRACT_MASK_FROM_SILK );
-
-#undef TRANSFER_SETTING
     }
 }
 
@@ -727,5 +586,5 @@ void EDA_3D_VIEWER_FRAME::loadCommonSettings()
     const DPI_SCALING dpi{ settings, this };
     m_canvas->SetScaleFactor( dpi.GetScaleFactor() );
     // TODO(JE) use all control options
-    m_boardAdapter.SetFlag( FL_MOUSEWHEEL_PANNING, settings->m_Input.scroll_modifier_zoom != 0 );
+    m_boardAdapter.m_MousewheelPanning = settings->m_Input.scroll_modifier_zoom != 0;
 }

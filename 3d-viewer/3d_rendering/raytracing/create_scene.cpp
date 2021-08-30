@@ -70,30 +70,23 @@ static float TransparencyControl( float aGrayColorValue, float aTransparency )
 
 void RENDER_3D_RAYTRACE::setupMaterials()
 {
-    MATERIAL::SetDefaultRefractionRayCount( m_boardAdapter.m_RtRefractionSampleCount );
-    MATERIAL::SetDefaultReflectionRayCount( m_boardAdapter.m_RtReflectionSampleCount );
+    MATERIAL::SetDefaultRefractionRayCount( m_boardAdapter.m_Cfg->m_Render.raytrace_nrsamples_refractions );
+    MATERIAL::SetDefaultReflectionRayCount( m_boardAdapter.m_Cfg->m_Render.raytrace_nrsamples_reflections );
 
-    MATERIAL::SetDefaultRefractionRecursionCount( m_boardAdapter.m_RtRecursiveRefractionCount );
-    MATERIAL::SetDefaultReflectionRecursionCount( m_boardAdapter.m_RtRecursiveReflectionCount );
+    MATERIAL::SetDefaultRefractionRecursionCount( m_boardAdapter.m_Cfg->m_Render.raytrace_recursivelevel_refractions );
+    MATERIAL::SetDefaultReflectionRecursionCount( m_boardAdapter.m_Cfg->m_Render.raytrace_recursivelevel_reflections );
 
     double mmTo3Dunits = IU_PER_MM * m_boardAdapter.BiuTo3dUnits();
 
-    if( m_boardAdapter.GetFlag( FL_RENDER_RAYTRACING_PROCEDURAL_TEXTURES ) )
+    if( m_boardAdapter.m_Cfg->m_Render.raytrace_procedural_textures )
     {
         m_boardMaterial = BOARD_NORMAL( 0.40f * mmTo3Dunits );
-
         m_copperMaterial = COPPER_NORMAL( 4.0f * mmTo3Dunits, &m_boardMaterial );
-
         m_platedCopperMaterial = PLATED_COPPER_NORMAL( 0.5f * mmTo3Dunits );
-
         m_solderMaskMaterial = SOLDER_MASK_NORMAL( &m_boardMaterial );
-
         m_plasticMaterial = PLASTIC_NORMAL( 0.05f * mmTo3Dunits );
-
         m_shinyPlasticMaterial = PLASTIC_SHINE_NORMAL( 0.1f * mmTo3Dunits );
-
         m_brushedMetalMaterial = BRUSHED_METAL_NORMAL( 0.05f * mmTo3Dunits );
-
         m_silkScreenMaterial = SILK_SCREEN_NORMAL( 0.25f * mmTo3Dunits );
     }
 
@@ -107,14 +100,14 @@ void RENDER_3D_RAYTRACE::setupMaterials()
             ConvertSRGBToLinear( (SFVEC3F) m_boardAdapter.m_CopperColor * 0.3f ),
             SFVEC3F( 0.0f ), copperSpecularLinear, 0.4f * 128.0f, 0.0f, 0.0f );
 
-    if( m_boardAdapter.GetFlag( FL_RENDER_RAYTRACING_PROCEDURAL_TEXTURES ) )
+    if( m_boardAdapter.m_Cfg->m_Render.raytrace_procedural_textures )
         m_materials.m_Copper.SetGenerator( &m_platedCopperMaterial );
 
     m_materials.m_NonPlatedCopper = BLINN_PHONG_MATERIAL(
             ConvertSRGBToLinear( SFVEC3F( 0.191f, 0.073f, 0.022f ) ), SFVEC3F( 0.0f, 0.0f, 0.0f ),
             SFVEC3F( 0.256f, 0.137f, 0.086f ), 0.15f * 128.0f, 0.0f, 0.0f );
 
-    if( m_boardAdapter.GetFlag( FL_RENDER_RAYTRACING_PROCEDURAL_TEXTURES ) )
+    if( m_boardAdapter.m_Cfg->m_Render.raytrace_procedural_textures )
         m_materials.m_NonPlatedCopper.SetGenerator( &m_copperMaterial );
 
     m_materials.m_Paste = BLINN_PHONG_MATERIAL(
@@ -132,7 +125,7 @@ void RENDER_3D_RAYTRACE::setupMaterials()
                                   (SFVEC3F) m_boardAdapter.m_SilkScreenColorTop ) ),
                         SFVEC3F( 0.0f ), SFVEC3F( 0.10f ) ), 0.078125f * 128.0f, 0.0f, 0.0f );
 
-    if( m_boardAdapter.GetFlag( FL_RENDER_RAYTRACING_PROCEDURAL_TEXTURES ) )
+    if( m_boardAdapter.m_Cfg->m_Render.raytrace_procedural_textures )
         m_materials.m_SilkS.SetGenerator( &m_silkScreenMaterial );
 
     // Assume that SolderMaskTop == SolderMaskBot
@@ -153,7 +146,7 @@ void RENDER_3D_RAYTRACE::setupMaterials()
     m_materials.m_SolderMask.SetCastShadows( true );
     m_materials.m_SolderMask.SetRefractionRayCount( 1 );
 
-    if( m_boardAdapter.GetFlag( FL_RENDER_RAYTRACING_PROCEDURAL_TEXTURES ) )
+    if( m_boardAdapter.m_Cfg->m_Render.raytrace_procedural_textures )
         m_materials.m_SolderMask.SetGenerator( &m_solderMaskMaterial );
 
     m_materials.m_EpoxyBoard =
@@ -166,7 +159,7 @@ void RENDER_3D_RAYTRACE::setupMaterials()
 
     m_materials.m_EpoxyBoard.SetAbsorvance( 10.0f );
 
-    if( m_boardAdapter.GetFlag( FL_RENDER_RAYTRACING_PROCEDURAL_TEXTURES ) )
+    if( m_boardAdapter.m_Cfg->m_Render.raytrace_procedural_textures )
         m_materials.m_EpoxyBoard.SetGenerator( &m_boardMaterial );
 
     SFVEC3F bgTop = ConvertSRGBToLinear( (SFVEC3F) m_boardAdapter.m_BgColorTop );
@@ -278,11 +271,11 @@ void RENDER_3D_RAYTRACE::createItemsFromContainer( const BVH_CONTAINER_2D* aCont
             // layer and the flag is set, then clip the silk at the outer edge of the annular ring,
             // rather than the at the outer edge of the copper plating.
             const BVH_CONTAINER_2D& throughHoleOuter =
-                    ( m_boardAdapter.GetFlag( FL_CLIP_SILK_ON_VIA_ANNULUS )
-                            && m_boardAdapter.GetFlag( FL_USE_REALISTIC_MODE )
-                            && ( ( aLayer_id == B_SilkS ) || ( aLayer_id == F_SilkS ) ) ) ?
-                            m_boardAdapter.GetThroughHoleAnnularRings() :
-                            m_boardAdapter.GetThroughHoleOds();
+                    m_boardAdapter.m_Cfg->m_Render.clip_silk_on_via_annulus
+                        && m_boardAdapter.m_Cfg->m_Render.realistic
+                        && ( aLayer_id == B_SilkS || aLayer_id == F_SilkS ) ?
+                                                    m_boardAdapter.GetThroughHoleAnnularRings() :
+                                                    m_boardAdapter.GetThroughHoleOds();
 
             if( !throughHoleOuter.GetList().empty() )
             {
@@ -308,8 +301,8 @@ void RENDER_3D_RAYTRACE::createItemsFromContainer( const BVH_CONTAINER_2D* aCont
 
         const MAP_CONTAINER_2D_BASE& mapLayers = m_boardAdapter.GetLayerMap();
 
-        if( m_boardAdapter.GetFlag( FL_SUBTRACT_MASK_FROM_SILK )
-            && m_boardAdapter.GetFlag( FL_USE_REALISTIC_MODE )
+        if( m_boardAdapter.m_Cfg->m_Render.subtract_mask_from_silk
+            && m_boardAdapter.m_Cfg->m_Render.realistic
             && (    ( aLayer_id == B_SilkS && mapLayers.find( B_Mask ) != mapLayers.end() )
                  || ( aLayer_id == F_SilkS && mapLayers.find( F_Mask ) != mapLayers.end() ) ) )
         {
@@ -439,7 +432,7 @@ void RENDER_3D_RAYTRACE::Reload( REPORTER* aStatusReporter, REPORTER* aWarningRe
                                         *m_boardAdapter.GetBoard(), ii );
             }
 
-            if( m_boardAdapter.GetFlag( FL_SHOW_BOARD_BODY ) )
+            if( m_boardAdapter.m_Cfg->m_Render.show_board_body )
             {
                 const LIST_OBJECT2D& listObjects = m_outlineBoard2dObjects->GetList();
 
@@ -592,7 +585,7 @@ void RENDER_3D_RAYTRACE::Reload( REPORTER* aStatusReporter, REPORTER* aWarningRe
         case F_Paste:
             materialLayer = &m_materials.m_Paste;
 
-            if( m_boardAdapter.GetFlag( FL_USE_REALISTIC_MODE ) )
+            if( m_boardAdapter.m_Cfg->m_Render.realistic )
                 layerColor = m_boardAdapter.m_SolderPasteColor;
             else
                 layerColor = m_boardAdapter.GetLayerColor( layer_id );
@@ -602,7 +595,7 @@ void RENDER_3D_RAYTRACE::Reload( REPORTER* aStatusReporter, REPORTER* aWarningRe
         case B_SilkS:
             materialLayer = &m_materials.m_SilkS;
 
-            if( m_boardAdapter.GetFlag( FL_USE_REALISTIC_MODE ) )
+            if( m_boardAdapter.m_Cfg->m_Render.realistic )
                 layerColor = m_boardAdapter.m_SilkScreenColorBot;
             else
                 layerColor = m_boardAdapter.GetLayerColor( layer_id );
@@ -612,7 +605,7 @@ void RENDER_3D_RAYTRACE::Reload( REPORTER* aStatusReporter, REPORTER* aWarningRe
         case F_SilkS:
             materialLayer = &m_materials.m_SilkS;
 
-            if( m_boardAdapter.GetFlag( FL_USE_REALISTIC_MODE ) )
+            if( m_boardAdapter.m_Cfg->m_Render.realistic )
                 layerColor = m_boardAdapter.m_SilkScreenColorTop;
             else
                 layerColor = m_boardAdapter.GetLayerColor( layer_id );
@@ -636,9 +629,9 @@ void RENDER_3D_RAYTRACE::Reload( REPORTER* aStatusReporter, REPORTER* aWarningRe
             break;
 
         default:
-            if( m_boardAdapter.GetFlag( FL_USE_REALISTIC_MODE ) )
+            if( m_boardAdapter.m_Cfg->m_Render.realistic )
             {
-                if( m_boardAdapter.GetFlag( FL_RENDER_PLATED_PADS_AS_PLATED ) )
+                if( m_boardAdapter.m_Cfg->m_Render.renderPlatedPadsAsPlated )
                     layerColor = SFVEC3F( 184.0f / 255.0f, 115.0f / 255.0f, 50.0f / 255.0f );
                 else
                     layerColor = m_boardAdapter.m_CopperColor;
@@ -656,8 +649,8 @@ void RENDER_3D_RAYTRACE::Reload( REPORTER* aStatusReporter, REPORTER* aWarningRe
     } // for each layer on map
 
     // Create plated copper
-    if( m_boardAdapter.GetFlag( FL_RENDER_PLATED_PADS_AS_PLATED )
-            && m_boardAdapter.GetFlag( FL_USE_REALISTIC_MODE ) )
+    if( m_boardAdapter.m_Cfg->m_Render.renderPlatedPadsAsPlated
+            && m_boardAdapter.m_Cfg->m_Render.realistic )
     {
         createItemsFromContainer( m_boardAdapter.GetPlatedPadsFront(), F_Cu, &m_materials.m_Copper,
                                   m_boardAdapter.m_CopperColor,
@@ -674,7 +667,8 @@ void RENDER_3D_RAYTRACE::Reload( REPORTER* aStatusReporter, REPORTER* aWarningRe
         // Solder mask layers are "negative" layers so the elements that we have in the container
         // should remove the board outline. We will check for all objects in the outline if it
         // intersects any object in the layer container and also any hole.
-        if( m_boardAdapter.GetFlag( FL_SOLDERMASK ) && !m_outlineBoard2dObjects->GetList().empty() )
+        if( m_boardAdapter.m_Cfg->m_Render.show_soldermask
+                && !m_outlineBoard2dObjects->GetList().empty() )
         {
             const MATERIAL* materialLayer = &m_materials.m_SolderMask;
 
@@ -693,7 +687,7 @@ void RENDER_3D_RAYTRACE::Reload( REPORTER* aStatusReporter, REPORTER* aWarningRe
 
                 SFVEC3F layerColor;
 
-                if( m_boardAdapter.GetFlag( FL_USE_REALISTIC_MODE ) )
+                if( m_boardAdapter.m_Cfg->m_Render.realistic )
                 {
                     if( layer_id == B_Mask )
                         layerColor = m_boardAdapter.m_SolderMaskColorBot;
@@ -798,7 +792,7 @@ void RENDER_3D_RAYTRACE::Reload( REPORTER* aStatusReporter, REPORTER* aWarningRe
     if( !aOnlyLoadCopperAndShapes )
     {
         // Add floor
-        if( m_boardAdapter.GetFlag( FL_RENDER_RAYTRACING_BACKFLOOR ) )
+        if( m_boardAdapter.m_Cfg->m_Render.raytrace_backfloor )
         {
             BBOX_3D boardBBox = m_boardAdapter.GetBBox();
 
@@ -878,41 +872,47 @@ void RENDER_3D_RAYTRACE::Reload( REPORTER* aStatusReporter, REPORTER* aWarningRe
                            && ( aSource.b < ( 1.0f / 255.0f ) ) );
                 };
 
-        m_cameraLight = new DIRECTIONAL_LIGHT( SFVEC3F( 0.0f, 0.0f, 0.0f ),
-                                               m_boardAdapter.m_RtCameraLightColor );
+        SFVEC3F cameraLightColor =
+                m_boardAdapter.GetColor( m_boardAdapter.m_Cfg->m_Render.raytrace_lightColorCamera );
+        SFVEC3F topLightColor =
+                m_boardAdapter.GetColor( m_boardAdapter.m_Cfg->m_Render.raytrace_lightColorTop );
+        SFVEC3F bottomLightColor =
+                m_boardAdapter.GetColor( m_boardAdapter.m_Cfg->m_Render.raytrace_lightColorBottom );
+
+        m_cameraLight = new DIRECTIONAL_LIGHT( SFVEC3F( 0.0f, 0.0f, 0.0f ), cameraLightColor );
         m_cameraLight->SetCastShadows( false );
 
-        if( !IsColorZero( m_boardAdapter.m_RtCameraLightColor ) )
+        if( !IsColorZero( cameraLightColor ) )
             m_lights.push_back( m_cameraLight );
 
         const SFVEC3F& boardCenter = m_boardAdapter.GetBBox().GetCenter();
 
-        if( !IsColorZero( m_boardAdapter.m_RtLightColorTop ) )
+        if( !IsColorZero( topLightColor ) )
         {
             m_lights.push_back( new POINT_LIGHT( SFVEC3F( boardCenter.x, boardCenter.y,
                                                           +RANGE_SCALE_3D * 2.0f ),
-                                                 m_boardAdapter.m_RtLightColorTop ) );
+                                                 topLightColor ) );
         }
 
-        if( !IsColorZero( m_boardAdapter.m_RtLightColorBottom ) )
+        if( !IsColorZero( bottomLightColor ) )
         {
             m_lights.push_back( new POINT_LIGHT( SFVEC3F( boardCenter.x, boardCenter.y,
                                                           -RANGE_SCALE_3D * 2.0f ),
-                                                 m_boardAdapter.m_RtLightColorBottom ) );
+                                                 bottomLightColor ) );
         }
 
-        wxASSERT( m_boardAdapter.m_RtLightColor.size()
-                  == m_boardAdapter.m_RtLightSphericalCoords.size() );
-
-        for( size_t i = 0; i < m_boardAdapter.m_RtLightColor.size(); ++i )
+        for( size_t i = 0; i < m_boardAdapter.m_Cfg->m_Render.raytrace_lightColor.size(); ++i )
         {
-            if( !IsColorZero( m_boardAdapter.m_RtLightColor[i] ) )
+            SFVEC3F lightColor =
+                    m_boardAdapter.GetColor( m_boardAdapter.m_Cfg->m_Render.raytrace_lightColor[i] );
+
+            if( !IsColorZero( lightColor ) )
             {
-                const SFVEC2F sc = m_boardAdapter.m_RtLightSphericalCoords[i];
+                const SFVEC2F sc = m_boardAdapter.GetSphericalCoord( i );
 
                 m_lights.push_back( new DIRECTIONAL_LIGHT(
                         SphericalToCartesian( glm::pi<float>() * sc.x, glm::pi<float>() * sc.y ),
-                        m_boardAdapter.m_RtLightColor[i] ) );
+                        lightColor ) );
             }
         }
     }
@@ -970,7 +970,7 @@ void RENDER_3D_RAYTRACE::insertHole( const PCB_VIA* aVia )
 
     objPtr->SetMaterial( &m_materials.m_Copper );
 
-    if( m_boardAdapter.GetFlag( FL_USE_REALISTIC_MODE ) )
+    if( m_boardAdapter.m_Cfg->m_Render.realistic )
         objPtr->SetColor( ConvertSRGBToLinear( m_boardAdapter.m_CopperColor ) );
     else if( aVia->GetViaType() == VIATYPE::MICROVIA )
         objPtr->SetColor( ConvertSRGBToLinear( m_boardAdapter.GetItemColor( LAYER_VIA_MICROVIA ) ) );
@@ -989,7 +989,7 @@ void RENDER_3D_RAYTRACE::insertHole( const PAD* aPad )
 
     SFVEC3F objColor;
 
-    if( m_boardAdapter.GetFlag( FL_USE_REALISTIC_MODE ) )
+    if( m_boardAdapter.m_Cfg->m_Render.realistic )
         objColor = m_boardAdapter.m_CopperColor;
     else
         objColor = m_boardAdapter.GetItemColor( LAYER_PADS_TH );
@@ -1195,9 +1195,9 @@ void RENDER_3D_RAYTRACE::load3DModels( CONTAINER_3D& aDstContainer, bool aSkipMa
     if( !m_boardAdapter.GetBoard() )
         return;
 
-    if( !m_boardAdapter.GetFlag( FL_FP_ATTRIBUTES_NORMAL )
-      && !m_boardAdapter.GetFlag( FL_FP_ATTRIBUTES_NORMAL_INSERT )
-      && !m_boardAdapter.GetFlag( FL_FP_ATTRIBUTES_VIRTUAL ) )
+    if( !m_boardAdapter.m_Cfg->m_Render.show_footprints_normal
+          && !m_boardAdapter.m_Cfg->m_Render.show_footprints_insert
+          && !m_boardAdapter.m_Cfg->m_Render.show_footprints_virtual )
     {
         return;
     }
@@ -1312,7 +1312,7 @@ MODEL_MATERIALS* RENDER_3D_RAYTRACE::getModelMaterial( const S3DMODEL* a3DModel 
 
         for( unsigned int imat = 0; imat < a3DModel->m_MaterialsSize; ++imat )
         {
-            if( m_boardAdapter.GetMaterialMode() == MATERIAL_MODE::NORMAL )
+            if( m_boardAdapter.m_Cfg->m_Render.material_mode == MATERIAL_MODE::NORMAL )
             {
                 const SMATERIAL& material = a3DModel->m_Materials[imat];
 
@@ -1334,7 +1334,7 @@ MODEL_MATERIALS* RENDER_3D_RAYTRACE::getModelMaterial( const S3DMODEL* a3DModel 
                         ConvertSRGBToLinear( material.m_Specular ), material.m_Shininess * 180.0f,
                         material.m_Transparency, reflectionFactor );
 
-                if( m_boardAdapter.GetFlag( FL_RENDER_RAYTRACING_PROCEDURAL_TEXTURES ) )
+                if( m_boardAdapter.m_Cfg->m_Render.raytrace_procedural_textures )
                 {
                     // Guess material type and apply a normal perturbator
                     if( ( RGBtoGray( material.m_Diffuse ) < 0.3f )
@@ -1502,7 +1502,7 @@ void RENDER_3D_RAYTRACE::addModels( CONTAINER_3D& aDstContainer, const S3DMODEL*
                                 const SFVEC3F diffuseColor =
                                         a3DModel->m_Materials[mesh.m_MaterialIdx].m_Diffuse;
 
-                                if( m_boardAdapter.GetMaterialMode() == MATERIAL_MODE::CAD_MODE )
+                                if( m_boardAdapter.m_Cfg->m_Render.material_mode == MATERIAL_MODE::CAD_MODE )
                                     newTriangle->SetColor( ConvertSRGBToLinear(
                                             MaterialDiffuseToColorCAD( diffuseColor ) ) );
                                 else
@@ -1510,7 +1510,8 @@ void RENDER_3D_RAYTRACE::addModels( CONTAINER_3D& aDstContainer, const S3DMODEL*
                             }
                             else
                             {
-                                if( m_boardAdapter.GetMaterialMode() == MATERIAL_MODE::CAD_MODE )
+                                if( m_boardAdapter.m_Cfg->m_Render.material_mode == MATERIAL_MODE::CAD_MODE )
+                                {
                                     newTriangle->SetColor(
                                             ConvertSRGBToLinear( MaterialDiffuseToColorCAD(
                                                     mesh.m_Color[idx0] ) ),
@@ -1518,11 +1519,14 @@ void RENDER_3D_RAYTRACE::addModels( CONTAINER_3D& aDstContainer, const S3DMODEL*
                                                     mesh.m_Color[idx1] ) ),
                                             ConvertSRGBToLinear( MaterialDiffuseToColorCAD(
                                                     mesh.m_Color[idx2] ) ) );
+                                }
                                 else
+                                {
                                     newTriangle->SetColor(
                                             ConvertSRGBToLinear( mesh.m_Color[idx0] ),
                                             ConvertSRGBToLinear( mesh.m_Color[idx1] ),
                                             ConvertSRGBToLinear( mesh.m_Color[idx2] ) );
+                                }
                             }
                         }
                     }

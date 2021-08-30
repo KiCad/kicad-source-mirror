@@ -211,72 +211,63 @@ TOOL_ACTION EDA_3D_ACTIONS::showTHT( "3DViewer.Control.attributesTHT",
         AS_ACTIVE,
         'T', "",
         _( "Toggle Through Hole 3D models" ), _( "Toggle 3D models for 'Through hole' type components" ),
-        BITMAPS::show_tht, AF_NONE, (void*) FL_FP_ATTRIBUTES_NORMAL );
+        BITMAPS::show_tht, AF_NONE );
 
 TOOL_ACTION EDA_3D_ACTIONS::showSMD( "3DViewer.Control.attributesSMD",
         AS_ACTIVE,
         'S', "",
         _( "Toggle SMD 3D models" ), _( "Toggle 3D models for 'Surface mount' type components" ),
-        BITMAPS::show_smt, AF_NONE, (void*) FL_FP_ATTRIBUTES_NORMAL_INSERT );
+        BITMAPS::show_smt, AF_NONE );
 
 TOOL_ACTION EDA_3D_ACTIONS::showVirtual( "3DViewer.Control.attributesOther",
         AS_ACTIVE,
         'V', "",
         _( "Toggle Other 3D models" ), _( "Toggle 3D models for 'Other' type components" ),
-        BITMAPS::show_other, AF_NONE, (void*) FL_FP_ATTRIBUTES_VIRTUAL );
+        BITMAPS::show_other, AF_NONE );
 
 TOOL_ACTION EDA_3D_ACTIONS::showBBoxes( "3DViewer.Control.showBoundingBoxes",
          AS_GLOBAL, 0, "",
          _( "Show Model Bounding Boxes" ), _( "Show Model Bounding Boxes" ),
-         BITMAPS::ortho, AF_NONE, (void*) FL_RENDER_OPENGL_SHOW_MODEL_BBOX );
+         BITMAPS::ortho, AF_NONE );
 
 TOOL_ACTION EDA_3D_ACTIONS::toggleRealisticMode( "3DViewer.Control.toggleRealisticMode",
         AS_GLOBAL, 0, "",
-        _( "Toggle realistic mode" ), _( "Toggle realistic mode" ),
-        BITMAPS::INVALID_BITMAP, AF_NONE, (void*) FL_USE_REALISTIC_MODE );
+        _( "Toggle realistic mode" ), _( "Toggle realistic mode" ) );
 
 TOOL_ACTION EDA_3D_ACTIONS::toggleBoardBody( "3DViewer.Control.toggleBoardBody",
         AS_GLOBAL, 0, "",
-        _( "Toggle board body display" ), _( "Toggle board body display" ),
-        BITMAPS::INVALID_BITMAP, AF_NONE, (void*) FL_SHOW_BOARD_BODY );
+        _( "Toggle board body display" ), _( "Toggle board body display" ) );
 
 TOOL_ACTION EDA_3D_ACTIONS::showAxis( "3DViewer.Control.showAxis",
         AS_GLOBAL, 0, "",
         _( "Show 3D Axis" ), _( "Show 3D Axis" ),
-        BITMAPS::axis3d_front, AF_NONE, (void*) FL_AXIS );
+        BITMAPS::axis3d_front, AF_NONE );
 
 TOOL_ACTION EDA_3D_ACTIONS::toggleZones( "3DViewer.Control.toggleZones",
         AS_GLOBAL, 0, "",
-        _( "Toggle zone display" ), _( "Toggle zone display" ),
-        BITMAPS::INVALID_BITMAP, AF_NONE, (void*) FL_ZONE );
+        _( "Toggle zone display" ), _( "Toggle zone display" ) );
 
 TOOL_ACTION EDA_3D_ACTIONS::toggleAdhesive( "3DViewer.Control.toggleAdhesive",
         AS_GLOBAL, 0, "",
-        _( "Toggle adhesive display" ), _( "Toggle display of adhesive layers" ),
-        BITMAPS::INVALID_BITMAP, AF_NONE, (void*) FL_ADHESIVE );
+        _( "Toggle adhesive display" ), _( "Toggle display of adhesive layers" ) );
 
 TOOL_ACTION EDA_3D_ACTIONS::toggleSilk( "3DViewer.Control.toggleSilk",
         AS_GLOBAL, 0, "",
-        _( "Toggle silkscreen display" ), _( "Toggle display of silkscreen layers" ),
-        BITMAPS::INVALID_BITMAP, AF_NONE, (void*) FL_SILKSCREEN );
+        _( "Toggle silkscreen display" ), _( "Toggle display of silkscreen layers" ) );
 
 TOOL_ACTION EDA_3D_ACTIONS::toggleSolderMask( "3DViewer.Control.toggleSolderMask",
         AS_GLOBAL, 0, "",
-        _( "Toggle solder mask display" ), _( "Toggle display of solder mask layers" ),
-        BITMAPS::INVALID_BITMAP, AF_NONE, (void*) FL_SOLDERMASK );
+        _( "Toggle solder mask display" ), _( "Toggle display of solder mask layers" ) );
 
 TOOL_ACTION EDA_3D_ACTIONS::toggleSolderPaste( "3DViewer.Control.toggleSolderPaste",
         AS_GLOBAL, 0, "",
-        _( "Toggle solder paste display" ), _( "Toggle display of solder paste layers" ),
-        BITMAPS::INVALID_BITMAP, AF_NONE, (void*) FL_SOLDERPASTE );
+        _( "Toggle solder paste display" ), _( "Toggle display of solder paste layers" ) );
 
 TOOL_ACTION EDA_3D_ACTIONS::toggleComments( "3DViewer.Control.toggleComments",
         AS_GLOBAL, 0, "",
-        _( "Toggle comments display" ), _( "Toggle display of comments and drawings layers" ),
-        BITMAPS::INVALID_BITMAP, AF_NONE, (void*) FL_COMMENTS );
+        _( "Toggle comments display" ), _( "Toggle display of comments and drawings layers" ) );
 
 TOOL_ACTION EDA_3D_ACTIONS::toggleECO( "3DViewer.Control.toggleECO",
         AS_GLOBAL, 0, "",
-        _( "Toggle ECO display" ), _( "Toggle display of ECO layers" ),
-        BITMAPS::INVALID_BITMAP, AF_NONE, (void*) FL_ECO );
+        _( "Toggle ECO display" ), _( "Toggle display of ECO layers" ) );
 

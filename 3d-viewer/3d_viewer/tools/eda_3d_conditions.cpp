@@ -30,37 +30,9 @@
 using namespace std::placeholders;
 
 
-SELECTION_CONDITION EDA_3D_CONDITIONS::MaterialMode( MATERIAL_MODE aMaterial )
-{
-    return std::bind( &EDA_3D_CONDITIONS::materialModeFunction, _1, m_adapter, aMaterial );
-}
-
-
-SELECTION_CONDITION EDA_3D_CONDITIONS::Flag( DISPLAY3D_FLG aFlag )
-{
-    return std::bind( &EDA_3D_CONDITIONS::flagFunction, _1, m_adapter, aFlag );
-}
-
-
 SELECTION_CONDITION EDA_3D_CONDITIONS::GridSize( GRID3D_TYPE aGridSize )
 {
     return std::bind( &EDA_3D_CONDITIONS::gridSizeFunction, _1, m_adapter, aGridSize );
-}
-
-
-bool EDA_3D_CONDITIONS::materialModeFunction( const SELECTION& aSelection,
-                                              BOARD_ADAPTER* aAdapter,
-                                              MATERIAL_MODE aMaterial )
-{
-    return aAdapter->GetMaterialMode() == aMaterial;
-}
-
-
-bool EDA_3D_CONDITIONS::flagFunction( const SELECTION& aSelection,
-                                      BOARD_ADAPTER* aAdapter,
-                                      DISPLAY3D_FLG aFlag )
-{
-    return aAdapter->GetFlag( aFlag );
 }
 
 
@@ -68,5 +40,5 @@ bool EDA_3D_CONDITIONS::gridSizeFunction( const SELECTION& aSelection,
                                           BOARD_ADAPTER* aAdapter,
                                           GRID3D_TYPE aGridSize )
 {
-    return aAdapter->GetGridType() == aGridSize;
+    return aAdapter->m_Cfg->m_Render.grid_type == aGridSize;
 }

@@ -45,24 +45,6 @@ public:
     {}
 
     /**
-     * Creates a functor that tests if a specific material mode is active.
-     *
-     * @param aAdapter is the board adapter the setting is in
-     * @param aMaterial is the material mode to test for.
-     * @return Functor testing if a material mode is active.
-     */
-    SELECTION_CONDITION MaterialMode( MATERIAL_MODE aMaterial );
-
-    /**
-     * Creates a functor that tests if the board adapter has a flag set currently.
-     *
-     * @param aAdapter is the board adapter the setting is in
-     * @param aFlag is the flag to test for.
-     * @return Functor testing if the flag is set.
-     */
-    SELECTION_CONDITION Flag( DISPLAY3D_FLG aFlag );
-
-    /**
      * Creates a functor that tests the current grid size.
      *
      * @param aAdapter is the board adapter the setting is in
@@ -72,14 +54,6 @@ public:
     SELECTION_CONDITION GridSize( GRID3D_TYPE aGridSize );
 
 private:
-    ///< Helper function used by MaterialMode()
-    static bool materialModeFunction( const SELECTION& aSelection, BOARD_ADAPTER* aAdapter,
-                                      MATERIAL_MODE aMaterial );
-
-    ///< Helper function used by Flag()
-    static bool flagFunction( const SELECTION& aSelection, BOARD_ADAPTER* aAdapter,
-                              DISPLAY3D_FLG aFlag );
-
     ///< Helper function used by GridDize()
     static bool gridSizeFunction( const SELECTION& aSelection, BOARD_ADAPTER* aAdapter,
                                   GRID3D_TYPE aGridSize );

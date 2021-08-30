@@ -30,7 +30,6 @@
 #include <symbol_library.h>
 #include <connection_graph.h>
 #include <gal/graphics_abstraction_layer.h>
-#include <geometry/geometry_utils.h>
 #include <geometry/shape_segment.h>
 #include <geometry/shape_simple.h>
 #include <gr_text.h>
@@ -40,7 +39,6 @@
 #include <lib_pin.h>
 #include <lib_text.h>
 #include <math/util.h>
-#include <plotters/plotter.h>
 #include <sch_bitmap.h>
 #include <sch_bus_entry.h>
 #include <sch_symbol.h>

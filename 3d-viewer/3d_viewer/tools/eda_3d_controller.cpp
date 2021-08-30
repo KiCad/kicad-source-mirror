@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -152,17 +152,17 @@ int EDA_3D_CONTROLLER::RotateView( const TOOL_EVENT& aEvent )
 
     switch( aEvent.Parameter<ROTATION_DIR>() )
     {
-    case ROTATION_DIR::X_CW: m_camera->RotateX( -rotIncrement ); break;
+    case ROTATION_DIR::X_CW:  m_camera->RotateX( -rotIncrement ); break;
     case ROTATION_DIR::X_CCW: m_camera->RotateX( rotIncrement );  break;
     /// Y rotations are backward b/c the RHR has Y pointing into the screen
-    case ROTATION_DIR::Y_CW: m_camera->RotateY( rotIncrement ); break;
-    case ROTATION_DIR::Y_CCW: m_camera->RotateY( -rotIncrement );  break;
-    case ROTATION_DIR::Z_CW: m_camera->RotateZ( -rotIncrement ); break;
+    case ROTATION_DIR::Y_CW:  m_camera->RotateY( rotIncrement );  break;
+    case ROTATION_DIR::Y_CCW: m_camera->RotateY( -rotIncrement ); break;
+    case ROTATION_DIR::Z_CW:  m_camera->RotateZ( -rotIncrement ); break;
     case ROTATION_DIR::Z_CCW: m_camera->RotateZ( rotIncrement );  break;
-    default:                wxFAIL;                             break;
+    default:                wxFAIL;                               break;
     }
 
-    if( m_boardAdapter->GetRenderEngine() == RENDER_ENGINE::OPENGL )
+    if( m_boardAdapter->m_Cfg->m_Render.engine == RENDER_ENGINE::OPENGL )
         m_canvas->Request_refresh();
     else
         m_canvas->RenderRaytracingRequest();
@@ -173,9 +173,7 @@ int EDA_3D_CONTROLLER::RotateView( const TOOL_EVENT& aEvent )
 
 int EDA_3D_CONTROLLER::SetMaterial( const TOOL_EVENT& aEvent )
 {
-    MATERIAL_MODE mode = aEvent.Parameter<MATERIAL_MODE>();
-
-    m_boardAdapter->SetMaterialMode( mode );
+    m_boardAdapter->m_Cfg->m_Render.material_mode = aEvent.Parameter<MATERIAL_MODE>();
 
     if( auto* viewer = dynamic_cast<EDA_3D_VIEWER_FRAME*>( m_toolMgr->GetToolHolder() ) )
         viewer->NewDisplay( true );
@@ -190,7 +188,7 @@ int EDA_3D_CONTROLLER::ToggleOrtho( const TOOL_EVENT& aEvent )
 {
     m_camera->ToggleProjection();
 
-    if( m_boardAdapter->GetRenderEngine() == RENDER_ENGINE::OPENGL )
+    if( m_boardAdapter->m_Cfg->m_Render.engine == RENDER_ENGINE::OPENGL )
         m_canvas->Request_refresh();
     else
         m_canvas->RenderRaytracingRequest();
@@ -198,56 +196,91 @@ int EDA_3D_CONTROLLER::ToggleOrtho( const TOOL_EVENT& aEvent )
     return 0;
 }
 
-
 int EDA_3D_CONTROLLER::ToggleVisibility( const TOOL_EVENT& aEvent )
 {
-    DISPLAY3D_FLG flag = aEvent.Parameter<DISPLAY3D_FLG>();
+    bool reload = false;
 
-    m_boardAdapter->SetFlag( flag, !m_boardAdapter->GetFlag( flag ) );
+#define FLIP( x ) x = !x
 
-    switch( flag )
+    if( aEvent.IsAction( &EDA_3D_ACTIONS::showTHT ) )
     {
-    // These commands do not request a 3D scene rebuild (and do not exist in raytracing):
-    case FL_RENDER_OPENGL_SHOW_MODEL_BBOX:
-    case FL_AXIS:
-        m_canvas->Request_refresh();
-        break;
+        FLIP( m_boardAdapter->m_Cfg->m_Render.show_footprints_normal );
+        reload = true;
+    }
+    else if( aEvent.IsAction( &EDA_3D_ACTIONS::showSMD ) )
+    {
+        FLIP( m_boardAdapter->m_Cfg->m_Render.show_footprints_insert );
+        reload = true;
+    }
+    else if( aEvent.IsAction( &EDA_3D_ACTIONS::showVirtual ) )
+    {
+        FLIP( m_boardAdapter->m_Cfg->m_Render.show_footprints_virtual );
+        reload = true;
+    }
+    else if( aEvent.IsAction( &EDA_3D_ACTIONS::showBBoxes ) )
+    {
+        FLIP( m_boardAdapter->m_Cfg->m_Render.opengl_show_model_bbox );
+    }
+    else if( aEvent.IsAction( &EDA_3D_ACTIONS::toggleRealisticMode ) )
+    {
+        FLIP( m_boardAdapter->m_Cfg->m_Render.realistic );
+    }
+    else if( aEvent.IsAction( &EDA_3D_ACTIONS::toggleBoardBody ) )
+    {
+        FLIP( m_boardAdapter->m_Cfg->m_Render.show_board_body );
+    }
+    else if( aEvent.IsAction( &EDA_3D_ACTIONS::showAxis ) )
+    {
+        FLIP( m_boardAdapter->m_Cfg->m_Render.show_axis );
+    }
+    else if( aEvent.IsAction( &EDA_3D_ACTIONS::toggleZones ) )
+    {
+        FLIP( m_boardAdapter->m_Cfg->m_Render.show_zones );
+    }
+    else if( aEvent.IsAction( &EDA_3D_ACTIONS::toggleAdhesive ) )
+    {
+        FLIP( m_boardAdapter->m_Cfg->m_Render.show_adhesive );
+    }
+    else if( aEvent.IsAction( &EDA_3D_ACTIONS::toggleSilk ) )
+    {
+        FLIP( m_boardAdapter->m_Cfg->m_Render.show_silkscreen );
+    }
+    else if( aEvent.IsAction( &EDA_3D_ACTIONS::toggleSolderMask ) )
+    {
+        FLIP( m_boardAdapter->m_Cfg->m_Render.show_soldermask );
+    }
+    else if( aEvent.IsAction( &EDA_3D_ACTIONS::toggleSolderPaste ) )
+    {
+        FLIP( m_boardAdapter->m_Cfg->m_Render.show_solderpaste );
+    }
+    else if( aEvent.IsAction( &EDA_3D_ACTIONS::toggleComments ) )
+    {
+        FLIP( m_boardAdapter->m_Cfg->m_Render.show_comments );
+    }
+    else if( aEvent.IsAction( &EDA_3D_ACTIONS::toggleECO ) )
+    {
+        FLIP( m_boardAdapter->m_Cfg->m_Render.show_eco );
+    }
 
-    // These commands do not request a 3D scene rebuild and exist in raytracing:
-    case FL_RENDER_RAYTRACING_SHADOWS:
-    case FL_RENDER_RAYTRACING_REFRACTIONS:
-    case FL_RENDER_RAYTRACING_REFLECTIONS:
-    case FL_RENDER_RAYTRACING_ANTI_ALIASING:
-        if( m_boardAdapter->GetRenderEngine() == RENDER_ENGINE::OPENGL )
-            m_canvas->Request_refresh();
-        else
-            m_canvas->RenderRaytracingRequest();
-
-        break;
-
-    case FL_FP_ATTRIBUTES_NORMAL:
-    case FL_FP_ATTRIBUTES_NORMAL_INSERT:
-    case FL_FP_ATTRIBUTES_VIRTUAL:
-        // Loading 3D shapes can be needed if not yet loaded
-        if( m_boardAdapter->GetRenderEngine() == RENDER_ENGINE::OPENGL )
+    if( reload )
+    {
+        if( m_boardAdapter->m_Cfg->m_Render.engine == RENDER_ENGINE::OPENGL )
         {
-            RENDER_3D_OPENGL* render = static_cast<RENDER_3D_OPENGL*>( m_canvas->GetCurrentRender() );
-            render->Load3dModelsIfNeeded();
+            auto* renderer = static_cast<RENDER_3D_OPENGL*>( m_canvas->GetCurrentRender() );
+            renderer->Load3dModelsIfNeeded();
             m_canvas->Request_refresh();
         }
         else
+        {
             m_canvas->RenderRaytracingRequest();
-
-        break;
-
-    default:
+        }
+    }
+    else
     {
         if( auto viewer = dynamic_cast<EDA_3D_VIEWER_FRAME*>( m_toolMgr->GetToolHolder() ) )
             viewer->NewDisplay( true );
         else
             m_canvas->Request_refresh();
-        break;
-    }
     }
 
     return 0;
@@ -256,8 +289,7 @@ int EDA_3D_CONTROLLER::ToggleVisibility( const TOOL_EVENT& aEvent )
 
 int EDA_3D_CONTROLLER::On3DGridSelection( const TOOL_EVENT& aEvent )
 {
-    GRID3D_TYPE grid = aEvent.Parameter<GRID3D_TYPE>();
-    m_boardAdapter->SetGridType( grid );
+    m_boardAdapter->m_Cfg->m_Render.grid_type = aEvent.Parameter<GRID3D_TYPE>();
 
     if( m_canvas )
         m_canvas->Request_refresh();

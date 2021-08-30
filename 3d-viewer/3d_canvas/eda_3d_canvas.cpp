@@ -432,11 +432,11 @@ void EDA_3D_CANVAS::DoRePaint()
     {
         m_3d_render = m_3d_render_opengl;
         m_render_raytracing_was_requested = false;
-        m_boardAdapter.SetRenderEngine( RENDER_ENGINE::OPENGL );
+        m_boardAdapter.m_Cfg->m_Render.engine = RENDER_ENGINE::OPENGL;
     }
 
     // Check if a raytacing was requested and need to switch to raytracing mode
-    if( m_boardAdapter.GetRenderEngine() == RENDER_ENGINE::OPENGL )
+    if( m_boardAdapter.m_Cfg->m_Render.engine == RENDER_ENGINE::OPENGL )
     {
         const bool was_camera_changed = m_camera.ParametersChanged();
 
@@ -485,7 +485,7 @@ void EDA_3D_CANVAS::DoRePaint()
 
             bool reloadRaytracingForCalculations = false;
 
-            if( m_boardAdapter.GetRenderEngine() == RENDER_ENGINE::OPENGL
+            if( m_boardAdapter.m_Cfg->m_Render.engine == RENDER_ENGINE::OPENGL
                     && m_3d_render_opengl->IsReloadRequestPending() )
             {
                 reloadRaytracingForCalculations = true;
@@ -593,11 +593,10 @@ void EDA_3D_CANVAS::OnMouseWheel( wxMouseEvent& event )
 
     float delta_move = m_delta_move_step_factor * m_camera.GetZoom();
 
-    if( m_boardAdapter.GetFlag( FL_MOUSEWHEEL_PANNING ) )
+    if( m_boardAdapter.m_MousewheelPanning )
         delta_move *= 0.01f * event.GetWheelRotation();
-    else
-        if( event.GetWheelRotation() < 0 )
-            delta_move = -delta_move;
+    else if( event.GetWheelRotation() < 0 )
+        delta_move = -delta_move;
 
     // mousewheel_panning enabled:
     //      wheel           -> pan;
@@ -608,7 +607,7 @@ void EDA_3D_CANVAS::OnMouseWheel( wxMouseEvent& event )
     //      wheel + ctrl    -> horizontal scrolling;
     //      wheel           -> zooming.
 
-    if( m_boardAdapter.GetFlag( FL_MOUSEWHEEL_PANNING ) && !event.ControlDown() )
+    if( m_boardAdapter.m_MousewheelPanning && !event.ControlDown() )
     {
         if( event.GetWheelAxis() == wxMOUSE_WHEEL_HORIZONTAL || event.ShiftDown() )
             m_camera.Pan( SFVEC3F( -delta_move, 0.0f, 0.0f ) );
@@ -617,12 +616,12 @@ void EDA_3D_CANVAS::OnMouseWheel( wxMouseEvent& event )
 
         mouseActivity = true;
     }
-    else if( event.ShiftDown() && !m_boardAdapter.GetFlag( FL_MOUSEWHEEL_PANNING ) )
+    else if( event.ShiftDown() && !m_boardAdapter.m_MousewheelPanning )
     {
         m_camera.Pan( SFVEC3F( 0.0f, -delta_move, 0.0f ) );
         mouseActivity = true;
     }
-    else if( event.ControlDown() && !m_boardAdapter.GetFlag( FL_MOUSEWHEEL_PANNING ) )
+    else if( event.ControlDown() && !m_boardAdapter.m_MousewheelPanning )
     {
         m_camera.Pan( SFVEC3F( delta_move, 0.0f, 0.0f ) );
         mouseActivity = true;
@@ -699,7 +698,7 @@ void EDA_3D_CANVAS::OnMouseMove( wxMouseEvent& event )
 
     m_camera.SetCurMousePosition( nativePosition );
 
-    if( !event.Dragging() && m_boardAdapter.GetRenderEngine() == RENDER_ENGINE::OPENGL )
+    if( !event.Dragging() && m_boardAdapter.m_Cfg->m_Render.engine == RENDER_ENGINE::OPENGL )
     {
         STATUSBAR_REPORTER reporter( m_parentStatusBar,
                                      static_cast<int>( EDA_3D_VIEWER_STATUSBAR::HOVERED_ITEM ) );
@@ -777,7 +776,8 @@ void EDA_3D_CANVAS::OnMouseMove( wxMouseEvent& event )
         }
         else
         {
-            if( m_currentRollOverItem && m_boardAdapter.GetRenderEngine() == RENDER_ENGINE::OPENGL )
+            if( m_currentRollOverItem
+                    && m_boardAdapter.m_Cfg->m_Render.engine == RENDER_ENGINE::OPENGL )
             {
                 m_3d_render_opengl->SetCurrentRollOverItem( nullptr );
                 Request_refresh();
@@ -1111,7 +1111,10 @@ bool EDA_3D_CANVAS::SetView3D( int aKeycode )
 
 void EDA_3D_CANVAS::RenderEngineChanged()
 {
-    switch( m_boardAdapter.GetRenderEngine() )
+    SETTINGS_MANAGER&       mgr = Pgm().GetSettingsManager();
+    EDA_3D_VIEWER_SETTINGS* cfg = mgr.GetAppSettings<EDA_3D_VIEWER_SETTINGS>();
+
+    switch( cfg->m_Render.engine )
     {
     case RENDER_ENGINE::OPENGL:     m_3d_render = m_3d_render_opengl;     break;
     case RENDER_ENGINE::RAYTRACING: m_3d_render = m_3d_render_raytracing; break;

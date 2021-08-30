@@ -97,10 +97,8 @@ PANEL_PREVIEW_3D_MODEL::PANEL_PREVIEW_3D_MODEL( wxWindow* aParent, PCB_BASE_FRAM
                                        aFrame->Prj().Get3DCacheManager() );
 
     m_boardAdapter.SetBoard( m_dummyBoard );
+    m_boardAdapter.m_IsBoardView = false;
     loadSettings();
-
-    m_boardAdapter.SetFlag( FL_USE_SELECTION, false );
-    m_boardAdapter.SetFlag( FL_HIGHLIGHT_ROLLOVER_ITEM, false );
 
     // Create the manager
     m_toolManager = new TOOL_MANAGER;
@@ -174,7 +172,7 @@ void PANEL_PREVIEW_3D_MODEL::loadSettings()
     m_previewPane->SetScaleFactor( dpi.GetScaleFactor() );
 
     // TODO(JE) use all control options
-    m_boardAdapter.SetFlag( FL_MOUSEWHEEL_PANNING, settings->m_Input.scroll_modifier_zoom != 0  );
+    m_boardAdapter.m_MousewheelPanning = settings->m_Input.scroll_modifier_zoom != 0;
 
     COLOR_SETTINGS* colors = Pgm().GetSettingsManager().GetColorSettings();
 
@@ -204,9 +202,7 @@ void PANEL_PREVIEW_3D_MODEL::loadSettings()
 
     if( cfg )
     {
-        m_boardAdapter.SetRenderEngine( RENDER_ENGINE::OPENGL );
-        m_boardAdapter.SetFlag( FL_USE_REALISTIC_MODE, cfg->m_Render.realistic );
-        m_boardAdapter.SetMaterialMode( static_cast<MATERIAL_MODE>( cfg->m_Render.material_mode ) );
+        m_boardAdapter.m_Cfg = cfg;
 
         m_previewPane->SetAnimationEnabled( cfg->m_Camera.animation_enabled );
         m_previewPane->SetMovingSpeedMultiplier( cfg->m_Camera.moving_speed_multiplier );
