@@ -151,14 +151,23 @@ long KIDIALOG::getStyle( KD_TYPE aType )
 }
 
 
-bool OverrideLock( wxWindow* aParent, const wxString& aMessage  )
+bool OverrideLock( wxWindow* aParent, const wxString& aMessage )
 {
+#ifdef __APPLE__
+    // wxMessageDialog gets the button spacing wrong on Mac so we have to use wxRichMessageDialog.
+    // Note that its warning icon is more like wxMessageDialog's error icon, so we use it instead
+    // of wxICON_ERROR.
+    wxRichMessageDialog dlg( aParent, aMessage, _( "File Open Error" ),
+                             wxYES_NO | wxICON_WARNING | wxCENTER );
+    dlg.SetExtendedMessage( _( "Interleaved saves may produce very unexpected results." )
+                                + wxS( "\n" ) );
+    dlg.SetYesNoLabels( _( "OK" ), _( "Open Anyway" ) );
+#else
     wxMessageDialog dlg( aParent, aMessage, _( "File Open Error" ),
-                             wxYES_NO | wxICON_ERROR | wxCENTER );
-
-    // Note: must use the "no" label to get the correct positioning/spacing for a (potentially)
-    // destructive action
-    dlg.SetYesNoLabels( _( "Do Not Open" ), _( "Open Anyway" ) );
+                         wxYES_NO | wxICON_ERROR | wxCENTER );
+    dlg.SetExtendedMessage( _( "Interleaved saves may produce very unexpected results." ) );
+    dlg.SetYesNoLabels( _( "OK" ), _( "Open Anyway" ) );
+#endif
 
     return dlg.ShowModal() == wxID_NO;
 }
@@ -170,7 +179,8 @@ int UnsavedChangesDialog( wxWindow* parent, const wxString& aMessage, bool* aApp
 
     wxRichMessageDialog dlg( parent, aMessage, _( "Save Changes?" ),
                              wxYES_NO | wxCANCEL | wxYES_DEFAULT | wxICON_WARNING | wxCENTER );
-    dlg.SetExtendedMessage( _( "If you don't save, all your changes will be permanently lost." ) );
+    dlg.SetExtendedMessage( _( "If you don't save, all your changes will be permanently lost." )
+                                + wxS( "\n" ) );
     dlg.SetYesNoLabels( _( "Save" ), _( "Discard Changes" ) );
 
     if( aApplyToAll )
@@ -192,7 +202,8 @@ int UnsavedChangesDialog( wxWindow* parent, const wxString& aMessage, bool* aApp
 int UnsavedChangesDialog( wxWindow* parent, const wxString& aMessage )
 {
 #ifdef __APPLE__
-    // wxWidgets gets the button order wrong on Mac so use the other dialog.
+    // wxMessageDialog gets the button order (and spacing) wrong on Mac so we have to use
+    // wxRichMessageDialog.
     return UnsavedChangesDialog( parent, aMessage, nullptr );
 #else
     wxMessageDialog dlg( parent, aMessage, _( "Save Changes?" ),

@@ -113,16 +113,15 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
         return false;
     }
 
-    wxString fullFileName( aFileSet[0] );
+    wxString   fullFileName( aFileSet[0] );
+    wxFileName wx_filename( fullFileName );
 
     // We insist on caller sending us an absolute path, if it does not, we say it's a bug.
-    wxASSERT_MSG( wxFileName( fullFileName ).IsAbsolute(), wxT( "Path is not absolute!" ) );
+    wxASSERT_MSG( wx_filename.IsAbsolute(), wxT( "Path is not absolute!" ) );
 
     if( !LockFile( fullFileName ) )
     {
-        msg.Printf( _( "Schematic file '%s' is already open.\n\n"
-                       "Interleaved saves may produce very unexpected results.\n" ),
-                    fullFileName );
+        msg.Printf( _( "Schematic '%s' is already open." ), wx_filename.GetFullName() );
 
         if( !OverrideLock( this, msg ) )
             return false;
@@ -1119,6 +1118,7 @@ bool SCH_EDIT_FRAME::doAutoSave()
 
 bool SCH_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType )
 {
+    wxFileName             filename( aFileName );
     wxFileName             newfilename;
     SCH_SHEET_LIST         sheetList = Schematic().GetSheets();
     SCH_IO_MGR::SCH_FILE_T fileType = (SCH_IO_MGR::SCH_FILE_T) aFileType;
@@ -1129,15 +1129,12 @@ bool SCH_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType )
     case SCH_IO_MGR::SCH_CADSTAR_ARCHIVE:
     case SCH_IO_MGR::SCH_EAGLE:
         // We insist on caller sending us an absolute path, if it does not, we say it's a bug.
-        wxASSERT_MSG( wxFileName( aFileName ).IsAbsolute(),
-                      wxT( "Import schematic caller didn't send full filename" ) );
+        wxASSERT_MSG( filename.IsAbsolute(), wxT( "Import schematic: path is not absolute!" ) );
 
         if( !LockFile( aFileName ) )
         {
             wxString msg;
-            msg.Printf( _( "Schematic file '%s' is already open.\n\n"
-                           "Interleaved saves may produce very unexpected results.\n" ),
-                        aFileName );
+            msg.Printf( _( "Schematic '%s' is already open." ), filename.GetFullName() );
 
             if( !OverrideLock( this, msg ) )
                 return false;

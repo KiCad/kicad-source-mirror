@@ -563,24 +563,21 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
         return false;
     }
 
-    wxString fullFileName( aFileSet[0] );
-    wxString msg;
+    wxString   fullFileName( aFileSet[0] );
+    wxFileName wx_filename( fullFileName );
+    wxString   msg;
 
     if( Kiface().IsSingle() )
-    {
         KIPLATFORM::APP::RegisterApplicationRestart( fullFileName );
-    }
 
     // We insist on caller sending us an absolute path, if it does not, we say it's a bug.
-    wxASSERT_MSG( wxFileName( fullFileName ).IsAbsolute(), wxT( "Path is not absolute!" ) );
+    wxASSERT_MSG( wx_filename.IsAbsolute(), wxT( "Path is not absolute!" ) );
 
     std::unique_ptr<wxSingleInstanceChecker> lockFile = ::LockFile( fullFileName );
 
     if( !lockFile || lockFile->IsAnotherRunning() )
     {
-        msg.Printf( _( "PCB file '%s' is already open.\n\n"
-                       "Interleaved saves may produce very unexpected results.\n" ),
-                    fullFileName );
+        msg.Printf( _( "PCB '%s' is already open." ), wx_filename.GetFullName() );
 
         if( !OverrideLock( this, msg ) )
             return false;
