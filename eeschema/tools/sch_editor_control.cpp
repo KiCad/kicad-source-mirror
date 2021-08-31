@@ -1541,7 +1541,9 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
     catch( IO_ERROR& )
     {
         // If it wasn't content, then paste as text
-        paste_screen->Append( new SCH_TEXT( wxPoint( 0, 0 ), text ) );
+        SCH_TEXT* text_item = new SCH_TEXT( wxPoint( 0, 0 ), text );
+        text_item->SetLabelSpinStyle( LABEL_SPIN_STYLE::RIGHT ); // Left alignment
+        paste_screen->Append( text_item );
     }
 
     // Save loaded screen instances to m_clipboardSheetInstances
