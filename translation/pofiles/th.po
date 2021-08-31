@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-01 11:31-0700\n"
-"PO-Revision-Date: 2021-08-30 21:44+0000\n"
+"PO-Revision-Date: 2021-09-01 16:34+0000\n"
 "Last-Translator: boonchai k. <kicadthai@gmail.com>\n"
 "Language-Team: Thai <https://hosted.weblate.org/projects/kicad/master-source/"
 "th/>\n"
@@ -23730,74 +23730,74 @@ msgstr "กรองชิ้นส่วนตามเลเยอร์:"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:78
 msgid "Filter items by parent footprint library id:"
-msgstr ""
+msgstr "กรองรายการตามไอดีฟุ้ทพรินท์ไลบรารี:"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:103
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:90
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.cpp:34
 msgid "Action"
-msgstr ""
+msgstr "การกระทำ"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:105
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:92
 msgid "Set to specified values:"
-msgstr ""
+msgstr "ตั้งเป็นค่าที่ระบุ:"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:202
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:210
 msgid "Keep upright"
-msgstr ""
+msgstr "ตั้งตรง"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:226
 msgid "Set to layer default values:"
-msgstr ""
+msgstr "ตั้งเป็นค่าเริ่มต้นของเลเยอร์:"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:197
 msgid "Via Drill"
-msgstr ""
+msgstr "รูเจาะของเวีย"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:199
 msgid "uVia Drill"
-msgstr ""
+msgstr "รูเจาะไมโครเวีย"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:39
 msgid "Filter Items"
-msgstr ""
+msgstr "กรองรายการ"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:57
 msgid "Filter items by net class:"
-msgstr ""
+msgstr "กรองรายการตามเน็ทคลาส:"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:115
 msgid "Set to net class values:"
-msgstr ""
+msgstr "ตั้งค่าตามเน็ทคลาส:"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.h:73
 msgid "Set Track and Via Properties"
-msgstr ""
+msgstr "ตั้งคุณสมบัติแทร็คและเวีย"
 
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:30
 msgid "footprint"
-msgstr ""
+msgstr "ฟุ้ทพรินท์"
 
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:59
 #, c-format
 msgid "Error occurred writing empty footprint library table '%s'."
-msgstr ""
+msgstr "เกิดข้อผิดพลาดในการเขียนตารางฟุ้ทพรินท์ไลบรารี '%s'"
 
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:73
 msgid "Please select a footprint library table file."
-msgstr ""
+msgstr "โปรดเลือกไฟล์ตารางฟุ้ทพรินท์ไลบรารี"
 
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:95
 #, c-format
 msgid "'%s' is not a valid footprint library table."
-msgstr ""
+msgstr "'%s' ไม่ใช่ตารางฟุ้ทพรินท์ไลบรารีที่ถูกต้อง"
 
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:106
 #, c-format
 msgid "Cannot create library table path '%s'."
-msgstr ""
+msgstr "ไม่สามารถสร้างเส้นทางตารางไลบรารี '%s'"
 
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:114
 #, c-format
@@ -23807,115 +23807,119 @@ msgid ""
 "to:\n"
 "%s."
 msgstr ""
+"ไม่สามารถคัดลอกตารางฟุ้ทพรินท์ไลบรารีจาก:\n"
+"%s\n"
+"ไปยัง:\n"
+"%s"
 
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:133
 msgid "Error loading footprint library table."
-msgstr ""
+msgstr "ข้อผิดพลาดในการโหลดตารางฟุ้ทพรินท์ไลบรารี"
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:178
 msgid "Circle Properties"
-msgstr ""
+msgstr "คุณสมบัติของวงกลม"
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:191
 msgid "Arc Properties"
-msgstr ""
+msgstr "คุณสมบัติส่วนโค้ง"
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:197
 msgid "Polygon Properties"
-msgstr ""
+msgstr "คุณสมบัติรูปหลายเหลี่ยม"
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:203
 msgid "Rectangle Properties"
-msgstr ""
+msgstr "คุณสมบัติสี่เหลี่ยมผืนผ้า"
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:209
 msgid "Line Segment Properties"
-msgstr ""
+msgstr "คุณสมบัติส่วนเส้นตรง"
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:285
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:176
 msgid "Line width may not be 0 for unfilled shapes."
-msgstr ""
+msgstr "ความกว้างของเส้นต้องไม่ 0 สำหรับรูปร่างที่ยังไม่ได้เติม"
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:364
 msgid "Modify drawing properties"
-msgstr ""
+msgstr "แก้ไขคุณสมบัติการวาดภาพ"
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:389
 msgid "The arc angle cannot be zero."
-msgstr ""
+msgstr "มุมโค้งไม่สามารถเป็นศูนย์"
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:396
 msgid "The radius cannot be zero."
-msgstr ""
+msgstr "รัศมีต้องไม่เป็นศูนย์"
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:402
 msgid "The rectangle cannot be empty."
-msgstr ""
+msgstr "สี่เหลี่ยมต้องไม่ว่างเปล่า"
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:418
 msgid "Error List"
-msgstr ""
+msgstr "รายการข้อผิดพลาด"
 
 #: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:29
 msgid "Start Point"
-msgstr ""
+msgstr "จุดเริ่มต้น"
 
 #: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:55
 msgid "End Point"
-msgstr ""
+msgstr "จุดสิ้นสุด"
 
 #: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:81
 #: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:107
 msgid "Bezier Control Pt"
-msgstr ""
+msgstr "จุดควบคุมเบซิเยร์"
 
 #: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:145
 msgid "Arc angle:"
-msgstr ""
+msgstr "มุมโค้ง:"
 
 #: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:165
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1284
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1519
 msgid "Filled shape"
-msgstr ""
+msgstr "เติมเต็มรูปร่าง"
 
 #: pcbnew/dialogs/dialog_graphic_item_properties_base.h:93
 msgid "Graphic Item Properties"
-msgstr ""
+msgstr "คุณสมบัติรายการกราฟิก"
 
 #: pcbnew/dialogs/dialog_group_properties.cpp:115
 msgid "Modified group"
-msgstr ""
+msgstr "กลุ่มที่แก้ไข"
 
 #: pcbnew/dialogs/dialog_group_properties_base.cpp:28
 msgid "Group name:"
-msgstr ""
+msgstr "ชื่อกลุ่ม:"
 
 #: pcbnew/dialogs/dialog_group_properties_base.cpp:38
 msgid "Group members:"
-msgstr ""
+msgstr "สมาชิกกลุ่ม:"
 
 #: pcbnew/dialogs/dialog_group_properties_base.h:62
 msgid "Group Properties"
-msgstr ""
+msgstr "คุณสมบัติกลุ่ม"
 
 #: pcbnew/dialogs/dialog_import_settings.cpp:52
 #: pcbnew/dialogs/dialog_import_settings.cpp:101
 msgid "Deselect All"
-msgstr ""
+msgstr "ยกเลิกการเลือกทั้งหมด"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:49
 msgid "Layers setup"
-msgstr ""
+msgstr "ตั้งค่าเลเยอร์"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:52
 msgid "Text and graphics default properties"
-msgstr ""
+msgstr "คุณสมบัติเริ่มต้นของข้อความและกราฟิก"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:55
 msgid "Design rules"
-msgstr ""
+msgstr "กฎการออกแบบ"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:58
 msgid "Predefined track and via dimensions"
