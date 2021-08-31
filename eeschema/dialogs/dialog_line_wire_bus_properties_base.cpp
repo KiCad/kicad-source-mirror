@@ -73,7 +73,7 @@ DIALOG_LINE_WIRE_BUS_PROPERTIES_BASE::DIALOG_LINE_WIRE_BUS_PROPERTIES_BASE( wxWi
 
 	mainSizer->Add( fgSizerGeneral, 1, wxEXPAND|wxTOP|wxBOTTOM|wxLEFT, 10 );
 
-	m_helpLabel1 = new wxStaticText( this, wxID_ANY, _("Set width to 0 to use Schematic Editor line widths."), wxDefaultPosition, wxDefaultSize, 0 );
+	m_helpLabel1 = new wxStaticText( this, wxID_ANY, _("Set width to 0 to use Netclass line widths."), wxDefaultPosition, wxDefaultSize, 0 );
 	m_helpLabel1->Wrap( 333 );
 	mainSizer->Add( m_helpLabel1, 0, wxRIGHT|wxLEFT, 10 );
 

@@ -158,7 +158,7 @@ DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_
 	bSizer2 = new wxBoxSizer( wxVERTICAL );
 
 	wxFlexGridSizer* fgSizer1;
-	fgSizer1 = new wxFlexGridSizer( 0, 6, 4, 0 );
+	fgSizer1 = new wxFlexGridSizer( 0, 6, 2, 0 );
 	fgSizer1->AddGrowableCol( 1 );
 	fgSizer1->AddGrowableCol( 3 );
 	fgSizer1->SetFlexibleDirection( wxBOTH );
@@ -171,11 +171,11 @@ DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_
 	m_textSizeCtrl = new wxTextCtrl( m_specifiedValues, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_textSizeCtrl->SetMinSize( wxSize( 120,-1 ) );
 
-	fgSizer1->Add( m_textSizeCtrl, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+	fgSizer1->Add( m_textSizeCtrl, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_textSizeUnits = new wxStaticText( m_specifiedValues, wxID_ANY, _("unit"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_textSizeUnits->Wrap( -1 );
-	fgSizer1->Add( m_textSizeUnits, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+	fgSizer1->Add( m_textSizeUnits, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 
 	fgSizer1->Add( 0, 0, 1, wxEXPAND, 5 );
@@ -188,13 +188,13 @@ DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_
 
 	orientationLabel = new wxStaticText( m_specifiedValues, wxID_ANY, _("Orientation:"), wxDefaultPosition, wxDefaultSize, 0 );
 	orientationLabel->Wrap( -1 );
-	fgSizer1->Add( orientationLabel, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizer1->Add( orientationLabel, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
 	wxString m_orientationChoices[] = { _("Right"), _("Up"), _("Left"), _("Down"), _("-- leave unchanged --") };
 	int m_orientationNChoices = sizeof( m_orientationChoices ) / sizeof( wxString );
 	m_orientation = new wxChoice( m_specifiedValues, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_orientationNChoices, m_orientationChoices, 0 );
 	m_orientation->SetSelection( 4 );
-	fgSizer1->Add( m_orientation, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
+	fgSizer1->Add( m_orientation, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxTOP|wxBOTTOM, 4 );
 
 
 	fgSizer1->Add( 0, 0, 1, wxEXPAND, 5 );
@@ -203,7 +203,13 @@ DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_
 	fgSizer1->Add( 0, 0, 0, wxEXPAND|wxRIGHT|wxLEFT, 25 );
 
 	m_Italic = new wxCheckBox( m_specifiedValues, wxID_ANY, _("Italic"), wxDefaultPosition, wxDefaultSize, wxCHK_3STATE|wxCHK_ALLOW_3RD_STATE_FOR_USER );
-	fgSizer1->Add( m_Italic, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizer1->Add( m_Italic, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+
+
+	fgSizer1->Add( 0, 0, 1, wxEXPAND, 5 );
+
+
+	fgSizer1->Add( 0, 5, 1, wxEXPAND, 5 );
 
 
 	fgSizer1->Add( 0, 0, 1, wxEXPAND, 5 );
@@ -212,9 +218,6 @@ DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_
 	fgSizer1->Add( 0, 0, 1, wxEXPAND, 5 );
 
 
-	fgSizer1->Add( 0, 0, 1, wxEXPAND|wxTOP|wxBOTTOM, 5 );
-
-
 	fgSizer1->Add( 0, 0, 1, wxEXPAND, 5 );
 
 
@@ -223,10 +226,7 @@ DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_
 
 	fgSizer1->Add( 0, 0, 1, wxEXPAND, 5 );
 
-
-	fgSizer1->Add( 0, 0, 1, wxEXPAND, 5 );
-
-	hAlignLabel = new wxStaticText( m_specifiedValues, wxID_ANY, _("H Alignment (fields only):"), wxDefaultPosition, wxDefaultSize, 0 );
+	hAlignLabel = new wxStaticText( m_specifiedValues, wxID_ANY, _("H Align (fields only):"), wxDefaultPosition, wxDefaultSize, 0 );
 	hAlignLabel->Wrap( -1 );
 	fgSizer1->Add( hAlignLabel, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
@@ -234,7 +234,7 @@ DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_
 	int m_hAlignNChoices = sizeof( m_hAlignChoices ) / sizeof( wxString );
 	m_hAlign = new wxChoice( m_specifiedValues, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_hAlignNChoices, m_hAlignChoices, 0 );
 	m_hAlign->SetSelection( 3 );
-	fgSizer1->Add( m_hAlign, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	fgSizer1->Add( m_hAlign, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxTOP|wxBOTTOM, 4 );
 
 
 	fgSizer1->Add( 0, 0, 1, wxEXPAND, 5 );
@@ -248,7 +248,7 @@ DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_
 
 	fgSizer1->Add( 80, 0, 1, wxEXPAND, 5 );
 
-	vAlignLabel = new wxStaticText( m_specifiedValues, wxID_ANY, _("V Alignment (fields only):"), wxDefaultPosition, wxDefaultSize, 0 );
+	vAlignLabel = new wxStaticText( m_specifiedValues, wxID_ANY, _("V Align (fields only):"), wxDefaultPosition, wxDefaultSize, 0 );
 	vAlignLabel->Wrap( -1 );
 	fgSizer1->Add( vAlignLabel, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
@@ -256,7 +256,7 @@ DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_
 	int m_vAlignNChoices = sizeof( m_vAlignChoices ) / sizeof( wxString );
 	m_vAlign = new wxChoice( m_specifiedValues, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_vAlignNChoices, m_vAlignChoices, 0 );
 	m_vAlign->SetSelection( 3 );
-	fgSizer1->Add( m_vAlign, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	fgSizer1->Add( m_vAlign, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
 
 
 	fgSizer1->Add( 0, 0, 1, wxEXPAND, 5 );
@@ -271,7 +271,7 @@ DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_
 	fgSizer1->Add( 0, 0, 1, wxEXPAND, 5 );
 
 	m_staticline1 = new wxStaticLine( m_specifiedValues, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	fgSizer1->Add( m_staticline1, 0, wxEXPAND|wxTOP|wxBOTTOM|wxLEFT, 7 );
+	fgSizer1->Add( m_staticline1, 0, wxEXPAND|wxTOP|wxBOTTOM, 7 );
 
 	m_staticline2 = new wxStaticLine( m_specifiedValues, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
 	fgSizer1->Add( m_staticline2, 0, wxEXPAND|wxTOP|wxBOTTOM, 7 );
@@ -283,7 +283,7 @@ DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_
 	fgSizer1->Add( m_staticline3, 0, wxEXPAND|wxTOP|wxBOTTOM, 7 );
 
 	m_staticline4 = new wxStaticLine( m_specifiedValues, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	fgSizer1->Add( m_staticline4, 0, wxEXPAND|wxTOP|wxBOTTOM, 7 );
+	fgSizer1->Add( m_staticline4, 0, wxEXPAND|wxBOTTOM, 7 );
 
 	m_staticline5 = new wxStaticLine( m_specifiedValues, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
 	fgSizer1->Add( m_staticline5, 0, wxEXPAND|wxTOP|wxBOTTOM|wxRIGHT, 7 );
@@ -293,11 +293,11 @@ DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_
 	fgSizer1->Add( m_lineWidthLabel, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
 	m_LineWidthCtrl = new wxTextCtrl( m_specifiedValues, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer1->Add( m_LineWidthCtrl, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	fgSizer1->Add( m_LineWidthCtrl, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
 
 	m_lineWidthUnits = new wxStaticText( m_specifiedValues, wxID_ANY, _("unit"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_lineWidthUnits->Wrap( -1 );
-	fgSizer1->Add( m_lineWidthUnits, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+	fgSizer1->Add( m_lineWidthUnits, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 
 	fgSizer1->Add( 0, 0, 1, wxEXPAND, 5 );
@@ -319,7 +319,7 @@ DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_
 	int m_lineStyleNChoices = sizeof( m_lineStyleChoices ) / sizeof( wxString );
 	m_lineStyle = new wxChoice( m_specifiedValues, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_lineStyleNChoices, m_lineStyleChoices, 0 );
 	m_lineStyle->SetSelection( 0 );
-	fgSizer1->Add( m_lineStyle, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+	fgSizer1->Add( m_lineStyle, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL, 5 );
 
 
 	fgSizer1->Add( 0, 0, 1, wxEXPAND, 5 );
@@ -335,6 +335,29 @@ DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_
 	m_bgColorSwatch->SetMinSize( wxSize( 48,24 ) );
 
 	fgSizer1->Add( m_bgColorSwatch, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+
+	m_dotSizeLabel = new wxStaticText( m_specifiedValues, wxID_ANY, _("Junction size:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_dotSizeLabel->Wrap( -1 );
+	fgSizer1->Add( m_dotSizeLabel, 0, wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
+
+	m_dotSizeCtrl = new wxTextCtrl( m_specifiedValues, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer1->Add( m_dotSizeCtrl, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
+
+	m_dotSizeUnits = new wxStaticText( m_specifiedValues, wxID_ANY, _("unit"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_dotSizeUnits->Wrap( -1 );
+	fgSizer1->Add( m_dotSizeUnits, 0, wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
+
+
+	fgSizer1->Add( 0, 0, 1, wxEXPAND|wxALIGN_CENTER_VERTICAL, 5 );
+
+	m_setDotColor = new wxCheckBox( m_specifiedValues, wxID_ANY, _("Junction color:"), wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer1->Add( m_setDotColor, 0, wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
+
+	m_dotColorSwatch = new COLOR_SWATCH( m_specifiedValues, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
+	m_dotColorSwatch->SetForegroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOW ) );
+	m_dotColorSwatch->SetMinSize( wxSize( 48,24 ) );
+
+	fgSizer1->Add( m_dotColorSwatch, 0, wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
 
 
 	bSizer2->Add( fgSizer1, 1, wxEXPAND|wxTOP, 2 );

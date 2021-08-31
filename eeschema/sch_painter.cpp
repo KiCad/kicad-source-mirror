@@ -1216,7 +1216,7 @@ void SCH_PAINTER::draw( const SCH_JUNCTION *aJct, int aLayer )
 
     COLOR4D color = getRenderColor( aJct, aJct->GetLayer(), drawingShadows );
 
-    int junctionSize = aJct->GetDiameter() / 2;
+    int junctionSize = aJct->GetEffectiveDiameter() / 2;
 
     if( junctionSize > 1 )
     {

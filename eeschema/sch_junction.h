@@ -94,7 +94,9 @@ public:
 
     bool IsPointClickableAnchor( const wxPoint& aPos ) const override { return false; }
 
-    int GetDiameter() const;
+    int GetEffectiveDiameter() const;
+
+    int GetDiameter() const { return m_diameter; }
     void SetDiameter( int aDiameter ) { m_diameter = aDiameter; }
 
     COLOR4D GetJunctionColor() const;

@@ -72,6 +72,7 @@ class DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS : public DIALOG_GLOBAL_EDIT_TEXT_AND_
 
     UNIT_BINDER            m_textSize;
     UNIT_BINDER            m_lineWidth;
+    UNIT_BINDER            m_junctionSize;
 
     bool                   m_appendUndo;
 
@@ -101,7 +102,8 @@ protected:
 DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS( SCH_EDIT_FRAME* parent ) :
         DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE( parent ),
         m_textSize( parent, m_textSizeLabel, m_textSizeCtrl, m_textSizeUnits, true ),
-        m_lineWidth( parent, m_lineWidthLabel, m_LineWidthCtrl, m_lineWidthUnits, true )
+        m_lineWidth( parent, m_lineWidthLabel, m_LineWidthCtrl, m_lineWidthUnits, true ),
+        m_junctionSize( parent, m_dotSizeLabel, m_dotSizeCtrl, m_dotSizeUnits, true )
 {
     m_parent = parent;
     m_appendUndo = false;
@@ -117,6 +119,8 @@ DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS( SCH_
     m_colorSwatch->SetDefaultColor( COLOR4D::UNSPECIFIED );
     m_bgColorSwatch->SetSwatchColor( COLOR4D::UNSPECIFIED, false );
     m_bgColorSwatch->SetDefaultColor( COLOR4D::UNSPECIFIED );
+    m_dotColorSwatch->SetSwatchColor( COLOR4D::UNSPECIFIED, false );
+    m_dotColorSwatch->SetDefaultColor( COLOR4D::UNSPECIFIED );
 
     m_sdbSizerButtonsOK->SetDefault();
 
@@ -211,8 +215,10 @@ bool DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::TransferDataToWindow()
     m_Visible->Set3StateValue( wxCHK_UNDETERMINED );
     m_lineWidth.SetValue( INDETERMINATE_ACTION );
     m_lineStyle->SetStringSelection( INDETERMINATE_ACTION );
+    m_junctionSize.SetValue( INDETERMINATE_ACTION );
     m_setColor->SetValue( false );
     m_setBgColor->SetValue( false );
+    m_setDotColor->SetValue( false );
 
     return true;
 }
@@ -233,9 +239,10 @@ void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::processItem( const SCH_SHEET_PATH& aS
         return;
     }
 
-    EDA_TEXT* eda_text = dynamic_cast<EDA_TEXT*>( aItem );
-    SCH_TEXT* sch_text = dynamic_cast<SCH_TEXT*>( aItem );
-    SCH_LINE* lineItem = dynamic_cast<SCH_LINE*>( aItem );
+    EDA_TEXT*     eda_text = dynamic_cast<EDA_TEXT*>( aItem );
+    SCH_TEXT*     sch_text = dynamic_cast<SCH_TEXT*>( aItem );
+    SCH_LINE*     lineItem = dynamic_cast<SCH_LINE*>( aItem );
+    SCH_JUNCTION* junction = dynamic_cast<SCH_JUNCTION*>( aItem );
 
     m_parent->SaveCopyInUndoList( aSheetPath.LastScreen(), aItem, UNDO_REDO::CHANGED, m_appendUndo );
     m_appendUndo = true;
@@ -283,6 +290,15 @@ void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::processItem( const SCH_SHEET_PATH& aS
 
         if( m_setColor->GetValue() )
             lineItem->SetLineColor( m_colorSwatch->GetSwatchColor() );
+    }
+
+    if( junction )
+    {
+        if( !m_junctionSize.IsIndeterminate() )
+            junction->SetDiameter( m_junctionSize.GetValue() );
+
+        if( m_setDotColor->GetValue() )
+            junction->SetColor( m_dotColorSwatch->GetSwatchColor() );
     }
 }
 
@@ -404,18 +420,14 @@ void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::visitItem( const SCH_SHEET_PATH& aShe
 
         for( SCH_ITEM* item : junction->ConnectedItems( aSheetPath ) )
         {
-            if( item->GetLayer() == LAYER_BUS )
+            if( item->GetLayer() == LAYER_BUS && m_buses->GetValue() )
             {
-                if( m_buses->GetValue() && m_setColor->GetValue() )
-                    junction->SetColor( m_colorSwatch->GetSwatchColor() );
-
+                processItem( aSheetPath, aItem );
                 break;
             }
-            else if( item->GetLayer() == LAYER_WIRE )
+            else if( item->GetLayer() == LAYER_WIRE && m_wires->GetValue() )
             {
-                if( m_wires->GetValue() && m_setColor->GetValue() )
-                    junction->SetColor( m_colorSwatch->GetSwatchColor() );
-
+                processItem( aSheetPath, aItem );
                 break;
             }
         }

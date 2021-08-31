@@ -90,6 +90,11 @@ class DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE : public DIALOG_SHIM
 		wxChoice* m_lineStyle;
 		wxCheckBox* m_setBgColor;
 		COLOR_SWATCH* m_bgColorSwatch;
+		wxStaticText* m_dotSizeLabel;
+		wxTextCtrl* m_dotSizeCtrl;
+		wxStaticText* m_dotSizeUnits;
+		wxCheckBox* m_setDotColor;
+		COLOR_SWATCH* m_dotColorSwatch;
 		wxStdDialogButtonSizer* m_sdbSizerButtons;
 		wxButton* m_sdbSizerButtonsOK;
 		wxButton* m_sdbSizerButtonsCancel;

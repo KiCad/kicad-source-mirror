@@ -42,6 +42,8 @@ class DIALOG_JUNCTION_PROPS_BASE : public DIALOG_SHIM
 		wxStaticText* m_staticTextColor;
 		wxPanel* m_panel1;
 		COLOR_SWATCH* m_colorSwatch;
+		wxStaticText* m_helpLabel1;
+		wxStaticText* m_helpLabel2;
 		wxStaticLine* m_staticline2;
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;

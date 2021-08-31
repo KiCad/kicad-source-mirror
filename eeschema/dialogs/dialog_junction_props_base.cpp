@@ -58,6 +58,14 @@ DIALOG_JUNCTION_PROPS_BASE::DIALOG_JUNCTION_PROPS_BASE( wxWindow* parent, wxWind
 
 	bSizer2->Add( fgSizer2, 1, wxALL|wxEXPAND, 10 );
 
+	m_helpLabel1 = new wxStaticText( this, wxID_ANY, _("Set diameter to 0 to use schematic junction dot size."), wxDefaultPosition, wxDefaultSize, 0 );
+	m_helpLabel1->Wrap( 333 );
+	bSizer2->Add( m_helpLabel1, 0, wxRIGHT|wxLEFT, 10 );
+
+	m_helpLabel2 = new wxStaticText( this, wxID_ANY, _("Set color to transparent to use Schematic Editor colors."), wxDefaultPosition, wxDefaultSize, 0 );
+	m_helpLabel2->Wrap( -1 );
+	bSizer2->Add( m_helpLabel2, 0, wxBOTTOM|wxRIGHT|wxLEFT, 10 );
+
 	m_staticline2 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
 	bSizer2->Add( m_staticline2, 0, wxEXPAND | wxALL, 5 );
 

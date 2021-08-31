@@ -181,7 +181,7 @@ COLOR4D SCH_JUNCTION::GetJunctionColor() const
 }
 
 
-int SCH_JUNCTION::GetDiameter() const
+int SCH_JUNCTION::GetEffectiveDiameter() const
 {
     return getEffectiveShape().GetRadius() * 2;
 }
@@ -235,7 +235,7 @@ void SCH_JUNCTION::Plot( PLOTTER* aPlotter ) const
 
     aPlotter->SetColor( color );
 
-    aPlotter->Circle( m_pos, GetDiameter(), FILL_TYPE::FILLED_SHAPE );
+    aPlotter->Circle( m_pos, GetEffectiveDiameter(), FILL_TYPE::FILLED_SHAPE );
 }
 
 
