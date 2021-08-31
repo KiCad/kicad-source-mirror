@@ -253,10 +253,15 @@ void DIALOG_COLOR_PICKER::createRGBBitmap()
     // clear background (set the window bg color)
     wxColor bg = GetBackgroundColour();
 
+    // Don't do standard-color lookups on OSX each time through the loop
+    wxColourBase::ChannelType bgR = bg.Red();
+    wxColourBase::ChannelType bgG = bg.Green();
+    wxColourBase::ChannelType bgB = bg.Blue();
+
     for( int xx = 0; xx < bmsize.x; xx++ ) // blue axis
     {
         for( int yy = 0; yy < bmsize.y; yy++ )  // Red axis
-            img.SetRGB( xx, yy, bg.Red(), bg.Green(), bg.Blue() );
+            img.SetRGB( xx, yy, bgR, bgG, bgB );
     }
 
     // Build the palette
@@ -328,10 +333,15 @@ void DIALOG_COLOR_PICKER::createHSVBitmap()
     // clear background (set the window bg color)
     wxColor bg = GetBackgroundColour();
 
+    // Don't do standard-color lookups on OSX each time through the loop
+    wxColourBase::ChannelType bgR = bg.Red();
+    wxColourBase::ChannelType bgG = bg.Green();
+    wxColourBase::ChannelType bgB = bg.Blue();
+
     for( int xx = 0; xx < bmsize.x; xx++ ) // blue axis
     {
         for( int yy = 0; yy < bmsize.y; yy++ )  // Red axis
-            img.SetRGB( xx, yy, bg.Red(), bg.Green(), bg.Blue() );
+            img.SetRGB( xx, yy, bgR, bgG, bgB );
     }
 
     // Reserve room to draw cursors inside the bitmap
