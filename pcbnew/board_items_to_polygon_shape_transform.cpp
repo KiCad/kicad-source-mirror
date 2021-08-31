@@ -311,12 +311,15 @@ void FP_TEXT::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffe
                                                     int aError, ERROR_LOC aErrorLoc,
                                                     bool aIgnoreLineWidth ) const
 {
-    EDA_TEXT::TransformBoundingBoxWithClearanceToPolygon( &aCornerBuffer, aClearance );
+    SHAPE_POLY_SET buffer;
+    EDA_TEXT::TransformBoundingBoxWithClearanceToPolygon( &buffer, aClearance );
 
     const FOOTPRINT* parentFootprint = static_cast<const FOOTPRINT*>( m_parent );
 
     if( parentFootprint )
-        aCornerBuffer.Rotate( DECIDEG2RAD( GetDrawRotation() ), GetTextPos() );
+        buffer.Rotate( DECIDEG2RAD( GetDrawRotation() ), GetTextPos() );
+
+    aCornerBuffer.Append( buffer );
 }
 
 
