@@ -83,6 +83,13 @@ protected:
 
 
 /**
+ * Display a dialog indicating the file is already open, with an option to reset the lock.
+ * @return true if the lock was reset.
+ */
+bool OverrideLock( wxWindow* aParent, const wxString& aMessage  );
+
+
+/**
  * Display a dialog with Save, Cancel and Discard Changes buttons.
  *
  * @param aParent = the parent window

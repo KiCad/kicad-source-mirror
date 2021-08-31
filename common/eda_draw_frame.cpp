@@ -205,7 +205,7 @@ bool EDA_DRAW_FRAME::LockFile( const wxString& aFileName )
 {
     m_file_checker = ::LockFile( aFileName );
 
-    return bool( m_file_checker );
+    return m_file_checker && !m_file_checker->IsAnotherRunning();
 }
 
 

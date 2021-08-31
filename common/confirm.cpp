@@ -151,6 +151,19 @@ long KIDIALOG::getStyle( KD_TYPE aType )
 }
 
 
+bool OverrideLock( wxWindow* aParent, const wxString& aMessage  )
+{
+    wxRichMessageDialog dlg( aParent, aMessage, _( "File Open Error" ),
+                             wxYES_NO | wxICON_ERROR | wxCENTER );
+
+    // Note: must use the "no" label to get the correct positioning/spacing for a (potentially)
+    // destructive action
+    dlg.SetYesNoLabels( _( "OK" ), _( "Open Anyway" ) );
+
+    return dlg.ShowModal() == wxID_NO;
+}
+
+
 int UnsavedChangesDialog( wxWindow* parent, const wxString& aMessage, bool* aApplyToAll )
 {
     static bool s_apply_to_all = false;

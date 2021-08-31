@@ -564,6 +564,7 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
     }
 
     wxString fullFileName( aFileSet[0] );
+    wxString msg;
 
     if( Kiface().IsSingle() )
     {
@@ -575,11 +576,14 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
 
     std::unique_ptr<wxSingleInstanceChecker> lockFile = ::LockFile( fullFileName );
 
-    if( !lockFile )
+    if( !lockFile || lockFile->IsAnotherRunning() )
     {
-        wxString msg = wxString::Format( _( "PCB '%s' is already open." ), fullFileName );
-        DisplayError( this, msg );
-        return false;
+        msg.Printf( _( "PCB file '%s' is already open.\n\n"
+                       "Interleaved saves may produce very unexpected results.\n" ),
+                    fullFileName );
+
+        if( !OverrideLock( this, msg ) )
+            return false;
     }
 
     if( IsContentModified() )
@@ -603,9 +607,9 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
     if( is_new && !( aCtl & KICTL_CREATE ) )
     {
         // notify user that fullFileName does not exist, ask if user wants to create it.
-        wxString ask = wxString::Format( _( "PCB '%s' does not exist. Do you wish to create it?" ),
-                                         fullFileName );
-        if( !IsOK( this, ask ) )
+        msg.Printf( _( "PCB '%s' does not exist. Do you wish to create it?" ), fullFileName );
+
+        if( !IsOK( this, msg ) )
             return false;
     }
 
@@ -662,7 +666,6 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
     {
         BOARD*           loadedBoard = nullptr;   // it will be set to non-NULL if loaded OK
         PLUGIN::RELEASER pi( IO_MGR::PluginFind( pluginType ) );
-        wxString         msg;
 
         LAYER_REMAPPABLE_PLUGIN* layerRemappablePlugin =
             dynamic_cast< LAYER_REMAPPABLE_PLUGIN* >( (PLUGIN*) pi );

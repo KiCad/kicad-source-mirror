@@ -120,9 +120,12 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
 
     if( !LockFile( fullFileName ) )
     {
-        msg.Printf( _( "Schematic file '%s' is already open." ), fullFileName );
-        DisplayError( this, msg );
-        return false;
+        msg.Printf( _( "Schematic file '%s' is already open.\n\n"
+                       "Interleaved saves may produce very unexpected results.\n" ),
+                    fullFileName );
+
+        if( !OverrideLock( this, msg ) )
+            return false;
     }
 
     if( !AskToSaveChanges() )
@@ -1131,9 +1134,13 @@ bool SCH_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType )
 
         if( !LockFile( aFileName ) )
         {
-            wxString msg = wxString::Format( _( "Schematic '%s' is already open." ), aFileName );
-            DisplayError( this, msg );
-            return false;
+            wxString msg;
+            msg.Printf( _( "Schematic file '%s' is already open.\n\n"
+                           "Interleaved saves may produce very unexpected results.\n" ),
+                        aFileName );
+
+            if( !OverrideLock( this, msg ) )
+                return false;
         }
 
         try
