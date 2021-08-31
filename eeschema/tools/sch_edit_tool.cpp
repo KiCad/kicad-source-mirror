@@ -629,6 +629,7 @@ int SCH_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
 
         connections |= item->IsConnectable();
         m_frame->UpdateItem( item );
+        updateItem( item, true );
     }
 
     m_toolMgr->PostEvent( EVENTS::SelectedItemsModified );
