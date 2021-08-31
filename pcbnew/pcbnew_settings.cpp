@@ -43,7 +43,7 @@
 
 
 ///! Update the schema version whenever a migration is required
-const int pcbnewSchemaVersion = 0;
+const int pcbnewSchemaVersion = 1;
 
 
 PCBNEW_SETTINGS::PCBNEW_SETTINGS()
@@ -133,6 +133,9 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS()
     m_params.emplace_back( new PARAM<bool>( "editing.allow_free_pads",
             &m_AllowFreePads, false ) );
 
+    m_params.emplace_back( new PARAM<int>( "editing.rotation_angle",
+            &m_RotationAngle, 900, 1, 900 ) );
+
     m_params.emplace_back( new PARAM<bool>( "pcb_display.graphic_items_fill",
             &m_Display.m_DisplayGraphicsFill, true ) );
 
@@ -151,6 +154,9 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS()
     m_params.emplace_back( new PARAM<bool>( "pcb_display.pad_clearance",
             &m_Display.m_DisplayPadClearance, true ) );
 
+    m_params.emplace_back( new PARAM<bool>( "pcb_display.pad_no_connects",
+            &m_Display.m_DisplayPadNoConnects, true ) );
+
     m_params.emplace_back( new PARAM<bool>( "pcb_display.pad_fill",
             &m_Display.m_DisplayPadFill, true ) );
 
@@ -165,9 +171,6 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS()
 
     m_params.emplace_back( new PARAM<bool>( "pcb_display.ratsnest_curved",
             &m_Display.m_DisplayRatsnestLinesCurved, false ) );
-
-    m_params.emplace_back( new PARAM<int>( "pcb_display.rotation_angle",
-            &m_RotationAngle, 900, 1, 900 ) );
 
     m_params.emplace_back( new PARAM<int>( "pcb_display.track_clearance_mode",
             reinterpret_cast<int*>( &m_Display.m_ShowTrackClearanceMode ),
@@ -515,6 +518,23 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS()
 
     m_params.emplace_back( new PARAM<wxString>( "system.last_footprint3d_dir",
             &m_lastFootprint3dDir, "" ) );
+
+    registerMigration( 0, 1,
+            [&]()
+            {
+                if( OPT<int> optval = Get<int>( "pcb_display.rotation_angle" ) )
+                    Set( "editing.rotation_angle", optval.get() );
+
+                try
+                {
+                    At( "pcb_display" ).erase( "rotation_angle" );
+                }
+                catch( ... )
+                {}
+
+                return true;
+            } );
+
 }
 
 

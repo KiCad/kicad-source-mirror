@@ -57,6 +57,7 @@ public:
     bool m_DisplayViaFill;
     bool m_DisplayPadNum;           // show pads numbers
     bool m_DisplayPadClearance;
+    bool m_DisplayPadNoConnects;
     bool m_DisplayGraphicsFill;     // How to display fp drawings ( sketch/ filled )
     bool m_DisplayTextFill;         // How to display fp texts ( sketch/ filled )
     bool m_DisplayPcbTrackFill;     // false : tracks are show in sketch mode, true = filled.

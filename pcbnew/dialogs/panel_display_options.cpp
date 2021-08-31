@@ -107,6 +107,7 @@ bool PANEL_DISPLAY_OPTIONS::TransferDataFromWindow()
         displ_opts.m_DisplayPadNum = m_OptDisplayPadNumber->GetValue();
 
         pcbEdit->SetElementVisibility( LAYER_NO_CONNECTS, m_OptDisplayPadNoConn->GetValue() );
+        displ_opts.m_DisplayPadNoConnects = m_OptDisplayPadNoConn->GetValue();
 
         displ_opts.m_DisplayNetNamesMode = m_ShowNetNamesOption->GetSelection();
         displ_opts.m_Live3DRefresh       = m_live3Drefresh->GetValue();

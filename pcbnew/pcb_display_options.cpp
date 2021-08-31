@@ -38,6 +38,7 @@ PCB_DISPLAY_OPTIONS::PCB_DISPLAY_OPTIONS()
     m_DisplayViaFill          = FILLED;
     m_DisplayPadNum           = true;
     m_DisplayPadClearance     = true;
+    m_DisplayPadNoConnects    = true;
 
     m_DisplayGraphicsFill     = FILLED;
     m_DisplayTextFill         = FILLED;
