@@ -146,18 +146,32 @@ wxString COLOR4D::ToWxString( long flags ) const
 
 bool COLOR4D::SetFromHexString( const wxString& aColorString )
 {
-    if( aColorString.length() != 9 || aColorString.GetChar( 0 ) != '#' )
+    wxString str = aColorString;
+    str.Trim( true );
+    str.Trim( false );
+
+    if( str.length() < 7 || str.GetChar( 0 ) != '#' )
         return false;
 
     unsigned long tmp;
 
-    if( wxSscanf( aColorString.wx_str() + 1, wxT( "%lx" ), &tmp ) != 1 )
+    if( wxSscanf( str.wx_str() + 1, wxT( "%lx" ), &tmp ) != 1 )
         return false;
 
-    r = ( (tmp >> 24) & 0xFF ) / 255.0;
-    g = ( (tmp >> 16) & 0xFF ) / 255.0;
-    b = ( (tmp >>  8) & 0xFF ) / 255.0;
-    a = ( tmp & 0xFF ) / 255.0;
+    if( str.length() >= 9 )
+    {
+        r = ( (tmp >> 24) & 0xFF ) / 255.0;
+        g = ( (tmp >> 16) & 0xFF ) / 255.0;
+        b = ( (tmp >>  8) & 0xFF ) / 255.0;
+        a = (  tmp        & 0xFF ) / 255.0;
+    }
+    else
+    {
+        r = ( (tmp >> 16) & 0xFF ) / 255.0;
+        g = ( (tmp >>  8) & 0xFF ) / 255.0;
+        b = (  tmp        & 0xFF ) / 255.0;
+        a = 1.0;
+    }
 
     return true;
 }
