@@ -155,6 +155,9 @@ public:
 
     wxString ToWxString( long flags ) const;
 
+    bool SetFromHexString( const wxString& aColorString );
+    wxString ToHexString() const;
+
     wxColour ToColour() const;
 
     /**

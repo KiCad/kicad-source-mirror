@@ -27,6 +27,8 @@
 #include <nlohmann/json.hpp>
 #include <gal/color4d.h>
 #include <i18n_utility.h>
+#include <wx/crt.h>
+#include <math/util.h>
 
 using namespace KIGFX;
 
@@ -139,6 +141,35 @@ wxString COLOR4D::ToWxString( long flags ) const
 {
     wxColour c = ToColour();
     return c.GetAsString( flags );
+}
+
+
+bool COLOR4D::SetFromHexString( const wxString& aColorString )
+{
+    if( aColorString.length() != 9 || aColorString.GetChar( 0 ) != '#' )
+        return false;
+
+    unsigned long tmp;
+
+    if( wxSscanf( aColorString.wx_str() + 1, wxT( "%lx" ), &tmp ) != 1 )
+        return false;
+
+    r = ( (tmp >> 24) & 0xFF ) / 255.0;
+    g = ( (tmp >> 16) & 0xFF ) / 255.0;
+    b = ( (tmp >>  8) & 0xFF ) / 255.0;
+    a = ( tmp & 0xFF ) / 255.0;
+
+    return true;
+}
+
+
+wxString COLOR4D::ToHexString() const
+{
+    return wxString::Format( wxT("#%02X%02X%02X%02X" ),
+                             KiROUND( r * 255.0 ),
+                             KiROUND( g * 255.0 ),
+                             KiROUND( b * 255.0 ),
+                             KiROUND( a * 255.0 ) );
 }
 
 

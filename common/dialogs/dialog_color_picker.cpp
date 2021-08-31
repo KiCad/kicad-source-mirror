@@ -512,7 +512,7 @@ void DIALOG_COLOR_PICKER::SetEditVals( CHANGED_COLOR aChanged, bool aCheckTransp
         m_sliderBrightness->SetValue(normalizeToInt( m_val ) );
 
     if( aChanged != HEX_CHANGED )
-        m_colorValue->ChangeValue( m_newColor4D.ToWxString( wxC2S_CSS_SYNTAX ) );
+        m_colorValue->ChangeValue( m_newColor4D.ToHexString() );
 }
 
 
@@ -676,7 +676,7 @@ void DIALOG_COLOR_PICKER::onHSVMouseDrag( wxMouseEvent& event )
 
 void DIALOG_COLOR_PICKER::OnColorValueText( wxCommandEvent& event )
 {
-    m_newColor4D.SetFromWxString( m_colorValue->GetValue() );
+    m_newColor4D.SetFromHexString( m_colorValue->GetValue() );
     m_newColor4D.ToHSV( m_hue, m_sat, m_val, true );
 
     SetEditVals( HEX_CHANGED, true );
