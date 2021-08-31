@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-08-30 14:45-0700\n"
-"PO-Revision-Date: 2021-08-27 08:25+0000\n"
+"PO-Revision-Date: 2021-09-01 16:34+0000\n"
 "Last-Translator: Eric <spice2wolf@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
@@ -30,7 +30,6 @@ msgstr ""
 "X-Poedit-SearchPathExcluded-0: resources\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
-#, fuzzy
 msgid "All Files"
 msgstr "所有文件"
 
@@ -944,27 +943,24 @@ msgid "Toggle Through Hole 3D models"
 msgstr "切换直插通孔 3D 模型"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:213
-#, fuzzy
 msgid "Toggle 3D models for 'Through hole' type components"
-msgstr "切换直插元件的通孔 3D 模型"
+msgstr "切换 '通孔' 类型组件的 3D 模型"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:219
 msgid "Toggle SMD 3D models"
 msgstr "切换贴片(SMD) 3D 模型"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:219
-#, fuzzy
 msgid "Toggle 3D models for 'Surface mount' type components"
-msgstr "切换表贴元件的 3D 模型"
+msgstr "切换'表面贴装'类型组件的 3D 模型"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:225
-#, fuzzy
 msgid "Toggle Other 3D models"
-msgstr "切换贴片(SMD) 3D 模型"
+msgstr "切换其他 3D 模型"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:225
 msgid "Toggle 3D models for 'Other' type components"
-msgstr ""
+msgstr "切换 '其他' 类型组件的 3D 模型"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:230
 msgid "Show Model Bounding Boxes"
@@ -4354,7 +4350,7 @@ msgstr "可选的。如果要创建自己的工程模板文件夹，则可以定
 msgid ""
 "A directory containing 3rd party plugins, libraries and other downloadable "
 "content."
-msgstr ""
+msgstr "包含第三方插件、库和其他可下载内容的目录。"
 
 #: common/env_vars.cpp:86
 msgid ""
@@ -5287,9 +5283,8 @@ msgid "No default editor found, you must choose it"
 msgstr "未找到默认编辑器，请先设置首选文本编辑器"
 
 #: common/pgm_base.cpp:184 common/pgm_base.cpp:186
-#, fuzzy
 msgid "Executable file"
-msgstr "可执行文件 ("
+msgstr "可执行文件"
 
 #: common/pgm_base.cpp:196
 msgid "Select Preferred Editor"
@@ -12329,16 +12324,14 @@ msgid "Schematic Files"
 msgstr "原理图文件"
 
 #: eeschema/files-io.cpp:75
-#, fuzzy
 msgid "Create a new project for this schematic"
-msgstr "为此板创建新工程"
+msgstr "为此原理图创建一个新项目"
 
 #: eeschema/files-io.cpp:77
-#, fuzzy
 msgid ""
 "Creating a project will enable features such as text variables, net classes, "
 "and ERC exclusions"
-msgstr "创建工程将启用设计规则、网络类和图层预设等功能"
+msgstr "创建工程将启用文本变量、网络类和 ERC 排除等功能"
 
 #: eeschema/files-io.cpp:123
 #, c-format
@@ -16891,64 +16884,52 @@ msgid "Gerber files (.g* .lgr .pho)"
 msgstr "Gerber 文件 (.g* .lgr .pho)"
 
 #: gerbview/files.cpp:144
-#, fuzzy
 msgid "Top layer"
-msgstr "层："
+msgstr "顶层"
 
 #: gerbview/files.cpp:145
-#, fuzzy
 msgid "Bottom layer"
-msgstr "底层："
+msgstr "底层"
 
 #: gerbview/files.cpp:146
-#, fuzzy
 msgid "Bottom solder resist"
-msgstr "底部焊膏"
+msgstr "底部阻焊剂"
 
 #: gerbview/files.cpp:147
-#, fuzzy
 msgid "Top solder resist"
-msgstr "顶部焊膏"
+msgstr "顶部阻焊剂"
 
 #: gerbview/files.cpp:148
-#, fuzzy
 msgid "Bottom overlay"
-msgstr "底层阻焊"
+msgstr "底层丝印字符"
 
 #: gerbview/files.cpp:149
-#, fuzzy
 msgid "Top overlay"
-msgstr "顶层阻焊"
+msgstr "顶层丝印字符"
 
 #: gerbview/files.cpp:150
-#, fuzzy
 msgid "Bottom paste"
-msgstr "没有粘贴项"
+msgstr "底层焊膏"
 
 #: gerbview/files.cpp:151
-#, fuzzy
 msgid "Top paste"
-msgstr "顶部焊膏"
+msgstr "顶层焊膏"
 
 #: gerbview/files.cpp:152
-#, fuzzy
 msgid "Keep-out layer"
-msgstr "保留 &外部层"
+msgstr "隔离层"
 
 #: gerbview/files.cpp:153
-#, fuzzy
 msgid "Mechanical layers"
-msgstr "工艺层："
+msgstr "机械层"
 
 #: gerbview/files.cpp:154
-#, fuzzy
 msgid "Top Pad Master"
-msgstr "顶部焊膏"
+msgstr "顶部主焊盘"
 
 #: gerbview/files.cpp:155
-#, fuzzy
 msgid "Bottom Pad Master"
-msgstr "底部焊膏"
+msgstr "底部主焊盘"
 
 #: gerbview/files.cpp:173
 msgid "Open Gerber File(s)"
@@ -17603,9 +17584,8 @@ msgid "Reset all settings on this page to their default"
 msgstr "将此页面上的所有设置重置为其默认值"
 
 #: include/wxstream_helper.h:46
-#, fuzzy
 msgid "Failed to output data"
-msgstr "未能输出数据。"
+msgstr "未能输出数据"
 
 #: kicad/dialogs/dialog_template_selector.cpp:127
 msgid "<html><h1>Template Selector</h1></html>"
@@ -17672,7 +17652,7 @@ msgstr "编辑用于原理图和 PCB 设计的图纸边框和工程图明细表"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:142
 msgid "Manage downloadable packages from KiCad and 3rd party repositories"
-msgstr ""
+msgstr "管理来自 KiCad 和第三方存储库的可下载包"
 
 #: kicad/files-io.cpp:46
 msgid "KiCad project file"
@@ -17853,83 +17833,78 @@ msgstr "在文件资源管理器中打开工程目录"
 
 #: kicad/pcm/dialogs/dialog_manage_repositories.cpp:67
 msgid "Please enter fully qualified repository url"
-msgstr ""
+msgstr "请输入完全合格的存储库 url"
 
 #: kicad/pcm/dialogs/dialog_manage_repositories.cpp:67
-#, fuzzy
 msgid "Add repository"
-msgstr "添加连线和总线入口"
+msgstr "添加仓库"
 
 #: kicad/pcm/dialogs/dialog_manage_repositories_base.h:60
-#, fuzzy
 msgid "Manage Repositores"
-msgstr "管理总线定义"
+msgstr "管理仓库"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:50
-#, fuzzy, c-format
+#, c-format
 msgid "Plugins (%d)"
-msgstr "违规 (%d)"
+msgstr "插件 (%d)"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:51
-#, fuzzy, c-format
+#, c-format
 msgid "Libraries (%d)"
-msgstr "库"
+msgstr "库 (%d)"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:52
-#, fuzzy, c-format
+#, c-format
 msgid "Color themes (%d)"
-msgstr "颜色主题："
+msgstr "颜色主题 (%d)"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:79 kicad/pcm/dialogs/dialog_pcm.cpp:315
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:51
 #, c-format
 msgid "Repository (%d)"
-msgstr ""
+msgstr "存储库 (%d)"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:96 kicad/pcm/dialogs/panel_package.cpp:70
 #: kicad/pcm/dialogs/panel_package.cpp:74
 #: kicad/pcm/dialogs/panel_package_base.cpp:67
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:108
 msgid "Install"
-msgstr ""
+msgstr "安装"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:105 kicad/pcm/dialogs/panel_package.cpp:78
 msgid "Uninstall"
-msgstr ""
+msgstr "卸载"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:160
-#, fuzzy
 msgid ""
 "Are you sure you want to close the package manager and discard pending "
 "changes?"
-msgstr "确定要删除已选择项吗？"
+msgstr "您确定要关闭包管理器并放弃挂起的更改吗？"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:162
 #: kicad/tools/kicad_manager_actions.cpp:118
 msgid "Plugin and Content Manager"
-msgstr ""
+msgstr "插件和内容管理器"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:235
-#, fuzzy
 msgid "Choose package file"
-msgstr "选择图片"
+msgstr "选择包文件"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:330
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:117
 #, c-format
 msgid "Pending (%d)"
-msgstr ""
+msgstr "待安装 (%d)"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:365
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:60
 #, c-format
 msgid "Installed (%d)"
-msgstr ""
+msgstr "已安装 (%d)"
 
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:37
-#, fuzzy
 msgid "Manage"
-msgstr "KiCad 管理器"
+msgstr "管理"
 
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:82
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:103
@@ -17943,277 +17918,249 @@ msgid "Package"
 msgstr "包"
 
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:85
-#, fuzzy
 msgid "Repository"
-msgstr "报告"
+msgstr "仓库"
 
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:103
-#, fuzzy
 msgid "Discard action"
-msgstr "放弃更改"
+msgstr "放弃操作"
 
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:133
-#, fuzzy
 msgid "Install from file..."
-msgstr "无法重命名文件... "
+msgstr "从文件安装…"
 
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:136
-#, fuzzy
 msgid "Apply changes"
-msgstr "保存更改"
+msgstr "应用更改"
 
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:139
-#, fuzzy
 msgid "Discard changes"
 msgstr "放弃更改"
 
 #: kicad/pcm/dialogs/dialog_pcm_base.h:73
 msgid "Plugin And Content Manager"
-msgstr ""
+msgstr "插件和内容管理器"
 
 #: kicad/pcm/dialogs/dialog_pcm_progress.cpp:86
 #, c-format
 msgid "Downloaded %lld/%lld Kb"
-msgstr ""
+msgstr "已下载 %lld/%lld Kb"
 
 #: kicad/pcm/dialogs/dialog_pcm_progress.cpp:150
 msgid "All downloads finished"
-msgstr ""
+msgstr "已完成所有下载"
 
 #: kicad/pcm/dialogs/dialog_pcm_progress_base.cpp:21
-#, fuzzy
 msgid "Download progress"
-msgstr "正在下载 3D 库"
+msgstr "下载进度"
 
 #: kicad/pcm/dialogs/dialog_pcm_progress_base.cpp:23
-#, fuzzy
 msgid "Waiting..."
-msgstr "载入中..."
+msgstr "等待中..."
 
 #: kicad/pcm/dialogs/dialog_pcm_progress_base.cpp:42
-#, fuzzy
 msgid "Overall progress"
-msgstr "材料属性："
+msgstr "总体进度"
 
 #: kicad/pcm/dialogs/dialog_pcm_progress_base.cpp:52
 msgid "Details"
-msgstr ""
+msgstr "详情"
 
 #: kicad/pcm/dialogs/dialog_pcm_progress_base.h:58
 msgid "Applying package changes"
-msgstr ""
+msgstr "应用包更改"
 
 #: kicad/pcm/dialogs/panel_package.cpp:82
-#, fuzzy
 msgid "Pending install"
-msgstr "渲染选项"
+msgstr "待安装"
 
 #: kicad/pcm/dialogs/panel_package.cpp:86
-#, fuzzy
 msgid "Pending uninstall"
-msgstr "渲染引擎"
+msgstr "待卸载"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:147
 msgid "Metadata"
-msgstr ""
+msgstr "元数据"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:154
-#, fuzzy, c-format
+#, c-format
 msgid "Package identifier: %s\n"
-msgstr "唯一标识符："
+msgstr "包标识符：%s\n"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:155
-#, fuzzy, c-format
+#, c-format
 msgid "License: %s\n"
-msgstr "许可证"
+msgstr "许可证：%s\n"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:169
 #, c-format
 msgid "Tags: %s\n"
-msgstr ""
+msgstr "标签：%s\n"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:184
 msgid "Author"
-msgstr ""
+msgstr "作者"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:187
 msgid "Maintainer"
-msgstr ""
+msgstr "维护者"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:191
-#, fuzzy
 msgid "Resources"
-msgstr "交换源"
+msgstr "资源"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:266
 msgid "Pick a package on the left panel to view it's description."
-msgstr ""
+msgstr "在左侧面板上选择一个包来查看它的描述。"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:342
 msgid "Package download url is not specified"
-msgstr ""
+msgstr "未指定包下载地址"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:343
-#, fuzzy
 msgid "Error downloading package"
-msgstr "加载编辑器时出错。"
+msgstr "下载包时出错"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:352
-#, fuzzy
 msgid "Save package"
-msgstr "保存更改"
+msgstr "保存包"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:364
-#, fuzzy
 msgid "Downloading package"
-msgstr "正在下载 3D 库"
+msgstr "正在下载包"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:380
 msgid ""
 "Integrity of the downloaded package could not be verified, hash does not "
 "match. Are you sure you want to keep this file?"
-msgstr ""
+msgstr "无法验证下载的包的完整性，散列不匹配。 您确定要保留此文件吗？"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:382
-#, fuzzy
 msgid "Keep downloaded file"
-msgstr "阻止铜充填"
+msgstr "保留已下载文件"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:419
 msgid ""
 "This package version is incompatible with your kicad version or platform. "
 "Are you sure you want to install it anyway?"
-msgstr ""
+msgstr "此软件包版本与您的 kicad 版本或平台不兼容。 您确定要安装它吗？"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:421
-#, fuzzy
 msgid "Install package"
-msgstr "在包中"
+msgstr "安装包"
 
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:64
-#, fuzzy
 msgid "Show all versions"
-msgstr "显示所有过孔"
+msgstr "显示所有版本"
 
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:82
-#, fuzzy
 msgid "Dl Size"
-msgstr "X 尺寸"
+msgstr "下载大小"
 
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:83
-#, fuzzy
 msgid "Inst Size"
-msgstr "文本大小"
+msgstr "安装大小"
 
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:84
-#, fuzzy
 msgid "Comp"
-msgstr "厂商："
+msgstr "组件"
 
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:105
-#, fuzzy
 msgid "Download"
-msgstr "向下"
+msgstr "下载"
 
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:121
-#, fuzzy
 msgid "Versions"
 msgstr "版本"
 
 #: kicad/pcm/pcm.cpp:79
-#, fuzzy, c-format
+#, c-format
 msgid "schema file '%s' not found"
-msgstr "没有找到原理图文件 '%s'。"
+msgstr "没有找到原理图文件 '%s'"
 
 #: kicad/pcm/pcm.cpp:81
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading schema: %s"
-msgstr "加载原理图 '%s' 时出错。"
+msgstr "加载原理图时出错：%s"
 
 #: kicad/pcm/pcm.cpp:107
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading installed packages list: %s"
-msgstr ""
-"网表文件加载错误\n"
-" %s"
+msgstr "加载已安装包列表时出错：%s"
 
 #: kicad/pcm/pcm.cpp:184
 #, c-format
 msgid "Downloading %lld/%lld Kb"
-msgstr ""
+msgstr "正下载 %lld/%lld Kb"
 
 #: kicad/pcm/pcm.cpp:208
-#, fuzzy
 msgid "Download is too large."
-msgstr "正在下载 3D 库"
+msgstr "下载过大。"
 
 #: kicad/pcm/pcm.cpp:222
 msgid "Fetching repository"
-msgstr ""
+msgstr "获取存储库中"
 
 #: kicad/pcm/pcm.cpp:224
-#, fuzzy
 msgid "Unable to load repository url"
-msgstr "无法载入文件 %s"
+msgstr "无法载入仓库 url"
 
 #: kicad/pcm/pcm.cpp:239
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Unable to parse repository:\n"
 "\n"
 "%s"
 msgstr ""
-"无法解析网址：\n"
-"\"%s\""
+"无法解析仓库：\n"
+"\n"
+"%s"
 
 #: kicad/pcm/pcm.cpp:260
 msgid "Fetching repository packages"
-msgstr ""
+msgstr "正获取存储库包"
 
 #: kicad/pcm/pcm.cpp:262
-#, fuzzy
 msgid "Unable to load repository packages url."
-msgstr "无法加载工程文件 %s"
+msgstr "无法加载仓库包 url。"
 
 #: kicad/pcm/pcm.cpp:270
 msgid "Packages hash doesn't match. Repository may be corrupted."
-msgstr ""
+msgstr "包哈希不匹配。 存储库可能已损坏。"
 
 #: kicad/pcm/pcm.cpp:286
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Unable to parse packages metadata:\n"
 "\n"
 "%s"
 msgstr ""
-"无法解析网址：\n"
-"\"%s\""
+"无法解析包元数据：\n"
+"\n"
+"%s"
 
 #: kicad/pcm/pcm.cpp:373
 msgid ""
 "Packages cache for current repository is corrupted, it will be redownloaded."
-msgstr ""
+msgstr "当前存储库的包缓存已损坏，将重新下载。"
 
 #: kicad/pcm/pcm.cpp:423
-#, fuzzy
 msgid "Downloading resources"
-msgstr "正在下载 3D 库"
+msgstr "正在下载资源"
 
 #: kicad/pcm/pcm.cpp:437
 msgid ""
 "Resources file hash doesn't match and will not be used. Repository may be "
 "corrupted."
-msgstr ""
+msgstr "资源文件哈希不匹配，不会被使用。 存储库可能已损坏。"
 
 #: kicad/pcm/pcm.cpp:582
-#, fuzzy
 msgid "Local file"
-msgstr "编辑本地文件..."
+msgstr "本地文件"
 
 #: kicad/pcm/pcm_task_manager.cpp:63
-#, fuzzy
 msgid "Unable to create download directory!"
-msgstr "无法创建目录 \"%s\""
+msgstr "无法创建下载目录！"
 
 #: kicad/pcm/pcm_task_manager.cpp:92
 #, c-format
@@ -18221,85 +18168,84 @@ msgid ""
 "Downloaded archive hash for package %s does not match repository entry. This "
 "may indicate a problem with the package, if the issue persists report this "
 "to repository maintainers."
-msgstr ""
+msgstr "包 %s 的已下载存档哈希与存储库条目不匹配。 这可能表明包有问题，如果问题仍然存在，请将此报告给存储库维护者。"
 
 #: kicad/pcm/pcm_task_manager.cpp:101
-#, fuzzy, c-format
+#, c-format
 msgid "Extracting package '%s'."
-msgstr "正在提取文件 \"%s\"。"
+msgstr "正在提取包 \"%s\"。"
 
 #: kicad/pcm/pcm_task_manager.cpp:116
 #, c-format
 msgid "Removing downloaded archive '%s'."
-msgstr ""
+msgstr "正移除下载的存档 '%s'。"
 
 #: kicad/pcm/pcm_task_manager.cpp:157
 #, c-format
 msgid "Downloading package url: '%s'"
-msgstr ""
+msgstr "下载包地址： '%s'"
 
 #: kicad/pcm/pcm_task_manager.cpp:170
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Failed to download url %s\n"
 "%s"
-msgstr "未能加载 '%s'."
+msgstr ""
+"未能下载 url %s\n"
+"%s"
 
 #: kicad/pcm/pcm_task_manager.cpp:249
 msgid "Aborting package installation."
-msgstr ""
+msgstr "正中止软件包安装。"
 
 #: kicad/pcm/pcm_task_manager.cpp:297
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Unable to parse package metadata:\n"
 "\n"
 "%s"
 msgstr ""
-"无法解析网址：\n"
-"\"%s\""
+"无法解析包元数据：\n"
+"\n"
+"%s"
 
 #: kicad/pcm/pcm_task_manager.cpp:306
 msgid "Archive does not contain a valid metadata.json file"
-msgstr ""
+msgstr "存档不包含有效的 metadata.json 文件"
 
 #: kicad/pcm/pcm_task_manager.cpp:314
-#, fuzzy
 msgid "Archive metadata must have a single version defined"
-msgstr "图框必须具有指定的文件。"
+msgstr "存档元数据必须定义一个版本"
 
 #: kicad/pcm/pcm_task_manager.cpp:326
 #, c-format
 msgid ""
 "Package with identifier %s is already installed, you must first uninstall "
 "this package."
-msgstr ""
+msgstr "已安装标识符为 %s 的程序包，您必须先卸载此程序包。"
 
 #: kicad/pcm/pcm_task_manager.cpp:354
-#, fuzzy, c-format
+#, c-format
 msgid "Removing directory %s"
-msgstr "删除单一焊盘网络 %s。"
+msgstr "正在删除目录 %s"
 
 #: kicad/pcm/pcm_task_manager.cpp:359
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to remove directory %s"
-msgstr "无法创建目录 \"%s\""
+msgstr "未能删除目录 %s"
 
 #: kicad/pcm/pcm_task_manager.cpp:376
 #, c-format
 msgid "Package %s uninstalled"
-msgstr ""
+msgstr "已卸载包 %s"
 
 #: kicad/pcm/pcm_task_manager.cpp:445
 msgid "Aborting remaining tasks."
-msgstr ""
+msgstr "正中止剩余任务。"
 
 #: kicad/pcm/pcm_task_manager.cpp:448
-#, fuzzy
 msgid "Done."
-msgstr ""
-"完成。\n"
-"\n"
+msgstr "完成。"
 
 #: kicad/project_template.cpp:52
 msgid "Could open the template path!"
@@ -18543,7 +18489,7 @@ msgstr "编辑图纸边框和工程图明细表"
 
 #: kicad/tools/kicad_manager_actions.cpp:118
 msgid "Run Plugin and Content Manager"
-msgstr ""
+msgstr "运行插件和内容管理器"
 
 #: kicad/tools/kicad_manager_actions.cpp:125
 msgid "Open Text Editor"
@@ -20110,9 +20056,8 @@ msgstr ""
 "是否要退出并放弃修改？"
 
 #: pcb_calculator/regulators_funct.cpp:127
-#, fuzzy
 msgid "PCB Calculator data file"
-msgstr "PCB 计算器数据文件 (*.%s)|*.%s"
+msgstr "PCB 计算器数据文件"
 
 #: pcb_calculator/regulators_funct.cpp:130
 msgid "Select PCB Calculator Data File"
@@ -20828,9 +20773,8 @@ msgid "A layer thickness is < 0. Fix it"
 msgstr "层厚度为 < 0。修复它"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:1522
-#, fuzzy
 msgid "Custom..."
-msgstr "自定义"
+msgstr "自定义…"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:20
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:49
@@ -22980,9 +22924,8 @@ msgid "Select a STEP export filename"
 msgstr "选择导出 STEP 文件名"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:138
-#, fuzzy
 msgid "STEP files"
-msgstr "SVG 文件"
+msgstr "STEP 文件"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:202
 msgid "Non-unity scaled models:"
@@ -23016,7 +22959,7 @@ msgstr "导出 STEP"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:26
 msgid "temp"
-msgstr "temp"
+msgstr "临时"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:36
 msgid "Coordinates"
@@ -23812,9 +23755,8 @@ msgid "CSV"
 msgstr "CSV"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:48
-#, fuzzy
 msgid "Gerber (experimental)"
-msgstr "Gerber (非常实验性)"
+msgstr "Gerber (实验性)"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:50
 msgid "Format"
@@ -23841,9 +23783,8 @@ msgstr ""
 "只创建一个包含所有封装放置文件\n"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:74
-#, fuzzy
 msgid "Include only SMD footprints"
-msgstr "包含封装 (&F)"
+msgstr "仅包含贴片封装"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:77
 msgid "Exclude all footprints with through hole pads"
@@ -28463,9 +28404,8 @@ msgid "Local override on %s; clearance: %s."
 msgstr "%s 上的本地替代；间隙：%s。"
 
 #: pcbnew/drc/drc_engine.cpp:831
-#, fuzzy
 msgid "board minimum"
-msgstr "电路板最小宽度"
+msgstr "电路板最小值"
 
 #: pcbnew/drc/drc_engine.cpp:834
 #, c-format
@@ -28473,14 +28413,13 @@ msgid "Board minimum clearance: %s."
 msgstr "板最小间隙：%s。"
 
 #: pcbnew/drc/drc_engine.cpp:843
-#, fuzzy
 msgid "board minimum hole"
-msgstr "电路板最小宽度"
+msgstr "板最小孔"
 
 #: pcbnew/drc/drc_engine.cpp:846
-#, fuzzy, c-format
+#, c-format
 msgid "Board minimum hole clearance: %s."
-msgstr "板最小间隙：%s。"
+msgstr "板最小孔间隙：%s。"
 
 #: pcbnew/drc/drc_engine.cpp:873
 #, c-format
@@ -28744,9 +28683,8 @@ msgid "Rule: %s"
 msgstr "规则：%s"
 
 #: pcbnew/drc/drc_item.cpp:322
-#, fuzzy
 msgid "Local override"
-msgstr "局部间隙"
+msgstr "本地覆盖"
 
 #: pcbnew/drc/drc_rule.h:137
 #, c-format
@@ -29640,14 +29578,13 @@ msgid "No footprints to export!"
 msgstr "没有可导出的封装！"
 
 #: pcbnew/footprint_libraries_utils.cpp:689
-#, fuzzy, c-format
+#, c-format
 msgid "Update footprints on board to refer to %s?"
-msgstr "更新在板上的封装"
+msgstr "更新板上的封装指向 %s?"
 
 #: pcbnew/footprint_libraries_utils.cpp:736
-#, fuzzy
 msgid "Update footprints on board to refer to new library?"
-msgstr "更新封装以包含来自库的任何更改"
+msgstr "更新板上的封装以引用新库？"
 
 #: pcbnew/footprint_libraries_utils.cpp:875
 #: pcbnew/footprint_viewer_frame.cpp:718
