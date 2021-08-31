@@ -153,12 +153,12 @@ long KIDIALOG::getStyle( KD_TYPE aType )
 
 bool OverrideLock( wxWindow* aParent, const wxString& aMessage  )
 {
-    wxRichMessageDialog dlg( aParent, aMessage, _( "File Open Error" ),
+    wxMessageDialog dlg( aParent, aMessage, _( "File Open Error" ),
                              wxYES_NO | wxICON_ERROR | wxCENTER );
 
     // Note: must use the "no" label to get the correct positioning/spacing for a (potentially)
     // destructive action
-    dlg.SetYesNoLabels( _( "OK" ), _( "Open Anyway" ) );
+    dlg.SetYesNoLabels( _( "Do Not Open" ), _( "Open Anyway" ) );
 
     return dlg.ShowModal() == wxID_NO;
 }
@@ -287,14 +287,14 @@ void DisplayErrorMessage( wxWindow* aParent, const wxString& aText, const wxStri
 
 void DisplayInfoMessage( wxWindow* aParent, const wxString& aMessage, const wxString& aExtraInfo )
 {
-    wxRichMessageDialog* dlg;
-    int                  icon = wxICON_INFORMATION;
+    wxMessageDialog* dlg;
+    int              icon = wxICON_INFORMATION;
 
-    dlg = new wxRichMessageDialog( aParent, aMessage, _( "Info" ),
-                                   wxOK | wxCENTRE | wxRESIZE_BORDER | icon | wxSTAY_ON_TOP );
+    dlg = new wxMessageDialog( aParent, aMessage, _( "Information" ),
+                               wxOK | wxCENTRE | wxRESIZE_BORDER | icon | wxSTAY_ON_TOP );
 
     if( !aExtraInfo.IsEmpty() )
-        dlg->ShowDetailedText( aExtraInfo );
+        dlg->SetExtendedMessage( aExtraInfo );
 
     dlg->ShowModal();
     dlg->Destroy();
