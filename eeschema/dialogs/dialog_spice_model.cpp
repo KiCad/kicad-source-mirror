@@ -193,7 +193,7 @@ bool DIALOG_SPICE_MODEL::TransferDataFromWindow()
 
         int modelIdx = m_modelType->GetSelection();
 
-        if( modelIdx > 0 && modelIdx < (int)modelTypes.size() )
+        if( modelIdx >= 0 && modelIdx < (int)modelTypes.size() )
             m_fieldsTmp[SF_PRIMITIVE] = static_cast<char>( modelTypes[modelIdx].type );
 
         m_fieldsTmp[SF_MODEL] = m_modelName->GetValue();
