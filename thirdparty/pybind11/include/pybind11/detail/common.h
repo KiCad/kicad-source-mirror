@@ -136,10 +136,6 @@
 #  pragma warning(push)
 // C4505: 'PySlice_GetIndicesEx': unreferenced local function has been removed (PyPy only)
 #  pragma warning(disable: 4505)
-#  if defined(_DEBUG) && !defined(Py_DEBUG)
-#    define PYBIND11_DEBUG_MARKER
-#    undef _DEBUG
-#  endif
 #  pragma warning(disable: 4510 4610 4512 4005)
 #endif
 
