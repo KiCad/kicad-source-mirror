@@ -511,7 +511,9 @@ void DIALOG_COLOR_PICKER::SetEditVals( CHANGED_COLOR aChanged, bool aCheckTransp
     if( aChanged != VAL_CHANGED )
         m_sliderBrightness->SetValue(normalizeToInt( m_val ) );
 
-    if( aChanged != HEX_CHANGED )
+    if( aChanged == HEX_CHANGED )
+        m_sliderTransparency->SetValue( normalizeToInt( m_newColor4D.a, ALPHA_MAX ) );
+    else
         m_colorValue->ChangeValue( m_newColor4D.ToHexString() );
 }
 
@@ -731,6 +733,7 @@ void DIALOG_COLOR_PICKER::OnChangeAlpha( wxScrollEvent& event )
     updatePreview( m_NewColorRect, m_newColor4D );
     m_NewColorRect->Thaw();
     m_NewColorRect->Refresh();
+    SetEditVals( ALPHA_CHANGED, false );
 }
 
 
