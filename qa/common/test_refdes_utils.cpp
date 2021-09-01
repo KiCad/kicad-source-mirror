@@ -66,36 +66,4 @@ BOOST_AUTO_TEST_CASE( GetPrefix )
 }
 
 
-struct REF_DES_COMP_CASE
-{
-    std::string m_refdes_a;
-    std::string m_refdes_b;
-    int         m_exp_res;
-};
-
-/**
- * Test the #UTIL::RefDesStringCompare function
- */
-BOOST_AUTO_TEST_CASE( RefDesComp )
-{
-    const int SAME = 0;
-    const int LESS = -1;
-    const int MORE = 1;
-
-    const std::vector<REF_DES_COMP_CASE> cases = {
-        { "", "", SAME },
-        { "U", "U", SAME },
-        { "U1", "U1", SAME },
-        { "U1", "U2", LESS },
-        { "U2", "U1", MORE },
-        { "U1000", "U2000", LESS },
-    };
-
-    for( const auto& c : cases )
-    {
-        BOOST_CHECK_EQUAL( UTIL::RefDesStringCompare( c.m_refdes_a, c.m_refdes_b ), c.m_exp_res );
-    }
-}
-
-
 BOOST_AUTO_TEST_SUITE_END()

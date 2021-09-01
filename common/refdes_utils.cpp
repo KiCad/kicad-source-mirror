@@ -70,46 +70,4 @@ int GetRefDesNumber( const wxString& aRefDes )
     return retval;
 }
 
-
-int RefDesStringCompare( const wxString& aFirst, const wxString& aSecond )
-{
-    // Compare unescaped text
-    wxString strFWord = UnescapeString( aFirst );
-    wxString strSWord = UnescapeString( aSecond );
-
-    // The different sections of the two strings
-    wxString strFWordBeg, strFWordMid, strFWordEnd;
-    wxString strSWordBeg, strSWordMid, strSWordEnd;
-
-    // Split the two strings into separate parts
-    SplitString( strFWord, &strFWordBeg, &strFWordMid, &strFWordEnd );
-    SplitString( strSWord, &strSWordBeg, &strSWordMid, &strSWordEnd );
-
-    // Compare the Beginning section of the strings
-    int isEqual = strFWordBeg.Cmp( strSWordBeg );
-
-    if( isEqual > 0 )
-        return 1;
-    else if( isEqual < 0 )
-        return -1;
-    else
-    {
-        // If the first sections are equal compare their digits
-        long lFirstDigit = 0;
-        long lSecondDigit = 0;
-
-        strFWordMid.ToLong( &lFirstDigit );
-        strSWordMid.ToLong( &lSecondDigit );
-
-        if( lFirstDigit > lSecondDigit )
-            return 1;
-        else if( lFirstDigit < lSecondDigit )
-            return -1;
-        // If the first two sections are equal compare the endings
-        else
-            return strFWordEnd.Cmp( strSWordEnd );
-    }
-}
-
-
 } // namespace UTIL

@@ -104,7 +104,7 @@ public:
     const char* GetRefStr() const { return m_ref.c_str(); }
 
     ///< Return reference name with unit altogether
-    wxString GetFullRef()
+    wxString GetFullRef() const
     {
         if( GetSymbol()->GetUnitCount() > 1 )
             return GetRef() + LIB_SYMBOL::SubReference( GetUnit() );

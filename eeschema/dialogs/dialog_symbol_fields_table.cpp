@@ -33,7 +33,6 @@
 #include <grid_tricks.h>
 #include <string_utils.h>
 #include <kiface_i.h>
-#include <refdes_utils.h>
 #include <sch_edit_frame.h>
 #include <sch_reference_list.h>
 #include <schematic.h>
@@ -302,9 +301,9 @@ public:
             std::sort( references.begin(), references.end(),
                     []( const SCH_REFERENCE& l, const SCH_REFERENCE& r ) -> bool
                     {
-                        wxString l_ref( l.GetRef() << l.GetRefNumber() );
-                        wxString r_ref( r.GetRef() << r.GetRefNumber() );
-                        return UTIL::RefDesStringCompare( l_ref, r_ref ) < 0;
+                        wxString l_ref( l.GetFullRef() );
+                        wxString r_ref( r.GetFullRef() );
+                        return StrNumCmp( l_ref, r_ref, true ) < 0;
                     } );
 
             auto logicalEnd = std::unique( references.begin(), references.end(),
@@ -372,9 +371,9 @@ public:
 
         if( lhs == rhs || sortCol == REFERENCE_FIELD )
         {
-            wxString lhRef = lhGroup.m_Refs[ 0 ].GetRef() + lhGroup.m_Refs[ 0 ].GetRefNumber();
-            wxString rhRef = rhGroup.m_Refs[ 0 ].GetRef() + rhGroup.m_Refs[ 0 ].GetRefNumber();
-            return local_cmp( UTIL::RefDesStringCompare( lhRef, rhRef ), 0 );
+            wxString lhRef = lhGroup.m_Refs[ 0 ].GetFullRef();
+            wxString rhRef = rhGroup.m_Refs[ 0 ].GetFullRef();
+            return local_cmp( StrNumCmp( lhRef, rhRef, true ), 0 );
         }
         else
         {

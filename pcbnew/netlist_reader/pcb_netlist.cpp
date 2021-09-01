@@ -24,7 +24,7 @@
  */
 
 
-#include <refdes_utils.h>
+#include <string_utils.h>
 #include "pcb_netlist.h"
 #include <footprint.h>
 
@@ -211,7 +211,7 @@ void NETLIST::SortByFPID()
  */
 bool operator < ( const COMPONENT& item1, const COMPONENT& item2 )
 {
-    return UTIL::RefDesStringCompare( item1.GetReference(), item2.GetReference() ) < 0;
+    return StrNumCmp( item1.GetReference(), item2.GetReference(), true ) < 0;
 }
 
 

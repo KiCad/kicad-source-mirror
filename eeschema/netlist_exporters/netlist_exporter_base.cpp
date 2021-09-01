@@ -25,7 +25,7 @@
 
 #include <netlist_exporter_base.h>
 
-#include <refdes_utils.h>
+#include <string_utils.h>
 
 #include <symbol_library.h>
 #include <connection_graph.h>
@@ -117,7 +117,7 @@ SCH_SYMBOL* NETLIST_EXPORTER_BASE::findNextSymbol( EDA_ITEM* aItem, SCH_SHEET_PA
 static bool sortPinsByNum( PIN_INFO& aPin1, PIN_INFO& aPin2 )
 {
     // return "lhs < rhs"
-    return UTIL::RefDesStringCompare( aPin1.num, aPin2.num ) < 0;
+    return StrNumCmp( aPin1.num, aPin2.num, true ) < 0;
 }
 
 

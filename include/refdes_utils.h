@@ -64,15 +64,6 @@ wxString GetRefDesUnannotated( const wxString& aRefDes );
  */
 int GetRefDesNumber( const wxString& aRefDes );
 
-/**
- * Acts just like the strcmp function but treats numbers within the string text
- * correctly for sorting.  eg. A10 > A2
- * return -1 if first string is less than the second
- * return 0 if the strings are equal
- * return 1 if the first string is greater than the second
- */
-int RefDesStringCompare( const wxString& lhs, const wxString& rhs );
-
 } // namespace UTIL
 
 #endif // REFDES_UTILS__H

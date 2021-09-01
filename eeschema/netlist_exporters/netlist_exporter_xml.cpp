@@ -31,7 +31,7 @@
 #include <symbol_library.h>
 #include <string_utils.h>
 #include <connection_graph.h>
-#include <refdes_utils.h>
+#include <string_utils.h>
 #include <wx/wfstream.h>
 #include <xnode.h>      // also nests: <wx/xml/xml.h>
 
@@ -237,8 +237,8 @@ XNODE* NETLIST_EXPORTER_XML::makeSymbols( unsigned aCtl )
 
         auto cmp = [sheet]( SCH_SYMBOL* a, SCH_SYMBOL* b )
                    {
-                       return ( UTIL::RefDesStringCompare( a->GetRef( &sheet ),
-                                                           b->GetRef( &sheet ) ) < 0 );
+                       return ( StrNumCmp( a->GetRef( &sheet, false ),
+                                           b->GetRef( &sheet, false ), true ) < 0 );
                    };
 
         std::set<SCH_SYMBOL*, decltype( cmp )> ordered_symbols( cmp );
@@ -779,5 +779,5 @@ XNODE* NETLIST_EXPORTER_XML::node( const wxString& aName,
 static bool sortPinsByNumber( LIB_PIN* aPin1, LIB_PIN* aPin2 )
 {
     // return "lhs < rhs"
-    return UTIL::RefDesStringCompare( aPin1->GetShownNumber(), aPin2->GetShownNumber() ) < 0;
+    return StrNumCmp( aPin1->GetShownNumber(), aPin2->GetShownNumber(), true ) < 0;
 }

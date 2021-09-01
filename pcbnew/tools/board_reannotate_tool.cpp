@@ -24,6 +24,7 @@
  */
 
 #include <refdes_utils.h>
+#include <string_utils.h>
 #include <tool/tool_manager.h>
 #include <wx/filedlg.h>
 #include <tools/board_reannotate_tool.h>
@@ -86,7 +87,7 @@ int BOARD_REANNOTATE_TOOL::ReannotateDuplicatesInSelection()
     std::sort( fpInSelection.begin(), fpInSelection.end(),
                []( const FOOTPRINT* aA, const FOOTPRINT* aB ) -> bool
                {
-                   int ii = UTIL::RefDesStringCompare( aA->GetReference(), aB->GetReference() );
+                   int ii = StrNumCmp( aA->GetReference(), aB->GetReference(), true );
 
                    if( ii == 0 )
                        ii = aA->m_Uuid < aB->m_Uuid; // ensure a deterministic sort
