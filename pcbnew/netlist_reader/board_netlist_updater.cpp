@@ -788,6 +788,15 @@ bool BOARD_NETLIST_UPDATER::deleteSinglePadNets()
 
     std::vector<PAD*> padlist = m_board->GetPads();
 
+    // Add the new pads
+    for( FOOTPRINT* fp : m_addedFootprints)
+    {
+        for( PAD* pad : fp->Pads() )
+        {
+            padlist.push_back( pad );
+        }
+    }
+
     // Sort pads by netlist name
     std::sort( padlist.begin(), padlist.end(),
                [ this ]( PAD* a, PAD* b ) -> bool
