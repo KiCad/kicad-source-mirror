@@ -35,7 +35,7 @@
 #include <vector>
 #include <unordered_set>
 
-#include <refdes_utils.h>
+#include <string_utils.h>
 #include <erc_settings.h>
 #include <sch_symbol.h>
 #include <sch_edit_frame.h>
@@ -130,7 +130,7 @@ bool SCH_REFERENCE_LIST::sortByRefAndValue( const SCH_REFERENCE& item1,
 bool SCH_REFERENCE_LIST::sortByReferenceOnly( const SCH_REFERENCE& item1,
                                               const SCH_REFERENCE& item2 )
 {
-    int ii = UTIL::RefDesStringCompare( item1.GetRef(), item2.GetRef() );
+    int ii = StrNumCmp( item1.GetRef(), item2.GetRef(), false );
 
     if( ii == 0 )
         ii = item1.m_unit - item2.m_unit;

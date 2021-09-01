@@ -30,7 +30,7 @@
 #ifndef CLASS_REGULATOR_DATA_H
 #define CLASS_REGULATOR_DATA_H
 
-#include <refdes_utils.h>
+#include <string_utils.h>
 
 #include <vector>
 
@@ -81,7 +81,7 @@ public:
 
         for( ; ii < m_List.size(); ii++ )
         {
-            if( UTIL::RefDesStringCompare( aItem->m_Name, m_List[ii]->m_Name ) < 0 )
+            if( StrNumCmp( aItem->m_Name, m_List[ii]->m_Name, true ) < 0 )
                 break;
         }
 
