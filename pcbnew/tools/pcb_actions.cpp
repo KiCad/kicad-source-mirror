@@ -109,13 +109,13 @@ TOOL_ACTION PCB_ACTIONS::placeCharacteristics( "pcbnew.InteractiveDrawing.placeC
         AS_GLOBAL, 0,  LEGACY_HK_NAME( "Add Board Characteristics" ),
         _( "Add Board Characteristics" ),
         _( "Add a board characteristics table on a graphic layer" ),
-        BITMAPS::config, AF_ACTIVATE );
+        BITMAPS::INVALID_BITMAP, AF_ACTIVATE );
 
 TOOL_ACTION PCB_ACTIONS::placeStackup( "pcbnew.InteractiveDrawing.placeStackup", AS_GLOBAL, 0,
         LEGACY_HK_NAME( "Add Stackup Table" ),
         _( "Add Stackup Table" ),
         _( "Add a board stackup table on a graphic layer" ),
-        BITMAPS::layers_manager, AF_ACTIVATE );
+        BITMAPS::INVALID_BITMAP, AF_ACTIVATE );
 
 TOOL_ACTION PCB_ACTIONS::placeText( "pcbnew.InteractiveDrawing.text",
         AS_GLOBAL,
@@ -1095,8 +1095,7 @@ TOOL_ACTION PCB_ACTIONS::repairBoard( "pcbnew.Control.repairBoard",
 TOOL_ACTION PCB_ACTIONS::repairFootprint( "pcbnew.ModuleEditor.repairFootprint",
         AS_GLOBAL, 0, "",
         _( "Repair Footprint" ),
-        _( "Run various diagnostics and attempt to repair footprint" ),
-        BITMAPS::rescue );
+        _( "Run various diagnostics and attempt to repair footprint" ) );
 
 
 // PLACEMENT_TOOL
@@ -1356,8 +1355,7 @@ TOOL_ACTION PCB_ACTIONS::routerInlineDrag( "pcbnew.InteractiveRouter.InlineDrag"
 TOOL_ACTION PCB_ACTIONS::routerUndoLastSegment( "pcbnew.InteractiveRouter.UndoLastSegment",
         AS_CONTEXT,
         WXK_BACK, "",
-        _( "Undo Last Segment" ),  _( "Walks the current track back one segment." ),
-        BITMAPS::checked_ok );
+        _( "Undo Last Segment" ),  _( "Walks the current track back one segment." ) );
 
 TOOL_ACTION PCB_ACTIONS::inlineBreakTrack( "pcbnew.InteractiveRouter.InlineBreakTrack",
         AS_GLOBAL, 0, "",

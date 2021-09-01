@@ -49,8 +49,7 @@ TOOL_ACTION KICAD_MANAGER_ACTIONS::newFromTemplate( "kicad.Control.newFromTempla
 TOOL_ACTION KICAD_MANAGER_ACTIONS::openDemoProject( "kicad.Control.openDemoProject",
         AS_GLOBAL,
         0, LEGACY_HK_NAME( "Open Demo Project" ),
-        _( "Open Demo Project..." ), _( "Open a demo project" ),
-        BITMAPS::directory_open );
+        _( "Open Demo Project..." ), _( "Open a demo project" ) );
 
 TOOL_ACTION KICAD_MANAGER_ACTIONS::openProject( "kicad.Control.openProject",
         AS_GLOBAL,

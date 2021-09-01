@@ -88,8 +88,7 @@ TOOL_ACTION ACTIONS::saveAll( "common.Control.saveAll",
 TOOL_ACTION ACTIONS::revert( "common.Control.revert",
         AS_GLOBAL,
         0, "",
-        _( "Revert" ), _( "Throw away changes" ),
-        BITMAPS::undo );
+        _( "Revert" ), _( "Throw away changes" ) );
 
 TOOL_ACTION ACTIONS::pageSettings( "common.Control.pageSettings",
         AS_GLOBAL,
