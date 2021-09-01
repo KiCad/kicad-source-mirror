@@ -256,21 +256,30 @@ bool LIB_POLYLINE::HitTest( const EDA_RECT& aRect, bool aContained, int aAccurac
     // Account for the width of the line
     sel.Inflate( ( GetPenWidth() / 2 ) + 1 );
 
-    // Only test closing segment if the polyline is filled
-    int count = m_fill == FILL_TYPE::NO_FILL ? m_PolyPoints.size() - 1 : m_PolyPoints.size();
-
-    for( int ii = 0; ii < count; ii++ )
+    for( size_t ii = 0; ii <  m_PolyPoints.size(); ii++ )
     {
         wxPoint pt = DefaultTransform.TransformCoordinate( m_PolyPoints[ ii ] );
-        wxPoint ptNext = DefaultTransform.TransformCoordinate( m_PolyPoints[ (ii+1) % count ] );
 
         // Test if the point is within aRect
         if( sel.Contains( pt ) )
             return true;
 
-        // Test if this edge intersects aRect
-        if( sel.Intersects( pt, ptNext ) )
-            return true;
+        if( ii + 1 < m_PolyPoints.size() )
+        {
+            wxPoint ptNext = DefaultTransform.TransformCoordinate( m_PolyPoints[ ii + 1 ] );
+
+            // Test if this edge intersects aRect
+            if( sel.Intersects( pt, ptNext ) )
+                return true;
+        }
+        else if( m_fill != FILL_TYPE::NO_FILL )
+        {
+            wxPoint ptNext = DefaultTransform.TransformCoordinate( m_PolyPoints[ 0 ] );
+
+            // Test if this edge intersects aRect
+            if( sel.Intersects( pt, ptNext ) )
+                return true;
+        }
     }
 
     return false;
