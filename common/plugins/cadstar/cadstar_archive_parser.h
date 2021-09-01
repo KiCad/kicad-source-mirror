@@ -1369,6 +1369,13 @@ public:
             XNODE* aNode, PARSER_CONTEXT* aContext, bool aTestAllChildNodes = false );
 
     /**
+     * @brief Convert a string with CADSTAR overbar characters to equivalent in KiCad
+     * @param aCadstarString Input string
+     * @return KiCad string with overbar characters
+    */
+    static wxString HandleTextOverbar( wxString aCadstarString );
+
+    /**
      * Corrects the position of a text element that had NO_ALIGNMENT in CADSTAR. Assumes that the
      * provided text element has been initialised with a position and orientation.
      * @param aKiCadTextItem a Kicad item to correct

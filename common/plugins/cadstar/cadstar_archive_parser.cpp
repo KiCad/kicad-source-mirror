@@ -31,6 +31,7 @@
 #include <eda_item.h>
 #include <eda_text.h>
 #include <macros.h>
+#include <string_utils.h>
 #include <trigo.h>
 
 // Ratio derived from CADSTAR default font. See doxygen comment in cadstar_archive_parser.h
@@ -2543,6 +2544,16 @@ std::vector<CADSTAR_ARCHIVE_PARSER::CUTOUT> CADSTAR_ARCHIVE_PARSER::ParseAllChil
     }
 
     return retVal;
+}
+
+
+wxString CADSTAR_ARCHIVE_PARSER::HandleTextOverbar( wxString aCadstarString )
+{
+    wxString escapedText = aCadstarString;
+
+    escapedText.Replace( wxT( "'" ), wxT( "~" ) );
+
+    return ConvertToNewOverbarNotation( escapedText );
 }
 
 

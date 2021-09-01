@@ -680,7 +680,10 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadBusses()
             m_busesMap.insert( { bus.ID, kiBusAlias } );
 
             SCH_LABEL* label = new SCH_LABEL();
-            label->SetText( wxT( "{" ) + bus.Name + wxT( "}" ) );
+
+            wxString busname = HandleTextOverbar( bus.Name );
+
+            label->SetText( wxT( "{" ) + busname + wxT( "}" ) );
             label->SetVisible( true );
             screen->Append( label );
 
@@ -730,6 +733,9 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadBusses()
                                    bus.BusLabel.Alignment,
                                    bus.BusLabel.Justification );
 
+                // Re-set bus name as it might have been "double-escaped" after applyTextSettings
+                label->SetText( wxT( "{" ) + busname + wxT( "}" ) );
+
                 // Note orientation of the bus label will be determined in loadNets
                 // (the position of the wire will determine how best to place the bus label)
             }
@@ -750,6 +756,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadNets()
         if( netName.IsEmpty() )
             netName = wxString::Format( "$%ld", net.SignalNum );
 
+        netName = HandleTextOverbar( netName );
 
         for( std::pair<NETELEMENT_ID, NET_SCH::SYM_TERM> terminalPair : net.Terminals )
         {
@@ -805,7 +812,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadNets()
         {
             SCH_HIERLABEL* label = getHierarchicalLabel( blockPair.first );
 
-            if(label)
+            if( label )
                 label->SetText( netName );
         }
 
@@ -1236,8 +1243,8 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadSymDefIntoLibrary( const SYMDEF_ID& aSymdef
         {
             PART::DEFINITION::PIN csPin = getPartDefinitionPin( *aCadstarPart, aGateID, term.ID );
 
-            pinName = csPin.Label;
-            pinNum  = csPin.Name;
+            pinName = HandleTextOverbar( csPin.Label );
+            pinNum = HandleTextOverbar( csPin.Name );
 
             if( pinNum.IsEmpty() )
             {
@@ -1667,7 +1674,7 @@ SCH_SYMBOL* CADSTAR_SCH_ARCHIVE_LOADER::loadSchematicSymbol( const SYMBOL& aCads
                                         return;
 
                                     LIB_PIN* libpin = pinNumToLibPinMap.at( aOldPinNum );
-                                    libpin->SetNumber( aNewPinNum );
+                                    libpin->SetNumber( HandleTextOverbar( aNewPinNum ) );
                                 };
 
         //Older versions of Cadstar used pin numbers
@@ -2460,10 +2467,8 @@ void CADSTAR_SCH_ARCHIVE_LOADER::applyTextSettings( EDA_TEXT*            aKiCadT
     int      textHeight = KiROUND( (double) getKiCadLength( textCode.Height ) * TXT_HEIGHT_RATIO );
     int      textWidth = getKiCadLength( textCode.Width );
 
-    // In Cadstar the overbar token is "'" whereas in KiCad it is "~"
-    wxString escapedText = aKiCadTextItem->GetText();
-    escapedText.Replace( wxT( "~" ), wxT( "~~" ) );
-    escapedText.Replace( wxT( "'" ), wxT( "~" ) );
+    // Ensure we have no Cadstar overbar characters
+    wxString escapedText = HandleTextOverbar( aKiCadTextItem->GetText() );
     aKiCadTextItem->SetText( escapedText );
 
     // The width is zero for all non-cadstar fonts. Using a width equal to 2/3 the height seems

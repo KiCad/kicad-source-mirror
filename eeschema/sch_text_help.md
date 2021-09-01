@@ -31,12 +31,12 @@
         <td></td>
     </tr>
     <tr>
-        <td> &nbsp;<br><samp>~{overbar}</samp><br> &nbsp;<br><samp>~{CLK}</samp><br> &nbsp;<br><samp>~~</samp> </td>
+        <td> &nbsp;<br><samp>~{overbar}</samp><br> &nbsp;<br><samp>~{CLK}</samp></td>
         <td></td>
-        <td> <samp><u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> <samp>overbar</samp><br> <samp><u>&nbsp;&nbsp;&nbsp;</u></samp><br> <samp>CLK</samp><br> <samp>&nbsp;</samp><br> <samp>~</samp> </td>
+        <td> <samp><u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> <samp>overbar</samp><br> <samp><u>&nbsp;&nbsp;&nbsp;</u></samp><br> <samp>CLK</samp></td>
     </tr>
     <tr>
-        <td><br></td>
+        <td></td>
     </tr>
     <tr>
         <td>&nbsp;<br><samp>${variable}</samp></td>

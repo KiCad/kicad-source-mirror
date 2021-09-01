@@ -41,10 +41,9 @@ wxString escapeName( const wxString& aNetName )
 {
     wxString ret( aNetName );
 
-    ret.Replace( "~", "~~" );
     ret.Replace( "!", "~" );
 
-    return ret;
+    return ConvertToNewOverbarNotation( ret );
 }
 
 

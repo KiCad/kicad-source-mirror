@@ -1989,7 +1989,7 @@ LIB_TEXT* SCH_EAGLE_PLUGIN::loadSymbolText(
     std::replace( text.begin(), text.end(), '\n', '_' );
     std::replace( text.begin(), text.end(), '\r', '_' );
 
-    libtext->SetText( text.IsEmpty() ? "~~" : text );
+    libtext->SetText( text.IsEmpty() ? "~" : text );
     loadTextAttributes( libtext.get(), etext );
 
     return libtext.release();
