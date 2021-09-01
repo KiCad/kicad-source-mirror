@@ -86,12 +86,20 @@ bool PROJECT_ARCHIVER::Unarchive( const wxString& aSrcFile, const wxString& aDes
         if( entry->IsDir() )
             continue;
 
+
         wxTempFileOutputStream outputFileStream( fullname );
 
         if( CopyStreamData( *archiveStream, outputFileStream, entry->GetSize() ) )
             outputFileStream.Commit();
         else
             aReporter.Report( _( "Error extracting file!" ), RPT_SEVERITY_ERROR );
+
+        // Now let's set the filetimes based on what's in the zip
+        wxFileName outputFileName( fullname );
+        wxDateTime fileTime = entry->GetDateTime();
+        // For now we set access, mod, create to the same datetime
+        // create (third arg) is only used on Windows
+        outputFileName.SetTimes( &fileTime, &fileTime, &fileTime );
     }
 
     aReporter.Report( wxT( "Extracted project." ), RPT_SEVERITY_INFO );
