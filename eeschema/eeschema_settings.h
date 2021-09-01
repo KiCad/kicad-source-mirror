@@ -95,7 +95,6 @@ public:
         std::vector<double> junction_size_mult_list;
         // Pulldown index for user default junction dot size (e.g. smallest = 0, small = 1, etc)
         int      junction_size_choice;
-        double   junction_size_mult; // User selected default multiplier for junction dot size
     };
 
     struct INPUT

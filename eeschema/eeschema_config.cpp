@@ -116,11 +116,12 @@ void SCH_EDIT_FRAME::ShowSchematicSetupDialog( const wxString& aInitialPage )
     {
         Prj().GetProjectFile().NetSettings().ResolveNetClassAssignments( true );
 
-        EESCHEMA_SETTINGS* cfg = static_cast<EESCHEMA_SETTINGS*>( config() );
+        EESCHEMA_SETTINGS*  cfg = static_cast<EESCHEMA_SETTINGS*>( config() );
+        SCHEMATIC_SETTINGS& settings = Schematic().Settings();
 
-        Schematic().Settings().m_JunctionSize =
+        settings.m_JunctionSize =
                 Prj().GetProjectFile().NetSettings().m_NetClasses.GetDefaultPtr()->GetWireWidth()
-                * cfg->m_Drawing.junction_size_mult_list[ cfg->m_Drawing.junction_size_choice ];
+                * cfg->m_Drawing.junction_size_mult_list[ settings.m_JunctionSizeChoice ];
 
         if( Schematic().Settings().m_JunctionSize < 1 )
             Schematic().Settings().m_JunctionSize = 1;
