@@ -2553,6 +2553,8 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
                 via->SetNetCode( track->GetNetCode() );
             else if( pad )
                 via->SetNetCode( pad->GetNetCode() );
+            else
+                via->SetNetCode( findStitchedZoneNet( via ) );
 
             if( !m_allowDRCViolations && checkDRCViolation( via ) )
             {
