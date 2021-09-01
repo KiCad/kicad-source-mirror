@@ -148,11 +148,13 @@ const wxString GetGerberFileFunctionAttribute( const BOARD *aBoard, LAYER_NUM aL
         break;
 
     case B_Fab:
-        attrib = "Other,Fab,Bot";
+        // This is actually a assembly layer
+        attrib = "AssemblyDrawing,Bot";
         break;
 
     case F_Fab:
-        attrib = "Other,Fab,Top";
+        // This is actually a assembly layer
+        attrib = "AssemblyDrawing,Top";
         break;
 
     case B_Cu:
