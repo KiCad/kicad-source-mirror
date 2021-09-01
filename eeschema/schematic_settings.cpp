@@ -99,20 +99,19 @@ SCHEMATIC_SETTINGS::SCHEMATIC_SETTINGS( JSON_SETTINGS* aParent, const std::strin
             &m_IntersheetRefsSuffix, defaultIntersheetsRefSuffix ) );
 
     m_params.emplace_back( new PARAM_SCALED<int>( "drawing.default_line_thickness",
-            &m_DefaultLineWidth, Mils2iu( defaultLineThickness ),
-            Mils2iu( 5 ), Mils2iu( 1000 ), 1 / IU_PER_MILS ) );
+            &m_DefaultLineWidth, Mils2iu( defaultLineThickness ), Mils2iu( 5 ), Mils2iu( 1000 ),
+            1 / IU_PER_MILS ) );
 
     m_params.emplace_back( new PARAM_SCALED<int>( "drawing.default_wire_thickness",
-            &m_DefaultWireThickness, Mils2iu( defaultWireThickness ),
-            Mils2iu( 5 ), Mils2iu( 1000 ), 1 / IU_PER_MILS ) );
+            &m_DefaultWireThickness, Mils2iu( defaultWireThickness ), Mils2iu( 5 ), Mils2iu( 1000 ),
+            1 / IU_PER_MILS ) );
 
     m_params.emplace_back( new PARAM_SCALED<int>( "drawing.default_bus_thickness",
             &m_DefaultBusThickness, Mils2iu( defaultBusThickness ),
             Mils2iu( 5 ), Mils2iu( 1000 ), 1 / IU_PER_MILS ) );
 
     m_params.emplace_back( new PARAM_SCALED<int>( "drawing.default_text_size",
-            &m_DefaultTextSize,
-            Mils2iu( defaultTextSize ), Mils2iu( 5 ), Mils2iu( 1000 ),
+            &m_DefaultTextSize, Mils2iu( defaultTextSize ), Mils2iu( 5 ), Mils2iu( 1000 ),
             1 / IU_PER_MILS ) );
 
     m_params.emplace_back( new PARAM<double>( "drawing.text_offset_ratio",
@@ -122,13 +121,12 @@ SCHEMATIC_SETTINGS::SCHEMATIC_SETTINGS( JSON_SETTINGS* aParent, const std::strin
             &m_LabelSizeRatio, DEFAULT_LABEL_SIZE_RATIO, 0.0, 2.0 ) );
 
     m_params.emplace_back( new PARAM_SCALED<int>( "drawing.pin_symbol_size",
-            &m_PinSymbolSize,
-            Mils2iu( defaultPinSymbolSize ), Mils2iu( 5 ), Mils2iu( 1000 ),
+            &m_PinSymbolSize, Mils2iu( defaultPinSymbolSize ), Mils2iu( 5 ), Mils2iu( 1000 ),
             1 / IU_PER_MILS ) );
 
     m_params.emplace_back( new PARAM_SCALED<int>( "drawing.default_junction_size",
-            &m_JunctionSize,
-            Mils2iu( defaultJunctionSize ), Mils2iu( 5 ), Mils2iu( 1000 ), 1 / IU_PER_MILS ) );
+            &m_JunctionSize, Mils2iu( defaultJunctionSize ), Mils2iu( 5 ), Mils2iu( 1000 ),
+            1 / IU_PER_MILS ) );
 
     // User choice for junction dot size ( e.g. none = 0, smallest = 1, small = 2, etc )
     m_params.emplace_back( new PARAM<int>( "drawing.junction_size_choice",
@@ -162,7 +160,9 @@ SCHEMATIC_SETTINGS::SCHEMATIC_SETTINGS( JSON_SETTINGS* aParent, const std::strin
                     {
                         if( !entry.contains( "name" ) || !entry.contains( "url" )
                                 || !entry.contains( "visible" ) )
+                        {
                             continue;
+                        }
 
                         TEMPLATE_FIELDNAME field( entry["name"].get<wxString>() );
                         field.m_URL     = entry["url"].get<bool>();

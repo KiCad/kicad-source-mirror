@@ -29,6 +29,8 @@
 #include <sch_junction.h>
 #include <schematic.h>
 #include <schematic_settings.h>
+#include <project/project_file.h>
+#include <project/net_settings.h>
 
 
 PANEL_SETUP_FORMATTING::PANEL_SETUP_FORMATTING( wxWindow* aWindow, SCH_EDIT_FRAME* aFrame  ) :
@@ -132,35 +134,8 @@ bool PANEL_SETUP_FORMATTING::TransferDataFromWindow()
     settings.m_DefaultLineWidth = (int) m_lineWidth.GetValue();
     settings.m_PinSymbolSize = (int) m_pinSymbolSize.GetValue();
 
-    // Get the current working size in case of problem with wxChoice widget results
-    int currJunctionDotSize = settings.m_JunctionSize;
-    // See if user has made a junction dot size selection
-    int currDotSizeIndex    = m_choiceJunctionDotSize->GetSelection();
-
-    if( currDotSizeIndex != wxNOT_FOUND )
-    {
-        EESCHEMA_SETTINGS* projSettings =
-                dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
-
-        wxCHECK( projSettings, false );
-
-        if( currDotSizeIndex )
-        {
-            // Junction dots are scaled value of default line width
-            currJunctionDotSize =
-                    settings.m_DefaultLineWidth
-                    * projSettings->m_Drawing.junction_size_mult_list[currDotSizeIndex];
-        }
-        else
-        {
-            // Don't set to zero or else it's set to min of 10 mils in "sch_painter.cpp"
-            currJunctionDotSize = 1;
-        }
-
-        settings.m_JunctionSizeChoice = currDotSizeIndex; // Store to set pulldown next time
-    }
-
-    settings.m_JunctionSize = currJunctionDotSize;
+    if( m_choiceJunctionDotSize->GetSelection() != wxNOT_FOUND )
+        settings.m_JunctionSizeChoice = m_choiceJunctionDotSize->GetSelection();
 
     settings.m_IntersheetRefsShow        = m_showIntersheetsReferences->GetValue();
     settings.m_IntersheetRefsFormatShort = !m_radioFormatStandard->GetValue();
@@ -177,10 +152,10 @@ bool PANEL_SETUP_FORMATTING::TransferDataFromWindow()
     settings.m_LabelSizeRatio = dtmp / 100.0;
 
     m_frame->GetRenderSettings()->SetDefaultPenWidth( settings.m_DefaultLineWidth );
-    m_frame->GetRenderSettings()->m_LabelSizeRatio       = settings.m_LabelSizeRatio;
-    m_frame->GetRenderSettings()->m_TextOffsetRatio      = settings.m_TextOffsetRatio;
-    m_frame->GetRenderSettings()->m_PinSymbolSize        = settings.m_PinSymbolSize;
-    m_frame->GetRenderSettings()->m_JunctionSize         = settings.m_JunctionSize;
+    m_frame->GetRenderSettings()->m_LabelSizeRatio  = settings.m_LabelSizeRatio;
+    m_frame->GetRenderSettings()->m_TextOffsetRatio = settings.m_TextOffsetRatio;
+    m_frame->GetRenderSettings()->m_PinSymbolSize   = settings.m_PinSymbolSize;
+    m_frame->GetRenderSettings()->m_JunctionSize    = settings.m_JunctionSize;
 
     m_frame->GetCanvas()->GetView()->MarkDirty();
     m_frame->GetCanvas()->GetView()->UpdateAllItems( KIGFX::REPAINT );
