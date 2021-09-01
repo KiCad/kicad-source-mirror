@@ -1451,10 +1451,16 @@ bool PCB_EDIT_FRAME::FetchNetlistFromSchematic( NETLIST& aNetlist,
         KICAD_NETLIST_READER netlistReader( lineReader, &aNetlist );
         netlistReader.LoadNetlist();
     }
-    catch( const IO_ERROR& )
+    catch( const IO_ERROR& e )
     {
         Raise();
-        assert( false ); // should never happen
+
+        // Do not translate extra_info strings.  These are for developers
+        wxString extra_info = e.Problem() + " : " + e.What() + " at " + e.Where();
+
+        DisplayErrorMessage( this, _( "Received an error while reading netlist.  Please "
+                                      "report this issue to the KiCad team using the menu "
+                                      "Help->Report Bug."), extra_info );
         return false;
     }
 
