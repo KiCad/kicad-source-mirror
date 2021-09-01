@@ -52,6 +52,9 @@ class SCHEMATIC;
 class CADSTAR_SCH_ARCHIVE_LOADER : public CADSTAR_SCH_ARCHIVE_PARSER
 {
 public:
+    // Size of tiny net labels when none present in original design
+    const int SMALL_LABEL_SIZE = KiROUND( (double) SCH_IU_PER_MM * 0.4 );
+
     explicit CADSTAR_SCH_ARCHIVE_LOADER( wxString aFilename, REPORTER* aReporter )
             : CADSTAR_SCH_ARCHIVE_PARSER( aFilename )
     {
@@ -196,6 +199,7 @@ private:
     PART           getPart( const PART_ID& aCadstarPartID );
     ROUTECODE      getRouteCode( const ROUTECODE_ID& aCadstarRouteCodeID );
     TEXTCODE       getTextCode( const TEXTCODE_ID& aCadstarTextCodeID );
+    int            getTextHeightFromTextCode( const TEXTCODE_ID& aCadstarTextCodeID );
     wxString       getAttributeName( const ATTRIBUTE_ID& aCadstarAttributeID );
 
     PART::DEFINITION::PIN getPartDefinitionPin(

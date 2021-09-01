@@ -611,8 +611,18 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadSchematicSymbolInstances()
 
                 SCH_GLOBALLABEL* netLabel = new SCH_GLOBALLABEL;
                 netLabel->SetPosition( getKiCadPoint( sym.Origin + terminalPosOffset ) );
-                netLabel->SetText( "YOU SHOULDN'T SEE THIS TEXT - PLEASE REPORT THIS BUG" );
+                netLabel->SetText( "***UNKNOWN NET****" ); // This should be later updated when we load the netlist
                 netLabel->SetTextSize( wxSize( Mils2iu( 50 ), Mils2iu( 50 ) ) );
+
+                SYMDEF_SCM symbolDef = Library.SymbolDefinitions.at( sym.SymdefID );
+
+                if( symbolDef.TextLocations.count( LINK_ORIGIN_ATTRID ) )
+                {
+                    TEXT_LOCATION linkOrigin = symbolDef.TextLocations.at( LINK_ORIGIN_ATTRID );
+                    applyTextSettings( netLabel, linkOrigin.TextCodeID, linkOrigin.Alignment,
+                                       linkOrigin.Justification );
+                }
+
                 netLabel->SetLabelSpinStyle( getSpinStyle( sym.OrientAngle, sym.Mirror ) );
 
                 if( libSymDef.Alternate.Lower().Contains( "in" ) )
@@ -852,8 +862,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadNets()
             }
             else
             {
-                const int smallText = KiROUND( (double) SCH_IU_PER_MM * 0.4 );
-                label->SetTextSize( wxSize( smallText, smallText ) );
+                label->SetTextSize( wxSize( SMALL_LABEL_SIZE, SMALL_LABEL_SIZE ) );
             }
 
             netlabels.insert( { busTerm.ID, label } );
@@ -865,9 +874,18 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadNets()
             NET_SCH::DANGLER dangler = danglerPair.second;
 
             SCH_LABEL* label = new SCH_LABEL();
-            label->SetText( netName );
             label->SetPosition( getKiCadPoint( dangler.Position ) );
             label->SetVisible( true );
+
+            if( dangler.HasNetLabel )
+            {
+                applyTextSettings( label,
+                                   dangler.NetLabel.TextCodeID,
+                                   dangler.NetLabel.Alignment,
+                                   dangler.NetLabel.Justification );
+            }
+
+            label->SetText( netName ); // set text after applying settings to avoid double-escaping
             netlabels.insert( { dangler.ID, label } );
 
             m_sheetMap.at( dangler.LayerID )->GetScreen()->Append( label );
@@ -1272,6 +1290,24 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadSymDefIntoLibrary( const SYMDEF_ID& aSymdef
         pin->SetUnit( gateNumber );
         pin->SetNumber( pinNum );
         pin->SetName( pinName );
+
+        int pinNumberHeight = getTextHeightFromTextCode( wxT( "TC0" ) ); // TC0 is the default CADSTAR text size for name/number
+        int pinNameHeight = getTextHeightFromTextCode( wxT( "TC0" ) );
+
+        if( symbol.PinNumberLocations.count( term.ID ) )
+        {
+            PIN_NUM_LABEL_LOC pinNumLocation = symbol.PinNumberLocations.at( term.ID );
+            pinNumberHeight = getTextHeightFromTextCode( pinNumLocation.TextCodeID );
+        }
+
+        if( symbol.PinLabelLocations.count( term.ID ) )
+        {
+            PIN_NUM_LABEL_LOC pinNameLocation = symbol.PinLabelLocations.at( term.ID );
+            pinNameHeight = getTextHeightFromTextCode( pinNameLocation.TextCodeID );
+        }
+
+        pin->SetNumberTextSize( pinNumberHeight );
+        pin->SetNameTextSize( pinNameHeight );
 
         if( aSymbol->IsPower() )
         {
@@ -2290,6 +2326,14 @@ CADSTAR_SCH_ARCHIVE_LOADER::TEXTCODE CADSTAR_SCH_ARCHIVE_LOADER::getTextCode(
              TEXTCODE() );
 
     return Assignments.Codedefs.TextCodes.at( aCadstarTextCodeID );
+}
+
+
+int CADSTAR_SCH_ARCHIVE_LOADER::getTextHeightFromTextCode( const TEXTCODE_ID& aCadstarTextCodeID )
+{
+    TEXTCODE txtCode = getTextCode( aCadstarTextCodeID );
+
+    return KiROUND( (double) getKiCadLength( txtCode.Height ) * TXT_HEIGHT_RATIO );
 }
 
 
