@@ -11,8 +11,11 @@
    data-name="Слой 1"
    viewBox="0 0 24 24"
    version="1.1"
-   sodipodi:docname="pad_sketch.svg"
-   inkscape:version="1.0.1 (c497b03c, 2020-09-10)">
+   sodipodi:docname="via_sketch.svg"
+   inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)"
+   inkscape:export-filename="C:\Users\micha\Source\Repos\kicad\bitmaps_png\png\via_sketch_24.png"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96">
   <sodipodi:namedview
      pagecolor="#ffffff"
      bordercolor="#666666"
@@ -22,16 +25,16 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1280"
-     inkscape:window-height="755"
+     inkscape:window-width="1920"
+     inkscape:window-height="1017"
      id="namedview30"
      showgrid="true"
-     inkscape:zoom="20.99893"
+     inkscape:zoom="16.10271"
      inkscape:cx="7.6893282"
      inkscape:cy="13"
-     inkscape:window-x="1471"
-     inkscape:window-y="179"
-     inkscape:window-maximized="0"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
      inkscape:document-rotation="0"
      inkscape:current-layer="Слой_1">
     <inkscape:grid
@@ -79,28 +82,29 @@
   </defs>
   <title
      id="title158811">pad_sketch</title>
+  <ellipse
+     style="display:inline;fill:none;fill-opacity:1;stroke:#b9b9b9;stroke-width:0.999998;stroke-linecap:square;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1"
+     id="path1616-7"
+     cx="12.000002"
+     cy="12"
+     rx="4.5000014"
+     ry="4.500001" />
+  <circle
+     style="display:inline;fill:none;fill-opacity:1;stroke:#b9b9b9;stroke-width:1;stroke-linecap:square;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1"
+     id="path1616"
+     cx="12"
+     cy="12"
+     r="9.5" />
   <path
-     class="cls-1"
-     d="M 11.9844,24.019 A 11.9552,11.9552 0 0 1 3.4736,20.499 L 4.1807,19.792 A 11.036275,11.036275 0 0 0 19.7881,4.1841 l 0.707,-0.707 A 12.0312,12.0312 0 0 1 11.9844,24.019 Z"
-     id="path158813" />
-  <path
-     class="cls-1"
-     d="M 11.9844,21.2983 A 9.2885,9.2885 0 0 1 5.3975,18.5747 l 0.707,-0.707 a 8.3155757,8.3155757 0 0 0 11.76,-11.76 l 0.707,-0.707 a 9.3105,9.3105 0 0 1 -6.5869,15.8974 z m 0,-3.042 A 6.2513,6.2513 0 0 1 7.55,16.4224 L 8.257,15.7153 A 5.2715518,5.2715518 0 0 0 15.7119,8.26 l 0.707,-0.7071 A 6.2685,6.2685 0 0 1 11.9844,18.256 Z"
-     id="path158815" />
-  <path
-     class="cls-2"
-     d="m 11.9844,-0.0122 a 11.9942,11.9942 0 0 0 -8.67,20.2879 c 0.0374,0.0391 0.113,0.1166 0.113,0.1166 L 20.4657,3.5066 c 0,0 -0.1065,-0.1055 -0.16,-0.1575 A 11.9591,11.9591 0 0 0 11.9844,-0.0122 Z M 4.21,19.7626 c 0,0 -0.0971,-0.098 -0.1449,-0.1477 A 10.995,10.995 0 0 1 19.43,3.8973 c 0.0451,0.0416 0.1345,0.1259 0.1345,0.1259 z"
-     id="path158817" />
-  <path
-     class="cls-2"
-     d="M 11.9844,2.7122 A 9.2712,9.2712 0 0 0 5.2323,18.3415 c 0.0682,0.0724 0.2078,0.2138 0.2078,0.2138 L 18.5871,5.4791 c 0,0 -0.1768,-0.1758 -0.2678,-0.261 A 9.2415,9.2415 0 0 0 11.9844,2.7122 Z m -3.7173,13.016 c 0,0 -0.1383,-0.1414 -0.2045,-0.2149 a 5.2733,5.2733 0 0 1 7.4431,-7.451 c 0.0627,0.0562 0.1838,0.1731 0.1838,0.1731 z"
-     id="path158819" />
+     id="line158655-1"
+     style="display:inline;fill:#f29100;fill-opacity:1;stroke:none;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     d="M 4.917621,19 9.142334,14.775285 A 3.9835242,3.9835242 0 0 1 7.975286,11.958809 3.9835242,3.9835242 0 0 1 11.95881,7.975286 3.9835242,3.9835242 0 0 1 14.775286,9.142335 L 19,4.917621 A 9.9588104,9.9588104 0 0 0 11.95881,2 9.9588104,9.9588104 0 0 0 2,11.958809 9.9588104,9.9588104 0 0 0 4.917621,19 Z" />
   <line
      class="cls-3"
-     x1="0.5"
+     x1="0.5000003"
      y1="23.5"
      x2="23.5"
      y2="0.5"
-     id="line158655"
-     style="fill:none;stroke:#545454;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+     id="line158655-2"
+     style="display:inline;fill:none;stroke:#545454;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
 </svg>
