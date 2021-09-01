@@ -336,7 +336,8 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadPartsLibrary()
         if( part.Definition.GateSymbols.size() == 0 )
             continue;
 
-        LIB_SYMBOL* kiPart = new LIB_SYMBOL( part.Name );
+        wxString    escapedPartName = EscapeString( part.Name, CTX_LIBID );
+        LIB_SYMBOL* kiPart = new LIB_SYMBOL( escapedPartName );
 
         kiPart->SetUnitCount( part.Definition.GateSymbols.size() );
         bool ok = true;
