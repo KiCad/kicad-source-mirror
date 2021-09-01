@@ -531,6 +531,10 @@ class netlist():
         """Return the tool string which was used to create the netlist tree"""
         return self.design.get("tool")
 
+    def getNets(self):
+        """Return the nets """
+        return self.nets
+
     def gatherComponentFieldUnion(self, components=None):
         """Gather the complete 'set' of unique component fields, fields found in any component.
         """
