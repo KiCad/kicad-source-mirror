@@ -1098,7 +1098,6 @@ void ROUTER_TOOL::performRouting()
 
         if( evt->IsMotion() )
         {
-            m_router->SetOrthoMode( evt->Modifier( MD_SHIFT ) );
             updateEndItem( *evt );
             m_router->Move( m_endSnapPoint, m_endItem );
         }

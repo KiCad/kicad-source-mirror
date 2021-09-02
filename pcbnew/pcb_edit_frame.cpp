@@ -691,7 +691,7 @@ void PCB_EDIT_FRAME::setupUIConditions()
     mgr->SetConditions( PCB_ACTIONS::zoneFill, ENABLE( SELECTION_CONDITIONS::MoreThan( 0 ) ) );
     mgr->SetConditions( PCB_ACTIONS::zoneUnfill, ENABLE( SELECTION_CONDITIONS::MoreThan( 0 ) ) );
 
-    mgr->SetConditions( PCB_ACTIONS::toggleLine45degMode, CHECK( cond.Line45degMode() ) );
+    mgr->SetConditions( PCB_ACTIONS::toggle45, CHECK( cond.Get45degMode() ) );
 
 #define CURRENT_TOOL( action ) mgr->SetConditions( action, CHECK( cond.CurrentTool( action ) ) )
 

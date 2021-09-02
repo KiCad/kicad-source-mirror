@@ -44,7 +44,7 @@ FOOTPRINT_EDITOR_SETTINGS::FOOTPRINT_EDITOR_SETTINGS() :
         m_Display(),
         m_UserGrid(),
         m_PolarCoords( false ),
-        m_Use45DegreeGraphicSegments( true ),
+        m_Use45Limit( true ),
         m_LibWidth( 250 ),
         m_LastImportExportPath(),
         m_FootprintTextShownColumns()
@@ -71,8 +71,8 @@ FOOTPRINT_EDITOR_SETTINGS::FOOTPRINT_EDITOR_SETTINGS() :
 
     m_params.emplace_back( new PARAM<bool>( "editing.polar_coords", &m_PolarCoords, false ) );
 
-    m_params.emplace_back( new PARAM<bool>( "editing.use_45_degree_graphic_segments",
-            &m_Use45DegreeGraphicSegments, false ) );
+    m_params.emplace_back( new PARAM<bool>( "editing.use_45_degree_limit",
+            &m_Use45Limit, false ) );
 
     m_params.emplace_back( new PARAM<bool>( "pcb_display.text_fill",
             &m_Display.m_DisplayTextFill, true ) );

@@ -123,13 +123,13 @@ SELECTION_CONDITION PCB_EDITOR_CONDITIONS::ZoneDisplayMode( ZONE_DISPLAY_MODE aM
 }
 
 
-SELECTION_CONDITION PCB_EDITOR_CONDITIONS::Line45degMode()
+SELECTION_CONDITION PCB_EDITOR_CONDITIONS::Get45degMode()
 {
     PCB_BASE_FRAME* drwFrame = dynamic_cast<PCB_BASE_FRAME*>( m_frame );
 
     wxASSERT( drwFrame );
 
-    return std::bind( &PCB_EDITOR_CONDITIONS::line45degModeFunc, _1, drwFrame );
+    return std::bind( &PCB_EDITOR_CONDITIONS::get45degModeFunc, _1, drwFrame );
 }
 
 
@@ -183,7 +183,7 @@ bool PCB_EDITOR_CONDITIONS::zoneDisplayModeFunc( const SELECTION& aSelection, PC
     return aFrame->GetDisplayOptions().m_ZoneDisplayMode == aMode;
 }
 
-bool PCB_EDITOR_CONDITIONS::line45degModeFunc( const SELECTION& aSelection, PCB_BASE_FRAME* aFrame )
+bool PCB_EDITOR_CONDITIONS::get45degModeFunc( const SELECTION& aSelection, PCB_BASE_FRAME* aFrame )
 {
-    return aFrame->Settings().m_Use45DegreeGraphicSegments;
+    return aFrame->Settings().m_Use45DegreeLimit;
 }

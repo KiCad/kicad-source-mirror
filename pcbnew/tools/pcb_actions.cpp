@@ -217,11 +217,6 @@ TOOL_ACTION PCB_ACTIONS::closeOutline( "pcbnew.InteractiveDrawing.closeOutline",
         _( "Close Outline" ), _( "Close the in progress outline" ),
         BITMAPS::checked_ok );
 
-TOOL_ACTION PCB_ACTIONS::toggleLine45degMode( "pcbnew.InteractiveDrawing.line45degMode",
-        AS_GLOBAL, 0, "",
-        _( "Limit Lines to 45 deg" ), _( "Limit graphic lines to H, V and 45 degrees" ),
-        BITMAPS::INVALID_BITMAP, AF_NONE );
-
 // DRC
 //
 TOOL_ACTION PCB_ACTIONS::runDRC( "pcbnew.DRCTool.runDRC",
@@ -666,6 +661,11 @@ TOOL_ACTION PCB_ACTIONS::toggleLock( "pcbnew.EditorControl.toggleLock",
         'L', LEGACY_HK_NAME( "Lock/Unlock Footprint" ),
         _( "Toggle Lock" ), _( "Lock or unlock selected items" ),
         BITMAPS::lock_unlock );
+
+TOOL_ACTION PCB_ACTIONS::toggle45( "pcbnew.EditorControl.toggle45",
+        AS_GLOBAL, WXK_TAB, "",
+        _( "Toggle 45 Limit" ), _( "Limit actions to 45 degrees from the starting point" ),
+        BITMAPS::INVALID_BITMAP );
 
 TOOL_ACTION PCB_ACTIONS::lock( "pcbnew.EditorControl.lock",
         AS_GLOBAL, 0, "",

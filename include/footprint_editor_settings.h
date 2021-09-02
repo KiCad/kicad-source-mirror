@@ -56,8 +56,7 @@ public:
 
     bool m_PolarCoords;
 
-    bool m_Use45DegreeGraphicSegments;   // True to constraint graphic lines to horizontal,
-    // vertical and 45º
+    bool m_Use45Limit;
 
     int m_LibWidth;
 

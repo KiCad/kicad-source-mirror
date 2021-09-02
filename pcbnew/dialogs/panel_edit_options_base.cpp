@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.9.0 Apr 22 2021)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -46,11 +46,6 @@ PANEL_EDIT_OPTIONS_BASE::PANEL_EDIT_OPTIONS_BASE( wxWindow* parent, wxWindowID i
 
 	wxBoxSizer* bSizerUniversal;
 	bSizerUniversal = new wxBoxSizer( wxVERTICAL );
-
-	m_segments45OnlyCtrl = new wxCheckBox( bOptionsSizer->GetStaticBox(), wxID_SEGMENTS45, _("L&imit graphic lines to H, V and 45 degrees"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_segments45OnlyCtrl->SetToolTip( _("When drawing graphic lines force to horizontal, vertical, or 45 degrees.") );
-
-	bSizerUniversal->Add( m_segments45OnlyCtrl, 0, wxBOTTOM, 3 );
 
 	wxBoxSizer* bSizerRotationStep;
 	bSizerRotationStep = new wxBoxSizer( wxHORIZONTAL );

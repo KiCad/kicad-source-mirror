@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.9.0 Apr 22 2021)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -36,15 +36,9 @@ class PANEL_EDIT_OPTIONS_BASE : public wxPanel
 	private:
 
 	protected:
-		enum
-		{
-			wxID_SEGMENTS45 = 1000
-		};
-
 		wxCheckBox* m_magneticPads;
 		wxCheckBox* m_magneticGraphics;
 		wxCheckBox* m_flipLeftRight;
-		wxCheckBox* m_segments45OnlyCtrl;
 		wxStaticText* m_staticTextRotationAngle;
 		wxTextCtrl* m_rotationAngle;
 		wxStaticText* m_staticText32;

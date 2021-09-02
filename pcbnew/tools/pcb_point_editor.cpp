@@ -516,9 +516,7 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
             }
 
             // The alternative constraint limits to 45 degrees
-            bool enableAltConstraint = !!evt->Modifier( MD_SHIFT );
-
-            if( enableAltConstraint )
+            if( Is45Limited() )
                 m_altConstraint->Apply();
             else
                 m_editedPoint->ApplyConstraint();

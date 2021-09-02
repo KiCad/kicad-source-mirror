@@ -103,11 +103,11 @@ public:
     SELECTION_CONDITION ZoneDisplayMode( ZONE_DISPLAY_MODE aMode );
 
     /**
-     * Create a functor that tests whether only 45 degree graphic lines should be drawn
+     * Create a functor that tests whether only 45 degree lines should be allowed
      *
-     * @return Functor returning true if only 45 degree graphic lines should be drawn
+     * @return Functor returning true if only 45 degree lines should be allowed
      */
-    SELECTION_CONDITION Line45degMode();
+    SELECTION_CONDITION Get45degMode();
 
 protected:
     ///< Helper function used by HasItems()
@@ -136,7 +136,7 @@ protected:
                                      ZONE_DISPLAY_MODE aMode );
 
     ///< Helper function used by Line45degMode()
-    static bool line45degModeFunc( const SELECTION& aSelection, PCB_BASE_FRAME* aFrame );
+    static bool get45degModeFunc( const SELECTION& aSelection, PCB_BASE_FRAME* aFrame );
 };
 
 #endif /* PCB_EDITOR_CONDITIONS_H_ */

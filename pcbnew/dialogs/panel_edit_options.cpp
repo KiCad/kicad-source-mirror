@@ -59,8 +59,6 @@ bool PANEL_EDIT_OPTIONS::TransferDataToWindow()
     const PCB_DISPLAY_OPTIONS& displ_opts = m_frame->GetDisplayOptions();
     const PCBNEW_SETTINGS&     general_opts = m_frame->Settings();
 
-    m_segments45OnlyCtrl->SetValue( general_opts.m_Use45DegreeGraphicSegments );
-
     wxString rotationAngle;
     rotationAngle = AngleToStringDegrees( (double) m_frame->GetRotationAngle() );
     m_rotationAngle->SetValue( rotationAngle );
@@ -107,8 +105,6 @@ bool PANEL_EDIT_OPTIONS::TransferDataFromWindow()
     PCB_DISPLAY_OPTIONS displ_opts = m_frame->GetDisplayOptions();
 
     m_frame->SetRotationAngle( wxRound( 10.0 * wxAtof( m_rotationAngle->GetValue() ) ) );
-
-    m_frame->Settings().m_Use45DegreeGraphicSegments = m_segments45OnlyCtrl->GetValue();
 
     if( dynamic_cast<PCB_EDIT_FRAME*>( m_frame ) )
     {

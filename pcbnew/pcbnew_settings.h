@@ -275,8 +275,8 @@ public:
 
     TRACK_DRAG_ACTION m_TrackDragAction;
 
-    bool m_Use45DegreeGraphicSegments;   // True to constraint graphic lines to horizontal,
-    // vertical and 45º
+    bool m_Use45DegreeLimit;             // True to constrain tool actions to horizontal,
+                                         // vertical and 45º
     bool m_FlipLeftRight;                // True: Flip footprints across Y axis
     // False: Flip footprints across X axis
 

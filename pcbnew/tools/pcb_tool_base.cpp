@@ -318,6 +318,12 @@ PCB_SELECTION& PCB_TOOL_BASE::selection()
 }
 
 
+bool PCB_TOOL_BASE::Is45Limited() const
+{
+    return frame()->Settings().m_Use45DegreeLimit;
+}
+
+
 void INTERACTIVE_PLACER_BASE::SnapItem( BOARD_ITEM *aItem )
 {
     // Base implementation performs no snapping
@@ -329,3 +335,4 @@ bool INTERACTIVE_PLACER_BASE::PlaceItem( BOARD_ITEM *aItem, BOARD_COMMIT& aCommi
     aCommit.Add( aItem );
     return true;
 }
+

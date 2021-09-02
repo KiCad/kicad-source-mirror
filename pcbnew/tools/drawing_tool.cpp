@@ -24,43 +24,48 @@
  */
 
 #include "drawing_tool.h"
-#include "pcb_actions.h"
-#include <pcb_edit_frame.h>
-#include <confirm.h>
+
+
+#include <dialogs/dialog_text_properties.h>
+#include <dialogs/dialog_track_via_size.h>
+#include <geometry/geometry_utils.h>
+#include <geometry/shape_segment.h>
 #include <import_gfx/dialog_import_gfx.h>
-#include <view/view.h>
+#include <preview_items/two_point_assistant.h>
+#include <preview_items/two_point_geom_manager.h>
+#include <ratsnest/ratsnest_data.h>
+#include <router/router_tool.h>
 #include <tool/tool_manager.h>
+#include <tools/pcb_actions.h>
+#include <tools/pcb_editor_conditions.h>
 #include <tools/pcb_grid_helper.h>
 #include <tools/pcb_selection_tool.h>
 #include <tools/tool_event_utils.h>
 #include <tools/zone_create_helper.h>
+#include <view/view.h>
 #include <widgets/appearance_controls.h>
-#include <router/router_tool.h>
-#include <geometry/geometry_utils.h>
-#include <geometry/shape_segment.h>
-#include <board_commit.h>
-#include <scoped_set_reset.h>
+#include <widgets/infobar.h>
+
 #include <bitmaps.h>
-#include <painter.h>
-#include <status_popup.h>
-#include <dialogs/dialog_text_properties.h>
-#include <preview_items/arc_assistant.h>
 #include <board.h>
+#include <board_commit.h>
+#include <board_design_settings.h>
+#include <confirm.h>
+#include <footprint.h>
 #include <fp_shape.h>
+#include <macros.h>
+#include <painter.h>
+#include <pcb_edit_frame.h>
 #include <pcb_group.h>
 #include <pcb_text.h>
 #include <pcb_dimension.h>
-#include <zone.h>
-#include <footprint.h>
-#include <preview_items/two_point_assistant.h>
-#include <preview_items/two_point_geom_manager.h>
-#include <ratsnest/ratsnest_data.h>
 #include <pcbnew_id.h>
-#include <dialogs/dialog_track_via_size.h>
+#include <preview_items/arc_assistant.h>
+#include <scoped_set_reset.h>
+#include <status_popup.h>
 #include <string_utils.h>
-#include <macros.h>
-#include <widgets/infobar.h>
-#include <board_design_settings.h>
+#include <zone.h>
+
 
 using SCOPED_DRAW_MODE = SCOPED_SET_RESET<DRAWING_TOOL::MODE>;
 
@@ -207,6 +212,7 @@ bool DRAWING_TOOL::Init()
     ctxMenu.AddItem( PCB_ACTIONS::closeOutline,    canCloseOutline, 200 );
     ctxMenu.AddItem( PCB_ACTIONS::deleteLastPoint, canUndoPoint, 200 );
 
+    ctxMenu.AddCheckItem( PCB_ACTIONS::toggle45, SELECTION_CONDITIONS::ShowAlways, 250 );
     ctxMenu.AddSeparator( 500 );
 
     std::shared_ptr<VIA_SIZE_MENU> viaSizeMenu = std::make_shared<VIA_SIZE_MENU>();
@@ -897,7 +903,7 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
                 dimension->SetEnd( (wxPoint) cursorPos );
                 dimension->Update();
 
-                if( !!evt->Modifier( MD_SHIFT ) || dimension->Type() == PCB_DIM_CENTER_T )
+                if( Is45Limited() || dimension->Type() == PCB_DIM_CENTER_T )
                     constrainDimension( dimension );
 
                 // Dimensions that have origin and end in the same spot are not valid
@@ -978,7 +984,7 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
 
                 dimension->Update();
 
-                if( !!evt->Modifier( MD_SHIFT ) || dimension->Type() == PCB_DIM_CENTER_T )
+                if( Is45Limited() || dimension->Type() == PCB_DIM_CENTER_T )
                     constrainDimension( dimension );
 
                 break;
@@ -1367,8 +1373,8 @@ int DRAWING_TOOL::SetAnchor( const TOOL_EVENT& aEvent )
 
 int DRAWING_TOOL::ToggleLine45degMode( const TOOL_EVENT& toolEvent )
 {
-    m_frame->Settings().m_Use45DegreeGraphicSegments =
-            !m_frame->Settings().m_Use45DegreeGraphicSegments;
+    m_frame->Settings().m_Use45DegreeLimit =
+            !m_frame->Settings().m_Use45DegreeLimit;
 
     return 0;
 }
@@ -1462,12 +1468,6 @@ bool DRAWING_TOOL::drawSegment( const std::string& aTool, PCB_SHAPE** aGraphic,
         grid.SetUseGrid( getView()->GetGAL()->GetGridSnapping() && !evt->DisableGridSnapping() );
         cursorPos = grid.BestSnapAnchor( m_controls->GetMousePosition(), drawingLayer );
         m_controls->ForceCursorPosition( true, cursorPos );
-
-        // 45 degree angle constraint enabled with an option and toggled with Ctrl
-        bool limit45 = frame()->Settings().m_Use45DegreeGraphicSegments;
-
-        if( evt->Modifier( MD_SHIFT ) )
-            limit45 = !limit45;
 
         if( evt->IsCancelInteractive() )
         {
@@ -1633,9 +1633,7 @@ bool DRAWING_TOOL::drawSegment( const std::string& aTool, PCB_SHAPE** aGraphic,
         else if( evt->IsMotion() )
         {
             // 45 degree lines
-            if( started
-                && ( ( limit45 && shape == SHAPE_T::SEGMENT )
-                     || ( evt->Modifier( MD_SHIFT ) && shape == SHAPE_T::RECT ) ) )
+            if( started && Is45Limited() )
             {
                 const VECTOR2I lineVector( cursorPos - VECTOR2I( twoPointManager.GetOrigin() ) );
 
@@ -1860,7 +1858,7 @@ bool DRAWING_TOOL::drawArc( const std::string& aTool, PCB_SHAPE** aGraphic, bool
         else if( evt->IsMotion() )
         {
             // set angle snap
-            arcManager.SetAngleSnap( evt->Modifier( MD_SHIFT ) );
+            arcManager.SetAngleSnap( Is45Limited() );
 
             // update, but don't step the manager state
             arcManager.AddPoint( cursorPos, false );
@@ -2102,7 +2100,7 @@ int DRAWING_TOOL::DrawZone( const TOOL_EVENT& aEvent )
 
         m_controls->ForceCursorPosition( true, cursorPos );
 
-        if( ( sourceZone && sourceZone->GetHV45() ) || constrainAngle || evt->Modifier( MD_SHIFT ) )
+        if( ( sourceZone && sourceZone->GetHV45() ) || constrainAngle || Is45Limited() )
             polyGeomMgr.SetLeaderMode( POLYGON_GEOM_MANAGER::LEADER_MODE::DEG45 );
         else
             polyGeomMgr.SetLeaderMode( POLYGON_GEOM_MANAGER::LEADER_MODE::DIRECT );
@@ -2701,5 +2699,5 @@ void DRAWING_TOOL::setTransitions()
     Go( &DRAWING_TOOL::PlaceText,             PCB_ACTIONS::placeText.MakeEvent() );
     Go( &DRAWING_TOOL::PlaceImportedGraphics, PCB_ACTIONS::placeImportedGraphics.MakeEvent() );
     Go( &DRAWING_TOOL::SetAnchor,             PCB_ACTIONS::setAnchor.MakeEvent() );
-    Go( &DRAWING_TOOL::ToggleLine45degMode,   PCB_ACTIONS::toggleLine45degMode.MakeEvent() );
+    Go( &DRAWING_TOOL::ToggleLine45degMode,   PCB_ACTIONS::toggle45.MakeEvent() );
 }

@@ -301,7 +301,7 @@ int PCB_VIEWER_TOOLS::MeasureTool( const TOOL_EVENT& aEvent )
         // move or drag when origin set updates rules
         else if( originSet && ( evt->IsMotion() || evt->IsDrag( BUT_LEFT ) ) )
         {
-            twoPtMgr.SetAngleSnap( evt->Modifier( MD_SHIFT ) );
+            twoPtMgr.SetAngleSnap( frame()->Settings().m_Use45DegreeLimit );
             twoPtMgr.SetEnd( cursorPos );
 
             view.SetVisible( &ruler, true );

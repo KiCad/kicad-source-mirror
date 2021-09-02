@@ -103,6 +103,12 @@ public:
     void SetIsFootprintEditor( bool aEnabled ) { m_isFootprintEditor = aEnabled; }
     bool IsFootprintEditor() const { return m_isFootprintEditor; }
 
+    /**
+     * Should the tool use its 45° mode option?
+     * @return True if set to use 45°
+     */
+    bool Is45Limited() const;
+
 protected:
     /**
      * Options for placing items interactively.
@@ -173,6 +179,7 @@ protected:
 
 protected:
     bool m_isFootprintEditor;
+
 };
 
 #endif
