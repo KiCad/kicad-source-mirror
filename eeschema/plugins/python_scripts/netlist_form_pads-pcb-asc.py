@@ -4,11 +4,11 @@
 
 """
     @package
-    Output: Cadstar RINF netlist
+    Output: PADS  format netlist
     Sorted By: Ref
 
     Command line:
-    python "pathToFile/netlist_form_cadstar.py" "%I" "%O.frp"
+    python "pathToFile/netlist_form_pads-pcb-asc.py" "%I" "%O.net"
 """
 
 from __future__ import print_function
@@ -46,41 +46,35 @@ components = netlist.getInterestingComponents()
 row =""
 
 ''' Netlist header '''
-row += ".HEA" + '\n'
-''' Generate line .TIM <time> '''
-row += '.TIM ' + netlist.getDate() + '\n'
-''' Generate line .APP <eeschema version> '''
-row += '.APP ' + netlist.getTool() + '\n'
-row += '.TYP FULL' + '\n\n'
+row += "!PADS-POWERPCB-V2.0-MILS!" + '\n'
+row += '*PART*' + '\n'
 
 
 ''' Generate list of component
  for each component  create lines like
-    .ADD_COM U3 "74LS541"   (when no footprint name specified)
-    .ADD_COM JP1 "CONN_8X2" "pin_array_8x2"   (with a specified footprint name)
+ C1 Capacitor_THT:CP_Axial_L18.0mm_D6.5mm_P25.00mm_Horizontal
+ C2 Capacitor_THT:CP_Axial_L18.0mm_D6.5mm_P25.00mm_Horizontal
 '''
 
 for c in components:
-    row += ".ADD_COM " + " " + c.getRef() + " \"" + c.getValue() + "\""
+    row += " " + c.getRef()
 
     fp_name = c.getFootprint( False )
 
     if fp_name != "":
-        row += " \"" + fp_name + "\""
+        row += " " + fp_name
 
     row += '\n'
 
 '''
 generate for each net create lines like
-.ADD_TER U3.9 "/PC-RST"
-.TER     U3.8
-         BUS1.2
-.ADD_TER BUS1.14 "/PC-IOR"
-.TER     U3.7
+*SIGNAL* /CLOCK-RB6
+ P2.27
+ P3.39
 '''
 nets = netlist.getNets()
 
-row += '\n'
+row += '\n*NET*' + '\n'
 
 for net in nets:
     # count the number of pads in net. nets with only one pad are skipped
@@ -90,29 +84,15 @@ for net in nets:
     for node in netitems:
         pad_count += 1
 
-    item_cnt = 1
     netitems = net.children
 
     if pad_count > 1:
+        row += "*SIGNAL* " + net.get( "net", "name" ) + '\n'
+
         for node in netitems:
+            row += node.get('node','ref') + '.' + node.get('node','pin') + '\n'
 
-            if item_cnt == 1:
-                row += ".ADD_TER " + net.get( "node", "ref" ) + '.' + net.get( "node", "pin" )
-                row += " \"" + net.get( "net", "name" ) + '\"\n'
-
-            if item_cnt == 2:
-                row += ".TER     "
-
-            if item_cnt > 2:
-                row += "         "
-
-            if item_cnt > 1:
-                    row += node.get('node','ref') + '.' + node.get('node','pin') + '\n'
-
-            item_cnt += 1
-
-
-row += '\n.END\n'
+row += '*END*\n'
 
 f.write(row.encode('utf-8'))
 f.close()

@@ -286,6 +286,16 @@ class libpart():
                 fieldNames.append( f.get('field','name') )
         return fieldNames
 
+    def getPinList(self):
+        """Return a list of pins in play for this libpart.
+        """
+        pinList = []
+        pins = self.element.getChild('pins')
+        if pins:
+            for f in pins.getChildren():
+                pinList.append( f )
+        return pinList
+
     def getDatasheet(self):
         return self.getField("Datasheet")
 
@@ -361,20 +371,21 @@ class comp():
     def getValue(self):
         return self.element.get("value")
 
-    def getField(self, name, libraryToo=True):
-        """Return the value of a field named name. The component is first
+    def getField(self, name, aLibraryToo = True):
+        """
+        Return the value of a field named name. The component is first
         checked for the field, and then the components library part is checked
         for the field. If the field doesn't exist in either, an empty string is
         returned
 
         Keywords:
         name -- The name of the field to return the value for
-        libraryToo --   look in the libpart's fields for the same name if not found
+        aLibraryToo --  look in the libpart's fields for the same name if not found
                         in component itself
         """
 
         field = self.element.get("field", "name", name)
-        if field == "" and libraryToo and self.libpart:
+        if field == "" and aLibraryToo and self.libpart:
             field = self.libpart.getField(name)
         return field
 
@@ -394,15 +405,25 @@ class comp():
     def getRef(self):
         return self.element.get("comp", "ref")
 
-    def getFootprint(self, libraryToo=True):
+    '''
+    return the footprint name. if empty and aLibraryToo = True, return the
+    footprint name from libary
+    '''
+    def getFootprint(self, aLibraryToo = True):
         ret = self.element.get("footprint")
-        if ret == "" and libraryToo and self.libpart:
+
+        if ret == "" and aLibraryToo and self.libpart:
             ret = self.libpart.getFootprint()
+
         return ret
 
-    def getDatasheet(self, libraryToo=True):
+    '''
+    return the datasheet name. if empty and aLibraryToo = True, return the
+    datasheet name from libary
+    '''
+    def getDatasheet(self, aLibraryToo = True):
         ret = self.element.get("datasheet")
-        if ret == "" and libraryToo and self.libpart:
+        if ret == "" and aLibraryToo and self.libpart:
             ret = self.libpart.getDatasheet()
         return ret
 
@@ -419,6 +440,41 @@ class comp():
 
     def getDescription(self):
         return self.element.get("libsource", "description")
+
+    '''
+    return the netname of the pin aPinNum in netlist aNetlist
+    if aSkipEmptyNet = True, net having only one pin will return a empty name
+    '''
+    def getPinNetname(self, aPinNum, aNetlist, aSkipEmptyNet):
+        ref = self.getRef()
+
+        for net in aNetlist.nets:
+            net_name = net.get( "net", "name" )
+
+            item_cnt = 1
+            netitems = net.children
+
+            for node in netitems:
+                curr_item_ref = node.get( "node", "ref" )
+
+                if curr_item_ref == ref:
+                    curr_pin = node.get( "node", "pin" )
+
+                    if aPinNum == curr_pin:
+                        if aSkipEmptyNet:   #ensure at least 2 pins are in net
+                            pin_count = 0
+
+                            for curr_node in netitems:
+                                pin_count += 1
+
+                                if pin_count > 1:
+                                    return net_name
+
+                            return ""
+                        else:
+                            return net_name
+
+        return "?"
 
 
 class netlist():
