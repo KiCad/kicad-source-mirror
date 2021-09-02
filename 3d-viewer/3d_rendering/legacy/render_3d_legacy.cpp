@@ -1371,7 +1371,7 @@ void RENDER_3D_LEGACY::generate3dGrid( GRID3D_TYPE aGridType )
     const SFVEC3F gridColor = m_boardAdapter.GetColor( DARKGRAY );
 
     // Color of grid lines every 5 lines
-    const SFVEC3F gridColor_marker = m_boardAdapter.GetColor( LIGHTGRAY );
+    const SFVEC3F gridColor_marker = m_boardAdapter.GetColor( LIGHTBLUE );
     const double  scale            = m_boardAdapter.BiuTo3dUnits();
     const GLfloat transparency     = 0.35f;
 
@@ -1413,6 +1413,9 @@ void RENDER_3D_LEGACY::generate3dGrid( GRID3D_TYPE aGridType )
     double  ymax = ( brd_center_pos.y + ysize / 2 ) * scale;
     double  zmin = Millimeter2iu( -50 ) * scale;
     double  zmax = Millimeter2iu( 100 ) * scale;
+
+    // Set rasterised line width (min value = 1)
+    glLineWidth( 1 );
 
     // Draw horizontal grid centered on 3D origin (center of the board)
     for( int ii = 0; ; ii++ )
