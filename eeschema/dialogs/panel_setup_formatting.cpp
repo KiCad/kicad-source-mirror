@@ -23,7 +23,6 @@
 
 #include <sch_edit_frame.h>
 #include <sch_painter.h>
-#include <eeschema_settings.h>
 #include <kiface_i.h>
 #include <panel_setup_formatting.h>
 #include <sch_junction.h>
@@ -136,6 +135,8 @@ bool PANEL_SETUP_FORMATTING::TransferDataFromWindow()
 
     if( m_choiceJunctionDotSize->GetSelection() != wxNOT_FOUND )
         settings.m_JunctionSizeChoice = m_choiceJunctionDotSize->GetSelection();
+
+    settings.m_JunctionSize = m_frame->GetSchematicJunctionSize();
 
     settings.m_IntersheetRefsShow        = m_showIntersheetsReferences->GetValue();
     settings.m_IntersheetRefsFormatShort = !m_radioFormatStandard->GetValue();

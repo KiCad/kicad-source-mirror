@@ -77,13 +77,16 @@ void SCH_EDIT_FRAME::InstallPreferences( PAGED_DIALOG* aParent,
 
 bool SCH_EDIT_FRAME::LoadProjectSettings()
 {
-    GetRenderSettings()->SetDefaultPenWidth( m_defaults->m_DefaultLineWidth );
-    GetRenderSettings()->m_DefaultWireThickness = m_defaults->m_DefaultWireThickness;
-    GetRenderSettings()->m_DefaultBusThickness  = m_defaults->m_DefaultBusThickness;
-    GetRenderSettings()->m_LabelSizeRatio       = m_defaults->m_LabelSizeRatio;
-    GetRenderSettings()->m_TextOffsetRatio      = m_defaults->m_TextOffsetRatio;
-    GetRenderSettings()->m_PinSymbolSize        = m_defaults->m_PinSymbolSize;
-    GetRenderSettings()->m_JunctionSize         = m_defaults->m_JunctionSize;
+    SCHEMATIC_SETTINGS& settings = Schematic().Settings();
+    settings.m_JunctionSize = GetSchematicJunctionSize();
+
+    GetRenderSettings()->SetDefaultPenWidth( settings.m_DefaultLineWidth );
+    GetRenderSettings()->m_DefaultWireThickness = settings.m_DefaultWireThickness;
+    GetRenderSettings()->m_DefaultBusThickness  = settings.m_DefaultBusThickness;
+    GetRenderSettings()->m_LabelSizeRatio       = settings.m_LabelSizeRatio;
+    GetRenderSettings()->m_TextOffsetRatio      = settings.m_TextOffsetRatio;
+    GetRenderSettings()->m_PinSymbolSize        = settings.m_PinSymbolSize;
+    GetRenderSettings()->m_JunctionSize         = settings.m_JunctionSize;
 
     // Verify some values, because the config file can be edited by hand,
     // and have bad values:
@@ -97,9 +100,7 @@ bool SCH_EDIT_FRAME::LoadProjectSettings()
                                                          Prj().GetProjectPath() );
 
     if( !DS_DATA_MODEL::GetTheInstance().LoadDrawingSheet( filename ) )
-    {
         ShowInfoBarError( _( "Error loading drawing sheet." ), true );
-    }
 
     return true;
 }
@@ -116,21 +117,23 @@ void SCH_EDIT_FRAME::ShowSchematicSetupDialog( const wxString& aInitialPage )
     {
         Prj().GetProjectFile().NetSettings().ResolveNetClassAssignments( true );
 
-        EESCHEMA_SETTINGS*  cfg = static_cast<EESCHEMA_SETTINGS*>( config() );
-        SCHEMATIC_SETTINGS& settings = Schematic().Settings();
-
-        settings.m_JunctionSize =
-                Prj().GetProjectFile().NetSettings().m_NetClasses.GetDefaultPtr()->GetWireWidth()
-                * cfg->m_Drawing.junction_size_mult_list[ settings.m_JunctionSizeChoice ];
-
-        if( Schematic().Settings().m_JunctionSize < 1 )
-            Schematic().Settings().m_JunctionSize = 1;
-
         SaveProjectSettings();
 
         Kiway().CommonSettingsChanged( false, true );
         GetCanvas()->Refresh();
     }
+}
+
+
+int SCH_EDIT_FRAME::GetSchematicJunctionSize()
+{
+    std::vector<double>& sizeMultipliers = eeconfig()->m_Drawing.junction_size_mult_list;
+
+    NETCLASSPTR defaultNetclass = Prj().GetProjectFile().NetSettings().m_NetClasses.GetDefault();
+    int         sizeChoice = Schematic().Settings().m_JunctionSizeChoice;
+    int         junctionSize = defaultNetclass->GetWireWidth() * sizeMultipliers[ sizeChoice ];
+
+    return std::max( junctionSize, 1 );
 }
 
 

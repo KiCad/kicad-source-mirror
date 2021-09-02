@@ -238,11 +238,8 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     LoadSettings( eeconfig() );
 
-    // Also links the schematic to the loaded project
+    // NB: also links the schematic to the loaded project
     CreateScreens();
-
-    // After schematic has been linked to project, SCHEMATIC_SETTINGS works
-    m_defaults = &m_schematic->Settings();
 
     setupTools();
     setupUIConditions();
@@ -554,8 +551,6 @@ void SCH_EDIT_FRAME::CreateScreens()
     m_schematic->SetProject( &Prj() );
 
     m_schematic->SetRoot( new SCH_SHEET( m_schematic ) );
-
-    m_defaults = &m_schematic->Settings();
 
     SCH_SCREEN* rootScreen = new SCH_SCREEN( m_schematic );
     m_schematic->Root().SetScreen( rootScreen );

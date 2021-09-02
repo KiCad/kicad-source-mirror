@@ -110,11 +110,6 @@ public:
 
     KIGFX::SCH_RENDER_SETTINGS* GetRenderSettings();
 
-    SCHEMATIC_SETTINGS& GetDefaults()
-    {
-        return *m_defaults;
-    }
-
     COLOR4D GetDrawBgColor() const override;
 
     /**
@@ -258,9 +253,6 @@ protected:
     /// These are only used by symbol_editor.  Eeschema should be using the one inside
     /// the SCHEMATIC.
     SCHEMATIC_SETTINGS  m_base_frame_defaults;
-
-    SCHEMATIC_SETTINGS* m_defaults;
-
 };
 
 #endif // SCH_BASE_FRAME_H_

@@ -801,6 +801,8 @@ public:
 
     void FixupJunctions();
 
+    int GetSchematicJunctionSize();
+
     void FocusOnItem( SCH_ITEM* aItem );
 
     /**

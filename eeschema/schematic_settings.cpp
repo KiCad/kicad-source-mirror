@@ -23,7 +23,6 @@
 #include <lib_symbol.h>
 #include <convert_to_biu.h>
 #include <default_values.h>
-#include <eda_text.h>
 #include <eeschema_settings.h>
 #include <kiface_i.h>
 #include <macros.h>
@@ -45,8 +44,8 @@ SCHEMATIC_SETTINGS::SCHEMATIC_SETTINGS( JSON_SETTINGS* aParent, const std::strin
         m_LabelSizeRatio( DEFAULT_LABEL_SIZE_RATIO ),
         m_TextOffsetRatio( DEFAULT_TEXT_OFFSET_RATIO ),
         m_PinSymbolSize( DEFAULT_TEXT_SIZE * IU_PER_MILS / 2 ),
-        m_JunctionSize( DEFAULT_JUNCTION_DIAM * IU_PER_MILS ),
         m_JunctionSizeChoice( 3 ),
+        m_JunctionSize( DEFAULT_JUNCTION_DIAM * IU_PER_MILS ),
         m_AnnotateStartNum( 0 ),
         m_IntersheetRefsShow( false ),
         m_IntersheetRefsListOwnPage( true ),
@@ -124,9 +123,7 @@ SCHEMATIC_SETTINGS::SCHEMATIC_SETTINGS( JSON_SETTINGS* aParent, const std::strin
             &m_PinSymbolSize, Mils2iu( defaultPinSymbolSize ), Mils2iu( 5 ), Mils2iu( 1000 ),
             1 / IU_PER_MILS ) );
 
-    m_params.emplace_back( new PARAM_SCALED<int>( "drawing.default_junction_size",
-            &m_JunctionSize, Mils2iu( defaultJunctionSize ), Mils2iu( 5 ), Mils2iu( 1000 ),
-            1 / IU_PER_MILS ) );
+    // m_JunctionSize is only a run-time cache of the calculated size.  Do not save it.
 
     // User choice for junction dot size ( e.g. none = 0, smallest = 1, small = 2, etc )
     m_params.emplace_back( new PARAM<int>( "drawing.junction_size_choice",
