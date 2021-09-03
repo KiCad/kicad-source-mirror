@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-08-30 14:45-0700\n"
-"PO-Revision-Date: 2021-08-27 08:25+0000\n"
+"PO-Revision-Date: 2021-09-04 23:34+0000\n"
 "Last-Translator: David Chen <d0123456789g@yahoo.com.tw>\n"
 "Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hant/>\n"
@@ -18059,14 +18059,14 @@ msgid "Metadata"
 msgstr ""
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:154
-#, fuzzy, c-format
+#, c-format
 msgid "Package identifier: %s\n"
-msgstr "唯一時間戳記:"
+msgstr "套件識別碼： %s\n"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:155
-#, fuzzy, c-format
+#, c-format
 msgid "License: %s\n"
-msgstr "許可證"
+msgstr "授權條款：%s\n"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:169
 #, c-format
@@ -18172,11 +18172,9 @@ msgid "Error loading schema: %s"
 msgstr "載入原理圖 '%s' 時出錯。"
 
 #: kicad/pcm/pcm.cpp:107
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading installed packages list: %s"
-msgstr ""
-"網表文件載入錯誤\n"
-" %s"
+msgstr "載入已安裝套件列表時發生錯誤： %s"
 
 #: kicad/pcm/pcm.cpp:184
 #, c-format
@@ -18198,12 +18196,15 @@ msgid "Unable to load repository url"
 msgstr "無法載入檔案 %s"
 
 #: kicad/pcm/pcm.cpp:239
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Unable to parse repository:\n"
 "\n"
 "%s"
-msgstr "無法解析 URL: \"%s\""
+msgstr ""
+"無法解析版本庫：\n"
+"\n"
+"\"%s\""
 
 #: kicad/pcm/pcm.cpp:260
 msgid "Fetching repository packages"
@@ -18219,12 +18220,15 @@ msgid "Packages hash doesn't match. Repository may be corrupted."
 msgstr ""
 
 #: kicad/pcm/pcm.cpp:286
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Unable to parse packages metadata:\n"
 "\n"
 "%s"
-msgstr "無法解析 URL: \"%s\""
+msgstr ""
+"無法解析套件中繼資料：\n"
+"\n"
+"\"%s\""
 
 #: kicad/pcm/pcm.cpp:373
 msgid ""
@@ -18248,9 +18252,8 @@ msgid "Local file"
 msgstr "編輯本地檔案..."
 
 #: kicad/pcm/pcm_task_manager.cpp:63
-#, fuzzy
 msgid "Unable to create download directory!"
-msgstr "無法建立目錄 \"%s\""
+msgstr "無法建立目錄 \"%s\"！"
 
 #: kicad/pcm/pcm_task_manager.cpp:92
 #, c-format
@@ -18276,23 +18279,28 @@ msgid "Downloading package url: '%s'"
 msgstr ""
 
 #: kicad/pcm/pcm_task_manager.cpp:170
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Failed to download url %s\n"
 "%s"
-msgstr "未能載入 '%s'."
+msgstr ""
+"無法下載 URL %s\n"
+"\"%s\""
 
 #: kicad/pcm/pcm_task_manager.cpp:249
 msgid "Aborting package installation."
 msgstr ""
 
 #: kicad/pcm/pcm_task_manager.cpp:297
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Unable to parse package metadata:\n"
 "\n"
 "%s"
-msgstr "無法解析 URL: \"%s\""
+msgstr ""
+"無法解析套件中繼資料：\n"
+"\n"
+"\"%s\""
 
 #: kicad/pcm/pcm_task_manager.cpp:306
 msgid "Archive does not contain a valid metadata.json file"
@@ -29696,14 +29704,13 @@ msgid "No footprints to export!"
 msgstr "沒有可匯出的封裝！"
 
 #: pcbnew/footprint_libraries_utils.cpp:689
-#, fuzzy, c-format
+#, c-format
 msgid "Update footprints on board to refer to %s?"
-msgstr "更新在板上的封装"
+msgstr "要根據 %s 更新在板子上的封裝嗎？"
 
 #: pcbnew/footprint_libraries_utils.cpp:736
-#, fuzzy
 msgid "Update footprints on board to refer to new library?"
-msgstr "更新封裝以包含來自庫的任何變更"
+msgstr "要根據最新變更來更新板子上的封裝嗎？"
 
 #: pcbnew/footprint_libraries_utils.cpp:875
 #: pcbnew/footprint_viewer_frame.cpp:718
