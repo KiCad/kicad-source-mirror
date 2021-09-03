@@ -111,7 +111,8 @@ BOOST_FIXTURE_TEST_CASE( DRCFalseNegativeRegressions, DRC_REGRESSION_TEST_FIXTUR
                                                       { "issue7241", 1 },
                                                       { "issue7267", 4 },
                                                       { "issue7325", 2 },
-                                                      { "issue8003", 2 } };
+                                                      { "issue8003", 2 },
+                                                      { "issue9081", 2 } };
 
     for( const std::pair<wxString, int>& entry : tests )
     {
