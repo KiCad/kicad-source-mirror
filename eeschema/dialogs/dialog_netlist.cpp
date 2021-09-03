@@ -471,13 +471,7 @@ bool NETLIST_DIALOG::TransferDataFromWindow()
 
     default:    // custom, NET_TYPE_CUSTOM1 and greater
     {
-        wxString command = currPage->m_CommandStringCtrl->GetValue();
-        wxRegEx extRE( wxT( ".*\\.([[:alnum:]][[:alnum:]][[:alnum:]][[:alnum:]]?)\\.xslt?\".*" ) );
-
-        if( extRE.Matches( command ) )
-            fileExt = extRE.GetMatch( command, 1 );
-
-        title.Printf( _( "%s Export" ), currPage->m_TitleStringCtrl->GetValue().GetData() );
+        title.Printf( _( "%s Export" ), currPage->m_TitleStringCtrl->GetValue() );
         break;
     }
     }
@@ -581,9 +575,9 @@ void NETLIST_DIALOG::WriteCurrentNetlistSetup()
             if( title.IsEmpty() )
                 continue;
 
-            cfg->m_NetlistPanel.custom_command_titles.emplace_back( title.ToStdString() );
+            cfg->m_NetlistPanel.custom_command_titles.emplace_back( title );
             cfg->m_NetlistPanel.custom_command_paths.emplace_back(
-                    currPage->m_CommandStringCtrl->GetValue().ToStdString() );
+                    currPage->m_CommandStringCtrl->GetValue() );
         }
     }
 }
@@ -711,11 +705,10 @@ void NETLIST_DIALOG_ADD_GENERATOR::OnBrowseGenerators( wxCommandEvent& event )
 
     m_textCtrlCommand->SetValue( cmdLine );
 
-    /* Get a title for this page */
-    wxString title = m_textCtrlName->GetValue();
-
-    if( title.IsEmpty() )
-        wxMessageBox( _( "Do not forget to choose a title for this netlist control page" ) );
+    // We need a title for this panel
+    // Propose a default value if empty ( i.e. the short filename of the script)
+    if( m_textCtrlName->GetValue().IsEmpty() )
+        m_textCtrlName->SetValue( fn.GetName() );
 }
 
 
