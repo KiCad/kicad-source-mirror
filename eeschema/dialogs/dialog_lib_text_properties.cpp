@@ -121,7 +121,9 @@ bool DIALOG_LIB_TEXT_PROPERTIES::TransferDataFromWindow()
             m_graphicText->SetText( m_TextCtrl->GetValue() );
 
         m_graphicText->SetPosition( wxPoint( m_posX.GetValue(), m_posY.GetValue() ) );
-        m_graphicText->SetTextSize( wxSize( m_textSize.GetValue(), m_textSize.GetValue() ) );
+
+        if( m_textSize.GetValue() != m_graphicText->GetTextWidth() )
+            m_graphicText->SetTextSize( wxSize( m_textSize.GetValue(), m_textSize.GetValue() ) );
 
         m_graphicText->SetTextAngle( m_orientChoice->GetSelection() ? TEXT_ANGLE_VERT
                                                                     : TEXT_ANGLE_HORIZ );

@@ -350,9 +350,14 @@ bool DIALOG_TEXT_AND_LABEL_PROPERTIES::TransferDataFromWindow()
         return false;
     }
 
-    m_CurrentText->SetLabelSpinStyle( (LABEL_SPIN_STYLE::SPIN) m_TextOrient->GetSelection() );
+    LABEL_SPIN_STYLE selectedSpinStyle(
+            static_cast<LABEL_SPIN_STYLE::SPIN>( m_TextOrient->GetSelection() ) );
 
-    m_CurrentText->SetTextSize( wxSize( m_textSize.GetValue(), m_textSize.GetValue() ) );
+    if( m_CurrentText->GetLabelSpinStyle() != selectedSpinStyle )
+        m_CurrentText->SetLabelSpinStyle( selectedSpinStyle );
+
+    if( m_CurrentText->GetTextWidth() != m_textSize.GetValue() )
+        m_CurrentText->SetTextSize( wxSize( m_textSize.GetValue(), m_textSize.GetValue() ) );
 
     if( m_TextShape )
         m_CurrentText->SetShape( (PINSHEETLABEL_SHAPE) m_TextShape->GetSelection() );
@@ -361,15 +366,15 @@ bool DIALOG_TEXT_AND_LABEL_PROPERTIES::TransferDataFromWindow()
 
     m_CurrentText->SetItalic( ( style & 1 ) );
 
-    if( ( style & 2 ) )
+    if( ( style & 2 ) && !m_CurrentText->IsBold() )
     {
         m_CurrentText->SetBold( true );
         m_CurrentText->SetTextThickness( GetPenSizeForBold( m_CurrentText->GetTextWidth() ) );
     }
-    else
+    else if( m_CurrentText->IsBold() )
     {
         m_CurrentText->SetBold( false );
-        m_CurrentText->SetTextThickness( 0 );    // Use default pen width
+        m_CurrentText->SetTextThickness( 0 ); // Use default pen width
     }
 
     m_Parent->UpdateItem( m_CurrentText );

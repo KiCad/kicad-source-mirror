@@ -280,7 +280,10 @@ bool DIALOG_FIELD_PROPERTIES::TransferDataFromWindow()
 void DIALOG_FIELD_PROPERTIES::updateText( EDA_TEXT* aText )
 {
     aText->SetTextPos( m_position );
-    aText->SetTextSize( wxSize( m_size, m_size ) );
+
+    if( aText->GetTextWidth() != m_size )
+        aText->SetTextSize( wxSize( m_size, m_size ) );
+
     aText->SetVisible( m_isVisible );
     aText->SetTextAngle( m_isVertical ? TEXT_ANGLE_VERT : TEXT_ANGLE_HORIZ );
     aText->SetItalic( m_isItalic );
