@@ -537,6 +537,8 @@ public:
                             bool resetTextEffects = true, bool resetFabricationAttrs = true,
                             bool reset3DModels = true );
 
+    bool FootprintMatchesLibrary();
+
     /**
      * Install the corresponding dialog editor for the given item.
      *

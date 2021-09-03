@@ -53,8 +53,8 @@ private:
     wxRadioButton* getRadioButtonForMode();
 
     bool isMatch( FOOTPRINT* );
-    bool processMatchingFootprints();
-    bool processFootprint( FOOTPRINT* aFootprint, const LIB_ID& aNewFPID );
+    void processMatchingFootprints();
+    void processFootprint( FOOTPRINT* aFootprint, const LIB_ID& aNewFPID );
 
     BOARD_COMMIT    m_commit;
     PCB_EDIT_FRAME* m_parent;
