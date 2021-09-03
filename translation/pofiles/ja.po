@@ -5,10 +5,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-08-30 14:45-0700\n"
-"PO-Revision-Date: 2021-08-28 15:22+0000\n"
+"PO-Revision-Date: 2021-09-04 23:34+0000\n"
 "Last-Translator: Tokita, Hiroshi <tokita.hiroshi@gmail.com>\n"
-"Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/master-"
-"source/ja/>\n"
+"Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
+"master-source/ja/>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -21,9 +21,8 @@ msgstr ""
 "X-Poedit-SearchPath-0: .\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
-#, fuzzy
 msgid "All Files"
-msgstr "全てのファイル"
+msgstr "すべてのファイル"
 
 #: 3d-viewer/3d_cache/dialogs/dialog_select_3d_model.cpp:94
 #, c-format
@@ -864,7 +863,7 @@ msgstr "基板ビューを反転"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:120
 msgid "Toggle orthographic projection"
-msgstr "正投影モードの切替"
+msgstr "正投影モードの切り替え"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:120
 msgid "Enable/disable orthographic projection"
@@ -941,31 +940,27 @@ msgstr "マテリアルのディフューズ カラーに基づいた CAD カラ
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:213
 msgid "Toggle Through Hole 3D models"
-msgstr "挿入部品 3D モデルの切替"
+msgstr "スルーホールの3Dモデル表示を切り替え"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:213
-#, fuzzy
 msgid "Toggle 3D models for 'Through hole' type components"
-msgstr "'Through hole' 属性の 3D モデルを切替"
+msgstr "「スルーホール」タイプの部品の 3D モデル表示を切り替え"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:219
 msgid "Toggle SMD 3D models"
-msgstr "SMD 3D モデルの切替"
+msgstr "SMDの3Dモデル表示を切り替え"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:219
-#, fuzzy
 msgid "Toggle 3D models for 'Surface mount' type components"
-msgstr "'Surface mount' 属性の 3D モデルを切替"
+msgstr "「表面実装」タイプの部品の 3D モデル表示を切り替え"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:225
-#, fuzzy
 msgid "Toggle Other 3D models"
-msgstr "SMD 3D モデルの切替"
+msgstr "その他の3Dモデル表示の切り替え"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:225
-#, fuzzy
 msgid "Toggle 3D models for 'Other' type components"
-msgstr "表面実装タイプへ 3D モデルを切替"
+msgstr "「その他」タイプの部品の 3D モデル表示を切り替え"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:230
 msgid "Show Model Bounding Boxes"
@@ -973,11 +968,11 @@ msgstr "モデルをバウンディング ボックスで表示"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:235
 msgid "Toggle realistic mode"
-msgstr "リアル モードの切替"
+msgstr "リアル モードの切り替え"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:240
 msgid "Toggle board body display"
-msgstr "基板本体表示の切替"
+msgstr "基板本体表示の切り替え"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:245
 msgid "Show 3D Axis"
@@ -985,15 +980,15 @@ msgstr "3D 軸を表示"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:250
 msgid "Toggle zone display"
-msgstr "ゾーン表示の切替"
+msgstr "ゾーン表示の切り替え"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:255
 msgid "Toggle adhesive display"
-msgstr "接着剤レイヤーの表示の切替"
+msgstr "接着剤レイヤーの表示の切り替え"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:255
 msgid "Toggle display of adhesive layers"
-msgstr "接着剤 (Adhesive) レイヤーの表示を切替"
+msgstr "接着剤 (Adhesive) レイヤーの表示を切り替え"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:260
 msgid "Toggle silkscreen display"
@@ -1001,39 +996,39 @@ msgstr "シルクスクリーン表示の切替"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:260
 msgid "Toggle display of silkscreen layers"
-msgstr "シルクスクリーン レイヤーの表示を切替"
+msgstr "シルクスクリーン レイヤーの表示を切り替え"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:265
 msgid "Toggle solder mask display"
-msgstr "ハンダ マスク表示の切替"
+msgstr "ハンダ マスク表示の切り替え"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:265
 msgid "Toggle display of solder mask layers"
-msgstr "ハンダ マスク レイヤーの表示を切替"
+msgstr "ハンダ マスク レイヤーの表示を切り替え"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:270
 msgid "Toggle solder paste display"
-msgstr "ハンダ ペースト表示の切替"
+msgstr "ハンダ ペースト表示の切り替え"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:270
 msgid "Toggle display of solder paste layers"
-msgstr "ハンダ ペースト レイヤーの表示を切替"
+msgstr "ハンダ ペースト レイヤーの表示を切り替え"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:275
 msgid "Toggle comments display"
-msgstr "コメント表示の切替"
+msgstr "コメント表示の切り替え"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:275
 msgid "Toggle display of comments and drawings layers"
-msgstr "コメントと図形描画レイヤーの表示を切替"
+msgstr "コメントと図形描画レイヤーの表示を切り替え"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:280
 msgid "Toggle ECO display"
-msgstr "ECO 表示の切替"
+msgstr "ECO 表示の切り替え"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:280
 msgid "Toggle display of ECO layers"
-msgstr "ECO レイヤーの表示を切替"
+msgstr "ECO レイヤーの表示を切り替え"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:159 common/base_units.cpp:435
 #: common/dialogs/dialog_grid_settings_base.cpp:41
@@ -4662,7 +4657,7 @@ msgstr "選択に追加"
 
 #: common/hotkey_store.cpp:49 common/hotkey_store.cpp:54
 msgid "Toggle Selection State"
-msgstr "選択状態を切替"
+msgstr "選択状態を切り替え"
 
 #: common/hotkey_store.cpp:50 common/hotkey_store.cpp:55
 msgid "Remove from Selection"
@@ -5345,9 +5340,8 @@ msgstr ""
 "デフォルトのエディターが見つかりません。エディターを指定する必要があります"
 
 #: common/pgm_base.cpp:184 common/pgm_base.cpp:186
-#, fuzzy
 msgid "Executable file"
-msgstr "実行ファイル ("
+msgstr "実行ファイル"
 
 #: common/pgm_base.cpp:196
 msgid "Select Preferred Editor"
@@ -5915,19 +5909,19 @@ msgstr "右にパン"
 
 #: common/tool/actions.cpp:445
 msgid "Switch to Fast Grid 1"
-msgstr "高速グリッド1に切替"
+msgstr "高速グリッド1に切り替え"
 
 #: common/tool/actions.cpp:450
 msgid "Switch to Fast Grid 2"
-msgstr "高速グリッド2に切替"
+msgstr "高速グリッド2に切り替え"
 
 #: common/tool/actions.cpp:455
 msgid "Switch to Next Grid"
-msgstr "次のグリッドに切替"
+msgstr "次のグリッドに切り替え"
 
 #: common/tool/actions.cpp:459
 msgid "Switch to Previous Grid"
-msgstr "以前のグリッドに切替"
+msgstr "以前のグリッドに切り替え"
 
 #: common/tool/actions.cpp:464
 msgid "Set the grid origin point"
@@ -5982,7 +5976,7 @@ msgstr "mm 単位を使用"
 
 #: common/tool/actions.cpp:506
 msgid "Switch units"
-msgstr "単位を切替"
+msgstr "単位を切り替え"
 
 #: common/tool/actions.cpp:506
 msgid "Switch between imperial and metric units"
@@ -12509,9 +12503,8 @@ msgid "Schematic Files"
 msgstr "回路図ファイル"
 
 #: eeschema/files-io.cpp:75
-#, fuzzy
 msgid "Create a new project for this schematic"
-msgstr "この基板の新規プロジェクトを作成"
+msgstr "この回路図向けに新規プロジェクトを作成"
 
 #: eeschema/files-io.cpp:77
 #, fuzzy
@@ -16271,7 +16264,7 @@ msgstr "クリップボードに現在のシートにある線画をエクスポ
 
 #: eeschema/tools/ee_actions.cpp:614
 msgid "Switch to PCB Editor"
-msgstr "PCBエディターに切替"
+msgstr "PCBエディターに切り替え"
 
 #: eeschema/tools/ee_actions.cpp:614
 msgid "Open PCB in board editor"
@@ -17221,9 +17214,8 @@ msgid "Keep-out layer"
 msgstr "外側のレイヤーを維持(&o)"
 
 #: gerbview/files.cpp:153
-#, fuzzy
 msgid "Mechanical layers"
-msgstr "テクニカル レイヤー:"
+msgstr "メカニカルレイヤー"
 
 #: gerbview/files.cpp:154
 #, fuzzy
@@ -17896,9 +17888,8 @@ msgid "Reset all settings on this page to their default"
 msgstr "このページ上の全ての設定をデフォルトにリセットします"
 
 #: include/wxstream_helper.h:46
-#, fuzzy
 msgid "Failed to output data"
-msgstr "データの出力に失敗しました。"
+msgstr "データの出力に失敗しました"
 
 #: kicad/dialogs/dialog_template_selector.cpp:127
 msgid "<html><h1>Template Selector</h1></html>"
@@ -18158,46 +18149,44 @@ msgid "Please enter fully qualified repository url"
 msgstr ""
 
 #: kicad/pcm/dialogs/dialog_manage_repositories.cpp:67
-#, fuzzy
 msgid "Add repository"
-msgstr "Github リポジトリ"
+msgstr "Github リポジトリー"
 
 #: kicad/pcm/dialogs/dialog_manage_repositories_base.h:60
-#, fuzzy
 msgid "Manage Repositores"
-msgstr "バス定義を管理"
+msgstr "リポジトリーを管理"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:50
-#, fuzzy, c-format
+#, c-format
 msgid "Plugins (%d)"
-msgstr "プラグイン"
+msgstr "プラグイン (%d)"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:51
-#, fuzzy, c-format
+#, c-format
 msgid "Libraries (%d)"
-msgstr "ライブラリー"
+msgstr "ライブラリー (%d)"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:52
-#, fuzzy, c-format
+#, c-format
 msgid "Color themes (%d)"
-msgstr "カラー テーマ:"
+msgstr "カラーテーマ (%d)"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:79 kicad/pcm/dialogs/dialog_pcm.cpp:315
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:51
 #, c-format
 msgid "Repository (%d)"
-msgstr ""
+msgstr "リポジトリー (%d)"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:96 kicad/pcm/dialogs/panel_package.cpp:70
 #: kicad/pcm/dialogs/panel_package.cpp:74
 #: kicad/pcm/dialogs/panel_package_base.cpp:67
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:108
 msgid "Install"
-msgstr ""
+msgstr "インストール"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:105 kicad/pcm/dialogs/panel_package.cpp:78
 msgid "Uninstall"
-msgstr ""
+msgstr "アンインストール"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:160
 #, fuzzy
@@ -18212,9 +18201,8 @@ msgid "Plugin and Content Manager"
 msgstr ""
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:235
-#, fuzzy
 msgid "Choose package file"
-msgstr "イメージの選択"
+msgstr "パッケージファイルを選択"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:330
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:117
@@ -18245,9 +18233,8 @@ msgid "Package"
 msgstr "パッケージ"
 
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:85
-#, fuzzy
 msgid "Repository"
-msgstr "Github リポジトリ"
+msgstr "リポジトリー"
 
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:103
 #, fuzzy
@@ -18255,17 +18242,14 @@ msgid "Discard action"
 msgstr "変更を破棄"
 
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:133
-#, fuzzy
 msgid "Install from file..."
-msgstr "ファイル名を変更できません... "
+msgstr "ファイルからインストール..."
 
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:136
-#, fuzzy
 msgid "Apply changes"
 msgstr "変更を適用"
 
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:139
-#, fuzzy
 msgid "Discard changes"
 msgstr "変更を破棄"
 
@@ -18276,7 +18260,7 @@ msgstr ""
 #: kicad/pcm/dialogs/dialog_pcm_progress.cpp:86
 #, c-format
 msgid "Downloaded %lld/%lld Kb"
-msgstr ""
+msgstr "%lld/%lld Kb ダウンロード完了"
 
 #: kicad/pcm/dialogs/dialog_pcm_progress.cpp:150
 msgid "All downloads finished"
@@ -18302,9 +18286,8 @@ msgid "Details"
 msgstr ""
 
 #: kicad/pcm/dialogs/dialog_pcm_progress_base.h:58
-#, fuzzy
 msgid "Applying package changes"
-msgstr "変更を適用"
+msgstr "パッケージの変更を適用"
 
 #: kicad/pcm/dialogs/panel_package.cpp:82
 #, fuzzy
@@ -18321,14 +18304,14 @@ msgid "Metadata"
 msgstr ""
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:154
-#, fuzzy, c-format
+#, c-format
 msgid "Package identifier: %s\n"
-msgstr "固有識別子:"
+msgstr "パッケージ識別子: %s\n"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:155
-#, fuzzy, c-format
+#, c-format
 msgid "License: %s\n"
-msgstr "ライセンス"
+msgstr "ライセンス: %s\n"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:169
 #, c-format
@@ -18344,9 +18327,8 @@ msgid "Maintainer"
 msgstr ""
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:191
-#, fuzzy
 msgid "Resources"
-msgstr "ソースを入れ替え"
+msgstr "リソース"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:266
 msgid "Pick a package on the left panel to view it's description."
@@ -18357,19 +18339,16 @@ msgid "Package download url is not specified"
 msgstr ""
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:343
-#, fuzzy
 msgid "Error downloading package"
-msgstr "エディターをロード中にエラーしました。"
+msgstr "パッケージをダウンロード中にエラー"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:352
-#, fuzzy
 msgid "Save package"
-msgstr "変更を保存"
+msgstr "パッケージを保存"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:364
-#, fuzzy
 msgid "Downloading package"
-msgstr "ライブラリーをダウンロード中"
+msgstr "パッケージをダウンロード中"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:380
 msgid ""
@@ -18378,9 +18357,8 @@ msgid ""
 msgstr ""
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:382
-#, fuzzy
 msgid "Keep downloaded file"
-msgstr "銅箔塗りつぶし禁止"
+msgstr "ダウンロードしたファイルを保持"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:419
 msgid ""
@@ -18389,24 +18367,20 @@ msgid ""
 msgstr ""
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:421
-#, fuzzy
 msgid "Install package"
-msgstr "パッケージ内"
+msgstr "パッケージをインストール"
 
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:64
-#, fuzzy
 msgid "Show all versions"
-msgstr "全てのビアを表示"
+msgstr "全てのバージョンを表示"
 
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:82
-#, fuzzy
 msgid "Dl Size"
-msgstr "X サイズ"
+msgstr "DLサイズ"
 
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:83
-#, fuzzy
 msgid "Inst Size"
-msgstr "カスタム サイズ"
+msgstr "Instサイズ"
 
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:84
 #, fuzzy
@@ -18414,46 +18388,40 @@ msgid "Comp"
 msgstr "会社名"
 
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:105
-#, fuzzy
 msgid "Download"
-msgstr "下"
+msgstr "ダウンロード"
 
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:121
-#, fuzzy
 msgid "Versions"
 msgstr "バージョン"
 
 #: kicad/pcm/pcm.cpp:79
-#, fuzzy, c-format
+#, c-format
 msgid "schema file '%s' not found"
-msgstr "回路図ファイル '%s' が見つかりません。"
+msgstr "スキーマファイル '%s' が見つかりません"
 
 #: kicad/pcm/pcm.cpp:81
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading schema: %s"
-msgstr "回路図 '%s' のロード中のエラー。"
+msgstr "スキーマの読み込みでエラー: %s"
 
 #: kicad/pcm/pcm.cpp:107
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading installed packages list: %s"
-msgstr ""
-"ネットリストをロード中のエラーです。\n"
-"%s"
+msgstr "インストール済みパッケージリストのロード中のエラー: %s"
 
 #: kicad/pcm/pcm.cpp:184
-#, fuzzy, c-format
+#, c-format
 msgid "Downloading %lld/%lld Kb"
-msgstr "ロード中 %d/%d %s"
+msgstr "%lld/%lld Kb ダウンロード中"
 
 #: kicad/pcm/pcm.cpp:208
-#, fuzzy
 msgid "Download is too large."
-msgstr "3D ライブラリーをダウンロード中"
+msgstr "ダウンロードのサイズが大きすぎます。"
 
 #: kicad/pcm/pcm.cpp:222
-#, fuzzy
 msgid "Fetching repository"
-msgstr "Github リポジトリ"
+msgstr "リポジトリーを取得"
 
 #: kicad/pcm/pcm.cpp:224
 #, fuzzy
@@ -18461,37 +18429,38 @@ msgid "Unable to load repository url"
 msgstr "ファイル %s をロードできません"
 
 #: kicad/pcm/pcm.cpp:239
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Unable to parse repository:\n"
 "\n"
 "%s"
 msgstr ""
-"以下のURLが処理できませんでした:\n"
-"\"%s\""
+"リポジトリーの解析ができません:\n"
+"\n"
+"%s"
 
 #: kicad/pcm/pcm.cpp:260
 msgid "Fetching repository packages"
 msgstr ""
 
 #: kicad/pcm/pcm.cpp:262
-#, fuzzy
 msgid "Unable to load repository packages url."
-msgstr "プロジェクト \"%s\" をロードできません"
+msgstr "リポジトリー パッケージURLをロードすることができません。"
 
 #: kicad/pcm/pcm.cpp:270
 msgid "Packages hash doesn't match. Repository may be corrupted."
 msgstr ""
 
 #: kicad/pcm/pcm.cpp:286
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Unable to parse packages metadata:\n"
 "\n"
 "%s"
 msgstr ""
-"以下のURLが処理できませんでした:\n"
-"\"%s\""
+"パッケージメタデータの解析ができません:\n"
+"\n"
+"%s"
 
 #: kicad/pcm/pcm.cpp:373
 msgid ""
@@ -18499,9 +18468,8 @@ msgid ""
 msgstr ""
 
 #: kicad/pcm/pcm.cpp:423
-#, fuzzy
 msgid "Downloading resources"
-msgstr "ライブラリーをダウンロード中"
+msgstr "リソースをダウンロード中"
 
 #: kicad/pcm/pcm.cpp:437
 msgid ""
@@ -18510,14 +18478,12 @@ msgid ""
 msgstr ""
 
 #: kicad/pcm/pcm.cpp:582
-#, fuzzy
 msgid "Local file"
-msgstr "ローカル ファイルを編集します"
+msgstr "ローカルファイル"
 
 #: kicad/pcm/pcm_task_manager.cpp:63
-#, fuzzy
 msgid "Unable to create download directory!"
-msgstr "ディレクトリ \"%s\" を作成できません"
+msgstr "ダウンロードディレクトリを作成できません!"
 
 #: kicad/pcm/pcm_task_manager.cpp:92
 #, c-format
@@ -18528,40 +18494,43 @@ msgid ""
 msgstr ""
 
 #: kicad/pcm/pcm_task_manager.cpp:101
-#, fuzzy, c-format
+#, c-format
 msgid "Extracting package '%s'."
-msgstr "ファイル '%s' を展開します。"
+msgstr "パッケージ '%s' を展開します。"
 
 #: kicad/pcm/pcm_task_manager.cpp:116
-#, fuzzy, c-format
+#, c-format
 msgid "Removing downloaded archive '%s'."
-msgstr "未使用のフットプリント %s を削除しています。"
+msgstr "ダウンロード済みアーカイブ '%s' を削除します。"
 
 #: kicad/pcm/pcm_task_manager.cpp:157
-#, fuzzy, c-format
+#, c-format
 msgid "Downloading package url: '%s'"
-msgstr "ライブラリーをダウンロード中"
+msgstr "ダウンロード中 パッケージURL: '%s'"
 
 #: kicad/pcm/pcm_task_manager.cpp:170
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Failed to download url %s\n"
 "%s"
-msgstr "'%s' のロードに失敗しました。"
+msgstr ""
+"URL %s' のダウンロードロードに失敗しました\n"
+"%s"
 
 #: kicad/pcm/pcm_task_manager.cpp:249
 msgid "Aborting package installation."
 msgstr ""
 
 #: kicad/pcm/pcm_task_manager.cpp:297
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Unable to parse package metadata:\n"
 "\n"
 "%s"
 msgstr ""
-"以下のURLが処理できませんでした:\n"
-"\"%s\""
+"パッケージメタデータの解析ができません:\n"
+"\n"
+"%s"
 
 #: kicad/pcm/pcm_task_manager.cpp:306
 #, fuzzy
@@ -18569,9 +18538,8 @@ msgid "Archive does not contain a valid metadata.json file"
 msgstr "ライブラリー %s はエイリアス %s を含んでいません"
 
 #: kicad/pcm/pcm_task_manager.cpp:314
-#, fuzzy
 msgid "Archive metadata must have a single version defined"
-msgstr "シートは指定されたファイルを持つ必要があります。"
+msgstr "アーカイブメタデータは単一のバージョンが定義されていなければなりません"
 
 #: kicad/pcm/pcm_task_manager.cpp:326
 #, c-format
@@ -18581,14 +18549,14 @@ msgid ""
 msgstr ""
 
 #: kicad/pcm/pcm_task_manager.cpp:354
-#, fuzzy, c-format
+#, c-format
 msgid "Removing directory %s"
-msgstr "設定ディレクトリー"
+msgstr "ディレクトリ %s を削除しています"
 
 #: kicad/pcm/pcm_task_manager.cpp:359
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to remove directory %s"
-msgstr "ディレクトリ \"%s\" を作成できません"
+msgstr "ディレクトリー '%s' の削除に失敗しました"
 
 #: kicad/pcm/pcm_task_manager.cpp:376
 #, c-format
@@ -18661,7 +18629,7 @@ msgstr "新規ディレクトリーを作成"
 
 #: kicad/project_tree_pane.cpp:705
 msgid "Switch to this Project"
-msgstr "このプロジェクトに切替え"
+msgstr "このプロジェクトに切り替え"
 
 #: kicad/project_tree_pane.cpp:706
 msgid "Close all editors, and switch to the selected project"
@@ -20418,9 +20386,8 @@ msgstr ""
 "変更を破棄して終了しますか？"
 
 #: pcb_calculator/regulators_funct.cpp:127
-#, fuzzy
 msgid "PCB Calculator data file"
-msgstr "PCB 電卓データ ファイル (*.%s)|*.%s"
+msgstr "PCB 電卓データ ファイル"
 
 #: pcb_calculator/regulators_funct.cpp:130
 msgid "Select PCB Calculator Data File"
@@ -21138,9 +21105,8 @@ msgid "A layer thickness is < 0. Fix it"
 msgstr "レイヤーの厚さが負の値です。修正して下さい"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:1522
-#, fuzzy
 msgid "Custom..."
-msgstr "カスタム"
+msgstr "カスタム..."
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:20
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:49
@@ -23314,9 +23280,8 @@ msgid "Select a STEP export filename"
 msgstr "STEP エクスポート ファイル名を選択"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:138
-#, fuzzy
 msgid "STEP files"
-msgstr "SVG ファイル"
+msgstr "STEPファイル"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:202
 msgid "Non-unity scaled models:"
@@ -24171,9 +24136,8 @@ msgid "CSV"
 msgstr "CSV"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:48
-#, fuzzy
 msgid "Gerber (experimental)"
-msgstr "Gerber X2 (実験用)"
+msgstr "Gerber (実験的)"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:50
 msgid "Format"
@@ -24200,9 +24164,8 @@ msgstr ""
 "配置するための全てのフットプリントを含んだ1つのファイルを生成します\n"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:74
-#, fuzzy
 msgid "Include only SMD footprints"
-msgstr "フットプリントを含む (&f)"
+msgstr "表面実装のフットプリントのみを含む"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:77
 msgid "Exclude all footprints with through hole pads"
@@ -29048,9 +29011,9 @@ msgid "Missing constraint type.|  Expected %s."
 msgstr "制約タイプがありません。| %s が期待されます。"
 
 #: pcbnew/drc/drc_rule_parser.cpp:294
-#, fuzzy, c-format
+#, c-format
 msgid "Rule already has a '%s' constraint."
-msgstr "ルールエリア '%s' は配線を許可しません。"
+msgstr "ルールにはすでに '%s' の制約があります。"
 
 #: pcbnew/drc/drc_rule_parser.cpp:352
 msgid "Missing min value."
@@ -29864,14 +29827,13 @@ msgid "No footprints to export!"
 msgstr "エクスポートするフットプリントがありません！"
 
 #: pcbnew/footprint_libraries_utils.cpp:689
-#, fuzzy, c-format
+#, c-format
 msgid "Update footprints on board to refer to %s?"
-msgstr "基板のフットプリントを更新"
+msgstr "基板上のフットプリントが %sを参照するように更新しますか?"
 
 #: pcbnew/footprint_libraries_utils.cpp:736
-#, fuzzy
 msgid "Update footprints on board to refer to new library?"
-msgstr "全ての変更を適用するためにライブラリーからフットプリントを更新"
+msgstr "基板上のフットプリントが 新しいライブラリーを参照するように更新しますか?"
 
 #: pcbnew/footprint_libraries_utils.cpp:875
 #: pcbnew/footprint_viewer_frame.cpp:718
@@ -34500,7 +34462,7 @@ msgstr "ドリル ファイルと部品配置ファイルへ原点位置を配�
 
 #: pcbnew/tools/pcb_actions.cpp:667
 msgid "Toggle Lock"
-msgstr "ロックを切替"
+msgstr "ロックを切り替え"
 
 #: pcbnew/tools/pcb_actions.cpp:667
 msgid "Lock or unlock selected items"
@@ -34564,7 +34526,7 @@ msgstr "選択されたネットをハイライト表示"
 
 #: pcbnew/tools/pcb_actions.cpp:716
 msgid "Toggle Last Net Highlight"
-msgstr "最後のネット ハイライト表示をトグル切替"
+msgstr "最後のネット ハイライト表示を切り替え"
 
 #: pcbnew/tools/pcb_actions.cpp:716
 msgid "Toggle between last two highlighted nets"
@@ -34608,7 +34570,7 @@ msgstr "選択されたネットのラッツネストを表示"
 
 #: pcbnew/tools/pcb_actions.cpp:747
 msgid "Switch to Schematic Editor"
-msgstr "回路図エディターに切替"
+msgstr "回路図エディターに切り替え"
 
 #: pcbnew/tools/pcb_actions.cpp:747
 msgid "Open schematic in Eeschema"
@@ -34729,7 +34691,7 @@ msgstr "ゾーン塗り潰しを表示 (&F)"
 
 #: pcbnew/tools/pcb_actions.cpp:855
 msgid "Toggle Zone Display"
-msgstr "ゾーンの表示を切替"
+msgstr "ゾーンの表示を切り替え"
 
 #: pcbnew/tools/pcb_actions.cpp:856
 #, fuzzy
@@ -34738,23 +34700,23 @@ msgstr "塗り潰し、ワイヤーフレーム、スケッチにゾーンの表
 
 #: pcbnew/tools/pcb_actions.cpp:864
 msgid "Switch to Component (F.Cu) layer"
-msgstr "部品レイヤー (F.Cu) へ切替"
+msgstr "部品レイヤー (F.Cu) へ切り替え"
 
 #: pcbnew/tools/pcb_actions.cpp:870
 msgid "Switch to Inner layer 1"
-msgstr "内層レイヤー1へ切替"
+msgstr "内層レイヤー1へ切り替え"
 
 #: pcbnew/tools/pcb_actions.cpp:876
 msgid "Switch to Inner layer 2"
-msgstr "内層レイヤー2へ切替"
+msgstr "内層レイヤー2へ切り替え"
 
 #: pcbnew/tools/pcb_actions.cpp:882
 msgid "Switch to Inner layer 3"
-msgstr "内層レイヤー3へ切替"
+msgstr "内層レイヤー3へ切り替え"
 
 #: pcbnew/tools/pcb_actions.cpp:888
 msgid "Switch to Inner layer 4"
-msgstr "内層レイヤー4へ切替"
+msgstr "内層レイヤー4へ切り替え"
 
 #: pcbnew/tools/pcb_actions.cpp:894
 msgid "Switch to Inner layer 5"
@@ -34762,119 +34724,119 @@ msgstr "内層レイヤー5へ切替"
 
 #: pcbnew/tools/pcb_actions.cpp:900
 msgid "Switch to Inner layer 6"
-msgstr "内層レイヤー6へ切替"
+msgstr "内層レイヤー6へ切り替え"
 
 #: pcbnew/tools/pcb_actions.cpp:905
 msgid "Switch to Inner layer 7"
-msgstr "内層レイヤー7へ切替"
+msgstr "内層レイヤー7へ切り替え"
 
 #: pcbnew/tools/pcb_actions.cpp:910
 msgid "Switch to Inner layer 8"
-msgstr "内層レイヤー8へ切替"
+msgstr "内層レイヤー8へ切り替え"
 
 #: pcbnew/tools/pcb_actions.cpp:915
 msgid "Switch to Inner layer 9"
-msgstr "内層レイヤー9へ切替"
+msgstr "内層レイヤー9へ切り替え"
 
 #: pcbnew/tools/pcb_actions.cpp:920
 msgid "Switch to Inner layer 10"
-msgstr "内層レイヤー10へ切替"
+msgstr "内層レイヤー10へ切り替え"
 
 #: pcbnew/tools/pcb_actions.cpp:925
 msgid "Switch to Inner layer 11"
-msgstr "内層レイヤー11へ切替"
+msgstr "内層レイヤー11へ切り替え"
 
 #: pcbnew/tools/pcb_actions.cpp:930
 msgid "Switch to Inner layer 12"
-msgstr "内層レイヤー12へ切替"
+msgstr "内層レイヤー12へ切り替え"
 
 #: pcbnew/tools/pcb_actions.cpp:935
 msgid "Switch to Inner layer 13"
-msgstr "内層レイヤー13へ切替"
+msgstr "内層レイヤー13へ切り替え"
 
 #: pcbnew/tools/pcb_actions.cpp:940
 msgid "Switch to Inner layer 14"
-msgstr "内層レイヤー14へ切替"
+msgstr "内層レイヤー14へ切り替え"
 
 #: pcbnew/tools/pcb_actions.cpp:945
 msgid "Switch to Inner layer 15"
-msgstr "内層レイヤー15へ切替"
+msgstr "内層レイヤー15へ切り替え"
 
 #: pcbnew/tools/pcb_actions.cpp:950
 msgid "Switch to Inner layer 16"
-msgstr "内層レイヤー16へ切替"
+msgstr "内層レイヤー16へ切り替え"
 
 #: pcbnew/tools/pcb_actions.cpp:955
 msgid "Switch to Inner layer 17"
-msgstr "内層レイヤー17へ切替"
+msgstr "内層レイヤー17へ切り替え"
 
 #: pcbnew/tools/pcb_actions.cpp:960
 msgid "Switch to Inner layer 18"
-msgstr "内層レイヤー18へ切替"
+msgstr "内層レイヤー18へ切り替え"
 
 #: pcbnew/tools/pcb_actions.cpp:965
 msgid "Switch to Inner layer 19"
-msgstr "内層レイヤー19へ切替"
+msgstr "内層レイヤー19へ切り替え"
 
 #: pcbnew/tools/pcb_actions.cpp:970
 msgid "Switch to Inner layer 20"
-msgstr "内層レイヤー20へ切替"
+msgstr "内層レイヤー20へ切り替え"
 
 #: pcbnew/tools/pcb_actions.cpp:975
 msgid "Switch to Inner layer 21"
-msgstr "内層レイヤー21へ切替"
+msgstr "内層レイヤー21へ切り替え"
 
 #: pcbnew/tools/pcb_actions.cpp:980
 msgid "Switch to Inner layer 22"
-msgstr "内層レイヤー22へ切替"
+msgstr "内層レイヤー22へ切り替え"
 
 #: pcbnew/tools/pcb_actions.cpp:985
 msgid "Switch to Inner layer 23"
-msgstr "内層レイヤー23へ切替"
+msgstr "内層レイヤー23へ切り替え"
 
 #: pcbnew/tools/pcb_actions.cpp:990
 msgid "Switch to Inner layer 24"
-msgstr "内層レイヤー24へ切替"
+msgstr "内層レイヤー24へ切り替え"
 
 #: pcbnew/tools/pcb_actions.cpp:995
 msgid "Switch to Inner layer 25"
-msgstr "内層レイヤー25へ切替"
+msgstr "内層レイヤー25へ切り替え"
 
 #: pcbnew/tools/pcb_actions.cpp:1000
 msgid "Switch to Inner layer 26"
-msgstr "内層レイヤー26へ切替"
+msgstr "内層レイヤー26へ切り替え"
 
 #: pcbnew/tools/pcb_actions.cpp:1005
 msgid "Switch to Inner layer 27"
-msgstr "内層レイヤー27へ切替"
+msgstr "内層レイヤー27へ切り替え"
 
 #: pcbnew/tools/pcb_actions.cpp:1010
 msgid "Switch to Inner layer 28"
-msgstr "内層レイヤー28へ切替"
+msgstr "内層レイヤー28へ切り替え"
 
 #: pcbnew/tools/pcb_actions.cpp:1015
 msgid "Switch to Inner layer 29"
-msgstr "内層レイヤー29へ切替"
+msgstr "内層レイヤー29へ切り替え"
 
 #: pcbnew/tools/pcb_actions.cpp:1020
 msgid "Switch to Inner layer 30"
-msgstr "内層レイヤー30へ切替"
+msgstr "内層レイヤー30へ切り替え"
 
 #: pcbnew/tools/pcb_actions.cpp:1026
 msgid "Switch to Copper (B.Cu) layer"
-msgstr "導体レイヤー (B.Cu) へ切替"
+msgstr "導体レイヤー (B.Cu) へ切り替え"
 
 #: pcbnew/tools/pcb_actions.cpp:1032
 msgid "Switch to Next Layer"
-msgstr "次のレイヤーへ切替"
+msgstr "次のレイヤーへ切り替え"
 
 #: pcbnew/tools/pcb_actions.cpp:1038
 msgid "Switch to Previous Layer"
-msgstr "前のレイヤーへ切替"
+msgstr "前のレイヤーへ切り替え"
 
 #: pcbnew/tools/pcb_actions.cpp:1044
 msgid "Toggle Layer"
-msgstr "レイヤーを切替"
+msgstr "レイヤーを切り替え"
 
 #: pcbnew/tools/pcb_actions.cpp:1044
 msgid "Switch between layers in active layer pair"
@@ -35152,7 +35114,7 @@ msgstr "ルーター ハイライト モード"
 
 #: pcbnew/tools/pcb_actions.cpp:1314
 msgid "Switch router to highlight mode"
-msgstr "ルーターをハイライト モードに切替"
+msgstr "ルーターをハイライト モードに切り替え"
 
 #: pcbnew/tools/pcb_actions.cpp:1319
 msgid "Router Shove Mode"
@@ -35160,7 +35122,7 @@ msgstr "ルーター押しのけモード"
 
 #: pcbnew/tools/pcb_actions.cpp:1319
 msgid "Switch router to shove mode"
-msgstr "ルーターを押しのけモードに切替"
+msgstr "ルーターを押しのけモードに切り替え"
 
 #: pcbnew/tools/pcb_actions.cpp:1324
 msgid "Router Walkaround Mode"
@@ -35168,7 +35130,7 @@ msgstr "ルーター迂回モード"
 
 #: pcbnew/tools/pcb_actions.cpp:1324
 msgid "Switch router to walkaround mode"
-msgstr "ルーターを迂回モードに切替"
+msgstr "ルーターを迂回モードに切り替え"
 
 #: pcbnew/tools/pcb_actions.cpp:1329
 msgid "Set Layer Pair..."
