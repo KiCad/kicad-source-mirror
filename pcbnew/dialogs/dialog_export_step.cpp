@@ -135,9 +135,13 @@ DIALOG_EXPORT_STEP::DIALOG_EXPORT_STEP( PCB_EDIT_FRAME* aParent, const wxString&
     widget->Destroy();
 
     m_filePickerSTEP = new wxFilePickerCtrl( this, wxID_ANY, wxEmptyString,
-            _( "Select a STEP export filename" ), _( "STEP files" ) + AddFileExtListToFilter( { "STEP", "STP" } ), wxDefaultPosition,
+            _( "Select a STEP export filename" ),
+            _( "STEP files" ) + AddFileExtListToFilter( { "STEP", "STP" } ),
+            wxDefaultPosition,
             wxSize( -1, -1 ), wxFLP_SAVE | wxFLP_USE_TEXTCTRL );
     bSizerTop->Add( m_filePickerSTEP, 1, wxTOP|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
+
+    m_filePickerSTEP->SetPath( path );
 
     Layout();
     bSizerSTEPFile->Fit( this );
