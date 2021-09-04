@@ -30,6 +30,7 @@
 #include <board.h>
 #include <board_design_settings.h>
 #include <footprint.h>
+#include <pcb_group.h>
 #include <pcb_dimension.h>
 #include <fp_shape.h>
 #include <pcb_text.h>
@@ -113,7 +114,7 @@ protected:
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
 
-    void visitItem( BOARD_COMMIT& aCommit, BOARD_ITEM* aItem, FOOTPRINT* aParentItem );
+    void visitItem( BOARD_COMMIT& aCommit, BOARD_ITEM* aItem );
     void processItem( BOARD_COMMIT& aCommit, BOARD_ITEM* aItem );
 };
 
@@ -348,12 +349,29 @@ void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::processItem( BOARD_COMMIT& aCommit, B
 }
 
 
-void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::visitItem( BOARD_COMMIT& aCommit, BOARD_ITEM* aItem,
-                                                      FOOTPRINT* aParentItem = nullptr )
+void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::visitItem( BOARD_COMMIT& aCommit, BOARD_ITEM* aItem )
 {
-    if( m_selectedItemsFilter->GetValue() && !m_selection.Contains( aItem )
-        && ( aParentItem == nullptr || !m_selection.Contains( aParentItem ) ) )
-        return;
+    if( m_selectedItemsFilter->GetValue() )
+    {
+        BOARD_ITEM* candidate = aItem;
+
+        if( !candidate->IsSelected() )
+        {
+            if( candidate->GetParent() && candidate->GetParent()->Type() == PCB_FOOTPRINT_T )
+                candidate = candidate->GetParent();
+        }
+
+        if( !candidate->IsSelected() )
+        {
+            candidate = candidate->GetParentGroup();
+
+            while( candidate && !candidate->IsSelected() )
+                candidate = candidate->GetParentGroup();
+
+            if( !candidate )
+                return;
+        }
+    }
 
     if( m_layerFilterOpt->GetValue() && m_layerFilter->GetLayerSelection() != UNDEFINED_LAYER )
     {
@@ -401,10 +419,10 @@ bool DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::TransferDataFromWindow()
     for( FOOTPRINT* fp : m_parent->GetBoard()->Footprints() )
     {
         if( m_references->GetValue() )
-            visitItem( commit, &fp->Reference(), fp );
+            visitItem( commit, &fp->Reference() );
 
         if( m_values->GetValue() )
-            visitItem( commit, &fp->Value(), fp );
+            visitItem( commit, &fp->Value() );
 
         // Go through all other footprint items
         for( BOARD_ITEM* boardItem : fp->GraphicalItems() )
@@ -416,16 +434,16 @@ bool DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::TransferDataFromWindow()
                 const wxString text = dynamic_cast<EDA_TEXT*>( boardItem )->GetText();
 
                 if( m_references->GetValue() && text == wxT( "${REFERENCE}" ) )
-                    visitItem( commit, boardItem, fp );
+                    visitItem( commit, boardItem );
                 else if( m_values->GetValue() && text == wxT( "${VALUE}" ) )
-                    visitItem( commit, boardItem, fp );
+                    visitItem( commit, boardItem );
                 else if( m_otherFields->GetValue() )
-                    visitItem( commit, boardItem, fp );
+                    visitItem( commit, boardItem );
             }
             else if( boardItem->Type() == PCB_FP_SHAPE_T )
             {
                 if( m_footprintGraphics->GetValue() )
-                    visitItem( commit, boardItem, fp );
+                    visitItem( commit, boardItem );
             }
         }
     }

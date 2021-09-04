@@ -26,6 +26,7 @@
 #include <board.h>
 #include <board_design_settings.h>
 #include <pcb_track.h>
+#include <pcb_group.h>
 #include <connectivity/connectivity_data.h>
 #include <pcb_layer_box_selector.h>
 #include <tool/tool_manager.h>
@@ -327,6 +328,20 @@ void DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::processItem( PICKED_ITEMS_LIST* aUndoLi
 
 void DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::visitItem( PICKED_ITEMS_LIST* aUndoList, PCB_TRACK* aItem )
 {
+    if( m_selectedItemsFilter->GetValue() )
+    {
+        if( !aItem->IsSelected() )
+        {
+            PCB_GROUP* group = aItem->GetParentGroup();
+
+            while( group && !group->IsSelected() )
+                group = group->GetParentGroup();
+
+            if( !group )
+                return;
+        }
+    }
+
     if( m_selectedItemsFilter->GetValue() && !m_selection.Contains( aItem ) )
         return;
 
