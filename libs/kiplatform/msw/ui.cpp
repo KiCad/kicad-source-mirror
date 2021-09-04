@@ -100,7 +100,6 @@ bool KIPLATFORM::UI::IsStockCursorOk( wxStockCursor aCursor )
 {
     switch( aCursor )
     {
-    case wxCURSOR_SIZING:
     case wxCURSOR_BULLSEYE:
     case wxCURSOR_HAND:
     case wxCURSOR_ARROW:
