@@ -330,11 +330,9 @@ bool PCBMODEL::AddOutlineSegment( KICADCURVE* aCurve )
 
             if( rad < m_minDistance2 )
             {
-                wxString msg;
-                msg.Printf( "  * AddOutlineSegment() rejected an arc with equivalent end "
-                            "points, %s\n",
-                            aCurve->Describe() );
-                ReportMessage( msg );
+                ReportMessage( wxString::Format( "  * AddOutlineSegment() rejected an arc with "
+                                                 "equivalent end points, %s\n",
+                                                 aCurve->Describe() ) );
                 return false;
             }
         }
@@ -1240,14 +1238,14 @@ bool PCBMODEL::getModelLocation( bool aBottom, DOUBLET aPosition, double aRotati
     lPos.Multiply( lOff );
 
     gp_Trsf lOrient;
-    lOrient.SetRotation( gp_Ax1( gp_Pnt( 0.0, 0.0, 0.0 ),
-       gp_Dir( 0.0, 0.0, 1.0 ) ), -aOrientation.z );
+    lOrient.SetRotation( gp_Ax1( gp_Pnt( 0.0, 0.0, 0.0 ), gp_Dir( 0.0, 0.0, 1.0 ) ),
+                         -aOrientation.z );
     lPos.Multiply( lOrient );
-    lOrient.SetRotation( gp_Ax1( gp_Pnt( 0.0, 0.0, 0.0 ),
-        gp_Dir( 0.0, 1.0, 0.0 ) ), -aOrientation.y );
+    lOrient.SetRotation( gp_Ax1( gp_Pnt( 0.0, 0.0, 0.0 ), gp_Dir( 0.0, 1.0, 0.0 ) ),
+                         -aOrientation.y );
     lPos.Multiply( lOrient );
-    lOrient.SetRotation( gp_Ax1( gp_Pnt( 0.0, 0.0, 0.0 ),
-        gp_Dir( 1.0, 0.0, 0.0 ) ), -aOrientation.x );
+    lOrient.SetRotation( gp_Ax1( gp_Pnt( 0.0, 0.0, 0.0 ), gp_Dir( 1.0, 0.0, 0.0 ) ),
+                         -aOrientation.x );
     lPos.Multiply( lOrient );
 
     aLocation = TopLoc_Location( lPos );
@@ -1409,7 +1407,6 @@ TDF_Label PCBMODEL::transferModel( Handle( TDocStd_Document )& source,
                           || scolor->GetColor( stop.Current(), XCAFDoc_ColorGen, face_color )
                           || scolor->GetColor( stop.Current(), XCAFDoc_ColorCurv, face_color ) )
                 {
-
                     dcolor->SetColor( dtop.Current(), face_color, XCAFDoc_ColorSurf );
                 }
 
@@ -1575,7 +1572,7 @@ bool OUTLINE::MakeShape( TopoDS_Shape& aShape, double aThickness )
     DOUBLET lastPoint;
     getCurveEndPoint( m_curves.back(), lastPoint );
 
-    for( auto i : m_curves )
+    for( KICADCURVE& i : m_curves )
     {
         bool success = false;
 
@@ -1591,9 +1588,11 @@ bool OUTLINE::MakeShape( TopoDS_Shape& aShape, double aThickness )
 
         if( !success )
         {
-            ReportMessage( wxString::Format(
-                "failed to add an edge:\n%s\nlast valid outline point: %f %f\n",
-                i.Describe().c_str(), lastPoint.x, lastPoint.y ) );
+            ReportMessage( wxString::Format( "failed to add edge: %s\n"
+                                             "last valid outline point: %f %f\n",
+                                             i.Describe().c_str(),
+                                             lastPoint.x,
+                                             lastPoint.y ) );
             return false;
         }
     }
@@ -1649,6 +1648,7 @@ bool OUTLINE::addEdge( BRepBuilderAPI_MakeWire* aWire, KICADCURVE& aCurve, DOUBL
     {
         TColgp_Array1OfPnt poles( 0, 3 );
         gp_Pnt             pt = gp_Pnt( aCurve.m_start.x, aCurve.m_start.y, 0.0 );
+
         poles( 0 ) = pt;
         pt = gp_Pnt( aCurve.m_bezierctrl1.x, aCurve.m_bezierctrl1.y, 0.0 );
         poles( 1 ) = pt;
@@ -1687,6 +1687,7 @@ bool OUTLINE::testClosed( const KICADCURVE& aFrontCurve, const KICADCURVE& aBack
 {
     double spx0, spy0, epx0, epy0;
     getEndPoints( aFrontCurve, spx0, spy0, epx0, epy0 );
+
     double spx1, spy1, epx1, epy1;
     getEndPoints( aBackCurve, spx1, spy1, epx1, epy1 );
 

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 Cirilo Bernardo <cirilo.bernardo@gmail.com>
- * Copyright  2018-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright  2018-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -54,13 +54,13 @@ KICADFOOTPRINT::KICADFOOTPRINT( KICADPCB* aParent )
 
 KICADFOOTPRINT::~KICADFOOTPRINT()
 {
-    for( auto i : m_pads )
+    for( KICADPAD* i : m_pads )
         delete i;
 
-    for( auto i : m_curves )
+    for( KICADCURVE* i : m_curves )
         delete i;
 
-    for( auto i : m_models )
+    for( KICADMODEL* i : m_models )
         delete i;
 
     return;
@@ -69,7 +69,7 @@ KICADFOOTPRINT::~KICADFOOTPRINT()
 
 bool KICADFOOTPRINT::Read( SEXPR::SEXPR* aEntry )
 {
-    if( NULL == aEntry )
+    if( !aEntry )
         return false;
 
     if( aEntry->IsList() )
@@ -120,27 +120,27 @@ bool KICADFOOTPRINT::Read( SEXPR::SEXPR* aEntry )
             symname = child->GetChild( 0 )->GetSymbol();
 
             if( symname == "layer" )
-                result = result && parseLayer( child );
+                result = parseLayer( child );
             else if( symname == "at" )
-                result = result && parsePosition( child );
+                result = parsePosition( child );
             else if( symname == "attr" )
-                result = result && parseAttribute( child );
+                result = parseAttribute( child );
             else if( symname == "fp_text" )
-                result = result && parseText( child );
+                result = parseText( child );
             else if( symname == "fp_arc" )
-                result = result && parseCurve( child, CURVE_ARC );
+                result = parseCurve( child, CURVE_ARC );
             else if( symname == "fp_line" )
-                result = result && parseCurve( child, CURVE_LINE );
+                result = parseCurve( child, CURVE_LINE );
             else if( symname == "fp_circle" )
-                result = result && parseCurve( child, CURVE_CIRCLE );
+                result = parseCurve( child, CURVE_CIRCLE );
             else if( symname == "fp_rect" )
-                result = result && parseRect( child );
+                result = parseRect( child );
             else if( symname == "fp_curve" )
-                result = result && parseCurve( child, CURVE_BEZIER );
+                result = parseCurve( child, CURVE_BEZIER );
             else if( symname == "pad" )
-                result = result && parsePad( child );
+                result = parsePad( child );
             else if( symname == "model" )
-                result = result && parseModel( child );
+                result = parseModel( child );
         }
 
         return result;
@@ -386,7 +386,7 @@ bool KICADFOOTPRINT::ComposePCB( class PCBMODEL* aPCB, S3D_RESOLVER* resolver,
 
     }
 
-    for( auto i : m_pads )
+    for( KICADPAD* i : m_pads )
     {
         if( !i->IsThruHole() )
             continue;
@@ -415,22 +415,25 @@ bool KICADFOOTPRINT::ComposePCB( class PCBMODEL* aPCB, S3D_RESOLVER* resolver,
 
     DOUBLET newpos( posX, posY );
 
-    for( auto i : m_models )
+    for( KICADMODEL* i : m_models )
     {
-        std::string fname( resolver->ResolvePath(
-            wxString::FromUTF8Unchecked( i->m_modelname.c_str() ) ).ToUTF8() );
+        wxString mname = wxString::FromUTF8Unchecked( i->m_modelname.c_str() );
+        std::string fname( resolver->ResolvePath( mname ).ToUTF8() );
 
         try
         {
             if( aPCB->AddComponent( fname, m_refdes, LAYER_BOTTOM == m_side ? true : false,
                 newpos, m_rotation, i->m_offset, i->m_rotation, i->m_scale, aSubstituteModels ) )
+            {
                 hasdata = true;
+            }
         }
         catch( const Standard_Failure& e)
         {
-            ReportMessage( wxString::Format( "could not add component %s\n>>Opencascade "
-                                             "error: %s\n ",
-                                             m_refdes, e.GetMessageString() ) );
+            ReportMessage( wxString::Format( "could not add component %s\n"
+                                             "Open CASCADE error: %s\n ",
+                                             m_refdes, 
+                                             e.GetMessageString() ) );
         }
     }
 
