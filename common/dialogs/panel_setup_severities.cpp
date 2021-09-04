@@ -179,7 +179,7 @@ void PANEL_SETUP_SEVERITIES::ImportSettingsFrom( std::map<int, SEVERITY>& aSetti
         int newSeverity = aSettings[ pinMapCode ];
 
         m_buttonMap[ pinMapCode ][0]->SetValue( newSeverity != RPT_SEVERITY_IGNORE );
-        m_buttonMap[ pinMapCode ][1]->SetValue( newSeverity == RPT_SEVERITY_IGNORE );
+        m_buttonMap[ pinMapCode ][2]->SetValue( newSeverity == RPT_SEVERITY_IGNORE );
     }
 }
 
