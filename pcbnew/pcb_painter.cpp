@@ -778,8 +778,8 @@ void PCB_PAINTER::draw( const PCB_VIA* aVia, int aLayer )
 
         wxString netname = UnescapeString( aVia->GetShortNetname() );
 
-        // calculate the size of net name text:
-        double tsize = 1.5 * size / netname.Length();
+        // approximate the size of net name text:
+        double tsize = 1.5 * size / PrintableCharCount( netname );
         tsize = std::min( tsize, size );
 
         // Use a smaller text size to handle interline, pen size..
@@ -960,8 +960,8 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
             // position to display 2 lines
             if( displayNetname && m_pcbSettings.m_padNumbers )
             {
-                size = size / 2.0;
-                textpos.y = size / 2.0;
+                size = size / 2.5;
+                textpos.y = size / 1.7;
             }
 
             if( displayNetname )
@@ -974,11 +974,11 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
                 else if( pinType == wxT( "free" ) && netname.StartsWith( wxT( "unconnected-(" ) ) )
                     netname = "*";
 
-                // calculate the size of net name text:
-                double tsize = 1.5 * padsize.x / netname.Length();
+                // approximate the size of net name text:
+                double tsize = 1.5 * padsize.x / PrintableCharCount( netname );
                 tsize = std::min( tsize, size );
 
-                // Use a smaller text size to handle interline, pen size..
+                // Use a smaller text size to handle interline, pen size...
                 tsize *= 0.7;
                 VECTOR2D namesize( tsize, tsize );
 
@@ -991,10 +991,12 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
             {
                 const wxString& padNumber = aPad->GetNumber();
                 textpos.y = -textpos.y;
-                double tsize = 1.5 * padsize.x / padNumber.Length();
+
+                // approximate the size of the pad number text:
+                double tsize = 1.5 * padsize.x / PrintableCharCount( padNumber );
                 tsize = std::min( tsize, size );
 
-                // Use a smaller text size to handle interline, pen size..
+                // Use a smaller text size to handle interline, pen size...
                 tsize *= 0.7;
                 tsize = std::min( tsize, size );
                 VECTOR2D numsize( tsize, tsize );
@@ -1665,7 +1667,7 @@ void PCB_PAINTER::draw( const PCB_GROUP* aGroup, int aLayer )
         wxPoint textOffset = wxPoint( width.x / 2, - KiROUND( textSize * 0.5 ) );
         wxPoint titleHeight = wxPoint( 0, KiROUND( textSize * 2.0 ) );
 
-        if( !name.IsEmpty() && (int) aGroup->GetName().Length() * textSize < bbox.GetWidth() )
+        if( PrintableCharCount( name ) * textSize < bbox.GetWidth() )
         {
             m_gal->DrawLine( topLeft, topLeft - titleHeight );
             m_gal->DrawLine( topLeft - titleHeight, topLeft + width - titleHeight );

@@ -452,7 +452,7 @@ wxString EscapeHTML( const wxString& aString )
 {
     wxString converted;
 
-    for( wxUniChar c: aString )
+    for( wxUniChar c : aString )
     {
         if( c == '\"' )
             converted += "&quot;";
@@ -477,6 +477,90 @@ bool NoPrintableChars( const wxString& aString )
     wxString tmp = aString;
 
     return tmp.Trim( true ).Trim( false ).IsEmpty();
+}
+
+
+/**
+ * Return the number of printable (ie: non-formatting) chars.  Used to approximate rendered
+ * text size when speed is more important than accuracy.
+ */
+int PrintableCharCount( const wxString& aString )
+{
+    int char_count = 0;
+    int overbarDepth = -1;
+    int superSubDepth = -1;
+    int braceNesting = 0;
+
+    for( auto chIt = aString.begin(), end = aString.end(); chIt < end; ++chIt )
+    {
+        if( *chIt == '\t' )
+        {
+            // We don't format tabs in bitmap text (where this is currently used), so just
+            // drop them from the count.
+            continue;
+        }
+        else if( *chIt == '^' && superSubDepth == -1 )
+        {
+            auto lookahead = chIt;
+
+            if( ++lookahead != end && *lookahead == '{' )
+            {
+                chIt = lookahead;
+                superSubDepth = braceNesting;
+                braceNesting++;
+                continue;
+            }
+        }
+        else if( *chIt == '_' && superSubDepth == -1 )
+        {
+            auto lookahead = chIt;
+
+            if( ++lookahead != end && *lookahead == '{' )
+            {
+                chIt = lookahead;
+                superSubDepth = braceNesting;
+                braceNesting++;
+                continue;
+            }
+        }
+        else if( *chIt == '~' && overbarDepth == -1 )
+        {
+            auto lookahead = chIt;
+
+            if( ++lookahead != end && *lookahead == '{' )
+            {
+                chIt = lookahead;
+                overbarDepth = braceNesting;
+                braceNesting++;
+                continue;
+            }
+        }
+        else if( *chIt == '{' )
+        {
+            braceNesting++;
+        }
+        else if( *chIt == '}' )
+        {
+            if( braceNesting > 0 )
+                braceNesting--;
+
+            if( braceNesting == superSubDepth )
+            {
+                superSubDepth = -1;
+                continue;
+            }
+
+            if( braceNesting == overbarDepth )
+            {
+                overbarDepth = -1;
+                continue;
+            }
+        }
+
+        char_count++;
+    }
+
+    return char_count;
 }
 
 

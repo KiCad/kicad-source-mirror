@@ -134,6 +134,12 @@ char* GetLine( FILE* aFile, char* Line, int* LineNum = nullptr, int SizeLine = 2
 bool NoPrintableChars( const wxString& aString );
 
 /**
+ * Return the number of printable (ie: non-formatting) chars.  Used to approximate rendered
+ * text size when speed is more important than accuracy.
+ */
+int PrintableCharCount( const wxString& aString );
+
+/**
  * Remove leading and training spaces, tabs and end of line chars in \a text
  *
  * @return a pointer on the first n char in text
