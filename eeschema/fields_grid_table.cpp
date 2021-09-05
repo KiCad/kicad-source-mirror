@@ -488,7 +488,7 @@ void FIELDS_GRID_TABLE<T>::SetValue( int aRow, int aCol, const wxString &aValue 
                 value = fn.GetFullPath();
             }
         }
-        else if( m_parentType == SCH_SYMBOL_T && aRow == VALUE_FIELD )
+        else if( m_frame->IsType( FRAME_SCH_SYMBOL_EDITOR ) && aRow == VALUE_FIELD )
         {
             value = EscapeString( value, CTX_LIBID );
         }
