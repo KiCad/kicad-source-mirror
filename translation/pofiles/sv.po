@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-08-30 14:45-0700\n"
-"PO-Revision-Date: 2021-09-04 23:34+0000\n"
+"PO-Revision-Date: 2021-09-05 21:21+0000\n"
 "Last-Translator: Richard Jonsson <richard_jonsson@hotmail.com>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/"
 "master-source/sv/>\n"
@@ -5453,7 +5453,7 @@ msgstr "Det går inte att tolka '%s' i '%s'"
 #: common/plugins/eagle/eagle_parser.cpp:121
 #, c-format
 msgid "Invalid size %lld: too large"
-msgstr "Ogiltig storlek %ll d: för stor"
+msgstr "Ogiltig storlek %lld: för stor"
 
 #: common/plugins/eagle/eagle_parser.cpp:283
 #, c-format
@@ -5461,30 +5461,26 @@ msgid "Invalid Arc with radius %f and angle %f"
 msgstr "Ogiltig båge med radie %f och vinkel %f"
 
 #: common/project.cpp:310 common/project.cpp:315 pcbnew/pcb_base_frame.cpp:155
-#, fuzzy
 msgid "Error loading project footprint library table."
-msgstr "Fel vid inläsning av projekttabell för biblioteksbord"
+msgstr "Fel vid inläsning av bibliotekstabellen för projektets fotavtryck."
 
 #: common/project/project_archiver.cpp:52 kicad/pcm/pcm_task_manager.cpp:266
-#, fuzzy
 msgid "Could not open archive file."
-msgstr "Det gick inte att öppna arkivfilen\n"
+msgstr "Kunde inte öppna arkivfilen."
 
 #: common/project/project_archiver.cpp:61 kicad/pcm/pcm_task_manager.cpp:274
-#, fuzzy
 msgid "Invalid archive file format."
-msgstr "Ogiltigt arkivfilformat\n"
+msgstr "Ogiltigt arkivfilformat."
 
 #: common/project/project_archiver.cpp:72
-#, fuzzy, c-format
+#, c-format
 msgid "Extracting file '%s'."
-msgstr "Extraherar fil \"%s\"\n"
+msgstr "Extraherar fil '%s'."
 
 #: common/project/project_archiver.cpp:94 kicad/pcm/pcm_task_manager.cpp:193
 #: kicad/pcm/pcm_task_manager.cpp:234
-#, fuzzy
 msgid "Error extracting file!"
-msgstr "Fel vid extrahering av fil!\n"
+msgstr "Fel vid extrahering av fil!"
 
 #: common/project/project_archiver.cpp:151 eeschema/dialogs/dialog_erc.cpp:760
 #: eeschema/dialogs/dialog_plot_schematic.cpp:519
@@ -5512,28 +5508,28 @@ msgstr "Fel vid extrahering av fil!\n"
 #: pcbnew/exporters/gendrill_file_writer_base.cpp:344
 #: pcbnew/exporters/gendrill_gerber_writer.cpp:101
 #: pcbnew/exporters/gerber_jobfile_writer.cpp:152
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to create file '%s'."
-msgstr "Det gick inte att skapa filen \"%s\""
+msgstr "Det gick inte att skapa filen '%s'."
 
 #: common/project/project_archiver.cpp:197
-#, fuzzy, c-format
+#, c-format
 msgid "Archived file '%s'."
-msgstr "Arkivera filen \"%s\"\n"
+msgstr "Arkiverade filen '%s'."
 
 #: common/project/project_archiver.cpp:207
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to archive file '%s'."
-msgstr "Det gick inte att säkerhetskopiera filen \"%s\".\n"
+msgstr "Kunde inte arkivera filen '%s'."
 
 #: common/project/project_archiver.cpp:233
-#, fuzzy, c-format
+#, c-format
 msgid "Zip archive '%s' created (%s uncompressed, %s compressed)."
-msgstr "Zip-arkiv \"%s\" skapat (%s okomprimerat, %s komprimerat)\n"
+msgstr "Zip-arkiv '%s' skapat (%s okomprimerat, %s komprimerat)."
 
 #: common/rc_item.cpp:353
 msgid "Excluded "
-msgstr "Utesluten "
+msgstr "Undantagen "
 
 #: common/rc_item.cpp:357
 msgid "Error: "
@@ -5544,17 +5540,17 @@ msgid "Warning: "
 msgstr "Varning: "
 
 #: common/richio.cpp:170
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to open %s for reading."
-msgstr "Det gick inte att öppna filnamnet \"%s\" för läsning"
+msgstr "Kunde inte öppna %s för läsning."
 
 #: common/richio.cpp:221 common/richio.cpp:317
 msgid "Maximum line length exceeded"
-msgstr "Maximal linjelängd överskridits"
+msgstr "Maximal radlängd överskriden"
 
 #: common/richio.cpp:283
 msgid "Line length exceeded"
-msgstr "Linjens längd överskridits"
+msgstr "Radens längd överskriden"
 
 #: common/richio.cpp:566
 msgid "OUTPUTSTREAM_OUTPUTFORMATTER write error"
@@ -5570,12 +5566,12 @@ msgstr "KiCad Standard"
 
 #: common/settings/color_settings.cpp:389
 msgid "KiCad Classic"
-msgstr "KiCad Classic"
+msgstr "KiCad Klassisk"
 
 #: common/template_fieldnames.cpp:72 eeschema/sch_sheet.cpp:59
 #, c-format
 msgid "Field%d"
-msgstr "Fält %d"
+msgstr "Fält%d"
 
 #: common/tool/action_menu.cpp:209 common/tool/action_menu.cpp:214
 #, c-format
@@ -5597,7 +5593,7 @@ msgstr "Skapa ett nytt dokument i redigeraren"
 
 #: common/tool/actions.cpp:49
 msgid "New Library..."
-msgstr "Nytt bibliotek ..."
+msgstr "Nytt Bibliotek..."
 
 #: common/tool/actions.cpp:49
 msgid "Create a new library folder"
@@ -5605,7 +5601,7 @@ msgstr "Skapa en ny biblioteksmapp"
 
 #: common/tool/actions.cpp:55
 msgid "Add Library..."
-msgstr "Lägg till bibliotek ..."
+msgstr "Lägg till Bibliotek..."
 
 #: common/tool/actions.cpp:55
 msgid "Add an existing library folder"
@@ -5613,7 +5609,7 @@ msgstr "Lägg till en befintlig biblioteksmapp"
 
 #: common/tool/actions.cpp:61 eeschema/sim/sim_plot_frame_base.cpp:25
 msgid "Open..."
-msgstr "Öppna…"
+msgstr "Öppna..."
 
 #: common/tool/actions.cpp:61
 msgid "Open existing document"
@@ -5634,7 +5630,7 @@ msgstr "Spara aktuellt dokument till en annan plats"
 
 #: common/tool/actions.cpp:79
 msgid "Save Copy As..."
-msgstr "Spara kopia som ..."
+msgstr "Spara Kopia Som..."
 
 #: common/tool/actions.cpp:79
 msgid "Save a copy of the current document to another location"
@@ -5654,7 +5650,7 @@ msgstr "Kasta bort förändringar"
 
 #: common/tool/actions.cpp:97
 msgid "Page Settings..."
-msgstr "Sidinställningar ..."
+msgstr "Sidinställningar..."
 
 #: common/tool/actions.cpp:97
 msgid "Settings for paper size and title block info"
@@ -5662,11 +5658,11 @@ msgstr "Inställningar för pappersstorlek och titelblockinformation"
 
 #: common/tool/actions.cpp:103 kicad/project_tree_pane.cpp:802
 msgid "Print..."
-msgstr "Skriv ut…"
+msgstr "Skriv Ut..."
 
 #: common/tool/actions.cpp:109
 msgid "Plot..."
-msgstr "Komplott..."
+msgstr "Plotta..."
 
 #: common/tool/actions.cpp:109 pcbnew/dialogs/dialog_plot.cpp:68
 #: pcbnew/dialogs/dialog_plot_base.h:153
@@ -5683,7 +5679,7 @@ msgstr "Avbryt nuvarande verktyg"
 
 #: common/tool/actions.cpp:128
 msgid "Show Context Menu"
-msgstr "Visa innehållsmeny"
+msgstr "Visa Kontextmeny"
 
 #: common/tool/actions.cpp:128
 msgid "Perform the right-mouse-button action"
@@ -5707,7 +5703,7 @@ msgstr "Gör om den senaste redigeringen"
 
 #: common/tool/actions.cpp:154
 msgid "Cut selected item(s) to clipboard"
-msgstr "Klipp valda objekt till urklipp"
+msgstr "Klipp ut markerade objekt till urklipp"
 
 #: common/tool/actions.cpp:160
 msgid "Copy selected item(s) to clipboard"
@@ -5715,7 +5711,7 @@ msgstr "Kopiera markerade objekt till urklipp"
 
 #: common/tool/actions.cpp:166
 msgid "Paste items(s) from clipboard"
-msgstr "Klistra in objekt från klippbordet"
+msgstr "Klistra in objekt från urklipp"
 
 #: common/tool/actions.cpp:172
 msgid "Select all items on screen"
@@ -5723,11 +5719,11 @@ msgstr "Välj alla objekt på skärmen"
 
 #: common/tool/actions.cpp:176
 msgid "Paste Special..."
-msgstr "Klistra in special ..."
+msgstr "Klistra in Special..."
 
 #: common/tool/actions.cpp:176
 msgid "Paste item(s) from clipboard with options"
-msgstr "Klistra in objekt från klippbordet med alternativ"
+msgstr "Klistra in objekt från urklipp med alternativ"
 
 #: common/tool/actions.cpp:181
 msgid "Duplicate"
@@ -5735,7 +5731,7 @@ msgstr "Duplicera"
 
 #: common/tool/actions.cpp:181
 msgid "Duplicates the selected item(s)"
-msgstr "Kopierar markerade objekt"
+msgstr "Duplicerar markerade objekt"
 
 #: common/tool/actions.cpp:192
 msgid "Deletes selected item(s)"
@@ -5743,15 +5739,15 @@ msgstr "Raderar markerade objekt"
 
 #: common/tool/actions.cpp:197
 msgid "Interactive Delete Tool"
-msgstr "Interaktivt borttagningsverktyg"
+msgstr "Interaktivt Raderingsverktyg"
 
 #: common/tool/actions.cpp:197
 msgid "Delete clicked items"
-msgstr "Ta bort klickade objekt"
+msgstr "Radera klickade objekt"
 
 #: common/tool/actions.cpp:204
 msgid "Change Edit Method"
-msgstr "Ändra redigeringsmetod"
+msgstr "Ändra Redigeringsmetod"
 
 #: common/tool/actions.cpp:204
 msgid "Change edit method constraints"
@@ -5768,7 +5764,7 @@ msgstr "Hitta text"
 
 #: common/tool/actions.cpp:215 eeschema/dialogs/dialog_schematic_find.cpp:44
 msgid "Find and Replace"
-msgstr "Sök och ersätt"
+msgstr "Sök och Ersätt"
 
 #: common/tool/actions.cpp:215
 msgid "Find and replace text"
@@ -5780,19 +5776,19 @@ msgstr "Hitta Nästa"
 
 #: common/tool/actions.cpp:221
 msgid "Find next match"
-msgstr "Hitta nästa match"
+msgstr "Hitta nästa träff"
 
 #: common/tool/actions.cpp:227
 msgid "Find Next Marker"
-msgstr "Hitta nästa markör"
+msgstr "Hitta Nästa Markör"
 
 #: common/tool/actions.cpp:233
 msgid "Replace and Find Next"
-msgstr "Byt ut och hitta nästa"
+msgstr "Byt Ut och Hitta Nästa"
 
 #: common/tool/actions.cpp:233
 msgid "Replace current match and find next"
-msgstr "Byt ut aktuell matchning och hitta nästa"
+msgstr "Ersätt aktuell matchning och hitta nästa"
 
 #: common/tool/actions.cpp:239
 msgid "Replace All"
@@ -5800,31 +5796,31 @@ msgstr "Ersätt Alla"
 
 #: common/tool/actions.cpp:239
 msgid "Replace all matches"
-msgstr "Ersätt alla tändstickor"
+msgstr "Ersätt alla träffar"
 
 #: common/tool/actions.cpp:250
 msgid "Previous Marker"
-msgstr "Tidigare markör"
+msgstr "Föregående Markör"
 
 #: common/tool/actions.cpp:250
 msgid "Go to previous marker in Checker window"
-msgstr "Gå till föregående markör i rutan Checker"
+msgstr "Gå till föregående markör i Kontrollfönstret"
 
 #: common/tool/actions.cpp:255
 msgid "Next Marker"
-msgstr "Nästa markör"
+msgstr "Nästa Markör"
 
 #: common/tool/actions.cpp:255
 msgid "Go to next marker in Checker window"
-msgstr "Gå till nästa markör i rutan Checker"
+msgstr "Gå till nästa markör i Kontrollfönstret"
 
 #: common/tool/actions.cpp:260
 msgid "Exclude Marker"
-msgstr "Uteslut markör"
+msgstr "Exkludera Markör"
 
 #: common/tool/actions.cpp:260
 msgid "Mark current violation in Checker window as an exclusion"
-msgstr "Markera aktuell överträdelse i kontrollrutan som en uteslutning"
+msgstr "Markera aktuell överträdelse i Kontrollfönstret som ett undantag"
 
 #: common/tool/actions.cpp:271 kicad/pcm/dialogs/dialog_pcm_base.cpp:127
 msgid "Refresh"
@@ -5832,65 +5828,65 @@ msgstr "Uppdatera"
 
 #: common/tool/actions.cpp:282
 msgid "Zoom to Fit"
-msgstr "Zooma för att passa"
+msgstr "Zooma för att Passa"
 
 #: common/tool/actions.cpp:287
 msgid "Zoom to Objects"
-msgstr "Zooma till objekt"
+msgstr "Zooma till Objekt"
 
 #: common/tool/actions.cpp:298
 msgid "Zoom In at Cursor"
-msgstr "Zooma in på markören"
+msgstr "Zooma In vid Markören"
 
 #: common/tool/actions.cpp:309
 msgid "Zoom Out at Cursor"
-msgstr "Zooma ut på markören"
+msgstr "Zooma Ut vid Markören"
 
 #: common/tool/actions.cpp:315 common/widgets/mathplot.cpp:1667
 #: eeschema/sim/sim_plot_frame_base.cpp:87
 msgid "Zoom In"
-msgstr "Zooma in"
+msgstr "Zooma In"
 
 #: common/tool/actions.cpp:321 common/widgets/mathplot.cpp:1668
 #: eeschema/sim/sim_plot_frame_base.cpp:91
 msgid "Zoom Out"
-msgstr "Zooma ut"
+msgstr "Zooma Ut"
 
 #: common/tool/actions.cpp:333
 msgid "Zoom to Selection"
-msgstr "Zooma till urval"
+msgstr "Zooma till Markering"
 
 #: common/tool/actions.cpp:346
 msgid "Cursor Up"
-msgstr "Markör upp"
+msgstr "Markör Upp"
 
 #: common/tool/actions.cpp:352
 msgid "Cursor Down"
-msgstr "Markör ner"
+msgstr "Markör Ner"
 
 #: common/tool/actions.cpp:358
 msgid "Cursor Left"
-msgstr "Markör vänster"
+msgstr "Markör Vänster"
 
 #: common/tool/actions.cpp:364
 msgid "Cursor Right"
-msgstr "Markör höger"
+msgstr "Markör Höger"
 
 #: common/tool/actions.cpp:371
 msgid "Cursor Up Fast"
-msgstr "Markör upp snabbt"
+msgstr "Markör Snabbt Upp"
 
 #: common/tool/actions.cpp:377
 msgid "Cursor Down Fast"
-msgstr "Markör ner snabbt"
+msgstr "Markör Snabbt Ner"
 
 #: common/tool/actions.cpp:383
 msgid "Cursor Left Fast"
-msgstr "Markören vänster snabbt"
+msgstr "Markör Snabbt Vänster"
 
 #: common/tool/actions.cpp:389
 msgid "Cursor Right Fast"
-msgstr "Markör höger snabbt"
+msgstr "Markör Snabbt Höger"
 
 #: common/tool/actions.cpp:395
 msgid "Click"
@@ -5898,7 +5894,7 @@ msgstr "Klicka"
 
 #: common/tool/actions.cpp:395
 msgid "Performs left mouse button click"
-msgstr "Utför vänster musknapp"
+msgstr "Utför klick med vänster musknapp"
 
 #: common/tool/actions.cpp:401
 msgid "Double-click"
@@ -5906,9 +5902,10 @@ msgstr "Dubbelklicka"
 
 #: common/tool/actions.cpp:401
 msgid "Performs left mouse button double-click"
-msgstr "Utför vänster musknapp dubbelklicka"
+msgstr "Utför dubbelklick med vänster musknapp"
 
 #: common/tool/actions.cpp:409
+#, fuzzy
 msgid "Pin Library"
 msgstr "Pin-bibliotek"
 
@@ -5918,7 +5915,7 @@ msgstr "Behåll biblioteket på toppen av listan"
 
 #: common/tool/actions.cpp:414
 msgid "Unpin Library"
-msgstr "Lossa biblioteket"
+msgstr "Lossa Biblioteket"
 
 #: common/tool/actions.cpp:415
 msgid "No longer keep the library at the top of the list"
@@ -5926,55 +5923,55 @@ msgstr "Behåll inte biblioteket på toppen av listan"
 
 #: common/tool/actions.cpp:420
 msgid "Pan Up"
-msgstr "Panorera uppåt"
+msgstr "Panorera Uppåt"
 
 #: common/tool/actions.cpp:426
 msgid "Pan Down"
-msgstr "Panorera nedåt"
+msgstr "Panorera Nedåt"
 
 #: common/tool/actions.cpp:432
 msgid "Pan Left"
-msgstr "Panorera till vänster"
+msgstr "Panorera till Vänster"
 
 #: common/tool/actions.cpp:438
 msgid "Pan Right"
-msgstr "Panorera till höger"
+msgstr "Panorera till Höger"
 
 #: common/tool/actions.cpp:445
 msgid "Switch to Fast Grid 1"
-msgstr "Byt till Fast Grid 1"
+msgstr "Byt till Snabbrutnät 1"
 
 #: common/tool/actions.cpp:450
 msgid "Switch to Fast Grid 2"
-msgstr "Byt till Fast Grid 2"
+msgstr "Byt till Snabbrutnät 2"
 
 #: common/tool/actions.cpp:455
 msgid "Switch to Next Grid"
-msgstr "Byt till nästa rutnät"
+msgstr "Byt till Nästa Rutnät"
 
 #: common/tool/actions.cpp:459
 msgid "Switch to Previous Grid"
-msgstr "Byt till föregående rutnät"
+msgstr "Byt till Föregående Rutnät"
 
 #: common/tool/actions.cpp:464
 msgid "Set the grid origin point"
-msgstr "Ställ in nätets ursprungspunkt"
+msgstr "Ange rutnätets ursprungspunkt"
 
 #: common/tool/actions.cpp:477
 msgid "Show Grid"
-msgstr "Visa stö&drutor"
+msgstr "Visa Rutnät"
 
 #: common/tool/actions.cpp:477
 msgid "Display grid dots or lines in the edit window"
-msgstr "Visa rutnätpunkter eller linjer i redigeringsfönstret"
+msgstr "Visa rutnätets punkter eller linjer i redigeringsfönstret"
 
 #: common/tool/actions.cpp:482
 msgid "Grid Properties..."
-msgstr "Rutnätegenskaper ..."
+msgstr "Rutnätsegenskaper..."
 
 #: common/tool/actions.cpp:482
 msgid "Set grid dimensions"
-msgstr "Ställ in rutmått"
+msgstr "Ange rutnätsdimensioner"
 
 #: common/tool/actions.cpp:487
 msgid "Use inches"
@@ -6013,11 +6010,11 @@ msgstr "Växla enheter"
 
 #: common/tool/actions.cpp:506
 msgid "Switch between imperial and metric units"
-msgstr "Växla mellan kejserliga och metriska enheter"
+msgstr "Växla mellan brittiska och metriska enheter"
 
 #: common/tool/actions.cpp:511
 msgid "Polar Coordinates"
-msgstr "Polarkoordinater"
+msgstr "Polära Koordinater"
 
 #: common/tool/actions.cpp:511
 msgid "Switch between polar and cartesian coordinate systems"
@@ -6025,27 +6022,27 @@ msgstr "Växla mellan polära och kartesiska koordinatsystem"
 
 #: common/tool/actions.cpp:517
 msgid "Reset Local Coordinates"
-msgstr "Återställ lokala koordinater"
+msgstr "Återställ Lokala Koordinater"
 
 #: common/tool/actions.cpp:523
 msgid "Always Show Cursor"
-msgstr "Visa alltid markören"
+msgstr "Visa Alltid Markören"
 
 #: common/tool/actions.cpp:523
 msgid "Display crosshairs even in selection tool"
-msgstr "Visa hårkors även i urvalsverktyget"
+msgstr "Visa hårkors även i markeringsverktyget"
 
 #: common/tool/actions.cpp:528
 msgid "Full-Window Crosshairs"
-msgstr "Korshår i full fönster"
+msgstr "Korshår över Hela Fönstret"
 
 #: common/tool/actions.cpp:528
 msgid "Switch display of full-window crosshairs"
-msgstr "Byt visning av hårfönster i hela fönster"
+msgstr "Växla visning av hårkors i hela fönstret"
 
 #: common/tool/actions.cpp:534
 msgid "Single Layer View Mode"
-msgstr "Visningsläge för enstaka lager"
+msgstr "Visningsläge för Enskilt Lager"
 
 #: common/tool/actions.cpp:534
 msgid "Toggle inactive layers between normal and dimmed"
@@ -6053,7 +6050,7 @@ msgstr "Växla inaktiva lager mellan normalt och nedtonat"
 
 #: common/tool/actions.cpp:540
 msgid "Single Layer View Mode (3-state)"
-msgstr "Visningsläge för enstaka lager (3-tillstånd)"
+msgstr "Visningsläge för Enskilt Lager (3-läge)"
 
 #: common/tool/actions.cpp:541
 msgid "Toggle inactive layers between normal, dimmed, and hidden"
@@ -6078,7 +6075,7 @@ msgstr "Visa 3D-visningsfönster"
 #: common/tool/actions.cpp:569 eeschema/symbol_viewer_frame.cpp:101
 #: eeschema/symbol_viewer_frame.cpp:920
 msgid "Symbol Library Browser"
-msgstr "Webbläsare för symbolbibliotek"
+msgstr "Bläddrare för Symbolbibliotek"
 
 #: common/tool/actions.cpp:569
 msgid "Browse symbol libraries"
@@ -6107,7 +6104,7 @@ msgstr "Bläddra i fotavtrycksbibliotek"
 #: pcbnew/footprint_edit_frame.cpp:804 pcbnew/footprint_edit_frame.cpp:925
 #: pcbnew/menubar_footprint_editor.cpp:89
 msgid "Footprint Editor"
-msgstr "Footprint Editor"
+msgstr "Fotavtrycksredigerare"
 
 #: common/tool/actions.cpp:584
 msgid "Create, delete and edit footprints"
@@ -6115,53 +6112,53 @@ msgstr "Skapa, ta bort och redigera fotavtryck"
 
 #: common/tool/actions.cpp:590
 msgid "Update PCB from Schematic..."
-msgstr "Uppdatera PCB från Schematisk ..."
+msgstr "Uppdatera Mönsterkort från Schema..."
 
 #: common/tool/actions.cpp:590
 msgid "Update PCB with changes made to schematic"
-msgstr "Uppdatera PCB med ändringar som gjorts i schemat"
+msgstr "Uppdatera mönsterkort med ändringar som gjorts i schemat"
 
 #: common/tool/actions.cpp:595
 msgid "Update Schematic from PCB..."
-msgstr "Uppdatera Schematisk från PCB ..."
+msgstr "Uppdatera Schema från Mönsterkort..."
 
 #: common/tool/actions.cpp:595
 msgid "Update schematic with changes made to PCB"
-msgstr "Uppdatera schemat med ändringar gjorda på PCB"
+msgstr "Uppdatera schema med ändringar gjorda på mönsterkort"
 
 #: common/tool/actions.cpp:605
 #: pcbnew/dialogs/panel_fp_properties_3d_model_base.cpp:71
 msgid "Configure Paths..."
-msgstr "Konfigurera banor ..."
+msgstr "Konfigurera Sökvägar..."
 
 #: common/tool/actions.cpp:605
 msgid "Edit path configuration environment variables"
-msgstr "Redigera sökvägskonfigurationsmiljövariabler"
+msgstr "Redigera miljövariabler för sökvägskonfiguration"
 
 #: common/tool/actions.cpp:610
 msgid "Manage Symbol Libraries..."
-msgstr "Hantera symbolbibliotek ..."
+msgstr "Hantera Symbolbibliotek..."
 
 #: common/tool/actions.cpp:611
 msgid "Edit the global and project symbol library lists"
-msgstr ""
-"Redigera de globala listorna och bibliotekslistorna för projektsymboler"
+msgstr "Redigera listorna över det globala och projektets symbolbibliotek"
 
 #: common/tool/actions.cpp:616
 msgid "Manage Footprint Libraries..."
-msgstr "Hantera fotavtrycksbibliotek ..."
+msgstr "Hantera Fotavtrycksbibliotek..."
 
 #: common/tool/actions.cpp:617
 msgid "Edit the global and project footprint library lists"
-msgstr "Redigera de globala listorna och bibliotekslistorna för projektavtryck"
+msgstr ""
+"Redigera listorna över globala bibliotek och projektbibliotek för fotavtryck"
 
 #: common/tool/actions.cpp:622
 msgid "Getting Started with KiCad"
-msgstr "Komma igång med KiCad"
+msgstr "Kom Igång med KiCad"
 
 #: common/tool/actions.cpp:623
 msgid "Open \"Getting Started in KiCad\" guide for beginners"
-msgstr "Öppna \"Komma igång i KiCad\" -guiden för nybörjare"
+msgstr "Öppna \"Kom Igång med KiCad\"-guiden för nybörjare"
 
 #: common/tool/actions.cpp:628
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:598
@@ -6174,15 +6171,15 @@ msgstr "Öppna produktdokumentation i en webbläsare"
 
 #: common/tool/actions.cpp:635
 msgid "List Hotkeys..."
-msgstr "Lista snabbtangenter ..."
+msgstr "Lista Snabbtangenter ..."
 
 #: common/tool/actions.cpp:636
 msgid "Displays current hotkeys table and corresponding commands"
-msgstr "Visar aktuell snabbtangentabell och motsvarande kommandon"
+msgstr "Visar aktuell snabbtangenttabell och motsvarande kommandon"
 
 #: common/tool/actions.cpp:641
 msgid "Get Involved"
-msgstr "Involvera dig"
+msgstr "Engagera Dig"
 
 #: common/tool/actions.cpp:642
 msgid "Open \"Contribute to KiCad\" in a web browser"
@@ -6198,31 +6195,30 @@ msgstr "Öppna \"Donera till KiCad\" i en webbläsare"
 
 #: common/tool/actions.cpp:652
 msgid "Report Bug"
-msgstr "Rapportera fel"
+msgstr "Rapportera Fel"
 
 #: common/tool/common_control.cpp:219
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Help file '%s' or\n"
 "'%s' could not be found.\n"
 "Do you want to access the KiCad online help?"
 msgstr ""
-"Hjälpfil \"%s\" eller\n"
-"\"%s\" kunde inte hittas.\n"
+"Hjälpfil '%s' eller\n"
+"'%s' kunde inte hittas.\n"
 "Vill du öppna KiCads online-hjälp?"
 
 #: common/tool/common_control.cpp:222 common/tool/common_control.cpp:242
-#, fuzzy
 msgid "File Not Found"
-msgstr "Filen hittades inte"
+msgstr "Filen Hittades Inte"
 
 #: common/tool/common_control.cpp:239
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Help file '%s' could not be found.\n"
 "Do you want to access the KiCad online help?"
 msgstr ""
-"Hjälpfilen \"%s\" kunde inte hittas.\n"
+"Hjälpfilen '%s' kunde inte hittas.\n"
 "Vill du öppna KiCads online-hjälp?"
 
 #: common/tool/common_control.cpp:269
@@ -6232,11 +6228,11 @@ msgid ""
 "For information on how to help the KiCad project, visit %s"
 msgstr ""
 "Det gick inte att starta standardwebbläsaren.\n"
-"För information om hur du hjälper KiCad-projektet, besök %s"
+"Besök %s för information om hur du hjälper KiCad-projektet."
 
 #: common/tool/common_control.cpp:272
 msgid "Get involved with KiCad"
-msgstr "Bli involverad med KiCad"
+msgstr "Bli engagerad i KiCad"
 
 #: common/tool/common_control.cpp:284
 #, c-format
@@ -6244,7 +6240,7 @@ msgid ""
 "Could not launch the default browser.\n"
 "To donate to the KiCad project, visit %s"
 msgstr ""
-"Det gick inte att starta standardwebbläsaren.\n"
+"Kund inte starta standardwebbläsaren.\n"
 "För att donera till KiCad-projektet, besök %s"
 
 #: common/tool/common_control.cpp:287
@@ -6259,7 +6255,7 @@ msgstr "Rutnät: %s (%s)"
 #: common/tool/grid_menu.cpp:104
 #, c-format
 msgid "User grid: %s (%s)"
-msgstr "Användarnät: %s (%s)"
+msgstr "Användarrutnät: %s (%s)"
 
 #: common/tool/zoom_menu.cpp:49
 #, c-format
@@ -6273,20 +6269,20 @@ msgstr "Felaktigt värde: %s"
 
 #: common/validators.cpp:294
 msgid "Entry contains trailing white space."
-msgstr "Posten innehåller efterföljande vitt utrymme."
+msgstr "Posten innehåller efterföljande blanksteg."
 
 #: common/validators.cpp:298
 msgid "Entry contains leading white space."
-msgstr "Posten innehåller ledande vitt utrymme."
+msgstr "Posten innehåller inledande blanksteg."
 
 #: common/validators.cpp:302
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' is not a valid library identifier format."
-msgstr "\"%s\" är inte ett giltigt format för biblioteksidentifierare."
+msgstr "'%s' är inte ett giltigt format för biblioteksidentifierare."
 
 #: common/validators.cpp:309
 msgid "Library Identifier Validation Error"
-msgstr "Valideringsfel för biblioteksidentifierare"
+msgstr "Valideringsfel för Biblioteksidentifierare"
 
 #: common/validators.cpp:356
 msgid "Invalid signal name"
@@ -6294,7 +6290,7 @@ msgstr "Ogiltigt signalnamn"
 
 #: common/validators.cpp:367
 msgid "Signal names cannot contain CR or LF characters"
-msgstr "Signalnamn får inte innehålla CR- eller LF-tecken"
+msgstr "Signalnamn får inte innehålla radbrytningstecken"
 
 #: common/validators.cpp:370
 msgid "Signal names cannot contain spaces"
@@ -6310,13 +6306,14 @@ msgstr "Fotavtryck hittades inte."
 
 #: common/widgets/footprint_select_widget.cpp:144
 msgid "No default footprint"
-msgstr "Inget standardavtryck"
+msgstr "Inget standardfotavtryck"
 
 #: common/widgets/gal_options_panel.cpp:85
 msgid "Accelerated graphics"
 msgstr "Accelererad grafik"
 
 #: common/widgets/gal_options_panel.cpp:85
+#, fuzzy
 msgid "Fallback graphics"
 msgstr "Reserv-grafik"
 
@@ -6338,7 +6335,7 @@ msgstr ""
 
 #: common/widgets/gal_options_panel.cpp:103
 msgid "Grid Options"
-msgstr "Rutnätalternativ"
+msgstr "Alternativ för Rutnät"
 
 #: common/widgets/gal_options_panel.cpp:108
 msgid "Dots"
@@ -6354,11 +6351,11 @@ msgstr "Små kors"
 
 #: common/widgets/gal_options_panel.cpp:114
 msgid "Grid Style"
-msgstr "Grid Style"
+msgstr "Stil på Rutnät"
 
 #: common/widgets/gal_options_panel.cpp:126
 msgid "Grid thickness:"
-msgstr "Gittertjocklek:"
+msgstr "Tjocklek på rutnät:"
 
 #: common/widgets/gal_options_panel.cpp:137
 #: common/widgets/gal_options_panel.cpp:153
@@ -6368,11 +6365,11 @@ msgstr "px"
 
 #: common/widgets/gal_options_panel.cpp:142
 msgid "Min grid spacing:"
-msgstr "Min rutnätavstånd:"
+msgstr "Minsta rutavstånd:"
 
 #: common/widgets/gal_options_panel.cpp:158
 msgid "Snap to Grid:"
-msgstr "Snap to Grid:"
+msgstr "Fäst mot Rutnät:"
 
 #: common/widgets/gal_options_panel.cpp:162
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:341
@@ -6396,7 +6393,7 @@ msgstr "Aldrig"
 
 #: common/widgets/gal_options_panel.cpp:188
 msgid "Cursor Options"
-msgstr "Marköralternativ"
+msgstr "Alternativ för Markör"
 
 #: common/widgets/gal_options_panel.cpp:194
 msgid "Small crosshair"
@@ -6404,15 +6401,15 @@ msgstr "Litet hårkors"
 
 #: common/widgets/gal_options_panel.cpp:195
 msgid "Full window crosshair"
-msgstr "Hårkors i hela fönster"
+msgstr "Hårkors över hela fönstret"
 
 #: common/widgets/gal_options_panel.cpp:200
 msgid "Cursor Shape"
-msgstr "Markörform"
+msgstr "Markörens Utseende"
 
 #: common/widgets/gal_options_panel.cpp:205
 msgid "Cursor shape for drawing, placement and movement tools"
-msgstr "Markörform för ritning, placering och rörelseverktyg"
+msgstr "Markörens utseende för ritning, placering och förflyttningsverktyg"
 
 #: common/widgets/gal_options_panel.cpp:208
 msgid "Always show crosshairs"
@@ -6420,27 +6417,27 @@ msgstr "Visa alltid hårkors"
 
 #: common/widgets/grid_text_button_helpers.cpp:379
 msgid "Select a File"
-msgstr "Välj en fil"
+msgstr "Välj en Fil"
 
 #: common/widgets/mathplot.cpp:1665
 msgid "Center plot view to this position"
-msgstr "Centrera plotvy till denna position"
+msgstr "Centrera plottvy till denna position"
 
 #: common/widgets/mathplot.cpp:1666 eeschema/sim/sim_plot_frame_base.cpp:95
 msgid "Fit on Screen"
-msgstr "Passa på skärmen"
+msgstr "Passa på Skärmen"
 
 #: common/widgets/mathplot.cpp:1666
 msgid "Set plot view to show all items"
-msgstr "Ställ in plotvy för att visa alla objekt"
+msgstr "Ange plottvy till att visa alla objekt"
 
 #: common/widgets/mathplot.cpp:1667
 msgid "Zoom in plot view."
-msgstr "Zooma in plotvy."
+msgstr "Zooma in plottvy."
 
 #: common/widgets/mathplot.cpp:1668
 msgid "Zoom out plot view."
-msgstr "Zooma ut plotvy."
+msgstr "Zooma ut plottvy."
 
 #: common/widgets/net_selector.cpp:58
 msgid "<no net>"
@@ -6463,12 +6460,12 @@ msgstr "Filter:"
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1481
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1764
 msgid "Reset to Defaults"
-msgstr "Återställ till _standardvärden"
+msgstr "Återställ till Standard"
 
 #: common/widgets/paged_dialog.cpp:367
-#, fuzzy, c-format
+#, c-format
 msgid "Reset %s to Defaults"
-msgstr "Återställ till _standardvärden"
+msgstr "Återställ %s till Standard"
 
 #: common/widgets/unit_binder.cpp:217
 #, c-format
@@ -6482,7 +6479,7 @@ msgstr "%s måste vara mindre än %s."
 
 #: common/widgets/widget_hotkey_list.cpp:94
 msgid "Press a new hotkey, or press Esc to cancel..."
-msgstr "Tryck på en ny snabbtangent eller tryck på Esc för att avbryta ..."
+msgstr "Tryck på en ny snabbtangent eller tryck på Esc för att avbryta..."
 
 #: common/widgets/widget_hotkey_list.cpp:101
 msgid "Command:"
@@ -6490,40 +6487,40 @@ msgstr "Kommando:"
 
 #: common/widgets/widget_hotkey_list.cpp:109
 msgid "Current key:"
-msgstr "Aktuell nyckel:"
+msgstr "Aktuell tangent:"
 
 #: common/widgets/widget_hotkey_list.cpp:140
 msgid "Set Hotkey"
-msgstr "Ställ in snabbtangent"
+msgstr "Ange Snabbtangent"
 
 #: common/widgets/widget_hotkey_list.cpp:370
 msgid "Edit..."
-msgstr "Ändra..."
+msgstr "Redigera..."
 
 #: common/widgets/widget_hotkey_list.cpp:371
 msgid "Undo Changes"
-msgstr "Ångra ändringar"
+msgstr "Ångra Ändringar"
 
 #: common/widgets/widget_hotkey_list.cpp:372
 msgid "Clear Assigned Hotkey"
-msgstr "Rensa tilldelad snabbtangent"
+msgstr "Rensa Tilldelad Snabbtangent"
 
 #: common/widgets/widget_hotkey_list.cpp:373
 msgid "Restore Default"
-msgstr "Återställ till Ursprungsvärden"
+msgstr "Återställ Standard"
 
 #: common/widgets/widget_hotkey_list.cpp:409
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "'%s' is already assigned to '%s' in section '%s'. Are you sure you want to "
 "change its assignment?"
 msgstr ""
-"\"%s\" har redan tilldelats \"%s\" i avsnitt \"%s\". Är du säker på att du "
-"vill ändra uppdraget?"
+"'%s' har redan tilldelats '%s' i avsnitt '%s'. Är du säker på att du vill "
+"ändra tilldelningen?"
 
 #: common/widgets/widget_hotkey_list.cpp:415
 msgid "Confirm change"
-msgstr "Bekräfta ändringar"
+msgstr "Bekräfta ändring"
 
 #: common/widgets/widget_hotkey_list.cpp:435
 msgid "Command"
@@ -6559,7 +6556,7 @@ msgstr "Alla KiCad-symbolbiblioteksfiler"
 
 #: common/wildcards_and_files_ext.cpp:215
 msgid "KiCad project files"
-msgstr "KiCad projektfil"
+msgstr "KiCad projektfiler"
 
 #: common/wildcards_and_files_ext.cpp:221
 msgid "KiCad legacy project files"
@@ -6644,7 +6641,7 @@ msgstr "KiCad footprint-filer"
 
 #: common/wildcards_and_files_ext.cpp:346
 msgid "KiCad footprint library paths"
-msgstr "KiCad fotavtryck biblioteksvägar"
+msgstr "KiCad fotavtryck biblioteksökvägar"
 
 #: common/wildcards_and_files_ext.cpp:353
 msgid "Legacy footprint library files"
@@ -6659,9 +6656,8 @@ msgid "Geda PCB footprint library files"
 msgstr "Geda PCB-fotavtryck biblioteksfiler"
 
 #: common/wildcards_and_files_ext.cpp:371
-#, fuzzy
 msgid "Drawing sheet files"
-msgstr "Ritningsblad"
+msgstr "Ritningsbladsfiler"
 
 #: common/wildcards_and_files_ext.cpp:379
 msgid "KiCad symbol footprint link files"
@@ -6669,7 +6665,7 @@ msgstr "KiCad symbol fotavtryck länkfiler"
 
 #: common/wildcards_and_files_ext.cpp:387 gerbview/files.cpp:68
 msgid "Drill files"
-msgstr "Borra filer"
+msgstr "Borr-filer"
 
 #: common/wildcards_and_files_ext.cpp:394
 msgid "SVG files"
@@ -6677,7 +6673,7 @@ msgstr "SVG-filer"
 
 #: common/wildcards_and_files_ext.cpp:400
 msgid "HTML files"
-msgstr "HTML-fil"
+msgstr "HTML-filer"
 
 #: common/wildcards_and_files_ext.cpp:406
 msgid "CSV Files"
@@ -6685,7 +6681,7 @@ msgstr "CSV-filer"
 
 #: common/wildcards_and_files_ext.cpp:412
 msgid "Portable document format files"
-msgstr "Portable Document Format (PDF) files"
+msgstr "Portable Document Format (PDF)-filer"
 
 #: common/wildcards_and_files_ext.cpp:418
 msgid "PostScript files"
@@ -6693,7 +6689,7 @@ msgstr "PostScript-filer"
 
 #: common/wildcards_and_files_ext.cpp:424
 msgid "Report files"
-msgstr "Rapportera filer"
+msgstr "Rapport-filer"
 
 #: common/wildcards_and_files_ext.cpp:430
 msgid "Component placement files"
@@ -6717,11 +6713,11 @@ msgstr "Äldre exportfiler för fotavtryck"
 
 #: common/wildcards_and_files_ext.cpp:460
 msgid "Electrical rule check file"
-msgstr "Elektrisk regelkontrollfil"
+msgstr "Elektrisk regelkontroll-fil"
 
 #: common/wildcards_and_files_ext.cpp:466
 msgid "Spice library file"
-msgstr "Kryddbibliotekfil"
+msgstr "Spice biblioteksfil"
 
 #: common/wildcards_and_files_ext.cpp:472
 msgid "SPICE netlist file"
@@ -6733,15 +6729,15 @@ msgstr "CadStar netlist-fil"
 
 #: common/wildcards_and_files_ext.cpp:484
 msgid "Symbol footprint association files"
-msgstr "Föreningsfiler för symbolfotavtryck"
+msgstr "Associationsfiler för symbolfotavtryck"
 
 #: common/wildcards_and_files_ext.cpp:490
 msgid "Zip file"
-msgstr "Zip fil"
+msgstr "Zip-fil"
 
 #: common/wildcards_and_files_ext.cpp:496
 msgid "GenCAD 1.4 board files"
-msgstr "GenCAD 1.4-kortfiler"
+msgstr "GenCAD 1.4 kort-filer"
 
 #: common/wildcards_and_files_ext.cpp:502
 msgid "DXF Files"
@@ -6750,24 +6746,23 @@ msgstr "DXF-filer"
 #: common/wildcards_and_files_ext.cpp:508
 #: resources/linux/mime/kicad-gerbers.xml.in:21
 msgid "Gerber job file"
-msgstr "Gerber jobbfil"
+msgstr "Gerberjobb-fil"
 
 #: common/wildcards_and_files_ext.cpp:514
 msgid "Specctra DSN file"
 msgstr "Specctra DSN-fil"
 
 #: common/wildcards_and_files_ext.cpp:521
-#, fuzzy
 msgid "Specctra Session file"
-msgstr "Slå ihop Specctra-sessionsfil:"
+msgstr "Specctra Session-fil"
 
 #: common/wildcards_and_files_ext.cpp:528
 msgid "IPC-D-356 Test Files"
-msgstr "IPC-D-356 testfiler"
+msgstr "IPC-D-356 Testfiler"
 
 #: common/wildcards_and_files_ext.cpp:535
 msgid "Workbook file"
-msgstr "Arbetsbokfil"
+msgstr "Arbetsboksfil"
 
 #: common/wildcards_and_files_ext.cpp:542
 msgid "PNG file"
@@ -6775,31 +6770,30 @@ msgstr "PNG-fil"
 
 #: common/wildcards_and_files_ext.cpp:548
 msgid "Jpeg file"
-msgstr "JPEG-fil"
+msgstr "Jpeg-fil"
 
 #: common/wildcards_and_files_ext.cpp:554
-#, fuzzy
 msgid "Hotkey file"
-msgstr "Snabbtangent Lista"
+msgstr "Snabbtangentsfil"
 
 #: cvpcb/auto_associate.cpp:105
-#, fuzzy, c-format
+#, c-format
 msgid "Equivalence file '%s' could not be found in the default search paths."
-msgstr "Ekvivalensfilen \"%s\" kunde inte hittas i standardsökvägarna."
+msgstr "Ekvivalensfilen '%s' kunde inte hittas i standardsökvägarna."
 
 #: cvpcb/auto_associate.cpp:126
-#, fuzzy, c-format
+#, c-format
 msgid "Error opening equivalence file '%s'."
-msgstr "Fel vid öppning av ekvivalensfilen \"%s\"."
+msgstr "Kunde inte öppna ekvivalensfilen '%s'."
 
 #: cvpcb/auto_associate.cpp:178
 msgid "Equivalence File Load Error"
-msgstr "Fel vid laddning av ekvivalensfil"
+msgstr "Fel Vid Laddning av Ekvivalensfil"
 
 #: cvpcb/auto_associate.cpp:185
 #, c-format
 msgid "%lu footprint/symbol equivalences found."
-msgstr "%lu fotavtryck / symbolekvivalenter hittade."
+msgstr "%lu fotavtryck/symbolekvivalenter hittade."
 
 #: cvpcb/auto_associate.cpp:261
 #, c-format
@@ -6825,25 +6819,25 @@ msgid ""
 "See the \"Footprint Library Table\" section of the CvPcb documentation for "
 "more information."
 msgstr ""
-"Du har kört CvPcb för första gången med den nya metoden för "
-"tabellbibliotekstabell för att hitta fotavtryck.\n"
+"Du har kört CvPcb för första gången med den nya fotavtrycksbibliotekstabell-"
+"metoden för att hitta fotspår i biblioteket.\n"
 "CvPcb har antingen kopierat standardtabellen eller skapat en tom tabell i "
 "din hemmapp.\n"
-"Du måste först konfigurera bibliotektabellen så att den omfattar alla "
-"fotavtrycksbibliotek som inte ingår i KiCad.\n"
+"Du måste först konfigurera bibliotekstabellen så att den innehåller alla "
+"fotspårbibliotek som inte ingår i KiCad.\n"
 "Se avsnittet \"Footprint Library Table\" i CvPcb-dokumentationen för mer "
 "information."
 
 #: cvpcb/cvpcb.cpp:187
-#, fuzzy
 msgid ""
 "An error occurred attempting to load the global footprint library table."
 msgstr ""
-"Ett fel inträffade när du försökte ladda den globala tabellen för fotavtryck"
+"Ett fel inträffade när den globala fotavtrycksbibliotekstabellen skulle "
+"läsas in."
 
 #: cvpcb/cvpcb_mainframe.cpp:63 cvpcb/menubar.cpp:51
 msgid "Assign Footprints"
-msgstr "Tilldela fotavtryck"
+msgstr "Tilldela Fotavtryck"
 
 #: cvpcb/cvpcb_mainframe.cpp:103 pcbnew/dialogs/panel_fp_lib_table.cpp:1082
 msgid "Footprint Libraries"
@@ -6855,12 +6849,12 @@ msgstr "Symbol: Fotavtryckstilldelningar"
 
 #: cvpcb/cvpcb_mainframe.cpp:110
 msgid "Filtered Footprints"
-msgstr "Filtrerade fotavtryck"
+msgstr "Filtrerade Fotavtryck"
 
 #: cvpcb/cvpcb_mainframe.cpp:144
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:105
 msgid "Apply, Save Schematic && Continue"
-msgstr "Ansök, spara schematisk && Fortsätt"
+msgstr "Verkställ, Spara Schemat && Fortsätt"
 
 #: cvpcb/cvpcb_mainframe.cpp:212
 msgid "Symbol to footprint changes are unsaved"
@@ -6868,12 +6862,12 @@ msgstr "Ändringar av symbol till fotavtryck är inte sparade"
 
 #: cvpcb/cvpcb_mainframe.cpp:386
 msgid "Symbol to Footprint links have been modified. Save changes?"
-msgstr "Symbol till Footprint-länkar har ändrats. Spara ändringar?"
+msgstr "Symbol till Fotavtryckslänkar har ändrats. Spara ändringar?"
 
 #: cvpcb/cvpcb_mainframe.cpp:527 cvpcb/tools/cvpcb_association_tool.cpp:207
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' is not a valid footprint."
-msgstr "\"%s\" är inte ett giltigt fotavtryck."
+msgstr "'%s' är inte ett giltigt fotavtryck."
 
 #: cvpcb/cvpcb_mainframe.cpp:682 eeschema/generate_alias_info.cpp:39
 #: eeschema/sch_symbol.cpp:1422 eeschema/symbol_editor/symbol_editor.cpp:1225
@@ -6898,7 +6892,7 @@ msgstr "Söktext"
 
 #: cvpcb/cvpcb_mainframe.cpp:728
 msgid "No Filtering"
-msgstr "Ingen filtrering"
+msgstr "Ingen Filtrering"
 
 #: cvpcb/cvpcb_mainframe.cpp:730
 #, c-format
@@ -6908,7 +6902,7 @@ msgstr "Filtrerad efter %s"
 #: cvpcb/cvpcb_mainframe.cpp:744
 #, c-format
 msgid "Description: %s;  Keywords: %s"
-msgstr "Beskrivning: %s; Nyckelord: %s"
+msgstr "Beskrivning: %s;  Nyckelord: %s"
 
 #: cvpcb/cvpcb_mainframe.cpp:776
 #, c-format
@@ -6933,7 +6927,7 @@ msgstr "Inställningsfel"
 #: cvpcb/cvpcb_mainframe.cpp:796 pcbnew/footprint_edit_frame.cpp:829
 #: pcbnew/load_select_footprint.cpp:224
 msgid "Loading Footprint Libraries"
-msgstr "Laddar fotavtrycksbibliotek"
+msgstr "Laddar Fotavtrycksbibliotek"
 
 #: cvpcb/cvpcb_mainframe.cpp:859
 #, c-format
@@ -6941,30 +6935,30 @@ msgid ""
 "Error loading schematic.\n"
 "%s"
 msgstr ""
-"Fel vid inläsning av schematisk.\n"
+"Fel vid inläsning av schema.\n"
 "%s"
 
 #: cvpcb/dialogs/dialog_config_equfiles.cpp:51
-#, fuzzy, c-format
+#, c-format
 msgid "Project file: '%s'"
-msgstr "Projektfil: \"%s\""
+msgstr "Projektfil: '%s'"
 
 #: cvpcb/dialogs/dialog_config_equfiles.cpp:103
 msgid "No editor defined in KiCad. Please choose it."
-msgstr "Ingen redaktör definierad i KiCad. Välj det."
+msgstr "Ingen redigerare definierad i KiCad. Välj det."
 
 #: cvpcb/dialogs/dialog_config_equfiles.cpp:249
 msgid "Footprint Association File"
 msgstr "Footprint Association-fil"
 
 #: cvpcb/dialogs/dialog_config_equfiles.cpp:293
-#, fuzzy, c-format
+#, c-format
 msgid "File '%s' already exists in list."
-msgstr "Filen %s finns redan i listan"
+msgstr "Filen '%s' finns redan i listan."
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:20
 msgid "Symbol Footprint Association Files (.equ)"
-msgstr "Symbol Footprint Association-filer (.equ)"
+msgstr "Symbol Fotavtryck Association-filer (.equ)"
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:36
 #: eeschema/dialogs/dialog_bus_manager.cpp:74
@@ -7035,11 +7029,11 @@ msgstr "Sökvägstyp"
 
 #: cvpcb/dialogs/fp_conflict_assignment_selector.cpp:37
 msgid "Ref"
-msgstr "Referens"
+msgstr "Ref"
 
 #: cvpcb/dialogs/fp_conflict_assignment_selector.cpp:38
 msgid "Schematic assignment"
-msgstr "Schematisk uppgift"
+msgstr "Schematilldelning"
 
 #: cvpcb/dialogs/fp_conflict_assignment_selector.cpp:41
 msgid "Cmp file assignment"
@@ -7052,35 +7046,35 @@ msgid ""
 "\n"
 "Please choose the assignment."
 msgstr ""
-"Fotavtryckstilldelningar från schematisk netlist- och "
+"Fotavtryckstilldelningar från schemats nätlista- och "
 "symbolfotavtrycksassociationsfil (.cmp) är motstridiga.\n"
 "\n"
-"Välj uppdrag."
+"Vänligen välj tilldelning."
 
 #: cvpcb/dialogs/fp_conflict_assignment_selector_base.h:53
 msgid "Footprint Assignment Conflicts"
-msgstr "Konflikter för tilldelning av fotavtryck"
+msgstr "Konflikter vid Tilldelning av Fotavtryck"
 
 #: cvpcb/display_footprints_frame.cpp:69
 #: pcbnew/toolbars_footprint_viewer.cpp:162
 msgid "Footprint Viewer"
-msgstr "Footprint Viewer"
+msgstr "Fotavtrycksvisare"
 
 #: cvpcb/display_footprints_frame.cpp:405
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint ID '%s' is not valid."
-msgstr "Fotavtryck-ID \"%s\" är inte giltigt."
+msgstr "Fotavtryck-ID '%s' är inte giltigt."
 
 #: cvpcb/display_footprints_frame.cpp:420
-#, fuzzy, c-format
+#, c-format
 msgid "Library '%s' is not in the footprint library table."
-msgstr "Bibliotek \"%s\" finns inte i tabellen för fotavtrycksbiblioteket."
+msgstr "Bibliotek '%s' finns inte i tabellen för fotavtrycksbiblioteket."
 
 #: cvpcb/display_footprints_frame.cpp:429
 #: cvpcb/display_footprints_frame.cpp:454
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint '%s' not found."
-msgstr "Fotavtryck \"%s\" hittades inte."
+msgstr "Fotavtryck '%s' hittades inte."
 
 #: cvpcb/display_footprints_frame.cpp:484 pcbnew/footprint.cpp:919
 #, c-format
@@ -7093,7 +7087,6 @@ msgid "Lib: %s"
 msgstr "Lib: %s"
 
 #: cvpcb/readwrite_dlgs.cpp:119
-#, fuzzy
 msgid ""
 "Some of the assigned footprints are legacy entries with no library names. "
 "Would you like KiCad to attempt to convert them to the new required LIB_ID "
@@ -7102,29 +7095,27 @@ msgid ""
 msgstr ""
 "Några av de tilldelade fotspåren är äldre poster utan biblioteksnamn. Vill "
 "du att Kicad ska försöka konvertera dem till det nya obligatoriska LIB_ID-"
-"formatet? (Om du svarar nej rensas dessa uppgifter och du måste tilldela dem "
-"manuellt.)"
+"formatet? (Svarar du nej rensas dessa tilldelningar och du måste tilldela "
+"dem manuellt.)"
 
 #: cvpcb/readwrite_dlgs.cpp:148
-#, fuzzy, c-format
+#, c-format
 msgid "Component '%s' footprint '%s' <b>not found</b> in any library.\n"
 msgstr ""
-"Komponenten \"%s\" footprint \"%s\" hittades <b> inte </b> i något "
-"bibliotek.\n"
+"Komponenten '%s' fotavtryck '%s' hittades <b>inte</b> i något bibliotek.\n"
 
 #: cvpcb/readwrite_dlgs.cpp:155
-#, fuzzy, c-format
+#, c-format
 msgid "Component '%s' footprint '%s' was found in <b>multiple</b> libraries.\n"
-msgstr ""
-"Komponent \"%s\" footprint \"%s\" hittades i <b> flera </b> bibliotek.\n"
+msgstr "Komponent '%s' footprint '%s' hittades i <b>flera</b> bibliotek.\n"
 
 #: cvpcb/readwrite_dlgs.cpp:168
 msgid "First check your footprint library table entries."
-msgstr "Kontrollera först dina poster i biblioteket."
+msgstr "Kontrollera först dina poster i fotavtrycksbibliotekstabellen."
 
 #: cvpcb/readwrite_dlgs.cpp:170
 msgid "Problematic Footprint Library Tables"
-msgstr "Problematiska tabeller för fotavtrycksbibliotek"
+msgstr "Problematiska Tabeller för Fotavtrycksbibliotek"
 
 #: cvpcb/readwrite_dlgs.cpp:178
 msgid ""
@@ -7132,8 +7123,8 @@ msgid ""
 "assignments:\n"
 "\n"
 msgstr ""
-"Följande fel inträffade när man försökte konvertera "
-"fotavtryckstilldelningarna:\n"
+"Följande fel inträffade vid försök att konvertera fotavtryckstilldelningarna:"
+"\n"
 "\n"
 
 #: cvpcb/readwrite_dlgs.cpp:181
@@ -7144,11 +7135,11 @@ msgid ""
 msgstr ""
 "\n"
 "Du måste tilldela dem om manuellt om du vill att de ska uppdateras korrekt "
-"nästa gång du importerar netlistan i Pcbnew."
+"nästa gång du importerar nätlistan i Pcbnew."
 
 #: cvpcb/readwrite_dlgs.cpp:299
 msgid "Schematic saved"
-msgstr "Schematisk sparad"
+msgstr "Schema sparat"
 
 #: cvpcb/toolbars_cvpcb.cpp:75
 msgid "Footprint Filters:"
@@ -7164,7 +7155,7 @@ msgstr "Visa det valda fotavtrycket i fotavtrycksvisaren"
 
 #: cvpcb/tools/cvpcb_actions.cpp:60
 msgid "Manage Footprint Association Files"
-msgstr "Hantera Footprint Association-filer"
+msgstr "Hantera Fotavtryck Association-filer"
 
 #: cvpcb/tools/cvpcb_actions.cpp:61
 msgid ""
@@ -7172,31 +7163,32 @@ msgid ""
 "automatically assign footprint names from symbol values."
 msgstr ""
 "Konfigurera lista över fotavtryckassociationsfil (.equ). Dessa filer används "
-"för att automatiskt tilldela fotavtrycknamn från symbolvärden."
+"för att automatiskt tilldela fotavtrycksnamn från symbolvärden."
 
 #: cvpcb/tools/cvpcb_actions.cpp:67
 msgid "Save to Schematic"
-msgstr "Spara i Schematisk"
+msgstr "Spara till Schema"
 
 #: cvpcb/tools/cvpcb_actions.cpp:68
 msgid "Save footprint associations in schematic symbol footprint fields"
-msgstr "Spara associering av fotavtryck i schematiska fält för fotavtryck"
+msgstr ""
+"Spara fotspårsassociationer i fälten för fotavtryck i schematiska symboler"
 
 #: cvpcb/tools/cvpcb_actions.cpp:91
 msgid "Select next unassigned symbol"
-msgstr "Välj nästa icke tilldelade symbol"
+msgstr "Välj nästa otilldelade symbol"
 
 #: cvpcb/tools/cvpcb_actions.cpp:92
 msgid "Select next symbol with no footprint assignment"
-msgstr "Välj nästa symbol utan tilldelning av fotavtryck"
+msgstr "Välj nästa symbol som inte tilldelats fotavtryck"
 
 #: cvpcb/tools/cvpcb_actions.cpp:98
 msgid "Select previous unassigned symbol"
-msgstr "Välj tidigare icke tilldelad symbol"
+msgstr "Välj föregående otilldelad symbol"
 
 #: cvpcb/tools/cvpcb_actions.cpp:99
 msgid "Select previous symbol with no footprint assignment"
-msgstr "Välj tidigare symbol utan tilldelning av fotavtryck"
+msgstr "Välj föregående symbol utan tilldelning av fotavtryck"
 
 #: cvpcb/tools/cvpcb_actions.cpp:108
 msgid "Assign footprint"
@@ -7204,7 +7196,7 @@ msgstr "Tilldela fotavtryck"
 
 #: cvpcb/tools/cvpcb_actions.cpp:109
 msgid "Assign footprint to selected symbols"
-msgstr "Tilldela markavtryck till valda symboler"
+msgstr "Tilldela fotavtryck till valda symboler"
 
 #: cvpcb/tools/cvpcb_actions.cpp:114
 msgid "Automatically assign footprints"
@@ -7216,11 +7208,11 @@ msgstr "Utför automatisk tilldelning av fotavtryck"
 
 #: cvpcb/tools/cvpcb_actions.cpp:121
 msgid "Delete association"
-msgstr "Radera koppling"
+msgstr "Ta bort association"
 
 #: cvpcb/tools/cvpcb_actions.cpp:122
 msgid "Delete selected footprint associations"
-msgstr "Ta bort valda fotavtryckssammanslutningar"
+msgstr "Ta bort valda fotavtrycksassociationer"
 
 #: cvpcb/tools/cvpcb_actions.cpp:127 cvpcb/tools/cvpcb_actions.cpp:128
 msgid "Delete all footprint associations"
@@ -7228,7 +7220,7 @@ msgstr "Ta bort alla fotavtrycksassociationer"
 
 #: cvpcb/tools/cvpcb_actions.cpp:135
 msgid "Use symbol footprint filters"
-msgstr "Använd symbolfilter för fotavtryck"
+msgstr "Använd symbolfotavtrycksfilter"
 
 #: cvpcb/tools/cvpcb_actions.cpp:136
 msgid "Filter footprint list by footprint filters defined in the symbol"
@@ -7261,28 +7253,28 @@ msgid "%d duplicate time stamps were found and replaced."
 msgstr "%d dubbla tidsstämplar hittades och ersattes."
 
 #: eeschema/annotate.cpp:284
-#, fuzzy, c-format
+#, c-format
 msgid "Updated %s (unit %s) from %s to %s."
-msgstr "Uppdaterad %s (enhet %s) från %s till %s"
+msgstr "Uppdaterade %s (enhet %s) från %s till %s."
 
 #: eeschema/annotate.cpp:292
-#, fuzzy, c-format
+#, c-format
 msgid "Updated %s from %s to %s."
-msgstr "Uppdaterad %s från %s till %s"
+msgstr "Uppdaterade %s från %s till %s."
 
 #: eeschema/annotate.cpp:302
-#, fuzzy, c-format
+#, c-format
 msgid "Annotated %s (unit %s) as %s."
-msgstr "Annoterad %s (enhet %s) som %s"
+msgstr "Annoterade %s (enhet %s) som %s."
 
 #: eeschema/annotate.cpp:309
-#, fuzzy, c-format
+#, c-format
 msgid "Annotated %s as %s."
-msgstr "Annoterad %s som %s"
+msgstr "Annoterade %s som %s."
 
 #: eeschema/annotate.cpp:326
 msgid "Annotation complete."
-msgstr "Anteckningen slutförd."
+msgstr "Annotering slutförd."
 
 #: eeschema/bom_plugins.cpp:46
 #, c-format
@@ -7298,59 +7290,58 @@ msgstr ""
 #: eeschema/component_references_lister.cpp:608
 #, c-format
 msgid "Item not annotated: %s%s (unit %d)\n"
-msgstr "Artikel inte kommenterad: %s %s (enhet %d)\n"
+msgstr "Komponent inte annoterad: %s%s (enhet %d)\n"
 
 #: eeschema/component_references_lister.cpp:615
 #, c-format
 msgid "Item not annotated: %s%s\n"
-msgstr "Artikel inte kommenterad: %s %s\n"
+msgstr "Komponent inte annoterad: %s%s\n"
 
 #: eeschema/component_references_lister.cpp:633
-#, fuzzy, c-format
+#, c-format
 msgid "Error: symbol %s%s%s (unit %d) exceeds units defined (%d)\n"
-msgstr ""
-"Fel: symbol %s %s enhet %d och symbol har endast %d enheter definierade\n"
+msgstr "Fel: symbol %s%s%s (enhet %d) överskrider definierade enheter (%d)\n"
 
 #: eeschema/component_references_lister.cpp:670
 #: eeschema/component_references_lister.cpp:698
-#, fuzzy, c-format
+#, c-format
 msgid "Duplicate items %s%s%s\n"
-msgstr "Flera objekt %s %s\n"
+msgstr "Dubbla objekt %s%s%s\n"
 
 #: eeschema/component_references_lister.cpp:677
 #: eeschema/component_references_lister.cpp:705
-#, fuzzy, c-format
+#, c-format
 msgid "Duplicate items %s%s\n"
-msgstr "Flera objekt %s %s\n"
+msgstr "Dubbla objekt %s%s\n"
 
 #: eeschema/component_references_lister.cpp:717
 #, c-format
 msgid "Different values for %s%d%s (%s) and %s%d%s (%s)"
-msgstr "Olika värden för %s %d %s (%s) och %s %d %s (%s)"
+msgstr "Olika värden för %s%d%s (%s) och %s%d%s (%s)"
 
 #: eeschema/connection_graph.cpp:2251
 #, c-format
 msgid ""
 "Both %s and %s are attached to the same items; %s will be used in the netlist"
 msgstr ""
-"Både %s och %s är fästa vid samma objekt; %s kommer att användas i netlistan"
+"Både %s och %s är kopplade till samma objekt; %s kommer att användas i "
+"nätlistan"
 
 #: eeschema/connection_graph.cpp:2469
 #, c-format
 msgid ""
 "Net %s is graphically connected to bus %s but is not a member of that bus"
-msgstr ""
-"Nät %s är grafiskt anslutet till buss %s men är inte medlem i den bussen"
+msgstr "Nät %s är grafiskt anslutet till buss %s men ingår inte i den bussen"
 
 #: eeschema/connection_graph.cpp:2877
 #, c-format
 msgid "Sheet pin %s has no matching hierarchical label inside the sheet"
-msgstr "Arkstift %s har ingen matchande hierarkisk etikett inuti arket"
+msgstr "Bladstift %s har ingen matchande hierarkisk etikett inuti bladet"
 
 #: eeschema/connection_graph.cpp:2894
-#, fuzzy, c-format
+#, c-format
 msgid "Hierarchical label %s has no matching sheet pin in the parent sheet"
-msgstr "Arkstift %s har ingen matchande hierarkisk etikett inuti arket"
+msgstr "Bladstift %s har ingen matchande hierarkisk etikett inuti bladet"
 
 #: eeschema/cross-probing.cpp:265 pcbnew/cross-probing.cpp:172
 #, c-format
@@ -7375,7 +7366,7 @@ msgstr "%s hittades inte"
 
 #: eeschema/cross-probing.cpp:329
 msgid "Selected net:"
-msgstr "Vald nät:"
+msgstr "Valt nät:"
 
 #: eeschema/dialogs/dialog_annotate.cpp:87
 msgid "Annotation Messages:"
@@ -7387,16 +7378,15 @@ msgstr "Annotera"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:37
 msgid "Entire schematic"
-msgstr "Hela schematiska"
+msgstr "Hela schemat"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:37
 msgid "Current sheet only"
-msgstr "Endast nuvarande ark"
+msgstr "Endast nuvarande blad"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:37
-#, fuzzy
 msgid "Selection only"
-msgstr "& Endast val"
+msgstr "Endast markering"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:39
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:23
@@ -7411,22 +7401,20 @@ msgid "Order"
 msgstr "Ordning"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:49
-#, fuzzy
 msgid "Sort symbols by &X position"
-msgstr "Sortera komponenter efter & X-position"
+msgstr "Sortera symboler efter &X-position"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:67
-#, fuzzy
 msgid "Sort symbols by &Y position"
-msgstr "Sortera komponenter efter & Y-position"
+msgstr "Sortera symboler efter &Y-position"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:82
 msgid "Keep existing annotations"
-msgstr "Behåll befintliga anteckningar"
+msgstr "Behåll befintliga annoteringar"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:82
 msgid "Reset existing annotations"
-msgstr "Återställ befintliga anteckningar"
+msgstr "Återställ befintliga annoteringar"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:89
 msgid "Numbering"
@@ -7438,19 +7426,19 @@ msgstr "Använd första lediga numret efter:"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:102
 msgid "First free after sheet number X 100"
-msgstr "Först gratis efter arknummer X 100"
+msgstr "Första lediga efter bladnummer X 100"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:105
 msgid "First free after sheet number X 1000"
-msgstr "Först gratis efter arknummer X 1000"
+msgstr "Första lediga efter bladnummer X 1000"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:128
 msgid "Clear Annotation"
-msgstr "Rensa kommentarer"
+msgstr "Rensa Annotering"
 
 #: eeschema/dialogs/dialog_annotate_base.h:81
 msgid "Annotate Schematic"
-msgstr "Anotera schema"
+msgstr "Annotera Schema"
 
 #: eeschema/dialogs/dialog_bom.cpp:133
 msgid "Generate"
@@ -7461,9 +7449,9 @@ msgid "(file missing)"
 msgstr "(fil saknas)"
 
 #: eeschema/dialogs/dialog_bom.cpp:294
-#, fuzzy, c-format
+#, c-format
 msgid "The selected BOM generator script %s could not be found."
-msgstr "Schemat för denna styrelse kan inte hittas."
+msgstr "Det valda BOM-generatorskriptet %s kunde inte hittas."
 
 #: eeschema/dialogs/dialog_bom.cpp:299
 #, c-format
@@ -7474,11 +7462,15 @@ msgid ""
 "\t%s\n"
 "\t%s"
 msgstr ""
+"\n"
+"\n"
+"Sökte:\n"
+"\t%s\n"
+"\t%s"
 
 #: eeschema/dialogs/dialog_bom.cpp:345
-#, fuzzy
 msgid "Generating BOM requires a fully annotated schematic."
-msgstr "För att exportera netlistan krävs ett fullständigt kommenterat schema."
+msgstr "För att generera BOM krävs ett fullständigt annoterat schema."
 
 #: eeschema/dialogs/dialog_bom.cpp:382 eeschema/dialogs/dialog_bom_base.cpp:43
 msgid "Generator nickname:"
@@ -7489,14 +7481,13 @@ msgid "Add Generator"
 msgstr "Lägg till generator"
 
 #: eeschema/dialogs/dialog_bom.cpp:391
-#, fuzzy, c-format
+#, c-format
 msgid "Nickname '%s' already in use."
-msgstr "Smeknamn \"%s\" används redan."
+msgstr "Smeknamn '%s' används redan."
 
 #: eeschema/dialogs/dialog_bom.cpp:420 eeschema/dialogs/dialog_netlist.cpp:690
-#, fuzzy
 msgid "Generator File"
-msgstr "Generatorfiler:"
+msgstr "Generatorfil"
 
 #: eeschema/dialogs/dialog_bom.cpp:439
 msgid "Generator file name not found."
@@ -7508,7 +7499,7 @@ msgstr "Ingen textredigerare vald i KiCad. Vänligen välj en."
 
 #: eeschema/dialogs/dialog_bom.cpp:461
 msgid "Bill of Material Generation Help"
-msgstr "Bill of Material Generation Help"
+msgstr "Hjälp med Generering av Materialförteckning"
 
 #: eeschema/dialogs/dialog_bom_base.cpp:25
 msgid "BOM generator scripts:"
@@ -7542,17 +7533,16 @@ msgid ""
 msgstr ""
 "Som standard körs kommandoraden med dolt konsolfönster och utdata "
 "omdirigeras till informationsdisplayen.\n"
-"Ställ in det här alternativet för att visa fönstret för det körande "
-"kommandot."
+"Välj det här alternativet för att visa fönstret för det körande kommandot."
 
 #: eeschema/dialogs/dialog_bom_base.cpp:116
-#, fuzzy
 msgid "Reset the list of BOM generator scripts to the default settings"
-msgstr "Ställ in på 0 för att använda standardvärden"
+msgstr ""
+"Återställ listan över BOM-generatorskripten till standardinställningarna"
 
 #: eeschema/dialogs/dialog_bom_base.h:81
 msgid "Bill of Material"
-msgstr "Stycklista"
+msgstr "Materialförteckning"
 
 #: eeschema/dialogs/dialog_bom_help_md.h:2
 msgid ""
@@ -7936,12 +7926,12 @@ msgstr "Bussalias"
 
 #: eeschema/dialogs/dialog_bus_manager.cpp:65
 msgid "Alias Name"
-msgstr "Alias namn"
+msgstr "Alias Namn"
 
 #: eeschema/dialogs/dialog_bus_manager.cpp:75
 #: eeschema/dialogs/dialog_bus_manager.cpp:109
 msgid "Rename"
-msgstr "Byt namn"
+msgstr "Byt Namn"
 
 #: eeschema/dialogs/dialog_bus_manager.cpp:89
 msgid "Alias Members"
@@ -7957,20 +7947,19 @@ msgstr "Bussaliasnamn"
 
 #: eeschema/dialogs/dialog_bus_manager.cpp:181
 msgid "Net or Bus Name"
-msgstr "Nät- eller bussnamn"
+msgstr "Nät- eller Bussnamn"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:66
 msgid "Change all symbols in schematic"
-msgstr "Ändra alla symboler schematiskt"
+msgstr "Ändra alla symboler i schemat"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:67
 msgid "Change Symbols"
-msgstr "Ändra symboler"
+msgstr "Ändra Symboler"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:76
-#, fuzzy
 msgid "Change selected symbol(s)"
-msgstr "Ändra vald symbol"
+msgstr "Ändra vald symbol(er)"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:93
 msgid "Change symbols matching reference designator:"
@@ -7986,7 +7975,7 @@ msgstr "Ändra symboler som matchar biblioteksidentifieraren:"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:132
 msgid "Update Fields"
-msgstr "Uppdatera fält"
+msgstr "Uppdatera Fält"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:133
 msgid "Remove fields if not in new symbol"
@@ -7997,9 +7986,8 @@ msgid "Reset fields if empty in new symbol"
 msgstr "Återställ fält om de är tomma i ny symbol"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:135
-#, fuzzy
 msgid "Update field text"
-msgstr "Uppdatera fält"
+msgstr "Uppdatera fälttext"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:136
 msgid "Update field visibilities"
@@ -8014,9 +8002,8 @@ msgid "Update field positions"
 msgstr "Uppdatera fältpositioner"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:139
-#, fuzzy
 msgid "Update symbol attributes"
-msgstr "Uppdatera / återställ tillverkningsattribut"
+msgstr "Uppdatera symbolattribut"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:159
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:165
@@ -8059,12 +8046,11 @@ msgstr "*** ny symbol har för få enheter ***"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:27
 msgid "Update all symbols in schematic"
-msgstr "Uppdatera alla symboler schematiskt"
+msgstr "Uppdatera alla symboler i schemat"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:30
-#, fuzzy
 msgid "Update selected symbol(s)"
-msgstr "Uppdatera vald symbol"
+msgstr "Uppdatera vald symbol(er)"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:33
 msgid "Update symbols matching reference designator:"
@@ -8085,12 +8071,12 @@ msgstr "Ny biblioteksidentifierare:"
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:94
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:36
 msgid "Update/reset Fields"
-msgstr "Uppdatera / återställ fält"
+msgstr "Uppdatera/Återställ Fält"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:108
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:50
 msgid "Select None"
-msgstr "Markera ingen"
+msgstr "Avmarkera"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:117
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:59
@@ -8114,38 +8100,36 @@ msgstr "Återställ fält om de är tomma i bibliotekssymbolen"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:130
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:72
-#, fuzzy
 msgid "Update/reset field text"
-msgstr "Uppdatera / återställ fält"
+msgstr "Uppdatera/återställ fälttext"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:133
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:75
 msgid "Update/reset field visibilities"
-msgstr "Uppdatera / återställ fältets synlighet"
+msgstr "Uppdatera/återställ fältsynlighet"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:136
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:78
 msgid "Update/reset field sizes and styles"
-msgstr "Uppdatera / återställ fältstorlekar och stilar"
+msgstr "Uppdatera/återställ fältstorlekar och stilar"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:139
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:81
 msgid "Update/reset field positions"
-msgstr "Uppdatera / återställ fältpositioner"
+msgstr "Uppdatera/återställ fältpositioner"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:145
-#, fuzzy
 msgid "Update/reset symbol attributes"
-msgstr "Uppdatera / återställ tillverkningsattribut"
+msgstr "Uppdatera/återställ symbolattribut"
 
 #: eeschema/dialogs/dialog_change_symbols_base.h:100
 msgid "Update Symbols from Library"
-msgstr "Uppdatera symboler från biblioteket"
+msgstr "Uppdatera Symboler från Biblioteket"
 
 #: eeschema/dialogs/dialog_choose_symbol.cpp:143
 #: pcbnew/dialogs/dialog_choose_footprint.cpp:95
 msgid "Select with Browser"
-msgstr "Välj med webbläsaren"
+msgstr "Välj med Bläddraren"
 
 #: eeschema/dialogs/dialog_choose_symbol.cpp:147
 msgid "Place repeated copies"
@@ -8168,9 +8152,9 @@ msgstr "Placera alla enheter i symbolen sekventiellt."
 #: eeschema/generate_alias_info.cpp:81 eeschema/sch_base_frame.cpp:70
 #: eeschema/symbol_editor/symbol_editor.cpp:288
 #: eeschema/widgets/symbol_preview_widget.cpp:181
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading symbol %s from library '%s'."
-msgstr "Fel inträffade vid inläsning av symbolen '%s' från biblioteket '%s'."
+msgstr "Fel vid inläsning av symbolen %s från biblioteket '%s'."
 
 #: eeschema/dialogs/dialog_choose_symbol.cpp:421
 msgid "No footprint specified"
@@ -8185,9 +8169,9 @@ msgid "No symbol selected"
 msgstr "Ingen symbol vald"
 
 #: eeschema/dialogs/dialog_edit_symbols_libid.cpp:544
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol library identifier %s is not valid."
-msgstr "Symbolbibliotekets identifierare \"%s\" är inte giltig."
+msgstr "Symbolbibliotekets identifierare %s är inte giltig."
 
 #: eeschema/dialogs/dialog_edit_symbols_libid.cpp:641
 #, c-format
@@ -8197,17 +8181,17 @@ msgstr "Tillgängliga kandidater för %s "
 #: eeschema/dialogs/dialog_edit_symbols_libid.cpp:645
 #, c-format
 msgid "Candidates count %d "
-msgstr "Kandidater räknar %d "
+msgstr "Antal kandidater %d "
 
 #: eeschema/dialogs/dialog_edit_symbols_libid.cpp:656
 #, c-format
 msgid "%u link(s) mapped, %u not found"
-msgstr "%u länk(ar) mappad, %u hittades inte"
+msgstr "%u länk(ar) kartlagda, %u hittades inte"
 
 #: eeschema/dialogs/dialog_edit_symbols_libid.cpp:662
 #, c-format
 msgid "All %u link(s) resolved"
-msgstr "Alla %u länk (ar) har lösts"
+msgstr "Alla %u länk(ar) har lösts"
 
 #: eeschema/dialogs/dialog_edit_symbols_libid.cpp:693
 msgid "Invalid symbol library identifier"
@@ -8238,30 +8222,32 @@ msgid "New Library Reference"
 msgstr "Ny biblioteksreferens"
 
 #: eeschema/dialogs/dialog_edit_symbols_libid_base.cpp:58
+#, fuzzy
 msgid "Map Orphans"
-msgstr "Karta föräldralösa barn"
+msgstr "Kartlägg Föräldralösa/Lösryckta"
 
 #: eeschema/dialogs/dialog_edit_symbols_libid_base.cpp:59
-#, fuzzy
 msgid ""
 "If some symbols are orphaned (the linked symbol is not found anywhere),\n"
 "try to find a candidate having the same name in one of loaded symbol "
 "libraries."
 msgstr ""
-"Om vissa komponenter är föräldralösa (den länkade symbolen finns "
-"ingenstans),\n"
-"försök hitta en kandidat med samma namn i ett av laddade symbolbibliotek."
+"Om vissa komponenter är föräldralösa (den länkade symbolen finns ingenstans),"
+"\n"
+"försök hitta en kandidat med samma namn i ett av de laddade "
+"symbolbiblioteken."
 
 #: eeschema/dialogs/dialog_edit_symbols_libid_base.cpp:63
-#, fuzzy
 msgid "Update symbol fields from new library"
-msgstr "Uppdatera symboler från biblioteket"
+msgstr "Uppdatera symbolfält från nytt bibliotek"
 
 #: eeschema/dialogs/dialog_edit_symbols_libid_base.cpp:64
 msgid ""
 "Replace current symbols fields by fields from the new library.\n"
 "Warning: fields \"Value\" and \"Footprints\" will be therefore replaced."
 msgstr ""
+"Ersätt nuvarande symbolfält med fält från det nya biblioteket.\n"
+"Varning: fälten \"Värde\" och \"Fotavtryck\" kommer därför att ersättas."
 
 #: eeschema/dialogs/dialog_edit_symbols_libid_base.h:57
 msgid "Symbol Library References"
@@ -8273,31 +8259,31 @@ msgstr "Kör ERC"
 
 #: eeschema/dialogs/dialog_erc.cpp:93
 msgid "Show Annotation dialog"
-msgstr "Visa dialogrutan Annotation"
+msgstr "Visa dialogrutan Annotering"
 
 #: eeschema/dialogs/dialog_erc.cpp:106
 msgid "Schematic is not fully annotated. ERC results will be incomplete."
 msgstr ""
-"Schemats symboler är inte alla tilldelade referenser. ERC-resultat kommer "
-"att vara ofullständiga."
+"Schemat är inte fullständigt annoterat. ERC-resultaten kommer att vara "
+"ofullständiga."
 
 #: eeschema/dialogs/dialog_erc.cpp:194
 msgid "Delete exclusions too?"
-msgstr "Radera uteslutningar också?"
+msgstr "Radera undantag också?"
 
 #: eeschema/dialogs/dialog_erc.cpp:194 pcbnew/dialogs/dialog_drc.cpp:893
 #: pcbnew/dialogs/dialog_drc_base.cpp:195
 #: pcbnew/dialogs/dialog_footprint_checker_base.cpp:82
 msgid "Delete All Markers"
-msgstr "Ta bort alla markörer"
+msgstr "Ta Bort Alla Markörer"
 
 #: eeschema/dialogs/dialog_erc.cpp:196
 msgid "Errors and Warnings Only"
-msgstr "Endast fel och varningar"
+msgstr "Endast Fel och Varningar"
 
 #: eeschema/dialogs/dialog_erc.cpp:196
 msgid "Errors, Warnings and Exclusions"
-msgstr "Fel, varningar och undantag"
+msgstr "Fel, Varningar och Undantag"
 
 #: eeschema/dialogs/dialog_erc.cpp:302
 #, c-format
@@ -8306,20 +8292,20 @@ msgstr "%d symbol(er) kräver annotering.<br><br>"
 
 #: eeschema/dialogs/dialog_erc.cpp:306
 msgid "-------- ERC cancelled by user.<br><br>"
-msgstr "-------- ERC avbröts av användaren. <br> <br>"
+msgstr "-------- ERC avbröts av användaren.<br><br>"
 
 #: eeschema/dialogs/dialog_erc.cpp:308
 #, fuzzy
 msgid "ERC completed.<br><br>"
-msgstr "Klart. <br> <br>"
+msgstr "ERC slutförd.<br><br>"
 
 #: eeschema/dialogs/dialog_erc.cpp:356
 msgid "Checking sheet names..."
-msgstr "Kontrollerar arknamn ..."
+msgstr "Kontrollerar bladnamn..."
 
 #: eeschema/dialogs/dialog_erc.cpp:362
 msgid "Checking bus conflicts..."
-msgstr "Kontrollerar busskonflikter ..."
+msgstr "Kontrollerar busskonflikter..."
 
 #: eeschema/dialogs/dialog_erc.cpp:367
 msgid "Checking conflicts..."
