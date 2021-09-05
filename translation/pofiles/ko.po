@@ -15,8 +15,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-08-30 14:45-0700\n"
-"PO-Revision-Date: 2021-09-01 16:34+0000\n"
-"Last-Translator: 킴슨김랑기 <korearf@gmail.com>\n"
+"PO-Revision-Date: 2021-09-05 21:21+0000\n"
+"Last-Translator: Ji Yoon Choi <chichoon.choi@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
 "Language: ko\n"
@@ -39,7 +39,6 @@ msgstr ""
 "X-Poedit-SearchPath-7: share\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
-#, fuzzy
 msgid "All Files"
 msgstr "모든 파일"
 
@@ -957,27 +956,24 @@ msgid "Toggle Through Hole 3D models"
 msgstr "스루홀 3D 모델로 전환"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:213
-#, fuzzy
 msgid "Toggle 3D models for 'Through hole' type components"
-msgstr "'스루홀' 속성으로 3D 모델 전환"
+msgstr "'스루홀' 속성 부품에 대한 3D 모델 전환"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:219
 msgid "Toggle SMD 3D models"
 msgstr "SMD 3D 모델로 전환"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:219
-#, fuzzy
 msgid "Toggle 3D models for 'Surface mount' type components"
-msgstr "'표면 실장' 속성으로 3D 모델 전환"
+msgstr "'표면 실장' 속성 부품에 대한 3D 모델 전환"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:225
-#, fuzzy
 msgid "Toggle Other 3D models"
-msgstr "SMD 3D 모델로 전환"
+msgstr "그 외의 3D 모델 전환"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:225
 msgid "Toggle 3D models for 'Other' type components"
-msgstr ""
+msgstr "'기타' 유형 부품의 3D 모델 전환"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:230
 msgid "Show Model Bounding Boxes"
@@ -4391,7 +4387,7 @@ msgstr "선택적. 고유한 프로젝트 템플릿 폴더를 만들려면 정�
 msgid ""
 "A directory containing 3rd party plugins, libraries and other downloadable "
 "content."
-msgstr ""
+msgstr "서드 파티 플러그인과 라이브러리, 그 외의 다운로드 가능한 컨텐츠가 저장되는 디렉토리입니다."
 
 #: common/env_vars.cpp:86
 msgid ""
@@ -5328,9 +5324,8 @@ msgid "No default editor found, you must choose it"
 msgstr "기본 편집기를 선택해야 합니다"
 
 #: common/pgm_base.cpp:184 common/pgm_base.cpp:186
-#, fuzzy
 msgid "Executable file"
-msgstr "실행 파일 ("
+msgstr "실행 파일"
 
 #: common/pgm_base.cpp:196
 msgid "Select Preferred Editor"
@@ -12443,18 +12438,14 @@ msgid "Schematic Files"
 msgstr "회로도 파일"
 
 #: eeschema/files-io.cpp:75
-#, fuzzy
 msgid "Create a new project for this schematic"
-msgstr "이 기판으로부터 새로운 프로젝트 생성"
+msgstr "이 회로도로부터 새로운 프로젝트 생성"
 
 #: eeschema/files-io.cpp:77
-#, fuzzy
 msgid ""
 "Creating a project will enable features such as text variables, net classes, "
 "and ERC exclusions"
-msgstr ""
-"새로운 프로젝트를 생성함으로써 디자인 규칙, 네트 클래스와 레이어 프리셋 등의 "
-"기능을 사용할 수 있습니다"
+msgstr "새로운 프로젝트를 생성함으로써 문자열 변수, 네트 클래스와 ERC 제외와 같은 기능들이 활성화됩니다"
 
 #: eeschema/files-io.cpp:123
 #, c-format
@@ -17087,64 +17078,52 @@ msgid "Gerber files (.g* .lgr .pho)"
 msgstr "거버 파일 (.g* .lgr .pho)"
 
 #: gerbview/files.cpp:144
-#, fuzzy
 msgid "Top layer"
-msgstr "이 레이어로:"
+msgstr "상단 레이어"
 
 #: gerbview/files.cpp:145
-#, fuzzy
 msgid "Bottom layer"
-msgstr "하단/후면 레이어:"
+msgstr "하단 레이어"
 
 #: gerbview/files.cpp:146
-#, fuzzy
 msgid "Bottom solder resist"
-msgstr "하단 솔더 페이스트"
+msgstr "하단 솔더 레지스트"
 
 #: gerbview/files.cpp:147
-#, fuzzy
 msgid "Top solder resist"
-msgstr "상단 솔더 페이스트"
+msgstr "상단 솔더 레지스터"
 
 #: gerbview/files.cpp:148
-#, fuzzy
 msgid "Bottom overlay"
-msgstr "하단 솔더 마스크"
+msgstr "하단 오버레이"
 
 #: gerbview/files.cpp:149
-#, fuzzy
 msgid "Top overlay"
-msgstr "상단 솔더 마스크"
+msgstr "상단 오버레이"
 
 #: gerbview/files.cpp:150
-#, fuzzy
 msgid "Bottom paste"
-msgstr "저장할 부품이 없습니다."
+msgstr "하단 페이스트"
 
 #: gerbview/files.cpp:151
-#, fuzzy
 msgid "Top paste"
-msgstr "상단 솔더 페이스트"
+msgstr "상단 페이스트"
 
 #: gerbview/files.cpp:152
-#, fuzzy
 msgid "Keep-out layer"
-msgstr "외곽 레이어 유지 (&o)"
+msgstr "킵아웃 레이어"
 
 #: gerbview/files.cpp:153
-#, fuzzy
 msgid "Mechanical layers"
-msgstr "기술 레이어:"
+msgstr "기술 레이어"
 
 #: gerbview/files.cpp:154
-#, fuzzy
 msgid "Top Pad Master"
-msgstr "상단 솔더 페이스트"
+msgstr "상단 패드 마스터"
 
 #: gerbview/files.cpp:155
-#, fuzzy
 msgid "Bottom Pad Master"
-msgstr "하단 솔더 페이스트"
+msgstr "하단 솔더 마스터"
 
 #: gerbview/files.cpp:173
 msgid "Open Gerber File(s)"
@@ -17801,9 +17780,8 @@ msgid "Reset all settings on this page to their default"
 msgstr "이 페이지의 모든 설정을 기본값으로 되돌리기"
 
 #: include/wxstream_helper.h:46
-#, fuzzy
 msgid "Failed to output data"
-msgstr "데이터를 출력하지 못했습니다."
+msgstr "데이터 출력에 실패하였습니다"
 
 #: kicad/dialogs/dialog_template_selector.cpp:127
 msgid "<html><h1>Template Selector</h1></html>"
@@ -17870,7 +17848,7 @@ msgstr "회로도와 PCB 디자인에서 사용되는 시트 경계선과 제목
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:142
 msgid "Manage downloadable packages from KiCad and 3rd party repositories"
-msgstr ""
+msgstr "KiCad와 서드 파티 레포지토리로부터 다운로드 가능한 패키지 관리"
 
 #: kicad/files-io.cpp:46
 msgid "KiCad project file"
@@ -18054,22 +18032,20 @@ msgstr "파일 탐색기에서 프로젝트 디렉토리 열기"
 
 #: kicad/pcm/dialogs/dialog_manage_repositories.cpp:67
 msgid "Please enter fully qualified repository url"
-msgstr ""
+msgstr "권한이 있는 레포지토리 주소를 입력하세요"
 
 #: kicad/pcm/dialogs/dialog_manage_repositories.cpp:67
-#, fuzzy
 msgid "Add repository"
-msgstr "버스 항목에 배선 추가"
+msgstr "레포지토리 추가"
 
 #: kicad/pcm/dialogs/dialog_manage_repositories_base.h:60
-#, fuzzy
 msgid "Manage Repositores"
-msgstr "버스 정의 관리"
+msgstr "레포지토리 관리"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:50
-#, fuzzy, c-format
+#, c-format
 msgid "Plugins (%d)"
-msgstr "위반 (%d)"
+msgstr "플러그인 (%d)"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:51
 #, c-format
@@ -18085,52 +18061,49 @@ msgstr "색상 테마 (%d)"
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:51
 #, c-format
 msgid "Repository (%d)"
-msgstr ""
+msgstr "레포지토리 (%d)"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:96 kicad/pcm/dialogs/panel_package.cpp:70
 #: kicad/pcm/dialogs/panel_package.cpp:74
 #: kicad/pcm/dialogs/panel_package_base.cpp:67
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:108
 msgid "Install"
-msgstr ""
+msgstr "설치"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:105 kicad/pcm/dialogs/panel_package.cpp:78
 msgid "Uninstall"
-msgstr ""
+msgstr "제거"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:160
-#, fuzzy
 msgid ""
 "Are you sure you want to close the package manager and discard pending "
 "changes?"
-msgstr "선택한 항목을 삭제 하겠습니까?"
+msgstr "패키지 매니저를 종료하고 대기 중인 변경 내용을 취소하시겠습니까?"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:162
 #: kicad/tools/kicad_manager_actions.cpp:118
 msgid "Plugin and Content Manager"
-msgstr ""
+msgstr "플러그인과 컨텐츠 매니저"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:235
-#, fuzzy
 msgid "Choose package file"
-msgstr "이미지 선택"
+msgstr "패키지 파일 선택"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:330
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:117
 #, c-format
 msgid "Pending (%d)"
-msgstr ""
+msgstr "대기 중 (%d)"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:365
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:60
 #, c-format
 msgid "Installed (%d)"
-msgstr ""
+msgstr "설치됨 (%d)"
 
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:37
-#, fuzzy
 msgid "Manage"
-msgstr "레이어 매니저"
+msgstr "관리"
 
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:82
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:103
@@ -18144,82 +18117,74 @@ msgid "Package"
 msgstr "패키지"
 
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:85
-#, fuzzy
 msgid "Repository"
-msgstr "보고서"
+msgstr "레포지토리"
 
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:103
-#, fuzzy
 msgid "Discard action"
-msgstr "변경 사항 무시"
+msgstr "작업 취소"
 
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:133
 msgid "Install from file..."
 msgstr "파일에서 설치..."
 
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:136
-#, fuzzy
 msgid "Apply changes"
-msgstr "변경 사항 저장"
+msgstr "변경 사항 적용"
 
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:139
-#, fuzzy
 msgid "Discard changes"
-msgstr "변경 사항 무시"
+msgstr "변경 사항 취소"
 
 #: kicad/pcm/dialogs/dialog_pcm_base.h:73
 msgid "Plugin And Content Manager"
-msgstr ""
+msgstr "플러그인과 컨텐츠 매니저"
 
 #: kicad/pcm/dialogs/dialog_pcm_progress.cpp:86
 #, c-format
 msgid "Downloaded %lld/%lld Kb"
-msgstr ""
+msgstr "%lld/%lld Kb 다운로드됨"
 
 #: kicad/pcm/dialogs/dialog_pcm_progress.cpp:150
 msgid "All downloads finished"
-msgstr ""
+msgstr "모든 다운로드가 완료됨"
 
 #: kicad/pcm/dialogs/dialog_pcm_progress_base.cpp:21
 msgid "Download progress"
-msgstr ""
+msgstr "다운로드 진행도"
 
 #: kicad/pcm/dialogs/dialog_pcm_progress_base.cpp:23
-#, fuzzy
 msgid "Waiting..."
-msgstr "불러오는 중..."
+msgstr "대기 중..."
 
 #: kicad/pcm/dialogs/dialog_pcm_progress_base.cpp:42
-#, fuzzy
 msgid "Overall progress"
-msgstr "재료 속성:"
+msgstr "전체 진행도"
 
 #: kicad/pcm/dialogs/dialog_pcm_progress_base.cpp:52
 msgid "Details"
-msgstr ""
+msgstr "상세"
 
 #: kicad/pcm/dialogs/dialog_pcm_progress_base.h:58
 msgid "Applying package changes"
-msgstr ""
+msgstr "패키지 변경점을 적용"
 
 #: kicad/pcm/dialogs/panel_package.cpp:82
-#, fuzzy
 msgid "Pending install"
-msgstr "렌더링 옵션"
+msgstr "설치 보류 중"
 
 #: kicad/pcm/dialogs/panel_package.cpp:86
-#, fuzzy
 msgid "Pending uninstall"
-msgstr "렌더링 엔진"
+msgstr "제거 보류 중"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:147
 msgid "Metadata"
-msgstr ""
+msgstr "메타데이터"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:154
 #, c-format
 msgid "Package identifier: %s\n"
-msgstr ""
+msgstr "패키지 식별자: %s\n"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:155
 #, c-format
@@ -18229,186 +18194,172 @@ msgstr "라이센스: %s\n"
 #: kicad/pcm/dialogs/panel_packages_view.cpp:169
 #, c-format
 msgid "Tags: %s\n"
-msgstr ""
+msgstr "태그: %s\n"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:184
-#, fuzzy
 msgid "Author"
-msgstr "제작자:"
+msgstr "제작자"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:187
 msgid "Maintainer"
-msgstr ""
+msgstr "관리자"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:191
-#, fuzzy
 msgid "Resources"
-msgstr "소스 뒤바꾸기"
+msgstr "리소스"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:266
 msgid "Pick a package on the left panel to view it's description."
-msgstr ""
+msgstr "패키지를 왼쪽 패널로 선택하여 설명을 확인하세요."
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:342
 msgid "Package download url is not specified"
-msgstr ""
+msgstr "패키지 다운로드 url이 입력되지 않았습니다"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:343
-#, fuzzy
 msgid "Error downloading package"
-msgstr "편집기를 불러오는 중에 오류가 발생했습니다."
+msgstr "패키지 다운로드 중 에러 발생"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:352
-#, fuzzy
 msgid "Save package"
-msgstr "변경 사항 저장"
+msgstr "패키지 저장"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:364
 msgid "Downloading package"
-msgstr ""
+msgstr "패키지 다운로드 중"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:380
 msgid ""
 "Integrity of the downloaded package could not be verified, hash does not "
 "match. Are you sure you want to keep this file?"
-msgstr ""
+msgstr "다운로드한 패키지의 무결성을 확인할 수 없습니다, 해시가 일치하지 않습니다. 이 파일을 이대로 보관하시겠습니까?"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:382
-#, fuzzy
 msgid "Keep downloaded file"
-msgstr "구리 충전물 금지"
+msgstr "다운로드한 파일 보존"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:419
 msgid ""
 "This package version is incompatible with your kicad version or platform. "
 "Are you sure you want to install it anyway?"
-msgstr ""
+msgstr "이 패키지는 현재 KiCad 버전 또는 플랫폼과 호환되지 않습니다. 설치하시겠습니까?"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:421
-#, fuzzy
 msgid "Install package"
-msgstr "패키지"
+msgstr "패키지 설치"
 
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:64
-#, fuzzy
 msgid "Show all versions"
-msgstr "모든 비아 표시"
+msgstr "모든 버전 표시"
 
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:82
-#, fuzzy
 msgid "Dl Size"
-msgstr "X 크기"
+msgstr "DL 크기"
 
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:83
-#, fuzzy
 msgid "Inst Size"
-msgstr "시트 크기"
+msgstr "Inst 크기"
 
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:84
-#, fuzzy
 msgid "Comp"
-msgstr "회사:"
+msgstr "회사"
 
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:105
-#, fuzzy
 msgid "Download"
-msgstr "아래쪽"
+msgstr "다운로드"
 
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:121
-#, fuzzy
 msgid "Versions"
 msgstr "버전"
 
 #: kicad/pcm/pcm.cpp:79
-#, fuzzy, c-format
+#, c-format
 msgid "schema file '%s' not found"
-msgstr "회로도 파일 '%s'을(를) 찾을 수 없습니다."
+msgstr "스키마 파일 '%s'을(를) 찾을 수 없습니다"
 
 #: kicad/pcm/pcm.cpp:81
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading schema: %s"
-msgstr "회로도 '%s'을(를) 불러오는 중에 오류가 발생했습니다."
+msgstr "스키마를 불러오는 중에 오류가 발생하였습니다: %s"
 
 #: kicad/pcm/pcm.cpp:107
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading installed packages list: %s"
-msgstr ""
-"네트리스트를 불러오는 도중에 오류가 발생하였습니다.\n"
-"%s"
+msgstr "설치한 패키지 리스트를 불러오는 중 오류가 발생하였습니다: %s"
 
 #: kicad/pcm/pcm.cpp:184
 #, c-format
 msgid "Downloading %lld/%lld Kb"
-msgstr ""
+msgstr "%lld/%lld Kb 다운로드 중"
 
 #: kicad/pcm/pcm.cpp:208
-#, fuzzy
 msgid "Download is too large."
-msgstr "잘못된 크기 %lld: 너무 큼"
+msgstr "다운로드 파일이 너무 큽니다."
 
 #: kicad/pcm/pcm.cpp:222
 msgid "Fetching repository"
-msgstr ""
+msgstr "레포지토리 취득"
 
 #: kicad/pcm/pcm.cpp:224
-#, fuzzy
 msgid "Unable to load repository url"
-msgstr "%s 파일을 불러올 수 없습니다"
+msgstr "레포지토리 주소를 불러올 수 없습니다"
 
 #: kicad/pcm/pcm.cpp:239
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Unable to parse repository:\n"
 "\n"
 "%s"
-msgstr "%s을(를) 열 수 없습니다."
+msgstr ""
+"레포지토리를 파싱할 수 없습니다:\n"
+"\n"
+"%s"
 
 #: kicad/pcm/pcm.cpp:260
 msgid "Fetching repository packages"
-msgstr ""
+msgstr "레포지토리 패키지를 취득 중"
 
 #: kicad/pcm/pcm.cpp:262
-#, fuzzy
 msgid "Unable to load repository packages url."
-msgstr "파일을 만들 수 없음"
+msgstr "레포지토리 패키지 주소를 불러올 수 없습니다."
 
 #: kicad/pcm/pcm.cpp:270
 msgid "Packages hash doesn't match. Repository may be corrupted."
-msgstr ""
+msgstr "패키지 해시가 일치하지 않습니다. 레포지토리가 손상되었을 수 있습니다."
 
 #: kicad/pcm/pcm.cpp:286
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Unable to parse packages metadata:\n"
 "\n"
 "%s"
-msgstr "%s을(를) 열 수 없습니다."
+msgstr ""
+"패키지 메타데이터를 파싱할 수 없습니다:\n"
+"\n"
+"%s"
 
 #: kicad/pcm/pcm.cpp:373
 msgid ""
 "Packages cache for current repository is corrupted, it will be redownloaded."
-msgstr ""
+msgstr "현재 레포지토리에 대한 패키지가 손상되었습니다. 다시 다운로드됩니다."
 
 #: kicad/pcm/pcm.cpp:423
-#, fuzzy
 msgid "Downloading resources"
-msgstr "소스 뒤바꾸기"
+msgstr "리소스 다운로드 중"
 
 #: kicad/pcm/pcm.cpp:437
 msgid ""
 "Resources file hash doesn't match and will not be used. Repository may be "
 "corrupted."
-msgstr ""
+msgstr "리소스 파일 해시가 일치하지 않아 사용되지 않습니다. 레포지토리가 손상되었을 수 있습니다."
 
 #: kicad/pcm/pcm.cpp:582
-#, fuzzy
 msgid "Local file"
-msgstr "로컬 파일 편집..."
+msgstr "로컬 파일"
 
 #: kicad/pcm/pcm_task_manager.cpp:63
-#, fuzzy
 msgid "Unable to create download directory!"
-msgstr "%s 파일을 만들 수 없습니다."
+msgstr "다운로드 디렉토리를 생성할 수 없습니다!"
 
 #: kicad/pcm/pcm_task_manager.cpp:92
 #, c-format
@@ -18417,21 +18368,23 @@ msgid ""
 "may indicate a problem with the package, if the issue persists report this "
 "to repository maintainers."
 msgstr ""
+"패키지 %s에 대한 다운로드된 아카이브 해시가 레포지토리 항목과 일치하지 않습니다. 이는 이 패키지에 문제가 있음을 나타낼 수 있으며, "
+"문제가 지속되면 레포지토리 관리자에게 문의하세요."
 
 #: kicad/pcm/pcm_task_manager.cpp:101
-#, fuzzy, c-format
+#, c-format
 msgid "Extracting package '%s'."
-msgstr "'%s' 파일을 추출하는 중."
+msgstr "'%s' 패키지를 추출하는 중입니다."
 
 #: kicad/pcm/pcm_task_manager.cpp:116
 #, c-format
 msgid "Removing downloaded archive '%s'."
-msgstr ""
+msgstr "다운로드한 아카이브 '%s'를 삭제합니다."
 
 #: kicad/pcm/pcm_task_manager.cpp:157
 #, c-format
 msgid "Downloading package url: '%s'"
-msgstr ""
+msgstr "패키지 url: '%s' 다운로드 중"
 
 #: kicad/pcm/pcm_task_manager.cpp:170
 #, c-format
@@ -18444,55 +18397,56 @@ msgstr ""
 
 #: kicad/pcm/pcm_task_manager.cpp:249
 msgid "Aborting package installation."
-msgstr ""
+msgstr "패키지 설치를 중단합니다."
 
 #: kicad/pcm/pcm_task_manager.cpp:297
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Unable to parse package metadata:\n"
 "\n"
 "%s"
-msgstr "%s을(를) 열 수 없습니다."
+msgstr ""
+"패키지 메타데이터를 파싱할 수 없습니다:\n"
+"\n"
+"%s"
 
 #: kicad/pcm/pcm_task_manager.cpp:306
 msgid "Archive does not contain a valid metadata.json file"
-msgstr ""
+msgstr "아카이브에 유효한 metadata.json 파일이 존재하지 않습니다"
 
 #: kicad/pcm/pcm_task_manager.cpp:314
-#, fuzzy
 msgid "Archive metadata must have a single version defined"
-msgstr "시트에는 지정된 파일이 있어야 합니다."
+msgstr "아카이브 메타데이터는 하나의 버전이 정의되어 있어야 합니다"
 
 #: kicad/pcm/pcm_task_manager.cpp:326
 #, c-format
 msgid ""
 "Package with identifier %s is already installed, you must first uninstall "
 "this package."
-msgstr ""
+msgstr "식별자 %s에 해당하는 패키지는 이미 설치되었습니다. 이 패키지를 제거하고 다시 시도하세요."
 
 #: kicad/pcm/pcm_task_manager.cpp:354
-#, fuzzy, c-format
+#, c-format
 msgid "Removing directory %s"
-msgstr "단일 패드 네트 %s을(를) 제거합니다."
+msgstr "디렉토리 %s를 삭제합니다"
 
 #: kicad/pcm/pcm_task_manager.cpp:359
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to remove directory %s"
-msgstr "%s 파일을 만들 수 없습니다."
+msgstr "디렉토리 %s 삭제에 실패하였습니다"
 
 #: kicad/pcm/pcm_task_manager.cpp:376
 #, c-format
 msgid "Package %s uninstalled"
-msgstr ""
+msgstr "패키지 %s 제거됨"
 
 #: kicad/pcm/pcm_task_manager.cpp:445
 msgid "Aborting remaining tasks."
-msgstr ""
+msgstr "남은 작업을 중단합니다."
 
 #: kicad/pcm/pcm_task_manager.cpp:448
-#, fuzzy
 msgid "Done."
-msgstr "완료"
+msgstr "완료."
 
 #: kicad/project_template.cpp:52
 msgid "Could open the template path!"
@@ -18736,7 +18690,7 @@ msgstr "도면 시트 테두리와 제목 블록 편집"
 
 #: kicad/tools/kicad_manager_actions.cpp:118
 msgid "Run Plugin and Content Manager"
-msgstr ""
+msgstr "플러그인과 컨텐츠 매니저 실행"
 
 #: kicad/tools/kicad_manager_actions.cpp:125
 msgid "Open Text Editor"
@@ -20307,9 +20261,8 @@ msgstr ""
 "변경 사항을 취소하고 종료 하시겠습니까?"
 
 #: pcb_calculator/regulators_funct.cpp:127
-#, fuzzy
 msgid "PCB Calculator data file"
-msgstr "PCB 계산기 데이터 파일 (*.%s)|*.%s"
+msgstr "PCB 계산 데이터 파일"
 
 #: pcb_calculator/regulators_funct.cpp:130
 msgid "Select PCB Calculator Data File"
@@ -21027,9 +20980,8 @@ msgid "A layer thickness is < 0. Fix it"
 msgstr "레이어 두께가 < 0입니다. 수정하세요"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:1522
-#, fuzzy
 msgid "Custom..."
-msgstr "사용자 정의"
+msgstr "사용자 정의..."
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:20
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:49
@@ -23198,9 +23150,8 @@ msgid "Select a STEP export filename"
 msgstr "STEP 내보내기 파일명을 지정"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:138
-#, fuzzy
 msgid "STEP files"
-msgstr "SVG 파일"
+msgstr "STEP 파일"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:202
 msgid "Non-unity scaled models:"
@@ -23236,7 +23187,7 @@ msgstr "STEP 내보내기"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:26
 msgid "temp"
-msgstr ""
+msgstr "temp"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:36
 msgid "Coordinates"
@@ -24046,9 +23997,8 @@ msgid "CSV"
 msgstr "CSV"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:48
-#, fuzzy
 msgid "Gerber (experimental)"
-msgstr "거버 (매우 실험적 요소)"
+msgstr "거버 (실험적 요소)"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:50
 msgid "Format"
@@ -24075,9 +24025,8 @@ msgstr ""
 "모든 배치된 풋프린트를 포함하는 단 하나의 파일을 생성합니다\n"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:74
-#, fuzzy
 msgid "Include only SMD footprints"
-msgstr "풋프린트 포함 (&f)"
+msgstr "SMD 풋프린트만 포함"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:77
 msgid "Exclude all footprints with through hole pads"
@@ -28218,7 +28167,6 @@ msgid "Check rule syntax"
 msgstr "규칙 문법을 체크"
 
 #: pcbnew/dialogs/panel_setup_rules_help_md.h:2
-#, fuzzy
 msgid ""
 "### Top-level Clauses\n"
 "\n"
@@ -28449,20 +28397,21 @@ msgstr ""
 "\n"
 "### 제약 형식\n"
 "\n"
-" * annular_width\n"
+" * annular\\_width\n"
 " * clearance\n"
 " * courtyard_clearance\n"
 " * diff\\_pair\\_gap\n"
 " * diff\\_pair\\_uncoupled\n"
 " * disallow\n"
-" * edge_clearance\n"
+" * edge\\_clearance\n"
 " * length\n"
-" * hole\n"
-" * hole_clearance\n"
-" * silk_clearance\n"
+" * hole\\_clearance\n"
+" * hole\\_size\n"
+" * silk\\_clearance\n"
 " * skew\n"
-" * track_width\n"
-" * via_count\n"
+" * track\\_width\n"
+" * via\\_count\n"
+" * via\\_diameter\n"
 "\n"
 "\n"
 "<br><br>\n"
@@ -28509,8 +28458,7 @@ msgstr ""
 "\n"
 "### 참고\n"
 "\n"
-"Version 절이 첫 번째 절이 되어야 합니다.  이는 파일의 문법 버전을 알려주"
-"며, \n"
+"Version 절이 첫 번째 절이 되어야 합니다.  이는 파일의 문법 버전을 알려주며, \n"
 "훗날 규칙 파서가 자동 업데이트를 진행하는 데 도움을 줍니다.  이는\n"
 "\"1\" 로 설정되어야 합니다.\n"
 "\n"
@@ -28527,18 +28475,15 @@ msgstr ""
 "<br><br>\n"
 "\n"
 "    A.insideCourtyard('<footprint_refdes>')\n"
-"`A`의 일부가 제시된 풋프린트의 주요 코트야드 범위 내에 있을 경우 참이 됩니"
-"다.\n"
+"`A`의 일부가 제시된 풋프린트의 주요 코트야드 범위 내에 있을 경우 참이 됩니다.\n"
 "<br><br>\n"
 "\n"
 "    A.insideFrontCourtyard('<footprint_refdes>')\n"
-"`A`의 일부가 제시된 풋프린트의 전면 코트야드 범위 내에 있을 경우 참이 됩니"
-"다.\n"
+"`A`의 일부가 제시된 풋프린트의 전면 코트야드 범위 내에 있을 경우 참이 됩니다.\n"
 "<br><br>\n"
 "\n"
 "    A.insideBackCourtyard('<footprint_refdes>')\n"
-"`A`의 일부가 제시된 풋프린트의 후면 코트야드 범위 내에 있을 경우 참이 됩니"
-"다.\n"
+"`A`의 일부가 제시된 풋프린트의 후면 코트야드 범위 내에 있을 경우 참이 됩니다.\n"
 "<br><br>\n"
 "\n"
 "    A.insideArea('<zone_name>')\n"
@@ -28761,9 +28706,8 @@ msgid "Local override on %s; clearance: %s."
 msgstr "%s에 대한 지역 재정의; 클리어런스: %s."
 
 #: pcbnew/drc/drc_engine.cpp:831
-#, fuzzy
 msgid "board minimum"
-msgstr "기판 최소 너비"
+msgstr "기판 최소값"
 
 #: pcbnew/drc/drc_engine.cpp:834
 #, c-format
@@ -28771,14 +28715,13 @@ msgid "Board minimum clearance: %s."
 msgstr "보드 최소 클리어런스: %s."
 
 #: pcbnew/drc/drc_engine.cpp:843
-#, fuzzy
 msgid "board minimum hole"
-msgstr "기판 최소 너비"
+msgstr "기판 최소 홀"
 
 #: pcbnew/drc/drc_engine.cpp:846
-#, fuzzy, c-format
+#, c-format
 msgid "Board minimum hole clearance: %s."
-msgstr "보드 최소 클리어런스: %s."
+msgstr "기판 최소 홀 클리어런스: %s."
 
 #: pcbnew/drc/drc_engine.cpp:873
 #, c-format
@@ -29041,9 +28984,8 @@ msgid "Rule: %s"
 msgstr "규칙: %s"
 
 #: pcbnew/drc/drc_item.cpp:322
-#, fuzzy
 msgid "Local override"
-msgstr "유격"
+msgstr "지역 재정의"
 
 #: pcbnew/drc/drc_rule.h:137
 #, c-format
@@ -29946,14 +29888,13 @@ msgid "No footprints to export!"
 msgstr "내보낼 풋프린트가 없습니다!"
 
 #: pcbnew/footprint_libraries_utils.cpp:689
-#, fuzzy, c-format
+#, c-format
 msgid "Update footprints on board to refer to %s?"
-msgstr "현재 보드 모듈 업데이트"
+msgstr "기판상의 풋프린트를 %s를 참조하여 업데이트하시겠습니까?"
 
 #: pcbnew/footprint_libraries_utils.cpp:736
-#, fuzzy
 msgid "Update footprints on board to refer to new library?"
-msgstr "라이브러리에서 모든 변경점을 포함하도록 풋프린트 업데이트"
+msgstr "기판상의 풋프린트를 새 라이브러리를 참조하여 업데이트하시겠습니까?"
 
 #: pcbnew/footprint_libraries_utils.cpp:875
 #: pcbnew/footprint_viewer_frame.cpp:718
