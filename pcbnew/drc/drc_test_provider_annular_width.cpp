@@ -61,8 +61,6 @@ public:
     {
         return "Tests pad/via annular rings";
     }
-
-    virtual std::set<DRC_CONSTRAINT_T> GetConstraintTypes() const override;
 };
 
 
@@ -105,6 +103,9 @@ bool DRC_TEST_PROVIDER_ANNULAR_WIDTH::Run()
                 int  annularWidth = ( via->GetWidth() - via->GetDrillValue() ) / 2;
                 bool fail_min = false;
                 bool fail_max = false;
+
+                if( constraint.GetSeverity() == RPT_SEVERITY_IGNORE )
+                    return true;
 
                 if( constraint.Value().HasMin() )
                 {
@@ -159,12 +160,6 @@ bool DRC_TEST_PROVIDER_ANNULAR_WIDTH::Run()
     reportRuleStatistics();
 
     return true;
-}
-
-
-std::set<DRC_CONSTRAINT_T> DRC_TEST_PROVIDER_ANNULAR_WIDTH::GetConstraintTypes() const
-{
-    return { ANNULAR_WIDTH_CONSTRAINT };
 }
 
 

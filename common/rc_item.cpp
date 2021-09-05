@@ -83,10 +83,11 @@ wxString RC_ITEM::ShowReport( EDA_UNITS aUnits, SEVERITY aSeverity,
 
     switch( aSeverity )
     {
-    case RPT_SEVERITY_ERROR:   severity = wxT( "Severity: error" );   break;
-    case RPT_SEVERITY_WARNING: severity = wxT( "Severity: warning" ); break;
-    case RPT_SEVERITY_ACTION:  severity = wxT( "Severity: action" );  break;
-    case RPT_SEVERITY_INFO:    severity = wxT( "Severity: info" );    break;
+    case RPT_SEVERITY_ERROR:     severity = wxT( "Severity: error" );     break;
+    case RPT_SEVERITY_WARNING:   severity = wxT( "Severity: warning" );   break;
+    case RPT_SEVERITY_ACTION:    severity = wxT( "Severity: action" );    break;
+    case RPT_SEVERITY_INFO:      severity = wxT( "Severity: info" );      break;
+    case RPT_SEVERITY_EXCLUSION: severity = wxT( "Severity: exclusion" ); break;
     default:                   ;
     };
 
@@ -349,20 +350,25 @@ void RC_TREE_MODEL::GetValue( wxVariant&              aVariant,
     {
         wxString prefix;
 
-        if( rcItem->GetParent() && rcItem->GetParent()->IsExcluded() )
-            prefix = _( "Excluded " );
-
-        switch( m_editFrame->GetSeverity( rcItem->GetErrorCode() ) )
+        if( rcItem->GetParent() )
         {
-        case RPT_SEVERITY_ERROR:   prefix += _( "Error: " ); break;
-        case RPT_SEVERITY_WARNING: prefix += _( "Warning: " ); break;
+            SEVERITY severity = rcItem->GetParent()->GetSeverity();
 
-        case RPT_SEVERITY_EXCLUSION:
-        case RPT_SEVERITY_UNDEFINED:
-        case RPT_SEVERITY_INFO:
-        case RPT_SEVERITY_ACTION:
-        case RPT_SEVERITY_IGNORE:
-            break;
+            if( severity == RPT_SEVERITY_EXCLUSION )
+            {
+                if( m_editFrame->GetSeverity( rcItem->GetErrorCode() ) == RPT_SEVERITY_WARNING )
+                    prefix = _( "Excluded warning: " );
+                else
+                    prefix = _( "Excluded error: " );
+            }
+            else if( severity == RPT_SEVERITY_WARNING )
+            {
+                prefix = _( "Warning: " );
+            }
+            else
+            {
+                prefix = _( "Error: " );
+            }
         }
 
         aVariant = prefix + rcItem->GetErrorMessage();
@@ -416,7 +422,8 @@ bool RC_TREE_MODEL::GetAttr( wxDataViewItem const&   aItem,
         ret = true;
     }
 
-    if( node->m_RcItem->GetParent() && node->m_RcItem->GetParent()->IsExcluded() )
+    if( node->m_RcItem->GetParent()
+            && node->m_RcItem->GetParent()->GetSeverity() == RPT_SEVERITY_EXCLUSION )
     {
         wxColour textColour = wxSystemSettings::GetColour( wxSYS_COLOUR_LISTBOXTEXT );
         double   brightness = KIGFX::COLOR4D( textColour ).GetBrightness();
@@ -493,7 +500,10 @@ void RC_TREE_MODEL::DeleteItems( bool aCurrentOnly, bool aIncludeExclusions, boo
     {
         std::shared_ptr<RC_ITEM> rcItem = m_rcItemsProvider->GetItem( i );
         MARKER_BASE*             marker = rcItem->GetParent();
-        bool                     excluded = marker ? marker->IsExcluded() : false;
+        bool                     excluded = false;
+
+        if( marker && marker->GetSeverity() == RPT_SEVERITY_EXCLUSION )
+            excluded = true;
 
         if( aCurrentOnly && itemDeleted && lastGood >= 0 )
             break;

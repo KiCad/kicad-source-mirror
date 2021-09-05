@@ -41,9 +41,13 @@ struct DRC_REGRESSION_TEST_FIXTURE
 };
 
 
-BOOST_FIXTURE_TEST_CASE( DRCSolderMaskBridgingTest, DRC_REGRESSION_TEST_FIXTURE )
+BOOST_FIXTURE_TEST_CASE( DRCCustomRuleSeverityTest, DRC_REGRESSION_TEST_FIXTURE )
 {
-    KI_TEST::LoadBoard( m_settingsManager, "solder_mask_bridge_test", m_board );
+    // This board has two edge-connectors.  There is a custom DRC rule which conditionally
+    // applies to one of them and sets the edge-clearance severity to "ignore".  It should
+    // therefore only generate edge-clearance violations for the other edge connector.
+
+    KI_TEST::LoadBoard( m_settingsManager, "severities", m_board );
     KI_TEST::FillZones( m_board.get(), 6 );
 
     std::vector<DRC_ITEM>  violations;
@@ -60,14 +64,14 @@ BOOST_FIXTURE_TEST_CASE( DRCSolderMaskBridgingTest, DRC_REGRESSION_TEST_FIXTURE 
 
     bds.m_DRCEngine->RunTests( EDA_UNITS::MILLIMETRES, true, false );
 
-    if( violations.size() == 4 )
+    if( violations.size() == 8 )
     {
         BOOST_CHECK_EQUAL( 1, 1 );  // quiet "did not check any assertions" warning
-        BOOST_TEST_MESSAGE( "DRC solder mask bridge test passed" );
+        BOOST_TEST_MESSAGE( "Custom rule severity test passed" );
     }
     else
     {
-        BOOST_CHECK_EQUAL( violations.size(), 4 );
+        BOOST_CHECK_EQUAL( violations.size(), 8 );
 
         std::map<KIID, EDA_ITEM*> itemMap;
         m_board->FillItemMap( itemMap );
@@ -75,6 +79,6 @@ BOOST_FIXTURE_TEST_CASE( DRCSolderMaskBridgingTest, DRC_REGRESSION_TEST_FIXTURE 
         for( const DRC_ITEM& item : violations )
             BOOST_TEST_MESSAGE( item.ShowReport( EDA_UNITS::INCHES, RPT_SEVERITY_ERROR, itemMap ) );
 
-        BOOST_ERROR( "DRC solder mask bridge test failed" );
+        BOOST_ERROR( "Custom rule severity test failed" );
     }
 }

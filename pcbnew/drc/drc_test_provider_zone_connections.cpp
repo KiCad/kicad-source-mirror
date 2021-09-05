@@ -64,12 +64,6 @@ public:
     {
         return "Checks thermal reliefs for a sufficient number of connecting spokes";
     }
-
-    virtual std::set<DRC_CONSTRAINT_T> GetConstraintTypes() const override
-    {
-        return { ZONE_CONNECTION_CONSTRAINT, THERMAL_RELIEF_GAP_CONSTRAINT,
-                 THERMAL_SPOKE_WIDTH_CONSTRAINT, MIN_RESOLVED_SPOKES_CONSTRAINT };
-    }
 };
 
 bool DRC_TEST_PROVIDER_ZONE_CONNECTIONS::Run()
@@ -132,7 +126,7 @@ bool DRC_TEST_PROVIDER_ZONE_CONNECTIONS::Run()
                                                              pad, zone, layer );
                     int minCount = constraint.m_Value.Min();
 
-                    if( minCount <= 0 )
+                    if( constraint.GetSeverity() == RPT_SEVERITY_IGNORE || minCount <= 0 )
                         continue;
 
                     SHAPE_POLY_SET padPoly;

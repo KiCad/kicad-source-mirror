@@ -1,0 +1,5 @@
+(version 1)
+(rule board_edge
+	(constraint edge_clearance (min 1mm))
+	(condition "A.memberOf('board_edge')")
+	(severity ignore))

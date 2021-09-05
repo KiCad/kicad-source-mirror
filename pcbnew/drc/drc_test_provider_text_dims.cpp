@@ -58,8 +58,6 @@ public:
     {
         return "Tests text height and thickness";
     }
-
-    virtual std::set<DRC_CONSTRAINT_T> GetConstraintTypes() const override;
 };
 
 
@@ -120,16 +118,19 @@ bool DRC_TEST_PROVIDER_TEXT_DIMS::Run()
                     int  constraintHeight;
                     int  actual = textItem->GetTextHeight();
 
-                    if( constraint.Value().HasMin() && actual < constraint.Value().Min() )
+                    if( constraint.GetSeverity() != RPT_SEVERITY_IGNORE )
                     {
-                        fail_min         = true;
-                        constraintHeight = constraint.Value().Min();
-                    }
+                        if( constraint.Value().HasMin() && actual < constraint.Value().Min() )
+                        {
+                            fail_min         = true;
+                            constraintHeight = constraint.Value().Min();
+                        }
 
-                    if( constraint.Value().HasMax() && actual > constraint.Value().Max() )
-                    {
-                        fail_max         = true;
-                        constraintHeight = constraint.Value().Max();
+                        if( constraint.Value().HasMax() && actual > constraint.Value().Max() )
+                        {
+                            fail_max         = true;
+                            constraintHeight = constraint.Value().Max();
+                        }
                     }
 
                     if( fail_min || fail_max )
@@ -168,16 +169,19 @@ bool DRC_TEST_PROVIDER_TEXT_DIMS::Run()
                     int  constraintThickness;
                     int  actual = textItem->GetTextThickness();
 
-                    if( constraint.Value().HasMin() && actual < constraint.Value().Min() )
+                    if( constraint.GetSeverity() != RPT_SEVERITY_IGNORE )
                     {
-                        fail_min            = true;
-                        constraintThickness = constraint.Value().Min();
-                    }
+                        if( constraint.Value().HasMin() && actual < constraint.Value().Min() )
+                        {
+                            fail_min            = true;
+                            constraintThickness = constraint.Value().Min();
+                        }
 
-                    if( constraint.Value().HasMax() && actual > constraint.Value().Max() )
-                    {
-                        fail_max            = true;
-                        constraintThickness = constraint.Value().Max();
+                        if( constraint.Value().HasMax() && actual > constraint.Value().Max() )
+                        {
+                            fail_max            = true;
+                            constraintThickness = constraint.Value().Max();
+                        }
                     }
 
                     if( fail_min || fail_max )
@@ -218,12 +222,6 @@ bool DRC_TEST_PROVIDER_TEXT_DIMS::Run()
     reportRuleStatistics();
 
     return true;
-}
-
-
-std::set<DRC_CONSTRAINT_T> DRC_TEST_PROVIDER_TEXT_DIMS::GetConstraintTypes() const
-{
-    return { TEXT_HEIGHT_CONSTRAINT, TEXT_THICKNESS_CONSTRAINT };
 }
 
 

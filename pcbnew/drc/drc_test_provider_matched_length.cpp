@@ -66,8 +66,6 @@ public:
         return "Tests matched track lengths.";
     }
 
-    virtual std::set<DRC_CONSTRAINT_T> GetConstraintTypes() const override;
-
     DRC_LENGTH_REPORT BuildLengthReport() const;
 
 private:
@@ -361,17 +359,17 @@ bool DRC_TEST_PROVIDER_MATCHED_LENGTH::runInternal( bool aDelayReportMode )
 
             OPT<DRC_CONSTRAINT> lengthConstraint = rule->FindConstraint( LENGTH_CONSTRAINT );
 
-            if( lengthConstraint )
+            if( lengthConstraint && lengthConstraint->GetSeverity() != RPT_SEVERITY_IGNORE )
                 checkLengths( *lengthConstraint, matchedConnections );
 
             OPT<DRC_CONSTRAINT> skewConstraint = rule->FindConstraint( SKEW_CONSTRAINT );
 
-            if( skewConstraint )
+            if( skewConstraint && skewConstraint->GetSeverity() != RPT_SEVERITY_IGNORE )
                 checkSkews( *skewConstraint, matchedConnections );
 
             OPT<DRC_CONSTRAINT> viaCountConstraint = rule->FindConstraint( VIA_COUNT_CONSTRAINT );
 
-            if( viaCountConstraint )
+            if( viaCountConstraint && viaCountConstraint->GetSeverity() != RPT_SEVERITY_IGNORE )
                 checkViaCounts( *viaCountConstraint, matchedConnections );
         }
 
@@ -379,12 +377,6 @@ bool DRC_TEST_PROVIDER_MATCHED_LENGTH::runInternal( bool aDelayReportMode )
     }
 
     return true;
-}
-
-
-std::set<DRC_CONSTRAINT_T> DRC_TEST_PROVIDER_MATCHED_LENGTH::GetConstraintTypes() const
-{
-    return { LENGTH_CONSTRAINT, SKEW_CONSTRAINT, VIA_COUNT_CONSTRAINT };
 }
 
 

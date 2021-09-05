@@ -18,11 +18,11 @@
  */
 
 
-#ifndef _REPORT_SEVERITY_H_
-#define _REPORT_SEVERITY_H_
+#ifndef REPORT_SEVERITY_H
+#define REPORT_SEVERITY_H
 
 // Note: On windows, SEVERITY_ERROR collides with a system declaration,
-// so we used RPT_SEVERITY _xxx instead of SEVERITY _xxx
+// so we used RPT_SEVERITY_xxx instead of SEVERITY_xxx
 enum SEVERITY {
     RPT_SEVERITY_UNDEFINED = 0x00,
     RPT_SEVERITY_INFO      = 0x01,
@@ -33,4 +33,4 @@ enum SEVERITY {
     RPT_SEVERITY_IGNORE    = 0x20
 };
 
-#endif // _REPORT_SEVERITY_H_
+#endif // REPORT_SEVERITY_H

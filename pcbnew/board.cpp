@@ -823,8 +823,8 @@ void BOARD::DeleteMARKERs( bool aWarningsAndErrors, bool aExclusions )
 
     for( PCB_MARKER* marker : m_markers )
     {
-        if( ( marker->IsExcluded() && aExclusions )
-                || ( !marker->IsExcluded() && aWarningsAndErrors ) )
+        if( ( marker->GetSeverity() == RPT_SEVERITY_EXCLUSION && aExclusions )
+                || ( marker->GetSeverity() != RPT_SEVERITY_EXCLUSION && aWarningsAndErrors ) )
         {
             delete marker;
         }

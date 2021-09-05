@@ -95,6 +95,8 @@ public:
     bool IsExcluded() const { return m_excluded; }
     void SetExcluded( bool aExcluded ) { m_excluded = aExcluded; }
 
+    virtual SEVERITY GetSeverity() const { return RPT_SEVERITY_UNDEFINED; }
+
     /**
      * @return the #RC_ITEM held within this marker so that its interface may be used.
      */

@@ -68,8 +68,6 @@ public:
         return "Misc checks (board outline, missing textvars)";
     }
 
-    virtual std::set<DRC_CONSTRAINT_T> GetConstraintTypes() const override;
-
 private:
     void testOutline();
     void testDisabledLayers();
@@ -279,12 +277,6 @@ bool DRC_TEST_PROVIDER_MISC::Run()
     }
 
     return true;
-}
-
-
-std::set<DRC_CONSTRAINT_T> DRC_TEST_PROVIDER_MISC::GetConstraintTypes() const
-{
-    return {};
 }
 
 

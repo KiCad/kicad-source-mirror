@@ -275,7 +275,8 @@ void PANEL_SETUP_RULES::onScintillaCharAdded( wxStyledTextEvent &aEvent )
         {
             tokens = "condition|"
                      "constraint|"
-                     "layer";
+                     "layer|"
+                     "severity";
         }
         else if( sexprs.top() == "constraint" )
         {
@@ -344,6 +345,13 @@ void PANEL_SETUP_RULES::onScintillaCharAdded( wxStyledTextEvent &aEvent )
         else if( sexprs.top() == "severity" )
         {
             tokens = "warning|error|ignore|exclusion";
+        }
+        else if( sexprs.top() == "severity" )
+        {
+            tokens = "error "
+                     "exclusion "
+                     "ignore "
+                     "warning";
         }
     }
     else if( context == STRING && !sexprs.empty() && sexprs.top() == "condition" )

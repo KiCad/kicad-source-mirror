@@ -56,8 +56,6 @@ public:
     {
         return "Tests via diameters";
     }
-
-    virtual std::set<DRC_CONSTRAINT_T> GetConstraintTypes() const override;
 };
 
 
@@ -100,16 +98,19 @@ bool DRC_TEST_PROVIDER_VIA_DIAMETER::Run()
                 int  constraintDiameter = 0;
                 int  actual = via->GetWidth();
 
-                if( constraint.Value().HasMin() && actual < constraint.Value().Min() )
+                if( constraint.GetSeverity() != RPT_SEVERITY_IGNORE )
                 {
-                    fail_min = true;
-                    constraintDiameter = constraint.Value().Min();
-                }
+                    if( constraint.Value().HasMin() && actual < constraint.Value().Min() )
+                    {
+                        fail_min = true;
+                        constraintDiameter = constraint.Value().Min();
+                    }
 
-                if( constraint.Value().HasMax() && actual > constraint.Value().Max() )
-                {
-                    fail_max = true;
-                    constraintDiameter = constraint.Value().Max();
+                    if( constraint.Value().HasMax() && actual > constraint.Value().Max() )
+                    {
+                        fail_max = true;
+                        constraintDiameter = constraint.Value().Max();
+                    }
                 }
 
                 if( fail_min )
@@ -155,12 +156,6 @@ bool DRC_TEST_PROVIDER_VIA_DIAMETER::Run()
     reportRuleStatistics();
 
     return true;
-}
-
-
-std::set<DRC_CONSTRAINT_T> DRC_TEST_PROVIDER_VIA_DIAMETER::GetConstraintTypes() const
-{
-    return { VIA_DIAMETER_CONSTRAINT };
 }
 
 

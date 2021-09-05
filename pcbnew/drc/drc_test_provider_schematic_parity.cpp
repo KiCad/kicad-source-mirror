@@ -68,8 +68,6 @@ public:
         return "Performs layout-vs-schematics integity check";
     }
 
-    virtual std::set<DRC_CONSTRAINT_T> GetConstraintTypes() const override;
-
 private:
     void testNetlist( NETLIST& aNetlist );
 };
@@ -230,12 +228,6 @@ bool DRC_TEST_PROVIDER_SCHEMATIC_PARITY::Run()
     }
 
     return true;
-}
-
-
-std::set<DRC_CONSTRAINT_T> DRC_TEST_PROVIDER_SCHEMATIC_PARITY::GetConstraintTypes() const
-{
-    return {};
 }
 
 

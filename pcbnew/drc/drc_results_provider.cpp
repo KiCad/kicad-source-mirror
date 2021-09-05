@@ -28,20 +28,11 @@ void BOARD_DRC_ITEMS_PROVIDER::SetSeverities( int aSeverities )
 {
     m_severities = aSeverities;
 
-    BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
-
     m_filteredMarkers.clear();
 
     for( PCB_MARKER* marker : m_board->Markers() )
     {
-        SEVERITY markerSeverity;
-
-        if( marker->IsExcluded() )
-            markerSeverity = RPT_SEVERITY_EXCLUSION;
-        else
-            markerSeverity = bds.GetSeverity( marker->GetRCItem()->GetErrorCode() );
-
-        if( markerSeverity & m_severities )
+        if( marker->GetSeverity() & m_severities )
             m_filteredMarkers.push_back( marker );
     }
 }
@@ -52,20 +43,11 @@ int BOARD_DRC_ITEMS_PROVIDER::GetCount( int aSeverity ) const
     if( aSeverity < 0 )
         return m_filteredMarkers.size();
 
-    BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
-
     int count = 0;
 
     for( PCB_MARKER* marker : m_board->Markers() )
     {
-        SEVERITY markerSeverity;
-
-        if( marker->IsExcluded() )
-            markerSeverity = RPT_SEVERITY_EXCLUSION;
-        else
-            markerSeverity = bds.GetSeverity( marker->GetRCItem()->GetErrorCode() );
-
-        if( markerSeverity == aSeverity )
+        if( marker->GetSeverity() == aSeverity )
             count++;
     }
 

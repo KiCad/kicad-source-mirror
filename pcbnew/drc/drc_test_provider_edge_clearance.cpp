@@ -68,8 +68,6 @@ public:
         return "Tests items vs board edge clearance";
     }
 
-    virtual std::set<DRC_CONSTRAINT_T> GetConstraintTypes() const override;
-
 private:
     bool testAgainstEdge( BOARD_ITEM* item, SHAPE* itemShape, BOARD_ITEM* other,
                           DRC_CONSTRAINT_T aConstraintType, PCB_DRC_CODE aErrorCode );
@@ -88,26 +86,29 @@ bool DRC_TEST_PROVIDER_EDGE_CLEARANCE::testAgainstEdge( BOARD_ITEM* item, SHAPE*
     int      actual;
     VECTOR2I pos;
 
-    if( minClearance >= 0 && itemShape->Collide( edgeShape.get(), minClearance, &actual, &pos ) )
+    if( constraint.GetSeverity() != RPT_SEVERITY_IGNORE && minClearance >= 0 )
     {
-        std::shared_ptr<DRC_ITEM> drce = DRC_ITEM::Create( aErrorCode );
-
-        // Only report clearance info if there is any; otherwise it's just a straight collision
-        if( minClearance > 0 )
+        if( itemShape->Collide( edgeShape.get(), minClearance, &actual, &pos ) )
         {
-            m_msg.Printf( _( "(%s clearance %s; actual %s)" ),
-                          constraint.GetName(),
-                          MessageTextFromValue( userUnits(), minClearance ),
-                          MessageTextFromValue( userUnits(), actual ) );
+            std::shared_ptr<DRC_ITEM> drce = DRC_ITEM::Create( aErrorCode );
 
-            drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + m_msg );
+            // Only report clearance info if there is any; otherwise it's just a straight collision
+            if( minClearance > 0 )
+            {
+                m_msg.Printf( _( "(%s clearance %s; actual %s)" ),
+                              constraint.GetName(),
+                              MessageTextFromValue( userUnits(), minClearance ),
+                              MessageTextFromValue( userUnits(), actual ) );
+
+                drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + m_msg );
+            }
+
+            drce->SetItems( edge->m_Uuid, item->m_Uuid );
+            drce->SetViolatingRule( constraint.GetParentRule() );
+
+            reportViolation( drce, (wxPoint) pos );
+            return false;       // don't report violations with multiple edges; one is enough
         }
-
-        drce->SetItems( edge->m_Uuid, item->m_Uuid );
-        drce->SetViolatingRule( constraint.GetParentRule() );
-
-        reportViolation( drce, (wxPoint) pos );
-        return false;       // don't report violations with multiple edges; one is enough
     }
 
     return true;
@@ -278,12 +279,6 @@ bool DRC_TEST_PROVIDER_EDGE_CLEARANCE::Run()
     reportRuleStatistics();
 
     return true;
-}
-
-
-std::set<DRC_CONSTRAINT_T> DRC_TEST_PROVIDER_EDGE_CLEARANCE::GetConstraintTypes() const
-{
-    return { EDGE_CLEARANCE_CONSTRAINT, SILK_CLEARANCE_CONSTRAINT };
 }
 
 

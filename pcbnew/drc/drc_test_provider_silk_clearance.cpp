@@ -68,8 +68,6 @@ public:
         return "Tests for overlapping silkscreen features.";
     }
 
-    virtual std::set<DRC_CONSTRAINT_T> GetConstraintTypes() const override;
-
 private:
 
     BOARD* m_board;
@@ -193,7 +191,7 @@ bool DRC_TEST_PROVIDER_SILK_CLEARANCE::Run()
                                                                     aTestItem->parent,
                                                                     aLayers.second );
 
-                if( constraint.IsNull() )
+                if( constraint.IsNull() || constraint.GetSeverity() == RPT_SEVERITY_IGNORE )
                     return true;
 
                 int minClearance = constraint.GetValue().Min();
@@ -251,12 +249,6 @@ bool DRC_TEST_PROVIDER_SILK_CLEARANCE::Run()
     reportRuleStatistics();
 
     return true;
-}
-
-
-std::set<DRC_CONSTRAINT_T> DRC_TEST_PROVIDER_SILK_CLEARANCE::GetConstraintTypes() const
-{
-    return { SILK_CLEARANCE_CONSTRAINT };
 }
 
 

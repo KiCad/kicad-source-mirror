@@ -105,6 +105,8 @@ public:
 
     void ViewGetLayers( int aLayers[], int& aCount ) const override;
 
+    SEVERITY GetSeverity() const override;
+
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const override { ShowDummy( os ); }
 #endif

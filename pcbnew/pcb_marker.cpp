@@ -93,6 +93,8 @@ void PCB_MARKER::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_
 {
     aList.emplace_back( _( "Type" ), _( "Marker" ) );
     aList.emplace_back( _( "Violation" ), m_rcItem->GetErrorMessage() );
+    aList.emplace_back( _( "Severity" ), GetSeverity() == RPT_SEVERITY_ERROR ? _( "Error" )
+                                                                             : _( "Warning" ) );
 
     wxString  mainText;
     wxString  auxText;
@@ -149,51 +151,45 @@ BITMAPS PCB_MARKER::GetMenuImage() const
 }
 
 
+SEVERITY PCB_MARKER::GetSeverity() const
+{
+    if( IsExcluded() )
+        return RPT_SEVERITY_EXCLUSION;
+
+    DRC_ITEM* item = static_cast<DRC_ITEM*>( m_rcItem.get() );
+    DRC_RULE* rule = item->GetViolatingRule();
+
+    if( rule && rule->m_Severity != RPT_SEVERITY_UNDEFINED )
+        return rule->m_Severity;
+
+    return GetBoard()->GetDesignSettings().GetSeverity( item->GetErrorCode() );
+}
+
+
 void PCB_MARKER::ViewGetLayers( int aLayers[], int& aCount ) const
 {
     aCount = 2;
 
     aLayers[1] = LAYER_MARKER_SHADOWS;
 
-    if( IsExcluded() )
-    {
-        aLayers[0] = LAYER_DRC_EXCLUSION;
-        return;
-    }
-
-    BOARD_ITEM_CONTAINER* ancestor = GetParent();
-
-    while( ancestor->GetParent() )
-        ancestor = ancestor->GetParent();
-
-    BOARD* board = static_cast<BOARD*>( ancestor );
-
-    switch( board->GetDesignSettings().GetSeverity( m_rcItem->GetErrorCode() ) )
+    switch( GetSeverity() )
     {
     default:
-    case SEVERITY::RPT_SEVERITY_ERROR:   aLayers[0] = LAYER_DRC_ERROR;   break;
-    case SEVERITY::RPT_SEVERITY_WARNING: aLayers[0] = LAYER_DRC_WARNING; break;
+    case SEVERITY::RPT_SEVERITY_ERROR:     aLayers[0] = LAYER_DRC_ERROR;     break;
+    case SEVERITY::RPT_SEVERITY_WARNING:   aLayers[0] = LAYER_DRC_WARNING;   break;
+    case SEVERITY::RPT_SEVERITY_EXCLUSION: aLayers[0] = LAYER_DRC_EXCLUSION; break;
     }
 }
 
 
 GAL_LAYER_ID PCB_MARKER::GetColorLayer() const
 {
-    if( IsExcluded() )
-        return LAYER_DRC_EXCLUSION;
-
-    BOARD_ITEM_CONTAINER* ancestor = GetParent();
-
-    while( ancestor->GetParent() )
-        ancestor = ancestor->GetParent();
-
-    BOARD* board = static_cast<BOARD*>( ancestor );
-
-    switch( board->GetDesignSettings().GetSeverity( m_rcItem->GetErrorCode() ) )
+    switch( GetSeverity() )
     {
     default:
-    case SEVERITY::RPT_SEVERITY_ERROR:   return LAYER_DRC_ERROR;
-    case SEVERITY::RPT_SEVERITY_WARNING: return LAYER_DRC_WARNING;
+    case SEVERITY::RPT_SEVERITY_ERROR:     return LAYER_DRC_ERROR;
+    case SEVERITY::RPT_SEVERITY_WARNING:   return LAYER_DRC_WARNING;
+    case SEVERITY::RPT_SEVERITY_EXCLUSION: return LAYER_DRC_EXCLUSION;
     }
 }
 

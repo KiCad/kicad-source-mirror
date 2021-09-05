@@ -9,12 +9,15 @@ diff_pair_gap
 diff_pair_uncoupled
 disallow
 edge_clearance
+error
+exclusion
 footprint
 graphic
 hole
 hole_clearance
 hole_size
 hole_to_hole
+ignore
 inner
 layer
 length
@@ -31,6 +34,7 @@ outer
 pad
 pth
 rule
+severity
 silk_clearance
 skew
 solid
@@ -46,5 +50,6 @@ version
 via
 via_count
 via_diameter
+warning
 zone
 zone_connection

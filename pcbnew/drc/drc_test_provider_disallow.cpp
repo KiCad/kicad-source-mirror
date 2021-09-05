@@ -58,8 +58,6 @@ public:
     {
         return "Tests for disallowed items (e.g. keepouts)";
     }
-
-    virtual std::set<DRC_CONSTRAINT_T> GetConstraintTypes() const override;
 };
 
 
@@ -80,7 +78,7 @@ bool DRC_TEST_PROVIDER_DISALLOW::Run()
                 auto constraint = m_drcEngine->EvalRules( DISALLOW_CONSTRAINT, item, nullptr,
                                                           UNDEFINED_LAYER );
 
-                if( constraint.m_DisallowFlags )
+                if( constraint.m_DisallowFlags && constraint.GetSeverity() != RPT_SEVERITY_IGNORE )
                 {
                     std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_ALLOWED_ITEMS );
 
@@ -165,12 +163,6 @@ bool DRC_TEST_PROVIDER_DISALLOW::Run()
     reportRuleStatistics();
 
     return true;
-}
-
-
-std::set<DRC_CONSTRAINT_T> DRC_TEST_PROVIDER_DISALLOW::GetConstraintTypes() const
-{
-    return { DISALLOW_CONSTRAINT };
 }
 
 

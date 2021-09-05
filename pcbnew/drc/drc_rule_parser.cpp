@@ -226,6 +226,10 @@ DRC_RULE* DRC_RULES_PARSER::parseDRC_RULE()
             rule->m_LayerCondition = parseLayer();
             break;
 
+        case T_severity:
+            rule->m_Severity = parseSeverity();
+            break;
+
         case T_EOF:
             reportError( _( "Incomplete statement." ) );
             return rule;
@@ -572,6 +576,41 @@ LSET DRC_RULES_PARSER::parseLayer()
         reportError( wxString::Format( _( "Unrecognized item '%s'." ), FromUTF8() ) );
         parseUnknown();
     }
+
+    return retVal;
+}
+
+
+SEVERITY DRC_RULES_PARSER::parseSeverity()
+{
+    SEVERITY retVal = RPT_SEVERITY_UNDEFINED;
+    wxString msg;
+
+    T token = NextTok();
+
+    if( (int) token == DSN_RIGHT || token == T_EOF )
+    {
+        reportError( _( "Missing severity name." ) );
+        return RPT_SEVERITY_UNDEFINED;
+    }
+
+    switch( token )
+    {
+    case T_ignore:    retVal = RPT_SEVERITY_IGNORE;    break;
+    case T_warning:   retVal = RPT_SEVERITY_WARNING;   break;
+    case T_error:     retVal = RPT_SEVERITY_ERROR;     break;
+    case T_exclusion: retVal = RPT_SEVERITY_EXCLUSION; break;
+
+    default:
+        msg.Printf( _( "Unrecognized item '%s'.| Expected %s." ),
+                    FromUTF8(),
+                    "ignore, warning, error or exclusion" );
+        reportError( msg );
+        parseUnknown();
+    }
+
+    if( (int) NextTok() != DSN_RIGHT )
+        reportError( _( "Missing ')'." ) );
 
     return retVal;
 }

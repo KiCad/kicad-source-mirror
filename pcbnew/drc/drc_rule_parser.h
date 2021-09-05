@@ -51,6 +51,7 @@ private:
     void parseConstraint( DRC_RULE* aRule );
     void parseValueWithUnits( const wxString& aExpr, int& aResult );
     LSET parseLayer();
+    SEVERITY parseSeverity();
     void parseUnknown();
 
     void reportError( const wxString& aMessage );

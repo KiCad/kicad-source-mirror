@@ -69,8 +69,6 @@ public:
                "mask apertures of other nets";
     }
 
-    virtual std::set<DRC_CONSTRAINT_T> GetConstraintTypes() const override;
-
 private:
     void addItemToRTrees( BOARD_ITEM* item );
     void buildRTrees();
@@ -261,7 +259,7 @@ void DRC_TEST_PROVIDER_SOLDER_MASK::testSilkToMaskClearance()
                     int            actual;
                     VECTOR2I       pos;
 
-                    if( clearance <= 0 )
+                    if( constraint.GetSeverity() == RPT_SEVERITY_IGNORE || clearance <= 0 )
                         return true;
 
                     std::shared_ptr<SHAPE> itemShape = item->GetEffectiveShape( layer );
@@ -570,12 +568,6 @@ bool DRC_TEST_PROVIDER_SOLDER_MASK::Run()
     reportRuleStatistics();
 
     return true;
-}
-
-
-std::set<DRC_CONSTRAINT_T> DRC_TEST_PROVIDER_SOLDER_MASK::GetConstraintTypes() const
-{
-    return { SILK_CLEARANCE_CONSTRAINT };
 }
 
 

@@ -32,6 +32,7 @@
 #include <zones.h>
 #include <libeval_compiler/libeval_compiler.h>
 #include <wx/intl.h>
+#include <widgets/report_severity.h>
 
 class BOARD_ITEM;
 class PCB_EXPR_UCODE;
@@ -109,6 +110,7 @@ public:
     LSET                        m_LayerCondition;
     DRC_RULE_CONDITION*         m_Condition;
     std::vector<DRC_CONSTRAINT> m_Constraints;
+    SEVERITY                    m_Severity;
 };
 
 
@@ -150,6 +152,14 @@ class DRC_CONSTRAINT
         }
 
         return m_name;
+    }
+
+    SEVERITY GetSeverity() const
+    {
+        if( m_parentRule )
+            return m_parentRule->m_Severity;
+        else
+            return RPT_SEVERITY_UNDEFINED;
     }
 
 public:

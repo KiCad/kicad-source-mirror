@@ -61,11 +61,6 @@ public:
         return "Checks copper layers for slivers";
     }
 
-    virtual std::set<DRC_CONSTRAINT_T> GetConstraintTypes() const override
-    {
-        return {};
-    }
-
 private:
     wxString layerDesc( PCB_LAYER_ID aLayer );
 };

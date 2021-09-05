@@ -67,8 +67,6 @@ public:
         return "Tests footprints' courtyard clearance";
     }
 
-    virtual std::set<DRC_CONSTRAINT_T> GetConstraintTypes() const override;
-
 private:
     bool testFootprintCourtyardDefinitions();
 
@@ -198,54 +196,58 @@ bool DRC_TEST_PROVIDER_COURTYARD_CLEARANCE::testCourtyardClearances()
             if( frontA.OutlineCount() > 0 && frontB.OutlineCount() > 0
                     && frontBBox.Intersects( frontB.BBoxFromCaches() ) )
             {
-                constraint = m_drcEngine->EvalRules( COURTYARD_CLEARANCE_CONSTRAINT, fpA, fpB,
-                                                     F_Cu );
+                constraint = m_drcEngine->EvalRules( COURTYARD_CLEARANCE_CONSTRAINT, fpA, fpB, F_Cu );
                 clearance = constraint.GetValue().Min();
 
-                if( clearance >= 0 && frontA.Collide( &frontB, clearance, &actual, &pos ) )
+                if( constraint.GetSeverity() != RPT_SEVERITY_IGNORE && clearance >= 0 )
                 {
-                    auto drce = DRC_ITEM::Create( DRCE_OVERLAPPING_FOOTPRINTS );
-
-                    if( clearance > 0 )
+                    if( frontA.Collide( &frontB, clearance, &actual, &pos ) )
                     {
-                        m_msg.Printf( _( "(%s clearance %s; actual %s)" ),
-                                      constraint.GetName(),
-                                      MessageTextFromValue( userUnits(), clearance ),
-                                      MessageTextFromValue( userUnits(), actual ) );
+                        auto drce = DRC_ITEM::Create( DRCE_OVERLAPPING_FOOTPRINTS );
 
-                        drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + m_msg );
-                        drce->SetViolatingRule( constraint.GetParentRule() );
+                        if( clearance > 0 )
+                        {
+                            m_msg.Printf( _( "(%s clearance %s; actual %s)" ),
+                                          constraint.GetName(),
+                                          MessageTextFromValue( userUnits(), clearance ),
+                                          MessageTextFromValue( userUnits(), actual ) );
+
+                            drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + m_msg );
+                            drce->SetViolatingRule( constraint.GetParentRule() );
+                        }
+
+                        drce->SetItems( fpA, fpB );
+                        reportViolation( drce, (wxPoint) pos );
                     }
-
-                    drce->SetItems( fpA, fpB );
-                    reportViolation( drce, (wxPoint) pos );
                 }
             }
 
             if( backA.OutlineCount() > 0 && backB.OutlineCount() > 0
                     && backBBox.Intersects( backB.BBoxFromCaches() ) )
             {
-                constraint = m_drcEngine->EvalRules( COURTYARD_CLEARANCE_CONSTRAINT, fpA, fpB,
-                                                     B_Cu );
+                constraint = m_drcEngine->EvalRules( COURTYARD_CLEARANCE_CONSTRAINT, fpA, fpB, B_Cu );
                 clearance = constraint.GetValue().Min();
 
-                if( clearance >= 0 && backA.Collide( &backB, clearance, &actual, &pos ) )
+                if( constraint.GetSeverity() != RPT_SEVERITY_IGNORE && clearance >= 0 )
                 {
-                    auto drce = DRC_ITEM::Create( DRCE_OVERLAPPING_FOOTPRINTS );
-
-                    if( clearance > 0 )
+                    if( backA.Collide( &backB, clearance, &actual, &pos ) )
                     {
-                        m_msg.Printf( _( "(%s clearance %s; actual %s)" ),
-                                      constraint.GetName(),
-                                      MessageTextFromValue( userUnits(), clearance ),
-                                      MessageTextFromValue( userUnits(), actual ) );
+                        auto drce = DRC_ITEM::Create( DRCE_OVERLAPPING_FOOTPRINTS );
 
-                        drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + m_msg );
-                        drce->SetViolatingRule( constraint.GetParentRule() );
+                        if( clearance > 0 )
+                        {
+                            m_msg.Printf( _( "(%s clearance %s; actual %s)" ),
+                                          constraint.GetName(),
+                                          MessageTextFromValue( userUnits(), clearance ),
+                                          MessageTextFromValue( userUnits(), actual ) );
+
+                            drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + m_msg );
+                            drce->SetViolatingRule( constraint.GetParentRule() );
+                        }
+
+                        drce->SetItems( fpA, fpB );
+                        reportViolation( drce, (wxPoint) pos );
                     }
-
-                    drce->SetItems( fpA, fpB );
-                    reportViolation( drce, (wxPoint) pos );
                 }
             }
 
@@ -314,12 +316,6 @@ bool DRC_TEST_PROVIDER_COURTYARD_CLEARANCE::Run()
        return false;
 
     return true;
-}
-
-
-std::set<DRC_CONSTRAINT_T> DRC_TEST_PROVIDER_COURTYARD_CLEARANCE::GetConstraintTypes() const
-{
-    return { COURTYARD_CLEARANCE_CONSTRAINT };
 }
 
 

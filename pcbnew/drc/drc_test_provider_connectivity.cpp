@@ -63,8 +63,6 @@ public:
     {
         return "Tests board connectivity";
     }
-
-    virtual std::set<DRC_CONSTRAINT_T> GetConstraintTypes() const override;
 };
 
 
@@ -170,12 +168,6 @@ bool DRC_TEST_PROVIDER_CONNECTIVITY::Run()
     reportRuleStatistics();
 
     return true;
-}
-
-
-std::set<DRC_CONSTRAINT_T> DRC_TEST_PROVIDER_CONNECTIVITY::GetConstraintTypes() const
-{
-    return {};
 }
 
 

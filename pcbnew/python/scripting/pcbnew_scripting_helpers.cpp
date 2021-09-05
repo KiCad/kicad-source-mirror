@@ -517,7 +517,7 @@ bool WriteDRCReport( BOARD* aBoard, const wxString& aFileName, EDA_UNITS aUnits,
 
     for( const std::shared_ptr<DRC_ITEM>& item : violations )
     {
-        SEVERITY severity = bds.GetSeverity( item->GetErrorCode() );
+        SEVERITY severity = item->GetParent()->GetSeverity();
         fprintf( fp, "%s", TO_UTF8( item->ShowReport( aUnits, severity, itemMap ) ) );
     }
 

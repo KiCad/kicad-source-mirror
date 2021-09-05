@@ -143,7 +143,6 @@ public:
      */
     void RunTests( EDA_UNITS aUnits,  bool aReportAllTrackErrors, bool aTestFootprints );
 
-
     bool IsErrorLimitExceeded( int error_code );
 
     DRC_CONSTRAINT EvalRules( DRC_CONSTRAINT_T aConstraintType, const BOARD_ITEM* a,
@@ -168,7 +167,7 @@ public:
 
     bool QueryWorstConstraint( DRC_CONSTRAINT_T aRuleId, DRC_CONSTRAINT& aConstraint );
 
-    std::vector<DRC_TEST_PROVIDER* > GetTestProviders() const { return m_testProviders; };
+    std::vector<DRC_TEST_PROVIDER*> GetTestProviders() const { return m_testProviders; };
 
     DRC_TEST_PROVIDER* GetTestProvider( const wxString& name ) const;
 

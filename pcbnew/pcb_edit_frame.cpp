@@ -809,7 +809,7 @@ void PCB_EDIT_FRAME::RecordDRCExclusions()
 
     for( PCB_MARKER* marker : GetBoard()->Markers() )
     {
-        if( marker->IsExcluded() )
+        if( marker->GetSeverity() == RPT_SEVERITY_EXCLUSION )
             bds.m_DrcExclusions.insert( marker->Serialize() );
     }
 }
@@ -826,7 +826,7 @@ void PCB_EDIT_FRAME::ResolveDRCExclusions()
 
     for( PCB_MARKER* marker : GetBoard()->Markers() )
     {
-        if( marker->IsExcluded() )
+        if( marker->GetSeverity() == RPT_SEVERITY_EXCLUSION )
         {
             GetCanvas()->GetView()->Remove( marker );
             GetCanvas()->GetView()->Add( marker );

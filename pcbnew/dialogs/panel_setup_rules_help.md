@@ -15,6 +15,8 @@
 
     (layer "<layer_name>")
 
+    (severity <severity_name>)
+
 
 <br>
 
@@ -66,6 +68,15 @@ Note: `clearance` and `hole_clearance` rules are not run against items of the sa
  * solid
  * thermal\_reliefs
  * none
+
+<br>
+
+### Severity Names
+
+ * warning
+ * error
+ * exclusion
+ * ignore
 
 <br>
 

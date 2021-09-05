@@ -89,8 +89,6 @@ public:
     virtual const wxString GetName() const;
     virtual const wxString GetDescription() const;
 
-    virtual std::set<DRC_CONSTRAINT_T> GetConstraintTypes() const = 0;
-
     bool IsEnabled() const
     {
         return m_enabled;

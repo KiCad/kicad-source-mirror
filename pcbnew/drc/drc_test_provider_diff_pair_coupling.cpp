@@ -74,10 +74,7 @@ public:
         return "Tests differential pair coupling";
     }
 
-    virtual std::set<DRC_CONSTRAINT_T> GetConstraintTypes() const override;
-
 private:
-
     BOARD* m_board;
 };
 
@@ -297,7 +294,7 @@ bool test::DRC_TEST_PROVIDER_DIFF_PAIR_COUPLING::Run()
                         auto constraint = m_drcEngine->EvalRules( constraintsToCheck[ i ], item,
                                                                   nullptr, item->GetLayer() );
 
-                        if( constraint.IsNull() )
+                        if( constraint.IsNull() || constraint.GetSeverity() == RPT_SEVERITY_IGNORE )
                             continue;
 
                         drc_dbg( 10, "cns %d item %p\n", constraintsToCheck[i], item );
@@ -316,8 +313,8 @@ bool test::DRC_TEST_PROVIDER_DIFF_PAIR_COUPLING::Run()
 
     m_board->GetConnectivity()->GetFromToCache()->Rebuild( m_board );
 
-    forEachGeometryItem( { PCB_TRACE_T, PCB_VIA_T, PCB_ARC_T },
-                    LSET::AllCuMask(), evaluateDpConstraints );
+    forEachGeometryItem( { PCB_TRACE_T, PCB_VIA_T, PCB_ARC_T }, LSET::AllCuMask(),
+                         evaluateDpConstraints );
 
     drc_dbg( 10, "dp rule matches %d\n", (int) dpRuleMatches.size() );
 
@@ -420,9 +417,6 @@ bool test::DRC_TEST_PROVIDER_DIFF_PAIR_COUPLING::Run()
                 if( val.HasMax() && gap > val.Max() )
                     insideRange = false;
 
-//                if(val.HasMin() && val.HasMax() )
-  //                  drc_dbg(10, "Vmin %d vmax %d\n", val.Min(), val.Max() );
-
                 cpair.couplingOK = insideRange;
             }
             else
@@ -512,12 +506,6 @@ bool test::DRC_TEST_PROVIDER_DIFF_PAIR_COUPLING::Run()
     reportRuleStatistics();
 
     return true;
-}
-
-
-std::set<DRC_CONSTRAINT_T> test::DRC_TEST_PROVIDER_DIFF_PAIR_COUPLING::GetConstraintTypes() const
-{
-    return { DIFF_PAIR_GAP_CONSTRAINT, DIFF_PAIR_MAX_UNCOUPLED_CONSTRAINT };
 }
 
 

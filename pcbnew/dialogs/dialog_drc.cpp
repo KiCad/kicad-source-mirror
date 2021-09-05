@@ -822,7 +822,7 @@ void DIALOG_DRC::ExcludeMarker()
     RC_TREE_NODE* node = RC_TREE_MODEL::ToNode( m_markerDataView->GetCurrentItem() );
     PCB_MARKER*   marker = dynamic_cast<PCB_MARKER*>( node->m_RcItem->GetParent() );
 
-    if( marker && !marker->IsExcluded() )
+    if( marker && !marker->GetSeverity() == RPT_SEVERITY_EXCLUSION )
     {
         marker->SetExcluded( true );
         m_frame->GetCanvas()->GetView()->Update( marker );
@@ -876,7 +876,10 @@ bool DIALOG_DRC::writeReport( const wxString& aFullFileName )
     for( int i = 0; i < count; ++i )
     {
         const std::shared_ptr<RC_ITEM>& item = m_markersProvider->GetItem( i );
-        SEVERITY severity = bds.GetSeverity( item->GetErrorCode() );
+        SEVERITY severity = item->GetParent()->GetSeverity();
+
+        if( severity == RPT_SEVERITY_EXCLUSION )
+            severity = bds.GetSeverity( item->GetErrorCode() );
 
         fprintf( fp, "%s", TO_UTF8( item->ShowReport( units, severity, itemMap ) ) );
     }

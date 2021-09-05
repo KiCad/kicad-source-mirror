@@ -68,8 +68,6 @@ public:
         return "Tests hole to hole spacing";
     }
 
-    virtual std::set<DRC_CONSTRAINT_T> GetConstraintTypes() const override;
-
 private:
     bool testHoleAgainstHole( BOARD_ITEM* aItem, SHAPE_CIRCLE* aHole, BOARD_ITEM* aOther );
 
@@ -304,7 +302,9 @@ bool DRC_TEST_PROVIDER_HOLE_TO_HOLE::testHoleAgainstHole( BOARD_ITEM* aItem, SHA
                                                   UNDEFINED_LAYER /* holes pierce all layers */ );
         int  minClearance = constraint.GetValue().Min() - epsilon;
 
-        if( minClearance >= 0 && actual < minClearance )
+        if( constraint.GetSeverity() != RPT_SEVERITY_IGNORE
+                && minClearance >= 0
+                && actual < minClearance )
         {
             std::shared_ptr<DRC_ITEM> drce = DRC_ITEM::Create( DRCE_DRILLED_HOLES_TOO_CLOSE );
 
@@ -322,12 +322,6 @@ bool DRC_TEST_PROVIDER_HOLE_TO_HOLE::testHoleAgainstHole( BOARD_ITEM* aItem, SHA
     }
 
     return true;
-}
-
-
-std::set<DRC_CONSTRAINT_T> DRC_TEST_PROVIDER_HOLE_TO_HOLE::GetConstraintTypes() const
-{
-    return { HOLE_TO_HOLE_CONSTRAINT };
 }
 
 

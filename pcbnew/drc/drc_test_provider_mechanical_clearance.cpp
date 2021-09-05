@@ -70,8 +70,6 @@ public:
         return "Tests item clearances irrespective of nets";
     }
 
-    virtual std::set<DRC_CONSTRAINT_T> GetConstraintTypes() const override;
-
 private:
     bool testItemAgainstItem( BOARD_ITEM* item, SHAPE* itemShape, PCB_LAYER_ID layer,
                               BOARD_ITEM* other );
@@ -510,7 +508,7 @@ void DRC_TEST_PROVIDER_MECHANICAL_CLEARANCE::testZoneLayer( ZONE* aZone, PCB_LAY
     int            clearance = aConstraint.GetValue().Min();
     SHAPE_POLY_SET fill = aZone->GetFilledPolysList( aLayer );
 
-    if( clearance - epsilon <= 0 )
+    if( aConstraint.GetSeverity() == RPT_SEVERITY_IGNORE || clearance - epsilon <= 0 )
         return;
 
     // Turn fractured fill into outlines and holes
@@ -580,7 +578,7 @@ bool DRC_TEST_PROVIDER_MECHANICAL_CLEARANCE::testItemAgainstItem( BOARD_ITEM* it
         clearance = constraint.GetValue().Min();
     }
 
-    if( clearance > 0 )
+    if( constraint.GetSeverity() != RPT_SEVERITY_IGNORE && clearance > 0 )
     {
         if( itemShape->Collide( otherShape.get(), clearance, &actual, &pos ) )
         {
@@ -644,38 +642,39 @@ bool DRC_TEST_PROVIDER_MECHANICAL_CLEARANCE::testItemAgainstItem( BOARD_ITEM* it
             clearance = constraint.GetValue().Min();
         }
 
-        if( clearance > 0 && itemHoleShape && itemHoleShape->Collide( otherShape.get(), clearance,
-                                                                      &actual, &pos ) )
+        if( constraint.GetSeverity() != RPT_SEVERITY_IGNORE && clearance > 0 )
         {
-            std::shared_ptr<DRC_ITEM> drce = DRC_ITEM::Create( DRCE_HOLE_CLEARANCE );
+            if( itemHoleShape && itemHoleShape->Collide( otherShape.get(), clearance, &actual, &pos ) )
+            {
+                std::shared_ptr<DRC_ITEM> drce = DRC_ITEM::Create( DRCE_HOLE_CLEARANCE );
 
-            m_msg.Printf( _( "(%s clearance %s; actual %s)" ),
-                          constraint.GetName(),
-                          MessageTextFromValue( userUnits(), clearance ),
-                          MessageTextFromValue( userUnits(), actual ) );
+                m_msg.Printf( _( "(%s clearance %s; actual %s)" ),
+                              constraint.GetName(),
+                              MessageTextFromValue( userUnits(), clearance ),
+                              MessageTextFromValue( userUnits(), actual ) );
 
-            drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + m_msg );
-            drce->SetItems( item, other );
-            drce->SetViolatingRule( constraint.GetParentRule() );
+                drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + m_msg );
+                drce->SetItems( item, other );
+                drce->SetViolatingRule( constraint.GetParentRule() );
 
-            reportViolation( drce, (wxPoint) pos );
-        }
+                reportViolation( drce, (wxPoint) pos );
+            }
 
-        if( clearance > 0 && otherHoleShape && otherHoleShape->Collide( itemShape, clearance,
-                                                                        &actual, &pos ) )
-        {
-            std::shared_ptr<DRC_ITEM> drce = DRC_ITEM::Create( DRCE_HOLE_CLEARANCE );
+            if( otherHoleShape && otherHoleShape->Collide( itemShape, clearance, &actual, &pos ) )
+            {
+                std::shared_ptr<DRC_ITEM> drce = DRC_ITEM::Create( DRCE_HOLE_CLEARANCE );
 
-            m_msg.Printf( _( "(%s clearance %s; actual %s)" ),
-                          constraint.GetName(),
-                          MessageTextFromValue( userUnits(), clearance ),
-                          MessageTextFromValue( userUnits(), actual ) );
+                m_msg.Printf( _( "(%s clearance %s; actual %s)" ),
+                              constraint.GetName(),
+                              MessageTextFromValue( userUnits(), clearance ),
+                              MessageTextFromValue( userUnits(), actual ) );
 
-            drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + m_msg );
-            drce->SetItems( item, other );
-            drce->SetViolatingRule( constraint.GetParentRule() );
+                drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + m_msg );
+                drce->SetItems( item, other );
+                drce->SetViolatingRule( constraint.GetParentRule() );
 
-            reportViolation( drce, (wxPoint) pos );
+                reportViolation( drce, (wxPoint) pos );
+            }
         }
     }
 
@@ -714,7 +713,7 @@ void DRC_TEST_PROVIDER_MECHANICAL_CLEARANCE::testItemAgainstZones( BOARD_ITEM* a
                 clearance = constraint.GetValue().Min();
             }
 
-            if( clearance > 0 )
+            if( constraint.GetSeverity() != RPT_SEVERITY_IGNORE && clearance > 0 )
             {
                 std::shared_ptr<SHAPE> itemShape = aItem->GetEffectiveShape( aLayer );
 
@@ -793,9 +792,10 @@ void DRC_TEST_PROVIDER_MECHANICAL_CLEARANCE::testItemAgainstZones( BOARD_ITEM* a
                                                          aItem, zone, aLayer );
                     clearance = constraint.GetValue().Min();
 
-                    if( clearance > 0 && zoneTree->QueryColliding( itemBBox, holeShape.get(),
-                                                                   aLayer, clearance, &actual,
-                                                                   &pos ) )
+                    if( constraint.GetSeverity() != RPT_SEVERITY_IGNORE
+                            && clearance > 0
+                            && zoneTree->QueryColliding( itemBBox, holeShape.get(), aLayer,
+                                                         clearance, &actual, &pos ) )
                     {
                         std::shared_ptr<DRC_ITEM> drce = DRC_ITEM::Create( DRCE_HOLE_CLEARANCE );
 
@@ -814,14 +814,6 @@ void DRC_TEST_PROVIDER_MECHANICAL_CLEARANCE::testItemAgainstZones( BOARD_ITEM* a
             }
         }
     }
-}
-
-
-
-
-std::set<DRC_CONSTRAINT_T> DRC_TEST_PROVIDER_MECHANICAL_CLEARANCE::GetConstraintTypes() const
-{
-    return { MECHANICAL_CLEARANCE_CONSTRAINT, MECHANICAL_HOLE_CLEARANCE_CONSTRAINT };
 }
 
 

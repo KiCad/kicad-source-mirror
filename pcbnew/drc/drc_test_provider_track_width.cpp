@@ -56,8 +56,6 @@ public:
     {
         return "Tests track widths";
     }
-
-    virtual std::set<DRC_CONSTRAINT_T> GetConstraintTypes() const override;
 };
 
 
@@ -110,16 +108,19 @@ bool DRC_TEST_PROVIDER_TRACK_WIDTH::Run()
                 bool fail_max = false;
                 int  constraintWidth;
 
-                if( constraint.Value().HasMin() && actual < constraint.Value().Min() )
+                if( constraint.GetSeverity() != RPT_SEVERITY_IGNORE )
                 {
-                    fail_min        = true;
-                    constraintWidth = constraint.Value().Min();
-                }
+                    if( constraint.Value().HasMin() && actual < constraint.Value().Min() )
+                    {
+                        fail_min        = true;
+                        constraintWidth = constraint.Value().Min();
+                    }
 
-                if( constraint.Value().HasMax() && actual > constraint.Value().Max() )
-                {
-                    fail_max        = true;
-                    constraintWidth = constraint.Value().Max();
+                    if( constraint.Value().HasMax() && actual > constraint.Value().Max() )
+                    {
+                        fail_max        = true;
+                        constraintWidth = constraint.Value().Max();
+                    }
                 }
 
                 if( fail_min || fail_max )
@@ -165,12 +166,6 @@ bool DRC_TEST_PROVIDER_TRACK_WIDTH::Run()
     reportRuleStatistics();
 
     return true;
-}
-
-
-std::set<DRC_CONSTRAINT_T> DRC_TEST_PROVIDER_TRACK_WIDTH::GetConstraintTypes() const
-{
-    return { TRACK_WIDTH_CONSTRAINT };
 }
 
 
