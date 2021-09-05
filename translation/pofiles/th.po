@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-01 11:31-0700\n"
-"PO-Revision-Date: 2021-09-01 16:34+0000\n"
+"PO-Revision-Date: 2021-09-05 21:22+0000\n"
 "Last-Translator: boonchai k. <kicadthai@gmail.com>\n"
 "Language-Team: Thai <https://hosted.weblate.org/projects/kicad/master-source/"
 "th/>\n"
@@ -23923,298 +23923,301 @@ msgstr "กฎการออกแบบ"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:58
 msgid "Predefined track and via dimensions"
-msgstr ""
+msgstr "ขนาดแทร็กและเวียที่กำหนดไว้ล่วงหน้า"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:61
 msgid "Solder mask/paste defaults"
-msgstr ""
+msgstr "ค่าตั้งต้นของโซลเดอร์ มาสก์/เพสต์"
 
 #: pcbnew/dialogs/dialog_imported_layers.cpp:237
 #: pcbnew/dialogs/dialog_imported_layers.cpp:245
 msgid "Imported Layer"
-msgstr ""
+msgstr "นำเข้าเลเยอร์"
 
 #: pcbnew/dialogs/dialog_imported_layers.cpp:253
 msgid "KiCad Layer"
-msgstr ""
+msgstr "เลเยอร์ของคีแคด"
 
 #: pcbnew/dialogs/dialog_imported_layers.cpp:328
 msgid ""
 "All required layers (marked with '*') must be matched. Please click on 'Auto-"
 "Match Layers' to automatically match the remaining layers"
 msgstr ""
+"เลเยอร์ที่จำเป็นต้องตรงกัน (ที่มีเครื่องหมาย '*') โปรดคลิกที่ "
+"'จับคู่เลเยอร์อัตโนมัติ' เพื่อจับคู่เลเยอร์ที่เหลือโดยอัตโนมัติ"
 
 #: pcbnew/dialogs/dialog_imported_layers.cpp:331
 #: pcbnew/dialogs/dialog_imported_layers_base.cpp:22
 msgid "Unmatched Layers"
-msgstr ""
+msgstr "เลเยอร์ที่ไม่ตรงกัน"
 
 #: pcbnew/dialogs/dialog_imported_layers_base.cpp:32
 msgid "Imported Layers"
-msgstr ""
+msgstr "เลเยอร์ที่นำเข้า"
 
 #: pcbnew/dialogs/dialog_imported_layers_base.cpp:36
 msgid "KiCad Layers"
-msgstr ""
+msgstr "เลเยอร์ของคีแคด"
 
 #: pcbnew/dialogs/dialog_imported_layers_base.cpp:59
 msgid ">"
-msgstr ""
+msgstr ">"
 
 #: pcbnew/dialogs/dialog_imported_layers_base.cpp:61
 msgid "Add selected layers to matched layers list."
-msgstr ""
+msgstr "เพิ่มเลเยอร์ที่เลือก เข้าในรายการเลเยอร์ตรงกัน"
 
 #: pcbnew/dialogs/dialog_imported_layers_base.cpp:65
 msgid "<"
-msgstr ""
+msgstr "<"
 
 #: pcbnew/dialogs/dialog_imported_layers_base.cpp:67
 msgid "Remove selected layers from matched layers list."
-msgstr ""
+msgstr "ลบเลเยอร์ที่เลือก ออกจากรายการเลเยอร์ตรงกัน"
 
 #: pcbnew/dialogs/dialog_imported_layers_base.cpp:71
 msgid "<<"
-msgstr ""
+msgstr "<<"
 
 #: pcbnew/dialogs/dialog_imported_layers_base.cpp:73
 msgid "Remove all matched layers."
-msgstr ""
+msgstr "ลบเลเยอร์ที่ตรงกันทั้งหมด"
 
 #: pcbnew/dialogs/dialog_imported_layers_base.cpp:81
 msgid "Matched Layers"
-msgstr ""
+msgstr "เลเยอร์ที่ตรงกัน"
 
 #: pcbnew/dialogs/dialog_imported_layers_base.cpp:97
 msgid "Auto-Match Layers"
-msgstr ""
+msgstr "จับคู่เลเยอร์อัตโนมัติ"
 
 #: pcbnew/dialogs/dialog_imported_layers_base.cpp:98
 msgid "Automatically match any unmatched layers to their KiCad equivalent."
-msgstr ""
+msgstr "จับคู่เลเยอร์ที่ไม่ตรงกัน กับเลเยอร์ที่เทียบเท่าในคีแคดอัตโนมัติ"
 
 #: pcbnew/dialogs/dialog_imported_layers_base.h:65
 msgid "Edit Mapping of Imported Layers"
-msgstr ""
+msgstr "แก้ไขการจับคู่ของเลเยอร์ที่นำเข้า"
 
 #: pcbnew/dialogs/dialog_layer_selection_base.cpp:120
 msgid "Top/Front layer:"
-msgstr ""
+msgstr "เลเยอร์ด้าน บน/หน้า:"
 
 #: pcbnew/dialogs/dialog_layer_selection_base.cpp:159
 msgid "Bottom/Back layer:"
-msgstr ""
+msgstr "เลเยอร์ด้าน ล่าง/หลัง:"
 
 #: pcbnew/dialogs/dialog_layer_selection_base.h:50
 msgid "Select Layer"
-msgstr ""
+msgstr "เลือกเลเยอร์"
 
 #: pcbnew/dialogs/dialog_layer_selection_base.h:79
 msgid "Select Copper Layer Pair"
-msgstr ""
+msgstr "เลือกคู่เลเยอร์ทองแดง"
 
 #: pcbnew/dialogs/dialog_move_exact.cpp:100
 msgid "Rotate around item anchor"
-msgstr ""
+msgstr "หมุนรอบจุดยึด"
 
 #: pcbnew/dialogs/dialog_move_exact.cpp:103
 msgid "Rotate around selection center"
-msgstr ""
+msgstr "หมุนรอบ จุดศูนย์กลาง"
 
 #: pcbnew/dialogs/dialog_move_exact.cpp:106
 #: pcbnew/dialogs/dialog_move_exact_base.cpp:69
 msgid "Rotate around local coordinates origin"
-msgstr ""
+msgstr "หมุนรอบพิกัดจุดกำเนิด"
 
 #: pcbnew/dialogs/dialog_move_exact.cpp:109
 #: pcbnew/dialogs/dialog_move_exact_base.cpp:69
 msgid "Rotate around drill/place origin"
-msgstr ""
+msgstr "หมุนรอบ จุดกำเนิดดอกสว่าน/การวาง"
 
 #: pcbnew/dialogs/dialog_move_exact.cpp:203
 #: pcbnew/dialogs/dialog_position_relative.cpp:162
 msgid "Distance:"
-msgstr ""
+msgstr "ระยะทาง:"
 
 #: pcbnew/dialogs/dialog_move_exact.cpp:209
 #: pcbnew/dialogs/dialog_move_exact_base.cpp:24
 msgid "Move X:"
-msgstr ""
+msgstr "ย้าย X:"
 
 #: pcbnew/dialogs/dialog_move_exact.cpp:210
 #: pcbnew/dialogs/dialog_move_exact_base.cpp:38
 msgid "Move Y:"
-msgstr ""
+msgstr "ย้าย Y:"
 
 #: pcbnew/dialogs/dialog_move_exact.cpp:287
 msgid ""
 "Invalid movement values.  Movement would place selection outside of the "
 "maximum board area."
 msgstr ""
+"ค่าการเคลื่อนไหวไม่ถูกต้อง การเคลื่อนไหวจะวางการเลือกนอกพื้นที่กระดานสูงสุด"
 
 #: pcbnew/dialogs/dialog_move_exact_base.cpp:69
 msgid "Rotate around center of selection"
-msgstr ""
+msgstr "หมุนรอบศูนย์กลางของการเลือก"
 
 #: pcbnew/dialogs/dialog_move_exact_base.cpp:84
 #: pcbnew/dialogs/dialog_position_relative_base.cpp:116
 msgid "Use polar coordinates"
-msgstr ""
+msgstr "ใช้พิกัดเชิงขั้ว"
 
 #: pcbnew/dialogs/dialog_move_exact_base.h:71
 msgid "Move Item"
-msgstr ""
+msgstr "ย้ายรายการ"
 
 #: pcbnew/dialogs/dialog_net_inspector.cpp:77 pcbnew/netinfo_item.cpp:78
 msgid "Net Name"
-msgstr ""
+msgstr "ชื่อเน็ท"
 
 #: pcbnew/dialogs/dialog_net_inspector.cpp:78
 msgid "Pad Count"
-msgstr ""
+msgstr "จำนวนแพ็ด"
 
 #: pcbnew/dialogs/dialog_net_inspector.cpp:79
 msgid "Via Count"
-msgstr ""
+msgstr "จำนวนเวีย"
 
 #: pcbnew/dialogs/dialog_net_inspector.cpp:80
 msgid "Via Length"
-msgstr ""
+msgstr "ความยาวเวีย"
 
 #: pcbnew/dialogs/dialog_net_inspector.cpp:81
 msgid "Track Length"
-msgstr ""
+msgstr "ความยาวแทร็ก"
 
 #: pcbnew/dialogs/dialog_net_inspector.cpp:82
 msgid "Die Length"
-msgstr ""
+msgstr "ความยาวดาย"
 
 #: pcbnew/dialogs/dialog_net_inspector.cpp:83
 msgid "Total Length"
-msgstr ""
+msgstr "ความยาวทั้งหมด"
 
 #: pcbnew/dialogs/dialog_net_inspector.cpp:83 pcbnew/netinfo_item.cpp:125
 msgid "Net Length"
-msgstr ""
+msgstr "ความยาวเน็ท"
 
 #: pcbnew/dialogs/dialog_net_inspector.cpp:1785
 #: pcbnew/dialogs/dialog_net_inspector.cpp:1842
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:53
 msgid "Net name:"
-msgstr ""
+msgstr "ชื่อเน็ท:"
 
 #: pcbnew/dialogs/dialog_net_inspector.cpp:1785
 msgid "New Net"
-msgstr ""
+msgstr "เน็ทใหม่"
 
 #: pcbnew/dialogs/dialog_net_inspector.cpp:1797
 #: pcbnew/dialogs/dialog_net_inspector.cpp:1865
 #, c-format
 msgid "Net name '%s' is already in use."
-msgstr ""
+msgstr "ชื่อเน็ต '%s' ถูกใช้แล้ว"
 
 #: pcbnew/dialogs/dialog_net_inspector.cpp:1842
 msgid "Rename Net"
-msgstr ""
+msgstr "เปลี่ยนชื่อเน็ท"
 
 #: pcbnew/dialogs/dialog_net_inspector.cpp:1855
 msgid "Net name cannot be empty."
-msgstr ""
+msgstr "ชื่อเน็ต ปล่อยว่างไม่ได้"
 
 #: pcbnew/dialogs/dialog_net_inspector.cpp:1921
 #, c-format
 msgid "Net '%s' is in use.  Delete anyway?"
-msgstr ""
+msgstr "เน็ต '%s' ใช้งานอยู่ ลบเลยไหม?"
 
 #: pcbnew/dialogs/dialog_net_inspector.cpp:1951
 #, c-format
 msgid "Delete all nets in group '%s'?"
-msgstr ""
+msgstr "ลบเน็ททั้งหมดในกลุ่ม '%s'?"
 
 #: pcbnew/dialogs/dialog_net_inspector.cpp:1974
 #: pcbnew/dialogs/dialog_net_inspector.cpp:1975
 msgid "Report file"
-msgstr ""
+msgstr "ไฟล์รายงาน"
 
 #: pcbnew/dialogs/dialog_net_inspector_base.cpp:44
 msgid "Show zero pad nets"
-msgstr ""
+msgstr "แสดงเน็ทที่มีจำนวนแพ็ดเป็นศูนย์"
 
 #: pcbnew/dialogs/dialog_net_inspector_base.cpp:48
 msgid "Group by:"
-msgstr ""
+msgstr "จัดกลุ่มโดย:"
 
 #: pcbnew/dialogs/dialog_net_inspector_base.cpp:54
 #: pcbnew/dialogs/dialog_net_inspector_base.cpp:55
 msgid "Wildcard"
-msgstr ""
+msgstr "ไวลด์การ์ด"
 
 #: pcbnew/dialogs/dialog_net_inspector_base.cpp:56
 msgid "RegEx"
-msgstr ""
+msgstr "RegEx"
 
 #: pcbnew/dialogs/dialog_net_inspector_base.cpp:57
 msgid "Wildcard Substr"
-msgstr ""
+msgstr "ข้อความย่อยไวล์คาร์ด"
 
 #: pcbnew/dialogs/dialog_net_inspector_base.cpp:58
 msgid "RegEx Substr"
-msgstr ""
+msgstr "ข้อความย่อย RegEx"
 
 #: pcbnew/dialogs/dialog_net_inspector_base.cpp:97
 msgid "Create Report..."
-msgstr ""
+msgstr "สร้างรายงาน..."
 
 #: pcbnew/dialogs/dialog_net_inspector_base.h:72
 #: pcbnew/tools/pcb_actions.cpp:768
 msgid "Net Inspector"
-msgstr ""
+msgstr "ตัวตรวจสอบเน็ท"
 
 #: pcbnew/dialogs/dialog_netlist.cpp:134
 msgid "Select Netlist"
-msgstr ""
+msgstr "เลือกรายการเน็ท"
 
 #: pcbnew/dialogs/dialog_netlist.cpp:150
 msgid "Please, choose a valid netlist file."
-msgstr ""
+msgstr "โปรด เลือกไฟล์รายการเน็ทที่ถูกต้อง"
 
 #: pcbnew/dialogs/dialog_netlist.cpp:156 pcbnew/dialogs/dialog_netlist.cpp:191
 msgid "The netlist file does not exist."
-msgstr ""
+msgstr "ไม่มีไฟล์รายการเน็ท"
 
 #: pcbnew/dialogs/dialog_netlist.cpp:160
 #: pcbnew/dialogs/dialog_update_pcb.cpp:141
 msgid "Changes Applied to PCB"
-msgstr ""
+msgstr "นำการเปลี่ยนแปลงไปยังพีซีบี"
 
 #: pcbnew/dialogs/dialog_netlist.cpp:226
 #, c-format
 msgid "Reading netlist file '%s'.\n"
-msgstr ""
+msgstr "กำลังอ่านไฟล์รายการเน็ท '%s'\n"
 
 #: pcbnew/dialogs/dialog_netlist.cpp:230
 msgid "Using reference designators to match symbols and footprints.\n"
-msgstr ""
+msgstr "ใช้ตัวอักษรอ้างอิงเพื่อ จับคู่สัญลักษณ์และฟุ้ทพรินท์\n"
 
 #: pcbnew/dialogs/dialog_netlist.cpp:232
 msgid "Using tstamps (unique IDs) to match symbols and footprints.\n"
-msgstr ""
+msgstr "การใช้ tstamps (ID หนึ่งเดียว) เพื่อจับคู่สัญลักษณ์และฟุ้ทพรินท์\n"
 
 #: pcbnew/dialogs/dialog_netlist_base.cpp:25
 msgid "Netlist file:"
-msgstr ""
+msgstr "ไฟล์รายการเน็ท:"
 
 #: pcbnew/dialogs/dialog_netlist_base.cpp:43
 msgid "Link footprints using component tstamps (unique ids)"
-msgstr ""
+msgstr "เชื่อมโยงฟุ้ทพรินท์โดยใช้ tstamp ของสัญญลักษณ์ (ID หนึ่งเดียว)"
 
 #: pcbnew/dialogs/dialog_netlist_base.cpp:43
 msgid "Link footprints using reference designators"
-msgstr ""
+msgstr "เชื่อมโยงฟุ้ทพรินท์ โดยใช้อักษรอ้างอิง"
 
 #: pcbnew/dialogs/dialog_netlist_base.cpp:45
 msgid "Link Method"
-msgstr ""
+msgstr "วิธีการเชื่อมโยง"
 
 #: pcbnew/dialogs/dialog_netlist_base.cpp:47
 msgid ""
@@ -24222,27 +24225,29 @@ msgid ""
 "assigned symbols, or to re-assign footprints to symbols which match their "
 "current references."
 msgstr ""
+"เลือกที่จะปรับปรุงอ้างอิงฟุ้ทพรินท์ให้ตรงกับสัญญลักษณ์ที่กำหนดมา "
+"หรือไปกำหนดค่าฟุ้ทพรินท์ที่สัญญลักษณ์ใหม่ เพื่อให้ตรงกับค่าอ้างอิง"
 
 #: pcbnew/dialogs/dialog_netlist_base.cpp:54
 msgid "Replace footprints with those specified in netlist"
-msgstr ""
+msgstr "แทนที่ฟุ้ทพรินท์ด้วยค่าที่ระบุมาในรายการเน็ท"
 
 #: pcbnew/dialogs/dialog_netlist_base.cpp:57
 msgid "Delete footprints with no components in netlist"
-msgstr ""
+msgstr "ลบฟุ้ทพรินท์ออก หากไม่มีปรากฏในรายการเน็ท"
 
 #: pcbnew/dialogs/dialog_netlist_base.cpp:60
 msgid "Delete tracks shorting multiple nets"
-msgstr ""
+msgstr "ลบแทร็กที่ลัดวงจรหลายๆเน็ท"
 
 #: pcbnew/dialogs/dialog_netlist_base.cpp:63
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:46
 msgid "Delete nets containing only a single pad"
-msgstr ""
+msgstr "ลบเน็ทที่มีแพ็ดเพียงหนึ่งเดียว"
 
 #: pcbnew/dialogs/dialog_netlist_base.cpp:66
 msgid "Generate warnings for pads with no net"
-msgstr ""
+msgstr "สร้างคำเตือนหากพบแพ็ดที่ไม่มีเน็ท"
 
 #: pcbnew/dialogs/dialog_netlist_base.cpp:67
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:53
