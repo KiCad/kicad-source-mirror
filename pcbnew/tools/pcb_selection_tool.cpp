@@ -55,6 +55,8 @@ using namespace std::placeholders;
 #include <connectivity/connectivity_data.h>
 #include <footprint_viewer_frame.h>
 #include <id.h>
+#include <wx/event.h>
+#include <wx/timer.h>
 #include <wx/log.h>
 #include "tool_event_utils.h"
 #include "pcb_selection_tool.h"
@@ -102,12 +104,6 @@ public:
 PCB_SELECTION_TOOL::PCB_SELECTION_TOOL() :
         PCB_TOOL_BASE( "pcbnew.InteractiveSelection" ),
         m_frame( nullptr ),
-        m_additive( false ),
-        m_subtractive( false ),
-        m_exclusive_or( false ),
-        m_multiple( false ),
-        m_skip_heuristics( false ),
-        m_highlight_modifier( false ),
         m_nonModifiedCursor( KICURSOR::ARROW ),
         m_enteredGroup( nullptr ),
         m_priv( std::make_unique<PRIV>() )
@@ -130,6 +126,8 @@ PCB_SELECTION_TOOL::~PCB_SELECTION_TOOL()
 {
     getView()->Remove( &m_selection );
     getView()->Remove( &m_enteredGroupOverlay );
+
+    Disconnect( wxEVT_TIMER, wxTimerEventHandler( PCB_SELECTION_TOOL::onDisambiguationExpire ), nullptr, this );
 }
 
 
@@ -176,6 +174,9 @@ bool PCB_SELECTION_TOOL::Init()
     if( frame )
         frame->AddStandardSubMenus( m_menu );
 
+    m_disambiguateTimer.SetOwner( this );
+    Connect( wxEVT_TIMER, wxTimerEventHandler( PCB_SELECTION_TOOL::onDisambiguationExpire ), nullptr, this );
+
     return true;
 }
 
@@ -212,55 +213,9 @@ void PCB_SELECTION_TOOL::Reset( RESET_REASON aReason )
 }
 
 
-void PCB_SELECTION_TOOL::setModifiersState( bool aShiftState, bool aCtrlState, bool aAltState )
+void PCB_SELECTION_TOOL::onDisambiguationExpire( wxTimerEvent& aEvent )
 {
-    // Set the configuration of m_additive, m_subtractive, m_exclusive_or
-    // from the state of modifier keys SHIFT, CTRL, ALT and the OS
-
-    // on left click, a selection is made, depending on modifiers ALT, SHIFT, CTRL:
-    // Due to the fact ALT key modifier cannot be used freely on Winows and Linux,
-    // actions are different on OSX and others OS
-    // Especially, ALT key cannot be used to force showing the full selection choice
-    // context menu (the menu is immediately closed on Windows )
-    //
-    // No modifier = select items and deselect previous selection
-    // ALT (on OSX) = skip heuristic and show full selection choice
-    // ALT (on others) = exclusive OR of selected items (inverse selection)
-    //
-    // CTRL (on OSX) = exclusive OR of selected items (inverse selection)
-    // CTRL (on others) = skip heuristic and show full selection choice
-    //
-    // SHIFT = add selected items to the current selection
-    //
-    // CTRL+SHIFT (on OSX) = remove selected items to the current selection
-    // CTRL+SHIFT (on others) = highlight net
-    //
-    // CTRL+ALT (on OSX) = highlight net
-    // CTRL+ALT (on others) = do nothing (same as no modifier)
-    //
-    // SHIFT+ALT (on OSX) =  do nothing (same as no modifier)
-    // SHIFT+ALT (on others) = remove selected items to the current selection
-
-#ifdef __WXOSX_MAC__
-    m_subtractive        = aCtrlState && aShiftState && !aAltState;
-    m_additive           = aShiftState && !aCtrlState && !aAltState;
-    m_exclusive_or       = aCtrlState && !aShiftState && !aAltState;
-    m_skip_heuristics    = aAltState && !aShiftState && !aCtrlState;
-    m_highlight_modifier = aCtrlState && aAltState && !aShiftState;
-
-#else
-    m_subtractive  = aShiftState && !aCtrlState && aAltState;
-    m_additive     = aShiftState && !aCtrlState && !aAltState;
-    m_exclusive_or = !aShiftState && !aCtrlState && aAltState;
-
-    // Is the user requesting that the selection list include all possible
-    // items without removing less likely selection candidates
-    // Cannot use the Alt key on windows or the disambiguation context menu is immediately
-    // dismissed rendering it useless.
-    m_skip_heuristics = aCtrlState && !aShiftState && !aAltState;
-
-    m_highlight_modifier = aCtrlState && aShiftState && !aAltState;
-#endif
+    m_toolMgr->ProcessEvent( EVENTS::DisambiguatePoint );
 }
 
 
@@ -307,19 +262,34 @@ int PCB_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
         {
             evt->SetPassEvent();
         }
+        else if( evt->IsMouseDown( BUT_LEFT ) )
+        {
+            // Avoid triggering when running under other tools
+            if( m_toolMgr->GetCurrentTool() == this )
+                m_disambiguateTimer.StartOnce( 500 );
+        }
         else if( evt->IsClick( BUT_LEFT ) )
         {
-            // Single click? Select single object
-            if( m_highlight_modifier && brd_editor )
-                m_toolMgr->RunAction( PCB_ACTIONS::highlightNet, true );
-            else
+            // If there is no disambiguation, this routine is still running and will
+            // register a `click` event when released
+            if( m_disambiguateTimer.IsRunning() )
             {
-                m_frame->FocusOnItem( nullptr );
-                selectPoint( evt->Position() );
+                m_disambiguateTimer.Stop();
+
+                // Single click? Select single object
+                if( m_highlight_modifier && brd_editor )
+                    m_toolMgr->RunAction( PCB_ACTIONS::highlightNet, true );
+                else
+                {
+                    m_frame->FocusOnItem( nullptr );
+                    selectPoint( evt->Position() );
+                }
             }
         }
         else if( evt->IsClick( BUT_RIGHT ) )
         {
+            m_disambiguateTimer.Stop();
+
             // Right click? if there is any object - show the context menu
             bool selectionCancelled = false;
 
@@ -359,6 +329,8 @@ int PCB_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
         }
         else if( evt->IsDrag( BUT_LEFT ) )
         {
+            m_disambiguateTimer.Stop();
+
             // Is another tool already moving a new object?  Don't allow a drag start
             if( !m_selection.Empty() && m_selection[0]->HasFlag( IS_NEW | IS_MOVING ) )
             {
@@ -439,6 +411,7 @@ int PCB_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
         }
         else if( evt->IsCancel() )
         {
+            m_disambiguateTimer.Stop();
             m_frame->FocusOnItem( nullptr );
 
             if( m_enteredGroup )
@@ -472,6 +445,7 @@ int PCB_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
 
     // Shutting down; clear the selection
     m_selection.Clear();
+    m_disambiguateTimer.Stop();
 
     return 0;
 }
@@ -822,7 +796,7 @@ bool PCB_SELECTION_TOOL::selectMultiple()
 
         if( evt->IsDrag( BUT_LEFT ) )
         {
-            if( !m_additive && !m_subtractive && !m_exclusive_or )
+            if( !m_drag_additive && !m_drag_subtractive )
             {
                 if( m_selection.GetSize() > 0 )
                 {
@@ -834,9 +808,9 @@ bool PCB_SELECTION_TOOL::selectMultiple()
             // Start drawing a selection box
             area.SetOrigin( evt->DragOrigin() );
             area.SetEnd( evt->Position() );
-            area.SetAdditive( m_additive );
-            area.SetSubtractive( m_subtractive );
-            area.SetExclusiveOr( m_exclusive_or );
+            area.SetAdditive( m_drag_additive );
+            area.SetSubtractive( m_drag_subtractive );
+            area.SetExclusiveOr( false );
 
             view->SetVisible( &area, true );
             view->Update( &area );
@@ -917,6 +891,19 @@ bool PCB_SELECTION_TOOL::selectMultiple()
 
     return cancelled;
 }
+
+
+int PCB_SELECTION_TOOL::disambiguateCursor( const TOOL_EVENT& aEvent )
+{
+    VECTOR2I pos = m_toolMgr->GetMousePosition();
+
+    m_skip_heuristics = true;
+    selectPoint( pos );
+    m_skip_heuristics = false;
+
+    return 0;
+}
+
 
 
 int PCB_SELECTION_TOOL::CursorSelection( const TOOL_EVENT& aEvent )
@@ -2587,7 +2574,7 @@ void PCB_SELECTION_TOOL::FilterCollectorForHierarchy( GENERAL_COLLECTOR& aCollec
         }
 
         // Footprints are a bit easier as they can't be nested.
-        if( parent && parent->GetFlags() & TEMP_SELECTED )
+        if( parent && ( parent->GetFlags() & TEMP_SELECTED ) )
         {
             // Remove children of selected items
             aCollector.Remove( item );
@@ -2654,4 +2641,6 @@ void PCB_SELECTION_TOOL::setTransitions()
     Go( &PCB_SELECTION_TOOL::updateSelection,     EVENTS::SelectedItemsMoved );
 
     Go( &PCB_SELECTION_TOOL::SelectAll,           ACTIONS::selectAll.MakeEvent() );
+
+    Go( &PCB_SELECTION_TOOL::disambiguateCursor,  EVENTS::DisambiguatePoint );
 }

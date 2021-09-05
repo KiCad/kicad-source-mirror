@@ -209,6 +209,9 @@ public:
     ///< Used to inform tools that the selection should temporarily be non-editable
     const static TOOL_EVENT InhibitSelectionEditing;
     const static TOOL_EVENT UninhibitSelectionEditing;
+
+    ///< Used to inform tool that it should display the disambiguation menu
+    const static TOOL_EVENT DisambiguatePoint;
 };
 
 #endif // __ACTIONS_H

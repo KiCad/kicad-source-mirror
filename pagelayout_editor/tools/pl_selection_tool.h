@@ -25,6 +25,7 @@
 #ifndef PL_SELECTION_TOOL_H
 #define PL_SELECTION_TOOL_H
 
+#include <tool/selection_tool.h>
 #include <tool/tool_interactive.h>
 #include <tool/tool_menu.h>
 #include "tools/pl_selection.h"
@@ -39,7 +40,7 @@ namespace KIGFX
 }
 
 
-class PL_SELECTION_TOOL : public TOOL_INTERACTIVE
+class PL_SELECTION_TOOL : public SELECTION_TOOL, public TOOL_INTERACTIVE
 {
 public:
     PL_SELECTION_TOOL();
@@ -134,6 +135,18 @@ private:
     bool doSelectionMenu( COLLECTOR* aItems );
 
     /**
+     * Start the process to show our disambiguation menu once the user has kept
+     * the mouse down for the minimum time
+     * @param aEvent
+     */
+    void onDisambiguationExpire( wxTimerEvent& aEvent );
+
+    /**
+     * Handle disambiguation actions including displaying the menu.
+     */
+    int disambiguateCursor( const TOOL_EVENT& aEvent );
+
+    /**
      * Takes necessary action mark an item as selected.
      *
      * @param aItem is an item to be selected.
@@ -176,12 +189,6 @@ private:
 private:
     PL_EDITOR_FRAME* m_frame;   // Pointer to the parent frame
     PL_SELECTION m_selection;   // Current state of selection
-
-    bool m_additive;            // Items should be added to selection (instead of replacing)
-    bool m_subtractive;         // Items should be removed from selection
-    bool m_exclusive_or;        // Items' selection state should be toggled
-    bool m_multiple;            // Multiple selection mode is active
-    bool m_skip_heuristics;     // Heuristics are not allowed when choosing item under cursor
 };
 
 #endif //PL_SELECTION_TOOL_H

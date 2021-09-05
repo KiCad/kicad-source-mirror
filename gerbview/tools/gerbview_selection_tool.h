@@ -26,6 +26,7 @@
 #include <tool/tool_interactive.h>
 #include <tool/action_menu.h>
 #include <tool/selection_conditions.h>
+#include <tool/selection_tool.h>
 #include <tool/tool_menu.h>
 #include <tools/gerbview_selection.h>
 #include <gerbview_frame.h>
@@ -42,7 +43,7 @@ namespace KIGFX
 /**
  * Selection tool for GerbView, based on the one in Pcbnew
  */
-class GERBVIEW_SELECTION_TOOL : public TOOL_INTERACTIVE
+class GERBVIEW_SELECTION_TOOL : public SELECTION_TOOL, public TOOL_INTERACTIVE
 {
 public:
     GERBVIEW_SELECTION_TOOL();
@@ -150,9 +151,6 @@ private:
     GERBVIEW_FRAME* m_frame;        // Pointer to the parent frame.
     GERBVIEW_SELECTION m_selection; // Current state of selection.
 
-    bool m_additive;                // Items should be added to selection (instead of replacing)
-    bool m_subtractive;             // Items should be removed from selection
-    bool m_exclusive_or;            // Items' selection state should be toggled
     bool m_preliminary;             // Determines if the selection is preliminary or final.
 };
 

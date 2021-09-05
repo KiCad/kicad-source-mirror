@@ -33,6 +33,7 @@
 #include <math/vector2d.h>
 #include <project/board_project_settings.h>
 #include <tool/action_menu.h>
+#include <tool/selection_tool.h>
 #include <tool/tool_menu.h>
 #include <tools/pcb_selection_conditions.h>
 #include <tools/pcb_tool_base.h>
@@ -60,7 +61,7 @@ typedef void (*CLIENT_SELECTION_FILTER)( const VECTOR2I&, GENERAL_COLLECTOR&, PC
  * - takes into account high-contrast & layer visibility settings
  * - invokes InteractiveEdit tool when user starts to drag selected items
  */
-class PCB_SELECTION_TOOL : public PCB_TOOL_BASE
+class PCB_SELECTION_TOOL : public SELECTION_TOOL, public PCB_TOOL_BASE
 {
 public:
     PCB_SELECTION_TOOL();
@@ -206,12 +207,6 @@ public:
     void FilterCollectedItems( GENERAL_COLLECTOR& aCollector );
 
 private:
-    /**
-     * Set the configuration of m_additive, m_subtractive, m_exclusive_or,
-     * m_skip_heuristics and m_highlight_modifier
-     * from the state of modifier keys SHIFT, CTRL, ALT and depending on the OS
-     */
-    void setModifiersState( bool aShiftState, bool aCtrlState, bool aAltState );
 
     /**
      * Select an item pointed by the parameter \a aWhere.
@@ -258,6 +253,18 @@ private:
      * @return true if an item was picked
      */
     bool doSelectionMenu( GENERAL_COLLECTOR* aItems );
+
+    /**
+     * Start the process to show our disambiguation menu once the user has kept
+     * the mouse down for the minimum time
+     * @param aEvent
+     */
+    void onDisambiguationExpire( wxTimerEvent& aEvent );
+
+    /**
+     * Handle disambiguation actions including displaying the menu.
+     */
+    int disambiguateCursor( const TOOL_EVENT& aEvent );
 
     /**
      * Expand the current track selection to the next boundary (junctions, pads, or all)
@@ -373,14 +380,6 @@ private:
     PCB_SELECTION            m_selection;            // Current state of selection
 
     SELECTION_FILTER_OPTIONS m_filter;
-
-    bool                     m_additive;             // Add to selection (instead of replacing)
-    bool                     m_subtractive;          // Remove from selection
-    bool                     m_exclusive_or;         // Items' selection state should be toggled
-    bool                     m_multiple;             // Multiple selection mode is active
-    bool                     m_skip_heuristics;      // Heuristics are not allowed when choosing
-                                                     // item under cursor
-    bool                     m_highlight_modifier;   // select highlight net on left click
 
     KICURSOR                 m_nonModifiedCursor;    // Cursor in the absence of shift/ctrl/alt
 

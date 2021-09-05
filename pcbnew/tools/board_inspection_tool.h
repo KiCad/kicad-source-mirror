@@ -106,8 +106,6 @@ public:
     }
 
 private:
-    ///< Event handler to recalculate dynamic ratsnest.
-    void ratsnestTimer( wxTimerEvent& aEvent );
 
     ///< Recalculate dynamic ratsnest for the current selection.
     void calculateSelectionRatsnest( const VECTOR2I& aDelta );

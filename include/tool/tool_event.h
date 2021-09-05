@@ -287,6 +287,11 @@ public:
         return m_actions == TA_MOUSE_DRAG && ( m_mouseButtons & aButtonMask ) == m_mouseButtons;
     }
 
+    bool IsMouseDown( int aButtonMask = BUT_ANY ) const
+    {
+        return m_actions == TA_MOUSE_DOWN && ( m_mouseButtons & aButtonMask ) == m_mouseButtons;
+    }
+
     bool IsMouseUp( int aButtonMask = BUT_ANY ) const
     {
         return m_actions == TA_MOUSE_UP && ( m_mouseButtons & aButtonMask ) == m_mouseButtons;

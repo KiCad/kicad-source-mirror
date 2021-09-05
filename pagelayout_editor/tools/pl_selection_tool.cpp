@@ -50,12 +50,7 @@
 
 PL_SELECTION_TOOL::PL_SELECTION_TOOL() :
         TOOL_INTERACTIVE( "plEditor.InteractiveSelection" ),
-        m_frame( nullptr ),
-        m_additive( false ),
-        m_subtractive( false ),
-        m_exclusive_or( false ),
-        m_multiple( false ),
-        m_skip_heuristics( false )
+        m_frame( nullptr )
 {
 }
 
@@ -74,6 +69,9 @@ bool PL_SELECTION_TOOL::Init()
 
     menu.AddSeparator( 1000 );
     m_frame->AddStandardSubMenus( m_menu );
+
+    m_disambiguateTimer.SetOwner( this );
+    Connect( wxEVT_TIMER, wxTimerEventHandler( PL_SELECTION_TOOL::onDisambiguationExpire ), nullptr, this );
 
     return true;
 }
@@ -107,79 +105,36 @@ int PL_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
     while( TOOL_EVENT* evt = Wait() )
     {
         // on left click, a selection is made, depending on modifiers ALT, SHIFT, CTRL:
-        // Due to the fact ALT key modifier cannot be used freely on Winows and Linux,
-        // actions are different on OSX and others OS
-        // Especially, ALT key cannot be used to force showing the full selection choice
-        // context menu (the menu is immediately closed on Windows )
-        //
-        // No modifier = select items and deselect previous selection
-        // ALT (on OSX) = skip heuristic and show full selection choice
-        // ALT (on others) = exclusive OR of selected items (inverse selection)
-        //
-        // CTRL/CMD (on OSX) = exclusive OR of selected items (inverse selection)
-        // CTRL (on others) = skip heuristic and show full selection choice
-        //
-        // SHIFT = add selected items to the current selection
-        //
-        // CTRL/CMD+SHIFT (on OSX) = remove selected items to the current selection
-        // CTRL+SHIFT (on others) = unused (can be used for a new action)
-        //
-        // CTRL/CMT+ALT (on OSX) = unused (can be used for a new action)
-        // CTRL+ALT (on others) = do nothing (same as no modifier)
-        //
-        // SHIFT+ALT (on OSX) =  do nothing (same as no modifier)
-        // SHIFT+ALT (on others) = remove selected items to the current selection
-
-#ifdef __WXOSX_MAC__
-        m_subtractive = evt->Modifier( MD_CTRL ) &&
-                        evt->Modifier( MD_SHIFT ) &&
-                        !evt->Modifier( MD_ALT );
-
-        m_additive = evt->Modifier( MD_SHIFT ) &&
-                     !evt->Modifier( MD_CTRL ) &&
-                     !evt->Modifier( MD_ALT );
-
-        m_exclusive_or = evt->Modifier( MD_CTRL ) &&
-                         !evt->Modifier( MD_SHIFT ) &&
-                         !evt->Modifier( MD_ALT );
-
-        m_skip_heuristics = evt->Modifier( MD_ALT ) &&
-                            !evt->Modifier( MD_SHIFT ) &&
-                            !evt->Modifier( MD_CTRL );
-
-#else
-        m_subtractive = evt->Modifier( MD_SHIFT )
-                        && !evt->Modifier( MD_CTRL )
-                        && evt->Modifier( MD_ALT );
-
-        m_additive = evt->Modifier( MD_SHIFT )
-                     && !evt->Modifier( MD_CTRL )
-                     && !evt->Modifier( MD_ALT );
-
-        m_exclusive_or = !evt->Modifier( MD_SHIFT )
-                         && !evt->Modifier( MD_CTRL )
-                         && evt->Modifier( MD_ALT );
-
-        // Is the user requesting that the selection list include all possible
-        // items without removing less likely selection candidates
-        // Cannot use the Alt key on windows or the disambiguation context menu is immediately
-        // dismissed rendering it useless.
-        m_skip_heuristics = evt->Modifier( MD_CTRL )
-                            && !evt->Modifier( MD_SHIFT )
-                            && !evt->Modifier( MD_ALT );
-#endif
+        setModifiersState( evt->Modifier( MD_SHIFT ), evt->Modifier( MD_CTRL ),
+                           evt->Modifier( MD_ALT ) );
 
         bool modifier_enabled = m_subtractive || m_additive || m_exclusive_or;
 
-        // Single click? Select single object
-        if( evt->IsClick( BUT_LEFT ) )
+        if( evt->IsMouseDown( BUT_LEFT ) )
         {
+            // Avoid triggering when running under other tools
+            if( m_toolMgr->GetCurrentTool() == this )
+                m_disambiguateTimer.StartOnce( 500 );
+        }
+        // Single click? Select single object
+        else if( evt->IsClick( BUT_LEFT ) )
+        {
+            // If the timer has stopped, then we have already run the disambiguate routine
+            // and we don't want to register an extra click here
+            if( !m_disambiguateTimer.IsRunning() )
+            {
+                evt->SetPassEvent();
+                continue;
+            }
+
+            m_disambiguateTimer.Stop();
             SelectPoint( evt->Position() );
         }
 
         // right click? if there is any object - show the context menu
         else if( evt->IsClick( BUT_RIGHT ) )
         {
+            m_disambiguateTimer.Stop();
             bool selectionCancelled = false;
 
             if( m_selection.Empty() )
@@ -201,6 +156,8 @@ int PL_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
         // drag with LMB? Select multiple objects (or at least draw a selection box) or drag them
         else if( evt->IsDrag( BUT_LEFT ) )
         {
+            m_disambiguateTimer.Stop();
+
             if( modifier_enabled || m_selection.Empty() )
             {
                 selectMultiple();
@@ -229,6 +186,7 @@ int PL_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
 
         else if( evt->IsCancelInteractive() )
         {
+            m_disambiguateTimer.Stop();
             ClearSelection();
         }
 
@@ -269,6 +227,24 @@ int PL_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
 }
 
 
+int PL_SELECTION_TOOL::disambiguateCursor( const TOOL_EVENT& aEvent )
+{
+    VECTOR2I pos = m_toolMgr->GetMousePosition();
+
+    m_skip_heuristics = true;
+    SelectPoint( pos );
+    m_skip_heuristics = false;
+
+    return 0;
+}
+
+
+void PL_SELECTION_TOOL::onDisambiguationExpire( wxTimerEvent& aEvent )
+{
+    m_toolMgr->ProcessEvent( EVENTS::DisambiguatePoint );
+}
+
+
 PL_SELECTION& PL_SELECTION_TOOL::GetSelection()
 {
     return m_selection;
@@ -302,8 +278,7 @@ void PL_SELECTION_TOOL::SelectPoint( const VECTOR2I& aWhere, bool* aSelectionCan
     // If still more than one item we're going to have to ask the user.
     if( collector.GetCount() > 1 )
     {
-        // Must call selectionMenu via RunAction() to avoid event-loop contention
-        m_toolMgr->RunAction( PL_ACTIONS::selectionMenu, true, &collector );
+        doSelectionMenu( &collector );
 
         if( collector.m_MenuCancelled )
         {
@@ -314,11 +289,17 @@ void PL_SELECTION_TOOL::SelectPoint( const VECTOR2I& aWhere, bool* aSelectionCan
         }
     }
 
-    if( !m_additive && !m_subtractive && !m_exclusive_or )
-        ClearSelection();
-
     bool anyAdded      = false;
     bool anySubtracted = false;
+
+
+    if( !m_additive && !m_subtractive && !m_exclusive_or )
+    {
+        if( collector.GetCount() == 0 )
+            anySubtracted = true;
+
+        ClearSelection();
+    }
 
     if( collector.GetCount() > 0 )
     {
@@ -407,15 +388,15 @@ bool PL_SELECTION_TOOL::selectMultiple()
 
         if( evt->IsDrag( BUT_LEFT ) )
         {
-            if( !m_additive && !m_subtractive && !m_exclusive_or )
+            if( !m_drag_additive && !m_drag_subtractive )
                 ClearSelection();
 
             // Start drawing a selection box
             area.SetOrigin( evt->DragOrigin() );
             area.SetEnd( evt->Position() );
-            area.SetAdditive( m_additive );
-            area.SetSubtractive( m_subtractive );
-            area.SetExclusiveOr( m_exclusive_or );
+            area.SetAdditive( m_drag_additive );
+            area.SetSubtractive( m_drag_subtractive );
+            area.SetExclusiveOr( false );
 
             view->SetVisible( &area, true );
             view->Update( &area );
@@ -835,4 +816,6 @@ void PL_SELECTION_TOOL::setTransitions()
     Go( &PL_SELECTION_TOOL::RemoveItemFromSel,     PL_ACTIONS::removeItemFromSel.MakeEvent() );
     Go( &PL_SELECTION_TOOL::RemoveItemsFromSel,    PL_ACTIONS::removeItemsFromSel.MakeEvent() );
     Go( &PL_SELECTION_TOOL::SelectionMenu,         PL_ACTIONS::selectionMenu.MakeEvent() );
+
+    Go( &PL_SELECTION_TOOL::disambiguateCursor,    EVENTS::DisambiguatePoint );
 }

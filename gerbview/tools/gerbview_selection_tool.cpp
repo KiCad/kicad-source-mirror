@@ -114,10 +114,7 @@ private:
 
 GERBVIEW_SELECTION_TOOL::GERBVIEW_SELECTION_TOOL() :
         TOOL_INTERACTIVE( "gerbview.InteractiveSelection" ),
-        m_frame( nullptr ),
-        m_additive( false ),
-        m_subtractive( false ),
-        m_exclusive_or( false )
+        m_frame( nullptr )
 {
     m_preliminary = true;
 }
@@ -194,14 +191,9 @@ int GERBVIEW_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
         if( m_frame->ToolStackIsEmpty() )
             m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
 
-        m_additive = m_subtractive = m_exclusive_or = false;
-
-        if( evt->Modifier( MD_SHIFT ) && evt->Modifier( MD_CTRL ) )
-            m_subtractive = true;
-        else if( evt->Modifier( MD_SHIFT ) )
-            m_additive = true;
-        else if( evt->Modifier( MD_CTRL ) )
-            m_exclusive_or = true;
+        // on left click, a selection is made, depending on modifiers ALT, SHIFT, CTRL:
+        setModifiersState( evt->Modifier( MD_SHIFT ), evt->Modifier( MD_CTRL ),
+                           evt->Modifier( MD_ALT ) );
 
         // single click? Select single object
         if( evt->IsClick( BUT_LEFT ) )
