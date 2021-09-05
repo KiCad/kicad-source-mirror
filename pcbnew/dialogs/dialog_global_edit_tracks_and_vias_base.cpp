@@ -93,24 +93,41 @@ DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE::DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE
 	m_setToSpecifiedValues->SetValue( true );
 	sbAction->Add( m_setToSpecifiedValues, 0, wxBOTTOM, 5 );
 
-	wxBoxSizer* bSizerTrackViaPopups;
-	bSizerTrackViaPopups = new wxBoxSizer( wxHORIZONTAL );
+	wxFlexGridSizer* fgSizerTrackViaPopups;
+	fgSizerTrackViaPopups = new wxFlexGridSizer( 2, 3, 0, 0 );
+	fgSizerTrackViaPopups->AddGrowableCol( 0 );
+	fgSizerTrackViaPopups->AddGrowableCol( 1 );
+	fgSizerTrackViaPopups->AddGrowableCol( 2 );
+	fgSizerTrackViaPopups->SetFlexibleDirection( wxHORIZONTAL );
+	fgSizerTrackViaPopups->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_NONE );
+
+	m_staticTextTrackWidth = new wxStaticText( sbAction->GetStaticBox(), wxID_ANY, _("Track Width"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextTrackWidth->Wrap( -1 );
+	fgSizerTrackViaPopups->Add( m_staticTextTrackWidth, 0, wxALL, 5 );
+
+	m_staticTextViaSize = new wxStaticText( sbAction->GetStaticBox(), wxID_ANY, _("Via Size"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextViaSize->Wrap( -1 );
+	fgSizerTrackViaPopups->Add( m_staticTextViaSize, 0, wxALL, 5 );
+
+	m_staticTextLayer = new wxStaticText( sbAction->GetStaticBox(), wxID_ANY, _("Layer"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextLayer->Wrap( -1 );
+	fgSizerTrackViaPopups->Add( m_staticTextLayer, 0, wxALL, 5 );
 
 	wxArrayString m_trackWidthSelectBoxChoices;
 	m_trackWidthSelectBox = new wxChoice( sbAction->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_trackWidthSelectBoxChoices, 0 );
 	m_trackWidthSelectBox->SetSelection( 0 );
-	bSizerTrackViaPopups->Add( m_trackWidthSelectBox, 4, wxEXPAND|wxRIGHT, 5 );
+	fgSizerTrackViaPopups->Add( m_trackWidthSelectBox, 4, wxEXPAND|wxRIGHT, 5 );
 
 	wxArrayString m_viaSizesSelectBoxChoices;
 	m_viaSizesSelectBox = new wxChoice( sbAction->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_viaSizesSelectBoxChoices, 0 );
 	m_viaSizesSelectBox->SetSelection( 0 );
-	bSizerTrackViaPopups->Add( m_viaSizesSelectBox, 5, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	fgSizerTrackViaPopups->Add( m_viaSizesSelectBox, 5, wxEXPAND|wxLEFT|wxRIGHT, 5 );
 
 	m_layerBox = new PCB_LAYER_BOX_SELECTOR( sbAction->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, 0 );
-	bSizerTrackViaPopups->Add( m_layerBox, 0, wxRIGHT|wxLEFT, 3 );
+	fgSizerTrackViaPopups->Add( m_layerBox, 0, wxRIGHT|wxLEFT, 3 );
 
 
-	sbAction->Add( bSizerTrackViaPopups, 0, wxEXPAND|wxBOTTOM|wxLEFT, 15 );
+	sbAction->Add( fgSizerTrackViaPopups, 1, wxBOTTOM|wxEXPAND|wxLEFT, 5 );
 
 	m_setToNetclassValues = new wxRadioButton( sbAction->GetStaticBox(), ID_SPECIFIED_NET_TO_NETCLASS_VALUES, _("Set to net class values:"), wxDefaultPosition, wxDefaultSize, 0 );
 	sbAction->Add( m_setToNetclassValues, 0, wxTOP|wxBOTTOM, 5 );

@@ -25,6 +25,7 @@ class PCB_LAYER_BOX_SELECTOR;
 #include <wx/choice.h>
 #include <wx/bmpcbox.h>
 #include <wx/radiobut.h>
+#include <wx/stattext.h>
 #include <wx/grid.h>
 #include <wx/button.h>
 #include <wx/dialog.h>
@@ -52,6 +53,9 @@ class DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE : public DIALOG_SHIM
 		PCB_LAYER_BOX_SELECTOR* m_layerFilter;
 		wxCheckBox* m_selectedItemsFilter;
 		wxRadioButton* m_setToSpecifiedValues;
+		wxStaticText* m_staticTextTrackWidth;
+		wxStaticText* m_staticTextViaSize;
+		wxStaticText* m_staticTextLayer;
 		wxChoice* m_trackWidthSelectBox;
 		wxChoice* m_viaSizesSelectBox;
 		PCB_LAYER_BOX_SELECTOR* m_layerBox;
