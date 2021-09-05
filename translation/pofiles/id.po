@@ -5,10 +5,10 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-08-30 14:45-0700\n"
-"PO-Revision-Date: 2021-08-27 08:25+0000\n"
+"PO-Revision-Date: 2021-09-05 21:22+0000\n"
 "Last-Translator: Triyan W. Nugroho <triyan.wn@gmail.com>\n"
-"Language-Team: Indonesian <https://hosted.weblate.org/projects/kicad/master-"
-"source/id/>\n"
+"Language-Team: Indonesian <https://hosted.weblate.org/projects/kicad/"
+"master-source/id/>\n"
 "Language: id\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -17,9 +17,8 @@ msgstr ""
 "X-Generator: Weblate 4.8.1-dev\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
-#, fuzzy
 msgid "All Files"
-msgstr "Semua berkas"
+msgstr "Semua Berkas"
 
 #: 3d-viewer/3d_cache/dialogs/dialog_select_3d_model.cpp:94
 #, c-format
@@ -832,27 +831,27 @@ msgstr ""
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:48
 msgid "Rotate X Clockwise"
-msgstr ""
+msgstr "Rotasi X Searah Jarum Jam"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:53
 msgid "Rotate X Counterclockwise"
-msgstr ""
+msgstr "Rotasi X Berlawanan Jarum Jam"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:58
 msgid "Rotate Y Clockwise"
-msgstr ""
+msgstr "Rotasi Y Searah Jarum Jam"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:63
 msgid "Rotate Y Counterclockwise"
-msgstr ""
+msgstr "Rotasi Y Berlawanan Jarum Jam"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:68
 msgid "Rotate Z Clockwise"
-msgstr ""
+msgstr "Rotasi Z Searah Jarum Jam"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:73
 msgid "Rotate Z Counterclockwise"
-msgstr ""
+msgstr "Rotasi Z Berlawanan Jarum Jam"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:79
 msgid "Move board Left"
@@ -1187,9 +1186,9 @@ msgstr "Buat Berkas Logo"
 #: bitmap2component/bitmap2cmp_gui.cpp:799
 #: bitmap2component/bitmap2cmp_gui.cpp:838
 #: bitmap2component/bitmap2cmp_gui.cpp:877
-#, fuzzy, c-format
+#, c-format
 msgid "File '%s' could not be created."
-msgstr "Berkas \"%s\" tidak dapat dibuat."
+msgstr "Berkas '%s' tidak dapat dibuat."
 
 #: bitmap2component/bitmap2cmp_gui.cpp:779
 msgid "Create PostScript File"
@@ -1299,14 +1298,12 @@ msgid "Export to Clipboard"
 msgstr ""
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:158
-#, fuzzy
 msgid "Symbol (.kicad_sym file)"
-msgstr "Isian tubuh simbol"
+msgstr "Simbol (berkas .kicad_sym)"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:158
-#, fuzzy
 msgid "Footprint (.kicad_mod file)"
-msgstr "Pcbnew (berkas .kicad_mod)"
+msgstr "Footprint (berkas .kicad_mod)"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:158
 msgid "Postscript (.ps file)"
@@ -2131,7 +2128,7 @@ msgstr ""
 #: common/dialogs/dialog_grid_settings_base.cpp:142
 #: common/dialogs/dialog_grid_settings_base.cpp:157
 msgid "(hotkey)"
-msgstr ""
+msgstr "(pintasan)"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:146
 msgid "Grid 2:"
@@ -2156,7 +2153,7 @@ msgstr ""
 
 #: common/dialogs/dialog_hotkey_list.cpp:34
 msgid "Hotkey List"
-msgstr "Senarai Hotkey"
+msgstr "Senarai Pintasan"
 
 #: common/dialogs/dialog_image_editor.cpp:72
 msgid "Incorrect scale number"
@@ -2379,9 +2376,9 @@ msgid "Portrait"
 msgstr ""
 
 #: common/dialogs/dialog_page_settings.cpp:473
-#, fuzzy, c-format
+#, c-format
 msgid "Drawing sheet file '%s' not found."
-msgstr "Berkas skematik \"%s\" tidak ditemukan."
+msgstr "Berkas lembar gambar '%s' tidak ditemukan."
 
 #: common/dialogs/dialog_page_settings.cpp:545
 msgid "the translation for paper size must preserve original spellings"
@@ -2393,12 +2390,11 @@ msgid "Landscape"
 msgstr ""
 
 #: common/dialogs/dialog_page_settings.cpp:792
-#, fuzzy
 msgid "Select Drawing Sheet File"
-msgstr "Pilih sebuah Berkas"
+msgstr "Pilih Berkas Lembar Gambar"
 
 #: common/dialogs/dialog_page_settings.cpp:808
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The drawing sheet file name has changed.\n"
 "Do you want to use the relative path:\n"
@@ -2406,7 +2402,7 @@ msgid ""
 "instead of\n"
 "\"%s\"?"
 msgstr ""
-"Nama berkas deskripsi tata letak halaman telah berubah.\n"
+"Nama berkas lembar gambar telah berubah.\n"
 "Apakah Anda ingin menggunakan path relatif:\n"
 "\"%s\"\n"
 "daripada\n"
@@ -2580,48 +2576,47 @@ msgstr ""
 
 #: common/dialogs/dialog_page_settings_base.cpp:224
 msgid "Comment1:"
-msgstr ""
+msgstr "Komentar1:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:236
 msgid "Comment2:"
-msgstr ""
+msgstr "Komentar2:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:248
 msgid "Comment3:"
-msgstr ""
+msgstr "Komentar3:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:260
 msgid "Comment4:"
-msgstr ""
+msgstr "Komentar4:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:272
 msgid "Comment5:"
-msgstr ""
+msgstr "Komentar5:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:284
 msgid "Comment6:"
-msgstr ""
+msgstr "Komentar6:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:296
 msgid "Comment7:"
-msgstr ""
+msgstr "Komentar7:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:308
 msgid "Comment8:"
-msgstr ""
+msgstr "Komentar8:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:320
 msgid "Comment9:"
-msgstr ""
+msgstr "Komentar9:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:338
-#, fuzzy
 msgid "Drawing sheet file"
-msgstr "Buka Penyunting Teks"
+msgstr "Berkas lembar gambar"
 
 #: common/dialogs/dialog_page_settings_base.cpp:348
 msgid "Browse..."
-msgstr ""
+msgstr "Ramban..."
 
 #: common/dialogs/dialog_paste_special.cpp:37
 msgid ""
@@ -3130,7 +3125,7 @@ msgstr "MB"
 
 #: common/dialogs/panel_common_settings_base.cpp:305
 msgid "Session"
-msgstr ""
+msgstr "Sesi"
 
 #: common/dialogs/panel_common_settings_base.cpp:307
 msgid "Remember open files for next project launch"
@@ -3150,30 +3145,30 @@ msgstr "Teks tipe penyaring"
 
 #: common/dialogs/panel_hotkeys_editor.cpp:126
 msgid "Undo All Changes"
-msgstr ""
+msgstr "Urungkan Semua Perubahan"
 
 #: common/dialogs/panel_hotkeys_editor.cpp:127
 msgid "Undo all changes made so far in this dialog"
-msgstr ""
+msgstr "Urungkan semua perubahan yang telah dibuat sejauh ini pada dialog ini"
 
 #: common/dialogs/panel_hotkeys_editor.cpp:135
 msgid "Import Hotkeys..."
-msgstr ""
+msgstr "Impor Pintasan..."
 
 #: common/dialogs/panel_hotkeys_editor.cpp:136
 msgid ""
 "Import hotkey definitions from an external file, replacing the current values"
 msgstr ""
-"Impor definisi tombol cepat dari sebuah berkas eksternal, menggantikan nilai "
+"Impor definisi pintasan dari sebuah berkas eksternal, menggantikan nilai "
 "saat ini"
 
 #: common/dialogs/panel_hotkeys_editor.cpp:198
 msgid "Import Hotkeys File:"
-msgstr "Impor Berkas Tombol Cepat:"
+msgstr "Impor Berkas Pintasan:"
 
 #: common/dialogs/panel_hotkeys_editor.cpp:246
 msgid "| Action | Default Hotkey | Description"
-msgstr ""
+msgstr "| Aksi | Pintasan Baku | Deskripsi"
 
 #: common/dialogs/panel_mouse_settings.cpp:47
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:162
@@ -3631,14 +3626,14 @@ msgstr "Kesalahan penyimpanan berkas"
 
 #: common/dialogs/wx_html_report_panel_base.cpp:16
 msgid "Output Messages"
-msgstr ""
+msgstr "Pesan Keluaran"
 
 #: common/dialogs/wx_html_report_panel_base.cpp:32
 #: eeschema/dialogs/dialog_erc_base.cpp:64
 #: pcbnew/dialogs/dialog_drc_base.cpp:147
 #: pcbnew/dialogs/dialog_footprint_checker_base.cpp:32
 msgid "Show:"
-msgstr ""
+msgstr "Tampilkan:"
 
 #: common/dialogs/wx_html_report_panel_base.cpp:36
 #: eeschema/dialogs/dialog_erc_base.cpp:68 eeschema/lib_item.cpp:57
@@ -3648,18 +3643,18 @@ msgstr ""
 #: pcbnew/dialogs/dialog_footprint_checker_base.cpp:36
 #: pcbnew/widgets/appearance_controls.cpp:660
 msgid "All"
-msgstr ""
+msgstr "Semua"
 
 #: common/dialogs/wx_html_report_panel_base.cpp:49
 #: eeschema/dialogs/dialog_erc_base.cpp:80
 #: pcbnew/dialogs/dialog_drc_base.cpp:163
 #: pcbnew/dialogs/dialog_footprint_checker_base.cpp:49
 msgid "Warnings"
-msgstr ""
+msgstr "Peringatan"
 
 #: common/dialogs/wx_html_report_panel_base.cpp:55
 msgid "Actions"
-msgstr ""
+msgstr "Aksi"
 
 #: common/dialogs/wx_html_report_panel_base.cpp:61
 msgid "Infos"
@@ -3669,7 +3664,7 @@ msgstr "Infos"
 #: eeschema/dialogs/dialog_erc_base.cpp:95
 #: pcbnew/dialogs/dialog_drc_base.cpp:178
 msgid "Save..."
-msgstr ""
+msgstr "Simpan..."
 
 #: common/draw_panel_gal.cpp:251 common/draw_panel_gal.cpp:413
 msgid "Could not use OpenGL, falling back to software rendering"
@@ -3702,7 +3697,7 @@ msgstr "Berkas \"%s\" tidak sepenuhnya terbaca"
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:28 pcbnew/fp_text.cpp:272
 #: pcbnew/fp_text.cpp:278 pcbnew/widgets/panel_selection_filter_base.cpp:35
 msgid "Text"
-msgstr ""
+msgstr "Teks"
 
 #: common/drawing_sheet/ds_data_item.cpp:371
 #: common/drawing_sheet/ds_draw_item.cpp:113 eeschema/pin_type.cpp:76
@@ -3711,7 +3706,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:61
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:111
 msgid "Line"
-msgstr ""
+msgstr "Garis"
 
 #: common/drawing_sheet/ds_data_item.cpp:372
 #: common/drawing_sheet/ds_draw_item.cpp:117 common/eda_item.cpp:300
@@ -3719,7 +3714,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:43 pcbnew/pad.cpp:1464
 #: pcbnew/pcb_shape.cpp:588
 msgid "Rectangle"
-msgstr ""
+msgstr "Persegi"
 
 #: common/drawing_sheet/ds_data_item.cpp:373
 #: common/drawing_sheet/ds_draw_item.cpp:126
@@ -3742,7 +3737,7 @@ msgstr "Impor berkas gambar 2D"
 
 #: common/drawing_sheet/ds_draw_item.cpp:136
 msgid "First Page Only"
-msgstr ""
+msgstr "Hanya Halaman Pertama"
 
 #: common/drawing_sheet/ds_draw_item.cpp:137
 msgid "Subsequent Pages"
@@ -3750,7 +3745,7 @@ msgstr ""
 
 #: common/drawing_sheet/ds_draw_item.cpp:138
 msgid "All Pages"
-msgstr ""
+msgstr "Semua Halaman"
 
 #: common/drawing_sheet/ds_draw_item.cpp:141
 msgid "First Page Option"
@@ -3771,12 +3766,12 @@ msgstr ""
 #: common/drawing_sheet/ds_draw_item.cpp:155
 #: pagelayout_editor/dialogs/dialog_design_inspector_base.cpp:39
 msgid "Comment"
-msgstr ""
+msgstr "Komentar"
 
 #: common/drawing_sheet/ds_draw_item.cpp:187
 #, c-format
 msgid "Text '%s'"
-msgstr ""
+msgstr "Teks '%s'"
 
 #: common/drawing_sheet/ds_draw_item.cpp:395 eeschema/lib_rectangle.cpp:273
 #, c-format
@@ -3799,27 +3794,27 @@ msgstr "papanklip"
 #: common/dsnlexer.cpp:336
 #, c-format
 msgid "Expecting %s"
-msgstr ""
+msgstr "Mengharapkan %s"
 
 #: common/dsnlexer.cpp:344
 #, c-format
 msgid "Expecting '%s'"
-msgstr ""
+msgstr "Mengharapkan '%s'"
 
 #: common/dsnlexer.cpp:352
 #, c-format
 msgid "Unexpected %s"
-msgstr ""
+msgstr "Tak diharapkan %s"
 
 #: common/dsnlexer.cpp:360
 #, c-format
 msgid "%s is a duplicate"
-msgstr ""
+msgstr "%s adalah duplikat"
 
 #: common/dsnlexer.cpp:368
 #, c-format
 msgid "Unexpected '%s'"
-msgstr ""
+msgstr "Tak diharapkan '%s'"
 
 #: common/dsnlexer.cpp:418
 #, c-format
@@ -3836,20 +3831,20 @@ msgstr ""
 
 #: common/eda_base_frame.cpp:453
 msgid "&About KiCad"
-msgstr ""
+msgstr "Tent&ang KiCad"
 
 #: common/eda_base_frame.cpp:455
 msgid "&Help"
-msgstr ""
+msgstr "Bantuan"
 
 #: common/eda_base_frame.cpp:941
-#, fuzzy, c-format
+#, c-format
 msgid "File '%s' was not found."
-msgstr "Berkas \"%s\" tidak ditemukan."
+msgstr "Berkas '%s' tidak ditemukan."
 
 #: common/eda_base_frame.cpp:984
 msgid "Preferences"
-msgstr ""
+msgstr "Preferensi"
 
 #: common/eda_base_frame.cpp:987 common/hotkey_store.cpp:80
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:20
@@ -3858,18 +3853,16 @@ msgstr ""
 
 #: common/eda_base_frame.cpp:989
 msgid "Mouse and Touchpad"
-msgstr ""
+msgstr "Tetikus dan Lapik Sentuh"
 
 #: common/eda_base_frame.cpp:992
 msgid "Hotkeys"
-msgstr ""
+msgstr "Pintasan"
 
 #: common/eda_base_frame.cpp:1046
-#, fuzzy, c-format
+#, c-format
 msgid "Insufficient permissions to folder '%s'."
-msgstr ""
-"Izin yang diperlukan tidak cukup untuk menyimpan berkas\n"
-"%s"
+msgstr "Izin tidak mencukupi untuk folder '%s'."
 
 #: common/eda_base_frame.cpp:1086
 #, fuzzy, c-format
@@ -3917,7 +3910,7 @@ msgstr "Tipe MIME tidak diketahui untuk berkas doc \"%s\""
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:85
 #: pcbnew/import_gfx/dialog_import_gfx.cpp:52
 msgid "Inches"
-msgstr ""
+msgstr "Inci"
 
 #: common/eda_draw_frame.cpp:308
 msgid "Edit User Grid..."
@@ -3935,7 +3928,7 @@ msgstr "Zoom %.2f"
 #: common/eda_draw_frame.cpp:532 pagelayout_editor/pl_editor_frame.cpp:734
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:193
 msgid "inches"
-msgstr ""
+msgstr "inci"
 
 #: common/eda_draw_frame.cpp:535
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:56
@@ -3947,11 +3940,11 @@ msgstr ""
 #: common/eda_draw_frame.cpp:954 eeschema/dialogs/panel_sym_lib_table.cpp:494
 #: pcbnew/footprint_libraries_utils.cpp:1233
 msgid "Select Library"
-msgstr ""
+msgstr "Pilih Pustaka"
 
 #: common/eda_draw_frame.cpp:954
 msgid "New Library"
-msgstr ""
+msgstr "Pustaka Baru"
 
 #: common/eda_draw_frame.cpp:1088
 msgid ""
@@ -4009,7 +4002,7 @@ msgstr ""
 #: common/eda_item.cpp:258 common/eda_item.cpp:267
 #: pcbnew/tools/board_inspection_tool.cpp:381
 msgid "Zone"
-msgstr "Zon"
+msgstr "Zona"
 
 #: common/eda_item.cpp:259 pcbnew/pcb_track.cpp:684
 msgid "Track"
@@ -4018,7 +4011,7 @@ msgstr ""
 #: common/eda_item.cpp:260 pcbnew/dialogs/dialog_board_statistics.cpp:493
 #: pcbnew/pcb_track.cpp:748
 msgid "Via"
-msgstr "Lalu"
+msgstr "Via"
 
 #: common/eda_item.cpp:261
 msgid "Board Marker"
@@ -4087,28 +4080,27 @@ msgstr "Bitmap"
 
 #: common/eda_item.cpp:279
 msgid "Schematic Text"
-msgstr ""
+msgstr "Teks Skematik"
 
 #: common/eda_item.cpp:280
 msgid "Net Label"
-msgstr ""
+msgstr "Label Net"
 
 #: common/eda_item.cpp:281 eeschema/sch_text.cpp:752
 msgid "Global Label"
-msgstr ""
+msgstr "Label Global"
 
 #: common/eda_item.cpp:282 eeschema/sch_text.cpp:753
 msgid "Hierarchical Label"
-msgstr ""
+msgstr "Label Hirarkis"
 
 #: common/eda_item.cpp:283
 msgid "Schematic Field"
-msgstr ""
+msgstr "Bidang Skematik"
 
 #: common/eda_item.cpp:284
-#, fuzzy
 msgid "Schematic Symbol"
-msgstr "Sunting Simbol Skematik"
+msgstr "Simbol Skematik"
 
 #: common/eda_item.cpp:285
 msgid "Sheet Pin"
@@ -4135,7 +4127,7 @@ msgstr "Simbol"
 #: pcbnew/dialogs/dialog_pad_properties.cpp:712
 #: pcbnew/dialogs/dialog_pad_properties.cpp:2117 pcbnew/pcb_shape.cpp:564
 msgid "Arc"
-msgstr ""
+msgstr "Busur"
 
 #: common/eda_item.cpp:298 eeschema/lib_circle.h:47
 #: gerbview/gerber_draw_item.cpp:237 pcbnew/board_item.cpp:42
@@ -4143,7 +4135,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:138 pcbnew/pad.cpp:1096
 #: pcbnew/pad.cpp:1463 pcbnew/pcb_shape.cpp:557
 msgid "Circle"
-msgstr "Bulat"
+msgstr "Lingkaran"
 
 #: common/eda_item.cpp:299
 msgid "Symbol Text"
@@ -4170,7 +4162,7 @@ msgstr "Bidang Simbol"
 
 #: common/eda_item.cpp:306
 msgid "Gerber Layout"
-msgstr ""
+msgstr "Tata Letak Gerber"
 
 #: common/eda_item.cpp:307
 msgid "Draw Item"
@@ -4184,7 +4176,7 @@ msgstr ""
 #: pcbnew/microwave/microwave_polygon.cpp:128
 #: pcbnew/widgets/appearance_controls.cpp:595
 msgid "Normal"
-msgstr ""
+msgstr "Normal"
 
 #: common/eda_text.cpp:503 common/eda_text.cpp:673
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:205
@@ -4298,7 +4290,7 @@ msgstr "Ketebalan"
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:189
 #: pcbnew/microwave/microwave_polygon.cpp:128
 msgid "Mirrored"
-msgstr ""
+msgstr "Dicerminkan"
 
 #: common/eda_text.cpp:681 eeschema/dialogs/dialog_lib_edit_pin_table.cpp:61
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:55
@@ -4322,7 +4314,7 @@ msgstr ""
 #: pcbnew/pcb_text.cpp:127 pcbnew/pcb_track.cpp:691 pcbnew/pcb_track.cpp:1116
 #: pcbnew/pcb_track.cpp:1133 pcbnew/pcb_track.cpp:1152
 msgid "Width"
-msgstr ""
+msgstr "Lebar"
 
 #: common/eda_text.cpp:688 eeschema/lib_field.cpp:434
 #: eeschema/sch_bitmap.cpp:205 pcbnew/dialogs/dialog_board_statistics.cpp:678
@@ -4333,7 +4325,7 @@ msgstr ""
 #: pcbnew/pcb_dimension.cpp:685 pcbnew/pcb_shape.cpp:594
 #: pcbnew/pcb_text.cpp:128
 msgid "Height"
-msgstr ""
+msgstr "Tinggi"
 
 #: common/eda_text.cpp:693
 msgid "Horizontal Justification"
@@ -4566,7 +4558,7 @@ msgstr "Tidak dapat menyalin berkas \"%s\"."
 #: common/grid_tricks.cpp:277 common/tool/actions.cpp:154
 #: eeschema/tools/ee_actions.cpp:148 pcbnew/tools/edit_tool.cpp:1963
 msgid "Cut"
-msgstr ""
+msgstr "Potong"
 
 #: common/grid_tricks.cpp:278
 msgid "Clear selected cells placing original contents on clipboard"
@@ -4575,7 +4567,7 @@ msgstr ""
 #: common/grid_tricks.cpp:279 common/tool/actions.cpp:160
 #: eeschema/tools/ee_actions.cpp:153
 msgid "Copy"
-msgstr ""
+msgstr "Salin"
 
 #: common/grid_tricks.cpp:280
 msgid "Copy selected cells to clipboard"
@@ -4583,7 +4575,7 @@ msgstr ""
 
 #: common/grid_tricks.cpp:281 common/tool/actions.cpp:166
 msgid "Paste"
-msgstr ""
+msgstr "Tempel"
 
 #: common/grid_tricks.cpp:282
 msgid "Paste clipboard cells to matrix at current cell"
@@ -4593,12 +4585,11 @@ msgstr ""
 #: kicad/project_tree_pane.cpp:788 pcbnew/plugins/kicad/pcb_parser.cpp:855
 #: pcbnew/tools/edit_tool.cpp:1965
 msgid "Delete"
-msgstr ""
+msgstr "Hapus"
 
 #: common/grid_tricks.cpp:283
-#, fuzzy
 msgid "Delete selected cells"
-msgstr "Hapus Beberapa Item"
+msgstr "Hapus sel terpilih"
 
 #: common/grid_tricks.cpp:284 common/tool/actions.cpp:172
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:105
@@ -4608,11 +4599,11 @@ msgstr "Hapus Beberapa Item"
 #: pcbnew/dialogs/dialog_import_settings.cpp:99
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:76
 msgid "Select All"
-msgstr ""
+msgstr "Pilih Semua"
 
 #: common/grid_tricks.cpp:284
 msgid "Select all cells"
-msgstr ""
+msgstr "Pilih semua sel"
 
 #: common/hotkey_store.cpp:43
 msgid "Pan Left/Right"
@@ -4657,25 +4648,23 @@ msgstr ""
 #: common/hotkey_store.cpp:66 common/tool/action_menu.cpp:227
 #: common/tool/actions.cpp:115
 msgid "Quit"
-msgstr ""
+msgstr "Keluar"
 
 #: common/hotkey_store.cpp:81
 msgid "Project Manager"
-msgstr ""
+msgstr "Manajer Proyek"
 
 #: common/hotkey_store.cpp:82 eeschema/eeschema_config.cpp:67
 #: eeschema/menubar.cpp:129 eeschema/sch_edit_frame.cpp:1258
 #: kicad/tools/kicad_manager_actions.cpp:70
-#, fuzzy
 msgid "Schematic Editor"
-msgstr "Berkas Skematik"
+msgstr "Penyunting Skematik"
 
 #: common/hotkey_store.cpp:83 kicad/tools/kicad_manager_actions.cpp:82
 #: pcbnew/menubar_pcb_editor.cpp:184 pcbnew/pcb_edit_frame.cpp:1257
 #: pcbnew/pcbnew_config.cpp:57
-#, fuzzy
 msgid "PCB Editor"
-msgstr "Penyunting Simbol"
+msgstr "Penyunting PCB"
 
 #: common/hotkey_store.cpp:84 kicad/tools/kicad_manager_actions.cpp:111
 #: pagelayout_editor/menubar.cpp:86 pagelayout_editor/pl_editor_frame.cpp:481
@@ -4735,135 +4724,135 @@ msgstr ""
 
 #: common/languages_menu.cpp:48
 msgid "Set Language"
-msgstr ""
+msgstr "Pilih Bahasa"
 
 #: common/layer_id.cpp:32
 msgid "F.Cu"
-msgstr ""
+msgstr "F.Cu"
 
 #: common/layer_id.cpp:33
 msgid "In1.Cu"
-msgstr ""
+msgstr "In1.Cu"
 
 #: common/layer_id.cpp:34
 msgid "In2.Cu"
-msgstr ""
+msgstr "In2.Cu"
 
 #: common/layer_id.cpp:35
 msgid "In3.Cu"
-msgstr ""
+msgstr "In3.Cu"
 
 #: common/layer_id.cpp:36
 msgid "In4.Cu"
-msgstr ""
+msgstr "In4.Cu"
 
 #: common/layer_id.cpp:37
 msgid "In5.Cu"
-msgstr ""
+msgstr "In5.Cu"
 
 #: common/layer_id.cpp:38
 msgid "In6.Cu"
-msgstr ""
+msgstr "In6.Cu"
 
 #: common/layer_id.cpp:39
 msgid "In7.Cu"
-msgstr ""
+msgstr "In7.Cu"
 
 #: common/layer_id.cpp:40
 msgid "In8.Cu"
-msgstr ""
+msgstr "In8.Cu"
 
 #: common/layer_id.cpp:41
 msgid "In9.Cu"
-msgstr ""
+msgstr "In9.Cu"
 
 #: common/layer_id.cpp:42
 msgid "In10.Cu"
-msgstr ""
+msgstr "In10.Cu"
 
 #: common/layer_id.cpp:43
 msgid "In11.Cu"
-msgstr ""
+msgstr "In11.Cu"
 
 #: common/layer_id.cpp:44
 msgid "In12.Cu"
-msgstr ""
+msgstr "In12.Cu"
 
 #: common/layer_id.cpp:45
 msgid "In13.Cu"
-msgstr ""
+msgstr "In13.Cu"
 
 #: common/layer_id.cpp:46
 msgid "In14.Cu"
-msgstr ""
+msgstr "In14.Cu"
 
 #: common/layer_id.cpp:47
 msgid "In15.Cu"
-msgstr ""
+msgstr "In15.Cu"
 
 #: common/layer_id.cpp:48
 msgid "In16.Cu"
-msgstr ""
+msgstr "In16.Cu"
 
 #: common/layer_id.cpp:49
 msgid "In17.Cu"
-msgstr ""
+msgstr "In17.Cu"
 
 #: common/layer_id.cpp:50
 msgid "In18.Cu"
-msgstr ""
+msgstr "In18.Cu"
 
 #: common/layer_id.cpp:51
 msgid "In19.Cu"
-msgstr ""
+msgstr "In19.Cu"
 
 #: common/layer_id.cpp:52
 msgid "In20.Cu"
-msgstr ""
+msgstr "In20.Cu"
 
 #: common/layer_id.cpp:53
 msgid "In21.Cu"
-msgstr ""
+msgstr "In21.Cu"
 
 #: common/layer_id.cpp:54
 msgid "In22.Cu"
-msgstr ""
+msgstr "In22.Cu"
 
 #: common/layer_id.cpp:55
 msgid "In23.Cu"
-msgstr ""
+msgstr "In23.Cu"
 
 #: common/layer_id.cpp:56
 msgid "In24.Cu"
-msgstr ""
+msgstr "In24.Cu"
 
 #: common/layer_id.cpp:57
 msgid "In25.Cu"
-msgstr ""
+msgstr "In25.Cu"
 
 #: common/layer_id.cpp:58
 msgid "In26.Cu"
-msgstr ""
+msgstr "In26.Cu"
 
 #: common/layer_id.cpp:59
 msgid "In27.Cu"
-msgstr ""
+msgstr "In27.Cu"
 
 #: common/layer_id.cpp:60
 msgid "In28.Cu"
-msgstr ""
+msgstr "In28.Cu"
 
 #: common/layer_id.cpp:61
 msgid "In29.Cu"
-msgstr ""
+msgstr "In29.Cu"
 
 #: common/layer_id.cpp:62
 msgid "In30.Cu"
-msgstr ""
+msgstr "In30.Cu"
 
 #: common/layer_id.cpp:63
 msgid "B.Cu"
-msgstr ""
+msgstr "B.Cu"
 
 #: common/layer_id.cpp:66
 msgid "B.Adhesive"
@@ -6128,15 +6117,15 @@ msgstr ""
 
 #: common/tool/actions.cpp:635
 msgid "List Hotkeys..."
-msgstr ""
+msgstr "Senarai Pintasan..."
 
 #: common/tool/actions.cpp:636
 msgid "Displays current hotkeys table and corresponding commands"
-msgstr ""
+msgstr "Tampilkan tabel pintasan dan perintah yang sesuai"
 
 #: common/tool/actions.cpp:641
 msgid "Get Involved"
-msgstr ""
+msgstr "Ikut Terlibat"
 
 #: common/tool/actions.cpp:642
 msgid "Open \"Contribute to KiCad\" in a web browser"
@@ -6430,7 +6419,7 @@ msgstr ""
 
 #: common/widgets/widget_hotkey_list.cpp:94
 msgid "Press a new hotkey, or press Esc to cancel..."
-msgstr ""
+msgstr "Tekan sebuah pintasan baru, atau tekan Esc untuk membatalkan..."
 
 #: common/widgets/widget_hotkey_list.cpp:101
 msgid "Command:"
@@ -6442,7 +6431,7 @@ msgstr ""
 
 #: common/widgets/widget_hotkey_list.cpp:140
 msgid "Set Hotkey"
-msgstr ""
+msgstr "Setel Pintasan"
 
 #: common/widgets/widget_hotkey_list.cpp:370
 msgid "Edit..."
@@ -6454,7 +6443,7 @@ msgstr ""
 
 #: common/widgets/widget_hotkey_list.cpp:372
 msgid "Clear Assigned Hotkey"
-msgstr ""
+msgstr "Bersihkan Pintasan yang Diterapkan"
 
 #: common/widgets/widget_hotkey_list.cpp:373
 msgid "Restore Default"
@@ -6481,7 +6470,7 @@ msgstr ""
 
 #: common/widgets/widget_hotkey_list.cpp:441
 msgid "Hotkey"
-msgstr ""
+msgstr "Pintasan"
 
 #: common/wildcards_and_files_ext.cpp:183
 msgid "All files"
@@ -6725,9 +6714,8 @@ msgid "Jpeg file"
 msgstr "Berkas Jpeg"
 
 #: common/wildcards_and_files_ext.cpp:554
-#, fuzzy
 msgid "Hotkey file"
-msgstr "Senarai Hotkey"
+msgstr "Berkas pintasan"
 
 #: cvpcb/auto_associate.cpp:105
 #, fuzzy, c-format
@@ -10738,7 +10726,7 @@ msgstr ""
 #: eeschema/dialogs/dialog_spice_model_base.cpp:919
 #: eeschema/sim/sim_plot_panel.cpp:342
 msgid "Voltage"
-msgstr ""
+msgstr "Tegangan"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:919
 #: eeschema/sim/sim_plot_panel.cpp:343 eeschema/sim/sim_plot_panel.cpp:420
@@ -10778,7 +10766,7 @@ msgstr ""
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:91
 #: eeschema/fields_grid_table.cpp:607 eeschema/tools/ee_actions.cpp:61
 msgid "Show Datasheet"
-msgstr ""
+msgstr "Tampilkan Lembar Data"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:92
 #: eeschema/fields_grid_table.cpp:608
@@ -14336,19 +14324,16 @@ msgid ""
 msgstr ""
 
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:70
-#, fuzzy
 msgid "Symbol..."
-msgstr "Simbol"
+msgstr "Simbol..."
 
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:71
-#, fuzzy
 msgid "View as PNG..."
-msgstr "Ekspor Tampilan Saat Ini sebagai PNG ..."
+msgstr "Lihat sebagai PNG..."
 
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:72
-#, fuzzy
 msgid "Symbol as SVG..."
-msgstr "Nilai simbol"
+msgstr "Simbol sebagai SVG..."
 
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:76
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:98
@@ -14356,9 +14341,8 @@ msgid "Library Editor"
 msgstr ""
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:112
-#, fuzzy
 msgid "KiCad Symbol Editor"
-msgstr "Penyunting Simbol"
+msgstr "Penyunting Simbol KiCad"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:148
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:912
@@ -14369,7 +14353,7 @@ msgstr "Memuat Pustaka Simbol"
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:176
 #: pcbnew/footprint_edit_frame.cpp:232 pcbnew/footprint_edit_frame.cpp:726
 msgid "Libraries"
-msgstr ""
+msgstr "Pustaka"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:225
 msgid "Library changes are unsaved"
@@ -14409,7 +14393,7 @@ msgstr ""
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:756
 #, c-format
 msgid "Open %s"
-msgstr ""
+msgstr "Buka %s"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:827
 #, fuzzy, c-format
@@ -14448,7 +14432,7 @@ msgstr ""
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1003
 #: pcbnew/footprint_libraries_utils.cpp:515
 msgid "Global"
-msgstr ""
+msgstr "Global"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1006
 #: pcbnew/footprint_libraries_utils.cpp:518
@@ -14458,12 +14442,12 @@ msgstr ""
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1007
 #: pcbnew/footprint_libraries_utils.cpp:519
 msgid "Add To Library Table"
-msgstr ""
+msgstr "Tambahkan ke Tabel Pustaka"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1039
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to save backup to '%s'."
-msgstr "Gagal menyimpan berkas pustaka simbol '%s'."
+msgstr "Gagal menyimpan cadangan ke '%s'."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1185
 #: eeschema/symbol_viewer_frame.cpp:392
@@ -14572,20 +14556,20 @@ msgstr ""
 
 #: eeschema/symbol_editor/symbol_editor.cpp:214
 msgid "Select Symbol Library"
-msgstr ""
+msgstr "Pilih Pustaka Simbol"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:262
 msgid "The current symbol has been modified.  Save changes?"
-msgstr ""
+msgstr "Simbol saat ini telah dimodifikasi.  Simpan perubahan?"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:409
 msgid "This new symbol has no name and cannot be created."
-msgstr ""
+msgstr "Simbol baru ini tidak memiliki nama sehingga tidak bisa dibuat."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:421
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol '%s' already exists in library '%s'."
-msgstr "Berkas \"%s\" sudah ada dalam daftar"
+msgstr "Simbol '%s' sudah ada di dalam pustaka '%s'."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:426
 #: eeschema/symbol_editor/symbol_editor.cpp:683
@@ -14597,12 +14581,12 @@ msgstr "Berkas \"%s\" sudah ada dalam daftar"
 #: pcbnew/footprint_libraries_utils.cpp:470
 #: pcbnew/footprint_libraries_utils.cpp:1065
 msgid "Overwrite"
-msgstr ""
+msgstr "Timpa"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:532
 #: eeschema/tools/symbol_editor_control.cpp:506
 msgid "No schematic currently open."
-msgstr ""
+msgstr "Tidak ada skematik yang sedang dibuka."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:552
 #: eeschema/symbol_editor/symbol_editor.cpp:1151
@@ -14611,12 +14595,12 @@ msgstr ""
 #: eeschema/tools/symbol_editor_control.cpp:265
 #, c-format
 msgid "Symbol library '%s' is not writeable."
-msgstr ""
+msgstr "Pustaka simbol '%s' tidak dapat ditulis."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:554
 #: eeschema/symbol_editor/symbol_editor.cpp:1152
 msgid "You must save to a different location."
-msgstr ""
+msgstr "Anda harus menyimpan ke lokasi lain."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:606 include/lib_table_grid.h:179
 #: pcbnew/footprint_libraries_utils.cpp:979
@@ -14625,18 +14609,17 @@ msgid "Nickname"
 msgstr ""
 
 #: eeschema/symbol_editor/symbol_editor.cpp:617
-#, fuzzy
 msgid "Save Symbol As"
-msgstr "Ubah Simbol"
+msgstr "Simpan Simbol Sebagai"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:618
 #: pcbnew/footprint_libraries_utils.cpp:991
 msgid "Save in library:"
-msgstr ""
+msgstr "Simpan di pustaka:"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:650
 msgid "No library specified.  Symbol could not be saved."
-msgstr ""
+msgstr "Tidak ada pustaka yang ditentukan.  Simbol tidak dapat disimpan."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:659
 msgid ""
@@ -14672,7 +14655,7 @@ msgstr ""
 #: eeschema/symbol_editor/symbol_editor.cpp:758
 #: eeschema/tools/ee_actions.cpp:143
 msgid "Delete Symbol"
-msgstr ""
+msgstr "Hapus Simbol"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:759
 msgid "Keep Symbol"
@@ -14682,7 +14665,7 @@ msgstr ""
 #: pcbnew/footprint_libraries_utils.cpp:1093
 #, c-format
 msgid "Revert '%s' to last version saved?"
-msgstr ""
+msgstr "Kembalikan '%s' ke versi tersimpan terakhir?"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:970
 #, fuzzy, c-format
@@ -14691,7 +14674,7 @@ msgstr "Tidak dapat menemukan berkas pustaka %s"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:999
 msgid "No library specified."
-msgstr ""
+msgstr "Tidak ada pustaka yang ditentukan."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1018
 #, fuzzy, c-format
@@ -14718,17 +14701,17 @@ msgstr "Berkas pustaka simbol \"%s\" disimpan"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1202
 msgid "Undefined!"
-msgstr ""
+msgstr "Tidak ditentukan!"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1203
 #: eeschema/symbol_viewer_frame.cpp:367 pcbnew/fp_shape.cpp:343
 #: pcbnew/fp_text.cpp:466 pcbnew/pad.cpp:1545
 msgid "Parent"
-msgstr ""
+msgstr "Induk"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1212
 msgid "Convert"
-msgstr ""
+msgstr "Konversi"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1216
 msgid "Body"
@@ -14764,7 +14747,7 @@ msgstr ""
 
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:128
 msgid "Export Symbol"
-msgstr ""
+msgstr "Ekspor Simbol"
 
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:149
 #, fuzzy, c-format
@@ -14875,19 +14858,19 @@ msgstr "Tidak ada simbol yang dipilih"
 
 #: eeschema/toolbars_symbol_viewer.cpp:51
 msgid "Choose symbol"
-msgstr ""
+msgstr "Pilih simbol"
 
 #: eeschema/toolbars_symbol_viewer.cpp:55
 msgid "Display previous symbol"
-msgstr ""
+msgstr "Tampilkan simbol sebelumnya"
 
 #: eeschema/toolbars_symbol_viewer.cpp:59
 msgid "Display next symbol"
-msgstr ""
+msgstr "Tampilkan simbol berikutnya"
 
 #: eeschema/toolbars_symbol_viewer.cpp:108
 msgid "Symbol Viewer"
-msgstr ""
+msgstr "Penampil Simbol"
 
 #: eeschema/tools/assign_footprints.cpp:207
 msgid "Load Symbol Footprint Link File"
@@ -14911,12 +14894,12 @@ msgstr ""
 
 #: eeschema/tools/assign_footprints.cpp:223
 msgid "Change Visibility"
-msgstr ""
+msgstr "Ubah Visibilitas"
 
 #: eeschema/tools/assign_footprints.cpp:233
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to open symbol-footprint link file '%s'."
-msgstr "Gagal membuka berkas taut komponen-footprint \"%s\""
+msgstr "Gagal membuka berkas taut simbol-footprint '%s'."
 
 #: eeschema/tools/backannotate.cpp:73
 msgid "Select at least one property to back annotate."
@@ -15007,35 +14990,35 @@ msgstr ""
 
 #: eeschema/tools/ee_actions.cpp:55
 msgid "Simulator..."
-msgstr ""
+msgstr "Simulator..."
 
 #: eeschema/tools/ee_actions.cpp:55
 msgid "Simulate circuit in SPICE"
-msgstr ""
+msgstr "Simulasikan sirkuit di SPICE"
 
 #: eeschema/tools/ee_actions.cpp:61
 msgid "Opens the datasheet in a browser"
-msgstr ""
+msgstr "Buka lembar data di peramban"
 
 #: eeschema/tools/ee_actions.cpp:69 pcbnew/tools/pcb_actions.cpp:1154
 msgid "Create Corner"
-msgstr ""
+msgstr "Buat Sudut"
 
 #: eeschema/tools/ee_actions.cpp:69 pcbnew/tools/pcb_actions.cpp:1154
 msgid "Create a corner"
-msgstr ""
+msgstr "Buat sebuah sudut"
 
 #: eeschema/tools/ee_actions.cpp:74 pcbnew/tools/pcb_actions.cpp:1159
 msgid "Remove Corner"
-msgstr ""
+msgstr "Buang Sudut"
 
 #: eeschema/tools/ee_actions.cpp:74 pcbnew/tools/pcb_actions.cpp:1159
 msgid "Remove corner"
-msgstr ""
+msgstr "Buang sudut"
 
 #: eeschema/tools/ee_actions.cpp:87
 msgid "Select Node"
-msgstr ""
+msgstr "Pilih Node"
 
 #: eeschema/tools/ee_actions.cpp:87
 msgid "Select a connection item under the cursor"
@@ -15043,15 +15026,15 @@ msgstr ""
 
 #: eeschema/tools/ee_actions.cpp:92
 msgid "Select Connection"
-msgstr ""
+msgstr "Pilih Koneksi"
 
 #: eeschema/tools/ee_actions.cpp:92
 msgid "Select a complete connection"
-msgstr ""
+msgstr "Pilih sebuah koneksi lengkap"
 
 #: eeschema/tools/ee_actions.cpp:118
 msgid "Save Library As..."
-msgstr ""
+msgstr "Simpan Pustaka Sebagai..."
 
 #: eeschema/tools/ee_actions.cpp:118
 msgid "Save the current library to a new file."
@@ -15059,62 +15042,59 @@ msgstr "Simpan pustaka saat ini ke sebuah berkas baru."
 
 #: eeschema/tools/ee_actions.cpp:123
 msgid "New Symbol..."
-msgstr ""
+msgstr "Simbol Baru..."
 
 #: eeschema/tools/ee_actions.cpp:123
 msgid "Create a new symbol"
-msgstr ""
+msgstr "Buat sebuah simbol baru"
 
 #: eeschema/tools/ee_actions.cpp:128
-#, fuzzy
 msgid "Edit Symbol"
-msgstr "Simbol"
+msgstr "Sunting Simbol"
 
 #: eeschema/tools/ee_actions.cpp:128
 msgid "Show selected symbol on editor canvas"
-msgstr ""
+msgstr "Tampilkan simbol terpilih pada kanvas penyunting"
 
 #: eeschema/tools/ee_actions.cpp:133
-#, fuzzy
 msgid "Duplicate Symbol"
-msgstr "Simbol Baru"
+msgstr "Duplikasikan Simbol"
 
 #: eeschema/tools/ee_actions.cpp:133
 msgid "Make a copy of the selected symbol"
-msgstr ""
+msgstr "Buat sebuah salinan simbol yang dipilih"
 
 #: eeschema/tools/ee_actions.cpp:138
 msgid "Save the current symbol to a different library."
-msgstr ""
+msgstr "Simpan simbol saat ini ke suatu pustaka."
 
 #: eeschema/tools/ee_actions.cpp:143
 msgid "Remove the selected symbol from its library"
-msgstr ""
+msgstr "Buang simbol terpilih dari pustaka"
 
 #: eeschema/tools/ee_actions.cpp:158
 msgid "Paste Symbol"
-msgstr ""
+msgstr "Tempel Simbol"
 
 #: eeschema/tools/ee_actions.cpp:163
 msgid "Import Symbol..."
-msgstr ""
+msgstr "Impor Simbol..."
 
 #: eeschema/tools/ee_actions.cpp:163
 msgid "Import a symbol to the current library"
-msgstr ""
+msgstr "Impor sebuah simbol ke pustaka saat ini"
 
 #: eeschema/tools/ee_actions.cpp:168
 msgid "Export..."
-msgstr ""
+msgstr "Ekspor..."
 
 #: eeschema/tools/ee_actions.cpp:168
 msgid "Export a symbol to a new library file"
 msgstr "Ekspor sebuah simbol ke berkas pustaka baru"
 
 #: eeschema/tools/ee_actions.cpp:173
-#, fuzzy
 msgid "Update Symbol Fields..."
-msgstr "Bidang Simbol"
+msgstr "Perbarui Bidang-bidang Simbol..."
 
 #: eeschema/tools/ee_actions.cpp:173
 #, fuzzy
@@ -15123,7 +15103,7 @@ msgstr "Perbarui skematik dengan perubahan yang dilakukan pada PCB"
 
 #: eeschema/tools/ee_actions.cpp:178
 msgid "Add Symbol to Schematic"
-msgstr ""
+msgstr "Tambahkan Simbol ke Skematik"
 
 #: eeschema/tools/ee_actions.cpp:183
 msgid "Show Pin Electrical Types"
@@ -15144,7 +15124,7 @@ msgstr "Teks Simbol"
 
 #: eeschema/tools/ee_actions.cpp:198
 msgid "Export View as PNG..."
-msgstr ""
+msgstr "Ekspor Tampilan sebagai PNG.."
 
 #: eeschema/tools/ee_actions.cpp:198
 msgid "Create PNG file from the current view"
@@ -15152,7 +15132,7 @@ msgstr "Buat berkas PNG dari tampilan saat ini"
 
 #: eeschema/tools/ee_actions.cpp:203
 msgid "Export Symbol as SVG..."
-msgstr ""
+msgstr "Ekspor Simbol sebagai SVG..."
 
 #: eeschema/tools/ee_actions.cpp:203
 msgid "Create SVG file from the current symbol"
@@ -15171,49 +15151,49 @@ msgstr ""
 
 #: eeschema/tools/ee_actions.cpp:220
 msgid "Add Pin"
-msgstr ""
+msgstr "Tambah Pin"
 
 #: eeschema/tools/ee_actions.cpp:220
 msgid "Add a pin"
-msgstr ""
+msgstr "Tambah sebuah pin"
 
 #: eeschema/tools/ee_actions.cpp:225 eeschema/tools/ee_actions.cpp:345
 #: pagelayout_editor/tools/pl_actions.cpp:54 pcbnew/tools/pcb_actions.cpp:123
 msgid "Add Text"
-msgstr ""
+msgstr "Tambah Teks"
 
 #: eeschema/tools/ee_actions.cpp:225 pagelayout_editor/tools/pl_actions.cpp:54
 #: pcbnew/tools/pcb_actions.cpp:123
 msgid "Add a text item"
-msgstr ""
+msgstr "Tambah sebuah item teks"
 
 #: eeschema/tools/ee_actions.cpp:230 pagelayout_editor/tools/pl_actions.cpp:49
 msgid "Add Rectangle"
-msgstr ""
+msgstr "Tambah Persegi"
 
 #: eeschema/tools/ee_actions.cpp:230 pagelayout_editor/tools/pl_actions.cpp:49
 msgid "Add a rectangle"
-msgstr ""
+msgstr "Tambah sebuah persegi"
 
 #: eeschema/tools/ee_actions.cpp:235
 msgid "Add Circle"
-msgstr ""
+msgstr "Tambah Lingkaran"
 
 #: eeschema/tools/ee_actions.cpp:235
 msgid "Add a circle"
-msgstr ""
+msgstr "Tambah sebuah lingkaran"
 
 #: eeschema/tools/ee_actions.cpp:240
 msgid "Add Arc"
-msgstr ""
+msgstr "Tambah Busur"
 
 #: eeschema/tools/ee_actions.cpp:240
 msgid "Add an arc"
-msgstr ""
+msgstr "Tambah sebuah busur"
 
 #: eeschema/tools/ee_actions.cpp:245 eeschema/tools/ee_actions.cpp:707
 msgid "Add Lines"
-msgstr ""
+msgstr "Tambah Garis"
 
 #: eeschema/tools/ee_actions.cpp:245 eeschema/tools/ee_actions.cpp:707
 msgid "Add connected graphic lines"
@@ -15297,27 +15277,27 @@ msgstr ""
 
 #: eeschema/tools/ee_actions.cpp:311
 msgid "Add Label"
-msgstr ""
+msgstr "Tambah Label"
 
 #: eeschema/tools/ee_actions.cpp:311
 msgid "Add a net label"
-msgstr ""
+msgstr "Tambah sebuah label net"
 
 #: eeschema/tools/ee_actions.cpp:317
 msgid "Add Hierarchical Label"
-msgstr ""
+msgstr "Tambah Label Hirarkis"
 
 #: eeschema/tools/ee_actions.cpp:317
 msgid "Add a hierarchical label"
-msgstr ""
+msgstr "Tambah sebuah label hirarkis"
 
 #: eeschema/tools/ee_actions.cpp:323
 msgid "Add Sheet"
-msgstr ""
+msgstr "Tambah Lembar Kerja"
 
 #: eeschema/tools/ee_actions.cpp:323
 msgid "Add a hierarchical sheet"
-msgstr ""
+msgstr "Tambah sebuah lembar kerja hirarkis"
 
 #: eeschema/tools/ee_actions.cpp:328 eeschema/tools/ee_actions.cpp:333
 msgid "Import Sheet Pin"
@@ -15329,23 +15309,23 @@ msgstr ""
 
 #: eeschema/tools/ee_actions.cpp:339
 msgid "Add Global Label"
-msgstr ""
+msgstr "Tambah Label Global"
 
 #: eeschema/tools/ee_actions.cpp:339
 msgid "Add a global label"
-msgstr ""
+msgstr "Tambah sebuah label global"
 
 #: eeschema/tools/ee_actions.cpp:345
 msgid "Add text"
-msgstr ""
+msgstr "Tambah teks"
 
 #: eeschema/tools/ee_actions.cpp:350
 msgid "Add Image"
-msgstr ""
+msgstr "Tambah Gambar"
 
 #: eeschema/tools/ee_actions.cpp:350
 msgid "Add bitmap image"
-msgstr ""
+msgstr "Tambah gambar bitmap"
 
 #: eeschema/tools/ee_actions.cpp:355
 msgid "Finish Sheet"
@@ -15357,27 +15337,27 @@ msgstr ""
 
 #: eeschema/tools/ee_actions.cpp:368
 msgid "Repeat Last Item"
-msgstr ""
+msgstr "Ulangi Item Terakhir"
 
 #: eeschema/tools/ee_actions.cpp:368
 msgid "Duplicates the last drawn item"
-msgstr ""
+msgstr "Duplikasikan item yang terakhir digambar"
 
 #: eeschema/tools/ee_actions.cpp:372 pcbnew/tools/pcb_actions.cpp:289
 msgid "Rotate Clockwise"
-msgstr ""
+msgstr "Rotasi Searah Jarum Jam"
 
 #: eeschema/tools/ee_actions.cpp:372 pcbnew/tools/pcb_actions.cpp:289
 msgid "Rotates selected item(s) clockwise"
-msgstr ""
+msgstr "Rotasi item terpilih searah jarum jam"
 
 #: eeschema/tools/ee_actions.cpp:378 pcbnew/tools/edit_tool.cpp:1492
 msgid "Rotate"
-msgstr ""
+msgstr "Rotasi"
 
 #: eeschema/tools/ee_actions.cpp:378
 msgid "Rotates selected item(s) counter-clockwise"
-msgstr ""
+msgstr "Rotasi item terpilih berlawanan jarum jam"
 
 #: eeschema/tools/ee_actions.cpp:384
 msgid "Mirror Vertically"
@@ -17284,7 +17264,7 @@ msgstr ""
 
 #: include/panel_hotkeys_editor.h:55
 msgid "Reset all hotkeys to the built-in KiCad defaults"
-msgstr ""
+msgstr "Setel ulang semua pintasan ke bawaan KiCad"
 
 #: include/project.h:41
 msgid "untitled"
@@ -21933,7 +21913,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_create_array_base.cpp:263
 #: pcbnew/dialogs/dialog_move_exact_base.cpp:52
 msgid "Rotate:"
-msgstr ""
+msgstr "Rotasi:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:269
 msgid ""
@@ -24355,7 +24335,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_pad_properties.cpp:492
 #, c-format
 msgid "Footprint %s (%s), %s, rotated %g deg"
-msgstr ""
+msgstr "Footprint %s (%s), %s, rotasi %g derajat"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:495
 #: pcbnew/dialogs/dialog_text_properties.cpp:237
@@ -32834,11 +32814,11 @@ msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:295
 msgid "Rotate Counterclockwise"
-msgstr ""
+msgstr "Rotasi Berlawanan Jarum Jam"
 
 #: pcbnew/tools/pcb_actions.cpp:295
 msgid "Rotates selected item(s) counterclockwise"
-msgstr ""
+msgstr "Rotasi item terpilih berlawanan jarum jam"
 
 #: pcbnew/tools/pcb_actions.cpp:301
 msgid "Flips selected item(s) to opposite side of board"
@@ -34934,20 +34914,17 @@ msgstr ""
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:57
 msgid "KiCad Main Window"
-msgstr ""
+msgstr "Jendela Utama KiCad"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:67
-#, fuzzy
 msgid "KiCad PCB Layout Editor"
-msgstr "Penyunting Simbol"
+msgstr "Penyunting Tata Letak PCB KiCad"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:84
-#, fuzzy
 msgid "The KiCad Developers"
-msgstr "Para Pengembang"
+msgstr "Para Pengembang KiCad"
 
 #: resources/linux/mime/kicad-gerbers.xml.in:5
-#, fuzzy
 msgid "Gerber file"
 msgstr "Berkas Gerber"
 
@@ -34956,18 +34933,16 @@ msgid "Excellon drill file"
 msgstr "Berkas drill Excellon"
 
 #: resources/linux/mime/kicad-kicad.xml.in:5
-#, fuzzy
 msgid "KiCad Project"
-msgstr "Tutup Proyek"
+msgstr "Proyek KiCad"
 
 #: resources/linux/mime/kicad-kicad.xml.in:12
-#, fuzzy
 msgid "KiCad Schematic"
-msgstr "Sunting Skematik"
+msgstr "Skematik KiCad"
 
 #: resources/linux/mime/kicad-kicad.xml.in:25
 msgid "KiCad Printed Circuit Board"
-msgstr ""
+msgstr "Papan Sirkuit KiCad"
 
 #~ msgid "3D Model Visibility"
 #~ msgstr "Visibilitas Model 3D"
