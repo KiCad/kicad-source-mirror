@@ -10,10 +10,10 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-08-30 14:45-0700\n"
-"PO-Revision-Date: 2021-08-27 08:25+0000\n"
+"PO-Revision-Date: 2021-09-05 21:21+0000\n"
 "Last-Translator: Konstantin Baranovskiy <baranovskiykonstantin@gmail.com>\n"
-"Language-Team: Russian <https://hosted.weblate.org/projects/kicad/master-"
-"source/ru/>\n"
+"Language-Team: Russian <https://hosted.weblate.org/projects/kicad/"
+"master-source/ru/>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -40,7 +40,6 @@ msgstr ""
 "X-Poedit-SearchPath-13: tools\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
-#, fuzzy
 msgid "All Files"
 msgstr "Все файлы"
 
@@ -968,27 +967,24 @@ msgid "Toggle Through Hole 3D models"
 msgstr "Переключить отображение 3D-модели выводного монтажа"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:213
-#, fuzzy
 msgid "Toggle 3D models for 'Through hole' type components"
-msgstr "Переключить отображение 3D-модели с атрибутом 'выводной монтаж'"
+msgstr "Переключить отображение 3D-моделей компонентов выводного монтажа"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:219
 msgid "Toggle SMD 3D models"
 msgstr "Переключить отображение 3D-модели поверхностного монтажа"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:219
-#, fuzzy
 msgid "Toggle 3D models for 'Surface mount' type components"
-msgstr "Переключить отображение 3D-модели с атрибутом 'поверхностный монтаж'"
+msgstr "Переключить отображение 3D-моделей компонентов выводного монтажа"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:225
-#, fuzzy
 msgid "Toggle Other 3D models"
-msgstr "Переключить отображение 3D-модели поверхностного монтажа"
+msgstr "Переключить отображение других 3D-моделей"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:225
 msgid "Toggle 3D models for 'Other' type components"
-msgstr ""
+msgstr "Переключить отображение 3D-моделей \"Прочих\" компонентов"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:230
 msgid "Show Model Bounding Boxes"
@@ -4453,6 +4449,8 @@ msgid ""
 "A directory containing 3rd party plugins, libraries and other downloadable "
 "content."
 msgstr ""
+"Каталог содержит плагины сторонних разработчиков, библиотеки и прочий "
+"загружаемый контент."
 
 #: common/env_vars.cpp:86
 msgid ""
@@ -5393,9 +5391,8 @@ msgid "No default editor found, you must choose it"
 msgstr "Редактор по умолчанию не найден, его необходимо определить"
 
 #: common/pgm_base.cpp:184 common/pgm_base.cpp:186
-#, fuzzy
 msgid "Executable file"
-msgstr "Исполняемые файлы ("
+msgstr "Исполняемый файл"
 
 #: common/pgm_base.cpp:196
 msgid "Select Preferred Editor"
@@ -12547,18 +12544,16 @@ msgid "Schematic Files"
 msgstr "Файлы схемы"
 
 #: eeschema/files-io.cpp:75
-#, fuzzy
 msgid "Create a new project for this schematic"
-msgstr "Создать новый проект для этой платы"
+msgstr "Создать новый проект для этой схемы"
 
 #: eeschema/files-io.cpp:77
-#, fuzzy
 msgid ""
 "Creating a project will enable features such as text variables, net classes, "
 "and ERC exclusions"
 msgstr ""
-"Создание проекта позволит использовать правила проектирования, классы цепей "
-"и наборы слоёв"
+"Создание проекта позволит использовать такие возможности как текстовые "
+"переменные, классы цепей и исключения ERC"
 
 #: eeschema/files-io.cpp:123
 #, c-format
@@ -17201,64 +17196,52 @@ msgid "Gerber files (.g* .lgr .pho)"
 msgstr "Файлы Gerber (.g* .lgr .pho)"
 
 #: gerbview/files.cpp:144
-#, fuzzy
 msgid "Top layer"
-msgstr "На слой:"
+msgstr "Верхний слой"
 
 #: gerbview/files.cpp:145
-#, fuzzy
 msgid "Bottom layer"
-msgstr "Нижний/задний слой:"
+msgstr "Нижний слой"
 
 #: gerbview/files.cpp:146
-#, fuzzy
 msgid "Bottom solder resist"
-msgstr "Паяльная паста снизу"
-
-#: gerbview/files.cpp:147
-#, fuzzy
-msgid "Top solder resist"
-msgstr "Паяльная паста сверху"
-
-#: gerbview/files.cpp:148
-#, fuzzy
-msgid "Bottom overlay"
 msgstr "Паяльная маска снизу"
 
-#: gerbview/files.cpp:149
-#, fuzzy
-msgid "Top overlay"
+#: gerbview/files.cpp:147
+msgid "Top solder resist"
 msgstr "Паяльная маска сверху"
 
+#: gerbview/files.cpp:148
+msgid "Bottom overlay"
+msgstr "Шёлкография снизу"
+
+#: gerbview/files.cpp:149
+msgid "Top overlay"
+msgstr "Шёлкография сверху"
+
 #: gerbview/files.cpp:150
-#, fuzzy
 msgid "Bottom paste"
 msgstr "Паяльная паста снизу"
 
 #: gerbview/files.cpp:151
-#, fuzzy
 msgid "Top paste"
 msgstr "Паяльная паста сверху"
 
 #: gerbview/files.cpp:152
-#, fuzzy
 msgid "Keep-out layer"
-msgstr "Оставить наружные слои"
+msgstr "Слой Keep-out"
 
 #: gerbview/files.cpp:153
-#, fuzzy
 msgid "Mechanical layers"
-msgstr "Технические слои:"
+msgstr "Технические слои"
 
 #: gerbview/files.cpp:154
-#, fuzzy
 msgid "Top Pad Master"
-msgstr "Паяльная паста сверху"
+msgstr "Pad Mastet сверху"
 
 #: gerbview/files.cpp:155
-#, fuzzy
 msgid "Bottom Pad Master"
-msgstr "Паяльная паста снизу"
+msgstr "Pad Master снизу"
 
 #: gerbview/files.cpp:173
 msgid "Open Gerber File(s)"
@@ -17917,9 +17900,8 @@ msgid "Reset all settings on this page to their default"
 msgstr "Сбросить все параметры на странице к значениям по умолчанию"
 
 #: include/wxstream_helper.h:46
-#, fuzzy
 msgid "Failed to output data"
-msgstr "Не удалось вывести данные."
+msgstr "Не удалось вывести данные"
 
 #: kicad/dialogs/dialog_template_selector.cpp:127
 msgid "<html><h1>Template Selector</h1></html>"
@@ -17989,7 +17971,7 @@ msgstr ""
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:142
 msgid "Manage downloadable packages from KiCad and 3rd party repositories"
-msgstr ""
+msgstr "Управление пакетами из репозиторев KiCad и сторонних разработчиков"
 
 #: kicad/files-io.cpp:46
 msgid "KiCad project file"
@@ -18173,84 +18155,78 @@ msgstr "Открыть каталог проекта в файловом мен�
 
 #: kicad/pcm/dialogs/dialog_manage_repositories.cpp:67
 msgid "Please enter fully qualified repository url"
-msgstr ""
+msgstr "Введите URL репозитория полностью"
 
 #: kicad/pcm/dialogs/dialog_manage_repositories.cpp:67
-#, fuzzy
 msgid "Add repository"
-msgstr "Добавить ввод проводника в шину"
+msgstr "Добавить репозиторий"
 
 #: kicad/pcm/dialogs/dialog_manage_repositories_base.h:60
-#, fuzzy
 msgid "Manage Repositores"
-msgstr "Менеджер псевдонимов шин"
+msgstr "Менеджер репозиториев"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:50
-#, fuzzy, c-format
+#, c-format
 msgid "Plugins (%d)"
-msgstr "Нарушения (%d)"
+msgstr "Плагины (%d)"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:51
-#, fuzzy, c-format
+#, c-format
 msgid "Libraries (%d)"
-msgstr "Библиотеки"
+msgstr "Библиотеки (%d)"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:52
-#, fuzzy, c-format
+#, c-format
 msgid "Color themes (%d)"
-msgstr "Цветовая тема:"
+msgstr "Цветовые темы (%d)"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:79 kicad/pcm/dialogs/dialog_pcm.cpp:315
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:51
 #, c-format
 msgid "Repository (%d)"
-msgstr ""
+msgstr "Репозиторий (%d)"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:96 kicad/pcm/dialogs/panel_package.cpp:70
 #: kicad/pcm/dialogs/panel_package.cpp:74
 #: kicad/pcm/dialogs/panel_package_base.cpp:67
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:108
 msgid "Install"
-msgstr ""
+msgstr "Установить"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:105 kicad/pcm/dialogs/panel_package.cpp:78
 msgid "Uninstall"
-msgstr ""
+msgstr "Удалить"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:160
-#, fuzzy
 msgid ""
 "Are you sure you want to close the package manager and discard pending "
 "changes?"
-msgstr "Удалить все выделенные элементы?"
+msgstr "Закрыть менеджер пакетов и отменить отложенные изменения?"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:162
 #: kicad/tools/kicad_manager_actions.cpp:118
-#, fuzzy
 msgid "Plugin and Content Manager"
-msgstr "ГОСТ Менеджер Компонентов"
+msgstr "Менеджер плагинов и контента"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:235
-#, fuzzy
 msgid "Choose package file"
-msgstr "Выбор изображения"
+msgstr "Выбор файла пакета"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:330
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:117
 #, c-format
 msgid "Pending (%d)"
-msgstr ""
+msgstr "Отложено (%d)"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:365
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:60
 #, c-format
 msgid "Installed (%d)"
-msgstr ""
+msgstr "Установлено (%d)"
 
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:37
-#, fuzzy
 msgid "Manage"
-msgstr "Менеджер проектов KiCad"
+msgstr "Управлять"
 
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:82
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:103
@@ -18264,278 +18240,256 @@ msgid "Package"
 msgstr "Корпус"
 
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:85
-#, fuzzy
 msgid "Repository"
-msgstr "Сообщить об ошибке"
+msgstr "Репозиторий"
 
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:103
-#, fuzzy
 msgid "Discard action"
-msgstr "Отменить изменения"
+msgstr "Отменить действие"
 
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:133
-#, fuzzy
 msgid "Install from file..."
-msgstr "Не удалось переименовать файл ... "
+msgstr "Установить из файла..."
 
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:136
-#, fuzzy
 msgid "Apply changes"
-msgstr "Сохранить изменения"
+msgstr "Применить изменения"
 
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:139
-#, fuzzy
 msgid "Discard changes"
 msgstr "Отменить изменения"
 
 #: kicad/pcm/dialogs/dialog_pcm_base.h:73
-#, fuzzy
 msgid "Plugin And Content Manager"
-msgstr "ГОСТ Менеджер Компонентов"
+msgstr "Менеджер плагинов и контента"
 
 #: kicad/pcm/dialogs/dialog_pcm_progress.cpp:86
 #, c-format
 msgid "Downloaded %lld/%lld Kb"
-msgstr ""
+msgstr "Загружено %lld/%lld кбит"
 
 #: kicad/pcm/dialogs/dialog_pcm_progress.cpp:150
 msgid "All downloads finished"
-msgstr ""
+msgstr "Загрузка завершена"
 
 #: kicad/pcm/dialogs/dialog_pcm_progress_base.cpp:21
-#, fuzzy
 msgid "Download progress"
-msgstr "Загрузка 3D библиотек"
+msgstr "Прогресс загрузки"
 
 #: kicad/pcm/dialogs/dialog_pcm_progress_base.cpp:23
-#, fuzzy
 msgid "Waiting..."
-msgstr "Загрузка..."
+msgstr "Ожидание..."
 
 #: kicad/pcm/dialogs/dialog_pcm_progress_base.cpp:42
-#, fuzzy
 msgid "Overall progress"
-msgstr "Свойства материала:"
+msgstr "Общий прогресс"
 
 #: kicad/pcm/dialogs/dialog_pcm_progress_base.cpp:52
 msgid "Details"
-msgstr ""
+msgstr "Подробности"
 
 #: kicad/pcm/dialogs/dialog_pcm_progress_base.h:58
 msgid "Applying package changes"
-msgstr ""
+msgstr "Применение изменений пакета"
 
 #: kicad/pcm/dialogs/panel_package.cpp:82
-#, fuzzy
 msgid "Pending install"
-msgstr "Параметры визуализации"
+msgstr "Отложенная установка"
 
 #: kicad/pcm/dialogs/panel_package.cpp:86
-#, fuzzy
 msgid "Pending uninstall"
-msgstr "Графический движок"
+msgstr "Отложенное удаление"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:147
 msgid "Metadata"
-msgstr ""
+msgstr "Метаданные"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:154
 #, c-format
 msgid "Package identifier: %s\n"
-msgstr ""
+msgstr "Идентификатор пакета: %s\n"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:155
-#, fuzzy, c-format
+#, c-format
 msgid "License: %s\n"
-msgstr "Лицензия"
+msgstr "Лицензия: %s\n"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:169
 #, c-format
 msgid "Tags: %s\n"
-msgstr ""
+msgstr "Метки: %s\n"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:184
 msgid "Author"
-msgstr ""
+msgstr "Автор"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:187
 msgid "Maintainer"
-msgstr ""
+msgstr "Сопровождающий"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:191
-#, fuzzy
 msgid "Resources"
-msgstr "Поменять источники местами"
+msgstr "Ресурсы"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:266
 msgid "Pick a package on the left panel to view it's description."
-msgstr ""
+msgstr "Выберите пакет на левой панели для просмотра его описания."
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:342
 msgid "Package download url is not specified"
-msgstr ""
+msgstr "Не указан URL для загрузки пакета"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:343
-#, fuzzy
 msgid "Error downloading package"
-msgstr "Ошибка загрузки редактора."
+msgstr "Ошибка загрузки пакета"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:352
-#, fuzzy
 msgid "Save package"
-msgstr "Сохранить изменения"
+msgstr "Сохранить пакет"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:364
-#, fuzzy
 msgid "Downloading package"
-msgstr "Загрузка 3D библиотек"
+msgstr "Загрузка пакета"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:380
 msgid ""
 "Integrity of the downloaded package could not be verified, hash does not "
 "match. Are you sure you want to keep this file?"
 msgstr ""
+"Не удалось подтвердить целостность загруженного пакета, контрольная сумма не "
+"совпадает. Оставить этот файл?"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:382
-#, fuzzy
 msgid "Keep downloaded file"
-msgstr "Запретить заполнение медью"
+msgstr "Оставить загруженный файл"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:419
 msgid ""
 "This package version is incompatible with your kicad version or platform. "
 "Are you sure you want to install it anyway?"
 msgstr ""
+"Версия этого пакета не совпадает с установленной версией KiCad или "
+"операционной системой. Всё равно установить?"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:421
-#, fuzzy
 msgid "Install package"
-msgstr "В корпусе"
+msgstr "Установить пакет"
 
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:64
-#, fuzzy
 msgid "Show all versions"
-msgstr "Показать все перех.отв."
+msgstr "Показать все версии"
 
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:82
-#, fuzzy
 msgid "Dl Size"
-msgstr "Размер X"
+msgstr "Загр.разм."
 
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:83
-#, fuzzy
 msgid "Inst Size"
-msgstr "Разм. текста"
+msgstr "Уст.разм."
 
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:84
-#, fuzzy
 msgid "Comp"
-msgstr "Организация:"
+msgstr "Орг."
 
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:105
-#, fuzzy
 msgid "Download"
-msgstr "Вниз"
+msgstr "Загрузить"
 
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:121
-#, fuzzy
 msgid "Versions"
-msgstr "Информация о версии"
+msgstr "Версии"
 
 #: kicad/pcm/pcm.cpp:79
-#, fuzzy, c-format
+#, c-format
 msgid "schema file '%s' not found"
-msgstr "Файл схемы '%s' не найден."
+msgstr "Файл схемы '%s' не найден"
 
 #: kicad/pcm/pcm.cpp:81
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading schema: %s"
-msgstr "Ошибка загрузки схемы '%s'."
+msgstr "Ошибка загрузки схемы: %s"
 
 #: kicad/pcm/pcm.cpp:107
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading installed packages list: %s"
-msgstr ""
-"Ошибка загрузки списка цепей.\n"
-"%s"
+msgstr "Ошибка загрузки списка цепей: %s"
 
 #: kicad/pcm/pcm.cpp:184
 #, c-format
 msgid "Downloading %lld/%lld Kb"
-msgstr ""
+msgstr "Загрузка %lld/%lld кбит"
 
 #: kicad/pcm/pcm.cpp:208
-#, fuzzy
 msgid "Download is too large."
-msgstr "Загрузка 3D библиотек"
+msgstr "Загрузка слишком большая."
 
 #: kicad/pcm/pcm.cpp:222
 msgid "Fetching repository"
-msgstr ""
+msgstr "Чтение репозитория"
 
 #: kicad/pcm/pcm.cpp:224
-#, fuzzy
 msgid "Unable to load repository url"
-msgstr "Не удалось загрузить файл %s"
+msgstr "Не удалось загрузить URL репозитория"
 
 #: kicad/pcm/pcm.cpp:239
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Unable to parse repository:\n"
 "\n"
 "%s"
 msgstr ""
-"Не удаётся разобрать URL:\n"
-"\"%s\""
+"Не удаётся разобрать репозиторий:\n"
+"\n"
+"%s"
 
 #: kicad/pcm/pcm.cpp:260
 msgid "Fetching repository packages"
-msgstr ""
+msgstr "Чтение пакетов репозитория"
 
 #: kicad/pcm/pcm.cpp:262
-#, fuzzy
 msgid "Unable to load repository packages url."
-msgstr "Не удалось загрузить файл проекта \"%s\""
+msgstr "Не удалось загрузить URL пакетов репозитория."
 
 #: kicad/pcm/pcm.cpp:270
 msgid "Packages hash doesn't match. Repository may be corrupted."
 msgstr ""
+"Контрольная сумма пакетов не совпадает. Возможно, репозиторий повреждён."
 
 #: kicad/pcm/pcm.cpp:286
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Unable to parse packages metadata:\n"
 "\n"
 "%s"
 msgstr ""
-"Не удаётся разобрать URL:\n"
-"\"%s\""
+"Не удаётся разобрать метаданные пакета:\n"
+"\n"
+"%s"
 
 #: kicad/pcm/pcm.cpp:373
 msgid ""
 "Packages cache for current repository is corrupted, it will be redownloaded."
-msgstr ""
+msgstr "Кэш пакетов текущего репозитория повреждён, он будет перезагружен."
 
 #: kicad/pcm/pcm.cpp:423
-#, fuzzy
 msgid "Downloading resources"
-msgstr "Загрузка 3D библиотек"
+msgstr "Загрузка ресурсов"
 
 #: kicad/pcm/pcm.cpp:437
 msgid ""
 "Resources file hash doesn't match and will not be used. Repository may be "
 "corrupted."
 msgstr ""
+"Контрольная сумма файла ресурсов не совпадает, файл не будет использован. "
+"Возможно, репозиторий повреждён."
 
 #: kicad/pcm/pcm.cpp:582
-#, fuzzy
 msgid "Local file"
-msgstr "Править файл..."
+msgstr "Локальный файл"
 
 #: kicad/pcm/pcm_task_manager.cpp:63
-#, fuzzy
 msgid "Unable to create download directory!"
-msgstr "Не удалось создать каталог \"%s\""
+msgstr "Не удалось создать каталог загрузки!"
 
 #: kicad/pcm/pcm_task_manager.cpp:92
 #, c-format
@@ -18544,51 +18498,56 @@ msgid ""
 "may indicate a problem with the package, if the issue persists report this "
 "to repository maintainers."
 msgstr ""
+"Контрольная сумма загруженного пакета %s не совпадает со значением из "
+"репозитория. Это может указывать на проблему с пакетом, если эта проблема "
+"возникает постоянно - сообщите сопровождающим репозитория."
 
 #: kicad/pcm/pcm_task_manager.cpp:101
-#, fuzzy, c-format
+#, c-format
 msgid "Extracting package '%s'."
-msgstr "Извлечение файла '%s'."
+msgstr "Распаковка пакета '%s'."
 
 #: kicad/pcm/pcm_task_manager.cpp:116
 #, c-format
 msgid "Removing downloaded archive '%s'."
-msgstr ""
+msgstr "Удаление загруженного архива '%s'."
 
 #: kicad/pcm/pcm_task_manager.cpp:157
 #, c-format
 msgid "Downloading package url: '%s'"
-msgstr ""
+msgstr "Загрузка пакета URL: '%s'"
 
 #: kicad/pcm/pcm_task_manager.cpp:170
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Failed to download url %s\n"
 "%s"
-msgstr "Не удалось загрузить '%s'."
+msgstr ""
+"Не удалось загрузить URL %s\n"
+"%s"
 
 #: kicad/pcm/pcm_task_manager.cpp:249
 msgid "Aborting package installation."
-msgstr ""
+msgstr "Прерывание установки пакета."
 
 #: kicad/pcm/pcm_task_manager.cpp:297
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Unable to parse package metadata:\n"
 "\n"
 "%s"
 msgstr ""
-"Не удаётся разобрать URL:\n"
-"\"%s\""
+"Не удаётся разобрать метаданные пакета:\n"
+"\n"
+"%s"
 
 #: kicad/pcm/pcm_task_manager.cpp:306
 msgid "Archive does not contain a valid metadata.json file"
-msgstr ""
+msgstr "Архив не содержит верного файла metadata.json"
 
 #: kicad/pcm/pcm_task_manager.cpp:314
-#, fuzzy
 msgid "Archive metadata must have a single version defined"
-msgstr "Листу должен быть назначен файл."
+msgstr "В метаданных должна быть указана только одна версия"
 
 #: kicad/pcm/pcm_task_manager.cpp:326
 #, c-format
@@ -18596,30 +18555,31 @@ msgid ""
 "Package with identifier %s is already installed, you must first uninstall "
 "this package."
 msgstr ""
+"Пакет с идентификатором %s уже установлен, сначала следует удалить этот "
+"пакет."
 
 #: kicad/pcm/pcm_task_manager.cpp:354
-#, fuzzy, c-format
+#, c-format
 msgid "Removing directory %s"
-msgstr "Удалена цепь %s с одной конт.пл."
+msgstr "Удаление каталога %s"
 
 #: kicad/pcm/pcm_task_manager.cpp:359
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to remove directory %s"
-msgstr "Не удалось создать каталог \"%s\""
+msgstr "Не удалось удалить каталог %s"
 
 #: kicad/pcm/pcm_task_manager.cpp:376
 #, c-format
 msgid "Package %s uninstalled"
-msgstr ""
+msgstr "Пакет %s удалён"
 
 #: kicad/pcm/pcm_task_manager.cpp:445
 msgid "Aborting remaining tasks."
-msgstr ""
+msgstr "Прерывание оставшихся задач."
 
 #: kicad/pcm/pcm_task_manager.cpp:448
-#, fuzzy
 msgid "Done."
-msgstr "Сделано."
+msgstr "Готово."
 
 #: kicad/project_template.cpp:52
 msgid "Could open the template path!"
@@ -18863,7 +18823,7 @@ msgstr "Редактировать форматную рамку и основн
 
 #: kicad/tools/kicad_manager_actions.cpp:118
 msgid "Run Plugin and Content Manager"
-msgstr ""
+msgstr "Запустить менеджер плагинов и контента"
 
 #: kicad/tools/kicad_manager_actions.cpp:125
 msgid "Open Text Editor"
@@ -20440,9 +20400,8 @@ msgstr ""
 "Желаете выйти и отказаться от изменений?"
 
 #: pcb_calculator/regulators_funct.cpp:127
-#, fuzzy
 msgid "PCB Calculator data file"
-msgstr "Файл данных для PCB Calculator (*.%s)|*.%s"
+msgstr "Файл данных для PCB Calculator"
 
 #: pcb_calculator/regulators_funct.cpp:130
 msgid "Select PCB Calculator Data File"
@@ -21163,9 +21122,8 @@ msgid "A layer thickness is < 0. Fix it"
 msgstr "Толщина слоя меньше нуля. Исправьте."
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:1522
-#, fuzzy
 msgid "Custom..."
-msgstr "Пользовательская"
+msgstr "Пользовательская..."
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:20
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:49
@@ -23358,9 +23316,8 @@ msgid "Select a STEP export filename"
 msgstr "Выбор имени файла экспорта в STEP"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:138
-#, fuzzy
 msgid "STEP files"
-msgstr "SVG файлы"
+msgstr "STEP файлы"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:202
 msgid "Non-unity scaled models:"
@@ -24219,7 +24176,6 @@ msgid "CSV"
 msgstr "CSV"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:48
-#, fuzzy
 msgid "Gerber (experimental)"
 msgstr "Gerber (экспериментально)"
 
@@ -24248,9 +24204,8 @@ msgstr ""
 "создаётся один файл, содержащий все посад.места для установки\n"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:74
-#, fuzzy
 msgid "Include only SMD footprints"
-msgstr "Включить посад.места"
+msgstr "Включить только SMD посад.места"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:77
 msgid "Exclude all footprints with through hole pads"
@@ -28467,7 +28422,6 @@ msgid "Check rule syntax"
 msgstr "Проверить синтаксис правил"
 
 #: pcbnew/dialogs/panel_setup_rules_help_md.h:2
-#, fuzzy
 msgid ""
 "### Top-level Clauses\n"
 "\n"
@@ -28712,6 +28666,7 @@ msgstr ""
 " * skew\n"
 " * track\\_width\n"
 " * via\\_count\n"
+" * via\\_diameter\n"
 "\n"
 "\n"
 "<br><br>\n"
@@ -28777,8 +28732,8 @@ msgstr ""
 "<br><br>\n"
 "\n"
 "    A.insideCourtyard('<обозначения_посад.мест>')\n"
-"Истина если любая часть `A` лежит в главной области установки указанных "
-"посад.мест.\n"
+"Истина если любая часть `A` лежит в главной области установки указанных посад"
+".мест.\n"
 "<br><br>\n"
 "\n"
 "    A.insideFrontCourtyard('<обозначения_посад.мест>')\n"
@@ -28810,8 +28765,8 @@ msgstr ""
 "<br><br>\n"
 "\n"
 "    A.memberOf('<имя_группы>')\n"
-"Истина если `A` является членом указанной группы (включая вложенные "
-"группы).\n"
+"Истина если `A` является членом указанной группы (включая вложенные группы)."
+"\n"
 "<br><br>\n"
 "\n"
 "    A.existsOnLayer('<имя_слоя>')\n"
@@ -29016,9 +28971,8 @@ msgid "Local override on %s; clearance: %s."
 msgstr "Локально переопределено на %s; зазор: %s."
 
 #: pcbnew/drc/drc_engine.cpp:831
-#, fuzzy
 msgid "board minimum"
-msgstr "минимальная ширина платы"
+msgstr "минимум платы"
 
 #: pcbnew/drc/drc_engine.cpp:834
 #, c-format
@@ -29026,14 +28980,13 @@ msgid "Board minimum clearance: %s."
 msgstr "Минимальный зазор для платы: %s."
 
 #: pcbnew/drc/drc_engine.cpp:843
-#, fuzzy
 msgid "board minimum hole"
-msgstr "минимальная ширина платы"
+msgstr "минимальное отв. платы"
 
 #: pcbnew/drc/drc_engine.cpp:846
-#, fuzzy, c-format
+#, c-format
 msgid "Board minimum hole clearance: %s."
-msgstr "Минимальный зазор для платы: %s."
+msgstr "Минимальный зазор отв. для платы: %s."
 
 #: pcbnew/drc/drc_engine.cpp:873
 #, c-format
@@ -29296,9 +29249,8 @@ msgid "Rule: %s"
 msgstr "Правило: %s"
 
 #: pcbnew/drc/drc_item.cpp:322
-#, fuzzy
 msgid "Local override"
-msgstr "Локальный зазор"
+msgstr "Переопределено локально"
 
 #: pcbnew/drc/drc_rule.h:137
 #, c-format
@@ -30203,14 +30155,13 @@ msgid "No footprints to export!"
 msgstr "Нет посад.мест для экспорта!"
 
 #: pcbnew/footprint_libraries_utils.cpp:689
-#, fuzzy, c-format
+#, c-format
 msgid "Update footprints on board to refer to %s?"
-msgstr "Обновить посад.место на плате"
+msgstr "Обновить посад.места на плате, чтобы соответствовать %s?"
 
 #: pcbnew/footprint_libraries_utils.cpp:736
-#, fuzzy
 msgid "Update footprints on board to refer to new library?"
-msgstr "Обновить посад.места, чтобы получить последние изменения из библиотеки"
+msgstr "Обновить посад.места на плате, чтобы соответствовать новой библиотеке?"
 
 #: pcbnew/footprint_libraries_utils.cpp:875
 #: pcbnew/footprint_viewer_frame.cpp:718
@@ -35076,11 +35027,11 @@ msgstr "Показать только контур зоны"
 
 #: pcbnew/tools/pcb_actions.cpp:844
 msgid "Draw Zone Fill Fracture Borders"
-msgstr ""
+msgstr "Показывать границы заливки"
 
 #: pcbnew/tools/pcb_actions.cpp:849
 msgid "Draw Zone Fill Triangulation"
-msgstr ""
+msgstr "Показывать вершины контура заливки"
 
 #: pcbnew/tools/pcb_actions.cpp:855
 msgid "Toggle Zone Display"
