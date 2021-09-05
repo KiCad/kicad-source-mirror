@@ -39,19 +39,17 @@ SELECTION_TOOL::SELECTION_TOOL() :
 
 void SELECTION_TOOL::setModifiersState( bool aShiftState, bool aCtrlState, bool aAltState )
 {
-    // Set the configuration of m_additive, m_subtractive, m_exclusive_or
-    // from the state of modifier keys SHIFT, CTRL, ALT
+    // Set the configuration of m_additive, m_subtractive, m_exclusive_or from the state of
+    // modifier keys SHIFT and CTRL
 
-    // on left click, a selection is made, depending on modifiers ALT, SHIFT, CTRL:
     // ALT key cannot be used on MSW because of a conflict with the system menu
-    // for this reason, we do not use the ALT key modifier.
 
     m_subtractive        = aCtrlState && aShiftState;
     m_additive           = !aCtrlState && aShiftState;
     m_exclusive_or       = false;
     m_highlight_modifier = aCtrlState && !aShiftState;
 
-    // Drag is more forgiving and allows either Ctrl+drag or Shift+Drag to add to the selection
+    // Drag is more forgiving and allows either Ctrl+Drag or Shift+Drag to add to the selection
     // Note, however that we cannot provide disambiguation at the same time as the box selection
     m_drag_additive      = ( aCtrlState || aShiftState ) && !aAltState;
     m_drag_subtractive   = aCtrlState && aShiftState && !aAltState;
@@ -59,6 +57,5 @@ void SELECTION_TOOL::setModifiersState( bool aShiftState, bool aCtrlState, bool 
     // While the ALT key has some conflicts under MSW (and some flavors of Linux WMs), it remains
     // useful for users who only use tap-click rather than holding the button.  It doesn't hurt
     // to also have this option.
-
     m_skip_heuristics = aAltState;
 }
