@@ -342,9 +342,6 @@ void DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::visitItem( PICKED_ITEMS_LIST* aUndoList
         }
     }
 
-    if( m_selectedItemsFilter->GetValue() && !m_selection.Contains( aItem ) )
-        return;
-
     if( m_netFilterOpt->GetValue() && m_netFilter->GetSelectedNetcode() >= 0 )
     {
         if( aItem->GetNetCode() != m_netFilter->GetSelectedNetcode() )
