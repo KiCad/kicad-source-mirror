@@ -175,8 +175,6 @@ public:
 
     struct PANEL_NETLIST
     {
-       // std::vector<wxString> custom_command_titles;
-       // std::vector<wxString> custom_command_paths;
         std::vector<NETLIST_PLUGIN_SETTINGS> plugins;
     };
 

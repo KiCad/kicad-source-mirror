@@ -57,7 +57,7 @@ class DIALOG_MANAGE_REPOSITORIES_BASE : public wxDialog
 
 	public:
 
-		DIALOG_MANAGE_REPOSITORIES_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Manage Repositores"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 500,300 ), long style = wxDEFAULT_DIALOG_STYLE );
+		DIALOG_MANAGE_REPOSITORIES_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Manage Repositores"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 500,300 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 		~DIALOG_MANAGE_REPOSITORIES_BASE();
 
 };
