@@ -70,6 +70,20 @@ public:
         wxString command;
     };
 
+    struct NETLIST_PLUGIN_SETTINGS
+    {
+        NETLIST_PLUGIN_SETTINGS() = default;
+
+        NETLIST_PLUGIN_SETTINGS( const wxString& aName, const wxString& aPath ) :
+                name( aName ),
+                path( aPath )
+        {}
+
+        wxString name;
+        wxString path;
+        wxString command;
+    };
+
     struct DRAWING
     {
         int      default_bus_thickness;
@@ -161,8 +175,9 @@ public:
 
     struct PANEL_NETLIST
     {
-        std::vector<wxString> custom_command_titles;
-        std::vector<wxString> custom_command_paths;
+       // std::vector<wxString> custom_command_titles;
+       // std::vector<wxString> custom_command_paths;
+        std::vector<NETLIST_PLUGIN_SETTINGS> plugins;
     };
 
     struct PANEL_PLOT
@@ -215,6 +230,9 @@ private:
     nlohmann::json bomSettingsToJson() const;
 
     static std::vector<BOM_PLUGIN_SETTINGS> bomSettingsFromJson( const nlohmann::json& aObj );
+
+    nlohmann::json netlistSettingsToJson() const;
+    static std::vector<NETLIST_PLUGIN_SETTINGS> netlistSettingsFromJson( const nlohmann::json& aObj );
 
 public:
     APPEARANCE m_Appearance;

@@ -219,6 +219,22 @@ EESCHEMA_SETTINGS::EESCHEMA_SETTINGS() :
             },
             defaultBomPlugins ) );
 
+    m_params.emplace_back( new PARAM_LAMBDA<nlohmann::json>( "netlist.plugins",
+            std::bind( &EESCHEMA_SETTINGS::netlistSettingsToJson, this ),
+            [&]( const nlohmann::json& aObj )
+            {
+                if( !aObj.is_array() )
+                    return;
+
+                if( aObj.empty() )
+                    return;
+
+                const nlohmann::json& list = aObj;
+
+                m_NetlistPanel.plugins = netlistSettingsFromJson( list );
+            },
+            nullptr ) );
+
     m_params.emplace_back( new PARAM<bool>( "page_settings.export_paper",
             &m_PageSettings.export_paper, false ) );
 
@@ -475,6 +491,7 @@ bool EESCHEMA_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
     ret &= fromLegacy<bool>( aCfg, "PageSettingsExportComment8", "page_settings.export_comment8" );
     ret &= fromLegacy<bool>( aCfg, "PageSettingsExportComment9", "page_settings.export_comment9" );
 
+    #if 0   // To do: move this code to the new netlist plugin management in settings
     {
         constexpr int max_custom_commands = 8;  // from DIALOG_NETLIST
         nlohmann::json js_cmd   = nlohmann::json::array();
@@ -498,6 +515,7 @@ bool EESCHEMA_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
         Set( "netlist.custom_command_titles", js_title );
         Set( "netlist.custom_command_paths", js_cmd );
     }
+    #endif
 
     {
         // NOTE(JE) These parameters should move to project-local storage before V6, but we are
@@ -727,6 +745,53 @@ std::vector<EESCHEMA_SETTINGS::BOM_PLUGIN_SETTINGS> EESCHEMA_SETTINGS::bomSettin
             continue;
 
         BOM_PLUGIN_SETTINGS plugin( entry.at( "name" ).get<wxString>(),
+                                    entry.at( "path" ).get<wxString>() );
+
+        if( entry.contains( "command" ) )
+            plugin.command = entry.at( "command" ).get<wxString>();
+
+        ret.emplace_back( plugin );
+    }
+
+    return ret;
+}
+
+
+nlohmann::json EESCHEMA_SETTINGS::netlistSettingsToJson() const
+{
+    nlohmann::json js = nlohmann::json::array();
+
+    for( const NETLIST_PLUGIN_SETTINGS& plugin : m_NetlistPanel.plugins )
+    {
+        nlohmann::json pluginJson;
+
+        pluginJson["name"]    = plugin.name.ToUTF8();
+        pluginJson["path"]    = plugin.path.ToUTF8();
+        pluginJson["command"] = plugin.command.ToUTF8();
+
+        js.push_back( pluginJson );
+    }
+
+    return js;
+}
+
+
+std::vector<EESCHEMA_SETTINGS::NETLIST_PLUGIN_SETTINGS> EESCHEMA_SETTINGS::netlistSettingsFromJson(
+        const nlohmann::json& aObj )
+{
+    std::vector<EESCHEMA_SETTINGS::NETLIST_PLUGIN_SETTINGS> ret;
+
+    wxASSERT( aObj.is_array() );
+
+    for( const nlohmann::json& entry : aObj )
+    {
+        if( entry.empty() || !entry.is_object() )
+            continue;
+
+        if( !entry.contains( "name" ) || !entry.contains( "path" ) )
+            continue;
+
+        NETLIST_PLUGIN_SETTINGS plugin( entry.at( "name" ).get<wxString>(),
                                     entry.at( "path" ).get<wxString>() );
 
         if( entry.contains( "command" ) )

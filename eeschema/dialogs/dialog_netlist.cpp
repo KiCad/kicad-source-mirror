@@ -356,16 +356,16 @@ void NETLIST_DIALOG::InstallCustomPages()
     if( cfg )
     {
         for( size_t i = 0;
-             i < CUSTOMPANEL_COUNTMAX && i < cfg->m_NetlistPanel.custom_command_titles.size();
+             i < CUSTOMPANEL_COUNTMAX && i < cfg->m_NetlistPanel.plugins.size();
              i++ )
         {
             // pairs of (title, command) are stored
-            wxString title = cfg->m_NetlistPanel.custom_command_titles[i];
+            wxString title = cfg->m_NetlistPanel.plugins[i].name;
 
-            if( i >= cfg->m_NetlistPanel.custom_command_paths.size() )
+            if( i >= cfg->m_NetlistPanel.plugins.size() )
                 break; // No more panel to install
 
-            wxString command = cfg->m_NetlistPanel.custom_command_paths[i];
+            wxString command = cfg->m_NetlistPanel.plugins[i].command;
 
             currPage = AddOneCustomPage( title, command,
                     static_cast<NETLIST_TYPE_ID>( NET_TYPE_CUSTOM1 + i ) );
@@ -557,28 +557,27 @@ void NETLIST_DIALOG::WriteCurrentNetlistSetup()
     EESCHEMA_SETTINGS* cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
     wxASSERT( cfg );
 
-    if( cfg )
+    if( !cfg )
+        return;
+
+    cfg->m_NetlistPanel.plugins.clear();
+
+    // Update existing custom pages
+    for( int ii = 0; ii < CUSTOMPANEL_COUNTMAX; ii++ )
     {
-        cfg->m_NetlistPanel.custom_command_titles.clear();
-        cfg->m_NetlistPanel.custom_command_paths.clear();
+        NETLIST_PAGE_DIALOG* currPage = m_PanelNetType[ii + PANELCUSTOMBASE];
 
-        // Update existing custom pages
-        for( int ii = 0; ii < CUSTOMPANEL_COUNTMAX; ii++ )
-        {
-            NETLIST_PAGE_DIALOG* currPage = m_PanelNetType[ii + PANELCUSTOMBASE];
+        if( currPage == nullptr )
+            break;
 
-            if( currPage == nullptr )
-                break;
+        wxString title = currPage->m_TitleStringCtrl->GetValue();
+        wxString command = currPage->m_CommandStringCtrl->GetValue();
 
-            wxString title = currPage->m_TitleStringCtrl->GetValue();
+        if( title.IsEmpty() || command.IsEmpty() )
+            continue;
 
-            if( title.IsEmpty() )
-                continue;
-
-            cfg->m_NetlistPanel.custom_command_titles.emplace_back( title );
-            cfg->m_NetlistPanel.custom_command_paths.emplace_back(
-                    currPage->m_CommandStringCtrl->GetValue() );
-        }
+        cfg->m_NetlistPanel.plugins.emplace_back( title, wxEmptyString );
+        cfg->m_NetlistPanel.plugins.back().command = command;
     }
 }
 
