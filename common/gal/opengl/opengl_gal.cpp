@@ -869,7 +869,7 @@ void OPENGL_GAL::DrawArcSegment( const VECTOR2D& aCenterPoint, double aRadius,
 
     // Calculate the seg count to approximate the arc with aMaxError or less
     int segCount360 = GetArcToSegmentCount( aRadius, aMaxError, 360.0 );
-    segCount360 = std::max( CIRCLE_POINTS, segCount360 );
+    segCount360 = std::max( SEG_PER_CIRCLE_COUNT, segCount360 );
     double alphaIncrement = 2.0 * M_PI / segCount360;
 
     // Refinement: Use a segment count multiple of 2, because we have a control point

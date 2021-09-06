@@ -49,12 +49,16 @@
 #define CALLBACK
 #endif
 
+///< The default number of points for circle approximation
+#define SEG_PER_CIRCLE_COUNT  64
+
 struct bitmap_glyph;
 
 namespace KIGFX
 {
 class SHADER;
 class GL_BITMAP_CACHE;
+
 
 /**
  * OpenGL implementation of the Graphics Abstraction Layer.
@@ -299,9 +303,6 @@ private:
     /// Super class definition
     typedef GAL super;
 
-    static const int    CIRCLE_POINTS   = 64;   ///< The number of points for circle approximation
-    static const int    CURVE_POINTS    = 32;   ///< The number of points for curve approximation
-
     static wxGLContext*     m_glMainContext;    ///< Parent OpenGL context
     wxGLContext*            m_glPrivContext;    ///< Canvas-specific OpenGL context
     static int              m_instanceCounter;  ///< GL GAL instance counter
@@ -510,7 +511,7 @@ private:
     double calcAngleStep( double aRadius ) const
     {
         // Bigger arcs need smaller alpha increment to make them look smooth
-        return std::min( 1e6 / aRadius, 2.0 * M_PI / CIRCLE_POINTS );
+        return std::min( 1e6 / aRadius, 2.0 * M_PI / SEG_PER_CIRCLE_COUNT );
     }
 
     double getWorldPixelSize() const;
