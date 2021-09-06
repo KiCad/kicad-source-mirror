@@ -279,12 +279,8 @@ public:
 PCB_SELECTION_TOOL::PCB_SELECTION_TOOL() :
         PCB_TOOL_BASE( "pcbnew.InteractiveSelection" ),
         m_frame( NULL ),
-        m_additive( false ),
-        m_subtractive( false ),
-        m_exclusive_or( false ),
-        m_multiple( false ),
-        m_skip_heuristics( false ),
         m_enteredGroup( NULL ),
+        m_nonModifiedCursor( KICURSOR::ARROW ),
         m_priv( nullptr )
 {
 
