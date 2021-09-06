@@ -46,14 +46,14 @@ void SELECTION_TOOL::setModifiersState( bool aShiftState, bool aCtrlState, bool 
     // ALT key cannot be used on MSW because of a conflict with the system menu
     // for this reason, we do not use the ALT key modifier.
 
-    // Drag is more forgiving and allows either Ctrl+drag or Shift+Drag to add to the selection
-
-    m_subtractive        = aCtrlState && aShiftState && !aAltState;
-    m_additive           = !aCtrlState && aShiftState && !aAltState;
+    m_subtractive        = aCtrlState && aShiftState;
+    m_additive           = !aCtrlState && aShiftState;
     m_exclusive_or       = false;
-    m_highlight_modifier = aCtrlState && !aShiftState && !aAltState;
+    m_highlight_modifier = aCtrlState && !aShiftState;
 
-    m_drag_additive      = ( aCtrlState || aShiftState ) && ! aAltState;
+    // Drag is more forgiving and allows either Ctrl+drag or Shift+Drag to add to the selection
+    // Note, however that we cannot provide disambiguation at the same time as the box selection
+    m_drag_additive      = ( aCtrlState || aShiftState ) && !aAltState;
     m_drag_subtractive   = aCtrlState && aShiftState && !aAltState;
 
     // While the ALT key has some conflicts under MSW (and some flavors of Linux WMs), it remains
