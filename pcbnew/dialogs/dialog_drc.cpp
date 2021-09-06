@@ -443,7 +443,7 @@ void DIALOG_DRC::OnDRCItemDClick( wxDataViewEvent& aEvent )
             Show( false );
     }
 
-    // Do not skip aVent here: this is not useful, and Pcbnew crashes
+    // Do not skip aEvent here: this is not useful, and Pcbnew crashes
     // if skipped (at least on Windows)
 }
 
@@ -456,6 +456,7 @@ void DIALOG_DRC::OnDRCItemRClick( wxDataViewEvent& aEvent )
         return;
 
     std::shared_ptr<RC_ITEM>  rcItem = node->m_RcItem;
+    DRC_ITEM*                 drcItem = static_cast<DRC_ITEM*>( rcItem.get() );
     wxString  listName;
     wxMenu    menu;
     wxString  msg;
@@ -471,11 +472,25 @@ void DIALOG_DRC::OnDRCItemRClick( wxDataViewEvent& aEvent )
     {
         menu.Append( 1, _( "Remove exclusion for this violation" ),
                      wxString::Format( _( "It will be placed back in the %s list" ), listName ) );
+
+        if( drcItem->GetViolatingRule() && !drcItem->GetViolatingRule()->m_Implicit )
+        {
+            msg.Printf( _( "Remove all exclusions for violations of rule '%s'" ),
+                        drcItem->GetViolatingRule()->m_Name );
+            menu.Append( 11, msg );
+        }
     }
     else
     {
         menu.Append( 2, _( "Exclude this violation" ),
                      wxString::Format( _( "It will be excluded from the %s list" ), listName ) );
+
+        if( drcItem->GetViolatingRule() && !drcItem->GetViolatingRule()->m_Implicit )
+        {
+            msg.Printf( _( "Exclude all violations of rule '%s'" ),
+                        drcItem->GetViolatingRule()->m_Name );
+            menu.Append( 21, msg );
+        }
     }
 
     if( rcItem->GetErrorCode() == DRCE_CLEARANCE
@@ -549,6 +564,38 @@ void DIALOG_DRC::OnDRCItemRClick( wxDataViewEvent& aEvent )
             modified = true;
         }
 
+        break;
+    }
+
+    case 11:
+    {
+        for( PCB_MARKER* marker : m_frame->GetBoard()->Markers() )
+        {
+            DRC_ITEM* candidateDrcItem = static_cast<DRC_ITEM*>( marker->GetRCItem().get() );
+
+            if( candidateDrcItem->GetViolatingRule() == drcItem->GetViolatingRule() )
+                marker->SetExcluded( false );
+        }
+
+        // Rebuild model and view
+        static_cast<RC_TREE_MODEL*>( aEvent.GetModel() )->SetProvider( m_markersProvider );
+        modified = true;
+        break;
+    }
+
+    case 21:
+    {
+        for( PCB_MARKER* marker : m_frame->GetBoard()->Markers() )
+        {
+            DRC_ITEM* candidateDrcItem = static_cast<DRC_ITEM*>( marker->GetRCItem().get() );
+
+            if( candidateDrcItem->GetViolatingRule() == drcItem->GetViolatingRule() )
+                marker->SetExcluded( true );
+        }
+
+        // Rebuild model and view
+        static_cast<RC_TREE_MODEL*>( aEvent.GetModel() )->SetProvider( m_markersProvider );
+        modified = true;
         break;
     }
 
@@ -822,7 +869,7 @@ void DIALOG_DRC::ExcludeMarker()
     RC_TREE_NODE* node = RC_TREE_MODEL::ToNode( m_markerDataView->GetCurrentItem() );
     PCB_MARKER*   marker = dynamic_cast<PCB_MARKER*>( node->m_RcItem->GetParent() );
 
-    if( marker && !marker->GetSeverity() == RPT_SEVERITY_EXCLUSION )
+    if( marker && marker->GetSeverity() != RPT_SEVERITY_EXCLUSION )
     {
         marker->SetExcluded( true );
         m_frame->GetCanvas()->GetView()->Update( marker );
