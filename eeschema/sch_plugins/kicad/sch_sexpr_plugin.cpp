@@ -236,8 +236,8 @@ static wxString getLineStyleToken( PLOT_DASH_TYPE aStyle )
     case PLOT_DASH_TYPE::DASH:     token = "dash";      break;
     case PLOT_DASH_TYPE::DOT:      token = "dot";       break;
     case PLOT_DASH_TYPE::DASHDOT:  token = "dash_dot";  break;
-    case PLOT_DASH_TYPE::SOLID:
-    default:                       token = "solid";     break;
+    case PLOT_DASH_TYPE::SOLID:    token = "solid";     break;
+    case PLOT_DASH_TYPE::DEFAULT:  token = "default";   break;
     }
 
     return token;
@@ -1214,15 +1214,7 @@ void SCH_SEXPR_PLUGIN::saveLine( SCH_LINE* aLine, int aNestLevel )
 
     wxString lineType;
 
-    // Lines having the plot style == PLOT_DASH_TYPE::DEFAULT are saved in file
-    // as SOLID by formatStroke().
-    // This is incorrect for graphic lines that use the DASH style for default
-    // So the plot style need adjustments to use the right style
-    // (TODO perhaps use "default" as keyword for line style in .kicad_sch file)
     STROKE_PARAMS line_stroke = aLine->GetStroke();
-
-    if( line_stroke.GetPlotStyle() == PLOT_DASH_TYPE::DEFAULT )
-        line_stroke.SetPlotStyle( aLine->GetDefaultStyle() );
 
     switch( aLine->GetLayer() )
     {
@@ -1947,8 +1939,7 @@ void SCH_SEXPR_PLUGIN_CACHE::saveField( LIB_FIELD* aField, OUTPUTFORMATTER& aFor
 }
 
 
-void SCH_SEXPR_PLUGIN_CACHE::savePin( LIB_PIN* aPin, OUTPUTFORMATTER& aFormatter,
-                                      int aNestLevel )
+void SCH_SEXPR_PLUGIN_CACHE::savePin( LIB_PIN* aPin, OUTPUTFORMATTER& aFormatter, int aNestLevel )
 {
     wxCHECK_RET( aPin && aPin->Type() == LIB_PIN_T, "Invalid LIB_PIN object." );
 
