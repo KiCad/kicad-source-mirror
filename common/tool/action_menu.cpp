@@ -252,20 +252,13 @@ void ACTION_MENU::Clear()
 
 bool ACTION_MENU::HasEnabledItems() const
 {
-    bool hasEnabled = false;
-
-    auto& items = GetMenuItems();
-
-    for( auto item : items )
+    for( wxMenuItem* item : GetMenuItems() )
     {
         if( item->IsEnabled() && !item->IsSeparator() )
-        {
-            hasEnabled = true;
-            break;
-        }
+            return true;
     }
 
-    return hasEnabled;
+    return false;
 }
 
 
@@ -339,7 +332,7 @@ void ACTION_MENU::updateHotKeys()
 {
     TOOL_MANAGER* toolMgr = getToolManager();
 
-    for( auto& ii : m_toolActions )
+    for( std::pair<const int, const TOOL_ACTION*>& ii : m_toolActions )
     {
         int                id = ii.first;
         const TOOL_ACTION& action = *ii.second;

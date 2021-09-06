@@ -452,7 +452,8 @@ void EDA_BASE_FRAME::AddStandardHelpMenu( wxMenuBar* aMenuBar )
     helpMenu->AppendSeparator();
     helpMenu->Add( _( "&About KiCad" ), "", wxID_ABOUT, BITMAPS::about );
 
-    aMenuBar->Append( helpMenu, _( "&Help" ) );
+    // Trailing space keeps OSX from hijacking our menu (and disabling everything in it).
+    aMenuBar->Append( helpMenu, _( "&Help" ) + wxS( " " ) );
 }
 
 
