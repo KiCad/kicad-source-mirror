@@ -1256,3 +1256,17 @@ void EDA_BASE_FRAME::onSystemColorChange( wxSysColourChangedEvent& aEvent )
     // Skip the change event to ensure the rest of the window controls get it
     aEvent.Skip();
 }
+
+
+#ifdef __WXWINDOWS__
+WXLRESULT EDA_BASE_FRAME::MSWWindowProc( WXUINT message, WXWPARAM wParam, WXLPARAM lParam )
+{
+    // This will help avoid the menu keeping focus when the alt key is released
+    // You can still trigger accelerators as long as you hold down alt
+    if( message == WM_SYSCOMMAND )
+        if( wParam == SC_KEYMENU && ( lParam >> 16 ) <= 0 )
+            return 0;
+
+    return wxFrame::MSWWindowProc( message, wParam, lParam );
+}
+#endif
