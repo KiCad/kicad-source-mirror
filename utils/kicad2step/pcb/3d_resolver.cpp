@@ -792,18 +792,20 @@ bool S3D_RESOLVER::SplitAlias( const wxString& aFileName, wxString& anAlias, wxS
     anAlias.clear();
     aRelPath.clear();
 
-    if( !aFileName.StartsWith( ":" ) )
-        return false;
+    size_t searchStart = 0;
 
-    size_t tagpos = aFileName.find( ":", 1 );
+    if( aFileName.StartsWith( wxT( ":" ) ) )
+        searchStart = 1;
 
-    if( wxString::npos ==  tagpos || 1 == tagpos )
+    size_t tagpos = aFileName.find( wxT( ":" ), searchStart );
+
+    if( tagpos == wxString::npos || tagpos == searchStart )
         return false;
 
     if( tagpos + 1 >= aFileName.length() )
         return false;
 
-    anAlias = aFileName.substr( 1, tagpos - 1 );
+    anAlias = aFileName.substr( searchStart, tagpos - searchStart );
     aRelPath = aFileName.substr( tagpos + 1 );
 
     return true;
@@ -907,46 +909,47 @@ bool S3D_RESOLVER::ValidateFileName( const wxString& aFileName, bool& hasAlias )
 
     wxString filename = aFileName;
     wxString lpath;
-    size_t pos0 = aFileName.find( ':' );
+    size_t aliasStart = aFileName.starts_with( ':' ) ? 1 : 0;
+    size_t aliasEnd = aFileName.find( ':' );
 
     // ensure that the file separators suit the current platform
 #ifdef __WINDOWS__
     filename.Replace( "/", "\\" );
 
     // if we see the :\ pattern then it must be a drive designator
-    if( pos0 != wxString::npos )
+    if( aliasEnd != wxString::npos )
     {
         size_t pos1 = aFileName.find( ":\\" );
 
-        if( pos1 != wxString::npos && ( pos1 != pos0 || pos1 != 1 ) )
+        if( pos1 != wxString::npos && ( pos1 != aliasEnd || pos1 != 1 ) )
             return false;
 
         // if we have a drive designator then we have no alias
         if( pos1 != wxString::npos )
-            pos0 = wxString::npos;
+            aliasEnd = wxString::npos;
     }
 #else
     filename.Replace( "\\", "/" );
 #endif
 
     // names may not end with ':'
-    if( pos0 == aFileName.length() -1 )
+    if( aliasEnd == aFileName.length() - 1 )
         return false;
 
-    if( pos0 != wxString::npos )
+    if( aliasEnd != wxString::npos )
     {
         // ensure the alias component is not empty
-        if( pos0 == 0 )
+        if( aliasEnd == aliasStart )
             return false;
 
-        lpath = filename.substr( 0, pos0 );
+        lpath = filename.substr( aliasStart, aliasEnd );
 
         // check the alias for restricted characters
         if( wxString::npos != lpath.find_first_of( "{}[]()%~<>\"='`;:.,&?/\\|$" ) )
             return false;
 
         hasAlias = true;
-        lpath = aFileName.substr( pos0 + 1 );
+        lpath = aFileName.substr( aliasEnd + 1 );
     }
     else
     {
@@ -954,15 +957,15 @@ bool S3D_RESOLVER::ValidateFileName( const wxString& aFileName, bool& hasAlias )
 
         // in the case of ${ENV_VAR}|$(ENV_VAR)/path, strip the
         // environment string before testing
-        pos0 = wxString::npos;
+        aliasEnd = wxString::npos;
 
         if( aFileName.StartsWith( "${" ) )
-            pos0 = aFileName.find( '}' );
+            aliasEnd = aFileName.find( '}' );
         else if( aFileName.StartsWith( "$(" ) )
-            pos0 = aFileName.find( ')' );
+            aliasEnd = aFileName.find( ')' );
 
-        if( pos0 != wxString::npos )
-            lpath = aFileName.substr( pos0 + 1 );
+        if( aliasEnd != wxString::npos )
+            lpath = aFileName.substr( aliasEnd + 1 );
 
     }
 

@@ -845,18 +845,20 @@ bool FILENAME_RESOLVER::SplitAlias( const wxString& aFileName,
     anAlias.clear();
     aRelPath.clear();
 
-    if( !aFileName.StartsWith( wxT( ":" ) ) )
-        return false;
+    size_t searchStart = 0;
 
-    size_t tagpos = aFileName.find( wxT( ":" ), 1 );
+    if( aFileName.StartsWith( wxT( ":" ) ) )
+        searchStart = 1;
 
-    if( wxString::npos == tagpos || 1 == tagpos )
+    size_t tagpos = aFileName.find( wxT( ":" ), searchStart );
+
+    if( tagpos == wxString::npos || tagpos == searchStart )
         return false;
 
     if( tagpos + 1 >= aFileName.length() )
         return false;
 
-    anAlias = aFileName.substr( 1, tagpos - 1 );
+    anAlias = aFileName.substr( searchStart, tagpos - searchStart );
     aRelPath = aFileName.substr( tagpos + 1 );
 
     return true;
@@ -971,46 +973,69 @@ bool FILENAME_RESOLVER::ValidateFileName( const wxString& aFileName, bool& hasAl
         return false;
 
     wxString filename = aFileName;
-    size_t pos0 = aFileName.find( ':' );
+    wxString lpath;
+    size_t aliasStart = aFileName.starts_with( ':' ) ? 1 : 0;
+    size_t aliasEnd = aFileName.find( ':', aliasStart );
 
     // ensure that the file separators suit the current platform
-    #ifdef __WINDOWS__
+#ifdef __WINDOWS__
     filename.Replace( wxT( "/" ), wxT( "\\" ) );
 
     // if we see the :\ pattern then it must be a drive designator
-    if( pos0 != wxString::npos )
+    if( aliasEnd != wxString::npos )
     {
         size_t pos1 = filename.find( wxT( ":\\" ) );
 
-        if( pos1 != wxString::npos && ( pos1 != pos0 || pos1 != 1 ) )
+        if( pos1 != wxString::npos && ( pos1 != aliasEnd || pos1 != 1 ) )
             return false;
 
         // if we have a drive designator then we have no alias
         if( pos1 != wxString::npos )
-            pos0 = wxString::npos;
+            aliasEnd = wxString::npos;
     }
-    #else
+#else
     filename.Replace( wxT( "\\" ), wxT( "/" ) );
-    #endif
+#endif
 
     // names may not end with ':'
-    if( pos0 == aFileName.length() -1 )
+    if( aliasEnd == aFileName.length() -1 )
         return false;
 
-    if( pos0 != wxString::npos )
+    if( aliasEnd != wxString::npos )
     {
         // ensure the alias component is not empty
-        if( pos0 == 0 )
+        if( aliasEnd == aliasStart )
             return false;
 
-        wxString lpath = filename.substr( 0, pos0 );
+        lpath = filename.substr( aliasStart, aliasEnd );
 
         // check the alias for restricted characters
         if( wxString::npos != lpath.find_first_of( wxT( "{}[]()%~<>\"='`;:.,&?/\\|$" ) ) )
             return false;
 
         hasAlias = true;
+        lpath = aFileName.substr( aliasEnd + 1 );
     }
+    else
+    {
+        lpath = aFileName;
+
+        // in the case of ${ENV_VAR}|$(ENV_VAR)/path, strip the
+        // environment string before testing
+        aliasEnd = wxString::npos;
+
+        if( aFileName.StartsWith( "${" ) )
+            aliasEnd = aFileName.find( '}' );
+        else if( aFileName.StartsWith( "$(" ) )
+            aliasEnd = aFileName.find( ')' );
+
+        if( aliasEnd != wxString::npos )
+            lpath = aFileName.substr( aliasEnd + 1 );
+
+    }
+
+    if( wxString::npos != lpath.find_first_of( wxFileName::GetForbiddenChars() ) )
+        return false;
 
     return true;
 }
