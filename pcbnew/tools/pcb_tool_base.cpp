@@ -28,9 +28,11 @@
 #include <footprint.h>
 #include <pcb_draw_panel_gal.h>
 #include <pcbnew_settings.h>
-#include "pcb_selection_tool.h"
-#include "pcb_actions.h"
-#include "tool_event_utils.h"
+
+#include <tools/pcb_grid_helper.h>
+#include <tools/pcb_selection_tool.h>
+#include <tools/pcb_actions.h>
+#include <tools/tool_event_utils.h>
 
 void PCB_TOOL_BASE::doInteractiveItemPlacement( const std::string& aTool,
                                                 INTERACTIVE_PLACER_BASE* aPlacer,
@@ -48,6 +50,8 @@ void PCB_TOOL_BASE::doInteractiveItemPlacement( const std::string& aTool,
 
     // do not capture or auto-pan until we start placing an item
     controls()->ShowCursor( true );
+
+    PCB_GRID_HELPER grid( m_toolMgr, frame()->GetMagneticItemsSettings() );
 
     // Add a VIEW_GROUP that serves as a preview for the new item
     PCB_SELECTION preview;
@@ -98,7 +102,10 @@ void PCB_TOOL_BASE::doInteractiveItemPlacement( const std::string& aTool,
     {
         setCursor();
 
-        VECTOR2I cursorPos = controls()->GetCursorPosition();
+        grid.SetSnap( false ); // Interactive placement tools need to set their own item snaps
+        grid.SetUseGrid( getView()->GetGAL()->GetGridSnapping() && !evt->DisableGridSnapping() );
+        VECTOR2I cursorPos = grid.BestSnapAnchor( controls()->GetMousePosition(), nullptr );
+
         aPlacer->m_modifiers = evt->Modifier();
 
         auto cleanup =
