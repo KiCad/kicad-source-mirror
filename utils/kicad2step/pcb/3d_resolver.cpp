@@ -909,7 +909,7 @@ bool S3D_RESOLVER::ValidateFileName( const wxString& aFileName, bool& hasAlias )
 
     wxString filename = aFileName;
     wxString lpath;
-    size_t aliasStart = aFileName.starts_with( ':' ) ? 1 : 0;
+    size_t aliasStart = aFileName.StartsWith( ':' ) ? 1 : 0;
     size_t aliasEnd = aFileName.find( ':' );
 
     // ensure that the file separators suit the current platform
