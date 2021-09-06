@@ -1258,7 +1258,7 @@ void EDA_BASE_FRAME::onSystemColorChange( wxSysColourChangedEvent& aEvent )
 }
 
 
-#ifdef __WXWINDOWS__
+#ifdef _WIN32
 WXLRESULT EDA_BASE_FRAME::MSWWindowProc( WXUINT message, WXWPARAM wParam, WXLPARAM lParam )
 {
     // This will help avoid the menu keeping focus when the alt key is released

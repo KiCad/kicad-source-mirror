@@ -682,7 +682,7 @@ private:
      */
     virtual bool IsModal() const { return false; }
 
-#ifdef __WXWINDOWS__
+#ifdef _WIN32
     /**
      * Windows specific override of the wxWidgets message handler for a window
      */
