@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-08-30 14:45-0700\n"
-"PO-Revision-Date: 2021-09-01 16:34+0000\n"
+"PO-Revision-Date: 2021-09-06 08:16+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/"
 "master-source/pl/>\n"
@@ -35543,7 +35543,7 @@ msgstr "Uaktualnij zaznaczony(-e) strefy miedzi"
 
 #: pcbnew/tools/pcb_actions.cpp:1258 pcbnew/tools/zone_filler_tool.cpp:154
 msgid "Fill All Zones"
-msgstr "Wypełniam wszystkie strefy"
+msgstr "Wypełnij wszystkie strefy"
 
 #: pcbnew/tools/pcb_actions.cpp:1258
 msgid "Update copper fill of all zones"
@@ -35551,7 +35551,7 @@ msgstr "Uaktualnij wszystkie wypełnienia ze wszystkich stref"
 
 #: pcbnew/tools/pcb_actions.cpp:1263 pcbnew/tools/zone_filler_tool.cpp:249
 msgid "Unfill Zone"
-msgstr "Usuwam wypełnienia strefy"
+msgstr "Usuń wypełnienia strefy"
 
 #: pcbnew/tools/pcb_actions.cpp:1263
 msgid "Remove copper fill from selected zone(s)"
@@ -35559,7 +35559,7 @@ msgstr "Usuń wypełnienie z zaznaczonych stref"
 
 #: pcbnew/tools/pcb_actions.cpp:1269 pcbnew/tools/zone_filler_tool.cpp:267
 msgid "Unfill All Zones"
-msgstr "Usuwam wypełnienia wszystkich stref"
+msgstr "Usuń wypełnienia wszystkich stref"
 
 #: pcbnew/tools/pcb_actions.cpp:1269
 msgid "Remove copper fill from all zones"
