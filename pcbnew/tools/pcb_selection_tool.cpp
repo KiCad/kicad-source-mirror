@@ -304,6 +304,8 @@ int PCB_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
         }
         else if( evt->IsDblClick( BUT_LEFT ) )
         {
+            m_disambiguateTimer.Stop();
+
             // Double click? Display the properties window
             m_frame->FocusOnItem( nullptr );
 

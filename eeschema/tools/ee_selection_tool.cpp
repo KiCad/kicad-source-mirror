@@ -481,6 +481,8 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
         }
         else if( evt->IsDblClick( BUT_LEFT ) )
         {
+            m_disambiguateTimer.Stop();
+
             // double click? Display the properties window
             if( SCH_EDIT_FRAME* schframe = dynamic_cast<SCH_EDIT_FRAME*>( m_frame ) )
                 schframe->FocusOnItem( nullptr );
