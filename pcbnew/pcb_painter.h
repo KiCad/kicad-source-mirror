@@ -293,6 +293,9 @@ protected:
 
 protected:
     PCB_RENDER_SETTINGS m_pcbSettings;
+
+    int                 m_maxError;
+    int                 m_holePlatingThickness;
 };
 } // namespace KIGFX
 
