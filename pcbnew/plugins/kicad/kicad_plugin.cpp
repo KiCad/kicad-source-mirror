@@ -1405,12 +1405,12 @@ void PCB_IO::format( const PAD* aPad, int aNestLevel ) const
     switch( aPad->GetProperty() )
     {
     case PAD_PROP::NONE:                                                  break;  // could be "none"
-    case PAD_PROP::BGA:              property = "PAD_PROP::BGA";           break;
+    case PAD_PROP::BGA:              property = "pad_prop_bga";           break;
     case PAD_PROP::FIDUCIAL_GLBL:    property = "pad_prop_fiducial_glob"; break;
     case PAD_PROP::FIDUCIAL_LOCAL:   property = "pad_prop_fiducial_loc";  break;
-    case PAD_PROP::TESTPOINT:        property = "PAD_PROP::TESTPOINT";     break;
-    case PAD_PROP::HEATSINK:         property = "PAD_PROP::HEATSINK";      break;
-    case PAD_PROP::CASTELLATED:      property = "PAD_PROP::CASTELLATED";   break;
+    case PAD_PROP::TESTPOINT:        property = "pad_prop_testpoint";     break;
+    case PAD_PROP::HEATSINK:         property = "pad_prop_heatsink";      break;
+    case PAD_PROP::CASTELLATED:      property = "pad_prop_castellated";   break;
 
     default:
         THROW_IO_ERROR( wxString::Format( "unknown pad property: %d", aPad->GetProperty() ) );
