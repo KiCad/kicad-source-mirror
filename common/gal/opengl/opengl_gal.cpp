@@ -48,6 +48,7 @@
 #include <wx/frame.h>
 
 #include <macros.h>
+#include <geometry/geometry_utils.h>
 
 #ifdef KICAD_GAL_PROFILE
 #include <profile.h>
@@ -850,8 +851,9 @@ void OPENGL_GAL::DrawArc( const VECTOR2D& aCenterPoint, double aRadius, double a
 }
 
 
-void OPENGL_GAL::DrawArcSegment( const VECTOR2D& aCenterPoint, double aRadius, double aStartAngle,
-                                 double aEndAngle, double aWidth )
+void OPENGL_GAL::DrawArcSegment( const VECTOR2D& aCenterPoint, double aRadius,
+                                 double aStartAngle, double aEndAngle,
+                                 double aWidth, double aMaxError )
 {
     if( aRadius <= 0 )
     {
@@ -865,7 +867,10 @@ void OPENGL_GAL::DrawArcSegment( const VECTOR2D& aCenterPoint, double aRadius, d
     // Swap the angles, if start angle is greater than end angle
     SWAP( aStartAngle, >, aEndAngle );
 
-    double alphaIncrement = calcAngleStep( aRadius );
+    // Calculate the seg count to approximate the arc with aMaxError or less
+    int segCount360 = GetArcToSegmentCount( aRadius, aMaxError, 360.0 );
+    segCount360 = std::max( CIRCLE_POINTS, segCount360 );
+    double alphaIncrement = 2.0 * M_PI / segCount360;
 
     // Refinement: Use a segment count multiple of 2, because we have a control point
     // on the middle of the arc, and the look is better if it is on a segment junction

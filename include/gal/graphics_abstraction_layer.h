@@ -151,9 +151,11 @@ public:
      * @param aStartAngle   is the start angle of the arc.
      * @param aEndAngle     is the end angle of the arc.
      * @param aWidth        is the thickness of the arc (pen size).
+     * @param aMaxError     is the max allowed error to create segments to approximate a circle.
+     *  It has meaning only for back ends that can't draw a true arc, and use segments to approximate.
      */
     virtual void DrawArcSegment( const VECTOR2D& aCenterPoint, double aRadius, double aStartAngle,
-                                 double aEndAngle, double aWidth ) {};
+                                 double aEndAngle, double aWidth, double aMaxError ) {};
 
     /**
      * Draw a rectangle.

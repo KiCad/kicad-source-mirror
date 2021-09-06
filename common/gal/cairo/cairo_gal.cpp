@@ -342,8 +342,10 @@ void CAIRO_GAL_BASE::DrawArc( const VECTOR2D& aCenterPoint, double aRadius, doub
 
 
 void CAIRO_GAL_BASE::DrawArcSegment( const VECTOR2D& aCenterPoint, double aRadius,
-                                     double aStartAngle, double aEndAngle, double aWidth )
+                                     double aStartAngle, double aEndAngle, double aWidth,
+                                     double aMaxError )
 {
+    // Note: aMaxError is not used because Cairo can draw true arcs
     if( m_isFillEnabled )
     {
         m_lineWidth = aWidth;

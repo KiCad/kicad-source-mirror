@@ -683,7 +683,7 @@ void PCB_PAINTER::draw( const PCB_ARC* aArc, int aLayer )
         m_gal->SetIsFill( not outline_mode );
         m_gal->SetLineWidth( m_pcbSettings.m_outlineWidth );
 
-        m_gal->DrawArcSegment( center, radius, start_angle, start_angle + angle, width );
+        m_gal->DrawArcSegment( center, radius, start_angle, start_angle + angle, width, ARC_HIGH_DEF );
     }
 
     // Clearance lines
@@ -700,7 +700,7 @@ void PCB_PAINTER::draw( const PCB_ARC* aArc, int aLayer )
         m_gal->SetStrokeColor( color );
 
         m_gal->DrawArcSegment( center, radius, start_angle, start_angle + angle,
-                               width + clearance * 2 );
+                               width + clearance * 2, ARC_HIGH_DEF );
     }
 
 // Debug only: enable this code only to test the TransformArcToPolygon function
@@ -1081,7 +1081,7 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
         std::unique_ptr<PAD>            dummyPad;
         std::shared_ptr<SHAPE_COMPOUND> shapes;
 
-        // Drawing components of compound shapes in outline mode produces a mess. 
+        // Drawing components of compound shapes in outline mode produces a mess.
         bool simpleShapes = !m_pcbSettings.m_sketchMode[LAYER_PADS_TH];
 
         if( simpleShapes )
@@ -1416,7 +1416,7 @@ void PCB_PAINTER::draw( const PCB_SHAPE* aShape, int aLayer )
             m_gal->DrawArcSegment( start, aShape->GetRadius(),
                     DECIDEG2RAD( aShape->GetArcAngleStart() ),
                     DECIDEG2RAD( aShape->GetArcAngleStart() + aShape->GetAngle() ), // Change this
-                    thickness );
+                    thickness, ARC_HIGH_DEF );
         }
         else
         {
@@ -1426,7 +1426,7 @@ void PCB_PAINTER::draw( const PCB_SHAPE* aShape, int aLayer )
             m_gal->DrawArcSegment( start, aShape->GetRadius(),
                     DECIDEG2RAD( aShape->GetArcAngleStart() ),
                     DECIDEG2RAD( aShape->GetArcAngleStart() + aShape->GetAngle() ), // Change this
-                    thickness );
+                    thickness, ARC_HIGH_DEF );
         }
         break;
 
