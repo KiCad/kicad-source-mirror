@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-08-30 14:45-0700\n"
-"PO-Revision-Date: 2021-09-06 08:16+0000\n"
+"PO-Revision-Date: 2021-09-07 15:16+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/"
 "master-source/pl/>\n"
@@ -35535,7 +35535,7 @@ msgstr "Usuwa element(y) z zaznaczenia na podstawie typu"
 
 #: pcbnew/tools/pcb_actions.cpp:1252 pcbnew/tools/zone_filler_tool.cpp:211
 msgid "Fill Zone"
-msgstr "Wypełniam strefę"
+msgstr "Wypełnij strefę"
 
 #: pcbnew/tools/pcb_actions.cpp:1252
 msgid "Update copper fill of selected zone(s)"
@@ -35807,7 +35807,7 @@ msgstr "Sprawdzanie stref"
 #: pcbnew/tools/zone_filler_tool.cpp:89 pcbnew/tools/zone_filler_tool.cpp:162
 #: pcbnew/tools/zone_filler_tool.cpp:217
 msgid "Fill Zone(s)"
-msgstr "Wypełniam strefę(-y)"
+msgstr "Wypełnij strefę(-y)"
 
 #: pcbnew/tools/zone_filler_tool.cpp:131
 msgid "Show DRC rules"
