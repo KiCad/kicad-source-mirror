@@ -576,14 +576,14 @@ long WIDGET_HOTKEY_LIST::MapKeypressToKeycode( const wxKeyEvent& aEvent )
             key += 'A' - 1;
 
         /* Disallow shift for keys that have two keycodes on them (e.g. number and
-         * punctuation keys) leaving only the "letter keys" of A-Z.
+         * punctuation keys) leaving only the "letter keys" of A-Z, tab and space
          * Then, you can have, e.g. Ctrl-5 and Ctrl-% (GB layout)
          * and Ctrl-( and Ctrl-5 (FR layout).
          * Otherwise, you'd have to have to say Ctrl-Shift-5 on a FR layout
          */
         bool keyIsLetter = key >= 'A' && key <= 'Z';
 
-        if( aEvent.ShiftDown() && ( keyIsLetter || key > 256 ) )
+        if( aEvent.ShiftDown() && ( keyIsLetter || key > 256 || key == 9 || key == 32 ) )
             key |= MD_SHIFT;
 
         if( aEvent.ControlDown() )

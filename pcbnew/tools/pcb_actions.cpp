@@ -663,7 +663,7 @@ TOOL_ACTION PCB_ACTIONS::toggleLock( "pcbnew.EditorControl.toggleLock",
         BITMAPS::lock_unlock );
 
 TOOL_ACTION PCB_ACTIONS::toggle45( "pcbnew.EditorControl.toggle45",
-        AS_GLOBAL, WXK_TAB, "",
+        AS_GLOBAL, MD_SHIFT + ' ', "",
         _( "Toggle 45 Limit" ), _( "Limit actions to 45 degrees from the starting point" ),
         BITMAPS::INVALID_BITMAP );
 
