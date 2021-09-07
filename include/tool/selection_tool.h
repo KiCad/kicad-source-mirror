@@ -54,6 +54,8 @@ protected:
     bool            m_drag_additive;     // Add multiple items to selection
     bool            m_drag_subtractive;  // Remove multiple from selection
 
+    bool            m_canceledMenu;      // Sets to true if the disambiguation menu was cancelled
+
     wxTimer         m_disambiguateTimer; // Timer to show the disambiguate menu
 };
 

@@ -265,14 +265,14 @@ int PCB_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
         else if( evt->IsMouseDown( BUT_LEFT ) )
         {
             // Avoid triggering when running under other tools
-            if( m_toolMgr->GetCurrentTool() == this )
+            if( m_frame->ToolStackIsEmpty() )
                 m_disambiguateTimer.StartOnce( 500 );
         }
         else if( evt->IsClick( BUT_LEFT ) )
         {
             // If there is no disambiguation, this routine is still running and will
             // register a `click` event when released
-            if( m_disambiguateTimer.IsRunning() )
+            if( !m_disambiguateTimer.IsRunning() )
             {
                 m_disambiguateTimer.Stop();
 
@@ -285,6 +285,8 @@ int PCB_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
                     selectPoint( evt->Position() );
                 }
             }
+
+            m_canceledMenu = false;
         }
         else if( evt->IsClick( BUT_RIGHT ) )
         {
@@ -900,7 +902,7 @@ int PCB_SELECTION_TOOL::disambiguateCursor( const TOOL_EVENT& aEvent )
     VECTOR2I pos = m_toolMgr->GetMousePosition();
 
     m_skip_heuristics = true;
-    selectPoint( pos );
+    selectPoint( pos, false, &m_canceledMenu );
     m_skip_heuristics = false;
 
     return 0;

@@ -113,7 +113,7 @@ int PL_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
         if( evt->IsMouseDown( BUT_LEFT ) )
         {
             // Avoid triggering when running under other tools
-            if( m_toolMgr->GetCurrentTool() == this )
+            if( m_frame->ToolStackIsEmpty() )
                 m_disambiguateTimer.StartOnce( 500 );
         }
         // Single click? Select single object
@@ -232,7 +232,7 @@ int PL_SELECTION_TOOL::disambiguateCursor( const TOOL_EVENT& aEvent )
     VECTOR2I pos = m_toolMgr->GetMousePosition();
 
     m_skip_heuristics = true;
-    SelectPoint( pos );
+    SelectPoint( pos, &m_canceledMenu );
     m_skip_heuristics = false;
 
     return 0;

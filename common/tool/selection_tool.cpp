@@ -33,7 +33,8 @@ SELECTION_TOOL::SELECTION_TOOL() :
     m_skip_heuristics( false ),
     m_highlight_modifier( false ),
     m_drag_additive( false ),
-    m_drag_subtractive( false )
+    m_drag_subtractive( false ),
+    m_canceledMenu( false )
 {
 }
 
