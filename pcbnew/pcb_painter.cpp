@@ -464,9 +464,17 @@ bool PCB_PAINTER::Draw( const VIEW_ITEM* aItem, int aLayer )
     if( !item )
         return false;
 
-    BOARD_DESIGN_SETTINGS& bds = item->GetBoard()->GetDesignSettings();
-    m_maxError = bds.m_MaxError;
-    m_holePlatingThickness = bds.GetHolePlatingThickness();
+    if( const BOARD* board = item->GetBoard() )
+    {
+        BOARD_DESIGN_SETTINGS& bds = board->GetDesignSettings();
+        m_maxError = bds.m_MaxError;
+        m_holePlatingThickness = bds.GetHolePlatingThickness();
+    }
+    else
+    {
+        m_maxError = ARC_HIGH_DEF;
+        m_holePlatingThickness = 0;
+    }
 
     // the "cast" applied in here clarifies which overloaded draw() is called
     switch( item->Type() )
