@@ -76,8 +76,8 @@ void EDA_3D_VIEWER_FRAME::CreateMenuBar()
     //
     ACTION_MENU* viewMenu = new ACTION_MENU( false, tool );
 
-    viewMenu->Add( ACTIONS::zoomIn );
-    viewMenu->Add( ACTIONS::zoomOut );
+    viewMenu->Add( ACTIONS::zoomInCenter );
+    viewMenu->Add( ACTIONS::zoomOutCenter );
     viewMenu->Add( ACTIONS::zoomFitScreen );
     viewMenu->Add( ACTIONS::zoomRedraw );
 
