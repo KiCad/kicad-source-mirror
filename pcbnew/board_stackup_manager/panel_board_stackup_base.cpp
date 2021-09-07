@@ -108,7 +108,7 @@ PANEL_SETUP_BOARD_STACKUP_BASE::PANEL_SETUP_BOARD_STACKUP_BASE( wxWindow* parent
 
 	m_fgGridSizer->Add( m_staticTextEpsilonR, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxLEFT|wxALIGN_CENTER_HORIZONTAL, 2 );
 
-	m_staticTextLossTg = new wxStaticText( m_scGridWin, wxID_ANY, _("Loss Tg"), wxDefaultPosition, wxDefaultSize, wxALIGN_LEFT );
+	m_staticTextLossTg = new wxStaticText( m_scGridWin, wxID_ANY, _("Loss Tan"), wxDefaultPosition, wxDefaultSize, wxALIGN_LEFT );
 	m_staticTextLossTg->Wrap( -1 );
 	m_staticTextLossTg->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
 

@@ -184,14 +184,17 @@ void PANEL_SETUP_BOARD_STACKUP::onAdjustDielectricThickness( wxCommandEvent& eve
     wxString title;
 
     if( min_thickness == 0 )
-        title.Printf( _( "Enter board thickness in %s" ),
-                      GetAbbreviatedUnitsLabel( m_frame->GetUserUnits() ) );
+    {
+        title.Printf( _( "Enter board thickness in %s:" ),
+                      GetAbbreviatedUnitsLabel( m_frame->GetUserUnits() ).Trim( false ) );
+    }
     else
-        title.Printf( _( "Enter expected board thickness in %s (min value %s)" ),
-                      GetAbbreviatedUnitsLabel( m_frame->GetUserUnits() ),
-                      StringFromValue( m_frame->GetUserUnits(), min_thickness ) );
+    {
+        title.Printf( _( "Enter expected board thickness (min value %s):" ),
+                      StringFromValue( m_frame->GetUserUnits(), min_thickness, true ) );
+    }
 
-    wxTextEntryDialog dlg( this, title, _( "Adjust not locked dielectric thickness layers" ) );
+    wxTextEntryDialog dlg( this, title, _( "Adjust Unlocked Dielectric Layers" ) );
 
     if( dlg.ShowModal() != wxID_OK )
         return;
@@ -202,9 +205,8 @@ void PANEL_SETUP_BOARD_STACKUP::onAdjustDielectricThickness( wxCommandEvent& eve
 
     if( iu_thickness <= min_thickness )
     {
-        wxMessageBox( wxString::Format( _("Too small value (min value %s %s). Aborted" ),
-                      StringFromValue( m_frame->GetUserUnits(), min_thickness ),
-                      GetAbbreviatedUnitsLabel( m_frame->GetUserUnits() ) ) );
+        wxMessageBox( wxString::Format( _("Value too small (min value %s)." ),
+                      StringFromValue( m_frame->GetUserUnits(), min_thickness, true ) ) );
         return;
     }
 
