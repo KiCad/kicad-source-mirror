@@ -15,8 +15,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-08-30 14:45-0700\n"
-"PO-Revision-Date: 2021-09-05 21:21+0000\n"
-"Last-Translator: Ji Yoon Choi <chichoon.choi@gmail.com>\n"
+"PO-Revision-Date: 2021-09-07 09:14+0000\n"
+"Last-Translator: 킴슨김랑기 <korearf@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
 "Language: ko\n"
@@ -188,7 +188,7 @@ msgstr "영역 만들기"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:756
 msgid "Simplifying copper layers polygons"
-msgstr "구리 레이어 다각형 단순화"
+msgstr "동박층 다각형 단순화"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:766
 msgid "Simplifying polygons on F_Cu"
@@ -201,7 +201,7 @@ msgstr "B_Cu 다각형 단순화"
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:807
 #, c-format
 msgid "Simplifying %d copper layers"
-msgstr "%d 구리 레이어 단순화"
+msgstr "%d 동박층 단순화"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:846
 msgid "Simplify holes contours"
@@ -20609,7 +20609,7 @@ msgstr "odd 모드 임피던스 (선로는 역 (차동) 전압에서 구동됨)"
 
 #: pcb_calculator/transline_ident.cpp:357
 msgid "Distance between strip and top metal"
-msgstr "스트립 라인과"
+msgstr "스트립 라인과 상단 금속 사이의 거리"
 
 #: pcb_calculator/transline_ident.cpp:389
 msgid "Twists"
@@ -20633,7 +20633,7 @@ msgstr "케이블 길이"
 
 #: pcb_calculator/via.cpp:82
 msgid "Electrical Resistivity in Ohm*m"
-msgstr "전기 저항 (Ω・m)"
+msgstr "전기 저항 (Ω*m)"
 
 #: pcb_calculator/widgets/unit_selector.cpp:35
 msgid "um"
@@ -20993,7 +20993,7 @@ msgstr "구리 레이어:"
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:22
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:30
 msgid "Select the number of copper layers in the stackup"
-msgstr "스택업에서 구리 레이어 수를 선택하세요"
+msgstr "스택업에서 동박 층의 수를 선택하세요"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:26
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:55
