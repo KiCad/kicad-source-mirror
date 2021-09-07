@@ -650,31 +650,26 @@ void SCH_PAINTER::draw( const LIB_FIELD *aField, int aLayer )
     m_gal->SetIsStroke( true );
     m_gal->SetStrokeColor( color );
 
-    auto pos = mapCoords( aField->GetPosition() );
+    EDA_RECT bbox = aField->GetBoundingBox();
+    wxPoint  textpos = bbox.Centre();
 
     if( drawingShadows && eeconfig()->m_Selection.text_as_box )
     {
-        EDA_RECT boundaryBox = aField->GetBoundingBox();
-
         m_gal->SetIsFill( true );
         m_gal->SetFillColor( color );
         m_gal->SetLineWidth( m_gal->GetLineWidth() * 0.5 );
-        boundaryBox.RevertYAxis();
+        bbox.RevertYAxis();
 
-        m_gal->DrawRectangle( mapCoords( boundaryBox.GetPosition() ),
-                              mapCoords( boundaryBox.GetEnd() ) );
+        m_gal->DrawRectangle( mapCoords( bbox.GetPosition() ), mapCoords( bbox.GetEnd() ) );
     }
     else
     {
+        m_gal->SetHorizontalJustify( GR_TEXT_HJUSTIFY_CENTER );
+        m_gal->SetVerticalJustify( GR_TEXT_VJUSTIFY_CENTER );
         m_gal->SetGlyphSize( VECTOR2D( aField->GetTextSize() ) );
         m_gal->SetFontItalic( aField->IsItalic() );
 
-        m_gal->SetHorizontalJustify( aField->GetHorizJustify() );
-        m_gal->SetVerticalJustify( aField->GetVertJustify() );
-
-        double orient = aField->GetTextAngleRadians();
-
-        strokeText( UnescapeString( aField->GetText() ), pos, orient );
+        strokeText( UnescapeString( aField->GetText() ), textpos, aField->GetTextAngleRadians() );
     }
 
     // Draw the umbilical line
@@ -682,7 +677,7 @@ void SCH_PAINTER::draw( const LIB_FIELD *aField, int aLayer )
     {
         m_gal->SetLineWidth( m_schSettings.m_outlineWidth );
         m_gal->SetStrokeColor( COLOR4D( 0.0, 0.0, 1.0, 1.0 ) );
-        m_gal->DrawLine( pos, wxPoint( 0, 0 ) );
+        m_gal->DrawLine( textpos, wxPoint( 0, 0 ) );
     }
 }
 
@@ -1554,8 +1549,8 @@ void SCH_PAINTER::draw( const SCH_FIELD *aField, int aLayer )
      *   to calculate so the easier way is to use no justifications (centered text) and use
      *   GetBoundingBox to know the text coordinate considered as centered
      */
-    EDA_RECT boundaryBox = aField->GetBoundingBox();
-    wxPoint textpos = boundaryBox.Centre();
+    EDA_RECT bbox = aField->GetBoundingBox();
+    wxPoint  textpos = bbox.Centre();
 
     m_gal->SetStrokeColor( color );
     m_gal->SetIsStroke( true );
@@ -1565,10 +1560,9 @@ void SCH_PAINTER::draw( const SCH_FIELD *aField, int aLayer )
         m_gal->SetIsFill( true );
         m_gal->SetFillColor( color );
         m_gal->SetLineWidth( m_gal->GetLineWidth() * 0.5 );
-        boundaryBox.RevertYAxis();
+        bbox.RevertYAxis();
 
-        m_gal->DrawRectangle( mapCoords( boundaryBox.GetPosition() ),
-                              mapCoords( boundaryBox.GetEnd() ) );
+        m_gal->DrawRectangle( mapCoords( bbox.GetPosition() ), mapCoords( bbox.GetEnd() ) );
     }
     else
     {

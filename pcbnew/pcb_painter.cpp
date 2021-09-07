@@ -414,13 +414,15 @@ COLOR4D PCB_RENDER_SETTINGS::GetColor( const VIEW_ITEM* aItem, int aLayer ) cons
     else if( item->Type() == PCB_ZONE_T || item->Type() == PCB_FP_ZONE_T )
         color.a *= m_zoneOpacity;
 
-    // No special modificators enabled
+    // No special modifiers enabled
     return color;
 }
 
 
 PCB_PAINTER::PCB_PAINTER( GAL* aGal ) :
-    PAINTER( aGal )
+    PAINTER( aGal ),
+    m_maxError( ARC_HIGH_DEF ),
+    m_holePlatingThickness( 0 )
 {
 }
 
