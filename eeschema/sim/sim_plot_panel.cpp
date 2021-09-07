@@ -449,16 +449,12 @@ void SIM_PLOT_PANEL::UpdateTraceStyle( TRACE* trace )
 }
 
 
-bool SIM_PLOT_PANEL::addTrace( const wxString& aName, int aPoints, const double* aX,
-                               const double* aY, SIM_PLOT_TYPE aType, const wxString& aParam )
+bool SIM_PLOT_PANEL::addTrace( const wxString& aTitle, const wxString& aName, int aPoints,
+                               const double* aX, const double* aY, SIM_PLOT_TYPE aType,
+                               const wxString& aParam )
 {
     TRACE* trace = nullptr;
-    wxString name = aName;
-
-    if( aType & SPT_AC_MAG )
-        name += " (mag)";
-    else if( aType & SPT_AC_PHASE )
-        name += " (phase)";
+    wxString name = aTitle;
 
     // Find previous entry, if there is one
     auto prev = m_traces.find( name );

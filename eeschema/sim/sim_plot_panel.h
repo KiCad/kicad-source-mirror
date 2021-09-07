@@ -290,8 +290,8 @@ public:
     }
 
 protected:
-    bool addTrace( const wxString& aName, int aPoints, const double* aX, const double* aY,
-                   SIM_PLOT_TYPE aType, const wxString& aParam );
+    bool addTrace( const wxString& aTitle, const wxString& aName, int aPoints, const double* aX,
+                   const double* aY, SIM_PLOT_TYPE aType, const wxString& aParam );
 
     bool deleteTrace( const wxString& aName );
 

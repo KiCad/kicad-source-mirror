@@ -695,6 +695,12 @@ bool SIM_PLOT_FRAME::updatePlot( const wxString& aName, SIM_PLOT_TYPE aType, con
     SIM_TYPE simType = m_exporter->GetSimType();
     wxString spiceVector = m_exporter->ComponentToVector( aName, aType, aParam );
 
+    wxString plotTitle = wxString::Format( "%s(%s)", aParam, aName );
+    if( aType & SPT_AC_MAG )
+        plotTitle += " (mag)";
+    else if( aType & SPT_AC_PHASE )
+        plotTitle += " (phase)";
+
     if( !SIM_PANEL_BASE::IsPlottable( simType ) )
     {
         // There is no plot to be shown
@@ -768,15 +774,16 @@ bool SIM_PLOT_FRAME::updatePlot( const wxString& aName, SIM_PLOT_TYPE aType, con
 
             for( size_t idx = 0; idx <= outer; idx++ )
             {
-                name = wxString::Format( "%s (%s = %s V)", aName, source2.m_source, v.ToString() );
+                name = wxString::Format( "%s (%s = %s V)", plotTitle, source2.m_source,
+                                         v.ToString() );
 
                 std::vector<double> sub_x( data_x.begin() + offset,
                                            data_x.begin() + offset + inner );
                 std::vector<double> sub_y( data_y.begin() + offset,
                                            data_y.begin() + offset + inner );
 
-                m_workbook->AddTrace( aPlotPanel, name, inner, sub_x.data(), sub_y.data(), aType,
-                        aParam );
+                m_workbook->AddTrace( aPlotPanel, name, aName, inner, sub_x.data(), sub_y.data(),
+                                      aType, aParam );
 
                 v = v + source2.m_vincrement;
                 offset += inner;
@@ -786,7 +793,8 @@ bool SIM_PLOT_FRAME::updatePlot( const wxString& aName, SIM_PLOT_TYPE aType, con
         }
     }
 
-    m_workbook->AddTrace( aPlotPanel, aName, size, data_x.data(), data_y.data(), aType, aParam );
+    m_workbook->AddTrace( aPlotPanel, plotTitle, aName, size, data_x.data(), data_y.data(), aType,
+                          aParam );
 
     return true;
 }

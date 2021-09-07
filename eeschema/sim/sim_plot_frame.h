@@ -178,8 +178,10 @@ private:
      * Update plot in a particular SIM_PLOT_PANEL. If the panel does not contain
      * the plot, it will be added.
      *
-     * @param aDescriptor contains the plot description.
-     * @param aPanel is the panel that should receive the update.
+     * @param aName is the device/net name.
+     * @param aType describes the type of plot.
+     * @param aParam is the parameter for the device/net (e.g. I, Id, V).
+     * @param aPlotPanel is the panel that should receive the update.
      * @return True if a plot was successfully added/updated.
      */
     bool updatePlot( const wxString& aName, SIM_PLOT_TYPE aType, const wxString& aParam,
