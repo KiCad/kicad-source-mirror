@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.9.0 Aug 10 2021)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -60,7 +60,7 @@ class PANEL_SETUP_NETCLASSES_BASE : public wxPanel
 		wxButton* m_assignSelectedButton;
 		WX_GRID* m_membershipGrid;
 
-		// Virtual event handlers, overide them in your derived class
+		// Virtual event handlers, override them in your derived class
 		virtual void OnUpdateUI( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void OnSizeNetclassGrid( wxSizeEvent& event ) { event.Skip(); }
 		virtual void OnAddNetclassClick( wxCommandEvent& event ) { event.Skip(); }
@@ -76,6 +76,7 @@ class PANEL_SETUP_NETCLASSES_BASE : public wxPanel
 	public:
 
 		PANEL_SETUP_NETCLASSES_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
+
 		~PANEL_SETUP_NETCLASSES_BASE();
 
 };

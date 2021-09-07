@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.9.0 Aug 10 2021)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -51,7 +51,7 @@ PANEL_3D_OPENGL_OPTIONS_BASE::PANEL_3D_OPENGL_OPTIONS_BASE( wxWindow* parent, wx
 	gSizer1->Add( m_selectionColorLabel, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
 	m_selectionColorSwatch = new COLOR_SWATCH( sbSizerOpenGLRenderoptions->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
-	gSizer1->Add( m_selectionColorSwatch, 0, wxALL|wxEXPAND, 5 );
+	gSizer1->Add( m_selectionColorSwatch, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 5 );
 
 
 	sbSizerOpenGLRenderoptions->Add( gSizer1, 0, 0, 5 );

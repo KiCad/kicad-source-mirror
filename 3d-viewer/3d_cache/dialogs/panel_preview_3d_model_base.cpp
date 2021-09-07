@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.9.0 Aug 10 2021)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -156,7 +156,7 @@ PANEL_PREVIEW_3D_MODEL_BASE::PANEL_PREVIEW_3D_MODEL_BASE( wxWindow* parent, wxWi
 	sbSizer4 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Opacity") ), wxVERTICAL );
 
 	m_opacity = new wxSlider( sbSizer4->GetStaticBox(), wxID_ANY, 50, 0, 100, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL|wxSL_LABELS );
-	sbSizer4->Add( m_opacity, 0, wxEXPAND|wxBOTTOM, 5 );
+	sbSizer4->Add( m_opacity, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 
 
 	bSizerLeft->Add( sbSizer4, 1, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
@@ -186,7 +186,7 @@ PANEL_PREVIEW_3D_MODEL_BASE::PANEL_PREVIEW_3D_MODEL_BASE( wxWindow* parent, wxWi
 	bSizer3DButtons = new wxBoxSizer( wxVERTICAL );
 
 
-	bSizer3DButtons->Add( 0, 0, 0, wxEXPAND|wxTOP, 5 );
+	bSizer3DButtons->Add( 0, 0, 0, wxEXPAND, 5 );
 
 	m_bpvISO = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), wxBU_AUTODRAW|0 );
 	m_bpvISO->SetToolTip( _("Change to isometric perspective") );

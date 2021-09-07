@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.9.0 Aug 10 2021)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -348,11 +348,12 @@ PANEL_3D_RAYTRACING_OPTIONS_BASE::PANEL_3D_RAYTRACING_OPTIONS_BASE( wxWindow* pa
 	bSizerMargins->Add( sbSizerRaytracingLightConfiguration, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 
 
-	bSizerMain->Add( bSizerMargins, 1, wxEXPAND|wxRIGHT, 5 );
+	bSizerMain->Add( bSizerMargins, 1, wxEXPAND, 5 );
 
 
 	this->SetSizer( bSizerMain );
 	this->Layout();
+	bSizerMain->Fit( this );
 }
 
 PANEL_3D_RAYTRACING_OPTIONS_BASE::~PANEL_3D_RAYTRACING_OPTIONS_BASE()

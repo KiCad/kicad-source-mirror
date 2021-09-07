@@ -14,6 +14,7 @@
         <property name="file">panel_3D_raytracing_options_base</property>
         <property name="first_id">1000</property>
         <property name="help_provider">none</property>
+        <property name="image_path_wrapper_function_name"></property>
         <property name="indent_with_spaces"></property>
         <property name="internationalize">1</property>
         <property name="name">panel_3D_raytracing_options_base</property>
@@ -25,6 +26,7 @@
         <property name="skip_php_events">1</property>
         <property name="skip_python_events">1</property>
         <property name="ui_table">UI</property>
+        <property name="use_array_enum">0</property>
         <property name="use_enum">0</property>
         <property name="use_microsoft_bom">0</property>
         <object class="Panel" expanded="1">
@@ -43,9 +45,10 @@
             <property name="minimum_size"></property>
             <property name="name">PANEL_3D_RAYTRACING_OPTIONS_BASE</property>
             <property name="pos"></property>
-            <property name="size">795,478</property>
+            <property name="size">-1,-1</property>
             <property name="subclass">RESETTABLE_PANEL; widgets/resettable_panel.h; forward_declare</property>
             <property name="tooltip"></property>
+            <property name="two_step_creation">0</property>
             <property name="window_extra_style"></property>
             <property name="window_name"></property>
             <property name="window_style">wxTAB_TRAVERSAL</property>
@@ -56,7 +59,7 @@
                 <property name="permission">none</property>
                 <object class="sizeritem" expanded="1">
                     <property name="border">5</property>
-                    <property name="flag">wxEXPAND|wxRIGHT</property>
+                    <property name="flag">wxEXPAND</property>
                     <property name="proportion">1</property>
                     <object class="wxBoxSizer" expanded="1">
                         <property name="minimum_size"></property>

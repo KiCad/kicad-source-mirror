@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.9.0 Aug 10 2021)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -38,7 +38,6 @@ PANEL_SETUP_NETCLASSES_BASE::PANEL_SETUP_NETCLASSES_BASE( wxWindow* parent, wxWi
 	// Columns
 	m_netclassGrid->EnableDragColMove( false );
 	m_netclassGrid->EnableDragColSize( true );
-	m_netclassGrid->SetColLabelSize( 24 );
 	m_netclassGrid->SetColLabelValue( 0, _("Net Class") );
 	m_netclassGrid->SetColLabelValue( 1, _("Clearance") );
 	m_netclassGrid->SetColLabelValue( 2, _("Track Width") );
@@ -52,12 +51,13 @@ PANEL_SETUP_NETCLASSES_BASE::PANEL_SETUP_NETCLASSES_BASE( wxWindow* parent, wxWi
 	m_netclassGrid->SetColLabelValue( 10, _("Bus Thickness") );
 	m_netclassGrid->SetColLabelValue( 11, _("Color") );
 	m_netclassGrid->SetColLabelValue( 12, _("Line Style") );
+	m_netclassGrid->SetColLabelSize( 24 );
 	m_netclassGrid->SetColLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
 
 	// Rows
 	m_netclassGrid->EnableDragRowSize( true );
-	m_netclassGrid->SetRowLabelSize( 0 );
 	m_netclassGrid->SetRowLabelValue( 0, _("Default") );
+	m_netclassGrid->SetRowLabelSize( 0 );
 	m_netclassGrid->SetRowLabelAlignment( wxALIGN_LEFT, wxALIGN_CENTER );
 
 	// Label Appearance
@@ -81,9 +81,9 @@ PANEL_SETUP_NETCLASSES_BASE::PANEL_SETUP_NETCLASSES_BASE( wxWindow* parent, wxWi
 
 	buttonBoxSizer->Add( 0, 0, 1, wxEXPAND, 5 );
 
-	m_colorDefaultHelpText = new wxStaticText( m_netclassesPane, wxID_ANY, _("Set color to transparent to use Kicad default color."), wxDefaultPosition, wxDefaultSize, 0 );
+	m_colorDefaultHelpText = new wxStaticText( m_netclassesPane, wxID_ANY, _("Set color to transparent to use KiCad default color."), wxDefaultPosition, wxDefaultSize, 0 );
 	m_colorDefaultHelpText->Wrap( -1 );
-	buttonBoxSizer->Add( m_colorDefaultHelpText, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	buttonBoxSizer->Add( m_colorDefaultHelpText, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
 
 
 	bUpperSizer->Add( buttonBoxSizer, 0, wxEXPAND|wxTOP|wxBOTTOM, 5 );
@@ -138,19 +138,22 @@ PANEL_SETUP_NETCLASSES_BASE::PANEL_SETUP_NETCLASSES_BASE( wxWindow* parent, wxWi
 	bSizer131 = new wxBoxSizer( wxHORIZONTAL );
 
 	m_showAllButton = new wxButton( sbFilters->GetStaticBox(), wxID_ANY, _("Show All Nets"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer131->Add( m_showAllButton, 1, wxALL, 5 );
+	bSizer131->Add( m_showAllButton, 1, wxLEFT|wxTOP, 5 );
 
 
 	bSizer131->Add( 0, 0, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 
 	m_filterNetsButton = new wxButton( sbFilters->GetStaticBox(), wxID_ANY, _("Apply Filters"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer131->Add( m_filterNetsButton, 1, wxALL, 5 );
+	bSizer131->Add( m_filterNetsButton, 1, wxRIGHT|wxTOP, 5 );
 
 
 	sbFilters->Add( bSizer131, 1, wxEXPAND|wxTOP|wxBOTTOM, 6 );
 
 
 	bLeft->Add( sbFilters, 0, wxEXPAND|wxBOTTOM, 5 );
+
+
+	bLeft->Add( 0, 0, 1, wxEXPAND, 5 );
 
 	wxStaticBoxSizer* sbEdit;
 	sbEdit = new wxStaticBoxSizer( new wxStaticBox( m_membershipPane, wxID_ANY, _("Assign Net Class") ), wxVERTICAL );
@@ -176,19 +179,19 @@ PANEL_SETUP_NETCLASSES_BASE::PANEL_SETUP_NETCLASSES_BASE( wxWindow* parent, wxWi
 	bSizer12 = new wxBoxSizer( wxHORIZONTAL );
 
 	m_assignAllButton = new wxButton( sbEdit->GetStaticBox(), wxID_ANY, _("Assign To All Listed Nets"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer12->Add( m_assignAllButton, 1, wxALL, 5 );
+	bSizer12->Add( m_assignAllButton, 1, wxBOTTOM|wxLEFT|wxTOP, 5 );
 
 
 	bSizer12->Add( 0, 0, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 
 	m_assignSelectedButton = new wxButton( sbEdit->GetStaticBox(), wxID_ANY, _("Assign To Selected Nets"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer12->Add( m_assignSelectedButton, 1, wxALL, 5 );
+	bSizer12->Add( m_assignSelectedButton, 1, wxBOTTOM|wxRIGHT|wxTOP, 5 );
 
 
 	sbEdit->Add( bSizer12, 0, wxEXPAND|wxTOP, 6 );
 
 
-	bLeft->Add( sbEdit, 1, wxEXPAND|wxTOP, 8 );
+	bLeft->Add( sbEdit, 0, wxEXPAND|wxTOP, 8 );
 
 
 	bLowerSizer->Add( bLeft, 1, wxEXPAND|wxTOP|wxRIGHT, 5 );
@@ -208,9 +211,9 @@ PANEL_SETUP_NETCLASSES_BASE::PANEL_SETUP_NETCLASSES_BASE( wxWindow* parent, wxWi
 	// Columns
 	m_membershipGrid->EnableDragColMove( false );
 	m_membershipGrid->EnableDragColSize( true );
-	m_membershipGrid->SetColLabelSize( 24 );
 	m_membershipGrid->SetColLabelValue( 0, _("Net") );
 	m_membershipGrid->SetColLabelValue( 1, _("Net Class") );
+	m_membershipGrid->SetColLabelSize( 24 );
 	m_membershipGrid->SetColLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
 
 	// Rows

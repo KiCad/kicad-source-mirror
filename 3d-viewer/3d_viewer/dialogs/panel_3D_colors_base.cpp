@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.9.0 Aug 10 2021)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -29,14 +29,14 @@ PANEL_3D_COLORS_BASE::PANEL_3D_COLORS_BASE( wxWindow* parent, wxWindowID id, con
 
 	backgroundTopLabel = new wxStaticText( sbEnvironmentColors->GetStaticBox(), wxID_ANY, _("Background gradient start:"), wxDefaultPosition, wxDefaultSize, 0 );
 	backgroundTopLabel->Wrap( -1 );
-	fgSizer1->Add( backgroundTopLabel, 0, wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizer1->Add( backgroundTopLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	m_backgroundTop = new COLOR_SWATCH( sbEnvironmentColors->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizer1->Add( m_backgroundTop, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
 	backgroundBotLabel = new wxStaticText( sbEnvironmentColors->GetStaticBox(), wxID_ANY, _("Background gradient end:"), wxDefaultPosition, wxDefaultSize, 0 );
 	backgroundBotLabel->Wrap( -1 );
-	fgSizer1->Add( backgroundBotLabel, 0, wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizer1->Add( backgroundBotLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	m_backgroundBottom = new COLOR_SWATCH( sbEnvironmentColors->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizer1->Add( m_backgroundBottom, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
@@ -49,7 +49,7 @@ PANEL_3D_COLORS_BASE::PANEL_3D_COLORS_BASE( wxWindow* parent, wxWindowID id, con
 
 	solderPasteLabel = new wxStaticText( sbEnvironmentColors->GetStaticBox(), wxID_ANY, _("Solder paste:"), wxDefaultPosition, wxDefaultSize, 0 );
 	solderPasteLabel->Wrap( -1 );
-	fgSizer1->Add( solderPasteLabel, 0, wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizer1->Add( solderPasteLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	m_solderPaste = new COLOR_SWATCH( sbEnvironmentColors->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizer1->Add( m_solderPaste, 0, wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );

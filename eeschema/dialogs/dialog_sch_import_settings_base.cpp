@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.9.0 Nov  1 2020)
+// C++ code generated with wxFormBuilder (version 3.9.0 Aug 10 2021)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -21,13 +21,13 @@ DIALOG_SCH_IMPORT_SETTINGS_BASE::DIALOG_SCH_IMPORT_SETTINGS_BASE( wxWindow* pare
 	wxStaticText* importFromLabel;
 	importFromLabel = new wxStaticText( this, wxID_ANY, _("Import from:"), wxDefaultPosition, wxDefaultSize, 0 );
 	importFromLabel->Wrap( -1 );
-	bupperSizer->Add( importFromLabel, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+	bupperSizer->Add( importFromLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	m_filePathCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_filePathCtrl->SetToolTip( _("Target directory for plot files. Can be absolute or relative to the board file location.") );
 	m_filePathCtrl->SetMinSize( wxSize( 300,-1 ) );
 
-	bupperSizer->Add( m_filePathCtrl, 1, wxEXPAND|wxTOP|wxBOTTOM, 5 );
+	bupperSizer->Add( m_filePathCtrl, 1, wxBOTTOM|wxEXPAND|wxLEFT|wxTOP, 5 );
 
 	m_browseButton = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
 	m_browseButton->SetMinSize( wxSize( 29,29 ) );
@@ -75,7 +75,7 @@ DIALOG_SCH_IMPORT_SETTINGS_BASE::DIALOG_SCH_IMPORT_SETTINGS_BASE( wxWindow* pare
 	m_sdbSizer1->AddButton( m_sdbSizer1Cancel );
 	m_sdbSizer1->Realize();
 
-	m_buttonsSizer->Add( m_sdbSizer1, 1, wxALL|wxEXPAND, 5 );
+	m_buttonsSizer->Add( m_sdbSizer1, 1, wxBOTTOM|wxEXPAND|wxTOP, 5 );
 
 
 	m_MainSizer->Add( m_buttonsSizer, 0, wxEXPAND, 5 );
