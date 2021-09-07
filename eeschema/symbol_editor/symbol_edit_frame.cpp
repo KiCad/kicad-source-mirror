@@ -270,11 +270,6 @@ void SYMBOL_EDIT_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
     SCH_BASE_FRAME::LoadSettings( GetSettings() );
 
     GetRenderSettings()->m_ShowPinsElectricalType = m_settings->m_ShowPinElectricalType;
-
-    // Hidden elements must be editable
-    GetRenderSettings()->m_ShowHiddenText = true;
-    GetRenderSettings()->m_ShowHiddenPins = true;
-    GetRenderSettings()->m_ShowUmbilicals = false;
 }
 
 
@@ -297,7 +292,7 @@ APP_SETTINGS_BASE* SYMBOL_EDIT_FRAME::config() const
 }
 
 
-COLOR_SETTINGS* SYMBOL_EDIT_FRAME::GetColorSettings() const
+COLOR_SETTINGS* SYMBOL_EDIT_FRAME::GetColorSettings( bool aForceRefresh ) const
 {
     SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
 

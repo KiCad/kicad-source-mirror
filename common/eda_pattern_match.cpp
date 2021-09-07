@@ -236,13 +236,14 @@ bool EDA_PATTERN_MATCH_RELATIONAL::SetPattern( const wxString& aPattern )
 
     if( val == "" )
     {
-        // Matching on empty values keeps the match list from going empty when
-        // the user types the relational operator character, which helps prevent
-        // confusion.
+        // Matching on empty values keeps the match list from going empty when the user
+        // types the relational operator character, which helps prevent confusion.
         m_relation = ANY;
     }
     else if( !val.ToCDouble( &m_value ) )
+    {
         return false;
+    }
 
     auto unit_it = m_units.find( unit.Lower() );
 

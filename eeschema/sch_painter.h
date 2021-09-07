@@ -102,17 +102,17 @@ public:
 
     const COLOR4D& GetCursorColor() override { return m_layerColors[ LAYER_SCHEMATIC_CURSOR ]; }
 
+    bool GetShowPageLimits() const override;
+
+public:
     bool   m_IsSymbolEditor;
 
     int    m_ShowUnit;                // Show all units if 0
     int    m_ShowConvert;             // Show all conversions if 0
 
-    bool   m_ShowHiddenText;
-    bool   m_ShowHiddenPins;
     bool   m_ShowPinsElectricalType;
     bool   m_ShowDisabled;
     bool   m_ShowGraphicsDisabled;
-    bool   m_ShowUmbilicals;
 
     bool   m_OverrideItemColors;
 

@@ -52,13 +52,6 @@ public:
 
     void LoadColors( const COLOR_SETTINGS* aSettings ) override;
 
-    /**
-     * Load settings related to display options.
-     *
-     * @param aOptions are settings that you want to use for displaying items.
-     */
-    void LoadDisplayOptions( const GBR_DISPLAY_OPTIONS& aOptions );
-
     /// @copydoc RENDER_SETTINGS::GetColor()
     virtual COLOR4D GetColor( const VIEW_ITEM* aItem, int aLayer ) const override;
 
@@ -99,35 +92,7 @@ public:
 
     const COLOR4D& GetCursorColor() override { return m_layerColors[ LAYER_CURSOR ]; }
 
-    inline bool IsSpotFill() const
-    {
-        return m_spotFill;
-    }
-
-    inline bool IsLineFill() const
-    {
-        return m_lineFill;
-    }
-
-    inline bool IsPolygonFill() const
-    {
-        return m_polygonFill;
-    }
-
-    inline bool IsShowNegativeItems() const
-    {
-        return m_showNegativeItems;
-    }
-
-    inline bool IsShowCodes() const
-    {
-        return m_showCodes;
-    }
-
-    inline bool IsDiffMode() const
-    {
-        return m_diffMode;
-    }
+    bool GetShowPageLimits() const override;
 
     /// Clear all highlight selections (dcode, net, component, attribute selection)
     void ClearHighlightSelections();
@@ -146,24 +111,6 @@ public:
     int m_dcodeHighlightValue;
 
 protected:
-    /// Flag determining if spots should be drawn with fill
-    bool    m_spotFill;
-
-    /// Flag determining if lines should be drawn with fill
-    bool    m_lineFill;
-
-    /// Flag determining if polygons should be drawn with fill
-    bool    m_polygonFill;
-
-    /// Flag determining if negative items should be drawn with a "ghost" color
-    bool    m_showNegativeItems;
-
-    /// Flag determining if D-Codes should be drawn
-    bool    m_showCodes;
-
-    /// Flag determining if layers should be rendered in "diff" mode
-    bool    m_diffMode;
-
     /// Maximum font size for D-Codes and other strings
     static const double MAX_FONT_SIZE;
 };

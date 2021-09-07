@@ -173,7 +173,7 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS()
 
     m_params.emplace_back( new PARAM<int>( "pcb_display.track_clearance_mode",
             reinterpret_cast<int*>( &m_Display.m_ShowTrackClearanceMode ),
-            PCB_DISPLAY_OPTIONS::SHOW_TRACK_CLEARANCE_WITH_VIA_WHILE_ROUTING ) );
+            SHOW_TRACK_CLEARANCE_WITH_VIA_WHILE_ROUTING ) );
 
     m_params.emplace_back( new PARAM<bool>( "pcb_display.track_fill",
             &m_Display.m_DisplayPcbTrackFill, true ) );

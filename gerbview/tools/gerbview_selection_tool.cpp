@@ -25,6 +25,7 @@ using namespace std::placeholders;
 #include <bitmaps.h>
 #include <eda_item.h>
 #include <gerber_collectors.h>
+#include <gerbview_settings.h>
 #include <class_draw_panel_gal.h>
 #include <string_utils.h>
 #include <view/view.h>
@@ -32,8 +33,6 @@ using namespace std::placeholders;
 #include <painter.h>
 #include <tool/tool_event.h>
 #include <tool/tool_manager.h>
-#include <gerbview_id.h>
-#include <gerbview_painter.h>
 #include "gerbview_selection_tool.h"
 #include "gerbview_actions.h"
 
@@ -496,18 +495,11 @@ bool GERBVIEW_SELECTION_TOOL::selectable( const EDA_ITEM* aItem ) const
     const GERBER_DRAW_ITEM* item = static_cast<const GERBER_DRAW_ITEM*>( aItem );
     int                     layer = item->GetLayer();
 
-
-    if( item->GetLayerPolarity() )
-    {
-        // Don't allow selection of invisible negative items
-        auto rs = static_cast<KIGFX::GERBVIEW_RENDER_SETTINGS*>( getView()->GetPainter()->GetSettings() );
-
-        if( !rs->IsShowNegativeItems() )
-            return false;
-    }
+    if( !frame->gvconfig()->m_Appearance.show_negative_objects && item->GetLayerPolarity() )
+        return false;
 
     // We do not want to select items that are in the background
-    if( frame->GetDisplayOptions().m_HighContrastMode && layer != frame->GetActiveLayer() )
+    if( frame->gvconfig()->m_Display.m_HighContrastMode && layer != frame->GetActiveLayer() )
         return false;
 
     return frame->IsLayerVisible( layer );

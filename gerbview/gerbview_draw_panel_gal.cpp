@@ -58,18 +58,8 @@ EDA_DRAW_PANEL_GAL( aParentWindow, aWindowId, aPosition, aSize, aOptions, aGalTy
 
     setDefaultLayerDeps();
 
-    // Load display options (such as filled/outline display of items).
-    auto frame = static_cast< GERBVIEW_FRAME* >( GetParentEDAFrame() );
-
-    if( frame )
-    {
-        auto& displ_opts = frame->GetDisplayOptions();
-        auto rs = static_cast<KIGFX::GERBVIEW_RENDER_SETTINGS*>(
-                m_view->GetPainter()->GetSettings() );
-
-        rs->LoadDisplayOptions( displ_opts );
-        rs->LoadColors( Pgm().GetSettingsManager().GetColorSettings() );
-    }
+    auto renderSettings = static_cast<KIGFX::GERBVIEW_RENDER_SETTINGS*>( m_painter->GetSettings() );
+    renderSettings->LoadColors( Pgm().GetSettingsManager().GetColorSettings() );
 }
 
 
@@ -96,7 +86,6 @@ void GERBVIEW_DRAW_PANEL_GAL::SetHighContrastLayer( int aLayer )
 void GERBVIEW_DRAW_PANEL_GAL::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame,
                                                std::vector<MSG_PANEL_ITEM>& aList )
 {
-
 }
 
 
@@ -105,12 +94,7 @@ void GERBVIEW_DRAW_PANEL_GAL::OnShow()
     GERBVIEW_FRAME* frame = dynamic_cast<GERBVIEW_FRAME*>( GetParentEDAFrame() );
 
     if( frame )
-    {
         SetTopLayer( frame->GetActiveLayer() );
-        auto& displ_opts = frame->GetDisplayOptions();
-        static_cast<KIGFX::GERBVIEW_RENDER_SETTINGS*>(
-            m_view->GetPainter()->GetSettings() )->LoadDisplayOptions( displ_opts );
-    }
 
     m_view->RecacheAllItems();
 }

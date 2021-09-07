@@ -56,24 +56,20 @@
 #include <geometry/shape_simple.h>
 #include <geometry/shape_circle.h>
 #include <bezier_curves.h>
+#include <kiface_base.h>
+#include "pcbnew_settings.h"
 
 using namespace KIGFX;
 
 PCB_RENDER_SETTINGS::PCB_RENDER_SETTINGS()
 {
     m_backgroundColor = COLOR4D( 0.0, 0.0, 0.0, 1.0 );
-    m_padNumbers = true;
-    m_netNamesOnPads = true;
-    m_netNamesOnTracks = true;
-    m_netNamesOnVias = true;
     m_zoneOutlines = true;
     m_zoneDisplayMode = ZONE_DISPLAY_MODE::SHOW_FILLED;
-    m_clearanceDisplayFlags = CL_NONE;
     m_sketchGraphics = false;
     m_sketchText = false;
     m_netColorMode = NET_COLOR_MODE::RATSNEST;
     m_contrastModeDisplay = HIGH_CONTRAST_MODE::NORMAL;
-    m_ratsnestDisplayMode = RATSNEST_MODE::ALL;
 
     m_trackOpacity = 1.0;
     m_viaOpacity   = 1.0;
@@ -135,16 +131,11 @@ void PCB_RENDER_SETTINGS::LoadColors( const COLOR_SETTINGS* aSettings )
 }
 
 
-void PCB_RENDER_SETTINGS::LoadDisplayOptions( const PCB_DISPLAY_OPTIONS& aOptions,
-                                              bool aShowPageLimits )
+void PCB_RENDER_SETTINGS::LoadDisplayOptions( const PCB_DISPLAY_OPTIONS& aOptions )
 {
-    m_hiContrastEnabled = ( aOptions.m_ContrastModeDisplay !=
-                            HIGH_CONTRAST_MODE::NORMAL );
-    m_padNumbers        = aOptions.m_DisplayPadNum;
-    m_sketchGraphics    = !aOptions.m_DisplayGraphicsFill;
-    m_sketchText        = !aOptions.m_DisplayTextFill;
-    m_curvedRatsnestlines = aOptions.m_DisplayRatsnestLinesCurved;
-    m_globalRatsnestlines = aOptions.m_ShowGlobalRatsnest;
+    m_hiContrastEnabled   = aOptions.m_ContrastModeDisplay != HIGH_CONTRAST_MODE::NORMAL;
+    m_sketchGraphics      = !aOptions.m_DisplayGraphicsFill;
+    m_sketchText          = !aOptions.m_DisplayTextFill;
 
     // Whether to draw tracks, vias & pads filled or as outlines
     m_sketchMode[LAYER_PADS_TH]      = !aOptions.m_DisplayPadFill;
@@ -153,76 +144,17 @@ void PCB_RENDER_SETTINGS::LoadDisplayOptions( const PCB_DISPLAY_OPTIONS& aOption
     m_sketchMode[LAYER_VIA_MICROVIA] = !aOptions.m_DisplayViaFill;
     m_sketchMode[LAYER_TRACKS]       = !aOptions.m_DisplayPcbTrackFill;
 
-    // Net names display settings
-    switch( aOptions.m_DisplayNetNamesMode )
-    {
-    case 0:
-        m_netNamesOnPads   = false;
-        m_netNamesOnTracks = false;
-        m_netNamesOnVias   = false;
-        break;
-
-    case 1:
-        m_netNamesOnPads   = true;
-        m_netNamesOnTracks = false;
-        m_netNamesOnVias   = true;        // Follow pads or tracks?  For now we chose pads....
-        break;
-
-    case 2:
-        m_netNamesOnPads   = false;
-        m_netNamesOnTracks = true;
-        m_netNamesOnVias   = false;       // Follow pads or tracks?  For now we chose pads....
-        break;
-
-    case 3:
-        m_netNamesOnPads   = true;
-        m_netNamesOnTracks = true;
-        m_netNamesOnVias   = true;
-        break;
-    }
-
     // Zone display settings
     m_zoneDisplayMode = aOptions.m_ZoneDisplayMode;
-
-    // Clearance settings
-    switch( aOptions.m_ShowTrackClearanceMode )
-    {
-        case PCB_DISPLAY_OPTIONS::DO_NOT_SHOW_CLEARANCE:
-            m_clearanceDisplayFlags = CL_NONE;
-            break;
-
-        case PCB_DISPLAY_OPTIONS::SHOW_TRACK_CLEARANCE_WHILE_ROUTING:
-            m_clearanceDisplayFlags = CL_NEW | CL_TRACKS;
-            break;
-
-        case PCB_DISPLAY_OPTIONS::SHOW_TRACK_CLEARANCE_WITH_VIA_WHILE_ROUTING:
-            m_clearanceDisplayFlags = CL_NEW | CL_TRACKS | CL_VIAS;
-            break;
-
-        case PCB_DISPLAY_OPTIONS::SHOW_WHILE_ROUTING_OR_DRAGGING:
-            m_clearanceDisplayFlags = CL_NEW | CL_EDITED | CL_TRACKS | CL_VIAS;
-            break;
-
-        case PCB_DISPLAY_OPTIONS::SHOW_TRACK_CLEARANCE_WITH_VIA_ALWAYS:
-            m_clearanceDisplayFlags = CL_NEW | CL_EDITED | CL_EXISTING | CL_TRACKS | CL_VIAS;
-            break;
-    }
-
-    if( aOptions.m_DisplayPadClearance )
-        m_clearanceDisplayFlags |= CL_PADS;
 
     m_contrastModeDisplay = aOptions.m_ContrastModeDisplay;
 
     m_netColorMode = aOptions.m_NetColorMode;
 
-    m_ratsnestDisplayMode = aOptions.m_RatsnestMode;
-
     m_trackOpacity = aOptions.m_TrackOpacity;
     m_viaOpacity   = aOptions.m_ViaOpacity;
     m_padOpacity   = aOptions.m_PadOpacity;
     m_zoneOpacity  = aOptions.m_ZoneOpacity;
-
-    m_showPageLimits = aShowPageLimits;
 }
 
 
@@ -424,6 +356,18 @@ COLOR4D PCB_RENDER_SETTINGS::GetColor( const VIEW_ITEM* aItem, int aLayer ) cons
 }
 
 
+PCBNEW_SETTINGS* pcbconfig()
+{
+    return dynamic_cast<PCBNEW_SETTINGS*>( Kiface().KifaceSettings() );
+}
+
+
+bool PCB_RENDER_SETTINGS::GetShowPageLimits() const
+{
+    return pcbconfig()->m_ShowPageLimits;
+}
+
+
 PCB_PAINTER::PCB_PAINTER( GAL* aGal ) :
     PAINTER( aGal ),
     m_maxError( ARC_HIGH_DEF ),
@@ -601,7 +545,7 @@ void PCB_PAINTER::draw( const PCB_TRACK* aTrack, int aLayer )
 
     if( IsNetnameLayer( aLayer ) )
     {
-        if( !m_pcbSettings.m_netNamesOnTracks )
+        if( pcbconfig()->m_Display.m_DisplayNetNamesMode < 2 )
             return;
 
         if( aTrack->GetNetCode() <= NETINFO_LIST::UNCONNECTED )
@@ -667,10 +611,7 @@ void PCB_PAINTER::draw( const PCB_TRACK* aTrack, int aLayer )
     }
 
     // Clearance lines
-    constexpr int clearanceFlags = PCB_RENDER_SETTINGS::CL_EXISTING
-                                 | PCB_RENDER_SETTINGS::CL_TRACKS;
-
-    if( ( m_pcbSettings.m_clearanceDisplayFlags & clearanceFlags ) == clearanceFlags )
+    if( pcbconfig()->m_Display.m_ShowTrackClearanceMode == SHOW_TRACK_CLEARANCE_WITH_VIA_ALWAYS )
     {
         int clearance = aTrack->GetOwnClearance( m_pcbSettings.GetActiveLayer() );
 
@@ -711,10 +652,7 @@ void PCB_PAINTER::draw( const PCB_ARC* aArc, int aLayer )
     }
 
     // Clearance lines
-    constexpr int clearanceFlags = PCB_RENDER_SETTINGS::CL_EXISTING
-                                 | PCB_RENDER_SETTINGS::CL_TRACKS;
-
-    if( ( m_pcbSettings.m_clearanceDisplayFlags & clearanceFlags ) == clearanceFlags )
+    if( pcbconfig()->m_Display.m_ShowTrackClearanceMode >= SHOW_TRACK_CLEARANCE_WHILE_ROUTING )
     {
         int clearance = aArc->GetOwnClearance( m_pcbSettings.GetActiveLayer() );
 
@@ -772,8 +710,12 @@ void PCB_PAINTER::draw( const PCB_VIA* aVia, int aLayer )
         VECTOR2D position( center );
 
         // Is anything that we can display enabled?
-        if( !m_pcbSettings.m_netNamesOnVias || aVia->GetNetname().empty() )
+        if( pcbconfig()->m_Display.m_DisplayNetNamesMode == 0
+                || pcbconfig()->m_Display.m_DisplayNetNamesMode == 2
+                || aVia->GetNetname().empty() )
+        {
             return;
+        }
 
         double maxSize = PCB_RENDER_SETTINGS::MAX_FONT_SIZE;
         double size = aVia->GetWidth();
@@ -887,9 +829,7 @@ void PCB_PAINTER::draw( const PCB_VIA* aVia, int aLayer )
     }
 
     // Clearance lines
-    constexpr int clearanceFlags = PCB_RENDER_SETTINGS::CL_EXISTING | PCB_RENDER_SETTINGS::CL_VIAS;
-
-    if( ( m_pcbSettings.m_clearanceDisplayFlags & clearanceFlags ) == clearanceFlags
+    if( pcbconfig()->m_Display.m_ShowTrackClearanceMode >= SHOW_TRACK_CLEARANCE_WITH_VIA_WHILE_ROUTING
             && aLayer != LAYER_VIA_HOLES )
     {
         PCB_LAYER_ID activeLayer = m_pcbSettings.GetActiveLayer();
@@ -911,14 +851,19 @@ void PCB_PAINTER::draw( const PCB_VIA* aVia, int aLayer )
 
 void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
 {
-    COLOR4D                color = m_pcbSettings.GetColor( aPad, aLayer );
+    COLOR4D color = m_pcbSettings.GetColor( aPad, aLayer );
 
     if( IsNetnameLayer( aLayer ) )
     {
         // Is anything that we can display enabled?
-        if( m_pcbSettings.m_netNamesOnPads || m_pcbSettings.m_padNumbers )
+        bool displayNetname = ( pcbconfig()->m_Display.m_DisplayNetNamesMode == 1
+                                || pcbconfig()->m_Display.m_DisplayNetNamesMode == 3 )
+                            && !aPad->GetNetname().empty();
+
+        bool displayPadNumber = pcbconfig()->m_Display.m_DisplayPadNum;
+
+        if( displayNetname || displayPadNumber )
         {
-            bool displayNetname = ( m_pcbSettings.m_netNamesOnPads && !aPad->GetNetname().empty() );
             EDA_RECT padBBox = aPad->GetBoundingBox();
             VECTOR2D position = padBBox.Centre();
             VECTOR2D padsize = VECTOR2D( padBBox.GetSize() );
@@ -970,7 +915,7 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
 
             // Divide the space, to display both pad numbers and netnames and set the Y text
             // position to display 2 lines
-            if( displayNetname && m_pcbSettings.m_padNumbers )
+            if( displayNetname && displayPadNumber )
             {
                 size = size / 2.5;
                 textpos.y = size / 1.7;
@@ -1006,7 +951,7 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
                 m_gal->BitmapText( netname, textpos, 0.0 );
             }
 
-            if( m_pcbSettings.m_padNumbers )
+            if( displayPadNumber )
             {
                 const wxString& padNumber = aPad->GetNumber();
                 textpos.y = -textpos.y;
@@ -1285,9 +1230,7 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
         }
     }
 
-    constexpr int clearanceFlags = PCB_RENDER_SETTINGS::CL_PADS;
-
-    if( ( m_pcbSettings.m_clearanceDisplayFlags & clearanceFlags ) == clearanceFlags
+    if( pcbconfig()->m_Display.m_DisplayPadClearance
             && ( aLayer == LAYER_PAD_FR || aLayer == LAYER_PAD_BK || aLayer == LAYER_PADS_TH ) )
     {
         /* Showing the clearance area is not obvious.

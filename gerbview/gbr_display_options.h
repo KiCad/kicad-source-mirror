@@ -38,18 +38,14 @@ public:
     bool    m_DisplayFlashedItemsFill;  ///< Option to draw flashed items (filled/sketch)
     bool    m_DisplayLinesFill;         ///< Option to draw line items (filled/sketch)
     bool    m_DisplayPolygonsFill;      ///< Option to draw polygons (filled/sketch)
-    bool    m_DisplayDCodes;            ///< Option to show dcode values on items drawn with a dcode tool
     bool    m_DisplayPageLimits;
-    bool    m_DisplayNegativeObjects;   ///< Option to draw negative objects in a specific color
     bool    m_IsPrinting;               ///< true when printing a page, false when drawing on screen
-    bool    m_ForceBlackAndWhite;       ///< Option print in black and white (not used in draw mode
     bool    m_DiffMode;                 ///< Display layers in diff mode
     bool    m_HighContrastMode;         ///< High contrast mode (dim un-highlighted objects)
     bool    m_FlipGerberView;           ///< Display as a mirror image
     COLOR4D m_NegativeDrawColor;        ///< The color used to draw negative objects, usually the
                                         ///< background color, but not always, when negative objects
                                         ///< must be visible
-    COLOR4D m_BgDrawColor;              ///< The background color
 
 public:
     GBR_DISPLAY_OPTIONS()
@@ -57,13 +53,9 @@ public:
         m_DisplayFlashedItemsFill = true;
         m_DisplayLinesFill = true;
         m_DisplayPolygonsFill = true;
-        m_DisplayDCodes = false;
         m_DisplayPageLimits = false;
         m_IsPrinting = false;
-        m_DisplayNegativeObjects = false;
-        m_ForceBlackAndWhite = false;
         m_NegativeDrawColor = COLOR4D( DARKGRAY );
-        m_BgDrawColor = COLOR4D::BLACK;
         m_DiffMode = false;
         m_HighContrastMode = false;
         m_FlipGerberView = false;

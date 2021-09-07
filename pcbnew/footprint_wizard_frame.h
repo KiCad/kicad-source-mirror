@@ -67,7 +67,7 @@ public:
      */
     void PythonPluginsReload();
 
-    COLOR_SETTINGS* GetColorSettings() const override;
+    COLOR_SETTINGS* GetColorSettings( bool aForceRefresh = false ) const override;
 
 private:
 

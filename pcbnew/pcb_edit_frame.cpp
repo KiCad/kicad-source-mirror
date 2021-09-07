@@ -1028,7 +1028,6 @@ void PCB_EDIT_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
     {
         m_rotationAngle            = cfg->m_RotationAngle;
         m_show_layer_manager_tools = cfg->m_AuiPanels.show_layer_manager;
-        m_showPageLimits           = cfg->m_ShowPageLimits;
     }
 }
 
@@ -1046,11 +1045,7 @@ void PCB_EDIT_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
         cfg->m_AuiPanels.show_layer_manager   = m_show_layer_manager_tools;
         cfg->m_AuiPanels.right_panel_width    = m_appearancePanel->GetSize().x;
         cfg->m_AuiPanels.appearance_panel_tab = m_appearancePanel->GetTabIndex();
-        cfg->m_ShowPageLimits                 = m_showPageLimits;
     }
-
-    if( GetSettingsManager() )
-        GetSettingsManager()->SaveColorSettings( GetColorSettings(), "board" );
 }
 
 
@@ -1727,7 +1722,7 @@ void PCB_EDIT_FRAME::CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVars
 
     auto* painter = static_cast<KIGFX::PCB_PAINTER*>( GetCanvas()->GetView()->GetPainter() );
     auto* renderSettings = painter->GetSettings();
-    renderSettings->LoadDisplayOptions( GetDisplayOptions(), ShowPageLimits() );
+    renderSettings->LoadDisplayOptions( GetDisplayOptions() );
     SetElementVisibility( LAYER_NO_CONNECTS, GetDisplayOptions().m_DisplayPadNoConnects );
     SetElementVisibility( LAYER_RATSNEST, GetDisplayOptions().m_ShowGlobalRatsnest );
 

@@ -283,7 +283,7 @@ void FOOTPRINT_WIZARD_FRAME::OnSize( wxSizeEvent& SizeEv )
 }
 
 
-COLOR_SETTINGS* FOOTPRINT_WIZARD_FRAME::GetColorSettings() const
+COLOR_SETTINGS* FOOTPRINT_WIZARD_FRAME::GetColorSettings( bool aForceRefresh ) const
 {
     wxString currentTheme = GetFootprintEditorSettings()->m_ColorTheme;
 

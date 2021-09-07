@@ -584,12 +584,10 @@ void FOOTPRINT_EDIT_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
     cfg->m_AuiPanels.show_layer_manager   = m_show_layer_manager_tools;
     cfg->m_AuiPanels.right_panel_width    = m_appearancePanel->GetSize().x;
     cfg->m_AuiPanels.appearance_panel_tab = m_appearancePanel->GetTabIndex();
-
-    GetSettingsManager()->SaveColorSettings( GetColorSettings(), "board" );
 }
 
 
-COLOR_SETTINGS* FOOTPRINT_EDIT_FRAME::GetColorSettings() const
+COLOR_SETTINGS* FOOTPRINT_EDIT_FRAME::GetColorSettings( bool aForceRefresh ) const
 {
     wxString currentTheme = GetFootprintEditorSettings()->m_ColorTheme;
     return Pgm().GetSettingsManager().GetColorSettings( currentTheme );

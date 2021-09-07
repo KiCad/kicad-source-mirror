@@ -78,7 +78,7 @@ public:
     ///< @copydoc EDA_DRAW_FRAME::UpdateMsgPanel()
     void UpdateMsgPanel() override;
 
-    COLOR_SETTINGS* GetColorSettings() const override;
+    COLOR_SETTINGS* GetColorSettings( bool aForceRefresh = false ) const override;
 
     /**
      * @return the color of the grid.

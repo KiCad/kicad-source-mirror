@@ -285,6 +285,12 @@ bool GERBVIEW_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
 }
 
 
+GERBVIEW_SETTINGS* GERBVIEW_FRAME::gvconfig() const
+{
+    return dynamic_cast<GERBVIEW_SETTINGS*>( config() );
+}
+
+
 void GERBVIEW_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
 {
     EDA_DRAW_FRAME::LoadSettings( aCfg );
@@ -347,9 +353,6 @@ void GERBVIEW_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
     wxCHECK( cfg, /*void*/ );
 
     cfg->m_Appearance.page_type = GetPageSettings().GetType();
-    cfg->m_Appearance.show_border_and_titleblock = m_showBorderAndTitleBlock;
-    cfg->m_Appearance.show_dcodes = IsElementVisible( LAYER_DCODES );
-    cfg->m_Appearance.show_negative_objects = IsElementVisible( LAYER_NEGATIVE_OBJECTS );
 
     m_drillFileHistory.Save( &cfg->m_DrillFileHistory );
     m_zipFileHistory.Save( &cfg->m_ZipFileHistory );
@@ -387,20 +390,25 @@ void GERBVIEW_FRAME::ReFillLayerWidget()
 
 void GERBVIEW_FRAME::SetElementVisibility( int aLayerID, bool aNewState )
 {
-    bool dcodes_changed = false;
+    KIGFX::VIEW* view = GetCanvas()->GetView();
 
     switch( aLayerID )
     {
     case LAYER_DCODES:
-        dcodes_changed = m_DisplayOptions.m_DisplayDCodes != aNewState;
-        m_DisplayOptions.m_DisplayDCodes = aNewState;
+        gvconfig()->m_Appearance.show_dcodes = aNewState;
+
+        for( int i = 0; i < GERBER_DRAWLAYERS_COUNT; i++ )
+        {
+            int layer = GERBER_DRAW_LAYER( i );
+            int dcode_layer = GERBER_DCODE_LAYER( layer );
+            view->SetLayerVisible( dcode_layer, aNewState && view->IsLayerVisible( layer ) );
+        }
+
         break;
 
     case LAYER_NEGATIVE_OBJECTS:
     {
-        m_DisplayOptions.m_DisplayNegativeObjects = aNewState;
-
-        auto view = GetCanvas()->GetView();
+        gvconfig()->m_Appearance.show_negative_objects = aNewState;
 
         view->UpdateAllItemsConditionally( KIGFX::REPAINT, []( KIGFX::VIEW_ITEM* aItem )
         {
@@ -414,7 +422,9 @@ void GERBVIEW_FRAME::SetElementVisibility( int aLayerID, bool aNewState )
     }
 
     case LAYER_GERBVIEW_DRAWINGSHEET:
-        m_showBorderAndTitleBlock = aNewState;
+        gvconfig()->m_Appearance.show_border_and_titleblock = aNewState;
+
+        m_showBorderAndTitleBlock = gvconfig()->m_Appearance.show_border_and_titleblock;
 
         // NOTE: LAYER_DRAWINGSHEET always used for visibility, but the layer manager passes
         // LAYER_GERBVIEW_DRAWINGSHEET because of independent color control
@@ -430,28 +440,15 @@ void GERBVIEW_FRAME::SetElementVisibility( int aLayerID, bool aNewState )
                                       aLayerID ) );
     }
 
-    if( dcodes_changed )
-    {
-        auto view = GetCanvas()->GetView();
-
-        for( int i = 0; i < GERBER_DRAWLAYERS_COUNT; i++ )
-        {
-            int layer = GERBER_DRAW_LAYER( i );
-            int dcode_layer = GERBER_DCODE_LAYER( layer );
-            view->SetLayerVisible( dcode_layer, aNewState && view->IsLayerVisible( layer ) );
-        }
-    }
-
-    applyDisplaySettingsToGAL();
+    ApplyDisplaySettingsToGAL();
     m_LayersManager->SetRenderState( aLayerID, aNewState );
 }
 
 
-void GERBVIEW_FRAME::applyDisplaySettingsToGAL()
+void GERBVIEW_FRAME::ApplyDisplaySettingsToGAL()
 {
     auto painter = static_cast<KIGFX::GERBVIEW_PAINTER*>( GetCanvas()->GetView()->GetPainter() );
     KIGFX::GERBVIEW_RENDER_SETTINGS* settings = painter->GetSettings();
-    settings->LoadDisplayOptions( m_DisplayOptions );
     settings->LoadColors( Pgm().GetSettingsManager().GetColorSettings() );
 
     GetCanvas()->GetView()->MarkTargetDirty( KIGFX::TARGET_NONCACHED );
@@ -527,24 +524,33 @@ void GERBVIEW_FRAME::SortLayersByX2Attributes()
     GetCanvas()->Refresh();
 }
 
+
 void GERBVIEW_FRAME::UpdateDiffLayers()
 {
-    auto target = GetCanvas()->GetBackend() == GERBVIEW_DRAW_PANEL_GAL::GAL_TYPE::GAL_TYPE_OPENGL
+    auto target = GetCanvas()->GetBackend() == GERBVIEW_DRAW_PANEL_GAL::GAL_TYPE_OPENGL
                           ? KIGFX::TARGET_CACHED
                           : KIGFX::TARGET_NONCACHED;
     auto view = GetCanvas()->GetView();
 
     int lastVisibleLayer = -1;
+
     for( int i = 0; i < GERBER_DRAWLAYERS_COUNT; i++ )
     {
-        view->SetLayerDiff( GERBER_DRAW_LAYER( i ), m_DisplayOptions.m_DiffMode );
+        view->SetLayerDiff( GERBER_DRAW_LAYER( i ), gvconfig()->m_Display.m_DiffMode );
+
         // Caching doesn't work with layered rendering of diff'd layers
-        view->SetLayerTarget( GERBER_DRAW_LAYER( i ),
-                              m_DisplayOptions.m_DiffMode ? KIGFX::TARGET_NONCACHED : target );
-        //We want the last visible layer, but deprioritize the active layer unless it's the only layer
+        if( gvconfig()->m_Display.m_DiffMode )
+            view->SetLayerTarget( GERBER_DRAW_LAYER( i ), KIGFX::TARGET_NONCACHED );
+        else
+            view->SetLayerTarget( GERBER_DRAW_LAYER( i ), target );
+
+        // We want the last visible layer, but deprioritize the active layer unless it's the
+        // only layer
         if( ( lastVisibleLayer == -1 )
             || ( view->IsLayerVisible( GERBER_DRAW_LAYER( i ) ) && i != GetActiveLayer() ) )
+        {
             lastVisibleLayer = i;
+        }
     }
 
     //We don't want to diff the last visible layer onto the background, etc.
@@ -557,78 +563,6 @@ void GERBVIEW_FRAME::UpdateDiffLayers()
     view->RecacheAllItems();
     view->MarkDirty();
     view->UpdateAllItems( KIGFX::ALL );
-}
-
-
-void GERBVIEW_FRAME::UpdateDisplayOptions( const GBR_DISPLAY_OPTIONS& aOptions )
-{
-    bool update_flashed =   ( m_DisplayOptions.m_DisplayFlashedItemsFill !=
-                              aOptions.m_DisplayFlashedItemsFill );
-    bool update_lines =     ( m_DisplayOptions.m_DisplayLinesFill !=
-                              aOptions.m_DisplayLinesFill );
-    bool update_polygons =  ( m_DisplayOptions.m_DisplayPolygonsFill !=
-                              aOptions.m_DisplayPolygonsFill );
-    bool update_diff_mode = ( m_DisplayOptions.m_DiffMode != aOptions.m_DiffMode );
-
-    auto view = GetCanvas()->GetView();
-
-    m_DisplayOptions = aOptions;
-
-    applyDisplaySettingsToGAL();
-
-    if( update_diff_mode )
-        UpdateDiffLayers();
-
-    if( update_flashed )
-    {
-        view->UpdateAllItemsConditionally( KIGFX::REPAINT, []( KIGFX::VIEW_ITEM* aItem )
-        {
-            auto item = static_cast<GERBER_DRAW_ITEM*>( aItem );
-
-            switch( item->m_Shape )
-            {
-            case GBR_SPOT_CIRCLE:
-            case GBR_SPOT_RECT:
-            case GBR_SPOT_OVAL:
-            case GBR_SPOT_POLY:
-            case GBR_SPOT_MACRO:
-                return true;
-
-            default:
-                return false;
-            }
-        } );
-    }
-    else if( update_lines )
-    {
-        view->UpdateAllItemsConditionally( KIGFX::REPAINT, []( KIGFX::VIEW_ITEM* aItem )
-        {
-            auto item = static_cast<GERBER_DRAW_ITEM*>( aItem );
-
-            switch( item->m_Shape )
-            {
-            case GBR_CIRCLE:
-            case GBR_ARC:
-            case GBR_SEGMENT:
-                return true;
-
-            default:
-                return false;
-            }
-        } );
-    }
-    else if( update_polygons )
-    {
-        view->UpdateAllItemsConditionally( KIGFX::REPAINT, []( KIGFX::VIEW_ITEM* aItem )
-        {
-            auto item = static_cast<GERBER_DRAW_ITEM*>( aItem );
-
-            return ( item->m_Shape == GBR_POLYGON );
-        } );
-    }
-
-    view->UpdateAllItems( KIGFX::COLOR );
-    GetCanvas()->Refresh();
 }
 
 
@@ -700,15 +634,14 @@ bool GERBVIEW_FRAME::IsElementVisible( int aLayerID ) const
 {
     switch( aLayerID )
     {
-    case LAYER_DCODES:                return m_DisplayOptions.m_DisplayDCodes;
-    case LAYER_NEGATIVE_OBJECTS:      return m_DisplayOptions.m_DisplayNegativeObjects;
+    case LAYER_DCODES:                return gvconfig()->m_Appearance.show_dcodes;
+    case LAYER_NEGATIVE_OBJECTS:      return gvconfig()->m_Appearance.show_negative_objects;
     case LAYER_GERBVIEW_GRID:         return IsGridVisible();
-    case LAYER_GERBVIEW_DRAWINGSHEET: return m_showBorderAndTitleBlock;
+    case LAYER_GERBVIEW_DRAWINGSHEET: return gvconfig()->m_Appearance.show_border_and_titleblock;
     case LAYER_GERBVIEW_BACKGROUND:   return true;
 
     default:
-        wxFAIL_MSG( wxString::Format( "GERBVIEW_FRAME::IsElementVisible(): bad arg %d",
-                                      aLayerID ) );
+        wxFAIL_MSG( wxString::Format( "GERBVIEW_FRAME::IsElementVisible bad arg %d", aLayerID ) );
     }
 
     return true;
@@ -739,7 +672,7 @@ void GERBVIEW_FRAME::SetVisibleLayers( LSET aLayerMask )
             int layer = GERBER_DRAW_LAYER( i );
             GetCanvas()->GetView()->SetLayerVisible( layer, v );
             GetCanvas()->GetView()->SetLayerVisible( GERBER_DCODE_LAYER( layer ),
-                                                     m_DisplayOptions.m_DisplayDCodes && v );
+                                                     gvconfig()->m_Appearance.show_dcodes && v );
         }
     }
 }
@@ -824,7 +757,7 @@ void GERBVIEW_FRAME::SetVisibleElementColor( int aLayerID, const COLOR4D& aColor
 
 COLOR4D GERBVIEW_FRAME::GetNegativeItemsColor()
 {
-    if( IsElementVisible( LAYER_NEGATIVE_OBJECTS ) )
+    if( gvconfig()->m_Appearance.show_negative_objects )
         return GetVisibleElementColor( LAYER_NEGATIVE_OBJECTS );
     else
         return GetDrawBgColor();
@@ -840,7 +773,7 @@ COLOR4D GERBVIEW_FRAME::GetLayerColor( int aLayer ) const
 void GERBVIEW_FRAME::SetLayerColor( int aLayer, const COLOR4D& aColor )
 {
     Pgm().GetSettingsManager().GetColorSettings()->SetColor( aLayer, aColor );
-    applyDisplaySettingsToGAL();
+    ApplyDisplaySettingsToGAL();
 }
 
 
@@ -848,7 +781,7 @@ void GERBVIEW_FRAME::SetActiveLayer( int aLayer, bool doLayerWidgetUpdate )
 {
     m_activeLayer = aLayer;
 
-    if( m_DisplayOptions.m_DiffMode )
+    if( gvconfig()->m_Display.m_DiffMode )
         UpdateDiffLayers();
 
     if( doLayerWidgetUpdate )
@@ -1100,49 +1033,49 @@ void GERBVIEW_FRAME::setupUIConditions()
     auto flashedDisplayOutlinesCond =
         [this] ( const SELECTION& )
         {
-            return !m_DisplayOptions.m_DisplayFlashedItemsFill;
+            return !gvconfig()->m_Display.m_DisplayFlashedItemsFill;
         };
 
     auto linesFillCond =
         [this] ( const SELECTION& )
         {
-            return !m_DisplayOptions.m_DisplayLinesFill;
+            return !gvconfig()->m_Display.m_DisplayLinesFill;
         };
 
     auto polygonsFilledCond =
         [this] ( const SELECTION& )
         {
-            return !m_DisplayOptions.m_DisplayPolygonsFill;
+            return !gvconfig()->m_Display.m_DisplayPolygonsFill;
         };
 
     auto negativeObjectsCond =
         [this] ( const SELECTION& )
         {
-            return IsElementVisible( LAYER_NEGATIVE_OBJECTS );
+            return gvconfig()->m_Appearance.show_negative_objects;
         };
 
     auto dcodeCond =
         [this] ( const SELECTION& )
         {
-            return IsElementVisible( LAYER_DCODES );
+            return gvconfig()->m_Appearance.show_dcodes;
         };
 
     auto diffModeCond =
         [this] ( const SELECTION& )
         {
-            return m_DisplayOptions.m_DiffMode;
+            return gvconfig()->m_Display.m_DiffMode;
         };
 
     auto highContrastModeCond =
         [this] ( const SELECTION& )
         {
-            return m_DisplayOptions.m_HighContrastMode;
+            return gvconfig()->m_Display.m_HighContrastMode;
         };
 
     auto flipGerberCond =
         [this] ( const SELECTION& )
         {
-            return m_DisplayOptions.m_FlipGerberView;
+            return gvconfig()->m_Display.m_FlipGerberView;
         };
 
     auto layersManagerShownCondition =
@@ -1172,18 +1105,12 @@ void GERBVIEW_FRAME::CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVars
 {
     EDA_DRAW_FRAME::CommonSettingsChanged( aEnvVarsChanged, aTextVarsChanged );
 
-    GERBVIEW_SETTINGS* cfg = static_cast<GERBVIEW_SETTINGS*>( config() );
-    SetPageSettings( PAGE_INFO( cfg->m_Appearance.page_type ) );
+    SetPageSettings( PAGE_INFO( gvconfig()->m_Appearance.page_type ) );
 
-    if( cfg->m_Display.m_DiffMode )
+    if( gvconfig()->m_Display.m_DiffMode )
         UpdateDiffLayers();
 
-    // Apply changes to the GAL
-    auto painter = static_cast<KIGFX::GERBVIEW_PAINTER*>( GetCanvas()->GetView()->GetPainter() );
-    auto settings = painter->GetSettings();
-    settings->LoadDisplayOptions( GetDisplayOptions() );
-
-    SetElementVisibility( LAYER_DCODES, GetDisplayOptions().m_DisplayDCodes );
+    SetElementVisibility( LAYER_DCODES, gvconfig()->m_Appearance.show_dcodes );
 
     GetCanvas()->GetView()->MarkTargetDirty( KIGFX::TARGET_NONCACHED );
     GetCanvas()->GetView()->UpdateAllItems( KIGFX::REPAINT );

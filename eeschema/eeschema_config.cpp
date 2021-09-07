@@ -146,18 +146,6 @@ void SCH_EDIT_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
     SCH_BASE_FRAME::LoadSettings( eeconfig() );
 
     GetRenderSettings()->m_ShowPinsElectricalType = false;
-    GetRenderSettings()->m_ShowHiddenText = false;
-    GetRenderSettings()->m_ShowHiddenPins = false;
-    GetRenderSettings()->m_ShowHiddenText = false;
-    GetRenderSettings()->SetShowPageLimits( true );
-    GetRenderSettings()->m_ShowUmbilicals = true;
-
-    if( eeconfig() )
-    {
-        GetRenderSettings()->m_ShowHiddenPins = eeconfig()->m_Appearance.show_hidden_pins;
-        GetRenderSettings()->m_ShowHiddenText = eeconfig()->m_Appearance.show_hidden_fields;
-        GetRenderSettings()->SetShowPageLimits( eeconfig()->m_Appearance.show_page_limits );
-    }
 }
 
 

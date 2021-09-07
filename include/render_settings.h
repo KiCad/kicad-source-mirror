@@ -212,8 +212,7 @@ public:
     void SetGapLengthRatio( double aRatio ) { m_gapLengthRatio = aRatio; }
     double GetGapLength( int aLineWidth ) const;
 
-    bool GetShowPageLimits() const { return m_showPageLimits; }
-    void SetShowPageLimits( bool aDraw ) { m_showPageLimits = aDraw; }
+    virtual bool GetShowPageLimits() const { return true; }
 
     bool IsPrinting() const { return m_isPrinting; }
     void SetIsPrinting( bool isPrinting ) { m_isPrinting = isPrinting; }
@@ -321,7 +320,6 @@ protected:
     double        m_dashLengthRatio;
     double        m_gapLengthRatio;
 
-    bool          m_showPageLimits;
     bool          m_isPrinting;
 
     wxDC*         m_printDC;              // This can go away once the drawing sheet is moved to

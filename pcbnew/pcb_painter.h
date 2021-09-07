@@ -66,22 +66,6 @@ class PCB_RENDER_SETTINGS : public RENDER_SETTINGS
 public:
     friend class PCB_PAINTER;
 
-    ///< Flags to control clearance lines visibility
-    enum CLEARANCE_MODE
-    {
-        CL_NONE             = 0x00,
-
-        // Object type
-        CL_PADS             = 0x01,
-        CL_VIAS             = 0x02,
-        CL_TRACKS           = 0x04,
-
-        // Existence
-        CL_NEW              = 0x08,
-        CL_EDITED           = 0x10,
-        CL_EXISTING         = 0x20
-    };
-
     PCB_RENDER_SETTINGS();
 
     /**
@@ -90,12 +74,14 @@ public:
      *
      * @param aOptions are settings that you want to use for displaying items.
      */
-    void LoadDisplayOptions( const PCB_DISPLAY_OPTIONS& aOptions, bool aShowPageLimits );
+    void LoadDisplayOptions( const PCB_DISPLAY_OPTIONS& aOptions );
 
-    virtual void LoadColors( const COLOR_SETTINGS* aSettings ) override;
+    void LoadColors( const COLOR_SETTINGS* aSettings ) override;
 
     /// @copydoc RENDER_SETTINGS::GetColor()
-    virtual COLOR4D GetColor( const VIEW_ITEM* aItem, int aLayer ) const override;
+    COLOR4D GetColor( const VIEW_ITEM* aItem, int aLayer ) const override;
+
+    bool GetShowPageLimits() const override;
 
     /**
      * Turn on/off sketch mode for given item layer.
@@ -167,18 +153,11 @@ public:
      */
     HIGH_CONTRAST_MODE GetContrastModeDisplay() { return m_contrastModeDisplay; }
 
-    inline bool GetCurvedRatsnestLinesEnabled() const { return m_curvedRatsnestlines; }
-
-    inline bool GetGlobalRatsnestLinesEnabled() const { return m_globalRatsnestlines; }
-
     bool GetDrawIndividualViaLayers() const { return m_drawIndividualViaLayers; }
     void SetDrawIndividualViaLayers( bool aFlag ) { m_drawIndividualViaLayers = aFlag; }
 
     NET_COLOR_MODE GetNetColorMode() const { return m_netColorMode; }
     void SetNetColorMode( NET_COLOR_MODE aMode ) { m_netColorMode = aMode; }
-
-    RATSNEST_MODE GetRatsnestDisplayMode() const { return m_ratsnestDisplayMode; }
-    void SetRatsnestDisplayMode( RATSNEST_MODE aMode ) { m_ratsnestDisplayMode = aMode; }
 
     std::map<wxString, KIGFX::COLOR4D>& GetNetclassColorMap() { return m_netclassColors; }
 
@@ -197,23 +176,12 @@ protected:
     bool               m_sketchGraphics;
     bool               m_sketchText;
 
-    bool               m_padNumbers;
-    bool               m_netNamesOnPads;
-    bool               m_netNamesOnTracks;
-    bool               m_netNamesOnVias;
-
     bool               m_zoneOutlines;
-
-    bool               m_curvedRatsnestlines = true;
-    bool               m_globalRatsnestlines = true;
 
     bool               m_drawIndividualViaLayers = false;
 
     ZONE_DISPLAY_MODE  m_zoneDisplayMode;
     HIGH_CONTRAST_MODE m_contrastModeDisplay;
-    RATSNEST_MODE      m_ratsnestDisplayMode;
-
-    int                m_clearanceDisplayFlags;
 
     ///< How to display nets and netclasses with color overrides
     NET_COLOR_MODE m_netColorMode;

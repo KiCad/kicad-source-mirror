@@ -25,6 +25,7 @@
 #include <gerber_file_image_list.h>
 #include <gerbview_painter.h>
 #include <gerbview_frame.h>
+#include <gerbview_settings.h>
 #include <string_utils.h>
 #include <excellon_image.h>
 #include <menus_helpers.h>
@@ -225,56 +226,92 @@ int GERBVIEW_CONTROL::HighlightControl( const TOOL_EVENT& aEvent )
 
 int GERBVIEW_CONTROL::DisplayControl( const TOOL_EVENT& aEvent )
 {
-    bool state;
-    bool needs_refresh = false;
-    auto options = m_frame->GetDisplayOptions();
+    GERBVIEW_SETTINGS* cfg = m_frame->gvconfig();
+    KIGFX::VIEW*       view = m_frame->GetCanvas()->GetView();
 
     if( aEvent.IsAction( &GERBVIEW_ACTIONS::linesDisplayOutlines ) )
     {
-        options.m_DisplayLinesFill = !options.m_DisplayLinesFill;
-        needs_refresh = true;
+        cfg->m_Display.m_DisplayLinesFill = !cfg->m_Display.m_DisplayLinesFill;
+
+        view->UpdateAllItemsConditionally( KIGFX::REPAINT,
+                []( KIGFX::VIEW_ITEM* aItem )
+                {
+                    GERBER_DRAW_ITEM* item = static_cast<GERBER_DRAW_ITEM*>( aItem );
+
+                    switch( item->m_Shape )
+                    {
+                    case GBR_CIRCLE:
+                    case GBR_ARC:
+                    case GBR_SEGMENT:
+                        return true;
+
+                    default:
+                        return false;
+                    }
+                } );
     }
     else if( aEvent.IsAction( &GERBVIEW_ACTIONS::flashedDisplayOutlines ) )
     {
-        options.m_DisplayFlashedItemsFill = !options.m_DisplayFlashedItemsFill;
-        needs_refresh = true;
+        cfg->m_Display.m_DisplayFlashedItemsFill = !cfg->m_Display.m_DisplayFlashedItemsFill;
+
+        view->UpdateAllItemsConditionally( KIGFX::REPAINT,
+                []( KIGFX::VIEW_ITEM* aItem )
+                {
+                    GERBER_DRAW_ITEM* item = static_cast<GERBER_DRAW_ITEM*>( aItem );
+
+                    switch( item->m_Shape )
+                    {
+                    case GBR_SPOT_CIRCLE:
+                    case GBR_SPOT_RECT:
+                    case GBR_SPOT_OVAL:
+                    case GBR_SPOT_POLY:
+                    case GBR_SPOT_MACRO:
+                        return true;
+
+                    default:
+                        return false;
+                    }
+                } );
     }
     else if( aEvent.IsAction( &GERBVIEW_ACTIONS::polygonsDisplayOutlines ) )
     {
-        options.m_DisplayPolygonsFill = !options.m_DisplayPolygonsFill;
-        needs_refresh = true;
+        cfg->m_Display.m_DisplayPolygonsFill = !cfg->m_Display.m_DisplayPolygonsFill;
+
+        view->UpdateAllItemsConditionally( KIGFX::REPAINT,
+                []( KIGFX::VIEW_ITEM* aItem )
+                {
+                    GERBER_DRAW_ITEM* item = static_cast<GERBER_DRAW_ITEM*>( aItem );
+
+                    return ( item->m_Shape == GBR_POLYGON );
+                } );
     }
     else if( aEvent.IsAction( &GERBVIEW_ACTIONS::negativeObjectDisplay ) )
     {
-        state = !m_frame->IsElementVisible( LAYER_NEGATIVE_OBJECTS );
-        m_frame->SetElementVisibility( LAYER_NEGATIVE_OBJECTS, state );
+        m_frame->SetElementVisibility( LAYER_NEGATIVE_OBJECTS, !cfg->m_Appearance.show_negative_objects );
     }
     else if( aEvent.IsAction( &GERBVIEW_ACTIONS::dcodeDisplay ) )
     {
-        state = !m_frame->IsElementVisible( LAYER_DCODES );
-        m_frame->SetElementVisibility( LAYER_DCODES, state );
+        m_frame->SetElementVisibility( LAYER_DCODES, !cfg->m_Appearance.show_dcodes );
     }
     else if( aEvent.IsAction( &ACTIONS::highContrastMode ) )
     {
-        options.m_HighContrastMode = !options.m_HighContrastMode;
-        needs_refresh = true;
+        cfg->m_Display.m_HighContrastMode = !cfg->m_Display.m_HighContrastMode;
     }
     else if( aEvent.IsAction( &GERBVIEW_ACTIONS::toggleDiffMode ) )
     {
-        options.m_DiffMode = !options.m_DiffMode;
-        needs_refresh = true;
+        cfg->m_Display.m_DiffMode = !cfg->m_Display.m_DiffMode;
+        m_frame->UpdateDiffLayers();
     }
     else if( aEvent.IsAction( &GERBVIEW_ACTIONS::flipGerberView ) )
     {
-        options.m_FlipGerberView = !options.m_FlipGerberView;
-
-        KIGFX::VIEW* view = canvas()->GetView();
-        view->SetMirror( options.m_FlipGerberView, false );
-        needs_refresh = true;
+        cfg->m_Display.m_FlipGerberView = !cfg->m_Display.m_FlipGerberView;
+        view->SetMirror( cfg->m_Display.m_FlipGerberView, false );
     }
 
-    if( needs_refresh )
-        m_frame->UpdateDisplayOptions( options );
+    m_frame->ApplyDisplaySettingsToGAL();
+
+    view->UpdateAllItems( KIGFX::COLOR );
+    m_frame->GetCanvas()->Refresh();
 
     return 0;
 }

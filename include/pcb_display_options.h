@@ -32,6 +32,16 @@
 
 #include <project/board_project_settings.h>
 
+enum TRACE_CLEARANCE_DISPLAY_MODE_T
+{
+    DO_NOT_SHOW_CLEARANCE = 0,
+    SHOW_TRACK_CLEARANCE_WHILE_ROUTING,
+    SHOW_TRACK_CLEARANCE_WITH_VIA_WHILE_ROUTING,
+    SHOW_WHILE_ROUTING_OR_DRAGGING,
+    SHOW_TRACK_CLEARANCE_WITH_VIA_ALWAYS
+};
+
+
 /**
  * Container for display options like enable/disable some optional drawings.
  */
@@ -45,14 +55,6 @@ public:
      *
      * This parameter controls how to show tracks and vias clearance area.
      */
-    enum TRACE_CLEARANCE_DISPLAY_MODE_T {
-        DO_NOT_SHOW_CLEARANCE = 0,
-        SHOW_TRACK_CLEARANCE_WHILE_ROUTING,
-        SHOW_TRACK_CLEARANCE_WITH_VIA_WHILE_ROUTING,
-        SHOW_WHILE_ROUTING_OR_DRAGGING,
-        SHOW_TRACK_CLEARANCE_WITH_VIA_ALWAYS
-    };
-
     bool m_DisplayPadFill;
     bool m_DisplayViaFill;
     bool m_DisplayPadNum;           // show pads numbers

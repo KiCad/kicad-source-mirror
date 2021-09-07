@@ -513,7 +513,7 @@ void PCB_DRAW_PANEL_GAL::OnShow()
         SetTopLayer( frame->GetActiveLayer() );
         KIGFX::PAINTER* painter = m_view->GetPainter();
         auto settings = static_cast<KIGFX::PCB_RENDER_SETTINGS*>( painter->GetSettings() );
-        settings->LoadDisplayOptions( frame->GetDisplayOptions(), frame->ShowPageLimits() );
+        settings->LoadDisplayOptions( frame->GetDisplayOptions() );
     }
 }
 

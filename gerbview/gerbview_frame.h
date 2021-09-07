@@ -40,6 +40,7 @@ class GBR_LAYER_BOX_SELECTOR;
 class GERBER_DRAW_ITEM;
 class GERBER_FILE_IMAGE;
 class GERBER_FILE_IMAGE_LIST;
+class GERBVIEW_SETTINGS;
 class REPORTER;
 class SELECTION;
 class wxStaticText;
@@ -91,6 +92,11 @@ public:
     void ReCreateMenuBar() override;
     void UpdateStatusBar() override;
     void UpdateToolbarControlSizes() override;
+
+    GERBVIEW_SETTINGS* gvconfig() const;
+
+    /// Updates the GAL with display settings changes
+    void ApplyDisplaySettingsToGAL();
 
     /**
      * @return 0 for fast mode (not fully compatible with negative objects)
@@ -351,13 +357,6 @@ public:
      */
     void UpdateDiffLayers();
 
-    /**
-     * Update the display options and refreshes the view as needed.
-     *
-     * @param aOptions is the new options to apply
-     */
-    void UpdateDisplayOptions( const GBR_DISPLAY_OPTIONS& aOptions );
-
     /*
      * Do nothing in GerbView.
      */
@@ -388,9 +387,6 @@ public:
     void CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVarsChanged ) override;
 
     SELECTION& GetCurrentSelection() override;
-
-    const GBR_DISPLAY_OPTIONS& GetDisplayOptions() const { return m_DisplayOptions; }
-    void SetDisplayOptions( const GBR_DISPLAY_OPTIONS& aOptions ) { m_DisplayOptions = aOptions; }
 
     /**
      * Set the m_gerberLayout member in such as way as to ensure deleting any previous
@@ -471,11 +467,11 @@ protected:
     void setupUIConditions() override;
 
 private:
-    void            updateComponentListSelectBox();
-    void            updateNetnameListSelectBox();
-    void            updateAperAttributesSelectBox();
-    void            updateDCodeSelectBox();
-    void            unitsChangeRefresh() override;      // See class EDA_DRAW_FRAME
+    void updateComponentListSelectBox();
+    void updateNetnameListSelectBox();
+    void updateAperAttributesSelectBox();
+    void updateDCodeSelectBox();
+    void unitsChangeRefresh() override;      // See class EDA_DRAW_FRAME
 
     void OnClearJobFileHistory( wxCommandEvent& aEvent );
     void OnClearZipFileHistory( wxCommandEvent& aEvent );
@@ -484,9 +480,6 @@ private:
 
     // The Tool Framework initialization
     void setupTools();
-
-    /// Updates the GAL with display settings changes
-    void applyDisplaySettingsToGAL();
 
 public:
     wxChoice* m_SelComponentBox;                // a choice box to display and highlight component
@@ -529,7 +522,6 @@ private:
     int                 m_activeLayer;
     wxPoint             m_grid_origin;
     PAGE_INFO           m_paper;            // used only to show paper limits to screen
-    GBR_DISPLAY_OPTIONS m_DisplayOptions;
     wxStaticText*       m_cmpText;          // a message on the auxiliary toolbar,
                                             // relative to the m_SelComponentBox
     wxStaticText*       m_netText;          // a message on the auxiliary toolbar,

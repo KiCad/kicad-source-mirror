@@ -66,16 +66,19 @@
 namespace KIGFX
 {
 
+EESCHEMA_SETTINGS* eeconfig()
+{
+    return dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
+}
+
+
 SCH_RENDER_SETTINGS::SCH_RENDER_SETTINGS() :
         m_IsSymbolEditor( false ),
         m_ShowUnit( 0 ),
         m_ShowConvert( 0 ),
-        m_ShowHiddenText( true ),
-        m_ShowHiddenPins( true ),
         m_ShowPinsElectricalType( true ),
         m_ShowDisabled( false ),
         m_ShowGraphicsDisabled( false ),
-        m_ShowUmbilicals( true ),
         m_OverrideItemColors( false ),
         m_LabelSizeRatio( DEFAULT_LABEL_SIZE_RATIO ),
         m_TextOffsetRatio( DEFAULT_TEXT_OFFSET_RATIO ),
@@ -112,9 +115,9 @@ COLOR4D SCH_RENDER_SETTINGS::GetColor( const VIEW_ITEM* aItem, int aLayer ) cons
 }
 
 
-EESCHEMA_SETTINGS* eeconfig()
+bool SCH_RENDER_SETTINGS::GetShowPageLimits() const
 {
-    return dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
+    return eeconfig()->m_Appearance.show_page_limits;
 }
 
 
@@ -638,7 +641,7 @@ void SCH_PAINTER::draw( const LIB_FIELD *aField, int aLayer )
 
     if( !( aField->IsVisible() || aField->IsForceVisible() ) )
     {
-        if( m_schSettings.m_ShowHiddenText )
+        if( !m_schematic || eeconfig()->m_Appearance.show_hidden_fields )
             color = getRenderColor( aField, LAYER_HIDDEN, drawingShadows );
         else
             return;
@@ -669,8 +672,8 @@ void SCH_PAINTER::draw( const LIB_FIELD *aField, int aLayer )
         strokeText( UnescapeString( aField->GetText() ), textpos, aField->GetTextAngleRadians() );
     }
 
-    // Draw the umbilical line
-    if( aField->IsMoving() && m_schSettings.m_ShowUmbilicals )
+    // Draw the umbilical line when in the schematic editor
+    if( aField->IsMoving() && m_schematic )
     {
         m_gal->SetLineWidth( m_schSettings.m_outlineWidth );
         m_gal->SetStrokeColor( getRenderColor( aField, LAYER_SCHEMATIC_ANCHOR, drawingShadows ) );
@@ -693,7 +696,7 @@ void SCH_PAINTER::draw( const LIB_TEXT *aText, int aLayer )
 
     if( !aText->IsVisible() )
     {
-        if( m_schSettings.m_ShowHiddenText )
+        if( !m_schematic || eeconfig()->m_Appearance.show_hidden_fields )
             color = getRenderColor( aText, LAYER_HIDDEN, drawingShadows );
         else
             return;
@@ -772,7 +775,7 @@ void SCH_PAINTER::draw( LIB_PIN *aPin, int aLayer )
 
     if( !aPin->IsVisible() )
     {
-        if( m_schSettings.m_ShowHiddenPins )
+        if( !m_schematic || eeconfig()->m_Appearance.show_hidden_pins )
         {
             color = getRenderColor( aPin, LAYER_HIDDEN, drawingShadows );
         }
@@ -1431,7 +1434,7 @@ void SCH_PAINTER::draw( const SCH_TEXT *aText, int aLayer )
 
     if( !( aText->IsVisible() || aText->IsForceVisible() ) )
     {
-        if( m_schSettings.m_ShowHiddenText )
+        if( !m_schematic || eeconfig()->m_Appearance.show_hidden_fields )
             color = getRenderColor( aText, LAYER_HIDDEN, drawingShadows );
         else
             return;
@@ -1602,7 +1605,7 @@ void SCH_PAINTER::draw( const SCH_FIELD *aField, int aLayer )
 
     if( !( aField->IsVisible() || aField->IsForceVisible() ) )
     {
-        if( m_schSettings.m_ShowHiddenText )
+        if( !m_schematic || eeconfig()->m_Appearance.show_hidden_fields )
             color = getRenderColor( aField, LAYER_HIDDEN, drawingShadows );
         else
             return;

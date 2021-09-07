@@ -847,8 +847,8 @@ void PCB_BASE_FRAME::CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVars
     RENDER_SETTINGS*     settings = GetCanvas()->GetView()->GetPainter()->GetSettings();
     PCB_RENDER_SETTINGS* renderSettings = static_cast<KIGFX::PCB_RENDER_SETTINGS*>( settings );
 
-    renderSettings->LoadColors( GetColorSettings() );
-    renderSettings->LoadDisplayOptions( GetDisplayOptions(), ShowPageLimits() );
+    renderSettings->LoadColors( GetColorSettings( true ) );
+    renderSettings->LoadDisplayOptions( GetDisplayOptions() );
     GetCanvas()->GetView()->UpdateAllItems( KIGFX::COLOR );
 
     RecreateToolbars();
@@ -896,7 +896,7 @@ void PCB_BASE_FRAME::ActivateGalCanvas()
     KIGFX::PCB_RENDER_SETTINGS* settings = painter->GetSettings();
     const PCB_DISPLAY_OPTIONS&  displ_opts = GetDisplayOptions();
 
-    settings->LoadDisplayOptions( displ_opts, ShowPageLimits() );
+    settings->LoadDisplayOptions( displ_opts );
     settings->LoadColors( GetColorSettings() );
 
     view->RecacheAllItems();

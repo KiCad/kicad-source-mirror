@@ -166,10 +166,7 @@ public:
     virtual void SetDrawBgColor( const COLOR4D& aColor) { m_drawBgColor= aColor ; }
 
     /// Returns a pointer to the active color theme settings
-    virtual COLOR_SETTINGS* GetColorSettings() const;
-
-    bool ShowPageLimits() const { return m_showPageLimits; }
-    void SetShowPageLimits( bool aShow ) { m_showPageLimits = aShow; }
+    virtual COLOR_SETTINGS* GetColorSettings( bool aForceRefresh = false ) const;
 
     /**
      * @param doOpen if true runs an Open Library browser, otherwise New Library
@@ -486,7 +483,6 @@ protected:
     ///< Prevents opening same file multiple times.
     std::unique_ptr<wxSingleInstanceChecker> m_file_checker;
 
-    bool               m_showPageLimits;    // True to display the page limits
     COLOR4D            m_gridColor;         // Grid color
     COLOR4D            m_drawBgColor;       // The background color of the draw canvas; BLACK for
                                             // Pcbnew, BLACK or WHITE for Eeschema

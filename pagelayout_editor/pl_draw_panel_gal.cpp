@@ -93,12 +93,6 @@ void PL_DRAW_PANEL_GAL::DisplayDrawingSheet()
 
     m_pageDrawItem.reset();
 
-    // Obviously, always show the page limit:
-    m_edaFrame->SetShowPageLimits( true );
-    auto painter = m_view->GetPainter();
-    auto settings = painter->GetSettings();
-    settings->SetShowPageLimits( true );
-
     model.SetupDrawEnvironment( m_edaFrame->GetPageSettings(), IU_PER_MILS );
 
     // To show the formatted texts instead of raw texts in drawing sheet editor, we need

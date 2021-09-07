@@ -163,7 +163,7 @@ public:
      *
      * @return a pointer to the active COLOR_SETTINGS.
      */
-    virtual COLOR_SETTINGS* GetColorSettings() const override
+    virtual COLOR_SETTINGS* GetColorSettings( bool aForceRefresh = false ) const override
     {
         wxFAIL_MSG( "Color settings requested for a PCB_BASE_FRAME that does not override!" );
         return nullptr;

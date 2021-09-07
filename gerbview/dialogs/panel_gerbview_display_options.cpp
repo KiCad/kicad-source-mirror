@@ -62,7 +62,7 @@ bool PANEL_GERBVIEW_DISPLAY_OPTIONS::TransferDataToWindow( )
     // Show Option Draw Lines. We use DisplayPcbTrackFill as Lines draw option
     m_OptDisplayLines->SetValue( !cfg->m_Display.m_DisplayLinesFill );
     m_OptDisplayFlashedItems->SetValue( !cfg->m_Display.m_DisplayFlashedItemsFill );
-    m_OptDisplayDCodes->SetValue( cfg->m_Display.m_DisplayDCodes );
+    m_OptDisplayDCodes->SetValue( cfg->m_Appearance.show_dcodes );
 
     for( unsigned i = 0;  i < arrayDim( gerberPageSizeList );  ++i )
     {
@@ -88,7 +88,7 @@ bool PANEL_GERBVIEW_DISPLAY_OPTIONS::TransferDataFromWindow()
     cfg->m_Display.m_DisplayLinesFill = !m_OptDisplayLines->GetValue();
     cfg->m_Display.m_DisplayFlashedItemsFill = !m_OptDisplayFlashedItems->GetValue();
     cfg->m_Display.m_DisplayPolygonsFill = !m_OptDisplayPolygons->GetValue();
-    cfg->m_Display.m_DisplayDCodes = m_OptDisplayDCodes->GetValue();
+    cfg->m_Appearance.show_dcodes = m_OptDisplayDCodes->GetValue();
 
     cfg->m_Appearance.page_type = gerberPageSizeList[ m_PageSize->GetSelection() ];
     cfg->m_Display.m_DisplayPageLimits = m_ShowPageLimitsOpt->GetValue();

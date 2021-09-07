@@ -238,7 +238,7 @@ public:
      */
     COLOR4D GetLayerColor( SCH_LAYER_ID aLayer );
 
-    COLOR_SETTINGS* GetColorSettings() const override;
+    COLOR_SETTINGS* GetColorSettings( bool aForceRefresh = false ) const override;
 
 protected:
     /**

@@ -20,7 +20,10 @@
 
 #include <gerbview_painter.h>
 #include <gal/graphics_abstraction_layer.h>
+#include <pgm_base.h>
+#include <settings/settings_manager.h>
 #include <settings/color_settings.h>
+#include <gerbview_settings.h>
 #include <convert_basic_shapes_to_polygon.h>
 #include <convert_to_biu.h>
 #include <gerbview.h>
@@ -32,16 +35,16 @@
 
 using namespace KIGFX;
 
+
+GERBVIEW_SETTINGS* gvconfig()
+{
+    return Pgm().GetSettingsManager().GetAppSettings<GERBVIEW_SETTINGS>();
+}
+
+
 GERBVIEW_RENDER_SETTINGS::GERBVIEW_RENDER_SETTINGS()
 {
     m_backgroundColor = COLOR4D::BLACK;
-
-    m_spotFill          = true;
-    m_lineFill          = true;
-    m_polygonFill       = true;
-    m_showNegativeItems = false;
-    m_showCodes         = false;
-    m_diffMode          = true;
 
     m_componentHighlightString = "";
     m_netHighlightString       = "";
@@ -85,22 +88,6 @@ void GERBVIEW_RENDER_SETTINGS::LoadColors( const COLOR_SETTINGS* aSettings )
 }
 
 
-void GERBVIEW_RENDER_SETTINGS::LoadDisplayOptions( const GBR_DISPLAY_OPTIONS& aOptions )
-{
-    m_spotFill          = aOptions.m_DisplayFlashedItemsFill;
-    m_lineFill          = aOptions.m_DisplayLinesFill;
-    m_polygonFill       = aOptions.m_DisplayPolygonsFill;
-    m_showNegativeItems = aOptions.m_DisplayNegativeObjects;
-    m_showCodes         = aOptions.m_DisplayDCodes;
-    m_diffMode          = aOptions.m_DiffMode;
-    m_hiContrastEnabled = aOptions.m_HighContrastMode;
-    m_showPageLimits    = aOptions.m_DisplayPageLimits;
-    m_backgroundColor   = aOptions.m_BgDrawColor;
-
-    update();
-}
-
-
 void GERBVIEW_RENDER_SETTINGS::ClearHighlightSelections()
 {
     // Clear all highlight selections (dcode, net, component, attribute selection)
@@ -128,7 +115,7 @@ COLOR4D GERBVIEW_RENDER_SETTINGS::GetColor( const VIEW_ITEM* aItem, int aLayer )
 
     if( gbrItem && gbrItem->GetLayerPolarity() )
     {
-        if( m_showNegativeItems )
+        if( gvconfig()->m_Appearance.show_negative_objects )
             return m_layerColors[LAYER_NEGATIVE_OBJECTS];
         else
             return transparent;
@@ -164,6 +151,12 @@ COLOR4D GERBVIEW_RENDER_SETTINGS::GetColor( const VIEW_ITEM* aItem, int aLayer )
 }
 
 
+bool GERBVIEW_RENDER_SETTINGS::GetShowPageLimits() const
+{
+    return gvconfig()->m_Display.m_DisplayPageLimits;
+}
+
+
 GERBVIEW_PAINTER::GERBVIEW_PAINTER( GAL* aGal ) :
     PAINTER( aGal )
 {
@@ -173,9 +166,8 @@ GERBVIEW_PAINTER::GERBVIEW_PAINTER( GAL* aGal ) :
 // TODO(JE): Pull up to PAINTER?
 int GERBVIEW_PAINTER::getLineThickness( int aActualThickness ) const
 {
-    // if items have 0 thickness, draw them with the outline
-    // width, otherwise respect the set value (which, no matter
-    // how small will produce something)
+    // if items have 0 thickness, draw them with the outline width, otherwise respect the set
+    // value (which, no matter how small will produce something)
     if( aActualThickness == 0 )
         return m_gerbviewSettings.m_outlineWidth;
 
@@ -185,24 +177,15 @@ int GERBVIEW_PAINTER::getLineThickness( int aActualThickness ) const
 
 bool GERBVIEW_PAINTER::Draw( const VIEW_ITEM* aItem, int aLayer )
 {
-    const EDA_ITEM* item = dynamic_cast<const EDA_ITEM*>( aItem );
+    GERBER_DRAW_ITEM* gbrItem = dynamic_cast<GERBER_DRAW_ITEM*>( const_cast<VIEW_ITEM*>( aItem ) );
 
-    if( !item )
-        return false;
-
-    // the "cast" applied in here clarifies which overloaded draw() is called
-    switch( item->Type() )
+    if( gbrItem )
     {
-    case GERBER_DRAW_ITEM_T:
-        draw( static_cast<GERBER_DRAW_ITEM*>( const_cast<EDA_ITEM*>( item ) ), aLayer );
-        break;
-
-    default:
-        // Painter does not know how to draw the object
-        return false;
+        draw( gbrItem, aLayer );
+        return true;
     }
 
-    return true;
+    return false;
 }
 
 
@@ -255,7 +238,7 @@ void GERBVIEW_PAINTER::draw( /*const*/ GERBER_DRAW_ITEM* aItem, int aLayer )
     if( aItem->IsBrightened() )
         color = COLOR4D( 0.0, 1.0, 0.0, 0.75 );
 
-    m_gal->SetNegativeDrawMode( isNegative && ! m_gerbviewSettings.IsShowNegativeItems() );
+    m_gal->SetNegativeDrawMode( isNegative && !gvconfig()->m_Appearance.show_negative_objects );
     m_gal->SetStrokeColor( color );
     m_gal->SetFillColor( color );
     m_gal->SetIsFill( isFilled );
@@ -265,7 +248,7 @@ void GERBVIEW_PAINTER::draw( /*const*/ GERBER_DRAW_ITEM* aItem, int aLayer )
     {
     case GBR_POLYGON:
     {
-        isFilled = m_gerbviewSettings.m_polygonFill;
+        isFilled = gvconfig()->m_Display.m_DisplayPolygonsFill;
         m_gal->SetIsFill( isFilled );
         m_gal->SetIsStroke( !isFilled );
 
@@ -296,9 +279,9 @@ void GERBVIEW_PAINTER::draw( /*const*/ GERBER_DRAW_ITEM* aItem, int aLayer )
             m_gal->DrawPolyline( aItem->m_AbsolutePolygon.COutline( 0 ) );
         else
         {
-            // On Opengl, a not convex filled polygon is usually drawn by using triangles as primitives.
-            // CacheTriangulation() can create basic triangle primitives to draw the polygon solid shape
-            // on Opengl
+            // On Opengl, a not convex filled polygon is usually drawn by using triangles as
+            // primitives. CacheTriangulation() can create basic triangle primitives to draw the
+            // polygon solid shape on Opengl
             if( m_gal->IsOpenGlEngine() && !aItem->m_AbsolutePolygon.IsTriangulationUpToDate() )
                 aItem->m_AbsolutePolygon.CacheTriangulation();
 
@@ -310,7 +293,7 @@ void GERBVIEW_PAINTER::draw( /*const*/ GERBER_DRAW_ITEM* aItem, int aLayer )
 
     case GBR_CIRCLE:
     {
-        isFilled = m_gerbviewSettings.m_lineFill;
+        isFilled = gvconfig()->m_Display.m_DisplayLinesFill;
         double radius = GetLineLength( aItem->m_Start, aItem->m_End );
         m_gal->DrawCircle( start, radius );
         break;
@@ -318,7 +301,7 @@ void GERBVIEW_PAINTER::draw( /*const*/ GERBER_DRAW_ITEM* aItem, int aLayer )
 
     case GBR_ARC:
     {
-        isFilled = m_gerbviewSettings.m_lineFill;
+        isFilled = gvconfig()->m_Display.m_DisplayLinesFill;
 
         // These are swapped because wxDC fills arcs counterclockwise and GAL
         // fills them clockwise.
@@ -347,9 +330,7 @@ void GERBVIEW_PAINTER::draw( /*const*/ GERBER_DRAW_ITEM* aItem, int aLayer )
 
         // In Gerber, 360-degree arcs are stored in the file with start equal to end
         if( arcStart == arcEnd )
-        {
             endAngle =  startAngle + 2*M_PI;
-        }
 
         m_gal->DrawArcSegment( center, radius, startAngle, endAngle, width, ARC_HIGH_DEF );
 
@@ -380,11 +361,9 @@ void GERBVIEW_PAINTER::draw( /*const*/ GERBER_DRAW_ITEM* aItem, int aLayer )
     case GBR_SPOT_OVAL:
     case GBR_SPOT_POLY:
     case GBR_SPOT_MACRO:
-    {
-        isFilled = m_gerbviewSettings.m_spotFill;
+        isFilled = gvconfig()->m_Display.m_DisplayFlashedItemsFill;
         drawFlashedShape( aItem, isFilled );
         break;
-    }
 
     case GBR_SEGMENT:
     {
@@ -393,7 +372,7 @@ void GERBVIEW_PAINTER::draw( /*const*/ GERBER_DRAW_ITEM* aItem, int aLayer )
          * In fact, any aperture can be used to plot a line.
          * currently: only a square pen is handled (I believe using a polygon gives a strange plot).
          */
-        isFilled = m_gerbviewSettings.m_lineFill;
+        isFilled = gvconfig()->m_Display.m_DisplayLinesFill;
         m_gal->SetIsFill( isFilled );
         m_gal->SetIsStroke( !isFilled );
 
@@ -438,8 +417,8 @@ void GERBVIEW_PAINTER::draw( /*const*/ GERBER_DRAW_ITEM* aItem, int aLayer )
 }
 
 
-void GERBVIEW_PAINTER::drawPolygon(
-        GERBER_DRAW_ITEM* aParent, const SHAPE_POLY_SET& aPolygon, bool aFilled, bool aShift )
+void GERBVIEW_PAINTER::drawPolygon( GERBER_DRAW_ITEM* aParent, const SHAPE_POLY_SET& aPolygon,
+                                    bool aFilled, bool aShift )
 {
     wxASSERT( aPolygon.OutlineCount() == 1 );
 
@@ -449,18 +428,16 @@ void GERBVIEW_PAINTER::drawPolygon(
     SHAPE_POLY_SET poly;
     poly.NewOutline();
     const std::vector<VECTOR2I> pts = aPolygon.COutline( 0 ).CPoints();
-    VECTOR2I       offset = aShift ? VECTOR2I( aParent->m_Start ) : VECTOR2I( 0, 0 );
+    VECTOR2I offset = aShift ? VECTOR2I( aParent->m_Start ) : VECTOR2I( 0, 0 );
 
-    for( auto& pt : pts )
+    for( const VECTOR2I& pt : pts )
         poly.Append( aParent->GetABPosition( pt + offset ) );
 
-    if( !m_gerbviewSettings.m_polygonFill )
+    if( !gvconfig()->m_Display.m_DisplayPolygonsFill )
         m_gal->SetLineWidth( m_gerbviewSettings.m_outlineWidth );
 
     if( !aFilled )
-    {
         m_gal->DrawPolyline( poly.COutline( 0 ) );
-    }
     else
         m_gal->DrawPolygon( poly );
 }
@@ -565,13 +542,11 @@ void GERBVIEW_PAINTER::drawFlashedShape( GERBER_DRAW_ITEM* aItem, bool aFilled )
     }
 
     case GBR_SPOT_POLY:
-    {
         if( code->m_Polygon.OutlineCount() == 0 )
             code->ConvertShapeToPolygon();
 
         drawPolygon( aItem, code->m_Polygon, aFilled, true );
         break;
-    }
 
     case GBR_SPOT_MACRO:
         drawApertureMacro( aItem, aFilled );
@@ -586,12 +561,11 @@ void GERBVIEW_PAINTER::drawFlashedShape( GERBER_DRAW_ITEM* aItem, bool aFilled )
 
 void GERBVIEW_PAINTER::drawApertureMacro( GERBER_DRAW_ITEM* aParent, bool aFilled )
 {
-    D_CODE* code = aParent->GetDcodeDescr();
+    D_CODE*         code = aParent->GetDcodeDescr();
     APERTURE_MACRO* macro = code->GetMacro();
-
     SHAPE_POLY_SET* macroShape = macro->GetApertureMacroShape( aParent, aParent->m_Start );
 
-    if( !m_gerbviewSettings.m_polygonFill )
+    if( !gvconfig()->m_Display.m_DisplayPolygonsFill )
         m_gal->SetLineWidth( m_gerbviewSettings.m_outlineWidth );
 
     if( !aFilled )
@@ -600,7 +574,9 @@ void GERBVIEW_PAINTER::drawApertureMacro( GERBER_DRAW_ITEM* aParent, bool aFille
             m_gal->DrawPolyline( macroShape->COutline( i ) );
     }
     else
+    {
         m_gal->DrawPolygon( *macroShape );
+    }
 }
 
 

@@ -100,7 +100,6 @@ EDA_DRAW_FRAME::EDA_DRAW_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrame
     m_currentScreen       = nullptr;
     m_showBorderAndTitleBlock = false;  // true to display reference sheet.
     m_gridColor           = COLOR4D( DARKGRAY );   // Default grid color
-    m_showPageLimits      = false;
     m_drawBgColor         = COLOR4D( BLACK );   // the background color of the draw canvas:
                                                 // BLACK for Pcbnew, BLACK or WHITE for Eeschema
     m_colorSettings       = nullptr;
@@ -1061,9 +1060,9 @@ void EDA_DRAW_FRAME::RecreateToolbars()
 }
 
 
-COLOR_SETTINGS* EDA_DRAW_FRAME::GetColorSettings() const
+COLOR_SETTINGS* EDA_DRAW_FRAME::GetColorSettings( bool aForceRefresh ) const
 {
-    if( !m_colorSettings )
+    if( !m_colorSettings || aForceRefresh )
     {
         COLOR_SETTINGS* colorSettings = Pgm().GetSettingsManager().GetColorSettings();
 

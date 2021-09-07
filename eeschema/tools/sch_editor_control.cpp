@@ -2130,9 +2130,6 @@ int SCH_EDITOR_CONTROL::ToggleHiddenPins( const TOOL_EVENT& aEvent )
     EESCHEMA_SETTINGS* cfg = m_frame->eeconfig();
     cfg->m_Appearance.show_hidden_pins = !cfg->m_Appearance.show_hidden_pins;
 
-    KIGFX::SCH_PAINTER* painter = static_cast<KIGFX::SCH_PAINTER*>( getView()->GetPainter() );
-    painter->GetSettings()->m_ShowHiddenPins = m_frame->GetShowAllPins();
-
     getView()->UpdateAllItems( KIGFX::REPAINT );
     m_frame->GetCanvas()->Refresh();
 
@@ -2144,9 +2141,6 @@ int SCH_EDITOR_CONTROL::ToggleHiddenFields( const TOOL_EVENT& aEvent )
 {
     EESCHEMA_SETTINGS* cfg = m_frame->eeconfig();
     cfg->m_Appearance.show_hidden_fields = !cfg->m_Appearance.show_hidden_fields;
-
-    KIGFX::SCH_PAINTER* painter = static_cast<KIGFX::SCH_PAINTER*>( getView()->GetPainter() );
-    painter->GetSettings()->m_ShowHiddenText = cfg->m_Appearance.show_hidden_fields;
 
     getView()->UpdateAllItems( KIGFX::REPAINT );
     m_frame->GetCanvas()->Refresh();

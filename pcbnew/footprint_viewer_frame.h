@@ -79,7 +79,7 @@ public:
      */
     bool ShowModal( wxString* aFootprint, wxWindow* aParent ) override;
 
-    COLOR_SETTINGS* GetColorSettings() const override;
+    COLOR_SETTINGS* GetColorSettings( bool aForceRefresh = false ) const override;
 
 protected:
     FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrameType );

@@ -100,7 +100,7 @@ DISPLAY_FOOTPRINTS_FRAME::DISPLAY_FOOTPRINTS_FRAME( KIWAY* aKiway, wxWindow* aPa
     displ_opts.m_DisplayPadNoConnects = false;     // Nor do connections
 
     // Track and via clearance has no meaning here.
-    displ_opts.m_ShowTrackClearanceMode = PCB_DISPLAY_OPTIONS::DO_NOT_SHOW_CLEARANCE;
+    displ_opts.m_ShowTrackClearanceMode = DO_NOT_SHOW_CLEARANCE;
     SetDisplayOptions( displ_opts );
 
     // Create the manager and dispatcher & route draw panel events to the dispatcher
@@ -528,7 +528,7 @@ void DISPLAY_FOOTPRINTS_FRAME::UpdateMsgPanel()
 }
 
 
-COLOR_SETTINGS* DISPLAY_FOOTPRINTS_FRAME::GetColorSettings() const
+COLOR_SETTINGS* DISPLAY_FOOTPRINTS_FRAME::GetColorSettings( bool aForceRefresh ) const
 {
     auto* settings = Pgm().GetSettingsManager().GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>();
 

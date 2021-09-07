@@ -418,7 +418,7 @@ void SCH_BASE_FRAME::CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVars
 {
     EDA_DRAW_FRAME::CommonSettingsChanged( aEnvVarsChanged, aTextVarsChanged );
 
-    COLOR_SETTINGS* colorSettings = GetColorSettings();
+    COLOR_SETTINGS* colorSettings = GetColorSettings( true );
 
     GetCanvas()->GetView()->GetPainter()->GetSettings()->LoadColors( colorSettings );
     GetCanvas()->GetGAL()->SetAxesColor( colorSettings->GetColor( LAYER_SCHEMATIC_GRID_AXES ) );
@@ -430,9 +430,9 @@ void SCH_BASE_FRAME::CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVars
 }
 
 
-COLOR_SETTINGS* SCH_BASE_FRAME::GetColorSettings() const
+COLOR_SETTINGS* SCH_BASE_FRAME::GetColorSettings( bool aForceRefresh ) const
 {
-    if( !m_colorSettings )
+    if( !m_colorSettings || aForceRefresh )
     {
         SETTINGS_MANAGER&  mgr = Pgm().GetSettingsManager();
         EESCHEMA_SETTINGS* cfg = mgr.GetAppSettings<EESCHEMA_SETTINGS>();

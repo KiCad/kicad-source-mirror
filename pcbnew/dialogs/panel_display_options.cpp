@@ -26,13 +26,13 @@
 #include <widgets/gal_options_panel.h>
 
 
-static const UTIL::CFG_MAP<PCB_DISPLAY_OPTIONS::TRACE_CLEARANCE_DISPLAY_MODE_T> traceClearanceSelectMap =
+static const UTIL::CFG_MAP<TRACE_CLEARANCE_DISPLAY_MODE_T> clearanceModeMap =
 {
-    { PCB_DISPLAY_OPTIONS::SHOW_TRACK_CLEARANCE_WITH_VIA_WHILE_ROUTING, 2 },     // Default
-    { PCB_DISPLAY_OPTIONS::DO_NOT_SHOW_CLEARANCE,                       0 },
-    { PCB_DISPLAY_OPTIONS::SHOW_TRACK_CLEARANCE_WHILE_ROUTING,          1 },
-    { PCB_DISPLAY_OPTIONS::SHOW_WHILE_ROUTING_OR_DRAGGING,              3 },
-    { PCB_DISPLAY_OPTIONS::SHOW_TRACK_CLEARANCE_WITH_VIA_ALWAYS,        4 },
+    { SHOW_TRACK_CLEARANCE_WITH_VIA_WHILE_ROUTING, 2 },     // Default
+    { DO_NOT_SHOW_CLEARANCE,                       0 },
+    { SHOW_TRACK_CLEARANCE_WHILE_ROUTING,          1 },
+    { SHOW_WHILE_ROUTING_OR_DRAGGING,              3 },
+    { SHOW_TRACK_CLEARANCE_WITH_VIA_ALWAYS,        4 },
 };
 
 
@@ -54,9 +54,8 @@ bool PANEL_DISPLAY_OPTIONS::TransferDataToWindow()
         SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
         PCBNEW_SETTINGS*  cfg = mgr.GetAppSettings<PCBNEW_SETTINGS>();
 
-        m_OptDisplayTracksClearance->SetSelection( UTIL::GetConfigForVal(
-                                                        traceClearanceSelectMap,
-                                                        cfg->m_Display.m_ShowTrackClearanceMode ) );
+        int i = UTIL::GetConfigForVal( clearanceModeMap, cfg->m_Display.m_ShowTrackClearanceMode );
+        m_OptDisplayTracksClearance->SetSelection( i );
 
         m_OptDisplayPadClearence->SetValue( cfg->m_Display.m_DisplayPadClearance );
         m_OptDisplayPadNumber->SetValue( cfg->m_Display.m_DisplayPadNum );
@@ -86,9 +85,8 @@ bool PANEL_DISPLAY_OPTIONS::TransferDataFromWindow()
         SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
         PCBNEW_SETTINGS*  cfg = mgr.GetAppSettings<PCBNEW_SETTINGS>();
 
-        cfg->m_Display.m_ShowTrackClearanceMode = UTIL::GetValFromConfig(
-                                                    traceClearanceSelectMap,
-                                                    m_OptDisplayTracksClearance->GetSelection() );
+        int i = m_OptDisplayTracksClearance->GetSelection();
+        cfg->m_Display.m_ShowTrackClearanceMode = UTIL::GetValFromConfig( clearanceModeMap, i );
 
         cfg->m_Display.m_DisplayPadClearance = m_OptDisplayPadClearence->GetValue();
         cfg->m_Display.m_DisplayPadNum = m_OptDisplayPadNumber->GetValue();

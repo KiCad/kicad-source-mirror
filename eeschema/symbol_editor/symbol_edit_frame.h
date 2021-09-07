@@ -200,7 +200,7 @@ public:
 
     APP_SETTINGS_BASE* config() const override;
 
-    COLOR_SETTINGS* GetColorSettings() const override;
+    COLOR_SETTINGS* GetColorSettings( bool aForceRefresh = false ) const override;
 
     /**
      * Trigger the wxCloseEvent, which is handled by the function given to EVT_CLOSE() macro:
