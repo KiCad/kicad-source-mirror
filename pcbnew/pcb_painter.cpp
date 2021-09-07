@@ -785,7 +785,7 @@ void PCB_PAINTER::draw( const PCB_VIA* aVia, int aLayer )
         wxString netname = UnescapeString( aVia->GetShortNetname() );
 
         // approximate the size of net name text:
-        double tsize = 1.5 * size / PrintableCharCount( netname );
+        double tsize = 1.5 * size / std::max( PrintableCharCount( netname ), 1 );
         tsize = std::min( tsize, size );
 
         // Use a smaller text size to handle interline, pen size..
@@ -977,7 +977,7 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
                     netname = "*";
 
                 // approximate the size of net name text:
-                double tsize = 1.5 * padsize.x / PrintableCharCount( netname );
+                double tsize = 1.5 * padsize.x / std::max( PrintableCharCount( netname ), 1 );
                 tsize = std::min( tsize, size );
 
                 // Use a smaller text size to handle interline, pen size...

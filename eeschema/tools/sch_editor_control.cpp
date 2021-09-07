@@ -479,9 +479,6 @@ int SCH_EDITOR_CONTROL::FindNext( const TOOL_EVENT& aEvent )
 
                 break;
             }
-
-            if( item )
-                break;
         }
     }
 
