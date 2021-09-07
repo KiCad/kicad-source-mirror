@@ -13,10 +13,10 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-08-30 14:45-0700\n"
-"PO-Revision-Date: 2021-08-28 04:15+0000\n"
+"PO-Revision-Date: 2021-09-07 15:16+0000\n"
 "Last-Translator: Jonathan Haas <haasjona@gmail.com>\n"
-"Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
-"source/de/>\n"
+"Language-Team: German <https://hosted.weblate.org/projects/kicad/"
+"master-source/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -42,7 +42,6 @@ msgstr ""
 "X-Poedit-SearchPath-12: utils\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
-#, fuzzy
 msgid "All Files"
 msgstr "Alle Dateien"
 
@@ -973,27 +972,24 @@ msgid "Toggle Through Hole 3D models"
 msgstr "3D-Modelle für Durchsteck-Bauteile umschalten"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:213
-#, fuzzy
 msgid "Toggle 3D models for 'Through hole' type components"
-msgstr "Anzeige von 3D-Modellen mit 'Durchsteck'-Attribut umschalten"
+msgstr "3D-Modelle für Bauteile mit Durchsteckmontage umschalten"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:219
 msgid "Toggle SMD 3D models"
 msgstr "3D-Modelle für SMD-Bauteile umschalten"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:219
-#, fuzzy
 msgid "Toggle 3D models for 'Surface mount' type components"
-msgstr "Anzeige von 3D-Modellen mit 'Oberflächenmontage'-Attribut umschalten"
+msgstr "3D-Modelle für Bauteile mit Oberflächenmontage (SMD) umschalten"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:225
-#, fuzzy
 msgid "Toggle Other 3D models"
-msgstr "3D-Modelle für SMD-Bauteile umschalten"
+msgstr "Andere 3D-Modelle umschalten"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:225
 msgid "Toggle 3D models for 'Other' type components"
-msgstr ""
+msgstr "3D-Modelle für andere Typen umschalten"
 
 # Einen Bereich (gezeichnete Elemente) umgebendes Rechteck.
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:230
@@ -1461,21 +1457,19 @@ msgstr ""
 "in '%s'."
 
 #: common/common.cpp:320
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot make path '%s' absolute with respect to '%s'."
-msgstr ""
-"Kann den absoluten Pfad \"%s\" nicht erstellen unter Berücksichtigung von "
-"\"%s\"."
+msgstr "Kann Pfad \"%s\" nicht in Bezug auf \"%s\" absolut machen."
 
 #: common/common.cpp:339
-#, fuzzy, c-format
+#, c-format
 msgid "Output directory '%s' created."
-msgstr "Das Ausgabeverzeichnis \"%s\" wurde erstellt.\n"
+msgstr "Ausgabeverzeichnis \"%s\" wurde erstellt."
 
 #: common/common.cpp:348
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot create output directory '%s'."
-msgstr "Konnte das Ausgabeverzeichnis \"%s\" nicht erstellen.\n"
+msgstr "Konnte das Ausgabeverzeichnis \"%s\" nicht erstellen."
 
 #: common/common.cpp:620
 msgid "This operating system is not supported by KiCad and its dependencies."
@@ -1525,7 +1519,6 @@ msgid "Warning"
 msgstr "Warnung"
 
 #: common/confirm.cpp:158 common/confirm.cpp:185
-#, fuzzy
 msgid "Save Changes?"
 msgstr "Änderungen speichern?"
 
@@ -1893,9 +1886,9 @@ msgstr ""
 "Umgebungsvariablen in Ihrem System."
 
 #: common/dialogs/dialog_configure_paths.cpp:374
-#, fuzzy, c-format
+#, c-format
 msgid "The name %s is reserved, and cannot be used."
-msgstr "Der Name %s ist reserviert und kann hier nicht benutzt werden"
+msgstr "Der Name %s ist reserviert und kann nicht benutzt werden."
 
 #: common/dialogs/dialog_configure_paths.cpp:517
 msgid "File Browser..."
@@ -2439,9 +2432,9 @@ msgid "Portrait"
 msgstr "Hochformat"
 
 #: common/dialogs/dialog_page_settings.cpp:473
-#, fuzzy, c-format
+#, c-format
 msgid "Drawing sheet file '%s' not found."
-msgstr "Zeichnungsblattdatei \"%s\" wurde nicht gefunden."
+msgstr "Zeichnungsblattdatei \"%s\" nicht gefunden."
 
 #: common/dialogs/dialog_page_settings.cpp:545
 msgid "the translation for paper size must preserve original spellings"
@@ -3618,6 +3611,7 @@ msgstr "Voreinstellung"
 #: common/dialogs/panel_setup_netclasses_base.cpp:84
 msgid "Set color to transparent to use Kicad default color."
 msgstr ""
+"Farbe auf transparent setzen, um die Standardfarbe von Kicad zu verwenden."
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:103
 msgid "Filter Nets"
@@ -3650,9 +3644,8 @@ msgid "New net class:"
 msgstr "Neue Netzklasse:"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:178
-#, fuzzy
 msgid "Assign To All Listed Nets"
-msgstr "Zuweisen zu den aufgelisteten Netzen"
+msgstr "Allen aufgelisteten Netzen zuweisen"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:184
 msgid "Assign To Selected Nets"
@@ -3711,9 +3704,9 @@ msgid "Save Report to File"
 msgstr "Speichere Protokoll in Datei"
 
 #: common/dialogs/wx_html_report_panel.cpp:353
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot write report to file '%s'."
-msgstr "Kann Protokolldatei \"%s\" nicht erstellen."
+msgstr "Kann Protokoll nicht in Datei \"%s\" schreiben."
 
 #: common/dialogs/wx_html_report_panel.cpp:355
 msgid "File save error"
@@ -3772,19 +3765,19 @@ msgid "Could not use OpenGL"
 msgstr "OpenGL kann nicht verwendet werden"
 
 #: common/drawing_sheet/drawing_sheet_parser.cpp:890
-#, fuzzy, c-format
+#, c-format
 msgid "Drawing sheet '%s' not found."
-msgstr "Zeichnungsblattdatei \"%s\" wurde nicht gefunden."
+msgstr "Zeichnungsblatt \"%s\" nicht gefunden."
 
 #: common/drawing_sheet/drawing_sheet_parser.cpp:900
-#, fuzzy, c-format
+#, c-format
 msgid "Drawing sheet '%s' could not be opened."
-msgstr "Zeichnungsblattdatei \"%s\" wurde nicht gefunden."
+msgstr "Zeichnungsblatt \"%s\" konnte nicht geöffnet werden."
 
 #: common/drawing_sheet/drawing_sheet_parser.cpp:913
-#, fuzzy, c-format
+#, c-format
 msgid "Drawing sheet '%s' was not fully read."
-msgstr "Die Datei \"%s\" wurde nicht vollständig gelesen"
+msgstr "Zeichnungsblatt \"%s\" wurde nicht vollständig gelesen."
 
 #: common/drawing_sheet/ds_data_item.cpp:370
 #: common/drawing_sheet/ds_draw_item.cpp:122 common/eda_text.cpp:667
@@ -3936,7 +3929,7 @@ msgid "&Help"
 msgstr "&Hilfe"
 
 #: common/eda_base_frame.cpp:941
-#, fuzzy, c-format
+#, c-format
 msgid "File '%s' was not found."
 msgstr "Datei '%s' nicht gefunden."
 
@@ -3958,11 +3951,9 @@ msgid "Hotkeys"
 msgstr "Tastaturbefehle"
 
 #: common/eda_base_frame.cpp:1046
-#, fuzzy, c-format
+#, c-format
 msgid "Insufficient permissions to folder '%s'."
-msgstr ""
-"Ungenügende Berechtigungen vorhanden zum speichern der Datei\n"
-"%s"
+msgstr "Unzureichende Berechtigungen für Ordner \"%s\"."
 
 #: common/eda_base_frame.cpp:1086
 #, c-format
@@ -3986,19 +3977,18 @@ msgstr ""
 "Platinendatei umbenannt werden."
 
 #: common/eda_doc.cpp:140
-#, fuzzy
 msgid "Documentation File"
-msgstr "Dokumentation öffnen"
+msgstr "Dokumentationsdatei"
 
 #: common/eda_doc.cpp:150
-#, fuzzy, c-format
+#, c-format
 msgid "Documentation file '%s' not found."
-msgstr "Schaltplandatei \"%s\" wurde nicht gefunden."
+msgstr "Dokumentationsdatei '%s' nicht gefunden."
 
 #: common/eda_doc.cpp:193
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown MIME type for documentation file '%s'"
-msgstr "Unbekannter MIME-Typ für Doc-Datei \"%s\""
+msgstr "Unbekannter MIME-Typ für Dokumentationsdatei '%s'"
 
 #: common/eda_draw_frame.cpp:141 common/tool/actions.cpp:487
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:27
@@ -4207,9 +4197,8 @@ msgid "Schematic Field"
 msgstr "Schaltplanfeld"
 
 #: common/eda_item.cpp:284
-#, fuzzy
 msgid "Schematic Symbol"
-msgstr "Schaltplansymbole bearbeiten"
+msgstr "Schaltplansymbol"
 
 #: common/eda_item.cpp:285
 msgid "Sheet Pin"
@@ -4479,6 +4468,8 @@ msgid ""
 "A directory containing 3rd party plugins, libraries and other downloadable "
 "content."
 msgstr ""
+"Ein Verzeichnis mit Plugins, Bibliotheken und anderen herunterladbaren "
+"Inhalten von Drittanbietern."
 
 #: common/env_vars.cpp:86
 msgid ""
@@ -4523,14 +4514,14 @@ msgid "Deprecated version of KICAD_SYMBOL_DIR."
 msgstr "Veraltete Version von KICAD_SYMBOL_DIR."
 
 #: common/exceptions.cpp:62
-#, fuzzy, c-format
+#, c-format
 msgid "from %s : %s() line %d"
-msgstr "von %s : %s() Zeile:%d"
+msgstr "von %s : %s() Zeile %d"
 
 #: common/exceptions.cpp:76
-#, fuzzy, c-format
+#, c-format
 msgid "%s in '%s', line %d, offset %d."
-msgstr "%s in \"%s\", Zeile %d, Offset %d"
+msgstr "%s in \"%s\", Zeile %d, Offset %d."
 
 #: common/exceptions.cpp:90
 #, c-format
@@ -4538,26 +4529,22 @@ msgid "from %s : %s() line:%d"
 msgstr "von %s : %s() Zeile:%d"
 
 #: common/exceptions.cpp:101
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "KiCad was unable to open this file because it was created with a more recent "
 "version than the one you are running.\n"
 "\n"
 "To open it you will need to upgrade KiCad to a version dated %s or later."
 msgstr ""
-"KiCad konnte diese Datei nicht öffnen, da sie mit einer neueren Version\n"
-"als der aktuell benutzten erstellt wurde. Um die Datei öffnen zu können\n"
-"müssen Sie KiCad auf eine neuere Version aktualisieren.\n"
+"KiCad konnte diese Datei nicht öffnen, da sie mit einer neueren Version "
+"erstellt wurde als die, die Sie verwenden.\n"
 "\n"
-"Die benötigte KiCad Version (oder neuer) lautet: %s\n"
-"\n"
-"Der komplette Fehlertext:\n"
-"%s"
+"Um sie zu öffnen, müssen Sie KiCad auf eine Version mit dem Datum %s oder "
+"höher aktualisieren."
 
 #: common/exceptions.cpp:126
-#, fuzzy
 msgid "Full error text:"
-msgstr "Text spiegeln"
+msgstr "Vollständiger Fehlertext:"
 
 #: common/filehistory.cpp:155
 msgid "No Files"
@@ -4615,13 +4602,13 @@ msgid "Errors were encountered loading footprints:"
 msgstr "Fehler traten beim Laden der Footprints auf:"
 
 #: common/fp_lib_table.cpp:200
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Duplicate library nickname '%s' found in footprint library table file line "
 "%d."
 msgstr ""
 "Doppelter Bibliotheks-Aliasname \"%s\" in der Tabelle der "
-"Footprintbibliotheken in Zeile %d gefunden"
+"Footprintbibliotheken in Zeile %d gefunden."
 
 #: common/fp_lib_table.cpp:300
 #, c-format
@@ -4638,23 +4625,23 @@ msgstr ""
 "werden."
 
 #: common/gestfich.cpp:140
-#, fuzzy, c-format
+#, c-format
 msgid "Command '%s' could not be found."
-msgstr "Programm \"%s\" nicht gefunden"
+msgstr "Programm \"%s\" nicht gefunden."
 
 #: common/gestfich.cpp:198
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Problem while running the PDF viewer.\n"
 "Command is '%s'."
 msgstr ""
 "Es ist ein Problem beim Starten des PDF-Betrachters aufgetreten.\n"
-"Ausgeführter Befehl: \"%s\""
+"Ausgeführter Befehl: \"%s\"."
 
 #: common/gestfich.cpp:205
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to find a PDF viewer for '%s'."
-msgstr "Konnte keinen PDF-Betrachter für \"%s\" finden"
+msgstr "Konnte keinen PDF-Betrachter für \"%s\" finden."
 
 #: common/gestfich.cpp:299
 #, c-format
@@ -4670,7 +4657,7 @@ msgstr ""
 #: common/gestfich.cpp:328 eeschema/eeschema.cpp:410 eeschema/eeschema.cpp:443
 #: gerbview/gerbview.cpp:237 kicad/project_template.cpp:257
 #: pcbnew/pcbnew.cpp:359
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot copy file '%s'."
 msgstr "Datei \"%s\" konnte nicht kopiert werden."
 
@@ -4764,9 +4751,8 @@ msgid "Ignore Other Snaps"
 msgstr "Ignoriert andere Raster"
 
 #: common/hotkey_store.cpp:59
-#, fuzzy
 msgid "Ignore H/V/45 Constraints"
-msgstr "Einschränkungen"
+msgstr "H/V/45-Einschränkungen ignorieren"
 
 #: common/hotkey_store.cpp:66 common/tool/action_menu.cpp:227
 #: common/tool/actions.cpp:115
@@ -4800,16 +4786,16 @@ msgid "Gestures"
 msgstr "Gesten"
 
 #: common/kiway.cpp:256
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to load kiface library '%s'."
 msgstr "Konnte die kiface-Bibliothek \"%s\" nicht laden."
 
 #: common/kiway.cpp:264
-#, fuzzy, c-format
+#, c-format
 msgid "Could not read instance name and version from kiface library '%s'."
 msgstr ""
-"Konnte Instanznamen- und Versions-Symbol nicht von der kiface-Bibliothek \"%s"
-"\" lesen."
+"Konnte Instanznamen- und Version nicht von der kiface-Bibliothek \"%s\" "
+"lesen."
 
 #: common/kiway.cpp:297
 #, c-format
@@ -4839,9 +4825,8 @@ msgstr ""
 "'"
 
 #: common/kiway.cpp:422 common/kiway.cpp:426 common/kiway.cpp:430
-#, fuzzy
 msgid "Error loading editor."
-msgstr "Fehler beim Laden des Editors"
+msgstr "Fehler beim Laden des Editors."
 
 #: common/kiway.cpp:516
 #, c-format
@@ -5271,14 +5256,12 @@ msgid "Hidden text"
 msgstr "Versteckter Text"
 
 #: common/layer_id.cpp:149
-#, fuzzy
 msgid "SMD pads front"
-msgstr "Pads Vorderseite"
+msgstr "SMD-Pads oben"
 
 #: common/layer_id.cpp:150
-#, fuzzy
 msgid "SMD pads back"
-msgstr "Pads Rückseite"
+msgstr "SMD-Pads unten"
 
 #: common/layer_id.cpp:151
 msgid "Through-hole pads"
@@ -5423,21 +5406,20 @@ msgstr "Fehlende Einheiten für '%s'| (%s)"
 #: common/libeval_compiler/libeval_compiler.cpp:1126
 #, c-format
 msgid "Type mismatch between '%s' and %lf"
-msgstr ""
+msgstr "Typkonflikt zwischen '%s' und %lf"
 
 #: common/libeval_compiler/libeval_compiler.cpp:1132
 #, c-format
 msgid "Type mismatch between %lf and '%s'"
-msgstr ""
+msgstr "Typkonflikt zwischen %lf und '%s'"
 
 #: common/pgm_base.cpp:164
 msgid "No default editor found, you must choose it"
 msgstr "Keine Voreinstellung für einen Editor gefunden, bitte auswählen"
 
 #: common/pgm_base.cpp:184 common/pgm_base.cpp:186
-#, fuzzy
 msgid "Executable file"
-msgstr "Ausführbare Dateien ("
+msgstr "Ausführbare Datei"
 
 #: common/pgm_base.cpp:196
 msgid "Select Preferred Editor"
@@ -5460,11 +5442,13 @@ msgid ""
 "Missing null byte at end of property list. Imported data might be malformed "
 "or missing."
 msgstr ""
+"Fehlendes Nullbyte am Ende der Eigenschaftsliste. Importierte Daten sind "
+"möglicherweise fehlerhaft oder fehlen."
 
 #: common/plugins/altium/altium_parser.cpp:247
-#, fuzzy, c-format
+#, c-format
 msgid "Unit '%s' does not end with 'mil'."
-msgstr "Einheit '%s' endet nicht auf mils"
+msgstr "Einheit '%s' endet nicht auf 'mil'."
 
 #: common/plugins/altium/altium_parser.cpp:255
 #, fuzzy, c-format
@@ -5525,32 +5509,28 @@ msgid "Invalid Arc with radius %f and angle %f"
 msgstr "Ungültiger Bogen mit Radius %f und Winkel %f"
 
 #: common/project.cpp:310 common/project.cpp:315 pcbnew/pcb_base_frame.cpp:155
-#, fuzzy
 msgid "Error loading project footprint library table."
 msgstr ""
 "Bei dem Versuch die Tabelle mit den Bibliotheken der Footprints des "
-"Projektes zu laden ist ein Fehler aufgetreten"
+"Projektes zu laden ist ein Fehler aufgetreten."
 
 #: common/project/project_archiver.cpp:52 kicad/pcm/pcm_task_manager.cpp:266
-#, fuzzy
 msgid "Could not open archive file."
-msgstr "Die Archivdatei kann nicht geöffnet werden\n"
+msgstr "Archivdatei kann nicht geöffnet werden."
 
 #: common/project/project_archiver.cpp:61 kicad/pcm/pcm_task_manager.cpp:274
-#, fuzzy
 msgid "Invalid archive file format."
-msgstr "Ungültiges Archivdateiformat\n"
+msgstr "Ungültiges Archivdateiformat."
 
 #: common/project/project_archiver.cpp:72
-#, fuzzy, c-format
+#, c-format
 msgid "Extracting file '%s'."
-msgstr "Entpacke Datei \"%s\"\n"
+msgstr "Entpacke Datei \"%s\"."
 
 #: common/project/project_archiver.cpp:94 kicad/pcm/pcm_task_manager.cpp:193
 #: kicad/pcm/pcm_task_manager.cpp:234
-#, fuzzy
 msgid "Error extracting file!"
-msgstr "Es ist ein Fehler beim Datei \"%s\" Extrahieren.\n"
+msgstr "Fehler beim Extrahieren!"
 
 #: common/project/project_archiver.cpp:151 eeschema/dialogs/dialog_erc.cpp:760
 #: eeschema/dialogs/dialog_plot_schematic.cpp:519
@@ -5578,14 +5558,14 @@ msgstr "Es ist ein Fehler beim Datei \"%s\" Extrahieren.\n"
 #: pcbnew/exporters/gendrill_file_writer_base.cpp:344
 #: pcbnew/exporters/gendrill_gerber_writer.cpp:101
 #: pcbnew/exporters/gerber_jobfile_writer.cpp:152
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to create file '%s'."
-msgstr "Konnte \"%s\" nicht erstellen"
+msgstr "Konnte Datei \"%s\" nicht erstellen."
 
 #: common/project/project_archiver.cpp:197
-#, fuzzy, c-format
+#, c-format
 msgid "Archived file '%s'."
-msgstr "Archivdatei \"%s\"\n"
+msgstr "Archivdatei \"%s\"."
 
 #: common/project/project_archiver.cpp:207
 #, fuzzy, c-format
