@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-08-30 14:45-0700\n"
-"PO-Revision-Date: 2021-09-07 09:14+0000\n"
+"PO-Revision-Date: 2021-09-07 15:16+0000\n"
 "Last-Translator: 킴슨김랑기 <korearf@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
@@ -16712,7 +16712,7 @@ msgstr "레이어 선택:"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:78
 msgid "Copper layers count:"
-msgstr "구리 레이어 카운트:"
+msgstr "동박 층 카운트:"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:82
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:83
