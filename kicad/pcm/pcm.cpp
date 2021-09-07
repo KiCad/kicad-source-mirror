@@ -76,7 +76,8 @@ PLUGIN_CONTENT_MANAGER::PLUGIN_CONTENT_MANAGER( wxWindow* aParent ) : m_dialog( 
     catch( std::exception& e )
     {
         if( !schema_file.FileExists() )
-            wxLogError( wxString::Format( _( "schema file '%s' not found" ), schema_file.GetFullPath() ) );
+            wxLogError( wxString::Format( _( "schema file '%s' not found" ),
+                                          schema_file.GetFullPath() ) );
         else
             wxLogError( wxString::Format( _( "Error loading schema: %s" ), e.what() ) );
     }
@@ -174,6 +175,7 @@ bool PLUGIN_CONTENT_MANAGER::DownloadToStream( const wxString& aUrl, std::ostrea
         if( aSizeLimit > 0 && ( dltotal > aSizeLimit || dlnow > aSizeLimit ) )
         {
             size_exceeded = true;
+
             // Non zero return means abort.
             return true;
         }
@@ -188,6 +190,7 @@ bool PLUGIN_CONTENT_MANAGER::DownloadToStream( const wxString& aUrl, std::ostrea
         {
             reporter->SetCurrentProgress( 0.0 );
         }
+
         return !reporter->KeepRefreshing();
     };
 
@@ -226,6 +229,7 @@ bool PLUGIN_CONTENT_MANAGER::FetchRepository( const wxString& aUrl, PCM_REPOSITO
     }
 
     nlohmann::json repository_json;
+
     try
     {
         repository_stream >> repository_json;
@@ -257,6 +261,7 @@ bool PLUGIN_CONTENT_MANAGER::fetchPackages( const wxString&                  aUr
                                             std::vector<PCM_PACKAGE>&        aPackages )
 {
     std::stringstream packages_stream;
+
     if( !DownloadToStream( aUrl, &packages_stream, _( "Fetching repository packages" ) ) )
     {
         wxLogError( _( "Unable to load repository packages url." ) );

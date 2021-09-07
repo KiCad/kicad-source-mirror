@@ -63,6 +63,7 @@ static size_t write_callback( void* contents, size_t size, size_t nmemb, void* u
     return realsize;
 }
 
+
 static size_t stream_write_callback( void* contents, size_t size, size_t nmemb, void* userp )
 {
     size_t realsize = size * nmemb;
@@ -76,7 +77,7 @@ static size_t stream_write_callback( void* contents, size_t size, size_t nmemb, 
 
 
 static int xferinfo( void* p, curl_off_t dltotal, curl_off_t dlnow, curl_off_t ultotal,
-                              curl_off_t ulnow )
+                     curl_off_t ulnow )
 {
     CURL_PROGRESS* progress = (CURL_PROGRESS*) p;
     curl_off_t     curtime = 0;
@@ -92,9 +93,10 @@ static int xferinfo( void* p, curl_off_t dltotal, curl_off_t dlnow, curl_off_t u
     return CURLE_OK;
 }
 
+
 KICAD_CURL_EASY::KICAD_CURL_EASY() : m_headers( nullptr )
 {
-    // Call KICAD_CURL::Init() from in here everytime, but only the first time
+    // Call KICAD_CURL::Init() from in here every time, but only the first time
     // will incur any overhead.  This strategy ensures that libcurl is never loaded
     // unless it is needed.
 
@@ -222,7 +224,6 @@ std::string KICAD_CURL_EASY::Escape( const std::string& aUrl )
 
     return ret;
 }
-
 
 
 bool KICAD_CURL_EASY::SetTransferCallback( const TRANSFER_CALLBACK& aCallback, size_t aInterval )

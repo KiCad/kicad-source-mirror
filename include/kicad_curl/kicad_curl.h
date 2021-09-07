@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015 Mark Roszko <mark.roszko@gmail.com>
- * Copyright (C) 2015 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2015, 2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -58,36 +58,30 @@ struct DYN_LOOKUP;
 
 
 /**
- * KICAD_CURL
- * simple wrapper class to call curl_global_init and curl_global_cleanup for KiCad.
+ * Simple wrapper class to call curl_global_init and curl_global_cleanup for KiCad.
  */
 class KICAD_CURL
 {
-    friend class KICAD_CURL_EASY;
-
 public:
     /**
-     * Function Init
-     * calls curl_global_init for the application. It must be used only once
+     * Call curl_global_init for the application. It must be used only once
      * and before any curl functions that perform requests.
      *
-     * @return bool - True if successful, false if CURL returned an error
+     * @return True if successful, false if CURL returned an error.
      * @throw IO_ERROR on failure, hopefully with helpful text in it.
      */
     static void Init();
 
     /**
-     * Function Cleanup
-     * calls curl_global_cleanup for the application. It must be used only after
+     * Call curl_global_cleanup for the application. It must be used only after
      * curl_global_init was called.
      */
     static void Cleanup();
 
     /**
-     * Function GetVersion
-     * wrapper for curl_version(). Reports back a short string of loaded libraries.
+     * Wrapper for curl_version(). Reports back a short string of loaded libraries.
      *
-     * @return const char* - String reported by libcurl and owned by it.
+     * @return String reported by libcurl and owned by it.
      * @throw IO_ERROR on failure, hopefully with helpful text in it.
      */
     static const char* GetVersion()
@@ -97,12 +91,14 @@ public:
 
 
     /**
-     * Function GetSimpleVersion
-     * Reports back curl version only and SSL library support
+     * Report back curl version only and SSL library support.
      *
-     * @return std::string - Generated version string
+     * @return  Generated version string.
      */
     static std::string GetSimpleVersion();
+
+private:
+    friend class KICAD_CURL_EASY;
 };
 
 #endif // KICAD_CURL_H_

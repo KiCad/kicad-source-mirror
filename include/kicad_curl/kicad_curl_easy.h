@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015 Mark Roszko <mark.roszko@gmail.com>
- * Copyright (C) 2015 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2015, 2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -42,8 +42,7 @@ typedef void CURL;
 struct curl_slist;
 
 /**
- * KICAD_CURL_EASY
- * wrapper interface around the curl_easy API
+ * Wrapper interface around the curl_easy API/
  *
  * Handling of using the curl_easy API to make a request and save the response to
  * a memory buffer
@@ -71,63 +70,55 @@ public:
     ~KICAD_CURL_EASY();
 
     /**
-     * Function perform
-     * equivalent to curl_easy_perform. Executes the request
-     * that was previously setup.
+     * Equivalent to curl_easy_perform. Executes the request that was previously setup.
      */
     int Perform();
 
     /**
-     * Function SetHeader
-     * sets an arbitrary header for the HTTP(s) request.
+     * Set an arbitrary header for the HTTP(s) request.
      *
-     * @param aName is the left hand side of the header, i.e. Accept without the colon
-     * @param aValue is the right hand side of the header, i.e. application/json
+     * @param aName is the left hand side of the header, i.e. Accept without the colon.
+     * @param aValue is the right hand side of the header, i.e. application/json.
      */
     void SetHeader( const std::string& aName, const std::string& aValue );
 
     /**
-     * Function SetUserAgent
-     * sets the request user agent
+     * Set the request user agent.
      *
-     * @param aAgent is the string to set for the user agent
-     * @return bool - True if successful, false if not
+     * @param aAgent is the string to set for the user agent.
+     * @return True if successful, false if not.
      */
     bool SetUserAgent( const std::string& aAgent );
 
     /**
-     * Function SetURL
-     * sets the request URL
+     * Set the request URL.
      *
-     * @param aURL is the URL
-     * @return bool - True if successful, false if not
+     * @param aURL is the URL.
+     * @return True if successful, false if not.
      */
     bool SetURL( const std::string& aURL );
 
     /**
-     * Function SetFollowRedirects
-     * enables the following of HTTP(s) and other redirects, by default curl
+     * Enable the following of HTTP(s) and other redirects, by default curl
      * does not follow redirects.
      *
-     * @param aFollow is a boolean where true will enable following redirects
-     * @return bool - True if successful, false if not
+     * @param aFollow is a boolean where true will enable following redirects.
+     * @return True if successful, false if not.
      */
     bool SetFollowRedirects( bool aFollow );
 
     /**
-     * Function GetErrorText
-     * fetches CURL's "friendly" error string for a given error code
+     * Fetch CURL's "friendly" error string for a given error code.
      *
-     * @param aCode is CURL error code
-     * @return const std::string - the corresponding error string for the given code
+     * @param aCode is CURL error code.
+     * @return The corresponding error string for the given code.
      */
     const std::string GetErrorText( int aCode );
 
     int GetTransferTotal( uint64_t& aDownloadedBytes ) const;
 
     /**
-     * Function GetBuffer
-     * returns a const reference to the received data buffer
+     * Return a reference to the received data buffer.
      */
     const std::string& GetBuffer() { return m_buffer; }
 
@@ -143,17 +134,14 @@ public:
 
 private:
     /**
-     * Function setOption
-     * sets a curl option, only supports single parameter curl options
+     * Set a curl option, only supports single parameter curl options.
      *
-     * @param aOption is CURL option, see CURL manual for options
-     * @param aArg is the argument being passed to CURL, ensure it is the right type per manual
-     * @return int  - a CURL error code, will return CURLE_OK unless a problem was encountered
+     * @param aOption is CURL option, see CURL manual for options.
+     * @param aArg is the argument being passed to CURL, ensure it is the right type per manual.
+     * @return A CURL error code, will return CURLE_OK unless a problem was encountered.
      */
     template <typename T>
     int setOption( int aOption, T aArg );
-
-    //static int xferinfo( void*, curl_off_t, curl_off_t, curl_off_t, curl_off_t );
 
     CURL*                          m_CURL;
     curl_slist*                    m_headers;
