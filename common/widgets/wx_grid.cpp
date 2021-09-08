@@ -38,6 +38,11 @@ WX_GRID::WX_GRID( wxWindow *parent, wxWindowID id, const wxPoint& pos, const wxS
         m_weOwnTable( false )
 {
     SetDefaultCellOverflow( false );
+
+    // Make sure the GUI font scales properly on GTK
+    wxFont guiFont = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT );
+    guiFont.SetSymbolicSize( wxFONTSIZE_MEDIUM );
+    SetDefaultCellFont( guiFont );
 }
 
 

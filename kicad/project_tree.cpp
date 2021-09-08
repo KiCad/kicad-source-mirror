@@ -24,6 +24,7 @@
 
 
 #include <bitmaps.h>
+#include <wx/settings.h>
 
 #include "project_tree_item.h"
 #include "project_tree_pane.h"
@@ -46,6 +47,11 @@ PROJECT_TREE::PROJECT_TREE( PROJECT_TREE_PANE* parent ) :
                     wxT( "EDATreeCtrl" ) )
 {
     m_projectTreePane = parent;
+
+    // Make sure the GUI font scales properly on GTK
+    wxFont guiFont = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT );
+    guiFont.SetSymbolicSize( wxFONTSIZE_MEDIUM );
+    SetFont( guiFont );
 
     // icons size is not know (depending on they are built)
     // so get it:
