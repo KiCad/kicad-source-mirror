@@ -12,7 +12,7 @@ https://github.com/wxWidgets/Phoenix/tree/master/wx/py
 import wx
 
 from wx.py import crust, version, dispatcher, editwindow
-from wx.py.editor import Editor
+from wx.py.editor import Editor, openSingle, openMultiple, saveSingle, messageDialog
 from wx.py.buffer import Buffer
 from wx import stc
 
@@ -906,9 +906,9 @@ class KiCadEditorFrame(KiCadPyFrame):
     def updateNamespace(self):
         """Update the buffer namespace for autocompletion and calltips."""
         if self.buffer.updateNamespace():
-            self.SetStatusText('Namespace updated')
+            self.parent.SetStatusText('Namespace updated')
         else:
-            self.SetStatusText('Error executing, unable to update namespace')
+            self.parent.SetStatusText('Error executing, unable to update namespace')
 
 
 class KiCadEditorNotebookFrame(KiCadEditorFrame):
