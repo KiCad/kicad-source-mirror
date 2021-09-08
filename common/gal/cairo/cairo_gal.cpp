@@ -1251,6 +1251,7 @@ CAIRO_GAL::CAIRO_GAL( GAL_DISPLAY_OPTIONS& aDisplayOptions, wxWindow* aParent,
     m_mainBuffer = 0;
     m_overlayBuffer = 0;
     m_tempBuffer = 0;
+    m_savedBuffer = 0;
     m_validCompositor = false;
     SetTarget( TARGET_NONCACHED );
 
@@ -1324,7 +1325,6 @@ void CAIRO_GAL::endDrawing()
 
     // Now translate the raw context data from the format stored
     // by cairo into a format understood by wxImage.
-
     pixman_image_t* dstImg = pixman_image_create_bits(
             wxPlatformInfo::Get().GetEndianness() == wxENDIAN_LITTLE ? PIXMAN_b8g8r8
                                                                      : PIXMAN_r8g8b8,
@@ -1644,7 +1644,6 @@ void CAIRO_GAL_BASE::DrawGrid()
     int gridEndY = KiROUND( ( worldEndPoint.y - m_gridOrigin.y ) / gridScreenSize.y );
 
     // Ensure start coordinate > end coordinate
-
     SWAP( gridStartX, >, gridEndX );
     SWAP( gridStartY, >, gridEndY );
 
@@ -1691,6 +1690,7 @@ void CAIRO_GAL_BASE::DrawGrid()
     {
         m_lineWidthIsOdd = true;
         m_isStrokeEnabled = true;
+
         for( int j = gridStartY; j <= gridEndY; j++ )
         {
             bool tickY = ( j % m_gridTick == 0 );

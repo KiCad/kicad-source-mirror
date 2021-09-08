@@ -995,7 +995,7 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
                 textpos.y = -textpos.y;
 
                 // approximate the size of the pad number text:
-                double tsize = 1.5 * padsize.x / PrintableCharCount( padNumber );
+                double tsize = 1.5 * padsize.x / std::max( PrintableCharCount( padNumber ), 1 );
                 tsize = std::min( tsize, size );
 
                 // Use a smaller text size to handle interline, pen size...

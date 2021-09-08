@@ -435,9 +435,9 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testItemAgainstZones( BOARD_ITEM* aItem
                     }
                 }
 
-                if( zoneTree->QueryColliding( itemBBox, itemShape.get(), aLayer,
-                                              std::max( 0, clearance - m_drcEpsilon ),
-                                              &actual, &pos ) )
+                if( zoneTree && zoneTree->QueryColliding( itemBBox, itemShape.get(), aLayer,
+                                                          std::max( 0, clearance - m_drcEpsilon ),
+                                                          &actual, &pos ) )
                 {
                     std::shared_ptr<DRC_ITEM> drce = DRC_ITEM::Create( DRCE_CLEARANCE );
 
@@ -480,9 +480,9 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testItemAgainstZones( BOARD_ITEM* aItem
                                                          aLayer );
                     clearance = constraint.GetValue().Min();
 
-                    if( zoneTree->QueryColliding( itemBBox, holeShape.get(), aLayer,
-                                                  std::max( 0, clearance - m_drcEpsilon ),
-                                                  &actual, &pos ) )
+                    if( zoneTree && zoneTree->QueryColliding( itemBBox, holeShape.get(), aLayer,
+                                                              std::max( 0, clearance - m_drcEpsilon ),
+                                                              &actual, &pos ) )
                     {
                         std::shared_ptr<DRC_ITEM> drce = DRC_ITEM::Create( DRCE_HOLE_CLEARANCE );
 
@@ -740,8 +740,8 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadAgainstItem( PAD* pad, SHAPE* pa
         otherShape.reset( new SHAPE_SEGMENT( pos, pos, otherVia->GetDrill() ) );
 
         if( clearance > 0 && padShape->Collide( otherShape.get(),
-                                                 std::max( 0, clearance - m_drcEpsilon ),
-                                                 &actual, &pos ) )
+                                                std::max( 0, clearance - m_drcEpsilon ),
+                                                &actual, &pos ) )
         {
             std::shared_ptr<DRC_ITEM> drce = DRC_ITEM::Create( DRCE_HOLE_CLEARANCE );
 
@@ -874,7 +874,8 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testZonesToZones()
                     continue;
 
                 // Test for same net
-                if( zoneRef->GetNetCode() == zoneToTest->GetNetCode() && zoneRef->GetNetCode() >= 0 )
+                if( zoneRef->GetNetCode() == zoneToTest->GetNetCode()
+                  && zoneRef->GetNetCode() >= 0 )
                     continue;
 
                 // test for different priorities
