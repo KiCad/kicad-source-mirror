@@ -162,11 +162,6 @@ protected:
     void erase( wxDC* DC );
 
     /**
-     * Compute the height and width of a 'W' in the system font.
-     */
-    static wxSize computeFontSize();
-
-    /**
      * Calculate the width and height of a text string using the system UI font.
      */
     wxSize computeTextSize( const wxString& text ) const;

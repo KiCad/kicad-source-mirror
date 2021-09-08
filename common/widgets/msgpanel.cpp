@@ -35,6 +35,8 @@
 #include <wx/settings.h>
 #include <wx/toplevel.h>
 
+#include <widgets/ui_common.h>
+
 
 BEGIN_EVENT_TABLE( EDA_MSG_PANEL, wxPanel )
     EVT_PAINT( EDA_MSG_PANEL::OnPaint )
@@ -54,7 +56,8 @@ EDA_MSG_PANEL::EDA_MSG_PANEL( wxWindow* aParent, int aId,
 
     m_last_x = 0;
 
-    m_fontSize = computeFontSize();
+    SetFont( KIUI::GetInfoFont() );
+    m_fontSize = GetTextExtent( wxT( "W" ) );
 }
 
 
@@ -63,24 +66,16 @@ EDA_MSG_PANEL::~EDA_MSG_PANEL()
 }
 
 
-wxSize EDA_MSG_PANEL::computeFontSize()
+int EDA_MSG_PANEL::GetRequiredHeight()
 {
-    // Get size of the wxSYS_DEFAULT_GUI_FONT
     wxSize     fontSizeInPixels;
-
     wxScreenDC dc;
 
     dc.SetFont( wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT ) );
     dc.GetTextExtent( wxT( "W" ), &fontSizeInPixels.x, &fontSizeInPixels.y );
 
-    return fontSizeInPixels;
-}
-
-
-int EDA_MSG_PANEL::GetRequiredHeight()
-{
     // make space for two rows of text plus a number of pixels between them.
-    return 2 * computeFontSize().y + 0;
+    return 2 * fontSizeInPixels.y + 0;
 }
 
 
