@@ -412,8 +412,6 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
 
                 // Remove this non existent item
                 aList->RemovePicker( ii );
-                ii++;       // the current item was removed, ii points now the next item
-                            // decrement it because it will be incremented later
                 not_found = true;
 
                 if( aList->GetCount() == 0 )
