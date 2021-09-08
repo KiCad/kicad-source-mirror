@@ -33,6 +33,7 @@
 #include <sexpr/sexpr.h>
 
 #include <wx/log.h>
+#include <wx/filename.h>
 
 #include <iostream>
 #include <limits>
@@ -427,19 +428,39 @@ bool KICADFOOTPRINT::ComposePCB( class PCBMODEL* aPCB, S3D_RESOLVER* resolver,
     for( KICADMODEL* i : m_models )
     {
         wxString mname = wxString::FromUTF8Unchecked( i->m_modelname.c_str() );
+
+        if( mname.empty() )
+        {
+            ReportMessage( wxString::Format( "No model defined for component %s.\n",
+                                             m_refdes ) );
+            return false;
+        }
+
+        mname = resolver->ResolvePath( mname );
+
+        if( !wxFileName::FileExists( mname ) )
+        {
+            ReportMessage( wxString::Format( "Could not add component %s\n"
+                                             "File not found: %s\n ",
+                                             m_refdes,
+                                             mname ) );
+            return false;
+        }
+
         std::string fname( resolver->ResolvePath( mname ).ToUTF8() );
 
         try
         {
             if( aPCB->AddComponent( fname, m_refdes, LAYER_BOTTOM == m_side ? true : false,
-                newpos, m_rotation, i->m_offset, i->m_rotation, i->m_scale, aSubstituteModels ) )
+                                    newpos, m_rotation, i->m_offset, i->m_rotation, i->m_scale,
+                                    aSubstituteModels ) )
             {
                 hasdata = true;
             }
         }
         catch( const Standard_Failure& e)
         {
-            ReportMessage( wxString::Format( "could not add component %s\n"
+            ReportMessage( wxString::Format( "Could not add component %s\n"
                                              "Open CASCADE error: %s\n ",
                                              m_refdes, 
                                              e.GetMessageString() ) );

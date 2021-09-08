@@ -249,7 +249,7 @@ bool S3D_RESOLVER::createPathList( void )
 #ifdef DEBUG
     wxLogTrace( trace3dResolver, " * [3D model] search paths:\n" );
 
-    for( const auto searchPath : m_Paths )
+    for( const SEARCH_PATH& searchPath : m_Paths )
         wxLogTrace( trace3dResolver, "   + '%s'\n", searchPath.m_Pathexp );
 #endif
 
@@ -294,14 +294,10 @@ wxString S3D_RESOLVER::ResolvePath( const wxString& aFileName )
 
     // in the case of absolute filenames we don't store a map item
     if( !aFileName.StartsWith( "${" ) && !aFileName.StartsWith( "$(" )
-        && !aFileName.StartsWith( ":" ) && tmpFN.IsAbsolute() )
+        && tmpFN.IsAbsolute() && tmpFN.FileExists() )
     {
         tmpFN.Normalize();
-
-        if( tmpFN.FileExists() )
-            return tmpFN.GetFullPath();
-
-        return wxEmptyString;
+        return tmpFN.GetFullPath();
     }
 
     // this case covers full paths, leading expanded vars, and paths
@@ -325,14 +321,7 @@ wxString S3D_RESOLVER::ResolvePath( const wxString& aFileName )
     // file either does not exist or the ENV_VAR is not defined
     if( aFileName.StartsWith( "${" ) || aFileName.StartsWith( "$(" ) )
     {
-        if( !( m_errflags & ERRFLG_ENVPATH ) )
-        {
-            m_errflags |= ERRFLG_ENVPATH;
-            wxString errmsg = "[3D File Resolver] File \"";
-            errmsg << aFileName << "\" not found\n";
-            ReportMessage( errmsg );
-        }
-
+        m_errflags |= ERRFLG_ENVPATH;
         return wxEmptyString;
     }
 
@@ -367,11 +356,10 @@ wxString S3D_RESOLVER::ResolvePath( const wxString& aFileName )
 
             return tname;
         }
-
     }
 
     // check the partial path relative to ${KICAD6_3DMODEL_DIR} (legacy behavior)
-    if( !tname.StartsWith( ":" ) )
+    if( !tname.Contains( ":" ) )
     {
         wxFileName fpath;
         wxString fullPath( "${KICAD6_3DMODEL_DIR}" );
@@ -386,12 +374,7 @@ wxString S3D_RESOLVER::ResolvePath( const wxString& aFileName )
             m_NameMap.insert( std::pair< wxString, wxString > ( aFileName, tname ) );
             return tname;
         }
-
     }
-
-    // ${ENV_VAR} paths have already been checked; skip them
-    while( sPL != ePL && ( sPL->m_Alias.StartsWith( "${" ) || sPL->m_Alias.StartsWith( "$(" ) ) )
-        ++sPL;
 
     // at this point the filename must contain an alias or else it is invalid
     wxString alias;         // the alias portion of the short filename
@@ -399,22 +382,18 @@ wxString S3D_RESOLVER::ResolvePath( const wxString& aFileName )
 
     if( !SplitAlias( tname, alias, relpath ) )
     {
-        if( !( m_errflags & ERRFLG_RELPATH ) )
-        {
-            // this can happen if the file was intended to be relative to
-            // ${KICAD6_3DMODEL_DIR} but ${KICAD6_3DMODEL_DIR} not set or incorrect.
-            m_errflags |= ERRFLG_RELPATH;
-            wxString errmsg = "[3D File Resolver] No such path";
-            errmsg.append( "\n" );
-            errmsg.append( tname );
-            wxLogTrace( trace3dResolver, "%s\n", errmsg.ToUTF8() );
-        }
-
+        // this can happen if the file was intended to be relative to ${KICAD6_3DMODEL_DIR}
+        // but ${KICAD6_3DMODEL_DIR} is not set or is incorrect.
+        m_errflags |= ERRFLG_RELPATH;
         return wxEmptyString;
     }
 
     while( sPL != ePL )
     {
+        // ${ENV_VAR} paths have already been checked; skip them
+        if( sPL->m_Alias.StartsWith( "${" ) || sPL->m_Alias.StartsWith( "$(" ) )
+            continue;
+
         if( !sPL->m_Alias.Cmp( alias ) && !sPL->m_Pathexp.empty() )
         {
             wxFileName fpath( wxFileName::DirName( sPL->m_Pathexp ) );
@@ -438,14 +417,7 @@ wxString S3D_RESOLVER::ResolvePath( const wxString& aFileName )
         ++sPL;
     }
 
-    if( !( m_errflags & ERRFLG_ALIAS ) )
-    {
-        m_errflags |= ERRFLG_ALIAS;
-        wxLogTrace( trace3dResolver,
-                    wxT( "[3D File Resolver] No such path; ensure the path alias is defined %s" ),
-                    tname.substr( 1 ) );
-    }
-
+    m_errflags |= ERRFLG_ALIAS;
     return wxEmptyString;
 }
 
