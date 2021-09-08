@@ -282,11 +282,10 @@ wxString S3D_RESOLVER::ResolvePath( const wxString& aFileName )
     tname.Replace( "/", "\\" );
 #endif
 
-    // Note: variable expansion must preferably be performed via a
-    // threadsafe wrapper for the getenv() system call. If we allow the
-    // wxFileName::Normalize() routine to perform expansion then
-    // we will have a race condition since wxWidgets does not assure
-    // a threadsafe wrapper for getenv().
+    // Note: variable expansion must preferably be performed via a threadsafe wrapper for the
+    // getenv() system call. If we allow the wxFileName::Normalize() routine to perform expansion
+    // then we will have a race condition since wxWidgets does not assure a threadsafe wrapper
+    // for getenv().
     if( tname.StartsWith( "${" ) || tname.StartsWith( "$(" ) )
         tname = expandVars( tname );
 
@@ -300,25 +299,24 @@ wxString S3D_RESOLVER::ResolvePath( const wxString& aFileName )
         return tmpFN.GetFullPath();
     }
 
-    // this case covers full paths, leading expanded vars, and paths
-    // relative to the current working directory (which is not necessarily
-    // the current project directory)
+    // this case covers full paths, leading expanded vars, and paths relative to the current
+    // working directory (which is not necessarily the current project directory)
     if( tmpFN.FileExists() )
     {
         tmpFN.Normalize();
         tname = tmpFN.GetFullPath();
         m_NameMap.insert( std::pair< wxString, wxString > ( aFileName, tname ) );
 
-        // special case: if a path begins with ${ENV_VAR} but is not in the
-        // resolver's path list then add it
+        // special case: if a path begins with ${ENV_VAR} but is not in the resolver's path list
+        // then add it
         if( aFileName.StartsWith( "${" ) || aFileName.StartsWith( "$(" ) )
             checkEnvVarPath( aFileName );
 
         return tname;
     }
 
-    // if a path begins with ${ENV_VAR}/$(ENV_VAR) and is not resolved then the
-    // file either does not exist or the ENV_VAR is not defined
+    // if a path begins with ${ENV_VAR}/$(ENV_VAR) and is not resolved then the file either does
+    // not exist or the ENV_VAR is not defined
     if( aFileName.StartsWith( "${" ) || aFileName.StartsWith( "$(" ) )
     {
         m_errflags |= ERRFLG_ENVPATH;
@@ -329,19 +327,14 @@ wxString S3D_RESOLVER::ResolvePath( const wxString& aFileName )
     // a. an aliased shortened name or
     // b. cannot be determined
 
-    std::list< SEARCH_PATH >::const_iterator sPL = m_Paths.begin();
-    std::list< SEARCH_PATH >::const_iterator ePL = m_Paths.end();
-
     // check the path relative to the current project directory;
-    // note: this is not necessarily the same as the current working
-    // directory, which has already been checked. This case accounts
-    // for partial paths which do not contain ${KIPRJMOD}.
-    // This check is performed before checking the path relative to
-    // ${KICAD6_3DMODEL_DIR} so that users can potentially override a model
-    // within ${KICAD6_3DMODEL_DIR}
-    if( !sPL->m_Pathexp.empty() && !tname.StartsWith( ":" ) )
+    // NB: this is not necessarily the same as the current working directory, which has already
+    // been checked. This case accounts for partial paths which do not contain ${KIPRJMOD}.
+    // This check is performed before checking the path relative to ${KICAD6_3DMODEL_DIR} so that
+    // users can potentially override a model within ${KICAD6_3DMODEL_DIR}
+    if( !m_Paths.begin()->m_Pathexp.empty() && !tname.StartsWith( ":" ) )
     {
-        tmpFN.Assign( sPL->m_Pathexp, "" );
+        tmpFN.Assign( m_Paths.begin()->m_Pathexp, "" );
         wxString fullPath = tmpFN.GetPathWithSep() + tname;
 
         if( fullPath.StartsWith( "${" ) || fullPath.StartsWith( "$(" ) )
@@ -388,15 +381,15 @@ wxString S3D_RESOLVER::ResolvePath( const wxString& aFileName )
         return wxEmptyString;
     }
 
-    while( sPL != ePL )
+    for( const SEARCH_PATH& path : m_Paths )
     {
         // ${ENV_VAR} paths have already been checked; skip them
-        if( sPL->m_Alias.StartsWith( "${" ) || sPL->m_Alias.StartsWith( "$(" ) )
+        if( path.m_Alias.StartsWith( "${" ) || path.m_Alias.StartsWith( "$(" ) )
             continue;
 
-        if( !sPL->m_Alias.Cmp( alias ) && !sPL->m_Pathexp.empty() )
+        if( !path.m_Alias.Cmp( alias ) && !path.m_Pathexp.empty() )
         {
-            wxFileName fpath( wxFileName::DirName( sPL->m_Pathexp ) );
+            wxFileName fpath( wxFileName::DirName( path.m_Pathexp ) );
             wxString fullPath = fpath.GetPathWithSep() + relpath;
 
             if( fullPath.StartsWith( "${") || fullPath.StartsWith( "$(" ) )
@@ -413,8 +406,6 @@ wxString S3D_RESOLVER::ResolvePath( const wxString& aFileName )
                 return tname;
             }
         }
-
-        ++sPL;
     }
 
     m_errflags |= ERRFLG_ALIAS;
