@@ -109,6 +109,19 @@ wxFont KIUI::GetInfoFont()
 }
 
 
+wxFont KIUI::GetStatusFont()
+{
+    // wxFONTSIZE_X_SMALL is too small, so we take the wxFONTSIZE_SMALL infofont and adjust
+    // it by wxFONTSIZE_SMALL again.
+
+    wxFont font = GetInfoFont();
+
+    font.SetPointSize( wxFont::AdjustToSymbolicSize( wxFONTSIZE_SMALL, font.GetPointSize() ) );
+
+    return font;
+}
+
+
 bool KIUI::EnsureTextCtrlWidth( wxTextCtrl* aCtrl, const wxString* aString )
 {
     wxWindow* window = aCtrl->GetParent();
@@ -176,14 +189,10 @@ void KIUI::SelectReferenceNumber( wxTextEntry* aTextEntry )
 bool KIUI::IsInputControlFocused( wxWindow* aFocus )
 {
     if( aFocus == nullptr )
-    {
         aFocus = wxWindow::FindFocus();
-    }
 
     if( !aFocus )
-    {
         return false;
-    }
 
     wxTextEntry*      textEntry = dynamic_cast<wxTextEntry*>( aFocus );
     wxStyledTextCtrl* styledText = dynamic_cast<wxStyledTextCtrl*>( aFocus );
@@ -196,20 +205,17 @@ bool KIUI::IsInputControlFocused( wxWindow* aFocus )
     wxSpinCtrlDouble* spinDblCtrl = dynamic_cast<wxSpinCtrlDouble*>( aFocus );
     wxSlider*         sliderCtl = dynamic_cast<wxSlider*>( aFocus );
 
-    // Data view control is annoying, the focus is on a "wxDataViewCtrlMainWindow"
-    // class that is not formerly exported via the header.
-    // However, we can test the parent is wxDataViewCtrl instead
+    // Data view control is annoying, the focus is on a "wxDataViewCtrlMainWindow" class that
+    // is not formerly exported via the header.
     wxDataViewCtrl* dataViewCtrl = nullptr;
 
     wxWindow* parent = aFocus->GetParent();
 
     if( parent )
-    {
         dataViewCtrl = dynamic_cast<wxDataViewCtrl*>( parent );
-    }
 
-    return ( textEntry || styledText || listBox || dataViewCtrl || searchCtrl || dataViewCtrl
-             || checkboxCtrl || choiceCtrl || radioBtn || spinCtrl || spinDblCtrl || sliderCtl );
+    return ( textEntry || styledText || listBox || searchCtrl || checkboxCtrl || choiceCtrl
+                || radioBtn || spinCtrl || spinDblCtrl || sliderCtl || dataViewCtrl );
 }
 
 

@@ -78,9 +78,7 @@ PROPERTIES_FRAME::PROPERTIES_FRAME( PL_EDITOR_FRAME* aParent ) :
     m_stcText->SetUseHorizontalScrollBar( false );
     m_scintillaTricks = new SCINTILLA_TRICKS( m_stcText, wxT( "{}" ), false );
 
-    wxFont infoFont = KIUI::GetInfoFont();
-    infoFont.SetSymbolicSize( wxFONTSIZE_X_SMALL );
-    m_staticTextSizeInfo->SetFont( infoFont );
+    m_staticTextSizeInfo->SetFont( KIUI::GetStatusFont() );
 
     m_buttonOK->SetDefault();
 

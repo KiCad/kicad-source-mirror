@@ -54,6 +54,8 @@ wxFont GetMonospacedUIFont();
 
 wxFont GetInfoFont();
 
+wxFont GetStatusFont();
+
 /**
  * Set the minimum pixel width on a text control in order to make a text
  * string be fully visible within it.

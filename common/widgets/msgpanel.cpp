@@ -48,7 +48,7 @@ EDA_MSG_PANEL::EDA_MSG_PANEL( wxWindow* aParent, int aId,
                               long style, const wxString &name ) :
     wxPanel( aParent, aId, aPosition, aSize, style, name )
 {
-    SetFont( wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT ) );
+    SetFont( KIUI::GetStatusFont() );
     SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_BTNFACE ) );
 
     // informs wx not to paint the background itself as we will paint it later in erase()
@@ -56,7 +56,6 @@ EDA_MSG_PANEL::EDA_MSG_PANEL( wxWindow* aParent, int aId,
 
     m_last_x = 0;
 
-    SetFont( KIUI::GetInfoFont() );
     m_fontSize = GetTextExtent( wxT( "W" ) );
 }
 
@@ -71,25 +70,11 @@ int EDA_MSG_PANEL::GetRequiredHeight()
     wxSize     fontSizeInPixels;
     wxScreenDC dc;
 
-    dc.SetFont( wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT ) );
+    dc.SetFont( KIUI::GetStatusFont() );
     dc.GetTextExtent( wxT( "W" ), &fontSizeInPixels.x, &fontSizeInPixels.y );
 
     // make space for two rows of text plus a number of pixels between them.
     return 2 * fontSizeInPixels.y + 0;
-}
-
-
-wxSize EDA_MSG_PANEL::computeTextSize( const wxString& aText ) const
-{
-    // Get size of the wxSYS_DEFAULT_GUI_FONT
-    wxSize     textSizeInPixels;
-
-    wxScreenDC dc;
-
-    dc.SetFont( wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT ) );
-    dc.GetTextExtent( aText, &textSizeInPixels.x, &textSizeInPixels.y );
-
-    return textSizeInPixels;
 }
 
 
@@ -102,7 +87,7 @@ void EDA_MSG_PANEL::OnPaint( wxPaintEvent& aEvent )
     dc.SetBackground( wxSystemSettings::GetColour( wxSYS_COLOUR_BTNFACE ) );
     dc.SetBackgroundMode( wxSOLID );
     dc.SetTextBackground( wxSystemSettings::GetColour( wxSYS_COLOUR_BTNFACE ) );
-    dc.SetFont( wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT ) );
+    dc.SetFont( KIUI::GetStatusFont() );
 
     for( const MSG_PANEL_ITEM& item : m_Items )
         showItem( dc, item );
@@ -135,7 +120,7 @@ void EDA_MSG_PANEL::AppendMessage( const wxString& aUpperText, const wxString& a
     item.m_UpperText = aUpperText;
     item.m_LowerText = aLowerText;
     m_Items.push_back( item );
-    m_last_x += computeTextSize( text ).x;
+    m_last_x += GetTextExtent( text ).x;
 
     // Add an extra space between texts for a better look:
     m_last_x += m_fontSize.x;

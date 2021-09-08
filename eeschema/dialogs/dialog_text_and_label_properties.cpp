@@ -116,10 +116,8 @@ DIALOG_TEXT_AND_LABEL_PROPERTIES::DIALOG_TEXT_AND_LABEL_PROPERTIES( SCH_EDIT_FRA
 
     if( m_CurrentText->Type() == SCH_GLOBAL_LABEL_T )
     {
-        wxFont infoFont = KIUI::GetInfoFont();
-        infoFont.SetSymbolicSize( wxFONTSIZE_X_SMALL );
-        m_note1->SetFont( infoFont );
-        m_note2->SetFont( infoFont );
+        m_note1->SetFont( KIUI::GetStatusFont() );
+        m_note2->SetFont( KIUI::GetStatusFont() );
     }
     else
     {

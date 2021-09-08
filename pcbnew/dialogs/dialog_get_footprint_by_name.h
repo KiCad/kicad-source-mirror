@@ -46,9 +46,7 @@ public:
         m_sdbSizerOK->SetDefault();
         m_choiceFpList->Append( aFpList );
 
-        wxFont infoFont = KIUI::GetInfoFont();
-        infoFont.SetSymbolicSize( wxFONTSIZE_X_SMALL );
-        m_multipleHint->SetFont( infoFont );
+        m_multipleHint->SetFont( KIUI::GetStatusFont() );
 
         // Hide help string until someone implements successive placement (#2227)
         m_multipleHint->Show( false );
