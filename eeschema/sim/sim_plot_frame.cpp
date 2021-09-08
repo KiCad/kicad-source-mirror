@@ -1350,18 +1350,22 @@ void SIM_PLOT_FRAME::menuTuneUpdate( wxUpdateUIEvent& event )
 
 void SIM_PLOT_FRAME::onPlotClose( wxAuiNotebookEvent& event )
 {
-    int idx = event.GetSelection();
-
-    if( idx == wxNOT_FOUND )
-        return;
-
-    wxCommandEvent dummy;
-    onCursorUpdate( dummy );
 }
 
 
 void SIM_PLOT_FRAME::onPlotClosed( wxAuiNotebookEvent& event )
 {
+    if( m_workbook->GetPageCount() == 0 )
+    {
+        m_signals->ClearAll();
+        m_cursors->ClearAll();
+    }
+    else
+    {
+        updateSignalList();
+        wxCommandEvent dummy;
+        onCursorUpdate( dummy );
+    }
 }
 
 
