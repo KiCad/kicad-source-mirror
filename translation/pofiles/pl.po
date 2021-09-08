@@ -6,10 +6,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-09-07 08:18-0700\n"
-"PO-Revision-Date: 2021-09-07 15:16+0000\n"
+"PO-Revision-Date: 2021-09-08 20:55+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
-"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/master-"
-"source/pl/>\n"
+"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/"
+"master-source/pl/>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1493,13 +1493,12 @@ msgid "Warning"
 msgstr "Ostrzeżenie"
 
 #: common/confirm.cpp:160 common/confirm.cpp:166
-#, fuzzy
 msgid "File Open Error"
-msgstr "Błąd zapisu pliku"
+msgstr "Błąd otwarcia pliku"
 
 #: common/confirm.cpp:162 common/confirm.cpp:168
 msgid "Interleaved saves may produce very unexpected results."
-msgstr ""
+msgstr "Przeplatane zapisy mogą dawać bardzo nieoczekiwane wyniki."
 
 #: common/confirm.cpp:164 common/confirm.cpp:169 common/confirm.cpp:251
 #: gerbview/dialogs/dialog_select_one_pcb_layer.cpp:164
@@ -1508,9 +1507,8 @@ msgid "OK"
 msgstr "OK"
 
 #: common/confirm.cpp:164 common/confirm.cpp:169
-#, fuzzy
 msgid "Open Anyway"
-msgstr "Zapisz mimo to"
+msgstr "Otwórz mimo to"
 
 #: common/confirm.cpp:180 common/confirm.cpp:209
 msgid "Save Changes?"
@@ -1556,9 +1554,8 @@ msgid "Cancel"
 msgstr "Anuluj"
 
 #: common/confirm.cpp:304
-#, fuzzy
 msgid "Information"
-msgstr "Potwierdzenie"
+msgstr "Informacja"
 
 #: common/confirm.cpp:317 eeschema/symbol_editor/symbol_editor.cpp:425
 #: eeschema/symbol_editor/symbol_editor.cpp:682
@@ -3592,7 +3589,6 @@ msgid "Default"
 msgstr "Domyślny"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:84
-#, fuzzy
 msgid "Set color to transparent to use KiCad default color."
 msgstr "Ustaw kolor na przeźroczysty by użyć domyślnego koloru programu KiCad."
 
@@ -8617,18 +8613,16 @@ msgid "-- leave unchanged --"
 msgstr "-- pozostaw niezmienione --"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:229
-#, fuzzy
 msgid "H Align (fields only):"
-msgstr "Ułożenie w poziomie (tylko pola):"
+msgstr "Wyrównanie w poziomie (tylko pola):"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:245
 msgid "Visible (fields only)"
 msgstr "Widoczność (tylko pola)"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:251
-#, fuzzy
 msgid "V Align (fields only):"
-msgstr "Ułożenie w poziomie (tylko pola):"
+msgstr "Wyrównanie w poziomie (tylko pola):"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:291
 #: eeschema/dialogs/dialog_lib_shape_properties_base.cpp:25
@@ -8652,14 +8646,12 @@ msgid "Sheet background color:"
 msgstr "Kolor tła arkusza:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:339
-#, fuzzy
 msgid "Junction size:"
 msgstr "Rozmiar punktu węzła:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:353
-#, fuzzy
 msgid "Junction color:"
-msgstr "Kolor wyboru:"
+msgstr "Kolor punktu węzła:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.h:110
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.h:95
@@ -8729,11 +8721,9 @@ msgid "Color:"
 msgstr "Kolor:"
 
 #: eeschema/dialogs/dialog_junction_props_base.cpp:61
-#, fuzzy
 msgid "Set diameter to 0 to use schematic junction dot size."
 msgstr ""
-"Ustaw szerokość na 0, aby użyć szerokości linii pochodzącą z Edytora "
-"schematów."
+"Ustaw szerokość na 0, aby użyć rozmiaru pochodzącego z Edytora schematów."
 
 #: eeschema/dialogs/dialog_junction_props_base.cpp:65
 #: eeschema/dialogs/dialog_line_wire_bus_properties_base.cpp:80
@@ -9389,11 +9379,9 @@ msgid "Style:"
 msgstr "Styl:"
 
 #: eeschema/dialogs/dialog_line_wire_bus_properties_base.cpp:76
-#, fuzzy
 msgid "Set width to 0 to use Netclass line widths."
 msgstr ""
-"Ustaw szerokość na 0, aby użyć szerokości linii pochodzącą z Edytora "
-"schematów."
+"Ustaw szerokość na 0, aby użyć szerokości linii pochodzącej z klasy sieci."
 
 #: eeschema/dialogs/dialog_line_wire_bus_properties_base.h:67
 msgid "Line, Wire & Bus Properties"
@@ -14227,7 +14215,6 @@ msgid "Syntax Help"
 msgstr "Pomoc dotycząca składni"
 
 #: eeschema/sch_text_help_md.h:2
-#, fuzzy
 msgid ""
 "<table>\n"
 "    <tr>\n"
@@ -14428,8 +14415,8 @@ msgstr ""
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>${oznaczenie:pole}</samp></td>\n"
 "        <td></td>\n"
-"        <td>&nbsp;<br><samp><i>wartość pola</i> of symbol <i>oznaczenie</i></"
-"samp></td>\n"
+"        <td>&nbsp;<br><samp><i>wartość pola</i> of symbol "
+"<i>oznaczenie</i></samp></td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>${R3:VALUE}</samp></td>\n"
@@ -14444,8 +14431,8 @@ msgstr ""
 "    </tr>\n"
 "    <tr>\n"
 "        <th>Definicja Magistrali</th>\n"
-"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
-"&nbsp;&nbsp;&nbsp;</th>\n"
+"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp"
+";&nbsp;&nbsp;</th>\n"
 "        <th>Wynikowe sieci</th>\n"
 "    </tr>\n"
 "    <tr>\n"
@@ -14496,9 +14483,12 @@ msgstr ""
 "        <td>&nbsp;<br><samp>MEM{D_{[1..2]} ~LATCH}</samp></td>\n"
 "        <td></td>\n"
 "        <td> <samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
-"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; &nbsp;&nbsp;&nbsp;"
-"&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> <samp>MEM.D<sub>1</"
-"sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
+"&nbsp;&nbsp;&nbsp;&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> "
+"<samp>MEM.D<sub>1</sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
 "    </tr>\n"
 "</table>\n"
 "<p></p>\n"
@@ -21163,24 +21153,23 @@ msgid "PrePreg"
 msgstr "Przekładka"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:188
-#, fuzzy, c-format
+#, c-format
 msgid "Enter board thickness in %s:"
-msgstr "Wpisz grubość płytki w %s"
+msgstr "Wpisz grubość płytki w %s:"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:193
-#, fuzzy, c-format
+#, c-format
 msgid "Enter expected board thickness (min value %s):"
-msgstr "Wpisz spodziewaną grubość płytki w %s (min wartość %s)"
+msgstr "Wpisz spodziewaną grubość płytki (min wartość %s):"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:197
-#, fuzzy
 msgid "Adjust Unlocked Dielectric Layers"
 msgstr "Dostosuj niezablokowane grubości warstw dielektryka"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:208
-#, fuzzy, c-format
+#, c-format
 msgid "Value too small (min value %s)."
-msgstr "Za mała wartość (min wartość %s %s). Przerwano"
+msgstr "Za mała wartość (min wartość %s)."
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:228
 msgid "All dielectric  thickness layers are locked"
@@ -21334,7 +21323,6 @@ msgid "Id"
 msgstr "Id"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:111
-#, fuzzy
 msgid "Loss Tan"
 msgstr "Tangens strat"
 
@@ -30048,13 +30036,13 @@ msgstr ""
 "Nie można zmienić nazwy pliku tymczasowego '%s'."
 
 #: pcbnew/files.cpp:1146
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Board copied to:\n"
 "%s"
 msgstr ""
 "Obwód został skopiowany do:\n"
-"\"%s\""
+"%s"
 
 #: pcbnew/footprint.cpp:882 pcbnew/tools/pcb_control.cpp:1193
 msgid "Last Change"
@@ -31486,6 +31474,8 @@ msgid ""
 "Received an error while reading netlist.  Please report this issue to the "
 "KiCad team using the menu Help->Report Bug."
 msgstr ""
+"Wystąpił błąd podczas odczytywania listy sieci.  Proszę zgłosić ten problem "
+"zespołowi programu KiCad, korzystając z menu Pomoc->Raportuj błąd."
 
 #: pcbnew/pcb_edit_frame.cpp:1488
 #, c-format
@@ -34985,13 +34975,12 @@ msgid "Lock or unlock selected items"
 msgstr "Blokuj lub odblokuj zaznaczone elementy"
 
 #: pcbnew/tools/pcb_actions.cpp:667
-#, fuzzy
 msgid "Toggle 45 Limit"
-msgstr "Przełącz podświetlenie sieci"
+msgstr "Przełącz ograniczenie do kąta 45 stopni"
 
 #: pcbnew/tools/pcb_actions.cpp:667
 msgid "Limit actions to 45 degrees from the starting point"
-msgstr ""
+msgstr "Ogranicz akcje by korzystały z kąta 45 stopni wobec punktu początkowego"
 
 #: pcbnew/tools/pcb_actions.cpp:672
 msgid "Prevent items from being moved and/or resized on the canvas"
