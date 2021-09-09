@@ -1,5 +1,5 @@
 # Christian Schlüter <chschlue@gmail.com>, 2020.
-# Seth Hillbrand <seth@kipro-pcb.com>, 2020.
+# Seth Hillbrand <seth@kipro-pcb.com>, 2020, 2021.
 # J. Lavoie <j.lavoie@net-c.ca>, 2020.
 # Kliment <kliment@0xfb.com>, 2020.
 # jonathan haas <jonathan.haas@live.de>, 2020.
@@ -13,16 +13,16 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-09-07 08:18-0700\n"
-"PO-Revision-Date: 2021-09-07 15:16+0000\n"
-"Last-Translator: Jonathan Haas <haasjona@gmail.com>\n"
-"Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
-"source/de/>\n"
+"PO-Revision-Date: 2021-09-10 19:57+0000\n"
+"Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
+"Language-Team: German <https://hosted.weblate.org/projects/kicad/"
+"master-source/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.8.1-dev\n"
+"X-Generator: Weblate 4.9-dev\n"
 "X-Poedit-Basepath: ../../../../../../mnt/kicad\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -1519,9 +1519,8 @@ msgid "Warning"
 msgstr "Warnung"
 
 #: common/confirm.cpp:160 common/confirm.cpp:166
-#, fuzzy
 msgid "File Open Error"
-msgstr "Fehler beim Dateischreibvorgang"
+msgstr "Fehler beim Dateilesevorgang"
 
 #: common/confirm.cpp:162 common/confirm.cpp:168
 msgid "Interleaved saves may produce very unexpected results."
@@ -1534,9 +1533,8 @@ msgid "OK"
 msgstr "OK"
 
 #: common/confirm.cpp:164 common/confirm.cpp:169
-#, fuzzy
 msgid "Open Anyway"
-msgstr "Trotzdem speichern"
+msgstr "Trotzdem öffnen"
 
 #: common/confirm.cpp:180 common/confirm.cpp:209
 msgid "Save Changes?"
@@ -1581,9 +1579,8 @@ msgid "Cancel"
 msgstr "Abbrechen"
 
 #: common/confirm.cpp:304
-#, fuzzy
 msgid "Information"
-msgstr "Bestätigung"
+msgstr "Information"
 
 #: common/confirm.cpp:317 eeschema/symbol_editor/symbol_editor.cpp:425
 #: eeschema/symbol_editor/symbol_editor.cpp:682
@@ -5465,9 +5462,9 @@ msgid "Unit '%s' does not end with 'mil'."
 msgstr "Einheit '%s' endet nicht auf 'mil'."
 
 #: common/plugins/altium/altium_parser.cpp:255
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot convert '%s' to double."
-msgstr "\"%s\" kann nicht in eine Ganzzahl konvertiert werden"
+msgstr "\"%s\" kann nicht in eine Double konvertiert werden"
 
 #: common/plugins/cadstar/cadstar_archive_parser.cpp:2329
 #, c-format
@@ -5582,14 +5579,14 @@ msgid "Archived file '%s'."
 msgstr "Archivdatei \"%s\"."
 
 #: common/project/project_archiver.cpp:215
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to archive file '%s'."
-msgstr "Konnte kein Backup der Datei \"%s\" erstellen.\n"
+msgstr "Konnte kein Archiv der Datei \"%s\" erstellen."
 
 #: common/project/project_archiver.cpp:241
-#, fuzzy, c-format
+#, c-format
 msgid "Zip archive '%s' created (%s uncompressed, %s compressed)."
-msgstr "Zip-Archiv \"%s\" erstellt (%s unkomprimiert, %s komprimiert)\n"
+msgstr "Zip-Archiv \"%s\" erstellt (%s unkomprimiert, %s komprimiert)."
 
 #: common/rc_item.cpp:353
 msgid "Excluded "
@@ -5604,9 +5601,9 @@ msgid "Warning: "
 msgstr "Warnung: "
 
 #: common/richio.cpp:170
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to open %s for reading."
-msgstr "Konnte Datei \"%s\" nicht zum Lesen öffnen"
+msgstr "Konnte Datei \"%s\" nicht zum Lesen öffnen."
 
 #: common/richio.cpp:221 common/richio.cpp:317
 msgid "Maximum line length exceeded"
@@ -6272,7 +6269,6 @@ msgid ""
 msgstr "Die Hilfedatei '%s' wurde nicht gefunden."
 
 #: common/tool/common_control.cpp:222 common/tool/common_control.cpp:242
-#, fuzzy
 msgid "File Not Found"
 msgstr "Datei nicht gefunden"
 
