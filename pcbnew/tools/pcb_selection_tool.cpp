@@ -266,7 +266,10 @@ int PCB_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
         {
             // Avoid triggering when running under other tools
             if( m_frame->ToolStackIsEmpty() )
+            {
+                m_originalCursor = m_toolMgr->GetMousePosition();
                 m_disambiguateTimer.StartOnce( 500 );
+            }
         }
         else if( evt->IsClick( BUT_LEFT ) )
         {
@@ -900,6 +903,9 @@ bool PCB_SELECTION_TOOL::selectMultiple()
 int PCB_SELECTION_TOOL::disambiguateCursor( const TOOL_EVENT& aEvent )
 {
     VECTOR2I pos = m_toolMgr->GetMousePosition();
+
+    if( pos != m_originalCursor )
+        return 0;
 
     m_skip_heuristics = true;
     selectPoint( pos, false, &m_canceledMenu );

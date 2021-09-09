@@ -24,7 +24,6 @@
 #include <tool/selection_tool.h>
 
 
-
 SELECTION_TOOL::SELECTION_TOOL() :
     m_additive( false ),
     m_subtractive( false ),

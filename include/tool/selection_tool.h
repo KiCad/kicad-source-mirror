@@ -25,7 +25,7 @@
 #ifndef INCLUDE_TOOL_SELECTION_TOOL_H_
 #define INCLUDE_TOOL_SELECTION_TOOL_H_
 
-
+#include <math/vector2d.h>
 #include <tool/tool_interactive.h>
 #include <wx/timer.h>
 
@@ -57,6 +57,8 @@ protected:
     bool            m_canceledMenu;      // Sets to true if the disambiguation menu was cancelled
 
     wxTimer         m_disambiguateTimer; // Timer to show the disambiguate menu
+
+    VECTOR2I        m_originalCursor;    // Location of original cursor when starting click
 };
 
 #endif /* INCLUDE_TOOL_SELECTION_TOOL_H_ */
