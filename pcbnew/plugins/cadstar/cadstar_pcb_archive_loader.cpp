@@ -38,6 +38,7 @@
 #include <pcb_text.h>
 #include <project.h>
 #include <pcb_track.h>
+#include <progress_reporter.h>
 #include <zone.h>
 #include <convert_basic_shapes_to_polygon.h>
 #include <trigo.h>
@@ -51,6 +52,9 @@ void CADSTAR_PCB_ARCHIVE_LOADER::Load( BOARD* aBoard, PROJECT* aProject )
 {
     m_board = aBoard;
     m_project = aProject;
+
+    if( m_progressReporter )
+        m_progressReporter->SetNumPhases( 3 ); // (0) Read file, (1) Parse file, (2) Load file
 
     Parse();
 
@@ -90,6 +94,18 @@ void CADSTAR_PCB_ARCHIVE_LOADER::Load( BOARD* aBoard, PROJECT* aProject )
                    "PCB and the schematic. " ) );
     }
 
+    if( m_progressReporter )
+    {
+        m_progressReporter->BeginPhase( 2 );
+
+        // Significantly most amount of time spent loading coppers compared to all the other steps
+        // (39 seconds vs max of 100ms in other steps). This is due to requirement of boolean
+        // operations to join them together into a single polygon.
+        long numSteps = Layout.Coppers.size();
+
+        m_progressReporter->SetMaxProgress( numSteps );
+    }
+
     loadBoardStackup();
     remapUnsureLayers();
     loadDesignRules();
@@ -103,7 +119,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::Load( BOARD* aBoard, PROJECT* aProject )
     loadComponents();
     loadDocumentationSymbols();
     loadTemplates();
-    loadCoppers();
+    loadCoppers(); // Progress reporting is here as significantly most amount of time spent
     calculateZonePriorities();
     loadNets();
     loadTextVariables();
@@ -1945,6 +1961,8 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadCoppers()
     for( std::pair<COPPER_ID, COPPER> copPair : Layout.Coppers )
     {
         COPPER& csCopper = copPair.second;
+
+        checkPoint();
 
         if( !csCopper.PouredTemplateID.IsEmpty() )
         {

@@ -134,7 +134,7 @@ SCH_SHEET* CADSTAR_SCH_ARCHIVE_PLUGIN::Load( const wxString& aFileName, SCHEMATI
         aSchematic->Prj().SchSymbolLibTable();
     }
 
-    CADSTAR_SCH_ARCHIVE_LOADER csaFile( aFileName, m_reporter );
+    CADSTAR_SCH_ARCHIVE_LOADER csaFile( aFileName, m_reporter, m_progressReporter );
     csaFile.Load( aSchematic, rootSheet, &sch_plugin, libFileName );
 
     sch_plugin->SaveLibrary( libFileName.GetFullPath() );

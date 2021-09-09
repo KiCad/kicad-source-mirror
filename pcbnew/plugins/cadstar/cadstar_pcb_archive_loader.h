@@ -39,8 +39,10 @@ class PCB_DIMENSION_BASE;
 class CADSTAR_PCB_ARCHIVE_LOADER : public CADSTAR_PCB_ARCHIVE_PARSER
 {
 public:
-    explicit CADSTAR_PCB_ARCHIVE_LOADER(
-            wxString aFilename, LAYER_MAPPING_HANDLER aLayerMappingHandler, bool aLogLayerWarnings )
+    explicit CADSTAR_PCB_ARCHIVE_LOADER( wxString              aFilename,
+                                         LAYER_MAPPING_HANDLER aLayerMappingHandler,
+                                         bool                  aLogLayerWarnings,
+                                         PROGRESS_REPORTER*    aProgressReporter )
             : CADSTAR_PCB_ARCHIVE_PARSER( aFilename )
     {
         m_layerMappingHandler     = aLayerMappingHandler;
@@ -53,6 +55,7 @@ public:
         m_doneSpacingClassWarning = false;
         m_doneNetClassWarning     = false;
         m_numNets                 = 0;
+        m_progressReporter        = aProgressReporter;
     }
 
 

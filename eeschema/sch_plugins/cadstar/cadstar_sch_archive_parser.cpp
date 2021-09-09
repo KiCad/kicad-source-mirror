@@ -26,12 +26,29 @@
 #include <convert_to_biu.h> // SCH_IU_PER_MM
 #include <macros.h>
 #include <sch_plugins/cadstar/cadstar_sch_archive_parser.h>
+#include <progress_reporter.h>
 #include <wx/translation.h>
 
 
 void CADSTAR_SCH_ARCHIVE_PARSER::Parse()
 {
-    XNODE* fileRootNode = LoadArchiveFile( Filename, wxT( "CADSTARSCM" ) );
+    if( m_progressReporter )
+        m_progressReporter->BeginPhase( 0 ); // Read file
+
+    XNODE* fileRootNode = LoadArchiveFile( Filename, wxT( "CADSTARSCM" ), m_progressReporter );
+
+    if( m_progressReporter )
+    {
+        m_progressReporter->BeginPhase( 1 ); // Parse File
+
+        std::vector<wxString> subNodeChildrenToCount = { wxT( "LIBRARY" ), wxT( "PARTS" ),
+                                                         wxT( "SCHEMATIC" ) };
+
+        long numOfSteps = GetNumberOfStepsForReporting( fileRootNode, subNodeChildrenToCount );
+        m_progressReporter->SetMaxProgress( numOfSteps );
+    }
+
+    m_context.CheckPointCallback = [&](){ checkPoint(); };
 
     XNODE* cNode = fileRootNode->GetChildren();
 
@@ -124,6 +141,8 @@ void CADSTAR_SCH_ARCHIVE_PARSER::Parse()
         {
             THROW_UNKNOWN_NODE_IO_ERROR( cNode->GetName(), wxT( "[root]" ) );
         }
+
+        checkPoint();
     }
 
     delete fileRootNode;
@@ -441,6 +460,8 @@ void CADSTAR_SCH_ARCHIVE_PARSER::LIBRARY_SCM::Parse( XNODE* aNode, PARSER_CONTEX
         {
             THROW_UNKNOWN_NODE_IO_ERROR( cNodeName, aNode->GetName() );
         }
+
+        aContext->CheckPointCallback();
     }
 }
 
@@ -1181,6 +1202,8 @@ void CADSTAR_SCH_ARCHIVE_PARSER::CADSTAR_SCHEMATIC::Parse( XNODE* aNode, PARSER_
         {
             THROW_UNKNOWN_NODE_IO_ERROR( cNodeName, aNode->GetName() );
         }
+
+        aContext->CheckPointCallback();
     }
 }
 

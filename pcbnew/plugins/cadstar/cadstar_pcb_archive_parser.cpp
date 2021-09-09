@@ -26,12 +26,29 @@
 #include <cadstar_pcb_archive_parser.h>
 #include <convert_to_biu.h> // PCB_IU_PER_MM
 #include <macros.h>
+#include <progress_reporter.h>
 #include <wx/translation.h>
 
 
 void CADSTAR_PCB_ARCHIVE_PARSER::Parse()
 {
-    XNODE* fileRootNode = LoadArchiveFile( Filename, wxT( "CADSTARPCB" ) );
+    if( m_progressReporter )
+        m_progressReporter->BeginPhase( 0 ); // Read file
+
+    XNODE* fileRootNode = LoadArchiveFile( Filename, wxT( "CADSTARPCB" ), m_progressReporter );
+
+    if( m_progressReporter )
+    {
+        m_progressReporter->BeginPhase( 1 ); // Parse File
+
+        std::vector<wxString> subNodeChildrenToCount = { wxT( "LIBRARY" ), wxT( "PARTS" ),
+                                                         wxT( "LAYOUT" ) };
+
+        long numOfSteps = GetNumberOfStepsForReporting( fileRootNode, subNodeChildrenToCount );
+        m_progressReporter->SetMaxProgress( numOfSteps );
+    }
+
+    m_context.CheckPointCallback = [&](){ checkPoint(); };
 
     XNODE* cNode = fileRootNode->GetChildren();
 
@@ -102,6 +119,8 @@ void CADSTAR_PCB_ARCHIVE_PARSER::Parse()
         {
             THROW_UNKNOWN_NODE_IO_ERROR( cNode->GetName(), wxT( "[root]" ) );
         }
+
+        checkPoint();
     }
 
     delete fileRootNode;
@@ -1598,6 +1617,8 @@ void CADSTAR_PCB_ARCHIVE_PARSER::LIBRARY::Parse( XNODE* aNode, PARSER_CONTEXT* a
         {
             THROW_UNKNOWN_NODE_IO_ERROR( cNodeName, aNode->GetName() );
         }
+
+        aContext->CheckPointCallback();
     }
 }
 
@@ -2579,5 +2600,7 @@ void CADSTAR_PCB_ARCHIVE_PARSER::LAYOUT::Parse( XNODE* aNode, PARSER_CONTEXT* aC
         {
             THROW_UNKNOWN_NODE_IO_ERROR( cNodeName, aNode->GetName() );
         }
+
+        aContext->CheckPointCallback();
     }
 }

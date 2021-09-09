@@ -42,6 +42,11 @@ public:
 
     void SetReporter( REPORTER* aReporter ) override { m_reporter = aReporter; }
 
+    void SetProgressReporter( PROGRESS_REPORTER* aReporter ) override
+    {
+        m_progressReporter = aReporter;
+    }
+
     const wxString GetFileExtension() const override;
 
     const wxString GetLibraryFileExtension() const override;
@@ -57,13 +62,16 @@ public:
     CADSTAR_SCH_ARCHIVE_PLUGIN()
     {
         m_reporter = &WXLOG_REPORTER::GetInstance();
+        m_progressReporter = nullptr;
     }
 
     ~CADSTAR_SCH_ARCHIVE_PLUGIN()
     {
     }
 
-    REPORTER* m_reporter;          // current reporter for warnings/errors
+private:
+    REPORTER* m_reporter; // current reporter for warnings/errors
+    PROGRESS_REPORTER* m_progressReporter;  // optional; may be nullptr
 };
 
 #endif // CADSTAR_SCH_ARCHIVE_PLUGIN_H_

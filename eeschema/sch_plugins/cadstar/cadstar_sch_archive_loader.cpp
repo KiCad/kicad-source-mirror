@@ -32,6 +32,7 @@
 #include <lib_polyline.h>
 #include <lib_text.h>
 #include <macros.h>
+#include <progress_reporter.h>
 #include <string_utils.h>
 #include <sch_bus_entry.h>
 #include <sch_edit_frame.h> //SYMBOL_ORIENTATION_T
@@ -54,6 +55,9 @@ const wxString PartNameFieldName = "Part Name";
 void CADSTAR_SCH_ARCHIVE_LOADER::Load( SCHEMATIC* aSchematic, SCH_SHEET* aRootSheet,
         SCH_PLUGIN::SCH_PLUGIN_RELEASER* aSchPlugin, const wxFileName& aLibraryFileName )
 {
+    if( m_progressReporter )
+        m_progressReporter->SetNumPhases( 3 ); // (0) Read file, (1) Parse file, (2) Load file
+
     Parse();
 
     LONGPOINT designLimit = Assignments.Settings.DesignLimit;
@@ -87,17 +91,38 @@ void CADSTAR_SCH_ARCHIVE_LOADER::Load( SCHEMATIC* aSchematic, SCH_SHEET* aRootSh
     m_plugin          = aSchPlugin;
     m_libraryFileName = aLibraryFileName;
 
+    if( m_progressReporter )
+    {
+        m_progressReporter->BeginPhase( 2 );
+        long numSteps = 11; // one step for each of below functions + one at the end of import
+
+        // Step 4 is by far the longest - add granularity in reporting
+        numSteps += Parts.PartDefinitions.size();
+
+        m_progressReporter->SetMaxProgress( numSteps );
+    }
+
     loadTextVariables(); // Load text variables right at the start to ensure bounding box
                          // calculations work correctly for text items
+        checkPoint(); // Step 1
     loadSheets();
+        checkPoint(); // Step 2
     loadHierarchicalSheetPins();
+        checkPoint(); // Step 3
     loadPartsLibrary();
+        checkPoint(); // Step 4, Subdivided into extra steps
     loadSchematicSymbolInstances();
+        checkPoint(); // Step 5
     loadBusses();
+        checkPoint(); // Step 6
     loadNets();
+        checkPoint(); // Step 7
     loadFigures();
+        checkPoint(); // Step 8
     loadTexts();
+        checkPoint(); // Step 9
     loadDocumentationSymbols();
+        checkPoint(); // Step 10
 
     if( Schematic.VariantHierarchy.Variants.size() > 0 )
     {
@@ -218,6 +243,8 @@ void CADSTAR_SCH_ARCHIVE_LOADER::Load( SCHEMATIC* aSchematic, SCH_SHEET* aRootSh
             sheet->GetScreen()->Update( item );
         }
     }
+
+    checkPoint();
 
     m_reporter->Report( _( "The CADSTAR design has been imported successfully.\n"
                            "Please review the import errors and warnings (if any)." ) );
@@ -382,6 +409,8 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadPartsLibrary()
             // been loaded correctly (saving us time later on)
             m_partMap.insert( { partID, kiPart } );
         }
+
+        checkPoint();
     }
 }
 

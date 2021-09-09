@@ -55,15 +55,17 @@ public:
     // Size of tiny net labels when none present in original design
     const int SMALL_LABEL_SIZE = KiROUND( (double) SCH_IU_PER_MM * 0.4 );
 
-    explicit CADSTAR_SCH_ARCHIVE_LOADER( wxString aFilename, REPORTER* aReporter )
-            : CADSTAR_SCH_ARCHIVE_PARSER( aFilename )
+    explicit CADSTAR_SCH_ARCHIVE_LOADER( wxString aFilename, REPORTER* aReporter,
+                                         PROGRESS_REPORTER* aProgressReporter ) :
+            CADSTAR_SCH_ARCHIVE_PARSER( aFilename )
     {
-        m_schematic      = nullptr;
-        m_rootSheet      = nullptr;
-        m_plugin         = nullptr;
+        m_schematic = nullptr;
+        m_rootSheet = nullptr;
+        m_plugin = nullptr;
         m_designCenter.x = 0;
         m_designCenter.y = 0;
-        m_reporter       = aReporter;
+        m_reporter = aReporter;
+        m_progressReporter = aProgressReporter;
     }
 
 

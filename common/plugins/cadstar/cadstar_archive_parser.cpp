@@ -31,6 +31,7 @@
 #include <eda_item.h>
 #include <eda_text.h>
 #include <macros.h>
+#include <progress_reporter.h>
 #include <string_utils.h>
 #include <trigo.h>
 
@@ -1963,6 +1964,8 @@ void CADSTAR_ARCHIVE_PARSER::PARTS::Parse( XNODE* aNode, PARSER_CONTEXT* aContex
         {
             THROW_UNKNOWN_NODE_IO_ERROR( cNodeName, aNode->GetName() );
         }
+
+        aContext->CheckPointCallback();
     }
 }
 
@@ -2313,7 +2316,7 @@ void CADSTAR_ARCHIVE_PARSER::InsertAttributeAtEnd( XNODE* aNode, wxString aValue
 
 
 XNODE* CADSTAR_ARCHIVE_PARSER::LoadArchiveFile( const wxString& aFileName,
-                                                const wxString& aFileTypeIdentifier )
+                                                const wxString& aFileTypeIdentifier, PROGRESS_REPORTER* aProgressReporter )
 {
     KEYWORD   emptyKeywords[1] = {};
     XNODE *   iNode = nullptr, *cNode = nullptr;
@@ -2323,15 +2326,32 @@ XNODE* CADSTAR_ARCHIVE_PARSER::LoadArchiveFile( const wxString& aFileName,
     wxCSConv  win1252( wxT( "windows-1252" ) );
     wxMBConv* conv = &win1252; // Initial testing suggests file encoding to be Windows-1252
                                // More samples required.
+
+    // Open the file and get the file size
     FILE* fp = wxFopen( aFileName, wxT( "rt" ) );
+    fseek( fp, 0L, SEEK_END );
+    long fileSize = ftell( fp );
+    rewind( fp );
 
     if( !fp )
         THROW_IO_ERROR( wxString::Format( _( "Cannot open file '%s'" ), aFileName ) );
 
     DSNLEXER lexer( emptyKeywords, 0, fp, aFileName );
 
+    long currentPosition = 0;
+
     while( ( tok = lexer.NextTok() ) != DSN_EOF )
     {
+        if( aProgressReporter )
+        {
+            if( !aProgressReporter->KeepRefreshing() )
+                THROW_IO_ERROR( _( "File import cancelled by user." ) );
+
+            currentPosition = ftell( fp );
+            double currentprogress = static_cast<double>( currentPosition ) / fileSize;
+            aProgressReporter->SetCurrentProgress( currentprogress );
+        }
+
         if( tok == DSN_RIGHT )
         {
             cNode = iNode;
@@ -2547,6 +2567,38 @@ std::vector<CADSTAR_ARCHIVE_PARSER::CUTOUT> CADSTAR_ARCHIVE_PARSER::ParseAllChil
 }
 
 
+long CADSTAR_ARCHIVE_PARSER::GetNumberOfChildNodes( XNODE* aNode )
+{
+    XNODE* childNodes = aNode->GetChildren();
+    long   retval = 0;
+
+    for( ; childNodes; childNodes = childNodes->GetNext() )
+        retval++;
+
+    return retval;
+}
+
+
+long CADSTAR_ARCHIVE_PARSER::GetNumberOfStepsForReporting( XNODE* aRootNode, std::vector<wxString> aSubNodeChildrenToCount )
+{
+    XNODE* level1Node = aRootNode->GetChildren();
+    long   retval = 0;
+
+    for( ; level1Node; level1Node = level1Node->GetNext() )
+    {
+        for( wxString childNodeName : aSubNodeChildrenToCount )
+        {
+            if( level1Node->GetName() == childNodeName )
+                retval += GetNumberOfChildNodes( level1Node );
+        }
+
+        retval++;
+    }
+
+    return retval;
+}
+
+
 wxString CADSTAR_ARCHIVE_PARSER::HandleTextOverbar( wxString aCadstarString )
 {
     wxString escapedText = aCadstarString;
@@ -2584,3 +2636,15 @@ void CADSTAR_ARCHIVE_PARSER::FixTextPositionNoAlignment( EDA_TEXT* aKiCadTextIte
         aKiCadTextItem->Offset( positionOffset );
     }
 }
+
+void CADSTAR_ARCHIVE_PARSER::checkPoint()
+{
+    if( m_progressReporter )
+    {
+        m_progressReporter->AdvanceProgress();
+
+        if( !m_progressReporter->KeepRefreshing() )
+            THROW_IO_ERROR( _( "File import cancelled by user." ) );
+    }
+}
+

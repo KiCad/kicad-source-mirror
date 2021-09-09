@@ -113,8 +113,8 @@ BOARD* CADSTAR_PCB_ARCHIVE_PLUGIN::Load( const wxString& aFileName, BOARD* aAppe
     m_board = aAppendToMe ? aAppendToMe : new BOARD();
     clearLoadedFootprints();
 
-    CADSTAR_PCB_ARCHIVE_LOADER tempPCB(
-            aFileName, m_layer_mapping_handler, m_show_layer_mapping_warnings );
+    CADSTAR_PCB_ARCHIVE_LOADER tempPCB( aFileName, m_layer_mapping_handler,
+                                        m_show_layer_mapping_warnings, aProgressReporter );
     tempPCB.Load( m_board, aProject );
 
     //center the board:

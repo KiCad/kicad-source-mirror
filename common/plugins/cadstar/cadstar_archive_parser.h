@@ -77,6 +77,7 @@
 
 class EDA_TEXT;
 class wxXmlAttribute;
+class PROGRESS_REPORTER;
 
 /**
  * @brief Helper functions and common structures for CADSTAR PCB and Schematic archive files.
@@ -84,6 +85,9 @@ class wxXmlAttribute;
 class CADSTAR_ARCHIVE_PARSER
 {
 public:
+    CADSTAR_ARCHIVE_PARSER() { m_progressReporter = nullptr; }
+
+
     typedef wxString LINECODE_ID;
     typedef wxString HATCHCODE_ID;
     typedef wxString ROUTECODE_ID;
@@ -185,6 +189,11 @@ public:
          * consistent across text elements.
          */
         std::set<TEXT_FIELD_NAME> InconsistentTextFields;
+
+        /**
+         * Callback function to report progress
+         */
+        std::function<void()> CheckPointCallback = []() {};
     };
 
     /**
@@ -1268,12 +1277,14 @@ public:
      * @param aFileName
      * @param aFileTypeIdentifier Identifier of the first node in the file to check against.
               E.g. "CADSTARPCB"
+     * @param aProgressReporter Pointer to a Progress Reporter to report progress to.
      * @return XNODE pointing to the top of the tree for further parsing. Each node has the first
      *         element as the node's name and subsequent elements as node attributes ("attr0",
      *         "attr1", "attr2", etc.). Caller is responsible for deleting to avoid memory leaks.
      * @throws IO_ERROR
      */
-    static XNODE* LoadArchiveFile( const wxString& aFileName, const wxString& aFileTypeIdentifier );
+    static XNODE* LoadArchiveFile( const wxString& aFileName, const wxString& aFileTypeIdentifier,
+                                   PROGRESS_REPORTER* aProgressReporter = nullptr );
 
     /**
      * @brief
@@ -1368,6 +1379,11 @@ public:
     static std::vector<CUTOUT> ParseAllChildCutouts(
             XNODE* aNode, PARSER_CONTEXT* aContext, bool aTestAllChildNodes = false );
 
+    static long GetNumberOfChildNodes( XNODE* aNode );
+
+    static long GetNumberOfStepsForReporting( XNODE*                aRootNode,
+                                              std::vector<wxString> aSubNodeChildrenToCount );
+
     /**
      * @brief Convert a string with CADSTAR overbar characters to equivalent in KiCad
      * @param aCadstarString Input string
@@ -1389,8 +1405,12 @@ public:
                                                  : wxT( "" ) );
     }
 
+
 protected:
-    PARSER_CONTEXT m_context;
+    void checkPoint(); ///< Updates m_progressReporter or throws if user cancelled
+
+    PARSER_CONTEXT     m_context;
+    PROGRESS_REPORTER* m_progressReporter; // optional; may be nullptr
 
 
 }; // class CADSTAR_ARCHIVE_PARSER
