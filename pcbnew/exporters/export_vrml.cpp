@@ -777,7 +777,8 @@ void EXPORTER_PCB_VRML::ExportVrmlFootprint( FOOTPRINT* aFootprint, std::ostream
 {
     wxCHECK( aFootprint && aOutputFile, /* void */ );
 
-    auto old_precision = aOutputFile->precision();
+    int old_precision = aOutputFile->precision();
+    aOutputFile->precision( m_precision );
 
     // Export pad holes
     for( PAD* pad : aFootprint->Pads() )
@@ -893,11 +894,11 @@ void EXPORTER_PCB_VRML::ExportVrmlFootprint( FOOTPRINT* aFootprint, std::ostream
             // only write a rotation if it is >= 0.1 deg
             if( std::abs( rot[3] ) > 0.0001745 )
             {
-                (*aOutputFile) << "  rotation " << aOutputFile->precision( 5 );
+                (*aOutputFile) << "  rotation ";
                 (*aOutputFile) << rot[0] << " " << rot[1] << " " << rot[2] << " " << rot[3] << "\n";
             }
 
-            (*aOutputFile) << "  translation " << aOutputFile->precision( m_precision );
+            (*aOutputFile) << "  translation ";
             (*aOutputFile) << trans.x << " ";
             (*aOutputFile) << trans.y << " ";
             (*aOutputFile) << trans.z << "\n";
