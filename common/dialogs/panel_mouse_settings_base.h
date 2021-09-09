@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.9.0 Apr 22 2021)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -83,7 +83,7 @@ class PANEL_MOUSE_SETTINGS_BASE : public RESETTABLE_PANEL
 		wxButton* m_mouseDefaults;
 		wxButton* m_trackpadDefaults;
 
-		// Virtual event handlers, overide them in your derived class
+		// Virtual event handlers, override them in your derived class
 		virtual void OnScrollRadioButton( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onMouseDefaults( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onTrackpadDefaults( wxCommandEvent& event ) { event.Skip(); }

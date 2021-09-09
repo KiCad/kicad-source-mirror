@@ -80,7 +80,7 @@ PANEL_EDIT_OPTIONS_BASE::PANEL_EDIT_OPTIONS_BASE( wxWindow* parent, wxWindowID i
 
 	m_mouseCmdsWinLin = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Left Click Mouse Commands") ), wxVERTICAL );
 
-	m_staticText181 = new wxStaticText( m_mouseCmdsWinLin->GetStaticBox(), wxID_ANY, _("Left click (and drag) actions depend on 3 modifier keys:\nAlt, Shift and Ctrl."), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText181 = new wxStaticText( m_mouseCmdsWinLin->GetStaticBox(), wxID_ANY, _("Left click (and drag) actions depend on 2 modifier keys:\nShift and Ctrl."), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText181->Wrap( -1 );
 	m_mouseCmdsWinLin->Add( m_staticText181, 0, wxALL, 5 );
 
@@ -103,6 +103,16 @@ PANEL_EDIT_OPTIONS_BASE::PANEL_EDIT_OPTIONS_BASE( wxWindow* parent, wxWindowID i
 	staticText71->Wrap( -1 );
 	fgSizerCmdsWinLin->Add( staticText71, 0, wxALL, 5 );
 
+	wxStaticText* staticText611;
+	staticText611 = new wxStaticText( m_mouseCmdsWinLin->GetStaticBox(), wxID_ANY, _("Long Click"), wxDefaultPosition, wxDefaultSize, 0 );
+	staticText611->Wrap( -1 );
+	fgSizerCmdsWinLin->Add( staticText611, 0, wxALL, 5 );
+
+	wxStaticText* staticText711;
+	staticText711 = new wxStaticText( m_mouseCmdsWinLin->GetStaticBox(), wxID_ANY, _("Clarify selection from menu."), wxDefaultPosition, wxDefaultSize, 0 );
+	staticText711->Wrap( -1 );
+	fgSizerCmdsWinLin->Add( staticText711, 0, wxALL, 5 );
+
 	wxStaticText* staticText81;
 	staticText81 = new wxStaticText( m_mouseCmdsWinLin->GetStaticBox(), wxID_ANY, _("Shift"), wxDefaultPosition, wxDefaultSize, 0 );
 	staticText81->Wrap( -1 );
@@ -114,7 +124,7 @@ PANEL_EDIT_OPTIONS_BASE::PANEL_EDIT_OPTIONS_BASE( wxWindow* parent, wxWindowID i
 	fgSizerCmdsWinLin->Add( staticText91, 0, wxALL, 5 );
 
 	wxStaticText* staticText121;
-	staticText121 = new wxStaticText( m_mouseCmdsWinLin->GetStaticBox(), wxID_ANY, _("Shift+Alt"), wxDefaultPosition, wxDefaultSize, 0 );
+	staticText121 = new wxStaticText( m_mouseCmdsWinLin->GetStaticBox(), wxID_ANY, _("Ctrl+Shift"), wxDefaultPosition, wxDefaultSize, 0 );
 	staticText121->Wrap( -1 );
 	fgSizerCmdsWinLin->Add( staticText121, 0, wxALL, 5 );
 
@@ -123,28 +133,8 @@ PANEL_EDIT_OPTIONS_BASE::PANEL_EDIT_OPTIONS_BASE( wxWindow* parent, wxWindowID i
 	staticText131->Wrap( -1 );
 	fgSizerCmdsWinLin->Add( staticText131, 0, wxALL, 5 );
 
-	wxStaticText* staticText141;
-	staticText141 = new wxStaticText( m_mouseCmdsWinLin->GetStaticBox(), wxID_ANY, _("Alt"), wxDefaultPosition, wxDefaultSize, 0 );
-	staticText141->Wrap( -1 );
-	fgSizerCmdsWinLin->Add( staticText141, 0, wxALL, 5 );
-
-	wxStaticText* staticText151;
-	staticText151 = new wxStaticText( m_mouseCmdsWinLin->GetStaticBox(), wxID_ANY, _("Toggle selected state of item(s)."), wxDefaultPosition, wxDefaultSize, 0 );
-	staticText151->Wrap( -1 );
-	fgSizerCmdsWinLin->Add( staticText151, 0, wxALL, 5 );
-
-	wxStaticText* staticText101;
-	staticText101 = new wxStaticText( m_mouseCmdsWinLin->GetStaticBox(), wxID_ANY, _("Ctrl"), wxDefaultPosition, wxDefaultSize, 0 );
-	staticText101->Wrap( -1 );
-	fgSizerCmdsWinLin->Add( staticText101, 0, wxALL, 5 );
-
-	wxStaticText* staticText111;
-	staticText111 = new wxStaticText( m_mouseCmdsWinLin->GetStaticBox(), wxID_ANY, _("Clarify selection from menu."), wxDefaultPosition, wxDefaultSize, 0 );
-	staticText111->Wrap( -1 );
-	fgSizerCmdsWinLin->Add( staticText111, 0, wxALL, 5 );
-
 	wxStaticText* staticText161;
-	staticText161 = new wxStaticText( m_mouseCmdsWinLin->GetStaticBox(), wxID_ANY, _("Ctrl+Shift"), wxDefaultPosition, wxDefaultSize, 0 );
+	staticText161 = new wxStaticText( m_mouseCmdsWinLin->GetStaticBox(), wxID_ANY, _("Ctrl"), wxDefaultPosition, wxDefaultSize, 0 );
 	staticText161->Wrap( -1 );
 	fgSizerCmdsWinLin->Add( staticText161, 0, wxALL, 5 );
 
@@ -161,7 +151,7 @@ PANEL_EDIT_OPTIONS_BASE::PANEL_EDIT_OPTIONS_BASE( wxWindow* parent, wxWindowID i
 
 	m_mouseCmdsOSX = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Left Click Mouse Commands") ), wxVERTICAL );
 
-	m_staticText1811 = new wxStaticText( m_mouseCmdsOSX->GetStaticBox(), wxID_ANY, _("Left click (and drag) actions depend on 3 modifier keys:\nAlt, Shift and Cmd."), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText1811 = new wxStaticText( m_mouseCmdsOSX->GetStaticBox(), wxID_ANY, _("Left click (and drag) actions depend on 3 modifier keys:\nOption, Shift and Cmd."), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText1811->Wrap( -1 );
 	m_mouseCmdsOSX->Add( m_staticText1811, 0, wxALL, 5 );
 
@@ -183,6 +173,16 @@ PANEL_EDIT_OPTIONS_BASE::PANEL_EDIT_OPTIONS_BASE( wxWindow* parent, wxWindowID i
 	staticText72 = new wxStaticText( m_mouseCmdsOSX->GetStaticBox(), wxID_ANY, _("Select item(s)."), wxDefaultPosition, wxDefaultSize, 0 );
 	staticText72->Wrap( -1 );
 	fgSizerCmdsOSX->Add( staticText72, 0, wxALL, 5 );
+
+	wxStaticText* staticText162;
+	staticText162 = new wxStaticText( m_mouseCmdsOSX->GetStaticBox(), wxID_ANY, _("Long Click"), wxDefaultPosition, wxDefaultSize, 0 );
+	staticText162->Wrap( -1 );
+	fgSizerCmdsOSX->Add( staticText162, 0, wxALL, 5 );
+
+	wxStaticText* staticText172;
+	staticText172 = new wxStaticText( m_mouseCmdsOSX->GetStaticBox(), wxID_ANY, _("Clarify selection from menu."), wxDefaultPosition, wxDefaultSize, 0 );
+	staticText172->Wrap( -1 );
+	fgSizerCmdsOSX->Add( staticText172, 0, wxALL, 5 );
 
 	wxStaticText* staticText82;
 	staticText82 = new wxStaticText( m_mouseCmdsOSX->GetStaticBox(), wxID_ANY, _("Shift"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -210,12 +210,12 @@ PANEL_EDIT_OPTIONS_BASE::PANEL_EDIT_OPTIONS_BASE( wxWindow* parent, wxWindowID i
 	fgSizerCmdsOSX->Add( staticText142, 0, wxALL, 5 );
 
 	wxStaticText* staticText152;
-	staticText152 = new wxStaticText( m_mouseCmdsOSX->GetStaticBox(), wxID_ANY, _("Toggle selected state of item(s)."), wxDefaultPosition, wxDefaultSize, 0 );
+	staticText152 = new wxStaticText( m_mouseCmdsOSX->GetStaticBox(), wxID_ANY, _("Highlight net (for pads or tracks)."), wxDefaultPosition, wxDefaultSize, 0 );
 	staticText152->Wrap( -1 );
 	fgSizerCmdsOSX->Add( staticText152, 0, wxALL, 5 );
 
 	wxStaticText* staticText102;
-	staticText102 = new wxStaticText( m_mouseCmdsOSX->GetStaticBox(), wxID_ANY, _("Alt"), wxDefaultPosition, wxDefaultSize, 0 );
+	staticText102 = new wxStaticText( m_mouseCmdsOSX->GetStaticBox(), wxID_ANY, _("Option"), wxDefaultPosition, wxDefaultSize, 0 );
 	staticText102->Wrap( -1 );
 	fgSizerCmdsOSX->Add( staticText102, 0, wxALL, 5 );
 
@@ -223,16 +223,6 @@ PANEL_EDIT_OPTIONS_BASE::PANEL_EDIT_OPTIONS_BASE( wxWindow* parent, wxWindowID i
 	staticText112 = new wxStaticText( m_mouseCmdsOSX->GetStaticBox(), wxID_ANY, _("Clarify selection from menu."), wxDefaultPosition, wxDefaultSize, 0 );
 	staticText112->Wrap( -1 );
 	fgSizerCmdsOSX->Add( staticText112, 0, wxALL, 5 );
-
-	wxStaticText* staticText162;
-	staticText162 = new wxStaticText( m_mouseCmdsOSX->GetStaticBox(), wxID_ANY, _("Alt+Cmd"), wxDefaultPosition, wxDefaultSize, 0 );
-	staticText162->Wrap( -1 );
-	fgSizerCmdsOSX->Add( staticText162, 0, wxALL, 5 );
-
-	wxStaticText* staticText172;
-	staticText172 = new wxStaticText( m_mouseCmdsOSX->GetStaticBox(), wxID_ANY, _("Highlight net (for pads or tracks)."), wxDefaultPosition, wxDefaultSize, 0 );
-	staticText172->Wrap( -1 );
-	fgSizerCmdsOSX->Add( staticText172, 0, wxALL, 5 );
 
 
 	m_mouseCmdsOSX->Add( fgSizerCmdsOSX, 1, wxEXPAND, 5 );

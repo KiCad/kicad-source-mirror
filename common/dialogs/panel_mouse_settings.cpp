@@ -45,6 +45,7 @@ PANEL_MOUSE_SETTINGS::PANEL_MOUSE_SETTINGS( PAGED_DIALOG* aDialog, wxWindow* aPa
     }
 
     m_lblCtrl->SetLabel( _( "Cmd" ) );
+    m_lblAlt->SetLabel( _( "Option" ) );
 #endif
 
     m_scrollWarning->SetBitmap( KiBitmap( BITMAPS::small_warning ) );

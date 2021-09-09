@@ -134,12 +134,13 @@ static struct hotkey_name_descr hotkeyNameList[] =
 
 #ifdef USING_MAC_CMD
 #define MODIFIER_CTRL       wxT( "Cmd+" )
+#define MODIFIER_ALT        wxT( "Option+" )
 #else
 #define MODIFIER_CTRL       wxT( "Ctrl+" )
+#define MODIFIER_ALT        wxT( "Alt+" )
 #endif
 #define MODIFIER_CMD_MAC    wxT( "Cmd+" )
 #define MODIFIER_CTRL_BASE  wxT( "Ctrl+" )
-#define MODIFIER_ALT        wxT( "Alt+" )
 #define MODIFIER_SHIFT      wxT( "Shift+" )
 
 
