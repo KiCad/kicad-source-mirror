@@ -1323,10 +1323,8 @@ bool SHAPE_LINE_CHAIN_BASE::PointInside( const VECTOR2I& aPt, int aAccuracy,
      * Don't check the bounding box unless it's cached.  Building it is about the same speed as
      * the rigorous test below and so just slows things down by doing potentially two tests.
      */
-    //if( aUseBBoxCache && !m_bbox.Contains( aPt ) )
-        //return false;
-
-    // fixme: bbox cache...
+    if( aUseBBoxCache && GetCachedBBox() && !GetCachedBBox()->Contains( aPt ) )
+        return false;
 
     if( !IsClosed() || GetPointCount() < 3 )
         return false;

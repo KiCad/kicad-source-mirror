@@ -413,9 +413,9 @@ public:
             m_bbox.Inflate( m_width );
     }
 
-    const BOX2I BBoxFromCache() const
+    BOX2I* GetCachedBBox() const override
     {
-        return m_bbox;
+        return &m_bbox;
     }
 
     /**

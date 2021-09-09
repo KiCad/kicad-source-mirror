@@ -1402,9 +1402,9 @@ const BOX2I SHAPE_POLY_SET::BBoxFromCaches() const
     for( unsigned i = 0; i < m_polys.size(); i++ )
     {
         if( i == 0 )
-            bb = m_polys[i][0].BBoxFromCache();
+            bb = *m_polys[i][0].GetCachedBBox();
         else
-            bb.Merge( m_polys[i][0].BBoxFromCache() );
+            bb.Merge( *m_polys[i][0].GetCachedBBox() );
     }
 
     return bb;

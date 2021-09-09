@@ -308,6 +308,8 @@ public:
     virtual size_t         GetPointCount() const          = 0;
     virtual size_t         GetSegmentCount() const        = 0;
     virtual bool IsClosed() const = 0;
+
+    virtual BOX2I* GetCachedBBox() const { return nullptr; }
 };
 
 #endif // __SHAPE_H
