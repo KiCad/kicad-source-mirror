@@ -26,6 +26,8 @@
 #include <drc/drc_item.h>
 #include <drc/drc_rule.h>
 #include <drc/drc_test_provider.h>
+#include <pad.h>
+#include <pcb_track.h>
 
 #include <drawing_sheet/ds_draw_item.h>
 #include <drawing_sheet/ds_proxy_view_item.h>
@@ -132,7 +134,39 @@ void DRC_TEST_PROVIDER_MISC::testDisabledLayers()
     auto checkDisabledLayers =
             [&]( BOARD_ITEM* item ) -> bool
             {
-                if( ( disabledLayers & item->GetLayerSet() ).any() )
+                bool onDisabledLayer = false;
+
+                if( item->Type() == PCB_PAD_T )
+                {
+                    PAD* pad = static_cast<PAD*>( item );
+
+                    if( pad->GetAttribute() == PAD_ATTRIB::SMD
+                            || pad->GetAttribute() == PAD_ATTRIB::CONN )
+                    {
+                        onDisabledLayer = disabledLayers.test( item->GetLayer() );
+                    }
+                    else
+                    {
+                        // Through hole pad is on whatever layers are there
+                        onDisabledLayer = false;
+                    }
+                }
+                else if( item->Type() == PCB_VIA_T )
+                {
+                    PCB_VIA* via = static_cast<PCB_VIA*>( item );
+                    PCB_LAYER_ID top;
+                    PCB_LAYER_ID bottom;
+
+                    via->LayerPair( &top, &bottom );
+
+                    onDisabledLayer = disabledLayers.test( top ) || disabledLayers.test( bottom );
+                }
+                else
+                {
+                    onDisabledLayer = ( disabledLayers & item->GetLayerSet() ).any();
+                }
+
+                if( onDisabledLayer )
                 {
                     std::shared_ptr<DRC_ITEM>drcItem = DRC_ITEM::Create( DRCE_DISABLED_LAYER_ITEM );
 
@@ -143,6 +177,7 @@ void DRC_TEST_PROVIDER_MISC::testDisabledLayers()
 
                     reportViolation( drcItem, item->GetPosition() );
                 }
+
                 return true;
             };
 
