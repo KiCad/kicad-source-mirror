@@ -4,21 +4,22 @@
 # http://www.gnu.org/licenses/fdl-1.3.html
 # Hildo Guillardi Júnior <hildogjr@gmail.com>, 2020.
 # ssantos <ssantos@web.de>, 2020, 2021.
+# Augusto Fraga Giachero <afg@augustofg.net>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-09-07 08:18-0700\n"
-"PO-Revision-Date: 2021-05-09 22:09+0000\n"
-"Last-Translator: ssantos <ssantos@web.de>\n"
-"Language-Team: Portuguese <https://hosted.weblate.org/projects/kicad/master-"
-"source/pt/>\n"
+"PO-Revision-Date: 2021-09-09 18:20+0000\n"
+"Last-Translator: Augusto Fraga Giachero <afg@augustofg.net>\n"
+"Language-Team: Portuguese <https://hosted.weblate.org/projects/kicad/"
+"master-source/pt/>\n"
 "Language: pt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.7-dev\n"
+"X-Generator: Weblate 4.8.1-dev\n"
 "X-Poedit-Basepath: ../../kicad-source-mirror\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
@@ -161,7 +162,7 @@ msgstr "Contornos da placa"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:535
 msgid "Create layers"
-msgstr "Cria camadas"
+msgstr "Criar camadas"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:709
 #: pcbnew/dialogs/dialog_footprint_checker.cpp:104
@@ -186,11 +187,11 @@ msgstr ""
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:227
 msgid "Create tracks and vias"
-msgstr "Cria trilhas e vias"
+msgstr "Criar trilhas e vias"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:687
 msgid "Create zones"
-msgstr "Cria zonas"
+msgstr "Criar zonas"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:756
 msgid "Simplifying copper layers polygons"
@@ -539,11 +540,11 @@ msgstr "Fixa o silk ao anel da via"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_display_options_base.cpp:74
 msgid "Use bare copper color for unplated copper"
-msgstr ""
+msgstr "Usar cor de cobre para regiões sem banho (cobre exposto)"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_display_options_base.cpp:75
 msgid "Use different colors for plated and unplated copper. (Slow)"
-msgstr ""
+msgstr "Usar cores diferentes para regiões de cobre com e sem banho. (Lento)"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_display_options_base.cpp:82
 #, fuzzy
@@ -852,11 +853,9 @@ msgstr "Nome do ficheiro de Imagem 3D"
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:681
 #: common/eda_base_frame.cpp:1052 common/eda_base_frame.cpp:1057
 #: pcbnew/plugins/altium/altium_pcb.cpp:1461
-#, fuzzy, c-format
+#, c-format
 msgid "Insufficient permissions to save file '%s'."
-msgstr ""
-"Permissões insuficientes necessárias para gravar o ficheiro\n"
-"%s"
+msgstr "Permissões insuficientes para gravar o ficheiro '%s'."
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:682 common/confirm.cpp:130
 #: common/confirm.cpp:288 common/dialogs/panel_setup_severities.cpp:43
@@ -1049,7 +1048,7 @@ msgstr "Exibir/Ocultar modelos 3D de componentes SMD"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:225
 msgid "Toggle 3D models for 'Other' type components"
-msgstr ""
+msgstr "Exibir/Ocultar modelos 3D para componentes do tipo 'Outros'"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:230
 msgid "Show Model Bounding Boxes"
@@ -1535,18 +1534,18 @@ msgid "Cannot make path '%s' absolute with respect to '%s'."
 msgstr "Não foi possível tornar o caminho \"%s\" absoluto em relação a \"%s\"."
 
 #: common/common.cpp:339
-#, fuzzy, c-format
+#, c-format
 msgid "Output directory '%s' created."
-msgstr "Pasta de saída \"%s\" criada.\n"
+msgstr "Pasta de saída '%s' criada."
 
 #: common/common.cpp:348
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot create output directory '%s'."
-msgstr "Não foi possível criar a pasta de saída \"%s\".\n"
+msgstr "Não foi possível criar a pasta de saída '%s'."
 
 #: common/common.cpp:620
 msgid "This operating system is not supported by KiCad and its dependencies."
-msgstr ""
+msgstr "O sistema operacional não é suportado pelo KiCad e suas dependências."
 
 #: common/common.cpp:622
 #, fuzzy
@@ -1558,6 +1557,8 @@ msgid ""
 "Any issues with KiCad on this system cannot be reported to the official "
 "bugtracker."
 msgstr ""
+"Problemas com o KiCad nesse sistema não podem ser reportados no bugtracker "
+"oficial."
 
 #: common/confirm.cpp:57
 msgid "Do not show again"
@@ -1596,6 +1597,8 @@ msgstr "Erro ao Salvar Ficheiro"
 #: common/confirm.cpp:162 common/confirm.cpp:168
 msgid "Interleaved saves may produce very unexpected results."
 msgstr ""
+"Salvar o mesmo arquivo em instâncias diferentes pode produzir resultados "
+"inesperados."
 
 #: common/confirm.cpp:164 common/confirm.cpp:169 common/confirm.cpp:251
 #: gerbview/dialogs/dialog_select_one_pcb_layer.cpp:164
@@ -2283,7 +2286,7 @@ msgstr "Redefinir Origem da Grade"
 #: common/dialogs/dialog_grid_settings_base.cpp:176
 #, fuzzy
 msgid "Reset Grid Sizes"
-msgstr "Tamanhos Responsivos"
+msgstr "Limpar tamanho das grades"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:178
 #, fuzzy
@@ -2339,6 +2342,8 @@ msgid ""
 "Remove locked items from the selection and only apply the operation to the "
 "unlocked items (if any)."
 msgstr ""
+"Remover items bloqueados da seleção e aplicar a operação somente a items "
+"desbloqueados (se existem)."
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:30
 #, fuzzy, c-format
@@ -2351,7 +2356,7 @@ msgstr ""
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:44
 msgid "Remember decision for this session."
-msgstr ""
+msgstr "Lembrar a decisão para esta sessão."
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:45
 msgid ""
@@ -2785,7 +2790,7 @@ msgstr "Alterar a referência %s para %s."
 #: common/dialogs/dialog_paste_special_base.cpp:22
 #, fuzzy
 msgid "Assign unique reference designators to pasted symbols"
-msgstr "Utilizando referências para corresponder componentes e footprints.\n"
+msgstr "Utilizando referências para corresponder componentes e footprints."
 
 #: common/dialogs/dialog_paste_special_base.cpp:22
 #, fuzzy
@@ -12297,9 +12302,8 @@ msgid "Default line thickness:"
 msgstr "Espessura do contorno:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:118
-#, fuzzy
 msgid "Pin symbol size:"
-msgstr " no símbolo %c"
+msgstr "Tamanho do pino do símbolo:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:136
 #: eeschema/erc_item.cpp:41
@@ -15526,9 +15530,8 @@ msgid "Nickname"
 msgstr "Apelido"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:617
-#, fuzzy
 msgid "Save Symbol As"
-msgstr "Novo Símbolo…"
+msgstr "Salvar símbolo como"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:618
 #: pcbnew/footprint_libraries_utils.cpp:991
@@ -18339,7 +18342,7 @@ msgstr "Falha ao carregar \"%s\""
 
 #: kicad/dialogs/dialog_template_selector.cpp:127
 msgid "<html><h1>Template Selector</h1></html>"
-msgstr "<html<h1>Seletor de Modelo</h1></html>"
+msgstr "<html><h1>Seletor de Modelo</h1></html>"
 
 #: kicad/dialogs/dialog_template_selector.cpp:228
 msgid "Select Templates Directory"
