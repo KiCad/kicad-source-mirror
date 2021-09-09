@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-09-07 08:18-0700\n"
-"PO-Revision-Date: 2021-09-09 18:20+0000\n"
+"PO-Revision-Date: 2021-09-10 19:57+0000\n"
 "Last-Translator: Augusto Fraga Giachero <afg@augustofg.net>\n"
 "Language-Team: Portuguese <https://hosted.weblate.org/projects/kicad/"
 "master-source/pt/>\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.8.1-dev\n"
+"X-Generator: Weblate 4.9-dev\n"
 "X-Poedit-Basepath: ../../kicad-source-mirror\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
@@ -14762,9 +14762,8 @@ msgid "space"
 msgstr "espaco"
 
 #: eeschema/sch_validators.cpp:171
-#, fuzzy
 msgid " or "
-msgstr "%s ou %s"
+msgstr " ou "
 
 #: eeschema/sch_validators.cpp:176
 #, fuzzy
@@ -17813,9 +17812,8 @@ msgid "Drawing layer %d not in use"
 msgstr "A camada de desenho %d não está em uso"
 
 #: gerbview/gerbview_frame.cpp:671
-#, fuzzy
 msgid "(with X2 attributes)"
-msgstr " (com atributos X2)"
+msgstr "(com atributos X2)"
 
 #: gerbview/gerbview_frame.cpp:680
 #, c-format
@@ -21454,9 +21452,8 @@ msgid "all copper layers"
 msgstr "Todas as camadas de cobre"
 
 #: pcbnew/board_item.cpp:120
-#, fuzzy
 msgid "and others"
-msgstr " e outros"
+msgstr "e outros"
 
 #: pcbnew/board_item.cpp:128
 msgid "no layers"
@@ -25998,9 +25995,9 @@ msgid "Connected layers only"
 msgstr "Apenas a camada atual"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:926
-#, fuzzy, c-format
+#, c-format
 msgid "%s and %s"
-msgstr " e outros"
+msgstr "%s e %s"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1226
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1231
@@ -29134,9 +29131,8 @@ msgstr "Controle de Verificação de Regras de Desenho"
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:357
 #: pcbnew/drc/drc_rule_condition.cpp:64
-#, fuzzy
 msgid "ERROR:"
-msgstr " *ERRO*\n"
+msgstr "ERRO:"
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:418
 msgid "Design rules cannot be added without a project"
