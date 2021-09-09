@@ -89,7 +89,7 @@ static void getSymbols( SCHEMATIC* aSchematic, std::vector<SCH_SYMBOL*>& aSymbol
 static LIB_SYMBOL* findSymbol( const wxString& aName, SYMBOL_LIBS* aLibs, bool aCached )
 {
     LIB_SYMBOL *symbol = nullptr;
-    wxString new_name = LIB_ID::FixIllegalChars( aName, false );
+    // wxString new_name = LIB_ID::FixIllegalChars( aName, false );
 
     for( SYMBOL_LIB& each_lib : *aLibs )
     {
@@ -99,7 +99,7 @@ static LIB_SYMBOL* findSymbol( const wxString& aName, SYMBOL_LIBS* aLibs, bool a
         if( !aCached && each_lib.IsCache() )
             continue;
 
-        symbol = each_lib.FindSymbol( new_name );
+        symbol = each_lib.FindSymbol( aName );
 
         if( symbol )
             break;

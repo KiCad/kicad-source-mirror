@@ -2808,7 +2808,7 @@ void SCH_LEGACY_PLUGIN_CACHE::loadHeader( FILE_LINE_READER& aReader )
 
 
 LIB_SYMBOL* SCH_LEGACY_PLUGIN_CACHE::LoadPart( LINE_READER& aReader, int aMajorVersion,
-                                             int aMinorVersion, LIB_SYMBOL_MAP* aMap )
+                                               int aMinorVersion, LIB_SYMBOL_MAP* aMap )
 {
     const char* line = aReader.Line();
 

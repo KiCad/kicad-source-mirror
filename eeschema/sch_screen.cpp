@@ -1337,13 +1337,11 @@ void SCH_SCREENS::UpdateSymbolLinks( REPORTER* aReporter )
 bool SCH_SCREENS::HasNoFullyDefinedLibIds()
 {
     SCH_SCREEN* screen;
-    unsigned cnt = 0;
 
     for( screen = GetFirst(); screen; screen = GetNext() )
     {
         for( SCH_ITEM* item : screen->Items().OfType( SCH_SYMBOL_T ) )
         {
-            cnt++;
             SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
 
             if( !symbol->GetLibId().GetLibNickname().empty() )
@@ -1351,7 +1349,7 @@ bool SCH_SCREENS::HasNoFullyDefinedLibIds()
         }
     }
 
-    return cnt != 0;
+    return true;
 }
 
 

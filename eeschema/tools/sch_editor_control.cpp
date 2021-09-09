@@ -250,11 +250,11 @@ int SCH_EDITOR_CONTROL::UpdateFind( const TOOL_EVENT& aEvent )
     auto visit =
             [&]( EDA_ITEM* aItem, SCH_SHEET_PATH* aSheet )
             {
-                // We may get triggered when the dialog is not opened due to binding SelectedItemsModified
-                // we also get triggered when the find dialog is closed....so we need to double check the dialog is open
-
-                if( m_frame->m_findReplaceDialog != nullptr 
-                    && !data.GetFindString().IsEmpty() 
+                // We may get triggered when the dialog is not opened due to binding
+                // SelectedItemsModified we also get triggered when the find dialog is
+                // closed....so we need to double check the dialog is open.
+                if( m_frame->m_findReplaceDialog != nullptr
+                    && !data.GetFindString().IsEmpty()
                     && aItem->Matches( data, aSheet ) )
                 {
                     aItem->SetForceVisible( true );
@@ -441,7 +441,8 @@ int SCH_EDITOR_CONTROL::FindNext( const TOOL_EVENT& aEvent )
             }
         }
 
-        std::sort( paths.begin(), paths.end(), [] ( const SCH_SHEET_PATH* lhs, const SCH_SHEET_PATH* rhs ) -> bool
+        std::sort( paths.begin(), paths.end(), [] ( const SCH_SHEET_PATH* lhs,
+                                                    const SCH_SHEET_PATH* rhs ) -> bool
                 {
                     int retval = lhs->ComparePageNumAndName( *rhs );
 
