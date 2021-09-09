@@ -5,13 +5,14 @@
 # Hildo Guillardi Júnior <hildogjr@gmail.com>, 2020.
 # ssantos <ssantos@web.de>, 2020, 2021.
 # Augusto Fraga Giachero <afg@augustofg.net>, 2021.
+# Wellington Terumi Uemura <wellingtonuemura@gmail.com>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-09-07 08:18-0700\n"
 "PO-Revision-Date: 2021-09-10 10:52+0000\n"
-"Last-Translator: Augusto Fraga Giachero <afg@augustofg.net>\n"
+"Last-Translator: Wellington Terumi Uemura <wellingtonuemura@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "kicad/master-source/pt_BR/>\n"
 "Language: pt_br\n"
@@ -208,9 +209,9 @@ msgid "Simplifying polygons on B_Cu"
 msgstr "Simplificando os polígonos das camadas de cobre"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:807
-#, fuzzy, c-format
+#, c-format
 msgid "Simplifying %d copper layers"
-msgstr "Simplificando os polígonos das camadas de cobre"
+msgstr "Simplificando os %d das camadas de cobre"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:846
 msgid "Simplify holes contours"
@@ -221,9 +222,9 @@ msgid "Build Tech layers"
 msgstr "Montar as camadas técnicas"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:909
-#, fuzzy, c-format
+#, c-format
 msgid "Build Tech layer %d"
-msgstr "Montar as camadas técnicas"
+msgstr "Monte as camadas técnicas %d"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1054
 msgid "Build BVH for holes and vias"
@@ -235,9 +236,9 @@ msgid "Your OpenGL version is not supported. Minimum required is 1.5."
 msgstr "Sua versão do OpenGL não é suportada. Requerido >= 1.5"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:531
-#, fuzzy, c-format
+#, c-format
 msgid "Last render time %.0f ms"
-msgstr "Tempo de renderização %.3f s"
+msgstr "Última renderização %.0f ms"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:721
 #, c-format
@@ -304,9 +305,9 @@ msgid "Load OpenGL: layers"
 msgstr "Carregar OpenGL: camadas"
 
 #: 3d-viewer/3d_rendering/legacy/create_scene.cpp:562
-#, fuzzy, c-format
+#, c-format
 msgid "Load OpenGL layer %d"
-msgstr "Carregar OpenGL: camadas"
+msgstr "Carregue a camada OpenGL %d"
 
 #: 3d-viewer/3d_rendering/legacy/create_scene.cpp:914
 #: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:430
@@ -2342,9 +2343,9 @@ msgid ""
 msgstr ""
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:30
-#, fuzzy, c-format
+#, c-format
 msgid "The selection contains %d locked items."
-msgstr "O item selecionado está bloqueado."
+msgstr "A seleção possuí %d itens bloqueados."
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:34
 msgid "These items will be skipped unless you override the locks."
@@ -2779,9 +2780,9 @@ msgid ""
 msgstr ""
 
 #: common/dialogs/dialog_paste_special.cpp:44
-#, fuzzy, c-format
+#, c-format
 msgid "Replaces reference designators with '%s'."
-msgstr "Alterar a referência %s para %s."
+msgstr "Substitui a referência dos designadores com '%s'."
 
 #: common/dialogs/dialog_paste_special_base.cpp:22
 #, fuzzy
@@ -3117,7 +3118,7 @@ msgid ""
 "If set to 0, cache clearing is disabled"
 msgstr ""
 "Ficheiros de cache 3D mais antigos do que isso são apagados.\n"
-"Se for definido como 0, a deleção de cache será desativada."
+"Se for definido como 0, a exclusão do cache é desativada"
 
 #: common/dialogs/panel_common_settings_base.cpp:65
 msgid "Days"
@@ -3482,7 +3483,7 @@ msgstr "Nenhum"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:125
 msgid "Right button drag:"
-msgstr "Botão direito para arrastar"
+msgstr "Botão direito para arrastar:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:145
 #, fuzzy
@@ -3991,19 +3992,19 @@ msgid "Comment"
 msgstr "Comentário"
 
 #: common/drawing_sheet/ds_draw_item.cpp:187
-#, fuzzy, c-format
+#, c-format
 msgid "Text '%s'"
-msgstr "Ficheiros de texto"
+msgstr "Texto '%s'"
 
 #: common/drawing_sheet/ds_draw_item.cpp:395 eeschema/lib_rectangle.cpp:273
-#, fuzzy, c-format
+#, c-format
 msgid "Rectangle, width %s height %s"
-msgstr "Tamanho da página: largura %.4g altura %.4g"
+msgstr "Rectângulo, largura %s altura %s"
 
 #: common/drawing_sheet/ds_draw_item.cpp:428
-#, fuzzy, c-format
+#, c-format
 msgid "Line, length %s"
-msgstr "Comprimento da Linha"
+msgstr "Linha, comprimento %s"
 
 #: common/drawing_sheet/ds_draw_item.cpp:482
 #, fuzzy
@@ -4692,21 +4693,18 @@ msgid "from %s : %s() line:%d"
 msgstr "de %s : %s() linha:%d"
 
 #: common/exceptions.cpp:101
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "KiCad was unable to open this file because it was created with a more recent "
 "version than the one you are running.\n"
 "\n"
 "To open it you will need to upgrade KiCad to a version dated %s or later."
 msgstr ""
-"O KiCad não conseguiu abrir este ficheiro, ele foi criado em uma versão mais "
-"recente da que está sendo executada.\n"
-"Para abri-lo, atualize o KiCad para uma versão mais recente.\n"
+"O KiCad não foi capaz de abrir este arquivo porque ele foi criado com uma "
+"versão mais recente do que o que você está executando.\n"
 "\n"
-"Data da Versão KiCad exigida (ou mais recente): %s\n"
-"\n"
-"Texto completo do erro:\n"
-"%s"
+"Para abri-lo, será preciso atualizar o KiCad para a versão %s ou mais "
+"recente."
 
 #: common/exceptions.cpp:126
 #, fuzzy
@@ -4980,9 +4978,7 @@ msgstr "Está faltando.\n"
 
 #: common/kiway.cpp:303
 msgid "Perhaps a shared library (.dll or .so) file is missing.\n"
-msgstr ""
-"Talvez uma biblioteca compartilhada (.dll ou .so) esteja faltando.\n"
-"\n"
+msgstr "Talvez uma biblioteca compartilhada (.dll ou .so) esteja faltando.\n"
 
 #: common/kiway.cpp:305
 msgid ""
@@ -5594,9 +5590,9 @@ msgid "Item"
 msgstr "Item"
 
 #: common/libeval_compiler/libeval_compiler.cpp:567
-#, fuzzy, c-format
+#, c-format
 msgid "Unrecognized character '%c'"
-msgstr "Sistema numérico não reconhecido: %d"
+msgstr "Caractere '%c' não reconhecido"
 
 #: common/libeval_compiler/libeval_compiler.cpp:827
 msgid "Unknown parent of function parameters"
@@ -5685,7 +5681,7 @@ msgstr "Não foi possível converter \"%s\" num número inteiro"
 #: common/plugins/cadstar/cadstar_archive_parser.cpp:2329
 #, c-format
 msgid "Cannot open file '%s'"
-msgstr "Não é possível abrir o ficheiro \"%s\"."
+msgstr "Não é possível abrir o arquivo '%s'"
 
 #: common/plugins/cadstar/cadstar_archive_parser.cpp:2345
 #: common/plugins/cadstar/cadstar_archive_parser.cpp:2363
@@ -5857,14 +5853,14 @@ msgid "Field%d"
 msgstr "Campo%d"
 
 #: common/tool/action_menu.cpp:209 common/tool/action_menu.cpp:214
-#, fuzzy, c-format
+#, c-format
 msgid "Close %s"
-msgstr "Fechar"
+msgstr "Fechar %s"
 
 #: common/tool/action_menu.cpp:228
-#, fuzzy, c-format
+#, c-format
 msgid "Quit %s"
-msgstr "Sair"
+msgstr "Encerrar %s"
 
 #: common/tool/actions.cpp:43
 msgid "New..."
@@ -6501,12 +6497,15 @@ msgid "Report Bug"
 msgstr "Ficheiro de relatório"
 
 #: common/tool/common_control.cpp:219
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Help file '%s' or\n"
 "'%s' could not be found.\n"
 "Do you want to access the KiCad online help?"
-msgstr "Ficheiro de ajuda \"%s\" não foi encontrado."
+msgstr ""
+"Arquivo de ajuda '%s' ou\n"
+"o '%s' não foi encontrado.\n"
+"Deseja acessar a ajuda online do KiCad?"
 
 #: common/tool/common_control.cpp:222 common/tool/common_control.cpp:242
 #, fuzzy
@@ -6553,9 +6552,9 @@ msgid "Grid: %s (%s)"
 msgstr "Via: %s (%s)"
 
 #: common/tool/grid_menu.cpp:104
-#, fuzzy, c-format
+#, c-format
 msgid "User grid: %s (%s)"
-msgstr "Grade do utilizador: %.2f mils (%.4f mm)"
+msgstr "Grade do usuário: %s (%s)"
 
 #: common/tool/zoom_menu.cpp:49
 #, c-format
@@ -6769,9 +6768,9 @@ msgid "Reset to Defaults"
 msgstr "Restaurar Padrões"
 
 #: common/widgets/paged_dialog.cpp:367
-#, fuzzy, c-format
+#, c-format
 msgid "Reset %s to Defaults"
-msgstr "Restaurar Padrões"
+msgstr "Redefina %s para os padrões"
 
 #: common/widgets/unit_binder.cpp:217
 #, c-format
@@ -7392,9 +7391,9 @@ msgid "Footprint ID '%s' is not valid."
 msgstr "O ID do footprint \"%s\" não é válido."
 
 #: cvpcb/display_footprints_frame.cpp:420
-#, fuzzy, c-format
+#, c-format
 msgid "Library '%s' is not in the footprint library table."
-msgstr "Biblioteca não encontrada na tabela de bibliotecas de footprint."
+msgstr "A biblioteca '%s' não está na tabela da biblioteca de footprint."
 
 #: cvpcb/display_footprints_frame.cpp:429
 #: cvpcb/display_footprints_frame.cpp:454
@@ -7642,16 +7641,16 @@ msgid "Item not annotated: %s%s\n"
 msgstr "Item não anotado: %s%s\n"
 
 #: eeschema/component_references_lister.cpp:633
-#, fuzzy, c-format
+#, c-format
 msgid "Error: symbol %s%s%s (unit %d) exceeds units defined (%d)\n"
 msgstr ""
-"Erro: Símbolo %s%s unidade %d e símbolo tem somente %d unidades definidas\n"
+"Erro: o símbolo %s%s%s (unidade %d) excedem as unidades definidas (%d)\n"
 
 #: eeschema/component_references_lister.cpp:670
 #: eeschema/component_references_lister.cpp:698
-#, fuzzy, c-format
+#, c-format
 msgid "Duplicate items %s%s%s\n"
-msgstr "Item múltiplo %s%s\n"
+msgstr "Itens duplicados %s%s%s\n"
 
 #: eeschema/component_references_lister.cpp:677
 #: eeschema/component_references_lister.cpp:705
@@ -7669,18 +7668,23 @@ msgstr "Valores diferentes para %s%d%s (%s) e %s%d%s (%s)"
 msgid ""
 "Both %s and %s are attached to the same items; %s will be used in the netlist"
 msgstr ""
-"%s e %s estão ambos ligados aos mesmos fios. %s foi escolhido como o rótulo."
+"Ambos os %s e %s estão ligados aos mesmos itens; o %s será utilizado na "
+"netlist"
 
 #: eeschema/connection_graph.cpp:2469
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Net %s is graphically connected to bus %s but is not a member of that bus"
-msgstr "%s ( %s) está conectado a %s (%s), mas não é um membro do barramento"
+msgstr ""
+"Net %s está graficamente conectado ao barramento %s mas não é um membro "
+"deste barramento"
 
 #: eeschema/connection_graph.cpp:2877
-#, fuzzy, c-format
+#, c-format
 msgid "Sheet pin %s has no matching hierarchical label inside the sheet"
-msgstr "Divergência entre etiquetas hierárquicas e planilhas de pinos"
+msgstr ""
+"A planilha de pinos %s não tem um rótulo hierárquico correspondente dentro "
+"da planilha"
 
 #: eeschema/connection_graph.cpp:2894
 #, fuzzy, c-format
@@ -7800,9 +7804,9 @@ msgid "(file missing)"
 msgstr "Está faltando.\n"
 
 #: eeschema/dialogs/dialog_bom.cpp:294
-#, fuzzy, c-format
+#, c-format
 msgid "The selected BOM generator script %s could not be found."
-msgstr "Essa ação não pode ser desfeita."
+msgstr "O script do gerador BOM selecionado %s não foi encontrado."
 
 #: eeschema/dialogs/dialog_bom.cpp:299
 #, c-format
@@ -8591,9 +8595,9 @@ msgid "Change severity to Warning for all '%s' violations"
 msgstr ""
 
 #: eeschema/dialogs/dialog_erc.cpp:523 pcbnew/dialogs/dialog_drc.cpp:477
-#, fuzzy, c-format
+#, c-format
 msgid "Ignore all '%s' violations"
-msgstr "Permitir violações da DRC"
+msgstr "Ignore todas as violações '%s'"
 
 #: eeschema/dialogs/dialog_erc.cpp:524 pcbnew/dialogs/dialog_drc.cpp:479
 msgid "Violations will not be checked or reported"
@@ -9990,9 +9994,9 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:1272
 #: eeschema/dialogs/dialog_plot_schematic.cpp:1312
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot normalize path '%s%s'."
-msgstr "Não é possível abrir o ficheiro \"%s\"."
+msgstr "Não é possível normalizar o caminho '%s%s'."
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:1298
 #, fuzzy
@@ -11104,7 +11108,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:71
 msgid "Spice unit symbols in values (case insensitive):"
-msgstr "Símbolos de unidades Spice em valores (insensível a maiúscula)"
+msgstr "Os símbolos das unidades Spice em valores (insensível a maiúscula):"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:210
 msgid "Library:"
@@ -11701,9 +11705,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:242
 msgid "Created project symbol library table.\n"
-msgstr ""
-"Criada tabela de bibliotecas de símbolo do projeto\n"
-"\n"
+msgstr "Foi criada a tabela da bibliotecas do símbolo do projeto.\n"
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:264
 #, fuzzy, c-format
@@ -12298,9 +12300,8 @@ msgid "Default line thickness:"
 msgstr "Espessura do contorno:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:118
-#, fuzzy
 msgid "Pin symbol size:"
-msgstr " no símbolo %c"
+msgstr "Tamanho do símbolo do pino:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:136
 #: eeschema/erc_item.cpp:41
@@ -12490,11 +12491,9 @@ msgid "Multiple libraries cannot share the same nickname ('%s')."
 msgstr ""
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:459 eeschema/symbol_library.cpp:550
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol library '%s' failed to load."
-msgstr ""
-"Falha no carregamento da biblioteca de símbolo \"%s\".\n"
-"Erro: %s"
+msgstr "Houve uma falha ao carregar a biblioteca de símbolos '%s'."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:462
 #, fuzzy
@@ -12746,9 +12745,9 @@ msgstr ""
 "e %s"
 
 #: eeschema/erc.cpp:370
-#, fuzzy, c-format
+#, c-format
 msgid "Different footprints assigned to %s and %s"
-msgstr "Footprint diferente atribuído em outra unidade do mesmo componente"
+msgstr "Diferentes footprints foram atribuídas a %s e %s"
 
 #: eeschema/erc.cpp:419
 #, fuzzy
@@ -12761,14 +12760,14 @@ msgid "Pins of type %s and %s are connected"
 msgstr "O pino %s do componente %s está desconectado."
 
 #: eeschema/erc.cpp:599
-#, fuzzy, c-format
+#, c-format
 msgid "Pin %s is connected to both %s and %s"
-msgstr "O pino %s em %s está ligado a %s e %s"
+msgstr "Pin %s está conectado tanto em %s quanto em %s"
 
 #: eeschema/erc.cpp:706
-#, fuzzy, c-format
+#, c-format
 msgid "The current configuration does not include the library '%s'."
-msgstr "O nome '%s' conflita com uma entrada existente na biblioteca '%s'."
+msgstr "A biblioteca '%s' não está inclusa na configuração atual."
 
 #: eeschema/erc.cpp:717
 #, c-format
@@ -13085,9 +13084,9 @@ msgid "Import Schematic"
 msgstr "Importar Esquema"
 
 #: eeschema/files-io.cpp:623
-#, fuzzy, c-format
+#, c-format
 msgid "Unexpected file extension: '%s'."
-msgstr "Utilizar nome de extensões de ficheiro Protel"
+msgstr "Extensão inesperada do arquivo: '%s'."
 
 #: eeschema/files-io.cpp:674
 #, fuzzy, c-format
@@ -13216,9 +13215,9 @@ msgid "Root"
 msgstr "Raiz"
 
 #: eeschema/hierarch.cpp:275
-#, fuzzy, c-format
+#, c-format
 msgid "(page %s)"
-msgstr "sem camadas"
+msgstr "(página %s)"
 
 #: eeschema/lib_arc.cpp:398 eeschema/lib_bezier.cpp:336
 #: eeschema/lib_circle.cpp:246 eeschema/lib_polyline.cpp:340
@@ -14759,9 +14758,8 @@ msgid "space"
 msgstr "espaco"
 
 #: eeschema/sch_validators.cpp:171
-#, fuzzy
 msgid " or "
-msgstr "%s ou %s"
+msgstr " ou "
 
 #: eeschema/sch_validators.cpp:176
 #, fuzzy
@@ -15009,13 +15007,16 @@ msgid "You need to run plot-providing simulation first."
 msgstr "Você precisa iniciar a simulação primeiro."
 
 #: eeschema/sim/sim_plot_frame.cpp:1726
-#, fuzzy
 msgid ""
 "\n"
 "\n"
 "Simulation results:\n"
 "\n"
-msgstr "Configurações da simulação"
+msgstr ""
+"\n"
+"\n"
+"Resultado da simulação:\n"
+"\n"
 
 #: eeschema/sim/sim_plot_frame.cpp:1797
 msgid "Hide Signal"
@@ -15292,11 +15293,9 @@ msgid "Symbol %s is derived from %s.  Symbol graphics will not be editable."
 msgstr ""
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:756
-#, fuzzy, c-format
+#, c-format
 msgid "Open %s"
-msgstr ""
-"\n"
-"Abrir \"%s\"\n"
+msgstr "Abrir %s"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:827
 #, fuzzy, c-format
@@ -15527,9 +15526,8 @@ msgid "Nickname"
 msgstr "Apelido"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:617
-#, fuzzy
 msgid "Save Symbol As"
-msgstr "Novo Símbolo…"
+msgstr "Salve o símbolo como"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:618
 #: pcbnew/footprint_libraries_utils.cpp:991
@@ -17035,11 +17033,8 @@ msgid "Reached end of sheet."
 msgstr "Atingiu o fim da folha."
 
 #: eeschema/tools/sch_editor_control.cpp:501
-#, fuzzy
 msgid "Find again to wrap around to the start."
-msgstr ""
-"\n"
-"Procure novamente para retornar ao início."
+msgstr "Procure novamente para retornar ao início."
 
 #: eeschema/tools/sch_editor_control.cpp:890
 msgid "Error: duplicate sub-sheet names found in current sheet."
@@ -17811,9 +17806,8 @@ msgid "Drawing layer %d not in use"
 msgstr "A camada de desenho %d não está em uso"
 
 #: gerbview/gerbview_frame.cpp:671
-#, fuzzy
 msgid "(with X2 attributes)"
-msgstr " (com atributos X2)"
+msgstr "(com atributos X2)"
 
 #: gerbview/gerbview_frame.cpp:680
 #, c-format
@@ -17822,7 +17816,7 @@ msgstr "Nome da imagem: \"%s\"  Nome da camada: \"%s\""
 
 #: gerbview/gerbview_frame.cpp:696
 msgid "X2 attr"
-msgstr "X2 attr"
+msgstr "Attr X2"
 
 #: gerbview/gerbview_frame.cpp:1057
 msgid "GerbView"
@@ -18340,7 +18334,7 @@ msgstr "Falha ao carregar \"%s\""
 
 #: kicad/dialogs/dialog_template_selector.cpp:127
 msgid "<html><h1>Template Selector</h1></html>"
-msgstr "<html<h1>Seletor de Modelo</h1></html>"
+msgstr "<html><h1>Seletor de Modelo</h1></html>"
 
 #: kicad/dialogs/dialog_template_selector.cpp:228
 msgid "Select Templates Directory"
@@ -21452,9 +21446,8 @@ msgid "all copper layers"
 msgstr "Todas as camadas de cobre"
 
 #: pcbnew/board_item.cpp:120
-#, fuzzy
 msgid "and others"
-msgstr " e outros"
+msgstr "e outros"
 
 #: pcbnew/board_item.cpp:128
 msgid "no layers"
@@ -22025,11 +22018,13 @@ msgid ""
 msgstr ""
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:313
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "\n"
 "%s footprints will be reannotated."
-msgstr "%s footprints com identificador:"
+msgstr ""
+"\n"
+"Os %s footprints serão anotados novamente."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:318
 #, c-format
@@ -22039,11 +22034,12 @@ msgid ""
 msgstr ""
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:323
-#, fuzzy
 msgid ""
 "\n"
 "Locked footprints will not be annotated"
-msgstr "Carregar footprint da placa atual"
+msgstr ""
+"\n"
+"Os footprints que foram bloqueados não serão anotados"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:327
 #, c-format
@@ -22053,11 +22049,13 @@ msgid ""
 msgstr ""
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:336
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "\n"
 "Back footprints will start at %s."
-msgstr "Locais de bibliotecas de footprint do KiCad"
+msgstr ""
+"\n"
+"As pegadas de trás começarão em %s."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:337
 #, fuzzy
@@ -22120,12 +22118,15 @@ msgid ""
 msgstr ""
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:534
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "\n"
 "Excluding: %s from reannotation\n"
 "\n"
-msgstr "Limpar Anotação"
+msgstr ""
+"\n"
+"Excluindo: %s da reannotação\n"
+"\n"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:537
 msgid ""
@@ -22139,11 +22140,12 @@ msgid " will be ignored"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:557
-#, fuzzy
 msgid ""
 "\n"
 "No footprints"
-msgstr "Nenhum footprint"
+msgstr ""
+"\n"
+"Nenhum footprint"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:563
 #, c-format
@@ -22163,11 +22165,13 @@ msgid "Reference Designator Coordinates"
 msgstr "Local de referência: origem das coordenadas locais"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:567
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "\n"
 "Sort Code %d"
-msgstr "Código D %d"
+msgstr ""
+"\n"
+"Código ordenado %d"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:571
 #, c-format
@@ -22201,20 +22205,24 @@ msgid "Aborted: too many errors"
 msgstr "Abortado pelo utilizador"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:859
-#, fuzzy
 msgid ""
 "\n"
 "\n"
 "Front Footprints"
-msgstr "Nenhum footprint"
+msgstr ""
+"\n"
+"\n"
+"Footprints da frente"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:860
-#, fuzzy
 msgid ""
 "\n"
 "\n"
 "Back Footprints"
-msgstr "Footprints"
+msgstr ""
+"\n"
+"\n"
+"Footprints de trás"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:925
 #, fuzzy
@@ -25996,9 +26004,9 @@ msgid "Connected layers only"
 msgstr "Apenas a camada atual"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:926
-#, fuzzy, c-format
+#, c-format
 msgid "%s and %s"
-msgstr " e outros"
+msgstr "%s e %s"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1226
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1231
@@ -29132,9 +29140,8 @@ msgstr "Controle de Verificação de Regras de Desenho"
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:357
 #: pcbnew/drc/drc_rule_condition.cpp:64
-#, fuzzy
 msgid "ERROR:"
-msgstr " *ERRO*\n"
+msgstr "ERRO:"
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:418
 msgid "Design rules cannot be added without a project"
@@ -30012,9 +30019,9 @@ msgid "(%s clearance %s; actual %s)"
 msgstr "Isolamento e Configurações Locais"
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:649
-#, fuzzy, c-format
+#, c-format
 msgid "(nets %s and %s)"
-msgstr " em unidades %c e %c"
+msgstr "(redes %s e %s)"
 
 #: pcbnew/drc/drc_test_provider_courtyard_clearance.cpp:89
 #, fuzzy
@@ -34046,7 +34053,7 @@ msgstr "Forma de via não suportada: %s"
 #: pcbnew/specctra_import_export/specctra_import.cpp:280
 #, c-format
 msgid "Session file uses invalid layer id \"%s\""
-msgstr "Ficheiro Session usa identificador de camada inválido:  \"%s\""
+msgstr "O arquivo session usa um identificador inválido de camada \"%s\""
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:326
 msgid "Session file is missing the \"session\" section"
@@ -36834,7 +36841,7 @@ msgstr "Pasta de solda na camada superior das placas"
 
 #: pcbnew/widgets/appearance_controls.cpp:1514
 msgid "Solder paste on board's back"
-msgstr "Pasta de solda  na camada inferior das placas"
+msgstr "Pasta de solda na parte de trás da placa"
 
 #: pcbnew/widgets/appearance_controls.cpp:1515
 msgid "Silkscreen on board's front"
