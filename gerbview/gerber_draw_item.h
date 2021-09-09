@@ -22,10 +22,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file gerber_draw_item.h
- */
-
 #ifndef GERBER_DRAW_ITEM_H
 #define GERBER_DRAW_ITEM_H
 
@@ -50,7 +46,8 @@ namespace KIGFX
 
 
 /* Shapes id for basic shapes ( .m_Shape member ) */
-enum Gbr_Basic_Shapes {
+enum Gbr_Basic_Shapes
+{
     GBR_SEGMENT = 0,        // usual segment : line with rounded ends
     GBR_ARC,                // Arcs (with rounded ends)
     GBR_CIRCLE,             // ring
@@ -252,6 +249,7 @@ public:
     ///< @copydoc EDA_ITEM::GetMenuImage()
     BITMAPS GetMenuImage() const override;
 
+public:
     bool               m_UnitsMetric;       // store here the gerber units (inch/mm).  Used
                                             // only to calculate aperture macros shapes sizes
     int                m_Shape;             // Shape and type of this gerber item
@@ -283,6 +281,7 @@ public:
 
     // This polygon is to draw this item (mainly GBR_POLYGON), according to layer parameters
     SHAPE_POLY_SET   m_AbsolutePolygon;     // the polygon to draw, in absolute coordinates
+
 private:
     // These values are used to draw this item, according to gerber layers parameters
     // Because they can change inside a gerber image, they are stored here
@@ -299,10 +298,5 @@ private:
                                             ///< a dynamic object attribute
 };
 
-
-class GERBER_NEGATIVE_IMAGE_BACKDROP : public EDA_ITEM
-{
-
-};
 
 #endif /* GERBER_DRAW_ITEM_H */

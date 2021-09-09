@@ -22,7 +22,6 @@
  */
 
 #include <pcb_edit_frame.h>
-#include <bitmaps.h>
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>
 #include <tools/pcb_tool_base.h>

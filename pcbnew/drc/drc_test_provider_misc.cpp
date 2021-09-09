@@ -38,9 +38,6 @@
     - DRCE_DISABLED_LAYER_ITEM,               ///< item on a disabled layer
     - DRCE_INVALID_OUTLINE,                   ///< invalid board outline
     - DRCE_UNRESOLVED_VARIABLE,
-
-    TODO:
-    - if grows too big, split into separate providers
 */
 
 class DRC_TEST_PROVIDER_MISC : public DRC_TEST_PROVIDER

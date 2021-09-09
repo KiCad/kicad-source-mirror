@@ -1,13 +1,8 @@
-/**
- * @file gerber_file_image.cpp
- * a GERBER class handle for a given layer info about used D_CODES and how the layer is drawn
- */
-
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 1992-2019 Jean-Pierre Charras  jp.charras at wanadoo.fr
- * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -105,15 +100,13 @@ GERBER_FILE_IMAGE::GERBER_FILE_IMAGE( int aLayer ) :
 GERBER_FILE_IMAGE::~GERBER_FILE_IMAGE()
 {
 
-    for( auto item : GetItems() )
+    for( GERBER_DRAW_ITEM* item : GetItems() )
         delete item;
 
     m_drawings.clear();
 
     for( unsigned ii = 0; ii < arrayDim( m_Aperture_List ); ii++ )
-    {
         delete m_Aperture_List[ii];
-    }
 
     delete m_FileFunction;
 }
@@ -144,9 +137,7 @@ D_CODE* GERBER_FILE_IMAGE::GetDCODE( int aDCODE ) const
     unsigned ndx = aDCODE - FIRST_DCODE;
 
     if( ndx < (unsigned) arrayDim( m_Aperture_List ) )
-    {
         return m_Aperture_List[ndx];
-    }
 
     return nullptr;
 }
@@ -236,14 +227,18 @@ bool GERBER_FILE_IMAGE::HasNegativeItems()
     if( m_hasNegativeItems < 0 )    // negative items are not yet searched: find them if any
     {
         if( m_ImageNegative )       // A negative layer is expected having always negative objects.
+        {
             m_hasNegativeItems = 1;
+        }
         else
         {
             m_hasNegativeItems = 0;
+
             for( GERBER_DRAW_ITEM* item : GetItems() )
             {
                 if( item->GetLayer() != m_GraphicLayer )
                     continue;
+
                 if( item->HasNegativeItems() )
                 {
                     m_hasNegativeItems = 1;
@@ -252,6 +247,7 @@ bool GERBER_FILE_IMAGE::HasNegativeItems()
             }
         }
     }
+
     return m_hasNegativeItems == 1;
 }
 
@@ -262,8 +258,11 @@ int GERBER_FILE_IMAGE::GetDcodesCount()
     for( unsigned ii = 0; ii < arrayDim( m_Aperture_List ); ii++ )
     {
         if( m_Aperture_List[ii] )
+        {
             if( m_Aperture_List[ii]->m_InUse || m_Aperture_List[ii]->m_Defined )
                 ++count;
+        }
+
     }
 
     return count;
@@ -295,8 +294,7 @@ void GERBER_FILE_IMAGE::InitToolTable()
  */
 void GERBER_FILE_IMAGE::StepAndRepeatItem( const GERBER_DRAW_ITEM& aItem )
 {
-    if( GetLayerParams().m_XRepeatCount < 2 &&
-        GetLayerParams().m_YRepeatCount < 2 )
+    if( GetLayerParams().m_XRepeatCount < 2 && GetLayerParams().m_YRepeatCount < 2 )
         return; // Nothing to repeat
 
     // Duplicate item:
@@ -312,9 +310,9 @@ void GERBER_FILE_IMAGE::StepAndRepeatItem( const GERBER_DRAW_ITEM& aItem )
             GERBER_DRAW_ITEM* dupItem = new GERBER_DRAW_ITEM( aItem );
             wxPoint           move_vector;
             move_vector.x = scaletoIU( ii * GetLayerParams().m_StepForRepeat.x,
-                                   GetLayerParams().m_StepForRepeatMetric );
+                                       GetLayerParams().m_StepForRepeatMetric );
             move_vector.y = scaletoIU( jj * GetLayerParams().m_StepForRepeat.y,
-                                   GetLayerParams().m_StepForRepeatMetric );
+                                       GetLayerParams().m_StepForRepeatMetric );
             dupItem->MoveXY( move_vector );
             AddItemToList( dupItem );
         }

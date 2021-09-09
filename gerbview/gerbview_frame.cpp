@@ -20,18 +20,14 @@
 
 #include <kiface_base.h>
 #include <pgm_base.h>
-#include <eda_base_frame.h>
-#include <base_units.h>
 #include <bitmaps.h>
 #include <wildcards_and_files_ext.h>
-#include <gerbview.h>
 #include <gerbview_frame.h>
 #include <gerbview_id.h>
 #include <gerber_file_image.h>
 #include <gerber_file_image_list.h>
 #include <gerbview_draw_panel_gal.h>
 #include <gerbview_settings.h>
-#include <gal/graphics_abstraction_layer.h>
 #include <drawing_sheet/ds_proxy_view_item.h>
 #include <settings/settings_manager.h>
 #include <tool/tool_manager.h>
@@ -50,7 +46,6 @@
 #include <view/view.h>
 #include <base_screen.h>
 #include <gerbview_painter.h>
-#include <widgets/msgpanel.h>
 #include <wx/wupdlock.h>
 
 #include "widgets/gbr_layer_box_selector.h"
@@ -412,7 +407,7 @@ void GERBVIEW_FRAME::SetElementVisibility( int aLayerID, bool aNewState )
 
         view->UpdateAllItemsConditionally( KIGFX::REPAINT, []( KIGFX::VIEW_ITEM* aItem )
         {
-            auto item = dynamic_cast<GERBER_DRAW_ITEM*>( aItem );
+            GERBER_DRAW_ITEM* item = dynamic_cast<GERBER_DRAW_ITEM*>( aItem );
 
             // GetLayerPolarity() returns true for negative items
             return ( item && item->GetLayerPolarity() );
@@ -513,11 +508,10 @@ void GERBVIEW_FRAME::SortLayersByX2Attributes()
 
     std::unordered_map<int, int> view_remapping;
 
-    for( auto it : remapping )
+    for( const std::pair<const int, int>& entry : remapping )
     {
-        view_remapping[ GERBER_DRAW_LAYER( it.first) ] = GERBER_DRAW_LAYER( it.second );
-        view_remapping[ GERBER_DCODE_LAYER( GERBER_DRAW_LAYER( it.first) ) ] =
-            GERBER_DCODE_LAYER( GERBER_DRAW_LAYER( it.second ) );
+        view_remapping[ entry.first ] = GERBER_DRAW_LAYER( entry.second );
+        view_remapping[ GERBER_DCODE_LAYER( entry.first ) ] = GERBER_DCODE_LAYER( entry.second );
     }
 
     GetCanvas()->GetView()->ReorderLayerData( view_remapping );
@@ -530,7 +524,7 @@ void GERBVIEW_FRAME::UpdateDiffLayers()
     auto target = GetCanvas()->GetBackend() == GERBVIEW_DRAW_PANEL_GAL::GAL_TYPE_OPENGL
                           ? KIGFX::TARGET_CACHED
                           : KIGFX::TARGET_NONCACHED;
-    auto view = GetCanvas()->GetView();
+    KIGFX::VIEW* view = GetCanvas()->GetView();
 
     int lastVisibleLayer = -1;
 

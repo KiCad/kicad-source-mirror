@@ -66,9 +66,11 @@ void GERBER_DRAW_ITEM::SetNetAttributes( const GBR_NETLIST_METADATA& aNetAttribu
 {
     m_netAttributes = aNetAttributes;
 
-    if( ( m_netAttributes.m_NetAttribType & GBR_NETLIST_METADATA::GBR_NETINFO_CMP ) ||
-        ( m_netAttributes.m_NetAttribType & GBR_NETLIST_METADATA::GBR_NETINFO_PAD ) )
+    if( ( m_netAttributes.m_NetAttribType & GBR_NETLIST_METADATA::GBR_NETINFO_CMP )
+        || ( m_netAttributes.m_NetAttribType & GBR_NETLIST_METADATA::GBR_NETINFO_PAD ) )
+    {
         m_GerberImageFile->m_ComponentsList.insert( std::make_pair( m_netAttributes.m_Cmpref, 0 ) );
+    }
 
     if( ( m_netAttributes.m_NetAttribType & GBR_NETLIST_METADATA::GBR_NETINFO_NET ) )
         m_GerberImageFile->m_NetnamesList.insert( std::make_pair( m_netAttributes.m_Netname, 0 ) );
@@ -90,13 +92,9 @@ bool GERBER_DRAW_ITEM::GetTextD_CodePrms( int& aSize, wxPoint& aPos, double& aOr
         return false;       // No D_Code for this item
 
     if( m_Flashed || m_Shape == GBR_ARC )
-    {
         aPos = m_Start;
-    }
     else    // it is a line:
-    {
         aPos = ( m_Start + m_End) / 2;
-    }
 
     aPos = GetABPosition( aPos );
 
@@ -227,29 +225,14 @@ wxString GERBER_DRAW_ITEM::ShowGBRShape() const
 {
     switch( m_Shape )
     {
-    case GBR_SEGMENT:
-        return _( "Line" );
-
-    case GBR_ARC:
-        return _( "Arc" );
-
-    case GBR_CIRCLE:
-        return _( "Circle" );
-
-    case GBR_SPOT_OVAL:
-        return wxT( "spot_oval" );
-
-    case GBR_SPOT_CIRCLE:
-        return wxT( "spot_circle" );
-
-    case GBR_SPOT_RECT:
-        return wxT( "spot_rect" );
-
-    case GBR_SPOT_POLY:
-        return wxT( "spot_poly" );
-
-    case GBR_POLYGON:
-        return wxT( "polygon" );
+    case GBR_SEGMENT:     return _( "Line" );
+    case GBR_ARC:         return _( "Arc" );
+    case GBR_CIRCLE:      return _( "Circle" );
+    case GBR_SPOT_OVAL:   return wxT( "spot_oval" );
+    case GBR_SPOT_CIRCLE: return wxT( "spot_circle" );
+    case GBR_SPOT_RECT:   return wxT( "spot_rect" );
+    case GBR_SPOT_POLY:   return wxT( "spot_poly" );
+    case GBR_POLYGON:     return wxT( "polygon" );
 
     case GBR_SPOT_MACRO:
     {
@@ -262,8 +245,7 @@ wxString GERBER_DRAW_ITEM::ShowGBRShape() const
         return name;
     }
 
-    default:
-        return wxT( "??" );
+    default:              return wxT( "??" );
     }
 }
 
@@ -760,14 +742,18 @@ void GERBER_DRAW_ITEM::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_
     if( ( m_netAttributes.m_NetAttribType & GBR_NETLIST_METADATA::GBR_NETINFO_PAD ) )
     {
         if( m_netAttributes.m_PadPinFunction.IsEmpty() )
+        {
             cmp_pad_msg.Printf( _( "Cmp: %s  Pad: %s" ),
                                 m_netAttributes.m_Cmpref,
                                 m_netAttributes.m_Padname.GetValue() );
+        }
         else
+        {
             cmp_pad_msg.Printf( _( "Cmp: %s  Pad: %s  Fct %s" ),
                                 m_netAttributes.m_Cmpref,
                                 m_netAttributes.m_Padname.GetValue(),
                                 m_netAttributes.m_PadPinFunction.GetValue() );
+        }
     }
 
     else if( ( m_netAttributes.m_NetAttribType & GBR_NETLIST_METADATA::GBR_NETINFO_CMP ) )
@@ -943,7 +929,6 @@ bool GERBER_DRAW_ITEM::HitTest( const EDA_RECT& aRefArea, bool aContained, int a
 void GERBER_DRAW_ITEM::Show( int nestLevel, std::ostream& os ) const
 {
     NestedSpace( nestLevel, os ) << '<' << GetClass().Lower().mb_str() <<
-
                                  " shape=\"" << m_Shape << '"' <<
                                  " addr=\"" << std::hex << this << std::dec << '"' <<
                                  " layer=\"" << GetLayer() << '"' <<
@@ -971,8 +956,7 @@ void GERBER_DRAW_ITEM::ViewGetLayers( int aLayers[], int& aCount ) const
 const BOX2I GERBER_DRAW_ITEM::ViewBBox() const
 {
     EDA_RECT bbox = GetBoundingBox();
-    return BOX2I( VECTOR2I( bbox.GetOrigin() ),
-                  VECTOR2I( bbox.GetSize() ) );
+    return BOX2I( VECTOR2I( bbox.GetOrigin() ), VECTOR2I( bbox.GetSize() ) );
 }
 
 

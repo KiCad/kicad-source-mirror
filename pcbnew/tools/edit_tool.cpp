@@ -90,10 +90,10 @@ SPECIAL_TOOLS_CONTEXT_MENU::SPECIAL_TOOLS_CONTEXT_MENU( TOOL_INTERACTIVE* aTool 
     SetIcon( BITMAPS::special_tools );
     SetTitle( _( "Special Tools" ) );
 
-    AddItem( PCB_ACTIONS::moveExact, SELECTION_CONDITIONS::ShowAlways );
+    AddItem( PCB_ACTIONS::moveExact,         SELECTION_CONDITIONS::ShowAlways );
     AddItem( PCB_ACTIONS::moveWithReference, SELECTION_CONDITIONS::ShowAlways );
-    AddItem( PCB_ACTIONS::positionRelative, SELECTION_CONDITIONS::ShowAlways );
-    AddItem( PCB_ACTIONS::createArray, SELECTION_CONDITIONS::ShowAlways );
+    AddItem( PCB_ACTIONS::positionRelative,  SELECTION_CONDITIONS::ShowAlways );
+    AddItem( PCB_ACTIONS::createArray,       SELECTION_CONDITIONS::ShowAlways );
 }
 
 
@@ -593,43 +593,43 @@ int EDIT_TOOL::DragArcTrack( const TOOL_EVENT& aEvent )
 
     // Ensure we only do one commit operation on each object
     auto processTrack =
-        [&]( PCB_TRACK* aTrack, PCB_TRACK* aTrackCopy, int aMaxLengthIU ) -> bool
-        {
-            if( aTrack->IsNew() )
+            [&]( PCB_TRACK* aTrack, PCB_TRACK* aTrackCopy, int aMaxLengthIU ) -> bool
             {
-                getView()->Remove( aTrack );
-
-                if( aTrack->GetLength() <= aMaxLengthIU )
+                if( aTrack->IsNew() )
                 {
-                    delete aTrack;
+                    getView()->Remove( aTrack );
+
+                    if( aTrack->GetLength() <= aMaxLengthIU )
+                    {
+                        delete aTrack;
+                        delete aTrackCopy;
+                        aTrack = nullptr;
+                        aTrackCopy = nullptr;
+                        return false;
+                    }
+                    else
+                    {
+                        m_commit->Add( aTrack );
+                        delete aTrackCopy;
+                        aTrackCopy = nullptr;
+                        return true;
+                    }
+                }
+                else if( aTrack->GetLength() <= aMaxLengthIU )
+                {
+                    aTrack->SwapData( aTrackCopy ); //restore the original before notifying COMMIT
+                    m_commit->Remove( aTrack );
                     delete aTrackCopy;
-                    aTrack = nullptr;
                     aTrackCopy = nullptr;
                     return false;
                 }
                 else
                 {
-                    m_commit->Add( aTrack );
-                    delete aTrackCopy;
-                    aTrackCopy = nullptr;
-                    return true;
+                    m_commit->Modified( aTrack, aTrackCopy );
                 }
-            }
-            else if( aTrack->GetLength() <= aMaxLengthIU )
-            {
-                aTrack->SwapData( aTrackCopy ); //restore the original before notifying COMMIT
-                m_commit->Remove( aTrack );
-                delete aTrackCopy;
-                aTrackCopy = nullptr;
-                return false;
-            }
-            else
-            {
-                m_commit->Modified( aTrack, aTrackCopy );
-            }
 
-            return true;
-        };
+                return true;
+            };
 
     // Amend the end points of the arc if we delete the joining tracks
     wxPoint newStart = trackOnStart->GetStart();
@@ -1361,8 +1361,8 @@ int EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
     // Tracks & vias are treated in a special way:
     if( ( SELECTION_CONDITIONS::OnlyTypes( GENERAL_COLLECTOR::Tracks ) )( selection ) )
     {
-            DIALOG_TRACK_VIA_PROPERTIES dlg( editFrame, selection, *m_commit );
-            dlg.ShowQuasiModal();       // QuasiModal required for NET_SELECTOR
+        DIALOG_TRACK_VIA_PROPERTIES dlg( editFrame, selection, *m_commit );
+        dlg.ShowQuasiModal();       // QuasiModal required for NET_SELECTOR
     }
     else if( selection.Size() == 1 )
     {
@@ -1473,11 +1473,10 @@ int EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
             // If rotating a group, record position of all the descendants for undo
             if( item->Type() == PCB_GROUP_T )
             {
-                static_cast<PCB_GROUP*>( item )->RunOnDescendants(
-                        [&]( BOARD_ITEM* bItem )
-                        {
-                            m_commit->Modify( bItem );
-                        });
+                static_cast<PCB_GROUP*>( item )->RunOnDescendants( [&]( BOARD_ITEM* bItem )
+                                                                   {
+                                                                       m_commit->Modify( bItem );
+                                                                   });
             }
         }
 
@@ -2204,12 +2203,12 @@ int EDIT_TOOL::CreateArray( const TOOL_EVENT& aEvent )
     }
 
     // Be sure that there is at least one item that we can modify
-    const auto& selection = m_selectionTool->RequestSelection(
-                []( const VECTOR2I&, GENERAL_COLLECTOR& aCollector, PCB_SELECTION_TOOL* sTool )
-                {
-                    sTool->FilterCollectorForMarkers( aCollector );
-                    sTool->FilterCollectorForHierarchy( aCollector, true );
-                } );
+    const PCB_SELECTION& selection = m_selectionTool->RequestSelection(
+            []( const VECTOR2I&, GENERAL_COLLECTOR& aCollector, PCB_SELECTION_TOOL* sTool )
+            {
+                sTool->FilterCollectorForMarkers( aCollector );
+                sTool->FilterCollectorForHierarchy( aCollector, true );
+            } );
 
     if( selection.Empty() )
         return 0;

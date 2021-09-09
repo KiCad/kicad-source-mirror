@@ -660,13 +660,10 @@ void DRC_ENGINE::RunTests( EDA_UNITS aUnits, bool aReportAllTrackErrors, bool aT
 
     for( DRC_TEST_PROVIDER* provider : m_testProviders )
     {
-        if( provider->IsEnabled() )
-        {
-            ReportAux( wxString::Format( "Run DRC provider: '%s'", provider->GetName() ) );
+        ReportAux( wxString::Format( "Run DRC provider: '%s'", provider->GetName() ) );
 
-            if( !provider->Run() )
-                break;
-        }
+        if( !provider->Run() )
+            break;
     }
 }
 
