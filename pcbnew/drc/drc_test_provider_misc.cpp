@@ -132,14 +132,11 @@ void DRC_TEST_PROVIDER_MISC::testDisabledLayers()
     auto checkDisabledLayers =
             [&]( BOARD_ITEM* item ) -> bool
             {
-                LSET refLayers ( item->GetLayer() );
-
-                if( ( disabledLayers & refLayers ).any() )
+                if( ( disabledLayers & item->GetLayerSet() ).any() )
                 {
                     std::shared_ptr<DRC_ITEM>drcItem = DRC_ITEM::Create( DRCE_DISABLED_LAYER_ITEM );
 
-                    m_msg.Printf( _( "(layer %s)" ),
-                                  item->GetLayerName() );
+                    m_msg.Printf( _( "(layer %s)" ), item->GetLayerName() );
 
                     drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + m_msg );
                     drcItem->SetItems( item );
@@ -149,10 +146,9 @@ void DRC_TEST_PROVIDER_MISC::testDisabledLayers()
                 return true;
             };
 
-    // fixme: what about graphical items?
-    forEachGeometryItem( { PCB_TRACE_T, PCB_ARC_T, PCB_VIA_T, PCB_ZONE_T, PCB_PAD_T },
-                           LSET::AllLayersMask(), checkDisabledLayers );
+    forEachGeometryItem( s_allBasicItems, LSET::AllLayersMask(), checkDisabledLayers );
 }
+
 
 void DRC_TEST_PROVIDER_MISC::testTextVars()
 {
