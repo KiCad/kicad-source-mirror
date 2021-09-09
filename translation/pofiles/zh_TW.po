@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-09-07 08:18-0700\n"
-"PO-Revision-Date: 2021-09-04 23:34+0000\n"
+"PO-Revision-Date: 2021-09-09 18:20+0000\n"
 "Last-Translator: David Chen <d0123456789g@yahoo.com.tw>\n"
 "Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hant/>\n"
@@ -393,9 +393,8 @@ msgid "Environment Colors"
 msgstr "環境變數"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:30
-#, fuzzy
 msgid "Background gradient start:"
-msgstr "底層工位起點："
+msgstr "背景鍵層開始："
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:37
 #, fuzzy
@@ -18015,9 +18014,8 @@ msgid "Discard action"
 msgstr "放棄變更"
 
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:133
-#, fuzzy
 msgid "Install from file..."
-msgstr "無法重新命名檔案... "
+msgstr "從檔案安裝..."
 
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:136
 #, fuzzy
