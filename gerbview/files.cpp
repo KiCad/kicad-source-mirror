@@ -142,18 +142,18 @@ bool GERBVIEW_FRAME::LoadGerberFiles( const wxString& aFullFileName )
         filetypes << wxT("|");
 
         /* Special gerber filetypes */
-        filetypes += _( "Top layer" ) + AddFileExtListToFilter( { "GTL" } );
-        filetypes += _( "Bottom layer" ) + AddFileExtListToFilter( { "GBL" } );
-        filetypes += _( "Bottom solder resist" ) + AddFileExtListToFilter( { "GBS" } );
-        filetypes += _( "Top solder resist" ) + AddFileExtListToFilter( { "GTS" } );
-        filetypes += _( "Bottom overlay" ) + AddFileExtListToFilter( { "GBO" } );
-        filetypes += _( "Top overlay" ) + AddFileExtListToFilter( { "GTO" } );
-        filetypes += _( "Bottom paste" ) + AddFileExtListToFilter( { "GBP" } );
-        filetypes += _( "Top paste" ) + AddFileExtListToFilter( { "GTP" } );
-        filetypes += _( "Keep-out layer" ) + AddFileExtListToFilter( { "GKO" } );
-        filetypes += _( "Mechanical layers" ) + AddFileExtListToFilter( { "GM1", "GM2", "GM3", "GM4", "GM5", "GM6", "GM7", "GM8", "GM9" } );
-        filetypes += _( "Top Pad Master" ) + AddFileExtListToFilter( { "GPT" } );
-        filetypes += _( "Bottom Pad Master" ) + AddFileExtListToFilter( { "GPB" } );
+        filetypes += _( "Top layer" ) + AddFileExtListToFilter( { "GTL" } ) + wxT( "|" );
+        filetypes += _( "Bottom layer" ) + AddFileExtListToFilter( { "GBL" } ) + wxT( "|" );
+        filetypes += _( "Bottom solder resist" ) + AddFileExtListToFilter( { "GBS" } ) + wxT( "|" );
+        filetypes += _( "Top solder resist" ) + AddFileExtListToFilter( { "GTS" } ) + wxT( "|" );
+        filetypes += _( "Bottom overlay" ) + AddFileExtListToFilter( { "GBO" } ) + wxT( "|" );
+        filetypes += _( "Top overlay" ) + AddFileExtListToFilter( { "GTO" } ) + wxT( "|" );
+        filetypes += _( "Bottom paste" ) + AddFileExtListToFilter( { "GBP" } ) + wxT( "|" );
+        filetypes += _( "Top paste" ) + AddFileExtListToFilter( { "GTP" } ) + wxT( "|" );
+        filetypes += _( "Keep-out layer" ) + AddFileExtListToFilter( { "GKO" } ) + wxT( "|" );
+        filetypes += _( "Mechanical layers" ) + AddFileExtListToFilter( { "GM1", "GM2", "GM3", "GM4", "GM5", "GM6", "GM7", "GM8", "GM9" } ) + wxT( "|" );
+        filetypes += _( "Top Pad Master" ) + AddFileExtListToFilter( { "GPT" } ) + wxT( "|" );
+        filetypes += _( "Bottom Pad Master" ) + AddFileExtListToFilter( { "GPB" } ) + wxT( "|" );
 
         // All filetypes
         filetypes += AllFilesWildcard();
