@@ -272,7 +272,7 @@ int PCB_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
         {
             // If there is no disambiguation, this routine is still running and will
             // register a `click` event when released
-            if( !m_disambiguateTimer.IsRunning() )
+            if( m_disambiguateTimer.IsRunning() )
             {
                 m_disambiguateTimer.Stop();
 
