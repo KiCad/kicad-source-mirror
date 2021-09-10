@@ -11,8 +11,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-09-07 08:18-0700\n"
-"PO-Revision-Date: 2021-09-10 10:52+0000\n"
-"Last-Translator: Wellington Terumi Uemura <wellingtonuemura@gmail.com>\n"
+"PO-Revision-Date: 2021-09-10 19:57+0000\n"
+"Last-Translator: Augusto Fraga Giachero <afg@augustofg.net>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "kicad/master-source/pt_BR/>\n"
 "Language: pt_br\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.8.1-dev\n"
+"X-Generator: Weblate 4.9-dev\n"
 "X-Poedit-Basepath: ../../kicad-source-mirror\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
@@ -41,9 +41,8 @@ msgstr ""
 "X-Poedit-SearchPath-14: tools\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
-#, fuzzy
 msgid "All Files"
-msgstr "Todos os ficheiros"
+msgstr "Todos os arquivos"
 
 #: 3d-viewer/3d_cache/dialogs/dialog_select_3d_model.cpp:94
 #, c-format
@@ -157,9 +156,8 @@ msgid "Reload board and 3D models"
 msgstr "Recarregar Placa e modelos 3D"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:357
-#, fuzzy
 msgid "Build board outline"
-msgstr "Contornos da placa"
+msgstr "Criar contorno da placa"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:535
 msgid "Create layers"
@@ -176,8 +174,8 @@ msgid ""
 "Footprint outline is missing or malformed. Run Footprint Checker for a full "
 "analysis."
 msgstr ""
-"O contorno do Footprint está malformado. Execute o Footprint Checker para "
-"uma análise completa."
+"O contorno do Footprint está malformado ou não existe. Execute o Footprint "
+"Checker para uma análise completa."
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:734
 #, fuzzy
@@ -224,21 +222,20 @@ msgstr "Montar as camadas técnicas"
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:909
 #, c-format
 msgid "Build Tech layer %d"
-msgstr "Monte as camadas técnicas %d"
+msgstr "Montar a camada técnica %d"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1054
 msgid "Build BVH for holes and vias"
 msgstr "Montar BVH para furos e vias"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:410
-#, fuzzy
 msgid "Your OpenGL version is not supported. Minimum required is 1.5."
-msgstr "Sua versão do OpenGL não é suportada. Requerido >= 1.5"
+msgstr "Sua versão do OpenGL não é suportada. Requerido >= 1.5."
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:531
 #, c-format
 msgid "Last render time %.0f ms"
-msgstr "Última renderização %.0f ms"
+msgstr "Último tempo de renderização %.0f ms"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:721
 #, c-format
@@ -263,9 +260,8 @@ msgstr "Carregar OpenGL: camadas"
 
 #: 3d-viewer/3d_rendering/3d_render_raytracing/create_scene.cpp:795
 #: 3d-viewer/3d_rendering/legacy/create_scene.cpp:650
-#, fuzzy
 msgid "Loading 3D models..."
-msgstr "Carregando modelos 3D"
+msgstr "Carregando modelos 3D..."
 
 #: 3d-viewer/3d_rendering/3d_render_raytracing/create_scene.cpp:934
 #: 3d-viewer/3d_rendering/legacy/create_scene.cpp:660
@@ -317,9 +313,9 @@ msgstr "Carregue a camada OpenGL %d"
 #: pcbnew/plugins/fabmaster/fabmaster_plugin.cpp:75
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:2290
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:449
-#, fuzzy, c-format
+#, c-format
 msgid "Loading %s..."
-msgstr "Carregando %s"
+msgstr "Carregando %s..."
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:50
 msgid "Export Current View as PNG..."
@@ -380,7 +376,7 @@ msgstr "Grade 3D"
 #: pcbnew/menubar_footprint_editor.cpp:241 pcbnew/menubar_pcb_editor.cpp:456
 #: pcbnew/toolbars_footprint_viewer.cpp:179
 msgid "&File"
-msgstr "&Ficheiro"
+msgstr "&Arquivo"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:146 cvpcb/menubar.cpp:88
 #: eeschema/menubar.cpp:288
@@ -432,9 +428,8 @@ msgid "Background gradient end:"
 msgstr "Fundo Branco"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:50
-#, fuzzy
 msgid "Solder paste:"
-msgstr "Pasta de Solda Superior"
+msgstr "Pasta de Solda:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:64
 #, fuzzy
@@ -442,9 +437,8 @@ msgid "Board Colors"
 msgstr "Cor do corpo da placa"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:66
-#, fuzzy
 msgid "Use board stackup colors"
-msgstr "Escala X restrita."
+msgstr "Usar cores do stackup da placa"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:69
 #, fuzzy
@@ -452,24 +446,20 @@ msgid "Use colors:"
 msgstr "Nova classe de rede:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:77
-#, fuzzy
 msgid "Silkscreen top:"
-msgstr "Serigrafia"
+msgstr "Serigrafia superior:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:84
-#, fuzzy
 msgid "Silkscreen bottom:"
-msgstr "Cor da Serigrafia"
+msgstr "Serigrafia inferior:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:97
-#, fuzzy
 msgid "Solder mask top:"
-msgstr "Cor da máscara de solda"
+msgstr "Máscara de solda superior:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:104
-#, fuzzy
 msgid "Solder mask bottom:"
-msgstr "Cor da máscara de solda"
+msgstr "Máscara de solda inferior:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:117
 #, fuzzy
@@ -477,9 +467,8 @@ msgid "Copper/surface finish:"
 msgstr "Cobre:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:130
-#, fuzzy
 msgid "Board body:"
-msgstr "Montar corpo da placa"
+msgstr "Corpo da placa:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_display_options_base.cpp:21
 msgid "Board Layers"
@@ -503,7 +492,7 @@ msgstr "Exibir camadas de adesivo"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_display_options_base.cpp:39
 msgid "User Layers (not shown in realistic mode)"
-msgstr "Camadas do utilizador (não exibido no modo realístico)"
+msgstr "Camadas do usuário (não exibido no modo realístico)"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_display_options_base.cpp:41
 msgid "Show comments and drawings layers"
@@ -532,7 +521,7 @@ msgstr "Exibir áreas preenchidas dentro de zonas"
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_display_options_base.cpp:68
 #: pcbnew/dialogs/dialog_plot_base.cpp:216
 msgid "Subtract soldermask from silkscreen"
-msgstr "Remover máscara de solda de serigrafias"
+msgstr "Subtrair máscara de solda da serigrafia"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_display_options_base.cpp:71
 #, fuzzy
@@ -541,16 +530,15 @@ msgstr "Fixa o silk ao anel da via"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_display_options_base.cpp:74
 msgid "Use bare copper color for unplated copper"
-msgstr ""
+msgstr "Usar cor de cobre para regiões sem banho (cobre exposto)"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_display_options_base.cpp:75
 msgid "Use different colors for plated and unplated copper. (Slow)"
-msgstr ""
+msgstr "Usar cores diferentes para regiões de cobre com e sem banho. (Lento)"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_display_options_base.cpp:82
-#, fuzzy
 msgid "Material properties:"
-msgstr "Propriedades Materiais"
+msgstr "Propriedades do material:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_display_options_base.cpp:86
 #, fuzzy
@@ -590,7 +578,7 @@ msgstr "°"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_display_options_base.cpp:122
 msgid "Enable animation"
-msgstr "Ativar animação"
+msgstr "Habilitar animação"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_display_options_base.cpp:129
 msgid "Animation speed:"
@@ -616,13 +604,12 @@ msgid "Highlight items on rollover"
 msgstr "Rede destacada: %s"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_opengl_options_base.cpp:37
-#, fuzzy
 msgid "Anti-aliasing:"
-msgstr "Anti Serrilhamento"
+msgstr "Anti Serrilhamento:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_opengl_options_base.cpp:41
 msgid "Disabled"
-msgstr "Desativar"
+msgstr "Desativado"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_opengl_options_base.cpp:41
 msgid "2x"
@@ -644,7 +631,7 @@ msgstr ""
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_opengl_options_base.cpp:49
 #, fuzzy
 msgid "Selection color:"
-msgstr "Selecione a cor"
+msgstr "Cor de seleção:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_opengl_options_base.cpp:63
 msgid "While Moving"
@@ -652,15 +639,15 @@ msgstr "Enquanto movendo"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_opengl_options_base.cpp:65
 msgid "Disable anti-aliasing"
-msgstr "Desativar anti serrilhamento da imagem"
+msgstr "Desabilitar anti serrilhamento da imagem"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_opengl_options_base.cpp:68
 msgid "Disable thickness"
-msgstr "Desativar espessura"
+msgstr "Desabilitar espessura"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_opengl_options_base.cpp:71
 msgid "Disable vias"
-msgstr "Desativar vias"
+msgstr "Desabilitar vias"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_opengl_options_base.cpp:74
 msgid "Disable holes"
@@ -704,9 +691,8 @@ msgid "Recursion Level"
 msgstr "Nível recursivo"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_raytracing_options_base.cpp:66
-#, fuzzy
 msgid "Shadows:"
-msgstr "Renderizar sombras"
+msgstr "Sombras:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_raytracing_options_base.cpp:71
 msgid ""
@@ -721,9 +707,8 @@ msgid "Random direction factor of the cast rays"
 msgstr "Fator de aleatoriedade de direção para os raios de luz"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_raytracing_options_base.cpp:84
-#, fuzzy
 msgid "Reflections:"
-msgstr "Reflexões"
+msgstr "Reflexões:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_raytracing_options_base.cpp:89
 msgid "Number of rays that will be cast to evaluate a reflection point"
@@ -749,7 +734,7 @@ msgstr "Número de raios que serão lançados para avaliar um ponto de refraçã
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_raytracing_options_base.cpp:120
 msgid "Number of bounces that a ray can hit reflective objects"
-msgstr "Número de saltos que um raio pode acertar objetos reflexivos"
+msgstr "Quantidade de reflexões que um raio pode acertar objetos reflexivos"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_raytracing_options_base.cpp:134
 #, fuzzy
@@ -849,16 +834,14 @@ msgstr "Cores"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:660
 msgid "3D Image File Name"
-msgstr "Nome do ficheiro de Imagem 3D"
+msgstr "Nome do arquivo de Imagem 3D"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:681
 #: common/eda_base_frame.cpp:1052 common/eda_base_frame.cpp:1057
 #: pcbnew/plugins/altium/altium_pcb.cpp:1461
-#, fuzzy, c-format
+#, c-format
 msgid "Insufficient permissions to save file '%s'."
-msgstr ""
-"Permissões insuficientes necessárias para gravar o ficheiro\n"
-"%s"
+msgstr "Permissões insuficientes necessárias para salvar o arquivo '%s'."
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:682 common/confirm.cpp:130
 #: common/confirm.cpp:288 common/dialogs/panel_setup_severities.cpp:43
@@ -877,7 +860,7 @@ msgstr "Falha ao copiar imagem para a área de transferência"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:726
 msgid "Can't save file"
-msgstr "Não foi possível salvar o ficheiro"
+msgstr "Não foi possível salvar o arquivo"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:43
 #, fuzzy
@@ -1006,7 +989,7 @@ msgstr "Perdas no Dielétrico:"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:188
 msgid "Use all material properties from each 3D model file"
-msgstr "Usar todas as propriedades de materiais de cada ficheiro de modelo 3D"
+msgstr "Usar todas as propriedades de materiais de cada arquivo de modelo 3D"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:194
 #, fuzzy
@@ -1015,7 +998,7 @@ msgstr "Renderizar Sombras"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:195
 msgid "Use only the diffuse color property from model 3D model file"
-msgstr "Utilizar apenas a propriedade difusa da cor do modelo do ficheiro 3D"
+msgstr "Utilizar apenas a propriedade difusa da cor do arquivo de modelo 3D"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:201
 #, fuzzy
@@ -1051,7 +1034,7 @@ msgstr "Exibir/Ocultar modelos 3D de componentes SMD"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:225
 msgid "Toggle 3D models for 'Other' type components"
-msgstr ""
+msgstr "Exibir/Ocultar modelos 3D para componentes tipo 'Outros'"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:230
 msgid "Show Model Bounding Boxes"
@@ -1537,18 +1520,18 @@ msgid "Cannot make path '%s' absolute with respect to '%s'."
 msgstr "Não foi possível tornar o caminho \"%s\" absoluto em relação a \"%s\"."
 
 #: common/common.cpp:339
-#, fuzzy, c-format
+#, c-format
 msgid "Output directory '%s' created."
-msgstr "Pasta de saída \"%s\" criada.\n"
+msgstr "Pasta de saída \"%s\" criada."
 
 #: common/common.cpp:348
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot create output directory '%s'."
-msgstr "Não foi possível criar a pasta de saída \"%s\".\n"
+msgstr "Não foi possível criar a pasta de saída '%s'."
 
 #: common/common.cpp:620
 msgid "This operating system is not supported by KiCad and its dependencies."
-msgstr ""
+msgstr "O sistema operacional não é suportado pelo KiCad e suas dependências."
 
 #: common/common.cpp:622
 #, fuzzy
@@ -1560,6 +1543,8 @@ msgid ""
 "Any issues with KiCad on this system cannot be reported to the official "
 "bugtracker."
 msgstr ""
+"Problemas com o KiCad neste sistema não podem ser reportados no bugtracker "
+"oficial."
 
 #: common/confirm.cpp:57
 msgid "Do not show again"
@@ -1598,6 +1583,8 @@ msgstr "Erro ao Salvar Ficheiro"
 #: common/confirm.cpp:162 common/confirm.cpp:168
 msgid "Interleaved saves may produce very unexpected results."
 msgstr ""
+"Salvar o mesmo arquivo em instâncias diferentes pode produzir resultados "
+"inesperados."
 
 #: common/confirm.cpp:164 common/confirm.cpp:169 common/confirm.cpp:251
 #: gerbview/dialogs/dialog_select_one_pcb_layer.cpp:164
@@ -2341,6 +2328,8 @@ msgid ""
 "Remove locked items from the selection and only apply the operation to the "
 "unlocked items (if any)."
 msgstr ""
+"Remover items bloqueados da seleção e aplicar a operação somente a items "
+"desbloqueados (se existem)."
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:30
 #, c-format
@@ -2353,13 +2342,15 @@ msgstr ""
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:44
 msgid "Remember decision for this session."
-msgstr ""
+msgstr "Lembrar a decisão para esta sessão."
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:45
 msgid ""
 "Remember the option selected for the remainder of this session.\n"
 "This dialog will not be shown again until KiCad is restarted."
 msgstr ""
+"Lembrar a opção selecionada durante o resto dessa sessão\n"
+"Este aviso não será mostrado novamente até que o KiCad seja reiniciado."
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:55
 #, fuzzy
@@ -2787,7 +2778,7 @@ msgstr "Substitui a referência dos designadores com '%s'."
 #: common/dialogs/dialog_paste_special_base.cpp:22
 #, fuzzy
 msgid "Assign unique reference designators to pasted symbols"
-msgstr "Utilizando referências para corresponder componentes e footprints.\n"
+msgstr "Utilizar referências para corresponder componentes e footprints."
 
 #: common/dialogs/dialog_paste_special_base.cpp:22
 #, fuzzy
@@ -2797,7 +2788,7 @@ msgstr "Manter as anotações existentes, mesmo que sejam duplicadas"
 #: common/dialogs/dialog_paste_special_base.cpp:22
 #, fuzzy
 msgid "Clear reference designators on all pasted symbols"
-msgstr "Valor do campo de referência ilegal!"
+msgstr "Eliminar referências de todos os símbolos copiados"
 
 #: common/dialogs/dialog_paste_special_base.cpp:24
 msgid "Paste Options"
@@ -4733,9 +4724,8 @@ msgid "This path:"
 msgstr "Este caminho:"
 
 #: common/filename_resolver.cpp:485
-#, fuzzy
 msgid "Existing path:"
-msgstr "Caminho existente: "
+msgstr "Caminho existente:"
 
 #: common/filename_resolver.cpp:487
 msgid "Bad alias (duplicate name)"
@@ -5754,9 +5744,8 @@ msgstr "Extraing ficheiro \"%s\"\n"
 
 #: common/project/project_archiver.cpp:95 kicad/pcm/pcm_task_manager.cpp:193
 #: kicad/pcm/pcm_task_manager.cpp:234
-#, fuzzy
 msgid "Error extracting file!"
-msgstr "Erro ao gravar no ficheiro \"%s\"!\n"
+msgstr "Erro na extração do arquivo!"
 
 #: common/project/project_archiver.cpp:159 eeschema/dialogs/dialog_erc.cpp:760
 #: eeschema/dialogs/dialog_plot_schematic.cpp:519
@@ -6542,9 +6531,8 @@ msgstr ""
 "Para informações de como ajudar o projeto KiCad, visite %s"
 
 #: common/tool/common_control.cpp:287
-#, fuzzy
 msgid "Donate to KiCad"
-msgstr "Bem vindo ao KiCad %s!"
+msgstr "Doar para o KiCad"
 
 #: common/tool/grid_menu.cpp:93
 #, fuzzy, c-format
@@ -8254,9 +8242,8 @@ msgid "Update symbols matching library identifier:"
 msgstr "Identificador de biblioteca de símbolos inválido"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:72
-#, fuzzy
 msgid "New library identifier:"
-msgstr "Nenhuma biblioteca definida!"
+msgstr "Novo identificador de biblioteca:"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:94
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:36
@@ -13004,7 +12991,6 @@ msgid "Project Load Warning"
 msgstr "Alerta no Carregamento do Projeto"
 
 #: eeschema/files-io.cpp:349
-#, fuzzy
 msgid ""
 "Symbol libraries defined in the project file symbol library list are no "
 "longer supported and will be removed.\n"
@@ -13012,9 +12998,10 @@ msgid ""
 "This may cause broken symbol library links under certain conditions."
 msgstr ""
 "Bibliotecas de símbolos definidas na lista de biblioteca de símbolos do "
-"ficheiro de projeto não são mais suportadas e serão\n"
-"removidas.  Isto pode causar a quebra de links de biblioteca de símbolos em "
-"determinadas condições."
+"arquivo de projeto não são mais suportadas e serão removidas.\n"
+"\n"
+"Isto pode causar a quebra de links de biblioteca de símbolos em determinadas "
+"condições."
 
 #: eeschema/files-io.cpp:353
 msgid "Do not show this dialog again."
@@ -15168,9 +15155,8 @@ msgid "Transfer function"
 msgstr "Função de Tranferência"
 
 #: eeschema/sim/spice_simulator.cpp:83
-#, fuzzy
 msgid "UNKNOWN!"
-msgstr "DESCONHECIDO (%d)"
+msgstr "DESCONHECIDO!"
 
 #: eeschema/sim/spice_value.cpp:42
 msgid "Spice value cannot be empty"
@@ -15371,14 +15357,13 @@ msgstr "Biblioteca não encontrada na tabela de biblioteca de símbolos."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1196
 #: eeschema/symbol_viewer_frame.cpp:399
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The library '%s' is not enabled in the current configuration.\n"
 "Use Manage Symbol Libraries to edit the configuration."
 msgstr ""
-"A biblioteca com o apelido \"%s\" não está habilitada\n"
-"na configuração atual.  Utilize \"Gerenciar Bibliotecas de Símbolos\" para\n"
-"editar a configuração."
+"A biblioteca \"%s\" não está habilitada na configuração atual.\n"
+"Utilize \"Gerenciar Bibliotecas de Símbolos\" para editar a configuração."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1199
 #: eeschema/symbol_viewer_frame.cpp:402
@@ -18947,9 +18932,8 @@ msgid "Local file"
 msgstr "Editar Ficheiro Local..."
 
 #: kicad/pcm/pcm_task_manager.cpp:63
-#, fuzzy
 msgid "Unable to create download directory!"
-msgstr "Impossível criar ficheiro \"%s\""
+msgstr "Não foi possível criar a pasta de download!"
 
 #: kicad/pcm/pcm_task_manager.cpp:92
 #, c-format
@@ -19034,14 +19018,12 @@ msgid "Done."
 msgstr ""
 
 #: kicad/project_template.cpp:52
-#, fuzzy
 msgid "Could open the template path!"
-msgstr "Não foi possível abrir o local do modelo! "
+msgstr "Não foi possível abrir o local do modelo!"
 
 #: kicad/project_template.cpp:57
-#, fuzzy
 msgid "Couldn't open the meta information directory for this template!"
-msgstr "Não foi possível abrir a pasta com meta informações para este modelo! "
+msgstr "Não foi possível abrir a pasta com meta informações para este modelo!"
 
 #: kicad/project_template.cpp:63
 msgid "Cound't find the meta HTML information file for this template!"
@@ -19370,9 +19352,8 @@ msgid "Similar files already exist in the destination folder."
 msgstr "Ficheiros semelhantes já existem na pasta de destino."
 
 #: kicad/tools/kicad_manager_control.cpp:276
-#, fuzzy
 msgid "A problem occurred creating new project from template."
-msgstr "Um problema ocorreu criando novo projeto a partir do modelo!"
+msgstr "Um problema ocorreu na criação de um novo projeto a partir do modelo."
 
 #: kicad/tools/kicad_manager_control.cpp:298
 msgid "Open Existing Project"
@@ -19701,9 +19682,8 @@ msgid "Drawing Sheet File"
 msgstr "Modo de Desenho"
 
 #: pagelayout_editor/files.cpp:61 pagelayout_editor/files.cpp:102
-#, fuzzy
 msgid "The current drawing sheet has been modified. Save changes?"
-msgstr "O footprint atual foi modificado.  Salvar as alterações?"
+msgstr "O footprint atual foi modificado. Salvar as alterações?"
 
 #: pagelayout_editor/files.cpp:74
 #, c-format
@@ -21986,9 +21966,8 @@ msgid "Only selected"
 msgstr "nenhum ficheiro selecionado"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:97
-#, fuzzy
 msgid "Empty"
-msgstr "Texto vazio!"
+msgstr "Vazio"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:98
 msgid "Invalid"
@@ -22225,9 +22204,8 @@ msgstr ""
 "Footprints de trás"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:925
-#, fuzzy
 msgid "Footprint not found in changelist"
-msgstr "Símbolo não encontrado em %s!"
+msgstr "Footprint não encontrado na lista de troca"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:30
 #, fuzzy
@@ -24036,12 +24014,10 @@ msgid "Loose (0.1 mm)"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:129
-#, fuzzy
 msgid ""
 "Tolerance sets the distance between two points that are considered joined."
 msgstr ""
-"A tolerância define a distância entre dois pontos considerados como unidos.  "
-"O padrão é 0.001 milímetros."
+"A tolerância define a distância entre dois pontos considerados como unidos."
 
 #: pcbnew/dialogs/dialog_export_step_base.h:77
 msgid "Export STEP"
@@ -29531,9 +29507,8 @@ msgstr "Alterar a referência %s para %s."
 #: pcbnew/tools/board_inspection_tool.cpp:656
 #: pcbnew/tools/board_inspection_tool.cpp:665
 #: pcbnew/tools/board_inspection_tool.cpp:805
-#, fuzzy
 msgid "undefined"
-msgstr "Indefinido!!!"
+msgstr "indefinido"
 
 #: pcbnew/drc/drc_engine.cpp:902
 #, fuzzy, c-format
@@ -30456,9 +30431,9 @@ msgid "The current PCB has been modified.  Save changes?"
 msgstr "A PCI atual foi modificada.  Salvar as alterações?"
 
 #: pcbnew/files.cpp:607
-#, fuzzy, c-format
+#, c-format
 msgid "PCB '%s' does not exist. Do you wish to create it?"
-msgstr "A PCI \"%s\" não existe.  Deseja criá-la?"
+msgstr "A PCI '%s' não existe. Deseja criá-la?"
 
 #: pcbnew/files.cpp:616
 msgid "Creating PCB"
@@ -30689,28 +30664,26 @@ msgid "Edit Zone"
 msgstr "Editar Ficheiro"
 
 #: pcbnew/footprint_editor_utils.cpp:283
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The current configuration does not include a library named '%s'.\n"
 "Use Manage Footprint Libraries to edit the configuration."
 msgstr ""
-"A configuração atual não inclui uma biblioteca com o\n"
-"apelido \"%s\".  Utilize \"Gerenciar Bibliotecas de Footprint\"\n"
-"para editar a configuração."
+"A configuração atual não inclui uma biblioteca nomeada '%s'.\n"
+"Utilize \"Gerenciar Bibliotecas de Footprint\" para editar a configuração."
 
 #: pcbnew/footprint_editor_utils.cpp:286
 msgid "Library not found in footprint library table."
 msgstr "Biblioteca não encontrada na tabela de bibliotecas de footprint."
 
 #: pcbnew/footprint_editor_utils.cpp:295
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The library '%s' is not enabled in the current configuration.\n"
 "Use Manage Footprint Libraries to edit the configuration."
 msgstr ""
-"A biblioteca com o apelido \"%s\" não está habilitada\n"
-"na configuração atual.  Utilize \"Gerenciar Bibliotecas de Footprint\"\n"
-"para editar a configuração."
+"A biblioteca '%s' não está habilitada na configuração atual.\n"
+"Utilize \"Gerenciar Bibliotecas de Footprint\" para editar a configuração."
 
 #: pcbnew/footprint_editor_utils.cpp:298 pcbnew/footprint_viewer_frame.cpp:932
 msgid "Footprint library not enabled."
@@ -31411,14 +31384,12 @@ msgid "Shape Description File"
 msgstr "Ler Ficheiro de Descrição de Forma..."
 
 #: pcbnew/microwave/microwave_polygon.cpp:314
-#, fuzzy
 msgid "Shape has a null size."
-msgstr "A forma tem tamanho nulo!"
+msgstr "A forma tem tamanho nulo."
 
 #: pcbnew/microwave/microwave_polygon.cpp:320
-#, fuzzy
 msgid "Shape has no points."
-msgstr "A forma não tem pontos!"
+msgstr "A forma não tem pontos."
 
 #: pcbnew/microwave/microwave_tool.cpp:93
 msgid "Place microwave feature"
@@ -34031,9 +34002,9 @@ msgid "Session file imported and merged OK."
 msgstr "Ficheiro Session importado e agregado OK."
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:166
-#, fuzzy, c-format
+#, c-format
 msgid "Session file uses invalid layer id '%s'."
-msgstr "Ficheiro Session usa identificador de camada inválido:  \"%s\""
+msgstr "O arquivo da sessão atual usa identificador de camada inválido: '%s'."
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:217
 msgid "Session via padstack has no shapes"
