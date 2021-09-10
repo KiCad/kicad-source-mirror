@@ -14,7 +14,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-09-07 08:18-0700\n"
 "PO-Revision-Date: 2021-09-10 19:57+0000\n"
-"Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
+"Last-Translator: Jonathan Haas <haasjona@gmail.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
 "Language: de\n"
@@ -1524,7 +1524,7 @@ msgstr "Fehler beim Dateilesevorgang"
 
 #: common/confirm.cpp:162 common/confirm.cpp:168
 msgid "Interleaved saves may produce very unexpected results."
-msgstr ""
+msgstr "Versetztes Speichern kann zu sehr unerwarteten Ergebnissen führen."
 
 #: common/confirm.cpp:164 common/confirm.cpp:169 common/confirm.cpp:251
 #: gerbview/dialogs/dialog_select_one_pcb_layer.cpp:164
@@ -3625,10 +3625,9 @@ msgid "Default"
 msgstr "Voreinstellung"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:84
-#, fuzzy
 msgid "Set color to transparent to use KiCad default color."
 msgstr ""
-"Farbe auf transparent setzen, um die Standardfarbe von Kicad zu verwenden."
+"Farbe auf transparent setzen, um die Standardfarbe von KiCad zu verwenden."
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:103
 msgid "Filter Nets"
@@ -6261,23 +6260,28 @@ msgid "Report Bug"
 msgstr "Fehler melden"
 
 #: common/tool/common_control.cpp:219
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Help file '%s' or\n"
 "'%s' could not be found.\n"
 "Do you want to access the KiCad online help?"
-msgstr "Die Hilfedatei '%s' wurde nicht gefunden."
+msgstr ""
+"Die Hilfedatei '%s' oder\n"
+"'%s' konnte nicht gefunden werden.\n"
+"Möchten Sie auf die KiCad-Online-Hilfe zugreifen?"
 
 #: common/tool/common_control.cpp:222 common/tool/common_control.cpp:242
 msgid "File Not Found"
 msgstr "Datei nicht gefunden"
 
 #: common/tool/common_control.cpp:239
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Help file '%s' could not be found.\n"
 "Do you want to access the KiCad online help?"
-msgstr "Die Hilfedatei '%s' wurde nicht gefunden."
+msgstr ""
+"Die Hilfedatei '%s' konnte nicht gefunden werden.\n"
+"Möchten Sie auf die KiCad-Online-Hilfe zugreifen?"
 
 #: common/tool/common_control.cpp:269
 #, c-format
@@ -6335,9 +6339,9 @@ msgid "Entry contains leading white space."
 msgstr "Eintrag enthält ein führendes Leerzeichen."
 
 #: common/validators.cpp:302
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' is not a valid library identifier format."
-msgstr "\"%s\" ist keine gültiges Bibliotheksformat."
+msgstr "'%s' ist kein gültiges Bibliotheksbezeichnerformat."
 
 #: common/validators.cpp:309
 msgid "Library Identifier Validation Error"
@@ -6521,9 +6525,9 @@ msgid "Reset to Defaults"
 msgstr "Rücksetzen auf Standardeinstellungen"
 
 #: common/widgets/paged_dialog.cpp:367
-#, fuzzy, c-format
+#, c-format
 msgid "Reset %s to Defaults"
-msgstr "Rücksetzen auf Standardeinstellungen"
+msgstr "%s auf Standardwerte zurücksetzen"
 
 #: common/widgets/unit_binder.cpp:217
 #, c-format
@@ -6569,7 +6573,7 @@ msgid "Restore Default"
 msgstr "Rücksetzen auf Standardeinstellungen"
 
 #: common/widgets/widget_hotkey_list.cpp:409
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "'%s' is already assigned to '%s' in section '%s'. Are you sure you want to "
 "change its assignment?"
@@ -6715,9 +6719,8 @@ msgid "Geda PCB footprint library files"
 msgstr "Geda PCB Footprint Bibliotheksdateien"
 
 #: common/wildcards_and_files_ext.cpp:371
-#, fuzzy
 msgid "Drawing sheet files"
-msgstr "Zeichnungsblatt"
+msgstr "Zeichnungsblattdateien"
 
 #: common/wildcards_and_files_ext.cpp:379
 msgid "KiCad symbol footprint link files"
@@ -6813,9 +6816,8 @@ msgid "Specctra DSN file"
 msgstr "Specctra DSN-Datei"
 
 #: common/wildcards_and_files_ext.cpp:521
-#, fuzzy
 msgid "Specctra Session file"
-msgstr "Zusammenführen mit Specctra Session Datei:"
+msgstr "Specctra-Session-Datei"
 
 #: common/wildcards_and_files_ext.cpp:528
 msgid "IPC-D-356 Test Files"
@@ -6834,21 +6836,20 @@ msgid "Jpeg file"
 msgstr "JPEG-Datei"
 
 #: common/wildcards_and_files_ext.cpp:554
-#, fuzzy
 msgid "Hotkey file"
-msgstr "Liste der Tastaturbefehle"
+msgstr "Tastaturbefehl-Datei"
 
 #: cvpcb/auto_associate.cpp:105
-#, fuzzy, c-format
+#, c-format
 msgid "Equivalence file '%s' could not be found in the default search paths."
 msgstr ""
-"Äquivalenz Datei \"%s\" konnte nicht in den voreingestellten Suchpfaden "
+"Äquivalenzdatei \"%s\" konnte nicht in den voreingestellten Suchpfaden "
 "gefunden werden."
 
 #: cvpcb/auto_associate.cpp:126
-#, fuzzy, c-format
+#, c-format
 msgid "Error opening equivalence file '%s'."
-msgstr "Ein Fehler ist beim Öffnen der Äquivalenzdatei \"%s\" aufgetreten."
+msgstr "Fehler beim Öffnen der Äquivalenzdatei \"%s\"."
 
 #: cvpcb/auto_associate.cpp:178
 msgid "Equivalence File Load Error"
@@ -6894,12 +6895,11 @@ msgstr ""
 "Dokumentation für mehr Informationen."
 
 #: cvpcb/cvpcb.cpp:187
-#, fuzzy
 msgid ""
 "An error occurred attempting to load the global footprint library table."
 msgstr ""
 "Bei dem Versuch die globale Tabelle der Bibliotheken für Footprints zu laden "
-"ist ein Fehler aufgetreten"
+"ist ein Fehler aufgetreten."
 
 #: cvpcb/cvpcb_mainframe.cpp:63 cvpcb/menubar.cpp:51
 msgid "Assign Footprints"
@@ -6933,9 +6933,9 @@ msgstr ""
 "speichern?"
 
 #: cvpcb/cvpcb_mainframe.cpp:527 cvpcb/tools/cvpcb_association_tool.cpp:207
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' is not a valid footprint."
-msgstr "\"%s\" ist keine gültiger Footprint."
+msgstr "\"%s\" ist kein gültiger Footprint."
 
 #: cvpcb/cvpcb_mainframe.cpp:682 eeschema/generate_alias_info.cpp:39
 #: eeschema/sch_symbol.cpp:1422 eeschema/symbol_editor/symbol_editor.cpp:1225
@@ -7007,7 +7007,7 @@ msgstr ""
 "%s"
 
 #: cvpcb/dialogs/dialog_config_equfiles.cpp:51
-#, fuzzy, c-format
+#, c-format
 msgid "Project file: '%s'"
 msgstr "Projektdatei: \"%s\""
 
@@ -7021,9 +7021,9 @@ msgid "Footprint Association File"
 msgstr "Footprints Assoziierungsdatei"
 
 #: cvpcb/dialogs/dialog_config_equfiles.cpp:293
-#, fuzzy, c-format
+#, c-format
 msgid "File '%s' already exists in list."
-msgstr "Datei \"%s\" existiert bereits in der Liste"
+msgstr "Datei \"%s\" existiert bereits in der Liste."
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:20
 msgid "Symbol Footprint Association Files (.equ)"
@@ -7130,18 +7130,18 @@ msgid "Footprint Viewer"
 msgstr "Footprintbetrachter"
 
 #: cvpcb/display_footprints_frame.cpp:405
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint ID '%s' is not valid."
-msgstr "Die Footprint-ID \"%s\" ist nicht zulässig."
+msgstr "Footprint-ID \"%s\" ist nicht zulässig."
 
 #: cvpcb/display_footprints_frame.cpp:420
-#, fuzzy, c-format
+#, c-format
 msgid "Library '%s' is not in the footprint library table."
-msgstr "Bibliothek \"%s\" nicht in der Footprintbibliothekstabelle gefunden."
+msgstr "Bibliothek \"%s\" ist nicht in der Footprintbibliothekstabelle."
 
 #: cvpcb/display_footprints_frame.cpp:429
 #: cvpcb/display_footprints_frame.cpp:454
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint '%s' not found."
 msgstr "Footprint \"%s\" nicht gefunden."
 
@@ -7168,17 +7168,17 @@ msgstr ""
 "Sie müssen diese Footprints manuell neu zuweisen.)"
 
 #: cvpcb/readwrite_dlgs.cpp:148
-#, fuzzy, c-format
+#, c-format
 msgid "Component '%s' footprint '%s' <b>not found</b> in any library.\n"
 msgstr ""
-"Das Bauteil \"%s\" mit dem Footprint \"%s\" konnte in <b>keiner</b> der "
+"Bauteil \"%s\" mit dem Footprint \"%s\" konnte in <b>keiner</b> der "
 "Bibliotheken gefunden werden.\n"
 
 #: cvpcb/readwrite_dlgs.cpp:155
-#, fuzzy, c-format
+#, c-format
 msgid "Component '%s' footprint '%s' was found in <b>multiple</b> libraries.\n"
 msgstr ""
-"Das Bauteil \"%s\" mit dem Footprint \"%s\" wurde in <b>mehreren</b> "
+"Bauteil \"%s\" mit dem Footprint \"%s\" wurde in <b>mehreren</b> "
 "Bibliotheken gefunden.\n"
 
 #: cvpcb/readwrite_dlgs.cpp:168
@@ -7325,24 +7325,24 @@ msgid "%d duplicate time stamps were found and replaced."
 msgstr "%d mehrfach vorkommende(r) Zeitstempel wurde(n) gefunden und ersetzt."
 
 #: eeschema/annotate.cpp:284
-#, fuzzy, c-format
+#, c-format
 msgid "Updated %s (unit %s) from %s to %s."
-msgstr "%s aktualisiert (Einheit %s) von %s zu %s"
+msgstr "%s aktualisiert (Einheit %s) von %s zu %s."
 
 #: eeschema/annotate.cpp:292
-#, fuzzy, c-format
+#, c-format
 msgid "Updated %s from %s to %s."
-msgstr "%s aktualisiert von %s auf %s"
+msgstr "%s aktualisiert von %s auf %s."
 
 #: eeschema/annotate.cpp:302
-#, fuzzy, c-format
+#, c-format
 msgid "Annotated %s (unit %s) as %s."
-msgstr "Annotiert: %s (Einheit %s) als %s"
+msgstr "Annotiert: %s (Einheit %s) als %s."
 
 #: eeschema/annotate.cpp:309
-#, fuzzy, c-format
+#, c-format
 msgid "Annotated %s as %s."
-msgstr "%s annotiert als %s"
+msgstr "%s annotiert als %s."
 
 #: eeschema/annotate.cpp:326
 msgid "Annotation complete."
@@ -7463,9 +7463,8 @@ msgid "Current sheet only"
 msgstr "Nur das aktuelle Blatt"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:37
-#, fuzzy
 msgid "Selection only"
-msgstr "Nur &Auswahl"
+msgstr "Nur Auswahl"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:39
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:23
@@ -7480,14 +7479,12 @@ msgid "Order"
 msgstr "Reihenfolge"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:49
-#, fuzzy
 msgid "Sort symbols by &X position"
-msgstr "Sortiere Bauteile nach ihrer &X-Position"
+msgstr "Sortiere Symbole nach ihrer &X-Position"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:67
-#, fuzzy
 msgid "Sort symbols by &Y position"
-msgstr "Sortiere Bauteile nach ihrer &Y-Position"
+msgstr "Sortiere Symbole nach ihrer &Y-Position"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:82
 msgid "Keep existing annotations"
@@ -7564,14 +7561,13 @@ msgid "Add Generator"
 msgstr "Generator hinzufügen"
 
 #: eeschema/dialogs/dialog_bom.cpp:391
-#, fuzzy, c-format
+#, c-format
 msgid "Nickname '%s' already in use."
 msgstr "Aliasname \"%s\" wird bereits benutzt."
 
 #: eeschema/dialogs/dialog_bom.cpp:420 eeschema/dialogs/dialog_netlist.cpp:683
-#, fuzzy
 msgid "Generator File"
-msgstr "Dateien des Generator:"
+msgstr "Generator-Datei"
 
 #: eeschema/dialogs/dialog_bom.cpp:439
 msgid "Generator file name not found."
@@ -8059,9 +8055,8 @@ msgid "Change Symbols"
 msgstr "Ändere Symbol"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:76
-#, fuzzy
 msgid "Change selected symbol(s)"
-msgstr "Ausgewähltes Symbol ändern"
+msgstr "Ausgewählte(s) Symbol(e) ändern"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:93
 msgid "Change symbols matching reference designator:"
@@ -8151,9 +8146,8 @@ msgid "Update all symbols in schematic"
 msgstr "Update alle Symbole im Schaltplan"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:30
-#, fuzzy
 msgid "Update selected symbol(s)"
-msgstr "Ausgewähltes Symbol updaten"
+msgstr "Ausgewählte(s) Symbol(e) updaten"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:33
 msgid "Update symbols matching reference designator:"
@@ -8257,11 +8251,11 @@ msgstr "Platziere alle Einheiten des Symbols nacheinander."
 #: eeschema/generate_alias_info.cpp:81 eeschema/sch_base_frame.cpp:70
 #: eeschema/symbol_editor/symbol_editor.cpp:288
 #: eeschema/widgets/symbol_preview_widget.cpp:181
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading symbol %s from library '%s'."
 msgstr ""
-"Bei dem Versuch das Symbol \"%s\" aus der Bibliothek \"%s\" zu laden ist ein "
-"Fehler aufgetreten."
+"Beim Laden von Symbol \"%s\" aus der Bibliothek \"%s\" ist ein Fehler "
+"aufgetreten."
 
 #: eeschema/dialogs/dialog_choose_symbol.cpp:421
 msgid "No footprint specified"
@@ -8276,10 +8270,9 @@ msgid "No symbol selected"
 msgstr "Kein Symbol gewählt"
 
 #: eeschema/dialogs/dialog_edit_symbols_libid.cpp:544
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol library identifier %s is not valid."
-msgstr ""
-"Bezeichner \"%s\" ist für eine Schaltplansymbolbibliothek nicht zulässig."
+msgstr "Symbolbibliotheksbezeichner %s ist ungültig."
 
 #: eeschema/dialogs/dialog_edit_symbols_libid.cpp:641
 #, c-format
@@ -8335,13 +8328,12 @@ msgid "Map Orphans"
 msgstr "Waisen zuordnen"
 
 #: eeschema/dialogs/dialog_edit_symbols_libid_base.cpp:59
-#, fuzzy
 msgid ""
 "If some symbols are orphaned (the linked symbol is not found anywhere),\n"
 "try to find a candidate having the same name in one of loaded symbol "
 "libraries."
 msgstr ""
-"Wenn einige Bauteile verwaist sind (das verlinkte Symbol kann nicht gefunden "
+"Wenn einige Symbole verwaist sind (das verlinkte Symbol kann nicht gefunden "
 "werden),\n"
 "versuchen einen namensgleichen Kandidaten in einer der geladenen "
 "Symbolbibliotheken zu finden."
@@ -8523,9 +8515,9 @@ msgid "Violation Severity"
 msgstr "Schweregrade Verletzungen"
 
 #: eeschema/dialogs/dialog_erc.cpp:755 pcbnew/dialogs/dialog_gendrill.cpp:471
-#, fuzzy, c-format
+#, c-format
 msgid "Report file '%s' created."
-msgstr "Protokolldatei \"%s\" erstellt\n"
+msgstr "Protokolldatei \"%s\" erstellt."
 
 #: eeschema/dialogs/dialog_erc.cpp:773
 #, c-format
@@ -8623,9 +8615,8 @@ msgid "Filters"
 msgstr "Filter"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:82
-#, fuzzy
 msgid "Filter other symbol fields by name:"
-msgstr "Filter Felder nach Namen gefiltert:"
+msgstr "Andere Symbolfelder nach Namen filtern:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:94
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:72
@@ -8687,7 +8678,6 @@ msgid "-- leave unchanged --"
 msgstr "-- unverändert lassen --"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:229
-#, fuzzy
 msgid "H Align (fields only):"
 msgstr "H-Ausrichtung (nur Felder):"
 
@@ -8696,7 +8686,6 @@ msgid "Visible (fields only)"
 msgstr "Sichtbar (nur Felder)"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:251
-#, fuzzy
 msgid "V Align (fields only):"
 msgstr "V-Ausrichtung (nur Felder):"
 
@@ -8722,14 +8711,12 @@ msgid "Sheet background color:"
 msgstr "Blatt-Hintergrundfarbe:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:339
-#, fuzzy
 msgid "Junction size:"
 msgstr "Knotenpunktgröße:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:353
-#, fuzzy
 msgid "Junction color:"
-msgstr "Auswahlfarbe:"
+msgstr "Knotenpunktfarbe:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.h:110
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.h:95
@@ -23742,9 +23729,8 @@ msgid "Select a STEP export filename"
 msgstr "Wähle einen STEP-Export Dateinamen"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:139
-#, fuzzy
 msgid "STEP files"
-msgstr "SVG-Dateien"
+msgstr "STEP-Dateien"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:206
 msgid "Non-unity scaled models:"
@@ -23807,9 +23793,8 @@ msgid "Board center origin"
 msgstr "Zentrum Platinenursprung"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:54
-#, fuzzy
 msgid "User Defined Origin"
-msgstr "Benutzerdefinierter Ursprungspunkt"
+msgstr "Benutzerdefinierter Ursprung"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:108
 msgid "Other Options"
