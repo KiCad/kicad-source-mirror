@@ -77,6 +77,7 @@ LANGUAGE_DESCR LanguagesList[] =
     { wxLANGUAGE_GREEK,      ID_LANGUAGE_GREEK,      wxT( "Ελληνικά" ), true },
     { wxLANGUAGE_ENGLISH,    ID_LANGUAGE_ENGLISH,    wxT( "English" ),  true },
     { wxLANGUAGE_SPANISH,    ID_LANGUAGE_SPANISH,    wxT( "Español" ),  true },
+    { wxLANGUAGE_SPANISH_MEXICAN, ID_LANGUAGE_SPANISH, wxT( "Español (Latinoamericano)" ),  true },
     { wxLANGUAGE_FRENCH,     ID_LANGUAGE_FRENCH,     wxT( "Français" ), true },
     { wxLANGUAGE_KOREAN,     ID_LANGUAGE_KOREAN,     wxT( "한국인"),       true },
     { wxLANGUAGE_ITALIAN,    ID_LANGUAGE_ITALIAN,    wxT( "Italiano" ), true },
