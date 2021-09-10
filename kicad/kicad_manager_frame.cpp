@@ -52,6 +52,7 @@
 #include <widgets/app_progress_dialog.h>
 #include <wx/ffile.h>
 #include <wx/filedlg.h>
+#include <wx/dcclient.h>
 #include <atomic>
 
 
@@ -122,12 +123,10 @@ KICAD_MANAGER_FRAME::KICAD_MANAGER_FRAME( wxWindow* parent, const wxString& titl
     wxXmlDocument dummy;
 #endif
 
-    // Create the status line (bottom of the frame)
-    static const int dims[2] = { -1, -1 };
-
-    CreateStatusBar( 2, wxSTB_SIZEGRIP | wxSTB_SHOW_TIPS | wxSTB_ELLIPSIZE_MIDDLE |
-                     wxFULL_REPAINT_ON_RESIZE );
-    SetStatusWidths( 2, dims );
+    // Create the status line (bottom of the frame).  Left half is for project name; right half
+    // is for Reporter (currently used by archiver/unarchiver).
+    CreateStatusBar( 2 );
+    GetStatusBar()->SetFont( KIUI::GetStatusFont( this ) );
 
     // Give an icon
     wxIcon icon;
@@ -345,6 +344,8 @@ void KICAD_MANAGER_FRAME::OnSize( wxSizeEvent& event )
 {
     if( m_auimgr.GetManagedWindow() )
         m_auimgr.Update();
+
+    PrintPrjInfo();
 
     event.Skip();
 }
@@ -681,8 +682,19 @@ void KICAD_MANAGER_FRAME::InstallPreferences( PAGED_DIALOG* aParent,
 
 void KICAD_MANAGER_FRAME::PrintPrjInfo()
 {
-    SetStatusText( wxString::Format( _( "Project: %s" ), Prj().GetProjectFullName() ) );
+    // wxStatusBar's wxELLIPSIZE_MIDDLE flag doesn't work (at least on Mac).
 
+    wxString     status = wxString::Format( _( "Project: %s" ), Prj().GetProjectFullName() );
+    wxStatusBar* statusBar = GetStatusBar();
+    int          width = statusBar->GetSize().GetWidth() / 2;
+
+    if( width > 20 )
+    {
+        wxClientDC dc( this );
+        status = wxControl::Ellipsize( status, dc, wxELLIPSIZE_MIDDLE, width );
+    }
+
+    SetStatusText( status );
 }
 
 

@@ -98,21 +98,12 @@ wxFont makeGUIFont( wxWindow* aWindow, int aDialogSize )
 {
     wxFont font = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT );
 
-    // Using wxFont::SetSymbolicSize() fails on (at least) GTK with HiDPI screens, so we have
-    // to build our own version based off our icon scaling architecture.
+    // Using wxFont::SetSymbolicSize() fails on (at least) GTK with HiDPI screens, but the
+    // dialog pixel conversion stuff seems to work....
 
     int vert_size = aWindow->ConvertDialogToPixels( wxSize( 0, aDialogSize ) ).y;
 
-    if( Pgm().GetCommonSettings()->m_Appearance.icon_scale > 0 )
-        vert_size *= Pgm().GetCommonSettings()->m_Appearance.icon_scale / 4;
-
-    if( vert_size < 7 )
-        vert_size = 7;
-
-    if( vert_size < 10 )
-        vert_size += 1;
-
-    font.SetPointSize( vert_size );
+    font.SetPointSize( vert_size / 2 );
 
 #ifdef __WXMAC__
     // https://trac.wxwidgets.org/ticket/19210
@@ -126,19 +117,19 @@ wxFont makeGUIFont( wxWindow* aWindow, int aDialogSize )
 
 wxFont KIUI::GetControlFont( wxWindow* aWindow )
 {
-    return makeGUIFont( aWindow, 7 );
+    return makeGUIFont( aWindow, 14 );
 }
 
 
 wxFont KIUI::GetInfoFont( wxWindow* aWindow )
 {
-    return makeGUIFont( aWindow, 6 );
+    return makeGUIFont( aWindow, 13 );
 }
 
 
 wxFont KIUI::GetStatusFont( wxWindow* aWindow )
 {
-    return makeGUIFont( aWindow, 5 );
+    return makeGUIFont( aWindow, 11 );
 }
 
 

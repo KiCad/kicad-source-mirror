@@ -31,7 +31,6 @@
 #include <board_design_settings.h>
 #include <board_commit.h>
 #include <bitmaps.h>
-#include <widgets/grid_icon_text_helpers.h>
 #include <widgets/grid_text_button_helpers.h>
 #include <widgets/wx_grid.h>
 #include <widgets/text_ctrl_eval.h>
@@ -106,12 +105,12 @@ DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR(
     m_allow90Label->SetFont( infoFont );
     m_allow180Label->SetFont( infoFont );
 #endif
-    m_staticTextInfoCopper->SetFont( infoFont );
-    m_staticTextInfoPaste->SetFont( infoFont );
 
     infoFont.SetStyle( wxFONTSTYLE_ITALIC );
     m_staticTextInfoValNeg->SetFont( infoFont );
     m_staticTextInfoValPos->SetFont( infoFont );
+    m_staticTextInfoCopper->SetFont( infoFont );
+    m_staticTextInfoPaste->SetFont( infoFont );
 
     if( static_cast<int>( m_page ) >= 0 )
         m_NoteBook->SetSelection( (unsigned) m_page );
