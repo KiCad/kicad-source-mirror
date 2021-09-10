@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-01 11:31-0700\n"
-"PO-Revision-Date: 2021-09-05 21:22+0000\n"
+"PO-Revision-Date: 2021-09-10 19:57+0000\n"
 "Last-Translator: boonchai k. <kicadthai@gmail.com>\n"
 "Language-Team: Thai <https://hosted.weblate.org/projects/kicad/master-source/"
 "th/>\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.8.1-dev\n"
+"X-Generator: Weblate 4.9-dev\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
 msgid "All Files (*.*)|*.*"
@@ -24255,68 +24255,70 @@ msgid ""
 "Display a warning if a pad in a footprint does not appear in netlist.\n"
 "Only pads on a copper layer and having a name are tested."
 msgstr ""
+"แสดงคำเตือนหากแพ็ดในฟุ้ทพรินท์ไม่ปรากฏในรายชื่อเน็ท\n"
+"เฉพาะแพ็ดบนเลเยอร์ทองแดงและตั้งชื่อเท่านั้น จะได้รับการทดสอบ"
 
 #: pcbnew/dialogs/dialog_netlist_base.h:69
 msgid "Import Netlist"
-msgstr ""
+msgstr "นำเข้ารายชื่อเน็ท"
 
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:57
 msgid "Outline style:"
-msgstr ""
+msgstr "รูปแบบเค้าร่าง:"
 
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:78
 msgid "Outline smooth:"
-msgstr ""
+msgstr "เค้าร่างราบเรียบ:"
 
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:120
 msgid "Solid shape"
-msgstr ""
+msgstr "รูปร่างทึบ"
 
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:120
 msgid "HatchBorder pattern"
-msgstr ""
+msgstr "รูปแบบ HatchBorder"
 
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:136
 msgid "degree"
-msgstr ""
+msgstr "องศา"
 
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:174
 msgid "Smooth amount:"
-msgstr ""
+msgstr "จำนวนความราบเรียบ:"
 
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.h:84
 msgid "Non Copper Zones Properties"
-msgstr ""
+msgstr "คุณสมบัติของโซนที่ไม่ใช่ทองแดง"
 
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:81
 #: pcbnew/dialogs/dialog_pad_properties.cpp:699
 #: pcbnew/dialogs/dialog_pad_properties.cpp:2142 pcbnew/pcb_shape.cpp:557
 msgid "Segment"
-msgstr ""
+msgstr "เซ็กเมนต์"
 
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:135
 msgid "Ring"
-msgstr ""
+msgstr "แหวน"
 
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:145
 msgid "Center:"
-msgstr ""
+msgstr "ศูนย์กลาง:"
 
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:332
 msgid "Polygon must have at least 3 corners"
-msgstr ""
+msgstr "รูปหลายเหลี่ยมต้องมีอย่างน้อย 3 มุม"
 
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:347
 msgid "Polygon must have at least 3 corners after simplification"
-msgstr ""
+msgstr "รูปหลายเหลี่ยมต้องมีอย่างน้อย 3 มุมหลังจากการทําให้ง่ายขึ้น"
 
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:353
 msgid "Polygon can not be self-intersecting"
-msgstr ""
+msgstr "รูปหลายเหลี่ยมไม่สามารถตัดกันเอง"
 
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:371
 msgid "Note: redundant corners removed"
-msgstr ""
+msgstr "หมายเหตุ: ลบมุมซ้ำซ้อนออก"
 
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:397
 msgid "Select a corner to add the new corner after."
