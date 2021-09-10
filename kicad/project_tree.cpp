@@ -49,9 +49,7 @@ PROJECT_TREE::PROJECT_TREE( PROJECT_TREE_PANE* parent ) :
     m_projectTreePane = parent;
 
     // Make sure the GUI font scales properly on GTK
-    wxFont guiFont = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT );
-    guiFont.SetSymbolicSize( wxFONTSIZE_MEDIUM );
-    SetFont( guiFont );
+    SetFont( KIUI::GetControlFont( this ) );
 
     // icons size is not know (depending on they are built)
     // so get it:

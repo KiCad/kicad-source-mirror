@@ -94,10 +94,25 @@ wxFont KIUI::GetMonospacedUIFont()
 }
 
 
-wxFont KIUI::GetInfoFont()
+wxFont makeGUIFont( wxWindow* aWindow, int aDialogSize )
 {
     wxFont font = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT );
-    font.SetSymbolicSize( wxFONTSIZE_SMALL );
+
+    // Using wxFont::SetSymbolicSize() fails on (at least) GTK with HiDPI screens, so we have
+    // to build our own version based off our icon scaling architecture.
+
+    int vert_size = aWindow->ConvertDialogToPixels( wxSize( 0, aDialogSize ) ).y;
+
+    if( Pgm().GetCommonSettings()->m_Appearance.icon_scale > 0 )
+        vert_size *= Pgm().GetCommonSettings()->m_Appearance.icon_scale / 4;
+
+    if( vert_size < 7 )
+        vert_size = 7;
+
+    if( vert_size < 10 )
+        vert_size += 1;
+
+    font.SetPointSize( vert_size );
 
 #ifdef __WXMAC__
     // https://trac.wxwidgets.org/ticket/19210
@@ -109,16 +124,21 @@ wxFont KIUI::GetInfoFont()
 }
 
 
-wxFont KIUI::GetStatusFont()
+wxFont KIUI::GetControlFont( wxWindow* aWindow )
 {
-    // wxFONTSIZE_X_SMALL is too small, so we take the wxFONTSIZE_SMALL infofont and adjust
-    // it by wxFONTSIZE_SMALL again.
+    return makeGUIFont( aWindow, 7 );
+}
 
-    wxFont font = GetInfoFont();
 
-    font.SetPointSize( wxFont::AdjustToSymbolicSize( wxFONTSIZE_SMALL, font.GetPointSize() ) );
+wxFont KIUI::GetInfoFont( wxWindow* aWindow )
+{
+    return makeGUIFont( aWindow, 6 );
+}
 
-    return font;
+
+wxFont KIUI::GetStatusFont( wxWindow* aWindow )
+{
+    return makeGUIFont( aWindow, 5 );
 }
 
 

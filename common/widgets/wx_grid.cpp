@@ -25,7 +25,7 @@
 #include <wx/tokenzr.h>
 #include <wx/dc.h>
 #include <widgets/wx_grid.h>
-
+#include <widgets/ui_common.h>
 #include <algorithm>
 
 
@@ -40,9 +40,8 @@ WX_GRID::WX_GRID( wxWindow *parent, wxWindowID id, const wxPoint& pos, const wxS
     SetDefaultCellOverflow( false );
 
     // Make sure the GUI font scales properly on GTK
-    wxFont guiFont = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT );
-    guiFont.SetSymbolicSize( wxFONTSIZE_MEDIUM );
-    SetDefaultCellFont( guiFont );
+    SetDefaultCellFont( KIUI::GetControlFont( this ) );
+
 }
 
 

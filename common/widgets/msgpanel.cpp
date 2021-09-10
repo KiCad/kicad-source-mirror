@@ -48,7 +48,7 @@ EDA_MSG_PANEL::EDA_MSG_PANEL( wxWindow* aParent, int aId,
                               long style, const wxString &name ) :
     wxPanel( aParent, aId, aPosition, aSize, style, name )
 {
-    SetFont( KIUI::GetStatusFont() );
+    SetFont( KIUI::GetStatusFont( this ) );
     SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_BTNFACE ) );
 
     // informs wx not to paint the background itself as we will paint it later in erase()
@@ -65,16 +65,24 @@ EDA_MSG_PANEL::~EDA_MSG_PANEL()
 }
 
 
-int EDA_MSG_PANEL::GetRequiredHeight()
+wxSize computeFontSize()
 {
+    // Get size of the wxSYS_DEFAULT_GUI_FONT
     wxSize     fontSizeInPixels;
+
     wxScreenDC dc;
 
-    dc.SetFont( KIUI::GetStatusFont() );
+    dc.SetFont( wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT ) );
     dc.GetTextExtent( wxT( "W" ), &fontSizeInPixels.x, &fontSizeInPixels.y );
 
+    return fontSizeInPixels;
+}
+
+
+int EDA_MSG_PANEL::GetRequiredHeight()
+{
     // make space for two rows of text plus a number of pixels between them.
-    return 2 * fontSizeInPixels.y + 0;
+    return 2 * computeFontSize().y + 0;
 }
 
 
@@ -87,7 +95,7 @@ void EDA_MSG_PANEL::OnPaint( wxPaintEvent& aEvent )
     dc.SetBackground( wxSystemSettings::GetColour( wxSYS_COLOUR_BTNFACE ) );
     dc.SetBackgroundMode( wxSOLID );
     dc.SetTextBackground( wxSystemSettings::GetColour( wxSYS_COLOUR_BTNFACE ) );
-    dc.SetFont( KIUI::GetStatusFont() );
+    dc.SetFont( KIUI::GetStatusFont( this ) );
 
     for( const MSG_PANEL_ITEM& item : m_Items )
         showItem( dc, item );

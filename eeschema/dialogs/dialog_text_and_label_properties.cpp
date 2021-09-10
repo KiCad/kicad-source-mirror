@@ -116,8 +116,8 @@ DIALOG_TEXT_AND_LABEL_PROPERTIES::DIALOG_TEXT_AND_LABEL_PROPERTIES( SCH_EDIT_FRA
 
     if( m_CurrentText->Type() == SCH_GLOBAL_LABEL_T )
     {
-        m_note1->SetFont( KIUI::GetStatusFont() );
-        m_note2->SetFont( KIUI::GetStatusFont() );
+        m_note1->SetFont( KIUI::GetInfoFont( this ) );
+        m_note2->SetFont( KIUI::GetInfoFont( this ) );
     }
     else
     {

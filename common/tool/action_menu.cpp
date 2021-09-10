@@ -338,7 +338,7 @@ void ACTION_MENU::updateHotKeys()
         const TOOL_ACTION& action = *ii.second;
         int                key = toolMgr->GetHotKey( action ) & ~MD_MODIFIER_MASK;
 
-        if( key )
+        if( key >= 0 )
         {
             int mod = toolMgr->GetHotKey( action ) & MD_MODIFIER_MASK;
             int flags = 0;

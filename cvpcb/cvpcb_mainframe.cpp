@@ -132,9 +132,9 @@ CVPCB_MAINFRAME::CVPCB_MAINFRAME( KIWAY* aKiway, wxWindow* aParent ) :
     wxStaticLine* staticline1 = new wxStaticLine( bottomPanel );
     panelSizer->Add( staticline1, 0, wxEXPAND, 5 );
 
-    m_statusLine1->SetFont( KIUI::GetInfoFont() );
-    m_statusLine2->SetFont( KIUI::GetInfoFont() );
-    m_statusLine3->SetFont( KIUI::GetInfoFont() );
+    m_statusLine1->SetFont( KIUI::GetInfoFont( this ) );
+    m_statusLine2->SetFont( KIUI::GetInfoFont( this ) );
+    m_statusLine3->SetFont( KIUI::GetInfoFont( this ) );
 
     // Add buttons:
     auto buttonsSizer = new wxBoxSizer( wxHORIZONTAL );
