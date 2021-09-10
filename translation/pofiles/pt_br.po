@@ -4,21 +4,22 @@
 # http://www.gnu.org/licenses/fdl-1.3.html
 # Hildo Guillardi Júnior <hildogjr@gmail.com>, 2020.
 # ssantos <ssantos@web.de>, 2020, 2021.
+# Augusto Fraga Giachero <afg@augustofg.net>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-09-07 08:18-0700\n"
-"PO-Revision-Date: 2021-05-09 22:09+0000\n"
-"Last-Translator: ssantos <ssantos@web.de>\n"
-"Language-Team: Brazilian Portuguese <https://hosted.weblate.org/projects/kicad/master-"
-"source/pt/>\n"
-"Language: pt_BR\n"
+"PO-Revision-Date: 2021-09-10 10:52+0000\n"
+"Last-Translator: Augusto Fraga Giachero <afg@augustofg.net>\n"
+"Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
+"kicad/master-source/pt_BR/>\n"
+"Language: pt_br\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.7-dev\n"
+"X-Generator: Weblate 4.8.1-dev\n"
 "X-Poedit-Basepath: ../../kicad-source-mirror\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
@@ -56,7 +57,7 @@ msgstr "Disponível:"
 #: 3d-viewer/3d_cache/dialogs/dialog_select_3d_model_base.cpp:67
 #: common/dialogs/dialog_configure_paths_base.h:72
 msgid "Configure Paths"
-msgstr "Locais dos Ficheiros"
+msgstr "Configurar caminhos"
 
 #: 3d-viewer/3d_cache/dialogs/dialog_select_3d_model_base.h:63
 msgid "Select 3D Model"
@@ -161,7 +162,7 @@ msgstr "Contornos da placa"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:535
 msgid "Create layers"
-msgstr "Cria camadas"
+msgstr "Criar camadas"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:709
 #: pcbnew/dialogs/dialog_footprint_checker.cpp:104
@@ -186,11 +187,11 @@ msgstr ""
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:227
 msgid "Create tracks and vias"
-msgstr "Cria trilhas e vias"
+msgstr "Criar trilhas e vias"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:687
 msgid "Create zones"
-msgstr "Cria zonas"
+msgstr "Criar zonas"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:756
 msgid "Simplifying copper layers polygons"
