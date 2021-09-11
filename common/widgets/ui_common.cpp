@@ -33,6 +33,7 @@
 #include <dialog_shim.h>
 #include <pgm_base.h>
 #include <wx/settings.h>
+#include <bitmaps/bitmap_types.h>
 
 int KIUI::GetStdMargin()
 {
@@ -94,21 +95,28 @@ wxFont KIUI::GetMonospacedUIFont()
 }
 
 
-wxFont makeGUIFont( wxWindow* aWindow, int aDialogSize )
+wxFont makeGUIFont( wxWindow* aWindow, int aPtSize )
 {
     wxFont font = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT );
 
-    // Using wxFont::SetSymbolicSize() fails on (at least) GTK with HiDPI screens, but the
-    // dialog pixel conversion stuff seems to work....
+    // Using wxFont::SetSymbolicSize() fails on (at least) GTK with HiDPI screens (too small),
+    // and the dialog pixel conversion stuff fails on (at least) GTK _without_ HiDPI screens
+    // (too large).
 
-    int vert_size = aWindow->ConvertDialogToPixels( wxSize( 0, aDialogSize ) ).y;
+    int requested_scale = Pgm().GetCommonSettings()->m_Appearance.icon_scale;
 
-    font.SetPointSize( vert_size / 2 );
+    if( requested_scale <= 0 )
+        requested_scale = KiIconScale( aWindow );
+
+    font.SetPointSize( KiROUND( aPtSize * requested_scale / 4.0 ) );
 
 #ifdef __WXMAC__
     // https://trac.wxwidgets.org/ticket/19210
     if( font.GetFaceName().IsEmpty() )
-        font.SetFaceName( "Lucida Grande" );
+        font.SetFaceName( "San Francisco" );
+    // OSX 10.1 .. 10.9: Lucida Grande
+    // OSX 10.10:        Helvetica Neue
+    // OSX 10.11 .. :    San Francisco
 #endif
 
     return font;
@@ -117,13 +125,13 @@ wxFont makeGUIFont( wxWindow* aWindow, int aDialogSize )
 
 wxFont KIUI::GetControlFont( wxWindow* aWindow )
 {
-    return makeGUIFont( aWindow, 14 );
+    return makeGUIFont( aWindow, 13 );
 }
 
 
 wxFont KIUI::GetInfoFont( wxWindow* aWindow )
 {
-    return makeGUIFont( aWindow, 13 );
+    return makeGUIFont( aWindow, 12 );
 }
 
 
