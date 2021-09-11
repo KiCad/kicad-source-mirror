@@ -5,16 +5,16 @@ msgstr ""
 "Project-Id-Version: Kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-09-07 08:18-0700\n"
-"PO-Revision-Date: 2021-07-09 08:32+0000\n"
-"Last-Translator: Trần Phi Hải <tranphihai-focus@outlook.com>\n"
-"Language-Team: Vietnamese <https://hosted.weblate.org/projects/kicad/master-"
-"source/vi/>\n"
+"PO-Revision-Date: 2021-09-11 21:54+0000\n"
+"Last-Translator: lê văn lập <levanlap2502@gmail.com>\n"
+"Language-Team: Vietnamese <https://hosted.weblate.org/projects/kicad/"
+"master-source/vi/>\n"
 "Language: vi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.8-dev\n"
+"X-Generator: Weblate 4.9-dev\n"
 "X-Poedit-Basepath: E:/OPEN_SOURSE/kicad\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SearchPath-0: .\n"
@@ -412,7 +412,7 @@ msgstr "Màu sắc thân Bo mạch"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:66
 msgid "Use board stackup colors"
-msgstr ""
+msgstr "Sử dụng màu stackup lên bảng"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:69
 #, fuzzy
@@ -806,7 +806,7 @@ msgstr "OpenGL"
 #: pagelayout_editor/pl_editor_frame.cpp:484
 #: pcbnew/footprint_edit_frame.cpp:928 pcbnew/pcbnew_config.cpp:60
 msgid "Colors"
-msgstr ""
+msgstr "Màu sắc"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:660
 msgid "3D Image File Name"
@@ -958,7 +958,7 @@ msgstr "Lưới 3D 1mm"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:187
 msgid "Render Realistic Materials"
-msgstr ""
+msgstr "Hiển thị vật liệu thực tế"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:188
 msgid "Use all material properties from each 3D model file"
@@ -1007,7 +1007,7 @@ msgstr "Bật tắt mô hình 3D linh kiện SMD"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:225
 msgid "Toggle 3D models for 'Other' type components"
-msgstr ""
+msgstr "Chuyển đổi mô hình 3D cho các thành phần loại 'Khác'"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:230
 msgid "Show Model Bounding Boxes"
@@ -1542,8 +1542,9 @@ msgid "File Open Error"
 msgstr "Lỗi lưu tệp tin"
 
 #: common/confirm.cpp:162 common/confirm.cpp:168
+#, fuzzy
 msgid "Interleaved saves may produce very unexpected results."
-msgstr ""
+msgstr "Lưu xen kẽ có thể tạo ra kết quả không mong đợi."
 
 #: common/confirm.cpp:164 common/confirm.cpp:169 common/confirm.cpp:251
 #: gerbview/dialogs/dialog_select_one_pcb_layer.cpp:164
@@ -1553,7 +1554,7 @@ msgstr "Đồng ý"
 
 #: common/confirm.cpp:164 common/confirm.cpp:169
 msgid "Open Anyway"
-msgstr ""
+msgstr "Mở bằng mọi cách"
 
 #: common/confirm.cpp:180 common/confirm.cpp:209
 #, fuzzy
@@ -4107,7 +4108,7 @@ msgstr "Không thể đổi tên tệp lưu tự động thành tên tệp in bo
 
 #: common/eda_doc.cpp:140
 msgid "Documentation File"
-msgstr ""
+msgstr "Tệp Tài liệu"
 
 #: common/eda_doc.cpp:150
 #, fuzzy, c-format
@@ -4652,6 +4653,8 @@ msgid ""
 "A directory containing 3rd party plugins, libraries and other downloadable "
 "content."
 msgstr ""
+"Thư mục chứa các plugin, thư viện của bên thứ 3 và các nội dung có thể tải "
+"xuống khác."
 
 #: common/env_vars.cpp:86
 #, fuzzy
@@ -4733,7 +4736,7 @@ msgstr ""
 
 #: common/exceptions.cpp:126
 msgid "Full error text:"
-msgstr ""
+msgstr "Văn bản lỗi đầy đủ:"
 
 #: common/filehistory.cpp:155
 #, fuzzy
@@ -4940,7 +4943,7 @@ msgstr "Thêm vào Lựa chọn"
 #: gerbview/tools/gerbview_actions.cpp:113 pcbnew/tools/pcb_actions.cpp:711
 #: pcbnew/tools/pcb_actions.cpp:731
 msgid "Highlight Net"
-msgstr ""
+msgstr "Tô sáng Net"
 
 #: common/hotkey_store.cpp:48
 msgid "Remove from Selection"
@@ -5706,11 +5709,13 @@ msgid ""
 "Missing null byte at end of property list. Imported data might be malformed "
 "or missing."
 msgstr ""
+"Thiếu byte rỗng ở cuối danh sách thuộc tính. Dữ liệu đã nhập có thể không "
+"đúng định dạng hoặc bị thiếu."
 
 #: common/plugins/altium/altium_parser.cpp:247
 #, c-format
 msgid "Unit '%s' does not end with 'mil'."
-msgstr ""
+msgstr "Đơn vị '%s' không kết thúc bằng 'mil'."
 
 #: common/plugins/altium/altium_parser.cpp:255
 #, fuzzy, c-format
@@ -8889,7 +8894,7 @@ msgstr "Các trường ký hiệu khác"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:37
 msgid "Wires && wire labels"
-msgstr ""
+msgstr "Nhãn dây &&dây"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:40
 msgid "Buses && bus labels"
@@ -8897,24 +8902,24 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:52
 msgid "Sheet titles"
-msgstr ""
+msgstr "Tiêu đề trang"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:55
 msgid "Other sheet fields"
-msgstr ""
+msgstr "Các trường trang khác"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:61
 msgid "Sheet borders && backgrounds"
-msgstr ""
+msgstr "Đường viền & & nền trang"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:67
 msgid "Schematic text && graphics"
-msgstr ""
+msgstr "Căn bản & & đồ họa sơ đồ mạch"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:74
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:52
 msgid "Filters"
-msgstr ""
+msgstr "Bộ lọc"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:82
 #, fuzzy
@@ -8924,28 +8929,28 @@ msgstr "Các trường ký hiệu khác"
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:94
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:72
 msgid "Filter items by parent reference designator:"
-msgstr ""
+msgstr "Lọc các mục theo chỉ định tham chiếu chính:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:102
 msgid "Filter items by parent symbol library id:"
-msgstr ""
+msgstr "Lọc các mục theo id thư viện biểu tượng chính:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:108
 msgid "Filter items by parent symbol type:"
-msgstr ""
+msgstr "Lọc các mục theo loại ký hiệu chính:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:111
 msgid "Non-power symbols"
-msgstr ""
+msgstr "Biểu tượng không phải nguồn điện"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:111
 msgid "Power symbols"
-msgstr ""
+msgstr "Biểu tượng nguồn điện"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:123
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:51
 msgid "Filter items by net:"
-msgstr ""
+msgstr "Lọc các mục theo net:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:135
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:84
@@ -8956,13 +8961,13 @@ msgstr "Xóa bỏ (các) khoản mục đã chọn"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:154
 msgid "Set To"
-msgstr ""
+msgstr "Đặt thành"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:167
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:155
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:55
 msgid "Text size:"
-msgstr ""
+msgstr "Kích thước cỡ chữ:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:193
 #: eeschema/pin_type.cpp:126
@@ -8979,19 +8984,19 @@ msgstr "Xuống"
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:255
 #: include/base_units.h:48
 msgid "-- leave unchanged --"
-msgstr ""
+msgstr "- không thay đổi --"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:229
 msgid "H Align (fields only):"
-msgstr ""
+msgstr "H Căn chỉnh (chỉ các trường):"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:245
 msgid "Visible (fields only)"
-msgstr ""
+msgstr "Hiển thị (chỉ các trường)"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:251
 msgid "V Align (fields only):"
-msgstr ""
+msgstr "V Căn chỉnh (chỉ các trường):"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:291
 #: eeschema/dialogs/dialog_lib_shape_properties_base.cpp:25
@@ -9000,19 +9005,19 @@ msgstr ""
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1267
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1508
 msgid "Line width:"
-msgstr ""
+msgstr "Chiều rộng đường kẻ:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:305
 msgid "Line color:"
-msgstr ""
+msgstr "Màu sắc đường kẻ:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:314
 msgid "Line style:"
-msgstr ""
+msgstr "Kiểu dáng đường kẻ:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:330
 msgid "Sheet background color:"
-msgstr ""
+msgstr "Màu nền trang vẽ:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:339
 #, fuzzy
@@ -9027,11 +9032,11 @@ msgstr "Màu sắc lựa chọn"
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.h:110
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.h:95
 msgid "Edit Text and Graphic Properties"
-msgstr ""
+msgstr "Chỉnh sửa thuộc tính văn bản và đồ họa"
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:31
 msgid "symbol"
-msgstr ""
+msgstr "Ký hiệu"
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:60
 #, fuzzy, c-format
@@ -9043,7 +9048,7 @@ msgstr "Lỗi tải bảng thư viện footprint trong dự án"
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:74
 msgid "Please select a symbol library table file."
-msgstr ""
+msgstr "Vui lòng chọn tệp bảng thư viện ký hiệu."
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:83
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:82
@@ -9075,7 +9080,7 @@ msgstr "Sao chép bảng thư viện toàn cục %s tùy chỉnh"
 
 #: eeschema/dialogs/dialog_junction_props_base.cpp:27
 msgid "Diameter:"
-msgstr ""
+msgstr "Đường kính:"
 
 #: eeschema/dialogs/dialog_junction_props_base.cpp:38
 #: eeschema/dialogs/dialog_line_wire_bus_properties_base.cpp:44
@@ -9084,23 +9089,23 @@ msgstr "Màu sắc:"
 
 #: eeschema/dialogs/dialog_junction_props_base.cpp:61
 msgid "Set diameter to 0 to use schematic junction dot size."
-msgstr ""
+msgstr "Đặt đường kính thành 0 để sử dụng kích thước điểm nối sơ đồ."
 
 #: eeschema/dialogs/dialog_junction_props_base.cpp:65
 #: eeschema/dialogs/dialog_line_wire_bus_properties_base.cpp:80
 msgid "Set color to transparent to use Schematic Editor colors."
-msgstr ""
+msgstr "Đặt màu trong suốt để sử dụng màu Trình soạn thảo Sơ đồ."
 
 #: eeschema/dialogs/dialog_junction_props_base.h:59
 msgid "Junction Properties"
-msgstr ""
+msgstr "Thuộc tính mối nối"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:51
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:45
 #: eeschema/dialogs/dialog_symbol_properties.cpp:138 eeschema/lib_pin.cpp:1026
 #: eeschema/sch_pin.cpp:201
 msgid "Number"
-msgstr ""
+msgstr "Số"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:53
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:47
@@ -9109,7 +9114,7 @@ msgstr ""
 #: eeschema/dialogs/dialog_symbol_properties.cpp:141
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:267
 msgid "Electrical Type"
-msgstr ""
+msgstr "Loại điện"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:54
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:48
@@ -9118,7 +9123,7 @@ msgstr ""
 #: eeschema/dialogs/dialog_symbol_properties.cpp:142
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:268
 msgid "Graphic Style"
-msgstr ""
+msgstr "Phong cách Đồ họa"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:55
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:49
@@ -9138,19 +9143,20 @@ msgstr "Sự định hướng"
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:56
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:50
 msgid "Number Text Size"
-msgstr ""
+msgstr "Kích thước chữ số"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:57
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:51
+#, fuzzy
 msgid "Name Text Size"
-msgstr ""
+msgstr "Tên kích thước văn bản"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:58
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:52
 #: eeschema/lib_pin.cpp:1035 eeschema/sch_pin.cpp:212 pcbnew/pcb_shape.cpp:577
 #: pcbnew/pcb_shape.cpp:602
 msgid "Length"
-msgstr ""
+msgstr "Độ dài"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:59
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:53
@@ -9159,7 +9165,7 @@ msgstr ""
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:62
 #: eeschema/fields_grid_table.cpp:206
 msgid "X Position"
-msgstr ""
+msgstr "Vị trí X"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:60
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:54
@@ -9168,14 +9174,14 @@ msgstr ""
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:63
 #: eeschema/fields_grid_table.cpp:207
 msgid "Y Position"
-msgstr ""
+msgstr "Vị trí X"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:495
 #: eeschema/dialogs/dialog_lib_shape_properties.cpp:47
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:91
 #: eeschema/dialogs/dialog_lib_text_properties.cpp:56
 msgid "Read Only"
-msgstr ""
+msgstr "Chỉ đọc"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:753
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1204
@@ -9184,11 +9190,11 @@ msgstr "Lưu thay đổi?"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:86
 msgid "Group by name"
-msgstr ""
+msgstr "Nhóm theo tên"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:95
 msgid "Pin numbers:"
-msgstr ""
+msgstr "Số pin:"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:99
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:146
@@ -9219,7 +9225,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_position_relative_base.cpp:88
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:127
 msgid "0"
-msgstr ""
+msgstr "0"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.h:70
 msgid "Pin Table"
