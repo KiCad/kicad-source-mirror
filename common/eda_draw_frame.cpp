@@ -145,7 +145,7 @@ EDA_DRAW_FRAME::EDA_DRAW_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrame
     };
 
     SetStatusWidths( arrayDim( dims ), dims );
-    stsbar->SetFont( KIUI::GetGUIFont( this, -2 ) );
+    stsbar->SetFont( KIUI::GetStatusFont( this ) );
 
     // Create child subwindows.
     GetClientSize( &m_frameSize.x, &m_frameSize.y );

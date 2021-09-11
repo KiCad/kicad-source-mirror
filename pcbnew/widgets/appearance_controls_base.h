@@ -59,12 +59,12 @@ class APPEARANCE_CONTROLS_BASE : public wxPanel
 		BITMAP_BUTTON* m_btnNetInspector;
 		WX_GRID* m_netsGrid;
 		wxPanel* m_panelNetclasses;
-		wxStaticText* m_staticText14;
+		wxStaticText* m_staticTextNetClasses;
 		BITMAP_BUTTON* m_btnConfigureNetClasses;
 		wxScrolledWindow* m_netclassScrolledWindow;
 		wxBoxSizer* m_netclassOuterSizer;
-		wxStaticText* presetsLabel;
-		wxStaticText* presetsHotkey;
+		wxStaticText* m_presetsLabel;
+		wxStaticText* m_presetsHotkey;
 		wxChoice* m_cbLayerPresets;
 
 		// Virtual event handlers, overide them in your derived class

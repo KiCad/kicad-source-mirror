@@ -429,6 +429,17 @@ APPEARANCE_CONTROLS::APPEARANCE_CONTROLS( PCB_BASE_FRAME* aParent, wxWindow* aFo
     m_windowObjects->SetScrollRate( 0, 5 );
     m_windowObjects->Bind( wxEVT_SET_FOCUS, &APPEARANCE_CONTROLS::OnSetFocus, this );
 
+    wxFont infoFont = KIUI::GetInfoFont( this );
+    m_staticTextNets->SetFont( infoFont );
+    m_staticTextNetClasses->SetFont( infoFont );
+    m_panelLayers->SetFont( infoFont );
+    m_windowLayers->SetFont( infoFont );
+    m_windowObjects->SetFont( infoFont );
+
+    infoFont = KIUI::GetStatusFont( this );
+    m_presetsLabel->SetFont( infoFont );
+    m_presetsHotkey->SetFont( infoFont );
+
     createControls();
 
     m_btnNetInspector->SetBitmap( KiBitmap( BITMAPS::list_nets_16 ) );
@@ -855,11 +866,9 @@ void APPEARANCE_CONTROLS::OnNetGridRightClick( wxGridEvent& event )
     menu.Append( new wxMenuItem( &menu, ID_SHOW_ALL_NETS,
                                  _( "Show All Nets" ), wxEmptyString, wxITEM_NORMAL ) );
     menu.Append( new wxMenuItem( &menu, ID_HIDE_OTHER_NETS,
-                                 _( "Hide All Other Nets" ), wxEmptyString,
-                                 wxITEM_NORMAL ) );
+                                 _( "Hide All Other Nets" ), wxEmptyString, wxITEM_NORMAL ) );
 
-    menu.Bind( wxEVT_COMMAND_MENU_SELECTED,
-               &APPEARANCE_CONTROLS::onNetContextMenu, this );
+    menu.Bind( wxEVT_COMMAND_MENU_SELECTED, &APPEARANCE_CONTROLS::onNetContextMenu, this );
 
     PopupMenu( &menu );
 }
@@ -1287,9 +1296,11 @@ std::vector<LAYER_PRESET> APPEARANCE_CONTROLS::GetUserLayerPresets() const
 {
     std::vector<LAYER_PRESET> ret;
 
-    for( const auto& pair : m_layerPresets )
+    for( const std::pair<const wxString, LAYER_PRESET>& pair : m_layerPresets )
+    {
         if( !pair.second.readOnly )
             ret.emplace_back( pair.second );
+    }
 
     return ret;
 }
@@ -1981,7 +1992,7 @@ void APPEARANCE_CONTROLS::rebuildObjects()
                                                      wxDefaultPosition, wxDefaultSize,
                                                      wxSL_HORIZONTAL );
 #ifdef __WXMAC__
-                    slider->SetMinSize( wxSize( 80, 22 ) );
+                    slider->SetMinSize( wxSize( 80, 16 ) );
 #else
                     slider->SetMinSize( wxSize( 80, -1 ) );
 #endif
@@ -2013,7 +2024,9 @@ void APPEARANCE_CONTROLS::rebuildObjects()
 
                 aSetting->ctl_text = label;
                 m_objectsOuterSizer->Add( sizer, 0, wxEXPAND | wxLEFT | wxRIGHT, 5 );
-                m_objectsOuterSizer->AddSpacer( 1 );
+
+                if( !aSetting->can_control_opacity )
+                    m_objectsOuterSizer->AddSpacer( 2 );
             };
 
     for( const APPEARANCE_SETTING& s_setting : s_objectSettings )
@@ -2035,7 +2048,7 @@ void APPEARANCE_CONTROLS::rebuildObjects()
 
             if( setting->can_control_opacity )
             {
-                int width = m_windowObjects->GetTextExtent( setting->label ).x;
+                int width = m_windowObjects->GetTextExtent( setting->label ).x + 5;
                 labelWidth = std::max( labelWidth, width );
             }
 
@@ -2134,9 +2147,10 @@ void APPEARANCE_CONTROLS::rebuildNets()
                 if( isDefaultClass )
                     setting->ctl_color->Hide();
 
-                setting->ctl_visibility =
-                        new BITMAP_TOGGLE( setting->ctl_panel, aId, KiBitmap( BITMAPS::visibility ),
-                                           KiBitmap( BITMAPS::visibility_off ), true );
+                setting->ctl_visibility = new BITMAP_TOGGLE( setting->ctl_panel, aId,
+                                                             KiBitmap( BITMAPS::visibility ),
+                                                             KiBitmap( BITMAPS::visibility_off ),
+                                                             true );
 
                 wxString tip;
                 tip.Printf( _( "Show or hide ratsnest for nets in %s" ), name );

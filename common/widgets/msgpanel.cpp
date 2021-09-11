@@ -43,7 +43,7 @@ EDA_MSG_PANEL::EDA_MSG_PANEL( wxWindow* aParent, int aId,
                               long style, const wxString &name ) :
     wxPanel( aParent, aId, aPosition, aSize, style, name )
 {
-    SetFont( KIUI::GetGUIFont( this, -2 ) );
+    SetFont( KIUI::GetStatusFont( this ) );
     SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_BTNFACE ) );
 
     // informs wx not to paint the background itself as we will paint it later in erase()
@@ -90,7 +90,7 @@ void EDA_MSG_PANEL::OnPaint( wxPaintEvent& aEvent )
     dc.SetBackground( wxSystemSettings::GetColour( wxSYS_COLOUR_BTNFACE ) );
     dc.SetBackgroundMode( wxSOLID );
     dc.SetTextBackground( wxSystemSettings::GetColour( wxSYS_COLOUR_BTNFACE ) );
-    dc.SetFont( KIUI::GetGUIFont( this ) );
+    dc.SetFont( KIUI::GetControlFont( this ) );
 
     for( const MSG_PANEL_ITEM& item : m_Items )
         showItem( dc, item );

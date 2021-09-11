@@ -51,7 +51,7 @@ PANEL_SETUP_CONSTRAINTS::PANEL_SETUP_CONSTRAINTS( PAGED_DIALOG* aParent, PCB_EDI
     m_Frame = aFrame;
     m_BrdSettings = &m_Frame->GetBoard()->GetDesignSettings();
 
-    m_stCircleToPolyWarning->SetFont( KIUI::GetGUIFont( this, -1 ) );
+    m_stCircleToPolyWarning->SetFont( KIUI::GetInfoFont( this ) );
 }
 
 

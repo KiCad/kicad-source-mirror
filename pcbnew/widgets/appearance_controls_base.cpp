@@ -14,7 +14,6 @@
 
 APPEARANCE_CONTROLS_BASE::APPEARANCE_CONTROLS_BASE( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style, const wxString& name ) : wxPanel( parent, id, pos, size, style, name )
 {
-	this->SetFont( wxFont( 10, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
 	this->SetMinSize( wxSize( 200,360 ) );
 
 	m_sizerOuter = new wxBoxSizer( wxVERTICAL );
@@ -61,19 +60,17 @@ APPEARANCE_CONTROLS_BASE::APPEARANCE_CONTROLS_BASE( wxWindow* parent, wxWindowID
 
 	m_staticTextNets = new wxStaticText( m_panelNets, wxID_ANY, _("Nets"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextNets->Wrap( -1 );
-	m_staticTextNets->SetFont( wxFont( 9, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
-
-	bSizer17->Add( m_staticTextNets, 1, wxALL, 5 );
+	bSizer17->Add( m_staticTextNets, 1, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
 	m_txtNetFilter = new wxTextCtrl( m_panelNets, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_txtNetFilter->Hide();
 
-	bSizer17->Add( m_txtNetFilter, 1, wxLEFT|wxTOP, 5 );
+	bSizer17->Add( m_txtNetFilter, 1, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	m_btnNetInspector = new BITMAP_BUTTON( m_panelNets, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 	m_btnNetInspector->SetToolTip( _("Show the Net Inspector") );
 
-	bSizer17->Add( m_btnNetInspector, 0, wxLEFT|wxRIGHT|wxTOP, 5 );
+	bSizer17->Add( m_btnNetInspector, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
 
 	bSizer192->Add( bSizer17, 0, wxEXPAND, 5 );
@@ -118,16 +115,14 @@ APPEARANCE_CONTROLS_BASE::APPEARANCE_CONTROLS_BASE( wxWindow* parent, wxWindowID
 	wxBoxSizer* bSizer20;
 	bSizer20 = new wxBoxSizer( wxHORIZONTAL );
 
-	m_staticText14 = new wxStaticText( m_panelNetclasses, wxID_ANY, _("Net Classes"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText14->Wrap( -1 );
-	m_staticText14->SetFont( wxFont( 9, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
-
-	bSizer20->Add( m_staticText14, 1, wxALL, 5 );
+	m_staticTextNetClasses = new wxStaticText( m_panelNetclasses, wxID_ANY, _("Net Classes"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextNetClasses->Wrap( -1 );
+	bSizer20->Add( m_staticTextNetClasses, 1, wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_btnConfigureNetClasses = new BITMAP_BUTTON( m_panelNetclasses, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 	m_btnConfigureNetClasses->SetToolTip( _("Configure net classes") );
 
-	bSizer20->Add( m_btnConfigureNetClasses, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxTOP, 5 );
+	bSizer20->Add( m_btnConfigureNetClasses, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 
 	bSizerNetClasses->Add( bSizer20, 0, wxEXPAND, 5 );
@@ -166,13 +161,13 @@ APPEARANCE_CONTROLS_BASE::APPEARANCE_CONTROLS_BASE( wxWindow* parent, wxWindowID
 	wxBoxSizer* bPresetsLabels;
 	bPresetsLabels = new wxBoxSizer( wxHORIZONTAL );
 
-	presetsLabel = new wxStaticText( this, wxID_ANY, _("Presets:"), wxDefaultPosition, wxDefaultSize, 0 );
-	presetsLabel->Wrap( -1 );
-	bPresetsLabels->Add( presetsLabel, 1, wxRIGHT|wxLEFT, 2 );
+	m_presetsLabel = new wxStaticText( this, wxID_ANY, _("Presets:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_presetsLabel->Wrap( -1 );
+	bPresetsLabels->Add( m_presetsLabel, 1, wxRIGHT|wxLEFT, 2 );
 
-	presetsHotkey = new wxStaticText( this, wxID_ANY, _("(Ctrl+Tab)"), wxDefaultPosition, wxDefaultSize, 0 );
-	presetsHotkey->Wrap( -1 );
-	bPresetsLabels->Add( presetsHotkey, 0, wxRIGHT|wxLEFT, 2 );
+	m_presetsHotkey = new wxStaticText( this, wxID_ANY, _("(Ctrl+Tab)"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_presetsHotkey->Wrap( -1 );
+	bPresetsLabels->Add( m_presetsHotkey, 0, wxRIGHT|wxLEFT, 2 );
 
 
 	bPresets->Add( bPresetsLabels, 1, wxEXPAND|wxTOP, 7 );

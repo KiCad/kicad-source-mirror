@@ -95,14 +95,9 @@ wxFont KIUI::GetMonospacedUIFont()
 }
 
 
-wxFont KIUI::GetGUIFont( wxWindow* aWindow, int aRelativeSize )
+wxFont getGUIFont( wxWindow* aWindow, int aRelativeSize )
 {
     wxFont font = aWindow->GetFont();
-
-#ifdef __WXMSW__
-    // -2 is too small on MSW
-    aRelativeSize = std::max( aRelativeSize, -1 );
-#endif
 
     font.SetPointSize( font.GetPointSize() + aRelativeSize );
 
@@ -128,6 +123,30 @@ wxFont KIUI::GetGUIFont( wxWindow* aWindow, int aRelativeSize )
 #endif
 
     return font;
+}
+
+
+wxFont KIUI::GetStatusFont( wxWindow* aWindow )
+{
+#ifdef __WXMAC__
+    int scale = -2;
+#else
+    int scale = -1;
+#endif
+
+    return getGUIFont( aWindow, scale );
+}
+
+
+wxFont KIUI::GetInfoFont( wxWindow* aWindow )
+{
+    return getGUIFont( aWindow, -1 );
+}
+
+
+wxFont KIUI::GetControlFont( wxWindow* aWindow )
+{
+    return getGUIFont( aWindow, 0 );
 }
 
 

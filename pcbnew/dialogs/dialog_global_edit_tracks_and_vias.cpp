@@ -129,7 +129,7 @@ DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS( PCB_EDIT
     m_layerBox->SetUndefinedLayerName( INDETERMINATE_ACTION );
     m_layerBox->Resync();
 
-    m_netclassGrid->SetDefaultCellFont( KIUI::GetGUIFont( this, -1 ) );
+    m_netclassGrid->SetDefaultCellFont( KIUI::GetInfoFont( this ) );
     buildNetclassesGrid();
 
     m_netclassGrid->SetCellHighlightPenWidth( 0 );

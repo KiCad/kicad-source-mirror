@@ -40,7 +40,7 @@ WX_GRID::WX_GRID( wxWindow *parent, wxWindowID id, const wxPoint& pos, const wxS
     SetDefaultCellOverflow( false );
 
     // Make sure the GUI font scales properly on GTK
-    SetDefaultCellFont( KIUI::GetGUIFont( this ) );
+    SetDefaultCellFont( KIUI::GetControlFont( this ) );
 }
 
 
@@ -60,7 +60,7 @@ void WX_GRID::SetColLabelSize( int aHeight )
     }
 
     // Make sure the GUI font scales properly on GTK
-    wxFont headingFont = KIUI::GetGUIFont( this );
+    wxFont headingFont = KIUI::GetControlFont( this );
     headingFont.MakeBold();
     SetLabelFont( headingFont );
 
