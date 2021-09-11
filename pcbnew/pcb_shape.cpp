@@ -1274,20 +1274,20 @@ std::shared_ptr<SHAPE> PCB_SHAPE::GetEffectiveShape( PCB_LAYER_ID aLayer ) const
 }
 
 
-const std::vector<wxPoint> PCB_SHAPE::BuildPolyPointsList() const
+void PCB_SHAPE::DupPolyPointsList( std::vector<wxPoint>& aBuffer ) const
 {
-    std::vector<wxPoint> rv;
-
     if( m_poly.OutlineCount() )
     {
-        if( m_poly.COutline( 0 ).PointCount() )
+        int pointCount = m_poly.COutline( 0 ).PointCount();
+
+        if( pointCount )
         {
+            aBuffer.reserve( pointCount );
+
             for ( auto iter = m_poly.CIterate(); iter; iter++ )
-                rv.emplace_back( iter->x, iter->y );
+                aBuffer.emplace_back( iter->x, iter->y );
         }
     }
-
-    return rv;
 }
 
 

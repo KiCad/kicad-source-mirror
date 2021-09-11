@@ -579,8 +579,10 @@ void PCB_GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos
                 {
                     SHAPE_LINE_CHAIN lc;
                     lc.SetClosed( true );
+                    std::vector<wxPoint> poly;
+                    shape->DupPolyPointsList( poly );
 
-                    for( const wxPoint& p : shape->BuildPolyPointsList() )
+                    for( const wxPoint& p : poly )
                     {
                         addAnchor( p, CORNER | SNAPPABLE, shape );
                         lc.Append( p );

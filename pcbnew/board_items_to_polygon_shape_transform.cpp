@@ -488,7 +488,7 @@ void PCB_SHAPE::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuf
 
         // Build the polygon with the actual position and orientation:
         std::vector<wxPoint> poly;
-        poly = BuildPolyPointsList();
+        DupPolyPointsList( poly );
 
         for( wxPoint& point : poly )
         {

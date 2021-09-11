@@ -1596,7 +1596,8 @@ void PCB_POINT_EDITOR::updatePoints()
 
         case SHAPE_T::POLY:
         {
-            const auto& points = shape->BuildPolyPointsList();
+            std::vector<wxPoint> points;
+            shape->DupPolyPointsList( points );
 
             if( m_editPoints->PointsSize() != (unsigned) points.size() )
             {

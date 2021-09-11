@@ -223,13 +223,13 @@ public:
     const std::vector<wxPoint>& GetBezierPoints() const { return m_bezierPoints; }
 
     /**
-     * Build and return the list of corners in a std::vector<wxPoint>
+     * Duplicate the list of corners in a std::vector<wxPoint>
      *
      * It must be used only to convert the SHAPE_POLY_SET internal corner buffer
      * to a list of wxPoints, and nothing else, because it duplicates the buffer,
      * that is inefficient to know for instance the corner count
      */
-    const std::vector<wxPoint> BuildPolyPointsList() const;
+    void DupPolyPointsList( std::vector<wxPoint>& aBuffer ) const;
 
     /**
      * @return the number of corners of the polygonal shape
