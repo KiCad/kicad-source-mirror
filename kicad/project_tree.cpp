@@ -49,7 +49,7 @@ PROJECT_TREE::PROJECT_TREE( PROJECT_TREE_PANE* parent ) :
     m_projectTreePane = parent;
 
     // Make sure the GUI font scales properly on GTK
-    SetFont( KIUI::GetInfoFont( this ) );
+    SetFont( KIUI::GetGUIFont( this ) );
 
     // icons size is not know (depending on they are built)
     // so get it:

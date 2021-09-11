@@ -199,7 +199,7 @@ PANEL_FP_EDITOR_DEFAULTS::PANEL_FP_EDITOR_DEFAULTS( FOOTPRINT_EDIT_FRAME* aFrame
 
     m_graphicsGrid->PushEventHandler( new GRID_TRICKS( m_graphicsGrid ) );
 
-    m_staticTextInfo->SetFont( KIUI::GetInfoFont( this ) );
+    m_staticTextInfo->SetFont( KIUI::GetGUIFont( this, -1 ) );
 }
 
 

@@ -95,20 +95,23 @@ wxFont KIUI::GetMonospacedUIFont()
 }
 
 
-wxFont makeGUIFont( wxWindow* aWindow, int aPtSize )
+wxFont KIUI::GetGUIFont( wxWindow* aWindow, int aRelativeSize )
 {
-    wxFont font = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT );
+    wxFont font = aWindow->GetFont();
 
-    // Using wxFont::SetSymbolicSize() fails on (at least) GTK with HiDPI screens (too small),
-    // and the dialog pixel conversion stuff fails on (at least) GTK _without_ HiDPI screens
-    // (too large).
+    font.SetPointSize( font.GetPointSize() + aRelativeSize );
+
+    // Both wxFont::SetSymbolicSize() and wxWindow::ConvertDialogToPixels() fail on some GTKs
+    // with HiDPI screens.  These appear to be the same conditions under which automatic icon
+    // scaling fails, so we look for that and apply a patch.
 
     int requested_scale = Pgm().GetCommonSettings()->m_Appearance.icon_scale;
 
-    if( requested_scale <= 0 )
-        requested_scale = KiIconScale( aWindow );
-
-    font.SetPointSize( KiROUND( aPtSize * requested_scale / 4.0 ) );
+    if( requested_scale > 0 )
+    {
+        double factor = static_cast<double>( requested_scale ) / 4.0;
+        font.SetPointSize( KiROUND( font.GetPointSize() * factor ) );
+    }
 
 #ifdef __WXMAC__
     // https://trac.wxwidgets.org/ticket/19210
@@ -120,24 +123,6 @@ wxFont makeGUIFont( wxWindow* aWindow, int aPtSize )
 #endif
 
     return font;
-}
-
-
-wxFont KIUI::GetControlFont( wxWindow* aWindow )
-{
-    return makeGUIFont( aWindow, 13 );
-}
-
-
-wxFont KIUI::GetInfoFont( wxWindow* aWindow )
-{
-    return makeGUIFont( aWindow, 12 );
-}
-
-
-wxFont KIUI::GetStatusFont( wxWindow* aWindow )
-{
-    return makeGUIFont( aWindow, 11 );
 }
 
 

@@ -46,7 +46,7 @@ public:
         m_sdbSizerOK->SetDefault();
         m_choiceFpList->Append( aFpList );
 
-        m_multipleHint->SetFont( KIUI::GetStatusFont( this ) );
+        m_multipleHint->SetFont( KIUI::GetGUIFont( this, -1 ) );
 
         // Hide help string until someone implements successive placement (#2227)
         m_multipleHint->Show( false );

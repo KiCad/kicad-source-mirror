@@ -45,7 +45,7 @@ DIALOG_LIB_TEXT_PROPERTIES::DIALOG_LIB_TEXT_PROPERTIES( SYMBOL_EDIT_FRAME* aPare
     m_TextValueSelectButton->Hide();
     m_PowerComponentValues->Show( false );
 
-    m_PowerComponentValues->SetFont( KIUI::GetInfoFont( this ) );
+    m_PowerComponentValues->SetFont( KIUI::GetGUIFont( this, -1 ) );
 
     SetInitialFocus( m_TextCtrl );
     m_StyledTextCtrl->Show( false );

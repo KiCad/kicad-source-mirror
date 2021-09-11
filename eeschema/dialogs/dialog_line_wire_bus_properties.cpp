@@ -64,8 +64,8 @@ DIALOG_LINE_WIRE_BUS_PROPERTIES::DIALOG_LINE_WIRE_BUS_PROPERTIES( SCH_EDIT_FRAME
 
     m_colorSwatch->SetDefaultColor( COLOR4D::UNSPECIFIED );
 
-    m_helpLabel1->SetFont( KIUI::GetInfoFont( this ) );
-    m_helpLabel2->SetFont( KIUI::GetInfoFont( this ) );
+    m_helpLabel1->SetFont( KIUI::GetGUIFont( this, -1 ) );
+    m_helpLabel2->SetFont( KIUI::GetGUIFont( this, -1 ) );
 
     SetInitialFocus( m_lineWidth );
 

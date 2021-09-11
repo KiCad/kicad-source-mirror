@@ -37,8 +37,8 @@ DIALOG_JUNCTION_PROPS::DIALOG_JUNCTION_PROPS( SCH_EDIT_FRAME* aParent,
 
     m_colorSwatch->SetDefaultColor( COLOR4D::UNSPECIFIED );
 
-    m_helpLabel1->SetFont( KIUI::GetInfoFont( this ) );
-    m_helpLabel2->SetFont( KIUI::GetInfoFont( this ) );
+    m_helpLabel1->SetFont( KIUI::GetGUIFont( this, -1 ) );
+    m_helpLabel2->SetFont( KIUI::GetGUIFont( this, -1 ) );
 
     SetInitialFocus( m_textCtrlDiameter );
 

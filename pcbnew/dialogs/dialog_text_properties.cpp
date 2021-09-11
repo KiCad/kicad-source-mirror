@@ -131,7 +131,7 @@ DIALOG_TEXT_PROPERTIES::DIALOG_TEXT_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, BO
         m_OrientCtrl->SetString( ii, wxString::Format( "%.1f", rot_list[ii] ) );
 
     // Set font sizes
-    m_statusLine->SetFont( KIUI::GetStatusFont( this ) );
+    m_statusLine->SetFont( KIUI::GetGUIFont( this, -2 ) );
 
     m_sdbSizerOK->SetDefault();
 

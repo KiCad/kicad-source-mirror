@@ -205,7 +205,7 @@ DIALOG_PAD_PROPERTIES::DIALOG_PAD_PROPERTIES( PCB_BASE_FRAME* aParent, PAD* aPad
 
     initValues();
 
-    wxFont infoFont = KIUI::GetInfoFont( this );
+    wxFont infoFont = KIUI::GetGUIFont( this, -1 );
     m_copperLayersLabel->SetFont( infoFont );
     m_techLayersLabel->SetFont( infoFont );
     m_parentInfo->SetFont( infoFont );

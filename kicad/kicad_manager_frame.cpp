@@ -126,7 +126,7 @@ KICAD_MANAGER_FRAME::KICAD_MANAGER_FRAME( wxWindow* parent, const wxString& titl
     // Create the status line (bottom of the frame).  Left half is for project name; right half
     // is for Reporter (currently used by archiver/unarchiver).
     CreateStatusBar( 2 );
-    GetStatusBar()->SetFont( KIUI::GetStatusFont( this ) );
+    GetStatusBar()->SetFont( KIUI::GetGUIFont( this, -2 ) );
 
     // Give an icon
     wxIcon icon;

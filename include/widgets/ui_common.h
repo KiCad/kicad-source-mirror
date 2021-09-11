@@ -52,9 +52,7 @@ wxSize GetTextSize( const wxString& aSingleLine, wxWindow* aWindow );
 
 wxFont GetMonospacedUIFont();
 
-wxFont GetControlFont( wxWindow* aWindow );
-wxFont GetInfoFont( wxWindow* aWindow );
-wxFont GetStatusFont( wxWindow* aWindow );
+wxFont GetGUIFont( wxWindow* aWindow, int aRelativeSize = 0 );
 
 /**
  * Set the minimum pixel width on a text control in order to make a text

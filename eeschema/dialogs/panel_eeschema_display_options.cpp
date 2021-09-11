@@ -37,7 +37,7 @@ PANEL_EESCHEMA_DISPLAY_OPTIONS::PANEL_EESCHEMA_DISPLAY_OPTIONS( SCH_EDIT_FRAME* 
 
     m_galOptionsSizer->Add( m_galOptsPanel, 1, wxEXPAND, 0 );
 
-    m_highlightColorNote->SetFont( KIUI::GetInfoFont( this ) );
+    m_highlightColorNote->SetFont( KIUI::GetGUIFont( this, -1 ) );
 }
 
 
