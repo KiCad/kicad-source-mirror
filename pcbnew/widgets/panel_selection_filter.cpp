@@ -29,6 +29,20 @@ PANEL_SELECTION_FILTER::PANEL_SELECTION_FILTER( wxWindow* aParent ) :
         m_frame( dynamic_cast<PCB_BASE_EDIT_FRAME*>( aParent ) ),
         m_onlyCheckbox( nullptr )
 {
+    wxFont font = KIUI::GetGUIFont( this, -2 );
+    m_cbLockedItems->SetFont( font );
+    m_cbFootprints->SetFont( font );
+    m_cbText->SetFont( font );
+    m_cbTracks->SetFont( font );
+    m_cbVias->SetFont( font );
+    m_cbPads->SetFont( font );
+    m_cbGraphics->SetFont( font );
+    m_cbZones->SetFont( font );
+    m_cbKeepouts->SetFont( font );
+    m_cbDimensions->SetFont( font );
+    m_cbOtherItems->SetFont( font );
+    m_cbAllItems->SetFont( font );
+
     wxASSERT( m_frame );
     m_tool = m_frame->GetToolManager()->GetTool<PCB_SELECTION_TOOL>();
     wxASSERT( m_tool );

@@ -36,7 +36,7 @@
             <property name="enabled">1</property>
             <property name="event_handler">impl_virtual</property>
             <property name="fg"></property>
-            <property name="font">,90,90,9,70,0</property>
+            <property name="font"></property>
             <property name="hidden">0</property>
             <property name="id">wxID_ANY</property>
             <property name="maximum_size"></property>

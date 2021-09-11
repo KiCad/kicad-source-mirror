@@ -99,6 +99,11 @@ wxFont KIUI::GetGUIFont( wxWindow* aWindow, int aRelativeSize )
 {
     wxFont font = aWindow->GetFont();
 
+#ifdef __WXMSW__
+    // -2 is too small on MSW
+    aRelativeSize = std::max( aRelativeSize, -1 );
+#endif
+
     font.SetPointSize( font.GetPointSize() + aRelativeSize );
 
     // Both wxFont::SetSymbolicSize() and wxWindow::ConvertDialogToPixels() fail on some GTKs
