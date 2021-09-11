@@ -28,6 +28,7 @@
 
 #include <richio.h>
 #include <wx/gdicmn.h>
+#include <functional>
 #include <map>
 #include <set>
 #include <vector>
