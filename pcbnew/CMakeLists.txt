@@ -655,6 +655,17 @@ add_dependencies( pcbnew_kiface_objects dxflib_qcad )
 add_dependencies( pcbnew_kiface_objects tinyspline_lib )
 add_dependencies( pcbnew_kiface_objects nanosvg )
 
+if( KICAD_STEP_EXPORT_LIB )
+    target_include_directories( pcbnew_kiface_objects PRIVATE
+        $<TARGET_PROPERTY:kicad2step_lib,INTERFACE_INCLUDE_DIRECTORIES>
+        )
+    add_dependencies( pcbnew_kiface_objects kicad2step_lib )
+
+    list( APPEND PCBNEW_EXTRA_LIBS kicad2step_lib )
+
+    add_definitions( -DKICAD_STEP_EXPORT_LIB )
+endif()
+
 add_library( pcbnew_kiface MODULE $<TARGET_OBJECTS:pcbnew_kiface_objects> )
 
 set_target_properties( pcbnew_kiface PROPERTIES

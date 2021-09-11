@@ -156,6 +156,9 @@ cmake_dependent_option( KICAD_WIN32_INSTALL_PDBS
     OFF "WIN32"
     OFF )
 
+option( KICAD_STEP_EXPORT_LIB
+    "Build and use kicad2step as a library, meant for debugging"
+    OFF )
 
 # Global setting: exports are explicit
 set( CMAKE_CXX_VISIBILITY_PRESET "hidden" )

@@ -32,43 +32,25 @@
 #include <iostream>
 #include <sstream>
 
+#include "kicad2step.h"
 #include "pcb/kicadpcb.h"
 #include "kicad2step_frame_base.h"
 #include "panel_kicad2step.h"
 #include <Standard_Failure.hxx>     // In open cascade
-
-class KICAD2STEP_FRAME;
-
-class KICAD2MCAD_APP : public wxApp
-{
-public:
-    KICAD2MCAD_APP() :
-        wxApp(),
-        m_Panel( nullptr ),
-        m_frame( nullptr )
-    {}
-
-    virtual bool OnInit() override;
-    virtual int OnRun() override;
-    virtual void OnInitCmdLine(wxCmdLineParser& parser) override;
-    virtual bool OnCmdLineParsed(wxCmdLineParser& parser) override;
-
-    PANEL_KICAD2STEP* m_Panel;
-
-private:
-    KICAD2STEP_FRAME* m_frame;
-    KICAD2MCAD_PRMS m_params;
-};
-
-
-wxIMPLEMENT_APP( KICAD2MCAD_APP );
-
 
 class KICAD2STEP_FRAME : public KICAD2STEP_FRAME_BASE
 {
 public:
     KICAD2STEP_FRAME( const wxString& title );
 };
+
+// Horrible hack until we decouple things more
+static PANEL_KICAD2STEP* openPanel = nullptr;
+void ReportMessage( const wxString& aMessage )
+{
+    if( openPanel != nullptr )
+        openPanel->AppendMessage( aMessage );
+}
 
 
 KICAD2MCAD_PRMS::KICAD2MCAD_PRMS()
@@ -88,89 +70,10 @@ KICAD2MCAD_PRMS::KICAD2MCAD_PRMS()
 }
 
 
-void ReportMessage( const wxString& aMessage )
-{
-    KICAD2MCAD_APP& app = wxGetApp();
-    app.m_Panel->AppendMessage( aMessage );
-}
-
-
-static const wxCmdLineEntryDesc cmdLineDesc[] = {
-    { wxCMD_LINE_PARAM, NULL, NULL, _( "pcb_filename" ).mb_str(), wxCMD_LINE_VAL_STRING,
-      wxCMD_LINE_OPTION_MANDATORY },
-    { wxCMD_LINE_OPTION, "o", "output-filename", _( "output filename" ).mb_str(),
-      wxCMD_LINE_VAL_STRING, wxCMD_LINE_PARAM_OPTIONAL },
-
-#ifdef SUPPORTS_IGES
-    { wxCMD_LINE_SWITCH, "fmt-iges", NULL, _( "IGES output (default STEP)" ).mb_str(),
-      wxCMD_LINE_VAL_NONE, wxCMD_LINE_PARAM_OPTIONAL },
-#endif
-
-    { wxCMD_LINE_SWITCH, "f", "force", _( "overwrite output file" ).mb_str(), wxCMD_LINE_VAL_NONE,
-      wxCMD_LINE_PARAM_OPTIONAL },
-    { wxCMD_LINE_SWITCH, NULL, "drill-origin", _( "Use Drill Origin for output origin" ).mb_str(),
-      wxCMD_LINE_VAL_NONE, wxCMD_LINE_PARAM_OPTIONAL },
-    { wxCMD_LINE_SWITCH, NULL, "grid-origin", _( "Use Grid Origin for output origin" ).mb_str(),
-      wxCMD_LINE_VAL_NONE, wxCMD_LINE_PARAM_OPTIONAL },
-    { wxCMD_LINE_OPTION, NULL, "user-origin",
-      _( "User-specified output origin ex. 1x1in, 1x1inch, 25.4x25.4mm (default mm)" ).mb_str(),
-      wxCMD_LINE_VAL_STRING, wxCMD_LINE_PARAM_OPTIONAL },
-    { wxCMD_LINE_SWITCH, NULL, "no-virtual",
-      _( "Exclude 3D models for components with 'virtual' attribute" ).mb_str(),
-      wxCMD_LINE_VAL_NONE, wxCMD_LINE_PARAM_OPTIONAL },
-    { wxCMD_LINE_SWITCH, NULL, "subst-models",
-      _( "Substitute STEP or IGS models with the same name in place of VRML models" ).mb_str(),
-      wxCMD_LINE_VAL_NONE, wxCMD_LINE_PARAM_OPTIONAL },
-    { wxCMD_LINE_OPTION, NULL, "min-distance",
-      _( "Minimum distance between points to treat them as separate ones (default 0.01 mm)" )
-              .mb_str(),
-      wxCMD_LINE_VAL_STRING, wxCMD_LINE_PARAM_OPTIONAL },
-    { wxCMD_LINE_SWITCH, "h", NULL, _( "display this message" ).mb_str(), wxCMD_LINE_VAL_NONE,
-      wxCMD_LINE_OPTION_HELP },
-    { wxCMD_LINE_NONE, nullptr, nullptr, nullptr, wxCMD_LINE_VAL_NONE, 0 }
-};
-
-
-bool KICAD2MCAD_APP::OnInit()
-{
-    if( !wxApp::OnInit() )
-        return false;
-
-    // create the main application window
-    m_frame = new KICAD2STEP_FRAME( "Kicad2step" );
-
-    m_Panel = m_frame->m_panelKicad2Step;
-    m_Panel->m_params = m_params;
-
-    // and show it (a wxFrame is not shown when created initially)
-    m_frame->Show( true );
-    m_frame->Iconize( false );
-
-    return true;
-}
-
-
-int KICAD2MCAD_APP::OnRun()
-{
-    int diag = m_Panel->RunConverter();
-    wxApp::OnRun();     // Start the main loop event, to manage the main frame
-
-    return diag;
-}
-
-
 KICAD2STEP_FRAME::KICAD2STEP_FRAME( const wxString& title ) :
         KICAD2STEP_FRAME_BASE( NULL, wxID_ANY, title )
 {
 }
-
-
-void KICAD2MCAD_APP::OnInitCmdLine( wxCmdLineParser& parser )
-{
-    parser.SetDesc( cmdLineDesc );
-    parser.SetSwitchChars( "-" );
-}
-
 
 PANEL_KICAD2STEP::PANEL_KICAD2STEP( wxWindow* parent, wxWindowID id, const wxPoint& pos,
                                     const wxSize& size, long style ) :
@@ -192,122 +95,6 @@ void PANEL_KICAD2STEP::AppendMessage( const wxString& aMessage )
 {
     m_tcMessages->AppendText( aMessage );
     wxSafeYield();
-}
-
-
-bool KICAD2MCAD_APP::OnCmdLineParsed( wxCmdLineParser& parser )
-{
-#ifdef SUPPORTS_IGES
-      if( parser.Found( "fmt-iges" ) )
-        m_fmtIGES = true;
-#endif
-
-    if( parser.Found( "f" ) )
-        m_params.m_overwrite = true;
-
-    if( parser.Found( "grid-origin" ) )
-        m_params.m_useGridOrigin = true;
-
-    if( parser.Found( "drill-origin" ) )
-        m_params. m_useDrillOrigin = true;
-
-    if( parser.Found( "no-virtual" ) )
-        m_params.m_includeVirtual = false;
-
-    if( parser.Found( "subst-models" ) )
-        m_params.m_substModels = true;
-
-    wxString tstr;
-
-    if( parser.Found( "user-origin", &tstr ) )
-    {
-        std::istringstream istr;
-        istr.str( std::string( tstr.ToUTF8() ) );
-        istr >> m_params.m_xOrigin;
-
-        if( istr.fail() )
-        {
-            parser.Usage();
-            return false;
-        }
-
-        char tmpc;
-        istr >> tmpc;
-
-        if( istr.fail() || ( tmpc != 'x' && tmpc != 'X' ) )
-        {
-            parser.Usage();
-            return false;
-        }
-
-        istr >> m_params.m_yOrigin;
-
-        if( istr.fail() )
-        {
-            parser.Usage();
-            return false;
-        }
-
-        if( !istr.eof() )
-        {
-            std::string tunit;
-            istr >> tunit;
-
-            if( !tunit.compare( "in" ) || !tunit.compare( "inch" ) )
-            {
-                m_params.m_xOrigin *= 25.4;
-                m_params.m_yOrigin *= 25.4;
-            }
-            else if( tunit.compare( "mm" ) )
-            {
-                parser.Usage();
-                return false;
-            }
-        }
-    }
-
-    if( parser.Found( "min-distance", &tstr ) )
-    {
-        std::istringstream istr;
-        istr.str( std::string( tstr.ToUTF8() ) );
-        istr >> m_params.m_minDistance;
-
-        if( istr.fail() )
-        {
-            parser.Usage();
-            return false;
-        }
-
-        if( !istr.eof() )
-        {
-            std::string tunit;
-            istr >> tunit;
-
-            if( !tunit.compare( "in" ) || !tunit.compare( "inch" ) )
-            {
-                m_params.m_minDistance *= 25.4;
-            }
-            else if( tunit.compare( "mm" ) )
-            {
-                parser.Usage();
-                return false;
-            }
-        }
-    }
-
-    if( parser.Found( "o", &tstr ) )
-        m_params.m_outputFile = tstr;
-
-
-    if( parser.GetParamCount() < 1 )
-    {
-        parser.Usage();
-        return false;
-    }
-
-    m_params.m_filename = parser.GetParam( 0 );
-
-    return true;
 }
 
 
@@ -476,4 +263,37 @@ wxString KICAD2MCAD_PRMS::getOutputExt() const
     else
 #endif
         return wxString( "step" );
+}
+
+
+KICAD2STEP::KICAD2STEP( KICAD2MCAD_PRMS aParams ) : m_params( aParams ), m_panel( nullptr )
+{
+}
+
+
+int KICAD2STEP::Run()
+{
+    // create the main application window
+    KICAD2STEP_FRAME* frame = new KICAD2STEP_FRAME( "Kicad2step" );
+
+    m_panel = frame->m_panelKicad2Step;
+    m_panel->m_params = m_params;
+
+    // and show it (a wxFrame is not shown when created initially)
+    frame->Show( true );
+    frame->Iconize( false );
+
+    openPanel = m_panel;
+
+    int diag = m_panel->RunConverter();
+
+    openPanel = nullptr;
+
+    return diag;
+}
+
+
+void KICAD2STEP::ReportMessage( const wxString& aMessage )
+{
+    m_panel->AppendMessage( aMessage );
 }

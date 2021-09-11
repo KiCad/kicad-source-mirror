@@ -34,29 +34,7 @@
 #include <wx/textctrl.h>
 #include <wx/panel.h>
 
-class KICAD2MCAD_PRMS       // A small class to handle parameters of conversion
-{
-public:
-    KICAD2MCAD_PRMS();
-
-    ///< Return file extension for the selected output format
-    wxString getOutputExt() const;
-
-#ifdef SUPPORTS_IGES
-    bool     m_fmtIGES;
-#endif
-    bool     m_overwrite;
-    bool     m_useGridOrigin;
-    bool     m_useDrillOrigin;
-    bool     m_includeVirtual;
-    bool     m_substModels;
-    wxString m_filename;
-    wxString m_outputFile;
-    double   m_xOrigin;
-    double   m_yOrigin;
-    double   m_minDistance;
-
-};
+#include "kicad2step.h"
 
 class PANEL_KICAD2STEP: public wxPanel
 {

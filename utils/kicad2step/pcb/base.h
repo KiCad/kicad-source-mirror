@@ -34,6 +34,8 @@
 
 #include <ostream>
 
+#include <import_export.h>
+
 ///< Default minimum distance between points to treat them as separate ones (mm)
 static constexpr double MIN_DISTANCE = 0.01;
 
@@ -94,7 +96,7 @@ struct TRIPLET
 
 std::ostream& operator<<( std::ostream& aStream, const TRIPLET& aTriplet );
 
-bool Get2DPositionAndRotation( const SEXPR::SEXPR* data, DOUBLET& aPosition, double& aRotation );
+APIEXPORT bool Get2DPositionAndRotation( const SEXPR::SEXPR* data, DOUBLET& aPosition, double& aRotation );
 bool Get2DCoordinate( const SEXPR::SEXPR* data, DOUBLET& aCoordinate );
 bool Get3DCoordinate( const SEXPR::SEXPR* data, TRIPLET& aCoordinate );
 bool GetXYZRotation( const SEXPR::SEXPR* data, TRIPLET& aRotation );
@@ -107,6 +109,6 @@ bool GetXYZRotation( const SEXPR::SEXPR* data, TRIPLET& aRotation );
  * @param aLayerElem the s-expr element to get the name from.
  * @return the layer name if valid, else empty.
  */
-OPT<std::string> GetLayerName( const SEXPR::SEXPR& aLayerElem );
+APIEXPORT OPT<std::string> GetLayerName( const SEXPR::SEXPR& aLayerElem );
 
 #endif  // KICADBASE_H
