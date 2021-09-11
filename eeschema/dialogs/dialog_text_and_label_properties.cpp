@@ -361,18 +361,23 @@ bool DIALOG_TEXT_AND_LABEL_PROPERTIES::TransferDataFromWindow()
         m_CurrentText->SetShape( (PINSHEETLABEL_SHAPE) m_TextShape->GetSelection() );
 
     int style = m_TextStyle->GetSelection();
+    bool wantItalic = ( style & 1 ) > 0;
+    bool wantBold = (style & 2 ) > 0;
 
-    m_CurrentText->SetItalic( ( style & 1 ) );
+    m_CurrentText->SetItalic( wantItalic );
 
-    if( ( style & 2 ) && !m_CurrentText->IsBold() )
+    if( wantBold != m_CurrentText->IsBold() )
     {
-        m_CurrentText->SetBold( true );
-        m_CurrentText->SetTextThickness( GetPenSizeForBold( m_CurrentText->GetTextWidth() ) );
-    }
-    else if( m_CurrentText->IsBold() )
-    {
-        m_CurrentText->SetBold( false );
-        m_CurrentText->SetTextThickness( 0 ); // Use default pen width
+        if( wantBold )
+        {
+            m_CurrentText->SetBold( true );
+            m_CurrentText->SetTextThickness( GetPenSizeForBold( m_CurrentText->GetTextWidth() ) );
+        }
+        else
+        {
+            m_CurrentText->SetBold( false );
+            m_CurrentText->SetTextThickness( 0 ); // Use default pen width
+        }
     }
 
     m_Parent->UpdateItem( m_CurrentText );
