@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-09-07 08:18-0700\n"
-"PO-Revision-Date: 2021-09-10 19:57+0000\n"
+"PO-Revision-Date: 2021-09-11 21:53+0000\n"
 "Last-Translator: Jonathan Haas <haasjona@gmail.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
@@ -8768,14 +8768,14 @@ msgstr ""
 "kopieren."
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:132
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error loading global symbol library table.\n"
 "\n"
 "%s"
 msgstr ""
-"Bei dem Versuch die globale Symbolbibliothekstabelle zu speichern ist ein "
-"Fehler aufgetreten:\n"
+"Fehler beim Laden der globalen Symbolbibliothekstabelle.\n"
+"\n"
 "%s"
 
 #: eeschema/dialogs/dialog_junction_props_base.cpp:27
@@ -8788,14 +8788,16 @@ msgid "Color:"
 msgstr "Farbe:"
 
 #: eeschema/dialogs/dialog_junction_props_base.cpp:61
-#, fuzzy
 msgid "Set diameter to 0 to use schematic junction dot size."
-msgstr "Wechseln zum Schaltplan Editor"
+msgstr ""
+"Durchmesser auf 0 setzen um die Knotenpunktgröße des Schaltplans zu "
+"verwenden."
 
 #: eeschema/dialogs/dialog_junction_props_base.cpp:65
 #: eeschema/dialogs/dialog_line_wire_bus_properties_base.cpp:80
 msgid "Set color to transparent to use Schematic Editor colors."
 msgstr ""
+"Farbe auf transparent setzen um die Schaltplaneditor-Farben zu benutzen."
 
 #: eeschema/dialogs/dialog_junction_props_base.h:59
 msgid "Junction Properties"
@@ -8937,12 +8939,11 @@ msgid "Symbol name:"
 msgstr "Symbolname:"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:35
-#, fuzzy
 msgid ""
 "The symbol name in library and also the default\n"
 "symbol value when loaded in the schematic."
 msgstr ""
-"Dies ist der Symbolname in der Bibliothek und der voreingestellte\n"
+"Symbolname in der Bibliothek und der voreingestellte\n"
 "Symbolwert für die Verwendung im Schaltplan."
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:42
@@ -9312,7 +9313,7 @@ msgstr "Offset für Position:"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:242
 msgid "Margin between the pin name position and the symbol body."
-msgstr ""
+msgstr "Abstand zwischen Pin-Name und Symbolkörper."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:249
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:133
