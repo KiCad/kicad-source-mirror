@@ -854,7 +854,10 @@ bool PCBMODEL::CreatePCB()
 
     // push the board to the data structure
     ReportMessage( "\nGenerate board full shape.\n" );
-    m_pcb_label = m_assy->AddComponent( m_assy_label, board );
+
+    // Add board to the assembly "expanded", meaning the shape gets tacked into an assembly
+    // which will better match how all the other models end up being added
+    m_pcb_label = m_assy->AddComponent( m_assy_label, board, true );
 
     if( m_pcb_label.IsNull() )
         return false;
