@@ -134,7 +134,7 @@ void DRC_TEST_PROVIDER_MISC::testDisabledLayers()
     auto checkDisabledLayers =
             [&]( BOARD_ITEM* item ) -> bool
             {
-                bool onDisabledLayer = false;
+                PCB_LAYER_ID badLayer = UNDEFINED_LAYER;
 
                 if( item->Type() == PCB_PAD_T )
                 {
@@ -143,12 +143,12 @@ void DRC_TEST_PROVIDER_MISC::testDisabledLayers()
                     if( pad->GetAttribute() == PAD_ATTRIB::SMD
                             || pad->GetAttribute() == PAD_ATTRIB::CONN )
                     {
-                        onDisabledLayer = disabledLayers.test( item->GetLayer() );
+                        if( disabledLayers.test( item->GetLayer() ) )
+                            badLayer = item->GetLayer();
                     }
                     else
                     {
-                        // Through hole pad is on whatever layers are there
-                        onDisabledLayer = false;
+                        // Through hole pad is on whatever layers there are.
                     }
                 }
                 else if( item->Type() == PCB_VIA_T )
@@ -159,18 +159,29 @@ void DRC_TEST_PROVIDER_MISC::testDisabledLayers()
 
                     via->LayerPair( &top, &bottom );
 
-                    onDisabledLayer = disabledLayers.test( top ) || disabledLayers.test( bottom );
+                    if( disabledLayers.test( top ) )
+                        badLayer = top;
+                    else if( disabledLayers.test( bottom ) )
+                        badLayer = bottom;
+                }
+                else if( item->Type() == PCB_FP_ZONE_T )
+                {
+                    // Footprint zones just get a top/bottom/inner setting, so they're on
+                    // whatever inner layers there are.
                 }
                 else
                 {
-                    onDisabledLayer = ( disabledLayers & item->GetLayerSet() ).any();
+                    LSET badLayers = disabledLayers & item->GetLayerSet();
+
+                    if( badLayers.any() )
+                        badLayer = badLayers.Seq().front();
                 }
 
-                if( onDisabledLayer )
+                if( badLayer != UNDEFINED_LAYER )
                 {
                     std::shared_ptr<DRC_ITEM>drcItem = DRC_ITEM::Create( DRCE_DISABLED_LAYER_ITEM );
 
-                    m_msg.Printf( _( "(layer %s)" ), item->GetLayerName() );
+                    m_msg.Printf( _( "(layer %s)" ), badLayer );
 
                     drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + m_msg );
                     drcItem->SetItems( item );
