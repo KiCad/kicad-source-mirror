@@ -145,10 +145,13 @@ static int get_scale_factor( wxWindow* aWindow )
 }
 
 
-wxBitmap KiScaledBitmap( BITMAPS aBitmap, wxWindow* aWindow, int aHeight )
+wxBitmap KiScaledBitmap( BITMAPS aBitmap, wxWindow* aWindow, int aHeight, bool aQuantized )
 {
     // Bitmap conversions are cached because they can be slow.
-    const int scale = get_scale_factor( aWindow );
+    int scale = get_scale_factor( aWindow );
+
+    if( aQuantized )
+        scale = KiROUND( (double) scale / 4.0 ) * 4;
 
     SCALED_BITMAP_ID id = { static_cast<BITMAPS>( aBitmap ), scale };
 

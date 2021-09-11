@@ -75,8 +75,10 @@ void ClearScaledBitmapCache();
  * @param aBitmap is from the BITMAPS enum in bitmaps_list.h
  * @param aWindow target window for scaling context
  * @param aHeight is the requested image height for the source bitmap, or -1 for any height
+ * @param aQuantized if true scaling will be rounded to integers (2X, 3X, etc.).
  */
-wxBitmap KiScaledBitmap( BITMAPS aBitmap, wxWindow* aWindow, int aHeight = -1 );
+wxBitmap KiScaledBitmap( BITMAPS aBitmap, wxWindow* aWindow, int aHeight = -1,
+                         bool aQuantized = false );
 
 /**
  * Overload of the above function that takes another wxBitmap as a parameter.
