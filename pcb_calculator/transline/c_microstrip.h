@@ -46,6 +46,7 @@ private:
     double s;                  // spacing of lines
     double Z0_e_0;             // static even-mode impedance
     double Z0_o_0;             // static odd-mode impedance
+    double Zdiff;              // differential impedance
     double Z0e;                // even-mode impedance
     double Z0o;                // odd-mode impedance
     double c_e;                // even-mode capacitance
@@ -79,6 +80,7 @@ private:
     void   dielectric_losses();
     void   attenuation();
     void   line_angle();
+    void   diff_impedance();
     void   syn_err_fun( double*, double*, double, double, double, double, double );
     void   synth_width();
     void   Z0_dispersion();

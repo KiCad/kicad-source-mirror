@@ -198,12 +198,12 @@ void PCB_CALCULATOR_FRAME::TranslineTypeSelection( enum TRANSLINE_TYPE_ID aType 
     wxStaticText* left_msg_list[] =
     {
         m_left_message1, m_left_message2, m_left_message3, m_left_message4, m_left_message5,
-        m_left_message6, m_left_message7, nullptr
+        m_left_message6, m_left_message7, m_left_message8, nullptr
     };
 
     wxStaticText* msg_list[] =
     {
-        m_Message1, m_Message2, m_Message3, m_Message4, m_Message5, m_Message6, m_Message7, nullptr
+        m_Message1, m_Message2, m_Message3, m_Message4, m_Message5, m_Message6, m_Message7, m_Message8, nullptr
     };
 
     unsigned jj = 0;

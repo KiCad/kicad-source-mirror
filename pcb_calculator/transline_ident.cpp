@@ -306,6 +306,7 @@ TRANSLINE_IDENT::TRANSLINE_IDENT( enum TRANSLINE_TYPE_ID aType )
         m_Messages.Add( _( "Dielectric losses (even):" ) );
         m_Messages.Add( _( "Dielectric losses (odd):" ) );
         m_Messages.Add( _( "Skin depth:" ) );
+        m_Messages.Add( _( "Differential Impedance (Zd):" ) );
 
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_SUBS, H_PRM,
                                    "H", "H", _( "Height of substrate" ), 0.2, true ) );

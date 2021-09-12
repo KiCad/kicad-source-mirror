@@ -48,6 +48,7 @@ C_MICROSTRIP::C_MICROSTRIP() : TRANSLINE(),
         s( 0.0 ),                  // spacing of lines
         Z0_e_0( 0.0 ),             // static even-mode impedance
         Z0_o_0( 0.0 ),             // static odd-mode impedance
+        Zdiff( 0.0),               // differential impedance
         Z0e( 0.0 ),                // even-mode impedance
         Z0o( 0.0 ),                // odd-mode impedance
         c_e( 0.0 ),                // even-mode capacitance
@@ -595,6 +596,15 @@ void C_MICROSTRIP::line_angle()
 }
 
 
+/*
+* diff_impedance() - calculate differential impedance
+*/
+void C_MICROSTRIP::diff_impedance()
+{
+    Zdiff = 2*Z0_o_0*(1 - 0.48*exp(-0.96*(m_parameters[PHYS_S_PRM] /m_parameters[H_PRM])));
+}
+
+
 void C_MICROSTRIP::syn_err_fun(
         double* f1, double* f2, double s_h, double w_h, double e_r, double w_h_se, double w_h_so )
 {
@@ -815,6 +825,8 @@ void C_MICROSTRIP::calcAnalyze()
     attenuation();
     /* calculate electrical lengths */
     line_angle();
+    /* calculate diff impedance */
+    diff_impedance();
 }
 
 
@@ -883,6 +895,7 @@ void C_MICROSTRIP::show_results()
     setResult( 5, atten_dielectric_o, "dB" );
 
     setResult( 6, m_parameters[SKIN_DEPTH_PRM] / UNIT_MICRON, "µm" );
+    setResult( 7, Zdiff, "Ω" );
 }
 
 
