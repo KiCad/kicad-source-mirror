@@ -35,6 +35,9 @@
 #include "pl_editor_frame.h"
 #include "tools/pl_selection_tool.h"
 
+#include <dialogs/html_messagebox.h>
+
+
 PROPERTIES_FRAME::PROPERTIES_FRAME( PL_EDITOR_FRAME* aParent ) :
         PANEL_PROPERTIES_BASE( aParent ),
         m_scintillaTricks( nullptr ),
@@ -299,6 +302,7 @@ void PROPERTIES_FRAME::CopyPrmsFromItemToPanel( DS_DATA_ITEM* aItem )
     m_SizerItemProperties->Show( true );
 
     m_SizerTextOptions->Show( aItem->GetType() == DS_DATA_ITEM::DS_TEXT );
+    m_buttonHelp->Show( aItem->GetType() == DS_DATA_ITEM::DS_TEXT );
 
     m_sbSizerEndPosition->Show( aItem->GetType() == DS_DATA_ITEM::DS_SEGMENT
                                 || aItem->GetType() == DS_DATA_ITEM::DS_RECT );
@@ -541,4 +545,34 @@ void PROPERTIES_FRAME::onScintillaCharAdded( wxStyledTextEvent &aEvent )
 
     m_scintillaTricks->DoAutocomplete( partial, autocompleteTokens );
     m_stcText->SetFocus();
+}
+
+
+void PROPERTIES_FRAME::onHelp( wxCommandEvent& aEvent )
+{
+    // Show the system variables for worksheet text:
+    HTML_MESSAGE_BOX dlg( this, _( "Predefined Keywords" ) );
+    wxString message;
+
+    message << _( "Texts can include keywords." ) << "<br>";
+    message << _( "Keyword notation is ${keyword}" ) << "<br>";
+    message << _( "Keywords are replaced by they actual value in strings" ) << "<br><br>";
+    message << _( "These build-in keywords are always available:" ) << "<br><br>";
+    dlg.AddHTML_Text( message );
+
+    message = "KICAD_VERSION\n";
+    message << "# " << _( "(sheet number)" ) << "\n";
+    message << "## " << _( "(sheet count)" ) << "\n";
+    message << "COMMENT1 … COMMENT9\n";
+    message << "COMPANY\n";
+    message << "FILENAME\n";
+    message << "ISSUE_DATE\n";
+    message << "LAYER\n";
+    message << "PAPER " << _( "(paper size)" ) << "\n";
+    message << "REVISION\n";
+    message << "SHEETNAME\n";
+    message << "TITLE\n";
+
+    dlg.ListSet( message );
+    dlg.ShowModal();
 }

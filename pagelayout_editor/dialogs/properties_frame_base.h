@@ -16,6 +16,10 @@
 #include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
+#include <wx/bitmap.h>
+#include <wx/image.h>
+#include <wx/icon.h>
+#include <wx/button.h>
 #include <wx/choice.h>
 #include <wx/sizer.h>
 #include <wx/stc/stc.h>
@@ -24,10 +28,6 @@
 #include <wx/combobox.h>
 #include <wx/statbox.h>
 #include <wx/gbsizer.h>
-#include <wx/bitmap.h>
-#include <wx/image.h>
-#include <wx/icon.h>
-#include <wx/button.h>
 #include <wx/scrolwin.h>
 #include <wx/notebook.h>
 #include <wx/panel.h>
@@ -46,6 +46,7 @@ class PANEL_PROPERTIES_BASE : public wxPanel
 		wxScrolledWindow* m_swItemProperties;
 		wxBoxSizer* m_SizerItemProperties;
 		wxStaticText* m_staticTextType;
+		wxButton* m_buttonHelp;
 		wxChoice* m_choicePageOpt;
 		wxBoxSizer* m_SizerTextOptions;
 		wxStyledTextCtrl* m_stcText;
@@ -136,13 +137,14 @@ class PANEL_PROPERTIES_BASE : public wxPanel
 
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnPageChanged( wxNotebookEvent& event ) { event.Skip(); }
+		virtual void onHelp( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnAcceptPrms( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnSetDefaultValues( wxCommandEvent& event ) { event.Skip(); }
 
 
 	public:
 
-		PANEL_PROPERTIES_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 309,888 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
+		PANEL_PROPERTIES_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 333,888 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
 		~PANEL_PROPERTIES_BASE();
 
 };

@@ -28,6 +28,9 @@ PANEL_PROPERTIES_BASE::PANEL_PROPERTIES_BASE( wxWindow* parent, wxWindowID id, c
 
 	bSizerButt->Add( m_staticTextType, 1, wxALL|wxALIGN_CENTER_VERTICAL, 4 );
 
+	m_buttonHelp = new wxButton( m_swItemProperties, wxID_ANY, _("Help"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	bSizerButt->Add( m_buttonHelp, 0, wxALL, 5 );
+
 	wxString m_choicePageOptChoices[] = { _("Show on all pages"), _("First page only"), _("Subsequent pages only") };
 	int m_choicePageOptNChoices = sizeof( m_choicePageOptChoices ) / sizeof( wxString );
 	m_choicePageOpt = new wxChoice( m_swItemProperties, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_choicePageOptNChoices, m_choicePageOptChoices, 0 );
@@ -579,6 +582,7 @@ PANEL_PROPERTIES_BASE::PANEL_PROPERTIES_BASE( wxWindow* parent, wxWindowID id, c
 
 	// Connect Events
 	m_notebook->Connect( wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED, wxNotebookEventHandler( PANEL_PROPERTIES_BASE::OnPageChanged ), NULL, this );
+	m_buttonHelp->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_PROPERTIES_BASE::onHelp ), NULL, this );
 	m_buttonOK->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_PROPERTIES_BASE::OnAcceptPrms ), NULL, this );
 	m_buttonDefault->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_PROPERTIES_BASE::OnSetDefaultValues ), NULL, this );
 	m_buttonGeneralOptsOK->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_PROPERTIES_BASE::OnAcceptPrms ), NULL, this );
@@ -588,6 +592,7 @@ PANEL_PROPERTIES_BASE::~PANEL_PROPERTIES_BASE()
 {
 	// Disconnect Events
 	m_notebook->Disconnect( wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED, wxNotebookEventHandler( PANEL_PROPERTIES_BASE::OnPageChanged ), NULL, this );
+	m_buttonHelp->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_PROPERTIES_BASE::onHelp ), NULL, this );
 	m_buttonOK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_PROPERTIES_BASE::OnAcceptPrms ), NULL, this );
 	m_buttonDefault->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_PROPERTIES_BASE::OnSetDefaultValues ), NULL, this );
 	m_buttonGeneralOptsOK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_PROPERTIES_BASE::OnAcceptPrms ), NULL, this );

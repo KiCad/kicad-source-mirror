@@ -83,6 +83,7 @@ public:
     void OnAcceptPrms( wxCommandEvent& event ) override;
     void OnSetDefaultValues( wxCommandEvent& event ) override;
     void onScintillaCharAdded( wxStyledTextEvent &aEvent );
+	void onHelp( wxCommandEvent& aEvent ) override;
 
     // Data transfer from general properties to widgets
     void CopyPrmsFromGeneralToPanel();
