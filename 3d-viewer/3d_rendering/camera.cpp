@@ -173,7 +173,7 @@ void CAMERA::rebuildProjection()
         m_frustum.nearD = 0.10f;
 
         // Ratio width / height of the window display
-        m_frustum.angle = 45.0f * m_zoom;
+        m_frustum.angle = 45.0f;
 
         m_projectionMatrix = glm::perspective( glm::radians( m_frustum.angle ), m_frustum.ratio,
                                                m_frustum.nearD, m_frustum.farD );
