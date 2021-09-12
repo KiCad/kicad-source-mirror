@@ -199,6 +199,7 @@ class PCB_CALCULATOR_FRAME_BASE : public KIWAY_PLAYER
 		UNIT_SELECTOR_FREQUENCY* m_choiceUnit_Frequency;
 		wxStaticBitmap* m_bmCMicrostripZoddZeven;
 		wxFlexGridSizer* m_fgSizerZcomment;
+		wxStaticText* m_staticTextZdiff;
 		wxStaticText* m_staticTextZcommon;
 		wxStaticText* m_phys_prm1_label;
 		wxTextCtrl* m_Phys_prm1_Value;

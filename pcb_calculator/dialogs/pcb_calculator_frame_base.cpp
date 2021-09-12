@@ -886,11 +886,17 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	m_bmCMicrostripZoddZeven = new wxStaticBitmap( m_panelTransline, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
 	bSizerHelpBitmaps->Add( m_bmCMicrostripZoddZeven, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 10 );
 
-	m_fgSizerZcomment = new wxFlexGridSizer( 0, 1, 0, 15 );
+	m_fgSizerZcomment = new wxFlexGridSizer( 0, 2, 0, 15 );
 	m_fgSizerZcomment->AddGrowableCol( 0 );
 	m_fgSizerZcomment->AddGrowableCol( 1 );
 	m_fgSizerZcomment->SetFlexibleDirection( wxBOTH );
 	m_fgSizerZcomment->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+
+	m_staticTextZdiff = new wxStaticText( m_panelTransline, wxID_ANY, _("Zdiff =\n2*Z0( (1 - 0.48exp( -0.96*S/H ) )"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextZdiff->Wrap( -1 );
+	m_staticTextZdiff->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_ITALIC, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
+
+	m_fgSizerZcomment->Add( m_staticTextZdiff, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
 
 	m_staticTextZcommon = new wxStaticText( m_panelTransline, wxID_ANY, _("Zcommon = Zeven / 2"), wxDefaultPosition, wxDefaultSize, wxALIGN_CENTER_HORIZONTAL );
 	m_staticTextZcommon->Wrap( -1 );
