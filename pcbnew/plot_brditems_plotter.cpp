@@ -636,10 +636,11 @@ void BRDITEMS_PLOTTER::PlotFootprintGraphicItem( const FP_SHAPE* aShape )
 
             if( parentFootprint )
             {
-                for( wxPoint corner : cornerList )
+                for( unsigned ii = 0; ii < cornerList.size(); ++ii )
                 {
-                    RotatePoint( &corner, parentFootprint->GetOrientation() );
-                    corner += parentFootprint->GetPosition();
+                    wxPoint* corner = &cornerList[ii];
+                    RotatePoint( corner, parentFootprint->GetOrientation() );
+                    *corner += parentFootprint->GetPosition();
                 }
             }
 
