@@ -160,7 +160,7 @@ int PANEL_KICAD2STEP::RunConverter()
     }
 
     wxString outfile = out_fname.GetFullPath();
-    KICADPCB pcb;
+    KICADPCB pcb( fname.GetName() );
 
     pcb.SetOrigin( m_params.m_xOrigin, m_params.m_yOrigin );
     pcb.SetMinDistance( m_params.m_minDistance );

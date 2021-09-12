@@ -42,7 +42,7 @@
 
 
 
-KICADPCB::KICADPCB()
+KICADPCB::KICADPCB( const wxString& aPcbName )
 {
     m_resolver.Set3DConfigDir( "" );
     m_thickness = 1.6;
@@ -52,6 +52,7 @@ KICADPCB::KICADPCB()
     m_useDrillOrigin = false;
     m_hasGridOrigin = false;
     m_hasDrillOrigin = false;
+    m_pcbName = aPcbName;
 }
 
 
@@ -477,7 +478,7 @@ bool KICADPCB::ComposePCB( bool aComposeVirtual, bool aSubstituteModels )
         origin = m_origin;
     }
 
-    m_pcb_model = new PCBMODEL();
+    m_pcb_model = new PCBMODEL( m_pcbName );
     m_pcb_model->SetPCBThickness( m_thickness );
     m_pcb_model->SetMinDistance( m_minDistance );
 

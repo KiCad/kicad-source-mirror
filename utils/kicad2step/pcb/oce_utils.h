@@ -86,7 +86,7 @@ private:
 class PCBMODEL
 {
 public:
-    PCBMODEL();
+    PCBMODEL( const wxString& aPcbName );
     virtual ~PCBMODEL();
 
     // add an outline segment (must be in final position)
@@ -165,6 +165,7 @@ private:
 
     std::list<KICADCURVE>           m_curves;
     std::vector<TopoDS_Shape>       m_cutouts;
+    wxString                        m_pcbName; // name of the PCB, which will most likely be the file name of the path
 };
 
 #endif // OCE_VIS_OCE_UTILS_H

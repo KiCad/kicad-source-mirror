@@ -52,9 +52,11 @@
 #include <Standard_Version.hxx>
 #include <TCollection_ExtendedString.hxx>
 #include <TDataStd_Name.hxx>
+#include <TDataStd_TreeNode.hxx>
 #include <TDF_LabelSequence.hxx>
 #include <TDF_ChildIterator.hxx>
 #include <TopExp_Explorer.hxx>
+#include <XCAFDoc.hxx>
 #include <XCAFDoc_DocumentTool.hxx>
 #include <XCAFDoc_ColorTool.hxx>
 
@@ -240,7 +242,7 @@ FormatType fileType( const char* aFileName )
 }
 
 
-PCBMODEL::PCBMODEL()
+PCBMODEL::PCBMODEL( const wxString& aPcbName )
 {
     m_app = XCAFApp_Application::GetApplication();
     m_app->NewDocument( "MDTV-XCAF", m_doc );
@@ -254,6 +256,7 @@ PCBMODEL::PCBMODEL()
     m_minDistance2 = MIN_LENGTH2;
     m_minx = 1.0e10;    // absurdly large number; any valid PCB X value will be smaller
     m_mincurve = m_curves.end();
+    m_pcbName = aPcbName;
     BRepBuilderAPI::Precision( MIN_DISTANCE );
 }
 
@@ -861,6 +864,26 @@ bool PCBMODEL::CreatePCB()
 
     if( m_pcb_label.IsNull() )
         return false;
+
+    // AddComponent adds a label that has a reference (not a parent/child relation) to the real label
+    // We need to extract that real label to name it for the STEP output cleanly
+    // Why are we trying to name the bare board? Because CAD tools like SolidWorks do fun things
+    // like "deduplicate" imported STEPs by swapping STEP assembly components with already identically named assemblies
+    // So we want to avoid having the PCB be generally defaulted to "Component" or "Assembly".
+    Handle( TDataStd_TreeNode ) Node;
+
+    if( m_pcb_label.FindAttribute( XCAFDoc::ShapeRefGUID(), Node ) )
+    {
+        TDF_Label label = Node->Father()->Label();
+        if( !label.IsNull() )
+        {
+            wxString                   pcbName = wxString::Format( "%s PCB", m_pcbName );
+            std::string                pcbNameStdString( pcbName.ToUTF8() );
+            TCollection_ExtendedString partname( pcbNameStdString.c_str() );
+            TDataStd_Name::Set( label, partname );
+        }
+    }
+
 
     // color the PCB
     Handle( XCAFDoc_ColorTool ) color = XCAFDoc_DocumentTool::ColorTool( m_doc->Main () );

@@ -54,7 +54,7 @@ class PCBMODEL;
 class KICADPCB
 {
 public:
-    KICADPCB();
+    KICADPCB( const wxString& aPcbName );
     virtual ~KICADPCB();
 
     int GetLayerId( std::string& aLayerName );
@@ -121,6 +121,7 @@ private:
     double                       m_thickness;
     std::vector<KICADFOOTPRINT*> m_footprints;
     std::vector<KICADCURVE*>     m_curves;
+    wxString                     m_pcbName;
 };
 
 
