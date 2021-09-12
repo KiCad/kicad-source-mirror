@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.9.0 Aug 10 2021)
+// C++ code generated with wxFormBuilder (version 3.9.0 Sep 12 2021)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -189,7 +189,7 @@ PANEL_PREVIEW_3D_MODEL_BASE::PANEL_PREVIEW_3D_MODEL_BASE( wxWindow* parent, wxWi
 	bSizer3DButtons->Add( 0, 0, 0, wxEXPAND, 5 );
 
 	m_bpvISO = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), wxBU_AUTODRAW|0 );
-	m_bpvISO->SetToolTip( _("Change to isometric perspective") );
+	m_bpvISO->SetToolTip( _("Enable/disable orthographic projection") );
 
 	bSizer3DButtons->Add( m_bpvISO, 0, wxTOP|wxBOTTOM, 5 );
 
