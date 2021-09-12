@@ -181,7 +181,7 @@ void DRC_TEST_PROVIDER_MISC::testDisabledLayers()
                 {
                     std::shared_ptr<DRC_ITEM>drcItem = DRC_ITEM::Create( DRCE_DISABLED_LAYER_ITEM );
 
-                    m_msg.Printf( _( "(layer %s)" ), badLayer );
+                    m_msg.Printf( _( "(layer %s)" ), LayerName( badLayer ) );
 
                     drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + m_msg );
                     drcItem->SetItems( item );
