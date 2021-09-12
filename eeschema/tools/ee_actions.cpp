@@ -534,7 +534,8 @@ TOOL_ACTION EE_ACTIONS::highlightNet( "eeschema.EditorControl.highlightNet",
         BITMAPS::net_highlight_schematic );
 
 TOOL_ACTION EE_ACTIONS::clearHighlight( "eeschema.EditorControl.clearHighlight",
-        AS_GLOBAL );
+        AS_GLOBAL, '~', "",
+        _( "Clear Net Highlighting" ), _( "Clear any existing net highlighting" ) );
 
 TOOL_ACTION EE_ACTIONS::updateNetHighlighting( "eeschema.EditorControl.updateNetHighlighting",
         AS_GLOBAL );
