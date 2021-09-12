@@ -1175,6 +1175,31 @@ void DXF_IMPORT_PLUGIN::addTextStyle( const DL_StyleData& aData )
 }
 
 
+void DXF_IMPORT_PLUGIN::addPoint( const DL_PointData& aData )
+{
+    DXF_ARBITRARY_AXIS arbAxis = getArbitraryAxis( getExtrusion() );
+    VECTOR3D           centerCoords = ocsToWcs( arbAxis, VECTOR3D( aData.x, aData.y, aData.z ) );
+
+    VECTOR2D          center( mapX( centerCoords.x ), mapY( centerCoords.y ) );
+
+    // we emulate points with filled circles
+    // set the linewidth to something that even small circles look good with
+    // thickness is optional for dxf points
+    // note: we had to modify the dxf library to grab the attribute for thickness
+    double lineWidth = 0.0001;
+    double thickness = mapDim( std::max( aData.thickness, 0.01 ) );
+
+    GRAPHICS_IMPORTER_BUFFER* bufferToUse =
+            ( m_currentBlock != nullptr ) ? &m_currentBlock->m_buffer : &m_internalImporter;
+    bufferToUse->AddCircle( center, thickness, lineWidth, true );
+
+    VECTOR2D radiusDelta( SCALE_FACTOR( thickness ), SCALE_FACTOR( thickness ) );
+
+    updateImageLimits( center + radiusDelta );
+    updateImageLimits( center - radiusDelta );
+}
+
+
 void DXF_IMPORT_PLUGIN::insertLine( const VECTOR2D& aSegStart,
                                     const VECTOR2D& aSegEnd, int aWidth )
 {

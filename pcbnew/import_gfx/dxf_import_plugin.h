@@ -413,6 +413,8 @@ private:
      */
     virtual void addBlock( const DL_BlockData& ) override;
     virtual void endBlock() override;
+    virtual void addTextStyle( const DL_StyleData& aData ) override;
+    virtual void addPoint( const DL_PointData& aData ) override;
 
     virtual void addCircle( const DL_CircleData& aData ) override;
     virtual void addArc( const DL_ArcData& aData ) override;
@@ -428,7 +430,6 @@ private:
      */
     virtual void addVertex( const DL_VertexData& aData ) override;
     virtual void addMText( const DL_MTextData& aData) override;
-    virtual void addTextStyle( const DL_StyleData& aData ) override;
 
     virtual void endEntity() override;
 
