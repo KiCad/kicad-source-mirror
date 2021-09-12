@@ -1090,12 +1090,10 @@ void SCH_ALTIUM_PLUGIN::ParseBezier( const std::map<wxString, wxString>& aProper
 
                 bezier->SetUnit( elem.ownerpartid );
 
-                std::vector<wxPoint> pts;
-
                 for( size_t j = i; j < elem.points.size() && j < i + 4; j++ )
                 {
-                    pts.push_back( GetRelativePosition( elem.points.at( j ) + m_sheetOffset,
-                                                        symbol ) );
+                    bezier->AddPoint( GetRelativePosition( elem.points.at( j ) + m_sheetOffset,
+                                                           symbol ) );
                 }
 
                 bezier->SetWidth( elem.lineWidth );
