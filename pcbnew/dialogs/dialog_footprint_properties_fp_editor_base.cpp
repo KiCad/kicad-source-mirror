@@ -71,7 +71,6 @@ DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::DIALOG_FOOTPRINT_PROPERTIES_FP_EDITO
 	m_itemsGrid->SetRowLabelAlignment( wxALIGN_LEFT, wxALIGN_CENTER );
 
 	// Label Appearance
-	m_itemsGrid->SetLabelFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
 
 	// Cell Defaults
 	m_itemsGrid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
@@ -138,8 +137,6 @@ DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::DIALOG_FOOTPRINT_PROPERTIES_FP_EDITO
 
 	m_allow90Label = new wxStaticText( m_sizerAP->GetStaticBox(), wxID_ANY, _("Allow 90 degree rotated placement:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_allow90Label->Wrap( -1 );
-	m_allow90Label->SetFont( wxFont( 11, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
-
 	m_sizerAllow90->Add( m_allow90Label, 0, 0, 5 );
 
 	m_CostRot90Ctrl = new wxSlider( m_sizerAP->GetStaticBox(), wxID_ANY, 0, 0, 10, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL|wxSL_LABELS );
@@ -155,8 +152,6 @@ DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::DIALOG_FOOTPRINT_PROPERTIES_FP_EDITO
 
 	m_allow180Label = new wxStaticText( m_sizerAP->GetStaticBox(), wxID_ANY, _("Allow 180 degree rotated placement:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_allow180Label->Wrap( -1 );
-	m_allow180Label->SetFont( wxFont( 11, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
-
 	m_sizerAllow180->Add( m_allow180Label, 0, 0, 5 );
 
 	m_CostRot180Ctrl = new wxSlider( m_sizerAP->GetStaticBox(), wxID_ANY, 0, 0, 10, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL|wxSL_LABELS );
@@ -219,20 +214,14 @@ DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::DIALOG_FOOTPRINT_PROPERTIES_FP_EDITO
 
 	m_staticTextInfo = new wxStaticText( sbSizerLocalProperties->GetStaticBox(), wxID_ANY, _("Set values to 0 to use netclass values."), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextInfo->Wrap( -1 );
-	m_staticTextInfo->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
-
 	sbSizerLocalProperties->Add( m_staticTextInfo, 0, wxLEFT|wxRIGHT, 5 );
 
 	m_staticTextInfoValPos = new wxStaticText( sbSizerLocalProperties->GetStaticBox(), wxID_ANY, _("Positive clearance means area bigger than the pad (usual for mask clearance)."), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextInfoValPos->Wrap( -1 );
-	m_staticTextInfoValPos->SetFont( wxFont( 12, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_ITALIC, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
-
 	sbSizerLocalProperties->Add( m_staticTextInfoValPos, 0, wxLEFT|wxRIGHT|wxTOP, 5 );
 
 	m_staticTextInfoValNeg = new wxStaticText( sbSizerLocalProperties->GetStaticBox(), wxID_ANY, _("Negative clearance means area smaller than the pad (usual for paste clearance)."), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextInfoValNeg->Wrap( -1 );
-	m_staticTextInfoValNeg->SetFont( wxFont( 12, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_ITALIC, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
-
 	sbSizerLocalProperties->Add( m_staticTextInfoValNeg, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 
 	wxFlexGridSizer* fgSizerClearances;
@@ -298,14 +287,10 @@ DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::DIALOG_FOOTPRINT_PROPERTIES_FP_EDITO
 
 	m_staticTextInfoCopper = new wxStaticText( sbSizerLocalProperties->GetStaticBox(), wxID_ANY, _("Note: solder mask and paste values are used only for pads on copper layers."), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextInfoCopper->Wrap( -1 );
-	m_staticTextInfoCopper->SetFont( wxFont( 12, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
-
 	sbSizerLocalProperties->Add( m_staticTextInfoCopper, 0, wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 5 );
 
 	m_staticTextInfoPaste = new wxStaticText( sbSizerLocalProperties->GetStaticBox(), wxID_ANY, _("Note: solder paste clearances (absolute and relative) are added to determine the final clearance."), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextInfoPaste->Wrap( -1 );
-	m_staticTextInfoPaste->SetFont( wxFont( 12, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
-
 	sbSizerLocalProperties->Add( m_staticTextInfoPaste, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 
 

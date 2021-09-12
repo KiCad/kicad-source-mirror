@@ -31,14 +31,10 @@ PANEL_SETUP_MASK_AND_PASTE_BASE::PANEL_SETUP_MASK_AND_PASTE_BASE( wxWindow* pare
 
 	m_staticTextInfoMaskMinWidth = new wxStaticText( this, wxID_ANY, _("Use your board house's recommendation for solder mask clearance and minimum bridge width."), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextInfoMaskMinWidth->Wrap( -1 );
-	m_staticTextInfoMaskMinWidth->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_ITALIC, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
-
 	bSizer4->Add( m_staticTextInfoMaskMinWidth, 0, wxEXPAND, 1 );
 
 	m_staticTextInfoMaskMinWidth1 = new wxStaticText( this, wxID_ANY, _("If none is provided, setting the values to zero is suggested."), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextInfoMaskMinWidth1->Wrap( -1 );
-	m_staticTextInfoMaskMinWidth1->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_ITALIC, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
-
 	bSizer4->Add( m_staticTextInfoMaskMinWidth1, 0, wxEXPAND|wxTOP, 1 );
 
 
@@ -132,8 +128,6 @@ PANEL_SETUP_MASK_AND_PASTE_BASE::PANEL_SETUP_MASK_AND_PASTE_BASE( wxWindow* pare
 
 	m_staticTextInfoPaste = new wxStaticText( this, wxID_ANY, _("Note: Solder paste clearances (absolute and relative) are added to determine the final clearance."), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextInfoPaste->Wrap( -1 );
-	m_staticTextInfoPaste->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
-
 	bSizer3->Add( m_staticTextInfoPaste, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 
 

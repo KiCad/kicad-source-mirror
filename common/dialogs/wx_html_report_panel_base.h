@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.9.0 Aug 10 2021)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -19,10 +19,10 @@
 #include <wx/stattext.h>
 #include <wx/checkbox.h>
 #include <widgets/number_badge.h>
-#include <wx/button.h>
 #include <wx/bitmap.h>
 #include <wx/image.h>
 #include <wx/icon.h>
+#include <wx/button.h>
 #include <wx/sizer.h>
 #include <wx/statbox.h>
 #include <wx/panel.h>
@@ -51,7 +51,7 @@ class WX_HTML_REPORT_PANEL_BASE : public wxPanel
 		wxCheckBox* m_checkBoxShowInfos;
 		wxButton* m_btnSaveReportToFile;
 
-		// Virtual event handlers, override them in your derived class
+		// Virtual event handlers, overide them in your derived class
 		virtual void onRightClick( wxMouseEvent& event ) { event.Skip(); }
 		virtual void onCheckBoxShowAll( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onCheckBoxShowErrors( wxCommandEvent& event ) { event.Skip(); }
@@ -64,7 +64,6 @@ class WX_HTML_REPORT_PANEL_BASE : public wxPanel
 	public:
 
 		WX_HTML_REPORT_PANEL_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
-
 		~WX_HTML_REPORT_PANEL_BASE();
 
 };

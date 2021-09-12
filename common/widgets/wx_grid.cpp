@@ -21,7 +21,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <wx/settings.h>
 #include <wx/tokenzr.h>
 #include <wx/dc.h>
 #include <widgets/wx_grid.h>
@@ -59,9 +58,9 @@ void WX_GRID::SetColLabelSize( int aHeight )
         return;
     }
 
+    wxFont headingFont = KIUI::GetControlFont( this ).Bold();
+
     // Make sure the GUI font scales properly on GTK
-    wxFont headingFont = KIUI::GetControlFont( this );
-    headingFont.MakeBold();
     SetLabelFont( headingFont );
 
     // Correct wxFormBuilder height for large fonts
@@ -173,6 +172,9 @@ void WX_GRID::DrawColLabel( wxDC& dc, int col )
     dc.DrawRectangle(rect);
 
     rend.DrawBorder( *this, dc, rect );
+
+    // Make sure fonts get scaled correctly on GTK HiDPI monitors
+    dc.SetFont( GetLabelFont() );
 
     int hAlign, vAlign;
     GetColLabelAlignment( &hAlign, &vAlign );

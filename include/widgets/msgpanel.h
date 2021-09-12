@@ -113,7 +113,7 @@ public:
      *
      * This takes into consideration the system gui font, wxSYS_DEFAULT_GUI_FONT.
      */
-    static int GetRequiredHeight();
+    static int GetRequiredHeight( wxWindow* aWindow );
 
     void OnPaint( wxPaintEvent& aEvent );
     void EraseMsgBox();

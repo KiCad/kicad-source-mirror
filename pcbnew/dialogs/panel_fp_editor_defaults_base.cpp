@@ -83,8 +83,6 @@ PANEL_FP_EDITOR_DEFAULTS_BASE::PANEL_FP_EDITOR_DEFAULTS_BASE( wxWindow* parent, 
 
 	m_staticTextInfo = new wxStaticText( this, wxID_ANY, _("Note: a blank reference designator or value will use the footprint name."), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextInfo->Wrap( -1 );
-	m_staticTextInfo->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
-
 	bButtonSize->Add( m_staticTextInfo, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 

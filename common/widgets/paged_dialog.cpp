@@ -58,6 +58,7 @@ PAGED_DIALOG::PAGED_DIALOG( wxWindow* aParent, const wxString& aTitle, bool aSho
     mainSizer->Add( m_infoBar, 0, wxEXPAND, 0 );
 
     m_treebook = new wxTreebook( this, wxID_ANY );
+    m_treebook->SetFont( KIUI::GetControlFont( this ) );
     mainSizer->Add( m_treebook, 1, wxEXPAND|wxLEFT|wxTOP, 10 );
 
     auto line = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize,

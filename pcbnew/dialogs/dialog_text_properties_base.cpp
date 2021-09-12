@@ -226,8 +226,6 @@ DIALOG_TEXT_PROPERTIES_BASE::DIALOG_TEXT_PROPERTIES_BASE( wxWindow* parent, wxWi
 
 	m_statusLine = new wxStaticText( this, wxID_ANY, _("Parent footprint description"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_statusLine->Wrap( -1 );
-	m_statusLine->SetFont( wxFont( 11, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
-
 	bMargins->Add( m_statusLine, 0, wxBOTTOM|wxRIGHT|wxLEFT, 3 );
 
 

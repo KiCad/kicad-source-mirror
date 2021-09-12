@@ -131,7 +131,7 @@ wxFont KIUI::GetStatusFont( wxWindow* aWindow )
 #ifdef __WXMAC__
     int scale = -2;
 #else
-    int scale = -1;
+    int scale = 0;
 #endif
 
     return getGUIFont( aWindow, scale );

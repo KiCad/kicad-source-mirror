@@ -14,7 +14,6 @@
         <property name="file">wx_html_report_panel_base</property>
         <property name="first_id">1000</property>
         <property name="help_provider">none</property>
-        <property name="image_path_wrapper_function_name"></property>
         <property name="indent_with_spaces"></property>
         <property name="internationalize">1</property>
         <property name="name">WX_HTML_REPORT_PANEL_BASE</property>
@@ -26,7 +25,6 @@
         <property name="skip_php_events">1</property>
         <property name="skip_python_events">1</property>
         <property name="ui_table">UI</property>
-        <property name="use_array_enum">0</property>
         <property name="use_enum">0</property>
         <property name="use_microsoft_bom">0</property>
         <object class="Panel" expanded="1">
@@ -48,7 +46,6 @@
             <property name="size">-1,-1</property>
             <property name="subclass"></property>
             <property name="tooltip"></property>
-            <property name="two_step_creation">0</property>
             <property name="window_extra_style"></property>
             <property name="window_name"></property>
             <property name="window_style">wxTAB_TRAVERSAL</property>
@@ -104,7 +101,7 @@
                                 <property name="enabled">1</property>
                                 <property name="fg"></property>
                                 <property name="floatable">1</property>
-                                <property name="font">,90,90,10,70,0</property>
+                                <property name="font"></property>
                                 <property name="gripper">0</property>
                                 <property name="hidden">0</property>
                                 <property name="id">wxID_ANY</property>
@@ -697,7 +694,6 @@
                                         <property name="aui_name"></property>
                                         <property name="aui_position"></property>
                                         <property name="aui_row"></property>
-                                        <property name="auth_needed">0</property>
                                         <property name="best_size"></property>
                                         <property name="bg"></property>
                                         <property name="bitmap"></property>

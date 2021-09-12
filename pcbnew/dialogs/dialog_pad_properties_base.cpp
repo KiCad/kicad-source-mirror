@@ -500,8 +500,6 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 
 	m_copperLayersLabel = new wxStaticText( m_LayersSizer->GetStaticBox(), wxID_ANY, _("Copper layers:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_copperLayersLabel->Wrap( -1 );
-	m_copperLayersLabel->SetFont( wxFont( 11, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
-
 	m_LayersSizer->Add( m_copperLayersLabel, 0, wxTOP|wxRIGHT|wxLEFT, 4 );
 
 	wxArrayString m_rbCopperLayersSelChoices;
@@ -511,8 +509,6 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 
 	m_techLayersLabel = new wxStaticText( m_LayersSizer->GetStaticBox(), wxID_ANY, _("Technical layers:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_techLayersLabel->Wrap( -1 );
-	m_techLayersLabel->SetFont( wxFont( 11, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
-
 	m_LayersSizer->Add( m_techLayersLabel, 0, wxALL, 5 );
 
 	m_PadLayerAdhCmp = new wxCheckBox( m_LayersSizer->GetStaticBox(), wxID_ANY, _("Front adhesive"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -587,20 +583,14 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	wxStaticText* m_staticTextHint;
 	m_staticTextHint = new wxStaticText( sbClearancesSizer->GetStaticBox(), wxID_ANY, _("Set values to 0 to use parent footprint or netclass values."), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextHint->Wrap( -1 );
-	m_staticTextHint->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
-
 	sbClearancesSizer->Add( m_staticTextHint, 0, wxRIGHT, 10 );
 
 	m_staticTextInfoPosValue = new wxStaticText( sbClearancesSizer->GetStaticBox(), wxID_ANY, _("Positive clearance means area bigger than the pad (usual for mask clearance)."), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextInfoPosValue->Wrap( -1 );
-	m_staticTextInfoPosValue->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_ITALIC, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
-
 	sbClearancesSizer->Add( m_staticTextInfoPosValue, 0, wxTOP|wxRIGHT, 10 );
 
 	m_staticTextInfoNegVal = new wxStaticText( sbClearancesSizer->GetStaticBox(), wxID_ANY, _("Negative clearance means area smaller than the pad (usual for paste clearance)."), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextInfoNegVal->Wrap( -1 );
-	m_staticTextInfoNegVal->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_ITALIC, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
-
 	sbClearancesSizer->Add( m_staticTextInfoNegVal, 0, wxBOTTOM|wxRIGHT, 10 );
 
 	wxFlexGridSizer* fgClearancesGridSizer;
@@ -672,14 +662,10 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 
 	m_nonCopperNote = new wxStaticText( notePanel, wxID_ANY, _("Note: solder mask and paste values are used only for pads on copper layers."), wxDefaultPosition, wxDefaultSize, 0 );
 	m_nonCopperNote->Wrap( -1 );
-	m_nonCopperNote->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_ITALIC, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
-
 	bNoteSizer->Add( m_nonCopperNote, 0, wxTOP|wxRIGHT, 5 );
 
 	m_staticTextInfoPaste = new wxStaticText( notePanel, wxID_ANY, _("Note: solder paste clearances (absolute and relative) are added to determine the final clearance."), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextInfoPaste->Wrap( -1 );
-	m_staticTextInfoPaste->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_ITALIC, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
-
 	bNoteSizer->Add( m_staticTextInfoPaste, 0, wxBOTTOM|wxRIGHT, 5 );
 
 
@@ -700,8 +686,6 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 
 	m_nonCopperWarningText = new wxStaticText( warningPanel, wxID_ANY, _("Note: solder mask and paste values are used only for pads on copper layers."), wxDefaultPosition, wxDefaultSize, 0 );
 	m_nonCopperWarningText->Wrap( -1 );
-	m_nonCopperWarningText->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
-
 	bWarningSizer->Add( m_nonCopperWarningText, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
 
@@ -790,14 +774,10 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 
 	m_staticTextPrimitivesList = new wxStaticText( m_panelCustomShapePrimitives, wxID_ANY, _("Primitives list:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextPrimitivesList->Wrap( -1 );
-	m_staticTextPrimitivesList->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
-
 	bSizerAboveList->Add( m_staticTextPrimitivesList, 1, wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 5 );
 
 	m_staticTextPrimitiveListWarning = new wxStaticText( m_panelCustomShapePrimitives, wxID_ANY, _("Note: coordinates are relative to anchor pad, orientation 0."), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextPrimitiveListWarning->Wrap( -1 );
-	m_staticTextPrimitiveListWarning->SetFont( wxFont( 11, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_ITALIC, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
-
 	bSizerAboveList->Add( m_staticTextPrimitiveListWarning, 0, wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 7 );
 
 
@@ -972,8 +952,6 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 
 	m_parentInfo = new wxStaticText( this, wxID_ANY, _("Footprint R1 (300K), back side (mirrored), rotated 180.0º"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_parentInfo->Wrap( -1 );
-	m_parentInfo->SetFont( wxFont( 12, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
-
 	bottomSizer->Add( m_parentInfo, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT, 8 );
 
 
@@ -1566,8 +1544,6 @@ DIALOG_PAD_PRIMITIVE_POLY_PROPS_BASE::DIALOG_PAD_PRIMITIVE_POLY_PROPS_BASE( wxWi
 
 	m_statusLine1 = new wxStaticText( this, wxID_ANY, _("Coordinates are relative to anchor pad, rotated 0.0 deg."), wxDefaultPosition, wxDefaultSize, 0 );
 	m_statusLine1->Wrap( -1 );
-	m_statusLine1->SetFont( wxFont( 11, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
-
 	bSizer24->Add( m_statusLine1, 1, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 10 );
 
 	m_sdbSizer = new wxStdDialogButtonSizer();

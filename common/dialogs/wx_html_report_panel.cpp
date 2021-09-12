@@ -45,6 +45,7 @@ WX_HTML_REPORT_PANEL::WX_HTML_REPORT_PANEL( wxWindow* parent,
         m_lazyUpdate( false )
 {
     syncCheckboxes();
+    m_htmlView->SetFont( KIUI::GetInfoFont( m_htmlView ) );
     m_htmlView->SetPage( addHeader( "" ) );
 
     Connect( wxEVT_COMMAND_MENU_SELECTED,

@@ -60,24 +60,16 @@ EDA_MSG_PANEL::~EDA_MSG_PANEL()
 }
 
 
-wxSize computeFontSize()
+int EDA_MSG_PANEL::GetRequiredHeight( wxWindow* aWindow )
 {
-    // Get size of the wxSYS_DEFAULT_GUI_FONT
     wxSize     fontSizeInPixels;
-
     wxScreenDC dc;
 
-    dc.SetFont( wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT ) );
+    dc.SetFont( KIUI::GetControlFont( aWindow ) );
     dc.GetTextExtent( wxT( "W" ), &fontSizeInPixels.x, &fontSizeInPixels.y );
 
-    return fontSizeInPixels;
-}
-
-
-int EDA_MSG_PANEL::GetRequiredHeight()
-{
     // make space for two rows of text plus a number of pixels between them.
-    return 2 * computeFontSize().y + 0;
+    return 2 * fontSizeInPixels.y + 0;
 }
 
 

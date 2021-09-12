@@ -65,8 +65,6 @@ DIALOG_LIB_TEXT_PROPERTIES_BASE::DIALOG_LIB_TEXT_PROPERTIES_BASE( wxWindow* pare
 
 	m_PowerComponentValues = new wxStaticText( this, wxID_ANY, _("(Power symbol value field text cannot be changed.)"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_PowerComponentValues->Wrap( -1 );
-	m_PowerComponentValues->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_ITALIC, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
-
 	bTextValueBoxSizer->Add( m_PowerComponentValues, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	m_TextValueSelectButton = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );

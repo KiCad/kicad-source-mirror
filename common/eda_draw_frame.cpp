@@ -104,12 +104,12 @@ EDA_DRAW_FRAME::EDA_DRAW_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrame
     m_drawBgColor         = COLOR4D( BLACK );   // the background color of the draw canvas:
                                                 // BLACK for Pcbnew, BLACK or WHITE for Eeschema
     m_colorSettings       = nullptr;
-    m_msgFrameHeight      = EDA_MSG_PANEL::GetRequiredHeight();
+    m_msgFrameHeight      = EDA_MSG_PANEL::GetRequiredHeight( this );
     m_userUnits           = EDA_UNITS::MILLIMETRES;
     m_polarCoords         = false;
     m_findReplaceData     = new wxFindReplaceData( wxFR_DOWN );
 
-    m_auimgr.SetFlags(wxAUI_MGR_DEFAULT);
+    m_auimgr.SetFlags( wxAUI_MGR_DEFAULT );
 
     CreateStatusBar( 7 );
 

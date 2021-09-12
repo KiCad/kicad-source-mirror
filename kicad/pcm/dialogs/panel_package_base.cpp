@@ -47,8 +47,6 @@ PANEL_PACKAGE_BASE::PANEL_PACKAGE_BASE( wxWindow* parent, wxWindowID id, const w
 
 	m_name = new wxStaticText( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxST_ELLIPSIZE_END );
 	m_name->Wrap( -1 );
-	m_name->SetFont( wxFont( 12, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
-
 	bSizer2->Add( m_name, 0, wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 5 );
 
 	wxBoxSizer* bSizer3;

@@ -37,6 +37,8 @@ PANEL_PACKAGE::PANEL_PACKAGE( wxWindow* parent, const ActionCallback& aCallback,
     m_name->SetBackgroundColour( bgColor );
     m_bitmap->SetBackgroundColour( bgColor );
 
+    m_name->SetFont( m_name->GetFont().Bold() );
+
     m_name->SetLabel( m_data.package.name );
     m_bitmap->SetBitmap( *m_data.bitmap );
 
