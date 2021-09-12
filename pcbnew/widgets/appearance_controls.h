@@ -206,17 +206,17 @@ public:
 
     void OnBoardNetSettingsChanged( BOARD& aBoard ) override;
 
-    void OnBoardItemAdded( BOARD& aBoard, BOARD_ITEM* aBoardItem ) override;
+    void OnBoardItemAdded( BOARD& aBoard, BOARD_ITEM* aItem ) override;
 
-    void OnBoardItemsAdded( BOARD& aBoard, std::vector<BOARD_ITEM*>& aBoardItems ) override;
+    void OnBoardItemsAdded( BOARD& aBoard, std::vector<BOARD_ITEM*>& aItems ) override;
 
-    void OnBoardItemRemoved( BOARD& aBoard, BOARD_ITEM* aBoardItem ) override;
+    void OnBoardItemRemoved( BOARD& aBoard, BOARD_ITEM* aItem ) override;
 
-    void OnBoardItemsRemoved( BOARD& aBoard, std::vector<BOARD_ITEM*>& aBoardItems ) override;
+    void OnBoardItemsRemoved( BOARD& aBoard, std::vector<BOARD_ITEM*>& aItems ) override;
 
-    void OnBoardItemChanged( BOARD& aBoard, BOARD_ITEM* aBoardItem ) override;
+    void OnBoardItemChanged( BOARD& aBoard, BOARD_ITEM* aItem ) override;
 
-    void OnBoardItemsChanged( BOARD& aBoard, std::vector<BOARD_ITEM*>& aBoardItems ) override;
+    void OnBoardItemsChanged( BOARD& aBoard, std::vector<BOARD_ITEM*>& aItems ) override;
 
     ///< Update the colors on all the widgets from the new chosen color theme.
     void OnColorThemeChanged();

@@ -29,11 +29,7 @@ PANEL_SELECTION_FILTER::PANEL_SELECTION_FILTER( wxWindow* aParent ) :
         m_frame( dynamic_cast<PCB_BASE_EDIT_FRAME*>( aParent ) ),
         m_onlyCheckbox( nullptr )
 {
-#ifdef __WXMAC__
-    wxFont font = KIUI::GetStatusFont( this );
-#else
     wxFont font = KIUI::GetInfoFont( this );
-#endif
     m_cbLockedItems->SetFont( font );
     m_cbFootprints->SetFont( font );
     m_cbText->SetFont( font );
