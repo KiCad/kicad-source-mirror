@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-09-07 08:18-0700\n"
-"PO-Revision-Date: 2021-09-08 20:55+0000\n"
+"PO-Revision-Date: 2021-09-13 17:58+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/"
 "master-source/pl/>\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.8.1-dev\n"
+"X-Generator: Weblate 4.9-dev\n"
 "X-Poedit-Basepath: ../../../kicad-source-mirror\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SearchPath-0: .\n"
@@ -8403,7 +8403,7 @@ msgstr "Zostanie wykluczone z listy %s"
 #: eeschema/dialogs/dialog_erc.cpp:512 pcbnew/dialogs/dialog_drc.cpp:464
 #, c-format
 msgid "Change severity to Error for all '%s' violations"
-msgstr "Zmień stopień na Błąd dla wszystkich '%s' naruszeń"
+msgstr "Zmień stopień na Błąd dla wszystkich naruszeń typu '%s'"
 
 #: eeschema/dialogs/dialog_erc.cpp:514 eeschema/dialogs/dialog_erc.cpp:520
 #: pcbnew/dialogs/dialog_drc.cpp:466 pcbnew/dialogs/dialog_drc.cpp:473
@@ -8414,12 +8414,12 @@ msgstr ""
 #: eeschema/dialogs/dialog_erc.cpp:518 pcbnew/dialogs/dialog_drc.cpp:471
 #, c-format
 msgid "Change severity to Warning for all '%s' violations"
-msgstr "Zmień stopień na Ostrzeżenie dla wszystkich '%s' naruszeń"
+msgstr "Zmień stopień na Ostrzeżenie dla wszystkich naruszeń typu '%s'"
 
 #: eeschema/dialogs/dialog_erc.cpp:523 pcbnew/dialogs/dialog_drc.cpp:477
 #, c-format
 msgid "Ignore all '%s' violations"
-msgstr "Ignoruj wszystkie '%s' naruszeń"
+msgstr "Ignoruj wszystkie naruszenia typu '%s'"
 
 #: eeschema/dialogs/dialog_erc.cpp:524 pcbnew/dialogs/dialog_drc.cpp:479
 msgid "Violations will not be checked or reported"
@@ -23232,7 +23232,7 @@ msgstr "Niepołączone elementy (%d)"
 #: pcbnew/dialogs/dialog_drc_base.cpp:129
 #, c-format
 msgid "Schematic Parity (%d)"
-msgstr "Zgodność schematu (%d)"
+msgstr "Zgodność ze schematem (%d)"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:192
 #: pcbnew/dialogs/dialog_footprint_checker_base.cpp:79
