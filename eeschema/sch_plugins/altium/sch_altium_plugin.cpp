@@ -1492,8 +1492,8 @@ void SCH_ALTIUM_PLUGIN::ParseRectangle( const std::map<wxString, wxString>& aPro
 }
 
 
-void SCH_ALTIUM_PLUGIN::ParseSheetSymbol( int aIndex, const std::map<wxString,
-                                          wxString>& aProperties )
+void SCH_ALTIUM_PLUGIN::ParseSheetSymbol( int aIndex,
+                                          const std::map<wxString, wxString>& aProperties )
 {
     ASCH_SHEET_SYMBOL elem( aProperties );
 
