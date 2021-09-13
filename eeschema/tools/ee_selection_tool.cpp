@@ -851,7 +851,13 @@ bool EE_SELECTION_TOOL::selectPoint( EE_COLLECTOR& aCollector, EDA_ITEM** aItem,
     // If still more than one item we're going to have to ask the user.
     if( aCollector.GetCount() > 1 )
     {
-        if( !doSelectionMenu( &aCollector ) || aCollector.m_MenuCancelled )
+        // Try to call selectionMenu via RunAction() to avoid event-loop contention
+        // But it we cannot handle the event, then we don't have an active tool loop, so
+        // handle it directly.
+        if( !m_toolMgr->RunAction( EE_ACTIONS::selectionMenu, true, &aCollector ) )
+            doSelectionMenu( &aCollector );
+
+        if( aCollector.m_MenuCancelled )
         {
             if( aSelectionCancelledFlag )
                 *aSelectionCancelledFlag = true;
