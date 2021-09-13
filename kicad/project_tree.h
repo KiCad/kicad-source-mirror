@@ -49,6 +49,8 @@ public:
     PROJECT_TREE( PROJECT_TREE_PANE* parent );
     ~PROJECT_TREE();
 
+    void LoadIcons();
+
 private:
     /* overridden sort function */
     int OnCompareItems( const wxTreeItemId& item1, const wxTreeItemId& item2 ) override;

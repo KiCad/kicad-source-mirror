@@ -189,6 +189,8 @@ private:
      */
     void onFileSystemEvent( wxFileSystemWatcherEvent& event );
 
+    void onThemeChanged( wxSysColourChangedEvent &aEvent );
+
 public:
     KICAD_MANAGER_FRAME*    m_Parent;
     PROJECT_TREE*           m_TreeProject;

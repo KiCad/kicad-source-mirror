@@ -41,10 +41,13 @@ public:
     void DoAutocomplete( const wxString& aPartial, const wxArrayString& aTokens );
 
 protected:
+    void setupStyles();
+
     int firstNonWhitespace( int aLine, int* aWhitespaceCount = nullptr );
 
     void onCharHook( wxKeyEvent& aEvent );
     void onScintillaUpdateUI( wxStyledTextEvent& aEvent );
+    void onThemeChanged( wxSysColourChangedEvent &aEvent );
 
 protected:
     wxStyledTextCtrl*     m_te;

@@ -164,11 +164,10 @@ wxImage BITMAP_STORE::getImage( BITMAPS aBitmapId, int aHeight )
 }
 
 
-bool BITMAP_STORE::ThemeChanged()
+void BITMAP_STORE::ThemeChanged()
 {
     COMMON_SETTINGS* settings = Pgm().GetCommonSettings();
-
-    wxString oldTheme = m_theme;
+    wxString         oldTheme = m_theme;
 
     if( settings )
     {
@@ -186,9 +185,8 @@ bool BITMAP_STORE::ThemeChanged()
         m_theme = wxT( "light" );
     }
 
-    m_bitmapNameCache.clear();
-
-    return !oldTheme.IsSameAs( m_theme );
+    if( !oldTheme.IsSameAs( m_theme ) )
+        m_bitmapNameCache.clear();
 }
 
 

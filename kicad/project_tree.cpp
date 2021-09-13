@@ -44,12 +44,27 @@ IMPLEMENT_ABSTRACT_CLASS( PROJECT_TREE, wxTreeCtrl )
 PROJECT_TREE::PROJECT_TREE( PROJECT_TREE_PANE* parent ) :
         wxTreeCtrl( parent, ID_PROJECT_TREE, wxDefaultPosition, wxDefaultSize,
                     PLATFORM_STYLE | wxTR_HAS_BUTTONS | wxTR_MULTIPLE, wxDefaultValidator,
-                    wxT( "EDATreeCtrl" ) )
+                    wxT( "EDATreeCtrl" ) ),
+        m_imageList( nullptr )
 {
     m_projectTreePane = parent;
 
     // Make sure the GUI font scales properly on GTK
     SetFont( KIUI::GetControlFont( this ) );
+
+    LoadIcons();
+}
+
+
+PROJECT_TREE::~PROJECT_TREE()
+{
+    delete m_imageList;
+}
+
+
+void PROJECT_TREE::LoadIcons()
+{
+    delete m_imageList;
 
     // icons size is not know (depending on they are built)
     // so get it:
@@ -90,12 +105,6 @@ PROJECT_TREE::PROJECT_TREE( PROJECT_TREE_PANE* parent ) :
     m_imageList->Add( KiBitmap( BITMAPS::editor ) );                 // DESIGN_RULES
 
     SetImageList( m_imageList );
-}
-
-
-PROJECT_TREE::~PROJECT_TREE()
-{
-    delete m_imageList;
 }
 
 

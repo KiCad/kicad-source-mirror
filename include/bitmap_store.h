@@ -73,9 +73,8 @@ public:
     /**
      * Notifies the store that the icon theme has been changed by the user, so caches must be
      * invalidated.
-     * @return true if the new theme is different than what was previously in use
      */
-    bool ThemeChanged();
+    void ThemeChanged();
 
     bool IsDarkTheme() const { return m_theme == wxT( "dark" ); }
 

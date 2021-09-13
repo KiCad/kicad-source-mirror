@@ -25,6 +25,7 @@
 #include <algorithm>
 #include <advanced_config.h>
 #include <bitmaps.h>
+#include <bitmap_store.h>
 #include <eda_draw_frame.h>
 #include <functional>
 #include <kiplatform/ui.h>
@@ -207,6 +208,9 @@ ACTION_TOOLBAR::ACTION_TOOLBAR( EDA_BASE_FRAME* parent, wxWindowID id, const wxP
     Connect( wxEVT_LEFT_UP, wxMouseEventHandler( ACTION_TOOLBAR::onMouseClick ), nullptr, this );
     Connect( m_paletteTimer->GetId(), wxEVT_TIMER,
              wxTimerEventHandler( ACTION_TOOLBAR::onTimerDone ), nullptr, this );
+
+    Bind( wxEVT_SYS_COLOUR_CHANGED,
+          wxSysColourChangedEventHandler( ACTION_TOOLBAR::onThemeChanged ), this );
 }
 
 
@@ -819,6 +823,15 @@ bool ACTION_TOOLBAR::KiRealize()
 
     Refresh( false );
     return retval;
+}
+
+
+void ACTION_TOOLBAR::onThemeChanged( wxSysColourChangedEvent &aEvent )
+{
+    GetBitmapStore()->ThemeChanged();
+    RefreshBitmaps();
+
+    aEvent.Skip();
 }
 
 

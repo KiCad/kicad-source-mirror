@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2020 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2020-2021 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -46,32 +46,7 @@ SCINTILLA_TRICKS::SCINTILLA_TRICKS( wxStyledTextCtrl* aScintilla, const wxString
     m_te->SetScrollWidth( 1 );
     m_te->SetScrollWidthTracking( true );
 
-    if( !m_singleLine )
-    {
-        // Set a monospace font with a tab width of 4.  This is the closest we can get to having
-        // Scintilla mimic the stroke font's tab positioning.
-        wxFont fixedFont = KIUI::GetMonospacedUIFont();
-
-        for( size_t i = 0; i < wxSTC_STYLE_MAX; ++i )
-            m_te->StyleSetFont( i, fixedFont );
-
-        m_te->StyleClearAll();    // Addresses a bug in wx3.0 where styles are not correctly set
-        m_te->SetTabWidth( 4 );
-    }
-
-    // Set up the brace highlighting
-    wxColour highlight = wxSystemSettings::GetColour( wxSYS_COLOUR_HIGHLIGHT );
-   	wxColour highlightText = wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOWTEXT );
-
-   	unsigned char r = highlight.Red();
-    unsigned char g = highlight.Green();
-    unsigned char b = highlight.Blue();
-   	wxColour::MakeGrey( &r, &g, &b );
-   	highlight.Set( r, g, b );
-
-    m_te->StyleSetForeground( wxSTC_STYLE_BRACELIGHT, highlightText );
-    m_te->StyleSetBackground( wxSTC_STYLE_BRACELIGHT, highlight );
-    m_te->StyleSetForeground( wxSTC_STYLE_BRACEBAD, *wxRED );
+    setupStyles();
 
     // Set up autocomplete
     m_te->AutoCompSetIgnoreCase( true );
@@ -83,6 +58,57 @@ SCINTILLA_TRICKS::SCINTILLA_TRICKS( wxStyledTextCtrl* aScintilla, const wxString
 
     // Dispatch command-keys in Scintilla control.
     m_te->Bind( wxEVT_CHAR_HOOK, &SCINTILLA_TRICKS::onCharHook, this );
+
+    m_te->Bind( wxEVT_SYS_COLOUR_CHANGED,
+                wxSysColourChangedEventHandler( SCINTILLA_TRICKS::onThemeChanged ), this );
+}
+
+
+void SCINTILLA_TRICKS::onThemeChanged( wxSysColourChangedEvent &aEvent )
+{
+    setupStyles();
+
+    aEvent.Skip();
+}
+
+
+void SCINTILLA_TRICKS::setupStyles()
+{
+    wxTextCtrl dummy( m_te->GetParent(), wxID_ANY );
+    wxColour   foreground    = dummy.GetForegroundColour();
+    wxColour   background    = dummy.GetBackgroundColour();
+    wxColour   highlight     = wxSystemSettings::GetColour( wxSYS_COLOUR_HIGHLIGHT );
+   	wxColour   highlightText = wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOWTEXT );
+
+    m_te->StyleSetForeground( wxSTC_STYLE_DEFAULT, foreground );
+    m_te->StyleSetBackground( wxSTC_STYLE_DEFAULT, background );
+    m_te->StyleClearAll();
+
+    m_te->SetSelForeground( true, highlightText );
+    m_te->SetSelBackground( true, highlight );
+
+    if( !m_singleLine )
+    {
+        // Set a monospace font with a tab width of 4.  This is the closest we can get to having
+        // Scintilla mimic the stroke font's tab positioning.
+        wxFont fixedFont = KIUI::GetMonospacedUIFont();
+
+        for( size_t i = 0; i < wxSTC_STYLE_MAX; ++i )
+            m_te->StyleSetFont( i, fixedFont );
+
+        m_te->SetTabWidth( 4 );
+    }
+
+    // Set up the brace highlighting
+   	unsigned char r = highlight.Red();
+    unsigned char g = highlight.Green();
+    unsigned char b = highlight.Blue();
+   	wxColour::MakeGrey( &r, &g, &b );
+   	highlight.Set( r, g, b );
+
+    m_te->StyleSetForeground( wxSTC_STYLE_BRACELIGHT, highlightText );
+    m_te->StyleSetBackground( wxSTC_STYLE_BRACELIGHT, highlight );
+    m_te->StyleSetForeground( wxSTC_STYLE_BRACEBAD, *wxRED );
 }
 
 
@@ -258,6 +284,11 @@ void SCINTILLA_TRICKS::onCharHook( wxKeyEvent& aEvent )
         m_te->HomeWrap();
     }
 #endif
+    else if( aEvent.GetKeyCode() == WXK_SPECIAL20 )
+    {
+        // Proxy for a wxSysColourChangedEvent
+        setupStyles();
+    }
     else
     {
         aEvent.Skip();

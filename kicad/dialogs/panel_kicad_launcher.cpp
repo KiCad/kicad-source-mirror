@@ -18,6 +18,7 @@
  */
 
 #include <bitmaps.h>
+#include <bitmap_store.h>
 #include <kicad_manager_frame.h>
 #include <tool/tool_manager.h>
 #include <tools/kicad_manager_actions.h>
@@ -32,6 +33,9 @@ PANEL_KICAD_LAUNCHER::PANEL_KICAD_LAUNCHER( wxWindow* aParent ) :
 {
     m_toolManager = static_cast<KICAD_MANAGER_FRAME*>( aParent )->GetToolManager();
     CreateLaunchers();
+
+    Bind( wxEVT_SYS_COLOUR_CHANGED,
+          wxSysColourChangedEventHandler( PANEL_KICAD_LAUNCHER::onThemeChanged ), this );
 }
 
 
@@ -144,3 +148,14 @@ void PANEL_KICAD_LAUNCHER::CreateLaunchers()
 
     Layout();
 }
+
+
+void PANEL_KICAD_LAUNCHER::onThemeChanged( wxSysColourChangedEvent &aEvent )
+{
+    GetBitmapStore()->ThemeChanged();
+    CreateLaunchers();
+
+    aEvent.Skip();
+}
+
+

@@ -34,9 +34,10 @@ public:
     void CreateLaunchers();
 
 private:
+    void onThemeChanged( wxSysColourChangedEvent &aEvent );
 
+private:
     TOOL_MANAGER* m_toolManager;
-
 };
 
 

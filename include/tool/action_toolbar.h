@@ -330,6 +330,8 @@ protected:
     ///< Handle the palette timer triggering
     void onTimerDone( wxTimerEvent& aEvent );
 
+    void onThemeChanged( wxSysColourChangedEvent &aEvent );
+
     ///< Render the triangle in the lower-right corner that represents that an action palette
     ///< is available for an item
     void OnCustomRender( wxDC& aDc, const wxAuiToolBarItem& aItem, const wxRect& aRect ) override;

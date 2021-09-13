@@ -481,10 +481,8 @@ void EDA_BASE_FRAME::CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVars
         m_fileHistory->SetMaxFiles( (unsigned) std::max( 0, historySize ) );
     }
 
-    if( GetBitmapStore()->ThemeChanged() )
-    {
-        ThemeChanged();
-    }
+    GetBitmapStore()->ThemeChanged();
+    ThemeChanged();
 
     if( GetMenuBar() )
     {
@@ -1236,8 +1234,8 @@ wxSize EDA_BASE_FRAME::GetWindowSize()
 void EDA_BASE_FRAME::HandleSystemColorChange()
 {
     // Update the icon theme when the system theme changes and update the toolbars
-    if( GetBitmapStore()->ThemeChanged() )
-        ThemeChanged();
+    GetBitmapStore()->ThemeChanged();
+    ThemeChanged();
 
     // This isn't handled by ThemeChanged()
     if( GetMenuBar() )
