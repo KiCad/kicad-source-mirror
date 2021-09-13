@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-09-07 08:18-0700\n"
+"POT-Creation-Date: 2021-09-13 10:58-0700\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -1994,6 +1994,9 @@ msgstr "| Action | Default Hotkey | Description"
 msgid "Cmd"
 msgstr "Cmd"
 
+msgid "Option"
+msgstr "Option"
+
 msgid "Only one action can be assigned to each vertical scroll setting"
 msgstr "Only one action can be assigned to each vertical scroll setting"
 
@@ -3418,6 +3421,9 @@ msgstr "Cannot convert '%s' to double."
 #, c-format
 msgid "Cannot open file '%s'"
 msgstr "Cannot open file '%s'"
+
+msgid "File import cancelled by user."
+msgstr "File import cancelled by user."
 
 msgid "The selected file is not valid or might be corrupt!"
 msgstr "The selected file is not valid or might be corrupt!"
@@ -11287,6 +11293,12 @@ msgstr "Select a value to be tuned"
 msgid "Highlight net under cursor"
 msgstr "Highlight net under cursor"
 
+msgid "Clear Net Highlighting"
+msgstr "Clear Net Highlighting"
+
+msgid "Clear any existing net highlighting"
+msgstr "Clear any existing net highlighting"
+
 msgid "Highlight Nets"
 msgstr "Highlight Nets"
 
@@ -13381,6 +13393,30 @@ msgstr "An error occurred attempting to print the drawing sheet."
 msgid "Printing"
 msgstr "Printing"
 
+msgid "Predefined Keywords"
+msgstr "Predefined Keywords"
+
+msgid "Texts can include keywords."
+msgstr "Texts can include keywords."
+
+msgid "Keyword notation is ${keyword}"
+msgstr "Keyword notation is ${keyword}"
+
+msgid "Keywords are replaced by they actual value in strings"
+msgstr "Keywords are replaced by they actual value in strings"
+
+msgid "These build-in keywords are always available:"
+msgstr "These build-in keywords are always available:"
+
+msgid "(sheet number)"
+msgstr "(sheet number)"
+
+msgid "(sheet count)"
+msgstr "(sheet count)"
+
+msgid "(paper size)"
+msgstr "(paper size)"
+
 msgid "Show on all pages"
 msgstr "Show on all pages"
 
@@ -14013,8 +14049,12 @@ msgstr "Conductor mu:"
 msgid "Component Parameters"
 msgstr "Component Parameters"
 
-msgid "Zdiff = Zodd * 2"
-msgstr "Zdiff = Zodd * 2"
+msgid ""
+"Zdiff =\n"
+"2*Z0( (1 - 0.48exp( -0.96*S/H ) )"
+msgstr ""
+"Zdiff =\n"
+"2*Z0( (1 - 0.48exp( -0.96*S/H ) )"
 
 msgid "Zcommon = Zeven / 2"
 msgstr "Zcommon = Zeven / 2"
@@ -14609,6 +14649,9 @@ msgstr "Dielectric losses (even):"
 
 msgid "Dielectric losses (odd):"
 msgstr "Dielectric losses (odd):"
+
+msgid "Differential Impedance (Zd):"
+msgstr "Differential Impedance (Zd):"
 
 msgid "Zeven"
 msgstr "Zeven"
@@ -17059,9 +17102,6 @@ msgstr "Options for Library '%s'"
 msgid "Plugin Options"
 msgstr "Plugin Options"
 
-msgid "Option"
-msgstr "Option"
-
 msgid "Option Choices"
 msgstr "Option Choices"
 
@@ -19290,14 +19330,21 @@ msgid ""
 msgstr ""
 "If checked, pads can be moved with respect to the rest of the footprint."
 
+msgid ""
+"Left click (and drag) actions depend on 2 modifier keys:\n"
+"Shift and Ctrl."
+msgstr ""
+"Left click (and drag) actions depend on 2 modifier keys:\n"
+"Shift and Ctrl."
+
 msgid "No modifier"
 msgstr "No modifier"
 
 msgid "Select item(s)."
 msgstr "Select item(s)."
 
-msgid "Shift+Alt"
-msgstr "Shift+Alt"
+msgid "Long Click"
+msgstr "Long Click"
 
 msgid "Ctrl+Shift"
 msgstr "Ctrl+Shift"
@@ -19305,11 +19352,15 @@ msgstr "Ctrl+Shift"
 msgid "Highlight net (for pads or tracks)."
 msgstr "Highlight net (for pads or tracks)."
 
+msgid ""
+"Left click (and drag) actions depend on 3 modifier keys:\n"
+"Option, Shift and Cmd."
+msgstr ""
+"Left click (and drag) actions depend on 3 modifier keys:\n"
+"Option, Shift and Cmd."
+
 msgid "Shift+Cmd"
 msgstr "Shift+Cmd"
-
-msgid "Alt+Cmd"
-msgstr "Alt+Cmd"
 
 msgid "Magnetic Points"
 msgstr "Magnetic Points"
@@ -25155,12 +25206,6 @@ msgstr "Toggle Last Net Highlight"
 msgid "Toggle between last two highlighted nets"
 msgstr "Toggle between last two highlighted nets"
 
-msgid "Clear Net Highlighting"
-msgstr "Clear Net Highlighting"
-
-msgid "Clear any existing net highlighting"
-msgstr "Clear any existing net highlighting"
-
 msgid "Toggle Net Highlight"
 msgstr "Toggle Net Highlight"
 
@@ -26354,6 +26399,15 @@ msgstr "KiCad Schematic"
 
 msgid "KiCad Printed Circuit Board"
 msgstr "KiCad Printed Circuit Board"
+
+#~ msgid "Zdiff = Zodd * 2"
+#~ msgstr "Zdiff = Zodd * 2"
+
+#~ msgid "Shift+Alt"
+#~ msgstr "Shift+Alt"
+
+#~ msgid "Alt+Cmd"
+#~ msgstr "Alt+Cmd"
 
 #~ msgid "Info"
 #~ msgstr "Info"
