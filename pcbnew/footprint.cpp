@@ -1788,22 +1788,20 @@ void FOOTPRINT::IncrementReference( int aDelta )
 }
 
 
-// Calculate the area of aPolySet, after fracturation, because
-// polygons with no hole are expected.
+// Calculate the area of a PolySet, polygons with hole are allowed.
 static double polygonArea( SHAPE_POLY_SET& aPolySet )
 {
-    double area = 0.0;
-
+    // Ensure all outlines are closed, before calculating the SHAPE_POLY_SET area
     for( int ii = 0; ii < aPolySet.OutlineCount(); ii++ )
     {
         SHAPE_LINE_CHAIN& outline = aPolySet.Outline( ii );
-        // Ensure the curr outline is closed, to calculate area
         outline.SetClosed( true );
 
-        area += outline.Area();
-     }
+        for( int jj = 0; jj < aPolySet.HoleCount( ii ); jj++ )
+            aPolySet.Hole( ii, jj ).SetClosed( true );
+    }
 
-    return area;
+    return aPolySet.Area();
 }
 
 
@@ -1883,8 +1881,6 @@ double FOOTPRINT::GetCoverageArea( const BOARD_ITEM* aItem, const GENERAL_COLLEC
                                                      ARC_LOW_DEF, ERROR_OUTSIDE );
     }
 
-    poly.Simplify( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
-    poly.Fracture( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
     return polygonArea( poly );
 }
 
@@ -1941,25 +1937,15 @@ double FOOTPRINT::CoverageRatio( const GENERAL_COLLECTOR& aCollector ) const
         }
     }
 
-    SHAPE_POLY_SET uncoveredRegion;
-
-    try
-    {
-        uncoveredRegion.BooleanSubtract( footprintRegion, coveredRegion,
-                                         SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
-        uncoveredRegion.Simplify( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
-        uncoveredRegion.Fracture( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
-    }
-    catch( ClipperLib::clipperException& )
-    {
-        // better to be conservative (this will result in the disambiguate dialog)
-        return 1.0;
-    }
-
     double footprintRegionArea = polygonArea( footprintRegion );
-    double uncoveredRegionArea = polygonArea( uncoveredRegion );
+    double uncoveredRegionArea = footprintRegionArea - polygonArea( coveredRegion );
     double coveredArea = footprintRegionArea - uncoveredRegionArea;
     double ratio = ( coveredArea / footprintRegionArea );
+
+    // Test for negative ratio (should not occur).
+    // better to be conservative (this will result in the disambiguate dialog)
+    if( ratio < 0.0 )
+        return 1.0;
 
     return std::min( ratio, 1.0 );
 }
