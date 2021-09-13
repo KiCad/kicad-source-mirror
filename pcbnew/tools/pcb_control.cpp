@@ -130,7 +130,7 @@ int PCB_CONTROL::TrackDisplayMode( const TOOL_EVENT& aEvent )
     Flip( opts.m_DisplayPcbTrackFill );
     m_frame->SetDisplayOptions( opts );
 
-    for( auto track : board()->Tracks() )
+    for( PCB_TRACK* track : board()->Tracks() )
     {
         if( track->Type() == PCB_TRACE_T || track->Type() == PCB_ARC_T )
             view()->Update( track, KIGFX::REPAINT );
@@ -152,7 +152,7 @@ int PCB_CONTROL::ToggleRatsnest( const TOOL_EVENT& aEvent )
         Flip( opts.m_ShowGlobalRatsnest );
         m_frame->SetDisplayOptions( opts );
         getEditFrame<PCB_EDIT_FRAME>()->SetElementVisibility( LAYER_RATSNEST,
-                opts.m_ShowGlobalRatsnest );
+                                                              opts.m_ShowGlobalRatsnest );
 
     }
     else if( aEvent.IsAction( &PCB_ACTIONS::ratsnestLineMode ) )
@@ -175,7 +175,7 @@ int PCB_CONTROL::ViaDisplayMode( const TOOL_EVENT& aEvent )
     Flip( opts.m_DisplayViaFill );
     m_frame->SetDisplayOptions( opts );
 
-    for( auto track : board()->Tracks() )
+    for( PCB_TRACK* track : board()->Tracks() )
     {
         if( track->Type() == PCB_TRACE_T || track->Type() == PCB_VIA_T )
             view()->Update( track, KIGFX::REPAINT );
@@ -301,17 +301,9 @@ int PCB_CONTROL::HighContrastModeCycle( const TOOL_EVENT& aEvent )
 
     switch( opts.m_ContrastModeDisplay )
     {
-    case HIGH_CONTRAST_MODE::NORMAL:
-        opts.m_ContrastModeDisplay = HIGH_CONTRAST_MODE::DIMMED;
-        break;
-
-    case HIGH_CONTRAST_MODE::DIMMED:
-        opts.m_ContrastModeDisplay = HIGH_CONTRAST_MODE::HIDDEN;
-        break;
-
-    case HIGH_CONTRAST_MODE::HIDDEN:
-        opts.m_ContrastModeDisplay = HIGH_CONTRAST_MODE::NORMAL;
-        break;
+    case HIGH_CONTRAST_MODE::NORMAL: opts.m_ContrastModeDisplay = HIGH_CONTRAST_MODE::DIMMED; break;
+    case HIGH_CONTRAST_MODE::DIMMED: opts.m_ContrastModeDisplay = HIGH_CONTRAST_MODE::HIDDEN; break;
+    case HIGH_CONTRAST_MODE::HIDDEN: opts.m_ContrastModeDisplay = HIGH_CONTRAST_MODE::NORMAL; break;
     }
 
     m_frame->SetDisplayOptions( opts );
@@ -367,8 +359,10 @@ int PCB_CONTROL::LayerPrev( const TOOL_EVENT& aEvent )
     while( startLayer != --layer )
     {
         if( IsCopperLayer( layer )       // also test for valid layer id (layer >= F_Cu)
-            && brd->IsLayerVisible( static_cast<PCB_LAYER_ID>( layer ) ) )
+                && brd->IsLayerVisible( static_cast<PCB_LAYER_ID>( layer ) ) )
+        {
             break;
+        }
 
         if( layer <= F_Cu )
             layer = B_Cu + 1;
@@ -405,10 +399,9 @@ int PCB_CONTROL::LayerToggle( const TOOL_EVENT& aEvent )
 
 int PCB_CONTROL::LayerAlphaInc( const TOOL_EVENT& aEvent )
 {
-    auto settings = m_frame->GetColorSettings();
-
-    LAYER_NUM currentLayer = m_frame->GetActiveLayer();
-    KIGFX::COLOR4D currentColor = settings->GetColor( currentLayer );
+    COLOR_SETTINGS* settings = m_frame->GetColorSettings();
+    LAYER_NUM       currentLayer = m_frame->GetActiveLayer();
+    KIGFX::COLOR4D  currentColor = settings->GetColor( currentLayer );
 
     if( currentColor.a <= ALPHA_MAX - ALPHA_STEP )
     {
@@ -426,7 +419,9 @@ int PCB_CONTROL::LayerAlphaInc( const TOOL_EVENT& aEvent )
         static_cast<PCB_BASE_EDIT_FRAME*>( m_frame )->OnLayerAlphaChanged();
     }
     else
+    {
         wxBell();
+    }
 
     return 0;
 }
@@ -434,10 +429,9 @@ int PCB_CONTROL::LayerAlphaInc( const TOOL_EVENT& aEvent )
 
 int PCB_CONTROL::LayerAlphaDec( const TOOL_EVENT& aEvent )
 {
-    auto settings = m_frame->GetColorSettings();
-
-    LAYER_NUM currentLayer = m_frame->GetActiveLayer();
-    KIGFX::COLOR4D currentColor = settings->GetColor( currentLayer );
+    COLOR_SETTINGS* settings = m_frame->GetColorSettings();
+    LAYER_NUM       currentLayer = m_frame->GetActiveLayer();
+    KIGFX::COLOR4D  currentColor = settings->GetColor( currentLayer );
 
     if( currentColor.a >= ALPHA_MIN + ALPHA_STEP )
     {
@@ -499,12 +493,12 @@ int PCB_CONTROL::GridSetOrigin( const TOOL_EVENT& aEvent )
         Activate();
 
         picker->SetClickHandler(
-            [this] ( const VECTOR2D& pt ) -> bool
-            {
-                m_frame->SaveCopyInUndoList( m_gridOrigin.get(), UNDO_REDO::GRIDORIGIN );
-                DoSetGridOrigin( getView(), m_frame, m_gridOrigin.get(), pt );
-                return false;   // drill origin is a one-shot; don't continue with tool
-            } );
+                [this]( const VECTOR2D& pt ) -> bool
+                {
+                    m_frame->SaveCopyInUndoList( m_gridOrigin.get(), UNDO_REDO::GRIDORIGIN );
+                    DoSetGridOrigin( getView(), m_frame, m_gridOrigin.get(), pt );
+                    return false;   // drill origin is a one-shot; don't continue with tool
+                } );
 
         m_toolMgr->RunAction( ACTIONS::pickerTool, true, &tool );
     }
@@ -541,82 +535,82 @@ int PCB_CONTROL::DeleteItemCursor( const TOOL_EVENT& aEvent )
     picker->SetCursor( KICURSOR::REMOVE );
 
     picker->SetClickHandler(
-        [this] ( const VECTOR2D& aPosition ) -> bool
-        {
-            if( m_pickerItem )
+            [this]( const VECTOR2D& aPosition ) -> bool
             {
-                if( m_pickerItem && m_pickerItem->IsLocked() )
+                if( m_pickerItem )
                 {
-                    m_statusPopup.reset( new STATUS_TEXT_POPUP( m_frame ) );
-                    m_statusPopup->SetText( _( "Item locked." ) );
-                    m_statusPopup->PopupFor( 2000 );
-                    m_statusPopup->Move( wxGetMousePosition() + wxPoint( 20, 20 ) );
-                    return true;
+                    if( m_pickerItem && m_pickerItem->IsLocked() )
+                    {
+                        m_statusPopup.reset( new STATUS_TEXT_POPUP( m_frame ) );
+                        m_statusPopup->SetText( _( "Item locked." ) );
+                        m_statusPopup->PopupFor( 2000 );
+                        m_statusPopup->Move( wxGetMousePosition() + wxPoint( 20, 20 ) );
+                        return true;
+                    }
+
+                    PCB_SELECTION_TOOL* selectionTool = m_toolMgr->GetTool<PCB_SELECTION_TOOL>();
+                    selectionTool->UnbrightenItem( m_pickerItem );
+                    selectionTool->AddItemToSel( m_pickerItem, true /*quiet mode*/ );
+                    m_toolMgr->RunAction( ACTIONS::doDelete, true );
+                    m_pickerItem = nullptr;
                 }
 
-                PCB_SELECTION_TOOL* selectionTool = m_toolMgr->GetTool<PCB_SELECTION_TOOL>();
-                selectionTool->UnbrightenItem( m_pickerItem );
-                selectionTool->AddItemToSel( m_pickerItem, true /*quiet mode*/ );
-                m_toolMgr->RunAction( ACTIONS::doDelete, true );
-                m_pickerItem = nullptr;
-            }
-
-            return true;
-        } );
+                return true;
+            } );
 
     picker->SetMotionHandler(
-        [this] ( const VECTOR2D& aPos )
-        {
-            BOARD*                   board = m_frame->GetBoard();
-            PCB_SELECTION_TOOL*      selectionTool = m_toolMgr->GetTool<PCB_SELECTION_TOOL>();
-            GENERAL_COLLECTORS_GUIDE guide = m_frame->GetCollectorsGuide();
-            GENERAL_COLLECTOR        collector;
-            collector.m_Threshold = KiROUND( getView()->ToWorld( HITTEST_THRESHOLD_PIXELS ) );
-
-            if( m_isFootprintEditor )
-                collector.Collect( board, GENERAL_COLLECTOR::FootprintItems,
-                                   (wxPoint) aPos, guide );
-            else
-                collector.Collect( board, GENERAL_COLLECTOR::BoardLevelItems,
-                                   (wxPoint) aPos, guide );
-
-            // Remove unselectable items
-            for( int i = collector.GetCount() - 1; i >= 0; --i )
+            [this]( const VECTOR2D& aPos )
             {
-                if( !selectionTool->Selectable( collector[ i ] ) )
-                    collector.Remove( i );
-            }
+                BOARD*                   board = m_frame->GetBoard();
+                PCB_SELECTION_TOOL*      selectionTool = m_toolMgr->GetTool<PCB_SELECTION_TOOL>();
+                GENERAL_COLLECTORS_GUIDE guide = m_frame->GetCollectorsGuide();
+                GENERAL_COLLECTOR        collector;
+                collector.m_Threshold = KiROUND( getView()->ToWorld( HITTEST_THRESHOLD_PIXELS ) );
 
-            if( collector.GetCount() > 1 )
-                selectionTool->GuessSelectionCandidates( collector, aPos );
+                if( m_isFootprintEditor )
+                    collector.Collect( board, GENERAL_COLLECTOR::FootprintItems,
+                                       (wxPoint) aPos, guide );
+                else
+                    collector.Collect( board, GENERAL_COLLECTOR::BoardLevelItems,
+                                       (wxPoint) aPos, guide );
 
-            BOARD_ITEM* item = collector.GetCount() == 1 ? collector[ 0 ] : nullptr;
+                // Remove unselectable items
+                for( int i = collector.GetCount() - 1; i >= 0; --i )
+                {
+                    if( !selectionTool->Selectable( collector[ i ] ) )
+                        collector.Remove( i );
+                }
 
-            if( m_pickerItem != item )
-            {
+                if( collector.GetCount() > 1 )
+                    selectionTool->GuessSelectionCandidates( collector, aPos );
 
-                if( m_pickerItem )
-                    selectionTool->UnbrightenItem( m_pickerItem );
+                BOARD_ITEM* item = collector.GetCount() == 1 ? collector[ 0 ] : nullptr;
 
-                m_pickerItem = item;
+                if( m_pickerItem != item )
+                {
 
-                if( m_pickerItem )
-                    selectionTool->BrightenItem( m_pickerItem );
-            }
-        } );
+                    if( m_pickerItem )
+                        selectionTool->UnbrightenItem( m_pickerItem );
+
+                    m_pickerItem = item;
+
+                    if( m_pickerItem )
+                        selectionTool->BrightenItem( m_pickerItem );
+                }
+            } );
 
     picker->SetFinalizeHandler(
-        [this] ( const int& aFinalState )
-        {
-            if( m_pickerItem )
-                m_toolMgr->GetTool<PCB_SELECTION_TOOL>()->UnbrightenItem( m_pickerItem );
+            [this]( const int& aFinalState )
+            {
+                if( m_pickerItem )
+                    m_toolMgr->GetTool<PCB_SELECTION_TOOL>()->UnbrightenItem( m_pickerItem );
 
-            m_statusPopup.reset();
+                m_statusPopup.reset();
 
-            // Ensure the cursor gets changed&updated
-            m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
-            m_frame->GetCanvas()->Refresh();
-        } );
+                // Ensure the cursor gets changed&updated
+                m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
+                m_frame->GetCanvas()->Refresh();
+            } );
 
     m_toolMgr->RunAction( ACTIONS::pickerTool, true, &tool );
 
@@ -901,10 +895,14 @@ static void moveUnflaggedItems( ZONES& aList, std::vector<BOARD_ITEM*>& aTarget,
                 aList.pop_back();
             }
             else
+            {
                 obj = nullptr;
+            }
         }
         else
+        {
             obj = idx < int(aList.size()-1) ? aList[++idx] : nullptr;
+        }
     }
 }
 

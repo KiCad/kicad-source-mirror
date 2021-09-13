@@ -179,9 +179,8 @@ BOARD_EDITOR_CONTROL::BOARD_EDITOR_CONTROL() :
     m_inPlaceFootprint( false ),
     m_inPlaceTarget( false )
 {
-    m_placeOrigin = std::make_unique<KIGFX::ORIGIN_VIEWITEM>(
-            KIGFX::COLOR4D( 0.8, 0.0, 0.0, 1.0 ),
-            KIGFX::ORIGIN_VIEWITEM::CIRCLE_CROSS );
+    m_placeOrigin = std::make_unique<KIGFX::ORIGIN_VIEWITEM>( KIGFX::COLOR4D( 0.8, 0.0, 0.0, 1.0 ),
+                                                             KIGFX::ORIGIN_VIEWITEM::CIRCLE_CROSS );
 }
 
 
@@ -206,19 +205,19 @@ void BOARD_EDITOR_CONTROL::Reset( RESET_REASON aReason )
 bool BOARD_EDITOR_CONTROL::Init()
 {
     auto activeToolCondition =
-            [ this ] ( const SELECTION& aSel )
+            [this]( const SELECTION& aSel )
             {
                 return ( !m_frame->ToolStackIsEmpty() );
             };
 
     auto inactiveStateCondition =
-            [ this ] ( const SELECTION& aSel )
+            [this]( const SELECTION& aSel )
             {
                 return ( m_frame->ToolStackIsEmpty() && aSel.Size() == 0 );
             };
 
     auto placeModuleCondition =
-            [ this ] ( const SELECTION& aSel )
+            [this]( const SELECTION& aSel )
             {
                 return m_frame->IsCurrentTool( PCB_ACTIONS::placeFootprint ) && aSel.GetSize() == 0;
             };
@@ -274,13 +273,14 @@ bool BOARD_EDITOR_CONTROL::Init()
 
         // Functor to say if the PCB_EDIT_FRAME is in a given mode
         // Capture the tool pointer and tool mode by value
-        auto toolActiveFunctor = [=]( DRAWING_TOOL::MODE aMode )
-        {
-            return [=]( const SELECTION& sel )
-            {
-                return drawingTool->GetDrawingMode() == aMode;
-            };
-        };
+        auto toolActiveFunctor =
+                [=]( DRAWING_TOOL::MODE aMode )
+                {
+                    return [=]( const SELECTION& sel )
+                           {
+                               return drawingTool->GetDrawingMode() == aMode;
+                           };
+                };
 
         menu.AddMenu( zoneMenu.get(), toolActiveFunctor( DRAWING_TOOL::MODE::ZONE ), 200 );
     }
@@ -333,8 +333,8 @@ int BOARD_EDITOR_CONTROL::PageSettings( const TOOL_EVENT& aEvent )
     undoCmd.PushItem( wrapper );
     m_frame->SaveCopyInUndoList( undoCmd, UNDO_REDO::PAGESETTINGS );
 
-    DIALOG_PAGES_SETTINGS dlg( m_frame, IU_PER_MILS,
-                               wxSize( MAX_PAGE_SIZE_PCBNEW_MILS, MAX_PAGE_SIZE_PCBNEW_MILS ) );
+    DIALOG_PAGES_SETTINGS dlg( m_frame, IU_PER_MILS, wxSize( MAX_PAGE_SIZE_PCBNEW_MILS,
+                                                             MAX_PAGE_SIZE_PCBNEW_MILS ) );
     dlg.SetWksFileName( BASE_SCREEN::m_DrawingSheetFileName );
 
     if( dlg.ShowModal() != wxID_OK )
@@ -412,7 +412,9 @@ int BOARD_EDITOR_CONTROL::ExportSpecctraDSN( const TOOL_EVENT& aEvent )
         fn.SetExt( SpecctraDsnFileExtension );
     }
     else
+    {
         fn = fullFileName;
+    }
 
     fullFileName = wxFileSelector( _( "Specctra DSN File" ), fn.GetPath(), fn.GetFullName(),
                                    SpecctraDsnFileExtension, SpecctraDsnFileWildcard(),
@@ -968,7 +970,9 @@ int BOARD_EDITOR_CONTROL::PlaceFootprint( const TOOL_EVENT& aEvent )
         m_toolMgr->RunAction( ACTIONS::refreshPreview );
     }
     else if( !aEvent.IsReactivate() )
+    {
         m_toolMgr->RunAction( PCB_ACTIONS::cursorClick );
+    }
 
     // Main loop: keep receiving events
     while( TOOL_EVENT* evt = Wait() )
@@ -1323,9 +1327,7 @@ static bool mergeZones( BOARD_COMMIT& aCommit, std::vector<ZONE*>& aOriginZones,
     }
 
     for( unsigned int i = 1; i < aOriginZones.size(); i++ )
-    {
         aCommit.Remove( aOriginZones[i] );
-    }
 
     aMergedZones.push_back( aOriginZones[0] );
 
@@ -1351,7 +1353,7 @@ int BOARD_EDITOR_CONTROL::ZoneMerge( const TOOL_EVENT& aEvent )
     ZONE* firstZone = nullptr;
     std::vector<ZONE*> toMerge, merged;
 
-    for( auto item : selection )
+    for( EDA_ITEM* item : selection )
     {
         ZONE* curr_area = dynamic_cast<ZONE*>( item );
 
@@ -1387,7 +1389,7 @@ int BOARD_EDITOR_CONTROL::ZoneMerge( const TOOL_EVENT& aEvent )
     {
         commit.Push( "Merge zones" );
 
-        for( auto item : merged )
+        for( EDA_ITEM* item : merged )
             m_toolMgr->RunAction( PCB_ACTIONS::selectItem, true, item );
     }
 

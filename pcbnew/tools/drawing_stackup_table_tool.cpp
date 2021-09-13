@@ -96,14 +96,14 @@ static std::vector<BOARD_ITEM*> initTextTable( std::vector<std::vector<PCB_TEXT*
     // First, we determine what the height/Width should be for every cell
     i = 0;
 
-    for( auto col : aContent )
+    for( const std::vector<PCB_TEXT*>& col : aContent )
     {
         j = 0;
 
         if( i >= nbCols )
             break;
 
-        for( auto cell : col )
+        for( const PCB_TEXT* cell : col )
         {
 
             if( j >= nbRows )
@@ -179,7 +179,7 @@ static std::vector<BOARD_ITEM*> initTextTable( std::vector<std::vector<PCB_TEXT*
     i           = 0;
     wxPoint pos = wxPoint( origin.x + xmargin, origin.y + ymargin );
 
-    for( auto col : aContent )
+    for( std::vector<PCB_TEXT*>& col : aContent )
     {
         j = 0;
 
@@ -188,7 +188,7 @@ static std::vector<BOARD_ITEM*> initTextTable( std::vector<std::vector<PCB_TEXT*
 
         pos.y = origin.y + ymargin;
 
-        for( auto cell : col )
+        for( PCB_TEXT* cell : col )
         {
 
             if( j >= nbRows )
@@ -208,10 +208,12 @@ static std::vector<BOARD_ITEM*> initTextTable( std::vector<std::vector<PCB_TEXT*
 }
 
 
-std::vector<BOARD_ITEM*> DRAWING_TOOL::DrawSpecificationStackup(
-        const wxPoint& aOrigin, PCB_LAYER_ID aLayer, bool aDrawNow, wxPoint* tableSize )
+std::vector<BOARD_ITEM*> DRAWING_TOOL::DrawSpecificationStackup( const wxPoint& aOrigin,
+                                                                 PCB_LAYER_ID aLayer,
+                                                                 bool aDrawNow,
+                                                                 wxPoint* tableSize )
 {
-    BOARD_COMMIT               commit( m_frame );
+    BOARD_COMMIT commit( m_frame );
     std::vector<std::vector<PCB_TEXT*>> texts;
 
     // Style : Header
@@ -237,11 +239,11 @@ std::vector<BOARD_ITEM*> DRAWING_TOOL::DrawSpecificationStackup(
     dataStyle->SetVertJustify( GR_TEXT_VJUSTIFY_TOP );
 
     //Get Layer names
-    BOARD_DESIGN_SETTINGS&           dsnSettings = m_frame->GetDesignSettings();
-    BOARD_STACKUP&                   stackup     = dsnSettings.GetStackupDescriptor();
+    BOARD_DESIGN_SETTINGS& dsnSettings = m_frame->GetDesignSettings();
+    BOARD_STACKUP&         stackup = dsnSettings.GetStackupDescriptor();
     stackup.SynchronizeWithBoard( &dsnSettings );
 
-    std::vector<BOARD_STACKUP_ITEM*> layers      = stackup.GetList();
+    std::vector<BOARD_STACKUP_ITEM*> layers = stackup.GetList();
 
     std::vector<PCB_TEXT*> colLayer;
     std::vector<PCB_TEXT*> colType;
@@ -298,13 +300,9 @@ std::vector<BOARD_ITEM*> DRAWING_TOOL::DrawSpecificationStackup(
             t = static_cast<PCB_TEXT*>( dataStyle->Duplicate() );
 
             if( layers.at( i )->GetLayerName().IsEmpty() )
-            {
                 t->SetText( m_frame->GetBoard()->GetLayerName( layers.at( i )->GetBrdLayerId() ) );
-            }
             else
-            {
                 t->SetText( layers.at( i )->GetLayerName() );
-            }
 
             colLayer.push_back( t );
 
@@ -348,7 +346,7 @@ std::vector<BOARD_ITEM*> DRAWING_TOOL::DrawSpecificationStackup(
 
     if( aDrawNow )
     {
-        for( auto item : table )
+        for( BOARD_ITEM* item : table )
             commit.Add( item );
 
         commit.Push( _( "Insert board stackup table" ) );
@@ -358,10 +356,12 @@ std::vector<BOARD_ITEM*> DRAWING_TOOL::DrawSpecificationStackup(
 }
 
 
-std::vector<BOARD_ITEM*> DRAWING_TOOL::DrawBoardCharacteristics(
-        const wxPoint& aOrigin, PCB_LAYER_ID aLayer, bool aDrawNow, wxPoint* tableSize )
+std::vector<BOARD_ITEM*> DRAWING_TOOL::DrawBoardCharacteristics( const wxPoint& aOrigin,
+                                                                 PCB_LAYER_ID aLayer,
+                                                                 bool aDrawNow,
+                                                                 wxPoint* tableSize )
 {
-    BOARD_COMMIT        commit( m_frame );
+    BOARD_COMMIT             commit( m_frame );
     std::vector<BOARD_ITEM*> objects;
     BOARD_DESIGN_SETTINGS&   settings = m_frame->GetBoard()->GetDesignSettings();
     BOARD_STACKUP&           stackup  = settings.GetStackupDescriptor();
@@ -404,7 +404,7 @@ std::vector<BOARD_ITEM*> DRAWING_TOOL::DrawBoardCharacteristics(
     std::vector<PCB_TEXT*>              colbreak;
     std::vector<PCB_TEXT*>              colLabel2;
     std::vector<PCB_TEXT*>              colData2;
-    wxString                   text = wxString( "" );
+    wxString                            text = wxString( "" );
 
     t = static_cast<PCB_TEXT*>( dataStyle->Duplicate() );
     t->SetText( _( "Copper Layer Count: " ) );
@@ -502,7 +502,7 @@ std::vector<BOARD_ITEM*> DRAWING_TOOL::DrawBoardCharacteristics(
     std::vector<BOARD_ITEM*> table = initTextTable( texts, cursorPos, Eco1_User, &tableSize2,
                                                     false );
 
-    for( auto item : table )
+    for( BOARD_ITEM* item : table )
         objects.push_back( item );
 
     if( aDrawNow )
@@ -555,7 +555,7 @@ int DRAWING_TOOL::InteractivePlaceWithPreview( const TOOL_EVENT& aEvent,
     view()->ClearPreview();
     view()->InitPreview();
 
-    for( auto item : aPreview )
+    for( BOARD_ITEM* item : aPreview )
     {
         item->Move( wxCursorPosition - wxPreviousCursorPosition );
         view()->AddToPreview( item );
@@ -614,13 +614,12 @@ int DRAWING_TOOL::InteractivePlaceWithPreview( const TOOL_EVENT& aEvent,
         {
             if( aLayers != nullptr )
             {
-                PCB_LAYER_ID targetLayer = frame()->SelectOneLayer(
-                                            PCB_LAYER_ID::PCB_LAYER_ID_COUNT,
-                                            *aLayers, wxGetMousePosition() );
+                PCB_LAYER_ID destLayer = frame()->SelectOneLayer( PCB_LAYER_ID::PCB_LAYER_ID_COUNT,
+                                                                  *aLayers, wxGetMousePosition() );
 
                 view()->ClearPreview();
 
-                if( targetLayer == PCB_LAYER_ID::UNDEFINED_LAYER )
+                if( destLayer == PCB_LAYER_ID::UNDEFINED_LAYER )
                 {
                     // The user did not pick any layer.
                     m_frame->PopTool( tool );
@@ -628,27 +627,21 @@ int DRAWING_TOOL::InteractivePlaceWithPreview( const TOOL_EVENT& aEvent,
                     break;
                 }
 
-                for( auto item : aItems )
+                for( BOARD_ITEM* item : aItems )
                 {
                     if( item->Type() == PCB_GROUP_T )
-                    {
-                        static_cast<PCB_GROUP*>( item )->SetLayerRecursive( targetLayer, 200 );
-                    }
+                        static_cast<PCB_GROUP*>( item )->SetLayerRecursive( destLayer, 200 );
                     else
-                    {
-                        item->SetLayer( targetLayer );
-                    }
+                        item->SetLayer( destLayer );
                 }
             }
 
-            for( auto item : aItems )
+            for( BOARD_ITEM* item : aItems )
             {
                 item->Move( wxCursorPosition );
 
                 if( item->Type() == PCB_GROUP_T )
-                {
                     static_cast<PCB_GROUP*>( item )->AddChildrenToCommit( commit );
-                }
 
                 commit.Add( item );
             }
@@ -691,8 +684,9 @@ int DRAWING_TOOL::PlaceCharacteristics( const TOOL_EVENT& aEvent )
         layer = Cmts_User;
     }
 
-    std::vector<BOARD_ITEM*> table = DrawBoardCharacteristics(
-            wxPoint( 0, 0 ), m_frame->GetActiveLayer(), false, &tableSize );
+    std::vector<BOARD_ITEM*> table = DrawBoardCharacteristics( wxPoint( 0, 0 ),
+                                                               m_frame->GetActiveLayer(), false,
+                                                               &tableSize );
     std::vector<BOARD_ITEM*> preview;
     std::vector<BOARD_ITEM*> items;
 
@@ -808,7 +802,7 @@ int DRAWING_TOOL::PlaceStackup( const TOOL_EVENT& aEvent )
     PCB_GROUP* group = new PCB_GROUP( m_board );
     group->SetName("group-boardStackUp");
 
-    for( auto item : table )
+    for( BOARD_ITEM* item : table )
         group->AddItem( item );
 
     items.push_back( static_cast<BOARD_ITEM*>( group ) );

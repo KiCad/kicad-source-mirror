@@ -77,16 +77,17 @@ bool PAD_TOOL::Init()
         SELECTION_CONDITION singlePadSel = SELECTION_CONDITIONS::Count( 1 ) &&
                                            SELECTION_CONDITIONS::OnlyType( PCB_PAD_T );
 
-        auto explodeCondition = [&]( const SELECTION& aSel )
-                                {
-                                    return m_editPad == niluuid
-                                           && aSel.Size() == 1 && aSel[0]->Type() == PCB_PAD_T;
-                                };
+        auto explodeCondition =
+                [&]( const SELECTION& aSel )
+                {
+                    return m_editPad == niluuid && aSel.Size() == 1 && aSel[0]->Type() == PCB_PAD_T;
+                };
 
-        auto recombineCondition = [&]( const SELECTION& aSel )
-                                  {
-                                      return m_editPad != niluuid;
-                                  };
+        auto recombineCondition =
+                [&]( const SELECTION& aSel )
+                {
+                    return m_editPad != niluuid;
+                };
 
         menu.AddSeparator( 400 );
 
@@ -118,7 +119,6 @@ bool PAD_TOOL::Init()
     getEditFrame<PCB_BASE_FRAME>()->AddStandardSubMenus( m_menu );
 
     return true;
-
 }
 
 

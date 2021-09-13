@@ -99,14 +99,14 @@ bool GROUP_TOOL::Init()
     // Find the selection tool, so they can cooperate
     m_selectionTool = m_toolMgr->GetTool<PCB_SELECTION_TOOL>();
 
-    auto groupMenu = std::make_shared<GROUP_CONTEXT_MENU>();
+    std::shared_ptr<GROUP_CONTEXT_MENU> groupMenu = std::make_shared<GROUP_CONTEXT_MENU>();
     groupMenu->SetTool( this );
 
     // Add the group control menus to relevant other tools
     if( m_selectionTool )
     {
-        auto& toolMenu = m_selectionTool->GetToolMenu();
-        auto& menu = toolMenu.GetMenu();
+        TOOL_MENU&        toolMenu = m_selectionTool->GetToolMenu();
+        CONDITIONAL_MENU& menu = toolMenu.GetMenu();
 
         toolMenu.AddSubMenu( groupMenu );
 
@@ -148,50 +148,50 @@ int GROUP_TOOL::PickNewMember( const TOOL_EVENT& aEvent  )
     statusPopup.SetText( _( "Click on new member..." ) );
 
     picker->SetClickHandler(
-        [&]( const VECTOR2D& aPoint ) -> bool
-        {
-            m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
-
-            const PCB_SELECTION& sel = m_selectionTool->RequestSelection(
-                    []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector,
-                        PCB_SELECTION_TOOL* sTool )
-                    {
-                    } );
-
-            if( sel.Empty() )
-                return true;    // still looking for an item
-
-            statusPopup.Hide();
-
-            if( m_propertiesDialog )
+            [&]( const VECTOR2D& aPoint ) -> bool
             {
-                m_propertiesDialog->DoAddMember( sel.Front() );
-                m_propertiesDialog->Show( true );
-            }
+                m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
 
-            return false;       // got our item; don't need any more
-        } );
+                const PCB_SELECTION& sel = m_selectionTool->RequestSelection(
+                        []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector,
+                            PCB_SELECTION_TOOL* sTool )
+                        {
+                        } );
+
+                if( sel.Empty() )
+                    return true;    // still looking for an item
+
+                statusPopup.Hide();
+
+                if( m_propertiesDialog )
+                {
+                    m_propertiesDialog->DoAddMember( sel.Front() );
+                    m_propertiesDialog->Show( true );
+                }
+
+                return false;       // got our item; don't need any more
+            } );
 
     picker->SetMotionHandler(
-        [&] ( const VECTOR2D& aPos )
-        {
-            statusPopup.Move( wxGetMousePosition() + wxPoint( 20, -50 ) );
-        } );
+            [&] ( const VECTOR2D& aPos )
+            {
+                statusPopup.Move( wxGetMousePosition() + wxPoint( 20, -50 ) );
+            } );
 
     picker->SetCancelHandler(
-        [&]()
-        {
-            if( m_propertiesDialog )
-                m_propertiesDialog->Show( true );
+            [&]()
+            {
+                if( m_propertiesDialog )
+                    m_propertiesDialog->Show( true );
 
-            statusPopup.Hide();
-        } );
+                statusPopup.Hide();
+            } );
 
     picker->SetFinalizeHandler(
-        [&]( const int& aFinalState )
-        {
-            done = true;
-        } );
+            [&]( const int& aFinalState )
+            {
+                done = true;
+            } );
 
     statusPopup.Move( wxGetMousePosition() + wxPoint( 20, -50 ) );
     statusPopup.Popup();

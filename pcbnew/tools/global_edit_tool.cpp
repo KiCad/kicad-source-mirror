@@ -92,7 +92,9 @@ int GLOBAL_EDIT_TOOL::ExchangeFootprints( const TOOL_EVENT& aEvent )
         currentMode = false;
     }
     else
+    {
         wxFAIL_MSG( "ExchangeFootprints: unexpected action" );
+    }
 
     // invoke the exchange dialog process
     {
