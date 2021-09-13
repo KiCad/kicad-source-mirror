@@ -940,11 +940,21 @@ int BOARD_EDITOR_CONTROL::PlaceFootprint( const TOOL_EVENT& aEvent )
     BOARD*                board = getModel<BOARD>();
 
     m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
-    controls->ShowCursor( true );
 
     std::string tool = aEvent.GetCommandStr().get();
     m_frame->PushTool( tool );
+
+    auto setCursor =
+            [&]()
+            {
+                m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::PENCIL );
+            };
+
     Activate();
+    // Must be done after Activate() so that it gets set into the correct context
+    controls->ShowCursor( true );
+    // Set initial cursor
+    setCursor();
 
     VECTOR2I cursorPos = controls->GetCursorPosition();
     bool     reselect = false;
@@ -959,15 +969,6 @@ int BOARD_EDITOR_CONTROL::PlaceFootprint( const TOOL_EVENT& aEvent )
     }
     else if( !aEvent.IsReactivate() )
         m_toolMgr->RunAction( PCB_ACTIONS::cursorClick );
-
-    auto setCursor =
-            [&]()
-            {
-                m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::PENCIL );
-            };
-
-    // Set initial cursor
-    setCursor();
 
     // Main loop: keep receiving events
     while( TOOL_EVENT* evt = Wait() )

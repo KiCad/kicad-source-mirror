@@ -270,15 +270,6 @@ int PAD_TOOL::EnumeratePads( const TOOL_EVENT& aEvent )
     if( !board()->GetFirstFootprint() || board()->GetFirstFootprint()->Pads().empty() )
         return 0;
 
-    DIALOG_ENUM_PADS settingsDlg( frame() );
-
-    if( settingsDlg.ShowModal() != wxID_OK )
-        return 0;
-
-    std::string tool = aEvent.GetCommandStr().get();
-    frame()->PushTool( tool );
-    Activate();
-
     GENERAL_COLLECTOR collector;
     const KICAD_T types[] = { PCB_PAD_T, EOT };
 
@@ -289,25 +280,25 @@ int PAD_TOOL::EnumeratePads( const TOOL_EVENT& aEvent )
     guide.SetIgnoreModulesVals( true );
     guide.SetIgnoreModulesRefs( true );
 
-    int seqPadNum = settingsDlg.GetStartNumber();
-    wxString padPrefix = settingsDlg.GetPrefix();
+    DIALOG_ENUM_PADS settingsDlg( frame() );
+
+    if( settingsDlg.ShowModal() != wxID_OK )
+        return 0;
+
+    int             seqPadNum = settingsDlg.GetStartNumber();
+    wxString        padPrefix = settingsDlg.GetPrefix();
     std::deque<int> storedPadNumbers;
+    std::map<wxString, std::pair<int, wxString>> oldNumbers;
 
     m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
-    getViewControls()->ShowCursor( true );
 
-    KIGFX::VIEW* view = m_toolMgr->GetView();
-    VECTOR2I oldCursorPos;  // store the previous mouse cursor position, during mouse drag
+    std::string tool = aEvent.GetCommandStr().get();
+    frame()->PushTool( tool );
+
+    VECTOR2I        oldCursorPos;  // store the previous mouse cursor position, during mouse drag
     std::list<PAD*> selectedPads;
-    BOARD_COMMIT commit( frame() );
-    std::map<wxString, std::pair<int, wxString>> oldNumbers;
-    bool isFirstPoint = true;   // used to be sure oldCursorPos will be initialized at least once.
-
-    STATUS_TEXT_POPUP statusPopup( frame() );
-    wxString msg = _( "Click on pad %s%d\nPress <esc> to cancel or double-click to commit" );
-    statusPopup.SetText( wxString::Format( msg, padPrefix, seqPadNum ) );
-    statusPopup.Popup();
-    statusPopup.Move( wxGetMousePosition() + wxPoint( 20, 20 ) );
+    BOARD_COMMIT    commit( frame() );
+    bool            isFirstPoint = true;   // make sure oldCursorPos is initialized at least once
 
     auto setCursor =
             [&]()
@@ -315,8 +306,17 @@ int PAD_TOOL::EnumeratePads( const TOOL_EVENT& aEvent )
                 frame()->GetCanvas()->SetCurrentCursor( KICURSOR::BULLSEYE );
             };
 
+    Activate();
+    // Must be done after Activate() so that it gets set into the correct context
+    getViewControls()->ShowCursor( true );
     // Set initial cursor
     setCursor();
+
+    STATUS_TEXT_POPUP statusPopup( frame() );
+    wxString msg = _( "Click on pad %s%d\nPress <esc> to cancel or double-click to commit" );
+    statusPopup.SetText( wxString::Format( msg, padPrefix, seqPadNum ) );
+    statusPopup.Popup();
+    statusPopup.Move( wxGetMousePosition() + wxPoint( 20, 20 ) );
 
     while( TOOL_EVENT* evt = Wait() )
     {
@@ -452,7 +452,7 @@ int PAD_TOOL::EnumeratePads( const TOOL_EVENT& aEvent )
     for( PAD* p : board()->GetFirstFootprint()->Pads() )
     {
         p->ClearSelected();
-        view->Update( p );
+        getView()->Update( p );
     }
 
     statusPopup.Hide();

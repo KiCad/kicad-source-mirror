@@ -131,11 +131,8 @@ int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
         wxFAIL_MSG( "PlaceSymbol(): unexpected request" );
     }
 
-    getViewControls()->ShowCursor( true );
-
     std::string tool = aEvent.GetCommandStr().get();
     m_frame->PushTool( tool );
-    Activate();
 
     auto addSymbol =
             [&]( SCH_SYMBOL* aSymbol )
@@ -169,6 +166,12 @@ int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
                 symbol = nullptr;
             };
 
+    Activate();
+    // Must be done after Activate() so that it gets set into the correct context
+    getViewControls()->ShowCursor( true );
+    // Set initial cursor
+    setCursor();
+
     // Prime the pump
     if( symbol )
     {
@@ -179,9 +182,6 @@ int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
     {
         m_toolMgr->RunAction( EE_ACTIONS::cursorClick );
     }
-
-    // Set initial cursor
-    setCursor();
 
     // Main loop: keep receiving events
     while( TOOL_EVENT* evt = Wait() )
@@ -378,7 +378,6 @@ int SCH_DRAWING_TOOLS::PlaceImage( const TOOL_EVENT& aEvent )
     REENTRANCY_GUARD guard( &m_inPlaceImage );
 
     m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
-    getViewControls()->ShowCursor( true );
 
     // Add all the drawable symbols to preview
     if( image )
@@ -390,8 +389,6 @@ int SCH_DRAWING_TOOLS::PlaceImage( const TOOL_EVENT& aEvent )
 
     std::string tool = aEvent.GetCommandStr().get();
     m_frame->PushTool( tool );
-    Activate();
-
     auto setCursor =
             [&]()
             {
@@ -410,14 +407,17 @@ int SCH_DRAWING_TOOLS::PlaceImage( const TOOL_EVENT& aEvent )
                 image = nullptr;
             };
 
+    Activate();
+    // Must be done after Activate() so that it gets set into the correct context
+    getViewControls()->ShowCursor( true );
+    // Set initial cursor
+    setCursor();
+
     // Prime the pump
     if( image )
         m_toolMgr->RunAction( ACTIONS::refreshPreview );
     else if( !aEvent.IsReactivate() )
         m_toolMgr->RunAction( ACTIONS::cursorClick );
-
-    // Set initial cursor
-    setCursor();
 
     // Main loop: keep receiving events
     while( TOOL_EVENT* evt = Wait() )
@@ -659,7 +659,6 @@ int SCH_DRAWING_TOOLS::SingleClickPlace( const TOOL_EVENT& aEvent )
     }
 
     m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
-    getViewControls()->ShowCursor( true );
 
     cursorPos = static_cast<wxPoint>( aEvent.HasPosition() ?
                                       aEvent.Position() :
@@ -667,7 +666,18 @@ int SCH_DRAWING_TOOLS::SingleClickPlace( const TOOL_EVENT& aEvent )
 
     std::string tool = aEvent.GetCommandStr().get();
     m_frame->PushTool( tool );
+
+    auto setCursor =
+            [&]()
+            {
+                m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::PLACE );
+            };
+
     Activate();
+    // Must be done after Activate() so that it gets set into the correct context
+    getViewControls()->ShowCursor( true );
+    // Set initial cursor
+    setCursor();
 
     m_view->ClearPreview();
     m_view->AddToPreview( previewItem->Clone() );
@@ -677,15 +687,6 @@ int SCH_DRAWING_TOOLS::SingleClickPlace( const TOOL_EVENT& aEvent )
         m_toolMgr->RunAction( ACTIONS::cursorClick );
     else
         m_toolMgr->RunAction( ACTIONS::refreshPreview );
-
-    auto setCursor =
-            [&]()
-            {
-                m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::PLACE );
-            };
-
-    // Set initial cursor
-    setCursor();
 
     // Main loop: keep receiving events
     while( TOOL_EVENT* evt = Wait() )
@@ -992,12 +993,9 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
     int  snapLayer     = isText ? LAYER_GRAPHICS : LAYER_CONNECTABLE;
 
     m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
-    controls->ShowCursor( true );
 
     std::string tool = aEvent.GetCommandStr().get();
     m_frame->PushTool( tool );
-    Activate();
-
     auto setCursor =
             [&]()
             {
@@ -1035,16 +1033,18 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
                 item = nullptr;
             };
 
-    // Prime the pump
-    // If the tool isn't being re-activated
+    Activate();
+    // Must be done after Activate() so that it gets set into the correct context
+    controls->ShowCursor( true );
+    // Set initial cursor
+    setCursor();
+
+    // Prime the pump if the tool isn't being re-activated
     if( aEvent.HasPosition() || ( !aEvent.IsReactivate()
             && ( isText || isGlobalLabel || isHierLabel || isNetLabel ) ) )
     {
         m_toolMgr->RunAction( ACTIONS::cursorClick );
     }
-
-    // Set initial cursor
-    setCursor();
 
     // Main loop: keep receiving events
     while( TOOL_EVENT* evt = Wait() )
@@ -1248,11 +1248,9 @@ int SCH_DRAWING_TOOLS::DrawSheet( const TOOL_EVENT& aEvent )
     REENTRANCY_GUARD guard( &m_inDrawSheet );
 
     m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
-    getViewControls()->ShowCursor( true );
 
     std::string tool = aEvent.GetCommandStr().get();
     m_frame->PushTool( tool );
-    Activate();
 
     auto setCursor =
             [&]()
@@ -1269,12 +1267,15 @@ int SCH_DRAWING_TOOLS::DrawSheet( const TOOL_EVENT& aEvent )
                 sheet = nullptr;
             };
 
+    Activate();
+    // Must be done after Activate() so that it gets set into the correct context
+    getViewControls()->ShowCursor( true );
+    // Set initial cursor
+    setCursor();
+
     // Prime the pump
     if( aEvent.HasPosition() )
         m_toolMgr->RunAction( ACTIONS::cursorClick );
-
-    // Set initial cursor
-    setCursor();
 
     // Main loop: keep receiving events
     while( TOOL_EVENT* evt = Wait() )

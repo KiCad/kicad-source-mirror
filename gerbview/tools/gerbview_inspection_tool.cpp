@@ -196,27 +196,19 @@ int GERBVIEW_INSPECTION_TOOL::ShowSource( const TOOL_EVENT& aEvent )
 }
 
 
+using KIGFX::PREVIEW::TWO_POINT_GEOMETRY_MANAGER;
+
+
 int GERBVIEW_INSPECTION_TOOL::MeasureTool( const TOOL_EVENT& aEvent )
 {
-    KIGFX::VIEW&          view = *getView();
-    KIGFX::VIEW_CONTROLS& controls = *getViewControls();
-    KIGFX::VC_SETTINGS    previous_settings = controls.GetSettings();
-
-    std::string tool = aEvent.GetCommandStr().get();
-    m_frame->PushTool( tool );
-    Activate();
-
-    KIGFX::PREVIEW::TWO_POINT_GEOMETRY_MANAGER twoPtMgr;
-
+    KIGFX::VIEW_CONTROLS&      controls = *getViewControls();
+    bool                       originSet = false;
+    TWO_POINT_GEOMETRY_MANAGER twoPtMgr;
     EDA_UNITS                  units = m_frame->GetUserUnits();
     KIGFX::PREVIEW::RULER_ITEM ruler( twoPtMgr, units );
 
-    view.Add( &ruler );
-    view.SetVisible( &ruler, false );
-
-    bool originSet = false;
-
-    controls.ShowCursor( true );
+    std::string tool = aEvent.GetCommandStr().get();
+    m_frame->PushTool( tool );
 
     auto setCursor =
             [&]()
@@ -224,28 +216,34 @@ int GERBVIEW_INSPECTION_TOOL::MeasureTool( const TOOL_EVENT& aEvent )
                 m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::MEASURE );
             };
 
+    auto cleanup =
+            [&] ()
+            {
+                getView()->SetVisible( &ruler, false );
+                controls.SetAutoPan( false );
+                controls.CaptureCursor( false );
+                originSet = false;
+            };
+
+    Activate();
+    // Must be done after Activate() so that it gets set into the correct context
+    controls.ShowCursor( true );
     // Set initial cursor
     setCursor();
+
+    getView()->Add( &ruler );
+    getView()->SetVisible( &ruler, false );
 
     while( TOOL_EVENT* evt = Wait() )
     {
         setCursor();
         const VECTOR2I cursorPos = controls.GetCursorPosition();
 
-        auto clearRuler =
-                [&] ()
-                {
-                    view.SetVisible( &ruler, false );
-                    controls.SetAutoPan( false );
-                    controls.CaptureCursor( false );
-                    originSet = false;
-                };
-
         if( evt->IsCancelInteractive() )
         {
             if( originSet )
             {
-                clearRuler();
+                cleanup();
             }
             else
             {
@@ -256,7 +254,7 @@ int GERBVIEW_INSPECTION_TOOL::MeasureTool( const TOOL_EVENT& aEvent )
         else if( evt->IsActivate() )
         {
             if( originSet )
-                clearRuler();
+                cleanup();
 
             if( evt->IsMoveTool() )
             {
@@ -294,8 +292,8 @@ int GERBVIEW_INSPECTION_TOOL::MeasureTool( const TOOL_EVENT& aEvent )
             twoPtMgr.SetAngleSnap( evt->Modifier( MD_SHIFT ) );
             twoPtMgr.SetEnd( cursorPos );
 
-            view.SetVisible( &ruler, true );
-            view.Update( &ruler, KIGFX::GEOMETRY );
+            getView()->SetVisible( &ruler, true );
+            getView()->Update( &ruler, KIGFX::GEOMETRY );
         }
         else if( evt->IsAction( &ACTIONS::updateUnits ) )
         {
@@ -303,7 +301,7 @@ int GERBVIEW_INSPECTION_TOOL::MeasureTool( const TOOL_EVENT& aEvent )
             {
                 units = m_frame->GetUserUnits();
                 ruler.SwitchUnits( units );
-                view.Update( &ruler, KIGFX::GEOMETRY );
+                getView()->Update( &ruler, KIGFX::GEOMETRY );
             }
             evt->SetPassEvent();
         }
@@ -317,10 +315,9 @@ int GERBVIEW_INSPECTION_TOOL::MeasureTool( const TOOL_EVENT& aEvent )
         }
     }
 
-    view.SetVisible( &ruler, false );
-    view.Remove( &ruler );
+    getView()->SetVisible( &ruler, false );
+    getView()->Remove( &ruler );
 
-    controls.ApplySettings( previous_settings );
     m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
     return 0;
 }

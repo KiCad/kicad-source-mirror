@@ -484,19 +484,20 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
             };
 
     m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
-    m_controls->ShowCursor( true );
-    // do not capture or auto-pan until we start placing some text
 
     std::string tool = aEvent.GetCommandStr().get();
     m_frame->PushTool( tool );
+
     Activate();
+    // Must be done after Activate() so that it gets set into the correct context
+    m_controls->ShowCursor( true );
+    // do not capture or auto-pan until we start placing some text
+    // Set initial cursor
+    setCursor();
 
     // Prime the pump
     if( !aEvent.IsReactivate() )
         m_toolMgr->RunAction( ACTIONS::cursorClick );
-
-    // Set initial cursor
-    setCursor();
 
     // Main loop: keep receiving events
     while( TOOL_EVENT* evt = Wait() )
@@ -738,20 +739,21 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
             };
 
     m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
-    m_controls->ShowCursor( true );
 
     std::string tool = aEvent.GetCommandStr().get();
     m_frame->PushTool( tool );
+
     Activate();
+    // Must be done after Activate() so that it gets set into the correct context
+    m_controls->ShowCursor( true );
+    // Set initial cursor
+    setCursor();
 
     // Prime the pump
     m_toolMgr->RunAction( ACTIONS::refreshPreview );
 
     if( aEvent.HasPosition() )
         m_toolMgr->PrimeTool( aEvent.Position() );
-
-    // Set initial cursor
-    setCursor();
 
     // Main loop: keep receiving events
     while( TOOL_EVENT* evt = Wait() )
@@ -1209,8 +1211,21 @@ int DRAWING_TOOL::PlaceImportedGraphics( const TOOL_EVENT& aEvent )
     m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
     m_toolMgr->RunAction( PCB_ACTIONS::selectItems, true, &selectedItems );
 
+    std::string tool = aEvent.GetCommandStr().get();
+    m_frame->PushTool( tool );
+
+    auto setCursor =
+            [&]()
+            {
+                m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::MOVING );
+            };
+
+    Activate();
+    // Must be done after Activate() so that it gets set into the correct context
     m_controls->ShowCursor( true );
     m_controls->ForceCursorPosition( false );
+    // Set initial cursor
+    setCursor();
 
     SCOPED_DRAW_MODE scopedDrawMode( m_mode, MODE::DXF );
 
@@ -1222,19 +1237,6 @@ int DRAWING_TOOL::PlaceImportedGraphics( const TOOL_EVENT& aEvent )
         item->Move( (wxPoint) delta );
 
     m_view->Update( &preview );
-
-    std::string tool = aEvent.GetCommandStr().get();
-    m_frame->PushTool( tool );
-    Activate();
-
-    auto setCursor =
-            [&]()
-            {
-                m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::MOVING );
-            };
-
-    // Set initial cursor
-    setCursor();
 
     // Main loop: keep receiving events
     while( TOOL_EVENT* evt = Wait() )
@@ -1305,14 +1307,10 @@ int DRAWING_TOOL::SetAnchor( const TOOL_EVENT& aEvent )
     SCOPED_DRAW_MODE scopedDrawMode( m_mode, MODE::ANCHOR );
     PCB_GRID_HELPER  grid( m_toolMgr, m_frame->GetMagneticItemsSettings() );
 
+    m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
+
     std::string tool = aEvent.GetCommandStr().get();
     m_frame->PushTool( tool );
-    Activate();
-
-    m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
-    m_controls->ShowCursor( true );
-    m_controls->SetAutoPan( true );
-    m_controls->CaptureCursor( false );
 
     auto setCursor =
             [&]()
@@ -1320,6 +1318,11 @@ int DRAWING_TOOL::SetAnchor( const TOOL_EVENT& aEvent )
                 m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::BULLSEYE );
             };
 
+    Activate();
+    // Must be done after Activate() so that it gets set into the correct context
+    m_controls->ShowCursor( true );
+    m_controls->SetAutoPan( true );
+    m_controls->CaptureCursor( false );
     // Set initial cursor
     setCursor();
 
@@ -1422,8 +1425,6 @@ bool DRAWING_TOOL::drawSegment( const std::string& aTool, PCB_SHAPE** aGraphic,
     m_view->Add( &preview );
     m_view->Add( &twoPointAsst );
 
-    m_controls->ShowCursor( true );
-
     bool     started = false;
     bool     cancelled = false;
     bool     isLocalOriginSet = ( m_frame->GetScreen()->m_LocalOrigin != VECTOR2D( 0, 0 ) );
@@ -1447,14 +1448,15 @@ bool DRAWING_TOOL::drawSegment( const std::string& aTool, PCB_SHAPE** aGraphic,
                     m_frame->GetScreen()->m_LocalOrigin = VECTOR2D( 0, 0 );
             };
 
+    m_controls->ShowCursor( true );
+    // Set initial cursor
+    setCursor();
+
     // Prime the pump
     m_toolMgr->RunAction( ACTIONS::refreshPreview );
 
     if( aStartingPoint )
         m_toolMgr->RunAction( ACTIONS::cursorClick );
-
-    // Set initial cursor
-    setCursor();
 
     // Main loop: keep receiving events
     while( TOOL_EVENT* evt = Wait() )
@@ -1743,12 +1745,6 @@ bool DRAWING_TOOL::drawArc( const std::string& aTool, PCB_SHAPE** aGraphic, bool
     m_view->Add( &arcAsst );
     PCB_GRID_HELPER grid( m_toolMgr, m_frame->GetMagneticItemsSettings() );
 
-    m_controls->ShowCursor( true );
-
-    bool firstPoint = false;
-    bool cancelled = false;
-
-    // Set initial cursor
     auto setCursor =
             [&]()
             {
@@ -1763,13 +1759,18 @@ bool DRAWING_TOOL::drawArc( const std::string& aTool, PCB_SHAPE** aGraphic, bool
                 *aGraphic = nullptr;
             };
 
+    m_controls->ShowCursor( true );
+    // Set initial cursor
+    setCursor();
+
+    bool firstPoint = false;
+    bool cancelled = false;
+
     // Prime the pump
     m_toolMgr->RunAction( ACTIONS::refreshPreview );
 
     if( aImmediateMode )
         m_toolMgr->RunAction( ACTIONS::cursorClick );
-
-    setCursor();
 
     // Main loop: keep receiving events
     while( TOOL_EVENT* evt = Wait() )
@@ -2044,24 +2045,20 @@ int DRAWING_TOOL::DrawZone( const TOOL_EVENT& aEvent )
     else
         params.m_layer = m_frame->GetActiveLayer();
 
-    ZONE_CREATE_HELPER zoneTool( *this, params );
-
-    // the geometry manager which handles the zone geometry, and
-    // hands the calculated points over to the zone creator tool
+    ZONE_CREATE_HELPER   zoneTool( *this, params );
+    // the geometry manager which handles the zone geometry, and hands the calculated points
+    // over to the zone creator tool
     POLYGON_GEOM_MANAGER polyGeomMgr( zoneTool );
-    bool constrainAngle = false;
+    bool                 constrainAngle = false;
+    bool                 started     = false;
+    PCB_GRID_HELPER      grid( m_toolMgr, m_frame->GetMagneticItemsSettings() );
+    STATUS_TEXT_POPUP    status( m_frame );
+
+    status.SetTextColor( wxColour( 255, 0, 0 ) );
+    status.SetText( _( "Self-intersecting polygons are not allowed" ) );
 
     std::string tool = aEvent.GetCommandStr().get();
     m_frame->PushTool( tool );
-    Activate();    // register for events
-
-    m_controls->ShowCursor( true );
-
-    bool    started     = false;
-    PCB_GRID_HELPER grid( m_toolMgr, m_frame->GetMagneticItemsSettings() );
-    STATUS_TEXT_POPUP status( m_frame );
-    status.SetTextColor( wxColour( 255, 0, 0 ) );
-    status.SetText( _( "Self-intersecting polygons are not allowed" ) );
 
     auto setCursor =
             [&]()
@@ -2079,12 +2076,15 @@ int DRAWING_TOOL::DrawZone( const TOOL_EVENT& aEvent )
                 m_controls->CaptureCursor( false );
             };
 
+    Activate();
+    // Must be done after Activate() so that it gets set into the correct context
+    m_controls->ShowCursor( true );
+    // Set initial cursor
+    setCursor();
+
     // Prime the pump
     if( aEvent.HasPosition() )
         m_toolMgr->PrimeTool( aEvent.Position() );
-
-    // Set initial cursor
-    setCursor();
 
     // Main loop: keep receiving events
     while( TOOL_EVENT* evt = Wait() )

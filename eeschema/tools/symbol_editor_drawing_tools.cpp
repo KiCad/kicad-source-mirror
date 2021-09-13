@@ -78,15 +78,9 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
     bool      isText = aEvent.IsAction( &EE_ACTIONS::placeSymbolText );
 
     m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
-    getViewControls()->ShowCursor( true );
 
     std::string tool = aEvent.GetCommandStr().get();
     m_frame->PushTool( tool );
-    Activate();
-
-    // Prime the pump
-    if( aEvent.HasPosition() || ( isText && !aEvent.IsReactivate() ) )
-        m_toolMgr->RunAction( ACTIONS::cursorClick );
 
     auto setCursor =
             [&]()
@@ -99,8 +93,15 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
                     m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::PENCIL );
             };
 
+    Activate();
+    // Must be done after Activate() so that it gets set into the correct context
+    getViewControls()->ShowCursor( true );
     // Set initial cursor
     setCursor();
+
+    // Prime the pump
+    if( aEvent.HasPosition() || ( isText && !aEvent.IsReactivate() ) )
+        m_toolMgr->RunAction( ACTIONS::cursorClick );
 
     // Main loop: keep receiving events
     while( TOOL_EVENT* evt = Wait() )
@@ -262,26 +263,20 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
 
 int SYMBOL_EDITOR_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
 {
-    SYMBOL_EDITOR_SETTINGS* settings = Pgm().GetSettingsManager().GetAppSettings<SYMBOL_EDITOR_SETTINGS>();
+    SETTINGS_MANAGER&       settingsMgr = Pgm().GetSettingsManager();
+    SYMBOL_EDITOR_SETTINGS* settings = settingsMgr.GetAppSettings<SYMBOL_EDITOR_SETTINGS>();
     KICAD_T                 type = aEvent.Parameter<KICAD_T>();
+    LIB_SYMBOL*             symbol = m_frame->GetCurSymbol();
+    LIB_ITEM*               item = nullptr;
 
     // We might be running as the same shape in another co-routine.  Make sure that one
     // gets whacked.
     m_toolMgr->DeactivateTool();
 
     m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
-    getViewControls()->ShowCursor( true );
 
     std::string tool = aEvent.GetCommandStr().get();
     m_frame->PushTool( tool );
-    Activate();
-
-    LIB_SYMBOL* symbol = m_frame->GetCurSymbol();
-    LIB_ITEM* item = nullptr;
-
-    // Prime the pump
-    if( aEvent.HasPosition() )
-        m_toolMgr->RunAction( ACTIONS::cursorClick );
 
     auto setCursor =
             [&]()
@@ -289,8 +284,24 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
                 m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::PENCIL );
             };
 
+    auto cleanup =
+            [&] ()
+            {
+                m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
+                m_view->ClearPreview();
+                delete item;
+                item = nullptr;
+            };
+
+    Activate();
+    // Must be done after Activate() so that it gets set into the correct context
+    getViewControls()->ShowCursor( true );
     // Set initial cursor
     setCursor();
+
+    // Prime the pump
+    if( aEvent.HasPosition() )
+        m_toolMgr->RunAction( ACTIONS::cursorClick );
 
     // Main loop: keep receiving events
     while( TOOL_EVENT* evt = Wait() )
@@ -298,15 +309,6 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
         setCursor();
 
         VECTOR2I cursorPos = getViewControls()->GetCursorPosition( !evt->DisableGridSnapping() );
-
-        auto cleanup =
-                [&] ()
-                {
-                    m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
-                    m_view->ClearPreview();
-                    delete item;
-                    item = nullptr;
-                };
 
         if( evt->IsCancelInteractive() )
         {
@@ -425,11 +427,8 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
 
 int SYMBOL_EDITOR_DRAWING_TOOLS::PlaceAnchor( const TOOL_EVENT& aEvent )
 {
-    getViewControls()->ShowCursor( true );
-
     std::string tool = aEvent.GetCommandStr().get();
     m_frame->PushTool( tool );
-    Activate();
 
     auto setCursor =
             [&]()
@@ -437,6 +436,9 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::PlaceAnchor( const TOOL_EVENT& aEvent )
                 m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::BULLSEYE );
             };
 
+    Activate();
+    // Must be done after Activate() so that it gets set into the correct context
+    getViewControls()->ShowCursor( true );
     // Set initial cursor
     setCursor();
 

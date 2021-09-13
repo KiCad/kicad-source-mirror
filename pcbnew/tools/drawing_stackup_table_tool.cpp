@@ -533,14 +533,16 @@ int DRAWING_TOOL::InteractivePlaceWithPreview( const TOOL_EVENT& aEvent,
     BOARD_COMMIT commit( m_frame );
 
     m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
-    m_controls->ShowCursor( true );
 
     // do not capture or auto-pan until we start placing the table
     SCOPED_DRAW_MODE scopedDrawMode( m_mode, MODE::TEXT );
 
     std::string tool = aEvent.GetCommandStr().get();
     m_frame->PushTool( tool );
+
     Activate();
+    // Must be done after Activate() so that it gets set into the correct context
+    m_controls->ShowCursor( true );
 
     // Prime the pump
     if( aEvent.HasPosition() )

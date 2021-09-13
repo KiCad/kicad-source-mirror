@@ -134,6 +134,7 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
     std::vector<DANGLING_END_ITEM> internalPoints;
 
     Activate();
+    // Must be done after Activate() so that it gets set into the correct context
     controls->ShowCursor( true );
 
     std::string tool = aEvent.GetCommandStr().get();

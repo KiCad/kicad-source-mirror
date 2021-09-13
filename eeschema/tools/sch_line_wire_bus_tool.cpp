@@ -514,9 +514,11 @@ int SCH_LINE_WIRE_BUS_TOOL::doDrawSegments( const std::string& aTool, int aType,
                 m_view->ShowPreview( false );
             };
 
-    controls->ShowCursor( true );
-
     Activate();
+    // Must be done after Activate() so that it gets set into the correct context
+    controls->ShowCursor( true );
+    // Set initial cursor
+    setCursor();
 
     // Add the new label to the selection so the rotate command operates on it
     if( m_busUnfold.label )
@@ -525,9 +527,6 @@ int SCH_LINE_WIRE_BUS_TOOL::doDrawSegments( const std::string& aTool, int aType,
     // Continue the existing wires if we've started (usually by immediate action preference)
     if( !m_wires.empty() )
         segment = m_wires.back();
-
-    // Set initial cursor
-    setCursor();
 
     wxPoint contextMenuPos;
 

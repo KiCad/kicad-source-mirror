@@ -42,14 +42,15 @@ void PCB_TOOL_BASE::doInteractiveItemPlacement( const std::string& aTool,
     std::unique_ptr<BOARD_ITEM> newItem;
 
     frame()->PushTool( aTool );
-    Activate();
 
     BOARD_COMMIT commit( frame() );
 
     GetManager()->RunAction( PCB_ACTIONS::selectionClear, true );
 
-    // do not capture or auto-pan until we start placing an item
+    Activate();
+    // Must be done after Activate() so that it gets set into the correct context
     controls()->ShowCursor( true );
+    // do not capture or auto-pan until we start placing an item
 
     PCB_GRID_HELPER grid( m_toolMgr, frame()->GetMagneticItemsSettings() );
 

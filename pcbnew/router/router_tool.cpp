@@ -1253,6 +1253,7 @@ int ROUTER_TOOL::MainLoop( const TOOL_EVENT& aEvent )
 {
     PNS::ROUTER_MODE mode = aEvent.Parameter<PNS::ROUTER_MODE>();
     PCB_EDIT_FRAME*  frame = getEditFrame<PCB_EDIT_FRAME>();
+    VIEW_CONTROLS*   controls = getViewControls();
 
     if( m_router->RoutingInProgress() )
     {
@@ -1267,18 +1268,6 @@ int ROUTER_TOOL::MainLoop( const TOOL_EVENT& aEvent )
 
     std::string tool = aEvent.GetCommandStr().get();
     frame->PushTool( tool );
-    Activate();
-
-    m_router->SetMode( mode );
-
-    VIEW_CONTROLS* ctls = getViewControls();
-    ctls->ShowCursor( true );
-    ctls->ForceCursorPosition( false );
-    m_cancelled = false;
-
-    // Prime the pump
-    if( aEvent.HasPosition() )
-        m_toolMgr->PrimeTool( ctls->GetCursorPosition( false ) );
 
     auto setCursor =
             [&]()
@@ -1286,8 +1275,19 @@ int ROUTER_TOOL::MainLoop( const TOOL_EVENT& aEvent )
                 frame->GetCanvas()->SetCurrentCursor( KICURSOR::PENCIL );
             };
 
+    Activate();
+    // Must be done after Activate() so that it gets set into the correct context
+    controls->ShowCursor( true );
+    controls->ForceCursorPosition( false );
     // Set initial cursor
     setCursor();
+
+    m_router->SetMode( mode );
+    m_cancelled = false;
+
+    // Prime the pump
+    if( aEvent.HasPosition() )
+        m_toolMgr->PrimeTool( controls->GetCursorPosition( false ) );
 
     // Main loop: keep receiving events
     while( TOOL_EVENT* evt = Wait() )

@@ -119,8 +119,9 @@ int PL_EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
 
     std::string tool = aEvent.GetCommandStr().get();
     m_frame->PushTool( tool );
-    Activate();
 
+    Activate();
+    // Must be done after Activate() so that it gets set into the correct context
     controls->ShowCursor( true );
     controls->SetAutoPan( true );
 

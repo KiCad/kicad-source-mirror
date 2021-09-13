@@ -156,24 +156,20 @@ int PL_POINT_EDITOR::Main( const TOOL_EVENT& aEvent )
 {
     static KICAD_T pointTypes[] = { WSG_LINE_T, WSG_RECT_T, EOT };
 
-    if( !m_selectionTool )
-        return 0;
-
-    const PL_SELECTION& selection = m_selectionTool->GetSelection();
+    KIGFX::VIEW_CONTROLS* controls = getViewControls();
+    const PL_SELECTION&   selection = m_selectionTool->GetSelection();
 
     if( selection.Size() != 1 || !selection.Front()->IsType( pointTypes ) )
         return 0;
 
+    EDA_ITEM* item = (EDA_ITEM*) selection.Front();
+
     // Wait till drawing tool is done
-    if( selection.Front()->IsNew() )
+    if( item->IsNew() )
         return 0;
 
     Activate();
-
-    KIGFX::VIEW_CONTROLS* controls = getViewControls();
-    KIGFX::VIEW*          view = getView();
-    EDA_ITEM*             item = (EDA_ITEM*) selection.Front();
-
+    // Must be done after Activate() so that it gets set into the correct context
     controls->ShowCursor( true );
 
     m_editPoints = EDIT_POINTS_FACTORY::Make( item );
@@ -181,7 +177,7 @@ int PL_POINT_EDITOR::Main( const TOOL_EVENT& aEvent )
     if( !m_editPoints )
         return 0;
 
-    view->Add( m_editPoints.get() );
+    getView()->Add( m_editPoints.get() );
     setEditedPoint( nullptr );
     updateEditedPoint( aEvent );
     bool inDrag = false;
@@ -245,7 +241,7 @@ int PL_POINT_EDITOR::Main( const TOOL_EVENT& aEvent )
 
     if( m_editPoints )
     {
-        view->Remove( m_editPoints.get() );
+        getView()->Remove( m_editPoints.get() );
 
         if( modified )
             m_frame->OnModify();

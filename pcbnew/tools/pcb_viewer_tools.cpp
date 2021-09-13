@@ -194,6 +194,9 @@ int PCB_VIEWER_TOOLS::TextOutlines( const TOOL_EVENT& aEvent )
 }
 
 
+using KIGFX::PREVIEW::TWO_POINT_GEOMETRY_MANAGER;
+
+
 int PCB_VIEWER_TOOLS::MeasureTool( const TOOL_EVENT& aEvent )
 {
     if( IsFootprintFrame() && !frame()->GetModel() )
@@ -207,23 +210,15 @@ int PCB_VIEWER_TOOLS::MeasureTool( const TOOL_EVENT& aEvent )
 
     std::string tool = aEvent.GetCommandStr().get();
     frame()->PushTool( tool );
-    Activate();
 
-    KIGFX::PREVIEW::TWO_POINT_GEOMETRY_MANAGER twoPtMgr;
-
+    TWO_POINT_GEOMETRY_MANAGER twoPtMgr;
+    PCB_GRID_HELPER            grid( m_toolMgr, frame()->GetMagneticItemsSettings() );
+    bool                       originSet = false;
     EDA_UNITS                  units = frame()->GetUserUnits();
     KIGFX::PREVIEW::RULER_ITEM ruler( twoPtMgr, units );
 
     view.Add( &ruler );
     view.SetVisible( &ruler, false );
-
-    PCB_GRID_HELPER grid( m_toolMgr, frame()->GetMagneticItemsSettings() );
-
-    bool originSet = false;
-
-    controls.ShowCursor( true );
-    controls.SetAutoPan( false );
-    controls.CaptureCursor( false );
 
     auto setCursor =
             [&]()
@@ -231,6 +226,20 @@ int PCB_VIEWER_TOOLS::MeasureTool( const TOOL_EVENT& aEvent )
                 frame()->GetCanvas()->SetCurrentCursor( KICURSOR::MEASURE );
             };
 
+    auto cleanup =
+            [&] ()
+            {
+                view.SetVisible( &ruler, false );
+                controls.SetAutoPan( false );
+                controls.CaptureCursor( false );
+                originSet = false;
+            };
+
+    Activate();
+    // Must be done after Activate() so that it gets set into the correct context
+    controls.ShowCursor( true );
+    controls.SetAutoPan( false );
+    controls.CaptureCursor( false );
     // Set initial cursor
     setCursor();
 
@@ -242,20 +251,11 @@ int PCB_VIEWER_TOOLS::MeasureTool( const TOOL_EVENT& aEvent )
         const VECTOR2I cursorPos = grid.BestSnapAnchor( controls.GetMousePosition(), nullptr );
         controls.ForceCursorPosition(true, cursorPos );
 
-        auto clearRuler =
-                [&] ()
-                {
-                    view.SetVisible( &ruler, false );
-                    controls.SetAutoPan( false );
-                    controls.CaptureCursor( false );
-                    originSet = false;
-                };
-
         if( evt->IsCancelInteractive() )
         {
             if( originSet )
             {
-                clearRuler();
+                cleanup();
             }
             else
             {
@@ -266,7 +266,7 @@ int PCB_VIEWER_TOOLS::MeasureTool( const TOOL_EVENT& aEvent )
         else if( evt->IsActivate() )
         {
             if( originSet )
-                clearRuler();
+                cleanup();
 
             if( evt->IsMoveTool() )
             {

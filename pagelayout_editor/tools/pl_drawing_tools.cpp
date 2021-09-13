@@ -81,15 +81,9 @@ int PL_DRAWING_TOOLS::PlaceItem( const TOOL_EVENT& aEvent )
     bool                       isText = aEvent.IsAction( &PL_ACTIONS::placeText );
 
     m_toolMgr->RunAction( PL_ACTIONS::clearSelection, true );
-    getViewControls()->ShowCursor( true );
 
     std::string tool = aEvent.GetCommandStr().get();
     m_frame->PushTool( tool );
-    Activate();
-
-    // Prime the pump
-    if( aEvent.HasPosition() || ( !aEvent.IsReactivate() && isText ) )
-        m_toolMgr->RunAction( ACTIONS::cursorClick );
 
     auto setCursor =
             [&]()
@@ -100,7 +94,16 @@ int PL_DRAWING_TOOLS::PlaceItem( const TOOL_EVENT& aEvent )
                     m_frame->GetCanvas()->SetCurrentCursor( isText ? KICURSOR::TEXT : KICURSOR::PENCIL );
             };
 
+
+    Activate();
+    // Must be done after Activate() so that it gets set into the correct context
+    getViewControls()->ShowCursor( true );
+    // Set initial cursor
     setCursor();
+
+    // Prime the pump
+    if( aEvent.HasPosition() || ( !aEvent.IsReactivate() && isText ) )
+        m_toolMgr->RunAction( ACTIONS::cursorClick );
 
     // Main loop: keep receiving events
     while( TOOL_EVENT* evt = Wait() )
@@ -229,15 +232,9 @@ int PL_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
     m_toolMgr->DeactivateTool();
 
     m_toolMgr->RunAction( PL_ACTIONS::clearSelection, true );
-    getViewControls()->ShowCursor( true );
 
     std::string tool = aEvent.GetCommandStr().get();
     m_frame->PushTool( tool );
-    Activate();
-
-    // Prime the pump
-    if( aEvent.HasPosition() )
-        m_toolMgr->RunAction( ACTIONS::cursorClick );
 
     auto setCursor =
             [&]()
@@ -245,8 +242,15 @@ int PL_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
                 m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::PENCIL );
             };
 
+    Activate();
+    // Must be done after Activate() so that it gets set into the correct context
+    getViewControls()->ShowCursor( true );
     // Set initial cursor
     setCursor();
+
+    // Prime the pump
+    if( aEvent.HasPosition() )
+        m_toolMgr->RunAction( ACTIONS::cursorClick );
 
     // Main loop: keep receiving events
     while( TOOL_EVENT* evt = Wait() )

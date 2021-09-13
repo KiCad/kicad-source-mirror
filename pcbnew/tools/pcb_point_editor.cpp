@@ -416,6 +416,7 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
         return 0;
 
     Activate();
+    // Must be done after Activate() so that it gets set into the correct context
     getViewControls()->ShowCursor( true );
 
     PCB_GRID_HELPER grid( m_toolMgr, editFrame->GetMagneticItemsSettings() );
