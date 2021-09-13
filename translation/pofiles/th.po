@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-01 11:31-0700\n"
-"PO-Revision-Date: 2021-09-10 19:57+0000\n"
+"PO-Revision-Date: 2021-09-13 17:58+0000\n"
 "Last-Translator: boonchai k. <kicadthai@gmail.com>\n"
 "Language-Team: Thai <https://hosted.weblate.org/projects/kicad/master-source/"
 "th/>\n"
@@ -24322,298 +24322,306 @@ msgstr "หมายเหตุ: ลบมุมซ้ำซ้อนออก"
 
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:397
 msgid "Select a corner to add the new corner after."
-msgstr ""
+msgstr "เลือกมุมเพื่อเพิ่มมุมใหม่หลังจากนั้น"
 
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:431
 msgid "Select a corner to delete."
-msgstr ""
+msgstr "เลือกมุมที่จะลบ"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:481
 #, c-format
 msgid "Footprint %s (%s), %s, rotated %g deg"
-msgstr ""
+msgstr "ฟุ้ทพรินท์ %s (%s), %s, หมุน %g องศา"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:484
 #: pcbnew/dialogs/dialog_text_properties.cpp:235
 msgid "back side (mirrored)"
-msgstr ""
+msgstr "ด้านหลัง (กลับกระจก)"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:485
 #: pcbnew/dialogs/dialog_text_properties.cpp:235
 msgid "front side"
-msgstr ""
+msgstr "ด้านหน้า"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:694
 msgid "width"
-msgstr ""
+msgstr "ความกว้าง"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:700
 #: pcbnew/dialogs/dialog_pad_properties.cpp:706
 msgid "from"
-msgstr ""
+msgstr "จาก"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:701
 #: pcbnew/dialogs/dialog_pad_properties.cpp:707
 msgid "to"
-msgstr ""
+msgstr "ถึง"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:712
 msgid "center"
-msgstr ""
+msgstr "ศูนย์กลาง"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:713
 msgid "start"
-msgstr ""
+msgstr "เริ่ม"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:714
 msgid "angle"
-msgstr ""
+msgstr "มุม"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:719
 msgid "ring"
-msgstr ""
+msgstr "แหวน"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:721
 msgid "circle"
-msgstr ""
+msgstr "วงกลม"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:724
 msgid "radius"
-msgstr ""
+msgstr "รัศมี"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:729
 #, c-format
 msgid "corners count %d"
-msgstr ""
+msgstr "จํานวนมุม %d"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:915
 msgid "All copper layers"
-msgstr ""
+msgstr "ชั้นทองแดงทั้งหมด"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:916
 #, c-format
 msgid "%s, %s and connected layers"
-msgstr ""
+msgstr "%s, %s และเลเยอร์ที่เชื่อมต่อ"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:919
 msgid "Connected layers only"
-msgstr ""
+msgstr "เลเยอร์ที่เชื่อมต่อเท่านั้น"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:924
 #, c-format
 msgid "%s and %s"
-msgstr ""
+msgstr "%s และ %s"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1226
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1231
 msgid "Warning: Pad size is less than zero."
-msgstr ""
+msgstr "คําเตือน: ขนาดแพ็ดเล็กกว่าศูนย์"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1256
 msgid ""
 "Warning: Pad drill will leave no copper or drill shape and pad shape do not "
 "overlap."
 msgstr ""
+"คำเตือน:การเจาะนี้จะไม่มีแพ็ดทองแดงเหลืออยู่ และรูปร่างแพ็ดไม่ทับซ้อนกัน"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1262
 msgid "Warning: Negative local clearance values will have no effect."
-msgstr ""
+msgstr "คำเตือน:ค่าระยะห่างเป็นลบ จะไม่มีผลใดๆ"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1279
 msgid ""
 "Warning: Negative solder mask clearances larger than some shape primitives. "
 "Results may be surprising."
 msgstr ""
+"คำเตือน:ค่าระยะห่างของโซลเดอร์มาส์กเป็นลบ ซึ่งใหญ่กว่ารูปร่างอื่นๆ "
+"ผลลัพธ์อาจจะประหลาดใจ"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1288
 msgid ""
 "Warning: Negative solder mask clearance larger than pad. No solder mask will "
 "be generated."
 msgstr ""
+"คำเตือน:ค่าระยะห่างโซลเดอร์มาส์กติดลบมากกว่าขนาดแพ็ด "
+"จะไม่มีการสร้างโซลเดอร์มาส์ก"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1307
 msgid ""
 "Warning: Negative solder paste margins larger than pad. No solder paste mask "
 "will be generated."
 msgstr ""
+"คำเตือน:ค่าระยะเว้นโซลเดอร์มาส์กติดลบมากกว่าขนาดแพ็ด "
+"จะไม่มีการสร้างโซลเดอร์มาส์ก"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1314
 msgid "Error: pad has no layer."
-msgstr ""
+msgstr "ข้อผิดพลาด: แพ็ดไม่มีเลเยอร์"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1320
 msgid ""
 "Warning: Plated through holes should normally have a copper pad on at least "
 "one layer."
-msgstr ""
+msgstr "คำเตือน: รูทะลุชนิด PTH ปกติต้องมีแพ็ดทองแดงอย่างน้อยหนึ่งเลเยอร์"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1326
 msgid "Too large value for pad delta size."
-msgstr ""
+msgstr "ค่าใหญ่เกินไปสำหรับขนาดเดลต้าแพ็ด"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1335
 msgid "Warning: Through hole pad has no hole."
-msgstr ""
+msgstr "คำเตือน:แพ็ดชนิดเจาะทะลุไม่มีรูเจาะ"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1342
 msgid ""
 "Warning: Connector pads normally have no solder paste. Use an SMD pad "
 "instead."
 msgstr ""
+"คำเตือน: โดยปกติแพ็ดสำหรับเชื่อมต่อจะไม่มีโซลเดอร์เพสต์ ใช้แพ็ดชนิด SMD แทน"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1352
 msgid "Warning: SMD pad has no outer layers."
-msgstr ""
+msgstr "คำเตือน: แพ็ด SMD ไม่มีเลเยอร์ด้านนอก"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1361
 msgid "Warning: Fiducial property makes no sense on NPTH pads."
-msgstr ""
+msgstr "คำเตือน: คุณสมบัติฟิดูเชี่ยลดูไม่สมเหตุผลกับแพ็ดชนิด NPTH"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1367
 msgid "Warning: Testpoint property makes no sense on NPTH pads."
-msgstr ""
+msgstr "คำเตือน: คุณสมบัติจุดทดสอบ ไม่สมเหตุผลกับแพ็ด NPTH"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1373
 msgid "Warning: Heatsink property makes no sense of NPTH pads."
-msgstr ""
+msgstr "คำเตือน: คุณสมบัติฮีทซิงค์ ไม่สมเหตุผลกับแพ็ด NPTH"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1379
 msgid "Warning: Castellated property is for PTH pads."
-msgstr ""
+msgstr "คำเตือน:คุณสมบัติแคสเทลเลทใช้สำหรับแพ็ด PTH"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1385
 msgid "Warning: BGA property is for SMD pads."
-msgstr ""
+msgstr "คำเตือน: คุณสมบัติ BGA ใช้สำหรับแพ็ด SMD"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1397
 msgid "Error: Corner size not a number."
-msgstr ""
+msgstr "ข้อผิดพลาด: ขนาดมุมไม่ใช่ตัวเลข"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1402
 msgid "Error: Negative corner size."
-msgstr ""
+msgstr "ข้อผิดพลาด: ขนาดมุมเป็นค่าลบ"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1404
 msgid "Warning: Corner size will make pad circular."
-msgstr ""
+msgstr "คำเตือน: ขนาดมุมจะทำให้แพ็ดกลายเป็นวงกลม"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1415
 msgid "Error: Custom pad shape must resolve to a single polygon."
-msgstr ""
+msgstr "ข้อผิดพลาด: รูปร่างแพ็ดที่กำหนดเอง ต้องมีรูปหลายเหลี่ยมเดียว"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1421
 msgid "Pad Properties Errors"
-msgstr ""
+msgstr "ข้อผิดพลาดคุณสมบัติของแพ็ด"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1422
 msgid "Pad Properties Warnings"
-msgstr ""
+msgstr "คำเตือนคุณสมบัติแพ็ด"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1652
 msgid "Modify pad"
-msgstr ""
+msgstr "แก้ไขแพ็ด"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:2052
 #: pcbnew/dialogs/dialog_pad_properties.cpp:2198
 #: pcbnew/dialogs/dialog_pad_properties.cpp:2232
 msgid "No shape selected"
-msgstr ""
+msgstr "ไม่ได้เลือกรูปร่าง"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:2145
 msgid "Ring/Circle"
-msgstr ""
+msgstr "แหวน/วงกลม"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:2149
 msgid "Shape type:"
-msgstr ""
+msgstr "ประเภทรูปร่าง:"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:2149
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:815
 msgid "Add Primitive"
-msgstr ""
+msgstr "เพิ่มดั้งเดิม"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:36
 msgid "Pad type:"
-msgstr ""
+msgstr "ประเภทแพ็ด:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:40 pcbnew/pad.cpp:1444
 msgid "Through-hole"
-msgstr ""
+msgstr "รูเจาะทะลุ"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:40
 msgid "Edge Connector"
-msgstr ""
+msgstr "ตัวเชื่อมต่อขอบบอร์ด"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:40
 msgid "NPTH, Mechanical"
-msgstr ""
+msgstr "NPTH, เครื่องกล"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:40
 msgid "SMD Aperture"
-msgstr ""
+msgstr "รูรับแสง SMD"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:46
 msgid "Pad number:"
-msgstr ""
+msgstr "หมายเลขแพ็ด:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:83
 msgid "Do not allow position of pad relative to parent footprint to be changed"
-msgstr ""
+msgstr "ไม่อนุญาตให้เปลี่ยนตำแหน่งของแพ็ดที่สัมพันธ์กับฟุ้ทพรินท์"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:105
 msgid "Pad shape:"
-msgstr ""
+msgstr "รูปร่างแพ็ด:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:109
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:369
 msgid "Circular"
-msgstr ""
+msgstr "กลม"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:109
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:369 pcbnew/pad.cpp:1084
 #: pcbnew/pad.cpp:1452
 msgid "Oval"
-msgstr ""
+msgstr "วงรี"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:109
 msgid "Rectangular"
-msgstr ""
+msgstr "สี่เหลี่ยม"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:109
 msgid "Trapezoidal"
-msgstr ""
+msgstr "สี่เหลี่ยมคางหมู"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:109 pcbnew/pad.cpp:1454
 msgid "Rounded rectangle"
-msgstr ""
+msgstr "สี่เหลี่ยมผืนผ้ามุมมน"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:109 pcbnew/pad.cpp:1455
 msgid "Chamfered rectangle"
-msgstr ""
+msgstr "สี่เหลี่ยมผืนผ้าลบมุม"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:109
 msgid "Chamfered with other corners rounded"
-msgstr ""
+msgstr "ลบมุมอื่นๆ ให้โค้งมน"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:109
 msgid "Custom (circular base)"
-msgstr ""
+msgstr "กำหนดเอง (ฐานวงกลม)"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:109
 msgid "Custom (rectangular base)"
-msgstr ""
+msgstr "กำหนดเอง (ฐานสี่เหลี่ยม)"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:127
 msgid "Trapezoid delta:"
-msgstr ""
+msgstr "สามเหลี่ยมปากหมู:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:138
 msgid "Trapezoid axis:"
-msgstr ""
+msgstr "แกนสี่เหลี่ยมคางหมู:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:159
 msgid "Corner size:"
-msgstr ""
+msgstr "ขนาดมุม:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:161
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:290
@@ -24622,11 +24630,14 @@ msgid ""
 "The width is the smaller value between size X and size Y.\n"
 "The max value is 50 percent."
 msgstr ""
+"รัศมีมุมเป็นเปอร์เซ็นต์ของความกว้างของแพ็ด\n"
+"ความกว้างคือค่าที่น้อยกว่าระหว่างขนาด X และขนาด Y\n"
+"ค่าสูงสุดคือ 50 เปอร์เซ็นต์"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:172
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:288
 msgid "Corner radius:"
-msgstr ""
+msgstr "รัศมีมุม:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:174
 msgid ""
@@ -24635,11 +24646,15 @@ msgid ""
 "The width is the smaller value between size X and size Y.\n"
 "Note: IPC norm gives a max value = 0.25mm."
 msgstr ""
+"รัศมีมุม\n"
+"ความกว้างไม่เกินครึ่งแพ็ด\n"
+"ความกว้างคือค่าที่น้อยกว่าระหว่างขนาด X และขนาด Y\n"
+"หมายเหตุ: บรรทัดฐาน IPC ให้ค่าสูงสุด = 0.25 มม."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:197
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:247
 msgid "Chamfer size:"
-msgstr ""
+msgstr "ขนาดลบมุม:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:199
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:249
@@ -24648,112 +24663,117 @@ msgid ""
 "The width is the smaller value between size X and size Y.\n"
 "The max value is 50 percent."
 msgstr ""
+"ขนาดลบมุมเป็นเปอร์เซ็นต์ของความกว้างของแพ็ด\n"
+"ความกว้างคือค่าที่น้อยกว่าระหว่างขนาด X และขนาด Y\n"
+"ค่าสูงสุดคือ 50 เปอร์เซ็นต์"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:210
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:260
 msgid "Chamfer corners:"
-msgstr ""
+msgstr "มุมลบมุม:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:212
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:262
 msgid ""
 "Chamfered corners. The position is relative to a pad orientation 0 degree."
-msgstr ""
+msgstr "มุมโค้งมน ตำแหน่งสัมพันธ์กับการวางแนวแพ็ดที่มุม 0 องศา"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:219
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:269
 msgid "Top left"
-msgstr ""
+msgstr "บนซ้าย"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:223
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:273
 msgid "Top right"
-msgstr ""
+msgstr "บนขวา"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:226
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:276
 msgid "Bottom left"
-msgstr ""
+msgstr "ซ้ายล่าง"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:229
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:279
 msgid "Bottom right"
-msgstr ""
+msgstr "ล่างขวา"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:314
 msgid "Pad size X:"
-msgstr ""
+msgstr "ขนาดแพ็ด X:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:342
 msgid "90"
-msgstr ""
+msgstr "90"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:365
 msgid "Hole shape:"
-msgstr ""
+msgstr "รูปร่างรูเจาะ:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:375
 msgid "Hole size X:"
-msgstr ""
+msgstr "ขนาดรูเจาะ X:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:409
 msgid "Offset shape from hole"
-msgstr ""
+msgstr "รูปร่างออฟเซตจากรูเจาะ"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:412
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:462
 msgid ":"
-msgstr ""
+msgstr ":"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:459
 msgid "Specify pad to die length"
-msgstr ""
+msgstr "ระบุความยาวจากแพ็ดไปที่ชิ้นดาย"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:494
 msgid ""
 "Parent footprint on board is flipped.\n"
 "Layers will be reversed."
 msgstr ""
+"ฟุ้ทพรินท์บนบอร์ดถูกพลิก\n"
+"เลเยอร์จะถูกกลับด้านไปด้วย"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:518
 msgid "Front adhesive"
-msgstr ""
+msgstr "กาวด้านหน้า"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:521
 msgid "Back adhesive"
-msgstr ""
+msgstr "กาวด้านหลัง"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:524
 msgid "Front solder paste"
-msgstr ""
+msgstr "โซลเดอร์เพสต์ด้านหน้า"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:527
 msgid "Back solder paste"
-msgstr ""
+msgstr "โซลเดอร์เพสต์ด้านหลัง"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:533
 msgid "Back silk screen"
-msgstr ""
+msgstr "ซิลค์สกรีนด้านหลัง"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:539
 msgid "Back solder mask"
-msgstr ""
+msgstr "โซลเดอร์มาส์กด้านหลัง"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:542
 msgid "Drafting notes"
-msgstr ""
+msgstr "ร่างบันทึก"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:545
 msgid "E.C.O.1"
-msgstr ""
+msgstr "E.C.O.1"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:548
 msgid "E.C.O.2"
-msgstr ""
+msgstr "E.C.O.2"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:554
 msgid "Fabrication Property:"
-msgstr ""
+msgstr "คุณสมบัติการผลิต:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:556
 msgid ""
@@ -24767,40 +24787,50 @@ msgid ""
 "Castellated specify castellated through hole pads on a board edge\n"
 "These properties are specified in Gerber X2  files."
 msgstr ""
+"คุณสมบัติทางเลือกเพื่อระบุวัตถุประสงค์พิเศษหรือข้อจำกัดในไฟล์การผลิต:\n"
+"แอตทริบิวต์ BGA ใช้สำหรับแพ็ดในฟุ้ทพรินท์ BGA\n"
+"Fiducial local เป็น fiducial สำหรับรอยเท้าของผู้ปกครอง\n"
+"Fiducial global เป็น fiducial สำหรับทั้งกระดาน\n"
+"แพ็ด Test Point มีประโยชน์ในการระบุจุดทดสอบในไฟล์เกอร์เบอร์\n"
+"แผ่นฮีทซิงค์ระบุแผ่นระบายความร้อน\n"
+"Castellated ระบุ castellated ผ่านแผ่นรูบนขอบกระดาน\n"
+"คุณสมบัติเหล่านี้ระบุไว้ในไฟล์ Gerber X2"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:563 pcbnew/pad.cpp:1460
 msgid "BGA pad"
-msgstr ""
+msgstr "แพ็ด BGA"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:563 pcbnew/pad.cpp:1462
 msgid "Fiducial, local to footprint"
-msgstr ""
+msgstr "ฟิดูเชียลท้องถิ่นเพื่อฟุ้ทพรินท์"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:563 pcbnew/pad.cpp:1461
 msgid "Fiducial, global to board"
-msgstr ""
+msgstr "ฟิดูเชี่ยวระดับโกลบอลไปยังบอร์ด"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:563 pcbnew/pad.cpp:1463
 msgid "Test point pad"
-msgstr ""
+msgstr "แพ็ดจุดทดสอบ"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:563 pcbnew/pad.cpp:1464
 msgid "Heatsink pad"
-msgstr ""
+msgstr "แพ็ดระบายความร้อน"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:563
 msgid "Castellated pad (through hole only)"
-msgstr ""
+msgstr "แพ็ดคาสเทลเลต (ผ่านรูเจาะทะลุเท่านั้น)"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:588
 msgid "Set values to 0 to use parent footprint or netclass values."
-msgstr ""
+msgstr "ตั้งค่าเป็น 0 เพื่อใช้จากฟุ้ทพรินท์หลัก หรือค่าจากเน็ทคลาส"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:614
 msgid ""
 "This is the local net clearance for this pad.\n"
 "If 0, the footprint local value or the Netclass value is used."
 msgstr ""
+"นี่คือค่าระยะห่างของเน็ทสำหรับแพ็ดนี้\n"
+"ถ้าค่าเป็น 0 จะใช้ค่าจากฟุ้ทพรินท์แทนหรือใช้ค่าจากเน็ทคลาส"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:627
 msgid ""
