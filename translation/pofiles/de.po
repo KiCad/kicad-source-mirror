@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-09-07 08:18-0700\n"
-"PO-Revision-Date: 2021-09-11 21:53+0000\n"
+"PO-Revision-Date: 2021-09-13 17:57+0000\n"
 "Last-Translator: Jonathan Haas <haasjona@gmail.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
@@ -9451,14 +9451,12 @@ msgid "Style:"
 msgstr "Stil:"
 
 #: eeschema/dialogs/dialog_line_wire_bus_properties_base.cpp:76
-#, fuzzy
 msgid "Set width to 0 to use Netclass line widths."
-msgstr "Wechseln zum Schaltplan Editor"
+msgstr "Breite auf 0 setzen, um Linienbreiten der Netzklasse zu verwenden."
 
 #: eeschema/dialogs/dialog_line_wire_bus_properties_base.h:67
-#, fuzzy
 msgid "Line, Wire & Bus Properties"
-msgstr "Liniensegmenteigenschaften"
+msgstr "Linien-, Verbindungs- und Bus-Eigenschaften"
 
 #: eeschema/dialogs/dialog_migrate_buses.cpp:102
 msgid "Conflicting Labels"
@@ -9573,14 +9571,12 @@ msgid "This plugin already exists."
 msgstr "Dieses Plugin existiert bereits."
 
 #: eeschema/dialogs/dialog_netlist.cpp:659
-#, fuzzy
 msgid "You must provide a netlist generator command string"
-msgstr "Fehler: Sie müssen einen Befehl angeben"
+msgstr "Sie müssen einen Netzlistengenerator-Kommando angeben"
 
 #: eeschema/dialogs/dialog_netlist.cpp:665
-#, fuzzy
 msgid "You must provide a netlist generator title"
-msgstr "Fehler: Sie müssen einen Titel angeben"
+msgstr "Sie müssen einen Netzlistengenerator-Titel angeben"
 
 #: eeschema/dialogs/dialog_netlist_base.cpp:39
 msgid "Add Generator..."
@@ -9617,47 +9613,50 @@ msgid "Alternate Pin Name"
 msgstr "Alternativer Pin-Name"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:145
-#, fuzzy
 msgid "Synchronized pins edit mode, and this pin is new"
-msgstr "Synchronisierter Pin Bearbeitungsmodus"
+msgstr "Synchronisierter Pin-Bearbeitungsmodus und dieser Pin ist neu"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:146
 msgid ""
 "Similar pins will be automatically added to other units, if this pin is not "
 "common to all units"
 msgstr ""
+"Ähnliche Pins werden automatisch zu anderen Einheiten hinzugefügt, wenn "
+"dieser Pin nicht allen Einheiten gemeinsam ist"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:151
-#, fuzzy
 msgid "Synchronized pins edit mode"
-msgstr "Synchronisierter Pin Bearbeitungsmodus"
+msgstr "Synchronisierter Pin-Bearbeitungsmodus"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:152
 msgid ""
 "Similar pins at the same location will be edited. Pin number of other pins "
 "will be not modified"
 msgstr ""
+"Ähnliche Pins an der gleichen Position werden bearbeitet. Die Pin-Nummern "
+"der anderen Pins werden nicht geändert"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:206
 #: eeschema/dialogs/dialog_symbol_properties.cpp:334
-#, fuzzy
 msgid "Alternate pin assignments are not available for DeMorgan symbols."
-msgstr ""
-"Für DeMorgan-Komponenten sind keine alternativen Pinbelegungen verfügbar."
+msgstr "Für DeMorgan-Symbole sind keine alternativen Pinbelegungen verfügbar."
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:282
 msgid "This symbol only has one unit. This control has no effect."
 msgstr ""
+"Dieses Symbol hat nur eine Einheit. Dieses Steuerelement hat keine Wirkung."
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:284
 msgid ""
 "Synchronized pin edit mode is enabled.\n"
 "Similar pins will be edited, regardless this option."
 msgstr ""
+"Der synchronisierte Pin-Editiermodus ist aktiviert.\n"
+"Ähnliche Pins werden unabhängig von dieser Option bearbeitet."
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:287
 msgid "If checked, this pin will exist in all units."
-msgstr ""
+msgstr "Wenn aktiviert, ist der Pin in allen Einheiten vorhanden."
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:308
 msgid "Alternate pin definitions must have a name."
