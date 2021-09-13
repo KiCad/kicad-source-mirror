@@ -5,16 +5,16 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-09-07 08:18-0700\n"
-"PO-Revision-Date: 2021-09-07 15:16+0000\n"
+"PO-Revision-Date: 2021-09-13 17:58+0000\n"
 "Last-Translator: Triyan W. Nugroho <triyan.wn@gmail.com>\n"
-"Language-Team: Indonesian <https://hosted.weblate.org/projects/kicad/master-"
-"source/id/>\n"
+"Language-Team: Indonesian <https://hosted.weblate.org/projects/kicad/"
+"master-source/id/>\n"
 "Language: id\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.8.1-dev\n"
+"X-Generator: Weblate 4.9-dev\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
 msgid "All Files"
@@ -24359,50 +24359,50 @@ msgstr "Footprint %s (%s), %s, rotasi %g derajat"
 #: pcbnew/dialogs/dialog_pad_properties.cpp:495
 #: pcbnew/dialogs/dialog_text_properties.cpp:237
 msgid "back side (mirrored)"
-msgstr ""
+msgstr "sisi belakang (dicerminkan)"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:496
 #: pcbnew/dialogs/dialog_text_properties.cpp:237
 msgid "front side"
-msgstr ""
+msgstr "sisi depan"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:694
 msgid "width"
-msgstr ""
+msgstr "lebar"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:701
 #: pcbnew/dialogs/dialog_pad_properties.cpp:707
 msgid "from"
-msgstr ""
+msgstr "dari"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:702
 #: pcbnew/dialogs/dialog_pad_properties.cpp:708
 msgid "to"
-msgstr ""
+msgstr "ke"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:713
 msgid "center"
-msgstr ""
+msgstr "tengah"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:714
 msgid "start"
-msgstr ""
+msgstr "mulai"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:716
 msgid "angle"
-msgstr ""
+msgstr "sudut"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:721
 msgid "ring"
-msgstr ""
+msgstr "cincin"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:723
 msgid "circle"
-msgstr ""
+msgstr "lingkaran"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:726
 msgid "radius"
-msgstr ""
+msgstr "radius"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:732
 #, c-format
@@ -24417,22 +24417,22 @@ msgstr ""
 #: pcbnew/dialogs/dialog_pad_properties.cpp:918
 #, c-format
 msgid "%s, %s and connected layers"
-msgstr ""
+msgstr "%s, %s dan lapisan terhubung"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:921
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:284
 msgid "Connected layers only"
-msgstr ""
+msgstr "Hanya lapisan terhubung"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:926
 #, c-format
 msgid "%s and %s"
-msgstr ""
+msgstr "%s dan %s"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1226
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1231
 msgid "Warning: Pad size is less than zero."
-msgstr ""
+msgstr "Peringatan: Ukuran pad kurang dari nol."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1256
 msgid ""
@@ -24532,30 +24532,30 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1644
 msgid "Modify pad"
-msgstr ""
+msgstr "Ubah pad"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:2028
 #: pcbnew/dialogs/dialog_pad_properties.cpp:2171
 #: pcbnew/dialogs/dialog_pad_properties.cpp:2205
 msgid "No shape selected"
-msgstr ""
+msgstr "Tidak ada pad yang dipilih"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:2119
 msgid "Ring/Circle"
-msgstr ""
+msgstr "Cincin/Lingkaran"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:2123
 msgid "Shape type:"
-msgstr ""
+msgstr "Tipe bentuk:"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:2123
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:815
 msgid "Add Primitive"
-msgstr ""
+msgstr "Tambahkan Primitif"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:36
 msgid "Pad type:"
-msgstr ""
+msgstr "Tipe pad:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:40 pcbnew/pad.cpp:1457
 msgid "Through-hole"
@@ -24594,7 +24594,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:369 pcbnew/pad.cpp:1097
 #: pcbnew/pad.cpp:1465
 msgid "Oval"
-msgstr ""
+msgstr "Oval"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:109
 msgid "Rectangular"
@@ -24635,7 +24635,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:159
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:288
 msgid "Corner size:"
-msgstr ""
+msgstr "Ukuran sudut:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:161
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:290
@@ -24644,10 +24644,13 @@ msgid ""
 "The width is the smaller value between size X and size Y.\n"
 "The max value is 50 percent."
 msgstr ""
+"Radius sudut dalam persen  dari lebar pad.\n"
+"Lebarnya adalah nilai yang lebih kecil antara ukuran X dan ukuran Y.\n"
+"Nilai maksimum adalah 50 persen."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:172
 msgid "Corner radius:"
-msgstr ""
+msgstr "Radius sudut:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:174
 msgid ""
@@ -24684,38 +24687,38 @@ msgstr ""
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:219
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:269
 msgid "Top left"
-msgstr ""
+msgstr "Atas kiri"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:223
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:273
 msgid "Top right"
-msgstr ""
+msgstr "Atas kanan"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:226
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:276
 msgid "Bottom left"
-msgstr ""
+msgstr "Bawah kiri"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:229
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:279
 msgid "Bottom right"
-msgstr ""
+msgstr "Bawah kanan"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:314
 msgid "Pad size X:"
-msgstr ""
+msgstr "Ukuran pad X:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:342
 msgid "90"
-msgstr ""
+msgstr "90"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:365
 msgid "Hole shape:"
-msgstr ""
+msgstr "Bentuk lubang:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:375
 msgid "Hole size X:"
-msgstr ""
+msgstr "Ukuran lubang X:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:409
 msgid "Offset shape from hole"
@@ -24869,7 +24872,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:791
 msgid "Primitives list:"
-msgstr ""
+msgstr "Daftar primitif:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:797
 msgid "Note: coordinates are relative to anchor pad, orientation 0."
@@ -24877,23 +24880,23 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:818
 msgid "Edit Primitive"
-msgstr ""
+msgstr "Sunting Primitif"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:821
 msgid "Duplicate Primitive"
-msgstr ""
+msgstr "Duplikasikan Primitif"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:824
 msgid "Transform Primitive"
-msgstr ""
+msgstr "Transformasikan Primitif"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:830
 msgid "Delete Primitive"
-msgstr ""
+msgstr "Hapus Primitif"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:843
 msgid "Custom Shape Primitives"
-msgstr ""
+msgstr "Primitif Bentuk Kustom"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:973
 msgid "Footprint R1 (300K), back side (mirrored), rotated 180.0º"
@@ -24905,19 +24908,19 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1140
 msgid "Start point"
-msgstr ""
+msgstr "Titik mulai"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1166
 msgid "Control point 1"
-msgstr ""
+msgstr "Titik kontrol 1"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1192
 msgid "Control point 2"
-msgstr ""
+msgstr "Titik kontrol 2"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1218
 msgid "End point"
-msgstr ""
+msgstr "Titik akhir"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1328
 msgid "Move vector"
@@ -24925,11 +24928,11 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1377
 msgid "Scaling factor:"
-msgstr ""
+msgstr "Faktor skala:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1399
 msgid "Duplicate:"
-msgstr ""
+msgstr "Duplikat:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1567
 msgid "Coordinates are relative to anchor pad, rotated 0.0 deg."
@@ -24937,7 +24940,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_pad_properties_base.h:265
 msgid "Pad Properties"
-msgstr ""
+msgstr "Properti Pad"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.h:354
 msgid "Pad Custom Shape Geometry Transform"
@@ -25042,27 +25045,27 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:117
 msgid "Actual size"
-msgstr ""
+msgstr "Ukuran aktual"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:123
 msgid "Scaling:"
-msgstr ""
+msgstr "Penskalaan:"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:127
 msgid "Auto"
-msgstr ""
+msgstr "Otomatis"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:127
 msgid "3:2"
-msgstr ""
+msgstr "3:2"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:127
 msgid "2:1"
-msgstr ""
+msgstr "2:1"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:127
 msgid "3:1"
-msgstr ""
+msgstr "3:1"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:133
 msgid "Plot mode:"
@@ -25188,11 +25191,11 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:273
 msgid "Postscript Options"
-msgstr ""
+msgstr "Opsi Postscript"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:283
 msgid "X scale factor:"
-msgstr ""
+msgstr "Faktor skala X:"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:288
 msgid "Set global X scale adjust for exact scale PostScript output."
@@ -25200,7 +25203,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:295
 msgid "Y scale factor:"
-msgstr ""
+msgstr "Faktor skala Y:"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:300
 msgid "Set global Y scale adjust for exact scale PostScript output."
@@ -25221,11 +25224,11 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:323
 msgid "Force A4 output"
-msgstr ""
+msgstr "Paksa keluaran A4"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:329
 msgid "DXF Options"
-msgstr ""
+msgstr "Opsi DXF"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:334
 msgid "Plot graphic items using their contours"
@@ -25259,7 +25262,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:378
 msgid "Millimeter"
-msgstr ""
+msgstr "Milimeter"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:382
 msgid ""
@@ -25299,11 +25302,11 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:459
 msgid "Select all Layers"
-msgstr ""
+msgstr "Pilih semua Lapisan"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:463
 msgid "Deselect all Layers"
-msgstr ""
+msgstr "Batal pilih semua Lapisan"
 
 #: pcbnew/dialogs/dialog_pns_diff_pair_dimensions.cpp:55
 msgid "Trace gap must be greater than 0."
@@ -30904,7 +30907,7 @@ msgstr ""
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1018
 #, c-format
 msgid "Unrecognized pad shape primitive '%s' in row %zu."
-msgstr ""
+msgstr "Primitif bentuk pad tak dikenal '%s' di baris %zu."
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1125
 #, c-format
