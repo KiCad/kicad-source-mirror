@@ -13,10 +13,10 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-09-13 10:58-0700\n"
-"PO-Revision-Date: 2021-09-13 17:57+0000\n"
-"Last-Translator: Jonathan Haas <haasjona@gmail.com>\n"
-"Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
-"source/de/>\n"
+"PO-Revision-Date: 2021-09-13 22:12+0000\n"
+"Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
+"Language-Team: German <https://hosted.weblate.org/projects/kicad/"
+"master-source/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -5469,7 +5469,7 @@ msgstr "Einheit '%s' endet nicht auf 'mil'."
 #: common/plugins/altium/altium_parser.cpp:255
 #, c-format
 msgid "Cannot convert '%s' to double."
-msgstr "\"%s\" kann nicht in eine Double konvertiert werden"
+msgstr "\"%s\" kann nicht in eine Double konvertiert werden."
 
 #: common/plugins/cadstar/cadstar_archive_parser.cpp:2337
 #, c-format
@@ -12286,11 +12286,9 @@ msgstr ""
 "Mehrere Bibliotheken können nicht denselben Spitznamen ('%s') verwenden."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:459 eeschema/symbol_library.cpp:550
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol library '%s' failed to load."
-msgstr ""
-"Symbolbibliothek \"%s\" wurde nicht geladen.\n"
-"%s"
+msgstr "Symbolbibliothek \"%s\" wurde nicht geladen."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:462
 msgid "Error Loading Library"
