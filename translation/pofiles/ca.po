@@ -4,10 +4,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-09-13 10:58-0700\n"
-"PO-Revision-Date: 2021-09-13 17:57+0000\n"
+"PO-Revision-Date: 2021-09-13 22:12+0000\n"
 "Last-Translator: Arnau Llovet Vidal <arnaullv@gmail.com>\n"
-"Language-Team: Catalan <https://hosted.weblate.org/projects/kicad/master-"
-"source/ca/>\n"
+"Language-Team: Catalan <https://hosted.weblate.org/projects/kicad/"
+"master-source/ca/>\n"
 "Language: ca\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1865,6 +1865,8 @@ msgid ""
 "This path was defined  externally to the running process and\n"
 "will only be temporarily overwritten."
 msgstr ""
+"Aquest camí s'ha definit externament al procés actual i\n"
+"només serà sobreescrita temporalment."
 
 #: common/dialogs/dialog_configure_paths.cpp:356
 msgid ""
@@ -1874,25 +1876,27 @@ msgid ""
 "this behavior, either rename any conflicting entries or remove\n"
 "the external environment variable(s) from your system."
 msgstr ""
+"Quan KiCad sigui executat de nou, qualsevol camí que ja hagi\n"
+"estat definit serà respectat, mentre que qualsevol ajustament que\n"
+"hagi estat definit al diàleg de configuració de camins serà\n"
+"ignorat. Si la teva intenció no és aquesta, canvia el nom o elimina les\n"
+"entrades conflictives en les variables d'entorn del teu sistema."
 
 #: common/dialogs/dialog_configure_paths.cpp:374
-#, fuzzy, c-format
+#, c-format
 msgid "The name %s is reserved, and cannot be used."
-msgstr "Ja està en ús l'àlies o el nom de component <%s>."
+msgstr "El nom %s està reservat, i no pot ser utilitzat."
 
 #: common/dialogs/dialog_configure_paths.cpp:517
-#, fuzzy
 msgid "File Browser..."
-msgstr "Navega..."
+msgstr "Explorador de fitxers..."
 
 #: common/dialogs/dialog_configure_paths.cpp:521
 #: common/widgets/grid_text_button_helpers.cpp:410
-#, fuzzy
 msgid "Select Path"
-msgstr "Selecciona-ho tot"
+msgstr "Selecciona Camí"
 
 #: common/dialogs/dialog_configure_paths.cpp:603
-#, fuzzy
 msgid ""
 "Enter the name and value for each environment variable.  Grey entries are "
 "names that have been defined externally at the system or user level.  "
@@ -1900,10 +1904,10 @@ msgid ""
 "over the ones defined in this table.  This means the values in this table "
 "are ignored."
 msgstr ""
-"Introduïu el nom i el camí per a cada variable d'entorn. Les entrades grises "
-"són noms que han estat definits externament a nivell del sistema o a nivell "
-"de l'usuari. Les variables d'entorn definides en l'àmbit del sistema o en "
-"l'àmbit de l'usuari tenen prioritat sobre aquelles definides en aquesta "
+"Introdueix el nom i el valor per a cada variable d'entorn. Les entrades "
+"grises són noms que han estat definits externament a nivell del sistema o a "
+"nivell de l'usuari. Les variables d'entorn definides en l'àmbit del sistema "
+"o en l'àmbit de l'usuari tenen prioritat sobre aquelles definides en aquesta "
 "taula. Això significa que els valors d'aquesta taula són ignorats."
 
 #: common/dialogs/dialog_configure_paths.cpp:609
@@ -1990,10 +1994,9 @@ msgid ""
 msgstr ""
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:55
-#, fuzzy, c-format
+#, c-format
 msgid "Copy custom global %s library table"
-msgstr ""
-"Seleccioneu el fitxer de la taula de les biblioteques de símbols globals:"
+msgstr "Copia la taula de biblioteques globals %s personalitzada"
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:57
 #, c-format
@@ -2002,21 +2005,22 @@ msgid ""
 msgstr ""
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:61
-#, fuzzy, c-format
+#, c-format
 msgid "Create an empty global %s library table"
-msgstr "Crea un nou directori"
+msgstr "Crea una taula de biblioteques global %s en blanc"
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:63
 #, c-format
 msgid ""
 "Select this option to define %s libraries in project specific library tables"
 msgstr ""
+"Selecciona aquesta opció per definir biblioteques %s en les taules "
+"específiques del projecte"
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:67
-#, fuzzy, c-format
+#, c-format
 msgid "Select global %s library table file:"
-msgstr ""
-"Seleccioneu el fitxer de la taula de les biblioteques de símbols globals:"
+msgstr "Selecciona el fitxer de la taula de biblioteques de %s globals:"
 
 #: common/dialogs/dialog_global_lib_table_config_base.cpp:21
 #: common/dialogs/dialog_global_lib_table_config_base.cpp:28
@@ -2169,14 +2173,12 @@ msgid "Reset Grid Origin"
 msgstr "Restableix l'origen de la quadrícula"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:176
-#, fuzzy
 msgid "Reset Grid Sizes"
-msgstr "Restableix la mida"
+msgstr "Restableix la mida de les graelles"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:178
-#, fuzzy
 msgid "Resets the list of grid sizes to default values"
-msgstr "Establiu-ho a 0 per utilitzar els valors per defecte"
+msgstr "Restableix la llista de mides de graelles als valors per defecte"
 
 #: common/dialogs/dialog_grid_settings_base.h:80
 msgid "Grid Settings"
@@ -2216,20 +2218,21 @@ msgid "Image Editor"
 msgstr "Editor d'imatges"
 
 #: common/dialogs/dialog_locked_items_query.cpp:35
-#, fuzzy
 msgid "Skip Locked Items"
-msgstr "Bloquejat: Sí"
+msgstr "Omet els elements bloquejats"
 
 #: common/dialogs/dialog_locked_items_query.cpp:36
 msgid ""
 "Remove locked items from the selection and only apply the operation to the "
 "unlocked items (if any)."
 msgstr ""
+"Elimina els elements bloquejats de la selecció i aplica l'operació als "
+"elements desbloquejats (si existeixen)."
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:30
-#, fuzzy, c-format
+#, c-format
 msgid "The selection contains %d locked items."
-msgstr "Mou els elements seleccionats"
+msgstr "La selecció conté %d elements bloquejats."
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:34
 msgid "These items will be skipped unless you override the locks."
@@ -2237,7 +2240,7 @@ msgstr ""
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:44
 msgid "Remember decision for this session."
-msgstr ""
+msgstr "Recorda la decisió durant aquesta sessió."
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:45
 msgid ""
@@ -2246,9 +2249,8 @@ msgid ""
 msgstr ""
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:55
-#, fuzzy
 msgid "Override Locks"
-msgstr "Text ocult"
+msgstr "Desactiva els Bloquejos"
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:56
 msgid ""
@@ -2275,18 +2277,16 @@ msgid "Import settings from a previous version (none found)"
 msgstr ""
 
 #: common/dialogs/dialog_migrate_settings.cpp:123
-#, fuzzy
 msgid "Select Settings Path"
-msgstr "Selecciona-ho tot"
+msgstr "Selecciona el camí dels ajustaments"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:30
 msgid "How would you like to configure KiCad?"
-msgstr ""
+msgstr "Com t'agradaria configurar KiCad?"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:34
-#, fuzzy
 msgid "Import settings from a previous version at:"
-msgstr "Desarxiva els fitxers del projecte d'un fitxer zip"
+msgstr "Importa les preferències d'una versió anterior a:"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:49
 msgid "Choose a different path"
@@ -2307,14 +2307,12 @@ msgid ""
 msgstr ""
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:69
-#, fuzzy
 msgid "Start with default settings"
-msgstr "Restableix als ajusts predeterminats"
+msgstr "Inicia amb la configuració predeterminada"
 
 #: common/dialogs/dialog_migrate_settings_base.h:67
-#, fuzzy
 msgid "Configure KiCad Settings Path"
-msgstr "Configura els camins"
+msgstr "Configura el camí de configuració de KiCad"
 
 #: common/dialogs/dialog_page_settings.cpp:54
 msgid "A5 148x210mm"
@@ -2409,9 +2407,9 @@ msgid "Portrait"
 msgstr "Vertical"
 
 #: common/dialogs/dialog_page_settings.cpp:473
-#, fuzzy, c-format
+#, c-format
 msgid "Drawing sheet file '%s' not found."
-msgstr "No s'ha trobat el fitxer de recuperació «%s»."
+msgstr "No s'ha trobat la fulla de dibuix '%s'."
 
 #: common/dialogs/dialog_page_settings.cpp:545
 msgid "the translation for paper size must preserve original spellings"
@@ -2423,9 +2421,8 @@ msgid "Landscape"
 msgstr "Horitzontal"
 
 #: common/dialogs/dialog_page_settings.cpp:792
-#, fuzzy
 msgid "Select Drawing Sheet File"
-msgstr "Dibuix"
+msgstr "Selecciona el fitxer de la fulla de dibuix"
 
 #: common/dialogs/dialog_page_settings.cpp:808
 #, c-format
@@ -2672,9 +2669,8 @@ msgid "Clear reference designators on all pasted symbols"
 msgstr "Designador de referències predeterminat:"
 
 #: common/dialogs/dialog_paste_special_base.cpp:24
-#, fuzzy
 msgid "Paste Options"
-msgstr "Opcions de la pàgina"
+msgstr "Opcions d'enganxar"
 
 #: common/dialogs/dialog_paste_special_base.h:48
 msgid "Paste Special"
@@ -2723,9 +2719,8 @@ msgid "Close"
 msgstr "Tanca"
 
 #: common/dialogs/dialog_print_generic.cpp:110
-#, fuzzy
 msgid "Warning: Bad scale number"
-msgstr "Àlies dolent (nom duplicat)"
+msgstr "Atenció: Número d'escala invàlid"
 
 #: common/dialogs/dialog_print_generic.cpp:119
 #, fuzzy, c-format
@@ -2743,9 +2738,8 @@ msgstr "Advertència: l'opció de l'escala està establerta a un valor molt baix
 
 #: common/dialogs/dialog_print_generic.cpp:197
 #: common/dialogs/dialog_print_generic.cpp:244
-#, fuzzy
 msgid "Nothing to print"
-msgstr "Carrega l'empremta"
+msgstr "No hi ha res per imprimir"
 
 #: common/dialogs/dialog_print_generic.cpp:235
 #: eeschema/dialogs/dialog_print_using_printer.cpp:311
@@ -2795,9 +2789,8 @@ msgid "Black and white"
 msgstr "Blanc i negre"
 
 #: common/dialogs/dialog_print_generic_base.cpp:41
-#, fuzzy
 msgid "Print border and title block"
-msgstr "Ploteja la vora i el títol del bloc"
+msgstr "Imprimeix la vora i el títol del bloc"
 
 #: common/dialogs/dialog_print_generic_base.cpp:43
 msgid "Print Frame references."
@@ -2822,9 +2815,8 @@ msgstr "Ajusta escala X per al traçat a escala natural"
 
 #: common/dialogs/dialog_print_generic_base.cpp:99
 #: eeschema/dialogs/dialog_print_using_printer_base.cpp:62
-#, fuzzy
 msgid "Page Setup..."
-msgstr "Configuració de la pàgina"
+msgstr "Configuració de la pàgina..."
 
 #: common/dialogs/dialog_text_entry_base.cpp:22
 #: common/dialogs/dialog_unit_entry_base.cpp:22
@@ -2853,14 +2845,12 @@ msgid "Reveal Themes in Finder"
 msgstr ""
 
 #: common/dialogs/panel_color_settings.cpp:131
-#, fuzzy
 msgid "New theme name:"
-msgstr "Nom de la xarxa:"
+msgstr "Nom del nou tema:"
 
 #: common/dialogs/panel_color_settings.cpp:131
-#, fuzzy
 msgid "Add Color Theme"
-msgstr "Estil de color CAD"
+msgstr "Afegeix un tema de color"
 
 #: common/dialogs/panel_color_settings.cpp:143
 msgid "Theme already exists!"
@@ -2868,18 +2858,16 @@ msgstr "El tema ja existeix!"
 
 #: common/dialogs/panel_color_settings.cpp:204
 #: common/dialogs/panel_color_settings.cpp:226
-#, fuzzy
 msgid "New Theme..."
-msgstr "Símbol d'alimentació"
+msgstr "Nou Tema..."
 
 #: common/dialogs/panel_color_settings.cpp:214
 msgid "(read-only)"
-msgstr ""
+msgstr "(només lectura)"
 
 #: common/dialogs/panel_color_settings.cpp:283
-#, fuzzy
 msgid "Copy color"
-msgstr "Color del coure"
+msgstr "Copia el color"
 
 #: common/dialogs/panel_color_settings.cpp:286
 msgid "Paste color"
@@ -2906,9 +2894,8 @@ msgid ""
 msgstr ""
 
 #: common/dialogs/panel_color_settings_base.cpp:41
-#, fuzzy
 msgid "Open Theme Folder"
-msgstr "Emissor obert"
+msgstr "Obre la carpeta de temes"
 
 #: common/dialogs/panel_color_settings_base.cpp:42
 msgid "Open the folder containing color themes"
@@ -2944,9 +2931,8 @@ msgid "Select Preferred PDF Viewer"
 msgstr "Selecció del navegador PDF preferit"
 
 #: common/dialogs/panel_common_settings_base.cpp:26
-#, fuzzy
 msgid "&Auto save:"
-msgstr "Posiciona automàticament"
+msgstr "Desat &automàtic:"
 
 #: common/dialogs/panel_common_settings_base.cpp:34
 msgid ""
@@ -2976,7 +2962,7 @@ msgstr ""
 
 #: common/dialogs/panel_common_settings_base.cpp:65
 msgid "Days"
-msgstr ""
+msgstr "Dies"
 
 #: common/dialogs/panel_common_settings_base.cpp:73
 #, fuzzy
@@ -2990,19 +2976,17 @@ msgstr "Sense antialiàsing"
 
 #: common/dialogs/panel_common_settings_base.cpp:77
 #: common/dialogs/panel_common_settings_base.cpp:87
-#, fuzzy
 msgid "Fast Antialiasing"
-msgstr "Sense antialiàsing"
+msgstr "Antialiàsing ràpid"
 
 #: common/dialogs/panel_common_settings_base.cpp:77
 #: common/dialogs/panel_common_settings_base.cpp:87
-#, fuzzy
 msgid "High Quality Antialiasing"
-msgstr "Sense antialiàsing"
+msgstr "Antialiàsing d'alta qualitat"
 
 #: common/dialogs/panel_common_settings_base.cpp:83
 msgid "Fallback graphics:"
-msgstr ""
+msgstr "Gràfics de reserva:"
 
 #: common/dialogs/panel_common_settings_base.cpp:99
 #, fuzzy
@@ -3010,9 +2994,8 @@ msgid "Helper Applications"
 msgstr "Elimina les seleccions"
 
 #: common/dialogs/panel_common_settings_base.cpp:105
-#, fuzzy
 msgid "Text editor:"
-msgstr "Editor de text"
+msgstr "Editor de text:"
 
 #: common/dialogs/panel_common_settings_base.cpp:126
 #, fuzzy
@@ -3040,9 +3023,8 @@ msgstr "Escala X:"
 #: common/dialogs/panel_mouse_settings_base.cpp:56
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:120
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:85
-#, fuzzy
 msgid "Automatic"
-msgstr "Ajusta automàticament"
+msgstr "Automàtic"
 
 #: common/dialogs/panel_common_settings_base.cpp:173
 #, fuzzy
@@ -3055,14 +3037,12 @@ msgid "Show icons in menus"
 msgstr "Icones als menús"
 
 #: common/dialogs/panel_common_settings_base.cpp:187
-#, fuzzy
 msgid "Icon theme:"
-msgstr "Color"
+msgstr "Tema d'icones:"
 
 #: common/dialogs/panel_common_settings_base.cpp:191
-#, fuzzy
 msgid "Light"
-msgstr "Dreta"
+msgstr "Clar"
 
 #: common/dialogs/panel_common_settings_base.cpp:192
 msgid "Use icons designed for light window backgrounds"
@@ -3103,9 +3083,8 @@ msgid ""
 msgstr ""
 
 #: common/dialogs/panel_common_settings_base.cpp:237
-#, fuzzy
 msgid "Project Backup"
-msgstr "Projecte nou"
+msgstr "Còpia de seguretat del projecte"
 
 #: common/dialogs/panel_common_settings_base.cpp:244
 #, fuzzy
@@ -3197,9 +3176,8 @@ msgid "Undo all changes made so far in this dialog"
 msgstr ""
 
 #: common/dialogs/panel_hotkeys_editor.cpp:135
-#, fuzzy
 msgid "Import Hotkeys..."
-msgstr "&Importa les dreceres de teclat"
+msgstr "Importa les dreceres de teclat..."
 
 #: common/dialogs/panel_hotkeys_editor.cpp:136
 msgid ""
@@ -3365,15 +3343,14 @@ msgid "Only one action can be assigned to each column"
 msgstr ""
 
 #: common/dialogs/panel_mouse_settings_base.cpp:175
-#, fuzzy
 msgid "--"
-msgstr "-A"
+msgstr "--"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:179
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:122
 #: pcbnew/dialogs/panel_edit_options_base.cpp:137
 msgid "Ctrl"
-msgstr ""
+msgstr "Ctrl"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:183
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:98
@@ -3381,14 +3358,13 @@ msgstr ""
 #: pcbnew/dialogs/panel_edit_options_base.cpp:117
 #: pcbnew/dialogs/panel_edit_options_base.cpp:188
 msgid "Shift"
-msgstr ""
+msgstr "Shift"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:187
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:106
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:178
-#, fuzzy
 msgid "Alt"
-msgstr "A"
+msgstr "Alt"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:191
 msgid "Zoom:"
@@ -3451,12 +3427,11 @@ msgstr ""
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:318
 #: eeschema/dialogs/dialog_line_wire_bus_properties.cpp:48
 msgid "Dash-Dot"
-msgstr ""
+msgstr "Ratlla-Punt"
 
 #: common/dialogs/panel_setup_netclasses.cpp:409
-#, fuzzy
 msgid "Netclass must have a name."
-msgstr "Valor Netclass"
+msgstr "La classe de xarxa ha de tenir un nom."
 
 #: common/dialogs/panel_setup_netclasses.cpp:418
 #, fuzzy
@@ -3464,9 +3439,8 @@ msgid "Netclass name already in use."
 msgstr "Ja està en ús l'àlies o el nom de component <%s>."
 
 #: common/dialogs/panel_setup_netclasses.cpp:479
-#, fuzzy
 msgid "Minimum copper clearance"
-msgstr "Marge de seguretat mín."
+msgstr "Distància mínima del coure"
 
 #: common/dialogs/panel_setup_netclasses.cpp:480
 #, fuzzy
@@ -3474,9 +3448,8 @@ msgid "Minimum track width"
 msgstr "Amplada mín. de la pista"
 
 #: common/dialogs/panel_setup_netclasses.cpp:481
-#, fuzzy
 msgid "Via pad diameter"
-msgstr "Diàmetre de la via:"
+msgstr "Diàmetre del pad la via"
 
 #: common/dialogs/panel_setup_netclasses.cpp:482
 #, fuzzy
@@ -3530,9 +3503,8 @@ msgstr "No es pot suprimir la classe de xarxa predeterminada"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:41
 #: common/dialogs/panel_setup_netclasses_base.cpp:215
-#, fuzzy
 msgid "Net Class"
-msgstr "Classes de xarxes"
+msgstr "Classe de xarxa"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:42
 #: pcbnew/tools/board_inspection_tool.cpp:193
@@ -3553,40 +3525,33 @@ msgstr "Amplada de la pista"
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1499
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:202
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:108
-#, fuzzy
 msgid "Via Size"
-msgstr "Mida de la via NC"
+msgstr "Mida de la Via"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:45
-#, fuzzy
 msgid "Via Hole"
-msgstr "Via de %s"
+msgstr "Forat de la Via"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:46
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:204
-#, fuzzy
 msgid "uVia Size"
-msgstr "Mida de la μvia"
+msgstr "Mida de la uVia"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:47
-#, fuzzy
 msgid "uVia Hole"
-msgstr "Via de %s"
+msgstr "Forat de la uVia"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:48
-#, fuzzy
 msgid "DP Width"
-msgstr "Amplada"
+msgstr "Amplada DP"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:49
-#, fuzzy
 msgid "DP Gap"
-msgstr "Afegeix una separació"
+msgstr "Espaiat DP"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:50
-#, fuzzy
 msgid "Wire Thickness"
-msgstr "Gruix de la &línia:"
+msgstr "Gruix del Fil"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:51
 #, fuzzy
@@ -6482,9 +6447,8 @@ msgid "Library Identifier Validation Error"
 msgstr "Error de validació de camp"
 
 #: common/validators.cpp:356
-#, fuzzy
 msgid "Invalid signal name"
-msgstr "Nom del fitxer no vàlid:"
+msgstr "Nom de la senyal invàlid"
 
 #: common/validators.cpp:367
 msgid "Signal names cannot contain CR or LF characters"
@@ -7546,9 +7510,9 @@ msgid "Updated %s from %s to %s."
 msgstr "Pad %s en %s de %s"
 
 #: eeschema/annotate.cpp:302
-#, fuzzy, c-format
+#, c-format
 msgid "Annotated %s (unit %s) as %s."
-msgstr "Element sense anotar: %s%s (unitat %d)\n"
+msgstr "Anotat %s (unitat %s) com %s."
 
 #: eeschema/annotate.cpp:309
 #, fuzzy, c-format
@@ -8162,14 +8126,14 @@ msgid "Update symbols %s from '%s' to '%s'"
 msgstr "Pad %s en %s de %s"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:543
-#, fuzzy, c-format
+#, c-format
 msgid "Change symbol %s from '%s' to '%s'"
-msgstr "Canvia el valor del component %s, del valor %s a %s.\n"
+msgstr "Canvia el símbol %s de '%s' a '%s'"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:550
-#, fuzzy, c-format
+#, c-format
 msgid "Change symbols %s from '%s' to '%s'"
-msgstr "Canvia el valor del component %s, del valor %s a %s.\n"
+msgstr "Canvia els símbols %s de '%s' a '%s'"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:561
 #, fuzzy
@@ -8485,9 +8449,8 @@ msgid "Checking labels..."
 msgstr "Combina les zones"
 
 #: eeschema/dialogs/dialog_erc.cpp:397
-#, fuzzy
 msgid "Checking for unresolved variables..."
-msgstr "Marges de seguretat del pad...\n"
+msgstr "S'estan comprovant variables no resoltes..."
 
 #: eeschema/dialogs/dialog_erc.cpp:403
 #, fuzzy
@@ -8582,9 +8545,9 @@ msgid "Violation Severity"
 msgstr ""
 
 #: eeschema/dialogs/dialog_erc.cpp:755 pcbnew/dialogs/dialog_gendrill.cpp:471
-#, fuzzy, c-format
+#, c-format
 msgid "Report file '%s' created."
-msgstr "S'ha creat el fitxer de l'informe %s\n"
+msgstr "S'ha creat el fitxer de l'informe '%s'."
 
 #: eeschema/dialogs/dialog_erc.cpp:773
 #, c-format
@@ -9935,9 +9898,9 @@ msgid "Plotted to '%s'."
 msgstr "No s'ha pogut carregar «%s»"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:875
-#, fuzzy, c-format
+#, c-format
 msgid "Plotted to '%s'.\n"
-msgstr "No s'ha pogut carregar «%s»"
+msgstr "Traçat a '%s'.\n"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:1251
 #, c-format
@@ -10537,9 +10500,9 @@ msgid "Link '%s' to this file?"
 msgstr ""
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:512
-#, fuzzy, c-format
+#, c-format
 msgid "Change '%s' link from '%s' to '%s'?"
-msgstr "Canvia el valor del component %s, del valor %s a %s.\n"
+msgstr "Vols canviar l'enllaç '%s' de '%s' a '%s'?"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:517
 #: eeschema/dialogs/dialog_sheet_properties.cpp:533
@@ -11684,9 +11647,8 @@ msgid ""
 msgstr ""
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:242
-#, fuzzy
 msgid "Created project symbol library table.\n"
-msgstr "Edita la taula de les biblioteques de símbols."
+msgstr "S'ha creat la taula de les biblioteques de símbols del projecte.\n"
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:264
 #, fuzzy, c-format
@@ -11730,9 +11692,9 @@ msgstr "R&escata"
 #: eeschema/dialogs/dialog_symbol_remap.cpp:453
 #: eeschema/dialogs/dialog_symbol_remap.cpp:469
 #: eeschema/dialogs/dialog_symbol_remap.cpp:485
-#, fuzzy, c-format
+#, c-format
 msgid "Backing up file '%s' to '%s'."
-msgstr "S'està llegint el fitxer netlist «%s».\n"
+msgstr "S'està fent la còpia de seguretat del fitxer '%s' al fitxer '%s'."
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:380
 #: eeschema/dialogs/dialog_symbol_remap.cpp:422
@@ -11740,14 +11702,14 @@ msgstr "S'està llegint el fitxer netlist «%s».\n"
 #: eeschema/dialogs/dialog_symbol_remap.cpp:461
 #: eeschema/dialogs/dialog_symbol_remap.cpp:477
 #: eeschema/dialogs/dialog_symbol_remap.cpp:493
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to back up file '%s'.\n"
-msgstr "Ha fallat l'obertura del fitxer «%s»"
+msgstr "No s'ha pogut fer la còpia de seguretat del fitxer '%s'.\n"
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:414
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to create backup folder '%s'.\n"
-msgstr "Ha fallat la creació del fitxer «%s»"
+msgstr "No s'ha pogut crear la carpeta de còpies de seguretat '%s'.\n"
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:499
 msgid "Some of the project files could not be backed up."
@@ -13010,9 +12972,8 @@ msgid "Load Without Cache File"
 msgstr "Carrega sense desar"
 
 #: eeschema/files-io.cpp:396
-#, fuzzy
 msgid "Abort"
-msgstr "S'està avortant\n"
+msgstr "S'està avortant"
 
 #: eeschema/files-io.cpp:411 eeschema/files-io.cpp:428
 #: pagelayout_editor/files.cpp:250 pcbnew/files.cpp:796
