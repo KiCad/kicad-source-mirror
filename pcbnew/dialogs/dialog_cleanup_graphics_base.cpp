@@ -62,6 +62,7 @@ DIALOG_CLEANUP_GRAPHICS_BASE::DIALOG_CLEANUP_GRAPHICS_BASE( wxWindow* parent, wx
 
 	// Connect Events
 	m_createRectanglesOpt->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_CLEANUP_GRAPHICS_BASE::OnCheckBox ), NULL, this );
+	m_deleteRedundantOpt->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_CLEANUP_GRAPHICS_BASE::OnCheckBox ), NULL, this );
 	m_changesDataView->Connect( wxEVT_COMMAND_DATAVIEW_SELECTION_CHANGED, wxDataViewEventHandler( DIALOG_CLEANUP_GRAPHICS_BASE::OnSelectItem ), NULL, this );
 	m_changesDataView->Connect( wxEVT_LEFT_DCLICK, wxMouseEventHandler( DIALOG_CLEANUP_GRAPHICS_BASE::OnLeftDClickItem ), NULL, this );
 }
@@ -70,6 +71,7 @@ DIALOG_CLEANUP_GRAPHICS_BASE::~DIALOG_CLEANUP_GRAPHICS_BASE()
 {
 	// Disconnect Events
 	m_createRectanglesOpt->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_CLEANUP_GRAPHICS_BASE::OnCheckBox ), NULL, this );
+	m_deleteRedundantOpt->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_CLEANUP_GRAPHICS_BASE::OnCheckBox ), NULL, this );
 	m_changesDataView->Disconnect( wxEVT_COMMAND_DATAVIEW_SELECTION_CHANGED, wxDataViewEventHandler( DIALOG_CLEANUP_GRAPHICS_BASE::OnSelectItem ), NULL, this );
 	m_changesDataView->Disconnect( wxEVT_LEFT_DCLICK, wxMouseEventHandler( DIALOG_CLEANUP_GRAPHICS_BASE::OnLeftDClickItem ), NULL, this );
 

@@ -150,7 +150,7 @@ void GRAPHICS_CLEANER::cleanupSegments()
             m_itemsList->push_back( item );
 
             if( !m_dryRun )
-                m_commit.Removed( segment );
+                m_commit.Remove( segment );
 
             continue;
         }
@@ -171,7 +171,7 @@ void GRAPHICS_CLEANER::cleanupSegments()
                 segment2->SetFlags( IS_DELETED );
 
                 if( !m_dryRun )
-                    m_commit.Removed( segment2 );
+                    m_commit.Remove( segment2 );
             }
         }
     }
@@ -204,7 +204,7 @@ void GRAPHICS_CLEANER::mergeRects()
     {
         PCB_SHAPE* shape = dynamic_cast<PCB_SHAPE*>( item );
 
-        if( !shape || shape->GetShape() != SHAPE_T::SEGMENT )
+        if( !shape || isNullShape( shape ) || shape->GetShape() != SHAPE_T::SEGMENT )
             continue;
 
         if( shape->GetStart().x == shape->GetEnd().x || shape->GetStart().y == shape->GetEnd().y )
@@ -269,7 +269,7 @@ void GRAPHICS_CLEANER::mergeRects()
             //
             for( SIDE_CANDIDATE* candidate : ptMap[ top->end ] )
             {
-                if( candidate != top && viable( candidate ) )
+                if( candidate != top && candidate != left && viable( candidate ) )
                 {
                     right = candidate;
                     break;
@@ -278,7 +278,7 @@ void GRAPHICS_CLEANER::mergeRects()
 
             for( SIDE_CANDIDATE* candidate : ptMap[ left->end ] )
             {
-                if( candidate != left && viable( candidate ) )
+                if( candidate != top && candidate != left && viable( candidate ) )
                 {
                     bottom = candidate;
                     break;
