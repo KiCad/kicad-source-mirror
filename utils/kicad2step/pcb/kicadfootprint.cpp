@@ -430,16 +430,14 @@ bool KICADFOOTPRINT::ComposePCB( class PCBMODEL* aPCB, S3D_RESOLVER* resolver,
         wxString mname = wxString::FromUTF8Unchecked( i->m_modelname.c_str() );
 
         if( mname.empty() )
-        {
-            ReportMessage( wxString::Format( "No model defined for component %s.\n", m_refdes ) );
-            return false;
-        }
+            continue;
 
         mname = resolver->ResolvePath( mname );
 
         if( !wxFileName::FileExists( mname ) )
         {
-            ReportMessage( wxString::Format( "Could not add component %s.\nFile not found: %s\n",
+            ReportMessage( wxString::Format( "Could not add 3D model to %s.\n"
+                                             "File not found: %s\n",
                                              m_refdes,
                                              mname ) );
             return false;
@@ -458,7 +456,8 @@ bool KICADFOOTPRINT::ComposePCB( class PCBMODEL* aPCB, S3D_RESOLVER* resolver,
         }
         catch( const Standard_Failure& e)
         {
-            ReportMessage( wxString::Format( "Could not add component %s.\nOpenCASCADE error: %s\n",
+            ReportMessage( wxString::Format( "Could not add 3D model to %s.\n"
+                                             "OpenCASCADE error: %s\n",
                                              m_refdes, 
                                              e.GetMessageString() ) );
         }
