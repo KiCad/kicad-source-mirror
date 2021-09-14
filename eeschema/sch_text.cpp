@@ -1479,7 +1479,7 @@ BITMAPS SCH_GLOBALLABEL::GetMenuImage() const
 
 bool SCH_GLOBALLABEL::HitTest( const wxPoint& aPosition, int aAccuracy ) const
 {
-    EDA_RECT bbox = GetBoundingBox();
+    EDA_RECT bbox = GetBoundingBoxBase();
     bbox.Inflate( aAccuracy );
 
     if( !bbox.Contains( aPosition ) )
@@ -1501,7 +1501,7 @@ bool SCH_GLOBALLABEL::HitTest( const wxPoint& aPosition, int aAccuracy ) const
 
 bool SCH_GLOBALLABEL::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const
 {
-    EDA_RECT bbox = GetBoundingBox();
+    EDA_RECT bbox = GetBoundingBoxBase();
 
     if( aContained )
     {
