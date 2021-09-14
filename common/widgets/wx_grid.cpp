@@ -295,6 +295,7 @@ void WX_GRID::EnsureColLabelsVisible()
     // TODO: use a better way to evaluate the text size, for bold font
     int line_height = int( GetTextExtent( "Mj" ).y * 1.1 ) + 3;
     int row_height = GetColLabelSize();
+    int initial_row_height = row_height;
 
     // Headers can be multiline. Fix the Column Label Height to show the full header
     // However GetTextExtent does not work on multiline strings,
@@ -311,5 +312,8 @@ void WX_GRID::EnsureColLabelsVisible()
         }
     }
 
-    SetColLabelSize( row_height );
+    // Update the column label size, but only if needed, to avoid generating useless
+    // and perhaps annoying UI events when the size does not change
+    if( initial_row_height != row_height )
+        SetColLabelSize( row_height );
 }
