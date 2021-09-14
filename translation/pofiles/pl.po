@@ -6,10 +6,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-09-13 10:58-0700\n"
-"PO-Revision-Date: 2021-09-13 17:58+0000\n"
+"PO-Revision-Date: 2021-09-15 17:51+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
-"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/master-"
-"source/pl/>\n"
+"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/"
+"master-source/pl/>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -5428,9 +5428,8 @@ msgstr "Nie można otworzyć pliku '%s'"
 
 #: common/plugins/cadstar/cadstar_archive_parser.cpp:2348
 #: common/plugins/cadstar/cadstar_archive_parser.cpp:2647
-#, fuzzy
 msgid "File import cancelled by user."
-msgstr "Otwieranie zostało anulowane przez użytkownika."
+msgstr "Importowanie pliku zostało anulowane przez użytkownika."
 
 #: common/plugins/cadstar/cadstar_archive_parser.cpp:2365
 #: common/plugins/cadstar/cadstar_archive_parser.cpp:2383
@@ -19155,40 +19154,36 @@ msgid "Printing"
 msgstr "Drukuj"
 
 #: pagelayout_editor/dialogs/properties_frame.cpp:554
-#, fuzzy
 msgid "Predefined Keywords"
-msgstr "Zdefiniowane szerokości:"
+msgstr "Zdefiniowane słowa kluczowe"
 
 #: pagelayout_editor/dialogs/properties_frame.cpp:557
 msgid "Texts can include keywords."
-msgstr ""
+msgstr "Teksty mogą zawierać słowa kluczowe."
 
 #: pagelayout_editor/dialogs/properties_frame.cpp:558
 msgid "Keyword notation is ${keyword}"
-msgstr ""
+msgstr "Sposób zapisu słów kluczowych to ${słowo_kluczowe}"
 
 #: pagelayout_editor/dialogs/properties_frame.cpp:559
 msgid "Keywords are replaced by they actual value in strings"
-msgstr ""
+msgstr "Słowa kluczowe są zamieniane przez ich aktualną wartość w tekście"
 
 #: pagelayout_editor/dialogs/properties_frame.cpp:560
 msgid "These build-in keywords are always available:"
-msgstr ""
+msgstr "Następujące słowa kluczowe są wbudowane i zawsze dostępne:"
 
 #: pagelayout_editor/dialogs/properties_frame.cpp:564
-#, fuzzy
 msgid "(sheet number)"
-msgstr "Numer arkusza: %d"
+msgstr "(numer arkusza)"
 
 #: pagelayout_editor/dialogs/properties_frame.cpp:565
-#, fuzzy
 msgid "(sheet count)"
-msgstr "Ilość powtórzeń:"
+msgstr "(liczba arkuszy)"
 
 #: pagelayout_editor/dialogs/properties_frame.cpp:571
-#, fuzzy
 msgid "(paper size)"
-msgstr "Rozmiar papieru użytkownika:"
+msgstr "(rozmiar papieru)"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:34
 msgid "Show on all pages"
@@ -20041,6 +20036,8 @@ msgid ""
 "Zdiff =\n"
 "2*Z0( (1 - 0.48exp( -0.96*S/H ) )"
 msgstr ""
+"Zdiff =\n"
+"2*Z0( (1 - 0.48exp( -0.96*S/H ) )"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:901
 msgid "Zcommon = Zeven / 2"
@@ -20895,9 +20892,8 @@ msgid "Dielectric losses (odd):"
 msgstr "Straty dielektryka (nieparzyste):"
 
 #: pcb_calculator/transline_ident.cpp:309
-#, fuzzy
 msgid "Differential Impedance (Zd):"
-msgstr "Prześwit między ścieżkami pary różnicowej"
+msgstr "Impedancja różnicowa (Zd):"
 
 #: pcb_calculator/transline_ident.cpp:334
 msgid "Zeven"
@@ -27338,14 +27334,13 @@ msgstr ""
 "footprintu."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:83
-#, fuzzy
 msgid ""
 "Left click (and drag) actions depend on 2 modifier keys:\n"
 "Shift and Ctrl."
 msgstr ""
 "Czynności związane z kliknięciem (i przeciągnięciem) lewym przyciskiem myszy "
-"zależą od 3 klawiszy modyfikujących:\n"
-"Alt, Shift i Ctrl."
+"zależą od 2 klawiszy modyfikujących:\n"
+"Shift oraz Ctrl."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:97
 #: pcbnew/dialogs/panel_edit_options_base.cpp:168
@@ -27359,9 +27354,8 @@ msgstr "Wybierz element(y)."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:107
 #: pcbnew/dialogs/panel_edit_options_base.cpp:178
-#, fuzzy
 msgid "Long Click"
-msgstr "Kliknij"
+msgstr "Długie kliknięcie"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:127
 msgid "Ctrl+Shift"
@@ -27373,14 +27367,13 @@ msgid "Highlight net (for pads or tracks)."
 msgstr "Podświetl sieć (dla pól lutowniczych i ścieżek)."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:154
-#, fuzzy
 msgid ""
 "Left click (and drag) actions depend on 3 modifier keys:\n"
 "Option, Shift and Cmd."
 msgstr ""
 "Czynności związane z kliknięciem (i przeciągnięciem) lewym przyciskiem myszy "
 "zależą od 3 klawiszy modyfikujących:\n"
-"Alt, Shift i Cmd."
+"Option, Shift oraz Cmd."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:198
 msgid "Shift+Cmd"
