@@ -27,7 +27,7 @@
 #include <confirm.h>
 #include <eda_dde.h>
 #include <fp_lib_table.h>
-#include <kiface_i.h>
+#include <kiface_base.h>
 #include <kiplatform/app.h>
 #include <kiway_express.h>
 #include <macros.h>

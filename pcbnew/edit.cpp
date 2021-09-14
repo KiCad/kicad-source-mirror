@@ -24,7 +24,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <kiface_i.h>
+#include <kiface_base.h>
 #include <confirm.h>
 #include <gestfich.h>
 #include <pcb_edit_frame.h>

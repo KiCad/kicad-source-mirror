@@ -30,7 +30,7 @@
 
 #include <pcbnew_scripting_helpers.h>
 #include <pgm_base.h>
-#include <kiface_i.h>
+#include <kiface_base.h>
 #include <kiface_ids.h>
 #include <confirm.h>
 #include <pcb_edit_frame.h>
@@ -62,12 +62,12 @@ extern "C" PyObject* PyInit__pcbnew( void );
 
 namespace PCB {
 
-static struct IFACE : public KIFACE_I
+static struct IFACE : public KIFACE_BASE
 {
     // Of course all are virtual overloads, implementations of the KIFACE.
 
     IFACE( const char* aName, KIWAY::FACE_T aType ) :
-        KIFACE_I( aName, aType )
+            KIFACE_BASE( aName, aType )
     {}
 
     bool OnKifaceStart( PGM_BASE* aProgram, int aCtlBits ) override;
@@ -190,7 +190,7 @@ using namespace PCB;
 static PGM_BASE* process;
 
 
-KIFACE_I& Kiface() { return kiface; }
+KIFACE_BASE& Kiface() { return kiface; }
 
 
 // KIFACE_GETTER's actual spelling is a substitution macro found in kiway.h.

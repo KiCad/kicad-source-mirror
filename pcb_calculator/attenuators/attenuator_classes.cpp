@@ -9,7 +9,7 @@
 #include <wx/bitmap.h>
 
 #include <i18n_utility.h>
-#include <kiface_i.h>
+#include <kiface_base.h>
 #include <bitmaps.h>
 
 #include "attenuator_classes.h"

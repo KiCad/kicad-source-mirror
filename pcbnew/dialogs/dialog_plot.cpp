@@ -22,7 +22,7 @@
  */
 
 
-#include <kiface_i.h>
+#include <kiface_base.h>
 #include <plotters/plotter.h>
 #include <confirm.h>
 #include <pcb_edit_frame.h>

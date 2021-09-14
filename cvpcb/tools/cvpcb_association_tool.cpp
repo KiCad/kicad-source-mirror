@@ -21,7 +21,7 @@
 #include <confirm.h>
 #include <cstdint>
 #include <functional>
-#include <kiface_i.h>
+#include <kiface_base.h>
 #include <kiway_express.h>
 #include <lib_id.h>
 #include <tool/actions.h>

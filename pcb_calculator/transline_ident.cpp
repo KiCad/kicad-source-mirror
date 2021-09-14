@@ -24,7 +24,7 @@
 #include <wx/intl.h>
 #include <wx/arrstr.h>
 
-#include <kiface_i.h>
+#include <kiface_base.h>
 #include <bitmaps.h>
 
 // transline specific functions:

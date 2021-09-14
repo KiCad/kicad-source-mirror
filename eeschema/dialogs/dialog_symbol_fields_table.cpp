@@ -32,7 +32,7 @@
 #include <general.h>
 #include <grid_tricks.h>
 #include <string_utils.h>
-#include <kiface_i.h>
+#include <kiface_base.h>
 #include <sch_edit_frame.h>
 #include <sch_reference_list.h>
 #include <schematic.h>

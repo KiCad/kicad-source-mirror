@@ -26,7 +26,7 @@
 #include <eda_3d_canvas.h>
 #include <eda_3d_viewer_frame.h>
 #include <id.h>
-#include <kiface_i.h>
+#include <kiface_base.h>
 #include <tools/eda_3d_controller.h>
 #include "eda_3d_actions.h"
 #include <3d_rendering/legacy/render_3d_legacy.h>

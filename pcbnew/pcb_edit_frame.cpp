@@ -21,7 +21,7 @@
  */
 
 #include <advanced_config.h>
-#include <kiface_i.h>
+#include <kiface_base.h>
 #include <kiway.h>
 #include <pgm_base.h>
 #include <pcb_edit_frame.h>

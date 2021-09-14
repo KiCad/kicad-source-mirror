@@ -23,7 +23,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <kiface_i.h>
+#include <kiface_base.h>
 #include <kiway_express.h>
 #include <eda_dde.h>
 #include <connection_graph.h>

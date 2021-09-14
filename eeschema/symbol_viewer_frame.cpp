@@ -29,7 +29,7 @@
 #include <dialog_choose_symbol.h>
 #include <eeschema_id.h>
 #include <eeschema_settings.h>
-#include <kiface_i.h>
+#include <kiface_base.h>
 #include <kiway.h>
 #include <symbol_viewer_frame.h>
 #include <widgets/msgpanel.h>

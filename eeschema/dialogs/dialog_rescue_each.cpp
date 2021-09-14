@@ -26,7 +26,7 @@
 #include <dialog_rescue_each_base.h>
 #include <eeschema_settings.h>
 #include <invoke_sch_dialog.h>
-#include <kiface_i.h>
+#include <kiface_base.h>
 #include <project_rescue.h>
 #include <sch_symbol.h>
 #include <sch_edit_frame.h>

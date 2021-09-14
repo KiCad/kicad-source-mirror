@@ -26,7 +26,7 @@
 
 #include <cassert>
 #include <cmath>
-#include <kiface_i.h>
+#include <kiface_base.h>
 
 #include <string_utils.h>
 #include "class_regulator_data.h"

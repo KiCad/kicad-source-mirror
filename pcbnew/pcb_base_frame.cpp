@@ -32,7 +32,7 @@
 #include <boost/uuid/entropy_error.hpp>
 #endif
 
-#include <kiface_i.h>
+#include <kiface_base.h>
 #include <confirm.h>
 #include <pcb_base_frame.h>
 #include <base_units.h>

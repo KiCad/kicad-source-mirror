@@ -24,7 +24,7 @@
 
 #include <sch_draw_panel.h>
 #include <confirm.h>
-#include <kiface_i.h>
+#include <kiface_base.h>
 #include <project.h>
 #include <wildcards_and_files_ext.h>
 #include <tool/tool_manager.h>

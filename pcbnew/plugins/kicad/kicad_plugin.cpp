@@ -34,7 +34,7 @@
 #include <footprint.h>
 #include <fp_shape.h>
 #include <string_utils.h>
-#include <kiface_i.h>
+#include <kiface_base.h>
 #include <locale_io.h>
 #include <macros.h>
 #include <pad.h>

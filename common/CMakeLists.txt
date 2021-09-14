@@ -347,7 +347,7 @@ set( COMMON_SRCS
     grid_tricks.cpp
     hotkey_store.cpp
     hotkeys_basic.cpp
-    kiface_i.cpp
+    kiface_base.cpp
     kiid.cpp
     kiway.cpp
     kiway_express.cpp

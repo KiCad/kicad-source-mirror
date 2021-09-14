@@ -21,7 +21,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <kiface_i.h>
+#include <kiface_base.h>
 #include <pgm_base.h>
 #include <transform.h>
 
@@ -35,11 +35,11 @@
 TRANSFORM DefaultTransform = TRANSFORM( 1, 0, 0, -1 );
 
 
-static struct IFACE : public KIFACE_I
+static struct IFACE : public KIFACE_BASE
 {
     // Of course all are overloads, implementations of the KIFACE.
 
-    IFACE( const char* aName, KIWAY::FACE_T aType ) : KIFACE_I( aName, aType )
+    IFACE( const char* aName, KIWAY::FACE_T aType ) : KIFACE_BASE( aName, aType )
     {
     }
 
@@ -125,7 +125,7 @@ PGM_BASE* PgmOrNull()
 }
 
 
-KIFACE_I& Kiface()
+KIFACE_BASE& Kiface()
 {
     return kiface;
 }

@@ -19,7 +19,7 @@
  */
 
 #include <pgm_base.h>
-#include <kiface_i.h>
+#include <kiface_base.h>
 #include <settings/settings_manager.h>
 
 #include "pcb_calculator_frame.h"
@@ -31,12 +31,12 @@ const wxString PcbCalcDataFileExt( wxT( "pcbcalc" ) );
 
 namespace PCBCALC {
 
-static struct IFACE : public KIFACE_I
+static struct IFACE : public KIFACE_BASE
 {
     // Of course all are virtual overloads, implementations of the KIFACE.
 
     IFACE( const char* aName, KIWAY::FACE_T aType ) :
-        KIFACE_I( aName, aType )
+            KIFACE_BASE( aName, aType )
     {}
 
     bool OnKifaceStart( PGM_BASE* aProgram, int aCtlBits ) override;
@@ -75,7 +75,7 @@ using namespace PCBCALC;
 static PGM_BASE* process;
 
 
-KIFACE_I& Kiface() { return kiface; }
+KIFACE_BASE& Kiface() { return kiface; }
 
 
 // KIFACE_GETTER's actual spelling is a substitution macro found in kiway.h.

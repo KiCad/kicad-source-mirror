@@ -25,7 +25,7 @@
 
 #include <confirm.h>
 #include <string_utils.h>
-#include <kiface_i.h>
+#include <kiface_base.h>
 #include <sch_edit_frame.h>
 #include <wildcards_and_files_ext.h>
 #include <sch_sheet_path.h>

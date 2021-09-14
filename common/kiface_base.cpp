@@ -23,7 +23,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <kiface_i.h>
+#include <kiface_base.h>
 #include <kiway.h>
 #include <search_stack.h>
 #include <systemdirsappend.h>
@@ -81,7 +81,7 @@ static void setSearchPaths( SEARCH_STACK* aDst, KIWAY::FACE_T aId )
 }
 
 
-bool KIFACE_I::start_common( int aCtlBits )
+bool KIFACE_BASE::start_common( int aCtlBits )
 {
     m_start_flags = aCtlBits;
     m_bm.Init();
@@ -91,7 +91,7 @@ bool KIFACE_I::start_common( int aCtlBits )
 }
 
 
-void KIFACE_I::end_common()
+void KIFACE_BASE::end_common()
 {
     m_bm.End();
 }

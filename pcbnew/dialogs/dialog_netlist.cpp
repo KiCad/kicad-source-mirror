@@ -22,7 +22,7 @@
  */
 
 #include <project.h>
-#include <kiface_i.h>
+#include <kiface_base.h>
 #include <confirm.h>
 #include <dialogs/html_message_box.h>
 #include <pcb_edit_frame.h>

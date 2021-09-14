@@ -39,7 +39,7 @@
 
 #include <hierarch.h>
 #include <view/view.h>
-#include <kiface_i.h>
+#include <kiface_base.h>
 #include "eeschema_settings.h"
 
 #include <wx/object.h>

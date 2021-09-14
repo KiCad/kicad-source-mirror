@@ -38,7 +38,7 @@
 #include <dialogs/html_message_box.h>
 #include <i18n_utility.h> // for _HKI definition used in dialog_bom_help_md.h
 #include <invoke_sch_dialog.h>
-#include <kiface_i.h>
+#include <kiface_base.h>
 #include <netlist_exporter_xml.h>
 #include <pgm_base.h>
 #include <reporter.h>

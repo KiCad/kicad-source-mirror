@@ -33,7 +33,7 @@
 #include <gerbview_frame.h>
 #include <gerbview_id.h>
 #include <gerbview_settings.h>
-#include <kiface_i.h>
+#include <kiface_base.h>
 #include <layer_ids.h>
 
 #include <dialogs/dialog_layers_select_to_pcb.h>

@@ -290,12 +290,12 @@ KIFACE* KIWAY::KiFACE( FACE_T aFaceId, bool doLoad )
         // by dso destructor.
         // However:
 
-        // There is a file installation bug. We only look for KIFACE_I's which we know
+        // There is a file installation bug. We only look for KIFACE's which we know
         // to exist, and we did not find one.  If we do not find one, this is an
         // installation bug.
 
         msg = wxString::Format( _( "Fatal Installation Bug. File:\n"
-                                   "\"%s\"\ncould not be loaded\n" ), dname );
+                                   "'%s'\ncould not be loaded\n" ), dname );
 
         if( ! wxFileExists( dname ) )
             msg << _( "It is missing.\n" );

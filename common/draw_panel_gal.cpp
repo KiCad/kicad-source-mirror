@@ -27,7 +27,7 @@
 
 #include <confirm.h>
 #include <eda_draw_frame.h>
-#include <kiface_i.h>
+#include <kiface_base.h>
 #include <macros.h>
 #include <settings/app_settings.h>
 #include <trace_helpers.h>

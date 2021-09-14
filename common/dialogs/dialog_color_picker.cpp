@@ -21,7 +21,7 @@
 #include <dialogs/dialog_color_picker.h>
 #include <cmath>
 #include <algorithm>
-#include <kiface_i.h>
+#include <kiface_base.h>
 #include <settings/app_settings.h>
 #include <widgets/color_swatch.h>
 #include <wx/bitmap.h>

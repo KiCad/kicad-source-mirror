@@ -23,7 +23,7 @@
 
 #include <sch_edit_frame.h>
 #include <sch_painter.h>
-#include <kiface_i.h>
+#include <kiface_base.h>
 #include <panel_setup_formatting.h>
 #include <sch_junction.h>
 #include <schematic.h>

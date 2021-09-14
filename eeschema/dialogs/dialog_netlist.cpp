@@ -34,7 +34,7 @@
  */
 
 #include <pgm_base.h>
-#include <kiface_i.h>
+#include <kiface_base.h>
 #include <gestfich.h>
 #include <sch_edit_frame.h>
 #include <general.h>

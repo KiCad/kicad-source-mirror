@@ -42,7 +42,7 @@
 #include <confirm.h>
 #include <dialogs/dialog_page_settings.h>
 #include <dialogs/dialog_update_pcb.h>
-#include <kiface_i.h>
+#include <kiface_base.h>
 #include <kiway.h>
 #include <netlist_reader/pcb_netlist.h>
 #include <origin_viewitem.h>

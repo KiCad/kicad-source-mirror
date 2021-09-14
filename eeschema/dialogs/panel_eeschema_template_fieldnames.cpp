@@ -29,7 +29,7 @@
 #include <bitmaps.h>
 #include <schematic.h>
 #include <panel_eeschema_template_fieldnames.h>
-#include <kiface_i.h>
+#include <kiface_base.h>
 
 PANEL_EESCHEMA_TEMPLATE_FIELDNAMES::PANEL_EESCHEMA_TEMPLATE_FIELDNAMES( SCH_EDIT_FRAME* aFrame,
                                                                         wxWindow* aWindow,

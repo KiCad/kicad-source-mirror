@@ -24,7 +24,7 @@
 #include <convert_to_biu.h>
 #include <default_values.h>
 #include <eeschema_settings.h>
-#include <kiface_i.h>
+#include <kiface_base.h>
 #include <macros.h>
 #include <schematic_settings.h>
 #include <settings/json_settings_internals.h>

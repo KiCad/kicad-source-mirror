@@ -36,7 +36,7 @@
 #include <wx/textentry.h>
 #include <tool/tool_event.h>
 
-class KIFACE_I;
+class KIFACE_BASE;
 class TOOL_INTERACTIVE;
 class TOOL_MANAGER;
 
@@ -125,7 +125,7 @@ public:
      *
      * @param aAppname is the application name to append to the tooltip.
      */
-    void AddQuitOrClose( KIFACE_I* aKiface, wxString aAppname = "" );
+    void AddQuitOrClose( KIFACE_BASE* aKiface, wxString aAppname = "" );
 
     /**
      * Remove all the entries from the menu (as well as its title).

@@ -32,7 +32,7 @@
 #include <footprint_editor_settings.h>
 #include <fp_lib_table.h>
 #include <id.h>
-#include <kiface_i.h>
+#include <kiface_base.h>
 #include <lib_id.h>
 #include <macros.h>
 #include <widgets/msgpanel.h>

@@ -24,7 +24,7 @@
  */
 
 
-#include <kiface_i.h>
+#include <kiface_base.h>
 #include <footprint_info.h>
 #include <lib_id.h>
 #include <lib_table_lexer.h>

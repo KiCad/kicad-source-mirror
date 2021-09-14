@@ -21,20 +21,20 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef KIFACE_I_H_
-#define KIFACE_I_H_
+#ifndef KIFACE_BASE_H
+#define KIFACE_BASE_H
 
 #include <kiway.h>
 #include <bin_mod.h>
 
 
 /**
- * A #KIFACE (I)mplementation.
+ * A #KIFACE implementation.
  *
  * This has useful for DSOs which implement a #KIFACE.  It is abstract so a few functions
  * must be implemented in derivations.
  */
-class KIFACE_I : public KIFACE
+class KIFACE_BASE : public KIFACE
 {
 public:
     /**
@@ -61,14 +61,14 @@ public:
      * @param aId is the type of DSO ( #FACE_SCH, #FACE_PCB, #FACE_CVPCB, #FACE_GERBVIEW,
      *            #FACE_PL_EDITOR, #FACE_PCB_CALCULATOR, #FACE_BMP2CMP)
      */
-    KIFACE_I( const char* aKifaceName, KIWAY::FACE_T aId ) :
+    KIFACE_BASE( const char* aKifaceName, KIWAY::FACE_T aId ) :
         m_id( aId ),
         m_bm( aKifaceName ),
         m_start_flags( 0 )
     {
     }
 
-    // ~KIFACE_I();
+    // ~KIFACE_BASE();
 
 protected:
 
@@ -89,28 +89,28 @@ public:
         return wxString::FromUTF8( m_bm.m_name );
     }
 
-    APP_SETTINGS_BASE* KifaceSettings() const           { return m_bm.m_config; }
+    APP_SETTINGS_BASE* KifaceSettings() const         { return m_bm.m_config; }
 
-    void InitSettings( APP_SETTINGS_BASE* aSettings )   { m_bm.InitSettings( aSettings ); }
+    void InitSettings( APP_SETTINGS_BASE* aSettings ) { m_bm.InitSettings( aSettings ); }
 
     /**
      * Return whatever was passed as @a aCtlBits to OnKifaceStart().
      */
-    int StartFlags() const                              { return m_start_flags; }
+    int StartFlags() const                            { return m_start_flags; }
 
     /**
-     * Is this KIFACE_I running under single_top?
+     * Is this KIFACE running under single_top?
      */
-    bool IsSingle() const                               { return m_start_flags & KFCTL_STANDALONE; }
+    bool IsSingle() const                             { return m_start_flags & KFCTL_STANDALONE; }
 
     /**
      * Return just the basename portion of the current help file.
      */
-    const wxString& GetHelpFileName() const             { return m_bm.m_help_file; }
+    const wxString& GetHelpFileName() const           { return m_bm.m_help_file; }
 
     /// Only for DSO specific 'non-library' files.
     /// (The library search path is in the PROJECT class.)
-    SEARCH_STACK&       KifaceSearch()                  { return m_bm.m_search; }
+    SEARCH_STACK&       KifaceSearch()                { return m_bm.m_search; }
 
 private:
     KIWAY::FACE_T       m_id;
@@ -121,7 +121,7 @@ private:
 };
 
 
-/// Global KIFACE_I "get" accessor.
-KIFACE_I& Kiface();
+/// Global KIFACE_BASE "get" accessor.
+KIFACE_BASE& Kiface();
 
-#endif // KIFACE_I_H_
+#endif // KIFACE_BASE_H

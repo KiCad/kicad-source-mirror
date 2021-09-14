@@ -22,7 +22,7 @@
  */
 
 #include <pgm_base.h>
-#include <kiface_i.h>
+#include <kiface_base.h>
 #include <confirm.h>
 #include <pcb_edit_frame.h>
 #include <eda_dde.h>
@@ -44,12 +44,12 @@ FP_LIB_TABLE GFootprintTable;
 
 #if 0
 
-static struct IFACE : public KIFACE_I
+static struct IFACE : public KIFACE_BASE
 {
     // Of course all are overloads, implementations of the KIFACE.
 
     IFACE( const char* aName, KIWAY::FACE_T aType ) :
-        KIFACE_I( aName, aType )
+        KIFACE_BASE( aName, aType )
     {}
 
     bool OnKifaceStart( PGM_BASE* aProgram, int aCtlBits ) override
@@ -131,7 +131,7 @@ PGM_BASE* PgmOrNull()
 }
 
 
-KIFACE_I& Kiface()
+KIFACE_BASE& Kiface()
 {
     return kiface;
 }

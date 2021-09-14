@@ -27,7 +27,7 @@
 #include <tool/conditional_menu.h>
 #include <tool/action_menu.h>
 #include <menus_helpers.h>
-#include <kiface_i.h>
+#include <kiface_base.h>
 
 
 CONDITIONAL_MENU::CONDITIONAL_MENU( TOOL_INTERACTIVE* aTool ) :

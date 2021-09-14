@@ -34,7 +34,7 @@
 class KIWAY;
 class PROJECT;
 struct KIFACE;
-class KIFACE_I;
+class KIFACE_BASE;
 class TOOL_MANAGER;
 class KIWAY_EXPRESS;
 

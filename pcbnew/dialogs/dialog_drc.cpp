@@ -26,7 +26,7 @@
 #include <confirm.h>
 #include <dialog_drc.h>
 #include <board_design_settings.h>
-#include <kiface_i.h>
+#include <kiface_base.h>
 #include <macros.h>
 #include <pad.h>
 #include <pcb_edit_frame.h>

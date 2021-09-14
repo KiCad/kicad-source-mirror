@@ -19,7 +19,7 @@
 
 #include "dialog_eeschema_page_settings.h"
 
-#include <kiface_i.h>
+#include <kiface_base.h>
 #include <general.h>
 #include <sch_edit_frame.h>
 #include <sch_screen.h>

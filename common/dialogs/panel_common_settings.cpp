@@ -27,7 +27,7 @@
 #include <bitmaps.h>
 #include <dialog_shim.h>
 #include <gal/dpi_scaling.h>
-#include <kiface_i.h>
+#include <kiface_base.h>
 #include <pgm_base.h>
 #include <id.h>
 #include <settings/common_settings.h>

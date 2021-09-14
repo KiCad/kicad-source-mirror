@@ -28,7 +28,7 @@
 #include <sch_edit_frame.h>
 #include <schematic.h>
 #include <project.h>
-#include <kiface_i.h>
+#include <kiface_base.h>
 #include <bitmaps.h>
 #include <reporter.h>
 #include <wildcards_and_files_ext.h>

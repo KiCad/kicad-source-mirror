@@ -45,7 +45,7 @@
 #include <cmath>
 #include <wx/choicdlg.h>
 
-#include <kiface_i.h>
+#include <kiface_base.h>
 
 #include "attenuators/attenuator_classes.h"
 #include "common_data.h"

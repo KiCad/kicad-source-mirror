@@ -38,7 +38,7 @@
 #include <base_screen.h>
 #include <tool/common_control.h>
 #include <id.h>
-#include <kiface_i.h>
+#include <kiface_base.h>
 #include <dialogs/dialog_configure_paths.h>
 #include <eda_doc.h>
 #include <wx/msgdlg.h>

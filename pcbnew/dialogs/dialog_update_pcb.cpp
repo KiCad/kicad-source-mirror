@@ -30,7 +30,7 @@
 #include <netlist_reader/board_netlist_updater.h>
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>
-#include <kiface_i.h>
+#include <kiface_base.h>
 #include <kiplatform/ui.h>
 
 bool DIALOG_UPDATE_PCB::m_warnForNoNetPads = false;

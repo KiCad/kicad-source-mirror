@@ -24,7 +24,7 @@
 
 #include <bitmap2cmp_gui.h>
 #include <bitmap2cmp_settings.h>
-#include <kiface_i.h>
+#include <kiface_base.h>
 #include <kiway.h>
 #include <pgm_base.h>
 #include <settings/settings_manager.h>
@@ -32,7 +32,7 @@
 
 namespace BMP2CMP {
 
-static struct IFACE : public KIFACE_I
+static struct IFACE : public KIFACE_BASE
 {
     bool OnKifaceStart( PGM_BASE* aProgram, int aCtlBits ) override;
 
@@ -60,7 +60,7 @@ static struct IFACE : public KIFACE_I
     }
 
     IFACE( const char* aDSOname, KIWAY::FACE_T aType ) :
-        KIFACE_I( aDSOname, aType )
+            KIFACE_BASE( aDSOname, aType )
     {}
 
 } kiface( "BMP2CMP", KIWAY::FACE_BMP2CMP );
@@ -72,7 +72,7 @@ using namespace BMP2CMP;
 static PGM_BASE* process;
 
 
-KIFACE_I& Kiface()
+KIFACE_BASE& Kiface()
 {
     return kiface;
 }

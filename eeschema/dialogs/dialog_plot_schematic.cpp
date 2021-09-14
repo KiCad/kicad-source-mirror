@@ -29,7 +29,7 @@
 #include <dialogs/wx_html_report_panel.h>
 #include <dialog_plot_schematic.h>
 #include <eeschema_settings.h>
-#include <kiface_i.h>
+#include <kiface_base.h>
 #include <locale_io.h>
 #include <plotters/plotter_hpgl.h>
 #include <plotters/plotter_dxf.h>

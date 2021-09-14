@@ -27,7 +27,7 @@
 #include <wx/tooltip.h>
 #include <grid_tricks.h>
 #include <confirm.h>
-#include <kiface_i.h>
+#include <kiface_base.h>
 #include <pin_numbers.h>
 #include <string_utils.h>
 #include <menus_helpers.h>

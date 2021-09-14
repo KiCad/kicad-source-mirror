@@ -58,7 +58,7 @@
 #include <sch_line.h>
 #include <lib_pin.h>
 #include <sch_draw_panel.h>
-#include <kiface_i.h>
+#include <kiface_base.h>
 #include <vector>
 #include <algorithm>
 #include <tool/tool_manager.h>

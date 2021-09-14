@@ -20,7 +20,7 @@
 #include <wx/msgdlg.h>
 #include <bitmaps.h>
 #include <geometry/shape_poly_set.h>
-#include <kiface_i.h>
+#include <kiface_base.h>
 #include "attenuators/attenuator_classes.h"
 #include "class_regulator_data.h"
 #include "pcb_calculator_frame.h"

@@ -31,7 +31,7 @@
 #include <eda_draw_frame.h>
 #include <filehistory.h>
 #include <id.h>
-#include <kiface_i.h>
+#include <kiface_base.h>
 #include <lockfile.h>
 #include <macros.h>
 #include <page_info.h>

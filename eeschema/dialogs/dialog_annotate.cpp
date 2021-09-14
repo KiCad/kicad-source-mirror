@@ -28,7 +28,7 @@
 #include <confirm.h>
 #include <dialog_annotate_base.h>
 #include <eeschema_settings.h>
-#include <kiface_i.h>
+#include <kiface_base.h>
 #include <widgets/infobar.h>
 #include <wx_html_report_panel.h>
 #include <schematic.h>

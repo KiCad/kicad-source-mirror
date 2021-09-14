@@ -29,7 +29,7 @@
 
 #include <confirm.h>
 #include <gestfich.h>
-#include <kiface_i.h>
+#include <kiface_base.h>
 #include <pcb_edit_frame.h>
 #include <trigo.h>
 #include <build_version.h>

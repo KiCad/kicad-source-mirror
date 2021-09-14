@@ -56,8 +56,8 @@
 
 
 // a dummy to quiet linking with EDA_BASE_FRAME::config();
-#include <kiface_i.h>
-KIFACE_I& Kiface()
+#include <kiface_base.h>
+KIFACE_BASE& Kiface()
 {
     // This function should never be called.  It is only referenced from
     // EDA_BASE_FRAME::config() and this is only provided to satisfy the linker,

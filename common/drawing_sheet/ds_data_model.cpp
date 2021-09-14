@@ -44,7 +44,7 @@
  * storage (wrapped in a DS_PROXY_UNDO_ITEM).
  */
 
-#include <kiface_i.h>
+#include <kiface_base.h>
 #include <title_block.h>
 #include <common.h>
 #include <eda_item.h>

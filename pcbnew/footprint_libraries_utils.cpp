@@ -23,7 +23,7 @@
 
 #include <wx/ffile.h>
 #include <pgm_base.h>
-#include <kiface_i.h>
+#include <kiface_base.h>
 #include <confirm.h>
 #include <string_utils.h>
 #include <macros.h>

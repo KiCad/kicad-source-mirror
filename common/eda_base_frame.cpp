@@ -31,7 +31,7 @@
 #include <eda_dde.h>
 #include <filehistory.h>
 #include <id.h>
-#include <kiface_i.h>
+#include <kiface_base.h>
 #include <menus_helpers.h>
 #include <panel_hotkeys_editor.h>
 #include <paths.h>

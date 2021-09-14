@@ -20,7 +20,7 @@
 #include <confirm.h>
 #include <sch_edit_frame.h>
 #include <schematic.h>
-#include <kiface_i.h>
+#include <kiface_base.h>
 #include <dialog_sch_import_settings.h>
 #include <dialogs/panel_setup_netclasses.h>
 #include <dialogs/panel_setup_severities.h>

@@ -31,7 +31,7 @@
 // 'FT232BL'		'QFP:LQFP-32_7x7mm_Pitch0.8mm'
 
 
-#include <kiface_i.h>
+#include <kiface_base.h>
 #include <string_utils.h>
 #include <macros.h>
 

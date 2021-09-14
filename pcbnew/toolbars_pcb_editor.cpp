@@ -30,7 +30,7 @@
 #include <bitmaps.h>
 #include <board.h>
 #include <board_design_settings.h>
-#include <kiface_i.h>
+#include <kiface_base.h>
 #include <macros.h>
 #include <pcb_edit_frame.h>
 #include <pcb_layer_box_selector.h>

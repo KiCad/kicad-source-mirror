@@ -18,7 +18,7 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <kiface_i.h>
+#include <kiface_base.h>
 #include <pgm_base.h>
 #include <eda_base_frame.h>
 #include <base_units.h>

@@ -37,7 +37,7 @@
 #include <lib_id.h>
 #include <thread>
 #include <utility>
-#include <kiface_i.h>
+#include <kiface_base.h>
 
 FOOTPRINT_INFO* FOOTPRINT_LIST::GetFootprintInfo( const wxString& aLibNickname,
                                                   const wxString& aFootprintName )

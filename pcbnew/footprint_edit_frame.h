@@ -32,7 +32,7 @@ class FOOTPRINT_TREE_PANE;
 class SYMBOL_LIBRARY_MANAGER;
 class FOOTPRINT_EDITOR_SETTINGS;
 
-namespace PCB { struct IFACE; }     // A KIFACE_I coded in pcbnew.c
+namespace PCB { struct IFACE; }     // A KIFACE coded in pcbnew.cpp
 
 
 class FOOTPRINT_EDIT_FRAME : public PCB_BASE_EDIT_FRAME

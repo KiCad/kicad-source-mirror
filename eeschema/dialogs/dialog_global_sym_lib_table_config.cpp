@@ -21,7 +21,7 @@
 #include "dialog_global_sym_lib_table_config.h"
 
 #include <confirm.h>
-#include <kiface_i.h>
+#include <kiface_base.h>
 #include <macros.h>
 
 #include "symbol_lib_table.h"

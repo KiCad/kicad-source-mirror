@@ -26,7 +26,7 @@
 #include <symbol_library.h>
 #include <dialog_choose_symbol.h>
 #include <eeschema_settings.h>
-#include <kiface_i.h>
+#include <kiface_base.h>
 #include <sch_base_frame.h>
 #include <template_fieldnames.h>
 #include <widgets/footprint_preview_widget.h>

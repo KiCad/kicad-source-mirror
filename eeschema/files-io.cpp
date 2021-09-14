@@ -31,7 +31,7 @@
 #include <dialog_symbol_remap.h>
 #include <eeschema_settings.h>
 #include <id.h>
-#include <kiface_i.h>
+#include <kiface_base.h>
 #include <kiplatform/app.h>
 #include <pgm_base.h>
 #include <profile.h>

@@ -33,7 +33,7 @@
 #include <sch_sheet_path.h>
 #include <schematic.h>
 #include <string_utils.h>
-#include <kiface_i.h>
+#include <kiface_base.h>
 #include <wildcards_and_files_ext.h>
 #include <connection_graph.h>
 #include <wx/log.h>

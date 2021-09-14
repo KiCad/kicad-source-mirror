@@ -32,7 +32,7 @@
 #include <confirm.h>
 #include <dialog_export_step_base.h>
 #include <footprint.h>
-#include <kiface_i.h>
+#include <kiface_base.h>
 #include <locale_io.h>
 #include <math/vector3.h>
 #include <pcb_edit_frame.h>

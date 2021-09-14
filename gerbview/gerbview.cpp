@@ -30,7 +30,7 @@
 #include <gerbview_frame.h>
 #include <gerbview_settings.h>
 #include <gestfich.h>
-#include <kiface_i.h>
+#include <kiface_base.h>
 #include <macros.h>
 #include <nlohmann/json.hpp>
 #include <pgm_base.h>
@@ -43,12 +43,12 @@ using json = nlohmann::json;
 
 namespace GERBV {
 
-static struct IFACE : public KIFACE_I
+static struct IFACE : public KIFACE_BASE
 {
     // Of course all are virtual overloads, implementations of the KIFACE.
 
     IFACE( const char* aName, KIWAY::FACE_T aType ) :
-        KIFACE_I( aName, aType )
+            KIFACE_BASE( aName, aType )
     {}
 
     bool OnKifaceStart( PGM_BASE* aProgram, int aCtlBits ) override;
@@ -109,7 +109,7 @@ using namespace GERBV;
 static PGM_BASE* process;
 
 
-KIFACE_I& Kiface() { return kiface; }
+KIFACE_BASE& Kiface() { return kiface; }
 
 
 // KIFACE_GETTER's actual spelling is a substitution macro found in kiway.h.

@@ -22,7 +22,7 @@
 #include <bitmaps.h>
 #include <dialog_footprint_wizard_list.h>
 #include <grid_tricks.h>
-#include <kiface_i.h>
+#include <kiface_base.h>
 #include <panel_pcbnew_action_plugins.h>
 #include <pcb_edit_frame.h>
 #include <python/scripting/pcbnew_scripting.h>

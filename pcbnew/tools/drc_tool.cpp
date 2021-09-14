@@ -28,7 +28,7 @@
 #include <tools/pcb_tool_base.h>
 #include <tools/zone_filler_tool.h>
 #include <tools/drc_tool.h>
-#include <kiface_i.h>
+#include <kiface_base.h>
 #include <dialog_drc.h>
 #include <board_commit.h>
 #include <board_design_settings.h>

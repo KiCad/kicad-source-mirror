@@ -32,7 +32,7 @@
 #include <eeschema_id.h>
 #include <eeschema_settings.h>
 #include <env_paths.h>
-#include <kiface_i.h>
+#include <kiface_base.h>
 #include <kiplatform/app.h>
 #include <kiway_express.h>
 #include <symbol_edit_frame.h>

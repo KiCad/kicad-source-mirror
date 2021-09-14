@@ -39,7 +39,7 @@
 #include <widgets/lib_tree.h>
 #include <widgets/footprint_preview_widget.h>
 #include <widgets/footprint_select_widget.h>
-#include <kiface_i.h>
+#include <kiface_base.h>
 
 
 DIALOG_CHOOSE_FOOTPRINT::DIALOG_CHOOSE_FOOTPRINT( PCB_BASE_FRAME* aParent,

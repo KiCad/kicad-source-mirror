@@ -26,7 +26,7 @@
 
 #include <sch_draw_panel.h>
 #include <sch_edit_frame.h>
-#include <kiface_i.h>
+#include <kiface_base.h>
 #include <bitmaps.h>
 #include <eeschema_id.h>
 #include <python_scripting.h>

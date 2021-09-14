@@ -39,7 +39,7 @@
 #include <zone.h>
 #include <collectors.h>
 #include <eda_dde.h>
-#include <kiface_i.h>
+#include <kiface_base.h>
 #include <kiway_express.h>
 #include <netlist_reader/pcb_netlist.h>
 #include <netlist_reader/board_netlist_updater.h>

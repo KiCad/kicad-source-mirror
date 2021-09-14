@@ -22,7 +22,7 @@
  */
 
 #include <sch_edit_frame.h>
-#include <kiface_i.h>
+#include <kiface_base.h>
 #include <bitmaps.h>
 #include <wildcards_and_files_ext.h>
 #include <schematic.h>

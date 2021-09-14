@@ -24,7 +24,7 @@
 
 #include <macros.h>
 #include <pgm_base.h>
-#include <kiface_i.h>
+#include <kiface_base.h>
 #include <project.h>
 #include <confirm.h>
 #include <reporter.h>

@@ -60,7 +60,7 @@
 #include <schematic.h>
 #include <settings/color_settings.h>
 #include <view/view.h>
-#include <kiface_i.h>
+#include <kiface_base.h>
 #include <default_values.h>
 #include <advanced_config.h>
 #include <string_utils.h>

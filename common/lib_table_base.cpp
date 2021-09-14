@@ -27,7 +27,7 @@
 #include <wx/filename.h>
 #include <set>
 #include <common.h>
-#include <kiface_i.h>
+#include <kiface_base.h>
 #include <lib_table_base.h>
 #include <lib_table_lexer.h>
 #include <macros.h>

@@ -21,7 +21,7 @@
 
 #include <eda_base_frame.h>
 #include <eda_pattern_match.h>
-#include <kiface_i.h>
+#include <kiface_base.h>
 #include <config_params.h>
 #include <lib_tree_model_adapter.h>
 #include <project/project_file.h>

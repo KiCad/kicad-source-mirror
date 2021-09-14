@@ -31,7 +31,7 @@
 #include <eda_draw_frame.h>
 #include <gal/graphics_abstraction_layer.h>
 #include <id.h>
-#include <kiface_i.h>
+#include <kiface_base.h>
 #include <project.h>
 #include <settings/app_settings.h>
 #include <tool/actions.h>

@@ -32,7 +32,7 @@
 #include <dialog_board_reannotate.h>
 #include <fstream>
 #include <string_utils.h>  // StrNumCmp
-#include <kiface_i.h>
+#include <kiface_base.h>
 #include <mail_type.h>
 #include <pcbnew_settings.h>
 #include <refdes_utils.h>

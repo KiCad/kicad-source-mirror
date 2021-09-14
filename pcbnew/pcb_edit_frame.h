@@ -60,7 +60,7 @@ class TOOL_ACTION;
 
 enum LAST_PATH_TYPE : unsigned int;
 
-namespace PCB { struct IFACE; }     // KIFACE_I is in pcbnew.cpp
+namespace PCB { struct IFACE; }     // KIFACE is in pcbnew.cpp
 
 /**
  * The main frame for Pcbnew.

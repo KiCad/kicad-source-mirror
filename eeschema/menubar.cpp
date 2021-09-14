@@ -26,7 +26,7 @@
 
 #include <bitmaps.h>
 #include <filehistory.h>
-#include <kiface_i.h>
+#include <kiface_base.h>
 #include <menus_helpers.h>
 #include <schematic.h>
 #include <tool/action_manager.h>

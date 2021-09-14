@@ -28,7 +28,7 @@
 #include <eda_base_frame.h>
 #include <functional>
 #include <id.h>
-#include <kiface_i.h>
+#include <kiface_base.h>
 #include <menus_helpers.h>
 #include <tool/action_menu.h>
 #include <tool/actions.h>
@@ -218,7 +218,7 @@ void ACTION_MENU::AddClose( const wxString& aAppname )
 }
 
 
-void ACTION_MENU::AddQuitOrClose( KIFACE_I* aKiface, wxString aAppname )
+void ACTION_MENU::AddQuitOrClose( KIFACE_BASE* aKiface, wxString aAppname )
 {
     if( !aKiface || aKiface->IsSingle() ) // not when under a project mgr
     {

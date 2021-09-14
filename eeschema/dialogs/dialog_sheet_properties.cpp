@@ -23,7 +23,7 @@
  */
 
 #include <dialog_sheet_properties.h>
-#include <kiface_i.h>
+#include <kiface_base.h>
 #include <wx/string.h>
 #include <wx/log.h>
 #include <wx/tooltip.h>

@@ -30,7 +30,7 @@
 
 #include <board.h>
 #include <confirm.h>
-#include <kiface_i.h>
+#include <kiface_base.h>
 #include <pcb_edit_frame.h>
 #include <pcbnew_settings.h>
 #include <project/project_file.h>  // LAST_PATH_TYPE
