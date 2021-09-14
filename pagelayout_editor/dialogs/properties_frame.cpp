@@ -563,7 +563,7 @@ void PROPERTIES_FRAME::onHelp( wxCommandEvent& aEvent )
     message = "KICAD_VERSION\n";
     message << "# " << _( "(sheet number)" ) << "\n";
     message << "## " << _( "(sheet count)" ) << "\n";
-    message << "COMMENT1 � COMMENT9\n";
+    message << "COMMENT1 thru COMMENT9\n";
     message << "COMPANY\n";
     message << "FILENAME\n";
     message << "ISSUE_DATE\n";
