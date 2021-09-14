@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-09-13 10:58-0700\n"
-"PO-Revision-Date: 2021-09-13 22:12+0000\n"
+"PO-Revision-Date: 2021-09-15 17:51+0000\n"
 "Last-Translator: Arnau Llovet Vidal <arnaullv@gmail.com>\n"
 "Language-Team: Catalan <https://hosted.weblate.org/projects/kicad/"
 "master-source/ca/>\n"
@@ -1980,6 +1980,11 @@ msgid ""
 "of the options below.  If you are not sure which option to select, please\n"
 "use the default selection."
 msgstr ""
+"S'ha executat per primera vegada KiCad utilitzant la nova taula de\n"
+"biblioteques %s per accedir a les biblioteques. Per que KiCad tingui\n"
+"accés a les biblioteques %s, has de configurar la taula global %s.\n"
+"Selecciona una de les opcions següents. Si no saps amb certesa quina\n"
+"opció seleccionar, utilitza la selecció predeterminada."
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:49
 #, c-format
@@ -1992,6 +1997,8 @@ msgid ""
 "Select this option if you not sure about configuring the global %s library "
 "table"
 msgstr ""
+"Selecciona aquesta opció si no tens la certesa de com configurar la taula "
+"global de biblioteques %s"
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:55
 #, c-format
@@ -2003,6 +2010,8 @@ msgstr "Copia la taula de biblioteques globals %s personalitzada"
 msgid ""
 "Select this option to copy a %s library table file other than the default"
 msgstr ""
+"Selecciona aquesta opció per copiar un fitxer de taules de biblioteques %s "
+"diferent al predeterminat"
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:61
 #, c-format
@@ -2197,6 +2206,8 @@ msgstr "Número d'escala incorrecte"
 msgid ""
 "This scale results in an image which is too small (%.2f mm or %.1f mil)."
 msgstr ""
+"Aquesta escala proporciona una mida d'imatge massa petita (%.2f mm o %.1f "
+"mil)."
 
 #: common/dialogs/dialog_image_editor.cpp:93
 #, c-format
@@ -2204,6 +2215,8 @@ msgid ""
 "This scale results in an image which is very large (%.1f mm or %.2f in). Are "
 "you sure?"
 msgstr ""
+"Aquesta escala proporciona una mida d'imatge molt grossa (%.1f mm o %.2f mil)"
+". N'estàs segur?"
 
 #: common/dialogs/dialog_image_editor_base.cpp:33
 msgid "Grey"
@@ -2236,7 +2249,7 @@ msgstr "La selecció conté %d elements bloquejats."
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:34
 msgid "These items will be skipped unless you override the locks."
-msgstr ""
+msgstr "Aquests elements s'omitiran a menys que s'anul·lin els bloquejos."
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:44
 msgid "Remember decision for this session."
@@ -2247,6 +2260,8 @@ msgid ""
 "Remember the option selected for the remainder of this session.\n"
 "This dialog will not be shown again until KiCad is restarted."
 msgstr ""
+"Recorda l'opció seleccionada durant la resta d'aquesta sessió.\n"
+"Aquest diàleg no es mostrarà de nou fins que es reinicïi KiCad."
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:55
 msgid "Override Locks"
@@ -2257,6 +2272,9 @@ msgid ""
 "Override locks and apply the operation on all the items selected.\n"
 "Any locked items will remain locked after the operation is complete."
 msgstr ""
+"Desestima els bloquejos i aplica l'operació a tots els elements seleccionats."
+"\n"
+"Tots els elements bloquejats ho seguiran estant al finalitzar l'operació."
 
 #: common/dialogs/dialog_locked_items_query_base.h:56
 msgid "Locked Items"
@@ -2274,7 +2292,7 @@ msgstr "Benvingut a KiCad %s!"
 
 #: common/dialogs/dialog_migrate_settings.cpp:61
 msgid "Import settings from a previous version (none found)"
-msgstr ""
+msgstr "Importa els ajustaments d'una versió anterior (no se n'ha trobat cap)"
 
 #: common/dialogs/dialog_migrate_settings.cpp:123
 msgid "Select Settings Path"
@@ -2294,17 +2312,19 @@ msgstr "Tria un camí diferent"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:56
 msgid "The selected path does not contain valid KiCad settings!"
-msgstr ""
+msgstr "La ruta seleccionada no conté configuracions vàlides de KiCad!"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:63
 msgid "Import library configuration from previous version"
-msgstr ""
+msgstr "Importa la configuració de la biblioteca des d'una versió anterior"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:65
 msgid ""
 "When checked, the symbol and footprint library tables from the previous "
 "version will be imported into this version"
 msgstr ""
+"Quan està marcat, les taules de la biblioteca de símbols i empremtes de la "
+"versió anterior s'importaran a aquesta versió"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:69
 msgid "Start with default settings"
@@ -2414,6 +2434,7 @@ msgstr "No s'ha trobat la fulla de dibuix '%s'."
 #: common/dialogs/dialog_page_settings.cpp:545
 msgid "the translation for paper size must preserve original spellings"
 msgstr ""
+"la traducció de la mida del paper ha de preservar la denominació original"
 
 #: common/dialogs/dialog_page_settings.cpp:711
 #: common/dialogs/dialog_page_settings_base.cpp:49
@@ -2433,6 +2454,11 @@ msgid ""
 "instead of\n"
 "\"%s\"?"
 msgstr ""
+"S'ha modificat el nom del fitxer de la fulla de dibuix.\n"
+"Vols utilitzar el camí relatiu:\n"
+"\"%s\"\n"
+"en lloc de\n"
+"\"%s\"?"
 
 #: common/dialogs/dialog_page_settings_base.cpp:36
 msgid "dummy text"
@@ -2649,6 +2675,8 @@ msgid ""
 "Finds the next available reference designator for any designators that "
 "already exist in the design."
 msgstr ""
+"Cerca el següent designador de referència lliure per tots els existents en "
+"el disseny."
 
 #: common/dialogs/dialog_paste_special.cpp:44
 #, c-format
@@ -2664,9 +2692,8 @@ msgid "Keep existing reference designators, even if they are duplicated"
 msgstr "Mantenir les referencies actuals, encara que existeixin duplicats"
 
 #: common/dialogs/dialog_paste_special_base.cpp:22
-#, fuzzy
 msgid "Clear reference designators on all pasted symbols"
-msgstr "Designador de referències predeterminat:"
+msgstr "Neteja els designador de referències en tots els símbols enganxats"
 
 #: common/dialogs/dialog_paste_special_base.cpp:24
 msgid "Paste Options"
@@ -2723,18 +2750,22 @@ msgid "Warning: Bad scale number"
 msgstr "Atenció: Número d'escala invàlid"
 
 #: common/dialogs/dialog_print_generic.cpp:119
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Warning: Scale option set to a very large value.\n"
 " Clamped to %f"
-msgstr "Advertència: l'opció de l'escala està establerta a un valor molt gran"
+msgstr ""
+"Atenció: L'opció de l'escala està establerta a un valor molt gran.\n"
+" S'ha retallat a %f"
 
 #: common/dialogs/dialog_print_generic.cpp:127
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Warning: Scale option set to a very small value.\n"
 " Clamped to %f"
-msgstr "Advertència: l'opció de l'escala està establerta a un valor molt baix"
+msgstr ""
+"Atenció: L'opció de l'escala està establerta a un valor molt baix.\n"
+" S'ha augmentat a %f"
 
 #: common/dialogs/dialog_print_generic.cpp:197
 #: common/dialogs/dialog_print_generic.cpp:244
@@ -2744,7 +2775,7 @@ msgstr "No hi ha res per imprimir"
 #: common/dialogs/dialog_print_generic.cpp:235
 #: eeschema/dialogs/dialog_print_using_printer.cpp:311
 msgid "Previous print job not yet complete."
-msgstr ""
+msgstr "Encara no s'ha acabat la impressió precedent."
 
 #: common/dialogs/dialog_print_generic.cpp:260
 msgid "There was a problem printing."
@@ -2838,11 +2869,11 @@ msgstr "Elements:"
 #: common/dialogs/eda_view_switcher_base.cpp:19
 #: common/dialogs/eda_view_switcher_base.h:40
 msgid "View Preset Switcher"
-msgstr ""
+msgstr "Veure el commutador d'ajustaments preestablerts"
 
 #: common/dialogs/panel_color_settings.cpp:51
 msgid "Reveal Themes in Finder"
-msgstr ""
+msgstr "Mostra els temes al Finder"
 
 #: common/dialogs/panel_color_settings.cpp:131
 msgid "New theme name:"
@@ -2874,9 +2905,8 @@ msgid "Paste color"
 msgstr "Enganxa el color"
 
 #: common/dialogs/panel_color_settings.cpp:289
-#, fuzzy
 msgid "Revert to saved color"
-msgstr "Reverteix a l'úl&tima còpia de seguretat"
+msgstr "Torna al color desat"
 
 #: common/dialogs/panel_color_settings_base.cpp:19
 #: pagelayout_editor/dialogs/panel_pl_editor_color_settings_base.cpp:21
@@ -2885,7 +2915,7 @@ msgstr "Tema:"
 
 #: common/dialogs/panel_color_settings_base.cpp:33
 msgid "Override individual item colors"
-msgstr ""
+msgstr "Substitueix els colors d'elements individuals"
 
 #: common/dialogs/panel_color_settings_base.cpp:34
 msgid ""
@@ -2912,6 +2942,14 @@ msgid ""
 "If this does not match the system DPI scaling, the canvas will not match the "
 "window size and cursor position."
 msgstr ""
+"Ajusta l'escala del llenç.\n"
+"\n"
+"En algunes plataformes, amb pantalles d'alt DPI, KiCad no pot determinar el "
+"factor de escala. En aquest cas podries necessitar modificar-lo per ajustar-"
+"lo a l'escalat de DPI del teu sistema. 2,0 és un valor habitual.\n"
+"\n"
+"Si no s'ajusta al valor de DPI del teu sistema, el llenç no coincidirà amb "
+"la mida de la finestra ni amb la posició del cursor."
 
 #: common/dialogs/panel_common_settings.cpp:64
 msgid ""
@@ -2965,9 +3003,8 @@ msgid "Days"
 msgstr "Dies"
 
 #: common/dialogs/panel_common_settings_base.cpp:73
-#, fuzzy
 msgid "Accelerated graphics:"
-msgstr "Gràfics:"
+msgstr "Gràfics accelerats:"
 
 #: common/dialogs/panel_common_settings_base.cpp:77
 #: common/dialogs/panel_common_settings_base.cpp:87
@@ -2998,9 +3035,8 @@ msgid "Text editor:"
 msgstr "Editor de text:"
 
 #: common/dialogs/panel_common_settings_base.cpp:126
-#, fuzzy
 msgid "System default PDF viewer"
-msgstr "Visualitzador PDF pre&determinat del sistema"
+msgstr "Visualitzador PDF predeterminat del sistema"
 
 #: common/dialogs/panel_common_settings_base.cpp:135
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:175
@@ -3008,14 +3044,12 @@ msgid "Other:"
 msgstr "Altres:"
 
 #: common/dialogs/panel_common_settings_base.cpp:153
-#, fuzzy
 msgid "User Interface"
-msgstr "Definit per l'usuari"
+msgstr "Interfície d'usuari"
 
 #: common/dialogs/panel_common_settings_base.cpp:161
-#, fuzzy
 msgid "Icon scale:"
-msgstr "Escala X:"
+msgstr "Escala de les icones:"
 
 #: common/dialogs/panel_common_settings_base.cpp:170
 #: common/dialogs/panel_common_settings_base.cpp:181
@@ -3027,9 +3061,8 @@ msgid "Automatic"
 msgstr "Automàtic"
 
 #: common/dialogs/panel_common_settings_base.cpp:173
-#, fuzzy
 msgid "Canvas scale:"
-msgstr "Escala X:"
+msgstr "Escala del llenç:"
 
 #: common/dialogs/panel_common_settings_base.cpp:184
 #, fuzzy
@@ -13082,11 +13115,12 @@ msgid "Save Warning"
 msgstr "Biblioteques específiques del projecte"
 
 #: eeschema/files-io.cpp:936
-#, fuzzy
 msgid ""
 "The following files will be overwritten:\n"
 "\n"
-msgstr "No s'han trobat les següents biblioteques:"
+msgstr ""
+"Els següents fitxers es sobreescriuran:\n"
+"\n"
 
 #: eeschema/files-io.cpp:937
 #, fuzzy
@@ -13134,11 +13168,11 @@ msgid "Choose Symbol (%d items loaded)"
 msgstr "Seleccioneu el component (%d elements carregats)"
 
 #: eeschema/getpart.cpp:248
-#, fuzzy, c-format
+#, c-format
 msgid "No alternate body style found for symbol '%s' in library '%s'."
 msgstr ""
-"Canvi del nom de la xarxa del component «%s:%s» pin «%s», del nom de la "
-"xarxa «%s» a «%s».\n"
+"No s'ha trobat un estil de cos alternatiu pel símbol '%s' a la biblioteca "
+"'%s'."
 
 #: eeschema/hierarch.cpp:88
 msgid "Navigator"
@@ -14279,9 +14313,9 @@ msgid "expected unquoted string"
 msgstr ""
 
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:862
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' does not appear to be an Eeschema file."
-msgstr "«%s» no és un fitxer d'Eeschema!"
+msgstr "'%s' no sembla ser un fitxer d'Eeschema."
 
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:892
 msgid "Missing 'EELAYER END'"
@@ -14406,23 +14440,21 @@ msgid "Missing parent"
 msgstr "Falta:"
 
 #: eeschema/sch_symbol.cpp:1408
-#, fuzzy
 msgid "Undefined!!!"
-msgstr "No definit"
+msgstr "No definit!!!"
 
 #: eeschema/sch_symbol.cpp:1415
 msgid "<Unknown>"
 msgstr "<Desconegut>"
 
 #: eeschema/sch_symbol.cpp:1436
-#, fuzzy
 msgid "No library defined!"
-msgstr "No s'ha especificat cap biblioteca."
+msgstr "No s'ha especificat cap biblioteca!"
 
 #: eeschema/sch_symbol.cpp:1440
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol not found in %s!"
-msgstr "Fitxer no trobat"
+msgstr "No s'ha trobat el símbol a %s!"
 
 #: eeschema/sch_symbol.cpp:1632
 #, fuzzy, c-format
@@ -15079,9 +15111,8 @@ msgid "Transfer function"
 msgstr "Funció de transferència"
 
 #: eeschema/sim/spice_simulator.cpp:83
-#, fuzzy
 msgid "UNKNOWN!"
-msgstr "DESCONEGUT"
+msgstr "DESCONEGUT!"
 
 #: eeschema/sim/spice_value.cpp:42
 #, fuzzy
@@ -15108,12 +15139,15 @@ msgid "'%s' is not a valid Spice value."
 msgstr "«%s» no és un valor vàlid de Spice"
 
 #: eeschema/symbol_async_loader.cpp:126
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error loading symbol library %s.\n"
 "\n"
 "%s\n"
-msgstr "Error en crear la biblioteca de símbols «%s»"
+msgstr ""
+"Error al carregar la biblioteca de símbols %s.\n"
+"\n"
+"%s\n"
 
 #: eeschema/symbol_async_loader.cpp:134
 #, fuzzy, c-format
@@ -15523,9 +15557,8 @@ msgid "Symbol library file '%s' saved."
 msgstr "Fitxer de biblioteca «%s» desat"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1202
-#, fuzzy
 msgid "Undefined!"
-msgstr "No definit"
+msgstr "No definit!"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1203
 #: eeschema/symbol_viewer_frame.cpp:367 pcbnew/fp_shape.cpp:343
@@ -15667,24 +15700,20 @@ msgid "[no library selected]"
 msgstr "cap biblioteca seleccionada"
 
 #: eeschema/toolbars_symbol_viewer.cpp:51
-#, fuzzy
 msgid "Choose symbol"
-msgstr "Símbol d'alimentació"
+msgstr "Tria símbol"
 
 #: eeschema/toolbars_symbol_viewer.cpp:55
-#, fuzzy
 msgid "Display previous symbol"
-msgstr "Mostra el component anterior"
+msgstr "Mostra el símbol anterior"
 
 #: eeschema/toolbars_symbol_viewer.cpp:59
-#, fuzzy
 msgid "Display next symbol"
-msgstr "Mostra el component següent"
+msgstr "Mostra el símbol següent"
 
 #: eeschema/toolbars_symbol_viewer.cpp:108
-#, fuzzy
 msgid "Symbol Viewer"
-msgstr "Edita la referència"
+msgstr "Visor de símbols"
 
 #: eeschema/tools/assign_footprints.cpp:207
 #, fuzzy
@@ -15727,14 +15756,14 @@ msgid ""
 msgstr ""
 
 #: eeschema/tools/backannotate.cpp:164
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint '%s' has no assigned symbol."
-msgstr "El nom del fitxer no és vàlid!"
+msgstr "L'empremta '%s' no té cap símbol associat."
 
 #: eeschema/tools/backannotate.cpp:196
-#, fuzzy, c-format
+#, c-format
 msgid "Footprints '%s' and '%s' linked to same symbol."
-msgstr "El nom del fitxer no és vàlid!"
+msgstr "Les empremtes '%s' i '%s' estan vinculades al mateix símbol."
 
 #: eeschema/tools/backannotate.cpp:261
 #, fuzzy, c-format
@@ -15762,9 +15791,9 @@ msgid "Footprint re-linking cancelled by user."
 msgstr ""
 
 #: eeschema/tools/backannotate.cpp:329
-#, fuzzy, c-format
+#, c-format
 msgid "Change '%s' reference designator to '%s'."
-msgstr "Canvia el component %s perquè referenciï a «%s».\n"
+msgstr "Canvia el designador de referència '%s' a '%s'."
 
 #: eeschema/tools/backannotate.cpp:346
 #, fuzzy, c-format
@@ -15777,14 +15806,14 @@ msgid "Change %s value from '%s' to '%s'."
 msgstr "Canvia el valor del component %s, del valor %s a %s.\n"
 
 #: eeschema/tools/backannotate.cpp:389
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot find %s pin '%s'."
-msgstr "No es pot obrir el fitxer netlist «%s»."
+msgstr "No es pot trobar %s pin '%s'."
 
 #: eeschema/tools/backannotate.cpp:532
-#, fuzzy, c-format
+#, c-format
 msgid "Change %s pin %s net label from '%s' to '%s'."
-msgstr "Canvi del valor del component «%s:%s», del valor «%s» a «%s».\n"
+msgstr "Canvia l'etiqueta de xarxa %s pin %s de '%s' a '%s'."
 
 #: eeschema/tools/backannotate.cpp:557
 #, c-format
@@ -15801,9 +15830,8 @@ msgid "Perform electrical rules check"
 msgstr "Realitza la comprovació de les regles elèctriques"
 
 #: eeschema/tools/ee_actions.cpp:50
-#, fuzzy
 msgid "Symbol Checker"
-msgstr "Edita la referència"
+msgstr "Comprovador de símbols"
 
 #: eeschema/tools/ee_actions.cpp:50
 #, fuzzy
@@ -15811,19 +15839,16 @@ msgid "Show the symbol checker window"
 msgstr "Inicia el comprovador de les regles de disseny (DRC)"
 
 #: eeschema/tools/ee_actions.cpp:55
-#, fuzzy
 msgid "Simulator..."
-msgstr "Simulado&r"
+msgstr "Simulador..."
 
 #: eeschema/tools/ee_actions.cpp:55
-#, fuzzy
 msgid "Simulate circuit in SPICE"
-msgstr "Simula el circuit"
+msgstr "Simula el circuit a SPICE"
 
 #: eeschema/tools/ee_actions.cpp:61
-#, fuzzy
 msgid "Opens the datasheet in a browser"
-msgstr "Mostra al navegador"
+msgstr "Obre la fulla de dades en un navegador"
 
 #: eeschema/tools/ee_actions.cpp:69 pcbnew/tools/pcb_actions.cpp:1153
 msgid "Create Corner"
@@ -15842,9 +15867,8 @@ msgid "Remove corner"
 msgstr "Suprimeix la cantonada"
 
 #: eeschema/tools/ee_actions.cpp:87
-#, fuzzy
 msgid "Select Node"
-msgstr "Selecciona el component"
+msgstr "Selecciona node"
 
 #: eeschema/tools/ee_actions.cpp:87
 #, fuzzy
@@ -15852,9 +15876,8 @@ msgid "Select a connection item under the cursor"
 msgstr "Selecciona tots les xarxes de la llista esquerra"
 
 #: eeschema/tools/ee_actions.cpp:92
-#, fuzzy
 msgid "Select Connection"
-msgstr "Elimina la connexió"
+msgstr "Selecciona la connexió"
 
 #: eeschema/tools/ee_actions.cpp:92
 #, fuzzy
@@ -15872,19 +15895,16 @@ msgid "Save the current library to a new file."
 msgstr "Desa a la biblioteca actual"
 
 #: eeschema/tools/ee_actions.cpp:123
-#, fuzzy
 msgid "New Symbol..."
-msgstr "Símbol d'alimentació"
+msgstr "Nou símbol..."
 
 #: eeschema/tools/ee_actions.cpp:123
-#, fuzzy
 msgid "Create a new symbol"
-msgstr "Crea una placa nova"
+msgstr "Crea un nou símbol"
 
 #: eeschema/tools/ee_actions.cpp:128
-#, fuzzy
 msgid "Edit Symbol"
-msgstr "Símbol"
+msgstr "Edita símbol"
 
 #: eeschema/tools/ee_actions.cpp:128
 #, fuzzy
@@ -15912,14 +15932,12 @@ msgid "Remove the selected symbol from its library"
 msgstr "Suprimeix l'entrada seleccionada de la taula."
 
 #: eeschema/tools/ee_actions.cpp:158
-#, fuzzy
 msgid "Paste Symbol"
-msgstr "Símbol d'alimentació"
+msgstr "Enganxa símbol"
 
 #: eeschema/tools/ee_actions.cpp:163
-#, fuzzy
 msgid "Import Symbol..."
-msgstr "Importa dibuixos de símbols"
+msgstr "Importa símbol..."
 
 #: eeschema/tools/ee_actions.cpp:163
 #, fuzzy
@@ -15927,9 +15945,8 @@ msgid "Import a symbol to the current library"
 msgstr "Desa a la biblioteca actual"
 
 #: eeschema/tools/ee_actions.cpp:168
-#, fuzzy
 msgid "Export..."
-msgstr "Exporta"
+msgstr "Exporta..."
 
 #: eeschema/tools/ee_actions.cpp:168
 #, fuzzy
@@ -18499,11 +18516,13 @@ msgid "Import Eagle Project Files"
 msgstr "Desa el fitxer del projecte"
 
 #: kicad/kicad.cpp:169
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "File '%s'\n"
 "does not appear to be a valid KiCad project file."
-msgstr "«%s» no és un fitxer d'Eeschema!"
+msgstr ""
+"El fitxer '%s'\n"
+"no sembla ser un fitxer de projecte de KiCad vàlid."
 
 #: kicad/kicad_manager_frame.cpp:170
 #, fuzzy
@@ -18980,9 +18999,8 @@ msgid "Local file"
 msgstr "Edita el fitxer local"
 
 #: kicad/pcm/pcm_task_manager.cpp:63
-#, fuzzy
 msgid "Unable to create download directory!"
-msgstr "Impossible de crear fitxer <%s>"
+msgstr "No s'ha pogut crear la carpeta de descàrregues!"
 
 #: kicad/pcm/pcm_task_manager.cpp:92
 #, c-format
@@ -22127,9 +22145,8 @@ msgid "Only selected"
 msgstr "no s'ha seleccionat cap fitxer"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:97
-#, fuzzy
 msgid "Empty"
-msgstr "Text buit!"
+msgstr "En blanc"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:98
 #, fuzzy
@@ -24999,9 +25016,8 @@ msgid "CSV"
 msgstr "CSV"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:48
-#, fuzzy
 msgid "Gerber (experimental)"
-msgstr "Gerber X2 (experimental)"
+msgstr "Gerber (experimental)"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:50
 msgid "Format"
@@ -25018,9 +25034,8 @@ msgid "Single file for board"
 msgstr "Un fitxer per a la placa"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:62
-#, fuzzy
 msgid "Files"
-msgstr "Fitxers:"
+msgstr "Fitxers"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:64
 msgid ""
@@ -25036,9 +25051,8 @@ msgid "Include only SMD footprints"
 msgstr "Inclou les em&premtes"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:77
-#, fuzzy
 msgid "Exclude all footprints with through hole pads"
-msgstr "Sense empremtes per arxivar!"
+msgstr "Excloure totes les empremtes amb pads amb forats passants"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:80
 #, fuzzy
@@ -31255,9 +31269,8 @@ msgid "Open File"
 msgstr "Obre un fitxer"
 
 #: pcbnew/import_gfx/dialog_import_gfx.cpp:277
-#, fuzzy
 msgid "No file selected!"
-msgstr "no s'ha seleccionat cap fitxer"
+msgstr "No s'ha seleccionat cap fitxer!"
 
 #: pcbnew/import_gfx/dialog_import_gfx.cpp:288
 #, fuzzy
@@ -31655,14 +31668,12 @@ msgid "Shape Description File"
 msgstr "Llegeix el fitxer de descripció de formes..."
 
 #: pcbnew/microwave/microwave_polygon.cpp:314
-#, fuzzy
 msgid "Shape has a null size."
-msgstr "La forma té una mida nul·la!"
+msgstr "La forma té una mida nul·la."
 
 #: pcbnew/microwave/microwave_polygon.cpp:320
-#, fuzzy
 msgid "Shape has no points."
-msgstr "La forma no té punts!"
+msgstr "La forma no té punts."
 
 #: pcbnew/microwave/microwave_tool.cpp:93
 msgid "Place microwave feature"
@@ -32031,9 +32042,9 @@ msgstr ""
 "No es pot canviar l'empremta del component %s, ja que falta l'empremta %s.\n"
 
 #: pcbnew/netlist_reader/netlist.cpp:205
-#, fuzzy, c-format
+#, c-format
 msgid "%s footprint ID '%s' is not valid."
-msgstr "El nom del fitxer no és vàlid!"
+msgstr "%s ID de l'empremta '%s' no és vàlid."
 
 #: pcbnew/netlist_reader/netlist.cpp:222
 #, fuzzy, c-format
@@ -32285,9 +32296,9 @@ msgid "New PCB file is unsaved"
 msgstr "S'ha desat el fitxer %s"
 
 #: pcbnew/pcb_edit_frame.cpp:858
-#, fuzzy, c-format
+#, c-format
 msgid "The auto save file '%s' could not be removed!"
-msgstr "No es pot suprimir la classe de xarxa predeterminada"
+msgstr "¡No es pot eliminar el fitxer de desat automàtic '%s'!"
 
 #: pcbnew/pcb_edit_frame.cpp:1101
 #, fuzzy
@@ -33436,9 +33447,9 @@ msgid "Library Not Found"
 msgstr "Fitxer %s no trobat"
 
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:2522
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint file name '%s' is not valid."
-msgstr "El nom del fitxer no és vàlid!"
+msgstr "El nom del fitxer d'empremtes '%s' no és vàlid."
 
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:2528
 #, c-format
