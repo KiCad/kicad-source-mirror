@@ -371,6 +371,9 @@ const EDA_RECT GERBER_DRAW_ITEM::GetBoundingBox() const
     {
         if( code && code->m_Shape == APT_RECT )
         {
+            if( m_Polygon.OutlineCount() == 0 )
+                ConvertSegmentToPolygon();
+
             if( m_Polygon.OutlineCount() > 0 )
             {
                 auto bb = m_Polygon.BBox();
