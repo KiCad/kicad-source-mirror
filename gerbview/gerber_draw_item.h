@@ -245,8 +245,11 @@ public:
      * convert a line to an equivalent polygon.
      * Useful when a line is plotted using a rectangular pen.
      * In this case, the usual segment plot function cannot be used
-     */
-    void ConvertSegmentToPolygon();
+     * @param aPolygon is the SHAPE_POLY_SET to fill. If null (usual case),
+     * m_Polygon will be used
+      */
+     void ConvertSegmentToPolygon();
+    void ConvertSegmentToPolygon( SHAPE_POLY_SET* aPolygon ) const;
 
     /**
      * Function DrawGbrPoly

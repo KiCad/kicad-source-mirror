@@ -372,12 +372,20 @@ const EDA_RECT GERBER_DRAW_ITEM::GetBoundingBox() const
         if( code && code->m_Shape == APT_RECT )
         {
             if( m_Polygon.OutlineCount() == 0 )
-                ConvertSegmentToPolygon();
-
-            if( m_Polygon.OutlineCount() > 0 )
             {
-                auto bb = m_Polygon.BBox();
-                bbox.Inflate( bb.GetWidth() / 2, bb.GetHeight() / 2 );
+                // We cannot initialize m_Polygon, because we are in a const function.
+                // So use a temporary polygon
+                SHAPE_POLY_SET poly_shape;
+                ConvertSegmentToPolygon( &poly_shape );
+                BOX2I bb = poly_shape.BBox();
+                bbox.SetSize( bb.GetWidth(), bb.GetHeight() );
+                bbox.SetOrigin( bb.GetOrigin().x, bb.GetOrigin().y );
+            }
+
+            else
+            {
+                BOX2I bb = m_Polygon.BBox();
+                bbox.SetSize( bb.GetWidth(), bb.GetHeight() );
                 bbox.SetOrigin( bb.GetOrigin().x, bb.GetOrigin().y );
             }
         }
@@ -596,10 +604,10 @@ void GERBER_DRAW_ITEM::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDra
 }
 
 
-void GERBER_DRAW_ITEM::ConvertSegmentToPolygon()
+void GERBER_DRAW_ITEM::ConvertSegmentToPolygon( SHAPE_POLY_SET* aPolygon ) const
 {
-    m_Polygon.RemoveAllContours();
-    m_Polygon.NewOutline();
+    aPolygon->RemoveAllContours();
+    aPolygon->NewOutline();
 
     wxPoint start = m_Start;
     wxPoint end = m_End;
@@ -629,37 +637,43 @@ void GERBER_DRAW_ITEM::ConvertSegmentToPolygon()
     corner.x -= m_Size.x/2;
     corner.y -= m_Size.y/2;
     wxPoint close = corner;
-    m_Polygon.Append( VECTOR2I( corner ) );  // Lower left corner, start point (1)
+    aPolygon->Append( VECTOR2I( corner ) );  // Lower left corner, start point (1)
     corner.y += m_Size.y;
-    m_Polygon.Append( VECTOR2I( corner ) );  // upper left corner, start point (2)
+    aPolygon->Append( VECTOR2I( corner ) );  // upper left corner, start point (2)
 
     if( delta.x || delta.y)
     {
         corner += delta;
-        m_Polygon.Append( VECTOR2I( corner ) );  // upper left corner, end point (3)
+        aPolygon->Append( VECTOR2I( corner ) );  // upper left corner, end point (3)
     }
 
     corner.x += m_Size.x;
-    m_Polygon.Append( VECTOR2I( corner ) );  // upper right corner, end point (4)
+    aPolygon->Append( VECTOR2I( corner ) );  // upper right corner, end point (4)
     corner.y -= m_Size.y;
-    m_Polygon.Append( VECTOR2I( corner ) );  // lower right corner, end point (5)
+    aPolygon->Append( VECTOR2I( corner ) );  // lower right corner, end point (5)
 
     if( delta.x || delta.y )
     {
         corner -= delta;
-        m_Polygon.Append( VECTOR2I( corner ) );  // lower left corner, start point (6)
+        aPolygon->Append( VECTOR2I( corner ) );  // lower left corner, start point (6)
     }
 
-    m_Polygon.Append( VECTOR2I( close ) );  // close the shape
+    aPolygon->Append( VECTOR2I( close ) );  // close the shape
 
     // Create final polygon:
-    for( auto it = m_Polygon.Iterate( 0 ); it; ++it )
+    for( auto it = aPolygon->Iterate( 0 ); it; ++it )
     {
         if( change )
             ( *it ).y = -( *it ).y;
 
         *it += start;
     }
+}
+
+
+void GERBER_DRAW_ITEM::ConvertSegmentToPolygon()
+{
+    ConvertSegmentToPolygon( &m_Polygon );
 }
 
 
