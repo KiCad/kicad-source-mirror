@@ -268,7 +268,7 @@ wxString S3D_RESOLVER::ResolvePath( const wxString& aFileName )
         createPathList();
 
     // look up the filename in the internal filename map
-    std::map< wxString, wxString, S3D::rsort_wxString >::iterator mi;
+    std::map<wxString, wxString, S3D::rsort_wxString>::iterator mi;
     mi = m_NameMap.find( aFileName );
 
     if( mi != m_NameMap.end() )
@@ -305,7 +305,7 @@ wxString S3D_RESOLVER::ResolvePath( const wxString& aFileName )
     {
         tmpFN.Normalize();
         tname = tmpFN.GetFullPath();
-        m_NameMap.insert( std::pair< wxString, wxString > ( aFileName, tname ) );
+        m_NameMap[ aFileName ] = tname;
 
         // special case: if a path begins with ${ENV_VAR} but is not in the resolver's path list
         // then add it
@@ -320,7 +320,7 @@ wxString S3D_RESOLVER::ResolvePath( const wxString& aFileName )
     if( aFileName.StartsWith( "${" ) || aFileName.StartsWith( "$(" ) )
     {
         m_errflags |= ERRFLG_ENVPATH;
-        return wxEmptyString;
+        return aFileName;
     }
 
     // at this point aFileName is:
@@ -345,8 +345,7 @@ wxString S3D_RESOLVER::ResolvePath( const wxString& aFileName )
             tmpFN.Assign( fullPath );
             tmpFN.Normalize();
             tname = tmpFN.GetFullPath();
-            m_NameMap.insert( std::pair< wxString, wxString > ( aFileName, tname ) );
-
+            m_NameMap[ aFileName ] = tname;
             return tname;
         }
     }
@@ -364,7 +363,7 @@ wxString S3D_RESOLVER::ResolvePath( const wxString& aFileName )
         if( fpath.Normalize() && fpath.FileExists() )
         {
             tname = fpath.GetFullPath();
-            m_NameMap.insert( std::pair< wxString, wxString > ( aFileName, tname ) );
+            m_NameMap[ aFileName ] = tname;
             return tname;
         }
     }
@@ -378,7 +377,7 @@ wxString S3D_RESOLVER::ResolvePath( const wxString& aFileName )
         // this can happen if the file was intended to be relative to ${KICAD6_3DMODEL_DIR}
         // but ${KICAD6_3DMODEL_DIR} is not set or is incorrect.
         m_errflags |= ERRFLG_RELPATH;
-        return wxEmptyString;
+        return aFileName;
     }
 
     for( const SEARCH_PATH& path : m_Paths )
@@ -402,14 +401,14 @@ wxString S3D_RESOLVER::ResolvePath( const wxString& aFileName )
                 if( tmp.Normalize() )
                     tname = tmp.GetFullPath();
 
-                m_NameMap.insert( std::pair< wxString, wxString > ( aFileName, tname ) );
+                m_NameMap[ aFileName ] = tname;
                 return tname;
             }
         }
     }
 
     m_errflags |= ERRFLG_ALIAS;
-    return wxEmptyString;
+    return aFileName;
 }
 
 
