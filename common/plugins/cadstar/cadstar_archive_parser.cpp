@@ -2329,12 +2329,13 @@ XNODE* CADSTAR_ARCHIVE_PARSER::LoadArchiveFile( const wxString& aFileName,
 
     // Open the file and get the file size
     FILE* fp = wxFopen( aFileName, wxT( "rt" ) );
-    fseek( fp, 0L, SEEK_END );
-    long fileSize = ftell( fp );
-    rewind( fp );
 
     if( !fp )
         THROW_IO_ERROR( wxString::Format( _( "Cannot open file '%s'" ), aFileName ) );
+
+    fseek( fp, 0L, SEEK_END );
+    long fileSize = ftell( fp );
+    rewind( fp );
 
     DSNLEXER lexer( emptyKeywords, 0, fp, aFileName );
 
