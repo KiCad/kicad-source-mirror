@@ -1477,6 +1477,58 @@ BITMAPS SCH_GLOBALLABEL::GetMenuImage() const
 }
 
 
+bool SCH_GLOBALLABEL::HitTest( const wxPoint& aPosition, int aAccuracy ) const
+{
+    EDA_RECT bbox = GetBoundingBox();
+    bbox.Inflate( aAccuracy );
+
+    if( !bbox.Contains( aPosition ) )
+    {
+        if( Schematic() && Schematic()->Settings().m_IntersheetRefsShow )
+        {
+            bbox = m_intersheetRefsField.GetBoundingBox();
+            bbox.Inflate( aAccuracy );
+
+            return bbox.Contains( aPosition );
+        }
+
+        return false;
+    }
+
+    return true;
+}
+
+
+bool SCH_GLOBALLABEL::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const
+{
+    EDA_RECT bbox = GetBoundingBox();
+
+    if( aContained )
+    {
+        if( Schematic() && Schematic()->Settings().m_IntersheetRefsShow )
+            bbox.Merge( m_intersheetRefsField.GetBoundingBox() );
+
+        bbox.Inflate( aAccuracy );
+        return aRect.Contains( bbox );
+    }
+
+    bbox.Inflate( aAccuracy );
+
+    if( aRect.Intersects( bbox ) )
+        return true;
+
+    if( Schematic() && Schematic()->Settings().m_IntersheetRefsShow )
+    {
+        bbox = m_intersheetRefsField.GetBoundingBox();
+        bbox.Inflate( aAccuracy );
+
+        return aRect.Intersects( bbox );
+    }
+
+    return false;
+}
+
+
 SCH_HIERLABEL::SCH_HIERLABEL( const wxPoint& pos, const wxString& text, KICAD_T aType )
         : SCH_TEXT( pos, text, aType )
 {

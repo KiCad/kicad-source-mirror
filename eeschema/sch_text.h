@@ -378,6 +378,14 @@ public:
      */
     const EDA_RECT GetBoundingBox() const override;
 
+    /**
+     * Override basic hit test to allow testing separately for label and intersheet refs
+     * which can move independently
+     * @return True if hit in either label or associated intersheet ref
+     */
+    bool HitTest( const wxPoint& aPosition, int aAccuracy = 0 ) const override;
+    bool HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy = 0 ) const override;
+
     void CreateGraphicShape( const RENDER_SETTINGS* aRenderSettings,
                              std::vector<wxPoint>& aPoints, const wxPoint& aPos ) const override;
 
