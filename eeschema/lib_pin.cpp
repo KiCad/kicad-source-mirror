@@ -31,6 +31,7 @@
 #include <settings/settings_manager.h>
 #include <symbol_editor/symbol_editor_settings.h>
 #include <trigo.h>
+#include <string_utils.h>
 #include "sch_painter.h"
 
 // small margin in internal units between the pin text and the pin line
@@ -1022,7 +1023,7 @@ void LIB_PIN::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, MSG_PANEL_ITEMS& aList )
 {
     LIB_ITEM::GetMsgPanelInfo( aFrame, aList );
 
-    aList.push_back( MSG_PANEL_ITEM( _( "Name" ), GetShownName() ) );
+    aList.push_back( MSG_PANEL_ITEM( _( "Name" ), UnescapeString( GetShownName() ) ) );
     aList.push_back( MSG_PANEL_ITEM( _( "Number" ), GetShownNumber() ) );
     aList.push_back( MSG_PANEL_ITEM( _( "Type" ), ElectricalPinTypeGetText( m_type ) ) );
     aList.push_back( MSG_PANEL_ITEM( _( "Style" ), PinShapeGetText( m_shape ) ) );
@@ -1178,15 +1179,15 @@ wxString LIB_PIN::GetSelectMenuText( EDA_UNITS aUnits ) const
     if( !m_name.IsEmpty() )
     {
         return wxString::Format( _( "Pin %s [%s, %s, %s]" ),
-                                 m_number,
-                                 m_name,
+                                 GetShownNumber(),
+                                 UnescapeString( GetShownName() ),
                                  GetElectricalTypeName(),
                                  PinShapeGetText( m_shape ) );
     }
     else
     {
         return wxString::Format( _( "Pin %s [%s, %s]" ),
-                                 m_number,
+                                 GetShownNumber(),
                                  GetElectricalTypeName(),
                                  PinShapeGetText( m_shape ) );
     }

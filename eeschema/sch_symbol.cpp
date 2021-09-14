@@ -1631,7 +1631,7 @@ wxString SCH_SYMBOL::GetSelectMenuText( EDA_UNITS aUnits ) const
 {
     return wxString::Format( _( "Symbol %s [%s]" ),
                              GetField( REFERENCE_FIELD )->GetShownText(),
-                             GetLibId().GetLibItemName().wx_str() );
+                             UnescapeString( GetLibId().GetLibItemName() ) );
 }
 
 
