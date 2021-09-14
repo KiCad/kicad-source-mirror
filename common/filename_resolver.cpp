@@ -634,7 +634,7 @@ bool FILENAME_RESOLVER::WritePathList( const wxString& aDir, const wxString& aFi
         cfgFile << "\"" << tstr.size() << ":" << tstr << "\",";
 
         if( aResolvePaths )
-            tstr = ResolvePath( sPL->m_Pathvar ).ToUTF8();
+            tstr = ExpandEnvVarSubstitutions( sPL->m_Pathvar, m_project ).ToUTF8();
         else
             tstr = sPL->m_Pathvar.ToUTF8();
 
