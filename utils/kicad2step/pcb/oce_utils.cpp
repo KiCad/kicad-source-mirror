@@ -858,9 +858,8 @@ bool PCBMODEL::CreatePCB()
     // push the board to the data structure
     ReportMessage( "\nGenerate board full shape.\n" );
 
-    // Add board to the assembly "expanded", meaning the shape gets tacked into an assembly
-    // which will better match how all the other models end up being added
-    m_pcb_label = m_assy->AddComponent( m_assy_label, board, true );
+    // Dont expand the component or else coloring it gets hard
+    m_pcb_label = m_assy->AddComponent( m_assy_label, board, false );
 
     if( m_pcb_label.IsNull() )
         return false;
@@ -870,11 +869,11 @@ bool PCBMODEL::CreatePCB()
     // Why are we trying to name the bare board? Because CAD tools like SolidWorks do fun things
     // like "deduplicate" imported STEPs by swapping STEP assembly components with already identically named assemblies
     // So we want to avoid having the PCB be generally defaulted to "Component" or "Assembly".
-    Handle( TDataStd_TreeNode ) Node;
+    Handle( TDataStd_TreeNode ) node;
 
-    if( m_pcb_label.FindAttribute( XCAFDoc::ShapeRefGUID(), Node ) )
+    if( m_pcb_label.FindAttribute( XCAFDoc::ShapeRefGUID(), node ) )
     {
-        TDF_Label label = Node->Father()->Label();
+        TDF_Label label = node->Father()->Label();
         if( !label.IsNull() )
         {
             wxString                   pcbName = wxString::Format( "%s PCB", m_pcbName );
