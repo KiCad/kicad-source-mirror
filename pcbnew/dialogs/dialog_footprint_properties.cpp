@@ -67,7 +67,8 @@ DIALOG_FOOTPRINT_PROPERTIES::DIALOG_FOOTPRINT_PROPERTIES( PCB_EDIT_FRAME* aParen
                        m_SolderPasteMarginUnits ),
         m_solderPasteRatio( aParent, m_PasteMarginRatioLabel, m_PasteMarginRatioCtrl,
                             m_PasteMarginRatioUnits ),
-        m_returnValue( FP_PROPS_CANCEL )
+        m_returnValue( FP_PROPS_CANCEL ),
+        m_initialized( false )
 {
     // Create the 3D models page
     m_3dPanel = new PANEL_FP_PROPERTIES_3D_MODEL( m_frame, m_footprint, this, m_NoteBook );
@@ -150,6 +151,7 @@ DIALOG_FOOTPRINT_PROPERTIES::DIALOG_FOOTPRINT_PROPERTIES( PCB_EDIT_FRAME* aParen
     m_bpDelete->SetBitmap( KiBitmap( BITMAPS::small_trash ) );
 
     finishDialogSettings();
+    m_initialized = true;
 }
 
 
@@ -617,6 +619,9 @@ void DIALOG_FOOTPRINT_PROPERTIES::adjustGridColumns( int aWidth )
 
 void DIALOG_FOOTPRINT_PROPERTIES::OnUpdateUI( wxUpdateUIEvent&  )
 {
+    if( !m_initialized )
+        return;
+
     if( !m_itemsGrid->IsCellEditControlShown() )
         adjustGridColumns( m_itemsGrid->GetRect().GetWidth() );
 
