@@ -271,9 +271,6 @@ int LENGTH_TUNER_TOOL::MainLoop( const TOOL_EVENT& aEvent )
     std::string tool = aEvent.GetCommandStr().get();
     frame()->PushTool( tool );
 
-    m_lastTuneMode = aEvent.Parameter<PNS::ROUTER_MODE>();
-    m_router->SetMode( m_lastTuneMode );
-
     auto setCursor =
             [&]()
             {
@@ -285,6 +282,10 @@ int LENGTH_TUNER_TOOL::MainLoop( const TOOL_EVENT& aEvent )
     controls()->ShowCursor( true );
     // Set initial cursor
     setCursor();
+
+    // Router mode must be set after Activate()
+    m_lastTuneMode = aEvent.Parameter<PNS::ROUTER_MODE>();
+    m_router->SetMode( m_lastTuneMode );
 
     // Main loop: keep receiving events
     while( TOOL_EVENT* evt = Wait() )
