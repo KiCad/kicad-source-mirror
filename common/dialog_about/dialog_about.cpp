@@ -42,7 +42,7 @@
  */
 #include <bitmaps.h>
 #include <build_version.h>
-#include <dialogs/html_messagebox.h>
+#include <dialogs/html_message_box.h>
 #include <tool/tool_manager.h>
 
 #include "dialog_about.h"

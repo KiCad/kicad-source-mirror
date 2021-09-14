@@ -32,6 +32,7 @@ class DIALOG_DISPLAY_HTML_TEXT_BASE : public DIALOG_SHIM
 	private:
 
 	protected:
+		wxHtmlWindow* m_htmlWindow;
 		wxStdDialogButtonSizer* m_sdbSizer1;
 		wxButton* m_sdbSizer1OK;
 
@@ -40,7 +41,6 @@ class DIALOG_DISPLAY_HTML_TEXT_BASE : public DIALOG_SHIM
 
 
 	public:
-		wxHtmlWindow* m_htmlWindow;
 
 		DIALOG_DISPLAY_HTML_TEXT_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 		~DIALOG_DISPLAY_HTML_TEXT_BASE();

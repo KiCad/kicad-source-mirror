@@ -27,7 +27,7 @@
 #include <sch_sheet_pin.h>
 #include <sch_validators.h>
 #include <dialog_sheet_pin_properties.h>
-#include <dialogs/html_messagebox.h>
+#include <dialogs/html_message_box.h>
 #include <string_utils.h>
 
 

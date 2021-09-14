@@ -39,7 +39,7 @@
 #include <gerbview_frame.h>
 #include <reporter.h>
 #include <gbr_metadata.h>
-#include <dialogs/html_messagebox.h>
+#include <dialogs/html_message_box.h>
 #include <view/view.h>
 #include <wx/filedlg.h>
 

@@ -121,6 +121,8 @@ private:
 
     void onBtnSaveToFile( wxCommandEvent& event ) override;
 
+    void onThemeChanged( wxSysColourChangedEvent &aEvent );
+
 private:
     WX_HTML_PANEL_REPORTER m_reporter;
 

@@ -42,7 +42,7 @@
 #include <default_values.h>
 #include <wx/debug.h>
 #include <wx/log.h>
-#include <dialogs/html_messagebox.h>
+#include <dialogs/html_message_box.h>
 #include <project/project_file.h>
 #include <project/net_settings.h>
 #include <core/mirror.h>
@@ -1728,7 +1728,7 @@ HTML_MESSAGE_BOX* SCH_TEXT::ShowSyntaxHelp( wxWindow* aParentWindow )
 #include "sch_text_help_md.h"
      ;
 
-    HTML_MESSAGE_BOX* dlg = new HTML_MESSAGE_BOX( nullptr, _( "Syntax Help" ) );
+    HTML_MESSAGE_BOX* dlg = new HTML_MESSAGE_BOX( nullptr, aParentWindow, _( "Syntax Help" ) );
     wxSize            sz( 320, 320 );
 
     dlg->SetMinSize( dlg->ConvertDialogToPixels( sz ) );
@@ -1736,7 +1736,7 @@ HTML_MESSAGE_BOX* SCH_TEXT::ShowSyntaxHelp( wxWindow* aParentWindow )
 
     wxString html_txt;
     ConvertMarkdown2Html( wxGetTranslation( msg ), html_txt );
-    dlg->m_htmlWindow->AppendToPage( html_txt );
+    dlg->AddHTML_Text( html_txt );
     dlg->ShowModeless();
 
     return dlg;

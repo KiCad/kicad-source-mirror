@@ -36,7 +36,7 @@
 #include <geometry/shape_segment.h>
 #include <dialog_pad_properties.h>
 #include <gal/graphics_abstraction_layer.h>
-#include <dialogs/html_messagebox.h>
+#include <dialogs/html_message_box.h>
 #include <macros.h>
 #include <pad.h>
 #include <pcb_base_frame.h>

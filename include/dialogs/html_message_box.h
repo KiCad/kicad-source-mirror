@@ -22,11 +22,10 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef _html_messagebox_
-#define _html_messagebox_
+#ifndef HTML_MESSAGE_BOX_H
+#define HTML_MESSAGE_BOX_H
 
-
-#include <../common/dialogs/dialog_display_info_HTML_base.h>
+#include <dialogs/dialog_display_html_text_base.h>
 
 
 class HTML_MESSAGE_BOX : public DIALOG_DISPLAY_HTML_TEXT_BASE
@@ -35,6 +34,9 @@ public:
     HTML_MESSAGE_BOX( wxWindow* aParent, const wxString& aTitle = wxEmptyString,
                       const wxPoint& aPosition = wxDefaultPosition,
                       const wxSize& aSize = wxDefaultSize );
+
+    HTML_MESSAGE_BOX( wxWindow* aParent, wxWindow* aHost, const wxString& aTitle );
+
     ~HTML_MESSAGE_BOX() override;
 
     /**
@@ -84,7 +86,14 @@ public:
     void ShowModeless();
 
 protected:
+    void reload();
+
+    void onThemeChanged( wxSysColourChangedEvent &aEvent );
     virtual void OnCharHook( wxKeyEvent& aEvt ) override;
+
+private:
+    wxWindow* m_host;
+    wxString  m_source;
 };
 
-#endif // _html_messagebox_
+#endif // HTML_MESSAGE_BOX_H

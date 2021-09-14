@@ -26,7 +26,7 @@
 #include <wx/richmsgdlg.h>
 #include <wx/choicdlg.h>
 #include <confirm.h>
-#include <dialogs/html_messagebox.h>
+#include <dialogs/html_message_box.h>
 #include <functional>
 #include <unordered_map>
 

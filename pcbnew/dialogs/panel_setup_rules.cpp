@@ -34,7 +34,7 @@
 #include <panel_setup_rules.h>
 #include <wx_html_report_box.h>
 #include <wx/treebook.h>
-#include <dialogs/html_messagebox.h>
+#include <dialogs/html_message_box.h>
 #include <scintilla_tricks.h>
 #include <drc/drc_rule_parser.h>
 #include <tools/drc_tool.h>
@@ -468,12 +468,12 @@ void PANEL_SETUP_RULES::OnSyntaxHelp( wxHyperlinkEvent& aEvent )
     msg.Replace( "Ctrl+", "Cmd+" );
 #endif
 
-    m_helpWindow = new HTML_MESSAGE_BOX( nullptr, _( "Syntax Help" ) );
+    m_helpWindow = new HTML_MESSAGE_BOX( nullptr, this, _( "Syntax Help" ) );
     m_helpWindow->SetDialogSizeInDU( 320, 320 );
 
     wxString html_txt;
     ConvertMarkdown2Html( wxGetTranslation( msg ), html_txt );
-    m_helpWindow->m_htmlWindow->AppendToPage( html_txt );
+    m_helpWindow->AddHTML_Text( html_txt );
 
     m_helpWindow->ShowModeless();
 }

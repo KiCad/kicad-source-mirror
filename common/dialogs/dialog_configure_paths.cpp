@@ -28,7 +28,7 @@
 #include <confirm.h>
 #include <menus_helpers.h>
 #include <validators.h>
-#include <dialogs/html_messagebox.h>
+#include <dialogs/html_message_box.h>
 #include <filename_resolver.h>
 #include <env_vars.h>
 #include <grid_tricks.h>
@@ -621,7 +621,7 @@ void DIALOG_CONFIGURE_PATHS::OnHelp( wxCommandEvent& event )
 
     }
 
-    m_helpDialog = new HTML_MESSAGE_BOX( nullptr, _( "Environment Variable Help" ) );
+    m_helpDialog = new HTML_MESSAGE_BOX( nullptr, this, _( "Environment Variable Help" ) );
     m_helpDialog->SetDialogSizeInDU( 400, 250 );
 
     m_helpDialog->AddHTML_Text( msg );

@@ -79,7 +79,7 @@
 
 #include <cmath>
 
-#include <dialogs/html_messagebox.h>
+#include <dialogs/html_message_box.h>
 
 // A helper function to calculate the arc center of an arc
 // known by 2 end points, the radius, and the angle direction (CW or CCW)

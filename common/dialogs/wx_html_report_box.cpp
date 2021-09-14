@@ -21,6 +21,7 @@
 #include <math/util.h>
 #include <common.h>
 #include <wx/settings.h>
+#include <wx/textctrl.h>
 #include "wx_html_report_box.h"
 
 
@@ -30,6 +31,18 @@ WX_HTML_REPORT_BOX::WX_HTML_REPORT_BOX( wxWindow* parent, wxWindowID id, const w
     m_units( EDA_UNITS::MILLIMETRES ),
     m_immediateMode( false )
 {
+    Flush();
+
+    Bind( wxEVT_SYS_COLOUR_CHANGED,
+          wxSysColourChangedEventHandler( WX_HTML_REPORT_BOX::onThemeChanged ), this );
+}
+
+
+void WX_HTML_REPORT_BOX::onThemeChanged( wxSysColourChangedEvent &aEvent )
+{
+    Flush();
+
+    aEvent.Skip();
 }
 
 
@@ -62,16 +75,19 @@ void WX_HTML_REPORT_BOX::Flush()
 
 wxString WX_HTML_REPORT_BOX::addHeader( const wxString& aBody )
 {
-    wxColour bgcolor = wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOW );
-    wxColour fgcolor = wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOWTEXT );
+    // Handle light/dark mode colors...
+
+    wxTextCtrl dummy( GetParent(), wxID_ANY );
+    wxColour   foreground = dummy.GetForegroundColour();
+    wxColour   background = dummy.GetBackgroundColour();
 
     return wxString::Format( wxT( "<html>"
                                   "  <body bgcolor='%s' text='%s'>"
                                   "    %s"
                                   "  </body>"
                                   "</html>" ),
-                             bgcolor.GetAsString( wxC2S_HTML_SYNTAX ),
-                             fgcolor.GetAsString( wxC2S_HTML_SYNTAX ),
+                             background.GetAsString( wxC2S_HTML_SYNTAX ),
+                             foreground.GetAsString( wxC2S_HTML_SYNTAX ),
                              aBody );
 }
 

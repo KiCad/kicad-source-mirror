@@ -24,13 +24,33 @@
 
 #include <wx/clipbrd.h>
 #include <wx/log.h>
+#include <wx/textctrl.h>
 #include <string_utils.h>
-#include <dialogs/html_messagebox.h>
+#include <dialogs/html_message_box.h>
+
+
+HTML_MESSAGE_BOX::HTML_MESSAGE_BOX( wxWindow* aParent, wxWindow* aHost, const wxString& aTitle ) :
+    DIALOG_DISPLAY_HTML_TEXT_BASE( aParent, wxID_ANY, aTitle, wxDefaultPosition, wxDefaultSize ),
+    m_host( aHost )
+{
+    m_htmlWindow->SetLayoutDirection( wxLayout_LeftToRight );
+    ListClear();
+
+    Center();
+
+    m_sdbSizer1OK->SetDefault();
+
+    reload();
+
+    Bind( wxEVT_SYS_COLOUR_CHANGED,
+          wxSysColourChangedEventHandler( HTML_MESSAGE_BOX::onThemeChanged ), this );
+}
 
 
 HTML_MESSAGE_BOX::HTML_MESSAGE_BOX( wxWindow* aParent, const wxString& aTitle,
                                     const wxPoint& aPosition, const wxSize& aSize ) :
-    DIALOG_DISPLAY_HTML_TEXT_BASE( aParent, wxID_ANY, aTitle, aPosition, aSize )
+    DIALOG_DISPLAY_HTML_TEXT_BASE( nullptr, wxID_ANY, aTitle, aPosition, aSize ),
+    m_host( aParent )
 {
     m_htmlWindow->SetLayoutDirection( wxLayout_LeftToRight );
     ListClear();
@@ -42,6 +62,11 @@ HTML_MESSAGE_BOX::HTML_MESSAGE_BOX( wxWindow* aParent, const wxString& aTitle,
     Center();
 
     m_sdbSizer1OK->SetDefault();
+
+    reload();
+
+    Bind( wxEVT_SYS_COLOUR_CHANGED,
+          wxSysColourChangedEventHandler( HTML_MESSAGE_BOX::onThemeChanged ), this );
 }
 
 
@@ -53,9 +78,37 @@ HTML_MESSAGE_BOX::~HTML_MESSAGE_BOX()
 }
 
 
+void HTML_MESSAGE_BOX::reload()
+{
+    // Handle light/dark mode colors...
+
+    wxTextCtrl dummy( m_host, wxID_ANY );
+    wxColour   foreground = dummy.GetForegroundColour();
+    wxColour   background = dummy.GetBackgroundColour();
+
+    m_htmlWindow->SetPage( wxString::Format( wxT( "<html>"
+                                                  "  <body bgcolor='%s' text='%s'>"
+                                                  "    %s"
+                                                  "  </body>"
+                                                  "</html>" ),
+                                             background.GetAsString( wxC2S_HTML_SYNTAX ),
+                                             foreground.GetAsString( wxC2S_HTML_SYNTAX ),
+                                             m_source ) );
+}
+
+
+void HTML_MESSAGE_BOX::onThemeChanged( wxSysColourChangedEvent &aEvent )
+{
+    reload();
+
+    aEvent.Skip();
+}
+
+
 void HTML_MESSAGE_BOX::ListClear()
 {
-    m_htmlWindow->SetPage( wxEmptyString );
+    m_source.clear();
+    reload();
 }
 
 
@@ -74,7 +127,8 @@ void HTML_MESSAGE_BOX::ListSet( const wxString& aList )
 
     msg += wxT( "</ul>" );
 
-    m_htmlWindow->AppendToPage( msg );
+    m_source += msg;
+    reload();
 }
 
 
@@ -90,27 +144,31 @@ void HTML_MESSAGE_BOX::ListSet( const wxArrayString& aList )
 
     msg += wxT( "</ul>" );
 
-    m_htmlWindow->AppendToPage( msg );
+    m_source += msg;
+    reload();
 }
 
 
 void HTML_MESSAGE_BOX::MessageSet( const wxString& message )
 {
-    wxString message_value = wxString::Format(
-                wxT( "<b>%s</b><br>" ), message );
+    wxString message_value = wxString::Format( wxT( "<b>%s</b><br>" ), message );
 
-    m_htmlWindow->AppendToPage( message_value );
+    m_source += message_value;
+    reload();
 }
 
 
 void HTML_MESSAGE_BOX::AddHTML_Text( const wxString& message )
 {
-    m_htmlWindow->AppendToPage( message );
+    m_source += message;
+    reload();
 }
 
 
 void HTML_MESSAGE_BOX::ShowModeless()
 {
+    reload();
+
     m_sdbSizer1->Show( false );
     Layout();
 

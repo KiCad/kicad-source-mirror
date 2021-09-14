@@ -35,7 +35,7 @@
 #include "pl_editor_frame.h"
 #include "tools/pl_selection_tool.h"
 
-#include <dialogs/html_messagebox.h>
+#include <dialogs/html_message_box.h>
 
 
 PROPERTIES_FRAME::PROPERTIES_FRAME( PL_EDITOR_FRAME* aParent ) :
@@ -563,7 +563,7 @@ void PROPERTIES_FRAME::onHelp( wxCommandEvent& aEvent )
     message = "KICAD_VERSION\n";
     message << "# " << _( "(sheet number)" ) << "\n";
     message << "## " << _( "(sheet count)" ) << "\n";
-    message << "COMMENT1 … COMMENT9\n";
+    message << "COMMENT1 ï¿½ COMMENT9\n";
     message << "COMPANY\n";
     message << "FILENAME\n";
     message << "ISSUE_DATE\n";

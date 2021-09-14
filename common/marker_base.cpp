@@ -35,7 +35,7 @@
 #include <core/arraydim.h>
 #include <geometry/shape_line_chain.h>
 #include <render_settings.h>
-#include "dialog_display_info_HTML_base.h"
+#include "dialogs/dialog_display_html_text_base.h"
 
 
 /* The graphic shape of markers is a polygon.

@@ -23,7 +23,7 @@
 #include <wx/tokenzr.h>
 #include <wx/window.h>
 #include <widgets/wx_progress_reporters.h>
-#include <dialogs/html_messagebox.h>
+#include <dialogs/html_message_box.h>
 #include <eda_pattern_match.h>
 #include <generate_alias_info.h>
 #include <lib_symbol.h>

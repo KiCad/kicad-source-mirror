@@ -25,7 +25,7 @@
 #include <footprint.h>
 #include <footprint_info.h>
 #include <fp_lib_table.h>
-#include <dialogs/html_messagebox.h>
+#include <dialogs/html_message_box.h>
 #include <string_utils.h>
 #include <locale_io.h>
 #include <kiway.h>

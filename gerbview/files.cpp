@@ -26,7 +26,7 @@
 #include <wx/wfstream.h>
 #include <wx/zipstrm.h>
 #include <reporter.h>
-#include <dialogs/html_messagebox.h>
+#include <dialogs/html_message_box.h>
 #include <gerbview_frame.h>
 #include <gerbview_id.h>
 #include <gerber_file_image.h>

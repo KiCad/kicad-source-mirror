@@ -31,7 +31,7 @@
 #include <wx/valnum.h>
 #include <board_commit.h>
 #include <pcb_layer_box_selector.h>
-#include <dialogs/html_messagebox.h>
+#include <dialogs/html_message_box.h>
 #include <tool/tool_manager.h>
 #include <tool/actions.h>
 #include <pcb_shape.h>

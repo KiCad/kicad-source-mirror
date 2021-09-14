@@ -158,7 +158,7 @@ set( COMMON_DLG_SRCS
     dialogs/dialog_color_picker_base.cpp
     dialogs/dialog_configure_paths.cpp
     dialogs/dialog_configure_paths_base.cpp
-    dialogs/dialog_display_info_HTML_base.cpp
+    dialogs/dialog_display_html_text_base.cpp
     dialogs/dialog_edit_library_tables.cpp
     dialogs/dialog_global_lib_table_config.cpp
     dialogs/dialog_global_lib_table_config_base.cpp
@@ -186,7 +186,7 @@ set( COMMON_DLG_SRCS
     dialogs/eda_list_dialog_base.cpp
     dialogs/eda_view_switcher.cpp
     dialogs/eda_view_switcher_base.cpp
-    dialogs/html_messagebox.cpp
+    dialogs/html_message_box.cpp
     dialogs/panel_color_settings_base.cpp
     dialogs/panel_color_settings.cpp
     dialogs/panel_common_settings.cpp

@@ -35,7 +35,7 @@
 #include <string_utils.h>
 #include <eeschema_settings.h>
 #include <gestfich.h>
-#include <dialogs/html_messagebox.h>
+#include <dialogs/html_message_box.h>
 #include <i18n_utility.h> // for _HKI definition used in dialog_bom_help_md.h
 #include <invoke_sch_dialog.h>
 #include <kiface_i.h>
@@ -458,13 +458,13 @@ void DIALOG_BOM::OnHelp( wxCommandEvent& event )
         return;
     }
 
-    m_helpWindow = new HTML_MESSAGE_BOX( nullptr, _( "Bill of Material Generation Help" ) );
+    m_helpWindow = new HTML_MESSAGE_BOX( nullptr, this, _( "Bill of Material Generation Help" ) );
     m_helpWindow->SetDialogSizeInDU( 500, 350 );
 
     wxString html_txt;
     ConvertMarkdown2Html( wxGetTranslation( s_bomHelpInfo ), html_txt );
 
-    m_helpWindow->m_htmlWindow->AppendToPage( html_txt );
+    m_helpWindow->AddHTML_Text( html_txt );
     m_helpWindow->ShowModeless();
 }
 

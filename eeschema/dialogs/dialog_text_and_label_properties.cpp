@@ -33,7 +33,7 @@
 #include <sch_symbol.h>
 #include <sch_reference_list.h>
 #include <schematic.h>
-#include <dialogs/html_messagebox.h>
+#include <dialogs/html_message_box.h>
 #include <dialog_text_and_label_properties.h>
 #include <string_utils.h>
 #include <tool/actions.h>

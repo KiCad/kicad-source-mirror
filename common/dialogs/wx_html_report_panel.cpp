@@ -32,13 +32,10 @@
 #include <wx/filedlg.h>
 #include <wx/msgdlg.h>
 #include <wx/menu.h>
+#include <wx/textctrl.h>
 
-
-WX_HTML_REPORT_PANEL::WX_HTML_REPORT_PANEL( wxWindow* parent,
-                                            wxWindowID id,
-                                            const wxPoint& pos,
-                                            const wxSize& size,
-                                            long style ) :
+WX_HTML_REPORT_PANEL::WX_HTML_REPORT_PANEL( wxWindow* parent, wxWindowID id, const wxPoint& pos,
+                                            const wxSize& size, long style ) :
         WX_HTML_REPORT_PANEL_BASE( parent, id, pos, size, style ),
         m_reporter( this ),
         m_severities( -1 ),
@@ -46,15 +43,27 @@ WX_HTML_REPORT_PANEL::WX_HTML_REPORT_PANEL( wxWindow* parent,
 {
     syncCheckboxes();
     m_htmlView->SetFont( KIUI::GetInfoFont( m_htmlView ) );
-    m_htmlView->SetPage( addHeader( "" ) );
+    Flush();
 
     Connect( wxEVT_COMMAND_MENU_SELECTED,
              wxMenuEventHandler( WX_HTML_REPORT_PANEL::onMenuEvent ), nullptr, this );
+
+    m_htmlView->Bind( wxEVT_SYS_COLOUR_CHANGED,
+                      wxSysColourChangedEventHandler( WX_HTML_REPORT_PANEL::onThemeChanged ),
+                      this );
 }
 
 
 WX_HTML_REPORT_PANEL::~WX_HTML_REPORT_PANEL()
 {
+}
+
+
+void WX_HTML_REPORT_PANEL::onThemeChanged( wxSysColourChangedEvent &aEvent )
+{
+    Flush();
+
+    aEvent.Skip();
 }
 
 
@@ -150,12 +159,19 @@ void WX_HTML_REPORT_PANEL::updateBadges()
 
 wxString WX_HTML_REPORT_PANEL::addHeader( const wxString& aBody )
 {
-    wxColour bgcolor = wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOW );
-    wxColour fgcolor = wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOWTEXT );
+    // Handle light/dark mode colors...
 
-    return wxString::Format( wxT( "<html><body bgcolor='%s' text='%s'>%s</body></html>" ),
-                             bgcolor.GetAsString( wxC2S_HTML_SYNTAX ),
-                             fgcolor.GetAsString( wxC2S_HTML_SYNTAX ),
+    wxTextCtrl dummy( GetParent(), wxID_ANY );
+    wxColour   foreground = dummy.GetForegroundColour();
+    wxColour   background = dummy.GetBackgroundColour();
+
+    return wxString::Format( wxT( "<html>"
+                                  "  <body bgcolor='%s' text='%s'>"
+                                  "    %s"
+                                  "  </body>"
+                                  "</html>" ),
+                             background.GetAsString( wxC2S_HTML_SYNTAX ),
+                             foreground.GetAsString( wxC2S_HTML_SYNTAX ),
                              aBody );
 }
 
@@ -211,14 +227,10 @@ wxString WX_HTML_REPORT_PANEL::generatePlainText( const REPORT_LINE& aLine )
 {
     switch( aLine.severity )
     {
-    case RPT_SEVERITY_ERROR:
-        return _( "Error:" ) + wxS( " " )+ aLine.message + wxT( "\n" );
-    case RPT_SEVERITY_WARNING:
-        return _( "Warning:" ) + wxS( " " )+ aLine.message + wxT( "\n" );
-    case RPT_SEVERITY_INFO:
-        return _( "Info:" ) + wxS( " " )+ aLine.message + wxT( "\n" );
-    default:
-        return aLine.message + wxT( "\n" );
+    case RPT_SEVERITY_ERROR:   return _( "Error:" ) + wxS( " " ) + aLine.message + wxT( "\n" );
+    case RPT_SEVERITY_WARNING: return _( "Warning:" ) + wxS( " " ) + aLine.message + wxT( "\n" );
+    case RPT_SEVERITY_INFO:    return _( "Info:" ) + wxS( " " ) + aLine.message + wxT( "\n" );
+    default:                   return aLine.message + wxT( "\n" );
     }
 }
 
@@ -420,20 +432,9 @@ void WX_HTML_REPORT_PANEL::SetShowSeverity( SEVERITY aSeverity, bool aValue )
 {
     switch( aSeverity )
     {
-    case RPT_SEVERITY_INFO:
-        m_checkBoxShowInfos->SetValue( aValue );
-        break;
-
-    case RPT_SEVERITY_ACTION:
-        m_checkBoxShowActions->SetValue( aValue );
-        break;
-
-    case RPT_SEVERITY_WARNING:
-        m_checkBoxShowWarnings->SetValue( aValue );
-        break;
-
-    default:
-        m_checkBoxShowErrors->SetValue( aValue );
-        break;
+    case RPT_SEVERITY_INFO:    m_checkBoxShowInfos->SetValue( aValue );    break;
+    case RPT_SEVERITY_ACTION:  m_checkBoxShowActions->SetValue( aValue );  break;
+    case RPT_SEVERITY_WARNING: m_checkBoxShowWarnings->SetValue( aValue ); break;
+    default:                   m_checkBoxShowErrors->SetValue( aValue );   break;
     }
 }

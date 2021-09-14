@@ -39,9 +39,40 @@
 #include <eda_doc.h>
 #include <sch_marker.h>
 #include <project.h>
-#include <dialogs/dialog_display_info_HTML_base.h>
+#include <dialogs/dialog_display_html_text_base.h>
 #include <dialogs/dialog_erc.h>
 #include <math/util.h>      // for KiROUND
+
+
+class DIALOG_DISPLAY_HTML_TEXT : public DIALOG_DISPLAY_HTML_TEXT_BASE
+{
+public:
+    DIALOG_DISPLAY_HTML_TEXT( wxWindow* aParent, wxWindowID aId, const wxString& aTitle,
+                              const wxPoint& aPos, const wxSize& aSize, long aStyle = 0 ) :
+        DIALOG_DISPLAY_HTML_TEXT_BASE( aParent, aId, aTitle, aPos, aSize, aStyle )
+    { }
+
+    ~DIALOG_DISPLAY_HTML_TEXT()
+    { }
+
+    void SetPage( const wxString& message )
+    {
+        // Handle light/dark mode colors...
+
+        wxTextCtrl dummy( GetParent(), wxID_ANY );
+        wxColour   foreground = dummy.GetForegroundColour();
+        wxColour   background = dummy.GetBackgroundColour();
+
+        m_htmlWindow->SetPage( wxString::Format( wxT( "<html>"
+                                                      "  <body bgcolor='%s' text='%s'>"
+                                                      "    %s"
+                                                      "  </body>"
+                                                      "</html>" ),
+                                                 background.GetAsString( wxC2S_HTML_SYNTAX ),
+                                                 foreground.GetAsString( wxC2S_HTML_SYNTAX ),
+                                                 message ) );
+    }
+};
 
 
 EE_INSPECTION_TOOL::EE_INSPECTION_TOOL() :
@@ -443,15 +474,15 @@ int EE_INSPECTION_TOOL::CheckSymbol( const TOOL_EVENT& aEvent )
                                             bgcolor.GetAsString( wxC2S_HTML_SYNTAX ),
                                             fgcolor.GetAsString( wxC2S_HTML_SYNTAX ) );
 
-        for( auto& msgPart : messages )
-            outmsg += msgPart;
+        for( const wxString& msg : messages )
+            outmsg += msg;
 
         outmsg += "</body></html>";
 
-        DIALOG_DISPLAY_HTML_TEXT_BASE error_display( m_frame, wxID_ANY, _( "Symbol Warnings" ),
-                                                     wxDefaultPosition, wxSize( 700, 350 ) );
+        DIALOG_DISPLAY_HTML_TEXT error_display( m_frame, wxID_ANY, _( "Symbol Warnings" ),
+                                                wxDefaultPosition, wxSize( 700, 350 ) );
 
-        error_display.m_htmlWindow->SetPage( outmsg );
+        error_display.SetPage( outmsg );
         error_display.ShowModal();
     }
 

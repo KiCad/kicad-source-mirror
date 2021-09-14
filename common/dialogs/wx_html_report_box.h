@@ -60,6 +60,8 @@ public:
     void Clear();
 
 private:
+    void onThemeChanged( wxSysColourChangedEvent &aEvent );
+
     wxString addHeader( const wxString& aBody );
     wxString generateHtml( const wxString& aLine );
 
