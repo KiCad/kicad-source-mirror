@@ -186,8 +186,11 @@ public:
      *
      * Useful when a line is plotted using a rectangular pen.
      * In this case, the usual segment plot function cannot be used
+     * @param aPolygon is the SHAPE_POLY_SET to fill. If null (usual case),
+     * m_Polygon will be used
      */
     void ConvertSegmentToPolygon();
+    void ConvertSegmentToPolygon( SHAPE_POLY_SET* aPolygon ) const;
 
     /**
      * Print the polygon stored in m_PolyCorners.
