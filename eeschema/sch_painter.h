@@ -196,7 +196,9 @@ private:
 
     void triLine ( const VECTOR2D &a, const VECTOR2D &b, const VECTOR2D &c );
     void strokeText( const wxString& aText, const VECTOR2D& aPosition, double aRotationAngle );
+    void boxText( const wxString& aText, const VECTOR2D& aPosition, double aAngle );
 
+private:
     SCH_RENDER_SETTINGS m_schSettings;
 
     SCHEMATIC* m_schematic;
