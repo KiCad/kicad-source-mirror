@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-01 11:31-0700\n"
-"PO-Revision-Date: 2021-09-13 17:58+0000\n"
+"PO-Revision-Date: 2021-09-15 17:51+0000\n"
 "Last-Translator: boonchai k. <kicadthai@gmail.com>\n"
 "Language-Team: Thai <https://hosted.weblate.org/projects/kicad/master-source/"
 "th/>\n"
@@ -24837,6 +24837,8 @@ msgid ""
 "This is the local clearance between this pad and the solder mask.\n"
 "If 0, the footprint local value or the global value is used."
 msgstr ""
+"นึ่คือค่าระยะห่างระหว่างแพ็ดและโซลเดอร์มาส์ก\n"
+"หากเป็น 0 จะใช้ค่าที่กำหนดจากฟุ้ทพรินท์ หรือค่าจากส่วนกลางแทน"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:640
 msgid ""
@@ -24846,6 +24848,10 @@ msgid ""
 "ratio.\n"
 "A negative value means a smaller mask size than pad size."
 msgstr ""
+"นึ่คือค่าระยะห่างระหว่างแพ็ดและโซลเดอร์เพสต์\n"
+"หากเป็น 0 จะใช้ค่าที่กำหนดจากฟุ้ทพรินท์ หรือค่าจากส่วนกลางแทน\n"
+"ค่าระยะห่างสุดท้าย คือผลรวมของค่านี้และค่าสัดส่วนระยะห่าง\n"
+"ค่าติดลบ หมายถึงขนาดหน้ากากเล็กกกว่าแพ็ด"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:653
 msgid ""
@@ -24856,122 +24862,127 @@ msgid ""
 "The final clearance value is the sum of this value and the clearance value.\n"
 "A negative value means a smaller mask size than pad size."
 msgstr ""
+"นึ่คือค่าระยะห่างระหว่างแพ็ดและโซลเดอร์เพสต์\n"
+"ค่า 10 หมายความว่าค่าระยะห่างคือ 10% ของขนาดแพ็ด\n"
+"หากเป็น 0 จะใช้ค่าที่กำหนดจากฟุ้ทพรินท์ หรือค่าจากส่วนกลางแทน\n"
+"ค่าระยะห่างสุดท้าย คือผลรวมของค่านี้และค่าสัดส่วนระยะห่าง\n"
+"ค่าติดลบ หมายถึงขนาดหน้ากากเล็กกกว่าแพ็ด"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:726
 msgid "Pad connection:"
-msgstr ""
+msgstr "การเชื่อมต่อแพ็ด:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:730
 msgid "From parent footprint"
-msgstr ""
+msgstr "จากฟุ้ทพรินท์หลัก"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:761
 msgid "Custom pad shape in zone:"
-msgstr ""
+msgstr "รูปร่างแพ็ดกำหนดเองในโซน:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:765
 msgid "Use pad shape"
-msgstr ""
+msgstr "ใช้รูปร่างแพ็ด"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:765
 msgid "Use pad convex hull"
-msgstr ""
+msgstr "ใช้แพ็ดแบบนูนท้องเรือ"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:791
 msgid "Primitives list:"
-msgstr ""
+msgstr "รายการวัตถุดั้งเดิม:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:797
 msgid "Note: coordinates are relative to anchor pad, orientation 0."
-msgstr ""
+msgstr "หมายเหตุ: พิกัดสัมพันธ์กับแพ็ดยึด วางตามแนว 0"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:818
 msgid "Edit Primitive"
-msgstr ""
+msgstr "แก้ไขวัตถุดั้งเดิม"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:821
 msgid "Duplicate Primitive"
-msgstr ""
+msgstr "ทำซ้ำวัตถุดั้งเดิม"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:824
 msgid "Transform Primitive"
-msgstr ""
+msgstr "เปลี่ยนแปลงวัตถุดั้งเดิม"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:830
 msgid "Delete Primitive"
-msgstr ""
+msgstr "ลบวัดถุดั้งเดิม"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:843
 msgid "Custom Shape Primitives"
-msgstr ""
+msgstr "กำหนดรูปร่างดั้งเดิมด้วยตนเอง"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:973
 msgid "Footprint R1 (300K), back side (mirrored), rotated 180.0º"
-msgstr ""
+msgstr "ฟุ้ทพรินท์ R1(300K), ด้านหลัง (กลับกระจก), หมุน 180.0º"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:982
 msgid "Preview pad in sketch mode"
-msgstr ""
+msgstr "ตัวอย่างของแพ็ดในโหมดร่าง"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1140
 msgid "Start point"
-msgstr ""
+msgstr "จุดเริ่มต้น"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1166
 msgid "Control point 1"
-msgstr ""
+msgstr "จุดควบคุม 1"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1192
 msgid "Control point 2"
-msgstr ""
+msgstr "จุดควบคุม 2"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1218
 msgid "End point"
-msgstr ""
+msgstr "จุดสิ้นสุด"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1328
 msgid "Move vector"
-msgstr ""
+msgstr "ย้ายเวกเตอร์"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1377
 msgid "Scaling factor:"
-msgstr ""
+msgstr "อัตราขยาย:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1399
 msgid "Duplicate:"
-msgstr ""
+msgstr "ทำซ้ำ:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1567
 msgid "Coordinates are relative to anchor pad, rotated 0.0 deg."
-msgstr ""
+msgstr "พิกัดสัมพันธ์กับแพ็ดยึด หมุน 0.0 องศา"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.h:265
 msgid "Pad Properties"
-msgstr ""
+msgstr "คุณสมบัติแพ็ด"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.h:354
 msgid "Pad Custom Shape Geometry Transform"
-msgstr ""
+msgstr "เปลี่ยนแปลงรูปร่างเรขาคณิตของแพ็ดกำหนดเอง"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.h:394
 msgid "Basic Shape Polygon"
-msgstr ""
+msgstr "รูปหลายเหลี่ยมรูปร่างพื้นฐาน"
 
 #: pcbnew/dialogs/dialog_plot.cpp:69
 msgid "Generate Drill Files..."
-msgstr ""
+msgstr "สร้างไฟล์เจาะ..."
 
 #: pcbnew/dialogs/dialog_plot.cpp:680
 msgid "HPGL pen size constrained."
-msgstr ""
+msgstr "ขนาดปากกา HPGL ถูกจำกัด"
 
 #: pcbnew/dialogs/dialog_plot.cpp:696
 msgid "X scale constrained."
-msgstr ""
+msgstr "มาตราส่วน X ถูกจำกัด"
 
 #: pcbnew/dialogs/dialog_plot.cpp:708
 msgid "Y scale constrained."
-msgstr ""
+msgstr "มาตราส่วน Y ถูกจำกัด"
 
 #: pcbnew/dialogs/dialog_plot.cpp:724
 #, c-format
@@ -24979,186 +24990,195 @@ msgid ""
 "Width correction constrained. The reasonable width correction value must be "
 "in a range of  [%s; %s] (%s) for current design rules."
 msgstr ""
+"การแก้ไขความกว้างถูกจำกัด ค่าการแก้ไขความกว้างที่เหมาะสมต้องอยู่ในช่วง [%s; "
+"%s] (%s) สำหรับกฎการออกแบบปัจจุบัน"
 
 #: pcbnew/dialogs/dialog_plot.cpp:801
 msgid "No layer selected, Nothing to plot"
-msgstr ""
+msgstr "ไม่ได้เลือกเลเยอร์ ไม่มีอะไรจะพล็อต"
 
 #: pcbnew/dialogs/dialog_plot.cpp:856
 msgid "Warning: Scale option set to a very small value"
-msgstr ""
+msgstr "คำเตือน: ตั้งค่าตัวเลือกมาตราส่วนเป็นค่าที่น้อยมาก"
 
 #: pcbnew/dialogs/dialog_plot.cpp:859
 msgid "Warning: Scale option set to a very large value"
-msgstr ""
+msgstr "คำเตือน: ตั้งค่าตัวเลือกมาตราส่วนเป็นค่าที่มีขนาดใหญ่มาก"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:23
 msgid "Plot format:"
-msgstr ""
+msgstr "รูปแบบพล็อต:"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:75
 msgid "Plot border and title block"
-msgstr ""
+msgstr "เส้นขอบการพล็อตและบล็อกหัวเรื่อง"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:80
 msgid "Plot footprint values"
-msgstr ""
+msgstr "พล็อตค่าฟุ้ทพรินท์"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:84
 msgid "Plot reference designators"
-msgstr ""
+msgstr "พล็อตตัวอักษรอ้างอิง"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:88
 msgid "Force plotting of invisible values / refs"
-msgstr ""
+msgstr "บังคับให้พล็อตค่าที่มองไม่เห็น / อ้างอิง"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:89
 msgid "Force plot invisible footprint values and reference designators"
-msgstr ""
+msgstr "บังคับพล็อตค่าฟุ้ทพรินท์ที่มองไม่เห็นและตัวอักษรอ้างอิง"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:93
 msgid "Plot Edge.Cuts on all layers"
-msgstr ""
+msgstr "พล็อตเลเยอร์ Edge.Cut บนทุกเลเยอร์"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:94
 msgid "Do not plot the contents of the PCB edge layer on any other layers."
-msgstr ""
+msgstr "ไม่ต้องพล็อตข้อมูลจากเลเยอร์เอ็ดจ์บนเลเยอร์อื่นๆ"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:98
 msgid "Sketch pads on fab layers"
-msgstr ""
+msgstr "แพ็ดแบบร่างบนเลเยอร์แฟ้บ"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:99
 msgid "Include pad outlines on F.Fab and B.Fab layers when plotting"
-msgstr ""
+msgstr "รวมโครงร่างแพ็ดบนเยอร์ F.Fab และ B.Fab ระหว่างพล็อต"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:103
 msgid "Do not tent vias"
-msgstr ""
+msgstr "ไม่ต้องคลุมเวีย"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:104
 msgid "Remove soldermask on vias"
-msgstr ""
+msgstr "นำโซลเดอร์มาส์กบนเวียออก"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:109
 msgid ""
 "Use the drill/place file origin as the coordinate origin for plotted files"
-msgstr ""
+msgstr "ใช้ต้นทางของไฟล์การเจาะ/วาง เป็นแหล่งพิกัดสำหรับไฟล์พล็อต"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:113
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:234
 msgid "Drill marks:"
-msgstr ""
+msgstr "เครื่องหมายเจาะ:"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:117
 msgid "Actual size"
-msgstr ""
+msgstr "ขนาดจริง"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:123
 msgid "Scaling:"
-msgstr ""
+msgstr "มาตราส่วน:"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:127
 msgid "Auto"
-msgstr ""
+msgstr "อัตโนมัติ"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:127
 msgid "3:2"
-msgstr ""
+msgstr "3:2"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:127
 msgid "2:1"
-msgstr ""
+msgstr "2:1"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:127
 msgid "3:1"
-msgstr ""
+msgstr "3:1"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:133
 msgid "Plot mode:"
-msgstr ""
+msgstr "โหมดการพล็อต:"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:137
 msgid "Filled"
-msgstr ""
+msgstr "เต็มแล้ว"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:137
 msgid "Sketch"
-msgstr ""
+msgstr "ร่าง"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:143
 msgid "Mirrored plot"
-msgstr ""
+msgstr "พล็อตกลับกระจก"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:146
 msgid "Negative plot"
-msgstr ""
+msgstr "พล็อตค่าลบ"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:149
 msgid "Check zone fills before plotting"
-msgstr ""
+msgstr "ตรวจสอบการเติมโซนก่อนพล็อต"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:169
 msgid "Global solder mask min width and/or margin are not set to 0. "
 msgstr ""
+"ความกว้างและ/หรือระยะขอบต่ำสุดของโซลเดอร์มาส์กส่วนกลางไม่ได้ตั้งค่าเป็น 0 "
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:173
 msgid ""
 "Most board houses expect 0 and use their constraints, especially for solder "
 "mask min width."
 msgstr ""
+"ผู้ผลิตบอร์ดส่วนใหญ่คาดหวัง 0 และใช้ข้อจำกัดของตนเอง, "
+"โดยเฉพาะอย่างยิงค่าโซลเดอร์มาส์กที่เล็กที่สุด"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:183
 msgid "Board setup"
-msgstr ""
+msgstr "ตั้งค่าบอร์ด"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:184
 msgid "File > Board Setup..."
-msgstr ""
+msgstr "ไฟล์ > การตั้งค่าบอร์ด..."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:197
 msgid "Gerber Options"
-msgstr ""
+msgstr "ตัวเลือกเกอร์เบอร์"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:204
 msgid "Use Protel filename extensions"
-msgstr ""
+msgstr "ใช้นามสกุลไฟล์ Protel"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:205
 msgid ""
 "Use Protel Gerber extensions (.GBL, .GTL, etc...)\n"
 "No longer recommended. The official extension is .gbr"
 msgstr ""
+"ใช้นามสกุลเกอร์เบอร์แบบ Protel (.GBL, .GTL, etc...)\n"
+"ไม่แนะนำอีกต่อไป นามสกุลแบบเป็นทางการคือ .gbr"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:210
 msgid "Generate Gerber job file"
-msgstr ""
+msgstr "สร้างไฟล์งานเกอร์เบอร์"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:212
 msgid ""
 "Generate a Gerber job file that contains info about the board,\n"
 "and the list of generated Gerber plot files"
 msgstr ""
+"สร้างไฟล์งานเกอร์เบอร์ที่บรรจุข้อมูลเกี่ยวกับบอร์ด\n"
+"และรายการไฟล์พล็อตเกอร์เบอร์ที่สร้างขึ้น"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:217
 msgid "Remove silkscreen from areas without soldermask"
-msgstr ""
+msgstr "นำซิลค์สกรีนออกจากบริเวณที่ไม่มีโซลเดอร์มาส์ก"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:221
 msgid "Coordinate format:"
-msgstr ""
+msgstr "รูปแบบพิกัด:"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:225
 msgid "4.5, unit mm"
-msgstr ""
+msgstr "4.5, หน่วยมม."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:225
 msgid "4.6, unit mm"
-msgstr ""
+msgstr "4.6, หน่วยมม."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:231
 msgid "Use extended X2 format (recommended)"
-msgstr ""
+msgstr "ใช้ส่วนขยายรูปแบบ X2 (แนะนำ)"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:232
 msgid ""
@@ -25167,10 +25187,14 @@ msgid ""
 "If not checked, use X1 format.\n"
 "In X1 format, these attributes are included as comments in files."
 msgstr ""
+"ใช้รูปแบบไฟล์เกอร์เบอร์ X2\n"
+"ใส่   คุณลักษณะ X2 ในส่วนหัวของไฟล์เกอร์เบอร์\n"
+"ถ้าไม่เลือก ใช้รูปแบบ X1\n"
+"ในรูปแบบ X1 คุณลักษณะจะใส่ที่ส่วนความคิดเห็นของไฟล์"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:236
 msgid "Include netlist attributes"
-msgstr ""
+msgstr "รวมคุณลักษณะของรายการเน็ต"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:237
 msgid ""
@@ -25178,44 +25202,49 @@ msgid ""
 "In X1 format, they are comments.\n"
 "Used to check connectivity in CAM tools and Gerber viewers."
 msgstr ""
+"รวมข้อมูลเมต้ารายการเน็ตและคุณลักษณะรูรับแสง ในไฟล์เกอร์เบอร์\n"
+"ในรูปแบบ X1, จะอยู่ที่ส่วนความคิดเห็น\n"
+"ใช้สำหรับตรวจสอบการเชื่อมต่อในเครื่องมือ CAM และโปรแกรมดูเกอร์เบอร์"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:241
 msgid "Disable aperture macros (non recommended)"
-msgstr ""
+msgstr "ปิดใช้งานมาโครรูรับแสง (ไม่แนะนำ)"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:242
 msgid ""
 "Disable aperture macros in Gerber files\n"
 "Use *only* for broken Gerber viewers."
 msgstr ""
+"ปิดใช้งานมาโครรูรับแสงในไฟล์เกอร์เบอร์\n"
+"ใช้ *เท่านั้น* สำหรับผู้ดูเกอร์เบอร์ที่มีปัญหา"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:256
 msgid "Default pen size:"
-msgstr ""
+msgstr "ขนาดปากกาเริ่มต้น:"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:273
 msgid "Postscript Options"
-msgstr ""
+msgstr "ตัวเลือกโพสคริปต์"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:283
 msgid "X scale factor:"
-msgstr ""
+msgstr "ตัวคูณมาตราส่วน X:"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:288
 msgid "Set global X scale adjust for exact scale PostScript output."
-msgstr ""
+msgstr "ตั้งค่ามาตราส่วนกลาง X สำหรับมาตราส่วนเอาต์พุต PostScript ที่แน่นอน"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:295
 msgid "Y scale factor:"
-msgstr ""
+msgstr "ตัวคูณมาตราส่วน Y:"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:300
 msgid "Set global Y scale adjust for exact scale PostScript output."
-msgstr ""
+msgstr "ตั้งค่ามาตราส่วนกลาง Y สำหรับมาตราส่วนเอาต์พุต PostScript ที่แน่นอน"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:307
 msgid "Track width correction:"
-msgstr ""
+msgstr "การแก้ไขความกว้างของแทร็ก:"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:312
 msgid ""
@@ -25225,54 +25254,64 @@ msgid ""
 "The reasonable width correction value must be in a range of [-"
 "(MinTrackWidth-1), +(MinClearanceValue-1)]."
 msgstr ""
+"ตั้งค่าการแก้ไขความกว้างส่วนกลาง สำหรับเอาต์พุต PostScript ที่แน่นอน\n"
+"การแก้ไขความกว้างเหล่านี้ มีไว้เพื่อชดเชยความกว้างของแทร็ก "
+"รวมถึงข้อผิดพลาดของแพ็ดและเวีย\n"
+"ค่าการแก้ไขความกว้างที่เหมาะสมต้องอยู่ในช่วง [-(MinTrackWidth-1), "
+"+(MinClearanceValue-1)]"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:323
 msgid "Force A4 output"
-msgstr ""
+msgstr "บังคับเอาต์พุต A4"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:329
 msgid "DXF Options"
-msgstr ""
+msgstr "ตัวเลือก DXF"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:334
 msgid "Plot graphic items using their contours"
-msgstr ""
+msgstr "พล็อตรายการกราฟิกโดยใช้เส้นรอบรูป"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:336
 msgid "Uncheck to plot graphic items using their center lines"
-msgstr ""
+msgstr "ยกเลิกการเลือก เพื่อพล็อตรายการกราฟิกโดยใช้เส้นกึ่งกลาง"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:340
 msgid "Use KiCad font to plot texts"
-msgstr ""
+msgstr "ใช้ฟอนต์ KiCad เพื่อพล็อตข้อความ"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:341
 msgid ""
 "Check to use KiCad stroke font\n"
 "Uncheck to plot single-line ASCII texts as editable text (using DXF font)"
 msgstr ""
+"เลือกเพื่อใช้แบบอักษร KiCad\n"
+"ยกเลิกการเลือก เพื่อพล็อตข้อความ ASCII บรรทัดเดียวเป็นข้อความที่แก้ไขได้ "
+"(โดยใช้แบบอักษร DXF)"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:354
 msgid "Export units:"
-msgstr ""
+msgstr "หน่วยส่งออก:"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:362
 msgid "The units to use for the exported DXF file"
-msgstr ""
+msgstr "หน่วยที่จะใช้สําหรับไฟล์ DXF ที่ส่งออก"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:372
 msgid "SVG Options"
-msgstr ""
+msgstr "ตัวเลือก SVG"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:378
 msgid "Millimeter"
-msgstr ""
+msgstr "มิลลิเมตร"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:382
 msgid ""
 "The units that are used for a SVG user units.\n"
 "Choose Millimeter when you are not sure."
 msgstr ""
+"หน่วยที่ใช้สําหรับหน่วยผู้ใช้ SVG\n"
+"เลือก มิลลิเมตร เมื่อคุณไม่แน่ใจ"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:394
 msgid ""
@@ -25282,211 +25321,221 @@ msgid ""
 "User unit is 10^-<N> mm or 10^-<N> inch.\n"
 "Choose 6 if you are not sure."
 msgstr ""
+"หน่วยผู้ใช้ SVG มีขนาดใหญ่เพียงใด\n"
+"ตัวเลขกำหนดจำนวนหลักที่จะส่งออกซึ่งต่ำกว่า 1 มม. หรือ 1 นิ้ว\n"
+"หน่วยผู้ใช้คือ 10^-<N> มม. หรือ 10^-<N> นิ้ว\n"
+"เลือก 6 ถ้าคุณไม่แน่ใจ"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:420
 msgid "Run DRC..."
-msgstr ""
+msgstr "เรียกใช้ DRC..."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:423
 #, c-format
 msgid "(%d known DRC violations; %d exclusions)"
-msgstr ""
+msgstr "(%d การละเมิด DRC ที่พบ; %d ข้อยกเว้น)"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:447
 msgid "Select Fab Layers"
-msgstr ""
+msgstr "เลือกเลเยอร์ Fab"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:451
 msgid "Select all Copper Layers"
-msgstr ""
+msgstr "เลือกชั้นทองแดงทั้งหมด"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:455
 msgid "Deselect all Copper Layers"
-msgstr ""
+msgstr "ยกเลิกการเลือกชั้นทองแดงทั้งหมด"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:459
 msgid "Select all Layers"
-msgstr ""
+msgstr "เลือกเลเยอร์ทั้งหมด"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:463
 msgid "Deselect all Layers"
-msgstr ""
+msgstr "ยกเลิกการเลือกเลเยอร์ทั้งหมด"
 
 #: pcbnew/dialogs/dialog_pns_diff_pair_dimensions.cpp:55
 msgid "Trace gap must be greater than 0."
-msgstr ""
+msgstr "ช่องว่างการติดตามต้องมากกว่า 0"
 
 #: pcbnew/dialogs/dialog_pns_diff_pair_dimensions_base.cpp:32
 #: pcbnew/dialogs/dialog_pns_diff_pair_dimensions_base.cpp:43
 #: pcbnew/dialogs/dialog_pns_diff_pair_dimensions_base.cpp:58
 msgid "u"
-msgstr ""
+msgstr "u"
 
 #: pcbnew/dialogs/dialog_pns_diff_pair_dimensions_base.cpp:36
 msgid "Trace gap:"
-msgstr ""
+msgstr "ช่องว่างระหว่างเทรส:"
 
 #: pcbnew/dialogs/dialog_pns_diff_pair_dimensions_base.cpp:47
 msgid "Via gap:"
-msgstr ""
+msgstr "ช่องว่างระหว่างเวีย:"
 
 #: pcbnew/dialogs/dialog_pns_diff_pair_dimensions_base.cpp:67
 msgid "Via gap same as trace gap"
-msgstr ""
+msgstr "ช่องว่างเวียเท่ากับช่วงว่างเทรส"
 
 #: pcbnew/dialogs/dialog_pns_diff_pair_dimensions_base.h:60
 msgid "Differential Pair Dimensions"
-msgstr ""
+msgstr "ขนาดคู่ดิฟเฟอเรนเชียล"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings.cpp:79
 msgid "Single Track Length Tuning"
-msgstr ""
+msgstr "การปรับความยาวแทร็กเดียว"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings.cpp:85
 msgid "Differential Pair Length Tuning"
-msgstr ""
+msgstr "การปรับความยาวคู่ดิฟเฟอเรนเชียล"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings.cpp:91
 msgid "Differential Pair Skew Tuning"
-msgstr ""
+msgstr "การปรับค่าลาดเอียงคู่ดิฟเฟอเรนเชียล"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings.cpp:93
 msgid "Target skew:"
-msgstr ""
+msgstr "เป้าหมายลาดเอียง:"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:22
 msgid "Length / Skew"
-msgstr ""
+msgstr "ความยาว / เอียง"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:30
 msgid "Tune from:"
-msgstr ""
+msgstr "ปรับแต่งจาก:"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:46
 msgid "Tune to:"
-msgstr ""
+msgstr "ปรับไปที่:"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:62
 msgid "Constraint:"
-msgstr ""
+msgstr "ข้อจํากัด:"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:68
 msgid "From Design Rules"
-msgstr ""
+msgstr "จากกฎการออกแบบ"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:80
 msgid "Target length:"
-msgstr ""
+msgstr "ความยาวเป้าหมาย:"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:98
 msgid "Meandering"
-msgstr ""
+msgstr "คดเคี้ยว"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:109
 msgid "Min amplitude (Amin):"
-msgstr ""
+msgstr "แอมพลิจูดต่ำสุด (Amin):"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:120
 msgid "Max amplitude (Amax):"
-msgstr ""
+msgstr "แอมพลิจูดสูงสุด (Amax):"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:131
 msgid "Min spacing (s):"
-msgstr ""
+msgstr "ระยะห่างต่ําสุด (s):"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:136
 msgid ""
 "Minimum spacing between adjacent meander segments. The resulting spacing may "
 "be greater based on design rules."
 msgstr ""
+"ระยะห่างขั้นต่ำระหว่างส่วนคดเคี้ยวที่ติดกัน ระยะห่างที่ได้อาจมากกว่านั้น "
+"ขึ้นกับกฎการออกแบบ"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:144
 msgid "Miter style:"
-msgstr ""
+msgstr "สไตล์ไมเตอร์:"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:148
 msgid "45 degree"
-msgstr ""
+msgstr "45 องศา"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:148
 msgid "arc"
-msgstr ""
+msgstr "ส่วนโค้ง"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:157
 msgid "Miter radius (r):"
-msgstr ""
+msgstr "รัศมีไมเตอร์ (r):"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.h:74
 msgid "Trace Length Tuning"
-msgstr ""
+msgstr "การปรับแต่งความยาวเทรส"
 
 #: pcbnew/dialogs/dialog_pns_settings.cpp:34
 msgid "DRC violation: highlight obstacles"
-msgstr ""
+msgstr "เกิดละเมิด DRC: แสดงสีเน้นที่อุปสรรค"
 
 #: pcbnew/dialogs/dialog_pns_settings.cpp:35
 msgid "DRC violation: shove tracks and vias"
-msgstr ""
+msgstr "เกิดละเมิด DRC: ผลักแทร็คและเวีย"
 
 #: pcbnew/dialogs/dialog_pns_settings.cpp:36
 msgid "DRC violation: walk around obstacles"
-msgstr ""
+msgstr "เกิดละเมิด DRC: เดินไปรอบๆอุปสรรค"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:19
 msgid "Highlight collisions"
-msgstr ""
+msgstr "แสดงเน้นที่การชนกัน"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:19
 msgid "Shove"
-msgstr ""
+msgstr "ผลัก"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:19
 msgid "Walk around"
-msgstr ""
+msgstr "เดินรอบๆ"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:21
 msgid "Mode"
-msgstr ""
+msgstr "โหมด"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:34
 msgid "Mouse drag behavior:"
-msgstr ""
+msgstr "พฤติกรรมการลากเมาส์:"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:38
 msgid "Move item"
-msgstr ""
+msgstr "ย้ายรายการ"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:38
 msgid "Interactive drag"
-msgstr ""
+msgstr "ลากแบบโต้ตอบ"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:47
 msgid "Free angle mode (no shove/walkaround)"
-msgstr ""
+msgstr "โหมดมุมฟรีอิสระ (ไม่ผลัก/ไปรอบๆ)"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:50
 msgid "Shove vias"
-msgstr ""
+msgstr "ดันเวีย"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:52
 msgid ""
 "When disabled, vias are treated as un-movable objects and hugged instead of "
 "shoved."
 msgstr ""
+"เมื่อปิดใช้งาน "
+"เวียจะถือเป็นวัตถุที่ไม่สามารถเคลื่อนย้ายได้และถูกกอดแทนที่จะถูกผลัก"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:56
 msgid "Jump over obstacles"
-msgstr ""
+msgstr "กระโดดข้ามสิ่งกีดขวาง"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:57
 msgid ""
 "When enabled, the router tries to move colliding traces behind solid "
 "obstacles (e.g. pads) instead of \"reflecting\" back the collision"
 msgstr ""
+"เมื่อเปิดใช้งาน เราเตอร์จะพยายามย้ายเทรส ที่ชนสิ่งกีดขวางของแข็ง (เช่น แพ็ด) "
+"แทนที่จะ \"สะท้อน\" กลับ"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:61
 msgid "Remove redundant tracks"
-msgstr ""
+msgstr "ลบแทร็กที่ซ้ำซ้อน"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:62
 msgid ""
@@ -25495,44 +25544,52 @@ msgid ""
 "Loop removal works locally (only between the start and end of the currently "
 "routed trace)."
 msgstr ""
+"ลบวงลูปขณะเราติั้ง (เช่น หากแทร็กใหม่เชื่อมต่อแบบเดียวกับที่มีอยู่แล้ว "
+"แทร็กเก่าจะถูกลบออก)\n"
+"การลบลูปจะทำงานในเครื่อง (ระหว่างจุดเริ่มต้นและจุดสิ้นสุดของการติดตามที่กำหนด"
+"เส้นทางในปัจจุบันเท่านั้น)"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:66
 msgid "Optimize pad connections"
-msgstr ""
+msgstr "ปรับการเชื่อมต่อแพ็ดให้เหมาะสม"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:67
 msgid ""
 "When enabled, the router tries to break out pads/vias in a clean way, "
 "avoiding acute angles and jagged breakout traces."
 msgstr ""
+"เมื่อเปิดใช้งาน เราเตอร์จะพยายามแยกจาก แพ็ด/เวีย ด้วยวิธีสะอาด "
+"หลีกเลี่ยงมุมแหลมและแทร็คขรุขระ"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:71
 msgid "Smooth dragged segments"
-msgstr ""
+msgstr "ลากแทร็คไปอย่างราบรื่น"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:72
 msgid ""
 "When enabled, the router attempts to merge several jagged segments into a "
 "single straight one (dragging mode)."
 msgstr ""
+"เมื่อเปิดใช้งาน เราเตอร์จะพยายามรวมส่วนที่ขรุขระหลายส่วนเป็นเส้นตรงเดียว "
+"(โหมดลาก)"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:76
 msgid "Allow DRC violations"
-msgstr ""
+msgstr "อนุญาตให้มีการละเมิด DRC"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:77
 msgid ""
 "(Highlight collisions mode only) - allows one to establish a track even if "
 "is violating the DRC rules."
-msgstr ""
+msgstr "(โหมดไฮไลต์การชนเท่านั้น) - อนุญาตให้สร้างแทร็กแม้ว่าจะละเมิดกฎ DRC"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:81
 msgid "Suggest track finish"
-msgstr ""
+msgstr "แนะนําการสิ้นสุดแทร็ค"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:86
 msgid "Optimize entire track being dragged"
-msgstr ""
+msgstr "ปรับแทร็กทั้งหมดให้เหมาะสม ระหว่างกําลังลาก"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:87
 msgid ""
@@ -25540,20 +25597,24 @@ msgid ""
 "will be optimized and re-routed when a segment is dragged.  When disabled, "
 "only the area near the segment being dragged will be optimized."
 msgstr ""
+"เมื่อเปิดใช้งาน ส่วนทั้งหมดของแทร็กที่ปรากฏบนหน้าจอจะได้รับการปรับให้เหมาะสม "
+"และกำหนดเส้นทางใหม่เมื่อลาก ส่วนเมื่อปิดใช้งาน "
+"เฉพาะพื้นที่ใกล้ส่วนที่ถูกลากเท่านั้นที่จะได้รับการปรับให้เหมาะสม"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:91
 msgid "Use mouse path to set track posture"
-msgstr ""
+msgstr "ใช้เส้นทางเมาส์เพื่อกำหนดท่าทางการติดตาม"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:92
 msgid ""
 "When enabled, the posture of tracks will be guided by how the mouse is moved "
 "from the starting location"
 msgstr ""
+"เมื่อเปิดใช้งาน ท่าทางของแทร็กจะถูกชี้นำโดยวิธีการย้ายเมาส์จากตำแหน่งเริ่มต้น"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:96
 msgid "Fix all segments on click"
-msgstr ""
+msgstr "แก้ไขทุกกลุ่มเมื่อคลิก"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:97
 msgid ""
@@ -25561,442 +25622,449 @@ msgid ""
 "location.  When disabled, the last segment (closest to the cursor) will "
 "remain free and follow the cursor."
 msgstr ""
+"เมื่อเปิดใช้งาน ส่วนของแทร็กทั้งหมดจะได้รับการแก้ไขจนถึงตำแหน่งเคอร์เซอร์ "
+"เมื่อปิดใช้งาน ส่วนสุดท้าย (ใกล้กับเคอร์เซอร์มากที่สุด) "
+"จะยังคงว่างและติดตามเคอร์เซอร์"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.h:65
 msgid "Interactive Router Settings"
-msgstr ""
+msgstr "การตั้งค่าเราเตอร์แบบโต้ตอบ"
 
 #: pcbnew/dialogs/dialog_position_relative.cpp:165
 msgid "Reset to the current distance from the reference position."
-msgstr ""
+msgstr "รีเซ็ตเป็นระยะทางปัจจุบันจากตําแหน่งอ้างอิง"
 
 #: pcbnew/dialogs/dialog_position_relative.cpp:166
 msgid "Reset to the current angle from the reference position."
-msgstr ""
+msgstr "รีเซ็ตเป็นมุมปัจจุบันจากตําแหน่งอ้างอิง"
 
 #: pcbnew/dialogs/dialog_position_relative.cpp:170
 #: pcbnew/dialogs/dialog_position_relative_base.cpp:67
 msgid "Offset X:"
-msgstr ""
+msgstr "ออฟเซ็ต X:"
 
 #: pcbnew/dialogs/dialog_position_relative.cpp:171
 #: pcbnew/dialogs/dialog_position_relative_base.cpp:84
 msgid "Offset Y:"
-msgstr ""
+msgstr "ออฟเซ็ต Y:"
 
 #: pcbnew/dialogs/dialog_position_relative.cpp:173
 msgid "Reset to the current X offset from the reference position."
-msgstr ""
+msgstr "รีเซ็ตเป็นค่าออฟเซ็ต X ปัจจุบันจากตำแหน่งอ้างอิง"
 
 #: pcbnew/dialogs/dialog_position_relative.cpp:174
 msgid "Reset to the current Y offset from the reference position."
-msgstr ""
+msgstr "รีเซ็ตเป็นออฟเซ็ต Y ปัจจุบันจากตําแหน่งการอ้างอิง"
 
 #: pcbnew/dialogs/dialog_position_relative.cpp:240
 msgid "Reference location: grid origin"
-msgstr ""
+msgstr "ตำแหน่งอ้างอิง: จุดกำเนิดกริด"
 
 #: pcbnew/dialogs/dialog_position_relative.cpp:249
 msgid "Reference location: local coordinates origin"
-msgstr ""
+msgstr "ตำแหน่งอ้างอิง: แหล่งกำเนิดพิกัดท้องถิ่น"
 
 #: pcbnew/dialogs/dialog_position_relative.cpp:255
 msgid "<none selected>"
-msgstr ""
+msgstr "<ไม่ได้เลือก>"
 
 #: pcbnew/dialogs/dialog_position_relative_base.cpp:22
 msgid "Reference item: <none selected>"
-msgstr ""
+msgstr "รายการอ้างอิง: <ไม่ได้เลือก>"
 
 #: pcbnew/dialogs/dialog_position_relative_base.cpp:35
 msgid "Use Local Origin"
-msgstr ""
+msgstr "ใช้จุดกำเนิดท้องถิ่น"
 
 #: pcbnew/dialogs/dialog_position_relative_base.cpp:38
 msgid "Use Grid Origin"
-msgstr ""
+msgstr "ใช้จุดกำเนิดกริด"
 
 #: pcbnew/dialogs/dialog_position_relative_base.cpp:41
 msgid "Select Item..."
-msgstr ""
+msgstr "เลือกรายการ..."
 
 #: pcbnew/dialogs/dialog_position_relative_base.cpp:42
 msgid ""
 "Click and select a board item.\n"
 "The anchor position will be the position of the selected item."
 msgstr ""
+"คลิกและเลือกรายการบนบอร์ด\n"
+"ตำแหน่งจุดยึดจะเป็นตำแหน่งของรายการที่เลือก"
 
 #: pcbnew/dialogs/dialog_position_relative_base.h:73
 msgid "Position Relative To Reference Item"
-msgstr ""
+msgstr "ตำแหน่งที่สัมพันธ์กับรายการอ้างอิง"
 
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:207
 msgid "Print according to objects tab of appearance manager"
-msgstr ""
+msgstr "พิมพ์ตามแท็บวัตถุของตัวจัดการลักษณะที่ปรากฏ"
 
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:235
 msgid "No drill mark"
-msgstr ""
+msgstr "ไม่มีเครื่องหมายเจาะ"
 
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:236
 msgid "Small mark"
-msgstr ""
+msgstr "เครื่องหมายขนาดเล็ก"
 
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:237
 msgid "Real drill"
-msgstr ""
+msgstr "สว่านจริง"
 
 #: pcbnew/dialogs/dialog_push_pad_properties.cpp:51
 msgid "Change Pads on Current Footprint"
-msgstr ""
+msgstr "เปลี่ยนแพ็ดบนฟุ้ทพรินท์ปัจจุบัน"
 
 #: pcbnew/dialogs/dialog_push_pad_properties.cpp:56
 msgid "Change Pads on Identical Footprints"
-msgstr ""
+msgstr "เปลี่ยนแพ็ดบนฟุ้ทพรินท์ที่เหมือนกัน"
 
 #: pcbnew/dialogs/dialog_push_pad_properties_base.cpp:25
 msgid "Do not modify pads having a different shape"
-msgstr ""
+msgstr "ไม่ดัดแปลงแพ็ดที่มีรูปร่างต่างกัน"
 
 #: pcbnew/dialogs/dialog_push_pad_properties_base.cpp:28
 msgid "Do not modify pads having different layers"
-msgstr ""
+msgstr "ไม่ดัดแปลงแพ็ดที่มีเลเยอร์ต่างกัน"
 
 #: pcbnew/dialogs/dialog_push_pad_properties_base.cpp:31
 msgid "Do not modify pads having a different orientation"
-msgstr ""
+msgstr "ไม่ดัดแปลงแพ็ดที่มีการจัดเรียงต่างกัน"
 
 #: pcbnew/dialogs/dialog_push_pad_properties_base.cpp:34
 msgid "Do not modify pads having a different type"
-msgstr ""
+msgstr "ไม่ดัดแปลงแพ็ดที่มีชนิดแตกต่างกัน"
 
 #: pcbnew/dialogs/dialog_push_pad_properties_base.h:51
 msgid "Push Pad Properties"
-msgstr ""
+msgstr "คุณสมบัติของแพ็ดกด"
 
 #: pcbnew/dialogs/dialog_rule_area_properties.cpp:153
 msgid "No layers selected."
-msgstr ""
+msgstr "ไม่ได้เลือกเลเยอร์"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:25
 msgid "Layers:"
-msgstr ""
+msgstr "เลเยอร์:"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:41
 msgid "Basic rules:"
-msgstr ""
+msgstr "กฎพื้นฐาน:"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:48
 msgid "Keep out tracks"
-msgstr ""
+msgstr "แทร็คคีบเอ้าท์"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:49
 msgid "Prevent tracks from routing into this area"
-msgstr ""
+msgstr "ป้องกันแทร็กไม่เข้าในบริเวณนี้"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:53
 msgid "Keep out vias"
-msgstr ""
+msgstr "เวียคีบเอ้าท์"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:54
 msgid "Prevent vias from being placed in this area"
-msgstr ""
+msgstr "ป้องกันไม่ให้วางเวียในบริเวณนี้"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:58
 msgid "Keep out pads"
-msgstr ""
+msgstr "แพ็ดคีบเอ้าท์"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:59
 msgid "Raise a DRC error if a pad overlaps this area"
-msgstr ""
+msgstr "เพิ่มข้อผิดพลาด DRC หากแพ็ดซ้อนทับบริเวณนี้"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:63
 msgid "Keep out copper fill"
-msgstr ""
+msgstr "ไม่ให้เติมทองแดง"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:64
 msgid "Zones will not fill copper into this area"
-msgstr ""
+msgstr "โซนนี้จะไม่เติมทองแดงลงในพื้นที่นี้"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:68
 msgid "Keep out footprints"
-msgstr ""
+msgstr "ไม่มีฟุ้ทพรินท์ในบริเวณนี้"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:69
 msgid "Raise a DRC error if a footprint courtyard overlaps this area"
-msgstr ""
+msgstr "เพิ่มข้อผิดพลาด DRC หากฟุ้ทพรินท์คาบเกี่ยวกับพื้นที่นี้"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:79
 msgid "Area name:"
-msgstr ""
+msgstr "ชื่อพื้นที่:"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:81
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:89
 msgid "A unique name for this rule area for use in DRC rules"
-msgstr ""
+msgstr "ชื่อเฉพาะสำหรับกฏพื้นที่นี้ จะใช้ในกฎ DRC"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:96
 msgid "Constrain outline to H, V and 45 deg"
-msgstr ""
+msgstr "จำกัดโครงร่างเป็น H, V และ 45 องศา"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:97
 msgid "Draw the area using horizontal, verical and 45 degree lines only"
-msgstr ""
+msgstr "วาดพื้นที่โดยใช้เส้นแนวนอน แนวตั้ง และ 45 องศาเท่านั้น"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.h:67
 msgid "Rule Area Properties"
-msgstr ""
+msgstr "คุณสมบัติกฏพื้นที่"
 
 #: pcbnew/dialogs/dialog_swap_layers.cpp:48
 msgid "Move items on:"
-msgstr ""
+msgstr "ย้ายรายการไปที่:"
 
 #: pcbnew/dialogs/dialog_swap_layers.cpp:49
 msgid "To layer:"
-msgstr ""
+msgstr "ไปยังเลเยอร์:"
 
 #: pcbnew/dialogs/dialog_swap_layers_base.h:48
 msgid "Swap Layers"
-msgstr ""
+msgstr "สลับเลเยอร์"
 
 #: pcbnew/dialogs/dialog_target_properties.cpp:111
 msgid "Modified alignment target"
-msgstr ""
+msgstr "แก้ไขเป้าหมายการจัดตำแหน่ง"
 
 #: pcbnew/dialogs/dialog_target_properties_base.cpp:50
 msgid "Shape:"
-msgstr ""
+msgstr "รูปร่าง:"
 
 #: pcbnew/dialogs/dialog_target_properties_base.cpp:54
 msgid "+"
-msgstr ""
+msgstr "+"
 
 #: pcbnew/dialogs/dialog_target_properties_base.cpp:54
 msgid "X"
-msgstr ""
+msgstr "X"
 
 #: pcbnew/dialogs/dialog_target_properties_base.h:54
 msgid "Target Properties"
-msgstr ""
+msgstr "คุณสมบัติเป้าหมาย"
 
 #: pcbnew/dialogs/dialog_text_properties.cpp:76
 msgid "Footprint Text Properties"
-msgstr ""
+msgstr "คุณสมบัติข้อความของฟุ้ทพรินท์"
 
 #: pcbnew/dialogs/dialog_text_properties.cpp:83
 msgid "Reference:"
-msgstr ""
+msgstr "อ้างอิง:"
 
 #: pcbnew/dialogs/dialog_text_properties.cpp:232
 #, c-format
 msgid "Footprint %s (%s), %s, rotated %.1f deg"
-msgstr ""
+msgstr "ฟุ้ทพรินท์ %s (%s), %s, หมุน %.1f องศา"
 
 #: pcbnew/dialogs/dialog_text_properties.cpp:336
 msgid ""
 "The text thickness is too large for the text size.\n"
 "It will be clamped."
 msgstr ""
+"ความหนาของข้อความใหญ่เกินไปสำหรับขนาดตัวอักษร\n"
+"มันจะถูกยึด"
 
 #: pcbnew/dialogs/dialog_text_properties.cpp:359
 msgid "Change text properties"
-msgstr ""
+msgstr "เปลี่ยนคุณสมบัติข้อความ"
 
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:57
 msgid "Enter the text placed on selected layer."
-msgstr ""
+msgstr "ป้อนข้อความที่วางอยู่บนเลเยอร์ที่เลือก"
 
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:211
 msgid "Keep text upright"
-msgstr ""
+msgstr "ตั้งข้อความให้ตรง"
 
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:227
 msgid "Parent footprint description"
-msgstr ""
+msgstr "คําอธิบายฟุ้ทพรินท์หลัก"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:346
 #, c-format
 msgid "Changing the net will also update %s pad %s to %s."
-msgstr ""
+msgstr "การเปลี่ยนเน็ตจะเป็นการอัปเดต %s แพ็ด %s เป็น %s ด้วย"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:355
 #, c-format
 msgid "Changing the net will also update %s pad %s and %s pad %s to %s."
-msgstr ""
+msgstr "การเปลี่ยนเน็ตจะอัปเดต %s แพ็ด %s และ %s แพ็ด %s เป็น %s ด้วย"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:364
 #, c-format
 msgid "Changing the net will also update %lu connected pads to %s."
-msgstr ""
+msgstr "การเปลี่ยนเน็ตจะอัปเดต %lu แพ็ดที่เชื่อมต่อไป %s"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:370
 msgid "Change Nets"
-msgstr ""
+msgstr "เปลี่ยนเน็ท"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:370
 msgid "Leave Nets Unchanged"
-msgstr ""
+msgstr "ปล่อยเน็ทไม่เปลี่ยนแปลง"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:391
 msgid "Via hole size must be smaller than via diameter"
-msgstr ""
+msgstr "ขนาดรูเจาะของเวียต้องเล็กกว่าเส้นผ่านศูนย์กลาง"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:400
 msgid "Via start layer and end layer cannot be the same"
-msgstr ""
+msgstr "เลเยอร์เริ่มต้นของเวียและเลเยอร์สิ้นสุด เหมือนกันไม่ได้"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:541
 msgid "Edit track/via properties"
-msgstr ""
+msgstr "แก้ไขคุณสมบัติ แทร็ค/เวีย"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:606
 msgid "Updating nets"
-msgstr ""
+msgstr "กำลังปรับปรุงเน็ท"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:35
 msgid "Automatically update via nets"
-msgstr ""
+msgstr "ปรับปรุงเน็ทของเวียอัตโนมัติ"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:36
 msgid ""
 "Automatically change the net of this via when the pads or zones it touches "
 "are changed"
-msgstr ""
+msgstr "เปลี่ยนเน็ทของเวียอัตโนมัติ เมื่อแพ็ดหรือโซนที่สัมผัสเปลี่ยนแปลง"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:60
 msgid "Start point X:"
-msgstr ""
+msgstr "จุดเริ่มต้น X:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:71
 msgid "Start point Y:"
-msgstr ""
+msgstr "จุดเริ่มต้น Y:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:82
 msgid "End point X:"
-msgstr ""
+msgstr "จุดสิ้นสุด X:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:93
 msgid "End point Y:"
-msgstr ""
+msgstr "จุดสิ้นสุด Y:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:104
 msgid "Pre-defined widths:"
-msgstr ""
+msgstr "ความกว้างที่กำหนดไว้ล่วงหน้า:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:117
 #: pcbnew/dialogs/dialog_track_via_size_base.cpp:25
 msgid "Track width:"
-msgstr ""
+msgstr "ความกว้างแทร็ก:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:131
 msgid "Use net class widths"
-msgstr ""
+msgstr "ใช้ความกว้างเน็ทคลาส"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:192
 msgid "Pre-defined sizes:"
-msgstr ""
+msgstr "ขนาดที่กําหนดไว้ล่วงหน้า:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:205
 #: pcbnew/dialogs/dialog_track_via_size_base.cpp:36
 msgid "Via diameter:"
-msgstr ""
+msgstr "เส้นผ่านศูนย์กลางเวีย:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:216
 msgid "Via hole:"
-msgstr ""
+msgstr "ขนาดรูเจาะเวีย:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:230
 msgid "Use net class sizes"
-msgstr ""
+msgstr "ใช้ขนาดจากเน็ทคลาส"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:247
 msgid "Via type:"
-msgstr ""
+msgstr "ชนิดเวีย:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:251
 #: pcbnew/pcb_track.cpp:1089
 msgid "Through"
-msgstr ""
+msgstr "ผ่าน"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:251
 #: pcbnew/pcb_track.cpp:1091
 msgid "Micro"
-msgstr ""
+msgstr "ไมโคร"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:251
 #: pcbnew/pcb_track.cpp:1090
 msgid "Blind/buried"
-msgstr ""
+msgstr "ชนิดบอด/ฝัง"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:259
 msgid "Start layer:"
-msgstr ""
+msgstr "เลเยอร์เริ่มต้น:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:266
 msgid "End layer:"
-msgstr ""
+msgstr "เลเยอร์สิ้นสุด:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.h:113
 msgid "Track & Via Properties"
-msgstr ""
+msgstr "คุณสมบัติแทร็คและเวีย"
 
 #: pcbnew/dialogs/dialog_track_via_size.cpp:58
 msgid "Via drill size must be smaller than via diameter"
-msgstr ""
+msgstr "ขนาดรูเจาะของเวียต้องเล็กกว่าเส้นผ่านศูนย์กลาง"
 
 #: pcbnew/dialogs/dialog_track_via_size_base.cpp:47
 msgid "Via drill:"
-msgstr ""
+msgstr "รูเจาะของเวีย:"
 
 #: pcbnew/dialogs/dialog_track_via_size_base.h:54
 msgid "Track Width and Via Size"
-msgstr ""
+msgstr "ขนาดแทร็คและขนาดเวีย"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers.cpp:146
 msgid "Set Unused Pad Properties"
-msgstr ""
+msgstr "ตั้งค่าคุณสมบัติของแพ็ดที่ไม่ได้ใช้"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.cpp:26
 msgid "&Vias"
-msgstr ""
+msgstr "เวีย"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.cpp:26
 msgid "&Pads"
-msgstr ""
+msgstr "แพ็ด"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.cpp:32
 msgid "&Remove unused layers"
-msgstr ""
+msgstr "นำเลเยอร์ไม่ใช้ออก"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.cpp:32
 msgid "Res&tore unused layers"
-msgstr ""
+msgstr "เรียกคืนเลเยอร์ไม่ใช้งาน"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.cpp:38
 msgid "&Selection only"
-msgstr ""
+msgstr "เลือกเท่านั้น"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.cpp:41
 msgid "Keep &outside layers"
-msgstr ""
+msgstr "เก็บเลเยอร์ชั้นนอก"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.h:58
 msgid "Remove Unused Pads"
-msgstr ""
+msgstr "นำออกแพ็ดที่ไม่ใช้"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:32
 msgid "Delete footprints with no symbols"
-msgstr ""
+msgstr "ลบฟุ้ทพรินท์ที่ไม่มีสัญลักษณ์"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:33
 msgid ""
 "Remove from the board unlocked footprints which are not linked to a "
 "schematic symbol."
-msgstr ""
+msgstr "นำฟุ้ทพรินท์ที่ไม่ล็อกออกจากบอร์ด ซึ่งไม่เชื่อมโยงไปยังสัญลักษณ์วงจร"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:37
 msgid "Replace footprints with those specified in the schematic"
-msgstr ""
+msgstr "ทดแทนฟุ้ทพรินท์โดยนำมาจากที่ระบุไว้ในวงจร"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:39
 msgid ""
@@ -26004,418 +26072,429 @@ msgid ""
 "assignment changes made in the schematic. Uncheck this only if you don't "
 "want to change existing footprints on the board."
 msgstr ""
+"โดยปกติฟุ้ทพรินท์บนบอร์ดจะถูกเปลี่ยนให้ตรงกับการกำหนดมาจากวงจร "
+"ไม่เลือกเมื่อคุณไม่ต้องการเปลี่ยนฟุ้ทพรินท์ที่มีอยู่บนบอร์ด"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:47
 msgid ""
 "Clear the net name of pads when there is only one pad belonging to this net."
-msgstr ""
+msgstr "ล้างชื่อเน็ทออกจากแพ็ด เมื่อมีเพียงแพ็ดเดียวในเน็ทนั้น"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:51
 msgid "Generate warnings for pads with no nets"
-msgstr ""
+msgstr "สร้างคำเตือนสำหรับแพ็ดที่ไม่มีเน็ท"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.h:55
 msgid "Update PCB from Schematic"
-msgstr ""
+msgstr "ปรับปรุงพีซีบีจากวงจร"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:37
 #: pcbnew/dialogs/panel_display_options_base.cpp:59
 msgid "Do not show"
-msgstr ""
+msgstr "ไม่แสดง"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:37
 msgid "Show on pads"
-msgstr ""
+msgstr "แสดงบนแพ็ด"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:37
 msgid "Show on tracks"
-msgstr ""
+msgstr "แสดงบนแทร็ค"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:37
 msgid "Show on pads and tracks"
-msgstr ""
+msgstr "แสดงบนแพ็ดและแทร็ก"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:39
 msgid "Net Names"
-msgstr ""
+msgstr "ชื่อเน็ท"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:41
 msgid "Show or hide net names on pads and/or tracks."
-msgstr ""
+msgstr "แสดงหรือซ่อนชื่อเน็ตบนแพ็ดและ/หรือแทร็ก"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:45
 #: pcbnew/tools/pcb_actions.cpp:825
 msgid "Show pad numbers"
-msgstr ""
+msgstr "แสดงหมายเลขแพ็ด"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:49
 msgid "Show pad <no net> indicator"
-msgstr ""
+msgstr "แสดงแพ็ด <ไม่มีเน็ท> ตัวบ่งชี้"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:57
 msgid "Clearance Outlines"
-msgstr ""
+msgstr "โครงร่างระยะห่าง"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:59
 msgid "Show when creating tracks"
-msgstr ""
+msgstr "แสดงเมื่อสร้างแทร็ค"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:59
 msgid "Show with via clearance at end"
-msgstr ""
+msgstr "แสดงกับระยะห่างเวียที่ด้านปลาย"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:59
 msgid "Show when creating and editing tracks"
-msgstr ""
+msgstr "แสดงเมื่อสร้างและแก้ไขแทร็ค"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:59
 msgid "Show always"
-msgstr ""
+msgstr "แสดงเสมอ"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:61
 msgid "Track Clearance"
-msgstr ""
+msgstr "ระยะห่างแทร็ค"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:63
 msgid ""
 "Show or hide the track and via clearance area. If \"New track\" is selected, "
 "track clearance area is shown only when creating the track."
 msgstr ""
+"แสดงหรือซ่อนพื้นที่ระยะห่างของแทร็คและเวีย ถ้า \"แทร็คใหม่\" ถูกเลือก, "
+"พื้นที่ระยะห่างของแทร็ค จะแสดงเมื่อมีการสร้างแทร็คเท่านั้น"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:67
 msgid "Show pad clearance"
-msgstr ""
+msgstr "แสดงระยะห่างแพ็ด"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:86
 msgid "Highlight nets when they are highlighted in the schematic editor"
-msgstr ""
+msgstr "แสดงสีเน้นที่เน็ทเมื่อมีการแสดงสีเน้นที่เครื่องมือแก้ไขวงจร"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:90
 msgid "Refresh 3D view automatically"
-msgstr ""
+msgstr "รีเฟรชมุมมอง 3 มิติโดยอัตโนมัติ"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:91
 msgid ""
 "When enabled, edits to the board will cause the 3D view to refresh (may be "
 "slow with larger boards)"
 msgstr ""
+"เมื่อเปิดใช้งานการแก้ไขบอร์ดจะทําให้มุมมอง 3 มิติรีเฟรช "
+"(อาจช้าด้วยบอร์ดขนาดใหญ่)"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:29
 msgid "Magnetic pads"
-msgstr ""
+msgstr "แผ่นแม่เหล็ก"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:32
 msgid "Magnetic graphics"
-msgstr ""
+msgstr "กราฟิกแม่เหล็ก"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:41
 msgid "Flip board items L/R (default is T/B)"
-msgstr ""
+msgstr "พลิกบอร์ด L/R (ค่าเริ่มต้นคือ T/B)"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:50
 msgid "L&imit graphic lines to H, V and 45 degrees"
-msgstr ""
+msgstr "จำกัดเส้นกราฟิกให้เป็น H,V และ 45องศา"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:51
 msgid ""
 "When drawing graphic lines force to horizontal, vertical, or 45 degrees."
-msgstr ""
+msgstr "เมื่อวาดเส้นกราฟิกถูกบังคับให้เป็นแนวนอน แนวตั้ง หรือ 45 องศา"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:58
 msgid "Step for &rotate commands:"
-msgstr ""
+msgstr "ขั้นองศา สำหรับคำสั่งหมุน:"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:63
 msgid "Set increment (in degrees) for context menu and hotkey rotation."
-msgstr ""
+msgstr "ตั้งค่าการเพิ่มขึ้น (เป็นองศา) สำหรับเมนูบริบทและการหมุนปุ่มลัด"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:75
 msgid "Allow free pads"
-msgstr ""
+msgstr "อนุญาตให้ใช้ฟรีแพ็ด"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:76
 msgid ""
 "If checked, pads can be moved with respect to the rest of the footprint."
 msgstr ""
+"หากเลือกไว้ สามารถเคลื่อนย้ายแพ็ด เมื่อเทียบกับส่วนที่เหลือของฟุ้ทพรินท์ได้"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:102
 #: pcbnew/dialogs/panel_edit_options_base.cpp:183
 msgid "No modifier"
-msgstr ""
+msgstr "ไม่มีตัวดัดแปลง"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:107
 #: pcbnew/dialogs/panel_edit_options_base.cpp:188
 msgid "Select item(s)."
-msgstr ""
+msgstr "เลือกรายการ"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:122
 msgid "Shift+Alt"
-msgstr ""
+msgstr "Shift+Alt"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:152
 msgid "Ctrl+Shift"
-msgstr ""
+msgstr "Ctrl+Shift"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:157
 #: pcbnew/dialogs/panel_edit_options_base.cpp:238
 msgid "Highlight net (for pads or tracks)."
-msgstr ""
+msgstr "สีเน้นที่เน็ท (สำหรับแพ็ดหรือแทร็ค)"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:203
 msgid "Shift+Cmd"
-msgstr ""
+msgstr "Shift+Cmd"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:233
 msgid "Alt+Cmd"
-msgstr ""
+msgstr "Alt+Cmd"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:261
 msgid "Magnetic Points"
-msgstr ""
+msgstr "จุดแม่เหล็ก"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:268
 msgid "Snap to pads:"
-msgstr ""
+msgstr "ชิดเข้าหาแพ็ด:"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:270
 #: pcbnew/dialogs/panel_edit_options_base.cpp:278
 msgid "Capture cursor when the mouse enters a pad area"
-msgstr ""
+msgstr "จับภาพเคอร์เซอร์เมื่อเมาส์เข้าสู่พื้นที่แพ็ด"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:274
 #: pcbnew/dialogs/panel_edit_options_base.cpp:288
 msgid "When creating tracks"
-msgstr ""
+msgstr "เมื่อสร้างแทร็ค"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:282
 msgid "Snap to tracks:"
-msgstr ""
+msgstr "จัดชิดแทร็ค:"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:284
 #: pcbnew/dialogs/panel_edit_options_base.cpp:292
 msgid "Capture cursor when the mouse approaches a track"
-msgstr ""
+msgstr "จับภาพเคอร์เซอร์เมื่อเมาส์เข้าใกล้แทร็ค"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:296
 msgid "Snap to graphics:"
-msgstr ""
+msgstr "จัดชิดกราฟิก:"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:298
 #: pcbnew/dialogs/panel_edit_options_base.cpp:306
 msgid "Capture cursor when the mouse approaches graphical control points"
-msgstr ""
+msgstr "จับภาพเคอร์เซอร์เมื่อเมาส์เข้าใกล้จุดควบคุมแบบกราฟิก"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:319
 msgid "Always show selected ratsnest"
-msgstr ""
+msgstr "แสดงเร็ทเน็ทที่เลือกเสมอ"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:322
 #: pcbnew/tools/pcb_actions.cpp:794
 msgid "Show ratsnest with curved lines"
-msgstr ""
+msgstr "แสดงเร็ทเน็ทด้วยเส้นโค้ง"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:329
 msgid "Track Editing"
-msgstr ""
+msgstr "การแก้ไขแทร็ค"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:331
 msgid "Mouse drag track behavior:"
-msgstr ""
+msgstr "พฤติกรรมการใช้เมาส์ลากแทร็ค:"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:333
 msgid ""
 "Choose the action to perform when dragging a track segment with the mouse"
-msgstr ""
+msgstr "เลือกการกระทําที่จะดําเนินการเมื่อลากส่วนแทร็คด้วยเมาส์"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:341
 msgid "Moves the track segment without moving connected tracks"
-msgstr ""
+msgstr "ย้ายส่วนของแทร็คโดยไม่ต้องย้ายแทร็คที่เชื่อมต่อ"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:345
 #: pcbnew/tools/pcb_actions.cpp:1373
 msgid "Drag (45 degree mode)"
-msgstr ""
+msgstr "ลาก (โหมด 45 องศา)"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:346
 #: pcbnew/tools/pcb_actions.cpp:1374
 msgid "Drags the track segment while keeping connected tracks at 45 degrees."
-msgstr ""
+msgstr "ลากส่วนแทร็คในขณะที่รักษาแทร็คที่เชื่อมต่อไว้ที่ 45 องศา"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:350
 #: pcbnew/tools/pcb_actions.cpp:1380
 msgid "Drag (free angle)"
-msgstr ""
+msgstr "ลาก (มุมอิสระ)"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:351
 #: pcbnew/tools/pcb_actions.cpp:1381
 msgid ""
 "Drags the nearest joint in the track without restricting the track angle."
-msgstr ""
+msgstr "ลากข้อต่อที่ใกล้ที่สุดในแทร็ก โดยไม่จำกัดมุมของแทร็ก"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:366
 msgid "Draw an outline to show the sheet size."
-msgstr ""
+msgstr "วาดเค้าร่างเพื่อแสดงขนาดแผ่นวาดแบบ"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:370
 msgid "Refill zones after Zone Properties dialog"
-msgstr ""
+msgstr "เติมโซนหลังจาก กล่องโต้ตอบคุณสมบัติของโซน"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:372
 msgid ""
 "If checked, zones will be re-filled after editing the properties of the zone "
 "using the Zone Properties dialog"
 msgstr ""
+"หากเลือก "
+"โซนจะถูกเติมใหม่หลังจากแก้ไขคุณสมบัติของโซนโดยใช้กล่องโต้ตอบคุณสมบัติของโซน"
 
 #: pcbnew/dialogs/panel_fp_editor_color_settings.cpp:130
 msgid "Internal Layers"
-msgstr ""
+msgstr "เลเยอร์ภายใน"
 
 #: pcbnew/dialogs/panel_fp_editor_defaults.cpp:323
 msgid ""
 "Text will not be readable with a thickness greater than\n"
 "1/4 its width or height."
 msgstr ""
+"ข้อความจะไม่สามารถอ่าน หากมีความหนามากกว่า\n"
+"1/4 ความกว้างหรือความสูง"
 
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:22
 msgid "Default text items for new footprints:"
-msgstr ""
+msgstr "รายการข้อความเริ่มต้นสําหรับฟุ้ทพรินท์ใหม่:"
 
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:84
 msgid ""
 "Note: a blank reference designator or value will use the footprint name."
-msgstr ""
+msgstr "หมายเหตุ: ตัวกําหนดหรือค่าอ้างอิงว่างเปล่า จะใช้ชื่อฟุ้ทพรินท์แทน"
 
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:103
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:21
 msgid "Default properties for new graphic items:"
-msgstr ""
+msgstr "คุณสมบัติเริ่มต้นสำหรับรายการกราฟิกใหม่:"
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:288
 msgid "Options Editor..."
-msgstr ""
+msgstr "ตัวแก้ไขตัวเลือก..."
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:288
 msgid "Edit options"
-msgstr ""
+msgstr "แก้ไขตัวเลือก"
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:555
 #, c-format
 msgid "Illegal character '%c' in nickname '%s'."
-msgstr ""
+msgstr "อักษรไม่ถูกต้อง '%c' ในชื่อเล่น '%s'"
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:798
 #, c-format
 msgid "Select %s Library"
-msgstr ""
+msgstr "เลือกไลบรารี %s"
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:858
 msgid "The following directories could not be opened: \n"
-msgstr ""
+msgstr "ไม่สามารถเปิดไดเรกทอรีต่อไปนี้: \n"
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:863
 msgid "Failed to open directories to look for libraries"
-msgstr ""
+msgstr "ไม่สามารถเปิดไดเร็กทอรีเพื่อค้นหาไลบรารี"
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:891
 msgid "Warning: Duplicate Nicknames"
-msgstr ""
+msgstr "คำเตือน: ชื่อเล่นซ้ำ"
 
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:107
 msgid "Add Existing"
-msgstr ""
+msgstr "เพิ่มที่มีอยู่"
 
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:138
 msgid "Path Substitutions"
-msgstr ""
+msgstr "การแทนที่เส้นทาง"
 
 #: pcbnew/dialogs/panel_pcbnew_action_plugins_base.cpp:36
 msgid "Icon"
-msgstr ""
+msgstr "ไอคอน"
 
 #: pcbnew/dialogs/panel_pcbnew_action_plugins_base.cpp:37
 msgid "Show button"
-msgstr ""
+msgstr "แสดงปุ่ม"
 
 #: pcbnew/dialogs/panel_pcbnew_action_plugins_base.cpp:39
 msgid "Category"
-msgstr ""
+msgstr "หมวดหมู่"
 
 #: pcbnew/dialogs/panel_pcbnew_action_plugins_base.cpp:75
 #: pcbnew/tools/pcb_actions.cpp:554
 msgid "Open Plugin Directory"
-msgstr ""
+msgstr "เปิดไดเรกทอรีปลั๊กอิน"
 
 #: pcbnew/dialogs/panel_pcbnew_action_plugins_base.cpp:80
 msgid "Reload Plugins"
-msgstr ""
+msgstr "โหลดปลั๊กอินอีกครั้ง"
 
 #: pcbnew/dialogs/panel_pcbnew_action_plugins_base.cpp:85
 msgid "Show Plugin Errors"
-msgstr ""
+msgstr "แสดงข้อผิดพลาดของปลั๊กอิน"
 
 #: pcbnew/dialogs/panel_pcbnew_display_origin_base.cpp:23
 msgid "Page origin"
-msgstr ""
+msgstr "จุดกำเนิดของหน้า"
 
 #: pcbnew/dialogs/panel_pcbnew_display_origin_base.cpp:25
 msgid "Display Origin"
-msgstr ""
+msgstr "แสดงจุดกำเนิด"
 
 #: pcbnew/dialogs/panel_pcbnew_display_origin_base.cpp:27
 msgid "Select which origin is used for X,Y coordinate display."
-msgstr ""
+msgstr "เลือกจุดเริ่มต้นที่จะใช้สําหรับการแสดงพิกัด X,Y"
 
 #: pcbnew/dialogs/panel_pcbnew_display_origin_base.cpp:31
 msgid "Increases right"
-msgstr ""
+msgstr "เพิ่มทางขวา"
 
 #: pcbnew/dialogs/panel_pcbnew_display_origin_base.cpp:31
 msgid "Increases left"
-msgstr ""
+msgstr "เพิ่มทางซ้าย"
 
 #: pcbnew/dialogs/panel_pcbnew_display_origin_base.cpp:33
 msgid "X Axis"
-msgstr ""
+msgstr "แกน X"
 
 #: pcbnew/dialogs/panel_pcbnew_display_origin_base.cpp:35
 msgid "Select which the direction on the screen in which the X axis increases."
-msgstr ""
+msgstr "เลือกทิศทางบนหน้าจอที่แกน X เพิ่มขึ้น"
 
 #: pcbnew/dialogs/panel_pcbnew_display_origin_base.cpp:39
 msgid "Increases up"
-msgstr ""
+msgstr "เพิ่มขึ้น"
 
 #: pcbnew/dialogs/panel_pcbnew_display_origin_base.cpp:39
 msgid "Increases down"
-msgstr ""
+msgstr "เพิ่มขึ้นลง"
 
 #: pcbnew/dialogs/panel_pcbnew_display_origin_base.cpp:41
 msgid "Y Axis"
-msgstr ""
+msgstr "แกน Y"
 
 #: pcbnew/dialogs/panel_pcbnew_display_origin_base.cpp:43
 msgid "Select which the direction on the screen in which the Y axis increases."
-msgstr ""
+msgstr "เลือกทิศทางบนหน้าจอที่แกน Y เพิ่มขึ้น"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:25
 msgid "Allowed features"
-msgstr ""
+msgstr "ความสามารถที่อนุญาต"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:37
 msgid "Allow blind/buried vias"
-msgstr ""
+msgstr "อนุญาตให้ใช้เวียชนิด บอด/ฝัง"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:43
 msgid "Allow micro vias (uVias)"
-msgstr ""
+msgstr "อนุญาตใช้ไมโครเวีย (uVias)"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:55
 msgid "Arc/circle approximated by segments"
-msgstr ""
+msgstr "ส่วนโค้ง/วงกลมประมาณด้วยเซกเมนต์"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:68
 msgid "Max allowed deviation:"
-msgstr ""
+msgstr "ค่าเบี่ยงเบนสูงสุดที่อนุญาต:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:70
 msgid ""
@@ -26423,47 +26502,53 @@ msgid ""
 "approximate it.\n"
 "The error max defines the number of segments of this polygon."
 msgstr ""
+"นี่คือระยะห่างสูงสุดระหว่างวงกลมกับรูปทรงหลายเหลี่ยมที่ใกล้เคียงกัน\n"
+"ค่าผิดพลาดสูงสุด กำหนดจำนวนเซ็กเมนต์ของรูปหลายเหลี่ยมนี้"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:84
 #, c-format
 msgid "Note: zone filling can be slow when < %s."
-msgstr ""
+msgstr "หมายเหตุ: การเติมโซนอาจช้าเมื่อ < %s"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:96
 msgid "Zone fill strategy"
-msgstr ""
+msgstr "กลยุทธ์การเติมโซน"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:109
 msgid "Mimic legacy behavior"
-msgstr ""
+msgstr "เลียนแบบพฤติกรรมดั้งเดิม"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:110
 msgid ""
 "Produces a slightly smoother outline at the expense of performance, some "
 "export fidelity issues, and overly aggressive higher-priority zone knockouts."
 msgstr ""
+"สร้างโครงร่างที่ราบเรียบขึ้นเล็กน้อย แลกกับประสิทธิภาพลดลง ประเด็นการส่งออก "
+"และการให้ความสำคัญแบบก้าวร้าวกับบริเวณตัดออกของโซน"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:114
 msgid "Smoothed polygons (best performance)"
-msgstr ""
+msgstr "ทำรูปหลายเหลี่ยมเรียบ (ประสิทธิภาพดีที่สุด)"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:116
 msgid ""
 "Better performance, exact export fidelity, and more complete filling near "
 "higher-priority zones."
 msgstr ""
+"ประสิทธิภาพที่ดีขึ้น ความเที่ยงตรงในการส่งออก และการเทที่สมบูรณ์ยิ่งขึ้น "
+"กับโซนที่มีลำดับความสำคัญสูงกว่า"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:132
 msgid "Allow fillets outside zone outline"
-msgstr ""
+msgstr "อนุญาตให้บางส่วนออกนอกเค้าร่างโซน"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:147
 msgid "Length tuning"
-msgstr ""
+msgstr "ปรับความยาว"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:151
 msgid "Include stackup height in track length calculations"
-msgstr ""
+msgstr "รวมความสูงของชั้นทับซ้อนในการคำนวณความยาวแทร็ค"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:152
 msgid ""
@@ -26471,71 +26556,74 @@ msgid ""
 "length calculations for tracks with vias.  When disabled, via stackup height "
 "is ignored."
 msgstr ""
+"เมื่อเปิดใช้งาน "
+"ระยะระหว่างชั้นของทองแดงจะถูกรวมไปในการคำนวณความยาวแทร็คที่มีเวีย  ถ้าปิด "
+"ความสูงของชั้นที่ทับซ้อนของเวียจะไม่นำมาคิดรวมความยาวแทร็ค"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:189
 msgid "Minimum clearance:"
-msgstr ""
+msgstr "ระยะห่างอย่างน้อย:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:203
 msgid "Minimum track width:"
-msgstr ""
+msgstr "ขนาดแทร็คอย่างน้อย:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:219
 msgid "Minimum annular width:"
-msgstr ""
+msgstr "ความกว้างวงแหวนต่ําสุด:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:233
 msgid "Minimum via diameter:"
-msgstr ""
+msgstr "เส้นผ่านศูนย์กลางเวียขั้นต่ำ:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:247
 msgid "Copper hole clearance:"
-msgstr ""
+msgstr "ระยะห่างรูเจาะทองแดง:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:261
 msgid "Copper edge clearance:"
-msgstr ""
+msgstr "ระยะห่างขอบทองแดง:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:284
 msgid "Holes"
-msgstr ""
+msgstr "รูเจาะ"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:300
 msgid "Minimum through hole:"
-msgstr ""
+msgstr "ขนาดรูเจาะทะลุอย่างต่ำ:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:314
 msgid "Hole to hole clearance:"
-msgstr ""
+msgstr "ระยะห่างระหว่างรูเจาะถึงรูเจาะ:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:337
 msgid "uVias"
-msgstr ""
+msgstr "uVias"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:353
 msgid "Minimum uVia diameter:"
-msgstr ""
+msgstr "เส้นผ่าศูนย์กลางขั้นต่ำของ uVia:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:367
 msgid "Minimum uVia hole:"
-msgstr ""
+msgstr "ขนาดรูเจาะขั้นต่ำ uVia:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:390
 msgid "Silkscreen"
-msgstr ""
+msgstr "ซิลค์สกรีน"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:406
 msgid "Minimum item clearance:"
-msgstr ""
+msgstr "ระยะห่างอย่างน้อย:"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:421
 msgid "Use the Physical Stackup page to change the number of copper layers."
-msgstr ""
+msgstr "ใช้หน้าการทับซ้อนเลเยอร์ทางกายภาพ เพื่อเปลี่ยนจำนวนชั้นทองแดง"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:434
 #, c-format
 msgid "The %s layer is mandatory."
-msgstr ""
+msgstr "จำเป็นต้องมีเลเยอร์ %s"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:467
 #, c-format
@@ -26545,6 +26633,10 @@ msgid ""
 "These items will be no longer accessible\n"
 "Do you wish to continue?"
 msgstr ""
+"ฟุ้ทพรินท์มีบางรายการในเลเยอร์ที่ถูกลบ:\n"
+"%s\n"
+"รายการเหล่านี้จะไม่สามารถเข้าถึงได้อีกต่อไป\n"
+"คุณต้องการดำเนินการต่อหรือไม่?"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:477
 msgid ""
@@ -26552,24 +26644,27 @@ msgid ""
 "items from removed layers and cannot be undone.\n"
 "Do you wish to continue?"
 msgstr ""
+"พบรายการในเลเยอร์ที่ถูกลบ "
+"การดำเนินการนี้จะลบรายการทั้งหมดออกจากเลเยอร์ที่ถูกลบและไม่สามารถยกเลิกได้\n"
+"คุณต้องการดำเนินการต่อหรือไม่?"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:653
 msgid "Layer must have a name."
-msgstr ""
+msgstr "เลเยอร์ต้องมีชื่อ"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:659
 #, c-format
 msgid "%s are forbidden in layer names."
-msgstr ""
+msgstr "%s เป็นสิ่งต้องห้ามในชื่อเลเยอร์"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:666
 msgid "Layer name \"signal\" is reserved."
-msgstr ""
+msgstr "ชื่อเลเยอร์ \"Signal\" ถูกสงวนไว้"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:674
 #, c-format
 msgid "Layer name '%s' already in use."
-msgstr ""
+msgstr "ชื่อเลเยอร์ '%s' ถูกใช้ไปแล้ว"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:774
 #, c-format
