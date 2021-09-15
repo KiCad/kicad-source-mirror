@@ -80,11 +80,9 @@ public:
     /**
      * Initialize a camera.
      *
-     * @param aRangeScale it will be expected that the board will have a
-     *                    -aRangeScale/2 to +aRangeScale/2.  It will initialize the
-     *                    Z position with aRangeScale.
+     * @param aInitialDistance Initial Z-distance to the board
      */
-    explicit CAMERA( float aRangeScale, float aDefaultZoom );
+    explicit CAMERA( float aInitialDistance );
 
     virtual ~CAMERA()
     {
@@ -245,17 +243,8 @@ protected:
     void updateRotationMatrix();
 
     /**
-     * The nominal range expected to be used in the camera.
-     *
-     * It will be used to initialize the Z position
+     * 3D zoom value -- Z-distance is scaled by it
      */
-    float m_range_scale;
-
-
-    /**
-     * 3D zoom value (Min 0.0 ... Max 1.0)
-     */
-    float m_default_zoom;
     float m_zoom;
     float m_zoom_t0;
     float m_zoom_t1;

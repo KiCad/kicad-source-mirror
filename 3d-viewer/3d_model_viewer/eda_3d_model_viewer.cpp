@@ -86,7 +86,7 @@ EDA_3D_MODEL_VIEWER::EDA_3D_MODEL_VIEWER( wxWindow* aParent, const int* aAttribL
                                           S3D_CACHE* aCacheManager ) :
         HIDPI_GL_CANVAS( aParent, wxID_ANY, aAttribList, wxDefaultPosition, wxDefaultSize,
                          wxFULL_REPAINT_ON_RESIZE ),
-        m_trackBallCamera( RANGE_SCALE_3D * 2.0f, 0.38f ),
+        m_trackBallCamera( RANGE_SCALE_3D * 4.0f ),
         m_cacheManager( aCacheManager )
 {
     wxLogTrace( m_logTrace, wxT( "EDA_3D_MODEL_VIEWER::EDA_3D_MODEL_VIEWER" ) );

@@ -49,7 +49,7 @@ PANEL_PREVIEW_3D_MODEL::PANEL_PREVIEW_3D_MODEL( wxWindow* aParent, PCB_BASE_FRAM
         m_infobar( nullptr ),
         m_boardAdapter(),
         m_currentCamera( m_trackBallCamera ),
-        m_trackBallCamera( RANGE_SCALE_3D, 0.85f )
+        m_trackBallCamera( 2 * RANGE_SCALE_3D )
 {
     m_userUnits = aFrame->GetUserUnits();
 
