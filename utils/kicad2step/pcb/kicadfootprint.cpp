@@ -440,7 +440,7 @@ bool KICADFOOTPRINT::ComposePCB( class PCBMODEL* aPCB, S3D_RESOLVER* resolver,
                                              "File not found: %s\n",
                                              m_refdes,
                                              mname ) );
-            return false;
+            continue;
         }
 
         std::string fname( mname.ToUTF8() );
