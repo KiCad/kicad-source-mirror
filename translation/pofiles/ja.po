@@ -5,16 +5,16 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-09-13 10:58-0700\n"
-"PO-Revision-Date: 2021-09-04 23:34+0000\n"
+"PO-Revision-Date: 2021-09-15 17:51+0000\n"
 "Last-Translator: Tokita, Hiroshi <tokita.hiroshi@gmail.com>\n"
-"Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/master-"
-"source/ja/>\n"
+"Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
+"master-source/ja/>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.8.1-dev\n"
+"X-Generator: Weblate 4.9-dev\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-Basepath: Source/kicad-master\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -1485,9 +1485,8 @@ msgid "Warning"
 msgstr "警告"
 
 #: common/confirm.cpp:160 common/confirm.cpp:166
-#, fuzzy
 msgid "File Open Error"
-msgstr "ファイル保存エラー"
+msgstr "ファイルのオープンでエラー"
 
 #: common/confirm.cpp:162 common/confirm.cpp:168
 msgid "Interleaved saves may produce very unexpected results."
@@ -1500,9 +1499,8 @@ msgid "OK"
 msgstr "OK"
 
 #: common/confirm.cpp:164 common/confirm.cpp:169
-#, fuzzy
 msgid "Open Anyway"
-msgstr "強制的に保存"
+msgstr "強制的に開く"
 
 #: common/confirm.cpp:180 common/confirm.cpp:209
 msgid "Save Changes?"
@@ -1546,9 +1544,8 @@ msgid "Cancel"
 msgstr "キャンセル"
 
 #: common/confirm.cpp:304
-#, fuzzy
 msgid "Information"
-msgstr "情報:"
+msgstr "情報"
 
 #: common/confirm.cpp:317 eeschema/symbol_editor/symbol_editor.cpp:425
 #: eeschema/symbol_editor/symbol_editor.cpp:682
@@ -3572,7 +3569,6 @@ msgid "Default"
 msgstr "標準"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:84
-#, fuzzy
 msgid "Set color to transparent to use KiCad default color."
 msgstr "色を透過に設定すると、KiCadのデフォルトの色を使用します。"
 
@@ -5402,9 +5398,8 @@ msgstr "ファイル '%s' を開くことができません"
 
 #: common/plugins/cadstar/cadstar_archive_parser.cpp:2348
 #: common/plugins/cadstar/cadstar_archive_parser.cpp:2647
-#, fuzzy
 msgid "File import cancelled by user."
-msgstr "オープンの操作はユーザーによってキャンセルされました。"
+msgstr "ファイルのインポートはユーザーによってキャンセルされました。"
 
 #: common/plugins/cadstar/cadstar_archive_parser.cpp:2365
 #: common/plugins/cadstar/cadstar_archive_parser.cpp:2383
@@ -8577,18 +8572,16 @@ msgid "-- leave unchanged --"
 msgstr "-- 未変更を維持 --"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:229
-#, fuzzy
 msgid "H Align (fields only):"
-msgstr "水平アラインメント (フィールドのみ):"
+msgstr "水平揃え (フィールドのみ):"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:245
 msgid "Visible (fields only)"
 msgstr "可視化 (フィールドのみ)"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:251
-#, fuzzy
 msgid "V Align (fields only):"
-msgstr "垂直アラインメント (フィールドのみ):"
+msgstr "垂直揃え (フィールドのみ):"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:291
 #: eeschema/dialogs/dialog_lib_shape_properties_base.cpp:25
@@ -8612,14 +8605,12 @@ msgid "Sheet background color:"
 msgstr "シートの背景色:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:339
-#, fuzzy
 msgid "Junction size:"
-msgstr "ジャンクションの点のサイズ:"
+msgstr "ジャンクションのサイズ:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:353
-#, fuzzy
 msgid "Junction color:"
-msgstr "選択色:"
+msgstr "ジャンクションの色:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.h:110
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.h:95
@@ -8692,9 +8683,8 @@ msgid "Color:"
 msgstr "カラー:"
 
 #: eeschema/dialogs/dialog_junction_props_base.cpp:61
-#, fuzzy
 msgid "Set diameter to 0 to use schematic junction dot size."
-msgstr "回路図エディターの線の幅を0に設定します。"
+msgstr "直径を0に設定すると、回路図のジャンクションの点のサイズを使用します。"
 
 #: eeschema/dialogs/dialog_junction_props_base.cpp:65
 #: eeschema/dialogs/dialog_line_wire_bus_properties_base.cpp:80
@@ -9352,9 +9342,8 @@ msgid "Style:"
 msgstr "スタイル:"
 
 #: eeschema/dialogs/dialog_line_wire_bus_properties_base.cpp:76
-#, fuzzy
 msgid "Set width to 0 to use Netclass line widths."
-msgstr "回路図エディターの線の幅を0に設定します。"
+msgstr "幅を0に設定すると、ネットクラスの幅を使用します。"
 
 #: eeschema/dialogs/dialog_line_wire_bus_properties_base.h:67
 msgid "Line, Wire & Bus Properties"
@@ -12544,13 +12533,10 @@ msgid "Create a new project for this schematic"
 msgstr "この回路図向けに新規プロジェクトを作成"
 
 #: eeschema/files-io.cpp:77
-#, fuzzy
 msgid ""
 "Creating a project will enable features such as text variables, net classes, "
 "and ERC exclusions"
-msgstr ""
-"プロジェクトを作成すると、デザインルール、ネットクラス、レイヤープリセットな"
-"どの機能が有効になります"
+msgstr "プロジェクトを作成すると、テキストの値、ネットクラス、ERCの除外設定などの機能が有効になります"
 
 #: eeschema/files-io.cpp:124 eeschema/files-io.cpp:1137
 #, c-format
@@ -18314,9 +18300,8 @@ msgid "Waiting..."
 msgstr "ロードしています..."
 
 #: kicad/pcm/dialogs/dialog_pcm_progress_base.cpp:42
-#, fuzzy
 msgid "Overall progress"
-msgstr "質感:"
+msgstr "全体の進捗:"
 
 #: kicad/pcm/dialogs/dialog_pcm_progress_base.cpp:52
 msgid "Details"
@@ -18556,7 +18541,7 @@ msgstr ""
 
 #: kicad/pcm/pcm_task_manager.cpp:249
 msgid "Aborting package installation."
-msgstr ""
+msgstr "パッケージのインストールを中止します。"
 
 #: kicad/pcm/pcm_task_manager.cpp:297
 #, c-format
@@ -18583,7 +18568,7 @@ msgstr "アーカイブメタデータは単一のバージョンが定義され
 msgid ""
 "Package with identifier %s is already installed, you must first uninstall "
 "this package."
-msgstr ""
+msgstr "識別子 %s を持つパッケージはすでにインストールされています。先にこのパッケージをアンインストールする必要があります。"
 
 #: kicad/pcm/pcm_task_manager.cpp:354
 #, c-format
@@ -18598,15 +18583,15 @@ msgstr "ディレクトリー '%s' の削除に失敗しました"
 #: kicad/pcm/pcm_task_manager.cpp:376
 #, c-format
 msgid "Package %s uninstalled"
-msgstr ""
+msgstr "パッケージ %s はアンインストールされました"
 
 #: kicad/pcm/pcm_task_manager.cpp:445
 msgid "Aborting remaining tasks."
-msgstr ""
+msgstr "残りのタスクを中断します。"
 
 #: kicad/pcm/pcm_task_manager.cpp:448
 msgid "Done."
-msgstr ""
+msgstr "完了."
 
 #: kicad/project_template.cpp:52
 msgid "Could open the template path!"
@@ -18851,7 +18836,7 @@ msgstr "図面シートの境界線とタイトル ブロックを編集"
 
 #: kicad/tools/kicad_manager_actions.cpp:117
 msgid "Run Plugin and Content Manager"
-msgstr ""
+msgstr "プラグインとコンテントマネージャーを実行"
 
 #: kicad/tools/kicad_manager_actions.cpp:124
 msgid "Open Text Editor"
@@ -19064,40 +19049,36 @@ msgid "Printing"
 msgstr "印刷中"
 
 #: pagelayout_editor/dialogs/properties_frame.cpp:554
-#, fuzzy
 msgid "Predefined Keywords"
-msgstr "定義されている幅:"
+msgstr "定義済みのキーワード"
 
 #: pagelayout_editor/dialogs/properties_frame.cpp:557
 msgid "Texts can include keywords."
-msgstr ""
+msgstr "テキストにはキーワードを含めることができます。"
 
 #: pagelayout_editor/dialogs/properties_frame.cpp:558
 msgid "Keyword notation is ${keyword}"
-msgstr ""
+msgstr "キーワードの表記は${keyword}です"
 
 #: pagelayout_editor/dialogs/properties_frame.cpp:559
 msgid "Keywords are replaced by they actual value in strings"
-msgstr ""
+msgstr "キーワードは実際の文字列の値に置き換えられます"
 
 #: pagelayout_editor/dialogs/properties_frame.cpp:560
 msgid "These build-in keywords are always available:"
-msgstr ""
+msgstr "これらの組み込みキーワードは常に使用可能です:"
 
 #: pagelayout_editor/dialogs/properties_frame.cpp:564
-#, fuzzy
 msgid "(sheet number)"
-msgstr "シート番号: %d"
+msgstr "(シート番号)"
 
 #: pagelayout_editor/dialogs/properties_frame.cpp:565
-#, fuzzy
 msgid "(sheet count)"
-msgstr "繰り返し数"
+msgstr "(シート数)"
 
 #: pagelayout_editor/dialogs/properties_frame.cpp:571
-#, fuzzy
 msgid "(paper size)"
-msgstr "カスタム用紙サイズ:"
+msgstr "(用紙サイズ)"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:34
 msgid "Show on all pages"
@@ -20793,9 +20774,8 @@ msgid "Dielectric losses (odd):"
 msgstr "誘電体損失 (odd):"
 
 #: pcb_calculator/transline_ident.cpp:309
-#, fuzzy
 msgid "Differential Impedance (Zd):"
-msgstr "差動ペアのギャップ"
+msgstr "差動インピーダンス(Zd):"
 
 #: pcb_calculator/transline_ident.cpp:334
 msgid "Zeven"
@@ -21111,24 +21091,23 @@ msgid "PrePreg"
 msgstr "プリプレグ"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:188
-#, fuzzy, c-format
+#, c-format
 msgid "Enter board thickness in %s:"
-msgstr "単位 %s で基板の厚さを入力"
+msgstr "%s の単位で基板の厚さを入力:"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:193
-#, fuzzy, c-format
+#, c-format
 msgid "Enter expected board thickness (min value %s):"
-msgstr "単位 %s で希望する基板の厚さを入力 (最小値は %s)"
+msgstr "希望する基板の厚さを入力 (最小値 %s):"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:197
-#, fuzzy
 msgid "Adjust Unlocked Dielectric Layers"
-msgstr "ロックされていない誘電体厚レイヤーを更新"
+msgstr "ロックされていない誘電体厚レイヤーを調整"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:208
-#, fuzzy, c-format
+#, c-format
 msgid "Value too small (min value %s)."
-msgstr "値が小さすぎます（最小値%s %s）。中止します"
+msgstr "値が小さすぎます。(最小値 %s)."
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:228
 msgid "All dielectric  thickness layers are locked"
@@ -21281,7 +21260,6 @@ msgid "Id"
 msgstr "ID"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:111
-#, fuzzy
 msgid "Loss Tan"
 msgstr "損失正接"
 
@@ -27163,13 +27141,12 @@ msgid ""
 msgstr "チェックすろと、パッドをフットプリントから移動することができます。"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:83
-#, fuzzy
 msgid ""
 "Left click (and drag) actions depend on 2 modifier keys:\n"
 "Shift and Ctrl."
 msgstr ""
-"左クリック(およびドラッグ)の動作は、Alt、Shift、Ctrlの\n"
-"3つの修飾キーに依存します。"
+"左クリック(およびドラッグ)の動作は2つの修飾キーに依存します:\n"
+"ShiftとCtrl."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:97
 #: pcbnew/dialogs/panel_edit_options_base.cpp:168
@@ -34773,9 +34750,8 @@ msgid "Draw Zone Fill Fracture Borders"
 msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:849
-#, fuzzy
 msgid "Draw Zone Fill Triangulation"
-msgstr "ゾーン塗り潰しを表示 (&F)"
+msgstr "ゾーン塗りつぶしの三角形分割を表示"
 
 #: pcbnew/tools/pcb_actions.cpp:855
 msgid "Toggle Zone Display"
@@ -35271,7 +35247,7 @@ msgstr "再表示しない"
 msgid ""
 "Not all zones are filled. Use Edit > Fill All Zones (%s) if you wish to see "
 "all fills."
-msgstr ""
+msgstr "全てのゾーンが塗りつぶされていません。全てのゾーンの塗りつぶしを表示するには、編集 > 全ゾーンを塗りつぶし(%s) を使います。"
 
 #: pcbnew/tools/pcb_control.cpp:545
 msgid "Item locked."
