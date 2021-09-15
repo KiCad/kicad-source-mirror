@@ -300,19 +300,21 @@ DIALOG_SYMBOL_PROPERTIES_BASE::DIALOG_SYMBOL_PROPERTIES_BASE( wxWindow* parent, 
 
 	m_libraryIDLabel = new wxStaticText( this, wxID_ANY, _("Library link:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_libraryIDLabel->Wrap( -1 );
-	bLibLink->Add( m_libraryIDLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+	bLibLink->Add( m_libraryIDLabel, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT, 2 );
 
 	m_tcLibraryID = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY|wxBORDER_NONE );
-	bLibLink->Add( m_tcLibraryID, 1, wxALIGN_CENTER_VERTICAL, 5 );
+	m_tcLibraryID->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_BTNFACE ) );
+
+	bLibLink->Add( m_tcLibraryID, 1, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
 
-	bSizerBottom->Add( bLibLink, 1, wxLEFT|wxEXPAND, 10 );
+	bSizerBottom->Add( bLibLink, 1, wxLEFT|wxEXPAND, 12 );
 
 
-	bSizerBottom->Add( 20, 0, 0, 0, 5 );
+	bSizerBottom->Add( 5, 0, 0, 0, 5 );
 
 	m_spiceFieldsButton = new wxButton( this, wxID_ANY, _("Spice Model..."), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerBottom->Add( m_spiceFieldsButton, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	bSizerBottom->Add( m_spiceFieldsButton, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 15 );
 
 	m_stdDialogButtonSizer = new wxStdDialogButtonSizer();
 	m_stdDialogButtonSizerOK = new wxButton( this, wxID_OK );

@@ -431,13 +431,13 @@ DIALOG_FOOTPRINT_PROPERTIES_BASE::DIALOG_FOOTPRINT_PROPERTIES_BASE( wxWindow* pa
 
 	m_libraryIDLabel = new wxStaticText( this, wxID_ANY, _("Library link:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_libraryIDLabel->Wrap( -1 );
-	fgSizerSymbolRef->Add( m_libraryIDLabel, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 3 );
+	fgSizerSymbolRef->Add( m_libraryIDLabel, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT, 2 );
 
 	m_tcLibraryID = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY|wxBORDER_NONE );
 	m_tcLibraryID->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_BTNFACE ) );
 	m_tcLibraryID->SetToolTip( _("The library ID and footprint ID currently assigned.  Use “Change Footprint…” to assign a different footprint.") );
 
-	fgSizerSymbolRef->Add( m_tcLibraryID, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxRIGHT, 5 );
+	fgSizerSymbolRef->Add( m_tcLibraryID, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxRIGHT|wxLEFT, 5 );
 
 
 	bSizerButtons->Add( fgSizerSymbolRef, 1, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxLEFT, 5 );
