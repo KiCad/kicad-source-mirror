@@ -169,16 +169,16 @@ private:
     void draw( const SCH_BUS_ENTRY_BASE* aEntry, int aLayer );
 
     void drawPinDanglingSymbol( const VECTOR2I& aPos, const COLOR4D& aColor,
-                                bool aDrawingShadows );
+                                bool aDrawingShadows, bool aBrightened );
     void drawDanglingSymbol( const wxPoint& aPos, const COLOR4D& aColor, int aWidth,
-                             bool aDrawingShadows );
+                             bool aDrawingShadows, bool aBrightened );
 
     int internalPinDecoSize( const LIB_PIN &aPin );
     int externalPinDecoSize( const LIB_PIN &aPin );
 
     bool isUnitAndConversionShown( const LIB_ITEM* aItem ) const;
 
-    float getShadowWidth() const;
+    float getShadowWidth( bool aForHighlight ) const;
     COLOR4D getRenderColor( const EDA_ITEM* aItem, int aLayer, bool aDrawingShadows ) const;
     float getLineWidth( const LIB_ITEM* aItem, bool aDrawingShadows ) const;
     float getLineWidth( const SCH_ITEM* aItem, bool aDrawingShadows ) const;

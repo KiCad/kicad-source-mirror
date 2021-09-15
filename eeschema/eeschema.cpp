@@ -55,6 +55,7 @@
 #include <panel_eeschema_editing_options.h>
 #include <panel_sym_editing_options.h>
 #include <dialogs/panel_gal_display_options.h>
+#include <panel_eeschema_display_options.h>
 
 // The main sheet of the project
 SCH_SHEET*  g_RootSheet = nullptr;
@@ -217,7 +218,7 @@ static struct IFACE : public KIFACE_BASE
             SETTINGS_MANAGER&  mgr = Pgm().GetSettingsManager();
             APP_SETTINGS_BASE* cfg = mgr.GetAppSettings<EESCHEMA_SETTINGS>();
 
-            return new PANEL_GAL_DISPLAY_OPTIONS( aParent, cfg );
+            return new PANEL_EESCHEMA_DISPLAY_OPTIONS( aParent, cfg );
         }
 
         case PANEL_SCH_EDIT_OPTIONS:

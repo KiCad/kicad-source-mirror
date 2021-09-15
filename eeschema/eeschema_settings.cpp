@@ -174,7 +174,10 @@ EESCHEMA_SETTINGS::EESCHEMA_SETTINGS() :
             &m_Input.drag_is_move, false ) );
 
     m_params.emplace_back( new PARAM<int>( "selection.thickness",
-            &m_Selection.thickness, 3 ) );
+            &m_Selection.selection_thickness, 3 ) );
+
+    m_params.emplace_back( new PARAM<int>( "selection.highlight_thickness",
+            &m_Selection.highlight_thickness, 2 ) );
 
     m_params.emplace_back( new PARAM<bool>( "selection.draw_selected_children",
             &m_Selection.draw_selected_children, true ) );

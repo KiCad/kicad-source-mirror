@@ -118,7 +118,8 @@ public:
 
     struct SELECTION
     {
-        int  thickness;
+        int  selection_thickness;
+        int  highlight_thickness;
         bool draw_selected_children;
         bool fill_shapes;
         bool select_pin_selects_symbol;
