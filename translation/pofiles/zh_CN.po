@@ -13,8 +13,8 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-09-13 10:58-0700\n"
-"PO-Revision-Date: 2021-09-08 20:55+0000\n"
-"Last-Translator: Eric <spice2wolf@gmail.com>\n"
+"PO-Revision-Date: 2021-09-15 17:51+0000\n"
+"Last-Translator: Rigo Ligo <rigoligo03@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -22,7 +22,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.8.1-dev\n"
+"X-Generator: Weblate 4.9-dev\n"
 "X-Poedit-KeywordsList: _HKI;_\n"
 "X-Poedit-Basepath: ../../kicad-source-mirror\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -11531,17 +11531,17 @@ msgstr "交叉探测"
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:80
 #: pcbnew/dialogs/panel_display_options_base.cpp:76
 msgid "Center view on cross-probed items"
-msgstr "交叉探测项目的中心视图"
+msgstr "将被交叉探测项目居中显示"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:84
 #: pcbnew/dialogs/panel_display_options_base.cpp:80
 msgid "Zoom to fit cross-probed items"
-msgstr "缩放以适合交叉探测的项目"
+msgstr "缩放视图至适合被交叉探测的项目"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:88
 #: pcbnew/dialogs/panel_display_options_base.cpp:84
 msgid "Highlight cross-probed nets"
-msgstr "高亮交叉探针网络"
+msgstr "高亮显示被交叉探测的网络"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:90
 msgid "Highlight nets when they are highlighted in the PCB editor"
@@ -27846,7 +27846,7 @@ msgstr "用户 9"
 msgid ""
 "Use your board house's recommendation for solder mask clearance and minimum "
 "bridge width."
-msgstr "使用您的电路板厂推荐的焊罩间隙和最小桥宽。"
+msgstr "使用您的电路板厂推荐的阻焊间隙和最小阻焊桥宽。"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:36
 msgid "If none is provided, setting the values to zero is suggested."
@@ -27857,8 +27857,8 @@ msgid ""
 "Global clearance between pads and the solder mask.\n"
 "This value can be superseded by local values for a footprint or a pad."
 msgstr ""
-"这是焊盘与阻焊之间的全局间间隙。\n"
-"该值可以被封装和焊盘的本地值所取代。"
+"这是焊盘与阻焊之间的全局间隙。\n"
+"该值可以被封装和焊盘中设置的值覆盖。"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:61
 msgid ""
@@ -27868,10 +27868,12 @@ msgstr "正间隙是指比焊盘面积大的区域(通常用于焊料掩膜间�
 
 # 绿油桥宽：
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:69
+#, fuzzy
 msgid "Solder mask minimum web width:"
 msgstr "阻焊剂最小网宽："
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:71
+#, fuzzy
 msgid ""
 "Min. dist between 2 pad areas.\n"
 "Two pad areas nearer than this value will be merged during plotting.\n"
