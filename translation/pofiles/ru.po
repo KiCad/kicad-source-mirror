@@ -10,17 +10,17 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-09-13 10:58-0700\n"
-"PO-Revision-Date: 2021-09-08 20:55+0000\n"
+"PO-Revision-Date: 2021-09-15 17:51+0000\n"
 "Last-Translator: Konstantin Baranovskiy <baranovskiykonstantin@gmail.com>\n"
-"Language-Team: Russian <https://hosted.weblate.org/projects/kicad/master-"
-"source/ru/>\n"
+"Language-Team: Russian <https://hosted.weblate.org/projects/kicad/"
+"master-source/ru/>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.8.1-dev\n"
+"X-Generator: Weblate 4.9-dev\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-Basepath: ../../kicad\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -5451,9 +5451,8 @@ msgstr "Не удалось открыть файл '%s'"
 
 #: common/plugins/cadstar/cadstar_archive_parser.cpp:2348
 #: common/plugins/cadstar/cadstar_archive_parser.cpp:2647
-#, fuzzy
 msgid "File import cancelled by user."
-msgstr "Открытие отменено пользователем."
+msgstr "Импорт файла отменён пользователем."
 
 #: common/plugins/cadstar/cadstar_archive_parser.cpp:2365
 #: common/plugins/cadstar/cadstar_archive_parser.cpp:2383
@@ -19060,40 +19059,36 @@ msgid "Printing"
 msgstr "Печать"
 
 #: pagelayout_editor/dialogs/properties_frame.cpp:554
-#, fuzzy
 msgid "Predefined Keywords"
-msgstr "Пред.установленные:"
+msgstr "Пред.установленные метки форматирования"
 
 #: pagelayout_editor/dialogs/properties_frame.cpp:557
 msgid "Texts can include keywords."
-msgstr ""
+msgstr "Текст может содержать метки форматирования."
 
 #: pagelayout_editor/dialogs/properties_frame.cpp:558
 msgid "Keyword notation is ${keyword}"
-msgstr ""
+msgstr "Формат записи меток: ${keyword}"
 
 #: pagelayout_editor/dialogs/properties_frame.cpp:559
 msgid "Keywords are replaced by they actual value in strings"
-msgstr ""
+msgstr "Метки заменяются своими значениями в тексте"
 
 #: pagelayout_editor/dialogs/properties_frame.cpp:560
 msgid "These build-in keywords are always available:"
-msgstr ""
+msgstr "Встроенные метки форматирования, которые всегда доступны:"
 
 #: pagelayout_editor/dialogs/properties_frame.cpp:564
-#, fuzzy
 msgid "(sheet number)"
-msgstr "Номер листа: %d"
+msgstr "(номер листа)"
 
 #: pagelayout_editor/dialogs/properties_frame.cpp:565
-#, fuzzy
 msgid "(sheet count)"
-msgstr "Кол-во повторений:"
+msgstr "(кол. листов)"
 
 #: pagelayout_editor/dialogs/properties_frame.cpp:571
-#, fuzzy
 msgid "(paper size)"
-msgstr "Пользовательский размер:"
+msgstr "(размер листа)"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:34
 msgid "Show on all pages"
@@ -19944,6 +19939,8 @@ msgid ""
 "Zdiff =\n"
 "2*Z0( (1 - 0.48exp( -0.96*S/H ) )"
 msgstr ""
+"Zdiff =\n"
+"2*Z0( (1 - 0.48exp( -0.96*S/H ) )"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:901
 msgid "Zcommon = Zeven / 2"
@@ -20796,9 +20793,8 @@ msgid "Dielectric losses (odd):"
 msgstr "Потери в диэлектрике для нечётной моды:"
 
 #: pcb_calculator/transline_ident.cpp:309
-#, fuzzy
 msgid "Differential Impedance (Zd):"
-msgstr "Зазор диф.пары"
+msgstr "Дифференциальный импеданс (Zd):"
 
 #: pcb_calculator/transline_ident.cpp:334
 msgid "Zeven"
@@ -27219,13 +27215,13 @@ msgstr ""
 "Если отмечено, конт.пл. могут свободно перемещаться относительно посад.места."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:83
-#, fuzzy
 msgid ""
 "Left click (and drag) actions depend on 2 modifier keys:\n"
 "Shift and Ctrl."
 msgstr ""
-"Действие левой кнопки мыши (и перетаскивание) зависит от нажатия клавиш:\n"
-"Alt, Shift и Ctrl."
+"Действие левой кнопки мыши (и перетаскивание) зависит от нажатия двух клавиш:"
+"\n"
+"Shift и Ctrl."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:97
 #: pcbnew/dialogs/panel_edit_options_base.cpp:168
@@ -27239,9 +27235,8 @@ msgstr "Выбрать элементы."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:107
 #: pcbnew/dialogs/panel_edit_options_base.cpp:178
-#, fuzzy
 msgid "Long Click"
-msgstr "Щелчок мыши"
+msgstr "Долгое нажатие"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:127
 msgid "Ctrl+Shift"
@@ -27253,13 +27248,13 @@ msgid "Highlight net (for pads or tracks)."
 msgstr "Подсветить цепь (конт.пл. или дорожки)."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:154
-#, fuzzy
 msgid ""
 "Left click (and drag) actions depend on 3 modifier keys:\n"
 "Option, Shift and Cmd."
 msgstr ""
-"Действие левой кнопки мыши (и перетаскивание) зависит от нажатия клавиш:\n"
-"Alt, Shift и Cmd."
+"Действие левой кнопки мыши (и перетаскивание) зависит от нажатия трёх клавиш:"
+"\n"
+"Option, Shift и Cmd."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:198
 msgid "Shift+Cmd"
