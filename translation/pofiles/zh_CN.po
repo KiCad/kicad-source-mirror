@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-09-13 10:58-0700\n"
-"PO-Revision-Date: 2021-09-15 17:51+0000\n"
+"PO-Revision-Date: 2021-09-16 16:11+0000\n"
 "Last-Translator: Eric <spice2wolf@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
@@ -27861,20 +27861,18 @@ msgstr "正间隙是指比焊盘面积大的区域(通常用于焊料掩膜间�
 
 # 绿油桥宽：
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:69
-#, fuzzy
 msgid "Solder mask minimum web width:"
 msgstr "阻焊剂最小网宽："
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:71
-#, fuzzy
 msgid ""
 "Min. dist between 2 pad areas.\n"
 "Two pad areas nearer than this value will be merged during plotting.\n"
 "This parameter is only used to plot solder mask layers.\n"
 "Leave at 0 unless you know what you are doing."
 msgstr ""
-"最小值。在两个焊盘区域之间。\n"
-"两个焊盘区靠近并超过此值将会在绘制过程中合并。\n"
+"两个焊盘区域之间最短距离。\n"
+"如两个焊盘区域间距离小于此值，两者会在绘制过程中被合并。\n"
 "这个参数只用来绘制阻焊层。\n"
 "将其保留为 0，除非您知道自己在做什么。"
 
