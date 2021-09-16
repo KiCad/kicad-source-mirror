@@ -311,9 +311,10 @@ COLOR4D PCB_RENDER_SETTINGS::GetColor( const VIEW_ITEM* aItem, int aLayer ) cons
         }
 
         if( netColor == COLOR4D::UNSPECIFIED )
+        {
             netColor = color;
-
-        if( selected )
+        }
+        else if( selected )
         {
             // Selection brightening overrides highlighting
             netColor.Brighten( m_selectFactor );

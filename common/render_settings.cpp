@@ -57,10 +57,14 @@ void RENDER_SETTINGS::update()
     for( int i = 0; i < LAYER_ID_COUNT; i++ )
     {
         m_hiContrastColor[i] = m_layerColors[i].Mix( m_layerColors[LAYER_PCB_BACKGROUND],
-                m_hiContrastFactor );
+                                                     m_hiContrastFactor );
+
         m_layerColorsHi[i]   = m_layerColors[i].Brightened( m_highlightFactor );
         m_layerColorsDark[i] = m_layerColors[i].Darkened( 1.0 - m_highlightFactor );
-        m_layerColorsSel[i]  = m_layerColors[i].Brightened( m_selectFactor );
+
+        // Linear brightening doesn't work well for colors near white
+        double factor = ( m_selectFactor * 0.6 ) + pow( m_layerColors[i].GetBrightness(), 3 );
+        m_layerColorsSel[i] = m_layerColors[i].Brightened( std::min( factor, 1.0 ) );
     }
 }
 
