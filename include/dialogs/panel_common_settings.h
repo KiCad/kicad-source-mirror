@@ -29,6 +29,7 @@
 
 class COMMON_SETTINGS;
 class DIALOG_SHIM;
+class STEPPED_SLIDER;
 
 
 class PANEL_COMMON_SETTINGS : public PANEL_COMMON_SETTINGS_BASE
@@ -45,8 +46,8 @@ protected:
 
     void applySettingsToPanel( COMMON_SETTINGS& aSettings );
 
-    void OnScaleSlider( wxScrollEvent& aEvent ) override;
-    void OnIconScaleAuto( wxCommandEvent& aEvent ) override;
+    void OnScaleSlider( wxScrollEvent& aEvent );
+    void OnIconScaleAuto( wxCommandEvent& aEvent );
     void OnTextEditorClick( wxCommandEvent& event ) override;
     void OnPDFViewerClick( wxCommandEvent& event ) override;
     void onUpdateUIPdfPath( wxUpdateUIEvent& event ) override;
@@ -61,9 +62,14 @@ protected:
      */
     void OnCanvasScaleAuto( wxCommandEvent& aEvent ) override;
 
-    DIALOG_SHIM*  m_dialog;
+protected:
+    DIALOG_SHIM*    m_dialog;
 
-    int           m_last_scale;               ///< saved icon scale when Auto selected
+    wxStaticText*   m_iconScaleLabel;
+    STEPPED_SLIDER* m_iconScaleSlider;
+    wxCheckBox*     m_iconScaleAuto;
+
+    int             m_last_scale;               ///< saved icon scale when Auto selected
 };
 
 #endif //KICAD_DIALOG_SUITE_OPTIONS_H

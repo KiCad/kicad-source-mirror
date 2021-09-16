@@ -55,33 +55,58 @@ COMMON_SETTINGS::COMMON_SETTINGS() :
         m_System(),
         m_NetclassPanel()
 {
-    // This only effect the first time KiCad is run.  The user's setting will be used for all
-    // subsequent runs.
-    // Menu icons are off by default on OSX and on for all other platforms.
-    // Use automatic canvas scaling on OSX, but not on the other platforms (their detection
-    // isn't as good).
-#if defined( __WXMAC__ )
-    bool   defaultUseIconsInMenus = false;
-    double canvasScale = 0.0;
-#else
-    bool   defaultUseIconsInMenus = true;
-    double canvasScale = 1.0;
-#endif
-
-    m_params.emplace_back( new PARAM<double>( "appearance.canvas_scale",
-            &m_Appearance.canvas_scale, canvasScale ) );
-
-    m_params.emplace_back( new PARAM<int>( "appearance.icon_scale",
-            &m_Appearance.icon_scale, 0 ) );
-
+    /*
+     * Automatic dark mode detection works fine on Mac.
+     */
+#if defined( __WXGTK__ ) || defined( __WXMSW__ )
     m_params.emplace_back( new PARAM_ENUM<ICON_THEME>( "appearance.icon_theme",
             &m_Appearance.icon_theme, ICON_THEME::AUTO, ICON_THEME::LIGHT, ICON_THEME::AUTO ) );
+#else
+    m_Appearance.icon_theme = ICON_THEME::AUTO;
+#endif
 
+    /*
+     * Automatic icon scaling works fine on Mac.  It works mostly fine on MSW, but perhaps not
+     * uniformly enough to exclude the explicit controls there.
+     */
+#if defined( __WXGTK__ ) || defined( __WXMSW__ )
+    m_params.emplace_back( new PARAM<int>( "appearance.icon_scale",
+            &m_Appearance.icon_scale, 0 ) );
+#else
+    m_Appearance.icon_scale = 0.0;
+#endif
+
+    /*
+   	 * Automatic canvas scaling works fine on Mac and MSW, and on GTK under wxWidgets 3.1 or
+     * better.
+     */
+#if defined( __WXGTK__ ) && !wxCHECK_VERSION( 3, 1, 0 )
+    m_params.emplace_back( new PARAM<double>( "appearance.canvas_scale",
+            &m_Appearance.canvas_scale, 1.0 ) );
+#else
+    m_Appearance.canvas_scale = 0.0;
+#endif
+
+    /*
+     * Menu icons are off by default on OSX and on for all other platforms.
+     */
+#ifdef __WXMAC__
     m_params.emplace_back( new PARAM<bool>( "appearance.use_icons_in_menus",
-            &m_Appearance.use_icons_in_menus, defaultUseIconsInMenus ) );
+            &m_Appearance.use_icons_in_menus, false ) );
+#else
+    m_params.emplace_back( new PARAM<bool>( "appearance.use_icons_in_menus",
+            &m_Appearance.use_icons_in_menus, true ) );
+#endif
 
+    /*
+     * Font scaling hacks are only needed on GTK under wxWidgets 3.0.
+     */
+#if defined( __WXGTK__ ) && !wxCHECK_VERSION( 3, 1, 0 )
     m_params.emplace_back( new PARAM<bool>( "appearance.apply_icon_scale_to_fonts",
             &m_Appearance.apply_icon_scale_to_fonts, false ) );
+#else
+    m_Appearance.apply_icon_scale_to_fonts = false;
+#endif
 
     m_params.emplace_back( new PARAM<bool>( "auto_backup.enabled", &m_Backup.enabled, true ) );
 
@@ -368,50 +393,44 @@ bool COMMON_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
 {
     bool ret = true;
 
-    ret &= fromLegacy<double>( aCfg, "CanvasScale",     "appearance.canvas_scale" );
-    ret &= fromLegacy<int>( aCfg,    "IconScale",       "appearance.icon_scale" );
-    ret &= fromLegacy<bool>( aCfg,   "UseIconsInMenus", "appearance.use_icons_in_menus" );
+    ret &= fromLegacy<double>( aCfg, "CanvasScale",             "appearance.canvas_scale" );
+    ret &= fromLegacy<int>(    aCfg, "IconScale",               "appearance.icon_scale" );
+    ret &= fromLegacy<bool>(   aCfg, "UseIconsInMenus",         "appearance.use_icons_in_menus" );
+    ret &= fromLegacy<bool>(   aCfg, "ShowEnvVarWarningDialog", "environment.show_warning_dialog" );
 
-// Force OSX to automatically scale the canvas. Before v6, the user setting wasn't used on OSX
-// and was set to 1.0. In v6, the setting is now used by OSX and should default to automatic
-// scaling.
-#ifdef __WXMAC__
-    Set( "appearance.canvas_scale", 0.0 );
-#endif
+    auto load_env_vars =
+            [&]()
+            {
+                wxString key, value;
+                long index = 0;
+                nlohmann::json::json_pointer ptr = m_internals->PointerFromString( "environment.vars" );
 
-    ret &= fromLegacy<bool>( aCfg, "ShowEnvVarWarningDialog", "environment.show_warning_dialog" );
+                aCfg->SetPath( "EnvironmentVariables" );
+                ( *m_internals )[ptr] = nlohmann::json( {} );
 
-    auto load_env_vars = [&] () {
-          wxString key, value;
-          long index = 0;
-          nlohmann::json::json_pointer ptr = m_internals->PointerFromString( "environment.vars" );
+                while( aCfg->GetNextEntry( key, index ) )
+                {
+                    if( envVarBlacklist.count( key ) )
+                    {
+                        wxLogTrace( traceSettings, "Migrate Env: %s is blacklisted; skipping.", key );
+                        continue;
+                    }
 
-          aCfg->SetPath( "EnvironmentVariables" );
-          ( *m_internals )[ptr] = nlohmann::json( {} );
+                    value = aCfg->Read( key, wxEmptyString );
 
-          while( aCfg->GetNextEntry( key, index ) )
-          {
-              if( envVarBlacklist.count( key ) )
-              {
-                  wxLogTrace( traceSettings, "Migrate Env: %s is blacklisted; skipping.", key );
-                  continue;
-              }
+                    if( !value.IsEmpty() )
+                    {
+                        ptr.push_back( key.ToStdString() );
 
-              value = aCfg->Read( key, wxEmptyString );
+                        wxLogTrace( traceSettings, "Migrate Env: %s=%s", ptr.to_string(), value );
+                        ( *m_internals )[ptr] = value.ToUTF8();
 
-              if( !value.IsEmpty() )
-              {
-                  ptr.push_back( key.ToStdString() );
+                        ptr.pop_back();
+                    }
+                }
 
-                  wxLogTrace( traceSettings, "Migrate Env: %s=%s", ptr.to_string(), value );
-                  ( *m_internals )[ptr] = value.ToUTF8();
-
-                  ptr.pop_back();
-              }
-          }
-
-          aCfg->SetPath( ".." );
-    };
+                aCfg->SetPath( ".." );
+            };
 
     load_env_vars();
 

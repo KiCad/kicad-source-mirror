@@ -109,83 +109,61 @@ PANEL_COMMON_SETTINGS_BASE::PANEL_COMMON_SETTINGS_BASE( wxWindow* parent, wxWind
 
 	bLeftSizer->Add( sizerHelperApps, 0, wxEXPAND|wxALL, 5 );
 
-	wxStaticBoxSizer* sbSizerIconsOpts;
-	sbSizerIconsOpts = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("User Interface") ), wxHORIZONTAL );
+	m_sbUserInterface = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("User Interface") ), wxVERTICAL );
 
-	wxGridBagSizer* gbSizer4;
-	gbSizer4 = new wxGridBagSizer( 1, 0 );
-	gbSizer4->SetFlexibleDirection( wxBOTH );
-	gbSizer4->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
-	gbSizer4->SetEmptyCellSize( wxSize( -1,5 ) );
+	m_gbUserInterface = new wxGridBagSizer( 10, 0 );
+	m_gbUserInterface->SetFlexibleDirection( wxVERTICAL );
+	m_gbUserInterface->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
-	m_stIconTheme = new wxStaticText( sbSizerIconsOpts->GetStaticBox(), wxID_ANY, _("Icon theme:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_checkBoxIconsInMenus = new wxCheckBox( m_sbUserInterface->GetStaticBox(), wxID_ANY, _("Show icons in menus"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_gbUserInterface->Add( m_checkBoxIconsInMenus, wxGBPosition( 0, 0 ), wxGBSpan( 1, 2 ), wxALIGN_CENTER_VERTICAL|wxBOTTOM, 5 );
+
+	m_stIconTheme = new wxStaticText( m_sbUserInterface->GetStaticBox(), wxID_ANY, _("Icon theme:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_stIconTheme->Wrap( -1 );
-	gbSizer4->Add( m_stIconTheme, wxGBPosition( 0, 0 ), wxGBSpan( 1, 1 ), wxBOTTOM|wxALIGN_CENTER_VERTICAL, 5 );
+	m_gbUserInterface->Add( m_stIconTheme, wxGBPosition( 1, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 
-	m_rbIconThemeLight = new wxRadioButton( sbSizerIconsOpts->GetStaticBox(), wxID_ANY, _("Light"), wxDefaultPosition, wxDefaultSize, wxRB_GROUP );
+	m_rbIconThemeLight = new wxRadioButton( m_sbUserInterface->GetStaticBox(), wxID_ANY, _("Light"), wxDefaultPosition, wxDefaultSize, wxRB_GROUP );
 	m_rbIconThemeLight->SetToolTip( _("Use icons designed for light window backgrounds") );
-	m_rbIconThemeLight->SetMinSize( wxSize( 100,-1 ) );
 
-	gbSizer4->Add( m_rbIconThemeLight, wxGBPosition( 0, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	m_gbUserInterface->Add( m_rbIconThemeLight, wxGBPosition( 1, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 
-	m_rbIconThemeDark = new wxRadioButton( sbSizerIconsOpts->GetStaticBox(), wxID_ANY, _("Dark"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_rbIconThemeDark = new wxRadioButton( m_sbUserInterface->GetStaticBox(), wxID_ANY, _("Dark"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_rbIconThemeDark->SetToolTip( _("Use icons designed for dark window backgrounds") );
-	m_rbIconThemeDark->SetMinSize( wxSize( 100,-1 ) );
 
-	gbSizer4->Add( m_rbIconThemeDark, wxGBPosition( 0, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	m_gbUserInterface->Add( m_rbIconThemeDark, wxGBPosition( 1, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 
-	m_rbIconThemeAuto = new wxRadioButton( sbSizerIconsOpts->GetStaticBox(), wxID_ANY, _("Automatic"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_rbIconThemeAuto = new wxRadioButton( m_sbUserInterface->GetStaticBox(), wxID_ANY, _("Automatic"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_rbIconThemeAuto->SetValue( true );
 	m_rbIconThemeAuto->SetToolTip( _("Automatically choose light or dark icons based on the system color theme") );
 
-	gbSizer4->Add( m_rbIconThemeAuto, wxGBPosition( 0, 3 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT, 5 );
+	m_gbUserInterface->Add( m_rbIconThemeAuto, wxGBPosition( 1, 3 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 15 );
 
-	m_staticTexticonscale = new wxStaticText( sbSizerIconsOpts->GetStaticBox(), wxID_ANY, _("Icon scale:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticTexticonscale->Wrap( -1 );
-	gbSizer4->Add( m_staticTexticonscale, wxGBPosition( 2, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
-
-	m_iconScaleSlider = new STEPPED_SLIDER( sbSizerIconsOpts->GetStaticBox(), wxID_ANY, 100, 50, 275, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL|wxSL_VALUE_LABEL );
-	gbSizer4->Add( m_iconScaleSlider, wxGBPosition( 2, 1 ), wxGBSpan( 1, 2 ), wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
-
-	m_iconScaleAuto = new wxCheckBox( sbSizerIconsOpts->GetStaticBox(), wxID_ANY, _("Automatic"), wxDefaultPosition, wxDefaultSize, 0 );
-	gbSizer4->Add( m_iconScaleAuto, wxGBPosition( 2, 3 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
-
-
-	gbSizer4->Add( 0, 10, wxGBPosition( 3, 0 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
-
-	m_staticTextCanvasScale = new wxStaticText( sbSizerIconsOpts->GetStaticBox(), wxID_ANY, _("Canvas scale:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextCanvasScale = new wxStaticText( m_sbUserInterface->GetStaticBox(), wxID_ANY, _("Canvas scale:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextCanvasScale->Wrap( -1 );
-	gbSizer4->Add( m_staticTextCanvasScale, wxGBPosition( 5, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
+	m_gbUserInterface->Add( m_staticTextCanvasScale, wxGBPosition( 3, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 
-	m_canvasScaleCtrl = new wxSpinCtrlDouble( sbSizerIconsOpts->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, 100, 0, 1 );
+	m_canvasScaleCtrl = new wxSpinCtrlDouble( m_sbUserInterface->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, 100, 0, 1 );
 	m_canvasScaleCtrl->SetDigits( 0 );
-	gbSizer4->Add( m_canvasScaleCtrl, wxGBPosition( 5, 1 ), wxGBSpan( 1, 2 ), wxALIGN_CENTER_VERTICAL|wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	m_gbUserInterface->Add( m_canvasScaleCtrl, wxGBPosition( 3, 1 ), wxGBSpan( 1, 2 ), wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
 
-	m_canvasScaleAuto = new wxCheckBox( sbSizerIconsOpts->GetStaticBox(), wxID_ANY, _("Automatic"), wxDefaultPosition, wxDefaultSize, 0 );
-	gbSizer4->Add( m_canvasScaleAuto, wxGBPosition( 5, 3 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxEXPAND|wxLEFT, 5 );
+	m_canvasScaleAuto = new wxCheckBox( m_sbUserInterface->GetStaticBox(), wxID_ANY, _("Automatic"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_gbUserInterface->Add( m_canvasScaleAuto, wxGBPosition( 3, 3 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxEXPAND|wxLEFT, 15 );
 
 
-	gbSizer4->Add( 0, 10, wxGBPosition( 6, 0 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
+	m_sbUserInterface->Add( m_gbUserInterface, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
 
-	m_checkBoxIconsInMenus = new wxCheckBox( sbSizerIconsOpts->GetStaticBox(), wxID_ANY, _("Show icons in menus"), wxDefaultPosition, wxDefaultSize, 0 );
-	gbSizer4->Add( m_checkBoxIconsInMenus, wxGBPosition( 7, 0 ), wxGBSpan( 1, 2 ), wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM, 5 );
 
-	m_scaleFonts = new wxCheckBox( sbSizerIconsOpts->GetStaticBox(), wxID_ANY, _("Apply icon scaling to fonts"), wxDefaultPosition, wxDefaultSize, 0 );
-	gbSizer4->Add( m_scaleFonts, wxGBPosition( 8, 0 ), wxGBSpan( 1, 2 ), wxALIGN_CENTER_VERTICAL|wxTOP, 5 );
+	m_sbUserInterface->Add( 0, 10, 0, wxEXPAND, 5 );
 
-	m_fontScalingHelp = new wxStaticText( sbSizerIconsOpts->GetStaticBox(), wxID_ANY, _("(This workaround will improve some GTK HiDPI font scaling issues.)"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_scaleFonts = new wxCheckBox( m_sbUserInterface->GetStaticBox(), wxID_ANY, _("Apply icon scaling to fonts"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_sbUserInterface->Add( m_scaleFonts, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+
+	m_fontScalingHelp = new wxStaticText( m_sbUserInterface->GetStaticBox(), wxID_ANY, _("(This workaround will improve some GTK HiDPI font scaling issues.)"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_fontScalingHelp->Wrap( -1 );
-	gbSizer4->Add( m_fontScalingHelp, wxGBPosition( 9, 0 ), wxGBSpan( 1, 5 ), wxLEFT, 5 );
+	m_sbUserInterface->Add( m_fontScalingHelp, 0, wxLEFT, 8 );
 
 
-	gbSizer4->AddGrowableCol( 1 );
-	gbSizer4->AddGrowableCol( 2 );
-	gbSizer4->AddGrowableRow( 0 );
-
-	sbSizerIconsOpts->Add( gbSizer4, 1, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
-
-
-	bLeftSizer->Add( sbSizerIconsOpts, 1, wxEXPAND|wxALL, 5 );
+	bLeftSizer->Add( m_sbUserInterface, 1, wxEXPAND|wxALL, 5 );
 
 
 	bPanelSizer->Add( bLeftSizer, 1, wxBOTTOM|wxEXPAND, 5 );
@@ -350,16 +328,6 @@ PANEL_COMMON_SETTINGS_BASE::PANEL_COMMON_SETTINGS_BASE( wxWindow* parent, wxWind
 	m_PDFViewerPath->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( PANEL_COMMON_SETTINGS_BASE::onUpdateUIPdfPath ), NULL, this );
 	m_pdfViewerBtn->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_COMMON_SETTINGS_BASE::OnPDFViewerClick ), NULL, this );
 	m_pdfViewerBtn->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( PANEL_COMMON_SETTINGS_BASE::onUpdateUIPdfPath ), NULL, this );
-	m_iconScaleSlider->Connect( wxEVT_SCROLL_TOP, wxScrollEventHandler( PANEL_COMMON_SETTINGS_BASE::OnScaleSlider ), NULL, this );
-	m_iconScaleSlider->Connect( wxEVT_SCROLL_BOTTOM, wxScrollEventHandler( PANEL_COMMON_SETTINGS_BASE::OnScaleSlider ), NULL, this );
-	m_iconScaleSlider->Connect( wxEVT_SCROLL_LINEUP, wxScrollEventHandler( PANEL_COMMON_SETTINGS_BASE::OnScaleSlider ), NULL, this );
-	m_iconScaleSlider->Connect( wxEVT_SCROLL_LINEDOWN, wxScrollEventHandler( PANEL_COMMON_SETTINGS_BASE::OnScaleSlider ), NULL, this );
-	m_iconScaleSlider->Connect( wxEVT_SCROLL_PAGEUP, wxScrollEventHandler( PANEL_COMMON_SETTINGS_BASE::OnScaleSlider ), NULL, this );
-	m_iconScaleSlider->Connect( wxEVT_SCROLL_PAGEDOWN, wxScrollEventHandler( PANEL_COMMON_SETTINGS_BASE::OnScaleSlider ), NULL, this );
-	m_iconScaleSlider->Connect( wxEVT_SCROLL_THUMBTRACK, wxScrollEventHandler( PANEL_COMMON_SETTINGS_BASE::OnScaleSlider ), NULL, this );
-	m_iconScaleSlider->Connect( wxEVT_SCROLL_THUMBRELEASE, wxScrollEventHandler( PANEL_COMMON_SETTINGS_BASE::OnScaleSlider ), NULL, this );
-	m_iconScaleSlider->Connect( wxEVT_SCROLL_CHANGED, wxScrollEventHandler( PANEL_COMMON_SETTINGS_BASE::OnScaleSlider ), NULL, this );
-	m_iconScaleAuto->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_COMMON_SETTINGS_BASE::OnIconScaleAuto ), NULL, this );
 	m_canvasScaleAuto->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_COMMON_SETTINGS_BASE::OnCanvasScaleAuto ), NULL, this );
 }
 
@@ -370,16 +338,6 @@ PANEL_COMMON_SETTINGS_BASE::~PANEL_COMMON_SETTINGS_BASE()
 	m_PDFViewerPath->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( PANEL_COMMON_SETTINGS_BASE::onUpdateUIPdfPath ), NULL, this );
 	m_pdfViewerBtn->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_COMMON_SETTINGS_BASE::OnPDFViewerClick ), NULL, this );
 	m_pdfViewerBtn->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( PANEL_COMMON_SETTINGS_BASE::onUpdateUIPdfPath ), NULL, this );
-	m_iconScaleSlider->Disconnect( wxEVT_SCROLL_TOP, wxScrollEventHandler( PANEL_COMMON_SETTINGS_BASE::OnScaleSlider ), NULL, this );
-	m_iconScaleSlider->Disconnect( wxEVT_SCROLL_BOTTOM, wxScrollEventHandler( PANEL_COMMON_SETTINGS_BASE::OnScaleSlider ), NULL, this );
-	m_iconScaleSlider->Disconnect( wxEVT_SCROLL_LINEUP, wxScrollEventHandler( PANEL_COMMON_SETTINGS_BASE::OnScaleSlider ), NULL, this );
-	m_iconScaleSlider->Disconnect( wxEVT_SCROLL_LINEDOWN, wxScrollEventHandler( PANEL_COMMON_SETTINGS_BASE::OnScaleSlider ), NULL, this );
-	m_iconScaleSlider->Disconnect( wxEVT_SCROLL_PAGEUP, wxScrollEventHandler( PANEL_COMMON_SETTINGS_BASE::OnScaleSlider ), NULL, this );
-	m_iconScaleSlider->Disconnect( wxEVT_SCROLL_PAGEDOWN, wxScrollEventHandler( PANEL_COMMON_SETTINGS_BASE::OnScaleSlider ), NULL, this );
-	m_iconScaleSlider->Disconnect( wxEVT_SCROLL_THUMBTRACK, wxScrollEventHandler( PANEL_COMMON_SETTINGS_BASE::OnScaleSlider ), NULL, this );
-	m_iconScaleSlider->Disconnect( wxEVT_SCROLL_THUMBRELEASE, wxScrollEventHandler( PANEL_COMMON_SETTINGS_BASE::OnScaleSlider ), NULL, this );
-	m_iconScaleSlider->Disconnect( wxEVT_SCROLL_CHANGED, wxScrollEventHandler( PANEL_COMMON_SETTINGS_BASE::OnScaleSlider ), NULL, this );
-	m_iconScaleAuto->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_COMMON_SETTINGS_BASE::OnIconScaleAuto ), NULL, this );
 	m_canvasScaleAuto->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_COMMON_SETTINGS_BASE::OnCanvasScaleAuto ), NULL, this );
 
 }

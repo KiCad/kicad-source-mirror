@@ -10,7 +10,6 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
-#include "widgets/stepped_slider.h"
 #include "widgets/resettable_panel.h"
 #include <wx/string.h>
 #include <wx/stattext.h>
@@ -29,7 +28,6 @@
 #include <wx/icon.h>
 #include <wx/button.h>
 #include <wx/radiobut.h>
-#include <wx/slider.h>
 #include <wx/checkbox.h>
 #include <wx/spinctrl.h>
 #include <wx/panel.h>
@@ -53,17 +51,16 @@ class PANEL_COMMON_SETTINGS_BASE : public RESETTABLE_PANEL
 		wxRadioButton* m_otherPDFViewer;
 		wxTextCtrl* m_PDFViewerPath;
 		wxBitmapButton* m_pdfViewerBtn;
+		wxStaticBoxSizer* m_sbUserInterface;
+		wxGridBagSizer* m_gbUserInterface;
+		wxCheckBox* m_checkBoxIconsInMenus;
 		wxStaticText* m_stIconTheme;
 		wxRadioButton* m_rbIconThemeLight;
 		wxRadioButton* m_rbIconThemeDark;
 		wxRadioButton* m_rbIconThemeAuto;
-		wxStaticText* m_staticTexticonscale;
-		STEPPED_SLIDER* m_iconScaleSlider;
-		wxCheckBox* m_iconScaleAuto;
 		wxStaticText* m_staticTextCanvasScale;
 		wxSpinCtrlDouble* m_canvasScaleCtrl;
 		wxCheckBox* m_canvasScaleAuto;
-		wxCheckBox* m_checkBoxIconsInMenus;
 		wxCheckBox* m_scaleFonts;
 		wxStaticText* m_fontScalingHelp;
 		wxCheckBox* m_warpMouseOnMove;
@@ -93,8 +90,6 @@ class PANEL_COMMON_SETTINGS_BASE : public RESETTABLE_PANEL
 		virtual void OnTextEditorClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onUpdateUIPdfPath( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void OnPDFViewerClick( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnScaleSlider( wxScrollEvent& event ) { event.Skip(); }
-		virtual void OnIconScaleAuto( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnCanvasScaleAuto( wxCommandEvent& event ) { event.Skip(); }
 
 

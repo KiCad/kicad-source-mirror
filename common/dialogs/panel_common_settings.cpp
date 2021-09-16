@@ -32,18 +32,76 @@
 #include <id.h>
 #include <settings/common_settings.h>
 #include <settings/settings_manager.h>
-
+#include <widgets/stepped_slider.h>
 #include <wx/filedlg.h>
 
-static constexpr int dpi_scaling_precision = 1;
-static constexpr double dpi_scaling_increment = 0.5;
-
+/*
+ * What follows is a whole lot of ugly to handle various platform GUI deficiences with respect
+ * to light/dark mode, DPI scaling, and other foibles.
+ *
+ * Ugly as it all is, it does improve our usability on various platforms.
+ */
 
 PANEL_COMMON_SETTINGS::PANEL_COMMON_SETTINGS( DIALOG_SHIM* aDialog, wxWindow* aParent )
         : PANEL_COMMON_SETTINGS_BASE( aParent ),
           m_dialog( aDialog ),
+          m_iconScaleLabel( nullptr ),
+          m_iconScaleSlider( nullptr ),
+          m_iconScaleAuto( nullptr ),
           m_last_scale( -1 )
 {
+    /*
+     * Cairo canvas doesn't work on Mac, so no need for fallback anti-aliasing options
+     */
+#ifdef __WXMAC__
+    m_antialiasingFallback->Show( false );
+    m_antialiasingFallbackLabel->Show( false );
+#endif
+
+    m_textEditorBtn->SetBitmap( KiBitmap( BITMAPS::small_folder ) );
+    m_pdfViewerBtn->SetBitmap( KiBitmap( BITMAPS::small_folder ) );
+
+    /*
+     * Automatic dark mode detection works fine on Mac, so no need for the explicit options.
+     */
+#ifdef __WXMAC__
+    m_stIconTheme->Show( false );
+    m_rbIconThemeLight->Show( false );
+    m_rbIconThemeDark->Show( false );
+    m_rbIconThemeAuto->Show( false );
+#endif
+
+    /*
+     * Automatic icon scaling works fine on Mac.  It works mostly fine on MSW, but perhaps not
+     * uniformly enough to exclude the explicit controls there.
+     */
+#if defined( __WXGTK__ ) || defined( __WXMSW__ )
+    // Sadly wxSlider is poorly implemented and adds its legends as sibiling windows (so that
+    // showing/hiding the control doesn't work).  So we have to create it conditionally.
+    wxWindow*       parent = m_sbUserInterface->GetStaticBox();
+    wxGridBagSizer* gb = m_gbUserInterface;
+
+    m_iconScaleLabel = new wxStaticText( parent, wxID_ANY, _( "Icon scale:" ) );
+   	m_iconScaleLabel->Wrap( -1 );
+   	gb->Add( m_iconScaleLabel, wxGBPosition( 2, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
+
+   	m_iconScaleSlider = new STEPPED_SLIDER( parent, wxID_ANY, 100, 50, 275, wxDefaultPosition,
+                                            wxDefaultSize, wxSL_HORIZONTAL|wxSL_VALUE_LABEL );
+   	m_iconScaleSlider->SetStep( 25 );
+   	gb->Add( m_iconScaleSlider, wxGBPosition( 2, 1 ), wxGBSpan( 1, 2 ), wxEXPAND|wxBOTTOM, 5 );
+
+   	m_iconScaleAuto = new wxCheckBox( parent, wxID_ANY, _( "Automatic" ) );
+   	gb->Add( m_iconScaleAuto, wxGBPosition( 2, 3 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 15 );
+#endif
+
+   	/*
+   	 * Automatic canvas scaling works fine on Mac and MSW, and on GTK under wxWidgets 3.1 or
+   	 * better.
+   	 */
+#if defined( __WXGTK__ ) && !wxCHECK_VERSION( 3, 1, 0 )
+   	static constexpr int dpi_scaling_precision = 1;
+   	static constexpr double dpi_scaling_increment = 0.5;
+
     m_canvasScaleCtrl->SetRange( DPI_SCALING::GetMinScaleFactor(),
                                  DPI_SCALING::GetMaxScaleFactor() );
     m_canvasScaleCtrl->SetDigits( dpi_scaling_precision );
@@ -65,31 +123,108 @@ PANEL_COMMON_SETTINGS::PANEL_COMMON_SETTINGS( DIALOG_SHIM* aDialog, wxWindow* aP
                "\n\n"
                "On some platforms, the automatic value is incorrect and should be "
                "set manually." ) );
-
-    m_iconScaleSlider->SetStep( 25 );
-
-#ifdef __WXMAC__
-    // Cairo canvas doesn't work on Mac, so no need for anti-aliasing options
-    m_antialiasingFallback->Show( false );
-    m_antialiasingFallbackLabel->Show( false );
+#else
+    m_staticTextCanvasScale->Show( false );
+    m_canvasScaleCtrl->Show( false );
+    m_canvasScaleCtrl = nullptr;
+    m_canvasScaleAuto->Show( false );
 #endif
 
-    m_textEditorBtn->SetBitmap( KiBitmap( BITMAPS::small_folder ) );
-    m_pdfViewerBtn->SetBitmap( KiBitmap( BITMAPS::small_folder ) );
-
+    /*
+     * Font scaling hacks are only needed on GTK under wxWidgets 3.0.
+     */
+#if defined( __WXGTK__ ) && !wxCHECK_VERSION( 3, 1, 0 )
     m_fontScalingHelp->SetFont( KIUI::GetInfoFont( this ).Italic() );
+#else
+    m_scaleFonts->Show( false );
+    m_fontScalingHelp->Show( false );
+#endif
 
-    m_canvasScaleCtrl->Connect( wxEVT_COMMAND_TEXT_UPDATED,
-                                wxCommandEventHandler( PANEL_COMMON_SETTINGS::OnCanvasScaleChange ),
-                                nullptr, this );
+    if( m_iconScaleSlider )
+    {
+        m_iconScaleSlider->Connect( wxEVT_SCROLL_TOP, 
+                                    wxScrollEventHandler( PANEL_COMMON_SETTINGS::OnScaleSlider ), 
+                                    nullptr, this );
+        m_iconScaleSlider->Connect( wxEVT_SCROLL_BOTTOM, 
+                                    wxScrollEventHandler( PANEL_COMMON_SETTINGS::OnScaleSlider ), 
+                                    nullptr, this );
+        m_iconScaleSlider->Connect( wxEVT_SCROLL_LINEUP, 
+                                    wxScrollEventHandler( PANEL_COMMON_SETTINGS::OnScaleSlider ), 
+                                    nullptr, this );
+        m_iconScaleSlider->Connect( wxEVT_SCROLL_LINEDOWN,
+                                    wxScrollEventHandler( PANEL_COMMON_SETTINGS::OnScaleSlider ), 
+                                    nullptr, this );
+        m_iconScaleSlider->Connect( wxEVT_SCROLL_PAGEUP,
+                                    wxScrollEventHandler( PANEL_COMMON_SETTINGS::OnScaleSlider ), 
+                                    nullptr, this );
+        m_iconScaleSlider->Connect( wxEVT_SCROLL_PAGEDOWN,
+                                    wxScrollEventHandler( PANEL_COMMON_SETTINGS::OnScaleSlider ), 
+                                    nullptr, this );
+        m_iconScaleSlider->Connect( wxEVT_SCROLL_THUMBTRACK, 
+                                    wxScrollEventHandler( PANEL_COMMON_SETTINGS::OnScaleSlider ), 
+                                    nullptr, this );
+        m_iconScaleSlider->Connect( wxEVT_SCROLL_THUMBRELEASE, 
+                                    wxScrollEventHandler( PANEL_COMMON_SETTINGS::OnScaleSlider ), 
+                                    nullptr, this );
+        m_iconScaleSlider->Connect( wxEVT_SCROLL_CHANGED,
+                                    wxScrollEventHandler( PANEL_COMMON_SETTINGS::OnScaleSlider ), 
+                                    nullptr, this );
+        m_iconScaleAuto->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED,
+                                  wxCommandEventHandler( PANEL_COMMON_SETTINGS::OnIconScaleAuto ),
+                                  nullptr, this );
+    }
+
+    if( m_canvasScaleCtrl )
+    {
+        m_canvasScaleCtrl->Connect( wxEVT_COMMAND_TEXT_UPDATED,
+                                    wxCommandEventHandler( PANEL_COMMON_SETTINGS::OnCanvasScaleChange ),
+                                    nullptr, this );
+    }
 }
 
 
 PANEL_COMMON_SETTINGS::~PANEL_COMMON_SETTINGS()
 {
-    m_canvasScaleCtrl->Disconnect( wxEVT_COMMAND_TEXT_UPDATED,
-                                   wxCommandEventHandler( PANEL_COMMON_SETTINGS::OnCanvasScaleChange ),
-                                   nullptr, this );
+    if( m_iconScaleSlider )
+    {
+        m_iconScaleSlider->Disconnect( wxEVT_SCROLL_TOP,
+                                       wxScrollEventHandler( PANEL_COMMON_SETTINGS::OnScaleSlider ),
+                                       nullptr, this );
+       	m_iconScaleSlider->Disconnect( wxEVT_SCROLL_BOTTOM,
+                                       wxScrollEventHandler( PANEL_COMMON_SETTINGS::OnScaleSlider ),
+                                       nullptr, this );
+       	m_iconScaleSlider->Disconnect( wxEVT_SCROLL_LINEUP,
+                                       wxScrollEventHandler( PANEL_COMMON_SETTINGS::OnScaleSlider ),
+                                       nullptr, this );
+       	m_iconScaleSlider->Disconnect( wxEVT_SCROLL_LINEDOWN,
+                                       wxScrollEventHandler( PANEL_COMMON_SETTINGS::OnScaleSlider ),
+                                       nullptr, this );
+       	m_iconScaleSlider->Disconnect( wxEVT_SCROLL_PAGEUP,
+                                       wxScrollEventHandler( PANEL_COMMON_SETTINGS::OnScaleSlider ),
+                                       nullptr, this );
+       	m_iconScaleSlider->Disconnect( wxEVT_SCROLL_PAGEDOWN,
+                                       wxScrollEventHandler( PANEL_COMMON_SETTINGS::OnScaleSlider ),
+                                       nullptr, this );
+       	m_iconScaleSlider->Disconnect( wxEVT_SCROLL_THUMBTRACK,
+                                       wxScrollEventHandler( PANEL_COMMON_SETTINGS::OnScaleSlider ),
+                                       nullptr, this );
+       	m_iconScaleSlider->Disconnect( wxEVT_SCROLL_THUMBRELEASE,
+                                       wxScrollEventHandler( PANEL_COMMON_SETTINGS::OnScaleSlider ),
+                                       nullptr, this );
+       	m_iconScaleSlider->Disconnect( wxEVT_SCROLL_CHANGED,
+                                       wxScrollEventHandler( PANEL_COMMON_SETTINGS::OnScaleSlider ),
+                                       nullptr, this );
+       	m_iconScaleAuto->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED,
+                                     wxCommandEventHandler( PANEL_COMMON_SETTINGS::OnIconScaleAuto ),
+                                     nullptr, this );
+    }
+
+    if( m_canvasScaleCtrl )
+    {
+        m_canvasScaleCtrl->Disconnect( wxEVT_COMMAND_TEXT_UPDATED,
+                                       wxCommandEventHandler( PANEL_COMMON_SETTINGS::OnCanvasScaleChange ),
+                                       nullptr, this );
+    }
 }
 
 
@@ -120,9 +255,13 @@ bool PANEL_COMMON_SETTINGS::TransferDataFromWindow()
     commonSettings->m_Graphics.opengl_aa_mode = m_antialiasing->GetSelection();
     commonSettings->m_Graphics.cairo_aa_mode = m_antialiasingFallback->GetSelection();
 
-    const int scale_fourths = m_iconScaleAuto->GetValue() ? -1 : m_iconScaleSlider->GetValue() / 25;
-    commonSettings->m_Appearance.icon_scale = scale_fourths;
+    if( m_iconScaleSlider )
+    {
+        int scale_fourths = m_iconScaleAuto->GetValue() ? -1 : m_iconScaleSlider->GetValue() / 25;
+        commonSettings->m_Appearance.icon_scale = scale_fourths;
+    }
 
+    if( m_canvasScaleCtrl )
     {
         DPI_SCALING dpi( commonSettings, this );
         dpi.SetDpiConfig( m_canvasScaleAuto->GetValue(), m_canvasScaleCtrl->GetValue() );
@@ -193,19 +332,23 @@ void PANEL_COMMON_SETTINGS::applySettingsToPanel( COMMON_SETTINGS& aSettings )
 
     m_Clear3DCacheFilesOlder->SetValue( aSettings.m_System.clear_3d_cache_interval );
 
-    int icon_scale_fourths = aSettings.m_Appearance.icon_scale;
-
-    if( icon_scale_fourths <= 0 )
+    if( m_iconScaleSlider )
     {
-        m_iconScaleAuto->SetValue( true );
-        m_iconScaleSlider->SetValue( 25 * KiIconScale( GetParent() ) );
-    }
-    else
-    {
-        m_iconScaleAuto->SetValue( false );
-        m_iconScaleSlider->SetValue( icon_scale_fourths * 25 );
+        int icon_scale_fourths = aSettings.m_Appearance.icon_scale;
+
+        if( icon_scale_fourths <= 0 )
+        {
+            m_iconScaleAuto->SetValue( true );
+            m_iconScaleSlider->SetValue( 25 * KiIconScale( GetParent() ) );
+        }
+        else
+        {
+            m_iconScaleAuto->SetValue( false );
+            m_iconScaleSlider->SetValue( icon_scale_fourths * 25 );
+        }
     }
 
+    if( m_canvasScaleCtrl )
     {
         const DPI_SCALING dpi( &aSettings, this );
         m_canvasScaleCtrl->SetValue( dpi.GetScaleFactor() );
@@ -245,15 +388,18 @@ void PANEL_COMMON_SETTINGS::OnScaleSlider( wxScrollEvent& aEvent )
 
 void PANEL_COMMON_SETTINGS::OnIconScaleAuto( wxCommandEvent& aEvent )
 {
-    if( m_iconScaleAuto->GetValue() )
+    if( m_iconScaleSlider )
     {
-        m_last_scale = m_iconScaleAuto->GetValue();
-        m_iconScaleSlider->SetValue( 25 * KiIconScale( GetParent() ) );
-    }
-    else
-    {
-        if( m_last_scale >= 0 )
-            m_iconScaleSlider->SetValue( m_last_scale );
+        if( m_iconScaleAuto->GetValue() )
+        {
+            m_last_scale = m_iconScaleAuto->GetValue();
+            m_iconScaleSlider->SetValue( 25 * KiIconScale( GetParent() ) );
+        }
+        else
+        {
+            if( m_last_scale >= 0 )
+                m_iconScaleSlider->SetValue( m_last_scale );
+        }
     }
 }
 
@@ -268,7 +414,7 @@ void PANEL_COMMON_SETTINGS::OnCanvasScaleAuto( wxCommandEvent& aEvent )
 {
     const bool automatic = m_canvasScaleAuto->GetValue();
 
-    if( automatic )
+    if( automatic && m_canvasScaleCtrl )
     {
         // set the scale to the auto value, without consulting the config
         DPI_SCALING dpi( nullptr, this );
