@@ -53,6 +53,7 @@ public:
         int        icon_scale;
         ICON_THEME icon_theme;
         bool       use_icons_in_menus;
+        bool       apply_icon_scale_to_fonts;
     };
 
     struct AUTO_BACKUP

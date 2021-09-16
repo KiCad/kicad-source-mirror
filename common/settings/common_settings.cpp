@@ -80,6 +80,9 @@ COMMON_SETTINGS::COMMON_SETTINGS() :
     m_params.emplace_back( new PARAM<bool>( "appearance.use_icons_in_menus",
             &m_Appearance.use_icons_in_menus, defaultUseIconsInMenus ) );
 
+    m_params.emplace_back( new PARAM<bool>( "appearance.apply_icon_scale_to_fonts",
+            &m_Appearance.apply_icon_scale_to_fonts, false ) );
+
     m_params.emplace_back( new PARAM<bool>( "auto_backup.enabled", &m_Backup.enabled, true ) );
 
     m_params.emplace_back( new PARAM<bool>( "auto_backup.backup_on_autosave",

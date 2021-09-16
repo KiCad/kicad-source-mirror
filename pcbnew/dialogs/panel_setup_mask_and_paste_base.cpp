@@ -29,11 +29,11 @@ PANEL_SETUP_MASK_AND_PASTE_BASE::PANEL_SETUP_MASK_AND_PASTE_BASE( wxWindow* pare
 	wxBoxSizer* bSizer4;
 	bSizer4 = new wxBoxSizer( wxVERTICAL );
 
-	m_staticTextInfoMaskMinWidth = new wxStaticText( this, wxID_ANY, _("Use your board house's recommendation for solder mask clearance and minimum bridge width."), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextInfoMaskMinWidth = new wxStaticText( this, wxID_ANY, _("Use your board house's recommendations for solder mask clearance and minimum web width."), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextInfoMaskMinWidth->Wrap( -1 );
 	bSizer4->Add( m_staticTextInfoMaskMinWidth, 0, wxEXPAND, 1 );
 
-	m_staticTextInfoMaskMinWidth1 = new wxStaticText( this, wxID_ANY, _("If none is provided, setting the values to zero is suggested."), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextInfoMaskMinWidth1 = new wxStaticText( this, wxID_ANY, _("If none are provided, setting the values to zero is suggested."), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextInfoMaskMinWidth1->Wrap( -1 );
 	bSizer4->Add( m_staticTextInfoMaskMinWidth1, 0, wxEXPAND|wxTOP, 1 );
 

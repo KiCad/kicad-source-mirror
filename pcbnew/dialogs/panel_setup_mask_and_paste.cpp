@@ -41,9 +41,7 @@ PANEL_SETUP_MASK_AND_PASTE::PANEL_SETUP_MASK_AND_PASTE( PAGED_DIALOG* aParent,
     m_Frame = aFrame;
     m_BrdSettings = &m_Frame->GetBoard()->GetDesignSettings();
 
-    m_staticTextInfoMaskMinWidth->SetFont( KIUI::GetInfoFont( this ) );
-    m_staticTextInfoMaskMinWidth1->SetFont( KIUI::GetInfoFont( this ) );
-    m_staticTextInfoPaste->SetFont( KIUI::GetInfoFont( this ) );
+    m_staticTextInfoPaste->SetFont( KIUI::GetInfoFont( this ).Italic() );
 
     m_pasteMargin.SetNegativeZero();
 

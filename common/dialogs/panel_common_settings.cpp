@@ -77,6 +77,8 @@ PANEL_COMMON_SETTINGS::PANEL_COMMON_SETTINGS( DIALOG_SHIM* aDialog, wxWindow* aP
     m_textEditorBtn->SetBitmap( KiBitmap( BITMAPS::small_folder ) );
     m_pdfViewerBtn->SetBitmap( KiBitmap( BITMAPS::small_folder ) );
 
+    m_fontScalingHelp->SetFont( KIUI::GetInfoFont( this ).Italic() );
+
     m_canvasScaleCtrl->Connect( wxEVT_COMMAND_TEXT_UPDATED,
                                 wxCommandEventHandler( PANEL_COMMON_SETTINGS::OnCanvasScaleChange ),
                                 nullptr, this );
@@ -134,6 +136,7 @@ bool PANEL_COMMON_SETTINGS::TransferDataFromWindow()
         commonSettings->m_Appearance.icon_theme = ICON_THEME::AUTO;
 
     commonSettings->m_Appearance.use_icons_in_menus = m_checkBoxIconsInMenus->GetValue();
+    commonSettings->m_Appearance.apply_icon_scale_to_fonts = m_scaleFonts->GetValue();
 
     commonSettings->m_Input.immediate_actions   = !m_NonImmediateActions->GetValue();
     commonSettings->m_Input.warp_mouse_on_move  = m_warpMouseOnMove->GetValue();
@@ -217,6 +220,7 @@ void PANEL_COMMON_SETTINGS::applySettingsToPanel( COMMON_SETTINGS& aSettings )
     }
 
     m_checkBoxIconsInMenus->SetValue( aSettings.m_Appearance.use_icons_in_menus );
+    m_scaleFonts->SetValue( aSettings.m_Appearance.apply_icon_scale_to_fonts );
 
     m_warpMouseOnMove->SetValue( aSettings.m_Input.warp_mouse_on_move );
     m_NonImmediateActions->SetValue( !aSettings.m_Input.immediate_actions );

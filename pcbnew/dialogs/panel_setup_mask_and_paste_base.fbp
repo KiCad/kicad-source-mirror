@@ -181,7 +181,7 @@
                                                 <property name="gripper">0</property>
                                                 <property name="hidden">0</property>
                                                 <property name="id">wxID_ANY</property>
-                                                <property name="label">Use your board house&apos;s recommendation for solder mask clearance and minimum bridge width.</property>
+                                                <property name="label">Use your board house&apos;s recommendations for solder mask clearance and minimum web width.</property>
                                                 <property name="markup">0</property>
                                                 <property name="max_size"></property>
                                                 <property name="maximize_button">0</property>
@@ -242,7 +242,7 @@
                                                 <property name="gripper">0</property>
                                                 <property name="hidden">0</property>
                                                 <property name="id">wxID_ANY</property>
-                                                <property name="label">If none is provided, setting the values to zero is suggested.</property>
+                                                <property name="label">If none are provided, setting the values to zero is suggested.</property>
                                                 <property name="markup">0</property>
                                                 <property name="max_size"></property>
                                                 <property name="maximize_button">0</property>

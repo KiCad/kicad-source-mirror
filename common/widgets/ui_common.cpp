@@ -101,16 +101,16 @@ wxFont getGUIFont( wxWindow* aWindow, int aRelativeSize )
 
     font.SetPointSize( font.GetPointSize() + aRelativeSize );
 
-    // Both wxFont::SetSymbolicSize() and wxWindow::ConvertDialogToPixels() fail on some GTKs
-    // with HiDPI screens.  These appear to be the same conditions under which automatic icon
-    // scaling fails, so we look for that and apply a patch.
-
-    int requested_scale = Pgm().GetCommonSettings()->m_Appearance.icon_scale;
-
-    if( requested_scale > 0 )
+    if( Pgm().GetCommonSettings()->m_Appearance.apply_icon_scale_to_fonts )
     {
-        double factor = static_cast<double>( requested_scale ) / 4.0;
-        font.SetPointSize( KiROUND( font.GetPointSize() * factor ) );
+        double icon_scale_fourths;
+
+        if( Pgm().GetCommonSettings()->m_Appearance.icon_scale <= 0 )
+            icon_scale_fourths = KiIconScale( aWindow );
+        else
+            icon_scale_fourths = Pgm().GetCommonSettings()->m_Appearance.icon_scale;
+
+        font.SetPointSize( KiROUND( icon_scale_fourths * font.GetPointSize() / 4.0 ) );
     }
 
 #ifdef __WXMAC__
