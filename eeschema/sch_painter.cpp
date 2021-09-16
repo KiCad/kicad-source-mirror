@@ -1071,15 +1071,15 @@ void SCH_PAINTER::draw( LIB_PIN *aPin, int aLayer )
             };
 
     auto drawText =
-            [&]( const wxString& text, const VECTOR2D& pos, double angle )
+            [&]( const wxString& aText, const VECTOR2D& aPos, double aAngle )
             {
-                if( text.IsEmpty() )
+                if( aText.IsEmpty() )
                     return;
 
                 if( drawingShadows && eeconfig()->m_Selection.text_as_box )
-                    boxText( text, pos, angle );
+                    boxText( aText, aPos, aAngle );
                 else
-                    strokeText( text, pos, angle );
+                    strokeText( aText, aPos, aAngle );
             };
 
     switch( orient )
