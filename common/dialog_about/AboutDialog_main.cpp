@@ -570,6 +570,26 @@ static void buildKicadAboutBanner( EDA_BASE_FRAME* aParent, ABOUT_APP_INFO& aInf
                                           wxEmptyString,
                                           wxEmptyString,
                                           "Japanese (JA)" ) );
+    aInfo.AddTranslator( new CONTRIBUTOR( "Hidemichi Gotou",
+                                          wxEmptyString,
+                                          wxEmptyString,
+                                          "Japanese (JA)" ) );
+    aInfo.AddTranslator( new CONTRIBUTOR( "Kaoru Zenyouji",
+                                          wxEmptyString,
+                                          wxEmptyString,
+                                          "Japanese (JA)" ) );
+    aInfo.AddTranslator( new CONTRIBUTOR( "Kinichiro Inoguchi",
+                                          wxEmptyString,
+                                          wxEmptyString,
+                                          "Japanese (JA)" ) );
+    aInfo.AddTranslator( new CONTRIBUTOR( "Norio Suzuki",
+                                          wxEmptyString,
+                                          wxEmptyString,
+                                          "Japanese (JA)" ) );
+    aInfo.AddTranslator( new CONTRIBUTOR( "starfort-jp",
+                                          wxEmptyString,
+                                          wxEmptyString,
+                                          "Japanese (JA)" ) );
     aInfo.AddTranslator( new CONTRIBUTOR( wxT( "킴슨김랑기" ),
                                           wxEmptyString,
                                           wxEmptyString,
