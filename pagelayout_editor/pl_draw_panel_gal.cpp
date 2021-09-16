@@ -128,8 +128,7 @@ void PL_DRAW_PANEL_GAL::DisplayDrawingSheet()
     // (Note: no need to have a large working area: nothing can be drawn outside th page size).
     double size_x = m_edaFrame->GetPageSizeIU().x;
     double size_y = m_edaFrame->GetPageSizeIU().y;
-    BOX2D boundary( VECTOR2D( -size_x/4 , -size_y/4 ),
-                    VECTOR2D( size_x * 1.5, size_y * 1.5) );
+    BOX2D boundary( VECTOR2D( -size_x/4 , -size_y/4 ), VECTOR2D( size_x * 1.5, size_y * 1.5) );
     m_view->SetBoundary( boundary );
 
     m_pageDrawItem->SetPageSize( m_edaFrame->GetPageSizeIU() );
