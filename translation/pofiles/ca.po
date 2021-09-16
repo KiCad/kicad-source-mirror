@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-09-13 10:58-0700\n"
-"PO-Revision-Date: 2021-09-15 17:51+0000\n"
+"PO-Revision-Date: 2021-09-16 16:11+0000\n"
 "Last-Translator: Arnau Llovet Vidal <arnaullv@gmail.com>\n"
 "Language-Team: Catalan <https://hosted.weblate.org/projects/kicad/"
 "master-source/ca/>\n"
@@ -2964,9 +2964,8 @@ msgid "Executable files ("
 msgstr "Fitxers executables ("
 
 #: common/dialogs/panel_common_settings.cpp:304
-#, fuzzy
 msgid "Select Preferred PDF Viewer"
-msgstr "Selecció del navegador PDF preferit"
+msgstr "Selecciona del visualitzador de PDF preferit"
 
 #: common/dialogs/panel_common_settings_base.cpp:26
 msgid "&Auto save:"
@@ -2985,12 +2984,11 @@ msgstr "minuts"
 
 #: common/dialogs/panel_common_settings_base.cpp:46
 msgid "File history size:"
-msgstr ""
+msgstr "Mida de l'historial de fitxers:"
 
 #: common/dialogs/panel_common_settings_base.cpp:53
-#, fuzzy
 msgid "3D cache file duration:"
-msgstr "Configuració dels camins a la cerca 3D"
+msgstr "Duració del fitxer de cau 3D:"
 
 #: common/dialogs/panel_common_settings_base.cpp:61
 msgid ""
@@ -3530,9 +3528,8 @@ msgid "Schematic wire line style"
 msgstr "Fitxers d'esquemàtic"
 
 #: common/dialogs/panel_setup_netclasses.cpp:541
-#, fuzzy
 msgid "The default net class is required."
-msgstr "No es pot suprimir la classe de xarxa predeterminada"
+msgstr "Es necessita la classe de xarxa predeterminada."
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:41
 #: common/dialogs/panel_setup_netclasses_base.cpp:215
@@ -3759,9 +3756,8 @@ msgstr "Info"
 #: common/dialogs/wx_html_report_panel_base.cpp:65
 #: eeschema/dialogs/dialog_erc_base.cpp:95
 #: pcbnew/dialogs/dialog_drc_base.cpp:178
-#, fuzzy
 msgid "Save..."
-msgstr "&Anomena i desa"
+msgstr "Desa..."
 
 #: common/draw_panel_gal.cpp:251 common/draw_panel_gal.cpp:413
 msgid "Could not use OpenGL, falling back to software rendering"
@@ -3783,9 +3779,9 @@ msgid "Drawing sheet '%s' could not be opened."
 msgstr "No s'ha trobat el fitxer de recuperació «%s»."
 
 #: common/drawing_sheet/drawing_sheet_parser.cpp:913
-#, fuzzy, c-format
+#, c-format
 msgid "Drawing sheet '%s' was not fully read."
-msgstr "No s'ha llegit totalment el fitxer <%s>"
+msgstr "No s'ha llegit totalment la fulla de dibuix '%s'."
 
 #: common/drawing_sheet/ds_data_item.cpp:370
 #: common/drawing_sheet/ds_draw_item.cpp:122 common/eda_text.cpp:667
@@ -3946,9 +3942,9 @@ msgid "&Help"
 msgstr "A&juda"
 
 #: common/eda_base_frame.cpp:942
-#, fuzzy, c-format
+#, c-format
 msgid "File '%s' was not found."
-msgstr "Fitxer %s no trobat"
+msgstr "No s'ha trobat el fitxer '%s'."
 
 #: common/eda_base_frame.cpp:985
 #, fuzzy
@@ -4016,9 +4012,8 @@ msgid "Inches"
 msgstr "Polzades"
 
 #: common/eda_draw_frame.cpp:309
-#, fuzzy
 msgid "Edit User Grid..."
-msgstr "Edita el camp"
+msgstr "Edita la quadrícula d'usuari..."
 
 #: common/eda_draw_frame.cpp:418
 msgid "Zoom Auto"
@@ -4197,9 +4192,8 @@ msgid "Graphic Line"
 msgstr "Capa gràfica"
 
 #: common/eda_item.cpp:278 eeschema/sch_bitmap.cpp:201
-#, fuzzy
 msgid "Bitmap"
-msgstr "Mapa de &bits..."
+msgstr "Mapa de bits"
 
 #: common/eda_item.cpp:279
 #, fuzzy
@@ -4532,24 +4526,24 @@ msgstr ""
 
 #: common/env_vars.cpp:98
 msgid "Deprecated version of KICAD_TEMPLATE_DIR."
-msgstr ""
+msgstr "Versió obsoleta de KICAD_TEMPLATE_DIR."
 
 #: common/env_vars.cpp:100
 msgid "Deprecated version of KICAD6_3DMODEL_DIR."
-msgstr ""
+msgstr "Versió obsoleta de KICAD6_3DMODEL_DIR."
 
 #: common/env_vars.cpp:102
 msgid "Deprecated version of KICAD6_FOOTPRINT_DIR."
-msgstr ""
+msgstr "Versió obsoleta de KICAD6_FOOTPRINT_DIR."
 
 #: common/env_vars.cpp:104
 msgid "Deprecated version of KICAD_SYMBOL_DIR."
-msgstr ""
+msgstr "Versió obsoleta de KICAD_SYMBOL_DIR."
 
 #: common/exceptions.cpp:62
-#, fuzzy, c-format
+#, c-format
 msgid "from %s : %s() line %d"
-msgstr "de %s : %s() línia:%d"
+msgstr "des de %s : %s() línia %d"
 
 #: common/exceptions.cpp:76
 #, fuzzy, c-format
@@ -4575,14 +4569,12 @@ msgid ""
 msgstr ""
 
 #: common/exceptions.cpp:126
-#, fuzzy
 msgid "Full error text:"
-msgstr "Reflecteix X"
+msgstr "Text sencer de l'error:"
 
 #: common/filehistory.cpp:155
-#, fuzzy
 msgid "No Files"
-msgstr "Fitxers de documentació"
+msgstr "Sense Fitxers"
 
 #: common/filename_resolver.cpp:430
 msgid "The given path does not exist"
@@ -8496,14 +8488,12 @@ msgid "Checking for library symbol issues..."
 msgstr "Fitxers de biblioteques:"
 
 #: eeschema/dialogs/dialog_erc.cpp:487 pcbnew/dialogs/dialog_drc.cpp:438
-#, fuzzy
 msgid "errors"
-msgstr "Errors"
+msgstr "errors"
 
 #: eeschema/dialogs/dialog_erc.cpp:488 pcbnew/dialogs/dialog_drc.cpp:439
-#, fuzzy
 msgid "warnings"
-msgstr "Advertències"
+msgstr "alertes"
 
 #: eeschema/dialogs/dialog_erc.cpp:489 pcbnew/dialogs/dialog_drc.cpp:440
 #, fuzzy
@@ -8512,7 +8502,7 @@ msgstr "Propietats del pad"
 
 #: eeschema/dialogs/dialog_erc.cpp:494 pcbnew/dialogs/dialog_drc.cpp:445
 msgid "Remove exclusion for this violation"
-msgstr ""
+msgstr "Elimina l'exclusió d'aquesta infracció"
 
 #: eeschema/dialogs/dialog_erc.cpp:495 pcbnew/dialogs/dialog_drc.cpp:446
 #, c-format
@@ -8521,7 +8511,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_erc.cpp:499 pcbnew/dialogs/dialog_drc.cpp:450
 msgid "Exclude this violation"
-msgstr ""
+msgstr "Exclou aquesta infracció"
 
 #: eeschema/dialogs/dialog_erc.cpp:500 pcbnew/dialogs/dialog_drc.cpp:451
 #, c-format
@@ -8531,7 +8521,7 @@ msgstr ""
 #: eeschema/dialogs/dialog_erc.cpp:512 pcbnew/dialogs/dialog_drc.cpp:464
 #, c-format
 msgid "Change severity to Error for all '%s' violations"
-msgstr ""
+msgstr "Canvia la gravetat a Error per totes les infraccions de '%s'"
 
 #: eeschema/dialogs/dialog_erc.cpp:514 eeschema/dialogs/dialog_erc.cpp:520
 #: pcbnew/dialogs/dialog_drc.cpp:466 pcbnew/dialogs/dialog_drc.cpp:473
@@ -8541,41 +8531,39 @@ msgstr ""
 #: eeschema/dialogs/dialog_erc.cpp:518 pcbnew/dialogs/dialog_drc.cpp:471
 #, c-format
 msgid "Change severity to Warning for all '%s' violations"
-msgstr ""
+msgstr "Canvia la gravetat a Alerta per a totes les infraccions de '%s'"
 
 #: eeschema/dialogs/dialog_erc.cpp:523 pcbnew/dialogs/dialog_drc.cpp:477
-#, fuzzy, c-format
+#, c-format
 msgid "Ignore all '%s' violations"
-msgstr "Permet la violació del DRC"
+msgstr "Ignora totes las infraccions de '%s'"
 
 #: eeschema/dialogs/dialog_erc.cpp:524 pcbnew/dialogs/dialog_drc.cpp:479
 msgid "Violations will not be checked or reported"
-msgstr ""
+msgstr "Las infraccions no es comprobaran ni s'informaran"
 
 #: eeschema/dialogs/dialog_erc.cpp:531
 msgid "Edit pin-to-pin conflict map..."
 msgstr ""
 
 #: eeschema/dialogs/dialog_erc.cpp:535 pcbnew/dialogs/dialog_drc.cpp:484
-#, fuzzy
 msgid "Edit violation severities..."
-msgstr "Edita les propietats de la zona"
+msgstr "Edita la gravetat de les infraccions..."
 
 #: eeschema/dialogs/dialog_erc.cpp:536
-#, fuzzy
 msgid "Open the Schematic Setup... dialog"
-msgstr "Obre el manual d'Eeschema"
+msgstr "Obre el diàleg de Configuració de l'esquema"
 
 #: eeschema/dialogs/dialog_erc.cpp:628
 #: eeschema/dialogs/dialog_schematic_setup.cpp:73
 msgid "Pin Conflicts Map"
-msgstr ""
+msgstr "Mapa de conflictes de pins"
 
 #: eeschema/dialogs/dialog_erc.cpp:632
 #: eeschema/dialogs/dialog_schematic_setup.cpp:72
 #: pcbnew/dialogs/dialog_board_setup.cpp:108 pcbnew/dialogs/dialog_drc.cpp:589
 msgid "Violation Severity"
-msgstr ""
+msgstr "Severitat de l'infracció"
 
 #: eeschema/dialogs/dialog_erc.cpp:755 pcbnew/dialogs/dialog_gendrill.cpp:471
 #, c-format
@@ -8619,15 +8607,14 @@ msgid "Click on items to highlight them on the board."
 msgstr ""
 
 #: eeschema/dialogs/dialog_erc_base.cpp:57
-#, fuzzy
 msgid "Violations"
-msgstr "Gir:"
+msgstr "Infraccions"
 
 #: eeschema/dialogs/dialog_erc_base.cpp:86
 #: pcbnew/dialogs/dialog_drc_base.cpp:169
 #: pcbnew/dialogs/dialog_footprint_checker_base.cpp:55
 msgid "Exclusions"
-msgstr ""
+msgstr "Exclusions"
 
 #: eeschema/dialogs/dialog_erc_base.cpp:109
 msgid "Delete Markers"
@@ -8661,9 +8648,8 @@ msgid "Buses && bus labels"
 msgstr ""
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:52
-#, fuzzy
 msgid "Sheet titles"
-msgstr "Etiqueta de full"
+msgstr "Títols de pàgina"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:55
 #, fuzzy
@@ -8682,9 +8668,8 @@ msgstr "Propietats del full de l'esquemàtic"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:74
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:52
-#, fuzzy
 msgid "Filters"
-msgstr "Filtre:"
+msgstr "Filtres"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:82
 msgid "Filter other symbol fields by name:"
@@ -8736,9 +8721,8 @@ msgstr "Estableix la drecera"
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:167
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:153
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:55
-#, fuzzy
 msgid "Text size:"
-msgstr "Mida del traç"
+msgstr "Mida del text:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:193
 #: eeschema/pin_type.cpp:126
@@ -8812,9 +8796,8 @@ msgid "Edit Text and Graphic Properties"
 msgstr "Edita les propietats del camp"
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:31
-#, fuzzy
 msgid "symbol"
-msgstr "Símbol"
+msgstr "símbol"
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:60
 #, fuzzy, c-format
@@ -8896,9 +8879,8 @@ msgstr "Número"
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:224
 #: eeschema/dialogs/dialog_symbol_properties.cpp:141
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:267
-#, fuzzy
 msgid "Electrical Type"
-msgstr "Tipus &elèctric:"
+msgstr "Tipus elèctric"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:54
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:48
@@ -8981,9 +8963,8 @@ msgid "Group by name"
 msgstr "Símbol d'alimentació"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:95
-#, fuzzy
 msgid "Pin numbers:"
-msgstr "Nú&mero del pin:"
+msgstr "Números de pin:"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:99
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:146
@@ -9078,9 +9059,8 @@ msgid "Create symbol with alternate body style (DeMorgan)"
 msgstr "Crea un component amb l'estil de cos alternatiu (DeMorgan)"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:79
-#, fuzzy
 msgid "Create symbol as power symbol"
-msgstr "Crea un component com a símbol d'alimentació"
+msgstr "Crea un símbol com a símbol d'alimentació"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:82
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:178
@@ -9113,23 +9093,20 @@ msgid "Pin name inside"
 msgstr "Nom de pin a l'interior"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.h:74
-#, fuzzy
 msgid "New Symbol"
-msgstr "Símbol d'alimentació"
+msgstr "Símbol nou"
 
 #: eeschema/dialogs/dialog_lib_shape_properties_base.cpp:39
-#, fuzzy
 msgid "Do not fill"
-msgstr "&No ho omplis"
+msgstr "No ho omplis"
 
 #: eeschema/dialogs/dialog_lib_shape_properties_base.cpp:39
 msgid "Fill with body outline color"
-msgstr ""
+msgstr "Omple amb el color del perímetre"
 
 #: eeschema/dialogs/dialog_lib_shape_properties_base.cpp:39
-#, fuzzy
 msgid "Fill with body background color"
-msgstr "Omple el &fons"
+msgstr "Omple amb el color del cos del fons"
 
 #: eeschema/dialogs/dialog_lib_shape_properties_base.cpp:41
 #, fuzzy
@@ -9173,9 +9150,9 @@ msgid "Delete extra units from symbol?"
 msgstr "Voleu eliminar les peces extres del component?"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:283
-#, fuzzy
 msgid "Add new pins for alternate body style (DeMorgan) to symbol?"
-msgstr "Crea un component amb l'estil de cos alternatiu (DeMorgan)"
+msgstr ""
+"Vols afegir pins nous per a l'estil alternatiu del cos (DeMorgan) del símbol?"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:288
 #, fuzzy
@@ -15796,14 +15773,14 @@ msgid "Change '%s' reference designator to '%s'."
 msgstr "Canvia el designador de referència '%s' a '%s'."
 
 #: eeschema/tools/backannotate.cpp:346
-#, fuzzy, c-format
+#, c-format
 msgid "Change %s footprint assignment from '%s' to '%s'."
-msgstr "Canvi del valor del component «%s:%s», del valor «%s» a «%s».\n"
+msgstr "Canvia l'assignació d'empremta %s de '%s' a '%s'."
 
 #: eeschema/tools/backannotate.cpp:364
-#, fuzzy, c-format
+#, c-format
 msgid "Change %s value from '%s' to '%s'."
-msgstr "Canvia el valor del component %s, del valor %s a %s.\n"
+msgstr "Canvia el valor %s de '%s' a '%s'."
 
 #: eeschema/tools/backannotate.cpp:389
 #, c-format
@@ -18339,14 +18316,12 @@ msgid "Library Path"
 msgstr "Camí a la biblioteca"
 
 #: include/lib_table_grid.h:183
-#, fuzzy
 msgid "Library Format"
-msgstr "Camí a la biblioteca"
+msgstr "Format de la biblioteca"
 
 #: include/lib_table_grid.h:186
-#, fuzzy
 msgid "Active"
-msgstr "Acció"
+msgstr "Actiu"
 
 #: include/libeval_compiler/libeval_compiler.h:313
 msgid "Malformed expression"
@@ -18384,7 +18359,7 @@ msgstr "Selecciona el directori de les plantilles"
 
 #: kicad/dialogs/dialog_template_selector_base.cpp:29
 msgid "Folder:"
-msgstr ""
+msgstr "Carpeta:"
 
 #: kicad/dialogs/dialog_template_selector_base.cpp:36
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:216
@@ -18457,13 +18432,13 @@ msgid "Unzip Project"
 msgstr "Descomprimeix el projecte"
 
 #: kicad/files-io.cpp:73
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "\n"
 "Open \"%s\"\n"
 msgstr ""
 "\n"
-"Obre «%s»\n"
+"Obre \"%s\"\n"
 
 #: kicad/files-io.cpp:76
 msgid "Target Directory"
@@ -18530,9 +18505,8 @@ msgid "Project Files"
 msgstr "Llegeix el fitxer del projecte"
 
 #: kicad/kicad_manager_frame.cpp:174
-#, fuzzy
 msgid "Editors"
-msgstr "&Edita"
+msgstr "Editors"
 
 #: kicad/kicad_manager_frame.cpp:571
 msgid "Load File to Edit"
@@ -18577,9 +18551,8 @@ msgid "Import CADSTAR Archive Schematic and PCB (*.csa, *.cpa)"
 msgstr ""
 
 #: kicad/menubar.cpp:107
-#, fuzzy
 msgid "EAGLE Project..."
-msgstr "Obre un projecte"
+msgstr "Projecte EAGLE..."
 
 #: kicad/menubar.cpp:108
 msgid "Import EAGLE CAD XML schematic and board"
@@ -18640,9 +18613,8 @@ msgid "Please enter fully qualified repository url"
 msgstr ""
 
 #: kicad/pcm/dialogs/dialog_manage_repositories.cpp:67
-#, fuzzy
 msgid "Add repository"
-msgstr "Dipòsit de Github"
+msgstr "Afegeix dipòsit"
 
 #: kicad/pcm/dialogs/dialog_manage_repositories_base.h:60
 msgid "Manage Repositores"
@@ -18674,11 +18646,11 @@ msgstr ""
 #: kicad/pcm/dialogs/panel_package_base.cpp:65
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:108
 msgid "Install"
-msgstr ""
+msgstr "Instal·la"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:105 kicad/pcm/dialogs/panel_package.cpp:80
 msgid "Uninstall"
-msgstr ""
+msgstr "Desinstal·la"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:160
 #, fuzzy
@@ -18718,9 +18690,8 @@ msgstr "Oculta e&l gestor de capes"
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:103
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:90
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.cpp:34
-#, fuzzy
 msgid "Action"
-msgstr "Accions"
+msgstr "Acció"
 
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:83 pcbnew/build_BOM_from_board.cpp:112
 msgid "Package"
@@ -18780,7 +18751,7 @@ msgstr "Propietats del material"
 
 #: kicad/pcm/dialogs/dialog_pcm_progress_base.cpp:52
 msgid "Details"
-msgstr ""
+msgstr "Detalls"
 
 #: kicad/pcm/dialogs/dialog_pcm_progress_base.h:58
 msgid "Applying package changes"
