@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-09-13 10:58-0700\n"
-"PO-Revision-Date: 2021-09-15 17:51+0000\n"
+"PO-Revision-Date: 2021-09-16 16:11+0000\n"
 "Last-Translator: Tokita, Hiroshi <tokita.hiroshi@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -496,7 +496,7 @@ msgstr "シルクスクリーンをビアの円環で切り抜く"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_display_options_base.cpp:74
 msgid "Use bare copper color for unplated copper"
-msgstr "メッキされていない導体には裸の銅の色を使用します"
+msgstr "メッキされていない導体には裸の銅の色を使用する"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_display_options_base.cpp:75
 msgid "Use different colors for plated and unplated copper. (Slow)"
@@ -1490,7 +1490,7 @@ msgstr "ファイルのオープンでエラー"
 
 #: common/confirm.cpp:162 common/confirm.cpp:168
 msgid "Interleaved saves may produce very unexpected results."
-msgstr ""
+msgstr "インターリーブされた保存は、予期外の結果をもたらす可能性があります。"
 
 #: common/confirm.cpp:164 common/confirm.cpp:169 common/confirm.cpp:251
 #: gerbview/dialogs/dialog_select_one_pcb_layer.cpp:164
@@ -4419,7 +4419,7 @@ msgstr ""
 msgid ""
 "A directory containing 3rd party plugins, libraries and other downloadable "
 "content."
-msgstr ""
+msgstr "サードパーティーのプラグイン、ライブラリとその他ダウンロード可能なコンテンツを含むディレクトリです。"
 
 #: common/env_vars.cpp:86
 msgid ""
@@ -5379,7 +5379,7 @@ msgstr "この言語向けのKiCadの言語ファイルがインストールさ�
 msgid ""
 "Missing null byte at end of property list. Imported data might be malformed "
 "or missing."
-msgstr ""
+msgstr "プロパティリスト最後のnullバイトがありません。インポートされたデータが正しくないか、欠落している可能性があります。"
 
 #: common/plugins/altium/altium_parser.cpp:247
 #, c-format
@@ -9518,7 +9518,7 @@ msgstr "同期ピン編集モード"
 msgid ""
 "Similar pins at the same location will be edited. Pin number of other pins "
 "will be not modified"
-msgstr ""
+msgstr "同じ位置にある同様のピンが編集されます。他のピンのピン番号は変更されません"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:206
 #: eeschema/dialogs/dialog_symbol_properties.cpp:334
@@ -9527,17 +9527,19 @@ msgstr "ド・モルガンのシンボルには、代替ピンの割り当ては
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:282
 msgid "This symbol only has one unit. This control has no effect."
-msgstr ""
+msgstr "このシンボルは1つのユニットしかありません。この操作は効果がありません。"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:284
 msgid ""
 "Synchronized pin edit mode is enabled.\n"
 "Similar pins will be edited, regardless this option."
 msgstr ""
+"ピン同期編集モードを有効にします。\n"
+"このオプションに関係なく、同様のピンが編集されます。"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:287
 msgid "If checked, this pin will exist in all units."
-msgstr ""
+msgstr "チェックすると、このピンはすべてのユニットに現れます。"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:308
 msgid "Alternate pin definitions must have a name."
@@ -9557,7 +9559,7 @@ msgstr ""
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:32
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:36
 msgid "info"
-msgstr ""
+msgstr "情報"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:57
 msgid "Pin &name:"
@@ -13460,7 +13462,7 @@ msgstr "ピンの外周端が予期せぬタイプです。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:700
 msgid "Pin has unexpected inner edge type."
-msgstr ""
+msgstr "ピンに予期しないinner edgeのタイプが指定されています。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:863
 #, c-format
@@ -13503,7 +13505,7 @@ msgstr "円弧のオーナー(%d) が見つかりません。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1355
 msgid "Arcs in symbols cannot exceed 180 degrees."
-msgstr ""
+msgstr "シンボルの円弧は180度を超えることはできません。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1395
 #, c-format
@@ -13522,7 +13524,7 @@ msgstr "シートエントリーのオーナー(%d) が見つかりません。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1780
 msgid "Power Port has unknown style, use bar instead."
-msgstr ""
+msgstr "電源ポートのスタイルが不明です。代わりにバーを使用してください。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1821
 #, c-format
@@ -14120,7 +14122,6 @@ msgid "Syntax Help"
 msgstr "構文ヘルプ"
 
 #: eeschema/sch_text_help_md.h:2
-#, fuzzy
 msgid ""
 "<table>\n"
 "    <tr>\n"
@@ -14295,12 +14296,12 @@ msgstr ""
 "        <td></td>\n"
 "    </tr>\n"
 "    <tr>\n"
-"        <td> &nbsp;<br><samp>~{上線}</samp><br> &nbsp;<br><samp>~{CLK}</"
-"samp><br> &nbsp;<br><samp>~~</samp> </td>\n"
+"        <td> &nbsp;<br><samp>~{上線}</samp><br> &nbsp;<br><samp>~{CLK}</samp> "
+"</td>\n"
 "        <td></td>\n"
 "        <td> <samp><u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></"
 "samp><br> <samp>上線</samp><br> <samp><u>&nbsp;&nbsp;&nbsp;</u></samp><br> "
-"<samp>CLK</samp><br> <samp>&nbsp;</samp><br> <samp>~</samp> </td>\n"
+"<samp>CLK</samp> </td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td><br></td>\n"
@@ -14321,8 +14322,8 @@ msgstr ""
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>${リファレンス指定子:フィールド名}</samp></td>\n"
 "        <td></td>\n"
-"        <td>&nbsp;<br><samp><i>リファレンス指定子</i> のシンボルの <i>フィー"
-"ルドの値</i></samp></td>\n"
+"        <td>&nbsp;<br><samp><i>リファレンス指定子</i> のシンボルの "
+"<i>フィールドの値</i></samp></td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>${R3:VALUE}</samp></td>\n"
@@ -14337,8 +14338,8 @@ msgstr ""
 "    </tr>\n"
 "    <tr>\n"
 "        <th>バスの定義</th>\n"
-"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
-"&nbsp;&nbsp;&nbsp;</th>\n"
+"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp"
+";&nbsp;&nbsp;</th>\n"
 "        <th>生成されるネット</th>\n"
 "    </tr>\n"
 "    <tr>\n"
@@ -14388,10 +14389,10 @@ msgstr ""
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>MEM{D_{[1..2]} ~LATCH}</samp></td>\n"
 "        <td></td>\n"
-"        <td> <samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp;"
-"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; &nbsp;&nbsp;&nbsp;"
-"&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> <samp>MEM.D<sub>1</"
-"sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
+"        <td> <samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
+"&nbsp;&nbsp;&nbsp;&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> "
+"<samp>MEM.D<sub>1</sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td><br></td>\n"
@@ -16963,7 +16964,7 @@ msgstr "ファイル形式"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:20
 msgid "These parameters are usually specified in files, but not always."
-msgstr ""
+msgstr "これらのパラメータは通常はファイルで指定しますが、必ずしもその限りではありません。"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:29
 msgid "File units"
@@ -16971,11 +16972,11 @@ msgstr "ファイルの単位"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:33
 msgid "No leading zeros (TZ format)"
-msgstr ""
+msgstr "先行ゼロなし (TZ 形式)"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:33
 msgid "No trailing zeros (LZ format)"
-msgstr ""
+msgstr "後続ゼロなし（LZ形式）"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:35
 msgid "Zero format"
@@ -16987,6 +16988,9 @@ msgid ""
 "No leading zeros format means the leading zeros are stripped\n"
 "No trailing zeros  format means the trainling zeros are stripped"
 msgstr ""
+"ファイル内の整数は、そのゼロを除去することができます。\n"
+"先行ゼロなしのフォーマットは、先頭のゼロが取り除かれることを意味します\n"
+"後続ゼロなしのフォーマットは、末尾のゼロが取り除かれます"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:51
 msgid "Coordinates Format"
@@ -16994,15 +16998,15 @@ msgstr "座標のフォーマット"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:53
 msgid "The coordinates format is not specified in Excellon format."
-msgstr ""
+msgstr "座標形式はExcellon形式で指定されていません。"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:57
 msgid "(The decimal format does not use these settings)"
-msgstr ""
+msgstr "(10進形式はこれらの設定を使用しません)"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:61
 msgid "Usually: 3:3 in mm and 2:4 in inches"
-msgstr ""
+msgstr "通常：ミリの場合3:3、インチの場合2:4"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:70
 msgid "Format for mm"
@@ -17192,63 +17196,52 @@ msgid "Gerber files (.g* .lgr .pho)"
 msgstr "ガーバー ファイル (.g*, .lgr, .pho)"
 
 #: gerbview/files.cpp:145
-#, fuzzy
 msgid "Top layer"
-msgstr "移動先レイヤー:"
+msgstr "表面レイヤー:"
 
 #: gerbview/files.cpp:146
-#, fuzzy
 msgid "Bottom layer"
-msgstr "下面/裏面レイヤー"
+msgstr "裏面レイヤー"
 
 #: gerbview/files.cpp:147
-#, fuzzy
 msgid "Bottom solder resist"
-msgstr "裏面層ハンダ ペースト"
+msgstr "裏面ハンダレジスト"
 
 #: gerbview/files.cpp:148
-#, fuzzy
 msgid "Top solder resist"
-msgstr "表面層ハンダ ペースト"
+msgstr "表面ハンダレジスト"
 
 #: gerbview/files.cpp:149
-#, fuzzy
 msgid "Bottom overlay"
-msgstr "裏面層ハンダ マスク"
+msgstr "裏面オーバーレイ"
 
 #: gerbview/files.cpp:150
-#, fuzzy
 msgid "Top overlay"
-msgstr "表面層ハンダ マスク"
+msgstr "表面オーバーレイ"
 
 #: gerbview/files.cpp:151
-#, fuzzy
 msgid "Bottom paste"
-msgstr "ペーストするものがありません"
+msgstr "裏面ハンダペースト"
 
 #: gerbview/files.cpp:152
-#, fuzzy
 msgid "Top paste"
-msgstr "表面層ハンダ ペースト"
+msgstr "表面ハンダペースト"
 
 #: gerbview/files.cpp:153
-#, fuzzy
 msgid "Keep-out layer"
-msgstr "外側のレイヤーを維持(&o)"
+msgstr "キープアウトレイヤー"
 
 #: gerbview/files.cpp:154
 msgid "Mechanical layers"
 msgstr "メカニカルレイヤー"
 
 #: gerbview/files.cpp:155
-#, fuzzy
 msgid "Top Pad Master"
-msgstr "表面層ハンダ ペースト"
+msgstr "表面パッド マスター"
 
 #: gerbview/files.cpp:156
-#, fuzzy
 msgid "Bottom Pad Master"
-msgstr "裏面層ハンダ ペースト"
+msgstr "裏面パッド マスター"
 
 #: gerbview/files.cpp:174
 msgid "Open Gerber File(s)"
@@ -17984,7 +17977,7 @@ msgstr ""
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:142
 msgid "Manage downloadable packages from KiCad and 3rd party repositories"
-msgstr ""
+msgstr "KiCadおよびサードパーティーのリポジトリーからダウンロード可能なパッケージを管理する"
 
 #: kicad/files-io.cpp:46
 msgid "KiCad project file"
@@ -18169,7 +18162,7 @@ msgstr "ファイル エクスプローラーでプロジェクト ディレク�
 
 #: kicad/pcm/dialogs/dialog_manage_repositories.cpp:67
 msgid "Please enter fully qualified repository url"
-msgstr ""
+msgstr "完全修飾されたリポジトリのURLを入力してください"
 
 #: kicad/pcm/dialogs/dialog_manage_repositories.cpp:67
 msgid "Add repository"
@@ -18212,16 +18205,15 @@ msgid "Uninstall"
 msgstr "アンインストール"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:160
-#, fuzzy
 msgid ""
 "Are you sure you want to close the package manager and discard pending "
 "changes?"
-msgstr "選択されたアイテムを削除してもよろしいですか？"
+msgstr "パッケージ マネージャーを閉じて、保留中の変更を破棄しますか?"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:162
 #: kicad/tools/kicad_manager_actions.cpp:117
 msgid "Plugin and Content Manager"
-msgstr ""
+msgstr "プラグインとコンテンツマネージャー"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:235
 msgid "Choose package file"
@@ -18231,18 +18223,17 @@ msgstr "パッケージファイルを選択"
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:117
 #, c-format
 msgid "Pending (%d)"
-msgstr ""
+msgstr "保留中 (%d)"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:365
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:60
 #, c-format
 msgid "Installed (%d)"
-msgstr ""
+msgstr "インストール済み (%d)"
 
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:37
-#, fuzzy
 msgid "Manage"
-msgstr "KiCad マネージャー"
+msgstr "管理"
 
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:82
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:103
@@ -18260,9 +18251,8 @@ msgid "Repository"
 msgstr "リポジトリー"
 
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:103
-#, fuzzy
 msgid "Discard action"
-msgstr "変更を破棄"
+msgstr "操作を破棄"
 
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:133
 msgid "Install from file..."
@@ -18278,7 +18268,7 @@ msgstr "変更を破棄"
 
 #: kicad/pcm/dialogs/dialog_pcm_base.h:73
 msgid "Plugin And Content Manager"
-msgstr ""
+msgstr "プラグインとコンテンツマネージャー"
 
 #: kicad/pcm/dialogs/dialog_pcm_progress.cpp:86
 #, c-format
@@ -18287,17 +18277,15 @@ msgstr "%lld/%lld Kb ダウンロード完了"
 
 #: kicad/pcm/dialogs/dialog_pcm_progress.cpp:150
 msgid "All downloads finished"
-msgstr ""
+msgstr "すべてのダウンロードが完了しました"
 
 #: kicad/pcm/dialogs/dialog_pcm_progress_base.cpp:21
-#, fuzzy
 msgid "Download progress"
-msgstr "ライブラリーをダウンロード中"
+msgstr "ダウンロードの進捗"
 
 #: kicad/pcm/dialogs/dialog_pcm_progress_base.cpp:23
-#, fuzzy
 msgid "Waiting..."
-msgstr "ロードしています..."
+msgstr "待機中..."
 
 #: kicad/pcm/dialogs/dialog_pcm_progress_base.cpp:42
 msgid "Overall progress"
@@ -18305,25 +18293,23 @@ msgstr "全体の進捗:"
 
 #: kicad/pcm/dialogs/dialog_pcm_progress_base.cpp:52
 msgid "Details"
-msgstr ""
+msgstr "詳細"
 
 #: kicad/pcm/dialogs/dialog_pcm_progress_base.h:58
 msgid "Applying package changes"
 msgstr "パッケージの変更を適用"
 
 #: kicad/pcm/dialogs/panel_package.cpp:84
-#, fuzzy
 msgid "Pending install"
-msgstr "レンダリング オプション"
+msgstr "インストールを保留中"
 
 #: kicad/pcm/dialogs/panel_package.cpp:88
-#, fuzzy
 msgid "Pending uninstall"
-msgstr "レンダリング エンジン"
+msgstr "アンインストールを保留中"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:147
 msgid "Metadata"
-msgstr ""
+msgstr "メタデータ"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:154
 #, c-format
@@ -18338,15 +18324,15 @@ msgstr "ライセンス: %s\n"
 #: kicad/pcm/dialogs/panel_packages_view.cpp:169
 #, c-format
 msgid "Tags: %s\n"
-msgstr ""
+msgstr "タグ: %s\n"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:184
 msgid "Author"
-msgstr ""
+msgstr "作者"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:187
 msgid "Maintainer"
-msgstr ""
+msgstr "メンテナー"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:191
 msgid "Resources"
@@ -18354,11 +18340,11 @@ msgstr "リソース"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:266
 msgid "Pick a package on the left panel to view it's description."
-msgstr ""
+msgstr "左のパネルでパッケージを選ぶと、その説明が表示されます。"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:342
 msgid "Package download url is not specified"
-msgstr ""
+msgstr "パッケージのダウンロード URL が指定されていません"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:343
 msgid "Error downloading package"
@@ -18376,7 +18362,7 @@ msgstr "パッケージをダウンロード中"
 msgid ""
 "Integrity of the downloaded package could not be verified, hash does not "
 "match. Are you sure you want to keep this file?"
-msgstr ""
+msgstr "ハッシュが一致せず、ダウンロードしたパッケージの整合性を確認できませんでした。このファイルを保存しますか?"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:382
 msgid "Keep downloaded file"
@@ -18386,7 +18372,7 @@ msgstr "ダウンロードしたファイルを保持"
 msgid ""
 "This package version is incompatible with your kicad version or platform. "
 "Are you sure you want to install it anyway?"
-msgstr ""
+msgstr "このパッケージのバージョンは、使われているKiCadバージョンまたはプラットフォームと互換性がありません。本当にインストールしますか？"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:421
 msgid "Install package"
@@ -18405,7 +18391,6 @@ msgid "Inst Size"
 msgstr "Instサイズ"
 
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:84
-#, fuzzy
 msgid "Comp"
 msgstr "会社名"
 
@@ -18446,9 +18431,8 @@ msgid "Fetching repository"
 msgstr "リポジトリーを取得"
 
 #: kicad/pcm/pcm.cpp:227
-#, fuzzy
 msgid "Unable to load repository url"
-msgstr "ファイル %s をロードできません"
+msgstr "リポジトリのURLを読み込めません"
 
 #: kicad/pcm/pcm.cpp:243
 #, c-format
@@ -18463,7 +18447,7 @@ msgstr ""
 
 #: kicad/pcm/pcm.cpp:265
 msgid "Fetching repository packages"
-msgstr ""
+msgstr "リポジトリパッケージの取得"
 
 #: kicad/pcm/pcm.cpp:267
 msgid "Unable to load repository packages url."
@@ -18471,7 +18455,7 @@ msgstr "リポジトリー パッケージURLをロードすることができ�
 
 #: kicad/pcm/pcm.cpp:275
 msgid "Packages hash doesn't match. Repository may be corrupted."
-msgstr ""
+msgstr "パッケージのハッシュが一致しません。リポジトリが壊れている可能性があります。"
 
 #: kicad/pcm/pcm.cpp:291
 #, c-format
@@ -18487,7 +18471,7 @@ msgstr ""
 #: kicad/pcm/pcm.cpp:378
 msgid ""
 "Packages cache for current repository is corrupted, it will be redownloaded."
-msgstr ""
+msgstr "現在のリポジトリのパッケージキャッシュが破損しているため、再ダウンロードされます。"
 
 #: kicad/pcm/pcm.cpp:428
 msgid "Downloading resources"
@@ -18497,7 +18481,7 @@ msgstr "リソースをダウンロード中"
 msgid ""
 "Resources file hash doesn't match and will not be used. Repository may be "
 "corrupted."
-msgstr ""
+msgstr "リソース ファイルのハッシュが一致しないため使用されません。リポジトリが破損している可能性があります。"
 
 #: kicad/pcm/pcm.cpp:587
 msgid "Local file"
@@ -18514,6 +18498,8 @@ msgid ""
 "may indicate a problem with the package, if the issue persists report this "
 "to repository maintainers."
 msgstr ""
+"ダウンロードしたパッケージ %s のアーカイブのハッシュが、リポジトリのエントリーと一致しません。これは、パッケージに問題があることを示しているかもしれま"
+"せん。問題が解決しない場合は、リポジトリのメンテナに報告してください。"
 
 #: kicad/pcm/pcm_task_manager.cpp:101
 #, c-format
@@ -18555,9 +18541,8 @@ msgstr ""
 "%s"
 
 #: kicad/pcm/pcm_task_manager.cpp:306
-#, fuzzy
 msgid "Archive does not contain a valid metadata.json file"
-msgstr "ライブラリー %s はエイリアス %s を含んでいません"
+msgstr "アーカイブに有効なmetadata.jsonファイルが含まれていません"
 
 #: kicad/pcm/pcm_task_manager.cpp:314
 msgid "Archive metadata must have a single version defined"
@@ -19928,6 +19913,8 @@ msgid ""
 "Zdiff =\n"
 "2*Z0( (1 - 0.48exp( -0.96*S/H ) )"
 msgstr ""
+"Zdiff =\n"
+"2*Z0( (1 - 0.48exp( -0.96*S/H ) )"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:901
 msgid "Zcommon = Zeven / 2"
@@ -24815,9 +24802,8 @@ msgid "Group name:"
 msgstr "グループ名:"
 
 #: pcbnew/dialogs/dialog_group_properties_base.cpp:39
-#, fuzzy
 msgid "Prevents group from being moved on canvas"
-msgstr "キャンバス上でアイテムが移動やサイズ変更されないようにする"
+msgstr "グループがキャンバス上で移動されないようにします"
 
 #: pcbnew/dialogs/dialog_group_properties_base.cpp:43
 msgid "Group members:"
@@ -25728,14 +25714,14 @@ msgstr "端面スルーホール パッド (スルーホールのみ)"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:584
 msgid "Set values to 0 to use parent footprint or netclass values."
-msgstr "親フットプリントまたはネットクラスの値を使用するため、値を 0 に設定。"
+msgstr "値を 0 に設定すると、親のフットプリントまたはネットクラスの値を使用します。"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:604
 msgid ""
 "This is the local net clearance for this pad.\n"
 "If 0, the footprint local value or the Netclass value is used."
 msgstr ""
-"これはこのパッドについてのローカル ネット クリアランスです。\n"
+"このパッドについてのローカル ネット クリアランスです。\n"
 "0 とした場合、フットプリントのローカル値かネットクラスの値が使用されます。"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:617
@@ -25743,7 +25729,7 @@ msgid ""
 "This is the local clearance between this pad and the solder mask.\n"
 "If 0, the footprint local value or the global value is used."
 msgstr ""
-"これはこのパッドとハンダ マスク間のローカル クリアランスです。\n"
+"このパッドとハンダ マスク間のローカル クリアランスです。\n"
 "0 とした場合、フットプリントのローカル値かグローバル値が使用されます。"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:630
@@ -25754,7 +25740,7 @@ msgid ""
 "ratio.\n"
 "A negative value means a smaller mask size than pad size."
 msgstr ""
-"これはこのパッドとハンダ ペースト間のローカル クリアランスです。\n"
+"このパッドとハンダ ペースト間のローカル クリアランスです。\n"
 "0 とした場合、フットプリントの値かグローバル値が使用されます。\n"
 "最終的なクリアランス値はこの値とクリアランス比率を合算したものになります。\n"
 "負値の場合、マスクのサイズはパッドのサイズより小さくなります。"
@@ -25768,12 +25754,10 @@ msgid ""
 "The final clearance value is the sum of this value and the clearance value.\n"
 "A negative value means a smaller mask size than pad size."
 msgstr ""
-"これはこのパッドとハンダ ペースト間のローカル クリアランス比率をパーセント指"
-"定したものです。\n"
+"このパッドとハンダ ペースト間のローカル クリアランス比率をパーセントで指定します。\n"
 "値 10 は、クリアランスの値がパッド サイズの10%であることを意味します。\n"
 "0 とした場合、フットプリントの値かグローバル値が使用されます。\n"
-"最終的なクリアランスの値は、この値とクリアランス値を合算したものになりま"
-"す。\n"
+"最終的なクリアランスの値は、この値とクリアランス値を合算したものになります。\n"
 "負値の場合、マスクのサイズはパッドのサイズより小さくなります。"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:710
@@ -26357,7 +26341,7 @@ msgstr "最小間隔 (s):"
 msgid ""
 "Minimum spacing between adjacent meander segments. The resulting spacing may "
 "be greater based on design rules."
-msgstr ""
+msgstr "隣接する蛇行セグメント間の最小間隔。結果として得られる間隔は、デザインルールにのものより大きくなる場合があります。"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:144
 msgid "Miter style:"
@@ -26799,7 +26783,7 @@ msgstr "テキストの直立をキープ"
 
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:227
 msgid "Parent footprint description"
-msgstr "親フットプリントの説明"
+msgstr "親のフットプリントの説明"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:358
 #, c-format
@@ -27160,9 +27144,8 @@ msgstr "アイテムを選択します。"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:107
 #: pcbnew/dialogs/panel_edit_options_base.cpp:178
-#, fuzzy
 msgid "Long Click"
-msgstr "クリック"
+msgstr "長くクリック"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:127
 msgid "Ctrl+Shift"
@@ -27174,13 +27157,12 @@ msgid "Highlight net (for pads or tracks)."
 msgstr "ネットをハイライトします(パッドまたはトラック)."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:154
-#, fuzzy
 msgid ""
 "Left click (and drag) actions depend on 3 modifier keys:\n"
 "Option, Shift and Cmd."
 msgstr ""
-"左クリック(およびドラッグ)の動作は、Alt, Shift, Cmdの\n"
-"3つの修飾キーに依存します。"
+"左クリック(およびドラッグ)の動作は3つの修飾キーに依存します:\n"
+"Option, Shift, Cmd."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:198
 msgid "Shift+Cmd"
@@ -27473,6 +27455,8 @@ msgid ""
 "to approximate it.  Smaller values produce smoother graphics at the expense "
 "of performance."
 msgstr ""
+"真の円または円弧に近似するために使用されるセグメントとの間の最大許容偏差です。  "
+"この値を小さくすると、パフォーマンスは低下しますが、より滑らかなグラフィックが得られます。"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:86
 #, c-format
@@ -27524,7 +27508,7 @@ msgid ""
 "When enabled, the distance between copper layers will be included in track "
 "length calculations for tracks with vias.  When disabled, via stackup height "
 "is ignored."
-msgstr ""
+msgstr "有効にすると、導体層間の距離をビアのある配線の配線長の計算に含めます。  無効にすると、ビアのスタックアップの高さは無視されます。"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:191
 msgid "Minimum clearance:"
@@ -27536,6 +27520,8 @@ msgid ""
 "net.  If set, this is an absolute minimum which cannot be reduced by "
 "netclasses, custom rules, or other settings."
 msgstr ""
+"同じネットに属していない導体アイテム間の最小クリアランス。  "
+"設定されている場合、これは絶対的な最小値であり、ネットクラスやカスタムルール、その他の設定によって減らすことはできません。"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:207
 msgid "Minimum track width:"
@@ -27546,6 +27532,7 @@ msgid ""
 "The minimum track width.  If set, this is an absolute minimum and cannot be "
 "reduced by netclasses, custom rules, or other settings."
 msgstr ""
+"配線の最小幅です。  設定されている場合、これは絶対的な最小値であり、ネットクラス、カスタムルール、またはその他の設定によって減少させることはできません。"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:224
 msgid "Minimum annular width:"
@@ -27556,6 +27543,8 @@ msgid ""
 "The minimum annular ring width.  If set, this is an absolute minimum and "
 "cannot be reduced by netclasses, custom rules, or other settings."
 msgstr ""
+"アニュラーリングの最小幅。  "
+"設定されている場合、これは絶対的な最小値であり、ネットクラス、カスタムルール、またはその他の設定によって減少させることはできません。"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:240
 msgid "Minimum via diameter:"
@@ -27566,6 +27555,7 @@ msgid ""
 "The minimum via diameter.  If set, this is an absolute minimum and cannot be "
 "reduced by netclasses, custom rules, or other settings."
 msgstr ""
+"ビアの最小直径。  設定されている場合、これは絶対的な最小値であり、ネットクラス、カスタムルール、またはその他の設定によって減少させることはできません。"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:256
 msgid "Copper to hole clearance:"
@@ -27577,6 +27567,8 @@ msgid ""
 "set, this is an absolute minimum and cannot be reduced by custom rules or "
 "other settings."
 msgstr ""
+"穴と関連付けのない導体アイテムとの間の最小クリアランスです。  "
+"設定されている場合、これは絶対的な最小値であり、カスタムルールや他の設定で減らすことはできません。"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:272
 msgid "Copper to edge clearance:"
@@ -27588,6 +27580,7 @@ msgid ""
 "this is an absolute minimum and cannot be reduced by custom rules or other "
 "settings."
 msgstr ""
+"基板の端と導体アイテムの間の最小クリアランス。  設定した場合、これは絶対的な最小値であり、カスタムルールや他の設定によって減少させることはできません。"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:297
 msgid "Holes"
@@ -27602,6 +27595,7 @@ msgid ""
 "The minimum through-hole size.  If set, this is an absolute minimum and "
 "cannot be reduced by netclasses, custom rules or other settings."
 msgstr ""
+"スルーホールの最小サイズ。  設定されている場合、これは絶対的な最小値であり、ネットクラス、カスタムルール、その他の設定によって縮小することはできません。"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:329
 msgid "Hole to hole clearance:"
@@ -27613,6 +27607,8 @@ msgid ""
 "absolute minimum and cannot be reduced by custom rules or other settings. "
 "(Note: does not apply to milled holes.)"
 msgstr ""
+"2つのドリル穴の間の最小クリアランスです。   "
+"設定されている場合、これは絶対的な最小値であり、カスタムルールや他の設定によって減らすことはできません。(注：ミルドホールには適用されません。)"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:354
 msgid "uVias"
@@ -27627,6 +27623,8 @@ msgid ""
 "The minimum diameter for micro-vias.  If set, this is an absolute minimum "
 "and cannot be reduced by netclasses, custom rules, or other settings."
 msgstr ""
+"マイクロビアの最小直径です。  "
+"設定されている場合、これは絶対的な最小値であり、ネットクラス、カスタムルール、またはその他の設定によって減少させることはできません。"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:386
 msgid "Minimum uVia hole:"
@@ -27637,6 +27635,8 @@ msgid ""
 "The minimum micro-via hole size.  If set, this is an absolute minimum and "
 "cannot be reduced by netclasses, custom rules, or other settings."
 msgstr ""
+"マイクロビアホールの最小サイズです。  "
+"設定されている場合、これは絶対的な最小値であり、ネットクラス、カスタムルール、またはその他の設定によって縮小することはできません。"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:411
 msgid "Silkscreen"
@@ -27652,6 +27652,8 @@ msgid ""
 "this can improve legibility.  (Note: does not apply to multiple shapes "
 "within a single footprint.)"
 msgstr ""
+"同じシルクスクリーン レイヤー上の2つのアイテム間の最小クリアランス。設定すると、読みやすさが向上します。 "
+"（注：単一のフットプリント内の複数の形状には適用されません。）"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:431
 msgid "Use the Physical Stackup page to change the number of copper layers."
@@ -28275,9 +28277,8 @@ msgstr ""
 "リアランス)"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:69
-#, fuzzy
 msgid "Solder mask minimum web width:"
-msgstr "ハンダ マスクの最小幅:"
+msgstr "ハンダ マスクの最小ウェブ幅:"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:71
 msgid ""
@@ -28578,6 +28579,209 @@ msgid ""
 "        (constraint clearance (min \"1.5mm\"))\n"
 "        (condition \"A.inDiffPair('*') && !AB.isCoupledDiffPair()\"))\n"
 msgstr ""
+"### トップレベルの句\n"
+"\n"
+"    (version <number>)\n"
+"\n"
+"    (rule <rule_name> <rule_clause> ...)\n"
+"\n"
+"\n"
+"<br><br>\n"
+"\n"
+"### ルール句\n"
+"\n"
+"    (constraint <constraint_type> ...)\n"
+"\n"
+"    (condition \"<expression>\")\n"
+"\n"
+"    (layer \"<layer_name>\")\n"
+"\n"
+"\n"
+"<br><br>\n"
+"\n"
+"### 制約タイプ\n"
+"\n"
+" * annular\\_width\n"
+" * clearance\n"
+" * courtyard_clearance\n"
+" * diff\\_pair\\_gap\n"
+" * diff\\_pair\\_uncoupled\n"
+" * disallow\n"
+" * edge\\_clearance\n"
+" * length\n"
+" * hole\\_clearance\n"
+" * hole\\_size\n"
+" * silk\\_clearance\n"
+" * skew\n"
+" * track\\_width\n"
+" * via\\_count\n"
+" * via\\_diameter\n"
+"\n"
+"\n"
+"<br><br>\n"
+"\n"
+"### アイテムタイプ\n"
+"\n"
+" * buried_via\n"
+" * graphic\n"
+" * hole\n"
+" * micro_via\n"
+" * pad\n"
+" * text\n"
+" * track\n"
+" * via\n"
+" * zone\n"
+"\n"
+"<br>\n"
+"\n"
+"### 例\n"
+"\n"
+"    (version 1)\n"
+"\n"
+"    (rule HV\n"
+"       (constraint clearance (min 1.5mm))\n"
+"       (condition \"A.NetClass == 'HV'\"))\n"
+"\n"
+"\n"
+"    (rule HV\n"
+"       (layer outer)\n"
+"       (constraint clearance (min 1.5mm))\n"
+"       (condition \"A.NetClass == 'HV'\"))\n"
+"\n"
+"\n"
+"    (rule HV_HV\n"
+"       # wider clearance between HV tracks\n"
+"       (constraint clearance (min \"1.5mm + 2.0mm\"))\n"
+"       (condition \"A.NetClass == 'HV' && B.NetClass == 'HV'\"))\n"
+"\n"
+"\n"
+"    (rule HV_unshielded\n"
+"       (constraint clearance (min 2mm))\n"
+"       (condition \"A.NetClass == 'HV' && !A.insideArea('Shield*')\"))\n"
+"<br><br>\n"
+"\n"
+"### 注\n"
+"\n"
+"version句ははじめの句でなければなりません。  ファイルの文法のバージョンを示し、\n"
+"将来のルールパーサーが自動的なアップデートをできるようするためです。\n"
+"ここには\"1\"を設定します。\n"
+"\n"
+"ルールは特異性の順に並べます。\n"
+"後ろにあるルールは前にあるものより優先されます。\n"
+"一度マッチするルールが見つかれば、他のルールはチェックされません。\n"
+"\n"
+"Ctrl+/ の操作で行をコメント化/非コメント化できます。\n"
+"<br><br><br>\n"
+"\n"
+"### 式関数\n"
+"\n"
+"全ての関数のパラメーターは単純なワイルドカードをサポートします。 (`*` and `?`).\n"
+"<br><br>\n"
+"\n"
+"    A.insideCourtyard('<footprint_refdes>')\n"
+"`A`のいずれかの部分が与えられたフットプリントのコートヤードの中にある場合、真になります。\n"
+"<br><br>\n"
+"\n"
+"    A.insideFrontCourtyard('<footprint_refdes>')\n"
+"`A`のいずれかの部分が与えられたフットプリントの表面のコートヤードの中にある場合、真になります。\n"
+"<br><br>\n"
+"\n"
+"    A.insideBackCourtyard('<footprint_refdes>')\n"
+"`A`のいずれかの部分が与えられたフットプリントの裏面のコートヤードの中にある場合、真になります。\n"
+"<br><br>\n"
+"\n"
+"    A.insideArea('<zone_name>')\n"
+"`A`のいずれかの部分が与えられたゾーンの中にある場合、真になります。\n"
+"<br><br>\n"
+"\n"
+"    A.isPlated()\n"
+"`A`にメッキされた穴が含まれている場合、真になります。\n"
+"<br><br>\n"
+"\n"
+"    A.inDiffPair('<net_name>')\n"
+"`A`が与えられた差動ペアのネットに属する場合、真になります。\n"
+"`<net_name>` は差動ペアのベース名です。例えば、`inDiffPair('CLK')`は\n"
+"`CKL_P`と`CLK_N`のネットにマッチします。\n"
+"<br><br>\n"
+"\n"
+"    AB.isCoupledDiffPair()\n"
+"`A`と`B`が同じ差動ペアに属する場合、真になります。\n"
+"<br><br>\n"
+"\n"
+"    A.memberOf('<group_name>')\n"
+"`A`と`B`が与えられたグループに属する場合、真になります。ネストされたメンバー関係も含みます。\n"
+"<br><br>\n"
+"\n"
+"    A.existsOnLayer('<layer_name>')\n"
+"True if `A` exists on the given layer.  The layer name can be\n"
+"`A`が与えられたレイヤー状にある場合、真になります。\n"
+"レイヤー名は 基板セットアップ > 基板編集レイヤー で指定された名前か、正規化名(例: `F.Cu`)が使えます。\n"
+"\n"
+"NB: this returns true if `A` is on the given layer, independently\n"
+"注意: これは、ルールがそのレイヤーに対して評価されているかいないかにかかわらず\n"
+"`A`がレイヤーにある場合に真を返します。後者の場合、`(layer \"layer_name\")`の句をルールの中で使います。\n"
+"<br><br><br>\n"
+"\n"
+"### More Examples\n"
+"\n"
+"    (rule \"copper keepout\"\n"
+"       (constraint disallow track via zone)\n"
+"       (condition \"A.insideArea('zone3')\"))\n"
+"\n"
+"\n"
+"    (rule \"BGA neckdown\"\n"
+"       (constraint track_width (min 0.2mm) (opt 0.25mm))\n"
+"       (constraint clearance (min 0.05mm) (opt 0.08mm))\n"
+"       (condition \"A.insideCourtyard('U3')\"))\n"
+"\n"
+"\n"
+"    # テンティングされたビアにシルクがかかるのを防ぐ\n"
+"    (rule silk_over_via\n"
+"       (constraint silk_clearance (min 0.2mm))\n"
+"       (condition \"A.Type == '*Text' && B.Type == 'Via'\"))\n"
+"\n"
+"\n"
+"    (rule \"Distance between Vias of Different Nets\"  \n"
+"        (constraint hole_to_hole (min 0.254mm))\n"
+"        (condition \"A.Type =='Via' && B.Type =='Via' && A.Net != B.Net\"))\n"
+"\n"
+"    (rule \"Clearance between Pads of Different Nets\"  \n"
+"        (constraint clearance (min 3.0mm))\n"
+"        (condition \"A.Type =='Pad' && B.Type =='Pad' && A.Net != B.Net\"))\n"
+"\n"
+"\n"
+"    (rule \"Via Hole to Track Clearance\"  \n"
+"        (constraint hole_clearance (min 0.254mm))\n"
+"        (condition \"A.Type =='Via' && B.Type =='Track'\"))\n"
+"    \n"
+"    (rule \"Pad to Track Clearance\"  \n"
+"        (constraint clearance (min 0.2mm))\n"
+"        (condition \"A.Type =='Pad' && B.Type =='Track'\"))\n"
+"\n"
+"\n"
+"    (rule \"clearance-to-1mm-cutout\"\n"
+"        (constraint clearance (min 0.8mm))\n"
+"        (condition \"A.Layer=='Edge.Cuts' && A.Thickness == 1.0mm\"))\n"
+"\n"
+"\n"
+"    (rule \"Max Drill Hole Size Mechanical\"  \n"
+"        (constraint hole_size (max 6.3mm))\n"
+"        (condition \"A.Pad_Type == 'NPTH, mechanical'\"))\n"
+"    \n"
+"    (rule \"Max Drill Hole Size PTH\"  \n"
+"        (constraint hole_size (max 6.35mm))\n"
+"        (condition \"A.Pad_Type == 'Through-hole'\"))\n"
+"\n"
+"\n"
+"    # 特定の差動ペアに最適なギャップを指定する\n"
+"    (rule \"dp clock gap\"\n"
+"        (constraint diff_pair_gap (opt \"0.8mm\"))\n"
+"        (condition \"A.inDiffPair('CLK') && AB.isCoupledDiffPair()\"))\n"
+"\n"
+"    # 差動ペアの周りにより大きなクリアランスを指定する\n"
+"    (rule \"dp clearance\"\n"
+"        (constraint clearance (min \"1.5mm\"))\n"
+"        (condition \"A.inDiffPair('*') && !AB.isCoupledDiffPair()\"))\n"
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:72
 msgid "Default properties for new dimension objects:"
@@ -28706,9 +28910,8 @@ msgid "Local override on %s; clearance: %s."
 msgstr "%s のローカルで上書き; クリアランス: %s."
 
 #: pcbnew/drc/drc_engine.cpp:831
-#, fuzzy
 msgid "board minimum"
-msgstr "基板の最小幅"
+msgstr "基板の最小値"
 
 #: pcbnew/drc/drc_engine.cpp:834
 #, c-format
@@ -28716,14 +28919,13 @@ msgid "Board minimum clearance: %s."
 msgstr "最小クリアランス: %s."
 
 #: pcbnew/drc/drc_engine.cpp:843
-#, fuzzy
 msgid "board minimum hole"
-msgstr "基板の最小幅"
+msgstr "基板の穴の最小値"
 
 #: pcbnew/drc/drc_engine.cpp:846
-#, fuzzy, c-format
+#, c-format
 msgid "Board minimum hole clearance: %s."
-msgstr "最小クリアランス: %s."
+msgstr "基板の穴間最小クリアランス: %s."
 
 #: pcbnew/drc/drc_engine.cpp:873
 #, c-format
@@ -28987,9 +29189,8 @@ msgid "Rule: %s"
 msgstr "ルール: %s"
 
 #: pcbnew/drc/drc_item.cpp:322
-#, fuzzy
 msgid "Local override"
-msgstr "ローカル クリアランス"
+msgstr "ローカル オーバーライド"
 
 #: pcbnew/drc/drc_rule.h:137
 #, c-format
@@ -29401,7 +29602,7 @@ msgstr ""
 
 #: pcbnew/exporters/export_hyperlynx.cpp:194
 msgid "They have been exported as oval pads."
-msgstr ""
+msgstr "楕円形のパッドとしてエクスポートされています。"
 
 #: pcbnew/exporters/export_hyperlynx.cpp:307
 #: pcbnew/exporters/export_vrml.cpp:577
@@ -29634,13 +29835,13 @@ msgstr ""
 "テンポラリー ファイル '%s' のリネームに失敗しました。"
 
 #: pcbnew/files.cpp:1146
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Board copied to:\n"
 "%s"
 msgstr ""
-"基板をコピーしました コピー先:\n"
-"\"%s\""
+"基板をコピー:\n"
+"%s"
 
 #: pcbnew/footprint.cpp:882 pcbnew/tools/pcb_control.cpp:1191
 msgid "Last Change"
@@ -31074,7 +31275,7 @@ msgstr "Eeschema ネットリスト"
 msgid ""
 "Received an error while reading netlist.  Please report this issue to the "
 "KiCad team using the menu Help->Report Bug."
-msgstr ""
+msgstr "ネットリストの読み取り中にエラーが発生しました。 メニューのヘルプ > バグをレポート からKiCadチームにこの問題を報告してください。"
 
 #: pcbnew/pcb_edit_frame.cpp:1488
 #, c-format
@@ -31331,12 +31532,12 @@ msgstr ""
 #: pcbnew/plugins/altium/altium_parser_pcb.cpp:134
 #, c-format
 msgid "Unknown mapping of the Altium layer '%s'."
-msgstr ""
+msgstr "Altiumレイヤー '%s'の不明なマッピング."
 
 #: pcbnew/plugins/altium/altium_parser_pcb.cpp:694
 #, c-format
 msgid "Pads6 stream has unexpected length for subrecord 6: %d."
-msgstr ""
+msgstr "Pads6ストリームのsubrecord6の長さが予期しないものです: %d."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:76
 msgid "Error reading file: cannot determine length."
@@ -31383,7 +31584,7 @@ msgstr ""
 #: pcbnew/plugins/altium/altium_pcb.cpp:1384
 #, c-format
 msgid "Ignored dimension of kind %d (not yet supported)."
-msgstr ""
+msgstr "種別 %d の次元は無視されました。(まだサポートされていません)."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1426
 msgid "No 3D-models will be imported."
@@ -31436,7 +31637,7 @@ msgstr ""
 #: pcbnew/plugins/altium/altium_pcb.cpp:1805
 #, c-format
 msgid "Ignored polygon shape of kind %d (not yet supported)."
-msgstr ""
+msgstr "種別 %d のポリゴン形状は無視されました。(まだサポートされていません)."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1819
 msgid "Loading zone fills..."
@@ -31471,7 +31672,7 @@ msgstr "パッドをロードしています..."
 #: pcbnew/plugins/altium/altium_pcb.cpp:2125
 #, c-format
 msgid "Footprint %s pad %s is not marked as multilayer, but is a TH pad."
-msgstr ""
+msgstr "フットプリント %s のパッド%s はマルチレイヤーとしてマークされていませんが、THパッドです。"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2145
 #, c-format
@@ -31491,7 +31692,7 @@ msgstr ""
 #: pcbnew/plugins/altium/altium_pcb.cpp:2181
 #, c-format
 msgid "Footprint %s pad %s uses a hole of unknown kind %d."
-msgstr ""
+msgstr "フットプリント %s のパッド %s は未知の穴の種別 %dを使用しています。"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2199
 #, c-format
@@ -31503,7 +31704,7 @@ msgstr ""
 #: pcbnew/plugins/altium/altium_pcb.cpp:2233
 #, c-format
 msgid "Footprint %s pad %s uses an unknown pad-shape."
-msgstr ""
+msgstr "フットプリント %s のパッド%sは未知のパッド形状を使用しています。"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2292
 #, c-format
@@ -31534,7 +31735,7 @@ msgstr ""
 #: pcbnew/plugins/altium/altium_pcb.cpp:2466
 #, c-format
 msgid "Non-copper pad %s uses an unknown pad-shape."
-msgstr ""
+msgstr "非導体のパッド %s は、未知のパッド形状を使用しています。"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2475
 msgid "Loading vias..."
@@ -31544,7 +31745,7 @@ msgstr "ビアをロードしています..."
 #, c-format
 msgid ""
 "Via from layer %d to %d uses a non-copper layer, which is not supported."
-msgstr ""
+msgstr "レイヤー %d から %d へのビアは、サポートされていない非導体レイヤーを使用します。"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2537
 msgid "Loading tracks..."
@@ -33404,7 +33605,7 @@ msgstr "穴のクリアランスの解決:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:629
 msgid "Items share no relevant layers:"
-msgstr ""
+msgstr "関連するレイヤーを持たないアイテム:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:678
 msgid "Select an item for a constraints resolution report."
@@ -34533,13 +34734,12 @@ msgid "Lock or unlock selected items"
 msgstr "選択されたアイテムをロック/ロック解除する"
 
 #: pcbnew/tools/pcb_actions.cpp:667
-#, fuzzy
 msgid "Toggle 45 Limit"
-msgstr "ネットのハイライトを切り替え"
+msgstr "45度制限を切り替え"
 
 #: pcbnew/tools/pcb_actions.cpp:667
 msgid "Limit actions to 45 degrees from the starting point"
-msgstr ""
+msgstr "開始点から 45 度単位に操作を制限"
 
 #: pcbnew/tools/pcb_actions.cpp:672
 msgid "Prevent items from being moved and/or resized on the canvas"
@@ -34747,7 +34947,7 @@ msgstr "ゾーンの境界線のみ表示"
 
 #: pcbnew/tools/pcb_actions.cpp:844
 msgid "Draw Zone Fill Fracture Borders"
-msgstr ""
+msgstr "ゾーンの塗りつぶしの折れた境界を描画"
 
 #: pcbnew/tools/pcb_actions.cpp:849
 msgid "Draw Zone Fill Triangulation"
@@ -34758,9 +34958,8 @@ msgid "Toggle Zone Display"
 msgstr "ゾーンの表示を切り替え"
 
 #: pcbnew/tools/pcb_actions.cpp:856
-#, fuzzy
 msgid "Cycle between showing zone fills and just their outlines"
-msgstr "塗り潰し、ワイヤーフレーム、スケッチにゾーンの表示を切り替え"
+msgstr "ゾーンの塗りつぶし表示とアウトライン表示を切り替えます"
 
 #: pcbnew/tools/pcb_actions.cpp:864
 msgid "Switch to Component (F.Cu) layer"
@@ -35238,7 +35437,6 @@ msgid "Sets the length tuning parameters for currently routed item."
 msgstr "作業中の配線長の調整パラメーターを設定します。"
 
 #: pcbnew/tools/pcb_control.cpp:214
-#, fuzzy
 msgid "Don't show again"
 msgstr "再表示しない"
 
