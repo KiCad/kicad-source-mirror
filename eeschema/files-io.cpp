@@ -285,6 +285,11 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
             failedLoad = true;
         }
 
+        // This fixes a focus issue after the progress reporter is done on GTK.  It shouldn't
+        // cause any issues on macOS and Windows.  If it does, it will have to be conditionally
+        // compiled.
+        Raise();
+
         if( failedLoad )
         {
             // Do not leave g_RootSheet == NULL because it is expected to be
