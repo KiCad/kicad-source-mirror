@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-01 11:31-0700\n"
-"PO-Revision-Date: 2021-09-15 17:51+0000\n"
+"PO-Revision-Date: 2021-09-16 16:11+0000\n"
 "Last-Translator: boonchai k. <kicadthai@gmail.com>\n"
 "Language-Team: Thai <https://hosted.weblate.org/projects/kicad/master-source/"
 "th/>\n"
@@ -26674,56 +26674,59 @@ msgid ""
 "\n"
 "Continue and delete the extra inner copper layers from the current board?"
 msgstr ""
+"การตั้งค่าที่นำเข้ามีชั้นทองแดงน้อยกว่าบอร์ดปัจจุบัน (%i แทนที่จะเป็น %i)\n"
+"\n"
+"ดำเนินการต่อและลบเลเยอร์ทองแดงภายในพิเศษออกจากบอร์ดปัจจุบันหรือไม่?"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:781
 msgid "Inner Layers To Be Deleted"
-msgstr ""
+msgstr "เลเยอร์ภายในที่จะลบ"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:816
 msgid "All user-defined layers have already been added."
-msgstr ""
+msgstr "เพิ่มเลเยอร์ที่ผู้ใช้กำหนดทั้งหมดแล้ว"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:820
 msgid "Add User-defined Layer"
-msgstr ""
+msgstr "เพิ่มเลเยอร์ผู้ใช้กําหนดเอง"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:26
 msgid "Add User Defined Layer..."
-msgstr ""
+msgstr "เพิ่มเลเยอร์ผู้ใช้กําหนดเอง..."
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:44
 msgid "If you want a courtyard layer for the front side of the board"
-msgstr ""
+msgstr "หากคุณต้องการชั้นลานสําหรับด้านหน้าของบอร์ด"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:48
 msgid "CrtYd_Front"
-msgstr ""
+msgstr "CrtYd_Front"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:53
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:643
 msgid "Off-board, testing"
-msgstr ""
+msgstr "นอกบอร์ด, กำลังทดสอบ"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:60
 msgid "If you want a fabrication layer for the front side of the board"
-msgstr ""
+msgstr "ถ้าคุณต้องการชั้นการผลิตสำหรับด้านหน้าของบอร์ด"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:64
 msgid "Fab_Front"
-msgstr ""
+msgstr "Fab_Front"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:67
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:631
 msgid "Off-board, manufacturing"
-msgstr ""
+msgstr "นอกบอร์ด, การผลิต"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:72
 msgid "If you want an adhesive template for the front side of the board"
-msgstr ""
+msgstr "หากคุณต้องการแม่แบบกาวสำหรับด้านหน้ากระดาน"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:76
 msgid "Adhes_Front"
-msgstr ""
+msgstr "Adhes_Front"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:79
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:91
@@ -26734,43 +26737,43 @@ msgstr ""
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:607
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:619
 msgid "On-board, non-copper"
-msgstr ""
+msgstr "บนบอร์ด,ไม่ใช่ทองแดง"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:84
 msgid "If you want a solder paster layer for front side of the board"
-msgstr ""
+msgstr "หากคุณต้องการชั้นโซลเดอร์เพสต์สำหรับบอร์ดด้านหน้า"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:88
 msgid "SoldP_Front"
-msgstr ""
+msgstr "SoldP_Front"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:96
 msgid "If you want a silk screen layer for the front side of the board"
-msgstr ""
+msgstr "หากคุณต้องการเลเยอร์ซิลค์สกรีนบนด้านหน้าของบอร์ด"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:100
 msgid "SilkS_Front"
-msgstr ""
+msgstr "SilkS_Front"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:108
 msgid "If you want a solder mask layer for the front of the board"
-msgstr ""
+msgstr "หากคุณต้องการเลเยอร์โซลเดอร์มาส์กบนด้านหน้าของบอร์ด"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:112
 msgid "Mask_Front"
-msgstr ""
+msgstr "Mask_Front"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:120
 msgid "If you want a front copper layer"
-msgstr ""
+msgstr "ถ้าคุณต้องการชั้นทองแดงด้านหน้า"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:124
 msgid "Front_layer"
-msgstr ""
+msgstr "Front_layer"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:125
 msgid "Layer name of front (top) copper layer"
-msgstr ""
+msgstr "ชื่อชั้นทองแดงด้านหน้า (บน)"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:129
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:143
@@ -26805,7 +26808,7 @@ msgstr ""
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:549
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:567
 msgid "signal"
-msgstr ""
+msgstr "สัญญาณ"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:129
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:143
@@ -26840,7 +26843,7 @@ msgstr ""
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:549
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:567
 msgid "power plane"
-msgstr ""
+msgstr "ระนาบพลังงาน"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:129
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:143
@@ -26875,7 +26878,7 @@ msgstr ""
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:549
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:567
 msgid "mixed"
-msgstr ""
+msgstr "ผสม"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:129
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:143
@@ -26910,7 +26913,7 @@ msgstr ""
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:549
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:567
 msgid "jumper"
-msgstr ""
+msgstr "จัมเปอร์"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:133
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:147
@@ -26948,233 +26951,235 @@ msgid ""
 "Copper layer type for Freerouter and other external routers.\n"
 "Power plane layers are removed from Freerouter's layer menus."
 msgstr ""
+"ประเภทเลเยอร์ทองแดงสำหรับ Freerouter และเราเตอร์ภายนอกอื่นๆ\n"
+"เลเยอร์ระนาบพลังงานจะถูกลบออกจากเมนูเลเยอร์ของ Freerouter"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:140
 msgid "In1"
-msgstr ""
+msgstr "In1"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:154
 msgid "In2"
-msgstr ""
+msgstr "In2"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:168
 msgid "In3"
-msgstr ""
+msgstr "In3"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:182
 msgid "In4"
-msgstr ""
+msgstr "In4"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:196
 msgid "In5"
-msgstr ""
+msgstr "In5"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:210
 msgid "In6"
-msgstr ""
+msgstr "In6"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:224
 msgid "In7"
-msgstr ""
+msgstr "In7"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:238
 msgid "In8"
-msgstr ""
+msgstr "In8"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:252
 msgid "In9"
-msgstr ""
+msgstr "In9"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:266
 msgid "In10"
-msgstr ""
+msgstr "In10"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:280
 msgid "In11"
-msgstr ""
+msgstr "In11"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:294
 msgid "In12"
-msgstr ""
+msgstr "In12"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:308
 msgid "In13"
-msgstr ""
+msgstr "In13"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:322
 msgid "In14"
-msgstr ""
+msgstr "In14"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:336
 msgid "In15"
-msgstr ""
+msgstr "In15"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:350
 msgid "In16"
-msgstr ""
+msgstr "In16"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:364
 msgid "In17"
-msgstr ""
+msgstr "In17"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:378
 msgid "In18"
-msgstr ""
+msgstr "In18"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:392
 msgid "In19"
-msgstr ""
+msgstr "In19"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:406
 msgid "In20"
-msgstr ""
+msgstr "In20"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:420
 msgid "In21"
-msgstr ""
+msgstr "In21"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:434
 msgid "In22"
-msgstr ""
+msgstr "In22"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:448
 msgid "In23"
-msgstr ""
+msgstr "In23"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:462
 msgid "In24"
-msgstr ""
+msgstr "In24"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:476
 msgid "In25"
-msgstr ""
+msgstr "In25"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:490
 msgid "In26"
-msgstr ""
+msgstr "In26"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:504
 msgid "In27"
-msgstr ""
+msgstr "In27"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:518
 msgid "In28"
-msgstr ""
+msgstr "In28"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:532
 msgid "In29"
-msgstr ""
+msgstr "In29"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:546
 msgid "In30"
-msgstr ""
+msgstr "In30"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:558
 msgid "If you want a back copper layer"
-msgstr ""
+msgstr "หากคุณต้องการชั้นทองแดงด้านหลัง"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:563
 msgid "Layer name of back (bottom) copper layer"
-msgstr ""
+msgstr "ชื่อเลเยอร์ทองแดงด้านหลัง (ด้านล่าง)"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:576
 msgid "If you want a solder mask layer for the back side of the board"
-msgstr ""
+msgstr "ถ้าคุณต้องการชั้นโซลเดอร์มาส์กสำหรับด้านหลังของบอร์ด"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:580
 msgid "SoldM_Back"
-msgstr ""
+msgstr "SoldM_Back"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:588
 msgid "If you want a silk screen layer for the back side of the board"
-msgstr ""
+msgstr "หากคุณต้องการชั้นซิลค์สกรีนสำหรับด้านหลังของบอร์ด"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:592
 msgid "SilkS_Back"
-msgstr ""
+msgstr "SilkS_Back"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:600
 msgid "If you want a solder paste layer for the back side of the board"
-msgstr ""
+msgstr "หากคุณต้องการชั้นโซลเดอร์เพสต์สำหรับเลเยอร์ด้านหลังของบอร์ด"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:604
 msgid "SoldP_Back"
-msgstr ""
+msgstr "SoldP_Back"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:612
 msgid "If you want an adhesive layer for the back side of the board"
-msgstr ""
+msgstr "หากคุณต้องการชั้นเลเยอร์กาวสำหรับด้านหลังของบอร์ด"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:616
 msgid "Adhes_Back"
-msgstr ""
+msgstr "Adhes_Back"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:624
 msgid "If you want a fabrication layer for the back side of the board"
-msgstr ""
+msgstr "หากคุณต้องการชั้นการผลิตสำหรับเลเยอร์ด้านหลังของบอร์ด"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:628
 msgid "Fab_Back"
-msgstr ""
+msgstr "Fab_Back"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:636
 msgid "If you want a courtyard layer for the back side of the board"
-msgstr ""
+msgstr "ถ้าคุณต้องการชั้นลานสำหรับด้านหลังของบอร์ด"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:640
 msgid "CrtYd_Back"
-msgstr ""
+msgstr "CrtYd_Back"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:648
 msgid "If you want a board perimeter layer"
-msgstr ""
+msgstr "ถ้าคุณต้องการชั้นปริมณฑลของบอร์ด"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:652
 msgid "Pcb_Edges"
-msgstr ""
+msgstr "Pcb_Edges"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:655
 msgid "Board contour"
-msgstr ""
+msgstr "รูปร่างของบอร์ด"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:665
 msgid "Edge_Cuts setback"
-msgstr ""
+msgstr "ระยะถอยหลังจาก Edge_Cuts"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:672
 msgid "Eco1"
-msgstr ""
+msgstr "Eco1"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:675
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:685
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:697
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:709
 msgid "Auxiliary"
-msgstr ""
+msgstr "ตัวช่วย"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:682
 msgid "Eco2"
-msgstr ""
+msgstr "Eco2"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:690
 msgid "If you want a separate layer for comments or notes"
-msgstr ""
+msgstr "ถ้าคุณต้องการแยกชั้นสำหรับความคิดเห็นหรือหมายเหตุ"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:694
 msgid "Comments"
-msgstr ""
+msgstr "ความเห็น"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:702
 msgid "If you want a layer for documentation drawings"
-msgstr ""
+msgstr "หากคุณต้องการเลเยอร์สําหรับภาพวาดเอกสาร"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:706
 msgid "Drawings"
-msgstr ""
+msgstr "ภาพวาด"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:716
 msgid "User1"
-msgstr ""
+msgstr "ผู้ใช้1"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:719
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:729
@@ -27186,65 +27191,69 @@ msgstr ""
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:789
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:799
 msgid "User defined layer"
-msgstr ""
+msgstr "ผู้ใช้กำหนดเลเยอร์"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:726
 msgid "User2"
-msgstr ""
+msgstr "ผู้ใช้2"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:736
 msgid "User3"
-msgstr ""
+msgstr "ผู้ใช้3"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:746
 msgid "User4"
-msgstr ""
+msgstr "ผู้ใช้4"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:756
 msgid "User5"
-msgstr ""
+msgstr "ผู้ใช้5"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:766
 msgid "User6"
-msgstr ""
+msgstr "ผู้ใช้6"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:776
 msgid "User7"
-msgstr ""
+msgstr "ผู้ใช้7"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:786
 msgid "User8"
-msgstr ""
+msgstr "ผู้ใช้8"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:796
 msgid "User9"
-msgstr ""
+msgstr "ผู้ใช้9"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:29
 msgid ""
 "Use your board house's recommendation for solder mask clearance and minimum "
 "bridge width."
 msgstr ""
+"ใช้คำแนะนำตามผู้ผลิตบอร์ดของคุณ "
+"สำหรับระยะห่างโซลเดอร์มาส์กและความกว้างเชื่อมต่อ"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:35
 msgid "If none is provided, setting the values to zero is suggested."
-msgstr ""
+msgstr "หากไม่ได้ระบุ แนะนำให้ตั้งค่าเป็นศูนย์"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:58
 msgid ""
 "Global clearance between pads and the solder mask.\n"
 "This value can be superseded by local values for a footprint or a pad."
 msgstr ""
+"ค่าระยะห่างจากส่วนกลางระหว่างแพ็ดและโซลเดอร์มาส์ก\n"
+"ค่านี้ถูกทับโดยค่าจากค่าของฟุ้ทพรินท์หรือแพ็ด"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:63
 msgid ""
 "Positive clearance means area bigger than the pad (usual for solder mask "
 "clearance)."
-msgstr ""
+msgstr "ค่าระยะห่างเป็นบวก หมายถึงพื้นที่ใหญ่กว่าแพ็ด (ปกติสำหรับโซลเดอร์มาส์ก)"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:71
 msgid "Solder mask minimum bridge width:"
-msgstr ""
+msgstr "ขนาดเชื่อมต่ออย่างต่ำของโซลเดอร์มาส์ก:"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:73
 msgid ""
@@ -27253,12 +27262,18 @@ msgid ""
 "This parameter is only used to plot solder mask layers.\n"
 "Leave at 0 unless you know what you are doing."
 msgstr ""
+"ต่ำสุด ระยะห่างระหว่าง 2 พื้นที่แพ็ด\n"
+"พื้นที่แพ็ดสองแผ่นที่ใกล้กว่าค่านี้ จะถูกรวมเข้าด้วยกันในระหว่างพล็อต\n"
+"พารามิเตอร์นี้ใช้เพื่อพล็อตเลเยอร์โซลเดอร์มาสก์เท่านั้น\n"
+"ปล่อยไว้ที่ 0 เว้นแต่คุณจะรู้ว่ากำลังทำอะไรอยู่"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:78
 msgid ""
 "Minimum distance between openings in the solder mask.  Pad openings closer "
 "than this distance will be plotted as a single opening."
 msgstr ""
+"ระยะห่างขั้นต่ำระหว่างช่องเปิดในโซลเดอร์มาสก์ "
+"ช่องเปิดแพ็ดที่ใกล้กว่าระยะนี้จะถูกวาดเป็นช่องเปิดเดียว"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:97
 msgid ""
@@ -27266,12 +27281,17 @@ msgid ""
 "This value can be superseded by local values for a footprint or a pad.\n"
 "Final clearance value is the sum of this value and the clearance value ratio."
 msgstr ""
+"ค่าส่วนกลาง ระยะระหว่างแพ็ดและโซลเดอร์เพสต์\n"
+"ค่านี้สามารถแทนที่ด้วยค่าในเครื่องสำหรับฟุ้ทพรินท์หรือแพ็ด\n"
+"ค่าระยะห่างสุดท้าย คือผลรวมของค่านี้และอัตราส่วนระยะห่าง"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:102
 msgid ""
 "Negative clearance means area smaller than the pad (usual for solder paste "
 "clearance)."
 msgstr ""
+"ค่าระยะห่างเป็นลบ หมายถึงพื้นที่เล็กกว่าแพ็ด "
+"(ปกติสำหรับระยะห่างโซลเดอร์เพสต์)"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:112
 msgid ""
@@ -27280,41 +27300,47 @@ msgid ""
 "This value can be superseded by local values for a footprint or a pad.\n"
 "Final clearance value is the sum of this value and the clearance value."
 msgstr ""
+"อัตราส่วนค่าระยะห่างส่วนกลาง เป็นเปอร์เซ็นต์ระหว่างแพ็ดและโซลเดอร์เพสต์\n"
+"ค่า 10 หมายความว่าค่าระยะห่างคือ 10 เปอร์เซ็นต์ของขนาดแพ็ด\n"
+"ค่านี้สามารถแทนที่ด้วยค่าในเครื่องสำหรับฟุ้ทพรินท์หรือแพ็ด\n"
+"ค่าระยะห่างสุดท้าย คือผลรวมของค่านี้และค่าระยะห่าง"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:117
 msgid "Additional clearance as a percentage of the pad size."
-msgstr ""
+msgstr "ระยะห่างเพิ่มเติมเป็นเปอร์เซ็นต์ของขนาดแพ็ด"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:131
 msgid ""
 "Note: Solder paste clearances (absolute and relative) are added to determine "
 "the final clearance."
 msgstr ""
+"หมายเหตุ: ระยะห่างโซลเดอร์เพสต์ (สัมบูรณ์และสัมพัทธ์) "
+"เพื่อกำหนดระยะห่างขั้นสุดท้าย"
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:82
 msgid "Cancel Changes?"
-msgstr ""
+msgstr "ยกเลิกการเปลี่ยนแปลง?"
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:350
 msgid "DRC rules"
-msgstr ""
+msgstr "กฎ DRC"
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:357
 #: pcbnew/drc/drc_rule_condition.cpp:64
 msgid "ERROR:"
-msgstr ""
+msgstr "ความผิดพลาด:"
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:418
 msgid "Design rules cannot be added without a project"
-msgstr ""
+msgstr "ไม่สามารถเพิ่มกฎการออกแบบได้หากไม่มีโครงการ"
 
 #: pcbnew/dialogs/panel_setup_rules_base.cpp:26
 msgid "DRC rules:"
-msgstr ""
+msgstr "กฎ DRC:"
 
 #: pcbnew/dialogs/panel_setup_rules_base.cpp:77
 msgid "Check rule syntax"
-msgstr ""
+msgstr "ตรวจสอบไวยากรณ์ของกฎ"
 
 #: pcbnew/dialogs/panel_setup_rules_help_md.h:2
 msgid ""
@@ -27524,537 +27550,745 @@ msgid ""
 "        (constraint clearance (min \"1.5mm\"))\n"
 "        (condition \"A.inDiffPair('*') && !AB.isCoupledDiffPair()\"))\n"
 msgstr ""
+"### Top-level Clauses\n"
+"\n"
+"    (version <number>)\n"
+"\n"
+"    (rule <rule_name> <rule_clause> ...)\n"
+"\n"
+"\n"
+"<br><br>\n"
+"\n"
+"### Rule Clauses\n"
+"\n"
+"    (constraint <constraint_type> ...)\n"
+"\n"
+"    (condition \"<expression>\")\n"
+"\n"
+"    (layer \"<layer_name>\")\n"
+"\n"
+"\n"
+"<br><br>\n"
+"\n"
+"### Constraint Types\n"
+"\n"
+" * annular_width\n"
+" * clearance\n"
+" * courtyard_clearance\n"
+" * diff\\_pair\\_gap\n"
+" * diff\\_pair\\_uncoupled\n"
+" * disallow\n"
+" * edge_clearance\n"
+" * length\n"
+" * hole\n"
+" * hole_clearance\n"
+" * silk_clearance\n"
+" * skew\n"
+" * track_width\n"
+" * via_count\n"
+"\n"
+"\n"
+"<br><br>\n"
+"\n"
+"### Item Types\n"
+"\n"
+" * buried_via\n"
+" * graphic\n"
+" * hole\n"
+" * micro_via\n"
+" * pad\n"
+" * text\n"
+" * track\n"
+" * via\n"
+" * zone\n"
+"\n"
+"<br>\n"
+"\n"
+"### ตัวอย่าง\n"
+"\n"
+"    (version 1)\n"
+"\n"
+"    (rule HV\n"
+"       (constraint clearance (min 1.5mm))\n"
+"       (condition \"A.NetClass == 'HV'\"))\n"
+"\n"
+"\n"
+"    (rule HV\n"
+"       (layer outer)\n"
+"       (constraint clearance (min 1.5mm))\n"
+"       (condition \"A.NetClass == 'HV'\"))\n"
+"\n"
+"\n"
+"    (rule HV_HV\n"
+"       # wider clearance between HV tracks\n"
+"       (constraint clearance (min \"1.5mm + 2.0mm\"))\n"
+"       (condition \"A.NetClass == 'HV' && B.NetClass == 'HV'\"))\n"
+"\n"
+"\n"
+"    (rule HV_unshielded\n"
+"       (constraint clearance (min 2mm))\n"
+"       (condition \"A.NetClass == 'HV' && !A.insideArea('Shield*')\"))\n"
+"<br><br>\n"
+"\n"
+"### Notes\n"
+"\n"
+"Version clause must be the first clause.  It indicates the syntax version of "
+"the file so that \n"
+"future rules parsers can perform automatic updates.  It should be\n"
+"set to \"1\".\n"
+"\n"
+"Rules should be ordered by specificity.  Later rules take\n"
+"precedence over earlier rules; once a matching rule is found\n"
+"no further rules will be checked.\n"
+"\n"
+"Use Ctrl+/ to comment or uncomment line(s).\n"
+"<br><br><br>\n"
+"\n"
+"### Expression functions\n"
+"\n"
+"All function parameters support simple wildcards (`*` and `?`).\n"
+"<br><br>\n"
+"\n"
+"    A.insideCourtyard('<footprint_refdes>')\n"
+"True if any part of `A` lies within the given footprint's principal "
+"courtyard.\n"
+"<br><br>\n"
+"\n"
+"    A.insideFrontCourtyard('<footprint_refdes>')\n"
+"True if any part of `A` lies within the given footprint's front courtyard.\n"
+"<br><br>\n"
+"\n"
+"    A.insideBackCourtyard('<footprint_refdes>')\n"
+"True if any part of `A` lies within the given footprint's back courtyard.\n"
+"<br><br>\n"
+"\n"
+"    A.insideArea('<zone_name>')\n"
+"True if any part of `A` lies within the given zone's outline.\n"
+"<br><br>\n"
+"\n"
+"    A.isPlated()\n"
+"True if `A` has a hole which is plated.\n"
+"<br><br>\n"
+"\n"
+"    A.inDiffPair('<net_name>')\n"
+"True if `A` has net that is part of the specified differential pair.\n"
+"`<net_name>` is the base name of the differential pair.  For example, "
+"`inDiffPair('CLK')`\n"
+"matches items in the `CLK_P` and `CLK_N` nets.\n"
+"<br><br>\n"
+"\n"
+"    AB.isCoupledDiffPair()\n"
+"True if `A` and `B` are members of the same diff pair.\n"
+"<br><br>\n"
+"\n"
+"    A.memberOf('<group_name>')\n"
+"True if `A` is a member of the given group. Includes nested membership.\n"
+"<br><br>\n"
+"\n"
+"    A.existsOnLayer('<layer_name>')\n"
+"True if `A` exists on the given layer.  The layer name can be\n"
+"either the name assigned in Board Setup > Board Editor Layers or\n"
+"the canonical name (ie: `F.Cu`).\n"
+"\n"
+"NB: this returns true if `A` is on the given layer, independently\n"
+"of whether or not the rule is being evaluated for that layer.\n"
+"For the latter use a `(layer \"layer_name\")` clause in the rule.\n"
+"<br><br><br>\n"
+"\n"
+"### More Examples\n"
+"\n"
+"    (rule \"copper keepout\"\n"
+"       (constraint disallow track via zone)\n"
+"       (condition \"A.insideArea('zone3')\"))\n"
+"\n"
+"\n"
+"    (rule \"BGA neckdown\"\n"
+"       (constraint track_width (min 0.2mm) (opt 0.25mm))\n"
+"       (constraint clearance (min 0.05mm) (opt 0.08mm))\n"
+"       (condition \"A.insideCourtyard('U3')\"))\n"
+"\n"
+"\n"
+"    # prevent silk over tented vias\n"
+"    (rule silk_over_via\n"
+"       (constraint silk_clearance (min 0.2mm))\n"
+"       (condition \"A.Type == '*Text' && B.Type == 'Via'\"))\n"
+"\n"
+"\n"
+"    (rule \"Distance between Vias of Different Nets\"  \n"
+"        (constraint hole_to_hole (min 0.254mm))\n"
+"        (condition \"A.Type =='Via' && B.Type =='Via' && A.Net != B.Net\"))\n"
+"\n"
+"    (rule \"Clearance between Pads of Different Nets\"  \n"
+"        (constraint clearance (min 3.0mm))\n"
+"        (condition \"A.Type =='Pad' && B.Type =='Pad' && A.Net != B.Net\"))\n"
+"\n"
+"\n"
+"    (rule \"Via Hole to Track Clearance\"  \n"
+"        (constraint hole_clearance (min 0.254mm))\n"
+"        (condition \"A.Type =='Via' && B.Type =='Track'\"))\n"
+"    \n"
+"    (rule \"Pad to Track Clearance\"  \n"
+"        (constraint clearance (min 0.2mm))\n"
+"        (condition \"A.Type =='Pad' && B.Type =='Track'\"))\n"
+"\n"
+"\n"
+"    (rule \"clearance-to-1mm-cutout\"\n"
+"        (constraint clearance (min 0.8mm))\n"
+"        (condition \"A.Layer=='Edge.Cuts' && A.Thickness == 1.0mm\"))\n"
+"\n"
+"\n"
+"    (rule \"Max Drill Hole Size Mechanical\"  \n"
+"        (constraint hole (max 6.3mm))\n"
+"        (condition \"A.Pad_Type == 'NPTH, mechanical'\"))\n"
+"    \n"
+"    (rule \"Max Drill Hole Size PTH\"  \n"
+"        (constraint hole (max 6.35mm))\n"
+"        (condition \"A.Pad_Type == 'Through-hole'\"))\n"
+"\n"
+"\n"
+"    # Specify an optimal gap for a particular diff-pair\n"
+"    (rule \"dp clock gap\"\n"
+"        (constraint diff_pair_gap (opt \"0.8mm\"))\n"
+"        (condition \"A.inDiffPair('CLK') && AB.isCoupledDiffPair()\"))\n"
+"\n"
+"    # Specify a larger clearance around any diff-pair\n"
+"    (rule \"dp clearance\"\n"
+"        (constraint clearance (min \"1.5mm\"))\n"
+"        (condition \"A.inDiffPair('*') && !AB.isCoupledDiffPair()\"))\n"
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:72
 msgid "Default properties for new dimension objects:"
-msgstr ""
+msgstr "คุณสมบัติเริ่มต้นสําหรับวัตถุกำหนดมิติสร้างใหม่:"
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:89
 msgid ""
 "Default units for dimensions (\"automatic\" to follow the chosen UI units)"
 msgstr ""
+"หน่วยเริ่มต้นสำหรับกำหนดมิติ (\"อัตโนมัติ\" เพื่อติดตามหน่วย UI ที่เลือก)"
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:96
 msgid "Text position:"
-msgstr ""
+msgstr "ตําแหน่งข้อความ:"
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:104
 msgid "Where to position the dimension text relative to the dimension line"
-msgstr ""
+msgstr "ตําแหน่งที่จะวางข้อความมิติให้สัมพันธ์กับบรรทัดมิติ"
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:118
 msgid "Keep text aligned"
-msgstr ""
+msgstr "จัดข้อความให้อยู่ในแนวเดียวกัน"
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:119
 msgid "When checked, dimension text will be kept aligned with dimension lines"
-msgstr ""
+msgstr "เมื่อเลือกแล้ว ข้อความมิติจะถูกจัดให้อยู่ในแนวเดียวกับเส้นมิติ"
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:131
 msgid "How many digits of precision to show"
-msgstr ""
+msgstr "ความแม่นยําในการแสดงกี่หลัก"
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:147
 msgid ""
 "When checked, \"1.2300\" will be rendered as \"1.23\" even if precision is "
 "set to show more digits"
 msgstr ""
+"เมื่อเลือก \"1.2300\" จะแสดงเป็น \"1.23\" "
+"แม้ว่าจะตั้งค่าความแม่นยําให้แสดงตัวเลขมากขึ้น"
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias.cpp:258
 msgid "No via hole size defined."
-msgstr ""
+msgstr "ไม่ได้กำหนดขนาดรูเจาะเวีย"
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias.cpp:273
 msgid "No differential pair gap defined."
-msgstr ""
+msgstr "ไม่มีการกําหนดช่องว่างของคู่ความแตกต่าง"
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:19
 msgid "Pre-defined track and via dimensions:"
-msgstr ""
+msgstr "ขนาดแทร็กและเวียที่กำหนดไว้ล่วงหน้า:"
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:50
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:107
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:165
 msgid "3"
-msgstr ""
+msgstr "3"
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:54
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:111
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:169
 msgid "7"
-msgstr ""
+msgstr "7"
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:99 pcbnew/pad.cpp:931
 msgid "Hole"
-msgstr ""
+msgstr "รูเจาะ"
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:140
 msgid "Differential Pairs"
-msgstr ""
+msgstr "คู่แตกต่าง"
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:156
 msgid "Gap"
-msgstr ""
+msgstr "ช่องว่าง"
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:157
 msgid "Via Gap"
-msgstr ""
+msgstr "ช่องว่างระหว่างเวีย"
 
 #: pcbnew/drc/drc_engine.cpp:144 pcbnew/drc/drc_engine.cpp:186
 #: pcbnew/drc/drc_engine.cpp:216
 msgid "board setup constraints"
-msgstr ""
+msgstr "ตั้งค่าบอร์ดส่วนข้อจำกัด"
 
 #: pcbnew/drc/drc_engine.cpp:195
 msgid "board setup micro-via constraints"
-msgstr ""
+msgstr "ตั้งค่าบอร์ดส่วนข้อจำกัดไมโครเวีย"
 
 #: pcbnew/drc/drc_engine.cpp:241 pcbnew/drc/drc_engine.cpp:322
 #: pcbnew/drc/drc_engine.cpp:350
 #, c-format
 msgid "netclass '%s'"
-msgstr ""
+msgstr "เน็ตคลาส '%s'"
 
 #: pcbnew/drc/drc_engine.cpp:268 pcbnew/drc/drc_engine.cpp:285
 #: pcbnew/drc/drc_engine.cpp:303
 #, c-format
 msgid "netclass '%s' (diff pair)"
-msgstr ""
+msgstr "เน็ตคลาส '%s' (คู่ดิฟฟ์)"
 
 #: pcbnew/drc/drc_engine.cpp:425
 msgid "keepout area"
-msgstr ""
+msgstr "พื้นที่หวงห้าม"
 
 #: pcbnew/drc/drc_engine.cpp:430
 #, c-format
 msgid "keepout area '%s'"
-msgstr ""
+msgstr "พื้นที่หวงห้าม '%s'"
 
 #: pcbnew/drc/drc_engine.cpp:702
 msgid "Tessellating copper zones..."
-msgstr ""
+msgstr "เทสเซลเลติ้งโซนทองแดง..."
 
 #: pcbnew/drc/drc_engine.cpp:801 pcbnew/drc/drc_engine.cpp:811
 #, c-format
 msgid "Local override on %s; clearance: %s."
-msgstr ""
+msgstr "แทนที่ภายในเครื่องบน %s; ระยะห่าง: %s"
 
 #: pcbnew/drc/drc_engine.cpp:825
 #, c-format
 msgid "Board minimum clearance: %s."
-msgstr ""
+msgstr "ระยะห่างขั้นต่ำของบอร์ด: %s"
 
 #: pcbnew/drc/drc_engine.cpp:845
 #, c-format
 msgid "Checking %s; clearance: %s."
-msgstr ""
+msgstr "ตรวจสอบ %s; ระยะห่าง: %s"
 
 #: pcbnew/drc/drc_engine.cpp:852
 #, c-format
 msgid "Checking %s; courtyard clearance: %s."
-msgstr ""
+msgstr "ตรวจสอบ %s; ระยะห่างจากลาน: %s"
 
 #: pcbnew/drc/drc_engine.cpp:859
 #, c-format
 msgid "Checking %s; silk clearance: %s."
-msgstr ""
+msgstr "ตรวจสอบ %s; ระยะห่างซิลค์สกรีน: %s"
 
 #: pcbnew/drc/drc_engine.cpp:866
 #, c-format
 msgid "Checking %s; hole clearance: %s."
-msgstr ""
+msgstr "กำลังตรวจสอบ %s; ระยะห่างของรูเจาะ: %s"
 
 #: pcbnew/drc/drc_engine.cpp:873
 #, c-format
 msgid "Checking %s; edge clearance: %s."
-msgstr ""
+msgstr "กำลังตรวจสอบ %s; ระยะห่างขอบ: %s"
 
 #: pcbnew/drc/drc_engine.cpp:879
 #, c-format
 msgid "Checking %s."
-msgstr ""
+msgstr "กำลังตรวจสอบ %s"
 
 #: pcbnew/drc/drc_engine.cpp:886
 msgid "Board and netclass clearances apply only between copper items."
-msgstr ""
+msgstr "ช่องว่างระหว่างบอร์ดและเน็ตคลาสใช้เฉพาะระหว่างวัตถุประเภททองแดงเท่านั้น"
 
 #: pcbnew/drc/drc_engine.cpp:930
 msgid "Keepout constraint not met."
-msgstr ""
+msgstr "ไม่พบข้อจำกัดพื้นที่หวงห้าม"
 
 #: pcbnew/drc/drc_engine.cpp:932
 msgid "Disallow constraint not met."
-msgstr ""
+msgstr "ไม่พบข้อจำกัดที่ต้องห้าม"
 
 #: pcbnew/drc/drc_engine.cpp:954
 msgid "Keepout layer(s) not matched."
-msgstr ""
+msgstr "เลเยอร์หวงห้ามไม่ตรงกัน"
 
 #: pcbnew/drc/drc_engine.cpp:958 pcbnew/drc/drc_engine.cpp:979
 #, c-format
 msgid "Rule layer '%s' not matched; rule ignored."
-msgstr ""
+msgstr "เลเยอร์กฎ '%s' ไม่ตรงกัน กฎถูกละเว้น"
 
 #: pcbnew/drc/drc_engine.cpp:964 pcbnew/drc/drc_engine.cpp:984
 msgid "Rule layer not matched; rule ignored."
-msgstr ""
+msgstr "เลเยอร์กฎไม่ตรงกัน กฎถูกละเว้น"
 
 #: pcbnew/drc/drc_engine.cpp:992
 msgid "Unconditional constraint applied."
-msgstr ""
+msgstr "ใช้ข้อจำกัดที่ไม่มีเงื่อนไข"
 
 #: pcbnew/drc/drc_engine.cpp:993
 msgid "Unconditional rule applied."
-msgstr ""
+msgstr "ใช้กฎที่ไม่มีเงื่อนไข"
 
 #: pcbnew/drc/drc_engine.cpp:1006
 #, c-format
 msgid "Checking rule condition '%s'."
-msgstr ""
+msgstr "กําลังตรวจสอบเงื่อนไขกฎ '%s'"
 
 #: pcbnew/drc/drc_engine.cpp:1012
 msgid "Constraint applied."
-msgstr ""
+msgstr "ใช้ข้อจำกัดแล้ว"
 
 #: pcbnew/drc/drc_engine.cpp:1013
 msgid "Rule applied; overrides previous constraints."
-msgstr ""
+msgstr "ใช้กฎ; แทนที่ข้อจำกัดก่อนหน้า"
 
 #: pcbnew/drc/drc_engine.cpp:1020
 msgid "Membership not satisfied; constraint ignored."
-msgstr ""
+msgstr "สมาชิกไม่พอใจ; ละเว้นข้อจำกัด"
 
 #: pcbnew/drc/drc_engine.cpp:1021
 msgid "Condition not satisfied; rule ignored."
-msgstr ""
+msgstr "เงื่อนไขไม่พอใจ กฎถูกละเว้น"
 
 #: pcbnew/drc/drc_engine.cpp:1066 pcbnew/drc/drc_engine.cpp:1077
 #, c-format
 msgid "Local clearance on %s; clearance: %s."
-msgstr ""
+msgstr "ระยะห่างท้องถิ่นบน %s; ระยะห่าง: %s"
 
 #: pcbnew/drc/drc_item.cpp:42
 msgid "Electrical"
-msgstr ""
+msgstr "ไฟฟ้า"
 
 #: pcbnew/drc/drc_item.cpp:43
 msgid "Design For Manufacturing"
-msgstr ""
+msgstr "ออกแบบเพื่อการผลิต"
 
 #: pcbnew/drc/drc_item.cpp:44
 msgid "Schematic Parity"
-msgstr ""
+msgstr "เท่าเทียมกับวงจร"
 
 #: pcbnew/drc/drc_item.cpp:45
 msgid "Signal Integrity"
-msgstr ""
+msgstr "ความสมบูรณ์ของสัญญาณ"
 
 #: pcbnew/drc/drc_item.cpp:49
 msgid "Missing connection between items"
-msgstr ""
+msgstr "ขาดการเชื่อมต่อระหว่างรายการ"
 
 #: pcbnew/drc/drc_item.cpp:53
 msgid "Items shorting two nets"
-msgstr ""
+msgstr "ลัดวงจรระหว่าง2เน็ต"
 
 #: pcbnew/drc/drc_item.cpp:57
 msgid "Items not allowed"
-msgstr ""
+msgstr "รายการไม่อนุญาต"
 
 #: pcbnew/drc/drc_item.cpp:61
 msgid "Text (or dimension) on Edge.Cuts layer"
-msgstr ""
+msgstr "ข้อความ (หรือมิติ) บนเลเยอร์ Edge.Cuts"
 
 #: pcbnew/drc/drc_item.cpp:65
 msgid "Clearance violation"
-msgstr ""
+msgstr "การละเมิดเรื่องระยะห่าง"
 
 #: pcbnew/drc/drc_item.cpp:69
 msgid "Tracks crossing"
-msgstr ""
+msgstr "แทร็คพาดข้าม"
 
 #: pcbnew/drc/drc_item.cpp:73
 msgid "Board edge clearance violation"
-msgstr ""
+msgstr "การละเมิดระยะห่างขอบบอร์ด"
 
 #: pcbnew/drc/drc_item.cpp:77
 msgid "Copper areas intersect"
-msgstr ""
+msgstr "พื้นที่ทองแดงตัดกัน"
 
 #: pcbnew/drc/drc_item.cpp:81
 msgid "Copper zone net has no pads"
-msgstr ""
+msgstr "เน็ตบนโซนทองแดงไม่มีแพ็ด"
 
 #: pcbnew/drc/drc_item.cpp:85
 msgid "Via is not connected or connected on only one layer"
-msgstr ""
+msgstr "เวียไม่เชื่อมต่อหรือเชื่อมต่อเพียงหนึ่งเลเยอร์เท่านั้น"
 
 #: pcbnew/drc/drc_item.cpp:89
 msgid "Track has unconnected end"
-msgstr ""
+msgstr "แทร็กมีจุดสิ้นสุดไม่เชื่อมต่อ"
 
 #: pcbnew/drc/drc_item.cpp:93
 msgid "Hole clearance violation"
-msgstr ""
+msgstr "การละเมิดระยะห่างรูเจาะ"
 
 #: pcbnew/drc/drc_item.cpp:97
 msgid "Drilled holes too close together"
-msgstr ""
+msgstr "รูเจาะดอกสว่าน ใกล้กันเกินไป"
 
 #: pcbnew/drc/drc_item.cpp:101
 msgid "Drilled holes co-located"
-msgstr ""
+msgstr "รูเจาะดอกส่วน ทับซ้อนกัน"
 
 #: pcbnew/drc/drc_item.cpp:105
 msgid "Track width"
-msgstr ""
+msgstr "ความกว้างแทร็ค"
 
 #: pcbnew/drc/drc_item.cpp:109
 msgid "Annular width"
-msgstr ""
+msgstr "ความกว้างวงแหวน"
 
 #: pcbnew/drc/drc_item.cpp:113
 msgid "Drill out of range"
-msgstr ""
+msgstr "รูเจาะนอกช่วง"
 
 #: pcbnew/drc/drc_item.cpp:117
 msgid "Via diameter"
-msgstr ""
+msgstr "เส้นผ่าศูนย์กลางเวีย"
 
 #: pcbnew/drc/drc_item.cpp:121
 msgid "Padstack is not valid"
-msgstr ""
+msgstr "การทับซ้อนของแพ็ดไม่ถูกต้อง"
 
 #: pcbnew/drc/drc_item.cpp:125
 msgid "Micro via drill out of range"
-msgstr ""
+msgstr "ขนาดเจาะไมโครเวียอยู่นอกช่วง"
 
 #: pcbnew/drc/drc_item.cpp:129
 msgid "Courtyards overlap"
-msgstr ""
+msgstr "ลานสนามทับซ้อนกัน"
 
 #: pcbnew/drc/drc_item.cpp:133
 msgid "Footprint has no courtyard defined"
-msgstr ""
+msgstr "ไม่ได้กำหนดลานสนามในฟุ้ทพรินท์"
 
 #: pcbnew/drc/drc_item.cpp:137
 msgid "Footprint has malformed courtyard"
-msgstr ""
+msgstr "ลานสนามผิดรูปในฟุ้ทพรินท์"
 
 #: pcbnew/drc/drc_item.cpp:141
 msgid "PTH inside courtyard"
-msgstr ""
+msgstr "PTH อยู่ภายในลานสนาม"
 
 #: pcbnew/drc/drc_item.cpp:145
 msgid "NPTH inside courtyard"
-msgstr ""
+msgstr "NPTH อยู่ภายในลานสนาม"
 
 #: pcbnew/drc/drc_item.cpp:149
 msgid "Item on a disabled layer"
-msgstr ""
+msgstr "มีรายการบนเลเยอร์ปิดใช้งาน"
 
 #: pcbnew/drc/drc_item.cpp:153
 msgid "Board has malformed outline"
-msgstr ""
+msgstr "บอร์ดมีรูปร่างรอบนอกไม่ถูกต้อง"
 
 #: pcbnew/drc/drc_item.cpp:157
 msgid "Duplicate footprints"
-msgstr ""
+msgstr "ฟุ้ทพรินท์ซ้ำ"
 
 #: pcbnew/drc/drc_item.cpp:161
 msgid "Missing footprint"
-msgstr ""
+msgstr "ไม่พบฟุ้ทพรินท์"
 
 #: pcbnew/drc/drc_item.cpp:165
 msgid "Extra footprint"
-msgstr ""
+msgstr "ฟุ้ทพรินท์นอกเหนือ"
 
 #: pcbnew/drc/drc_item.cpp:169
 msgid "Pad net doesn't match schematic"
-msgstr ""
+msgstr "เน็ตบนแพ็ดไม่ตรงกับวงจร"
 
 #: pcbnew/drc/drc_item.cpp:177
 msgid "Silkscreen clipped by solder mask"
-msgstr ""
+msgstr "ซิลค์สกรีนตัดด้วยโซลเดอร์มาสก์"
 
 #: pcbnew/drc/drc_item.cpp:181
 msgid "Silkscreen overlap"
-msgstr ""
+msgstr "ซิลค์สกรีนทับซ้อนกัน"
 
 #: pcbnew/drc/drc_item.cpp:185
 msgid "Trace length out of range"
-msgstr ""
+msgstr "ความยาวแทร็คอยู่นอกช่วง"
 
 #: pcbnew/drc/drc_item.cpp:189
 msgid "Skew between traces out of range"
-msgstr ""
+msgstr "รอยลาดเอียงระหว่างเทรสอยู่นอกช่วง"
 
 #: pcbnew/drc/drc_item.cpp:193
 msgid "Too many vias on a connection"
-msgstr ""
+msgstr "จำนวนเวียมากเกินไปในหนึ่งการเชื่อมต่อ"
 
 #: pcbnew/drc/drc_item.cpp:197
 msgid "Differential pair gap out of range"
-msgstr ""
+msgstr "ระยะระหว่างคู่แตกต่าง อยู่นอกช่วง"
 
 #: pcbnew/drc/drc_item.cpp:201
 msgid "Differential uncoupled length too long"
-msgstr ""
+msgstr "ความยาวช่วงไม่เข้าคู่ของสัญญาณแตกต่าง มากเกินไป"
 
 #: pcbnew/drc/drc_rule.h:135
 #, c-format
 msgid "rule %s"
-msgstr ""
+msgstr "กฎ %s"
 
 #: pcbnew/drc/drc_rule_condition.cpp:52
 msgid "ERROR in expression."
-msgstr ""
+msgstr "ข้อผิดพลาดในนิพจน์"
 
 #: pcbnew/drc/drc_rule_condition.cpp:100 pcbnew/drc/drc_rule_parser.cpp:60
 #: pcbnew/drc/drc_rule_parser.cpp:443
 #, c-format
 msgid "ERROR: <a href='%d:%d'>%s</a>%s"
-msgstr ""
+msgstr "ข้อผิดพลาด: <a href='%d:%d'>%s</a>%s"
 
 #: pcbnew/drc/drc_rule_parser.cpp:70 pcbnew/drc/drc_rule_parser.cpp:453
 #, c-format
 msgid "ERROR: %s%s"
-msgstr ""
+msgstr "ข้อผิดพลาด: %s%s"
 
 #: pcbnew/drc/drc_rule_parser.cpp:107 pcbnew/drc/drc_rule_parser.cpp:190
 #: pcbnew/drc/drc_rule_parser.cpp:345
 msgid "Missing '('."
-msgstr ""
+msgstr "หายไป '('."
 
 #: pcbnew/drc/drc_rule_parser.cpp:113
 msgid "Missing version statement."
-msgstr ""
+msgstr "ขาดรายงานเวอร์ชัน"
 
 #: pcbnew/drc/drc_rule_parser.cpp:125
 msgid "Missing version number."
-msgstr ""
+msgstr "ขาดหมายเลขเวอร์ชัน"
 
 #: pcbnew/drc/drc_rule_parser.cpp:137
 #, c-format
 msgid "Unrecognized item '%s'.| Expected version number."
-msgstr ""
+msgstr "รายการที่ไม่รู้จัก '%s'.| คาดหวังหมายเลขเวอร์ชัน"
 
 #: pcbnew/drc/drc_rule_parser.cpp:144 pcbnew/drc/drc_rule_parser.cpp:223
 #: pcbnew/drc/drc_rule_parser.cpp:365 pcbnew/drc/drc_rule_parser.cpp:386
 #: pcbnew/drc/drc_rule_parser.cpp:407 pcbnew/drc/drc_rule_parser.cpp:511
 #, c-format
 msgid "Unrecognized item '%s'."
-msgstr ""
+msgstr "ไม่รู้จักสิ่งนี้ '%s'"
 
 #: pcbnew/drc/drc_rule_parser.cpp:157 pcbnew/drc/drc_rule_parser.cpp:236
 #: pcbnew/drc/drc_rule_parser.cpp:415
 msgid "Incomplete statement."
-msgstr ""
+msgstr "คําสั่งไม่สมบูรณ์"
 
 #: pcbnew/drc/drc_rule_parser.cpp:161 pcbnew/drc/drc_rule_parser.cpp:240
 #: pcbnew/drc/drc_rule_parser.cpp:293 pcbnew/drc/drc_rule_parser.cpp:326
 #: pcbnew/drc/drc_rule_parser.cpp:419
 #, c-format
 msgid "Unrecognized item '%s'.| Expected %s."
-msgstr ""
+msgstr "รายการที่ไม่รู้จัก '%s'.| คาดหวัง %s"
 
 #: pcbnew/drc/drc_rule_parser.cpp:170
 msgid "No errors found."
-msgstr ""
+msgstr "ไม่พบข้อผิดพลาด"
 
 #: pcbnew/drc/drc_rule_parser.cpp:183
 msgid "Missing rule name."
-msgstr ""
+msgstr "ไม่มีชื่อกฎ"
 
 #: pcbnew/drc/drc_rule_parser.cpp:205
 msgid "Missing condition expression."
-msgstr ""
+msgstr "ไม่มีนิพจน์เงื่อนไข"
 
 #: pcbnew/drc/drc_rule_parser.cpp:216
 #, c-format
 msgid "Unrecognized item '%s'.| Expected quoted expression."
-msgstr ""
+msgstr "รายการที่ไม่รู้จัก '%s'.| คาดหวังนิพจน์"
 
 #: pcbnew/drc/drc_rule_parser.cpp:249 pcbnew/drc/drc_rule_parser.cpp:322
 #: pcbnew/drc/drc_rule_parser.cpp:336 pcbnew/drc/drc_rule_parser.cpp:428
 msgid "Missing ')'."
-msgstr ""
+msgstr "หายไป ')'."
 
 #: pcbnew/drc/drc_rule_parser.cpp:266
 #, c-format
 msgid "Missing constraint type.|  Expected %s."
-msgstr ""
+msgstr "ขาดชนิดข้อจํากัด.|  ต้องการ %s"
 
 #: pcbnew/drc/drc_rule_parser.cpp:356
 msgid "Missing min value."
-msgstr ""
+msgstr "ขาดค่าต่ําสุด"
 
 #: pcbnew/drc/drc_rule_parser.cpp:377
 msgid "Missing max value."
-msgstr ""
+msgstr "ขาดค่าสูงสุด"
 
 #: pcbnew/drc/drc_rule_parser.cpp:398
 msgid "Missing opt value."
-msgstr ""
+msgstr "ขาดค่าการเลือก"
 
 #: pcbnew/drc/drc_rule_parser.cpp:477
 msgid "Missing layer name or type."
-msgstr ""
+msgstr "ไม่มีชื่อหรือประเภทเลเยอร์"
 
 #: pcbnew/drc/drc_rule_parser.cpp:503
 #, c-format
 msgid "Unrecognized layer '%s'."
-msgstr ""
+msgstr "เลเยอร์ที่ไม่รู้จัก '%s'"
 
 #: pcbnew/drc/drc_test_provider_annular_width.cpp:87
 msgid "Checking via annular rings..."
-msgstr ""
+msgstr "ตรวจสอบวงแหวนเวีย..."
 
 #: pcbnew/drc/drc_test_provider_annular_width.cpp:128
 #, c-format
 msgid "(%s min annular width %s; actual %s)"
-msgstr ""
+msgstr "(%s ความกว้างวงแหวนขั้นต่ำ %s ค่าจริง %s)"
 
 #: pcbnew/drc/drc_test_provider_annular_width.cpp:134
 #, c-format
 msgid "(%s max annular width %s; actual %s)"
-msgstr ""
+msgstr "(%s ความกว้างสูงสุดของวงแหวน %s ค่าจริง %s)"
 
 #: pcbnew/drc/drc_test_provider_connectivity.cpp:75
 msgid "Checking pad, via and zone connections..."
-msgstr ""
+msgstr "กำลังตรวจสอบการเชื่อมต่อของแพ็ด, เวีย และโซน..."
 
 #: pcbnew/drc/drc_test_provider_connectivity.cpp:149
 msgid "Checking net connections..."
-msgstr ""
+msgstr "กําลังตรวจสอบการเชื่อมต่อเน็ต..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:192
 msgid "Gathering copper items..."
-msgstr ""
+msgstr "กำลังรวบรวมรายการทองแดง..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:208
 msgid "Checking track & via clearances..."
-msgstr ""
+msgstr "กำลังตรวจสอบระยะห่างแทร็ค&เวีย..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:215
 msgid "Checking hole clearances..."
-msgstr ""
+msgstr "กําลังตรวจสอบระยะห่างรูเจาะ..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:223
 msgid "Checking pad clearances..."
-msgstr ""
+msgstr "กำลังตรวจสอบระยะห่างแพ็ด..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:231
 msgid "Checking pads..."
-msgstr ""
+msgstr "กำลังตรวจสอบแพ็ด..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:239
 msgid "Checking copper zone clearances..."
-msgstr ""
+msgstr "กำลังตรวจสอบระยะห่างโซนทองแดง..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:246
 msgid "Checking zones..."
-msgstr ""
+msgstr "กำลังตรวจสอบโซน..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:309
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:357
@@ -28070,48 +28304,48 @@ msgstr ""
 #: pcbnew/drc/drc_test_provider_silk_to_mask.cpp:160
 #, c-format
 msgid "(%s clearance %s; actual %s)"
-msgstr ""
+msgstr "(%s ระยะห่าง %s ค่าจริง %s)"
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:570
 #, c-format
 msgid "(nets %s and %s)"
-msgstr ""
+msgstr "(เน็ท %s และ %s)"
 
 #: pcbnew/drc/drc_test_provider_courtyard_clearance.cpp:85
 msgid "Checking footprint courtyard definitions..."
-msgstr ""
+msgstr "กำลังตรวจสอบข้อกำหนดลานสนามในฟุ้ทพรินท์..."
 
 #: pcbnew/drc/drc_test_provider_courtyard_clearance.cpp:90
 msgid "Gathering footprint courtyards..."
-msgstr ""
+msgstr "การรวมกันของลานสนามฟุ้ทพรินท์..."
 
 #: pcbnew/drc/drc_test_provider_courtyard_clearance.cpp:151
 msgid "Checking footprints for overlapping courtyards..."
-msgstr ""
+msgstr "กำลังตรวจสอบฟุ้ทพรินท์สำหรับการเหลื่อมลานสนาม..."
 
 #: pcbnew/drc/drc_test_provider_diff_pair_coupling.cpp:348
 msgid "DPs evaluated:"
-msgstr ""
+msgstr "DPs ประเมิน:"
 
 #: pcbnew/drc/drc_test_provider_diff_pair_coupling.cpp:460
 #, c-format
 msgid "(%s maximum uncoupled length: %s; actual: %s)"
-msgstr ""
+msgstr "(%s ความยาวสูงสุดที่ไม่ได้ปะติดปะต่อกัน: %s; ค่าจริง: %s)"
 
 #: pcbnew/drc/drc_test_provider_diff_pair_coupling.cpp:494
 #, c-format
 msgid "minimum gap: %s; "
-msgstr ""
+msgstr "ช่องว่างต่ําสุด: %s; "
 
 #: pcbnew/drc/drc_test_provider_diff_pair_coupling.cpp:498
 #, c-format
 msgid "maximum gap: %s; "
-msgstr ""
+msgstr "ช่องว่างสูงสุด: %s; "
 
 #: pcbnew/drc/drc_test_provider_diff_pair_coupling.cpp:501
 #, c-format
 msgid "actual: %s)"
-msgstr ""
+msgstr "ค่าจริง: %s)"
 
 #: pcbnew/drc/drc_test_provider_disallow.cpp:70
 msgid "Checking keepouts & disallow constraints..."
