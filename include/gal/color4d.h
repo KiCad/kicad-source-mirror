@@ -358,6 +358,11 @@ public:
     void FromHSV( double aInH, double aInS, double aInV );
 
     /**
+     * Returns the distance (in RGB space) between two colors.
+     */
+    int Distance( const COLOR4D& other ) const;
+
+    /**
      * Returns a legacy color ID that is closest to the given 8-bit RGB values.
      */
     static EDA_COLOR_T FindNearestLegacyColor( int aR, int aG, int aB );

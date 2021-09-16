@@ -183,7 +183,7 @@ public:
     }
 
     ///< Single point size in pixels
-    static const int POINT_SIZE = 10;
+    static const int POINT_SIZE = 8;
 
     ///< Border size when not hovering
     static const int BORDER_SIZE = 2;

@@ -247,9 +247,24 @@ void EDIT_POINTS::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
     auto gal = aView->GetGAL();
 
     KIGFX::RENDER_SETTINGS* settings = aView->GetPainter()->GetSettings();
+    KIGFX::COLOR4D          drawColor = settings->GetLayerColor( LAYER_AUX_ITEMS );
 
-    KIGFX::COLOR4D drawColor      = settings->GetLayerColor( LAYER_AUX_ITEMS );
-    KIGFX::COLOR4D bgColor        = drawColor.Darkened( 0.3 ).WithAlpha( 0.8 );
+    // Don't assume LAYER_AUX_ITEMS is always a good choice.  Compare with background.
+    if( aView->GetGAL()->GetClearColor().Distance( drawColor ) < 0.5 )
+        drawColor.Invert();
+
+    // Linear darkening doesn't fit well with human color perception, and there's no guarantee
+    // that there's enough room for contrast either.
+    KIGFX::COLOR4D bgColor;
+    double         brightness = drawColor.GetBrightness();
+
+    if( brightness > 0.5 )
+        bgColor = drawColor.Darkened( 0.3 ).WithAlpha( 0.8 );
+    else if( brightness > 0.2 )
+        bgColor = drawColor.Darkened( 0.6 ).WithAlpha( 0.8 );
+    else
+        bgColor = drawColor.Brightened( 0.3 ).WithAlpha( 0.8 );
+
     KIGFX::COLOR4D highlightColor = settings->GetLayerColor( LAYER_SELECT_OVERLAY );
 
     gal->SetFillColor( drawColor );
