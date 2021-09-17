@@ -980,19 +980,20 @@ void SCH_PAINTER::draw( LIB_PIN *aPin, int aLayer )
         return;
     }
 
-    int textOffset = libEntry->GetPinNameOffset();
+    float penWidth = (float) m_schSettings.GetDefaultPenWidth();
+    int   textOffset = libEntry->GetPinNameOffset();
+    float nameStrokeWidth = getLineWidth( aPin, drawingShadows );
+    float numStrokeWidth = getLineWidth( aPin, drawingShadows );
 
-    float nameLineWidth = getLineWidth( aPin, drawingShadows );
-    nameLineWidth = Clamp_Text_PenSize( nameLineWidth, aPin->GetNameTextSize(), false );
-    float numLineWidth = getLineWidth( aPin, drawingShadows );
-    numLineWidth = Clamp_Text_PenSize( numLineWidth, aPin->GetNumberTextSize(), false );
+    nameStrokeWidth = Clamp_Text_PenSize( nameStrokeWidth, aPin->GetNameTextSize(), false );
+    numStrokeWidth = Clamp_Text_PenSize( numStrokeWidth, aPin->GetNumberTextSize(), false );
 
     #define PIN_TEXT_MARGIN 4.0
 
     // Four locations around a pin where text can be drawn
     enum { INSIDE = 0, OUTSIDE, ABOVE, BELOW };
     int size[4] = { 0, 0, 0, 0 };
-    float thickness[4] = { numLineWidth, numLineWidth, numLineWidth, numLineWidth };
+    float thickness[4] = { numStrokeWidth, numStrokeWidth, numStrokeWidth, numStrokeWidth };
     COLOR4D colour[4];
     wxString text[4];
 
@@ -1000,12 +1001,12 @@ void SCH_PAINTER::draw( LIB_PIN *aPin, int aLayer )
     if( textOffset )
     {
         size     [INSIDE] = libEntry->ShowPinNames() ? aPin->GetNameTextSize() : 0;
-        thickness[INSIDE] = nameLineWidth;
+        thickness[INSIDE] = nameStrokeWidth;
         colour   [INSIDE] = getRenderColor( aPin, LAYER_PINNAM, drawingShadows );
         text     [INSIDE] = aPin->GetShownName();
 
         size     [ABOVE] = libEntry->ShowPinNumbers() ? aPin->GetNumberTextSize() : 0;
-        thickness[ABOVE] = numLineWidth;
+        thickness[ABOVE] = numStrokeWidth;
         colour   [ABOVE] = getRenderColor( aPin, LAYER_PINNUM, drawingShadows );
         text     [ABOVE] = aPin->GetShownNumber();
     }
@@ -1013,12 +1014,12 @@ void SCH_PAINTER::draw( LIB_PIN *aPin, int aLayer )
     else
     {
         size     [ABOVE] = libEntry->ShowPinNames() ? aPin->GetNameTextSize() : 0;
-        thickness[ABOVE] = nameLineWidth;
+        thickness[ABOVE] = nameStrokeWidth;
         colour   [ABOVE] = getRenderColor( aPin, LAYER_PINNAM, drawingShadows );
         text     [ABOVE] = aPin->GetShownName();
 
         size     [BELOW] = libEntry->ShowPinNumbers() ? aPin->GetNumberTextSize() : 0;
-        thickness[BELOW] = numLineWidth;
+        thickness[BELOW] = numStrokeWidth;
         colour   [BELOW] = getRenderColor( aPin, LAYER_PINNUM, drawingShadows );
         text     [BELOW] = aPin->GetShownNumber();
     }
@@ -1037,26 +1038,31 @@ void SCH_PAINTER::draw( LIB_PIN *aPin, int aLayer )
             c = getRenderColor( aPin, LAYER_HIDDEN, drawingShadows );
     }
 
-    int insideOffset = textOffset;
-    int outsideOffset = 2 * Mils2iu( PIN_TEXT_MARGIN ) + ( dangling ? TARGET_PIN_RADIUS / 2 : 0 );
-    int aboveOffset = Mils2iu( PIN_TEXT_MARGIN ) + m_schSettings.GetDefaultPenWidth() / 2;
-    int belowOffset = Mils2iu( PIN_TEXT_MARGIN ) + m_schSettings.GetDefaultPenWidth() / 2;
+    float insideOffset  = textOffset                     - thickness[INSIDE]  / 2.0;
+    float outsideOffset = 2 * Mils2iu( PIN_TEXT_MARGIN ) - thickness[OUTSIDE] / 2.0;
+    float aboveOffset   = Mils2iu( PIN_TEXT_MARGIN )     + ( thickness[ABOVE] + penWidth ) / 2.0;
+    float belowOffset   = Mils2iu( PIN_TEXT_MARGIN )     + ( thickness[BELOW] + penWidth ) / 2.0;
+
+    if( dangling )
+        outsideOffset += TARGET_PIN_RADIUS / 2.0;
 
     if( drawingShadows )
     {
         float shadowWidth = getShadowWidth();
 
-        if( !eeconfig()->m_Selection.text_as_box )
+        if( eeconfig()->m_Selection.text_as_box )
         {
-            aboveOffset += thickness[ABOVE] / 2;
-            belowOffset += thickness[BELOW] / 2;
+            insideOffset  -= thickness[INSIDE]  / 2.0;
+            outsideOffset -= thickness[OUTSIDE] / 2.0;
+            aboveOffset   -= thickness[ABOVE] + penWidth;
+            belowOffset   -= thickness[BELOW] + penWidth;
         }
 
         for( float& t : thickness )
             t += shadowWidth;
 
-        insideOffset -= KiROUND( shadowWidth / 2.0 );
-        outsideOffset -= KiROUND( shadowWidth / 2.0 );
+        insideOffset  -= shadowWidth / 2.0;
+        outsideOffset -= shadowWidth / 2.0;
     }
 
     auto setupDC =
