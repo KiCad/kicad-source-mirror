@@ -501,14 +501,17 @@ void SCH_BUS_ENTRY_BASE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, MSG_PANEL_ITEM
     {
         conn->AppendInfoToMsgPanel( aList );
 
-        NET_SETTINGS& netSettings = Schematic()->Prj().GetProjectFile().NetSettings();
-        wxString netname = conn->Name();
-        wxString netclassName = netSettings.m_NetClasses.GetDefaultPtr()->GetName();
+        if( !conn->IsBus() )
+        {
+            NET_SETTINGS& netSettings = Schematic()->Prj().GetProjectFile().NetSettings();
+            wxString netname = conn->Name();
+            wxString netclassName = netSettings.m_NetClasses.GetDefaultPtr()->GetName();
 
-        if( netSettings.m_NetClassAssignments.count( netname ) )
-            netclassName = netSettings.m_NetClassAssignments[ netname ];
+            if( netSettings.m_NetClassAssignments.count( netname ) )
+                netclassName = netSettings.m_NetClassAssignments[ netname ];
 
-        aList.push_back( MSG_PANEL_ITEM( _( "Assigned Netclass" ), netclassName ) );
+            aList.push_back( MSG_PANEL_ITEM( _( "Assigned Netclass" ), netclassName ) );
+        }
     }
 }
 

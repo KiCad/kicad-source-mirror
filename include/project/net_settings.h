@@ -79,13 +79,9 @@ public:
                                std::vector<wxString>* aMemberList );
 
     /**
-     * Explode the list of netclass assignments to include atomic members of composite labels
-     * (buses).
-     *
-     * @param aRebuildFromScratch indicates the assignments should be rebuilt from the netclass
-     * membership lists before resolving.
+     * Rebuild netclass assignments from the netclass membership lists.
      */
-    void ResolveNetClassAssignments( bool aRebuildFromScratch = false );
+    void RebuildNetClassAssignments();
 
 private:
     bool migrateSchema0to1();

@@ -791,14 +791,14 @@ void SCH_TEXT::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, MSG_PANEL_ITEMS& aList )
     msg = MessageTextFromValue( aFrame->GetUserUnits(), GetTextWidth() );
     aList.push_back( MSG_PANEL_ITEM( _( "Size" ), msg ) );
 
-    SCH_EDIT_FRAME* frame = dynamic_cast<SCH_EDIT_FRAME*>( aFrame );
+    SCH_CONNECTION* conn = dynamic_cast<SCH_EDIT_FRAME*>( aFrame ) ? Connection() : nullptr;
 
-    if( frame )
+    if( conn )
     {
-        if( SCH_CONNECTION* conn = Connection() )
-        {
-            conn->AppendInfoToMsgPanel( aList );
+        conn->AppendInfoToMsgPanel( aList );
 
+        if( !conn->IsBus() )
+        {
             NET_SETTINGS& netSettings = Schematic()->Prj().GetProjectFile().NetSettings();
             const wxString& netname = conn->Name( true );
 

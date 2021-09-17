@@ -992,9 +992,17 @@ int SCH_EDITOR_CONTROL::AssignNetclass( const TOOL_EVENT& aEvent )
         if( conn->IsBus() )
         {
             for( const std::shared_ptr<SCH_CONNECTION>& member : conn->Members() )
-                netNames.Add( member->Name() );
-
-            netNames.Add( conn->Name() );
+            {
+                if( member->IsBus() )
+                {
+                    for( const std::shared_ptr<SCH_CONNECTION>& subMember : member->Members() )
+                        netNames.Add( subMember->Name() );
+                }
+                else
+                {
+                    netNames.Add( member->Name() );
+                }
+            }
         }
         else
         {
@@ -1046,7 +1054,6 @@ int SCH_EDITOR_CONTROL::AssignNetclass( const TOOL_EVENT& aEvent )
                     newNetclass->Add( netName );
 
                 netSettings.m_NetClassAssignments[netName] = netclassName;
-                netSettings.ResolveNetClassAssignments();
             }
         }
     }

@@ -753,7 +753,7 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
         {
             Prj().SetReadOnly( false );
 
-            Prj().GetProjectFile().NetSettings().ResolveNetClassAssignments( true );
+            Prj().GetProjectFile().NetSettings().RebuildNetClassAssignments();
 
             // Before we had a copper edge clearance setting, the edge line widths could be used
             // as a kludge to control them.  So if there's no setting then infer it from the

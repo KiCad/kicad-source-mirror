@@ -31,7 +31,8 @@
 
 
 // const int netSettingsSchemaVersion = 0;
-const int netSettingsSchemaVersion = 1;     // new overbar syntax
+// const int netSettingsSchemaVersion = 1;     // new overbar syntax
+const int netSettingsSchemaVersion = 2;        // exclude buses from netclass members
 
 
 static OPT<int> getInPcbUnits( const nlohmann::json& aObj, const std::string& aKey,
@@ -193,7 +194,26 @@ NET_SETTINGS::NET_SETTINGS( JSON_SETTINGS* aParent, const std::string& aPath ) :
                     if( entry.contains( "nets" ) && entry["nets"].is_array() )
                     {
                         for( const auto& net : entry["nets"].items() )
-                            nc->Add( net.value().get<wxString>() );
+                        {
+                            wxString netname = net.value().get<wxString>();
+
+                            if( m_schemaVersion < 2 )
+                            {
+                                // Strip out buses from older 5.99 implementations.  They were
+                                // a world of hurt, never fully functional, and are functionally
+                                // replaced by assigning a netclass to a bus on the canvas.
+                                wxString unescaped = UnescapeString( netname );
+                                wxString prefix;
+                                std::vector<wxString> members;
+
+                                if( ParseBusVector( unescaped, &prefix, &members ) )
+                                    continue;
+                                else if( ParseBusGroup( unescaped, &prefix, &members ) )
+                                    continue;
+                            }
+
+                            nc->Add( netname );
+                        }
                     }
 
                     if( entry.contains( "pcb_color" ) && entry["pcb_color"].is_string() )
@@ -211,8 +231,6 @@ NET_SETTINGS::NET_SETTINGS( JSON_SETTINGS* aParent, const std::string& aPath ) :
                     for( const wxString& net : *nc )
                         m_NetClassAssignments[ net ] = nc->GetName();
                 }
-
-                ResolveNetClassAssignments();
             },
             {} ) );
 
@@ -519,44 +537,13 @@ bool NET_SETTINGS::ParseBusGroup( const wxString& aGroup, wxString* aName,
 }
 
 
-void NET_SETTINGS::ResolveNetClassAssignments( bool aRebuildFromScratch )
+void NET_SETTINGS::RebuildNetClassAssignments()
 {
-    std::map<wxString, wxString> baseList;
-
-    if( aRebuildFromScratch )
-    {
-        for( const std::pair<const wxString, NETCLASSPTR>& netclass : m_NetClasses )
-        {
-            for( const wxString& net : *netclass.second )
-                baseList[ net ] = netclass.second->GetName();
-        }
-    }
-    else
-    {
-        baseList = m_NetClassAssignments;
-    }
-
     m_NetClassAssignments.clear();
 
-    for( const auto& ii : baseList )
+    for( const std::pair<const wxString, NETCLASSPTR>& netclass : m_NetClasses )
     {
-        m_NetClassAssignments[ ii.first ] = ii.second;
-
-        wxString unescaped = UnescapeString( ii.first );
-        wxString prefix;
-        std::vector<wxString> members;
-
-        if( ParseBusVector( unescaped, &prefix, &members ) )
-        {
-            prefix = wxEmptyString;
-        }
-        else if( ParseBusGroup( unescaped, &prefix, &members ) )
-        {
-            if( !prefix.IsEmpty() )
-                prefix += wxT( "." );
-        }
-
-        for( wxString& member : members )
-            m_NetClassAssignments[ prefix + member ] = ii.second;
+        for( const wxString& net : *netclass.second )
+            m_NetClassAssignments[ net ] = netclass.second->GetName();
     }
 }

@@ -658,8 +658,6 @@ void SCH_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
             if( netclass )
                 netclass->Add( ii.first );
         }
-
-        netSettings.ResolveNetClassAssignments();
     }
         break;
 

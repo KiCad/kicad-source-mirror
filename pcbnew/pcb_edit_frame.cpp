@@ -904,7 +904,7 @@ void PCB_EDIT_FRAME::ShowBoardSetupDialog( const wxString& aInitialPage )
 
     if( dlg.ShowQuasiModal() == wxID_OK )
     {
-        Prj().GetProjectFile().NetSettings().ResolveNetClassAssignments( true );
+        Prj().GetProjectFile().NetSettings().RebuildNetClassAssignments();
 
         GetBoard()->SynchronizeNetsAndNetClasses();
         SaveProjectSettings();
