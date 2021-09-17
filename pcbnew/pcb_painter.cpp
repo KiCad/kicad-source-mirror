@@ -1637,6 +1637,8 @@ void PCB_PAINTER::draw( const PCB_GROUP* aGroup, int aLayer )
         }
         else
         {
+            // Neither selected nor entered; draw nothing at the group level (ie: only draw
+            // its members)
             return;
         }
 
@@ -1655,6 +1657,9 @@ void PCB_PAINTER::draw( const PCB_GROUP* aGroup, int aLayer )
         m_gal->DrawLine( topLeft + height, topLeft );
 
         wxString name = aGroup->GetName();
+
+        if( name.IsEmpty() )
+            return;
 
         int ptSize = 12;
         int scaledSize = abs( KiROUND( m_gal->GetScreenWorldMatrix().GetScale().x * ptSize ) );
