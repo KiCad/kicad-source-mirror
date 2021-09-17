@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-09-13 10:58-0700\n"
-"PO-Revision-Date: 2021-09-16 16:11+0000\n"
+"PO-Revision-Date: 2021-09-17 12:39+0000\n"
 "Last-Translator: Arnau Llovet Vidal <arnaullv@gmail.com>\n"
 "Language-Team: Catalan <https://hosted.weblate.org/projects/kicad/"
 "master-source/ca/>\n"
@@ -2922,6 +2922,8 @@ msgid ""
 "Show all items in their default color even if they have specific colors set "
 "in their properties."
 msgstr ""
+"Mostra tots els elements en el seu color per defecte fins hi tot si "
+"s'especifica un color a les seves propietats."
 
 #: common/dialogs/panel_color_settings_base.cpp:41
 msgid "Open Theme Folder"
@@ -3024,9 +3026,8 @@ msgid "Fallback graphics:"
 msgstr "Gràfics de reserva:"
 
 #: common/dialogs/panel_common_settings_base.cpp:99
-#, fuzzy
 msgid "Helper Applications"
-msgstr "Elimina les seleccions"
+msgstr "Aplicacions de recolzament"
 
 #: common/dialogs/panel_common_settings_base.cpp:105
 msgid "Text editor:"
@@ -3063,9 +3064,8 @@ msgid "Canvas scale:"
 msgstr "Escala del llenç:"
 
 #: common/dialogs/panel_common_settings_base.cpp:184
-#, fuzzy
 msgid "Show icons in menus"
-msgstr "Icones als menús"
+msgstr "Mostra les icones als menús"
 
 #: common/dialogs/panel_common_settings_base.cpp:187
 msgid "Icon theme:"
@@ -3103,9 +3103,8 @@ msgid "Warp mouse to origin of moved object"
 msgstr ""
 
 #: common/dialogs/panel_common_settings_base.cpp:228
-#, fuzzy
 msgid "First hotkey selects tool"
-msgstr "Edita la llista de les dreceres de teclat"
+msgstr "La primera drecera selecciona l'eina"
 
 #: common/dialogs/panel_common_settings_base.cpp:229
 msgid ""
@@ -3118,9 +3117,8 @@ msgid "Project Backup"
 msgstr "Còpia de seguretat del projecte"
 
 #: common/dialogs/panel_common_settings_base.cpp:244
-#, fuzzy
 msgid "Automatically backup projects"
-msgstr "Encamina automàticament la xarxa"
+msgstr "Fes còpia de seguretat dels projectes automàticament"
 
 #: common/dialogs/panel_common_settings_base.cpp:245
 msgid ""
@@ -3164,9 +3162,8 @@ msgid ""
 msgstr ""
 
 #: common/dialogs/panel_common_settings_base.cpp:285
-#, fuzzy
 msgid "Maximum total backup size:"
-msgstr "Mida mín. de la via"
+msgstr "Mida màxima total de la còpia de seguretat:"
 
 #: common/dialogs/panel_common_settings_base.cpp:287
 msgid ""
@@ -3176,12 +3173,11 @@ msgstr ""
 
 #: common/dialogs/panel_common_settings_base.cpp:294
 msgid "MB"
-msgstr ""
+msgstr "MB"
 
 #: common/dialogs/panel_common_settings_base.cpp:305
-#, fuzzy
 msgid "Session"
-msgstr "Revisió"
+msgstr "Sessió"
 
 #: common/dialogs/panel_common_settings_base.cpp:307
 msgid "Remember open files for next project launch"
@@ -3198,9 +3194,8 @@ msgid "Type filter text"
 msgstr ""
 
 #: common/dialogs/panel_hotkeys_editor.cpp:126
-#, fuzzy
 msgid "Undo All Changes"
-msgstr "Aplica els canvis"
+msgstr "Desfés tots els canvis"
 
 #: common/dialogs/panel_hotkeys_editor.cpp:127
 msgid "Undo all changes made so far in this dialog"
@@ -3216,9 +3211,8 @@ msgid ""
 msgstr ""
 
 #: common/dialogs/panel_hotkeys_editor.cpp:198
-#, fuzzy
 msgid "Import Hotkeys File:"
-msgstr "&Importa les dreceres de teclat"
+msgstr "Importa el fitxer de dreceres de teclat:"
 
 #: common/dialogs/panel_hotkeys_editor.cpp:246
 msgid "| Action | Default Hotkey | Description"
@@ -3227,9 +3221,8 @@ msgstr ""
 #: common/dialogs/panel_mouse_settings.cpp:47
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:162
 #: pcbnew/dialogs/panel_edit_options_base.cpp:208
-#, fuzzy
 msgid "Cmd"
-msgstr "Ordre"
+msgstr "Cmd"
 
 #: common/dialogs/panel_mouse_settings.cpp:48
 #: pcbnew/dialogs/dialog_fp_plugin_options_base.cpp:43
@@ -9109,7 +9102,6 @@ msgid "Fill with body background color"
 msgstr "Omple amb el color del cos del fons"
 
 #: eeschema/dialogs/dialog_lib_shape_properties_base.cpp:41
-#, fuzzy
 msgid "Fill Style"
 msgstr "Estil d'ompliment"
 
@@ -9155,9 +9147,10 @@ msgstr ""
 "Vols afegir pins nous per a l'estil alternatiu del cos (DeMorgan) del símbol?"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:288
-#, fuzzy
 msgid "Delete alternate body style (DeMorgan) draw items from symbol?"
-msgstr "Crea un component amb l'estil de cos alternatiu (DeMorgan)"
+msgstr ""
+"Vols eliminar els elements dibuixats per l'estil alternatiu (DeMorgan) del "
+"símbol?"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:316
 #, c-format
@@ -10454,9 +10447,8 @@ msgid ""
 msgstr ""
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:301
-#, fuzzy
 msgid "Use Relative Path"
-msgstr "Voleu utilitzar un camí relatiu?"
+msgstr "Utilitza un camí relatiu"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:302
 #, fuzzy
@@ -10521,9 +10513,9 @@ msgid "This action cannot be undone."
 msgstr "El camp %s no pot estar buit."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:529
-#, fuzzy, c-format
+#, c-format
 msgid "Create new file '%s' with contents of '%s'?"
-msgstr "No es pot escriure el contingut dels missatges a «%s»."
+msgstr "Vols crear un nou fitxer '%s' amb els continguts de '%s'?"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:563
 #, fuzzy, c-format
@@ -12508,9 +12500,9 @@ msgstr ""
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:775
 #: pcbnew/dialogs/dialog_export_step.cpp:350
-#, fuzzy, c-format
+#, c-format
 msgid "File '%s' already exists. Do you want overwrite this file?"
-msgstr "El fitxer «%s» ja existeix a la llista"
+msgstr "El fitxer '%s' ja existeix. Vols sobreescriure'l?"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:778
 #, fuzzy
@@ -13082,9 +13074,8 @@ msgid ""
 msgstr ""
 
 #: eeschema/files-io.cpp:932
-#, fuzzy
 msgid "Saving will overwrite existing files."
-msgstr "Esteu segur que voleu eliminar l'element?"
+msgstr "Desar sobreescriurà els fitxers existents."
 
 #: eeschema/files-io.cpp:933
 #, fuzzy
@@ -15243,9 +15234,8 @@ msgstr "S'estan baixant les biblioteques"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:992
 #: pcbnew/footprint_libraries_utils.cpp:504
-#, fuzzy
 msgid "Add the library to the global library table?"
-msgstr "Crea un nou directori"
+msgstr "Vols afegir la biblioteca a la taula global de biblioteques?"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:993
 #: pcbnew/footprint_libraries_utils.cpp:505
@@ -17126,9 +17116,9 @@ msgid "Symbol is not derived from another symbol."
 msgstr ""
 
 #: eeschema/tools/symbol_editor_pin_tool.cpp:236
-#, fuzzy, c-format
+#, c-format
 msgid "This position is already occupied by another pin, in unit %d."
-msgstr "La posició ja està ocupada per un altre pin. Voleu continuar?"
+msgstr "La posició ja està ocupada per un altre pin, a la unitat %d."
 
 #: eeschema/tools/symbol_editor_pin_tool.cpp:240
 #, fuzzy
@@ -18777,9 +18767,9 @@ msgid "Package identifier: %s\n"
 msgstr ""
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:155
-#, fuzzy, c-format
+#, c-format
 msgid "License: %s\n"
-msgstr "Llicència"
+msgstr "Llicència: %s\n"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:169
 #, c-format
@@ -18965,9 +18955,8 @@ msgid ""
 msgstr ""
 
 #: kicad/pcm/pcm.cpp:587
-#, fuzzy
 msgid "Local file"
-msgstr "Edita el fitxer local"
+msgstr "Fitxer local"
 
 #: kicad/pcm/pcm_task_manager.cpp:63
 msgid "Unable to create download directory!"
@@ -19053,7 +19042,7 @@ msgstr ""
 
 #: kicad/pcm/pcm_task_manager.cpp:448
 msgid "Done."
-msgstr ""
+msgstr "Fet."
 
 #: kicad/project_template.cpp:52
 msgid "Could open the template path!"
@@ -19090,7 +19079,6 @@ msgid "Unable to rename file ... "
 msgstr "No s'ha pogut canviar el nom del fitxer ... "
 
 #: kicad/project_tree_item.cpp:120
-#, fuzzy
 msgid "Permission error?"
 msgstr "Error de permisos?"
 
@@ -19123,9 +19111,8 @@ msgid "Close all editors, and switch to the selected project"
 msgstr ""
 
 #: kicad/project_tree_pane.cpp:713
-#, fuzzy
 msgid "New Directory..."
-msgstr "Nou d&irectori"
+msgstr "Nova carpeta..."
 
 #: kicad/project_tree_pane.cpp:714
 msgid "Create a New Directory"
@@ -19174,23 +19161,20 @@ msgid "Edit in a Text Editor"
 msgstr "&Edita en un editor de text"
 
 #: kicad/project_tree_pane.cpp:759
-#, fuzzy
 msgid "Rename File..."
-msgstr "Reanomena el fitxer"
+msgstr "Reanomena el fitxer..."
 
 #: kicad/project_tree_pane.cpp:760
 msgid "Rename file"
 msgstr "Reanomena el fitxer"
 
 #: kicad/project_tree_pane.cpp:764
-#, fuzzy
 msgid "Rename Files..."
-msgstr "Reanomena el fitxer"
+msgstr "Reanomena fitxers..."
 
 #: kicad/project_tree_pane.cpp:765
-#, fuzzy
 msgid "Rename files"
-msgstr "Reanomena el fitxer"
+msgstr "Reanomena fitxers"
 
 #: kicad/project_tree_pane.cpp:774
 #, fuzzy
@@ -19203,9 +19187,8 @@ msgid "Delete the files and their contents"
 msgstr "Elimina el directori i el seu contingut"
 
 #: kicad/project_tree_pane.cpp:791
-#, fuzzy
 msgid "Move to Trash"
-msgstr "Pistes no connectades"
+msgstr "Mou a la paperera"
 
 #: kicad/project_tree_pane.cpp:806
 #, fuzzy
@@ -19213,9 +19196,9 @@ msgid "Print the contents of the file"
 msgstr "Estableix el punt de l'origen per a la quadrícula"
 
 #: kicad/project_tree_pane.cpp:868
-#, fuzzy, c-format
+#, c-format
 msgid "Change filename: \"%s\""
-msgstr "Canvia el nom del fitxer: «%s»"
+msgstr "Canvia el nom del fitxer: \"%s\""
 
 #: kicad/project_tree_pane.cpp:870
 msgid "Change filename"
@@ -19230,9 +19213,8 @@ msgid "Local path: monitoring folder changes"
 msgstr ""
 
 #: kicad/tools/kicad_manager_actions.cpp:41
-#, fuzzy
 msgid "New Project..."
-msgstr "Projecte nou"
+msgstr "Projecte nou..."
 
 #: kicad/tools/kicad_manager_actions.cpp:41
 msgid "Create new blank project"
@@ -19258,18 +19240,16 @@ msgid "Open a demo project"
 msgstr "Obre un projecte existent"
 
 #: kicad/tools/kicad_manager_actions.cpp:57
-#, fuzzy
 msgid "Open Project..."
-msgstr "&Obre un projecte..."
+msgstr "Obre un projecte..."
 
 #: kicad/tools/kicad_manager_actions.cpp:57
 msgid "Open an existing project"
 msgstr "Obre un projecte existent"
 
 #: kicad/tools/kicad_manager_actions.cpp:63
-#, fuzzy
 msgid "Close Project"
-msgstr "Projecte nou"
+msgstr "Tanca el projecte"
 
 #: kicad/tools/kicad_manager_actions.cpp:63
 #, fuzzy
@@ -19277,7 +19257,6 @@ msgid "Close the current project"
 msgstr "Únicament al projecte actual"
 
 #: kicad/tools/kicad_manager_actions.cpp:69
-#, fuzzy
 msgid "Edit schematic"
 msgstr "Edita l'esquemàtic"
 
@@ -19287,14 +19266,12 @@ msgid "Edit schematic symbols"
 msgstr "Edita l'esquemàtic"
 
 #: kicad/tools/kicad_manager_actions.cpp:81
-#, fuzzy
 msgid "Edit PCB"
-msgstr "Edita"
+msgstr "Edita PCB"
 
 #: kicad/tools/kicad_manager_actions.cpp:87
-#, fuzzy
 msgid "Edit PCB footprints"
-msgstr "Edita l'empremta PCB"
+msgstr "Edita empremtes de PCB"
 
 #: kicad/tools/kicad_manager_actions.cpp:93
 #, fuzzy
@@ -19314,9 +19291,8 @@ msgstr ""
 "elements d'Eeschema o de Pcbnew"
 
 #: kicad/tools/kicad_manager_actions.cpp:104
-#, fuzzy
 msgid "Calculator Tools"
-msgstr "Calculadora PCB"
+msgstr "Eines de càlcul"
 
 #: kicad/tools/kicad_manager_actions.cpp:104
 msgid "Run component calculations, track width calculations, etc."
@@ -22809,9 +22785,8 @@ msgid "Subtract holes from board area"
 msgstr "Sostreu la màscara de soldadura de la serigrafia"
 
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:201
-#, fuzzy
 msgid "Exclude components with no pins"
-msgstr "Voleu incloure els últims canvis al component?"
+msgstr "Excloure els components sense pins"
 
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:232
 #, fuzzy
@@ -25930,9 +25905,9 @@ msgid "Net '%s' is in use.  Delete anyway?"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_net_inspector.cpp:1948
-#, fuzzy, c-format
+#, c-format
 msgid "Delete all nets in group '%s'?"
-msgstr "Selecciona tots les xarxes de la llista dreta"
+msgstr "Vols eliminar totes les xarxes del grup '%s'?"
 
 #: pcbnew/dialogs/dialog_net_inspector.cpp:1971
 #: pcbnew/dialogs/dialog_net_inspector.cpp:1972
@@ -29384,9 +29359,8 @@ msgid ""
 msgstr ""
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:81
-#, fuzzy
 msgid "Cancel Changes?"
-msgstr "Reverteix els canvis"
+msgstr "Vols cancel·lar els canvis?"
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:350
 #, fuzzy
@@ -30645,9 +30619,9 @@ msgid "Recovery file '%s' not found."
 msgstr "No s'ha trobat el fitxer de recuperació «%s»."
 
 #: pcbnew/files.cpp:353
-#, fuzzy, c-format
+#, c-format
 msgid "OK to load recovery file '%s'?"
-msgstr "No s'ha pogut crear el fitxer de còpia de seguretat <%s>"
+msgstr "Vols carregar el fitxer de recuperació '%s'?"
 
 #: pcbnew/files.cpp:376
 #, fuzzy, c-format
@@ -30798,9 +30772,8 @@ msgid "Status: "
 msgstr "Estat: "
 
 #: pcbnew/footprint.cpp:915
-#, fuzzy
 msgid "Attributes:"
-msgstr "Atributs"
+msgstr "Atributs:"
 
 #: pcbnew/footprint.cpp:920
 #, fuzzy, c-format
@@ -30808,9 +30781,8 @@ msgid "3D-Shape: %s"
 msgstr "Forma 3D"
 
 #: pcbnew/footprint.cpp:920
-#, fuzzy
 msgid "<none>"
-msgstr "cap"
+msgstr "<cap>"
 
 #: pcbnew/footprint.cpp:924 pcbnew/tools/pcb_control.cpp:1197
 #, c-format
@@ -30818,7 +30790,7 @@ msgid "Doc: %s"
 msgstr "Document: %s"
 
 #: pcbnew/footprint.cpp:925 pcbnew/tools/pcb_control.cpp:1198
-#, fuzzy, c-format
+#, c-format
 msgid "Keywords: %s"
 msgstr "Paraules clau: %s"
 
@@ -30888,9 +30860,9 @@ msgid "Editing %s from board.  Saving will update the board only."
 msgstr ""
 
 #: pcbnew/footprint_edit_frame.cpp:767
-#, fuzzy, c-format
+#, c-format
 msgid "[from %s]"
-msgstr "Pad %s en %s de %s"
+msgstr "[des de %s]"
 
 #: pcbnew/footprint_edit_frame.cpp:801
 #, fuzzy
@@ -30947,9 +30919,8 @@ msgid "Fetching footprint libraries..."
 msgstr "Assistent per afegir biblioteques d'empremtes"
 
 #: pcbnew/footprint_info_impl.cpp:159
-#, fuzzy
 msgid "Loading footprints..."
-msgstr "Carrega l'empremta"
+msgstr "S'estan carregant les empremtes..."
 
 #: pcbnew/footprint_libraries_utils.cpp:58
 msgid ""
@@ -31026,14 +30997,15 @@ msgid "No footprints to export!"
 msgstr "Sense empremtes per arxivar!"
 
 #: pcbnew/footprint_libraries_utils.cpp:689
-#, fuzzy, c-format
+#, c-format
 msgid "Update footprints on board to refer to %s?"
-msgstr "Actualitza totes empremtes de la placa"
+msgstr "Vols actualitzar les empremtes de la placa per referir-se a %s?"
 
 #: pcbnew/footprint_libraries_utils.cpp:736
-#, fuzzy
 msgid "Update footprints on board to refer to new library?"
-msgstr "Desa l'empremta a la biblioteca activa"
+msgstr ""
+"Vols actualitzar les empremtes de la placa per associar-les a la nova "
+"biblioteca?"
 
 #: pcbnew/footprint_libraries_utils.cpp:875
 #: pcbnew/footprint_viewer_frame.cpp:718
@@ -32965,9 +32937,9 @@ msgid ""
 msgstr ""
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1586
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to find component '%s' in the library(Symdef ID: '%s')"
-msgstr "Voleu eliminar el component «%s» de la biblioteca «%s»?"
+msgstr "No es pot trobar el component '%s' a la biblioteca (Symdef ID: '%s')"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1704
 #, c-format
@@ -35887,9 +35859,8 @@ msgid "Remove Items"
 msgstr "Mou l'element"
 
 #: pcbnew/tools/pcb_actions.cpp:692
-#, fuzzy
 msgid "Remove items from group"
-msgstr "Voleu suprimir tots els àlies de la llista?"
+msgstr "Treure tots els elements del grup"
 
 #: pcbnew/tools/pcb_actions.cpp:697
 msgid "Enter Group"
