@@ -40,6 +40,7 @@ class PANEL_SETUP_TEXT_AND_GRAPHICS_BASE : public wxPanel
 		wxStaticText* m_staticTextDefProp;
 		WX_GRID* m_grid;
 		wxStaticText* m_staticTextDefPropDim;
+		wxPanel* m_panel1;
 		wxStaticText* m_lblDimensionUnits;
 		wxChoice* m_dimensionUnits;
 		wxStaticText* m_lblTextPositionMode;
