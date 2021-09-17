@@ -498,7 +498,7 @@ int SCH_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
             SCH_SHEET_PIN* pin   = static_cast<SCH_SHEET_PIN*>( head );
             SCH_SHEET*     sheet = pin->GetParent();
 
-            for( int i = 0; clockwise ? i < 1 : i < 3; ++i )
+            for( int i = 0; clockwise ? i < 3 : i < 1; ++i )
                 pin->Rotate( sheet->GetBoundingBox().GetCenter() );
 
             break;
@@ -507,7 +507,7 @@ int SCH_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
         case SCH_LINE_T:
         case SCH_BUS_BUS_ENTRY_T:
         case SCH_BUS_WIRE_ENTRY_T:
-            for( int i = 0; clockwise ? i < 1 : i < 3; ++i )
+            for( int i = 0; clockwise ? i < 3 : i < 1; ++i )
                 head->Rotate( rotPoint );
 
             break;
@@ -528,7 +528,7 @@ int SCH_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
         }
 
         case SCH_BITMAP_T:
-            for( int i = 0; clockwise ? i < 1 : i < 3; ++i )
+            for( int i = 0; clockwise ? i < 3 : i < 1; ++i )
                 head->Rotate( rotPoint );
 
             // The bitmap is cached in Opengl: clear the cache to redraw
@@ -571,7 +571,7 @@ int SCH_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
         if( !moving )
             saveCopyInUndoList( item, UNDO_REDO::CHANGED, ii > 0 );
 
-        for( int i = 0; clockwise ? i < 1 : i < 3; ++i )
+        for( int i = 0; clockwise ? i < 3 : i < 1; ++i )
         {
             if( item->Type() == SCH_LINE_T )
             {

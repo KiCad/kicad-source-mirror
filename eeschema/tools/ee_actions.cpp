@@ -375,7 +375,7 @@ TOOL_ACTION EE_ACTIONS::rotateCW( "eeschema.InteractiveEdit.rotateCW",
 TOOL_ACTION EE_ACTIONS::rotateCCW( "eeschema.InteractiveEdit.rotateCCW",
         AS_GLOBAL,
         'R', LEGACY_HK_NAME( "Rotate Item" ),
-        _( "Rotate" ), _( "Rotates selected item(s) counter-clockwise" ),
+        _( "Rotate Counterclockwise" ), _( "Rotates selected item(s) counter-clockwise" ),
         BITMAPS::rotate_ccw );
 
 TOOL_ACTION EE_ACTIONS::mirrorV( "eeschema.InteractiveEdit.mirrorV",
