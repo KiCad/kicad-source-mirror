@@ -208,24 +208,28 @@ wxRegEx SCH_NETNAME_VALIDATOR::m_busGroupRegex( R"((^|[^$_\^~]){)", wxRE_ADVANCE
 
 wxString SCH_NETNAME_VALIDATOR::IsValid( const wxString& str ) const
 {
+    wxString msg = NETNAME_VALIDATOR::IsValid( str );
+
+    if( !msg.IsEmpty() )
+        return msg;
+
     // We don't do single-character validation here
     if( str.Length() == 1 )
         return wxString();
 
-    if( ( str.Contains( '[' ) || str.Contains( ']' ) ) &&
-        !NET_SETTINGS::ParseBusVector( str, nullptr, nullptr ) )
-    {
-        return _( "Signal name contains '[' or ']' but is not a valid vector bus name." );
-    }
-
-    // Figuring out if the user "meant" to make a bus group is somewhat trickier because curly
+    // Figuring out if the user "meant" to make a bus group is somewhat tricky because curly
     // braces are also used for formatting and variable expansion
 
-    if( m_busGroupRegex.Matches( str ) && str.Contains( '}' ) &&
-        !NET_SETTINGS::ParseBusGroup( str, nullptr, nullptr ) )
+    if( m_busGroupRegex.Matches( str ) && str.Contains( '}' ) )
     {
-        return _( "Signal name contains '{' and '}' but is not a valid group bus name" );
+        if( !NET_SETTINGS::ParseBusGroup( str, nullptr, nullptr ) )
+            return _( "Signal name contains '{' and '}' but is not a valid bus name" );
+    }
+    else if( str.Contains( '[' ) || str.Contains( ']' ) )
+    {
+        if( !NET_SETTINGS::ParseBusVector( str, nullptr, nullptr ) )
+            return _( "Signal name contains '[' or ']' but is not a valid bus name." );
     }
 
-    return NETNAME_VALIDATOR::IsValid( str );
+    return wxString();
 }
