@@ -31,6 +31,8 @@
 #include <sch_junction.h>
 #include <sch_line.h>
 #include <sch_text.h>
+#include <project/net_settings.h>
+#include <project/project_file.h>
 #include <settings/color_settings.h>
 #include <netclass.h>
 #include <trigo.h>
@@ -493,13 +495,21 @@ void SCH_BUS_ENTRY_BASE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, MSG_PANEL_ITEM
 
     aList.push_back( MSG_PANEL_ITEM( _( "Bus Entry Type" ), msg ) );
 
-    SCH_EDIT_FRAME* frame = dynamic_cast<SCH_EDIT_FRAME*>( aFrame );
+    SCH_CONNECTION* conn = dynamic_cast<SCH_EDIT_FRAME*>( aFrame ) ? Connection() : nullptr;
 
-    if( !frame )
-        return;
-
-    if( SCH_CONNECTION* conn = Connection() )
+    if( conn )
+    {
         conn->AppendInfoToMsgPanel( aList );
+
+        NET_SETTINGS& netSettings = Schematic()->Prj().GetProjectFile().NetSettings();
+        wxString netname = conn->Name();
+        wxString netclassName = netSettings.m_NetClasses.GetDefaultPtr()->GetName();
+
+        if( netSettings.m_NetClassAssignments.count( netname ) )
+            netclassName = netSettings.m_NetClassAssignments[ netname ];
+
+        aList.push_back( MSG_PANEL_ITEM( _( "Assigned Netclass" ), netclassName ) );
+    }
 }
 
 

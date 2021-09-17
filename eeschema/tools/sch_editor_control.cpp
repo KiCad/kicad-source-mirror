@@ -982,8 +982,7 @@ int SCH_EDITOR_CONTROL::AssignNetclass( const TOOL_EVENT& aEvent )
         }
         else if( conn->IsBus() && conn->Members().size() == 0 )
         {
-            m_frame->ShowInfoBarError( _( "Bus must have at least one member to assign a netclass "
-                                          "to members." ) );
+            m_frame->ShowInfoBarError( _( "Bus has no members to assign netclass to." ) );
             highlightNet( m_toolMgr, CLEAR );
             return 0;
         }
@@ -992,10 +991,10 @@ int SCH_EDITOR_CONTROL::AssignNetclass( const TOOL_EVENT& aEvent )
 
         if( conn->IsBus() )
         {
-            for( auto& m : conn->Members() )
-            {
-                netNames.Add( m->Name() );
-            }
+            for( const std::shared_ptr<SCH_CONNECTION>& member : conn->Members() )
+                netNames.Add( member->Name() );
+
+            netNames.Add( conn->Name() );
         }
         else
         {
@@ -1014,7 +1013,7 @@ int SCH_EDITOR_CONTROL::AssignNetclass( const TOOL_EVENT& aEvent )
         defaultItem.Add( _( "Default" ) );
         items.emplace_back( defaultItem );
 
-        for( const auto& ii : netSettings.m_NetClasses )
+        for( const std::pair<const wxString, NETCLASSPTR>& ii : netSettings.m_NetClasses )
         {
             wxArrayString item;
             item.Add( ii.first );
@@ -1028,7 +1027,7 @@ int SCH_EDITOR_CONTROL::AssignNetclass( const TOOL_EVENT& aEvent )
         {
             netclassName = dlg.GetTextSelection();
 
-            for( auto& netName : netNames )
+            for( const wxString& netName : netNames )
             {
                 // Remove from old netclass membership list
                 if( netSettings.m_NetClassAssignments.count( netName ) )
