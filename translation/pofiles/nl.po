@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-09-13 10:58-0700\n"
-"PO-Revision-Date: 2021-09-15 17:51+0000\n"
+"PO-Revision-Date: 2021-09-20 16:15+0000\n"
 "Last-Translator: CJ van der Hoeven <KeesEnJoa@gmail.com>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/kicad/"
 "master-source/nl/>\n"
@@ -145,7 +145,7 @@ msgstr "Herlaad board en 3D-modellen"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:357
 msgid "Build board outline"
-msgstr "Bouw een bordomtrek"
+msgstr "Bouw een board-omtrek"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:535
 msgid "Create layers"
@@ -210,7 +210,7 @@ msgstr "Bouw technische laag %d"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1054
 msgid "Build BVH for holes and vias"
-msgstr "Bouw BVH voor gaten en via's"
+msgstr "Maak BVH voor gaten en via's"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:410
 msgid "Your OpenGL version is not supported. Minimum required is 1.5."
@@ -388,7 +388,7 @@ msgstr "Herlaad board"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:60
 msgid "Copy 3D image to clipboard"
-msgstr "Kopiëer 3D-afbeelding naar klembord"
+msgstr "Kopieer 3D-afbeelding naar klembord"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:65
 msgid "Render current view using Raytracing"
@@ -396,7 +396,7 @@ msgstr "Render de huidige weergave met behulp van Raytracing"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:23
 msgid "Environment Colors"
-msgstr "Omgevings-kleuren"
+msgstr "Omgevingskleuren"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:30
 msgid "Background gradient start:"
@@ -5353,7 +5353,7 @@ msgstr "Onbekende ouder van functieparameters"
 
 #: common/libeval_compiler/libeval_compiler.cpp:846
 msgid "Unknown parent of property"
-msgstr "Onbekende ouder van eigendom"
+msgstr "Onbekende ouder van eigenschap"
 
 #: common/libeval_compiler/libeval_compiler.cpp:869
 #: common/libeval_compiler/libeval_compiler.cpp:899
@@ -5377,7 +5377,7 @@ msgstr "Niet-herkende functie '%s'"
 #: common/libeval_compiler/libeval_compiler.cpp:1009
 #, c-format
 msgid "Missing units for '%s'| (%s)"
-msgstr "Ontbrekende eenheden voor \"%s\" | (%s)"
+msgstr "Ontbrekende eenheden voor ' %s'  | (%s)"
 
 #: common/libeval_compiler/libeval_compiler.cpp:1126
 #, c-format
@@ -5399,7 +5399,7 @@ msgstr "Uitvoerbaar bestand"
 
 #: common/pgm_base.cpp:198
 msgid "Select Preferred Editor"
-msgstr "Selecteer Preferred Editor"
+msgstr "Selecteer Voorkeur Editor"
 
 #: common/pgm_base.cpp:212
 msgid "Environment variable HOME is empty.  Unable to continue."
@@ -5457,7 +5457,7 @@ msgstr "Onverwacht aantal punten in '%s'. Gevonden %d maar verwacht %d."
 #: common/plugins/cadstar/cadstar_archive_parser.h:40
 #, c-format
 msgid "Missing node '%s' in '%s'"
-msgstr "Ontbrekende knoop '%s' in '%s'"
+msgstr "Ontbrekend knooppunt '%s' in '%s'"
 
 #: common/plugins/cadstar/cadstar_archive_parser.h:43
 #, c-format
@@ -5482,7 +5482,7 @@ msgstr "Kan '%s' niet ontleden in '%s'"
 #: common/plugins/eagle/eagle_parser.cpp:120
 #, c-format
 msgid "Invalid size %lld: too large"
-msgstr "Ongeldige maat %ll d: te groot"
+msgstr "Ongeldige maat %lld: te groot"
 
 #: common/plugins/eagle/eagle_parser.cpp:282
 #, c-format
@@ -5549,7 +5549,7 @@ msgstr "Archiefbestand '%s'."
 #: common/project/project_archiver.cpp:215
 #, c-format
 msgid "Failed to archive file '%s'."
-msgstr "Archieveren van bestand '%s' is mislukt."
+msgstr "Archiveren van bestand '%s' is mislukt."
 
 #: common/project/project_archiver.cpp:241
 #, c-format
@@ -5571,7 +5571,7 @@ msgstr "Waarschuwing: "
 #: common/richio.cpp:170
 #, c-format
 msgid "Unable to open %s for reading."
-msgstr "Kan bestandsnaam %s niet openen om te lezen."
+msgstr "Kan bestand %s niet openen om te lezen."
 
 #: common/richio.cpp:221 common/richio.cpp:317
 msgid "Maximum line length exceeded"
@@ -5587,7 +5587,7 @@ msgstr "OUTPUTSTREAM_OUTPUTFORMATTER schrijffout"
 
 #: common/settings/color_settings.cpp:332
 msgid "(Footprints)"
-msgstr "(Voetafdrukken)"
+msgstr "(Footprints)"
 
 #: common/settings/color_settings.cpp:384
 msgid "KiCad Default"
@@ -5683,7 +5683,7 @@ msgstr "Pagina-instellingen ..."
 
 #: common/tool/actions.cpp:96
 msgid "Settings for paper size and title block info"
-msgstr "Instellingen voor papierformaat en titelblokinformatie"
+msgstr "Instellingen voor papierformaat en titelblok"
 
 #: common/tool/actions.cpp:102 kicad/project_tree_pane.cpp:802
 msgid "Print..."
@@ -5691,7 +5691,7 @@ msgstr "Afdrukken..."
 
 #: common/tool/actions.cpp:108
 msgid "Plot..."
-msgstr "Verhaal..."
+msgstr "Plot..."
 
 #: common/tool/actions.cpp:108 pcbnew/dialogs/dialog_plot.cpp:68
 #: pcbnew/dialogs/dialog_plot_base.h:153
@@ -5708,7 +5708,7 @@ msgstr "Annuleer de huidige tool"
 
 #: common/tool/actions.cpp:127
 msgid "Show Context Menu"
-msgstr "Hulpballonnen weergeven"
+msgstr "Context-menu weergeven"
 
 #: common/tool/actions.cpp:127
 msgid "Perform the right-mouse-button action"
@@ -5720,7 +5720,7 @@ msgstr "Ongedaan Maken"
 
 #: common/tool/actions.cpp:136
 msgid "Undo last edit"
-msgstr "Maak de laatste bewerking ongedaan"
+msgstr "Laatste bewerking ongedaan maken"
 
 #: common/tool/actions.cpp:147
 msgid "Redo"
@@ -5732,11 +5732,11 @@ msgstr "Laatste bewerking opnieuw uitvoeren"
 
 #: common/tool/actions.cpp:153
 msgid "Cut selected item(s) to clipboard"
-msgstr "Knip geselecteerde item (s) naar het klembord"
+msgstr "Knip geselecteerde item(s) naar het klembord"
 
 #: common/tool/actions.cpp:159
 msgid "Copy selected item(s) to clipboard"
-msgstr "Kopieer geselecteerde item (s) naar klembord"
+msgstr "Kopiëer geselecteerde item(s) naar klembord"
 
 #: common/tool/actions.cpp:165
 msgid "Paste items(s) from clipboard"
@@ -5752,7 +5752,7 @@ msgstr "Plakken speciaal ..."
 
 #: common/tool/actions.cpp:175
 msgid "Paste item(s) from clipboard with options"
-msgstr "Plak item (s) van klembord met opties"
+msgstr "Plak item(s) van klembord met opties"
 
 #: common/tool/actions.cpp:180
 msgid "Duplicate"
@@ -5760,11 +5760,11 @@ msgstr "Dupliceren"
 
 #: common/tool/actions.cpp:180
 msgid "Duplicates the selected item(s)"
-msgstr "Dupliceert de geselecteerde item (s)"
+msgstr "Dupliceert de geselecteerde item(s)"
 
 #: common/tool/actions.cpp:191
 msgid "Deletes selected item(s)"
-msgstr "Verwijdert geselecteerde item (s)"
+msgstr "Verwijdert geselecteerde item(s)"
 
 #: common/tool/actions.cpp:196
 msgid "Interactive Delete Tool"
@@ -5789,7 +5789,7 @@ msgstr "Zoeken"
 
 #: common/tool/actions.cpp:208
 msgid "Find text"
-msgstr "Vind tekst"
+msgstr "Tekst zoeken"
 
 #: common/tool/actions.cpp:214 eeschema/dialogs/dialog_schematic_find.cpp:44
 msgid "Find and Replace"
@@ -5801,11 +5801,11 @@ msgstr "Zoek en vervang tekst"
 
 #: common/tool/actions.cpp:220 pcbnew/dialogs/dialog_find_base.cpp:93
 msgid "Find Next"
-msgstr "Vind Volgende"
+msgstr "Zoek Volgende"
 
 #: common/tool/actions.cpp:220
 msgid "Find next match"
-msgstr "Vind de volgende wedstrijd"
+msgstr "Zoek de volgende"
 
 #: common/tool/actions.cpp:226
 msgid "Find Next Marker"
@@ -5813,7 +5813,7 @@ msgstr "Zoek volgende markering"
 
 #: common/tool/actions.cpp:232
 msgid "Replace and Find Next"
-msgstr "Vervangen en volgende zoeken"
+msgstr "Vervang en zoek de volgende"
 
 #: common/tool/actions.cpp:232
 msgid "Replace current match and find next"
@@ -5858,7 +5858,7 @@ msgstr "Vernieuwen"
 
 #: common/tool/actions.cpp:281
 msgid "Zoom to Fit"
-msgstr "Inzoomen om te passen"
+msgstr "Zoom tot het past"
 
 #: common/tool/actions.cpp:286
 msgid "Zoom to Objects"
@@ -5928,7 +5928,7 @@ msgstr "Voert een klik met de linkermuisknop uit"
 
 #: common/tool/actions.cpp:400
 msgid "Double-click"
-msgstr "Dubbelklikken"
+msgstr "Dubbelklik"
 
 #: common/tool/actions.cpp:400
 msgid "Performs left mouse button double-click"
@@ -5980,11 +5980,11 @@ msgstr "Schakel over naar Next Grid"
 
 #: common/tool/actions.cpp:458
 msgid "Switch to Previous Grid"
-msgstr "Schakel over naar vorig raster"
+msgstr "Schakel over naar vorig Grid"
 
 #: common/tool/actions.cpp:463
 msgid "Set the grid origin point"
-msgstr "Stel het oorsprongspunt van het raster in"
+msgstr "Stel het nulpunt van het raster in"
 
 #: common/tool/actions.cpp:476
 msgid "Show Grid"
@@ -6055,7 +6055,7 @@ msgstr "Reset lokale coördinaten"
 
 #: common/tool/actions.cpp:522
 msgid "Always Show Cursor"
-msgstr "Toon altijd cursor"
+msgstr "Cursor altijd tonen"
 
 #: common/tool/actions.cpp:522
 msgid "Display crosshairs even in selection tool"
@@ -6087,7 +6087,7 @@ msgstr "Schakel inactieve lagen tussen normaal, gedimd en verborgen"
 
 #: common/tool/actions.cpp:545
 msgid "Select item(s)"
-msgstr "Selecteer items)"
+msgstr "Selecteer item(s)"
 
 #: common/tool/actions.cpp:552
 msgid "Measure Tool"
@@ -6104,11 +6104,11 @@ msgstr "3D-viewervenster weergeven"
 #: common/tool/actions.cpp:568 eeschema/symbol_viewer_frame.cpp:101
 #: eeschema/symbol_viewer_frame.cpp:920
 msgid "Symbol Library Browser"
-msgstr "Symboolbibliotheekbrowser"
+msgstr "Symbool-bibliotheek-browser"
 
 #: common/tool/actions.cpp:568
 msgid "Browse symbol libraries"
-msgstr "Blader door symboolbibliotheken"
+msgstr "Blader door symbool-bibliotheken"
 
 #: common/tool/actions.cpp:573 eeschema/eeschema_config.cpp:239
 #: eeschema/symbol_editor/symbol_editor.cpp:163
@@ -6141,15 +6141,15 @@ msgstr "Creëer, verwijder en bewerk footprints"
 
 #: common/tool/actions.cpp:589
 msgid "Update PCB from Schematic..."
-msgstr "Update PCB van Schematisch ..."
+msgstr "Update PCB van Schema..."
 
 #: common/tool/actions.cpp:589
 msgid "Update PCB with changes made to schematic"
-msgstr "Update PCB met wijzigingen in het schema"
+msgstr "Update PCB met wijzigingen uit het schema"
 
 #: common/tool/actions.cpp:594
 msgid "Update Schematic from PCB..."
-msgstr "Update Schema van PCB ..."
+msgstr "Update Schema van PCB..."
 
 #: common/tool/actions.cpp:594
 msgid "Update schematic with changes made to PCB"
@@ -6158,27 +6158,27 @@ msgstr "Update schema met wijzigingen aangebracht aan PCB"
 #: common/tool/actions.cpp:604
 #: pcbnew/dialogs/panel_fp_properties_3d_model_base.cpp:71
 msgid "Configure Paths..."
-msgstr "Paden configureren ..."
+msgstr "Directories configureren..."
 
 #: common/tool/actions.cpp:604
 msgid "Edit path configuration environment variables"
-msgstr "Bewerk omgevingsvariabelen voor padconfiguratie"
+msgstr "Bewerk omgevingsvariabelen voor Directory-configuratie"
 
 #: common/tool/actions.cpp:609
 msgid "Manage Symbol Libraries..."
-msgstr "Symboolbibliotheken beheren ..."
+msgstr "Symbool-bibliotheken beheren ..."
 
 #: common/tool/actions.cpp:610
 msgid "Edit the global and project symbol library lists"
-msgstr "Bewerk de globale en projectsymboolbibliotheeklijsten"
+msgstr "Bewerk de globale en project-symbool-bibliotheek-lijsten"
 
 #: common/tool/actions.cpp:615
 msgid "Manage Footprint Libraries..."
-msgstr "Footprint-bibliotheken beheren ..."
+msgstr "Footprint-bibliotheken beheren..."
 
 #: common/tool/actions.cpp:616
 msgid "Edit the global and project footprint library lists"
-msgstr "Bewerk de globale en project footprint bibliotheeklijsten"
+msgstr "Bewerk de globale en project footprint-bibliotheek-lijsten"
 
 #: common/tool/actions.cpp:621
 msgid "Getting Started with KiCad"
@@ -6196,11 +6196,11 @@ msgstr "Help"
 
 #: common/tool/actions.cpp:628
 msgid "Open product documentation in a web browser"
-msgstr "Open de productdocumentatie in een webbrowser"
+msgstr "Open de product-documentatie in een webbrowser"
 
 #: common/tool/actions.cpp:634
 msgid "List Hotkeys..."
-msgstr "Lijst sneltoetsen ..."
+msgstr "Lijst sneltoetsen..."
 
 #: common/tool/actions.cpp:635
 msgid "Displays current hotkeys table and corresponding commands"
@@ -6302,7 +6302,7 @@ msgstr "Invoer bevat witruimte achteraan."
 
 #: common/validators.cpp:298
 msgid "Entry contains leading white space."
-msgstr "Invoer bevat leidende witruimte."
+msgstr "Invoer bevat witruimte vooraan."
 
 #: common/validators.cpp:302
 #, c-format
@@ -6327,11 +6327,11 @@ msgstr "Signaalnamen mogen geen spaties bevatten"
 
 #: common/view/view.cpp:544
 msgid "Mirroring for Y axis is not supported yet"
-msgstr "Mirroring voor Y-as wordt nog niet ondersteund"
+msgstr "Spiegelen op Y-as wordt nog niet ondersteund"
 
 #: common/widgets/footprint_preview_widget.cpp:103
 msgid "Footprint not found."
-msgstr "Voetafdruk niet gevonden."
+msgstr "Footprint niet gevonden."
 
 #: common/widgets/footprint_select_widget.cpp:144
 msgid "No default footprint"
@@ -6358,16 +6358,16 @@ msgid ""
 "Software graphics (for computers which do not support KiCad's hardware "
 "acceleration requirements)"
 msgstr ""
-"Software graphics (voor computers die de hardwareversnellingsvereisten van "
+"Software graphics (voor computers die de hardware-versnellings-vereisten van "
 "KiCad niet ondersteunen)"
 
 #: common/widgets/gal_options_panel.cpp:103
 msgid "Grid Options"
-msgstr "Rasteropties"
+msgstr "Raster-opties"
 
 #: common/widgets/gal_options_panel.cpp:108
 msgid "Dots"
-msgstr "Stippen"
+msgstr "Punten"
 
 #: common/widgets/gal_options_panel.cpp:109
 msgid "Lines"
@@ -6421,7 +6421,7 @@ msgstr "Nooit"
 
 #: common/widgets/gal_options_panel.cpp:188
 msgid "Cursor Options"
-msgstr "Cursoropties"
+msgstr "Cursor opties"
 
 #: common/widgets/gal_options_panel.cpp:194
 msgid "Small crosshair"
@@ -6437,7 +6437,7 @@ msgstr "Cursor vorm"
 
 #: common/widgets/gal_options_panel.cpp:205
 msgid "Cursor shape for drawing, placement and movement tools"
-msgstr "Cursorvorm voor teken-, plaatsings- en verplaatsingsgereedschappen"
+msgstr "Cursorvorm voor teken-, plaatsings- en verplaatsings-gereedschappen"
 
 #: common/widgets/gal_options_panel.cpp:208
 msgid "Always show crosshairs"
@@ -6568,55 +6568,55 @@ msgstr "Alle bestanden"
 
 #: common/wildcards_and_files_ext.cpp:189
 msgid "KiCad drawing symbol files"
-msgstr "KiCad-tekeningsymboolbestanden"
+msgstr "KiCad teken-symbool bestanden"
 
 #: common/wildcards_and_files_ext.cpp:195
 msgid "KiCad symbol library files"
-msgstr "KiCad-symboolbibliotheekbestanden"
+msgstr "KiCad symbool-bibliotheek bestanden"
 
 #: common/wildcards_and_files_ext.cpp:202
 msgid "KiCad legacy symbol library files"
-msgstr "KiCad verouderde symboolbibliotheekbestanden"
+msgstr "KiCad verouderde symbool-bibliotheek-bestanden"
 
 #: common/wildcards_and_files_ext.cpp:208
 msgid "All KiCad symbol library files"
-msgstr "Alle KiCad-symboolbibliotheekbestanden"
+msgstr "Alle KiCad symbool-bibliotheek-bestanden"
 
 #: common/wildcards_and_files_ext.cpp:215
 msgid "KiCad project files"
-msgstr "KiCad-projectbestanden"
+msgstr "KiCad project-bestanden"
 
 #: common/wildcards_and_files_ext.cpp:221
 msgid "KiCad legacy project files"
-msgstr "Legacy-projectbestanden van KiCad"
+msgstr "Verouderde KiCad project-bestanden"
 
 #: common/wildcards_and_files_ext.cpp:228
 msgid "All KiCad project files"
-msgstr "Alle KiCad-projectbestanden"
+msgstr "Alle KiCad project-bestanden"
 
 #: common/wildcards_and_files_ext.cpp:235
 msgid "KiCad legacy schematic files"
-msgstr "KiCad legacy schematische bestanden"
+msgstr "KiCad verouderde schema-bestanden"
 
 #: common/wildcards_and_files_ext.cpp:242
 msgid "KiCad s-expression schematic files"
-msgstr "KiCad s-expression schematische bestanden"
+msgstr "KiCad s-expression schema-bestanden"
 
 #: common/wildcards_and_files_ext.cpp:249
 msgid "Altium schematic files"
-msgstr "Altium schematische bestanden"
+msgstr "Altium schema-bestanden"
 
 #: common/wildcards_and_files_ext.cpp:255
 msgid "CADSTAR Schematic Archive files"
-msgstr "CADSTAR schematische archiefbestanden"
+msgstr "CADSTAR schema-archief-bestanden"
 
 #: common/wildcards_and_files_ext.cpp:261
 msgid "CADSTAR Archive files"
-msgstr "CADSTAR Archiefbestanden"
+msgstr "CADSTAR Archief-bestanden"
 
 #: common/wildcards_and_files_ext.cpp:267
 msgid "Eagle XML schematic files"
-msgstr "Eagle XML-schematische bestanden"
+msgstr "Eagle XML-schema-bestanden"
 
 #: common/wildcards_and_files_ext.cpp:273
 msgid "Eagle XML files"
@@ -6633,7 +6633,7 @@ msgstr "Gerber-bestanden"
 #: common/wildcards_and_files_ext.cpp:291
 #: common/wildcards_and_files_ext.cpp:332
 msgid "KiCad printed circuit board files"
-msgstr "KiCad printplaatbestanden"
+msgstr "KiCad printplaat-bestanden"
 
 #: common/wildcards_and_files_ext.cpp:297
 msgid "Eagle ver. 6.x XML PCB files"
@@ -6641,7 +6641,7 @@ msgstr "Eagle ver. 6.x XML PCB-bestanden"
 
 #: common/wildcards_and_files_ext.cpp:302
 msgid "CADSTAR PCB Archive files"
-msgstr "CADSTAR PCB-archiefbestanden"
+msgstr "CADSTAR PCB-archief-bestanden"
 
 #: common/wildcards_and_files_ext.cpp:307
 msgid "P-Cad 200x ASCII PCB files"
@@ -6669,19 +6669,19 @@ msgstr "KiCad footprint-bestanden"
 
 #: common/wildcards_and_files_ext.cpp:346
 msgid "KiCad footprint library paths"
-msgstr "KiCad footprint bibliotheekpaden"
+msgstr "KiCad footprint bibliotheek-locaties"
 
 #: common/wildcards_and_files_ext.cpp:353
 msgid "Legacy footprint library files"
-msgstr "Legacy footprint-bibliotheekbestanden"
+msgstr "Legacy footprint-bibliotheek-bestanden"
 
 #: common/wildcards_and_files_ext.cpp:359
 msgid "Eagle ver. 6.x XML library files"
-msgstr "Eagle ver. 6.x XML-bibliotheekbestanden"
+msgstr "Eagle ver. 6.x XML-bibliotheek-bestanden"
 
 #: common/wildcards_and_files_ext.cpp:365
 msgid "Geda PCB footprint library files"
-msgstr "Geda PCB footprint bibliotheekbestanden"
+msgstr "Geda PCB footprint bibliotheek-bestanden"
 
 #: common/wildcards_and_files_ext.cpp:371
 msgid "Drawing sheet files"
@@ -6709,7 +6709,7 @@ msgstr "CSV-bestanden"
 
 #: common/wildcards_and_files_ext.cpp:412
 msgid "Portable document format files"
-msgstr "Portable document formaat bestanden"
+msgstr "Portable document format bestanden"
 
 #: common/wildcards_and_files_ext.cpp:418
 msgid "PostScript files"
@@ -6721,7 +6721,7 @@ msgstr "Rapportbestand"
 
 #: common/wildcards_and_files_ext.cpp:430
 msgid "Component placement files"
-msgstr "Component plaatsingsbestanden"
+msgstr "Component-plaatsing bestanden"
 
 #: common/wildcards_and_files_ext.cpp:436
 msgid "VRML and X3D files"
@@ -6737,15 +6737,15 @@ msgstr "Tekstbestanden"
 
 #: common/wildcards_and_files_ext.cpp:454
 msgid "Legacy footprint export files"
-msgstr "Legacy footprint exportbestanden"
+msgstr "Legacy footprint export bestanden"
 
 #: common/wildcards_and_files_ext.cpp:460
 msgid "Electrical rule check file"
-msgstr "Bestand ERC controle"
+msgstr "ERC controle bestand"
 
 #: common/wildcards_and_files_ext.cpp:466
 msgid "Spice library file"
-msgstr "Spice-bibliotheekbestand"
+msgstr "Spice-bibliotheek bestand"
 
 #: common/wildcards_and_files_ext.cpp:472
 msgid "SPICE netlist file"
@@ -6765,7 +6765,7 @@ msgstr "Zip bestand"
 
 #: common/wildcards_and_files_ext.cpp:496
 msgid "GenCAD 1.4 board files"
-msgstr "GenCAD 1.4-bordbestanden"
+msgstr "GenCAD 1.4-board bestanden"
 
 #: common/wildcards_and_files_ext.cpp:502
 msgid "DXF Files"
@@ -6790,7 +6790,7 @@ msgstr "IPC-D-356-testbestanden"
 
 #: common/wildcards_and_files_ext.cpp:535
 msgid "Workbook file"
-msgstr "Werkmapbestand"
+msgstr "Werkmap bestand"
 
 #: common/wildcards_and_files_ext.cpp:542
 msgid "PNG file"
@@ -6802,7 +6802,7 @@ msgstr "Jpeg-bestand"
 
 #: common/wildcards_and_files_ext.cpp:554
 msgid "Hotkey file"
-msgstr "Sneltoetslijst"
+msgstr "Sneltoets bestand"
 
 #: cvpcb/auto_associate.cpp:105
 #, c-format
@@ -6828,7 +6828,7 @@ msgstr "%lu footprint / symboolequivalenties gevonden."
 msgid ""
 "Component %s: footprint %s not found in any of the project footprint "
 "libraries."
-msgstr "Component %s: footprint %s niet gevonden in bibliotheken."
+msgstr "Component %s: footprint %s niet gevonden in project-bibliotheken."
 
 #: cvpcb/auto_associate.cpp:306
 msgid "CvPcb Warning"
@@ -6846,7 +6846,7 @@ msgid ""
 "more information."
 msgstr ""
 "U hebt CvPcb voor het eerst uitgevoerd met de nieuwe footprint-"
-"bibliotheektabelmethode om footprints te vinden.\n"
+"bibliotheektabelmethode om footprints te zoeken.\n"
 "CvPcb heeft de standaardtabel gekopieerd of een lege tabel in uw thuismap "
 "gemaakt.\n"
 "U moet eerst de bibliotheektabel configureren om alle footprint-bibliotheken "
@@ -6875,7 +6875,7 @@ msgstr "Symbool: Footprint Assignments"
 
 #: cvpcb/cvpcb_mainframe.cpp:110
 msgid "Filtered Footprints"
-msgstr "Gefilterde voetafdrukken"
+msgstr "Gefilterde Footprints"
 
 #: cvpcb/cvpcb_mainframe.cpp:144
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:105
@@ -6884,7 +6884,7 @@ msgstr "Toepassen, schema opslaan en doorgaan"
 
 #: cvpcb/cvpcb_mainframe.cpp:212
 msgid "Symbol to footprint changes are unsaved"
-msgstr "Wijzigingen van symbolen tot footprint worden niet opgeslagen"
+msgstr "Wijzigingen van symbolen tot footprint zijn niet opgeslagen"
 
 #: cvpcb/cvpcb_mainframe.cpp:386
 msgid "Symbol to Footprint links have been modified. Save changes?"
@@ -6918,7 +6918,7 @@ msgstr "Zoek tekst"
 
 #: cvpcb/cvpcb_mainframe.cpp:728
 msgid "No Filtering"
-msgstr "Stoppen filteren"
+msgstr "Geen filter"
 
 #: cvpcb/cvpcb_mainframe.cpp:730
 #, c-format
@@ -6943,8 +6943,8 @@ msgstr "Bibliotheeklocatie: onbekend"
 msgid ""
 "No PCB footprint libraries are listed in the current footprint library table."
 msgstr ""
-"Er worden geen PCB-footprintbibliotheken vermeld in de huidige "
-"footprintbibliotheektabel."
+"Er worden geen PCB-footprint-bibliotheken vermeld in de huidige footprint-"
+"bibliotheek-tabel."
 
 #: cvpcb/cvpcb_mainframe.cpp:792
 msgid "Configuration Error"
@@ -6971,11 +6971,11 @@ msgstr "Projectbestand: '%s'"
 
 #: cvpcb/dialogs/dialog_config_equfiles.cpp:103
 msgid "No editor defined in KiCad. Please choose it."
-msgstr "Geen editor gedefinieerd in KiCad. Kies het alstublieft."
+msgstr "Geen editor gedefiniëerd in KiCad. Kies het alstublieft."
 
 #: cvpcb/dialogs/dialog_config_equfiles.cpp:249
 msgid "Footprint Association File"
-msgstr "Footprint Association-bestand"
+msgstr "Footprint Associatie-bestand"
 
 #: cvpcb/dialogs/dialog_config_equfiles.cpp:293
 #, c-format
@@ -6984,7 +6984,7 @@ msgstr "Bestand '%s' bestaat al in de lijst."
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:20
 msgid "Symbol Footprint Association Files (.equ)"
-msgstr "Symbol Footprint Association Files (.equ)"
+msgstr "Symbol Footprint Association Bestanden (.equ)"
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:36
 #: eeschema/dialogs/dialog_bus_manager.cpp:74
@@ -7018,7 +7018,7 @@ msgstr "Bewerk bestand"
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:63
 msgid "Available environment variables for relative paths:"
-msgstr "Beschikbare omgevingsvariabelen voor relatieve paden:"
+msgstr "Beschikbare omgevingsvariabelen voor relatieve zoekpaden:"
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:81
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:57
@@ -7051,7 +7051,7 @@ msgstr "Relatief"
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:101
 msgid "Path Type"
-msgstr "Padtype"
+msgstr "Zoekpad type"
 
 #: cvpcb/dialogs/fp_conflict_assignment_selector.cpp:37
 msgid "Ref"
@@ -7059,11 +7059,11 @@ msgstr "Ref"
 
 #: cvpcb/dialogs/fp_conflict_assignment_selector.cpp:38
 msgid "Schematic assignment"
-msgstr "Schematische toewijzing"
+msgstr "Schema toewijzing"
 
 #: cvpcb/dialogs/fp_conflict_assignment_selector.cpp:41
 msgid "Cmp file assignment"
-msgstr "Cmp-bestandstoewijzing"
+msgstr "Cmp-bestands-toewijzing"
 
 #: cvpcb/dialogs/fp_conflict_assignment_selector_base.cpp:19
 msgid ""
@@ -7072,19 +7072,19 @@ msgid ""
 "\n"
 "Please choose the assignment."
 msgstr ""
-"Voetafdruktoewijzingen van schematische netlijst en "
-"symboolvoetafdrukassociatiebestand (.cmp) zijn tegenstrijdig.\n"
+"Footprint-toewijzingen van schema-netlijst en symbool-footprint-associatie-"
+"bestand (.cmp) zijn tegenstrijdig.\n"
 "\n"
-"Kies de opdracht."
+"Kies een toewijzing."
 
 #: cvpcb/dialogs/fp_conflict_assignment_selector_base.h:53
 msgid "Footprint Assignment Conflicts"
-msgstr "Footprint-toewijzingsconflicten"
+msgstr "Footprint-toewijzings-conflicten"
 
 #: cvpcb/display_footprints_frame.cpp:69
 #: pcbnew/toolbars_footprint_viewer.cpp:162
 msgid "Footprint Viewer"
-msgstr "Footprint-kijker"
+msgstr "Footprint-viewer"
 
 #: cvpcb/display_footprints_frame.cpp:405
 #, c-format
@@ -7121,7 +7121,7 @@ msgid ""
 msgstr ""
 "Sommige van de toegewezen footprints zijn verouderde items zonder "
 "bibliotheeknamen. Wilt u dat Kicad ze probeert te converteren naar het "
-"nieuwe vereiste LIB_ID-formaat? (Als u nee antwoordt, worden deze "
+"nieuwe vereiste LIB_ID format? (Als u nee antwoordt, worden deze "
 "toewijzingen gewist en moet u ze handmatig opnieuw toewijzen.)"
 
 #: cvpcb/readwrite_dlgs.cpp:148
@@ -7139,11 +7139,11 @@ msgstr ""
 
 #: cvpcb/readwrite_dlgs.cpp:168
 msgid "First check your footprint library table entries."
-msgstr "Controleer eerst uw footprint-bibliotheektabelitems."
+msgstr "Controleer eerst uw footprint-bibliotheek-tabel-items."
 
 #: cvpcb/readwrite_dlgs.cpp:170
 msgid "Problematic Footprint Library Tables"
-msgstr "Problematische voetafdruk bibliotheektabellen"
+msgstr "Problematische footprint bibliotheek-tabellen"
 
 #: cvpcb/readwrite_dlgs.cpp:178
 msgid ""
@@ -7151,8 +7151,8 @@ msgid ""
 "assignments:\n"
 "\n"
 msgstr ""
-"De volgende fouten zijn opgetreden bij het converteren van de "
-"footprinttoewijzingen:\n"
+"De volgende fouten zijn opgetreden bij het converteren van de footprint-"
+"toewijzingen:\n"
 "\n"
 
 #: cvpcb/readwrite_dlgs.cpp:181
@@ -7167,11 +7167,11 @@ msgstr ""
 
 #: cvpcb/readwrite_dlgs.cpp:299
 msgid "Schematic saved"
-msgstr "Schematisch opgeslagen"
+msgstr "Schema opgeslagen"
 
 #: cvpcb/toolbars_cvpcb.cpp:75
 msgid "Footprint Filters:"
-msgstr "Voetafdrukfilters:"
+msgstr "Footprint filters:"
 
 #: cvpcb/tools/cvpcb_actions.cpp:52
 msgid "View selected footprint"
@@ -7179,20 +7179,20 @@ msgstr "Bekijk geselecteerde footprint"
 
 #: cvpcb/tools/cvpcb_actions.cpp:53
 msgid "View the selected footprint in the footprint viewer"
-msgstr "Bekijk de geselecteerde footprint in de footprintviewer"
+msgstr "Bekijk de geselecteerde footprint in de footprint viewer"
 
 #: cvpcb/tools/cvpcb_actions.cpp:60
 msgid "Manage Footprint Association Files"
-msgstr "Beheer Footprint Association-bestanden"
+msgstr "Beheer Footprint Associatie-bestanden"
 
 #: cvpcb/tools/cvpcb_actions.cpp:61
 msgid ""
 "Configure footprint association file (.equ) list.  These files are used to "
 "automatically assign footprint names from symbol values."
 msgstr ""
-"Configureer de lijst met footprint-associatiebestanden (.equ). Deze "
-"bestanden worden gebruikt om automatisch footprintnamen toe te wijzen op "
-"basis van symboolwaarden."
+"Configureer de lijst met footprint-associatie-bestanden (.equ). Deze "
+"bestanden worden gebruikt om automatisch footprint-namen toe te wijzen op "
+"basis van symbool-waarden."
 
 #: cvpcb/tools/cvpcb_actions.cpp:67
 msgid "Save to Schematic"
@@ -7208,7 +7208,7 @@ msgstr "Selecteer het volgende niet-toegewezen symbool"
 
 #: cvpcb/tools/cvpcb_actions.cpp:92
 msgid "Select next symbol with no footprint assignment"
-msgstr "Selecteer het volgende symbool zonder footprinttoewijzing"
+msgstr "Selecteer het volgende symbool zonder footprint-toewijzing"
 
 #: cvpcb/tools/cvpcb_actions.cpp:98
 msgid "Select previous unassigned symbol"
@@ -7216,7 +7216,7 @@ msgstr "Selecteer het vorige niet-toegewezen symbool"
 
 #: cvpcb/tools/cvpcb_actions.cpp:99
 msgid "Select previous symbol with no footprint assignment"
-msgstr "Selecteer het vorige symbool zonder footprinttoewijzing"
+msgstr "Selecteer het vorige symbool zonder footprint-toewijzing"
 
 #: cvpcb/tools/cvpcb_actions.cpp:108
 msgid "Assign footprint"
@@ -7232,11 +7232,11 @@ msgstr "Wijs automatisch footprints toe"
 
 #: cvpcb/tools/cvpcb_actions.cpp:115
 msgid "Perform automatic footprint assignment"
-msgstr "Voer automatische footprinttoewijzing uit"
+msgstr "Voer automatische footprint-toewijzing uit"
 
 #: cvpcb/tools/cvpcb_actions.cpp:121
 msgid "Delete association"
-msgstr "Koppeling verwijderen"
+msgstr "Toewijzing verwijderen"
 
 #: cvpcb/tools/cvpcb_actions.cpp:122
 msgid "Delete selected footprint associations"
@@ -7248,12 +7248,12 @@ msgstr "Verwijder alle footprint-associaties"
 
 #: cvpcb/tools/cvpcb_actions.cpp:135
 msgid "Use symbol footprint filters"
-msgstr "Gebruik symbol footprintfilters"
+msgstr "Gebruik symbol-footprint filters"
 
 #: cvpcb/tools/cvpcb_actions.cpp:136
 msgid "Filter footprint list by footprint filters defined in the symbol"
 msgstr ""
-"Filter footprintlijst op footprintfilters die in het symbool zijn "
+"Filter footprint-lijst op footprint-filters die in het symbool zijn "
 "gedefinieerd"
 
 #: cvpcb/tools/cvpcb_actions.cpp:142
@@ -7262,7 +7262,7 @@ msgstr "Filter op aantal pinnen"
 
 #: cvpcb/tools/cvpcb_actions.cpp:143
 msgid "Filter footprint list by pin count"
-msgstr "Filter footprintlijst op aantal pinnen"
+msgstr "Filter footprint-lijst op aantal pinnen"
 
 #: cvpcb/tools/cvpcb_actions.cpp:149
 msgid "Filter by library"
@@ -7270,7 +7270,7 @@ msgstr "Filter op bibliotheek"
 
 #: cvpcb/tools/cvpcb_actions.cpp:150
 msgid "Filter footprint list by library"
-msgstr "Filter footprintlijst op bibliotheek"
+msgstr "Filter footprint-lijst op bibliotheek"
 
 #: cvpcb/tools/cvpcb_association_tool.cpp:257
 msgid "Delete all associations?"
@@ -7284,22 +7284,22 @@ msgstr "%d dubbele tijdstempels zijn gevonden en vervangen."
 #: eeschema/annotate.cpp:284
 #, c-format
 msgid "Updated %s (unit %s) from %s to %s."
-msgstr "Bijgewerkt %s (eenheid %s) van %s naar %s."
+msgstr "%s (eenheid %s) van %s naar %s bijgewerkt ."
 
 #: eeschema/annotate.cpp:292
 #, c-format
 msgid "Updated %s from %s to %s."
-msgstr "Bijgewerkt %s van %s naar %s."
+msgstr "%s van %s naar %s bijgewerkt ."
 
 #: eeschema/annotate.cpp:302
 #, c-format
 msgid "Annotated %s (unit %s) as %s."
-msgstr "Geannoteerd %s (eenheid %s) als %s."
+msgstr "%s (eenheid %s) als %s geannoteerd ."
 
 #: eeschema/annotate.cpp:309
 #, c-format
 msgid "Annotated %s as %s."
-msgstr "Geannoteerd %s als %s."
+msgstr "%s als %s geannoteerd ."
 
 #: eeschema/annotate.cpp:326
 msgid "Annotation complete."
@@ -7324,7 +7324,7 @@ msgstr "Item niet geannoteerd: %s %s (eenheid %d)\n"
 #: eeschema/component_references_lister.cpp:615
 #, c-format
 msgid "Item not annotated: %s%s\n"
-msgstr "Item niet geannoteerd: %s %s\n"
+msgstr "Item niet geannoteerd: %s%s\n"
 
 #: eeschema/component_references_lister.cpp:633
 #, c-format
@@ -7372,7 +7372,7 @@ msgstr "Sheet pin %s heeft geen overeenkomend hiërarchisch label in het vel"
 #, c-format
 msgid "Hierarchical label %s has no matching sheet pin in the parent sheet"
 msgstr ""
-"Hierarchielabel %s heeft geen corresponderende pin op de originele plaat"
+"Hiërarchie-label %s heeft geen corresponderende pin op de originele pagina"
 
 #: eeschema/cross-probing.cpp:265 pcbnew/cross-probing.cpp:172
 #, c-format
@@ -7413,7 +7413,7 @@ msgstr "Volledig schema"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:37
 msgid "Current sheet only"
-msgstr "Alleen huidig blad"
+msgstr "Alleen huidige pagina"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:37
 msgid "Selection only"
@@ -7433,7 +7433,7 @@ msgstr "Volgorde"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:49
 msgid "Sort symbols by &X position"
-msgstr "Sorteer sybols op &X-positie"
+msgstr "Sorteer symbols op &X-positie"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:67
 msgid "Sort symbols by &Y position"
@@ -7453,7 +7453,7 @@ msgstr "Nummeren"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:96
 msgid "Use first free number after:"
-msgstr "Gebruik het eerste gratis nummer na:"
+msgstr "Gebruik het eerste vrije nummer na:"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:102
 msgid "First free after sheet number X 100"
@@ -7465,7 +7465,7 @@ msgstr "Eerst vrij na bladnummer X 1000"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:128
 msgid "Clear Annotation"
-msgstr "Schoon Annotatie"
+msgstr "Annotatie wissen"
 
 #: eeschema/dialogs/dialog_annotate_base.h:81
 msgid "Annotate Schematic"
@@ -7535,12 +7535,12 @@ msgstr "Hulp bij het genereren van stuklijsten"
 
 #: eeschema/dialogs/dialog_bom_base.cpp:25
 msgid "BOM generator scripts:"
-msgstr "BOM-generatorscripts:"
+msgstr "BOM-generator-scripts:"
 
 #: eeschema/dialogs/dialog_bom_base.cpp:69
 msgid "Add a new BOM generator and its command line to the list"
 msgstr ""
-"Voeg een nieuwe stuklijstgenerator en de bijbehorende opdrachtregel toe aan "
+"Voeg een nieuwe stuklijst-generator en de bijbehorende opdrachtregel toe aan "
 "de lijst"
 
 #: eeschema/dialogs/dialog_bom_base.cpp:74
@@ -7549,15 +7549,15 @@ msgstr "Bewerk het scriptbestand in de teksteditor"
 
 #: eeschema/dialogs/dialog_bom_base.cpp:82
 msgid "Remove the current generator script from list"
-msgstr "Verwijder het huidige generatorscript uit de lijst"
+msgstr "Verwijder het huidige generator-script uit de lijst"
 
 #: eeschema/dialogs/dialog_bom_base.cpp:92
 msgid "Command line running the generator:"
-msgstr "Commandoregel met de generator:"
+msgstr "Commando-regel met de generator:"
 
 #: eeschema/dialogs/dialog_bom_base.cpp:101
 msgid "Show console window"
-msgstr "Toon consolevenster"
+msgstr "Toon console-venster"
 
 #: eeschema/dialogs/dialog_bom_base.cpp:102
 msgid ""
@@ -7565,17 +7565,19 @@ msgid ""
 "redirected to the info display.\n"
 "Set this option to show the window of the running command."
 msgstr ""
-"De opdrachtregel wordt standaard uitgevoerd met een verborgen consolevenster "
-"en de uitvoer wordt omgeleid naar het informatiedisplay.\n"
+"De opdrachtregel wordt standaard uitgevoerd met een verborgen console-"
+"venster en de uitvoer wordt omgeleid naar het informatie-display.\n"
 "Stel deze optie in om het venster van de lopende opdracht weer te geven."
 
 #: eeschema/dialogs/dialog_bom_base.cpp:116
 msgid "Reset the list of BOM generator scripts to the default settings"
-msgstr "Zet de stuklijst generator terug naar standaard instellingen"
+msgstr ""
+"Zet de lijst met stuklijst-generator-scripts terug naar standaard "
+"instellingen"
 
 #: eeschema/dialogs/dialog_bom_base.h:81
 msgid "Bill of Material"
-msgstr "Stuklijst"
+msgstr "Stuklijst (BOM)"
 
 #: eeschema/dialogs/dialog_bom_help_md.h:2
 msgid ""
@@ -7990,11 +7992,11 @@ msgstr "Aliasnaam van de bus"
 
 #: eeschema/dialogs/dialog_bus_manager.cpp:181
 msgid "Net or Bus Name"
-msgstr "Net- of busnaam"
+msgstr "Net- of bus-naam"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:66
 msgid "Change all symbols in schematic"
-msgstr "Verander alle symbolen schematisch"
+msgstr "Verander alle symbolen in het schema"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:67
 msgid "Change Symbols"
@@ -8010,11 +8012,11 @@ msgstr "Wijzig symbolen die overeenkomen met de referentie-aanduiding:"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:94
 msgid "Change symbols matching value:"
-msgstr "Verander symbolen overeenkomende waarde:"
+msgstr "Verander symbolen met dezelfde waarde:"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:95
 msgid "Change symbols matching library identifier:"
-msgstr "Wijzig symbolen die overeenkomen met bibliotheek-ID:"
+msgstr "Wijzig symbolen met hetzelfde bibliotheek-ID:"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:132
 msgid "Update Fields"
@@ -8038,11 +8040,11 @@ msgstr "Werk de zichtbaarheid van velden bij"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:137
 msgid "Update field sizes and styles"
-msgstr "Werk veldgroottes en stijlen bij"
+msgstr "Werk veld-groottes en stijlen bij"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:138
 msgid "Update field positions"
-msgstr "Werk veldposities bij"
+msgstr "Werk veld-posities bij"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:139
 msgid "Update symbol attributes"
@@ -8051,7 +8053,7 @@ msgstr "Update symbool attributen"
 #: eeschema/dialogs/dialog_change_symbols.cpp:159
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:165
 msgid "Change"
-msgstr "Verander"
+msgstr "Wijzig"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:161
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:44
@@ -31130,7 +31132,7 @@ msgstr "Boor-gat X / Y"
 #: pcbnew/router/router_tool.cpp:1931 pcbnew/zone.cpp:634
 #, c-format
 msgid "Min Clearance: %s"
-msgstr "Min. Klaring: %s"
+msgstr "Min. Clearance : %s"
 
 #: pcbnew/pad.cpp:961 pcbnew/pcb_track.cpp:727 pcbnew/pcb_track.cpp:734
 #: pcbnew/pcb_track.cpp:770 pcbnew/pcb_track.cpp:776
