@@ -1369,12 +1369,16 @@ void SCH_EDIT_FRAME::RecomputeIntersheetRefs()
     /* Refresh all global labels */
     for( EDA_ITEM* item : GetScreen()->Items().OfType( SCH_GLOBAL_LABEL_T ) )
     {
-        SCH_GLOBALLABEL* global = static_cast<SCH_GLOBALLABEL*>( item );
+        SCH_GLOBALLABEL* gLabel = (SCH_GLOBALLABEL*)( item );
+        SCH_FIELD*       intersheetRef = gLabel->GetIntersheetRefs();
 
-        global->GetIntersheetRefs()->SetVisible( show );
+        intersheetRef->SetVisible( show );
 
         if( show )
-            GetCanvas()->GetView()->Update( global );
+        {
+            GetScreen()->Update( gLabel );
+            GetCanvas()->GetView()->Update( gLabel );
+        }
     }
 }
 
