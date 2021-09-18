@@ -2263,6 +2263,9 @@ int DRAWING_TOOL::DrawZone( const TOOL_EVENT& aEvent )
 
 int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
 {
+    if( m_isFootprintEditor )
+        return 0;
+
     struct VIA_PLACER : public INTERACTIVE_PLACER_BASE
     {
         PCB_BASE_EDIT_FRAME*        m_frame;
