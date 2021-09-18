@@ -110,8 +110,8 @@ private:
     void restoreEnvironment( PDF_PLOTTER* aPlotter, SCH_SHEET_PATH& aOldsheetpath );
 
     // DXF
-    void createDxfFile( bool aPlotAll, bool aPlotDrawingSheet, RENDER_SETTINGS* aRenderSettings );
-    bool plotOneSheetDxf( const wxString& aFileName, SCH_SCREEN* aScreen,
+    void createDXFFiles( bool aPlotAll, bool aPlotDrawingSheet, RENDER_SETTINGS* aRenderSettings );
+    bool plotOneSheetDXF( const wxString& aFileName, SCH_SCREEN* aScreen,
                           RENDER_SETTINGS* aRenderSettings, const wxPoint& aPlotOffset,
                           double aScale, bool aPlotFrameRef );
 
@@ -151,7 +151,7 @@ private:
         }
     }
 
-    void createHPGLFile( bool aPlotAll, bool aPlotFrameRef, RENDER_SETTINGS* aRenderSettings );
+    void createHPGLFiles( bool aPlotAll, bool aPlotFrameRef, RENDER_SETTINGS* aRenderSettings );
     void setHpglPenWidth();
     bool plotOneSheetHpgl( const wxString& aFileName, SCH_SCREEN* aScreen,
                            const PAGE_INFO& aPageInfo, RENDER_SETTINGS* aRenderSettings,
@@ -159,13 +159,13 @@ private:
                            HPGL_PLOT_ORIGIN_AND_UNITS aOriginAndUnits );
 
     // PS
-    void createPSFile( bool aPlotAll, bool aPlotFrameRef, RENDER_SETTINGS* aSettings );
+    void createPSFiles( bool aPlotAll, bool aPlotFrameRef, RENDER_SETTINGS* aSettings );
     bool plotOneSheetPS( const wxString& aFileName, SCH_SCREEN* aScreen,
                          RENDER_SETTINGS* aRenderSettings, const PAGE_INFO& aPageInfo,
                          const wxPoint& aPlot0ffset, double aScale, bool aPlotFrameRef );
 
     // SVG
-    void createSVGFile( bool aPlotAll, bool aPlotFrameRef, RENDER_SETTINGS* aSettings );
+    void createSVGFiles( bool aPrintAll, bool aPrintFrameRef, RENDER_SETTINGS* aRenderSettings );
     bool plotOneSheetSVG( const wxString& aFileName, SCH_SCREEN* aScreen,
                           RENDER_SETTINGS* aRenderSettings, bool aPlotBlackAndWhite,
                           bool aPlotFrameRef );

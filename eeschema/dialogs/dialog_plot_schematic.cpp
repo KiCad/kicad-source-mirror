@@ -398,19 +398,19 @@ void DIALOG_PLOT_SCHEMATIC::plotSchematic( bool aPlotAll )
     {
     default:
     case PLOT_FORMAT::POST:
-        createPSFile( aPlotAll, getPlotDrawingSheet(), &renderSettings );
+        createPSFiles( aPlotAll, getPlotDrawingSheet(), &renderSettings );
         break;
     case PLOT_FORMAT::DXF:
-        createDxfFile( aPlotAll, getPlotDrawingSheet(), &renderSettings );
+        createDXFFiles( aPlotAll, getPlotDrawingSheet(), &renderSettings );
         break;
     case PLOT_FORMAT::PDF:
         createPDFFile( aPlotAll, getPlotDrawingSheet(), &renderSettings );
         break;
     case PLOT_FORMAT::SVG:
-        createSVGFile( aPlotAll, getPlotDrawingSheet(), &renderSettings );
+        createSVGFiles( aPlotAll, getPlotDrawingSheet(), &renderSettings );
         break;
     case PLOT_FORMAT::HPGL:
-        createHPGLFile( aPlotAll, getPlotDrawingSheet(), &renderSettings );
+        createHPGLFiles( aPlotAll, getPlotDrawingSheet(), &renderSettings );
         break;
     }
 }
@@ -433,8 +433,7 @@ wxFileName DIALOG_PLOT_SCHEMATIC::createPlotFileName( const wxString& aPlotFileN
 
     retv.SetExt( aExtension );
 
-    if( !EnsureFileDirectoryExists( &tmp, retv.GetFullName(), aReporter )
-      || !tmp.IsDirWritable() )
+    if( !EnsureFileDirectoryExists( &tmp, retv.GetFullName(), aReporter ) || !tmp.IsDirWritable() )
     {
         wxString msg = wxString::Format( _( "Failed to write plot files to folder '%s'." ),
                                          tmp.GetPath() );
@@ -457,17 +456,16 @@ wxFileName DIALOG_PLOT_SCHEMATIC::createPlotFileName( const wxString& aPlotFileN
 }
 
 
-void DIALOG_PLOT_SCHEMATIC::createDxfFile( bool aPlotAll, bool aPlotDrawingSheet,
-                                           RENDER_SETTINGS*  aRenderSettings )
+void DIALOG_PLOT_SCHEMATIC::createDXFFiles( bool aPlotAll, bool aPlotDrawingSheet,
+                                            RENDER_SETTINGS*  aRenderSettings )
 {
     SCH_EDIT_FRAME* schframe  = m_parent;
     SCH_SHEET_PATH  oldsheetpath = schframe->GetCurrentSheet();
 
-    /* When printing all pages, the printed page is not the current page.
-     *  In complex hierarchies, we must setup references and others parameters
-     * in the printed SCH_SCREEN
-     *  because in complex hierarchies a SCH_SCREEN (a schematic drawings)
-     *  is shared between many sheets
+    /* When printing all pages, the printed page is not the current page.  In complex hierarchies,
+     * we must update symbol references and other parameters in the given printed SCH_SCREEN,
+     * according to the sheet path because in complex hierarchies a SCH_SCREEN (a drawing ) is
+     * shared between many sheets and symbol references depend on the actual sheet path used.
      */
     SCH_SHEET_LIST sheetList;
 
@@ -508,7 +506,7 @@ void DIALOG_PLOT_SCHEMATIC::createDxfFile( bool aPlotAll, bool aPlotDrawingSheet
             if( !plotFileName.IsOk() )
                 return;
 
-            if( plotOneSheetDxf( plotFileName.GetFullPath(), screen, aRenderSettings,
+            if( plotOneSheetDXF( plotFileName.GetFullPath(), screen, aRenderSettings,
                                  plot_offset, 1.0, aPlotDrawingSheet ) )
             {
                 msg.Printf( _( "Plotted to '%s'." ), plotFileName.GetFullPath() );
@@ -531,13 +529,15 @@ void DIALOG_PLOT_SCHEMATIC::createDxfFile( bool aPlotAll, bool aPlotDrawingSheet
         }
     }
 
+    reporter.ReportTail( _( "Done." ), RPT_SEVERITY_INFO );
+
     schframe->SetCurrentSheet( oldsheetpath );
     schframe->GetCurrentSheet().UpdateAllScreenReferences();
     schframe->SetSheetNumberAndCount();
 }
 
 
-bool DIALOG_PLOT_SCHEMATIC::plotOneSheetDxf( const wxString&  aFileName,
+bool DIALOG_PLOT_SCHEMATIC::plotOneSheetDXF( const wxString&  aFileName,
                                              SCH_SCREEN*      aScreen,
                                              RENDER_SETTINGS* aRenderSettings,
                                              const wxPoint&   aPlotOffset,
@@ -602,17 +602,16 @@ void DIALOG_PLOT_SCHEMATIC::setHpglPenWidth()
 }
 
 
-void DIALOG_PLOT_SCHEMATIC::createHPGLFile( bool aPlotAll, bool aPlotFrameRef,
-                                            RENDER_SETTINGS* aRenderSettings )
+void DIALOG_PLOT_SCHEMATIC::createHPGLFiles( bool aPlotAll, bool aPlotFrameRef,
+                                             RENDER_SETTINGS* aRenderSettings )
 {
     SCH_SCREEN*     screen = m_parent->GetScreen();
     SCH_SHEET_PATH  oldsheetpath = m_parent->GetCurrentSheet();
 
-    /* When printing all pages, the printed page is not the current page.
-     *  In complex hierarchies, we must setup references and other parameters
-     *  in the printed SCH_SCREEN
-     *  because in complex hierarchies a SCH_SCREEN (a schematic drawings)
-     *  is shared between many sheets
+    /* When printing all pages, the printed page is not the current page.  In complex hierarchies,
+     * we must update symbol references and other parameters in the given printed SCH_SCREEN,
+     * according to the sheet path because in complex hierarchies a SCH_SCREEN (a drawing ) is
+     * shared between many sheets and symbol references depend on the actual sheet path used.
      */
     SCH_SHEET_LIST  sheetList;
 
@@ -695,8 +694,9 @@ void DIALOG_PLOT_SCHEMATIC::createHPGLFile( bool aPlotAll, bool aPlotFrameRef,
             msg.Printf( wxT( "HPGL Plotter exception: %s"), e.What() );
             reporter.Report( msg, RPT_SEVERITY_ERROR );
         }
-
     }
+
+    reporter.ReportTail( _( "Done." ), RPT_SEVERITY_INFO );
 
     m_parent->SetCurrentSheet( oldsheetpath );
     m_parent->GetCurrentSheet().UpdateAllScreenReferences();
@@ -780,12 +780,10 @@ void DIALOG_PLOT_SCHEMATIC::createPDFFile( bool aPlotAll, bool aPlotDrawingSheet
 {
     SCH_SHEET_PATH  oldsheetpath = m_parent->GetCurrentSheet();     // sheetpath is saved here
 
-    /* When printing all pages, the printed page is not the current page.  In
-     * complex hierarchies, we must update symbol references and other
-     * parameters in the given printed SCH_SCREEN, accordant to the sheet path
-     * because in complex hierarchies a SCH_SCREEN (a drawing ) is shared
-     * between many sheets and symbol references depend on the actual sheet
-     * path used
+    /* When printing all pages, the printed page is not the current page.  In complex hierarchies,
+     * we must update symbol references and other parameters in the given printed SCH_SCREEN,
+     * according to the sheet path because in complex hierarchies a SCH_SCREEN (a drawing ) is
+     * shared between many sheets and symbol references depend on the actual sheet path used.
      */
     SCH_SHEET_LIST sheetList;
 
@@ -806,10 +804,10 @@ void DIALOG_PLOT_SCHEMATIC::createPDFFile( bool aPlotAll, bool aPlotDrawingSheet
     plotter->SetCreator( wxT( "Eeschema-PDF" ) );
     plotter->SetTitle( m_parent->GetTitleBlock().GetTitle() );
 
-    wxString msg;
+    wxString   msg;
     wxFileName plotFileName;
-    REPORTER& reporter = m_MessagesBox->Reporter();
-    LOCALE_IO toggle;       // Switch the locale to standard C
+    REPORTER&  reporter = m_MessagesBox->Reporter();
+    LOCALE_IO  toggle;       // Switch the locale to standard C
 
     for( unsigned i = 0; i < sheetList.size(); i++ )
     {
@@ -820,14 +818,13 @@ void DIALOG_PLOT_SCHEMATIC::createPDFFile( bool aPlotAll, bool aPlotDrawingSheet
 
         if( i == 0 )
         {
-
             try
             {
                 wxString fname = m_parent->GetUniqueFilenameForCurrentSheet();
 
-                // The sub sheet can be in a sub_hierarchy, but we plot the file in the
-                // main project folder (or the folder specified by the caller),
-                // so replace separators to create a unique filename:
+                // The sub sheet can be in a sub_hierarchy, but we plot the file in the main
+                // project folder (or the folder specified by the caller), so replace separators
+                // to create a unique filename:
                 fname.Replace( "/", "_" );
                 fname.Replace( "\\", "_" );
                 wxString ext = PDF_PLOTTER::GetDefaultFileExtension();
@@ -874,6 +871,7 @@ void DIALOG_PLOT_SCHEMATIC::createPDFFile( bool aPlotAll, bool aPlotDrawingSheet
     // Everything done, close the plot and restore the environment
     msg.Printf( _( "Plotted to '%s'.\n" ), plotFileName.GetFullPath() );
     reporter.Report( msg, RPT_SEVERITY_ACTION );
+    reporter.ReportTail( _( "Done." ), RPT_SEVERITY_INFO );
 
     restoreEnvironment( plotter, oldsheetpath );
 }
@@ -955,11 +953,13 @@ void DIALOG_PLOT_SCHEMATIC::setupPlotPagePDF( PLOTTER* aPlotter, SCH_SCREEN* aSc
 }
 
 
-void DIALOG_PLOT_SCHEMATIC::createPSFile( bool aPlotAll, bool aPlotFrameRef,
-                                          RENDER_SETTINGS* aRenderSettings )
+void DIALOG_PLOT_SCHEMATIC::createPSFiles( bool aPlotAll, bool aPlotFrameRef,
+                                           RENDER_SETTINGS* aRenderSettings )
 {
     SCH_SHEET_PATH  oldsheetpath = m_parent->GetCurrentSheet();  // sheetpath is saved here
     PAGE_INFO       plotPage;                                    // page size selected to plot
+    wxString        msg;
+    REPORTER&       reporter = m_MessagesBox->Reporter();
 
     /* When printing all pages, the printed page is not the current page.
      * In complex hierarchies, we must update symbol references and other parameters in the
@@ -1008,13 +1008,8 @@ void DIALOG_PLOT_SCHEMATIC::createPSFile( bool aPlotAll, bool aPlotFrameRef,
 
         double  scalex  = (double) plotPage.GetWidthMils() / actualPage.GetWidthMils();
         double  scaley  = (double) plotPage.GetHeightMils() / actualPage.GetHeightMils();
-
-        double  scale = std::min( scalex, scaley );
-
+        double  scale   = std::min( scalex, scaley );
         wxPoint plot_offset;
-
-        wxString msg;
-        REPORTER& reporter = m_MessagesBox->Reporter();
 
         try
         {
@@ -1051,6 +1046,8 @@ void DIALOG_PLOT_SCHEMATIC::createPSFile( bool aPlotAll, bool aPlotFrameRef,
             reporter.Report( msg, RPT_SEVERITY_ERROR );
         }
     }
+
+    reporter.ReportTail( _( "Done." ), RPT_SEVERITY_INFO );
 
     m_parent->SetCurrentSheet( oldsheetpath );
     m_parent->GetCurrentSheet().UpdateAllScreenReferences();
@@ -1090,8 +1087,7 @@ bool DIALOG_PLOT_SCHEMATIC::plotOneSheetPS( const wxString&     aFileName,
     if( m_plotBackgroundColor->GetValue() )
     {
         plotter->SetColor( plotter->RenderSettings()->GetLayerColor( LAYER_SCHEMATIC_BACKGROUND ) );
-        wxPoint end( plotter->PageSettings().GetWidthIU(),
-                     plotter->PageSettings().GetHeightIU() );
+        wxPoint end( plotter->PageSettings().GetWidthIU(), plotter->PageSettings().GetHeightIU() );
         plotter->Rect( wxPoint( 0, 0 ), end, FILL_TYPE::FILLED_SHAPE, 1.0 );
     }
 
@@ -1114,8 +1110,8 @@ bool DIALOG_PLOT_SCHEMATIC::plotOneSheetPS( const wxString&     aFileName,
 }
 
 
-void DIALOG_PLOT_SCHEMATIC::createSVGFile( bool aPrintAll, bool aPrintFrameRef,
-                                           RENDER_SETTINGS* aRenderSettings )
+void DIALOG_PLOT_SCHEMATIC::createSVGFiles( bool aPrintAll, bool aPrintFrameRef,
+                                            RENDER_SETTINGS* aRenderSettings )
 {
     wxString        msg;
     REPORTER&       reporter = m_MessagesBox->Reporter();
@@ -1177,6 +1173,8 @@ void DIALOG_PLOT_SCHEMATIC::createSVGFile( bool aPrintAll, bool aPrintFrameRef,
             break;
         }
     }
+
+    reporter.ReportTail( _( "Done" ), RPT_SEVERITY_INFO );
 
     m_parent->SetCurrentSheet( oldsheetpath );
     m_parent->GetCurrentSheet().UpdateAllScreenReferences();
@@ -1283,9 +1281,8 @@ wxString DIALOG_PLOT_SCHEMATIC::getOutputPath()
             }
             else
             {
-                wxMessageDialog dlg( this, msg, _( "Warning" ),
-                                     wxOK | wxCENTER | wxRESIZE_BORDER | wxICON_EXCLAMATION |
-                                     wxSTAY_ON_TOP );
+                wxMessageDialog dlg( this, msg, _( "Warning" ), wxOK | wxCENTER | wxRESIZE_BORDER
+                                     | wxICON_EXCLAMATION | wxSTAY_ON_TOP );
 
                 dlg.SetExtendedMessage( extMsg );
                 dlg.ShowModal();
@@ -1297,9 +1294,8 @@ wxString DIALOG_PLOT_SCHEMATIC::getOutputPath()
         {
             msg = _( "No project or path defined for the current schematic." );
 
-            wxMessageDialog dlg( this, msg, _( "Warning" ),
-                                 wxOK | wxCENTER | wxRESIZE_BORDER | wxICON_EXCLAMATION |
-                                 wxSTAY_ON_TOP );
+            wxMessageDialog dlg( this, msg, _( "Warning" ), wxOK | wxCENTER | wxRESIZE_BORDER
+                                 | wxICON_EXCLAMATION | wxSTAY_ON_TOP );
             dlg.SetExtendedMessage( extMsg );
             dlg.ShowModal();
 

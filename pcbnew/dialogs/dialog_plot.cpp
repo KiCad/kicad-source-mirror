@@ -116,7 +116,9 @@ void DIALOG_PLOT::init_Dialog()
     // Test for a reasonable scale value. Set to 1 if problem
     if( m_XScaleAdjust < PLOT_MIN_SCALE || m_YScaleAdjust < PLOT_MIN_SCALE
         || m_XScaleAdjust > PLOT_MAX_SCALE || m_YScaleAdjust > PLOT_MAX_SCALE )
+    {
         m_XScaleAdjust = m_YScaleAdjust = 1.0;
+    }
 
     m_fineAdjustXCtrl->SetValue( StringFromValue( EDA_UNITS::UNSCALED, m_XScaleAdjust ) );
     m_fineAdjustYCtrl->SetValue( StringFromValue( EDA_UNITS::UNSCALED, m_YScaleAdjust ) );
@@ -246,8 +248,7 @@ void DIALOG_PLOT::reInitDialog()
 
     if( knownViolations || exclusions )
     {
-        m_DRCExclusionsWarning->SetLabel( wxString::Format( m_DRCWarningTemplate,
-                                                            knownViolations,
+        m_DRCExclusionsWarning->SetLabel( wxString::Format( m_DRCWarningTemplate, knownViolations,
                                                             exclusions ) );
         m_DRCExclusionsWarning->Show();
     }
@@ -281,10 +282,8 @@ void DIALOG_PLOT::OnRightClick( wxMouseEvent& event )
 // Select or deselect groups of layers in the layers list:
 void DIALOG_PLOT::OnPopUpLayers( wxCommandEvent& event )
 {
-    // Build a list of layers for usual fabrication:
-    // copper layers + tech layers without courtyard
-    LSET fab_layer_set = ( LSET::AllCuMask() | LSET::AllTechMask() )
-                         & ~LSET( 2, B_CrtYd, F_CrtYd );
+    // Build a list of layers for usual fabrication: copper layers + tech layers without courtyard
+    LSET fab_layer_set = ( LSET::AllCuMask() | LSET::AllTechMask() ) & ~LSET( 2, B_CrtYd, F_CrtYd );
 
     switch( event.GetId() )
     {
@@ -334,8 +333,7 @@ void DIALOG_PLOT::OnPopUpLayers( wxCommandEvent& event )
 
 void DIALOG_PLOT::CreateDrillFile( wxCommandEvent& event )
 {
-    // Be sure drill file use the same settings (axis option, plot directory)
-    // as plot files:
+    // Be sure drill file use the same settings (axis option, plot directory) as plot files:
     applyPlotSettings();
 
     DIALOG_GENDRILL dlg( m_parent, this );
@@ -349,12 +347,12 @@ void DIALOG_PLOT::CreateDrillFile( wxCommandEvent& event )
 
 void DIALOG_PLOT::OnChangeDXFPlotMode( wxCommandEvent& event )
 {
-    // m_DXF_plotTextStrokeFontOpt is disabled if m_DXF_plotModeOpt
-    // is checked (plot in DXF polygon mode)
+    // m_DXF_plotTextStrokeFontOpt is disabled if m_DXF_plotModeOpt is checked (plot in DXF
+    // polygon mode)
     m_DXF_plotTextStrokeFontOpt->Enable( !m_DXF_plotModeOpt->GetValue() );
 
-    // if m_DXF_plotTextStrokeFontOpt option is disabled (plot DXF in polygon mode),
-    // force m_DXF_plotTextStrokeFontOpt to true to use Pcbnew stroke font
+    // if m_DXF_plotTextStrokeFontOpt option is disabled (plot DXF in polygon mode), force
+    // m_DXF_plotTextStrokeFontOpt to true to use Pcbnew stroke font
     if( !m_DXF_plotTextStrokeFontOpt->IsEnabled() )
         m_DXF_plotTextStrokeFontOpt->SetValue( true );
 }
@@ -435,8 +433,8 @@ void DIALOG_PLOT::SetPlotFormat( wxCommandEvent& event )
     BOARD* board = m_parent->GetBoard();
     const BOARD_DESIGN_SETTINGS& brd_settings = board->GetDesignSettings();
 
-    if( getPlotFormat() == PLOT_FORMAT::GERBER &&
-        ( brd_settings.m_SolderMaskMargin || brd_settings.m_SolderMaskMinWidth ) )
+    if( getPlotFormat() == PLOT_FORMAT::GERBER
+            && ( brd_settings.m_SolderMaskMargin || brd_settings.m_SolderMaskMinWidth ) )
     {
         m_PlotOptionsSizer->Show( m_SizerSolderMaskAlert );
     }
@@ -591,8 +589,7 @@ void DIALOG_PLOT::SetPlotFormat( wxCommandEvent& event )
 }
 
 
-// A helper function to "clip" aValue between aMin and aMax
-// and write result in * aResult
+// A helper function to "clip" aValue between aMin and aMax and write result in * aResult
 // return false if clipped, true if aValue is just copied into * aResult
 static bool setDouble( double* aResult, double aValue, double aMin, double aMax )
 {
@@ -682,7 +679,9 @@ void DIALOG_PLOT::applyPlotSettings()
         }
     }
     else    // keep the last value (initial value if no HPGL plot made)
+    {
         tempOptions.SetHPGLPenDiameter( m_plotOpts.GetHPGLPenDiameter() );
+    }
 
     // X scale
     double tmpDouble;
@@ -717,8 +716,8 @@ void DIALOG_PLOT::applyPlotSettings()
     cfg->m_Plot.check_zones_before_plotting = m_zoneFillCheck->GetValue();
 
     // PS Width correction
-    if( !setInt( &m_PSWidthAdjust, m_trackWidthCorrection.GetValue(),
-                 m_widthAdjustMinValue, m_widthAdjustMaxValue ) )
+    if( !setInt( &m_PSWidthAdjust, m_trackWidthCorrection.GetValue(), m_widthAdjustMinValue,
+                 m_widthAdjustMaxValue ) )
     {
         m_trackWidthCorrection.SetValue( m_PSWidthAdjust );
         msg.Printf( _( "Width correction constrained. "
@@ -745,11 +744,13 @@ void DIALOG_PLOT::applyPlotSettings()
     tempOptions.SetSvgPrecision( m_svgPrecsision->GetValue(), m_svgUnits->GetSelection() );
 
     LSET selectedLayers;
+
     for( unsigned i = 0; i < m_layerList.size(); i++ )
     {
         if( m_layerCheckListBox->IsChecked( i ) )
             selectedLayers.set( m_layerList[i] );
     }
+
     // Get a list of copper layers that aren't being used by inverting enabled layers.
     LSET disabledCopperLayers = LSET::AllCuMask() & ~m_parent->GetBoard()->GetEnabledLayers();
     // Enable all of the disabled copper layers.
@@ -924,6 +925,8 @@ void DIALOG_PLOT::Plot( wxCommandEvent& event )
         BuildPlotFileName( &fn, outputDir.GetPath(), "job", GerberJobFileExtension );
         jobfile_writer.CreateJobFile( fn.GetFullPath() );
     }
+
+    reporter.ReportTail( _( "Done." ), RPT_SEVERITY_INFO );
 }
 
 
