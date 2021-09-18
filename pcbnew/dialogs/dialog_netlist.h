@@ -57,7 +57,6 @@ private:
     wxString&       m_netlistPath;
     bool            m_initialized;
     bool            m_runDragCommand;
-    static bool     m_warnForNoNetPads;
     static bool     m_matchByUUID;      // True to use UUID as link between symbol and footprint
                                         // False to use reference designator as link
                                         // between symbol and footprint

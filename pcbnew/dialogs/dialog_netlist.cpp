@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,14 +24,12 @@
 #include <project.h>
 #include <kiface_base.h>
 #include <confirm.h>
-#include <dialogs/html_message_box.h>
 #include <pcb_edit_frame.h>
 #include <pcbnew_settings.h>
 #include <reporter.h>
 #include <bitmaps.h>
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>
-#include <board.h>
 #include <connectivity/connectivity_data.h>
 #include <wildcards_and_files_ext.h>
 #include <netlist_reader/pcb_netlist.h>
@@ -55,7 +53,6 @@ void PCB_EDIT_FRAME::InstallNetlistFrame()
     SetLastPath( LAST_PATH_NETLIST, netlistName );
 }
 
-bool DIALOG_NETLIST::m_warnForNoNetPads = false;
 bool DIALOG_NETLIST::m_matchByUUID = false;
 
 
@@ -74,9 +71,7 @@ DIALOG_NETLIST::DIALOG_NETLIST( PCB_EDIT_FRAME* aParent, wxString& aNetlistFullF
     m_cbUpdateFootprints->SetValue( cfg->m_NetlistDialog.update_footprints );
     m_cbDeleteShortingTracks->SetValue( cfg->m_NetlistDialog.delete_shorting_tracks );
     m_cbDeleteExtraFootprints->SetValue( cfg->m_NetlistDialog.delete_extra_footprints );
-    m_cbDeleteSinglePadNets->SetValue( cfg->m_NetlistDialog.delete_single_pad_nets );
 
-    m_cbWarnNoNetPad->SetValue( m_warnForNoNetPads );
     m_matchByTimestamp->SetSelection( m_matchByUUID ? 0 : 1 );
 
     m_MessageWindow->SetLabel( _("Changes To Be Applied") );
@@ -98,16 +93,14 @@ DIALOG_NETLIST::DIALOG_NETLIST( PCB_EDIT_FRAME* aParent, wxString& aNetlistFullF
 
 DIALOG_NETLIST::~DIALOG_NETLIST()
 {
-    m_warnForNoNetPads = m_cbWarnNoNetPad->GetValue();
     m_matchByUUID = m_matchByTimestamp->GetSelection() == 0;
 
-    auto cfg = m_parent->GetPcbNewSettings();
+    PCBNEW_SETTINGS* cfg = m_parent->GetPcbNewSettings();
 
     cfg->m_NetlistDialog.report_filter           = m_MessageWindow->GetVisibleSeverities();
     cfg->m_NetlistDialog.update_footprints       = m_cbUpdateFootprints->GetValue();
     cfg->m_NetlistDialog.delete_shorting_tracks  = m_cbDeleteShortingTracks->GetValue();
     cfg->m_NetlistDialog.delete_extra_footprints = m_cbDeleteExtraFootprints->GetValue();
-    cfg->m_NetlistDialog.delete_single_pad_nets  = m_cbDeleteSinglePadNets->GetValue();
 
     if( m_runDragCommand )
     {
@@ -147,7 +140,7 @@ void DIALOG_NETLIST::OnUpdatePCB( wxCommandEvent& event )
 
     if( !fn.IsOk() )
     {
-        wxMessageBox( _( "Please, choose a valid netlist file." ) );
+        wxMessageBox( _( "Please choose a valid netlist file." ) );
         return;
     }
 
@@ -250,9 +243,6 @@ void DIALOG_NETLIST::loadNetlist( bool aDryRun )
     updater.SetLookupByTimestamp( m_matchByUUID );
     updater.SetDeleteUnusedFootprints( m_cbDeleteExtraFootprints->GetValue());
     updater.SetReplaceFootprints( m_cbUpdateFootprints->GetValue() );
-    updater.SetDeleteSinglePadNets( m_cbDeleteSinglePadNets->GetValue() );
-    m_warnForNoNetPads = m_cbWarnNoNetPad->GetValue();
-    updater.SetWarnPadNoNetInNetlist( m_warnForNoNetPads );
     updater.UpdateNetlist( netlist );
 
     // The creation of the report was made without window update: the full page must be displayed

@@ -388,9 +388,6 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS()
     m_params.emplace_back( new PARAM<bool>( "netlist.delete_extra_footprints",
             &m_NetlistDialog.delete_extra_footprints, false ) );
 
-    m_params.emplace_back( new PARAM<bool>( "netlist.delete_single_pad_nets",
-            &m_NetlistDialog.delete_single_pad_nets, false ) );
-
     m_params.emplace_back( new PARAM<bool>( "netlist.associate_by_ref_sch",
             &m_NetlistDialog.associate_by_ref_sch, false ) );
 
@@ -705,7 +702,6 @@ bool PCBNEW_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
     ret &= fromLegacy<bool>( aCfg, "NetlistUpdateFootprints",      "netlist.update_footprints" );
     ret &= fromLegacy<bool>( aCfg, "NetlistDeleteShortingTracks",  "netlist.delete_shorting_tracks" );
     ret &= fromLegacy<bool>( aCfg, "NetlistDeleteExtraFootprints", "netlist.delete_extra_footprints" );
-    ret &= fromLegacy<bool>( aCfg, "NetlistDeleteSinglePadNets",   "netlist.delete_single_pad_nets" );
 
     ret &= fromLegacy<int>(    aCfg, "PlaceFileUnits",          "place_file.units" );
     ret &= fromLegacy<int>(    aCfg, "PlaceFileOpts",           "place_file.file_options" );

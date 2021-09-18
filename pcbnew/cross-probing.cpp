@@ -558,8 +558,6 @@ void PCB_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
             updater.SetLookupByTimestamp( false );
             updater.SetDeleteUnusedFootprints( false );
             updater.SetReplaceFootprints( false );
-            updater.SetDeleteSinglePadNets( false );
-            updater.SetWarnPadNoNetInNetlist( false );
             updater.UpdateNetlist( netlist );
 
             bool dummy;

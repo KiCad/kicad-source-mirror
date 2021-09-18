@@ -57,7 +57,6 @@ BOARD_NETLIST_UPDATER::BOARD_NETLIST_UPDATER( PCB_EDIT_FRAME* aFrame, BOARD* aBo
     m_isDryRun = false;
     m_replaceFootprints = true;
     m_lookupByTimestamp = false;
-    m_warnForNoNetPads = false;
 
     m_warningCount = 0;
     m_errorCount = 0;
@@ -462,7 +461,7 @@ bool BOARD_NETLIST_UPDATER::updateComponentPadConnections( FOOTPRINT* aFootprint
 
                 m_reporter->Report( msg, RPT_SEVERITY_ACTION );
             }
-            else if( m_warnForNoNetPads && pad->IsOnCopperLayer() && !pad->GetNumber().IsEmpty() )
+            else if( pad->IsOnCopperLayer() && !pad->GetNumber().IsEmpty() )
             {
                 // pad is connectable but has no net found in netlist
                 msg.Printf( _( "No net found for symbol %s pin %s." ),
@@ -1060,7 +1059,7 @@ bool BOARD_NETLIST_UPDATER::UpdateNetlist( NETLIST& aNetlist )
                             footprint->GetReference() );
             }
 
-            m_reporter->Report( msg, RPT_SEVERITY_WARNING );
+            m_reporter->Report( msg, RPT_SEVERITY_ERROR );
             doDelete = false;
         }
 

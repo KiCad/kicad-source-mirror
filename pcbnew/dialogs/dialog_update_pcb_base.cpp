@@ -40,23 +40,6 @@ DIALOG_UPDATE_PCB_BASE::DIALOG_UPDATE_PCB_BASE( wxWindow* parent, wxWindowID id,
 
 	sbSizer1->Add( m_cbUpdateFootprints, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
-	wxBoxSizer* bSizer4;
-	bSizer4 = new wxBoxSizer( wxHORIZONTAL );
-
-	m_cbDeleteSinglePadNets = new wxCheckBox( sbSizer1->GetStaticBox(), wxID_ANY, _("Delete nets containing only a single pad"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_cbDeleteSinglePadNets->SetToolTip( _("Clear the net name of pads when there is only one pad belonging to this net.") );
-
-	bSizer4->Add( m_cbDeleteSinglePadNets, 1, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
-
-	m_cbWarnNoNetPad = new wxCheckBox( sbSizer1->GetStaticBox(), wxID_ANY, _("Generate warnings for pads with no nets"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_cbWarnNoNetPad->SetValue(true);
-	m_cbWarnNoNetPad->SetToolTip( _("Display a warning if a pad in a footprint does not appear in netlist.\nOnly pads on a copper layer and having a name are tested.") );
-
-	bSizer4->Add( m_cbWarnNoNetPad, 1, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
-
-
-	sbSizer1->Add( bSizer4, 1, wxEXPAND|wxTOP, 5 );
-
 
 	bUpperSizer->Add( sbSizer1, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 
@@ -91,8 +74,6 @@ DIALOG_UPDATE_PCB_BASE::DIALOG_UPDATE_PCB_BASE( wxWindow* parent, wxWindowID id,
 	m_cbRelinkFootprints->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_UPDATE_PCB_BASE::OnOptionChanged ), NULL, this );
 	m_cbDeleteExtraFootprints->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_UPDATE_PCB_BASE::OnOptionChanged ), NULL, this );
 	m_cbUpdateFootprints->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_UPDATE_PCB_BASE::OnOptionChanged ), NULL, this );
-	m_cbDeleteSinglePadNets->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_UPDATE_PCB_BASE::OnOptionChanged ), NULL, this );
-	m_cbWarnNoNetPad->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_UPDATE_PCB_BASE::OnOptionChanged ), NULL, this );
 	m_sdbSizer1OK->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_UPDATE_PCB_BASE::OnUpdateClick ), NULL, this );
 }
 
@@ -102,8 +83,6 @@ DIALOG_UPDATE_PCB_BASE::~DIALOG_UPDATE_PCB_BASE()
 	m_cbRelinkFootprints->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_UPDATE_PCB_BASE::OnOptionChanged ), NULL, this );
 	m_cbDeleteExtraFootprints->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_UPDATE_PCB_BASE::OnOptionChanged ), NULL, this );
 	m_cbUpdateFootprints->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_UPDATE_PCB_BASE::OnOptionChanged ), NULL, this );
-	m_cbDeleteSinglePadNets->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_UPDATE_PCB_BASE::OnOptionChanged ), NULL, this );
-	m_cbWarnNoNetPad->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_UPDATE_PCB_BASE::OnOptionChanged ), NULL, this );
 	m_sdbSizer1OK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_UPDATE_PCB_BASE::OnUpdateClick ), NULL, this );
 
 }

@@ -33,8 +33,6 @@
 #include <kiface_base.h>
 #include <kiplatform/ui.h>
 
-bool DIALOG_UPDATE_PCB::m_warnForNoNetPads = false;
-
 
 DIALOG_UPDATE_PCB::DIALOG_UPDATE_PCB( PCB_EDIT_FRAME* aParent, NETLIST* aNetlist ) :
     DIALOG_UPDATE_PCB_BASE( aParent ),
@@ -47,8 +45,6 @@ DIALOG_UPDATE_PCB::DIALOG_UPDATE_PCB( PCB_EDIT_FRAME* aParent, NETLIST* aNetlist
     m_cbRelinkFootprints->SetValue( cfg->m_NetlistDialog.associate_by_ref_sch );
     m_cbUpdateFootprints->SetValue( cfg->m_NetlistDialog.update_footprints );
     m_cbDeleteExtraFootprints->SetValue( cfg->m_NetlistDialog.delete_extra_footprints );
-    m_cbDeleteSinglePadNets->SetValue( cfg->m_NetlistDialog.delete_single_pad_nets );
-    m_cbWarnNoNetPad->SetValue( m_warnForNoNetPads );
 
     m_messagePanel->SetLabel( _("Changes To Be Applied") );
     m_messagePanel->SetFileName( Prj().GetProjectPath() + wxT( "report.txt" ) );
@@ -76,14 +72,11 @@ DIALOG_UPDATE_PCB::DIALOG_UPDATE_PCB( PCB_EDIT_FRAME* aParent, NETLIST* aNetlist
 
 DIALOG_UPDATE_PCB::~DIALOG_UPDATE_PCB()
 {
-    m_warnForNoNetPads = m_cbWarnNoNetPad->GetValue();
-
     auto cfg = m_frame->GetPcbNewSettings();
 
     cfg->m_NetlistDialog.associate_by_ref_sch    = m_cbRelinkFootprints->GetValue();
     cfg->m_NetlistDialog.update_footprints       = m_cbUpdateFootprints->GetValue();
     cfg->m_NetlistDialog.delete_extra_footprints = m_cbDeleteExtraFootprints->GetValue();
-    cfg->m_NetlistDialog.delete_single_pad_nets  = m_cbDeleteSinglePadNets->GetValue();
     cfg->m_NetlistDialog.report_filter           = m_messagePanel->GetVisibleSeverities();
 
     if( m_runDragCommand )
@@ -112,8 +105,6 @@ void DIALOG_UPDATE_PCB::PerformUpdate( bool aDryRun )
     updater.SetLookupByTimestamp( !m_cbRelinkFootprints->GetValue() );
     updater.SetDeleteUnusedFootprints( m_cbDeleteExtraFootprints->GetValue());
     updater.SetReplaceFootprints( m_cbUpdateFootprints->GetValue() );
-    updater.SetDeleteSinglePadNets( m_cbDeleteSinglePadNets->GetValue() );
-    updater.SetWarnPadNoNetInNetlist( m_warnForNoNetPads );
     updater.UpdateNetlist( *m_netlist );
 
     m_messagePanel->Flush( true );

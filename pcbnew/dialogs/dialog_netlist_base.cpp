@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.9.0 Dec 30 2020)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -60,14 +60,6 @@ DIALOG_NETLIST_BASE::DIALOG_NETLIST_BASE( wxWindow* parent, wxWindowID id, const
 	m_cbDeleteShortingTracks = new wxCheckBox( sbSizer1->GetStaticBox(), wxID_ANY, _("Delete tracks shorting multiple nets"), wxDefaultPosition, wxDefaultSize, 0 );
 	sbSizer1->Add( m_cbDeleteShortingTracks, 0, wxBOTTOM, 5 );
 
-	m_cbDeleteSinglePadNets = new wxCheckBox( sbSizer1->GetStaticBox(), wxID_ANY, _("Delete nets containing only a single pad"), wxDefaultPosition, wxDefaultSize, 0 );
-	sbSizer1->Add( m_cbDeleteSinglePadNets, 0, wxBOTTOM, 5 );
-
-	m_cbWarnNoNetPad = new wxCheckBox( sbSizer1->GetStaticBox(), wxID_ANY, _("Generate warnings for pads with no net"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_cbWarnNoNetPad->SetToolTip( _("Display a warning if a pad in a footprint does not appear in netlist.\nOnly pads on a copper layer and having a name are tested.") );
-
-	sbSizer1->Add( m_cbWarnNoNetPad, 0, 0, 5 );
-
 
 	bUpperSizer->Add( sbSizer1, 1, wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 5 );
 
@@ -110,8 +102,6 @@ DIALOG_NETLIST_BASE::DIALOG_NETLIST_BASE( wxWindow* parent, wxWindowID id, const
 	m_cbUpdateFootprints->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_NETLIST_BASE::OnOptionChanged ), NULL, this );
 	m_cbDeleteExtraFootprints->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_NETLIST_BASE::OnOptionChanged ), NULL, this );
 	m_cbDeleteShortingTracks->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_NETLIST_BASE::OnOptionChanged ), NULL, this );
-	m_cbDeleteSinglePadNets->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_NETLIST_BASE::OnOptionChanged ), NULL, this );
-	m_cbWarnNoNetPad->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_NETLIST_BASE::OnOptionChanged ), NULL, this );
 	m_sdbSizer1OK->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_NETLIST_BASE::OnUpdatePCB ), NULL, this );
 }
 
@@ -124,8 +114,6 @@ DIALOG_NETLIST_BASE::~DIALOG_NETLIST_BASE()
 	m_cbUpdateFootprints->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_NETLIST_BASE::OnOptionChanged ), NULL, this );
 	m_cbDeleteExtraFootprints->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_NETLIST_BASE::OnOptionChanged ), NULL, this );
 	m_cbDeleteShortingTracks->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_NETLIST_BASE::OnOptionChanged ), NULL, this );
-	m_cbDeleteSinglePadNets->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_NETLIST_BASE::OnOptionChanged ), NULL, this );
-	m_cbWarnNoNetPad->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_NETLIST_BASE::OnOptionChanged ), NULL, this );
 	m_sdbSizer1OK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_NETLIST_BASE::OnUpdatePCB ), NULL, this );
 
 }

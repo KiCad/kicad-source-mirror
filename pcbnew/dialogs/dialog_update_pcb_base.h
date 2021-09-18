@@ -38,8 +38,6 @@ class DIALOG_UPDATE_PCB_BASE : public DIALOG_SHIM
 		wxCheckBox* m_cbRelinkFootprints;
 		wxCheckBox* m_cbDeleteExtraFootprints;
 		wxCheckBox* m_cbUpdateFootprints;
-		wxCheckBox* m_cbDeleteSinglePadNets;
-		wxCheckBox* m_cbWarnNoNetPad;
 		WX_HTML_REPORT_PANEL* m_messagePanel;
 		wxStdDialogButtonSizer* m_sdbSizer1;
 		wxButton* m_sdbSizer1OK;

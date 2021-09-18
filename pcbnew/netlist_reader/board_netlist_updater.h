@@ -1,8 +1,3 @@
-/**
- * @file board_netlist_updater.h
- * @brief BOARD_NETLIST_UPDATER class definition
- */
-
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
@@ -31,8 +26,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef __BOARD_NETLIST_UPDATER_H
-#define __BOARD_NETLIST_UPDATER_H
+#ifndef BOARD_NETLIST_UPDATER_H
+#define BOARD_NETLIST_UPDATER_H
 
 class BOARD;
 class REPORTER;
@@ -63,9 +58,8 @@ class PCB_EDIT_FRAME;
  *     the time stamp is updated from the #NETLIST.
  * - After each footprint is added or update as described above, each footprint pad net
  *   name is compared and updated to the value defined in the #NETLIST.
- * - After all of the footprints have been added, updated, and net names and
- *    pin function properly set, any extra unlock footprints are removed
- *    from the #BOARD.
+ * - After all of the footprints have been added, updated, and net names and pin function
+ *   properly set, any extra unlocked footprints are removed from the #BOARD.
  *
  */
 class BOARD_NETLIST_UPDATER
@@ -88,12 +82,6 @@ public:
 
     ///< Enable dry run mode (just report, no changes to PCB).
     void SetIsDryRun( bool aEnabled ) { m_isDryRun = aEnabled; }
-
-    void SetDeleteSinglePadNets( bool aEnabled ) { m_deleteSinglePadNets = aEnabled; }
-
-    ///< Enable warning option if a connectable pad is not found in netlist
-    ///< connectable = pad with a name and on a copper layer.
-    void SetWarnPadNoNetInNetlist( bool aEnabled ) { m_warnForNoNetPads = aEnabled; }
 
     void SetReplaceFootprints( bool aEnabled ) { m_replaceFootprints = aEnabled; }
 
@@ -146,7 +134,6 @@ private:
     bool m_isDryRun;
     bool m_replaceFootprints;
     bool m_lookupByTimestamp;
-    bool m_warnForNoNetPads;    // Warn if a connectable pad has no net in netlist (not found).
 
     int m_warningCount;
     int m_errorCount;

@@ -45,7 +45,6 @@ private:
     NETLIST*        m_netlist;
     bool            m_initialized;
     bool            m_runDragCommand;
-    static bool     m_warnForNoNetPads;
 };
 
 #endif

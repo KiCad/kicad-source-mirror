@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.9.0 Dec 30 2020)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -48,15 +48,13 @@ class DIALOG_NETLIST_BASE : public DIALOG_SHIM
 		wxCheckBox* m_cbUpdateFootprints;
 		wxCheckBox* m_cbDeleteExtraFootprints;
 		wxCheckBox* m_cbDeleteShortingTracks;
-		wxCheckBox* m_cbDeleteSinglePadNets;
-		wxCheckBox* m_cbWarnNoNetPad;
 		WX_HTML_REPORT_PANEL* m_MessageWindow;
 		wxBoxSizer* m_buttonsSizer;
 		wxStdDialogButtonSizer* m_sdbSizer1;
 		wxButton* m_sdbSizer1OK;
 		wxButton* m_sdbSizer1Cancel;
 
-		// Virtual event handlers, override them in your derived class
+		// Virtual event handlers, overide them in your derived class
 		virtual void OnFilenameKillFocus( wxFocusEvent& event ) { event.Skip(); }
 		virtual void OnOpenNetlistClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnMatchChanged( wxCommandEvent& event ) { event.Skip(); }
