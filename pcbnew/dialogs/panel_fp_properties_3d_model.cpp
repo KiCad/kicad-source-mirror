@@ -218,7 +218,11 @@ void PANEL_FP_PROPERTIES_3D_MODEL::On3DModelCellChanged( wxGridEvent& aEvent )
 
         // The user is warned about failed validation through the updateValidateStatus call below
         if( filename.empty() || !res->ValidateFileName( filename, hasAlias ) )
+        {
+            wxMessageBox( _( "Error: illegal or empty filename." ) );
             aEvent.Veto();
+            return;
+        }
 
         // if the user has specified an alias in the name then prepend ':'
         if( hasAlias )

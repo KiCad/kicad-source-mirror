@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2020 Cirilo Bernardo <cirilo.bernardo@gmail.com>
+ * Copyright (C) 2015-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1013,7 +1014,17 @@ bool FILENAME_RESOLVER::ValidateFileName( const wxString& aFileName, bool& hasAl
 
     }
 
-    if( wxString::npos != lpath.find_first_of( wxFileName::GetForbiddenChars() ) )
+    // Test for forbidden chars in filenames. Should be wxFileName::GetForbiddenChars()
+    // On MSW, the list returned by wxFileName::GetForbiddenChars() contains separators
+    // '\'and '/' used here because lpath is a full path (after last ':').
+    // So remove separators
+    wxString lpath_no_sep = lpath;
+#ifdef __WINDOWS__
+    lpath_no_sep.Replace( "/", " " );
+    lpath_no_sep.Replace( "\\", " " );
+#endif
+
+    if( wxString::npos != lpath_no_sep.find_first_of( wxFileName::GetForbiddenChars() ) )
         return false;
 
     return true;
