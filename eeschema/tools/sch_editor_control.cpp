@@ -476,6 +476,7 @@ int SCH_EDITOR_CONTROL::FindNext( const TOOL_EVENT& aEvent )
                 screen->TestDanglingEnds();
 
                 m_frame->SetScreen( screen );
+                m_frame->UpdateHierarchyNavigator();
                 UpdateFind( ACTIONS::updateFind.MakeEvent() );
 
                 break;
