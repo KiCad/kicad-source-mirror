@@ -146,6 +146,14 @@ int ExecuteFile( const wxString& ExecFile, const wxString& param, wxProcess *cal
 
         return ProcessExecute( wxT( "/usr/bin/open -a " ) + fullFileName, wxEXEC_ASYNC, callback );
     }
+#else
+    else
+    {
+        wxString msg;
+        msg.Printf( _( "Command '%s' could not be found." ), fullFileName );
+        DisplayError( nullptr, msg, 20 );
+        return -1;
+    }
 #endif
 }
 
@@ -179,7 +187,7 @@ bool OpenPDF( const wxString& file )
     // Quote in case there are spaces in the path.
     // Not needed on 3.1.4, but needed in 3.0 versions
     // Moreover, on Linux, on 3.1.4 wx version, adding quotes breaks wxLaunchDefaultApplication
-    AddDelimiterString( filename );
+    QuoteString( filename );
     #endif
 #endif
 
