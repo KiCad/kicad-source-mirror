@@ -68,9 +68,7 @@ void FOOTPRINT_VIEWER_FRAME::ReCreateHToolbar()
     m_mainToolBar->Add( ACTIONS::zoomInCenter );
     m_mainToolBar->Add( ACTIONS::zoomOutCenter );
     m_mainToolBar->Add( ACTIONS::zoomFitScreen );
-    m_mainToolBar->Add( ACTIONS::zoomTool,
-                        ACTION_TOOLBAR::TOGGLE, ACTION_TOOLBAR::CANCEL );
-    m_mainToolBar->Add( PCB_ACTIONS::zoomFootprintAutomatically, ACTION_TOOLBAR::TOGGLE );
+    m_mainToolBar->Add( ACTIONS::zoomTool, ACTION_TOOLBAR::TOGGLE, ACTION_TOOLBAR::CANCEL );
 
     m_mainToolBar->AddScaledSeparator( this );
     m_mainToolBar->Add( ACTIONS::show3DViewer );
@@ -82,8 +80,10 @@ void FOOTPRINT_VIEWER_FRAME::ReCreateHToolbar()
 
     // Grid selection choice box.
     if( m_gridSelectBox == nullptr )
-        m_gridSelectBox = new wxChoice( m_mainToolBar, ID_ON_GRID_SELECT,
-                                        wxDefaultPosition, wxDefaultSize, 0, nullptr );
+    {
+        m_gridSelectBox = new wxChoice( m_mainToolBar, ID_ON_GRID_SELECT, wxDefaultPosition,
+                                        wxDefaultSize, 0, nullptr );
+    }
 
     UpdateGridSelectBox();
     m_mainToolBar->AddControl( m_gridSelectBox );
@@ -92,8 +92,10 @@ void FOOTPRINT_VIEWER_FRAME::ReCreateHToolbar()
 
     // Zoom selection choice box.
     if( m_zoomSelectBox == nullptr )
-        m_zoomSelectBox = new wxChoice( m_mainToolBar, ID_ON_ZOOM_SELECT,
-                                        wxDefaultPosition, wxDefaultSize, 0, nullptr );
+    {
+        m_zoomSelectBox = new wxChoice( m_mainToolBar, ID_ON_ZOOM_SELECT, wxDefaultPosition,
+                                        wxDefaultSize, 0, nullptr );
+    }
 
     UpdateZoomSelectBox();
     m_mainToolBar->AddControl( m_zoomSelectBox );

@@ -58,7 +58,6 @@ public:
     int PadDisplayMode( const TOOL_EVENT& aEvent );
     int GraphicOutlines( const TOOL_EVENT& aEvent );
     int TextOutlines( const TOOL_EVENT& aEvent );
-    int ZoomAutomatically( const TOOL_EVENT& aEvent );
 
     /// Show the 3D viewer
     int Show3DViewer( const TOOL_EVENT& aEvent );

@@ -378,16 +378,6 @@ public:
 
     virtual void ActivateGalCanvas() override;
 
-    /**
-     * Does nothing. Should be overridden in derived classes which support autozoom.
-     */
-    virtual void SetAutoZoom( bool aAutoZoom ) {}
-
-    /**
-     * Always returns false. Should be overridden in derived classes which support autozoom.
-     */
-    virtual bool GetAutoZoom() { return false; }
-
 protected:
     bool canCloseWindow( wxCloseEvent& aCloseEvent ) override;
 

@@ -54,9 +54,6 @@ public:
 
     virtual COLOR4D GetGridColor() override;
 
-    bool GetAutoZoom() override;
-    void SetAutoZoom( bool aAutoZoom ) override;
-
     MAGNETIC_SETTINGS* GetMagneticItemsSettings() override
     {
         return &m_magneticItems;

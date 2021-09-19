@@ -31,7 +31,6 @@ const int cvpcbSchemaVersion = 0;
 
 CVPCB_SETTINGS::CVPCB_SETTINGS() :
         APP_SETTINGS_BASE( "cvpcb", cvpcbSchemaVersion ),
-        m_FootprintViewerAutoZoom( false ),
         m_FootprintViewerZoom( 1.0 ),
         m_FilterFootprint( 0 ),
         m_LibrariesWidth( 0 ),
@@ -61,9 +60,6 @@ CVPCB_SETTINGS::CVPCB_SETTINGS() :
 
     m_params.emplace_back( new PARAM<bool>( "footprint_viewer.graphic_items_fill",
             &m_FootprintViewerDisplayOptions.m_DisplayGraphicsFill, true ) );
-
-    m_params.emplace_back( new PARAM<bool>( "footprint_viewer.auto_zoom",
-            &m_FootprintViewerAutoZoom, false ) );
 
     m_params.emplace_back( new PARAM<double>( "footprint_viewer.zoom",
             &m_FootprintViewerZoom, 1.0 ) );

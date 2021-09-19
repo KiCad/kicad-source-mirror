@@ -296,9 +296,7 @@ public:
 
     std::unique_ptr<PNS::ROUTING_SETTINGS> m_PnsSettings;
 
-    bool m_FootprintViewerAutoZoom;     ///< Should the footprint viewer auto zoom on select
-
-    double m_FootprintViewerZoom;       ///< The last zoom level in the footprint viewer
+    double m_FootprintViewerZoom;       ///< The last zoom level used (0 for auto)
 
     wxString m_lastFootprintLibDir;
 

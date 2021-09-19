@@ -85,14 +85,6 @@ template<class T> void Flip( T& aValue )
 }
 
 
-int PCB_VIEWER_TOOLS::ZoomAutomatically( const TOOL_EVENT& aEvent )
-{
-    frame()->SetAutoZoom( !frame()->GetAutoZoom() );
-
-    return 0;
-}
-
-
 int PCB_VIEWER_TOOLS::ShowPadNumbers( const TOOL_EVENT& aEvent )
 {
     auto opts = displayOptions();
@@ -347,7 +339,6 @@ void PCB_VIEWER_TOOLS::setTransitions()
     Go( &PCB_VIEWER_TOOLS::PadDisplayMode,    PCB_ACTIONS::padDisplayMode.MakeEvent() );
     Go( &PCB_VIEWER_TOOLS::GraphicOutlines,   PCB_ACTIONS::graphicsOutlines.MakeEvent() );
     Go( &PCB_VIEWER_TOOLS::TextOutlines,      PCB_ACTIONS::textOutlines.MakeEvent() );
-    Go( &PCB_VIEWER_TOOLS::ZoomAutomatically, PCB_ACTIONS::zoomFootprintAutomatically.MakeEvent() );
 
     Go( &PCB_VIEWER_TOOLS::MeasureTool,       ACTIONS::measureTool.MakeEvent() );
 }

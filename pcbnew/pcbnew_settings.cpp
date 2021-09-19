@@ -75,7 +75,6 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS()
           m_AutoRefillZones( true ),
           m_AllowFreePads( false ),
           m_PnsSettings( nullptr ),
-          m_FootprintViewerAutoZoom( false ),
           m_FootprintViewerZoom( 1.0 )
 {
     m_MagneticItems.pads     = MAGNETIC_OPTIONS::CAPTURE_CURSOR_IN_TRACK_TOOL;
@@ -501,9 +500,6 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS()
             nlohmann::json::array() ) );
 
     addParamsForWindow( &m_FootprintViewer, "footprint_viewer" );
-
-    m_params.emplace_back( new PARAM<bool>( "footprint_viewer.auto_zoom",
-            &m_FootprintViewerAutoZoom, false ) );
 
     m_params.emplace_back( new PARAM<double>( "footprint_viewer.zoom",
             &m_FootprintViewerZoom, 1.0 ) );

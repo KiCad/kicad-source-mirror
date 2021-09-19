@@ -824,11 +824,6 @@ TOOL_ACTION PCB_ACTIONS::showPadNumbers( "pcbnew.Control.showPadNumbers",
         _( "Show pad numbers" ), _( "Show pad numbers" ),
         BITMAPS::pad_number );
 
-TOOL_ACTION PCB_ACTIONS::zoomFootprintAutomatically( "pcbnew.Control.zoomFootprintAutomatically",
-        AS_GLOBAL, 0, "",
-        _( "Automatically zoom to fit" ), _( "Zoom to fit when changing footprint" ),
-        BITMAPS::zoom_auto_fit_in_page );
-
 TOOL_ACTION PCB_ACTIONS::zoneDisplayFilled( "pcbnew.Control.zoneDisplayEnable",
         AS_GLOBAL, 0, "",
         _( "Draw Zone Fills" ), _( "Show filled areas of zones" ),

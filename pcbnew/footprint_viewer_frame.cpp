@@ -58,6 +58,7 @@
 #include <wx/listbox.h>
 #include <wx/srchctrl.h>
 #include <wx/tokenzr.h>
+#include <wx/choice.h>
 
 using namespace std::placeholders;
 
@@ -335,14 +336,6 @@ void FOOTPRINT_VIEWER_FRAME::setupUIConditions()
     mgr->SetConditions( PCB_ACTIONS::padDisplayMode,     CHECK( !cond.PadFillDisplay() ) );
     mgr->SetConditions( PCB_ACTIONS::textOutlines,       CHECK( !cond.TextFillDisplay() ) );
     mgr->SetConditions( PCB_ACTIONS::graphicsOutlines,   CHECK( !cond.GraphicsFillDisplay() ) );
-
-    auto autoZoomCond =
-        [this] ( const SELECTION& )
-        {
-            return GetAutoZoom();
-        };
-
-    mgr->SetConditions( PCB_ACTIONS::zoomFootprintAutomatically, CHECK( autoZoomCond ) );
 
 #undef ENABLE
 #undef CHECK
@@ -813,24 +806,6 @@ COLOR_SETTINGS* FOOTPRINT_VIEWER_FRAME::GetColorSettings() const
 }
 
 
-bool FOOTPRINT_VIEWER_FRAME::GetAutoZoom()
-{
-    // It is stored in pcbnew's settings
-    PCBNEW_SETTINGS* cfg = GetPcbNewSettings();
-    wxCHECK( cfg, false );
-    return cfg->m_FootprintViewerAutoZoom;
-}
-
-
-void FOOTPRINT_VIEWER_FRAME::SetAutoZoom( bool aAutoZoom )
-{
-    // It is stored in pcbnew's settings
-    PCBNEW_SETTINGS* cfg = GetPcbNewSettings();
-    wxASSERT( cfg );
-    cfg->m_FootprintViewerAutoZoom = aAutoZoom;
-}
-
-
 void FOOTPRINT_VIEWER_FRAME::CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVarsChanged )
 {
     PCB_BASE_FRAME::CommonSettingsChanged( aEnvVarsChanged, aTextVarsChanged );
@@ -1064,7 +1039,7 @@ void FOOTPRINT_VIEWER_FRAME::updateView()
 
     m_toolManager->ResetTools( TOOL_BASE::MODEL_RELOAD );
 
-    if( GetAutoZoom() )
+    if( m_zoomSelectBox->GetSelection() == 0 )
         m_toolManager->RunAction( ACTIONS::zoomFitScreen, true );
     else
         m_toolManager->RunAction( ACTIONS::centerContents, true );

@@ -108,20 +108,6 @@ public:
         // currently: do nothing in CvPcb.
     }
 
-    /**
-     * Set if the canvas should automatically zoom to the footprint on load.
-     *
-     * @param aAutoZoom is true if it should automatically zoom
-     */
-    void SetAutoZoom( bool aAutoZoom ) override;
-
-    /**
-     * Get if the canvas should automatically zoom to the footprint on load.
-     *
-     * @return true if it should automatically zoom
-     */
-    bool GetAutoZoom() override;
-
     SELECTION& GetCurrentSelection() override;
 
     DECLARE_EVENT_TABLE()

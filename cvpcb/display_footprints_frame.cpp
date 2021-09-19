@@ -212,13 +212,6 @@ void DISPLAY_FOOTPRINTS_FRAME::setupUIConditions()
     mgr->SetConditions( ACTIONS::milsUnits,         CHECK( cond.Units( EDA_UNITS::MILS ) ) );
 
 
-    auto autoZoomCond =
-            [this] ( const SELECTION& aSel )
-            {
-                return GetAutoZoom();
-            };
-
-    mgr->SetConditions( PCB_ACTIONS::zoomFootprintAutomatically, CHECK( autoZoomCond ) );
     mgr->SetConditions( PCB_ACTIONS::showPadNumbers,
                         CHECK( cond.PadNumbersDisplay() ) );
     mgr->SetConditions( PCB_ACTIONS::padDisplayMode,             CHECK( !cond.PadFillDisplay() ) );
@@ -301,9 +294,7 @@ void DISPLAY_FOOTPRINTS_FRAME::ReCreateHToolbar()
     m_mainToolBar->Add( ACTIONS::zoomInCenter );
     m_mainToolBar->Add( ACTIONS::zoomOutCenter );
     m_mainToolBar->Add( ACTIONS::zoomFitScreen );
-    m_mainToolBar->Add( ACTIONS::zoomTool,
-                        ACTION_TOOLBAR::TOGGLE, ACTION_TOOLBAR::CANCEL );
-    m_mainToolBar->Add( PCB_ACTIONS::zoomFootprintAutomatically, ACTION_TOOLBAR::TOGGLE );
+    m_mainToolBar->Add( ACTIONS::zoomTool, ACTION_TOOLBAR::TOGGLE, ACTION_TOOLBAR::CANCEL );
 
     m_mainToolBar->AddScaledSeparator( this );
     m_mainToolBar->Add( ACTIONS::show3DViewer );
@@ -515,7 +506,7 @@ void DISPLAY_FOOTPRINTS_FRAME::updateView()
 
     m_toolManager->ResetTools( TOOL_BASE::MODEL_RELOAD );
 
-    if( GetAutoZoom() )
+    if( m_zoomSelectBox->GetSelection() == 0 )
         m_toolManager->RunAction( ACTIONS::zoomFitScreen, true );
     else
         m_toolManager->RunAction( ACTIONS::centerContents, true );
@@ -550,22 +541,6 @@ COLOR_SETTINGS* DISPLAY_FOOTPRINTS_FRAME::GetColorSettings() const
 BOARD_ITEM_CONTAINER* DISPLAY_FOOTPRINTS_FRAME::GetModel() const
 {
     return GetBoard()->GetFirstFootprint();
-}
-
-
-void DISPLAY_FOOTPRINTS_FRAME::SetAutoZoom( bool aAutoZoom )
-{
-    CVPCB_SETTINGS* cfg = dynamic_cast<CVPCB_SETTINGS*>( config() );
-    wxCHECK( cfg, /* void */ );
-    cfg->m_FootprintViewerAutoZoom = aAutoZoom;
-}
-
-
-bool DISPLAY_FOOTPRINTS_FRAME::GetAutoZoom()
-{
-    CVPCB_SETTINGS* cfg = dynamic_cast<CVPCB_SETTINGS*>( config() );
-    wxCHECK( cfg, false );
-    return cfg->m_FootprintViewerAutoZoom;
 }
 
 
