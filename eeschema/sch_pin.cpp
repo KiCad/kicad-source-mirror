@@ -22,6 +22,8 @@
 #include <lib_pin.h>
 #include <sch_symbol.h>
 #include <sch_pin.h>
+#include <schematic.h>
+#include <schematic_settings.h>
 #include <sch_sheet_path.h>
 #include <sch_edit_frame.h>
 
@@ -319,7 +321,8 @@ bool SCH_PIN::HitTest( const wxPoint& aPosition, int aAccuracy ) const
 {
     // When looking for an "exact" hit aAccuracy will be 0 which works poorly if the pin has
     // no pin number or name.  Give it a floor.
-    aAccuracy = std::max( aAccuracy, GetPenWidth() );
+    if( Schematic() )
+        aAccuracy = std::max( aAccuracy, Schematic()->Settings().m_PinSymbolSize / 4 );
 
     EDA_RECT rect = GetBoundingBox();
     return rect.Inflate( aAccuracy ).Contains( aPosition );

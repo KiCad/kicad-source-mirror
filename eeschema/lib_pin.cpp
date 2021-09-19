@@ -1094,7 +1094,7 @@ const EDA_RECT LIB_PIN::GetBoundingBox( bool aIncludeInvisibles, bool aPinOnly )
     // calculate top left corner position
     // for the default pin orientation (PIN_RIGHT)
     begin.y = std::max( minsizeV, numberTextHeight + Mils2iu( PIN_TEXT_MARGIN ) );
-    begin.x = std::min( -TARGET_PIN_RADIUS, m_length - (numberTextLength / 2) );
+    begin.x = std::min( 0, m_length - (numberTextLength / 2) );
 
     // calculate bottom right corner position and adjust top left corner position
     int nameTextLength = 0;
@@ -1113,14 +1113,14 @@ const EDA_RECT LIB_PIN::GetBoundingBox( bool aIncludeInvisibles, bool aPinOnly )
 
     if( nameTextOffset )        // for values > 0, pin name is inside the body
     {
-        end.x = m_length + nameTextLength + TARGET_PIN_RADIUS;
+        end.x = m_length + nameTextLength;
         end.y = std::min( -minsizeV, -nameTextHeight / 2 );
     }
     else        // if value == 0:
                 // pin name is outside the body, and above the pin line
                 // pin num is below the pin line
     {
-        end.x   = std::max( m_length + TARGET_PIN_RADIUS, nameTextLength );
+        end.x   = std::max( m_length, nameTextLength );
         end.y   = -begin.y;
         begin.y = std::max( minsizeV, nameTextHeight );
     }

@@ -33,6 +33,7 @@
 #include <lib_item.h>
 #include <symbol_viewer_frame.h>
 #include <math/util.h>
+#include <geometry/shape_rect.h>
 #include <menus_helpers.h>
 #include <painter.h>
 #include <preview_items/selection_area.h>
@@ -780,7 +781,9 @@ EE_SELECTION& EE_SELECTION_TOOL::GetSelection()
 bool EE_SELECTION_TOOL::CollectHits( EE_COLLECTOR& aCollector, const VECTOR2I& aWhere,
                                      const KICAD_T* aFilterList )
 {
-    aCollector.m_Threshold = KiROUND( getView()->ToWorld( HITTEST_THRESHOLD_PIXELS ) );
+    int pixelThreshold = KiROUND( getView()->ToWorld( HITTEST_THRESHOLD_PIXELS ) );
+    int gridThreshold = KiROUND( getView()->GetGAL()->GetGridSize().EuclideanNorm() );
+    aCollector.m_Threshold = std::max( pixelThreshold, gridThreshold );
 
     if( m_isSymbolEditor )
     {
@@ -807,7 +810,7 @@ void EE_SELECTION_TOOL::narrowSelection( EE_COLLECTOR& collector, const VECTOR2I
 {
     for( int i = collector.GetCount() - 1; i >= 0; --i )
     {
-        if( !Selectable( collector[i] ) )
+        if( !Selectable( collector[i], &aWhere ) )
         {
             collector.Remove( i );
             continue;
@@ -972,21 +975,18 @@ int EE_SELECTION_TOOL::SelectAll( const TOOL_EVENT& aEvent )
 
 void EE_SELECTION_TOOL::GuessSelectionCandidates( EE_COLLECTOR& collector, const VECTOR2I& aPos )
 {
-    // There are certain parent/child and enclosure combinations that can be handled
-    // automatically.
-
     // Prefer exact hits to sloppy ones
-    int exactHits = 0;
+    std::set<EDA_ITEM*> exactHits;
 
     for( int i = collector.GetCount() - 1; i >= 0; --i )
     {
         EDA_ITEM* item = collector[ i ];
 
         if( item->HitTest( (wxPoint) aPos, 0 ) )
-            exactHits++;
+            exactHits.insert( item );
     }
 
-    if( exactHits > 0 && exactHits < collector.GetCount() )
+    if( exactHits.size() > 0 && exactHits.size() < (unsigned) collector.GetCount() )
     {
         for( int i = collector.GetCount() - 1; i >= 0; --i )
         {
@@ -995,69 +995,6 @@ void EE_SELECTION_TOOL::GuessSelectionCandidates( EE_COLLECTOR& collector, const
             if( !item->HitTest( (wxPoint) aPos, 0 ) )
                 collector.Transfer( item );
         }
-    }
-
-    // Prefer a non-sheet to a sheet
-    for( int i = 0; collector.GetCount() == 2 && i < 2; ++i )
-    {
-        EDA_ITEM* item = collector[ i ];
-        EDA_ITEM* other = collector[ ( i + 1 ) % 2 ];
-
-        if( item->Type() != SCH_SHEET_T && other->Type() == SCH_SHEET_T )
-            collector.Transfer( other );
-    }
-
-    // Prefer a symbol to a pin or the opposite, when both a symbol and a pin are selected
-    // We need to be able to select only a pin:
-    // - to display its characteristics (especially if an ERC is attached to the pin)
-    // - for cross probing, to select the corresponding pad.
-    // Note also the case happens only in schematic editor. In symbol editor, the symbol
-    // itself is never selected
-    for( int i = 0; collector.GetCount() == 2 && i < 2; ++i )
-    {
-        SCH_ITEM* item  = collector[i];
-        SCH_ITEM* other = collector[( i + 1 ) % 2];
-
-        if( item->Type() == SCH_SYMBOL_T && other->Type() == SCH_PIN_T )
-        {
-            // Make sure we aren't clicking on the pin anchor itself, only the rest of the
-            // pin should select the symbol with this setting
-            // To avoid conflict with the auto-start wires option
-            EE_GRID_HELPER grid( m_toolMgr );
-            wxPoint        cursorPos = wxPoint( grid.BestSnapAnchor( aPos, LAYER_CONNECTABLE,
-                                                                     nullptr ) );
-
-            if( !m_isSymbolEditor
-                    && m_frame->eeconfig()->m_Selection.select_pin_selects_symbol
-                    && !other->IsPointClickableAnchor( cursorPos ) )
-            {
-                collector.Transfer( other );
-            }
-            else
-            {
-                collector.Transfer( item );
-            }
-        }
-    }
-
-    // Prefer things that are generally smaller than a symbol to a symbol
-    const std::set<KICAD_T> preferred =
-            {
-                SCH_FIELD_T,
-                SCH_LINE_T,
-                SCH_BUS_WIRE_ENTRY_T,
-                SCH_NO_CONNECT_T,
-                SCH_JUNCTION_T,
-                SCH_MARKER_T
-            };
-
-    for( int i = 0; collector.GetCount() == 2 && i < 2; ++i )
-    {
-        EDA_ITEM* item = collector[ i ];
-        EDA_ITEM* other = collector[ ( i + 1 ) % 2 ];
-
-        if( preferred.count( item->Type() ) && other->Type() == SCH_SYMBOL_T )
-            collector.Transfer( other );
     }
 
     // No need for multiple wires at a single point; if there's a junction select that;
@@ -1084,15 +1021,27 @@ void EE_SELECTION_TOOL::GuessSelectionCandidates( EE_COLLECTOR& collector, const
         }
     }
 
-    // Construct a tight box (1/2 height and width) around the center of the closest item.
-    // All items which exist at least partly outside this box have sufficient other areas
-    // for selection and can be dropped.
+    // Find the closest item.  (Note that at this point all hits are either exact or non-exact.)
     EDA_ITEM* closest = nullptr;
     int       closestDist = INT_MAX;
 
     for( EDA_ITEM* item : collector )
     {
-        int dist = EuclideanNorm( item->GetBoundingBox().GetCenter() - wxPoint( aPos ) );
+        EDA_RECT bbox = item->GetBoundingBox();
+        int      dist;
+
+        if( exactHits.count( item ) )
+        {
+            dist = EuclideanNorm( bbox.GetCenter() - (wxPoint) aPos );
+        }
+        else
+        {
+            SHAPE_RECT rect( bbox.GetPosition(), bbox.GetWidth(), bbox.GetHeight() );
+            rect.Collide( SEG( aPos, aPos ), collector.m_Threshold, &dist );
+        }
+
+        if( item->IsType( EE_COLLECTOR::FieldOwners ) )
+            dist += INT_MAX / 4;
 
         // For wires, if we hit one of the endpoints, consider that perfect
         if( item->Type() == SCH_LINE_T && ( item->GetFlags() & ( STARTPOINT | ENDPOINT ) ) )
@@ -1105,6 +1054,9 @@ void EE_SELECTION_TOOL::GuessSelectionCandidates( EE_COLLECTOR& collector, const
         }
     }
 
+    // Construct a tight box (1/2 height and width) around the center of the closest item.
+    // All items which exist at least partly outside this box have sufficient other areas
+    // for selection and can be dropped.
     if( closest ) // Don't try and get a tight bbox if nothing is near the mouse pointer
     {
         EDA_RECT tightBox = closest->GetBoundingBox();
@@ -1350,10 +1302,11 @@ EDA_ITEM* EE_SELECTION_TOOL::GetNode( VECTOR2I aPosition )
     EE_COLLECTOR collector;
 
     //TODO(snh): Reimplement after exposing KNN interface
-    int thresholdMax = KiROUND(
-            m_toolMgr->GetView()->GetGAL()->GetGridSize().EuclideanNorm() );
+    int pixelThreshold = KiROUND( getView()->ToWorld( HITTEST_THRESHOLD_PIXELS ) );
+    int gridThreshold = KiROUND( getView()->GetGAL()->GetGridSize().EuclideanNorm() );
+    int thresholdMax = std::max( pixelThreshold, gridThreshold );
 
-    for( int threshold : { 0, thresholdMax/2, thresholdMax } )
+    for( int threshold : { 0, thresholdMax/4, thresholdMax/2, thresholdMax } )
     {
         collector.m_Threshold = threshold;
         collector.Collect( m_frame->GetScreen(), nodeTypes, (wxPoint) aPosition );
@@ -1724,7 +1677,8 @@ bool EE_SELECTION_TOOL::doSelectionMenu( EE_COLLECTOR* aCollector )
 }
 
 
-bool EE_SELECTION_TOOL::Selectable( const EDA_ITEM* aItem, bool checkVisibilityOnly ) const
+bool EE_SELECTION_TOOL::Selectable( const EDA_ITEM* aItem, const VECTOR2I* aPos,
+                                    bool checkVisibilityOnly ) const
 {
     // NOTE: in the future this is where Eeschema layer/itemtype visibility will be handled
 
@@ -1738,14 +1692,33 @@ bool EE_SELECTION_TOOL::Selectable( const EDA_ITEM* aItem, bool checkVisibilityO
     switch( aItem->Type() )
     {
     case SCH_PIN_T:
-        if( !static_cast<const SCH_PIN*>( aItem )->IsVisible() && !m_frame->GetShowAllPins() )
+    {
+        const SCH_PIN* pin = static_cast<const SCH_PIN*>( aItem );
+
+        if( !pin->IsVisible() && !m_frame->GetShowAllPins() )
             return false;
+
+        if( m_frame->eeconfig()->m_Selection.select_pin_selects_symbol )
+        {
+            // Pin anchors have to be allowed for auto-starting wires.
+            if( aPos )
+            {
+                EE_GRID_HELPER grid( m_toolMgr );
+                VECTOR2I       cursorPos = grid.BestSnapAnchor( *aPos, LAYER_CONNECTABLE, nullptr );
+
+                if( pin->IsPointClickableAnchor( (wxPoint) cursorPos ) )
+                    return true;
+            }
+
+            return false;
+        }
+    }
         break;
 
     case LIB_SYMBOL_T:    // In symbol_editor we do not want to select the symbol itself.
         return false;
 
-    case LIB_FIELD_T:   // LIB_FIELD object can always be edited.
+    case LIB_FIELD_T:     // LIB_FIELD object can always be edited.
         break;
 
     case LIB_ARC_T:
@@ -1755,7 +1728,6 @@ bool EE_SELECTION_TOOL::Selectable( const EDA_ITEM* aItem, bool checkVisibilityO
     case LIB_POLYLINE_T:
     case LIB_BEZIER_T:
     case LIB_PIN_T:
-    {
         if( symEditFrame )
         {
             LIB_ITEM* lib_item = (LIB_ITEM*) aItem;
@@ -1768,7 +1740,6 @@ bool EE_SELECTION_TOOL::Selectable( const EDA_ITEM* aItem, bool checkVisibilityO
         }
 
         break;
-    }
 
     case SCH_MARKER_T:  // Always selectable
         return true;

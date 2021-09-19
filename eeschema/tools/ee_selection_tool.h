@@ -147,7 +147,8 @@ public:
      *
      * @return True if the item fulfills conditions to be selected.
      */
-    bool Selectable( const EDA_ITEM* aItem, bool checkVisibilityOnly = false ) const;
+    bool Selectable( const EDA_ITEM* aItem, const VECTOR2I* aPos = nullptr,
+                     bool checkVisibilityOnly = false ) const;
 
     /**
      * Apply heuristics to try and determine a single object when multiple are found under the
