@@ -15,10 +15,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-09-13 10:58-0700\n"
-"PO-Revision-Date: 2021-09-13 17:57+0000\n"
+"PO-Revision-Date: 2021-09-20 16:15+0000\n"
 "Last-Translator: Jan Straka <bach@email.cz>\n"
-"Language-Team: Czech <https://hosted.weblate.org/projects/kicad/master-"
-"source/cs/>\n"
+"Language-Team: Czech <https://hosted.weblate.org/projects/kicad/"
+"master-source/cs/>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -396,14 +396,12 @@ msgid "Environment Colors"
 msgstr "Barvy prostředí"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:30
-#, fuzzy
 msgid "Background gradient start:"
-msgstr "Dolní reference začíná:"
+msgstr "Začátek gradientu pozadí:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:37
-#, fuzzy
 msgid "Background gradient end:"
-msgstr "Bílé pozadí"
+msgstr "Konec gradientu pozadí:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:50
 msgid "Solder paste:"
@@ -416,7 +414,7 @@ msgstr "Barva desky"
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:66
 #, fuzzy
 msgid "Use board stackup colors"
-msgstr "omezení nastavení desky"
+msgstr "Použít barvy ze zásobníku vrstev"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:69
 msgid "Use colors:"
@@ -5408,9 +5406,8 @@ msgstr "Nelze otevřít soubor '%s'"
 
 #: common/plugins/cadstar/cadstar_archive_parser.cpp:2348
 #: common/plugins/cadstar/cadstar_archive_parser.cpp:2647
-#, fuzzy
 msgid "File import cancelled by user."
-msgstr "Otevírání zrušeno uživatelem."
+msgstr "Import souborů zrušen uživatelem."
 
 #: common/plugins/cadstar/cadstar_archive_parser.cpp:2365
 #: common/plugins/cadstar/cadstar_archive_parser.cpp:2383
@@ -12026,9 +12023,8 @@ msgid "Color Theme"
 msgstr "Barevné téma"
 
 #: eeschema/dialogs/panel_sym_color_settings_base.cpp:25
-#, fuzzy
 msgid "Use schematic editor color theme"
-msgstr "Použijte barevné téma Eeschema"
+msgstr "Použít barevné téma editoru schémat"
 
 #: eeschema/dialogs/panel_sym_color_settings_base.cpp:31
 msgid "Use theme:"
@@ -13764,9 +13760,8 @@ msgid "Invalid library identifier"
 msgstr "Neplatný identifikátor knihovny"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:251
-#, fuzzy
 msgid "Invalid parent symbol name"
-msgstr "Neplatné jméno signálu"
+msgstr "Neplatný název nadřazeného symbolu"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:260
 #, c-format
@@ -13788,9 +13783,9 @@ msgid "Invalid symbol unit name suffix %s"
 msgstr "Nesprávná přípona %s ve jménu jednotky"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:299
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid symbol unit number %s"
-msgstr "Neplatný identifikátor knihovny symbolů"
+msgstr "Neplatné číslo jednotky %s symbolu"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:307
 #, c-format
@@ -13810,9 +13805,8 @@ msgid "Missing floating point number"
 msgstr "Chybí plovoucí číslo"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:749
-#, fuzzy
 msgid "Invalid pin names definition"
-msgstr "Definice obvodu desky"
+msgstr "Neplatná definice názvů vývodů"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:771
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1717
@@ -13838,9 +13832,8 @@ msgid "Invalid pin number"
 msgstr "Neplatné číslo vývodu"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1351
-#, fuzzy
 msgid "Invalid alternate pin name"
-msgstr "Alternativní název vývodu"
+msgstr "Neplatný alternativní název vývodu"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1516
 msgid "Invalid text string"
@@ -13859,19 +13852,16 @@ msgid "Invalid sheet pin name"
 msgstr "Neplatný název vývodu listu"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1798
-#, fuzzy
 msgid "Empty sheet pin name"
-msgstr "Importovat vývody listu"
+msgstr "Prázdný název vývodu listu"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:2249
-#, fuzzy
 msgid "Invalid symbol library name"
-msgstr "Neplatný identifikátor knihovny symbolů"
+msgstr "Neplatný název knihovny symbolů"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:2269
-#, fuzzy
 msgid "Invalid symbol library ID"
-msgstr "Neplatný identifikátor knihovny symbolů"
+msgstr "Neplatný ID knihovny symbolů"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_plugin.cpp:1513
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:2601
@@ -18306,14 +18296,12 @@ msgid "Pick a package on the left panel to view it's description."
 msgstr ""
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:342
-#, fuzzy
 msgid "Package download url is not specified"
-msgstr "Proto páry vrstev nelze určit."
+msgstr "URL stahování balíčků není zadán"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:343
-#, fuzzy
 msgid "Error downloading package"
-msgstr "Chyba při načítání editoru."
+msgstr "Chyba stahování balíčku"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:352
 #, fuzzy
@@ -18395,9 +18383,8 @@ msgid "Downloading %lld/%lld Kb"
 msgstr "Stáhnout %lld/%lld Kb"
 
 #: kicad/pcm/pcm.cpp:211
-#, fuzzy
 msgid "Download is too large."
-msgstr "Nahrávám 3D knihovny"
+msgstr "Stahování je příliš dlouhé."
 
 #: kicad/pcm/pcm.cpp:225
 #, fuzzy
@@ -18425,23 +18412,23 @@ msgid "Fetching repository packages"
 msgstr ""
 
 #: kicad/pcm/pcm.cpp:267
-#, fuzzy
 msgid "Unable to load repository packages url."
-msgstr "Nelze načíst soubor \"%s\" projektu"
+msgstr "Nelze načíst adresu URL repozitáře balíčků."
 
 #: kicad/pcm/pcm.cpp:275
 msgid "Packages hash doesn't match. Repository may be corrupted."
 msgstr ""
 
 #: kicad/pcm/pcm.cpp:291
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Unable to parse packages metadata:\n"
 "\n"
 "%s"
 msgstr ""
-"Adresa URL nelze analyzovat:\n"
-"\"%s\""
+"Nelze analyzovat metadata balíčku:\n"
+"\n"
+"%s"
 
 #: kicad/pcm/pcm.cpp:378
 msgid ""
@@ -18491,25 +18478,28 @@ msgid "Downloading package url: '%s'"
 msgstr ""
 
 #: kicad/pcm/pcm_task_manager.cpp:170
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Failed to download url %s\n"
 "%s"
-msgstr "Nepodařilo se načíst '%s'."
+msgstr ""
+"Nepodařilo se o stažení adresy url %s\n"
+"%s"
 
 #: kicad/pcm/pcm_task_manager.cpp:249
 msgid "Aborting package installation."
 msgstr "Přerušení instalace balíčku."
 
 #: kicad/pcm/pcm_task_manager.cpp:297
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Unable to parse package metadata:\n"
 "\n"
 "%s"
 msgstr ""
-"Adresa URL nelze analyzovat:\n"
-"\"%s\""
+"Nelze analyzovat metadata balíčku:\n"
+"\n"
+"%s"
 
 #: kicad/pcm/pcm_task_manager.cpp:306
 msgid "Archive does not contain a valid metadata.json file"
@@ -18731,9 +18721,8 @@ msgid "Open Demo Project..."
 msgstr "Otevřít Demo projekt..."
 
 #: kicad/tools/kicad_manager_actions.cpp:52
-#, fuzzy
 msgid "Open a demo project"
-msgstr "Otevřít existující projekt"
+msgstr "Otevřít demo projekt"
 
 #: kicad/tools/kicad_manager_actions.cpp:57
 msgid "Open Project..."
@@ -19025,19 +19014,16 @@ msgid "These build-in keywords are always available:"
 msgstr ""
 
 #: pagelayout_editor/dialogs/properties_frame.cpp:564
-#, fuzzy
 msgid "(sheet number)"
-msgstr "List číslo: %d"
+msgstr "(číslo listu)"
 
 #: pagelayout_editor/dialogs/properties_frame.cpp:565
-#, fuzzy
 msgid "(sheet count)"
-msgstr "Počet opakování:"
+msgstr "(počet listů)"
 
 #: pagelayout_editor/dialogs/properties_frame.cpp:571
-#, fuzzy
 msgid "(paper size)"
-msgstr "Vlastní formát papíru:"
+msgstr "(velikost papíru)"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:34
 msgid "Show on all pages"
@@ -19259,7 +19245,7 @@ msgstr "Soubor rozvržení je pouze pro čtení."
 
 #: pagelayout_editor/pl_editor_frame.cpp:100
 msgid "KiCad Drawing Sheet Editor"
-msgstr ""
+msgstr "KiCad Editor výkresu"
 
 #: pagelayout_editor/pl_editor_frame.cpp:155
 msgid "coord origin: Right Bottom page corner"
@@ -19895,6 +19881,8 @@ msgid ""
 "Zdiff =\n"
 "2*Z0( (1 - 0.48exp( -0.96*S/H ) )"
 msgstr ""
+"Zdiff =\n"
+"2*Z0( (1 - 0.48exp( -0.96*S/H ) )"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:901
 msgid "Zcommon = Zeven / 2"
@@ -20701,9 +20689,8 @@ msgid "Dielectric losses (odd):"
 msgstr "Dielektrické ztráty (odd):"
 
 #: pcb_calculator/transline_ident.cpp:309
-#, fuzzy
 msgid "Differential Impedance (Zd):"
-msgstr "Mezera diferenciálního páru"
+msgstr "Diferenciální impedance (Zd):"
 
 #: pcb_calculator/transline_ident.cpp:334
 msgid "Zeven"
@@ -21029,9 +21016,8 @@ msgid "Enter expected board thickness (min value %s):"
 msgstr "Zadejte očekávanou tloušťku desky (min hodnota %s):"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:197
-#, fuzzy
 msgid "Adjust Unlocked Dielectric Layers"
-msgstr "Přidat dielektrickou vrstvu"
+msgstr "Upravit odemčené dielektrické vrstvy"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:208
 #, c-format
@@ -21188,19 +21174,16 @@ msgid "Id"
 msgstr "Id"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:111
-#, fuzzy
 msgid "Loss Tan"
-msgstr "Loss Tg"
+msgstr "Loss Tan"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:132
-#, fuzzy
 msgid "Board thickness from stackup:"
-msgstr "Tloušťka desky:"
+msgstr "Tloušťka desky ze zásobníku vrstev:"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:139
-#, fuzzy
 msgid "Adjust Dielectric Thickness"
-msgstr "Nastavit dielektrickou tloušťku"
+msgstr "Upravit dielektrickou tloušťku"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:39
 msgid "ENIG"
@@ -21419,7 +21402,7 @@ msgstr "Znova očíslování DPS"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:285
 msgid "No PCB to reannotate!"
-msgstr ""
+msgstr "Žádná DPS k přečíslování!"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:297
 msgid "PCB successfully reannotated"
@@ -23618,7 +23601,7 @@ msgstr "Najít předchozí"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:101
 msgid "Restart Search"
-msgstr ""
+msgstr "Restartovat vyhledávání"
 
 #: pcbnew/dialogs/dialog_footprint_checker.cpp:50
 msgid "Run Checks"
@@ -24736,7 +24719,7 @@ msgstr "Vlastnosti grafické položky"
 
 #: pcbnew/dialogs/dialog_group_properties.cpp:117
 msgid "Modified group"
-msgstr ""
+msgstr "Upravená skupina"
 
 #: pcbnew/dialogs/dialog_group_properties_base.cpp:28
 msgid "Group name:"
