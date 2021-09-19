@@ -242,15 +242,13 @@ int PLACEFILE_GERBER_WRITER::CreatePlaceFile( wxString& aFullFilename, PCB_LAYER
                 gbr_metadata.SetNetAttribType( GBR_NETLIST_METADATA::GBR_NETINFO_PAD );
 
                 // Flashes a diamond at pad position:
-                plotter.FlashRegularPolygon( pad1->GetPosition(),
-                                             pad1_mark_size,
-                                             4, 0.0, FILLED, &gbr_metadata );
+                plotter.FlashRegularPolygon( pad1->GetPosition(), pad1_mark_size, 4, 0.0, FILLED,
+                                             &gbr_metadata );
             }
         }
 
         if( m_plotOtherPadsMarker )
         {
-
             gbr_metadata.SetApertureAttrib(
                     GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_PADOTHER_POSITION );
             gbr_metadata.SetNetAttribType( GBR_NETLIST_METADATA::GBR_NETINFO_PAD );
@@ -281,9 +279,8 @@ int PLACEFILE_GERBER_WRITER::CreatePlaceFile( wxString& aFullFilename, PCB_LAYER
                 gbr_metadata.SetPadPinFunction( pad->GetPinFunction(), allowUtf8, true );
 
                 // Flashes a round, 0 sized round shape at pad position
-                plotter.FlashPadCircle( pad->GetPosition(),
-                                        other_pads_mark_size,
-                                        FILLED, &gbr_metadata );
+                plotter.FlashPadCircle( pad->GetPosition(), other_pads_mark_size, FILLED,
+                                        &gbr_metadata );
             }
         }
 
