@@ -474,6 +474,4 @@ void DIALOG_GENDRILL::OnGenReportFile( wxCommandEvent& event )
         msg.Printf( _( "Report file '%s' created." ), dlg.GetPath() );
         m_messagesBox->AppendText( msg );
     }
-
-    m_messagesBox->AppendText( _( "Done." ) );
 }

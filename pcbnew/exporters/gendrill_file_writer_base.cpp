@@ -352,7 +352,7 @@ void GENDRILL_WRITER_BASE::CreateMapFilesSet( const wxString& aPlotDirectory,
                 if( aReporter )
                 {
                     msg.Printf( _( "Created file '%s'." ), fullfilename );
-                    aReporter->Report( msg, RPT_SEVERITY_INFO );
+                    aReporter->Report( msg, RPT_SEVERITY_ACTION );
                 }
             }
         }

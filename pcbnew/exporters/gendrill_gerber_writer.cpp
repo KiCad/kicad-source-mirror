@@ -109,7 +109,7 @@ void GERBER_WRITER::CreateDrillandMapFilesSet( const wxString& aPlotDirectory, b
                     if( aReporter )
                     {
                         msg.Printf( _( "Created file '%s'." ), fullFilename );
-                        aReporter->Report( msg, RPT_SEVERITY_INFO );
+                        aReporter->Report( msg, RPT_SEVERITY_ACTION );
                     }
                 }
 
@@ -119,6 +119,8 @@ void GERBER_WRITER::CreateDrillandMapFilesSet( const wxString& aPlotDirectory, b
 
     if( aGenMap )
         CreateMapFilesSet( aPlotDirectory, aReporter );
+
+    aReporter->ReportTail( _( "Done." ), RPT_SEVERITY_INFO );
 }
 
 

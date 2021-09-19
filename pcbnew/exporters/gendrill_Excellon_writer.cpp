@@ -125,7 +125,7 @@ void EXCELLON_WRITER::CreateDrillandMapFilesSet( const wxString& aPlotDirectory,
                     if( aReporter )
                     {
                         msg.Printf( _( "Created file '%s'" ), fullFilename );
-                        aReporter->Report( msg, RPT_SEVERITY_INFO );
+                        aReporter->Report( msg, RPT_SEVERITY_ACTION );
                     }
                 }
 
@@ -148,6 +148,8 @@ void EXCELLON_WRITER::CreateDrillandMapFilesSet( const wxString& aPlotDirectory,
 
     if( aGenMap )
         CreateMapFilesSet( aPlotDirectory, aReporter );
+
+    aReporter->ReportTail( _( "Done." ), RPT_SEVERITY_INFO );
 }
 
 
