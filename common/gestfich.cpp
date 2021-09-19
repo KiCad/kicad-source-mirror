@@ -39,7 +39,7 @@
 #include <core/arraydim.h>
 #include <gestfich.h>
 
-void AddDelimiterString( wxString& string )
+void QuoteString( wxString& string )
 {
     if( !string.StartsWith( wxT( "\"" ) ) )
     {
@@ -112,22 +112,34 @@ wxString FindKicadFile( const wxString& shortname )
 }
 
 
-int ExecuteFile( wxWindow* frame, const wxString& ExecFile, const wxString& param,
-                 wxProcess *callback )
+int ExecuteFile( const wxString& ExecFile, const wxString& param, wxProcess *callback )
 {
-    wxString fullFileName = FindKicadFile( ExecFile );
+    wxString fullFileName;
+    wxString fullParams;
+    int      space = ExecFile.Find( ' ' );
+
+    if( space > 0 && !ExecFile.Contains( "\"" ) && !ExecFile.Contains( "\'" ) )
+    {
+        fullFileName = FindKicadFile( ExecFile.Mid( 0, space ) );
+        fullParams = ExecFile.Mid( space + 1 ) + wxS( " " ) + param;
+    }
+    else
+    {
+        fullFileName = FindKicadFile( ExecFile );
+        fullParams = param;
+    }
 
     if( wxFileExists( fullFileName ) )
     {
-        if( !param.IsEmpty() )
-            fullFileName += wxT( " " ) + param;
+        if( !fullParams.IsEmpty() )
+            fullFileName += wxS( " " ) + fullParams;
 
         return ProcessExecute( fullFileName, wxEXEC_ASYNC, callback );
     }
 #ifdef __WXMAC__
     else
     {
-        AddDelimiterString( fullFileName );
+        QuoteString( fullFileName );
 
         if( !param.IsEmpty() )
             fullFileName += wxT( " " ) + param;
@@ -135,11 +147,6 @@ int ExecuteFile( wxWindow* frame, const wxString& ExecFile, const wxString& para
         return ProcessExecute( wxT( "/usr/bin/open -a " ) + fullFileName, wxEXEC_ASYNC, callback );
     }
 #endif
-
-    wxString msg;
-    msg.Printf( _( "Command '%s' could not be found." ), fullFileName );
-    DisplayError( frame, msg, 20 );
-    return -1;
 }
 
 

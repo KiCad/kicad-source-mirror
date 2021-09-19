@@ -1506,7 +1506,7 @@ void PCB_EDIT_FRAME::RunEeschema()
     if( Kiface().IsSingle() )
     {
         wxString filename = wxT( "\"" ) + schematic.GetFullPath( wxPATH_NATIVE ) + wxT( "\"" );
-        ExecuteFile( this, EESCHEMA_EXE, filename );
+        ExecuteFile( EESCHEMA_EXE, filename );
     }
     else
     {

@@ -440,11 +440,11 @@ void DIALOG_BOM::OnEditGenerator( wxCommandEvent& event )
         return;
     }
 
-    AddDelimiterString( pluginFile );
-    wxString editorname = Pgm().GetEditorName();
+    QuoteString( pluginFile );
+    wxString editorname = Pgm().GetTextEditor();
 
     if( !editorname.IsEmpty() )
-        ExecuteFile( this, editorname, pluginFile );
+        ExecuteFile( editorname, pluginFile );
     else
         wxMessageBox( _( "No text editor selected in KiCad.  Please choose one." ) );
 }

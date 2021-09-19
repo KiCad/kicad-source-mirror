@@ -109,7 +109,7 @@ public:
     struct SYSTEM
     {
         int autosave_interval;
-        wxString editor_name;
+        wxString text_editor;
         int file_history_size;
         wxString language;
         wxString pdf_viewer_name;

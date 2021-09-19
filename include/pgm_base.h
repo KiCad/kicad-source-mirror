@@ -130,10 +130,10 @@ public:
 
     virtual COMMON_SETTINGS* GetCommonSettings() const;
 
-    virtual void SetEditorName( const wxString& aFileName );
+    virtual void SetTextEditor( const wxString& aFileName );
 
     /**
-     * Return the preferred editor name.
+     * Return the path to the preferred text editor application.
      *
      * @param   aCanShowFileChooser If no editor is currently set and this argument is
      *          'true' then this method will show a file chooser dialog asking for the
@@ -141,7 +141,7 @@ public:
      * @return  Returns the full path of the editor, or an empty string if no editor has
      *          been set.
      */
-    virtual const wxString& GetEditorName( bool aCanShowFileChooser = true );
+    virtual const wxString& GetTextEditor( bool aCanShowFileChooser = true );
 
     /**
      * Shows a dialog that instructs the user to select a new preferred editor.
@@ -306,29 +306,21 @@ protected:
      */
     bool setExecutablePath();
 
+protected:
     std::unique_ptr<SETTINGS_MANAGER> m_settings_manager;
 
     std::unique_ptr<SCRIPTING> m_python_scripting;
 
-    /// full path to this program
-    wxString        m_bin_dir;
+    wxString        m_bin_dir;                /// full path to this program
+    wxString        m_kicad_env;              /// The KICAD system environment variable.
 
-    /// The KICAD system environment variable.
-    wxString        m_kicad_env;
-
-    /// The current locale.
     wxLocale*       m_locale;
-
-    /// The current language setting.
     int             m_language_id;
 
-    /// true to use the selected PDF browser, if exists, or false to use the default
     bool            m_use_system_pdf_browser;
+    wxString        m_pdf_browser;            /// Filename of the app selected for browsing PDFs
 
-    /// The file name of the the program selected for browsing pdf files.
-    wxString        m_pdf_browser;
-    wxString        m_editor_name;
-
+    wxString        m_text_editor;
 };
 
 

@@ -22,16 +22,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * This file is part of the common library
- * TODO brief description
- * @file  gestfich.h
- * @see   common.h
- */
-
-
-#ifndef __INCLUDE__GESTFICH_H__
-#define __INCLUDE__GESTFICH_H__ 1
+#ifndef GESTFICH_H
+#define GESTFICH_H
 
 #include <wx/filename.h>
 #include <wx/process.h>
@@ -69,15 +61,15 @@ void KiCopyFile( const wxString& aSrcPath, const wxString& aDestPath, wxString& 
 /**
  * Call the executable file \a ExecFile with the command line parameters \a param.
  */
-int ExecuteFile( wxWindow* frame, const wxString& ExecFile,
-                 const wxString& param = wxEmptyString, wxProcess* callback = nullptr );
+int ExecuteFile( const wxString& ExecFile, const wxString& param = wxEmptyString,
+                 wxProcess* callback = nullptr );
 
 /**
  * Add un " to the start and the end of string (if not already done).
  *
  * @param string string to modify.
  */
-void AddDelimiterString( wxString& string );
+void QuoteString( wxString& string );
 
 /**
  * Search the executable file shortname in KiCad binary path and return full file
@@ -103,4 +95,4 @@ wxString FindKicadFile( const wxString& shortname );
  */
 extern wxString QuoteFullPath( wxFileName& fn, wxPathFormat format = wxPATH_NATIVE );
 
-#endif /* __INCLUDE__GESTFICH_H__ */
+#endif /* GESTFICH_H */

@@ -980,7 +980,7 @@ void SCH_EDIT_FRAME::OnOpenPcbnew( wxCommandEvent& event )
         if( Kiface().IsSingle() )
         {
             wxString filename = QuoteFullPath( boardfn );
-            ExecuteFile( this, PCBNEW_EXE, filename );
+            ExecuteFile( PCBNEW_EXE, filename );
         }
         else
         {
@@ -1006,7 +1006,7 @@ void SCH_EDIT_FRAME::OnOpenPcbnew( wxCommandEvent& event )
     {
         // If we are running inside a project, it should be impossible for this case to happen
         wxASSERT( Kiface().IsSingle() );
-        ExecuteFile( this, PCBNEW_EXE );
+        ExecuteFile( PCBNEW_EXE );
     }
 }
 

@@ -280,8 +280,13 @@ COMMON_SETTINGS::COMMON_SETTINGS() :
     m_params.emplace_back( new PARAM<int>( "system.autosave_interval",
             &m_System.autosave_interval, 600 ) );
 
-    m_params.emplace_back( new PARAM<wxString>( "system.editor_name",
-            &m_System.editor_name, "" ) );
+#ifdef __WXMAC__
+    m_params.emplace_back( new PARAM<wxString>( "system.text_editor",
+            &m_System.text_editor, "/usr/bin/open -e" ) );
+#else
+    m_params.emplace_back( new PARAM<wxString>( "system.text_editor",
+            &m_System.text_editor, "" ) );
+#endif
 
     m_params.emplace_back( new PARAM<int>( "system.file_history_size",
             &m_System.file_history_size, 9 ) );

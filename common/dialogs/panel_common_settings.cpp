@@ -235,7 +235,7 @@ bool PANEL_COMMON_SETTINGS::TransferDataToWindow()
     applySettingsToPanel( *commonSettings );
 
     // TODO(JE) Move these into COMMON_SETTINGS probably
-    m_textEditorPath->SetValue( Pgm().GetEditorName( false ) );
+    m_textEditorPath->SetValue( Pgm().GetTextEditor( false ) );
     m_defaultPDFViewer->SetValue( Pgm().UseSystemPdfBrowser() );
     m_otherPDFViewer->SetValue( !Pgm().UseSystemPdfBrowser() );
     m_PDFViewerPath->SetValue( Pgm().GetPdfBrowserName() );
@@ -289,7 +289,7 @@ bool PANEL_COMMON_SETTINGS::TransferDataFromWindow()
 
     commonSettings->m_Session.remember_open_files = m_cbRememberOpenFiles->GetValue();
 
-    Pgm().SetEditorName( m_textEditorPath->GetValue() );
+    Pgm().SetTextEditor( m_textEditorPath->GetValue());
 
     Pgm().SetPdfBrowserName( m_PDFViewerPath->GetValue() );
     Pgm().ForceSystemPdfBrowser( m_defaultPDFViewer->GetValue() );
@@ -310,7 +310,7 @@ void PANEL_COMMON_SETTINGS::ResetPanel()
     applySettingsToPanel( defaultSettings );
 
     // TODO(JE) Move these into COMMON_SETTINGS probably
-    m_textEditorPath->SetValue( defaultSettings.m_System.editor_name );
+    m_textEditorPath->SetValue( defaultSettings.m_System.text_editor );
     m_defaultPDFViewer->SetValue( defaultSettings.m_System.use_system_pdf_viewer );
     m_otherPDFViewer->SetValue( !defaultSettings.m_System.use_system_pdf_viewer );
     m_PDFViewerPath->SetValue( defaultSettings.m_System.pdf_viewer_name );
@@ -430,7 +430,7 @@ void PANEL_COMMON_SETTINGS::OnTextEditorClick( wxCommandEvent& event )
     // Ask the user to select a new editor, but suggest the current one as the default.
     wxString editorname = Pgm().AskUserForPreferredEditor( m_textEditorPath->GetValue() );
 
-    // If we have a new editor name request it to be copied to m_editor_name and saved
+    // If we have a new editor name request it to be copied to m_text_editor and saved
     // to the preferences file. If the user cancelled the dialog then the previous
     // value will be retained.
     if( !editorname.IsEmpty() )

@@ -135,17 +135,16 @@ wxApp& PGM_BASE::App()
 }
 
 
-void PGM_BASE::SetEditorName( const wxString& aFileName )
+void PGM_BASE::SetTextEditor( const wxString& aFileName )
 {
-    m_editor_name = aFileName;
-    wxASSERT( GetCommonSettings() );
-    GetCommonSettings()->m_System.editor_name = aFileName;
+    m_text_editor = aFileName;
+    GetCommonSettings()->m_System.text_editor = aFileName;
 }
 
 
-const wxString& PGM_BASE::GetEditorName( bool aCanShowFileChooser )
+const wxString& PGM_BASE::GetTextEditor( bool aCanShowFileChooser )
 {
-    wxString editorname = m_editor_name;
+    wxString editorname = m_text_editor;
 
     if( !editorname )
     {
@@ -153,7 +152,7 @@ const wxString& PGM_BASE::GetEditorName( bool aCanShowFileChooser )
         {
             // If there is no EDITOR variable set, try the desktop default
 #ifdef __WXMAC__
-            editorname = "/usr/bin/open";
+            editorname = "/usr/bin/open -e";
 #elif __WXX11__
             editorname = "/usr/bin/xdg-open";
 #endif
@@ -163,19 +162,19 @@ const wxString& PGM_BASE::GetEditorName( bool aCanShowFileChooser )
     // If we still don't have an editor name show a dialog asking the user to select one
     if( !editorname && aCanShowFileChooser )
     {
-        DisplayInfoMessage( nullptr, _( "No default editor found, you must choose it" ) );
+        DisplayInfoMessage( nullptr, _( "No default editor found, you must choose one." ) );
 
         editorname = AskUserForPreferredEditor();
     }
 
-    // If we finally have a new editor name request it to be copied to m_editor_name and
+    // If we finally have a new editor name request it to be copied to m_text_editor and
     // saved to the preferences file.
     if( !editorname.IsEmpty() )
-        SetEditorName( editorname );
+        SetTextEditor( editorname );
 
-    // m_editor_name already has the same value that editorname, or empty if no editor was
+    // m_text_editor already has the same value that editorname, or empty if no editor was
     // found/chosen.
-    return m_editor_name;
+    return m_text_editor;
 }
 
 
@@ -344,7 +343,7 @@ bool PGM_BASE::setExecutablePath()
 
 void PGM_BASE::loadCommonSettings()
 {
-    m_editor_name = GetCommonSettings()->m_System.editor_name;
+    m_text_editor = GetCommonSettings()->m_System.text_editor;
 
     for( const std::pair<wxString, ENV_VAR_ITEM> it : GetCommonSettings()->m_Env.vars )
     {

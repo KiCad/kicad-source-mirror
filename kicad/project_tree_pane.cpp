@@ -817,10 +817,13 @@ void PROJECT_TREE_PANE::onRight( wxTreeEvent& Event )
 
 void PROJECT_TREE_PANE::onOpenSelectedFileWithTextEditor( wxCommandEvent& event )
 {
-    wxString editorname = Pgm().GetEditorName();
+    wxString editorname = Pgm().GetTextEditor();
 
     if( editorname.IsEmpty() )
+    {
+        wxMessageBox( _( "No text editor selected in KiCad.  Please choose one." ) );
         return;
+    }
 
     std::vector<PROJECT_TREE_ITEM*> tree_data = GetSelectedData();
 
@@ -829,7 +832,7 @@ void PROJECT_TREE_PANE::onOpenSelectedFileWithTextEditor( wxCommandEvent& event 
     for( PROJECT_TREE_ITEM* item_data : tree_data )
     {
         wxString fullFileName = item_data->GetFileName();
-        AddDelimiterString( fullFileName );
+        QuoteString( fullFileName );
 
         if( !files.IsEmpty() )
             files += " ";
@@ -837,7 +840,7 @@ void PROJECT_TREE_PANE::onOpenSelectedFileWithTextEditor( wxCommandEvent& event 
         files += fullFileName;
     }
 
-    ExecuteFile( this, editorname, files );
+    ExecuteFile( editorname, files );
 }
 
 

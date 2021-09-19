@@ -751,7 +751,7 @@ int KICAD_MANAGER_CONTROL::Execute( const TOOL_EVENT& aEvent )
     else if( aEvent.IsAction( &KICAD_MANAGER_ACTIONS::editDrawingSheet ) )
         execFile = PL_EDITOR_EXE;
     else if( aEvent.IsAction( &KICAD_MANAGER_ACTIONS::openTextEditor ) )
-        execFile = Pgm().GetEditorName();
+        execFile = Pgm().GetTextEditor();
     else if( aEvent.IsAction( &KICAD_MANAGER_ACTIONS::editOtherSch ) )
         execFile = EESCHEMA_EXE;
     else if( aEvent.IsAction( &KICAD_MANAGER_ACTIONS::editOtherPCB ) )
@@ -777,11 +777,11 @@ int KICAD_MANAGER_CONTROL::Execute( const TOOL_EVENT& aEvent )
         params = m_frame->Prj().GetProjectPath();
 
     if( !params.empty() )
-        AddDelimiterString( params );
+        QuoteString( params );
 
     TERMINATE_HANDLER* callback = new TERMINATE_HANDLER( execFile );
 
-    long pid = ExecuteFile( m_frame, execFile, params, callback );
+    long pid = ExecuteFile( execFile, params, callback );
 
     if( pid > 0 )
     {

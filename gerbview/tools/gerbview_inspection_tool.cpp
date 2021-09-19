@@ -160,7 +160,7 @@ int GERBVIEW_INSPECTION_TOOL::ShowSource( const TOOL_EVENT& aEvent )
 
     if( gerber_layer )
     {
-        wxString editorname = Pgm().GetEditorName();
+        wxString editorname = Pgm().GetTextEditor();
 
         if( !editorname.IsEmpty() )
         {
@@ -177,12 +177,12 @@ int GERBVIEW_INSPECTION_TOOL::ShowSource( const TOOL_EVENT& aEvent )
             }
             else
             {
-                ExecuteFile( m_frame, editorname, QuoteFullPath( fn ) );
+                ExecuteFile( editorname, QuoteFullPath( fn ) );
             }
         }
         else
         {
-            wxMessageBox( _( "No editor defined. Please select one." ) );
+            wxMessageBox( _( "No text editor selected in KiCad.  Please choose one." ) );
         }
     }
     else

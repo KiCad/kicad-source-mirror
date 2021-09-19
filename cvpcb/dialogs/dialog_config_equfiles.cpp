@@ -96,11 +96,11 @@ void DIALOG_CONFIG_EQUFILES::Init()
 
 void DIALOG_CONFIG_EQUFILES::OnEditEquFile( wxCommandEvent& event )
 {
-    wxString    editorname = Pgm().GetEditorName();
+    wxString    editorname = Pgm().GetTextEditor();
 
     if( editorname.IsEmpty() )
     {
-        wxMessageBox( _( "No editor defined in KiCad. Please choose it." ) );
+        wxMessageBox( _( "No text editor selected in KiCad.  Please choose one." ) );
         return;
     }
 
@@ -116,7 +116,7 @@ void DIALOG_CONFIG_EQUFILES::OnEditEquFile( wxCommandEvent& event )
         m_ListChanged = true;
     }
 
-    ExecuteFile( this, editorname, fullFileNames );
+    ExecuteFile( editorname, fullFileNames );
 }
 
 
