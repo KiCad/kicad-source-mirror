@@ -120,9 +120,8 @@ bool KICADPAD::parseDrill( const SEXPR::SEXPR* aDrill )
 
     if( child->IsSymbol() )
     {
-        if( child->GetSymbol() == "oval" && nchild >= 4 )
+        if( child->GetSymbol() == "oval" )
         {
-            m_drill.oval = true;
             child = aDrill->GetChild( ++idx );
         }
         else
@@ -182,6 +181,9 @@ bool KICADPAD::parseDrill( const SEXPR::SEXPR* aDrill )
             }
 
             m_drill.size.y = y;
+
+            if( m_drill.size.y != m_drill.size.x )
+                m_drill.oval = true;
         }
     }
 
