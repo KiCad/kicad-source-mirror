@@ -37,7 +37,7 @@ void LaunchExternal( const wxString& aPath )
     // Not needed on 3.1.4, but needed in 3.0 versions
     // Moreover, on Linux, on 3.1.4 wx version, adding quotes breaks
     // wxLaunchDefaultApplication
-    AddDelimiterString( path );
+    QuoteString( path );
 #endif
 
     wxLaunchDefaultApplication( path );

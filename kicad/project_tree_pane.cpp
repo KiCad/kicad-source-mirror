@@ -230,7 +230,7 @@ void PROJECT_TREE_PANE::onOpenDirectory( wxCommandEvent& event )
         // Not needed on 3.1.4, but needed in 3.0 versions
         // Moreover, on Linux, on 3.1.4 wx version, adding quotes breaks
         // wxLaunchDefaultApplication
-        AddDelimiterString( curr_dir );
+        QuoteString( curr_dir );
     #endif
 
         wxLaunchDefaultApplication( curr_dir );
