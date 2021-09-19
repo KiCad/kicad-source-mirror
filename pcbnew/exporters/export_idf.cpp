@@ -420,6 +420,12 @@ static void idf_export_footprint( BOARD* aPcb, FOOTPRINT* aFootprint, IDF3_BOARD
 
     while( sM != eM )
     {
+        if( !sM->m_Show )
+        {
+            ++sM;
+            continue;
+        }
+
         idfFile.Assign( resolver->ResolvePath( sM->m_Filename ) );
         idfExt = idfFile.GetExt();
 

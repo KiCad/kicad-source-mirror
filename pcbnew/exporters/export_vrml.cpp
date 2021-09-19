@@ -796,6 +796,12 @@ void EXPORTER_PCB_VRML::ExportVrmlFootprint( FOOTPRINT* aFootprint, std::ostream
 
     while( sM != eM )
     {
+        if( !sM->m_Show )
+        {
+            ++sM;
+            continue;
+        }
+
         SGNODE* mod3d = (SGNODE*) m_Cache3Dmodels->Load( sM->m_Filename );
 
         if( nullptr == mod3d )
