@@ -1366,18 +1366,22 @@ void SCH_EDIT_FRAME::RecomputeIntersheetRefs()
 
     bool show = Schematic().Settings().m_IntersheetRefsShow;
 
-    /* Refresh all global labels */
-    for( EDA_ITEM* item : GetScreen()->Items().OfType( SCH_GLOBAL_LABEL_T ) )
-    {
-        SCH_GLOBALLABEL* gLabel = (SCH_GLOBALLABEL*)( item );
-        SCH_FIELD*       intersheetRef = gLabel->GetIntersheetRefs();
+    // Refresh all global labels.  Note that we have to collect them first as the
+    // SCH_SCREEN::Update() call is going to invalidate the RTree iterator.
 
-        intersheetRef->SetVisible( show );
+    std::vector<SCH_GLOBALLABEL*> globalLabels;
+
+    for( EDA_ITEM* item : GetScreen()->Items().OfType( SCH_GLOBAL_LABEL_T ) )
+        globalLabels.push_back( static_cast<SCH_GLOBALLABEL*>( item ) );
+
+    for( SCH_GLOBALLABEL* globalLabel : globalLabels )
+    {
+        globalLabel->GetIntersheetRefs()->SetVisible( show );
 
         if( show )
         {
-            GetScreen()->Update( gLabel );
-            GetCanvas()->GetView()->Update( gLabel );
+            GetScreen()->Update( globalLabel );
+            GetCanvas()->GetView()->Update( globalLabel );
         }
     }
 }
