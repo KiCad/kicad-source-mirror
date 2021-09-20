@@ -103,7 +103,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-09-13 10:58-0700\n"
-"PO-Revision-Date: 2021-08-27 08:25+0000\n"
+"PO-Revision-Date: 2021-09-20 09:48+0200\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/master-"
 "source/it/>\n"
@@ -135,7 +135,6 @@ msgstr ""
 "X-Poedit-SearchPath-17: scripts\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
-#, fuzzy
 msgid "All Files"
 msgstr "Tutti i file"
 
@@ -499,38 +498,32 @@ msgid "Render current view using Raytracing"
 msgstr "Render della vista corrente con raytracing"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:23
-#, fuzzy
 msgid "Environment Colors"
-msgstr "Variabili ambiente"
+msgstr "Colori ambiente"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:30
-#, fuzzy
 msgid "Background gradient start:"
-msgstr "Inizio riferimento retro:"
+msgstr "Inizio gradiente sfondo:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:37
-#, fuzzy
 msgid "Background gradient end:"
-msgstr "Sfondo sopra:"
+msgstr "Fine gradiente sfondo:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:50
 msgid "Solder paste:"
 msgstr "Pasta salda:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:64
-#, fuzzy
 msgid "Board Colors"
-msgstr "Colore corpo scheda"
+msgstr "Colori scheda"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:66
-#, fuzzy
 msgid "Use board stackup colors"
-msgstr "Inserisci tabella stack-up scheda"
+msgstr "Usa i colori dello stack-up scheda"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:69
-#, fuzzy
 msgid "Use colors:"
-msgstr "Colori collegamenti:"
+msgstr "Usa colori:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:77
 msgid "Silkscreen top:"
@@ -1069,30 +1062,24 @@ msgid "Toggle Through Hole 3D models"
 msgstr "Commuta modelli 3D a via passanti"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:213
-#, fuzzy
 msgid "Toggle 3D models for 'Through hole' type components"
-msgstr ""
-"Commuta la visualizzasione dei modelli 3D con attributo \"Via passante\""
+msgstr "Commuta modelli 3D del tipo componenti 'Foro passante'"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:219
 msgid "Toggle SMD 3D models"
 msgstr "Commuta modelli 3D SMD"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:219
-#, fuzzy
 msgid "Toggle 3D models for 'Surface mount' type components"
-msgstr ""
-"Commuta la visualizzazione dei modelli 3D con attributo \"Montaggio "
-"superficiale\""
+msgstr "Commuta modelli 3D del tipo 'Montaggio superficiale'"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:225
-#, fuzzy
 msgid "Toggle Other 3D models"
-msgstr "Commuta modelli 3D SMD"
+msgstr "Commuta altri modelli 3D"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:225
 msgid "Toggle 3D models for 'Other' type components"
-msgstr ""
+msgstr "Commuta modelli 3D del tipo 'Altro'"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:230
 msgid "Show Model Bounding Boxes"
@@ -1405,9 +1392,8 @@ msgid "Export to Clipboard"
 msgstr "Esporta sugli appunti"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:158
-#, fuzzy
 msgid "Symbol (.kicad_sym file)"
-msgstr "Simbolo (file .lib)"
+msgstr "Simbolo (file .kicad_sym)"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:158
 msgid "Footprint (.kicad_mod file)"
@@ -1617,13 +1603,12 @@ msgid "Warning"
 msgstr "Attenzione"
 
 #: common/confirm.cpp:160 common/confirm.cpp:166
-#, fuzzy
 msgid "File Open Error"
-msgstr "Errore salvataggio file"
+msgstr "Errore apertura file"
 
 #: common/confirm.cpp:162 common/confirm.cpp:168
 msgid "Interleaved saves may produce very unexpected results."
-msgstr ""
+msgstr "Salvataggi intrecciati possono condurre a risultati molto stani."
 
 #: common/confirm.cpp:164 common/confirm.cpp:169 common/confirm.cpp:251
 #: gerbview/dialogs/dialog_select_one_pcb_layer.cpp:164
@@ -1632,9 +1617,8 @@ msgid "OK"
 msgstr "OK"
 
 #: common/confirm.cpp:164 common/confirm.cpp:169
-#, fuzzy
 msgid "Open Anyway"
-msgstr "Salva comunque"
+msgstr "Apri comunque"
 
 #: common/confirm.cpp:180 common/confirm.cpp:209
 msgid "Save Changes?"
@@ -1678,9 +1662,8 @@ msgid "Cancel"
 msgstr "Annulla"
 
 #: common/confirm.cpp:304
-#, fuzzy
 msgid "Information"
-msgstr "Conferma"
+msgstr "Informazioni"
 
 #: common/confirm.cpp:317 eeschema/symbol_editor/symbol_editor.cpp:425
 #: eeschema/symbol_editor/symbol_editor.cpp:682
@@ -1879,7 +1862,7 @@ msgstr "Copia le info di versione di KiCad negli appunti"
 
 #: common/dialog_about/dialog_about_base.cpp:63
 msgid "&Report Bug"
-msgstr "&Rapporto bug"
+msgstr "&Segnala bug"
 
 #: common/dialog_about/dialog_about_base.cpp:64 common/tool/actions.cpp:652
 msgid "Report a problem with KiCad"
@@ -3726,7 +3709,6 @@ msgid "Default"
 msgstr "Predefinita"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:84
-#, fuzzy
 msgid "Set color to transparent to use KiCad default color."
 msgstr "Imposta il colore a trasparente per usare il colore KiCad predefinito."
 
@@ -4580,7 +4562,7 @@ msgstr ""
 msgid ""
 "A directory containing 3rd party plugins, libraries and other downloadable "
 "content."
-msgstr ""
+msgstr "Una cartella contenente plugin di terze parti, librerie e altro contenuto scaricabile."
 
 #: common/env_vars.cpp:86
 msgid ""
@@ -5515,9 +5497,8 @@ msgid "No default editor found, you must choose it"
 msgstr "Nessun editor predefinito trovato, sceglierne uno"
 
 #: common/pgm_base.cpp:186 common/pgm_base.cpp:188
-#, fuzzy
 msgid "Executable file"
-msgstr "File eseguibili ("
+msgstr "File eseguibile"
 
 #: common/pgm_base.cpp:198
 msgid "Select Preferred Editor"
@@ -5560,9 +5541,8 @@ msgstr "Impossibile aprire il file \"%s\""
 
 #: common/plugins/cadstar/cadstar_archive_parser.cpp:2348
 #: common/plugins/cadstar/cadstar_archive_parser.cpp:2647
-#, fuzzy
 msgid "File import cancelled by user."
-msgstr "Apertura annullata dall'utente."
+msgstr "Importazione file annullata dall'utente."
 
 #: common/plugins/cadstar/cadstar_archive_parser.cpp:2365
 #: common/plugins/cadstar/cadstar_archive_parser.cpp:2383
@@ -8742,7 +8722,6 @@ msgid "-- leave unchanged --"
 msgstr "-- abbandona i cambiamenti --"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:229
-#, fuzzy
 msgid "H Align (fields only):"
 msgstr "Allineamento O (solo campi):"
 
@@ -8751,7 +8730,6 @@ msgid "Visible (fields only)"
 msgstr "Visibile (solo campi)"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:251
-#, fuzzy
 msgid "V Align (fields only):"
 msgstr "Allineamento V (solo campi):"
 
@@ -8777,14 +8755,12 @@ msgid "Sheet background color:"
 msgstr "Colore di sfondo del foglio:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:339
-#, fuzzy
 msgid "Junction size:"
-msgstr "Dimensione punto giunzione:"
+msgstr "Dimensione giunzione:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:353
-#, fuzzy
 msgid "Junction color:"
-msgstr "Colore selezione:"
+msgstr "Colore giunzione:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.h:110
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.h:95
@@ -8856,10 +8832,8 @@ msgid "Color:"
 msgstr "Colore:"
 
 #: eeschema/dialogs/dialog_junction_props_base.cpp:61
-#, fuzzy
 msgid "Set diameter to 0 to use schematic junction dot size."
-msgstr ""
-"Imposta la larghezza a 0 per usare le larghezze dell'editor degli schemi."
+msgstr "Imposta il diametro a 0 per usare la dimensione punto di giunzione dell'editor degli schemi."
 
 #: eeschema/dialogs/dialog_junction_props_base.cpp:65
 #: eeschema/dialogs/dialog_line_wire_bus_properties_base.cpp:80
@@ -9514,10 +9488,8 @@ msgid "Style:"
 msgstr "Stile:"
 
 #: eeschema/dialogs/dialog_line_wire_bus_properties_base.cpp:76
-#, fuzzy
 msgid "Set width to 0 to use Netclass line widths."
-msgstr ""
-"Imposta la larghezza a 0 per usare le larghezze dell'editor degli schemi."
+msgstr "Imposta la larghezza a 0 per usare le larghezze righe della netclass."
 
 #: eeschema/dialogs/dialog_line_wire_bus_properties_base.h:67
 msgid "Line, Wire & Bus Properties"
@@ -9673,26 +9645,24 @@ msgid "Alternate Pin Name"
 msgstr "Nome pin alternativo"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:145
-#, fuzzy
 msgid "Synchronized pins edit mode, and this pin is new"
-msgstr "Modalità modifica pin sincronizzata"
+msgstr "Modalità modifica pin sincronizzati, e questo pin è nuovo"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:146
 msgid ""
 "Similar pins will be automatically added to other units, if this pin is not "
 "common to all units"
-msgstr ""
+msgstr "Pin simili verranno automaticamente aggiunti ad altre unità, se questo pin non è comune a tutte le unità"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:151
-#, fuzzy
 msgid "Synchronized pins edit mode"
-msgstr "Modalità modifica pin sincronizzata"
+msgstr "Modalità modifica pin sincronizzati"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:152
 msgid ""
 "Similar pins at the same location will be edited. Pin number of other pins "
 "will be not modified"
-msgstr ""
+msgstr "Pin simili nella stessa posizione verranno modificati. Il numero pin degli altri pin non verrà modificato"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:206
 #: eeschema/dialogs/dialog_symbol_properties.cpp:334
@@ -9701,17 +9671,19 @@ msgstr "Assegnazioni pin alternative non disponibili per i simboli DeMorgan."
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:282
 msgid "This symbol only has one unit. This control has no effect."
-msgstr ""
+msgstr "Questo simbolo ha solo una unità. Questa opzione non ha effetto."
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:284
 msgid ""
 "Synchronized pin edit mode is enabled.\n"
 "Similar pins will be edited, regardless this option."
 msgstr ""
+"La modalità di modifica pin sincronizzati è abilitata.\n"
+"Pin simili verranno modificati, indipendentemente da questa opzione."
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:287
 msgid "If checked, this pin will exist in all units."
-msgstr ""
+msgstr "Se selezionata, questo pin esisterà in tutte le unità."
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:308
 msgid "Alternate pin definitions must have a name."
@@ -9731,7 +9703,7 @@ msgstr ""
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:32
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:36
 msgid "info"
-msgstr ""
+msgstr "info"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:57
 msgid "Pin &name:"
@@ -12728,18 +12700,14 @@ msgid "Schematic Files"
 msgstr "File di schema"
 
 #: eeschema/files-io.cpp:75
-#, fuzzy
 msgid "Create a new project for this schematic"
-msgstr "Crea nuovo progetto da questa scheda"
+msgstr "Crea nuovo progetto per questo schema"
 
 #: eeschema/files-io.cpp:77
-#, fuzzy
 msgid ""
 "Creating a project will enable features such as text variables, net classes, "
 "and ERC exclusions"
-msgstr ""
-"Creando un progetto si abiliteranno caratteristiche come il controllo regole "
-"di progettazione (DRC), le netclass e le preimpostazioni strati"
+msgstr "Creando un progetto si abiliteranno caratteristiche come le variabili di testo, le netclass e le esclusioni ERC"
 
 #: eeschema/files-io.cpp:124 eeschema/files-io.cpp:1137
 #, c-format
@@ -13643,9 +13611,8 @@ msgid "Storage file not fully parsed (%d bytes remaining)."
 msgstr "File magazzino non analizzato completamente (%d byte rimanenti)."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:478
-#, fuzzy
 msgid "Compile mask not currently supported."
-msgstr "Il disegno di archi sullo schema non è attualmente supportato."
+msgstr "La maschera di compilazione non è attualmente supportata."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:491
 #, c-format
@@ -13705,9 +13672,8 @@ msgid "Rounded rectangle's owner (%d) not found."
 msgstr "Proprietario rettangolo arrotondato (%d) non trovato."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1319
-#, fuzzy
 msgid "Arcs on schematic not currently supported."
-msgstr "Il disegno di archi sullo schema non è attualmente supportato."
+msgstr "Gli archi sullo schema non sono attualmente supportati."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1329
 #, c-format
@@ -13715,7 +13681,6 @@ msgid "Arc's owner (%d) not found."
 msgstr "Proprietario arco (%d) non trovato."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1355
-#, fuzzy
 msgid "Arcs in symbols cannot exceed 180 degrees."
 msgstr "Gli archi nei simboli non possono eccedere i 180 gradi."
 
@@ -15812,7 +15777,7 @@ msgstr "Crea un file SVG dal simbolo corrente"
 
 #: eeschema/tools/ee_actions.cpp:208
 msgid "Synchronized Pins Edit Mode"
-msgstr "Modalità modifica pin sincronizzata"
+msgstr "Modalità modifica pin sincronizzati"
 
 #: eeschema/tools/ee_actions.cpp:209
 msgid ""
@@ -17278,64 +17243,52 @@ msgid "Gerber files (.g* .lgr .pho)"
 msgstr "File Gerber (.g* .lgr .pho)"
 
 #: gerbview/files.cpp:145
-#, fuzzy
 msgid "Top layer"
-msgstr "Allo strato:"
+msgstr "Strato superiore"
 
 #: gerbview/files.cpp:146
-#, fuzzy
 msgid "Bottom layer"
-msgstr "Strato inferiore/retro:"
+msgstr "Strato inferiore"
 
 #: gerbview/files.cpp:147
-#, fuzzy
 msgid "Bottom solder resist"
-msgstr "Pasta salda sotto"
+msgstr "Maschera di saldatura inferiore"
 
 #: gerbview/files.cpp:148
-#, fuzzy
 msgid "Top solder resist"
-msgstr "Pasta salda sopra"
+msgstr "Maschera di saldatura superiore"
 
 #: gerbview/files.cpp:149
-#, fuzzy
 msgid "Bottom overlay"
-msgstr "Maschera di saldatura sotto"
+msgstr "Overlay sotto"
 
 #: gerbview/files.cpp:150
-#, fuzzy
 msgid "Top overlay"
-msgstr "Maschera di saldatura sopra"
+msgstr "Overlay sopra"
 
 #: gerbview/files.cpp:151
-#, fuzzy
 msgid "Bottom paste"
-msgstr "Pasta salda sotto"
+msgstr "Pasta salda inferiore"
 
 #: gerbview/files.cpp:152
-#, fuzzy
 msgid "Top paste"
-msgstr "Pasta salda sopra"
+msgstr "Pasta salda superiore"
 
 #: gerbview/files.cpp:153
-#, fuzzy
 msgid "Keep-out layer"
-msgstr "Mantieni strati &esterni"
+msgstr "Strato keep-out"
 
 #: gerbview/files.cpp:154
-#, fuzzy
 msgid "Mechanical layers"
-msgstr "Strati tecnici:"
+msgstr "Strati meccanici"
 
 #: gerbview/files.cpp:155
-#, fuzzy
 msgid "Top Pad Master"
-msgstr "Pasta salda sopra"
+msgstr "Master pad sopra"
 
 #: gerbview/files.cpp:156
-#, fuzzy
 msgid "Bottom Pad Master"
-msgstr "Pasta salda sotto"
+msgstr "Master pad sotto"
 
 #: gerbview/files.cpp:174
 msgid "Open Gerber File(s)"
@@ -17999,9 +17952,8 @@ msgid "Reset all settings on this page to their default"
 msgstr "Reimposta tutte le impostazioni in questa pagina al predefinito"
 
 #: include/wxstream_helper.h:46
-#, fuzzy
 msgid "Failed to output data"
-msgstr "Impossibile emettere i dati."
+msgstr "Fallita emissione dati"
 
 #: kicad/dialogs/dialog_template_selector.cpp:127
 msgid "<html><h1>Template Selector</h1></html>"
@@ -18071,7 +18023,7 @@ msgstr ""
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:142
 msgid "Manage downloadable packages from KiCad and 3rd party repositories"
-msgstr ""
+msgstr "Gestisci pacchetti scaricabili da repository KiCad e di terze parti"
 
 #: kicad/files-io.cpp:46
 msgid "KiCad project file"
@@ -18255,83 +18207,78 @@ msgstr "Apri la cartella del progetto nell'esploratore file"
 
 #: kicad/pcm/dialogs/dialog_manage_repositories.cpp:67
 msgid "Please enter fully qualified repository url"
-msgstr ""
+msgstr "Prego inserire url assoluto repository"
 
 #: kicad/pcm/dialogs/dialog_manage_repositories.cpp:67
-#, fuzzy
 msgid "Add repository"
-msgstr "Aggiungi filo ad un bus"
+msgstr "Aggiungi repository"
 
 #: kicad/pcm/dialogs/dialog_manage_repositories_base.h:60
-#, fuzzy
 msgid "Manage Repositores"
-msgstr "Gestisci le definizioni dei bus"
+msgstr "Gestisci repositori"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:50
-#, fuzzy, c-format
+#, c-format
 msgid "Plugins (%d)"
-msgstr "Violazioni (%d)"
+msgstr "Plugin (%d)"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:51
-#, fuzzy, c-format
+#, c-format
 msgid "Libraries (%d)"
-msgstr "Librerie"
+msgstr "Librerie (%d)"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:52
-#, fuzzy, c-format
+#, c-format
 msgid "Color themes (%d)"
-msgstr "Tema colori:"
+msgstr "Temi colori (%d)"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:79 kicad/pcm/dialogs/dialog_pcm.cpp:315
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:51
 #, c-format
 msgid "Repository (%d)"
-msgstr ""
+msgstr "Repository (%d)"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:96 kicad/pcm/dialogs/panel_package.cpp:72
 #: kicad/pcm/dialogs/panel_package.cpp:76
 #: kicad/pcm/dialogs/panel_package_base.cpp:65
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:108
 msgid "Install"
-msgstr ""
+msgstr "Installa"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:105 kicad/pcm/dialogs/panel_package.cpp:80
 msgid "Uninstall"
-msgstr ""
+msgstr "Disinstalla"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:160
-#, fuzzy
 msgid ""
 "Are you sure you want to close the package manager and discard pending "
 "changes?"
-msgstr "Cancellare gli elementi selezionati?"
+msgstr "Chiudere la gestione pacchetti ed annullare i cambiamenti pendenti?"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:162
 #: kicad/tools/kicad_manager_actions.cpp:117
 msgid "Plugin and Content Manager"
-msgstr ""
+msgstr "Plugin gestore contenuto"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:235
-#, fuzzy
 msgid "Choose package file"
-msgstr "Scegli immagine"
+msgstr "Scegli file pacchetto"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:330
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:117
 #, c-format
 msgid "Pending (%d)"
-msgstr ""
+msgstr "Pendenti (%d)"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:365
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:60
 #, c-format
 msgid "Installed (%d)"
-msgstr ""
+msgstr "Installati (%d)"
 
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:37
-#, fuzzy
 msgid "Manage"
-msgstr "Gestione strati"
+msgstr "Gestisci"
 
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:82
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:103
@@ -18345,270 +18292,249 @@ msgid "Package"
 msgstr "Contenitore"
 
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:85
-#, fuzzy
 msgid "Repository"
-msgstr "Segnala"
+msgstr "Repository"
 
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:103
-#, fuzzy
 msgid "Discard action"
-msgstr "Abbandona i cambiamenti"
+msgstr "Abbandona azione"
 
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:133
-#, fuzzy
 msgid "Install from file..."
-msgstr "Impossibile rinominare il file ... "
+msgstr "Installa da file..."
 
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:136
-#, fuzzy
 msgid "Apply changes"
-msgstr "Salva i cambiamenti"
+msgstr "Applica i cambiamenti"
 
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:139
-#, fuzzy
 msgid "Discard changes"
 msgstr "Abbandona i cambiamenti"
 
 #: kicad/pcm/dialogs/dialog_pcm_base.h:73
 msgid "Plugin And Content Manager"
-msgstr ""
+msgstr "Gestione plugin e contenuto"
 
 #: kicad/pcm/dialogs/dialog_pcm_progress.cpp:86
 #, c-format
 msgid "Downloaded %lld/%lld Kb"
-msgstr ""
+msgstr "Scaricati %lld/%lld Kb"
 
 #: kicad/pcm/dialogs/dialog_pcm_progress.cpp:150
 msgid "All downloads finished"
-msgstr ""
+msgstr "Tutti gli scaricamenti terminati"
 
 #: kicad/pcm/dialogs/dialog_pcm_progress_base.cpp:21
 msgid "Download progress"
-msgstr ""
+msgstr "Avanzamento scaricamento"
 
 #: kicad/pcm/dialogs/dialog_pcm_progress_base.cpp:23
-#, fuzzy
 msgid "Waiting..."
-msgstr "Caricamento..."
+msgstr "In attesa..."
 
 #: kicad/pcm/dialogs/dialog_pcm_progress_base.cpp:42
-#, fuzzy
 msgid "Overall progress"
-msgstr "Proprietà materiale:"
+msgstr "Avanzamento generale"
 
 #: kicad/pcm/dialogs/dialog_pcm_progress_base.cpp:52
 msgid "Details"
-msgstr ""
+msgstr "Dettagli"
 
 #: kicad/pcm/dialogs/dialog_pcm_progress_base.h:58
 msgid "Applying package changes"
-msgstr ""
+msgstr "Applicazione cambiamenti pacchetti"
 
 #: kicad/pcm/dialogs/panel_package.cpp:84
-#, fuzzy
 msgid "Pending install"
-msgstr "Opzioni di rendering"
+msgstr "Installazione pendente"
 
 #: kicad/pcm/dialogs/panel_package.cpp:88
-#, fuzzy
 msgid "Pending uninstall"
-msgstr "Motore di rendering"
+msgstr "Disinstallazione pendente"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:147
 msgid "Metadata"
-msgstr ""
+msgstr "Metadati"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:154
 #, c-format
 msgid "Package identifier: %s\n"
-msgstr ""
+msgstr "Identificatore pacchetto: %s\n"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:155
-#, fuzzy, c-format
+#, c-format
 msgid "License: %s\n"
-msgstr "Licenza"
+msgstr "Licenza: %s\n"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:169
 #, c-format
 msgid "Tags: %s\n"
-msgstr ""
+msgstr "Etichette: %s\n"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:184
 msgid "Author"
-msgstr ""
+msgstr "Autore"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:187
 msgid "Maintainer"
-msgstr ""
+msgstr "Manutentore"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:191
-#, fuzzy
 msgid "Resources"
-msgstr "Scambia sorgenti"
+msgstr "Risorse"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:266
 msgid "Pick a package on the left panel to view it's description."
-msgstr ""
+msgstr "Scegli un pacchetto sul pannello di sinistra per visualizzarne la descrizione."
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:342
 msgid "Package download url is not specified"
-msgstr ""
+msgstr "URL di scaricamento pacchetto non specificato"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:343
-#, fuzzy
 msgid "Error downloading package"
-msgstr "Errore nel caricare l'editor."
+msgstr "Errore nello scaricare il pacchetto"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:352
-#, fuzzy
 msgid "Save package"
-msgstr "Salva i cambiamenti"
+msgstr "Salva pacchetto"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:364
 msgid "Downloading package"
-msgstr ""
+msgstr "Scaricamento pacchetto"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:380
 msgid ""
 "Integrity of the downloaded package could not be verified, hash does not "
 "match. Are you sure you want to keep this file?"
-msgstr ""
+msgstr "Integrità del pacchetto scaricato non confermata; l'hash non corrisponde. Sicuri di voler tenere questo file?"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:382
-#, fuzzy
 msgid "Keep downloaded file"
-msgstr "Riempimenti rame proibiti"
+msgstr "Mantieni i file scaricati"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:419
 msgid ""
 "This package version is incompatible with your kicad version or platform. "
 "Are you sure you want to install it anyway?"
-msgstr ""
+msgstr "Questa versione pacchetto non è compatibile con la tua piattaforma o versione di KiCad. Sicuri di volerlo scaricare ugualmente?"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:421
-#, fuzzy
 msgid "Install package"
-msgstr "Nel Contenitore"
+msgstr "Installa pacchetto"
 
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:64
-#, fuzzy
 msgid "Show all versions"
-msgstr "Mostra tutti i via"
+msgstr "Mostra tutte le versioni"
 
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:82
-#, fuzzy
 msgid "Dl Size"
-msgstr "Dim. X"
+msgstr "Dim. sc"
 
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:83
-#, fuzzy
 msgid "Inst Size"
-msgstr "Dim. testo"
+msgstr "Dim. inst"
 
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:84
-#, fuzzy
 msgid "Comp"
-msgstr "Azienda:"
+msgstr "Comp"
 
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:105
-#, fuzzy
 msgid "Download"
-msgstr "Sotto"
+msgstr "Scarica"
 
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:121
-#, fuzzy
 msgid "Versions"
-msgstr "Versione"
+msgstr "Versioni"
 
 #: kicad/pcm/pcm.cpp:79
-#, fuzzy, c-format
+#, c-format
 msgid "schema file '%s' not found"
-msgstr "File schema elettrico '%s' non trovato."
+msgstr "file schema '%s' non trovato"
 
 #: kicad/pcm/pcm.cpp:82
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading schema: %s"
-msgstr "Errore nel caricamento dello schema \"%s\"."
+msgstr "Errore caricando lo schema: %s"
 
 #: kicad/pcm/pcm.cpp:108
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading installed packages list: %s"
-msgstr ""
-"Errore nel caricamento della netlist.\n"
-"%s"
+msgstr "Errore caricando l'elenco pacchetti installati: %s"
 
 #: kicad/pcm/pcm.cpp:186
 #, c-format
 msgid "Downloading %lld/%lld Kb"
-msgstr ""
+msgstr "Scaricamento %lld/%lld Kb"
 
 #: kicad/pcm/pcm.cpp:211
-#, fuzzy
 msgid "Download is too large."
-msgstr "Dimensione non valida %lld: troppo larga"
+msgstr "Scaricamento troppo grande."
 
 #: kicad/pcm/pcm.cpp:225
 msgid "Fetching repository"
-msgstr ""
+msgstr "Recupero repository"
 
 #: kicad/pcm/pcm.cpp:227
-#, fuzzy
 msgid "Unable to load repository url"
-msgstr "Impossibile caricare il file %s"
+msgstr "Impossibile caricare url repository"
 
 #: kicad/pcm/pcm.cpp:243
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Unable to parse repository:\n"
 "\n"
 "%s"
-msgstr "Impossibile analizzare \"%s\" in \"%s\""
+msgstr ""
+"Impossibile analizzare repository:\n"
+"\n"
+"%s"
 
 #: kicad/pcm/pcm.cpp:265
 msgid "Fetching repository packages"
-msgstr ""
+msgstr "Recupero pacchetti repository"
 
 #: kicad/pcm/pcm.cpp:267
 msgid "Unable to load repository packages url."
-msgstr ""
+msgstr "Impossibile caricare l'URL repository pacchetti."
 
 #: kicad/pcm/pcm.cpp:275
 msgid "Packages hash doesn't match. Repository may be corrupted."
-msgstr ""
+msgstr "Gli hash dei pacchetti non corrispondono. Il repository potrebbe essere rovinato."
 
 #: kicad/pcm/pcm.cpp:291
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Unable to parse packages metadata:\n"
 "\n"
 "%s"
-msgstr "Impossibile analizzare \"%s\" in \"%s\""
+msgstr ""
+"Impossibile analizzare i metadati:\n"
+"\n"
+"%s"
 
 #: kicad/pcm/pcm.cpp:378
 msgid ""
 "Packages cache for current repository is corrupted, it will be redownloaded."
-msgstr ""
+msgstr "La cache pacchetti per il repository corrente è rovinata, verrà ri-scaricata."
 
 #: kicad/pcm/pcm.cpp:428
-#, fuzzy
 msgid "Downloading resources"
-msgstr "Scambia sorgenti"
+msgstr "Scaricamento risorse"
 
 #: kicad/pcm/pcm.cpp:442
 msgid ""
 "Resources file hash doesn't match and will not be used. Repository may be "
 "corrupted."
-msgstr ""
+msgstr "L'hash file risorse non corrisponde e non verrà usato. Il repository potrebbe essere rovinato."
 
 #: kicad/pcm/pcm.cpp:587
-#, fuzzy
 msgid "Local file"
-msgstr "Modifica file locale..."
+msgstr "File locale"
 
 #: kicad/pcm/pcm_task_manager.cpp:63
-#, fuzzy
 msgid "Unable to create download directory!"
-msgstr "Impossibile creare la cartella \"%s\""
+msgstr "Impossibile creare la cartella scaricamenti!"
 
 #: kicad/pcm/pcm_task_manager.cpp:92
 #, c-format
@@ -18616,80 +18542,84 @@ msgid ""
 "Downloaded archive hash for package %s does not match repository entry. This "
 "may indicate a problem with the package, if the issue persists report this "
 "to repository maintainers."
-msgstr ""
+msgstr "L'hash arhiviazione scaricato per il pacchetto %s non corrisponde alla voce del repository. Potrebbe esserci un problema relativo al pacchetto; se il problema persiste segnalarlo ai responsabili del repository."
 
 #: kicad/pcm/pcm_task_manager.cpp:101
-#, fuzzy, c-format
+#, c-format
 msgid "Extracting package '%s'."
-msgstr "Estrazione file \"%s\"."
+msgstr "Estrazione pacchetto '%s'."
 
 #: kicad/pcm/pcm_task_manager.cpp:116
 #, c-format
 msgid "Removing downloaded archive '%s'."
-msgstr ""
+msgstr "Rimozione archivio scaricato '%s'."
 
 #: kicad/pcm/pcm_task_manager.cpp:157
 #, c-format
 msgid "Downloading package url: '%s'"
-msgstr ""
+msgstr "Url scaricamento pacchetto: '%s'"
 
 #: kicad/pcm/pcm_task_manager.cpp:170
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Failed to download url %s\n"
 "%s"
-msgstr "Fallito caricamento di \"%s\"."
+msgstr ""
+"Fallito scaricamento url %s\n"
+"%s"
 
 #: kicad/pcm/pcm_task_manager.cpp:249
 msgid "Aborting package installation."
-msgstr ""
+msgstr "Annullamento installazione pacchetto."
 
 #: kicad/pcm/pcm_task_manager.cpp:297
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Unable to parse package metadata:\n"
 "\n"
 "%s"
-msgstr "Impossibile creare %s"
+msgstr ""
+"Impossibile analizzare i metadati del pacchetto:\n"
+"\n"
+"%s"
 
 #: kicad/pcm/pcm_task_manager.cpp:306
 msgid "Archive does not contain a valid metadata.json file"
-msgstr ""
+msgstr "L'archivio non contiene un file metadata.json valido"
 
 #: kicad/pcm/pcm_task_manager.cpp:314
-#, fuzzy
 msgid "Archive metadata must have a single version defined"
-msgstr "Un foglio deve avere un file specificato."
+msgstr "I metadati archivio devono avere una singola versione definita"
 
 #: kicad/pcm/pcm_task_manager.cpp:326
 #, c-format
 msgid ""
 "Package with identifier %s is already installed, you must first uninstall "
 "this package."
-msgstr ""
+msgstr "Un pacchetto con identificatore %s è già installato, è necessario prima disinstallare questo pacchetto."
 
 #: kicad/pcm/pcm_task_manager.cpp:354
-#, fuzzy, c-format
+#, c-format
 msgid "Removing directory %s"
-msgstr "Rimozione collegamento piazzola singola %s."
+msgstr "Rimozione cartella %s"
 
 #: kicad/pcm/pcm_task_manager.cpp:359
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to remove directory %s"
-msgstr "Impossibile creare la cartella \"%s\""
+msgstr "Fallita rimozione cartella %s"
 
 #: kicad/pcm/pcm_task_manager.cpp:376
 #, c-format
 msgid "Package %s uninstalled"
-msgstr ""
+msgstr "Pacchetto %s disinstallato"
 
 #: kicad/pcm/pcm_task_manager.cpp:445
 msgid "Aborting remaining tasks."
-msgstr ""
+msgstr "Annullamento compiti rimanenti."
 
 #: kicad/pcm/pcm_task_manager.cpp:448
 msgid "Done."
-msgstr ""
+msgstr "Fatto."
 
 #: kicad/project_template.cpp:52
 msgid "Could open the template path!"
@@ -18935,7 +18865,7 @@ msgstr "Modifica squadratura foglio e riquadro iscrizioni"
 
 #: kicad/tools/kicad_manager_actions.cpp:117
 msgid "Run Plugin and Content Manager"
-msgstr ""
+msgstr "Esegui Gestore pacchetti e contenuto"
 
 #: kicad/tools/kicad_manager_actions.cpp:124
 msgid "Open Text Editor"
@@ -19146,40 +19076,36 @@ msgid "Printing"
 msgstr "In stampa"
 
 #: pagelayout_editor/dialogs/properties_frame.cpp:554
-#, fuzzy
 msgid "Predefined Keywords"
-msgstr "Larghezze predefinite:"
+msgstr "Parolechiave predefinite"
 
 #: pagelayout_editor/dialogs/properties_frame.cpp:557
 msgid "Texts can include keywords."
-msgstr ""
+msgstr "I testi possono includere parolechiave."
 
 #: pagelayout_editor/dialogs/properties_frame.cpp:558
 msgid "Keyword notation is ${keyword}"
-msgstr ""
+msgstr "La notazione parolechiave è ${parolachiave}"
 
 #: pagelayout_editor/dialogs/properties_frame.cpp:559
 msgid "Keywords are replaced by they actual value in strings"
-msgstr ""
+msgstr "Le parolechiave vengono rimpiazzate dal loro valore corrente in stringhe"
 
 #: pagelayout_editor/dialogs/properties_frame.cpp:560
 msgid "These build-in keywords are always available:"
-msgstr ""
+msgstr "Queste parolechiave incorporate sono sempre disponibili:"
 
 #: pagelayout_editor/dialogs/properties_frame.cpp:564
-#, fuzzy
 msgid "(sheet number)"
-msgstr "Numero foglio: %d"
+msgstr "(numero foglio)"
 
 #: pagelayout_editor/dialogs/properties_frame.cpp:565
-#, fuzzy
 msgid "(sheet count)"
-msgstr "Conteggio ripetizione"
+msgstr "(numero fogli)"
 
 #: pagelayout_editor/dialogs/properties_frame.cpp:571
-#, fuzzy
 msgid "(paper size)"
-msgstr "Dimensione foglio personalizzata:"
+msgstr "(dimensione carta)"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:34
 msgid "Show on all pages"
@@ -20032,6 +19958,8 @@ msgid ""
 "Zdiff =\n"
 "2*Z0( (1 - 0.48exp( -0.96*S/H ) )"
 msgstr ""
+"Zdiff =\n"
+"2*Z0( (1 - 0.48exp( -0.96*S/H ) )"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:901
 msgid "Zcommon = Zeven / 2"
@@ -20550,9 +20478,8 @@ msgstr ""
 "Uscire ed abbandonare i cambiamenti?"
 
 #: pcb_calculator/regulators_funct.cpp:127
-#, fuzzy
 msgid "PCB Calculator data file"
-msgstr "File dati calcolatrice C.S. (*.%s)|*.%s"
+msgstr "File dati calcolatrice C.S."
 
 #: pcb_calculator/regulators_funct.cpp:130
 msgid "Select PCB Calculator Data File"
@@ -20885,9 +20812,8 @@ msgid "Dielectric losses (odd):"
 msgstr "Perdite dielettrico (odd):"
 
 #: pcb_calculator/transline_ident.cpp:309
-#, fuzzy
 msgid "Differential Impedance (Zd):"
-msgstr "Distanza coppia differenziale"
+msgstr "Impedenza differenziale (Zd):"
 
 #: pcb_calculator/transline_ident.cpp:334
 msgid "Zeven"
@@ -21164,14 +21090,12 @@ msgid "Loss Tg:"
 msgstr "Tg perd:"
 
 #: pcbnew/board_stackup_manager/dialog_dielectric_list_manager_base.cpp:60
-#, fuzzy
 msgid "Common materials:"
-msgstr "Comune a tutte le unità"
+msgstr "Materiali comuni:"
 
 #: pcbnew/board_stackup_manager/dialog_dielectric_list_manager_base.h:57
-#, fuzzy
 msgid "Dielectric Material Characteristics"
-msgstr "Caratteristiche materiale dielettrico:"
+msgstr "Caratteristiche materiale dielettrico"
 
 #: pcbnew/board_stackup_manager/panel_board_finish_base.cpp:20
 msgid "Has castellated pads"
@@ -21206,24 +21130,23 @@ msgid "PrePreg"
 msgstr "PrePreg"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:188
-#, fuzzy, c-format
+#, c-format
 msgid "Enter board thickness in %s:"
-msgstr "Inserire spessore scheda in %s"
+msgstr "Inserire spessore scheda in %s:"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:193
-#, fuzzy, c-format
+#, c-format
 msgid "Enter expected board thickness (min value %s):"
-msgstr "Inserire spessore scheda in %s (valore minimo %s)"
+msgstr "Inserire spessore scheda previsto (valore min %s):"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:197
-#, fuzzy
 msgid "Adjust Unlocked Dielectric Layers"
-msgstr "Regola strati spessore dielettrico non bloccati"
+msgstr "Regola strati dielettrico non bloccati"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:208
-#, fuzzy, c-format
+#, c-format
 msgid "Value too small (min value %s)."
-msgstr "Valore troppo piccolo (valore minimo %s %s). Annullato"
+msgstr "Valore troppo piccolo (valore min %s)."
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:228
 msgid "All dielectric  thickness layers are locked"
@@ -21281,9 +21204,8 @@ msgid "A layer thickness is < 0. Fix it"
 msgstr "Uno spessore strato è < 0. Sistemarlo"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:1524
-#, fuzzy
 msgid "Custom..."
-msgstr "Personalizzato"
+msgstr "Personalizzato..."
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:20
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:49
@@ -21378,9 +21300,8 @@ msgid "Id"
 msgstr "Id"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:111
-#, fuzzy
 msgid "Loss Tan"
-msgstr "Tangente perdita"
+msgstr "Tang perd"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:132
 msgid "Board thickness from stackup:"
@@ -21453,7 +21374,7 @@ msgstr "Blu"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:67
 msgid "Purple"
-msgstr ""
+msgstr "Viola"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:68
 msgid "Black"
@@ -23476,9 +23397,8 @@ msgid "Select a STEP export filename"
 msgstr "Seleziona un nome file per l'esportazione STEP"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:143
-#, fuzzy
 msgid "STEP files"
-msgstr "File SVG"
+msgstr "File STEP"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:210
 msgid "Non-unity scaled models:"
@@ -23514,7 +23434,7 @@ msgstr "Esportazione STEP"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:26
 msgid "temp"
-msgstr ""
+msgstr "temp"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:36
 msgid "Coordinates"
@@ -24340,9 +24260,8 @@ msgid "CSV"
 msgstr "CSV"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:48
-#, fuzzy
 msgid "Gerber (experimental)"
-msgstr "Gerber (molto sperimentale)"
+msgstr "Gerber (sperimentale)"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:50
 msgid "Format"
@@ -24369,9 +24288,8 @@ msgstr ""
 "Creare un unico file contenente tutte le impronte da inserire\n"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:74
-#, fuzzy
 msgid "Include only SMD footprints"
-msgstr "Includi i&mpronte"
+msgstr "Includi sono impronte SMD"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:77
 msgid "Exclude all footprints with through hole pads"
@@ -27111,14 +27029,12 @@ msgid "End layer:"
 msgstr "Strato finale:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:280
-#, fuzzy
 msgid "Annular rings:"
-msgstr "Larghezza anello"
+msgstr "Anelli:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:284
-#, fuzzy
 msgid "Start, end, and connected layers"
-msgstr "%s, %s e strati connessi"
+msgstr "Inizio, fine, e strati connessi"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.h:114
 msgid "Track & Via Properties"
@@ -27330,14 +27246,12 @@ msgstr ""
 "Se selezionato, le piazzole sono movibili rispetto al resto dell'impronta."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:83
-#, fuzzy
 msgid ""
 "Left click (and drag) actions depend on 2 modifier keys:\n"
 "Shift and Ctrl."
 msgstr ""
-"Le azioni clic sinistro (e trascinamento) dipendono da 3 tasti "
-"modificatori:\n"
-"Alt, Maiusc e Ctrl."
+"Le azioni clic sinistro (e trascinamento) dipendono da 2 tasti modificatori:\n"
+"Maiusc e Ctrl."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:97
 #: pcbnew/dialogs/panel_edit_options_base.cpp:168
@@ -27351,9 +27265,8 @@ msgstr "Seleziona elementi."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:107
 #: pcbnew/dialogs/panel_edit_options_base.cpp:178
-#, fuzzy
 msgid "Long Click"
-msgstr "Clic"
+msgstr "Clic lungo"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:127
 msgid "Ctrl+Shift"
@@ -27365,7 +27278,6 @@ msgid "Highlight net (for pads or tracks)."
 msgstr "Evidenzia net (per piazzole o piste)."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:154
-#, fuzzy
 msgid ""
 "Left click (and drag) actions depend on 3 modifier keys:\n"
 "Option, Shift and Cmd."
@@ -27779,7 +27691,6 @@ msgstr ""
 "ridotto da netclass, regole personalizzate o altre impostazioni."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:256
-#, fuzzy
 msgid "Copper to hole clearance:"
 msgstr "Distanza foro rame:"
 
@@ -27794,7 +27705,6 @@ msgstr ""
 "altre impostazioni."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:272
-#, fuzzy
 msgid "Copper to edge clearance:"
 msgstr "Distanza bordo rame:"
 
@@ -28514,9 +28424,8 @@ msgstr ""
 "distanza della maschera di saldatura)."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:69
-#, fuzzy
 msgid "Solder mask minimum web width:"
-msgstr "Larghezza minima ponte maschera di saldatura:"
+msgstr "Larghezza minima griglia maschera di saldatura:"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:71
 msgid ""
@@ -28904,24 +28813,20 @@ msgid "board setup constraints"
 msgstr "vincoli impostazioni scheda"
 
 #: pcbnew/drc/drc_engine.cpp:175
-#, fuzzy
 msgid "board setup constraints silk"
-msgstr "vincoli impostazioni scheda"
+msgstr "vincoli impostazioni scheda serigrafia"
 
 #: pcbnew/drc/drc_engine.cpp:181
-#, fuzzy
 msgid "board setup constraints hole"
-msgstr "vincoli impostazioni scheda"
+msgstr "vincoli impostazioni scheda fori"
 
 #: pcbnew/drc/drc_engine.cpp:186
-#, fuzzy
 msgid "board setup constraints edge"
-msgstr "vincoli impostazioni scheda"
+msgstr "vincoli impostazioni scheda bordi"
 
 #: pcbnew/drc/drc_engine.cpp:191
-#, fuzzy
 msgid "board setup constraints courtyard"
-msgstr "vincoli impostazioni scheda"
+msgstr "vincoli impostazioni scheda ingombri"
 
 #: pcbnew/drc/drc_engine.cpp:198
 msgid "board setup micro-via constraints"
@@ -28958,9 +28863,8 @@ msgid "Local override on %s; clearance: %s."
 msgstr "Superamento locale su %s; distanza: %s"
 
 #: pcbnew/drc/drc_engine.cpp:831
-#, fuzzy
 msgid "board minimum"
-msgstr "larghezza minima scheda"
+msgstr "minimi scheda"
 
 #: pcbnew/drc/drc_engine.cpp:834
 #, c-format
@@ -28968,17 +28872,16 @@ msgid "Board minimum clearance: %s."
 msgstr "Distanza minima scheda: %s."
 
 #: pcbnew/drc/drc_engine.cpp:843
-#, fuzzy
 msgid "board minimum hole"
-msgstr "larghezza minima scheda"
+msgstr "foro minimo scheda"
 
 #: pcbnew/drc/drc_engine.cpp:846
-#, fuzzy, c-format
+#, c-format
 msgid "Board minimum hole clearance: %s."
-msgstr "Distanza minima scheda: %s."
+msgstr "Distanza minima fori scheda: %s."
 
 #: pcbnew/drc/drc_engine.cpp:873
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s clearance: %s."
 msgstr "Verifica %s; distanza: %s."
 
@@ -28991,14 +28894,14 @@ msgid "undefined"
 msgstr "indefinito"
 
 #: pcbnew/drc/drc_engine.cpp:902
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s %s: %s."
-msgstr "Verifica %s."
+msgstr "Verifica %s %s: %s."
 
 #: pcbnew/drc/drc_engine.cpp:918
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s: min %s; opt %s; max %s."
-msgstr "Riconnetti %s pin %s da %s a %s."
+msgstr "Verifica %s: min %s; opz %s; max %s."
 
 #: pcbnew/drc/drc_engine.cpp:929
 #, c-format
@@ -29233,14 +29136,13 @@ msgid "Differential uncoupled length too long"
 msgstr "Lunghezza coppia differenziale non accoppiata troppo lunga"
 
 #: pcbnew/drc/drc_item.cpp:320
-#, fuzzy, c-format
+#, c-format
 msgid "Rule: %s"
-msgstr "Regole"
+msgstr "Regola: %s"
 
 #: pcbnew/drc/drc_item.cpp:322
-#, fuzzy
 msgid "Local override"
-msgstr "Distanza locale"
+msgstr "Scavalcamento locale"
 
 #: pcbnew/drc/drc_rule.h:137
 #, c-format
@@ -29328,9 +29230,9 @@ msgid "Missing constraint type.|  Expected %s."
 msgstr "Tipo vincolo mancante.|  Era atteso %s."
 
 #: pcbnew/drc/drc_rule_parser.cpp:294
-#, fuzzy, c-format
+#, c-format
 msgid "Rule already has a '%s' constraint."
-msgstr "L'area regole \"%s\" non permette piste."
+msgstr "La regola ha già un vincolo '%s'."
 
 #: pcbnew/drc/drc_rule_parser.cpp:352
 msgid "Missing min value."
@@ -29893,13 +29795,13 @@ msgstr ""
 "Fallita rinomina del file temporaneo '%s'."
 
 #: pcbnew/files.cpp:1146
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Board copied to:\n"
 "%s"
 msgstr ""
 "Scheda copiata su:\n"
-"\"%s\""
+"%s"
 
 #: pcbnew/footprint.cpp:882 pcbnew/tools/pcb_control.cpp:1191
 msgid "Last Change"
@@ -30151,15 +30053,13 @@ msgid "No footprints to export!"
 msgstr "Nessuna impronta da esportare!"
 
 #: pcbnew/footprint_libraries_utils.cpp:689
-#, fuzzy, c-format
+#, c-format
 msgid "Update footprints on board to refer to %s?"
-msgstr "Aggiorna tutte le impronte sulla scheda"
+msgstr "Aggiornare tutte le impronte per riferirsi a %s?"
 
 #: pcbnew/footprint_libraries_utils.cpp:736
-#, fuzzy
 msgid "Update footprints on board to refer to new library?"
-msgstr ""
-"Aggiorna le impronte per includere qualunque cambiamento dalla libreria"
+msgstr "Aggiornare le impronte per riferirsi alla nuova libreria?"
 
 #: pcbnew/footprint_libraries_utils.cpp:875
 #: pcbnew/footprint_viewer_frame.cpp:718
@@ -31339,7 +31239,7 @@ msgstr "Netlist Eeschema"
 msgid ""
 "Received an error while reading netlist.  Please report this issue to the "
 "KiCad team using the menu Help->Report Bug."
-msgstr ""
+msgstr "Ricevuto errore durante la lettura della netlist.  Prego trasmettere questo problema al team KiCad usando il menu Aiuto->Segnala bug."
 
 #: pcbnew/pcb_edit_frame.cpp:1488
 #, c-format
@@ -33642,9 +33542,8 @@ msgid "Cannot generate clearance report on empty group."
 msgstr "Impossibile generare rapporto distanze su un gruppo vuoto."
 
 #: pcbnew/tools/board_inspection_tool.cpp:383
-#, fuzzy
 msgid "Zone connection resolution for:"
-msgstr "Risoluzione distanza foro per:"
+msgstr "Risoluzione connessione zona per:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:397
 #, c-format
@@ -33687,9 +33586,8 @@ msgid "Silkscreen clearance resolution for:"
 msgstr "Risoluzione distanza serigrafia per:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:528
-#, fuzzy
 msgid "Courtyard clearance resolution for:"
-msgstr "Risoluzione distanza per:"
+msgstr "Risoluzione distanza ingombro per:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:566
 msgid "Hole clearance resolution for:"
@@ -33697,7 +33595,7 @@ msgstr "Risoluzione distanza foro per:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:629
 msgid "Items share no relevant layers:"
-msgstr ""
+msgstr "Gli elementi non condividono strati rilevanti:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:678
 msgid "Select an item for a constraints resolution report."
@@ -33712,9 +33610,9 @@ msgid "Track width resolution for:"
 msgstr "Risoluzione larghezza pista per:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:739
-#, fuzzy, c-format
+#, c-format
 msgid "Width constraints: min %s; opt %s; max %s."
-msgstr "Vincoli larghezza: min %s max %s."
+msgstr "Vincoli larghezza: min %s; opz %s; max %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:749
 msgid "Via Diameter"
@@ -33725,9 +33623,9 @@ msgid "Via diameter resolution for:"
 msgstr "Risoluzione diametro via per:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:762
-#, fuzzy, c-format
+#, c-format
 msgid "Diameter constraints: min %s; opt %s; max %s."
-msgstr "Vincoli diametro: min %s max %s."
+msgstr "Vincoli diametro: min %s; opz %s; max %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:769
 msgid "Via Annular Width"
@@ -33738,9 +33636,9 @@ msgid "Via annular width resolution for:"
 msgstr "Risoluzione larghezza anello via per:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:782
-#, fuzzy, c-format
+#, c-format
 msgid "Annular width constraints: min %s; opt %s; max %s."
-msgstr "Vincoli larghezza anello: min %s max %s."
+msgstr "Vincoli larghezza anello: min %s; opz %s; max %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:793
 msgid "Hole Size"
@@ -34838,13 +34736,12 @@ msgid "Lock or unlock selected items"
 msgstr "Blocca o sblocca gli elementi selezionati"
 
 #: pcbnew/tools/pcb_actions.cpp:667
-#, fuzzy
 msgid "Toggle 45 Limit"
-msgstr "Commuta evidenziazione net"
+msgstr "Commuta limite 45"
 
 #: pcbnew/tools/pcb_actions.cpp:667
 msgid "Limit actions to 45 degrees from the starting point"
-msgstr ""
+msgstr "Limita le azioni a 45 gradi dal punto di partenza"
 
 #: pcbnew/tools/pcb_actions.cpp:672
 msgid "Prevent items from being moved and/or resized on the canvas"
@@ -36510,1399 +36407,3 @@ msgstr "Schema KiCad"
 #: resources/linux/mime/kicad-kicad.xml.in:25
 msgid "KiCad Printed Circuit Board"
 msgstr "Circuito stampato KiCad"
-
-#~ msgid "Zdiff = Zodd * 2"
-#~ msgstr "Zdiff = Zodd * 2"
-
-#~ msgid "Shift+Alt"
-#~ msgstr "Maiusc+Alt"
-
-#~ msgid "Alt+Cmd"
-#~ msgstr "Alt+Cmd"
-
-#~ msgid "Info"
-#~ msgstr "Info"
-
-#~ msgid "Show Clarify Selection Menu"
-#~ msgstr "Mostra menu disambigua selezione"
-
-#~ msgid "Toggle Selection State"
-#~ msgstr "Commuta stato selezione"
-
-#~ msgid "Ignore H/V/45 Constraints"
-#~ msgstr "Ignorare vincoli O/V/45"
-
-#~ msgid "Do not forget to choose a title for this netlist control page"
-#~ msgstr ""
-#~ "Non dimenticare di scegliere un titolo per questa pagina di controllo "
-#~ "netlist"
-
-#, c-format
-#~ msgid "Schematic file '%s' is already open."
-#~ msgstr "Il file schema \"%s\" è già aperto."
-
-#~ msgid "L&imit graphic lines to H, V and 45 degrees"
-#~ msgstr "L&imita le linee grafiche a O, V e 45 gradi"
-
-#~ msgid ""
-#~ "When drawing graphic lines force to horizontal, vertical, or 45 degrees."
-#~ msgstr ""
-#~ "Durante il disegno di linee grafiche, forza orizzontale, verticale o 45 "
-#~ "gradi."
-
-#~ msgid "Limit Lines to 45 deg"
-#~ msgstr "Limita le linee a 45 gradi"
-
-#~ msgid "Limit graphic lines to H, V and 45 degrees"
-#~ msgstr "Limita le linee grafiche a O, V e 45 gradi"
-
-#~ msgid "3D Model Visibility"
-#~ msgstr "Visibilità modelli 3D"
-
-#~ msgid "Show 3D through hole models"
-#~ msgstr "Mostra i modelli 3D a via passanti"
-
-#~ msgid "Show 3D SMD models"
-#~ msgstr "Mostra modelli 3D SMD"
-
-#~ msgid "Show 3D virtual models"
-#~ msgstr "Mostra modelli 3D virtuali"
-
-#~ msgid "Toggle Virtual 3D models"
-#~ msgstr "Commuta modelli 3D virtuali"
-
-#~ msgid "Toggle 3D models with 'Virtual' attribute"
-#~ msgstr ""
-#~ "Commuta la visualizzazione dei modelli 3D con attributo \"Virtuale\""
-
-#~ msgid "There are no unreferenced pins in this sheet to remove."
-#~ msgstr "Non ci sono pin senza riferimenti in questo foglio da eliminare."
-
-#, c-format
-#~ msgid "Custom (%s)"
-#~ msgstr "Personalizzato (%s)"
-
-#~ msgid "STEP files (*.stp;*.step)|*.stp;*.step"
-#~ msgstr "File STEP (*.stp;*.step)|*.stp;*.step"
-
-#, c-format
-#~ msgid "The %s layer is mandatory."
-#~ msgstr "Lo strato %s è necessario."
-
-#~ msgid "If you want a courtyard layer for the front side of the board"
-#~ msgstr "Se si desidera uno strato ingombro per il fronte della scheda"
-
-#~ msgid "If you want a courtyard layer for the back side of the board"
-#~ msgstr "Se si desidera uno strato ingombro per il retro della scheda"
-
-#~ msgid "If you want a board perimeter layer"
-#~ msgstr "Se si desidera uno strato con l'ingombro della scheda"
-
-#, c-format
-#~ msgid "pad %s"
-#~ msgstr "piazzola %s"
-
-#~ msgid "All Files (*.*)|*.*"
-#~ msgstr "Tutti i file (*.*)|*.*"
-
-#~ msgid "Executable file (*.exe)|*.exe"
-#~ msgstr "File eseguibile (*.exe)|*.exe"
-
-#~ msgid "Executable file (*)|*"
-#~ msgstr "File eseguibile (*)|*"
-
-#~ msgid "Top layer (*.GTL)|*.GTL;*.gtl|"
-#~ msgstr "Strato superiore (*.GTL)|*.GTL;*.gtl|"
-
-#~ msgid "Bottom layer (*.GBL)|*.GBL;*.gbl|"
-#~ msgstr "Strato inferiore (*.GBL)|*.GBL;*.gbl|"
-
-#~ msgid "Bottom solder resist (*.GBS)|*.GBS;*.gbs|"
-#~ msgstr "Maschera di saldatura inferiore (*.GBS)|*.GBS;*.gbs|"
-
-#~ msgid "Top solder resist (*.GTS)|*.GTS;*.gts|"
-#~ msgstr "Maschera di saldatura superiore (*.GTS)|*.GTS;*.gts|"
-
-#~ msgid "Bottom overlay (*.GBO)|*.GBO;*.gbo|"
-#~ msgstr "Serigrafia inferiore (*.GBO)|*.GBO;*.gbo|"
-
-#~ msgid "Top overlay (*.GTO)|*.GTO;*.gto|"
-#~ msgstr "Serigrafia superiore (*.GTO)|*.GTO;*.gto|"
-
-#~ msgid "Bottom paste (*.GBP)|*.GBP;*.gbp|"
-#~ msgstr "Pasta salda inferiore (*.GBP)|*.GBP;*.gbp|"
-
-#~ msgid "Top paste (*.GTP)|*.GTP;*.gtp|"
-#~ msgstr "Pasta salda superiore (*.GTP)|*.GTP;*.gtp|"
-
-#~ msgid "Keep-out layer (*.GKO)|*.GKO;*.gko|"
-#~ msgstr "Strato esclusione (*.GKO)|*.GKO;*.gko|"
-
-#~ msgid "Mechanical layers (*.GMx)|*.GM1;*.gm1;*.GM2;*.gm2;*.GM3;*.gm3|"
-#~ msgstr "Strati meccanici (*.GMx)|*.GM1;*.gm1;*.GM2;*.gm2;*.GM3;*.gm3|"
-
-#~ msgid "Top Pad Master (*.GPT)|*.GPT;*.gpt|"
-#~ msgstr "Master strato componenti (*.GPT)|*.GPT;*.gpt|"
-
-#~ msgid "Bottom Pad Master (*.GPB)|*.GPB;*.gpb|"
-#~ msgstr "Master strato saldature (*.GPB)|*.GPB;*.gpb|"
-
-#~ msgid "Background bottom:"
-#~ msgstr "Sfondo sotto:"
-
-#~ msgid "Load Colors from Board Stackup"
-#~ msgstr "Carica colori dallo stackup scheda"
-
-#~ msgid "Text Editor"
-#~ msgstr "Editor di testo"
-
-#~ msgid "Available materials:"
-#~ msgstr "Materiali disponibili:"
-
-#~ msgid "Dielectric Materials"
-#~ msgstr "Materiali dielettrici"
-
-#~ msgid "Outline smooth:"
-#~ msgstr "Arrotondamento contorno:"
-
-#~ msgid "Solid shape"
-#~ msgstr "Forma piena"
-
-#~ msgid "HatchBorder pattern"
-#~ msgstr "Motivo tratteggio"
-
-#~ msgid "Smooth amount:"
-#~ msgstr "Sforzo di smusso:"
-
-#~ msgid "Error: Corner size not a number."
-#~ msgstr "Errore: la dimensione angolo non è un numero."
-
-#, c-format
-#~ msgid "Checking %s; courtyard clearance: %s."
-#~ msgstr "Verifica %s; distanza ingombri: %s."
-
-#, c-format
-#~ msgid "Checking %s; silk clearance: %s."
-#~ msgstr "Verifica %s; distanza serigrafia: %s."
-
-#, c-format
-#~ msgid "Checking %s; hole clearance: %s."
-#~ msgstr "Verifica %s; distanza fori: %s."
-
-#, c-format
-#~ msgid "Checking %s; edge clearance: %s."
-#~ msgstr "Verifica %s; distanza bordo: %s."
-
-#, c-format
-#~ msgid "Zone connection type: %s."
-#~ msgstr "Tipo connessione zona: %s"
-
-#, c-format
-#~ msgid "Overridden by %s; connection type: %s."
-#~ msgstr "Scavalcato da %s; tipo connessione: %s."
-
-#, c-format
-#~ msgid "Pad is not a PTH pad; connection will be: %s."
-#~ msgstr "La piazzola non è passante; la connessione sarà: %s."
-
-#, c-format
-#~ msgid "%s not present on layer %s.  No clearance defined."
-#~ msgstr "%s non presente sullo strato %s.  Nessuna distanza definita."
-
-#~ msgid "kicad"
-#~ msgstr "kicad"
-
-#~ msgid "pcbcalculator"
-#~ msgstr "pcbcalculator"
-
-#~ msgid "Shape Option"
-#~ msgstr "Opzioni forma"
-
-#~ msgid "File \"%s\" not found"
-#~ msgstr "File \"%s\" non trovato"
-
-#~ msgid "Setting schematic symbol '%s %s' library identifier to '%s'. "
-#~ msgstr ""
-#~ "Impostazione identificatore libreria di simboli schema \"%s %s\" a \"%s"
-#~ "\". "
-
-#~ msgid "Fill Zones"
-#~ msgstr "Riempi zone"
-
-#~ msgid "Wireframe Zones"
-#~ msgstr "Zone a reticolato"
-
-#~ msgid "Sketch Zones"
-#~ msgstr "Schizza zone"
-
-#~ msgid "Show solid areas of zones in outline mode"
-#~ msgstr "Mostra le aree piene delle zone in modalità contorno"
-
-#~ msgid "Bad or missing parameters!"
-#~ msgstr "Parametri errati o mancanti!"
-
-#~ msgid "Read descr shape file"
-#~ msgstr "Leggi file di descrione della forma"
-
-#~ msgid "Convert to Polygon"
-#~ msgstr "Converti in poligono"
-
-#~ msgid "Convert to Zone"
-#~ msgstr "Converti in zona"
-
-#~ msgid "Convert to Rule Area"
-#~ msgstr "Converti in area regole"
-
-#~ msgid "Convert to Lines"
-#~ msgstr "Converti in linee"
-
-#~ msgid "Convert to Arc"
-#~ msgstr "Converti in arco"
-
-#~ msgid "Converts selected line segment to an arc"
-#~ msgstr "Converte i segmenti di linea selezionati in un arco"
-
-#~ msgid "Convert to Tracks"
-#~ msgstr "Converti in piste"
-
-#~ msgid "Converts selected graphic lines to tracks"
-#~ msgstr "Converte le linee grafiche selezionate in piste"
-
-#~ msgid "Unable to create report file '%s'"
-#~ msgstr "Impossibile creare il file rapporto \"%s\""
-
-#~ msgid ""
-#~ "Line width may not be 0 for shapes other than filled with body outline "
-#~ "color."
-#~ msgstr ""
-#~ "La larghezza riga non può essere 0 per forme diverse da quelle riempite "
-#~ "con il colore del contorno del corpo."
-
-#~ msgid "Run command:"
-#~ msgstr "Esegui comando:"
-
-#~ msgid "Info messages:"
-#~ msgstr "Messaggi informativi:"
-
-#~ msgid "Error messages:"
-#~ msgstr "Messaggi d'errore:"
-
-#~ msgid "Pin has non-existent ownerindex %d."
-#~ msgstr "Pin ha indice-proprietario %d inesistente."
-
-#~ msgid "Label has non-existent ownerindex %d."
-#~ msgstr "L'etichetta ha indice-proprietario %d inesistente."
-
-#~ msgid "Bezier has non-existent ownerindex %d."
-#~ msgstr "La Bezier ha indice-proprietario %d inesistente."
-
-#~ msgid "Polyline has non-existent ownerindex %d."
-#~ msgstr "La polilinea ha indice-proprietario %d inesistente."
-
-#~ msgid "Polygon has non-existent ownerindex %d."
-#~ msgstr "Il poligono ha indice-proprietario %d inesistente."
-
-#~ msgid "Rounded rectangle has non-existent ownerindex %d."
-#~ msgstr "Il rettangolo stondato ha indice-proprietario %d inesistente."
-
-#~ msgid "Arc drawing is not possible for now on schematic."
-#~ msgstr "Il disegno di archi non è per ora possibile sugli schemi elettrici."
-
-#~ msgid "Arc has non-existent ownerindex %d."
-#~ msgstr "L'arco ha indice-proprietario %d inesistente."
-
-#~ msgid "Line has non-existent ownerindex %d."
-#~ msgstr "La linea ha indice-proprietario %d inesistente."
-
-#~ msgid "Rectangle has non-existent ownerindex %d."
-#~ msgstr "Il rettangolo ha indice-proprietario %d inesistente."
-
-#~ msgid "Designator has non-existent ownerindex %d."
-#~ msgstr "Il riferimento ha indice-proprietario %d inesistente."
-
-#~ msgid "You need to select the simulation settings first."
-#~ msgstr "Bisogna prima selezionare le impostazioni di simulazione."
-
-#~ msgid "There was an error while opening the workbook file"
-#~ msgstr "Errore durante l'apertura del file libretto di lavoro"
-
-#~ msgid "There was an error while saving the workbook file"
-#~ msgstr ""
-#~ "Si è verificato un errore durante il salvataggio del file libretto di "
-#~ "lavoro"
-
-#~ msgid "Unable to create \"%s\""
-#~ msgstr "Impossibile creare \"%s\""
-
-#~ msgid "Hide nets matching:"
-#~ msgstr "Nascondi piste corrispondenti:"
-
-#~ msgid ""
-#~ "Pattern to filter net names in filtered list.\n"
-#~ "Net names matching this pattern are not displayed."
-#~ msgstr ""
-#~ "Modello di corrispondenza dei nomi dei collegamenti della lista "
-#~ "filtrata.\n"
-#~ "I nomi dei collegamenti che corrispondono con il modello non saranno "
-#~ "mostrati."
-
-#~ msgid "Show nets matching:"
-#~ msgstr "Mostra collegamenti corrispondenti:"
-
-#~ msgid "*"
-#~ msgstr "*"
-
-#~ msgid "Show all nets"
-#~ msgstr "Mostra tutti i collegamenti"
-
-#~ msgid "Unable to create report file '%s'<br>"
-#~ msgstr "Impossibile creare il file rapporto \"%s\"<br>"
-
-#~ msgid "** Unable to create %s **\n"
-#~ msgstr "** Impossibile creare %s **\n"
-
-#~ msgid "Report file %s created\n"
-#~ msgstr "Il file di rapporto %s è stato creato\n"
-
-#~ msgid ""
-#~ "Polygon has only %d point extracted from %ld vertices. At least 2 points "
-#~ "are required."
-#~ msgstr ""
-#~ "Il poligono ha solo %d punti estratti da %ld vertici. Sono richiesti "
-#~ "almeno 2 punti."
-
-#~ msgid ""
-#~ "ShapeBasedRegion has only %d point extracted from %ld vertices. At least "
-#~ "2 points are required."
-#~ msgstr ""
-#~ "ShapeBasedRegion ha solo %d punti estratti da %ld vertici. Sono richiesti "
-#~ "almeno 2 punti."
-
-#~ msgid "Fill zone(s)"
-#~ msgstr "Riempimento zone"
-
-#~ msgid "Fill All"
-#~ msgstr "Riempi tutto"
-
-#~ msgid "Fill all zones"
-#~ msgstr "Riempi tutte le zone"
-
-#~ msgid "Unfill"
-#~ msgstr "Svuota"
-
-#~ msgid "Unfill zone(s)"
-#~ msgstr "Svuota le zone"
-
-#~ msgid "Unfill All"
-#~ msgstr "Svuota tutto"
-
-#~ msgid "Raytracing Options"
-#~ msgstr "Opzioni raytracing"
-
-#~ msgid "Choose Colors"
-#~ msgstr "Scegli i colori"
-
-#~ msgid "Background Top Color..."
-#~ msgstr "Colore di sfondo in alto..."
-
-#~ msgid "Background Bottom Color..."
-#~ msgstr "Colore di sfondo in fondo..."
-
-#~ msgid "Silkscreen Color..."
-#~ msgstr "Colore serigrafia..."
-
-#~ msgid "Solder Mask Color..."
-#~ msgstr "Colore maschera di saldatura..."
-
-#~ msgid "Solder Paste Color..."
-#~ msgstr "Colore pasta salda..."
-
-#~ msgid "Copper/Surface Finish Color..."
-#~ msgstr "Colore rame/finitura superficiale..."
-
-#~ msgid "Board Body Color..."
-#~ msgstr "Colore corpo scheda..."
-
-#~ msgid "Set display options, and some layers visibility"
-#~ msgstr ""
-#~ "Imposta le opzioni di visualizzazione, e la visibilità di alcuni strati"
-
-#~ msgid "OpenGL Render Options"
-#~ msgstr "Opzioni di resa OpenGL"
-
-#~ msgid "Raytracing Render Options"
-#~ msgstr "Opzioni render raytracing"
-
-#~ msgid "Post-processing"
-#~ msgstr "Post-elaborazione"
-
-#~ msgid "1:"
-#~ msgstr "1:"
-
-#~ msgid "5:"
-#~ msgstr "5:"
-
-#~ msgid "2:"
-#~ msgstr "2:"
-
-#~ msgid "6:"
-#~ msgstr "6:"
-
-#~ msgid "3:"
-#~ msgstr "3:"
-
-#~ msgid "7:"
-#~ msgstr "7:"
-
-#~ msgid "4:"
-#~ msgstr "4:"
-
-#~ msgid "8:"
-#~ msgstr "8:"
-
-#~ msgid "Reset to defaults"
-#~ msgstr "Reimposta ai predefiniti"
-
-#~ msgid "3D Display Options"
-#~ msgstr "Opzioni visualizzazione 3D"
-
-#~ msgid "Background Color, Top"
-#~ msgstr "Colore di sfondo, alto"
-
-#~ msgid "Copper Color"
-#~ msgstr "Colore rame"
-
-#~ msgid "Solder Paste Color"
-#~ msgstr "Colore pasta salda"
-
-#~ msgid "Use All Properties"
-#~ msgstr "Usa tutte le proprietà"
-
-#~ msgid "Use Diffuse Only"
-#~ msgstr "Usa solo diffusione"
-
-#~ msgid "CAD Color Style"
-#~ msgstr "Stile colore CAD"
-
-#~ msgid "Procedural Textures"
-#~ msgstr "Motivi procedurali"
-
-#~ msgid "Apply procedural textures to materials (slow)"
-#~ msgstr "Applica motivi procedurali ai materiali (lento)"
-
-#~ msgid "Add Floor"
-#~ msgstr "Aggiungi pavimento"
-
-#~ msgid "Adds a floor plane below the board (slow)"
-#~ msgstr "Aggiungi un piano di pavimento sotto la scheda (lento)"
-
-#~ msgid "Refractions"
-#~ msgstr "Rifrazioni"
-
-#~ msgid "Render materials with refractive properties on final render (slow)"
-#~ msgstr ""
-#~ "Render dei materiali con proprietà di rifrazione sul render finale (lento)"
-
-#~ msgid "Reflections"
-#~ msgstr "Riflessioni"
-
-#~ msgid "Render materials with reflective properties on final render (slow)"
-#~ msgstr ""
-#~ "Render dei materiali con proprietà di riflessione sul render finale "
-#~ "(lento)"
-
-#~ msgid "Render with improved quality on final render (slow)"
-#~ msgstr "Render con qualità migliorata sul render finale (lento)"
-
-#~ msgid "You do not have write permissions to folder \"%s\"."
-#~ msgstr "Non hai i permessi di scrittura per la cartella \"%s\"."
-
-#~ msgid ""
-#~ "You do not have write permissions to save file \"%s\" to folder \"%s\"."
-#~ msgstr ""
-#~ "Non hai i permessi di scrittura per salvare il file \"%s\" nella cartella "
-#~ "\"%s\"."
-
-#~ msgid "You do not have write permissions to save file \"%s\"."
-#~ msgstr "Non hai i permessi necessari per salvare il file \"%s\"."
-
-#~ msgid "Cannot create global library table path \"%s\"."
-#~ msgstr "Impossibile creare il percorso tabella librerie globale \"%s\"."
-
-#~ msgid "Cannot copy file \"%s\"."
-#~ msgstr "Impossibile copiare il file \"%s\"."
-
-#~ msgid "Illegal character found in revision"
-#~ msgstr "Carattere non consentito trovato nella revisione"
-
-#~ msgid "%s is already running. Continue?"
-#~ msgstr "%s è già in esecuzione. Continuare?"
-
-#~ msgid "Archive file \"%s\": Failed!\n"
-#~ msgstr "Archivia file \"%s\": fallito!\n"
-
-#~ msgid ""
-#~ "Library \"%s\" has duplicate entry name \"%s\".\n"
-#~ "This may cause some unexpected behavior when loading components into a "
-#~ "schematic."
-#~ msgstr ""
-#~ "La libreria \"%s\" ha un nome elemento duplicato \"%s\".\n"
-#~ "Questo potrebbe causare un comportamento imprevisto all'inserimento di un "
-#~ "componente in uno schema elettrico."
-
-#~ msgid ""
-#~ "Symbol library \"%s\" failed to load. Error:\n"
-#~ " %s"
-#~ msgstr ""
-#~ "Fallito il caricamento della libreria di simboli \"%s\". Errore:\n"
-#~ " %s"
-
-#~ msgid ""
-#~ "Symbol library \"%s\" failed to load.\n"
-#~ "Error: %s"
-#~ msgstr ""
-#~ "Fallito il caricamento della libreria di simboli \"%s\".\n"
-#~ "Errore: %s"
-
-#~ msgid ""
-#~ "Error occurred loading symbol %s from library %s.\n"
-#~ "\n"
-#~ "%s"
-#~ msgstr ""
-#~ "Errore durante il caricamento del simbolo \"%s\" dalla libreria %s.\n"
-#~ "\n"
-#~ "%s"
-
-#~ msgid ""
-#~ "Error occurred loading global symbol library table.\n"
-#~ "\n"
-#~ "%s"
-#~ msgstr ""
-#~ "Errore durante il caricamento della tabella librerie simboli globale:\n"
-#~ "\n"
-#~ "%s"
-
-#~ msgid "Common to all &units in component"
-#~ msgstr "Comune a tutte le &unità nel componente"
-
-#~ msgid ""
-#~ "Margin (in 0.001 inches) between a pin name position and the component "
-#~ "body.\n"
-#~ "A value from 10 to 40 is usually good."
-#~ msgstr ""
-#~ "Margine (in 0.001 di pollice) tra la posizione nome pin e il corpo del "
-#~ "componente.\n"
-#~ "Un valore tra 10 e 40 solitamente va bene."
-
-#~ msgid "Alternate pin assignments are not available for DeMorgan components."
-#~ msgstr ""
-#~ "Le assegnazioni dei pin alternative non sono disponibili per i componenti "
-#~ "DeMorgan."
-
-#~ msgid "Plot: \"%s\" OK.\n"
-#~ msgstr "Tracciatura: \"%s\" OK.\n"
-
-#~ msgid "Unable to create file \"%s\".\n"
-#~ msgstr "Impossibile creare il file \"%s\".\n"
-
-#~ msgid "Cannot create file \"%s\".\n"
-#~ msgstr "Impossibile creare il file \"%s\".\n"
-
-#~ msgid "Library \"%s\" not found."
-#~ msgstr "Libreria \"%s\" non trovata."
-
-#~ msgid "Failed to create temporary file \"%s\""
-#~ msgstr "Fallita creazione file temporaneo \"%s\""
-
-#~ msgid "Failed to rename temporary file \"%s\""
-#~ msgstr "Impossibile rinominare il file temporaneo \"%s\""
-
-#~ msgid ""
-#~ "The entire schematic could not be loaded.  Errors occurred attempting to "
-#~ "load \n"
-#~ "hierarchical sheet schematics."
-#~ msgstr ""
-#~ "Impossibile caricare lo schema elettrico completo. Si sono verificati "
-#~ "degli\n"
-#~ "errori nel tentativo di caricare la gerarchia degli schemi elettrici."
-
-#~ msgid "Append Schematic"
-#~ msgstr "Aggiungi schema"
-
-#~ msgid "Failed to save symbol library file \"%s\""
-#~ msgstr "Fallito salvataggio file libreria simboli \"%s\""
-
-#~ msgid "Save changes to \"%s\" before closing?"
-#~ msgstr "Salvare le modifiche a \"%s\" prima di chiudere?"
-
-#~ msgid "[no file]"
-#~ msgstr "[nessun file]"
-
-#~ msgid ""
-#~ "Invalid symbol name in\n"
-#~ "file: \"%s\"\n"
-#~ "line: %d\n"
-#~ "offset: %d"
-#~ msgstr ""
-#~ "Nome simbolo non valido in\n"
-#~ "file: \"%s\"\n"
-#~ "riga: %d\n"
-#~ "scostamento: %d"
-
-#~ msgid ""
-#~ "Invalid library identifier in\n"
-#~ "file: \"%s\"\n"
-#~ "line: %d\n"
-#~ "offset: %d"
-#~ msgstr ""
-#~ "Identificatore di libreria non valido in\n"
-#~ "file: \"%s\"\n"
-#~ "riga: %d\n"
-#~ "scostamento: %d"
-
-#~ msgid ""
-#~ "Invalid symbol extends name in\n"
-#~ "file: \"%s\"\n"
-#~ "line: %d\n"
-#~ "offset: %d"
-#~ msgstr ""
-#~ "Nome simbolo esteso non valido in\n"
-#~ "file: \"%s\"\n"
-#~ "riga: %d\n"
-#~ "scostamento: %d"
-
-#~ msgid ""
-#~ "Invalid symbol unit name in\n"
-#~ "file: \"%s\"\n"
-#~ "line: %d\n"
-#~ "offset: %d"
-#~ msgstr ""
-#~ "Nome unità simbolo non valido in\n"
-#~ "file: \"%s\"\n"
-#~ "riga: %d\n"
-#~ "scostamento: %d"
-
-#~ msgid ""
-#~ "Invalid symbol unit name prefix %s in\n"
-#~ "file: \"%s\"\n"
-#~ "line: %d\n"
-#~ "offset: %d"
-#~ msgstr ""
-#~ "Prefisso nome unità simbolo %s non valido in\n"
-#~ "file: \"%s\"\n"
-#~ "riga: %d\n"
-#~ "scostamento: %d"
-
-#~ msgid ""
-#~ "Invalid symbol unit number %s in\n"
-#~ "file: \"%s\"\n"
-#~ "line: %d\n"
-#~ "offset: %d"
-#~ msgstr ""
-#~ "Numero unità simbolo %s non valido in\n"
-#~ "file: \"%s\"\n"
-#~ "riga: %d\n"
-#~ "scostamento: %d"
-
-#~ msgid ""
-#~ "Invalid symbol names definition in\n"
-#~ "file: '%s'\n"
-#~ "line: %d\n"
-#~ "offset: %d"
-#~ msgstr ""
-#~ "Definizione nome simbolo non valida in\n"
-#~ "file: \"%s\"\n"
-#~ "riga: %d\n"
-#~ "scostamento: %d"
-
-#~ msgid ""
-#~ "Invalid property name in\n"
-#~ "file: '%s'\n"
-#~ "line: %d\n"
-#~ "offset: %d"
-#~ msgstr ""
-#~ "Nome proprietà non valido in\n"
-#~ "file: \"%s\"\n"
-#~ "riga: %d\n"
-#~ "scostamento: %d"
-
-#~ msgid ""
-#~ "Empty property name in\n"
-#~ "file: '%s'\n"
-#~ "line: %d\n"
-#~ "offset: %d"
-#~ msgstr ""
-#~ "Nome proprietà vuoto in\n"
-#~ "file: \"%s\"\n"
-#~ "riga: %d\n"
-#~ "scostamento: %d"
-
-#~ msgid ""
-#~ "Invalid property value in\n"
-#~ "file: '%s'\n"
-#~ "line: %d\n"
-#~ "offset: %d"
-#~ msgstr ""
-#~ "Valore proprietà non valido in\n"
-#~ "file: \"%s\"\n"
-#~ "riga: %d\n"
-#~ "scostamento: %d"
-
-#~ msgid ""
-#~ "Invalid pin name in\n"
-#~ "file: \"%s\"\n"
-#~ "line: %d\n"
-#~ "offset: %d"
-#~ msgstr ""
-#~ "Nome pin non valido in\n"
-#~ "file: \"%s\"\n"
-#~ "riga: %d\n"
-#~ "scostamento: %d"
-
-#~ msgid ""
-#~ "Invalid pin number in\n"
-#~ "file: \"%s\"\n"
-#~ "line: %d\n"
-#~ "offset: %d"
-#~ msgstr ""
-#~ "Numero pin non valido in\n"
-#~ "file: \"%s\"\n"
-#~ "riga: %d\n"
-#~ "scostamento: %d"
-
-#~ msgid ""
-#~ "Invalid alternate pin name in\n"
-#~ "file: \"%s\"\n"
-#~ "line: %d\n"
-#~ "offset: %d"
-#~ msgstr ""
-#~ "Nome pin alternativo non valido in\n"
-#~ "file: \"%s\"\n"
-#~ "riga: %d\n"
-#~ "scostamento: %d"
-
-#~ msgid ""
-#~ "Invalid text string in\n"
-#~ "file: \"%s\"\n"
-#~ "line: %d\n"
-#~ "offset: %d"
-#~ msgstr ""
-#~ "Stringa di testo non valida in\n"
-#~ "file: \"%s\"\n"
-#~ "riga: %d\n"
-#~ "scostamento: %d"
-
-#~ msgid ""
-#~ "Invalid property name in\n"
-#~ "file: \"%s\"\n"
-#~ "line: %d\n"
-#~ "offset: %d"
-#~ msgstr ""
-#~ "Nome proprietà non valido in\n"
-#~ "file: \"%s\"\n"
-#~ "riga: %d\n"
-#~ "scostamento: %d"
-
-#~ msgid ""
-#~ "Empty property name in\n"
-#~ "file: \"%s\"\n"
-#~ "line: %d\n"
-#~ "offset: %d"
-#~ msgstr ""
-#~ "Nome proprietà vuoto in\n"
-#~ "file: \"%s\"\n"
-#~ "riga: %d\n"
-#~ "scostamento: %d"
-
-#~ msgid ""
-#~ "Invalid property value in\n"
-#~ "file: \"%s\"\n"
-#~ "line: %d\n"
-#~ "offset: %d"
-#~ msgstr ""
-#~ "Valore proprietà non valido in\n"
-#~ "file: \"%s\"\n"
-#~ "riga: %d\n"
-#~ "scostamento: %d"
-
-#~ msgid ""
-#~ "Invalid sheet pin name in\n"
-#~ "file: \"%s\"\n"
-#~ "line: %d\n"
-#~ "offset: %d"
-#~ msgstr ""
-#~ "Nome pin foglio non valido in\n"
-#~ "file: \"%s\"\n"
-#~ "riga: %d\n"
-#~ "scostamento: %d"
-
-#~ msgid ""
-#~ "Empty sheet pin name in\n"
-#~ "file: \"%s\"\n"
-#~ "line: %d\n"
-#~ "offset: %d"
-#~ msgstr ""
-#~ "Nome pin foglio vuoto in\n"
-#~ "file: \"%s\"\n"
-#~ "riga: %d\n"
-#~ "scostamento: %d"
-
-#~ msgid ""
-#~ "Invalid symbol library name in\n"
-#~ "file: \"%s\"\n"
-#~ "line: %d\n"
-#~ "offset: %d"
-#~ msgstr ""
-#~ "Nome libreria di simboli non valido in\n"
-#~ "file: \"%s\"\n"
-#~ "riga: %d\n"
-#~ "scostamento: %d"
-
-#~ msgid ""
-#~ "Invalid symbol library ID in\n"
-#~ "file: \"%s\"\n"
-#~ "line: %d\n"
-#~ "offset: %d"
-#~ msgstr ""
-#~ "ID libreria simboli non valido in\n"
-#~ "file: \"%s\"\n"
-#~ "riga: %d\n"
-#~ "scostamento: %d"
-
-#~ msgid "symbol library \"%s\" already exists, cannot create a new library"
-#~ msgstr ""
-#~ "la libreria di simboli \"%s\" esiste già, non ne verrà creata una nuova"
-
-#~ msgid "user does not have permission to read library document file \"%s\""
-#~ msgstr "non si dispone dei permessi necessari per salvare il file \"%s\""
-
-#~ msgid "Error occurred loading schematic file \"%s\"."
-#~ msgstr "Errore durante il caricamento del file dello schema \"%s\"."
-
-#~ msgid "Library \"%s\" already exists"
-#~ msgstr "La libreria \"%s\" esiste già"
-
-#~ msgid "Error occurred loading symbol \"%s\" from library \"%s\"."
-#~ msgstr ""
-#~ "Errore durante il caricamento del simbolo \"%s\" dalla libreria \"%s\"."
-
-#~ msgid "Symbol \"%s\" already exists in library \"%s\""
-#~ msgstr "Il simbolo \"%s\" esiste già nella libreria \"%s\""
-
-#~ msgid "Symbol \"%s\" already exists in library \"%s\"."
-#~ msgstr "Il simbolo \"%s\" esiste già nella libreria \"%s\"."
-
-#~ msgid "Symbol \"%s\" already exists in \"%s\"."
-#~ msgstr "Il simbolo \"%s\" esiste già in \"%s\"."
-
-#~ msgid "Write permissions are required to save library \"%s\"."
-#~ msgstr ""
-#~ "Sono richiesti i permessi di scrittura per salvare la libreria \"%s\"."
-
-#~ msgid "Errors were encountered loading symbols:"
-#~ msgstr "Errori durante il caricamento di simboli:"
-
-#~ msgid "Cannot find library \"%s\" in the Symbol Library Table (%s)"
-#~ msgstr ""
-#~ "Impossibile trovare la libreria \"%s\" nella tabella librerie di simboli "
-#~ "(%s)"
-
-#~ msgid "Cannot load symbol \"%s\" from library \"%s\" (%s)"
-#~ msgstr "Impossibile caricare il simbolo \"%s\" dalla libreria \"%s\" (%s)"
-
-#~ msgid "An error \"%s\" occurred saving symbol \"%s\" to library \"%s\""
-#~ msgstr ""
-#~ "Errore \"%s\" durante il salvataggio del simbolo \"%s\" sulla libreria "
-#~ "\"%s\""
-
-#~ msgid "Cannot create file \"%s\""
-#~ msgstr "Impossibile creare il file \"%s\""
-
-#~ msgid "Source file \"%s\" is not available"
-#~ msgstr "Il file sorgente \"%s\" non è disponibile"
-
-#~ msgid "Make sure you have write permissions and try again."
-#~ msgstr ""
-#~ "La cartella \"%s\" non può essere creata.\n"
-#~ "\n"
-#~ "Assicurarsi di avere i permessi di scrittura e riprovare."
-
-#~ msgid "\"%s\" already exists."
-#~ msgstr "\"%s\" esiste già."
-
-#~ msgid ""
-#~ "Directory \"%s\" could not be created.\n"
-#~ "\n"
-#~ "Please make sure you have write permissions and try again."
-#~ msgstr ""
-#~ "La cartella \"%s\" non può essere creata.\n"
-#~ "\n"
-#~ "Assicurarsi di avere i permessi di scrittura e riprovare."
-
-#~ msgid "Cannot write to folder \"%s\"."
-#~ msgstr "Impossibile scrivere nella cartella \"%s\"."
-
-#~ msgid "Please check your access permissions to this folder and try again."
-#~ msgstr "Controllare i permessi di accesso a questa cartella e riprovare."
-
-#~ msgid "Error when loading file \"%s\""
-#~ msgstr "Errore nel caricare il file \"%s\""
-
-#~ msgid "no file selected"
-#~ msgstr "nessun file selezionato"
-
-#~ msgid "Select dielectric layer to add to board stack up."
-#~ msgstr ""
-#~ "Selezionare lo strato dielettrico da aggiungere allo stackup scheda."
-
-#~ msgid "Dielectric Layers List"
-#~ msgstr "Elenco strati dielettrici"
-
-#~ msgid "Select dielectric layer to remove from board stack up."
-#~ msgstr ""
-#~ "Selezionare lo strato dielettrico da rimuovere dallo stackup scheda."
-
-#~ msgid "Dielectric Layers"
-#~ msgstr "Strati dielettrici"
-
-#~ msgid "Unable to create file \"%s\""
-#~ msgstr "Impossibile creare il file \"%s\""
-
-#~ msgid "Drill and plot origin"
-#~ msgstr "Origine forature e tracciatura"
-
-#~ msgid "Other options:"
-#~ msgstr "Altre opzioni:"
-
-#~ msgid "Tolerance:"
-#~ msgstr "Tolleranza:"
-
-#~ msgid "Unable to create file \"%s\"."
-#~ msgstr "Impossibile creare il file \"%s\"."
-
-#~ msgid "\"%s\" not found"
-#~ msgstr "\"%s\" non trovato"
-
-#~ msgid "\"%s\" found"
-#~ msgstr "\"%s\" trovato"
-
-#~ msgid "File \"%s\" not found."
-#~ msgstr "File \"%s\" non trovato."
-
-#~ msgid ""
-#~ "Error occurred loading global footprint library table:\n"
-#~ "\n"
-#~ "%s"
-#~ msgstr ""
-#~ "Errore durante il caricamento della tabella librerie impronte globale:\n"
-#~ "\n"
-#~ "\"%s\""
-
-#~ msgid "Plot file \"%s\" created."
-#~ msgstr "File tracciatura \"%s\" creato."
-
-#~ msgid "Select user defined layer to add to board layer set"
-#~ msgstr ""
-#~ "Selezionare lo strato definito dall'utente su cui aggiungere l'insieme "
-#~ "strati scheda"
-
-#~ msgid "Could not create file \"%s\"."
-#~ msgstr "Impossibile creare il file \"%s\"."
-
-#~ msgid "Unable to create \"%s\"."
-#~ msgstr "Impossibile creare \"%s\"."
-
-#~ msgid "No access rights to write to file \"%s\""
-#~ msgstr "Nessun diritto di accesso durante la scrittura del file \"%s\""
-
-#~ msgid "No access rights to write to file '%s'."
-#~ msgstr "Nessun diritto di scrittura del file \"%s\"."
-
-#~ msgid "%s%s [from %s.%s]"
-#~ msgstr "%s%s [da %s.%s]"
-
-#~ msgid "Unable to create or write file \"%s\""
-#~ msgstr "Impossibile creare o scrivere il file \"%s\""
-
-#~ msgid ""
-#~ "Polygon on Altium layer %d has no KiCad equivalent. Ignore it instead"
-#~ msgstr ""
-#~ "Il poligono sullo strato Altium %d non ha equivalente KiCad. Ignoralo"
-
-#~ msgid ""
-#~ "Arc on Altium layer %d has no KiCad equivalent. Put it on Eco1_User "
-#~ "instead"
-#~ msgstr ""
-#~ "L'arco sullo strato Altium %d non ha equivalente KiCad. Mettilo su "
-#~ "Eco1_User"
-
-#~ msgid ""
-#~ "Track on Altium layer %d has no KiCad equivalent. Put it on Eco1_User "
-#~ "instead"
-#~ msgstr ""
-#~ "La pista sullo strato Altium %d non ha equivalente KiCad. Mettila su "
-#~ "Eco1_User"
-
-#~ msgid ""
-#~ "Invalid format for record_tag string \"%s\" in Geometric definition row "
-#~ "%zu"
-#~ msgstr ""
-#~ "Formato non valido per la stringa record_tag \"%s\" nella riga di "
-#~ "definizione geometrica %zu"
-
-#~ msgid "Unhandled graphic item '%s' in Geometric definition row %zu"
-#~ msgstr ""
-#~ "Elemento grafico non gestito \"%s\" nella riga di definizione geometrica "
-#~ "%zu"
-
-#~ msgid "footprint library path \"%s\" does not exist"
-#~ msgstr "il percorso libreria impronte \"%s\" non esiste"
-
-#~ msgid "unknown token \"%s\""
-#~ msgstr "token sconosciuto \"%s\""
-
-#~ msgid "Library \"%s\" is read only"
-#~ msgstr "La libreria \"%s\" è in sola lettura"
-
-#~ msgid "user does not have permission to delete directory \"%s\""
-#~ msgstr "l'utente non ha i permessi per cancellare la cartella \"%s\""
-
-#~ msgid "library directory \"%s\" has unexpected sub-directories"
-#~ msgstr "la cartella libreria \"%s\" ha sottocartelle inattese"
-
-#~ msgid "unexpected file \"%s\" was found in library path \"%s\""
-#~ msgstr "file inatteso \"%s\" trovato nel percorso libreria \"%s\""
-
-#~ msgid "footprint library \"%s\" cannot be deleted"
-#~ msgstr "la libreria impronte \"%s\" non può essere cancellata"
-
-#~ msgid "Footprint library path '%s' does not exist (or is not a directory)."
-#~ msgstr ""
-#~ "Il percorso libreria impronte \"%s\" non esiste (o non è una cartella)."
-
-#~ msgid "No write permissions to delete file \"%s\""
-#~ msgstr ""
-#~ "Non si dispone dei permessi di scrittura necessari per cancellare il file "
-#~ "\"%s\""
-
-#~ msgid "User does not have permission to delete directory \"%s\"."
-#~ msgstr "L'utente non ha i permessi per cancellare la cartella \"%s\"."
-
-#~ msgid ""
-#~ "Invalid net ID in\n"
-#~ "file: \"%s\"\n"
-#~ "line: %d\n"
-#~ "offset: %d"
-#~ msgstr ""
-#~ "Net ID non valido in\n"
-#~ "file: \"%s\"\n"
-#~ "riga: %d\n"
-#~ "scostamento: %d"
-
-#~ msgid ""
-#~ "invalid float number in file: \"%s\"\n"
-#~ "line: %d, offset: %d"
-#~ msgstr ""
-#~ "numero in virgola mobile non valido nel file: \"%s\"\n"
-#~ "riga: %d, scostamento: %d"
-
-#~ msgid ""
-#~ "missing float number in file: \"%s\"\n"
-#~ "line: %d, offset: %d"
-#~ msgstr ""
-#~ "numero in virgola mobile mancante nel file: \"%s\"\n"
-#~ "riga: %d, scostamento: %d"
-
-#~ msgid "Only through vias are allowed on 2 layer boards."
-#~ msgstr "Solo via passanti sono consentiti su schede a due strati."
-
-#~ msgid ""
-#~ "Microvias can only be placed between the outer layers (F.Cu/B.Cu) and the "
-#~ "ones directly adjacent to them."
-#~ msgstr ""
-#~ "I microvia possono essere piazzati solo tra gli strati esterni (F.Cu/B."
-#~ "Cu) e quelli direttamente adiacenti a questi."
-
-#~ msgid "Page layout description file \"%s\" not found."
-#~ msgstr "File di disposizione pagina \"%s\" non trovato."
-
-#~ msgid "Select Page Layout Description File"
-#~ msgstr "Seleziona il file di disposizione pagina"
-
-#~ msgid "Page layout description file"
-#~ msgstr "File di disposizione pagina"
-
-#~ msgid "Subpixel Antialiasing (High Quality)"
-#~ msgstr "Subpixel Antialiasing (qualità alta)"
-
-#~ msgid "Subpixel Antialiasing (Ultra Quality)"
-#~ msgstr "Subpixel Antialiasing (qualità ultra)"
-
-#~ msgid "Supersampling (2x)"
-#~ msgstr "Supercampionatura (2x)"
-
-#~ msgid "Supersampling (4x)"
-#~ msgstr "Supercampionatura (4x)"
-
-#~ msgid "Balanced Antialiasing"
-#~ msgstr "Antialiasing bilanciato"
-
-#~ msgid "Error writing page layout design file"
-#~ msgstr "Errore durante la scrittura del file di disposizione pagina"
-
-#~ msgid "Component"
-#~ msgstr "Componente"
-
-#~ msgid "Page layout design files"
-#~ msgstr "File di disposizione pagina"
-
-#~ msgid "Change \"%s\" link from \"%s\" to \"%s\"?"
-#~ msgstr "Cambiare il collegamento \"%s\" da \"%s\" a \"%s\"?"
-
-#~ msgid ""
-#~ "Error loading schematic \"%s\".\n"
-#~ "%s"
-#~ msgstr ""
-#~ "Errore durante il caricamento dello schema \"%s\".\n"
-#~ "%s"
-
-#~ msgid "%s, %s, or %s"
-#~ msgstr "%s, %s, o %s"
-
-#~ msgid "%s, %s, %s, or %s"
-#~ msgstr "%s, %s, %s, o %s"
-
-#~ msgid "Failed to load schematic \"%s\""
-#~ msgstr "Impossibile caricare lo schema elettrico \"%s\""
-
-#~ msgid "Start the simulation by clicking the Run Simulation button"
-#~ msgstr "Avvia la simulazione facendo clic sul pulsante Avvia simulazione"
-
-#~ msgid "Visibles"
-#~ msgstr "Visibili"
-
-#~ msgid "Plugin Type"
-#~ msgstr "Tipo plugin"
-
-#~ msgid "Template path:"
-#~ msgstr "Percorso modelli:"
-
-#~ msgid "Failed to delete '%s'"
-#~ msgstr "Impossibile cancellare \"%s\""
-
-#~ msgid "Delete Directory"
-#~ msgstr "Cancella cartella"
-
-#~ msgid "Delete File"
-#~ msgstr "Cancella file"
-
-#~ msgid "Are you sure you want to delete '%s'?"
-#~ msgstr "Confermi la cancellazione di \"%s\"?"
-
-#~ msgid "Delete Multiple Items"
-#~ msgstr "Elimina elementi multipli"
-
-#~ msgid "Template Error"
-#~ msgstr "Errore modello"
-
-#~ msgid "Print Page Layout"
-#~ msgstr "Stampa disposizione pagina"
-
-#~ msgid "An error occurred attempting to print the page layout."
-#~ msgstr ""
-#~ "Si è verificato un errore durante la stampa della disposizione pagina."
-
-#~ msgid "Page Layout Description File"
-#~ msgstr "File di disposizione pagina"
-
-#~ msgid "The current page layout has been modified. Save changes?"
-#~ msgstr ""
-#~ "La pagina di disposizione corrente è stata modificata. Salvare le "
-#~ "modifiche?"
-
-#~ msgid "The current page layout has been modified.  Save changes?"
-#~ msgstr ""
-#~ "La pagina di disposizione corrente è stata modificata. Salvare le "
-#~ "modifiche?"
-
-#~ msgid "New page layout file is unsaved"
-#~ msgstr "Il nuovo file di disposizione pagina non è stato salvato"
-
-#~ msgid "Page layout changes are unsaved"
-#~ msgstr "Cambiamenti disposizione pagina non salvati"
-
-#~ msgid "Thermal clearance:"
-#~ msgstr "Distanza termica:"
-
-#~ msgid "&Run"
-#~ msgstr "&Esegui"
-
-#~ msgid "Scripting Test Window"
-#~ msgstr "Finestra di test script"
-
-#~ msgid "Thermal Width"
-#~ msgstr "Larghezza termica"
-
-#~ msgid "Thermal Gap"
-#~ msgstr "Spaziatura termica"
-
-#~ msgid "Highlight Ratsnest"
-#~ msgstr "Evidenzia ratsnest"
-
-#~ msgid "Thermal Clearance"
-#~ msgstr "Distanza termica"
-
-#~ msgid "Thermal Spoke Width"
-#~ msgstr "Larghezza supporti termici"
-
-#~ msgid ""
-#~ "Html or pdf help file \n"
-#~ "%s\n"
-#~ "or\n"
-#~ "%s could not be found."
-#~ msgstr ""
-#~ "File guida HTML o PDF \n"
-#~ "%s\n"
-#~ "o\n"
-#~ "%s non trovato."
-
-#~ msgid "Reset, but keep order of multi-unit parts"
-#~ msgstr "Reimposta, ma mantieni l'ordine delle parti multiple"
-
-#~ msgid "Enable second source"
-#~ msgstr "Abilita seconda sorgente"
-
-#~ msgid "DC source:"
-#~ msgstr "Sorgente DC:"
-
-#~ msgid "Horizontal left"
-#~ msgstr "Sinistra orizzontale"
-
-#~ msgid "Vertical up"
-#~ msgstr "Su verticale"
-
-#~ msgid "Horizontal right"
-#~ msgstr "Destra orizzontale"
-
-#~ msgid "Vertical down"
-#~ msgstr "Giù verticale"
-
-#~ msgid "Welcome!"
-#~ msgstr "Benvenuti!"
-
-#~ msgid "Open Workbook"
-#~ msgstr "Apri libretto di lavoro"
-
-#~ msgid "Save Workbook"
-#~ msgstr "Salva libretto di lavoro"
-
-#~ msgid "Close Simulation"
-#~ msgstr "Chiudi simulazione"
-
-#~ msgid "Errors reported by Eeschema:\n"
-#~ msgstr "Errori riportati da Eeschema:\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "Annotation not performed!\n"
-#~ msgstr ""
-#~ "\n"
-#~ "Annotazione non eseguita!\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "The schematic will be updated."
-#~ msgstr ""
-#~ "\n"
-#~ "Lo schema verrà aggiornato."
-
-#~ msgid ""
-#~ "\n"
-#~ "The schematic will not be updated."
-#~ msgstr ""
-#~ "\n"
-#~ "Lo schema non verrà aggiornato."
-
-#~ msgid ""
-#~ "\n"
-#~ "Reannotate failed!\n"
-#~ msgstr ""
-#~ "\n"
-#~ "Riannotazione fallita!\n"
-
-#~ msgid "Update schematic"
-#~ msgstr "Aggiorna schema"
-
-#~ msgid "Print (or not) the edges layer on others layers"
-#~ msgstr "Stampa (o no) lo strato di taglio sugli altri strati"
-
-#~ msgid "One file per layer"
-#~ msgstr "Un file per strato"
-
-#~ msgid "All layers in a single file"
-#~ msgstr "Tutti gli strati in un file"
-
-#~ msgid "Pagination"
-#~ msgstr "Paginazione"
-
-#~ msgid "Enable hotkey move commands and Auto Placement"
-#~ msgstr "Abilita comandi da tastiera spostamento e autoposizionamento"
-
-#~ msgid "Disable hotkey move commands and Auto Placement"
-#~ msgstr "Disabilita comandi da tastiera spostamento e autoposizionamento"
-
-#~ msgid "Exclude PCB edge layer from other layers"
-#~ msgstr ""
-#~ "Escludi il contenuto dello strato di bordo scheda dagli altri strati"
-
-#~ msgid "All layers on single page"
-#~ msgstr "Tutti gli strati su una singola pagina"
-
-#~ msgid "Exclude PCB edge layer"
-#~ msgstr "Escludi lo strato di bordo del C.S."
-
-#~ msgid "Exclude contents of Edges_Pcb layer from all other layers"
-#~ msgstr "Esclude il contenuto dello strato Ingombro scheda"
-
-#~ msgid "Net Class parameters"
-#~ msgstr "Parametri del gruppo di collegamenti"
-
-#~ msgid "locked"
-#~ msgstr "bloccato"
-
-#~ msgid ""
-#~ "KiCad is a Cross Platform and Open Source Electronics Design Automation "
-#~ "Suite. The programs handle Schematic Capture, and PCB Layout with Gerber "
-#~ "output."
-#~ msgstr ""
-#~ "KiCad è una suite Open Source e multipiattaforma di automazione della "
-#~ "progettazione elettronica (EDA). I suoi programmi gestiscono il disegno "
-#~ "dello schema elettrico e creazione del relativo Circuito Stampato con "
-#~ "generazione di file Gerber."
-
-#~ msgid "Eeschema Schematic Editor"
-#~ msgstr "Eeschema editor schemi elettrici"
-
-#~ msgid "PcbNew PCB Layout"
-#~ msgstr "PcbNew progettazione C.S."
-
-#~ msgid "PcbNew 3D Viewer"
-#~ msgstr "PcbNew visualizzatore 3D"
-
-#~ msgid "Eeschema (Standalone)"
-#~ msgstr "Eeschema (autonomo)"
-
-#~ msgid "Electronic schematic capture"
-#~ msgstr "Disegno schemi elettrici"
-
-#~ msgid "KiCad electronic schematic design (standalone)"
-#~ msgstr "KiCad progettazione schemi elettrici (autonomo)"
-
-#~ msgid "Electronic Design Automation suite"
-#~ msgstr "Suite di progettazione circuiti elettronici (EDA)"
-
-#~ msgid "Pcbnew (Standalone)"
-#~ msgstr "Pcbnew (autonomo)"
-
-#~ msgid "KiCad printed circuit board layout (standalone)"
-#~ msgstr "Progettazione circuiti stampati KiCad (autonomo)"
