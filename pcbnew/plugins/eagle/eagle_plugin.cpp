@@ -409,6 +409,10 @@ BOARD* EAGLE_PLUGIN::Load( const wxString& aFileName, BOARD* aAppendToMe,
         auto finishNetclass =
                 [&]( NETCLASSPTR netclass )
                 {
+                    // If Eagle has a clearance matrix then we'll build custom rules from that.
+                    // Netclasses should just be the board minimum clearance.
+                    netclass->SetClearance( KiROUND( designSettings.m_MinClearance ) );
+
                     if( netclass->GetTrackWidth() == INT_MAX )
                         netclass->SetTrackWidth( defaults.GetTrackWidth() );
 
