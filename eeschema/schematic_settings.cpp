@@ -67,8 +67,6 @@ SCHEMATIC_SETTINGS::SCHEMATIC_SETTINGS( JSON_SETTINGS* aParent, const std::strin
             appSettings ? appSettings->m_Drawing.default_text_size : DEFAULT_TEXT_SIZE;
     int defaultPinSymbolSize =
             appSettings ? appSettings->m_Drawing.pin_symbol_size : DEFAULT_TEXT_SIZE / 2;
-    int defaultJunctionSize =
-            appSettings ? appSettings->m_Drawing.default_junction_size : DEFAULT_JUNCTION_DIAM;
     int defaultJunctionSizeChoice =
             appSettings ? appSettings->m_Drawing.junction_size_choice : 3;
     bool defaultIntersheetsRefShow =

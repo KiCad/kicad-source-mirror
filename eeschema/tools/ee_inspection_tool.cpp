@@ -474,8 +474,8 @@ int EE_INSPECTION_TOOL::CheckSymbol( const TOOL_EVENT& aEvent )
                                             bgcolor.GetAsString( wxC2S_HTML_SYNTAX ),
                                             fgcolor.GetAsString( wxC2S_HTML_SYNTAX ) );
 
-        for( const wxString& msg : messages )
-            outmsg += msg;
+        for( const wxString& single_msg : messages )
+            outmsg += single_msg;
 
         outmsg += "</body></html>";
 
