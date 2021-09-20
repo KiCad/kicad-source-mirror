@@ -149,7 +149,8 @@ void EXCELLON_WRITER::CreateDrillandMapFilesSet( const wxString& aPlotDirectory,
     if( aGenMap )
         CreateMapFilesSet( aPlotDirectory, aReporter );
 
-    aReporter->ReportTail( _( "Done." ), RPT_SEVERITY_INFO );
+    if( aReporter )
+        aReporter->ReportTail( _( "Done." ), RPT_SEVERITY_INFO );
 }
 
 
