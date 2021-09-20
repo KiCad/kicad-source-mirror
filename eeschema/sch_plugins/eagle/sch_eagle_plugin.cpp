@@ -1173,20 +1173,13 @@ SCH_TEXT* SCH_EAGLE_PLUGIN::loadLabel( wxXmlNode* aLabelNode, const wxString& aN
     bool                      global = m_netCounts[aNetName] > 1;
     std::unique_ptr<SCH_TEXT> label;
 
-    wxSize textSize;
+    wxSize textSize = wxSize( KiROUND( elabel.size.ToSchUnits() * 0.7 ),
+                              KiROUND( elabel.size.ToSchUnits() * 0.7 ) );
 
     if( global )
-    {
         label = std::make_unique<SCH_GLOBALLABEL>();
-        textSize = wxSize( KiROUND( elabel.size.ToSchUnits() * 0.75 ),
-                           KiROUND( elabel.size.ToSchUnits() * 0.75 ) );
-    }
     else
-    {
         label = std::make_unique<SCH_LABEL>();
-        textSize = wxSize( KiROUND( elabel.size.ToSchUnits() * 0.85 ),
-                           KiROUND( elabel.size.ToSchUnits() * 0.85 ) );
-    }
 
     label->SetPosition( elabelpos );
     label->SetText( escapeName( elabel.netname ) );
@@ -1195,13 +1188,11 @@ SCH_TEXT* SCH_EAGLE_PLUGIN::loadLabel( wxXmlNode* aLabelNode, const wxString& aN
 
     if( elabel.rot )
     {
-        label->SetLabelSpinStyle(
-                (LABEL_SPIN_STYLE::SPIN) ( KiROUND( elabel.rot->degrees / 90 ) % 4 ) );
+        for( int i = 0; i < KiROUND( elabel.rot->degrees / 90 ) %4; ++i )
+            label->Rotate90( false );
 
         if( elabel.rot->mirror )
-        {
-            label->SetLabelSpinStyle( label->GetLabelSpinStyle().MirrorY() );
-        }
+            label->MirrorSpinStyle( false );
     }
 
     return label.release();
