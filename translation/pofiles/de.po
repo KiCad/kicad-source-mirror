@@ -14,8 +14,8 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-09-13 10:58-0700\n"
-"PO-Revision-Date: 2021-09-15 17:51+0000\n"
-"Last-Translator: Benedikt Freisen <b.freisen@gmx.net>\n"
+"PO-Revision-Date: 2021-09-20 16:15+0000\n"
+"Last-Translator: Jonathan Haas <haasjona@gmail.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
 "Language: de\n"
@@ -10367,9 +10367,8 @@ msgid "Sheet file must have a '.kicad_sch' extension."
 msgstr "Die Blattdatei muss die Erweiterung '.kicad_sch' haben."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:293
-#, fuzzy
 msgid "Use relative path for sheet file?"
-msgstr "Einen relativen Pfad verwenden?"
+msgstr "Einen relativen Pfad für Schaltplanblatt-Datei verwenden?"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:294
 msgid "Sheet File Path"
@@ -10647,9 +10646,8 @@ msgid "Source:"
 msgstr "Quelle:"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:119
-#, fuzzy
 msgid "Sweep type:"
-msgstr "Formtyp:"
+msgstr "Sweep-Typ:"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:123
 msgid "Source 1"
@@ -11548,9 +11546,9 @@ msgid "Symbol library table mapping complete!"
 msgstr "Kartierung der Symbolbibliothekstabelle ist fertig gestellt!"
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:349
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot create project remap back up folder '%s'."
-msgstr "Konnte die Projekt-Sicherungskopie \"%s\" nicht erstellen."
+msgstr "Konnte den Projekt-Remap-Sicherungskopie-Ordner \"%s\" nicht erstellen."
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:352
 #: eeschema/dialogs/dialog_symbol_remap.cpp:500
@@ -12090,11 +12088,10 @@ msgid "Global label size:"
 msgstr "Größe globaler Bezeichner:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:81
-#, fuzzy
 msgid "Percentage of the text size to use as space around a global label"
 msgstr ""
-"Prozentsatz des Versatzes der Textgröße vom Text über oder unter der "
-"elektrischen Verbindung oder Bus"
+"Prozentsatz der Textgröße, der bei globalen Bezeichnern freigehalten werden "
+"soll"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:107
 msgid "Default line thickness:"
@@ -12232,21 +12229,20 @@ msgstr "50"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:350
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:531
-#, fuzzy
 msgid "A library table row nickname and path cells are empty."
-msgstr "Eine Bibliothek mit dem Namen \"%s\" existiert bereits."
+msgstr ""
+"Die Zellen für den Name und Pfad in einer Bibliothekstabellen-Zeile sind "
+"leer."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:352
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:533
-#, fuzzy
 msgid "A library table row nickname cell is empty."
-msgstr "Eine Bibliothek mit dem Namen \"%s\" existiert bereits."
+msgstr "Die Zelle für den Name in einer Bibliothekstabellen-Zeile ist leer."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:354
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:535
-#, fuzzy
 msgid "A library table row path cell is empty."
-msgstr "Die Symbolbibliothek \"%s\" ist leer."
+msgstr "Die Zelle für den Pfad in einer Bibliothekstabellen-Zeile ist leer."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:356
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:537
@@ -12325,12 +12321,12 @@ msgstr ""
 "aus, die im aktuellen Format (*.kicad_sym) gespeichert werden sollen."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:741
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Save '%s' as current KiCad format (*.kicad_sym) and replace legacy entry in "
 "table?"
 msgstr ""
-"'%s' als aktuelles Format (* .kicad_sym) speichern und alten Eintrag in "
+"'%s' als aktuelles Format (*.kicad_sym) speichern und alten Eintrag in "
 "Tabelle ersetzen?"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:747
@@ -12702,13 +12698,12 @@ msgid "Create a new project for this schematic"
 msgstr "Ein neues Projekt für diesen Schaltplan erstellen"
 
 #: eeschema/files-io.cpp:77
-#, fuzzy
 msgid ""
 "Creating a project will enable features such as text variables, net classes, "
 "and ERC exclusions"
 msgstr ""
-"Durch das Erstellen eines Projekts werden Funktionen wie Entwurfsregeln, "
-"Netzklassen und Lagenvoreinstellungen aktiviert"
+"Durch das Erstellen eines Projekts werden Funktionen wie Textvariablen, "
+"Netzklassen und ERC-Ausnahmen aktiviert"
 
 #: eeschema/files-io.cpp:124 eeschema/files-io.cpp:1137
 #, c-format
@@ -12837,9 +12832,8 @@ msgid "Schematic is read only."
 msgstr "Schaltplandatei ist schreibgeschützt."
 
 #: eeschema/files-io.cpp:512
-#, fuzzy
 msgid "Insert Schematic"
-msgstr "Schaltplanimport"
+msgstr "Schaltplan einfügen"
 
 #: eeschema/files-io.cpp:540
 msgid ""
@@ -12866,12 +12860,12 @@ msgid "Unexpected file extension: '%s'."
 msgstr "Unerwartete Dateinamenserweiterung: \"%s\"."
 
 #: eeschema/files-io.cpp:674
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error saving schematic file '%s'.\n"
 "%s"
 msgstr ""
-"Beim Schreiben der Schaltplandatei \"%s\" ist folgender Fehler aufgetreten:\n"
+"Fehler beim Schreiben der Schaltplandatei \"%s\".\n"
 "%s"
 
 #: eeschema/files-io.cpp:679 pcbnew/files.cpp:1020
@@ -13126,9 +13120,8 @@ msgid "Open Recent"
 msgstr "Zuletzt geöffnet"
 
 #: eeschema/menubar.cpp:92
-#, fuzzy
 msgid "Insert Schematic Sheet Content..."
-msgstr "Inhalt Schaltplanblatt hinzufügen..."
+msgstr "Schaltplanblatt-Inhalt hinzufügen..."
 
 #: eeschema/menubar.cpp:93
 msgid ""
@@ -13626,9 +13619,8 @@ msgid "Storage file not fully parsed (%d bytes remaining)."
 msgstr "Datei nicht vollständig gelesen (%d Bytes verbleiben)."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:478
-#, fuzzy
 msgid "Compile mask not currently supported."
-msgstr "Gegenwärtig ist kein Schaltplan geöffnet."
+msgstr "Compile mask wird derzeit nicht unterstützt."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:491
 #, c-format
@@ -13730,9 +13722,9 @@ msgid "Port %s has no connections."
 msgstr "Port %s ist nicht verbunden."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2129
-#, fuzzy, c-format
+#, c-format
 msgid "Embedded file %s not found in storage."
-msgstr "Wiederherstellungsdatei \"%s\" wurde nicht gefunden."
+msgstr "Eingebettete Datei %s nicht im Speicher gefunden."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2146
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2165
@@ -13978,9 +13970,8 @@ msgid "Invalid symbol name"
 msgstr "Ungültiger Symbolname"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:179
-#, fuzzy
 msgid "Invalid library identifier"
-msgstr "Ungültige Bezeichnung für ein Bibliothekssymbol"
+msgstr "Ungültiger Bibliotheksbezeichner"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:251
 msgid "Invalid parent symbol name"
@@ -14006,9 +13997,9 @@ msgid "Invalid symbol unit name suffix %s"
 msgstr "Ungültiger Namenssuffix für Symboleinheit %s"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:299
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid symbol unit number %s"
-msgstr "Ungültige Bezeichnung für ein Bibliothekssymbol"
+msgstr "Ungültige Symboleinheits-Nummer %s"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:307
 #, c-format
@@ -14174,12 +14165,12 @@ msgid "Setting schematic symbol '%s %s' library identifier to '%s'."
 msgstr "Setze Bibliothekskennung des Schaltplansymbols '%s %s' auf '%s'."
 
 #: eeschema/sch_screen.cpp:599
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Schematic symbol reference '%s' library identifier is not valid. Unable to "
 "link library symbol."
 msgstr ""
-"Die Bibliothekskennung der schematischen Symbolreferenz '%s' ist ungültig. "
+"Bibliotheksbezeichner der Symbolreferenz '%s' ist ungültig. "
 "Bibliothekssymbol kann nicht verknüpft werden."
 
 #: eeschema/sch_screen.cpp:615
@@ -14894,9 +14885,8 @@ msgid "Open simulation workbook"
 msgstr "Arbeitsmappe öffnen"
 
 #: eeschema/sim/sim_plot_frame.cpp:1165
-#, fuzzy
 msgid "Save Simulation Workbook As"
-msgstr "Simulationsarbeitsmappe speichern"
+msgstr "Simulationsarbeitsmappe speichern unter"
 
 #: eeschema/sim/sim_plot_frame.cpp:1181
 msgid "Save Plot as Image"
