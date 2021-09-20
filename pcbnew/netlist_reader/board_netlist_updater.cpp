@@ -52,7 +52,6 @@ BOARD_NETLIST_UPDATER::BOARD_NETLIST_UPDATER( PCB_EDIT_FRAME* aFrame, BOARD* aBo
 {
     m_reporter = &NULL_REPORTER::GetInstance();
 
-    m_deleteSinglePadNets = true;
     m_deleteUnusedFootprints = false;
     m_isDryRun = false;
     m_replaceFootprints = true;
@@ -774,105 +773,6 @@ bool BOARD_NETLIST_UPDATER::updateCopperZoneNets( NETLIST& aNetlist )
 }
 
 
-bool BOARD_NETLIST_UPDATER::deleteSinglePadNets()
-{
-    int       count = 0;
-    wxString  netname;
-    wxString  msg;
-    PAD*      previouspad = nullptr;
-
-    // We need the pad list for next tests.
-
-    m_board->BuildListOfNets();
-
-    std::vector<PAD*> padlist = m_board->GetPads();
-
-    // Add the new pads
-    for( FOOTPRINT* fp : m_addedFootprints)
-    {
-        for( PAD* pad : fp->Pads() )
-        {
-            padlist.push_back( pad );
-        }
-    }
-
-    // Sort pads by netlist name
-    std::sort( padlist.begin(), padlist.end(),
-               [ this ]( PAD* a, PAD* b ) -> bool
-               {
-                   return getNetname( a ) < getNetname( b );
-               } );
-
-    for( PAD* pad : padlist )
-    {
-        if( getNetname( pad ).IsEmpty() )
-            continue;
-
-        if( netname != getNetname( pad ) )  // End of net
-        {
-            if( previouspad && count == 1 )
-            {
-                // First, see if we have a copper zone attached to this pad.
-                // If so, this is not really a single pad net
-
-                for( ZONE* zone : m_board->Zones() )
-                {
-                    if( !zone->IsOnCopperLayer() )
-                        continue;
-
-                    if( zone->GetIsRuleArea() )
-                        continue;
-
-                    if( zone->GetNetname() == getNetname( previouspad ) )
-                    {
-                        count++;
-                        break;
-                    }
-                }
-
-                if( count == 1 )    // Really one pad, and nothing else
-                {
-                    if( m_isDryRun )
-                    {
-                        cacheNetname( previouspad, wxEmptyString );
-                        msg.Printf( _( "Remove single pad net %s." ),
-                                    UnescapeString( getNetname( previouspad ) ) );
-                    }
-                    else
-                    {
-                        previouspad->SetNetCode( NETINFO_LIST::UNCONNECTED );
-                        msg.Printf( _( "Removed single pad net %s." ),
-                                    UnescapeString( getNetname( previouspad ) ) );
-                    }
-
-                    m_reporter->Report( msg, RPT_SEVERITY_ACTION );
-                }
-            }
-
-            netname = getNetname( pad );
-            count = 1;
-        }
-        else
-        {
-            count++;
-        }
-
-        previouspad = pad;
-    }
-
-    // Examine last pad
-    if( count == 1 )
-    {
-        if( !m_isDryRun )
-            previouspad->SetNetCode( NETINFO_LIST::UNCONNECTED );
-        else
-            cacheNetname( previouspad, wxEmptyString );
-    }
-
-    return true;
-}
-
-
 bool BOARD_NETLIST_UPDATER::testConnectivity( NETLIST& aNetlist,
                                               std::map<COMPONENT*, FOOTPRINT*>& aFootprintMap )
 {
@@ -1019,8 +919,7 @@ bool BOARD_NETLIST_UPDATER::UpdateNetlist( NETLIST& aNetlist )
         }
         else if( matchCount > 1 )
         {
-            msg.Printf( _( "Multiple footprints found for '%s'." ),
-                        component->GetReference() );
+            msg.Printf( _( "Multiple footprints found for '%s'." ), component->GetReference() );
             m_reporter->Report( msg, RPT_SEVERITY_ERROR );
         }
     }
@@ -1095,10 +994,6 @@ bool BOARD_NETLIST_UPDATER::UpdateNetlist( NETLIST& aNetlist )
         m_board->GetConnectivity()->Build( m_board );
         testConnectivity( aNetlist, footprintMap );
 
-        // Now the connectivity data is rebuilt, we can delete single pads nets
-        if( m_deleteSinglePadNets )
-            deleteSinglePadNets();
-
         for( NETINFO_ITEM* net : m_board->GetNetInfo() )
         {
             if( !net->IsCurrent() )
@@ -1115,13 +1010,6 @@ bool BOARD_NETLIST_UPDATER::UpdateNetlist( NETLIST& aNetlist )
 
         m_board->SynchronizeNetsAndNetClasses();
         m_frame->SaveProjectSettings();
-    }
-    else if( m_deleteSinglePadNets && !m_newFootprintsCount )
-    {
-        // We can delete single net pads in dry run mode only if no new footprints
-        // are added, because these new footprints are not actually added to the board
-        // and the current pad list is wrong in this case.
-        deleteSinglePadNets();
     }
 
     if( m_isDryRun )

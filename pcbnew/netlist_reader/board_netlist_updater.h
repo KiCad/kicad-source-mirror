@@ -113,8 +113,6 @@ private:
 
     bool updateCopperZoneNets( NETLIST& aNetlist );
 
-    bool deleteSinglePadNets();
-
     bool testConnectivity( NETLIST& aNetlist, std::map<COMPONENT*, FOOTPRINT*>& aFootprintMap );
 
     PCB_EDIT_FRAME* m_frame;
@@ -129,7 +127,6 @@ private:
     std::vector<FOOTPRINT*>            m_addedFootprints;
     std::map<wxString, NETINFO_ITEM*>  m_addedNets;
 
-    bool m_deleteSinglePadNets;
     bool m_deleteUnusedFootprints;
     bool m_isDryRun;
     bool m_replaceFootprints;
