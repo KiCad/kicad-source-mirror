@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jul 10 2019)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -18,6 +18,7 @@
 #include <wx/settings.h>
 #include <wx/string.h>
 #include <wx/sizer.h>
+#include <wx/button.h>
 #include <wx/frame.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -31,6 +32,12 @@ class KICAD2STEP_FRAME_BASE : public wxFrame
 	private:
 
 	protected:
+		wxStdDialogButtonSizer* m_sdbSizer1;
+		wxButton* m_sdbSizer1OK;
+
+		// Virtual event handlers, overide them in your derived class
+		virtual void OnOKButtonClick( wxCommandEvent& event ) { event.Skip(); }
+
 
 	public:
 		PANEL_KICAD2STEP* m_panelKicad2Step;
