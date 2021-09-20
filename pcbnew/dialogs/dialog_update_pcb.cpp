@@ -99,6 +99,12 @@ void DIALOG_UPDATE_PCB::PerformUpdate( bool aDryRun )
     m_netlist->SetFindByTimeStamp( !m_cbRelinkFootprints->GetValue() );
     m_netlist->SetReplaceFootprints( m_cbUpdateFootprints->GetValue() );
 
+    if( !aDryRun )
+    {
+        m_frame->GetToolManager()->DeactivateTool();
+        m_frame->GetToolManager()->RunAction( PCB_ACTIONS::selectionClear, true );
+    }
+
     BOARD_NETLIST_UPDATER updater( m_frame, m_frame->GetBoard() );
     updater.SetReporter ( &reporter );
     updater.SetIsDryRun( aDryRun );
