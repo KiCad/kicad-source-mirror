@@ -67,6 +67,7 @@ if( APPLE )
 else()
     install( TARGETS kicad2step_bin kicad2step_lib
             RUNTIME DESTINATION ${KICAD_BIN}
+            ARCHIVE DESTINATION ${KICAD_LIB}
             COMPONENT binary )
 endif()
 
