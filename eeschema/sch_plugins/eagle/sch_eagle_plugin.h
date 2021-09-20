@@ -116,7 +116,7 @@ private:
     void countNets( wxXmlNode* aSchematicNode );
 
     /// Move any labels on the wire to the new end point of the wire.
-    void moveLabels( SCH_ITEM* aWire, const wxPoint& aNewEndPoint );
+    void moveLabels( SCH_LINE* aWire, const wxPoint& aNewEndPoint );
 
     /// This function finds best way to place a bus entry symbol for when an Eagle wire segment
     /// ends on an Eagle bus segment.

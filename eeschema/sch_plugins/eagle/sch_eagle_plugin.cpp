@@ -118,7 +118,7 @@ static EDA_RECT getSheetBbox( SCH_SHEET* aSheet )
 {
     EDA_RECT bbox;
 
-    for( auto item : aSheet->GetScreen()->Items() )
+    for( SCH_ITEM* item : aSheet->GetScreen()->Items() )
         bbox.Merge( item->GetBoundingBox() );
 
     return bbox;
@@ -180,7 +180,7 @@ void SCH_EAGLE_PLUGIN::loadLayerDefs( wxXmlNode* aLayers )
     }
 
     // match layers based on their names
-    for( const auto& elayer : eagleLayers )
+    for( const ELAYER& elayer : eagleLayers )
     {
         /**
          * Layers in KiCad schematics are not actually layers, but abstract groups mainly used to
@@ -596,7 +596,8 @@ void SCH_EAGLE_PLUGIN::loadSchematic( wxXmlNode* aSchematicNode )
     if( !sheetNode )
         return;
 
-    auto count_nodes = []( wxXmlNode* aNode ) -> unsigned
+    auto count_nodes =
+            []( wxXmlNode* aNode ) -> unsigned
             {
                 unsigned count = 0;
 
@@ -945,9 +946,11 @@ void SCH_EAGLE_PLUGIN::loadSheet( wxXmlNode* aSheetNode, int aSheetIndex )
     translation.y       = translation.y - translation.y % Mils2iu( 100 );
 
     // Add global net labels for the named power input pins in this sheet
-    for( auto item : m_currentSheet->GetScreen()->Items().OfType( SCH_SYMBOL_T ) )
-        addImplicitConnections( static_cast<SCH_SYMBOL*>( item ), m_currentSheet->GetScreen(),
-                                true );
+    for( SCH_ITEM* item : m_currentSheet->GetScreen()->Items().OfType( SCH_SYMBOL_T ) )
+    {
+        SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
+        addImplicitConnections( symbol, m_currentSheet->GetScreen(), true );
+    }
 
     m_connPoints.clear();
 
@@ -957,7 +960,7 @@ void SCH_EAGLE_PLUGIN::loadSheet( wxXmlNode* aSheetNode, int aSheetIndex )
     std::copy( m_currentSheet->GetScreen()->Items().begin(),
             m_currentSheet->GetScreen()->Items().end(), std::back_inserter( allItems ) );
 
-    for( auto item : allItems )
+    for( SCH_ITEM* item : allItems )
     {
         item->SetPosition( item->GetPosition() + translation );
         item->ClearFlags();
@@ -1002,8 +1005,8 @@ void SCH_EAGLE_PLUGIN::loadFrame( wxXmlNode* aFrameNode, std::vector<SCH_LINE*>&
 }
 
 
-void SCH_EAGLE_PLUGIN::loadSegments(
-        wxXmlNode* aSegmentsNode, const wxString& netName, const wxString& aNetClass )
+void SCH_EAGLE_PLUGIN::loadSegments( wxXmlNode* aSegmentsNode, const wxString& netName,
+                                     const wxString& aNetClass )
 {
     // Loop through all segments
     wxXmlNode*  currentSegment = aSegmentsNode->GetChildren();
@@ -1035,14 +1038,14 @@ void SCH_EAGLE_PLUGIN::loadSegments(
                 // Test for intersections with other wires
                 SEG thisWire( wire->GetStartPoint(), wire->GetEndPoint() );
 
-                for( auto& desc : m_segments )
+                for( SEG_DESC& desc : m_segments )
                 {
                     if( !desc.labels.empty() && desc.labels.front()->GetText() == netName )
                         continue; // no point in saving intersections of the same net
 
-                    for( const auto& seg : desc.segs )
+                    for( const SEG& seg : desc.segs )
                     {
-                        auto intersection = thisWire.Intersect( seg, true );
+                        OPT_VECTOR2I intersection = thisWire.Intersect( seg, true );
 
                         if( intersection )
                             m_wireIntersections.push_back( *intersection );
@@ -1126,7 +1129,7 @@ SCH_LINE* SCH_EAGLE_PLUGIN::loadWire( wxXmlNode* aWireNode )
 {
     std::unique_ptr<SCH_LINE> wire = std::make_unique<SCH_LINE>();
 
-    auto ewire = EWIRE( aWireNode );
+    EWIRE ewire = EWIRE( aWireNode );
 
     wire->SetLayer( kiCadLayer( ewire.layer ) );
 
@@ -1151,8 +1154,8 @@ SCH_JUNCTION* SCH_EAGLE_PLUGIN::loadJunction( wxXmlNode* aJunction )
 {
     std::unique_ptr<SCH_JUNCTION> junction = std::make_unique<SCH_JUNCTION>();
 
-    auto    ejunction = EJUNCTION( aJunction );
-    wxPoint pos( ejunction.x.ToSchUnits(), -ejunction.y.ToSchUnits() );
+    EJUNCTION ejunction = EJUNCTION( aJunction );
+    wxPoint   pos( ejunction.x.ToSchUnits(), -ejunction.y.ToSchUnits() );
 
     junction->SetPosition( pos );
 
@@ -1162,7 +1165,7 @@ SCH_JUNCTION* SCH_EAGLE_PLUGIN::loadJunction( wxXmlNode* aJunction )
 
 SCH_TEXT* SCH_EAGLE_PLUGIN::loadLabel( wxXmlNode* aLabelNode, const wxString& aNetName )
 {
-    auto    elabel = ELABEL( aLabelNode, aNetName );
+    ELABEL  elabel = ELABEL( aLabelNode, aNetName );
     wxPoint elabelpos( elabel.x.ToSchUnits(), -elabel.y.ToSchUnits() );
 
     // Determine if the label is local or global depending on
@@ -1205,8 +1208,9 @@ SCH_TEXT* SCH_EAGLE_PLUGIN::loadLabel( wxXmlNode* aLabelNode, const wxString& aN
 }
 
 
-std::pair<VECTOR2I, const SEG*> SCH_EAGLE_PLUGIN::findNearestLinePoint(
-        const wxPoint& aPoint, const std::vector<SEG>& aLines ) const
+std::pair<VECTOR2I, const SEG*>
+SCH_EAGLE_PLUGIN::findNearestLinePoint( const wxPoint& aPoint,
+                                        const std::vector<SEG>& aLines ) const
 {
     VECTOR2I   nearestPoint;
     const SEG* nearestLine = nullptr;
@@ -1216,7 +1220,7 @@ std::pair<VECTOR2I, const SEG*> SCH_EAGLE_PLUGIN::findNearestLinePoint(
     // Find the nearest start, middle or end of a line from the list of lines.
     for( const SEG& line : aLines )
     {
-        auto testpoint = line.A;
+        VECTOR2I testpoint = line.A;
         d = sqrt( abs( ( ( aPoint.x - testpoint.x ) ^ 2 ) + ( ( aPoint.y - testpoint.y ) ^ 2 ) ) );
 
         if( d < mindistance )
@@ -1253,8 +1257,7 @@ std::pair<VECTOR2I, const SEG*> SCH_EAGLE_PLUGIN::findNearestLinePoint(
 
 void SCH_EAGLE_PLUGIN::loadInstance( wxXmlNode* aInstanceNode )
 {
-    auto einstance = EINSTANCE( aInstanceNode );
-
+    EINSTANCE   einstance = EINSTANCE( aInstanceNode );
     SCH_SCREEN* screen = m_currentSheet->GetScreen();
 
     // Find the part in the list for the sheet.
@@ -1357,7 +1360,7 @@ void SCH_EAGLE_PLUGIN::loadInstance( wxXmlNode* aInstanceNode )
 
     for( const auto& a : epart->attribute )
     {
-        auto field = symbol->AddField( *symbol->GetField( VALUE_FIELD ) );
+        SCH_FIELD* field = symbol->AddField( *symbol->GetField( VALUE_FIELD ) );
         field->SetName( a.first );
         field->SetText( a.second );
         field->SetVisible( false );
@@ -1365,7 +1368,7 @@ void SCH_EAGLE_PLUGIN::loadInstance( wxXmlNode* aInstanceNode )
 
     for( const auto& a : epart->variant )
     {
-        auto field = symbol->AddField( *symbol->GetField( VALUE_FIELD ) );
+        SCH_FIELD* field = symbol->AddField( *symbol->GetField( VALUE_FIELD ) );
         field->SetName( "VARIANT_" + a.first );
         field->SetText( a.second );
         field->SetVisible( false );
@@ -1381,7 +1384,7 @@ void SCH_EAGLE_PLUGIN::loadInstance( wxXmlNode* aInstanceNode )
     {
         if( attributeNode->GetName() == "attribute" )
         {
-            auto       attr  = EATTR( attributeNode );
+            EATTR      attr  = EATTR( attributeNode );
             SCH_FIELD* field = nullptr;
 
             if( attr.name.Lower() == "name" )
@@ -1422,8 +1425,8 @@ void SCH_EAGLE_PLUGIN::loadInstance( wxXmlNode* aInstanceNode )
                 int reldegrees = ( absdegrees - rotation + 360.0 );
                 reldegrees %= 360;
 
-                eagleToKicadAlignment(
-                        (EDA_TEXT*) field, align, reldegrees, mirror, spin, absdegrees );
+                eagleToKicadAlignment( (EDA_TEXT*) field, align, reldegrees, mirror, spin,
+                                       absdegrees );
             }
         }
         else if( attributeNode->GetName() == "variant" )
@@ -1433,7 +1436,7 @@ void SCH_EAGLE_PLUGIN::loadInstance( wxXmlNode* aInstanceNode )
             if( attributeNode->GetAttribute( "name", &variant )
                     && attributeNode->GetAttribute( "value", &value ) )
             {
-                auto field = symbol->AddField( *symbol->GetField( VALUE_FIELD ) );
+                SCH_FIELD* field = symbol->AddField( *symbol->GetField( VALUE_FIELD ) );
                 field->SetName( "VARIANT_" + variant );
                 field->SetText( value );
                 field->SetVisible( false );
@@ -1463,7 +1466,7 @@ void SCH_EAGLE_PLUGIN::loadInstance( wxXmlNode* aInstanceNode )
     std::vector<LIB_PIN*> pins;
     symbol->GetLibPins( pins );
 
-    for( const auto& pin : pins )
+    for( const LIB_PIN* pin : pins )
         m_connPoints[symbol->GetPinPhysicalPosition( pin )].emplace( pin );
 
     symbol->ClearFlags();
@@ -1622,7 +1625,7 @@ bool SCH_EAGLE_PLUGIN::loadSymbol( wxXmlNode* aSymbolNode, std::unique_ptr<LIB_S
 
             if( aDevice->connects.size() != 0 )
             {
-                for( const auto& connect : aDevice->connects )
+                for( const ECONNECT& connect : aDevice->connects )
                 {
                     if( connect.gate == aGateName && pin->GetName() == connect.pin )
                     {
@@ -1725,8 +1728,8 @@ bool SCH_EAGLE_PLUGIN::loadSymbol( wxXmlNode* aSymbolNode, std::unique_ptr<LIB_S
 }
 
 
-LIB_CIRCLE* SCH_EAGLE_PLUGIN::loadSymbolCircle(
-        std::unique_ptr<LIB_SYMBOL>& aSymbol, wxXmlNode* aCircleNode, int aGateNumber )
+LIB_CIRCLE* SCH_EAGLE_PLUGIN::loadSymbolCircle( std::unique_ptr<LIB_SYMBOL>& aSymbol,
+                                                wxXmlNode* aCircleNode, int aGateNumber )
 {
     // Parse the circle properties
     ECIRCLE c( aCircleNode );
@@ -1742,8 +1745,8 @@ LIB_CIRCLE* SCH_EAGLE_PLUGIN::loadSymbolCircle(
 }
 
 
-LIB_RECTANGLE* SCH_EAGLE_PLUGIN::loadSymbolRectangle(
-        std::unique_ptr<LIB_SYMBOL>& aSymbol, wxXmlNode* aRectNode, int aGateNumber )
+LIB_RECTANGLE* SCH_EAGLE_PLUGIN::loadSymbolRectangle( std::unique_ptr<LIB_SYMBOL>& aSymbol,
+                                                      wxXmlNode* aRectNode, int aGateNumber )
 {
     ERECT rect( aRectNode );
 
@@ -1761,10 +1764,10 @@ LIB_RECTANGLE* SCH_EAGLE_PLUGIN::loadSymbolRectangle(
 }
 
 
-LIB_ITEM* SCH_EAGLE_PLUGIN::loadSymbolWire(
-        std::unique_ptr<LIB_SYMBOL>& aSymbol, wxXmlNode* aWireNode, int aGateNumber )
+LIB_ITEM* SCH_EAGLE_PLUGIN::loadSymbolWire( std::unique_ptr<LIB_SYMBOL>& aSymbol,
+                                            wxXmlNode* aWireNode, int aGateNumber )
 {
-    auto ewire = EWIRE( aWireNode );
+    EWIRE ewire = EWIRE( aWireNode );
 
     wxPoint begin, end;
 
@@ -1846,8 +1849,8 @@ LIB_ITEM* SCH_EAGLE_PLUGIN::loadSymbolWire(
 }
 
 
-LIB_POLYLINE* SCH_EAGLE_PLUGIN::loadSymbolPolyLine(
-        std::unique_ptr<LIB_SYMBOL>& aSymbol, wxXmlNode* aPolygonNode, int aGateNumber )
+LIB_POLYLINE* SCH_EAGLE_PLUGIN::loadSymbolPolyLine( std::unique_ptr<LIB_SYMBOL>& aSymbol,
+                                                    wxXmlNode* aPolygonNode, int aGateNumber )
 {
     std::unique_ptr<LIB_POLYLINE> polyLine = std::make_unique<LIB_POLYLINE>( aSymbol.get() );
 
@@ -1874,8 +1877,8 @@ LIB_POLYLINE* SCH_EAGLE_PLUGIN::loadSymbolPolyLine(
 }
 
 
-LIB_PIN* SCH_EAGLE_PLUGIN::loadPin(
-        std::unique_ptr<LIB_SYMBOL>& aSymbol, wxXmlNode* aPin, EPIN* aEPin, int aGateNumber )
+LIB_PIN* SCH_EAGLE_PLUGIN::loadPin( std::unique_ptr<LIB_SYMBOL>& aSymbol, wxXmlNode* aPin,
+                                    EPIN* aEPin, int aGateNumber )
 {
     std::unique_ptr<LIB_PIN> pin = std::make_unique<LIB_PIN>( aSymbol.get() );
     pin->SetPosition( wxPoint( aEPin->x.ToSchUnits(), aEPin->y.ToSchUnits() ) );
@@ -1971,8 +1974,8 @@ LIB_PIN* SCH_EAGLE_PLUGIN::loadPin(
 }
 
 
-LIB_TEXT* SCH_EAGLE_PLUGIN::loadSymbolText(
-        std::unique_ptr<LIB_SYMBOL>& aSymbol, wxXmlNode* aLibText, int aGateNumber )
+LIB_TEXT* SCH_EAGLE_PLUGIN::loadSymbolText( std::unique_ptr<LIB_SYMBOL>& aSymbol,
+                                            wxXmlNode* aLibText, int aGateNumber )
 {
     std::unique_ptr<LIB_TEXT> libtext = std::make_unique<LIB_TEXT>( aSymbol.get() );
     ETEXT                     etext( aLibText );
@@ -2255,7 +2258,7 @@ void SCH_EAGLE_PLUGIN::adjustNetLabels()
                                            m_wireIntersections.end(), aPos );
             };
 
-    for( auto& segDesc : m_segments )
+    for( SEG_DESC& segDesc : m_segments )
     {
         for( SCH_TEXT* label : segDesc.labels )
         {
@@ -2268,8 +2271,8 @@ void SCH_EAGLE_PLUGIN::adjustNetLabels()
             // Move the label to the nearest wire
             if( !segAttached )
             {
-                std::tie( labelPos, segAttached ) =
-                        findNearestLinePoint( label->GetPosition(), segDesc.segs );
+                std::tie( labelPos, segAttached ) = findNearestLinePoint( label->GetPosition(),
+                                                                          segDesc.segs );
 
                 if( !segAttached ) // we cannot do anything
                     continue;
@@ -2333,14 +2336,14 @@ bool SCH_EAGLE_PLUGIN::CheckHeader( const wxString& aFileName )
 }
 
 
-void SCH_EAGLE_PLUGIN::moveLabels( SCH_ITEM* aWire, const wxPoint& aNewEndPoint )
+void SCH_EAGLE_PLUGIN::moveLabels( SCH_LINE* aWire, const wxPoint& aNewEndPoint )
 {
-    for( auto item : m_currentSheet->GetScreen()->Items().Overlapping( aWire->GetBoundingBox() ) )
+    for( SCH_ITEM* item : m_currentSheet->GetScreen()->Items().Overlapping( aWire->GetBoundingBox() ) )
     {
         if( item->Type() == SCH_LABEL_T || item->Type() == SCH_GLOBAL_LABEL_T )
         {
-            if( TestSegmentHit( item->GetPosition(), ( (SCH_LINE*) aWire )->GetStartPoint(),
-                        ( (SCH_LINE*) aWire )->GetEndPoint(), 0 ) )
+            if( TestSegmentHit( item->GetPosition(), aWire->GetStartPoint(), aWire->GetEndPoint(),
+                                0 ) )
             {
                 item->SetPosition( aNewEndPoint );
             }
@@ -2899,7 +2902,7 @@ const SEG* SCH_EAGLE_PLUGIN::SEG_DESC::LabelAttached( const SCH_TEXT* aLabel ) c
 {
     VECTOR2I labelPos( aLabel->GetPosition() );
 
-    for( const auto& seg : segs )
+    for( const SEG& seg : segs )
     {
         if( seg.Contains( labelPos ) )
             return &seg;
@@ -2942,7 +2945,7 @@ void SCH_EAGLE_PLUGIN::addImplicitConnections( SCH_SYMBOL* aSymbol, SCH_SCREEN* 
     std::set<int> missingUnits;
 
     // Search all units for pins creating implicit connections
-    for( const auto& pin : pins )
+    for( const LIB_PIN* pin : pins )
     {
         if( pin->GetType() == ELECTRICAL_PINTYPE::PT_POWER_IN )
         {
