@@ -15,16 +15,16 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-09-13 10:58-0700\n"
-"PO-Revision-Date: 2021-09-07 15:16+0000\n"
+"PO-Revision-Date: 2021-09-20 16:15+0000\n"
 "Last-Translator: 킴슨김랑기 <korearf@gmail.com>\n"
-"Language-Team: Korean <https://hosted.weblate.org/projects/kicad/master-"
-"source/ko/>\n"
+"Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
+"master-source/ko/>\n"
 "Language: ko\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.8.1-dev\n"
+"X-Generator: Weblate 4.9-dev\n"
 "X-Poedit-Country: KOREA, REPUBLIC OF\n"
 "X-Poedit-Basepath: f:\\kicad-dev\n"
 "X-Poedit-KeywordsList: _\n"
@@ -1145,7 +1145,7 @@ msgstr "mm"
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:741
 #: pcbnew/dialogs/dialog_plot_base.cpp:378
 msgid "Inch"
-msgstr "Inch"
+msgstr "인치"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:159
 msgid "DPI"
@@ -1494,13 +1494,12 @@ msgid "Warning"
 msgstr "경고"
 
 #: common/confirm.cpp:160 common/confirm.cpp:166
-#, fuzzy
 msgid "File Open Error"
-msgstr "파일 저장 오류"
+msgstr "파일 열기 오류"
 
 #: common/confirm.cpp:162 common/confirm.cpp:168
 msgid "Interleaved saves may produce very unexpected results."
-msgstr ""
+msgstr "인터리브 저장 시 매우 예상치 못한 결과가 발생할 수 있습니다."
 
 #: common/confirm.cpp:164 common/confirm.cpp:169 common/confirm.cpp:251
 #: gerbview/dialogs/dialog_select_one_pcb_layer.cpp:164
@@ -1509,9 +1508,8 @@ msgid "OK"
 msgstr "확인"
 
 #: common/confirm.cpp:164 common/confirm.cpp:169
-#, fuzzy
 msgid "Open Anyway"
-msgstr "강제로 저장"
+msgstr "무시하고 열기"
 
 #: common/confirm.cpp:180 common/confirm.cpp:209
 msgid "Save Changes?"
@@ -1555,9 +1553,8 @@ msgid "Cancel"
 msgstr "취소"
 
 #: common/confirm.cpp:304
-#, fuzzy
 msgid "Information"
-msgstr "확인"
+msgstr "정보"
 
 #: common/confirm.cpp:317 eeschema/symbol_editor/symbol_editor.cpp:425
 #: eeschema/symbol_editor/symbol_editor.cpp:682
@@ -2375,7 +2372,7 @@ msgstr "USLedger 11x17in"
 
 #: common/dialogs/dialog_page_settings.cpp:68
 msgid "User (Custom)"
-msgstr "사용자 (커스텀)"
+msgstr "사용자(사용자 정의)"
 
 #: common/dialogs/dialog_page_settings.cpp:98
 msgid "Preview Settings"
@@ -3568,9 +3565,8 @@ msgid "Default"
 msgstr "기본값"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:84
-#, fuzzy
 msgid "Set color to transparent to use KiCad default color."
-msgstr "Kicad 기본 색상을 사용하려면 색상을 투명으로 설정합니다."
+msgstr "KiCad 기본 색상을 사용하려면 색상을 투명으로 설정하십시오."
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:103
 msgid "Filter Nets"
@@ -5390,9 +5386,8 @@ msgstr "'%s' 파일을 열 수 없음"
 
 #: common/plugins/cadstar/cadstar_archive_parser.cpp:2348
 #: common/plugins/cadstar/cadstar_archive_parser.cpp:2647
-#, fuzzy
 msgid "File import cancelled by user."
-msgstr "사용자에 의해 열기가 취소되었습니다."
+msgstr "사용자가 파일 가져오기를 취소했습니다."
 
 #: common/plugins/cadstar/cadstar_archive_parser.cpp:2365
 #: common/plugins/cadstar/cadstar_archive_parser.cpp:2383
@@ -8541,7 +8536,6 @@ msgid "-- leave unchanged --"
 msgstr "-- 설정 변경 없이 유지 --"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:229
-#, fuzzy
 msgid "H Align (fields only):"
 msgstr "수평 정렬 (필드 전용):"
 
@@ -8550,7 +8544,6 @@ msgid "Visible (fields only)"
 msgstr "보기 (필드 전용)"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:251
-#, fuzzy
 msgid "V Align (fields only):"
 msgstr "수직 정렬 (필드 전용):"
 
@@ -8576,14 +8569,12 @@ msgid "Sheet background color:"
 msgstr "시트 배경색:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:339
-#, fuzzy
 msgid "Junction size:"
 msgstr "접합 점 크기:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:353
-#, fuzzy
 msgid "Junction color:"
-msgstr "선택 색상 :"
+msgstr "접합 점 색상:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.h:110
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.h:95
@@ -8653,9 +8644,8 @@ msgid "Color:"
 msgstr "색:"
 
 #: eeschema/dialogs/dialog_junction_props_base.cpp:61
-#, fuzzy
 msgid "Set diameter to 0 to use schematic junction dot size."
-msgstr "회로도 편집기 선 너비를 사용하려면 너비를 0으로 설정합니다."
+msgstr "회로도 접합 점 크기를 사용하도록 직경을 0으로 설정합니다."
 
 #: eeschema/dialogs/dialog_junction_props_base.cpp:65
 #: eeschema/dialogs/dialog_line_wire_bus_properties_base.cpp:80
@@ -9304,9 +9294,8 @@ msgid "Style:"
 msgstr "스타일:"
 
 #: eeschema/dialogs/dialog_line_wire_bus_properties_base.cpp:76
-#, fuzzy
 msgid "Set width to 0 to use Netclass line widths."
-msgstr "회로도 편집기 선 너비를 사용하려면 너비를 0으로 설정합니다."
+msgstr "네크클래스 선 너비를 사용하려면 너비를 0으로 설정하십시오."
 
 #: eeschema/dialogs/dialog_line_wire_bus_properties_base.h:67
 msgid "Line, Wire & Bus Properties"
@@ -14060,7 +14049,6 @@ msgid "Syntax Help"
 msgstr "구문 도움말"
 
 #: eeschema/sch_text_help_md.h:2
-#, fuzzy
 msgid ""
 "<table>\n"
 "    <tr>\n"
@@ -14214,9 +14202,9 @@ msgstr ""
 "        <td>&nbsp;<br><samp><sup>위 첨자</sup>&nbsp;</samp></td>\n"
 "    </tr>\n"
 "    <tr>\n"
-"        <td>&nbsp;<br><samp>Driver Board^{Rev A}</samp></td>\n"
+"        <td>&nbsp;<br><samp>구동 기판^{Rev A}</samp></td>\n"
 "        <td></td>\n"
-"        <td>&nbsp;<br><samp>Driver Board<sup>Rev A</sup></samp></td>\n"
+"        <td>&nbsp;<br><samp>구동 기판<sup>Rev A</sup></samp></td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td><br></td>\n"
@@ -14261,8 +14249,7 @@ msgstr ""
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>${참조지정자:필드}</samp></td>\n"
 "        <td></td>\n"
-"        <td>&nbsp;<br><samp><i>필드 값</i> of symbol <i>참조지정자</i></"
-"samp></td>\n"
+"        <td>&nbsp;<br><samp><i>심볼의 참조지정자 필드_값</i></samp></td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>${R3:VALUE}</samp></td>\n"
@@ -14277,14 +14264,14 @@ msgstr ""
 "    </tr>\n"
 "    <tr>\n"
 "        <th>버스 정의</th>\n"
-"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
-"&nbsp;&nbsp;&nbsp;</th>\n"
+"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp"
+";&nbsp;&nbsp;</th>\n"
 "        <th>생성된 네트</th>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>접두사[m..n]</samp></td>\n"
 "        <td></td>\n"
-"        <td>&nbsp;<br><samp>접두사m to 접두사n</samp></td>\n"
+"        <td>&nbsp;<br><samp>접두사m 에서 접두사n까지</samp></td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>D[0..7]</samp></td>\n"
@@ -14329,9 +14316,9 @@ msgstr ""
 "        <td>&nbsp;<br><samp>MEM{D_{[1..2]} ~LATCH}</samp></td>\n"
 "        <td></td>\n"
 "        <td> <samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
-"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; &nbsp;&nbsp;&nbsp;"
-"&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> <samp>MEM.D<sub>1</"
-"sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
+"&nbsp;&nbsp;&nbsp;&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> "
+"<samp>MEM.D<sub>1</sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td><br></td>\n"
@@ -14339,7 +14326,7 @@ msgstr ""
 "</table>\n"
 "<p></p>\n"
 "<p></p>\n"
-"<i>마크업이 버스 정의보다 앞에 오는 것을 주의하세요</i>\n"
+"<i>마크업은 버스 정의보다 우선합니다</i>\n"
 "\n"
 
 #: eeschema/sch_validators.cpp:102
@@ -18954,40 +18941,36 @@ msgid "Printing"
 msgstr "인쇄"
 
 #: pagelayout_editor/dialogs/properties_frame.cpp:554
-#, fuzzy
 msgid "Predefined Keywords"
-msgstr "사전 정의된 너비:"
+msgstr "사전 정의된 키워드"
 
 #: pagelayout_editor/dialogs/properties_frame.cpp:557
 msgid "Texts can include keywords."
-msgstr ""
+msgstr "텍스트에는 키워드가 포함될 수 있습니다."
 
 #: pagelayout_editor/dialogs/properties_frame.cpp:558
 msgid "Keyword notation is ${keyword}"
-msgstr ""
+msgstr "키워드 표기는 ${키워드}"
 
 #: pagelayout_editor/dialogs/properties_frame.cpp:559
 msgid "Keywords are replaced by they actual value in strings"
-msgstr ""
+msgstr "키워드는 문자열의 실제 값으로 대체됩니다"
 
 #: pagelayout_editor/dialogs/properties_frame.cpp:560
 msgid "These build-in keywords are always available:"
-msgstr ""
+msgstr "다음 기본 제공 키워드는 항상 사용할 수 있습니다:"
 
 #: pagelayout_editor/dialogs/properties_frame.cpp:564
-#, fuzzy
 msgid "(sheet number)"
-msgstr "시트 번호: %d"
+msgstr "(시트 번호)"
 
 #: pagelayout_editor/dialogs/properties_frame.cpp:565
-#, fuzzy
 msgid "(sheet count)"
-msgstr "반복 횟수"
+msgstr "(시트 수)"
 
 #: pagelayout_editor/dialogs/properties_frame.cpp:571
-#, fuzzy
 msgid "(paper size)"
-msgstr "사용자 정의 용지 크기:"
+msgstr "(용지 크기)"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:34
 msgid "Show on all pages"
@@ -19839,6 +19822,8 @@ msgid ""
 "Zdiff =\n"
 "2*Z0( (1 - 0.48exp( -0.96*S/H ) )"
 msgstr ""
+"Zdiff =\n"
+"2*Z0( (1 - 0.48exp( -0.96*S/H ) )"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:901
 msgid "Zcommon = Zeven / 2"
@@ -20682,9 +20667,8 @@ msgid "Dielectric losses (odd):"
 msgstr "유전 손실 (odd):"
 
 #: pcb_calculator/transline_ident.cpp:309
-#, fuzzy
 msgid "Differential Impedance (Zd):"
-msgstr "차동 쌍 간격"
+msgstr "차동 임피던스(Zd):"
 
 #: pcb_calculator/transline_ident.cpp:334
 msgid "Zeven"
@@ -21000,24 +20984,23 @@ msgid "PrePreg"
 msgstr "PrePreg"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:188
-#, fuzzy, c-format
+#, c-format
 msgid "Enter board thickness in %s:"
-msgstr "%s에 보드 두께 입력"
+msgstr "%s에 보드 두께 입력:"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:193
-#, fuzzy, c-format
+#, c-format
 msgid "Enter expected board thickness (min value %s):"
-msgstr "예상되는 기판 두께를 %s(으)로 입력하세요 (최소값은 %s입니다)"
+msgstr "예상되는 기판 두께를 입력하세요 (최소값은 %s입니다):"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:197
-#, fuzzy
 msgid "Adjust Unlocked Dielectric Layers"
-msgstr "잠기지 않은 유전체 레이어의 두께를 조정"
+msgstr "잠금 해제된 유전체 레이어 조정"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:208
-#, fuzzy, c-format
+#, c-format
 msgid "Value too small (min value %s)."
-msgstr "값이 너무 작습니다 (최소값 %s %s). 중단합니다"
+msgstr "값이 너무 작습니다 (최소값 %s )."
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:228
 msgid "All dielectric  thickness layers are locked"
@@ -21171,9 +21154,8 @@ msgid "Id"
 msgstr "Id"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:111
-#, fuzzy
 msgid "Loss Tan"
-msgstr "손실 탄젠트"
+msgstr "탄젠트 손실"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:132
 msgid "Board thickness from stackup:"
@@ -27015,13 +26997,12 @@ msgid ""
 msgstr "체크할 경우, 패드를 나머지 풋프린트와 관련하여 움직일 수 있습니다."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:83
-#, fuzzy
 msgid ""
 "Left click (and drag) actions depend on 2 modifier keys:\n"
 "Shift and Ctrl."
 msgstr ""
-"좌클릭 (및 끌기) 동작은 3개의 수정자 키에 따라 달라집니다.\n"
-"Alt, Shift 및 Ctrl입니다."
+"좌클릭 (및 끌기) 동작은 2개의 수정자 키에 따라 달라짐:\n"
+"Shift 및 Ctrl입니다."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:97
 #: pcbnew/dialogs/panel_edit_options_base.cpp:168
@@ -27035,9 +27016,8 @@ msgstr "항목을 선택합니다."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:107
 #: pcbnew/dialogs/panel_edit_options_base.cpp:178
-#, fuzzy
 msgid "Long Click"
-msgstr "클릭"
+msgstr "긴 클릭"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:127
 msgid "Ctrl+Shift"
@@ -27049,13 +27029,12 @@ msgid "Highlight net (for pads or tracks)."
 msgstr "네트 강조 (패드 또는 배선용)."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:154
-#, fuzzy
 msgid ""
 "Left click (and drag) actions depend on 3 modifier keys:\n"
 "Option, Shift and Cmd."
 msgstr ""
-"좌클릭 (및 끌기) 동작은 3개의 수정자 키에 따라 달라집니다.\n"
-"Alt, Shift 및 Cmd."
+"좌클릭 (및 끌기) 동작은 3개의 수정자 키에 따라 달라짐:\n"
+"Option, Shift 및 Cmd."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:198
 msgid "Shift+Cmd"
@@ -29738,13 +29717,13 @@ msgstr ""
 "임시 파일 '%s'의 이름을 바꾸지 못함."
 
 #: pcbnew/files.cpp:1146
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Board copied to:\n"
 "%s"
 msgstr ""
-"기판이 복사되었습니다:\n"
-"\"%s\"(으)로 복사됨"
+"기판이 복사됨:\n"
+"%s"
 
 #: pcbnew/footprint.cpp:882 pcbnew/tools/pcb_control.cpp:1191
 msgid "Last Change"
@@ -31163,7 +31142,7 @@ msgstr "Eeschema 네트리스트"
 msgid ""
 "Received an error while reading netlist.  Please report this issue to the "
 "KiCad team using the menu Help->Report Bug."
-msgstr ""
+msgstr "넷리스트를 읽는 동안 오류가 발생했습니다. 도움말->버그 보고 메뉴를 사용하여 KiCad 팀에 이 문제를 보고하십시오."
 
 #: pcbnew/pcb_edit_frame.cpp:1488
 #, c-format
@@ -34614,13 +34593,12 @@ msgid "Lock or unlock selected items"
 msgstr "선택한 항목 잠금 또는 잠금 해제"
 
 #: pcbnew/tools/pcb_actions.cpp:667
-#, fuzzy
 msgid "Toggle 45 Limit"
-msgstr "네트 강조 표시 전환"
+msgstr "토글 45도 제한"
 
 #: pcbnew/tools/pcb_actions.cpp:667
 msgid "Limit actions to 45 degrees from the starting point"
-msgstr ""
+msgstr "시작점에서 45도로 동작 제한"
 
 #: pcbnew/tools/pcb_actions.cpp:672
 msgid "Prevent items from being moved and/or resized on the canvas"
