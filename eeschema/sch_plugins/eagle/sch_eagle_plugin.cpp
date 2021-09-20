@@ -1081,8 +1081,16 @@ void SCH_EAGLE_PLUGIN::loadSegments( wxXmlNode* aSegmentsNode, const wxString& n
             else if( nodeName == "pinref" )
             {
                 segmentAttribute->GetAttribute( "gate" ); // REQUIRED
-                segmentAttribute->GetAttribute( "part" ); // REQUIRED
-                segmentAttribute->GetAttribute( "pin" );  // REQUIRED
+                wxString part = segmentAttribute->GetAttribute( "part" ); // REQUIRED
+                wxString pin = segmentAttribute->GetAttribute( "pin" );  // REQUIRED
+
+                auto powerPort = m_powerPorts.find( "#" + part );
+
+                if( powerPort != m_powerPorts.end()
+                        && powerPort->second == EscapeString( pin, CTX_NETNAME ) )
+                {
+                    labelled = true;
+                }
             }
             else if( nodeName == "wire" )
             {
@@ -1459,6 +1467,9 @@ void SCH_EAGLE_PLUGIN::loadInstance( wxXmlNode* aInstanceNode )
 
     for( const LIB_PIN* pin : pins )
         m_connPoints[symbol->GetPinPhysicalPosition( pin )].emplace( pin );
+
+    if( part->IsPower() )
+        m_powerPorts[ reference ] = symbol->GetField( VALUE_FIELD )->GetText();
 
     symbol->ClearFlags();
 

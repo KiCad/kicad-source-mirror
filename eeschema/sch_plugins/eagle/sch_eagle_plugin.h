@@ -234,6 +234,8 @@ private:
 
     std::map<wxString, int>           m_netCounts;
     std::map<int, SCH_LAYER_ID>       m_layerMap;
+    std::map<wxString, wxString>      m_powerPorts;        ///< map from symbol reference to global
+                                                           ///< label equivalent
 
     ///< Wire intersection points, used for quick checks whether placing a net label in a particular
     ///< place would short two nets.
