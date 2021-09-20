@@ -209,6 +209,10 @@ int PANEL_KICAD2STEP::RunConverter()
                 ReportMessage( _( "\n** Error writing STEP file. **\n" ) );
                 return -1;
             }
+            else
+            {
+                ReportMessage( wxString::Format( _( "\nSTEP file '%s' created.\n" ), outfile ) );
+            }
         }
         catch( const Standard_Failure& e )
         {
@@ -222,12 +226,15 @@ int PANEL_KICAD2STEP::RunConverter()
             return -1;
         }
     }
+    else
+    {
+        ReportMessage( _( "\n** Error reading kicad_pcb file. **\n" ) );
+        return -1;
+    }
 
     wxString msgs, errs;
     msgs << msgs_from_opencascade.str();
     ReportMessage( msgs );
-
-    ReportMessage( wxString::Format( _( "\nSTEP file '%s' created.\n" ), outfile ) );
 
     errs << errors_from_opencascade.str();
     ReportMessage( errs );
