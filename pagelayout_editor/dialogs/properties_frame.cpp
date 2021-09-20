@@ -556,7 +556,7 @@ void PROPERTIES_FRAME::onHelp( wxCommandEvent& aEvent )
 
     message << _( "Texts can include keywords." ) << "<br>";
     message << _( "Keyword notation is ${keyword}" ) << "<br>";
-    message << _( "Keywords are replaced by they actual value in strings" ) << "<br><br>";
+    message << _( "Each keyword is replaced by its value" ) << "<br><br>";
     message << _( "These build-in keywords are always available:" ) << "<br><br>";
     dlg.AddHTML_Text( message );
 
