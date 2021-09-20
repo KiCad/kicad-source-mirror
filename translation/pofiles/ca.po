@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-09-13 10:58-0700\n"
-"PO-Revision-Date: 2021-09-17 12:39+0000\n"
+"PO-Revision-Date: 2021-09-20 16:14+0000\n"
 "Last-Translator: Arnau Llovet Vidal <arnaullv@gmail.com>\n"
 "Language-Team: Catalan <https://hosted.weblate.org/projects/kicad/"
 "master-source/ca/>\n"
@@ -2931,7 +2931,7 @@ msgstr "Obre la carpeta de temes"
 
 #: common/dialogs/panel_color_settings_base.cpp:42
 msgid "Open the folder containing color themes"
-msgstr ""
+msgstr "Obre la carpeta que conté els temes de color"
 
 #: common/dialogs/panel_common_settings.cpp:54
 msgid ""
@@ -2960,6 +2960,10 @@ msgid ""
 "On some platforms, the automatic value is incorrect and should be set "
 "manually."
 msgstr ""
+"Utilitza un valor automàtic per l'escalat del llenç.\n"
+"\n"
+"En algunes plataformes el valor automàtic és incorrecte i ha de ser ajustat "
+"manualment."
 
 #: common/dialogs/panel_common_settings.cpp:299
 msgid "Executable files ("
@@ -2978,6 +2982,9 @@ msgid ""
 "Delay after the first change to create a backup file of the board on disk.\n"
 "If set to 0, auto backup is disabled"
 msgstr ""
+"Temps d'espera després del primer canvi per crear una còpia de seguretat de "
+"la placa al disc.\n"
+"Si s'indica 0, es deshabilitarà la còpia de seguretat"
 
 #: common/dialogs/panel_common_settings_base.cpp:39
 #: common/dialogs/panel_common_settings_base.cpp:281
@@ -2997,6 +3004,8 @@ msgid ""
 "3D cache files older than this are deleted.\n"
 "If set to 0, cache clearing is disabled"
 msgstr ""
+"Els fitxers del cau 3D més antics que això s'eliminen.\n"
+"Si s'ha introduït 0, l'esborrat del cau està deshabilitat"
 
 #: common/dialogs/panel_common_settings_base.cpp:65
 msgid "Days"
@@ -3077,7 +3086,7 @@ msgstr "Clar"
 
 #: common/dialogs/panel_common_settings_base.cpp:192
 msgid "Use icons designed for light window backgrounds"
-msgstr ""
+msgstr "Utilitza icones dissenyades pels fons de finestra clars"
 
 #: common/dialogs/panel_common_settings_base.cpp:196
 #: gerbview/gerber_draw_item.cpp:712
@@ -3086,12 +3095,12 @@ msgstr "Fosc"
 
 #: common/dialogs/panel_common_settings_base.cpp:197
 msgid "Use icons designed for dark window backgrounds"
-msgstr ""
+msgstr "Utilitza icones dissenyades pels fons de finestra foscos"
 
 #: common/dialogs/panel_common_settings_base.cpp:203
 msgid ""
 "Automatically choose light or dark icons based on the system color theme"
-msgstr ""
+msgstr "Tria automàticament les icones en funció del color del tema"
 
 #: common/dialogs/panel_common_settings_base.cpp:223
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:21
@@ -3100,7 +3109,7 @@ msgstr "Edició"
 
 #: common/dialogs/panel_common_settings_base.cpp:225
 msgid "Warp mouse to origin of moved object"
-msgstr ""
+msgstr "Desplaça el punter a l'origen de l'objecte desplaçat"
 
 #: common/dialogs/panel_common_settings_base.cpp:228
 msgid "First hotkey selects tool"
@@ -3170,6 +3179,9 @@ msgid ""
 "If the total size of backup files grows above this limit, old backups will "
 "be deleted (set to 0 for no limit)"
 msgstr ""
+"Si la mida total dels fitxers de còpia de seguretat creix per sobre d'aquest "
+"límit, les còpies de seguretat antigues s'eliminaran (establir a 0 per "
+"il·limitat)"
 
 #: common/dialogs/panel_common_settings_base.cpp:294
 msgid "MB"
@@ -3191,7 +3203,7 @@ msgstr ""
 
 #: common/dialogs/panel_hotkeys_editor.cpp:84
 msgid "Type filter text"
-msgstr ""
+msgstr "Escriu el filtre de text"
 
 #: common/dialogs/panel_hotkeys_editor.cpp:126
 msgid "Undo All Changes"
@@ -3209,6 +3221,8 @@ msgstr "Importa les dreceres de teclat..."
 msgid ""
 "Import hotkey definitions from an external file, replacing the current values"
 msgstr ""
+"Importa les definicions de dreceres de teclat d'un fitxer extern, tot "
+"substituint els valors actuals"
 
 #: common/dialogs/panel_hotkeys_editor.cpp:198
 msgid "Import Hotkeys File:"
@@ -3216,7 +3230,7 @@ msgstr "Importa el fitxer de dreceres de teclat:"
 
 #: common/dialogs/panel_hotkeys_editor.cpp:246
 msgid "| Action | Default Hotkey | Description"
-msgstr ""
+msgstr "| Acció | Drecera per defecte | Descripció"
 
 #: common/dialogs/panel_mouse_settings.cpp:47
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:162
@@ -3235,23 +3249,20 @@ msgid "Only one action can be assigned to each vertical scroll setting"
 msgstr ""
 
 #: common/dialogs/panel_mouse_settings_base.cpp:18
-#, fuzzy
 msgid "Pan and Zoom"
-msgstr "Panoràmica i zoom"
+msgstr "Desplaça i amplia"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:25
-#, fuzzy
 msgid "Center and warp cursor on zoom"
-msgstr "Ce&ntra i desplaça el cursor en fer zoom"
+msgstr "Centra i desplaça el cursor en ampliar"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:26
 msgid "Center the cursor on screen when zooming."
-msgstr ""
+msgstr "Centra el cursor a la pantalla en ampliar."
 
 #: common/dialogs/panel_mouse_settings_base.cpp:33
-#, fuzzy
 msgid "Automatically pan while moving object"
-msgstr "En&quadra mentre es mou l'objecte"
+msgstr "Desplaça automàticament al moure l'objecte"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:34
 msgid ""
@@ -3260,18 +3271,16 @@ msgid ""
 msgstr ""
 
 #: common/dialogs/panel_mouse_settings_base.cpp:38
-#, fuzzy
 msgid "Use zoom acceleration"
-msgstr "Habilita l'eliminació automàtica de pistes"
+msgstr "Utilitza l'acceleració del zoom"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:39
 msgid "Zoom faster when scrolling quickly"
-msgstr ""
+msgstr "Amplia més ràpidament quan es desplaci ràpidament"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:45
-#, fuzzy
 msgid "Zoom speed:"
-msgstr "Centra el zoom"
+msgstr "Velocitat del zoom:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:51
 msgid "How far to zoom in for each rotation of the mouse wheel"
@@ -3279,43 +3288,42 @@ msgstr ""
 
 #: common/dialogs/panel_mouse_settings_base.cpp:58
 msgid "Pick the zoom speed automatically"
-msgstr ""
+msgstr "Pren la velocitat del zoom automàticament"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:67
-#, fuzzy
 msgid "Auto pan speed:"
-msgstr "Posiciona automàticament els camps"
+msgstr "Velocitat de desplaçament automàtic:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:72
 msgid "How fast to pan when moving an object off the edge of the screen"
 msgstr ""
+"Com de ràpid es desplaçarà al moure un objecte fora de la vora de la pantalla"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:91
-#, fuzzy
 msgid "Drag Gestures"
-msgstr "Arrossega l'element"
+msgstr "Gestos d'arrossegat"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:99
 msgid "Left button drag:"
-msgstr ""
+msgstr "Arrossega botó esquerre:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:103
-#, fuzzy
 msgid "Draw selection rectangle"
-msgstr "Traça un cercle"
+msgstr "Traça un rectangle de selecció"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:103
 msgid "Drag selected objects; otherwise draw selection rectangle"
 msgstr ""
+"Arrossega els objectes seleccionats; si no n'hi ha, dibuixa un rectangle de "
+"selecció"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:103
-#, fuzzy
 msgid "Drag any object (selected or not)"
-msgstr "Mou els elements seleccionats"
+msgstr "Arrossega qualsevol objecte (seleccionat o no)"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:112
 msgid "Middle button drag:"
-msgstr ""
+msgstr "Arrossega botó central:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:116
 #: common/dialogs/panel_mouse_settings_base.cpp:129
@@ -3352,7 +3360,7 @@ msgstr "Cap"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:125
 msgid "Right button drag:"
-msgstr ""
+msgstr "Arrossega botó dret:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:145
 msgid "Scroll Gestures"
@@ -3364,7 +3372,7 @@ msgstr ""
 
 #: common/dialogs/panel_mouse_settings_base.cpp:158
 msgid "Only one action can be assigned to each column"
-msgstr ""
+msgstr "Només es pot assignar una acció a cada columna"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:175
 msgid "--"
@@ -3869,14 +3877,14 @@ msgid "Text '%s'"
 msgstr "Projecte «%s»"
 
 #: common/drawing_sheet/ds_draw_item.cpp:395 eeschema/lib_rectangle.cpp:273
-#, fuzzy, c-format
+#, c-format
 msgid "Rectangle, width %s height %s"
-msgstr "Mida de paper: amplada %.4g alçada %.4g"
+msgstr "Rectangle, ample %s alt %s"
 
 #: common/drawing_sheet/ds_draw_item.cpp:428
-#, fuzzy, c-format
+#, c-format
 msgid "Line, length %s"
-msgstr "Longitud de la línia"
+msgstr "Línia, longitud %s"
 
 #: common/drawing_sheet/ds_draw_item.cpp:482
 #, fuzzy
@@ -4539,13 +4547,9 @@ msgid "from %s : %s() line %d"
 msgstr "des de %s : %s() línia %d"
 
 #: common/exceptions.cpp:76
-#, fuzzy, c-format
+#, c-format
 msgid "%s in '%s', line %d, offset %d."
-msgstr ""
-"falta el número en punt flotant a\n"
-"fitxer: <%s>\n"
-"línia: %d\n"
-"desplaçament: %d"
+msgstr "%s en '%s', línia %d, desplaçament %d."
 
 #: common/exceptions.cpp:90
 #, c-format
@@ -4621,11 +4625,13 @@ msgid "Errors were encountered loading footprints:"
 msgstr ""
 
 #: common/fp_lib_table.cpp:200
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Duplicate library nickname '%s' found in footprint library table file line "
 "%d."
-msgstr "Edita la taula de les biblioteques de símbols."
+msgstr ""
+"S'ha trobat un sobrenom de biblioteca duplicat '%s' a la línia %d del fitxer "
+"de la taula de biblioteques d'empremtes."
 
 #: common/fp_lib_table.cpp:300
 #, c-format
@@ -4670,9 +4676,9 @@ msgstr ""
 #: common/gestfich.cpp:328 eeschema/eeschema.cpp:410 eeschema/eeschema.cpp:443
 #: gerbview/gerbview.cpp:237 kicad/project_template.cpp:257
 #: pcbnew/pcbnew.cpp:359
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot copy file '%s'."
-msgstr "No es pot copiar el fitxer «%s»."
+msgstr "No es pot copiar el fitxer '%s'."
 
 #: common/grid_tricks.cpp:277 common/tool/actions.cpp:153
 #: eeschema/tools/ee_actions.cpp:148 pcbnew/tools/edit_tool.cpp:1984
@@ -4739,9 +4745,8 @@ msgid "Finish Drawing"
 msgstr "Acaba el dibuix"
 
 #: common/hotkey_store.cpp:46
-#, fuzzy
 msgid "Add to Selection"
-msgstr "Zoom a la selecció"
+msgstr "Afegeix a la selecció"
 
 #: common/hotkey_store.cpp:47 eeschema/tools/ee_actions.cpp:533
 #: gerbview/tools/gerbview_actions.cpp:113 pcbnew/tools/pcb_actions.cpp:711
@@ -4786,9 +4791,8 @@ msgstr "Editor de PCB's"
 #: common/hotkey_store.cpp:75 kicad/tools/kicad_manager_actions.cpp:110
 #: pagelayout_editor/menubar.cpp:86 pagelayout_editor/pl_editor_frame.cpp:481
 #: pagelayout_editor/pl_editor_frame.cpp:555
-#, fuzzy
 msgid "Drawing Sheet Editor"
-msgstr "Editor de text"
+msgstr "Editor de fulles de dibuix"
 
 #: common/hotkey_store.cpp:156
 msgid "Gestures"
@@ -4800,12 +4804,11 @@ msgid "Failed to load kiface library '%s'."
 msgstr "No s'ha pogut crear el fitxer de la biblioteca de components «%s»"
 
 #: common/kiway.cpp:264
-#, fuzzy, c-format
+#, c-format
 msgid "Could not read instance name and version from kiface library '%s'."
 msgstr ""
-"No es pot carregar l'empremta «%s» de la biblioteca «%s».\n"
-"\n"
-"Error %s."
+"No es pot llegir el nom de l'instància ni la versió des de la biblioteca de "
+"kiface '%s'."
 
 #: common/kiway.cpp:297
 #, c-format
@@ -4817,11 +4820,11 @@ msgstr ""
 
 #: common/kiway.cpp:301
 msgid "It is missing.\n"
-msgstr ""
+msgstr "Falta.\n"
 
 #: common/kiway.cpp:303
 msgid "Perhaps a shared library (.dll or .so) file is missing.\n"
-msgstr ""
+msgstr "Pot ser que falti una biblioteca compartida (.dll o .so).\n"
 
 #: common/kiway.cpp:305
 msgid ""
@@ -4832,11 +4835,8 @@ msgstr ""
 "'"
 
 #: common/kiway.cpp:422 common/kiway.cpp:426 common/kiway.cpp:430
-#, fuzzy
 msgid "Error loading editor."
-msgstr ""
-"Error en carregar el netlist.\n"
-"%s"
+msgstr "Error en carregar l'editor."
 
 #: common/kiway.cpp:516
 #, fuzzy, c-format
@@ -5384,9 +5384,9 @@ msgid "Item"
 msgstr "Element"
 
 #: common/libeval_compiler/libeval_compiler.cpp:567
-#, fuzzy, c-format
+#, c-format
 msgid "Unrecognized character '%c'"
-msgstr "Esquema de numeració no reconegut: %d"
+msgstr "Caràcter no reconegut: '%c'"
 
 #: common/libeval_compiler/libeval_compiler.cpp:827
 msgid "Unknown parent of function parameters"
@@ -5400,9 +5400,9 @@ msgstr ""
 #: common/libeval_compiler/libeval_compiler.cpp:899
 #: common/libeval_compiler/libeval_compiler.cpp:973
 #: common/libeval_compiler/libeval_compiler.cpp:1037
-#, fuzzy, c-format
+#, c-format
 msgid "Unrecognized item '%s'"
-msgstr "Ítems sense connectar"
+msgstr "Element no reconegut '%s'"
 
 #: common/libeval_compiler/libeval_compiler.cpp:875
 #: common/libeval_compiler/libeval_compiler.cpp:978
@@ -5411,9 +5411,9 @@ msgid "Unrecognized property '%s'"
 msgstr ""
 
 #: common/libeval_compiler/libeval_compiler.cpp:912
-#, fuzzy, c-format
+#, c-format
 msgid "Unrecognized function '%s'"
-msgstr "Esquema de numeració no reconegut: %d"
+msgstr "Funció no reconeguda '%s'"
 
 #: common/libeval_compiler/libeval_compiler.cpp:1009
 #, fuzzy, c-format
@@ -5515,9 +5515,9 @@ msgid "Unknown Parameter '%s' in '%s'"
 msgstr ""
 
 #: common/plugins/cadstar/cadstar_archive_parser.h:52
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to parse '%s' in '%s'"
-msgstr "No es pot crear el fitxer «%s»"
+msgstr "No es pot interpretar '%s' a '%s'"
 
 #: common/plugins/eagle/eagle_parser.cpp:120
 #, c-format
@@ -5651,14 +5651,14 @@ msgid "Field%d"
 msgstr "Camp%d"
 
 #: common/tool/action_menu.cpp:209 common/tool/action_menu.cpp:214
-#, fuzzy, c-format
+#, c-format
 msgid "Close %s"
-msgstr "Tanca"
+msgstr "Tanca %s"
 
 #: common/tool/action_menu.cpp:228
-#, fuzzy, c-format
+#, c-format
 msgid "Quit %s"
-msgstr "&Surt"
+msgstr "Surt %s"
 
 #: common/tool/actions.cpp:43
 #, fuzzy
@@ -6432,9 +6432,9 @@ msgid "Grid: %s (%s)"
 msgstr "Valor %s de %s"
 
 #: common/tool/grid_menu.cpp:104
-#, fuzzy, c-format
+#, c-format
 msgid "User grid: %s (%s)"
-msgstr "Quadrícula: %.2f mil (%.4f mm)"
+msgstr "Quadrícula d'usuari: %s (%s)"
 
 #: common/tool/zoom_menu.cpp:49
 #, c-format
@@ -6442,9 +6442,9 @@ msgid "Zoom: %.2f"
 msgstr "Zoom: %.2f"
 
 #: common/validators.cpp:250
-#, fuzzy, c-format
+#, c-format
 msgid "Incorrect value: %s"
-msgstr "Valor incorrecte pe a R1 R2"
+msgstr "Valor incorrecte: %s"
 
 #: common/validators.cpp:294
 msgid "Entry contains trailing white space."
@@ -6455,9 +6455,9 @@ msgid "Entry contains leading white space."
 msgstr ""
 
 #: common/validators.cpp:302
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' is not a valid library identifier format."
-msgstr "%d no és un nombre de capa vàlid"
+msgstr "'%s' no és un format d'identificador de biblioteca vàlid."
 
 #: common/validators.cpp:309
 #, fuzzy
@@ -6473,11 +6473,8 @@ msgid "Signal names cannot contain CR or LF characters"
 msgstr ""
 
 #: common/validators.cpp:370
-#, fuzzy
 msgid "Signal names cannot contain spaces"
-msgstr ""
-"S'ha creat el fitxer d'informe d'empremta:\n"
-"«%s»"
+msgstr "Els noms de senyals no poden tenir espais"
 
 #: common/view/view.cpp:544
 msgid "Mirroring for Y axis is not supported yet"
@@ -6657,9 +6654,9 @@ msgid "Reset to Defaults"
 msgstr "Estableix al valor predeterminat"
 
 #: common/widgets/paged_dialog.cpp:368
-#, fuzzy, c-format
+#, c-format
 msgid "Reset %s to Defaults"
-msgstr "Estableix al valor predeterminat"
+msgstr "Restableix %s al valor predeterminat"
 
 #: common/widgets/unit_binder.cpp:217
 #, c-format
@@ -7159,9 +7156,9 @@ msgid "Description: %s;  Keywords: %s"
 msgstr "Descripció: %s;  Paraules clau: %s"
 
 #: cvpcb/cvpcb_mainframe.cpp:776
-#, fuzzy, c-format
+#, c-format
 msgid "Library location: %s"
-msgstr "Opcions de l'editor de components"
+msgstr "Localització de la biblioteca: %s"
 
 #: cvpcb/cvpcb_mainframe.cpp:778
 #, fuzzy
@@ -7184,12 +7181,12 @@ msgid "Loading Footprint Libraries"
 msgstr "Càrrega de biblioteques de símbols"
 
 #: cvpcb/cvpcb_mainframe.cpp:859
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error loading schematic.\n"
 "%s"
 msgstr ""
-"S'ha produït un error en carregar el fitxer de l'esquemàtic «%s».\n"
+"S'ha produït un error en carregar l'esquema.\n"
 "%s"
 
 #: cvpcb/dialogs/dialog_config_equfiles.cpp:51
@@ -7323,9 +7320,9 @@ msgid "Footprint ID '%s' is not valid."
 msgstr "L'ID de l'empremta '%s' no és vàlid."
 
 #: cvpcb/display_footprints_frame.cpp:420
-#, fuzzy, c-format
+#, c-format
 msgid "Library '%s' is not in the footprint library table."
-msgstr "Edita la taula de les biblioteques d'empremtes"
+msgstr "La biblioteca '%s' no és a la taula de biblioteques d'empremtes."
 
 #: cvpcb/display_footprints_frame.cpp:429
 #: cvpcb/display_footprints_frame.cpp:454
@@ -7518,9 +7515,9 @@ msgid "%d duplicate time stamps were found and replaced."
 msgstr "S'han trobat i s'han substituït %d marques de temps duplicades."
 
 #: eeschema/annotate.cpp:284
-#, fuzzy, c-format
+#, c-format
 msgid "Updated %s (unit %s) from %s to %s."
-msgstr "Pad %s en %s de %s"
+msgstr "Actualitzat %s (unitat %s) de %s a %s."
 
 #: eeschema/annotate.cpp:292
 #, fuzzy, c-format
@@ -7533,9 +7530,9 @@ msgid "Annotated %s (unit %s) as %s."
 msgstr "Anotat %s (unitat %s) com %s."
 
 #: eeschema/annotate.cpp:309
-#, fuzzy, c-format
+#, c-format
 msgid "Annotated %s as %s."
-msgstr "Anota"
+msgstr "Anotat %s com %s."
 
 #: eeschema/annotate.cpp:326
 #, fuzzy
@@ -18976,9 +18973,9 @@ msgid "Extracting package '%s'."
 msgstr "Extreu el fitxer «%s»"
 
 #: kicad/pcm/pcm_task_manager.cpp:116
-#, fuzzy, c-format
+#, c-format
 msgid "Removing downloaded archive '%s'."
-msgstr "Supressió del component sense utilitzar «%s:%s».\n"
+msgstr "S'està traient el fitxer descarregat '%s'."
 
 #: kicad/pcm/pcm_task_manager.cpp:157
 #, c-format
@@ -19418,9 +19415,8 @@ msgid "KiCad Error"
 msgstr "Error de KiCad"
 
 #: kicad/tools/kicad_manager_control.cpp:652
-#, fuzzy
 msgid "Application failed to load."
-msgstr "Pcbnew no ha pogut carregar:\n"
+msgstr "No s'ha pogut carregar l'aplicació."
 
 #: kicad/tools/kicad_manager_control.cpp:718
 #, c-format
@@ -22962,9 +22958,8 @@ msgid "No layer selected."
 msgstr "Cap capa seleccionada."
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:868
-#, fuzzy
 msgid "Selecting <no net> will create an isolated copper island."
-msgstr "Supressió del component sense utilitzar «%s:%s».\n"
+msgstr "Seleccionant <sense xarxa> es crearà una illa de coure aïllada."
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:46
 msgid ""
@@ -23777,9 +23772,9 @@ msgid "Open the Board Setup... dialog"
 msgstr "Configuració de &les capes"
 
 #: pcbnew/dialogs/dialog_drc.cpp:661
-#, fuzzy, c-format
+#, c-format
 msgid "Report file '%s' created<br>"
-msgstr "S'ha creat el fitxer de l'informe %s\n"
+msgstr "S'ha creat el fitxer de l'informe '%s'<br>"
 
 #: pcbnew/dialogs/dialog_drc.cpp:892
 msgid "Do you wish to delete excluded markers as well?"
@@ -23817,9 +23812,8 @@ msgid "Test for parity between PCB and schematic"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:77
-#, fuzzy
 msgid "Tests Running..."
-msgstr "Prova les zones...\n"
+msgstr "S'estan executant proves..."
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:105
 #, fuzzy, c-format
@@ -23927,9 +23921,9 @@ msgid "Update footprint %s from '%s' to '%s'"
 msgstr "Pad %s en %s de %s"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:381
-#, fuzzy, c-format
+#, c-format
 msgid "Change footprint %s from '%s' to '%s'"
-msgstr "Canvi del valor del component «%s:%s», del valor «%s» a «%s».\n"
+msgstr "Canvia l'empremta %s de '%s' a '%s'"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:391
 #, fuzzy
@@ -24398,9 +24392,8 @@ msgid "Wrap"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_find_base.cpp:62
-#, fuzzy
 msgid "Search footprint reference designators"
-msgstr "Canvi del component «%s:%s» perquè referenciï a «%s».\n"
+msgstr "Cerca designadors de referències d'empremtes"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:66
 #, fuzzy
@@ -26001,9 +25994,8 @@ msgid "Link footprints using component tstamps (unique ids)"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_netlist_base.cpp:43
-#, fuzzy
 msgid "Link footprints using reference designators"
-msgstr "Canvi del component «%s:%s» perquè referenciï a «%s».\n"
+msgstr "Enllaça empremtes utilitzant els designadors de referències"
 
 #: pcbnew/dialogs/dialog_netlist_base.cpp:45
 #, fuzzy
@@ -27453,15 +27445,13 @@ msgstr "Mou la selecció actual una posició cap amunt"
 
 #: pcbnew/dialogs/dialog_position_relative.cpp:170
 #: pcbnew/dialogs/dialog_position_relative_base.cpp:67
-#, fuzzy
 msgid "Offset X:"
-msgstr "Desplaçament X"
+msgstr "Desplaçament X:"
 
 #: pcbnew/dialogs/dialog_position_relative.cpp:171
 #: pcbnew/dialogs/dialog_position_relative_base.cpp:84
-#, fuzzy
 msgid "Offset Y:"
-msgstr "Desplaçament Y"
+msgstr "Desplaçament Y:"
 
 #: pcbnew/dialogs/dialog_position_relative.cpp:173
 #, fuzzy
@@ -27484,28 +27474,24 @@ msgid "Reference location: local coordinates origin"
 msgstr "Activa la coordenada polar"
 
 #: pcbnew/dialogs/dialog_position_relative.cpp:255
-#, fuzzy
 msgid "<none selected>"
-msgstr "no s'ha seleccionat cap fitxer"
+msgstr "<cap seleccionat>"
 
 #: pcbnew/dialogs/dialog_position_relative_base.cpp:22
 msgid "Reference item: <none selected>"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_position_relative_base.cpp:35
-#, fuzzy
 msgid "Use Local Origin"
-msgstr "Origen definit per l'usuari"
+msgstr "Utilitza un origen local"
 
 #: pcbnew/dialogs/dialog_position_relative_base.cpp:38
-#, fuzzy
 msgid "Use Grid Origin"
-msgstr "Restableix l'origen de la quadrícula"
+msgstr "Utilitza un origen de quadrícula"
 
 #: pcbnew/dialogs/dialog_position_relative_base.cpp:41
-#, fuzzy
 msgid "Select Item..."
-msgstr "Selecciona els elements"
+msgstr "Selecciona l'element..."
 
 #: pcbnew/dialogs/dialog_position_relative_base.cpp:42
 msgid ""
@@ -27535,9 +27521,8 @@ msgid "Real drill"
 msgstr "Perforació real"
 
 #: pcbnew/dialogs/dialog_push_pad_properties.cpp:51
-#, fuzzy
 msgid "Change Pads on Current Footprint"
-msgstr "Canvia els pads en l'empremta"
+msgstr "Canvia els pads en l'empremta actual"
 
 #: pcbnew/dialogs/dialog_push_pad_properties.cpp:56
 msgid "Change Pads on Identical Footprints"
@@ -27556,9 +27541,8 @@ msgid "Do not modify pads having a different orientation"
 msgstr "No modifiquis els pads que tinguin una orientació diferent"
 
 #: pcbnew/dialogs/dialog_push_pad_properties_base.cpp:34
-#, fuzzy
 msgid "Do not modify pads having a different type"
-msgstr "No modifiquis els pads que tinguin una forma diferent"
+msgstr "No modifiquis els pads que tinguin un tipus diferent"
 
 #: pcbnew/dialogs/dialog_push_pad_properties_base.h:51
 #, fuzzy
@@ -27566,7 +27550,6 @@ msgid "Push Pad Properties"
 msgstr "Propietats del pad"
 
 #: pcbnew/dialogs/dialog_rule_area_properties.cpp:154
-#, fuzzy
 msgid "No layers selected."
 msgstr "Cap capa seleccionada."
 
@@ -27575,9 +27558,8 @@ msgid "Layers:"
 msgstr "Capes:"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:41
-#, fuzzy
 msgid "Basic rules:"
-msgstr "Regles de &disseny"
+msgstr "Normes bàsiques:"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:48
 #, fuzzy
@@ -27627,9 +27609,8 @@ msgid "Raise a DRC error if a footprint courtyard overlaps this area"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:79
-#, fuzzy
 msgid "Area name:"
-msgstr "Nom del fitxer:"
+msgstr "Nom de l'àrea:"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:81
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:89
@@ -27661,9 +27642,8 @@ msgid "To layer:"
 msgstr "Sense capes"
 
 #: pcbnew/dialogs/dialog_swap_layers_base.h:48
-#, fuzzy
 msgid "Swap Layers"
-msgstr "Intercanvia les capes:"
+msgstr "Intercanvia les capes"
 
 #: pcbnew/dialogs/dialog_target_properties.cpp:109
 msgid "Modified alignment target"
@@ -27724,11 +27704,9 @@ msgid "Parent footprint description"
 msgstr "Orientació de l'empremta mare"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:358
-#, fuzzy, c-format
+#, c-format
 msgid "Changing the net will also update %s pad %s to %s."
-msgstr ""
-"Canvi del nom de la xarxa del component «%s:%s» pin «%s», del nom de la "
-"xarxa «%s» a «%s».\n"
+msgstr "Canviant la xarxa també s'actualitzarà %s pad %s a %s."
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:367
 #, fuzzy, c-format
