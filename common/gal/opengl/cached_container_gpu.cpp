@@ -63,7 +63,7 @@ CACHED_CONTAINER_GPU::CACHED_CONTAINER_GPU( unsigned int aSize ) :
     // disable glCopyBuffer, causes crashes/freezes on certain driver versions
     // Note, Intel's GL_VENDOR string varies depending on GPU/driver generation
     // But generally always starts with Intel at least
-    if( vendor.Contains( "Intel" ) || vendor.Contains( "etnaviv" ) )
+    if( vendor.StartsWith( "Intel" ) || vendor.Contains( "etnaviv" ) )
     {
         m_useCopyBuffer = false;
     }
