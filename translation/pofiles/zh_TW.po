@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-09-20 11:50-0700\n"
+"POT-Creation-Date: 2021-09-20 11:57-0700\n"
 "PO-Revision-Date: 2021-09-09 18:20+0000\n"
 "Last-Translator: David Chen <d0123456789g@yahoo.com.tw>\n"
 "Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/"
@@ -18870,7 +18870,7 @@ msgid "Keyword notation is ${keyword}"
 msgstr ""
 
 #: pagelayout_editor/dialogs/properties_frame.cpp:559
-msgid "Keywords are replaced by they actual value in strings"
+msgid "Each keyword is replaced by its value"
 msgstr ""
 
 #: pagelayout_editor/dialogs/properties_frame.cpp:560

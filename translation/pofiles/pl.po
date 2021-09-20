@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-09-20 11:50-0700\n"
+"POT-Creation-Date: 2021-09-20 11:57-0700\n"
 "PO-Revision-Date: 2021-09-15 17:51+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/master-"
@@ -19193,7 +19193,8 @@ msgid "Keyword notation is ${keyword}"
 msgstr "Sposób zapisu słów kluczowych to ${słowo_kluczowe}"
 
 #: pagelayout_editor/dialogs/properties_frame.cpp:559
-msgid "Keywords are replaced by they actual value in strings"
+#, fuzzy
+msgid "Each keyword is replaced by its value"
 msgstr "Słowa kluczowe są zamieniane przez ich aktualną wartość w tekście"
 
 #: pagelayout_editor/dialogs/properties_frame.cpp:560

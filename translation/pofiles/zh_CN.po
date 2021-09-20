@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-09-20 11:50-0700\n"
+"POT-Creation-Date: 2021-09-20 11:57-0700\n"
 "PO-Revision-Date: 2021-09-16 16:11+0000\n"
 "Last-Translator: Eric <spice2wolf@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
@@ -18774,7 +18774,8 @@ msgid "Keyword notation is ${keyword}"
 msgstr "关键字符号为 ${keyword}"
 
 #: pagelayout_editor/dialogs/properties_frame.cpp:559
-msgid "Keywords are replaced by they actual value in strings"
+#, fuzzy
+msgid "Each keyword is replaced by its value"
 msgstr "关键字被它们在字符串中的实际值所取代"
 
 #: pagelayout_editor/dialogs/properties_frame.cpp:560

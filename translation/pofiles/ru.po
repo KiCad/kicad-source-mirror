@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-09-20 11:50-0700\n"
+"POT-Creation-Date: 2021-09-20 11:57-0700\n"
 "PO-Revision-Date: 2021-09-15 17:51+0000\n"
 "Last-Translator: Konstantin Baranovskiy <baranovskiykonstantin@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/kicad/master-"
@@ -19098,7 +19098,8 @@ msgid "Keyword notation is ${keyword}"
 msgstr "Формат записи меток: ${keyword}"
 
 #: pagelayout_editor/dialogs/properties_frame.cpp:559
-msgid "Keywords are replaced by they actual value in strings"
+#, fuzzy
+msgid "Each keyword is replaced by its value"
 msgstr "Метки заменяются своими значениями в тексте"
 
 #: pagelayout_editor/dialogs/properties_frame.cpp:560
