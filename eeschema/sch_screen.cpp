@@ -1164,6 +1164,8 @@ void SCH_SCREENS::buildScreenList( SCH_SHEET* aSheet )
     {
         SCH_SCREEN* screen = aSheet->GetScreen();
 
+        wxCHECK_RET( screen, "No screen for aSheet" );
+
         addScreenToList( screen, aSheet );
 
         for( SCH_ITEM* item : screen->Items().OfType( SCH_SHEET_T ) )
@@ -1336,20 +1338,22 @@ void SCH_SCREENS::UpdateSymbolLinks( REPORTER* aReporter )
 
 bool SCH_SCREENS::HasNoFullyDefinedLibIds()
 {
-    SCH_SCREEN* screen;
+    bool has_symbols = false;
 
-    for( screen = GetFirst(); screen; screen = GetNext() )
+    for( SCH_SCREEN* screen = GetFirst(); screen; screen = GetNext() )
     {
         for( SCH_ITEM* item : screen->Items().OfType( SCH_SYMBOL_T ) )
         {
             SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
+            has_symbols = true;
 
             if( !symbol->GetLibId().GetLibNickname().empty() )
                 return false;
         }
     }
 
-    return true;
+    // return true (i.e. has no fully defined symbol) only if at least one symbol is found
+    return has_symbols ? true : false;
 }
 
 
