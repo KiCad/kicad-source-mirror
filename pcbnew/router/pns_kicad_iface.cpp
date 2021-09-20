@@ -90,7 +90,17 @@ public:
 
 private:
     int holeRadius( const PNS::ITEM* aItem ) const;
-    int matchDpSuffix( const wxString& aNetName, wxString& aComplementNet, wxString& aBaseDpName );
+
+    /**
+     * Checks for netnamed differential pairs.
+     * This accepts nets named suffixed by 'P', 'N', '+', '-', as well as additional
+     * numbers and underscores following the suffix.  So NET_P_123 is a valid positive net
+     * name matched to NET_N_123.
+     * @param aNetName Input net name to check for DP naming
+     * @param aComplementNet Generated net name for the pair
+     * @return -1 if found the negative pair, +1 if found the positive pair, 0 otherwise
+     */
+    int matchDpSuffix( const wxString& aNetName, wxString& aComplementNet );
 
 private:
     PNS::ROUTER_IFACE* m_routerIface;
@@ -574,60 +584,49 @@ int PNS_KICAD_IFACE_BASE::StackupHeight( int aFirstLayer, int aSecondLayer ) con
 }
 
 
-int PNS_PCBNEW_RULE_RESOLVER::matchDpSuffix( const wxString& aNetName, wxString& aComplementNet,
-                                             wxString& aBaseDpName )
+int PNS_PCBNEW_RULE_RESOLVER::matchDpSuffix( const wxString& aNetName, wxString& aComplementNet )
 {
     int rv = 0;
+    int count = 0;
 
-    if( aNetName.EndsWith( "+" ) )
+    for( auto it = aNetName.rbegin(); it != aNetName.rend() && rv == 0; ++it, ++count )
     {
-        aComplementNet = "-";
-        rv = 1;
-    }
-    else if( aNetName.EndsWith( "P" ) )
-    {
-        aComplementNet = "N";
-        rv = 1;
-    }
-    else if( aNetName.EndsWith( "-" ) )
-    {
-        aComplementNet = "+";
-        rv = -1;
-    }
-    else if( aNetName.EndsWith( "N" ) )
-    {
-        aComplementNet = "P";
-        rv = -1;
-    }
-    else if( aNetName.Right( 2 ).IsNumber() && aNetName.Right( 3 ).Left( 1 ) == "P" )
-    {
-        // Match P followed by 2 digits
-        aComplementNet = "N" + aNetName.Right( 2 );
-        rv = 1;
-    }
-    else if( aNetName.Right( 1 ).IsNumber() && aNetName.Right( 2 ).Left( 1 ) == "P" )
-    {
-        // Match P followed by 1 digit
-        aComplementNet = "N" + aNetName.Right( 1 );
-        rv = 1;
-    }
-    else if( aNetName.Right( 2 ).IsNumber() && aNetName.Right( 3 ).Left( 1 ) == "N" )
-    {
-        // Match N followed by 2 digits
-        aComplementNet = "P" + aNetName.Right( 2 );
-        rv = -1;
-    }
-    else if( aNetName.Right( 1 ).IsNumber() && aNetName.Right( 2 ).Left( 1 ) == "N" )
-    {
-        // Match N followed by 1 digit
-        aComplementNet = "P" + aNetName.Right( 1 );
-        rv = -1;
+        int ch = *it;
+
+        if( ( ch >= '0' && ch <= '9' ) || ch == '_' )
+        {
+            continue;
+        }
+        else if( ch == '+' )
+        {
+            aComplementNet = "-";
+            rv = 1;
+        }
+        else if( ch == '-' )
+        {
+            aComplementNet = "+";
+            rv = -1;
+        }
+        else if( ch == 'N' )
+        {
+            aComplementNet = "P";
+            rv = -1;
+        }
+        else if ( ch == 'P' )
+        {
+            aComplementNet = "N";
+            rv = 1;
+        }
+        else
+        {
+            break;
+        }
     }
 
-    if( rv != 0 )
+    if( rv != 0 && count > 1 )
     {
-        aBaseDpName = aNetName.Left( aNetName.Length() - aComplementNet.Length() );
-        aComplementNet = aBaseDpName + aComplementNet;
+        aComplementNet = aNetName.Left( aNetName.length() - count ) + aComplementNet
+                + aNetName.Right( count - 1 );
     }
 
     return rv;
@@ -637,9 +636,9 @@ int PNS_PCBNEW_RULE_RESOLVER::matchDpSuffix( const wxString& aNetName, wxString&
 int PNS_PCBNEW_RULE_RESOLVER::DpCoupledNet( int aNet )
 {
     wxString refName = m_board->FindNet( aNet )->GetNetname();
-    wxString dummy, coupledNetName;
+    wxString coupledNetName;
 
-    if( matchDpSuffix( refName, coupledNetName, dummy ) )
+    if( matchDpSuffix( refName, coupledNetName ) )
     {
         NETINFO_ITEM* net = m_board->FindNet( coupledNetName );
 
@@ -662,9 +661,9 @@ wxString PNS_PCBNEW_RULE_RESOLVER::NetName( int aNet )
 int PNS_PCBNEW_RULE_RESOLVER::DpNetPolarity( int aNet )
 {
     wxString refName = m_board->FindNet( aNet )->GetNetname();
-    wxString dummy1, dummy2;
+    wxString dummy1;
 
-    return matchDpSuffix( refName, dummy1, dummy2 );
+    return matchDpSuffix( refName, dummy1 );
 }
 
 
@@ -680,9 +679,9 @@ bool PNS_PCBNEW_RULE_RESOLVER::DpNetPair( const PNS::ITEM* aItem, int& aNetP, in
         return false;
 
     wxString netNameP = netInfo->GetNetname();
-    wxString netNameN, netNameCoupled, netNameBase;
+    wxString netNameN, netNameCoupled;
 
-    int r = matchDpSuffix( netNameP, netNameCoupled, netNameBase );
+    int r = matchDpSuffix( netNameP, netNameCoupled );
 
     if( r == 0 )
     {
