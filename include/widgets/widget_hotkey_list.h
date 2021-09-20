@@ -25,6 +25,7 @@
 #ifndef __widget_hotkey_list__
 #define __widget_hotkey_list__
 
+#include <unordered_map>
 #include <utility>
 #include <vector>
 
@@ -181,6 +182,8 @@ private:
 private:
     HOTKEY_STORE&  m_hk_store;
     bool           m_readOnly;
+
+    std::unordered_map<long, wxString> m_reservedHotkeys;
 
     wxTreeListItem m_context_menu_item;
 };

@@ -23,15 +23,19 @@
  */
 
 #include <cctype>
+
+#include <confirm.h>
 #include <widgets/widget_hotkey_list.h>
-#include <wx/statline.h>
-#include <wx/treelist.h>
-#include <wx/msgdlg.h>
-#include <wx/menu.h>
 #include <tool/tool_event.h>
 #include <dialog_shim.h>
+
+#include <wx/log.h>
 #include <wx/dcclient.h>
+#include <wx/menu.h>
+#include <wx/msgdlg.h>
+#include <wx/statline.h>
 #include <wx/stattext.h>
+#include <wx/treelist.h>
 
 /**
  * Menu IDs for the hotkey context menu
@@ -131,6 +135,7 @@ public:
         // specials like Tab and Return, are received, particularly on MSW.
         panel->Bind( wxEVT_CHAR, &HK_PROMPT_DIALOG::OnChar, this );
         panel->Bind( wxEVT_CHAR_HOOK, &HK_PROMPT_DIALOG::OnCharHook, this );
+        panel->Bind( wxEVT_KEY_UP, &HK_PROMPT_DIALOG::OnKeyUp, this );
         SetInitialFocus( panel );
     }
 
@@ -190,6 +195,11 @@ protected:
     void OnChar( wxKeyEvent& aEvent )
     {
         m_event = aEvent;
+    }
+
+    void OnKeyUp( wxKeyEvent& aEvent )
+    {
+        /// This needs to occur in KeyUp, so that we don't pass the event back to pcbnew
         wxPostEvent( this, wxCommandEvent( wxEVT_COMMAND_BUTTON_CLICKED, wxID_OK ) );
     }
 
@@ -318,11 +328,23 @@ void WIDGET_HOTKEY_LIST::editItem( wxTreeListItem aItem )
     wxString    name = GetItemText( aItem, 0 );
     wxString    current_key = GetItemText( aItem, 1 );
 
-    wxKeyEvent key_event = HK_PROMPT_DIALOG::PromptForKey( GetParent(), name, current_key );
+    wxKeyEvent key_event = HK_PROMPT_DIALOG::PromptForKey( this, name, current_key );
     long key = MapKeypressToKeycode( key_event );
 
     if( key )
     {
+        auto it = m_reservedHotkeys.find( key );
+
+        if( it != m_reservedHotkeys.end() )
+        {
+            wxString msg = wxString::Format(
+                    _( "'%s' is a reserved hotkey in KiCad and cannot be assigned." ),
+                    it->second );
+
+            DisplayErrorMessage( this, msg );
+            return;
+        }
+
         changeHotkey( hkdata->GetChangedHotkey(), key );
         updateFromClientData();
     }
@@ -455,6 +477,24 @@ WIDGET_HOTKEY_LIST::WIDGET_HOTKEY_LIST( wxWindow* aParent, HOTKEY_STORE& aHotkey
     dv->GetColumn( 1 )->SetMinWidth( dv->GetMainWindow()->GetTextExtent( longKey ).x + pad );
 #endif
 
+    std::vector<wxString> reserved_keys =
+    {
+            "Ctrl+Tab",
+            "Ctrl+Shift+Tab"
+    };
+
+    for( auto& key : reserved_keys )
+    {
+        long code = KeyCodeFromKeyName( key );
+
+        if( code )
+            m_reservedHotkeys[code] = key;
+        else
+        {
+            wxLogWarning( "Unknown reserved keycode %s\n", key );
+        }
+    }
+
     GetDataView()->SetIndent( 10 );
 
     if( !m_readOnly )
@@ -560,6 +600,7 @@ bool WIDGET_HOTKEY_LIST::TransferDataFromControl()
 long WIDGET_HOTKEY_LIST::MapKeypressToKeycode( const wxKeyEvent& aEvent )
 {
     long key = aEvent.GetKeyCode();
+    bool is_tab = aEvent.IsKeyInCategory( WXK_CATEGORY_TAB );
 
     if( key == WXK_ESCAPE )
     {
@@ -572,7 +613,7 @@ long WIDGET_HOTKEY_LIST::MapKeypressToKeycode( const wxKeyEvent& aEvent )
 
         // Remap Ctrl A (=1+GR_KB_CTRL) to Ctrl Z(=26+GR_KB_CTRL)
         // to GR_KB_CTRL+'A' .. GR_KB_CTRL+'Z'
-        if( aEvent.ControlDown() && key >= WXK_CONTROL_A && key <= WXK_CONTROL_Z )
+        if( !is_tab && aEvent.ControlDown() && key >= WXK_CONTROL_A && key <= WXK_CONTROL_Z )
             key += 'A' - 1;
 
         /* Disallow shift for keys that have two keycodes on them (e.g. number and
