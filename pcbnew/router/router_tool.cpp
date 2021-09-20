@@ -526,10 +526,11 @@ void ROUTER_TOOL::saveRouterDebugLog()
     FILE *f = fopen( fname_log.GetFullPath().c_str(), "wb" );
 
     // save base router configuration (mode, etc.)
-    fprintf(f, "config %d %d %d\n",
+    fprintf(f, "config %d %d %d %d\n",
         m_router->Settings().Mode(),
         m_router->Settings().RemoveLoops() ? 1 : 0,
-        m_router->Settings().GetFixAllSegments() ? 1 : 0
+        m_router->Settings().GetFixAllSegments() ? 1 : 0,
+        m_router->Settings().GetCornerMode()
      );
 
     const auto& events = logger->GetEvents();

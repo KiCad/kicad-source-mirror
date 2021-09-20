@@ -45,6 +45,7 @@
 #include "label_manager.h"
 #define TOM_EXTRA_DEBUG
 
+
 LABEL_MANAGER::LABEL_MANAGER( KIGFX::GAL* aGal ) : m_gal( aGal )
 {
 

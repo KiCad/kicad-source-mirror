@@ -28,6 +28,10 @@
 #include <board_design_settings.h>
 #include <pcbnew/drc/drc_engine.h>
 #include <pcbnew/drc/drc_test_provider.h>
+#include <pns_arc.h>
+
+
+#define PNSLOGINFO PNS::DEBUG_DECORATOR::SRC_LOCATION_INFO( __FILE__, __FUNCTION__, __LINE__ )
 
 using namespace PNS;
 
@@ -75,6 +79,7 @@ bool PNS_LOG_FILE::Load( const std::string& logName, const std::string boardName
             m_routerSettings->SetMode( (PNS::PNS_MODE) wxAtoi( tokens.GetNextToken() ) );
             m_routerSettings->SetRemoveLoops( wxAtoi( tokens.GetNextToken() ) );
             m_routerSettings->SetFixAllSegments( wxAtoi( tokens.GetNextToken() ) );
+            m_routerSettings->SetCornerMode( (PNS::CORNER_MODE) wxAtoi( tokens.GetNextToken() ) );
         }
     }
 
@@ -165,7 +170,8 @@ void PNS_TEST_ENVIRONMENT::ReplayLog ( PNS_LOG_FILE* aLog, int aStartEventIndex,
         {
         case LOGGER::EVT_START_ROUTE:
         {
-            m_debugDecorator.NewStage( "route-start", 0 );
+            m_debugDecorator.NewStage( "route-start", 0, PNSLOGINFO );
+            m_debugDecorator.Message( wxString::Format( "route-start (%d, %d)", evt.p.x, evt.p.y ) );
             printf( "  rtr start-route (%d, %d) %p \n", evt.p.x, evt.p.y, ritem );
             m_router->StartRouting( evt.p, ritem, ritem ? ritem->Layers().Start() : F_Cu );
             break;
@@ -173,7 +179,8 @@ void PNS_TEST_ENVIRONMENT::ReplayLog ( PNS_LOG_FILE* aLog, int aStartEventIndex,
 
         case LOGGER::EVT_START_DRAG:
         {
-            m_debugDecorator.NewStage( "drag-start", 0 );
+            m_debugDecorator.NewStage( "drag-start", 0, PNSLOGINFO );
+            m_debugDecorator.Message( wxString::Format( "drag-start (%d, %d)", evt.p.x, evt.p.y ) );
             bool rv = m_router->StartDragging( evt.p, ritem, 0 );
             printf( "  rtr start-drag (%d, %d) %p ret %d\n", evt.p.x, evt.p.y, ritem, rv ? 1 : 0 );
             break;
@@ -181,12 +188,17 @@ void PNS_TEST_ENVIRONMENT::ReplayLog ( PNS_LOG_FILE* aLog, int aStartEventIndex,
 
         case LOGGER::EVT_FIX:
         {
+            m_debugDecorator.NewStage( "fix", 0, PNSLOGINFO );
+            m_debugDecorator.Message( wxString::Format( "fix (%d, %d)", evt.p.x, evt.p.y ) );
+            bool rv = m_router->FixRoute( evt.p, ritem );
+            printf( "  fix -> (%d, %d) ret %d\n", evt.p.x, evt.p.y, rv ? 1 : 0 );
             break;
         }
 
         case LOGGER::EVT_MOVE:
         {
-            m_debugDecorator.NewStage( "move", 0 );
+            m_debugDecorator.NewStage( "move", 0, PNSLOGINFO );
+            m_debugDecorator.Message( wxString::Format( "move (%d, %d)", evt.p.x, evt.p.y ) );
             printf( "  move -> (%d, %d)\n", evt.p.x, evt.p.y );
             m_router->Move( evt.p, ritem );
             break;
@@ -200,8 +212,8 @@ void PNS_TEST_ENVIRONMENT::ReplayLog ( PNS_LOG_FILE* aLog, int aStartEventIndex,
 
         if( m_router->GetState() == PNS::ROUTER::ROUTE_TRACK )
         {
-#if 0
-            m_debugDecorator.BeginGroup( "head");
+#if 1
+            m_debugDecorator.BeginGroup( "current route", PNSLOGINFO );
 
             auto traces = m_router->Placer()->Traces();
 
@@ -210,10 +222,11 @@ void PNS_TEST_ENVIRONMENT::ReplayLog ( PNS_LOG_FILE* aLog, int aStartEventIndex,
                 const LINE *l  = static_cast<LINE*>(t.item);
                 const auto& sh = l->CLine();
 
-                m_debugDecorator.AddLine( sh, 4, 10000 );
+                m_debugDecorator.AddLine( sh, YELLOW, l->Width(), "line seg",
+                                          PNSLOGINFO );
             }
 
-            m_debugDecorator.EndGroup();
+            m_debugDecorator.EndGroup( PNSLOGINFO );
 #endif
 
             node = m_router->Placer()->CurrentNode( true );
@@ -230,23 +243,32 @@ void PNS_TEST_ENVIRONMENT::ReplayLog ( PNS_LOG_FILE* aLog, int aStartEventIndex,
 
         node->GetUpdatedItems( removed, added );
 
-#if 0
+#if 1
         if( ! added.empty() )
         {
             bool first = true;
-            m_debugDecorator.BeginGroup( "node-added-items");
+            m_debugDecorator.BeginGroup( "node-added-items", PNSLOGINFO );
 
             for( auto t : added )
             {
                 if( t->OfKind( PNS::ITEM::SEGMENT_T ) )
                 {
                     auto s = static_cast<PNS::SEGMENT*>( t );
-                    m_debugDecorator.AddSegment( s->Seg(), 2 );
+                    m_debugDecorator.AddLine( SHAPE_LINE_CHAIN( { s->Seg().A, s->Seg().B } ),
+                                              MAGENTA, s->Width(), "seg",
+                                              PNSLOGINFO );
+                    first = false;
+                }
+                else if( t->OfKind( PNS::ITEM::ARC_T ) )
+                {
+                    PNS::ARC* arc = static_cast<PNS::ARC*>( t );
+                    m_debugDecorator.AddLine( SHAPE_LINE_CHAIN( arc->Arc() ), MAGENTA,
+                                              arc->Width(), "arc", PNSLOGINFO );
                     first = false;
                 }
             }
 
-            m_debugDecorator.EndGroup();
+            m_debugDecorator.EndGroup( PNSLOGINFO );
         }
 #endif
     }
@@ -405,7 +427,11 @@ void PNS_TEST_DEBUG_DECORATOR::Message( const wxString& msg, const SRC_LOCATION_
 void PNS_TEST_DEBUG_DECORATOR::NewStage( const std::string& name, int iter,
                                          const SRC_LOCATION_INFO& aSrcLoc )
 {
-    m_stages.push_back( new STAGE );
+    STAGE* stage = new STAGE();
+    stage->m_name = name;
+    stage->m_iter = iter;
+
+    m_stages.push_back( new STAGE);
     m_activeEntry = m_stages.back()->m_entries;
 }
 

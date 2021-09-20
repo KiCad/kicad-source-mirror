@@ -1405,10 +1405,8 @@ SHOVE::SHOVE_STATUS SHOVE::ShoveLines( const LINE& aCurrentHead )
 
     m_multiLineMode = false;
 
-    if( Dbg() )
-    {
-        Dbg()->Message( wxString::Format( "Shove start, lc = %d", aCurrentHead.SegmentCount() ) );
-    }
+    PNS_DBG( Dbg(), Message,
+             wxString::Format( "Shove start, lc = %d", aCurrentHead.SegmentCount() ) )
 
     // empty head? nothing to shove...
     if( !aCurrentHead.SegmentCount() && !aCurrentHead.EndsWithVia() )
@@ -1447,12 +1445,7 @@ SHOVE::SHOVE_STATUS SHOVE::ShoveLines( const LINE& aCurrentHead )
     head.Mark( MK_HEAD );
     head.SetRank( 100000 );
 
-    if( Dbg() )
-    {
-        Dbg()->BeginGroup( "initial" );
-        Dbg()->AddLine(head.CLine(), CYAN, head.Width(), "head" );
-        Dbg()->EndGroup();
-    }
+    PNS_DBG( Dbg(), AddLine, head.CLine(), CYAN, head.Width(), "head, after shove" );
 
     if( head.EndsWithVia() )
     {
