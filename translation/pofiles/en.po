@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-09-13 10:58-0700\n"
+"POT-Creation-Date: 2021-09-20 11:50-0700\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -52,8 +52,8 @@ msgstr "Opacity"
 msgid "Preview"
 msgstr "Preview"
 
-msgid "Change to isometric perspective"
-msgstr "Change to isometric perspective"
+msgid "Enable/disable orthographic projection"
+msgstr "Enable/disable orthographic projection"
 
 msgid "Reload board and 3D models"
 msgstr "Reload board and 3D models"
@@ -556,9 +556,6 @@ msgstr "Flip the board view"
 
 msgid "Toggle orthographic projection"
 msgstr "Toggle orthographic projection"
-
-msgid "Enable/disable orthographic projection"
-msgstr "Enable/disable orthographic projection"
 
 msgid "View Front"
 msgstr "View Front"
@@ -1756,6 +1753,12 @@ msgstr "Open Theme Folder"
 msgid "Open the folder containing color themes"
 msgstr "Open the folder containing color themes"
 
+msgid "Icon scale:"
+msgstr "Icon scale:"
+
+msgid "Automatic"
+msgstr "Automatic"
+
 msgid ""
 "Set the scale for the canvas.\n"
 "\n"
@@ -1792,34 +1795,8 @@ msgstr "Executable files ("
 msgid "Select Preferred PDF Viewer"
 msgstr "Select Preferred PDF Viewer"
 
-msgid "&Auto save:"
-msgstr "&Auto save:"
-
-msgid ""
-"Delay after the first change to create a backup file of the board on disk.\n"
-"If set to 0, auto backup is disabled"
-msgstr ""
-"Delay after the first change to create a backup file of the board on disk.\n"
-"If set to 0, auto backup is disabled"
-
-msgid "minutes"
-msgstr "minutes"
-
-msgid "File history size:"
-msgstr "File history size:"
-
-msgid "3D cache file duration:"
-msgstr "3D cache file duration:"
-
-msgid ""
-"3D cache files older than this are deleted.\n"
-"If set to 0, cache clearing is disabled"
-msgstr ""
-"3D cache files older than this are deleted.\n"
-"If set to 0, cache clearing is disabled"
-
-msgid "Days"
-msgstr "Days"
+msgid "Antialiasing"
+msgstr "Antialiasing"
 
 msgid "Accelerated graphics:"
 msgstr "Accelerated graphics:"
@@ -1851,15 +1828,6 @@ msgstr "Other:"
 msgid "User Interface"
 msgstr "User Interface"
 
-msgid "Icon scale:"
-msgstr "Icon scale:"
-
-msgid "Automatic"
-msgstr "Automatic"
-
-msgid "Canvas scale:"
-msgstr "Canvas scale:"
-
 msgid "Show icons in menus"
 msgstr "Show icons in menus"
 
@@ -1883,6 +1851,15 @@ msgid ""
 msgstr ""
 "Automatically choose light or dark icons based on the system color theme"
 
+msgid "Canvas scale:"
+msgstr "Canvas scale:"
+
+msgid "Apply icon scaling to fonts"
+msgstr "Apply icon scaling to fonts"
+
+msgid "(This workaround will improve some GTK HiDPI font scaling issues.)"
+msgstr "(This workaround will improve some GTK HiDPI font scaling issues.)"
+
 msgid "Editing"
 msgstr "Editing"
 
@@ -1898,6 +1875,48 @@ msgid ""
 msgstr ""
 "If not checked, hotkeys will immediately perform an action even if the "
 "relevant tool was not previously selected."
+
+msgid "Session"
+msgstr "Session"
+
+msgid "Remember open files for next project launch"
+msgstr "Remember open files for next project launch"
+
+msgid ""
+"If checked, launching a project will also launch tools such as eeschema and "
+"pcbnew with previously open files"
+msgstr ""
+"If checked, launching a project will also launch tools such as eeschema and "
+"pcbnew with previously open files"
+
+msgid "&Auto save:"
+msgstr "&Auto save:"
+
+msgid ""
+"Delay after the first change to create a backup file of the board on disk.\n"
+"If set to 0, auto backup is disabled"
+msgstr ""
+"Delay after the first change to create a backup file of the board on disk.\n"
+"If set to 0, auto backup is disabled"
+
+msgid "minutes"
+msgstr "minutes"
+
+msgid "File history size:"
+msgstr "File history size:"
+
+msgid "3D cache file duration:"
+msgstr "3D cache file duration:"
+
+msgid ""
+"3D cache files older than this are deleted.\n"
+"If set to 0, cache clearing is disabled"
+msgstr ""
+"3D cache files older than this are deleted.\n"
+"If set to 0, cache clearing is disabled"
+
+msgid "days"
+msgstr "days"
 
 msgid "Project Backup"
 msgstr "Project Backup"
@@ -1954,19 +1973,6 @@ msgstr ""
 
 msgid "MB"
 msgstr "MB"
-
-msgid "Session"
-msgstr "Session"
-
-msgid "Remember open files for next project launch"
-msgstr "Remember open files for next project launch"
-
-msgid ""
-"If checked, launching a project will also launch tools such as eeschema and "
-"pcbnew with previously open files"
-msgstr ""
-"If checked, launching a project will also launch tools such as eeschema and "
-"pcbnew with previously open files"
 
 msgid "Type filter text"
 msgstr "Type filter text"
@@ -2949,11 +2955,11 @@ msgstr "Could not read instance name and version from kiface library '%s'."
 #, c-format
 msgid ""
 "Fatal Installation Bug. File:\n"
-"\"%s\"\n"
+"'%s'\n"
 "could not be loaded\n"
 msgstr ""
 "Fatal Installation Bug. File:\n"
-"“%s”\n"
+"'%s'\n"
 "could not be loaded\n"
 
 msgid "It is missing.\n"
@@ -3385,8 +3391,8 @@ msgstr "Type mismatch between '%s' and %lf"
 msgid "Type mismatch between %lf and '%s'"
 msgstr "Type mismatch between %lf and '%s'"
 
-msgid "No default editor found, you must choose it"
-msgstr "No default editor found, you must choose it"
+msgid "No default editor found, you must choose one."
+msgstr "No default editor found, you must choose one."
 
 msgid "Executable file"
 msgstr "Executable file"
@@ -4193,6 +4199,10 @@ msgstr "Current key:"
 msgid "Set Hotkey"
 msgstr "Set Hotkey"
 
+#, c-format
+msgid "'%s' is a reserved hotkey in KiCad and cannot be assigned."
+msgstr "'%s' is a reserved hotkey in KiCad and cannot be assigned."
+
 msgid "Edit..."
 msgstr "Edit…"
 
@@ -4533,8 +4543,8 @@ msgstr ""
 msgid "Project file: '%s'"
 msgstr "Project file: '%s'"
 
-msgid "No editor defined in KiCad. Please choose it."
-msgstr "No editor defined in KiCad. Please choose it."
+msgid "No text editor selected in KiCad.  Please choose one."
+msgstr "No text editor selected in KiCad.  Please choose one."
 
 msgid "Footprint Association File"
 msgstr "Footprint Association File"
@@ -4937,9 +4947,6 @@ msgstr "Generator File"
 
 msgid "Generator file name not found."
 msgstr "Generator file name not found."
-
-msgid "No text editor selected in KiCad.  Please choose one."
-msgstr "No text editor selected in KiCad.  Please choose one."
 
 msgid "Bill of Material Generation Help"
 msgstr "Bill of Material Generation Help"
@@ -6555,9 +6562,15 @@ msgstr "Failed to write plot files to folder '%s'."
 msgid "Plotted to '%s'."
 msgstr "Plotted to '%s'."
 
+msgid "Done."
+msgstr "Done."
+
 #, c-format
 msgid "Plotted to '%s'.\n"
 msgstr "Plotted to '%s'.\n"
+
+msgid "Done"
+msgstr "Done"
 
 #, c-format
 msgid "Falling back to user path '%s'."
@@ -8977,6 +8990,9 @@ msgstr "Bus"
 msgid "Bus Entry Type"
 msgstr "Bus Entry Type"
 
+msgid "Assigned Netclass"
+msgstr "Assigned Netclass"
+
 msgid "Connection Name"
 msgstr "Connection Name"
 
@@ -9113,9 +9129,6 @@ msgstr "Line Type"
 
 msgid "from netclass"
 msgstr "from netclass"
-
-msgid "Assigned Netclass"
-msgstr "Assigned Netclass"
 
 msgid "Electrical Rule Check Error"
 msgstr "Electrical Rule Check Error"
@@ -10030,11 +10043,11 @@ msgstr "The reference designator cannot contain text variable references"
 msgid "Field Validation Error"
 msgstr "Field Validation Error"
 
-msgid "Signal name contains '[' or ']' but is not a valid vector bus name."
-msgstr "Signal name contains '[' or ']' but is not a valid vector bus name."
+msgid "Signal name contains '{' and '}' but is not a valid bus name"
+msgstr "Signal name contains '{' and '}' but is not a valid bus name"
 
-msgid "Signal name contains '{' and '}' but is not a valid group bus name"
-msgstr "Signal name contains '{' and '}' but is not a valid group bus name"
+msgid "Signal name contains '[' or ']' but is not a valid bus name."
+msgstr "Signal name contains '[' or ']' but is not a valid bus name."
 
 #, c-format
 msgid ""
@@ -11131,8 +11144,8 @@ msgstr "Rotate Clockwise"
 msgid "Rotates selected item(s) clockwise"
 msgstr "Rotates selected item(s) clockwise"
 
-msgid "Rotate"
-msgstr "Rotate"
+msgid "Rotate Counterclockwise"
+msgstr "Rotate Counterclockwise"
 
 msgid "Rotates selected item(s) counter-clockwise"
 msgstr "Rotates selected item(s) counter-clockwise"
@@ -11682,8 +11695,8 @@ msgstr "Error: duplicate sub-sheet names found in current sheet."
 msgid "Net must be labeled to assign a netclass."
 msgstr "Net must be labeled to assign a netclass."
 
-msgid "Bus must have at least one member to assign a netclass to members."
-msgstr "Bus must have at least one member to assign a netclass to members."
+msgid "Bus has no members to assign netclass to."
+msgstr "Bus has no members to assign netclass to."
 
 msgid "Netclasses"
 msgstr "Netclasses"
@@ -12405,9 +12418,6 @@ msgstr "D Codes"
 msgid "Source file '%s' not found."
 msgstr "Source file '%s' not found."
 
-msgid "No editor defined. Please select one."
-msgstr "No editor defined. Please select one."
-
 #, c-format
 msgid "No file loaded on the active layer %d."
 msgstr "No file loaded on the active layer %d."
@@ -13057,9 +13067,6 @@ msgstr "Package %s uninstalled"
 
 msgid "Aborting remaining tasks."
 msgstr "Aborting remaining tasks."
-
-msgid "Done."
-msgstr "Done."
 
 msgid "Could open the template path!"
 msgstr "Could open the template path!"
@@ -17768,8 +17775,8 @@ msgstr "Net Inspector"
 msgid "Select Netlist"
 msgstr "Select Netlist"
 
-msgid "Please, choose a valid netlist file."
-msgstr "Please, choose a valid netlist file."
+msgid "Please choose a valid netlist file."
+msgstr "Please choose a valid netlist file."
 
 msgid "The netlist file does not exist."
 msgstr "The netlist file does not exist."
@@ -17816,19 +17823,6 @@ msgstr "Delete footprints with no components in netlist"
 
 msgid "Delete tracks shorting multiple nets"
 msgstr "Delete tracks shorting multiple nets"
-
-msgid "Delete nets containing only a single pad"
-msgstr "Delete nets containing only a single pad"
-
-msgid "Generate warnings for pads with no net"
-msgstr "Generate warnings for pads with no net"
-
-msgid ""
-"Display a warning if a pad in a footprint does not appear in netlist.\n"
-"Only pads on a copper layer and having a name are tested."
-msgstr ""
-"Display a warning if a pad in a footprint does not appear in netlist.\n"
-"Only pads on a copper layer and having a name are tested."
 
 msgid "Import Netlist"
 msgstr "Import Netlist"
@@ -19231,14 +19225,6 @@ msgstr ""
 "assignment changes made in the schematic. Uncheck this only if you don't "
 "want to change existing footprints on the board."
 
-msgid ""
-"Clear the net name of pads when there is only one pad belonging to this net."
-msgstr ""
-"Clear the net name of pads when there is only one pad belonging to this net."
-
-msgid "Generate warnings for pads with no nets"
-msgstr "Generate warnings for pads with no nets"
-
 msgid "Update PCB from Schematic"
 msgstr "Update PCB from Schematic"
 
@@ -19482,6 +19468,9 @@ msgstr "Add Existing"
 
 msgid "Path Substitutions"
 msgstr "Path Substitutions"
+
+msgid "Error: illegal or empty filename."
+msgstr "Error: illegal or empty filename."
 
 msgid "File not found"
 msgstr "File not found"
@@ -20077,14 +20066,14 @@ msgid "User9"
 msgstr "User9"
 
 msgid ""
-"Use your board house's recommendation for solder mask clearance and minimum "
-"bridge width."
+"Use your board house's recommendations for solder mask clearance and minimum "
+"web width."
 msgstr ""
-"Use your board house's recommendation for solder mask clearance and minimum "
-"bridge width."
+"Use your board house's recommendations for solder mask clearance and minimum "
+"web width."
 
-msgid "If none is provided, setting the values to zero is suggested."
-msgstr "If none is provided, setting the values to zero is suggested."
+msgid "If none are provided, setting the values to zero is suggested."
+msgstr "If none are provided, setting the values to zero is suggested."
 
 msgid ""
 "Global clearance between pads and the solder mask.\n"
@@ -24514,6 +24503,9 @@ msgstr "Unable to fillet the selected track segments."
 msgid "Some of the track segments could not be filleted."
 msgstr "Some of the track segments could not be filleted."
 
+msgid "Rotate"
+msgstr "Rotate"
+
 msgid "Change Side / Flip"
 msgstr "Change Side / Flip"
 
@@ -24795,9 +24787,6 @@ msgstr "Create Array…"
 
 msgid "Create array"
 msgstr "Create array"
-
-msgid "Rotate Counterclockwise"
-msgstr "Rotate Counterclockwise"
 
 msgid "Rotates selected item(s) counterclockwise"
 msgstr "Rotates selected item(s) counterclockwise"
@@ -25292,12 +25281,6 @@ msgstr "Sketch Text Items"
 
 msgid "Show footprint texts in line mode"
 msgstr "Show footprint texts in line mode"
-
-msgid "Automatically zoom to fit"
-msgstr "Automatically zoom to fit"
-
-msgid "Zoom to fit when changing footprint"
-msgstr "Zoom to fit when changing footprint"
 
 msgid "Draw Zone Fills"
 msgstr "Draw Zone Fills"
@@ -26399,6 +26382,82 @@ msgstr "KiCad Schematic"
 
 msgid "KiCad Printed Circuit Board"
 msgstr "KiCad Printed Circuit Board"
+
+#~ msgid "Change to isometric perspective"
+#~ msgstr "Change to isometric perspective"
+
+#~ msgid "Days"
+#~ msgstr "Days"
+
+#, c-format
+#~ msgid ""
+#~ "Fatal Installation Bug. File:\n"
+#~ "\"%s\"\n"
+#~ "could not be loaded\n"
+#~ msgstr ""
+#~ "Fatal Installation Bug. File:\n"
+#~ "“%s”\n"
+#~ "could not be loaded\n"
+
+#~ msgid "No default editor found, you must choose it"
+#~ msgstr "No default editor found, you must choose it"
+
+#~ msgid "No editor defined in KiCad. Please choose it."
+#~ msgstr "No editor defined in KiCad. Please choose it."
+
+#~ msgid "Signal name contains '[' or ']' but is not a valid vector bus name."
+#~ msgstr "Signal name contains '[' or ']' but is not a valid vector bus name."
+
+#~ msgid "Signal name contains '{' and '}' but is not a valid group bus name"
+#~ msgstr "Signal name contains '{' and '}' but is not a valid group bus name"
+
+#~ msgid "Bus must have at least one member to assign a netclass to members."
+#~ msgstr "Bus must have at least one member to assign a netclass to members."
+
+#~ msgid "No editor defined. Please select one."
+#~ msgstr "No editor defined. Please select one."
+
+#~ msgid "Please, choose a valid netlist file."
+#~ msgstr "Please, choose a valid netlist file."
+
+#~ msgid "Delete nets containing only a single pad"
+#~ msgstr "Delete nets containing only a single pad"
+
+#~ msgid "Generate warnings for pads with no net"
+#~ msgstr "Generate warnings for pads with no net"
+
+#~ msgid ""
+#~ "Display a warning if a pad in a footprint does not appear in netlist.\n"
+#~ "Only pads on a copper layer and having a name are tested."
+#~ msgstr ""
+#~ "Display a warning if a pad in a footprint does not appear in netlist.\n"
+#~ "Only pads on a copper layer and having a name are tested."
+
+#~ msgid ""
+#~ "Clear the net name of pads when there is only one pad belonging to this "
+#~ "net."
+#~ msgstr ""
+#~ "Clear the net name of pads when there is only one pad belonging to this "
+#~ "net."
+
+#~ msgid "Generate warnings for pads with no nets"
+#~ msgstr "Generate warnings for pads with no nets"
+
+#~ msgid ""
+#~ "Use your board house's recommendation for solder mask clearance and "
+#~ "minimum bridge width."
+#~ msgstr ""
+#~ "Use your board house's recommendation for solder mask clearance and "
+#~ "minimum bridge width."
+
+#~ msgid "If none is provided, setting the values to zero is suggested."
+#~ msgstr "If none is provided, setting the values to zero is suggested."
+
+#~ msgid "Automatically zoom to fit"
+#~ msgstr "Automatically zoom to fit"
+
+#~ msgid "Zoom to fit when changing footprint"
+#~ msgstr "Zoom to fit when changing footprint"
 
 #~ msgid "Zdiff = Zodd * 2"
 #~ msgstr "Zdiff = Zodd * 2"
