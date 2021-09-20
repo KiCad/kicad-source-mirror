@@ -1,6 +1,3 @@
-#ifndef EAGLE_PLUGIN_H_
-#define EAGLE_PLUGIN_H_
-
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
@@ -25,9 +22,13 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#ifndef EAGLE_PLUGIN_H
+#define EAGLE_PLUGIN_H
+
 #include <convert_to_biu.h>
 #include <io_mgr.h>
 #include <layer_ids.h>
+#include <netclass.h>
 #include <plugins/eagle/eagle_parser.h>
 #include <plugins/common/plugin_common_layer_mapping.h>
 
@@ -218,6 +219,7 @@ private:
     void loadDesignRules( wxXmlNode* aDesignRules );
     void loadLayerDefs( wxXmlNode* aLayers );
     void loadPlain( wxXmlNode* aPlain );
+    void loadClasses( wxXmlNode* aClasses );
     void loadSignals( wxXmlNode* aSignals );
 
     /**
@@ -286,6 +288,9 @@ private:
     std::map<wxString, int>          m_eagleLayersIds; ///< Eagle layer ids stored by layer name
     std::map<wxString, PCB_LAYER_ID> m_layer_map;      ///< Map of Eagle layers to KiCad layers
 
+    std::map<wxString, NETCLASSPTR>  m_classMap;       ///< Eagle class number to KiCad netclass
+    wxString                         m_customRules;
+
     ERULES*       m_rules;          ///< Eagle design rules.
     XPATH*        m_xpath;          ///< keeps track of what we are working on within
                                     ///< XML document during a Load().
@@ -299,8 +304,8 @@ private:
                                     ///< lookup key is either libname.packagename or simply
                                     ///< packagename if FootprintLoad() or FootprintEnumberate()
 
-    const PROPERTIES* m_props;      ///< passed via Save() or Load(), no ownership, may be NULL.
-    BOARD*      m_board;            ///< which BOARD is being worked on, no ownership here
+    const PROPERTIES*   m_props;    ///< passed via Save() or Load(), no ownership, may be NULL.
+    BOARD*              m_board;    ///< which BOARD is being worked on, no ownership here
 
     PROGRESS_REPORTER*  m_progressReporter;  ///< optional; may be nullptr
     unsigned            m_doneCount;
@@ -316,4 +321,4 @@ private:
     wxDateTime  m_mod_time;
 };
 
-#endif  // EAGLE_PLUGIN_H_
+#endif  // EAGLE_PLUGIN_H

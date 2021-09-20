@@ -1054,4 +1054,14 @@ struct EDEVICE_SET
 };
 
 
+struct ECLASS
+{
+    wxString number;
+    wxString name;
+    std::map<wxString, ECOORD> clearanceMap;
+
+    ECLASS( wxXmlNode* aClass );
+};
+
+
 #endif // _EAGLE_PARSER_H_

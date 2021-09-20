@@ -278,8 +278,9 @@ wxPoint ConvertArcCenter( const wxPoint& aStart, const wxPoint& aEnd, double aAn
 
     if( !std::isnormal( dlen ) || !std::isnormal( aAngle ) )
     {
-        THROW_IO_ERROR(
-                wxString::Format( _( "Invalid Arc with radius %f and angle %f" ), dlen, aAngle ) );
+        THROW_IO_ERROR( wxString::Format( _( "Invalid Arc with radius %f and angle %f" ),
+                                          dlen,
+                                          aAngle ) );
     }
 
     double dist = dlen / ( 2 * tan( DEG2RAD( aAngle ) / 2 ) );
@@ -919,15 +920,14 @@ EPART::EPART( wxXmlNode* aPart )
     technology = parseOptionalAttribute<wxString>( aPart, "technology" );
     value = parseOptionalAttribute<wxString>( aPart, "value" );
 
-    for( auto child = aPart->GetChildren(); child; child = child->GetNext() )
+    for( wxXmlNode* child = aPart->GetChildren(); child; child = child->GetNext() )
     {
-
         if( child->GetName() == "attribute" )
         {
             std::string aname, avalue;
-            for( auto x = child->GetAttributes(); x; x = x->GetNext() )
-            {
 
+            for( wxXmlAttribute* x = child->GetAttributes(); x; x = x->GetNext() )
+            {
                 if( x->GetName() == "name" )
                     aname = x->GetValue();
                 else if( x->GetName() == "value" )
@@ -940,9 +940,9 @@ EPART::EPART( wxXmlNode* aPart )
         else if( child->GetName() == "variant" )
         {
             std::string aname, avalue;
-            for( auto x = child->GetAttributes(); x; x = x->GetNext() )
-            {
 
+            for( wxXmlAttribute* x = child->GetAttributes(); x; x = x->GetNext() )
+            {
                 if( x->GetName() == "name" )
                     aname = x->GetValue();
                 else if( x->GetName() == "value" )
@@ -1077,7 +1077,7 @@ EDEVICE_SET::EDEVICE_SET( wxXmlNode* aDeviceSet )
               >
      */
 
-    name = parseRequiredAttribute<wxString>(aDeviceSet, "name");
+    name = parseRequiredAttribute<wxString>( aDeviceSet, "name" );
     prefix = parseOptionalAttribute<wxString>( aDeviceSet, "prefix" );
     uservalue = parseOptionalAttribute<bool>( aDeviceSet, "uservalue" );
 
@@ -1101,4 +1101,22 @@ EDEVICE_SET::EDEVICE_SET( wxXmlNode* aDeviceSet )
     }
     */
 
+}
+
+
+ECLASS::ECLASS( wxXmlNode* aClass )
+{
+    number = parseRequiredAttribute<wxString>( aClass, "number" );
+    name   = parseRequiredAttribute<wxString>( aClass, "name" );
+
+    for( wxXmlNode* child = aClass->GetChildren(); child; child = child->GetNext() )
+    {
+        if( child->GetName() == "clearance" )
+        {
+            wxString to = parseRequiredAttribute<wxString>( child, "class" );
+            ECOORD value = parseRequiredAttribute<ECOORD>( child, "value" );
+
+            clearanceMap[to] = value;
+        }
+    }
 }

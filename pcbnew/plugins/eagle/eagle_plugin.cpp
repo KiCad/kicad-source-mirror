@@ -68,7 +68,7 @@ Load() TODO's
 #include <trigo.h>
 #include <math/util.h>      // for KiROUND
 #include <progress_reporter.h>
-
+#include <project.h>
 #include <board.h>
 #include <board_design_settings.h>
 #include <footprint.h>
@@ -402,13 +402,34 @@ BOARD* EAGLE_PLUGIN::Load( const wxString& aFileName, BOARD* aAppendToMe,
             designSettings.m_ViasMinAnnularWidth = m_min_annulus;
 
         if( m_rules->mdWireWire )
-        {
-            NETCLASS* defaultNetclass = designSettings.GetDefault();
-            int       clearance = KiROUND( m_rules->mdWireWire );
+            designSettings.m_MinClearance = KiROUND( m_rules->mdWireWire );
 
-            if( clearance < defaultNetclass->GetClearance() )
-                defaultNetclass->SetClearance( clearance );
-        }
+        NETCLASS defaults( "dummy" );
+
+        auto finishNetclass =
+                [&]( NETCLASSPTR netclass )
+                {
+                    if( netclass->GetTrackWidth() == INT_MAX )
+                        netclass->SetTrackWidth( defaults.GetTrackWidth() );
+
+                    if( netclass->GetViaDiameter() == INT_MAX )
+                        netclass->SetViaDiameter( defaults.GetViaDiameter() );
+
+                    if( netclass->GetViaDrill() == INT_MAX )
+                        netclass->SetViaDrill( defaults.GetViaDrill() );
+                };
+
+        finishNetclass( designSettings.GetNetClasses().GetDefault() );
+
+        for( const std::pair<const wxString, NETCLASSPTR>& entry : designSettings.GetNetClasses() )
+            finishNetclass( entry.second );
+
+        m_board->m_LegacyNetclassesLoaded = true;
+        m_board->m_LegacyDesignSettingsLoaded = true;
+
+        fn.SetExt( "kicad_dru" );
+        wxFile rulesFile( fn.GetFullPath(), wxFile::write );
+        rulesFile.Write( m_customRules );
 
         // should be empty, else missing m_xpath->pop()
         wxASSERT( m_xpath->Contents().size() == 0 );
@@ -507,6 +528,7 @@ void EAGLE_PLUGIN::loadAllSections( wxXmlNode* aDoc )
     wxXmlNode* designrules = boardChildren["designrules"];
     wxXmlNode* layers = drawingChildren["layers"];
     wxXmlNode* plain = boardChildren["plain"];
+    wxXmlNode* classes = boardChildren["classes"];
     wxXmlNode* signals = boardChildren["signals"];
     wxXmlNode* libs = boardChildren["libraries"];
     wxXmlNode* elems = boardChildren["elements"];
@@ -555,6 +577,7 @@ void EAGLE_PLUGIN::loadAllSections( wxXmlNode* aDoc )
         m_xpath->push( "board" );
 
         loadPlain( plain );
+        loadClasses( classes );
         loadSignals( signals );
         loadLibraries( libs );
         loadElements( elems );
@@ -2382,13 +2405,73 @@ void EAGLE_PLUGIN::deleteTemplates()
 }
 
 
+void EAGLE_PLUGIN::loadClasses( wxXmlNode* aClasses )
+{
+    BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
+
+    m_xpath->push( "classes.class", "number" );
+
+    std::vector<ECLASS> eClasses;
+    wxXmlNode*          classNode = aClasses->GetChildren();
+
+    while( classNode )
+    {
+        checkpoint();
+
+        ECLASS      eClass( classNode );
+        NETCLASSPTR netclass;
+
+        if( eClass.name.CmpNoCase( "default" ) == 0 )
+        {
+            netclass = bds.GetNetClasses().GetDefault();
+        }
+        else
+        {
+            netclass.reset( new NETCLASS( eClass.name ) );
+            m_board->GetDesignSettings().GetNetClasses().Add( netclass );
+        }
+
+        netclass->SetTrackWidth( INT_MAX );
+        netclass->SetViaDiameter( INT_MAX );
+        netclass->SetViaDrill( INT_MAX );
+
+        eClasses.emplace_back( eClass );
+        m_classMap[ eClass.number ] = netclass;
+
+        // Get next class
+        classNode = classNode->GetNext();
+    }
+
+    m_customRules = "(version 1)";
+
+    for( ECLASS& eClass : eClasses )
+    {
+        for( std::pair<const wxString&, ECOORD> entry : eClass.clearanceMap )
+        {
+            wxString rule;
+            rule.Printf( "(rule \"class %s:%s\"\n"
+                         "  (condition \"A.NetClass == '%s' && B.NetClass == '%s'\")\n"
+                         "  (constraint clearance (min %smm)))\n",
+                         eClass.number,
+                         entry.first,
+                         eClass.name,
+                         m_classMap[ entry.first ]->GetName(),
+                         StringFromValue( EDA_UNITS::MILLIMETRES, entry.second.ToPcbUnits() ) );
+
+            m_customRules += "\n" + rule;
+        }
+    }
+
+    m_xpath->pop(); // "classes.class"
+}
+
+
 void EAGLE_PLUGIN::loadSignals( wxXmlNode* aSignals )
 {
     ZONES zones;      // per net
+    int   netCode = 1;
 
     m_xpath->push( "signals.signal", "name" );
-
-    int netCode = 1;
 
     // Get the first signal and iterate
     wxXmlNode* net = aSignals->GetChildren();
@@ -2402,7 +2485,18 @@ void EAGLE_PLUGIN::loadSignals( wxXmlNode* aSignals )
         zones.clear();
 
         const wxString& netName = escapeName( net->GetAttribute( "name" ) );
-        m_board->Add( new NETINFO_ITEM( m_board, netName, netCode ) );
+        NETINFO_ITEM*   netInfo = new NETINFO_ITEM( m_board, netName, netCode );
+        NETCLASSPTR     netclass;
+
+        if( net->HasAttribute( "class" ) )
+        {
+            netclass = m_classMap[ net->GetAttribute( "class" ) ];
+
+            netclass->Add( netName );
+            netInfo->SetNetClass( netclass );
+        }
+
+        m_board->Add( netInfo );
 
         m_xpath->Value( netName.c_str() );
 
@@ -2434,6 +2528,9 @@ void EAGLE_PLUGIN::loadSignals( wxXmlNode* aSignals )
 
                     if( width < m_min_trace )
                         m_min_trace = width;
+
+                    if( netclass && width < netclass->GetTrackWidth() )
+                        netclass->SetTrackWidth( width );
 
                     if( w.curve )
                     {
@@ -2538,8 +2635,14 @@ void EAGLE_PLUGIN::loadSignals( wxXmlNode* aSignals )
                     if( kidiam < m_min_via )
                         m_min_via = kidiam;
 
+                    if( netclass && kidiam < netclass->GetViaDiameter() )
+                        netclass->SetViaDiameter( kidiam );
+
                     if( drillz < m_min_hole )
                         m_min_hole = drillz;
+
+                    if( netclass && drillz < netclass->GetViaDrill() )
+                        netclass->SetViaDrill( drillz );
 
                     if( ( kidiam - drillz ) / 2 < m_min_annulus )
                         m_min_annulus = ( kidiam - drillz ) / 2;
