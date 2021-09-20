@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-09-13 10:58-0700\n"
-"PO-Revision-Date: 2021-09-16 16:11+0000\n"
+"PO-Revision-Date: 2021-09-20 16:15+0000\n"
 "Last-Translator: Tokita, Hiroshi <tokita.hiroshi@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -21957,7 +21957,7 @@ msgstr "デフォルト"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:103
 msgid "Design Rules"
-msgstr "デザイン ルール"
+msgstr "デザインルール"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:104 pcbnew/router/router_tool.cpp:834
 #: pcbnew/router/router_tool.cpp:855
@@ -23061,7 +23061,7 @@ msgstr "DRC が不完全: カスタム デザイン ルールをコンパイル�
 
 #: pcbnew/dialogs/dialog_drc.cpp:227 pcbnew/tools/board_inspection_tool.cpp:133
 msgid "Show design rules."
-msgstr "デザイン ルールを表示します。"
+msgstr "デザインルールを表示します。"
 
 #: pcbnew/dialogs/dialog_drc.cpp:260
 msgid "-------- DRC cancelled by user.<br><br>"
@@ -24828,7 +24828,7 @@ msgstr "テキストとグラフィックスのデフォルト プロパティ"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:55
 msgid "Design rules"
-msgstr "デザイン ルール"
+msgstr "デザインルール"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:58
 msgid "Predefined track and via dimensions"
@@ -29755,10 +29755,8 @@ msgid ""
 "This may result in different fills from previous KiCad versions which used "
 "the line thicknesses of the board boundary on the Edge Cuts layer."
 msgstr ""
-"基板のゾーンが塗り潰される場合には、基板端クリアランス設定が使用されます (基"
-"板セットアップ > デザイン ルール > 制約 を参照)。\n"
-"これにより、Edge Cuts レイヤーにおける基板外形線の太さを使用していた以前の"
-"バージョンの KiCad とは異なった塗り潰しの結果となります。"
+"基板のゾーンが塗り潰される場合には、基板端クリアランス設定が使用されます (基板セットアップ > デザインルール > 制約 を参照)。\n"
+"これにより、Edge Cuts レイヤーにおける基板外形線の太さを使用していた以前のバージョンの KiCad とは異なった塗り潰しの結果となります。"
 
 #: pcbnew/files.cpp:549
 msgid "Edge Clearance Warning"
@@ -31288,11 +31286,11 @@ msgstr "Eeschema のロードに失敗しました。"
 
 #: pcbnew/pcb_edit_frame.cpp:1670
 msgid "Edit design rules"
-msgstr "デザイン ルールを編集"
+msgstr "デザインルールを編集"
 
 #: pcbnew/pcb_edit_frame.cpp:1682
 msgid "Could not compile custom design rules."
-msgstr "カスタム デザイン ルールをコンパイルできません。"
+msgstr "カスタム デザインルールをコンパイルできません。"
 
 #: pcbnew/pcb_edit_frame.cpp:1717
 msgid "Export Hyperlynx Layout"
@@ -33207,16 +33205,12 @@ msgstr "基板セットアップを表示"
 msgid ""
 "Blind/buried vias must first be enabled in Board Setup > Design Rules > "
 "Constraints."
-msgstr ""
-"ブラインド/ベリード ビアは、基板セットアップ > デザイン ルール > 制約 で有効"
-"にしなければなりません。"
+msgstr "ブラインド/ベリード ビアは、基板セットアップ > デザインルール > 制約 で有効にしなければなりません。"
 
 #: pcbnew/router/router_tool.cpp:861
 msgid ""
 "Microvias must first be enabled in Board Setup > Design Rules > Constraints."
-msgstr ""
-"マイクロ ビアは、基板セットアップ > デザイン ルール > 制約 で有効にしなければ"
-"なりません。"
+msgstr "マイクロ ビアは、基板セットアップ > デザインルール > 制約 で有効にしなければなりません。"
 
 #: pcbnew/router/router_tool.cpp:997
 msgid "Tracks on Copper layers only."
@@ -34197,11 +34191,11 @@ msgstr "作成中の外形を閉じます"
 
 #: pcbnew/tools/pcb_actions.cpp:224
 msgid "Design Rules Checker"
-msgstr "デザイン ルール チェッカー"
+msgstr "デザインルール チェッカー"
 
 #: pcbnew/tools/pcb_actions.cpp:224
 msgid "Show the design rules checker window"
-msgstr "デザイン ルール チェッカー ウィンドウを表示"
+msgstr "デザインルール チェッカー ウィンドウを表示"
 
 #: pcbnew/tools/pcb_actions.cpp:233
 msgid "Open in Footprint Editor"
@@ -34578,8 +34572,7 @@ msgstr "基板セットアップ..."
 
 #: pcbnew/tools/pcb_actions.cpp:557
 msgid "Edit board setup including layers, design rules and various defaults"
-msgstr ""
-"レイヤー、デザイン ルール、様々なデフォルト値を含む、基板セットアップを編集"
+msgstr "レイヤー、デザインルール、様々なデフォルト値を含む、基板セットアップを編集"
 
 #: pcbnew/tools/pcb_actions.cpp:562
 msgid "Import Netlist..."
