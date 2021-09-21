@@ -796,11 +796,9 @@ msgstr "Nama Berkas Gambar 3D"
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:681
 #: common/eda_base_frame.cpp:1050 common/eda_base_frame.cpp:1055
 #: pcbnew/plugins/altium/altium_pcb.cpp:1461
-#, fuzzy, c-format
+#, c-format
 msgid "Insufficient permissions to save file '%s'."
-msgstr ""
-"Izin yang diperlukan tidak cukup untuk menyimpan berkas\n"
-"%s"
+msgstr "Izin tidak cukup untuk menyimpan file '%s'."
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:682 common/confirm.cpp:130
 #: common/confirm.cpp:288 common/dialogs/panel_setup_severities.cpp:43
@@ -1447,14 +1445,14 @@ msgid "Cannot make path '%s' absolute with respect to '%s'."
 msgstr ""
 
 #: common/common.cpp:339
-#, fuzzy, c-format
+#, c-format
 msgid "Output directory '%s' created."
-msgstr "Berkas laporan '%s' telah dibuat\n"
+msgstr "Direktori keluaran '%s' dibuat."
 
 #: common/common.cpp:348
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot create output directory '%s'."
-msgstr "Tidak dapat membuat berkas \"%s\".\n"
+msgstr "Tidak dapat membuat direktori keluaran '%s'."
 
 #: common/common.cpp:620
 msgid "This operating system is not supported by KiCad and its dependencies."
@@ -4443,13 +4441,9 @@ msgid "from %s : %s() line %d"
 msgstr "dari %s : %s() garis:%d"
 
 #: common/exceptions.cpp:76
-#, fuzzy, c-format
+#, c-format
 msgid "%s in '%s', line %d, offset %d."
-msgstr ""
-"ID net tidak valid pada\n"
-"berkas: '%s'\n"
-"baris: %d\n"
-"ofset: %d"
+msgstr "%s di '%s', garis %d, offset %d."
 
 #: common/exceptions.cpp:90
 #, c-format
@@ -4457,21 +4451,17 @@ msgid "from %s : %s() line:%d"
 msgstr "dari %s : %s() garis:%d"
 
 #: common/exceptions.cpp:101
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "KiCad was unable to open this file because it was created with a more recent "
 "version than the one you are running.\n"
 "\n"
 "To open it you will need to upgrade KiCad to a version dated %s or later."
 msgstr ""
-"KiCad tidak dapat membuka berkas ini, karena dibuat dengan versi yang lebih "
-"baru dari yang Anda jalankan.\n"
-"Untuk membukanya, Anda perlu memperbarui KiCad ke versi yang lebih baru.\n"
+"KiCad tidak dapat membuka file dari versi terbaru.\n"
 "\n"
-"Tanggal versi KiCad yang diperlukan (atau lebih baru): %s\n"
-"\n"
-"Teks kesalahan lengkap:\n"
-"%s"
+"Untuk membukanya, Anda perlu meng-upgrade KiCad ke versi saat ini %s atau "
+"yang lebih baru."
 
 #: common/exceptions.cpp:126
 msgid "Full error text:"
@@ -5431,33 +5421,26 @@ msgid "Invalid Arc with radius %f and angle %f"
 msgstr ""
 
 #: common/project.cpp:310 common/project.cpp:315 pcbnew/pcb_base_frame.cpp:155
-#, fuzzy
 msgid "Error loading project footprint library table."
-msgstr ""
-"Terjadi kesalahan saat menulis tabel pustaka simbol kosong.\n"
-"\n"
-"%s"
+msgstr "Galat memuat tabel pustaka jejak proyek."
 
 #: common/project/project_archiver.cpp:52 kicad/pcm/pcm_task_manager.cpp:266
-#, fuzzy
 msgid "Could not open archive file."
-msgstr "Tidak dapat membuka berkas arsip\n"
+msgstr "Tak bisa membuka berkas arsip."
 
 #: common/project/project_archiver.cpp:61 kicad/pcm/pcm_task_manager.cpp:274
-#, fuzzy
 msgid "Invalid archive file format."
-msgstr "Format berkas arsip tidak valid\n"
+msgstr "Format file arsip tidak valid."
 
 #: common/project/project_archiver.cpp:72
-#, fuzzy, c-format
+#, c-format
 msgid "Extracting file '%s'."
-msgstr "Mengekstrak berkas \"%s\"\n"
+msgstr "Mengekstrak file '%s'."
 
 #: common/project/project_archiver.cpp:95 kicad/pcm/pcm_task_manager.cpp:193
 #: kicad/pcm/pcm_task_manager.cpp:234
-#, fuzzy
 msgid "Error extracting file!"
-msgstr "Terjadi kesalahan saat mengekstrak berkas!\n"
+msgstr "Galat saat mengekstrak file!"
 
 #: common/project/project_archiver.cpp:159 eeschema/dialogs/dialog_erc.cpp:760
 #: eeschema/dialogs/dialog_plot_schematic.cpp:517
@@ -5490,14 +5473,14 @@ msgid "Failed to create file '%s'."
 msgstr "Gagal membuat berkas \"%s\""
 
 #: common/project/project_archiver.cpp:205
-#, fuzzy, c-format
+#, c-format
 msgid "Archived file '%s'."
-msgstr "Berkas arsip \"%s\"\n"
+msgstr "File yang diarsipkan '%s'."
 
 #: common/project/project_archiver.cpp:215
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to archive file '%s'."
-msgstr "Gagal mencadangkan berkas \"%s\".\n"
+msgstr "Gagal mengarsipkan file '%s'."
 
 #: common/project/project_archiver.cpp:241
 #, c-format
@@ -6177,12 +6160,15 @@ msgid "Report Bug"
 msgstr ""
 
 #: common/tool/common_control.cpp:219
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Help file '%s' or\n"
 "'%s' could not be found.\n"
 "Do you want to access the KiCad online help?"
-msgstr "Berkas bantuan \"%s\" tidak dapat ditemukan."
+msgstr ""
+"File bantuan '%s' atau\n"
+"'%s' tidak dapat ditemukan.\n"
+"Apakah Anda ingin mengakses bantuan online KiCad?"
 
 #: common/tool/common_control.cpp:222 common/tool/common_control.cpp:242
 #, fuzzy
@@ -6190,11 +6176,13 @@ msgid "File Not Found"
 msgstr "Berkas tidak ditemukan"
 
 #: common/tool/common_control.cpp:239
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Help file '%s' could not be found.\n"
 "Do you want to access the KiCad online help?"
-msgstr "Berkas bantuan \"%s\" tidak dapat ditemukan."
+msgstr ""
+"File bantuan '%s' tidak dapat ditemukan.\n"
+"Apakah Anda ingin mengakses bantuan online KiCad?"
 
 #: common/tool/common_control.cpp:269
 #, c-format
@@ -6251,12 +6239,9 @@ msgid "Entry contains leading white space."
 msgstr ""
 
 #: common/validators.cpp:302
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' is not a valid library identifier format."
-msgstr ""
-"'%s' bukan tabel pustaka simbol yang valid.\n"
-"\n"
-"%s"
+msgstr "'%s' bukan tabel pustaka simbol yang valid."
 
 #: common/validators.cpp:309
 msgid "Library Identifier Validation Error"
@@ -6837,12 +6822,9 @@ msgid "Symbol to Footprint links have been modified. Save changes?"
 msgstr "Tautan Simbol ke Footprint telah dimodifikasi. Simpan perubahan?"
 
 #: cvpcb/cvpcb_mainframe.cpp:527 cvpcb/tools/cvpcb_association_tool.cpp:207
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' is not a valid footprint."
-msgstr ""
-"'%s' bukan tabel pustaka simbol yang valid.\n"
-"\n"
-"%s"
+msgstr "'%s' bukan footprint yang valid."
 
 #: cvpcb/cvpcb_mainframe.cpp:682 eeschema/generate_alias_info.cpp:39
 #: eeschema/sch_symbol.cpp:1422 eeschema/symbol_editor/symbol_editor.cpp:1225
@@ -31435,11 +31417,11 @@ msgstr ""
 #: pcbnew/python/scripting/pcbnew_action_plugins.cpp:84
 #: pcbnew/python/scripting/pcbnew_footprint_wizards.cpp:84
 msgid "Unknown Method"
-msgstr ""
+msgstr "Metode tidak dikenal"
 
 #: pcbnew/python/scripting/pcbnew_action_plugins.cpp:370
 msgid "Apply action script"
-msgstr ""
+msgstr "Terapkan skrip tindakan"
 
 #: pcbnew/python/scripting/pcbnew_footprint_wizards.cpp:70
 msgid "Exception on python footprint wizard code"
@@ -33595,51 +33577,51 @@ msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:865
 msgid "Switch to Inner layer 1"
-msgstr ""
+msgstr "Beralih ke Inner layer 1"
 
 #: pcbnew/tools/pcb_actions.cpp:871
 msgid "Switch to Inner layer 2"
-msgstr ""
+msgstr "Beralih ke Inner layer 2"
 
 #: pcbnew/tools/pcb_actions.cpp:877
 msgid "Switch to Inner layer 3"
-msgstr ""
+msgstr "Beralih ke Inner layer 3"
 
 #: pcbnew/tools/pcb_actions.cpp:883
 msgid "Switch to Inner layer 4"
-msgstr ""
+msgstr "Beralih ke Inner layer 4"
 
 #: pcbnew/tools/pcb_actions.cpp:889
 msgid "Switch to Inner layer 5"
-msgstr ""
+msgstr "Beralih ke Inner layer 5"
 
 #: pcbnew/tools/pcb_actions.cpp:895
 msgid "Switch to Inner layer 6"
-msgstr ""
+msgstr "Beralih ke Inner layer 6"
 
 #: pcbnew/tools/pcb_actions.cpp:900
 msgid "Switch to Inner layer 7"
-msgstr ""
+msgstr "Beralih ke Inner layer 7"
 
 #: pcbnew/tools/pcb_actions.cpp:905
 msgid "Switch to Inner layer 8"
-msgstr ""
+msgstr "Beralih ke Inner layer 8"
 
 #: pcbnew/tools/pcb_actions.cpp:910
 msgid "Switch to Inner layer 9"
-msgstr ""
+msgstr "Beralih ke Inner layer 9"
 
 #: pcbnew/tools/pcb_actions.cpp:915
 msgid "Switch to Inner layer 10"
-msgstr ""
+msgstr "Beralih ke Inner layer 10"
 
 #: pcbnew/tools/pcb_actions.cpp:920
 msgid "Switch to Inner layer 11"
-msgstr ""
+msgstr "Beralih ke Inner layer 11"
 
 #: pcbnew/tools/pcb_actions.cpp:925
 msgid "Switch to Inner layer 12"
-msgstr ""
+msgstr "Beralih ke Inner layer 12"
 
 #: pcbnew/tools/pcb_actions.cpp:930
 msgid "Switch to Inner layer 13"
@@ -33699,7 +33681,7 @@ msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:1000
 msgid "Switch to Inner layer 27"
-msgstr ""
+msgstr "Beralih ke Inner layer 27"
 
 #: pcbnew/tools/pcb_actions.cpp:1005
 msgid "Switch to Inner layer 28"
@@ -33817,7 +33799,7 @@ msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:1110
 msgid "Align to Left"
-msgstr ""
+msgstr "Sejajarkan ke Kiri"
 
 #: pcbnew/tools/pcb_actions.cpp:1111
 msgid "Aligns selected items to the left edge"
@@ -33825,7 +33807,7 @@ msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:1115
 msgid "Align to Right"
-msgstr ""
+msgstr "Sejajarkan ke Kanan"
 
 #: pcbnew/tools/pcb_actions.cpp:1116
 msgid "Aligns selected items to the right edge"
@@ -34066,7 +34048,7 @@ msgstr ""
 
 #: pcbnew/tools/pcb_control.cpp:214
 msgid "Don't show again"
-msgstr ""
+msgstr "Jangan tampilkan lagi"
 
 #: pcbnew/tools/pcb_control.cpp:228
 #, c-format
@@ -34120,7 +34102,7 @@ msgstr ""
 
 #: pcbnew/tools/pcb_selection_tool.cpp:72
 msgid "Select"
-msgstr ""
+msgstr "Pilih"
 
 #: pcbnew/tools/placement_tool.cpp:65
 msgid "Align/Distribute"
@@ -34172,7 +34154,7 @@ msgstr ""
 
 #: pcbnew/tools/zone_create_helper.cpp:215
 msgid "Add a zone"
-msgstr ""
+msgstr "Tambah zona"
 
 #: pcbnew/tools/zone_create_helper.cpp:246
 msgid "Add a graphical polygon"
@@ -34249,7 +34231,7 @@ msgstr ""
 
 #: pcbnew/widgets/appearance_controls.cpp:344
 msgid "References"
-msgstr ""
+msgstr "Referensi"
 
 #: pcbnew/widgets/appearance_controls.cpp:344
 msgid "Show footprint references"
@@ -34281,7 +34263,7 @@ msgstr ""
 
 #: pcbnew/widgets/appearance_controls.cpp:351
 msgid "DRC Warnings"
-msgstr ""
+msgstr "Peringatan DRC"
 
 #: pcbnew/widgets/appearance_controls.cpp:351
 msgid "DRC violations with a Warning severity"
@@ -34289,7 +34271,7 @@ msgstr ""
 
 #: pcbnew/widgets/appearance_controls.cpp:352
 msgid "DRC Errors"
-msgstr ""
+msgstr "Galat DRC"
 
 #: pcbnew/widgets/appearance_controls.cpp:352
 msgid "DRC violations with an Error severity"
@@ -34313,12 +34295,12 @@ msgstr ""
 
 #: pcbnew/widgets/appearance_controls.cpp:376
 msgid "No Layers"
-msgstr ""
+msgstr "Tidak ada layer"
 
 #: pcbnew/widgets/appearance_controls.cpp:378
 #: pcbnew/widgets/appearance_controls_base.cpp:175
 msgid "All Layers"
-msgstr ""
+msgstr "Semua Layer"
 
 #: pcbnew/widgets/appearance_controls.cpp:380
 msgid "All Copper Layers"
@@ -34371,7 +34353,7 @@ msgstr ""
 
 #: pcbnew/widgets/appearance_controls.cpp:612
 msgid "Hide"
-msgstr ""
+msgstr "Sembunyikan"
 
 #: pcbnew/widgets/appearance_controls.cpp:614
 msgid "Inactive layers will be hidden"
@@ -34433,19 +34415,19 @@ msgstr "Warna Silkscreen"
 #: pcbnew/widgets/appearance_controls.cpp:848
 #, c-format
 msgid "Highlight %s"
-msgstr ""
+msgstr "Sorot %s"
 
 #: pcbnew/widgets/appearance_controls.cpp:851
 #: pcbnew/widgets/appearance_controls.cpp:2179
-#, fuzzy, c-format
+#, c-format
 msgid "Select Tracks and Vias in %s"
-msgstr "Buat trek dan via"
+msgstr "Pilih Trek dan Vias di %s"
 
 #: pcbnew/widgets/appearance_controls.cpp:854
 #: pcbnew/widgets/appearance_controls.cpp:2183
-#, fuzzy, c-format
+#, c-format
 msgid "Unselect Tracks and Vias in %s"
-msgstr "Buat trek dan via"
+msgstr "Batalkan Pilihan Trek dan Vias di %s"
 
 #: pcbnew/widgets/appearance_controls.cpp:862
 msgid "Hide All Other Nets"
@@ -34630,12 +34612,12 @@ msgstr ""
 #: pcbnew/widgets/appearance_controls.cpp:1943
 #, c-format
 msgid "Show or hide %s"
-msgstr ""
+msgstr "Tampilkan atau sembunyikan %s"
 
 #: pcbnew/widgets/appearance_controls.cpp:1984
 #, c-format
 msgid "Set opacity of %s"
-msgstr ""
+msgstr "Atur opasitas %s"
 
 #: pcbnew/widgets/appearance_controls.cpp:2140
 #, c-format
@@ -34662,19 +34644,19 @@ msgstr ""
 
 #: pcbnew/widgets/appearance_controls.cpp:2247
 msgid "Save preset..."
-msgstr ""
+msgstr "Simpan preset..."
 
 #: pcbnew/widgets/appearance_controls.cpp:2248
 msgid "Delete preset..."
-msgstr ""
+msgstr "Hapus preset..."
 
 #: pcbnew/widgets/appearance_controls.cpp:2326
 msgid "Layer preset name:"
-msgstr ""
+msgstr "Nama layer preset:"
 
 #: pcbnew/widgets/appearance_controls.cpp:2326
 msgid "Save Layer Preset"
-msgstr ""
+msgstr "Simpan Layer Preset"
 
 #: pcbnew/widgets/appearance_controls.cpp:2367
 msgid "Presets"
@@ -34682,15 +34664,15 @@ msgstr ""
 
 #: pcbnew/widgets/appearance_controls.cpp:2379
 msgid "Delete Preset"
-msgstr ""
+msgstr "Hapus Preset"
 
 #: pcbnew/widgets/appearance_controls.cpp:2380
 msgid "Select preset:"
-msgstr ""
+msgstr "Pilih preset:"
 
 #: pcbnew/widgets/appearance_controls.cpp:2845
 msgid "Open Preferences"
-msgstr ""
+msgstr "Buka Preferensi"
 
 #: pcbnew/widgets/appearance_controls.cpp:2859
 msgid ""
@@ -34700,7 +34682,7 @@ msgstr ""
 
 #: pcbnew/widgets/appearance_controls_base.cpp:45
 msgid "Objects"
-msgstr ""
+msgstr "Objek"
 
 #: pcbnew/widgets/appearance_controls_base.cpp:71
 msgid "Show the Net Inspector"
@@ -34712,36 +34694,36 @@ msgstr ""
 
 #: pcbnew/widgets/appearance_controls_base.cpp:164
 msgid "Presets:"
-msgstr ""
+msgstr "Preset:"
 
 #: pcbnew/widgets/appearance_controls_base.cpp:168
 msgid "(Ctrl+Tab)"
-msgstr ""
+msgstr "(Ctrl+Tab)"
 
 #: pcbnew/widgets/appearance_controls_base.cpp:175
 msgid "(unsaved)"
-msgstr ""
+msgstr "(blm disimpan)"
 
 #: pcbnew/widgets/appearance_controls_base.cpp:179
 msgid "Layer presets"
-msgstr ""
+msgstr "Layer preset"
 
 #: pcbnew/widgets/panel_selection_filter.cpp:144
 #, c-format
 msgid "Only %s"
-msgstr ""
+msgstr "Hanya %s"
 
 #: pcbnew/widgets/panel_selection_filter_base.cpp:19
 msgid "All items"
-msgstr ""
+msgstr "Semua item"
 
 #: pcbnew/widgets/panel_selection_filter_base.cpp:23
 msgid "Locked items"
-msgstr ""
+msgstr "Item terkunci"
 
 #: pcbnew/widgets/panel_selection_filter_base.cpp:25
 msgid "Allow selection of locked items"
-msgstr ""
+msgstr "Izinkan pemilihan item yang terkunci"
 
 #: pcbnew/widgets/panel_selection_filter_base.cpp:57
 msgid "Rule Areas"
@@ -34749,11 +34731,11 @@ msgstr ""
 
 #: pcbnew/widgets/panel_selection_filter_base.cpp:61
 msgid "Dimensions"
-msgstr ""
+msgstr "Dimensi"
 
 #: pcbnew/widgets/panel_selection_filter_base.cpp:65
 msgid "Other items"
-msgstr ""
+msgstr "Item lainnya"
 
 #: pcbnew/zone.cpp:552
 msgid "Rule Area"
@@ -34777,7 +34759,7 @@ msgstr ""
 
 #: pcbnew/zone.cpp:573
 msgid "No tracks"
-msgstr ""
+msgstr "Tidak ada trek"
 
 #: pcbnew/zone.cpp:576
 msgid "No pads"
@@ -34797,12 +34779,12 @@ msgstr ""
 
 #: pcbnew/zone.cpp:594 pcbnew/zone.cpp:1410
 msgid "Priority"
-msgstr ""
+msgstr "Prioritas"
 
 #: pcbnew/zone.cpp:612 pcbnew/zone.cpp:870
 #, c-format
 msgid "%s and %d more"
-msgstr ""
+msgstr "%s dan %d lagi"
 
 #: pcbnew/zone.cpp:626
 msgid "Fill Mode"
@@ -34838,7 +34820,7 @@ msgstr ""
 #: pcbnew/zone.cpp:885
 #, c-format
 msgid "Zone %s on %s"
-msgstr ""
+msgstr "Zona %s pada %s"
 
 #: pcbnew/zone.cpp:1401
 msgid "Inherited"
@@ -34846,7 +34828,7 @@ msgstr ""
 
 #: pcbnew/zone.cpp:1419
 msgid "Min Width"
-msgstr ""
+msgstr "Lebar Min"
 
 #: pcbnew/zone.cpp:1422
 msgid "Pad Connections"
@@ -34866,11 +34848,11 @@ msgstr ""
 
 #: pcbnew/zone_filler.cpp:420
 msgid "Refill"
-msgstr ""
+msgstr "Isi ulang"
 
 #: pcbnew/zone_filler.cpp:420
 msgid "Continue without Refill"
-msgstr ""
+msgstr "Lanjut tanpa Isi ulang"
 
 #: pcbnew/zone_filler.cpp:431
 msgid "Performing polygon fills..."
@@ -34925,9 +34907,8 @@ msgstr "Pratinjau"
 
 #: resources/linux/launchers/org.kicad.kicad.desktop.in:10
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:6
-#, fuzzy
 msgid "KiCad"
-msgstr "Kesalahan KiCad"
+msgstr "KiCad"
 
 #: resources/linux/launchers/org.kicad.kicad.desktop.in:11
 msgid "EDA Suite"
@@ -34952,9 +34933,8 @@ msgid "KiCad PCB Editor (Standalone)"
 msgstr "Penyunting Simbol"
 
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:11
-#, fuzzy
 msgid "PCB layout editor"
-msgstr "Tata Letak"
+msgstr "Editor tata letak PCB"
 
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:12
 msgid "Standalone circuit board editor for KiCad boards"
@@ -34962,7 +34942,7 @@ msgstr ""
 
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:13
 msgid "pcbnew"
-msgstr ""
+msgstr "pcbnew"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:13
 msgid "An EDA suite for schematic and circuit board design"
@@ -35010,6 +34990,10 @@ msgstr "Skematik KiCad"
 msgid "KiCad Printed Circuit Board"
 msgstr "Papan Sirkuit KiCad"
 
+#: pagelayout_editor/dialogs/properties_frame.cpp:559
+msgid "Keywords are replaced by they actual value in strings"
+msgstr ""
+
 #~ msgid "Change to isometric perspective"
 #~ msgstr "Ubah ke perspektif isometrik"
 
@@ -35019,7 +35003,7 @@ msgstr "Papan Sirkuit KiCad"
 #~ msgid "Info"
 #~ msgstr "Info"
 
-#, fuzzy, c-format
+#, fuzzy
 #~ msgid "Schematic file '%s' is already open."
 #~ msgstr "Berkas skematik \"%s\" sudah terbuka."
 
@@ -35047,22 +35031,20 @@ msgstr "Papan Sirkuit KiCad"
 #~ msgid "Doc Files"
 #~ msgstr "Berkas Doc"
 
-#, fuzzy, c-format
+#, fuzzy
 #~ msgid "Doc File '%s' not found"
 #~ msgstr "Berkas Doc \"%s\" tidak ditemukan"
 
 #~ msgid "Filename:"
 #~ msgstr "Nama berkas:"
 
-#, c-format
 #~ msgid "File \"%s\" not found"
 #~ msgstr "Berkas \"%s\" tidak ditemukan"
 
-#, c-format
 #~ msgid "Invalid filename: %s"
 #~ msgstr "Nama berkas tidak valid: %s"
 
-#, fuzzy, c-format
+#, fuzzy
 #~ msgid "Unable to create archive file '%s'.\n"
 #~ msgstr "Tidak dapat membuat berkas arsip \"%s\"\n"
 
@@ -35076,19 +35058,16 @@ msgstr "Papan Sirkuit KiCad"
 #~ msgid "KiCad "
 #~ msgstr "Kesalahan KiCad"
 
-#, c-format
 #~ msgid "Unable to create \"%s\""
 #~ msgstr "Tak dapat membuat \"%s\""
 
-#, c-format
 #~ msgid "Unable to create report file '%s'<br>"
 #~ msgstr "Tidak dapat membuat berkas laporan '%s'<br>"
 
-#, fuzzy, c-format
+#, fuzzy
 #~ msgid "Unable to create '%s'."
 #~ msgstr "Tak dapat membuat \"%s\""
 
-#, c-format
 #~ msgid "Report file %s created\n"
 #~ msgstr "Berkas laporan %s telah dibuat\n"
 
@@ -35149,26 +35128,21 @@ msgstr "Papan Sirkuit KiCad"
 #~ msgid "CAD Color Style"
 #~ msgstr "Gaya Warna CAD"
 
-#, c-format
 #~ msgid ""
 #~ "You do not have write permissions to save file \"%s\" to folder \"%s\"."
 #~ msgstr ""
 #~ "Anda tidak memiliki izin menulis untuk menyimpan berkas \"%s\" ke folder "
 #~ "\"%s\"."
 
-#, c-format
 #~ msgid "You do not have write permissions to save file \"%s\"."
 #~ msgstr "Anda tidak memiliki izin menulis untuk menyimpan berkas \"%s\"."
 
-#, c-format
 #~ msgid "Cannot copy file \"%s\"."
 #~ msgstr "Tidak dapat menyalin berkas \"%s\"."
 
-#, c-format
 #~ msgid "Archive file \"%s\": Failed!\n"
 #~ msgstr "Berkas arsip \"%s\": Gagal!\n"
 
-#, c-format
 #~ msgid ""
 #~ "Symbol library \"%s\" failed to load. Error:\n"
 #~ " %s"
@@ -35176,7 +35150,6 @@ msgstr "Papan Sirkuit KiCad"
 #~ "Pustaka simbol \"%s\" gagal dimuat. Kesalahan:\n"
 #~ " %s"
 
-#, c-format
 #~ msgid ""
 #~ "Error occurred loading symbol %s from library %s.\n"
 #~ "\n"
@@ -35186,30 +35159,24 @@ msgstr "Papan Sirkuit KiCad"
 #~ "\n"
 #~ "%s"
 
-#, c-format
 #~ msgid "Unable to create file \"%s\".\n"
 #~ msgstr "Tidak dapat membuat berkas \"%s.\n"
 
-#, c-format
 #~ msgid "Cannot create file \"%s\".\n"
 #~ msgstr "Tidak dapat membuat berkas \"%s\".\n"
 
-#, c-format
 #~ msgid "Failed to create temporary file \"%s\""
 #~ msgstr "Gagal membuat berkas sementara \"%s\""
 
-#, c-format
 #~ msgid "Failed to rename temporary file \"%s\""
 #~ msgstr "Gagal mengganti nama berkas sementara \"%s\""
 
-#, c-format
 #~ msgid "Failed to save symbol library file \"%s\""
 #~ msgstr "Gagal menyimpan berkas pustaka simbol \"%s\""
 
 #~ msgid "[no file]"
 #~ msgstr "[tak ada berkas]"
 
-#, c-format
 #~ msgid ""
 #~ "Invalid symbol name in\n"
 #~ "file: \"%s\"\n"
@@ -35221,7 +35188,6 @@ msgstr "Papan Sirkuit KiCad"
 #~ "baris: %d\n"
 #~ "ofset: %d"
 
-#, c-format
 #~ msgid ""
 #~ "Invalid library identifier in\n"
 #~ "file: \"%s\"\n"
@@ -35233,7 +35199,6 @@ msgstr "Papan Sirkuit KiCad"
 #~ "baris: %d\n"
 #~ "ofset: %d"
 
-#, c-format
 #~ msgid ""
 #~ "Invalid symbol unit name in\n"
 #~ "file: \"%s\"\n"
@@ -35245,7 +35210,6 @@ msgstr "Papan Sirkuit KiCad"
 #~ "baris: %d\n"
 #~ "ofset: %d"
 
-#, c-format
 #~ msgid ""
 #~ "Invalid symbol unit number %s in\n"
 #~ "file: \"%s\"\n"
@@ -35257,7 +35221,7 @@ msgstr "Papan Sirkuit KiCad"
 #~ "baris: %d\n"
 #~ "ofset: %d"
 
-#, fuzzy, c-format
+#, fuzzy
 #~ msgid ""
 #~ "Invalid symbol names definition in\n"
 #~ "file: '%s'\n"
@@ -35269,7 +35233,7 @@ msgstr "Papan Sirkuit KiCad"
 #~ "baris: %d\n"
 #~ "ofset: %d"
 
-#, fuzzy, c-format
+#, fuzzy
 #~ msgid ""
 #~ "Invalid property name in\n"
 #~ "file: '%s'\n"
@@ -35281,7 +35245,7 @@ msgstr "Papan Sirkuit KiCad"
 #~ "baris: %d\n"
 #~ "ofset: %d"
 
-#, fuzzy, c-format
+#, fuzzy
 #~ msgid ""
 #~ "Empty property name in\n"
 #~ "file: '%s'\n"
@@ -35293,7 +35257,7 @@ msgstr "Papan Sirkuit KiCad"
 #~ "baris: %d\n"
 #~ "ofset: %d"
 
-#, fuzzy, c-format
+#, fuzzy
 #~ msgid ""
 #~ "Invalid property value in\n"
 #~ "file: '%s'\n"
@@ -35305,7 +35269,6 @@ msgstr "Papan Sirkuit KiCad"
 #~ "baris: %d\n"
 #~ "ofset: %d"
 
-#, c-format
 #~ msgid ""
 #~ "Invalid pin name in\n"
 #~ "file: \"%s\"\n"
@@ -35317,7 +35280,6 @@ msgstr "Papan Sirkuit KiCad"
 #~ "baris: %d\n"
 #~ "ofset: %d"
 
-#, c-format
 #~ msgid ""
 #~ "Invalid alternate pin name in\n"
 #~ "file: \"%s\"\n"
@@ -35329,7 +35291,6 @@ msgstr "Papan Sirkuit KiCad"
 #~ "baris: %d\n"
 #~ "ofset: %d"
 
-#, c-format
 #~ msgid ""
 #~ "Invalid text string in\n"
 #~ "file: \"%s\"\n"
@@ -35341,7 +35302,6 @@ msgstr "Papan Sirkuit KiCad"
 #~ "baris: %d\n"
 #~ "ofset: %d"
 
-#, c-format
 #~ msgid ""
 #~ "Invalid property name in\n"
 #~ "file: \"%s\"\n"
@@ -35353,7 +35313,6 @@ msgstr "Papan Sirkuit KiCad"
 #~ "baris: %d\n"
 #~ "ofset: %d"
 
-#, c-format
 #~ msgid ""
 #~ "Empty property name in\n"
 #~ "file: \"%s\"\n"
@@ -35365,7 +35324,6 @@ msgstr "Papan Sirkuit KiCad"
 #~ "baris: %d\n"
 #~ "ofset: %d"
 
-#, c-format
 #~ msgid ""
 #~ "Invalid property value in\n"
 #~ "file: \"%s\"\n"
@@ -35377,7 +35335,6 @@ msgstr "Papan Sirkuit KiCad"
 #~ "baris: %d\n"
 #~ "ofset: %d"
 
-#, c-format
 #~ msgid ""
 #~ "Invalid sheet pin name in\n"
 #~ "file: \"%s\"\n"
@@ -35389,7 +35346,6 @@ msgstr "Papan Sirkuit KiCad"
 #~ "baris: %d\n"
 #~ "ofset: %d"
 
-#, c-format
 #~ msgid ""
 #~ "Empty sheet pin name in\n"
 #~ "file: \"%s\"\n"
@@ -35401,7 +35357,6 @@ msgstr "Papan Sirkuit KiCad"
 #~ "baris: %d\n"
 #~ "ofset: %d"
 
-#, c-format
 #~ msgid ""
 #~ "Invalid symbol library name in\n"
 #~ "file: \"%s\"\n"
@@ -35413,7 +35368,6 @@ msgstr "Papan Sirkuit KiCad"
 #~ "baris: %d\n"
 #~ "ofset: %d"
 
-#, c-format
 #~ msgid ""
 #~ "Invalid symbol library ID in\n"
 #~ "file: \"%s\"\n"
@@ -35425,24 +35379,20 @@ msgstr "Papan Sirkuit KiCad"
 #~ "baris: %d\n"
 #~ "ofset: %d"
 
-#, c-format
 #~ msgid "user does not have permission to read library document file \"%s\""
 #~ msgstr ""
 #~ "pengguna tidak memiliki izin untuk membaca berkas dokumen pustaka \"%s\""
 
-#, c-format
 #~ msgid "Error occurred loading schematic file \"%s\"."
 #~ msgstr "Terjadi kesalahan saat memuat berkas skematik \"%s\"."
 
-#, c-format
 #~ msgid "Cannot create file \"%s\""
 #~ msgstr "Tidak dapat membuat berkas \"%s\""
 
-#, c-format
 #~ msgid "Source file \"%s\" is not available"
 #~ msgstr "Berkas sumber \"%s\" tidak tersedia"
 
-#, fuzzy, c-format
+#, fuzzy
 #~ msgid "Cannot write to folder '%s'."
 #~ msgstr "Tidak dapat menulis ke folder \"%s\"."
 
@@ -35453,7 +35403,6 @@ msgstr "Papan Sirkuit KiCad"
 #~ "\n"
 #~ "Harap pastikan Anda memiliki izin menulis dan coba lagi."
 
-#, c-format
 #~ msgid ""
 #~ "Directory \"%s\" could not be created.\n"
 #~ "\n"
@@ -35463,62 +35412,50 @@ msgstr "Papan Sirkuit KiCad"
 #~ "\n"
 #~ "Harap pastikan Anda memiliki izin menulis dan coba lagi."
 
-#, c-format
 #~ msgid "Cannot write to folder \"%s\"."
 #~ msgstr "Tidak dapat menulis ke folder \"%s\"."
 
 #~ msgid "Please check your access permissions to this folder and try again."
 #~ msgstr "Harap periksa izin akses Anda ke folder ini dan coba lagi."
 
-#, c-format
 #~ msgid "Error when loading file \"%s\""
 #~ msgstr "Kesalahan saat memuat berkas \"%s\""
 
 #~ msgid "no file selected"
 #~ msgstr "tak ada berkas yang dipilih"
 
-#, c-format
 #~ msgid "Unable to create file \"%s\""
 #~ msgstr "Tidak dapat membuat berkas \"%s\""
 
-#, c-format
 #~ msgid "Unable to create file \"%s\"."
 #~ msgstr "Tidak dapat membuat berkas \"%s\"."
 
-#, c-format
 #~ msgid "File \"%s\" not found."
 #~ msgstr "Berkas \"%s\" tidak ditemukan."
 
-#, c-format
 #~ msgid "Plot file \"%s\" created."
 #~ msgstr "Berkas plot \"%s\" telah dibuat."
 
-#, c-format
 #~ msgid "Could not create file \"%s\"."
 #~ msgstr "Tidak dapat membuat berkas \"%s\"."
 
-#, c-format
 #~ msgid "No access rights to write to file \"%s\""
 #~ msgstr "Tidak ada hak akses untuk menulis ke berkas \"%s\""
 
-#, fuzzy, c-format
+#, fuzzy
 #~ msgid "No access rights to write to file '%s'."
 #~ msgstr "Tidak ada hak akses untuk menulis ke berkas \"%s\""
 
-#, c-format
 #~ msgid "Unable to create or write file \"%s\""
 #~ msgstr "Tidak dapat membuat atau menulis berkas \"%s\""
 
-#, c-format
 #~ msgid "unexpected file \"%s\" was found in library path \"%s\""
 #~ msgstr ""
 #~ "berkas \"%s\" yang tidak diharapkan telah ditemukan di path pustaka \"%s\""
 
-#, c-format
 #~ msgid "No write permissions to delete file \"%s\""
 #~ msgstr "Tidak ada izin menulis untuk menghapus berkas \"%s\""
 
-#, c-format
 #~ msgid ""
 #~ "Invalid net ID in\n"
 #~ "file: \"%s\"\n"
@@ -35530,7 +35467,6 @@ msgstr "Papan Sirkuit KiCad"
 #~ "baris: %d\n"
 #~ "ofset: %d"
 
-#, c-format
 #~ msgid ""
 #~ "missing float number in file: \"%s\"\n"
 #~ "line: %d, offset: %d"
@@ -35538,7 +35474,6 @@ msgstr "Papan Sirkuit KiCad"
 #~ "angka float tidak ada pada berkas: \"%s\"\n"
 #~ "baris: %d, ofset: %d"
 
-#, c-format
 #~ msgid "Page layout description file \"%s\" not found."
 #~ msgstr "Berkas deskripsi tata letak halaman \"%s\" tidak ditemukan."
 
@@ -35557,7 +35492,7 @@ msgstr "Papan Sirkuit KiCad"
 #~ msgid "Delete File"
 #~ msgstr "Hapus Berkas"
 
-#, fuzzy, c-format
+#, fuzzy
 #~ msgid "Are you sure you want to delete %d items?"
 #~ msgstr "Apakah Anda yakin ingin menghapus %lu item?"
 
@@ -35576,7 +35511,6 @@ msgstr "Papan Sirkuit KiCad"
 #~ msgid "New page layout file is unsaved"
 #~ msgstr "Berkas tata letak halaman baru tidak disimpan"
 
-#, c-format
 #~ msgid ""
 #~ "Html or pdf help file \n"
 #~ "%s\n"
@@ -35618,7 +35552,6 @@ msgstr "Papan Sirkuit KiCad"
 #~ msgid "Edit worksheet graphics and text"
 #~ msgstr "Sunting grafik dan teks lembar kerja"
 
-#, c-format
 #~ msgid "Render time %.0f ms ( %.1f fps)"
 #~ msgstr "Waktu render %.0f ms (%.1f fps)"
 
