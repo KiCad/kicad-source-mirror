@@ -1246,7 +1246,7 @@ void SCH_PAINTER::draw( const LIB_BEZIER *aCurve, int aLayer )
 void SCH_PAINTER::drawDanglingSymbol( const wxPoint& aPos, int aWidth, bool aDrawingShadows )
 {
     wxPoint radius( aWidth + Mils2iu( DANGLING_SYMBOL_SIZE / 2 ),
-                    aWidth + Mils2iu( DANGLING_SYMBOL_SIZE /2 ) );
+                    aWidth + Mils2iu( DANGLING_SYMBOL_SIZE / 2 ) );
 
     m_gal->SetIsStroke( true );
     m_gal->SetIsFill( false );

@@ -981,9 +981,20 @@ void EE_SELECTION_TOOL::GuessSelectionCandidates( EE_COLLECTOR& collector, const
     for( int i = collector.GetCount() - 1; i >= 0; --i )
     {
         EDA_ITEM* item = collector[ i ];
+        SCH_LINE* line = dynamic_cast<SCH_LINE*>( item );
 
-        if( item->HitTest( (wxPoint) aPos, 0 ) )
-            exactHits.insert( item );
+        // Lines are hard to hit.  Give them a bit more slop to still be considered "exact".
+
+        if( line )
+        {
+            if( line->HitTest( (wxPoint) aPos, Mils2iu( DANGLING_SYMBOL_SIZE ) ) )
+                exactHits.insert( line );
+        }
+        else
+        {
+            if( item->HitTest( (wxPoint) aPos, 0 ) )
+                exactHits.insert( item );
+        }
     }
 
     if( exactHits.size() > 0 && exactHits.size() < (unsigned) collector.GetCount() )
@@ -992,32 +1003,8 @@ void EE_SELECTION_TOOL::GuessSelectionCandidates( EE_COLLECTOR& collector, const
         {
             EDA_ITEM* item = collector[ i ];
 
-            if( !item->HitTest( (wxPoint) aPos, 0 ) )
+            if( !exactHits.count( item ) )
                 collector.Transfer( item );
-        }
-    }
-
-    // No need for multiple wires at a single point; if there's a junction select that;
-    // otherwise any of the wires will do
-    bool junction = false;
-    bool wiresOnly = true;
-
-    for( EDA_ITEM* item : collector )
-    {
-        if( item->Type() == SCH_JUNCTION_T )
-            junction = true;
-        else if( item->Type() != SCH_LINE_T )
-            wiresOnly = false;
-    }
-
-    if( wiresOnly )
-    {
-        for( int j = collector.GetCount() - 1; j >= 0; --j )
-        {
-            if( junction && collector[ j ]->Type() != SCH_JUNCTION_T )
-                collector.Transfer( j );
-            else if( !junction && j > 0 )
-                collector.Transfer( j );
         }
     }
 
@@ -1032,7 +1019,13 @@ void EE_SELECTION_TOOL::GuessSelectionCandidates( EE_COLLECTOR& collector, const
 
         if( exactHits.count( item ) )
         {
-            dist = EuclideanNorm( bbox.GetCenter() - (wxPoint) aPos );
+            wxPoint   pos( aPos );
+            SCH_LINE* line = dynamic_cast<SCH_LINE*>( item );
+
+            if( line )
+                dist = DistanceLinePoint( line->GetStartPoint(), line->GetEndPoint(), pos );
+            else
+                dist = EuclideanNorm( bbox.GetCenter() - pos ) * 2;
         }
         else
         {
@@ -1042,10 +1035,6 @@ void EE_SELECTION_TOOL::GuessSelectionCandidates( EE_COLLECTOR& collector, const
 
         if( item->IsType( EE_COLLECTOR::FieldOwners ) )
             dist += INT_MAX / 4;
-
-        // For wires, if we hit one of the endpoints, consider that perfect
-        if( item->Type() == SCH_LINE_T && ( item->GetFlags() & ( STARTPOINT | ENDPOINT ) ) )
-            dist = 0;
 
         if( dist < closestDist )
         {

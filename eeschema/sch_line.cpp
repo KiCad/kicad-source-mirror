@@ -788,7 +788,13 @@ bool SCH_LINE::HitTest( const wxPoint& aPosition, int aAccuracy ) const
     else
         aAccuracy = abs( aAccuracy );
 
-    return TestSegmentHit( aPosition, m_start, m_end, aAccuracy );
+    if( TestSegmentHit( aPosition, m_start, m_end, aAccuracy ) )
+        return true;
+
+    aAccuracy += Mils2iu( DANGLING_SYMBOL_SIZE );
+
+    return ( EuclideanNorm( aPosition - m_start ) < aAccuracy
+            || EuclideanNorm( aPosition - m_end ) < aAccuracy );
 }
 
 
