@@ -1149,11 +1149,12 @@ int SCH_EDIT_TOOL::EditField( const TOOL_EVENT& aEvent )
     if( selection.Size() != 1 )
         return 0;
 
-    SCH_ITEM* item = (SCH_ITEM*) selection.Front();
+    bool      clearSelection = selection.IsHover();
+    EDA_ITEM* item = selection.Front();
 
     if( item->Type() == SCH_SYMBOL_T )
     {
-        SCH_SYMBOL* symbol = (SCH_SYMBOL*) item;
+        SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
 
         if( aEvent.IsAction( &EE_ACTIONS::editReference ) )
             editFieldText( symbol->GetField( REFERENCE_FIELD ) );
@@ -1164,10 +1165,15 @@ int SCH_EDIT_TOOL::EditField( const TOOL_EVENT& aEvent )
     }
     else if( item->Type() == SCH_FIELD_T )
     {
-        editFieldText( (SCH_FIELD*) item );
+        SCH_FIELD* field = static_cast<SCH_FIELD*>( item );
+
+        editFieldText( field );
+
+        if( !field->IsVisible() )
+            clearSelection = true;
     }
 
-    if( selection.IsHover() )
+    if( clearSelection )
         m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
 
     return 0;
@@ -1264,6 +1270,7 @@ int SCH_EDIT_TOOL::ConvertDeMorgan( const TOOL_EVENT& aEvent )
 int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
 {
     EE_SELECTION& selection = m_selectionTool->RequestSelection( EE_COLLECTOR::EditableItems );
+    bool          clearSelection = selection.IsHover();
 
     if( selection.Empty() )
     {
@@ -1279,7 +1286,7 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
         return 0;
     }
 
-    SCH_ITEM* item = (SCH_ITEM*) selection.Front();
+    EDA_ITEM* item = selection.Front();
 
     switch( item->Type() )
     {
@@ -1307,7 +1314,7 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
     {
     case SCH_SYMBOL_T:
     {
-        SCH_SYMBOL*              symbol = (SCH_SYMBOL*) item;
+        SCH_SYMBOL*              symbol = static_cast<SCH_SYMBOL*>( item );
         DIALOG_SYMBOL_PROPERTIES symbolPropsDialog( m_frame, symbol );
 
         // This dialog itself subsequently can invoke a KIWAY_PLAYER as a quasimodal
@@ -1397,7 +1404,7 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
 
     case SCH_SHEET_PIN_T:
     {
-        SCH_SHEET_PIN*              pin = (SCH_SHEET_PIN*) item;
+        SCH_SHEET_PIN*              pin = static_cast<SCH_SHEET_PIN*>( item );
         DIALOG_SHEET_PIN_PROPERTIES dlg( m_frame, pin );
 
         // QuasiModal required for help dialog
@@ -1414,7 +1421,8 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
     case SCH_GLOBAL_LABEL_T:
     case SCH_HIER_LABEL_T:
     {
-        DIALOG_TEXT_AND_LABEL_PROPERTIES dlg( m_frame, (SCH_TEXT*) item );
+        SCH_TEXT*                        text = static_cast<SCH_TEXT*>( item );
+        DIALOG_TEXT_AND_LABEL_PROPERTIES dlg( m_frame, text );
 
         // Must be quasi modal for syntax help
         if( dlg.ShowQuasiModal() == wxID_OK )
@@ -1426,12 +1434,19 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
         break;
 
     case SCH_FIELD_T:
-        editFieldText( (SCH_FIELD*) item );
+    {
+        SCH_FIELD* field = static_cast<SCH_FIELD*>( item );
+
+        editFieldText( field );
+
+        if( !field->IsVisible() )
+            clearSelection = true;
+    }
         break;
 
     case SCH_BITMAP_T:
     {
-        SCH_BITMAP*         bitmap = (SCH_BITMAP*) item;
+        SCH_BITMAP*         bitmap = static_cast<SCH_BITMAP*>( item );
         DIALOG_IMAGE_EDITOR dlg( m_frame, bitmap->GetImage() );
 
         if( dlg.ShowModal() == wxID_OK )
@@ -1455,7 +1470,7 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
     {
         std::deque<SCH_ITEM*> strokeItems;
 
-        for( auto selItem : selection.Items() )
+        for( EDA_ITEM* selItem : selection.Items() )
         {
             SCH_ITEM* schItem = dynamic_cast<SCH_ITEM*>( selItem );
 
@@ -1479,7 +1494,7 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
     {
         std::deque<SCH_JUNCTION*> junctions;
 
-        for( auto selItem : selection.Items() )
+        for( EDA_ITEM* selItem : selection.Items() )
         {
             SCH_JUNCTION* junction = dynamic_cast<SCH_JUNCTION*>( selItem );
 
@@ -1508,7 +1523,7 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
 
     updateItem( item, true );
 
-    if( selection.IsHover() )
+    if( clearSelection )
         m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
 
     return 0;
@@ -1603,7 +1618,9 @@ int SCH_EDIT_TOOL::ChangeTextType( const TOOL_EVENT& aEvent )
                 }
             }
             else
+            {
                 m_frame->TestDanglingEnds();
+            }
 
             m_frame->OnModify();
         }

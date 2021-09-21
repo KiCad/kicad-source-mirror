@@ -1446,9 +1446,20 @@ int EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
     if( selection.IsHover() )
     {
         m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
+    }
+    else
+    {
+        // Check for items becoming invisible and drop them from the selection.
 
-        // Notify other tools of the changes -- This updates the visual ratsnest
-        m_toolMgr->ProcessEvent( EVENTS::SelectedItemsModified );
+        LSET visible = editFrame->GetBoard()->GetVisibleLayers();
+
+        for( EDA_ITEM* eda_item : selection )
+        {
+            BOARD_ITEM* item = static_cast<BOARD_ITEM*>( eda_item );
+
+            if( !( item->GetLayerSet() & visible ).any() )
+                m_selectionTool->RemoveItemFromSel( item );
+        }
     }
 
     return 0;
