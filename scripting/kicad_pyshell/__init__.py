@@ -115,6 +115,7 @@ class KiCadPyShell(KiCadEditorNotebookFrame):
                                  startupScript=self.startup_file,
                                  execStartupScript=self.execStartupScript)
 
+        self.crust._CheckShouldSplit()
         self.shell = self.crust.shell
         # Override the filling so that status messages go to the status bar.
         self.crust.filling.tree.setStatusText = self.parent.SetStatusText
