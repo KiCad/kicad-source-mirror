@@ -456,10 +456,10 @@ bool S3D_RESOLVER::addPath( const SEARCH_PATH& aPath )
     wxFileName path( tpath.m_Pathvar, "" );
     path.Normalize();
 
-    if( !path.DirExists() )
+     if( !path.DirExists() )
     {
         // suppress the message if the missing pathvar is the legacy KICAD6_3DMODEL_DIR variable
-        if( aPath.m_Pathvar != "${KICAD6_3DMODEL_DIR}" &&
+        if( aPath.m_Pathvar != "${KIPRJMOD}" &&
             aPath.m_Pathvar != "$(KICAD6_3DMODEL_DIR)" )
         {
             wxString msg = _( "The given path does not exist" );
@@ -581,7 +581,10 @@ bool S3D_RESOLVER::readPathList( void )
             continue;
 
         // never add on KICAD6_3DMODEL_DIR from a config file
-        if( !al.m_Alias.Cmp( "KICAD6_3DMODEL_DIR" ) )
+        if( !al.m_Alias.Cmp( "${KICAD6_3DMODEL_DIR}" ) )
+            continue;
+
+        if( !al.m_Alias.Cmp( "${KIPRJMOD}" ) )
             continue;
 
         if( !getHollerith( cfgLine, idx, al.m_Pathvar ) )
