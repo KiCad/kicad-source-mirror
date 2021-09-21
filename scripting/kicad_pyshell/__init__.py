@@ -49,21 +49,24 @@ class KiCadPyShell(KiCadEditorNotebookFrame):
 
         # Check if startup script exists
         if not os.path.isfile(self.startup_file):
-            # Not, so create a default.
-            default_startup = open(self.startup_file, 'w')
-            # provide the content for the default startup file.
-            default_startup.write(
-                "### DEFAULT STARTUP FILE FOR KiCad Python Shell\n" +
-                "# Enter any Python code you would like to execute when" +
-                " the PCBNEW python shell first runs.\n" +
-                "\n" +
-                "# For example, uncomment the following lines to import the current board\n" +
-                "\n" +
-                "# import pcbnew\n" +
-                "# import eeschema\n" +
-                "# board = pcbnew.GetBoard()\n" +
-                "# sch = eeschema.GetSchematic()\n")
-            default_startup.close()
+            # Not, so try to create a default.
+            try:
+                default_startup = open(self.startup_file, 'w')
+                # provide the content for the default startup file.
+                default_startup.write(
+                    "### DEFAULT STARTUP FILE FOR KiCad Python Shell\n" +
+                    "# Enter any Python code you would like to execute when" +
+                    " the PCBNEW python shell first runs.\n" +
+                    "\n" +
+                    "# For example, uncomment the following lines to import the current board\n" +
+                    "\n" +
+                    "# import pcbnew\n" +
+                    "# import eeschema\n" +
+                    "# board = pcbnew.GetBoard()\n" +
+                    "# sch = eeschema.GetSchematic()\n")
+                default_startup.close()
+            except:
+                pass
 
     def _setup(self):
         """
