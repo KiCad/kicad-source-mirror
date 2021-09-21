@@ -240,8 +240,7 @@ bool S3D_RESOLVER::createPathList( void )
 
     }
 
-    if( !m_ConfigDir.empty() )
-        readPathList();
+    readPathList();
 
     if( m_Paths.empty() )
         return false;

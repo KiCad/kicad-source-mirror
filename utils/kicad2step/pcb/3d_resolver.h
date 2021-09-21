@@ -197,7 +197,6 @@ private:
 
     wxString expandVars( const wxString& aPath );
 
-    wxString m_ConfigDir;             ///< 3D configuration directory.
     std::list< SEARCH_PATH > m_Paths; ///< List of base search paths.
 
     ///< Mapping of (short) file names to resolved names.
