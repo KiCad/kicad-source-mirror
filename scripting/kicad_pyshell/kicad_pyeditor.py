@@ -90,18 +90,12 @@ class KiCadPyFrame():
         self.findData = wx.FindReplaceData()
         self.findData.SetFlags(wx.FR_DOWN)
 
-        self.parent.Bind(wx.EVT_CLOSE, self.OnClose)
         self.parent.Bind(wx.EVT_ICONIZE, self.OnIconize)
 
 
     def OnIconize(self, event):
         """Event handler for Iconize."""
         self.iconized = event.Iconized()
-
-
-    def OnClose(self, event):
-        """Event handler for closing."""
-        self.parent.Destroy()
 
 
     def __createMenus(self):
@@ -710,7 +704,8 @@ class KiCadEditorFrame(KiCadPyFrame):
         self._defaultText = title
         self._statusText = self._defaultText
         self.parent.SetStatusText(self._statusText)
-        self.parent.Bind(wx.EVT_IDLE, self.OnIdle)
+        self.parent.Bind( wx.EVT_IDLE, self.OnIdle )
+        self.parent.Bind( wx.EVT_CLOSE, self.OnClose )
         self._setup()
 
     def _setup(self):
@@ -733,7 +728,6 @@ class KiCadEditorFrame(KiCadPyFrame):
                 if cancel and event.CanVeto():
                     event.Veto()
                     return
-        self.parent.Destroy()
 
     def OnIdle(self, event):
         """Event handler for idle time."""
