@@ -129,8 +129,10 @@ public:
      * In the future remote files may be supported, in which case it is best to require a full
      * URI in which case #ResolvePath should check that the URI conforms to RFC-2396 and related
      * documents and copies \a aFileName into the resolved name if the URI is valid.
+     *
+     * If the file is not found, \a aSearchedPaths will contain the paths that were searched.
      */
-    wxString ResolvePath( const wxString& aFileName );
+    wxString ResolvePath( const wxString& aFileName, std::vector<wxString>& aSearchedPaths );
 
     /**
      * Produce a relative path based on the existing search directories or returns the same path

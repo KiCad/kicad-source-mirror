@@ -432,14 +432,23 @@ bool KICADFOOTPRINT::ComposePCB( class PCBMODEL* aPCB, S3D_RESOLVER* resolver,
         if( mname.empty() )
             continue;
 
-        mname = resolver->ResolvePath( mname );
+        std::vector<wxString> searchedPaths;
+        mname = resolver->ResolvePath( mname, searchedPaths );
 
         if( !wxFileName::FileExists( mname ) )
         {
+            wxString paths;
+
+            for( const wxString& path : searchedPaths )
+                paths += "    " + path + "\n";
+
             ReportMessage( wxString::Format( "Could not add 3D model to %s.\n"
-                                             "File not found: %s\n",
+                                             "File not found: %s\n"
+                                             "Searched paths:\n"
+                                             "%s",
                                              m_refdes,
-                                             mname ) );
+                                             mname,
+                                             paths) );
             continue;
         }
 

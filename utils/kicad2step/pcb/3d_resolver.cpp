@@ -256,7 +256,8 @@ bool S3D_RESOLVER::createPathList( void )
 }
 
 
-wxString S3D_RESOLVER::ResolvePath( const wxString& aFileName )
+wxString S3D_RESOLVER::ResolvePath( const wxString& aFileName,
+                                    std::vector<wxString>& aSearchedPaths )
 {
     std::lock_guard<std::mutex> lock( mutex3D_resolver );
 
@@ -291,18 +292,25 @@ wxString S3D_RESOLVER::ResolvePath( const wxString& aFileName )
     wxFileName tmpFN( tname );
 
     // in the case of absolute filenames we don't store a map item
-    if( !aFileName.StartsWith( "${" ) && !aFileName.StartsWith( "$(" )
-        && tmpFN.IsAbsolute() && tmpFN.FileExists() )
+    if( !aFileName.StartsWith( "${" ) && !aFileName.StartsWith( "$(" ) && tmpFN.IsAbsolute() )
     {
-        tmpFN.Normalize();
-        return tmpFN.GetFullPath();
+        if( tmpFN.FileExists() )
+        {
+            tmpFN.Normalize();
+            return tmpFN.GetFullPath();
+        }
+        else
+        {
+            aSearchedPaths.push_back( tmpFN.GetFullPath() );
+        }
     }
 
     // this case covers full paths, leading expanded vars, and paths relative to the current
     // working directory (which is not necessarily the current project directory)
+    tmpFN.Normalize();
+
     if( tmpFN.FileExists() )
     {
-        tmpFN.Normalize();
         tname = tmpFN.GetFullPath();
         m_NameMap[ aFileName ] = tname;
 
@@ -312,6 +320,10 @@ wxString S3D_RESOLVER::ResolvePath( const wxString& aFileName )
             checkEnvVarPath( aFileName );
 
         return tname;
+    }
+    else if( tmpFN.GetFullPath() != aFileName )
+    {
+        aSearchedPaths.push_back( tmpFN.GetFullPath() );
     }
 
     // if a path begins with ${ENV_VAR}/$(ENV_VAR) and is not resolved then the file either does
@@ -339,13 +351,18 @@ wxString S3D_RESOLVER::ResolvePath( const wxString& aFileName )
         if( fullPath.StartsWith( "${" ) || fullPath.StartsWith( "$(" ) )
             fullPath = expandVars( fullPath );
 
-        if( wxFileName::FileExists( fullPath ) )
+        tmpFN.Assign( fullPath );
+        tmpFN.Normalize();
+
+        if( tmpFN.FileExists() )
         {
-            tmpFN.Assign( fullPath );
-            tmpFN.Normalize();
             tname = tmpFN.GetFullPath();
             m_NameMap[ aFileName ] = tname;
             return tname;
+        }
+        else if( tmpFN.GetFullPath() != aFileName )
+        {
+            aSearchedPaths.push_back( tmpFN.GetFullPath() );
         }
     }
 
@@ -358,12 +375,17 @@ wxString S3D_RESOLVER::ResolvePath( const wxString& aFileName )
         fullPath.Append( tname );
         fullPath = expandVars( fullPath );
         fpath.Assign( fullPath );
+        fpath.Normalize();
 
-        if( fpath.Normalize() && fpath.FileExists() )
+        if( fpath.FileExists() )
         {
             tname = fpath.GetFullPath();
             m_NameMap[ aFileName ] = tname;
             return tname;
+        }
+        else
+        {
+            aSearchedPaths.push_back( fpath.GetFullPath() );
         }
     }
 
@@ -393,17 +415,18 @@ wxString S3D_RESOLVER::ResolvePath( const wxString& aFileName )
             if( fullPath.StartsWith( "${") || fullPath.StartsWith( "$(" ) )
                 fullPath = expandVars( fullPath );
 
-            if( wxFileName::FileExists( fullPath ) )
+            wxFileName tmp( fullPath );
+            tmp.Normalize();
+
+            if( tmp.FileExists() )
             {
-                tname = fullPath;
-
-                wxFileName tmp( tname );
-
-                if( tmp.Normalize() )
-                    tname = tmp.GetFullPath();
-
+                tname = tmp.GetFullPath();
                 m_NameMap[ aFileName ] = tname;
                 return tname;
+            }
+            else
+            {
+                aSearchedPaths.push_back( tmp.GetFullPath() );
             }
         }
     }
