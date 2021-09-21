@@ -66,6 +66,11 @@ void KICAD_MANAGER_FRAME::ImportNonKiCadProject( const wxString& aWindowTitle,
     if( schdlg.ShowModal() == wxID_CANCEL )
         return;
 
+    // OK, we got a new project to open.  Time to close any existing project before we go on
+    // to collect info about where to put the new one, etc.  Otherwise the workflow is kind of
+    // disjoint.
+    CloseProject( true );
+
     wxFileName sch( schdlg.GetPath() );
     sch.SetExt( aSchFileExtension );
 
@@ -171,8 +176,6 @@ void KICAD_MANAGER_FRAME::ImportNonKiCadProject( const wxString& aWindowTitle,
         }
     }
 
-    // Close the project and make the new one
-    CloseProject( true );
     CreateNewProject( pro.GetFullPath(), false /* Don't create stub files */ );
     LoadProject( pro );
 

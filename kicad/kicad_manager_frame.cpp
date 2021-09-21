@@ -411,6 +411,9 @@ bool KICAD_MANAGER_FRAME::CloseProject( bool aSave )
     if( !Kiway().PlayersClose( false ) )
         return false;
 
+    // Give a timeslice for the save-changes? dialog (and for the project to actually close)
+    wxSafeYield();
+
     // Save the project file for the currently loaded project.
     if( m_active_project )
     {
