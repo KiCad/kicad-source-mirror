@@ -729,6 +729,9 @@ class KiCadEditorFrame(KiCadPyFrame):
                     event.Veto()
                     return
 
+        self.parent.Hide()
+        pass
+
     def OnIdle(self, event):
         """Event handler for idle time."""
         self._updateStatus()
