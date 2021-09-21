@@ -396,7 +396,9 @@ wxString S3D_RESOLVER::ResolvePath( const wxString& aFileName )
 
             if( wxFileName::FileExists( fullPath ) )
             {
-                wxFileName tmp( fullPath );
+                tname = fullPath;
+
+                wxFileName tmp( tname );
 
                 if( tmp.Normalize() )
                     tname = tmp.GetFullPath();
@@ -928,7 +930,6 @@ bool S3D_RESOLVER::ValidateFileName( const wxString& aFileName, bool& hasAlias )
 
         if( aliasEnd != wxString::npos )
             lpath = aFileName.substr( aliasEnd + 1 );
-
     }
 
     if( wxString::npos != lpath.find_first_of( wxFileName::GetForbiddenChars() ) )

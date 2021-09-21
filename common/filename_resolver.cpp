@@ -377,6 +377,8 @@ wxString FILENAME_RESOLVER::ResolvePath( const wxString& aFileName )
 
             if( wxFileName::FileExists( fullPath ) )
             {
+                tname = fullPath;
+
                 wxFileName tmp( fullPath );
 
                 if( tmp.Normalize() )
