@@ -2971,9 +2971,8 @@ msgid "Select Preferred PDF Viewer"
 msgstr "Wybierz preferowaną przeglądarkę PDF"
 
 #: common/dialogs/panel_common_settings_base.cpp:21
-#, fuzzy
 msgid "Antialiasing"
-msgstr "Anty-aliasing:"
+msgstr "Wygładzanie"
 
 #: common/dialogs/panel_common_settings_base.cpp:30
 msgid "Accelerated graphics:"
@@ -3056,13 +3055,13 @@ msgid "Canvas scale:"
 msgstr "Skala kanwy:"
 
 #: common/dialogs/panel_common_settings_base.cpp:158
-#, fuzzy
 msgid "Apply icon scaling to fonts"
-msgstr "Zastosuj skrypt akcji"
+msgstr "Zastosuj skalowanie ikon dla czcionek"
 
 #: common/dialogs/panel_common_settings_base.cpp:161
 msgid "(This workaround will improve some GTK HiDPI font scaling issues.)"
 msgstr ""
+"(To obejście poprawi niektóre problemy ze skalowaniem czcionek w GTK HiDPI.)"
 
 #: common/dialogs/panel_common_settings_base.cpp:175
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:21
@@ -3137,7 +3136,7 @@ msgstr ""
 
 #: common/dialogs/panel_common_settings_base.cpp:236
 msgid "days"
-msgstr ""
+msgstr "dni"
 
 #: common/dialogs/panel_common_settings_base.cpp:249
 msgid "Project Backup"
@@ -4775,14 +4774,14 @@ msgstr ""
 "'%s'."
 
 #: common/kiway.cpp:297
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Fatal Installation Bug. File:\n"
 "'%s'\n"
 "could not be loaded\n"
 msgstr ""
-"Fatalny błąd instalacji. Plik\n"
-"\"%s\"\n"
+"Fatalny błąd instalacji. Plik:\n"
+"'%s'\n"
 "nie mógł być załadowany\n"
 
 #: common/kiway.cpp:301
@@ -5391,9 +5390,8 @@ msgid "Type mismatch between %lf and '%s'"
 msgstr "Niezgodność typów pomiędzy %lf i '%s'"
 
 #: common/pgm_base.cpp:165
-#, fuzzy
 msgid "No default editor found, you must choose one."
-msgstr "Nie znaleziono domyślnego edytora. Musisz go wybrać"
+msgstr "Nie znaleziono domyślnego edytora, należy go wybrać by kontynuować."
 
 #: common/pgm_base.cpp:185 common/pgm_base.cpp:187
 msgid "Executable file"
@@ -6531,9 +6529,9 @@ msgid "Set Hotkey"
 msgstr "Ustaw skrót"
 
 #: common/widgets/widget_hotkey_list.cpp:341
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' is a reserved hotkey in KiCad and cannot be assigned."
-msgstr "Nazwa %s jest zarezerwowana i nie może być użyta."
+msgstr "'%s' to zarezerwowany skrót klawiszowy i nie może być przypisany."
 
 #: common/widgets/widget_hotkey_list.cpp:392
 msgid "Edit..."
@@ -9824,9 +9822,8 @@ msgid "Plotted to '%s'.\n"
 msgstr "Narysowano w '%s'.\n"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:1177
-#, fuzzy
 msgid "Done"
-msgstr "Gotowe."
+msgstr "Gotowe"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:1249
 #, c-format
@@ -14614,14 +14611,12 @@ msgid "Field Validation Error"
 msgstr "Błąd walidacji zawartości pola"
 
 #: eeschema/sch_validators.cpp:226
-#, fuzzy
 msgid "Signal name contains '{' and '}' but is not a valid bus name"
 msgstr ""
-"Nazwa sygnału zawiera znaki '{' lub '}' ale nie jest prawidłową nazwą grupy "
+"Nazwa sygnału zawiera znaki '{' lub '}' ale nie jest prawidłową nazwą "
 "magistrali"
 
 #: eeschema/sch_validators.cpp:231
-#, fuzzy
 msgid "Signal name contains '[' or ']' but is not a valid bus name."
 msgstr ""
 "Nazwa sygnału zawiera znaki '[' lub ']' ale nie jest prawidłową nazwą "
@@ -16829,11 +16824,9 @@ msgid "Net must be labeled to assign a netclass."
 msgstr "Sieci muszą być nazwane by je dołączyć do klas sieci."
 
 #: eeschema/tools/sch_editor_control.cpp:986
-#, fuzzy
 msgid "Bus has no members to assign netclass to."
 msgstr ""
-"Magistrala musi mieć co najmniej jednego członka, aby przypisać im klasę "
-"sieci."
+"Magistrala musi mieć co najmniej jednego członka, aby przypisać klasę sieci."
 
 #: eeschema/tools/sch_editor_control.cpp:1019
 msgid "Netclasses"
@@ -25285,7 +25278,6 @@ msgid "Select Netlist"
 msgstr "Wybierz listę sieci"
 
 #: pcbnew/dialogs/dialog_netlist.cpp:143
-#, fuzzy
 msgid "Please choose a valid netlist file."
 msgstr "Proszę wybrać poprawny plik z listą sieci."
 
@@ -27552,7 +27544,7 @@ msgstr "Odpowiedniki ścieżek"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:222
 msgid "Error: illegal or empty filename."
-msgstr ""
+msgstr "Błąd: nieprawidłowa lub pusta nazwa pliku."
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:379
 #: pcbnew/microwave/microwave_polygon.cpp:224
@@ -28497,7 +28489,6 @@ msgid "User9"
 msgstr "User9"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:32
-#, fuzzy
 msgid ""
 "Use your board house's recommendations for solder mask clearance and minimum "
 "web width."
@@ -28506,7 +28497,6 @@ msgstr ""
 "i minimalnej szerokości mostków."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:36
-#, fuzzy
 msgid "If none are provided, setting the values to zero is suggested."
 msgstr "Jeśli nie podano, sugerowane jest ustawienie wartości na zero."
 
@@ -36715,6 +36705,10 @@ msgstr "Schemat KiCad"
 msgid "KiCad Printed Circuit Board"
 msgstr "Obwód drukowany KiCad"
 
+#: pagelayout_editor/dialogs/properties_frame.cpp:559
+msgid "Keywords are replaced by they actual value in strings"
+msgstr "Słowa kluczowe są zamieniane przez ich aktualną wartość w tekście"
+
 #~ msgid "Change to isometric perspective"
 #~ msgstr "Zamiana na perspektywę izometryczną"
 
@@ -36781,7 +36775,6 @@ msgstr "Obwód drukowany KiCad"
 #~ msgid "Do not forget to choose a title for this netlist control page"
 #~ msgstr "Nie zapomnij wybrać i wypełnić pola Tytuł dla tej zakładki"
 
-#, c-format
 #~ msgid "Schematic file '%s' is already open."
 #~ msgstr "Schemat '%s' jest już otwarty."
 
@@ -36823,14 +36816,12 @@ msgstr "Obwód drukowany KiCad"
 #~ "W tym arkuszu nie ma żadnych niezdefiniowanych pinów, które można by "
 #~ "usunąć."
 
-#, c-format
 #~ msgid "Custom (%s)"
 #~ msgstr "Własny (%s)"
 
 #~ msgid "STEP files (*.stp;*.step)|*.stp;*.step"
 #~ msgstr "Pliki STEP (*.stp;*.step)|*.stp;*.step"
 
-#, c-format
 #~ msgid "The %s layer is mandatory."
 #~ msgstr "Warstwa %s jest obowiązkowa."
 
@@ -36843,7 +36834,6 @@ msgstr "Obwód drukowany KiCad"
 #~ msgid "If you want a board perimeter layer"
 #~ msgstr "Jeśli potrzebna jest warstwa obwodowa"
 
-#, c-format
 #~ msgid "pad %s"
 #~ msgstr "pole %s"
 
@@ -36904,14 +36894,12 @@ msgstr "Obwód drukowany KiCad"
 #~ msgid "Doc Files"
 #~ msgstr "Pliki dokumentacji"
 
-#, c-format
 #~ msgid "Doc File '%s' not found"
 #~ msgstr "Plik z dokumentacją '%s' nie został znaleziony"
 
 #~ msgid "Text Editor"
 #~ msgstr "Edytor tekstu"
 
-#, c-format
 #~ msgid "Setting schematic symbol '%s %s' library identifier to '%s'. "
 #~ msgstr ""
 #~ "Ustawiam symbolowi na schemacie '%s %s' identyfikator biblioteki na '%s'. "
@@ -36919,7 +36907,6 @@ msgstr "Obwód drukowany KiCad"
 #~ msgid "Filename:"
 #~ msgstr "Nazwa pliku:"
 
-#, c-format
 #~ msgid "File \"%s\" not found"
 #~ msgstr "Plik \"%s\" nie został znaleziony"
 
@@ -36932,7 +36919,6 @@ msgstr "Obwód drukowany KiCad"
 #~ msgid "Dielectric Materials"
 #~ msgstr "Materiał dielektryka"
 
-#, c-format
 #~ msgid "Invalid filename: %s"
 #~ msgstr "Nieprawidłowa nazwa pliku: %s"
 
@@ -36951,19 +36937,15 @@ msgstr "Obwód drukowany KiCad"
 #~ msgid "Error: Corner size not a number."
 #~ msgstr "Błąd: Rozmiar narożnika nie jest liczbą."
 
-#, c-format
 #~ msgid "Checking %s; courtyard clearance: %s."
 #~ msgstr "Sprawdzanie %s; prześwit obszaru zajętości: %s."
 
-#, c-format
 #~ msgid "Checking %s; silk clearance: %s."
 #~ msgstr "Sprawdzanie %s; prześwit opisów: %s."
 
-#, c-format
 #~ msgid "Checking %s; hole clearance: %s."
 #~ msgstr "Sprawdzanie %s; prześwit otworu: %s."
 
-#, c-format
 #~ msgid "Checking %s; edge clearance: %s."
 #~ msgstr "Sprawdzam %s; prześwit wobec krawędzi: %s."
 
@@ -36973,19 +36955,15 @@ msgstr "Obwód drukowany KiCad"
 #~ msgid "Read descr shape file"
 #~ msgstr "Wczytaj opis kształtu z pliku"
 
-#, c-format
 #~ msgid "Zone connection type: %s."
 #~ msgstr "Typ połączenia ze strefą: %s."
 
-#, c-format
 #~ msgid "Overridden by %s; connection type: %s."
 #~ msgstr "Zastąpiony przez %s; typ połączenia: %s."
 
-#, c-format
 #~ msgid "Pad is not a PTH pad; connection will be: %s."
 #~ msgstr "Pole nie jest polem PTH; połączone będzie: %s."
 
-#, c-format
 #~ msgid "%s not present on layer %s.  No clearance defined."
 #~ msgstr "%s nie występuj na warstwie %s.  Nie zdefiniowano prześwitu."
 
@@ -37025,11 +37003,9 @@ msgstr "Obwód drukowany KiCad"
 #~ msgid "Show solid areas of zones in outline mode"
 #~ msgstr "Pokaż wypełnione obszary stref jako zarys"
 
-#, c-format
 #~ msgid "Unable to create archive file '%s'.\n"
 #~ msgstr "Nie można utworzyć pliku archiwum '%s'.\n"
 
-#, c-format
 #~ msgid "Unable to create report file '%s'"
 #~ msgstr "Nie można utworzyć pliku raportu '%s'"
 
@@ -37049,50 +37025,39 @@ msgstr "Obwód drukowany KiCad"
 #~ msgid "Error messages:"
 #~ msgstr "Błędy:"
 
-#, c-format
 #~ msgid "Pin has non-existent ownerindex %d."
 #~ msgstr "Pin ma nieistniejący indeks rodzica %d."
 
-#, c-format
 #~ msgid "Label has non-existent ownerindex %d."
 #~ msgstr "Etykieta posiada nieistniejący indeks własny %d."
 
-#, c-format
 #~ msgid "Bezier has non-existent ownerindex %d."
 #~ msgstr "Krzywa Beziera ma nieistniejący indeks własny %d."
 
-#, c-format
 #~ msgid "Polyline has non-existent ownerindex %d."
 #~ msgstr "Linia łamana ma nieistniejący indeks własny %d."
 
-#, c-format
 #~ msgid "Polygon has non-existent ownerindex %d."
 #~ msgstr "Polygon ma nieistniejący indeks własny %d."
 
-#, c-format
 #~ msgid "Rounded rectangle has non-existent ownerindex %d."
 #~ msgstr "Zaokrąglony prostokąt ma nieistniejący indeks własny %d."
 
 #~ msgid "Arc drawing is not possible for now on schematic."
 #~ msgstr "Rysowanie łuków nie jest obecnie możliwe na schemacie."
 
-#, c-format
 #~ msgid "Arc has non-existent ownerindex %d."
 #~ msgstr "Łuk ma nieistniejący indeks własny %d."
 
-#, c-format
 #~ msgid "Line has non-existent ownerindex %d."
 #~ msgstr "Linia ma nieistniejący indeks własny %d."
 
-#, c-format
 #~ msgid "Rectangle has non-existent ownerindex %d."
 #~ msgstr "Prostokąt ma nieistniejący indeks własny %d."
 
-#, c-format
 #~ msgid "There is a port for '%s', but no connections to it."
 #~ msgstr "Istnieje port dla '%s', ale nie ma z nim żadnych połączeń."
 
-#, c-format
 #~ msgid "Designator has non-existent ownerindex %d."
 #~ msgstr "Oznaczenie ma nieistniejący indeks własny %d."
 
@@ -37111,7 +37076,6 @@ msgstr "Obwód drukowany KiCad"
 #~ msgid "KiCad "
 #~ msgstr "KiCad "
 
-#, c-format
 #~ msgid "Unable to create \"%s\""
 #~ msgstr "Nie można utworzyć \"%s\""
 
@@ -37134,31 +37098,24 @@ msgstr "Obwód drukowany KiCad"
 #~ msgid "Show all nets"
 #~ msgstr "Pokaż wszystkie sieci"
 
-#, c-format
 #~ msgid "Unable to create report file '%s'<br>"
 #~ msgstr "Nie można utworzyć pliku raportu '%s'<br>"
 
-#, c-format
 #~ msgid "Unable to create %s"
 #~ msgstr "Nie można utworzyć %s"
 
-#, c-format
 #~ msgid "Unable to create '%s'."
 #~ msgstr "Nie można utworzyć '%s'."
 
-#, c-format
 #~ msgid "** Unable to create %s **\n"
 #~ msgstr "** Nie mogę utworzyć %s ** \n"
 
-#, c-format
 #~ msgid "Report file %s created\n"
 #~ msgstr "Plik raportu %s został utworzony\n"
 
-#, c-format
 #~ msgid "Unable to create job file '%s'."
 #~ msgstr "Nie można utworzyć pliku zadań '%s'."
 
-#, c-format
 #~ msgid ""
 #~ "Polygon has only %d point extracted from %ld vertices. At least 2 points "
 #~ "are required."
@@ -37166,7 +37123,6 @@ msgstr "Obwód drukowany KiCad"
 #~ "Wielokąt ma tylko %d punków wyodrębnionych z %ld wierzchołków. Wymagane "
 #~ "są co najmniej 2 punkty."
 
-#, c-format
 #~ msgid ""
 #~ "ShapeBasedRegion has only %d point extracted from %ld vertices. At least "
 #~ "2 points are required."
@@ -37310,41 +37266,33 @@ msgstr "Obwód drukowany KiCad"
 #~ msgid "Render with improved quality on final render (slow)"
 #~ msgstr "Renderuj ze zwiększoną jakością na finalnym renderingu (wolne)"
 
-#, c-format
 #~ msgid "You do not have write permissions to folder \"%s\"."
 #~ msgstr "Nie masz wystarczających uprawnień by zapisywać w folderze \"%s\"."
 
-#, c-format
 #~ msgid ""
 #~ "You do not have write permissions to save file \"%s\" to folder \"%s\"."
 #~ msgstr ""
 #~ "Nie masz wystarczających uprawnień by zapisać plik \"%s\" w folderze \"%s"
 #~ "\"."
 
-#, c-format
 #~ msgid "You do not have write permissions to save file \"%s\"."
 #~ msgstr "Nie masz wystarczających uprawnień by zapisać plik \"%s\"."
 
-#, c-format
 #~ msgid "Cannot create global library table path \"%s\"."
 #~ msgstr "Nie można utworzyć globalnej tabeli bibliotek w ścieżce \"%s\"."
 
-#, c-format
 #~ msgid "Cannot copy file \"%s\"."
 #~ msgstr "Nie można skopiować \"%s\"."
 
 #~ msgid "Illegal character found in revision"
 #~ msgstr "Niepoprawny znak w danych o rewizji"
 
-#, c-format
 #~ msgid "%s is already running. Continue?"
 #~ msgstr "%s jest już uruchomiony. Kontynuować?"
 
-#, c-format
 #~ msgid "Archive file \"%s\": Failed!\n"
 #~ msgstr "Plik archiwum \"%s\": Wystąpił błąd!\n"
 
-#, c-format
 #~ msgid ""
 #~ "Library \"%s\" has duplicate entry name \"%s\".\n"
 #~ "This may cause some unexpected behavior when loading components into a "
@@ -37354,7 +37302,6 @@ msgstr "Obwód drukowany KiCad"
 #~ "Może to doprowadzić do nieprzewidywalnego zachowania podczas ładowania "
 #~ "komponentów do schematu."
 
-#, c-format
 #~ msgid ""
 #~ "Symbol library \"%s\" failed to load. Error:\n"
 #~ " %s"
@@ -37362,7 +37309,6 @@ msgstr "Obwód drukowany KiCad"
 #~ "Nie można załadować biblioteki \"%s\". Błąd:\n"
 #~ " %s"
 
-#, c-format
 #~ msgid ""
 #~ "Symbol library \"%s\" failed to load.\n"
 #~ "Error: %s"
@@ -37370,7 +37316,6 @@ msgstr "Obwód drukowany KiCad"
 #~ "Nie można załadować biblioteki \"%s\".\n"
 #~ "Błąd: %s"
 
-#, c-format
 #~ msgid ""
 #~ "Error occurred loading symbol %s from library %s.\n"
 #~ "\n"
@@ -37380,7 +37325,6 @@ msgstr "Obwód drukowany KiCad"
 #~ "\n"
 #~ "%s"
 
-#, c-format
 #~ msgid ""
 #~ "Error occurred loading global symbol library table.\n"
 #~ "\n"
@@ -37406,27 +37350,21 @@ msgstr "Obwód drukowany KiCad"
 #~ msgstr ""
 #~ "Alternatywne definicje pinów nie są dostępne w komponentach DeMorgan."
 
-#, c-format
 #~ msgid "Plot: \"%s\" OK.\n"
 #~ msgstr "Rysowanie: \"%s\" OK.\n"
 
-#, c-format
 #~ msgid "Unable to create file \"%s\".\n"
 #~ msgstr "Nie można utworzyć pliku \"%s\".\n"
 
-#, c-format
 #~ msgid "Cannot create file \"%s\".\n"
 #~ msgstr "Nie dało się utworzyć pliku \"%s\".\n"
 
-#, c-format
 #~ msgid "Library \"%s\" not found."
 #~ msgstr "Biblioteka \"%s\" nie została znaleziona."
 
-#, c-format
 #~ msgid "Failed to create temporary file \"%s\""
 #~ msgstr "Nie udało się utworzyć pliku tymczasowego \"%s\""
 
-#, c-format
 #~ msgid "Failed to rename temporary file \"%s\""
 #~ msgstr "Nie można było zmienić nazwy pliku tymczasowego \"%s\""
 
@@ -37441,18 +37379,15 @@ msgstr "Obwód drukowany KiCad"
 #~ msgid "Append Schematic"
 #~ msgstr "Dołącz schemat"
 
-#, c-format
 #~ msgid "Failed to save symbol library file \"%s\""
 #~ msgstr "Nie można było zapisać pliku biblioteki symboli \"%s\""
 
-#, c-format
 #~ msgid "Save changes to \"%s\" before closing?"
 #~ msgstr "Zapisać zmiany w \"%s\" przed zamknięciem?"
 
 #~ msgid "[no file]"
 #~ msgstr "[brak pliku]"
 
-#, c-format
 #~ msgid ""
 #~ "Invalid symbol name in\n"
 #~ "file: \"%s\"\n"
@@ -37464,7 +37399,6 @@ msgstr "Obwód drukowany KiCad"
 #~ "linia: %d\n"
 #~ "przesunięcie: %d"
 
-#, c-format
 #~ msgid ""
 #~ "Invalid library identifier in\n"
 #~ "file: \"%s\"\n"
@@ -37476,7 +37410,6 @@ msgstr "Obwód drukowany KiCad"
 #~ "linia: %d\n"
 #~ "przesunięcie: %d"
 
-#, c-format
 #~ msgid ""
 #~ "Invalid symbol extends name in\n"
 #~ "file: \"%s\"\n"
@@ -37488,7 +37421,6 @@ msgstr "Obwód drukowany KiCad"
 #~ "linia: %d\n"
 #~ "przesunięcie: %d"
 
-#, c-format
 #~ msgid ""
 #~ "Invalid symbol unit name in\n"
 #~ "file: \"%s\"\n"
@@ -37500,7 +37432,6 @@ msgstr "Obwód drukowany KiCad"
 #~ "linia: %d\n"
 #~ "przesunięcie: %d"
 
-#, c-format
 #~ msgid ""
 #~ "Invalid symbol unit name prefix %s in\n"
 #~ "file: \"%s\"\n"
@@ -37512,7 +37443,6 @@ msgstr "Obwód drukowany KiCad"
 #~ "linia: %d\n"
 #~ "przesunięcie: %d"
 
-#, c-format
 #~ msgid ""
 #~ "Invalid symbol unit number %s in\n"
 #~ "file: \"%s\"\n"
@@ -37524,7 +37454,6 @@ msgstr "Obwód drukowany KiCad"
 #~ "linia: %d\n"
 #~ "przesunięcie: %d"
 
-#, c-format
 #~ msgid ""
 #~ "Invalid symbol names definition in\n"
 #~ "file: '%s'\n"
@@ -37536,7 +37465,6 @@ msgstr "Obwód drukowany KiCad"
 #~ "linia: %d\n"
 #~ "przesunięcie: %d"
 
-#, c-format
 #~ msgid ""
 #~ "Invalid property name in\n"
 #~ "file: '%s'\n"
@@ -37548,7 +37476,6 @@ msgstr "Obwód drukowany KiCad"
 #~ "linia: %d\n"
 #~ "przesunięcie: %d"
 
-#, c-format
 #~ msgid ""
 #~ "Empty property name in\n"
 #~ "file: '%s'\n"
@@ -37560,7 +37487,6 @@ msgstr "Obwód drukowany KiCad"
 #~ "linia: %d\n"
 #~ "przesunięcie: %d"
 
-#, c-format
 #~ msgid ""
 #~ "Invalid property value in\n"
 #~ "file: '%s'\n"
@@ -37572,7 +37498,6 @@ msgstr "Obwód drukowany KiCad"
 #~ "linia: %d\n"
 #~ "przesunięcie: %d"
 
-#, c-format
 #~ msgid ""
 #~ "Invalid pin name in\n"
 #~ "file: \"%s\"\n"
@@ -37584,7 +37509,6 @@ msgstr "Obwód drukowany KiCad"
 #~ "linia: %d\n"
 #~ "przesunięcie: %d"
 
-#, c-format
 #~ msgid ""
 #~ "Invalid pin number in\n"
 #~ "file: \"%s\"\n"
@@ -37596,7 +37520,6 @@ msgstr "Obwód drukowany KiCad"
 #~ "linia: %d\n"
 #~ "przesunięcie: %d"
 
-#, c-format
 #~ msgid ""
 #~ "Invalid alternate pin name in\n"
 #~ "file: \"%s\"\n"
@@ -37608,7 +37531,6 @@ msgstr "Obwód drukowany KiCad"
 #~ "linia: %d\n"
 #~ "przesunięcie: %d"
 
-#, c-format
 #~ msgid ""
 #~ "Invalid text string in\n"
 #~ "file: \"%s\"\n"
@@ -37620,7 +37542,6 @@ msgstr "Obwód drukowany KiCad"
 #~ "linia: %d\n"
 #~ "przesunięcie: %d"
 
-#, c-format
 #~ msgid ""
 #~ "Invalid property name in\n"
 #~ "file: \"%s\"\n"
@@ -37632,7 +37553,6 @@ msgstr "Obwód drukowany KiCad"
 #~ "linia: %d\n"
 #~ "przesunięcie: %d"
 
-#, c-format
 #~ msgid ""
 #~ "Empty property name in\n"
 #~ "file: \"%s\"\n"
@@ -37644,7 +37564,6 @@ msgstr "Obwód drukowany KiCad"
 #~ "linia: %d\n"
 #~ "przesunięcie: %d"
 
-#, c-format
 #~ msgid ""
 #~ "Invalid property value in\n"
 #~ "file: \"%s\"\n"
@@ -37656,7 +37575,6 @@ msgstr "Obwód drukowany KiCad"
 #~ "linia: %d\n"
 #~ "przesunięcie: %d"
 
-#, c-format
 #~ msgid ""
 #~ "Invalid sheet pin name in\n"
 #~ "file: \"%s\"\n"
@@ -37668,7 +37586,6 @@ msgstr "Obwód drukowany KiCad"
 #~ "linia: %d\n"
 #~ "przesunięcie: %d"
 
-#, c-format
 #~ msgid ""
 #~ "Empty sheet pin name in\n"
 #~ "file: \"%s\"\n"
@@ -37680,7 +37597,6 @@ msgstr "Obwód drukowany KiCad"
 #~ "linia: %d\n"
 #~ "przesunięcie: %d"
 
-#, c-format
 #~ msgid ""
 #~ "Invalid symbol library name in\n"
 #~ "file: \"%s\"\n"
@@ -37692,7 +37608,6 @@ msgstr "Obwód drukowany KiCad"
 #~ "linia: %d\n"
 #~ "przesunięcie: %d"
 
-#, c-format
 #~ msgid ""
 #~ "Invalid symbol library ID in\n"
 #~ "file: \"%s\"\n"
@@ -37704,75 +37619,59 @@ msgstr "Obwód drukowany KiCad"
 #~ "linia: %d\n"
 #~ "przesunięcie: %d"
 
-#, c-format
 #~ msgid "symbol library \"%s\" already exists, cannot create a new library"
 #~ msgstr ""
 #~ "bibliotek symboli \"%s\" już istnieje, nie można utworzyć nowej biblioteki"
 
-#, c-format
 #~ msgid "user does not have permission to read library document file \"%s\""
 #~ msgstr ""
 #~ "użytkownik nie posiada uprawnień by odczytać plik dokumentacji \"%s\""
 
-#, c-format
 #~ msgid "Error occurred loading schematic file \"%s\"."
 #~ msgstr "Wystąpił błąd przy ładowaniu schematu \"%s\"."
 
-#, c-format
 #~ msgid "Library \"%s\" already exists"
 #~ msgstr "Biblioteka \"%s\" już istnieje"
 
-#, c-format
 #~ msgid "Error occurred loading symbol \"%s\" from library \"%s\"."
 #~ msgstr "Wystąpił błąd podczas ładowania \"%s\" z biblioteki \"%s\"."
 
-#, c-format
 #~ msgid "Symbol \"%s\" already exists in library \"%s\""
 #~ msgstr "Symbol \"%s\" istnieje już w bibliotece \"%s\""
 
-#, c-format
 #~ msgid "Symbol name \"%s\" not found in library \"%s\""
 #~ msgstr "Symbol \"%s\" nie został znaleziony w bibliotece \"%s\""
 
-#, c-format
 #~ msgid "Symbol \"%s\" already exists in library \"%s\"."
 #~ msgstr "Symbol \"%s\" już istnieje w bibliotece \"%s\"."
 
-#, c-format
 #~ msgid "Symbol \"%s\" already exists in \"%s\"."
 #~ msgstr "Symbol \"%s\" już istnieje w \"%s\"."
 
-#, c-format
 #~ msgid "Write permissions are required to save library \"%s\"."
 #~ msgstr "Wymagane są prawa zapisu by zapisać w bibliotece \"%s\"."
 
 #~ msgid "Errors were encountered loading symbols:"
 #~ msgstr "Wystąpiły błędy podczas ładowania symboli:"
 
-#, c-format
 #~ msgid "Cannot find library \"%s\" in the Symbol Library Table (%s)"
 #~ msgstr ""
 #~ "Nie można odnaleźć biblioteki \"%s\" w tabeli bibliotek symboli (%s)"
 
-#, c-format
 #~ msgid "Cannot load symbol \"%s\" from library \"%s\" (%s)"
 #~ msgstr "Nie można załadować symbolu \"%s\" z biblioteki \"%s\" (%s)"
 
-#, c-format
 #~ msgid "An error \"%s\" occurred saving symbol \"%s\" to library \"%s\""
 #~ msgstr ""
 #~ "Wystąpił błąd \"%s\" podczas zapisywania symbolu \"%s\" w bibliotece \"%s"
 #~ "\""
 
-#, c-format
 #~ msgid "Cannot create file \"%s\""
 #~ msgstr "Nie mogę utworzyć pliku \"%s\""
 
-#, c-format
 #~ msgid "Source file \"%s\" is not available"
 #~ msgstr "Plik źródłowy \"%s\" nie jest dostępny"
 
-#, c-format
 #~ msgid "Cannot write to folder '%s'."
 #~ msgstr "Nie można zapisać do folderu '%s'."
 
@@ -37781,11 +37680,9 @@ msgstr "Obwód drukowany KiCad"
 #~ "Należy upewnić się czy użytkownik posiada uprawnienia do zapisu i "
 #~ "spróbować ponownie."
 
-#, c-format
 #~ msgid "\"%s\" already exists."
 #~ msgstr "\"%s\" już istnieje."
 
-#, c-format
 #~ msgid ""
 #~ "Directory \"%s\" could not be created.\n"
 #~ "\n"
@@ -37796,14 +37693,12 @@ msgstr "Obwód drukowany KiCad"
 #~ "Należy upewnić się czy użytkownik posiada uprawnienia do zapisu i "
 #~ "spróbować ponownie."
 
-#, c-format
 #~ msgid "Cannot write to folder \"%s\"."
 #~ msgstr "Nie można zapisać do folderu \"%s\"."
 
 #~ msgid "Please check your access permissions to this folder and try again."
 #~ msgstr "Proszę sprawdzić swoje uprawnienia do folderu i ponowić próbę."
 
-#, c-format
 #~ msgid "Error when loading file \"%s\""
 #~ msgstr "Błąd podczas ładowania pliku \"%s\""
 
@@ -37825,7 +37720,6 @@ msgstr "Obwód drukowany KiCad"
 #~ msgid "Dielectric Layers"
 #~ msgstr "Warstwy dielektryczne"
 
-#, c-format
 #~ msgid "Unable to create file \"%s\""
 #~ msgstr "Nie można utworzyć pliku \"%s\""
 
@@ -37838,23 +37732,18 @@ msgstr "Obwód drukowany KiCad"
 #~ msgid "Tolerance:"
 #~ msgstr "Tolerancja:"
 
-#, c-format
 #~ msgid "Unable to create file \"%s\"."
 #~ msgstr "Nie można utworzyć pliku \"%s\"."
 
-#, c-format
 #~ msgid "\"%s\" not found"
 #~ msgstr "\"%s\" nieodnaleziono"
 
-#, c-format
 #~ msgid "\"%s\" found"
 #~ msgstr "\"%s\" odlaleziono"
 
-#, c-format
 #~ msgid "File \"%s\" not found."
 #~ msgstr "Plik \"%s\" nie został znaleziony."
 
-#, c-format
 #~ msgid ""
 #~ "Error occurred loading global footprint library table:\n"
 #~ "\n"
@@ -37865,7 +37754,6 @@ msgstr "Obwód drukowany KiCad"
 #~ "\n"
 #~ "%s"
 
-#, c-format
 #~ msgid "Plot file \"%s\" created."
 #~ msgstr "Plik z rysunkiem \"%s\" został utworzony."
 
@@ -37874,38 +37762,30 @@ msgstr "Obwód drukowany KiCad"
 #~ "Wybierz warstwę zdefiniowaną przez użytkownika, aby dodać ją do zestawu "
 #~ "warstw płytki"
 
-#, c-format
 #~ msgid "Could not create file \"%s\"."
 #~ msgstr "Nie można utworzyć pliku \"%s\"."
 
-#, c-format
 #~ msgid "Unable to create \"%s\"."
 #~ msgstr "Nie można utworzyć \"%s\"."
 
-#, c-format
 #~ msgid "No access rights to write to file \"%s\""
 #~ msgstr "Nie ma uprawnień aby zapisać plik \"%s\""
 
-#, c-format
 #~ msgid "No access rights to write to file '%s'."
 #~ msgstr "Nie masz uprawnień aby zapisać plik '%s'."
 
-#, c-format
 #~ msgid "%s%s [from %s.%s]"
 #~ msgstr "%s%s [z %s.%s]"
 
-#, c-format
 #~ msgid "Unable to create or write file \"%s\""
 #~ msgstr "Nie można utworzyć lub zapisać pliku \"%s\""
 
-#, c-format
 #~ msgid ""
 #~ "Polygon on Altium layer %d has no KiCad equivalent. Ignore it instead"
 #~ msgstr ""
 #~ "Wielokąt na warstwie Altium %d nie ma odpowiednika w programie KiCad. "
 #~ "Zostanie zignorowany"
 
-#, c-format
 #~ msgid ""
 #~ "Arc on Altium layer %d has no KiCad equivalent. Put it on Eco1_User "
 #~ "instead"
@@ -37913,7 +37793,6 @@ msgstr "Obwód drukowany KiCad"
 #~ "Łuk na warstwie Altium %d nie ma odpowiednika w programie KiCad. Zamiast "
 #~ "tego umieszczono go na Eco1_User"
 
-#, c-format
 #~ msgid ""
 #~ "Track on Altium layer %d has no KiCad equivalent. Put it on Eco1_User "
 #~ "instead"
@@ -37921,7 +37800,6 @@ msgstr "Obwód drukowany KiCad"
 #~ "Ścieżka na warstwie Altium %d nie ma odpowiednika w programie KiCad. "
 #~ "Zamiast tego umieszczono ją na Eco1_User"
 
-#, c-format
 #~ msgid ""
 #~ "Invalid format for record_tag string \"%s\" in Geometric definition row "
 #~ "%zu"
@@ -37929,56 +37807,44 @@ msgstr "Obwód drukowany KiCad"
 #~ "Nieprawidłowy format ciągu 'record_tag' \"%s\" w wierszu definicji "
 #~ "geometrycznej %zu"
 
-#, c-format
 #~ msgid "Unhandled graphic item '%s' in Geometric definition row %zu"
 #~ msgstr ""
 #~ "Nieprawidłowy element graficzny '%s' w wierszu definicji geometrycznej %zu"
 
-#, c-format
 #~ msgid "footprint library path \"%s\" does not exist"
 #~ msgstr "ścieżka do biblioteki footprintu \"%s\" nie istnieje"
 
-#, c-format
 #~ msgid "unknown token \"%s\""
 #~ msgstr "nieznany token \"%s\""
 
-#, c-format
 #~ msgid "Library \"%s\" is read only"
 #~ msgstr "Biblioteka \"%s\" jest tylko do odczytu"
 
-#, c-format
 #~ msgid "user does not have permission to delete directory \"%s\""
 #~ msgstr "użytkownik nie posiada uprawnień do usunięcia biblioteki \"%s\""
 
-#, c-format
 #~ msgid "library directory \"%s\" has unexpected sub-directories"
 #~ msgstr "folder biblioteki \"%s\" posiada podkatalogi"
 
-#, c-format
 #~ msgid "unexpected file \"%s\" was found in library path \"%s\""
 #~ msgstr ""
 #~ "niespodziewany plik \"%s\" został odnaleziony w bibliotece o ścieżce \"%s"
 #~ "\""
 
-#, c-format
 #~ msgid "footprint library \"%s\" cannot be deleted"
 #~ msgstr "biblioteka footprintu \"%s\" nie może być usunięta"
 
-#, c-format
 #~ msgid "Footprint library path '%s' does not exist (or is not a directory)."
 #~ msgstr ""
 #~ "Ścieżka do biblioteki footprintu '%s' nie istnieje (lub nie jest "
 #~ "folderem)."
 
-#, c-format
 #~ msgid "No write permissions to delete file \"%s\""
 #~ msgstr "Użytkownik nie ma uprawnień do skasowania pliku \"%s\""
 
-#, c-format
 #~ msgid "User does not have permission to delete directory \"%s\"."
 #~ msgstr "Użytkownik nie posiada uprawnień do usunięcia folderu \"%s\"."
 
-#, c-format
 #~ msgid ""
 #~ "Invalid net ID in\n"
 #~ "file: \"%s\"\n"
@@ -37990,7 +37856,6 @@ msgstr "Obwód drukowany KiCad"
 #~ "linia: %d\n"
 #~ "przesunięcie: %d"
 
-#, c-format
 #~ msgid ""
 #~ "invalid float number in file: \"%s\"\n"
 #~ "line: %d, offset: %d"
@@ -37998,7 +37863,6 @@ msgstr "Obwód drukowany KiCad"
 #~ "nieprawidłowa liczba w pliku: \"%s\"\n"
 #~ "linia: %d, przesunięcie: %d"
 
-#, c-format
 #~ msgid ""
 #~ "missing float number in file: \"%s\"\n"
 #~ "line: %d, offset: %d"
@@ -38019,7 +37883,6 @@ msgstr "Obwód drukowany KiCad"
 #~ "(F.Cu/B.Cu) oraz wewnętrznymi warstwami przylegającymi bezpośrednio do "
 #~ "siebie."
 
-#, c-format
 #~ msgid "Page layout description file \"%s\" not found."
 #~ msgstr "Plik z definicją strony \"%s\" nie został znaleziony."
 
@@ -38053,15 +37916,12 @@ msgstr "Obwód drukowany KiCad"
 #~ msgid "Page layout design files"
 #~ msgstr "Pliki definicji układu strony"
 
-#, c-format
 #~ msgid "Change \"%s\" link from \"%s\" to \"%s\"?"
 #~ msgstr "Zmienić łącze \"%s\" z \"%s\" na \"%s\"?"
 
-#, c-format
 #~ msgid "Error loading schematic file \"%s\""
 #~ msgstr "Błąd podczas ładowania pliku schematu \"%s\""
 
-#, c-format
 #~ msgid ""
 #~ "Error loading schematic \"%s\".\n"
 #~ "%s"
@@ -38069,15 +37929,12 @@ msgstr "Obwód drukowany KiCad"
 #~ "Błąd podczas ładowania schematu \"%s\".\n"
 #~ "%s"
 
-#, c-format
 #~ msgid "%s, %s, or %s"
 #~ msgstr "%s, %s lub %s"
 
-#, c-format
 #~ msgid "%s, %s, %s, or %s"
 #~ msgstr "%s, %s, %s lub %s"
 
-#, c-format
 #~ msgid "Failed to load schematic \"%s\""
 #~ msgstr "Nie można załadować schematu \"%s\""
 
@@ -38093,7 +37950,6 @@ msgstr "Obwód drukowany KiCad"
 #~ msgid "Template path:"
 #~ msgstr "Ścieżka szablonów:"
 
-#, c-format
 #~ msgid "Failed to delete '%s'"
 #~ msgstr "Niepowodzenie przy usuwaniu '%s'"
 
@@ -38103,11 +37959,9 @@ msgstr "Obwód drukowany KiCad"
 #~ msgid "Delete File"
 #~ msgstr "Usuń plik"
 
-#, c-format
 #~ msgid "Are you sure you want to delete '%s'?"
 #~ msgstr "Czy chcesz usunąć '%s'?"
 
-#, c-format
 #~ msgid "Are you sure you want to delete %d items?"
 #~ msgstr "Czy chcesz usunąć %d elementów?"
 
@@ -38162,7 +38016,6 @@ msgstr "Obwód drukowany KiCad"
 #~ msgid "Thermal Spoke Width"
 #~ msgstr "Szerokość poł. termicznego"
 
-#, c-format
 #~ msgid ""
 #~ "Html or pdf help file \n"
 #~ "%s\n"
@@ -38436,40 +38289,33 @@ msgstr "Obwód drukowany KiCad"
 #~ "Tekst nie będzie czytelny z grubością większą niż 1/4 jego szerokości lub "
 #~ "wysokości."
 
-#, c-format
 #~ msgid "Track width less than minimum track width (%s)."
 #~ msgstr "Szerokość ścieżki mniejsza niż minimalna szerokość ścieżki (%s)."
 
-#, c-format
 #~ msgid "Via diameter less than minimum via diameter (%s)."
 #~ msgstr "Rozmiar przelotki jest mniejsza niż minimalny rozmiar (%s)."
 
-#, c-format
 #~ msgid "Via hole diameter less than minimum through hole diameter (%s)."
 #~ msgstr "Rozmiar otworu przelotki jest mniejszy niż minimalny rozmiar (%s)."
 
 #~ msgid "Via hole diameter larger than via diameter."
 #~ msgstr "Rozmiar otworu przelotki jest większy niż rozmiar przelotki."
 
-#, c-format
 #~ msgid "Diameter and hole leave via annulus less than minimum (%s)."
 #~ msgstr ""
 #~ "Średnica oraz otwór przelotki pozostawia szerokość pierścienia mniejszy "
 #~ "od minimalnego (%s)."
 
-#, c-format
 #~ msgid "Differential pair track width less than minimum track width (%s)."
 #~ msgstr ""
 #~ "Szerokość ścieżek pary różnicowej mniejsza niż minimalna szerokość "
 #~ "ścieżki (%s)."
 
-#, c-format
 #~ msgid "Differential pair via gap less than minimum clearance (%s)."
 #~ msgstr ""
 #~ "Szerokość prześwitu przelotek pary różnicowej mniejsza niż minimalny "
 #~ "prześwit (%s)."
 
-#, c-format
 #~ msgid "Change %s footprint from \"%s\" to \"%s\"."
 #~ msgstr "Zmieniam footprint %s z \"%s\" na \"%s\"."
 
@@ -38548,7 +38394,6 @@ msgstr "Obwód drukowany KiCad"
 #~ msgid "Table Name"
 #~ msgstr "Nazwa tabeli"
 
-#, c-format
 #~ msgid "Directory \"%s\" is not writable."
 #~ msgstr "Zapis w folderze \"%s\" nie jest możliwy."
 
@@ -38582,7 +38427,6 @@ msgstr "Obwód drukowany KiCad"
 #~ msgid "Flip (mirror) the board view"
 #~ msgstr "Odwraca (lustrzanie) widok płytki"
 
-#, c-format
 #~ msgid "Render time %.0f ms ( %.1f fps)"
 #~ msgstr "Czas renderowania %.0f ms ( %.1f fps)"
 
@@ -38592,7 +38436,6 @@ msgstr "Obwód drukowany KiCad"
 #~ msgid "Mirror Around Vertical Axis"
 #~ msgstr "Odbija pionowo wokół osi Y"
 
-#, c-format
 #~ msgid ""
 #~ "Project name:\n"
 #~ "%s\n"
@@ -38708,7 +38551,6 @@ msgstr "Obwód drukowany KiCad"
 #~ msgid "Regulator list change"
 #~ msgstr "Zmiana listy regulatorów"
 
-#, c-format
 #~ msgid ""
 #~ "Board thickness %s differs from stackup thickness %s\n"
 #~ "Allowed max error %s"
@@ -38760,7 +38602,6 @@ msgstr "Obwód drukowany KiCad"
 #~ "Wybór domyślnego rozmiaru pisaka używanego do rysowania elementów, które "
 #~ "nie mają określonego jego rozmiaru."
 
-#, c-format
 #~ msgid "Via drill less than minimum through hole (%s)."
 #~ msgstr ""
 #~ "Rozmiar otworu przelotki mniejszy od minimalnego otworu przelotek (%s)."
@@ -38783,7 +38624,6 @@ msgstr "Obwód drukowany KiCad"
 #~ msgid "Footprint place files"
 #~ msgstr "Pliki położeń footprintów"
 
-#, c-format
 #~ msgid "Multiple item %s%s (unit %d)\n"
 #~ msgstr "Element wielokrotny %s%s (część %d)\n"
 
@@ -38836,7 +38676,6 @@ msgstr "Obwód drukowany KiCad"
 #~ msgid "Settings"
 #~ msgstr "Ustawienia"
 
-#, c-format
 #~ msgid "Error saving %s symbol library table."
 #~ msgstr "Wystąpił błąd zapisywania %s tabeli bibliotek."
 
@@ -38860,7 +38699,6 @@ msgstr "Obwód drukowany KiCad"
 #~ msgid "Generate Footprint Position Files"
 #~ msgstr "Generowanie plików położeń footprintów"
 
-#, c-format
 #~ msgid ""
 #~ "Value < %s  can be time consuming when \n"
 #~ "filling zones."
@@ -38899,15 +38737,12 @@ msgstr "Obwód drukowany KiCad"
 #~ msgid "Add footprints with pads unlocked"
 #~ msgstr "Dodaj footrinty z odblokowanymi polami"
 
-#, c-format
 #~ msgid "More than one symbol found in symbol file \"%s\"."
 #~ msgstr "Znaleziono więcej niż jeden symbol w pliku \"%s\"."
 
-#, c-format
 #~ msgid "Saving symbol in \"%s\""
 #~ msgstr "Zapisuję symbol w \"%s\""
 
-#, c-format
 #~ msgid "An error occurred saving symbol file \"%s\""
 #~ msgstr "Wystąpił błąd przy próbie zapisania pliku symbolu \"%s\""
 
@@ -39030,7 +38865,6 @@ msgstr "Obwód drukowany KiCad"
 #~ msgid "Drill too small"
 #~ msgstr "Otwór jest zbyt mały"
 
-#, c-format
 #~ msgid "(%s %s; actual %s)"
 #~ msgstr "(%s %s; obecnie %s)"
 
@@ -39040,7 +38874,6 @@ msgstr "Obwód drukowany KiCad"
 #~ msgid "Pad local solder mask clearance must be zero or greater than zero"
 #~ msgstr "Lokalny prześwit soldermaski musi być większy lub równy zero"
 
-#, c-format
 #~ msgid "Pad local solder mask clearance must be greater than %s"
 #~ msgstr "Lokalny prześwit soldermaski musi być większy niż %s"
 
@@ -39061,7 +38894,6 @@ msgstr "Obwód drukowany KiCad"
 #~ "Niepoprawny kształt pola lutowniczego: kształt musi być odpowiednikiem "
 #~ "pojedynczej strefy"
 
-#, c-format
 #~ msgid ""
 #~ "This will change the net assigned to %s pad %s to %s.\n"
 #~ "Do you wish to continue?"
@@ -39069,7 +38901,6 @@ msgstr "Obwód drukowany KiCad"
 #~ "To spowoduje zmianę przydzielonej sieci do %s pole %s na %s.\n"
 #~ "Czy chcesz kontynuować?"
 
-#, c-format
 #~ msgid ""
 #~ "This will change the net assigned to %lu connected pads to %s.\n"
 #~ "Do you wish to continue?"
@@ -39080,7 +38911,6 @@ msgstr "Obwód drukowany KiCad"
 #~ msgid "Continue"
 #~ msgstr "Kontynuuj"
 
-#, c-format
 #~ msgid ""
 #~ "The selected file is not valid or might be corrupt: The layer stack "
 #~ "refers to layer ID '%s' which does not exist in the layer definitions."
@@ -39119,19 +38949,15 @@ msgstr "Obwód drukowany KiCad"
 #~ msgid "Associate selected footprint with selected components"
 #~ msgstr "Przypisuje wybrane footprinty do wybranych komponentów"
 
-#, c-format
 #~ msgid "pin %s"
 #~ msgstr "pin %s"
 
-#, c-format
 #~ msgid "%s %s found"
 #~ msgstr "Znaleziono %s w %s"
 
-#, c-format
 #~ msgid "Component %s not found"
 #~ msgstr "Symbol %s nie został znaleziony"
 
-#, c-format
 #~ msgid "%s %s \"%s\" from \"%s\" to \"%s\""
 #~ msgstr "%s %s \"%s\" z \"%s\" do \"%s\""
 
@@ -39169,14 +38995,12 @@ msgstr "Obwód drukowany KiCad"
 #~ msgid "No Colon in Nicknames"
 #~ msgstr "Nie można stosować przecinków w nazwach"
 
-#, c-format
 #~ msgid "Duplicate Nickname: \"%s\"."
 #~ msgstr "Zduplikowana nazwa skrótowa: \"%s\"."
 
 #~ msgid "Please Delete or Modify One"
 #~ msgstr "Proszę usunąć lub zmodyfikować jednen z wpisów"
 
-#, c-format
 #~ msgid ""
 #~ "The current configuration does not include a library with the\n"
 #~ "nickname \"%s\".  Use Manage Symbol Libraries\n"
@@ -39189,7 +39013,6 @@ msgstr "Obwód drukowany KiCad"
 #~ msgid "Symbol library not found."
 #~ msgstr "Biblioteka symboli nie została znaleziona."
 
-#, c-format
 #~ msgid ""
 #~ "Library \"%s\" is read only and must be saved as a different library."
 #~ msgstr ""
@@ -39199,19 +39022,15 @@ msgstr "Obwód drukowany KiCad"
 #~ msgid "Select symbol to browse"
 #~ msgstr "Wybierz symbol by przeglądać"
 
-#, c-format
 #~ msgid "Cannot find footprint for symbol '%s'."
 #~ msgstr "Nie można odnaleźć footprintu dla symbolu '%s'."
 
-#, c-format
 #~ msgid "Change '%s' labels to '%s'."
 #~ msgstr "Zmieniam '%s' etykiet na '%s'."
 
-#, c-format
 #~ msgid "Change '%s' global labels to '%s'."
 #~ msgstr "Zmieniam '%s' etykiet globalnych na '%s'."
 
-#, c-format
 #~ msgid "Change '%s' hierarchical label to '%s'."
 #~ msgstr "Zmieniam '%s' etykiet hierarchicznych na '%s'."
 
@@ -39221,7 +39040,6 @@ msgstr "Obwód drukowany KiCad"
 #~ msgid "Edit Component Name"
 #~ msgstr "Edycja nazwy komponentu"
 
-#, c-format
 #~ msgid ""
 #~ "Current project directory:\n"
 #~ "%s"
@@ -39232,18 +39050,15 @@ msgstr "Obwód drukowany KiCad"
 #~ msgid "Default Values:"
 #~ msgstr "Domyślne wartości:"
 
-#, c-format
 #~ msgid "File \"%s\" written"
 #~ msgstr "Plik \"%s\" zapisany"
 
-#, c-format
 #~ msgid "Page size: width %.4g height %.4g"
 #~ msgstr "Rozmiar strony: szerokość %.4g wysokość %.4g"
 
 #~ msgid "3D Settings"
 #~ msgstr "Ustawienia 3D"
 
-#, c-format
 #~ msgid "%s footprint \"%s\" (from \"%s\") to \"%s\""
 #~ msgstr "%s footprint \"%s\" (z \"%s\") na \"%s\""
 
@@ -39266,7 +39081,6 @@ msgstr "Obwód drukowany KiCad"
 #~ "Wprowadzone zmiany nie mogą zostać cofnięte.  Czy chcesz dokonać "
 #~ "aktualizacji PCB?"
 
-#, c-format
 #~ msgid "Duplicate nicknames \"%s\"."
 #~ msgstr "Zduplikowana nazwa skrótowa \"%s\"."
 
@@ -39276,18 +39090,15 @@ msgstr "Obwód drukowany KiCad"
 #~ msgid "Keepout violation"
 #~ msgstr "Naruszenie obszaru chronionego"
 
-#, c-format
 #~ msgid "Wrote board file: \"%s\""
 #~ msgstr "Zapisano plik obwodu drukowanego: \"%s\""
 
 #~ msgid "none"
 #~ msgstr "brak"
 
-#, c-format
 #~ msgid "Component \"%s\" replaced in \"%s\""
 #~ msgstr "Komponent \"%s\" zastąpiony przez \"%s\""
 
-#, c-format
 #~ msgid "Component \"%s\" added in \"%s\""
 #~ msgstr "Komponent \"%s\" dodany do \"%s\""
 
@@ -39301,7 +39112,6 @@ msgstr "Obwód drukowany KiCad"
 #~ msgid "Anonymous"
 #~ msgstr "Anonimowa"
 
-#, c-format
 #~ msgid ""
 #~ "File \"%s\" is format version: %d.\n"
 #~ "I only support format version <= %d.\n"
