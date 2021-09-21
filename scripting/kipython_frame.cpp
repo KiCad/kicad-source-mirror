@@ -83,8 +83,6 @@ KIPYTHON_FRAME::KIPYTHON_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
             KIWAY_PLAYER( aKiway, aParent, FRAME_PYTHON, wxT( "KiPython" ), wxDefaultPosition,
                     wxDefaultSize, KICAD_DEFAULT_DRAWFRAME_STYLE, wxT( "KiPython" ) )
 {
-    m_stdio = 0;
-
     CallAfter( [&](){ SetupPythonEditor(); } );
 
     redirectStdio();
@@ -93,8 +91,4 @@ KIPYTHON_FRAME::KIPYTHON_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
 KIPYTHON_FRAME::~KIPYTHON_FRAME()
 {
-    wxWindow* stdio_window = wxWindow::FindWindowById( m_stdio );
-
-    if( stdio_window )
-        stdio_window->Close( true );
 }

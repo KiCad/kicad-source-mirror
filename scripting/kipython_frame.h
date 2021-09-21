@@ -55,7 +55,6 @@ private:
     bool canCloseWindow( wxCloseEvent& aCloseEvent ) override { return true; }
     void doCloseWindow() override {}
 
-    long m_stdio;
 };
 
 

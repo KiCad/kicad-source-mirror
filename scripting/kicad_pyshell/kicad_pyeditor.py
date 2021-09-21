@@ -923,7 +923,12 @@ class KiCadEditorNotebookFrame(KiCadEditorFrame):
                 place the stdout into the editor window """
             import pydoc, sys
             self._keep_stdin = sys.stdin
-            pydoc.pager = pydoc.plainpager
+
+            """getline will crash unexpectedly, so we don't support it
+                and bold fonts wreak havoc on our output, so strip them as well"""
+            pydoc.getpager = lambda: pydoc.plainpager
+            pydoc.Helper.getline = lambda self, prompt: None
+            pydoc.TextDoc.use_bold = lambda self, text: text
 
             dispatcher.connect(receiver=self._editorChange,
                                signal='EditorChange', sender=self.notebook)
