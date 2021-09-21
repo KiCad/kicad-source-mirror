@@ -2932,9 +2932,8 @@ msgid "Select Preferred PDF Viewer"
 msgstr "选择首选 PDF 浏览器"
 
 #: common/dialogs/panel_common_settings_base.cpp:21
-#, fuzzy
 msgid "Antialiasing"
-msgstr "抗锯齿："
+msgstr "抗锯齿"
 
 #: common/dialogs/panel_common_settings_base.cpp:30
 msgid "Accelerated graphics:"
@@ -3015,13 +3014,12 @@ msgid "Canvas scale:"
 msgstr "画布缩放："
 
 #: common/dialogs/panel_common_settings_base.cpp:158
-#, fuzzy
 msgid "Apply icon scaling to fonts"
-msgstr "应用操作脚本"
+msgstr "将图标缩放应用到字体"
 
 #: common/dialogs/panel_common_settings_base.cpp:161
 msgid "(This workaround will improve some GTK HiDPI font scaling issues.)"
-msgstr ""
+msgstr "(这个临时解决方案将改善一些 GTK HiDPI 字体缩放问题。)"
 
 #: common/dialogs/panel_common_settings_base.cpp:175
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:21
@@ -3093,7 +3091,7 @@ msgstr ""
 
 #: common/dialogs/panel_common_settings_base.cpp:236
 msgid "days"
-msgstr ""
+msgstr "天"
 
 #: common/dialogs/panel_common_settings_base.cpp:249
 msgid "Project Backup"
@@ -4690,13 +4688,13 @@ msgid "Could not read instance name and version from kiface library '%s'."
 msgstr "无法从 kiface 库 \"%s\" 读取实例名和版本号。"
 
 #: common/kiway.cpp:297
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Fatal Installation Bug. File:\n"
 "'%s'\n"
 "could not be loaded\n"
 msgstr ""
-"致命的安装错误。文件：\n"
+"重大安装错误。文件：\n"
 "\"%s\"\n"
 "无法加载\n"
 
@@ -5306,9 +5304,8 @@ msgid "Type mismatch between %lf and '%s'"
 msgstr "%lf 和 '%s'的类型不匹配"
 
 #: common/pgm_base.cpp:165
-#, fuzzy
 msgid "No default editor found, you must choose one."
-msgstr "未找到默认编辑器，请先设置首选文本编辑器"
+msgstr "未找到默认编辑器，你必须先选择一个。"
 
 #: common/pgm_base.cpp:185 common/pgm_base.cpp:187
 msgid "Executable file"
@@ -6434,9 +6431,9 @@ msgid "Set Hotkey"
 msgstr "设置快捷键"
 
 #: common/widgets/widget_hotkey_list.cpp:341
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' is a reserved hotkey in KiCad and cannot be assigned."
-msgstr "名称 %s 是保留的，不能使用。"
+msgstr "'%s' 是 KiCad 中的一个保留快捷键，不能进行分配。"
 
 #: common/widgets/widget_hotkey_list.cpp:392
 msgid "Edit..."
@@ -9627,9 +9624,8 @@ msgid "Plotted to '%s'.\n"
 msgstr "绘制到 '%s'。\n"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:1177
-#, fuzzy
 msgid "Done"
-msgstr "完成。"
+msgstr "完成"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:1249
 #, c-format
@@ -14290,14 +14286,12 @@ msgid "Field Validation Error"
 msgstr "字段验证错误"
 
 #: eeschema/sch_validators.cpp:226
-#, fuzzy
 msgid "Signal name contains '{' and '}' but is not a valid bus name"
-msgstr "信号名称包含 \"{\" 或 \"}\", 但不是有效的组总线名称"
+msgstr "信号名称包含 \"{\" 和 \"}\", 但不是有效的总线名称"
 
 #: eeschema/sch_validators.cpp:231
-#, fuzzy
 msgid "Signal name contains '[' or ']' but is not a valid bus name."
-msgstr "信号名称包含 \"[\" 或 \"]\", 但不是有效的矢量总线名。"
+msgstr "信号名称包含 \"[\" 或 \"]\", 但不是有效的总线名。"
 
 #: eeschema/sheet.cpp:63
 #, c-format
@@ -16451,9 +16445,8 @@ msgid "Net must be labeled to assign a netclass."
 msgstr "网络必须标记才能关联网络类。"
 
 #: eeschema/tools/sch_editor_control.cpp:986
-#, fuzzy
 msgid "Bus has no members to assign netclass to."
-msgstr "总线必须至少有一个成员才能将一个网络类分配给多个成员。"
+msgstr "总线没有要分配网络类的成员。"
 
 #: eeschema/tools/sch_editor_control.cpp:1019
 msgid "Netclasses"
@@ -24756,7 +24749,6 @@ msgid "Select Netlist"
 msgstr "选择网表"
 
 #: pcbnew/dialogs/dialog_netlist.cpp:143
-#, fuzzy
 msgid "Please choose a valid netlist file."
 msgstr "请选择一个有效的网表文件。"
 
@@ -26922,7 +26914,7 @@ msgstr "路径替换"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:222
 msgid "Error: illegal or empty filename."
-msgstr ""
+msgstr "错误：非法或空的文件名。"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:379
 #: pcbnew/microwave/microwave_polygon.cpp:224
@@ -27842,14 +27834,12 @@ msgid "User9"
 msgstr "用户 9"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:32
-#, fuzzy
 msgid ""
 "Use your board house's recommendations for solder mask clearance and minimum "
 "web width."
-msgstr "使用您的电路板厂推荐的阻焊间隙和最小阻焊桥宽。"
+msgstr "使用您的电路板厂推荐的焊膜间隙和最小网宽。"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:36
-#, fuzzy
 msgid "If none are provided, setting the values to zero is suggested."
 msgstr "如果没有提供，建议将这些值设置为 0。"
 
@@ -35834,6 +35824,10 @@ msgstr "KiCad 原理图"
 msgid "KiCad Printed Circuit Board"
 msgstr "KiCad 印刷电路板"
 
+#: pagelayout_editor/dialogs/properties_frame.cpp:559
+msgid "Keywords are replaced by they actual value in strings"
+msgstr "关键字被它们在字符串中的实际值所取代"
+
 #~ msgid "Change to isometric perspective"
 #~ msgstr "更改为等轴测视图"
 
@@ -35897,7 +35891,6 @@ msgstr "KiCad 印刷电路板"
 #~ msgid "Do not forget to choose a title for this netlist control page"
 #~ msgstr "不要忘记为这个网表控制页选择一个标题"
 
-#, c-format
 #~ msgid "Schematic file '%s' is already open."
 #~ msgstr "电路图文件 \"%s\" 已经打开。"
 
@@ -35935,14 +35928,12 @@ msgstr "KiCad 印刷电路板"
 #~ msgid "There are no unreferenced pins in this sheet to remove."
 #~ msgstr "此图框中没有要删除的未引用引脚。"
 
-#, c-format
 #~ msgid "Custom (%s)"
 #~ msgstr "自定义 (%s)"
 
 #~ msgid "STEP files (*.stp;*.step)|*.stp;*.step"
 #~ msgstr "STEP 文件 (*.stp;*.step)|*.stp;*.step"
 
-#, c-format
 #~ msgid "The %s layer is mandatory."
 #~ msgstr "%s 层是必须的。"
 
@@ -35955,7 +35946,6 @@ msgstr "KiCad 印刷电路板"
 #~ msgid "If you want a board perimeter layer"
 #~ msgstr "打开/关闭 电路板边框层"
 
-#, c-format
 #~ msgid "pad %s"
 #~ msgstr "焊盘 %s"
 
@@ -36016,21 +36006,18 @@ msgstr "KiCad 印刷电路板"
 #~ msgid "Doc Files"
 #~ msgstr "文档文件"
 
-#, c-format
 #~ msgid "Doc File '%s' not found"
 #~ msgstr "未找到文档文件 \"%s\""
 
 #~ msgid "Text Editor"
 #~ msgstr "文本编辑器"
 
-#, c-format
 #~ msgid "Setting schematic symbol '%s %s' library identifier to '%s'. "
 #~ msgstr "正在将原理图符号 '%s %s' 库标识符设置为 '%s'。 "
 
 #~ msgid "Filename:"
 #~ msgstr "文件名："
 
-#, c-format
 #~ msgid "File \"%s\" not found"
 #~ msgstr "文件 \"%s\" 没有找到"
 
@@ -36043,7 +36030,6 @@ msgstr "KiCad 印刷电路板"
 #~ msgid "Dielectric Materials"
 #~ msgstr "电介质材料"
 
-#, c-format
 #~ msgid "Invalid filename: %s"
 #~ msgstr "无效的文件名：%s"
 
@@ -36062,19 +36048,15 @@ msgstr "KiCad 印刷电路板"
 #~ msgid "Error: Corner size not a number."
 #~ msgstr "错误：边角尺寸不是数字。"
 
-#, c-format
 #~ msgid "Checking %s; courtyard clearance: %s."
 #~ msgstr "正在检查 %s；外框间隙：%s。"
 
-#, c-format
 #~ msgid "Checking %s; silk clearance: %s."
 #~ msgstr "正在检查 %s；丝印间隙：%s。"
 
-#, c-format
 #~ msgid "Checking %s; hole clearance: %s."
 #~ msgstr "正在检查 %s；通孔间隙：%s。"
 
-#, c-format
 #~ msgid "Checking %s; edge clearance: %s."
 #~ msgstr "正在检查 %s；板边间隙：%s。"
 
@@ -36084,19 +36066,15 @@ msgstr "KiCad 印刷电路板"
 #~ msgid "Read descr shape file"
 #~ msgstr "读取样式描述文件"
 
-#, c-format
 #~ msgid "Zone connection type: %s."
 #~ msgstr "覆铜连接类型：%s。"
 
-#, c-format
 #~ msgid "Overridden by %s; connection type: %s."
 #~ msgstr "被 %s 覆盖；连接类型：%s。"
 
-#, c-format
 #~ msgid "Pad is not a PTH pad; connection will be: %s."
 #~ msgstr "焊盘不是金属化孔焊盘；连接将是：%s。"
 
-#, c-format
 #~ msgid "%s not present on layer %s.  No clearance defined."
 #~ msgstr "%s 不在层 %s 上。    未定义间隙。"
 
@@ -36136,11 +36114,9 @@ msgstr "KiCad 印刷电路板"
 #~ msgid "Show solid areas of zones in outline mode"
 #~ msgstr "在轮廓模式下显示覆铜的实心区域"
 
-#, c-format
 #~ msgid "Unable to create archive file '%s'.\n"
 #~ msgstr "无法创建压缩文件 \"%s\"。\n"
 
-#, c-format
 #~ msgid "Unable to create report file '%s'"
 #~ msgstr "无法创建报告文件 \"%s\""
 
@@ -36158,50 +36134,39 @@ msgstr "KiCad 印刷电路板"
 #~ msgid "Error messages:"
 #~ msgstr "错误信息："
 
-#, c-format
 #~ msgid "Pin has non-existent ownerindex %d."
 #~ msgstr "引脚有不存在的所有者索引 %d。"
 
-#, c-format
 #~ msgid "Label has non-existent ownerindex %d."
 #~ msgstr "标签有不存在的所有者索引 %d。"
 
-#, c-format
 #~ msgid "Bezier has non-existent ownerindex %d."
 #~ msgstr "贝塞尔曲线有不存在的所有者索引 %d。"
 
-#, c-format
 #~ msgid "Polyline has non-existent ownerindex %d."
 #~ msgstr "多段线有不存在的所有者索引 %d。"
 
-#, c-format
 #~ msgid "Polygon has non-existent ownerindex %d."
 #~ msgstr "多边形有不存在的所有者索引 %d。"
 
-#, c-format
 #~ msgid "Rounded rectangle has non-existent ownerindex %d."
 #~ msgstr "圆角矩形有不存在的所有者索引 %d。"
 
 #~ msgid "Arc drawing is not possible for now on schematic."
 #~ msgstr "当前不可能在原理图上画圆弧。"
 
-#, c-format
 #~ msgid "Arc has non-existent ownerindex %d."
 #~ msgstr "圆弧有不存在的所有者索引 %d。"
 
-#, c-format
 #~ msgid "Line has non-existent ownerindex %d."
 #~ msgstr "线段有不存在的所有者索引 %d。"
 
-#, c-format
 #~ msgid "Rectangle has non-existent ownerindex %d."
 #~ msgstr "矩形有不存在的所有者索引 %d。"
 
-#, c-format
 #~ msgid "There is a port for '%s', but no connections to it."
 #~ msgstr "'%s' 有一个端口，但它没有和其他东西连接。"
 
-#, c-format
 #~ msgid "Designator has non-existent ownerindex %d."
 #~ msgstr "指示符有未知的所有者类型 %d。"
 
@@ -36220,7 +36185,6 @@ msgstr "KiCad 印刷电路板"
 #~ msgid "KiCad "
 #~ msgstr "KiCad "
 
-#, c-format
 #~ msgid "Unable to create \"%s\""
 #~ msgstr "\"%s\" 无法建立"
 
@@ -36243,37 +36207,29 @@ msgstr "KiCad 印刷电路板"
 #~ msgid "Show all nets"
 #~ msgstr "显示所有网络"
 
-#, c-format
 #~ msgid "Unable to create report file '%s'<br>"
 #~ msgstr "无法创建报告文件 '%s'<br>"
 
-#, c-format
 #~ msgid "Unable to create %s"
 #~ msgstr "无法创建 %s"
 
-#, c-format
 #~ msgid "Unable to create '%s'."
 #~ msgstr "无法创建' %s'。"
 
-#, c-format
 #~ msgid "** Unable to create %s **\n"
 #~ msgstr "** 无法创建 %s **\n"
 
-#, c-format
 #~ msgid "Report file %s created\n"
 #~ msgstr "生成报告文件 %s\n"
 
-#, c-format
 #~ msgid "Unable to create job file '%s'."
 #~ msgstr "无法创建工作文件 \"%s\"。"
 
-#, c-format
 #~ msgid ""
 #~ "Polygon has only %d point extracted from %ld vertices. At least 2 points "
 #~ "are required."
 #~ msgstr "多边形只有 %d 个点从 %ld 个顶点中提取。至少需要 2 个点。"
 
-#, c-format
 #~ msgid ""
 #~ "ShapeBasedRegion has only %d point extracted from %ld vertices. At least "
 #~ "2 points are required."
@@ -36414,39 +36370,31 @@ msgstr "KiCad 印刷电路板"
 #~ msgid "Render with improved quality on final render (slow)"
 #~ msgstr "在最终渲染中以最高质量渲染 (慢)"
 
-#, c-format
 #~ msgid "You do not have write permissions to folder \"%s\"."
 #~ msgstr "你没有 \"%s\" 文件夹的写入权限。"
 
-#, c-format
 #~ msgid ""
 #~ "You do not have write permissions to save file \"%s\" to folder \"%s\"."
 #~ msgstr "你没有写入权限把文件 \"%s\" 保存到文件夹 \"%s\"。"
 
-#, c-format
 #~ msgid "You do not have write permissions to save file \"%s\"."
 #~ msgstr "你没有写入权限来保存文件 \"%s\"。"
 
-#, c-format
 #~ msgid "Cannot create global library table path \"%s\"."
 #~ msgstr "无法创建全局库列表路径 \"%s\"。"
 
-#, c-format
 #~ msgid "Cannot copy file \"%s\"."
 #~ msgstr "无法复制文件 \"%s\"。"
 
 #~ msgid "Illegal character found in revision"
 #~ msgstr "修订版本中包含非法字符"
 
-#, c-format
 #~ msgid "%s is already running. Continue?"
 #~ msgstr "%s 正在运行, 是否打开新窗口运行?"
 
-#, c-format
 #~ msgid "Archive file \"%s\": Failed!\n"
 #~ msgstr "压缩文件 \"%s\"：错误！\n"
 
-#, c-format
 #~ msgid ""
 #~ "Library \"%s\" has duplicate entry name \"%s\".\n"
 #~ "This may cause some unexpected behavior when loading components into a "
@@ -36455,7 +36403,6 @@ msgstr "KiCad 印刷电路板"
 #~ "库 \"%s\" 有重复的条目名 \"%s\"。\n"
 #~ "在载入元件到原理图时,可能会导致一些异常情况。"
 
-#, c-format
 #~ msgid ""
 #~ "Symbol library \"%s\" failed to load. Error:\n"
 #~ " %s"
@@ -36463,7 +36410,6 @@ msgstr "KiCad 印刷电路板"
 #~ "符号库 \"%s\" 载入失败。错误：\n"
 #~ " %s"
 
-#, c-format
 #~ msgid ""
 #~ "Symbol library \"%s\" failed to load.\n"
 #~ "Error: %s"
@@ -36471,7 +36417,6 @@ msgstr "KiCad 印刷电路板"
 #~ "符号库 \"%s\" 载入失败。\n"
 #~ "错误：%s"
 
-#, c-format
 #~ msgid ""
 #~ "Error occurred loading symbol %s from library %s.\n"
 #~ "\n"
@@ -36481,7 +36426,6 @@ msgstr "KiCad 印刷电路板"
 #~ "\n"
 #~ "%s"
 
-#, c-format
 #~ msgid ""
 #~ "Error occurred loading global symbol library table.\n"
 #~ "\n"
@@ -36505,27 +36449,21 @@ msgstr "KiCad 印刷电路板"
 #~ msgid "Alternate pin assignments are not available for DeMorgan components."
 #~ msgstr "备用引脚分配不适用于德摩根等效符号。"
 
-#, c-format
 #~ msgid "Plot: \"%s\" OK.\n"
 #~ msgstr "绘制：\"%s\" 完成。\n"
 
-#, c-format
 #~ msgid "Unable to create file \"%s\".\n"
 #~ msgstr "无法创建文件 \"%s\"。\n"
 
-#, c-format
 #~ msgid "Cannot create file \"%s\".\n"
 #~ msgstr "无法创建文件 \"%s\"。\n"
 
-#, c-format
 #~ msgid "Library \"%s\" not found."
 #~ msgstr "库 \"%s\" 未找到。"
 
-#, c-format
 #~ msgid "Failed to create temporary file \"%s\""
 #~ msgstr "无法创建临时文件 \"%s\""
 
-#, c-format
 #~ msgid "Failed to rename temporary file \"%s\""
 #~ msgstr "重命名临时文件 \"%s\" 失败"
 
@@ -36540,18 +36478,15 @@ msgstr "KiCad 印刷电路板"
 #~ msgid "Append Schematic"
 #~ msgstr "添加原理图"
 
-#, c-format
 #~ msgid "Failed to save symbol library file \"%s\""
 #~ msgstr "无法创建元件库文件 \"%s\""
 
-#, c-format
 #~ msgid "Save changes to \"%s\" before closing?"
 #~ msgstr "是否在 \"%s\" 关闭之前保存更改？"
 
 #~ msgid "[no file]"
 #~ msgstr "[没有文件]"
 
-#, c-format
 #~ msgid ""
 #~ "Invalid symbol name in\n"
 #~ "file: \"%s\"\n"
@@ -36563,7 +36498,6 @@ msgstr "KiCad 印刷电路板"
 #~ "行：%d\n"
 #~ "偏移：%d"
 
-#, c-format
 #~ msgid ""
 #~ "Invalid library identifier in\n"
 #~ "file: \"%s\"\n"
@@ -36575,7 +36509,6 @@ msgstr "KiCad 印刷电路板"
 #~ "行：%d\n"
 #~ "偏移：%d"
 
-#, c-format
 #~ msgid ""
 #~ "Invalid symbol extends name in\n"
 #~ "file: \"%s\"\n"
@@ -36587,7 +36520,6 @@ msgstr "KiCad 印刷电路板"
 #~ "行：%d\n"
 #~ "偏移：%d"
 
-#, c-format
 #~ msgid ""
 #~ "Invalid symbol unit name in\n"
 #~ "file: \"%s\"\n"
@@ -36599,7 +36531,6 @@ msgstr "KiCad 印刷电路板"
 #~ "行：%d\n"
 #~ "偏移：%d"
 
-#, c-format
 #~ msgid ""
 #~ "Invalid symbol unit name prefix %s in\n"
 #~ "file: \"%s\"\n"
@@ -36611,7 +36542,6 @@ msgstr "KiCad 印刷电路板"
 #~ "行：%d\n"
 #~ "偏移：%d"
 
-#, c-format
 #~ msgid ""
 #~ "Invalid symbol unit number %s in\n"
 #~ "file: \"%s\"\n"
@@ -36623,7 +36553,6 @@ msgstr "KiCad 印刷电路板"
 #~ "行：%d\n"
 #~ "位移：%d"
 
-#, c-format
 #~ msgid ""
 #~ "Invalid symbol names definition in\n"
 #~ "file: '%s'\n"
@@ -36635,7 +36564,6 @@ msgstr "KiCad 印刷电路板"
 #~ "行：%d\n"
 #~ "偏移：%d"
 
-#, c-format
 #~ msgid ""
 #~ "Invalid property name in\n"
 #~ "file: '%s'\n"
@@ -36647,7 +36575,6 @@ msgstr "KiCad 印刷电路板"
 #~ "行：%d\n"
 #~ "偏移：%d"
 
-#, c-format
 #~ msgid ""
 #~ "Empty property name in\n"
 #~ "file: '%s'\n"
@@ -36659,7 +36586,6 @@ msgstr "KiCad 印刷电路板"
 #~ "行：%d\n"
 #~ "偏移：%d"
 
-#, c-format
 #~ msgid ""
 #~ "Invalid property value in\n"
 #~ "file: '%s'\n"
@@ -36671,7 +36597,6 @@ msgstr "KiCad 印刷电路板"
 #~ "行：%d\n"
 #~ "偏移：%d"
 
-#, c-format
 #~ msgid ""
 #~ "Invalid pin name in\n"
 #~ "file: \"%s\"\n"
@@ -36683,7 +36608,6 @@ msgstr "KiCad 印刷电路板"
 #~ "行：%d\n"
 #~ "偏移：%d"
 
-#, c-format
 #~ msgid ""
 #~ "Invalid pin number in\n"
 #~ "file: \"%s\"\n"
@@ -36695,7 +36619,6 @@ msgstr "KiCad 印刷电路板"
 #~ "行：%d\n"
 #~ "位移：%d"
 
-#, c-format
 #~ msgid ""
 #~ "Invalid alternate pin name in\n"
 #~ "file: \"%s\"\n"
@@ -36707,7 +36630,6 @@ msgstr "KiCad 印刷电路板"
 #~ "行：%d\n"
 #~ "偏移：%d"
 
-#, c-format
 #~ msgid ""
 #~ "Invalid text string in\n"
 #~ "file: \"%s\"\n"
@@ -36719,7 +36641,6 @@ msgstr "KiCad 印刷电路板"
 #~ "行：%d\n"
 #~ "偏移：%d"
 
-#, c-format
 #~ msgid ""
 #~ "Invalid property name in\n"
 #~ "file: \"%s\"\n"
@@ -36731,7 +36652,6 @@ msgstr "KiCad 印刷电路板"
 #~ "行：%d\n"
 #~ "偏移：%d"
 
-#, c-format
 #~ msgid ""
 #~ "Empty property name in\n"
 #~ "file: \"%s\"\n"
@@ -36743,7 +36663,6 @@ msgstr "KiCad 印刷电路板"
 #~ "行：%d\n"
 #~ "偏移：%d"
 
-#, c-format
 #~ msgid ""
 #~ "Invalid property value in\n"
 #~ "file: \"%s\"\n"
@@ -36755,7 +36674,6 @@ msgstr "KiCad 印刷电路板"
 #~ "行：%d\n"
 #~ "偏移：%d"
 
-#, c-format
 #~ msgid ""
 #~ "Invalid sheet pin name in\n"
 #~ "file: \"%s\"\n"
@@ -36767,7 +36685,6 @@ msgstr "KiCad 印刷电路板"
 #~ "行：%d\n"
 #~ "偏移：%d"
 
-#, c-format
 #~ msgid ""
 #~ "Empty sheet pin name in\n"
 #~ "file: \"%s\"\n"
@@ -36779,7 +36696,6 @@ msgstr "KiCad 印刷电路板"
 #~ "行：%d\n"
 #~ "偏移：%d"
 
-#, c-format
 #~ msgid ""
 #~ "Invalid symbol library name in\n"
 #~ "file: \"%s\"\n"
@@ -36791,7 +36707,6 @@ msgstr "KiCad 印刷电路板"
 #~ "行：%d\n"
 #~ "偏移：%d"
 
-#, c-format
 #~ msgid ""
 #~ "Invalid symbol library ID in\n"
 #~ "file: \"%s\"\n"
@@ -36803,81 +36718,63 @@ msgstr "KiCad 印刷电路板"
 #~ "行：%d\n"
 #~ "偏移：%d"
 
-#, c-format
 #~ msgid "symbol library \"%s\" already exists, cannot create a new library"
 #~ msgstr "符号库 \"%s\" 已经存在, 无法创建新的库"
 
-#, c-format
 #~ msgid "user does not have permission to read library document file \"%s\""
 #~ msgstr "用户没有权限读取库文档 \"%s\""
 
-#, c-format
 #~ msgid "Error occurred loading schematic file \"%s\"."
 #~ msgstr "载入原理图文件 \"%s\" 发生错误。"
 
-#, c-format
 #~ msgid "Library \"%s\" already exists"
 #~ msgstr "库 \"%s\" 已经存在"
 
-#, c-format
 #~ msgid "Error occurred loading symbol \"%s\" from library \"%s\"."
 #~ msgstr "从库中%s加载符号%s发生错误。"
 
-#, c-format
 #~ msgid "Symbol \"%s\" already exists in library \"%s\""
 #~ msgstr "符号 \"%s\" 已经在库 \"%s\" 中存在"
 
-#, c-format
 #~ msgid "Symbol name \"%s\" not found in library \"%s\""
 #~ msgstr "符号名称 \"%s\" 在库 \"%s\" 中找不到"
 
-#, c-format
 #~ msgid "Symbol \"%s\" already exists in library \"%s\"."
 #~ msgstr "符号 \"%s\" 已经在库 \"%s\" 中存在。"
 
-#, c-format
 #~ msgid "Symbol \"%s\" already exists in \"%s\"."
 #~ msgstr "符号 <%s> 已经在<%s>中存在。"
 
-#, c-format
 #~ msgid "Write permissions are required to save library \"%s\"."
 #~ msgstr "需要写入权限才能保存库 \"%s\"。"
 
 #~ msgid "Errors were encountered loading symbols:"
 #~ msgstr "加载符号时出现错误："
 
-#, c-format
 #~ msgid "Cannot find library \"%s\" in the Symbol Library Table (%s)"
 #~ msgstr "在符号库表中找不到库 \"%s\"（%s）"
 
-#, c-format
 #~ msgid "Cannot load symbol \"%s\" from library \"%s\" (%s)"
 #~ msgstr "无法从库 \"%s\"(%s) 加载符号 \"%s\""
 
-#, c-format
 #~ msgid "An error \"%s\" occurred saving symbol \"%s\" to library \"%s\""
 #~ msgstr "错误 \"%s\" 发生保存符号 \"%s\" 到库 \"%s\""
 
-#, c-format
 #~ msgid "Cannot create file \"%s\""
 #~ msgstr "无法创建文件 \"%s\""
 
-#, c-format
 #~ msgid "Source file \"%s\" is not available"
 #~ msgstr "源文件 \"%s\" 不可用"
 
-#, c-format
 #~ msgid "Cannot write to folder '%s'."
 #~ msgstr "无法写入文件夹 ‘%s’。"
 
 #~ msgid "Make sure you have write permissions and try again."
 #~ msgstr "请确保你拥有写入权限并再次尝试。"
 
-#, c-format
 #~ msgid "\"%s\" already exists."
 #~ msgstr "\"%s\" 已经存在。"
 
-#, c-format
 #~ msgid ""
 #~ "Directory \"%s\" could not be created.\n"
 #~ "\n"
@@ -36887,14 +36784,12 @@ msgstr "KiCad 印刷电路板"
 #~ "\n"
 #~ "请确保你拥有写入权限并不再次尝试。"
 
-#, c-format
 #~ msgid "Cannot write to folder \"%s\"."
 #~ msgstr "无法写入到文件夹 \"%s\"。"
 
 #~ msgid "Please check your access permissions to this folder and try again."
 #~ msgstr "请检查你对此文件夹的访问权限, 然后重试。"
 
-#, c-format
 #~ msgid "Error when loading file \"%s\""
 #~ msgstr "<%s> 文件加载错误"
 
@@ -36913,7 +36808,6 @@ msgstr "KiCad 印刷电路板"
 #~ msgid "Dielectric Layers"
 #~ msgstr "介电层"
 
-#, c-format
 #~ msgid "Unable to create file \"%s\""
 #~ msgstr "无法创建文件 \"%s\""
 
@@ -36926,23 +36820,18 @@ msgstr "KiCad 印刷电路板"
 #~ msgid "Tolerance:"
 #~ msgstr "误差："
 
-#, c-format
 #~ msgid "Unable to create file \"%s\"."
 #~ msgstr "无法创建文件 \"%s\"。"
 
-#, c-format
 #~ msgid "\"%s\" not found"
 #~ msgstr "未找到 \"%s\""
 
-#, c-format
 #~ msgid "\"%s\" found"
 #~ msgstr "找到 \"%s\""
 
-#, c-format
 #~ msgid "File \"%s\" not found."
 #~ msgstr "文件 \"%s\" 没有找到。"
 
-#, c-format
 #~ msgid ""
 #~ "Error occurred loading global footprint library table:\n"
 #~ "\n"
@@ -36952,106 +36841,83 @@ msgstr "KiCad 印刷电路板"
 #~ "\n"
 #~ "%s"
 
-#, c-format
 #~ msgid "Plot file \"%s\" created."
 #~ msgstr "创建绘制文件 \"%s\"。"
 
 #~ msgid "Select user defined layer to add to board layer set"
 #~ msgstr "选择要添加到电路板层集合的用户定义层"
 
-#, c-format
 #~ msgid "Could not create file \"%s\"."
 #~ msgstr "无法创建文件 \"%s\"。"
 
-#, c-format
 #~ msgid "Unable to create \"%s\"."
 #~ msgstr "无法创建 \"%s\"。"
 
-#, c-format
 #~ msgid "No access rights to write to file \"%s\""
 #~ msgstr "没有权限写入文件 \"%s\""
 
-#, c-format
 #~ msgid "No access rights to write to file '%s'."
 #~ msgstr "没有权限写入文件 '%s'。"
 
-#, c-format
 #~ msgid "%s%s [from %s.%s]"
 #~ msgstr "%s%s [来自 %s.%s]"
 
-#, c-format
 #~ msgid "Unable to create or write file \"%s\""
 #~ msgstr "无法创建或写入文件 \"%s\""
 
-#, c-format
 #~ msgid ""
 #~ "Polygon on Altium layer %d has no KiCad equivalent. Ignore it instead"
 #~ msgstr "Altium 层 %d 上的 Polygon 没有任何 KiCad 等效项。 忽略它"
 
-#, c-format
 #~ msgid ""
 #~ "Arc on Altium layer %d has no KiCad equivalent. Put it on Eco1_User "
 #~ "instead"
 #~ msgstr "Altium 层 %d 上的 Arc 没有 KiCad 等效项。改为将其放在 Eco1_User 上"
 
-#, c-format
 #~ msgid ""
 #~ "Track on Altium layer %d has no KiCad equivalent. Put it on Eco1_User "
 #~ "instead"
 #~ msgstr ""
 #~ "Altium 层 %d 上的 Track 没有任何 KiCad 等效项。 改为将其放在 Eco1_User 上"
 
-#, c-format
 #~ msgid ""
 #~ "Invalid format for record_tag string \"%s\" in Geometric definition row "
 #~ "%zu"
 #~ msgstr "record_tag 字符串 \"%s\" 的格式无效位于几何定义行 %zu 中"
 
-#, c-format
 #~ msgid "Unhandled graphic item '%s' in Geometric definition row %zu"
 #~ msgstr "未处理的图形项'%s'，位于几何定义行 %zu"
 
-#, c-format
 #~ msgid "footprint library path \"%s\" does not exist"
 #~ msgstr "封装库路径 \"%s\" 不存在"
 
-#, c-format
 #~ msgid "unknown token \"%s\""
 #~ msgstr "未知标记 \"%s\""
 
-#, c-format
 #~ msgid "Library \"%s\" is read only"
 #~ msgstr "\"%s\" 库为只读"
 
-#, c-format
 #~ msgid "user does not have permission to delete directory \"%s\""
 #~ msgstr "用户没有权限删除目录 \"%s\""
 
-#, c-format
 #~ msgid "library directory \"%s\" has unexpected sub-directories"
 #~ msgstr "库目录 \"%s\" 有额外的子目录"
 
-#, c-format
 #~ msgid "unexpected file \"%s\" was found in library path \"%s\""
 #~ msgstr "在库路径 \"%s\" 中找到了额外的文件 \"%s\""
 
-#, c-format
 #~ msgid "footprint library \"%s\" cannot be deleted"
 #~ msgstr "封装库 \"%s\" 不能被删除"
 
-#, c-format
 #~ msgid "Footprint library path '%s' does not exist (or is not a directory)."
 #~ msgstr "封装库路径 \"%s\" 不存在（或不是目录）。"
 
-#, c-format
 #~ msgid "No write permissions to delete file \"%s\""
 #~ msgstr "没有写入权限来删除文件 \"%s\""
 
-#, c-format
 #~ msgid "User does not have permission to delete directory \"%s\"."
 #~ msgstr "用户没有权限删除目录 \"%s\"。"
 
-#, c-format
 #~ msgid ""
 #~ "Invalid net ID in\n"
 #~ "file: \"%s\"\n"
@@ -37063,7 +36929,6 @@ msgstr "KiCad 印刷电路板"
 #~ "行：%d\n"
 #~ "偏移：%d"
 
-#, c-format
 #~ msgid ""
 #~ "invalid float number in file: \"%s\"\n"
 #~ "line: %d, offset: %d"
@@ -37071,7 +36936,6 @@ msgstr "KiCad 印刷电路板"
 #~ "文件中的浮点数字无效：\"%s\"\n"
 #~ "行：%d, 偏移量：%d"
 
-#, c-format
 #~ msgid ""
 #~ "missing float number in file: \"%s\"\n"
 #~ "line: %d, offset: %d"
@@ -37090,7 +36954,6 @@ msgstr "KiCad 印刷电路板"
 #~ msgid "No graphic items found in file to import"
 #~ msgstr "在要导入的文件中找不到图形项目"
 
-#, c-format
 #~ msgid "Page layout description file \"%s\" not found."
 #~ msgstr "未找到图框描述文件 \"%s\"。"
 
@@ -37124,15 +36987,12 @@ msgstr "KiCad 印刷电路板"
 #~ msgid "Page layout design files"
 #~ msgstr "图框设计文件"
 
-#, c-format
 #~ msgid "Change \"%s\" link from \"%s\" to \"%s\"?"
 #~ msgstr "将 \"%s\" 链接从 \"%s\" 改为 \"%s\"?"
 
-#, c-format
 #~ msgid "Error loading schematic file \"%s\""
 #~ msgstr "加载原理图文件 \"%s\" 时出错"
 
-#, c-format
 #~ msgid ""
 #~ "Error loading schematic \"%s\".\n"
 #~ "%s"
@@ -37140,15 +37000,12 @@ msgstr "KiCad 印刷电路板"
 #~ "加载原理图 \"%s\" 出错。\n"
 #~ "%s"
 
-#, c-format
 #~ msgid "%s, %s, or %s"
 #~ msgstr "%s, %s, 或 %s"
 
-#, c-format
 #~ msgid "%s, %s, %s, or %s"
 #~ msgstr "%s, %s, %s, 或 %s"
 
-#, c-format
 #~ msgid "Failed to load schematic \"%s\""
 #~ msgstr "无法加载原理图 \"%s\""
 
@@ -37164,7 +37021,6 @@ msgstr "KiCad 印刷电路板"
 #~ msgid "Template path:"
 #~ msgstr "模板路径:"
 
-#, c-format
 #~ msgid "Failed to delete '%s'"
 #~ msgstr "无法删除 '%s'"
 
@@ -37174,11 +37030,9 @@ msgstr "KiCad 印刷电路板"
 #~ msgid "Delete File"
 #~ msgstr "删除文件"
 
-#, c-format
 #~ msgid "Are you sure you want to delete '%s'?"
 #~ msgstr "确定要删除 \"%s\"？"
 
-#, c-format
 #~ msgid "Are you sure you want to delete %d items?"
 #~ msgstr "你确定你想删除 %d 个项目吗？"
 
@@ -37233,7 +37087,6 @@ msgstr "KiCad 印刷电路板"
 #~ msgid "Thermal Spoke Width"
 #~ msgstr "防散热导线宽度"
 
-#, c-format
 #~ msgid ""
 #~ "Html or pdf help file \n"
 #~ "%s\n"
@@ -37496,34 +37349,27 @@ msgstr "KiCad 印刷电路板"
 #~ "height."
 #~ msgstr "厚度大于其宽度或高度的 1/4 的文本将不可读。"
 
-#, c-format
 #~ msgid "Track width less than minimum track width (%s)."
 #~ msgstr "布线宽度小于最小线宽 (%s)。"
 
-#, c-format
 #~ msgid "Via diameter less than minimum via diameter (%s)."
 #~ msgstr "过孔外径小于最小过孔外径 (%s)。"
 
-#, c-format
 #~ msgid "Via hole diameter less than minimum through hole diameter (%s)."
 #~ msgstr "通孔直径小于最小通孔直径 (%s)。"
 
 #~ msgid "Via hole diameter larger than via diameter."
 #~ msgstr "通孔直径大于过孔直径。"
 
-#, c-format
 #~ msgid "Diameter and hole leave via annulus less than minimum (%s)."
 #~ msgstr "直径和钻头通过的环隙小于最小值 (%s)。"
 
-#, c-format
 #~ msgid "Differential pair track width less than minimum track width (%s)."
 #~ msgstr "差分对布线宽度小于最小布线宽度 (%s)。"
 
-#, c-format
 #~ msgid "Differential pair via gap less than minimum clearance (%s)."
 #~ msgstr "差分对过孔间隙小于最小间隙(%s)。"
 
-#, c-format
 #~ msgid "Change %s footprint from \"%s\" to \"%s\"."
 #~ msgstr "%s 的封装从 \"%s\" 更改为 \"%s\"。"
 
@@ -37598,7 +37444,6 @@ msgstr "KiCad 印刷电路板"
 #~ msgid "Table Name"
 #~ msgstr "列表名称"
 
-#, c-format
 #~ msgid "Directory \"%s\" is not writable."
 #~ msgstr "目录 \"%s\" 不可写入。"
 
@@ -37632,7 +37477,6 @@ msgstr "KiCad 印刷电路板"
 #~ msgid "Flip (mirror) the board view"
 #~ msgstr "翻转 (镜像) 板视图"
 
-#, c-format
 #~ msgid "Render time %.0f ms ( %.1f fps)"
 #~ msgstr "渲染时间 %.0f ms ( %.1f fps)"
 
@@ -37642,7 +37486,6 @@ msgstr "KiCad 印刷电路板"
 #~ msgid "Mirror Around Vertical Axis"
 #~ msgstr "围绕垂直轴(Y)镜像"
 
-#, c-format
 #~ msgid ""
 #~ "Project name:\n"
 #~ "%s\n"
@@ -37758,7 +37601,6 @@ msgstr "KiCad 印刷电路板"
 #~ msgid "Regulator list change"
 #~ msgstr "修改稳压器列表"
 
-#, c-format
 #~ msgid ""
 #~ "Board thickness %s differs from stackup thickness %s\n"
 #~ "Allowed max error %s"
@@ -37805,7 +37647,6 @@ msgstr "KiCad 印刷电路板"
 #~ "specified."
 #~ msgstr "选择用于绘制具有指定画笔大小项的画笔大小。"
 
-#, c-format
 #~ msgid "Via drill less than minimum through hole (%s)."
 #~ msgstr "通孔小于最小通孔 (%s)。"
 
@@ -37827,7 +37668,6 @@ msgstr "KiCad 印刷电路板"
 #~ msgid "Footprint place files"
 #~ msgstr "封装位置文件"
 
-#, c-format
 #~ msgid "Multiple item %s%s (unit %d)\n"
 #~ msgstr "多重项目 %s%s (单元 %d)\n"
 
@@ -37877,7 +37717,6 @@ msgstr "KiCad 印刷电路板"
 #~ msgid "Settings"
 #~ msgstr "设置"
 
-#, c-format
 #~ msgid "Error saving %s symbol library table."
 #~ msgstr "保存 %s 符号库表出错。"
 
@@ -37899,7 +37738,6 @@ msgstr "KiCad 印刷电路板"
 #~ msgid "Generate Footprint Position Files"
 #~ msgstr "生成封装位置文件"
 
-#, c-format
 #~ msgid ""
 #~ "Value < %s  can be time consuming when \n"
 #~ "filling zones."
@@ -37936,15 +37774,12 @@ msgstr "KiCad 印刷电路板"
 #~ msgid "Add footprints with pads unlocked"
 #~ msgstr "添加焊盘处于解锁状态的封装"
 
-#, c-format
 #~ msgid "More than one symbol found in symbol file \"%s\"."
 #~ msgstr "符号文件 \"%s\" 内不止一个符号。"
 
-#, c-format
 #~ msgid "Saving symbol in \"%s\""
 #~ msgstr "保存符号到 \"%s\""
 
-#, c-format
 #~ msgid "An error occurred saving symbol file \"%s\""
 #~ msgstr "保存符号文件 \"%s\" 发生错误"
 
@@ -38060,7 +37895,6 @@ msgstr "KiCad 印刷电路板"
 #~ msgid "Drill too small"
 #~ msgstr "钻孔内径太小"
 
-#, c-format
 #~ msgid "(%s %s; actual %s)"
 #~ msgstr "(%s %s; 实际 %s)"
 
@@ -38070,7 +37904,6 @@ msgstr "KiCad 印刷电路板"
 #~ msgid "Pad local solder mask clearance must be zero or greater than zero"
 #~ msgstr "焊盘局部阻焊间隙必须为零或大于零"
 
-#, c-format
 #~ msgid "Pad local solder mask clearance must be greater than %s"
 #~ msgstr "焊盘局部阻焊间隙必须大于 %s"
 
@@ -38087,7 +37920,6 @@ msgstr "KiCad 印刷电路板"
 #~ "Incorrect pad shape: the shape must be equivalent to only one polygon"
 #~ msgstr "错误的焊盘形状：该形状必须相当于只有一个多边形"
 
-#, c-format
 #~ msgid ""
 #~ "This will change the net assigned to %s pad %s to %s.\n"
 #~ "Do you wish to continue?"
@@ -38095,7 +37927,6 @@ msgstr "KiCad 印刷电路板"
 #~ "将关联给 %s 焊盘 %s 的网络更改为 %s。\n"
 #~ "是否要继续？"
 
-#, c-format
 #~ msgid ""
 #~ "This will change the net assigned to %lu connected pads to %s.\n"
 #~ "Do you wish to continue?"
@@ -38106,7 +37937,6 @@ msgstr "KiCad 印刷电路板"
 #~ msgid "Continue"
 #~ msgstr "继续"
 
-#, c-format
 #~ msgid ""
 #~ "The selected file is not valid or might be corrupt: The layer stack "
 #~ "refers to layer ID '%s' which does not exist in the layer definitions."
@@ -38139,22 +37969,18 @@ msgstr "KiCad 印刷电路板"
 #~ msgid "Associate selected footprint with selected components"
 #~ msgstr "将所选封装与所选元件关联"
 
-#, c-format
 #~ msgid "pin %s"
 #~ msgstr "引脚 %s"
 
 #~ msgid "component"
 #~ msgstr "元件"
 
-#, c-format
 #~ msgid "%s %s found"
 #~ msgstr "%s %s 找到"
 
-#, c-format
 #~ msgid "Component %s not found"
 #~ msgstr "元件 %s 没有找到"
 
-#, c-format
 #~ msgid "%s %s \"%s\" from \"%s\" to \"%s\""
 #~ msgstr "%s %s \"%s\" 从 \"%s\" 到 \"%s\""
 
@@ -38190,14 +38016,12 @@ msgstr "KiCad 印刷电路板"
 #~ msgid "No Colon in Nicknames"
 #~ msgstr "别名没有冒号"
 
-#, c-format
 #~ msgid "Duplicate Nickname: \"%s\"."
 #~ msgstr "重复的昵称：\"%s\"。"
 
 #~ msgid "Please Delete or Modify One"
 #~ msgstr "请删除或修改一个"
 
-#, c-format
 #~ msgid ""
 #~ "The current configuration does not include a library with the\n"
 #~ "nickname \"%s\".  Use Manage Symbol Libraries\n"
@@ -38210,7 +38034,6 @@ msgstr "KiCad 印刷电路板"
 #~ msgid "Symbol library not found."
 #~ msgstr "符号库未找到。"
 
-#, c-format
 #~ msgid ""
 #~ "Library \"%s\" is read only and must be saved as a different library."
 #~ msgstr "库 \"%s\" 是只读的，必须另存为其他库。"
@@ -38218,21 +38041,17 @@ msgstr "KiCad 印刷电路板"
 #~ msgid "Select symbol to browse"
 #~ msgstr "选择要浏览的符号"
 
-#, c-format
 #~ msgid "Cannot find footprint for symbol '%s'."
 #~ msgstr "找不到 \"%s\" 符号的封装。"
 
 # 可能会出现语序问题。待测试。
-#, c-format
 #~ msgid "Change '%s' labels to '%s'."
 #~ msgstr "将 '%s' 标签更改为 '%s'。"
 
 # 可能会出现语序问题。待测试。
-#, c-format
 #~ msgid "Change '%s' global labels to '%s'."
 #~ msgstr "更改 '%s' 全局标签至 '%s'。"
 
-#, c-format
 #~ msgid "Change '%s' hierarchical label to '%s'."
 #~ msgstr "更改 '%s' 分层标签为 '%s'。"
 
@@ -38248,7 +38067,6 @@ msgstr "KiCad 印刷电路板"
 #~ msgid "Edit Component Name"
 #~ msgstr "编辑元件名称"
 
-#, c-format
 #~ msgid ""
 #~ "Current project directory:\n"
 #~ "%s"
@@ -38259,18 +38077,15 @@ msgstr "KiCad 印刷电路板"
 #~ msgid "Default Values:"
 #~ msgstr "默认值："
 
-#, c-format
 #~ msgid "File \"%s\" written"
 #~ msgstr "文件 \"%s\" 写入"
 
-#, c-format
 #~ msgid "Page size: width %.4g height %.4g"
 #~ msgstr "图框尺寸: 宽 %.4g 高 %.4g"
 
 #~ msgid "3D Settings"
 #~ msgstr "3D 设置"
 
-#, c-format
 #~ msgid "%s footprint \"%s\" (from \"%s\") to \"%s\""
 #~ msgstr "%s 封装 \"%s\" (从 \"%s\")更改为 \"%s\""
 
@@ -38291,7 +38106,6 @@ msgstr "KiCad 印刷电路板"
 #~ "PCB?"
 #~ msgstr "所做的更改不能撤销。你确定要更新 PCB 吗？"
 
-#, c-format
 #~ msgid "Duplicate nicknames \"%s\"."
 #~ msgstr "重复的昵称 \"%s\"。"
 
@@ -38301,18 +38115,15 @@ msgstr "KiCad 印刷电路板"
 #~ msgid "Keepout violation"
 #~ msgstr "禁止违规"
 
-#, c-format
 #~ msgid "Wrote board file: \"%s\""
 #~ msgstr "写板文件：\"%s\""
 
 #~ msgid "none"
 #~ msgstr "无"
 
-#, c-format
 #~ msgid "Component \"%s\" replaced in \"%s\""
 #~ msgstr "元件 \"%s\" 替换为 \"%s\""
 
-#, c-format
 #~ msgid "Component \"%s\" added in \"%s\""
 #~ msgstr "组件 \"%s\" 已加入 \"%s\""
 
@@ -38325,7 +38136,6 @@ msgstr "KiCad 印刷电路板"
 #~ msgid "Anonymous"
 #~ msgstr "匿名"
 
-#, c-format
 #~ msgid ""
 #~ "File \"%s\" is format version: %d.\n"
 #~ "I only support format version <= %d.\n"
@@ -39403,7 +39213,6 @@ msgstr "KiCad 印刷电路板"
 #~ msgstr "通孔环"
 
 #, fuzzy
-#~| msgid "Track width outside allowed limits"
 #~ msgid "Via diameter outside allowed limits"
 #~ msgstr "布线宽度超出允许的限制"
 
@@ -39411,12 +39220,10 @@ msgstr "KiCad 印刷电路板"
 #~ msgstr "  （%s %s 环形 %s;实际 %s）"
 
 #, fuzzy
-#~| msgid "Checking pins...\n"
 #~ msgid "Checking dangling pads & vias..."
 #~ msgstr "测试悬空的焊盘/过孔"
 
 #, fuzzy
-#~| msgid "Checking sheet names...\n"
 #~ msgid "Checking starved zones..."
 #~ msgstr "测试 starved 区域"
 
