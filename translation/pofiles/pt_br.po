@@ -1573,9 +1573,8 @@ msgid "Warning"
 msgstr "Atenção"
 
 #: common/confirm.cpp:160 common/confirm.cpp:166
-#, fuzzy
 msgid "File Open Error"
-msgstr "Erro ao Salvar Ficheiro"
+msgstr "Houve um erro ao abrir o arquivo"
 
 #: common/confirm.cpp:162 common/confirm.cpp:168
 msgid "Interleaved saves may produce very unexpected results."
@@ -2521,7 +2520,7 @@ msgstr "Retrato"
 #: common/dialogs/dialog_page_settings.cpp:473
 #, fuzzy, c-format
 msgid "Drawing sheet file '%s' not found."
-msgstr "Ficheiro de esquema \"%s\" não encontrado."
+msgstr "Ficheiro de esquema \"%s\" não foi encontrado."
 
 #: common/dialogs/dialog_page_settings.cpp:545
 msgid "the translation for paper size must preserve original spellings"
@@ -3655,14 +3654,12 @@ msgid "Bus wire thickness"
 msgstr "Espessura do &Barramento:"
 
 #: common/dialogs/panel_setup_netclasses.cpp:489
-#, fuzzy
 msgid "Schematic wire color"
-msgstr "Ficheiros de esquema"
+msgstr "Arquivos do esquema"
 
 #: common/dialogs/panel_setup_netclasses.cpp:490
-#, fuzzy
 msgid "Schematic wire line style"
-msgstr "Ficheiros de esquema"
+msgstr "Arquivos do esquema"
 
 #: common/dialogs/panel_setup_netclasses.cpp:541
 msgid "The default net class is required."
@@ -3905,19 +3902,19 @@ msgid "Could not use OpenGL"
 msgstr "Não foi possível abrir o CvPcb"
 
 #: common/drawing_sheet/drawing_sheet_parser.cpp:890
-#, fuzzy, c-format
+#, c-format
 msgid "Drawing sheet '%s' not found."
-msgstr "Ficheiro de esquema \"%s\" não encontrado."
+msgstr "O arquivo do esquema \"%s\" não foi encontrado."
 
 #: common/drawing_sheet/drawing_sheet_parser.cpp:900
-#, fuzzy, c-format
+#, c-format
 msgid "Drawing sheet '%s' could not be opened."
-msgstr "Ficheiro de esquema \"%s\" não encontrado."
+msgstr "O arquivo do esquema \"%s\" não pode ser aberto."
 
 #: common/drawing_sheet/drawing_sheet_parser.cpp:913
-#, fuzzy, c-format
+#, c-format
 msgid "Drawing sheet '%s' was not fully read."
-msgstr "O ficheiro \"%s\" não foi lido completamente"
+msgstr "O arquivo \"%s\" não foi completamente lido."
 
 #: common/drawing_sheet/ds_data_item.cpp:370
 #: common/drawing_sheet/ds_draw_item.cpp:122 common/eda_text.cpp:667
@@ -3961,9 +3958,8 @@ msgstr "Imagem"
 
 #: common/drawing_sheet/ds_data_model_io.cpp:91
 #: common/drawing_sheet/ds_data_model_io.cpp:120
-#, fuzzy
 msgid "Error writing drawing sheet file"
-msgstr "Encerrar desenho da folha"
+msgstr "Encerre o desenho do arquivo do esquema"
 
 #: common/drawing_sheet/ds_draw_item.cpp:136
 msgid "First Page Only"
@@ -3983,15 +3979,15 @@ msgstr "Opção da Primeira Página"
 
 #: common/drawing_sheet/ds_draw_item.cpp:144
 msgid "Repeat Count"
-msgstr "Repetir Contagem"
+msgstr "Repita a contagem"
 
 #: common/drawing_sheet/ds_draw_item.cpp:147
 msgid "Repeat Label Increment"
-msgstr "Repetir Incremento de Rótulo"
+msgstr "Repita o incremento do rótulo"
 
 #: common/drawing_sheet/ds_draw_item.cpp:153
 msgid "Repeat Position Increment"
-msgstr "Repetir Incremento de Posição"
+msgstr "Repita o incremento da posição"
 
 #: common/drawing_sheet/ds_draw_item.cpp:155
 #: pagelayout_editor/dialogs/dialog_design_inspector_base.cpp:39
@@ -4014,28 +4010,27 @@ msgid "Line, length %s"
 msgstr "Linha, comprimento %s"
 
 #: common/drawing_sheet/ds_draw_item.cpp:482
-#, fuzzy
 msgid "Page Limits"
-msgstr "Exibir limites da folha"
+msgstr "Limites da página"
 
 #: common/dsnlexer.cpp:35
 msgid "clipboard"
 msgstr "área de transferência"
 
 #: common/dsnlexer.cpp:336
-#, fuzzy, c-format
+#, c-format
 msgid "Expecting %s"
 msgstr "Aguardando \"%s\""
 
 #: common/dsnlexer.cpp:344
-#, fuzzy, c-format
+#, c-format
 msgid "Expecting '%s'"
-msgstr "Executando ‘%s’"
+msgstr "Aguardando '%s'"
 
 #: common/dsnlexer.cpp:352
-#, fuzzy, c-format
+#, c-format
 msgid "Unexpected %s"
-msgstr "Inesperado \"%s\""
+msgstr "\"%s\" inesperado"
 
 #: common/dsnlexer.cpp:360
 #, c-format
@@ -4043,18 +4038,18 @@ msgid "%s is a duplicate"
 msgstr "%s é uma cópia"
 
 #: common/dsnlexer.cpp:368
-#, fuzzy, c-format
+#, c-format
 msgid "Unexpected '%s'"
-msgstr "Inesperado \"%s\""
+msgstr "'%s' Inesperado"
 
 #: common/dsnlexer.cpp:418
-#, fuzzy, c-format
+#, c-format
 msgid "need a number for '%s'"
-msgstr "precisa de um NÚMERO para \"%s\""
+msgstr "precisa de uma quantidade para '%s'"
 
 #: common/dsnlexer.cpp:703 common/dsnlexer.cpp:764
 msgid "Un-terminated delimited string"
-msgstr "String delimitada não terminada"
+msgstr "Cadeia delimitada não terminada"
 
 #: common/dsnlexer.cpp:725
 msgid "String delimiter must be a single character of ', \", or $"
@@ -4069,9 +4064,9 @@ msgid "&Help"
 msgstr "&Ajuda"
 
 #: common/eda_base_frame.cpp:940
-#, fuzzy, c-format
+#, c-format
 msgid "File '%s' was not found."
-msgstr "Ficheiro \"%s\" não encontrado."
+msgstr "O arquivo '%s' não foi encontrado."
 
 #: common/eda_base_frame.cpp:983
 msgid "Preferences"
@@ -4126,7 +4121,7 @@ msgstr "Documentação"
 #: common/eda_doc.cpp:150
 #, fuzzy, c-format
 msgid "Documentation file '%s' not found."
-msgstr "Ficheiro de esquema \"%s\" não encontrado."
+msgstr "Ficheiro de esquema \"%s\" não foi encontrado."
 
 #: common/eda_doc.cpp:193
 #, fuzzy, c-format
@@ -4231,25 +4226,21 @@ msgid "Pad"
 msgstr "Ilha"
 
 #: common/eda_item.cpp:254 common/eda_item.cpp:257
-#, fuzzy
 msgid "Graphic Shape"
-msgstr "Estilo Gráfico"
+msgstr "Formato do gráfico"
 
 #: common/eda_item.cpp:255
-#, fuzzy
 msgid "Board Text"
-msgstr "Configuração da Placa"
+msgstr "Texto da placa"
 
 #: common/eda_item.cpp:256 pcbnew/widgets/appearance_controls.cpp:345
-#, fuzzy
 msgid "Footprint Text"
-msgstr "Texto dos Footprints - Verso"
+msgstr "Texto da representação real do componente"
 
 #: common/eda_item.cpp:258 common/eda_item.cpp:267
 #: pcbnew/tools/board_inspection_tool.cpp:381
-#, fuzzy
 msgid "Zone"
-msgstr "Zonas"
+msgstr "Zona"
 
 #: common/eda_item.cpp:259 pcbnew/pcb_track.cpp:684
 msgid "Track"
@@ -4257,29 +4248,24 @@ msgstr "Trilha"
 
 #: common/eda_item.cpp:260 pcbnew/dialogs/dialog_board_statistics.cpp:493
 #: pcbnew/pcb_track.cpp:748
-#, fuzzy
 msgid "Via"
-msgstr "Vias"
+msgstr "Via"
 
 #: common/eda_item.cpp:261
-#, fuzzy
 msgid "Board Marker"
-msgstr "Camadas da placa:"
+msgstr "Marcador da placa"
 
 #: common/eda_item.cpp:262
-#, fuzzy
 msgid "Aligned Dimension"
-msgstr "Adicionar Cota"
+msgstr "Dimensão alinhada"
 
 #: common/eda_item.cpp:263
-#, fuzzy
 msgid "Orthogonal Dimension"
-msgstr "Dimensão"
+msgstr "Complemento ortogonal"
 
 #: common/eda_item.cpp:264
-#, fuzzy
 msgid "Center Dimension"
-msgstr "Dimensão"
+msgstr "Dimensão do centro"
 
 #: common/eda_item.cpp:265 pcbnew/pcb_dimension.cpp:1044
 msgid "Leader"
@@ -4290,9 +4276,8 @@ msgid "Target"
 msgstr "Alvo"
 
 #: common/eda_item.cpp:268
-#, fuzzy
 msgid "Item List"
-msgstr "Itens"
+msgstr "Lista do item"
 
 #: common/eda_item.cpp:269
 msgid "Net Info"
@@ -4305,9 +4290,8 @@ msgid "Group"
 msgstr "Agrupar por"
 
 #: common/eda_item.cpp:272
-#, fuzzy
 msgid "Schematic Marker"
-msgstr "Esquema salvo"
+msgstr "Marcador do esquemático"
 
 #: common/eda_item.cpp:273 eeschema/sch_junction.h:87
 msgid "Junction"
@@ -4324,9 +4308,8 @@ msgid "Wire Entry"
 msgstr "Adicionar Entrada de Fio"
 
 #: common/eda_item.cpp:276
-#, fuzzy
 msgid "Bus Entry"
-msgstr "Adicionar Entrada de Barramento"
+msgstr "Entrada do barramento"
 
 #: common/eda_item.cpp:277
 #, fuzzy
@@ -4338,14 +4321,12 @@ msgid "Bitmap"
 msgstr "Bitmap"
 
 #: common/eda_item.cpp:279
-#, fuzzy
 msgid "Schematic Text"
-msgstr "Tamanho da folha"
+msgstr "Texto do esquemático"
 
 #: common/eda_item.cpp:280
-#, fuzzy
 msgid "Net Label"
-msgstr "Novo Rótulo"
+msgstr "Rótulo da rede"
 
 #: common/eda_item.cpp:281 eeschema/sch_text.cpp:752
 msgid "Global Label"
@@ -4356,14 +4337,12 @@ msgid "Hierarchical Label"
 msgstr "Rótulo Hierárquico"
 
 #: common/eda_item.cpp:283
-#, fuzzy
 msgid "Schematic Field"
-msgstr "Ficheiros de esquema"
+msgstr "Campo do esquemático"
 
 #: common/eda_item.cpp:284
-#, fuzzy
 msgid "Schematic Symbol"
-msgstr "Editar Símbolos Esquemáticos"
+msgstr "Símbolo do esquemático"
 
 #: common/eda_item.cpp:285
 #, fuzzy
@@ -4800,7 +4779,7 @@ msgstr ""
 #: common/gestfich.cpp:153
 #, fuzzy, c-format
 msgid "Command '%s' could not be found."
-msgstr "Comando \"%s\" não encontrado"
+msgstr "Comando \"%s\" não foi encontrado"
 
 #: common/gestfich.cpp:213
 #, fuzzy, c-format
@@ -4933,23 +4912,20 @@ msgstr "Gestor do projeto"
 #: common/hotkey_store.cpp:73 eeschema/eeschema_config.cpp:67
 #: eeschema/menubar.cpp:129 eeschema/sch_edit_frame.cpp:1253
 #: kicad/tools/kicad_manager_actions.cpp:69
-#, fuzzy
 msgid "Schematic Editor"
-msgstr "Alternar para Editor de Esquemas"
+msgstr "Editor do esquemático"
 
 #: common/hotkey_store.cpp:74 kicad/tools/kicad_manager_actions.cpp:81
 #: pcbnew/menubar_pcb_editor.cpp:184 pcbnew/pcb_edit_frame.cpp:1269
 #: pcbnew/pcbnew_config.cpp:57
-#, fuzzy
 msgid "PCB Editor"
-msgstr "Alternar para o Editor de PCI"
+msgstr "Editor da PCI"
 
 #: common/hotkey_store.cpp:75 kicad/tools/kicad_manager_actions.cpp:110
 #: pagelayout_editor/menubar.cpp:86 pagelayout_editor/pl_editor_frame.cpp:481
 #: pagelayout_editor/pl_editor_frame.cpp:555
-#, fuzzy
 msgid "Drawing Sheet Editor"
-msgstr "Folha de Desenho"
+msgstr "Editor do esquema"
 
 #: common/hotkey_store.cpp:156
 msgid "Gestures"
@@ -4968,15 +4944,15 @@ msgstr ""
 "biblioteca kiface \"%s\"."
 
 #: common/kiway.cpp:297
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Fatal Installation Bug. File:\n"
 "'%s'\n"
 "could not be loaded\n"
 msgstr ""
-"Erro Fatal de Instalação. Ficheiro:\n"
+"Erro Fatal de Instalação. O arquivo:\n"
 "\"%s\"\n"
-"não pôde ser carregado\n"
+"não pode ser carregado\n"
 
 #: common/kiway.cpp:301
 msgid "It is missing.\n"
@@ -5645,7 +5621,7 @@ msgstr ""
 #: common/pgm_base.cpp:165
 #, fuzzy
 msgid "No default editor found, you must choose one."
-msgstr "Editor padrão não encontrado, você deve escolhê-lo"
+msgstr "Editor padrão não foi encontrado, você deve escolhê-lo"
 
 #: common/pgm_base.cpp:185 common/pgm_base.cpp:187
 #, fuzzy
@@ -6499,14 +6475,12 @@ msgid "Donate"
 msgstr ""
 
 #: common/tool/actions.cpp:647
-#, fuzzy
 msgid "Open \"Donate to KiCad\" in a web browser"
-msgstr "Abre \"Contribuir com o KiCad\" em um navegador web"
+msgstr "Abra \"Contribua com o KiCad\" em um navegador da internet"
 
 #: common/tool/actions.cpp:651
-#, fuzzy
 msgid "Report Bug"
-msgstr "Ficheiro de relatório"
+msgstr "Relate um problema"
 
 #: common/tool/common_control.cpp:219
 #, c-format
@@ -6520,16 +6494,17 @@ msgstr ""
 "Deseja acessar a ajuda online do KiCad?"
 
 #: common/tool/common_control.cpp:222 common/tool/common_control.cpp:242
-#, fuzzy
 msgid "File Not Found"
-msgstr "Ficheiro não encontrado"
+msgstr "O arquivo não foi encontrado"
 
 #: common/tool/common_control.cpp:239
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Help file '%s' could not be found.\n"
 "Do you want to access the KiCad online help?"
-msgstr "Ficheiro de ajuda \"%s\" não foi encontrado."
+msgstr ""
+"O arquivo de ajuda '%s' não foi encontrado.\n"
+"Deseja acessar a ajuda do KiCad online?"
 
 #: common/tool/common_control.cpp:269
 #, c-format
@@ -6613,7 +6588,7 @@ msgstr "Espelhamento pelo eixo Y ainda não suportado"
 #: common/widgets/footprint_preview_widget.cpp:103
 #, fuzzy
 msgid "Footprint not found."
-msgstr "Footprint não encontrado"
+msgstr "Footprint não foi encontrado"
 
 #: common/widgets/footprint_select_widget.cpp:144
 msgid "No default footprint"
@@ -6861,274 +6836,266 @@ msgstr "Todos os ficheiros"
 
 #: common/wildcards_and_files_ext.cpp:189
 msgid "KiCad drawing symbol files"
-msgstr "Ficheiros de símbolos de desenho do KiCad"
+msgstr "Arquivos dos símbolos de desenho do KiCad"
 
 #: common/wildcards_and_files_ext.cpp:195
 msgid "KiCad symbol library files"
-msgstr "Ficheiros de biblioteca de símbolos do KiCad"
+msgstr "Arquivos da biblioteca dos símbolos do KiCad"
 
 #: common/wildcards_and_files_ext.cpp:202
-#, fuzzy
 msgid "KiCad legacy symbol library files"
-msgstr "Ficheiros de biblioteca de símbolos do KiCad"
+msgstr "Arquivos da biblioteca dos símbolos do KiCad"
 
 #: common/wildcards_and_files_ext.cpp:208
-#, fuzzy
 msgid "All KiCad symbol library files"
-msgstr "Ficheiros de biblioteca de símbolos do KiCad"
+msgstr "Arquivos da biblioteca dos símbolos do KiCad"
 
 #: common/wildcards_and_files_ext.cpp:215
 msgid "KiCad project files"
-msgstr "Ficheiro de projeto KiCad"
+msgstr "Arquivo do projeto KiCad"
 
 #: common/wildcards_and_files_ext.cpp:221
-#, fuzzy
 msgid "KiCad legacy project files"
-msgstr "Ficheiro de projeto KiCad"
+msgstr "Arquivos legados do projeto KiCad"
 
 #: common/wildcards_and_files_ext.cpp:228
-#, fuzzy
 msgid "All KiCad project files"
-msgstr "Ficheiro de projeto KiCad"
+msgstr "Todos os arquivos do projeto KiCad"
 
 #: common/wildcards_and_files_ext.cpp:235
-#, fuzzy
 msgid "KiCad legacy schematic files"
-msgstr "Ficheiros esquemáticos do KiCad"
+msgstr "Arquivos dos esquemáticos legados do KiCad"
 
 #: common/wildcards_and_files_ext.cpp:242
-#, fuzzy
 msgid "KiCad s-expression schematic files"
-msgstr "Ficheiros esquemáticos do KiCad"
+msgstr "Arquivos dos esquemáticos s-expression do KiCad"
 
 #: common/wildcards_and_files_ext.cpp:249
-#, fuzzy
 msgid "Altium schematic files"
-msgstr "Ficheiros esquemáticos do KiCad"
+msgstr "Arquivos do esquemático do Altium"
 
 #: common/wildcards_and_files_ext.cpp:255
 msgid "CADSTAR Schematic Archive files"
-msgstr "Ficheiros de arquivos esquemáticos do CADSTAR"
+msgstr "Arquivos dos documento esquemáticos do CADSTAR"
 
 #: common/wildcards_and_files_ext.cpp:261
 msgid "CADSTAR Archive files"
-msgstr "Ficheiros de arquivos CADSTAR"
+msgstr "Arquivos dos documentos CADSTAR"
 
 #: common/wildcards_and_files_ext.cpp:267
 msgid "Eagle XML schematic files"
-msgstr "Ficheiros XML esquemáticos do Eagle"
+msgstr "Arquivos do esquemático XML do Eagle"
 
 #: common/wildcards_and_files_ext.cpp:273
 msgid "Eagle XML files"
-msgstr "Ficheiros XML do Eagle"
+msgstr "Arquivos XML do Eagle"
 
 #: common/wildcards_and_files_ext.cpp:279
 msgid "KiCad netlist files"
-msgstr "Ficheiros netlist do KiCad"
+msgstr "Arquivos netlist do KiCad"
 
 #: common/wildcards_and_files_ext.cpp:285 gerbview/files.cpp:50
 msgid "Gerber files"
-msgstr "Ficheiros Gerber"
+msgstr "Arquivos Gerber"
 
 #: common/wildcards_and_files_ext.cpp:291
 #: common/wildcards_and_files_ext.cpp:332
 msgid "KiCad printed circuit board files"
-msgstr "Ficheiros de placa de circuito impresso do KiCad"
+msgstr "Arquivos da placa de circuito impresso do KiCad"
 
 #: common/wildcards_and_files_ext.cpp:297
 msgid "Eagle ver. 6.x XML PCB files"
-msgstr "Ficheiros de PCI em XML ver. 6.x do Eagle"
+msgstr "Arquivos da PCI em XML ver. 6.x do Eagle"
 
 #: common/wildcards_and_files_ext.cpp:302
 msgid "CADSTAR PCB Archive files"
-msgstr "Ficheiros de arquivos CADSTAR PCB"
+msgstr "Arquivo dos documentos CADSTAR PCB"
 
 #: common/wildcards_and_files_ext.cpp:307
 msgid "P-Cad 200x ASCII PCB files"
-msgstr "Ficheiros de PCI em ASCII do P-Cad 200x"
+msgstr "Arquivos PCI em ASCII do P-Cad 200x"
 
 #: common/wildcards_and_files_ext.cpp:312
 msgid "Altium Designer PCB files"
-msgstr "Ficheiro de design do Altium"
+msgstr "Arquivos PCI do Altium Designer"
 
 #: common/wildcards_and_files_ext.cpp:317
 msgid "Altium Circuit Studio PCB files"
-msgstr "Ficheiro circuito estúdio do Altium"
+msgstr "Arquivos do Altium Circuit Studio"
 
 #: common/wildcards_and_files_ext.cpp:322
 msgid "Altium Circuit Maker PCB files"
-msgstr "Ficheiro maker do Altium"
+msgstr "Arquivos PCI do Altium Circuit Maker"
 
 #: common/wildcards_and_files_ext.cpp:327
 msgid "Fabmaster PCB files"
-msgstr "Ficheiros Fabmaster"
+msgstr "Arquivos Fabmaster"
 
 #: common/wildcards_and_files_ext.cpp:339
 msgid "KiCad footprint files"
-msgstr "Ficheiros de footprint do KiCad"
+msgstr "Arquivos de representação real do componente do KiCad"
 
 #: common/wildcards_and_files_ext.cpp:346
 msgid "KiCad footprint library paths"
-msgstr "Locais de bibliotecas de footprint do KiCad"
+msgstr ""
+"Os caminhos das bibliotecas da representação real do componente do KiCad"
 
 #: common/wildcards_and_files_ext.cpp:353
 msgid "Legacy footprint library files"
-msgstr "Ficheiros de biblioteca de footprint legados"
+msgstr "Arquivos da biblioteca de representação real dos componentes legados"
 
 #: common/wildcards_and_files_ext.cpp:359
 msgid "Eagle ver. 6.x XML library files"
-msgstr "Ficheiros de biblioteca em XML ver. 6.x do Eagle"
+msgstr "Arquivos da biblioteca em XML ver. 6.x do Eagle"
 
 #: common/wildcards_and_files_ext.cpp:365
 msgid "Geda PCB footprint library files"
-msgstr "Ficheiros de biblioteca de footprint PCB do Geda"
+msgstr ""
+"Arquivos da biblioteca da representação real do componente da PCI do Geda"
 
 #: common/wildcards_and_files_ext.cpp:371
-#, fuzzy
 msgid "Drawing sheet files"
-msgstr "Desenhos"
+msgstr "Arquivos dos esquemáticos"
 
 #: common/wildcards_and_files_ext.cpp:379
 msgid "KiCad symbol footprint link files"
-msgstr "Ficheiros de ligação entre símbolos e footprints do KiCad"
+msgstr ""
+"Arquivos de ligação entre os símbolos e da representação real do componente "
+"do KiCad"
 
 #: common/wildcards_and_files_ext.cpp:387 gerbview/files.cpp:69
 msgid "Drill files"
-msgstr "Ficheiros de furação"
+msgstr "Arquivos de perfuração"
 
 #: common/wildcards_and_files_ext.cpp:394
 msgid "SVG files"
-msgstr "Ficheiros SVG"
+msgstr "Arquivos SVG"
 
 #: common/wildcards_and_files_ext.cpp:400
 msgid "HTML files"
-msgstr "Ficheiros HTML"
+msgstr "Arquivos HTML"
 
 #: common/wildcards_and_files_ext.cpp:406
 msgid "CSV Files"
-msgstr "Ficheiros CSV"
+msgstr "Arquivos CSV"
 
 #: common/wildcards_and_files_ext.cpp:412
 msgid "Portable document format files"
-msgstr "Ficheiros de formato de documentos portáveis"
+msgstr "Arquivos PDF"
 
 #: common/wildcards_and_files_ext.cpp:418
 msgid "PostScript files"
-msgstr "Ficheiros PostScript"
+msgstr "Arquivos PostScript"
 
 #: common/wildcards_and_files_ext.cpp:424
 msgid "Report files"
-msgstr "Ficheiros de relatório"
+msgstr "Arquivos do relatório"
 
 #: common/wildcards_and_files_ext.cpp:430
-#, fuzzy
 msgid "Component placement files"
-msgstr "Parâmetros do Componente:"
+msgstr "Arquivos de posicionamento dos componentes"
 
 #: common/wildcards_and_files_ext.cpp:436
 msgid "VRML and X3D files"
-msgstr "Ficheiros VRML e X3D"
+msgstr "Arquivos VRML e X3D"
 
 #: common/wildcards_and_files_ext.cpp:442
 msgid "IDFv3 footprint files"
-msgstr "Ficheiros de footprint IDFv3"
+msgstr "Arquivos de representação real do componente IDFv3"
 
 #: common/wildcards_and_files_ext.cpp:448
 msgid "Text files"
-msgstr "Ficheiros de texto"
+msgstr "Arquivos de texto"
 
 #: common/wildcards_and_files_ext.cpp:454
 msgid "Legacy footprint export files"
-msgstr "Ficheiros de exportação de footprint legados"
+msgstr "Arquivos de exportação legado da representação real do componente"
 
 #: common/wildcards_and_files_ext.cpp:460
-#, fuzzy
 msgid "Electrical rule check file"
-msgstr "Ficheiro de checagem de regas eletrônicas"
+msgstr "Arquivo de verificação das regras elétricas"
 
 #: common/wildcards_and_files_ext.cpp:466
 msgid "Spice library file"
-msgstr "Ficheiro de biblioteca Spice"
+msgstr "Arquivo da biblioteca Spice"
 
 #: common/wildcards_and_files_ext.cpp:472
 msgid "SPICE netlist file"
-msgstr "Ficheiro de netlist SPICE"
+msgstr "Arquivo netlist SPICE"
 
 #: common/wildcards_and_files_ext.cpp:478
 msgid "CadStar netlist file"
-msgstr "Ficheiro de netlist CadStar"
+msgstr "Arquivo netlist CadStar"
 
 #: common/wildcards_and_files_ext.cpp:484
 msgid "Symbol footprint association files"
-msgstr "Ficheiros de associação entre símbolo e footprint"
+msgstr "Arquivos da associação do símbolo da representação real do componente"
 
 #: common/wildcards_and_files_ext.cpp:490
 msgid "Zip file"
-msgstr "Ficheiro ZIP"
+msgstr "Arquivo zip"
 
 #: common/wildcards_and_files_ext.cpp:496
 msgid "GenCAD 1.4 board files"
-msgstr "Ficheiros de placa GenCAD 1.4"
+msgstr "Arquivos da placa GenCAD 1.4"
 
 #: common/wildcards_and_files_ext.cpp:502
 msgid "DXF Files"
-msgstr "Ficheiros DXF"
+msgstr "Arquivos DXF"
 
 #: common/wildcards_and_files_ext.cpp:508
 #: resources/linux/mime/kicad-gerbers.xml.in:21
 msgid "Gerber job file"
-msgstr "Ficheiro de trabalho Gerber"
+msgstr "Arquivo de trabalho Gerber"
 
 #: common/wildcards_and_files_ext.cpp:514
 msgid "Specctra DSN file"
-msgstr "Ficheiro Specctra DSN"
+msgstr "Arquivo Specctra DSN"
 
 #: common/wildcards_and_files_ext.cpp:521
-#, fuzzy
 msgid "Specctra Session file"
-msgstr "Anexar aquivo Specctra Session:"
+msgstr "Arquivo Specctra Session"
 
 #: common/wildcards_and_files_ext.cpp:528
 msgid "IPC-D-356 Test Files"
-msgstr "Ficheiros de Teste IPC-D-356"
+msgstr "Arquivos de teste IPC-D-356"
 
 #: common/wildcards_and_files_ext.cpp:535
 msgid "Workbook file"
-msgstr "Ficheiro Workbook"
+msgstr "Arquivo da pasta de trabalho"
 
 #: common/wildcards_and_files_ext.cpp:542
 msgid "PNG file"
-msgstr "Ficheiro PNG"
+msgstr "Arquivo PNG"
 
 #: common/wildcards_and_files_ext.cpp:548
 msgid "Jpeg file"
-msgstr "Ficheiro Jpeg"
+msgstr "Arquivo jpeg"
 
 #: common/wildcards_and_files_ext.cpp:554
-#, fuzzy
 msgid "Hotkey file"
-msgstr "Lista de Atalhos"
+msgstr "Arquivo da lista das teclas de atalho"
 
 #: cvpcb/auto_associate.cpp:105
-#, fuzzy, c-format
+#, c-format
 msgid "Equivalence file '%s' could not be found in the default search paths."
 msgstr ""
-"O ficheiro de equivalência \"%s\" não foi encontrado nos caminhos de busca "
-"padrão."
+"O arquivo de equivalência '%s' não pôde ser encontrado nos caminhos de "
+"pesquisa predefinido."
 
 #: cvpcb/auto_associate.cpp:126
-#, fuzzy, c-format
+#, c-format
 msgid "Error opening equivalence file '%s'."
-msgstr "Erro ao abrir ficheiro de equivalência \"%s\"."
+msgstr "Erro ao abrir o arquivo de equivalência \"%s\"."
 
 #: cvpcb/auto_associate.cpp:178
 msgid "Equivalence File Load Error"
-msgstr "Erro Carregando Ficheiro de Equivalência"
+msgstr "Houve um erro ao carregar o arquivo de equivalência"
 
 #: cvpcb/auto_associate.cpp:185
-#, fuzzy, c-format
+#, c-format
 msgid "%lu footprint/symbol equivalences found."
-msgstr "encontradas as equivalências footprint/cmp %lu."
+msgstr "foram encontradas as equivalências footprint/cmp %lu."
 
 #: cvpcb/auto_associate.cpp:261
 #, c-format
@@ -7136,7 +7103,7 @@ msgid ""
 "Component %s: footprint %s not found in any of the project footprint "
 "libraries."
 msgstr ""
-"Componente %s: footprint %s não encontrado em nenhuma das bibliotecas de "
+"Componente %s: footprint %s não foi encontrado em nenhuma das bibliotecas de "
 "footprint."
 
 #: cvpcb/auto_associate.cpp:306
@@ -7418,7 +7385,7 @@ msgstr "A biblioteca '%s' não está na tabela da biblioteca de footprint."
 #: cvpcb/display_footprints_frame.cpp:445
 #, fuzzy, c-format
 msgid "Footprint '%s' not found."
-msgstr "Footprint \"%s\" não encontrado"
+msgstr "Footprint \"%s\" não foi encontrado"
 
 #: cvpcb/display_footprints_frame.cpp:475 pcbnew/footprint.cpp:919
 #, c-format
@@ -7647,7 +7614,7 @@ msgid ""
 msgstr ""
 "Ficheiro de script:\n"
 "%s\n"
-"não encontrado. Script não disponível."
+"não foi encontrado. Script não disponível."
 
 #: eeschema/component_references_lister.cpp:608
 #, c-format
@@ -7718,7 +7685,7 @@ msgstr "%s pino %s encontrado"
 #: eeschema/cross-probing.cpp:267
 #, fuzzy, c-format
 msgid "%s found but pin %s not found"
-msgstr "%s encontrado, porém %s não encontrado"
+msgstr "%s encontrado, porém %s não foi encontrado"
 
 #: eeschema/cross-probing.cpp:271 pcbnew/cross-probing.cpp:185
 #, c-format
@@ -7729,7 +7696,7 @@ msgstr "%s encontrada"
 #: pcbnew/cross-probing.cpp:187
 #, c-format
 msgid "%s not found"
-msgstr "%s não encontrado"
+msgstr "%s não foi encontrado"
 
 #: eeschema/cross-probing.cpp:329
 msgid "Selected net:"
@@ -7862,7 +7829,7 @@ msgstr "Ficheiros do gerador:"
 
 #: eeschema/dialogs/dialog_bom.cpp:439
 msgid "Generator file name not found."
-msgstr "Nome do ficheiro de gerador não encontrado."
+msgstr "Nome do ficheiro de gerador não foi encontrado."
 
 #: eeschema/dialogs/dialog_bom.cpp:461
 msgid "Bill of Material Generation Help"
@@ -8237,7 +8204,7 @@ msgstr "Alterar o valor %s de %s para %s."
 #: eeschema/dialogs/dialog_change_symbols.cpp:561
 #, fuzzy
 msgid "*** symbol not found ***"
-msgstr "*** footprint não encontrado ***"
+msgstr "*** footprint não foi encontrado ***"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:570
 msgid "*** new symbol has too few units ***"
@@ -8402,7 +8369,7 @@ msgstr "Contagem de candidatos %d "
 #: eeschema/dialogs/dialog_edit_symbols_libid.cpp:656
 #, c-format
 msgid "%u link(s) mapped, %u not found"
-msgstr "%u link(s) mapeados, %u não encontrado"
+msgstr "%u link(s) mapeados, %u não foi encontrado"
 
 #: eeschema/dialogs/dialog_edit_symbols_libid.cpp:662
 #, c-format
@@ -8895,7 +8862,7 @@ msgstr "Por favor, selecione um ficheiro de tabela de biblioteca de símbolos."
 #: pcbnew/footprint_libraries_utils.cpp:249
 #, fuzzy, c-format
 msgid "File '%s' not found."
-msgstr "Ficheiro %s não encontrado"
+msgstr "Ficheiro %s não foi encontrado"
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:96
 #, fuzzy, c-format
@@ -10293,7 +10260,7 @@ msgstr "Importar Configurações De"
 #: eeschema/dialogs/dialog_sch_import_settings.cpp:74
 #: pcbnew/dialogs/dialog_import_settings.cpp:128
 msgid "File not found."
-msgstr "Ficheiro não encontrado."
+msgstr "Ficheiro não foi encontrado."
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:22
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:22
@@ -12979,7 +12946,7 @@ msgstr "Imprimir Esquema"
 #: eeschema/files-io.cpp:225
 #, fuzzy
 msgid "Schematic file changes are unsaved"
-msgstr "Ficheiro de esquema \"%s\" não encontrado."
+msgstr "Ficheiro de esquema \"%s\" não foi encontrado."
 
 #: eeschema/files-io.cpp:258
 #, fuzzy
@@ -13664,7 +13631,7 @@ msgstr "Alternar para Editor de Esquemas"
 #: eeschema/sch_edit_frame.cpp:300
 #, fuzzy
 msgid "New schematic file is unsaved"
-msgstr "Ficheiro de esquema \"%s\" não encontrado."
+msgstr "Ficheiro de esquema \"%s\" não foi encontrado."
 
 #: eeschema/sch_edit_frame.cpp:652 eeschema/sim/sim_plot_frame.cpp:1601
 #: eeschema/symbol_editor/symbol_editor.cpp:1129
@@ -13899,7 +13866,7 @@ msgstr "Código de erro DRC desconhecido %d"
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:608
 #, fuzzy, c-format
 msgid "Pin's owner (%d) not found."
-msgstr "Ficheiro %s não encontrado"
+msgstr "Ficheiro %s não foi encontrado"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:653
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1889
@@ -13923,7 +13890,7 @@ msgstr ""
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:863
 #, fuzzy, c-format
 msgid "Label's owner (%d) not found."
-msgstr "Ficheiro %s não encontrado"
+msgstr "Ficheiro %s não foi encontrado"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:980
 #, c-format
@@ -13933,22 +13900,22 @@ msgstr ""
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1037
 #, fuzzy, c-format
 msgid "Bezier's owner (%d) not found."
-msgstr "Ficheiro de recuperação \"%s\" não encontrado."
+msgstr "Ficheiro de recuperação \"%s\" não foi encontrado."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1142
 #, fuzzy, c-format
 msgid "Polyline's owner (%d) not found."
-msgstr "Ficheiro %s não encontrado"
+msgstr "Ficheiro %s não foi encontrado"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1201
 #, fuzzy, c-format
 msgid "Polygon's owner (%d) not found."
-msgstr "Ficheiro %s não encontrado"
+msgstr "Ficheiro %s não foi encontrado"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1282
 #, fuzzy, c-format
 msgid "Rounded rectangle's owner (%d) not found."
-msgstr "Ficheiro de recuperação \"%s\" não encontrado."
+msgstr "Ficheiro de recuperação \"%s\" não foi encontrado."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1319
 #, fuzzy
@@ -13958,7 +13925,7 @@ msgstr "Nenhum esquema atualmente aberto."
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1329
 #, fuzzy, c-format
 msgid "Arc's owner (%d) not found."
-msgstr "Ficheiro de recuperação \"%s\" não encontrado."
+msgstr "Ficheiro de recuperação \"%s\" não foi encontrado."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1355
 msgid "Arcs in symbols cannot exceed 180 degrees."
@@ -13967,17 +13934,17 @@ msgstr ""
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1395
 #, fuzzy, c-format
 msgid "Line's owner (%d) not found."
-msgstr "Ficheiro %s não encontrado"
+msgstr "Ficheiro %s não foi encontrado"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1466
 #, fuzzy, c-format
 msgid "Rectangle's owner (%d) not found."
-msgstr "Ficheiro de recuperação \"%s\" não encontrado."
+msgstr "Ficheiro de recuperação \"%s\" não foi encontrado."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1534
 #, fuzzy, c-format
 msgid "Sheet entry's owner (%d) not found."
-msgstr "Ficheiro de recuperação \"%s\" não encontrado."
+msgstr "Ficheiro de recuperação \"%s\" não foi encontrado."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1780
 msgid "Power Port has unknown style, use bar instead."
@@ -13996,7 +13963,7 @@ msgstr "Conexões da ilha:"
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2129
 #, fuzzy, c-format
 msgid "Embedded file %s not found in storage."
-msgstr "Ficheiro de recuperação \"%s\" não encontrado."
+msgstr "Ficheiro de recuperação \"%s\" não foi encontrado."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2146
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2165
@@ -14007,32 +13974,32 @@ msgstr "Encerrar desenho da folha"
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2158
 #, fuzzy, c-format
 msgid "File not found %s."
-msgstr "Ficheiro não encontrado."
+msgstr "Ficheiro não foi encontrado."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2228
 #, fuzzy, c-format
 msgid "Sheetname's owner (%d) not found."
-msgstr "Ficheiro de recuperação \"%s\" não encontrado."
+msgstr "Ficheiro de recuperação \"%s\" não foi encontrado."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2251
 #, fuzzy, c-format
 msgid "Filename's owner (%d) not found."
-msgstr "Ficheiro %s não encontrado"
+msgstr "Ficheiro %s não foi encontrado"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2285
 #, fuzzy, c-format
 msgid "Designator's owner (%d) not found."
-msgstr "Ficheiro de recuperação \"%s\" não encontrado."
+msgstr "Ficheiro de recuperação \"%s\" não foi encontrado."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2420
 #, fuzzy, c-format
 msgid "Implementation's owner (%d) not found."
-msgstr "Ficheiro %s não encontrado"
+msgstr "Ficheiro %s não foi encontrado"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2430
 #, fuzzy, c-format
 msgid "Footprint's owner (%d) not found."
-msgstr "Ficheiro %s não encontrado"
+msgstr "Ficheiro %s não foi encontrado"
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:75
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:73
@@ -14344,7 +14311,7 @@ msgstr "Identificador de biblioteca de símbolos inválido"
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:2601
 #, fuzzy, c-format
 msgid "Library file '%s' not found."
-msgstr "Ficheiro de biblioteca \"%s\" não encontrado."
+msgstr "Ficheiro de biblioteca \"%s\" não foi encontrado."
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_plugin.cpp:2073
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:4221
@@ -14526,7 +14493,7 @@ msgstr "Nenhuma biblioteca definida!"
 #: eeschema/sch_symbol.cpp:1440
 #, c-format
 msgid "Symbol not found in %s!"
-msgstr "Símbolo não encontrado em %s!"
+msgstr "Símbolo não foi encontrado em %s!"
 
 #: eeschema/sch_symbol.cpp:1632
 #, fuzzy, c-format
@@ -15612,7 +15579,7 @@ msgstr "Reverter \"%s\" para a última versão salva?"
 #: eeschema/symbol_editor/symbol_editor.cpp:970
 #, fuzzy, c-format
 msgid "Symbol %s not found in library '%s'."
-msgstr "Símbolo \"%s\" não encontrado na biblioteca \"%s\"."
+msgstr "Símbolo \"%s\" não foi encontrado na biblioteca \"%s\"."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:999
 msgid "No library specified."
@@ -15730,7 +15697,7 @@ msgstr "Biblioteca não encontrada na tabela de biblioteca de símbolos."
 
 #: eeschema/symbol_editor/symbol_library_manager.cpp:402
 msgid "Symbol not found."
-msgstr "Símbolo não encontrado."
+msgstr "Símbolo não foi encontrado."
 
 #: eeschema/symbol_editor/symbol_library_manager.cpp:433
 #, fuzzy, c-format
@@ -16953,7 +16920,7 @@ msgstr "<b>Pino desligado %s</b> \"%s\" na localização <b>(%.3f, %.3f)</b>"
 #: eeschema/tools/ee_inspection_tool.cpp:467
 #, fuzzy
 msgid "No symbol issues found."
-msgstr "Símbolo não encontrado."
+msgstr "Símbolo não foi encontrado."
 
 #: eeschema/tools/ee_inspection_tool.cpp:482
 #, fuzzy
@@ -17529,7 +17496,7 @@ msgstr "Gestor de camadas"
 #: gerbview/excellon_read_drill_file.cpp:264
 #, fuzzy, c-format
 msgid "File %s not found."
-msgstr "Ficheiro %s não encontrado"
+msgstr "Ficheiro %s não foi encontrado"
 
 #: gerbview/excellon_read_drill_file.cpp:276
 #, fuzzy
@@ -17667,7 +17634,7 @@ msgstr "Abrir Ficheiro(s) Gerber"
 
 #: gerbview/files.cpp:241
 msgid "File not found:"
-msgstr "Ficheiro não encontrado:"
+msgstr "Ficheiro não foi encontrado:"
 
 #: gerbview/files.cpp:253
 msgid "Loading Gerber files..."
@@ -17898,7 +17865,7 @@ msgstr "Abrir Zip Recente"
 #: gerbview/readgerb.cpp:63
 #, fuzzy, c-format
 msgid "File '%s' not found"
-msgstr "Ficheiro %s não encontrado"
+msgstr "Ficheiro %s não foi encontrado"
 
 #: gerbview/readgerb.cpp:88
 #, fuzzy
@@ -18170,7 +18137,7 @@ msgstr "Códigos D"
 #: gerbview/tools/gerbview_inspection_tool.cpp:175
 #, fuzzy, c-format
 msgid "Source file '%s' not found."
-msgstr "Ficheiro de esquema \"%s\" não encontrado."
+msgstr "Ficheiro de esquema \"%s\" não foi encontrado."
 
 #: gerbview/tools/gerbview_inspection_tool.cpp:191
 #, fuzzy, c-format
@@ -18886,7 +18853,7 @@ msgstr "Informações da Versão"
 #: kicad/pcm/pcm.cpp:79
 #, fuzzy, c-format
 msgid "schema file '%s' not found"
-msgstr "Ficheiro de esquema \"%s\" não encontrado."
+msgstr "Ficheiro de esquema \"%s\" não foi encontrado."
 
 #: kicad/pcm/pcm.cpp:82
 #, fuzzy, c-format
@@ -19843,7 +19810,7 @@ msgstr "origem: %s"
 #: pagelayout_editor/pl_editor_frame.cpp:901
 #, fuzzy
 msgid "New drawing sheet file is unsaved"
-msgstr "Ficheiro de esquema \"%s\" não encontrado."
+msgstr "Ficheiro de esquema \"%s\" não foi encontrado."
 
 #: pagelayout_editor/pl_editor_frame.cpp:905
 #, fuzzy
@@ -22028,7 +21995,7 @@ msgstr ""
 #: pcbnew/cross-probing.cpp:170
 #, c-format
 msgid "%s pin %s not found"
-msgstr "%s pino %s não encontrado"
+msgstr "%s pino %s não foi encontrado"
 
 #: pcbnew/cross-probing.cpp:193
 #, c-format
@@ -22288,7 +22255,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:925
 msgid "Footprint not found in changelist"
-msgstr "Footprint não encontrado na lista de troca"
+msgstr "Footprint não foi encontrado na lista de troca"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:30
 #, fuzzy
@@ -23876,7 +23843,7 @@ msgstr "Alterar o footprint %s de \"%s\" para \"%s\"."
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:391
 msgid "*** footprint not found ***"
-msgstr "*** footprint não encontrado ***"
+msgstr "*** footprint não foi encontrado ***"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:24
 #, fuzzy
@@ -24303,7 +24270,7 @@ msgstr "Carregando…"
 #: pcbnew/dialogs/dialog_find.cpp:345
 #, fuzzy, c-format
 msgid "'%s' not found"
-msgstr "%s não encontrado"
+msgstr "%s não foi encontrado"
 
 #: pcbnew/dialogs/dialog_find.cpp:353
 #, fuzzy
@@ -28137,7 +28104,7 @@ msgstr "Erro: Nenhum nome de arquivo DXF!"
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:379
 #: pcbnew/microwave/microwave_polygon.cpp:224
 msgid "File not found"
-msgstr "Ficheiro não encontrado"
+msgstr "Ficheiro não foi encontrado"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:384
 #, fuzzy
@@ -29525,19 +29492,17 @@ msgid "netclass '%s' (diff pair)"
 msgstr "Valores de classe de rede da via"
 
 #: pcbnew/drc/drc_engine.cpp:428
-#, fuzzy
 msgid "keepout area"
-msgstr "Adicionar área de afastamento"
+msgstr "área de isolamento"
 
 #: pcbnew/drc/drc_engine.cpp:433
-#, fuzzy, c-format
+#, c-format
 msgid "keepout area '%s'"
-msgstr "Adicionar áreas de afastamento"
+msgstr "área de isolamento '%s'"
 
 #: pcbnew/drc/drc_engine.cpp:699
-#, fuzzy
 msgid "Tessellating copper zones..."
-msgstr "Isolamentos entre zonas...\n"
+msgstr "Isolamento entre as zonas cobreadas..."
 
 #: pcbnew/drc/drc_engine.cpp:800 pcbnew/drc/drc_engine.cpp:815
 #, c-format
@@ -30449,7 +30414,7 @@ msgstr "Imprimir Placa"
 #: pcbnew/files.cpp:348
 #, fuzzy, c-format
 msgid "Recovery file '%s' not found."
-msgstr "Ficheiro de recuperação \"%s\" não encontrado."
+msgstr "Ficheiro de recuperação \"%s\" não foi encontrado."
 
 #: pcbnew/files.cpp:353
 #, fuzzy, c-format
@@ -31478,7 +31443,7 @@ msgstr "Não é possível adicionar %s (nenhum footprint associado)."
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:151
 #, fuzzy, c-format
 msgid "Cannot add %s (footprint '%s' not found)."
-msgstr "Não é possível adicionar %s (footprint \"%s\" não encontrado)."
+msgstr "Não é possível adicionar %s (footprint \"%s\" não foi encontrado)."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:161
 #, fuzzy, c-format
@@ -31498,7 +31463,7 @@ msgstr "Não é possível atualizar %s (nenhum footprint associado)."
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:215
 #, fuzzy, c-format
 msgid "Cannot update %s (footprint '%s' not found)."
-msgstr "Não é possível atualizar %s (footprint \"%s\" não encontrado)."
+msgstr "Não é possível atualizar %s (footprint \"%s\" não foi encontrado)."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:225
 #, fuzzy, c-format
@@ -31668,7 +31633,7 @@ msgstr "Remover rede com apenas uma ilha %s."
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:902
 #, c-format
 msgid "%s pad %s not found in %s."
-msgstr "%s ilha %s não encontrado em %s."
+msgstr "%s ilha %s não foi encontrado em %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:953
 #, fuzzy, c-format
@@ -31818,8 +31783,8 @@ msgstr "%s ID de footprint \"%s\" não é válido."
 msgid ""
 "%s footprint '%s' not found in any libraries in the footprint library table."
 msgstr ""
-"%s footprint \"%s\" não encontrado em nenhuma biblioteca da tabela de "
-"bibliotecas de footprint.\n"
+"%s footprint \"%s\" não foi encontrado em nenhuma biblioteca da tabela de "
+"bibliotecas de footprint."
 
 #: pcbnew/netlist_reader/netlist_reader.cpp:184
 #, fuzzy, c-format
@@ -32101,7 +32066,7 @@ msgstr ""
 #: pcbnew/pcb_edit_frame.cpp:1500
 #, fuzzy, c-format
 msgid "Schematic file '%s' not found."
-msgstr "Ficheiro de esquema \"%s\" não encontrado."
+msgstr "Ficheiro de esquema \"%s\" não foi encontrado."
 
 #: pcbnew/pcb_edit_frame.cpp:1531
 #, fuzzy
@@ -32402,7 +32367,7 @@ msgstr "O ficheiro \"%s\" não foi lido completamente"
 #: pcbnew/plugins/altium/altium_pcb.cpp:527
 #, fuzzy, c-format
 msgid "File not found: '%s'."
-msgstr "Ficheiro não encontrado:"
+msgstr "Ficheiro não foi encontrado:"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:933
 #, fuzzy, c-format
@@ -32433,7 +32398,7 @@ msgstr ""
 #: pcbnew/plugins/altium/altium_pcb.cpp:1449
 #, fuzzy, c-format
 msgid "File not found: '%s'. 3D-model not imported."
-msgstr "Ficheiro não encontrado:"
+msgstr "Ficheiro não foi encontrado:"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1485
 #, fuzzy
@@ -33517,7 +33482,7 @@ msgstr "Exceção no código do plugin de ação python"
 #: pcbnew/python/scripting/pcbnew_footprint_wizards.cpp:83
 #, c-format
 msgid "Method \"%s\" not found, or not callable"
-msgstr "Método \"%s\" não encontrado, ou não pôde ser chamado"
+msgstr "Método \"%s\" não foi encontrado, ou não pôde ser chamado"
 
 #: pcbnew/python/scripting/pcbnew_action_plugins.cpp:84
 #: pcbnew/python/scripting/pcbnew_footprint_wizards.cpp:84
@@ -34108,7 +34073,7 @@ msgstr "Está faltando a seção \"library_out\" no ficheiro de seção"
 #: pcbnew/specctra_import_export/specctra_import.cpp:359
 #, fuzzy, c-format
 msgid "Reference '%s' not found."
-msgstr "Ficheiro de recuperação \"%s\" não encontrado."
+msgstr "Ficheiro de recuperação \"%s\" não foi encontrado."
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:501
 #, fuzzy, c-format
@@ -37433,6 +37398,10 @@ msgstr "Editar Esquema Eletrônico"
 msgid "KiCad Printed Circuit Board"
 msgstr "Ficheiros de placa de circuito impresso do KiCad"
 
+#: pagelayout_editor/dialogs/properties_frame.cpp:559
+msgid "Keywords are replaced by they actual value in strings"
+msgstr ""
+
 #~ msgid "Change to isometric perspective"
 #~ msgstr "Mudar para perspectiva isométrica"
 
@@ -37488,7 +37457,7 @@ msgstr "Ficheiros de placa de circuito impresso do KiCad"
 #~ msgstr ""
 #~ "Não esqueça de escolher um título para esta página de controle de netlist"
 
-#, fuzzy, c-format
+#, fuzzy
 #~ msgid "Schematic file '%s' is already open."
 #~ msgstr "O ficheiro de esquema \"%s\" já está aberto."
 
@@ -37524,14 +37493,13 @@ msgstr "Ficheiros de placa de circuito impresso do KiCad"
 #~ msgid "There are no unreferenced pins in this sheet to remove."
 #~ msgstr "Não há pinos não referênciados nesta folha para remover."
 
-#, fuzzy, c-format
+#, fuzzy
 #~ msgid "Custom (%s)"
 #~ msgstr "Customizado"
 
 #~ msgid "STEP files (*.stp;*.step)|*.stp;*.step"
 #~ msgstr "Ficheiros STEP (*.stp;*.step)|*.stp;*.step"
 
-#, c-format
 #~ msgid "The %s layer is mandatory."
 #~ msgstr "A camada %s é obrigatória."
 
@@ -37604,21 +37572,20 @@ msgstr "Ficheiros de placa de circuito impresso do KiCad"
 #~ msgid "Doc Files"
 #~ msgstr "Ficheiros Doc"
 
-#, fuzzy, c-format
+#, fuzzy
 #~ msgid "Doc File '%s' not found"
 #~ msgstr "Ficheiro Doc \"%s\" não encontrado"
 
 #~ msgid "Text Editor"
 #~ msgstr "Editor de textos"
 
-#, fuzzy, c-format
+#, fuzzy
 #~ msgid "Setting schematic symbol '%s %s' library identifier to '%s'. "
 #~ msgstr "Identificador de biblioteca de símbolos inválido"
 
 #~ msgid "Filename:"
 #~ msgstr "Nome do ficheiro:"
 
-#, c-format
 #~ msgid "File \"%s\" not found"
 #~ msgstr "Ficheiro \"%s\" não encontrado"
 
@@ -37633,7 +37600,6 @@ msgstr "Ficheiros de placa de circuito impresso do KiCad"
 #~ msgid "Dielectric Materials"
 #~ msgstr "Perdas no Dielétrico:"
 
-#, c-format
 #~ msgid "Invalid filename: %s"
 #~ msgstr "Nome de ficheiro inválido: %s"
 
@@ -37651,11 +37617,11 @@ msgstr "Ficheiros de placa de circuito impresso do KiCad"
 #~ msgid "Smooth amount:"
 #~ msgstr "Esforço de suavização:"
 
-#, fuzzy, c-format
+#, fuzzy
 #~ msgid "Checking %s; hole clearance: %s."
 #~ msgstr "Alterar a referência %s para %s."
 
-#, fuzzy, c-format
+#, fuzzy
 #~ msgid "Checking %s; edge clearance: %s."
 #~ msgstr "Isolamento da borda do cobre:"
 
@@ -37665,7 +37631,7 @@ msgstr "Ficheiros de placa de circuito impresso do KiCad"
 #~ msgid "Read descr shape file"
 #~ msgstr "Ler ficheiro de descrição de forma"
 
-#, fuzzy, c-format
+#, fuzzy
 #~ msgid "Zone connection type: %s."
 #~ msgstr "Tipo de conexão:"
 
@@ -37709,11 +37675,11 @@ msgstr "Ficheiros de placa de circuito impresso do KiCad"
 #~ msgid "Show solid areas of zones in outline mode"
 #~ msgstr "Mostra as áreas sólidas de zonas em modo contorno"
 
-#, fuzzy, c-format
+#, fuzzy
 #~ msgid "Unable to create archive file '%s'.\n"
 #~ msgstr "Não foi possível criar o ficheiro de arquivo zip \"%s\"\n"
 
-#, fuzzy, c-format
+#, fuzzy
 #~ msgid "Unable to create report file '%s'"
 #~ msgstr "Não é possível criar o ficheiro de relatório \"%s\""
 
@@ -37739,7 +37705,6 @@ msgstr "Ficheiros de placa de circuito impresso do KiCad"
 #~ msgid "KiCad "
 #~ msgstr "&Sobre o KiCad"
 
-#, c-format
 #~ msgid "Unable to create \"%s\""
 #~ msgstr "Incapaz de criar \"%s\""
 
@@ -37762,27 +37727,25 @@ msgstr "Ficheiros de placa de circuito impresso do KiCad"
 #~ msgid "Show all nets"
 #~ msgstr "Exibir todas as redes"
 
-#, fuzzy, c-format
+#, fuzzy
 #~ msgid "Unable to create report file '%s'<br>"
 #~ msgstr "Não é possível criar o ficheiro de relatório \"%s\""
 
-#, fuzzy, c-format
+#, fuzzy
 #~ msgid "Unable to create %s"
 #~ msgstr "Incapaz de criar \"%s\""
 
-#, fuzzy, c-format
+#, fuzzy
 #~ msgid "Unable to create '%s'."
 #~ msgstr "Incapaz de criar \"%s\""
 
-#, c-format
 #~ msgid "** Unable to create %s **\n"
 #~ msgstr "** Não foi possível criar %s **\n"
 
-#, c-format
 #~ msgid "Report file %s created\n"
 #~ msgstr "Ficheiro de relatório %s criado\n"
 
-#, fuzzy, c-format
+#, fuzzy
 #~ msgid "Unable to create job file '%s'."
 #~ msgstr "Não foi possível criar o ficheiro de trabalho \"%s\""
 
@@ -37927,42 +37890,34 @@ msgstr "Ficheiros de placa de circuito impresso do KiCad"
 #~ msgid "Render with improved quality on final render (slow)"
 #~ msgstr "Utilizar qualidade superior na renderização final (lento)"
 
-#, c-format
 #~ msgid "You do not have write permissions to folder \"%s\"."
 #~ msgstr "Você não tem permissão de escrita na pasta \"%s\"."
 
-#, c-format
 #~ msgid ""
 #~ "You do not have write permissions to save file \"%s\" to folder \"%s\"."
 #~ msgstr ""
 #~ "Você não tem permissão de escrita para salvar o ficheiro \"%s\" na pasta "
 #~ "\"%s\"."
 
-#, c-format
 #~ msgid "You do not have write permissions to save file \"%s\"."
 #~ msgstr "Você não tem permissão de escrita para salvar o ficheiro \"%s\"."
 
-#, c-format
 #~ msgid "Cannot create global library table path \"%s\"."
 #~ msgstr ""
 #~ "Não foi possível criar o caminho global para tabela de bibliotecas \"%s\"."
 
-#, c-format
 #~ msgid "Cannot copy file \"%s\"."
 #~ msgstr "Não é possível copiar o ficheiro \"%s\"."
 
 #~ msgid "Illegal character found in revision"
 #~ msgstr "Caractere ilegal encontrado na revisão"
 
-#, c-format
 #~ msgid "%s is already running. Continue?"
 #~ msgstr "%s já está rodando. Continuar?"
 
-#, c-format
 #~ msgid "Archive file \"%s\": Failed!\n"
 #~ msgstr "Ficheiro de arquivos \"%s\": Falha!\n"
 
-#, c-format
 #~ msgid ""
 #~ "Library \"%s\" has duplicate entry name \"%s\".\n"
 #~ "This may cause some unexpected behavior when loading components into a "
@@ -37972,7 +37927,6 @@ msgstr "Ficheiros de placa de circuito impresso do KiCad"
 #~ "Isto pode causar comportamentos inesperados quando do carregamento de "
 #~ "componentes no esquema."
 
-#, c-format
 #~ msgid ""
 #~ "Symbol library \"%s\" failed to load. Error:\n"
 #~ " %s"
@@ -37980,7 +37934,6 @@ msgstr "Ficheiros de placa de circuito impresso do KiCad"
 #~ "Falha no carregamento da biblioteca de símbolo \"%s\". Erro:\n"
 #~ "%s"
 
-#, c-format
 #~ msgid ""
 #~ "Symbol library \"%s\" failed to load.\n"
 #~ "Error: %s"
@@ -37988,7 +37941,6 @@ msgstr "Ficheiros de placa de circuito impresso do KiCad"
 #~ "Falha no carregamento da biblioteca de símbolo \"%s\".\n"
 #~ "Erro: %s"
 
-#, c-format
 #~ msgid ""
 #~ "Error occurred loading symbol %s from library %s.\n"
 #~ "\n"
@@ -37998,7 +37950,7 @@ msgstr "Ficheiros de placa de circuito impresso do KiCad"
 #~ "\n"
 #~ "%s"
 
-#, fuzzy, c-format
+#, fuzzy
 #~ msgid ""
 #~ "Error occurred loading global symbol library table.\n"
 #~ "\n"
@@ -38020,29 +37972,25 @@ msgstr "Ficheiros de placa de circuito impresso do KiCad"
 #~ "componente.\n"
 #~ "Um valor de 10 a 40 é usualmente bom."
 
-#, c-format
 #~ msgid "Plot: \"%s\" OK.\n"
 #~ msgstr ""
 #~ "Plotar: \"%s\" OK.\n"
 #~ "\n"
 
-#, c-format
 #~ msgid "Unable to create file \"%s\".\n"
 #~ msgstr "Impossível criar ficheiro \"%s\"\n"
 
-#, c-format
 #~ msgid "Cannot create file \"%s\".\n"
 #~ msgstr "Impossível criar o ficheiro \"%s\".\n"
 
-#, c-format
 #~ msgid "Library \"%s\" not found."
 #~ msgstr "Biblioteca \"%s\" não encontrada."
 
-#, fuzzy, c-format
+#, fuzzy
 #~ msgid "Failed to create temporary file \"%s\""
 #~ msgstr "Falhou ao criar ficheiro de biblioteca de símbolos \"%s\""
 
-#, fuzzy, c-format
+#, fuzzy
 #~ msgid "Failed to rename temporary file \"%s\""
 #~ msgstr "Falhou ao criar ficheiro \"%s\""
 
@@ -38057,11 +38005,9 @@ msgstr "Ficheiros de placa de circuito impresso do KiCad"
 #~ msgid "Append Schematic"
 #~ msgstr "Anexar Esquema"
 
-#, c-format
 #~ msgid "Failed to save symbol library file \"%s\""
 #~ msgstr "Falha ao salvar o ficheiro de biblioteca de símbolos \"%s\""
 
-#, c-format
 #~ msgid "Save changes to \"%s\" before closing?"
 #~ msgstr "Salvar alterações em \"%s\" antes de fechar?"
 
@@ -38069,7 +38015,7 @@ msgstr "Ficheiros de placa de circuito impresso do KiCad"
 #~ msgid "[no file]"
 #~ msgstr "[sem ficheiro]"
 
-#, fuzzy, c-format
+#, fuzzy
 #~ msgid ""
 #~ "Invalid symbol name in\n"
 #~ "file: \"%s\"\n"
@@ -38081,7 +38027,7 @@ msgstr "Ficheiros de placa de circuito impresso do KiCad"
 #~ "linha: %d\n"
 #~ "posição: %d"
 
-#, fuzzy, c-format
+#, fuzzy
 #~ msgid ""
 #~ "Invalid library identifier in\n"
 #~ "file: \"%s\"\n"
@@ -38093,7 +38039,7 @@ msgstr "Ficheiros de placa de circuito impresso do KiCad"
 #~ "linha: %d\n"
 #~ "posição: %d"
 
-#, fuzzy, c-format
+#, fuzzy
 #~ msgid ""
 #~ "Invalid symbol extends name in\n"
 #~ "file: \"%s\"\n"
@@ -38105,7 +38051,7 @@ msgstr "Ficheiros de placa de circuito impresso do KiCad"
 #~ "linha: %d\n"
 #~ "posição: %d"
 
-#, fuzzy, c-format
+#, fuzzy
 #~ msgid ""
 #~ "Invalid symbol unit name in\n"
 #~ "file: \"%s\"\n"
@@ -38117,7 +38063,7 @@ msgstr "Ficheiros de placa de circuito impresso do KiCad"
 #~ "linha: %d\n"
 #~ "posição: %d"
 
-#, fuzzy, c-format
+#, fuzzy
 #~ msgid ""
 #~ "Invalid symbol unit name prefix %s in\n"
 #~ "file: \"%s\"\n"
@@ -38129,7 +38075,7 @@ msgstr "Ficheiros de placa de circuito impresso do KiCad"
 #~ "linha: %d\n"
 #~ "posição: %d"
 
-#, fuzzy, c-format
+#, fuzzy
 #~ msgid ""
 #~ "Invalid symbol unit number %s in\n"
 #~ "file: \"%s\"\n"
@@ -38141,7 +38087,7 @@ msgstr "Ficheiros de placa de circuito impresso do KiCad"
 #~ "linha: %d\n"
 #~ "posição: %d"
 
-#, fuzzy, c-format
+#, fuzzy
 #~ msgid ""
 #~ "Invalid symbol names definition in\n"
 #~ "file: '%s'\n"
@@ -38153,7 +38099,7 @@ msgstr "Ficheiros de placa de circuito impresso do KiCad"
 #~ "linha: %d\n"
 #~ "posição: %d"
 
-#, fuzzy, c-format
+#, fuzzy
 #~ msgid ""
 #~ "Invalid property name in\n"
 #~ "file: '%s'\n"
@@ -38165,7 +38111,7 @@ msgstr "Ficheiros de placa de circuito impresso do KiCad"
 #~ "linha: %d\n"
 #~ "posição: %d"
 
-#, fuzzy, c-format
+#, fuzzy
 #~ msgid ""
 #~ "Empty property name in\n"
 #~ "file: '%s'\n"
@@ -38177,7 +38123,7 @@ msgstr "Ficheiros de placa de circuito impresso do KiCad"
 #~ "linha: %d\n"
 #~ "posição: %d"
 
-#, fuzzy, c-format
+#, fuzzy
 #~ msgid ""
 #~ "Invalid property value in\n"
 #~ "file: '%s'\n"
@@ -38189,7 +38135,7 @@ msgstr "Ficheiros de placa de circuito impresso do KiCad"
 #~ "linha: %d\n"
 #~ "posição: %d"
 
-#, fuzzy, c-format
+#, fuzzy
 #~ msgid ""
 #~ "Invalid pin name in\n"
 #~ "file: \"%s\"\n"
@@ -38201,7 +38147,7 @@ msgstr "Ficheiros de placa de circuito impresso do KiCad"
 #~ "linha: %d\n"
 #~ "posição: %d"
 
-#, fuzzy, c-format
+#, fuzzy
 #~ msgid ""
 #~ "Invalid pin number in\n"
 #~ "file: \"%s\"\n"
@@ -38213,7 +38159,7 @@ msgstr "Ficheiros de placa de circuito impresso do KiCad"
 #~ "linha: %d\n"
 #~ "posição: %d"
 
-#, fuzzy, c-format
+#, fuzzy
 #~ msgid ""
 #~ "Invalid alternate pin name in\n"
 #~ "file: \"%s\"\n"
@@ -38225,7 +38171,7 @@ msgstr "Ficheiros de placa de circuito impresso do KiCad"
 #~ "linha: %d\n"
 #~ "posição: %d"
 
-#, fuzzy, c-format
+#, fuzzy
 #~ msgid ""
 #~ "Invalid text string in\n"
 #~ "file: \"%s\"\n"
@@ -38237,7 +38183,7 @@ msgstr "Ficheiros de placa de circuito impresso do KiCad"
 #~ "linha: %d\n"
 #~ "posição: %d"
 
-#, fuzzy, c-format
+#, fuzzy
 #~ msgid ""
 #~ "Invalid property name in\n"
 #~ "file: \"%s\"\n"
@@ -38249,7 +38195,7 @@ msgstr "Ficheiros de placa de circuito impresso do KiCad"
 #~ "linha: %d\n"
 #~ "posição: %d"
 
-#, fuzzy, c-format
+#, fuzzy
 #~ msgid ""
 #~ "Empty property name in\n"
 #~ "file: \"%s\"\n"
@@ -38261,7 +38207,7 @@ msgstr "Ficheiros de placa de circuito impresso do KiCad"
 #~ "linha: %d\n"
 #~ "posição: %d"
 
-#, fuzzy, c-format
+#, fuzzy
 #~ msgid ""
 #~ "Invalid property value in\n"
 #~ "file: \"%s\"\n"
@@ -38273,7 +38219,7 @@ msgstr "Ficheiros de placa de circuito impresso do KiCad"
 #~ "linha: %d\n"
 #~ "posição: %d"
 
-#, fuzzy, c-format
+#, fuzzy
 #~ msgid ""
 #~ "Invalid sheet pin name in\n"
 #~ "file: \"%s\"\n"
@@ -38285,7 +38231,7 @@ msgstr "Ficheiros de placa de circuito impresso do KiCad"
 #~ "linha: %d\n"
 #~ "posição: %d"
 
-#, fuzzy, c-format
+#, fuzzy
 #~ msgid ""
 #~ "Empty sheet pin name in\n"
 #~ "file: \"%s\"\n"
@@ -38297,7 +38243,7 @@ msgstr "Ficheiros de placa de circuito impresso do KiCad"
 #~ "linha: %d\n"
 #~ "posição: %d"
 
-#, fuzzy, c-format
+#, fuzzy
 #~ msgid ""
 #~ "Invalid symbol library name in\n"
 #~ "file: \"%s\"\n"
@@ -38309,7 +38255,7 @@ msgstr "Ficheiros de placa de circuito impresso do KiCad"
 #~ "linha: %d\n"
 #~ "posição: %d"
 
-#, fuzzy, c-format
+#, fuzzy
 #~ msgid ""
 #~ "Invalid symbol library ID in\n"
 #~ "file: \"%s\"\n"
@@ -38321,46 +38267,36 @@ msgstr "Ficheiros de placa de circuito impresso do KiCad"
 #~ "linha: %d\n"
 #~ "posição: %d"
 
-#, c-format
 #~ msgid "symbol library \"%s\" already exists, cannot create a new library"
 #~ msgstr ""
 #~ "a biblioteca de símbolos \"%s\" já existe, não é possível criar uma nova"
 
-#, c-format
 #~ msgid "user does not have permission to read library document file \"%s\""
 #~ msgstr ""
 #~ "utilizador não tem permissão para ler o ficheiro de documento da "
 #~ "biblioteca \"%s\""
 
-#, c-format
 #~ msgid "Error occurred loading schematic file \"%s\"."
 #~ msgstr "Ocorreu um erro ao carregar o ficheiro de esquema \"%s\"."
 
-#, c-format
 #~ msgid "Library \"%s\" already exists"
 #~ msgstr "Biblioteca \"%s\" já existe"
 
-#, c-format
 #~ msgid "Error occurred loading symbol \"%s\" from library \"%s\"."
 #~ msgstr "Ocorreu um erro carregando o símbolo \"%s\" da biblioteca \"%s\"."
 
-#, c-format
 #~ msgid "Symbol \"%s\" already exists in library \"%s\""
 #~ msgstr "O símbolo \"%s\" já existe na biblioteca \"%s\""
 
-#, c-format
 #~ msgid "Symbol name \"%s\" not found in library \"%s\""
 #~ msgstr "Nome de símbolo \"%s\" não encontrado na biblioteca \"%s\""
 
-#, c-format
 #~ msgid "Symbol \"%s\" already exists in library \"%s\"."
 #~ msgstr "O símbolo \"%s\" já existe na biblioteca \"%s\"."
 
-#, c-format
 #~ msgid "Symbol \"%s\" already exists in \"%s\"."
 #~ msgstr "Símbolo \"%s\" já existe em \"%s\"."
 
-#, c-format
 #~ msgid "Write permissions are required to save library \"%s\"."
 #~ msgstr ""
 #~ "Permissões de gravação são necessárias para salvar a biblioteca \"%s\"."
@@ -38369,30 +38305,26 @@ msgstr "Ficheiros de placa de circuito impresso do KiCad"
 #~ msgid "Errors were encountered loading symbols:"
 #~ msgstr "Erros foram encontrados ao carregar os footprints:"
 
-#, c-format
 #~ msgid "Cannot find library \"%s\" in the Symbol Library Table (%s)"
 #~ msgstr ""
 #~ "Não é possível localizar a biblioteca \"%s\" na Tabela de Biblioteca de "
 #~ "Símbolos (%s)"
 
-#, c-format
 #~ msgid "Cannot load symbol \"%s\" from library \"%s\" (%s)"
 #~ msgstr ""
 #~ "Não foi possível carregar o símbolo \"%s\" da biblioteca \"%s\" (%s)"
 
-#, fuzzy, c-format
+#, fuzzy
 #~ msgid "An error \"%s\" occurred saving symbol \"%s\" to library \"%s\""
 #~ msgstr "Ocorreu um erro carregando o símbolo \"%s\" da biblioteca \"%s\"."
 
-#, c-format
 #~ msgid "Cannot create file \"%s\""
 #~ msgstr "Impossível criar o ficheiro \"%s\""
 
-#, c-format
 #~ msgid "Source file \"%s\" is not available"
 #~ msgstr "Ficheiro fonte : \"%s\" não disponível"
 
-#, fuzzy, c-format
+#, fuzzy
 #~ msgid "Cannot write to folder '%s'."
 #~ msgstr "Não é possível gravar na pasta \"%s\"."
 
@@ -38403,11 +38335,9 @@ msgstr "Ficheiros de placa de circuito impresso do KiCad"
 #~ "\n"
 #~ "Por favor, verifique se você tem permissões de gravação e tente novamente."
 
-#, c-format
 #~ msgid "\"%s\" already exists."
 #~ msgstr "\"%s\" já existe."
 
-#, c-format
 #~ msgid ""
 #~ "Directory \"%s\" could not be created.\n"
 #~ "\n"
@@ -38417,7 +38347,6 @@ msgstr "Ficheiros de placa de circuito impresso do KiCad"
 #~ "\n"
 #~ "Por favor, verifique se você tem permissões de gravação e tente novamente."
 
-#, c-format
 #~ msgid "Cannot write to folder \"%s\"."
 #~ msgstr "Não é possível gravar na pasta \"%s\"."
 
@@ -38426,7 +38355,6 @@ msgstr "Ficheiros de placa de circuito impresso do KiCad"
 #~ "Por favor, verifique suas permissões de acesso para esta pasta e tente "
 #~ "novamente."
 
-#, c-format
 #~ msgid "Error when loading file \"%s\""
 #~ msgstr "Erro carregando o ficheiro \"%s\""
 
@@ -38441,7 +38369,6 @@ msgstr "Ficheiros de placa de circuito impresso do KiCad"
 #~ msgid "Dielectric Layers"
 #~ msgstr "Perdas no Dielétrico:"
 
-#, c-format
 #~ msgid "Unable to create file \"%s\""
 #~ msgstr "Impossível criar ficheiro \"%s\""
 
@@ -38454,23 +38381,18 @@ msgstr "Ficheiros de placa de circuito impresso do KiCad"
 #~ msgid "Tolerance:"
 #~ msgstr "Tolerância:"
 
-#, c-format
 #~ msgid "Unable to create file \"%s\"."
 #~ msgstr "Não foi possível criar o ficheiro \"%s\"."
 
-#, c-format
 #~ msgid "\"%s\" not found"
 #~ msgstr "\"%s\" não encontrado"
 
-#, c-format
 #~ msgid "\"%s\" found"
 #~ msgstr "\"%s\" encontrado"
 
-#, c-format
 #~ msgid "File \"%s\" not found."
 #~ msgstr "Ficheiro \"%s\" não encontrado."
 
-#, c-format
 #~ msgid ""
 #~ "Error occurred loading global footprint library table:\n"
 #~ "\n"
@@ -38480,78 +38402,63 @@ msgstr "Ficheiros de placa de circuito impresso do KiCad"
 #~ "\n"
 #~ "%s"
 
-#, c-format
 #~ msgid "Plot file \"%s\" created."
 #~ msgstr "Ficheiro de plotagem \"%s\" criado."
 
-#, c-format
 #~ msgid "Could not create file \"%s\"."
 #~ msgstr "Não foi possível criar o ficheiro \"%s\"."
 
-#, c-format
 #~ msgid "Unable to create \"%s\"."
 #~ msgstr "Não foi possível criar \"%s\"."
 
-#, c-format
 #~ msgid "No access rights to write to file \"%s\""
 #~ msgstr "Sem permissões de acesso para gravar no ficheiro \"%s\""
 
-#, fuzzy, c-format
+#, fuzzy
 #~ msgid "No access rights to write to file '%s'."
 #~ msgstr "Sem permissões de acesso para gravar no ficheiro \"%s\""
 
-#, fuzzy, c-format
+#, fuzzy
 #~ msgid "%s%s [from %s.%s]"
 #~ msgstr "Atualizado %s de %s para %s"
 
-#, c-format
 #~ msgid "Unable to create or write file \"%s\""
 #~ msgstr "Não é possível criar ou gravar ficheiro \"%s\""
 
-#, c-format
 #~ msgid "footprint library path \"%s\" does not exist"
 #~ msgstr "caminho da biblioteca de footprint \"%s\" não existe"
 
-#, c-format
 #~ msgid "unknown token \"%s\""
 #~ msgstr "token desconhecido \"%s\""
 
-#, c-format
 #~ msgid "Library \"%s\" is read only"
 #~ msgstr "Biblioteca \"%s\" somente para leitura"
 
-#, c-format
 #~ msgid "user does not have permission to delete directory \"%s\""
 #~ msgstr "o utilizador não tem permissão para apagar o diretório \"%s\""
 
-#, c-format
 #~ msgid "library directory \"%s\" has unexpected sub-directories"
 #~ msgstr "diretório da biblioteca \"%s\" tem subdiretórios inesperados"
 
-#, c-format
 #~ msgid "unexpected file \"%s\" was found in library path \"%s\""
 #~ msgstr ""
 #~ "ficheiro inesperado \"%s\" foi encontrado no local da biblioteca \"%s\""
 
-#, c-format
 #~ msgid "footprint library \"%s\" cannot be deleted"
 #~ msgstr "biblioteca de footprint \"%s\" não pode ser apagada"
 
-#, c-format
 #~ msgid "Footprint library path '%s' does not exist (or is not a directory)."
 #~ msgstr ""
 #~ "O caminho da biblioteca de footprint '%s' não existe (ou não é um "
 #~ "diretório)."
 
-#, c-format
 #~ msgid "No write permissions to delete file \"%s\""
 #~ msgstr "Sem permissões de gravação para apagar o ficheiro \"%s\""
 
-#, fuzzy, c-format
+#, fuzzy
 #~ msgid "User does not have permission to delete directory \"%s\"."
 #~ msgstr "o utilizador não tem permissão para excluir o diretório \"%s\""
 
-#, c-format
 #~ msgid ""
 #~ "Invalid net ID in\n"
 #~ "file: \"%s\"\n"
@@ -38563,7 +38470,6 @@ msgstr "Ficheiros de placa de circuito impresso do KiCad"
 #~ "linha: %d\n"
 #~ "posição: %d"
 
-#, c-format
 #~ msgid ""
 #~ "invalid float number in file: \"%s\"\n"
 #~ "line: %d, offset: %d"
@@ -38571,7 +38477,6 @@ msgstr "Ficheiros de placa de circuito impresso do KiCad"
 #~ "número de ponto flutuante inválido no ficheiro: \"%s\"\n"
 #~ "linha: %d, posição: %d"
 
-#, c-format
 #~ msgid ""
 #~ "missing float number in file: \"%s\"\n"
 #~ "line: %d, offset: %d"
@@ -38593,7 +38498,6 @@ msgstr "Ficheiros de placa de circuito impresso do KiCad"
 #~ msgid "No graphic items found in file to import"
 #~ msgstr "Nenhum item gráfico encontrado no ficheiro de importação"
 
-#, c-format
 #~ msgid "Page layout description file \"%s\" not found."
 #~ msgstr "Ficheiro de descrição de layout de página \"%s\" não encontrado."
 
@@ -38627,17 +38531,15 @@ msgstr "Ficheiros de placa de circuito impresso do KiCad"
 #~ msgid "Page layout design files"
 #~ msgstr "Ficheiros de desenho de layout de página"
 
-#, c-format
 #~ msgid "Change \"%s\" link from \"%s\" to \"%s\"?"
 #~ msgstr "Alterar o link \"%s\" de \"%s\" para \"%s\"?"
 
-#, fuzzy, c-format
+#, fuzzy
 #~ msgid "Error loading schematic file \"%s\""
 #~ msgstr ""
 #~ "Erro ao carregar o ficheiro de esquema \"%s\".\n"
 #~ "%s"
 
-#, c-format
 #~ msgid ""
 #~ "Error loading schematic \"%s\".\n"
 #~ "%s"
@@ -38645,15 +38547,12 @@ msgstr "Ficheiros de placa de circuito impresso do KiCad"
 #~ "Erro ao carregar o esquema \"%s\".\n"
 #~ "%s"
 
-#, c-format
 #~ msgid "%s, %s, or %s"
 #~ msgstr "%s, %s, ou %s"
 
-#, c-format
 #~ msgid "%s, %s, %s, or %s"
 #~ msgstr "%s, %s, %s, ou %s"
 
-#, c-format
 #~ msgid "Failed to load schematic \"%s\""
 #~ msgstr "Falha ao carregar esquema \"%s\""
 
@@ -38669,7 +38568,7 @@ msgstr "Ficheiros de placa de circuito impresso do KiCad"
 #~ msgid "Template path:"
 #~ msgstr "Local do modelo:"
 
-#, fuzzy, c-format
+#, fuzzy
 #~ msgid "Failed to delete '%s'"
 #~ msgstr "Falhou ao criar \"%s\""
 
@@ -38680,11 +38579,10 @@ msgstr "Ficheiros de placa de circuito impresso do KiCad"
 #~ msgid "Delete File"
 #~ msgstr "Apagar o ficheiro"
 
-#, c-format
 #~ msgid "Are you sure you want to delete '%s'?"
 #~ msgstr "Tem certeza que deseja apagar '%s'?"
 
-#, fuzzy, c-format
+#, fuzzy
 #~ msgid "Are you sure you want to delete %d items?"
 #~ msgstr "Tem certeza que deseja excluir '%s'?"
 
@@ -38746,7 +38644,6 @@ msgstr "Ficheiros de placa de circuito impresso do KiCad"
 #~ msgid "Thermal Spoke Width"
 #~ msgstr "Largura da raia térmica:"
 
-#, c-format
 #~ msgid ""
 #~ "Html or pdf help file \n"
 #~ "%s\n"
@@ -38973,15 +38870,13 @@ msgstr "Ficheiros de placa de circuito impresso do KiCad"
 #~ "O texto não será legível com uma espessura maior que\n"
 #~ "1/4 de sua largura ou altura."
 
-#, c-format
 #~ msgid "Track width less than minimum track width (%s)."
 #~ msgstr "Largura da trilha menor que a largura mínima de trilha (%s)."
 
-#, c-format
 #~ msgid "Via diameter less than minimum via diameter (%s)."
 #~ msgstr "Diâmetro da via menor que o diâmetro mínimo de via (%s)."
 
-#, fuzzy, c-format
+#, fuzzy
 #~ msgid "Via hole diameter less than minimum through hole diameter (%s)."
 #~ msgstr "Diâmetro da via menor que o diâmetro mínimo de via (%s)."
 
@@ -38989,23 +38884,21 @@ msgstr "Ficheiros de placa de circuito impresso do KiCad"
 #~ msgid "Via hole diameter larger than via diameter."
 #~ msgstr "Furo da via mais maior que seu diâmetro."
 
-#, fuzzy, c-format
+#, fuzzy
 #~ msgid "Diameter and hole leave via annulus less than minimum (%s)."
 #~ msgstr ""
 #~ "Diâmetro do furo da via menor que o diâmetro mínimo de furo de via (%s)."
 
-#, c-format
 #~ msgid "Differential pair track width less than minimum track width (%s)."
 #~ msgstr ""
 #~ "Largura da trilha do par diferencial menor que a largura mínima de trilha "
 #~ "(%s)."
 
-#, fuzzy, c-format
+#, fuzzy
 #~ msgid "Differential pair via gap less than minimum clearance (%s)."
 #~ msgstr ""
 #~ "Largura do par diferencial menor que a largura mínima de trilha (%s)."
 
-#, c-format
 #~ msgid "Change %s footprint from \"%s\" to \"%s\"."
 #~ msgstr "Alterar o footprint %s de \"%s\" para \"%s\"."
 
@@ -39075,7 +38968,6 @@ msgstr "Ficheiros de placa de circuito impresso do KiCad"
 #~ msgid "Table Name"
 #~ msgstr "Nome da Tabela"
 
-#, c-format
 #~ msgid "Directory \"%s\" is not writable."
 #~ msgstr "A pasta \"%s\" não tem permissão de escrita."
 
@@ -39110,7 +39002,6 @@ msgstr "Ficheiros de placa de circuito impresso do KiCad"
 #~ msgid "Flip (mirror) the board view"
 #~ msgstr "Inverter (espelhar) visualização da placa"
 
-#, c-format
 #~ msgid "Render time %.0f ms ( %.1f fps)"
 #~ msgstr "Tempo de renderização %.0f ms ( %.1f fps)"
 
@@ -39120,7 +39011,6 @@ msgstr "Ficheiros de placa de circuito impresso do KiCad"
 #~ msgid "Mirror Around Vertical Axis"
 #~ msgstr "Espelhar em Torno do Eixo Vertical"
 
-#, c-format
 #~ msgid ""
 #~ "Project name:\n"
 #~ "%s\n"
@@ -39250,7 +39140,7 @@ msgstr "Ficheiros de placa de circuito impresso do KiCad"
 #~ "Seleção do tamanho da caneta utilizada para desenhar itens que não têm "
 #~ "tamanho de caneta especificado."
 
-#, fuzzy, c-format
+#, fuzzy
 #~ msgid "Via drill less than minimum through hole (%s)."
 #~ msgstr ""
 #~ "Diâmetro do furo da via menor que o diâmetro mínimo de furo de via (%s)."
@@ -39273,7 +39163,6 @@ msgstr "Ficheiros de placa de circuito impresso do KiCad"
 #~ msgid "Footprint place files"
 #~ msgstr "Arquivos de posicionamento de footprint"
 
-#, c-format
 #~ msgid "Multiple item %s%s (unit %d)\n"
 #~ msgstr "Item múltiplo %s%s (unidade %d)\n"
 
@@ -39315,7 +39204,7 @@ msgstr "Ficheiros de placa de circuito impresso do KiCad"
 #~ msgid "Settings"
 #~ msgstr "Configurações"
 
-#, fuzzy, c-format
+#, fuzzy
 #~ msgid "Error saving %s symbol library table."
 #~ msgstr ""
 #~ "Erro ao salvar a tabela global de biblioteca de símbolos:\n"
@@ -39371,15 +39260,12 @@ msgstr "Ficheiros de placa de circuito impresso do KiCad"
 #~ msgid "Add footprints with pads unlocked"
 #~ msgstr "Adicionar filtro de footprint"
 
-#, c-format
 #~ msgid "More than one symbol found in symbol file \"%s\"."
 #~ msgstr "Mais de um símbolo encontrado no arquivo de símbolos \"%s\"."
 
-#, c-format
 #~ msgid "Saving symbol in \"%s\""
 #~ msgstr "Salvando símbolo em \"%s\""
 
-#, c-format
 #~ msgid "An error occurred saving symbol file \"%s\""
 #~ msgstr "Ocorreu um erro ao salvar o arquivo de símbolo \"%s\""
 
@@ -39505,7 +39391,7 @@ msgstr "Ficheiros de placa de circuito impresso do KiCad"
 #~ msgid "Drill too small"
 #~ msgstr "Furo da via muito pequeno"
 
-#, fuzzy, c-format
+#, fuzzy
 #~ msgid "(%s %s; actual %s)"
 #~ msgstr "Tamanho real"
 
@@ -39517,7 +39403,6 @@ msgstr "Ficheiros de placa de circuito impresso do KiCad"
 #~ "O isolamento da máscara de solda local da ilha deve ser zero ou maior que "
 #~ "zero"
 
-#, c-format
 #~ msgid "Pad local solder mask clearance must be greater than %s"
 #~ msgstr ""
 #~ "O isolamento da máscara de solda local da ilha deve ser maior que %s"
@@ -39533,7 +39418,6 @@ msgstr "Ficheiros de placa de circuito impresso do KiCad"
 #~ msgstr ""
 #~ "Forma de ilha incorreta: a forma deve ser equivalente a apenas um polígono"
 
-#, c-format
 #~ msgid ""
 #~ "This will change the net assigned to %s pad %s to %s.\n"
 #~ "Do you wish to continue?"
@@ -39541,7 +39425,6 @@ msgstr "Ficheiros de placa de circuito impresso do KiCad"
 #~ "Isto irá alterar a rede atribuída a %s ilha %s para %s.\n"
 #~ "Deseja continuar?"
 
-#, c-format
 #~ msgid ""
 #~ "This will change the net assigned to %s pad %s and %s pad %s to %s.\n"
 #~ "Do you wish to continue?"
@@ -39549,7 +39432,6 @@ msgstr "Ficheiros de placa de circuito impresso do KiCad"
 #~ "Isto irá alterar a rede atribuída a %s ilha %s e %s ilha %s para %s.\n"
 #~ "Deseja continuar?"
 
-#, c-format
 #~ msgid ""
 #~ "This will change the net assigned to %lu connected pads to %s.\n"
 #~ "Do you wish to continue?"
@@ -39587,22 +39469,19 @@ msgstr "Ficheiros de placa de circuito impresso do KiCad"
 #~ msgid "Associate selected footprint with selected components"
 #~ msgstr "Associar o footprint selecionado aos componentes selecionados"
 
-#, c-format
 #~ msgid "pin %s"
 #~ msgstr "pino %s"
 
 #~ msgid "component"
 #~ msgstr "componente"
 
-#, c-format
 #~ msgid "%s %s found"
 #~ msgstr "%s %s encontrado"
 
-#, c-format
 #~ msgid "Component %s not found"
 #~ msgstr "O componente %s não foi encontrado"
 
-#, fuzzy, c-format
+#, fuzzy
 #~ msgid "%s %s \"%s\" from \"%s\" to \"%s\""
 #~ msgstr "%s footprint \"%s\" (de \"%s\") para \"%s\""
 
@@ -39648,14 +39527,12 @@ msgstr "Ficheiros de placa de circuito impresso do KiCad"
 #~ msgid "No Colon in Nicknames"
 #~ msgstr "Sem Vírgula em Apelidos"
 
-#, c-format
 #~ msgid "Duplicate Nickname: \"%s\"."
 #~ msgstr "Apelido Duplicado: \"%s\"."
 
 #~ msgid "Please Delete or Modify One"
 #~ msgstr "Exclua ou Modifique Um"
 
-#, c-format
 #~ msgid ""
 #~ "The current configuration does not include a library with the\n"
 #~ "nickname \"%s\".  Use Manage Symbol Libraries\n"
@@ -39668,7 +39545,7 @@ msgstr "Ficheiros de placa de circuito impresso do KiCad"
 #~ msgid "Symbol library not found."
 #~ msgstr "Biblioteca de símbolos não encontrada."
 
-#, fuzzy, c-format
+#, fuzzy
 #~ msgid ""
 #~ "Library \"%s\" is read only and must be saved as a different library."
 #~ msgstr "Biblioteca não encontrada na tabela de bibliotecas de footprint."
@@ -39676,19 +39553,19 @@ msgstr "Ficheiros de placa de circuito impresso do KiCad"
 #~ msgid "Select symbol to browse"
 #~ msgstr "Selecione o símbolo a ser examinado"
 
-#, fuzzy, c-format
+#, fuzzy
 #~ msgid "Cannot find footprint for symbol '%s'."
 #~ msgstr "Não é possível adicionar %s (footprint \"%s\" não encontrado)."
 
-#, fuzzy, c-format
+#, fuzzy
 #~ msgid "Change '%s' labels to '%s'."
 #~ msgstr "Alterar o link \"%s\" de \"%s\" para \"%s\"?"
 
-#, fuzzy, c-format
+#, fuzzy
 #~ msgid "Change '%s' global labels to '%s'."
 #~ msgstr "Alterar o link \"%s\" de \"%s\" para \"%s\"?"
 
-#, fuzzy, c-format
+#, fuzzy
 #~ msgid "Change '%s' hierarchical label to '%s'."
 #~ msgstr "Mudar para Rótulo Hierárquico"
 
@@ -39701,7 +39578,6 @@ msgstr "Ficheiros de placa de circuito impresso do KiCad"
 #~ msgid "Edit Component Name"
 #~ msgstr "Editar Nome do Componente"
 
-#, c-format
 #~ msgid ""
 #~ "Current project directory:\n"
 #~ "%s"
@@ -39712,18 +39588,15 @@ msgstr "Ficheiros de placa de circuito impresso do KiCad"
 #~ msgid "Default Values:"
 #~ msgstr "Valores Padrão:"
 
-#, c-format
 #~ msgid "File \"%s\" written"
 #~ msgstr "Arquivo \"%s\" escrito"
 
-#, c-format
 #~ msgid "Page size: width %.4g height %.4g"
 #~ msgstr "Tamanho da página: largura %.4g altura %.4g"
 
 #~ msgid "3D Settings"
 #~ msgstr "Configurações"
 
-#, c-format
 #~ msgid "%s footprint \"%s\" (from \"%s\") to \"%s\""
 #~ msgstr "%s footprint \"%s\" (de \"%s\") para \"%s\""
 
@@ -39746,7 +39619,7 @@ msgstr "Ficheiros de placa de circuito impresso do KiCad"
 #~ "As alterações realizadas não podem ser desfeitas.  Tem certeza de que "
 #~ "deseja atualizar a PCI?"
 
-#, fuzzy, c-format
+#, fuzzy
 #~ msgid "Duplicate nicknames \"%s\"."
 #~ msgstr "Apelidos Duplicados: \"%s\"."
 
@@ -39758,15 +39631,13 @@ msgstr "Ficheiros de placa de circuito impresso do KiCad"
 #~ msgid "Keepout violation"
 #~ msgstr "Afastar vias"
 
-#, c-format
 #~ msgid "Wrote board file: \"%s\""
 #~ msgstr "Arquivo de placa gravado: \"%s\""
 
-#, c-format
 #~ msgid "Component \"%s\" replaced in \"%s\""
 #~ msgstr "O componente \"%s\" foi substituído em \"%s\""
 
-#, fuzzy, c-format
+#, fuzzy
 #~ msgid "Component \"%s\" added in \"%s\""
 #~ msgstr "Componente \"%s\" adicionado em  \"%s\""
 
@@ -39777,7 +39648,6 @@ msgstr "Ficheiros de placa de circuito impresso do KiCad"
 #~ "Ocorreram erros durante a atualização da netlist. A menos que você os "
 #~ "conserte, sua placa não estará consistente com o esquema eletrônico."
 
-#, c-format
 #~ msgid ""
 #~ "File \"%s\" is format version: %d.\n"
 #~ "I only support format version <= %d.\n"
