@@ -55,6 +55,8 @@
 #include <geometry/shape_segment.h>
 #include <geometry/shape_circle.h>
 
+#include <wx/log.h>
+
 
 SHAPE_POLY_SET::SHAPE_POLY_SET() :
     SHAPE( SH_POLY_SET )
@@ -970,14 +972,11 @@ void SHAPE_POLY_SET::fractureSingle( POLYGON& paths )
 
         int x_min = std::numeric_limits<int>::max();
 
-        for( const VECTOR2I& p : points )
-        {
-            if( p.x < x_min )
-                x_min = p.x;
-        }
-
         for( int i = 0; i < pointCount; i++ )
         {
+            if( points[i].x < x_min )
+                x_min = points[i].x;
+
             // Do not use path.CPoint() here; open-coding it using the local variables "points"
             // and "pointCount" gives a non-trivial performance boost to zone fill times.
             FractureEdge* fe = new FractureEdge( first, points[ i ],
@@ -1015,22 +1014,37 @@ void SHAPE_POLY_SET::fractureSingle( POLYGON& paths )
     while( num_unconnected > 0 )
     {
         int x_min = std::numeric_limits<int>::max();
+        auto it = border_edges.begin();
 
         FractureEdge* smallestX = nullptr;
 
         // find the left-most hole edge and merge with the outline
-        for( FractureEdge* border_edge : border_edges )
+        for( ; it != border_edges.end(); ++it )
         {
+            FractureEdge* border_edge = *it;
             int xt = border_edge->m_p1.x;
 
-            if( ( xt < x_min ) && !border_edge->m_connected )
+            if( ( xt <= x_min ) && !border_edge->m_connected )
             {
                 x_min = xt;
                 smallestX = border_edge;
             }
         }
 
-        num_unconnected -= processEdge( edges, smallestX );
+        int num_processed = processEdge( edges, smallestX );
+
+        // If we can't handle the edge, the zone is broken (maybe)
+        if( !num_processed )
+        {
+            wxLogWarning( "Broken polygon, dropping path" );
+
+            for( FractureEdge* edge : edges )
+                delete edge;
+
+            return;
+        }
+
+        num_unconnected -= num_processed;
     }
 
     paths.clear();
