@@ -214,6 +214,9 @@ void EDA_DRAW_FRAME::ScriptingConsoleEnableDisable()
 {
     KIWAY_PLAYER* frame = Kiway().Player( FRAME_PYTHON, false );
 
+    wxRect  rect = GetScreenRect();
+    wxPoint center = rect.GetPosition() + rect.GetSize() / 2;
+
     if( !frame )
     {
         frame = Kiway().Player( FRAME_PYTHON, true, Kiway().GetTop() );
@@ -230,11 +233,13 @@ void EDA_DRAW_FRAME::ScriptingConsoleEnableDisable()
             frame->Iconize( false );
 
         frame->Raise();
+        frame->SetPosition( center - frame->GetSize() / 2 );
 
         return;
     }
 
     frame->Show( !frame->IsVisible() );
+    frame->SetPosition( center - frame->GetSize() / 2 );
 }
 
 
