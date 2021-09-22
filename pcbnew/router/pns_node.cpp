@@ -1068,19 +1068,23 @@ int NODE::FindLinesBetweenJoints( const JOINT& aA, const JOINT& aB, std::vector<
 
 void NODE::FixupVirtualVias()
 {
+    SEGMENT* locked_seg = nullptr;
     std::vector<VVIA*> vvias;
 
-    for( auto& joint : m_joints )
+    for( auto& jointPair : m_joints )
     {
-        if( joint.second.Layers().IsMultilayer() )
+        JOINT joint = jointPair.second;
+
+        if( joint.Layers().IsMultilayer() )
             continue;
 
         int  n_seg = 0, n_solid = 0, n_vias = 0;
-        int  prev_w = -1;
-        int  max_w = -1;
+        int  prev_w          = -1;
+        int  max_w           = -1;
         bool is_width_change = false;
+        bool is_locked       = false;
 
-        for( const auto& lnk : joint.second.LinkList() )
+        for( const auto& lnk : joint.LinkList() )
         {
             if( lnk.item->OfKind( ITEM::VIA_T ) )
             {
@@ -1101,15 +1105,28 @@ void NODE::FixupVirtualVias()
 
                 max_w = std::max( w, max_w );
                 prev_w = w;
+
+                is_locked  = t->IsLocked();
+                locked_seg = t;
             }
         }
 
-        if( ( is_width_change || n_seg >= 3 ) && n_solid == 0 && n_vias == 0 )
+        if( ( is_width_change || n_seg >= 3 || is_locked ) && n_solid == 0 && n_vias == 0 )
         {
             // fixme: the hull margin here is an ugly temporary workaround. The real fix
             // is to use octagons for via force propagation.
-            vvias.push_back( new VVIA( joint.second.Pos(), joint.second.Layers().Start(),
-                                       max_w + 2 * PNS_HULL_MARGIN, joint.second.Net() ) );
+            vvias.push_back( new VVIA( joint.Pos(), joint.Layers().Start(),
+                                       max_w + 2 * PNS_HULL_MARGIN, joint.Net() ) );
+        }
+
+        if( is_locked )
+        {
+            const VECTOR2I& secondPos = ( locked_seg->Seg().A == joint.Pos() ) ?
+                                        locked_seg->Seg().B :
+                                        locked_seg->Seg().A;
+
+            vvias.push_back( new VVIA( secondPos, joint.Layers().Start(),
+                                       max_w + 2 * PNS_HULL_MARGIN, joint.Net() ) );
         }
     }
 
