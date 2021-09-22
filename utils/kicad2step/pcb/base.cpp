@@ -286,7 +286,7 @@ OPT<std::string> GetLayerName( const SEXPR::SEXPR& aLayerElem )
 
     if( aLayerElem.GetNumberOfChildren() == 2 )
     {
-        const SEXPR* layerChild = *aLayerElem.GetChild( 1 );
+        const SEXPR::SEXPR& layerChild = *aLayerElem.GetChild( 1 );
 
         // The layer child can be quoted (string) or unquoted (symbol) depending on PCB version.
         if( layerChild.IsString() )
