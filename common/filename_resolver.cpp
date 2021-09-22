@@ -110,7 +110,7 @@ bool FILENAME_RESOLVER::SetProject( PROJECT* aProject, bool* flgChanged )
     }
     else
     {
-        if( m_paths.front().m_Pathexp.Cmp( m_curProjDir ) )
+        if( m_paths.front().m_Pathexp != m_curProjDir )
         {
             m_paths.front().m_Pathexp = m_curProjDir;
 
@@ -305,7 +305,7 @@ wxString FILENAME_RESOLVER::ResolvePath( const wxString& aFileName )
     // NB: this is not necessarily the same as the current working directory, which has already
     // been checked. This case accounts for partial paths which do not contain ${KIPRJMOD}.
     // This check is performed before checking the path relative to ${KICAD6_3DMODEL_DIR} so that
-    // users can potentially override a model within ${KICAD6_3DMODEL_DIR}
+    // users can potentially override a model within ${KICAD6_3DMODEL_DIR}.
     if( !m_paths.begin()->m_Pathexp.empty() && !tname.StartsWith( ":" ) )
     {
         tmpFN.Assign( m_paths.begin()->m_Pathexp, "" );
@@ -368,7 +368,7 @@ wxString FILENAME_RESOLVER::ResolvePath( const wxString& aFileName )
         if( path.m_Alias.StartsWith( "${" ) || path.m_Alias.StartsWith( "$(" ) )
             continue;
 
-        if( !path.m_Alias.Cmp( alias ) && !path.m_Pathexp.empty() )
+        if( path.m_Alias == alias && !path.m_Pathexp.empty() )
         {
             wxFileName fpath( wxFileName::DirName( path.m_Pathexp ) );
             wxString fullPath = fpath.GetPathWithSep() + relpath;
@@ -426,9 +426,13 @@ bool FILENAME_RESOLVER::addPath( const SEARCH_PATH& aPath )
 
     if( !path.DirExists() )
     {
-        // suppress the message if the missing pathvar is the
-        // legacy KICAD6_3DMODEL_DIR variable
-        if( aPath.m_Pathvar.compare( wxT( "${KICAD6_3DMODEL_DIR}" ) ) )
+        if( aPath.m_Pathvar == "${KICAD6_3DMODEL_DIR}"
+                || aPath.m_Pathvar == "${KIPRJMOD}" || aPath.m_Pathvar == "$(KIPRJMOD)"
+                || aPath.m_Pathvar == "${KISYS3DMOD}" || aPath.m_Pathvar == "$(KISYS3DMOD)" )
+        {
+            // suppress the message if the missing pathvar is a system variable
+        }
+        else
         {
             wxString msg = _( "The given path does not exist" );
             msg.append( wxT( "\n" ) );
@@ -456,7 +460,7 @@ bool FILENAME_RESOLVER::addPath( const SEARCH_PATH& aPath )
 
     while( sPL != ePL )
     {
-        if( !tpath.m_Alias.Cmp( sPL->m_Alias ) )
+        if( tpath.m_Alias == sPL->m_Alias )
         {
             wxString msg = _( "Alias: " );
             msg.append( tpath.m_Alias );
@@ -560,9 +564,14 @@ bool FILENAME_RESOLVER::readPathList()
         if( !getHollerith( cfgLine, idx, al.m_Alias ) )
             continue;
 
-        // never add on KICAD6_3DMODEL_DIR from a config file
-        if( !al.m_Alias.Cmp( wxT( "KICAD6_3DMODEL_DIR" ) ) )
+        // Don't add KICAD6_3DMODEL_DIR, one of its legacy equivalents, or KIPRJMOD from a
+        // config file.  They're system variables are are defined at runtime.
+        if( al.m_Alias == "${KICAD6_3DMODEL_DIR}"
+                || al.m_Alias == "${KIPRJMOD}" || al.m_Alias == "$(KIPRJMOD)"
+                || al.m_Alias == "${KISYS3DMOD}" || al.m_Alias == "$(KISYS3DMOD)" )
+        {
             continue;
+        }
 
         if( !getHollerith( cfgLine, idx, al.m_Pathvar ) )
             continue;

@@ -33,10 +33,8 @@
 #include <wx/filename.h>
 #include <wx/log.h>
 #include <wx/thread.h>
-#include <wx/utils.h>
 #include <wx/msgdlg.h>
 #include <wx/stdpaths.h>
-#include "kicadpcb.h"
 
 #include "3d_resolver.h"
 
@@ -78,167 +76,10 @@ bool S3D_RESOLVER::Set3DConfigDir( const wxString& aConfigDir )
 }
 
 
-bool S3D_RESOLVER::SetProjectDir( const wxString& aProjDir, bool* flgChanged )
-{
-    if( aProjDir.empty() )
-        return false;
-
-    wxFileName projdir( aProjDir, "" );
-    projdir.Normalize();
-
-    if( false == projdir.DirExists() )
-        return false;
-
-    m_curProjDir = projdir.GetPath();
-    wxSetEnv( "KIPRJMOD", m_curProjDir );
-
-    if( flgChanged )
-        *flgChanged = false;
-
-    if( m_Paths.empty() )
-    {
-        SEARCH_PATH al;
-        al.m_Alias = "${KIPRJMOD}";
-        al.m_Pathvar = "${KIPRJMOD}";
-        al.m_Pathexp = m_curProjDir;
-        m_Paths.push_back( al );
-        m_NameMap.clear();
-
-        if( flgChanged )
-            *flgChanged = true;
-
-    }
-    else
-    {
-        if( m_Paths.front().m_Pathexp.Cmp( m_curProjDir ) )
-        {
-            m_Paths.front().m_Pathexp = m_curProjDir;
-            m_NameMap.clear();
-
-            if( flgChanged )
-                *flgChanged = true;
-
-        }
-        else
-        {
-            return true;
-        }
-    }
-
-    wxLogTrace( trace3dResolver, wxT( "%s:%s:%d\n"
-                                       " * [INFO] changed project dir to '%s'" ),
-                __FILE__, __FUNCTION__, __LINE__, m_Paths.front().m_Pathexp );
-
-    return true;
-}
-
-
-wxString S3D_RESOLVER::GetProjectDir( void )
-{
-    return m_curProjDir;
-}
-
-
 bool S3D_RESOLVER::createPathList( void )
 {
     if( !m_Paths.empty() )
         return true;
-
-    wxString kmod;
-
-    // add an entry for the default search path; at this point
-    // we cannot set a sensible default so we use an empty string.
-    // the user may change this later with a call to SetProjectDir()
-
-    SEARCH_PATH lpath;
-    lpath.m_Alias = "${KIPRJMOD}";
-    lpath.m_Pathvar = "${KIPRJMOD}";
-    lpath.m_Pathexp = m_curProjDir;
-    m_Paths.push_back( lpath );
-    wxFileName fndummy;
-    wxUniChar psep = fndummy.GetPathSeparator();
-    bool hasKICAD6_3DMODEL_DIR = false;
-
-    // iterate over the list of internally defined ENV VARs
-    // and add existing paths to the resolver
-    std::map< wxString, wxString >::const_iterator mS = m_EnvVars.begin();
-    std::map< wxString, wxString >::const_iterator mE = m_EnvVars.end();
-
-    while( mS != mE )
-    {
-        // filter out URLs, template directories, and known system paths
-        if( mS->first == wxString( "KICAD_PTEMPLATES" )
-            || mS->first == wxString( "KICAD6_FOOTPRINT_DIR" ) )
-        {
-            ++mS;
-            continue;
-        }
-
-        if( wxString::npos != mS->second.find( wxString( "://" ) ) )
-        {
-            ++mS;
-            continue;
-        }
-
-        fndummy.Assign( mS->second, "" );
-        wxString pathVal;
-
-        // ensure system ENV VARs supersede internally defined vars
-        if( wxGetEnv( mS->first, &pathVal ) && wxDirExists( pathVal ) )
-            fndummy.Assign( pathVal, "" );
-        else
-            fndummy.Assign( mS->second, "" );
-
-        fndummy.Normalize();
-
-        if( !fndummy.DirExists() )
-        {
-            ++mS;
-            continue;
-        }
-
-        wxString tmp( "${" );
-        tmp.Append( mS->first );
-        tmp.Append( "}" );
-
-        if( tmp == "${KICAD6_3DMODEL_DIR}" )
-            hasKICAD6_3DMODEL_DIR = true;
-
-        lpath.m_Alias =  tmp;
-        lpath.m_Pathvar = tmp;
-        lpath.m_Pathexp = fndummy.GetFullPath();
-
-        if( !lpath.m_Pathexp.empty() && psep == *lpath.m_Pathexp.rbegin() )
-            lpath.m_Pathexp.erase( --lpath.m_Pathexp.end() );
-
-        m_Paths.push_back( lpath );
-
-        ++mS;
-    }
-
-    // special case: if KICAD6_FOOTPRINT_DIR is not internally defined but is defined by
-    // the system, then create an entry here
-    wxString envar;
-
-    if( !hasKICAD6_3DMODEL_DIR && wxGetEnv( "KICAD6_3DMODEL_DIR", &envar ) )
-    {
-        lpath.m_Alias = "${KICAD6_3DMODEL_DIR}";
-        lpath.m_Pathvar = "${KICAD6_3DMODEL_DIR}";
-        fndummy.Assign( envar, "" );
-        fndummy.Normalize();
-
-        if( fndummy.DirExists() )
-        {
-            lpath.m_Pathexp = fndummy.GetFullPath();
-
-            if( !lpath.m_Pathexp.empty() && psep == *lpath.m_Pathexp.rbegin() )
-                lpath.m_Pathexp.erase( --lpath.m_Pathexp.end() );
-
-            if( !lpath.m_Pathexp.empty() )
-                m_Paths.push_back( lpath );
-        }
-
-    }
 
     readPathList();
 
@@ -342,7 +183,7 @@ wxString S3D_RESOLVER::ResolvePath( const wxString& aFileName,
     // NB: this is not necessarily the same as the current working directory, which has already
     // been checked. This case accounts for partial paths which do not contain ${KIPRJMOD}.
     // This check is performed before checking the path relative to ${KICAD6_3DMODEL_DIR} so that
-    // users can potentially override a model within ${KICAD6_3DMODEL_DIR}
+    // users can potentially override a model within ${KICAD6_3DMODEL_DIR}.
     if( !m_Paths.begin()->m_Pathexp.empty() && !tname.StartsWith( ":" ) )
     {
         tmpFN.Assign( m_Paths.begin()->m_Pathexp, "" );
@@ -407,7 +248,7 @@ wxString S3D_RESOLVER::ResolvePath( const wxString& aFileName,
         if( path.m_Alias.StartsWith( "${" ) || path.m_Alias.StartsWith( "$(" ) )
             continue;
 
-        if( !path.m_Alias.Cmp( alias ) && !path.m_Pathexp.empty() )
+        if( path.m_Alias == alias && !path.m_Pathexp.empty() )
         {
             wxFileName fpath( wxFileName::DirName( path.m_Pathexp ) );
             wxString fullPath = fpath.GetPathWithSep() + relpath;
@@ -456,11 +297,15 @@ bool S3D_RESOLVER::addPath( const SEARCH_PATH& aPath )
     wxFileName path( tpath.m_Pathvar, "" );
     path.Normalize();
 
-     if( !path.DirExists() )
+    if( !path.DirExists() )
     {
-        // suppress the message if the missing pathvar is the legacy KICAD6_3DMODEL_DIR variable
-        if( aPath.m_Pathvar != "${KIPRJMOD}" &&
-            aPath.m_Pathvar != "$(KICAD6_3DMODEL_DIR)" )
+        if( aPath.m_Pathvar == "${KICAD6_3DMODEL_DIR}"
+                || aPath.m_Pathvar == "${KIPRJMOD}" || aPath.m_Pathvar == "$(KIPRJMOD)"
+                || aPath.m_Pathvar == "${KISYS3DMOD}" || aPath.m_Pathvar == "$(KISYS3DMOD)" )
+        {
+            // suppress the message if the missing pathvar is a system variable
+        }
+        else
         {
             wxString msg = _( "The given path does not exist" );
             msg.append( "\n" );
@@ -489,7 +334,7 @@ bool S3D_RESOLVER::addPath( const SEARCH_PATH& aPath )
 
     while( sPL != ePL )
     {
-        if( !tpath.m_Alias.Cmp( sPL->m_Alias ) )
+        if( tpath.m_Alias == sPL->m_Alias )
         {
             wxString msg = _( "Alias:" ) + wxS( " " );
             msg.append( tpath.m_Alias );
@@ -525,8 +370,7 @@ bool S3D_RESOLVER::readPathList( void )
 
     if( !wxFileName::Exists( cfgname ) )
     {
-        wxLogTrace( trace3dResolver, wxT( "%s:%s:d\n"
-                                          " * no 3D configuration file '%s'" ),
+        wxLogTrace( trace3dResolver, wxT( "%s:%s:d\n * no 3D configuration file '%s'" ),
                     __FILE__, __FUNCTION__, __LINE__, cfgname );
 
         return false;
@@ -536,8 +380,7 @@ bool S3D_RESOLVER::readPathList( void )
 
     if( !cfgFile.is_open() )
     {
-        wxLogTrace( trace3dResolver, wxT( "%s:%s:%d\n"
-                                          " * Could not open configuration file '%s'" ),
+        wxLogTrace( trace3dResolver, wxT( "%s:%s:%d\n * Could not open configuration file '%s'" ),
                     __FILE__, __FUNCTION__, __LINE__, cfgname );
 
         return false;
@@ -578,13 +421,6 @@ bool S3D_RESOLVER::readPathList( void )
         idx = 0;
 
         if( !getHollerith( cfgLine, idx, al.m_Alias ) )
-            continue;
-
-        // never add on KICAD6_3DMODEL_DIR from a config file
-        if( !al.m_Alias.Cmp( "${KICAD6_3DMODEL_DIR}" ) )
-            continue;
-
-        if( !al.m_Alias.Cmp( "${KIPRJMOD}" ) )
             continue;
 
         if( !getHollerith( cfgLine, idx, al.m_Pathvar ) )
@@ -672,7 +508,7 @@ wxString S3D_RESOLVER::expandVars( const wxString& aPath )
 
     wxString result;
 
-    for( const auto& i : m_EnvVars )
+    for( const std::pair<const wxString, wxString>& i : m_EnvVars )
     {
         if( !aPath.compare( 2, i.first.length(), i.first ) )
         {
@@ -807,8 +643,7 @@ static bool getHollerith( const std::string& aString, size_t& aIndex, wxString& 
 
     if( aIndex >= aString.size() )
     {
-        wxLogTrace( trace3dResolver, wxT( "%s:%s:%d\n"
-                                          " * Bad Hollerith string in line \"%s\"" ),
+        wxLogTrace( trace3dResolver, wxT( "%s:%s:%d\n * Bad Hollerith string in line '%s'" ),
                     __FILE__, __FUNCTION__, __LINE__, aString );
 
         return false;
@@ -818,8 +653,7 @@ static bool getHollerith( const std::string& aString, size_t& aIndex, wxString& 
 
     if( std::string::npos == i2 )
     {
-        wxLogTrace( trace3dResolver, wxT( "%s:%s:%d\n"
-                                          " * missing opening quote mark in line \"%s\"" ),
+        wxLogTrace( trace3dResolver, wxT( "%s:%s:%d\n * missing opening quote mark in line '%s'" ),
                     __FILE__, __FUNCTION__, __LINE__, aString );
 
         return false;
@@ -829,8 +663,7 @@ static bool getHollerith( const std::string& aString, size_t& aIndex, wxString& 
 
     if( i2 >= aString.size() )
     {
-        wxLogTrace( trace3dResolver, wxT( "%s:%s:%d\n"
-                                          " * unexpected end of line in line \"%s\"" ),
+        wxLogTrace( trace3dResolver, wxT( "%s:%s:%d\n * unexpected end of line in line '%s'" ),
                     __FILE__, __FUNCTION__, __LINE__, aString );
 
         return false;
@@ -843,8 +676,7 @@ static bool getHollerith( const std::string& aString, size_t& aIndex, wxString& 
 
     if( tnum.empty() || aString[i2++] != ':' )
     {
-        wxLogTrace( trace3dResolver, wxT( "%s:%s:%d\n"
-                                          " * Bad Hollerith string in line \"%s\"" ),
+        wxLogTrace( trace3dResolver, wxT( "%s:%s:%d\n * Bad Hollerith string in line '%s'" ),
                     __FILE__, __FUNCTION__, __LINE__, aString );
 
         return false;
@@ -857,8 +689,7 @@ static bool getHollerith( const std::string& aString, size_t& aIndex, wxString& 
 
     if( (i2 + nchars) >= aString.size() )
     {
-        wxLogTrace( trace3dResolver, wxT( "%s:%s:%d\n"
-                                          " * unexpected end of line in line \"%s\"\n" ),
+        wxLogTrace( trace3dResolver, wxT( "%s:%s:%d\n * unexpected end of line in line '%s'" ),
                     __FILE__, __FUNCTION__, __LINE__, aString );
 
         return false;
@@ -872,8 +703,7 @@ static bool getHollerith( const std::string& aString, size_t& aIndex, wxString& 
 
     if( i2 >= aString.size() || aString[i2] != '"' )
     {
-        wxLogTrace( trace3dResolver, wxT( "%s:%s:%d\n"
-                                          " * missing closing quote mark in line \"%s\"" ),
+        wxLogTrace( trace3dResolver, wxT( "%s:%s:%d\n * missing closing quote mark in line '%s'" ),
                     __FILE__, __FUNCTION__, __LINE__, aString );
 
         return false;

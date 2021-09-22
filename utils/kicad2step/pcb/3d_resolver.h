@@ -114,16 +114,6 @@ public:
     bool Set3DConfigDir( const wxString& aConfigDir );
 
     /**
-     * Set the current KiCad project directory as the first entry in the model path list.
-     *
-     * @param aProjDir is the current project directory.
-     * @param flgChanged, if specified, is set to true if the directory actually changed.
-     * @return true if the call succeeds.
-     */
-    bool SetProjectDir( const wxString& aProjDir, bool* flgChanged = NULL );
-    wxString GetProjectDir( void );
-
-    /**
      * Determine the full path of the given file name.
      *
      * In the future remote files may be supported, in which case it is best to require a full

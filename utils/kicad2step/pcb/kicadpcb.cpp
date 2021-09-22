@@ -32,8 +32,6 @@
 #include <sexpr/sexpr_parser.h>
 
 #include <wx/filename.h>
-#include <wx/log.h>
-#include <wx/stdpaths.h>
 #include <wx/wxcrtvararg.h>
 
 #include <memory>
@@ -58,10 +56,10 @@ KICADPCB::KICADPCB( const wxString& aPcbName )
 
 KICADPCB::~KICADPCB()
 {
-    for( auto i : m_footprints )
+    for( KICADFOOTPRINT* i : m_footprints )
         delete i;
 
-    for( auto i : m_curves )
+    for( KICADCURVE* i : m_curves )
         delete i;
 
     delete m_pcb_model;
@@ -89,7 +87,6 @@ bool KICADPCB::ReadFile( const wxString& aFileName )
 
     fname.Normalize();
     m_filename = fname.GetFullPath();
-    m_resolver.SetProjectDir( fname.GetPath() );
 
     try
     {
