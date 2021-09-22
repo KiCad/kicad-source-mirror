@@ -1,37 +1,98 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<svg xmlns:dc="http://purl.org/dc/elements/1.1/"
-   xmlns:cc="http://creativecommons.org/ns#"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-   xmlns:svg="http://www.w3.org/2000/svg"
-   xmlns="http://www.w3.org/2000/svg"
+<svg
+   id="Слой_1"
+   data-name="Слой 1"
+   viewBox="0 0 24 24"
+   version="1.1"
+   sodipodi:docname="ercerr.svg"
+   inkscape:version="1.1 (1:1.1+202105261517+ce6663b3b7)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" id="Слой_1" data-name="Слой 1" viewBox="0 0 24 24" version="1.1" sodipodi:docname="ercerr.svg" inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
-   <sodipodi:namedview pagecolor="#ffffff" bordercolor="#666666" borderopacity="1" objecttolerance="10" gridtolerance="10" guidetolerance="10" inkscape:pageopacity="0" inkscape:pageshadow="2" inkscape:window-width="1865" inkscape:window-height="1428" id="namedview30" showgrid="true" inkscape:zoom="27.961538" inkscape:cx="13" inkscape:cy="13" inkscape:window-x="0" inkscape:window-y="37" inkscape:window-maximized="0" inkscape:document-rotation="0" inkscape:current-layer="Слой_1">
-      <inkscape:grid type="xygrid" id="grid_kicad" spacingx="0.5" spacingy="0.5" color="#9999ff" opacity="0.13" empspacing="2" />
-   </sodipodi:namedview>
-   <metadata id="metadata43">
-      <rdf:RDF>
-         <cc:Work rdf:about="">
-            <cc:license rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" />
-            <dc:format>image/svg+xml</dc:format>
-            <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-            <dc:title>add_arc</dc:title>
-         </cc:Work>
-         <cc:License rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
-            <cc:permits rdf:resource="http://creativecommons.org/ns#Reproduction" />
-            <cc:permits rdf:resource="http://creativecommons.org/ns#Distribution" />
-            <cc:requires rdf:resource="http://creativecommons.org/ns#Notice" />
-            <cc:requires rdf:resource="http://creativecommons.org/ns#Attribution" />
-            <cc:permits rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
-            <cc:requires rdf:resource="http://creativecommons.org/ns#ShareAlike" />
-         </cc:License>
-      </rdf:RDF>
-   </metadata>
-   <defs id="defs7">
-      <style id="style5">.cls-1{fill:#f2647e;}.cls-2{fill:none;stroke:#545454;stroke-linecap:round;stroke-linejoin:round;stroke-width:3px;}</style>
-   </defs>
-   <title id="title9">erc_error</title>
-   <path class="cls-1" d="M 24,12 A 12,12 0 1 1 12,0 12,12 0 0 1 24,12 Z" id="path11" />
-   <line class="cls-2" x1="12.0435" y1="19.9541" x2="12.0453" y2="19.9541" id="line13" />
-   <line class="cls-2" x1="11.9547" y1="4.0458999" x2="12.0382" y2="15.552" id="line15" />
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="2560"
+     inkscape:window-height="1371"
+     id="namedview30"
+     showgrid="true"
+     inkscape:zoom="27.961538"
+     inkscape:cx="6.6341129"
+     inkscape:cy="12.982119"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:document-rotation="0"
+     inkscape:current-layer="Слой_1"
+     inkscape:pagecheckerboard="0">
+    <inkscape:grid
+       type="xygrid"
+       id="grid_kicad"
+       spacingx="0.5"
+       spacingy="0.5"
+       color="#9999ff"
+       opacity="0.13"
+       empspacing="2" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata43">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" />
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title>add_arc</dc:title>
+      </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#ShareAlike" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs7">
+    <style
+       id="style5">.cls-1{fill:#f2647e;}.cls-2{fill:none;stroke:#545454;stroke-linecap:round;stroke-linejoin:round;stroke-width:3px;}</style>
+  </defs>
+  <title
+     id="title9">erc_error</title>
+  <path
+     class="cls-1"
+     d="M 24,12 A 12,12 0 1 1 12,0 12,12 0 0 1 24,12 Z"
+     id="path11"
+     style="fill:#e0526c;fill-opacity:1" />
+  <g
+     aria-label="!"
+     id="text14025"
+     style="font-size:21.3333px;line-height:1.25;letter-spacing:0px;word-spacing:0px;fill:#ffffff">
+    <path
+       d="m 13.5,14 h -3 L 10,4 h 4 z m -3.465896,3.736749 c 0,-0.654221 0.177777,-1.109332 0.533332,-1.365332 0.355555,-0.270221 0.789333,-0.405332 1.301332,-0.405332 0.497777,0 0.924443,0.135111 1.279998,0.405332 0.355555,0.256 0.533332,0.711111 0.533332,1.365332 0,0.625777 -0.177777,1.080887 -0.533332,1.365331 -0.355555,0.270222 -0.782221,0.405333 -1.279998,0.405333 -0.511999,0 -0.945777,-0.135111 -1.301332,-0.405333 -0.355555,-0.284444 -0.533332,-0.739554 -0.533332,-1.365331 z"
+       style="font-weight:bold;font-family:'Noto Sans';-inkscape-font-specification:'Noto Sans Bold'"
+       id="path36574"
+       sodipodi:nodetypes="cccccscscscscs" />
+  </g>
 </svg>
