@@ -5,10 +5,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-09-20 11:57-0700\n"
-"PO-Revision-Date: 2021-09-20 16:15+0000\n"
+"PO-Revision-Date: 2021-09-22 15:26+0000\n"
 "Last-Translator: Tokita, Hiroshi <tokita.hiroshi@gmail.com>\n"
-"Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/master-"
-"source/ja/>\n"
+"Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
+"master-source/ja/>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -2959,9 +2959,8 @@ msgid "Select Preferred PDF Viewer"
 msgstr "優先するPDFビューアーを選択"
 
 #: common/dialogs/panel_common_settings_base.cpp:21
-#, fuzzy
 msgid "Antialiasing"
-msgstr "アンチエイリアシング:"
+msgstr "アンチエイリアシング"
 
 #: common/dialogs/panel_common_settings_base.cpp:30
 msgid "Accelerated graphics:"
@@ -5364,10 +5363,8 @@ msgid "Type mismatch between %lf and '%s'"
 msgstr "%lf と '%s' との間で型が不整合です"
 
 #: common/pgm_base.cpp:165
-#, fuzzy
 msgid "No default editor found, you must choose one."
-msgstr ""
-"デフォルトのエディターが見つかりません。エディターを指定する必要があります"
+msgstr "デフォルトのエディターが見つからないので、指定する必要があります。"
 
 #: common/pgm_base.cpp:185 common/pgm_base.cpp:187
 msgid "Executable file"
@@ -6500,9 +6497,9 @@ msgid "Set Hotkey"
 msgstr "ホットキーを設定"
 
 #: common/widgets/widget_hotkey_list.cpp:341
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' is a reserved hotkey in KiCad and cannot be assigned."
-msgstr "名前 %s は予約されており、使用することはできません。"
+msgstr "'%s' はKiCad予約されたホットキーなので、指定することはできません。"
 
 #: common/widgets/widget_hotkey_list.cpp:392
 msgid "Edit..."
@@ -9773,9 +9770,8 @@ msgid "Plotted to '%s'.\n"
 msgstr "'%s' にプロットしました。\n"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:1177
-#, fuzzy
 msgid "Done"
-msgstr "完了."
+msgstr "完了"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:1249
 #, c-format
