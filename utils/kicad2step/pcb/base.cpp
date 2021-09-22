@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 Cirilo Bernardo <cirilo.bernardo@gmail.com>
+ * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -71,9 +72,13 @@ bool Get2DPositionAndRotation( const SEXPR::SEXPR* data, DOUBLET& aPosition, dou
     double x;
 
     if( child->IsDouble() )
+    {
         x = child->GetDouble();
+    }
     else if( child->IsInteger() )
+    {
         x = (double) child->GetInteger();
+    }
     else
     {
         std::ostringstream ostr;
@@ -86,9 +91,13 @@ bool Get2DPositionAndRotation( const SEXPR::SEXPR* data, DOUBLET& aPosition, dou
     double y;
 
     if( child->IsDouble() )
+    {
         y = child->GetDouble();
+    }
     else if( child->IsInteger() )
+    {
         y = (double) child->GetInteger();
+    }
     else
     {
         std::ostringstream ostr;
@@ -107,9 +116,13 @@ bool Get2DPositionAndRotation( const SEXPR::SEXPR* data, DOUBLET& aPosition, dou
     double angle = 0.0;
 
     if( child->IsDouble() )
+    {
         angle = child->GetDouble();
+    }
     else if( child->IsInteger() )
+    {
         angle = (double) child->GetInteger();
+    }
     else
     {
         std::ostringstream ostr;
@@ -147,9 +160,13 @@ bool Get2DCoordinate( const SEXPR::SEXPR* data, DOUBLET& aCoordinate )
     double x;
 
     if( child->IsDouble() )
+    {
         x = child->GetDouble();
+    }
     else if( child->IsInteger() )
+    {
         x = (double) child->GetInteger();
+    }
     else
     {
         std::ostringstream ostr;
@@ -162,9 +179,13 @@ bool Get2DCoordinate( const SEXPR::SEXPR* data, DOUBLET& aCoordinate )
     double y;
 
     if( child->IsDouble() )
+    {
         y = child->GetDouble();
+    }
     else if( child->IsInteger() )
+    {
         y = (double) child->GetInteger();
+    }
     else
     {
         std::ostringstream ostr;
@@ -265,18 +286,13 @@ OPT<std::string> GetLayerName( const SEXPR::SEXPR& aLayerElem )
 
     if( aLayerElem.GetNumberOfChildren() == 2 )
     {
-        const auto& layerChild = *aLayerElem.GetChild( 1 );
+        const SEXPR* layerChild = *aLayerElem.GetChild( 1 );
 
-        // The layer child can be quoted (string) or unquoted (symbol)
-        // depending on PCB version.
+        // The layer child can be quoted (string) or unquoted (symbol) depending on PCB version.
         if( layerChild.IsString() )
-        {
             layer = layerChild.GetString();
-        }
         else if( layerChild.IsSymbol() )
-        {
             layer = layerChild.GetSymbol();
-        }
     }
 
     return layer;

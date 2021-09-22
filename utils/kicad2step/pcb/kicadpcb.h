@@ -98,24 +98,23 @@ private:
     bool parseRect( SEXPR::SEXPR* data );
     bool parsePolygon( SEXPR::SEXPR* data );
 
-    S3D_RESOLVER m_resolver;
-    wxString    m_filename;
-    PCBMODEL*   m_pcb_model;
-    DOUBLET     m_origin;
-    DOUBLET     m_gridOrigin;
-    DOUBLET     m_drillOrigin;
-    bool        m_useGridOrigin;
-    bool        m_useDrillOrigin;
-
-    // set to TRUE if the origin was actually parsed
-    bool        m_hasGridOrigin;
-    bool        m_hasDrillOrigin;
+private:
+    S3D_RESOLVER                 m_resolver;
+    wxString                     m_filename;
+    PCBMODEL*                    m_pcb_model;
+    DOUBLET                      m_origin;
+    DOUBLET                      m_gridOrigin;
+    DOUBLET                      m_drillOrigin;
+    bool                         m_useGridOrigin;
+    bool                         m_useDrillOrigin;
+    bool                         m_hasGridOrigin;    // indicates origin found in source file
+    bool                         m_hasDrillOrigin;   // indicates origin found in source file
 
     // minimum distance between points to treat them as separate entities (mm)
-    double      m_minDistance;
+    double                       m_minDistance;
 
     // the names of layers in use, and the internal layer ID
-    std::map<std::string, int> m_layersNames;
+    std::map<std::string, int>   m_layersNames;
 
     // PCB parameters/entities
     double                       m_thickness;

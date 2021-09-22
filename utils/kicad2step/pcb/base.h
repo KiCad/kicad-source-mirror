@@ -52,6 +52,7 @@ enum CURVE_TYPE
     CURVE_BEZIER
 };
 
+
 /*
  * Layers of importance to MCAD export:
  *  - LAYER_TOP: specifies that a footprint is on the top of the PCB
@@ -66,16 +67,26 @@ enum LAYERS
     LAYER_EDGE      // edge data
 };
 
+
 struct DOUBLET
 {
     double x;
     double y;
 
-    DOUBLET() : x( 0.0 ), y( 0.0 ) { return; }
-    DOUBLET( double aX, double aY ) : x( aX ), y( aY ) { return; }
+    DOUBLET() :
+        x( 0.0 ),
+        y( 0.0 )
+    { }
+
+    DOUBLET( double aX, double aY ) :
+        x( aX ),
+        y( aY )
+    { }
 };
 
+
 std::ostream& operator<<( std::ostream& aStream, const DOUBLET& aDoublet );
+
 
 struct TRIPLET
 {
@@ -88,11 +99,22 @@ struct TRIPLET
         double angle;
     };
 
-    TRIPLET() : x( 0.0 ), y( 0.0 ), z( 0.0 ) { return; }
-    TRIPLET( double aX, double aY, double aZ ) : x( aX ), y( aY ), z( aZ ) { return; }
+    TRIPLET() :
+            x( 0.0 ),
+            y( 0.0 ),
+            z( 0.0 )
+    { }
+
+    TRIPLET( double aX, double aY, double aZ ) :
+        x( aX ),
+        y( aY ),
+        z( aZ )
+    { }
 };
 
+
 std::ostream& operator<<( std::ostream& aStream, const TRIPLET& aTriplet );
+
 
 bool Get2DPositionAndRotation( const SEXPR::SEXPR* data, DOUBLET& aPosition, double& aRotation );
 bool Get2DCoordinate( const SEXPR::SEXPR* data, DOUBLET& aCoordinate );
