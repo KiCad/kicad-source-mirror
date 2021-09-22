@@ -54,6 +54,11 @@ sys.path.append( stock_path )
 
     // Execute the code to make the makeWindow function we defined above
     PyRun_SimpleString( pcbnew_pyshell_one_step.str().c_str() );
+
+    /// For unknown reasons, some mac builds don't automatically layout the Python window until resized
+    /// so force the fit here
+    Layout();
+    Fit();
 }
 
 
