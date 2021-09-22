@@ -194,25 +194,25 @@ For the latter use a `(layer "layer_name")` clause in the rule.
 
     (rule "Distance between Vias of Different Nets"  
         (constraint hole_to_hole (min 0.254mm))
-        (condition "A.Type =='Via' && B.Type =='Via' && A.Net != B.Net"))
+        (condition "A.Type == 'Via' && B.Type == 'Via' && A.Net != B.Net"))
 
     (rule "Clearance between Pads of Different Nets"  
         (constraint clearance (min 3.0mm))
-        (condition "A.Type =='Pad' && B.Type =='Pad' && A.Net != B.Net"))
+        (condition "A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B.Net"))
 
 
     (rule "Via Hole to Track Clearance"  
         (constraint hole_clearance (min 0.254mm))
-        (condition "A.Type =='Via' && B.Type =='Track'"))
+        (condition "A.Type == 'Via' && B.Type == 'Track'"))
     
     (rule "Pad to Track Clearance"  
         (constraint clearance (min 0.2mm))
-        (condition "A.Type =='Pad' && B.Type =='Track'"))
+        (condition "A.Type == 'Pad' && B.Type == 'Track'"))
 
 
     (rule "clearance-to-1mm-cutout"
         (constraint clearance (min 0.8mm))
-        (condition "A.Layer=='Edge.Cuts' && A.Thickness == 1.0mm"))
+        (condition "A.Layer == 'Edge.Cuts' && A.Thickness == 1.0mm"))
 
 
     (rule "Max Drill Hole Size Mechanical"  
@@ -248,3 +248,9 @@ For the latter use a `(layer "layer_name")` clause in the rule.
     (rule holes_in_pads
         (constraint mechanical_hole_clearance (min 0.2mm))
         (condition "B.Pad_Type == 'SMD'"))
+
+
+    # Disallow solder mask margin overrides
+    (rule "disallow solder mask margin overrides"
+        (constraint assertion "A.Soldermask_Margin_Override == 0mm")
+        (condition "A.Type == 'Pad'"))

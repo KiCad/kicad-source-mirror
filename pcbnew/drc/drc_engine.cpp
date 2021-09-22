@@ -871,6 +871,18 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
         }
     }
 
+    auto testAssertion =
+            [&]( const DRC_ENGINE_CONSTRAINT* c )
+            {
+                REPORT( wxString::Format( _( "Checking assertion \"%s\"." ),
+                                          EscapeHTML( c->constraint.m_Test->GetExpression() ) ) )
+
+                if( c->constraint.m_Test->EvaluateFor( a, b, aLayer, aReporter ) )
+                    REPORT( _( "Assertion passed." ) )
+                else
+                    REPORT( EscapeHTML( _( "--> Assertion failed. <--" ) ) )
+            };
+
     auto processConstraint =
             [&]( const DRC_ENGINE_CONSTRAINT* c ) -> bool
             {
@@ -1027,8 +1039,7 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
                         }
                         else if( c->parentRule )
                         {
-                            REPORT( wxString::Format( _( "Rule layer '%s' not matched; rule "
-                                                         "ignored." ),
+                            REPORT( wxString::Format( _( "Rule layer '%s' not matched; rule ignored." ),
                                                       EscapeHTML( c->parentRule->m_LayerSource ) ) )
                         }
                         else
@@ -1061,8 +1072,22 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
 
                 if( !c->condition || c->condition->GetExpression().IsEmpty() )
                 {
-                    REPORT( implicit ? _( "Unconditional constraint applied." )
-                                     : _( "Unconditional rule applied." ) );
+                    if( aReporter )
+                    {
+                        if( implicit )
+                        {
+                            REPORT( _( "Unconditional constraint applied." ) )
+                        }
+                        else if( constraint.m_Type == ASSERTION_CONSTRAINT )
+                        {
+                            REPORT( _( "Unconditional rule applied." ) )
+                            testAssertion( c );
+                        }
+                        else
+                        {
+                            REPORT( _( "Unconditional rule applied; overrides previous constraints." ) )
+                        }
+                    }
 
                     constraint = c->constraint;
                     return true;
@@ -1081,8 +1106,22 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
 
                     if( c->condition->EvaluateFor( a, b, aLayer, aReporter ) )
                     {
-                        REPORT( implicit ? _( "Constraint applied." )
-                                         : _( "Rule applied; overrides previous constraints." ) )
+                        if( aReporter )
+                        {
+                            if( implicit )
+                            {
+                                REPORT( _( "Constraint applied." ) )
+                            }
+                            else if( constraint.m_Type == ASSERTION_CONSTRAINT )
+                            {
+                                REPORT( _( "Rule applied." ) )
+                                testAssertion( c );
+                            }
+                            else
+                            {
+                                REPORT( _( "Rule applied; overrides previous constraints." ) )
+                            }
+                        }
 
                         if( c->constraint.m_Value.HasMin() )
                             constraint.m_Value.SetMin( c->constraint.m_Value.Min() );
@@ -1239,6 +1278,78 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
 
     return constraint;
 }
+
+
+void DRC_ENGINE::ProcessAssertions( const BOARD_ITEM* a,
+                                    std::function<void( const DRC_CONSTRAINT* )> aFailureHandler,
+                                    REPORTER* aReporter )
+{
+    /*
+     * NOTE: all string manipulation MUST BE KEPT INSIDE the REPORT macro.  It absolutely
+     * kills performance when running bulk DRC tests (where aReporter is nullptr).
+     */
+
+    auto testAssertion =
+            [&]( const DRC_ENGINE_CONSTRAINT* c )
+            {
+                REPORT( wxString::Format( _( "Checking rule assertion \"%s\"." ),
+                                          EscapeHTML( c->constraint.m_Test->GetExpression() ) ) )
+
+                if( c->constraint.m_Test->EvaluateFor( a, nullptr, a->GetLayer(), aReporter ) )
+                {
+                    REPORT( _( "Assertion passed." ) )
+                }
+                else
+                {
+                    REPORT( EscapeHTML( _( "--> Assertion failed. <--" ) ) )
+                    aFailureHandler( &c->constraint );
+                }
+            };
+
+    auto processConstraint =
+            [&]( const DRC_ENGINE_CONSTRAINT* c )
+            {
+                REPORT( "" )
+                REPORT( wxString::Format( _( "Checking %s." ), c->constraint.GetName() ) )
+
+                if( !( a->GetLayerSet() & c->layerTest ).any() )
+                {
+                    REPORT( wxString::Format( _( "Rule layer '%s' not matched; rule ignored." ),
+                                              EscapeHTML( c->parentRule->m_LayerSource ) ) )
+                }
+
+                if( !c->condition || c->condition->GetExpression().IsEmpty() )
+                {
+                    REPORT( _( "Unconditional rule applied." ) )
+                    testAssertion( c );
+                }
+                else
+                {
+                    REPORT( wxString::Format( _( "Checking rule condition \"%s\"." ),
+                                              EscapeHTML( c->condition->GetExpression() ) ) )
+
+                    if( c->condition->EvaluateFor( a, nullptr, a->GetLayer(), aReporter ) )
+                    {
+                        REPORT( _( "Rule applied." ) )
+                        testAssertion( c );
+                    }
+                    else
+                    {
+                        REPORT( _( "Condition not satisfied; rule ignored." ) )
+                    }
+                }
+            };
+
+    if( m_constraintMap.count( ASSERTION_CONSTRAINT ) )
+    {
+        std::vector<DRC_ENGINE_CONSTRAINT*>* ruleset = m_constraintMap[ ASSERTION_CONSTRAINT ];
+
+        for( int ii = 0; ii < (int) ruleset->size(); ++ii )
+            processConstraint( ruleset->at( ii ) );
+    }
+}
+
+
 #undef REPORT
 #undef UNITS
 #undef REPORT_VALUE

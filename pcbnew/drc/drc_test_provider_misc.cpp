@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2004-2020 KiCad Developers.
+ * Copyright (C) 2004-2021 KiCad Developers.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,6 +25,7 @@
 #include <drc/drc_engine.h>
 #include <drc/drc_item.h>
 #include <drc/drc_rule.h>
+#include <drc/drc_rule_condition.h>
 #include <drc/drc_test_provider.h>
 #include <pad.h>
 #include <pcb_track.h>
@@ -38,6 +39,7 @@
     - DRCE_DISABLED_LAYER_ITEM,               ///< item on a disabled layer
     - DRCE_INVALID_OUTLINE,                   ///< invalid board outline
     - DRCE_UNRESOLVED_VARIABLE,
+    - DRCE_ASSERTION_FAILURE                  ///< user-defined assertions
 */
 
 class DRC_TEST_PROVIDER_MISC : public DRC_TEST_PROVIDER
@@ -69,6 +71,7 @@ private:
     void testOutline();
     void testDisabledLayers();
     void testTextVars();
+    void testAssertions();
 
     BOARD* m_board;
 };
@@ -119,6 +122,19 @@ void DRC_TEST_PROVIDER_MISC::testOutline()
 
 void DRC_TEST_PROVIDER_MISC::testDisabledLayers()
 {
+    // This is the number of tests between 2 calls to the progress bar
+    const int delta = 2000;
+
+    int       ii = 0;
+    int       items = 0;
+
+    auto countItems =
+            [&]( BOARD_ITEM* item ) -> bool
+            {
+                ++items;
+                return true;
+            };
+
     LSET disabledLayers = m_board->GetEnabledLayers().flip();
 
     // Perform the test only for copper layers
@@ -127,6 +143,12 @@ void DRC_TEST_PROVIDER_MISC::testDisabledLayers()
     auto checkDisabledLayers =
             [&]( BOARD_ITEM* item ) -> bool
             {
+                if( m_drcEngine->IsErrorLimitExceeded( DRCE_DISABLED_LAYER_ITEM ) )
+                    return false;
+
+                if( !reportProgress( ii++, items, delta ) )
+                    return false;
+
                 PCB_LAYER_ID badLayer = UNDEFINED_LAYER;
 
                 if( item->Type() == PCB_PAD_T )
@@ -172,7 +194,7 @@ void DRC_TEST_PROVIDER_MISC::testDisabledLayers()
 
                 if( badLayer != UNDEFINED_LAYER )
                 {
-                    std::shared_ptr<DRC_ITEM>drcItem = DRC_ITEM::Create( DRCE_DISABLED_LAYER_ITEM );
+                    auto drcItem = DRC_ITEM::Create( DRCE_DISABLED_LAYER_ITEM );
 
                     m_msg.Printf( _( "(layer %s)" ), LayerName( badLayer ) );
 
@@ -185,16 +207,76 @@ void DRC_TEST_PROVIDER_MISC::testDisabledLayers()
                 return true;
             };
 
+    forEachGeometryItem( s_allBasicItems, LSET::AllLayersMask(), countItems );
     forEachGeometryItem( s_allBasicItems, LSET::AllLayersMask(), checkDisabledLayers );
+}
+
+
+void DRC_TEST_PROVIDER_MISC::testAssertions()
+{
+    // This is the number of tests between 2 calls to the progress bar
+    const int delta = 2000;
+
+    int       ii = 0;
+    int       items = 0;
+
+    auto countItems =
+            [&]( BOARD_ITEM* item ) -> bool
+            {
+                ++items;
+                return true;
+            };
+
+    auto checkAssertions =
+            [&]( BOARD_ITEM* item ) -> bool
+            {
+                if( m_drcEngine->IsErrorLimitExceeded( DRCE_ASSERTION_FAILURE ) )
+                    return false;
+
+                if( !reportProgress( ii++, items, delta ) )
+                    return false;
+
+                m_drcEngine->ProcessAssertions( item,
+                        [&]( const DRC_CONSTRAINT* c )
+                        {
+                            auto drcItem = DRC_ITEM::Create( DRCE_ASSERTION_FAILURE );
+                            drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " (" )
+                                                        + c->GetName() + wxS( ")" ) );
+                            drcItem->SetItems( item );
+
+                            reportViolation( drcItem, item->GetPosition() );
+                        } );
+
+                return true;
+            };
+
+    forEachGeometryItem( {}, LSET::AllLayersMask(), countItems );
+    forEachGeometryItem( {}, LSET::AllLayersMask(), checkAssertions );
 }
 
 
 void DRC_TEST_PROVIDER_MISC::testTextVars()
 {
-    auto checkUnresolvedTextVar =
+    // This is the number of tests between 2 calls to the progress bar
+    const int delta = 2000;
+
+    int       ii = 0;
+    int       items = 0;
+
+    auto countItems =
+            [&]( BOARD_ITEM* item ) -> bool
+            {
+                ++items;
+                return true;
+            };
+
+    auto checkTextVars =
             [&]( EDA_ITEM* item ) -> bool
             {
                 if( m_drcEngine->IsErrorLimitExceeded( DRCE_UNRESOLVED_VARIABLE ) )
+                    return false;
+
+                if( !reportProgress( ii++, items, delta ) )
                     return false;
 
                 EDA_TEXT* text = dynamic_cast<EDA_TEXT*>( item );
@@ -209,8 +291,8 @@ void DRC_TEST_PROVIDER_MISC::testTextVars()
                 return true;
             };
 
-    forEachGeometryItem( { PCB_FP_TEXT_T, PCB_TEXT_T }, LSET::AllLayersMask(),
-                         checkUnresolvedTextVar );
+    forEachGeometryItem( { PCB_FP_TEXT_T, PCB_TEXT_T }, LSET::AllLayersMask(), countItems );
+    forEachGeometryItem( { PCB_FP_TEXT_T, PCB_TEXT_T }, LSET::AllLayersMask(), checkTextVars );
 
     DS_PROXY_VIEW_ITEM* drawingSheet = m_drcEngine->GetDrawingSheet();
     DS_DRAW_ITEM_LIST   drawItems;
@@ -271,6 +353,14 @@ bool DRC_TEST_PROVIDER_MISC::Run()
             return false;   // DRC cancelled
 
         testTextVars();
+    }
+
+    if( !m_drcEngine->IsErrorLimitExceeded( DRCE_ASSERTION_FAILURE ) )
+    {
+        if( !reportPhase( _( "Checking assertions..." ) ) )
+            return false;   // DRC cancelled
+
+        testAssertions();
     }
 
     return true;

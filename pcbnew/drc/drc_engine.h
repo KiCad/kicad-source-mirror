@@ -152,6 +152,10 @@ public:
     DRC_CONSTRAINT EvalZoneConnection( const BOARD_ITEM* a, const BOARD_ITEM* b,
                                        PCB_LAYER_ID aLayer, REPORTER* aReporter = nullptr );
 
+    void ProcessAssertions( const BOARD_ITEM* a,
+                            std::function<void( const DRC_CONSTRAINT* )> aFailureHandler,
+                            REPORTER* aReporter = nullptr );
+
     bool HasRulesForConstraintType( DRC_CONSTRAINT_T constraintID );
 
     EDA_UNITS UserUnits() const { return m_userUnits; }

@@ -840,6 +840,22 @@ int BOARD_INSPECTION_TOOL::InspectConstraints( const TOOL_EVENT& aEvent )
 
     r->Flush();
 
+    r = m_inspectConstraintsDialog->AddPage( _( "Assertions" ) );
+    reportHeader( _( "Assertions for:" ), item, r );
+
+    if( compileError )
+        reportCompileError( r );
+
+    if( courtyardError )
+    {
+        r->Report( "" );
+        r->Report( _( "Report may be incomplete: some footprint courtyards are malformed." )
+                   + "  <a href='drc'>" + _( "Run DRC for a full analysis." ) + "</a>" );
+    }
+
+    drcEngine.ProcessAssertions( item, []( const DRC_CONSTRAINT* c ){}, r );
+    r->Flush();
+
     m_inspectConstraintsDialog->FinishInitialization();
     m_inspectConstraintsDialog->Raise();
     m_inspectConstraintsDialog->Show( true );

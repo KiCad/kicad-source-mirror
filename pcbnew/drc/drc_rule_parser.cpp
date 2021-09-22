@@ -260,7 +260,7 @@ void DRC_RULES_PARSER::parseConstraint( DRC_RULE* aRule )
     if( (int) token == DSN_RIGHT || token == T_EOF )
     {
         msg.Printf( _( "Missing constraint type.|  Expected %s." ),
-                    "clearance, hole_clearance, edge_clearance, mechanical_clearance, "
+                    "assertion, clearance, hole_clearance, edge_clearance, mechanical_clearance, "
                     "mechanical_hole_clearance, courtyard_clearance, silk_clearance, hole_size, "
                     "hole_to_hole, track_width, annular_width, via_diameter, disallow, "
                     "zone_connection, thermal_relief_gap, thermal_spoke_width, min_resolved_spokes, "
@@ -271,6 +271,7 @@ void DRC_RULES_PARSER::parseConstraint( DRC_RULE* aRule )
 
     switch( token )
     {
+    case T_assertion:                 c.m_Type = ASSERTION_CONSTRAINT;                 break;
     case T_clearance:                 c.m_Type = CLEARANCE_CONSTRAINT;                 break;
     case T_hole_clearance:            c.m_Type = HOLE_CLEARANCE_CONSTRAINT;            break;
     case T_edge_clearance:            c.m_Type = EDGE_CLEARANCE_CONSTRAINT;            break;
@@ -298,7 +299,7 @@ void DRC_RULES_PARSER::parseConstraint( DRC_RULE* aRule )
     case T_mechanical_hole_clearance: c.m_Type = MECHANICAL_HOLE_CLEARANCE_CONSTRAINT; break;
     default:
         msg.Printf( _( "Unrecognized item '%s'.| Expected %s." ), FromUTF8(),
-                    "clearance, hole_clearance, edge_clearance, mechanical_clearance, "
+                    "assertion, clearance, hole_clearance, edge_clearance, mechanical_clearance, "
                     "mechanical_hole_clearance, courtyard_clearance, silk_clearance, hole_size, "
                     "hole_to_hole, track_width, annular_width, disallow, zone_connection, "
                     "thermal_relief_gap, thermal_spoke_width, min_resolved_spokes, length, skew, "
@@ -408,6 +409,33 @@ void DRC_RULES_PARSER::parseConstraint( DRC_RULE* aRule )
 
         if( (int) NextTok() != DSN_RIGHT )
             reportError( _( "Missing ')'." ) );
+
+        aRule->AddConstraint( c );
+        return;
+    }
+    else if( c.m_Type == ASSERTION_CONSTRAINT )
+    {
+        token = NextTok();
+
+        if( (int) token == DSN_RIGHT )
+            reportError( _( "Missing assertion expression." ) );
+
+        if( IsSymbol( token ) )
+        {
+            c.m_Test = new DRC_RULE_CONDITION( FromUTF8() );
+            c.m_Test->Compile( m_reporter, CurLineNumber(), CurOffset() );
+        }
+        else
+        {
+            msg.Printf( _( "Unrecognized item '%s'.| Expected quoted expression." ), FromUTF8() );
+            reportError( msg );
+        }
+
+        if( (int) NextTok() != DSN_RIGHT )
+        {
+            reportError( wxString::Format( _( "Unrecognized item '%s'." ), FromUTF8() ) );
+            parseUnknown();
+        }
 
         aRule->AddConstraint( c );
         return;

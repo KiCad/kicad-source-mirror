@@ -73,6 +73,7 @@ enum PCB_DRC_CODE {
     DRCE_PAD_TH_WITH_NO_HOLE,            // footprint has Plated Through-Hole with no hole
 
     DRCE_UNRESOLVED_VARIABLE,
+    DRCE_ASSERTION_FAILURE,              // user-defined (custom rule) assertion
 
     DRCE_COPPER_SLIVER,
     DRCE_SOLDERMASK_BRIDGE,              // failure to maintain min soldermask web thickness
@@ -177,6 +178,7 @@ private:
     static DRC_ITEM netConflict;
     static DRC_ITEM libFootprintIssues;
     static DRC_ITEM unresolvedVariable;
+    static DRC_ITEM assertionFailure;
     static DRC_ITEM copperSliver;
     static DRC_ITEM silkClearance;
     static DRC_ITEM solderMaskBridge;

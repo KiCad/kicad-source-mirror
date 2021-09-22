@@ -183,6 +183,10 @@ DRC_ITEM DRC_ITEM::unresolvedVariable( DRCE_UNRESOLVED_VARIABLE,
         _( "Unresolved text variable" ),
         wxT( "unresolved_variable" ) );
 
+DRC_ITEM DRC_ITEM::assertionFailure( DRCE_ASSERTION_FAILURE,
+        _( "Assertion failure" ),
+        wxT( "assertion_failure" ) );
+
 DRC_ITEM DRC_ITEM::copperSliver( DRCE_COPPER_SLIVER,
         _( "Copper sliver" ),
         wxT( "copper_sliver" ) );
@@ -334,6 +338,7 @@ std::shared_ptr<DRC_ITEM> DRC_ITEM::Create( int aErrorCode )
     case DRCE_EXTRA_FOOTPRINT:          return std::make_shared<DRC_ITEM>( extraFootprint );
     case DRCE_LIB_FOOTPRINT_ISSUES:     return std::make_shared<DRC_ITEM>( libFootprintIssues );
     case DRCE_UNRESOLVED_VARIABLE:      return std::make_shared<DRC_ITEM>( unresolvedVariable );
+    case DRCE_ASSERTION_FAILURE:        return std::make_shared<DRC_ITEM>( assertionFailure );
     case DRCE_COPPER_SLIVER:            return std::make_shared<DRC_ITEM>( copperSliver );
     case DRCE_OVERLAPPING_SILK:         return std::make_shared<DRC_ITEM>( silkOverlaps );
     case DRCE_SILK_CLEARANCE:           return std::make_shared<DRC_ITEM>( silkClearance );

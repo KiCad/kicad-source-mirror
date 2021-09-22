@@ -67,7 +67,8 @@ enum DRC_CONSTRAINT_T
     DIFF_PAIR_INTRA_SKEW_CONSTRAINT,
     VIA_COUNT_CONSTRAINT,
     MECHANICAL_CLEARANCE_CONSTRAINT,
-    MECHANICAL_HOLE_CLEARANCE_CONSTRAINT
+    MECHANICAL_HOLE_CLEARANCE_CONSTRAINT,
+    ASSERTION_CONSTRAINT
 };
 
 
@@ -123,6 +124,7 @@ class DRC_CONSTRAINT
             m_Value(),
             m_DisallowFlags( 0 ),
             m_ZoneConnection( ZONE_CONNECTION::INHERITED ),
+            m_Test( nullptr ),
             m_name( aName ),
             m_parentRule( nullptr )
     {
@@ -163,14 +165,15 @@ class DRC_CONSTRAINT
     }
 
 public:
-    DRC_CONSTRAINT_T  m_Type;
-    MINOPTMAX<int>    m_Value;
-    int               m_DisallowFlags;
-    ZONE_CONNECTION   m_ZoneConnection;
+    DRC_CONSTRAINT_T    m_Type;
+    MINOPTMAX<int>      m_Value;
+    int                 m_DisallowFlags;
+    ZONE_CONNECTION     m_ZoneConnection;
+    DRC_RULE_CONDITION* m_Test;
 
 private:
-    wxString          m_name;          // For just-in-time constraints
-    DRC_RULE*         m_parentRule;    // For constraints found in rules
+    wxString            m_name;          // For just-in-time constraints
+    DRC_RULE*           m_parentRule;    // For constraints found in rules
 };
 
 

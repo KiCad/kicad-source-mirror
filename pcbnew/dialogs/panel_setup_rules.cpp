@@ -292,6 +292,7 @@ void PANEL_SETUP_RULES::onScintillaCharAdded( wxStyledTextEvent &aEvent )
         else if( sexprs.top() == "constraint" )
         {
             tokens = "annular_width|"
+                     "assertion|"
                      "clearance|"
                      "courtyard_clearance|"
                      "diff_pair_gap|"
@@ -330,13 +331,11 @@ void PANEL_SETUP_RULES::onScintillaCharAdded( wxStyledTextEvent &aEvent )
         }
         else if( sexprs.top() == "zone_connection" )
         {
-            tokens = "solid "
-                     "thermal_relief "
-                     "none";
+            tokens = "none|solid|thermal_relief";
         }
         else if( sexprs.top() == "min_resolved_spokes" )
         {
-            tokens = "0 1 2 3 4";
+            tokens = "0|1|2|3|4";
         }
         else if( sexprs.top() == "layer" )
         {
@@ -346,15 +345,14 @@ void PANEL_SETUP_RULES::onScintillaCharAdded( wxStyledTextEvent &aEvent )
         {
             tokens = "warning|error|ignore|exclusion";
         }
-        else if( sexprs.top() == "severity" )
-        {
-            tokens = "error "
-                     "exclusion "
-                     "ignore "
-                     "warning";
-        }
     }
-    else if( context == STRING && !sexprs.empty() && sexprs.top() == "condition" )
+    else if( context == SEXPR_STRING && !sexprs.empty()
+            && ( sexprs.top() == "condition" || sexprs.top() == "assertion" ) )
+    {
+        m_textEditor->AddText( "\"" );
+    }
+    else if( context == STRING && !sexprs.empty()
+            && ( sexprs.top() == "condition" || sexprs.top() == "assertion" ) )
     {
         if( expr_context == STRUCT_REF )
         {
