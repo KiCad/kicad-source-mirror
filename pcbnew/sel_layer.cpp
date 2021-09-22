@@ -80,15 +80,16 @@ class PCB_ONE_LAYER_SELECTOR : public PCB_LAYER_SELECTOR, public DIALOG_LAYER_SE
 {
 public:
     PCB_ONE_LAYER_SELECTOR( PCB_BASE_FRAME* aParent, BOARD * aBrd, PCB_LAYER_ID aDefaultLayer,
-                            LSET aNotAllowedLayersMask );
+                            LSET aNotAllowedLayersMask, bool aHideCheckBoxes = false );
     ~PCB_ONE_LAYER_SELECTOR();
 
     LAYER_NUM GetLayerSelection()   { return m_layerSelected; }
 
 private:
     // Event handlers
-    void OnLeftGridCellClick( wxGridEvent& event ) override;
-    void OnRightGridCellClick( wxGridEvent& event ) override;
+    void OnLeftGridCellClick( wxGridEvent& aEvent ) override;
+    void OnRightGridCellClick( wxGridEvent& aEvent ) override;
+    void OnMouseMove( wxUpdateUIEvent& aEvent ) override;
 
     // Will close the dialog on ESC key
     void onCharHook( wxKeyEvent& event );
@@ -105,7 +106,8 @@ private:
 
 PCB_ONE_LAYER_SELECTOR::PCB_ONE_LAYER_SELECTOR( PCB_BASE_FRAME* aParent, BOARD* aBrd,
                                                 PCB_LAYER_ID aDefaultLayer,
-                                                LSET aNotAllowedLayersMask ) :
+                                                LSET aNotAllowedLayersMask,
+                                                bool aHideCheckBoxes ) :
         PCB_LAYER_SELECTOR( aParent ),
         DIALOG_LAYER_SELECTION_BASE( aParent )
 {
@@ -121,6 +123,12 @@ PCB_ONE_LAYER_SELECTOR::PCB_ONE_LAYER_SELECTOR( PCB_BASE_FRAME* aParent, BOARD* 
     m_rightGridLayers->SetColFormatBool( SELECT_COLNUM );
     buildList();
 
+    if( aHideCheckBoxes )
+    {
+        m_leftGridLayers->HideCol( SELECT_COLNUM );
+        m_rightGridLayers->HideCol( SELECT_COLNUM );
+    }
+
     Connect( wxEVT_CHAR_HOOK, wxKeyEventHandler( PCB_ONE_LAYER_SELECTOR::onCharHook ) );
 
     Layout();
@@ -132,6 +140,41 @@ PCB_ONE_LAYER_SELECTOR::PCB_ONE_LAYER_SELECTOR( PCB_BASE_FRAME* aParent, BOARD* 
 PCB_ONE_LAYER_SELECTOR::~PCB_ONE_LAYER_SELECTOR()
 {
     Disconnect( wxEVT_CHAR_HOOK, wxKeyEventHandler( PCB_ONE_LAYER_SELECTOR::onCharHook ) );
+}
+
+
+void PCB_ONE_LAYER_SELECTOR::OnMouseMove( wxUpdateUIEvent& aEvent )
+{
+    /// We have to assign this in UpdateUI events because the wxGrid is not properly receiving
+    /// MouseMove events.  It seems to only get them on the edges.  So, for now we use this
+    /// workaround
+
+    wxPoint mouse_pos = wxGetMousePosition();
+    wxPoint left_pos = m_leftGridLayers->ScreenToClient( mouse_pos );
+    wxPoint right_pos = m_rightGridLayers->ScreenToClient( mouse_pos );
+
+    if( m_leftGridLayers->HitTest( left_pos ) == wxHT_WINDOW_INSIDE )
+    {
+        int row = m_leftGridLayers->YToRow( left_pos.y );
+
+        if( row != wxNOT_FOUND && row < static_cast<int>( m_layersIdLeftColumn.size() ) )
+        {
+            m_layerSelected = m_layersIdLeftColumn[ row ];
+            m_leftGridLayers->SelectBlock( row, LAYERNAME_COLNUM, row, LAYERNAME_COLNUM);
+            return;
+        }
+    }
+
+    if( m_rightGridLayers->HitTest( right_pos ) == wxHT_WINDOW_INSIDE )
+    {
+        int row = m_rightGridLayers->YToRow( right_pos.y );
+
+        if( row == wxNOT_FOUND || row >= static_cast<int>( m_layersIdRightColumn.size() ) )
+            return;
+
+        m_layerSelected = m_layersIdRightColumn[ row ];
+        m_rightGridLayers->SelectBlock( row, LAYERNAME_COLNUM, row, LAYERNAME_COLNUM);
+    }
 }
 
 
@@ -231,7 +274,7 @@ void PCB_ONE_LAYER_SELECTOR::OnRightGridCellClick( wxGridEvent& event )
 PCB_LAYER_ID PCB_BASE_FRAME::SelectOneLayer( PCB_LAYER_ID aDefaultLayer, LSET aNotAllowedLayersMask,
                                              wxPoint aDlgPosition )
 {
-    PCB_ONE_LAYER_SELECTOR dlg( this, GetBoard(), aDefaultLayer, aNotAllowedLayersMask );
+    PCB_ONE_LAYER_SELECTOR dlg( this, GetBoard(), aDefaultLayer, aNotAllowedLayersMask, true );
 
     if( aDlgPosition != wxDefaultPosition )
     {

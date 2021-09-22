@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version v3.8.0)
+// C++ code generated with wxFormBuilder (version 3.9.0 Apr 22 2021)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -88,6 +88,7 @@ DIALOG_LAYER_SELECTION_BASE::DIALOG_LAYER_SELECTION_BASE( wxWindow* parent, wxWi
 	this->Centre( wxBOTH );
 
 	// Connect Events
+	this->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_LAYER_SELECTION_BASE::OnMouseMove ) );
 	m_leftGridLayers->Connect( wxEVT_GRID_CELL_LEFT_CLICK, wxGridEventHandler( DIALOG_LAYER_SELECTION_BASE::OnLeftGridCellClick ), NULL, this );
 	m_leftGridLayers->Connect( wxEVT_LEFT_UP, wxMouseEventHandler( DIALOG_LAYER_SELECTION_BASE::OnLeftButtonReleased ), NULL, this );
 	m_rightGridLayers->Connect( wxEVT_GRID_CELL_LEFT_CLICK, wxGridEventHandler( DIALOG_LAYER_SELECTION_BASE::OnRightGridCellClick ), NULL, this );
@@ -97,6 +98,7 @@ DIALOG_LAYER_SELECTION_BASE::DIALOG_LAYER_SELECTION_BASE( wxWindow* parent, wxWi
 DIALOG_LAYER_SELECTION_BASE::~DIALOG_LAYER_SELECTION_BASE()
 {
 	// Disconnect Events
+	this->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_LAYER_SELECTION_BASE::OnMouseMove ) );
 	m_leftGridLayers->Disconnect( wxEVT_GRID_CELL_LEFT_CLICK, wxGridEventHandler( DIALOG_LAYER_SELECTION_BASE::OnLeftGridCellClick ), NULL, this );
 	m_leftGridLayers->Disconnect( wxEVT_LEFT_UP, wxMouseEventHandler( DIALOG_LAYER_SELECTION_BASE::OnLeftButtonReleased ), NULL, this );
 	m_rightGridLayers->Disconnect( wxEVT_GRID_CELL_LEFT_CLICK, wxGridEventHandler( DIALOG_LAYER_SELECTION_BASE::OnRightGridCellClick ), NULL, this );

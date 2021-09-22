@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version v3.8.0)
+// C++ code generated with wxFormBuilder (version 3.9.0 Apr 22 2021)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -39,7 +39,8 @@ class DIALOG_LAYER_SELECTION_BASE : public DIALOG_SHIM
 		wxGrid* m_leftGridLayers;
 		wxGrid* m_rightGridLayers;
 
-		// Virtual event handlers, overide them in your derived class
+		// Virtual event handlers, override them in your derived class
+		virtual void OnMouseMove( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void OnLeftGridCellClick( wxGridEvent& event ) { event.Skip(); }
 		virtual void OnLeftButtonReleased( wxMouseEvent& event ) { event.Skip(); }
 		virtual void OnRightGridCellClick( wxGridEvent& event ) { event.Skip(); }
@@ -69,7 +70,7 @@ class DIALOG_COPPER_LAYER_PAIR_SELECTION_BASE : public DIALOG_SHIM
 		wxButton* m_sdbSizerOK;
 		wxButton* m_sdbSizerCancel;
 
-		// Virtual event handlers, overide them in your derived class
+		// Virtual event handlers, override them in your derived class
 		virtual void OnLeftGridCellClick( wxGridEvent& event ) { event.Skip(); }
 		virtual void OnRightGridCellClick( wxGridEvent& event ) { event.Skip(); }
 
