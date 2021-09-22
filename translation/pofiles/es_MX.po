@@ -7,21 +7,22 @@
 # Iñigo <ifs@elektroquark.com>, 2021.
 # VicSanRoPe <vicsanrope@protonmail.com>, 2021.
 # ZbeeGin <zbeegin@op.pl>, 2021.
+# Ulices <ulicesah@gmail.com>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-09-20 11:57-0700\n"
-"PO-Revision-Date: 2021-08-27 08:25+0000\n"
-"Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
-"Language-Team: Spanish <https://hosted.weblate.org/projects/kicad/master-"
-"source/es/>\n"
-"Language: es_mx\n"
+"PO-Revision-Date: 2021-09-22 15:26+0000\n"
+"Last-Translator: Ulices <ulicesah@gmail.com>\n"
+"Language-Team: Spanish (Mexico) <https://hosted.weblate.org/projects/kicad/"
+"master-source/es_MX/>\n"
+"Language: es_MX\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.8.1-dev\n"
+"X-Generator: Weblate 4.9-dev\n"
 "X-Poedit-Basepath: ../Git/kicad\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -204,9 +205,9 @@ msgid "Build Tech layers"
 msgstr "Construir capas técnicas"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:909
-#, fuzzy, c-format
+#, c-format
 msgid "Build Tech layer %d"
-msgstr "Construir capas técnicas"
+msgstr "Construir capa técnica %d"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1054
 msgid "Build BVH for holes and vias"
@@ -284,9 +285,9 @@ msgid "Load OpenGL: layers"
 msgstr "Cargar OpenGL: capas"
 
 #: 3d-viewer/3d_rendering/legacy/create_scene.cpp:562
-#, fuzzy, c-format
+#, c-format
 msgid "Load OpenGL layer %d"
-msgstr "Cargar OpenGL: capas"
+msgstr "Cargar capa OpenGL %d"
 
 #: 3d-viewer/3d_rendering/legacy/create_scene.cpp:914
 #: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:430
@@ -405,9 +406,8 @@ msgid "Background gradient start:"
 msgstr "Inicio de las referencias traseras:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:37
-#, fuzzy
 msgid "Background gradient end:"
-msgstr "&Fondo blanco"
+msgstr "Fin del gradiente de fondo:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:50
 msgid "Solder paste:"
@@ -1569,9 +1569,8 @@ msgid "Cancel"
 msgstr "Cancelar"
 
 #: common/confirm.cpp:304
-#, fuzzy
 msgid "Information"
-msgstr "Información:"
+msgstr "Información"
 
 #: common/confirm.cpp:317 eeschema/symbol_editor/symbol_editor.cpp:425
 #: eeschema/symbol_editor/symbol_editor.cpp:682
@@ -2997,9 +2996,8 @@ msgid "Select Preferred PDF Viewer"
 msgstr "Seleccionar el lector PDF preferido"
 
 #: common/dialogs/panel_common_settings_base.cpp:21
-#, fuzzy
 msgid "Antialiasing"
-msgstr "Antidentado:"
+msgstr "Antialiasing"
 
 #: common/dialogs/panel_common_settings_base.cpp:30
 msgid "Accelerated graphics:"
@@ -3998,9 +3996,8 @@ msgstr ""
 "de la placa."
 
 #: common/eda_doc.cpp:140
-#, fuzzy
 msgid "Documentation File"
-msgstr "Nombre del archivo de documentación:"
+msgstr "Archivo de documentación"
 
 #: common/eda_doc.cpp:150
 #, fuzzy, c-format
@@ -5025,7 +5022,7 @@ msgstr "Edge.Cuts"
 
 #: common/layer_id.cpp:81 pcbnew/dialogs/panel_setup_layers_base.cpp:656
 msgid "Margin"
-msgstr "Margin"
+msgstr "Margen"
 
 #: common/layer_id.cpp:84
 msgid "F.Courtyard"
@@ -5421,9 +5418,8 @@ msgid "Type mismatch between %lf and '%s'"
 msgstr "Error de tipo entre %lf y '%s'"
 
 #: common/pgm_base.cpp:165
-#, fuzzy
 msgid "No default editor found, you must choose one."
-msgstr "No se ha encontrado editor por defecto, debe configurar uno"
+msgstr "No se ha encontrado editor por defecto, debe escoger uno."
 
 #: common/pgm_base.cpp:185 common/pgm_base.cpp:187
 #, fuzzy
@@ -6051,7 +6047,7 @@ msgstr "Utilizar pulgadas"
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:89
 #: pcbnew/import_gfx/dialog_import_gfx.cpp:54
 msgid "Mils"
-msgstr "Mils"
+msgstr "Millésimas"
 
 #: common/tool/actions.cpp:491
 msgid "Use mils"
@@ -6531,9 +6527,9 @@ msgid "Reset to Defaults"
 msgstr "Restablecer ajustes predeterminados"
 
 #: common/widgets/paged_dialog.cpp:368
-#, fuzzy, c-format
+#, c-format
 msgid "Reset %s to Defaults"
-msgstr "Restablecer ajustes predeterminados"
+msgstr "Restablecer %s a los ajustes predeterminados"
 
 #: common/widgets/unit_binder.cpp:217
 #, c-format
@@ -6826,9 +6822,8 @@ msgid "Specctra DSN file"
 msgstr "Archivo Specctra DSN"
 
 #: common/wildcards_and_files_ext.cpp:521
-#, fuzzy
 msgid "Specctra Session file"
-msgstr "Combinar archivo Spectra Session:"
+msgstr "Archivo Spectra Session"
 
 #: common/wildcards_and_files_ext.cpp:528
 msgid "IPC-D-356 Test Files"
@@ -9577,9 +9572,8 @@ msgid "You must provide a netlist generator command string"
 msgstr "Error. Debe escribir un comando"
 
 #: eeschema/dialogs/dialog_netlist.cpp:665
-#, fuzzy
 msgid "You must provide a netlist generator title"
-msgstr "Debe dar nombre a este componente:  "
+msgstr "Debe proporcionar un título de generador de netlist"
 
 #: eeschema/dialogs/dialog_netlist_base.cpp:39
 msgid "Add Generator..."
@@ -9859,9 +9853,8 @@ msgstr "Trazado a '%s'."
 #: kicad/pcm/pcm_task_manager.cpp:448 pcbnew/dialogs/dialog_plot.cpp:929
 #: pcbnew/exporters/gendrill_Excellon_writer.cpp:153
 #: pcbnew/exporters/gendrill_gerber_writer.cpp:124
-#, fuzzy
 msgid "Done."
-msgstr "Listo"
+msgstr "Listo."
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:872
 #, c-format
@@ -12095,9 +12088,8 @@ msgstr ""
 "debajo del cable o bus"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:79
-#, fuzzy
 msgid "Global label size:"
-msgstr "Etiquetas globales"
+msgstr "Tamaño de etiquetas globales:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:81
 #, fuzzy
@@ -17211,9 +17203,8 @@ msgid ""
 msgstr ""
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:51
-#, fuzzy
 msgid "Coordinates Format"
-msgstr "Formato de coordenadas:"
+msgstr "Formato de coordenadas"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:53
 msgid "The coordinates format is not specified in Excellon format."
@@ -17415,9 +17406,8 @@ msgid "Gerber files (.g* .lgr .pho)"
 msgstr "Archivos Gerber (.g* .lgr .pho)"
 
 #: gerbview/files.cpp:145
-#, fuzzy
 msgid "Top layer"
-msgstr "A la capa:"
+msgstr "Capa superior"
 
 #: gerbview/files.cpp:146
 #, fuzzy
@@ -17461,9 +17451,8 @@ msgid "Keep-out layer"
 msgstr "Mantener capas de z&onas no permitidas"
 
 #: gerbview/files.cpp:154
-#, fuzzy
 msgid "Mechanical layers"
-msgstr "Capas técnicas:"
+msgstr "Capas mecánicas"
 
 #: gerbview/files.cpp:155
 #, fuzzy
@@ -17576,12 +17565,12 @@ msgstr "Red:"
 #: gerbview/gerber_draw_item.cpp:763
 #, c-format
 msgid "Cmp: %s  Pad: %s"
-msgstr "Cmp: %s  Pad: %s"
+msgstr "Cmp: %s   Pad: %s"
 
 #: gerbview/gerber_draw_item.cpp:767
 #, c-format
 msgid "Cmp: %s  Pad: %s  Fct %s"
-msgstr "Cmp: %s  Pad: %s  Fct %s"
+msgstr "Cmp: %s   Pad: %s   Fct %s"
 
 #: gerbview/gerber_draw_item.cpp:775 gerbview/toolbars_gerber.cpp:125
 #: gerbview/toolbars_gerber.cpp:128
@@ -17702,9 +17691,9 @@ msgid "Open Recent Zip File"
 msgstr "Abrir archivo zip reciente"
 
 #: gerbview/readgerb.cpp:63
-#, fuzzy, c-format
+#, c-format
 msgid "File '%s' not found"
-msgstr "No se ha encontrado el archivo '%s'."
+msgstr "No se ha encontrado el archivo '%s'"
 
 #: gerbview/readgerb.cpp:88
 msgid ""
@@ -18142,9 +18131,8 @@ msgid "Reset all settings on this page to their default"
 msgstr "Restablecer todos los ajustes de esta página a su valor predeterminado"
 
 #: include/wxstream_helper.h:46
-#, fuzzy
 msgid "Failed to output data"
-msgstr "No se pudieron generar datos."
+msgstr "No se pudieron generar datos"
 
 #: kicad/dialogs/dialog_template_selector.cpp:127
 msgid "<html><h1>Template Selector</h1></html>"
@@ -18216,7 +18204,7 @@ msgstr ""
 #: kicad/dialogs/panel_kicad_launcher.cpp:146
 msgid "Manage downloadable packages from KiCad and 3rd party repositories"
 msgstr ""
-"Administrar paquetes descargables de los repositorios de KiCad y terceros."
+"Administrar paquetes descargables de los repositorios de KiCad y terceros"
 
 #: kicad/files-io.cpp:46
 msgid "KiCad project file"
@@ -18413,19 +18401,19 @@ msgid "Manage Repositores"
 msgstr "Gestionar las definiciones de bus"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:50
-#, fuzzy, c-format
+#, c-format
 msgid "Plugins (%d)"
-msgstr "Complementos"
+msgstr "Complementos (%d)"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:51
-#, fuzzy, c-format
+#, c-format
 msgid "Libraries (%d)"
-msgstr "Librerías"
+msgstr "Bibliotecas (%d)"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:52
-#, fuzzy, c-format
+#, c-format
 msgid "Color themes (%d)"
-msgstr "Tema de color:"
+msgstr "Temas de color (%d)"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:79 kicad/pcm/dialogs/dialog_pcm.cpp:315
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:51
@@ -18457,9 +18445,8 @@ msgid "Plugin and Content Manager"
 msgstr ""
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:235
-#, fuzzy
 msgid "Choose package file"
-msgstr "Archivo colocación lado cobre:"
+msgstr "Escoge el archivo del paquete"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:330
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:117
@@ -18570,9 +18557,9 @@ msgid "Package identifier: %s\n"
 msgstr ""
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:155
-#, fuzzy, c-format
+#, c-format
 msgid "License: %s\n"
-msgstr "Licencia"
+msgstr "Licencia: %s\n"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:169
 #, c-format
@@ -18682,11 +18669,9 @@ msgid "Error loading schema: %s"
 msgstr "Error al cargar el esquema '%s'."
 
 #: kicad/pcm/pcm.cpp:108
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading installed packages list: %s"
-msgstr ""
-"Error al cargar la lista de redes.\n"
-"%s"
+msgstr "Error al cargar la lista de paquetes: %s"
 
 #: kicad/pcm/pcm.cpp:186
 #, fuzzy, c-format
@@ -18709,13 +18694,14 @@ msgid "Unable to load repository url"
 msgstr "No se ha podido abrir el archivo %s"
 
 #: kicad/pcm/pcm.cpp:243
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Unable to parse repository:\n"
 "\n"
 "%s"
 msgstr ""
-"No puede interpretarse la URL:\n"
+"No puede interpretarse el repositorio:\n"
+"\n"
 "\"%s\""
 
 #: kicad/pcm/pcm.cpp:265
@@ -18763,9 +18749,8 @@ msgid "Local file"
 msgstr "Cargar Archivo:"
 
 #: kicad/pcm/pcm_task_manager.cpp:63
-#, fuzzy
 msgid "Unable to create download directory!"
-msgstr "Imposible crear archivo \"%s\""
+msgstr "¡Imposible crear carpeta de descarga!"
 
 #: kicad/pcm/pcm_task_manager.cpp:92
 #, c-format
@@ -18781,9 +18766,9 @@ msgid "Extracting package '%s'."
 msgstr "Extrayendo el archivo '%s'."
 
 #: kicad/pcm/pcm_task_manager.cpp:116
-#, fuzzy, c-format
+#, c-format
 msgid "Removing downloaded archive '%s'."
-msgstr "Eliminando la huella no utilizada \"%s:%s\".\n"
+msgstr "Eliminando archivo descargado \"%s\"."
 
 #: kicad/pcm/pcm_task_manager.cpp:157
 #, fuzzy, c-format
@@ -27710,9 +27695,8 @@ msgid "Path Substitutions"
 msgstr "Sustituciones de rutas"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:222
-#, fuzzy
 msgid "Error: illegal or empty filename."
-msgstr "Error: ¡No se encuentra nombre de archivo DXF!"
+msgstr "Error: nombre de archivo ilegal o vacío"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:379
 #: pcbnew/microwave/microwave_polygon.cpp:224
@@ -30539,14 +30523,15 @@ msgid "No footprints to export!"
 msgstr "¡No hay huellas para exportar!"
 
 #: pcbnew/footprint_libraries_utils.cpp:689
-#, fuzzy, c-format
+#, c-format
 msgid "Update footprints on board to refer to %s?"
-msgstr "Actualizar huella en placa"
+msgstr "¿Actualizar huella en placa para referir a %s?"
 
 #: pcbnew/footprint_libraries_utils.cpp:736
-#, fuzzy
 msgid "Update footprints on board to refer to new library?"
-msgstr "Actualizar huellas para incluir cualquier cambio desde la librería"
+msgstr ""
+"¿Actualizar huellas en placa para incluir cualquier cambio desde la librería "
+"nueva?"
 
 #: pcbnew/footprint_libraries_utils.cpp:875
 #: pcbnew/footprint_viewer_frame.cpp:711
