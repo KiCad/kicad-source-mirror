@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-01 11:31-0700\n"
-"PO-Revision-Date: 2021-09-22 03:04+0000\n"
+"PO-Revision-Date: 2021-09-22 15:26+0000\n"
 "Last-Translator: boonchai k. <kicadthai@gmail.com>\n"
 "Language-Team: Thai <https://hosted.weblate.org/projects/kicad/master-source/"
 "th/>\n"
@@ -31648,132 +31648,138 @@ msgid ""
 "Missing floating point number in file: '%s'\n"
 "line: %d, offset: %d"
 msgstr ""
+"ไม่พบเลขทศนิยมในไฟล์: '%s'\n"
+"บรรทัด: %d, ออฟเซต: %d"
 
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:3176
 #, c-format
 msgid "File '%s' is empty."
-msgstr ""
+msgstr "ไฟล์ '%s' ว่างเปล่า"
 
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:3179
 #, c-format
 msgid "File '%s' is not a legacy library."
-msgstr ""
+msgstr "ไฟล์ '%s' ไม่ใช่ไลบรารีดั้งเดิม"
 
 #: pcbnew/plugins/pcad/pcb.cpp:50 pcbnew/plugins/pcad/pcb.cpp:60
 #: pcbnew/plugins/pcad/pcb.cpp:70
 #, c-format
 msgid "Unknown PCad layer %u"
-msgstr ""
+msgstr "ไม่รู้จักเลเยอร์ของ PCad %u"
 
 #: pcbnew/plugins/pcad/pcb.cpp:748
 msgid "KiCad only supports 32 signal layers."
-msgstr ""
+msgstr "KiCad รองรับเพียง 32 ชั้นสัญญาณเท่านั้น"
 
 #: pcbnew/plugins/pcad/pcb_via.cpp:91
 msgid "Unable to find library section."
-msgstr ""
+msgstr "ไม่พบส่วนของไลบรารี"
 
 #: pcbnew/plugins/pcad/pcb_via.cpp:106
 #, c-format
 msgid "Unable to find viaStyleDef %s."
-msgstr ""
+msgstr "ไม่สามารถค้นพบ viaStyleDef %s"
 
 #: pcbnew/python/scripting/pcbnew_action_plugins.cpp:70
 msgid "Exception on python action plugin code"
-msgstr ""
+msgstr "เกิดข้อยกเว้นกับโค้ดไพธอนปลั๊กอิน"
 
 #: pcbnew/python/scripting/pcbnew_action_plugins.cpp:82
 #: pcbnew/python/scripting/pcbnew_footprint_wizards.cpp:83
 #, c-format
 msgid "Method \"%s\" not found, or not callable"
-msgstr ""
+msgstr "เมธอด \"%s\" ไม่พบ, หรือไม่สามารถเรียกใช้งาน"
 
 #: pcbnew/python/scripting/pcbnew_action_plugins.cpp:83
 #: pcbnew/python/scripting/pcbnew_footprint_wizards.cpp:84
 msgid "Unknown Method"
-msgstr ""
+msgstr "ไม่รู้จักเมธอด"
 
 #: pcbnew/python/scripting/pcbnew_action_plugins.cpp:368
 msgid "Apply action script"
-msgstr ""
+msgstr "ใช้สคริปต์ดำเนินการ"
 
 #: pcbnew/python/scripting/pcbnew_footprint_wizards.cpp:70
 msgid "Exception on python footprint wizard code"
-msgstr ""
+msgstr "เกิดข้อยกเว้นสำหรับโค้ดไพธอนตัวช่วยสร้างฟุ้ทพรินท์"
 
 #: pcbnew/router/length_tuner_tool.cpp:46
 msgid "New Track"
-msgstr ""
+msgstr "แทร็กใหม่"
 
 #: pcbnew/router/length_tuner_tool.cpp:46
 msgid "Starts laying a new track."
-msgstr ""
+msgstr "เริ่มวางแทร็คใหม่"
 
 #: pcbnew/router/length_tuner_tool.cpp:51
 msgid "End Track"
-msgstr ""
+msgstr "สิ้นสุดแทร็ค"
 
 #: pcbnew/router/length_tuner_tool.cpp:51
 msgid "Stops laying the current meander."
-msgstr ""
+msgstr "หยุดวางเส้นคดเคี้ยวของปัจจุบัน"
 
 #: pcbnew/router/length_tuner_tool.cpp:56
 msgid "Increase Spacing"
-msgstr ""
+msgstr "เพิ่มระยะห่าง"
 
 #: pcbnew/router/length_tuner_tool.cpp:56
 msgid "Increase meander spacing by one step."
-msgstr ""
+msgstr "เพิ่มระยะห่างคดเคี้ยวขึ้นหนึ่งขั้น"
 
 #: pcbnew/router/length_tuner_tool.cpp:62
 msgid "Decrease Spacing"
-msgstr ""
+msgstr "ลดระยะห่าง"
 
 #: pcbnew/router/length_tuner_tool.cpp:62
 msgid "Decrease meander spacing by one step."
-msgstr ""
+msgstr "ลดระยะห่างที่คดเคี้ยวลงหนึ่งขั้น"
 
 #: pcbnew/router/length_tuner_tool.cpp:68
 msgid "Increase Amplitude"
-msgstr ""
+msgstr "เพิ่มแอมพลิจูด"
 
 #: pcbnew/router/length_tuner_tool.cpp:68
 msgid "Increase meander amplitude by one step."
-msgstr ""
+msgstr "เพิ่มแอมพลิจูดที่คดเคี้ยวขึ้นหนึ่งขั้น"
 
 #: pcbnew/router/length_tuner_tool.cpp:74
 msgid "Decrease Amplitude"
-msgstr ""
+msgstr "ลดแอมพลิจูด"
 
 #: pcbnew/router/length_tuner_tool.cpp:74
 msgid "Decrease meander amplitude by one step."
-msgstr ""
+msgstr "ลดแอมพลิจูดที่คดเคี้ยวลงหนึ่งขั้น"
 
 #: pcbnew/router/length_tuner_tool.cpp:99
 msgid "Length Tuner"
-msgstr ""
+msgstr "เครื่องมือปรับความยาว"
 
 #: pcbnew/router/pns_diff_pair_placer.cpp:476
 msgid ""
 "Unable to find complementary differential pair nets. Make sure the names of "
 "the nets belonging to a differential pair end with either N/P or +/-."
 msgstr ""
+"ไม่พบคู่ส่วนต่างสัญญาณดิฟแพร์ "
+"ตรวจสอบให้แน่ใจว่าชื่อเน็ทที่เป็นของคู่ส่วนต่างสิ้นสุดด้วย N / P หรือ +/-"
 
 #: pcbnew/router/pns_diff_pair_placer.cpp:493
 msgid ""
 "Can't find a suitable starting point.  If starting from an existing "
 "differential pair make sure you are at the end."
 msgstr ""
+"ไม่พบจุดเริ่มต้นที่เหมาะสม ถ้าเริ่มจากดิฟแพร์ "
+"ต้องแน่ใจว่าคุณเริ่มจากคุณสิ้นสุด"
 
 #: pcbnew/router/pns_diff_pair_placer.cpp:546
 #, c-format
 msgid "Can't find a suitable starting point for coupled net \"%s\"."
-msgstr ""
+msgstr "ไม่พบจุดเริ่มต้นที่เหมาะสมสําหรับเน็ตจับคู่ \"%s\""
 
 #: pcbnew/router/pns_dp_meander_placer.cpp:76
 #: pcbnew/router/pns_meander_placer.cpp:64
 msgid "Please select a track whose length you want to tune."
-msgstr ""
+msgstr "โปรดเลือกแทร็กที่คุณต้องการปรับความยาว"
 
 #: pcbnew/router/pns_dp_meander_placer.cpp:90
 msgid ""
@@ -31781,46 +31787,51 @@ msgid ""
 "sure the names of the nets belonging to a differential pair end with either "
 "_N/_P or +/-."
 msgstr ""
+"ไม่พบเน็ตคู่ดิฟแพร์สำหรับการปรับความยาว "
+"ตรวจสอบให้แน่ใจว่าชื่อเน็ตที่เป็นของคู่ดิฟเฟอเรนเชียลลงท้ายด้วย _N/_P หรือ "
+"+/-"
 
 #: pcbnew/router/pns_dp_meander_placer.cpp:392
 #: pcbnew/router/pns_meander_placer.cpp:268
 msgid "Too long: "
-msgstr ""
+msgstr "ยาวเกินไป: "
 
 #: pcbnew/router/pns_dp_meander_placer.cpp:395
 #: pcbnew/router/pns_meander_placer.cpp:271
 msgid "Too short: "
-msgstr ""
+msgstr "สั้นเกินไป: "
 
 #: pcbnew/router/pns_dp_meander_placer.cpp:398
 #: pcbnew/router/pns_meander_placer.cpp:274
 msgid "Tuned: "
-msgstr ""
+msgstr "ปรับแล้ว: "
 
 #: pcbnew/router/pns_dp_meander_placer.cpp:401
 #: pcbnew/router/pns_meander_placer.cpp:277
 #: pcbnew/router/pns_meander_skew_placer.cpp:172
 msgid "?"
-msgstr ""
+msgstr "?"
 
 #: pcbnew/router/pns_kicad_iface.cpp:1048
 #, c-format
 msgid "%s is malformed."
-msgstr ""
+msgstr "%s มีรูปแบบผิดเพี้ยน"
 
 #: pcbnew/router/pns_kicad_iface.cpp:1051
 msgid ""
 "This zone cannot be handled by the router.\n"
 "Please verify it is not a self-intersecting polygon."
 msgstr ""
+"เราเตอร์ไม่สามารถจัดการโซนนี้\n"
+"โปรดตรวจสอบว่าไม่ใช่รูปหลายเหลี่ยมที่ตัดกันเอง"
 
 #: pcbnew/router/pns_kicad_iface.cpp:1649 pcbnew/router/router_tool.cpp:433
 msgid "Interactive Router"
-msgstr ""
+msgstr "เราเตอร์แบบโต้ตอบ"
 
 #: pcbnew/router/pns_meander_skew_placer.cpp:54
 msgid "Please select a differential pair trace you want to tune."
-msgstr ""
+msgstr "โปรดเลือกคู่ส่วนต่างดิฟแพร์ที่ต้องการปรับแต่ง"
 
 #: pcbnew/router/pns_meander_skew_placer.cpp:70
 msgid ""
@@ -31828,228 +31839,231 @@ msgid ""
 "sure the names of the nets belonging to a differential pair end with either "
 "_N/_P or +/-."
 msgstr ""
+"ไม่พบเน็ตคู่ส่วนต่างดิฟแพร์สำหรับการจูนแบบลาดเอียง "
+"ตรวจสอบให้แน่ใจว่าชื่อของเน็ตที่เป็นของคู่ดิฟแพร์ลงท้ายด้วย _N/_P หรือ +/-"
 
 #: pcbnew/router/pns_meander_skew_placer.cpp:163
 msgid "Too long: skew "
-msgstr ""
+msgstr "ยาวเกินไป: เอียง "
 
 #: pcbnew/router/pns_meander_skew_placer.cpp:166
 msgid "Too short: skew "
-msgstr ""
+msgstr "สั้นเกินไป: เอียง "
 
 #: pcbnew/router/pns_meander_skew_placer.cpp:169
 msgid "Tuned: skew "
-msgstr ""
+msgstr "ปรับแต่งแล้ว: เอียง "
 
 #: pcbnew/router/pns_router.cpp:212
 msgid "Diff pair gap is less than board minimum clearance."
-msgstr ""
+msgstr "ช่องว่างคู่ดิฟแพร์น้อยกว่าระยะห่างขั้นต่ำของพีซีบอร์ด"
 
 #: pcbnew/router/pns_router.cpp:232
 msgid "Cannot start routing from a non-plated hole."
-msgstr ""
+msgstr "ไม่สามารถเริ่มเดินเส้นจากแพ็ดชนิดไม่มีการชุบ"
 
 #: pcbnew/router/pns_router.cpp:243
 #, c-format
 msgid "Rule area '%s' disallows tracks."
-msgstr ""
+msgstr "พื้นที่กฎ '%s' ไม่อนุญาตให้มีแทร็ก"
 
 #: pcbnew/router/pns_router.cpp:248
 msgid "Rule area disallows tracks."
-msgstr ""
+msgstr "พื้นที่กฎไม่อนุญาตให้มีแทร็ก"
 
 #: pcbnew/router/pns_router.cpp:255
 msgid "Cannot start routing from a text item."
-msgstr ""
+msgstr "ไม่สามารถเริ่มเดินลายเส้นทองแดงจากข้อความ"
 
 #: pcbnew/router/pns_router.cpp:260
 msgid "Cannot start routing from a graphic."
-msgstr ""
+msgstr "ไม่สามารถเริ่มการเดินลายทองแดงจากกราฟิก"
 
 #: pcbnew/router/pns_router.cpp:306 pcbnew/router/pns_router.cpp:362
 msgid "The routing start point violates DRC."
-msgstr ""
+msgstr "จุดเริ่มต้นการเดินลายเส้นละเมิด DRC"
 
 #: pcbnew/router/pns_router.cpp:314
 msgid "Cannot start a differential pair in the middle of nowhere."
-msgstr ""
+msgstr "ไม่สามารถเริ่มคู่ส่วนต่างดิฟแพร์ จากระหว่างกลางจุดใดๆ"
 
 #: pcbnew/router/router_tool.cpp:89
 msgid "Finish Track"
-msgstr ""
+msgstr "สิ้นสุดแทร็ก"
 
 #: pcbnew/router/router_tool.cpp:89
 msgid "Stops laying the current track."
-msgstr ""
+msgstr "หยุดวางแทร็กปัจจุบัน"
 
 #: pcbnew/router/router_tool.cpp:95
 msgid "Auto-finish Track"
-msgstr ""
+msgstr "สิ้นสุดแทร็กอัตโนมัติ"
 
 #: pcbnew/router/router_tool.cpp:95
 msgid "Automagically finishes laying the current track."
-msgstr ""
+msgstr "เสร็จสิ้นการวางแทร็กปัจจุบันโดยอัตโนมัติ"
 
 #: pcbnew/router/router_tool.cpp:100
 msgid "Place Through Via"
-msgstr ""
+msgstr "วางเวียชนิดเจาะทะลุ"
 
 #: pcbnew/router/router_tool.cpp:101
 msgid "Adds a through-hole via at the end of currently routed track."
-msgstr ""
+msgstr "เพิ่มเวียรูทะลุผ่านที่ส่วนท้ายของลายเส้นปัจจุบัน"
 
 #: pcbnew/router/router_tool.cpp:107
 msgid "Place Blind/Buried Via"
-msgstr ""
+msgstr "วางเวียชนิด บอด/ฝัง"
 
 #: pcbnew/router/router_tool.cpp:108
 msgid "Adds a blind or buried via at the end of currently routed track."
-msgstr ""
+msgstr "เพิ่มเวียชนิดตาบอดหรือฝัง ที่ตอนท้ายของลายเส้นปัจจุบัน"
 
 #: pcbnew/router/router_tool.cpp:114
 msgid "Place Microvia"
-msgstr ""
+msgstr "วางไมโครเวีย"
 
 #: pcbnew/router/router_tool.cpp:114
 msgid "Adds a microvia at the end of currently routed track."
-msgstr ""
+msgstr "เพิ่มไมโครเวียที่ตอนท้ายของลายเส้นปัจจุบัน"
 
 #: pcbnew/router/router_tool.cpp:121
 msgid "Select Layer and Place Through Via..."
-msgstr ""
+msgstr "เลือกเลเยอร์และวางเวียชนิดทะลุผ่าน..."
 
 #: pcbnew/router/router_tool.cpp:122
 msgid ""
 "Select a layer, then add a through-hole via at the end of currently routed "
 "track."
-msgstr ""
+msgstr "เลือกเลเยอร์ จากนั้นเพิ่มเวียทะลุผ่านที่ส่วนท้ายแทร็กปัจจุบัน"
 
 #: pcbnew/router/router_tool.cpp:130
 msgid "Select Layer and Place Blind/Buried Via..."
-msgstr ""
+msgstr "เลือกเลเยอร์และใส่เวียชนิด บอด/ฝัง..."
 
 #: pcbnew/router/router_tool.cpp:131
 msgid ""
 "Select a layer, then add a blind or buried via at the end of currently "
 "routed track."
 msgstr ""
+"เลือกเลเยอร์ จากนั้นเพิ่มเวียชนิดตาบอดหรือฝัง ที่ตอนท้ายของลายเส้นปัจจุบัน"
 
 #: pcbnew/router/router_tool.cpp:139
 msgid "Select Layer and Place Micro Via..."
-msgstr ""
+msgstr "เลือกเลเยอร์และวางไมโครเวีย..."
 
 #: pcbnew/router/router_tool.cpp:140
 msgid ""
 "Select a layer, then add a micro via at the end of currently routed track."
-msgstr ""
+msgstr "เลือกเลเยอร์ จากนั้นเพิ่มไมโครเวียที่ตอนท้ายของลายเส้นปัจจุบัน"
 
 #: pcbnew/router/router_tool.cpp:147
 msgid "Custom Track/Via Size..."
-msgstr ""
+msgstr "กำหนดขนาดเอง แทร็ก/เวีย..."
 
 #: pcbnew/router/router_tool.cpp:148
 msgid "Shows a dialog for changing the track width and via size."
-msgstr ""
+msgstr "แสดงกล่องโต้ตอบเปลี่ยนความกว้างแทร็กและขนาดเวีย"
 
 #: pcbnew/router/router_tool.cpp:154
 msgid "Switch Track Posture"
-msgstr ""
+msgstr "สลับท่าทางแทร็ก"
 
 #: pcbnew/router/router_tool.cpp:155
 msgid "Switches posture of the currently routed track."
-msgstr ""
+msgstr "สลับท่าทางของแทร็กลายเส้นปัจจุบัน"
 
 #: pcbnew/router/router_tool.cpp:161
 msgid "Track Corner Mode"
-msgstr ""
+msgstr "โหมดมุมแทร็ค"
 
 #: pcbnew/router/router_tool.cpp:162
 msgid "Switches between sharp and rounded corners when routing tracks."
-msgstr ""
+msgstr "สลับไปมาระหว่างมุมแหลมและโค้งมน เมื่อกำหนดเดินลายเส้นทองแดง"
 
 #: pcbnew/router/router_tool.cpp:184
 msgid "Select Track/Via Width"
-msgstr ""
+msgstr "เลือกความกว้าง แทร็ก/เวีย"
 
 #: pcbnew/router/router_tool.cpp:203
 msgid "Use Starting Track Width"
-msgstr ""
+msgstr "ใช้ความกว้างจากแทร็กเริ่มต้น"
 
 #: pcbnew/router/router_tool.cpp:204
 msgid "Route using the width of the starting track."
-msgstr ""
+msgstr "เดินลายเส้นโดยใช้ความกว้างจากเส้นเริ่มต้น"
 
 #: pcbnew/router/router_tool.cpp:208 pcbnew/router/router_tool.cpp:329
 msgid "Use Net Class Values"
-msgstr ""
+msgstr "ใช้ค่าเน็ตคลาส"
 
 #: pcbnew/router/router_tool.cpp:209
 msgid "Use track and via sizes from the net class"
-msgstr ""
+msgstr "ใช้ขนาดแทร็กและเวียจากเน็ตคลาส"
 
 #: pcbnew/router/router_tool.cpp:213 pcbnew/router/router_tool.cpp:334
 #: pcbnew/tools/drawing_tool.cpp:95
 msgid "Use Custom Values..."
-msgstr ""
+msgstr "ใช้ค่ากำหนดเอง..."
 
 #: pcbnew/router/router_tool.cpp:214 pcbnew/tools/drawing_tool.cpp:96
 msgid "Specify custom track and via sizes"
-msgstr ""
+msgstr "ระบุขนาดกำหนดเองสำหรับแทร็กและเวีย"
 
 #: pcbnew/router/router_tool.cpp:225
 msgid "Track netclass width"
-msgstr ""
+msgstr "ความกว้างแทร็กเน็ตคลาส"
 
 #: pcbnew/router/router_tool.cpp:227
 #, c-format
 msgid "Track %s"
-msgstr ""
+msgstr "แทร็ค %s"
 
 #: pcbnew/router/router_tool.cpp:241
 msgid "Via netclass values"
-msgstr ""
+msgstr "ค่าเวียเน็ตคลาส"
 
 #: pcbnew/router/router_tool.cpp:245 pcbnew/tools/drawing_tool.cpp:107
 #, c-format
 msgid "Via %s, drill %s"
-msgstr ""
+msgstr "เวีย %s, เจาะรู %s"
 
 #: pcbnew/router/router_tool.cpp:249 pcbnew/tools/drawing_tool.cpp:113
 #, c-format
 msgid "Via %s"
-msgstr ""
+msgstr "เวีย %s"
 
 #: pcbnew/router/router_tool.cpp:313
 msgid "Select Differential Pair Dimensions"
-msgstr ""
+msgstr "เลือกขนาดคู่ที่แตกต่างดิฟแพร์"
 
 #: pcbnew/router/router_tool.cpp:330
 msgid "Use differential pair dimensions from the net class"
-msgstr ""
+msgstr "ใช้มิติคู่ส่วนต่างดิฟแพร์จากเน็ตคลาส"
 
 #: pcbnew/router/router_tool.cpp:335
 msgid "Specify custom differential pair dimensions"
-msgstr ""
+msgstr "ระบุมิติคู่ที่แตกต่างดิฟแพร์แบบกําหนดเอง"
 
 #: pcbnew/router/router_tool.cpp:352
 #, c-format
 msgid "Width %s"
-msgstr ""
+msgstr "ความกว้าง %s"
 
 #: pcbnew/router/router_tool.cpp:357
 #, c-format
 msgid "Width %s, via gap %s"
-msgstr ""
+msgstr "ความกว้าง %s, ช่องห่างเวีย %s"
 
 #: pcbnew/router/router_tool.cpp:366
 #, c-format
 msgid "Width %s, gap %s"
-msgstr ""
+msgstr "ความกว้าง %s, ช่องห่างเวีย %s"
 
 #: pcbnew/router/router_tool.cpp:372
 #, c-format
 msgid "Width %s, gap %s, via gap %s"
-msgstr ""
+msgstr "ความกว้าง %s, ช่องห่าง %s, ช่องห่างเวีย %s"
 
 #: pcbnew/router/router_tool.cpp:519
 #, c-format
@@ -32057,245 +32071,255 @@ msgid ""
 "Event file: %s\n"
 "Board dump: %s"
 msgstr ""
+"ไฟล์เหตุการ์ณ: %s\n"
+"การถ่ายโอนข้อมูลของบอร์ด: %s"
 
 #: pcbnew/router/router_tool.cpp:521
 msgid "Save router log"
-msgstr ""
+msgstr "บันทึกไฟล์ล็อกเราเตอร์"
 
 #: pcbnew/router/router_tool.cpp:521
 msgid ""
 "Would you like to save the router\n"
 "event log for debugging purposes?"
 msgstr ""
+"คุณต้องการบันทึกเราเตอร์\n"
+"บันทึกเหตุการณ์เพื่อวัตถุประสงค์ในการดีบัก?"
 
 #: pcbnew/router/router_tool.cpp:828 pcbnew/router/router_tool.cpp:850
 msgid "Show board setup"
-msgstr ""
+msgstr "แสดงการตั้งค่าบอร์ด"
 
 #: pcbnew/router/router_tool.cpp:840
 msgid ""
 "Blind/buried vias must first be enabled in Board Setup > Design Rules > "
 "Constraints."
 msgstr ""
+"ต้องเปิดใช้งานเวียชนิด บอด/ฝัง ก่อน ในการตั้งค่าบอร์ด > กฎการออกแบบ > "
+"ข้อจำกัด"
 
 #: pcbnew/router/router_tool.cpp:861
 msgid ""
 "Microvias must first be enabled in Board Setup > Design Rules > Constraints."
-msgstr ""
+msgstr "ต้องเปิดใช้งานไมโครเวีย ก่อนในการตั้งค่าบอร์ด > กฎการออกแบบ > ข้อจำกัด"
 
 #: pcbnew/router/router_tool.cpp:994
 msgid "Tracks on Copper layers only."
-msgstr ""
+msgstr "แทร็คต้องอยู่บนเลเยอร์ทองแดงเท่านั้น"
 
 #: pcbnew/router/router_tool.cpp:1399 pcbnew/router/router_tool.cpp:1821
 msgid "The selected item is locked."
-msgstr ""
+msgstr "รายการที่เลือกถูกล็อค"
 
 #: pcbnew/router/router_tool.cpp:1401
 msgid "Drag Anyway"
-msgstr ""
+msgstr "ลากต่อไป"
 
 #: pcbnew/router/router_tool.cpp:1823 pcbnew/tools/pcb_actions.cpp:1360
 #: pcbnew/tools/pcb_actions.cpp:1366
 msgid "Break Track"
-msgstr ""
+msgstr "แตกแทร็ก"
 
 #: pcbnew/sel_layer.cpp:294
 msgid "Warning: top and bottom layers are same."
-msgstr ""
+msgstr "คําเตือน: เลเยอร์ด้านบนและด้านล่างเหมือนกัน"
 
 #: pcbnew/specctra_import_export/specctra_export.cpp:132
 msgid "BOARD exported OK."
-msgstr ""
+msgstr "บอร์ดส่งออกเรียบร้อย"
 
 #: pcbnew/specctra_import_export/specctra_export.cpp:137
 msgid "Unable to export, please fix and try again"
-msgstr ""
+msgstr "ไม่สามารถส่งออก,โปรดแก้ไขแล้วลองอีกครั้ง"
 
 #: pcbnew/specctra_import_export/specctra_export.cpp:1029
 #, c-format
 msgid "Symbol with value of '%s' has empty reference id."
-msgstr ""
+msgstr "สัญลักษณ์ที่มีค่า '%s' มีรหัสอ้างอิงว่างเปล่า"
 
 #: pcbnew/specctra_import_export/specctra_export.cpp:1039
 #, c-format
 msgid "Multiple symbols have identical reference IDs of '%s'."
-msgstr ""
+msgstr "สัญลักษณ์หลายตัวมีรหัสอ้างอิงที่เหมือนกับ '%s'"
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:70
 msgid ""
 "Board may be corrupted, do not save it.\n"
 " Fix problem and try again"
 msgstr ""
+"บอร์ดอาจเสียหายอย่าบันทึก\n"
+" แก้ไขปัญหาแล้วลองอีกครั้ง"
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:93
 msgid "Session file imported and merged OK."
-msgstr ""
+msgstr "ไฟล์เซสชันที่นำเข้าและรวมเข้าด้วยกันเรียบร้อย"
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:166
 #, c-format
 msgid "Session file uses invalid layer id '%s'."
-msgstr ""
+msgstr "ไฟล์เซสชันใช้รหัสเลเยอร์ที่ไม่ถูกต้อง '%s'"
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:217
 msgid "Session via padstack has no shapes"
-msgstr ""
+msgstr "เซสชันเวียแพ็ดสแต็คไม่มีรูปร่าง"
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:226
 #, c-format
 msgid "Unsupported via shape: %s."
-msgstr ""
+msgstr "ไม่รองรับรูปร่างเวีย: %s"
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:246
 #: pcbnew/specctra_import_export/specctra_import.cpp:271
 #, c-format
 msgid "Unsupported via shape: %s"
-msgstr ""
+msgstr "ไม่รองรับรูปร่างเวีย: %s"
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:280
 #, c-format
 msgid "Session file uses invalid layer id \"%s\""
-msgstr ""
+msgstr "ไฟล์เซสชันใช้รหัสเลเยอร์ไม่ถูกต้อง \"%s\""
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:326
 msgid "Session file is missing the \"session\" section"
-msgstr ""
+msgstr "ไฟล์เซสชันไม่มีส่วน \"เซสชัน\""
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:329
 msgid "Session file is missing the \"routes\" section"
-msgstr ""
+msgstr "ไฟล์เซสชันไม่มีส่วน \"เส้นทาง\""
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:332
 msgid "Session file is missing the \"library_out\" section"
-msgstr ""
+msgstr "ไฟล์เซสชันไม่มีส่วน \"library_out\""
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:359
 #, c-format
 msgid "Reference '%s' not found."
-msgstr ""
+msgstr "ไม่พบการอ้างอิง '%s'"
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:501
 #, c-format
 msgid "A wire_via refers to missing padstack '%s'."
-msgstr ""
+msgstr "wire_via อ้างถึงแพ็ดสแต็กที่ไม่มี '%s'"
 
 #: pcbnew/toolbars_footprint_editor.cpp:91
 msgid "Load footprint from current board"
-msgstr ""
+msgstr "อ่านฟุ้ทพรินท์จากบอร์ดปัจจุบัน"
 
 #: pcbnew/toolbars_footprint_editor.cpp:95
 msgid "Insert footprint into current board"
-msgstr ""
+msgstr "แทรกฟุ้ทพริ้นท์ลงในบอร์ดปัจจุบัน"
 
 #: pcbnew/toolbars_footprint_editor.cpp:236 pcbnew/toolbars_pcb_editor.cpp:733
 msgid "+/- to switch"
-msgstr ""
+msgstr "+/- เพื่อสลับ"
 
 #: pcbnew/toolbars_footprint_viewer.cpp:60
 msgid "Display previous footprint"
-msgstr ""
+msgstr "แสดงฟุ้ทพรินท์ก่อนหน้า"
 
 #: pcbnew/toolbars_footprint_viewer.cpp:63
 msgid "Display next footprint"
-msgstr ""
+msgstr "แสดงฟุ้ทพรินท์ถัดไป"
 
 #: pcbnew/toolbars_footprint_viewer.cpp:77
 msgid "Insert footprint in board"
-msgstr ""
+msgstr "ใส่ฟุ้ทพรินท์เข้าไปในบอร์ด"
 
 #: pcbnew/toolbars_pcb_editor.cpp:528
 msgid ""
 "When routing from an existing track use its width instead of the current "
 "width setting"
 msgstr ""
+"เมื่อเดินลายเส้นจากเส้นที่มีอยู่แล้ว ใช้ขนาดของมัน "
+"แทนที่จะใช้ขนาดเส้นจากที่ตั้งไว้"
 
 #: pcbnew/toolbars_pcb_editor.cpp:635
 msgid "Track: use netclass width"
-msgstr ""
+msgstr "แทร็ก: ใช้ความกว้างจากเน็ตคลาส"
 
 #: pcbnew/toolbars_pcb_editor.cpp:641
 #, c-format
 msgid "Track: %s (%s)"
-msgstr ""
+msgstr "แทร็ก: %s (%s)"
 
 #: pcbnew/toolbars_pcb_editor.cpp:650 pcbnew/toolbars_pcb_editor.cpp:718
 msgid "Edit Pre-defined Sizes..."
-msgstr ""
+msgstr "แก้ไขขนาดที่กําหนดไว้ล่วงหน้า..."
 
 #: pcbnew/toolbars_pcb_editor.cpp:687
 msgid "Via: use netclass sizes"
-msgstr ""
+msgstr "เวีย: ใช้ขนาดเน็ตคลาส"
 
 #: pcbnew/toolbars_pcb_editor.cpp:710
 #, c-format
 msgid "Via: %s (%s)"
-msgstr ""
+msgstr "เวีย: %s (%s)"
 
 #: pcbnew/tools/board_editor_control.cpp:114
 msgid "Locking"
-msgstr ""
+msgstr "กำลังล็อค"
 
 #: pcbnew/tools/board_editor_control.cpp:137
 msgid "Omit extra information"
-msgstr ""
+msgstr "ละเว้นข้อมูลเพิ่มเติม"
 
 #: pcbnew/tools/board_editor_control.cpp:138
 msgid "Omit nets"
-msgstr ""
+msgstr "ละเว้นเน็ต"
 
 #: pcbnew/tools/board_editor_control.cpp:140
 msgid "Do not prefix path with footprint UUID."
-msgstr ""
+msgstr "ไม่ต้องนำหน้าพาธด้วย UUID ของฟุ้ทพรินท์"
 
 #: pcbnew/tools/board_editor_control.cpp:380
 msgid "Merge Specctra Session file:"
-msgstr ""
+msgstr "รวมไฟล์เซสชัน Specctra:"
 
 #: pcbnew/tools/board_editor_control.cpp:403
 msgid "Specctra DSN File"
-msgstr ""
+msgstr "ไฟล์ Specctra DSN"
 
 #: pcbnew/tools/board_editor_control.cpp:427
 msgid "Export Board Netlist"
-msgstr ""
+msgstr "ส่งออกเน็ตลิสต์ของบอร์ด"
 
 #: pcbnew/tools/board_editor_control.cpp:428
 msgid "KiCad board netlist files"
-msgstr ""
+msgstr "ไฟล์เน็ตลิสต์ของบอร์ด KiCad"
 
 #: pcbnew/tools/board_editor_control.cpp:442
 #, c-format
 msgid "Path `%s` is read only."
-msgstr ""
+msgstr "เส้นทาง `%s` เป็นแบบอ่านอย่างเดียว"
 
 #: pcbnew/tools/board_editor_control.cpp:443
 msgid "I/O Error"
-msgstr ""
+msgstr "ข้อผิดพลาด I/O"
 
 #: pcbnew/tools/board_editor_control.cpp:534
 #, c-format
 msgid "Orphaned net %s re-parented.\n"
-msgstr ""
+msgstr "เน็ตกําพร้า %s เลี้ยงดูใหม่\n"
 
 #: pcbnew/tools/board_editor_control.cpp:591
 #: pcbnew/tools/footprint_editor_control.cpp:566
 #, c-format
 msgid "%d duplicate IDs replaced.\n"
-msgstr ""
+msgstr "%d แทนที่ไอดีซ้ำกัน\n"
 
 #: pcbnew/tools/board_editor_control.cpp:606
 #: pcbnew/tools/footprint_editor_control.cpp:581
 #, c-format
 msgid "%d potential problems repaired."
-msgstr ""
+msgstr "%d ปัญหาที่อาจเกิดขึ้นได้รับการแก้ไขแล้ว"
 
 #: pcbnew/tools/board_editor_control.cpp:613
 msgid "No board problems found."
-msgstr ""
+msgstr "ไม่พบปัญหาของบอร์ด"
 
 #: pcbnew/tools/board_editor_control.cpp:624
 msgid "Updating PCB requires a fully annotated schematic."
-msgstr ""
+msgstr "การอัปเดต PCB ต้องใช้วงจรที่มีคำอธิบายประกอบสมบูรณ์"
 
 #: pcbnew/tools/board_editor_control.cpp:639
 msgid ""
@@ -32303,78 +32327,81 @@ msgid ""
 "order to create or update PCBs from schematics, you must launch the KiCad "
 "project manager and create a project."
 msgstr ""
+"ไม่สามารถปรับปรุงแผนผังได้ เนื่องจาก Pcbnew ถูกเปิดในโหมดสแตนด์อโลน "
+"ในการสร้างหรืออัปเดต PCB จากแผนผังคุณต้องเปิดตัวจัดการโครงการ KiCad "
+"และสร้างโครงการ"
 
 #: pcbnew/tools/board_editor_control.cpp:1057
 msgid "Place a footprint"
-msgstr ""
+msgstr "วางฟุ้ทพรินท์"
 
 #: pcbnew/tools/board_editor_control.cpp:1162 pcbnew/tools/pcb_actions.cpp:673
 msgid "Lock"
-msgstr ""
+msgstr "ล็อค"
 
 #: pcbnew/tools/board_editor_control.cpp:1162 pcbnew/tools/pcb_actions.cpp:678
 msgid "Unlock"
-msgstr ""
+msgstr "ปลดล็อก"
 
 #: pcbnew/tools/board_editor_control.cpp:1433
 msgid "Duplicate zone"
-msgstr ""
+msgstr "เกิดโซนซ้ำ"
 
 #: pcbnew/tools/board_inspection_tool.cpp:68
 msgid "Net Tools"
-msgstr ""
+msgstr "เครื่องมือเน็ต"
 
 #: pcbnew/tools/board_inspection_tool.cpp:130
 #, c-format
 msgid "[netclass %s]"
-msgstr ""
+msgstr "[เน็ตคลาส %s]"
 
 #: pcbnew/tools/board_inspection_tool.cpp:146
 #, c-format
 msgid "Zone connection type: %s."
-msgstr ""
+msgstr "ประเภทการเชื่อมต่อโซน: %s"
 
 #: pcbnew/tools/board_inspection_tool.cpp:149
 #: pcbnew/tools/board_inspection_tool.cpp:183
 #: pcbnew/tools/board_inspection_tool.cpp:201 pcbnew/zone.cpp:337
 #: pcbnew/zone.cpp:352 pcbnew/zone.cpp:500 pcbnew/zone.cpp:781
 msgid "zone"
-msgstr ""
+msgstr "โซน"
 
 #: pcbnew/tools/board_inspection_tool.cpp:151
 #, c-format
 msgid "Overridden by %s; connection type: %s."
-msgstr ""
+msgstr "แทนที่โดย %s; ชนิดการเชื่อมต่อ: %s"
 
 #: pcbnew/tools/board_inspection_tool.cpp:166
 #, c-format
 msgid "Pad is not a PTH pad; connection will be: %s."
-msgstr ""
+msgstr "แพ็ดไม่ใช่ PTH การเชื่อมต่อจะเป็น: %s"
 
 #: pcbnew/tools/board_inspection_tool.cpp:178
 #, c-format
 msgid "Zone thermal relief: %s."
-msgstr ""
+msgstr "บรรเทาความร้อนโซน: %s"
 
 #: pcbnew/tools/board_inspection_tool.cpp:185
 #, c-format
 msgid "Overridden by %s; thermal relief: %s."
-msgstr ""
+msgstr "แทนที่โดย %s; การระบายความร้อน: %s"
 
 #: pcbnew/tools/board_inspection_tool.cpp:194
 #, c-format
 msgid "Zone clearance: %s."
-msgstr ""
+msgstr "ระยะห่างของโซน: %s"
 
 #: pcbnew/tools/board_inspection_tool.cpp:203
 #, c-format
 msgid "Overridden by larger thermal relief from %s;clearance: %s."
-msgstr ""
+msgstr "แทนที่ด้วยการระบายความร้อนที่มีขนาดใหญ่กว่าจาก %s ระยะห่าง: %s"
 
 #: pcbnew/tools/board_inspection_tool.cpp:212
 #, c-format
 msgid "Clearance: %s."
-msgstr ""
+msgstr "ระยะห่าง: %s"
 
 #: pcbnew/tools/board_inspection_tool.cpp:232
 #: pcbnew/tools/board_inspection_tool.cpp:616
@@ -32383,67 +32410,67 @@ msgstr ""
 #: pcbnew/tools/board_inspection_tool.cpp:727
 #: pcbnew/tools/board_inspection_tool.cpp:757
 msgid "Report incomplete: could not compile custom design rules.  "
-msgstr ""
+msgstr "รายงานไม่สมบูรณ์: ไม่สามารถรวบรวมกฎการออกแบบที่กำหนดเอง  "
 
 #: pcbnew/tools/board_inspection_tool.cpp:254
 #, c-format
 msgid "Resolved clearance: %s."
-msgstr ""
+msgstr "แก้ไขระยะห่าง: %s"
 
 #: pcbnew/tools/board_inspection_tool.cpp:270
 #: pcbnew/tools/board_inspection_tool.cpp:358
 msgid "Clearance Report"
-msgstr ""
+msgstr "รายงานเรื่องระยะห่าง"
 
 #: pcbnew/tools/board_inspection_tool.cpp:284
 #: pcbnew/tools/board_inspection_tool.cpp:499
 msgid "Edge clearance resolution for:"
-msgstr ""
+msgstr "ความละเอียดระยะห่างจากขอบบอร์ดสำหรับ:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:321
 #: pcbnew/tools/board_inspection_tool.cpp:509
 msgid "Clearance resolution for:"
-msgstr ""
+msgstr "ความละเอียดระยะห่างสําหรับ:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:351
 msgid "Select two items for a clearance resolution report."
-msgstr ""
+msgstr "เลือกสองรายการ สำหรับการสร้างรายงานระยะห่าง"
 
 #: pcbnew/tools/board_inspection_tool.cpp:387
 #: pcbnew/tools/board_inspection_tool.cpp:400
 msgid "Cannot generate clearance report on empty group."
-msgstr ""
+msgstr "ไม่สามารถสร้างรายงานระยะห่างสำหรับกลุ่มที่ว่างเปล่า"
 
 #: pcbnew/tools/board_inspection_tool.cpp:444
 msgid "Silkscreen clearance resolution for:"
-msgstr ""
+msgstr "ความละเอียดระยะห่างซิลค์สกรีนสำหรับ:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:458
 #: pcbnew/tools/board_inspection_tool.cpp:479
 msgid "Hole clearance resolution for:"
-msgstr ""
+msgstr "ความละเอียดระยะห่างรูเจาะสำหรับ:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:470
 #: pcbnew/tools/board_inspection_tool.cpp:491
 #, c-format
 msgid "%s not present on layer %s.  No clearance defined."
-msgstr ""
+msgstr "%s ไม่มีในเลเยอร์ %s  ไม่มีระยะห่างกําหนดไว้"
 
 #: pcbnew/tools/board_inspection_tool.cpp:533
 msgid "Items belong to the same net. Clearance is 0."
-msgstr ""
+msgstr "รายการอยู่ในเน็ตเดียวกัน ค่าระยะห่างคือ 0"
 
 #: pcbnew/tools/board_inspection_tool.cpp:558
 msgid "Select an item for a constraints resolution report."
-msgstr ""
+msgstr "เลือกรายการสำหรับรายงานการแก้ไขข้อจำกัด"
 
 #: pcbnew/tools/board_inspection_tool.cpp:565
 msgid "Constraints Report"
-msgstr ""
+msgstr "รายงานข้อจํากัด"
 
 #: pcbnew/tools/board_inspection_tool.cpp:609
 msgid "Track width resolution for:"
-msgstr ""
+msgstr "ความละเอียดความกว้างของแทร็กสําหรับ:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:624
 #: pcbnew/tools/board_inspection_tool.cpp:625
@@ -32453,320 +32480,322 @@ msgstr ""
 #: pcbnew/tools/board_inspection_tool.cpp:698
 #: pcbnew/tools/board_inspection_tool.cpp:736
 msgid "undefined"
-msgstr ""
+msgstr "ไม่ได้กําหนด"
 
 #: pcbnew/tools/board_inspection_tool.cpp:634
 #, c-format
 msgid "Width constraints: min %s max %s."
-msgstr ""
+msgstr "ข้อจำกัดความกว้าง: ต่ำสุด %s สูงสุด %s"
 
 #: pcbnew/tools/board_inspection_tool.cpp:644
 msgid "Via Diameter"
-msgstr ""
+msgstr "เส้นผ่าศูนย์กลางเวีย"
 
 #: pcbnew/tools/board_inspection_tool.cpp:646
 msgid "Via diameter resolution for:"
-msgstr ""
+msgstr "ความละเอียดเส้นผ่านศูนย์กลางเวียสำหรับ:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:672
 #, c-format
 msgid "Diameter constraints: min %s max %s."
-msgstr ""
+msgstr "ข้อจำกัดเส้นผ่าศูนย์กลาง: ต่ำสุด %s สูงสุด %s"
 
 #: pcbnew/tools/board_inspection_tool.cpp:679
 msgid "Via Annular Width"
-msgstr ""
+msgstr "ความกว้างวงแหวนเวีย"
 
 #: pcbnew/tools/board_inspection_tool.cpp:681
 msgid "Via annular width resolution for:"
-msgstr ""
+msgstr "ความละเอียดความกว้างวงแหวนเวียสำหรับ:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:707
 #, c-format
 msgid "Annular width constraints: min %s max %s."
-msgstr ""
+msgstr "ข้อจำกัดความกว้างของวงแหวน: ต่ำสุด %s สูงสุด %s"
 
 #: pcbnew/tools/board_inspection_tool.cpp:718
 msgid "Hole Size"
-msgstr ""
+msgstr "ขนาดรู"
 
 #: pcbnew/tools/board_inspection_tool.cpp:720
 msgid "Hole diameter resolution for:"
-msgstr ""
+msgstr "ความละเอียดเส้นผ่านศูนย์กลางรูสำหรับ:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:742
 #, c-format
 msgid "Hole constraint: min %s."
-msgstr ""
+msgstr "ข้อจำกัดของรู: ขั้นต่ำ %s"
 
 #: pcbnew/tools/board_inspection_tool.cpp:748
 msgid "Keepouts"
-msgstr ""
+msgstr "บริเวณห้าม"
 
 #: pcbnew/tools/board_inspection_tool.cpp:750
 msgid "Keepout resolution for:"
-msgstr ""
+msgstr "ความละเอียดบริเวณห้ามสำหรับ:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:765
 msgid "Report may be incomplete: some footprint courtyards are malformed."
-msgstr ""
+msgstr "รายงานอาจไม่สมบูรณ์: ฟุ้ทพรินท์บางแห่งมีรูปแบบไม่ถูกต้อง"
 
 #: pcbnew/tools/board_inspection_tool.cpp:766
 msgid "Run DRC for a full analysis."
-msgstr ""
+msgstr "เรียกใช้ DRC เพื่อการวิเคราะห์แบบเต็ม"
 
 #: pcbnew/tools/board_inspection_tool.cpp:775
 msgid "Item <b>disallowed</b> at current location."
-msgstr ""
+msgstr "รายการ <b>ไม่อนุญาต</b> ที่ตำแหน่งปัจจุบัน"
 
 #: pcbnew/tools/board_inspection_tool.cpp:777
 msgid "Item allowed at current location."
-msgstr ""
+msgstr "รายการที่อนุญาต ณ ตำแหน่งปัจจุบัน"
 
 #: pcbnew/tools/convert_tool.cpp:197
 msgid "Convert shapes to polygon"
-msgstr ""
+msgstr "แปลงรูปเป็นหลายเหลี่ยม"
 
 #: pcbnew/tools/convert_tool.cpp:233
 msgid "Convert shapes to zone"
-msgstr ""
+msgstr "แปลงรูปร่างเป็นโซน"
 
 #: pcbnew/tools/convert_tool.cpp:586
 msgid "Convert polygons to lines"
-msgstr ""
+msgstr "แปลงรูปหลายเหลี่ยมเป็นลายเส้น"
 
 #: pcbnew/tools/convert_tool.cpp:676
 msgid "Create arc from line segment"
-msgstr ""
+msgstr "สร้างส่วนโค้งจากส่วนของเส้นตรง"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:253
 msgid "Layer Name"
-msgstr ""
+msgstr "ชื่อเลเยอร์"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:267
 msgid "Thickness (mm)"
-msgstr ""
+msgstr "ความหนา (มม.)"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:270
 msgid "Thickness (mils)"
-msgstr ""
+msgstr "ความหนา (มิล)"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:283
 msgid "Loss Tangent"
-msgstr ""
+msgstr "สูญเสียแทนเจนต์"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:351
 msgid "Insert board stackup table"
-msgstr ""
+msgstr "แทรกตารางสแต็กอัพของบอร์ด"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:390
 msgid "BOARD CHARACTERISTICS"
-msgstr ""
+msgstr "คุณลักษณะของบอร์ด"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:406
 msgid "Copper Layer Count: "
-msgstr ""
+msgstr "จำนวนชั้นทองแดง: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:415
 msgid "Board overall dimensions: "
-msgstr ""
+msgstr "ขนาดโดยรวมของบอร์ด: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:425
 msgid "Min track/spacing: "
-msgstr ""
+msgstr "แทร็ก/ระยะห่าง ขั้นต่ำ: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:435
 msgid "Copper Finish: "
-msgstr ""
+msgstr "ทองแดงเสร็จสิ้น: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:443
 msgid "Castellated pads: "
-msgstr ""
+msgstr "แพ็ดคาสเทลเลต: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:451
 msgid "Board Thickness: "
-msgstr ""
+msgstr "ความหนาบอร์ด: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:467
 msgid "Min hole diameter: "
-msgstr ""
+msgstr "เส้นผ่าศูนย์กลางรูต่ำสุด: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:477
 msgid "Impedance Control: "
-msgstr ""
+msgstr "การควบคุมอิมพีแดนซ์: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:485
 msgid "Plated Board Edge: "
-msgstr ""
+msgstr "ชุบขอบบอร์ด: "
 
 #: pcbnew/tools/drawing_tool.cpp:75
 msgid "Select Via Size"
-msgstr ""
+msgstr "เลือกขนาดเวีย"
 
 #: pcbnew/tools/drawing_tool.cpp:279 pcbnew/tools/drawing_tool.cpp:1625
 msgid "Draw a line segment"
-msgstr ""
+msgstr "วาดส่วนของเส้นตรง"
 
 #: pcbnew/tools/drawing_tool.cpp:332 pcbnew/tools/pcb_actions.cpp:94
 msgid "Draw a rectangle"
-msgstr ""
+msgstr "วาดสี่เหลี่ยมผืนผ้า"
 
 #: pcbnew/tools/drawing_tool.cpp:384 pcbnew/tools/pcb_actions.cpp:100
 msgid "Draw a circle"
-msgstr ""
+msgstr "วาดวงกลม"
 
 #: pcbnew/tools/drawing_tool.cpp:432 pcbnew/tools/pcb_actions.cpp:106
 msgid "Draw an arc"
-msgstr ""
+msgstr "วาดส่วนโค้ง"
 
 #: pcbnew/tools/drawing_tool.cpp:633
 msgid "Place a text"
-msgstr ""
+msgstr "วางข้อความ"
 
 #: pcbnew/tools/drawing_tool.cpp:934
 msgid "Draw a leader"
-msgstr ""
+msgstr "วาดเส้นนำ"
 
 #: pcbnew/tools/drawing_tool.cpp:947
 msgid "Draw a dimension"
-msgstr ""
+msgstr "วาดมิติ"
 
 #: pcbnew/tools/drawing_tool.cpp:1154
 msgid "No graphic items found in file."
-msgstr ""
+msgstr "ไม่พบรายการกราฟิกในไฟล์"
 
 #: pcbnew/tools/drawing_tool.cpp:1205 pcbnew/tools/drawing_tool.cpp:1276
 msgid "Place a DXF_SVG drawing"
-msgstr ""
+msgstr "วางเขียนแบบ DXF_SVG"
 
 #: pcbnew/tools/drawing_tool.cpp:1350
 msgid "Move the footprint reference anchor"
-msgstr ""
+msgstr "ย้ายจุดยึดชื่ออ้างอิงฟุ้ทพรินท์"
 
 #: pcbnew/tools/drawing_tool.cpp:2077
 msgid "Self-intersecting polygons are not allowed"
-msgstr ""
+msgstr "ไม่อนุญาตให้ใช้รูปหลายเหลี่ยมที่ตัดกันเอง"
 
 #: pcbnew/tools/drawing_tool.cpp:2571
 msgid "Via location violates DRC."
-msgstr ""
+msgstr "ตำแหน่งเวียละเมิด DRC"
 
 #: pcbnew/tools/drawing_tool.cpp:2674
 msgid "Place via"
-msgstr ""
+msgstr "วางเวีย"
 
 #: pcbnew/tools/drc_tool.cpp:150
 msgid "Refilling all zones..."
-msgstr ""
+msgstr "เติมทุกโซนอีกครั้ง..."
 
 #: pcbnew/tools/drc_tool.cpp:159
 msgid "Schematic parity tests require a fully annotated schematic."
-msgstr ""
+msgstr "การทดสอบความเท่าเทียมวงจร จำเป็นต้องมีคำอธิบายประกอบวงจรครบถ้วน"
 
 #: pcbnew/tools/drc_tool.cpp:207
 msgid "DRC"
-msgstr ""
+msgstr "DRC"
 
 #: pcbnew/tools/edit_tool.cpp:94
 msgid "Special Tools"
-msgstr ""
+msgstr "เครื่องมือพิเศษ"
 
 #: pcbnew/tools/edit_tool.cpp:344
 #, c-format
 msgid "Unable to resize arc tracks %.1f degrees or greater."
-msgstr ""
+msgstr "ไม่สามารถปรับขนาดแทร็กโค้ง %.1f องศาหรือมากกว่าได้"
 
 #: pcbnew/tools/edit_tool.cpp:661
 msgid "Drag Arc Track"
-msgstr ""
+msgstr "ลากแทร็กโค้ง"
 
 #: pcbnew/tools/edit_tool.cpp:797
 msgid "Select reference point for move..."
-msgstr ""
+msgstr "เลือกจุดอ้างอิงสำหรับการย้าย..."
 
 #: pcbnew/tools/edit_tool.cpp:1151
 msgid "Edit track width/via size"
-msgstr ""
+msgstr "แก้ไขความกว้างของแทร็ก/ขนาดเวีย"
 
 #: pcbnew/tools/edit_tool.cpp:1186
 msgid "At least two straight track segments must be selected."
-msgstr ""
+msgstr "ต้องเลือกแทร็กส่วนตรงอย่างน้อยสองส่วน"
 
 #: pcbnew/tools/edit_tool.cpp:1190
 msgid "Enter fillet radius:"
-msgstr ""
+msgstr "ใส่รัศมีพอกมุม:"
 
 #: pcbnew/tools/edit_tool.cpp:1190 pcbnew/tools/edit_tool.cpp:1353
 #: pcbnew/tools/pcb_actions.cpp:316
 msgid "Fillet Tracks"
-msgstr ""
+msgstr "แทร็กพอกมุม"
 
 #: pcbnew/tools/edit_tool.cpp:1200
 msgid ""
 "A radius of zero was entered.\n"
 "The fillet operation was not performed."
 msgstr ""
+"รัศมีศูนย์ถูกป้อน\n"
+"ไม่ดําเนินการพอกมุม"
 
 #: pcbnew/tools/edit_tool.cpp:1360
 msgid "Unable to fillet the selected track segments."
-msgstr ""
+msgstr "ไม่สามารถพอกมุมสำหรับส่วนของแทร็กที่เลือก"
 
 #: pcbnew/tools/edit_tool.cpp:1362
 msgid "Some of the track segments could not be filleted."
-msgstr ""
+msgstr "บางส่วนของแทร็กไม่สามารถพอกมุม"
 
 #: pcbnew/tools/edit_tool.cpp:1689 pcbnew/tools/pcb_actions.cpp:302
 msgid "Change Side / Flip"
-msgstr ""
+msgstr "เปลี่ยน ด้าน/พลิก"
 
 #: pcbnew/tools/edit_tool.cpp:1990
 msgid "Move exact"
-msgstr ""
+msgstr "ย้ายที่แน่นอน"
 
 #: pcbnew/tools/edit_tool.cpp:2132
 #, c-format
 msgid "Duplicated %d item(s)"
-msgstr ""
+msgstr "ซ้ำกัน %d รายการ"
 
 #: pcbnew/tools/edit_tool.cpp:2343
 msgid "Select reference point for the copy..."
-msgstr ""
+msgstr "เลือกจุดอ้างอิงสําหรับสําเนา..."
 
 #: pcbnew/tools/edit_tool.cpp:2344 pcbnew/tools/edit_tool.cpp:2358
 msgid "Selection copied"
-msgstr ""
+msgstr "คัดลอกการเลือกแล้ว"
 
 #: pcbnew/tools/edit_tool.cpp:2345
 msgid "Copy cancelled"
-msgstr ""
+msgstr "ยกเลิกคัดลอกแล้ว"
 
 #: pcbnew/tools/footprint_editor_control.cpp:343
 msgid "_copy"
-msgstr ""
+msgstr "_copy"
 
 #: pcbnew/tools/footprint_editor_control.cpp:586
 msgid "No footprint problems found."
-msgstr ""
+msgstr "ไม่พบปัญหาในฟุ้ทพรินท์"
 
 #: pcbnew/tools/group_tool.cpp:43
 msgid "Grouping"
-msgstr ""
+msgstr "การจัดกลุ่ม"
 
 #: pcbnew/tools/group_tool.cpp:65
 msgid "Group is in inconsistent state:"
-msgstr ""
+msgstr "กลุ่มอยู่ในสถานะไม่คงที่:"
 
 #: pcbnew/tools/group_tool.cpp:148
 msgid "Click on new member..."
-msgstr ""
+msgstr "คลิกสมาชิกใหม่..."
 
 #: pcbnew/tools/pad_tool.cpp:144
 msgid "Paste Pad Properties"
-msgstr ""
+msgstr "วางคุณสมบัติแพ็ด"
 
 #: pcbnew/tools/pad_tool.cpp:260
 msgid "Push Pad Settings"
-msgstr ""
+msgstr "กดดันการตั้งค่าแพ็ด"
 
 #: pcbnew/tools/pad_tool.cpp:308
 #, c-format
@@ -32774,200 +32803,202 @@ msgid ""
 "Click on pad %s%d\n"
 "Press <esc> to cancel or double-click to commit"
 msgstr ""
+"คลิกที่แพ็ด %s%d\n"
+"กด <esc> เพื่อยกเลิกหรือคลิกสองครั้งเพื่อยอมรับ"
 
 #: pcbnew/tools/pad_tool.cpp:336 pcbnew/tools/pad_tool.cpp:434
 msgid "Renumber pads"
-msgstr ""
+msgstr "เรียงหมายเลขแพ็ดใหม่"
 
 #: pcbnew/tools/pad_tool.cpp:518
 msgid "Place pad"
-msgstr ""
+msgstr "วางแพ็ด"
 
 #: pcbnew/tools/pad_tool.cpp:554
 #, c-format
 msgid "Pad Edit Mode.  Press %s again to exit."
-msgstr ""
+msgstr "โหมดแก้ไขแพ็ด  กด %s อีกครั้งเพื่อออก"
 
 #: pcbnew/tools/pad_tool.cpp:559
 #, c-format
 msgid "Pad Edit Mode.  Press %s to exit."
-msgstr ""
+msgstr "โหมดแก้ไขแพ็ด  กด %s เพื่อออก"
 
 #: pcbnew/tools/pad_tool.cpp:625
 msgid "Edit pad shapes"
-msgstr ""
+msgstr "แก้ไขรูปร่างแพ็ด"
 
 #: pcbnew/tools/pad_tool.cpp:732
 msgid "Recombine pads"
-msgstr ""
+msgstr "รวมแพ็ดใหม่"
 
 #: pcbnew/tools/pcb_actions.cpp:49
 msgid "Convert to Polygon"
-msgstr ""
+msgstr "แปลงเป็นรูปหลายเหลี่ยม"
 
 #: pcbnew/tools/pcb_actions.cpp:49
 msgid "Creates a graphic polygon from the selection"
-msgstr ""
+msgstr "สร้างรูปหลายเหลี่ยมกราฟิกจากส่วนที่เลือก"
 
 #: pcbnew/tools/pcb_actions.cpp:54
 msgid "Convert to Zone"
-msgstr ""
+msgstr "แปลงเป็นโซน"
 
 #: pcbnew/tools/pcb_actions.cpp:54
 msgid "Creates a copper zone from the selection"
-msgstr ""
+msgstr "สร้างโซนทองแดงจากส่วนที่เลือก"
 
 #: pcbnew/tools/pcb_actions.cpp:59
 msgid "Convert to Rule Area"
-msgstr ""
+msgstr "แปลงเป็นพื้นที่กฎ"
 
 #: pcbnew/tools/pcb_actions.cpp:59
 msgid "Creates a rule area from the selection"
-msgstr ""
+msgstr "สร้างพื้นที่กฎจากส่วนที่เลือก"
 
 #: pcbnew/tools/pcb_actions.cpp:64
 msgid "Convert to Lines"
-msgstr ""
+msgstr "แปลงเป็นเส้นตรง"
 
 #: pcbnew/tools/pcb_actions.cpp:64
 msgid "Creates graphic lines from the selection"
-msgstr ""
+msgstr "สร้างเส้นตรงกราฟิกจากสิ่งที่เลือก"
 
 #: pcbnew/tools/pcb_actions.cpp:69
 msgid "Convert to Arc"
-msgstr ""
+msgstr "แปลงเป็นส่วนโค้ง"
 
 #: pcbnew/tools/pcb_actions.cpp:69
 msgid "Converts selected line segment to an arc"
-msgstr ""
+msgstr "แปลงส่วนของเส้นตรงที่เลือกเป็นส่วนโค้ง"
 
 #: pcbnew/tools/pcb_actions.cpp:74
 msgid "Convert to Tracks"
-msgstr ""
+msgstr "แปลงเป็นแทร็ก"
 
 #: pcbnew/tools/pcb_actions.cpp:74
 msgid "Converts selected graphic lines to tracks"
-msgstr ""
+msgstr "แปลงเส้นกราฟิกที่เลือกเป็นแทร็ก"
 
 #: pcbnew/tools/pcb_actions.cpp:83
 msgid "Draw Line"
-msgstr ""
+msgstr "วาดเส้น"
 
 #: pcbnew/tools/pcb_actions.cpp:83
 msgid "Draw a line"
-msgstr ""
+msgstr "การวาดเส้น"
 
 #: pcbnew/tools/pcb_actions.cpp:89
 msgid "Draw Graphic Polygon"
-msgstr ""
+msgstr "วาดรูปหลายเหลี่ยมกราฟิก"
 
 #: pcbnew/tools/pcb_actions.cpp:89
 msgid "Draw a graphic polygon"
-msgstr ""
+msgstr "วาดรูปหลายเหลี่ยมกราฟิก"
 
 #: pcbnew/tools/pcb_actions.cpp:94
 msgid "Draw Rectangle"
-msgstr ""
+msgstr "วาดรูปสี่เหลี่ยมผืนผ้า"
 
 #: pcbnew/tools/pcb_actions.cpp:100
 msgid "Draw Circle"
-msgstr ""
+msgstr "วาดวงกลม"
 
 #: pcbnew/tools/pcb_actions.cpp:106
 msgid "Draw Arc"
-msgstr ""
+msgstr "วาดส่วนโค้ง"
 
 #: pcbnew/tools/pcb_actions.cpp:111
 msgid "Add Board Characteristics"
-msgstr ""
+msgstr "เพิ่มคุณสมบัติของบอร์ด"
 
 #: pcbnew/tools/pcb_actions.cpp:112
 msgid "Add a board characteristics table on a graphic layer"
-msgstr ""
+msgstr "เพิ่มตารางลักษณะของบอร์ดบนเลเยอร์กราฟิก"
 
 #: pcbnew/tools/pcb_actions.cpp:117
 msgid "Add Stackup Table"
-msgstr ""
+msgstr "เพิ่มตารางสแต็กอัพ"
 
 #: pcbnew/tools/pcb_actions.cpp:118
 msgid "Add a board stackup table on a graphic layer"
-msgstr ""
+msgstr "เพิ่มตารางบอร์ดสแต็กอัพบนเลเยอร์กราฟิก"
 
 #: pcbnew/tools/pcb_actions.cpp:130
 msgid "Add Aligned Dimension"
-msgstr ""
+msgstr "เพิ่มมิติที่สอดคล้อง"
 
 #: pcbnew/tools/pcb_actions.cpp:130
 msgid "Add an aligned linear dimension"
-msgstr ""
+msgstr "เพิ่มมิติเชิงเส้นตรง"
 
 #: pcbnew/tools/pcb_actions.cpp:135
 msgid "Add Center Dimension"
-msgstr ""
+msgstr "เพิ่มแสดงขนาดกึ่งกลาง"
 
 #: pcbnew/tools/pcb_actions.cpp:135
 msgid "Add a center dimension"
-msgstr ""
+msgstr "เพิ่มแสดงขนาดกึ่งกลาง"
 
 #: pcbnew/tools/pcb_actions.cpp:140
 msgid "Add Orthogonal Dimension"
-msgstr ""
+msgstr "เพิ่มแสดงขนาดมุมฉาก"
 
 #: pcbnew/tools/pcb_actions.cpp:140
 msgid "Add an orthogonal dimension"
-msgstr ""
+msgstr "เพิ่มแสดงขนาดมุมฉาก"
 
 #: pcbnew/tools/pcb_actions.cpp:145
 msgid "Add Leader"
-msgstr ""
+msgstr "เพิ่มเส้นนำ"
 
 #: pcbnew/tools/pcb_actions.cpp:145
 msgid "Add a leader dimension"
-msgstr ""
+msgstr "เพิ่มเส้นนำแสดงขนาด"
 
 #: pcbnew/tools/pcb_actions.cpp:156
 msgid "Add Filled Zone"
-msgstr ""
+msgstr "เพิ่มโซนเติมเต็ม"
 
 #: pcbnew/tools/pcb_actions.cpp:156
 msgid "Add a filled zone"
-msgstr ""
+msgstr "เพิ่มโซนเติมเต็ม"
 
 #: pcbnew/tools/pcb_actions.cpp:162
 msgid "Add Vias"
-msgstr ""
+msgstr "เพิ่มเวีย"
 
 #: pcbnew/tools/pcb_actions.cpp:162
 msgid "Add free-standing vias"
-msgstr ""
+msgstr "เพิ่มเวียชนิดยืนอิสระ"
 
 #: pcbnew/tools/pcb_actions.cpp:168
 msgid "Add Rule Area"
-msgstr ""
+msgstr "เพิ่มพื้นที่กฎ"
 
 #: pcbnew/tools/pcb_actions.cpp:168
 msgid "Add a rule area (keepout)"
-msgstr ""
+msgstr "เพิ่มพื้นที่กฎ (บริเวณห้าม)"
 
 #: pcbnew/tools/pcb_actions.cpp:174
 msgid "Add a Zone Cutout"
-msgstr ""
+msgstr "เพิ่มบริเวณตัดออกของโซน"
 
 #: pcbnew/tools/pcb_actions.cpp:174
 msgid "Add a cutout area of an existing zone"
-msgstr ""
+msgstr "เพิ่มบริเวณตัดออกไปบนโซนที่มีอยู่แล้ว"
 
 #: pcbnew/tools/pcb_actions.cpp:180
 msgid "Add a Similar Zone"
-msgstr ""
+msgstr "เพิ่มโซนที่คล้ายกัน"
 
 #: pcbnew/tools/pcb_actions.cpp:180
 msgid "Add a zone with the same settings as an existing zone"
-msgstr ""
+msgstr "เพิ่มโซนด้วยการตั้งค่าเดียวกันกับโซนที่มีอยู่"
 
 #: pcbnew/tools/pcb_actions.cpp:186
 msgid "Import Graphics..."
-msgstr ""
+msgstr "นําเข้ากราฟิก..."
 
 #: pcbnew/tools/pcb_actions.cpp:186
 msgid "Import 2D drawing file"
