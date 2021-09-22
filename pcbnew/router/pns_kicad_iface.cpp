@@ -623,7 +623,7 @@ int PNS_PCBNEW_RULE_RESOLVER::matchDpSuffix( const wxString& aNetName, wxString&
         }
     }
 
-    if( rv != 0 && count > 1 )
+    if( rv != 0 && count >= 1 )
     {
         aComplementNet = aNetName.Left( aNetName.length() - count ) + aComplementNet
                 + aNetName.Right( count - 1 );
