@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-01 11:31-0700\n"
-"PO-Revision-Date: 2021-09-20 16:15+0000\n"
+"PO-Revision-Date: 2021-09-22 03:04+0000\n"
 "Last-Translator: boonchai k. <kicadthai@gmail.com>\n"
 "Language-Team: Thai <https://hosted.weblate.org/projects/kicad/master-source/"
 "th/>\n"
@@ -31180,12 +31180,12 @@ msgstr "ขนาดแถวไม่ถูกต้องในแถว J %zu
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:294
 msgid "Could not find units value, defaulting to mils."
-msgstr ""
+msgstr "ไม่พบค่าหน่วย ค่าเริ่มต้นเป็นมิล"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:319
 #, c-format
 msgid "Could not find column label %s."
-msgstr ""
+msgstr "ไม่พบป้ายชื่อคอลัมน์ %s"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:363
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:446
@@ -31199,159 +31199,159 @@ msgstr ""
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1735
 #, c-format
 msgid "Invalid row size in row %zu. Expecting %zu elements but found %zu."
-msgstr ""
+msgstr "ขนาดแถวไม่ถูกต้อง %zu คาดหวังองค์ประกอบ %zu แต่พบ %zu"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:498
 #, c-format
 msgid "Expecting drill size value but found %s!%s!%s in row %zu."
-msgstr ""
+msgstr "ต้องการขนาดดอกสว่าน แต่พบ %s!%s!%s ในแถว %zu."
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:546
 #, c-format
 msgid "Expecting pad size values but found %s : %s in row %zu."
-msgstr ""
+msgstr "ต้องการค่าขนาดแพ็ด แต่พบ %s : %s ในแถว %zu"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:568
 #, c-format
 msgid "Invalid pad size in row %zu."
-msgstr ""
+msgstr "ขนาดแพ็ดในแถว %zu ไม่ถูกต้อง"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:603
 #, c-format
 msgid "Expecting pad offset values but found %s:%s in row %zu."
-msgstr ""
+msgstr "ต้องการค่าออฟเซ็ตของแพ็ด แต่พบ %s:%s ในแถว %zu"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:648
 #, c-format
 msgid "Unknown pad shape name '%s' on layer '%s' in row %zu."
-msgstr ""
+msgstr "ไม่รู้จักชื่อรูปร่างแพ็ด '%s' บนเลเยอร์ '%s' ในแถว %zu"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:970
 #, c-format
 msgid "Invalid format for id string '%s' in custom pad row %zu."
-msgstr ""
+msgstr "รูปแบบไม่ถูกต้องสำหรับข้อความรหัส '%s' ในแถวของแพ็ดที่กำหนดเอง %zu"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1011
 #, c-format
 msgid "Could not insert graphical item %d into padstack '%s'."
-msgstr ""
+msgstr "ไม่สามารถแทรกรายการกราฟิก %d ลงในแพ็ดสแต็ก '%s' ได้"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1018
 #, c-format
 msgid "Unrecognized pad shape primitive '%s' in row %zu."
-msgstr ""
+msgstr "ไม่รู้จักรูปร่างแพ็ดดั้งเดิม '%s' ในแถว %zu"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1125
 #, c-format
 msgid "Invalid token count. Expected 8 but found %zu."
-msgstr ""
+msgstr "จํานวนโทเค็นไม่ถูกต้อง ต้องการ 8 แต่พบ %zu"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1260
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1449
 #, c-format
 msgid "Invalid format for record_tag string '%s' in row %zu."
-msgstr ""
+msgstr "รูปแบบไม่ถูกต้องสําหรับข้อความ record_tag '%s' ในแถว %zu"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1420
 #, c-format
 msgid "Invalid row size in row %zu.  Expecting %zu elements but found %zu."
-msgstr ""
+msgstr "ขนาดแถวไม่ถูกต้อง %zu คาดหวังองค์ประกอบ %zu แต่พบ %zu"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1459
 #, c-format
 msgid "Unhandled graphic item '%s' in row %zu."
-msgstr ""
+msgstr "รายการกราฟิกที่ไม่รองรับ '%s' ในแถว %zu."
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1490
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1505
 #, c-format
 msgid "Duplicate item for ID %d and sequence %d in row %zu."
-msgstr ""
+msgstr "รายการซ้ำสำหรับไอดี %d และลำดับ %d ในแถว %zu"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:2318
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:2347
 #, c-format
 msgid "Invalid custom pad '%s'. Replacing with circular pad."
-msgstr ""
+msgstr "แพ็ดชนิดกําหนดเอง '%s' ไม่ถูกต้อง แทนที่ด้วยแพ็ดวงกลม"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:2355
 #, c-format
 msgid "Could not find custom pad '%s'."
-msgstr ""
+msgstr "ไม่พบแพ็ดกำหนดเอง '%s'"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:2555
 #, c-format
 msgid "Expecting etch data to be on copper layer. Row found on layer '%s'"
-msgstr ""
+msgstr "คาดหวังข้อมูลการแกะสลักจะอยู่บนชั้นทองแดง แถวที่พบในเลเยอร์ '%s'"
 
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:91
 #, c-format
 msgid "Cannot convert '%s' to an integer."
-msgstr ""
+msgstr "ไม่สามารถแปลง '%s' เป็นจํานวนเต็ม"
 
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:229
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:877
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:242
 #, c-format
 msgid "Footprint library '%s' not found."
-msgstr ""
+msgstr "ไม่พบไลบรารีฟุ้ทพรินท์ '%s'"
 
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:283
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:298
 #, c-format
 msgid "Library '%s' has no footprint '%s'."
-msgstr ""
+msgstr "ไลบรารี '%s' ไม่มีฟุ้ทพรินท์ '%s'"
 
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:347
 #: pcbnew/plugins/kicad/pcb_parser.cpp:573
 #: pcbnew/plugins/kicad/pcb_parser.cpp:739
 #, c-format
 msgid "Unknown token '%s'"
-msgstr ""
+msgstr "โทเค็นที่ไม่รู้จัก '%s'"
 
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:354
 #, c-format
 msgid "Element token contains %d parameters."
-msgstr ""
+msgstr "โทเค็นองค์ประกอบมีพารามิเตอร์ %d"
 
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:982
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:2533
 #, c-format
 msgid "Insufficient permissions to delete folder '%s'."
-msgstr ""
+msgstr "มีสิทธิ์ไม่เพียงพอที่จะลบโฟลเดอร์ '%s'"
 
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:990
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:2541
 #, c-format
 msgid "Library folder '%s' has unexpected sub-folders."
-msgstr ""
+msgstr "โฟลเดอร์ไลบรารี '%s' มีโฟลเดอร์ย่อยที่ไม่คาดคิด"
 
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:1009
 #, c-format
 msgid "Unexpected file '%s' found in library '%s'."
-msgstr ""
+msgstr "พบไฟล์ที่ไม่คาดคิด '%s' ในไลบรารี '%s'"
 
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:1028
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:2578
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:3405
 #, c-format
 msgid "Footprint library '%s' cannot be deleted."
-msgstr ""
+msgstr "ไม่สามารถลบไลบรารีฟุ้ทพรินท์ '%s'"
 
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:172
 #, c-format
 msgid "Cannot create footprint library '%s'."
-msgstr ""
+msgstr "ไม่สามารถสร้างไลบรารีฟุ้ทพรินท์ '%s'"
 
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:178
 #, c-format
 msgid "Footprint library '%s' is read only."
-msgstr ""
+msgstr "ไลบรารีฟุ้ทพรินท์ '%s' เป็นแบบอ่านอย่างเดียว"
 
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:216
 #, c-format
 msgid "Cannot rename temporary file '%s' to '%s'"
-msgstr ""
+msgstr "ไม่สามารถเปลี่ยนชื่อแฟ้มชั่วคราว '%s' เป็น '%s'"
 
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:342
 #, c-format
@@ -31360,37 +31360,40 @@ msgid ""
 "\n"
 "Save anyway?"
 msgstr ""
+"โปรดรายงานข้อผิดพลาดนี้ เกิดข้อผิดพลาดในการตรวจสอบโครงสร้างกลุ่ม: %s\n"
+"\n"
+"บันทึกหรือไม่?"
 
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:344
 msgid "Internal group data structure corrupt"
-msgstr ""
+msgstr "โครงสร้างข้อมูลกลุ่มภายในเสียหาย"
 
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:346
 msgid "Save Anyway"
-msgstr ""
+msgstr "บันทึกต่อไป"
 
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:1325
 #, c-format
 msgid "unknown pad type: %d"
-msgstr ""
+msgstr "แพ็ดที่ไม่รู้จัก: %d"
 
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:1792
 #, c-format
 msgid "unknown via type %d"
-msgstr ""
+msgstr "เวียที่ไม่รู้จัก %d"
 
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:1981
 #, c-format
 msgid "unknown zone corner smoothing type %d"
-msgstr ""
+msgstr "ประเภทการปรับมุมโซนที่ไม่รู้จัก %d"
 
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:2202
 msgid "Open cancelled by user."
-msgstr ""
+msgstr "การเปิดถูกยกเลิกโดยผู้ใช้"
 
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:2251
 msgid "This file does not contain a PCB."
-msgstr ""
+msgstr "ไฟล์นี้ไม่มีพีซีบอร์ด"
 
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:2401
 #, c-format
@@ -31398,30 +31401,32 @@ msgid ""
 "Library '%s' does not exist.\n"
 "Would you like to create it?"
 msgstr ""
+"ไลบรารี '%s' ไม่มีอยู่\n"
+"คุณต้องการสร้างหรือไม่?"
 
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:2405
 msgid "Library Not Found"
-msgstr ""
+msgstr "ไม่พบไลบรารี"
 
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:2431
 #, c-format
 msgid "Footprint file name '%s' is not valid."
-msgstr ""
+msgstr "ชื่อไฟล์ฟุ้ทพรินท์ '%s' ไม่ถูกต้อง"
 
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:2437
 #, c-format
 msgid "Insufficient permissions to delete '%s'."
-msgstr ""
+msgstr "ไม่มีสิทธิเพียงพอสำหรับการลบ '%s'"
 
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:2508
 #, c-format
 msgid "Cannot overwrite library path '%s'."
-msgstr ""
+msgstr "ไม่สามารถเขียนทับเส้นทางไลบรารี '%s'"
 
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:2560
 #, c-format
 msgid "Unexpected file '%s' found in library path '%s'."
-msgstr ""
+msgstr "ไฟล์ที่ไม่คาดคิด '%s' พบในเส้นทางไลบรารี '%s'"
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:174
 #, c-format
@@ -31431,6 +31436,10 @@ msgid ""
 "line: %d\n"
 "offset: %d"
 msgstr ""
+"หมายเลขทศนิยมไม่ถูกต้องใน\n"
+"ไฟล์: '%s'\n"
+"บรรทัด: %d\n"
+"ออฟเซ็ต: %d"
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:183
 #, c-format
@@ -31440,41 +31449,47 @@ msgid ""
 "line: %d\n"
 "offset: %d"
 msgstr ""
+"ไม่มีเลขทศนิยมใน\n"
+"ไฟล์: '%s'\n"
+"บรรทัด: %d\n"
+"ออฟเซ็ต: %d"
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:257
 #, c-format
 msgid "Cannot interpret date code %d"
-msgstr ""
+msgstr "ไม่สามารถแปลรหัสวันที่ %d"
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:753
 msgid ""
 "Items found on undefined layers.  Do you wish to\n"
 "rescue them to the User.Comments layer?"
 msgstr ""
+"พบรายการในเลเยอร์ที่ไม่กำหนด คุณต้องการที่จะ\n"
+"ช่วยชีวิตพวกเขาไปในเลเยอร์ User.Comments?"
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:755
 msgid "Undefined layers:"
-msgstr ""
+msgstr "เลเยอร์ที่ไม่ได้กำหนด:"
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:1010
 #, c-format
 msgid "Page type '%s' is not valid."
-msgstr ""
+msgstr "ประเภทหน้า '%s' ไม่ถูกต้อง"
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:1541
 #, c-format
 msgid "Layer '%s' in file '%s' at line %d is not in fixed layer hash."
-msgstr ""
+msgstr "เลเยอร์ '%s' ในไฟล์ '%s' ที่บรรทัด %d ไม่ได้อยู่คงที่ในเลเยอร์"
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:1579
 #, c-format
 msgid "%d is not a valid layer count"
-msgstr ""
+msgstr "%d ไม่ใช่การนับเลเยอร์ที่ถูกต้อง"
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:2221
 #, c-format
 msgid "Duplicate NETCLASS name '%s' in file '%s' at line %d, offset %d."
-msgstr ""
+msgstr "ชื่อ NETCLASS ซ้ำ '%s' ในไฟล์ '%s' ที่บรรทัด %d ออฟเซ็ต %d"
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:3068
 #, c-format
@@ -31484,11 +31499,15 @@ msgid ""
 "line: %d\n"
 "offset: %d."
 msgstr ""
+"รหัสฟุ้ทพรินท์ไม่ถูกต้องใน\n"
+"ไฟล์: '%s'\n"
+"บรรทัด: %d\n"
+"ออฟเซต: %d"
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:3402
 #, c-format
 msgid "Cannot handle footprint text type %s"
-msgstr ""
+msgstr "ไม่สามารถจัดการประเภทข้อความของฟุ้ทพรินท์ %s"
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:3997
 #, c-format
@@ -31497,6 +31516,9 @@ msgid ""
 "file: %s\n"
 "line: %d offset: %d"
 msgstr ""
+"รหัสเน็ตไม่ถูกต้องใน\n"
+"ไฟล์: %s\n"
+"บรรทัด: %d ออฟเซ็ต: %d"
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:4018
 #, c-format
@@ -31505,6 +31527,9 @@ msgid ""
 "file: %s\n"
 "line: %d offset: %d"
 msgstr ""
+"ชื่อเน็ตไม่ตรงกับไอดีใน\n"
+"ไฟล์: %s\n"
+"บรรทัด: %d ออฟเซ็ต: %d"
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:4470
 #: pcbnew/plugins/kicad/pcb_parser.cpp:4550
@@ -31515,6 +31540,10 @@ msgid ""
 "line: %d\n"
 "offset: %d."
 msgstr ""
+"รหัสเน็ตไม่ถูกต้องใน\n"
+"ไฟล์: %s\n"
+"บรรทัด: %d\n"
+"ออฟเซ็ต: %d"
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:4644
 #, c-format
@@ -31524,6 +31553,10 @@ msgid ""
 "line: %d\n"
 "offset: %d"
 msgstr ""
+"เน็ตไอดีไม่ถูกต้องใน\n"
+"ไฟล์: %s\n"
+"บรรทัด: %d\n"
+"ออฟเซ็ต: %d"
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:4754
 #, c-format
@@ -31533,6 +31566,10 @@ msgid ""
 "line: %d\n"
 "offset: %d."
 msgstr ""
+"รหัสเน็ทไม่ถูกต้องใน\n"
+" ไฟล์: '%s;\n"
+"บรรทัด: %d\n"
+"ออฟเซ็ต: %d"
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:4872
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:2630
@@ -31540,57 +31577,59 @@ msgid ""
 "The legacy segment fill mode is no longer supported.\n"
 "Convert zones to polygon fills?"
 msgstr ""
+"โหมดการเติมเซ็กเมนต์ดั้งเดิมไม่ได้รับการสนับสนุนอีกต่อไป\n"
+"จะแปลงโซนเป็นการเติมรูปหลายเหลี่ยมหรือไม่?"
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:4874
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:2632
 msgid "Legacy Zone Warning"
-msgstr ""
+msgstr "คําเตือนโซนดั้งเดิม"
 
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:596
 #, c-format
 msgid "File '%s' has an unrecognized version: %d."
-msgstr ""
+msgstr "ไฟล์ '%s' มีเวอร์ชันที่ไม่รู้จัก: %d"
 
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:750
 #, c-format
 msgid "Unknown sheet type '%s' on line: %d."
-msgstr ""
+msgstr "ชนิดแผ่นงานที่ไม่รู้จัก '%s' ในบรรทัด: %d"
 
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:1430
 #, c-format
 msgid "Missing '$EndMODULE' for MODULE '%s'."
-msgstr ""
+msgstr "ไม่พบ '$EndMODULE' สำหรับโมดูล '%s'"
 
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:1480
 #, c-format
 msgid "Unknown padshape '%c=0x%02x' on line: %d of footprint: '%s'."
-msgstr ""
+msgstr "รูปร่างแพ็ดที่ไม่รู้จัก '%c=0x%02x' ในบรรทัด: %d ของฟุ้ทพรินท์: '%s'"
 
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:1685
 #, c-format
 msgid "Unknown FP_SHAPE type:'%c=0x%02x' on line %d of footprint '%s'."
-msgstr ""
+msgstr "ประเภท FP_SHAPE ที่ไม่รู้จัก:'%c=0x%02x' ในบรรทัด %d ของฟุ้ทพรินท์ '%s'"
 
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:2466
 #, c-format
 msgid "Duplicate NETCLASS name '%s'."
-msgstr ""
+msgstr "ชื่อ NETCLASS ซ้ํากัน '%s'"
 
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:2545
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:2556
 #, c-format
 msgid "Bad ZAux for CZONE_CONTAINER \"%s\""
-msgstr ""
+msgstr "Zaux ไม่ถูกต้องสำหรับ CZONE_CONTAINER \"%s\""
 
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:2574
 #, c-format
 msgid "Bad ZSmoothing for CZONE_CONTAINER \"%s\""
-msgstr ""
+msgstr "ZSmoothing ไม่ถูกต้องสำหรับ CZONE_CONTAINER \"%s\""
 
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:2669
 #, c-format
 msgid "Bad ZClearance padoption for CZONE_CONTAINER \"%s\""
-msgstr ""
+msgstr "ทางเลือกแพ็ด ZClearance ไม่ถูกต้องสำหรับ CZONE_CONTAINER \"%s\""
 
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:2983
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:3022
@@ -31599,6 +31638,8 @@ msgid ""
 "Invalid floating point number in file: '%s'\n"
 "line: %d, offset: %d"
 msgstr ""
+"เลขทศนิยมในไฟล์ไม่ถูกต้อง: '%s'\n"
+"บรรทัด: %d, ออฟเซ็ต: %d"
 
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:2993
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:3032
