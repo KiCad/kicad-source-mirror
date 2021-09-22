@@ -4,10 +4,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-09-20 11:57-0700\n"
-"PO-Revision-Date: 2021-09-20 16:14+0000\n"
+"PO-Revision-Date: 2021-09-22 15:26+0000\n"
 "Last-Translator: Arnau Llovet Vidal <arnaullv@gmail.com>\n"
-"Language-Team: Catalan <https://hosted.weblate.org/projects/kicad/master-"
-"source/ca/>\n"
+"Language-Team: Catalan <https://hosted.weblate.org/projects/kicad/"
+"master-source/ca/>\n"
 "Language: ca\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -3585,9 +3585,8 @@ msgid "Wire Thickness"
 msgstr "Gruix del Fil"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:51
-#, fuzzy
 msgid "Bus Thickness"
-msgstr "Gruix del bus:"
+msgstr "Gruix del bus"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:53 eeschema/sch_line.cpp:893
 #, fuzzy
@@ -4633,14 +4632,14 @@ msgstr ""
 #: common/fp_lib_table.cpp:492
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:107
 #: eeschema/symbol_lib_table.cpp:507
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot create global library table path '%s'."
-msgstr "No es pot crear el camí a la biblioteca d'empremtes «%s»"
+msgstr "No es pot crear el camí a la taula global de biblioteques '%s'."
 
 #: common/gestfich.cpp:153
-#, fuzzy, c-format
+#, c-format
 msgid "Command '%s' could not be found."
-msgstr "No s'ha trobat l'ordre <%s>"
+msgstr "No s'ha trobat l'ordre '%s'."
 
 #: common/gestfich.cpp:213
 #, c-format
@@ -4650,9 +4649,9 @@ msgid ""
 msgstr ""
 
 #: common/gestfich.cpp:220
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to find a PDF viewer for '%s'."
-msgstr "No es pot trobar un visualitzador PDF per «%s»"
+msgstr "No es pot trobar un visualitzador PDF per '%s'."
 
 #: common/gestfich.cpp:314
 #, c-format
@@ -4791,9 +4790,9 @@ msgid "Gestures"
 msgstr "Gestos"
 
 #: common/kiway.cpp:256
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to load kiface library '%s'."
-msgstr "No s'ha pogut crear el fitxer de la biblioteca de components «%s»"
+msgstr "No s'ha pogut carregar la biblioteca kiface '%s'."
 
 #: common/kiway.cpp:264
 #, c-format
@@ -5423,9 +5422,8 @@ msgid "Type mismatch between %lf and '%s'"
 msgstr ""
 
 #: common/pgm_base.cpp:165
-#, fuzzy
 msgid "No default editor found, you must choose one."
-msgstr "No s'ha trobat cap editor de text predeterminat, heu de triar-ne un"
+msgstr "No s'ha trobat cap editor de text predeterminat, has de triar-ne un."
 
 #: common/pgm_base.cpp:185 common/pgm_base.cpp:187
 msgid "Executable file"
@@ -5460,14 +5458,14 @@ msgid "Unit '%s' does not end with 'mil'."
 msgstr ""
 
 #: common/plugins/altium/altium_parser.cpp:255
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot convert '%s' to double."
-msgstr "No es pot convertir «%s» a un enter"
+msgstr "No es pot convertir '%s' a double."
 
 #: common/plugins/cadstar/cadstar_archive_parser.cpp:2334
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot open file '%s'"
-msgstr "No es pot copiar el fitxer «%s»."
+msgstr "No es pot obrir el fitxer '%s'"
 
 #: common/plugins/cadstar/cadstar_archive_parser.cpp:2349
 #: common/plugins/cadstar/cadstar_archive_parser.cpp:2648
@@ -5596,7 +5594,7 @@ msgstr "S'ha creat el fitxer Zip '%s' (%s sense comprimir, %s comprimit)."
 
 #: common/rc_item.cpp:353
 msgid "Excluded "
-msgstr ""
+msgstr "Exclòs "
 
 #: common/rc_item.cpp:357
 msgid "Error: "
@@ -5624,19 +5622,16 @@ msgid "OUTPUTSTREAM_OUTPUTFORMATTER write error"
 msgstr "Error d'escriptura OUTPUTSTREAM_OUTPUTFORMATTER"
 
 #: common/settings/color_settings.cpp:332
-#, fuzzy
 msgid "(Footprints)"
-msgstr "Empremtes"
+msgstr "(Empremtes)"
 
 #: common/settings/color_settings.cpp:384
-#, fuzzy
 msgid "KiCad Default"
-msgstr "Predeterminat"
+msgstr "Per defecte de KiCad"
 
 #: common/settings/color_settings.cpp:389
-#, fuzzy
 msgid "KiCad Classic"
-msgstr "2 capes"
+msgstr "Clàssic de KiCad"
 
 #: common/template_fieldnames.cpp:72 eeschema/sch_sheet.cpp:59
 #, c-format
@@ -5654,9 +5649,8 @@ msgid "Quit %s"
 msgstr "Surt %s"
 
 #: common/tool/actions.cpp:43
-#, fuzzy
 msgid "New..."
-msgstr "&Nou"
+msgstr "Nou..."
 
 #: common/tool/actions.cpp:43
 #, fuzzy
@@ -5664,9 +5658,8 @@ msgid "Create a new document in the editor"
 msgstr "Crea un nou directori"
 
 #: common/tool/actions.cpp:49
-#, fuzzy
 msgid "New Library..."
-msgstr "Nova biblioteca"
+msgstr "Nova biblioteca..."
 
 #: common/tool/actions.cpp:49
 #, fuzzy
@@ -5674,35 +5667,29 @@ msgid "Create a new library folder"
 msgstr "Crea una placa nova"
 
 #: common/tool/actions.cpp:55
-#, fuzzy
 msgid "Add Library..."
-msgstr "Annexa la biblioteca"
+msgstr "Afegeix biblioteca..."
 
 #: common/tool/actions.cpp:55
-#, fuzzy
 msgid "Add an existing library folder"
-msgstr "Obre una placa existent"
+msgstr "Obre una carpeta de biblioteques existent"
 
 #: common/tool/actions.cpp:61 eeschema/sim/sim_plot_frame_base.cpp:25
-#, fuzzy
 msgid "Open..."
-msgstr "&Obre..."
+msgstr "Obre..."
 
 #: common/tool/actions.cpp:61
-#, fuzzy
 msgid "Open existing document"
-msgstr "Obre un projecte existent"
+msgstr "Obre un document existent"
 
 #: common/tool/actions.cpp:67
-#, fuzzy
 msgid "Save changes"
-msgstr "Reverteix els canvis"
+msgstr "Desa els canvis"
 
 #: common/tool/actions.cpp:73 eeschema/sim/sim_plot_frame_base.cpp:33
 #: eeschema/tools/ee_actions.cpp:138
-#, fuzzy
 msgid "Save As..."
-msgstr "Anomena i &desa"
+msgstr "Desa com a..."
 
 #: common/tool/actions.cpp:73
 #, fuzzy
@@ -5720,9 +5707,8 @@ msgid "Save a copy of the current document to another location"
 msgstr "Desa una còpia de la placa actual"
 
 #: common/tool/actions.cpp:85
-#, fuzzy
 msgid "Save All"
-msgstr "Anomena i desa"
+msgstr "Desa-ho tot"
 
 #: common/tool/actions.cpp:85
 #, fuzzy
@@ -5744,14 +5730,12 @@ msgid "Settings for paper size and title block info"
 msgstr "Ajusts de la pàgina per a mida del paper i dels texts"
 
 #: common/tool/actions.cpp:102 kicad/project_tree_pane.cpp:806
-#, fuzzy
 msgid "Print..."
-msgstr "Im&primeix..."
+msgstr "Imprimeix..."
 
 #: common/tool/actions.cpp:108
-#, fuzzy
 msgid "Plot..."
-msgstr "P&loteja"
+msgstr "Ploteja..."
 
 #: common/tool/actions.cpp:108 pcbnew/dialogs/dialog_plot.cpp:68
 #: pcbnew/dialogs/dialog_plot_base.h:153
