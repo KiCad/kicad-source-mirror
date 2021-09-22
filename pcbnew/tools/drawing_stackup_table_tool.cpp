@@ -272,6 +272,9 @@ std::vector<BOARD_ITEM*> DRAWING_TOOL::DrawSpecificationStackup( const wxPoint& 
         t->SetText( _( "Thickness (mm)" ) );
 
     else if( m_frame->GetUserUnits() == EDA_UNITS::INCHES )
+        t->SetText( _( "Thickness (inches)" ) );
+
+    else if( m_frame->GetUserUnits() == EDA_UNITS::MILS )
         t->SetText( _( "Thickness (mils)" ) );
 
     colThickness.push_back( t );
