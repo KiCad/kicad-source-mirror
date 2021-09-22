@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-01 11:31-0700\n"
-"PO-Revision-Date: 2021-09-22 15:26+0000\n"
+"PO-Revision-Date: 2021-09-22 18:59+0000\n"
 "Last-Translator: boonchai k. <kicadthai@gmail.com>\n"
 "Language-Team: Thai <https://hosted.weblate.org/projects/kicad/master-source/"
 "th/>\n"
@@ -33002,63 +33002,63 @@ msgstr "นําเข้ากราฟิก..."
 
 #: pcbnew/tools/pcb_actions.cpp:186
 msgid "Import 2D drawing file"
-msgstr ""
+msgstr "นำเข้าไฟล์เขียนแบบ 2 มิติ"
 
 #: pcbnew/tools/pcb_actions.cpp:192
 msgid "Place the Footprint Anchor"
-msgstr ""
+msgstr "วางจุดยึดฟุ้ทพรินท์"
 
 #: pcbnew/tools/pcb_actions.cpp:192
 msgid "Set the coordinate origin point (anchor) of the footprint"
-msgstr ""
+msgstr "ตั้งค่าจุดกําเนิดพิกัด (จุดยึด) ของฟุ้ทพรินท์"
 
 #: pcbnew/tools/pcb_actions.cpp:198
 msgid "Increase Line Width"
-msgstr ""
+msgstr "เพิ่มความกว้างเส้นตรง"
 
 #: pcbnew/tools/pcb_actions.cpp:198
 msgid "Increase the line width"
-msgstr ""
+msgstr "เพิ่มความกว้างเส้นตรง"
 
 #: pcbnew/tools/pcb_actions.cpp:203
 msgid "Decrease Line Width"
-msgstr ""
+msgstr "ลดความกว้างเส้นตรง"
 
 #: pcbnew/tools/pcb_actions.cpp:203
 msgid "Decrease the line width"
-msgstr ""
+msgstr "ลดความกว้างเส้นตรง"
 
 #: pcbnew/tools/pcb_actions.cpp:208
 msgid "Switch Arc Posture"
-msgstr ""
+msgstr "สลับท่าทางเส้นโค้ง"
 
 #: pcbnew/tools/pcb_actions.cpp:208
 msgid "Switch the arc posture"
-msgstr ""
+msgstr "เปลี่ยนท่าทางเส้นโค้ง"
 
 #: pcbnew/tools/pcb_actions.cpp:213
 msgid "Delete Last Point"
-msgstr ""
+msgstr "ลบจุดสุดท้าย"
 
 #: pcbnew/tools/pcb_actions.cpp:213
 msgid "Delete the last point added to the current item"
-msgstr ""
+msgstr "ลบจุดสุดท้ายที่เพิ่มลงในรายการปัจจุบัน"
 
 #: pcbnew/tools/pcb_actions.cpp:218
 msgid "Close Outline"
-msgstr ""
+msgstr "ปิดเค้าร่าง"
 
 #: pcbnew/tools/pcb_actions.cpp:218
 msgid "Close the in progress outline"
-msgstr ""
+msgstr "ปิดเค้าร่างที่กําลังดําเนินการอยู่"
 
 #: pcbnew/tools/pcb_actions.cpp:223
 msgid "Limit Lines to 45 deg"
-msgstr ""
+msgstr "จำกัดเส้นตรงไว้ที่ 45 องศา"
 
 #: pcbnew/tools/pcb_actions.cpp:223
 msgid "Limit graphic lines to H, V and 45 degrees"
-msgstr ""
+msgstr "จำกัดเส้นกราฟิกให้เป็น H,V และ 45องศา"
 
 #: pcbnew/tools/pcb_actions.cpp:230
 msgid "Design Rules Checker"
