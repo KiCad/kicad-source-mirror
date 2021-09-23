@@ -61,7 +61,7 @@ bool DRC_RULE_CONDITION::EvaluateFor( const BOARD_ITEM* aItemA, const BOARD_ITEM
         ctx.SetErrorCallback(
                 [&]( const wxString& aMessage, int aOffset )
                 {
-                    aReporter->Report( _( "ERROR:" ) + wxS( " " )+ aMessage );
+                    aReporter->Report( _( "ERROR:" ) + wxS( " " ) + aMessage );
                 } );
     }
 

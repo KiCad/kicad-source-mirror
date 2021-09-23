@@ -336,25 +336,26 @@ bool DIALOG_EXCHANGE_FOOTPRINTS::processMatchingFootprints()
             return false;
     }
 
-    /* The change is done from the last footprint because processFootprint() modifies the last
-     * item in the list.
+    /*
+     * NB: the change is done from the last footprint because processFootprint() modifies the
+     * last item in the list.
      */
     for( auto it = m_parent->GetBoard()->Footprints().rbegin();
             it != m_parent->GetBoard()->Footprints().rend(); it++ )
     {
-        auto mod = *it;
+        FOOTPRINT* footprint = *it;
 
-        if( !isMatch( mod ) )
+        if( !isMatch( footprint ) )
             continue;
 
         if( m_updateMode )
         {
-            if( processFootprint( mod, mod->GetFPID() ) )
+            if( processFootprint( footprint, footprint->GetFPID() ) )
                 change = true;
         }
         else
         {
-            if( processFootprint( mod, newFPID ) )
+            if( processFootprint( footprint, newFPID ) )
                 change = true;
         }
     }

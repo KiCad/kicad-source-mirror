@@ -396,7 +396,7 @@ void SCINTILLA_TRICKS::DoAutocomplete( const wxString& aPartial, const wxArraySt
                                 return first.CmpNoCase( second );
                             });
 
-        m_te->AutoCompShow( aPartial.size(), wxJoin( matchedTokens, ' ' ) );
+        m_te->AutoCompShow( aPartial.size(), wxJoin( matchedTokens, m_te->AutoCompGetSeparator() ) );
     }
 }
 

@@ -59,6 +59,9 @@ private:
 
     wxRegEx           m_netClassRegex;
     wxRegEx           m_netNameRegex;
+    wxRegEx           m_typeRegex;
+    wxRegEx           m_padTypeRegex;
+    wxRegEx           m_fabPropRegex;
 
     HTML_MESSAGE_BOX* m_helpWindow;
 };
