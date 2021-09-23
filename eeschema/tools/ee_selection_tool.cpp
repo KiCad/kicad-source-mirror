@@ -1023,13 +1023,16 @@ void EE_SELECTION_TOOL::GuessSelectionCandidates( EE_COLLECTOR& collector, const
 
         if( exactHits.count( item ) )
         {
-            wxPoint       pos( aPos );
-            SCH_LINE*     line = dynamic_cast<SCH_LINE*>( item );
-            SCH_JUNCTION* junction = dynamic_cast<SCH_JUNCTION*>( item );
+            if( item->Type() == SCH_PIN_T || item->Type() == SCH_JUNCTION_T )
+            {
+                closest = item;
+                break;
+            }
 
-            if( junction )
-                dist = 0;   // Hits *inside* a junction dot should select the dot
-            else if( line )
+            wxPoint   pos( aPos );
+            SCH_LINE* line = dynamic_cast<SCH_LINE*>( item );
+
+            if( line )
                 dist = DistanceLinePoint( line->GetStartPoint(), line->GetEndPoint(), pos );
             else
                 dist = EuclideanNorm( bbox.GetCenter() - pos ) * 2;
