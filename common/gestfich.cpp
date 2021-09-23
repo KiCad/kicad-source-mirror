@@ -116,7 +116,9 @@ int ExecuteFile( const wxString& ExecFile, const wxString& param, wxProcess *cal
 {
     wxString fullFileName;
     wxString fullParams;
-    int      space = ExecFile.Find( ' ' );
+
+#ifdef __UNIX__
+    int space = ExecFile.Find( ' ' );
 
     if( space > 0 && !ExecFile.Contains( "\"" ) && !ExecFile.Contains( "\'" ) )
     {
@@ -124,6 +126,7 @@ int ExecuteFile( const wxString& ExecFile, const wxString& param, wxProcess *cal
         fullParams = ExecFile.Mid( space + 1 ) + wxS( " " ) + param;
     }
     else
+#endif
     {
         fullFileName = FindKicadFile( ExecFile );
         fullParams = param;
