@@ -27,18 +27,16 @@ from .kicad_pyeditor import KiCadEditorNotebookFrame
 from .kicad_pyeditor import KiCadEditorNotebook
 
 class KiCadPyShell(KiCadEditorNotebookFrame):
-    isPcbframe = False      # is True only if the board editor is open,
-                            # i.e. if Pcbnew application exists
-
     def __init__(self, parent):
-        KiCadEditorNotebookFrame.__init__(self, parent)
-
         # Search if a pcbnew frame is open, because import pcbnew can be made only if it exists.
         # frame names are "SchematicFrame" and "PcbFrame"
+        #
+        # Note we must do this before the KiCadEditorNotebookFrame __init__ call because it ends up calling _setup back on us
         frame = wx.FindWindowByName( "PcbFrame" )
 
-        if frame is not None:
-            isPcbframe = True
+        self.isPcbframe = frame is not None
+
+        KiCadEditorNotebookFrame.__init__(self, parent)
 
     def _setup_startup(self):
         """Initialise the startup script."""
