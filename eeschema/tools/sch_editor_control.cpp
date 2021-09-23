@@ -24,7 +24,6 @@
 
 #include <symbol_library.h>
 #include <confirm.h>
-#include <widgets/infobar.h>
 #include <connection_graph.h>
 #include <dialogs/dialog_symbol_fields_table.h>
 #include <dialogs/dialog_eeschema_page_settings.h>
@@ -313,9 +312,7 @@ SCH_ITEM* SCH_EDITOR_CONTROL::nextMatch( SCH_SCREEN* aScreen, SCH_SHEET_PATH* aS
     std::vector<SCH_ITEM*> sorted_items;
 
     for( SCH_ITEM* item : aScreen->Items() )
-    {
         sorted_items.push_back( item );
-    }
 
     std::sort( sorted_items.begin(), sorted_items.end(),
             [&]( SCH_ITEM* a, SCH_ITEM* b )
@@ -434,11 +431,8 @@ int SCH_EDITOR_CONTROL::FindNext( const TOOL_EVENT& aEvent )
 
         for( SCH_SCREEN* screen = screens.GetFirst(); screen; screen = screens.GetNext() )
         {
-
             for( SCH_SHEET_PATH& sheet : screen->GetClientSheetPaths() )
-            {
                 paths.push_back( &sheet );
-            }
         }
 
         std::sort( paths.begin(), paths.end(), [] ( const SCH_SHEET_PATH* lhs,
@@ -697,6 +691,7 @@ int SCH_EDITOR_CONTROL::SimProbe( const TOOL_EVENT& aEvent )
                 {
                     SCH_PIN*    pin = (SCH_PIN*) item;
                     SCH_SYMBOL* symbol = (SCH_SYMBOL*) item->GetParent();
+                    wxString    ref = symbol->GetRef( &m_frame->GetCurrentSheet() );
                     wxString    param;
                     wxString    primitive;
 
@@ -710,8 +705,7 @@ int SCH_EDITOR_CONTROL::SimProbe( const TOOL_EVENT& aEvent )
                     else
                         param = wxString::Format( wxT( "I%s" ), pin->GetShownName().Lower() );
 
-                    simFrame->AddCurrentPlot( symbol->GetRef( &m_frame->GetCurrentSheet() ),
-                                              param );
+                    simFrame->AddCurrentPlot( ref, param );
                 }
 
                 return true;
@@ -745,7 +739,6 @@ int SCH_EDITOR_CONTROL::SimProbe( const TOOL_EVENT& aEvent )
 
                 if( m_pickerItem != item )
                 {
-
                     if( m_pickerItem )
                         selectionTool->UnbrightenItem( m_pickerItem );
 
@@ -817,11 +810,11 @@ int SCH_EDITOR_CONTROL::SimTune( const TOOL_EVENT& aEvent )
                         return false;
                 }
 
-                SIM_PLOT_FRAME* simFrame =
-                        (SIM_PLOT_FRAME*) m_frame->Kiway().Player( FRAME_SIMULATOR, false );
+                SCH_SYMBOL*   symbol = static_cast<SCH_SYMBOL*>( item );
+                KIWAY_PLAYER* simFrame = m_frame->Kiway().Player( FRAME_SIMULATOR, false );
 
                 if( simFrame )
-                    simFrame->AddTuner( static_cast<SCH_SYMBOL*>( item ) );
+                    static_cast<SIM_PLOT_FRAME*>( simFrame )->AddTuner( symbol );
 
                 return true;
             } );
@@ -1401,8 +1394,8 @@ int SCH_EDITOR_CONTROL::Copy( const TOOL_EVENT& aEvent )
 
 void SCH_EDITOR_CONTROL::updatePastedSymbol( SCH_SYMBOL* aSymbol, SCH_SCREEN* aPasteScreen,
                                              const SCH_SHEET_PATH& aPastePath,
-                                             const KIID_PATH&      aClipPath,
-                                             bool                  aForceKeepAnnotations )
+                                             const KIID_PATH& aClipPath,
+                                             bool aForceKeepAnnotations )
 {
     KIID_PATH clipItemPath = aClipPath;
     clipItemPath.push_back( aSymbol->m_Uuid );
@@ -1448,8 +1441,8 @@ void SCH_EDITOR_CONTROL::updatePastedSymbol( SCH_SYMBOL* aSymbol, SCH_SCREEN* aP
 
 SCH_SHEET_PATH SCH_EDITOR_CONTROL::updatePastedSheet( const SCH_SHEET_PATH& aPastePath,
                                                       const KIID_PATH& aClipPath, SCH_SHEET* aSheet,
-                                                      bool                aForceKeepAnnotations,
-                                                      SCH_SHEET_LIST*     aPastedSheetsSoFar,
+                                                      bool aForceKeepAnnotations,
+                                                      SCH_SHEET_LIST* aPastedSheetsSoFar,
                                                       SCH_REFERENCE_LIST* aPastedSymbolsSoFar )
 {
     SCH_SHEET_PATH sheetPath = aPastePath;
@@ -1536,10 +1529,10 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
         return 0;
 
     STRING_LINE_READER reader( text, "Clipboard" );
-    SCH_SEXPR_PLUGIN  plugin;
+    SCH_SEXPR_PLUGIN   plugin;
 
-    SCH_SHEET paste_sheet;
-    SCH_SCREEN* paste_screen = new SCH_SCREEN( &m_frame->Schematic() );
+    SCH_SHEET          paste_sheet;
+    SCH_SCREEN*        paste_screen = new SCH_SCREEN( &m_frame->Schematic() );
 
     // Screen object on heap is owned by the sheet.
     paste_sheet.SetScreen( paste_screen );
