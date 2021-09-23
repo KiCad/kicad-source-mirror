@@ -23,6 +23,7 @@
 
 #include <locale_io.h>
 #include <wx/intl.h>
+#include <clocale>
 
 // When reading/writing files, we need to swtich to setlocale( LC_NUMERIC, "C" ).
 // Works fine to read/write files with floating point numbers.
