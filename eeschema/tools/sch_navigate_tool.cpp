@@ -91,7 +91,6 @@ int SCH_NAVIGATE_TOOL::EnterSheet( const TOOL_EVENT& aEvent )
 
         m_frame->GetCurrentSheet().push_back( sheet );
         m_frame->DisplayCurrentSheet();
-        m_frame->UpdateHierarchyNavigator();
     }
 
     return 0;
@@ -107,7 +106,6 @@ int SCH_NAVIGATE_TOOL::LeaveSheet( const TOOL_EVENT& aEvent )
 
         m_frame->GetCurrentSheet().pop_back();
         m_frame->DisplayCurrentSheet();
-        m_frame->UpdateHierarchyNavigator();
     }
 
     return 0;

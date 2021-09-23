@@ -1987,7 +1987,6 @@ int SCH_EDITOR_CONTROL::EnterSheet( const TOOL_EVENT& aEvent )
 
         m_frame->GetCurrentSheet().push_back( sheet );
         m_frame->DisplayCurrentSheet();
-        m_frame->UpdateHierarchyNavigator();
     }
 
     return 0;
@@ -2006,7 +2005,6 @@ int SCH_EDITOR_CONTROL::LeaveSheet( const TOOL_EVENT& aEvent )
 
         m_frame->GetCurrentSheet().pop_back();
         m_frame->DisplayCurrentSheet();
-        m_frame->UpdateHierarchyNavigator();
     }
 
     return 0;

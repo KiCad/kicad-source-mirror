@@ -314,4 +314,6 @@ void SCH_EDIT_FRAME::DisplayCurrentSheet()
     editTool->UpdateNetHighlighting( dummy );
 
     HardRedraw();   // Ensure all items are redrawn (especially the drawing-sheet items)
+
+    UpdateHierarchyNavigator();
 }
