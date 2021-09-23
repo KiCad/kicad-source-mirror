@@ -14,10 +14,10 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-09-20 11:57-0700\n"
-"PO-Revision-Date: 2021-09-20 16:15+0000\n"
+"PO-Revision-Date: 2021-09-23 11:10+0000\n"
 "Last-Translator: Jonathan Haas <haasjona@gmail.com>\n"
-"Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
-"source/de/>\n"
+"Language-Team: German <https://hosted.weblate.org/projects/kicad/"
+"master-source/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -3099,6 +3099,7 @@ msgstr "Aktionsskript anwenden"
 #: common/dialogs/panel_common_settings_base.cpp:161
 msgid "(This workaround will improve some GTK HiDPI font scaling issues.)"
 msgstr ""
+"(Dieser Workaround verbessert einige GTK HiDPI-Schriftskalierungsprobleme.)"
 
 #: common/dialogs/panel_common_settings_base.cpp:175
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:21
@@ -3174,7 +3175,7 @@ msgstr ""
 
 #: common/dialogs/panel_common_settings_base.cpp:236
 msgid "days"
-msgstr ""
+msgstr "Tage"
 
 #: common/dialogs/panel_common_settings_base.cpp:249
 msgid "Project Backup"
@@ -17267,7 +17268,7 @@ msgstr "Das Koordinatenformat ist im Excellon-Format nicht angegeben."
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:57
 msgid "(The decimal format does not use these settings)"
-msgstr ""
+msgstr "(Das Dezimalformat verwendet diese Einstellungen nicht)"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:61
 msgid "Usually: 3:3 in mm and 2:4 in inches"
@@ -18552,7 +18553,7 @@ msgstr "Änderungen verwerfen"
 
 #: kicad/pcm/dialogs/dialog_pcm_base.h:73
 msgid "Plugin And Content Manager"
-msgstr ""
+msgstr "Plugin- und Content-Manager"
 
 #: kicad/pcm/dialogs/dialog_pcm_progress.cpp:86
 #, c-format
@@ -18633,7 +18634,7 @@ msgstr "Wählen Sie links ein Paket, um seine Beschreibung anzuzeigen."
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:342
 msgid "Package download url is not specified"
-msgstr ""
+msgstr "Paket-Download-URL ist nicht angegeben"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:343
 #, fuzzy
@@ -18732,7 +18733,7 @@ msgstr "Download ist zu groß."
 
 #: kicad/pcm/pcm.cpp:225
 msgid "Fetching repository"
-msgstr ""
+msgstr "Repository wird abgerufen"
 
 #: kicad/pcm/pcm.cpp:227
 #, fuzzy
@@ -18751,7 +18752,7 @@ msgstr ""
 
 #: kicad/pcm/pcm.cpp:265
 msgid "Fetching repository packages"
-msgstr ""
+msgstr "Repository-Pakete werden abgerufen"
 
 #: kicad/pcm/pcm.cpp:267
 msgid "Unable to load repository packages url."
@@ -18824,7 +18825,7 @@ msgstr "Heruntergeladenes Archiv \"%s\" wird entfernt."
 #: kicad/pcm/pcm_task_manager.cpp:157
 #, c-format
 msgid "Downloading package url: '%s'"
-msgstr ""
+msgstr "Paket-URL wird heruntergeladen: '%s'"
 
 #: kicad/pcm/pcm_task_manager.cpp:170
 #, fuzzy, c-format
@@ -19127,7 +19128,7 @@ msgstr "Zeichnungsblattränder und Schriftfelder bearbeiten"
 
 #: kicad/tools/kicad_manager_actions.cpp:117
 msgid "Run Plugin and Content Manager"
-msgstr ""
+msgstr "Plugin- und Content-Manager ausführen"
 
 #: kicad/tools/kicad_manager_actions.cpp:124
 msgid "Open Text Editor"
@@ -22758,6 +22759,7 @@ msgstr "Freiraum:"
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:186
 msgid "Copper clearance for this zone (set to 0 to use the netclass clearance)"
 msgstr ""
+"Kupfer-Abstand dieser Zone (auf 0 setzen um Wert der Netzklasse zu verwenden)"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:197
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:67
@@ -22799,6 +22801,8 @@ msgid ""
 "The distance that will be kept clear between the filled area of the zone and "
 "a pad connected by thermal relief spokes."
 msgstr ""
+"Der Abstand, der zwischen dem gefüllten Bereich der Zone und einem durch "
+"thermische Wärmeabführung verbundenen Pad freigehalten wird."
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:232
 msgid "Clearance between pads in the same net and filled areas."
@@ -23715,7 +23719,7 @@ msgstr "STEP-Dateien"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:210
 msgid "Non-unity scaled models:"
-msgstr ""
+msgstr "Nicht-Einheitsskalierte Modelle:"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:212
 msgid ""
@@ -27795,7 +27799,7 @@ msgstr "Pfadsubstitutionen"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:222
 msgid "Error: illegal or empty filename."
-msgstr ""
+msgstr "Fehler: ungültiger oder leerer Dateiname."
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:379
 #: pcbnew/microwave/microwave_polygon.cpp:224
@@ -28052,6 +28056,10 @@ msgid ""
 "set, this is an absolute minimum and cannot be reduced by custom rules or "
 "other settings."
 msgstr ""
+"Der Mindestabstand zwischen einem Loch und einem nicht dazugehörigen "
+"Kupferelement.  Wenn diese Einstellung gesetzt ist, ist dies ein absolutes "
+"Minimum und kann nicht durch benutzerdefinierte Regeln oder andere "
+"Einstellungen reduziert werden."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:272
 #, fuzzy
@@ -32864,7 +32872,7 @@ msgstr "Unbekannter FABMASTER-Abschnitt %s:%s in Zeile %zu."
 #, c-format
 msgid "Invalid row size in J row %zu. Expecting 11 elements but found %zu."
 msgstr ""
-"Ungültige Zeilengröße in J-Zeile %zu.  11 Elemente erwartet, aber %zu "
+"Ungültige Zeilengröße in J-Zeile %zu. 11 Elemente erwartet, aber %zu "
 "gefunden."
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:294
@@ -32890,8 +32898,7 @@ msgstr "Konnte Spaltenbeschriftung %s nicht finden."
 #, c-format
 msgid "Invalid row size in row %zu. Expecting %zu elements but found %zu."
 msgstr ""
-"Ungültige Zeilengröße in Zeile %zu.  %zu Elemente erwartet, aber %zu "
-"gefunden."
+"Ungültige Zeilengröße in Zeile %zu. %zu Elemente erwartet, aber %zu gefunden."
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:498
 #, c-format
