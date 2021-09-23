@@ -73,7 +73,7 @@ EDA_RECT EE_SELECTION::GetBoundingBox() const
             // so the exception is legit.
             try
             {
-                bbox.Merge( static_cast<SCH_SYMBOL*>( item )->GetBoundingBox( false ) );
+                bbox.Merge( static_cast<SCH_SYMBOL*>( item )->GetBoundingBox() );
             }
             catch( const boost::bad_pointer& exc )
             {

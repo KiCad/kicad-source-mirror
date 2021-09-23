@@ -166,7 +166,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::Load( SCHEMATIC* aSchematic, SCH_SHEET* aRootSh
             if( item->Type() == SCH_SYMBOL_T )
             {
                 SCH_SYMBOL* comp = static_cast<SCH_SYMBOL*>( item );
-                bbox = comp->GetBodyBoundingBox();
+                bbox = comp->GetBodyAndPinsBoundingBox();
 
                 for( const SCH_FIELD& field : comp->GetFields() )
                 {

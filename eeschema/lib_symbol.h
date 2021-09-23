@@ -215,7 +215,7 @@ public:
      *  if aConvert == 0 Convert is non used
      *  Fields are not taken in account
      **/
-    const EDA_RECT GetBodyBoundingBox( int aUnit, int aConvert ) const;
+    const EDA_RECT GetBodyBoundingBox( int aUnit, int aConvert, bool aIncludePins ) const;
 
     const EDA_RECT GetBoundingBox() const override
     {

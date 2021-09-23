@@ -1298,14 +1298,14 @@ void SCH_SYMBOL::Show( int nestLevel, std::ostream& os ) const
 #endif
 
 
-EDA_RECT SCH_SYMBOL::GetBodyBoundingBox() const
+EDA_RECT SCH_SYMBOL::doGetBoundingBox( bool aIncludePins, bool aIncludeFields ) const
 {
     EDA_RECT    bBox;
 
     if( m_part )
-        bBox = m_part->GetBodyBoundingBox( m_unit, m_convert );
+        bBox = m_part->GetBodyBoundingBox( m_unit, m_convert, aIncludePins );
     else
-        bBox = dummy()->GetBodyBoundingBox( m_unit, m_convert );
+        bBox = dummy()->GetBodyBoundingBox( m_unit, m_convert, aIncludePins );
 
     int x0 = bBox.GetX();
     int xm = bBox.GetRight();
@@ -1329,35 +1329,35 @@ EDA_RECT SCH_SYMBOL::GetBodyBoundingBox() const
     bBox.Normalize();
 
     bBox.Offset( m_pos );
+
+    if( aIncludeFields )
+    {
+        for( const SCH_FIELD& field : m_fields )
+        {
+            if( field.IsVisible() )
+                bBox.Merge( field.GetBoundingBox() );
+        }
+    }
+
     return bBox;
+}
+
+
+EDA_RECT SCH_SYMBOL::GetBodyBoundingBox() const
+{
+    return doGetBoundingBox( false, false );
+}
+
+
+EDA_RECT SCH_SYMBOL::GetBodyAndPinsBoundingBox() const
+{
+    return doGetBoundingBox( true, false );
 }
 
 
 const EDA_RECT SCH_SYMBOL::GetBoundingBox() const
 {
-    EDA_RECT bbox = GetBodyBoundingBox();
-
-    for( const SCH_FIELD& field : m_fields )
-    {
-        if( field.IsVisible() )
-            bbox.Merge( field.GetBoundingBox() );
-    }
-
-    return bbox;
-}
-
-
-const EDA_RECT SCH_SYMBOL::GetBoundingBox( bool aIncludeInvisibleText ) const
-{
-    EDA_RECT bbox = GetBodyBoundingBox();
-
-    for( const SCH_FIELD& field : m_fields )
-    {
-        if( field.IsVisible() || aIncludeInvisibleText )
-            bbox.Merge( field.GetBoundingBox() );
-    }
-
-    return bbox;
+    return doGetBoundingBox( true, true );
 }
 
 
@@ -1716,10 +1716,10 @@ bool SCH_SYMBOL::operator <( const SCH_ITEM& aItem ) const
 
     auto symbol = static_cast<const SCH_SYMBOL*>( &aItem );
 
-    EDA_RECT rect = GetBodyBoundingBox();
+    EDA_RECT rect = GetBodyAndPinsBoundingBox();
 
-    if( rect.GetArea() != symbol->GetBodyBoundingBox().GetArea() )
-        return rect.GetArea() < symbol->GetBodyBoundingBox().GetArea();
+    if( rect.GetArea() != symbol->GetBodyAndPinsBoundingBox().GetArea() )
+        return rect.GetArea() < symbol->GetBodyAndPinsBoundingBox().GetArea();
 
     if( m_pos.x != symbol->m_pos.x )
         return m_pos.x < symbol->m_pos.x;

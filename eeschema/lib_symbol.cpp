@@ -848,7 +848,7 @@ void LIB_SYMBOL::ViewGetLayers( int aLayers[], int& aCount ) const
 }
 
 
-const EDA_RECT LIB_SYMBOL::GetBodyBoundingBox( int aUnit, int aConvert ) const
+const EDA_RECT LIB_SYMBOL::GetBodyBoundingBox( int aUnit, int aConvert, bool aIncludePins ) const
 {
     EDA_RECT bbox;
 
@@ -864,9 +864,17 @@ const EDA_RECT LIB_SYMBOL::GetBodyBoundingBox( int aUnit, int aConvert ) const
             continue;
 
         if( item.Type() == LIB_PIN_T )
-            bbox.Merge( static_cast<const LIB_PIN&>( item ).GetBoundingBox( false, true ) );
+        {
+            if( aIncludePins )
+            {
+                const LIB_PIN& pin = static_cast<const LIB_PIN&>( item );
+                bbox.Merge( pin.GetBoundingBox( false, true ) );
+            }
+        }
         else
+        {
             bbox.Merge( item.GetBoundingBox() );
+        }
     }
 
     return bbox;

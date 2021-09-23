@@ -1500,16 +1500,8 @@ const BOX2I SCH_EDIT_FRAME::GetDocumentExtents( bool aIncludeAllVisible ) const
         for( EDA_ITEM* item : GetScreen()->Items() )
         {
             if( item != dsAsItem ) // Ignore the drawing-sheet itself
-            {
-                if( item->Type() == SCH_SYMBOL_T )
-                {
-                    // For symbols we need to get the bounding box without invisible text
-                    SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
-                    bBoxItems.Merge( symbol->GetBoundingBox( false ) );
-                }
-                else
-                    bBoxItems.Merge( item->GetBoundingBox() );
-            }
+                bBoxItems.Merge( item->GetBoundingBox() );
+
             bBoxDoc = bBoxItems;
         }
     }

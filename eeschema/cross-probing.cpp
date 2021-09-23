@@ -144,8 +144,7 @@ SCH_ITEM* SCH_EDITOR_CONTROL::FindSymbolAndItem( const wxString& aReference,
 #endif // COMP_1_TO_1_RATIO
 
 #ifndef COMP_1_TO_1_RATIO // Do the scaled zoom
-                // Pass "false" to only include visible fields of symbol in bbox calculations.
-                EDA_RECT bbox       = symbol->GetBoundingBox( false );
+                EDA_RECT bbox       = symbol->GetBoundingBox();
                 wxSize   bbSize     = bbox.Inflate( bbox.GetWidth() * 0.2f ).GetSize();
                 VECTOR2D screenSize = getView()->GetViewport().GetSize();
 

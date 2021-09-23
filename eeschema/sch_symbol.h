@@ -315,12 +315,15 @@ public:
 
     const EDA_RECT GetBoundingBox() const override;
 
-    const EDA_RECT GetBoundingBox( bool aIncludeInvisibleText ) const;
-
     /**
-     * Return a bounding box for the symbol body but not the fields.
+     * Return a bounding box for the symbol body but not the pins or fields.
      */
     EDA_RECT GetBodyBoundingBox() const;
+
+    /**
+     * Return a bounding box for the symbol body and pins but not the fields.
+     */
+    EDA_RECT GetBodyAndPinsBoundingBox() const;
 
 
     //-----<Fields>-----------------------------------------------------------
@@ -665,6 +668,8 @@ public:
     bool IsPointClickableAnchor( const wxPoint& aPos ) const override;
 
 private:
+    EDA_RECT doGetBoundingBox( bool aIncludePins, bool aIncludeFields ) const;
+
     bool doIsConnected( const wxPoint& aPosition ) const override;
 
     void Init( const wxPoint& pos = wxPoint( 0, 0 ) );

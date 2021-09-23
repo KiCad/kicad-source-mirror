@@ -129,7 +129,7 @@ public:
             m_align_to_grid = cfg->m_AutoplaceFields.align_to_grid;
         }
 
-        m_symbol_bbox = m_symbol->GetBodyBoundingBox();
+        m_symbol_bbox = m_symbol->GetBodyAndPinsBoundingBox();
         m_fbox_size = computeFBoxSize( /* aDynamic */ true );
 
         m_is_power_symbol = !m_symbol->IsInNetlist();
@@ -294,7 +294,7 @@ protected:
             EDA_RECT item_box;
 
             if( SCH_SYMBOL* item_comp = dynamic_cast<SCH_SYMBOL*>( item ) )
-                item_box = item_comp->GetBodyBoundingBox();
+                item_box = item_comp->GetBodyAndPinsBoundingBox();
             else
                 item_box = item->GetBoundingBox();
 
