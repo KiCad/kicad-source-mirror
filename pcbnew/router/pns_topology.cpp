@@ -381,7 +381,7 @@ const ITEM_SET TOPOLOGY::AssembleTuningPath( ITEM* aStart, SOLID** aStartPad, SO
                     aLine.Remove( start, clip - 1 );
 
                 // Now connect the dots
-                aLine.Insert( aForward ? 0 : aLine.PointCount() - 1, aPad->GetPosition() );
+                aLine.Insert( aForward ? 0 : aLine.PointCount(), aPad->GetPosition() );
             };
 
     auto processPad =
