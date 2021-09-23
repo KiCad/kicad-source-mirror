@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-09-20 11:57-0700\n"
-"PO-Revision-Date: 2021-09-23 11:10+0000\n"
+"PO-Revision-Date: 2021-09-24 01:00+0000\n"
 "Last-Translator: Jonathan Haas <haasjona@gmail.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
@@ -28072,6 +28072,10 @@ msgid ""
 "this is an absolute minimum and cannot be reduced by custom rules or other "
 "settings."
 msgstr ""
+"Der minimale Freiraum zwischen der Platinenkante und einem beliebigen "
+"Kupferelement.  Wenn diese Einstellung gesetzt ist, ist dies ein absolutes "
+"Minimum und kann nicht durch benutzerdefinierte Regeln oder andere "
+"Einstellungen reduziert werden."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:297
 msgid "Holes"
@@ -28100,6 +28104,10 @@ msgid ""
 "absolute minimum and cannot be reduced by custom rules or other settings. "
 "(Note: does not apply to milled holes.)"
 msgstr ""
+"Der minimale Freiraum zwischen zwei gebohrten Löchern.   Wenn diese "
+"Einstellung gesetzt ist, ist dies ein absolutes Minimum und kann nicht durch "
+"benutzerdefinierte Regeln oder andere Einstellungen reduziert werden. "
+"(Hinweis: gilt nicht für gefräste Löcher.)"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:354
 msgid "uVias"
@@ -28127,6 +28135,9 @@ msgid ""
 "The minimum micro-via hole size.  If set, this is an absolute minimum and "
 "cannot be reduced by netclasses, custom rules, or other settings."
 msgstr ""
+"Die minimale Micro-Via-Lochgröße.  Wenn diese festgelegt ist, ist dies ein "
+"absolutes Minimum und kann nicht durch Netzklassen, benutzerdefinierte "
+"Regeln oder andere Einstellungen reduziert werden."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:411
 msgid "Silkscreen"
@@ -28142,6 +28153,9 @@ msgid ""
 "this can improve legibility.  (Note: does not apply to multiple shapes "
 "within a single footprint.)"
 msgstr ""
+"Minimaler Freiraum zwischen zwei Elementen auf derselben "
+"Bestückungsdruckebene.  Dies kann die Lesbarkeit verbessern.  (Hinweis: gilt "
+"nicht für mehrere Elemente eines Footprints.)"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:431
 msgid "Use the Physical Stackup page to change the number of copper layers."
@@ -31851,6 +31865,8 @@ msgid ""
 "Received an error while reading netlist.  Please report this issue to the "
 "KiCad team using the menu Help->Report Bug."
 msgstr ""
+"Beim Lesen der Netzliste ist ein Fehler aufgetreten.  Bitte melden Sie "
+"dieses Problem an das KiCad-Team über das Menü Hilfe->Fehler melden."
 
 #: pcbnew/pcb_edit_frame.cpp:1500
 #, fuzzy, c-format
@@ -32116,7 +32132,7 @@ msgstr ""
 #: pcbnew/plugins/altium/altium_parser_pcb.cpp:694
 #, c-format
 msgid "Pads6 stream has unexpected length for subrecord 6: %d."
-msgstr ""
+msgstr "Pads6-Stream hat unerwartete Länge für Subrecord 6: %d."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:76
 msgid "Error reading file: cannot determine length."
@@ -32285,7 +32301,7 @@ msgstr ""
 #: pcbnew/plugins/altium/altium_pcb.cpp:2181
 #, c-format
 msgid "Footprint %s pad %s uses a hole of unknown kind %d."
-msgstr ""
+msgstr "Footprint %s Pad %s verwendet ein Loch von unbekannter Art %d."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2199
 #, fuzzy, c-format
@@ -32297,7 +32313,7 @@ msgstr ""
 #: pcbnew/plugins/altium/altium_pcb.cpp:2233
 #, c-format
 msgid "Footprint %s pad %s uses an unknown pad-shape."
-msgstr ""
+msgstr "Footprint %s Pad %s verwendet eine unbekannte Pad-Form."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2292
 #, c-format
@@ -32329,7 +32345,7 @@ msgstr ""
 #: pcbnew/plugins/altium/altium_pcb.cpp:2466
 #, c-format
 msgid "Non-copper pad %s uses an unknown pad-shape."
-msgstr ""
+msgstr "Nicht-Kupfer-Pad %s verwendet eine unbekannte Pad-Form."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2475
 #, fuzzy
@@ -32341,6 +32357,8 @@ msgstr "Lade..."
 msgid ""
 "Via from layer %d to %d uses a non-copper layer, which is not supported."
 msgstr ""
+"Via von Lage %d bis %d verwendet eine Nicht-Kupfer-Schicht, was nicht "
+"unterstützt wird."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2537
 #, fuzzy
@@ -34027,6 +34045,10 @@ msgid ""
 "overridden by the board minimum width, or by the width of an existing track "
 "if the 'Use Existing Track Width' feature is enabled."
 msgstr ""
+"Wählen Sie die Standardbreite für neue Leiterbahnen aus. Beachten Sie, dass "
+"diese Breite durch die minimale Breite der Platine oder durch die Breite "
+"einer vorhandenen Leiterbahn überschrieben werden kann, wenn die Funktion „"
+"Bisherige Leiterbahnbreite verwenden“ aktiviert ist."
 
 #: pcbnew/toolbars_pcb_editor.cpp:540
 msgid ""
@@ -34258,7 +34280,7 @@ msgstr "Ermittlung Lochabstände für:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:629
 msgid "Items share no relevant layers:"
-msgstr ""
+msgstr "Elemente haben keine gemeinsamen Lagen:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:678
 msgid "Select an item for a constraints resolution report."
@@ -35435,7 +35457,7 @@ msgstr "Letzte Netzhervorhebung umschalten"
 
 #: pcbnew/tools/pcb_actions.cpp:667
 msgid "Limit actions to 45 degrees from the starting point"
-msgstr ""
+msgstr "Aktionen auf 45 Grad vom Startpunkt begrenzen"
 
 #: pcbnew/tools/pcb_actions.cpp:672
 msgid "Prevent items from being moved and/or resized on the canvas"
@@ -35649,11 +35671,11 @@ msgstr "Zeige nur Umriss von Flächen"
 
 #: pcbnew/tools/pcb_actions.cpp:839
 msgid "Draw Zone Fill Fracture Borders"
-msgstr ""
+msgstr "Bruchkanten der Zonenfüllung zeichnen"
 
 #: pcbnew/tools/pcb_actions.cpp:844
 msgid "Draw Zone Fill Triangulation"
-msgstr ""
+msgstr "Triangulation der Zonenfüllung zeichnen"
 
 #: pcbnew/tools/pcb_actions.cpp:850
 msgid "Toggle Zone Display"
