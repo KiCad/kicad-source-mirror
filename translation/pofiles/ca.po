@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-09-20 11:57-0700\n"
-"PO-Revision-Date: 2021-09-22 15:26+0000\n"
+"PO-Revision-Date: 2021-09-23 11:10+0000\n"
 "Last-Translator: Arnau Llovet Vidal <arnaullv@gmail.com>\n"
 "Language-Team: Catalan <https://hosted.weblate.org/projects/kicad/"
 "master-source/ca/>\n"
@@ -3067,7 +3067,7 @@ msgstr "Escala del llenç:"
 
 #: common/dialogs/panel_common_settings_base.cpp:158
 msgid "Apply icon scaling to fonts"
-msgstr ""
+msgstr "Aplica l'escalat de les icones als tipus de lletra"
 
 #: common/dialogs/panel_common_settings_base.cpp:161
 msgid "(This workaround will improve some GTK HiDPI font scaling issues.)"
@@ -3098,7 +3098,7 @@ msgstr "Sessió"
 
 #: common/dialogs/panel_common_settings_base.cpp:191
 msgid "Remember open files for next project launch"
-msgstr ""
+msgstr "Recorda els fitxers oberts en la propera obertura del projecte"
 
 #: common/dialogs/panel_common_settings_base.cpp:193
 msgid ""
@@ -3142,7 +3142,7 @@ msgstr ""
 
 #: common/dialogs/panel_common_settings_base.cpp:236
 msgid "days"
-msgstr ""
+msgstr "dies"
 
 #: common/dialogs/panel_common_settings_base.cpp:249
 msgid "Project Backup"
@@ -3177,21 +3177,26 @@ msgstr ""
 
 #: common/dialogs/panel_common_settings_base.cpp:275
 msgid "Maximum backups per day:"
-msgstr ""
+msgstr "Màxim de còpies de seguretat per dia:"
 
 #: common/dialogs/panel_common_settings_base.cpp:277
 msgid "How many backup files to keep each day (set to 0 for no limit)"
 msgstr ""
+"Quants fitxers de còpies de seguretat s'han de conservar cada dia (estableix "
+"a 0 per il·limitat)"
 
 #: common/dialogs/panel_common_settings_base.cpp:284
 msgid "Minimum time between backups:"
-msgstr ""
+msgstr "Temps mínim entre còpies de seguretat:"
 
 #: common/dialogs/panel_common_settings_base.cpp:286
 msgid ""
 "Number of minutes since the last backup before another will be created the "
 "next time you save (set to 0 for no minimum)"
 msgstr ""
+"Número de minuts des de la darrera còpia de seguretat abans que se'n creï "
+"una altra la propera vegada que es desi (estableix a 0 per no establir un "
+"mínim)"
 
 #: common/dialogs/panel_common_settings_base.cpp:297
 msgid "Maximum total backup size:"
@@ -3256,6 +3261,7 @@ msgstr "Opció"
 #: common/dialogs/panel_mouse_settings.cpp:85
 msgid "Only one action can be assigned to each vertical scroll setting"
 msgstr ""
+"Només es pot assignar una acció a cada ajustament de desplaçament vertical"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:18
 msgid "Pan and Zoom"
@@ -7691,11 +7697,10 @@ msgid ""
 msgstr ""
 
 #: eeschema/dialogs/dialog_bom.cpp:345
-#, fuzzy
 msgid "Generating BOM requires a fully annotated schematic."
 msgstr ""
-"L'exportació del netlist requereix\n"
-"un esquemàtic completament anotat."
+"La generació de llista de materials (BOM) requereix un esquemàtic "
+"completament anotat."
 
 #: eeschema/dialogs/dialog_bom.cpp:382 eeschema/dialogs/dialog_bom_base.cpp:43
 #, fuzzy
@@ -7770,6 +7775,7 @@ msgid "Bill of Material"
 msgstr "Llista de materials"
 
 #: eeschema/dialogs/dialog_bom_help_md.h:2
+#, fuzzy
 msgid ""
 "# 1 - Full documentation\n"
 "\n"
@@ -7955,52 +7961,226 @@ msgid ""
 "\"%O.csv\"\n"
 "```\n"
 msgstr ""
+"# 1 - Documentació completa\n"
+"\n"
+"La documentació de Eeschema (*eeschema.html*) descriu aquest llistat de "
+"xarxes intermèdies i dóna exemples (capítol ***creant llistats de xarxes "
+"personalitzats i arxius de bom***).\n"
+"\n"
+"# 2 - El fitxer de xarxes intermedi\n"
+"\n"
+"Els fitxers de BOM (i els fitxers de llistats de xarxes) poden ser creats "
+"des d'un *fitxer de llistats de xarxes intermèdies* creat per Eeschema.\n"
+"\n"
+"Aquest fitxer utilitza sintàxis XML i s'anomena llistat de xarxes "
+"intermèdies. The intermediate netlist includes a large amount of data about "
+"your board and because of this, it can be used with post-processing to "
+"create a BOM or other reports.\n"
+"\n"
+"Depending on the output (BOM or netlist), different subsets of the complete "
+"Intermediate Netlist file will be used in the post-processing.\n"
+"\n"
+"# 3 - Conversió a un nou format\n"
+"\n"
+"By applying a post-processing filter to the Intermediate netlist file you "
+"can generate foreign netlist files as well as BOM files. Because this "
+"conversion is a text to text transformation, this post-processing filter can "
+"be written using *Python*, *XSLT*, or any other tool capable of taking XML "
+"as input.\n"
+"\n"
+"XSLT itself is a XML language suitable for XML transformations. There is a "
+"free program called `xsltproc` that you can download and install. The "
+"`xsltproc` program can be used to read the Intermediate XML netlist input "
+"file, apply a style-sheet to transform the input, and save the results in an "
+"output file. Use of `xsltproc` requires a style-sheet file using XSLT "
+"conventions. The full conversion process is handled by Eeschema, after it is "
+"configured once to run `xsltproc` in a specific way.\n"
+"\n"
+"A Python script is somewhat more easy to create.\n"
+"\n"
+"# 4 - Inicialització de la finestra de diàleg\n"
+"\n"
+"You should add a new plugin (a script) in the plugin list by clicking on the "
+"Add Plugin button.\n"
+"\n"
+"## 4.1 - Configuració dels paràmetres dels connectors\n"
+"\n"
+"El diàleg de configuració del connector d'Eeschema necessita la següent "
+"informació:\n"
+"\n"
+" * The title: for instance, the name of the netlist format.\n"
+" * The command line to launch the converter (usually a script).\n"
+"\n"
+"***Note (Windows only):***\n"
+"*By default, the command line runs with hidden console window and output is "
+"redirected to \"Plugin info\" field. To show the window of the running "
+"command, set the checkbox \"Show console window\".*\n"
+"\n"
+"Once you click on the generate button the following will happen:\n"
+"\n"
+"1. Eeschema creates an intermediate netlist file \\*.xml, for instance `test."
+"xml`.\n"
+"2. Eeschema runs the script from the command line to create the final output "
+"file.\n"
+"\n"
+"## 4.2 - Generate netlist files with the command line\n"
+"\n"
+"Assuming we are using the program `xsltproc.exe` to apply the sheet style to "
+"the intermediate file, `xsltproc.exe` is executed with the following command."
+"\n"
+"\n"
+"```\n"
+"xsltproc.exe -o <output filename> <style-sheet filename> <input XML file to "
+"convert>\n"
+"```\n"
+"\n"
+"A Windows the command line is the following.\n"
+"\n"
+"```\n"
+"f:/kicad/bin/xsltproc.exe -o \"%O\" f:/kicad/bin/plugins/myconverter.xsl \"%"
+"I\"\n"
+"```\n"
+"\n"
+"A Linux the command becomes as following.\n"
+"\n"
+"```\n"
+"xsltproc -o \"%O\" /usr/local/kicad/bin/plugins/myconverter .xsl \"%I\"\n"
+"```\n"
+"where `myconverter.xsl` is the style-sheet that you are applying.\n"
+"\n"
+"Do not forget the double quotes around the file names, this allows them to "
+"have spaces after the substitution by Eeschema.\n"
+"\n"
+"If a Python script is used, the command line is something like (depending on "
+"the Python script):\n"
+"\n"
+"```\n"
+"python f:/kicad/bin/plugins/bom-in-python/myconverter.py \"%I\" \"%O\"\n"
+"```\n"
+"\n"
+"or\n"
+"\n"
+"```\n"
+"python /usr/local/kicad/bin/plugins/bom-in-python/myconverter .xsl \"%I\" \"%"
+"O\"\n"
+"```\n"
+"\n"
+"El format de la línia d'ordres accepts parameters for filenames. The "
+"supported formatting parameters are:\n"
+"\n"
+" * `%B`: base filename of selected output file, minus path and extension.\n"
+" * `%P`: project directory, without name and without trailing '/'.\n"
+" * `%I`: complete filename and path of the temporary input file\n"
+"(the intermediate net file).\n"
+" * `%O`: complete filename and path (but without extension) of the user\n"
+"chosen output file.\n"
+"\n"
+"`%I` serà substituït per the actual intermediate file name (usually the full "
+"root sheet filename with extension \".xml\").\n"
+"`%O` serà substituït per the actual output file name (the full root sheet "
+"filename minus extension).\n"
+"`%B` serà substituït per the actual output short file name (the short root "
+"sheet filename minus extension).\n"
+"`%P` serà substituït per the actual current project path.\n"
+"\n"
+"## 4.3 - Format de la línia d'ordres:\n"
+"\n"
+"### 4.3.1 - Remark:\n"
+"\n"
+"Most of time, the created file must have an extension, depending on its type."
+"\n"
+"Therefore you have to add to the option ***%O*** the right file extension.\n"
+"\n"
+"For instance:\n"
+"\n"
+" * **%O.csv** to create a .csv file (comma separated value file).\n"
+" * **%O.htm** to create a .html file.\n"
+" * **%O.bom** to create a .bom file.\n"
+"\n"
+"### 4.3.2 Exemple per xsltproc:\n"
+"\n"
+"El format de la línia d'ordres per xsltproc és el següent:\n"
+"\n"
+"```\n"
+"<path of xsltproc> xsltproc <xsltproc parameters>\n"
+"```\n"
+"\n"
+"A Windows:\n"
+"```\n"
+"f:/kicad/bin/xsltproc.exe -o \"%O.bom\" f:/kicad/bin/plugins/"
+"netlist_form_pads-pcb.xsl \"%I\"\n"
+"```\n"
+"\n"
+"A Linux:\n"
+"```\n"
+"xsltproc -o \"%O.bom\" /usr/local/kicad/bin/plugins/netlist_form_pads-"
+"pcb.xsl \"%I\"\n"
+"```\n"
+"\n"
+"The above examples assume `xsltproc` is installed on your PC under Windows "
+"and xsl files located in `<path_to_kicad>/kicad/bin/plugins/`.\n"
+"\n"
+"\n"
+"### 4.3.3 Example for Python scripts:\n"
+"\n"
+"Assuming python is installed on your PC, and python scripts are located in\n"
+"\n"
+" `<path_to_kicad>/kicad/bin/plugins/bom-in-python/`,\n"
+"\n"
+"the command line format for python is something like:\n"
+"\n"
+"```\n"
+"python <script file name> <input filename> <output filename>\n"
+"```\n"
+"\n"
+"A Windows:\n"
+"```\n"
+"python.exe f:/kicad/bin/plugins/bom-in-python/my_python_script.py \"%I\" \"%O"
+".html\"\n"
+"```\n"
+"\n"
+"A Linux:\n"
+"```\n"
+"python /usr/local/kicad/bin/plugins/bom-in-python/my_python_script.py \"%I\" "
+"\"%O.csv\"\n"
+"```\n"
 
 #: eeschema/dialogs/dialog_bus_manager.cpp:37
-#, fuzzy
 msgid "Bus Definitions"
-msgstr "Designació"
+msgstr "Definicions de bus"
 
 #: eeschema/dialogs/dialog_bus_manager.cpp:55
-#, fuzzy
 msgid "Bus Aliases"
-msgstr "Àlies"
+msgstr "Àlies de bus"
 
 #: eeschema/dialogs/dialog_bus_manager.cpp:65
-#, fuzzy
 msgid "Alias Name"
-msgstr "Nom del fitxer:"
+msgstr "Nom de l'àlies"
 
 #: eeschema/dialogs/dialog_bus_manager.cpp:75
 #: eeschema/dialogs/dialog_bus_manager.cpp:109
-#, fuzzy
 msgid "Rename"
-msgstr "nom"
+msgstr "Canvia el nom"
 
 #: eeschema/dialogs/dialog_bus_manager.cpp:89
-#, fuzzy
 msgid "Alias Members"
-msgstr "Àlies"
+msgstr "Membres dels àlies"
 
 #: eeschema/dialogs/dialog_bus_manager.cpp:99
-#, fuzzy
 msgid "Member Name"
-msgstr "Nom de la taula"
+msgstr "Nom del membre"
 
 #: eeschema/dialogs/dialog_bus_manager.cpp:180
-#, fuzzy
 msgid "Bus Alias Name"
-msgstr "Nom del fitxer:"
+msgstr "Nom de l'àlies del bus"
 
 #: eeschema/dialogs/dialog_bus_manager.cpp:181
-#, fuzzy
 msgid "Net or Bus Name"
-msgstr "Nom de la xarxa"
+msgstr "Nom de la xarxa o bus"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:66
-#, fuzzy
 msgid "Change all symbols in schematic"
-msgstr "Insereix el component a l'esquemàtic"
+msgstr "Canvia tots els símbols a l'esquema"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:67
 #, fuzzy
@@ -8063,9 +8243,8 @@ msgid "Update field positions"
 msgstr "Posició definida per l'usuari"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:139
-#, fuzzy
 msgid "Update symbol attributes"
-msgstr "Sortides de &fabricació"
+msgstr "Actualitza atributs del símbol"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:159
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:165
@@ -8084,9 +8263,9 @@ msgid "Update symbol %s from '%s' to '%s'"
 msgstr "Pad %s en %s de %s"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:533
-#, fuzzy, c-format
+#, c-format
 msgid "Update symbols %s from '%s' to '%s'"
-msgstr "Pad %s en %s de %s"
+msgstr "Actualitza símbols %s de '%s' a '%s'"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:543
 #, c-format
@@ -8152,15 +8331,12 @@ msgstr "Selecciona el component"
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:117
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:59
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:94
-#, fuzzy
 msgid "Update Options"
-msgstr "Opcions de la pàgina"
+msgstr "Opcions d'actualització"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:119
-#, fuzzy
 msgid "Remove fields if not in library symbol"
-msgstr ""
-"Establiu els camps a 0 per a utilitzar els valors de l'ascendent o globals"
+msgstr "Elimina els camps si no apareixen al símbol de la biblioteca"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:120
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:62
@@ -8209,7 +8385,6 @@ msgstr "Obre una empremta d'una biblioteca"
 
 #: eeschema/dialogs/dialog_choose_symbol.cpp:143
 #: pcbnew/dialogs/dialog_choose_footprint.cpp:95
-#, fuzzy
 msgid "Select with Browser"
 msgstr "Selecciona amb el navegador"
 
