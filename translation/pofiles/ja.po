@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-09-20 11:57-0700\n"
-"PO-Revision-Date: 2021-09-22 15:26+0000\n"
+"PO-Revision-Date: 2021-09-23 11:10+0000\n"
 "Last-Translator: Tokita, Hiroshi <tokita.hiroshi@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -3123,7 +3123,7 @@ msgstr ""
 
 #: common/dialogs/panel_common_settings_base.cpp:236
 msgid "days"
-msgstr ""
+msgstr "日"
 
 #: common/dialogs/panel_common_settings_base.cpp:249
 msgid "Project Backup"
@@ -4747,15 +4747,15 @@ msgstr ""
 "せんでした。"
 
 #: common/kiway.cpp:297
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Fatal Installation Bug. File:\n"
 "'%s'\n"
 "could not be loaded\n"
 msgstr ""
-"致命的なインストール バグ。ファイル:\n"
-"\"%s\"\n"
-"ロードされませんでした\n"
+"致命的なインストール バグ. ファイル:\n"
+"'%s'\n"
+"はロードできませんでした\n"
 
 #: common/kiway.cpp:301
 msgid "It is missing.\n"
@@ -14515,17 +14515,12 @@ msgid "Field Validation Error"
 msgstr "フィールド検証エラー"
 
 #: eeschema/sch_validators.cpp:226
-#, fuzzy
 msgid "Signal name contains '{' and '}' but is not a valid bus name"
-msgstr ""
-"信号名は '{' または '}' を含んでいますが、有効なグループ バス名ではありません"
+msgstr "信号名は '{' と '}' を含んでいますが、有効なバス名ではありません"
 
 #: eeschema/sch_validators.cpp:231
-#, fuzzy
 msgid "Signal name contains '[' or ']' but is not a valid bus name."
-msgstr ""
-"信号名は '[' または ']' を含んでいますが、有効なベクトル バス名ではありませ"
-"ん。"
+msgstr "信号名は '[' または ']' を含んでいますが、有効なバス名ではありません。"
 
 #: eeschema/sheet.cpp:63
 #, c-format
@@ -16726,11 +16721,8 @@ msgid "Net must be labeled to assign a netclass."
 msgstr "ネットクラスを割り当てるには、ネットへのラベル付けが必要です。"
 
 #: eeschema/tools/sch_editor_control.cpp:986
-#, fuzzy
 msgid "Bus has no members to assign netclass to."
-msgstr ""
-"ネットクラスをメンバーに割り当てるには、バスには少なくとも１つのメンバー必要"
-"です。"
+msgstr "バスにはネットクラスに割り当てるメンバーがありません。"
 
 #: eeschema/tools/sch_editor_control.cpp:1019
 msgid "Netclasses"
@@ -19093,9 +19085,8 @@ msgid "Keyword notation is ${keyword}"
 msgstr "キーワードの表記は${keyword}です"
 
 #: pagelayout_editor/dialogs/properties_frame.cpp:559
-#, fuzzy
 msgid "Each keyword is replaced by its value"
-msgstr "キーワードは実際の文字列の値に置き換えられます"
+msgstr "それぞれのキーワードはその値に置き換えられます"
 
 #: pagelayout_editor/dialogs/properties_frame.cpp:560
 msgid "These build-in keywords are always available:"
@@ -25135,7 +25126,6 @@ msgid "Select Netlist"
 msgstr "ネットリストを選択"
 
 #: pcbnew/dialogs/dialog_netlist.cpp:143
-#, fuzzy
 msgid "Please choose a valid netlist file."
 msgstr "有効なネットリスト ファイルを選択して下さい。"
 
@@ -27361,9 +27351,8 @@ msgid "Path Substitutions"
 msgstr "設定されているパス"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:222
-#, fuzzy
 msgid "Error: illegal or empty filename."
-msgstr "エラー: DXF ファイル名がありません!"
+msgstr "エラー: ファイル名が不正、もしくは空です。"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:379
 #: pcbnew/microwave/microwave_polygon.cpp:224
@@ -28294,16 +28283,12 @@ msgid "User9"
 msgstr "User9"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:32
-#, fuzzy
 msgid ""
 "Use your board house's recommendations for solder mask clearance and minimum "
 "web width."
-msgstr ""
-"ハンダ マスクのクリアランスと最小ブリッジ幅については、ボードハウスの推奨値を"
-"使用してください。"
+msgstr "ハンダ マスクのクリアランスと最小ウェブ幅については、ボードハウスの推奨値を使用してください。"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:36
-#, fuzzy
 msgid "If none are provided, setting the values to zero is suggested."
 msgstr "指定がない場合、値をゼロに設定するのが推奨です。"
 
