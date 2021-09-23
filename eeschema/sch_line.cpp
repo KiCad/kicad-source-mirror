@@ -380,22 +380,31 @@ void SCH_LINE::Print( const RENDER_SETTINGS* aSettings, const wxPoint& offset )
 
 void SCH_LINE::MirrorVertically( int aCenter )
 {
-    MIRROR( m_start.y, aCenter );
-    MIRROR( m_end.y,   aCenter );
+    if( m_flags & STARTPOINT )
+        MIRROR( m_start.y, aCenter );
+
+    if( m_flags & ENDPOINT )
+        MIRROR( m_end.y,   aCenter );
 }
 
 
 void SCH_LINE::MirrorHorizontally( int aCenter )
 {
-    MIRROR( m_start.x, aCenter );
-    MIRROR( m_end.x,   aCenter );
+    if( m_flags & STARTPOINT )
+        MIRROR( m_start.x, aCenter );
+
+    if( m_flags & ENDPOINT )
+        MIRROR( m_end.x,   aCenter );
 }
 
 
 void SCH_LINE::Rotate( const wxPoint& aCenter )
 {
-    RotatePoint( &m_start, aCenter, 900 );
-    RotatePoint( &m_end, aCenter, 900 );
+    if( m_flags & STARTPOINT )
+        RotatePoint( &m_start, aCenter, 900 );
+
+    if( m_flags & ENDPOINT )
+        RotatePoint( &m_end, aCenter, 900 );
 }
 
 

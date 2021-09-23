@@ -189,8 +189,13 @@ private:
     /**
      * Apply rules to narrow the collection down to selectable objects, and then heuristics
      * to try and narrow it to a single object.
+     *
+     * @param collector EE_COLLECTOR with elements to filter
+     * @param aWhere point where we should narrow (if relevant)
+     * @param aCheckLocked If false, remove locked elements from #collector
+     * @param aSelectPoints If true, set STARTPOINT/ENDPOINT flags on individual wires
      */
-    void narrowSelection( EE_COLLECTOR& collector, const VECTOR2I& aWhere, bool aCheckLocked );
+    void narrowSelection( EE_COLLECTOR& collector, const VECTOR2I& aWhere, bool aCheckLocked, bool aSelectPoints );
 
     /**
      * This is the primary SelectPoint method that will prompt the user with a menu to disambiguate

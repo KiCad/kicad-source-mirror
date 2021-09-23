@@ -421,16 +421,7 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
                 || evt->IsAction( &EE_ACTIONS::mirrorH )
                 || evt->IsAction( &EE_ACTIONS::mirrorV ) )
         {
-            if( m_isDrag )
-            {
-                // These are just going to make a mess, so eat them without doing anything.
-                wxBell();
-            }
-            else
-            {
-                // Allow operations while moving
-                evt->SetPassEvent();
-            }
+            evt->SetPassEvent();
         }
         else if( evt->Action() == TA_CHOICE_MENU_CHOICE )
         {
