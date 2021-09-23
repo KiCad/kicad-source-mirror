@@ -17,6 +17,9 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <env_paths.h>
+#include <pgm_base.h>
+#include <bitmaps.h>
 #include <base_screen.h>
 #include <confirm.h>
 #include <core/arraydim.h>
@@ -81,6 +84,8 @@ DIALOG_PAGES_SETTINGS::DIALOG_PAGES_SETTINGS( EDA_DRAW_FRAME* aParent, double aI
         m_customSizeY( aParent, m_userSizeYLabel, m_userSizeYCtrl, m_userSizeYUnits )
 {
     m_projectPath = Prj().GetProjectPath();
+    m_browseButton->SetBitmap( KiBitmap( BITMAPS::small_folder ) );
+
     m_maxPageSizeMils = aMaxUserSizeMils;
     m_tb = m_parent->GetTitleBlock();
     m_customFmt = false;
@@ -240,24 +245,20 @@ void DIALOG_PAGES_SETTINGS::OnPaperSizeChoice( wxCommandEvent& event )
 
     if( paperType.Contains( PAGE_INFO::Custom ) )
     {
+        m_staticTextOrient->Enable( false );
         m_orientationComboBox->Enable( false );
+
+        m_staticTextCustSize->Enable( true );
         m_customSizeX.Enable( true );
         m_customSizeY.Enable( true );
         m_customFmt = true;
     }
     else
     {
+        m_staticTextOrient->Enable( true );
         m_orientationComboBox->Enable( true );
 
-#if 0
-        // ForcePortrait() does not exist, but could be useful.
-        // so I leave these lines, which could be seen as a todo feature
-        if( paperType.ForcePortrait() )
-        {
-            m_orientationComboBox->SetStringSelection( _( "Portrait" ) );
-            m_orientationComboBox->Enable( false );
-        }
-#endif
+        m_staticTextCustSize->Enable( false );
         m_customSizeX.Enable( false );
         m_customSizeY.Enable( false );
         m_customFmt = false;
@@ -465,7 +466,7 @@ bool DIALOG_PAGES_SETTINGS::SavePageSettings()
 
     if( fileName != BASE_SCREEN::m_DrawingSheetFileName )
     {
-        wxString fullFileName = DS_DATA_MODEL::MakeFullFileName( fileName, m_projectPath );
+        wxString fullFileName = DS_DATA_MODEL::ResolvePath( fileName, m_projectPath );
 
         if( !fullFileName.IsEmpty() && !wxFileExists( fullFileName ) )
         {
@@ -789,42 +790,33 @@ void DIALOG_PAGES_SETTINGS::OnWksFileSelection( wxCommandEvent& event )
     }
 
     // Display a file picker dialog
-    wxFileDialog fileDialog( this, _( "Select Drawing Sheet File" ),
-                             path, name, DrawingSheetFileWildcard(),
-                             wxFD_DEFAULT_STYLE | wxFD_FILE_MUST_EXIST );
+    wxFileDialog fileDialog( this, _( "Select Drawing Sheet File" ), path, name,
+                             DrawingSheetFileWildcard(), wxFD_DEFAULT_STYLE|wxFD_FILE_MUST_EXIST );
 
     if( fileDialog.ShowModal() != wxID_OK )
         return;
 
     wxString fileName = fileDialog.GetPath();
+    wxString shortFileName;
 
-    // Try to remove the path, if the path is the current working dir,
-    // or the dir of kicad.pro (template), and use a relative path
-    wxString shortFileName = DS_DATA_MODEL::MakeShortFileName( fileName, m_projectPath );
-
-    // For Win/Linux/macOS compatibility, a relative path is a good idea
-    if( shortFileName != GetWksFileName() && shortFileName != fileName )
+    // Try to use a project-relative path first:
+    if( !m_projectPath.IsEmpty() && fileName.StartsWith( m_projectPath ) )
     {
-        wxString msg = wxString::Format( _( "The drawing sheet file name has changed.\n"
-                                            "Do you want to use the relative path:\n"
-                                            "\"%s\"\n"
-                                            "instead of\n"
-                                            "\"%s\"?" ),
-                                         shortFileName,
-                                         fileName );
-
-        if( !IsOK( this, msg ) )
-            shortFileName = fileName;
+        fn = wxFileName( fileName );
+        fn.MakeRelativeTo( m_projectPath );
+        shortFileName = fn.GetFullPath();
+    }
+    else
+    {
+        // Failing that see if we can shorten it with env vars:
+        shortFileName = NormalizePath( fileName, &Pgm().GetLocalEnvVariables(), nullptr );
     }
 
     std::unique_ptr<DS_DATA_MODEL> ws = std::make_unique<DS_DATA_MODEL>();
 
     if( ws->LoadDrawingSheet( fileName ) )
     {
-        if( m_drawingSheet != nullptr )
-        {
-            delete m_drawingSheet;
-        }
+        delete m_drawingSheet;
 
         m_drawingSheet = ws.release();
 

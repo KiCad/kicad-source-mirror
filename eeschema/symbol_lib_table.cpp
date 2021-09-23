@@ -360,9 +360,6 @@ LIB_SYMBOL* SYMBOL_LIB_TABLE::LoadSymbol( const wxString& aNickname, const wxStr
     LIB_SYMBOL* symbol = row->plugin->LoadSymbol( row->GetFullURI( true ), aSymbolName,
                                                   row->GetProperties() );
 
-    if( symbol == nullptr )
-        return symbol;
-
     // The library cannot know its own name, because it might have been renamed or moved.
     // Therefore footprints cannot know their own library nickname when residing in
     // a symbol library.
@@ -395,9 +392,8 @@ SYMBOL_LIB_TABLE::SAVE_T SYMBOL_LIB_TABLE::SaveSymbol( const wxString& aNickname
 
         wxString name = aSymbol->GetLibId().GetLibItemName();
 
-        std::unique_ptr< LIB_SYMBOL > symbol( row->plugin->LoadSymbol( row->GetFullURI( true ),
-                                                                       name,
-                                                                       row->GetProperties() ) );
+        std::unique_ptr<LIB_SYMBOL> symbol( row->plugin->LoadSymbol( row->GetFullURI( true ),
+                                                                     name, row->GetProperties() ) );
 
         if( symbol.get() )
             return SAVE_SKIPPED;
@@ -420,8 +416,7 @@ void SYMBOL_LIB_TABLE::DeleteSymbol( const wxString& aNickname, const wxString& 
 {
     const SYMBOL_LIB_TABLE_ROW* row = FindRow( aNickname, true );
     wxCHECK( row && row->plugin, /* void */ );
-    return row->plugin->DeleteSymbol( row->GetFullURI( true ), aSymbolName,
-                                      row->GetProperties() );
+    return row->plugin->DeleteSymbol( row->GetFullURI( true ), aSymbolName, row->GetProperties() );
 }
 
 
@@ -465,10 +460,9 @@ LIB_SYMBOL* SYMBOL_LIB_TABLE::LoadSymbolWithOptionalNickname( const LIB_ID& aLib
     {
         return LoadSymbol( nickname, name );
     }
-
-    // nickname is empty, sequentially search (alphabetically) all libs/nicks for first match:
     else
     {
+        // nickname is empty, sequentially search (alphabetically) all libs/nicks for first match:
         std::vector<wxString> nicks = GetLogicalLibs();
 
         // Search each library going through libraries alphabetically.

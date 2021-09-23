@@ -38,10 +38,9 @@
 #include <pcbplot.h>
 #include <pcb_painter.h>
 #include <project.h>
-#include <invoke_pcb_dialog.h>
 #include <widgets/appearance_controls.h>
-#include <widgets/paged_dialog.h>
 #include <widgets/panel_selection_filter.h>
+#include <widgets/paged_dialog.h>
 #include <project/net_settings.h>
 #include <project/project_file.h>
 #include <project/project_local_settings.h>
@@ -72,11 +71,10 @@ bool PCB_EDIT_FRAME::LoadProjectSettings()
 
     BASE_SCREEN::m_DrawingSheetFileName = project.m_BoardDrawingSheetFile;
 
-    // Load the drawing sheet description file, from the filename stored in
-    // BASE_SCREEN::m_DrawingSheetFileName, read in config project file
-    // If empty, or not existing, the default descr is loaded
-    wxString filename = DS_DATA_MODEL::MakeFullFileName( BASE_SCREEN::m_DrawingSheetFileName,
-                                                         Prj().GetProjectPath() );
+    // Load the drawing sheet from the filename stored in BASE_SCREEN::m_DrawingSheetFileName.
+    // If empty, or not existing, the default drawing sheet is loaded.
+    wxString filename = DS_DATA_MODEL::ResolvePath( BASE_SCREEN::m_DrawingSheetFileName,
+                                                    Prj().GetProjectPath());
 
     if( !DS_DATA_MODEL::GetTheInstance().LoadDrawingSheet( filename ) )
     {

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.9.0 Nov  1 2020)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -27,6 +27,7 @@
 #include <wx/image.h>
 #include <wx/icon.h>
 #include <wx/statbmp.h>
+#include <wx/bmpbuttn.h>
 #include <wx/button.h>
 #include <wx/datectrl.h>
 #include <wx/dateevt.h>
@@ -57,9 +58,14 @@ class DIALOG_PAGES_SETTINGS_BASE : public DIALOG_SHIM
 		wxTextCtrl* m_userSizeXCtrl;
 		wxStaticText* m_userSizeXUnits;
 		wxCheckBox* m_PaperExport;
-		wxStaticLine* m_staticline31;
 		wxStaticText* m_staticTextPreview;
+		wxStaticLine* m_staticline31;
 		wxStaticBitmap* m_PageLayoutExampleBitmap;
+		wxStaticText* m_staticTextDrawingSheet;
+		wxStaticLine* m_staticline4;
+		wxStaticText* m_staticText30;
+		wxTextCtrl* m_textCtrlFilePicker;
+		wxBitmapButton* m_browseButton;
 		wxStaticText* m_staticTextTitleBlock;
 		wxStaticLine* m_staticline3;
 		wxStaticText* m_TextSheetCount;
@@ -105,9 +111,7 @@ class DIALOG_PAGES_SETTINGS_BASE : public DIALOG_SHIM
 		wxStaticText* m_staticTextComment9;
 		wxTextCtrl* m_TextComment9;
 		wxCheckBox* m_Comment9Export;
-		wxStaticText* m_staticTextfilename;
-		wxTextCtrl* m_textCtrlFilePicker;
-		wxButton* m_buttonBrowse;
+		wxStaticLine* m_staticline5;
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;
 		wxButton* m_sdbSizerCancel;
@@ -117,6 +121,7 @@ class DIALOG_PAGES_SETTINGS_BASE : public DIALOG_SHIM
 		virtual void OnPageOrientationChoice( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnUserPageSizeYTextUpdated( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnUserPageSizeXTextUpdated( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnWksFileSelection( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnDateTextUpdated( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnDateApplyClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnRevisionTextUpdated( wxCommandEvent& event ) { event.Skip(); }
@@ -132,7 +137,6 @@ class DIALOG_PAGES_SETTINGS_BASE : public DIALOG_SHIM
 		virtual void OnComment7TextUpdated( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnComment8TextUpdated( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnComment9TextUpdated( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnWksFileSelection( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnOkClick( wxCommandEvent& event ) { event.Skip(); }
 
 

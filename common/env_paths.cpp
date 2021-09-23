@@ -111,7 +111,11 @@ wxString NormalizePath( const wxFileName& aFilePath, const ENV_VAR_MAP* aEnvVars
             varName = PROJECT_VAR_NAME;
     }
 
-    if( !varName.IsEmpty() )
+    if( varName.IsEmpty() )
+    {
+        normalizedFullPath = aFilePath.GetFullPath();
+    }
+    else
     {
         normalizedFullPath = wxString::Format( "${%s}/", varName );
 

@@ -1373,9 +1373,6 @@ bool SYMBOL_EDIT_FRAME::addLibTableEntry( const wxString& aLibFile, TABLE_SCOPE 
         normalizedPath = NormalizePath( aLibFile, &envVars, wxEmptyString );
     }
 
-    if( normalizedPath.IsEmpty() )
-        normalizedPath = aLibFile;
-
     row->SetFullURI( normalizedPath );
 
     wxCHECK( libTable->InsertRow( row ), false );
@@ -1428,9 +1425,6 @@ bool SYMBOL_EDIT_FRAME::replaceLibTableEntry( const wxString& aLibNickname,
         projectPath = Prj().GetProjectPath();
 
     wxString normalizedPath = NormalizePath( aLibFile, &envVars, projectPath );
-
-    if( normalizedPath.IsEmpty() )
-        normalizedPath = aLibFile;
 
     row->SetFullURI( normalizedPath );
     row->SetType( "KiCad" );

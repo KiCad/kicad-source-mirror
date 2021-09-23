@@ -804,8 +804,7 @@ void PANEL_FP_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event )
 
     if( fileType.m_IsFile )
     {
-        wxFileDialog dlg( this, title, openDir, wxEmptyString,
-                          fileType.m_FileFilter,
+        wxFileDialog dlg( this, title, openDir, wxEmptyString, fileType.m_FileFilter,
                           wxFD_OPEN | wxFD_FILE_MUST_EXIST | wxFD_MULTIPLE );
 
         int result = dlg.ShowModal();
@@ -833,8 +832,7 @@ void PANEL_FP_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event )
 
         dlg.GetPaths( files );
 #else
-        wxDirDialog dlg( nullptr, title, openDir,
-                         wxDD_DEFAULT_STYLE | wxDD_DIR_MUST_EXIST );
+        wxDirDialog dlg( nullptr, title, openDir, wxDD_DEFAULT_STYLE | wxDD_DIR_MUST_EXIST );
 
         int result = dlg.ShowModal();
 
@@ -925,7 +923,7 @@ void PANEL_FP_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event )
 
             // Do not use the project path in the global library table.  This will almost
             // assuredly be wrong for a different project.
-            if( path.IsEmpty() || ( m_pageNdx == 0 && path.Contains( "${KIPRJMOD}" ) ) )
+            if( m_pageNdx == 0 && path.Contains( "${KIPRJMOD}" ) )
                 path = fn.GetFullPath();
 
             m_cur_grid->SetCellValue( last_row, COL_URI, path );

@@ -51,13 +51,14 @@ public:
     void EnableWksFileNamePicker( bool aEnable )
     {
          m_textCtrlFilePicker->Enable( aEnable );
-         m_buttonBrowse->Enable( aEnable );
+         m_browseButton->Enable( aEnable );
     }
 
 private:
     virtual void onTransferDataToWindow() {}
 
-    virtual bool onSavePageSettings() {
+    virtual bool onSavePageSettings()
+    {
         // default just return true savepagesettings to succeed
         return true;
     }

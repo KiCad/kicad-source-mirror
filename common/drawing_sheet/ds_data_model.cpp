@@ -47,7 +47,6 @@
 #include <kiface_base.h>
 #include <title_block.h>
 #include <common.h>
-#include <eda_item.h>
 #include <drawing_sheet/ds_data_item.h>
 #include <drawing_sheet/ds_data_model.h>
 #include <drawing_sheet/ds_painter.h>
@@ -141,6 +140,7 @@ void DS_DATA_MODEL::Remove( DS_DATA_ITEM* aItem )
 int DS_DATA_MODEL::GetItemIndex( DS_DATA_ITEM* aItem ) const
 {
     unsigned idx = 0;
+
     while( idx < m_list.size() )
     {
         if( m_list[idx] == aItem )
@@ -163,39 +163,9 @@ DS_DATA_ITEM* DS_DATA_MODEL::GetItem( unsigned aIdx ) const
 }
 
 
-const wxString DS_DATA_MODEL::MakeShortFileName( const wxString& aFullFileName,
-                                                 const wxString& aProjectPath  )
+const wxString DS_DATA_MODEL::ResolvePath( const wxString& aPath, const wxString& aProjectPath )
 {
-    wxString    shortFileName = aFullFileName;
-    wxFileName  fn = aFullFileName;
-
-    if( fn.IsRelative() )
-        return shortFileName;
-
-    if( ! aProjectPath.IsEmpty() && aFullFileName.StartsWith( aProjectPath ) )
-    {
-        fn.MakeRelativeTo( aProjectPath );
-        shortFileName = fn.GetFullPath();
-        return shortFileName;
-    }
-
-    wxString    fileName = Kiface().KifaceSearch().FindValidPath( fn.GetFullName() );
-
-    if( !fileName.IsEmpty() )
-    {
-        fn = fileName;
-        shortFileName = fn.GetFullName();
-        return shortFileName;
-    }
-
-    return shortFileName;
-}
-
-
-const wxString DS_DATA_MODEL::MakeFullFileName( const wxString& aShortFileName,
-                                                const wxString& aProjectPath )
-{
-    wxString fullFileName = ExpandEnvVarSubstitutions( aShortFileName, nullptr );
+    wxString fullFileName = ExpandEnvVarSubstitutions( aPath, nullptr );
 
     if( fullFileName.IsEmpty() )
         return fullFileName;
@@ -205,8 +175,7 @@ const wxString DS_DATA_MODEL::MakeFullFileName( const wxString& aShortFileName,
     if( fn.IsAbsolute() )
         return fullFileName;
 
-    // the path is not absolute: search it in project path, and then in
-    // kicad valid paths
+    // the path is not absolute: search it in project path, and then in kicad valid paths
     if( !aProjectPath.IsEmpty() )
     {
         fn.MakeAbsolute( aProjectPath );

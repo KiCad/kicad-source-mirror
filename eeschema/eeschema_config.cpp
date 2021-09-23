@@ -88,16 +88,14 @@ bool SCH_EDIT_FRAME::LoadProjectSettings()
     GetRenderSettings()->m_PinSymbolSize        = settings.m_PinSymbolSize;
     GetRenderSettings()->m_JunctionSize         = settings.m_JunctionSize;
 
-    // Verify some values, because the config file can be edited by hand,
-    // and have bad values:
+    // Verify some values, because the config file can be edited by hand, and have bad values:
     LIB_SYMBOL::SetSubpartIdNotation( LIB_SYMBOL::GetSubpartIdSeparator(),
                                       LIB_SYMBOL::GetSubpartFirstId() );
 
-    // Load the drawing sheet description file, from the filename stored in
-    // BASE_SCREEN::m_DrawingSheetFileName, read in config project file
-    // If empty, or not existing, the default descr is loaded
-    wxString filename = DS_DATA_MODEL::MakeFullFileName( BASE_SCREEN::m_DrawingSheetFileName,
-                                                         Prj().GetProjectPath() );
+    // Load the drawing sheet from the filename stored in BASE_SCREEN::m_DrawingSheetFileName.
+    // If empty, or not existing, the default drawing sheet is loaded.
+    wxString filename = DS_DATA_MODEL::ResolvePath( BASE_SCREEN::m_DrawingSheetFileName,
+                                                    Prj().GetProjectPath() );
 
     if( !DS_DATA_MODEL::GetTheInstance().LoadDrawingSheet( filename ) )
         ShowInfoBarError( _( "Error loading drawing sheet." ), true );

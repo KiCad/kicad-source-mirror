@@ -170,28 +170,9 @@ public:
                         const wxString& aSource = wxT( "Sexpr_string" )  );
 
     /**
-     * @param aFullFileName is the full filename, which can be a relative.
-     * @param aProjectPath is the current project absolute path (can be empty).
-     * @return a short filename from a full filename:
-     * if the path is the current project path, or if the path
-     * is the same as kicad.pro (in template), returns the shortname
-     * else do nothing and returns a full filename
+     * Resolve a path which might be project-relative or contain env variable references.
      */
-    static const wxString MakeShortFileName( const wxString& aFullFileName,
-                                             const wxString& aProjectPath );
-
-    /**
-     * @param aShortFileName = the short filename, which can be a relative
-     * @param aProjectPath = the curr project absolute path (can be empty)
-     * or absolute path, and can include env variable reference ( ${envvar} expression )
-     * if the short filename path is relative, it is expected relative to the project path
-     * or (if aProjectPath is empty or if the file does not exist)
-     * relative to kicad.pro (in template)
-     * If aShortFileName is absolute return aShortFileName
-     * @return a full filename from a short filename.
-     */
-    static const wxString MakeFullFileName( const wxString& aShortFileName,
-                                            const wxString& aProjectPath );
+    static const wxString ResolvePath( const wxString& aPath, const wxString& aProjectPath );
 
     double m_WSunits2Iu;            // conversion factor between
                                     // ws units (mils) and draw/plot units

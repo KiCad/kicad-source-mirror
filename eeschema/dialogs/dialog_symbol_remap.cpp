@@ -198,10 +198,6 @@ void DIALOG_SYMBOL_REMAP::createProjectSymbolLibTable( REPORTER& aReporter )
             // system wide environment variables is probably not a good idea.
             wxString fullFileName = NormalizePath( fn, &Pgm().GetLocalEnvVariables(), &Prj() );
 
-            // Fall back to the absolute library path.
-            if( fullFileName.IsEmpty() )
-                fullFileName = lib->GetFullFileName();
-
             wxFileName tmpFn = fullFileName;
 
             // Don't add symbol libraries that do not exist.

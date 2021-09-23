@@ -554,7 +554,7 @@ void PANEL_SYM_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event )
 
             // Do not use the project path in the global library table.  This will almost
             // assuredly be wrong for a different project.
-            if( path.IsEmpty() || (m_pageNdx == 0 && path.Contains( "${KIPRJMOD}" )) )
+            if( m_pageNdx == 0 && path.Contains( "${KIPRJMOD}" ) )
                 path = fn.GetFullPath();
 
             m_cur_grid->SetCellValue( last_row, COL_URI, path );
@@ -791,7 +791,7 @@ void PANEL_SYM_LIB_TABLE::onConvertLegacyLibraries( wxCommandEvent& event )
 
             // Do not use the project path in the global library table.  This will almost
             // assuredly be wrong for a different project.
-            if( relPath.IsEmpty() || (m_cur_grid == m_global_grid && relPath.Contains( "${KIPRJMOD}" ) ) )
+            if( m_cur_grid == m_global_grid && relPath.Contains( "${KIPRJMOD}" ) )
                 relPath = newLib.GetFullPath();
 
             m_cur_grid->SetCellValue( row, COL_URI, relPath );

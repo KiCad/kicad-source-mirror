@@ -393,9 +393,6 @@ protected:
                                               m_normalizeBasePath );
                 }
 
-                if( relPath.IsEmpty() )
-                    relPath = filePath;
-
                 SetValue( relPath );
 
                 if( !m_grid->CommitPendingChanges() )
@@ -420,9 +417,6 @@ protected:
                     relPath = NormalizePath( filePath, &Pgm().GetLocalEnvVariables(),
                                              m_normalizeBasePath );
                 }
-
-                if( relPath.IsEmpty() )
-                    relPath = filePath;
 
                 SetValue( relPath );
 
