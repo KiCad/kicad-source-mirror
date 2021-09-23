@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-01 11:31-0700\n"
-"PO-Revision-Date: 2021-09-22 18:59+0000\n"
+"PO-Revision-Date: 2021-09-23 11:10+0000\n"
 "Last-Translator: boonchai k. <kicadthai@gmail.com>\n"
 "Language-Team: Thai <https://hosted.weblate.org/projects/kicad/master-source/"
 "th/>\n"
@@ -33062,526 +33062,527 @@ msgstr "จำกัดเส้นกราฟิกให้เป็น H,V �
 
 #: pcbnew/tools/pcb_actions.cpp:230
 msgid "Design Rules Checker"
-msgstr ""
+msgstr "ตัวตรวจสอบกฎการออกแบบ"
 
 #: pcbnew/tools/pcb_actions.cpp:230
 msgid "Show the design rules checker window"
-msgstr ""
+msgstr "แสดงหน้าต่างตัวตรวจสอบกฎการออกแบบ"
 
 #: pcbnew/tools/pcb_actions.cpp:239
 msgid "Open in Footprint Editor"
-msgstr ""
+msgstr "เปิดในตัวแก้ไขฟุ้ทพรินท์"
 
 #: pcbnew/tools/pcb_actions.cpp:240
 msgid "Opens the selected footprint in the Footprint Editor"
-msgstr ""
+msgstr "เปิดฟุ้ทพรินท์ที่เลือกภาย ในเครื่องมือแก้ไขฟุ้ทพรินท์"
 
 #: pcbnew/tools/pcb_actions.cpp:247
 msgid ""
 "Selects a footprint by reference designator and places it under the cursor "
 "for moving"
 msgstr ""
+"เลือกฟุ้ทพรินท์โดยตัวกําหนดอ้างอิงและวางไว้ใต้เคอร์เซอร์เพื่อการเคลื่อนย้าย"
 
 #: pcbnew/tools/pcb_actions.cpp:258
 msgid "Move with Reference"
-msgstr ""
+msgstr "ย้ายไปพร้อมกับตัวอ้างอิง"
 
 #: pcbnew/tools/pcb_actions.cpp:259
 msgid "Moves the selected item(s) with a specified starting point"
-msgstr ""
+msgstr "ย้ายรายการที่เลือกด้วยจุดเริ่มต้นที่ระบุ"
 
 #: pcbnew/tools/pcb_actions.cpp:264
 msgid "Copy with Reference"
-msgstr ""
+msgstr "คัดลอกพร้อมการอ้างอิง"
 
 #: pcbnew/tools/pcb_actions.cpp:265
 msgid "Copy selected item(s) to clipboard with a specified starting point"
-msgstr ""
+msgstr "คัดลอกรายการที่เลือกไปยังคลิปบอร์ดด้วยจุดเริ่มต้นที่ระบุ"
 
 #: pcbnew/tools/pcb_actions.cpp:271
 msgid "Duplicate and Increment"
-msgstr ""
+msgstr "ทําซ้ําและเพิ่มขึ้น"
 
 #: pcbnew/tools/pcb_actions.cpp:271
 msgid "Duplicates the selected item(s), incrementing pad numbers"
-msgstr ""
+msgstr "ทําซ้ํารายการที่เลือก และการเพิ่มหมายเลขแพ็ด"
 
 #: pcbnew/tools/pcb_actions.cpp:277
 msgid "Move Exactly..."
-msgstr ""
+msgstr "ย้ายแม่นยำ..."
 
 #: pcbnew/tools/pcb_actions.cpp:277
 msgid "Moves the selected item(s) by an exact amount"
-msgstr ""
+msgstr "ย้ายรายการที่เลือกตามจำนวนที่แน่นอน"
 
 #: pcbnew/tools/pcb_actions.cpp:283
 msgid "Create Array..."
-msgstr ""
+msgstr "สร้างอาร์เรย์..."
 
 #: pcbnew/tools/pcb_actions.cpp:283
 msgid "Create array"
-msgstr ""
+msgstr "สร้างอาร์เรย์"
 
 #: pcbnew/tools/pcb_actions.cpp:296
 msgid "Rotate Counterclockwise"
-msgstr ""
+msgstr "หมุนทวนเข็มนาฬิกา"
 
 #: pcbnew/tools/pcb_actions.cpp:296
 msgid "Rotates selected item(s) counterclockwise"
-msgstr ""
+msgstr "หมุนรายการที่เลือกทวนเข็มนาฬิกา"
 
 #: pcbnew/tools/pcb_actions.cpp:302
 msgid "Flips selected item(s) to opposite side of board"
-msgstr ""
+msgstr "พลิกรายการที่เลือกไปด้านตรงข้ามของบอร์ด"
 
 #: pcbnew/tools/pcb_actions.cpp:307
 msgid "Mirrors selected item"
-msgstr ""
+msgstr "กลับด้านกระจกรายการที่เลือก"
 
 #: pcbnew/tools/pcb_actions.cpp:312
 msgid "Change Track Width"
-msgstr ""
+msgstr "เปลี่ยนความกว้างของแทร็ก"
 
 #: pcbnew/tools/pcb_actions.cpp:312
 msgid "Updates selected track & via sizes"
-msgstr ""
+msgstr "อัปเดตขนาดแทร็กและเวียที่เลือก"
 
 #: pcbnew/tools/pcb_actions.cpp:316
 msgid "Adds arcs tangent to the selected straight track segments"
-msgstr ""
+msgstr "เพิ่มส่วนโค้งแทนเจนต์ให้กับส่วนช่วงตรงของแทร็กที่เลือก"
 
 #: pcbnew/tools/pcb_actions.cpp:321
 msgid "Delete Full Track"
-msgstr ""
+msgstr "ลบแทร็กทั้งหมด"
 
 #: pcbnew/tools/pcb_actions.cpp:321
 msgid "Deletes selected item(s) and copper connections"
-msgstr ""
+msgstr "ลบรายการที่เลือกและการเชื่อมต่อทองแดง"
 
 #: pcbnew/tools/pcb_actions.cpp:335
 msgid "Show Footprint Tree"
-msgstr ""
+msgstr "แสดงต้นไม้ของฟุ้ทพรินท์"
 
 #: pcbnew/tools/pcb_actions.cpp:340
 msgid "Hide Footprint Tree"
-msgstr ""
+msgstr "ซ่อนต้นไม้ของฟุ้ทพรินท์"
 
 #: pcbnew/tools/pcb_actions.cpp:346
 msgid "New Footprint..."
-msgstr ""
+msgstr "ฟุ้ทพรินท์ใหม่..."
 
 #: pcbnew/tools/pcb_actions.cpp:346
 msgid "Create a new, empty footprint"
-msgstr ""
+msgstr "สร้างใหม่, ฟุ้ทพรินท์ว่างเปล่า"
 
 #: pcbnew/tools/pcb_actions.cpp:351
 msgid "Create Footprint..."
-msgstr ""
+msgstr "สร้างฟุ้ทพรินท์..."
 
 #: pcbnew/tools/pcb_actions.cpp:351
 msgid "Create a new footprint using the Footprint Wizard"
-msgstr ""
+msgstr "สร้างฟุ้ทพรินท์ใหม่โดยใช้ตัวช่วยมหัศจรรย์"
 
 #: pcbnew/tools/pcb_actions.cpp:356
 msgid "Edit Footprint"
-msgstr ""
+msgstr "แก้ไขฟุ้ทพรินท์"
 
 #: pcbnew/tools/pcb_actions.cpp:356
 msgid "Show selected footprint on editor canvas"
-msgstr ""
+msgstr "แสดงฟุ้ทพรินท์ที่เลือกบนผืนผ้าใบของเครื่องมือแก้ไข"
 
 #: pcbnew/tools/pcb_actions.cpp:361
 msgid "Delete Footprint from Library"
-msgstr ""
+msgstr "ลบฟุ้ทพรินท์ออกจากไลบรารี"
 
 #: pcbnew/tools/pcb_actions.cpp:366
 msgid "Cut Footprint"
-msgstr ""
+msgstr "ตัดฟุ้ทพรินท์"
 
 #: pcbnew/tools/pcb_actions.cpp:371
 msgid "Copy Footprint"
-msgstr ""
+msgstr "สำเนาฟุ้ทพรินท์"
 
 #: pcbnew/tools/pcb_actions.cpp:376
 msgid "Paste Footprint"
-msgstr ""
+msgstr "วางสำเนาฟุ้ทพรินท์"
 
 #: pcbnew/tools/pcb_actions.cpp:381
 msgid "Import Footprint..."
-msgstr ""
+msgstr "นำเข้าฟุ้ทพรินท์..."
 
 #: pcbnew/tools/pcb_actions.cpp:381
 msgid "Import footprint from file"
-msgstr ""
+msgstr "นำเข้าฟุ้ทพรินท์จากไฟล์"
 
 #: pcbnew/tools/pcb_actions.cpp:386
 msgid "Export Footprint..."
-msgstr ""
+msgstr "ส่งออกฟุ้ทพรินท์..."
 
 #: pcbnew/tools/pcb_actions.cpp:386
 msgid "Export footprint to file"
-msgstr ""
+msgstr "ส่งออกฟุ้ทพรินท์ไปยังไฟล์"
 
 #: pcbnew/tools/pcb_actions.cpp:391
 msgid "Footprint Properties..."
-msgstr ""
+msgstr "คุณสมบัติฟุ้ทพรินท์..."
 
 #: pcbnew/tools/pcb_actions.cpp:391
 msgid "Edit footprint properties"
-msgstr ""
+msgstr "แก้ไขคุณสมบัติฟุ้ทพรินท์"
 
 #: pcbnew/tools/pcb_actions.cpp:396
 msgid "Show the footprint checker window"
-msgstr ""
+msgstr "แสดงหน้าต่างตัวตรวจสอบฟุ้ทพรินท์"
 
 #: pcbnew/tools/pcb_actions.cpp:403
 msgid "Update Footprint..."
-msgstr ""
+msgstr "ปรับปรุงฟุ้ทพรินท์..."
 
 #: pcbnew/tools/pcb_actions.cpp:404
 msgid "Update footprint to include any changes from the library"
-msgstr ""
+msgstr "ปรับปรุงฟุ้ทพรินท์ให้รวมการเปลี่ยนแปลงจากไลบรารี"
 
 #: pcbnew/tools/pcb_actions.cpp:409
 msgid "Update Footprints from Library..."
-msgstr ""
+msgstr "ปรับปรุงฟุ้ทพรินท์จากไลบรารี..."
 
 #: pcbnew/tools/pcb_actions.cpp:410
 msgid "Update footprints to include any changes from the library"
-msgstr ""
+msgstr "ปรับปรุงฟุ้ทพรินท์ให้รวมการเปลี่ยนจากไลบบรารี"
 
 #: pcbnew/tools/pcb_actions.cpp:415
 msgid "Remove Unused Pads..."
-msgstr ""
+msgstr "นำแพ็ดที่ไม่ได้ใช้ออก..."
 
 #: pcbnew/tools/pcb_actions.cpp:416
 msgid ""
 "Remove or restore the unconnected inner layers on through hole pads and vias"
-msgstr ""
+msgstr "ถอดหรือคืนค่าเลเยอร์ชั้นในที่ไม่ได้เชื่อมต่อกับแพ็ดและเวียเจาะทะลุ"
 
 #: pcbnew/tools/pcb_actions.cpp:421
 msgid "Assign a different footprint from the library"
-msgstr ""
+msgstr "กำหนดฟุ้ทพรินท์ที่แตกต่างจากไลบรารี"
 
 #: pcbnew/tools/pcb_actions.cpp:426
 msgid "Change Footprints..."
-msgstr ""
+msgstr "เปลี่ยนฟุ้ทพรินท์..."
 
 #: pcbnew/tools/pcb_actions.cpp:426
 msgid "Assign different footprints from the library"
-msgstr ""
+msgstr "กำหนดฟุ้ทพรินท์ที่แตกต่างจากไลบรารี"
 
 #: pcbnew/tools/pcb_actions.cpp:431
 msgid "Swap Layers..."
-msgstr ""
+msgstr "สลับเลเยอร์..."
 
 #: pcbnew/tools/pcb_actions.cpp:431
 msgid "Move tracks or drawings from one layer to another"
-msgstr ""
+msgstr "ย้ายแทร็กหรือเขียนแบบจากเลเยอร์ไปอีกเลเยอร์หนึ่ง"
 
 #: pcbnew/tools/pcb_actions.cpp:436
 msgid "Edit Track & Via Properties..."
-msgstr ""
+msgstr "แก้ไขคุณสมบัติแทร็ค & เวีย..."
 
 #: pcbnew/tools/pcb_actions.cpp:437
 msgid "Edit track and via properties globally across board"
-msgstr ""
+msgstr "แก้ไขคุณสมบัติแทร็กและเวียอย่างทั่วถึงไปทั้งบอร์ด"
 
 #: pcbnew/tools/pcb_actions.cpp:443
 msgid "Edit Text and graphics properties globally across board"
-msgstr ""
+msgstr "แก้ไขคุณสมบัติข้อความและกราฟฟิกอย่างทั่วถึงไปทั้งบอร์ด"
 
 #: pcbnew/tools/pcb_actions.cpp:448
 msgid "Global Deletions..."
-msgstr ""
+msgstr "การลบอย่างทั่วถึง..."
 
 #: pcbnew/tools/pcb_actions.cpp:449
 msgid "Delete tracks, footprints and graphic items from board"
-msgstr ""
+msgstr "ลบแทร็ก, ฟุ้ทพรินท์และกราฟฟิกออกจากบอร์ด"
 
 #: pcbnew/tools/pcb_actions.cpp:454
 msgid "Cleanup Tracks & Vias..."
-msgstr ""
+msgstr "ทำความสะอาดแทร็ก&เวีย..."
 
 #: pcbnew/tools/pcb_actions.cpp:455
 msgid "Cleanup redundant items, shorting items, etc."
-msgstr ""
+msgstr "ล้างรายการซ้ำซ้อน รายการลัดวงจร ฯลฯ"
 
 #: pcbnew/tools/pcb_actions.cpp:460
 msgid "Cleanup Graphics..."
-msgstr ""
+msgstr "ล้างกราฟิก..."
 
 #: pcbnew/tools/pcb_actions.cpp:461
 msgid "Cleanup redundant items, etc."
-msgstr ""
+msgstr "ล้างรายการซ้ำซ้อน ฯลฯ"
 
 #: pcbnew/tools/pcb_actions.cpp:468
 msgid "Add Microwave Gap"
-msgstr ""
+msgstr "เพิ่มช่องว่างไมโครเวฟ"
 
 #: pcbnew/tools/pcb_actions.cpp:468
 msgid "Create gap of specified length for microwave applications"
-msgstr ""
+msgstr "สร้างช่องว่างของความยาวที่กำหนดสำหรับการใช้งานไมโครเวฟ"
 
 #: pcbnew/tools/pcb_actions.cpp:473
 msgid "Add Microwave Stub"
-msgstr ""
+msgstr "เพิ่มต้นขั้วไมโครเวฟ"
 
 #: pcbnew/tools/pcb_actions.cpp:473
 msgid "Create stub of specified length for microwave applications"
-msgstr ""
+msgstr "สร้างต้นขั้วที่มีความยาวที่ระบุสําหรับการใช้งานไมโครเวฟ"
 
 #: pcbnew/tools/pcb_actions.cpp:478
 msgid "Add Microwave Arc Stub"
-msgstr ""
+msgstr "เพิ่มต้นขั้วโค้งไมโครเวฟ"
 
 #: pcbnew/tools/pcb_actions.cpp:478
 msgid "Create stub (arc) of specified size for microwave applications"
-msgstr ""
+msgstr "สร้างต้นขั้ว(ส่วนโค้ง)มีขนาดที่ระบุสําหรับการใช้งานไมโครเวฟ"
 
 #: pcbnew/tools/pcb_actions.cpp:483
 msgid "Add Microwave Polygonal Shape"
-msgstr ""
+msgstr "เพิ่มรูปทรงหลายเหลี่ยมไมโครเวฟ"
 
 #: pcbnew/tools/pcb_actions.cpp:483
 msgid "Create a microwave polygonal shape from a list of vertices"
-msgstr ""
+msgstr "สร้างรูปร่างเหลี่ยมไมโครเวฟจากรายการจุดยอด"
 
 #: pcbnew/tools/pcb_actions.cpp:488
 msgid "Add Microwave Line"
-msgstr ""
+msgstr "เพิ่มสายไมโครเวฟ"
 
 #: pcbnew/tools/pcb_actions.cpp:488
 msgid "Create line of specified length for microwave applications"
-msgstr ""
+msgstr "สร้างเส้นความยาวที่ระบุสําหรับการใช้งานไมโครเวฟ"
 
 #: pcbnew/tools/pcb_actions.cpp:496
 msgid "Copy Pad Properties to Default"
-msgstr ""
+msgstr "คัดลอกคุณสมบัติแพ็ดเป็นค่าเริ่มต้น"
 
 #: pcbnew/tools/pcb_actions.cpp:496
 msgid "Copy current pad's properties"
-msgstr ""
+msgstr "คัดลอกคุณสมบัติแพ็ดปัจจุบัน"
 
 #: pcbnew/tools/pcb_actions.cpp:501
 msgid "Paste Default Pad Properties to Selected"
-msgstr ""
+msgstr "วางสำเนาคุณสมบัติตั้งต้นของแพ็ดไปยังที่เลือก"
 
 #: pcbnew/tools/pcb_actions.cpp:502
 msgid "Replace the current pad's properties with those copied earlier"
-msgstr ""
+msgstr "แทนที่คุณสมบัติของแพ็ดปัจจุบันด้วยค่าที่คัดลอกไว้ก่อนหน้า"
 
 #: pcbnew/tools/pcb_actions.cpp:507
 msgid "Push Pad Properties to Other Pads..."
-msgstr ""
+msgstr "ผลักดันคุณสมบัติแพ็ดไปยังแพ็ดอื่นๆ..."
 
 #: pcbnew/tools/pcb_actions.cpp:508
 msgid "Copy the current pad's properties to other pads"
-msgstr ""
+msgstr "คัดลอกคุณสมบัติของแพ็ดปัจจุบันไปยังแพ็ดอื่นๆ"
 
 #: pcbnew/tools/pcb_actions.cpp:513
 msgid "Renumber Pads..."
-msgstr ""
+msgstr "เรียงหมายเลขแพ็ดใหม่..."
 
 #: pcbnew/tools/pcb_actions.cpp:514
 msgid "Renumber pads by clicking on them in the desired order"
-msgstr ""
+msgstr "เรียงหมายเลขแพ็ดโดยคลิกตามลำดับที่ต้องการ"
 
 #: pcbnew/tools/pcb_actions.cpp:519
 msgid "Add Pad"
-msgstr ""
+msgstr "เพิ่มแพ็ด"
 
 #: pcbnew/tools/pcb_actions.cpp:519
 msgid "Add a pad"
-msgstr ""
+msgstr "เพิ่มแพ็ด"
 
 #: pcbnew/tools/pcb_actions.cpp:525
 msgid "Edit Pad as Graphic Shapes"
-msgstr ""
+msgstr "แก้ไขแพ็ดดังเช่นรูปร่างกราฟิก"
 
 #: pcbnew/tools/pcb_actions.cpp:526
 msgid "Ungroups a custom-shaped pad for editing as individual graphic shapes"
-msgstr ""
+msgstr "ยกเลิกการจัดกลุ่มรูปร่างแพ็ดแบบกำหนดเอง สำหรับแก้ไขแบบรูปร่างกราฟิก"
 
 #: pcbnew/tools/pcb_actions.cpp:532
 msgid "Finish Pad Edit"
-msgstr ""
+msgstr "สิ้นสุดการแก้ไขแพ็ด"
 
 #: pcbnew/tools/pcb_actions.cpp:533
 msgid "Regroups all touching graphic shapes into the edited pad"
-msgstr ""
+msgstr "จับกลุ่มรูปร่างกราฟิกทั้งหมดที่สัมผัสกัน ให้เป็นแพ็ดที่แก้ไขแล้ว"
 
 #: pcbnew/tools/pcb_actions.cpp:538
 msgid "Default Pad Properties..."
-msgstr ""
+msgstr "คุณสมบัติแพ็ดตั้งต้น..."
 
 #: pcbnew/tools/pcb_actions.cpp:538
 msgid "Edit the pad properties used when creating new pads"
-msgstr ""
+msgstr "แก้ไขคุณสมบัติแพ็ดสำหรับใช้เมื่อสร้างแพ็ดใหม่"
 
 #: pcbnew/tools/pcb_actions.cpp:546
 msgid "Refresh Plugins"
-msgstr ""
+msgstr "รีเฟรชปลั๊กอิน"
 
 #: pcbnew/tools/pcb_actions.cpp:546
 msgid "Reload all python plugins and refresh plugin menus"
-msgstr ""
+msgstr "อ่านใหม่ปลั๊กอินไพธอนและรีเฟรชเมนูปลั๊กอิน"
 
 #: pcbnew/tools/pcb_actions.cpp:552
 msgid "Reveal Plugin Folder in Finder"
-msgstr ""
+msgstr "เปิดเผยโฟลเดอร์ปลั๊กอินในตัวค้นหา"
 
 #: pcbnew/tools/pcb_actions.cpp:552
 msgid "Reveals the plugins folder in a Finder window"
-msgstr ""
+msgstr "แสดงโฟลเดอร์ปลั๊กอินในหน้าต่าง Finder"
 
 #: pcbnew/tools/pcb_actions.cpp:562
 msgid "Board Setup..."
-msgstr ""
+msgstr "ตั้งค่าบอร์ด..."
 
 #: pcbnew/tools/pcb_actions.cpp:563
 msgid "Edit board setup including layers, design rules and various defaults"
-msgstr ""
+msgstr "แก้ไขการตั้งค่าบอร์ดรวมถึงเลเยอร์,กฎการออกแบบและค่าเริ่มต้นต่างๆ"
 
 #: pcbnew/tools/pcb_actions.cpp:568
 msgid "Import Netlist..."
-msgstr ""
+msgstr "นําเข้าเน็ตลิสต์..."
 
 #: pcbnew/tools/pcb_actions.cpp:568
 msgid "Read netlist and update board connectivity"
-msgstr ""
+msgstr "อ่านเน็ตลิสต์และอัปเดตการเชื่อมต่อบนบอร์ด"
 
 #: pcbnew/tools/pcb_actions.cpp:573
 msgid "Import Specctra Session..."
-msgstr ""
+msgstr "นําเข้าเซสชัน Specctra..."
 
 #: pcbnew/tools/pcb_actions.cpp:573
 msgid "Import routed Specctra session (*.ses) file"
-msgstr ""
+msgstr "นำเข้าไฟล์เซสชัน Specctra (*.ses)"
 
 #: pcbnew/tools/pcb_actions.cpp:578
 msgid "Export Specctra DSN..."
-msgstr ""
+msgstr "ส่งออก Specctra DSN..."
 
 #: pcbnew/tools/pcb_actions.cpp:578
 msgid "Export Specctra DSN routing info"
-msgstr ""
+msgstr "ส่งออกข้อมูลเราติ้ง Specctra DSN"
 
 #: pcbnew/tools/pcb_actions.cpp:583
 msgid "Gerbers (.gbr)..."
-msgstr ""
+msgstr "เกอร์เบอร์ (.gbr)..."
 
 #: pcbnew/tools/pcb_actions.cpp:583
 msgid "Generate Gerbers for fabrication"
-msgstr ""
+msgstr "สร้างเกอร์เบอร์สำหรับการผลิต"
 
 #: pcbnew/tools/pcb_actions.cpp:588
 msgid "Drill Files (.drl)..."
-msgstr ""
+msgstr "ไฟล์เจาะ (.drl)..."
 
 #: pcbnew/tools/pcb_actions.cpp:588
 msgid "Generate Excellon drill file(s)"
-msgstr ""
+msgstr "สร้างไฟล์เจาะ Excellon"
 
 #: pcbnew/tools/pcb_actions.cpp:593
 msgid "Component Placement (.pos)..."
-msgstr ""
+msgstr "ตำแหน่งอุปกรณ์ (.pos)..."
 
 #: pcbnew/tools/pcb_actions.cpp:594
 msgid "Generate component placement file(s) for pick and place"
-msgstr ""
+msgstr "สร้างไฟล์จัดวางตำแหน่งอุปกรณ์ สำหรับเครื่อง pick&place"
 
 #: pcbnew/tools/pcb_actions.cpp:599
 msgid "Footprint Report (.rpt)..."
-msgstr ""
+msgstr "รายงานฟุ้ทพรินท์ (.rpt)..."
 
 #: pcbnew/tools/pcb_actions.cpp:600
 msgid "Create report of all footprints from current board"
-msgstr ""
+msgstr "สร้างรายงานฟุ้ทพรินท์ทั้งหมดจากบอร์ดปัจจุบัน"
 
 #: pcbnew/tools/pcb_actions.cpp:605
 msgid "IPC-D-356 Netlist File..."
-msgstr ""
+msgstr "ไฟล์เน็ตลิสต์ IPC-D-356..."
 
 #: pcbnew/tools/pcb_actions.cpp:605
 msgid "Generate IPC-D-356 netlist file"
-msgstr ""
+msgstr "สร้างไฟล์เน็ตลิสต์ IPC-D-356"
 
 #: pcbnew/tools/pcb_actions.cpp:610
 msgid "BOM..."
-msgstr ""
+msgstr "BOM..."
 
 #: pcbnew/tools/pcb_actions.cpp:610
 msgid "Create bill of materials from board"
-msgstr ""
+msgstr "สร้างรายการวัสดุจากบอร์ด"
 
 #: pcbnew/tools/pcb_actions.cpp:617
 msgid "Switch Track Width to Next"
-msgstr ""
+msgstr "เปลี่ยนความกว้างแทร็กเป็นค่าถัดไป"
 
 #: pcbnew/tools/pcb_actions.cpp:617
 msgid "Change track width to next pre-defined size"
-msgstr ""
+msgstr "เปลี่ยนขนาดความกว้างแทร็กไปเป็นค่าที่กำหนดไว้ถัดไป"
 
 #: pcbnew/tools/pcb_actions.cpp:622
 msgid "Switch Track Width to Previous"
-msgstr ""
+msgstr "สลับความกว้างแทร็กไปที่ค่าก่อนหน้า"
 
 #: pcbnew/tools/pcb_actions.cpp:622
 msgid "Change track width to previous pre-defined size"
-msgstr ""
+msgstr "เปลี่ยนความกว้างแทร็กไปเป็นค่าครั้งก่อนที่กำหนดไว้ก่อนหน้า"
 
 #: pcbnew/tools/pcb_actions.cpp:627
 msgid "Increase Via Size"
-msgstr ""
+msgstr "เพิ่มขนาดเวีย"
 
 #: pcbnew/tools/pcb_actions.cpp:627
 msgid "Change via size to next pre-defined size"
-msgstr ""
+msgstr "เปลี่ยนขนาดเวียไปเป็นค่าต่อไปที่กำหนดไว้ล่วงหน้า"
 
 #: pcbnew/tools/pcb_actions.cpp:632
 msgid "Decrease Via Size"
-msgstr ""
+msgstr "ลดค่าขนาดเวีย"
 
 #: pcbnew/tools/pcb_actions.cpp:632
 msgid "Change via size to previous pre-defined size"
-msgstr ""
+msgstr "เปลี่ยนค่าขนาดเวียไปค่าก่อนหน้าที่กำหนดไว้"
 
 #: pcbnew/tools/pcb_actions.cpp:641
 msgid "Merge Zones"
-msgstr ""
+msgstr "รวมโซนทั้งหมด"
 
 #: pcbnew/tools/pcb_actions.cpp:641
 msgid "Merge zones"
-msgstr ""
+msgstr "รวมโซนทั้งหมด"
 
 #: pcbnew/tools/pcb_actions.cpp:645
 msgid "Duplicate Zone onto Layer..."
-msgstr ""
+msgstr "ทำซ้ำโซนไปบนเลเยอร์..."
 
 #: pcbnew/tools/pcb_actions.cpp:645
 msgid "Duplicate zone outline onto a different layer"
-msgstr ""
+msgstr "ทำซ้ำโครงร่างโซนไปยังเลเยอร์ที่แตกต่าง"
 
 #: pcbnew/tools/pcb_actions.cpp:650
 msgid "Add Layer Alignment Target"
-msgstr ""
+msgstr "เพิ่มเป้าหมายการจัดตำแหน่งเลเยอร์"
 
 #: pcbnew/tools/pcb_actions.cpp:650
 msgid "Add a layer alignment target"
-msgstr ""
+msgstr "เพิ่มเป้าหมายการจัดตำแหน่งเลเยอร์"
 
 #: pcbnew/tools/pcb_actions.cpp:656
 msgid "Add Footprint"
-msgstr ""
+msgstr "เพิ่มฟุ้ทพรินท์"
 
 #: pcbnew/tools/pcb_actions.cpp:656
 msgid "Add a footprint"
-msgstr ""
+msgstr "เพิ่มฟุ้ทพรินท์"
 
 #: pcbnew/tools/pcb_actions.cpp:661
 msgid "Drill/Place File Origin"
-msgstr ""
+msgstr "จุดกำเนิดไฟล์ เจาะ/วาง"
 
 #: pcbnew/tools/pcb_actions.cpp:662
 msgid "Place origin point for drill files and component placement files"
