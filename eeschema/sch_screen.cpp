@@ -885,7 +885,7 @@ SCH_SHEET_PIN* SCH_SCREEN::GetSheetPin( const wxPoint& aPosition ) const
 {
     SCH_SHEET_PIN* sheetPin = nullptr;
 
-    for( SCH_ITEM* item : Items().OfType( SCH_SHEET_T ) )
+    for( SCH_ITEM* item : Items().Overlapping( SCH_SHEET_T, aPosition ) )
     {
         auto sheet = static_cast<SCH_SHEET*>( item );
 
@@ -903,7 +903,7 @@ size_t SCH_SCREEN::CountConnectedItems( const wxPoint& aPos, bool aTestJunctions
 {
     size_t count = 0;
 
-    for( const SCH_ITEM* item : Items() )
+    for( const SCH_ITEM* item : Items().Overlapping( aPos ) )
     {
         if( ( item->Type() != SCH_JUNCTION_T || aTestJunctions ) && item->IsConnected( aPos ) )
             count++;
@@ -981,10 +981,12 @@ void SCH_SCREEN::TestDanglingEnds( const SCH_SHEET_PATH* aPath,
     std::vector<DANGLING_END_ITEM> endPoints;
 
     for( SCH_ITEM* item : Items() )
-        item->GetEndPoints( endPoints );
-
-    for( SCH_ITEM* item : Items() )
     {
+        endPoints.clear();
+
+        for( SCH_ITEM* overlapping : Items().Overlapping( item->GetBoundingBox() ) )
+            overlapping->GetEndPoints( endPoints );
+
         if( item->UpdateDanglingState( endPoints, aPath ) )
         {
             if( aChangedHandler )
@@ -1000,7 +1002,7 @@ SCH_LINE* SCH_SCREEN::GetLine( const wxPoint& aPosition, int aAccuracy, int aLay
     // an accuracy of 0 had problems with rounding errors; use at least 1
     aAccuracy = std::max( aAccuracy, 1 );
 
-    for( SCH_ITEM* item : Items() )
+    for( SCH_ITEM* item : Items().Overlapping( aPosition, aAccuracy ) )
     {
         if( item->Type() != SCH_LINE_T )
             continue;
