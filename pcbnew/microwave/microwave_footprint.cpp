@@ -190,6 +190,8 @@ FOOTPRINT* MICROWAVE_TOOL::createBaseFootprint( const wxString& aValue,
 
     FOOTPRINT* footprint = editFrame.CreateNewFootprint( aValue );
 
+    footprint->SetAttributes( FP_EXCLUDE_FROM_POS_FILES | FP_EXCLUDE_FROM_BOM );
+
     if( aTextSize > 0 )
     {
         footprint->Reference().SetTextSize( wxSize( aTextSize, aTextSize ) );
