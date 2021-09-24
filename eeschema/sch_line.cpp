@@ -40,7 +40,7 @@ SCH_LINE::SCH_LINE( const wxPoint& pos, int layer ) :
 {
     m_start           = pos;
     m_end             = pos;
-    m_startIsDangling = m_endIsDangling = false;
+    m_startIsDangling = m_endIsDangling = true;
     m_stroke.SetWidth( 0 );
     m_stroke.SetPlotStyle( PLOT_DASH_TYPE::DEFAULT );
     m_stroke.SetColor( COLOR4D::UNSPECIFIED );
