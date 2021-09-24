@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-09-20 11:57-0700\n"
-"PO-Revision-Date: 2021-09-24 02:01+0000\n"
+"PO-Revision-Date: 2021-09-24 19:44+0000\n"
 "Last-Translator: Wellington Terumi Uemura <wellingtonuemura@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "kicad/master-source/pt_BR/>\n"
@@ -2222,7 +2222,7 @@ msgstr "Número de escala incorreto"
 #, c-format
 msgid ""
 "This scale results in an image which is too small (%.2f mm or %.1f mil)."
-msgstr "Esta escala resulta em uma imagem muito pequena (%.2f mm ou %.1f mil)."
+msgstr "Esta escala resulta numa imagem muito pequena (%.2f mm ou %.1f mil)."
 
 #: common/dialogs/dialog_image_editor.cpp:93
 #, c-format
@@ -2230,7 +2230,7 @@ msgid ""
 "This scale results in an image which is very large (%.1f mm or %.2f in). Are "
 "you sure?"
 msgstr ""
-"Esta escala resulta em uma imagem muito grande (%.1f mm ou %.2f in). Tem "
+"Esta escala resulta numa imagem muito grande (%.1f mm ou %.2f in). Tem "
 "certeza?"
 
 #: common/dialogs/dialog_image_editor_base.cpp:33
@@ -6421,7 +6421,7 @@ msgstr "Doe"
 
 #: common/tool/actions.cpp:647
 msgid "Open \"Donate to KiCad\" in a web browser"
-msgstr "Abra \"Contribua com o KiCad\" em um navegador da internet"
+msgstr "Abra \"Contribua com o KiCad\" num navegador da internet"
 
 #: common/tool/actions.cpp:651
 msgid "Report Bug"
@@ -7819,7 +7819,7 @@ msgid ""
 "redirected to the info display.\n"
 "Set this option to show the window of the running command."
 msgstr ""
-"Por padrão, a linha de comando é executada em uma janela de console oculta e "
+"Por padrão, a linha de comando é executada numa janela de console oculta e "
 "sua saída é redirecionada para a tela de informações.\n"
 "Marque esta opção para exibir a janela de console em execução."
 
@@ -8030,9 +8030,9 @@ msgstr ""
 "arquivo netlist intermediário* criado pelo Eeschema.\n"
 "\n"
 "Este arquivo usa uma sintaxe XML e é chamado de netlist intermediária. A "
-"netlist intermediária inclui uma grande quantidade de dados sobre sua placa "
-"e, por isso, pode ser usada com o pós-processamento para criar um relatório "
-"BOM ou quaisquer outros relatórios.\n"
+"netlist intermediária inclui uma grande quantidade de dados sobre a sua "
+"placa e, por isso, pode ser usada com o pós-processamento para criar um "
+"relatório BOM ou quaisquer outros relatórios.\n"
 "\n"
 "Dependendo do relatório que foi criado (BOM ou netlist), serão usados no pós-"
 "processamento diferentes subconjuntos completos do arquivo Netlist "
@@ -8050,7 +8050,7 @@ msgstr ""
 "pode baixar e instalar um programa gratuito chamado `xsltproc`. O programa "
 "`xsltproc` pode ser usado para ler o arquivo netlist XML intermediário, "
 "aplicar uma folha de estilo para transformar a entrada e salvar os "
-"resultados em um arquivo. O uso do `xsltproc` requer que um arquivo de folha "
+"resultados num arquivo. O uso do `xsltproc` requer que um arquivo de folha "
 "de estilo seja usado contendo as convenções XSLT. Todo o processo de "
 "conversão é feito pelo Eeschema, após ser configurado uma vez para rodar o "
 "`xsltproc`.\n"
@@ -8079,13 +8079,13 @@ msgstr ""
 "Após clicar no botão gerar, acontecerá o seguinte:\n"
 "\n"
 "1 O Eeschema cria um arquivo netlist \\*.xml intermediário, `test.xml` por "
-"exemplo .\n"
+"exemplo.\n"
 "2. O eeschema roda o script da linha de comando para criar o arquivo final.\n"
 "\n"
 "## 4.2 - Gerando os arquivos netlist com a linha de comando\n"
 "\n"
 "Assumindo que estamos usando o programa `xsltproc.exe` para aplicar o estilo "
-"ao arquivo intermediário,o `xsltproc.exe` roda com o seguinte comando.\n"
+"ao arquivo intermediário, o `xsltproc.exe` roda com o seguinte comando.\n"
 "\n"
 "```\n"
 "xsltproc.exe -o <nome do arquivo> <nome do arquivo da folha de estilo> "
@@ -8135,8 +8135,8 @@ msgstr ""
 " * `%O`: o nome do arquivo e o seu caminho completo (sem a extensão) do\n"
 "arquivo de saída que foi escolhido pelo usuário.\n"
 "\n"
-"O `%I` será substituído pelo nome do arquivo intermediário real (normalmente "
-"o nome de arquivo completo da folha principal com a extensão\" .xml \").\n"
+"O `%I` será substituído pelo nome do arquivo intermediário (normalmente o "
+"nome de arquivo completo da folha principal com a extensão \".xml\").\n"
 "O `%O` será substituído pelo nome atual do arquivo que foi gerado (o nome "
 "completo do arquivo da folha principal menos a extensão).\n"
 "O `%B` será substituído pelo apelido do arquivo atual que foi gerado (o nome "
@@ -8180,8 +8180,8 @@ msgstr ""
 "`` `\n"
 "\n"
 "Os exemplos acima assumem que `xsltproc` está instalado em seu PC com "
-"Windows e arquivos xsl localizados em` <path_to_kicad> / kicad / bin / "
-"plugins / `.\n"
+"Windows e arquivos xsl localizados em` <caminho_para_o_kicad> /kicad/bin/"
+"plugins/`.\n"
 "\n"
 "\n"
 "### 4.3.3 Exemplos para scripts Python:\n"
@@ -8212,36 +8212,36 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_bus_manager.cpp:37
 msgid "Bus Definitions"
-msgstr "Definições de Barramento"
+msgstr "Definições do barramento"
 
 #: eeschema/dialogs/dialog_bus_manager.cpp:55
 msgid "Bus Aliases"
-msgstr "Aliases de Barramento"
+msgstr "Aliases do barramento"
 
 #: eeschema/dialogs/dialog_bus_manager.cpp:65
 msgid "Alias Name"
-msgstr "Nome do Alias"
+msgstr "Nome do alias"
 
 #: eeschema/dialogs/dialog_bus_manager.cpp:75
 #: eeschema/dialogs/dialog_bus_manager.cpp:109
 msgid "Rename"
-msgstr "Renomear"
+msgstr "Renomeie"
 
 #: eeschema/dialogs/dialog_bus_manager.cpp:89
 msgid "Alias Members"
-msgstr "Membros do Alias"
+msgstr "Membros do alias"
 
 #: eeschema/dialogs/dialog_bus_manager.cpp:99
 msgid "Member Name"
-msgstr "Nome do Membro"
+msgstr "Nome do membro"
 
 #: eeschema/dialogs/dialog_bus_manager.cpp:180
 msgid "Bus Alias Name"
-msgstr "Nome do Alias do Barramento"
+msgstr "Pseudônimo do barramento"
 
 #: eeschema/dialogs/dialog_bus_manager.cpp:181
 msgid "Net or Bus Name"
-msgstr "Nome da Rede ou Barramento"
+msgstr "Nome da rede ou do barramento"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:66
 #, fuzzy
@@ -8560,7 +8560,7 @@ msgid ""
 msgstr ""
 "Se alguns componentes estão órfãos (o símbolo vinculado não foi localizado "
 "em nenhum lugar),\n"
-"tente encontrar um candidato com o mesmo nome em uma das bibliotecas de "
+"tente encontrar um candidato com o mesmo nome numa das bibliotecas de "
 "símbolos carregadas."
 
 #: eeschema/dialogs/dialog_edit_symbols_libid_base.cpp:63
@@ -9957,7 +9957,7 @@ msgid ""
 "difficult to connect to in the schematic.\n"
 "Do you want to continue?"
 msgstr ""
-"Este pino não está em uma grade de %d mils, isto irá\n"
+"Este pino não está numa grade de %d mils, isto irá\n"
 "dificultar a conexão com ele no esquema.\n"
 "Quer continuar?"
 
@@ -10351,8 +10351,8 @@ msgid ""
 msgstr ""
 "Este esquema foi feito utilizando bibliotecas de símbolos antigas que podem "
 "quebrar o esquema.  Alguns símbolos podem precisar de vinculo com um nome de "
-"símbolo diferente.  Alguns símbolos podem precisar serem \"recuperados"
-"\" (copiados e renomeados) em uma nova biblioteca.\n"
+"símbolo diferente.  Alguns símbolos podem precisar serem \"recuperados\" ("
+"copiados e renomeados) numa nova biblioteca.\n"
 "\n"
 "As seguintes alterações são recomendadas para atualizar o projeto."
 
@@ -12302,7 +12302,7 @@ msgstr "Fundo do corpo"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:73
 msgid "Clicking on a pin selects the symbol"
-msgstr "Ao clicar em um pino um símbolo é selecionado"
+msgstr "Ao clicar num pino um símbolo é selecionado"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:74
 msgid ""
@@ -12312,7 +12312,7 @@ msgid ""
 msgstr ""
 "No editor esquemático:\n"
 "Se ativo, ao clicar no pino, o símbolo relacionado será selecionado.\n"
-"Caso seja desativado, apenas um pino será selecionado ao clicar em um pino."
+"Caso seja desativado, apenas um pino será selecionado ao clicar num pino."
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:84
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:140
@@ -12807,7 +12807,7 @@ msgid ""
 "Changes must be saved or discarded before the symbol library table can be "
 "modified."
 msgstr ""
-"Foram feitas alterações em uma ou mais bibliotecas de símbolos.\n"
+"Foram feitas alterações numa ou mais bibliotecas de símbolos.\n"
 "As alterações devem ser salvas ou descartadas antes que a tabela de "
 "biblioteca de símbolos possa ser modificada."
 
@@ -13271,7 +13271,7 @@ msgid ""
 "missing symbols, either manual recovery of the schematic or recovery of the "
 "symbol cache library file and reloading the schematic is required."
 msgstr ""
-"Isso pode resultar em um esquema corrompido sob certas condições.  Caso o "
+"Isso pode resultar num esquema corrompido sob certas condições.  Caso o "
 "esquema não tenha nenhum símbolo ausente ao abrir, salve-o imediatamente "
 "antes de fazer qualquer alteração para evitar a perda dos dados.  Caso haja "
 "símbolos ausentes, será preciso fazer o recarregamento do esquema para a "
@@ -14394,7 +14394,7 @@ msgid ""
 "design but KiCad only supports rotation angles multiples of 90 degrees. The "
 "connecting wires will need manual fixing."
 msgstr ""
-"O símbolo '%s' foi girado em um ângulo de %.1f graus no design original do "
+"O símbolo '%s' foi girado num ângulo de %.1f graus no design original do "
 "CADSTAR mas o KiCad só suporta ângulos de rotação múltiplos de 90 graus. Os "
 "fios de conexão precisarão de fixação manual."
 
@@ -19628,7 +19628,7 @@ msgstr "Revelar no Finder"
 
 #: kicad/project_tree_pane.cpp:727
 msgid "Reveals the directory in a Finder window"
-msgstr "Revela o diretório em uma janela do Finder"
+msgstr "Revela o diretório numa janela do Finder"
 
 #: kicad/project_tree_pane.cpp:729
 #, fuzzy
@@ -19642,7 +19642,7 @@ msgstr "Abre o diretório no gestor de ficheiros padrão do sistema"
 #: kicad/project_tree_pane.cpp:737
 #, fuzzy
 msgid "Reveals the directories in a Finder window"
-msgstr "Revela o diretório em uma janela do Finder"
+msgstr "Revela o diretório numa janela do Finder"
 
 #: kicad/project_tree_pane.cpp:739
 #, fuzzy
@@ -19661,12 +19661,12 @@ msgstr "Abrir o ficheiro num Editor de Texto"
 #: kicad/project_tree_pane.cpp:753
 #, fuzzy
 msgid "Open files in a Text Editor"
-msgstr "Abrir o ficheiro em um Editor de Texto"
+msgstr "Abrir o ficheiro num Editor de Texto"
 
 #: kicad/project_tree_pane.cpp:755
 #, fuzzy
 msgid "Edit in a Text Editor"
-msgstr "&Abrir em um Editor de Texto"
+msgstr "&Abrir num Editor de Texto"
 
 #: kicad/project_tree_pane.cpp:763
 #, fuzzy
@@ -23547,7 +23547,7 @@ msgstr "Nenhuma camada selecionada."
 msgid "Selecting <no net> will create an isolated copper island."
 msgstr ""
 "Nenhuma rede resultará\n"
-"em uma ilha cobreada\n"
+"numa ilha cobreada\n"
 "não conectada."
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:46
@@ -23779,7 +23779,7 @@ msgstr "Remover %s não utilizados."
 msgid "Choose what to do with unconnected copper islands"
 msgstr ""
 "Nenhuma rede resultará\n"
-"em uma ilha cobreada\n"
+"numa ilha cobreada\n"
 "não conectada."
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:341
@@ -24037,7 +24037,7 @@ msgid ""
 "This item was on a non-existing or forbidden layer.\n"
 "It has been moved to the first allowed layer."
 msgstr ""
-"Este item estava em uma camada inexistente ou proibida.\n"
+"Este item estava numa camada inexistente ou proibida.\n"
 "Foi movido para a primeira camada permitida."
 
 #: pcbnew/dialogs/dialog_dimension_properties.cpp:280
@@ -24811,7 +24811,7 @@ msgstr "Modo de Impressão"
 
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:84
 msgid "Export as black elements on a white background"
-msgstr "Exporte como elementos pretos em um fundo branco"
+msgstr "Exporte como elementos pretos num fundo branco"
 
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:88
 msgid "Page with frame and title block"
@@ -25409,7 +25409,7 @@ msgid ""
 msgstr ""
 "Este é o isolamento de rede local para todas as ilhas deste footprint.\n"
 "Caso seja 0, os valores da classe de rede serão utilizados.\n"
-"Este valor pode ser substituído em uma base de ilha-por-ilha na guia\n"
+"Este valor pode ser substituído numa base de ilha-por-ilha na guia\n"
 "de Isolamento e Configurações Locais das Propriedades da Ilha."
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:248
@@ -25423,7 +25423,7 @@ msgstr ""
 "Este é o isolamento local entre ilhas e máscara de solda para \n"
 "este footprint.\n"
 "Caso seja 0, o valor global será utilizado.\n"
-"Este valor pode ser substituído em uma base de ilha-por-ilha na guia\n"
+"Este valor pode ser substituído numa base de ilha-por-ilha na guia\n"
 "de Isolamento e Configurações Locais das Propriedades da Ilha."
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:261
@@ -25440,7 +25440,7 @@ msgstr ""
 "este footprint.\n"
 "O valor final de isolamento é a soma deste valor com a taxa de isolamento.\n"
 "Um valor negativo significa uma máscara menor que o tamanho da ilha.\n"
-"Este valor pode ser substituído em uma base de ilha-por-ilha na guia\n"
+"Este valor pode ser substituído numa base de ilha-por-ilha na guia\n"
 "de Isolamento e Configurações Locais das Propriedades da Ilha."
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:274
@@ -25458,7 +25458,7 @@ msgstr ""
 "Um valor de 10 significa que o isolamento é 10 porcento do tamanho da ilha.\n"
 "O isolamento final é a soma deste valor com o valor do isolamento.\n"
 "Um valor negativo significa uma máscara menor que o tamanho da ilha.\n"
-"Este valor pode ser substituído em uma base de ilha-por-ilha na guia\n"
+"Este valor pode ser substituído numa base de ilha-por-ilha na guia\n"
 "de Isolamento e Configurações Locais das Propriedades da Ilha."
 
 #: pcbnew/dialogs/dialog_footprint_wizard_list.cpp:144
@@ -26837,8 +26837,7 @@ msgstr "Aviso: O tamanho do canto tornará a ilha circular."
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1406
 msgid "Error: Custom pad shape must resolve to a single polygon."
 msgstr ""
-"Erro: O formato do bloco personalizado deve ser resolvido em um único "
-"polígono."
+"Erro: O formato do bloco personalizado deve ser resolvido num único polígono."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1412
 #, fuzzy
@@ -27642,8 +27641,8 @@ msgstr ""
 "Definir correção da largura global para saída postscript de largura exata.\n"
 "Essa correção de largura destina-se a compensar larguras de trilhas e também "
 "erros de tamanho de ilhas e vias.\n"
-"Um valor razoável de correção de largura deve estar em um intervalo de [-"
-"(LarguraTrilhaMin-1), +(IsolamentoMin-1)] em decimils."
+"Um valor razoável de correção de largura deve estar num intervalo de "
+"[-(LarguraTrilhaMin-1), +(IsolamentoMin-1)] em decimils."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:323
 msgid "Force A4 output"
@@ -29241,7 +29240,7 @@ msgid ""
 msgstr ""
 "Espaço mínimo entre dois itens na mesma camada da serigrafia.  Caso seja "
 "definido, pode melhorar a legibilidade.  (Observação: não se aplica a várias "
-"formas em uma única representação real do componente.)"
+"formas numa única representação real do componente.)"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:431
 #, fuzzy
@@ -30811,7 +30810,7 @@ msgstr "Ilha dentro de uma área de afastamento"
 
 #: pcbnew/drc/drc_item.cpp:150
 msgid "Item on a disabled layer"
-msgstr "Item em uma camada desativada"
+msgstr "Item numa camada desativada"
 
 #: pcbnew/drc/drc_item.cpp:154
 #, fuzzy
@@ -32156,7 +32155,7 @@ msgstr "Itens auxiliares"
 
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:164
 msgid "Add all imported items into a new group"
-msgstr "Adicione todos os itens que foram importados em um novo grupo"
+msgstr "Adicione todos os itens que foram importados num novo grupo"
 
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:175
 #, fuzzy
@@ -32356,7 +32355,7 @@ msgid ""
 "Add footprints used on board to an existing footprint library\n"
 "(does not remove other footprints from this library)"
 msgstr ""
-"Arquivar todos os footprints em uma biblioteca existente na tabela de "
+"Arquivar todos os footprints numa biblioteca existente na tabela de "
 "bibliotecas de footprint (não remove outros footprints desta biblioteca)"
 
 #: pcbnew/menubar_pcb_editor.cpp:155
@@ -32370,7 +32369,7 @@ msgid ""
 "Create a new footprint library containing the footprints used on board\n"
 "(if the library already exists it will be replaced)"
 msgstr ""
-"Arquivar todos os footprints em uma nova biblioteca\n"
+"Arquivar todos os footprints numa nova biblioteca\n"
 "(se a biblioteca já existir será substituída)"
 
 #: pcbnew/menubar_pcb_editor.cpp:164
@@ -33473,8 +33472,8 @@ msgid ""
 "Polygon found on an Altium layer (%d) with no KiCad equivalent. It has been "
 "moved to KiCad layer Eco1_User."
 msgstr ""
-"O polígono encontrado numa camada Altium (%d) sem um equivalente no KiCad. "
-"Ele foi movido para a camada Eco1_User do KiCad."
+"O polígono encontrado numa camada Altium (%d) snum equivalente no KiCad. Ele "
+"foi movido para a camada Eco1_User do KiCad."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1641
 #, fuzzy
@@ -33530,8 +33529,8 @@ msgid ""
 "Arc found on an Altium layer (%d) with no KiCad equivalent. It has been "
 "moved to KiCad layer Eco1_User."
 msgstr ""
-"Arco encontrado em uma camada Altium (%d) sem um equivalente no KiCad. Ele "
-"foi movido para a camada Eco1_User do KiCad."
+"Arco encontrado numa camada Altium (%d) snum equivalente no KiCad. Ele foi "
+"movido para a camada Eco1_User do KiCad."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2065
 #, fuzzy
@@ -33549,7 +33548,7 @@ msgstr ""
 #, c-format
 msgid "Footprint %s pad %s has a square hole (not yet supported)."
 msgstr ""
-"A representação real do componete %s ilha %s tem um orifício quadrado (ainda "
+"A representação real do componete %s ilha %s tnum orifício quadrado (ainda "
 "não é compatível)."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2167
@@ -33588,8 +33587,8 @@ msgid ""
 "Non-copper pad %s found on an Altium layer (%d) with no KiCad equivalent. It "
 "has been moved to KiCad layer Eco1_User."
 msgstr ""
-"Ilha sem cobre %s foi encontrada em uma camada Altium (%d) sem um "
-"equivalente no KiCad. Ele foi movido para a camada Eco1_User do KiCad."
+"Ilha sem cobre %s foi encontrada numa camada Altium (%d) sem um equivalente "
+"no KiCad. Ele foi movido para a camada Eco1_User do KiCad."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2301
 #, fuzzy, c-format
@@ -33636,7 +33635,7 @@ msgid ""
 "Track keepout found on an Altium layer (%d) with no KiCad equivalent. It has "
 "been moved to KiCad layer Eco1_User."
 msgstr ""
-"Guarda da trilha foi encontrada em uma camada Altium (%d) sem um equivalente "
+"Guarda da trilha foi encontrada numa camada Altium (%d) sem um equivalente "
 "no KiCad Ele foi movido para a camada Eco1_User do KiCad."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2603
@@ -33645,7 +33644,7 @@ msgid ""
 "Track found on an Altium layer (%d) with no KiCadequivalent. It has been "
 "moved to KiCad layer Eco1_User."
 msgstr ""
-"Uma trilha foi encontrada em uma camada Altium (%d) sem um equivalente no "
+"Uma trilha foi encontrada numa camada Altium (%d) sem um equivalente no "
 "KiCad. Ele foi movido para a camada Eco1_User do KiCad."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2644
@@ -33665,8 +33664,8 @@ msgid ""
 "Text found on an Altium layer (%d) with no KiCad equivalent. It has been "
 "moved to KiCad layer Eco1_User."
 msgstr ""
-"Um texto foi encontrada em uma camada Altium (%d) sem um equivalente no "
-"KiCad. Ele foi movido para a camada Eco1_User do KiCad."
+"Um texto foi encontrada numa camada Altium (%d) sem um equivalente no KiCad. "
+"Ele foi movido para a camada Eco1_User do KiCad."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2829
 #, fuzzy
@@ -33679,7 +33678,7 @@ msgid ""
 "Fill found on an Altium layer (%d) with no KiCad equivalent. It has been "
 "moved to KiCad layer Eco1_User."
 msgstr ""
-"Um preenchimento foi encontrada em uma camada Altium (%d) sem um equivalente "
+"Um preenchimento foi encontrada numa camada Altium (%d) sem um equivalente "
 "no KiCad. Ele foi movido para a camada Eco1_User do KiCad."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:91
@@ -33937,7 +33936,7 @@ msgid ""
 "has been applied instead. When the template is re-filled the thermal reliefs "
 "will be removed."
 msgstr ""
-"O modelo CADSTAR '%s' possui alívios térmicos no design original mas não há "
+"O modelo CADSTAR '%s' possui alívios térmicos no design original, mas não há "
 "um equivalente no KiCad que corresponda às configurações originais do "
 "CADSTAR. Em vez disso, o preenchimento sólido foi aplicado. Quando o modelo "
 "for preenchido novamente, os alívios térmicos serão removidos."
@@ -34134,9 +34133,8 @@ msgid "Ignoring a circle since Eagle layer '%s' (%d) was not mapped"
 msgstr "Ignorando um círculo porque a camada '%s' do Eagle (%d) não foi mapeada"
 
 #: pcbnew/plugins/fabmaster/fabmaster_plugin.cpp:85
-#, fuzzy
 msgid "Could not read file "
-msgstr "Não foi possível criar o ficheiro \"%s\". "
+msgstr "Não foi possível ler o arquivo "
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:254
 #, c-format
@@ -34147,7 +34145,7 @@ msgstr "Seção FABMASTER desconhecida %s:%s na linha %zu."
 #, c-format
 msgid "Invalid row size in J row %zu. Expecting 11 elements but found %zu."
 msgstr ""
-"Tamanho de linha inválida na linha J %zu. Esperando 11 elementos mas "
+"Tamanho de linha inválida na linha J %zu. Esperando 11 elementos, mas "
 "encontrou %zu."
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:294
@@ -34173,20 +34171,20 @@ msgstr "Não foi possível localizar o ficheiro de biblioteca %s"
 #, c-format
 msgid "Invalid row size in row %zu. Expecting %zu elements but found %zu."
 msgstr ""
-"Tamanho inválido da linha na linha %zu. Esperando %zu elementos mas "
+"Tamanho inválido da linha na linha %zu. Esperando %zu elementos, mas "
 "encontrou %zu."
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:498
 #, c-format
 msgid "Expecting drill size value but found %s!%s!%s in row %zu."
 msgstr ""
-"Esperando o valor do tamanho da broca mas encontrou %s!%s!%s na linha %zu."
+"Esperando o valor do tamanho da broca, mas encontrou %s!%s!%s na linha %zu."
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:546
 #, c-format
 msgid "Expecting pad size values but found %s : %s in row %zu."
 msgstr ""
-"Esperando os valores do tamanho do bloco mas encontrou %s:%s na linha %zu."
+"Esperando os valores do tamanho do bloco, mas encontrou %s:%s na linha %zu."
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:568
 #, fuzzy, c-format
@@ -34197,7 +34195,7 @@ msgstr "Tamanho inválido: %lld: muito grande"
 #, c-format
 msgid "Expecting pad offset values but found %s:%s in row %zu."
 msgstr ""
-"Esperando os valores de deslocamento da ilha mas encontrou %s:%s na linha "
+"Esperando os valores de deslocamento da ilha, mas encontrou %s:%s na linha "
 "%zu."
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:648
@@ -34225,7 +34223,7 @@ msgstr "Propriedade desconhecida '%s'"
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1125
 #, c-format
 msgid "Invalid token count. Expected 8 but found %zu."
-msgstr "Contagem inválida do tokens. Era esperado 8 mas encontrou %zu."
+msgstr "Contagem inválida do tokens. Era esperado 8, mas encontrou %zu."
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1260
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1449
@@ -34237,7 +34235,7 @@ msgstr "Formato inválido para a string record_tag '%s' na linha %zu."
 #, c-format
 msgid "Invalid row size in row %zu.  Expecting %zu elements but found %zu."
 msgstr ""
-"Tamanho inválido da linha na linha %zu.  Esperando %zu elementos mas "
+"Tamanho inválido da linha na linha %zu.  Esperando %zu elementos, mas "
 "encontrou %zu."
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1459
@@ -34270,9 +34268,9 @@ msgstr ""
 "encontrada na camada '%s'"
 
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:91
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot convert '%s' to an integer."
-msgstr "Não foi possível converter \"%s\" num número inteiro"
+msgstr "Não foi possível converter o '%s' num número inteiro."
 
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:228
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:877
@@ -35340,8 +35338,8 @@ msgid ""
 "When routing from an existing track use its width instead of the current "
 "width setting"
 msgstr ""
-"Largura de trilha automática: quando iniciando em uma trilha existente "
-"utiliza sua largura,\n"
+"Largura de trilha automática: quando iniciando numa trilha existente utiliza "
+"sua largura,\n"
 "de outro modo, utiliza a definição de largura atual"
 
 #: pcbnew/toolbars_pcb_editor.cpp:647
@@ -35523,7 +35521,7 @@ msgstr "Selecione dois itens para um relatório da resolução de folga."
 #: pcbnew/tools/board_inspection_tool.cpp:279
 #: pcbnew/tools/board_inspection_tool.cpp:292
 msgid "Cannot generate clearance report on empty group."
-msgstr "Não é possível gerar um relatório de liberação em um grupo vazio."
+msgstr "Não é possível gerar um relatório de liberação num grupo vazio."
 
 #: pcbnew/tools/board_inspection_tool.cpp:383
 #, fuzzy
@@ -36102,7 +36100,7 @@ msgstr "Estatísticas da Placa"
 
 #: pcbnew/tools/pcb_actions.cpp:111
 msgid "Add a board characteristics table on a graphic layer"
-msgstr "Adicione uma tabela das características da placa em uma camada gráfica"
+msgstr "Adicione uma tabela das características da placa numa camada gráfica"
 
 #: pcbnew/tools/pcb_actions.cpp:116
 #, fuzzy
@@ -36111,7 +36109,7 @@ msgstr "Adicionar Segmento"
 
 #: pcbnew/tools/pcb_actions.cpp:117
 msgid "Add a board stackup table on a graphic layer"
-msgstr "Adicione uma tabela de empilhamento da placa em uma camada gráfica"
+msgstr "Adicione uma tabela de empilhamento da placa numa camada gráfica"
 
 #: pcbnew/tools/pcb_actions.cpp:129
 #, fuzzy
@@ -36616,7 +36614,7 @@ msgstr "Explodir Ilha para Formas Gráficas"
 #: pcbnew/tools/pcb_actions.cpp:520
 #, fuzzy
 msgid "Ungroups a custom-shaped pad for editing as individual graphic shapes"
-msgstr "Converte ilhas personalizadas em um conjunto de formas gráficas"
+msgstr "Converte ilhas personalizadas num conjunto de formas gráficas"
 
 #: pcbnew/tools/pcb_actions.cpp:526
 #, fuzzy
@@ -36652,7 +36650,7 @@ msgstr "Revelar no Finder"
 #: pcbnew/tools/pcb_actions.cpp:546
 #, fuzzy
 msgid "Reveals the plugins folder in a Finder window"
-msgstr "Revela o diretório em uma janela do Finder"
+msgstr "Revela o diretório numa janela do Finder"
 
 #: pcbnew/tools/pcb_actions.cpp:556
 msgid "Board Setup..."
@@ -36790,7 +36788,7 @@ msgstr "Duplicar Zona em Camada…"
 
 #: pcbnew/tools/pcb_actions.cpp:639
 msgid "Duplicate zone outline onto a different layer"
-msgstr "Duplica o contorno da zona em uma camada diferente"
+msgstr "Duplica o contorno da zona numa camada diferente"
 
 #: pcbnew/tools/pcb_actions.cpp:644
 msgid "Add Layer Alignment Target"
