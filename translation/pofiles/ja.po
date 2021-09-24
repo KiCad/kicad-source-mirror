@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-09-20 11:57-0700\n"
-"PO-Revision-Date: 2021-09-23 11:10+0000\n"
+"PO-Revision-Date: 2021-09-24 19:44+0000\n"
 "Last-Translator: Tokita, Hiroshi <tokita.hiroshi@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -484,7 +484,7 @@ msgstr "基板外形を表示"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_display_options_base.cpp:65
 msgid "Show filled areas in zones"
-msgstr "ゾーンの塗り潰し領域を表示"
+msgstr "ゾーンの塗りつぶし領域を表示"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_display_options_base.cpp:68
 #: pcbnew/dialogs/dialog_plot_base.cpp:216
@@ -2819,7 +2819,7 @@ msgstr "実際の作画倍率にXスケールを調整"
 #: common/dialogs/dialog_print_generic_base.cpp:99
 #: eeschema/dialogs/dialog_print_using_printer_base.cpp:62
 msgid "Page Setup..."
-msgstr "ページ セットアップ..."
+msgstr "ページ設定..."
 
 #: common/dialogs/dialog_text_entry_base.cpp:22
 #: common/dialogs/dialog_unit_entry_base.cpp:22
@@ -7947,7 +7947,7 @@ msgstr "エイリアス名"
 #: eeschema/dialogs/dialog_bus_manager.cpp:75
 #: eeschema/dialogs/dialog_bus_manager.cpp:109
 msgid "Rename"
-msgstr "名前変更"
+msgstr "名前を変更"
 
 #: eeschema/dialogs/dialog_bus_manager.cpp:89
 msgid "Alias Members"
@@ -8386,7 +8386,7 @@ msgstr "全ての '%s' 違反のためにエラーの深刻度を変更"
 #: eeschema/dialogs/dialog_erc.cpp:514 eeschema/dialogs/dialog_erc.cpp:520
 #: pcbnew/dialogs/dialog_drc.cpp:466 pcbnew/dialogs/dialog_drc.cpp:473
 msgid "Violation severities can also be edited in the Board Setup... dialog"
-msgstr "違反の深刻度は、基板セットアップ... ダイアログで編集することができます"
+msgstr "違反の深刻度は、基板の設定... ダイアログで編集することができます"
 
 #: eeschema/dialogs/dialog_erc.cpp:518 pcbnew/dialogs/dialog_drc.cpp:471
 #, c-format
@@ -8412,7 +8412,7 @@ msgstr "違反の深刻度を編集..."
 
 #: eeschema/dialogs/dialog_erc.cpp:536
 msgid "Open the Schematic Setup... dialog"
-msgstr "回路図セットアップ... ダイアログを開く"
+msgstr "回路図の設定... ダイアログを開く"
 
 #: eeschema/dialogs/dialog_erc.cpp:628
 #: eeschema/dialogs/dialog_schematic_setup.cpp:73
@@ -8586,7 +8586,7 @@ msgstr "下"
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:255
 #: include/base_units.h:48
 msgid "-- leave unchanged --"
-msgstr "-- 未変更を維持 --"
+msgstr "-- 変更しない --"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:229
 msgid "H Align (fields only):"
@@ -8944,19 +8944,19 @@ msgstr "新しいシンボル"
 
 #: eeschema/dialogs/dialog_lib_shape_properties_base.cpp:39
 msgid "Do not fill"
-msgstr "塗り潰し無し"
+msgstr "塗りつぶさない"
 
 #: eeschema/dialogs/dialog_lib_shape_properties_base.cpp:39
 msgid "Fill with body outline color"
-msgstr "ボディ外形色で塗り潰し"
+msgstr "ボディ外形色で塗りつぶし"
 
 #: eeschema/dialogs/dialog_lib_shape_properties_base.cpp:39
 msgid "Fill with body background color"
-msgstr "ボディ背景色で塗り潰し"
+msgstr "ボディ背景色で塗りつぶし"
 
 #: eeschema/dialogs/dialog_lib_shape_properties_base.cpp:41
 msgid "Fill Style"
-msgstr "塗り潰しのスタイル"
+msgstr "塗りつぶしのスタイル"
 
 #: eeschema/dialogs/dialog_lib_shape_properties_base.cpp:45
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:167
@@ -9171,7 +9171,7 @@ msgstr "複数ユニットを含むシンボルの場合、ユニット数を入
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:199
 msgid "All units are interchangeable"
-msgstr "複数ユニットでのユニット交換可能"
+msgstr "全てのユニットが交換可能"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:200
 msgid ""
@@ -9553,7 +9553,7 @@ msgid ""
 "Synchronized pin edit mode is enabled.\n"
 "Similar pins will be edited, regardless this option."
 msgstr ""
-"ピン同期編集モードを有効にします。\n"
+"同期ピン編集モードを有効にします。\n"
 "このオプションに関係なく、同様のピンが編集されます。"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:287
@@ -10099,7 +10099,7 @@ msgstr "検索文字列"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:41
 msgid "Replace &with:"
-msgstr "交換 (&W):"
+msgstr "置換 (&W):"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:52
 msgid "Direction:"
@@ -10119,6 +10119,7 @@ msgstr "大文字/小文字を区別 (&M)"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:85
 #: pcbnew/dialogs/dialog_find_base.cpp:46
+#, fuzzy
 msgid "Words"
 msgstr "ワード"
 
@@ -10157,7 +10158,7 @@ msgstr "全て置換 (&A)"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:41
 msgid "Schematic Setup"
-msgstr "回路図セットアップ"
+msgstr "回路図の設定"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:42
 msgid "Import Settings from Another Project..."
@@ -11543,7 +11544,7 @@ msgid ""
 "The margins around the text are controlled by the text offset ratio\n"
 "in Schematic Setup > General > Formatting."
 msgstr ""
-"テキスト周辺のマージンは、 回路図セットアップ > 一般 > フォーマット にある\n"
+"テキスト周辺のマージンは、 回路図の設定 > 一般 > フォーマット にある\n"
 "テキストのオフセット比で制御されます。"
 
 #: eeschema/dialogs/dialog_text_and_label_properties_base.cpp:120
@@ -15765,7 +15766,7 @@ msgstr "現在のシンボルから SVG ファイルを作成"
 
 #: eeschema/tools/ee_actions.cpp:208
 msgid "Synchronized Pins Edit Mode"
-msgstr "ピン同期編集モード"
+msgstr "同期ピン編集モード"
 
 #: eeschema/tools/ee_actions.cpp:209
 msgid ""
@@ -15773,9 +15774,9 @@ msgid ""
 "When enabled propagates all changes (except pin numbers) to other units.\n"
 "Enabled by default for multiunit parts with interchangeable units."
 msgstr ""
-"ピン同期編集モード\n"
-"有効の場合、全ての変更 (ピン番号を除く) を他のユニットにも同時に適用する。\n"
-"ユニット交換可の複数ユニット部品ではデフォルトで有効です。"
+"同期ピン編集モード\n"
+"有効の場合、全ての変更 (ピン番号を除く) を他のユニットにも同時に適用します。\n"
+"ユニットが交換可能な部品ではデフォルトで有効です。"
 
 #: eeschema/tools/ee_actions.cpp:220
 msgid "Add Pin"
@@ -16264,13 +16265,11 @@ msgstr "回路図シンボルのリファレンス指定子を記入"
 
 #: eeschema/tools/ee_actions.cpp:582
 msgid "Schematic Setup..."
-msgstr "回路図セットアップ..."
+msgstr "回路図の設定..."
 
 #: eeschema/tools/ee_actions.cpp:583
 msgid "Edit schematic setup including annotation styles and electrical rules"
-msgstr ""
-"アノテーション スタイルとエレクトリカル ルールを含んでいる回路図セットアップ"
-"を編集"
+msgstr "アノテーション スタイルとエレクトリカル ルールを含んでいる回路図の設定を編集"
 
 #: eeschema/tools/ee_actions.cpp:588
 msgid "Edit Sheet Page Number..."
@@ -21405,7 +21404,7 @@ msgstr "供給業者、参考資料"
 
 #: pcbnew/cleanup_item.cpp:46 pcbnew/zone_filler.cpp:96
 msgid "Checking zone fills..."
-msgstr "ゾーンの塗り潰しをチェック中..."
+msgstr "ゾーンの塗りつぶしをチェック中..."
 
 #: pcbnew/cleanup_item.cpp:47
 msgid "Remove track shorting two nets"
@@ -21960,7 +21959,7 @@ msgstr "位置に基づいて再アノテーション"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:53
 msgid "Board Setup"
-msgstr "基板セットアップ"
+msgstr "基板の設定"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:54
 msgid "Import Settings from Another Board..."
@@ -22380,8 +22379,7 @@ msgid ""
 "* If its priority is higher, its outlines are removed from the other zone.\n"
 "* If its priority is equal, a DRC error is set."
 msgstr ""
-"ゾーンは優先度レベルに従って塗り潰されます。(レベル３はレベル２より高い優先度"
-"となります)\n"
+"ゾーンは優先度レベルに従って塗りつぶされます。(レベル３はレベル２より高い優先度となります)\n"
 "ゾーンが別のゾーンの内部にある場合:\n"
 "* その優先度が高い場合、その外形は別のゾーンから取り除かれます。\n"
 "* その優先度が等しい場合、DRC エラーがセットされます。"
@@ -22444,7 +22442,7 @@ msgstr "最小幅:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:199
 msgid "Minimum thickness of filled areas."
-msgstr "塗り潰しエリアの最小幅。"
+msgstr "塗りつぶしエリアの最小幅。"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:213
 msgid "Pad connections:"
@@ -22481,7 +22479,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:232
 msgid "Clearance between pads in the same net and filled areas."
-msgstr "同一ネット内のパッドと塗り潰しエリアのクリアランス。"
+msgstr "同一ネット内のパッドと塗りつぶしエリアのクリアランス。"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:240
 msgid "Thermal spoke width:"
@@ -22494,7 +22492,7 @@ msgstr "サーマルリリーフ内のブリッジ幅。"
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:262
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:108
 msgid "Fill"
-msgstr "塗り潰し"
+msgstr "塗りつぶし"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:270
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:116
@@ -22585,9 +22583,7 @@ msgstr "他のゾーンに設定をエクスポートする"
 msgid ""
 "Export this zone setup (excluding layer and net selection) to all other "
 "copper zones."
-msgstr ""
-"このゾーン セットアップ (レイヤーとネットの選択を除く) を他の全ての導体ゾーン"
-"にエクスポートします。"
+msgstr "このゾーンの設定 (レイヤーとネットの選択を除く) を他の全ての導体ゾーンにエクスポートします。"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.h:139
 msgid "Copper Zone Properties"
@@ -23116,7 +23112,7 @@ msgstr "クリアランスの解決ツールを実行..."
 
 #: pcbnew/dialogs/dialog_drc.cpp:484
 msgid "Open the Board Setup... dialog"
-msgstr "基板セットアップ... ダイアログを開く"
+msgstr "基板の設定... ダイアログを開く"
 
 #: pcbnew/dialogs/dialog_drc.cpp:661
 #, c-format
@@ -23901,7 +23897,7 @@ msgstr "クリアランス"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:315
 msgid "Set values to 0 to use Board Setup values."
-msgstr "基板セットアップの値を使用するため、値を0に設定します。"
+msgstr "基板の設定の値を使用するため、値を0に設定します。"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:319
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:219
@@ -24826,7 +24822,7 @@ msgstr "円弧角:"
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1262
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1497
 msgid "Filled shape"
-msgstr "塗り潰し"
+msgstr "塗りつぶし"
 
 #: pcbnew/dialogs/dialog_graphic_item_properties_base.h:93
 msgid "Graphic Item Properties"
@@ -26013,7 +26009,7 @@ msgstr "プロット モード:"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:137
 msgid "Filled"
-msgstr "塗り潰し"
+msgstr "塗りつぶし"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:137
 msgid "Sketch"
@@ -26029,7 +26025,7 @@ msgstr "ネガ出力プロット"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:149
 msgid "Check zone fills before plotting"
-msgstr "プロット前にゾーンの塗り潰しをチェック"
+msgstr "プロット前にゾーンの塗りつぶしをチェック"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:169
 msgid "Global solder mask min width and/or margin are not set to 0. "
@@ -26047,11 +26043,11 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:183
 msgid "Board setup"
-msgstr "基板セットアップ"
+msgstr "基板の設定"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:184
 msgid "File > Board Setup..."
-msgstr "ファイル > 基板セットアップ..."
+msgstr "ファイル >基板の設定..."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:197
 msgid "Gerber Options"
@@ -27486,7 +27482,7 @@ msgstr "注: %s< の場合にゾーンの塗りつぶしが遅くなることが
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:98
 msgid "Zone fill strategy"
-msgstr "ゾーン塗り潰し方法"
+msgstr "ゾーン塗りつぶし方法"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:111
 msgid "Mimic legacy behavior"
@@ -28694,8 +28690,7 @@ msgstr ""
 "\n"
 "### 注\n"
 "\n"
-"version句ははじめの句でなければなりません。  ファイルの文法のバージョンを示"
-"し、\n"
+"version句ははじめの句でなければなりません。  ファイルの文法のバージョンを示し、\n"
 "将来のルールパーサーが自動的なアップデートをできるようするためです。\n"
 "ここには\"1\"を設定します。\n"
 "\n"
@@ -28708,23 +28703,19 @@ msgstr ""
 "\n"
 "### 式関数\n"
 "\n"
-"全ての関数のパラメーターは単純なワイルドカードをサポートします。 (`*` and `?"
-"`).\n"
+"全ての関数のパラメーターは単純なワイルドカードをサポートします。 (`*` and `?`).\n"
 "<br><br>\n"
 "\n"
 "    A.insideCourtyard('<footprint_refdes>')\n"
-"`A`のいずれかの部分が与えられたフットプリントのコートヤードの中にある場合、真"
-"になります。\n"
+"`A`のいずれかの部分が与えられたフットプリントのコートヤードの中にある場合、真になります。\n"
 "<br><br>\n"
 "\n"
 "    A.insideFrontCourtyard('<footprint_refdes>')\n"
-"`A`のいずれかの部分が与えられたフットプリントの表面のコートヤードの中にある場"
-"合、真になります。\n"
+"`A`のいずれかの部分が与えられたフットプリントの表面のコートヤードの中にある場合、真になります。\n"
 "<br><br>\n"
 "\n"
 "    A.insideBackCourtyard('<footprint_refdes>')\n"
-"`A`のいずれかの部分が与えられたフットプリントの裏面のコートヤードの中にある場"
-"合、真になります。\n"
+"`A`のいずれかの部分が与えられたフットプリントの裏面のコートヤードの中にある場合、真になります。\n"
 "<br><br>\n"
 "\n"
 "    A.insideArea('<zone_name>')\n"
@@ -28746,21 +28737,17 @@ msgstr ""
 "<br><br>\n"
 "\n"
 "    A.memberOf('<group_name>')\n"
-"`A`と`B`が与えられたグループに属する場合、真になります。ネストされたメンバー"
-"関係も含みます。\n"
+"`A`と`B`が与えられたグループに属する場合、真になります。ネストされたメンバー関係も含みます。\n"
 "<br><br>\n"
 "\n"
 "    A.existsOnLayer('<layer_name>')\n"
 "True if `A` exists on the given layer.  The layer name can be\n"
 "`A`が与えられたレイヤー状にある場合、真になります。\n"
-"レイヤー名は 基板セットアップ > 基板編集レイヤー で指定された名前か、正規化名"
-"(例: `F.Cu`)が使えます。\n"
+"レイヤー名は 基板の設定 > 基板編集レイヤー で指定された名前か、正規化名(例: `F.Cu`)が使えます。\n"
 "\n"
 "NB: this returns true if `A` is on the given layer, independently\n"
-"注意: これは、ルールがそのレイヤーに対して評価されているかいないかにかかわら"
-"ず\n"
-"`A`がレイヤーにある場合に真を返します。後者の場合、`(layer \"layer_name\")`の"
-"句をルールの中で使います。\n"
+"注意: これは、ルールがそのレイヤーに対して評価されているかいないかにかかわらず\n"
+"`A`がレイヤーにある場合に真を返します。後者の場合、`(layer \"layer_name\")`の句をルールの中で使います。\n"
 "<br><br><br>\n"
 "\n"
 "### More Examples\n"
@@ -28898,27 +28885,27 @@ msgstr "ビア ギャップ"
 
 #: pcbnew/drc/drc_engine.cpp:145 pcbnew/drc/drc_engine.cpp:219
 msgid "board setup constraints"
-msgstr "基板セットアップの制約"
+msgstr "基板の設定の制約"
 
 #: pcbnew/drc/drc_engine.cpp:175
 msgid "board setup constraints silk"
-msgstr "基板セットアップのシルク印刷の制約"
+msgstr "基板の設定のシルク印刷の制約"
 
 #: pcbnew/drc/drc_engine.cpp:181
 msgid "board setup constraints hole"
-msgstr "基板セットアップの穴の制約"
+msgstr "基板の設定の穴の制約"
 
 #: pcbnew/drc/drc_engine.cpp:186
 msgid "board setup constraints edge"
-msgstr "基板セットアップの基板端の制約"
+msgstr "基板の設定の基板端の制約"
 
 #: pcbnew/drc/drc_engine.cpp:191
 msgid "board setup constraints courtyard"
-msgstr "基板セットアップのコートヤードの制約"
+msgstr "基板の設定のコートヤードの制約"
 
 #: pcbnew/drc/drc_engine.cpp:198
 msgid "board setup micro-via constraints"
-msgstr "基板セットアップのマイクロビアの制約"
+msgstr "基板の設定のマイクロビアの制約"
 
 #: pcbnew/drc/drc_engine.cpp:244 pcbnew/drc/drc_engine.cpp:325
 #: pcbnew/drc/drc_engine.cpp:353
@@ -29796,10 +29783,8 @@ msgid ""
 "This may result in different fills from previous KiCad versions which used "
 "the line thicknesses of the board boundary on the Edge Cuts layer."
 msgstr ""
-"基板のゾーンが塗り潰される場合には、基板端クリアランス設定が使用されます (基"
-"板セットアップ > デザインルール > 制約 を参照)。\n"
-"これにより、Edge Cuts レイヤーにおける基板外形線の太さを使用していた以前の"
-"バージョンの KiCad とは異なった塗り潰しの結果となります。"
+"基板のゾーンが塗り潰される場合には、基板端クリアランス設定が使用されます (基板の設定 > デザインルール > 制約 を参照)。\n"
+"これにより、Edge Cuts レイヤーにおける基板外形線の太さを使用していた以前のバージョンの KiCad とは異なった塗り潰しの結果となります。"
 
 #: pcbnew/files.cpp:549
 msgid "Edge Clearance Warning"
@@ -33248,22 +33233,18 @@ msgstr ""
 
 #: pcbnew/router/router_tool.cpp:828 pcbnew/router/router_tool.cpp:850
 msgid "Show board setup"
-msgstr "基板セットアップを表示"
+msgstr "基板の設定を表示"
 
 #: pcbnew/router/router_tool.cpp:840
 msgid ""
 "Blind/buried vias must first be enabled in Board Setup > Design Rules > "
 "Constraints."
-msgstr ""
-"ブラインド/ベリード ビアは、基板セットアップ > デザインルール > 制約 で有効に"
-"しなければなりません。"
+msgstr "ブラインド/ベリード ビアは、基板の設定 > デザインルール > 制約 で有効にしなければなりません。"
 
 #: pcbnew/router/router_tool.cpp:861
 msgid ""
 "Microvias must first be enabled in Board Setup > Design Rules > Constraints."
-msgstr ""
-"マイクロ ビアは、基板セットアップ > デザインルール > 制約 で有効にしなければ"
-"なりません。"
+msgstr "マイクロ ビアは、基板の設定 > デザインルール > 制約 で有効にしなければなりません。"
 
 #: pcbnew/router/router_tool.cpp:997
 msgid "Tracks on Copper layers only."
@@ -33738,7 +33719,7 @@ msgstr "アイテムはこの場所で許可されています。"
 
 #: pcbnew/tools/convert_tool.cpp:76
 msgid "Create from Selection"
-msgstr "選択領域から作成"
+msgstr "選択対象から作成"
 
 #: pcbnew/tools/convert_tool.cpp:207
 msgid "Convert shapes to polygon"
@@ -34156,7 +34137,7 @@ msgstr "塗り潰しゾーンを追加"
 
 #: pcbnew/tools/pcb_actions.cpp:155
 msgid "Add a filled zone"
-msgstr "塗り潰しゾーンを追加"
+msgstr "塗りつぶしゾーンを追加"
 
 #: pcbnew/tools/pcb_actions.cpp:161
 msgid "Add Vias"
@@ -34621,12 +34602,11 @@ msgstr "ファインダー ウィンドウにプラグイン フォルダーを�
 
 #: pcbnew/tools/pcb_actions.cpp:556
 msgid "Board Setup..."
-msgstr "基板セットアップ..."
+msgstr "基板の設定..."
 
 #: pcbnew/tools/pcb_actions.cpp:557
 msgid "Edit board setup including layers, design rules and various defaults"
-msgstr ""
-"レイヤー、デザインルール、様々なデフォルト値を含む、基板セットアップを編集"
+msgstr "レイヤー、デザインルール、様々なデフォルト値を含む基板の設定を編集"
 
 #: pcbnew/tools/pcb_actions.cpp:562
 msgid "Import Netlist..."
@@ -34974,7 +34954,7 @@ msgstr "ゾーンの塗りつぶしを描画"
 
 #: pcbnew/tools/pcb_actions.cpp:829
 msgid "Show filled areas of zones"
-msgstr "ゾーンの塗り潰し領域を表示"
+msgstr "ゾーンの塗りつぶし領域を表示"
 
 #: pcbnew/tools/pcb_actions.cpp:834
 msgid "Draw Zone Outlines"
@@ -35332,7 +35312,7 @@ msgstr "選択対象から指定のタイプのアイテムを除外"
 
 #: pcbnew/tools/pcb_actions.cpp:1246 pcbnew/tools/zone_filler_tool.cpp:211
 msgid "Fill Zone"
-msgstr "ゾーンを塗り潰し"
+msgstr "ゾーンを塗りつぶし"
 
 #: pcbnew/tools/pcb_actions.cpp:1246
 msgid "Update copper fill of selected zone(s)"
@@ -35340,7 +35320,7 @@ msgstr "選択されたゾーンの導体塗りつぶしを更新"
 
 #: pcbnew/tools/pcb_actions.cpp:1252 pcbnew/tools/zone_filler_tool.cpp:154
 msgid "Fill All Zones"
-msgstr "全ゾーンを塗り潰し"
+msgstr "全ゾーンを塗りつぶし"
 
 #: pcbnew/tools/pcb_actions.cpp:1252
 msgid "Update copper fill of all zones"
@@ -35348,7 +35328,7 @@ msgstr "全てのゾーンの導体塗りつぶしを更新"
 
 #: pcbnew/tools/pcb_actions.cpp:1257 pcbnew/tools/zone_filler_tool.cpp:249
 msgid "Unfill Zone"
-msgstr "ゾーンの塗り潰しを削除"
+msgstr "ゾーンの塗りつぶしを削除"
 
 #: pcbnew/tools/pcb_actions.cpp:1257
 msgid "Remove copper fill from selected zone(s)"
@@ -35356,7 +35336,7 @@ msgstr "選択されたゾーンから導体塗りつぶしを削除"
 
 #: pcbnew/tools/pcb_actions.cpp:1263 pcbnew/tools/zone_filler_tool.cpp:267
 msgid "Unfill All Zones"
-msgstr "全ゾーンの塗り潰しを削除"
+msgstr "全ゾーンの塗りつぶしを削除"
 
 #: pcbnew/tools/pcb_actions.cpp:1263
 msgid "Remove copper fill from all zones"
@@ -35380,7 +35360,7 @@ msgstr "基板エリアの外にあるコンポーネントの自動配置を実
 
 #: pcbnew/tools/pcb_actions.cpp:1285
 msgid "Route Single Track"
-msgstr "単線(シングル) をインタラクティブ配線"
+msgstr "単線を配線"
 
 #: pcbnew/tools/pcb_actions.cpp:1285
 msgid "Route tracks"
@@ -35400,7 +35380,7 @@ msgstr "インタラクティブ ルーターの設定..."
 
 #: pcbnew/tools/pcb_actions.cpp:1298
 msgid "Open Interactive Router settings"
-msgstr "インタラクティブ ルーター設定を開く"
+msgstr "インタラクティブ ルーターの設定を開く"
 
 #: pcbnew/tools/pcb_actions.cpp:1303
 msgid "Differential Pair Dimensions..."
@@ -35600,7 +35580,7 @@ msgstr "ゾーンをチェック中"
 #: pcbnew/tools/zone_filler_tool.cpp:89 pcbnew/tools/zone_filler_tool.cpp:162
 #: pcbnew/tools/zone_filler_tool.cpp:217
 msgid "Fill Zone(s)"
-msgstr "ゾーンを塗り潰し"
+msgstr "ゾーンを塗りつぶし"
 
 #: pcbnew/tools/zone_filler_tool.cpp:131
 msgid "Show DRC rules"
@@ -36222,11 +36202,11 @@ msgstr "%s と %d ほか"
 
 #: pcbnew/zone.cpp:626
 msgid "Fill Mode"
-msgstr "塗り潰しモード"
+msgstr "塗りつぶしモード"
 
 #: pcbnew/zone.cpp:629
 msgid "Filled Area"
-msgstr "塗り潰し領域"
+msgstr "塗りつぶし領域"
 
 #: pcbnew/zone.cpp:641
 msgid "HatchBorder Lines"
@@ -36270,7 +36250,7 @@ msgstr "パッド接続"
 
 #: pcbnew/zone_filler.cpp:97
 msgid "Building zone fills..."
-msgstr "ゾーンの塗り潰しを実行中..."
+msgstr "ゾーンの塗りつぶしを実行中..."
 
 #: pcbnew/zone_filler.cpp:305
 msgid "Removing isolated copper islands..."
@@ -36278,7 +36258,7 @@ msgstr "孤立した導体部分を削除中..."
 
 #: pcbnew/zone_filler.cpp:418
 msgid "Zone fills are out-of-date. Refill?"
-msgstr "ゾーンの塗り潰しは古いままです。再度塗り潰しますか？"
+msgstr "ゾーンの塗りつぶしは古いままです。再度塗りつぶしますか？"
 
 #: pcbnew/zone_filler.cpp:420
 msgid "Refill"
@@ -36290,7 +36270,7 @@ msgstr "再塗り潰しせずに続行"
 
 #: pcbnew/zone_filler.cpp:431
 msgid "Performing polygon fills..."
-msgstr "ポリゴンの塗り潰しを実行中..."
+msgstr "ポリゴンの塗りつぶしを実行中..."
 
 #: plugins/3d/vrml/vrml.cpp:228
 msgid "[INFO] load failed: input line too long\n"
