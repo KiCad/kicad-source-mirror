@@ -810,17 +810,33 @@ void SCH_PAINTER::draw( LIB_PIN *aPin, int aLayer )
         }
     }
 
-    VECTOR2I p0( aPin->GetPinRoot() );
+    VECTOR2I p0;
     VECTOR2I dir;
-    int      len = aPin->GetLength();
+    int len = aPin->GetLength();
+    int orient = aPin->GetOrientation();
 
-    switch( aPin->GetOrientation() )
+    switch( orient )
     {
+    case PIN_UP:
+        p0 = VECTOR2I( pos.x, pos.y - len );
+        dir = VECTOR2I( 0, 1 );
+        break;
+
+    case PIN_DOWN:
+        p0 = VECTOR2I( pos.x, pos.y + len );
+        dir = VECTOR2I( 0, -1 );
+        break;
+
+    case PIN_LEFT:
+        p0 = VECTOR2I( pos.x - len, pos.y );
+        dir = VECTOR2I( 1, 0 );
+        break;
+
     default:
-    case PIN_RIGHT: dir = VECTOR2I( -1,  0 ); break;
-    case PIN_LEFT:  dir = VECTOR2I(  1,  0 ); break;
-    case PIN_UP:    dir = VECTOR2I(  0,  1 ); break;
-    case PIN_DOWN:  dir = VECTOR2I(  0, -1 ); break;
+    case PIN_RIGHT:
+        p0 = VECTOR2I( pos.x + len, pos.y );
+        dir = VECTOR2I( -1, 0 );
+        break;
     }
 
     VECTOR2D pc;
@@ -1072,7 +1088,7 @@ void SCH_PAINTER::draw( LIB_PIN *aPin, int aLayer )
                     strokeText( aText, aPos, aAngle );
             };
 
-    switch( aPin->GetOrientation() )
+    switch( orient )
     {
     case PIN_LEFT:
         if( size[INSIDE] )
