@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-01 11:31-0700\n"
-"PO-Revision-Date: 2021-09-24 01:00+0000\n"
+"PO-Revision-Date: 2021-09-24 01:07+0000\n"
 "Last-Translator: boonchai k. <kicadthai@gmail.com>\n"
 "Language-Team: Thai <https://hosted.weblate.org/projects/kicad/master-source/"
 "th/>\n"
@@ -34173,19 +34173,19 @@ msgstr "ยกเลิกการเติม"
 
 #: pcbnew/tools/pcb_actions.cpp:1259
 msgid "Unfill zone(s)"
-msgstr ""
+msgstr "ไม่เติมโซน"
 
 #: pcbnew/tools/pcb_actions.cpp:1265
 msgid "Unfill All"
-msgstr ""
+msgstr "ไม่เติมทั้งหมด"
 
 #: pcbnew/tools/pcb_actions.cpp:1265
 msgid "Unfill all zones"
-msgstr ""
+msgstr "ไม่เติมโซนทั้งหมด"
 
 #: pcbnew/tools/pcb_actions.cpp:1273
 msgid "Place Selected Footprints"
-msgstr ""
+msgstr "วางฟุ้ทพรินท์ที่เลือกไว้"
 
 #: pcbnew/tools/pcb_actions.cpp:1274
 msgid "Performs automatic placement of selected components"
