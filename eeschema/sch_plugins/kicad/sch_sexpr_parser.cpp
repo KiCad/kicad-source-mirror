@@ -1566,23 +1566,23 @@ void SCH_SEXPR_PARSER::parsePAGE_INFO( PAGE_INFO& aPageInfo )
 
     if( pageType == PAGE_INFO::Custom )
     {
-        double width = parseDouble( "width" );      // width in mm
+        int width = Mm2mils( parseDouble( "width" ) ); // width stored in mm so we convert to mils
 
         // Perform some controls to avoid crashes if the size is edited by hands
-        if( width < 100.0 )
-            width = 100.0;
-        else if( width > 1200.0 )
-            width = 1200.0;
+        if( width < MIN_PAGE_SIZE_MILS )
+            width = MIN_PAGE_SIZE_MILS;
+        else if( width > MAX_PAGE_SIZE_MILS )
+            width = MAX_PAGE_SIZE_MILS;
 
-        double height = parseDouble( "height" );    // height in mm
+        int height = Mm2mils( parseDouble( "height" ) ); // height stored in mm so we convert to mils
 
-        if( height < 100.0 )
-            height = 100.0;
-        else if( height > 1200.0 )
-            height = 1200.0;
+        if( height < MIN_PAGE_SIZE_MILS )
+            height = MIN_PAGE_SIZE_MILS;
+        else if( height > MAX_PAGE_SIZE_MILS )
+            height = MAX_PAGE_SIZE_MILS;
 
-        aPageInfo.SetWidthMils( Mm2mils( width ) );
-        aPageInfo.SetHeightMils( Mm2mils( height ) );
+        aPageInfo.SetWidthMils( width );
+        aPageInfo.SetHeightMils( height );
     }
 
     token = NextTok();
