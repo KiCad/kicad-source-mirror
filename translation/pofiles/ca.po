@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-09-20 11:57-0700\n"
-"PO-Revision-Date: 2021-09-24 01:00+0000\n"
+"PO-Revision-Date: 2021-09-24 19:44+0000\n"
 "Last-Translator: Arnau Llovet Vidal <arnaullv@gmail.com>\n"
 "Language-Team: Catalan <https://hosted.weblate.org/projects/kicad/"
 "master-source/ca/>\n"
@@ -3297,6 +3297,8 @@ msgid ""
 "When drawing a track or moving an item, pan when approaching the edge of the "
 "display."
 msgstr ""
+"Al traçar una pista o moure un element, desplaçar al apropar-se a la vora de "
+"la pantalla."
 
 #: common/dialogs/panel_mouse_settings_base.cpp:38
 msgid "Use zoom acceleration"
@@ -3312,7 +3314,7 @@ msgstr "Velocitat del zoom:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:51
 msgid "How far to zoom in for each rotation of the mouse wheel"
-msgstr ""
+msgstr "Quant s'aproparà en cada rotació de la roda del ratolí"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:58
 msgid "Pick the zoom speed automatically"
@@ -3395,7 +3397,7 @@ msgstr "Gestos de desplaçament"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:153
 msgid "Vertical touchpad or scroll wheel movement:"
-msgstr ""
+msgstr "Moviment vertical del panell tàctil o de la roda de desplaçament:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:158
 msgid "Only one action can be assigned to each column"
@@ -3619,6 +3621,8 @@ msgstr "Predeterminat"
 #: common/dialogs/panel_setup_netclasses_base.cpp:84
 msgid "Set color to transparent to use KiCad default color."
 msgstr ""
+"Estableix el color a transparent per utilitzar-lo com a color per defecte de "
+"KiCad."
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:103
 msgid "Filter Nets"
@@ -3826,18 +3830,16 @@ msgstr "Imatge"
 
 #: common/drawing_sheet/ds_data_model_io.cpp:91
 #: common/drawing_sheet/ds_data_model_io.cpp:120
-#, fuzzy
 msgid "Error writing drawing sheet file"
-msgstr "Importa dibuixos existents"
+msgstr "Error a l'escriure el fitxer de la fulla de dibuix"
 
 #: common/drawing_sheet/ds_draw_item.cpp:136
-#, fuzzy
 msgid "First Page Only"
-msgstr "Únicament la pàgina 1"
+msgstr "Només la primera pàgina"
 
 #: common/drawing_sheet/ds_draw_item.cpp:137
 msgid "Subsequent Pages"
-msgstr ""
+msgstr "Pàgines següents"
 
 #: common/drawing_sheet/ds_draw_item.cpp:138
 msgid "All Pages"
@@ -3848,25 +3850,21 @@ msgid "First Page Option"
 msgstr "Opcions de primera pàgina"
 
 #: common/drawing_sheet/ds_draw_item.cpp:144
-#, fuzzy
 msgid "Repeat Count"
 msgstr "Nombre de repeticions"
 
 #: common/drawing_sheet/ds_draw_item.cpp:147
-#, fuzzy
 msgid "Repeat Label Increment"
-msgstr "Repeteix l'últim element"
+msgstr "Repeteix l'increment d'etiqueta"
 
 #: common/drawing_sheet/ds_draw_item.cpp:153
-#, fuzzy
 msgid "Repeat Position Increment"
-msgstr "Genera els fitxers de posició dels components"
+msgstr "Repeteix l'increment de posició"
 
 #: common/drawing_sheet/ds_draw_item.cpp:155
 #: pagelayout_editor/dialogs/dialog_design_inspector_base.cpp:39
-#, fuzzy
 msgid "Comment"
-msgstr "Comentari1"
+msgstr "Comentari"
 
 #: common/drawing_sheet/ds_draw_item.cpp:187
 #, c-format
@@ -3892,19 +3890,19 @@ msgid "clipboard"
 msgstr "porta-retalls"
 
 #: common/dsnlexer.cpp:336
-#, fuzzy, c-format
+#, c-format
 msgid "Expecting %s"
-msgstr "S'espera «%s»"
+msgstr "S'està esperant %s"
 
 #: common/dsnlexer.cpp:344
-#, fuzzy, c-format
+#, c-format
 msgid "Expecting '%s'"
-msgstr "S'espera «%s»"
+msgstr "S'està esperant '%s'"
 
 #: common/dsnlexer.cpp:352
-#, fuzzy, c-format
+#, c-format
 msgid "Unexpected %s"
-msgstr "Inesperat «%s»"
+msgstr "Inesperat %s"
 
 #: common/dsnlexer.cpp:360
 #, c-format
@@ -3912,14 +3910,14 @@ msgid "%s is a duplicate"
 msgstr "%s és un duplicat"
 
 #: common/dsnlexer.cpp:368
-#, fuzzy, c-format
+#, c-format
 msgid "Unexpected '%s'"
-msgstr "Inesperat «%s»"
+msgstr "Inesperat '%s'"
 
 #: common/dsnlexer.cpp:418
-#, fuzzy, c-format
+#, c-format
 msgid "need a number for '%s'"
-msgstr "necessita un NÚMERO per «%s»"
+msgstr "es necessita un número per '%s'"
 
 #: common/dsnlexer.cpp:703 common/dsnlexer.cpp:764
 msgid "Un-terminated delimited string"
@@ -3954,16 +3952,16 @@ msgstr "Comú"
 
 #: common/eda_base_frame.cpp:988
 msgid "Mouse and Touchpad"
-msgstr ""
+msgstr "Ratolí i panell tàctil"
 
 #: common/eda_base_frame.cpp:991
 msgid "Hotkeys"
 msgstr "Dreceres de teclat"
 
 #: common/eda_base_frame.cpp:1045
-#, fuzzy, c-format
+#, c-format
 msgid "Insufficient permissions to folder '%s'."
-msgstr "No teniu permisos d'escriptura a la carpeta <%s>."
+msgstr "Permisos insuficients a la carpeta '%s'."
 
 #: common/eda_base_frame.cpp:1085
 #, c-format
@@ -3989,9 +3987,9 @@ msgid "Documentation file '%s' not found."
 msgstr "No s'ha trobat el fitxer de documentació '%s'."
 
 #: common/eda_doc.cpp:193
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown MIME type for documentation file '%s'"
-msgstr "Tipus MIME desconegut per al fitxer de documentació <%s>"
+msgstr "Tipus MIME desconegut per al fitxer de documentació '%s'"
 
 #: common/eda_draw_frame.cpp:141 common/tool/actions.cpp:486
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:27
@@ -4085,14 +4083,12 @@ msgid "Graphic Shape"
 msgstr "Forma gràfica"
 
 #: common/eda_item.cpp:255
-#, fuzzy
 msgid "Board Text"
-msgstr "Cara de la placa"
+msgstr "Text de la placa"
 
 #: common/eda_item.cpp:256 pcbnew/widgets/appearance_controls.cpp:345
-#, fuzzy
 msgid "Footprint Text"
-msgstr "Empremtes posteriors"
+msgstr "Text de l'empremta"
 
 #: common/eda_item.cpp:258 common/eda_item.cpp:267
 #: pcbnew/tools/board_inspection_tool.cpp:381
@@ -4137,9 +4133,8 @@ msgid "Item List"
 msgstr "Llista d'elements"
 
 #: common/eda_item.cpp:269
-#, fuzzy
 msgid "Net Info"
-msgstr "Informació"
+msgstr "Informació de xarxa"
 
 #: common/eda_item.cpp:270 pcbnew/pcb_group.cpp:322
 #: pcbnew/tools/pcb_actions.cpp:682
@@ -4155,9 +4150,8 @@ msgid "Junction"
 msgstr "Entroncament"
 
 #: common/eda_item.cpp:274
-#, fuzzy
 msgid "No-Connect Flag"
-msgstr "Indicador de &no connexió"
+msgstr "Indicador de no connexió"
 
 #: common/eda_item.cpp:275
 msgid "Wire Entry"
@@ -4176,9 +4170,8 @@ msgid "Bitmap"
 msgstr "Mapa de bits"
 
 #: common/eda_item.cpp:279
-#, fuzzy
 msgid "Schematic Text"
-msgstr "Mida de l'esquemàtic"
+msgstr "Text de l'esquemàtic"
 
 #: common/eda_item.cpp:280
 msgid "Net Label"
@@ -4193,14 +4186,12 @@ msgid "Hierarchical Label"
 msgstr "Etiqueta jeràrquica"
 
 #: common/eda_item.cpp:283
-#, fuzzy
 msgid "Schematic Field"
-msgstr "Fitxers d'esquemàtic"
+msgstr "Camp de l'esquemàtic"
 
 #: common/eda_item.cpp:284
-#, fuzzy
 msgid "Schematic Symbol"
-msgstr "Edita l'esquemàtic"
+msgstr "Símbol de l'esquemàtic"
 
 #: common/eda_item.cpp:285
 msgid "Sheet Pin"
@@ -4212,9 +4203,8 @@ msgid "Sheet"
 msgstr "Full"
 
 #: common/eda_item.cpp:293
-#, fuzzy
 msgid "SCH Screen"
-msgstr "Serigrafia"
+msgstr "Pantalla SCH"
 
 #: common/eda_item.cpp:295
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:166
@@ -4239,14 +4229,12 @@ msgid "Circle"
 msgstr "Cercle"
 
 #: common/eda_item.cpp:299
-#, fuzzy
 msgid "Symbol Text"
-msgstr "Símbol"
+msgstr "Text del símbol"
 
 #: common/eda_item.cpp:301
-#, fuzzy
 msgid "Polyline"
-msgstr "Línia poligonal"
+msgstr "Polilínia"
 
 #: common/eda_item.cpp:302 eeschema/lib_bezier.h:50
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:100
@@ -4260,19 +4248,16 @@ msgid "Pin"
 msgstr "Pin"
 
 #: common/eda_item.cpp:304
-#, fuzzy
 msgid "Symbol Field"
-msgstr "Suprimeix els camps"
+msgstr "Camp del símbol"
 
 #: common/eda_item.cpp:306
-#, fuzzy
 msgid "Gerber Layout"
-msgstr "Gerber"
+msgstr "Disposició Gerber"
 
 #: common/eda_item.cpp:307
-#, fuzzy
 msgid "Draw Item"
-msgstr "Arrossega l'element"
+msgstr "Dibuixa element"
 
 #: common/eda_text.cpp:502
 #: eeschema/dialogs/dialog_text_and_label_properties_base.cpp:126
@@ -4434,14 +4419,12 @@ msgid "Height"
 msgstr "Alçada"
 
 #: common/eda_text.cpp:693
-#, fuzzy
 msgid "Horizontal Justification"
-msgstr "Justificació horitzontal"
+msgstr "Justificat horitzontal"
 
 #: common/eda_text.cpp:697
-#, fuzzy
 msgid "Vertical Justification"
-msgstr "Justificació vertical"
+msgstr "Justificat vertical"
 
 #: common/env_vars.cpp:71
 #, fuzzy
@@ -4962,11 +4945,11 @@ msgstr "Adhesiu.F"
 
 #: common/layer_id.cpp:68
 msgid "B.Paste"
-msgstr "Enganxa.P"
+msgstr "Pasta.P"
 
 #: common/layer_id.cpp:69
 msgid "F.Paste"
-msgstr "Enganxa.F"
+msgstr "Pasta.F"
 
 #: common/layer_id.cpp:70
 msgid "B.Silkscreen"
@@ -5557,19 +5540,19 @@ msgstr "Error quan s'extreia el fitxer!"
 #: pcbnew/exporters/gendrill_file_writer_base.cpp:344
 #: pcbnew/exporters/gendrill_gerber_writer.cpp:101
 #: pcbnew/exporters/gerber_jobfile_writer.cpp:152
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to create file '%s'."
-msgstr "Ha fallat la creació del fitxer «%s»"
+msgstr "No s'ha pogut crear del fitxer '%s'."
 
 #: common/project/project_archiver.cpp:205
-#, fuzzy, c-format
+#, c-format
 msgid "Archived file '%s'."
-msgstr "Fitxer d'arxiu <%s>"
+msgstr "Fitxer d'arxiu '%s'."
 
 #: common/project/project_archiver.cpp:215
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to archive file '%s'."
-msgstr "Ha fallat l'obertura del fitxer «%s»"
+msgstr "No s'ha pogut arxivar el fitxer '%s'."
 
 #: common/project/project_archiver.cpp:241
 #, c-format
@@ -5946,33 +5929,28 @@ msgid "Performs left mouse button click"
 msgstr ""
 
 #: common/tool/actions.cpp:400
-#, fuzzy
 msgid "Double-click"
-msgstr "Feu doble clic per a editar-ho"
+msgstr "Doble clic"
 
 #: common/tool/actions.cpp:400
 msgid "Performs left mouse button double-click"
 msgstr ""
 
 #: common/tool/actions.cpp:408
-#, fuzzy
 msgid "Pin Library"
-msgstr "Biblioteca"
+msgstr "Fixa la biblioteca"
 
 #: common/tool/actions.cpp:409
-#, fuzzy
 msgid "Keep the library at the top of the list"
-msgstr "Desa la biblioteca activa actual"
+msgstr "Mantén la biblioteca al començament de la llista"
 
 #: common/tool/actions.cpp:413
-#, fuzzy
 msgid "Unpin Library"
-msgstr "Annexa la biblioteca"
+msgstr "No fixis la biblioteca"
 
 #: common/tool/actions.cpp:414
-#, fuzzy
 msgid "No longer keep the library at the top of the list"
-msgstr "Desa la biblioteca activa actual"
+msgstr "No fixis més la biblioteca al començament de la llista"
 
 #: common/tool/actions.cpp:419
 msgid "Pan Up"
@@ -6016,18 +5994,16 @@ msgid "Set the grid origin point"
 msgstr "Estableix l'origen de la quadrícula"
 
 #: common/tool/actions.cpp:476
-#, fuzzy
 msgid "Show Grid"
-msgstr "Mostra la &quadrícula"
+msgstr "Mostra la quadrícula"
 
 #: common/tool/actions.cpp:476
 msgid "Display grid dots or lines in the edit window"
 msgstr ""
 
 #: common/tool/actions.cpp:481
-#, fuzzy
 msgid "Grid Properties..."
-msgstr "Propietats de la quadrícula"
+msgstr "Propietats de la quadrícula..."
 
 #: common/tool/actions.cpp:481
 #, fuzzy
@@ -6035,9 +6011,8 @@ msgid "Set grid dimensions"
 msgstr "Estableix l'origen de la quadrícula"
 
 #: common/tool/actions.cpp:486
-#, fuzzy
 msgid "Use inches"
-msgstr "polzades"
+msgstr "Utilitza polzades"
 
 #: common/tool/actions.cpp:491
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:120
@@ -6091,9 +6066,8 @@ msgid "Reset Local Coordinates"
 msgstr "Restableix les coordenades locals"
 
 #: common/tool/actions.cpp:522
-#, fuzzy
 msgid "Always Show Cursor"
-msgstr "Mostra el cursor"
+msgstr "Mostra sempre el cursor"
 
 #: common/tool/actions.cpp:522
 msgid "Display crosshairs even in selection tool"
@@ -6147,21 +6121,18 @@ msgid "Symbol Library Browser"
 msgstr "Navegador de biblioteques"
 
 #: common/tool/actions.cpp:568
-#, fuzzy
 msgid "Browse symbol libraries"
-msgstr "Gestiona les biblioteques de símbols"
+msgstr "Navega dins les biblioteques de símbols"
 
 #: common/tool/actions.cpp:573 eeschema/eeschema_config.cpp:239
 #: eeschema/symbol_editor/symbol_editor.cpp:163
 #: kicad/tools/kicad_manager_actions.cpp:75
-#, fuzzy
 msgid "Symbol Editor"
-msgstr "&Editor de biblioteques"
+msgstr "Editor de símbols"
 
 #: common/tool/actions.cpp:573
-#, fuzzy
 msgid "Create, delete and edit symbols"
-msgstr "Crea un component com a símbol d'alimentació"
+msgstr "Crea, esborra i edita símbols"
 
 #: common/tool/actions.cpp:578 pcbnew/footprint_viewer_frame.cpp:109
 #: pcbnew/footprint_viewer_frame.cpp:983
@@ -6185,49 +6156,41 @@ msgid "Create, delete and edit footprints"
 msgstr "Crea un component com a símbol d'alimentació"
 
 #: common/tool/actions.cpp:589
-#, fuzzy
 msgid "Update PCB from Schematic..."
-msgstr "Actualitza el PCB a partir de l'esquemàtic"
+msgstr "Actualitza PCB a partir de l'esquemàtic..."
 
 #: common/tool/actions.cpp:589
-#, fuzzy
 msgid "Update PCB with changes made to schematic"
-msgstr "Actualitza el PCB a partir de l'esquemàtic"
+msgstr "Actualitza PCB amb els canvis fets a l'esquemàtic"
 
 #: common/tool/actions.cpp:594
-#, fuzzy
 msgid "Update Schematic from PCB..."
-msgstr "Actualitza el PCB a partir de l'esquemàtic"
+msgstr "Actualitza PCB a partir de l'esquemàtic..."
 
 #: common/tool/actions.cpp:594
-#, fuzzy
 msgid "Update schematic with changes made to PCB"
-msgstr "Actualitza el PCB a partir de l'esquemàtic"
+msgstr "Actualitza PCB amb els canvis fets a l'esquemàtic"
 
 #: common/tool/actions.cpp:604
 #: pcbnew/dialogs/panel_fp_properties_3d_model_base.cpp:71
-#, fuzzy
 msgid "Configure Paths..."
-msgstr "&Configura els camins"
+msgstr "Configura els camins..."
 
 #: common/tool/actions.cpp:604
 msgid "Edit path configuration environment variables"
 msgstr "Edita les variables d'entorn de la configuració dels camins"
 
 #: common/tool/actions.cpp:609
-#, fuzzy
 msgid "Manage Symbol Libraries..."
-msgstr "Gestiona les biblioteques de símbols"
+msgstr "Gestiona les biblioteques de símbols..."
 
 #: common/tool/actions.cpp:610
-#, fuzzy
 msgid "Edit the global and project symbol library lists"
-msgstr "Edita la taula de les biblioteques de símbols."
+msgstr "Edita les llistes de biblioteques de símbols globals i de projecte"
 
 #: common/tool/actions.cpp:615
-#, fuzzy
 msgid "Manage Footprint Libraries..."
-msgstr "Gestiona les biblioteques de símbols"
+msgstr "Gestiona les biblioteques d'empremtes..."
 
 #: common/tool/actions.cpp:616
 #, fuzzy
@@ -6254,37 +6217,32 @@ msgid "Open product documentation in a web browser"
 msgstr ""
 
 #: common/tool/actions.cpp:634
-#, fuzzy
 msgid "List Hotkeys..."
-msgstr "&Llista de les dreceres de teclat"
+msgstr "Llista de les dreceres..."
 
 #: common/tool/actions.cpp:635
 msgid "Displays current hotkeys table and corresponding commands"
 msgstr ""
 
 #: common/tool/actions.cpp:640
-#, fuzzy
 msgid "Get Involved"
-msgstr "&Involucrar-se"
+msgstr "Involucrar-se"
 
 #: common/tool/actions.cpp:641
-#, fuzzy
 msgid "Open \"Contribute to KiCad\" in a web browser"
-msgstr "Contribuïu a KiCad (obre un navegador web)"
+msgstr "Obre \"Contribueix a KiCad\" al navegador web"
 
 #: common/tool/actions.cpp:646
 msgid "Donate"
-msgstr ""
+msgstr "Fes una donació"
 
 #: common/tool/actions.cpp:647
-#, fuzzy
 msgid "Open \"Donate to KiCad\" in a web browser"
-msgstr "Contribuïu a KiCad (obre un navegador web)"
+msgstr "Obre \"Fes una donació a KiCad\" al navegador web"
 
 #: common/tool/actions.cpp:651
-#, fuzzy
 msgid "Report Bug"
-msgstr "Fitxer d'informe"
+msgstr "Informa d'un error"
 
 #: common/tool/common_control.cpp:219
 #, c-format
@@ -6298,9 +6256,8 @@ msgstr ""
 "Vols accedir a l'ajuda en línia de KiCad?"
 
 #: common/tool/common_control.cpp:222 common/tool/common_control.cpp:242
-#, fuzzy
 msgid "File Not Found"
-msgstr "Fitxer no trobat"
+msgstr "No s'ha trobat el fitxer"
 
 #: common/tool/common_control.cpp:239
 #, c-format
@@ -6330,14 +6287,13 @@ msgid ""
 msgstr ""
 
 #: common/tool/common_control.cpp:287
-#, fuzzy
 msgid "Donate to KiCad"
-msgstr "Tanca KiCad"
+msgstr "Dóna a KiCad"
 
 #: common/tool/grid_menu.cpp:93
-#, fuzzy, c-format
+#, c-format
 msgid "Grid: %s (%s)"
-msgstr "Valor %s de %s"
+msgstr "Quadrícula: %s (%s)"
 
 #: common/tool/grid_menu.cpp:104
 #, c-format
@@ -6356,11 +6312,11 @@ msgstr "Valor incorrecte: %s"
 
 #: common/validators.cpp:294
 msgid "Entry contains trailing white space."
-msgstr ""
+msgstr "L'entrada conté un espai en blanc al final."
 
 #: common/validators.cpp:298
 msgid "Entry contains leading white space."
-msgstr ""
+msgstr "L'entrada conté un espai en blanc al principi."
 
 #: common/validators.cpp:302
 #, c-format
@@ -6368,9 +6324,8 @@ msgid "'%s' is not a valid library identifier format."
 msgstr "'%s' no és un format d'identificador de biblioteca vàlid."
 
 #: common/validators.cpp:309
-#, fuzzy
 msgid "Library Identifier Validation Error"
-msgstr "Error de validació de camp"
+msgstr "Error de validació d'identificador de biblioteca"
 
 #: common/validators.cpp:356
 msgid "Invalid signal name"
@@ -6378,7 +6333,7 @@ msgstr "Nom de la senyal invàlid"
 
 #: common/validators.cpp:367
 msgid "Signal names cannot contain CR or LF characters"
-msgstr ""
+msgstr "Els noms de senyals no poden contenir els caràcters CR o LF"
 
 #: common/validators.cpp:370
 msgid "Signal names cannot contain spaces"
@@ -6386,46 +6341,43 @@ msgstr "Els noms de senyals no poden tenir espais"
 
 #: common/view/view.cpp:544
 msgid "Mirroring for Y axis is not supported yet"
-msgstr ""
+msgstr "Encara no està implementat fer mirall sobre l'eix Y"
 
 #: common/widgets/footprint_preview_widget.cpp:103
-#, fuzzy
 msgid "Footprint not found."
-msgstr "No s'ha trobat l'empremta"
+msgstr "No s'ha trobat l'empremta."
 
 #: common/widgets/footprint_select_widget.cpp:144
 msgid "No default footprint"
 msgstr "Sense empremta predeterminada"
 
 #: common/widgets/gal_options_panel.cpp:85
-#, fuzzy
 msgid "Accelerated graphics"
-msgstr "Gràfics:"
+msgstr "Gràfics accelerats"
 
 #: common/widgets/gal_options_panel.cpp:85
-#, fuzzy
 msgid "Fallback graphics"
-msgstr "Pistes desbloquejades"
+msgstr "Gràfics de reserva"
 
 #: common/widgets/gal_options_panel.cpp:86
-#, fuzzy
 msgid "Rendering Engine"
-msgstr "Motor de renderització"
+msgstr "Motor de renderitzat"
 
 #: common/widgets/gal_options_panel.cpp:90
 msgid "Hardware-accelerated graphics (recommended)"
-msgstr ""
+msgstr "Acceleració gràfica per hardware (recomanat)"
 
 #: common/widgets/gal_options_panel.cpp:91
 msgid ""
 "Software graphics (for computers which do not support KiCad's hardware "
 "acceleration requirements)"
 msgstr ""
+"Gràfics per software (per a ordenadors que no soportin els requisits "
+"d'acceleració per hardware de KiCad)"
 
 #: common/widgets/gal_options_panel.cpp:103
-#, fuzzy
 msgid "Grid Options"
-msgstr "Opcions genèriques"
+msgstr "Opcions de quadrícula"
 
 #: common/widgets/gal_options_panel.cpp:108
 msgid "Dots"
@@ -6440,9 +6392,8 @@ msgid "Small crosses"
 msgstr "Creus petites"
 
 #: common/widgets/gal_options_panel.cpp:114
-#, fuzzy
 msgid "Grid Style"
-msgstr "Estil de la quadrícula"
+msgstr "Estil de quadrícula"
 
 #: common/widgets/gal_options_panel.cpp:126
 msgid "Grid thickness:"
@@ -6456,12 +6407,11 @@ msgstr "px"
 
 #: common/widgets/gal_options_panel.cpp:142
 msgid "Min grid spacing:"
-msgstr ""
+msgstr "Espaiat min de la quadrícula:"
 
 #: common/widgets/gal_options_panel.cpp:158
-#, fuzzy
 msgid "Snap to Grid:"
-msgstr "En les pistes"
+msgstr "Ajusta a la quadrícula:"
 
 #: common/widgets/gal_options_panel.cpp:162
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:341
@@ -6904,9 +6854,8 @@ msgid "Gerber job file"
 msgstr "Fitxers Gerber"
 
 #: common/wildcards_and_files_ext.cpp:514
-#, fuzzy
 msgid "Specctra DSN file"
-msgstr "Fitxer de Specctra DSN:"
+msgstr "Fitxer Specctra DSN"
 
 #: common/wildcards_and_files_ext.cpp:521
 #, fuzzy
@@ -6985,10 +6934,11 @@ msgid ""
 msgstr ""
 
 #: cvpcb/cvpcb.cpp:187
-#, fuzzy
 msgid ""
 "An error occurred attempting to load the global footprint library table."
-msgstr "Edita la taula de les biblioteques d'empremtes"
+msgstr ""
+"Hi ha hagut un error al intentar carregar la taula global de biblioteques "
+"d'empremtes."
 
 #: cvpcb/cvpcb_mainframe.cpp:63 cvpcb/menubar.cpp:51
 #, fuzzy
@@ -7027,9 +6977,9 @@ msgid "Symbol to Footprint links have been modified. Save changes?"
 msgstr "La placa actual ha estat modificada. Voleu desar els canvis?"
 
 #: cvpcb/cvpcb_mainframe.cpp:527 cvpcb/tools/cvpcb_association_tool.cpp:207
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' is not a valid footprint."
-msgstr "«%s» no és un valor vàlid de Spice"
+msgstr "'%s' no és una empremta vàlida."
 
 #: cvpcb/cvpcb_mainframe.cpp:682 eeschema/generate_alias_info.cpp:39
 #: eeschema/sch_symbol.cpp:1422 eeschema/symbol_editor/symbol_editor.cpp:1225
@@ -7038,9 +6988,8 @@ msgid "Keywords"
 msgstr "Paraules clau"
 
 #: cvpcb/cvpcb_mainframe.cpp:698
-#, fuzzy
 msgid "Pin Count"
-msgstr "Nombre:"
+msgstr "Número de pins"
 
 #: cvpcb/cvpcb_mainframe.cpp:711 eeschema/sch_symbol.cpp:1404
 #: eeschema/sch_symbol.cpp:1408 eeschema/sch_symbol.cpp:1436
@@ -7111,9 +7060,8 @@ msgstr "Fitxer del projecte: «%s»"
 #: eeschema/dialogs/dialog_bom.cpp:449
 #: gerbview/tools/gerbview_inspection_tool.cpp:185
 #: kicad/project_tree_pane.cpp:824
-#, fuzzy
 msgid "No text editor selected in KiCad.  Please choose one."
-msgstr "No hi ha cap text seleccionat a KiCad. Si us plau, seleccioneu-ne un"
+msgstr "No hi ha cap editor de text seleccionat a KiCad. Si us plau, tria'n un."
 
 #: cvpcb/dialogs/dialog_config_equfiles.cpp:249
 #, fuzzy
@@ -7121,9 +7069,9 @@ msgid "Footprint Association File"
 msgstr "Desa el fitxer de l'associació de l'empremta"
 
 #: cvpcb/dialogs/dialog_config_equfiles.cpp:293
-#, fuzzy, c-format
+#, c-format
 msgid "File '%s' already exists in list."
-msgstr "El fitxer «%s» ja existeix a la llista"
+msgstr "El fitxer '%s' ja existeix a la llista."
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:20
 #, fuzzy
@@ -7242,9 +7190,9 @@ msgstr "La biblioteca '%s' no és a la taula de biblioteques d'empremtes."
 
 #: cvpcb/display_footprints_frame.cpp:420
 #: cvpcb/display_footprints_frame.cpp:445
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint '%s' not found."
-msgstr "No s'ha trobat l'empremta «%s»"
+msgstr "No s'ha trobat l'empremta '%s'."
 
 #: cvpcb/display_footprints_frame.cpp:475 pcbnew/footprint.cpp:919
 #, c-format
@@ -7306,9 +7254,8 @@ msgid "Schematic saved"
 msgstr "Mida de l'esquemàtic"
 
 #: cvpcb/toolbars_cvpcb.cpp:75
-#, fuzzy
 msgid "Footprint Filters:"
-msgstr "Filtre de l'empremta"
+msgstr "Filtre d'empremtes:"
 
 #: cvpcb/tools/cvpcb_actions.cpp:52
 msgid "View selected footprint"
@@ -7436,9 +7383,9 @@ msgid "Updated %s (unit %s) from %s to %s."
 msgstr "Actualitzat %s (unitat %s) de %s a %s."
 
 #: eeschema/annotate.cpp:292
-#, fuzzy, c-format
+#, c-format
 msgid "Updated %s from %s to %s."
-msgstr "Pad %s en %s de %s"
+msgstr "Actualitzat %s de %s a %s."
 
 #: eeschema/annotate.cpp:302
 #, c-format
@@ -7451,9 +7398,8 @@ msgid "Annotated %s as %s."
 msgstr "Anotat %s com %s."
 
 #: eeschema/annotate.cpp:326
-#, fuzzy
 msgid "Annotation complete."
-msgstr "Selecció d'anotació"
+msgstr "Anotació completada."
 
 #: eeschema/bom_plugins.cpp:46
 #, c-format
@@ -7511,11 +7457,10 @@ msgid ""
 msgstr ""
 
 #: eeschema/connection_graph.cpp:2877
-#, fuzzy, c-format
+#, c-format
 msgid "Sheet pin %s has no matching hierarchical label inside the sheet"
 msgstr ""
-"Falta de correspondència entre les etiquetes jeràrquiques i les fulles dels "
-"pins"
+"El pin de la fulla %s no té una etiqueta jeràrquica corresponent a la fulla"
 
 #: eeschema/connection_graph.cpp:2894
 #, fuzzy, c-format
@@ -7672,9 +7617,9 @@ msgid "Add Generator"
 msgstr "Afegeix un regulador"
 
 #: eeschema/dialogs/dialog_bom.cpp:391
-#, fuzzy, c-format
+#, c-format
 msgid "Nickname '%s' already in use."
-msgstr "Aquest nom ja existeix i s'avorta"
+msgstr "El sobrenom '%s' ja està utilitzat."
 
 #: eeschema/dialogs/dialog_bom.cpp:420 eeschema/dialogs/dialog_netlist.cpp:683
 #, fuzzy
@@ -7734,7 +7679,6 @@ msgid "Bill of Material"
 msgstr "Llista de materials"
 
 #: eeschema/dialogs/dialog_bom_help_md.h:2
-#, fuzzy
 msgid ""
 "# 1 - Full documentation\n"
 "\n"
@@ -7931,137 +7875,142 @@ msgstr ""
 "Els fitxers de BOM (i els fitxers de llistats de xarxes) poden ser creats "
 "des d'un *fitxer de llistats de xarxes intermèdies* creat per Eeschema.\n"
 "\n"
-"Aquest fitxer utilitza sintàxis XML i s'anomena llistat de xarxes "
-"intermèdies. The intermediate netlist includes a large amount of data about "
-"your board and because of this, it can be used with post-processing to "
-"create a BOM or other reports.\n"
+"Aquest fitxer utilitza sintaxis XML i s'anomena llistat de xarxes "
+"intermèdies. El llistat de xarxes intermèdies inclou una gran quantitat de "
+"dades de la teva placa i per aquest motiu, pot ser utilitzat amb el post-"
+"processat per crear una BOM (llista de materials) o altres informes.\n"
 "\n"
-"Depending on the output (BOM or netlist), different subsets of the complete "
-"Intermediate Netlist file will be used in the post-processing.\n"
+"Depenent de la sortida (BOM o llistat de xarxes), s'utilitzaran diferents "
+"parts del fitxer de llistat de xarxes intermèdies complet en el post-"
+"processat.\n"
 "\n"
 "# 3 - Conversió a un nou format\n"
 "\n"
-"By applying a post-processing filter to the Intermediate netlist file you "
-"can generate foreign netlist files as well as BOM files. Because this "
-"conversion is a text to text transformation, this post-processing filter can "
-"be written using *Python*, *XSLT*, or any other tool capable of taking XML "
-"as input.\n"
+"Aplicant un filtre de post-processat al fitxer de llistes de xarxes "
+"intermèdies pots generar fitxers de llistes de xarxes externes així com "
+"fitxers de BOM. Al ser aquesta conversió una transformació de text a text, "
+"aquest filtre de post-processat pot ser escrit utilitzant *Python*, *XSLT*, "
+"o qualsevol altra eina capaç d'utilitzar XML com a entrada.\n"
 "\n"
-"XSLT itself is a XML language suitable for XML transformations. There is a "
-"free program called `xsltproc` that you can download and install. The "
-"`xsltproc` program can be used to read the Intermediate XML netlist input "
-"file, apply a style-sheet to transform the input, and save the results in an "
-"output file. Use of `xsltproc` requires a style-sheet file using XSLT "
-"conventions. The full conversion process is handled by Eeschema, after it is "
-"configured once to run `xsltproc` in a specific way.\n"
+"XSLT és un llenguatge XML adequat per transformacions XML. Aquest es un "
+"programa lliure anomenat `xsltproc` que pots descarregar i instal·lar. El "
+"programa `xsltproc` pot ser utilitzat per llegir els fitxer d'entrada de "
+"llistes de xarxes XML intermèdies, aplica uns fulla d'estil per transformar "
+"l'entrada, i desar els resultats en un fitxer de sortida. La utilització de "
+"`xsltproc` requereix un fitxer de fulla d'estil que utilitzi les convencions "
+"XSLT. El procés de conversió complet està gestionat per Eeschema, després "
+"d'haver estat configurat per executar `xsltproc` d'una manera específica.\n"
 "\n"
-"A Python script is somewhat more easy to create.\n"
+"Un script de Python és més fàcil de crear.\n"
 "\n"
 "# 4 - Inicialització de la finestra de diàleg\n"
 "\n"
-"You should add a new plugin (a script) in the plugin list by clicking on the "
-"Add Plugin button.\n"
+"Hauries d'afegir un nou connector (a script) a la llista de connectors "
+"clicant sobre el botó Afegeix connector.\n"
 "\n"
 "## 4.1 - Configuració dels paràmetres dels connectors\n"
 "\n"
 "El diàleg de configuració del connector d'Eeschema necessita la següent "
 "informació:\n"
 "\n"
-" * The title: for instance, the name of the netlist format.\n"
-" * The command line to launch the converter (usually a script).\n"
+" * El títol: per exemple, el nom del format de llista de xarxes.\n"
+" * La línia d'ordres per executar el convertidor (habitualment un script).\n"
 "\n"
-"***Note (Windows only):***\n"
-"*By default, the command line runs with hidden console window and output is "
-"redirected to \"Plugin info\" field. To show the window of the running "
-"command, set the checkbox \"Show console window\".*\n"
+"***Nota (Només per Windows):***\n"
+"*Per defecte, la línia d'ordres s'executa amb la finestra d'ordres amagada i "
+"la sortida és redirigida al camp \"Info Connector\". Per mostrar la finestra "
+"de l'ordre en execució, marca la casella de verificació \"Mostra la finestra "
+"de la consola\".*\n"
 "\n"
-"Once you click on the generate button the following will happen:\n"
+"Quan cliquis al botó genera passarà el següent:\n"
 "\n"
-"1. Eeschema creates an intermediate netlist file \\*.xml, for instance `test."
-"xml`.\n"
-"2. Eeschema runs the script from the command line to create the final output "
-"file.\n"
+"1. Eeschema crea un fitxer de llista de xarxes intermèdies \\*.xml, per "
+"exemple `test.xml`.\n"
+"2. Eeschema executa l'script des de la línia d'ordres per crear el fitxer "
+"final de sortida.\n"
 "\n"
-"## 4.2 - Generate netlist files with the command line\n"
+"## 4.2 - Generar el fitxer de llista de xarxes amb la línia d'ordres\n"
 "\n"
-"Assuming we are using the program `xsltproc.exe` to apply the sheet style to "
-"the intermediate file, `xsltproc.exe` is executed with the following command."
-"\n"
+"Assumint que estem utilitzant el programa `xsltproc.exe` per aplicar la "
+"fulla d'estil al fitxer intermedi, `xsltproc.exe` és executat amb la següent "
+"ordre.\n"
 "\n"
 "```\n"
-"xsltproc.exe -o <output filename> <style-sheet filename> <input XML file to "
-"convert>\n"
+"xsltproc.exe -o <nom del fitxer de sortida> <nom del fitxer de la fulla "
+"d'estil> <fitxer d'entrada XML a convertir>\n"
 "```\n"
 "\n"
-"A Windows the command line is the following.\n"
+"Una línia d'ordres per a Windows seria la següent.\n"
 "\n"
 "```\n"
 "f:/kicad/bin/xsltproc.exe -o \"%O\" f:/kicad/bin/plugins/myconverter.xsl \"%"
 "I\"\n"
 "```\n"
 "\n"
-"A Linux the command becomes as following.\n"
+"Una línia d'ordres per a Linux seria la següent.\n"
 "\n"
 "```\n"
-"xsltproc -o \"%O\" /usr/local/kicad/bin/plugins/myconverter .xsl \"%I\"\n"
+"xsltproc -o \"%O\" /usr/local/kicad/bin/plugins/elmeuconvertidor.xsl \"%I\"\n"
 "```\n"
-"where `myconverter.xsl` is the style-sheet that you are applying.\n"
+"on `elmeuconvertidor.xsl` és la fulla d'estil que estàs aplicant.\n"
 "\n"
-"Do not forget the double quotes around the file names, this allows them to "
-"have spaces after the substitution by Eeschema.\n"
+"No oblidis les cometes dobles al voltant dels noms del fitxers, això permet "
+"que tinguin espais després de ser substituïts per Eeschema.\n"
 "\n"
-"If a Python script is used, the command line is something like (depending on "
-"the Python script):\n"
-"\n"
-"```\n"
-"python f:/kicad/bin/plugins/bom-in-python/myconverter.py \"%I\" \"%O\"\n"
-"```\n"
-"\n"
-"or\n"
+"Si s'utilitza un script de Python, la línia d'ordres tindrà un aspecte com "
+"ara (depenent de l'script de Python):\n"
 "\n"
 "```\n"
-"python /usr/local/kicad/bin/plugins/bom-in-python/myconverter .xsl \"%I\" \"%"
-"O\"\n"
+"python f:/kicad/bin/plugins/bom-in-python/elmeuconvertidor.py \"%I\" \"%O\"\n"
 "```\n"
 "\n"
-"El format de la línia d'ordres accepts parameters for filenames. The "
-"supported formatting parameters are:\n"
+"o\n"
 "\n"
-" * `%B`: base filename of selected output file, minus path and extension.\n"
-" * `%P`: project directory, without name and without trailing '/'.\n"
-" * `%I`: complete filename and path of the temporary input file\n"
-"(the intermediate net file).\n"
-" * `%O`: complete filename and path (but without extension) of the user\n"
-"chosen output file.\n"
+"```\n"
+"python /usr/local/kicad/bin/plugins/bom-in-python/elmeuconvertidor .xsl \"%"
+"I\" \"%O\"\n"
+"```\n"
 "\n"
-"`%I` serà substituït per the actual intermediate file name (usually the full "
-"root sheet filename with extension \".xml\").\n"
-"`%O` serà substituït per the actual output file name (the full root sheet "
-"filename minus extension).\n"
-"`%B` serà substituït per the actual output short file name (the short root "
-"sheet filename minus extension).\n"
-"`%P` serà substituït per the actual current project path.\n"
+"El format de la línia d'ordres accepta paràmetres pels noms de fitxers. Els "
+"paràmetres de format suportats són:\n"
+"\n"
+" * `%B`: nom de fitxer base pel fitxer de sortida seleccionat, menys el camí "
+"i l'extensió.\n"
+" * `%P`: carpeta de projecte, sense el nom i sense final '/'.\n"
+" * `%I`: nom del fitxer complet i camí del fitxer d'entrada temporal (el "
+"fitxer de xarxa intermèdia).\n"
+" * `%O`: nom del fitxer complet i camí (sense extensió) del fitxer de "
+"sortida triat per l'usuari.\n"
+"\n"
+"`%I` serà substituït pel veritable nom de fitxer intermedi (usualment el nom "
+"de fitxer complet de la fulla principal amb extensió \".xml\").\n"
+"`%O` serà substituït pel veritable nom de fitxer de sortida (el nom de "
+"fitxer complet de la fulla principal menys l'extensió).\n"
+"`%B` serà substituït pel veritable nom curt de fitxer de sortida (el nom de "
+"fitxer curt de la fulla principal menys l'extensió).\n"
+"`%P` serà substituït pel veritable camí del projecte actual.\n"
 "\n"
 "## 4.3 - Format de la línia d'ordres:\n"
 "\n"
-"### 4.3.1 - Remark:\n"
+"### 4.3.1 - Nota:\n"
 "\n"
-"Most of time, the created file must have an extension, depending on its type."
+"La majoria de vegades, el fitxer creat ha de tenir una extensió, que depèn "
+"del seu tipus.\n"
+"Aleshores has d'afegir a l'opció ***%O*** l'extensió de fitxer correcte.\n"
 "\n"
-"Therefore you have to add to the option ***%O*** the right file extension.\n"
+"Per exemple:\n"
 "\n"
-"For instance:\n"
-"\n"
-" * **%O.csv** to create a .csv file (comma separated value file).\n"
-" * **%O.htm** to create a .html file.\n"
-" * **%O.bom** to create a .bom file.\n"
+" * **%O.csv** per crear un fitxer .csv (fitxer amb valors separats per "
+"comes).\n"
+" * **%O.htm** per crear un fitxer .html.\n"
+" * **%O.bom** per crear un fitxer .bom.\n"
 "\n"
 "### 4.3.2 Exemple per xsltproc:\n"
 "\n"
 "El format de la línia d'ordres per xsltproc és el següent:\n"
 "\n"
 "```\n"
-"<path of xsltproc> xsltproc <xsltproc parameters>\n"
+"<camí a xsltproc> xsltproc <paràmetres xsltproc>\n"
 "```\n"
 "\n"
 "A Windows:\n"
@@ -8076,32 +8025,34 @@ msgstr ""
 "pcb.xsl \"%I\"\n"
 "```\n"
 "\n"
-"The above examples assume `xsltproc` is installed on your PC under Windows "
-"and xsl files located in `<path_to_kicad>/kicad/bin/plugins/`.\n"
+"Els exemples anteriors assumeixen que `xsltproc` està instal·lat al teu PC "
+"amb Windows i els fitxers xsl són a `<camí_a_kicad>/kicad/bin/plugins/`.\n"
 "\n"
 "\n"
-"### 4.3.3 Example for Python scripts:\n"
+"### 4.3.3 Exemple per als scripts de Python:\n"
 "\n"
-"Assuming python is installed on your PC, and python scripts are located in\n"
+"Assumint que python està instal·lat al teu PC, i els scripts de python són "
+"a\n"
 "\n"
-" `<path_to_kicad>/kicad/bin/plugins/bom-in-python/`,\n"
+" `<cami_a_kicad>/kicad/bin/plugins/bom-in-python/`,\n"
 "\n"
-"el format de la línia d'ordres per python és alguna cosa com ara:\n"
+"el format de la línia d'ordres per python serà alguna cosa com ara:\n"
 "\n"
 "```\n"
-"python <script file name> <input filename> <output filename>\n"
+"python <nom del fitxer de l'script> <nom del fitxer d'entrada> <nom del "
+"fitxer de sortida>\n"
 "```\n"
 "\n"
 "A Windows:\n"
 "```\n"
-"python.exe f:/kicad/bin/plugins/bom-in-python/my_python_script.py \"%I\" \"%O"
-".html\"\n"
+"python.exe f:/kicad/bin/plugins/bom-in-python/el_meu_script_python.py \"%I\" "
+"\"%O.html\"\n"
 "```\n"
 "\n"
 "A Linux:\n"
 "```\n"
-"python /usr/local/kicad/bin/plugins/bom-in-python/my_python_script.py \"%I\" "
-"\"%O.csv\"\n"
+"python /usr/local/kicad/bin/plugins/bom-in-python/el_meu_script_python.py \"%"
+"I\" \"%O.csv\"\n"
 "```\n"
 
 #: eeschema/dialogs/dialog_bus_manager.cpp:37
@@ -8371,9 +8322,9 @@ msgstr ""
 #: eeschema/generate_alias_info.cpp:81 eeschema/sch_base_frame.cpp:70
 #: eeschema/symbol_editor/symbol_editor.cpp:288
 #: eeschema/widgets/symbol_preview_widget.cpp:181
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading symbol %s from library '%s'."
-msgstr "Error en crear la biblioteca de símbols «%s»"
+msgstr "Error al carregar el símbol %s des de la biblioteca '%s'."
 
 #: eeschema/dialogs/dialog_choose_symbol.cpp:421
 msgid "No footprint specified"
@@ -8405,9 +8356,9 @@ msgid "Candidates count %d "
 msgstr "Nombre de candidats %d "
 
 #: eeschema/dialogs/dialog_edit_symbols_libid.cpp:656
-#, fuzzy, c-format
+#, c-format
 msgid "%u link(s) mapped, %u not found"
-msgstr "%s pin %s no trobat"
+msgstr "%u enllaç(os) mapejat(s), %u no trobat"
 
 #: eeschema/dialogs/dialog_edit_symbols_libid.cpp:662
 #, c-format
@@ -9253,9 +9204,9 @@ msgstr "Ja està en ús l'àlies o el nom de component <%s>."
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:504
 #: eeschema/dialogs/dialog_sheet_properties.cpp:709
 #: eeschema/dialogs/dialog_symbol_properties.cpp:842
-#, fuzzy, c-format
+#, c-format
 msgid "The first %d fields are mandatory."
-msgstr "El camp %s no pot estar buit."
+msgstr "Els primers %d camps són obligatoris."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:625
 msgid "Add Footprint Filter"
@@ -9398,11 +9349,13 @@ msgid "All units are interchangeable"
 msgstr "Totes les unitats són intercanviables"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:200
-#, fuzzy
 msgid ""
 "Check this option when all symbol units are identical except\n"
 "for pin numbers."
-msgstr "Crea un component com a símbol d'alimentació"
+msgstr ""
+"Marca aquesta opció quan totes les unitats de símbols siguin idèntiques "
+"excepte\n"
+"els números dels pins."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:214
 #, fuzzy
@@ -9642,11 +9595,8 @@ msgid "Export Netlist"
 msgstr "Importa fitxers"
 
 #: eeschema/dialogs/dialog_netlist.cpp:300
-#, fuzzy
 msgid "Simulator requires a fully annotated schematic."
-msgstr ""
-"L'exportació del netlist requereix\n"
-"un esquemàtic completament anotat."
+msgstr "El simulador necessita un esquemàtic completament anotat."
 
 #: eeschema/dialogs/dialog_netlist.cpp:323
 msgid "Reformat passive symbol values"
@@ -9689,11 +9639,10 @@ msgstr "Exportació de %s"
 
 #: eeschema/dialogs/dialog_netlist.cpp:503
 #: eeschema/netlist_exporters/netlist_generator.cpp:54
-#, fuzzy
 msgid "Exporting netlist requires a fully annotated schematic."
 msgstr ""
-"L'exportació del netlist requereix\n"
-"un esquemàtic completament anotat."
+"Per exportar la llista de xarxes es necessita un esquemàtic completament "
+"anotat."
 
 #: eeschema/dialogs/dialog_netlist.cpp:626
 #, fuzzy
@@ -9895,11 +9844,13 @@ msgstr "Selecciona el directori de sortida"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:232
 #: pcbnew/dialogs/dialog_gendrill.cpp:306 pcbnew/dialogs/dialog_plot.cpp:396
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Do you want to use a path relative to\n"
 "'%s'?"
-msgstr "Voleu canviar la biblioteca activa?"
+msgstr ""
+"¿Utilitza un camí relatiu a\n"
+"\"%s\"?"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:234
 #: pcbnew/dialogs/dialog_export_svg.cpp:214
@@ -10015,9 +9966,9 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:1270
 #: eeschema/dialogs/dialog_plot_schematic.cpp:1308
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot normalize path '%s%s'."
-msgstr "No es pot copiar el fitxer «%s»."
+msgstr "No es pot normalitzar el camí '%s %s'."
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:1295
 #, fuzzy
@@ -10188,7 +10139,6 @@ msgid "Use a different color theme for printing:"
 msgstr ""
 
 #: eeschema/dialogs/dialog_rescue_each.cpp:103
-#, fuzzy
 msgid ""
 "This schematic was made using older symbol libraries which may break the "
 "schematic.  Some symbols may need to be linked to a different symbol name.  "
@@ -10197,12 +10147,10 @@ msgid ""
 "\n"
 "The following changes are recommended to update the project."
 msgstr ""
-"Segons sembla aquest projecte es va fer mitjançant biblioteques antigues de "
-"components esquemàtics.\n"
-"Algunes peces necessiten tornar-se a enllaçar al nom d'un símbol diferent, i "
-"alguns altres símbols\n"
-"pot ser que hagin de ser “rescatats\" (clonats i reanomenats) a una nova "
-"biblioteca.\n"
+"Aquest esquemàtic ha estat realitzat amb biblioteques de símbols antigues "
+"que poden inutilitzar l'esquemàtic. Podria ser necessari vincular alguns "
+"símbols a símbols de nom diferent. Podria ser que alguns símbols necessitin "
+"ser \"recuperats\" (copiats i renombrats) a una nova biblioteca.\n"
 "\n"
 "Es recomanen els següents canvis per actualitzar el projecte."
 
@@ -10595,9 +10543,9 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:469
 #: kicad/tools/kicad_manager_control.cpp:547
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' already exists."
-msgstr "Aquest nom ja existeix i s'avorta"
+msgstr "'%s' ja existeix."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:472
 #, c-format
@@ -10621,11 +10569,9 @@ msgid "Create new file '%s' with contents of '%s'?"
 msgstr "Vols crear un nou fitxer '%s' amb els continguts de '%s'?"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:563
-#, fuzzy, c-format
+#, c-format
 msgid "Error occurred saving schematic file '%s'."
-msgstr ""
-"S'ha produït un error en desar el fitxer de l'esquemàtic «%s».\n"
-"%s"
+msgstr "Error al desar el fitxer d'esquemàtic '%s'."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:567
 #, fuzzy, c-format
@@ -11734,9 +11680,11 @@ msgid ""
 msgstr ""
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:210
-#, fuzzy, c-format
+#, c-format
 msgid "Adding library '%s', file '%s' to project symbol library table."
-msgstr "Edita la taula de les biblioteques de símbols."
+msgstr ""
+"Afegint la biblioteca '%s', fitxer '%s' a la taula de biblioteques de "
+"símbols del projecte."
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:220
 #: eeschema/dialogs/panel_sym_lib_table.cpp:765
@@ -11756,9 +11704,9 @@ msgid "Created project symbol library table.\n"
 msgstr "S'ha creat la taula de les biblioteques de símbols del projecte.\n"
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:264
-#, fuzzy, c-format
+#, c-format
 msgid "No symbol %s found in symbol library table."
-msgstr "Edita la taula de les biblioteques de símbols."
+msgstr "No s'ha trobat el símbol %s a la taula de biblioteques de símbols."
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:270
 #, fuzzy, c-format
@@ -12164,30 +12112,27 @@ msgstr "Zoom a la selecció"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:110
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:166
-#, fuzzy
 msgid "Toggle selected state of item(s)."
-msgstr "Elimina els elements seleccionats"
+msgstr "Commuta l'estat seleccionat dels element(s)."
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:114
 msgid "Alt+Shift"
-msgstr ""
+msgstr "Alt+Shift"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:118
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:174
 #: pcbnew/dialogs/panel_edit_options_base.cpp:132
 #: pcbnew/dialogs/panel_edit_options_base.cpp:203
-#, fuzzy
 msgid "Remove item(s) from selection."
-msgstr "Zoom a la selecció"
+msgstr "Elimina element(s) de la selecció."
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:126
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:182
 #: pcbnew/dialogs/panel_edit_options_base.cpp:112
 #: pcbnew/dialogs/panel_edit_options_base.cpp:183
 #: pcbnew/dialogs/panel_edit_options_base.cpp:223
-#, fuzzy
 msgid "Clarify selection from menu."
-msgstr "Clarifica la selecció"
+msgstr "Clarifica la selecció del menú."
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:142
 msgid ""
@@ -12197,7 +12142,7 @@ msgstr ""
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:170
 msgid "Cmd+Shift"
-msgstr ""
+msgstr "Cmd+Shift"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:204
 msgid "Symbol Field Automatic Placement"
@@ -12243,9 +12188,8 @@ msgid "Label increment:"
 msgstr "Increment del text"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:268
-#, fuzzy
 msgid "Dialog Preferences"
-msgstr "&Preferències"
+msgstr "Preferències de diàleg"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:270
 #, fuzzy
@@ -12253,46 +12197,39 @@ msgid "Show footprint previews in Symbol Chooser"
 msgstr "Mostra els pads al mode de delimitació"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:273
-#, fuzzy
 msgid "Keep hierarchy navigator open"
-msgstr "Mantén aquest diàleg obert"
+msgstr "Mantén obert el navegador de jerarquies"
 
 #: eeschema/dialogs/panel_eeschema_template_fieldnames.cpp:41
-#, fuzzy
 msgid "Global field name templates:"
-msgstr "Plantilles del sistema"
+msgstr "Plantilles de nom de camp global:"
 
 #: eeschema/dialogs/panel_eeschema_template_fieldnames.cpp:42
-#, fuzzy
 msgid "Project field name templates:"
-msgstr "Plantilles del sistema"
+msgstr "Plantilles de nom de camp de projecte:"
 
 #: eeschema/dialogs/panel_eeschema_template_fieldnames.cpp:77
-#, fuzzy
 msgid "Untitled Field"
-msgstr "Gira el camp"
+msgstr "Camp sense títol"
 
 #: eeschema/dialogs/panel_eeschema_template_fieldnames_base.cpp:23
-#, fuzzy
 msgid "Field name templates:"
-msgstr "Plantilles del sistema"
+msgstr "Plantilles de nom de camp:"
 
 #: eeschema/dialogs/panel_eeschema_template_fieldnames_base.cpp:45
 #: kicad/pcm/dialogs/dialog_manage_repositories_base.cpp:38
 msgid "URL"
-msgstr ""
+msgstr "URL"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:25
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:28
 #: pcbnew/dialogs/panel_display_options_base.cpp:35
-#, fuzzy
 msgid "Annotations"
-msgstr "Gir:"
+msgstr "Anotacions"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:30
-#, fuzzy
 msgid "Symbol unit notation:"
-msgstr "Símbols a actualitzar:"
+msgstr "Notació de la unitat del símbol:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:34
 msgid ".A"
@@ -12320,9 +12257,8 @@ msgstr "_1"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:55
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:40
-#, fuzzy
 msgid "Default text size:"
-msgstr "Mid&a del text per defecte:"
+msgstr "Mida del text per defecte:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:66
 #, fuzzy
@@ -12334,9 +12270,8 @@ msgid "Percentage of the text size to offset text above or below wire or bus"
 msgstr ""
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:79
-#, fuzzy
 msgid "Global label size:"
-msgstr "Etiqueta global"
+msgstr "Mida de l'etiqueta global:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:81
 msgid "Percentage of the text size to use as space around a global label"
@@ -12348,25 +12283,21 @@ msgid "Default line thickness:"
 msgstr "Gruix de línia per defecte"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:118
-#, fuzzy
 msgid "Pin symbol size:"
-msgstr "Desa el símbol a «%s»"
+msgstr "Mida del símbol del pin:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:136
 #: eeschema/erc_item.cpp:41
-#, fuzzy
 msgid "Connections"
-msgstr "Sense connectar"
+msgstr "Connexions"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:141
-#, fuzzy
 msgid "Junction dot size:"
-msgstr "Entroncament"
+msgstr "Mida del punt d'unió:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:145
-#, fuzzy
 msgid "Smallest"
-msgstr "Petit"
+msgstr "El més petit"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:145
 #: pcbnew/dialogs/dialog_plot_base.cpp:117
@@ -12375,54 +12306,49 @@ msgstr "Petit"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:145
 msgid "Large"
-msgstr ""
+msgstr "Gran"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:145
 msgid "Largest"
-msgstr ""
+msgstr "El més gran"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:164
-#, fuzzy
 msgid "Inter-sheet References"
-msgstr "Gira la referència"
+msgstr "Referències entre fulles"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:166
-#, fuzzy
 msgid "Show inter-sheet references"
-msgstr "Mostra les referències de l'empremta"
+msgstr "Mostra les referències entre fulles"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:172
-#, fuzzy
 msgid "Show own page reference"
-msgstr "Mostra les referències de l'empremta"
+msgstr "Mostra la referència de la pròpia pàgina"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:176
-#, fuzzy
 msgid "Standard (1,2,3)"
-msgstr "Tipus estàndard"
+msgstr "Estàndard (1,2,3)"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:180
 msgid "Abbreviated (1..3)"
-msgstr ""
+msgstr "Abreviat (1..3)"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:189
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:128
-#, fuzzy
 msgid "Prefix:"
-msgstr "Prefix del nom del pad:"
+msgstr "Prefixe:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:193
 msgid "["
-msgstr ""
+msgstr "["
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:196
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:153
 msgid "Suffix:"
-msgstr ""
+msgstr "Sufixe:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:200
 msgid "]"
-msgstr ""
+msgstr "]"
 
 #: eeschema/dialogs/panel_setup_pinmap.cpp:169
 msgid "No error or warning"
@@ -12437,25 +12363,21 @@ msgid "Generate error"
 msgstr "Genera l'error"
 
 #: eeschema/dialogs/panel_setup_pinmap_base.cpp:24
-#, fuzzy
 msgid "Pin to Pin Connections"
-msgstr "Pin a les connexions del pin"
+msgstr "Connexions Pin a Pin"
 
 #: eeschema/dialogs/panel_sym_color_settings_base.cpp:22
 #: pagelayout_editor/dialogs/panel_pl_editor_color_settings_base.cpp:18
-#, fuzzy
 msgid "Color Theme"
-msgstr "Codis dels colors"
+msgstr "Tema de color"
 
 #: eeschema/dialogs/panel_sym_color_settings_base.cpp:25
-#, fuzzy
 msgid "Use schematic editor color theme"
-msgstr "Fitxers d'esquemàtic"
+msgstr "Utilitza el tema de color de l'editor d'esquemàtics"
 
 #: eeschema/dialogs/panel_sym_color_settings_base.cpp:31
-#, fuzzy
 msgid "Use theme:"
-msgstr "Temps de pujada [s]"
+msgstr "Utilitza tema:"
 
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:29
 msgid "&Default line width:"
@@ -12521,9 +12443,9 @@ msgid ""
 msgstr ""
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:374
-#, fuzzy, c-format
+#, c-format
 msgid "Illegal character '%c' in nickname '%s'"
-msgstr "S'ha trobat un caràcter no permès a la revisió"
+msgstr "Caràcter il·legal '%c' al sobrenom: '%s'"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:385
 #: eeschema/dialogs/panel_sym_lib_table.cpp:426
@@ -12540,11 +12462,9 @@ msgid "Multiple libraries cannot share the same nickname ('%s')."
 msgstr ""
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:459 eeschema/symbol_library.cpp:550
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol library '%s' failed to load."
-msgstr ""
-"No s'ha pogut carregar la biblioteca de peces «%s». Error:\n"
-"%s"
+msgstr "No s'ha pogut carregar la biblioteca de símbols '%s'."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:462
 #, fuzzy
@@ -12558,9 +12478,9 @@ msgstr "Àlies dolent (nom duplicat)"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:509
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:892
-#, fuzzy, c-format
+#, c-format
 msgid "A library nicknamed '%s' already exists."
-msgstr "Aquest nom ja existeix i s'avorta"
+msgstr "Ja existeix una biblioteca amb el sobrenom '%s'."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:510
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:893
@@ -12632,12 +12552,15 @@ msgstr "Gestiona les biblioteques de símbols"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:1074
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:1103
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error saving global library table:\n"
 "\n"
 "%s"
-msgstr "Edita la taula de les biblioteques d'empremtes"
+msgstr ""
+"Error al desar la taula global de biblioteques:\n"
+"\n"
+"%s"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:1075
 #: eeschema/dialogs/panel_sym_lib_table.cpp:1088
@@ -12651,14 +12574,15 @@ msgstr "Error en el desament del fitxer"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:1087
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:1116
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error saving project-specific library table:\n"
 "\n"
 "%s"
 msgstr ""
-"S'ha produït un error quan s'intentava desar la peça a la biblioteca de "
-"símbols «%s»."
+"Error al desar la taula de biblioteques específica del projecte:\n"
+"\n"
+"%s"
 
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:20
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:20
@@ -12723,11 +12647,8 @@ msgid "Editing Options"
 msgstr "Edita les opcions de la línia"
 
 #: eeschema/eeschema_config.cpp:103 pcbnew/pcbnew_config.cpp:83
-#, fuzzy
 msgid "Error loading drawing sheet."
-msgstr ""
-"Error en carregar el netlist.\n"
-"%s"
+msgstr "Error en carregar la fulla de dibuix."
 
 #: eeschema/eeschema_config.cpp:286 eeschema/sheet.cpp:284
 #, fuzzy, c-format
@@ -12755,9 +12676,8 @@ msgid "Passive Pin"
 msgstr "Pin passiu"
 
 #: eeschema/erc.cpp:64 eeschema/erc.cpp:81
-#, fuzzy
 msgid "Free Pin"
-msgstr "Crea un pin"
+msgstr "Pin lliure"
 
 #: eeschema/erc.cpp:65 eeschema/erc.cpp:82
 msgid "Unspecified Pin"
@@ -12793,18 +12713,18 @@ msgid "Bus alias %s has conflicting definitions on %s and %s"
 msgstr ""
 
 #: eeschema/erc.cpp:370
-#, fuzzy, c-format
+#, c-format
 msgid "Different footprints assigned to %s and %s"
-msgstr "Elimina totes les associacions d'empremtes"
+msgstr "S'han assignat empremtes diferents a %s i %s"
 
 #: eeschema/erc.cpp:419
 msgid "Pins with \"no connection\" type are connected"
 msgstr ""
 
 #: eeschema/erc.cpp:533
-#, fuzzy, c-format
+#, c-format
 msgid "Pins of type %s and %s are connected"
-msgstr "El pin %s (%s) del component %s està sense connectar."
+msgstr "Els pins del tipus %s i %s estan connectats"
 
 #: eeschema/erc.cpp:599
 #, c-format
@@ -12812,9 +12732,9 @@ msgid "Pin %s is connected to both %s and %s"
 msgstr "El pin %s està connectat tant a %s com a %s"
 
 #: eeschema/erc.cpp:706
-#, fuzzy, c-format
+#, c-format
 msgid "The current configuration does not include the library '%s'."
-msgstr "Actualitza el component actual a la biblioteca actual"
+msgstr "La configuració actual no inclou la biblioteca '%s'."
 
 #: eeschema/erc.cpp:717
 #, c-format
@@ -13009,18 +12929,14 @@ msgstr ""
 
 #: eeschema/files-io.cpp:265 eeschema/files-io.cpp:273
 #: eeschema/files-io.cpp:1217 eeschema/sheet.cpp:162
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading schematic '%s'."
-msgstr ""
-"S'ha produït un error en carregar el fitxer de l'esquemàtic «%s».\n"
-"%s"
+msgstr "Error en carregar l'esquemàtic '%s'."
 
 #: eeschema/files-io.cpp:281
-#, fuzzy, c-format
+#, c-format
 msgid "Memory exhausted loading schematic '%s'."
-msgstr ""
-"S'ha produït un error en carregar el fitxer de l'esquemàtic «%s».\n"
-"%s"
+msgstr "Memòria exhaurida en carregar l'esquemàtic '%s'."
 
 #: eeschema/files-io.cpp:300 eeschema/files-io.cpp:1220 eeschema/sheet.cpp:165
 #, fuzzy, c-format
@@ -13082,14 +12998,12 @@ msgstr "S'està avortant"
 
 #: eeschema/files-io.cpp:417 eeschema/files-io.cpp:434
 #: pagelayout_editor/files.cpp:250 pcbnew/files.cpp:801
-#, fuzzy
 msgid ""
 "This file was created by an older version of KiCad. It will be converted to "
 "the new format when saved."
 msgstr ""
-"Aquest fitxer es va crear amb una versió antiga de Pcbnew.\n"
-"S'emmagatzemarà amb el nou format de fitxer quan deseu un altre cop aquest "
-"fitxer."
+"Aquest fitxer es va crear amb una versió antiga de KiCad. Serà convertit al "
+"nou format quan torneu a desar-lo."
 
 #: eeschema/files-io.cpp:493
 #, fuzzy
@@ -13124,9 +13038,9 @@ msgid "Import Schematic"
 msgstr "Importa un esquemàtic"
 
 #: eeschema/files-io.cpp:629
-#, fuzzy, c-format
+#, c-format
 msgid "Unexpected file extension: '%s'."
-msgstr "Utilitza les extensions de nom de fitxer de Protel"
+msgstr "Extensió de fitxer inesperada: '%s'."
 
 #: eeschema/files-io.cpp:680
 #, fuzzy, c-format
@@ -13254,9 +13168,9 @@ msgid "Root"
 msgstr "Arrel"
 
 #: eeschema/hierarch.cpp:275
-#, fuzzy, c-format
+#, c-format
 msgid "(page %s)"
-msgstr "Sense capes"
+msgstr "(pàgina %s)"
 
 #: eeschema/lib_arc.cpp:398 eeschema/lib_bezier.cpp:336
 #: eeschema/lib_circle.cpp:246 eeschema/lib_polyline.cpp:340
@@ -13340,9 +13254,9 @@ msgid "Pos Y"
 msgstr "Pos. Y"
 
 #: eeschema/lib_pin.cpp:1181
-#, fuzzy, c-format
+#, c-format
 msgid "Pin %s [%s, %s, %s]"
-msgstr "Pin %s, %s, %s"
+msgstr "Pin %s [%s, %s, %s]"
 
 #: eeschema/lib_pin.cpp:1189
 #, fuzzy, c-format
@@ -13562,15 +13476,17 @@ msgid "NonLogic"
 msgstr "No lògic"
 
 #: eeschema/project_rescue.cpp:194
-#, fuzzy, c-format
+#, c-format
 msgid "Rename %s to %s"
-msgstr "Reanomena a %s"
+msgstr "Canvia el nom de %s a %s"
 
 #: eeschema/project_rescue.cpp:302 eeschema/project_rescue.cpp:462
 #, c-format
 msgid ""
 "Cannot rescue symbol %s which is not available in any library or the cache."
 msgstr ""
+"No es pot recuperar el símbol %s degut a no estar disponible en cap "
+"biblioteca o al cau."
 
 #: eeschema/project_rescue.cpp:305 eeschema/project_rescue.cpp:468
 #, c-format
@@ -13609,20 +13525,23 @@ msgstr ""
 "símbols «%s»."
 
 #: eeschema/sch_base_frame.cpp:217
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error saving global symbol library table:\n"
 "%s"
-msgstr "Edita la taula de les biblioteques d'empremtes"
+msgstr ""
+"Hi ha hagut un error al desar la taula global de biblioteques de símbols:\n"
+"%s"
 
 #: eeschema/sch_base_frame.cpp:233
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error saving project-specific symbol library table:\n"
 "%s"
 msgstr ""
-"S'ha produït un error quan s'intentava desar la peça a la biblioteca de "
-"símbols «%s»."
+"Hi hagut un error al desar la taula de biblioteques de símbols específica "
+"del projecte:\n"
+"%s"
 
 #: eeschema/sch_bus_entry.cpp:422
 msgid "Bus to Wire Entry"
@@ -13641,9 +13560,8 @@ msgid "Bus"
 msgstr "Bus"
 
 #: eeschema/sch_bus_entry.cpp:496
-#, fuzzy
 msgid "Bus Entry Type"
-msgstr "Estableix la forma de l'entrada del bus /"
+msgstr "Tipus d'entrada de bus"
 
 #: eeschema/sch_bus_entry.cpp:513 eeschema/sch_line.cpp:910
 #: eeschema/sch_text.cpp:808
@@ -13651,9 +13569,8 @@ msgid "Assigned Netclass"
 msgstr "Classe de xarxa assignada"
 
 #: eeschema/sch_connection.cpp:404
-#, fuzzy
 msgid "Connection Name"
-msgstr "Tipus de connexió:"
+msgstr "Nom de connexió"
 
 #: eeschema/sch_connection.cpp:413 pcbnew/dialogs/dialog_net_inspector.cpp:76
 #: pcbnew/netinfo_item.cpp:76
@@ -13661,9 +13578,9 @@ msgid "Net Code"
 msgstr "Codi de la xarxa"
 
 #: eeschema/sch_connection.cpp:419 eeschema/sch_connection.cpp:434
-#, fuzzy, c-format
+#, c-format
 msgid "Bus Alias %s Members"
-msgstr "Classes de xarxes"
+msgstr "Membres d'àlies %s de bus"
 
 #: eeschema/sch_edit_frame.cpp:170 pcbnew/board_connected_item.cpp:142
 msgid "Not Found"
@@ -13675,9 +13592,8 @@ msgstr "No s'han trobat les següents biblioteques:"
 
 #: eeschema/sch_edit_frame.cpp:222
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:62
-#, fuzzy
 msgid "KiCad Schematic Editor"
-msgstr "Opcions de l'editor de l'esquemàtic"
+msgstr "Editor d'esquemàtics KiCad"
 
 #: eeschema/sch_edit_frame.cpp:300
 #, fuzzy
@@ -13688,12 +13604,9 @@ msgstr "No s'ha trobat el fitxer de recuperació «%s»."
 #: eeschema/symbol_editor/symbol_editor.cpp:1129
 #: pagelayout_editor/pl_editor_frame.cpp:375
 #: pcbnew/footprint_edit_frame.cpp:626 pcbnew/pcb_edit_frame.cpp:819
-#, fuzzy, c-format
+#, c-format
 msgid "Save changes to '%s' before closing?"
-msgstr ""
-"Voleu desar els canvis a\n"
-"«%s»\n"
-"abans de sortir?"
+msgstr "Vols desar els canvis a '%s' abans de tancar?"
 
 #: eeschema/sch_edit_frame.cpp:803
 msgid ""
@@ -13716,11 +13629,8 @@ msgid "Open Schematic"
 msgstr "Obre un esquemàtic"
 
 #: eeschema/sch_edit_frame.cpp:1019
-#, fuzzy
 msgid "Assigning footprints requires a fully annotated schematic."
-msgstr ""
-"L'exportació del netlist requereix\n"
-"un esquemàtic completament anotat."
+msgstr "Per assignar empremtes es necessita un esquemàtic completament anotat."
 
 #: eeschema/sch_edit_frame.cpp:1038
 #, fuzzy
@@ -13730,24 +13640,22 @@ msgstr "Tanca CvPcb"
 #: eeschema/sch_edit_frame.cpp:1243 eeschema/sim/sim_plot_frame.cpp:353
 #: kicad/kicad_manager_frame.cpp:636 pcbnew/footprint_edit_frame.cpp:788
 #: pcbnew/pcb_edit_frame.cpp:1264
-#, fuzzy
 msgid "[Read Only]"
-msgstr "[només lectura]"
+msgstr "[Només lectura]"
 
 #: eeschema/sch_edit_frame.cpp:1246 eeschema/sim/sim_plot_frame.cpp:356
 #: pcbnew/footprint_edit_frame.cpp:797 pcbnew/pcb_edit_frame.cpp:1267
 msgid "[Unsaved]"
-msgstr ""
+msgstr "[No desat]"
 
 #: eeschema/sch_edit_frame.cpp:1250
-#, fuzzy
 msgid "[no schematic loaded]"
-msgstr "Mida de l'esquemàtic"
+msgstr "[no hi ha un esquemàtic carregat]"
 
 #: eeschema/sch_edit_frame.cpp:1459
-#, fuzzy, c-format
+#, c-format
 msgid "Highlighted net: %s"
-msgstr "Ressalta la xarxa"
+msgstr "Xarxa realçada: %s"
 
 #: eeschema/sch_field.cpp:189 pcbnew/dialogs/dialog_export_step_base.cpp:22
 msgid "File:"
@@ -13755,12 +13663,12 @@ msgstr "Fitxer:"
 
 #: eeschema/sch_field.cpp:514
 msgid "<root sheet>"
-msgstr ""
+msgstr "<fulla principal>"
 
 #: eeschema/sch_field.cpp:521
-#, fuzzy, c-format
+#, c-format
 msgid "Go to Page %s (%s)"
-msgstr "Valor %s de %s"
+msgstr "Ves a la pàgina %s (%s)"
 
 #: eeschema/sch_field.cpp:527
 msgid "Back to Previous Selected Sheet"
@@ -13774,12 +13682,12 @@ msgstr "Gira la referència"
 #: eeschema/sch_io_mgr.cpp:35 pcbnew/io_mgr.cpp:42
 #, c-format
 msgid "Plugin \"%s\" does not implement the \"%s\" function."
-msgstr ""
+msgstr "El connector \"%s\" no implementa la funció \"%s\"."
 
 #: eeschema/sch_io_mgr.cpp:36 pcbnew/io_mgr.cpp:43
-#, fuzzy, c-format
+#, c-format
 msgid "Plugin type \"%s\" is not found."
-msgstr "No s'ha trobat el tipus de connector «%s»."
+msgstr "No s'ha trobat el tipus de connector \"%s\"."
 
 #: eeschema/sch_io_mgr.cpp:92
 #, c-format
@@ -13787,39 +13695,39 @@ msgid "Unknown SCH_FILE_T value: %d"
 msgstr "Valor desconegut de SCH_FILE_T: %d"
 
 #: eeschema/sch_line.cpp:717
-#, fuzzy, c-format
+#, c-format
 msgid "Vertical Wire, length %s"
-msgstr "Longitud elèctrica"
+msgstr "Cable vertical, longitud %s"
 
 #: eeschema/sch_line.cpp:718
-#, fuzzy, c-format
+#, c-format
 msgid "Vertical Bus, length %s"
-msgstr "Longitud elèctrica"
+msgstr "Bus vertical, longitud %s"
 
 #: eeschema/sch_line.cpp:719
-#, fuzzy, c-format
+#, c-format
 msgid "Vertical Graphic Line, length %s"
-msgstr "Gràfic pcb: %s, longitud %s en %s"
+msgstr "Línia gràfica vertical, longitud %s"
 
 #: eeschema/sch_line.cpp:726
-#, fuzzy, c-format
+#, c-format
 msgid "Horizontal Wire, length %s"
-msgstr "Inversió horitzontal"
+msgstr "Cable horitzontal, longitud %s"
 
 #: eeschema/sch_line.cpp:727
-#, fuzzy, c-format
+#, c-format
 msgid "Horizontal Bus, length %s"
-msgstr "Nombre horitzontal:"
+msgstr "Bus horitzontal, longitud %s"
 
 #: eeschema/sch_line.cpp:728
-#, fuzzy, c-format
+#, c-format
 msgid "Horizontal Graphic Line, length %s"
-msgstr "Gràfic pcb: %s, longitud %s en %s"
+msgstr "Línia gràfica horitzontal, longitud %s"
 
 #: eeschema/sch_line.cpp:735
-#, fuzzy, c-format
+#, c-format
 msgid "Wire, length %s"
-msgstr "Longitud de la línia"
+msgstr "Cable, longitud %s"
 
 #: eeschema/sch_line.cpp:736
 #, c-format
@@ -13827,27 +13735,23 @@ msgid "Bus, length %s"
 msgstr ""
 
 #: eeschema/sch_line.cpp:737
-#, fuzzy, c-format
+#, c-format
 msgid "Graphic Line, length %s"
-msgstr "Gràfic pcb: %s, longitud %s en %s"
+msgstr "Línia gràfica, longitud %s"
 
 #: eeschema/sch_line.cpp:883
-#, fuzzy
 msgid "Graphical"
-msgstr "E&stil gràfic:"
+msgstr "Gràfica"
 
 #: eeschema/sch_line.cpp:886
-#, fuzzy
 msgid "Line Type"
-msgstr "Estil de la quadrícula"
+msgstr "Tipus de línia"
 
 #: eeschema/sch_line.cpp:889
-#, fuzzy
 msgid "from netclass"
-msgstr "Per Netclass"
+msgstr "per classe de xarxa"
 
 #: eeschema/sch_marker.cpp:165
-#, fuzzy
 msgid "Electrical Rule Check Error"
 msgstr "Error de comprovació de les regles elèctriques"
 
@@ -13914,9 +13818,9 @@ msgid "Unknown Record id: %d."
 msgstr "tipus de pad desconegut: %d"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:608
-#, fuzzy, c-format
+#, c-format
 msgid "Pin's owner (%d) not found."
-msgstr "No s'ha trobat el fitxer «%s»"
+msgstr "No s'ha trobat el propietari del pin (%d)."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:653
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1889
@@ -13938,9 +13842,9 @@ msgid "Pin has unexpected inner edge type."
 msgstr ""
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:863
-#, fuzzy, c-format
+#, c-format
 msgid "Label's owner (%d) not found."
-msgstr "No s'ha trobat el fitxer «%s»"
+msgstr "No s'ha trobat el propietari de l'etiqueta (%d)."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:980
 #, c-format
@@ -13948,24 +13852,24 @@ msgid "Bezier has %d control points. At least 2 are expected."
 msgstr ""
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1037
-#, fuzzy, c-format
+#, c-format
 msgid "Bezier's owner (%d) not found."
-msgstr "No s'ha trobat el fitxer «%s»."
+msgstr "No s'ha trobat el propietari del bezier (%d)."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1142
-#, fuzzy, c-format
+#, c-format
 msgid "Polyline's owner (%d) not found."
-msgstr "No s'ha trobat el fitxer «%s»"
+msgstr "No s'ha trobat el propietari de la polilínia (%d)."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1201
-#, fuzzy, c-format
+#, c-format
 msgid "Polygon's owner (%d) not found."
-msgstr "No s'ha trobat el fitxer «%s»"
+msgstr "No s'ha trobat el propietari del polígon (%d)."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1282
-#, fuzzy, c-format
+#, c-format
 msgid "Rounded rectangle's owner (%d) not found."
-msgstr "No s'ha trobat el fitxer «%s»."
+msgstr "No s'ha trobat el propietari del rectangle arrodonit (%d)."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1319
 #, fuzzy
@@ -13973,28 +13877,28 @@ msgid "Arcs on schematic not currently supported."
 msgstr "No hi ha en aquest moment cap placa editada"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1329
-#, fuzzy, c-format
+#, c-format
 msgid "Arc's owner (%d) not found."
-msgstr "No s'ha trobat el fitxer «%s»."
+msgstr "No s'ha trobat el propietari de l'arc (%d)."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1355
 msgid "Arcs in symbols cannot exceed 180 degrees."
 msgstr ""
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1395
-#, fuzzy, c-format
+#, c-format
 msgid "Line's owner (%d) not found."
-msgstr "No s'ha trobat el fitxer «%s»"
+msgstr "No s'ha trobat el propietari de la línia (%d)."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1466
-#, fuzzy, c-format
+#, c-format
 msgid "Rectangle's owner (%d) not found."
-msgstr "No s'ha trobat el fitxer «%s»."
+msgstr "No s'ha trobat el propietari del rectangle (%d)."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1534
-#, fuzzy, c-format
+#, c-format
 msgid "Sheet entry's owner (%d) not found."
-msgstr "No s'ha trobat el fitxer «%s»."
+msgstr "No s'ha trobat el propietari de l'entrada de la fulla (%d)."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1780
 msgid "Power Port has unknown style, use bar instead."
@@ -14006,9 +13910,9 @@ msgid "Power symbol creates a global label with name '%s'"
 msgstr ""
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1938
-#, fuzzy, c-format
+#, c-format
 msgid "Port %s has no connections."
-msgstr "Connexió del pad:"
+msgstr "El port %s no té connexions."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2129
 #, fuzzy, c-format
@@ -14017,39 +13921,39 @@ msgstr "No s'ha trobat el fitxer de recuperació «%s»."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2146
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2165
-#, fuzzy, c-format
+#, c-format
 msgid "Error reading image %s."
-msgstr "Importa dibuixos existents"
+msgstr "Error al llegir la imatge %s."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2158
-#, fuzzy, c-format
+#, c-format
 msgid "File not found %s."
-msgstr "Fitxer no trobat"
+msgstr "No s'ha trobat el fitxer %s."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2228
-#, fuzzy, c-format
+#, c-format
 msgid "Sheetname's owner (%d) not found."
-msgstr "No s'ha trobat el fitxer «%s»."
+msgstr "No s'ha trobat el propietari del nom de la fulla (%d)."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2251
-#, fuzzy, c-format
+#, c-format
 msgid "Filename's owner (%d) not found."
-msgstr "No s'ha trobat el fitxer «%s»"
+msgstr "No s'ha trobat el propietari del nom del fitxer (%d)."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2285
-#, fuzzy, c-format
+#, c-format
 msgid "Designator's owner (%d) not found."
-msgstr "No s'ha trobat el fitxer «%s»."
+msgstr "No s'ha trobat el propietari de la referència (%d)."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2420
-#, fuzzy, c-format
+#, c-format
 msgid "Implementation's owner (%d) not found."
-msgstr "No s'ha trobat el fitxer «%s»"
+msgstr "No s'ha trobat el propietari de la implementació (%d)."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2430
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint's owner (%d) not found."
-msgstr "No s'ha trobat el fitxer «%s»"
+msgstr "No s'ha trobat el propietari de l'empremta (%d)."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:75
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:73
@@ -14216,31 +14120,23 @@ msgid "Invalid parent symbol name"
 msgstr "Nom del símbol pare no vàlid"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:260
-#, fuzzy, c-format
+#, c-format
 msgid "No parent for extended symbol %s"
-msgstr ""
-"número en punt flotant no vàlid a\n"
-"fitxer: <%s>\n"
-"línia: %d\n"
-"desplaçament: %d"
+msgstr "No hi ha pare pel símbol estès %s"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:275
 msgid "Invalid symbol unit name"
 msgstr "Nom de la unitat del símbol no vàlid"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:283
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid symbol unit name prefix %s"
-msgstr "No s'ha especificat cap empremta"
+msgstr "Prefixe del nom d'unitat de símbol invàlid %s"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:293
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid symbol unit name suffix %s"
-msgstr ""
-"número en punt flotant no vàlid a\n"
-"fitxer: <%s>\n"
-"línia: %d\n"
-"desplaçament: %d"
+msgstr "Sufixe del nom d'unitat de símbol invàlid %s"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:299
 #, c-format
@@ -14248,31 +14144,17 @@ msgid "Invalid symbol unit number %s"
 msgstr "Número d'unitat de símbol invàlid %s"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:307
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid symbol convert number %s"
-msgstr ""
-"número en punt flotant no vàlid a\n"
-"fitxer: <%s>\n"
-"línia: %d\n"
-"desplaçament: %d"
+msgstr "Número de conversió de símbol invàlid %s"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:428
-#, fuzzy
 msgid "Floating point number with incorrect locale"
-msgstr ""
-"número en punt flotant no vàlid a\n"
-"fitxer: <%s>\n"
-"línia: %d\n"
-"desplaçament: %d"
+msgstr "Número de punt flotant amb format local incorrecte"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:438
-#, fuzzy
 msgid "Invalid floating point number"
-msgstr ""
-"número en punt flotant no vàlid a\n"
-"fitxer: <%s>\n"
-"línia: %d\n"
-"desplaçament: %d"
+msgstr "Número de punt flotant invàlid"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:444
 #, fuzzy
@@ -14447,9 +14329,9 @@ msgid ""
 msgstr ""
 
 #: eeschema/sch_screen.cpp:634
-#, fuzzy, c-format
+#, c-format
 msgid "I/O error %s resolving library symbol %s"
-msgstr "Error en crear la biblioteca de símbols «%s»"
+msgstr "Error d'E/S %s al resoldre el símbol de biblioteca %s"
 
 #: eeschema/sch_screen.cpp:654
 #, c-format
@@ -14457,27 +14339,25 @@ msgid "Falling back to cache to set symbol '%s:%s' link '%s'."
 msgstr ""
 
 #: eeschema/sch_screen.cpp:686
-#, fuzzy, c-format
+#, c-format
 msgid "No library symbol found for schematic symbol '%s %s'."
-msgstr "Mou més d'una peça al fitxer de peces «%s»."
+msgstr "No s'ha trobat el símbol de biblioteca pel símbol d'esquemàtic '%s %s'."
 
 #: eeschema/sch_sheet.cpp:57
 msgid "Sheet name"
 msgstr "Nom del full"
 
 #: eeschema/sch_sheet.cpp:58
-#, fuzzy
 msgid "Sheet file"
-msgstr "Nom del fitxer del full"
+msgstr "Fitxer del full"
 
 #: eeschema/sch_sheet.cpp:713
 msgid "Sheet Name"
 msgstr "Nom del full"
 
 #: eeschema/sch_sheet.cpp:720
-#, fuzzy
 msgid "Hierarchical Path"
-msgstr "Etiqueta jeràrquica"
+msgstr "Camí jeràrquic"
 
 #: eeschema/sch_sheet.cpp:723
 msgid "File Name"
@@ -14489,9 +14369,8 @@ msgid "Hierarchical Sheet %s"
 msgstr "Full jeràrquic %s"
 
 #: eeschema/sch_sheet_path.cpp:57 include/board_item.h:376
-#, fuzzy
 msgid "(Deleted Item)"
-msgstr "Elimina l'element"
+msgstr "(Element esborrat)"
 
 #: eeschema/sch_sheet_pin.cpp:289
 #, c-format
@@ -14507,9 +14386,8 @@ msgid "flags"
 msgstr ""
 
 #: eeschema/sch_symbol.cpp:1393
-#, fuzzy
 msgid "Missing parent"
-msgstr "Falta:"
+msgstr "Falta el pare"
 
 #: eeschema/sch_symbol.cpp:1408
 msgid "Undefined!!!"
@@ -14529,9 +14407,9 @@ msgid "Symbol not found in %s!"
 msgstr "No s'ha trobat el símbol a %s!"
 
 #: eeschema/sch_symbol.cpp:1632
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol %s [%s]"
-msgstr "Símbol"
+msgstr "Símbol %s [%s]"
 
 #: eeschema/sch_text.cpp:578
 msgid "Tri-State"
@@ -14561,23 +14439,23 @@ msgid "Size"
 msgstr "Mida"
 
 #: eeschema/sch_text.cpp:920
-#, fuzzy, c-format
+#, c-format
 msgid "Label '%s'"
-msgstr "Etiqueta %s"
+msgstr "Etiqueta '%s'"
 
 #: eeschema/sch_text.cpp:1470
-#, fuzzy, c-format
+#, c-format
 msgid "Global Label '%s'"
-msgstr "Etiqueta global %s"
+msgstr "Etiqueta global '%s'"
 
 #: eeschema/sch_text.cpp:1715
-#, fuzzy, c-format
+#, c-format
 msgid "Hierarchical Label '%s'"
-msgstr "Etiqueta jeràrquica %s"
+msgstr "Etiqueta jeràrquica '%s'"
 
 #: eeschema/sch_text.cpp:1731 pcbnew/dialogs/panel_setup_rules.cpp:471
 msgid "Syntax Help"
-msgstr ""
+msgstr "Ajuda de sintaxis"
 
 #: eeschema/sch_text_help_md.h:2
 msgid ""
@@ -14721,6 +14599,146 @@ msgid ""
 "<i>Note that markup has precedence over bus definitions.</i>\n"
 "\n"
 msgstr ""
+"<table>\n"
+"    <tr>\n"
+"        <th>Markup</th>\n"
+"        <th></th>\n"
+"        <th>Resultat</th>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>^{superscript}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp><sup>superscript</sup>&nbsp;</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>Placa Controladora^{Rev A}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>Placa Controladora<sup>Rev A</sup></samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>_{subscript}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp><sub>subscript</sub>&nbsp;</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>D_{0} - D_{15}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>D<sub>0</sub> - D<sub>15</sub></samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td> &nbsp;<br><samp>~{overbar}</samp><br> "
+"&nbsp;<br><samp>~{CLK}</samp></td>\n"
+"        <td></td>\n"
+"        <td> <samp><u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></"
+"samp><br> <samp>overbar</samp><br> <samp><u>&nbsp;&nbsp;&nbsp;</u></"
+"samp><br> <samp>CLK</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${variable}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp><i>variable_value</i></samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${REVISION}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>2020.1</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${refdes:field}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp><i>field_value</i> of symbol "
+"<i>refdes</i></samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${R3:VALUE}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>150K</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <th>Definició de Bus</th>\n"
+"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp"
+";&nbsp;&nbsp;</th>\n"
+"        <th>Resultant Nets</th>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>prefix[m..n]</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>prefixm a prefixn</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>D[0..7]</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>D0, D1, D2, D3, D4, D5, D6, D7</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>{net1 net2 ...}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>net1, net2, ...</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>{SCL SDA}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>SCL, SDA</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>prefix{net1 net2 ...}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>prefix.net1, prefix.net2, ...</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>USB1{D+ D-}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>USB1.D+, USB1.D-</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>MEM{D[1..2] LATCH}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br> <samp>MEM.D1, MEM.D2, MEM.LATCH</samp> </td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>MEM{D_{[1..2]} ~LATCH}</samp></td>\n"
+"        <td></td>\n"
+"        <td> <samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
+"&nbsp;&nbsp;&nbsp;&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> "
+"<samp>MEM.D<sub>1</sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"</table>\n"
+"<p></p>\n"
+"<p></p>\n"
+"<i>Tingues en compte que el markup té prioritat respecte les definicions de "
+"bus.</i>\n"
+"\n"
 
 #: eeschema/sch_validators.cpp:102
 #, c-format
@@ -14733,11 +14751,9 @@ msgid "The value field cannot contain %s character(s)."
 msgstr ""
 
 #: eeschema/sch_validators.cpp:110
-#, fuzzy, c-format
+#, c-format
 msgid "The footprint field cannot contain %s character(s)."
-msgstr ""
-"S'ha creat el fitxer d'informe d'empremta:\n"
-"«%s»"
+msgstr "El camp d'empremta no pot contenir %s caràcters."
 
 #: eeschema/sch_validators.cpp:114
 #, c-format
@@ -14771,7 +14787,7 @@ msgstr "El valor de la variable d'entorn no pot estar buit."
 
 #: eeschema/sch_validators.cpp:151
 msgid "carriage return"
-msgstr ""
+msgstr "retorn de carro"
 
 #: eeschema/sch_validators.cpp:153
 msgid "line feed"
@@ -15273,12 +15289,8 @@ msgid "Library changes are unsaved"
 msgstr ""
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:516
-#, fuzzy
 msgid "Save changes to schematic before closing?"
-msgstr ""
-"Voleu desar els canvis a\n"
-"«%s»\n"
-"abans de sortir?"
+msgstr "Vols desar els canvis de l'esquemàtic abans de tancar?"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:565
 #: eeschema/tools/sch_edit_tool.cpp:118
