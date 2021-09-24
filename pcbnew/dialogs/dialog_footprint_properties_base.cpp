@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.9.0 Apr 22 2021)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -49,7 +49,6 @@ DIALOG_FOOTPRINT_PROPERTIES_BASE::DIALOG_FOOTPRINT_PROPERTIES_BASE( wxWindow* pa
 	m_itemsGrid->SetColSize( 10, 110 );
 	m_itemsGrid->EnableDragColMove( false );
 	m_itemsGrid->EnableDragColSize( false );
-	m_itemsGrid->SetColLabelSize( 24 );
 	m_itemsGrid->SetColLabelValue( 0, _("Text Items") );
 	m_itemsGrid->SetColLabelValue( 1, _("Show") );
 	m_itemsGrid->SetColLabelValue( 2, _("Width") );
@@ -61,13 +60,14 @@ DIALOG_FOOTPRINT_PROPERTIES_BASE::DIALOG_FOOTPRINT_PROPERTIES_BASE( wxWindow* pa
 	m_itemsGrid->SetColLabelValue( 8, _("Keep Upright") );
 	m_itemsGrid->SetColLabelValue( 9, _("X Offset") );
 	m_itemsGrid->SetColLabelValue( 10, _("Y Offset") );
+	m_itemsGrid->SetColLabelSize( 24 );
 	m_itemsGrid->SetColLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
 
 	// Rows
 	m_itemsGrid->EnableDragRowSize( false );
-	m_itemsGrid->SetRowLabelSize( 160 );
 	m_itemsGrid->SetRowLabelValue( 0, _("Reference designator") );
 	m_itemsGrid->SetRowLabelValue( 1, _("Value") );
+	m_itemsGrid->SetRowLabelSize( 160 );
 	m_itemsGrid->SetRowLabelAlignment( wxALIGN_LEFT, wxALIGN_CENTER );
 
 	// Label Appearance
@@ -269,7 +269,7 @@ DIALOG_FOOTPRINT_PROPERTIES_BASE::DIALOG_FOOTPRINT_PROPERTIES_BASE( wxWindow* pa
 	wxBoxSizer* bPartTypeSizer;
 	bPartTypeSizer = new wxBoxSizer( wxHORIZONTAL );
 
-	m_componentTypeLabel = new wxStaticText( sbFabSizer->GetStaticBox(), wxID_ANY, _("Component:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_componentTypeLabel = new wxStaticText( sbFabSizer->GetStaticBox(), wxID_ANY, _("Footprint type:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_componentTypeLabel->Wrap( -1 );
 	bPartTypeSizer->Add( m_componentTypeLabel, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
 
