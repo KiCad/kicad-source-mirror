@@ -42,6 +42,7 @@
 #include <core/optional.h>
 #include <wx/log.h>
 #include <wx/stc/stc.h>
+#include <wx/settings.h>
 #include <kiplatform/app.h>
 #include <kiplatform/ui.h>
 
@@ -52,7 +53,6 @@ struct TOOL_DISPATCHER::BUTTON_STATE
                  const wxEventType& aUpEvent, const wxEventType& aDblClickEvent ) :
         dragging( false ),
         pressed( false ),
-        dragMaxDelta( 0.0f ),
         button( aButton ),
         downEvent( aDownEvent ),
         upEvent( aUpEvent ),
@@ -70,10 +70,6 @@ struct TOOL_DISPATCHER::BUTTON_STATE
 
     ///< Point where click event has occurred.
     VECTOR2D downPosition;
-
-    ///< Difference between drag origin point and current mouse position (expressed as distance in
-    ///< pixels).
-    double dragMaxDelta;
 
     ///< Determines the mouse button for which information are stored.
     TOOL_MOUSE_BUTTONS button;
@@ -126,6 +122,12 @@ struct TOOL_DISPATCHER::BUTTON_STATE
 TOOL_DISPATCHER::TOOL_DISPATCHER( TOOL_MANAGER* aToolMgr ) :
     m_toolMgr( aToolMgr )
 {
+    m_sysDragMinX = wxSystemSettings::GetMetric( wxSYS_DRAG_X );
+    m_sysDragMinY = wxSystemSettings::GetMetric( wxSYS_DRAG_Y );
+
+    m_sysDragMinX = m_sysDragMinX != -1 ? m_sysDragMinX : DragDistanceThreshold;
+    m_sysDragMinY = m_sysDragMinY != -1 ? m_sysDragMinY : DragDistanceThreshold;
+
     m_buttons.push_back( new BUTTON_STATE( BUT_LEFT, wxEVT_LEFT_DOWN,
                          wxEVT_LEFT_UP, wxEVT_LEFT_DCLICK ) );
     m_buttons.push_back( new BUTTON_STATE( BUT_RIGHT, wxEVT_RIGHT_DOWN,
@@ -192,7 +194,6 @@ bool TOOL_DISPATCHER::handleMouseButton( wxEvent& aEvent, int aIndex, bool aMoti
             st->dragOrigin = m_lastMousePos;
 
         st->downPosition = m_lastMousePos;
-        st->dragMaxDelta = 0;
         st->pressed = true;
         evt = TOOL_EVENT( TC_MOUSE, TA_MOUSE_DOWN, args );
     }
@@ -201,16 +202,7 @@ bool TOOL_DISPATCHER::handleMouseButton( wxEvent& aEvent, int aIndex, bool aMoti
         st->pressed = false;
 
         if( st->dragging )
-        {
-            wxLongLong t = wxGetLocalTimeMillis();
-
-            // Determine if it was just a single click or beginning of dragging
-            if( t - st->downTimestamp < DragTimeThreshold &&
-                    st->dragMaxDelta < DragDistanceThreshold )
-                isClick = true;
-            else
-                evt = TOOL_EVENT( TC_MOUSE, TA_MOUSE_UP, args );
-        }
+            evt = TOOL_EVENT( TC_MOUSE, TA_MOUSE_UP, args );
         else
             isClick = true;
 
@@ -226,14 +218,20 @@ bool TOOL_DISPATCHER::handleMouseButton( wxEvent& aEvent, int aIndex, bool aMoti
 
     if( st->pressed && aMotion )
     {
-        st->dragging = true;
-        double dragPixelDistance =
-            getView()->ToScreen( m_lastMousePos - st->dragOrigin, false ).EuclideanNorm();
-        st->dragMaxDelta = std::max( st->dragMaxDelta, dragPixelDistance );
+        if( !st->dragging )
+        {
+#ifdef __WXMAC__
+            if( wxGetLocalTimeMillis() - st->downTimestamp > DragTimeThreshold )
+                st->dragging = true;
+#else
+            VECTOR2D offset = getView()->ToScreen( m_lastMousePos - st->dragOrigin, false );
 
-        wxLongLong t = wxGetLocalTimeMillis();
+            if( abs( offset.x ) > m_sysDragMinX || abs( offset.y ) > m_sysDragMinY )
+                st->dragging = true;
+#endif
+        }
 
-        if( t - st->downTimestamp > DragTimeThreshold || st->dragMaxDelta > DragDistanceThreshold )
+        if( st->dragging )
         {
             evt = TOOL_EVENT( TC_MOUSE, TA_MOUSE_DRAG, args );
             evt->setMouseDragOrigin( st->dragOrigin );

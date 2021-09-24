@@ -86,7 +86,13 @@ private:
 
     ///< The distance threshold for mouse cursor that distinguishes between a single mouse click
     ///< and a beginning of drag event (expressed in screen pixels).
+    ///< System drag preferences take precedence if available
     static const int DragDistanceThreshold = 8;
+
+    ///< Mininum distance before drag is activated in the X axis
+    int m_sysDragMinX;
+    ///< Maximum distance before drag is activated in the Y axis
+    int m_sysDragMinY;
 
     ///< Handles mouse related events (click, motion, dragging).
     bool handleMouseButton( wxEvent& aEvent, int aIndex, bool aMotion );
