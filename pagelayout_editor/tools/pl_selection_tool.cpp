@@ -232,13 +232,8 @@ int PL_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
 
 int PL_SELECTION_TOOL::disambiguateCursor( const TOOL_EVENT& aEvent )
 {
-    VECTOR2I pos = m_toolMgr->GetMousePosition();
-
-    if( pos != m_originalCursor )
-        return 0;
-
     m_skip_heuristics = true;
-    SelectPoint( pos, &m_canceledMenu );
+    SelectPoint( m_originalCursor, &m_canceledMenu );
     m_skip_heuristics = false;
 
     return 0;

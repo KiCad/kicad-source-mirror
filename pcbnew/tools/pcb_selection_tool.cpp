@@ -902,13 +902,8 @@ bool PCB_SELECTION_TOOL::selectMultiple()
 
 int PCB_SELECTION_TOOL::disambiguateCursor( const TOOL_EVENT& aEvent )
 {
-    VECTOR2I pos = m_toolMgr->GetMousePosition();
-
-    if( pos != m_originalCursor )
-        return 0;
-
     m_skip_heuristics = true;
-    selectPoint( pos, false, &m_canceledMenu );
+    selectPoint( m_originalCursor, false, &m_canceledMenu );
     m_skip_heuristics = false;
 
     return 0;

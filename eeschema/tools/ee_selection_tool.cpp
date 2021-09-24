@@ -732,14 +732,9 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
 
 int EE_SELECTION_TOOL::disambiguateCursor( const TOOL_EVENT& aEvent )
 {
-    VECTOR2I pos = m_toolMgr->GetMousePosition();
-
-    if( pos != m_originalCursor )
-        return 0;
-
     m_skip_heuristics = true;
-    SelectPoint( pos, EE_COLLECTOR::AllItems, nullptr, &m_canceledMenu, false, m_additive,
-            m_subtractive, m_exclusive_or );
+    SelectPoint( m_originalCursor, EE_COLLECTOR::AllItems, nullptr, &m_canceledMenu, false,
+                 m_additive, m_subtractive, m_exclusive_or );
     m_skip_heuristics = false;
 
     return 0;
