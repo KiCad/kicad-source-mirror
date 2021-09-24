@@ -273,8 +273,9 @@ public:
      *       footprint is placed on a board and a netlist is read.
      *
      * @param aFootprintName is the name of the new footprint in library.
+     * @param aQuiet prevents user dialogs from being shown
      */
-    FOOTPRINT* CreateNewFootprint( const wxString& aFootprintName );
+    FOOTPRINT* CreateNewFootprint( const wxString& aFootprintName, bool aQuiet = false );
 
     /**
      * Places \a aFootprint at the current cursor position and updates footprint coordinates

@@ -414,7 +414,7 @@ FOOTPRINT* MICROWAVE_TOOL::createMicrowaveInductor( MICROWAVE_INDUCTOR_PATTERN& 
     if( ( cmpdlg.ShowQuasiModal() != wxID_OK ) || msg.IsEmpty() )
         return nullptr;    //  Aborted by user
 
-    FOOTPRINT* footprint = editFrame.CreateNewFootprint( msg );
+    FOOTPRINT* footprint = editFrame.CreateNewFootprint( msg, true );
 
     footprint->SetFPID( LIB_ID( wxEmptyString, wxT( "mw_inductor" ) ) );
     footprint->SetAttributes( FP_EXCLUDE_FROM_POS_FILES | FP_EXCLUDE_FROM_BOM );

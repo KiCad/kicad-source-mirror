@@ -1148,7 +1148,7 @@ bool FOOTPRINT_EDIT_FRAME::RevertFootprint()
 }
 
 
-FOOTPRINT* PCB_BASE_FRAME::CreateNewFootprint( const wxString& aFootprintName )
+FOOTPRINT* PCB_BASE_FRAME::CreateNewFootprint( const wxString& aFootprintName, bool aQuiet )
 {
     wxString footprintName = aFootprintName;
 
@@ -1156,7 +1156,7 @@ FOOTPRINT* PCB_BASE_FRAME::CreateNewFootprint( const wxString& aFootprintName )
     static int footprintType = 1;
 
     // Ask for the new footprint name
-    if( footprintName.IsEmpty() )
+    if( footprintName.IsEmpty() && !aQuiet )
     {
         WX_TEXT_ENTRY_DIALOG dlg( this, _( "Enter footprint name:" ), _( "New Footprint" ),
                                   footprintName, _( "Footprint type:" ),
@@ -1184,7 +1184,9 @@ FOOTPRINT* PCB_BASE_FRAME::CreateNewFootprint( const wxString& aFootprintName )
 
     if( footprintName.IsEmpty() )
     {
-        DisplayInfoMessage( this, _( "No footprint name defined." ) );
+        if( !aQuiet )
+            DisplayInfoMessage( this, _( "No footprint name defined." ) );
+
         return nullptr;
     }
 
