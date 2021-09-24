@@ -38,6 +38,25 @@ WX_TEXT_ENTRY_DIALOG::WX_TEXT_ENTRY_DIALOG( wxWindow* aParent,
 }
 
 
+WX_TEXT_ENTRY_DIALOG::WX_TEXT_ENTRY_DIALOG( wxWindow* aParent, const wxString& aLabel, const wxString& aCaption,
+                      const wxString& aDefaultValue, const wxString& aChoiceCaption,
+                      const std::vector<wxString>& aChoices, int aDefaultChoice ) :
+              WX_TEXT_ENTRY_DIALOG( aParent, aLabel, aCaption, aDefaultValue )
+{
+    m_choiceLabel->SetLabel( aChoiceCaption );
+    m_choiceLabel->Show( true );
+
+    for( const wxString& choice : aChoices )
+        m_choice->Append( choice );
+
+    m_choice->SetSelection( aDefaultChoice );
+    m_choice->Show( true );
+
+    this->Layout();
+    m_mainSizer->Fit( this );
+}
+
+
 void WX_TEXT_ENTRY_DIALOG::SetTextValidator( wxTextValidatorStyle style )
 {
     SetTextValidator( wxTextValidator(style) );
@@ -53,5 +72,11 @@ void WX_TEXT_ENTRY_DIALOG::SetTextValidator( const wxTextValidator& validator )
 wxString WX_TEXT_ENTRY_DIALOG::GetValue() const
 {
     return m_textCtrl->GetValue();
+}
+
+
+int WX_TEXT_ENTRY_DIALOG::GetChoice() const
+{
+    return m_choice->GetCurrentSelection();
 }
 
