@@ -1555,8 +1555,7 @@ bool SCH_SYMBOL::UpdateDanglingState( std::vector<DANGLING_END_ITEM>& aItemList,
             case PIN_END:
             case LABEL_END:
             case SHEET_LABEL_END:
-            case WIRE_START_END:
-            case WIRE_END_END:
+            case WIRE_END:
             case NO_CONNECT_END:
             case JUNCTION_END:
 

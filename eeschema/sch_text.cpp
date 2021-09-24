@@ -486,22 +486,16 @@ bool SCH_TEXT::UpdateDanglingState( std::vector<DANGLING_END_ITEM>& aItemList,
 
             break;
 
-        case BUS_START_END:
+        case BUS_END:
             m_connectionType = CONNECTION_TYPE::BUS;
             KI_FALLTHROUGH;
 
-        case WIRE_START_END:
+        case WIRE_END:
         {
-            // These schematic items have created 2 DANGLING_END_ITEM one per end.  But being
-            // a paranoid programmer, I'll check just in case.
-            ii++;
-
-            wxCHECK_MSG( ii < aItemList.size(), previousState != m_isDangling,
-                         wxT( "Dangling end type list overflow.  Bad programmer!" ) );
+            DANGLING_END_ITEM& nextItem = aItemList[++ii];
 
             int accuracy = 1;   // We have rounding issues with an accuracy of 0
 
-            DANGLING_END_ITEM & nextItem = aItemList[ii];
             m_isDangling = !TestSegmentHit( GetTextPos(), item.GetPosition(),
                                             nextItem.GetPosition(), accuracy );
 

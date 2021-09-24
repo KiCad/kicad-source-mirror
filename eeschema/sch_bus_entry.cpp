@@ -312,41 +312,37 @@ bool SCH_BUS_WIRE_ENTRY::UpdateDanglingState( std::vector<DANGLING_END_ITEM>& aI
 
     m_isDanglingStart = m_isDanglingEnd = true;
 
-    // Wires and buses are stored in the list as a pair, start and end. This
-    // variable holds the start position from one iteration so it can be used
-    // when the end position is found.
-    wxPoint seg_start;
-
     // Store the connection type and state for the start (0) and end (1)
     bool has_wire[2] = { false };
     bool has_bus[2] = { false };
 
-    for( const DANGLING_END_ITEM& each_item : aItemList )
+    for( unsigned ii = 0; ii < aItemList.size(); ii++ )
     {
-        if( each_item.GetItem() == this )
+        DANGLING_END_ITEM& item = aItemList[ii];
+
+        if( item.GetItem() == this )
             continue;
 
-        switch( each_item.GetType() )
+        switch( item.GetType() )
         {
-        case WIRE_START_END:
-        case WIRE_END_END:
-            if( m_pos == each_item.GetPosition() )
+        case WIRE_END:
+            if( m_pos == item.GetPosition() )
                 has_wire[0] = true;
-            else if( GetEnd() == each_item.GetPosition() )
+            else if( GetEnd() == item.GetPosition() )
                 has_wire[1] = true;
 
             break;
 
-        case BUS_START_END:
-            seg_start = each_item.GetPosition();
-            break;
+        case BUS_END:
+        {
+            // The bus has created 2 DANGLING_END_ITEMs, one per end.
+            DANGLING_END_ITEM& nextItem = aItemList[++ii];
 
-        case BUS_END_END:
-            if( IsPointOnSegment( seg_start, each_item.GetPosition(), m_pos ) )
+            if( IsPointOnSegment( item.GetPosition(), nextItem.GetPosition(), m_pos ) )
                 has_bus[0] = true;
-            else if( IsPointOnSegment( seg_start, each_item.GetPosition(), GetEnd() ) )
+            else if( IsPointOnSegment( item.GetPosition(), nextItem.GetPosition(), GetEnd() ) )
                 has_bus[1] = true;
-
+        }
             break;
 
         default:
@@ -375,27 +371,27 @@ bool SCH_BUS_BUS_ENTRY::UpdateDanglingState( std::vector<DANGLING_END_ITEM>& aIt
 
     m_isDanglingStart = m_isDanglingEnd = true;
 
-    // Wires and buses are stored in the list as a pair, start and end. This
-    // variable holds the start position from one iteration so it can be used
-    // when the end position is found.
-    wxPoint seg_start;
-
-    for( const DANGLING_END_ITEM& each_item : aItemList )
+    for( unsigned ii = 0; ii < aItemList.size(); ii++ )
     {
-        if( each_item.GetItem() == this )
+        DANGLING_END_ITEM& item = aItemList[ii];
+
+        if( item.GetItem() == this )
             continue;
 
-        switch( each_item.GetType() )
+        switch( item.GetType() )
         {
-        case BUS_START_END:
-            seg_start = each_item.GetPosition();
-            break;
-        case BUS_END_END:
-            if( IsPointOnSegment( seg_start, each_item.GetPosition(), m_pos ) )
+        case BUS_END:
+        {
+            // The bus has created 2 DANGLING_END_ITEMs, one per end.
+            DANGLING_END_ITEM& nextItem = aItemList[++ii];
+
+            if( IsPointOnSegment( item.GetPosition(), nextItem.GetPosition(), m_pos ) )
                 m_isDanglingStart = false;
-            if( IsPointOnSegment( seg_start, each_item.GetPosition(), GetEnd() ) )
+            if( IsPointOnSegment( item.GetPosition(), nextItem.GetPosition(), GetEnd() ) )
                 m_isDanglingEnd = false;
+        }
             break;
+
         default:
             break;
         }

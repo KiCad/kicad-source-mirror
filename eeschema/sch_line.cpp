@@ -579,29 +579,11 @@ SCH_LINE* SCH_LINE::MergeOverlap( SCH_SCREEN* aScreen, SCH_LINE* aLine, bool aCh
 
 void SCH_LINE::GetEndPoints( std::vector <DANGLING_END_ITEM>& aItemList )
 {
-    DANGLING_END_T startType, endType;
-
-    switch( GetLayer() )
+    if( IsConnectable() )
     {
-    case LAYER_WIRE:
-        startType = WIRE_START_END;
-        endType = WIRE_END_END;
-        break;
-    case LAYER_BUS:
-        startType = BUS_START_END;
-        endType = BUS_END_END;
-        break;
-    default:
-        startType = GRAPHIC_START_END;
-        endType = GRAPHIC_END_END;
-        break;
+        aItemList.emplace_back( IsBus() ? BUS_END : WIRE_END, this, m_start );
+        aItemList.emplace_back( IsBus() ? BUS_END : WIRE_END, this, m_end );
     }
-
-    DANGLING_END_ITEM item( startType, this, m_start );
-    aItemList.push_back( item );
-
-    DANGLING_END_ITEM item1( endType, this, m_end );
-    aItemList.push_back( item1 );
 }
 
 
@@ -618,34 +600,26 @@ bool SCH_LINE::UpdateDanglingState( std::vector<DANGLING_END_ITEM>& aItemList,
         if( item.GetItem() == this )
             continue;
 
-        if( ( IsWire()
-              && ( item.GetType() == BUS_START_END || item.GetType() == BUS_END_END
-                   || item.GetType() == BUS_ENTRY_END ) )
-            || ( IsBus()
-                 && ( item.GetType() == WIRE_START_END || item.GetType() == WIRE_END_END
-                      || item.GetType() == PIN_END ) )
-            || ( IsGraphicLine()
-                 && ( item.GetType() != GRAPHIC_START_END && item.GetType() != GRAPHIC_END_END ) ) )
-            continue;
+        if( ( IsWire() && item.GetType() != BUS_END && item.GetType() != BUS_ENTRY_END )
+            || ( IsBus() && item.GetType() != WIRE_END && item.GetType() != PIN_END ) )
+        {
+            if( m_start == item.GetPosition() )
+                m_startIsDangling = false;
 
-        if( m_start == item.GetPosition() )
-            m_startIsDangling = false;
+            if( m_end == item.GetPosition() )
+                m_endIsDangling = false;
 
-        if( m_end == item.GetPosition() )
-            m_endIsDangling = false;
-
-        if( !m_startIsDangling && !m_endIsDangling )
-            break;
+            if( !m_startIsDangling && !m_endIsDangling )
+                break;
+        }
     }
 
-    if( IsBus() || IsGraphicLine() )
-    {
-        // Force unchanged return state for graphic lines and busses
-        previousStartState = m_startIsDangling;
-        previousEndState = m_endIsDangling;
-    }
-
-    return ( previousStartState != m_startIsDangling ) || ( previousEndState != m_endIsDangling );
+    // We only use the bus dangling state for automatic line starting, so we don't care if it
+    // has changed or not (and returning true will result in extra work)
+    if( IsBus() )
+        return false;
+    else
+        return previousStartState != m_startIsDangling || previousEndState != m_endIsDangling;
 }
 
 

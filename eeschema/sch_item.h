@@ -60,12 +60,8 @@ enum FIELDS_AUTOPLACED
 enum DANGLING_END_T
 {
     UNKNOWN = 0,
-    GRAPHIC_START_END,
-    GRAPHIC_END_END,
-    WIRE_START_END,
-    WIRE_END_END,
-    BUS_START_END,
-    BUS_END_END,
+    WIRE_END,
+    BUS_END,
     JUNCTION_END,
     PIN_END,
     LABEL_END,
@@ -91,8 +87,8 @@ public:
         m_parent = aItem;
     }
 
-    DANGLING_END_ITEM( DANGLING_END_T aType, EDA_ITEM* aItem,
-            const wxPoint& aPosition, const EDA_ITEM* aParent )
+    DANGLING_END_ITEM( DANGLING_END_T aType, EDA_ITEM* aItem, const wxPoint& aPosition,
+                       const EDA_ITEM* aParent )
     {
         m_item = aItem;
         m_type = aType;
@@ -128,17 +124,10 @@ public:
     DANGLING_END_T GetType() const { return m_type; }
 
 private:
-    /// A pointer to the connectable object.
-    EDA_ITEM*       m_item;
-
-    /// The position of the connection point.
-    wxPoint         m_pos;
-
-    /// The type of connection of #m_item.
-    DANGLING_END_T  m_type;
-
-    /// A pointer to the parent object (in the case of pins)
-    const EDA_ITEM* m_parent;
+    EDA_ITEM*       m_item;         /// A pointer to the connectable object.
+    wxPoint         m_pos;          /// The position of the connection point.
+    DANGLING_END_T  m_type;         /// The type of connection of #m_item.
+    const EDA_ITEM* m_parent;       /// A pointer to the parent object (in the case of pins)
 };
 
 
