@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-01 11:31-0700\n"
-"PO-Revision-Date: 2021-09-24 01:07+0000\n"
+"PO-Revision-Date: 2021-09-24 08:52+0000\n"
 "Last-Translator: boonchai k. <kicadthai@gmail.com>\n"
 "Language-Team: Thai <https://hosted.weblate.org/projects/kicad/master-source/"
 "th/>\n"
@@ -34189,120 +34189,120 @@ msgstr "วางฟุ้ทพรินท์ที่เลือกไว้
 
 #: pcbnew/tools/pcb_actions.cpp:1274
 msgid "Performs automatic placement of selected components"
-msgstr ""
+msgstr "ดําเนินการจัดวางส่วนอุปกรณ์ที่เลือกโดยอัตโนมัติ"
 
 #: pcbnew/tools/pcb_actions.cpp:1278
 msgid "Place Off-Board Footprints"
-msgstr ""
+msgstr "ย้ายฟุ้ทพรินท์นอกบอร์ด"
 
 #: pcbnew/tools/pcb_actions.cpp:1279
 msgid "Performs automatic placement of components outside board area"
-msgstr ""
+msgstr "ดําเนินการจัดวางส่วนอุปกรณ์ภายนอกพื้นที่บอร์ดโดยอัตโนมัติ"
 
 #: pcbnew/tools/pcb_actions.cpp:1287
 msgid "Route Single Track"
-msgstr ""
+msgstr "เดินแทร็กเส้นเดียว"
 
 #: pcbnew/tools/pcb_actions.cpp:1287
 msgid "Route tracks"
-msgstr ""
+msgstr "เดินแทร็ก"
 
 #: pcbnew/tools/pcb_actions.cpp:1294
 msgid "Route Differential Pair"
-msgstr ""
+msgstr "เดินเส้นดิฟแพร์"
 
 #: pcbnew/tools/pcb_actions.cpp:1294
 msgid "Route differential pairs"
-msgstr ""
+msgstr "เดินเส้นดิฟแพร์"
 
 #: pcbnew/tools/pcb_actions.cpp:1300
 msgid "Interactive Router Settings..."
-msgstr ""
+msgstr "ตั้งค่าเดินเส้นทองแดงแบบโต้ตอบ..."
 
 #: pcbnew/tools/pcb_actions.cpp:1300
 msgid "Open Interactive Router settings"
-msgstr ""
+msgstr "เปิดการตั้งค่าเราเตอร์แบบโต้ตอบ"
 
 #: pcbnew/tools/pcb_actions.cpp:1305
 msgid "Differential Pair Dimensions..."
-msgstr ""
+msgstr "ขนาดคู่ที่แตกต่าง..."
 
 #: pcbnew/tools/pcb_actions.cpp:1305
 msgid "Open Differential Pair Dimension settings"
-msgstr ""
+msgstr "เปิดการตั้งค่ามิติคู่ส่วนต่างดิฟแพร์"
 
 #: pcbnew/tools/pcb_actions.cpp:1310
 msgid "Router Highlight Mode"
-msgstr ""
+msgstr "แสดงสีเน้นเน้นเราเตอร์"
 
 #: pcbnew/tools/pcb_actions.cpp:1310
 msgid "Switch router to highlight mode"
-msgstr ""
+msgstr "เปลี่ยนเราเตอร์เป็นโหมดสีเน้น"
 
 #: pcbnew/tools/pcb_actions.cpp:1315
 msgid "Router Shove Mode"
-msgstr ""
+msgstr "โหมดผลักดันลายเส้น"
 
 #: pcbnew/tools/pcb_actions.cpp:1315
 msgid "Switch router to shove mode"
-msgstr ""
+msgstr "สลับเราเตอร์ไปเป็นโหมดผลัก"
 
 #: pcbnew/tools/pcb_actions.cpp:1320
 msgid "Router Walkaround Mode"
-msgstr ""
+msgstr "โหมดเดินเส้นหลีกเลี่ยงของเราเตอร์"
 
 #: pcbnew/tools/pcb_actions.cpp:1320
 msgid "Switch router to walkaround mode"
-msgstr ""
+msgstr "เปลี่ยนเราเตอร์เป็นโหมดเดินเส้นหลีกเลี่ยง"
 
 #: pcbnew/tools/pcb_actions.cpp:1325
 msgid "Set Layer Pair..."
-msgstr ""
+msgstr "ตั้งค่าคู่เลเยอร์..."
 
 #: pcbnew/tools/pcb_actions.cpp:1325
 msgid "Change active layer pair for routing"
-msgstr ""
+msgstr "เปลี่ยนคู่เลเยอร์ที่ใช้งานสำหรับการเดินลายเส้น"
 
 #: pcbnew/tools/pcb_actions.cpp:1332
 msgid "Tune length of a single track"
-msgstr ""
+msgstr "ปรับความยาวของแทร็กเส้นเดียว"
 
 #: pcbnew/tools/pcb_actions.cpp:1339
 msgid "Tune length of a differential pair"
-msgstr ""
+msgstr "ปรับแต่งความยาวของคู่แตกต่างดิฟแพร์"
 
 #: pcbnew/tools/pcb_actions.cpp:1346
 msgid "Tune skew of a differential pair"
-msgstr ""
+msgstr "ปรับความเอียงของคู่ดิฟเฟอเรนเชียล"
 
 #: pcbnew/tools/pcb_actions.cpp:1355
 msgid "Undo Last Segment"
-msgstr ""
+msgstr "ยกเลิกบางส่วนช่วงสุดท้าย"
 
 #: pcbnew/tools/pcb_actions.cpp:1355
 msgid "Walks the current track back one segment."
-msgstr ""
+msgstr "เดินแทร็คปัจจุบันย้อนกลับไปหนึ่งส่วน"
 
 #: pcbnew/tools/pcb_actions.cpp:1361 pcbnew/tools/pcb_actions.cpp:1367
 msgid ""
 "Splits the track segment into two segments connected at the cursor position."
-msgstr ""
+msgstr "แยกส่วนของแทร็กออกเป็นสองส่วนย่อยเชื่อมต่อกันที่ตำแหน่งเคอร์เซอร์"
 
 #: pcbnew/tools/pcb_actions.cpp:1391
 msgid "Length Tuning Settings..."
-msgstr ""
+msgstr "การตั้งค่าการปรับความยาว..."
 
 #: pcbnew/tools/pcb_actions.cpp:1392
 msgid "Sets the length tuning parameters for currently routed item."
-msgstr ""
+msgstr "ตั้งค่าพารามิเตอร์การปรับความยาวสำหรับรายการที่กำลังเดินลายเส้น"
 
 #: pcbnew/tools/pcb_control.cpp:493
 msgid "Item locked."
-msgstr ""
+msgstr "รายการถูกล็อค"
 
 #: pcbnew/tools/pcb_control.cpp:765
 msgid "Invalid clipboard contents"
-msgstr ""
+msgstr "เนื้อหาคลิปบอร์ดไม่ถูกต้อง"
 
 #: pcbnew/tools/pcb_control.cpp:1029
 #, c-format
@@ -34310,845 +34310,850 @@ msgid ""
 "Error loading board.\n"
 "%s"
 msgstr ""
+"เกิดข้อผิดพลาดในการโหลดบอร์ด\n"
+"%s"
 
 #: pcbnew/tools/pcb_control.cpp:1106
 msgid "Selected Items"
-msgstr ""
+msgstr "รายการที่เลือก"
 
 #: pcbnew/tools/pcb_control.cpp:1123
 msgid "Footprint Name"
-msgstr ""
+msgstr "ชื่อฟุ้ทพรินท์"
 
 #: pcbnew/tools/pcb_point_editor.cpp:114
 msgid "Self-intersecting polygons are not allowed."
-msgstr ""
+msgstr "ไม่อนุญาตให้ใช้รูปหลายเหลี่ยมที่ตัดกันเอง"
 
 #: pcbnew/tools/pcb_point_editor.cpp:537
 msgid "Drag a corner"
-msgstr ""
+msgstr "ลากที่จุดมุม"
 
 #: pcbnew/tools/pcb_point_editor.cpp:2068
 msgid "Add a zone corner"
-msgstr ""
+msgstr "เพิ่มมุมโซน"
 
 #: pcbnew/tools/pcb_point_editor.cpp:2106
 msgid "Split segment"
-msgstr ""
+msgstr "แยกส่วน"
 
 #: pcbnew/tools/pcb_point_editor.cpp:2177
 msgid "Remove a zone/polygon corner"
-msgstr ""
+msgstr "ลบมุมโซน/รูปหลายเหลี่ยมออก"
 
 #: pcbnew/tools/pcb_selection_tool.cpp:71
 msgid "Select"
-msgstr ""
+msgstr "เลือก"
 
 #: pcbnew/tools/placement_tool.cpp:62
 msgid "Align/Distribute"
-msgstr ""
+msgstr "จัดแนว/กระจาย"
 
 #: pcbnew/tools/placement_tool.cpp:230
 msgid "Align to top"
-msgstr ""
+msgstr "จัดชิดด้านบน"
 
 #: pcbnew/tools/placement_tool.cpp:275
 msgid "Align to bottom"
-msgstr ""
+msgstr "จัดชิดด้านล่าง"
 
 #: pcbnew/tools/placement_tool.cpp:335
 msgid "Align to left"
-msgstr ""
+msgstr "จัดชิดซ้าย"
 
 #: pcbnew/tools/placement_tool.cpp:395
 msgid "Align to right"
-msgstr ""
+msgstr "จัดชิดขวา"
 
 #: pcbnew/tools/placement_tool.cpp:440
 msgid "Align to middle"
-msgstr ""
+msgstr "จัดชิดกลาง"
 
 #: pcbnew/tools/placement_tool.cpp:485
 msgid "Align to center"
-msgstr ""
+msgstr "จัดตำแหน่งให้ตรงกลาง"
 
 #: pcbnew/tools/placement_tool.cpp:548
 msgid "Distribute horizontally"
-msgstr ""
+msgstr "กระจายตามแนวนอน"
 
 #: pcbnew/tools/placement_tool.cpp:675
 msgid "Distribute vertically"
-msgstr ""
+msgstr "กระจายตามแนวตั้ง"
 
 #: pcbnew/tools/position_relative_tool.cpp:150
 msgid "Position Relative"
-msgstr ""
+msgstr "ตําแหน่งสัมพัทธ์"
 
 #: pcbnew/tools/position_relative_tool.cpp:171
 msgid "Click on reference item..."
-msgstr ""
+msgstr "คลิกที่รายการอ้างอิง..."
 
 #: pcbnew/tools/zone_create_helper.cpp:176
 msgid "Add a zone cutout"
-msgstr ""
+msgstr "เพิ่มบริเวณตัดออกของโซน"
 
 #: pcbnew/tools/zone_create_helper.cpp:215
 msgid "Add a zone"
-msgstr ""
+msgstr "เพิ่มโซน"
 
 #: pcbnew/tools/zone_create_helper.cpp:246
 msgid "Add a graphical polygon"
-msgstr ""
+msgstr "เพิ่มรูปหลายเหลี่ยมกราฟิก"
 
 #: pcbnew/tools/zone_filler_tool.cpp:77
 msgid "Checking Zones"
-msgstr ""
+msgstr "กำลังตรวจสอบโซน"
 
 #: pcbnew/tools/zone_filler_tool.cpp:83 pcbnew/tools/zone_filler_tool.cpp:150
 #: pcbnew/tools/zone_filler_tool.cpp:203
 msgid "Fill Zone(s)"
-msgstr ""
+msgstr "เติมโซน"
 
 #: pcbnew/tools/zone_filler_tool.cpp:124
 msgid "Show DRC rules"
-msgstr ""
+msgstr "แสดงกฎ DRC"
 
 #: pcbnew/tools/zone_filler_tool.cpp:137
 msgid "Zone fills may be inaccurate.  DRC rules contain errors."
-msgstr ""
+msgstr "การเติมโซนอาจไม่ถูกต้อง กฎ DRC มีข้อผิดพลาด"
 
 #: pcbnew/tools/zone_filler_tool.cpp:144
 msgid "Fill All Zones"
-msgstr ""
+msgstr "เติมโซนทั้งหมด"
 
 #: pcbnew/tools/zone_filler_tool.cpp:198
 msgid "Fill Zone"
-msgstr ""
+msgstr "เติมโซน"
 
 #: pcbnew/tools/zone_filler_tool.cpp:235
 msgid "Unfill Zone"
-msgstr ""
+msgstr "ไม่เติมโซน"
 
 #: pcbnew/tools/zone_filler_tool.cpp:253
 msgid "Unfill All Zones"
-msgstr ""
+msgstr "ยกเลิกเติมโซนทั้งหมด"
 
 #: pcbnew/undo_redo.cpp:541
 msgid "Incomplete undo/redo operation: some items not found"
-msgstr ""
+msgstr "เลิกทํา/ทําซ้ําไม่สมบูรณ์: ไม่พบบางรายการ"
 
 #: pcbnew/widgets/appearance_controls.cpp:340
 msgid "Show tracks"
-msgstr ""
+msgstr "แสดงแทร็ค"
 
 #: pcbnew/widgets/appearance_controls.cpp:341
 msgid "Show all vias"
-msgstr ""
+msgstr "แสดงเวียทั้งหมด"
 
 #: pcbnew/widgets/appearance_controls.cpp:342
 msgid "Show all pads"
-msgstr ""
+msgstr "แสดงแพ็ดทั้งหมด"
 
 #: pcbnew/widgets/appearance_controls.cpp:343
 msgid "Show copper zones"
-msgstr ""
+msgstr "แสดงโซนทองแดง"
 
 #: pcbnew/widgets/appearance_controls.cpp:345
 msgid "Footprints Front"
-msgstr ""
+msgstr "ฟุ้ทพรินท์ด้านหน้า"
 
 #: pcbnew/widgets/appearance_controls.cpp:345
 msgid "Show footprints that are on board's front"
-msgstr ""
+msgstr "แสดงฟุ้ทพรินท์ที่อยู่บนบอร์ดด้านหน้า"
 
 #: pcbnew/widgets/appearance_controls.cpp:346
 msgid "Footprints Back"
-msgstr ""
+msgstr "ฟุ้ทพรินท์ด้านหลัง"
 
 #: pcbnew/widgets/appearance_controls.cpp:346
 msgid "Show footprints that are on board's back"
-msgstr ""
+msgstr "แสดงฟุ้ทพรินท์ที่อยู่บนบอร์ดด้านหลัง"
 
 #: pcbnew/widgets/appearance_controls.cpp:347
 msgid "Through-hole Pads"
-msgstr ""
+msgstr "แพ็ดชนิดรูเจาะทะลุ"
 
 #: pcbnew/widgets/appearance_controls.cpp:347
 msgid "Show through-hole pads"
-msgstr ""
+msgstr "แสดงแพ็ดชนิดเจาะทะลุ"
 
 #: pcbnew/widgets/appearance_controls.cpp:348
 msgid "Show footprint values"
-msgstr ""
+msgstr "แสดงค่าฟุ้ทพรินท์"
 
 #: pcbnew/widgets/appearance_controls.cpp:349
 msgid "References"
-msgstr ""
+msgstr "อ้างอิง"
 
 #: pcbnew/widgets/appearance_controls.cpp:349
 msgid "Show footprint references"
-msgstr ""
+msgstr "แสดงอ้างอิงฟุ้ทพรินท์"
 
 #: pcbnew/widgets/appearance_controls.cpp:350
 msgid "Show all footprint text"
-msgstr ""
+msgstr "แสดงข้อความของฟุ้ทพรินท์ทั้งหมด"
 
 #: pcbnew/widgets/appearance_controls.cpp:351
 msgid "Hidden Text"
-msgstr ""
+msgstr "ข้อความที่ซ่อน"
 
 #: pcbnew/widgets/appearance_controls.cpp:351
 msgid "Show footprint text marked as invisible"
-msgstr ""
+msgstr "แสดงข้อความของฟุ้ทพรินท์ที่กำหนดเป็นมองไม่เห็น"
 
 #: pcbnew/widgets/appearance_controls.cpp:354
 msgid "Show unconnected nets as a ratsnest"
-msgstr ""
+msgstr "แสดงเน็ตที่ไม่เชื่อมต่อเป็นแร็ทเน็ต"
 
 #: pcbnew/widgets/appearance_controls.cpp:355
 msgid "No-Connects"
-msgstr ""
+msgstr "ไม่เชื่อมต่อ"
 
 #: pcbnew/widgets/appearance_controls.cpp:355
 msgid "Show a marker on pads which have no net connected"
-msgstr ""
+msgstr "แสดงมาร์คเกอร์บนแพ็ดที่ไม่มีเน็ตเชื่อมต่อ"
 
 #: pcbnew/widgets/appearance_controls.cpp:356
 msgid "DRC Warnings"
-msgstr ""
+msgstr "คําเตือน DRC"
 
 #: pcbnew/widgets/appearance_controls.cpp:356
 msgid "DRC violations with a Warning severity"
-msgstr ""
+msgstr "การละเมิด DRC ด้วยคำเตือนที่เข้มงวด"
 
 #: pcbnew/widgets/appearance_controls.cpp:357
 msgid "DRC Errors"
-msgstr ""
+msgstr "ข้อผิดพลาด DRC"
 
 #: pcbnew/widgets/appearance_controls.cpp:357
 msgid "DRC violations with an Error severity"
-msgstr ""
+msgstr "การละเมิด DRC ที่มีความรุนแรงของข้อผิดพลาด"
 
 #: pcbnew/widgets/appearance_controls.cpp:358
 msgid "DRC Exclusions"
-msgstr ""
+msgstr "การยกเว้น DRC"
 
 #: pcbnew/widgets/appearance_controls.cpp:358
 msgid "DRC violations which have been individually excluded"
-msgstr ""
+msgstr "การละเมิด DRC ซึ่งได้รับการยกเว้นเป็นบางรายการ"
 
 #: pcbnew/widgets/appearance_controls.cpp:359
 msgid "Show footprint and text origins as a cross"
-msgstr ""
+msgstr "แสดงจุดกำเนิดของฟุ้ทพรินท์และข้อความเป็นกากบาท"
 
 #: pcbnew/widgets/appearance_controls.cpp:360
 msgid "Show drawing sheet borders and title block"
-msgstr ""
+msgstr "แก้ไขเส้นขอบแผ่นชีตวาดเขียนและบล็อกชื่อหัวเรื่อง"
 
 #: pcbnew/widgets/appearance_controls.cpp:380
 msgid "No Layers"
-msgstr ""
+msgstr "ไม่มีเลเยอร์"
 
 #: pcbnew/widgets/appearance_controls.cpp:382
 #: pcbnew/widgets/appearance_controls_base.cpp:180
 msgid "All Layers"
-msgstr ""
+msgstr "เลเยอร์ทั้งหมด"
 
 #: pcbnew/widgets/appearance_controls.cpp:384
 msgid "All Copper Layers"
-msgstr ""
+msgstr "เลเยอร์ทองแดงทั้งหมด"
 
 #: pcbnew/widgets/appearance_controls.cpp:387
 msgid "Inner Copper Layers"
-msgstr ""
+msgstr "เลเยอร์ทองแดงภายใน"
 
 #: pcbnew/widgets/appearance_controls.cpp:390
 msgid "Front Layers"
-msgstr ""
+msgstr "เลเยอร์ด้านหน้า"
 
 #: pcbnew/widgets/appearance_controls.cpp:393
 msgid "Front Assembly View"
-msgstr ""
+msgstr "มุมมองการประกอบด้านหน้า"
 
 #: pcbnew/widgets/appearance_controls.cpp:396
 msgid "Back Layers"
-msgstr ""
+msgstr "เลเยอร์ด้านหลัง"
 
 #: pcbnew/widgets/appearance_controls.cpp:399
 msgid "Back Assembly View"
-msgstr ""
+msgstr "มุมมองการประกอบด้านหลัง"
 
 #: pcbnew/widgets/appearance_controls.cpp:439
 msgid "Filter nets"
-msgstr ""
+msgstr "กรองชื่อเน็ท"
 
 #: pcbnew/widgets/appearance_controls.cpp:575
 msgid "Layer Display Options"
-msgstr ""
+msgstr "ตัวเลือกการแสดงเลเยอร์"
 
 #: pcbnew/widgets/appearance_controls.cpp:585
 msgid "Inactive layers:"
-msgstr ""
+msgstr "เลเยอร์ไม่ใช้งาน:"
 
 #: pcbnew/widgets/appearance_controls.cpp:597
 msgid "Inactive layers will be shown in full color"
-msgstr ""
+msgstr "เลเยอร์ไม่ใช้งานจะไม่แสดงสีเต็ม"
 
 #: pcbnew/widgets/appearance_controls.cpp:601
 msgid "Dim"
-msgstr ""
+msgstr "สีจาง"
 
 #: pcbnew/widgets/appearance_controls.cpp:603
 msgid "Inactive layers will be dimmed"
-msgstr ""
+msgstr "เลเยอร๋ไม่ใช้งานจะแสดงสีจาง"
 
 #: pcbnew/widgets/appearance_controls.cpp:607
 msgid "Hide"
-msgstr ""
+msgstr "ซ่อน"
 
 #: pcbnew/widgets/appearance_controls.cpp:609
 msgid "Inactive layers will be hidden"
-msgstr ""
+msgstr "เลเยอร์ไม่ใช้งานจะถูกซ่อน"
 
 #: pcbnew/widgets/appearance_controls.cpp:619
 msgid "Flip board view"
-msgstr ""
+msgstr "มุมมองพลิกด้านบอร์ด"
 
 #: pcbnew/widgets/appearance_controls.cpp:641
 msgid "Net Display Options"
-msgstr ""
+msgstr "ตัวเลือกการแสดงเน็ต"
 
 #: pcbnew/widgets/appearance_controls.cpp:650
 msgid "Net colors:"
-msgstr ""
+msgstr "สีเน็ต:"
 
 #: pcbnew/widgets/appearance_controls.cpp:653
 msgid "Choose when to show net and netclass colors"
-msgstr ""
+msgstr "เลือกเมื่อใดต้องการแสดงสีเน็ตและสีเน็ตคลาส"
 
 #: pcbnew/widgets/appearance_controls.cpp:661
 msgid "Net and netclass colors are shown on all copper items"
-msgstr ""
+msgstr "สีเน็ตและสีเน็ตคลาสจะแสดงในรายการทองแดงทั้งหมด"
 
 #: pcbnew/widgets/appearance_controls.cpp:668
 msgid "Net and netclass colors are shown on the ratsnest only"
-msgstr ""
+msgstr "สีของเน็ตและเน็ตคลาสจะแสดงบนแร็ทเน็ตเท่านั้น"
 
 #: pcbnew/widgets/appearance_controls.cpp:674
 msgid "Net and netclass colors are not shown"
-msgstr ""
+msgstr "สีของเน็ตและเน็ตคลาสจะไม่แสดง"
 
 #: pcbnew/widgets/appearance_controls.cpp:682
 msgid "Ratsnest display:"
-msgstr ""
+msgstr "แสดงแร็ทเน็ต:"
 
 #: pcbnew/widgets/appearance_controls.cpp:685
 msgid "Choose what ratsnest lines to display"
-msgstr ""
+msgstr "เลือกแร็ทเน็ตเส้นอะไรที่จะแสดง"
 
 #: pcbnew/widgets/appearance_controls.cpp:693
 msgid "Ratsnest lines are shown to items on all layers"
-msgstr ""
+msgstr "เส้นแร็ทเน็ตจะแสดงรายการในทุกชั้นเลเยอร์"
 
 #: pcbnew/widgets/appearance_controls.cpp:698
 msgid "Visible layers"
-msgstr ""
+msgstr "ชั้นที่มองเห็น"
 
 #: pcbnew/widgets/appearance_controls.cpp:700
 msgid "Ratsnest lines are shown to items on visible layers"
-msgstr ""
+msgstr "เส้นแร็ทเน็ตจะแสดงต่อรายการบนเลเยอร์ที่มองเห็นได้"
 
 #: pcbnew/widgets/appearance_controls.cpp:841
 msgid "Set Net Color"
-msgstr ""
+msgstr "ตั้งค่าสีเน็ต"
 
 #: pcbnew/widgets/appearance_controls.cpp:843
 #, c-format
 msgid "Highlight %s"
-msgstr ""
+msgstr "เน้นสีเน็ท %s"
 
 #: pcbnew/widgets/appearance_controls.cpp:846
 #: pcbnew/widgets/appearance_controls.cpp:2164
 #, c-format
 msgid "Select Tracks and Vias in %s"
-msgstr ""
+msgstr "เลือกแทร็กและเวียใน %s"
 
 #: pcbnew/widgets/appearance_controls.cpp:849
 #: pcbnew/widgets/appearance_controls.cpp:2168
 #, c-format
 msgid "Unselect Tracks and Vias in %s"
-msgstr ""
+msgstr "ยกเลิกการเลือกแทร็กและเวียใน %s"
 
 #: pcbnew/widgets/appearance_controls.cpp:857
 msgid "Hide All Other Nets"
-msgstr ""
+msgstr "ซ่อนเน็ตอื่นๆ"
 
 #: pcbnew/widgets/appearance_controls.cpp:890
 #, c-format
 msgid "Click to hide ratsnest for %s"
-msgstr ""
+msgstr "คลิกเพื่อซ่อนแร็ทเน็ตสำหรับ %s"
 
 #: pcbnew/widgets/appearance_controls.cpp:891
 #, c-format
 msgid "Click to show ratsnest for %s"
-msgstr ""
+msgstr "คลิกเพื่อแสดงแร็ทเน็ตสำหรับ %s"
 
 #: pcbnew/widgets/appearance_controls.cpp:897
 msgid ""
 "Double click (or middle click) to change color; right click for more actions"
 msgstr ""
+"คลิกสองครั้ง (หรือคลิกกลาง) เพื่อเปลี่ยนสี; คลิกขวาสําหรับทางเลือกเพิ่มเติม"
 
 #: pcbnew/widgets/appearance_controls.cpp:1399
 msgid "Double click or middle click for color change, right click for menu"
-msgstr ""
+msgstr "ดับเบิลคลิกซ้ายหรือคลิกกลางเพื่อเปลี่ยนสี, คลิกขวาสำหรับเมนู"
 
 #: pcbnew/widgets/appearance_controls.cpp:1406
 msgid "Show or hide this layer"
-msgstr ""
+msgstr "แสดงหรือซ่อนเลเยอร์นี้"
 
 #: pcbnew/widgets/appearance_controls.cpp:1482
 msgid "Front copper layer"
-msgstr ""
+msgstr "ชั้นทองแดงด้านหน้า"
 
 #: pcbnew/widgets/appearance_controls.cpp:1483
 msgid "Back copper layer"
-msgstr ""
+msgstr "ชั้นทองแดงด้านหลัง"
 
 #: pcbnew/widgets/appearance_controls.cpp:1484
 msgid "Inner copper layer"
-msgstr ""
+msgstr "ชั้นทองแดงด้านใน"
 
 #: pcbnew/widgets/appearance_controls.cpp:1510
 msgid "Adhesive on board's front"
-msgstr ""
+msgstr "กาวบนบอร์ดด้านหน้า"
 
 #: pcbnew/widgets/appearance_controls.cpp:1511
 msgid "Adhesive on board's back"
-msgstr ""
+msgstr "กาวบนบอร์ดด้านหลัง"
 
 #: pcbnew/widgets/appearance_controls.cpp:1512
 msgid "Solder paste on board's front"
-msgstr ""
+msgstr "โซลเดอร์เพสต์บนบอร์ดด้านหน้า"
 
 #: pcbnew/widgets/appearance_controls.cpp:1513
 msgid "Solder paste on board's back"
-msgstr ""
+msgstr "โซลเดอร์เพสต์บนบอร์ดด้านหลัง"
 
 #: pcbnew/widgets/appearance_controls.cpp:1514
 msgid "Silkscreen on board's front"
-msgstr ""
+msgstr "ซิลค์กรีนบนบอร์ดด้านหน้า"
 
 #: pcbnew/widgets/appearance_controls.cpp:1515
 msgid "Silkscreen on board's back"
-msgstr ""
+msgstr "ซิลค์สกรีนบนบอร์ดด้านหลัง"
 
 #: pcbnew/widgets/appearance_controls.cpp:1516
 msgid "Solder mask on board's front"
-msgstr ""
+msgstr "โซลเดอร์มาสก์บนบอร์ดด้านหน้า"
 
 #: pcbnew/widgets/appearance_controls.cpp:1517
 msgid "Solder mask on board's back"
-msgstr ""
+msgstr "โซลเดอร์มาสก์บนบอร์ดด้านหลัง"
 
 #: pcbnew/widgets/appearance_controls.cpp:1518
 msgid "Explanatory drawings"
-msgstr ""
+msgstr "การเขียนแบบอธิบาย"
 
 #: pcbnew/widgets/appearance_controls.cpp:1519
 msgid "Explanatory comments"
-msgstr ""
+msgstr "ข้อคิดเห็นอธิบาย"
 
 #: pcbnew/widgets/appearance_controls.cpp:1520
 #: pcbnew/widgets/appearance_controls.cpp:1521
 msgid "User defined meaning"
-msgstr ""
+msgstr "ความหมายที่ผู้ใช้กำหนด"
 
 #: pcbnew/widgets/appearance_controls.cpp:1522
 msgid "Board's perimeter definition"
-msgstr ""
+msgstr "คำจำกัดความขอบเขตบอร์ด"
 
 #: pcbnew/widgets/appearance_controls.cpp:1523
 msgid "Board's edge setback outline"
-msgstr ""
+msgstr "โครงร่างขอบบอร์ดที่ตั้งย้อนหลัง"
 
 #: pcbnew/widgets/appearance_controls.cpp:1524
 msgid "Footprint courtyards on board's front"
-msgstr ""
+msgstr "ลานสนามของฟุ้ทพรินท์บนบอร์ดด้านหน้า"
 
 #: pcbnew/widgets/appearance_controls.cpp:1525
 msgid "Footprint courtyards on board's back"
-msgstr ""
+msgstr "ลานสนามฟุ้ทพรินท์บนบอร์ดด้านหลัง"
 
 #: pcbnew/widgets/appearance_controls.cpp:1526
 msgid "Footprint assembly on board's front"
-msgstr ""
+msgstr "การประกอบฟุ้ทพรินท์บนบอร์ดด้านหน้า"
 
 #: pcbnew/widgets/appearance_controls.cpp:1527
 msgid "Footprint assembly on board's back"
-msgstr ""
+msgstr "การประกอบฟุ้ทพรินท์บนบอร์ดด้านหลัง"
 
 #: pcbnew/widgets/appearance_controls.cpp:1528
 msgid "User defined layer 1"
-msgstr ""
+msgstr "เลเยอร์กำหนดโดยผู้ใช้ 1"
 
 #: pcbnew/widgets/appearance_controls.cpp:1529
 msgid "User defined layer 2"
-msgstr ""
+msgstr "เลเยอร์กำหนดโดยผู้ใช้ 2"
 
 #: pcbnew/widgets/appearance_controls.cpp:1530
 msgid "User defined layer 3"
-msgstr ""
+msgstr "เลเยอร์กำหนดโดยผู้ใช้ 3"
 
 #: pcbnew/widgets/appearance_controls.cpp:1531
 msgid "User defined layer 4"
-msgstr ""
+msgstr "เลเยอร์กำหนดโดยผู้ใช้ 4"
 
 #: pcbnew/widgets/appearance_controls.cpp:1532
 msgid "User defined layer 5"
-msgstr ""
+msgstr "เลเยอร์กำหนดโดยผู้ใช้ 5"
 
 #: pcbnew/widgets/appearance_controls.cpp:1533
 msgid "User defined layer 6"
-msgstr ""
+msgstr "เลเยอร์กำหนดโดยผู้ใช้ 6"
 
 #: pcbnew/widgets/appearance_controls.cpp:1534
 msgid "User defined layer 7"
-msgstr ""
+msgstr "เลเยอร์กำหนดโดยผู้ใช้ 7"
 
 #: pcbnew/widgets/appearance_controls.cpp:1535
 msgid "User defined layer 8"
-msgstr ""
+msgstr "เลเยอร์กำหนดโดยผู้ใช้ 8"
 
 #: pcbnew/widgets/appearance_controls.cpp:1536
 msgid "User defined layer 9"
-msgstr ""
+msgstr "เลเยอร์กำหนดโดยผู้ใช้ 9"
 
 #: pcbnew/widgets/appearance_controls.cpp:1574
 msgid "Show All Copper Layers"
-msgstr ""
+msgstr "แสดงเลเยอร์ทองแดงทั้งหมด"
 
 #: pcbnew/widgets/appearance_controls.cpp:1577
 msgid "Hide All Copper Layers"
-msgstr ""
+msgstr "ซ่อนเลเยอร์ทองแดงทั้งหมด"
 
 #: pcbnew/widgets/appearance_controls.cpp:1588
 msgid "Show All Non Copper Layers"
-msgstr ""
+msgstr "แสดงเลเยอร์ที่ไม่ใช่ทองแดงทั้งหมด"
 
 #: pcbnew/widgets/appearance_controls.cpp:1591
 msgid "Hide All Non Copper Layers"
-msgstr ""
+msgstr "ซ่อนเลเยอร์ที่ไม่ใช่ทองแดงทั้งหมด"
 
 #: pcbnew/widgets/appearance_controls.cpp:1605
 msgid "Show Only Front Assembly Layers"
-msgstr ""
+msgstr "แสดงเฉพาะเลเยอร์การประกอบด้านหน้า"
 
 #: pcbnew/widgets/appearance_controls.cpp:1607
 msgid "Show Only Front Layers"
-msgstr ""
+msgstr "แสดงเฉพาะเลเยอร์ด้านหน้า"
 
 #: pcbnew/widgets/appearance_controls.cpp:1613
 msgid "Show Only Inner Layers"
-msgstr ""
+msgstr "แสดงเฉพาะเลเยอร์ภายใน"
 
 #: pcbnew/widgets/appearance_controls.cpp:1617
 msgid "Show Only Back Layers"
-msgstr ""
+msgstr "แสดงเฉพาะเลเยอร์ด้านหลัง"
 
 #: pcbnew/widgets/appearance_controls.cpp:1620
 msgid "Show Only Back Assembly Layers"
-msgstr ""
+msgstr "แสดงเฉพาะเลเยอร์การประกอบด้านหลัง"
 
 #: pcbnew/widgets/appearance_controls.cpp:1931
 #, c-format
 msgid "Show or hide %s"
-msgstr ""
+msgstr "แสดงหรือซ่อน %s"
 
 #: pcbnew/widgets/appearance_controls.cpp:1972
 #, c-format
 msgid "Set opacity of %s"
-msgstr ""
+msgstr "ตั้งค่าความทึบแสงของ %s"
 
 #: pcbnew/widgets/appearance_controls.cpp:2125
 #, c-format
 msgid "Show or hide ratsnest for nets in %s"
-msgstr ""
+msgstr "แสดงหรือซ่อนแร็ทเน็ตของเน็ตใน %s"
 
 #: pcbnew/widgets/appearance_controls.cpp:2156
 msgid "Set Netclass Color"
-msgstr ""
+msgstr "ตั้งค่าสีเน็ตคลาส"
 
 #: pcbnew/widgets/appearance_controls.cpp:2161
 #, c-format
 msgid "Highlight Nets in %s"
-msgstr ""
+msgstr "แสดงสีเน้นของเน็ตใน %s"
 
 #: pcbnew/widgets/appearance_controls.cpp:2175
 msgid "Show All Netclasses"
-msgstr ""
+msgstr "แสดงเน็ตคลาสทั้งหมด"
 
 #: pcbnew/widgets/appearance_controls.cpp:2178
 msgid "Hide All Other Netclasses"
-msgstr ""
+msgstr "ซ่อนเน็ตคลาสอื่นๆทั้งหมด"
 
 #: pcbnew/widgets/appearance_controls.cpp:2232
 msgid "Save preset..."
-msgstr ""
+msgstr "บันทึกค่าที่ตั้งไว้..."
 
 #: pcbnew/widgets/appearance_controls.cpp:2233
 msgid "Delete preset..."
-msgstr ""
+msgstr "ลบค่าที่ตั้งไว้..."
 
 #: pcbnew/widgets/appearance_controls.cpp:2311
 msgid "Layer preset name:"
-msgstr ""
+msgstr "ชื่อเลเยอร์ตั้งล่วงหน้า:"
 
 #: pcbnew/widgets/appearance_controls.cpp:2311
 msgid "Save Layer Preset"
-msgstr ""
+msgstr "บันทึกเลเยอร์ที่ตั้งไว้ล่วงหน้า"
 
 #: pcbnew/widgets/appearance_controls.cpp:2350
 msgid "Presets"
-msgstr ""
+msgstr "ค่าที่ตั้งไว้"
 
 #: pcbnew/widgets/appearance_controls.cpp:2362
 msgid "Delete Preset"
-msgstr ""
+msgstr "ลบที่ตั้งไว้ล่วงหน้า"
 
 #: pcbnew/widgets/appearance_controls.cpp:2363
 msgid "Select preset:"
-msgstr ""
+msgstr "เลือกค่าที่ตั้งไว้ล่วงหน้า:"
 
 #: pcbnew/widgets/appearance_controls.cpp:2828
 msgid "Open Preferences"
-msgstr ""
+msgstr "เปิดการกําหนดลักษณะ"
 
 #: pcbnew/widgets/appearance_controls.cpp:2842
 msgid ""
 "The current color theme is read-only.  Create a new theme in Preferences to "
 "enable color editing."
 msgstr ""
+"ชุดรูปแบบสีปัจจุบันเป็นแบบอ่านอย่างเดียว "
+"สร้างธีมใหม่ในการตั้งค่าเพื่อเปิดใช้งานการแก้ไขสี"
 
 #: pcbnew/widgets/appearance_controls_base.cpp:46
 msgid "Objects"
-msgstr ""
+msgstr "วัตถุ"
 
 #: pcbnew/widgets/appearance_controls_base.cpp:74
 msgid "Show the Net Inspector"
-msgstr ""
+msgstr "แสดงตัวตรวจสอบเน็ต"
 
 #: pcbnew/widgets/appearance_controls_base.cpp:128
 msgid "Configure net classes"
-msgstr ""
+msgstr "กำหนดค่าเน็ตคลาส"
 
 #: pcbnew/widgets/appearance_controls_base.cpp:169
 msgid "Presets:"
-msgstr ""
+msgstr "ค่าที่ตั้งไว้:"
 
 #: pcbnew/widgets/appearance_controls_base.cpp:173
 msgid "(Ctrl+Tab)"
-msgstr ""
+msgstr "(Ctrl+แท็บ)"
 
 #: pcbnew/widgets/appearance_controls_base.cpp:180
 msgid "(unsaved)"
-msgstr ""
+msgstr "(ยังไม่บันทึก)"
 
 #: pcbnew/widgets/appearance_controls_base.cpp:184
 msgid "Layer presets"
-msgstr ""
+msgstr "เลเยอร์ที่ตั้งไว้ล่วงหน้า"
 
 #: pcbnew/widgets/panel_selection_filter.cpp:130
 #, c-format
 msgid "Only %s"
-msgstr ""
+msgstr "เฉพาะ %s"
 
 #: pcbnew/widgets/panel_selection_filter_base.cpp:21
 msgid "All items"
-msgstr ""
+msgstr "รายการทั้งหมด"
 
 #: pcbnew/widgets/panel_selection_filter_base.cpp:25
 msgid "Locked items"
-msgstr ""
+msgstr "รายการที่ถูกล็อก"
 
 #: pcbnew/widgets/panel_selection_filter_base.cpp:27
 msgid "Allow selection of locked items"
-msgstr ""
+msgstr "อนุญาตให้เลือกรายการที่ถูกล็อกได้"
 
 #: pcbnew/widgets/panel_selection_filter_base.cpp:59
 msgid "Rule Areas"
-msgstr ""
+msgstr "พื้นที่กฎ"
 
 #: pcbnew/widgets/panel_selection_filter_base.cpp:63
 msgid "Dimensions"
-msgstr ""
+msgstr "มิติขนาด"
 
 #: pcbnew/widgets/panel_selection_filter_base.cpp:67
 msgid "Other items"
-msgstr ""
+msgstr "รายการอื่นๆ"
 
 #: pcbnew/zone.cpp:552
 msgid "Rule Area"
-msgstr ""
+msgstr "พื้นที่กฎ"
 
 #: pcbnew/zone.cpp:554
 msgid "Copper Zone"
-msgstr ""
+msgstr "โซนทองแดง"
 
 #: pcbnew/zone.cpp:556
 msgid "Non-copper Zone"
-msgstr ""
+msgstr "โซนที่ไม่ใช่ทองแดง"
 
 #: pcbnew/zone.cpp:561
 msgid "Cutout"
-msgstr ""
+msgstr "ตัดออก"
 
 #: pcbnew/zone.cpp:570
 msgid "No vias"
-msgstr ""
+msgstr "ไม่มีเวีย"
 
 #: pcbnew/zone.cpp:573
 msgid "No tracks"
-msgstr ""
+msgstr "ไม่มีแทร็ก"
 
 #: pcbnew/zone.cpp:576
 msgid "No pads"
-msgstr ""
+msgstr "ไม่มีแพ็ด"
 
 #: pcbnew/zone.cpp:579
 msgid "No copper zones"
-msgstr ""
+msgstr "ไม่มีโซนทองแดง"
 
 #: pcbnew/zone.cpp:582
 msgid "No footprints"
-msgstr ""
+msgstr "ไม่มีฟุ้ทพรินท์"
 
 #: pcbnew/zone.cpp:585
 msgid "Restrictions"
-msgstr ""
+msgstr "ข้อจำกัด"
 
 #: pcbnew/zone.cpp:594 pcbnew/zone.cpp:1408
 msgid "Priority"
-msgstr ""
+msgstr "ลำดับความสำคัญ"
 
 #: pcbnew/zone.cpp:612 pcbnew/zone.cpp:872
 #, c-format
 msgid "%s and %d more"
-msgstr ""
+msgstr "%s และ %d เพิ่มเติม"
 
 #: pcbnew/zone.cpp:626
 msgid "Fill Mode"
-msgstr ""
+msgstr "โหมดเติม"
 
 #: pcbnew/zone.cpp:629
 msgid "Filled Area"
-msgstr ""
+msgstr "พื้นที่เติมเต็ม"
 
 #: pcbnew/zone.cpp:641
 msgid "HatchBorder Lines"
-msgstr ""
+msgstr "เส้นแรเงาตามขอบนอก"
 
 #: pcbnew/zone.cpp:665
 msgid "Corner Count"
-msgstr ""
+msgstr "จํานวนมุม"
 
 #: pcbnew/zone.cpp:878
 #, c-format
 msgid "Rule Area Cutout on %s"
-msgstr ""
+msgstr "การตัดพื้นที่กฎบน %s"
 
 #: pcbnew/zone.cpp:880
 #, c-format
 msgid "Zone Cutout on %s"
-msgstr ""
+msgstr "ตัดออกของโซนบน %s"
 
 #: pcbnew/zone.cpp:885
 #, c-format
 msgid "Rule Area on %s"
-msgstr ""
+msgstr "พื้นที่กฎบน %s"
 
 #: pcbnew/zone.cpp:887
 #, c-format
 msgid "Zone %s on %s"
-msgstr ""
+msgstr "โซน %s บน %s"
 
 #: pcbnew/zone.cpp:1399
 msgid "Inherited"
-msgstr ""
+msgstr "ถูกสืบทอด"
 
 #: pcbnew/zone.cpp:1417
 msgid "Min Width"
-msgstr ""
+msgstr "ความกว้างต่ําสุด"
 
 #: pcbnew/zone.cpp:1420
 msgid "Pad Connections"
-msgstr ""
+msgstr "การเชื่อมต่อแพ็ด"
 
 #: pcbnew/zone_filler.cpp:105
 msgid "Building zone fills..."
-msgstr ""
+msgstr "การสร้างโซนเติมเต็ม..."
 
 #: pcbnew/zone_filler.cpp:313
 msgid "Removing isolated copper islands..."
-msgstr ""
+msgstr "นำออกเกาะทองแดงโดดเดี่ยว..."
 
 #: pcbnew/zone_filler.cpp:426
 msgid "Zone fills are out-of-date. Refill?"
-msgstr ""
+msgstr "การเติมโซนล้าสมัย เติมใหม่?"
 
 #: pcbnew/zone_filler.cpp:428
 msgid "Refill"
-msgstr ""
+msgstr "เติมใหม่"
 
 #: pcbnew/zone_filler.cpp:428
 msgid "Continue without Refill"
-msgstr ""
+msgstr "ทําต่อโดยไม่เติมโซน"
 
 #: pcbnew/zone_filler.cpp:439
 msgid "Performing polygon fills..."
-msgstr ""
+msgstr "กำลังเติมเต็มรูปหลายเหลี่ยม..."
 
 #: plugins/3d/vrml/vrml.cpp:219
 msgid "[INFO] load failed: input line too long\n"
-msgstr ""
+msgstr "[INFO] โหลดไม่สำเร็จ: บรรทัดอินพุตยาวเกินไป\n"
 
 #: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:9
 msgid "KiCad Image Converter"
-msgstr ""
+msgstr "โปรแกรมแปลงรูปภาพ KiCad"
 
 #: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:11
 msgid "Create a component from a bitmap for use with KiCad"
-msgstr ""
+msgstr "สร้างอุปกรณ์ขึ้นมาจากบิทแมปสำหรับใช้งานใน KiCad"
 
 #: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:12
 msgid "bitmap2component"
-msgstr ""
+msgstr "bitmap2component"
 
 #: resources/linux/launchers/org.kicad.eeschema.desktop.in:10
 msgid "KiCad Schematic Editor (Standalone)"
-msgstr ""
+msgstr "เครื่องมือแก้ไขวงจร KiCad (ทำงานเดี่ยว)"
 
 #: resources/linux/launchers/org.kicad.eeschema.desktop.in:11
 msgid "Schematic Capture Tool"
-msgstr ""
+msgstr "เครื่องมือจับภาพวงจร"
 
 #: resources/linux/launchers/org.kicad.eeschema.desktop.in:12
 msgid "Standalone schematic editor for KiCad schematics"
-msgstr ""
+msgstr "ตัวแก้ไขแผนผังวงจรแบบโดดเดี่ยว สำหรับวงจร KiCad"
 
 #: resources/linux/launchers/org.kicad.eeschema.desktop.in:13
 msgid "eeschema"
-msgstr ""
+msgstr "อีอีสกีมมา"
 
 #: resources/linux/launchers/org.kicad.gerbview.desktop.in:11
 msgid "Gerber File Viewer"
-msgstr ""
+msgstr "โปรแกรมดูไฟล์เกอร์เบอร์"
 
 #: resources/linux/launchers/org.kicad.gerbview.desktop.in:12
 msgid "View Gerber files"
-msgstr ""
+msgstr "ดูไฟล์เกอร์เบอร์"
 
 #: resources/linux/launchers/org.kicad.gerbview.desktop.in:13
 msgid "gerbview"
-msgstr ""
+msgstr "gerbview"
 
 #: resources/linux/launchers/org.kicad.kicad.desktop.in:10
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:6
@@ -35157,41 +35162,42 @@ msgstr "คีแคด"
 
 #: resources/linux/launchers/org.kicad.kicad.desktop.in:11
 msgid "EDA Suite"
-msgstr ""
+msgstr "ชุดเครื่องมือ EDA"
 
 #: resources/linux/launchers/org.kicad.kicad.desktop.in:12
 msgid "Suite of tools for schematic design and circuit board layout"
-msgstr ""
+msgstr "ชุดเครื่องมือสำหรับออกแบบวงจรและออกแบบวงจรพิมพ์"
 
 #: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:9
 msgid "KiCad PCB Calculator"
-msgstr ""
+msgstr "เครื่องคิดเลข KiCad PCB"
 
 #: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:11
 msgid "Calculator for various electronics-related computations"
-msgstr ""
+msgstr "เครื่องคิดเลขสำหรับการคำนวณที่เกี่ยวข้องกับอิเล็กทรอนิกส์ต่างๆ"
 
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:10
 msgid "KiCad PCB Editor (Standalone)"
-msgstr ""
+msgstr "เครื่องมือแก้ไขพีซีบี KiCad (โดดเดี่ยว)"
 
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:11
 msgid "PCB layout editor"
-msgstr ""
+msgstr "เครื่องมือออกแบบพีซีบี"
 
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:12
 msgid "Standalone circuit board editor for KiCad boards"
-msgstr ""
+msgstr "เครื่องมือแก้ไขวงจรพิมพ์สำหรับบอร์ด KiCad"
 
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:13
 msgid "pcbnew"
-msgstr ""
+msgstr "pcbnew"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:13
 msgid "An EDA suite for schematic and circuit board design"
-msgstr ""
+msgstr "ชุดเครื่องมือ EDA สำหรับการออกแบบวงจรและแผ่นวงจรพิมพ์"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:50
+#, fuzzy
 msgid ""
 "KiCad is a free and open-source electronics design automation (EDA) suite. "
 "It features schematic capture, integrated circuit simulation, printed "
@@ -35200,34 +35206,39 @@ msgid ""
 "featuring thousands of symbols, footprints, and 3D models. KiCad has minimal "
 "system requirements and runs on Linux, Windows, and macOS."
 msgstr ""
+"KiCad เป็นชุดระบบอัตโนมัติการออกแบบอิเล็กทรอนิกส์ (EDA) ฟรีและโอเพ่นซอร์ส "
+"มันมีแผนผังจับภาพการจําลองวงจรรวมเค้าโครงแผงวงจรพิมพ์ (PCB) การแสดงผล 3 "
+"มิติและการพล็อต / การส่งออกข้อมูลไปยังรูปแบบต่างๆ นอกจากนี้ KiCad "
+"ยังมีไลบรารีส่วนประกอบคุณภาพสูงที่มีสัญลักษณ์รอยเท้าและโมเดล 3 มิติหลายพันรุ่"
+"น KiCad มีความต้องการของระบบน้อยที่สุดและทํางานบน Linux, Windows และ macOS"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:57
 msgid "KiCad Main Window"
-msgstr ""
+msgstr "หน้าต่างหลักของ KiCad"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:67
 msgid "KiCad PCB Layout Editor"
-msgstr ""
+msgstr "เครื่องมือแก้ไข PCB ของ KiCad"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:84
 msgid "The KiCad Developers"
-msgstr ""
+msgstr "นักพัฒนา KiCad"
 
 #: resources/linux/mime/kicad-gerbers.xml.in:5
 msgid "Gerber file"
-msgstr ""
+msgstr "ไฟล์เกอร์เบอร์"
 
 #: resources/linux/mime/kicad-gerbers.xml.in:26
 msgid "Excellon drill file"
-msgstr ""
+msgstr "ไฟล์เจาะ Excellon"
 
 #: resources/linux/mime/kicad-kicad.xml.in:5
 msgid "KiCad Project"
-msgstr ""
+msgstr "โครงการ KiCad"
 
 #: resources/linux/mime/kicad-kicad.xml.in:12
 msgid "KiCad Schematic"
-msgstr ""
+msgstr "แผนผังวงจร KiCad"
 
 #: resources/linux/mime/kicad-kicad.xml.in:25
 msgid "KiCad Printed Circuit Board"
