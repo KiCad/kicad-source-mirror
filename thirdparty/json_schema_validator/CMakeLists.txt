@@ -1,4 +1,4 @@
-add_library( nlohmann_json_schema_validator
+add_library( nlohmann_json_schema_validator STATIC
     json-schema-draft7.json.cpp
     json-uri.cpp
     json-validator.cpp
