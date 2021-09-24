@@ -273,8 +273,9 @@ bool EDA_BASE_FRAME::ProcessEvent( wxEvent& aEvent )
     if( !wxFrame::ProcessEvent( aEvent ) )
         return false;
 
-    if( IsShown() && m_hasAutoSave && IsActive() &&
-        (m_autoSaveState != isAutoSaveRequired()) && (m_autoSaveInterval > 0) )
+    if( !m_isClosing && m_hasAutoSave && IsShown() && IsActive()
+        && m_autoSaveState != isAutoSaveRequired()
+        && m_autoSaveInterval > 0 )
     {
         if( !m_autoSaveState )
         {
