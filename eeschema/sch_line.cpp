@@ -40,7 +40,6 @@ SCH_LINE::SCH_LINE( const wxPoint& pos, int layer ) :
 {
     m_start           = pos;
     m_end             = pos;
-    m_startIsDangling = m_endIsDangling = true;
     m_stroke.SetWidth( 0 );
     m_stroke.SetPlotStyle( PLOT_DASH_TYPE::DEFAULT );
     m_stroke.SetColor( COLOR4D::UNSPECIFIED );
@@ -51,6 +50,11 @@ SCH_LINE::SCH_LINE( const wxPoint& pos, int layer ) :
     case LAYER_WIRE: m_layer = LAYER_WIRE;  break;
     case LAYER_BUS:  m_layer = LAYER_BUS;   break;
     }
+
+    if( layer == LAYER_NOTES )
+        m_startIsDangling = m_endIsDangling = true;
+    else
+        m_startIsDangling = m_endIsDangling = false;
 }
 
 
