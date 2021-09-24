@@ -283,7 +283,6 @@ PCB_SELECTION_TOOL::PCB_SELECTION_TOOL() :
         m_nonModifiedCursor( KICURSOR::ARROW ),
         m_priv( nullptr )
 {
-
 }
 
 
@@ -294,33 +293,28 @@ PCB_SELECTION_TOOL::~PCB_SELECTION_TOOL()
 
 bool PCB_SELECTION_TOOL::Init()
 {
-
     return true;
 }
 
 
 void PCB_SELECTION_TOOL::Reset( RESET_REASON aReason )
 {
-
 }
 
 
 int PCB_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
 {
-
     return 0;
 }
 
 
 void PCB_SELECTION_TOOL::EnterGroup()
 {
-
 }
 
 
 void PCB_SELECTION_TOOL::ExitGroup( bool aSelectGroup )
 {
-
 }
 
 
@@ -333,7 +327,6 @@ PCB_SELECTION& PCB_SELECTION_TOOL::GetSelection()
 PCB_SELECTION& PCB_SELECTION_TOOL::RequestSelection( CLIENT_SELECTION_FILTER aClientFilter,
                                                  bool aConfirmLockedItems )
 {
-
     return m_selection;
 }
 
@@ -348,43 +341,36 @@ bool PCB_SELECTION_TOOL::selectPoint( const VECTOR2I& aWhere, bool aOnDrag,
                                       bool* aSelectionCancelledFlag,
                                       CLIENT_SELECTION_FILTER aClientFilter )
 {
-
-
     return false;
 }
 
 
 bool PCB_SELECTION_TOOL::selectCursor( bool aForceSelect, CLIENT_SELECTION_FILTER aClientFilter )
 {
-
     return false;
 }
 
 
 bool PCB_SELECTION_TOOL::selectMultiple()
 {
-
     return false;
 }
 
 
 int PCB_SELECTION_TOOL::CursorSelection( const TOOL_EVENT& aEvent )
 {
-
     return 0;
 }
 
 
 int PCB_SELECTION_TOOL::ClearSelection( const TOOL_EVENT& aEvent )
 {
-
     return 0;
 }
 
 
 int PCB_SELECTION_TOOL::SelectItems( const TOOL_EVENT& aEvent )
 {
-
     return 0;
 }
 
@@ -397,21 +383,17 @@ int PCB_SELECTION_TOOL::SelectItem( const TOOL_EVENT& aEvent )
 
 int PCB_SELECTION_TOOL::SelectAll( const TOOL_EVENT& aEvent )
 {
-
-
     return 0;
 }
 
 
 void PCB_SELECTION_TOOL::AddItemToSel( BOARD_ITEM* aItem, bool aQuietMode )
 {
-
 }
 
 
 int PCB_SELECTION_TOOL::UnselectItems( const TOOL_EVENT& aEvent )
 {
-
     return 0;
 }
 
@@ -424,7 +406,6 @@ int PCB_SELECTION_TOOL::UnselectItem( const TOOL_EVENT& aEvent )
 
 void PCB_SELECTION_TOOL::RemoveItemFromSel( BOARD_ITEM* aItem, bool aQuietMode )
 {
-
 }
 
 
@@ -438,11 +419,8 @@ void PCB_SELECTION_TOOL::UnbrightenItem( BOARD_ITEM* aItem )
 }
 
 
-
-
 int PCB_SELECTION_TOOL::expandConnection( const TOOL_EVENT& aEvent )
 {
-
     return 0;
 }
 
@@ -450,45 +428,38 @@ int PCB_SELECTION_TOOL::expandConnection( const TOOL_EVENT& aEvent )
 void PCB_SELECTION_TOOL::selectConnectedTracks( BOARD_CONNECTED_ITEM& aStartItem,
                                                 STOP_CONDITION aStopCondition )
 {
-
 }
 
 
 void PCB_SELECTION_TOOL::selectAllItemsOnNet( int aNetCode, bool aSelect )
 {
-
 }
 
 
 int PCB_SELECTION_TOOL::selectNet( const TOOL_EVENT& aEvent )
 {
-
     return 0;
 }
 
 
 void PCB_SELECTION_TOOL::selectAllItemsOnSheet( wxString& aSheetPath )
 {
-
 }
 
 
 void PCB_SELECTION_TOOL::zoomFitSelection()
 {
-
 }
 
 
 int PCB_SELECTION_TOOL::selectSheetContents( const TOOL_EVENT& aEvent )
 {
-
     return 0;
 }
 
 
 int PCB_SELECTION_TOOL::selectSameSheet( const TOOL_EVENT& aEvent )
 {
-
     return 0;
 }
 
@@ -503,48 +474,39 @@ int PCB_SELECTION_TOOL::selectSameSheet( const TOOL_EVENT& aEvent )
 static bool itemIsIncludedByFilter( const BOARD_ITEM& aItem, const BOARD& aBoard,
                                     const DIALOG_FILTER_SELECTION::OPTIONS& aFilterOptions )
 {
-
-
     return false;
 }
 
 
 int PCB_SELECTION_TOOL::filterSelection( const TOOL_EVENT& aEvent )
 {
-
     return 0;
 }
 
 
-void PCB_SELECTION_TOOL::FilterCollectedItems( GENERAL_COLLECTOR& aCollector )
+void PCB_SELECTION_TOOL::FilterCollectedItems( GENERAL_COLLECTOR& aCollector, bool aMultiSelect )
 {
-
 }
 
 
-bool PCB_SELECTION_TOOL::itemPassesFilter( BOARD_ITEM* aItem )
+bool PCB_SELECTION_TOOL::itemPassesFilter( BOARD_ITEM* aItem, bool aMultiSelect )
 {
-
-
     return true;
 }
 
 
 void PCB_SELECTION_TOOL::ClearSelection( bool aQuietMode )
 {
-
 }
 
 
 void PCB_SELECTION_TOOL::RebuildSelection()
 {
-
 }
 
 
 int PCB_SELECTION_TOOL::SelectionMenu( const TOOL_EVENT& aEvent )
 {
-
     return 0;
 }
 
@@ -563,49 +525,40 @@ bool PCB_SELECTION_TOOL::Selectable( const BOARD_ITEM* aItem, bool checkVisibili
 
 void PCB_SELECTION_TOOL::select( BOARD_ITEM* aItem )
 {
-
 }
 
 
 void PCB_SELECTION_TOOL::unselect( BOARD_ITEM* aItem )
 {
-
 }
 
 void PCB_SELECTION_TOOL::highlight( BOARD_ITEM* aItem, int aMode, PCB_SELECTION* aGroup )
 {
-
 }
 
 void PCB_SELECTION_TOOL::highlightInternal( BOARD_ITEM* aItem, int aMode, bool aUsingOverlay )
 {
-
 }
 
 
 void PCB_SELECTION_TOOL::unhighlight( BOARD_ITEM* aItem, int aMode, PCB_SELECTION* aGroup )
 {
-
 }
 
 
 void PCB_SELECTION_TOOL::unhighlightInternal( BOARD_ITEM* aItem, int aMode, bool aUsingOverlay )
 {
-
 }
 
 
 bool PCB_SELECTION_TOOL::selectionContains( const VECTOR2I& aPoint ) const
 {
-
-
     return false;
 }
 
 void PCB_SELECTION_TOOL::GuessSelectionCandidates( GENERAL_COLLECTOR& aCollector,
                                                    const VECTOR2I& aWhere ) const
 {
-
 }
 
 
@@ -613,20 +566,19 @@ void PCB_SELECTION_TOOL::GuessSelectionCandidates( GENERAL_COLLECTOR& aCollector
 
 int PCB_SELECTION_TOOL::updateSelection( const TOOL_EVENT& aEvent )
 {
-
     return 0;
 }
 
 
 int PCB_SELECTION_TOOL::UpdateMenu( const TOOL_EVENT& aEvent )
 {
-
     return 0;
 }
 
 
 void PCB_SELECTION_TOOL::setTransitions()
-{}
+{
+}
 
 void PCB_TOOL_BASE::doInteractiveItemPlacement( const std::string& aTool,
                                                 INTERACTIVE_PLACER_BASE* aPlacer,

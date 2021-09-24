@@ -959,7 +959,7 @@ int BOARD_INSPECTION_TOOL::HighlightItem( const TOOL_EVENT& aEvent )
         bool saved         = filter.lockedItems;
         filter.lockedItems = true;
 
-        selectionTool->FilterCollectedItems( collector );
+        selectionTool->FilterCollectedItems( collector, true );
 
         filter.lockedItems = saved;
 

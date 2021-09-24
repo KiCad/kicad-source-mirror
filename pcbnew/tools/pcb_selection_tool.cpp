@@ -688,7 +688,7 @@ bool PCB_SELECTION_TOOL::selectPoint( const VECTOR2I& aWhere, bool aOnDrag,
         aClientFilter( aWhere, collector, this );
 
     // Apply the stateful filter
-    FilterCollectedItems( collector );
+    FilterCollectedItems( collector, false );
 
     FilterCollectorForHierarchy( collector, false );
 
@@ -853,7 +853,7 @@ bool PCB_SELECTION_TOOL::selectMultiple()
             }
 
             // Apply the stateful filter
-            FilterCollectedItems( collector );
+            FilterCollectedItems( collector, true );
 
             FilterCollectorForHierarchy( collector, true );
 
@@ -978,7 +978,7 @@ int PCB_SELECTION_TOOL::SelectAll( const TOOL_EVENT& aEvent )
     {
         BOARD_ITEM* item = static_cast<BOARD_ITEM*>( item_pair.first );
 
-        if( !item || !Selectable( item ) || !itemPassesFilter( item ) )
+        if( !item || !Selectable( item ) || !itemPassesFilter( item, true ) )
             continue;
 
         collection.Append( item );
@@ -1248,7 +1248,7 @@ void PCB_SELECTION_TOOL::selectAllItemsOnNet( int aNetCode, bool aSelect )
 
     for( BOARD_CONNECTED_ITEM* item : connectivity->GetNetItems( aNetCode, types ) )
     {
-        if( itemPassesFilter( item ) )
+        if( itemPassesFilter( item, true ) )
             aSelect ? select( item ) : unselect( item );
     }
 }
@@ -1591,7 +1591,7 @@ int PCB_SELECTION_TOOL::filterSelection( const TOOL_EVENT& aEvent )
 }
 
 
-void PCB_SELECTION_TOOL::FilterCollectedItems( GENERAL_COLLECTOR& aCollector )
+void PCB_SELECTION_TOOL::FilterCollectedItems( GENERAL_COLLECTOR& aCollector, bool aMultiSelect )
 {
     if( aCollector.GetCount() == 0 )
         return;
@@ -1602,7 +1602,7 @@ void PCB_SELECTION_TOOL::FilterCollectedItems( GENERAL_COLLECTOR& aCollector )
     {
         BOARD_ITEM* item = static_cast<BOARD_ITEM*>( i );
 
-        if( !itemPassesFilter( item ) )
+        if( !itemPassesFilter( item, aMultiSelect ) )
             rejected.insert( item );
     }
 
@@ -1611,10 +1611,23 @@ void PCB_SELECTION_TOOL::FilterCollectedItems( GENERAL_COLLECTOR& aCollector )
 }
 
 
-bool PCB_SELECTION_TOOL::itemPassesFilter( BOARD_ITEM* aItem )
+bool PCB_SELECTION_TOOL::itemPassesFilter( BOARD_ITEM* aItem, bool aMultiSelect )
 {
-    if( aItem->IsLocked() && !m_filter.lockedItems && aItem->Type() != PCB_PAD_T )
-        return false;
+    if( !m_filter.lockedItems )
+    {
+        if( aItem->IsLocked() || ( aItem->GetParent() && aItem->GetParent()->IsLocked() ) )
+        {
+            if( aItem->Type() == PCB_PAD_T && !aMultiSelect )
+            {
+                // allow a single pad to be selected -- there are a lot of operations that
+                // require this so we allow this one inconsistency
+            }
+            else
+            {
+                return false;
+            }
+        }
+    }
 
     switch( aItem->Type() )
     {

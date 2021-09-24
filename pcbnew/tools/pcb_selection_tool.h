@@ -204,7 +204,7 @@ public:
     void FilterCollectorForHierarchy( GENERAL_COLLECTOR& aCollector, bool aMultiselect ) const;
 
     ///< Apply the SELECTION_FILTER_OPTIONS to a collection of items
-    void FilterCollectedItems( GENERAL_COLLECTOR& aCollector );
+    void FilterCollectedItems( GENERAL_COLLECTOR& aCollector, bool aMultiSelect );
 
 private:
 
@@ -324,7 +324,7 @@ private:
     int filterSelection( const TOOL_EVENT& aEvent );
 
     ///< Return true if the given item passes the current SELECTION_FILTER_OPTIONS.
-    bool itemPassesFilter( BOARD_ITEM* aItem );
+    bool itemPassesFilter( BOARD_ITEM* aItem, bool aMultiSelect );
 
     /**
      * Take necessary action mark an item as unselected.
