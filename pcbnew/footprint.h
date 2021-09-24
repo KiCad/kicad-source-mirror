@@ -245,6 +245,13 @@ public:
         return GetKeywords().StartsWith( wxT( "net tie" ) );
     }
 
+    /**
+     * Returns the most likely attribute based on pads
+     * Either FP_THROUGH_HOLE/FP_SMD/OTHER(0)
+     * @return 0/FP_SMD/FP_THROUGH_HOLE
+     */
+    int GetLikelyAttribute() const;
+
     void Move( const wxPoint& aMoveVector ) override;
 
     void Rotate( const wxPoint& aRotCentre, double aAngle ) override;
@@ -530,6 +537,12 @@ public:
      * @return the next available pad number
      */
     wxString GetNextPadNumber( const wxString& aLastPadName ) const;
+
+    /**
+     * Get the type of footprint
+     * @return "SMD"/"Through hole"/"Other" based on attributes
+     */
+    wxString GetTypeName() const;
 
     double GetArea( int aPadding = 0 ) const;
 

@@ -650,6 +650,48 @@ double FOOTPRINT::GetArea( int aPadding ) const
 }
 
 
+int FOOTPRINT::GetLikelyAttribute() const
+{
+    int smd_count = 0;
+    int tht_count = 0;
+
+    for( PAD* pad : m_pads )
+    {
+        switch( pad->GetAttribute() )
+        {
+        case PAD_ATTRIB::PTH:
+            tht_count++;
+            break;
+        case PAD_ATTRIB::SMD:
+            smd_count++;
+            break;
+        default:
+            break;
+        }
+    }
+
+    if( tht_count > 0 )
+        return FP_THROUGH_HOLE;
+
+    if( smd_count > 0 )
+        return FP_SMD;
+
+    return 0;
+}
+
+
+wxString FOOTPRINT::GetTypeName() const
+{
+    if( ( m_attributes & FP_SMD ) == FP_SMD )
+        return _( "SMD" );
+
+    if( ( m_attributes & FP_THROUGH_HOLE ) == FP_THROUGH_HOLE )
+        return _( "Through hole" );
+
+    return _( "Other" );
+}
+
+
 EDA_RECT FOOTPRINT::GetFpPadsLocalBbox() const
 {
     EDA_RECT area;

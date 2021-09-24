@@ -784,6 +784,38 @@ bool FOOTPRINT_EDIT_FRAME::SaveFootprint( FOOTPRINT* aFootprint )
     wxString libraryName = aFootprint->GetFPID().GetLibNickname();
     wxString footprintName = aFootprint->GetFPID().GetLibItemName();
     bool     nameChanged = m_footprintNameWhenLoaded != footprintName;
+    int      likelyAttr = aFootprint->GetLikelyAttribute();
+    int      setAttr = ( aFootprint->GetAttributes() & ( FP_SMD | FP_THROUGH_HOLE ) );
+
+    // This is only valid if the footprint doesn't have FP_SMD and FP_THROUGH_HOLE set
+    // Which is, unfortunately, possible in theory but not in the UI (I think)
+    if( likelyAttr != setAttr )
+    {
+        wxString msg;
+
+        if( likelyAttr == FP_THROUGH_HOLE )
+        {
+            msg.Printf( _( "Your footprint has plated through hole pads but "
+                    "its type is set to \"%s\"" ), aFootprint->GetTypeName() );
+        }
+        else if( likelyAttr == FP_SMD )
+        {
+            msg.Printf( _( "Your footprint has SMD pads but "
+                    "its type is set to \"%s\"" ), aFootprint->GetTypeName() );
+        }
+        else
+        {
+            msg.Printf( _( "Your footprint has no SMD or plated through hole pads but "
+                            "its type is set to \"%s\"" ), aFootprint->GetTypeName() );
+        }
+
+        KIDIALOG errorDlg( this, msg, _( "Confirmation" ), wxOK | wxCANCEL | wxICON_WARNING );
+        errorDlg.SetOKLabel( _( "Continue" ) );
+        errorDlg.DoNotShowCheckbox( __FILE__, __LINE__ );
+
+        if( errorDlg.ShowModal() == wxID_CANCEL )
+            return false;
+    }
 
     if( aFootprint->GetLink() != niluuid )
     {
