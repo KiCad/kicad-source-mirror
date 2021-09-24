@@ -48,6 +48,14 @@ public:
 
     PNS::PNS_MODE GetRouterMode();
 
+    /**
+     * @brief Returns whether routing is currently active.
+     *
+     * @return True if actively routing, false if not routing or
+     *         tool is activated and idle.
+     */
+    bool RoutingInProgress();
+
     void setTransitions() override;
 
     // A filter for narrowing a collection representing a simple corner

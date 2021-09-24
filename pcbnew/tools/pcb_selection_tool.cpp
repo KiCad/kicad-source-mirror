@@ -258,7 +258,7 @@ int PCB_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
         ROUTER_TOOL* router = m_toolMgr->GetTool<ROUTER_TOOL>();
 
         // If the router tool is active, don't override
-        if( router && router->IsToolActive() )
+        if( router && router->IsToolActive() && router->RoutingInProgress() )
         {
             evt->SetPassEvent();
         }

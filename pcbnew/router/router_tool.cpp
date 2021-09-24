@@ -1243,6 +1243,12 @@ PNS::PNS_MODE ROUTER_TOOL::GetRouterMode()
 }
 
 
+bool ROUTER_TOOL::RoutingInProgress()
+{
+    return m_router->RoutingInProgress();
+}
+
+
 void ROUTER_TOOL::breakTrack()
 {
     if( m_startItem && m_startItem->OfKind( PNS::ITEM::SEGMENT_T ) )
@@ -1293,7 +1299,8 @@ int ROUTER_TOOL::MainLoop( const TOOL_EVENT& aEvent )
     // Main loop: keep receiving events
     while( TOOL_EVENT* evt = Wait() )
     {
-        setCursor();
+        if( !evt->IsDrag() )
+            setCursor();
 
         if( evt->IsCancelInteractive() )
         {
