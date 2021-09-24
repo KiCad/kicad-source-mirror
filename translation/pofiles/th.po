@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-01 11:31-0700\n"
-"PO-Revision-Date: 2021-09-24 08:52+0000\n"
+"PO-Revision-Date: 2021-09-24 19:44+0000\n"
 "Last-Translator: boonchai k. <kicadthai@gmail.com>\n"
 "Language-Team: Thai <https://hosted.weblate.org/projects/kicad/master-source/"
 "th/>\n"
@@ -31052,40 +31052,38 @@ msgstr ""
 "การเติมตาข่ายที่นําเข้า จะเป็นขีดไขว้เท่านั้น"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3439
-#, c-format, fuzzy
+#, c-format
 msgid ""
 "The CADSTAR Hatching code '%s' has different line widths for each hatch. "
 "KiCad only supports one width for the haching. The imported hatching uses "
 "the width defined in the first hatch definition, i.e. %.2f mm."
 msgstr ""
-"รหัสการฟักไข่ CADSTAR '%s' มีความกว้างของเส้นที่แตกต่างกันสําหรับแต่ละฟัก "
-"KiCad รองรับความกว้างเพียงหนึ่งความกว้างสําหรับการแฮช "
-"การฟักไข่ที่นําเข้าจะใช้ความกว้างที่กําหนดไว้ในคําจํากัดความฟักแรกเช่น %.2f "
-"มม."
+"รหัสการแรเงาของ CADSTAR '%s' มีความกว้างของเส้นที่แตกต่างกันสําหรับแต่"
+"ละการแรเงา KiCad รองรับความกว้างเพียงหนึ่งขนาด "
+"การแรเงาที่นําเข้าจะใช้ความกว้างที่กําหนดไว้ในคําจํากัดแรกเช่น %.2f มม."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3451
-#, c-format, fuzzy
+#, c-format
 msgid ""
 "The CADSTAR Hatching code '%s' has different step sizes for each hatch. "
 "KiCad only supports one step size for the haching. The imported hatching "
 "uses the step size defined in the first hatching definition, i.e. %.2f mm."
 msgstr ""
-"รหัสการฟักไข่ CADSTAR '%s' มีขนาดขั้นตอนที่แตกต่างกันสําหรับแต่ละฟัก KiCad "
-"รองรับเพียงขนาดขั้นตอนเดียวสําหรับการแฮช "
-"การฟักไข่ที่นําเข้าใช้ขนาดขั้นตอนที่กําหนดไว้ในคําจํากัดความการฟักครั้งแรกเช่"
-"น %.2f มม."
+"รหัสการแรเงาของ CADSTAR '%s' มีขั้นการเลื่อนที่แตกต่างของแต่ละการแรเงา KiCad "
+"รองรับการเลื่อนขั้นการแรเงาขนาดเดียว "
+"ที่นําเข้าจะใช้ขั้นการเลื่อนตามที่กําหนดไว้ในคําจํากัดแรกเช่น %.2f มม."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3464
-#, c-format, fuzzy
+#, c-format
 msgid ""
 "The hatches in CADSTAR Hatching code '%s' have an angle  difference of %.1f "
 "degrees. KiCad only supports hatching 90 degrees apart.  The imported "
 "hatching has two hatches 90 degrees apart, oriented %.1f degrees from "
 "horizontal."
 msgstr ""
-"การฟักไข่ในรหัสการฟักไข่ CADSTAR '%s' มีมุมที่แตกต่างกันขององศา %.1f KiCad "
-"รองรับการฟักไข่ห่างกัน 90 องศาเท่านั้น  การฟักไข่ที่นําเข้ามีสองฟักห่างกัน "
-"90 องศามุ่งเน้น %.1f องศาจากแนวนอน"
+"รหัสการแรเงาของ CADSTAR '%s' มีขนาดมุม แตกต่างกัน %.1f องศา KiCad "
+"รองรับการแรเงาที่มุม 90 องศาเท่านัั้น การแรเงาที่นําเข้าจะใช้มุม 90 องศา "
+"จัดเรียง %.1f องศาจากแนวนอน"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3537
 #, c-format
@@ -31097,27 +31095,25 @@ msgstr ""
 "มิลลิเมตรจะถูกนําไปใช้แทน"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3752
-#, fuzzy
 msgid ""
 "The CADSTAR design contains nets with a 'Net Class' assigned. KiCad does not "
 "have an equivalent to CADSTAR's Net Class so these elements were not "
 "imported. Note: KiCad's version of 'Net Class' is closer to CADSTAR's 'Net "
 "Route Code' (which has been imported for all nets)."
 msgstr ""
-"การออกแบบ CADSTAR ประกอบด้วยอวนที่กำหนด 'Net Class' KiCad ไม่มี Net Class "
-"ที่เทียบเท่ากับ CADSTAR ดังนั้นจึงไม่ได้นำเข้าองค์ประกอบเหล่านี้ หมายเหตุ: "
-"'Net Class' เวอร์ชันของ KiCad นั้นใกล้เคียงกับ 'Net Route Code' ของ CADSTAR "
-"มากกว่า (ซึ่งนำเข้ามาสำหรับเน็ตทั้งหมดแล้ว)"
+"การออกแบบ CADSTAR ประกอบด้วยเน็ทที่กำหนด 'เน็ตคลาส' KiCad "
+"ไม่มีเน็ตคลาสที่เทียบเท่ากับ CADSTAR ดังนั้นจึงไม่ได้นำเข้าองค์ประกอบเหล่านี้"
+" หมายเหตุ: 'เน็ตคลาส' รุ่นของ KiCad นั้นใกล้เคียงกับ 'Net Route Code' ของ "
+"CADSTAR มากกว่า (ซึ่งนำเข้ามาสำหรับเน็ตทั้งหมดแล้ว)"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3762
-#, fuzzy
 msgid ""
 "The CADSTAR design contains nets with a 'Spacing Class' assigned. KiCad does "
 "not have an equivalent to CADSTAR's Spacing Class so these elements were not "
 "imported. Please review the design rules as copper pours will affected by "
 "this."
 msgstr ""
-"การออกแบบ CADSTAR ประกอบด้วยอวนที่ได้รับมอบหมาย 'คลาสระยะห่าง' KiCad "
+"การออกแบบ CADSTAR ประกอบด้วยเน็ทที่ได้รับมอบหมาย 'คลาสระยะห่าง' KiCad "
 "ไม่มีคลาสระยะห่างของ CADSTAR ดังนั้นจึงไม่มีการนําเข้าองค์ประกอบเหล่านี้ "
 "โปรดตรวจสอบกฎการออกแบบเนื่องจากทองแดงจะได้รับผลกระทบจากสิ่งนี้"
 
@@ -35190,14 +35186,13 @@ msgstr "เครื่องมือแก้ไขวงจรพิมพ์
 
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:13
 msgid "pcbnew"
-msgstr "pcbnew"
+msgstr "พีซีบีนิว"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:13
 msgid "An EDA suite for schematic and circuit board design"
 msgstr "ชุดเครื่องมือ EDA สำหรับการออกแบบวงจรและแผ่นวงจรพิมพ์"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:50
-#, fuzzy
 msgid ""
 "KiCad is a free and open-source electronics design automation (EDA) suite. "
 "It features schematic capture, integrated circuit simulation, printed "
@@ -35207,10 +35202,11 @@ msgid ""
 "system requirements and runs on Linux, Windows, and macOS."
 msgstr ""
 "KiCad เป็นชุดระบบอัตโนมัติการออกแบบอิเล็กทรอนิกส์ (EDA) ฟรีและโอเพ่นซอร์ส "
-"มันมีแผนผังจับภาพการจําลองวงจรรวมเค้าโครงแผงวงจรพิมพ์ (PCB) การแสดงผล 3 "
-"มิติและการพล็อต / การส่งออกข้อมูลไปยังรูปแบบต่างๆ นอกจากนี้ KiCad "
-"ยังมีไลบรารีส่วนประกอบคุณภาพสูงที่มีสัญลักษณ์รอยเท้าและโมเดล 3 มิติหลายพันรุ่"
-"น KiCad มีความต้องการของระบบน้อยที่สุดและทํางานบน Linux, Windows และ macOS"
+"มีการใส่วงจร, การจําลองวงจร, การออกแบบวงจรพิมพ์ (PCB), การแสดงผล 3 "
+"มิติและการพล็อต/ส่งออกข้อมูลไปยังรูปแบบต่างๆ นอกจากนี้ KiCad "
+"ยังมีไลบรารีอุปกรณ์คุณภาพสูงที่มีสัญลักษณ์, ฟุ้ทพรินท์และโมเดล 3 "
+"มิติหลายพันชนิด KiCad มีความต้องการระบบน้อยทและทํางานบน Linux, Windows และ "
+"macOS"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:57
 msgid "KiCad Main Window"
