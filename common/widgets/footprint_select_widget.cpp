@@ -36,7 +36,6 @@ FOOTPRINT_SELECT_WIDGET::FOOTPRINT_SELECT_WIDGET( EDA_DRAW_FRAME* aFrame, wxWind
                                                   FOOTPRINT_LIST* aFpList, bool aUpdate,
                                                   int aMaxItems ) :
           wxPanel( aParent ),
-          m_kiway( nullptr ),
           m_update( aUpdate ),
           m_max_items( aMaxItems ),
           m_fp_list( aFpList )
@@ -56,8 +55,6 @@ FOOTPRINT_SELECT_WIDGET::FOOTPRINT_SELECT_WIDGET( EDA_DRAW_FRAME* aFrame, wxWind
 
 void FOOTPRINT_SELECT_WIDGET::Load( KIWAY& aKiway, PROJECT& aProject )
 {
-    m_kiway = &aKiway;
-
     try
     {
         m_fp_list = FOOTPRINT_LIST::GetInstance( aKiway );

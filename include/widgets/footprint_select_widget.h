@@ -123,7 +123,6 @@ public:
     virtual bool Enable( bool aEnable = true ) override;
 
 private:
-    KIWAY*                   m_kiway;
     FOOTPRINT_CHOICE*        m_fp_sel_ctrl;
     wxSizer*                 m_sizer;
 
