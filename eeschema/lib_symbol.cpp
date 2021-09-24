@@ -865,11 +865,15 @@ const EDA_RECT LIB_SYMBOL::GetBodyBoundingBox( int aUnit, int aConvert, bool aIn
 
         if( item.Type() == LIB_PIN_T )
         {
+            const LIB_PIN& pin = static_cast<const LIB_PIN&>( item );
+
+            // Note: the roots of the pins are always inlcuded for symbols that don't have a
+            // well-defined body.
+
             if( aIncludePins )
-            {
-                const LIB_PIN& pin = static_cast<const LIB_PIN&>( item );
                 bbox.Merge( pin.GetBoundingBox( false, true ) );
-            }
+            else
+                bbox.Merge( pin.GetPinRoot() );
         }
         else
         {

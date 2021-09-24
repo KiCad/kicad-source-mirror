@@ -210,6 +210,8 @@ public:
     wxPoint GetPosition() const override { return m_position; }
     void SetPosition( const wxPoint& aPos ) override { m_position = aPos; }
 
+    wxPoint GetPinRoot() const;
+
     void MirrorHorizontal( const wxPoint& aCenter ) override;
     void MirrorVertical( const wxPoint& aCenter ) override;
     void Rotate( const wxPoint& aCenter, bool aRotateCCW = true ) override;
