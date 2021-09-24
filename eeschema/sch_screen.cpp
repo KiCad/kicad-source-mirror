@@ -982,15 +982,18 @@ void SCH_SCREEN::TestDanglingEnds( const SCH_SHEET_PATH* aPath,
 
     for( SCH_ITEM* item : Items() )
     {
-        endPoints.clear();
-
-        for( SCH_ITEM* overlapping : Items().Overlapping( item->GetBoundingBox() ) )
-            overlapping->GetEndPoints( endPoints );
-
-        if( item->UpdateDanglingState( endPoints, aPath ) )
+        if( item->IsConnectable() )
         {
-            if( aChangedHandler )
-                (*aChangedHandler)( item );
+            endPoints.clear();
+
+            for( SCH_ITEM* overlapping : Items().Overlapping( item->GetBoundingBox() ) )
+                overlapping->GetEndPoints( endPoints );
+
+            if( item->UpdateDanglingState( endPoints, aPath ) )
+            {
+                if( aChangedHandler )
+                    (*aChangedHandler)( item );
+            }
         }
     }
 }

@@ -590,36 +590,41 @@ void SCH_LINE::GetEndPoints( std::vector <DANGLING_END_ITEM>& aItemList )
 bool SCH_LINE::UpdateDanglingState( std::vector<DANGLING_END_ITEM>& aItemList,
                                     const SCH_SHEET_PATH* aPath )
 {
-    bool previousStartState = m_startIsDangling;
-    bool previousEndState = m_endIsDangling;
-
-    m_startIsDangling = m_endIsDangling = true;
-
-    for( DANGLING_END_ITEM item : aItemList )
+    if( IsConnectable() )
     {
-        if( item.GetItem() == this )
-            continue;
+        bool previousStartState = m_startIsDangling;
+        bool previousEndState = m_endIsDangling;
 
-        if( ( IsWire() && item.GetType() != BUS_END && item.GetType() != BUS_ENTRY_END )
-            || ( IsBus() && item.GetType() != WIRE_END && item.GetType() != PIN_END ) )
+        m_startIsDangling = m_endIsDangling = true;
+
+        for( DANGLING_END_ITEM item : aItemList )
         {
-            if( m_start == item.GetPosition() )
-                m_startIsDangling = false;
+            if( item.GetItem() == this )
+                continue;
 
-            if( m_end == item.GetPosition() )
-                m_endIsDangling = false;
+            if( ( IsWire() && item.GetType() != BUS_END && item.GetType() != BUS_ENTRY_END )
+                || ( IsBus() && item.GetType() != WIRE_END && item.GetType() != PIN_END ) )
+            {
+                if( m_start == item.GetPosition() )
+                    m_startIsDangling = false;
 
-            if( !m_startIsDangling && !m_endIsDangling )
-                break;
+                if( m_end == item.GetPosition() )
+                    m_endIsDangling = false;
+
+                if( !m_startIsDangling && !m_endIsDangling )
+                    break;
+            }
         }
+
+        // We only use the bus dangling state for automatic line starting, so we don't care if it
+        // has changed or not (and returning true will result in extra work)
+        if( IsBus() )
+            return false;
+
+        return previousStartState != m_startIsDangling || previousEndState != m_endIsDangling;
     }
 
-    // We only use the bus dangling state for automatic line starting, so we don't care if it
-    // has changed or not (and returning true will result in extra work)
-    if( IsBus() )
-        return false;
-    else
-        return previousStartState != m_startIsDangling || previousEndState != m_endIsDangling;
+    return false;
 }
 
 
