@@ -1799,8 +1799,11 @@ void PCB_IO::format( const FP_TEXT* aText, int aNestLevel ) const
     case FP_TEXT::TEXT_is_DIVERS: type = "user";
     }
 
-    m_out->Print( aNestLevel, "(fp_text %s %s (at %s",
+    std::string locked = aText->IsLocked() ? " locked" : "";
+
+    m_out->Print( aNestLevel, "(fp_text %s%s %s (at %s",
                   type.c_str(),
+                  locked.c_str(),
                   m_out->Quotew( aText->GetText() ).c_str(),
                   FormatInternalUnits( aText->GetPos0() ).c_str() );
 

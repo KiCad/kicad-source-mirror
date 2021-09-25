@@ -3533,11 +3533,20 @@ FP_TEXT* PCB_PARSER::parseFP_TEXT()
         break;          // Default type is user text.
 
     default:
-        THROW_IO_ERROR(
-                wxString::Format( _( "Cannot handle footprint text type %s" ), FromUTF8() ) );
+        THROW_IO_ERROR( wxString::Format( _( "Cannot handle footprint text type %s" ),
+                                          FromUTF8() ) );
     }
 
-    NeedSYMBOLorNUMBER();
+    token = NextTok();
+
+    if( token == T_locked )
+    {
+        text->SetLocked( true );
+        token = NextTok();
+    }
+
+    if( !IsSymbol( token ) && (int) token != DSN_NUMBER )
+        Expecting( "text value" );
 
     wxString value = FromUTF8();
     value.Replace( "%V", "${VALUE}" );

@@ -100,7 +100,8 @@ class PCB_TEXT;
 //#define SEXPR_BOARD_FILE_VERSION    20210606  // Change overbar syntax from `~...~` to `~{...}`.
 //#define SEXPR_BOARD_FILE_VERSION    20210623  // Add support for reading/writing arcs in polygons
 //#define SEXPR_BOARD_FILE_VERSION    20210722  // Reading/writing group locked flags
-#define SEXPR_BOARD_FILE_VERSION      20210824  // Opacity in 3D colors
+//#define SEXPR_BOARD_FILE_VERSION    20210824  // Opacity in 3D colors
+#define SEXPR_BOARD_FILE_VERSION      20210925  // Locked flag for fp_text
 
 #define BOARD_FILE_HOST_VERSION       20200825  ///< Earlier files than this include the host tag
 
