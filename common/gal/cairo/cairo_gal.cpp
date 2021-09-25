@@ -140,6 +140,8 @@ const double CAIRO_GAL_BASE::angle_xform( const double aAngle )
 
 void CAIRO_GAL_BASE::arc_angles_xform_and_normalize( double& aStartAngle, double& aEndAngle )
 {
+    // 360 deg arcs have a specific calculation.
+    bool is_360deg_arc = std::abs( aEndAngle - aStartAngle ) >= 2 * M_PI;
     double startAngle = aStartAngle;
     double endAngle = aEndAngle;
 
@@ -163,7 +165,7 @@ void CAIRO_GAL_BASE::arc_angles_xform_and_normalize( double& aStartAngle, double
     // So, if this is the case, force the aEndAngle value to draw a circle.
     aStartAngle = angle_xform( startAngle );
 
-    if( std::abs( aEndAngle - aStartAngle ) >= 2 * M_PI ) // arc is a full circle
+    if( is_360deg_arc ) // arc is a full circle
         aEndAngle = aStartAngle + 2 * M_PI;
     else
         aEndAngle = angle_xform( endAngle );
