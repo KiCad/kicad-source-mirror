@@ -301,8 +301,8 @@ public:
             std::sort( references.begin(), references.end(),
                     []( const SCH_REFERENCE& l, const SCH_REFERENCE& r ) -> bool
                     {
-                wxString l_ref( l.GetRef() << l.GetRefNumber() );
-                wxString r_ref( r.GetRef() << r.GetRefNumber() );
+                        wxString l_ref( l.GetRef() << l.GetRefNumber() );
+                        wxString r_ref( r.GetRef() << r.GetRefNumber() );
                         return StrNumCmp( l_ref, r_ref, true ) < 0;
                     } );
 
