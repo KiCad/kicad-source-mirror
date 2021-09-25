@@ -652,15 +652,24 @@ int SHAPE_LINE_CHAIN::Split( const VECTOR2I& aP )
 
     if( ii >= 0 )
     {
-        // Are we splitting at the beginning of an arc?  If so, let's split right before so that
-        // the shape is preserved
+        // Don't create duplicate points
+        if( GetPoint( ii ) == aP )
+            return ii;
+
+        size_t newIndex = static_cast<size_t>( ii ) + 1;
+
         if( IsArcSegment( ii ) )
-            ii--;
+        {
+            m_points.insert( m_points.begin() + newIndex, aP );
+            m_shapes.insert( m_shapes.begin() + newIndex, { ArcIndex( ii ), SHAPE_IS_PT } );
+            splitArc( newIndex, true ); // Make the inserted point a shared point
+        }
+        else
+        {
+            Insert( newIndex, aP );
+        }
 
-        m_points.insert( m_points.begin() + ( ii + 1 ), aP );
-        m_shapes.insert( m_shapes.begin() + ( ii + 1 ), SHAPES_ARE_PT );
-
-        return ii + 1;
+        return newIndex;
     }
 
     return -1;

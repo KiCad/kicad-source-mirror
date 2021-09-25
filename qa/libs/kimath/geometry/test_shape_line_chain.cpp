@@ -108,6 +108,80 @@ BOOST_AUTO_TEST_CASE( ArcToPolylineLargeCoords )
 }
 
 
+// Test SHAPE_LINE_CHAIN::Split()
+BOOST_AUTO_TEST_CASE( Split )
+{
+    SEG       seg1( VECTOR2I( 0, 100000 ), VECTOR2I( 50000, 0 ) );
+    SEG       seg2( VECTOR2I( 200000, 0 ), VECTOR2I( 300000, 0 ) );
+    SHAPE_ARC arc( VECTOR2I( 200000, 0 ), VECTOR2I( 300000, 0 ), 180.0 );
+
+    // Start a chain with 2 points (seg1)
+    SHAPE_LINE_CHAIN chain( { seg1.A, seg1.B } );
+    BOOST_CHECK_EQUAL( chain.PointCount(), 2 );
+    // Add first arc
+    chain.Append( arc );
+    BOOST_CHECK_EQUAL( chain.PointCount(), 9 );
+    // Add two points (seg2)
+    chain.Append( seg2.A );
+    chain.Append( seg2.B );
+    BOOST_CHECK_EQUAL( chain.PointCount(), 11 );
+    BOOST_CHECK( GEOM_TEST::IsOutlineValid( chain ) );
+
+    BOOST_TEST_CONTEXT( "Case 1: Point not in the chain" )
+    {
+        SHAPE_LINE_CHAIN chainCopy = chain;
+        BOOST_CHECK_EQUAL( chainCopy.Split( VECTOR2I( 400000, 0 ) ), -1 );
+        BOOST_CHECK_EQUAL( chainCopy.PointCount(), chain.PointCount() );
+        BOOST_CHECK_EQUAL( chainCopy.ArcCount(), chain.ArcCount() );
+    }
+
+    BOOST_TEST_CONTEXT( "Case 2: Point close to start of a segment" )
+    {
+        SHAPE_LINE_CHAIN chainCopy = chain;
+        VECTOR2I         splitPoint = seg1.A + VECTOR2I( 5, -10 );
+        BOOST_CHECK_EQUAL( chainCopy.Split( splitPoint ), 1 );
+        BOOST_CHECK( GEOM_TEST::IsOutlineValid( chainCopy ) );
+        BOOST_CHECK_EQUAL( chainCopy.GetPoint( 1 ), splitPoint );
+        BOOST_CHECK_EQUAL( chainCopy.PointCount(), chain.PointCount() + 1 ); // new point added
+        BOOST_CHECK_EQUAL( chainCopy.ArcCount(), chain.ArcCount() );
+    }
+
+    BOOST_TEST_CONTEXT( "Case 3: Point exactly on the segment" )
+    {
+        SHAPE_LINE_CHAIN chainCopy = chain;
+        VECTOR2I         splitPoint = seg1.B;
+        BOOST_CHECK_EQUAL( chainCopy.Split( splitPoint ), 1 );
+        BOOST_CHECK( GEOM_TEST::IsOutlineValid( chainCopy ) );
+        BOOST_CHECK_EQUAL( chainCopy.GetPoint( 1 ), splitPoint );
+        BOOST_CHECK_EQUAL( chainCopy.PointCount(), chain.PointCount() );
+        BOOST_CHECK_EQUAL( chainCopy.ArcCount(), chain.ArcCount() );
+    }
+
+    BOOST_TEST_CONTEXT( "Case 4: Point at start of arc" )
+    {
+        SHAPE_LINE_CHAIN chainCopy = chain;
+        VECTOR2I         splitPoint = arc.GetP0();
+        BOOST_CHECK_EQUAL( chainCopy.Split( splitPoint ), 2 );
+        BOOST_CHECK( GEOM_TEST::IsOutlineValid( chainCopy ) );
+        BOOST_CHECK_EQUAL( chainCopy.GetPoint( 2 ), splitPoint );
+        BOOST_CHECK_EQUAL( chainCopy.PointCount(), chain.PointCount() );
+        BOOST_CHECK_EQUAL( chainCopy.ArcCount(), chain.ArcCount() );
+    }
+
+    BOOST_TEST_CONTEXT( "Case 5: Point close to start of arc" )
+    {
+        SHAPE_LINE_CHAIN chainCopy = chain;
+        VECTOR2I         splitPoint = arc.GetP0() + VECTOR2I( -10, 130 );
+        BOOST_CHECK_EQUAL( chainCopy.Split( splitPoint ), 3 );
+        BOOST_CHECK( GEOM_TEST::IsOutlineValid( chainCopy ) );
+        BOOST_CHECK_EQUAL( chainCopy.GetPoint( 3 ), splitPoint );
+        BOOST_CHECK_EQUAL( chainCopy.IsSharedPt( 3 ), true ); // must be a shared point
+        BOOST_CHECK_EQUAL( chainCopy.PointCount(), chain.PointCount() + 1 ); // new point added
+        BOOST_CHECK_EQUAL( chainCopy.ArcCount(), chain.ArcCount() + 1 ); // new arc should have been created
+    }
+}
+
+
 // Test SHAPE_LINE_CHAIN::Slice()
 BOOST_AUTO_TEST_CASE( Slice )
 {
