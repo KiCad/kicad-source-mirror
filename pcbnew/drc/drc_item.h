@@ -67,6 +67,8 @@ enum PCB_DRC_CODE {
     DRCE_EXTRA_FOOTPRINT,                // netlist item not found for footprint
     DRCE_NET_CONFLICT,                   // pad net doesn't match netlist
 
+    DRCE_FOOTPRINT_TYPE_MISMATCH,        // footprint attribute does not match actual pads
+
     DRCE_UNRESOLVED_VARIABLE,
     DRCE_SILK_MASK_CLEARANCE,            // silkscreen clipped by mask (potentially leaving it
                                          //   over pads, exposed copper, etc.)
@@ -169,6 +171,7 @@ private:
     static DRC_ITEM tooManyVias;
     static DRC_ITEM diffPairGapOutOfRange;
     static DRC_ITEM diffPairUncoupledLengthTooLong;
+    static DRC_ITEM footprintTypeMismatch;
 
 private:
     DRC_RULE*          m_violatingRule = nullptr;

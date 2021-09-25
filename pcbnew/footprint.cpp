@@ -2072,6 +2072,38 @@ void FOOTPRINT::BuildPolyCourtyards( OUTLINE_ERROR_HANDLER* aErrorHandler )
 }
 
 
+void FOOTPRINT::CheckFootprintAttributes( const std::function<void( const wxString& msg )>* aErrorHandler )
+{
+
+    int      likelyAttr = GetLikelyAttribute();
+    int      setAttr = ( GetAttributes() & ( FP_SMD | FP_THROUGH_HOLE ) );
+
+    // This is only valid if the footprint doesn't have FP_SMD and FP_THROUGH_HOLE set
+    // Which is, unfortunately, possible in theory but not in the UI (I think)
+    if( aErrorHandler && likelyAttr != setAttr )
+    {
+        wxString msg;
+
+        if( likelyAttr == FP_THROUGH_HOLE )
+        {
+            msg.Printf( _( "Expected \"Through hole\" type but set to \"%s\"" ), GetTypeName() );
+        }
+        else if( likelyAttr == FP_SMD )
+        {
+            msg.Printf( _( "Expected \"SMD\" type but set to \"%s\"" ), GetTypeName() );
+        }
+        else
+        {
+            msg.Printf( _( "Expected \"Other\" type but set to \"%s\"" ), GetTypeName() );
+        }
+
+        msg = "(" + msg + ")";
+
+        (*aErrorHandler)( msg );
+    }
+}
+
+
 void FOOTPRINT::SwapData( BOARD_ITEM* aImage )
 {
     wxASSERT( aImage->Type() == PCB_FOOTPRINT_T );

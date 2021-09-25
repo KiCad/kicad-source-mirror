@@ -51,6 +51,7 @@ DIALOG_FOOTPRINT_CHECKER::DIALOG_FOOTPRINT_CHECKER( FOOTPRINT_EDIT_FRAME* aParen
     m_sdbSizerCancel->SetLabel( _( "Close" ) );
 
     m_sdbSizerOK->SetDefault();
+    m_sdbSizer->Layout();
 
     syncCheckboxes();
 
@@ -66,8 +67,6 @@ DIALOG_FOOTPRINT_CHECKER::~DIALOG_FOOTPRINT_CHECKER()
 
 bool DIALOG_FOOTPRINT_CHECKER::TransferDataToWindow()
 {
-    runChecks();
-
     return true;
 }
 
@@ -120,6 +119,21 @@ void DIALOG_FOOTPRINT_CHECKER::runChecks()
 
     footprint->BuildPolyCourtyards( &errorHandler );
 
+
+    const std::function<void( const wxString& msg )> typeWarning =
+            [&]( const wxString& aMsg )
+            {
+                std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_FOOTPRINT_TYPE_MISMATCH );
+
+                drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + aMsg );
+                drcItem->SetItems( footprint );
+
+                PCB_MARKER* marker = new PCB_MARKER( drcItem, wxPoint( 0, 0 ) );
+                board->Add( marker );
+                m_frame->GetCanvas()->GetView()->Add( marker );
+            };
+
+    footprint->CheckFootprintAttributes( &typeWarning );
     m_checksRun = true;
 
     SetMarkersProvider( new BOARD_DRC_ITEMS_PROVIDER( m_frame->GetBoard() ) );
