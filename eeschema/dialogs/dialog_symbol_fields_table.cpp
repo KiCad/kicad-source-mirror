@@ -301,8 +301,8 @@ public:
             std::sort( references.begin(), references.end(),
                     []( const SCH_REFERENCE& l, const SCH_REFERENCE& r ) -> bool
                     {
-                        wxString l_ref( l.GetFullRef() );
-                        wxString r_ref( r.GetFullRef() );
+                wxString l_ref( l.GetRef() << l.GetRefNumber() );
+                wxString r_ref( r.GetRef() << r.GetRefNumber() );
                         return StrNumCmp( l_ref, r_ref, true ) < 0;
                     } );
 
@@ -371,8 +371,8 @@ public:
 
         if( lhs == rhs || sortCol == REFERENCE_FIELD )
         {
-            wxString lhRef = lhGroup.m_Refs[ 0 ].GetFullRef();
-            wxString rhRef = rhGroup.m_Refs[ 0 ].GetFullRef();
+            wxString lhRef = lhGroup.m_Refs[ 0 ].GetRef() + lhGroup.m_Refs[ 0 ].GetRefNumber();
+            wxString rhRef = rhGroup.m_Refs[ 0 ].GetRef() + rhGroup.m_Refs[ 0 ].GetRefNumber();
             return local_cmp( StrNumCmp( lhRef, rhRef, true ), 0 );
         }
         else
