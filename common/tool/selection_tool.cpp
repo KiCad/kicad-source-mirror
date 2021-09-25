@@ -55,7 +55,12 @@ void SELECTION_TOOL::setModifiersState( bool aShiftState, bool aCtrlState, bool 
     m_drag_subtractive   = aCtrlState && aShiftState && !aAltState;
 
     // While the ALT key has some conflicts under MSW (and some flavors of Linux WMs), it remains
-    // useful for users who only use tap-click rather than holding the button.  It doesn't hurt
-    // to also have this option.
+    // useful for users who only use tap-click rather than holding the button.  We disable it for
+    // windows because it flashes the disambiguation menu without showing data
+#ifndef __WINDOWS__
     m_skip_heuristics = aAltState;
+#else
+    m_skip_heuristics = false;
+#endif
+
 }
