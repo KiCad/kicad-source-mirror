@@ -34,6 +34,8 @@
 #include <wx/checkbox.h>
 #include <wx/dir.h>
 #include <wx/filedlg.h>
+#include <common.h>
+
 #ifdef PCM
 #include "dialog_pcm.h"
 #endif
@@ -790,7 +792,7 @@ int KICAD_MANAGER_CONTROL::Execute( const TOOL_EVENT& aEvent )
 
 #ifdef __WXMAC__
         msg.Printf( "osascript -e 'activate application \"%s\"' ", execFile );
-        system( msg.c_str() );
+        ProcessExecute( msg );
 #endif
     }
     else

@@ -292,7 +292,7 @@ bool doPrintFile( const wxString& file, bool aDryRun )
                              file );
 
         if( !aDryRun )
-            system( printCommand.c_str() );
+            ProcessExecute( printCommand );
 
         return true;
     }

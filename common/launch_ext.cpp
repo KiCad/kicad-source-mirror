@@ -25,10 +25,7 @@
 void LaunchExternal( const wxString& aPath )
 {
 #ifdef __WXMAC__
-    // Quote in case there are spaces in the path.
-    wxString msg = "open \"" + aPath + "\"";
-
-    system( msg.c_str() );
+    wxExecute( wxString::Format( "open \"%s\"", aPath ) );
 #else
     wxString path( aPath );
 
@@ -48,11 +45,7 @@ void LaunchExternal( const wxString& aPath )
 void LaunchURL( const wxString& aUrl )
 {
 #ifdef __WXMAC__
-    wxString msg;
-
-    msg.Printf( "open %s", aUrl );
-
-    system( msg.c_str() );
+    wxExecute( wxString::Format( "open %s", aUrl ) );
 #else
     wxLaunchDefaultApplication( aUrl );
 #endif

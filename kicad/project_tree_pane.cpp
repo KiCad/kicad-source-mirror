@@ -41,6 +41,7 @@
 #include <kiplatform/environment.h>
 #include <core/kicad_algo.h>
 #include <paths.h>
+#include <launch_ext.h>
 
 #include "project_tree_item.h"
 #include "project_tree.h"
@@ -217,24 +218,7 @@ void PROJECT_TREE_PANE::onOpenDirectory( wxCommandEvent& event )
                 curr_dir += wxFileName::GetPathSeparator();
         }
 
-#ifdef __WXMAC__
-        wxString msg;
-
-        // Quote in case there are spaces in the path.
-        msg.Printf( "open \"%s\"", curr_dir );
-
-        system( msg.c_str() );
-#else
-    #if !wxCHECK_VERSION( 3, 1, 0 )
-        // Quote in case there are spaces in the path.
-        // Not needed on 3.1.4, but needed in 3.0 versions
-        // Moreover, on Linux, on 3.1.4 wx version, adding quotes breaks
-        // wxLaunchDefaultApplication
-        QuoteString( curr_dir );
-    #endif
-
-        wxLaunchDefaultApplication( curr_dir );
-#endif
+        LaunchExternal( curr_dir );
     }
 }
 
