@@ -15,10 +15,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-09-20 11:57-0700\n"
-"PO-Revision-Date: 2021-09-20 16:15+0000\n"
-"Last-Translator: 킴슨김랑기 <korearf@gmail.com>\n"
-"Language-Team: Korean <https://hosted.weblate.org/projects/kicad/master-"
-"source/ko/>\n"
+"PO-Revision-Date: 2021-09-25 12:08+0000\n"
+"Last-Translator: 김랑기 <korearf@gmail.com>\n"
+"Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
+"master-source/ko/>\n"
 "Language: ko\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -2960,9 +2960,8 @@ msgid "Select Preferred PDF Viewer"
 msgstr "선호하는 PDF 뷰어 선택"
 
 #: common/dialogs/panel_common_settings_base.cpp:21
-#, fuzzy
 msgid "Antialiasing"
-msgstr "안티-앨리어싱:"
+msgstr "안티-앨리어싱"
 
 #: common/dialogs/panel_common_settings_base.cpp:30
 msgid "Accelerated graphics:"
@@ -3043,13 +3042,12 @@ msgid "Canvas scale:"
 msgstr "캔버스 배율:"
 
 #: common/dialogs/panel_common_settings_base.cpp:158
-#, fuzzy
 msgid "Apply icon scaling to fonts"
-msgstr "액션 스크립트 적용"
+msgstr "글꼴에 아이콘 크기 조정 적용"
 
 #: common/dialogs/panel_common_settings_base.cpp:161
 msgid "(This workaround will improve some GTK HiDPI font scaling issues.)"
-msgstr ""
+msgstr "(이 해결 방법은 일부 GTK HiDPI 글꼴 크기 조정 문제를 개선합니다.)"
 
 #: common/dialogs/panel_common_settings_base.cpp:175
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:21
@@ -3123,7 +3121,7 @@ msgstr ""
 
 #: common/dialogs/panel_common_settings_base.cpp:236
 msgid "days"
-msgstr ""
+msgstr "일"
 
 #: common/dialogs/panel_common_settings_base.cpp:249
 msgid "Project Backup"
@@ -4733,7 +4731,7 @@ msgid "Could not read instance name and version from kiface library '%s'."
 msgstr "kiface 라이브러리 '%s'에서 인스턴스 이름과 버전을 읽을 수 없습니다."
 
 #: common/kiway.cpp:297
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Fatal Installation Bug. File:\n"
 "'%s'\n"
@@ -4741,7 +4739,7 @@ msgid ""
 msgstr ""
 "치명적인 설치 버그. 파일:\n"
 "\"%s\"\n"
-"불러올 수 없습니다.\n"
+"불러올 수 없음\n"
 
 #: common/kiway.cpp:301
 msgid "It is missing.\n"
@@ -5349,9 +5347,8 @@ msgid "Type mismatch between %lf and '%s'"
 msgstr "%lf와 '%s' 간의 유형 불일치"
 
 #: common/pgm_base.cpp:165
-#, fuzzy
 msgid "No default editor found, you must choose one."
-msgstr "기본 편집기를 선택해야 합니다"
+msgstr "기본 편집기를 선택해야 합니다."
 
 #: common/pgm_base.cpp:185 common/pgm_base.cpp:187
 msgid "Executable file"
@@ -6483,9 +6480,9 @@ msgid "Set Hotkey"
 msgstr "단축키 설정"
 
 #: common/widgets/widget_hotkey_list.cpp:341
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' is a reserved hotkey in KiCad and cannot be assigned."
-msgstr "이름 %s은(는) 예약되어 있으며, 사용할 수 없습니다."
+msgstr "'%s'는 KiCad에 예약된 단축키이며 할당할 수 없습니다."
 
 #: common/widgets/widget_hotkey_list.cpp:392
 msgid "Edit..."
@@ -9721,9 +9718,8 @@ msgid "Plotted to '%s'.\n"
 msgstr "'%s'에 플롯됨.\n"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:1177
-#, fuzzy
 msgid "Done"
-msgstr "완료."
+msgstr "완료"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:1249
 #, c-format
@@ -14437,15 +14433,12 @@ msgid "Field Validation Error"
 msgstr "필드 검증 오류"
 
 #: eeschema/sch_validators.cpp:226
-#, fuzzy
 msgid "Signal name contains '{' and '}' but is not a valid bus name"
-msgstr "신호 이름이 '{'와 '}'를 포함하지만 유효한 그룹 버스 이름이 아닙니다"
+msgstr "신호 이름이 '{'와 '}'를 포함하지만 유효한 버스 이름이 아닙니다"
 
 #: eeschema/sch_validators.cpp:231
-#, fuzzy
 msgid "Signal name contains '[' or ']' but is not a valid bus name."
-msgstr ""
-"신호 이름이 '[' 또는 ']'을 포함하지만 유효한 벡터 버스 이름이 아닙니다."
+msgstr "신호 이름이 '[' 또는 ']'을 포함하지만 유효한 버스 이름이 아닙니다."
 
 #: eeschema/sheet.cpp:63
 #, c-format
@@ -16633,11 +16626,8 @@ msgid "Net must be labeled to assign a netclass."
 msgstr "네트클래스를 할당하려면 네트에 라벨을 지정해야 합니다."
 
 #: eeschema/tools/sch_editor_control.cpp:986
-#, fuzzy
 msgid "Bus has no members to assign netclass to."
-msgstr ""
-"네트클래스를 멤버에 할당하기 위해서는 버스가 최소한 하나의 멤버를 가지고 있어"
-"야 합니다."
+msgstr "버스에 네트클래스를 할당할 멤버가 없습니다."
 
 #: eeschema/tools/sch_editor_control.cpp:1019
 msgid "Netclasses"
@@ -18980,9 +18970,8 @@ msgid "Keyword notation is ${keyword}"
 msgstr "키워드 표기는 ${키워드}"
 
 #: pagelayout_editor/dialogs/properties_frame.cpp:559
-#, fuzzy
 msgid "Each keyword is replaced by its value"
-msgstr "키워드는 문자열의 실제 값으로 대체됩니다"
+msgstr "각 키워드는 해당 값으로 대체됩니다"
 
 #: pagelayout_editor/dialogs/properties_frame.cpp:560
 msgid "These build-in keywords are always available:"
@@ -25002,7 +24991,6 @@ msgid "Select Netlist"
 msgstr "네트리스트 선택"
 
 #: pcbnew/dialogs/dialog_netlist.cpp:143
-#, fuzzy
 msgid "Please choose a valid netlist file."
 msgstr "유효한 네트리스트 파일을 선택하세요."
 
@@ -27208,7 +27196,7 @@ msgstr "경로 대체"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:222
 msgid "Error: illegal or empty filename."
-msgstr ""
+msgstr "오류: 파일 이름이 잘못되었거나 비어 있습니다."
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:379
 #: pcbnew/microwave/microwave_polygon.cpp:224
@@ -28136,16 +28124,12 @@ msgid "User9"
 msgstr "사용자9"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:32
-#, fuzzy
 msgid ""
 "Use your board house's recommendations for solder mask clearance and minimum "
 "web width."
-msgstr ""
-"솔더 마스크 클리어런스와 브릿지 최소 폭은 기판 제조 업체의 권장사항을 사용하"
-"세요."
+msgstr "솔더 마스크 클리어런스와 브릿지 최소 폭은 기판 제조 업체의 권장사항을 사용하세요."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:36
-#, fuzzy
 msgid "If none are provided, setting the values to zero is suggested."
 msgstr "아무 값도 제공되지 않았다면, 0으로 설정하는 것을 권장합니다."
 
