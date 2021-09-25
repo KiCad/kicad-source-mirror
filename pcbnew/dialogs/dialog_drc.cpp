@@ -389,17 +389,13 @@ void DIALOG_DRC::OnDRCItemSelected( wxDataViewEvent& aEvent )
 
         WINDOW_THAWER thawer( m_frame );
 
-        m_frame->FocusOnItem( item );
-        m_frame->GetCanvas()->Refresh();
-
         if( ( violationLayers & board->GetVisibleLayers() ) == 0 )
-        {
             m_frame->GetAppearancePanel()->SetLayerVisible( principalLayer, true );
-            m_frame->GetCanvas()->Refresh();
-        }
 
         if( board->GetVisibleLayers().test( principalLayer ) )
             m_frame->SetActiveLayer( principalLayer );
+
+        m_frame->FocusOnItem( item, principalLayer );
     }
 
     aEvent.Skip();

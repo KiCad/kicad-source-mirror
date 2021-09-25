@@ -64,6 +64,18 @@ SHAPE_POLY_SET::SHAPE_POLY_SET() :
 }
 
 
+SHAPE_POLY_SET::SHAPE_POLY_SET( const BOX2D& aRect ) :
+    SHAPE( SH_POLY_SET )
+{
+    NewOutline();
+    Append( VECTOR2I( aRect.GetLeft(),  aRect.GetTop() ) );
+    Append( VECTOR2I( aRect.GetRight(), aRect.GetTop() ) );
+    Append( VECTOR2I( aRect.GetRight(), aRect.GetBottom() ) );
+    Append( VECTOR2I( aRect.GetLeft(),  aRect.GetBottom() ) );
+    Outline( 0 ).SetClosed( true );
+}
+
+
 SHAPE_POLY_SET::SHAPE_POLY_SET( const SHAPE_LINE_CHAIN& aOutline ) :
     SHAPE( SH_POLY_SET )
 {

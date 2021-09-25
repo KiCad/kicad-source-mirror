@@ -200,7 +200,7 @@ EDA_ITEM* PCB_BASE_FRAME::GetItem( const KIID& aId ) const
 }
 
 
-void PCB_BASE_FRAME::FocusOnItem( BOARD_ITEM* aItem )
+void PCB_BASE_FRAME::FocusOnItem( BOARD_ITEM* aItem, PCB_LAYER_ID aLayer )
 {
     static KIID lastBrightenedItemID( niluuid );
 
@@ -270,7 +270,48 @@ void PCB_BASE_FRAME::FocusOnItem( BOARD_ITEM* aItem )
 
         GetCanvas()->GetView()->Update( aItem );
         lastBrightenedItemID = aItem->m_Uuid;
-        FocusOnLocation( aItem->GetFocusPosition() );
+
+        // Focus on the object's location.  Prefer a visible part of the object to its anhcor
+        // in order to keep from scrolling around.
+
+        wxPoint        focusPt = aItem->GetFocusPosition();
+        KIGFX::VIEW*   view = GetCanvas()->GetView();
+        SHAPE_POLY_SET viewportPoly( view->GetViewport() );
+        wxWindow*      dialog = findDialog();
+
+        if( dialog )
+        {
+            wxPoint        dialogPos = GetCanvas()->ScreenToClient( dialog->GetScreenPosition() );
+            SHAPE_POLY_SET dialogPoly( BOX2D( view->ToWorld( dialogPos, true ),
+                                              view->ToWorld( dialog->GetSize(), false ) ) );
+
+            viewportPoly.BooleanSubtract( dialogPoly, SHAPE_POLY_SET::PM_FAST );
+        }
+
+        SHAPE_POLY_SET itemPoly, clippedPoly;
+
+        if( aLayer == UNDEFINED_LAYER )
+            aLayer = aItem->GetLayer();
+
+        aItem->TransformShapeWithClearanceToPolygon( itemPoly, aLayer, 0, Millimeter2iu( 0.1 ),
+                                                     ERROR_INSIDE );
+
+        clippedPoly.BooleanIntersection( itemPoly, viewportPoly, SHAPE_POLY_SET::PM_FAST );
+
+        if( !clippedPoly.IsEmpty() )
+            itemPoly = clippedPoly;
+
+        BOX2I bbox = itemPoly.BBox();
+        int   step = std::min( bbox.GetWidth(), bbox.GetHeight() ) / 10;
+
+        while( !itemPoly.IsEmpty() )
+        {
+            focusPt = (wxPoint) itemPoly.BBox().Centre();
+            itemPoly.Deflate( step, 4 );
+        }
+
+        FocusOnLocation( focusPt );
+
         GetCanvas()->Refresh();
     }
 }

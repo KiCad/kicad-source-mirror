@@ -478,6 +478,8 @@ public:
 
     SHAPE_POLY_SET();
 
+    SHAPE_POLY_SET( const BOX2D& aRect );
+
     /**
      * Construct a SHAPE_POLY_SET with the first outline given by aOutline.
      *

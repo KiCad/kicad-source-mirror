@@ -836,9 +836,9 @@ void EDA_DRAW_FRAME::Zoom_Automatique( bool aWarpPointer )
 
 
 // Find the first child dialog.
-wxWindow* findDialog( wxWindowList& aList )
+wxWindow* EDA_DRAW_FRAME::findDialog()
 {
-    for( wxWindow* window : aList )
+    for( wxWindow* window : GetChildren() )
     {
         if( dynamic_cast<DIALOG_SHIM*>( window ) )
             return window;
@@ -860,7 +860,7 @@ void EDA_DRAW_FRAME::FocusOnLocation( const wxPoint& aPos )
         centerView = true;
 
     // Center if we're behind an obscuring dialog, or within 10% of its edge
-    wxWindow* dialog = findDialog( GetChildren() );
+    wxWindow* dialog = findDialog();
 
     if( dialog )
     {
@@ -882,7 +882,9 @@ void EDA_DRAW_FRAME::FocusOnLocation( const wxPoint& aPos )
             GetCanvas()->GetView()->SetCenter( aPos, dialogRect );
         }
         else
+        {
             GetCanvas()->GetView()->SetCenter( aPos );
+        }
     }
 
     GetCanvas()->GetViewControls()->SetCrossHairCursorPosition( aPos );
