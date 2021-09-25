@@ -64,7 +64,19 @@ void RENDER_SETTINGS::update()
 
         // Linear brightening doesn't work well for colors near white
         double factor = ( m_selectFactor * 0.6 ) + pow( m_layerColors[i].GetBrightness(), 3 );
-        m_layerColorsSel[i] = m_layerColors[i].Brightened( std::min( factor, 1.0 ) );
+        factor = std::min( 1.0, factor );
+
+        m_layerColorsSel[i] = m_layerColors[i].Brightened( factor );
+
+        // If we are maxed out on brightening as a highlight, fallback to darkening but keep
+        // the blue that acts as a "glowing" color
+        if( std::fabs( m_layerColorsSel[i].GetBrightness() - m_layerColors[i].GetBrightness() )
+                < 0.05 )
+        {
+            m_layerColorsSel[i] = m_layerColors[i].Darkened( m_selectFactor * 0.4 );
+            m_layerColorsSel[i].b = m_layerColors[i].b * ( 1.0 - factor ) + factor;
+        }
+
     }
 }
 
