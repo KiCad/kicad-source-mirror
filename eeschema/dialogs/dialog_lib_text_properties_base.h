@@ -40,6 +40,7 @@ class DIALOG_LIB_TEXT_PROPERTIES_BASE : public DIALOG_SHIM
 	private:
 
 	protected:
+		wxStaticText* m_stSheetFnWarning;
 		wxStaticText* m_textLabel;
 		wxTextCtrl* m_TextCtrl;
 		wxStyledTextCtrl* m_StyledTextCtrl;

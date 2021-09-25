@@ -152,6 +152,7 @@ public:
 
 private:
     const SCH_FIELD* m_field;
+    bool m_isSheetFilename;
 };
 
 #endif    // DIALOG_EDIT_ONE_FIELD_H_

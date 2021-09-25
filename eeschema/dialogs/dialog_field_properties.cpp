@@ -315,6 +315,8 @@ DIALOG_SCH_FIELD_PROPERTIES::DIALOG_SCH_FIELD_PROPERTIES( SCH_BASE_FRAME* aParen
         DIALOG_FIELD_PROPERTIES( aParent, aTitle, aField ),
         m_field( aField )
 {
+    m_isSheetFilename = false;
+
     if( aField->GetParent() && aField->GetParent()->Type() == SCH_SYMBOL_T )
     {
         m_fieldId = aField->GetId();
@@ -323,9 +325,19 @@ DIALOG_SCH_FIELD_PROPERTIES::DIALOG_SCH_FIELD_PROPERTIES( SCH_BASE_FRAME* aParen
     {
         switch( aField->GetId() )
         {
-        case SHEETNAME:     m_fieldId = SHEETNAME_V;      break;
-        case SHEETFILENAME: m_fieldId = SHEETFILENAME_V;  break;
-        default:            m_fieldId = SHEETUSERFIELD_V; break;
+        case SHEETNAME:
+            m_fieldId = SHEETNAME_V;
+            break;
+
+        case SHEETFILENAME:
+            m_isSheetFilename = true;
+            m_fieldId = SHEETFILENAME_V;
+            m_stSheetFnWarning->Show( true );
+            break;
+
+        default:
+            m_fieldId = SHEETUSERFIELD_V;
+            break;
         }
     }
 
@@ -353,6 +365,12 @@ DIALOG_SCH_FIELD_PROPERTIES::DIALOG_SCH_FIELD_PROPERTIES( SCH_BASE_FRAME* aParen
                             &DIALOG_SCH_FIELD_PROPERTIES::onScintillaCharAdded, this );
 
     init();
+
+    if( m_isSheetFilename )
+    {
+        m_StyledTextCtrl->Enable( false );
+        m_TextCtrl->Enable( false );
+    }
 }
 
 

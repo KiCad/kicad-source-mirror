@@ -39,6 +39,7 @@ DIALOG_LIB_TEXT_PROPERTIES::DIALOG_LIB_TEXT_PROPERTIES( SYMBOL_EDIT_FRAME* aPare
 {
     m_parent = aParent;
     m_graphicText = aText;
+    m_stSheetFnWarning->Show( false );  // Shown only for sheet filename
 
     // Disable options for fieldedit, not existing in  graphic text
     m_visible->Show( false );

@@ -16,6 +16,10 @@ DIALOG_LIB_TEXT_PROPERTIES_BASE::DIALOG_LIB_TEXT_PROPERTIES_BASE( wxWindow* pare
 	wxBoxSizer* bMainSizer;
 	bMainSizer = new wxBoxSizer( wxVERTICAL );
 
+	m_stSheetFnWarning = new wxStaticText( this, wxID_ANY, _("Warning: Sheet filename can be modified only in sheet properties dialog."), wxDefaultPosition, wxDefaultSize, 0 );
+	m_stSheetFnWarning->Wrap( -1 );
+	bMainSizer->Add( m_stSheetFnWarning, 0, wxALL, 5 );
+
 	wxBoxSizer* bPropertiesSizer;
 	bPropertiesSizer = new wxBoxSizer( wxVERTICAL );
 
