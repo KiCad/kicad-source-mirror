@@ -107,16 +107,11 @@ void DIALOG_CONFIG_EQUFILES::OnEditEquFile( wxCommandEvent& event )
     wxArrayInt selections;
     m_ListEquiv->GetSelections( selections );
 
-    wxString fullFileNames, tmp;
-
     for( unsigned ii = 0; ii < selections.GetCount(); ii++ )
     {
-        tmp = m_ListEquiv->GetString( selections[ii] );
-        fullFileNames << wxT( " \"" ) << wxExpandEnvVars( tmp ) << wxT( "\"" );
+        ExecuteFile( editorname, wxExpandEnvVars( m_ListEquiv->GetString( selections[ii] ) ) );
         m_ListChanged = true;
     }
-
-    ExecuteFile( editorname, fullFileNames );
 }
 
 

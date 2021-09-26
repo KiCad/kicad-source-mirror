@@ -144,7 +144,7 @@ bool SCH_EDIT_FRAME::WriteNetListFile( int aFormat, const wxString& aFullFileNam
         }
         else
         {
-            ProcessExecute( commandLine, m_exec_flags );
+            wxExecute( commandLine, m_exec_flags );
         }
 
         DefaultExecFlags(); // Reset flags to default after executing

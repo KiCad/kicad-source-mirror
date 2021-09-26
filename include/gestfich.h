@@ -59,10 +59,10 @@ bool CanPrintFile( const wxString& file );
 void KiCopyFile( const wxString& aSrcPath, const wxString& aDestPath, wxString& aErrors );
 
 /**
- * Call the executable file \a ExecFile with the command line parameters \a param.
+ * Call the executable file \a aEditorName with the parameter \a aFileName.
  */
-int ExecuteFile( const wxString& ExecFile, const wxString& param = wxEmptyString,
-                 wxProcess* callback = nullptr );
+int ExecuteFile( const wxString& aEditorName, const wxString& aFileName = wxEmptyString,
+                 wxProcess* aCallback = nullptr );
 
 /**
  * Add un " to the start and the end of string (if not already done).

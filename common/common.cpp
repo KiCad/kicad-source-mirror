@@ -43,12 +43,6 @@
 #endif
 
 
-int ProcessExecute( const wxString& aCommandLine, int aFlags, wxProcess *callback )
-{
-    return (int) wxExecute( aCommandLine, aFlags, callback );
-}
-
-
 enum Bracket
 {
     Bracket_None,

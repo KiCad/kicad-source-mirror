@@ -44,18 +44,6 @@ class SEARCH_STACK;
 class REPORTER;
 
 /**
- * Run a command in a child process.
- *
- * @param aCommandLine The process and any arguments to it all in a single string.
- * @param aFlags The same args as allowed for wxExecute()
- * @param callback wxProcess implementing OnTerminate to be run when the
-                   child process finishes
- * @return pid of process, 0 in case of error (like return values of wxExecute()).
- */
-int ProcessExecute( const wxString& aCommandLine, int aFlags = wxEXEC_ASYNC,
-                    wxProcess *callback = nullptr );
-
-/**
  * Return the help file's full path.
  *
  * Return the full path and name (including extension) of the given KiCad help file. It is expected

@@ -112,72 +112,56 @@ wxString FindKicadFile( const wxString& shortname )
 }
 
 
-int ExecuteFile( const wxString& ExecFile, const wxString& param, wxProcess *callback )
+int ExecuteFile( const wxString& aEditorName, const wxString& aFileName, wxProcess *aCallback )
 {
-    wxString fullFileName;
-    wxString fullParams;
+    wxString fullEditorName;
+    wxString param;
 
 #ifdef __UNIX__
-    int space = ExecFile.Find( ' ' );
+    int space = aEditorName.Find( ' ' );
 
-    if( space > 0 && !ExecFile.Contains( "\"" ) && !ExecFile.Contains( "\'" ) )
+    if( space > 0 && !aEditorName.Contains( "\"" ) && !aEditorName.Contains( "\'" ) )
     {
-        fullFileName = FindKicadFile( ExecFile.Mid( 0, space ) );
-        fullParams = ExecFile.Mid( space + 1 ) + wxS( " " ) + param;
+        fullEditorName = FindKicadFile( aEditorName.Mid( 0, space ) );
+        param = aEditorName.Mid( space + 1 );
     }
     else
 #endif
     {
-        fullFileName = FindKicadFile( ExecFile );
-        fullParams = param;
+        fullEditorName = FindKicadFile( aEditorName );
     }
 
-    if( wxFileExists( fullFileName ) )
+    if( wxFileExists( fullEditorName ) )
     {
-        if( !fullParams.IsEmpty() )
-            fullFileName += wxS( " " ) + fullParams;
+        int i = 0;
+        const char* args[4];
 
-        return ProcessExecute( fullFileName, wxEXEC_ASYNC, callback );
-    }
-#ifdef __WXMAC__
-    else
-    {
-        QuoteString( fullFileName );
+        args[i++] = fullEditorName.c_str();
 
         if( !param.IsEmpty() )
-            fullFileName += wxT( " " ) + param;
+            args[i++] = param.c_str();
 
-        return ProcessExecute( wxT( "/usr/bin/open -a " ) + fullFileName, wxEXEC_ASYNC, callback );
+        args[i++] = aFileName.c_str();
+        args[i] = nullptr;
+
+        return wxExecute( args, wxEXEC_ASYNC, aCallback );
     }
-#else
-    else
-    {
-        wxString msg;
-        msg.Printf( _( "Command '%s' could not be found." ), fullFileName );
-        DisplayError( nullptr, msg, 20 );
-        return -1;
-    }
-#endif
+
+    wxString msg;
+    msg.Printf( _( "Command '%s' could not be found." ), fullEditorName );
+    DisplayError( nullptr, msg, 20 );
+    return -1;
 }
 
 
 bool OpenPDF( const wxString& file )
 {
-    wxString command;
+    wxString msg;
     wxString filename = file;
 
     Pgm().ReadPdfBrowserInfos();
 
-    if( !Pgm().UseSystemPdfBrowser() )    //  Run the preferred PDF Browser
-    {
-#ifdef __WXMSW__
-        // Windows requires double quotes around the filename to handle spaces
-        command = Pgm().GetPdfBrowserName() + wxT( " \"" ) + filename + wxT( "\"" );
-#else
-        command = Pgm().GetPdfBrowserName() + wxT( " '" ) + filename + wxT( "'" );
-#endif
-    }
-    else
+    if( Pgm().UseSystemPdfBrowser() )
     {
         // wxLaunchDefaultApplication on Unix systems is run as an external process passing
         // the filename to the appropriate application as a command argument.
@@ -187,44 +171,44 @@ bool OpenPDF( const wxString& file )
         // See https://github.com/wxWidgets/wxWidgets/blob/master/src/unix/utilsx11.cpp#L2654
 #ifdef __WXGTK__
     #if !wxCHECK_VERSION( 3, 1, 0 )
-    // Quote in case there are spaces in the path.
-    // Not needed on 3.1.4, but needed in 3.0 versions
-    // Moreover, on Linux, on 3.1.4 wx version, adding quotes breaks wxLaunchDefaultApplication
-    QuoteString( filename );
+        // Quote in case there are spaces in the path.
+        // Not needed on 3.1.4, but needed in 3.0 versions
+        // Moreover, on Linux, 3.1.4 wx version, adding quotes breaks wxLaunchDefaultApplication
+        QuoteString( filename );
     #endif
 #endif
 
-        if( wxLaunchDefaultApplication( filename ) )
-            return true;
-
-#ifdef __WXMAC__
-        command = wxT( "/usr/bin/open -a '" ) + file + wxT( "'" );
-#endif
-        // If launching the system default PDF viewer fails, fall through with empty command
-        // string so the error message is displayed.
-    }
-
-    if( !command.IsEmpty() )
-    {
-        if( ProcessExecute( command ) != -1 )
+        if( !wxLaunchDefaultApplication( filename ) )
         {
-            return true;
-        }
-        else
-        {
-            wxString msg;
-            msg.Printf( _( "Problem while running the PDF viewer.\nCommand is '%s'." ), command );
+            msg.Printf( _( "Unable to find a PDF viewer for '%s'." ), filename );
             DisplayError( nullptr, msg );
+            return false;
         }
     }
     else
     {
-        wxString msg;
-        msg.Printf( _( "Unable to find a PDF viewer for '%s'." ), file );
-        DisplayError( nullptr, msg );
+        const char*  args[3];
+
+#if 0   // Is this still needed with the separate arguments version of wxExecute?
+#ifdef __WXMSW__
+        // Windows requires double quotes around the filename to handle spaces
+        filename = "\"" + filename + "\"";
+#endif
+#endif
+
+        args[0] = Pgm().GetPdfBrowserName().c_str();
+        args[1] = filename.c_str();
+        args[2] = nullptr;
+
+        if( wxExecute( args ) == -1 )
+        {
+            msg.Printf( _( "Problem while running the PDF viewer '%s'." ), args[0] );
+            DisplayError( nullptr, msg );
+            return false;
+        }
     }
 
-    return false;
+    return true;
 }
 
 
@@ -243,35 +227,36 @@ void OpenFile( const wxString& file )
     delete filetype;
 
     if( !command.IsEmpty() )
-        ProcessExecute( command );
+        wxExecute( command );
 }
 
 
 bool doPrintFile( const wxString& file, bool aDryRun )
 {
-    wxFileName  fileName( file );
-    wxString    ext = fileName.GetExt();
+    wxString ext = wxFileName( file ).GetExt();
+    wxString application;
+
+#ifdef __WXMSW__
     wxFileType* filetype = wxTheMimeTypesManager->GetFileTypeFromExtension( ext );
 
-    if( !filetype )
-        return false;
-
-    wxString    printCommand;
-    wxString    openCommand;
-    wxString    application;
-
-    wxFileType::MessageParameters params( file );
-    filetype->GetPrintCommand( &printCommand, params );
-    filetype->GetOpenCommand( &openCommand, params );
-    delete filetype;
-
-    if( !printCommand.IsEmpty() )
+    if( filetype )
     {
-        if( !aDryRun )
-            ProcessExecute( printCommand );
+        wxString                      printCommand;
+        wxFileType::MessageParameters params( file );
 
-        return true;
+        filetype->GetPrintCommand( &printCommand, params );
+
+        delete filetype;
+
+        if( !printCommand.IsEmpty() )
+        {
+            if( !aDryRun )
+                wxExecute( printCommand );
+
+            return true;
+        }
     }
+#endif
 
 #ifdef __WXMAC__
     if( ext == "ps" || ext == "pdf" )
@@ -283,16 +268,17 @@ bool doPrintFile( const wxString& file, bool aDryRun )
 
     if( !application.IsEmpty() )
     {
-        printCommand.Printf( "osascript -e 'tell application \"%s\"' "
-                             "-e '   set srcFileRef to (open POSIX file \"%s\")' "
-                             "-e '   activate' "
-                             "-e '   print srcFileRef print dialog true' "
-                             "-e 'end tell' ",
-                             application,
-                             file );
+        wxString ascript;
+        ascript.Printf( "osascript -e 'tell application \"%s\"' "
+                                  "-e '   set srcFileRef to (open POSIX file \"%s\")' "
+                                  "-e '   activate' "
+                                  "-e '   print srcFileRef print dialog true' "
+                                  "-e 'end tell' ",
+                        application,
+                        file );
 
         if( !aDryRun )
-            ProcessExecute( printCommand );
+            wxExecute( ascript );
 
         return true;
     }
@@ -303,10 +289,14 @@ bool doPrintFile( const wxString& file, bool aDryRun )
             || ext == "csv"
             || ext == "txt" || ext == "rpt" || ext == "pos" || ext == "cmp" || ext == "net" )
     {
-        printCommand.Printf( "lp \"%s\"", file );
-
         if( !aDryRun )
-            ProcessExecute( printCommand );
+        {
+            char* params[3];
+            params[0] = "lp";
+            params[1] = file.c_str();
+            params[2] = nullptr;
+
+            wxExecute( params );
 
         return true;
     }

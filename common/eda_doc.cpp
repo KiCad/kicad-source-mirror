@@ -185,7 +185,7 @@ bool GetAssociatedDocument( wxWindow* aParent, const wxString& aDocName, PROJECT
         delete filetype;
 
         if( success )
-            success = ProcessExecute( command );
+            success = wxExecute( command );
     }
 
     if( !success )
