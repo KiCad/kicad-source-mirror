@@ -476,6 +476,9 @@ bool BOARD_STACKUP::SynchronizeWithBoard( BOARD_DESIGN_SETTINGS* aSettings )
         }
     }
 
+    // Transfert layer settings:
+    *this = stackup;
+
     // Transfer other stackup settings from aSettings
     const BOARD_STACKUP& source_stackup = aSettings->GetStackupDescriptor();
     m_HasDielectricConstrains  = source_stackup.m_HasDielectricConstrains;
@@ -483,8 +486,6 @@ bool BOARD_STACKUP::SynchronizeWithBoard( BOARD_DESIGN_SETTINGS* aSettings )
     m_CastellatedPads = source_stackup.m_CastellatedPads;
     m_EdgePlating     = source_stackup.m_EdgePlating;
     m_FinishType      = source_stackup.m_FinishType;
-
-    *this = stackup;
 
     return change;
 }

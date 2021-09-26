@@ -50,6 +50,7 @@
 #include <reporter.h>
 #include <wildcards_and_files_ext.h>
 
+
 GERBER_JOBFILE_WRITER::GERBER_JOBFILE_WRITER( BOARD* aPcb, REPORTER* aReporter )
 {
     m_pcb = aPcb;
@@ -286,6 +287,9 @@ void GERBER_JOBFILE_WRITER::addJSONGeneralSpecs()
 
     if( !brd_stackup.m_FinishType.IsEmpty() )
         m_json["GeneralSpecs"]["Finish"] = brd_stackup.m_FinishType;
+
+    if( brd_stackup.m_HasDielectricConstrains )
+        m_json["GeneralSpecs"]["ImpedanceControlled"] = true;
 
     if( brd_stackup.m_CastellatedPads )
         m_json["GeneralSpecs"]["Castellated"] = true;
@@ -666,6 +670,7 @@ void GERBER_JOBFILE_WRITER::addJSONMaterialStackup()
                     // These constrains are only written if the board has impedance controlled tracks.
                     // If the board is not impedance controlled,  they are useless.
                     // Do not add constrains that create more expensive boards.
+
                     if( brd_stackup.m_HasDielectricConstrains )
                     {
                         // Generate Epsilon R if > 1.0 (value <= 1.0 means not specified: it is not
