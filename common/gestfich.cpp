@@ -132,7 +132,7 @@ int ExecuteFile( const wxString& aEditorName, const wxString& aFileName, wxProce
     if( wxFileExists( fullEditorName ) )
     {
         int i = 0;
-        const char* args[4];
+        char const* args[4];
 
         args[i++] = fullEditorName.c_str();
 
@@ -185,14 +185,7 @@ bool OpenPDF( const wxString& file )
     }
     else
     {
-        const char*  args[3];
-
-#if 0   // Is this still needed with the separate arguments version of wxExecute?
-#ifdef __WXMSW__
-        // Windows requires double quotes around the filename to handle spaces
-        filename = "\"" + filename + "\"";
-#endif
-#endif
+        char const*  args[3];
 
         args[0] = Pgm().GetPdfBrowserName().c_str();
         args[1] = filename.c_str();
@@ -289,12 +282,12 @@ bool doPrintFile( const wxString& file, bool aDryRun )
     {
         if( !aDryRun )
         {
-            const char* params[3];
-            params[0] = "lp";
-            params[1] = file.c_str();
-            params[2] = nullptr;
+            char const* args[3];
+            args[0] = "lp";
+            args[1] = file.c_str();
+            args[2] = nullptr;
 
-            wxExecute( params );
+            wxExecute( args );
         }
 
         return true;
