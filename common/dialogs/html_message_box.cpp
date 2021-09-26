@@ -94,6 +94,8 @@ void HTML_MESSAGE_BOX::reload()
                                              background.GetAsString( wxC2S_HTML_SYNTAX ),
                                              foreground.GetAsString( wxC2S_HTML_SYNTAX ),
                                              m_source ) );
+
+    Layout();
 }
 
 
