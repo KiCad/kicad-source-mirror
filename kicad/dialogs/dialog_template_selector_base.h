@@ -20,6 +20,7 @@
 #include <wx/html/htmlwin.h>
 #include <wx/stattext.h>
 #include <wx/textctrl.h>
+#include <wx/bmpbuttn.h>
 #include <wx/bitmap.h>
 #include <wx/image.h>
 #include <wx/icon.h>
@@ -46,8 +47,8 @@ class DIALOG_TEMPLATE_SELECTOR_BASE : public DIALOG_SHIM
 		wxHtmlWindow* m_htmlWin;
 		wxStaticText* m_staticTextTpath;
 		wxTextCtrl* m_tcTemplatePath;
-		wxButton* m_buttonBrowse;
-		wxButton* m_buttonValidate;
+		wxBitmapButton* m_browseButton;
+		wxBitmapButton* m_reloadButton;
 		wxStaticLine* m_staticline;
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;
@@ -57,12 +58,12 @@ class DIALOG_TEMPLATE_SELECTOR_BASE : public DIALOG_SHIM
 		virtual void OnPageChange( wxNotebookEvent& event ) { event.Skip(); }
 		virtual void OnHtmlLinkActivated( wxHtmlLinkEvent& event ) { event.Skip(); }
 		virtual void onDirectoryBrowseClicked( wxCommandEvent& event ) { event.Skip(); }
-		virtual void onValidatePath( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onReload( wxCommandEvent& event ) { event.Skip(); }
 
 
 	public:
 
-		DIALOG_TEMPLATE_SELECTOR_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Project Template Selector"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 640,480 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		DIALOG_TEMPLATE_SELECTOR_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Project Template Selector"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 800,540 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 		~DIALOG_TEMPLATE_SELECTOR_BASE();
 
 };
@@ -79,7 +80,7 @@ class TEMPLATE_SELECTION_PANEL_BASE : public wxPanel
 	public:
 		wxBoxSizer* m_SizerBase;
 		wxScrolledWindow* m_scrolledWindow;
-		wxBoxSizer* m_SizerChoice;
+		wxGridSizer* m_SizerChoice;
 
 		TEMPLATE_SELECTION_PANEL_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,140 ), long style = wxTAB_TRAVERSAL|wxBORDER_NONE, const wxString& name = wxEmptyString );
 		~TEMPLATE_SELECTION_PANEL_BASE();
@@ -99,7 +100,7 @@ class TEMPLATE_WIDGET_BASE : public wxPanel
 
 	public:
 
-		TEMPLATE_WIDGET_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 74,118 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
+		TEMPLATE_WIDGET_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 108,-1 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
 		~TEMPLATE_WIDGET_BASE();
 
 };

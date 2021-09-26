@@ -121,7 +121,7 @@ private:
     void onNotebookResize( wxSizeEvent& event );
     void OnPageChange( wxNotebookEvent& event ) override;
     void onDirectoryBrowseClicked( wxCommandEvent& event ) override;
-	void onValidatePath( wxCommandEvent& event ) override;
+	void onReload( wxCommandEvent& event ) override;
 	void OnHtmlLinkActivated( wxHtmlLinkEvent& event ) override;
 };
 

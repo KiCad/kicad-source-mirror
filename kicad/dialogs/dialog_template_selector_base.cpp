@@ -33,11 +33,11 @@ DIALOG_TEMPLATE_SELECTOR_BASE::DIALOG_TEMPLATE_SELECTOR_BASE( wxWindow* parent, 
 	m_tcTemplatePath = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER );
 	bsizerTemplateSelector->Add( m_tcTemplatePath, 1, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
-	m_buttonBrowse = new wxButton( this, wxID_ANY, _("Browse"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
-	bsizerTemplateSelector->Add( m_buttonBrowse, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+	m_browseButton = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	bsizerTemplateSelector->Add( m_browseButton, 0, wxTOP|wxBOTTOM, 5 );
 
-	m_buttonValidate = new wxButton( this, wxID_ANY, _("Validate"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
-	bsizerTemplateSelector->Add( m_buttonValidate, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+	m_reloadButton = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	bsizerTemplateSelector->Add( m_reloadButton, 0, wxALL, 5 );
 
 
 	bmainSizer->Add( bsizerTemplateSelector, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
@@ -63,8 +63,8 @@ DIALOG_TEMPLATE_SELECTOR_BASE::DIALOG_TEMPLATE_SELECTOR_BASE( wxWindow* parent, 
 	// Connect Events
 	m_notebook->Connect( wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED, wxNotebookEventHandler( DIALOG_TEMPLATE_SELECTOR_BASE::OnPageChange ), NULL, this );
 	m_htmlWin->Connect( wxEVT_COMMAND_HTML_LINK_CLICKED, wxHtmlLinkEventHandler( DIALOG_TEMPLATE_SELECTOR_BASE::OnHtmlLinkActivated ), NULL, this );
-	m_buttonBrowse->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_TEMPLATE_SELECTOR_BASE::onDirectoryBrowseClicked ), NULL, this );
-	m_buttonValidate->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_TEMPLATE_SELECTOR_BASE::onValidatePath ), NULL, this );
+	m_browseButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_TEMPLATE_SELECTOR_BASE::onDirectoryBrowseClicked ), NULL, this );
+	m_reloadButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_TEMPLATE_SELECTOR_BASE::onReload ), NULL, this );
 }
 
 DIALOG_TEMPLATE_SELECTOR_BASE::~DIALOG_TEMPLATE_SELECTOR_BASE()
@@ -72,8 +72,8 @@ DIALOG_TEMPLATE_SELECTOR_BASE::~DIALOG_TEMPLATE_SELECTOR_BASE()
 	// Disconnect Events
 	m_notebook->Disconnect( wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED, wxNotebookEventHandler( DIALOG_TEMPLATE_SELECTOR_BASE::OnPageChange ), NULL, this );
 	m_htmlWin->Disconnect( wxEVT_COMMAND_HTML_LINK_CLICKED, wxHtmlLinkEventHandler( DIALOG_TEMPLATE_SELECTOR_BASE::OnHtmlLinkActivated ), NULL, this );
-	m_buttonBrowse->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_TEMPLATE_SELECTOR_BASE::onDirectoryBrowseClicked ), NULL, this );
-	m_buttonValidate->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_TEMPLATE_SELECTOR_BASE::onValidatePath ), NULL, this );
+	m_browseButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_TEMPLATE_SELECTOR_BASE::onDirectoryBrowseClicked ), NULL, this );
+	m_reloadButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_TEMPLATE_SELECTOR_BASE::onReload ), NULL, this );
 
 }
 
@@ -83,7 +83,7 @@ TEMPLATE_SELECTION_PANEL_BASE::TEMPLATE_SELECTION_PANEL_BASE( wxWindow* parent, 
 
 	m_scrolledWindow = new wxScrolledWindow( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxHSCROLL );
 	m_scrolledWindow->SetScrollRate( 5, 5 );
-	m_SizerChoice = new wxBoxSizer( wxHORIZONTAL );
+	m_SizerChoice = new wxGridSizer( 1, 0, 0, 0 );
 
 
 	m_scrolledWindow->SetSizer( m_SizerChoice );
@@ -102,18 +102,20 @@ TEMPLATE_SELECTION_PANEL_BASE::~TEMPLATE_SELECTION_PANEL_BASE()
 
 TEMPLATE_WIDGET_BASE::TEMPLATE_WIDGET_BASE( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style, const wxString& name ) : wxPanel( parent, id, pos, size, style, name )
 {
-	this->SetMinSize( wxSize( 74,150 ) );
-	this->SetMaxSize( wxSize( 74,-1 ) );
+	this->SetMinSize( wxSize( 108,-1 ) );
+	this->SetMaxSize( wxSize( 108,-1 ) );
 
 	wxBoxSizer* bSizer4;
 	bSizer4 = new wxBoxSizer( wxVERTICAL );
 
 	m_bitmapIcon = new wxStaticBitmap( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 64,64 ), 0 );
-	bSizer4->Add( m_bitmapIcon, 0, wxALL|wxEXPAND, 3 );
+	m_bitmapIcon->SetMinSize( wxSize( 64,64 ) );
+
+	bSizer4->Add( m_bitmapIcon, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 3 );
 
 	m_staticTitle = new wxStaticText( this, wxID_ANY, _("Project Template Title"), wxDefaultPosition, wxDefaultSize, wxALIGN_CENTER_HORIZONTAL );
-	m_staticTitle->Wrap( 150 );
-	bSizer4->Add( m_staticTitle, 1, wxALL|wxEXPAND, 3 );
+	m_staticTitle->Wrap( 100 );
+	bSizer4->Add( m_staticTitle, 1, wxALL|wxALIGN_CENTER_HORIZONTAL, 3 );
 
 
 	this->SetSizer( bSizer4 );
