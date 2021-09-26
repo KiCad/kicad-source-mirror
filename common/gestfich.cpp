@@ -287,7 +287,7 @@ bool doPrintFile( const wxString& file, bool aDryRun )
             args[1] = file.wc_str();
             args[2] = nullptr;
 
-            wxExecute( const_cast<w_char**>( args ) );
+            wxExecute( const_cast<wchar_t**>( args ) );
         }
 
         return true;
