@@ -291,51 +291,56 @@ std::vector<BOARD_ITEM*> DRAWING_TOOL::DrawSpecificationStackup( const wxPoint& 
     t->SetText( _( "Loss Tangent" ) );
     colTanD.push_back( t );
 
-    int i, j;
-
-    for( i = 0; i < stackup.GetCount(); i++ )
+    for( int i = 0; i < stackup.GetCount(); i++ )
     {
-        if( !IsValidLayer( layers.at( i )->GetBrdLayerId() ) )
-            continue;
+        BOARD_STACKUP_ITEM* stackup_item = layers.at( i );
 
-        for( j = 0; j < layers.at( i )->GetSublayersCount(); j++ )
+        for( int j = 0; j < stackup_item->GetSublayersCount(); j++ )
         {
+            t = static_cast<PCB_TEXT*>( dataStyle->Duplicate() );
+
             // Layer names are empty until we close at least once the board setup dialog.
             // If the user did not open the dialog, then get the names from the board.
             // But dielectric layer names will be missing.
-            t = static_cast<PCB_TEXT*>( dataStyle->Duplicate() );
+            // In this case, for dielectric, a dummy name will be used
+            if( stackup_item->GetLayerName().IsEmpty() )
+            {
+                wxString ly_name = m_frame->GetBoard()->GetLayerName( stackup_item->GetBrdLayerId() );
 
-            if( layers.at( i )->GetLayerName().IsEmpty() )
-                t->SetText( m_frame->GetBoard()->GetLayerName( layers.at( i )->GetBrdLayerId() ) );
+                if( ly_name.IsEmpty() && stackup_item->GetType() == BS_ITEM_TYPE_DIELECTRIC )
+                   ly_name = _( "Dielectric" );
+
+                t->SetText( ly_name );
+            }
             else
-                t->SetText( layers.at( i )->GetLayerName() );
+                t->SetText( stackup_item->GetLayerName() );
 
             colLayer.push_back( t );
 
             t = static_cast<PCB_TEXT*>( dataStyle->Duplicate() );
-            t->SetText( layers.at( i )->GetTypeName() );
+            t->SetText( stackup_item->GetTypeName() );
             colType.push_back( t );
 
             t = static_cast<PCB_TEXT*>( dataStyle->Duplicate() );
-            t->SetText( layers.at( i )->GetMaterial( j ) );
+            t->SetText( stackup_item->GetMaterial( j ) );
             colMaterial.push_back( t );
 
             t = static_cast<PCB_TEXT*>( dataStyle->Duplicate() );
-            t->SetText( StringFromValue( m_frame->GetUserUnits(), layers.at( i )->GetThickness( j ),
+            t->SetText( StringFromValue( m_frame->GetUserUnits(), stackup_item->GetThickness( j ),
                                          true ) );
             colThickness.push_back( t );
 
             t = static_cast<PCB_TEXT*>( dataStyle->Duplicate() );
-            t->SetText( layers.at( i )->GetColor() );
+            t->SetText( stackup_item->GetColor() );
             colColor.push_back( t );
 
             t = static_cast<PCB_TEXT*>( dataStyle->Duplicate() );
-            t->SetText( StringFromValue( EDA_UNITS::UNSCALED, layers.at( i )->GetEpsilonR( j ),
+            t->SetText( StringFromValue( EDA_UNITS::UNSCALED, stackup_item->GetEpsilonR( j ),
                                          false ) );
             colEpsilon.push_back( t );
 
             t = static_cast<PCB_TEXT*>( dataStyle->Duplicate() );
-            t->SetText( StringFromValue( EDA_UNITS::UNSCALED, layers.at( i )->GetLossTangent( j ),
+            t->SetText( StringFromValue( EDA_UNITS::UNSCALED, stackup_item->GetLossTangent( j ),
                                          false ) );
             colTanD.push_back( t );
         }
@@ -488,15 +493,29 @@ std::vector<BOARD_ITEM*> DRAWING_TOOL::DrawBoardCharacteristics( const wxPoint& 
     colLabel2.push_back( t );
 
     t = static_cast<PCB_TEXT*>( dataStyle->Duplicate() );
-    t->SetText( stackup.m_CastellatedPads ? _( "Yes" ) : _( "No" ) );
+    t->SetText( stackup.m_HasDielectricConstrains ? _( "Yes" ) : _( "No" ) );
     colData2.push_back( t );
 
     t = static_cast<PCB_TEXT*>( dataStyle->Duplicate() );
     t->SetText( _( "Plated Board Edge: " ) );
     colLabel2.push_back( t );
+
     t = static_cast<PCB_TEXT*>( dataStyle->Duplicate() );
-    t->SetText( stackup.m_HasDielectricConstrains ? _( "Yes" ) : _( "No" ) );
+    t->SetText( stackup.m_EdgePlating ? _( "Yes" ) : _( "No" ) );
     colData2.push_back( t );
+
+    t = static_cast<PCB_TEXT*>( dataStyle->Duplicate() );
+    t->SetText( _( "Edge card connectors: " ) );
+    colLabel1.push_back( t );
+
+    t = static_cast<PCB_TEXT*>( dataStyle->Duplicate() );
+    switch( stackup.m_EdgeConnectorConstraints )
+    {
+    case BS_EDGE_CONNECTOR_NONE: t->SetText( _( "No" ) ); break;
+    case BS_EDGE_CONNECTOR_IN_USE: t->SetText( _( "Yes" ) ); break;
+    case BS_EDGE_CONNECTOR_BEVELLED: t->SetText( _( "Yes, Bevelled" ) ); break;
+    }
+    colData1.push_back( t );
 
     texts.push_back( colLabel1 );
     texts.push_back( colData1 );
