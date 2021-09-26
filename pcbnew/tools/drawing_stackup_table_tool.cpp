@@ -305,7 +305,10 @@ std::vector<BOARD_ITEM*> DRAWING_TOOL::DrawSpecificationStackup( const wxPoint& 
             // In this case, for dielectric, a dummy name will be used
             if( stackup_item->GetLayerName().IsEmpty() )
             {
-                wxString ly_name = m_frame->GetBoard()->GetLayerName( stackup_item->GetBrdLayerId() );
+                wxString ly_name;
+
+                if( IsValidLayer( stackup_item->GetBrdLayerId() ) )
+                    ly_name = m_frame->GetBoard()->GetLayerName( stackup_item->GetBrdLayerId() );
 
                 if( ly_name.IsEmpty() && stackup_item->GetType() == BS_ITEM_TYPE_DIELECTRIC )
                    ly_name = _( "Dielectric" );
