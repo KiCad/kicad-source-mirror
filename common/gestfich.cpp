@@ -289,7 +289,7 @@ bool doPrintFile( const wxString& file, bool aDryRun )
     {
         if( !aDryRun )
         {
-            char* params[3];
+            const char* params[3];
             params[0] = "lp";
             params[1] = file.c_str();
             params[2] = nullptr;
