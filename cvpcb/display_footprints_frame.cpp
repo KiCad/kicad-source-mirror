@@ -517,8 +517,8 @@ void DISPLAY_FOOTPRINTS_FRAME::updateView()
 
 void DISPLAY_FOOTPRINTS_FRAME::UpdateMsgPanel()
 {
-    FOOTPRINT*      footprint = GetBoard()->GetFirstFootprint();
-    MSG_PANEL_ITEMS items;
+    FOOTPRINT*                  footprint = GetBoard()->GetFirstFootprint();
+    std::vector<MSG_PANEL_ITEM> items;
 
     if( footprint )
         footprint->GetMsgPanelInfo( this, items );

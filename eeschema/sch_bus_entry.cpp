@@ -478,7 +478,8 @@ void SCH_BUS_ENTRY_BASE::Plot( PLOTTER* aPlotter ) const
 }
 
 
-void SCH_BUS_ENTRY_BASE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, MSG_PANEL_ITEMS& aList )
+void SCH_BUS_ENTRY_BASE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame,
+                                          std::vector<MSG_PANEL_ITEM>& aList )
 {
     wxString msg;
 

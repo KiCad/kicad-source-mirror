@@ -97,7 +97,7 @@ public:
 
     bool HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy = 0 ) const override;
 
-    void GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, MSG_PANEL_ITEMS& aList ) override;
+    void GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList ) override;
 
 protected:
     DS_DRAW_ITEM_BASE( DS_DATA_ITEM* aPeer, int aIndex, KICAD_T aType ) :

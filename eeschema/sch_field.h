@@ -178,6 +178,7 @@ public:
     bool Replace( const wxFindReplaceData& aSearchData, void* aAuxData = nullptr ) override;
 
     wxString GetSelectMenuText( EDA_UNITS aUnits ) const override;
+    void GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList ) override;
 
     BITMAPS GetMenuImage() const override;
 

@@ -21,10 +21,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file lib_text.cpp
- */
-
 #include <common.h>
 #include <sch_draw_panel.h>
 #include <plotters/plotter.h>
@@ -39,7 +35,7 @@
 #include <settings/color_settings.h>
 #include <lib_text.h>
 #include <default_values.h>    // For some default values
-
+#include <string_utils.h>
 
 LIB_TEXT::LIB_TEXT( LIB_SYMBOL* aParent ) :
     LIB_ITEM( LIB_TEXT_T, aParent ),
@@ -343,12 +339,38 @@ void LIB_TEXT::print( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset, 
 }
 
 
-void LIB_TEXT::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, MSG_PANEL_ITEMS& aList )
+void LIB_TEXT::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList )
 {
+    wxString msg;
+
     LIB_ITEM::GetMsgPanelInfo( aFrame, aList );
 
-    wxString msg = MessageTextFromValue( aFrame->GetUserUnits(), GetTextThickness() );
-    aList.push_back( MSG_PANEL_ITEM( _( "Line Width" ), msg ) );
+    // Don't use GetShownText() here; we want to show the user the variable references
+    aList.push_back( MSG_PANEL_ITEM( _( "Text" ), UnescapeString( GetText() ) ) );
+
+    msg = GetTextStyleName();
+    aList.push_back( MSG_PANEL_ITEM( _( "Style" ), msg ) );
+
+    msg = MessageTextFromValue( aFrame->GetUserUnits(), GetTextWidth() );
+    aList.push_back( MSG_PANEL_ITEM( _( "Text Size" ), msg ) );
+
+    switch ( GetHorizJustify() )
+    {
+    case GR_TEXT_HJUSTIFY_LEFT:   msg = _( "Left" );   break;
+    case GR_TEXT_HJUSTIFY_CENTER: msg = _( "Center" ); break;
+    case GR_TEXT_HJUSTIFY_RIGHT:  msg = _( "Right" );  break;
+    }
+
+    aList.push_back( MSG_PANEL_ITEM( _( "H Justification" ), msg ) );
+
+    switch ( GetVertJustify() )
+    {
+    case GR_TEXT_VJUSTIFY_TOP:    msg = _( "Top" );    break;
+    case GR_TEXT_VJUSTIFY_CENTER: msg = _( "Center" ); break;
+    case GR_TEXT_VJUSTIFY_BOTTOM: msg = _( "Bottom" ); break;
+    }
+
+    aList.push_back( MSG_PANEL_ITEM( _( "V Justification" ), msg ) );
 }
 
 

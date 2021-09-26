@@ -47,7 +47,7 @@ LIB_ITEM::LIB_ITEM( KICAD_T        aType,
 }
 
 
-void LIB_ITEM::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, MSG_PANEL_ITEMS& aList )
+void LIB_ITEM::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList )
 {
     wxString msg;
 

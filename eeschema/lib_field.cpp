@@ -417,27 +417,43 @@ void LIB_FIELD::CalcEdit( const wxPoint& aPosition )
 }
 
 
-void LIB_FIELD::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, MSG_PANEL_ITEMS& aList )
+void LIB_FIELD::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList )
 {
     wxString msg;
 
     LIB_ITEM::GetMsgPanelInfo( aFrame, aList );
 
-    // Display style:
+    aList.push_back( MSG_PANEL_ITEM( _( "Field" ), GetName() ) );
+
+    // Don't use GetShownText() here; we want to show the user the variable references
+    aList.push_back( MSG_PANEL_ITEM( _( "Text" ), UnescapeString( GetText() ) ) );
+
+    msg = IsVisible() ? _( "Yes" ) : _( "No" );
+    aList.push_back( MSG_PANEL_ITEM( _( "Visible" ), msg ) );
+
     msg = GetTextStyleName();
     aList.push_back( MSG_PANEL_ITEM( _( "Style" ), msg ) );
 
     msg = MessageTextFromValue( aFrame->GetUserUnits(), GetTextWidth() );
-    aList.push_back( MSG_PANEL_ITEM( _( "Width" ), msg ) );
+    aList.push_back( MSG_PANEL_ITEM( _( "Text Size" ), msg ) );
 
-    msg = MessageTextFromValue( aFrame->GetUserUnits(), GetTextHeight() );
-    aList.push_back( MSG_PANEL_ITEM( _( "Height" ), msg ) );
+    switch ( GetHorizJustify() )
+    {
+    case GR_TEXT_HJUSTIFY_LEFT:   msg = _( "Left" );   break;
+    case GR_TEXT_HJUSTIFY_CENTER: msg = _( "Center" ); break;
+    case GR_TEXT_HJUSTIFY_RIGHT:  msg = _( "Right" );  break;
+    }
 
-    // Display field name (ref, value ...)
-    aList.push_back( MSG_PANEL_ITEM( _( "Field" ), GetName() ) );
+    aList.push_back( MSG_PANEL_ITEM( _( "H Justification" ), msg ) );
 
-    // Display field text:
-    aList.push_back( MSG_PANEL_ITEM( _( "Value" ), GetShownText() ) );
+    switch ( GetVertJustify() )
+    {
+    case GR_TEXT_VJUSTIFY_TOP:    msg = _( "Top" );    break;
+    case GR_TEXT_VJUSTIFY_CENTER: msg = _( "Center" ); break;
+    case GR_TEXT_VJUSTIFY_BOTTOM: msg = _( "Bottom" ); break;
+    }
+
+    aList.push_back( MSG_PANEL_ITEM( _( "V Justification" ), msg ) );
 }
 
 

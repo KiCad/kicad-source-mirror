@@ -477,6 +477,44 @@ wxString SCH_FIELD::GetSelectMenuText( EDA_UNITS aUnits ) const
 }
 
 
+void SCH_FIELD::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList )
+{
+    wxString msg;
+
+    aList.push_back( MSG_PANEL_ITEM( _( "Symbol Field" ), GetName() ) );
+
+    // Don't use GetShownText() here; we want to show the user the variable references
+    aList.push_back( MSG_PANEL_ITEM( _( "Text" ), UnescapeString( GetText() ) ) );
+
+    msg = IsVisible() ? _( "Yes" ) : _( "No" );
+    aList.push_back( MSG_PANEL_ITEM( _( "Visible" ), msg ) );
+
+    msg = GetTextStyleName();
+    aList.push_back( MSG_PANEL_ITEM( _( "Style" ), msg ) );
+
+    msg = MessageTextFromValue( aFrame->GetUserUnits(), GetTextWidth() );
+    aList.push_back( MSG_PANEL_ITEM( _( "Text Size" ), msg ) );
+
+    switch ( GetHorizJustify() )
+    {
+    case GR_TEXT_HJUSTIFY_LEFT:   msg = _( "Left" );   break;
+    case GR_TEXT_HJUSTIFY_CENTER: msg = _( "Center" ); break;
+    case GR_TEXT_HJUSTIFY_RIGHT:  msg = _( "Right" );  break;
+    }
+
+    aList.push_back( MSG_PANEL_ITEM( _( "H Justification" ), msg ) );
+
+    switch ( GetVertJustify() )
+    {
+    case GR_TEXT_VJUSTIFY_TOP:    msg = _( "Top" );    break;
+    case GR_TEXT_VJUSTIFY_CENTER: msg = _( "Center" ); break;
+    case GR_TEXT_VJUSTIFY_BOTTOM: msg = _( "Bottom" ); break;
+    }
+
+    aList.push_back( MSG_PANEL_ITEM( _( "V Justification" ), msg ) );
+}
+
+
 void SCH_FIELD::DoHypertextMenu( EDA_DRAW_FRAME* aFrame )
 {
     constexpr int START_ID = 1;

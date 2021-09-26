@@ -1361,7 +1361,7 @@ const EDA_RECT SCH_SYMBOL::GetBoundingBox() const
 }
 
 
-void SCH_SYMBOL::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, MSG_PANEL_ITEMS& aList )
+void SCH_SYMBOL::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList )
 {
     wxString msg;
 

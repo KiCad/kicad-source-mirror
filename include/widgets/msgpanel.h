@@ -94,9 +94,6 @@ private:
 };
 
 
-typedef std::vector<MSG_PANEL_ITEM>      MSG_PANEL_ITEMS;
-
-
 /**
  * A panel to display various information messages.
  */
@@ -166,9 +163,10 @@ protected:
      */
     wxSize computeTextSize( const wxString& text ) const;
 
-    MSG_PANEL_ITEMS        m_Items;
-    int                    m_last_x;      ///< the last used x coordinate
-    wxSize                 m_fontSize;
+protected:
+    std::vector<MSG_PANEL_ITEM> m_Items;
+    int                         m_last_x;      ///< the last used x coordinate
+    wxSize                      m_fontSize;
 };
 
 

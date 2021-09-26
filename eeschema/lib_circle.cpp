@@ -234,7 +234,7 @@ const EDA_RECT LIB_CIRCLE::GetBoundingBox() const
 }
 
 
-void LIB_CIRCLE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, MSG_PANEL_ITEMS& aList )
+void LIB_CIRCLE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList )
 {
     wxString msg;
     EDA_RECT bBox = GetBoundingBox();

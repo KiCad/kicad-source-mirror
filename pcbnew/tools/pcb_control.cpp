@@ -1150,16 +1150,16 @@ int PCB_CONTROL::UpdateMessagePanel( const TOOL_EVENT& aEvent )
 
     if( selection.GetSize() == 1 )
     {
-        EDA_ITEM*       item = selection.Front();
-        MSG_PANEL_ITEMS msgItems;
+        EDA_ITEM*                   item = selection.Front();
+        std::vector<MSG_PANEL_ITEM> msgItems;
 
         item->GetMsgPanelInfo( m_frame, msgItems );
         m_frame->SetMsgPanel( msgItems );
     }
     else if( selection.GetSize() > 1 )
     {
-        MSG_PANEL_ITEMS msgItems;
-        wxString        msg = wxString::Format( wxT( "%d" ), selection.GetSize() );
+        std::vector<MSG_PANEL_ITEM> msgItems;
+        wxString                    msg = wxString::Format( wxT( "%d" ), selection.GetSize() );
 
         msgItems.emplace_back( MSG_PANEL_ITEM( _( "Selected Items" ), msg ) );
         m_frame->SetMsgPanel( msgItems );
@@ -1171,8 +1171,8 @@ int PCB_CONTROL::UpdateMessagePanel( const TOOL_EVENT& aEvent )
         if( !footprint )
             return 0;
 
-        MSG_PANEL_ITEMS msgItems;
-        wxString        msg;
+        std::vector<MSG_PANEL_ITEM> msgItems;
+        wxString                    msg;
 
         msg = footprint->GetFPID().GetLibNickname().wx_str();
         msgItems.emplace_back( MSG_PANEL_ITEM( _( "Library" ), msg ) );

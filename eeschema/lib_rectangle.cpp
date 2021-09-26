@@ -181,7 +181,7 @@ void LIB_RECTANGLE::print( const RENDER_SETTINGS* aSettings, const wxPoint& aOff
 }
 
 
-void LIB_RECTANGLE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, MSG_PANEL_ITEMS& aList )
+void LIB_RECTANGLE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList )
 {
     LIB_ITEM::GetMsgPanelInfo( aFrame, aList );
 

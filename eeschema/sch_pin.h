@@ -25,12 +25,13 @@
 #include <lib_pin.h>
 #include <sch_item.h>
 #include <sch_sheet_path.h>
-#include <widgets/msgpanel.h>
 
 #include <mutex>
 #include <map>
 
 class SCH_SYMBOL;
+class MSG_PANEL_ITEM;
+
 
 class SCH_PIN : public SCH_ITEM
 {
@@ -64,7 +65,7 @@ public:
     void SetAlt( const wxString& aAlt ) { m_alt = aAlt; }
 
     wxString GetSelectMenuText( EDA_UNITS aUnits ) const override;
-    void GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, MSG_PANEL_ITEMS& aList ) override;
+    void GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList ) override;
 
     void Print( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset ) override {}
 

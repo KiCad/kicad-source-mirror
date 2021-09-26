@@ -481,7 +481,7 @@ void SYMBOL_EDITOR_EDIT_TOOL::editGraphicProperties( LIB_ITEM* aItem )
     drawingTools->SetDrawSpecificConvert( !dlg.GetApplyToAllConversions() );
     drawingTools->SetDrawSpecificUnit( !dlg.GetApplyToAllUnits() );
 
-    MSG_PANEL_ITEMS items;
+    std::vector<MSG_PANEL_ITEM> items;
     aItem->GetMsgPanelInfo( m_frame, items );
     m_frame->SetMsgPanel( items );
 }

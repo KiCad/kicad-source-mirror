@@ -373,7 +373,7 @@ int GERBVIEW_CONTROL::UpdateMessagePanel( const TOOL_EVENT& aEvent )
     {
         EDA_ITEM* item = (EDA_ITEM*) selection.Front();
 
-        MSG_PANEL_ITEMS msgItems;
+        std::vector<MSG_PANEL_ITEM> msgItems;
         item->GetMsgPanelInfo( m_frame, msgItems );
         m_frame->SetMsgPanel( msgItems );
     }

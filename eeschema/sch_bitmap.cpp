@@ -196,7 +196,7 @@ BITMAPS SCH_BITMAP::GetMenuImage() const
 }
 
 
-void SCH_BITMAP::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, MSG_PANEL_ITEMS& aList )
+void SCH_BITMAP::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList )
 {
     aList.push_back( MSG_PANEL_ITEM( _( "Bitmap" ), wxEmptyString ) );
 

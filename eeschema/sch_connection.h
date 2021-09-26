@@ -27,15 +27,14 @@
 
 #include <boost/optional.hpp>
 #include <wx/regex.h>
-
 #include <bus_alias.h>
-#include <widgets/msgpanel.h>
 #include <sch_sheet_path.h>
 
 
 class CONNECTION_GRAPH;
 class SCH_ITEM;
 class SCH_SHEET_PATH;
+class MSG_PANEL_ITEM;
 
 
 enum class CONNECTION_TYPE
@@ -215,7 +214,7 @@ public:
     /**
      * Adds information about the connection object to aList
      */
-    void AppendInfoToMsgPanel( MSG_PANEL_ITEMS& aList ) const;
+    void AppendInfoToMsgPanel( std::vector<MSG_PANEL_ITEM>& aList ) const;
 
     /**
      * Test if \a aLabel has a bus notation.

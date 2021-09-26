@@ -660,7 +660,7 @@ void EDA_DRAW_FRAME::ClearMsgPanel()
 }
 
 
-void EDA_DRAW_FRAME::SetMsgPanel( const MSG_PANEL_ITEMS& aList )
+void EDA_DRAW_FRAME::SetMsgPanel( const std::vector<MSG_PANEL_ITEM>& aList )
 {
     if( m_messagePanel )
     {
@@ -688,7 +688,7 @@ void EDA_DRAW_FRAME::SetMsgPanel( EDA_ITEM* aItem )
 {
     wxCHECK_RET( aItem, wxT( "Invalid EDA_ITEM pointer.  Bad programmer." ) );
 
-    MSG_PANEL_ITEMS items;
+    std::vector<MSG_PANEL_ITEM> items;
     aItem->GetMsgPanelInfo( this, items );
     SetMsgPanel( items );
 }

@@ -177,7 +177,7 @@ wxString SCH_PIN::GetSelectMenuText( EDA_UNITS aUnits ) const
 }
 
 
-void SCH_PIN::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, MSG_PANEL_ITEMS& aList )
+void SCH_PIN::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList )
 {
     wxString msg;
 
@@ -215,12 +215,6 @@ void SCH_PIN::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, MSG_PANEL_ITEMS& aList )
 
     msg = PinOrientationName( (unsigned) PinOrientationIndex( GetOrientation() ) );
     aList.push_back( MSG_PANEL_ITEM( _( "Orientation" ), msg ) );
-
-    msg = MessageTextFromValue( aFrame->GetUserUnits(), m_position.x );
-    aList.emplace_back( _( "Pos X" ), msg );
-
-    msg = MessageTextFromValue( aFrame->GetUserUnits(), m_position.y );
-    aList.emplace_back( _( "Pos Y" ), msg );
 
     SCH_EDIT_FRAME* schframe = dynamic_cast<SCH_EDIT_FRAME*>( aFrame );
     SCH_SHEET_PATH* currentSheet = schframe ? &schframe->GetCurrentSheet() : nullptr;

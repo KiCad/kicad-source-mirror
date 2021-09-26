@@ -735,7 +735,7 @@ void SCH_TEXT::Plot( PLOTTER* aPlotter ) const
 }
 
 
-void SCH_TEXT::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, MSG_PANEL_ITEMS& aList )
+void SCH_TEXT::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList )
 {
     wxString msg;
 
@@ -752,16 +752,12 @@ void SCH_TEXT::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, MSG_PANEL_ITEMS& aList )
     // Don't use GetShownText() here; we want to show the user the variable references
     aList.push_back( MSG_PANEL_ITEM( msg, UnescapeString( GetText() ) ) );
 
-    switch( GetLabelSpinStyle() )
+    // Display electrical type if it is relevant
+    if( Type() == SCH_GLOBAL_LABEL_T || Type() == SCH_HIER_LABEL_T || Type() == SCH_SHEET_PIN_T )
     {
-    case LABEL_SPIN_STYLE::LEFT:   msg = _( "Align right" );   break;
-    case LABEL_SPIN_STYLE::UP:     msg = _( "Align bottom" );  break;
-    case LABEL_SPIN_STYLE::RIGHT:  msg = _( "Align left" );    break;
-    case LABEL_SPIN_STYLE::BOTTOM: msg = _( "Align top" );     break;
-    default:                       msg = wxT( "???" );         break;
+        msg = getElectricalTypeLabel( GetShape() );
+        aList.push_back( MSG_PANEL_ITEM( _( "Type" ), msg ) );
     }
-
-    aList.push_back( MSG_PANEL_ITEM( _( "Justification" ), msg, BROWN ) );
 
     wxString textStyle[] = { _( "Normal" ), _( "Italic" ), _( "Bold" ), _( "Bold Italic" ) };
     int style = 0;
@@ -774,16 +770,20 @@ void SCH_TEXT::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, MSG_PANEL_ITEMS& aList )
 
     aList.push_back( MSG_PANEL_ITEM( _( "Style" ), textStyle[style] ) );
 
-    // Display electrical type if it is relevant
-    if( Type() == SCH_GLOBAL_LABEL_T || Type() == SCH_HIER_LABEL_T || Type() == SCH_SHEET_PIN_T )
-    {
-        msg = getElectricalTypeLabel( GetShape() );
-        aList.push_back( MSG_PANEL_ITEM( _( "Type" ), msg ) );
-    }
-
     // Display text size (X or Y value, with are the same value in Eeschema)
     msg = MessageTextFromValue( aFrame->GetUserUnits(), GetTextWidth() );
-    aList.push_back( MSG_PANEL_ITEM( _( "Size" ), msg ) );
+    aList.push_back( MSG_PANEL_ITEM( _( "Text Size" ), msg ) );
+
+    switch( GetLabelSpinStyle() )
+    {
+    case LABEL_SPIN_STYLE::LEFT:   msg = _( "Align right" );   break;
+    case LABEL_SPIN_STYLE::UP:     msg = _( "Align bottom" );  break;
+    case LABEL_SPIN_STYLE::RIGHT:  msg = _( "Align left" );    break;
+    case LABEL_SPIN_STYLE::BOTTOM: msg = _( "Align top" );     break;
+    default:                       msg = wxT( "???" );         break;
+    }
+
+    aList.push_back( MSG_PANEL_ITEM( _( "Justification" ), msg ) );
 
     SCH_CONNECTION* conn = dynamic_cast<SCH_EDIT_FRAME*>( aFrame ) ? Connection() : nullptr;
 

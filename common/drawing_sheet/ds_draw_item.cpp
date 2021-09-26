@@ -98,7 +98,8 @@ bool DS_DRAW_ITEM_BASE::HitTest( const EDA_RECT& aRect, bool aContained, int aAc
 }
 
 
-void DS_DRAW_ITEM_BASE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, MSG_PANEL_ITEMS& aList )
+void DS_DRAW_ITEM_BASE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame,
+                                         std::vector<MSG_PANEL_ITEM>& aList )
 {
     wxString      msg;
     DS_DATA_ITEM* dataItem = GetPeer();

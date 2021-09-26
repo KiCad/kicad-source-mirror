@@ -79,8 +79,6 @@ public:
 
     int GetPenWidth() const override;
 
-    void GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList ) override;
-
     const EDA_RECT GetBoundingBox() const override;
 
     void BeginEdit( const wxPoint& aStartPoint ) override;
@@ -105,6 +103,7 @@ public:
     void SetWidth( int aWidth ) override { SetTextThickness( aWidth ); }
 
     wxString GetSelectMenuText( EDA_UNITS aUnits ) const override;
+    void GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList ) override;
 
     BITMAPS GetMenuImage() const override;
 
