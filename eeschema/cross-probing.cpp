@@ -119,8 +119,7 @@ SCH_ITEM* SCH_EDITOR_CONTROL::FindSymbolAndItem( const wxString& aReference,
 
         if( crossProbingSettings.center_on_items )
         {
-            m_frame->GetCanvas()->GetViewControls()->SetCrossHairCursorPosition( pos, false );
-            m_frame->CenterScreen( pos, false );
+            m_frame->FocusOnLocation( pos );
 
             if( crossProbingSettings.zoom_to_fit )
             {
