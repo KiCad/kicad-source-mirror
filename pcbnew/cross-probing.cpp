@@ -406,7 +406,7 @@ void PCB_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
 #endif // ifndef DEFAULT_PCBNEW_CODE
         }
 
-        view->SetCenter( bbox.Centre() );
+        FocusOnLocation( (wxPoint) bbox.Centre() );
     }
 
     view->UpdateAllLayersColor();

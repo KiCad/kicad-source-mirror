@@ -73,7 +73,7 @@ PANEL_DISPLAY_OPTIONS_BASE::PANEL_DISPLAY_OPTIONS_BASE( wxWindow* parent, wxWind
 	wxStaticBoxSizer* sbSizer3;
 	sbSizer3 = new wxStaticBoxSizer( new wxStaticBox( pcbPage, wxID_ANY, _("Cross-probing") ), wxVERTICAL );
 
-	m_checkCrossProbeCenter = new wxCheckBox( sbSizer3->GetStaticBox(), wxID_ANY, _("Center view on cross-probed items"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_checkCrossProbeCenter = new wxCheckBox( sbSizer3->GetStaticBox(), wxID_ANY, _("Scroll cross-probed items into view"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_checkCrossProbeCenter->SetValue(true);
 	sbSizer3->Add( m_checkCrossProbeCenter, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
