@@ -22,10 +22,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file eda_doc.cpp
- */
-
 #include <pgm_base.h>
 #include <common.h>
 #include <confirm.h>
@@ -33,7 +29,6 @@
 #include <settings/common_settings.h>
 
 #include <wx/mimetype.h>
-#include <wx/tokenzr.h>
 #include <wx/filename.h>
 #include <wx/uri.h>
 #include <wx/filedlg.h>

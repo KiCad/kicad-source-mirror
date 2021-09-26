@@ -33,7 +33,6 @@
 #include <wx/config.h>
 #include <wx/log.h>
 #include <wx/msgdlg.h>
-#include <wx/process.h>
 #include <wx/stdpaths.h>
 #include <wx/url.h>
 #include <wx/utils.h>
