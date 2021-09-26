@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-09-20 11:57-0700\n"
-"PO-Revision-Date: 2021-09-24 19:44+0000\n"
+"PO-Revision-Date: 2021-09-27 13:41+0000\n"
 "Last-Translator: Tokita, Hiroshi <tokita.hiroshi@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -27,7 +27,7 @@ msgstr "すべてのファイル"
 #: 3d-viewer/3d_cache/dialogs/dialog_select_3d_model.cpp:94
 #, c-format
 msgid "All supported files (%s)"
-msgstr "サポートされている全てのファイル (%s)"
+msgstr "サポートされているすべてのファイル (%s)"
 
 #: 3d-viewer/3d_cache/dialogs/dialog_select_3d_model_base.cpp:58
 msgid "Available paths:"
@@ -3202,11 +3202,11 @@ msgstr "フィルター テキストをタイプ"
 
 #: common/dialogs/panel_hotkeys_editor.cpp:126
 msgid "Undo All Changes"
-msgstr "全ての変更を元に戻す"
+msgstr "すべての変更を元に戻す"
 
 #: common/dialogs/panel_hotkeys_editor.cpp:127
 msgid "Undo all changes made so far in this dialog"
-msgstr "このダイアログで今までに行った全ての変更を元に戻す"
+msgstr "このダイアログでこれまでに行った変更をすべて元に戻す"
 
 #: common/dialogs/panel_hotkeys_editor.cpp:135
 msgid "Import Hotkeys..."
@@ -3598,7 +3598,7 @@ msgstr "ネット名フィルター:"
 #: common/dialogs/panel_setup_netclasses_base.cpp:140
 #: pcbnew/widgets/appearance_controls.cpp:860
 msgid "Show All Nets"
-msgstr "全てのネットを表示"
+msgstr "すべてのネットを表示"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:146
 msgid "Apply Filters"
@@ -3700,7 +3700,7 @@ msgstr "表示:"
 #: pcbnew/dialogs/dialog_footprint_checker_base.cpp:36
 #: pcbnew/widgets/appearance_controls.cpp:664
 msgid "All"
-msgstr "全て"
+msgstr "すべて"
 
 #: common/dialogs/wx_html_report_panel_base.cpp:47
 #: eeschema/dialogs/dialog_erc_base.cpp:80
@@ -3801,7 +3801,7 @@ msgstr "以降のページ"
 
 #: common/drawing_sheet/ds_draw_item.cpp:138
 msgid "All Pages"
-msgstr "全てのページ"
+msgstr "すべてのページ"
 
 #: common/drawing_sheet/ds_draw_item.cpp:141
 msgid "First Page Option"
@@ -4663,7 +4663,7 @@ msgstr "選択したセルを削除"
 #: pcbnew/dialogs/dialog_import_settings.cpp:99
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:76
 msgid "Select All"
-msgstr "全て選択"
+msgstr "すべて選択"
 
 #: common/grid_tricks.cpp:284
 msgid "Select all cells"
@@ -5643,11 +5643,11 @@ msgstr "現在のドキュメントのコピーを別の場所に保存"
 
 #: common/tool/actions.cpp:85
 msgid "Save All"
-msgstr "全て保存"
+msgstr "すべて保存"
 
 #: common/tool/actions.cpp:85
 msgid "Save all changes"
-msgstr "全ての変更を保存"
+msgstr "すべての変更を保存"
 
 #: common/tool/actions.cpp:91
 msgid "Throw away changes"
@@ -5720,7 +5720,7 @@ msgstr "クリップボードからアイテムを貼り付け"
 
 #: common/tool/actions.cpp:171
 msgid "Select all items on screen"
-msgstr "画面上の全てのアイテムを選択"
+msgstr "画面上のすべてのアイテムを選択"
 
 #: common/tool/actions.cpp:175
 msgid "Paste Special..."
@@ -5797,11 +5797,11 @@ msgstr "現在の一致したものを置換して次を検索"
 
 #: common/tool/actions.cpp:238
 msgid "Replace All"
-msgstr "全て置換"
+msgstr "すべて置換"
 
 #: common/tool/actions.cpp:238
 msgid "Replace all matches"
-msgstr "一致したものを全て置換"
+msgstr "一致したものをすべて置換"
 
 #: common/tool/actions.cpp:249
 msgid "Previous Marker"
@@ -6544,7 +6544,7 @@ msgstr "ホットキー"
 
 #: common/wildcards_and_files_ext.cpp:183
 msgid "All files"
-msgstr "全てのファイル"
+msgstr "すべてのファイル"
 
 #: common/wildcards_and_files_ext.cpp:189
 msgid "KiCad drawing symbol files"
@@ -6572,7 +6572,7 @@ msgstr "KiCad レガシー プロジェクト ファイル"
 
 #: common/wildcards_and_files_ext.cpp:228
 msgid "All KiCad project files"
-msgstr "全ての KiCad プロジェクト ファイル"
+msgstr "すべての KiCad プロジェクト ファイル"
 
 #: common/wildcards_and_files_ext.cpp:235
 msgid "KiCad legacy schematic files"
@@ -7232,7 +7232,7 @@ msgstr "選択されたフットプリントの関連付けを削除"
 
 #: cvpcb/tools/cvpcb_actions.cpp:127 cvpcb/tools/cvpcb_actions.cpp:128
 msgid "Delete all footprint associations"
-msgstr "全てのフットプリント関連付けを削除"
+msgstr "すべてのフットプリント関連付けを削除"
 
 #: cvpcb/tools/cvpcb_actions.cpp:135
 msgid "Use symbol footprint filters"
@@ -7262,7 +7262,7 @@ msgstr "ライブラリーでフットプリントを絞込み"
 
 #: cvpcb/tools/cvpcb_association_tool.cpp:257
 msgid "Delete all associations?"
-msgstr "全ての関連付けを削除しますか？"
+msgstr "すべての関連付けを削除しますか？"
 
 #: eeschema/annotate.cpp:159
 #, c-format
@@ -8157,7 +8157,7 @@ msgstr "以降のクリックのためにシンボルを選択したままにし
 
 #: eeschema/dialogs/dialog_choose_symbol.cpp:151
 msgid "Place all units"
-msgstr "全てのユニットを配置"
+msgstr "すべてのユニットを配置"
 
 #: eeschema/dialogs/dialog_choose_symbol.cpp:153
 msgid "Sequentially place all units of the symbol."
@@ -8207,7 +8207,7 @@ msgstr "%u リンク マップ、%u が見つかりません"
 #: eeschema/dialogs/dialog_edit_symbols_libid.cpp:662
 #, c-format
 msgid "All %u link(s) resolved"
-msgstr "全ての %u リンクが解決されました"
+msgstr "すべての %u リンクが解決されました"
 
 #: eeschema/dialogs/dialog_edit_symbols_libid.cpp:693
 msgid "Invalid symbol library identifier"
@@ -8396,7 +8396,7 @@ msgstr "全ての '%s' 違反のために警告の深刻度を変更"
 #: eeschema/dialogs/dialog_erc.cpp:523 pcbnew/dialogs/dialog_drc.cpp:477
 #, c-format
 msgid "Ignore all '%s' violations"
-msgstr "全ての '%s' 違反を無視"
+msgstr "すべての '%s' 違反を無視"
 
 #: eeschema/dialogs/dialog_erc.cpp:524 pcbnew/dialogs/dialog_drc.cpp:479
 msgid "Violations will not be checked or reported"
@@ -9643,7 +9643,7 @@ msgstr "ピン プロパティ"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:111
 msgid "Plot All Pages"
-msgstr "全てのページをプロット"
+msgstr "すべてのページをプロット"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:112
 msgid "Plot Current Page"
@@ -10154,7 +10154,7 @@ msgstr "置換 (&R)"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:125
 msgid "Replace &All"
-msgstr "全て置換 (&A)"
+msgstr "すべて置換 (&A)"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:41
 msgid "Schematic Setup"
@@ -12715,7 +12715,7 @@ msgstr ""
 #: eeschema/files-io.cpp:592 pcbnew/files.cpp:163
 #: pcbnew/import_gfx/dialog_import_gfx.cpp:250
 msgid "All supported formats|"
-msgstr "サポートされている全てのフォーマット|"
+msgstr "サポートされているすべてのフォーマット|"
 
 #: eeschema/files-io.cpp:594
 msgid "Import Schematic"
@@ -15502,11 +15502,11 @@ msgstr "既存フットプリント フィールドの表示設定を変更し�
 
 #: eeschema/tools/assign_footprints.cpp:219
 msgid "Show all footprint fields"
-msgstr "全てのフットプリント フィールドを表示"
+msgstr "すべてのフットプリント フィールドを表示"
 
 #: eeschema/tools/assign_footprints.cpp:220
 msgid "Hide all footprint fields"
-msgstr "全てのフットプリント フィールドを隠す"
+msgstr "すべてのフットプリント フィールドを非表示にする"
 
 #: eeschema/tools/assign_footprints.cpp:222
 msgid "Select the footprint field visibility setting."
@@ -15898,7 +15898,7 @@ msgstr "ジャンクションを追加"
 
 #: eeschema/tools/ee_actions.cpp:305
 msgid "Add Wire to Bus Entry"
-msgstr "バス エントリーに配線を追加"
+msgstr "ワイヤー-バス エントリーを追加"
 
 #: eeschema/tools/ee_actions.cpp:305
 msgid "Add a wire entry to a bus"
@@ -16615,7 +16615,7 @@ msgstr "データシートが定義されていません。"
 #: pagelayout_editor/tools/pl_selection_tool.cpp:620
 #: pcbnew/tools/pcb_selection_tool.cpp:1801
 msgid "Select &All\tA"
-msgstr "全て選択 (&A)\tA"
+msgstr "すべて選択 (&A)\tA"
 
 #: eeschema/tools/ee_selection_tool.cpp:1561
 #: pcbnew/tools/pcb_selection_tool.cpp:1804
@@ -16931,12 +16931,12 @@ msgstr "含まれるレイヤー"
 #: gerbview/dialogs/dialog_print_gerbview.cpp:194
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:298
 msgid "Select all"
-msgstr "全て選択"
+msgstr "すべて選択"
 
 #: gerbview/dialogs/dialog_print_gerbview.cpp:196
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:300
 msgid "Deselect all"
-msgstr "全て選択解除"
+msgstr "すべて選択解除"
 
 #: gerbview/dialogs/dialog_select_one_pcb_layer.cpp:92
 #, c-format
@@ -17648,11 +17648,11 @@ msgstr "選択されたグラフィック レイヤーをクリアー"
 
 #: gerbview/tools/gerbview_actions.cpp:92
 msgid "Clear All Layers"
-msgstr "全てのレイヤーをクリア"
+msgstr "すべてのレイヤーをクリア"
 
 #: gerbview/tools/gerbview_actions.cpp:93
 msgid "Clear all layers. All data will be deleted"
-msgstr "全てのレイヤーをクリアします。全てのデータが削除されます"
+msgstr "すべてのレイヤーをクリアします。全てのデータが削除されます"
 
 #: gerbview/tools/gerbview_actions.cpp:98
 msgid "Reload All Layers"
@@ -17660,7 +17660,7 @@ msgstr "全レイヤーをリロード"
 
 #: gerbview/tools/gerbview_actions.cpp:99
 msgid "Reload all layers. All data will be reloaded"
-msgstr "全てのレイヤーをリロードします。全てのデータがリロードされます"
+msgstr "すべてのレイヤーをリロードします。全てのデータがリロードされます"
 
 #: gerbview/tools/gerbview_actions.cpp:108
 msgid "Clear Highlight"
@@ -17840,7 +17840,7 @@ msgstr "PCB の背景"
 #: gerbview/widgets/gerbview_layer_widget.cpp:122
 #: pcbnew/widgets/appearance_controls.cpp:1592
 msgid "Show All Layers"
-msgstr "全てのレイヤーを表示"
+msgstr "すべてのレイヤーを表示"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:126
 #: pcbnew/widgets/appearance_controls.cpp:1579
@@ -17854,7 +17854,7 @@ msgstr "常にアクティブでない全てのレイヤーを隠す"
 #: gerbview/widgets/gerbview_layer_widget.cpp:133
 #: pcbnew/widgets/appearance_controls.cpp:1595
 msgid "Hide All Layers"
-msgstr "全てのレイヤーを非表示"
+msgstr "すべてのレイヤーを非表示"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:137
 msgid "Sort Layers if X2 Mode"
@@ -18414,7 +18414,7 @@ msgstr "パッケージをインストール"
 
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:64
 msgid "Show all versions"
-msgstr "全てのバージョンを表示"
+msgstr "すべてのバージョンを表示"
 
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:82
 msgid "Dl Size"
@@ -19105,7 +19105,7 @@ msgstr "(用紙サイズ)"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:34
 msgid "Show on all pages"
-msgstr "全てのページに表示"
+msgstr "すべてのページに表示"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:34
 msgid "First page only"
@@ -20979,7 +20979,7 @@ msgstr "ポリゴン"
 
 #: pcbnew/board_item.cpp:106
 msgid "all copper layers"
-msgstr "全ての導体レイヤー"
+msgstr "すべての導体レイヤー"
 
 #: pcbnew/board_item.cpp:120
 msgid "and others"
@@ -22404,7 +22404,7 @@ msgstr "ハッチング"
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:61
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:111
 msgid "Fully hatched"
-msgstr "全てハッチング"
+msgstr "すべてハッチング"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:144
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:78
@@ -24851,7 +24851,7 @@ msgstr "グループ プロパティ"
 #: pcbnew/dialogs/dialog_import_settings.cpp:52
 #: pcbnew/dialogs/dialog_import_settings.cpp:101
 msgid "Deselect All"
-msgstr "全て選択解除"
+msgstr "すべて選択解除"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:49
 msgid "Layers setup"
@@ -25300,7 +25300,7 @@ msgstr "角の数 %d"
 #: pcbnew/dialogs/dialog_pad_properties.cpp:917
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:284
 msgid "All copper layers"
-msgstr "全ての導体レイヤー"
+msgstr "すべての導体レイヤー"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:918
 #, c-format
@@ -26261,19 +26261,19 @@ msgstr "Fab レイヤーを選択"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:451
 msgid "Select all Copper Layers"
-msgstr "全ての導体レイヤーを選択"
+msgstr "すべての導体レイヤーを選択"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:455
 msgid "Deselect all Copper Layers"
-msgstr "全ての導体レイヤーを選択解除"
+msgstr "すべての導体レイヤーを選択解除"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:459
 msgid "Select all Layers"
-msgstr "全てのレイヤーを選択"
+msgstr "すべてのレイヤーを選択"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:463
 msgid "Deselect all Layers"
-msgstr "全てのレイヤーを選択解除"
+msgstr "すべてのレイヤーを選択解除"
 
 #: pcbnew/dialogs/dialog_pns_diff_pair_dimensions.cpp:55
 msgid "Trace gap must be greater than 0."
@@ -29727,7 +29727,7 @@ msgstr "基板のスタックアップ設定が最新ではありません。"
 
 #: pcbnew/files.cpp:144
 msgid "All KiCad Board Files"
-msgstr "全ての KiCad 基板ファイル"
+msgstr "すべての KiCad 基板ファイル"
 
 #: pcbnew/files.cpp:185
 msgid "Open Board File"
@@ -30191,7 +30191,7 @@ msgid ""
 "A term which is a number will also match against the pad count."
 msgstr ""
 "フットプリント名、キーワード、説明、パッド数でフィルターします。\n"
-"検索語はスペースで区切られます。  詮索語は全て一致しなければなりません。\n"
+"検索語はスペースで区切られます。  検索語はすべて一致しなければなりません。\n"
 "数値の検索語はパッドカウントに対しても一致します。"
 
 #: pcbnew/footprint_viewer_frame.cpp:669
@@ -30606,7 +30606,7 @@ msgstr "製造用出力"
 
 #: pcbnew/menubar_pcb_editor.cpp:309
 msgid "Add Microwave Shape"
-msgstr "高周波用の形状を作成"
+msgstr "マイクロ波用の形状を作成"
 
 #: pcbnew/menubar_pcb_editor.cpp:344
 msgid "Auto-Place Footprints"
@@ -30659,11 +30659,11 @@ msgstr "指定された長さ < 最小長さ"
 
 #: pcbnew/microwave/microwave_inductor.cpp:397
 msgid "Requested length too large"
-msgstr "指定された長さは長過ぎます"
+msgstr "指定された長さは長すぎです"
 
 #: pcbnew/microwave/microwave_inductor.cpp:400
 msgid "Requested length too small"
-msgstr "指定された長さは小さ過ぎます"
+msgstr "指定された長さは短すぎです"
 
 #: pcbnew/microwave/microwave_inductor.cpp:403
 msgid "Requested length can't be represented"
@@ -33855,7 +33855,7 @@ msgstr "ビアを配置"
 
 #: pcbnew/tools/drc_tool.cpp:150
 msgid "Refilling all zones..."
-msgstr "全てのゾーンを再塗り潰し..."
+msgstr "すべてのゾーンを再塗り潰し..."
 
 #: pcbnew/tools/drc_tool.cpp:159
 msgid "Schematic parity tests require a fully annotated schematic."
@@ -34481,7 +34481,7 @@ msgstr "冗長なアイテムなどをクリーンアップします。"
 
 #: pcbnew/tools/pcb_actions.cpp:462
 msgid "Add Microwave Gap"
-msgstr "高周波用ギャップを作成"
+msgstr "マイクロ波用のギャップを作成"
 
 #: pcbnew/tools/pcb_actions.cpp:462
 msgid "Create gap of specified length for microwave applications"
@@ -34489,7 +34489,7 @@ msgstr "高周波基板用に指定長のギャップを作成"
 
 #: pcbnew/tools/pcb_actions.cpp:467
 msgid "Add Microwave Stub"
-msgstr "高周波用スタブを追加"
+msgstr "マイクロ波用のスタブを追加"
 
 #: pcbnew/tools/pcb_actions.cpp:467
 msgid "Create stub of specified length for microwave applications"
@@ -34497,7 +34497,7 @@ msgstr "高周波基板用に指定長のスタブを作成"
 
 #: pcbnew/tools/pcb_actions.cpp:472
 msgid "Add Microwave Arc Stub"
-msgstr "高周波用円弧スタブを追加"
+msgstr "マイクロ波用の円弧スタブを追加"
 
 #: pcbnew/tools/pcb_actions.cpp:472
 msgid "Create stub (arc) of specified size for microwave applications"
@@ -34505,11 +34505,11 @@ msgstr "高周波基板用に指定長のスタブ (円弧) を作成"
 
 #: pcbnew/tools/pcb_actions.cpp:477
 msgid "Add Microwave Polygonal Shape"
-msgstr "高周波用多角形を追加"
+msgstr "マイクロ波用の多角形を追加"
 
 #: pcbnew/tools/pcb_actions.cpp:477
 msgid "Create a microwave polygonal shape from a list of vertices"
-msgstr "頂点のリストから高周波用多角形を作成"
+msgstr "頂点のリストからマイクロ波用の多角形を作成"
 
 #: pcbnew/tools/pcb_actions.cpp:482
 msgid "Add Microwave Line"
@@ -34910,7 +34910,7 @@ msgstr "曲線ラッツネスト"
 
 #: pcbnew/tools/pcb_actions.cpp:799
 msgid "Sketch Tracks"
-msgstr "配線をスケッチ モードで表示"
+msgstr "配線をスケッチ表示"
 
 #: pcbnew/tools/pcb_actions.cpp:799
 msgid "Show tracks in outline mode"
@@ -34918,7 +34918,7 @@ msgstr "アウトライン モードで配線を表示"
 
 #: pcbnew/tools/pcb_actions.cpp:804
 msgid "Sketch Pads"
-msgstr "パッドをスケッチ モードで表示"
+msgstr "パッドをスケッチ表示"
 
 #: pcbnew/tools/pcb_actions.cpp:804
 msgid "Show pads in outline mode"
@@ -34926,7 +34926,7 @@ msgstr "アウトライン モードでパッドを表示"
 
 #: pcbnew/tools/pcb_actions.cpp:809
 msgid "Sketch Vias"
-msgstr "ビアをスケッチ モードで表示"
+msgstr "ビアをスケッチ表示"
 
 #: pcbnew/tools/pcb_actions.cpp:809
 msgid "Show vias in outline mode"
@@ -34938,7 +34938,7 @@ msgstr "図形アイテムをスケッチ表示"
 
 #: pcbnew/tools/pcb_actions.cpp:814
 msgid "Show graphic items in outline mode"
-msgstr "スケッチ モードで図形アイテムを表示"
+msgstr "アウトライン モードで図形アイテムを表示"
 
 #: pcbnew/tools/pcb_actions.cpp:819
 msgid "Sketch Text Items"
@@ -34946,11 +34946,11 @@ msgstr "テキスト アイテムをスケッチ表示"
 
 #: pcbnew/tools/pcb_actions.cpp:819
 msgid "Show footprint texts in line mode"
-msgstr "フットプリントのテキストをラインモードで表示"
+msgstr "アウトライン モードでフットプリントのテキストを表示"
 
 #: pcbnew/tools/pcb_actions.cpp:829
 msgid "Draw Zone Fills"
-msgstr "ゾーンの塗りつぶしを描画"
+msgstr "ゾーンを塗りつぶしで描画"
 
 #: pcbnew/tools/pcb_actions.cpp:829
 msgid "Show filled areas of zones"
@@ -34958,7 +34958,7 @@ msgstr "ゾーンの塗りつぶし領域を表示"
 
 #: pcbnew/tools/pcb_actions.cpp:834
 msgid "Draw Zone Outlines"
-msgstr "ゾーンの外枠を描画"
+msgstr "ゾーンを外形線で描画"
 
 #: pcbnew/tools/pcb_actions.cpp:834
 msgid "Show only zone boundaries"
@@ -35126,7 +35126,7 @@ msgstr "アクティブなレイヤーペアの間でレイヤーを切り替え
 
 #: pcbnew/tools/pcb_actions.cpp:1046
 msgid "Increase Layer Opacity"
-msgstr "レイヤーの不透明度を増加"
+msgstr "レイヤーの不透明度を上げる"
 
 #: pcbnew/tools/pcb_actions.cpp:1046
 msgid "Make the current layer less transparent"
@@ -35134,7 +35134,7 @@ msgstr "現在のレイヤーの透明度を減少させる"
 
 #: pcbnew/tools/pcb_actions.cpp:1053
 msgid "Decrease Layer Opacity"
-msgstr "レイヤーの不透明度を減少"
+msgstr "レイヤーの不透明度を下げる"
 
 #: pcbnew/tools/pcb_actions.cpp:1053
 msgid "Make the current layer more transparent"
@@ -35168,7 +35168,7 @@ msgstr "選択されたオブジェクトの制約の解決を表示します"
 
 #: pcbnew/tools/pcb_actions.cpp:1081
 msgid "Geographical Reannotate..."
-msgstr "位置で再アノテーション..."
+msgstr "位置に基づいて再アノテーション..."
 
 #: pcbnew/tools/pcb_actions.cpp:1081
 msgid "Reannotate PCB in geographical order"
@@ -35320,7 +35320,7 @@ msgstr "選択されたゾーンの導体塗りつぶしを更新"
 
 #: pcbnew/tools/pcb_actions.cpp:1252 pcbnew/tools/zone_filler_tool.cpp:154
 msgid "Fill All Zones"
-msgstr "全ゾーンを塗りつぶし"
+msgstr "すべてのゾーンを塗りつぶし"
 
 #: pcbnew/tools/pcb_actions.cpp:1252
 msgid "Update copper fill of all zones"
@@ -35336,7 +35336,7 @@ msgstr "選択されたゾーンから導体塗りつぶしを削除"
 
 #: pcbnew/tools/pcb_actions.cpp:1263 pcbnew/tools/zone_filler_tool.cpp:267
 msgid "Unfill All Zones"
-msgstr "全ゾーンの塗りつぶしを削除"
+msgstr "すべてのゾーンの塗りつぶしを削除"
 
 #: pcbnew/tools/pcb_actions.cpp:1263
 msgid "Remove copper fill from all zones"
@@ -35464,9 +35464,7 @@ msgstr "再表示しない"
 msgid ""
 "Not all zones are filled. Use Edit > Fill All Zones (%s) if you wish to see "
 "all fills."
-msgstr ""
-"全てのゾーンが塗りつぶされていません。全てのゾーンの塗りつぶしを表示するに"
-"は、編集 > 全ゾーンを塗りつぶし(%s) を使います。"
+msgstr "すべてのゾーンが塗りつぶされていません。すべてのゾーンの塗りつぶしを表示するには、編集 >すべてのゾーンを塗りつぶし(%s) を使います。"
 
 #: pcbnew/tools/pcb_control.cpp:545
 msgid "Item locked."
@@ -35606,11 +35604,11 @@ msgstr "配線を表示"
 
 #: pcbnew/widgets/appearance_controls.cpp:336
 msgid "Show all vias"
-msgstr "全てのビアを表示"
+msgstr "すべてのビアを表示"
 
 #: pcbnew/widgets/appearance_controls.cpp:337
 msgid "Show all pads"
-msgstr "全てのパッドを表示"
+msgstr "すべてのパッドを表示"
 
 #: pcbnew/widgets/appearance_controls.cpp:338
 msgid "Show copper zones"
@@ -35654,7 +35652,7 @@ msgstr "フットプリントのリファレンスを表示"
 
 #: pcbnew/widgets/appearance_controls.cpp:345
 msgid "Show all footprint text"
-msgstr "全てのフットプリント テキストを表示"
+msgstr "すべてのフットプリント テキストを表示"
 
 #: pcbnew/widgets/appearance_controls.cpp:346
 msgid "Hidden Text"
@@ -35719,7 +35717,7 @@ msgstr "全レイヤー"
 
 #: pcbnew/widgets/appearance_controls.cpp:380
 msgid "All Copper Layers"
-msgstr "全ての導体レイヤー"
+msgstr "すべての導体レイヤー"
 
 #: pcbnew/widgets/appearance_controls.cpp:383
 msgid "Inner Copper Layers"
@@ -35988,11 +35986,11 @@ msgstr "ユーザー定義レイヤー 9"
 
 #: pcbnew/widgets/appearance_controls.cpp:1570
 msgid "Show All Copper Layers"
-msgstr "全ての導体レイヤーを表示"
+msgstr "すべての導体レイヤーを表示"
 
 #: pcbnew/widgets/appearance_controls.cpp:1573
 msgid "Hide All Copper Layers"
-msgstr "導体レイヤーを全て非表示"
+msgstr "すべての導体レイヤーを非表示"
 
 #: pcbnew/widgets/appearance_controls.cpp:1584
 msgid "Show All Non Copper Layers"
@@ -36048,7 +36046,7 @@ msgstr "%s のネットをハイライト"
 
 #: pcbnew/widgets/appearance_controls.cpp:2190
 msgid "Show All Netclasses"
-msgstr "全てのネットクラスを表示"
+msgstr "すべてのネットクラスを表示"
 
 #: pcbnew/widgets/appearance_controls.cpp:2193
 msgid "Hide All Other Netclasses"
@@ -36129,7 +36127,7 @@ msgstr "%s のみ"
 
 #: pcbnew/widgets/panel_selection_filter_base.cpp:19
 msgid "All items"
-msgstr "全てのアイテム"
+msgstr "すべてのアイテム"
 
 #: pcbnew/widgets/panel_selection_filter_base.cpp:23
 msgid "Locked items"
