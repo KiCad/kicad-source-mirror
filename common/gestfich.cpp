@@ -295,6 +295,7 @@ bool doPrintFile( const wxString& file, bool aDryRun )
             params[2] = nullptr;
 
             wxExecute( params );
+        }
 
         return true;
     }
