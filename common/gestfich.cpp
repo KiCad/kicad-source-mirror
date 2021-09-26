@@ -132,17 +132,17 @@ int ExecuteFile( const wxString& aEditorName, const wxString& aFileName, wxProce
     if( wxFileExists( fullEditorName ) )
     {
         int i = 0;
-        char const* args[4];
+        const wchar_t* args[4];
 
-        args[i++] = fullEditorName.c_str();
+        args[i++] = fullEditorName.wc_str();
 
         if( !param.IsEmpty() )
-            args[i++] = param.c_str();
+            args[i++] = param.wc_str();
 
-        args[i++] = aFileName.c_str();
+        args[i++] = aFileName.wc_str();
         args[i] = nullptr;
 
-        return wxExecute( args, wxEXEC_ASYNC, aCallback );
+        return wxExecute( const_cast<wchar_t**>( args ), wxEXEC_ASYNC, aCallback );
     }
 
     wxString msg;
@@ -185,13 +185,13 @@ bool OpenPDF( const wxString& file )
     }
     else
     {
-        char const*  args[3];
+        const wchar_t*  args[3];
 
-        args[0] = Pgm().GetPdfBrowserName().c_str();
-        args[1] = filename.c_str();
+        args[0] = Pgm().GetPdfBrowserName().wc_str();
+        args[1] = filename.wc_str();
         args[2] = nullptr;
 
-        if( wxExecute( args ) == -1 )
+        if( wxExecute( const_cast<wchar_t**>( args ) ) == -1 )
         {
             msg.Printf( _( "Problem while running the PDF viewer '%s'." ), args[0] );
             DisplayError( nullptr, msg );
@@ -282,12 +282,12 @@ bool doPrintFile( const wxString& file, bool aDryRun )
     {
         if( !aDryRun )
         {
-            char const* args[3];
-            args[0] = "lp";
-            args[1] = file.c_str();
+            const wchar_t* args[3];
+            args[0] = wxT( "lp" );
+            args[1] = file.wc_str();
             args[2] = nullptr;
 
-            wxExecute( args );
+            wxExecute( const_cast<w_char**>( args ) );
         }
 
         return true;
