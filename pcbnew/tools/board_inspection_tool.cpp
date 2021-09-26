@@ -908,9 +908,9 @@ int BOARD_INSPECTION_TOOL::HighlightItem( const TOOL_EVENT& aEvent )
         const PCB_SELECTION& selection = selectionTool->GetSelection();
         std::set<int> netcodes;
 
-        for( auto item : selection )
+        for( EDA_ITEM* item : selection )
         {
-            if( auto ci = dyn_cast<BOARD_CONNECTED_ITEM*>( item ) )
+            if( BOARD_CONNECTED_ITEM* ci = dynamic_cast<BOARD_CONNECTED_ITEM*>( item ) )
                 netcodes.insert( ci->GetNetCode() );
         }
 
@@ -941,12 +941,12 @@ int BOARD_INSPECTION_TOOL::HighlightItem( const TOOL_EVENT& aEvent )
     if( net < 0 )
     {
         GENERAL_COLLECTORS_GUIDE guide = m_frame->GetCollectorsGuide();
-        GENERAL_COLLECTOR collector;
+        guide.SetIgnoreZoneFills( false );
 
         PCB_LAYER_ID activeLayer = static_cast<PCB_LAYER_ID>( view()->GetTopLayer() );
         guide.SetPreferredLayer( activeLayer );
 
-        // Find a connected item for which we are going to highlight a net
+        GENERAL_COLLECTOR collector;
         collector.Collect( board, GENERAL_COLLECTOR::PadsOrTracks, (wxPoint) aPosition, guide );
 
         if( collector.GetCount() == 0 )
