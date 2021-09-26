@@ -15,10 +15,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-09-20 11:57-0700\n"
-"PO-Revision-Date: 2021-09-20 16:15+0000\n"
+"PO-Revision-Date: 2021-09-27 13:40+0000\n"
 "Last-Translator: Jan Straka <bach@email.cz>\n"
-"Language-Team: Czech <https://hosted.weblate.org/projects/kicad/master-"
-"source/cs/>\n"
+"Language-Team: Czech <https://hosted.weblate.org/projects/kicad/"
+"master-source/cs/>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -413,7 +413,6 @@ msgid "Board Colors"
 msgstr "Barva desky"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:66
-#, fuzzy
 msgid "Use board stackup colors"
 msgstr "Použít barvy ze zásobníku vrstev"
 
@@ -2970,9 +2969,8 @@ msgid "Select Preferred PDF Viewer"
 msgstr "Vybrat preferovaný PDF prohlížeč"
 
 #: common/dialogs/panel_common_settings_base.cpp:21
-#, fuzzy
 msgid "Antialiasing"
-msgstr "Antialiasing:"
+msgstr "Antialiasing"
 
 #: common/dialogs/panel_common_settings_base.cpp:30
 msgid "Accelerated graphics:"
@@ -3592,9 +3590,8 @@ msgid "Default"
 msgstr "Výchozí"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:84
-#, fuzzy
 msgid "Set color to transparent to use KiCad default color."
-msgstr "Obnovit všechny barvy v tomto motivu na výchozí hodnoty KiCadu"
+msgstr "Nastavte barvu k průhledn pro použití výchozích barev KiCadu."
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:103
 msgid "Filter Nets"
@@ -4754,14 +4751,14 @@ msgid "Could not read instance name and version from kiface library '%s'."
 msgstr "Nelze číst jméno instance a verze symbolů v knihovně kiface '%s'."
 
 #: common/kiway.cpp:297
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Fatal Installation Bug. File:\n"
 "'%s'\n"
 "could not be loaded\n"
 msgstr ""
 "Fatální chyba instalace. Soubor:\n"
-"\"%s\"\n"
+"'%s'\n"
 "nelze načíst\n"
 
 #: common/kiway.cpp:301
@@ -5370,9 +5367,8 @@ msgid "Type mismatch between %lf and '%s'"
 msgstr ""
 
 #: common/pgm_base.cpp:165
-#, fuzzy
 msgid "No default editor found, you must choose one."
-msgstr "Výchozí editor nenalezen, je třeba jej zvolit"
+msgstr "Výchozí editor nenalezen, je třeba jej zvolit."
 
 #: common/pgm_base.cpp:185 common/pgm_base.cpp:187
 msgid "Executable file"
@@ -6500,9 +6496,9 @@ msgid "Set Hotkey"
 msgstr "Nastavit kl. zkratku"
 
 #: common/widgets/widget_hotkey_list.cpp:341
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' is a reserved hotkey in KiCad and cannot be assigned."
-msgstr "Název %s je vyhrazen a nelze jej zde použít."
+msgstr "'%s' je vyhrazená klávesová zkratka v KiCadu a nemůže být přiřazena."
 
 #: common/widgets/widget_hotkey_list.cpp:392
 msgid "Edit..."
@@ -9349,9 +9345,8 @@ msgid "Set width to 0 to use Netclass line widths."
 msgstr "Nastavte šířku na 0, chcete-li použít šířky čar editoru schémat."
 
 #: eeschema/dialogs/dialog_line_wire_bus_properties_base.h:67
-#, fuzzy
 msgid "Line, Wire & Bus Properties"
-msgstr "Vlastnosti segmentu čáry"
+msgstr "Vlastnosti řádku, drátu a sběrnic"
 
 #: eeschema/dialogs/dialog_migrate_buses.cpp:102
 msgid "Conflicting Labels"
@@ -9753,9 +9748,8 @@ msgid "Plotted to '%s'.\n"
 msgstr "Vykresleno na '%s'.\n"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:1177
-#, fuzzy
 msgid "Done"
-msgstr "Hotovo."
+msgstr "Hotovo"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:1249
 #, c-format
@@ -14129,7 +14123,6 @@ msgid "Syntax Help"
 msgstr "Nápověda syntaxe"
 
 #: eeschema/sch_text_help_md.h:2
-#, fuzzy
 msgid ""
 "<table>\n"
 "    <tr>\n"
@@ -14309,10 +14302,10 @@ msgstr ""
 "        <td></td>\n"
 "        <td> <samp><u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></"
 "samp><br> <samp>overbar</samp><br> <samp><u>&nbsp;&nbsp;&nbsp;</u></"
-"samp><br> <samp>CLK</samp><br> <samp>&nbsp;</samp><br> <samp>~</samp> </td>\n"
+"samp><br> <samp>CLK</samp></td>/samp> </td>\n"
 "    </tr>\n"
 "    <tr>\n"
-"        <td><br></td>\n"
+"        <td></td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>${variable}</samp></td>\n"
@@ -14330,8 +14323,8 @@ msgstr ""
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>${refdes:field}</samp></td>\n"
 "        <td></td>\n"
-"        <td>&nbsp;<br><samp><i>hodnota_pole</i> of symbol <i>refdes</i></"
-"samp></td>\n"
+"        <td>&nbsp;<br><samp><i>hodnota_pole</i> of symbol "
+"<i>refdes</i></samp></td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>${R3:VALUE}</samp></td>\n"
@@ -14346,8 +14339,8 @@ msgstr ""
 "    </tr>\n"
 "    <tr>\n"
 "        <th>Definice sběrnice</th>\n"
-"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
-"&nbsp;&nbsp;&nbsp;</th>\n"
+"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp"
+";&nbsp;&nbsp;</th>\n"
 "        <th>Výsledné sítě</th>\n"
 "    </tr>\n"
 "    <tr>\n"
@@ -14398,9 +14391,9 @@ msgstr ""
 "        <td>&nbsp;<br><samp>MEM{D_{[1..2]} ~LATCH}</samp></td>\n"
 "        <td></td>\n"
 "        <td> <samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
-"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; &nbsp;&nbsp;&nbsp;"
-"&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> <samp>MEM.D<sub>1</"
-"sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
+"&nbsp;&nbsp;&nbsp;&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> "
+"<samp>MEM.D<sub>1</sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td><br></td>\n"
@@ -14487,18 +14480,14 @@ msgid "Field Validation Error"
 msgstr "Chyba ověření pole"
 
 #: eeschema/sch_validators.cpp:226
-#, fuzzy
 msgid "Signal name contains '{' and '}' but is not a valid bus name"
 msgstr ""
-"Název signálu obsahuje znaky '[' or ']', ale nejedná se o platný název "
+"Název signálu obsahuje znaky '{' and '}' ale nejedná se o platný název "
 "sběrnice"
 
 #: eeschema/sch_validators.cpp:231
-#, fuzzy
 msgid "Signal name contains '[' or ']' but is not a valid bus name."
-msgstr ""
-"Název signálu obsahuje znaky '[' or ']', ale není platný název vektoru "
-"sběrnice."
+msgstr "Název signálu obsahuje znaky '[' or ']' ale není platný název sběrnice."
 
 #: eeschema/sheet.cpp:63
 #, fuzzy, c-format
@@ -16670,9 +16659,8 @@ msgid "Net must be labeled to assign a netclass."
 msgstr ""
 
 #: eeschema/tools/sch_editor_control.cpp:986
-#, fuzzy
 msgid "Bus has no members to assign netclass to."
-msgstr "Sběrnice nemá žádné členy"
+msgstr "Sběrnice nemá žádné členy k přiřazení třídy spojů."
 
 #: eeschema/tools/sch_editor_control.cpp:1019
 msgid "Netclasses"
@@ -18251,11 +18239,11 @@ msgstr ""
 #: kicad/pcm/dialogs/dialog_pcm_progress.cpp:86
 #, c-format
 msgid "Downloaded %lld/%lld Kb"
-msgstr ""
+msgstr "Staženo %lld/%lld Kb"
 
 #: kicad/pcm/dialogs/dialog_pcm_progress.cpp:150
 msgid "All downloads finished"
-msgstr ""
+msgstr "Všechna stahování dokončena"
 
 #: kicad/pcm/dialogs/dialog_pcm_progress_base.cpp:21
 #, fuzzy
@@ -23340,7 +23328,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:114
 msgid "Replace VRML models with STEP models of the same name"
-msgstr ""
+msgstr "Vyměňte modely VRML za STEP modely stejného jména"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:118
 msgid "Overwrite old file"
@@ -23578,7 +23566,7 @@ msgstr "Žádné další položky k zobrazení"
 
 #: pcbnew/dialogs/dialog_find.cpp:355
 msgid "No hits"
-msgstr ""
+msgstr "Žádný cíl"
 
 #: pcbnew/dialogs/dialog_find.cpp:362
 #, c-format
@@ -23588,7 +23576,7 @@ msgstr "%s nalezeno"
 #: pcbnew/dialogs/dialog_find.cpp:365
 #, c-format
 msgid "Hit(s): %ld / %lu"
-msgstr ""
+msgstr "Cíl(e): %ld / %lu"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:28
 msgid "Search for:"
@@ -25359,7 +25347,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1406
 msgid "Error: Custom pad shape must resolve to a single polygon."
-msgstr ""
+msgstr "Chyba: Vlastní tvar plošky musí vyřešit jeden mnohoúhelník."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1412
 #, fuzzy
@@ -27296,9 +27284,8 @@ msgid "Path Substitutions"
 msgstr "Nahrazení cesty"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:222
-#, fuzzy
 msgid "Error: illegal or empty filename."
-msgstr "Chyba: Neexistuje žádný název souboru DXF!"
+msgstr "Chyba: nelegální nebo prázdný název souboru."
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:379
 #: pcbnew/microwave/microwave_polygon.cpp:224
@@ -28963,9 +28950,9 @@ msgid "Differential uncoupled length too long"
 msgstr "Doladění délky diferenciálního páru"
 
 #: pcbnew/drc/drc_item.cpp:320
-#, fuzzy, c-format
+#, c-format
 msgid "Rule: %s"
-msgstr "Pravidla"
+msgstr "Pravidlo: %s"
 
 #: pcbnew/drc/drc_item.cpp:322
 #, fuzzy
@@ -29441,18 +29428,17 @@ msgstr "Úplný počet pouzder: %d."
 #: pcbnew/exporters/gen_footprints_placefile.cpp:340
 #: pcbnew/exporters/gen_footprints_placefile.cpp:438
 #: pcbnew/exporters/gen_footprints_placefile.cpp:489
-#, fuzzy
 msgid "File generation successful."
-msgstr "Soubor STEP byl úspěšně vytvořen."
+msgstr "Generování souborů úspěšné."
 
 #: pcbnew/exporters/gen_footprints_placefile.cpp:366
 msgid "No footprint for automated placement."
 msgstr "Žádné pouzdro k automatickému umístění."
 
 #: pcbnew/exporters/gen_footprints_placefile.cpp:427
-#, fuzzy, c-format
+#, c-format
 msgid "Placement file: '%s'."
-msgstr "Soubor umístění: \"%s\"."
+msgstr "Soubor umístění: '%s'."
 
 #: pcbnew/exporters/gen_footprints_placefile.cpp:562
 #, c-format
@@ -29468,9 +29454,9 @@ msgid "Footprint Report"
 msgstr "Report pouzdra"
 
 #: pcbnew/exporters/gendrill_Excellon_writer.cpp:127
-#, fuzzy, c-format
+#, c-format
 msgid "Created file '%s'"
-msgstr "Vytvořit soubor %s"
+msgstr "Vytvořit soubor '%s'"
 
 #: pcbnew/exporters/gendrill_file_writer_base.cpp:354
 #: pcbnew/exporters/gendrill_gerber_writer.cpp:111
@@ -29479,9 +29465,9 @@ msgid "Created file '%s'."
 msgstr "Vytvořit soubor '%s'."
 
 #: pcbnew/exporters/gerber_jobfile_writer.cpp:158
-#, fuzzy, c-format
+#, c-format
 msgid "Created Gerber job file '%s'."
-msgstr "Vytvořit Gerber job soubor '%s'."
+msgstr "Vytvořen Gerber job soubor '%s'."
 
 #: pcbnew/exporters/gerber_jobfile_writer.cpp:575
 msgid "Board stackup settings not up to date."
@@ -29500,9 +29486,8 @@ msgid "Import Non KiCad Board File"
 msgstr "Import jiného souboru schématu, než KiCad"
 
 #: pcbnew/files.cpp:214
-#, fuzzy
 msgid "Create a new project for this board"
-msgstr "Vytvoří nový projekt ze šablony"
+msgstr "Vytvořit nový projekt pro tuto desku"
 
 #: pcbnew/files.cpp:216
 msgid ""
@@ -29519,9 +29504,9 @@ msgid "Printed circuit board"
 msgstr "Deska plošných spojů"
 
 #: pcbnew/files.cpp:348
-#, fuzzy, c-format
+#, c-format
 msgid "Recovery file '%s' not found."
-msgstr "Soubor obnovy \"%s\" nenalezen."
+msgstr "Soubor obnovy '%s' nenalezen."
 
 #: pcbnew/files.cpp:353
 #, c-format
@@ -29529,10 +29514,9 @@ msgid "OK to load recovery file '%s'?"
 msgstr "OK pro načtení souboru obnovení '%s'?"
 
 #: pcbnew/files.cpp:376
-#, fuzzy, c-format
+#, c-format
 msgid "Current board will be closed, save changes to '%s' before continuing?"
-msgstr ""
-"Aktuální deska bude uzavřena, před pokračováním uložte změny do \"%s\"?"
+msgstr "Aktuální deska bude uzavřena, uložit změny do '%s' před pokračováním?"
 
 #: pcbnew/files.cpp:390
 msgid "Current Board will be closed. Continue?"
@@ -29547,32 +29531,31 @@ msgid ""
 msgstr ""
 
 #: pcbnew/files.cpp:549
-#, fuzzy
 msgid "Edge Clearance Warning"
-msgstr "Izolační mezera Varování"
+msgstr "Izolační mezera okraje Varování"
 
 #: pcbnew/files.cpp:580
-#, fuzzy, c-format
+#, c-format
 msgid "PCB '%s' is already open."
-msgstr "Soubor DPS \"%s\" je již otevřen."
+msgstr "Soubor DPS '%s' je již otevřen."
 
 #: pcbnew/files.cpp:588
 msgid "The current PCB has been modified.  Save changes?"
 msgstr "Aktuální DPS byla upravena. Uložit změny?"
 
 #: pcbnew/files.cpp:607
-#, fuzzy, c-format
+#, c-format
 msgid "PCB '%s' does not exist. Do you wish to create it?"
-msgstr "PCB \"%s\" neexistuje. Chcete ji vytvořit?"
+msgstr "DPS '%s' neexistuje. Chcete ji vytvořit?"
 
 #: pcbnew/files.cpp:616
 msgid "Creating PCB"
 msgstr "Vytváření DPS"
 
 #: pcbnew/files.cpp:708 pcbnew/files.cpp:718
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading PCB '%s'."
-msgstr "Chyba při načítání schématu '%s'."
+msgstr "Chyba při načítání DPS '%s'."
 
 #: pcbnew/files.cpp:727
 #, c-format
@@ -29601,12 +29584,12 @@ msgid "Error saving custom rules file '%s'."
 msgstr "Chyba ukládání souboru vlastních pravidel '%s'."
 
 #: pcbnew/files.cpp:1021 pcbnew/files.cpp:1123
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error saving board file '%s'.\n"
 "%s"
 msgstr ""
-"Chyba uložení souboru desky \"%s\".\n"
+"Chyba uložení souboru desky '%s'.\n"
 "%s"
 
 #: pcbnew/files.cpp:1038
@@ -29619,13 +29602,13 @@ msgstr ""
 "Nepodařilo se přejmenovat dočasný soubor '%s."
 
 #: pcbnew/files.cpp:1151
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Board copied to:\n"
 "%s"
 msgstr ""
 "Deska zkopírována do:\n"
-"\"%s\""
+"%s"
 
 #: pcbnew/footprint.cpp:882 pcbnew/tools/pcb_control.cpp:1191
 msgid "Last Change"
@@ -29711,9 +29694,8 @@ msgid "Thermal Relief Width"
 msgstr "Šířka tepelného reliefu"
 
 #: pcbnew/footprint.cpp:2141 pcbnew/pad.cpp:1527 pcbnew/zone.cpp:1424
-#, fuzzy
 msgid "Thermal Relief Gap"
-msgstr "Teplotní profil"
+msgstr "Teplotní profil Mezera"
 
 #: pcbnew/footprint.h:215
 #, c-format
@@ -29742,9 +29724,9 @@ msgid "Editing %s from board.  Saving will update the board only."
 msgstr ""
 
 #: pcbnew/footprint_edit_frame.cpp:767
-#, fuzzy, c-format
+#, c-format
 msgid "[from %s]"
-msgstr "(z %s)"
+msgstr "[z %s]"
 
 #: pcbnew/footprint_edit_frame.cpp:801
 msgid "[no footprint loaded]"
@@ -29847,9 +29829,9 @@ msgid "Footprint exported to file '%s'."
 msgstr "Pouzdro exportováno do souboru '%s'."
 
 #: pcbnew/footprint_libraries_utils.cpp:462
-#, fuzzy, c-format
+#, c-format
 msgid "Library %s is read only."
-msgstr "Knihovna \"%s\" je pouze pro čtení."
+msgstr "Knihovna %s je pouze pro čtení."
 
 #: pcbnew/footprint_libraries_utils.cpp:468
 #, c-format
@@ -29920,14 +29902,14 @@ msgid "Footprint %s already exists in %s."
 msgstr "Pouzdro %s již existuje v %s."
 
 #: pcbnew/footprint_libraries_utils.cpp:1077
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint '%s' replaced in '%s'"
-msgstr "Pouzdro '%s' smazáno z knihovny '%s'"
+msgstr "Pouzdro '%s' nahrazeno v '%s'"
 
 #: pcbnew/footprint_libraries_utils.cpp:1078
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint '%s' added to '%s'"
-msgstr "Pouzdro '%s' smazáno z knihovny '%s'"
+msgstr "Pouzdro '%s' přidáno do '%s'"
 
 #: pcbnew/footprint_libraries_utils.cpp:1126
 msgid "Enter footprint name:"
@@ -30075,7 +30057,7 @@ msgstr "Chyba při načítání pouzdra %s z knihovny '%s'."
 
 #: pcbnew/generate_footprint_info.cpp:121
 msgid "doc url"
-msgstr ""
+msgstr "dok url"
 
 #: pcbnew/import_gfx/dialog_import_gfx.cpp:55
 msgid "Centimeter"
@@ -30208,9 +30190,9 @@ msgid "Footprint '%s' saved."
 msgstr "Pouzdro '%s' uloženo."
 
 #: pcbnew/load_select_footprint.cpp:441
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint library '%s' saved as '%s'."
-msgstr "Knihovnu pouzder \"%s\" uložit jako \"%s\"."
+msgstr "Knihovnu pouzder '%s' uložit jako '%s'."
 
 #: pcbnew/menubar_footprint_editor.cpp:68
 #: pcbnew/menubar_footprint_editor.cpp:77
@@ -30331,9 +30313,8 @@ msgid "Hyperlynx..."
 msgstr "Hyperlynx..."
 
 #: pcbnew/menubar_pcb_editor.cpp:150
-#, fuzzy
 msgid "Footprints to Library..."
-msgstr "Aktualizovat pouzdra z knihovny..."
+msgstr "Pouzdra do knihovny..."
 
 #: pcbnew/menubar_pcb_editor.cpp:151
 msgid ""
@@ -30344,9 +30325,8 @@ msgstr ""
 "(neodstraní další pouzdra z této knihovny)"
 
 #: pcbnew/menubar_pcb_editor.cpp:155
-#, fuzzy
 msgid "Footprints to New Library..."
-msgstr "Aktualizovat pouzdra z knihovny..."
+msgstr "Pouzdra do nové knihovny..."
 
 #: pcbnew/menubar_pcb_editor.cpp:156
 #, fuzzy
@@ -30362,9 +30342,8 @@ msgid "Fabrication Outputs"
 msgstr "Výstupy pro výrobu"
 
 #: pcbnew/menubar_pcb_editor.cpp:309
-#, fuzzy
 msgid "Add Microwave Shape"
-msgstr "Přidat mikrovlnnou mezeru"
+msgstr "Přidat mikrovlnný tvar"
 
 #: pcbnew/menubar_pcb_editor.cpp:344
 msgid "Auto-Place Footprints"
@@ -30392,7 +30371,6 @@ msgstr "Hodnota poloměru obloukového pahýlu:"
 
 #: pcbnew/microwave/microwave_footprint.cpp:80
 #: pcbnew/microwave/microwave_footprint.cpp:95
-#, fuzzy
 msgid "Create Microwave Footprint"
 msgstr "Vytvořit mikrovlnné pouzdro"
 
@@ -30482,14 +30460,14 @@ msgid "Cannot add %s (footprint '%s' not found)."
 msgstr "Nelze přidat %s (pouzdro \"%s\" nenalezeno)."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:161
-#, fuzzy, c-format
+#, c-format
 msgid "Add %s (footprint '%s')."
-msgstr "Přidat %s (pouzdro \"%s\")."
+msgstr "Přidat %s (pouzdro '%s')."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:185
-#, fuzzy, c-format
+#, c-format
 msgid "Added %s (footprint '%s')."
-msgstr "Přidáno %s (pouzdro \"%s\")."
+msgstr "Přidáno %s (pouzdro '%s')."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:203
 #, c-format
@@ -30497,9 +30475,9 @@ msgid "Cannot update %s (no footprint assigned)."
 msgstr "Nelze aktualizovat %s (nepřiřazeno pouzdro)."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:215
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot update %s (footprint '%s' not found)."
-msgstr "Nelze aktualizovat %s (pouzdro \"%s\" nenalezeno)."
+msgstr "Nelze aktualizovat %s (pouzdro '%s' nenalezeno)."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:225
 #, c-format
@@ -36185,7 +36163,7 @@ msgstr "pcbnew"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:13
 msgid "An EDA suite for schematic and circuit board design"
-msgstr ""
+msgstr "EDA suite pro schémata a návrh desky plošných spojů"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:50
 msgid ""
