@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-09-20 11:57-0700\n"
-"PO-Revision-Date: 2021-09-22 15:26+0000\n"
+"PO-Revision-Date: 2021-09-27 13:41+0000\n"
 "Last-Translator: Ulices <ulicesah@gmail.com>\n"
 "Language-Team: Spanish (Mexico) <https://hosted.weblate.org/projects/kicad/"
 "master-source/es_MX/>\n"
@@ -3085,6 +3085,8 @@ msgstr "Aplicar secuencia de acciones"
 #: common/dialogs/panel_common_settings_base.cpp:161
 msgid "(This workaround will improve some GTK HiDPI font scaling issues.)"
 msgstr ""
+"(Esta solución temporal mejorará algunos problemas de escalamiento GTK HiDPI "
+"de fuentes.)"
 
 #: common/dialogs/panel_common_settings_base.cpp:175
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:21
@@ -4486,6 +4488,8 @@ msgid ""
 "A directory containing 3rd party plugins, libraries and other downloadable "
 "content."
 msgstr ""
+"Una carpeta que contiene complementos, bibliotecas y otro contenido "
+"descargable de terceros."
 
 #: common/env_vars.cpp:86
 msgid ""
@@ -9619,6 +9623,8 @@ msgid ""
 "Similar pins will be automatically added to other units, if this pin is not "
 "common to all units"
 msgstr ""
+"Pines similares van a ser automáticamente agregados a otras unidades, si "
+"este pin no es común en todas las unidades"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:151
 #, fuzzy
@@ -9630,6 +9636,8 @@ msgid ""
 "Similar pins at the same location will be edited. Pin number of other pins "
 "will be not modified"
 msgstr ""
+"Pines similares en la misma localización van a ser editados. El número de "
+"pin de otros pines no va a ser modificado"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:206
 #: eeschema/dialogs/dialog_symbol_properties.cpp:334
@@ -9647,10 +9655,12 @@ msgid ""
 "Synchronized pin edit mode is enabled.\n"
 "Similar pins will be edited, regardless this option."
 msgstr ""
+"El modo de edición de pin sincronizado está habilitado.\n"
+"Pines similares van a ser editados, independientemente de esta opción."
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:287
 msgid "If checked, this pin will exist in all units."
-msgstr ""
+msgstr "Si está marcado, este pin va a existir en todas las unidades."
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:308
 msgid "Alternate pin definitions must have a name."
@@ -17168,9 +17178,8 @@ msgid "Sketch polygons"
 msgstr "Polígonos de boceto"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:18
-#, fuzzy
 msgid "File Format"
-msgstr "Formato de archivo Map"
+msgstr "Formato de Archivo"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:20
 msgid "These parameters are usually specified in files, but not always."
@@ -17178,17 +17187,16 @@ msgstr ""
 "Estos parámetros son especificados usualmente en archivos, pero no siempre."
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:29
-#, fuzzy
 msgid "File units"
-msgstr "unidades"
+msgstr "Unidades de archivo"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:33
 msgid "No leading zeros (TZ format)"
-msgstr ""
+msgstr "No hay ceros a la izquierda (formato TZ)"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:33
 msgid "No trailing zeros (LZ format)"
-msgstr ""
+msgstr "Sin ceros a la derecha (formato LZ)"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:35
 #, fuzzy
@@ -17201,6 +17209,11 @@ msgid ""
 "No leading zeros format means the leading zeros are stripped\n"
 "No trailing zeros  format means the trainling zeros are stripped"
 msgstr ""
+"Los enteros en los archivos pueden tener sus ceros eliminados.\n"
+"El formato sin ceros a la izquierda significa que los ceros a la izquierda "
+"se eliminan\n"
+"El formato sin ceros a la derecha significa que los ceros a la derecha se "
+"eliminan"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:51
 msgid "Coordinates Format"
@@ -18388,7 +18401,7 @@ msgstr "Abrir carpeta de proyecto en el explorador"
 
 #: kicad/pcm/dialogs/dialog_manage_repositories.cpp:67
 msgid "Please enter fully qualified repository url"
-msgstr ""
+msgstr "Por favor ingresa la URL completa del repositorio"
 
 #: kicad/pcm/dialogs/dialog_manage_repositories.cpp:67
 #, fuzzy
@@ -18426,7 +18439,7 @@ msgstr "Repositorio (%d)"
 #: kicad/pcm/dialogs/panel_package_base.cpp:65
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:108
 msgid "Install"
-msgstr ""
+msgstr "Instalar"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:105 kicad/pcm/dialogs/panel_package.cpp:80
 msgid "Uninstall"
@@ -18442,7 +18455,7 @@ msgstr "¿Está seguro de que quiere eliminar los elementos seleccionados?"
 #: kicad/pcm/dialogs/dialog_pcm.cpp:162
 #: kicad/tools/kicad_manager_actions.cpp:117
 msgid "Plugin and Content Manager"
-msgstr ""
+msgstr "Complemento y Administrador de Contenido"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:235
 msgid "Choose package file"
@@ -18487,9 +18500,8 @@ msgid "Discard action"
 msgstr "Descartar cambios"
 
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:133
-#, fuzzy
 msgid "Install from file..."
-msgstr "Imposble mover el archivo"
+msgstr "Instalar desde archivo..."
 
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:136
 msgid "Apply changes"
@@ -18502,7 +18514,7 @@ msgstr "Descartar cambios"
 
 #: kicad/pcm/dialogs/dialog_pcm_base.h:73
 msgid "Plugin And Content Manager"
-msgstr ""
+msgstr "Complemento Y Administrador de Contenido"
 
 #: kicad/pcm/dialogs/dialog_pcm_progress.cpp:86
 #, c-format
@@ -18524,9 +18536,8 @@ msgid "Waiting..."
 msgstr "Cargando..."
 
 #: kicad/pcm/dialogs/dialog_pcm_progress_base.cpp:42
-#, fuzzy
 msgid "Overall progress"
-msgstr "Propiedades del material:"
+msgstr "Progreso general"
 
 #: kicad/pcm/dialogs/dialog_pcm_progress_base.cpp:52
 msgid "Details"
@@ -18554,7 +18565,7 @@ msgstr "Metadatos"
 #: kicad/pcm/dialogs/panel_packages_view.cpp:154
 #, c-format
 msgid "Package identifier: %s\n"
-msgstr ""
+msgstr "Identificador de paquete: %s\n"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:155
 #, c-format
@@ -18588,9 +18599,8 @@ msgid "Package download url is not specified"
 msgstr "La url de descarga del paquete no está especificada"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:343
-#, fuzzy
 msgid "Error downloading package"
-msgstr "Error al cargar el editor."
+msgstr "Error al descargar el paquete"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:352
 #, fuzzy
@@ -18659,14 +18669,14 @@ msgid "Versions"
 msgstr "Versión"
 
 #: kicad/pcm/pcm.cpp:79
-#, fuzzy, c-format
+#, c-format
 msgid "schema file '%s' not found"
-msgstr "No se ha encontrado el archivo de esquema '%s'."
+msgstr "No se ha encontrado el archivo de esquema \"%s\""
 
 #: kicad/pcm/pcm.cpp:82
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading schema: %s"
-msgstr "Error al cargar el esquema '%s'."
+msgstr "Error al cargar el esquema: %s"
 
 #: kicad/pcm/pcm.cpp:108
 #, c-format
@@ -18674,14 +18684,13 @@ msgid "Error loading installed packages list: %s"
 msgstr "Error al cargar la lista de paquetes: %s"
 
 #: kicad/pcm/pcm.cpp:186
-#, fuzzy, c-format
+#, c-format
 msgid "Downloading %lld/%lld Kb"
-msgstr "Descargando librerías"
+msgstr "Descargando %lld/%lld Kb"
 
 #: kicad/pcm/pcm.cpp:211
-#, fuzzy
 msgid "Download is too large."
-msgstr "Descargando librerías 3D"
+msgstr "La descarga es muy grande."
 
 #: kicad/pcm/pcm.cpp:225
 #, fuzzy
@@ -18706,31 +18715,34 @@ msgstr ""
 
 #: kicad/pcm/pcm.cpp:265
 msgid "Fetching repository packages"
-msgstr ""
+msgstr "Obteniendo paquetes del repositorio"
 
 #: kicad/pcm/pcm.cpp:267
-#, fuzzy
 msgid "Unable to load repository packages url."
-msgstr "No es posible cargar el archivo del proyecto \"%s\""
+msgstr "No es posible cargar el repositorio con las URL de los paquetes."
 
 #: kicad/pcm/pcm.cpp:275
 msgid "Packages hash doesn't match. Repository may be corrupted."
 msgstr ""
+"El hash de los paquetes no coincide. El repositorio podría estar corrupto."
 
 #: kicad/pcm/pcm.cpp:291
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Unable to parse packages metadata:\n"
 "\n"
 "%s"
 msgstr ""
-"No puede interpretarse la URL:\n"
+"No se pueden analizar los metadatos de los paquetes:\n"
+"\n"
 "\"%s\""
 
 #: kicad/pcm/pcm.cpp:378
 msgid ""
 "Packages cache for current repository is corrupted, it will be redownloaded."
 msgstr ""
+"La caché de los paquetes para el repositorio actual es corrupta, se volverá "
+"a descargar."
 
 #: kicad/pcm/pcm.cpp:428
 #, fuzzy
@@ -18742,11 +18754,12 @@ msgid ""
 "Resources file hash doesn't match and will not be used. Repository may be "
 "corrupted."
 msgstr ""
+"El hash del archivo de recursos no coinciden y no se utilizará. El "
+"repositorio podría ser corrupto."
 
 #: kicad/pcm/pcm.cpp:587
-#, fuzzy
 msgid "Local file"
-msgstr "Cargar Archivo:"
+msgstr "Archivo local"
 
 #: kicad/pcm/pcm_task_manager.cpp:63
 msgid "Unable to create download directory!"
@@ -18771,39 +18784,41 @@ msgid "Removing downloaded archive '%s'."
 msgstr "Eliminando archivo descargado \"%s\"."
 
 #: kicad/pcm/pcm_task_manager.cpp:157
-#, fuzzy, c-format
+#, c-format
 msgid "Downloading package url: '%s'"
-msgstr "Descargando librerías"
+msgstr "Descargando URL del paquete: \"%s\""
 
 #: kicad/pcm/pcm_task_manager.cpp:170
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Failed to download url %s\n"
 "%s"
-msgstr "Fallo al cargar '%s'."
+msgstr ""
+"Falló al descargar la URL %s\n"
+"%s"
 
 #: kicad/pcm/pcm_task_manager.cpp:249
 msgid "Aborting package installation."
-msgstr ""
+msgstr "Abortando instalación del paquete."
 
 #: kicad/pcm/pcm_task_manager.cpp:297
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Unable to parse package metadata:\n"
 "\n"
 "%s"
 msgstr ""
 "No puede interpretarse la URL:\n"
-"\"%s\""
+"\n"
+"%s"
 
 #: kicad/pcm/pcm_task_manager.cpp:306
 msgid "Archive does not contain a valid metadata.json file"
-msgstr ""
+msgstr "El archivo no continene un archivo .json de metadatos válido"
 
 #: kicad/pcm/pcm_task_manager.cpp:314
-#, fuzzy
 msgid "Archive metadata must have a single version defined"
-msgstr "Una hoja debe tener un archivo especificado."
+msgstr "Los metadatos del archivo deben de tener una única versión definida"
 
 #: kicad/pcm/pcm_task_manager.cpp:326
 #, c-format
@@ -18811,11 +18826,13 @@ msgid ""
 "Package with identifier %s is already installed, you must first uninstall "
 "this package."
 msgstr ""
+"El paquete con el identificador %s ya ha sido instalado, primero debes de "
+"desinstalar este paquete."
 
 #: kicad/pcm/pcm_task_manager.cpp:354
-#, fuzzy, c-format
+#, c-format
 msgid "Removing directory %s"
-msgstr "carpeta de configuración"
+msgstr "Borrando directorio %s"
 
 #: kicad/pcm/pcm_task_manager.cpp:359
 #, fuzzy, c-format
@@ -18825,11 +18842,11 @@ msgstr "Imposible crear archivo \"%s\""
 #: kicad/pcm/pcm_task_manager.cpp:376
 #, c-format
 msgid "Package %s uninstalled"
-msgstr ""
+msgstr "Paquete %s desinstalado"
 
 #: kicad/pcm/pcm_task_manager.cpp:445
 msgid "Aborting remaining tasks."
-msgstr ""
+msgstr "Abortando las tareas restantes."
 
 #: kicad/project_template.cpp:52
 msgid "Could open the template path!"
@@ -19075,7 +19092,7 @@ msgstr "Editar marco de borde de hoja y bloque de título"
 
 #: kicad/tools/kicad_manager_actions.cpp:117
 msgid "Run Plugin and Content Manager"
-msgstr ""
+msgstr "Ejecutar el Complemento y Administrador de Contenido"
 
 #: kicad/tools/kicad_manager_actions.cpp:124
 msgid "Open Text Editor"
@@ -19288,25 +19305,24 @@ msgid "Printing"
 msgstr "Imprimiendo"
 
 #: pagelayout_editor/dialogs/properties_frame.cpp:554
-#, fuzzy
 msgid "Predefined Keywords"
-msgstr "Anchos predefinidos:"
+msgstr "Palabras clave predefinidas"
 
 #: pagelayout_editor/dialogs/properties_frame.cpp:557
 msgid "Texts can include keywords."
-msgstr ""
+msgstr "Los textos pueden incluir palabras clave."
 
 #: pagelayout_editor/dialogs/properties_frame.cpp:558
 msgid "Keyword notation is ${keyword}"
-msgstr ""
+msgstr "La notación de palabras clave es ${palabra clave}"
 
 #: pagelayout_editor/dialogs/properties_frame.cpp:559
 msgid "Each keyword is replaced by its value"
-msgstr ""
+msgstr "Cada palabra clave es reemplazada por su valor"
 
 #: pagelayout_editor/dialogs/properties_frame.cpp:560
 msgid "These build-in keywords are always available:"
-msgstr ""
+msgstr "Estas palabras clave incorporadas están siempre disponibles:"
 
 #: pagelayout_editor/dialogs/properties_frame.cpp:564
 #, fuzzy
@@ -19314,14 +19330,12 @@ msgid "(sheet number)"
 msgstr "Página número: %d"
 
 #: pagelayout_editor/dialogs/properties_frame.cpp:565
-#, fuzzy
 msgid "(sheet count)"
-msgstr "Número de repeticiones:"
+msgstr "(recuento de hojas)"
 
 #: pagelayout_editor/dialogs/properties_frame.cpp:571
-#, fuzzy
 msgid "(paper size)"
-msgstr "Tamaño de papel personalizado:"
+msgstr "(tamaño de papel)"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:34
 msgid "Show on all pages"
@@ -20180,6 +20194,8 @@ msgid ""
 "Zdiff =\n"
 "2*Z0( (1 - 0.48exp( -0.96*S/H ) )"
 msgstr ""
+"Zdiff =\n"
+"2*Z0( (1 - 0.48exp( -0.96*S/H ) )"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:901
 msgid "Zcommon = Zeven / 2"
@@ -21042,9 +21058,8 @@ msgid "Dielectric losses (odd):"
 msgstr "Pérdidas dieléctricas (inpar):"
 
 #: pcb_calculator/transline_ident.cpp:309
-#, fuzzy
 msgid "Differential Impedance (Zd):"
-msgstr "Espaciado de par diferencial"
+msgstr "Impedancia Diferencial (Zd):"
 
 #: pcb_calculator/transline_ident.cpp:334
 msgid "Zeven"
@@ -21322,9 +21337,8 @@ msgid "Loss Tg:"
 msgstr "Tg Pérdida:"
 
 #: pcbnew/board_stackup_manager/dialog_dielectric_list_manager_base.cpp:60
-#, fuzzy
 msgid "Common materials:"
-msgstr "Común a las Unidades"
+msgstr "Materiales comunes:"
 
 #: pcbnew/board_stackup_manager/dialog_dielectric_list_manager_base.h:57
 msgid "Dielectric Material Characteristics"
@@ -21364,14 +21378,14 @@ msgid "PrePreg"
 msgstr "Preimpregnado"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:188
-#, fuzzy, c-format
+#, c-format
 msgid "Enter board thickness in %s:"
-msgstr "Ingrese el ancho de la placa en %s"
+msgstr "Ingrese el ancho de la placa en %s:"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:193
-#, fuzzy, c-format
+#, c-format
 msgid "Enter expected board thickness (min value %s):"
-msgstr "Ingrese el ancho esperado de la placa en %s (valor mínimo %s)"
+msgstr "Ingrese el ancho esperado de la placa (valor mínimo %s):"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:197
 #, fuzzy
@@ -21379,9 +21393,9 @@ msgid "Adjust Unlocked Dielectric Layers"
 msgstr "Ajustar los grosores de las capas dieléctricas desbloqueadas"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:208
-#, fuzzy, c-format
+#, c-format
 msgid "Value too small (min value %s)."
-msgstr "Valor demasiado pequeño (valor mínimo %s %s). Cancelado"
+msgstr "Valor demasiado pequeño (valor mínimo %s)."
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:228
 msgid "All dielectric  thickness layers are locked"
@@ -21439,9 +21453,8 @@ msgid "A layer thickness is < 0. Fix it"
 msgstr "El grosor de una capa es <0. Arréglalo"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:1524
-#, fuzzy
 msgid "Custom..."
-msgstr "Personalizado"
+msgstr "Personalizado..."
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:20
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:49
@@ -21611,7 +21624,7 @@ msgstr "Azul"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:67
 msgid "Purple"
-msgstr ""
+msgstr "Púrpura"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:68
 msgid "Black"
@@ -23682,7 +23695,7 @@ msgstr "Exportar STEP"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:26
 msgid "temp"
-msgstr ""
+msgstr "temp"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:36
 msgid "Coordinates"
@@ -24402,10 +24415,10 @@ msgid ""
 "This value can be overridden on a pad-by-pad basis in the Local\n"
 "Clearance and Settings tab of Pad Properties."
 msgstr ""
-"Este es el margen local entre los pads y la pasta de soldadura para esta "
-"huella.\n"
-"El valor final del margen es la suma de este valor y la proporción de "
-"margen.\n"
+"Este es el margen local entre los pads y la pasta de soldadura para\n"
+"esta huella.\n"
+"El valor final del margen es la suma de este valor y la proporción de margen."
+"\n"
 "Un valor negativo significa un tamaño de máscara menor que el del pad.\n"
 "Este valor puede ser sustituido individualmente por cada pad en\n"
 "la pestaña de márgenes y ajustes locales de las propiedades del pad."
@@ -27696,7 +27709,7 @@ msgstr "Sustituciones de rutas"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:222
 msgid "Error: illegal or empty filename."
-msgstr "Error: nombre de archivo ilegal o vacío"
+msgstr "Error: nombre de archivo ilegal o vacío."
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:379
 #: pcbnew/microwave/microwave_polygon.cpp:224
@@ -29361,9 +29374,9 @@ msgid "undefined"
 msgstr "indefinido"
 
 #: pcbnew/drc/drc_engine.cpp:902
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s %s: %s."
-msgstr "Comprobando %s."
+msgstr "Comprobando %s %s: %s."
 
 #: pcbnew/drc/drc_engine.cpp:918
 #, fuzzy, c-format
@@ -29604,14 +29617,13 @@ msgid "Differential uncoupled length too long"
 msgstr "Longitud diferencial desacoplada demasiado larga"
 
 #: pcbnew/drc/drc_item.cpp:320
-#, fuzzy, c-format
+#, c-format
 msgid "Rule: %s"
-msgstr "Reglas"
+msgstr "Regla: %s"
 
 #: pcbnew/drc/drc_item.cpp:322
-#, fuzzy
 msgid "Local override"
-msgstr "Valores locales de margen:"
+msgstr "Anulación local"
 
 #: pcbnew/drc/drc_rule.h:137
 #, c-format
@@ -31100,9 +31112,8 @@ msgid "Read Shape Description File..."
 msgstr "Leer archivo de descripción de forma..."
 
 #: pcbnew/microwave/microwave_polygon.cpp:210
-#, fuzzy
 msgid "Shape Description File"
-msgstr "Leer archivo de descripción de forma..."
+msgstr "Archivo de Descripción de Forma"
 
 #: pcbnew/microwave/microwave_polygon.cpp:314
 msgid "Shape has a null size."
@@ -31727,6 +31738,9 @@ msgid ""
 "Received an error while reading netlist.  Please report this issue to the "
 "KiCad team using the menu Help->Report Bug."
 msgstr ""
+"Se ha recibido un error al leer la lista de redes. Por favor, informe de "
+"este problema al equipo de KiCad utilizando el menú Ayuda->Informar de un "
+"error."
 
 #: pcbnew/pcb_edit_frame.cpp:1500
 #, c-format
@@ -32152,7 +32166,7 @@ msgstr "Huella %s pad %s utiliza un orificio de tipo desconocido %d."
 #, c-format
 msgid "Footprint %s pad %s uses a complex pad stack (not yet supported.)"
 msgstr ""
-"Huella %s pad %s utiliza un apilado de pads complejo (todavía no soportado)."
+"Huella %s pad %s utiliza un apilado de pads complejo (todavía no soportado.)"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2233
 #, c-format
@@ -33922,9 +33936,8 @@ msgid "Do not prefix path with footprint UUID."
 msgstr "No prefijar la ruta con el UUID de huella."
 
 #: pcbnew/tools/board_editor_control.cpp:392
-#, fuzzy
 msgid "Specctra Session File"
-msgstr "Combinar archivo Spectra Session:"
+msgstr "Archivo de Spectra Session"
 
 #: pcbnew/tools/board_editor_control.cpp:419
 msgid "Specctra DSN File"
@@ -34103,7 +34116,7 @@ msgstr "Resolución de margen de orificios para:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:629
 msgid "Items share no relevant layers:"
-msgstr ""
+msgstr "Los artículos no comparten capas relevantes:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:678
 msgid "Select an item for a constraints resolution report."
@@ -34118,9 +34131,9 @@ msgid "Track width resolution for:"
 msgstr "Resolución de ancho de pista para:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:739
-#, fuzzy, c-format
+#, c-format
 msgid "Width constraints: min %s; opt %s; max %s."
-msgstr "Restricciones de ancho: mínimo %s máximo %s."
+msgstr "Restricciones de ancho: mínimo %s; opcional %s; máximo %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:749
 msgid "Via Diameter"
@@ -34131,9 +34144,9 @@ msgid "Via diameter resolution for:"
 msgstr "Resolución de diámetro de vía para:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:762
-#, fuzzy, c-format
+#, c-format
 msgid "Diameter constraints: min %s; opt %s; max %s."
-msgstr "Restricciones de diámetro: mínimo %s máximo %s."
+msgstr "Restricciones de diámetro: mínimo %s; opcional %s; máximo %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:769
 msgid "Via Annular Width"
@@ -34144,9 +34157,10 @@ msgid "Via annular width resolution for:"
 msgstr "Resolución de ancho de anular de vía para:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:782
-#, fuzzy, c-format
+#, c-format
 msgid "Annular width constraints: min %s; opt %s; max %s."
-msgstr "Restricciones de ancho de anular de vía: mínimo %s máximo %s."
+msgstr ""
+"Restricciones de ancho de anular de vía: mínimo %s; opcional %s; máximo %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:793
 msgid "Hole Size"
@@ -35267,7 +35281,7 @@ msgstr "Alternar resaltado de red"
 
 #: pcbnew/tools/pcb_actions.cpp:667
 msgid "Limit actions to 45 degrees from the starting point"
-msgstr ""
+msgstr "Limitar las acciones a 45 grados desde el punto de partida"
 
 #: pcbnew/tools/pcb_actions.cpp:672
 msgid "Prevent items from being moved and/or resized on the canvas"
@@ -35475,7 +35489,7 @@ msgstr "Mostrar solo delimitación de las zonas"
 
 #: pcbnew/tools/pcb_actions.cpp:839
 msgid "Draw Zone Fill Fracture Borders"
-msgstr ""
+msgstr "Dibujar Bordes de Fractura de las Zonas de Relleno"
 
 #: pcbnew/tools/pcb_actions.cpp:844
 #, fuzzy
@@ -35982,6 +35996,8 @@ msgid ""
 "Not all zones are filled. Use Edit > Fill All Zones (%s) if you wish to see "
 "all fills."
 msgstr ""
+"No todas las zonas son llenadas. Usa Editar > Llenar Todas las Zonas (%s) si "
+"deseas ver todo lleno."
 
 #: pcbnew/tools/pcb_control.cpp:545
 msgid "Item locked."
@@ -36935,7 +36951,7 @@ msgstr "Placa de circuito impreso de KiCad"
 
 #: pagelayout_editor/dialogs/properties_frame.cpp:559
 msgid "Keywords are replaced by they actual value in strings"
-msgstr ""
+msgstr "Las palabras clave son reemplazadas por el valor actual en las cadenas"
 
 #~ msgid "Change to isometric perspective"
 #~ msgstr "Cambiar a perspectiva isométrica"
