@@ -47,10 +47,10 @@ TEMPLATE_WIDGET::TEMPLATE_WIDGET( wxWindow* aParent, DIALOG_TEMPLATE_SELECTOR* a
     // wxWidgets_3.xx way of doing the same...
     // Bind(wxEVT_LEFT_DOWN, &TEMPLATE_WIDGET::OnMouse, this );
 
-    m_bitmapIcon->Connect( wxEVT_LEFT_DOWN,
-                           wxMouseEventHandler( TEMPLATE_WIDGET::OnMouse ), nullptr, this );
-    m_staticTitle->Connect( wxEVT_LEFT_DOWN,
-                            wxMouseEventHandler( TEMPLATE_WIDGET::OnMouse ), nullptr, this );
+    m_bitmapIcon->Connect( wxEVT_LEFT_DOWN, wxMouseEventHandler( TEMPLATE_WIDGET::OnMouse ),
+                           nullptr, this );
+    m_staticTitle->Connect( wxEVT_LEFT_DOWN, wxMouseEventHandler( TEMPLATE_WIDGET::OnMouse ),
+                            nullptr, this );
 
     // We're not selected until we're clicked
     Unselect();
@@ -80,9 +80,9 @@ void TEMPLATE_WIDGET::Unselect()
 void TEMPLATE_WIDGET::SetTemplate( PROJECT_TEMPLATE* aTemplate )
 {
     m_currTemplate = aTemplate;
-    m_staticTitle->SetLabel( *( aTemplate->GetTitle() ) );
+    m_staticTitle->SetLabel( *aTemplate->GetTitle() );
     m_staticTitle->Wrap( 100 );
-    m_bitmapIcon->SetBitmap( *( aTemplate->GetIcon() ) );
+    m_bitmapIcon->SetBitmap( *aTemplate->GetIcon() );
 }
 
 
@@ -96,9 +96,10 @@ void TEMPLATE_WIDGET::OnMouse( wxMouseEvent& event )
 
 void DIALOG_TEMPLATE_SELECTOR::onNotebookResize( wxSizeEvent& event )
 {
-    for( size_t i=0; i < m_notebook->GetPageCount(); i++ )
+    for( size_t i = 0; i < m_notebook->GetPageCount(); i++ )
     {
-        m_panels[i]->SetSize( m_notebook->GetSize().GetWidth() - 6, 140 );
+        m_panels[i]->SetSize( m_notebook->GetSize().GetWidth() - 6,
+                              m_panels[i]->m_SizerChoice->GetSize().GetHeight() );
         m_panels[i]->m_SizerBase->FitInside( m_panels[i] );
         m_panels[i]->m_scrolledWindow->SetSize( m_panels[i]->GetSize().GetWidth() - 6,
                                                 m_panels[i]->GetSize().GetHeight() - 6 );
@@ -212,9 +213,7 @@ void DIALOG_TEMPLATE_SELECTOR::buildPageContent( const wxString& aPath, int aPag
                 wxString sub_full = aPath + sub_name;
 
                 if( sub_dir.Open( sub_full ) )
-                {
                     AddTemplate( aPage, new PROJECT_TEMPLATE( sub_full ) );
-                }
 
                 cont = dir.GetNext( &sub_name );
             }
@@ -230,8 +229,7 @@ void DIALOG_TEMPLATE_SELECTOR::onDirectoryBrowseClicked( wxCommandEvent& event )
     fn.Normalize();
     wxString currPath = fn.GetFullPath();
 
-    wxDirDialog dirDialog( this, _( "Select Templates Directory" ),
-                           currPath,
+    wxDirDialog dirDialog( this, _( "Select Templates Directory" ), currPath,
                            wxDD_DEFAULT_STYLE | wxDD_DIR_MUST_EXIST );
 
     if( dirDialog.ShowModal() != wxID_OK )
