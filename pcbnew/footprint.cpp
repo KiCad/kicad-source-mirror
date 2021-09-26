@@ -854,6 +854,8 @@ SHAPE_POLY_SET FOOTPRINT::GetBoundingHull() const
     {
         pad->TransformShapeWithClearanceToPolygon( rawPolys, UNDEFINED_LAYER, 0, ARC_LOW_DEF,
                                                    ERROR_OUTSIDE );
+        // In case hole is larger than pad
+        pad->TransformHoleWithClearanceToPolygon( rawPolys, 0, ARC_LOW_DEF, ERROR_OUTSIDE );
     }
 
     for( FP_ZONE* zone : m_fp_zones )

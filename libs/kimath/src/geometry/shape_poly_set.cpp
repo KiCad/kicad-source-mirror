@@ -1478,6 +1478,9 @@ bool SHAPE_POLY_SET::Collide( const SEG& aSeg, int aClearance, int* aActual,
 bool SHAPE_POLY_SET::Collide( const VECTOR2I& aP, int aClearance, int* aActual,
                               VECTOR2I* aLocation ) const
 {
+    if( IsEmpty() || VertexCount() == 0 )
+        return false;
+
     VECTOR2I nearest;
     ecoord dist_sq = SquaredDistance( aP, aLocation ? &nearest : nullptr );
 
