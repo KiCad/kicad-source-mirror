@@ -7,16 +7,16 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-09-20 11:57-0700\n"
-"PO-Revision-Date: 2021-07-23 08:32+0000\n"
-"Last-Translator: Michael Misirlis <MMISIRLIS@gmail.com>\n"
-"Language-Team: Greek <https://hosted.weblate.org/projects/kicad/master-"
-"source/el/>\n"
+"PO-Revision-Date: 2021-09-27 13:40+0000\n"
+"Last-Translator: aris-kimi <aris_kimi@hotmail.com>\n"
+"Language-Team: Greek <https://hosted.weblate.org/projects/kicad/"
+"master-source/el/>\n"
 "Language: el\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.7.2-dev\n"
+"X-Generator: Weblate 4.9-dev\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-Basepath: /home/m/ll/mount_point/home/mmisirlis/KiCad-GR-LL-notes/"
 "sources_git_official/kicad\n"
@@ -31,7 +31,6 @@ msgstr ""
 "X-Poedit-SearchPath-6: 3d-viewer\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
-#, fuzzy
 msgid "All Files"
 msgstr "Όλα τα αρχεία"
 
@@ -397,9 +396,8 @@ msgid "Render current view using Raytracing"
 msgstr "Απόδοση τρέχουσας προβολής με χρήση Raytracing"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:23
-#, fuzzy
 msgid "Environment Colors"
-msgstr "Μεταβλητές Περιβάλλοντος"
+msgstr "Χρώματα Περιβάλλοντος"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:30
 #, fuzzy
@@ -982,9 +980,8 @@ msgstr ""
 "Εναλλαγή Προβολής 3Δ μοντέλων με xαρακτηριστικό 'Επιφανειακής στήριξης'"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:225
-#, fuzzy
 msgid "Toggle Other 3D models"
-msgstr "Εναλλαγή 3Δ μοντέλων για SMD"
+msgstr "Εναλλαγή Άλλων 3D μοντέλων"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:225
 msgid "Toggle 3D models for 'Other' type components"
@@ -1301,9 +1298,8 @@ msgid "Export to Clipboard"
 msgstr "Εξαγωγή στο Πρόχειρο"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:158
-#, fuzzy
 msgid "Symbol (.kicad_sym file)"
-msgstr "Σύμβολο (αρχείο *.lib)"
+msgstr "Σύμβολο (αρχείο *.kicad_sym)"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:158
 msgid "Footprint (.kicad_mod file)"
