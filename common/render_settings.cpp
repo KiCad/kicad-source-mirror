@@ -62,8 +62,14 @@ void RENDER_SETTINGS::update()
         m_layerColorsHi[i]   = m_layerColors[i].Brightened( m_highlightFactor );
         m_layerColorsDark[i] = m_layerColors[i].Darkened( 1.0 - m_highlightFactor );
 
+        if( IsNetnameLayer( i ) || IsHoleLayer( i ) )
+        {
+            m_layerColorsSel[i] = m_layerColors[i];
+            continue;
+        }
+
         // Linear brightening doesn't work well for colors near white
-        double factor = ( m_selectFactor * 0.6 ) + pow( m_layerColors[i].GetBrightness(), 3 );
+        double factor = ( m_selectFactor * 0.5 ) + pow( m_layerColors[i].GetBrightness(), 3 );
         factor = std::min( 1.0, factor );
 
         m_layerColorsSel[i] = m_layerColors[i].Brightened( factor );
