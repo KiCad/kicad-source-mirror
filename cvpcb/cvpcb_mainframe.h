@@ -49,11 +49,6 @@ typedef std::vector< CVPCB_ASSOCIATION >       CVPCB_UNDO_REDO_ENTRIES;
 // The undo list is a vector of undo entries
 typedef std::vector< CVPCB_UNDO_REDO_ENTRIES > CVPCB_UNDO_REDO_LIST;
 
-/**
- * The print format to display a schematic component line.
- * format: idx reference - value : footprint_id
- */
-#define CMP_FORMAT wxT( "%3d %8s - %16s : %s" )
 
 /**
  * The CvPcb application main window.
@@ -343,6 +338,9 @@ protected:
     void setupUIConditions() override;
 
 private:
+    wxString formatSymbolDesc( int idx, const wxString& aReference, const wxString& aValue,
+                               const wxString& aFootprint );
+
     /**
      * Setup the tool system for the CVPCB main frame.
      */

@@ -263,10 +263,10 @@ bool CVPCB_MAINFRAME::ReadNetListAndFpFiles( const std::string& aNetlist )
     {
         COMPONENT* component = m_netlist.GetComponent( i );
 
-        msg.Printf( CMP_FORMAT, m_symbolsListBox->GetCount() + 1,
-                    component->GetReference(),
-                    component->GetValue(),
-                    FROM_UTF8( component->GetFPID().Format().c_str() ) );
+        msg = formatSymbolDesc( m_symbolsListBox->GetCount() + 1,
+                                component->GetReference(),
+                                component->GetValue(),
+                                FROM_UTF8( component->GetFPID().Format().c_str() ) );
 
         m_symbolsListBox->AppendLine( msg );
     }
