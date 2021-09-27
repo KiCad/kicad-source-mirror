@@ -154,9 +154,6 @@ public:
     wxString GetSelectedLibrary();
     wxString OnGetItemText( long item, long column ) const override;
 
-    // Events functions:
-    void     OnLeftClick( wxListEvent& event );
-
     void     OnSelectLibrary( wxListEvent& event );
 
     /**
@@ -179,12 +176,12 @@ private:
 };
 
 
-class COMPONENTS_LISTBOX : public ITEMS_LISTBOX_BASE
+class SYMBOLS_LISTBOX : public ITEMS_LISTBOX_BASE
 {
 public:
-    COMPONENTS_LISTBOX( CVPCB_MAINFRAME* parent, wxWindowID id );
+    SYMBOLS_LISTBOX( CVPCB_MAINFRAME* parent, wxWindowID id );
 
-    ~COMPONENTS_LISTBOX();
+    ~SYMBOLS_LISTBOX();
 
     void     Clear();
     int      GetCount();
@@ -222,7 +219,7 @@ public:
     DECLARE_EVENT_TABLE();
 
 public:
-    wxArrayString      m_ComponentList;
+    wxArrayString      m_SymbolList;
 };
 
 

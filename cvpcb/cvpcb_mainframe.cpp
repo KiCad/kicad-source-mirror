@@ -921,11 +921,11 @@ void CVPCB_MAINFRAME::BuildSymbolsListBox()
 
     if( m_symbolsListBox == nullptr )
     {
-        m_symbolsListBox = new COMPONENTS_LISTBOX( this, ID_CVPCB_COMPONENT_LIST );
+        m_symbolsListBox = new SYMBOLS_LISTBOX( this, ID_CVPCB_COMPONENT_LIST );
         m_symbolsListBox->SetFont( KIUI::GetMonospacedUIFont() );
     }
 
-    m_symbolsListBox->m_ComponentList.Clear();
+    m_symbolsListBox->m_SymbolList.Clear();
 
     for( unsigned i = 0;  i < m_netlist.GetCount();  i++ )
     {
@@ -935,14 +935,14 @@ void CVPCB_MAINFRAME::BuildSymbolsListBox()
                                 symbol->GetReference(),
                                 symbol->GetValue(),
                                 symbol->GetFPID().Format().wx_str() );
-        m_symbolsListBox->m_ComponentList.Add( msg );
+        m_symbolsListBox->m_SymbolList.Add( msg );
     }
 
-    if( m_symbolsListBox->m_ComponentList.Count() )
+    if( m_symbolsListBox->m_SymbolList.Count() )
     {
-        m_symbolsListBox->SetItemCount( m_symbolsListBox->m_ComponentList.Count() );
+        m_symbolsListBox->SetItemCount( m_symbolsListBox->m_SymbolList.Count() );
         m_symbolsListBox->SetSelection( 0, true );
-        m_symbolsListBox->RefreshItems( 0L, m_symbolsListBox->m_ComponentList.Count() - 1 );
+        m_symbolsListBox->RefreshItems( 0L, m_symbolsListBox->m_SymbolList.Count() - 1 );
         m_symbolsListBox->UpdateWidth();
     }
 }

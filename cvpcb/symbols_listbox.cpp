@@ -33,65 +33,65 @@
 #include <wx/log.h>
 
 
-COMPONENTS_LISTBOX::COMPONENTS_LISTBOX( CVPCB_MAINFRAME* parent, wxWindowID id ) :
+SYMBOLS_LISTBOX::SYMBOLS_LISTBOX( CVPCB_MAINFRAME* parent, wxWindowID id ) :
     ITEMS_LISTBOX_BASE( parent, id )
 {
 }
 
 
-COMPONENTS_LISTBOX::~COMPONENTS_LISTBOX()
+SYMBOLS_LISTBOX::~SYMBOLS_LISTBOX()
 {
 }
 
 
-BEGIN_EVENT_TABLE( COMPONENTS_LISTBOX, ITEMS_LISTBOX_BASE )
-    EVT_CHAR( COMPONENTS_LISTBOX::OnChar )
-    EVT_LIST_ITEM_SELECTED( ID_CVPCB_COMPONENT_LIST, COMPONENTS_LISTBOX::OnSelectComponent )
+BEGIN_EVENT_TABLE( SYMBOLS_LISTBOX, ITEMS_LISTBOX_BASE )
+    EVT_CHAR( SYMBOLS_LISTBOX::OnChar )
+    EVT_LIST_ITEM_SELECTED( ID_CVPCB_COMPONENT_LIST, SYMBOLS_LISTBOX::OnSelectComponent )
 END_EVENT_TABLE()
 
 
-void COMPONENTS_LISTBOX::Clear()
+void SYMBOLS_LISTBOX::Clear()
 {
-    m_ComponentList.Clear();
+    m_SymbolList.Clear();
     SetItemCount( 0 );
 }
 
 
-int COMPONENTS_LISTBOX::GetCount()
+int SYMBOLS_LISTBOX::GetCount()
 {
-    return m_ComponentList.Count();
+    return m_SymbolList.Count();
 }
 
 
-void COMPONENTS_LISTBOX::SetString( unsigned linecount, const wxString& text )
+void SYMBOLS_LISTBOX::SetString( unsigned linecount, const wxString& text )
 {
-    if( linecount >= m_ComponentList.Count() )
-        linecount = m_ComponentList.Count() - 1;
+    if( linecount >= m_SymbolList.Count() )
+        linecount = m_SymbolList.Count() - 1;
 
-    if( m_ComponentList.Count() > 0 )
+    if( m_SymbolList.Count() > 0 )
     {
-        m_ComponentList[linecount] = text;
+        m_SymbolList[linecount] = text;
         UpdateWidth( linecount );
     }
 }
 
 
-void COMPONENTS_LISTBOX::AppendLine( const wxString& text )
+void SYMBOLS_LISTBOX::AppendLine( const wxString& text )
 {
-    m_ComponentList.Add( text );
-    int lines = m_ComponentList.Count();
+    m_SymbolList.Add( text );
+    int lines = m_SymbolList.Count();
     SetItemCount( lines );
     UpdateWidth( lines - 1 );
 }
 
 
-wxString COMPONENTS_LISTBOX::OnGetItemText( long item, long column ) const
+wxString SYMBOLS_LISTBOX::OnGetItemText( long item, long column ) const
 {
-    return m_ComponentList.Item( item );
+    return m_SymbolList.Item( item );
 }
 
 
-void COMPONENTS_LISTBOX::SetSelection( int index, bool State )
+void SYMBOLS_LISTBOX::SetSelection( int index, bool State )
 {
     if( index >= GetCount() )
         index = GetCount() - 1;
@@ -108,9 +108,9 @@ void COMPONENTS_LISTBOX::SetSelection( int index, bool State )
 }
 
 
-void COMPONENTS_LISTBOX::OnChar( wxKeyEvent& event )
+void SYMBOLS_LISTBOX::OnChar( wxKeyEvent& event )
 {
-    wxLogTrace( kicadTraceKeyEvent, "COMPONENTS_LISTBOX::OnChar %s", dump( event ) );
+    wxLogTrace( kicadTraceKeyEvent, "SYMBOLS_LISTBOX::OnChar %s", dump( event ) );
 
     int key = event.GetKeyCode();
 
@@ -133,9 +133,9 @@ void COMPONENTS_LISTBOX::OnChar( wxKeyEvent& event )
     // Search for an item name starting by the key code:
     key = toupper( key );
 
-    for( unsigned ii = 0; ii < m_ComponentList.GetCount(); ii++ )
+    for( unsigned ii = 0; ii < m_SymbolList.GetCount(); ii++ )
     {
-        wxString text = m_ComponentList.Item( ii );
+        wxString text = m_SymbolList.Item( ii );
 
         // Search for the start char of the footprint name.  Skip the line number.
         text.Trim( false );      // Remove leading spaces in line
@@ -166,7 +166,7 @@ void COMPONENTS_LISTBOX::OnChar( wxKeyEvent& event )
 }
 
 
-void COMPONENTS_LISTBOX::OnSelectComponent( wxListEvent& event )
+void SYMBOLS_LISTBOX::OnSelectComponent( wxListEvent& event )
 {
     SetFocus();
     GetParent()->OnSelectComponent( event );

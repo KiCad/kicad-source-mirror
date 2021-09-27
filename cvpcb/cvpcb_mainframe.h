@@ -384,7 +384,7 @@ private:
     ACTION_TOOLBAR*           m_mainToolBar;
     FOOTPRINTS_LISTBOX*       m_footprintListBox;
     LIBRARY_LISTBOX*          m_librariesListBox;
-    COMPONENTS_LISTBOX*       m_symbolsListBox;
+    SYMBOLS_LISTBOX*       m_symbolsListBox;
     wxTextCtrl*               m_tcFilterString;
     wxStaticText*             m_statusLine1;
     wxStaticText*             m_statusLine2;
