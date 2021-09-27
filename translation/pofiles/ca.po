@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-09-20 11:57-0700\n"
-"PO-Revision-Date: 2021-09-27 13:40+0000\n"
+"PO-Revision-Date: 2021-09-27 15:33+0000\n"
 "Last-Translator: Arnau Llovet Vidal <arnaullv@gmail.com>\n"
 "Language-Team: Catalan <https://hosted.weblate.org/projects/kicad/"
 "master-source/ca/>\n"
@@ -4493,14 +4493,19 @@ msgid ""
 "For instance, ${KIPRJMOD}/libs/footprints.pretty can be defined as a folder "
 "containing a project specific footprint library named footprints.pretty."
 msgstr ""
+"Definida internament per KiCad (no pot editar-se) i conté el camí absolut "
+"del projecte actiu. Aquesta variable d'entorn pot utilitzar-se per definir "
+"fitxers i camins relatius al projecte actiu. Per exemple, ${KIPRJMOD}/libs/"
+"footprints.pretty pot definir-se com una carpeta que conté una biblioteca "
+"d'empremtes específica al projecte, de nom footprints.pretty."
 
 #: common/env_vars.cpp:92
 msgid "A directory containing system-wide scripts installed with KiCad"
-msgstr ""
+msgstr "Una carpeta que conté scripts del sistema instal·lats amb KiCad"
 
 #: common/env_vars.cpp:94
 msgid "A directory containing user-specific scripts installed with KiCad"
-msgstr ""
+msgstr "Una carpeta que conté scripts d'usuari instal·lats amb KiCad"
 
 #: common/env_vars.cpp:98
 msgid "Deprecated version of KICAD_TEMPLATE_DIR."
@@ -4541,6 +4546,10 @@ msgid ""
 "\n"
 "To open it you will need to upgrade KiCad to a version dated %s or later."
 msgstr ""
+"KiCad no ha pogut obrir el fitxer ja que ha estat creat amb una versió més "
+"recent de la que està en us.\n"
+"\n"
+"Per obrir-lo, necessites actualitzar KiCad a la versió %s o posterior."
 
 #: common/exceptions.cpp:126
 msgid "Full error text:"
@@ -4599,7 +4608,7 @@ msgstr "Error de càrrega"
 
 #: common/footprint_info.cpp:101
 msgid "Errors were encountered loading footprints:"
-msgstr ""
+msgstr "S'han trobat errors en carregar l'empremta:"
 
 #: common/fp_lib_table.cpp:200
 #, c-format
@@ -4613,7 +4622,7 @@ msgstr ""
 #: common/fp_lib_table.cpp:300
 #, c-format
 msgid "fp-lib-table files contain no library named '%s'."
-msgstr ""
+msgstr "La taula fp-lib-table no conté la biblioteca anomenada '%s'."
 
 #: common/fp_lib_table.cpp:492
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:107
@@ -4633,6 +4642,8 @@ msgid ""
 "Problem while running the PDF viewer.\n"
 "Command is '%s'."
 msgstr ""
+"S'ha trobat un problema en executar el visor de PDFs.\n"
+"L'ordre és '%s'."
 
 #: common/gestfich.cpp:220
 #, c-format
@@ -4710,14 +4721,13 @@ msgstr "Selecciona totes les cel·les"
 
 #: common/hotkey_store.cpp:43
 msgid "Pan Left/Right"
-msgstr ""
+msgstr "Desplaçament Esquerra/Dreta"
 
 #: common/hotkey_store.cpp:44
 msgid "Pan Up/Down"
-msgstr ""
+msgstr "Desplaçament Amunt/Avall"
 
 #: common/hotkey_store.cpp:45 eeschema/tools/ee_actions.cpp:255
-#, fuzzy
 msgid "Finish Drawing"
 msgstr "Acaba el dibuix"
 
@@ -4732,17 +4742,16 @@ msgid "Highlight Net"
 msgstr "Ressalta la xarxa"
 
 #: common/hotkey_store.cpp:48
-#, fuzzy
 msgid "Remove from Selection"
-msgstr "Zoom a la selecció"
+msgstr "Treu de la selecció"
 
 #: common/hotkey_store.cpp:49
 msgid "Ignore Grid Snaps"
-msgstr ""
+msgstr "Ignora l'ajustament a la quadrícula"
 
 #: common/hotkey_store.cpp:50
 msgid "Ignore Other Snaps"
-msgstr ""
+msgstr "Ignora altres ajustaments"
 
 #: common/hotkey_store.cpp:57 common/tool/action_menu.cpp:227
 #: common/tool/actions.cpp:114
@@ -4816,13 +4825,13 @@ msgid "Error loading editor."
 msgstr "Error en carregar l'editor."
 
 #: common/kiway.cpp:516
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to switch language to %s"
-msgstr "No es pot escriure <%s>"
+msgstr "No s'ha pogut canviar l'idioma a %s"
 
 #: common/languages_menu.cpp:48
 msgid "Set Language"
-msgstr "Estableix la llengua"
+msgstr "Estableix l'idioma"
 
 #: common/layer_id.cpp:32
 msgid "F.Cu"
