@@ -5,7 +5,7 @@
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#include "dialogs/dialog_display_html_text_base.h"
+#include "dialog_display_html_text_base.h"
 
 ///////////////////////////////////////////////////////////////////////////
 
@@ -16,6 +16,7 @@ DIALOG_DISPLAY_HTML_TEXT_BASE::DIALOG_DISPLAY_HTML_TEXT_BASE( wxWindow* parent, 
 	wxBoxSizer* bMainSizer;
 	bMainSizer = new wxBoxSizer( wxVERTICAL );
 
+	bMainSizer->SetMinSize( wxSize( 540,240 ) );
 	m_htmlWindow = new wxHtmlWindow( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxHW_SCROLLBAR_AUTO );
 	bMainSizer->Add( m_htmlWindow, 1, wxALL|wxEXPAND, 5 );
 

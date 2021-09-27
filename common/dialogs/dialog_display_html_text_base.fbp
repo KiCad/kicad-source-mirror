@@ -54,7 +54,7 @@
             <property name="window_name"></property>
             <property name="window_style"></property>
             <object class="wxBoxSizer" expanded="1">
-                <property name="minimum_size">-1,-1</property>
+                <property name="minimum_size">540,240</property>
                 <property name="name">bMainSizer</property>
                 <property name="orient">wxVERTICAL</property>
                 <property name="permission">none</property>
