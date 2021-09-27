@@ -13,10 +13,10 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-09-27 08:33-0700\n"
-"PO-Revision-Date: 2021-09-15 17:51+0000\n"
-"Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
-"Language-Team: Spanish <https://hosted.weblate.org/projects/kicad/master-"
-"source/es/>\n"
+"PO-Revision-Date: 2021-09-29 17:58+0000\n"
+"Last-Translator: Roberto Fernandez Bautista <roberto.fer.bau@gmail.com>\n"
+"Language-Team: Spanish <https://hosted.weblate.org/projects/kicad/"
+"master-source/es/>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -205,9 +205,9 @@ msgid "Build Tech layers"
 msgstr "Construir capas técnicas"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:909
-#, fuzzy, c-format
+#, c-format
 msgid "Build Tech layer %d"
-msgstr "Construir capas técnicas"
+msgstr "Construir capa técnica %d"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1054
 msgid "Build BVH for holes and vias"
@@ -285,9 +285,9 @@ msgid "Load OpenGL: layers"
 msgstr "Cargar OpenGL: capas"
 
 #: 3d-viewer/3d_rendering/legacy/create_scene.cpp:562
-#, fuzzy, c-format
+#, c-format
 msgid "Load OpenGL layer %d"
-msgstr "Cargar OpenGL: capas"
+msgstr "Cargar capa OpenGL %d"
 
 #: 3d-viewer/3d_rendering/legacy/create_scene.cpp:914
 #: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:430
@@ -396,28 +396,24 @@ msgid "Render current view using Raytracing"
 msgstr "Renderizar la vista actual utilizando Raytracing"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:23
-#, fuzzy
 msgid "Environment Colors"
-msgstr "Variables de entorno"
+msgstr "Colores de entorno"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:30
-#, fuzzy
 msgid "Background gradient start:"
-msgstr "Inicio de las referencias traseras:"
+msgstr "Inicio del gradiente de fondo:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:37
-#, fuzzy
 msgid "Background gradient end:"
-msgstr "&Fondo blanco"
+msgstr "Final del gradiente de fondo:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:50
 msgid "Solder paste:"
 msgstr "Pasta de soldadura:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:64
-#, fuzzy
 msgid "Board Colors"
-msgstr "Color del cuerpo de la placa"
+msgstr "Colores de la Placa"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:66
 #, fuzzy
@@ -18554,9 +18550,9 @@ msgid "Package identifier: %s\n"
 msgstr ""
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:155
-#, fuzzy, c-format
+#, c-format
 msgid "License: %s\n"
-msgstr "Licencia"
+msgstr "Licencia: %s\n"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:169
 #, c-format
@@ -18828,7 +18824,7 @@ msgstr ""
 
 #: kicad/project_template.cpp:52
 msgid "Could open the template path!"
-msgstr "¡Ha podido abrirse la ruta a la plantilla!"
+msgstr "¡No se pudo abrir la ruta a la plantilla!"
 
 #: kicad/project_template.cpp:57
 msgid "Couldn't open the meta information directory for this template!"
