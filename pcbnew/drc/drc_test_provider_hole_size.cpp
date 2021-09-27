@@ -40,8 +40,7 @@
 class DRC_TEST_PROVIDER_HOLE_SIZE : public DRC_TEST_PROVIDER
 {
 public:
-    DRC_TEST_PROVIDER_HOLE_SIZE() :
-        m_board( nullptr )
+    DRC_TEST_PROVIDER_HOLE_SIZE()
     {
     }
 
@@ -68,8 +67,6 @@ public:
 private:
     void checkVia( PCB_VIA* via, bool aExceedMicro, bool aExceedStd );
     void checkPad( PAD* aPad );
-
-    BOARD* m_board;
 };
 
 
@@ -80,9 +77,7 @@ bool DRC_TEST_PROVIDER_HOLE_SIZE::Run()
         if( !reportPhase( _( "Checking pad holes..." ) ) )
             return false;   // DRC cancelled
 
-        m_board = m_drcEngine->GetBoard();
-
-        for( FOOTPRINT* footprint : m_board->Footprints() )
+        for( FOOTPRINT* footprint : m_drcEngine->GetBoard()->Footprints() )
         {
             if( m_drcEngine->IsErrorLimitExceeded( DRCE_DRILL_OUT_OF_RANGE ) )
                 break;
@@ -113,7 +108,7 @@ bool DRC_TEST_PROVIDER_HOLE_SIZE::Run()
 
         std::vector<PCB_VIA*> vias;
 
-        for( PCB_TRACK* track : m_board->Tracks() )
+        for( PCB_TRACK* track : m_drcEngine->GetBoard()->Tracks() )
         {
             if( track->Type() == PCB_VIA_T )
                 vias.push_back( static_cast<PCB_VIA*>( track ) );
