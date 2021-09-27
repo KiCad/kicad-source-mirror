@@ -16,15 +16,11 @@ DIALOG_LIB_TEXT_PROPERTIES_BASE::DIALOG_LIB_TEXT_PROPERTIES_BASE( wxWindow* pare
 	wxBoxSizer* bMainSizer;
 	bMainSizer = new wxBoxSizer( wxVERTICAL );
 
-	m_stSheetFnWarning = new wxStaticText( this, wxID_ANY, _("Warning: Sheet filename can be modified only in sheet properties dialog."), wxDefaultPosition, wxDefaultSize, 0 );
-	m_stSheetFnWarning->Wrap( -1 );
-	bMainSizer->Add( m_stSheetFnWarning, 0, wxALL, 5 );
-
 	wxBoxSizer* bPropertiesSizer;
 	bPropertiesSizer = new wxBoxSizer( wxVERTICAL );
 
 	wxBoxSizer* bUpperBoxSizer;
-	bUpperBoxSizer = new wxBoxSizer( wxHORIZONTAL );
+	bUpperBoxSizer = new wxBoxSizer( wxVERTICAL );
 
 	wxBoxSizer* bTextValueBoxSizer;
 	bTextValueBoxSizer = new wxBoxSizer( wxHORIZONTAL );
@@ -67,15 +63,15 @@ DIALOG_LIB_TEXT_PROPERTIES_BASE::DIALOG_LIB_TEXT_PROPERTIES_BASE( wxWindow* pare
 	m_StyledTextCtrl->SetSelForeground( true, wxSystemSettings::GetColour( wxSYS_COLOUR_HIGHLIGHTTEXT ) );
 	bTextValueBoxSizer->Add( m_StyledTextCtrl, 1, wxRIGHT|wxLEFT, 5 );
 
-	m_PowerComponentValues = new wxStaticText( this, wxID_ANY, _("(Power symbol value field text cannot be changed.)"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_PowerComponentValues->Wrap( -1 );
-	bTextValueBoxSizer->Add( m_PowerComponentValues, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
-
 	m_TextValueSelectButton = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
 	bTextValueBoxSizer->Add( m_TextValueSelectButton, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 
 	bUpperBoxSizer->Add( bTextValueBoxSizer, 1, wxEXPAND|wxTOP|wxBOTTOM|wxRIGHT, 5 );
+
+	m_note = new wxStaticText( this, wxID_ANY, _("(%s)"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_note->Wrap( -1 );
+	bUpperBoxSizer->Add( m_note, 0, wxBOTTOM|wxRIGHT|wxLEFT, 10 );
 
 
 	bPropertiesSizer->Add( bUpperBoxSizer, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
@@ -217,6 +213,7 @@ DIALOG_LIB_TEXT_PROPERTIES_BASE::DIALOG_LIB_TEXT_PROPERTIES_BASE( wxWindow* pare
 
 	this->SetSizer( bMainSizer );
 	this->Layout();
+	bMainSizer->Fit( this );
 
 	// Connect Events
 	this->Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( DIALOG_LIB_TEXT_PROPERTIES_BASE::OnCloseDialog ) );

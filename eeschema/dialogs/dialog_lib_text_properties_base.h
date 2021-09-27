@@ -40,12 +40,11 @@ class DIALOG_LIB_TEXT_PROPERTIES_BASE : public DIALOG_SHIM
 	private:
 
 	protected:
-		wxStaticText* m_stSheetFnWarning;
 		wxStaticText* m_textLabel;
 		wxTextCtrl* m_TextCtrl;
 		wxStyledTextCtrl* m_StyledTextCtrl;
-		wxStaticText* m_PowerComponentValues;
 		wxBitmapButton* m_TextValueSelectButton;
+		wxStaticText* m_note;
 		wxCheckBox* m_visible;
 		wxStaticText* m_xPosLabel;
 		wxTextCtrl* m_xPosCtrl;
@@ -79,7 +78,7 @@ class DIALOG_LIB_TEXT_PROPERTIES_BASE : public DIALOG_SHIM
 
 	public:
 
-		DIALOG_LIB_TEXT_PROPERTIES_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Text Item Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 739,340 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		DIALOG_LIB_TEXT_PROPERTIES_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Text Item Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 		~DIALOG_LIB_TEXT_PROPERTIES_BASE();
 
 };
