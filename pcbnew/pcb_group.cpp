@@ -142,6 +142,18 @@ void PCB_GROUP::SetLayerRecursive( PCB_LAYER_ID aLayer, int aDepth )
 }
 
 
+void PCB_GROUP::SetLocked( bool aLockState )
+{
+    BOARD_ITEM::SetLocked( aLockState );
+
+    RunOnChildren(
+            [&]( BOARD_ITEM* child )
+            {
+                child->SetLocked( aLockState );
+            } );
+}
+
+
 EDA_ITEM* PCB_GROUP::Clone() const
 {
     // Use copy constructor to get the same uuid and other fields

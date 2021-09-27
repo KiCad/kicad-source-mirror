@@ -687,10 +687,10 @@ bool PCB_SELECTION_TOOL::selectPoint( const VECTOR2I& aWhere, bool aOnDrag,
     if( aClientFilter )
         aClientFilter( aWhere, collector, this );
 
+    FilterCollectorForHierarchy( collector, false );
+
     // Apply the stateful filter
     FilterCollectedItems( collector, false );
-
-    FilterCollectorForHierarchy( collector, false );
 
     // Apply some ugly heuristics to avoid disambiguation menus whenever possible
     if( collector.GetCount() > 1 && !m_skip_heuristics )

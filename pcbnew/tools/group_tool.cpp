@@ -254,6 +254,7 @@ int GROUP_TOOL::Group( const TOOL_EVENT& aEvent )
 
     BOARD*     board = getModel<BOARD>();
     PCB_GROUP* group = nullptr;
+    bool       lockGroup = false;
 
     if( m_isFootprintEditor )
     {
@@ -264,8 +265,15 @@ int GROUP_TOOL::Group( const TOOL_EVENT& aEvent )
         group = new PCB_GROUP( parentFootprint );
         parentFootprint->Add( group );
 
-        for( EDA_ITEM* item : selection )
-            group->AddItem( static_cast<BOARD_ITEM*>( item ) );
+        for( EDA_ITEM* eda_item : selection )
+        {
+            BOARD_ITEM* item = static_cast<BOARD_ITEM*>( eda_item );
+
+            if( item->IsLocked() )
+                lockGroup = true;
+
+            group->AddItem( item );
+        }
     }
     else
     {
@@ -276,14 +284,23 @@ int GROUP_TOOL::Group( const TOOL_EVENT& aEvent )
 
         undoList.PushItem( ITEM_PICKER( nullptr, group, UNDO_REDO::NEWITEM ) );
 
-        for( EDA_ITEM* item : selection )
+        for( EDA_ITEM* eda_item : selection )
         {
+            BOARD_ITEM* item = static_cast<BOARD_ITEM*>( eda_item );
+
+            if( item->IsLocked() )
+                lockGroup = true;
+
             group->AddItem( static_cast<BOARD_ITEM*>( item ) );
+
             undoList.PushItem( ITEM_PICKER( nullptr, item, UNDO_REDO::REGROUP ) );
         }
 
         m_frame->SaveCopyInUndoList( undoList, UNDO_REDO::REGROUP );
     }
+
+    if( lockGroup )
+        group->SetLocked( true );
 
     selTool->ClearSelection();
     selTool->select( group );
