@@ -753,3 +753,10 @@ TOOL_ACTION EE_ACTIONS::symbolMoveActivate( "eeschema.SymbolMoveTool",
 TOOL_ACTION EE_ACTIONS::alignToGrid( "eeschema.AlignToGrid",
         AS_GLOBAL, 0, "",
         _( "Align Elements to Grid" ), "", BITMAPS::move, AF_ACTIVATE );
+
+// Schematic editor save copy curr sheet command
+TOOL_ACTION EE_ACTIONS::saveCurrSheetCopyAs( "eeschema.EditorControl.saveCurrSheetCopyAs",
+        AS_GLOBAL,
+        0, "",
+        _( "Save Current Sheet Copy As..." ), _( "Save a copy of the current sheet to another location or name" ),
+        BITMAPS::save_as );

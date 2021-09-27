@@ -38,6 +38,9 @@ class TOOL_MANAGER;
 class EE_ACTIONS : public ACTIONS
 {
 public:
+    // Menu bar save curr sheet as command
+    static TOOL_ACTION saveCurrSheetCopyAs;
+
     // Selection Tool
     /// Activation of the selection tool
     static TOOL_ACTION selectionActivate;

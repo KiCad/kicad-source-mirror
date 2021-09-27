@@ -85,7 +85,7 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     if( Kiface().IsSingle() )
         fileMenu->Add( ACTIONS::saveAs );
     else
-        fileMenu->Add( ACTIONS::saveCopyAs );
+        fileMenu->Add( EE_ACTIONS::saveCurrSheetCopyAs );
 
     fileMenu->AppendSeparator();
 
