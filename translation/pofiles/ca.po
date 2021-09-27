@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-09-20 11:57-0700\n"
-"PO-Revision-Date: 2021-09-24 19:44+0000\n"
+"PO-Revision-Date: 2021-09-27 13:40+0000\n"
 "Last-Translator: Arnau Llovet Vidal <arnaullv@gmail.com>\n"
 "Language-Team: Catalan <https://hosted.weblate.org/projects/kicad/"
 "master-source/ca/>\n"
@@ -3972,10 +3972,17 @@ msgid ""
 "it was not saved properly.  Do you wish to restore the last saved edits you "
 "made?"
 msgstr ""
+"Pot ser que hi hagi un problema!\n"
+"Sembla que l'última vegada que vas editar el fitxer\n"
+"\"%s\"\n"
+"no es va desar de forma correcta. Vols recuperar les darreres edicions que "
+"vas realitzar?"
 
 #: common/eda_base_frame.cpp:1101
 msgid "The auto save file could not be renamed to the board file name."
 msgstr ""
+"El fitxer de desat automàtic no ha pogut ser renomenat amb el nom de la "
+"placa."
 
 #: common/eda_doc.cpp:140
 msgid "Documentation File"
@@ -4048,6 +4055,14 @@ msgid ""
 "If you'd like to choose later, select Accelerated Graphics in the "
 "Preferences menu."
 msgstr ""
+"KiCad pot utilitzar la teva targeta gràfica per proporcionar-te una "
+"experiència més ràpida i fluïda. Aquesta opció està deshabilitada per "
+"defecte ja que no és compatible amb tots els ordenadors.\n"
+"\n"
+"Vols intentar activar l'acceleració gràfica?\n"
+"\n"
+"Si vols intentar-ho més tard, selecciona Gràfics accelerats al menú "
+"Preferències."
 
 #: common/eda_draw_frame.cpp:1096
 msgid "Enable Graphics Acceleration"
@@ -4451,7 +4466,7 @@ msgstr ""
 
 #: common/env_vars.cpp:78
 msgid "A directory containing project templates installed with KiCad."
-msgstr ""
+msgstr "La carpeta que conté les plantilles de projecte instal·lades per KiCad."
 
 #: common/env_vars.cpp:80
 #, fuzzy
@@ -4467,6 +4482,8 @@ msgid ""
 "A directory containing 3rd party plugins, libraries and other downloadable "
 "content."
 msgstr ""
+"La carpeta conté connectors de 3ers, biblioteques i altres continguts "
+"descarregables."
 
 #: common/env_vars.cpp:86
 msgid ""
@@ -7463,9 +7480,9 @@ msgstr ""
 "El pin de la fulla %s no té una etiqueta jeràrquica corresponent a la fulla"
 
 #: eeschema/connection_graph.cpp:2894
-#, fuzzy, c-format
+#, c-format
 msgid "Hierarchical label %s has no matching sheet pin in the parent sheet"
-msgstr "L'etiqueta jeràrquica %s no està connectada a una etiqueta del full."
+msgstr "L'etiqueta jeràrquica %s no està connectada a la fulla pare"
 
 #: eeschema/cross-probing.cpp:265 pcbnew/cross-probing.cpp:172
 #, c-format
@@ -8470,48 +8487,40 @@ msgid "ERC completed.<br><br>"
 msgstr ""
 
 #: eeschema/dialogs/dialog_erc.cpp:356
-#, fuzzy
 msgid "Checking sheet names..."
-msgstr "Combina les zones"
+msgstr "S'estan verificant els noms de les fulles..."
 
 #: eeschema/dialogs/dialog_erc.cpp:362
-#, fuzzy
 msgid "Checking bus conflicts..."
-msgstr "Combina les zones"
+msgstr "S'estan verificant els conflictes de bus..."
 
 #: eeschema/dialogs/dialog_erc.cpp:367
-#, fuzzy
 msgid "Checking conflicts..."
-msgstr "Combina les zones"
+msgstr "S'estan verificant els conflictes..."
 
 #: eeschema/dialogs/dialog_erc.cpp:374
-#, fuzzy
 msgid "Checking footprints..."
-msgstr "Comprova les empremtes"
+msgstr "S'estan verificant les empremtes..."
 
 #: eeschema/dialogs/dialog_erc.cpp:378
-#, fuzzy
 msgid "Checking pins..."
-msgstr "Combina les zones"
+msgstr "S'estan verificant els pins..."
 
 #: eeschema/dialogs/dialog_erc.cpp:391
-#, fuzzy
 msgid "Checking labels..."
-msgstr "Combina les zones"
+msgstr "S'estan verificant les etiquetes..."
 
 #: eeschema/dialogs/dialog_erc.cpp:397
 msgid "Checking for unresolved variables..."
 msgstr "S'estan comprovant variables no resoltes..."
 
 #: eeschema/dialogs/dialog_erc.cpp:403
-#, fuzzy
 msgid "Checking no connect pins for connections..."
-msgstr "Combina les zones"
+msgstr "S'estan verificant les connexions dels pins sense connexió..."
 
 #: eeschema/dialogs/dialog_erc.cpp:409
-#, fuzzy
 msgid "Checking for library symbol issues..."
-msgstr "Fitxers de biblioteques:"
+msgstr "S'estan verificant problemes amb els símbols de la biblioteca..."
 
 #: eeschema/dialogs/dialog_erc.cpp:487 pcbnew/dialogs/dialog_drc.cpp:438
 msgid "errors"
@@ -8809,9 +8818,8 @@ msgid "Junction size:"
 msgstr "Entroncament"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:353
-#, fuzzy
 msgid "Junction color:"
-msgstr "Selecciona el fitxer..."
+msgstr "Color de la unió:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.h:110
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.h:95
@@ -8885,9 +8893,10 @@ msgid "Color:"
 msgstr "Color"
 
 #: eeschema/dialogs/dialog_junction_props_base.cpp:61
-#, fuzzy
 msgid "Set diameter to 0 to use schematic junction dot size."
-msgstr "Editor d'esquemàtics"
+msgstr ""
+"Estableix el diàmetre a 0 per utilitzar la mida del punt d'unió de "
+"l'esquemàtic."
 
 #: eeschema/dialogs/dialog_junction_props_base.cpp:65
 #: eeschema/dialogs/dialog_line_wire_bus_properties_base.cpp:80
@@ -9532,9 +9541,10 @@ msgid "Style:"
 msgstr "Estil:"
 
 #: eeschema/dialogs/dialog_line_wire_bus_properties_base.cpp:76
-#, fuzzy
 msgid "Set width to 0 to use Netclass line widths."
-msgstr "Editor d'esquemàtics"
+msgstr ""
+"Estableix l'ample a 0 per utilitzar les amplades de línia de la classe de "
+"xarxa."
 
 #: eeschema/dialogs/dialog_line_wire_bus_properties_base.h:67
 #, fuzzy
@@ -9645,9 +9655,8 @@ msgstr ""
 "anotat."
 
 #: eeschema/dialogs/dialog_netlist.cpp:626
-#, fuzzy
 msgid "This plugin already exists."
-msgstr "Aquest connector ja existeix i s'avorta"
+msgstr "Aquest connector ja existeix."
 
 #: eeschema/dialogs/dialog_netlist.cpp:659
 #, fuzzy
@@ -9660,9 +9669,8 @@ msgid "You must provide a netlist generator title"
 msgstr "Error. Heu de proporcionar un títol"
 
 #: eeschema/dialogs/dialog_netlist_base.cpp:39
-#, fuzzy
 msgid "Add Generator..."
-msgstr "Annexa la biblioteca"
+msgstr "Afegeix generador..."
 
 #: eeschema/dialogs/dialog_netlist_base.cpp:42
 #, fuzzy
@@ -9683,9 +9691,8 @@ msgid "Command line to run the generator:"
 msgstr ""
 
 #: eeschema/dialogs/dialog_netlist_base.cpp:105
-#, fuzzy
 msgid "Browse Generators..."
-msgstr "Navega pels fitxers"
+msgstr "Navega pels generadors..."
 
 #: eeschema/dialogs/dialog_netlist_base.h:107
 #, fuzzy
@@ -15238,9 +15245,9 @@ msgstr ""
 "%s\n"
 
 #: eeschema/symbol_async_loader.cpp:134
-#, fuzzy, c-format
+#, c-format
 msgid "Loading library %s..."
-msgstr "S'estan baixant les biblioteques"
+msgstr "S'està carregant la biblioteca %s..."
 
 #: eeschema/symbol_editor/lib_logger.cpp:64
 msgid ""
@@ -15344,9 +15351,9 @@ msgid "Could not open the library file."
 msgstr "No s'ha pogut trobar el fitxer de biblioteca %s"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:918
-#, fuzzy, c-format
+#, c-format
 msgid "Loading library '%s'..."
-msgstr "S'estan baixant les biblioteques"
+msgstr "S'està carregant la biblioteca '%s'..."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:992
 #: pcbnew/footprint_libraries_utils.cpp:504
@@ -15531,9 +15538,9 @@ msgstr "No hi ha en aquest moment cap placa editada"
 #: eeschema/tools/symbol_editor_control.cpp:170
 #: eeschema/tools/symbol_editor_control.cpp:240
 #: eeschema/tools/symbol_editor_control.cpp:265
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol library '%s' is not writeable."
-msgstr "Editor de biblioteques PCB"
+msgstr "La biblioteca de símbols '%s' no és escrivible."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:554
 #: eeschema/symbol_editor/symbol_editor.cpp:1152
@@ -15620,9 +15627,9 @@ msgid "No library specified."
 msgstr "No s'ha especificat cap biblioteca."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1018
-#, fuzzy, c-format
+#, c-format
 msgid "Save Library '%s' As..."
-msgstr "Anomena i desa la biblioteca a&ctual..."
+msgstr "Desa la biblioteca '%s' com a..."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1057
 #, fuzzy, c-format
@@ -15722,9 +15729,10 @@ msgstr ""
 "%s"
 
 #: eeschema/symbol_editor/symbol_library_manager.cpp:176
-#, fuzzy, c-format
+#, c-format
 msgid "Library '%s' not found in the Symbol Library Table."
-msgstr "Edita la taula de les biblioteques de símbols."
+msgstr ""
+"No s'ha trobat la biblioteca '%s' a la taula de biblioteques de símbols."
 
 #: eeschema/symbol_editor/symbol_library_manager.cpp:402
 #, fuzzy
@@ -15732,14 +15740,14 @@ msgid "Symbol not found."
 msgstr "Fitxer no trobat"
 
 #: eeschema/symbol_editor/symbol_library_manager.cpp:433
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading symbol %s from library '%s'. (%s)"
-msgstr "Error en crear la biblioteca de símbols «%s»"
+msgstr "Error en carregar el símbol %s des de la biblioteca '%s'. (%s)"
 
 #: eeschema/symbol_editor/symbol_library_manager.cpp:619
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot load symbol '%s' from library '%s'."
-msgstr "Error en crear la biblioteca de símbols «%s»"
+msgstr "No es pot carregar el símbol '%s' des de la biblioteca '%s'."
 
 #: eeschema/symbol_editor/symbol_library_manager.cpp:775
 #, fuzzy, c-format
@@ -15747,15 +15755,17 @@ msgid "Cannot enumerate library '%s'."
 msgstr "No es pot crear el camí a la biblioteca d'empremtes «%s»"
 
 #: eeschema/symbol_editor/symbol_library_manager.cpp:1051
-#, fuzzy, c-format
+#, c-format
 msgid "Error saving symbol %s to library '%s'."
-msgstr "Error en crear la biblioteca de símbols «%s»"
+msgstr "Error al desar el símbol %s a la biblioteca '%s'."
 
 #: eeschema/symbol_lib_table.cpp:229
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Duplicate library nickname '%s' found in symbol library table file line %d"
-msgstr "Edita la taula de les biblioteques de símbols."
+msgstr ""
+"Sobrenom de la biblioteca '%s' duplicat a la línia %d de la taula de "
+"biblioteques de símbols"
 
 #: eeschema/symbol_library.cpp:572 eeschema/symbol_tree_model_adapter.cpp:152
 #, fuzzy, c-format
@@ -15849,11 +15859,9 @@ msgid "Footprints '%s' and '%s' linked to same symbol."
 msgstr "Les empremtes '%s' i '%s' estan vinculades al mateix símbol."
 
 #: eeschema/tools/backannotate.cpp:261
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot find symbol for footprint '%s'."
-msgstr ""
-"No es pot analitzar sintàcticament el nom del pin a la secció de la xarxa "
-"del component del netlist."
+msgstr "No es pot trobar el símbol per l'empremta '%s'."
 
 #: eeschema/tools/backannotate.cpp:290
 #, c-format
@@ -15904,9 +15912,9 @@ msgid "Net %s cannot be changed to %s because it is driven by a power pin."
 msgstr ""
 
 #: eeschema/tools/backannotate.cpp:566
-#, fuzzy, c-format
+#, c-format
 msgid "Add label '%s' to %s pin %s net."
-msgstr "Etiqueta local «%s» (full «%s»)"
+msgstr "Afegeix etiqueta '%s' a %s pin %s xarxa."
 
 #: eeschema/tools/ee_actions.cpp:45
 msgid "Perform electrical rules check"
@@ -17378,9 +17386,9 @@ msgid "Deselect all"
 msgstr "Desselecciona-ho tot"
 
 #: gerbview/dialogs/dialog_select_one_pcb_layer.cpp:92
-#, fuzzy, c-format
+#, c-format
 msgid "Select Layer: %s"
-msgstr "Seleccioneu la capa:"
+msgstr "Selecciona capa: %s"
 
 #: gerbview/dialogs/dialog_select_one_pcb_layer.cpp:151
 #: pcbnew/board_connected_item.cpp:172 pcbnew/board_connected_item.cpp:173
@@ -17749,9 +17757,9 @@ msgid "Loading Gerber files..."
 msgstr "Carrega un fitxer &Gerber"
 
 #: gerbview/files.cpp:256 gerbview/files.cpp:263
-#, fuzzy, c-format
+#, c-format
 msgid "Loading %u/%zu %s..."
-msgstr "S'està carregant «%s»"
+msgstr "S'està carregant %u/%zu %s..."
 
 #: gerbview/files.cpp:287
 #, c-format
@@ -17840,9 +17848,9 @@ msgid "Cmp: %s  Pad: %s"
 msgstr "Cmp: %s;  Pad: %s"
 
 #: gerbview/gerber_draw_item.cpp:767
-#, fuzzy, c-format
+#, c-format
 msgid "Cmp: %s  Pad: %s  Fct %s"
-msgstr "Cmp: %s;  Pad: %s"
+msgstr "Cmp: %s  Pad: %s  Fct %s"
 
 #: gerbview/gerber_draw_item.cpp:775 gerbview/toolbars_gerber.cpp:125
 #: gerbview/toolbars_gerber.cpp:128
