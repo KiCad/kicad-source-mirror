@@ -139,10 +139,12 @@ int ExecuteFile( const wxString& aEditorName, const wxString& aFileName, wxProce
         if( !param.IsEmpty() )
             args[i++] = param.wc_str();
 
-        args[i++] = aFileName.wc_str();
+        if( !aFileName.IsEmpty() )
+            args[i++] = aFileName.wc_str();
+
         args[i] = nullptr;
 
-        return wxExecute( const_cast<wchar_t**>( args ), wxEXEC_ASYNC, aCallback );
+        return wxExecute( const_cast< wchar_t**>( args ), wxEXEC_ASYNC, aCallback );
     }
 
     wxString msg;
