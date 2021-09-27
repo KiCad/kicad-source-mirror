@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-09-20 11:57-0700\n"
+"POT-Creation-Date: 2021-09-27 08:33-0700\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -2528,14 +2528,8 @@ msgstr "Footprint"
 msgid "Pad"
 msgstr "Pad"
 
-msgid "Graphic Shape"
-msgstr "Graphic Shape"
-
-msgid "Board Text"
-msgstr "Board Text"
-
-msgid "Footprint Text"
-msgstr "Footprint Text"
+msgid "Graphic"
+msgstr "Graphic"
 
 msgid "Zone"
 msgstr "Zone"
@@ -2546,17 +2540,11 @@ msgstr "Track"
 msgid "Via"
 msgstr "Via"
 
-msgid "Board Marker"
-msgstr "Board Marker"
+msgid "Marker"
+msgstr "Marker"
 
-msgid "Aligned Dimension"
-msgstr "Aligned Dimension"
-
-msgid "Orthogonal Dimension"
-msgstr "Orthogonal Dimension"
-
-msgid "Center Dimension"
-msgstr "Center Dimension"
+msgid "Dimension"
+msgstr "Dimension"
 
 msgid "Leader"
 msgstr "Leader"
@@ -2564,17 +2552,14 @@ msgstr "Leader"
 msgid "Target"
 msgstr "Target"
 
-msgid "Item List"
-msgstr "Item List"
+msgid "ItemList"
+msgstr "ItemList"
 
-msgid "Net Info"
-msgstr "Net Info"
+msgid "NetInfo"
+msgstr "NetInfo"
 
 msgid "Group"
 msgstr "Group"
-
-msgid "Schematic Marker"
-msgstr "Schematic Marker"
 
 msgid "Junction"
 msgstr "Junction"
@@ -2588,14 +2573,8 @@ msgstr "Wire Entry"
 msgid "Bus Entry"
 msgstr "Bus Entry"
 
-msgid "Graphic Line"
-msgstr "Graphic Line"
-
 msgid "Bitmap"
 msgstr "Bitmap"
-
-msgid "Schematic Text"
-msgstr "Schematic Text"
 
 msgid "Net Label"
 msgstr "Net Label"
@@ -2606,11 +2585,14 @@ msgstr "Global Label"
 msgid "Hierarchical Label"
 msgstr "Hierarchical Label"
 
-msgid "Schematic Field"
-msgstr "Schematic Field"
+msgid "Field"
+msgstr "Field"
 
-msgid "Schematic Symbol"
-msgstr "Schematic Symbol"
+msgid "Symbol"
+msgstr "Symbol"
+
+msgid "Pin"
+msgstr "Pin"
 
 msgid "Sheet Pin"
 msgstr "Sheet Pin"
@@ -2621,26 +2603,17 @@ msgstr "Sheet"
 msgid "SCH Screen"
 msgstr "SCH Screen"
 
-msgid "Symbol"
-msgstr "Symbol"
-
 msgid "Arc"
 msgstr "Arc"
 
 msgid "Circle"
 msgstr "Circle"
 
-msgid "Symbol Text"
-msgstr "Symbol Text"
-
 msgid "Polyline"
 msgstr "Polyline"
 
 msgid "Bezier"
 msgstr "Bezier"
-
-msgid "Pin"
-msgstr "Pin"
 
 msgid "Symbol Field"
 msgstr "Symbol Field"
@@ -2847,16 +2820,12 @@ msgid "Command '%s' could not be found."
 msgstr "Command '%s' could not be found."
 
 #, c-format
-msgid ""
-"Problem while running the PDF viewer.\n"
-"Command is '%s'."
-msgstr ""
-"Problem while running the PDF viewer.\n"
-"Command is '%s'."
-
-#, c-format
 msgid "Unable to find a PDF viewer for '%s'."
 msgstr "Unable to find a PDF viewer for '%s'."
+
+#, c-format
+msgid "Problem while running the PDF viewer '%s'."
+msgstr "Problem while running the PDF viewer '%s'."
 
 #, c-format
 msgid ""
@@ -5752,11 +5721,17 @@ msgstr "Delete Markers"
 msgid "Electrical Rules Checker"
 msgstr "Electrical Rules Checker"
 
+msgid "Power symbol value field text cannot be changed."
+msgstr "Power symbol value field text cannot be changed."
+
 msgid "Illegal reference designator value!"
 msgstr "Illegal reference designator value!"
 
 msgid "Value may not be empty."
 msgstr "Value may not be empty."
+
+msgid "Sheet filename can only be modified in Sheet Properties dialog."
+msgstr "Sheet filename can only be modified in Sheet Properties dialog."
 
 msgid "Other symbol fields"
 msgstr "Other symbol fields"
@@ -6251,8 +6226,9 @@ msgstr "Library Symbol Properties"
 msgid "Text:"
 msgstr "Text:"
 
-msgid "(Power symbol value field text cannot be changed.)"
-msgstr "(Power symbol value field text cannot be changed.)"
+#, c-format
+msgid "(%s)"
+msgstr "(%s)"
 
 msgid "Position X:"
 msgstr "Position X:"
@@ -7525,9 +7501,6 @@ msgstr "The Reference column cannot be hidden."
 msgid "Qty"
 msgstr "Qty"
 
-msgid "Field"
-msgstr "Field"
-
 msgid "Group By"
 msgstr "Group By"
 
@@ -8751,6 +8724,18 @@ msgstr "Radius"
 msgid "Circle, radius %s"
 msgstr "Circle, radius %s"
 
+msgid "Yes"
+msgstr "Yes"
+
+msgid "No"
+msgstr "No"
+
+msgid "H Justification"
+msgstr "H Justification"
+
+msgid "V Justification"
+msgstr "V Justification"
+
 msgid "Type"
 msgstr "Type"
 
@@ -8762,12 +8747,6 @@ msgstr "yes"
 
 msgid "Converted"
 msgstr "Converted"
-
-msgid "Yes"
-msgstr "Yes"
-
-msgid "No"
-msgstr "No"
 
 msgid "Pos X"
 msgstr "Pos X"
@@ -9685,9 +9664,6 @@ msgstr "Hierarchical Sheet Pin"
 
 msgid "Bold Italic"
 msgstr "Bold Italic"
-
-msgid "Size"
-msgstr "Size"
 
 #, c-format
 msgid "Label '%s'"
@@ -12551,12 +12527,6 @@ msgstr "Select Templates Directory"
 msgid "Folder:"
 msgstr "Folder:"
 
-msgid "Browse"
-msgstr "Browse"
-
-msgid "Validate"
-msgstr "Validate"
-
 msgid "Project Template Title"
 msgstr "Project Template Title"
 
@@ -13866,6 +13836,9 @@ msgstr "Regulators data file:"
 
 msgid "The name of the data file which stores known regulators parameters."
 msgstr "The name of the data file which stores known regulators parameters."
+
+msgid "Browse"
+msgstr "Browse"
 
 msgid "Edit Regulator"
 msgstr "Edit Regulator"
@@ -16856,8 +16829,8 @@ msgstr "Edit Library Footprint…"
 msgid "Fabrication Attributes"
 msgstr "Fabrication Attributes"
 
-msgid "Component:"
-msgstr "Component:"
+msgid "Footprint type:"
+msgstr "Footprint type:"
 
 msgid "Through hole"
 msgstr "Through hole"
@@ -19255,20 +19228,20 @@ msgstr "Show pad <no net> indicator"
 msgid "Clearance Outlines"
 msgstr "Clearance Outlines"
 
-msgid "Show when creating tracks"
-msgstr "Show when creating tracks"
+msgid "Show when routing"
+msgstr "Show when routing"
 
-msgid "Show with via clearance at end"
-msgstr "Show with via clearance at end"
+msgid "Show when routing w/ via clearance at end"
+msgstr "Show when routing w/ via clearance at end"
 
-msgid "Show when creating and editing tracks"
-msgstr "Show when creating and editing tracks"
+msgid "Show when routing and editing"
+msgstr "Show when routing and editing"
 
 msgid "Show always"
 msgstr "Show always"
 
-msgid "Track Clearance"
-msgstr "Track Clearance"
+msgid "Track && Via Clearances"
+msgstr "Track && Via Clearances"
 
 msgid ""
 "Show or hide the track and via clearance area. If \"New track\" is selected, "
@@ -19279,6 +19252,9 @@ msgstr ""
 
 msgid "Show pad clearance"
 msgstr "Show pad clearance"
+
+msgid "Scroll cross-probed items into view"
+msgstr "Scroll cross-probed items into view"
 
 msgid "Highlight nets when they are highlighted in the schematic editor"
 msgstr "Highlight nets when they are highlighted in the schematic editor"
@@ -20622,6 +20598,9 @@ msgstr "Pre-defined track and via dimensions:"
 msgid "7"
 msgstr "7"
 
+msgid "Size"
+msgstr "Size"
+
 msgid "Hole"
 msgstr "Hole"
 
@@ -20877,6 +20856,9 @@ msgstr "Differential pair gap out of range"
 
 msgid "Differential uncoupled length too long"
 msgstr "Differential uncoupled length too long"
+
+msgid "Footprint type doesn't match footprint pads"
+msgstr "Footprint type doesn't match footprint pads"
 
 #, c-format
 msgid "Rule: %s"
@@ -21412,6 +21394,18 @@ msgstr "<no reference designator>"
 #, c-format
 msgid "Footprint %s"
 msgstr "Footprint %s"
+
+#, c-format
+msgid "Expected \"Through hole\" type but set to \"%s\""
+msgstr "Expected \"Through hole\" type but set to \"%s\""
+
+#, c-format
+msgid "Expected \"SMD\" type but set to \"%s\""
+msgstr "Expected \"SMD\" type but set to \"%s\""
+
+#, c-format
+msgid "Expected \"Other\" type but set to \"%s\""
+msgstr "Expected \"Other\" type but set to \"%s\""
 
 msgid "Clearance Override"
 msgstr "Clearance Override"
@@ -22155,14 +22149,6 @@ msgid "Copper zone on layer %s at (%s, %s) has no pads connected."
 msgstr "Copper zone on layer %s at (%s, %s) has no pads connected."
 
 #, c-format
-msgid "Remove single pad net %s."
-msgstr "Remove single pad net %s."
-
-#, c-format
-msgid "Removed single pad net %s."
-msgstr "Removed single pad net %s."
-
-#, c-format
 msgid "%s pad %s not found in %s."
 msgstr "%s pad %s not found in %s."
 
@@ -22408,9 +22394,6 @@ msgstr "Round Radius Ratio"
 msgid "Error loading project footprint libraries."
 msgstr "Error loading project footprint libraries."
 
-msgid "Dimension"
-msgstr "Dimension"
-
 msgid "Prefix"
 msgstr "Prefix"
 
@@ -22517,9 +22500,6 @@ msgstr "Members"
 
 msgid "(not activated)"
 msgstr "(not activated)"
-
-msgid "Marker"
-msgstr "Marker"
 
 msgid "Violation"
 msgstr "Violation"
@@ -24375,11 +24355,17 @@ msgstr "Layer Name"
 msgid "Thickness (mm)"
 msgstr "Thickness (mm)"
 
+msgid "Thickness (inches)"
+msgstr "Thickness (inches)"
+
 msgid "Thickness (mils)"
 msgstr "Thickness (mils)"
 
 msgid "Loss Tangent"
 msgstr "Loss Tangent"
+
+msgid "Dielectric"
+msgstr "Dielectric"
 
 msgid "Insert board stackup table"
 msgstr "Insert board stackup table"
@@ -24413,6 +24399,12 @@ msgstr "Impedance Control: "
 
 msgid "Plated Board Edge: "
 msgstr "Plated Board Edge: "
+
+msgid "Edge card connectors: "
+msgstr "Edge card connectors: "
+
+msgid "Yes, Bevelled"
+msgstr "Yes, Bevelled"
 
 msgid "Select Via Size"
 msgstr "Select Via Size"
@@ -25813,6 +25805,9 @@ msgstr "References"
 msgid "Show footprint references"
 msgstr "Show footprint references"
 
+msgid "Footprint Text"
+msgstr "Footprint Text"
+
 msgid "Show all footprint text"
 msgstr "Show all footprint text"
 
@@ -26382,6 +26377,85 @@ msgstr "KiCad Schematic"
 
 msgid "KiCad Printed Circuit Board"
 msgstr "KiCad Printed Circuit Board"
+
+#~ msgid "Graphic Shape"
+#~ msgstr "Graphic Shape"
+
+#~ msgid "Board Text"
+#~ msgstr "Board Text"
+
+#~ msgid "Board Marker"
+#~ msgstr "Board Marker"
+
+#~ msgid "Aligned Dimension"
+#~ msgstr "Aligned Dimension"
+
+#~ msgid "Orthogonal Dimension"
+#~ msgstr "Orthogonal Dimension"
+
+#~ msgid "Center Dimension"
+#~ msgstr "Center Dimension"
+
+#~ msgid "Item List"
+#~ msgstr "Item List"
+
+#~ msgid "Net Info"
+#~ msgstr "Net Info"
+
+#~ msgid "Schematic Marker"
+#~ msgstr "Schematic Marker"
+
+#~ msgid "Graphic Line"
+#~ msgstr "Graphic Line"
+
+#~ msgid "Schematic Text"
+#~ msgstr "Schematic Text"
+
+#~ msgid "Schematic Field"
+#~ msgstr "Schematic Field"
+
+#~ msgid "Schematic Symbol"
+#~ msgstr "Schematic Symbol"
+
+#~ msgid "Symbol Text"
+#~ msgstr "Symbol Text"
+
+#, c-format
+#~ msgid ""
+#~ "Problem while running the PDF viewer.\n"
+#~ "Command is '%s'."
+#~ msgstr ""
+#~ "Problem while running the PDF viewer.\n"
+#~ "Command is '%s'."
+
+#~ msgid "(Power symbol value field text cannot be changed.)"
+#~ msgstr "(Power symbol value field text cannot be changed.)"
+
+#~ msgid "Validate"
+#~ msgstr "Validate"
+
+#~ msgid "Component:"
+#~ msgstr "Component:"
+
+#~ msgid "Show when creating tracks"
+#~ msgstr "Show when creating tracks"
+
+#~ msgid "Show with via clearance at end"
+#~ msgstr "Show with via clearance at end"
+
+#~ msgid "Show when creating and editing tracks"
+#~ msgstr "Show when creating and editing tracks"
+
+#~ msgid "Track Clearance"
+#~ msgstr "Track Clearance"
+
+#, c-format
+#~ msgid "Remove single pad net %s."
+#~ msgstr "Remove single pad net %s."
+
+#, c-format
+#~ msgid "Removed single pad net %s."
+#~ msgstr "Removed single pad net %s."
 
 #~ msgid "Keywords are replaced by they actual value in strings"
 #~ msgstr "Keywords are replaced by they actual value in strings"

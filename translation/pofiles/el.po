@@ -6,11 +6,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-09-20 11:57-0700\n"
+"POT-Creation-Date: 2021-09-27 08:33-0700\n"
 "PO-Revision-Date: 2021-09-27 13:40+0000\n"
 "Last-Translator: aris-kimi <aris_kimi@hotmail.com>\n"
-"Language-Team: Greek <https://hosted.weblate.org/projects/kicad/"
-"master-source/el/>\n"
+"Language-Team: Greek <https://hosted.weblate.org/projects/kicad/master-"
+"source/el/>\n"
 "Language: el\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -115,7 +115,7 @@ msgid "Z:"
 msgstr "Z:"
 
 #: 3d-viewer/3d_cache/dialogs/panel_preview_3d_model_base.cpp:66
-#: gerbview/gerber_draw_item.cpp:726 pcbnew/footprint.cpp:917
+#: gerbview/gerber_draw_item.cpp:726 pcbnew/footprint.cpp:961
 #: pcbnew/pad.cpp:931
 msgid "Rotation"
 msgstr "Περιστροφή"
@@ -154,7 +154,7 @@ msgid "Create layers"
 msgstr "Δημιουργία επιπέδων"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:709
-#: pcbnew/dialogs/dialog_footprint_checker.cpp:104
+#: pcbnew/dialogs/dialog_footprint_checker.cpp:103
 msgid "No footprint loaded."
 msgstr "Δεν φορτώθηκε αποτύπωμα."
 
@@ -295,7 +295,7 @@ msgstr "Φόρτωση OpenGL: επίπεδα"
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:776
 #: eeschema/symbol_library.cpp:507 pcbnew/plugins/eagle/eagle_plugin.cpp:363
 #: pcbnew/plugins/fabmaster/fabmaster_plugin.cpp:75
-#: pcbnew/plugins/kicad/kicad_plugin.cpp:2290
+#: pcbnew/plugins/kicad/kicad_plugin.cpp:2293
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:449
 #, c-format
 msgid "Loading %s..."
@@ -312,7 +312,7 @@ msgstr "Εξαγωγή Τρέχουσας Προβολής ως JPEG..."
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:61
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:236 common/hotkey_store.cpp:76
 #: common/tool/actions.cpp:563 pcbnew/footprint_viewer_frame.cpp:933
-#: pcbnew/pcb_base_frame.cpp:440
+#: pcbnew/pcb_base_frame.cpp:481
 msgid "3D Viewer"
 msgstr "3Δ Προβολή"
 
@@ -797,7 +797,7 @@ msgid "3D Image File Name"
 msgstr "Όνομα Αρχείου Εικόνας 3Δ"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:681
-#: common/eda_base_frame.cpp:1050 common/eda_base_frame.cpp:1055
+#: common/eda_base_frame.cpp:1051 common/eda_base_frame.cpp:1056
 #: pcbnew/plugins/altium/altium_pcb.cpp:1461
 #, c-format
 msgid "Insufficient permissions to save file '%s'."
@@ -808,11 +808,11 @@ msgstr ""
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:682 common/confirm.cpp:130
 #: common/confirm.cpp:288 common/dialogs/panel_setup_severities.cpp:43
 #: eeschema/files-io.cpp:806 eeschema/files-io.cpp:873
-#: kicad/import_project.cpp:122 kicad/import_project.cpp:149
-#: kicad/import_project.cpp:168 kicad/kicad.cpp:171
-#: kicad/tools/kicad_manager_control.cpp:179
-#: kicad/tools/kicad_manager_control.cpp:233
-#: kicad/tools/kicad_manager_control.cpp:277
+#: kicad/import_project.cpp:127 kicad/import_project.cpp:154
+#: kicad/import_project.cpp:173 kicad/kicad.cpp:171
+#: kicad/tools/kicad_manager_control.cpp:182
+#: kicad/tools/kicad_manager_control.cpp:236
+#: kicad/tools/kicad_manager_control.cpp:280
 msgid "Error"
 msgstr "Σφάλμα"
 
@@ -1060,7 +1060,7 @@ msgstr "Εναλλαγή προβολής επιπέδων ECO"
 #: common/dialogs/dialog_grid_settings_base.cpp:52
 #: common/dialogs/dialog_grid_settings_base.cpp:98
 #: common/dialogs/dialog_grid_settings_base.cpp:109
-#: common/eda_draw_frame.cpp:535
+#: common/eda_draw_frame.cpp:540
 #: eeschema/dialogs/dialog_lib_shape_properties_base.cpp:32
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:107
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:143
@@ -1384,7 +1384,7 @@ msgstr "τετρ. χιλιοστά"
 msgid "cu. mm"
 msgstr "κιβ. χιλιοστά"
 
-#: common/base_units.cpp:449 common/eda_draw_frame.cpp:534
+#: common/base_units.cpp:449 common/eda_draw_frame.cpp:539
 #: eeschema/dialogs/dialog_junction_props_base.cpp:34
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:110
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:236
@@ -1443,7 +1443,7 @@ msgstr "κιβ. ίντσες"
 msgid "%"
 msgstr "%"
 
-#: common/common.cpp:234
+#: common/common.cpp:227
 #, c-format
 msgid ""
 "Environment variables expansion failed: missing '%c' at position %u in '%s'."
@@ -1451,32 +1451,32 @@ msgstr ""
 "Απέτυχε η επέκταση των μεταβλητών συστήματος: λείπει το '%c' στη θέση %u στο "
 "'%s'."
 
-#: common/common.cpp:320
+#: common/common.cpp:313
 #, c-format
 msgid "Cannot make path '%s' absolute with respect to '%s'."
 msgstr "Αδυναμία δημιουργίας απόλυτης διαδρομής \"%s\" σε σχέση με το \"%s\"."
 
-#: common/common.cpp:339
+#: common/common.cpp:332
 #, c-format
 msgid "Output directory '%s' created."
 msgstr "Δημιουργήθηκε ο φάκελος εξόδου \"%s\"."
 
-#: common/common.cpp:348
+#: common/common.cpp:341
 #, c-format
 msgid "Cannot create output directory '%s'."
 msgstr "Αδυναμία δημιουργίας φακέλου εξόδου \"%s\"."
 
-#: common/common.cpp:620
+#: common/common.cpp:613
 msgid "This operating system is not supported by KiCad and its dependencies."
 msgstr ""
 "Τα Windows 7 και παλαιότερα δεν υποστηρίζονται πλέον από το KiCad και τις "
 "εξαρτήσεις του."
 
-#: common/common.cpp:622
+#: common/common.cpp:615
 msgid "Unsupported Operating System"
 msgstr "Μη Υποστηριζόμενο Λειτουργικό Σύστημα"
 
-#: common/common.cpp:625
+#: common/common.cpp:618
 msgid ""
 "Any issues with KiCad on this system cannot be reported to the official "
 "bugtracker."
@@ -1581,14 +1581,14 @@ msgstr "Επιβεβαίωση"
 #: eeschema/symbol_editor/symbol_editor.cpp:682
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:98
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:161
-#: eeschema/tools/symbol_editor_pin_tool.cpp:239 kicad/import_project.cpp:98
-#: kicad/tools/kicad_manager_control.cpp:259
+#: eeschema/tools/symbol_editor_pin_tool.cpp:239 kicad/import_project.cpp:103
+#: kicad/tools/kicad_manager_control.cpp:262
 #: pcbnew/dialogs/dialog_export_idf.cpp:162
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:121
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:381
 #: pcbnew/footprint_libraries_utils.cpp:469
-#: pcbnew/footprint_libraries_utils.cpp:1064 pcbnew/router/router_tool.cpp:1404
-#: pcbnew/router/router_tool.cpp:1829 pcbnew/zone_filler.cpp:419
+#: pcbnew/footprint_libraries_utils.cpp:1064 pcbnew/router/router_tool.cpp:1405
+#: pcbnew/router/router_tool.cpp:1851 pcbnew/zone_filler.cpp:419
 msgid "Confirmation"
 msgstr "Επιβεβαίωση"
 
@@ -1603,7 +1603,7 @@ msgstr "Επιβεβαίωση"
 #: pcbnew/dialogs/dialog_footprint_wizard_list_base.cpp:44
 #: pcbnew/dialogs/panel_pcbnew_action_plugins_base.cpp:40
 #: pcbnew/footprint_libraries_utils.cpp:980
-#: pcbnew/footprint_libraries_utils.cpp:1216
+#: pcbnew/footprint_libraries_utils.cpp:1236
 msgid "Description"
 msgstr "Περιγραφή"
 
@@ -1950,7 +1950,7 @@ msgstr "Μεταβλητές Περιβάλλοντος"
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:53
 #: eeschema/dialogs/panel_eeschema_template_fieldnames_base.cpp:43
 #: eeschema/dialogs/panel_sym_lib_table.cpp:299
-#: eeschema/fields_grid_table.cpp:197 eeschema/lib_pin.cpp:1026
+#: eeschema/fields_grid_table.cpp:197 eeschema/lib_pin.cpp:1039
 #: eeschema/sch_pin.cpp:202 eeschema/sch_symbol.cpp:1388
 #: eeschema/sch_symbol.cpp:1430 eeschema/symbol_editor/symbol_editor.cpp:1196
 #: eeschema/symbol_viewer_frame.cpp:366
@@ -1974,7 +1974,7 @@ msgstr "Διαδρομή"
 msgid "3D Search Paths"
 msgstr "Διαδρομές αναζήτησης 3Δ"
 
-#: common/dialogs/dialog_configure_paths_base.cpp:92 common/eda_item.cpp:296
+#: common/dialogs/dialog_configure_paths_base.cpp:92 common/eda_item.cpp:297
 msgid "Alias"
 msgstr "Όνομα"
 
@@ -2717,7 +2717,7 @@ msgstr "Ειδική Επικόλληση"
 #: common/dialogs/dialog_print_generic_base.h:78 common/tool/actions.cpp:102
 #: eeschema/dialogs/dialog_print_using_printer.cpp:146
 #: eeschema/dialogs/dialog_print_using_printer_base.h:61
-#: kicad/project_tree_pane.cpp:808
+#: kicad/project_tree_pane.cpp:792
 msgid "Print"
 msgstr "Εκτύπωση"
 
@@ -2818,7 +2818,7 @@ msgstr "Κατάσταση Εξόδου:"
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:76
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:99
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:80
-#: pcbnew/tools/drawing_stackup_table_tool.cpp:280
+#: pcbnew/tools/drawing_stackup_table_tool.cpp:283
 msgid "Color"
 msgstr "Χρώμα"
 
@@ -2857,7 +2857,8 @@ msgstr "Ορισμός προσαρμογής κλίμακας Χ για σχε�
 msgid "Page Setup..."
 msgstr "Ρύθμιση Σελίδας..."
 
-#: common/dialogs/dialog_text_entry_base.cpp:22
+#: common/dialogs/dialog_text_entry_base.cpp:21
+#: common/dialogs/dialog_text_entry_base.cpp:33
 #: common/dialogs/dialog_unit_entry_base.cpp:22
 #: kicad/pcm/dialogs/panel_package_base.cpp:55
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1523
@@ -3616,18 +3617,18 @@ msgstr "Πάχος Καλωδίου"
 msgid "Bus Thickness"
 msgstr "Πάχος Δίαυλου"
 
-#: common/dialogs/panel_setup_netclasses_base.cpp:53 eeschema/sch_line.cpp:893
+#: common/dialogs/panel_setup_netclasses_base.cpp:53 eeschema/sch_line.cpp:891
 msgid "Line Style"
 msgstr "Στυλ Γραμμής"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:59 common/pgm_base.cpp:72
-#: common/widgets/footprint_select_widget.cpp:145
+#: common/widgets/footprint_select_widget.cpp:142
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics.cpp:66
 #: eeschema/dialogs/dialog_junction_props.cpp:36
 #: eeschema/dialogs/dialog_line_wire_bus_properties.cpp:52
 #: eeschema/dialogs/dialog_line_wire_bus_properties.cpp:63
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:145
-#: eeschema/tools/sch_editor_control.cpp:1022
+#: eeschema/tools/sch_editor_control.cpp:1015
 msgid "Default"
 msgstr "Προεπιλογή"
 
@@ -3723,7 +3724,7 @@ msgid "Info:"
 msgstr "Πληροφορίες:"
 
 #: common/dialogs/wx_html_report_panel.cpp:349
-#: eeschema/dialogs/dialog_erc.cpp:736 pcbnew/dialogs/dialog_drc.cpp:642
+#: eeschema/dialogs/dialog_erc.cpp:736 pcbnew/dialogs/dialog_drc.cpp:638
 msgid "Save Report to File"
 msgstr "Αποθήκευση Αναφοράς σε Αρχείο"
 
@@ -3802,8 +3803,11 @@ msgid "Drawing sheet '%s' was not fully read."
 msgstr "Το αρχείο \"%s\" δεν διαβάστηκε πλήρως"
 
 #: common/drawing_sheet/ds_data_item.cpp:370
-#: common/drawing_sheet/ds_draw_item.cpp:122 common/eda_text.cpp:667
-#: eeschema/dialogs/panel_setup_formatting_base.cpp:47 eeschema/lib_text.h:55
+#: common/drawing_sheet/ds_draw_item.cpp:123 common/eda_item.cpp:255
+#: common/eda_item.cpp:256 common/eda_item.cpp:279 common/eda_item.cpp:300
+#: common/eda_text.cpp:667 eeschema/dialogs/panel_setup_formatting_base.cpp:47
+#: eeschema/lib_field.cpp:429 eeschema/lib_text.cpp:349 eeschema/lib_text.h:55
+#: eeschema/sch_field.cpp:487
 #: pagelayout_editor/dialogs/dialog_design_inspector_base.cpp:40
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:145
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:28 pcbnew/fp_text.cpp:272
@@ -3812,16 +3816,16 @@ msgid "Text"
 msgstr "Κείμενο"
 
 #: common/drawing_sheet/ds_data_item.cpp:371
-#: common/drawing_sheet/ds_draw_item.cpp:113 eeschema/pin_type.cpp:76
-#: gerbview/gerber_draw_item.cpp:231 pcbnew/board_item.cpp:39
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:135
+#: common/drawing_sheet/ds_draw_item.cpp:114 common/eda_item.cpp:277
+#: eeschema/pin_type.cpp:76 gerbview/gerber_draw_item.cpp:231
+#: pcbnew/board_item.cpp:39 pcbnew/dialogs/dialog_copper_zones_base.cpp:135
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:61
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:111
 msgid "Line"
 msgstr "Γραμμή"
 
 #: common/drawing_sheet/ds_data_item.cpp:372
-#: common/drawing_sheet/ds_draw_item.cpp:117 common/eda_item.cpp:300
+#: common/drawing_sheet/ds_draw_item.cpp:118 common/eda_item.cpp:301
 #: eeschema/lib_rectangle.h:47
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:43 pcbnew/pad.cpp:1464
 #: pcbnew/pcb_shape.cpp:588
@@ -3829,14 +3833,14 @@ msgid "Rectangle"
 msgstr "Ορθογώνιο"
 
 #: common/drawing_sheet/ds_data_item.cpp:373
-#: common/drawing_sheet/ds_draw_item.cpp:126
-#: common/drawing_sheet/ds_draw_item.cpp:298
+#: common/drawing_sheet/ds_draw_item.cpp:127
+#: common/drawing_sheet/ds_draw_item.cpp:299
 msgid "Imported Shape"
 msgstr "Εισηγμένο Σχήμα"
 
 #: common/drawing_sheet/ds_data_item.cpp:374
-#: common/drawing_sheet/ds_draw_item.cpp:130
-#: common/drawing_sheet/ds_draw_item.cpp:476 common/eda_item.cpp:308
+#: common/drawing_sheet/ds_draw_item.cpp:131
+#: common/drawing_sheet/ds_draw_item.cpp:477 common/eda_item.cpp:309
 #: eeschema/sch_bitmap.h:129
 msgid "Image"
 msgstr "Εικόνα"
@@ -3846,55 +3850,55 @@ msgstr "Εικόνα"
 msgid "Error writing drawing sheet file"
 msgstr "Ολοκλήρωση σχεδίαση φύλλου"
 
-#: common/drawing_sheet/ds_draw_item.cpp:136
+#: common/drawing_sheet/ds_draw_item.cpp:137
 msgid "First Page Only"
 msgstr "Μόνο Πρώτη Σελίδα"
 
-#: common/drawing_sheet/ds_draw_item.cpp:137
+#: common/drawing_sheet/ds_draw_item.cpp:138
 msgid "Subsequent Pages"
 msgstr "Επόμενες Σελίδες"
 
-#: common/drawing_sheet/ds_draw_item.cpp:138
+#: common/drawing_sheet/ds_draw_item.cpp:139
 msgid "All Pages"
 msgstr "Όλες οι Σελίδες"
 
-#: common/drawing_sheet/ds_draw_item.cpp:141
+#: common/drawing_sheet/ds_draw_item.cpp:142
 msgid "First Page Option"
 msgstr "Ρύθμιση Πρώτης Σελίδας"
 
-#: common/drawing_sheet/ds_draw_item.cpp:144
+#: common/drawing_sheet/ds_draw_item.cpp:145
 msgid "Repeat Count"
 msgstr "Επανάληψη Μέτρησης"
 
-#: common/drawing_sheet/ds_draw_item.cpp:147
+#: common/drawing_sheet/ds_draw_item.cpp:148
 msgid "Repeat Label Increment"
 msgstr "Επανάληψη Προσαύξησης Ετικέτας"
 
-#: common/drawing_sheet/ds_draw_item.cpp:153
+#: common/drawing_sheet/ds_draw_item.cpp:154
 msgid "Repeat Position Increment"
 msgstr "Επανάληψη Προσαύξησης Θέσης"
 
-#: common/drawing_sheet/ds_draw_item.cpp:155
+#: common/drawing_sheet/ds_draw_item.cpp:156
 #: pagelayout_editor/dialogs/dialog_design_inspector_base.cpp:39
 msgid "Comment"
 msgstr "Σχόλιο"
 
-#: common/drawing_sheet/ds_draw_item.cpp:187
+#: common/drawing_sheet/ds_draw_item.cpp:188
 #, c-format
 msgid "Text '%s'"
 msgstr "Κείμενο '%s'"
 
-#: common/drawing_sheet/ds_draw_item.cpp:395 eeschema/lib_rectangle.cpp:273
+#: common/drawing_sheet/ds_draw_item.cpp:396 eeschema/lib_rectangle.cpp:273
 #, c-format
 msgid "Rectangle, width %s height %s"
 msgstr "Ορθογώνιο, πλάτος %s ύψος %s"
 
-#: common/drawing_sheet/ds_draw_item.cpp:428
+#: common/drawing_sheet/ds_draw_item.cpp:429
 #, c-format
 msgid "Line, length %s"
 msgstr "Γραμμή, Μήκος %s"
 
-#: common/drawing_sheet/ds_draw_item.cpp:482
+#: common/drawing_sheet/ds_draw_item.cpp:483
 msgid "Page Limits"
 msgstr "Όρια Σελίδας"
 
@@ -3942,44 +3946,44 @@ msgstr ""
 "Το αλφαριθμητικό οριοθέτησης πρέπει να είναι ένα χαρακτήρας μεταξύ των ', "
 "\", ή $"
 
-#: common/eda_base_frame.cpp:453
+#: common/eda_base_frame.cpp:454
 msgid "&About KiCad"
 msgstr "&Περί του KiCad"
 
-#: common/eda_base_frame.cpp:456
+#: common/eda_base_frame.cpp:457
 msgid "&Help"
 msgstr "&Βοήθεια"
 
-#: common/eda_base_frame.cpp:940
+#: common/eda_base_frame.cpp:941
 #, c-format
 msgid "File '%s' was not found."
 msgstr "Το αρχείο \"%s\" δεν βρέθηκε."
 
-#: common/eda_base_frame.cpp:983
+#: common/eda_base_frame.cpp:984
 msgid "Preferences"
 msgstr "Προτιμήσεις"
 
-#: common/eda_base_frame.cpp:986 common/hotkey_store.cpp:71
+#: common/eda_base_frame.cpp:987 common/hotkey_store.cpp:71
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:20
 msgid "Common"
 msgstr "Κοινό"
 
-#: common/eda_base_frame.cpp:988
+#: common/eda_base_frame.cpp:989
 msgid "Mouse and Touchpad"
 msgstr "Ποντίκι και επιφάνεια αφής"
 
-#: common/eda_base_frame.cpp:991
+#: common/eda_base_frame.cpp:992
 msgid "Hotkeys"
 msgstr "Συντομεύσεις"
 
-#: common/eda_base_frame.cpp:1045
+#: common/eda_base_frame.cpp:1046
 #, c-format
 msgid "Insufficient permissions to folder '%s'."
 msgstr ""
 "Απαιτούνται δικαιώματα εγγραφής για την αποθήκευση αρχείου\n"
 "%s"
 
-#: common/eda_base_frame.cpp:1085
+#: common/eda_base_frame.cpp:1086
 #, c-format
 msgid ""
 "Well this is potentially embarrassing!\n"
@@ -3994,23 +3998,23 @@ msgstr ""
 "δεν αποθηκεύτηκε σωστά. Θέλετε να επαναφέρετε τις τελευταίες αποθηκευμένες "
 "αλλαγές που κάνατε;"
 
-#: common/eda_base_frame.cpp:1101
+#: common/eda_base_frame.cpp:1102
 msgid "The auto save file could not be renamed to the board file name."
 msgstr ""
 "Το αρχείο αυτόματης αποθήκευσης δεν ήταν εφικτό να μετονομαστεί στο όνομα "
 "του αρχείου πλακέτας."
 
-#: common/eda_doc.cpp:140
+#: common/eda_doc.cpp:135
 #, fuzzy
 msgid "Documentation File"
 msgstr "Όνομα Αρχείου Τεκμηρίωσης"
 
-#: common/eda_doc.cpp:150
+#: common/eda_doc.cpp:145
 #, fuzzy, c-format
 msgid "Documentation file '%s' not found."
 msgstr "Δεν βρέθηκε το σχηματικό αρχείο \"%s\"."
 
-#: common/eda_doc.cpp:193
+#: common/eda_doc.cpp:188
 #, fuzzy, c-format
 msgid "Unknown MIME type for documentation file '%s'"
 msgstr "Άγνωστος τύπος MIME για το αρχείο τεκμηρίωσης \"%s\""
@@ -4027,41 +4031,41 @@ msgstr "Άγνωστος τύπος MIME για το αρχείο τεκμηρί
 msgid "Inches"
 msgstr "Ίντσες"
 
-#: common/eda_draw_frame.cpp:309
+#: common/eda_draw_frame.cpp:314
 msgid "Edit User Grid..."
 msgstr "Επεξεργασία Πλέγματος Χρήστη..."
 
-#: common/eda_draw_frame.cpp:418
+#: common/eda_draw_frame.cpp:423
 msgid "Zoom Auto"
 msgstr "Αυτόματη Μεγέθυνση"
 
-#: common/eda_draw_frame.cpp:425
+#: common/eda_draw_frame.cpp:430
 #, c-format
 msgid "Zoom %.2f"
 msgstr "Μεγέθυνση %.2f"
 
-#: common/eda_draw_frame.cpp:533 pagelayout_editor/pl_editor_frame.cpp:734
+#: common/eda_draw_frame.cpp:538 pagelayout_editor/pl_editor_frame.cpp:734
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:193
 msgid "inches"
 msgstr "ίντσες"
 
-#: common/eda_draw_frame.cpp:536
+#: common/eda_draw_frame.cpp:541
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:56
 #: pcbnew/footprint_wizard_frame.cpp:331
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:95 pcbnew/pcb_dimension.cpp:321
 msgid "Units"
 msgstr "Μονάδες"
 
-#: common/eda_draw_frame.cpp:955 eeschema/dialogs/panel_sym_lib_table.cpp:494
-#: pcbnew/footprint_libraries_utils.cpp:1233
+#: common/eda_draw_frame.cpp:962 eeschema/dialogs/panel_sym_lib_table.cpp:494
+#: pcbnew/footprint_libraries_utils.cpp:1253
 msgid "Select Library"
 msgstr "Επιλέξτε Βιβλιοθήκη"
 
-#: common/eda_draw_frame.cpp:955
+#: common/eda_draw_frame.cpp:962
 msgid "New Library"
 msgstr "Νέα Βιβλιοθήκη"
 
-#: common/eda_draw_frame.cpp:1089
+#: common/eda_draw_frame.cpp:1096
 msgid ""
 "KiCad can use your graphics card to give you a smoother and faster "
 "experience. This option is turned off by default since it is not compatible "
@@ -4081,15 +4085,15 @@ msgstr ""
 "Αν θέλετε να επιλέξετε αργότερα, επιλέξτε Γραφικά με Επιτάχυνση στο μενού "
 "Προτιμήσεις."
 
-#: common/eda_draw_frame.cpp:1096
+#: common/eda_draw_frame.cpp:1103
 msgid "Enable Graphics Acceleration"
 msgstr "Ενεργοποίηση Επιτάχυνσης Γραφικών"
 
-#: common/eda_draw_frame.cpp:1098
+#: common/eda_draw_frame.cpp:1105
 msgid "&Enable Acceleration"
 msgstr "&Ενεργοποίηση Επιτάχυνσης"
 
-#: common/eda_draw_frame.cpp:1098
+#: common/eda_draw_frame.cpp:1105
 msgid "&No Thanks"
 msgstr "Όχι Ευχαριστ&ώ"
 
@@ -4111,16 +4115,9 @@ msgid "Pad"
 msgstr "Έδρα"
 
 #: common/eda_item.cpp:254 common/eda_item.cpp:257
-msgid "Graphic Shape"
-msgstr "Στυλ Γραφικών"
-
-#: common/eda_item.cpp:255
-msgid "Board Text"
-msgstr "Κείμενο Πλακέτας"
-
-#: common/eda_item.cpp:256 pcbnew/widgets/appearance_controls.cpp:345
-msgid "Footprint Text"
-msgstr "Κείμενο Αποτυπώματος"
+#, fuzzy
+msgid "Graphic"
+msgstr "Γραφικά"
 
 #: common/eda_item.cpp:258 common/eda_item.cpp:267
 #: pcbnew/tools/board_inspection_tool.cpp:381
@@ -4136,21 +4133,14 @@ msgstr "Διάδρομος"
 msgid "Via"
 msgstr "Via"
 
-#: common/eda_item.cpp:261
-msgid "Board Marker"
-msgstr "Σημάδι Πλακέτας"
+#: common/eda_item.cpp:261 common/eda_item.cpp:272 pcbnew/pcb_marker.cpp:94
+msgid "Marker"
+msgstr "Σημάδι"
 
-#: common/eda_item.cpp:262
-msgid "Aligned Dimension"
-msgstr "Ευθυγραμμισμένη Διάσταση"
-
-#: common/eda_item.cpp:263
-msgid "Orthogonal Dimension"
-msgstr "Ορθογώνια Διάσταση"
-
-#: common/eda_item.cpp:264
-msgid "Center Dimension"
-msgstr "Κεντρική Διάσταση"
+#: common/eda_item.cpp:262 common/eda_item.cpp:263 common/eda_item.cpp:264
+#: pcbnew/pcb_dimension.cpp:300
+msgid "Dimension"
+msgstr "Διάσταση"
 
 #: common/eda_item.cpp:265 pcbnew/pcb_dimension.cpp:1044
 msgid "Leader"
@@ -4161,21 +4151,19 @@ msgid "Target"
 msgstr "Στόχος"
 
 #: common/eda_item.cpp:268
-msgid "Item List"
+#, fuzzy
+msgid "ItemList"
 msgstr "Λίστα Αντικειμένων"
 
 #: common/eda_item.cpp:269
-msgid "Net Info"
+#, fuzzy
+msgid "NetInfo"
 msgstr "Πληροφορίες Net"
 
-#: common/eda_item.cpp:270 pcbnew/pcb_group.cpp:322
+#: common/eda_item.cpp:270 pcbnew/pcb_group.cpp:334
 #: pcbnew/tools/pcb_actions.cpp:682
 msgid "Group"
 msgstr "Ομαδοποίηση"
-
-#: common/eda_item.cpp:272
-msgid "Schematic Marker"
-msgstr "Σημάδι Σχηματικού"
 
 #: common/eda_item.cpp:273 eeschema/sch_junction.h:87
 msgid "Junction"
@@ -4193,58 +4181,52 @@ msgstr "Εισαγωγή καλωδίου"
 msgid "Bus Entry"
 msgstr "Εισαγωγή Δίαυλου"
 
-#: common/eda_item.cpp:277
-msgid "Graphic Line"
-msgstr "Γραμμή Γραφικών"
-
 #: common/eda_item.cpp:278 eeschema/sch_bitmap.cpp:201
 msgid "Bitmap"
 msgstr "Bitmap"
-
-#: common/eda_item.cpp:279
-msgid "Schematic Text"
-msgstr "Κείμενο Σχηματικού"
 
 #: common/eda_item.cpp:280
 msgid "Net Label"
 msgstr "Ετικέτα Net"
 
-#: common/eda_item.cpp:281 eeschema/sch_text.cpp:752
+#: common/eda_item.cpp:281 eeschema/sch_text.cpp:746
 msgid "Global Label"
 msgstr "Καθολική Ετικέτα"
 
-#: common/eda_item.cpp:282 eeschema/sch_text.cpp:753
+#: common/eda_item.cpp:282 eeschema/sch_text.cpp:747
 msgid "Hierarchical Label"
 msgstr "Ιεραρχική Ετικέτα"
 
-#: common/eda_item.cpp:283
-msgid "Schematic Field"
-msgstr "Πεδίο Σχηματικού"
+#: common/eda_item.cpp:283 eeschema/dialogs/dialog_symbol_fields_table.cpp:686
+#: eeschema/lib_field.cpp:426 eeschema/lib_field.h:79
+msgid "Field"
+msgstr "Πεδίο"
 
-#: common/eda_item.cpp:284
-msgid "Schematic Symbol"
-msgstr "Επεξεργασία συμβόλων σχηματικού"
-
-#: common/eda_item.cpp:285
-msgid "Sheet Pin"
-msgstr "Ακροδέκτης Φύλλου"
-
-#: common/eda_item.cpp:286 eeschema/dialogs/dialog_migrate_buses.cpp:101
-#: pcbnew/tools/pcb_actions.cpp:1226
-msgid "Sheet"
-msgstr "Φύλλο"
-
-#: common/eda_item.cpp:293
-msgid "SCH Screen"
-msgstr "Οθόνη SCH"
-
-#: common/eda_item.cpp:295
+#: common/eda_item.cpp:284 common/eda_item.cpp:296
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:166
 #: eeschema/symbol_editor/symbol_editor.cpp:1221
 msgid "Symbol"
 msgstr "Σύμβολο"
 
-#: common/eda_item.cpp:297 eeschema/lib_arc.h:51
+#: common/eda_item.cpp:285 common/eda_item.cpp:304 eeschema/lib_pin.h:72
+#: eeschema/sch_pin.cpp:184
+msgid "Pin"
+msgstr "Ακροδέκτης"
+
+#: common/eda_item.cpp:286
+msgid "Sheet Pin"
+msgstr "Ακροδέκτης Φύλλου"
+
+#: common/eda_item.cpp:287 eeschema/dialogs/dialog_migrate_buses.cpp:101
+#: pcbnew/tools/pcb_actions.cpp:1226
+msgid "Sheet"
+msgstr "Φύλλο"
+
+#: common/eda_item.cpp:294
+msgid "SCH Screen"
+msgstr "Οθόνη SCH"
+
+#: common/eda_item.cpp:298 eeschema/lib_arc.h:51
 #: gerbview/gerber_draw_item.cpp:234 pcbnew/board_item.cpp:41
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:114
 #: pcbnew/dialogs/dialog_pad_properties.cpp:712
@@ -4252,7 +4234,7 @@ msgstr "Σύμβολο"
 msgid "Arc"
 msgstr "Τόξο"
 
-#: common/eda_item.cpp:298 eeschema/lib_circle.h:47
+#: common/eda_item.cpp:299 eeschema/lib_circle.h:47
 #: gerbview/gerber_draw_item.cpp:237 pcbnew/board_item.cpp:42
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:43
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:138 pcbnew/pad.cpp:1096
@@ -4260,40 +4242,32 @@ msgstr "Τόξο"
 msgid "Circle"
 msgstr "Κύκλος"
 
-#: common/eda_item.cpp:299
-msgid "Symbol Text"
-msgstr "Κείμενο Συμβόλου"
-
-#: common/eda_item.cpp:301
+#: common/eda_item.cpp:302
 msgid "Polyline"
 msgstr "ΠολυΓραμμή"
 
-#: common/eda_item.cpp:302 eeschema/lib_bezier.h:50
+#: common/eda_item.cpp:303 eeschema/lib_bezier.h:50
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:100
 #: pcbnew/dialogs/dialog_pad_properties.cpp:706
 #: pcbnew/dialogs/dialog_pad_properties.cpp:2118
 msgid "Bezier"
 msgstr "Μπεζιέ"
 
-#: common/eda_item.cpp:303 eeschema/lib_pin.h:72 eeschema/sch_pin.cpp:184
-msgid "Pin"
-msgstr "Ακροδέκτης"
-
-#: common/eda_item.cpp:304
+#: common/eda_item.cpp:305 eeschema/sch_field.cpp:484
 msgid "Symbol Field"
 msgstr "Πεδία Συμβόλων"
 
-#: common/eda_item.cpp:306
+#: common/eda_item.cpp:307
 msgid "Gerber Layout"
 msgstr "Διάταξη Gerber"
 
-#: common/eda_item.cpp:307
+#: common/eda_item.cpp:308
 msgid "Draw Item"
 msgstr "Σχεδίαση Αντικειμένου"
 
 #: common/eda_text.cpp:502
 #: eeschema/dialogs/dialog_text_and_label_properties_base.cpp:126
-#: eeschema/sch_text.cpp:772 eeschema/symbol_editor/symbol_editor.cpp:1214
+#: eeschema/sch_text.cpp:762 eeschema/symbol_editor/symbol_editor.cpp:1214
 #: gerbview/gerber_file_image.cpp:352 gerbview/gerber_file_image.cpp:356
 #: gerbview/gerber_file_image.cpp:359
 #: pcbnew/microwave/microwave_polygon.cpp:128
@@ -4308,10 +4282,10 @@ msgstr "Κανονικό"
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:55
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:58
 #: eeschema/dialogs/dialog_text_and_label_properties_base.cpp:126
-#: eeschema/fields_grid_table.cpp:202 eeschema/sch_text.cpp:772
+#: eeschema/fields_grid_table.cpp:202 eeschema/sch_text.cpp:762
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:113
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:298
-#: pcbnew/dialogs/dialog_footprint_properties_base.cpp:58
+#: pcbnew/dialogs/dialog_footprint_properties_base.cpp:57
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:58
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:247
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:185
@@ -4329,7 +4303,7 @@ msgstr "Πλάγιο"
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:56
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:59
 #: eeschema/dialogs/dialog_text_and_label_properties_base.cpp:126
-#: eeschema/fields_grid_table.cpp:203 eeschema/sch_text.cpp:772
+#: eeschema/fields_grid_table.cpp:203 eeschema/sch_text.cpp:762
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:97
 msgid "Bold"
 msgstr "Έντονο"
@@ -4343,7 +4317,9 @@ msgstr "Έντονα+Πλάγια"
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:233
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:147
 #: eeschema/fields_grid_table.cpp:158 eeschema/fields_grid_table.cpp:393
-#: eeschema/fields_grid_table.cpp:505 eeschema/pin_type.cpp:125
+#: eeschema/fields_grid_table.cpp:505 eeschema/lib_field.cpp:442
+#: eeschema/lib_text.cpp:359 eeschema/pin_type.cpp:125
+#: eeschema/sch_field.cpp:500
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:88
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:315
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:144
@@ -4359,6 +4335,9 @@ msgstr "Αριστερά"
 #: eeschema/fields_grid_table.cpp:151 eeschema/fields_grid_table.cpp:159
 #: eeschema/fields_grid_table.cpp:394 eeschema/fields_grid_table.cpp:404
 #: eeschema/fields_grid_table.cpp:507 eeschema/fields_grid_table.cpp:518
+#: eeschema/lib_field.cpp:443 eeschema/lib_field.cpp:452
+#: eeschema/lib_text.cpp:360 eeschema/lib_text.cpp:369
+#: eeschema/sch_field.cpp:501 eeschema/sch_field.cpp:510
 #: gerbview/gerber_file_image.cpp:356 gerbview/gerber_file_image.cpp:359
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:88
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:104
@@ -4374,7 +4353,9 @@ msgstr "Κέντρο"
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:233
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:147
 #: eeschema/fields_grid_table.cpp:160 eeschema/fields_grid_table.cpp:395
-#: eeschema/fields_grid_table.cpp:509 eeschema/pin_type.cpp:124
+#: eeschema/fields_grid_table.cpp:509 eeschema/lib_field.cpp:444
+#: eeschema/lib_text.cpp:361 eeschema/pin_type.cpp:124
+#: eeschema/sch_field.cpp:502
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:88
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:315
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:144
@@ -4385,7 +4366,8 @@ msgstr "Δεξιά"
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:255
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:177
 #: eeschema/fields_grid_table.cpp:150 eeschema/fields_grid_table.cpp:403
-#: eeschema/fields_grid_table.cpp:516
+#: eeschema/fields_grid_table.cpp:516 eeschema/lib_field.cpp:451
+#: eeschema/lib_text.cpp:368 eeschema/sch_field.cpp:509
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:104
 msgid "Top"
 msgstr "Επάνω"
@@ -4394,14 +4376,15 @@ msgstr "Επάνω"
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:255
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:177
 #: eeschema/fields_grid_table.cpp:152 eeschema/fields_grid_table.cpp:405
-#: eeschema/fields_grid_table.cpp:520
+#: eeschema/fields_grid_table.cpp:520 eeschema/lib_field.cpp:453
+#: eeschema/lib_text.cpp:370 eeschema/sch_field.cpp:511
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:104
 msgid "Bottom"
 msgstr "Κάτω"
 
 #: common/eda_text.cpp:669
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:90
-#: pcbnew/dialogs/dialog_footprint_properties_base.cpp:57
+#: pcbnew/dialogs/dialog_footprint_properties_base.cpp:56
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:57
 #: pcbnew/fp_text.cpp:297 pcbnew/fp_text_grid_table.cpp:93
 #: pcbnew/pcb_shape.cpp:1370 pcbnew/pcb_text.cpp:126
@@ -4419,16 +4402,17 @@ msgstr "Καθρεφτισμένο"
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:55
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:82
 #: eeschema/dialogs/panel_eeschema_template_fieldnames_base.cpp:44
+#: eeschema/lib_field.cpp:432 eeschema/sch_field.cpp:490
 #: eeschema/sch_pin.cpp:210
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:133
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:102
 msgid "Visible"
 msgstr "Ορατό"
 
-#: common/eda_text.cpp:684 eeschema/lib_field.cpp:431
-#: eeschema/sch_bitmap.cpp:203 pcbnew/dialogs/dialog_board_statistics.cpp:676
+#: common/eda_text.cpp:684 eeschema/sch_bitmap.cpp:203
+#: pcbnew/dialogs/dialog_board_statistics.cpp:676
 #: pcbnew/dialogs/dialog_board_statistics.cpp:686
-#: pcbnew/dialogs/dialog_footprint_properties_base.cpp:55
+#: pcbnew/dialogs/dialog_footprint_properties_base.cpp:54
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:55
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:42
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:155
@@ -4439,10 +4423,10 @@ msgstr "Ορατό"
 msgid "Width"
 msgstr "Πλάτος"
 
-#: common/eda_text.cpp:688 eeschema/lib_field.cpp:434
-#: eeschema/sch_bitmap.cpp:205 pcbnew/dialogs/dialog_board_statistics.cpp:678
+#: common/eda_text.cpp:688 eeschema/sch_bitmap.cpp:205
+#: pcbnew/dialogs/dialog_board_statistics.cpp:678
 #: pcbnew/dialogs/dialog_board_statistics.cpp:687
-#: pcbnew/dialogs/dialog_footprint_properties_base.cpp:56
+#: pcbnew/dialogs/dialog_footprint_properties_base.cpp:55
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:56
 #: pcbnew/fp_text.cpp:303 pcbnew/fp_text_grid_table.cpp:92 pcbnew/pad.cpp:919
 #: pcbnew/pcb_dimension.cpp:685 pcbnew/pcb_shape.cpp:594
@@ -4576,48 +4560,48 @@ msgstr "Καθρέφτισμα κειμένου"
 msgid "No Files"
 msgstr "Κανένα Αρχείο"
 
-#: common/filename_resolver.cpp:431
+#: common/filename_resolver.cpp:437
 msgid "The given path does not exist"
 msgstr "Η διαδρομή δεν υπάρχει"
 
-#: common/filename_resolver.cpp:434
+#: common/filename_resolver.cpp:440
 msgid "3D model search path"
 msgstr "Διαδρομή αναζήτησης 3Δ μοντέλων"
 
-#: common/filename_resolver.cpp:459
+#: common/filename_resolver.cpp:465
 msgid "Alias: "
 msgstr "Συνώνυμο: "
 
-#: common/filename_resolver.cpp:462
+#: common/filename_resolver.cpp:468
 msgid "This path:"
 msgstr "Αυτή η διαδρομή:"
 
-#: common/filename_resolver.cpp:465
+#: common/filename_resolver.cpp:471
 msgid "Existing path:"
 msgstr "Υπάρχουσα διαδρομή:"
 
-#: common/filename_resolver.cpp:467
+#: common/filename_resolver.cpp:473
 msgid "Bad alias (duplicate name)"
 msgstr "Λάθος συνώνυμο (το όνομα έχει ξαναοριστεί)"
 
-#: common/filename_resolver.cpp:590
+#: common/filename_resolver.cpp:601
 msgid "3D configuration directory is unknown"
 msgstr "Άγνωστος φάκελος ρυθμίσεων 3Δ"
 
-#: common/filename_resolver.cpp:593 common/filename_resolver.cpp:624
-#: common/filename_resolver.cpp:656
+#: common/filename_resolver.cpp:604 common/filename_resolver.cpp:635
+#: common/filename_resolver.cpp:667
 msgid "Write 3D search path list"
 msgstr "Εγγραφή λίστας αναζήτησης διαδρομής 3Δ"
 
-#: common/filename_resolver.cpp:621
+#: common/filename_resolver.cpp:632
 msgid "Could not open configuration file"
 msgstr "Αδυναμία ανοίγματος αρχείου ρυθμίσεων"
 
-#: common/filename_resolver.cpp:655
+#: common/filename_resolver.cpp:666
 msgid "Problems writing configuration file"
 msgstr "Προβλήματα κατά την εγγραφή αρχείου ρυθμίσεων"
 
-#: common/footprint_info.cpp:99 cvpcb/cvpcb_mainframe.cpp:861
+#: common/footprint_info.cpp:99 cvpcb/cvpcb_mainframe.cpp:881
 #: eeschema/symbol_editor/symbol_library_manager.cpp:104
 #: eeschema/symbol_tree_model_adapter.cpp:102
 msgid "Load Error"
@@ -4650,26 +4634,24 @@ msgid "Cannot create global library table path '%s'."
 msgstr ""
 "Αδυναμία δημιουργίας καθολικής διαδρομής αρχείου καταλόγου βιβλιοθήκης '%s'."
 
-#: common/gestfich.cpp:153
+#: common/gestfich.cpp:149
 #, c-format
 msgid "Command '%s' could not be found."
 msgstr "Η εντολή \"%s\" δεν βρέθηκε"
 
-#: common/gestfich.cpp:213
-#, c-format
-msgid ""
-"Problem while running the PDF viewer.\n"
-"Command is '%s'."
-msgstr ""
-"Πρόβλημα κατά την εκτέλεση του προγράμματος προβολής PDF\n"
-"Η εντολή είναι \"%s\""
-
-#: common/gestfich.cpp:220
+#: common/gestfich.cpp:181
 #, c-format
 msgid "Unable to find a PDF viewer for '%s'."
 msgstr "Αδυναμία εύρεσης προγράμματος προβολής PDF για \"%s\""
 
-#: common/gestfich.cpp:314
+#: common/gestfich.cpp:196
+#, fuzzy, c-format
+msgid "Problem while running the PDF viewer '%s'."
+msgstr ""
+"Πρόβλημα κατά την εκτέλεση του προγράμματος προβολής PDF\n"
+"Η εντολή είναι \"%s\""
+
+#: common/gestfich.cpp:299
 #, c-format
 msgid ""
 "Cannot print '%s'.\n"
@@ -4680,7 +4662,7 @@ msgstr ""
 "\n"
 "Άγνωστος τύπος αρχείου."
 
-#: common/gestfich.cpp:343 eeschema/eeschema.cpp:410 eeschema/eeschema.cpp:443
+#: common/gestfich.cpp:328 eeschema/eeschema.cpp:410 eeschema/eeschema.cpp:443
 #: gerbview/gerbview.cpp:237 kicad/project_template.cpp:257
 #: pcbnew/pcbnew.cpp:359
 #, c-format
@@ -4688,7 +4670,7 @@ msgid "Cannot copy file '%s'."
 msgstr "Αδυναμία αντιγραφής αρχείου '%s'."
 
 #: common/grid_tricks.cpp:277 common/tool/actions.cpp:153
-#: eeschema/tools/ee_actions.cpp:148 pcbnew/tools/edit_tool.cpp:1984
+#: eeschema/tools/ee_actions.cpp:148 pcbnew/tools/edit_tool.cpp:1995
 msgid "Cut"
 msgstr "Αποκοπή"
 
@@ -4716,8 +4698,8 @@ msgid "Paste clipboard cells to matrix at current cell"
 msgstr "Επικόλληση κελιών από το πρόχειρο το τρέχον κελί του πίνακα"
 
 #: common/grid_tricks.cpp:283 common/tool/actions.cpp:191
-#: kicad/project_tree_pane.cpp:792 pcbnew/plugins/kicad/pcb_parser.cpp:855
-#: pcbnew/tools/edit_tool.cpp:1986
+#: kicad/project_tree_pane.cpp:776 pcbnew/plugins/kicad/pcb_parser.cpp:855
+#: pcbnew/tools/edit_tool.cpp:1997
 msgid "Delete"
 msgstr "Διαγραφή"
 
@@ -5570,7 +5552,7 @@ msgstr "Σφάλμα εξαγωγής αρχείου!"
 #: gerbview/export_to_pcbnew.cpp:68 pagelayout_editor/files.cpp:204
 #: pcbnew/build_BOM_from_board.cpp:103
 #: pcbnew/dialogs/dialog_board_statistics.cpp:661
-#: pcbnew/dialogs/dialog_drc.cpp:666 pcbnew/dialogs/dialog_export_idf.cpp:223
+#: pcbnew/dialogs/dialog_drc.cpp:662 pcbnew/dialogs/dialog_export_idf.cpp:223
 #: pcbnew/dialogs/dialog_export_svg.cpp:296
 #: pcbnew/dialogs/dialog_export_vrml.cpp:264
 #: pcbnew/dialogs/dialog_gendrill.cpp:469 pcbnew/dialogs/dialog_plot.cpp:913
@@ -5584,7 +5566,7 @@ msgstr "Σφάλμα εξαγωγής αρχείου!"
 #: pcbnew/exporters/gendrill_Excellon_writer.cpp:117
 #: pcbnew/exporters/gendrill_file_writer_base.cpp:344
 #: pcbnew/exporters/gendrill_gerber_writer.cpp:101
-#: pcbnew/exporters/gerber_jobfile_writer.cpp:152
+#: pcbnew/exporters/gerber_jobfile_writer.cpp:153
 #, c-format
 msgid "Failed to create file '%s'."
 msgstr "Αποτυχία δημιουργίας αρχείου \"%s\""
@@ -5733,7 +5715,7 @@ msgstr "Ρυθμίσεις Σελίδας..."
 msgid "Settings for paper size and title block info"
 msgstr "Ρυθμίσεις για το μέγεθος του χαρτιού και πλαισίου τίτλου πληροφοριών"
 
-#: common/tool/actions.cpp:102 kicad/project_tree_pane.cpp:806
+#: common/tool/actions.cpp:102 kicad/project_tree_pane.cpp:790
 msgid "Print..."
 msgstr "Εκτύπωση..."
 
@@ -6383,7 +6365,7 @@ msgstr "Δεν υποστήριζεται καφρέφτισμα στον άξο
 msgid "Footprint not found."
 msgstr "Το αποτύπωμα δεν βρέθηκε."
 
-#: common/widgets/footprint_select_widget.cpp:144
+#: common/widgets/footprint_select_widget.cpp:141
 msgid "No default footprint"
 msgstr "Κανένα προκαθορισμένο αποτύπωμα"
 
@@ -6952,72 +6934,72 @@ msgid "Symbol to Footprint links have been modified. Save changes?"
 msgstr ""
 "Οι σύνδεσμοι Σύμβολο σε Αποτύπωμα έχουν τροποποιηθεί. Αποθήκευση αλλαγών;"
 
-#: cvpcb/cvpcb_mainframe.cpp:527 cvpcb/tools/cvpcb_association_tool.cpp:207
+#: cvpcb/cvpcb_mainframe.cpp:548 cvpcb/tools/cvpcb_association_tool.cpp:207
 #, c-format
 msgid "'%s' is not a valid footprint."
 msgstr "Το '%s' δεν είναι έγκυρο αποτύπωμα."
 
-#: cvpcb/cvpcb_mainframe.cpp:682 eeschema/generate_alias_info.cpp:39
+#: cvpcb/cvpcb_mainframe.cpp:702 eeschema/generate_alias_info.cpp:39
 #: eeschema/sch_symbol.cpp:1422 eeschema/symbol_editor/symbol_editor.cpp:1225
 #: eeschema/symbol_viewer_frame.cpp:369 pcbnew/generate_footprint_info.cpp:37
 msgid "Keywords"
 msgstr "Λέξεις-κλειδιά"
 
-#: cvpcb/cvpcb_mainframe.cpp:698
+#: cvpcb/cvpcb_mainframe.cpp:718
 msgid "Pin Count"
 msgstr "Πλήθος Pin"
 
-#: cvpcb/cvpcb_mainframe.cpp:711 eeschema/sch_symbol.cpp:1404
+#: cvpcb/cvpcb_mainframe.cpp:731 eeschema/sch_symbol.cpp:1404
 #: eeschema/sch_symbol.cpp:1408 eeschema/sch_symbol.cpp:1436
 #: eeschema/sch_symbol.cpp:1441 eeschema/symbol_editor/symbol_editor.cpp:194
 #: pcbnew/tools/pcb_control.cpp:1178
 msgid "Library"
 msgstr "Βιβλιοθήκη"
 
-#: cvpcb/cvpcb_mainframe.cpp:724
+#: cvpcb/cvpcb_mainframe.cpp:744
 msgid "Search Text"
 msgstr "Κείμενο Αναζήτησης"
 
-#: cvpcb/cvpcb_mainframe.cpp:728
+#: cvpcb/cvpcb_mainframe.cpp:748
 msgid "No Filtering"
 msgstr "Χωρίς Φίλτρο"
 
-#: cvpcb/cvpcb_mainframe.cpp:730
+#: cvpcb/cvpcb_mainframe.cpp:750
 #, c-format
 msgid "Filtered by %s"
 msgstr "Φιλτράρισμα με βάση %s"
 
-#: cvpcb/cvpcb_mainframe.cpp:744
+#: cvpcb/cvpcb_mainframe.cpp:764
 #, c-format
 msgid "Description: %s;  Keywords: %s"
 msgstr "Περιγραφή: %s;  Λέξεις-κλειδιά: %s"
 
-#: cvpcb/cvpcb_mainframe.cpp:776
+#: cvpcb/cvpcb_mainframe.cpp:796
 #, c-format
 msgid "Library location: %s"
 msgstr "Τοποθεσία βιβλιοθήκης: %s"
 
-#: cvpcb/cvpcb_mainframe.cpp:778
+#: cvpcb/cvpcb_mainframe.cpp:798
 msgid "Library location: unknown"
 msgstr "Τοποθεσία βιβλιοθήκης: άγνωστη"
 
-#: cvpcb/cvpcb_mainframe.cpp:791
+#: cvpcb/cvpcb_mainframe.cpp:811
 msgid ""
 "No PCB footprint libraries are listed in the current footprint library table."
 msgstr ""
 "Δεν βρέθηκαν βιβλιοθήκες αποτυπωμάτων PCB στον κατάλογο βιβλιοθήκης "
 "εξαρτημάτων."
 
-#: cvpcb/cvpcb_mainframe.cpp:792
+#: cvpcb/cvpcb_mainframe.cpp:812
 msgid "Configuration Error"
 msgstr "Σφάλμα Ρύθμισης"
 
-#: cvpcb/cvpcb_mainframe.cpp:796 pcbnew/footprint_edit_frame.cpp:829
+#: cvpcb/cvpcb_mainframe.cpp:816 pcbnew/footprint_edit_frame.cpp:829
 #: pcbnew/load_select_footprint.cpp:224
 msgid "Loading Footprint Libraries"
 msgstr "Φόρτωση Βιβλιοθηκών Αποτυπωμάτων"
 
-#: cvpcb/cvpcb_mainframe.cpp:859
+#: cvpcb/cvpcb_mainframe.cpp:879
 #, c-format
 msgid ""
 "Error loading schematic.\n"
@@ -7034,16 +7016,16 @@ msgstr "Αρχείο έργου: \"%s\""
 #: cvpcb/dialogs/dialog_config_equfiles.cpp:103
 #: eeschema/dialogs/dialog_bom.cpp:449
 #: gerbview/tools/gerbview_inspection_tool.cpp:185
-#: kicad/project_tree_pane.cpp:824
+#: kicad/project_tree_pane.cpp:808
 msgid "No text editor selected in KiCad.  Please choose one."
 msgstr ""
 "Δεν έχει επιλεχθεί επεξεργαστής κειμένου στο KiCad.  Παρακαλώ επιλέξτε έναν."
 
-#: cvpcb/dialogs/dialog_config_equfiles.cpp:249
+#: cvpcb/dialogs/dialog_config_equfiles.cpp:244
 msgid "Footprint Association File"
 msgstr "Αρχείο Συσχέτισης Αποτυπωμάτων"
 
-#: cvpcb/dialogs/dialog_config_equfiles.cpp:293
+#: cvpcb/dialogs/dialog_config_equfiles.cpp:288
 #, c-format
 msgid "File '%s' already exists in list."
 msgstr "Το αρχείο \"%s\" υπάρχει ήδη στη λίστα"
@@ -7093,14 +7075,14 @@ msgstr "Διαθέσιμες μεταβλητές περιβάλλοντος γ�
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:959
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:54
 #: eeschema/dialogs/panel_sym_lib_table.cpp:300
-#: eeschema/fields_grid_table.cpp:198 eeschema/lib_field.cpp:440
-#: eeschema/sch_symbol.cpp:1378 eeschema/sch_symbol.cpp:1429
-#: pcbnew/dialogs/dialog_footprint_properties_base.cpp:70
+#: eeschema/fields_grid_table.cpp:198 eeschema/sch_symbol.cpp:1378
+#: eeschema/sch_symbol.cpp:1429
+#: pcbnew/dialogs/dialog_footprint_properties_base.cpp:69
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:70
 #: pcbnew/dialogs/dialog_fp_plugin_options_base.cpp:44
 #: pcbnew/dialogs/panel_fp_editor_defaults.cpp:63
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:54
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:447 pcbnew/footprint.cpp:2122
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:447 pcbnew/footprint.cpp:2198
 #: pcbnew/footprint_wizard_frame.cpp:330 pcbnew/fp_text.cpp:272
 #: pcbnew/fp_text_grid_table.cpp:110 pcbnew/pcb_dimension.cpp:310
 msgid "Value"
@@ -7168,7 +7150,7 @@ msgstr "Βιβλιοθήκη \"%s\" δεν βρέθηκε στον πίνακα 
 msgid "Footprint '%s' not found."
 msgstr "Το αποτύπωμα \"%s\" δεν βρέθηκε."
 
-#: cvpcb/display_footprints_frame.cpp:475 pcbnew/footprint.cpp:919
+#: cvpcb/display_footprints_frame.cpp:475 pcbnew/footprint.cpp:963
 #, c-format
 msgid "Footprint: %s"
 msgstr "Αποτύπωμα: %s"
@@ -7446,28 +7428,28 @@ msgstr ""
 "Η ιεραρχική ετικέτα %s δεν έχει pin φύλλου που να ταιριάζει με το γονικό "
 "φύλλο"
 
-#: eeschema/cross-probing.cpp:265 pcbnew/cross-probing.cpp:172
+#: eeschema/cross-probing.cpp:263 pcbnew/cross-probing.cpp:172
 #, c-format
 msgid "%s pin %s found"
 msgstr "Ο %s ακροδέκτης %s βρέθηκε"
 
-#: eeschema/cross-probing.cpp:267
+#: eeschema/cross-probing.cpp:265
 #, c-format
 msgid "%s found but pin %s not found"
 msgstr "%s βρέθηκε αλλά το pin %s δεν βρέθηκε"
 
-#: eeschema/cross-probing.cpp:271 pcbnew/cross-probing.cpp:185
+#: eeschema/cross-probing.cpp:269 pcbnew/cross-probing.cpp:185
 #, c-format
 msgid "%s found"
 msgstr "βρέθηκε %s"
 
-#: eeschema/cross-probing.cpp:276 pcbnew/cross-probing.cpp:168
+#: eeschema/cross-probing.cpp:274 pcbnew/cross-probing.cpp:168
 #: pcbnew/cross-probing.cpp:187
 #, c-format
 msgid "%s not found"
 msgstr "δεν βρέθηκε %s"
 
-#: eeschema/cross-probing.cpp:329
+#: eeschema/cross-probing.cpp:327
 msgid "Selected net:"
 msgstr "Επιλεγμένο net:"
 
@@ -8384,7 +8366,7 @@ msgstr ""
 msgid "Delete exclusions too?"
 msgstr "Διαγραφή και των εξαιρέσεων;"
 
-#: eeschema/dialogs/dialog_erc.cpp:194 pcbnew/dialogs/dialog_drc.cpp:893
+#: eeschema/dialogs/dialog_erc.cpp:194 pcbnew/dialogs/dialog_drc.cpp:889
 #: pcbnew/dialogs/dialog_drc_base.cpp:195
 #: pcbnew/dialogs/dialog_footprint_checker_base.cpp:82
 msgid "Delete All Markers"
@@ -8447,59 +8429,59 @@ msgstr "Έλεγχος ασύνδετων pins για συνδέσεις..."
 msgid "Checking for library symbol issues..."
 msgstr "Έλεγχος για θέματα με βιβλιοθήκη συμβόλων..."
 
-#: eeschema/dialogs/dialog_erc.cpp:487 pcbnew/dialogs/dialog_drc.cpp:438
+#: eeschema/dialogs/dialog_erc.cpp:487 pcbnew/dialogs/dialog_drc.cpp:434
 msgid "errors"
 msgstr "σφάλματα"
 
-#: eeschema/dialogs/dialog_erc.cpp:488 pcbnew/dialogs/dialog_drc.cpp:439
+#: eeschema/dialogs/dialog_erc.cpp:488 pcbnew/dialogs/dialog_drc.cpp:435
 msgid "warnings"
 msgstr "προειδοποιήσεις"
 
-#: eeschema/dialogs/dialog_erc.cpp:489 pcbnew/dialogs/dialog_drc.cpp:440
+#: eeschema/dialogs/dialog_erc.cpp:489 pcbnew/dialogs/dialog_drc.cpp:436
 msgid "appropriate"
 msgstr "κατάλληλο"
 
-#: eeschema/dialogs/dialog_erc.cpp:494 pcbnew/dialogs/dialog_drc.cpp:445
+#: eeschema/dialogs/dialog_erc.cpp:494 pcbnew/dialogs/dialog_drc.cpp:441
 msgid "Remove exclusion for this violation"
 msgstr "Κατάργηση εξαίρεσης για αυτήν την παράβαση"
 
-#: eeschema/dialogs/dialog_erc.cpp:495 pcbnew/dialogs/dialog_drc.cpp:446
+#: eeschema/dialogs/dialog_erc.cpp:495 pcbnew/dialogs/dialog_drc.cpp:442
 #, c-format
 msgid "It will be placed back in the %s list"
 msgstr "Θα τοποθετηθεί ξανά στη λίστα %s"
 
-#: eeschema/dialogs/dialog_erc.cpp:499 pcbnew/dialogs/dialog_drc.cpp:450
+#: eeschema/dialogs/dialog_erc.cpp:499 pcbnew/dialogs/dialog_drc.cpp:446
 msgid "Exclude this violation"
 msgstr "Εξαίρεση αυτής της παραβίασης"
 
-#: eeschema/dialogs/dialog_erc.cpp:500 pcbnew/dialogs/dialog_drc.cpp:451
+#: eeschema/dialogs/dialog_erc.cpp:500 pcbnew/dialogs/dialog_drc.cpp:447
 #, c-format
 msgid "It will be excluded from the %s list"
 msgstr "Θα αποκλειστεί από τη λίστα %s"
 
-#: eeschema/dialogs/dialog_erc.cpp:512 pcbnew/dialogs/dialog_drc.cpp:464
+#: eeschema/dialogs/dialog_erc.cpp:512 pcbnew/dialogs/dialog_drc.cpp:460
 #, c-format
 msgid "Change severity to Error for all '%s' violations"
 msgstr "Αλλαγή σοβαρότητας σε Σφάλμα για όλες τις παραβιάσεις '%s'"
 
 #: eeschema/dialogs/dialog_erc.cpp:514 eeschema/dialogs/dialog_erc.cpp:520
-#: pcbnew/dialogs/dialog_drc.cpp:466 pcbnew/dialogs/dialog_drc.cpp:473
+#: pcbnew/dialogs/dialog_drc.cpp:462 pcbnew/dialogs/dialog_drc.cpp:469
 msgid "Violation severities can also be edited in the Board Setup... dialog"
 msgstr ""
 "Μπορείτε επίσης να επεξεργαστείτε τις σοβαρές παραβιάσεις στο διάλογο Board "
 "Setup ..."
 
-#: eeschema/dialogs/dialog_erc.cpp:518 pcbnew/dialogs/dialog_drc.cpp:471
+#: eeschema/dialogs/dialog_erc.cpp:518 pcbnew/dialogs/dialog_drc.cpp:467
 #, c-format
 msgid "Change severity to Warning for all '%s' violations"
 msgstr "Αλλαγή σοβαρότητας σε Προειδοποίηση για όλες τις παραβιάσεις '%s'"
 
-#: eeschema/dialogs/dialog_erc.cpp:523 pcbnew/dialogs/dialog_drc.cpp:477
+#: eeschema/dialogs/dialog_erc.cpp:523 pcbnew/dialogs/dialog_drc.cpp:473
 #, c-format
 msgid "Ignore all '%s' violations"
 msgstr "Αγνόηση όλων των παραβιάσεων '%s'"
 
-#: eeschema/dialogs/dialog_erc.cpp:524 pcbnew/dialogs/dialog_drc.cpp:479
+#: eeschema/dialogs/dialog_erc.cpp:524 pcbnew/dialogs/dialog_drc.cpp:475
 msgid "Violations will not be checked or reported"
 msgstr "Οι παραβιάσεις δεν θα ελεγχθούν ούτε θα αναφερθούν"
 
@@ -8507,7 +8489,7 @@ msgstr "Οι παραβιάσεις δεν θα ελεγχθούν ούτε θα
 msgid "Edit pin-to-pin conflict map..."
 msgstr "Επεξεργασία χάρτη διενέξεων pin-to-pin ..."
 
-#: eeschema/dialogs/dialog_erc.cpp:535 pcbnew/dialogs/dialog_drc.cpp:484
+#: eeschema/dialogs/dialog_erc.cpp:535 pcbnew/dialogs/dialog_drc.cpp:480
 msgid "Edit violation severities..."
 msgstr "Επεξεργασία βαρύτητας παραβίασης..."
 
@@ -8522,7 +8504,7 @@ msgstr "Καρφίτσωμα Χάρτη Διενέξεων"
 
 #: eeschema/dialogs/dialog_erc.cpp:632
 #: eeschema/dialogs/dialog_schematic_setup.cpp:72
-#: pcbnew/dialogs/dialog_board_setup.cpp:108 pcbnew/dialogs/dialog_drc.cpp:589
+#: pcbnew/dialogs/dialog_board_setup.cpp:108 pcbnew/dialogs/dialog_drc.cpp:585
 msgid "Violation Severity"
 msgstr "Σοβαρότητα Παραβίασης"
 
@@ -8585,13 +8567,23 @@ msgstr "Διαγραφή Σημαδιών"
 msgid "Electrical Rules Checker"
 msgstr "Ελεγκτής Ηλεκτρικών Κανόνων"
 
-#: eeschema/dialogs/dialog_field_properties.cpp:242
+#: eeschema/dialogs/dialog_field_properties.cpp:131
+#, fuzzy
+msgid "Power symbol value field text cannot be changed."
+msgstr "(Το πεδίο κειμένου του εξαρτήματος ισχύος δεν μπορεί να αλλαχθεί.)"
+
+#: eeschema/dialogs/dialog_field_properties.cpp:246
 msgid "Illegal reference designator value!"
 msgstr "Απαγορευμένη τιμή προσδιορισμού αναφοράς!"
 
-#: eeschema/dialogs/dialog_field_properties.cpp:250
+#: eeschema/dialogs/dialog_field_properties.cpp:254
 msgid "Value may not be empty."
 msgstr "Η τιμή δεν μπορεί να είναι κενή."
+
+#: eeschema/dialogs/dialog_field_properties.cpp:340
+#, fuzzy
+msgid "Sheet filename can only be modified in Sheet Properties dialog."
+msgstr "Εμφάνιση του παραθύρου ιδιοτήτων αντικειμένου"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:31
 msgid "Other symbol fields"
@@ -8819,7 +8811,7 @@ msgstr "Ιδιότητες Σύνδεσης"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:51
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:45
-#: eeschema/dialogs/dialog_symbol_properties.cpp:138 eeschema/lib_pin.cpp:1027
+#: eeschema/dialogs/dialog_symbol_properties.cpp:138 eeschema/lib_pin.cpp:1040
 #: eeschema/sch_pin.cpp:203
 msgid "Number"
 msgstr "Αριθμός"
@@ -8847,12 +8839,12 @@ msgstr "Στυλ Γραφικών"
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:64
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:58
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:61
-#: eeschema/fields_grid_table.cpp:205 eeschema/lib_pin.cpp:1039
+#: eeschema/fields_grid_table.cpp:205 eeschema/lib_pin.cpp:1052
 #: eeschema/sch_pin.cpp:217
-#: pcbnew/dialogs/dialog_footprint_properties_base.cpp:60
+#: pcbnew/dialogs/dialog_footprint_properties_base.cpp:59
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:156
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:60
-#: pcbnew/footprint.cpp:2124 pcbnew/fp_text_grid_table.cpp:96
+#: pcbnew/footprint.cpp:2200 pcbnew/fp_text_grid_table.cpp:96
 #: pcbnew/pad.cpp:1498
 msgid "Orientation"
 msgstr "Προσανατολισμός"
@@ -8869,7 +8861,7 @@ msgstr "Μέγεθος Κειμένου Ονόματος"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:58
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:52
-#: eeschema/lib_pin.cpp:1036 eeschema/sch_pin.cpp:214 pcbnew/pcb_shape.cpp:577
+#: eeschema/lib_pin.cpp:1049 eeschema/sch_pin.cpp:214 pcbnew/pcb_shape.cpp:577
 #: pcbnew/pcb_shape.cpp:602
 msgid "Length"
 msgstr "Μήκος"
@@ -9145,7 +9137,7 @@ msgstr "Πεδία"
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:687
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:55
 #: eeschema/fields_grid_table.cpp:199
-#: pcbnew/dialogs/dialog_footprint_properties_base.cpp:54
+#: pcbnew/dialogs/dialog_footprint_properties_base.cpp:53
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:54
 #: pcbnew/dialogs/panel_fp_editor_defaults.cpp:52
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:46
@@ -9171,7 +9163,9 @@ msgstr "Κ Στοίχιση"
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:63
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:57
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:60
-#: eeschema/fields_grid_table.cpp:204
+#: eeschema/fields_grid_table.cpp:204 eeschema/lib_field.cpp:438
+#: eeschema/lib_text.cpp:355 eeschema/sch_field.cpp:496
+#: eeschema/sch_text.cpp:775
 msgid "Text Size"
 msgstr "Μέγεθος Κειμένου"
 
@@ -9405,9 +9399,10 @@ msgstr "Ιδιότητες Βιβλιοθήκης Συμβόλων"
 msgid "Text:"
 msgstr "Κείμενο:"
 
-#: eeschema/dialogs/dialog_lib_text_properties_base.cpp:66
-msgid "(Power symbol value field text cannot be changed.)"
-msgstr "(Το πεδίο κειμένου του εξαρτήματος ισχύος δεν μπορεί να αλλαχθεί.)"
+#: eeschema/dialogs/dialog_lib_text_properties_base.cpp:72
+#, fuzzy, c-format
+msgid "(%s)"
+msgstr "Μετατόπιση (ίντσες)"
 
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:93
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:233
@@ -9486,7 +9481,7 @@ msgstr "Νέα Ετικέτα"
 #: eeschema/dialogs/dialog_migrate_buses.cpp:104
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:85
 #: pcbnew/dialogs/dialog_find_base.cpp:120 pcbnew/fp_text.cpp:284
-#: pcbnew/pad.cpp:887 pcbnew/pcb_dimension.cpp:350 pcbnew/pcb_group.cpp:326
+#: pcbnew/pad.cpp:887 pcbnew/pcb_dimension.cpp:350 pcbnew/pcb_group.cpp:338
 #: pcbnew/pcb_shape.cpp:550 pcbnew/pcb_text.cpp:118 pcbnew/pcb_track.cpp:809
 #: pcbnew/zone.cpp:598
 msgid "Status"
@@ -10084,7 +10079,7 @@ msgstr "Διορθωτική Ενέργεια"
 #: eeschema/dialogs/dialog_rescue_each.cpp:132
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:958
 #: eeschema/sch_symbol.cpp:1376 eeschema/sch_symbol.cpp:1427
-#: pcbnew/footprint.cpp:2120
+#: pcbnew/footprint.cpp:2196
 msgid "Reference"
 msgstr "Ονομασία Αναφοράς"
 
@@ -10321,19 +10316,19 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_sheet_pin_properties.cpp:36
 #: eeschema/dialogs/dialog_text_and_label_properties_base.cpp:132
-#: eeschema/pin_type.cpp:51 eeschema/sch_text.cpp:575
+#: eeschema/pin_type.cpp:51 eeschema/sch_text.cpp:569
 msgid "Input"
 msgstr "Είσοδος"
 
 #: eeschema/dialogs/dialog_sheet_pin_properties.cpp:37
 #: eeschema/dialogs/dialog_text_and_label_properties_base.cpp:132
-#: eeschema/pin_type.cpp:52 eeschema/sch_text.cpp:576
+#: eeschema/pin_type.cpp:52 eeschema/sch_text.cpp:570
 msgid "Output"
 msgstr "Έξοδος"
 
 #: eeschema/dialogs/dialog_sheet_pin_properties.cpp:38
 #: eeschema/dialogs/dialog_text_and_label_properties_base.cpp:132
-#: eeschema/pin_type.cpp:53 eeschema/sch_text.cpp:577
+#: eeschema/pin_type.cpp:53 eeschema/sch_text.cpp:571
 msgid "Bidirectional"
 msgstr "Αμφίδρομο"
 
@@ -10346,7 +10341,7 @@ msgstr "Τρικατάστατο"
 #: eeschema/dialogs/dialog_sheet_pin_properties.cpp:40
 #: eeschema/dialogs/dialog_spice_model_base.cpp:199
 #: eeschema/dialogs/dialog_text_and_label_properties_base.cpp:132
-#: eeschema/pin_type.cpp:55 eeschema/sch_text.cpp:579
+#: eeschema/pin_type.cpp:55 eeschema/sch_text.cpp:573
 msgid "Passive"
 msgstr "Παθητικό"
 
@@ -10439,7 +10434,7 @@ msgid ""
 msgstr ""
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:469
-#: kicad/tools/kicad_manager_control.cpp:547
+#: kicad/tools/kicad_manager_control.cpp:551
 #, c-format
 msgid "'%s' already exists."
 msgstr "το '%s' υπάρχει ήδη."
@@ -10488,8 +10483,10 @@ msgstr "Ιεραρχική διαδρομή: "
 
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:115
 #: eeschema/dialogs/dialog_text_and_label_properties_base.cpp:128
-#: eeschema/lib_field.cpp:428 eeschema/lib_pin.cpp:1029
-#: eeschema/lib_pin.cpp:1032 eeschema/sch_pin.cpp:207 eeschema/sch_text.cpp:781
+#: eeschema/lib_field.cpp:435 eeschema/lib_pin.cpp:1042
+#: eeschema/lib_pin.cpp:1045 eeschema/lib_text.cpp:352
+#: eeschema/sch_field.cpp:493 eeschema/sch_pin.cpp:207
+#: eeschema/sch_text.cpp:771
 msgid "Style"
 msgstr "Στυλ"
 
@@ -11277,11 +11274,6 @@ msgstr "Η στήλη Αναφοράς δεν μπορεί να είναι κρ�
 msgid "Qty"
 msgstr "Ποσότητα"
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:686
-#: eeschema/lib_field.cpp:437 eeschema/lib_field.h:79
-msgid "Field"
-msgstr "Πεδίο"
-
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:689
 msgid "Group By"
 msgstr "Ομαδοποίηση Ανά"
@@ -11653,27 +11645,27 @@ msgstr ""
 "στο Ρυθμίσεις Σχηματικού> Γενικά> Μορφοποίηση."
 
 #: eeschema/dialogs/dialog_text_and_label_properties_base.cpp:120
-#: eeschema/sch_text.cpp:763
+#: eeschema/sch_text.cpp:779
 msgid "Align right"
 msgstr "Στοίχιση δεξιά"
 
 #: eeschema/dialogs/dialog_text_and_label_properties_base.cpp:120
-#: eeschema/sch_text.cpp:764
+#: eeschema/sch_text.cpp:780
 msgid "Align bottom"
 msgstr "Στοίχιση κάτω"
 
 #: eeschema/dialogs/dialog_text_and_label_properties_base.cpp:120
-#: eeschema/sch_text.cpp:765
+#: eeschema/sch_text.cpp:781
 msgid "Align left"
 msgstr "Στοίχιση αριστερά"
 
 #: eeschema/dialogs/dialog_text_and_label_properties_base.cpp:120
-#: eeschema/sch_text.cpp:766
+#: eeschema/sch_text.cpp:782
 msgid "Align top"
 msgstr "Στοίχιση επάνω"
 
 #: eeschema/dialogs/dialog_text_and_label_properties_base.cpp:122
-#: eeschema/sch_text.cpp:770
+#: eeschema/sch_text.cpp:786
 #, fuzzy
 msgid "Justification"
 msgstr "Στοίχιση:"
@@ -11838,7 +11830,6 @@ msgid "Cross-probing"
 msgstr "Cross-probing"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:80
-#: pcbnew/dialogs/panel_display_options_base.cpp:76
 msgid "Center view on cross-probed items"
 msgstr ""
 
@@ -12893,8 +12884,8 @@ msgid "File write operation failed."
 msgstr "Η εγγραφή αρχείου απέτυχε."
 
 #: eeschema/files-io.cpp:802 eeschema/files-io.cpp:869
-#: kicad/tools/kicad_manager_control.cpp:123
-#: kicad/tools/kicad_manager_control.cpp:220
+#: kicad/tools/kicad_manager_control.cpp:126
+#: kicad/tools/kicad_manager_control.cpp:223
 #, c-format
 msgid ""
 "Folder '%s' could not be created.\n"
@@ -12942,7 +12933,7 @@ msgid "Alias of"
 msgstr "Συνώνυμο του"
 
 #: eeschema/generate_alias_info.cpp:121 eeschema/sim/spice_simulator.cpp:83
-#: pcbnew/footprint.cpp:880 pcbnew/tools/pcb_control.cpp:1189
+#: pcbnew/footprint.cpp:924 pcbnew/tools/pcb_control.cpp:1189
 #: pcbnew/zone.cpp:623
 msgid "Unknown"
 msgstr "Άγνωστο"
@@ -12983,7 +12974,7 @@ msgstr "(σελίδα %s)"
 
 #: eeschema/lib_arc.cpp:398 eeschema/lib_bezier.cpp:336
 #: eeschema/lib_circle.cpp:246 eeschema/lib_polyline.cpp:340
-#: eeschema/lib_rectangle.cpp:190 eeschema/lib_text.cpp:351
+#: eeschema/lib_rectangle.cpp:190
 msgid "Line Width"
 msgstr "Πλάτος Γραμμής"
 
@@ -13008,8 +12999,43 @@ msgstr "Ακτίνα"
 msgid "Circle, radius %s"
 msgstr "Κύκλος, ακτίνα %s"
 
-#: eeschema/lib_item.cpp:54 eeschema/lib_pin.cpp:1028 eeschema/sch_pin.cpp:184
-#: eeschema/sch_pin.cpp:204 eeschema/sch_text.cpp:787
+#: eeschema/lib_field.cpp:431 eeschema/lib_pin.cpp:1044
+#: eeschema/sch_field.cpp:489 eeschema/sch_pin.cpp:209
+#: gerbview/gerber_draw_item.cpp:733 gerbview/gerber_draw_item.cpp:734
+#: pcbnew/board_stackup_manager/panel_board_finish_base.cpp:44
+#: pcbnew/fp_text.cpp:286 pcbnew/fp_text.cpp:291 pcbnew/pcb_text.cpp:122
+#: pcbnew/tools/drawing_stackup_table_tool.cpp:465
+#: pcbnew/tools/drawing_stackup_table_tool.cpp:499
+#: pcbnew/tools/drawing_stackup_table_tool.cpp:507
+#: pcbnew/tools/drawing_stackup_table_tool.cpp:518
+msgid "Yes"
+msgstr "Ναι"
+
+#: eeschema/lib_field.cpp:431 eeschema/lib_pin.cpp:1044
+#: eeschema/sch_field.cpp:489 eeschema/sch_pin.cpp:209
+#: gerbview/gerber_draw_item.cpp:733 gerbview/gerber_draw_item.cpp:734
+#: pcbnew/fp_text.cpp:286 pcbnew/fp_text.cpp:291 pcbnew/pcb_text.cpp:122
+#: pcbnew/tools/drawing_stackup_table_tool.cpp:465
+#: pcbnew/tools/drawing_stackup_table_tool.cpp:499
+#: pcbnew/tools/drawing_stackup_table_tool.cpp:507
+#: pcbnew/tools/drawing_stackup_table_tool.cpp:517
+msgid "No"
+msgstr "Όχι"
+
+#: eeschema/lib_field.cpp:447 eeschema/lib_text.cpp:364
+#: eeschema/sch_field.cpp:505
+#, fuzzy
+msgid "H Justification"
+msgstr "Στοίχιση:"
+
+#: eeschema/lib_field.cpp:456 eeschema/lib_text.cpp:373
+#: eeschema/sch_field.cpp:514
+#, fuzzy
+msgid "V Justification"
+msgstr "Στοίχιση:"
+
+#: eeschema/lib_item.cpp:54 eeschema/lib_pin.cpp:1041 eeschema/sch_pin.cpp:184
+#: eeschema/sch_pin.cpp:204 eeschema/sch_text.cpp:759
 #: eeschema/symbol_editor/symbol_editor.cpp:1223
 #: gerbview/gerber_draw_item.cpp:692
 #: pagelayout_editor/dialogs/dialog_design_inspector_base.cpp:37
@@ -13033,41 +13059,20 @@ msgstr "ναι"
 msgid "Converted"
 msgstr "Μετατράπηκε"
 
-#: eeschema/lib_pin.cpp:1031 eeschema/sch_pin.cpp:209
-#: gerbview/gerber_draw_item.cpp:733 gerbview/gerber_draw_item.cpp:734
-#: pcbnew/board_stackup_manager/panel_board_finish_base.cpp:44
-#: pcbnew/fp_text.cpp:286 pcbnew/fp_text.cpp:291 pcbnew/pcb_text.cpp:122
-#: pcbnew/tools/drawing_stackup_table_tool.cpp:451
-#: pcbnew/tools/drawing_stackup_table_tool.cpp:485
-#: pcbnew/tools/drawing_stackup_table_tool.cpp:492
-msgid "Yes"
-msgstr "Ναι"
-
-#: eeschema/lib_pin.cpp:1031 eeschema/sch_pin.cpp:209
-#: gerbview/gerber_draw_item.cpp:733 gerbview/gerber_draw_item.cpp:734
-#: pcbnew/fp_text.cpp:286 pcbnew/fp_text.cpp:291 pcbnew/pcb_text.cpp:122
-#: pcbnew/tools/drawing_stackup_table_tool.cpp:451
-#: pcbnew/tools/drawing_stackup_table_tool.cpp:485
-#: pcbnew/tools/drawing_stackup_table_tool.cpp:492
-msgid "No"
-msgstr "Όχι"
-
-#: eeschema/lib_pin.cpp:1046 eeschema/sch_pin.cpp:220
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1445
+#: eeschema/lib_pin.cpp:1059 pcbnew/dialogs/dialog_pad_properties_base.cpp:1445
 msgid "Pos X"
 msgstr "Θέση Χ"
 
-#: eeschema/lib_pin.cpp:1049 eeschema/sch_pin.cpp:223
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1446
+#: eeschema/lib_pin.cpp:1062 pcbnew/dialogs/dialog_pad_properties_base.cpp:1446
 msgid "Pos Y"
 msgstr "Θέση Ψ"
 
-#: eeschema/lib_pin.cpp:1181
+#: eeschema/lib_pin.cpp:1194
 #, c-format
 msgid "Pin %s [%s, %s, %s]"
 msgstr "Ακροδέκτης %s [%s, %s, %s]"
 
-#: eeschema/lib_pin.cpp:1189
+#: eeschema/lib_pin.cpp:1202
 #, c-format
 msgid "Pin %s [%s, %s]"
 msgstr "Pin %s [%s, %s]"
@@ -13081,7 +13086,7 @@ msgstr "Πολυγραμμή, %d σημεία"
 msgid "PolyLine"
 msgstr "ΠολυΓραμμή"
 
-#: eeschema/lib_text.cpp:382 eeschema/sch_text.cpp:668
+#: eeschema/lib_text.cpp:404 eeschema/sch_text.cpp:662
 #, c-format
 msgid "Graphic Text '%s'"
 msgstr "Γραφικό Κείμενο '%s'"
@@ -13339,28 +13344,28 @@ msgstr ""
 "Σφάλμα κατά την αποθήκευση καταλόγου βιβλιοθήκης συμβόλων για το έργο:\n"
 "%s"
 
-#: eeschema/sch_bus_entry.cpp:422
+#: eeschema/sch_bus_entry.cpp:418
 msgid "Bus to Wire Entry"
 msgstr "Μετάβαση Δίαυλου σε Σύρμα"
 
-#: eeschema/sch_bus_entry.cpp:428
+#: eeschema/sch_bus_entry.cpp:424
 msgid "Bus to Bus Entry"
 msgstr "Μετάβαση Δίαυλου σε Δίαυλο"
 
-#: eeschema/sch_bus_entry.cpp:492 eeschema/sch_line.cpp:881
+#: eeschema/sch_bus_entry.cpp:489 eeschema/sch_line.cpp:879
 msgid "Wire"
 msgstr "Σύρμα"
 
-#: eeschema/sch_bus_entry.cpp:493 eeschema/sch_line.cpp:882
+#: eeschema/sch_bus_entry.cpp:490 eeschema/sch_line.cpp:880
 msgid "Bus"
 msgstr "Δίαυλος"
 
-#: eeschema/sch_bus_entry.cpp:496
+#: eeschema/sch_bus_entry.cpp:493
 msgid "Bus Entry Type"
 msgstr "Τύπος Εισόδου Διαύλου"
 
-#: eeschema/sch_bus_entry.cpp:513 eeschema/sch_line.cpp:910
-#: eeschema/sch_text.cpp:808
+#: eeschema/sch_bus_entry.cpp:510 eeschema/sch_line.cpp:908
+#: eeschema/sch_text.cpp:802
 msgid "Assigned Netclass"
 msgstr "Netclass που έχουν Ανατεθεί"
 
@@ -13435,7 +13440,7 @@ msgid "Could not open CvPcb"
 msgstr "Αδυναμία ανοίγματος CvPcb"
 
 #: eeschema/sch_edit_frame.cpp:1243 eeschema/sim/sim_plot_frame.cpp:353
-#: kicad/kicad_manager_frame.cpp:636 pcbnew/footprint_edit_frame.cpp:788
+#: kicad/kicad_manager_frame.cpp:639 pcbnew/footprint_edit_frame.cpp:788
 #: pcbnew/pcb_edit_frame.cpp:1264
 msgid "[Read Only]"
 msgstr "[Μόνο Ανάγνωση]"
@@ -13458,20 +13463,20 @@ msgstr "Τονισμένο δίκτυο: %s"
 msgid "File:"
 msgstr "Αρχείο:"
 
-#: eeschema/sch_field.cpp:514
+#: eeschema/sch_field.cpp:552
 msgid "<root sheet>"
 msgstr "<root sheet>"
 
-#: eeschema/sch_field.cpp:521
+#: eeschema/sch_field.cpp:559
 #, c-format
 msgid "Go to Page %s (%s)"
 msgstr "Μετάβαση στη σελίδα %s (%s)"
 
-#: eeschema/sch_field.cpp:527
+#: eeschema/sch_field.cpp:565
 msgid "Back to Previous Selected Sheet"
 msgstr "Δημιουργία Έδρας από Επιλεγμένα Σχήματα"
 
-#: eeschema/sch_field.cpp:555
+#: eeschema/sch_field.cpp:593
 msgid "Intersheet References"
 msgstr "Αναφορές Εσωτερικά των Φύλλων"
 
@@ -13490,60 +13495,60 @@ msgstr "Δεν βρέθηκε το πρόσθετο τύπου \"%s\"."
 msgid "Unknown SCH_FILE_T value: %d"
 msgstr "Άγνωστη τιμή SCH_FILE_T: %d"
 
-#: eeschema/sch_line.cpp:717
+#: eeschema/sch_line.cpp:709
 #, c-format
 msgid "Vertical Wire, length %s"
 msgstr "Κατακόρυφο Καλώδιο, μήκος %s"
 
-#: eeschema/sch_line.cpp:718
+#: eeschema/sch_line.cpp:710
 #, c-format
 msgid "Vertical Bus, length %s"
 msgstr "Κατακόρυφος Δίαυλος, μήκος %s"
 
-#: eeschema/sch_line.cpp:719
+#: eeschema/sch_line.cpp:711
 #, c-format
 msgid "Vertical Graphic Line, length %s"
 msgstr "Κάθετη Γραφική Γραμμή, μήκος %s"
 
-#: eeschema/sch_line.cpp:726
+#: eeschema/sch_line.cpp:718
 #, c-format
 msgid "Horizontal Wire, length %s"
 msgstr "Οριζόντιο Καλώδιο, μήκος %s"
 
-#: eeschema/sch_line.cpp:727
+#: eeschema/sch_line.cpp:719
 #, c-format
 msgid "Horizontal Bus, length %s"
 msgstr "Οριζόντιος Δίαυλος, μήκος %s"
 
-#: eeschema/sch_line.cpp:728
+#: eeschema/sch_line.cpp:720
 #, c-format
 msgid "Horizontal Graphic Line, length %s"
 msgstr "Οριζόντια Γραφική Γραμμή, μήκος %s"
 
-#: eeschema/sch_line.cpp:735
+#: eeschema/sch_line.cpp:727
 #, c-format
 msgid "Wire, length %s"
 msgstr "Καλώδιο, μήκος %s"
 
-#: eeschema/sch_line.cpp:736
+#: eeschema/sch_line.cpp:728
 #, c-format
 msgid "Bus, length %s"
 msgstr "Δίαυλος, μήκος %s"
 
-#: eeschema/sch_line.cpp:737
+#: eeschema/sch_line.cpp:729
 #, c-format
 msgid "Graphic Line, length %s"
 msgstr "Γραφική Γραμμή, μήκος %s"
 
-#: eeschema/sch_line.cpp:883
+#: eeschema/sch_line.cpp:881
 msgid "Graphical"
 msgstr "Γραφικά"
 
-#: eeschema/sch_line.cpp:886
+#: eeschema/sch_line.cpp:884
 msgid "Line Type"
 msgstr "Τύπος Γραμμής"
 
-#: eeschema/sch_line.cpp:889
+#: eeschema/sch_line.cpp:887
 msgid "from netclass"
 msgstr "από το netclass"
 
@@ -13931,12 +13936,12 @@ msgstr ""
 "ένα θυγατρικό φύλλο αλλά δεν έχει καθοριστεί Figure."
 
 #: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:442
-#: pcbnew/plugins/eagle/eagle_plugin.cpp:2996
+#: pcbnew/plugins/eagle/eagle_plugin.cpp:3000
 #, c-format
 msgid "Unable to read file '%s'."
 msgstr "Αδυναμία δημιουργίας αρχείου '%s'"
 
-#: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:1269
+#: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:1271
 #, c-format
 msgid ""
 "Error parsing Eagle file. Could not find '%s' instance but it is referenced "
@@ -13945,7 +13950,7 @@ msgstr ""
 "Σφάλμα ανάλυσης αρχείου Eagle. Δεν ήταν δυνατή η εύρεση του \"%s\", αλλά "
 "αναφέρεται στο σχηματικό."
 
-#: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:1300
+#: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:1302
 #, c-format
 msgid "Could not find '%s' in the imported library."
 msgstr "Αδυναμία εύρεσης %s στην εισηγμένη βιβλιοθήκη"
@@ -14272,54 +14277,47 @@ msgstr "Δεν έχει οριστεί βιβλιοθήκη!"
 msgid "Symbol not found in %s!"
 msgstr "Δεν βρέθηκε το σύμβολο %s!"
 
-#: eeschema/sch_symbol.cpp:1632
+#: eeschema/sch_symbol.cpp:1631
 #, c-format
 msgid "Symbol %s [%s]"
 msgstr "Σύμβολο %s [%s]"
 
-#: eeschema/sch_text.cpp:578
+#: eeschema/sch_text.cpp:572
 msgid "Tri-State"
 msgstr "Τρικατάστατο"
 
-#: eeschema/sch_text.cpp:750
+#: eeschema/sch_text.cpp:744
 msgid "Graphic Text"
 msgstr "Γραφικό Κειμένων"
 
-#: eeschema/sch_text.cpp:751
+#: eeschema/sch_text.cpp:745
 msgid "Label"
 msgstr "Ετικέτα"
 
-#: eeschema/sch_text.cpp:754
+#: eeschema/sch_text.cpp:748
 msgid "Hierarchical Sheet Pin"
 msgstr "Ιεραρχικός Ακροδέκτης Φύλλου"
 
-#: eeschema/sch_text.cpp:772
+#: eeschema/sch_text.cpp:762
 msgid "Bold Italic"
 msgstr "Πλάγια Έντονα"
 
-#: eeschema/sch_text.cpp:792
-#: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:98
-#: pcbnew/microwave/microwave_polygon.cpp:136 pcbnew/pcb_target.cpp:156
-#: pcbnew/pcb_target.cpp:169
-msgid "Size"
-msgstr "Μέγεθος"
-
-#: eeschema/sch_text.cpp:920
+#: eeschema/sch_text.cpp:914
 #, c-format
 msgid "Label '%s'"
 msgstr "Ετικέτα '%s'"
 
-#: eeschema/sch_text.cpp:1470
+#: eeschema/sch_text.cpp:1464
 #, c-format
 msgid "Global Label '%s'"
 msgstr "Καθολική Ετικέτα '%s'"
 
-#: eeschema/sch_text.cpp:1715
+#: eeschema/sch_text.cpp:1709
 #, c-format
 msgid "Hierarchical Label '%s'"
 msgstr "Ιεραρχική Ετικέτα '%s'"
 
-#: eeschema/sch_text.cpp:1731 pcbnew/dialogs/panel_setup_rules.cpp:471
+#: eeschema/sch_text.cpp:1725 pcbnew/dialogs/panel_setup_rules.cpp:543
 msgid "Syntax Help"
 msgstr "Βοήθεια σύνταξης"
 
@@ -15390,7 +15388,7 @@ msgstr "Το σύμβολο '%s' υπάρχει ήδη στη βιβλιοθήκ
 #: eeschema/symbol_editor/symbol_editor.cpp:683
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:99
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:162
-#: kicad/tools/kicad_manager_control.cpp:261
+#: kicad/tools/kicad_manager_control.cpp:264
 #: pcbnew/dialogs/dialog_export_idf.cpp:163
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:122
 #: pcbnew/footprint_libraries_utils.cpp:470
@@ -15419,7 +15417,7 @@ msgstr "Πρέπει να αποθηκευτεί σε διαφορετική τ�
 
 #: eeschema/symbol_editor/symbol_editor.cpp:606 include/lib_table_grid.h:179
 #: pcbnew/footprint_libraries_utils.cpp:979
-#: pcbnew/footprint_libraries_utils.cpp:1215
+#: pcbnew/footprint_libraries_utils.cpp:1235
 msgid "Nickname"
 msgstr "Ψευδώνυμο"
 
@@ -16814,14 +16812,14 @@ msgstr "Προειδοποιήσεις Συμβόλου"
 msgid "No datasheet defined."
 msgstr "πεδίο φύλλου δεδομένων"
 
-#: eeschema/tools/ee_selection_tool.cpp:1558
+#: eeschema/tools/ee_selection_tool.cpp:1557
 #: pagelayout_editor/tools/pl_selection_tool.cpp:620
-#: pcbnew/tools/pcb_selection_tool.cpp:1801
+#: pcbnew/tools/pcb_selection_tool.cpp:1814
 msgid "Select &All\tA"
 msgstr "Επιλογή &Όλων\tA"
 
-#: eeschema/tools/ee_selection_tool.cpp:1561
-#: pcbnew/tools/pcb_selection_tool.cpp:1804
+#: eeschema/tools/ee_selection_tool.cpp:1560
+#: pcbnew/tools/pcb_selection_tool.cpp:1817
 msgid "&Expand Selection\tE"
 msgstr "&Επέκταση Επιλεγμένης Σύνδεσης\tE"
 
@@ -16874,74 +16872,74 @@ msgstr "δεν επιλέχθηκε σύμβολο"
 msgid "symbol is not multi-unit"
 msgstr "το σύμβολο δεν αποτελείται από πολλά μέρη"
 
-#: eeschema/tools/sch_edit_tool.cpp:878
+#: eeschema/tools/sch_edit_tool.cpp:893
 msgid "Label value cannot go below zero"
 msgstr "Η τιμή της ετικέτας δεν μπορεί να είναι μικρότερη από μηδέν"
 
-#: eeschema/tools/sch_edit_tool.cpp:1106 eeschema/tools/sch_edit_tool.cpp:1108
+#: eeschema/tools/sch_edit_tool.cpp:1121 eeschema/tools/sch_edit_tool.cpp:1123
 #: eeschema/tools/symbol_editor_edit_tool.cpp:520
 #, c-format
 msgid "Edit %s Field"
 msgstr "Επεξεργασία Πεδίου %s"
 
-#: eeschema/tools/sch_edit_tool.cpp:1110
+#: eeschema/tools/sch_edit_tool.cpp:1125
 #: eeschema/tools/symbol_editor_edit_tool.cpp:522
 #, c-format
 msgid "Edit '%s' Field"
 msgstr "Επεξεργασία Πεδίου %s"
 
-#: eeschema/tools/sch_edit_tool.cpp:1666
+#: eeschema/tools/sch_edit_tool.cpp:1698
 msgid "Do you wish to delete the unreferenced pins from this sheet?"
 msgstr "Διαγραφή μη αναφερόμενων ακροδεκτών σε αυτό το φύλλο;"
 
-#: eeschema/tools/sch_edit_tool.cpp:1726
+#: eeschema/tools/sch_edit_tool.cpp:1758
 #, c-format
 msgid "Enter page number for sheet path%s"
 msgstr "Εισαγωγή αριθμού σελίδας για τη διαδρομή φύλλου%s"
 
-#: eeschema/tools/sch_edit_tool.cpp:1729
+#: eeschema/tools/sch_edit_tool.cpp:1761
 msgid "Edit Sheet Page Number"
 msgstr "Επεξεργασία Αριθμού Σελίδας Φύλλου"
 
-#: eeschema/tools/sch_editor_control.cpp:495
+#: eeschema/tools/sch_editor_control.cpp:489
 msgid "Reached end of schematic."
 msgstr "Τέλος του σχηματικού."
 
-#: eeschema/tools/sch_editor_control.cpp:496
+#: eeschema/tools/sch_editor_control.cpp:490
 msgid "Reached end of sheet."
 msgstr "Τέλος φύλλου."
 
-#: eeschema/tools/sch_editor_control.cpp:500
+#: eeschema/tools/sch_editor_control.cpp:494
 msgid "Find again to wrap around to the start."
 msgstr "Εύρεση ξανά για ξεκίνημα πάλι από την αρχή."
 
-#: eeschema/tools/sch_editor_control.cpp:889
+#: eeschema/tools/sch_editor_control.cpp:882
 msgid "Error: duplicate sub-sheet names found in current sheet."
 msgstr ""
 "Σφάλμα: βρέθηκαν διπλότυπα ονόματα υπο-φύλλων στο τρέχον φύλλο. Διορθώστε το."
 
-#: eeschema/tools/sch_editor_control.cpp:980
+#: eeschema/tools/sch_editor_control.cpp:973
 msgid "Net must be labeled to assign a netclass."
 msgstr "Το Net πρέπει να φέρει ετικέτα για να εκχωρήσει ένα netclass."
 
-#: eeschema/tools/sch_editor_control.cpp:986
+#: eeschema/tools/sch_editor_control.cpp:979
 #, fuzzy
 msgid "Bus has no members to assign netclass to."
 msgstr "Το Net πρέπει να φέρει ετικέτα για να εκχωρήσει ένα netclass."
 
-#: eeschema/tools/sch_editor_control.cpp:1019
+#: eeschema/tools/sch_editor_control.cpp:1012
 msgid "Netclasses"
 msgstr "Netclasses"
 
-#: eeschema/tools/sch_editor_control.cpp:1032
+#: eeschema/tools/sch_editor_control.cpp:1025
 msgid "Assign Netclass"
 msgstr "Ανάθεση Netclass"
 
-#: eeschema/tools/sch_editor_control.cpp:1033
+#: eeschema/tools/sch_editor_control.cpp:1026
 msgid "Select netclass:"
 msgstr "Επιλογή netclass:"
 
-#: eeschema/tools/sch_editor_control.cpp:1627
+#: eeschema/tools/sch_editor_control.cpp:1620
 #, c-format
 msgid ""
 "The pasted sheet '%s'\n"
@@ -17156,12 +17154,12 @@ msgstr "Επιλογή Επιπέδου: %s"
 #: pcbnew/board_item.cpp:225
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:66
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:25
-#: pcbnew/dialogs/dialog_footprint_properties_base.cpp:59
+#: pcbnew/dialogs/dialog_footprint_properties_base.cpp:58
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:59
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:112
 #: pcbnew/dialogs/panel_fp_editor_defaults.cpp:53
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:47
-#: pcbnew/footprint.cpp:2115 pcbnew/footprint.cpp:2118 pcbnew/fp_text.cpp:289
+#: pcbnew/footprint.cpp:2191 pcbnew/footprint.cpp:2194 pcbnew/fp_text.cpp:289
 #: pcbnew/fp_text_grid_table.cpp:95 pcbnew/pad.cpp:890
 #: pcbnew/pcb_dimension.cpp:352 pcbnew/pcb_dimension.cpp:1056
 #: pcbnew/pcb_shape.cpp:616 pcbnew/pcb_target.cpp:154 pcbnew/pcb_text.cpp:120
@@ -17579,7 +17577,7 @@ msgid "Polarity"
 msgstr "Πολικότητα"
 
 #: gerbview/gerber_draw_item.cpp:735 pcbnew/fp_text.cpp:291
-#: pcbnew/pcb_text.cpp:122 pcbnew/tools/edit_tool.cpp:1658
+#: pcbnew/pcb_text.cpp:122 pcbnew/tools/edit_tool.cpp:1669
 #: pcbnew/tools/pcb_actions.cpp:301
 msgid "Mirror"
 msgstr "Καθρέφτισμα"
@@ -18161,11 +18159,11 @@ msgstr "Επαναφέρετε όλες τις ρυθμίσεις σε αυτή�
 msgid "Failed to output data"
 msgstr "Αποτυχία φορτώματος \"%s\""
 
-#: kicad/dialogs/dialog_template_selector.cpp:127
+#: kicad/dialogs/dialog_template_selector.cpp:132
 msgid "<html><h1>Template Selector</h1></html>"
 msgstr "<html><h1>Επιλογέας Πρότυπυ</h1></html>"
 
-#: kicad/dialogs/dialog_template_selector.cpp:228
+#: kicad/dialogs/dialog_template_selector.cpp:232
 msgid "Select Templates Directory"
 msgstr "Επιλογή Φακέλου Προτύπων"
 
@@ -18173,20 +18171,11 @@ msgstr "Επιλογή Φακέλου Προτύπων"
 msgid "Folder:"
 msgstr "Φάκελος:"
 
-#: kicad/dialogs/dialog_template_selector_base.cpp:36
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:216
-msgid "Browse"
-msgstr "Πλοήγηση"
-
-#: kicad/dialogs/dialog_template_selector_base.cpp:39
-msgid "Validate"
-msgstr "Επικύρωση"
-
-#: kicad/dialogs/dialog_template_selector_base.cpp:114
+#: kicad/dialogs/dialog_template_selector_base.cpp:116
 msgid "Project Template Title"
 msgstr "Τίτλος Προτύπου του Έργου"
 
-#: kicad/dialogs/dialog_template_selector_base.h:65
+#: kicad/dialogs/dialog_template_selector_base.h:66
 msgid "Project Template Selector"
 msgstr "Επιλογέας Πρότυπου Έργου"
 
@@ -18262,11 +18251,11 @@ msgstr "Αποσυμπίεση έργου σε \"%s\"\n"
 msgid "Archive Project Files"
 msgstr "Αρχειοθέτηση αρχείων έργου"
 
-#: kicad/import_project.cpp:78
+#: kicad/import_project.cpp:83
 msgid "KiCad Project Destination"
 msgstr "Προορισμός Έργου KiCad"
 
-#: kicad/import_project.cpp:94
+#: kicad/import_project.cpp:99
 msgid ""
 "The selected directory is not empty.  We recommend you create projects in "
 "their own clean directory.\n"
@@ -18278,7 +18267,7 @@ msgstr ""
 "\n"
 "Δημιουργία νέου, κενού φακέλου για το έργο;"
 
-#: kicad/import_project.cpp:119
+#: kicad/import_project.cpp:124
 msgid ""
 "Error creating new directory. Please try a different path. The project "
 "cannot be imported."
@@ -18286,7 +18275,7 @@ msgstr ""
 "Σφάλμα δημιουργίας νέου καταλόγου. Δοκιμάστε μια διαφορετική διαδρομή. Το "
 "έργο δεν εισήχθη."
 
-#: kicad/import_project.cpp:144 kicad/import_project.cpp:163
+#: kicad/import_project.cpp:149 kicad/import_project.cpp:168
 #, c-format
 msgid ""
 "Cannot copy file '%s'\n"
@@ -18297,11 +18286,11 @@ msgstr ""
 "σε «%s»\n"
 "Δεν είναι δυνατή η εισαγωγή του έργου."
 
-#: kicad/import_project.cpp:226
+#: kicad/import_project.cpp:229
 msgid "Import CADSTAR Archive Project Files"
 msgstr "Εισαγωγή Αρχειοθετημένων Αρχείων Έργου CADSTAR"
 
-#: kicad/import_project.cpp:234
+#: kicad/import_project.cpp:237
 msgid "Import Eagle Project Files"
 msgstr "Εισαγωγή Αρχείων Έργου Eagle"
 
@@ -18322,24 +18311,24 @@ msgstr "Αρχεία Έργου"
 msgid "Editors"
 msgstr "Επεξεργαστές"
 
-#: kicad/kicad_manager_frame.cpp:571
+#: kicad/kicad_manager_frame.cpp:574
 msgid "Load File to Edit"
 msgstr "Φόρτωση αρχείου για επεξεργασία"
 
-#: kicad/kicad_manager_frame.cpp:640
+#: kicad/kicad_manager_frame.cpp:643
 msgid "[no project loaded]"
 msgstr "[δεν φορτώθηκε έργο]"
 
-#: kicad/kicad_manager_frame.cpp:687
+#: kicad/kicad_manager_frame.cpp:690
 #, c-format
 msgid "Project: %s"
 msgstr "Έργο: '%s'"
 
-#: kicad/kicad_manager_frame.cpp:731
+#: kicad/kicad_manager_frame.cpp:734
 msgid "Restoring session"
 msgstr "Επαναφορά συνεδρίας"
 
-#: kicad/kicad_manager_frame.cpp:741
+#: kicad/kicad_manager_frame.cpp:744
 #, c-format
 msgid "Restoring \"%s\""
 msgstr "Επαναφορά \"%s\""
@@ -18906,117 +18895,117 @@ msgstr "Αδυναμία μετατροπής \"%s\" σε ακέραιο"
 msgid "Can not move '%s' to trash."
 msgstr "Αδυναμία μετατροπής \"%s\" σε ακέραιο"
 
-#: kicad/project_tree_pane.cpp:257
+#: kicad/project_tree_pane.cpp:241
 msgid "Directory name:"
 msgstr "Όνομα καταλόγου:"
 
-#: kicad/project_tree_pane.cpp:257
+#: kicad/project_tree_pane.cpp:241
 msgid "Create New Directory"
 msgstr "Δημιουργία Νέου Φακέλου"
 
-#: kicad/project_tree_pane.cpp:709
+#: kicad/project_tree_pane.cpp:693
 msgid "Switch to this Project"
 msgstr "Μετάβαση σε αυτό το Έργο"
 
-#: kicad/project_tree_pane.cpp:710
+#: kicad/project_tree_pane.cpp:694
 msgid "Close all editors, and switch to the selected project"
 msgstr "Κλείσιμο όλων των επεξεργαστών, και μετάβαση στο επιλεγμένο έργο"
 
-#: kicad/project_tree_pane.cpp:717
+#: kicad/project_tree_pane.cpp:701
 msgid "New Directory..."
 msgstr "Νέος Κατάλογος..."
 
-#: kicad/project_tree_pane.cpp:718
+#: kicad/project_tree_pane.cpp:702
 msgid "Create a New Directory"
 msgstr "Δημιουργία Νέου Φακέλου"
 
-#: kicad/project_tree_pane.cpp:726 kicad/project_tree_pane.cpp:736
+#: kicad/project_tree_pane.cpp:710 kicad/project_tree_pane.cpp:720
 msgid "Reveal in Finder"
 msgstr "Εμφάνιση στον Finder"
 
-#: kicad/project_tree_pane.cpp:727
+#: kicad/project_tree_pane.cpp:711
 msgid "Reveals the directory in a Finder window"
 msgstr "Εμφανίζει τον κατάλογο σε ένα παράθυρο Finder"
 
-#: kicad/project_tree_pane.cpp:729
+#: kicad/project_tree_pane.cpp:713
 msgid "Open Directory in File Explorer"
 msgstr "Άνοιγμα Καταλόγου στην Εξερεύνηση Αρχείων"
 
-#: kicad/project_tree_pane.cpp:730 pcbnew/tools/pcb_actions.cpp:548
+#: kicad/project_tree_pane.cpp:714 pcbnew/tools/pcb_actions.cpp:548
 msgid "Opens the directory in the default system file manager"
 msgstr "Ανοίγει τον κατάλογο στον προεπιλεγμένο διαχειριστή αρχείων συστήματος"
 
-#: kicad/project_tree_pane.cpp:737
+#: kicad/project_tree_pane.cpp:721
 msgid "Reveals the directories in a Finder window"
 msgstr "Εμφανίζει τους κατάλογους σε ένα παράθυρο Finder"
 
-#: kicad/project_tree_pane.cpp:739
+#: kicad/project_tree_pane.cpp:723
 msgid "Open Directories in File Explorer"
 msgstr "Άνοιγμα Καταλόγων στην Εξερεύνηση Αρχείων"
 
-#: kicad/project_tree_pane.cpp:740
+#: kicad/project_tree_pane.cpp:724
 msgid "Opens the directories in the default system file manager"
 msgstr ""
 "Ανοίγει τους καταλόγους στον προεπιλεγμένο διαχειριστή αρχείων συστήματος"
 
-#: kicad/project_tree_pane.cpp:751
+#: kicad/project_tree_pane.cpp:735
 msgid "Open the file in a Text Editor"
 msgstr "Άνοιγμα του αρχείου με έναν επεξεργαστή κειμένου"
 
-#: kicad/project_tree_pane.cpp:753
+#: kicad/project_tree_pane.cpp:737
 msgid "Open files in a Text Editor"
 msgstr "Άνοιγμα αρχείων με έναν Επεξεργαστή Κειμένου"
 
-#: kicad/project_tree_pane.cpp:755
+#: kicad/project_tree_pane.cpp:739
 msgid "Edit in a Text Editor"
 msgstr "Επεξεργασία σε Επεξεργαστή Κειμένου"
 
-#: kicad/project_tree_pane.cpp:763
+#: kicad/project_tree_pane.cpp:747
 msgid "Rename File..."
 msgstr "Μετονομασία Αρχείου..."
 
-#: kicad/project_tree_pane.cpp:764
+#: kicad/project_tree_pane.cpp:748
 msgid "Rename file"
 msgstr "Μετονομασία αρχείου"
 
-#: kicad/project_tree_pane.cpp:768
+#: kicad/project_tree_pane.cpp:752
 msgid "Rename Files..."
 msgstr "Μετονομασία Αρχείων..."
 
-#: kicad/project_tree_pane.cpp:769
+#: kicad/project_tree_pane.cpp:753
 msgid "Rename files"
 msgstr "Μετονομασία αρχείων"
 
-#: kicad/project_tree_pane.cpp:778
+#: kicad/project_tree_pane.cpp:762
 msgid "Delete the file and its content"
 msgstr "Διαγραφή αρχείου και των περιεχομένων του"
 
-#: kicad/project_tree_pane.cpp:780
+#: kicad/project_tree_pane.cpp:764
 msgid "Delete the files and their contents"
 msgstr "Διαγραφή αρχείων και των περιεχομένων τους"
 
-#: kicad/project_tree_pane.cpp:795
+#: kicad/project_tree_pane.cpp:779
 msgid "Move to Trash"
 msgstr "Μετακίνηση σε Σκουπίδια"
 
-#: kicad/project_tree_pane.cpp:810
+#: kicad/project_tree_pane.cpp:794
 msgid "Print the contents of the file"
 msgstr "Εκτύπωση περιεχομένων του αρχείου"
 
-#: kicad/project_tree_pane.cpp:875
+#: kicad/project_tree_pane.cpp:859
 #, c-format
 msgid "Change filename: \"%s\""
 msgstr "Αλλαγή ονόματος αρχείου: \"%s\""
 
-#: kicad/project_tree_pane.cpp:877
+#: kicad/project_tree_pane.cpp:861
 msgid "Change filename"
 msgstr "Αλλαγή ονόματος αρχείου"
 
-#: kicad/project_tree_pane.cpp:1197
+#: kicad/project_tree_pane.cpp:1181
 msgid "Network path: not monitoring folder changes"
 msgstr "Διαδρομή δικτύου: δεν παρακολουθούνται οι αλλαγές φακέλων"
 
-#: kicad/project_tree_pane.cpp:1202
+#: kicad/project_tree_pane.cpp:1186
 msgid "Local path: monitoring folder changes"
 msgstr "Τοπική διαδρομή: παρακολουθούνται οι αλλαγές φακέλων"
 
@@ -19114,15 +19103,15 @@ msgstr "Άνοιγμα Επεξεργαστή Κειμένου"
 msgid "Launch preferred text editor"
 msgstr "Άνοιγμα προτιμώμενου επεξεργαστή κειμένου"
 
-#: kicad/tools/kicad_manager_control.cpp:50
+#: kicad/tools/kicad_manager_control.cpp:53
 msgid "Create a new folder for the project"
 msgstr "Δημιουργία νέου φακέλου για το έργο"
 
-#: kicad/tools/kicad_manager_control.cpp:90
+#: kicad/tools/kicad_manager_control.cpp:93
 msgid "Create New Project"
 msgstr "Δημιουργία Νέου Έργου"
 
-#: kicad/tools/kicad_manager_control.cpp:132
+#: kicad/tools/kicad_manager_control.cpp:135
 msgid ""
 "The selected folder is not empty.  It is recommended that you create "
 "projects in their own empty folder.\n"
@@ -19134,56 +19123,56 @@ msgstr ""
 "\n"
 "Θέλετε να συνεχίσετε;"
 
-#: kicad/tools/kicad_manager_control.cpp:160
+#: kicad/tools/kicad_manager_control.cpp:163
 msgid "System Templates"
 msgstr "Πρότυπα Συστήματος"
 
-#: kicad/tools/kicad_manager_control.cpp:169
+#: kicad/tools/kicad_manager_control.cpp:172
 msgid "User Templates"
 msgstr "Πρότυπα Χρήστη"
 
-#: kicad/tools/kicad_manager_control.cpp:178
+#: kicad/tools/kicad_manager_control.cpp:181
 msgid "No project template was selected.  Cannot generate new project."
 msgstr "Δεν επιλέχθηκε κάποιο πρότυπο έργου. Αδυναμία δημιουργίας νέου έργου."
 
-#: kicad/tools/kicad_manager_control.cpp:186
+#: kicad/tools/kicad_manager_control.cpp:189
 msgid "New Project Folder"
 msgstr "Νέος Φάκελος Έργου"
 
-#: kicad/tools/kicad_manager_control.cpp:232
-#: kicad/tools/kicad_manager_control.cpp:563
+#: kicad/tools/kicad_manager_control.cpp:235
+#: kicad/tools/kicad_manager_control.cpp:567
 #, c-format
 msgid "Insufficient permissions to write to folder '%s'."
 msgstr ""
 "Απαιτούνται δικαιώματα εγγραφής για την αποθήκευση αρχείου\n"
 "%s"
 
-#: kicad/tools/kicad_manager_control.cpp:253
+#: kicad/tools/kicad_manager_control.cpp:256
 msgid "Overwriting files:"
 msgstr "Αντικατάσταση αρχείων:"
 
-#: kicad/tools/kicad_manager_control.cpp:258
+#: kicad/tools/kicad_manager_control.cpp:261
 msgid "Similar files already exist in the destination folder."
 msgstr "Υπάρχουν παρόμοια αρχεία στον φάκελο προορισμού."
 
-#: kicad/tools/kicad_manager_control.cpp:276
+#: kicad/tools/kicad_manager_control.cpp:279
 msgid "A problem occurred creating new project from template."
 msgstr "Πρόβλημα κατά τη δημιουργία νέου έργου από πρότυπο."
 
-#: kicad/tools/kicad_manager_control.cpp:298
+#: kicad/tools/kicad_manager_control.cpp:301
 msgid "Open Existing Project"
 msgstr "Άνοιγμα Υπάρχοντος Έργου"
 
-#: kicad/tools/kicad_manager_control.cpp:491
+#: kicad/tools/kicad_manager_control.cpp:495
 #, c-format
 msgid "Cannot copy folder '%s'."
 msgstr "Αδυναμία αντιγραφής φακέλου '%s'."
 
-#: kicad/tools/kicad_manager_control.cpp:534
+#: kicad/tools/kicad_manager_control.cpp:538
 msgid "Save Project To"
 msgstr "Αποθήκευση Αρχείου Έργου Σε"
 
-#: kicad/tools/kicad_manager_control.cpp:554
+#: kicad/tools/kicad_manager_control.cpp:558
 #, c-format
 msgid ""
 "Folder '%s' could not be created.\n"
@@ -19194,33 +19183,33 @@ msgstr ""
 "\n"
 "Βεβαιωθείτε ότι έχετε δικαιώματα εγγραφής και προσπαθήστε ξανά."
 
-#: kicad/tools/kicad_manager_control.cpp:565
+#: kicad/tools/kicad_manager_control.cpp:569
 msgid "Error!"
 msgstr "Σφάλμα!"
 
-#: kicad/tools/kicad_manager_control.cpp:622
+#: kicad/tools/kicad_manager_control.cpp:626
 msgid "Create (or open) a project to edit a schematic."
 msgstr "Δημιουργήστε (ή ανοίξτε) ένα έργο για να επεξεργαστείτε ένα σχηματικό."
 
-#: kicad/tools/kicad_manager_control.cpp:628
+#: kicad/tools/kicad_manager_control.cpp:632
 msgid "Create (or open) a project to edit a pcb."
 msgstr "Δημιουργήστε (ή ανοίξτε) ένα έργο για να επεξεργαστείτε μία πλακέτα."
 
-#: kicad/tools/kicad_manager_control.cpp:645
+#: kicad/tools/kicad_manager_control.cpp:649
 msgid "Application failed to load:\n"
 msgstr "Αποτυχία φόρτωσης της εφαρμογής:\n"
 
-#: kicad/tools/kicad_manager_control.cpp:645
-#: kicad/tools/kicad_manager_control.cpp:652 pcbnew/pcb_edit_frame.cpp:1501
+#: kicad/tools/kicad_manager_control.cpp:649
+#: kicad/tools/kicad_manager_control.cpp:656 pcbnew/pcb_edit_frame.cpp:1501
 #: pcbnew/pcb_edit_frame.cpp:1532
 msgid "KiCad Error"
 msgstr "Σφάλμα KiCad"
 
-#: kicad/tools/kicad_manager_control.cpp:652
+#: kicad/tools/kicad_manager_control.cpp:656
 msgid "Application failed to load."
 msgstr "Αποτυχία φόρτωσης της εφαρμογής."
 
-#: kicad/tools/kicad_manager_control.cpp:718
+#: kicad/tools/kicad_manager_control.cpp:722
 #, c-format
 msgid "%s closed [pid=%d]\n"
 msgstr "%s κλειστό [pid=%d]\n"
@@ -19938,6 +19927,10 @@ msgid "The name of the data file which stores known regulators parameters."
 msgstr ""
 "Το όνομα του αρχείου δεδομένων που αποθηκεύει τις γνωστές παραμέτρους "
 "ρυθμιστών."
+
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:216
+msgid "Browse"
+msgstr "Πλοήγηση"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:225
 msgid "Edit Regulator"
@@ -21275,8 +21268,8 @@ msgstr "Θέση Ψ"
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:101
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:79
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:46
-#: pcbnew/footprint.cpp:901 pcbnew/fp_text.cpp:284 pcbnew/pad.cpp:887
-#: pcbnew/pcb_dimension.cpp:350 pcbnew/pcb_group.cpp:326
+#: pcbnew/footprint.cpp:945 pcbnew/fp_text.cpp:284 pcbnew/pad.cpp:887
+#: pcbnew/pcb_dimension.cpp:350 pcbnew/pcb_group.cpp:338
 #: pcbnew/pcb_shape.cpp:550 pcbnew/pcb_text.cpp:118 pcbnew/pcb_track.cpp:809
 #: pcbnew/zone.cpp:598
 msgid "Locked"
@@ -21287,27 +21280,27 @@ msgstr "Κλειδωμένο"
 msgid "Dielectric %d"
 msgstr "Διηλεκτρικό %d"
 
-#: pcbnew/board_stackup_manager/board_stackup.cpp:527
+#: pcbnew/board_stackup_manager/board_stackup.cpp:528
 msgid "Top Silk Screen"
 msgstr "Πάνω Μεταξοτυπία"
 
-#: pcbnew/board_stackup_manager/board_stackup.cpp:535
+#: pcbnew/board_stackup_manager/board_stackup.cpp:536
 msgid "Top Solder Paste"
 msgstr "Πάνω Πάστα Συγκόλλησης"
 
-#: pcbnew/board_stackup_manager/board_stackup.cpp:543
+#: pcbnew/board_stackup_manager/board_stackup.cpp:544
 msgid "Top Solder Mask"
 msgstr "Πάνω Μάσκα Συγκόλλησης"
 
-#: pcbnew/board_stackup_manager/board_stackup.cpp:587
+#: pcbnew/board_stackup_manager/board_stackup.cpp:588
 msgid "Bottom Solder Mask"
 msgstr "Κάτω Μάσκα Συγκόλλησης"
 
-#: pcbnew/board_stackup_manager/board_stackup.cpp:595
+#: pcbnew/board_stackup_manager/board_stackup.cpp:596
 msgid "Bottom Solder Paste"
 msgstr "Κάτω Πάστα Συγκόλλησης"
 
-#: pcbnew/board_stackup_manager/board_stackup.cpp:603
+#: pcbnew/board_stackup_manager/board_stackup.cpp:604
 msgid "Bottom Silk Screen"
 msgstr "Κάτω Μεταξοτυπία"
 
@@ -21327,7 +21320,7 @@ msgstr "Υλικό"
 
 #: pcbnew/board_stackup_manager/dialog_dielectric_list_manager.cpp:94
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:105
-#: pcbnew/tools/drawing_stackup_table_tool.cpp:284
+#: pcbnew/tools/drawing_stackup_table_tool.cpp:287
 msgid "Epsilon R"
 msgstr "Epsilon R"
 
@@ -22106,7 +22099,7 @@ msgstr "Επανα-ονοματισμός:"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:178
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:140
-#: pcbnew/footprint.cpp:886
+#: pcbnew/footprint.cpp:930
 msgid "Front"
 msgstr "Μπροστά"
 
@@ -22274,8 +22267,8 @@ msgstr "Προκαθορισμένες τιμές"
 msgid "Design Rules"
 msgstr "Κανόνες Σχεδίασης"
 
-#: pcbnew/dialogs/dialog_board_setup.cpp:104 pcbnew/router/router_tool.cpp:834
-#: pcbnew/router/router_tool.cpp:855
+#: pcbnew/dialogs/dialog_board_setup.cpp:104 pcbnew/router/router_tool.cpp:835
+#: pcbnew/router/router_tool.cpp:856
 msgid "Constraints"
 msgstr "Περιορισμοί"
 
@@ -23410,28 +23403,28 @@ msgstr "-------- Το DRC ακυρώθηκε από τον χρήστη.<br><br>
 msgid "Done.<br><br>"
 msgstr "Έγινε.<br><br>"
 
-#: pcbnew/dialogs/dialog_drc.cpp:457
+#: pcbnew/dialogs/dialog_drc.cpp:453
 msgid "Run clearance resolution tool..."
 msgstr "Ανάλυση Διάκενου..."
 
-#: pcbnew/dialogs/dialog_drc.cpp:484
+#: pcbnew/dialogs/dialog_drc.cpp:480
 msgid "Open the Board Setup... dialog"
 msgstr "Άνοιγμα διαλόγου Διάταξης Πλακέτας..."
 
-#: pcbnew/dialogs/dialog_drc.cpp:661
+#: pcbnew/dialogs/dialog_drc.cpp:657
 #, c-format
 msgid "Report file '%s' created<br>"
 msgstr "Δημιουργήθηκε αρχείο αναφοράς '%s' <br>"
 
-#: pcbnew/dialogs/dialog_drc.cpp:892
+#: pcbnew/dialogs/dialog_drc.cpp:888
 msgid "Do you wish to delete excluded markers as well?"
 msgstr "Διαγραφή μη αναφερθέντων σημάνσεων σε αυτό το φύλλο;"
 
-#: pcbnew/dialogs/dialog_drc.cpp:895
+#: pcbnew/dialogs/dialog_drc.cpp:891
 msgid "Delete exclusions"
 msgstr "Διαγραφή εξαιρέσεων"
 
-#: pcbnew/dialogs/dialog_drc.cpp:968
+#: pcbnew/dialogs/dialog_drc.cpp:964
 msgid "not run"
 msgstr "δεν εκτελέστηκε"
 
@@ -23559,17 +23552,17 @@ msgstr ""
 "θέλει να τις αφαιρέσει είτε έκανε αλλαγές στο αποτύπωμα της βιβλιοθήκης και "
 "θέλει να τις διαδώσει ξανά στο PCB."
 
-#: pcbnew/dialogs/dialog_exchange_footprints.cpp:374
+#: pcbnew/dialogs/dialog_exchange_footprints.cpp:375
 #, c-format
 msgid "Update footprint %s from '%s' to '%s'"
 msgstr "Ενημέρωση αποτυπώματος %s από '%s' σε '%s'"
 
-#: pcbnew/dialogs/dialog_exchange_footprints.cpp:381
+#: pcbnew/dialogs/dialog_exchange_footprints.cpp:382
 #, c-format
 msgid "Change footprint %s from '%s' to '%s'"
 msgstr "Αλλαγή αποτυπώματος %s από '%s' σε '%s'"
 
-#: pcbnew/dialogs/dialog_exchange_footprints.cpp:391
+#: pcbnew/dialogs/dialog_exchange_footprints.cpp:392
 msgid "*** footprint not found ***"
 msgstr "*** το αποτύπωμα δεν βρέθηκε ***"
 
@@ -24078,7 +24071,7 @@ msgstr "Επεξεργασία ιδιοτήτων αποτυπώματος"
 msgid "Reference and value are mandatory."
 msgstr "Η αναφορά και η τιμή είναι υποχρεωτικά."
 
-#: pcbnew/dialogs/dialog_footprint_properties_base.cpp:53
+#: pcbnew/dialogs/dialog_footprint_properties_base.cpp:52
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:53
 #: pcbnew/dialogs/panel_fp_editor_defaults.cpp:51
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:45
@@ -24086,25 +24079,25 @@ msgstr "Η αναφορά και η τιμή είναι υποχρεωτικά."
 msgid "Text Items"
 msgstr "Αντικείμενα Κειμένου"
 
-#: pcbnew/dialogs/dialog_footprint_properties_base.cpp:61
+#: pcbnew/dialogs/dialog_footprint_properties_base.cpp:60
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:49
 #: pcbnew/fp_text_grid_table.cpp:97
 msgid "Keep Upright"
 msgstr "Διατήρηση Όρθιο"
 
-#: pcbnew/dialogs/dialog_footprint_properties_base.cpp:62
+#: pcbnew/dialogs/dialog_footprint_properties_base.cpp:61
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:62
 #: pcbnew/fp_text_grid_table.cpp:98
 msgid "X Offset"
 msgstr "Μετατόπιση Χ"
 
-#: pcbnew/dialogs/dialog_footprint_properties_base.cpp:63
+#: pcbnew/dialogs/dialog_footprint_properties_base.cpp:62
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:63
 #: pcbnew/fp_text_grid_table.cpp:99
 msgid "Y Offset"
 msgstr "Μετατόπιση Ψ"
 
-#: pcbnew/dialogs/dialog_footprint_properties_base.cpp:69
+#: pcbnew/dialogs/dialog_footprint_properties_base.cpp:68
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:69
 #: pcbnew/dialogs/panel_fp_editor_defaults.cpp:62
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:53
@@ -24162,23 +24155,28 @@ msgid "Fabrication Attributes"
 msgstr "Ιδιότητες Παραγωγής"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:272
-msgid "Component:"
-msgstr "Εξάρτημα:"
+#: pcbnew/footprint_libraries_utils.cpp:1130
+#, fuzzy
+msgid "Footprint type:"
+msgstr "Όνομα αποτυπώματος:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:276
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:179
+#: pcbnew/footprint.cpp:689 pcbnew/footprint_libraries_utils.cpp:1131
 msgid "Through hole"
 msgstr "Διαμπερής τρύπα"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:276
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:179
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:40 pcbnew/pad.cpp:1113
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:40 pcbnew/footprint.cpp:686
+#: pcbnew/footprint_libraries_utils.cpp:1131 pcbnew/pad.cpp:1113
 #: pcbnew/pad.cpp:1458
 msgid "SMD"
 msgstr "SMD"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:276
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:179
+#: pcbnew/footprint.cpp:691 pcbnew/footprint_libraries_utils.cpp:1131
 msgid "Other"
 msgstr "Άλλο"
 
@@ -25286,19 +25284,19 @@ msgstr ""
 msgid "Edit Mapping of Imported Layers"
 msgstr "Επεξεργασία Χαρτογράφησης Εισαχθέντων Επιπέδων"
 
-#: pcbnew/dialogs/dialog_layer_selection_base.cpp:120
+#: pcbnew/dialogs/dialog_layer_selection_base.cpp:122
 msgid "Top/Front layer:"
 msgstr "Πάνω/Μπροστά επίπεδο:"
 
-#: pcbnew/dialogs/dialog_layer_selection_base.cpp:159
+#: pcbnew/dialogs/dialog_layer_selection_base.cpp:161
 msgid "Bottom/Back layer:"
 msgstr "Κάτω/Πίσω επίπεδο:"
 
-#: pcbnew/dialogs/dialog_layer_selection_base.h:50
+#: pcbnew/dialogs/dialog_layer_selection_base.h:51
 msgid "Select Layer"
 msgstr "Επιλογή Επιπέδου"
 
-#: pcbnew/dialogs/dialog_layer_selection_base.h:79
+#: pcbnew/dialogs/dialog_layer_selection_base.h:80
 msgid "Select Copper Layer Pair"
 msgstr "Επιλογή Ζεύγους Επιπέδων Χαλκού"
 
@@ -25475,7 +25473,7 @@ msgid "The netlist file does not exist."
 msgstr "Το αρχείο λίστας δικτύου δεν υπάρχει."
 
 #: pcbnew/dialogs/dialog_netlist.cpp:153
-#: pcbnew/dialogs/dialog_update_pcb.cpp:132
+#: pcbnew/dialogs/dialog_update_pcb.cpp:138
 msgid "Changes Applied to PCB"
 msgstr "Αλλαγές Στο PCB"
 
@@ -27434,15 +27432,18 @@ msgid "Clearance Outlines"
 msgstr "Περιγράμματα Διάκενου"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:59
-msgid "Show when creating tracks"
+#, fuzzy
+msgid "Show when routing"
 msgstr "Εμφάνιση κατά τη δημιουργία διαδρόμων"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:59
-msgid "Show with via clearance at end"
+#, fuzzy
+msgid "Show when routing w/ via clearance at end"
 msgstr "Εμφάνιση με διάκενο via στο τέλος"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:59
-msgid "Show when creating and editing tracks"
+#, fuzzy
+msgid "Show when routing and editing"
 msgstr "Εμφάνιση κατά τη δημιουργία και επεξεργασία διαδρόμων"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:59
@@ -27450,7 +27451,8 @@ msgid "Show always"
 msgstr "Εμφάνιση πάντα"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:61
-msgid "Track Clearance"
+#, fuzzy
+msgid "Track && Via Clearances"
 msgstr "Διάκενα Διαδρόμου"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:63
@@ -27465,6 +27467,11 @@ msgstr ""
 #: pcbnew/dialogs/panel_display_options_base.cpp:67
 msgid "Show pad clearance"
 msgstr "Προβολή διάκενου έδρας"
+
+#: pcbnew/dialogs/panel_display_options_base.cpp:76
+#, fuzzy
+msgid "Scroll cross-probed items into view"
+msgstr "Μεγέθυνση ώστε να χωράει cross-probed αντικείμενα"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:86
 msgid "Highlight nets when they are highlighted in the schematic editor"
@@ -28748,20 +28755,20 @@ msgstr ""
 "Σημείωση: Προστίθενται τα διάκενα solder paste (απόλυτα και σχετικά) για να "
 "καθοριστεί το τελικό διάκενο."
 
-#: pcbnew/dialogs/panel_setup_rules.cpp:81
+#: pcbnew/dialogs/panel_setup_rules.cpp:86
 msgid "Cancel Changes?"
 msgstr "Ακύρωση αλλαγών;"
 
-#: pcbnew/dialogs/panel_setup_rules.cpp:350
+#: pcbnew/dialogs/panel_setup_rules.cpp:422
 msgid "DRC rules"
 msgstr "Κανόνες DRC"
 
-#: pcbnew/dialogs/panel_setup_rules.cpp:357
+#: pcbnew/dialogs/panel_setup_rules.cpp:429
 #: pcbnew/drc/drc_rule_condition.cpp:64
 msgid "ERROR:"
 msgstr "ΣΦΑΛΜΑ:"
 
-#: pcbnew/dialogs/panel_setup_rules.cpp:418
+#: pcbnew/dialogs/panel_setup_rules.cpp:490
 msgid "Design rules cannot be added without a project"
 msgstr "Οι κανόνες σχεδίασης DRC δεν μπορούν να προστεθούν χωρίς έργο"
 
@@ -29041,6 +29048,12 @@ msgstr "Προκαθορισμένες διαστάσεις για διάδρο�
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:169
 msgid "7"
 msgstr "7"
+
+#: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:98
+#: pcbnew/microwave/microwave_polygon.cpp:136 pcbnew/pcb_target.cpp:156
+#: pcbnew/pcb_target.cpp:169
+msgid "Size"
+msgstr "Μέγεθος"
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:99 pcbnew/pad.cpp:943
 #: pcbnew/tools/board_inspection_tool.cpp:564
@@ -29392,12 +29405,17 @@ msgstr "Το κενό διαφορικού ζεύγους είναι εκτός 
 msgid "Differential uncoupled length too long"
 msgstr "Υπερβολικά μεγάλο αποδιαζευγμένο μήκος διαφορικού ζεύγους"
 
-#: pcbnew/drc/drc_item.cpp:320
+#: pcbnew/drc/drc_item.cpp:206
+#, fuzzy
+msgid "Footprint type doesn't match footprint pads"
+msgstr "Επεξεργαστής Αποτυπώματος - Δημιουργήστε/επεξεργαστείτε αποτυπώματα"
+
+#: pcbnew/drc/drc_item.cpp:327
 #, fuzzy, c-format
 msgid "Rule: %s"
 msgstr "Κανόνες"
 
-#: pcbnew/drc/drc_item.cpp:322
+#: pcbnew/drc/drc_item.cpp:329
 #, fuzzy
 msgid "Local override"
 msgstr "Τοπικές Τιμές Διάκενου"
@@ -29633,27 +29651,27 @@ msgstr "Έλεγχος διακένων από περίγραμμα πλακέτ
 msgid "Checking silk to board edge clearances..."
 msgstr "Έλεγχος διακένων από περίγραμμα πλακέτας..."
 
-#: pcbnew/drc/drc_test_provider_hole_size.cpp:80
+#: pcbnew/drc/drc_test_provider_hole_size.cpp:77
 msgid "Checking pad holes..."
 msgstr "Έλεγχος οπών pad..."
 
-#: pcbnew/drc/drc_test_provider_hole_size.cpp:105
+#: pcbnew/drc/drc_test_provider_hole_size.cpp:100
 msgid "Checking via holes..."
 msgstr "Έλεγχος οπών via..."
 
-#: pcbnew/drc/drc_test_provider_hole_size.cpp:110
+#: pcbnew/drc/drc_test_provider_hole_size.cpp:105
 msgid "Checking micro-via holes..."
 msgstr "Έλεγχος οπών via..."
 
-#: pcbnew/drc/drc_test_provider_hole_size.cpp:172
-#: pcbnew/drc/drc_test_provider_hole_size.cpp:237
+#: pcbnew/drc/drc_test_provider_hole_size.cpp:167
+#: pcbnew/drc/drc_test_provider_hole_size.cpp:232
 #: pcbnew/drc/drc_test_provider_track_width.cpp:134
 #, c-format
 msgid "(%s min width %s; actual %s)"
 msgstr "(%s ελάχιστο πλάτος %s; πραγματικό %s)"
 
-#: pcbnew/drc/drc_test_provider_hole_size.cpp:179
-#: pcbnew/drc/drc_test_provider_hole_size.cpp:244
+#: pcbnew/drc/drc_test_provider_hole_size.cpp:174
+#: pcbnew/drc/drc_test_provider_hole_size.cpp:239
 #: pcbnew/drc/drc_test_provider_track_width.cpp:141
 #, c-format
 msgid "(%s max width %s; actual %s)"
@@ -29905,12 +29923,12 @@ msgstr "Δημιουργία αρχείου %s"
 msgid "Created file '%s'."
 msgstr "Δημιουργία αρχείου %s"
 
-#: pcbnew/exporters/gerber_jobfile_writer.cpp:158
+#: pcbnew/exporters/gerber_jobfile_writer.cpp:159
 #, c-format
 msgid "Created Gerber job file '%s'."
 msgstr "Δημιουργία αρχείου έργου Gerber \"%s\""
 
-#: pcbnew/exporters/gerber_jobfile_writer.cpp:575
+#: pcbnew/exporters/gerber_jobfile_writer.cpp:579
 msgid "Board stackup settings not up to date."
 msgstr ""
 "Δεν είναι ενημερωμένες οι ρυθμίσεις στοίβαξης του πίνακα\n"
@@ -30072,88 +30090,103 @@ msgstr ""
 "Η πλακέτα αντιγράφτηκε στο:\n"
 "\"%s\""
 
-#: pcbnew/footprint.cpp:882 pcbnew/tools/pcb_control.cpp:1191
+#: pcbnew/footprint.cpp:926 pcbnew/tools/pcb_control.cpp:1191
 msgid "Last Change"
 msgstr "Τελευταία αλλαγή"
 
-#: pcbnew/footprint.cpp:886
+#: pcbnew/footprint.cpp:930
 msgid "Board Side"
 msgstr "Πλευρά Πλακέτας"
 
-#: pcbnew/footprint.cpp:886
+#: pcbnew/footprint.cpp:930
 msgid "Back (Flipped)"
 msgstr "Πίσω (Ανεστραμμένο)"
 
-#: pcbnew/footprint.cpp:904
+#: pcbnew/footprint.cpp:948
 msgid "autoplaced"
 msgstr "αυτόματα τοποθετημένο"
 
-#: pcbnew/footprint.cpp:907
+#: pcbnew/footprint.cpp:951
 msgid "not in schematic"
 msgstr "οχι στο σχηματικό"
 
-#: pcbnew/footprint.cpp:910
+#: pcbnew/footprint.cpp:954
 msgid "exclude from pos files"
 msgstr "παράλειψη από αρχεία pos"
 
-#: pcbnew/footprint.cpp:913
+#: pcbnew/footprint.cpp:957
 msgid "exclude from BOM"
 msgstr "εξαίρεση από το BOM"
 
-#: pcbnew/footprint.cpp:915
+#: pcbnew/footprint.cpp:959
 msgid "Status: "
 msgstr "Κατάσταση: "
 
-#: pcbnew/footprint.cpp:915
+#: pcbnew/footprint.cpp:959
 msgid "Attributes:"
 msgstr "Ιδιότητες:"
 
-#: pcbnew/footprint.cpp:920
+#: pcbnew/footprint.cpp:964
 #, c-format
 msgid "3D-Shape: %s"
 msgstr "3D-Σχήμα: %s"
 
-#: pcbnew/footprint.cpp:920
+#: pcbnew/footprint.cpp:964
 msgid "<none>"
 msgstr "<κανένα>"
 
-#: pcbnew/footprint.cpp:924 pcbnew/tools/pcb_control.cpp:1197
+#: pcbnew/footprint.cpp:968 pcbnew/tools/pcb_control.cpp:1197
 #, c-format
 msgid "Doc: %s"
 msgstr "Τεκμηρίωση: %s"
 
-#: pcbnew/footprint.cpp:925 pcbnew/tools/pcb_control.cpp:1198
+#: pcbnew/footprint.cpp:969 pcbnew/tools/pcb_control.cpp:1198
 #, c-format
 msgid "Keywords: %s"
 msgstr "Λέξεις-κλειδιά: %s"
 
-#: pcbnew/footprint.cpp:1218
+#: pcbnew/footprint.cpp:1262
 msgid "<no reference designator>"
 msgstr "ένδειξη αναφοράς"
 
-#: pcbnew/footprint.cpp:1220
+#: pcbnew/footprint.cpp:1264
 #, c-format
 msgid "Footprint %s"
 msgstr "Αποτύπωμα %s"
 
-#: pcbnew/footprint.cpp:2127 pcbnew/pad.cpp:1542 pcbnew/zone.cpp:1416
+#: pcbnew/footprint.cpp:2091
+#, fuzzy, c-format
+msgid "Expected \"Through hole\" type but set to \"%s\""
+msgstr "Διαμπερές οπή pad %s του %s"
+
+#: pcbnew/footprint.cpp:2095
+#, c-format
+msgid "Expected \"SMD\" type but set to \"%s\""
+msgstr ""
+
+#: pcbnew/footprint.cpp:2099
+#, c-format
+msgid "Expected \"Other\" type but set to \"%s\""
+msgstr ""
+
+#: pcbnew/footprint.cpp:2203 pcbnew/pad.cpp:1542 pcbnew/zone.cpp:1416
 msgid "Clearance Override"
 msgstr "Περιγράμματα Διάκενου"
 
-#: pcbnew/footprint.cpp:2130 pcbnew/pad.cpp:1519
+#: pcbnew/footprint.cpp:2206 pcbnew/pad.cpp:1519
 #, fuzzy
 msgid "Solderpaste Margin Override"
 msgstr "Διάκενο πάστας συγκόλλησης:"
 
-#: pcbnew/footprint.cpp:2134 pcbnew/pad.cpp:1522
+#: pcbnew/footprint.cpp:2210 pcbnew/pad.cpp:1522
 msgid "Solderpaste Margin Ratio Override"
 msgstr "Τοπική αναλογία περιθωρίου Solderpaste"
 
-#: pcbnew/footprint.cpp:2137 pcbnew/pad.cpp:1524 pcbnew/zone.cpp:1427
+#: pcbnew/footprint.cpp:2213 pcbnew/pad.cpp:1524 pcbnew/zone.cpp:1427
 msgid "Thermal Relief Width"
 msgstr "Πλάτος Ακτίνων Θερμικής Εκτόνωσης"
 
-#: pcbnew/footprint.cpp:2141 pcbnew/pad.cpp:1527 pcbnew/zone.cpp:1424
+#: pcbnew/footprint.cpp:2217 pcbnew/pad.cpp:1527 pcbnew/zone.cpp:1424
 msgid "Thermal Relief Gap"
 msgstr "Θερμικές Εκτονώσεις"
 
@@ -30304,8 +30337,8 @@ msgstr "Η βιοβλιοθήκη \"%s\" υπάρχει ήδη."
 
 #: pcbnew/footprint_libraries_utils.cpp:629
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:963
-#: pcbnew/plugins/kicad/kicad_plugin.cpp:2504
-#: pcbnew/plugins/kicad/kicad_plugin.cpp:2580
+#: pcbnew/plugins/kicad/kicad_plugin.cpp:2507
+#: pcbnew/plugins/kicad/kicad_plugin.cpp:2583
 #, c-format
 msgid "Library '%s' is read only."
 msgstr "Η βιβλιοθήκη '%s' είναι μόνο για ανάγνωση."
@@ -30376,15 +30409,15 @@ msgstr "Το αποτύπωμα '%s' αντικαταστάθηκε από '%s'"
 msgid "Footprint '%s' added to '%s'"
 msgstr "Το αποτύπωμα '%s' προστέθηκε σε '%s'"
 
-#: pcbnew/footprint_libraries_utils.cpp:1126
+#: pcbnew/footprint_libraries_utils.cpp:1129
 msgid "Enter footprint name:"
 msgstr "Όνομα αποτυπώματος:"
 
-#: pcbnew/footprint_libraries_utils.cpp:1126
+#: pcbnew/footprint_libraries_utils.cpp:1129
 msgid "New Footprint"
 msgstr "Νέο Αποτύπωμα"
 
-#: pcbnew/footprint_libraries_utils.cpp:1139
+#: pcbnew/footprint_libraries_utils.cpp:1156
 msgid "No footprint name defined."
 msgstr "Δεν ορίστηκε όνομα αποτυπώματος."
 
@@ -30932,246 +30965,236 @@ msgstr "Στην πλακέτα"
 msgid "In Package"
 msgstr "Στο Πακέτο"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:139
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:138
 #, c-format
 msgid "Cannot add %s (no footprint assigned)."
 msgstr "Αδυναμία προσθήκης %s (δεν έχει αντιστοιχιστεί αποτύπωμα)."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:151
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:150
 #, c-format
 msgid "Cannot add %s (footprint '%s' not found)."
 msgstr "Αδυναμία προσθήκης %s (το αποτύπωμα \"%s\" δεν βρέθηκε)."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:161
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:160
 #, c-format
 msgid "Add %s (footprint '%s')."
 msgstr "Προσθήκη %s (αποτύπωμα \"%s\")."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:185
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:184
 #, c-format
 msgid "Added %s (footprint '%s')."
 msgstr "Προσθήκη %s (αποτύπωμα \"%s\")."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:203
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:202
 #, c-format
 msgid "Cannot update %s (no footprint assigned)."
 msgstr "Αδυναμία ενημέρωσης %s (δεν βρέθηκε αντιστοιχισμένο αποτύπωμα)."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:215
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:214
 #, c-format
 msgid "Cannot update %s (footprint '%s' not found)."
 msgstr "Αδυναμία ενημέρωσης %s (δεν βρέθηκε αποτύπωμα '%s')."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:225
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:224
 #, c-format
 msgid "Change %s footprint from '%s' to '%s'."
 msgstr "Αλλαγή αποτυπώματος %s από '%s' σε '%s'"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:237
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:236
 #, c-format
 msgid "Changed %s footprint from '%s' to '%s'."
 msgstr "Αλλαγή αποτυπώματος %s από '%s' σε '%s'"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:264
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:263
 #, c-format
 msgid "Change %s reference designator to %s."
 msgstr "Αλλαγή προσδιορισμού αναφοράς %s σε %s."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:270
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:269
 #, c-format
 msgid "Changed %s reference designator to %s."
 msgstr "Αλλαγή προσδιορισμού αναφοράς %s σε %s."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:286
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:285
 #, c-format
 msgid "Change %s value from %s to %s."
 msgstr "Αλλαγή τιμής %s από %s σε %s."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:293
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:292
 #, c-format
 msgid "Changed %s value from %s to %s."
 msgstr "Αλλαγή τιμής %s από %s σε %s."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:315
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:314
 #, c-format
 msgid "Update %s symbol association from %s to %s."
 msgstr "Ενημέρωση του συσχετισμού συμβόλου %s από %s σε %s."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:322
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:321
 #, c-format
 msgid "Updated %s symbol association from %s to %s."
 msgstr "Ενημέρωση του συσχετισμού συμβόλου %s από %s σε %s."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:338
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:337
 #, c-format
 msgid "Update %s properties."
 msgstr "Ενημέρωση ιδιοτήτων %s."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:343
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:342
 #, c-format
 msgid "Updated %s properties."
 msgstr "Ενημέρωση ιδιοτήτων %s."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:360
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:359
 #, c-format
 msgid "Add %s 'exclude from BOM' fabrication attribute."
 msgstr "Ρύθμιση %s χαρακτηριστικό παραγωγής 'αποκλεισμός από BOM'."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:365
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:364
 #, c-format
 msgid "Remove %s 'exclude from BOM' fabrication attribute."
 msgstr "Κατάργηση %s χαρακτηριστικό παραγωγής 'αποκλεισμός από BOM'."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:376
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:375
 #, c-format
 msgid "Added %s 'exclude from BOM' fabrication attribute."
 msgstr "Ρύθμιση %s χαρακτηριστικό παραγωγής 'αποκλεισμός από BOM'."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:382
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:381
 #, c-format
 msgid "Removed %s 'exclude from BOM' fabrication attribute."
 msgstr "Κατάργηση %s χαρακτηριστικό παραγωγής 'αποκλεισμός από BOM'."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:451
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:450
 #, c-format
 msgid "Disconnect %s pin %s."
 msgstr "Αποσύνδεση %s pin %s."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:457
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:456
 #, c-format
 msgid "Disconnected %s pin %s."
 msgstr "Αποσύνδεση %s pin %s."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:467
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:466
 #, c-format
 msgid "No net found for symbol %s pin %s."
 msgstr "Δεν υπάρχει net για το σύμβολο %s pin %s."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:519
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:518
 #, c-format
 msgid "Add net %s."
 msgstr "Προσθήκη δικτύου %s."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:529
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:528
 #, c-format
 msgid "Reconnect %s pin %s from %s to %s."
 msgstr "Επανασύνδεση %s pin %s από %s σε %s."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:537
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:536
 #, c-format
 msgid "Reconnected %s pin %s from %s to %s."
 msgstr "Επανασύνδεση %s pin %s από %s σε %s."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:548
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:547
 #, c-format
 msgid "Connect %s pin %s to %s."
 msgstr "Σύνδεση %s pin %s σε %s."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:555
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:554
 #, c-format
 msgid "Connected %s pin %s to %s."
 msgstr "Σύνδεση %s pin %s σε %s."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:634
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:633
 #, c-format
 msgid "Reconnect via from %s to %s."
 msgstr "Επανασύνδεση via από %s σε %s."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:652
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:651
 #, c-format
 msgid "Reconnected via from %s to %s."
 msgstr "Επανασύνδεση via από %s σε %s."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:662
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:661
 #, c-format
 msgid "Via connected to unknown net (%s)."
 msgstr "Via συνδεδεμένο σε άγνωστο net (%s)."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:705
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:704
 #, fuzzy, c-format
 msgid "Reconnect copper zone '%s' from %s to %s."
 msgstr "Επανασύνδεση ζώνης χαλκού από %s σε %s."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:712
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:711
 #, c-format
 msgid "Reconnect copper zone from %s to %s."
 msgstr "Επανασύνδεση ζώνης χαλκού από %s σε %s."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:733
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:732
 #, fuzzy, c-format
 msgid "Reconnected copper zone '%s' from %s to %s."
 msgstr "Επανασύνδεση ζώνης χαλκού από %s σε %s."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:740
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:739
 #, c-format
 msgid "Reconnected copper zone from %s to %s."
 msgstr "Επανασύνδεση ζώνης χαλκού από %s σε %s."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:753
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:752
 #, c-format
 msgid "Copper zone '%s' has no pads connected."
 msgstr "H ζώνη χαλκού (%s) δεν έχει καμία έδρα συνδεδεμένη."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:761
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:760
 #, fuzzy, c-format
 msgid "Copper zone on layer %s at (%s, %s) has no pads connected."
 msgstr "H ζώνη χαλκού (%s) δεν έχει καμία έδρα συνδεδεμένη."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:838
-#, c-format
-msgid "Remove single pad net %s."
-msgstr "Αφαίρεση δικτύου μίας έδρας %s."
-
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:844
-#, c-format
-msgid "Removed single pad net %s."
-msgstr "Αφαίρεση δικτύου μίας έδρας %s."
-
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:902
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:802
 #, c-format
 msgid "%s pad %s not found in %s."
 msgstr "%s ακροδέκτης %s δεν βρέθηκε στο %s."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:953
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:853
 #, c-format
 msgid "Processing symbol '%s:%s'."
 msgstr "Επεξεργασία συμβόλου '%s:%s'."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1022
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:922
 #, c-format
 msgid "Multiple footprints found for '%s'."
 msgstr "Βρέθηκαν πολλαπλά αποτυπώματα για το '%s'."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1053
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:952
 #, c-format
 msgid "Cannot remove unused footprint %s (locked)."
 msgstr "Αποτυχία αφαίρεσης μη χρησιμοποιούμενου αποτυπώματος %s (κλειδωμένο)."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1058
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:957
 #, c-format
 msgid "Could not remove unused footprint %s (locked)."
 msgstr "Αποτυχία αφαίρεσης μη χρησιμοποιούμενου αποτυπώματος %s (κλειδωμένο)."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1070
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:969
 #, c-format
 msgid "Remove unused footprint %s."
 msgstr "Αφαίρεση μη χρησιμοποιούμενου αποτυπώματος %s."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1075
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:974
 #, c-format
 msgid "Removed unused footprint %s."
 msgstr "Αφαίρεση μη χρησιμοποιούμενου αποτυπώματος %s."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1106
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1001
 #, c-format
 msgid "Removed unused net %s."
 msgstr "Αφαίρεση μη χρησιμοποιούμενου net \"%s\"."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1114
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1009
 msgid "Update netlist"
 msgstr "Ανανέωση λίστας δικτύου"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1139
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1027
 #, c-format
 msgid "Total warnings: %d, errors: %d."
 msgstr "Συνολικές προειδοποιήσεις: %d, λάθη: %d."
@@ -31339,14 +31362,14 @@ msgid "Hole X / Y"
 msgstr "Οπή Χ / Y"
 
 #: pcbnew/pad.cpp:959 pcbnew/pcb_track.cpp:725 pcbnew/pcb_track.cpp:768
-#: pcbnew/router/router_tool.cpp:1931 pcbnew/zone.cpp:634
+#: pcbnew/router/router_tool.cpp:1953 pcbnew/zone.cpp:634
 #, c-format
 msgid "Min Clearance: %s"
 msgstr "Ελάχιστο Διάκενο: %s"
 
 #: pcbnew/pad.cpp:961 pcbnew/pcb_track.cpp:727 pcbnew/pcb_track.cpp:734
 #: pcbnew/pcb_track.cpp:770 pcbnew/pcb_track.cpp:776
-#: pcbnew/router/router_tool.cpp:1919 pcbnew/router/router_tool.cpp:1933
+#: pcbnew/router/router_tool.cpp:1941 pcbnew/router/router_tool.cpp:1955
 #: pcbnew/zone.cpp:636
 #, c-format
 msgid "(from %s)"
@@ -31452,10 +31475,6 @@ msgstr "Αναλογία Κυκλικής Ακτίνας"
 #: pcbnew/pcb_base_frame.cpp:150
 msgid "Error loading project footprint libraries."
 msgstr "Σφάλμα κατά τη φόρτωση βιβλιοθηκών αποτυπωμάτων του έργου"
-
-#: pcbnew/pcb_dimension.cpp:300
-msgid "Dimension"
-msgstr "Διάσταση"
 
 #: pcbnew/pcb_dimension.cpp:302
 msgid "Prefix"
@@ -31575,31 +31594,27 @@ msgstr "Το αποτύπωμα δεν έχει ορισμένο χώρο απο
 msgid "must be mm, in, or mil"
 msgstr "πρέπει να είναι mm, in ή mil"
 
-#: pcbnew/pcb_group.cpp:304
+#: pcbnew/pcb_group.cpp:316
 #, c-format
 msgid "Unnamed Group, %zu members"
 msgstr "Ανώνυμη ομάδα, %zu μέλη"
 
-#: pcbnew/pcb_group.cpp:308
+#: pcbnew/pcb_group.cpp:320
 #, c-format
 msgid "Group '%s', %zu members"
 msgstr "Ομάδα '%s', μέλη %zu"
 
-#: pcbnew/pcb_group.cpp:322
+#: pcbnew/pcb_group.cpp:334
 msgid "<unnamed>"
 msgstr "<ανώνυμο>"
 
-#: pcbnew/pcb_group.cpp:323
+#: pcbnew/pcb_group.cpp:335
 msgid "Members"
 msgstr "Μέλη"
 
 #: pcbnew/pcb_layer_box_selector.cpp:94
 msgid "(not activated)"
 msgstr "(μη ενεργοποιημένο)"
-
-#: pcbnew/pcb_marker.cpp:94
-msgid "Marker"
-msgstr "Σημάδι"
 
 #: pcbnew/pcb_marker.cpp:95
 msgid "Violation"
@@ -32415,44 +32430,44 @@ msgstr ""
 msgid "Unable to read file '%s'"
 msgstr "Αδυναμία δημιουργίας αρχείου '%s'"
 
-#: pcbnew/plugins/eagle/eagle_plugin.cpp:1074
+#: pcbnew/plugins/eagle/eagle_plugin.cpp:1078
 #, c-format
 msgid "<package> '%s' duplicated in <library> '%s'"
 msgstr "όνομα <πακέτου>: \"%s\" υπάρχει και στη <βιβλιοθήκη> eagle: \"%s\""
 
-#: pcbnew/plugins/eagle/eagle_plugin.cpp:1152
+#: pcbnew/plugins/eagle/eagle_plugin.cpp:1156
 #, c-format
 msgid "No '%s' package in library '%s'."
 msgstr "Δεν υπάρχει πακέτο \"%s\" στη βιβλιοθήκη \"%s\""
 
-#: pcbnew/plugins/eagle/eagle_plugin.cpp:1383
-#: pcbnew/plugins/eagle/eagle_plugin.cpp:2149
+#: pcbnew/plugins/eagle/eagle_plugin.cpp:1387
+#: pcbnew/plugins/eagle/eagle_plugin.cpp:2153
 #, c-format
 msgid "Ignoring a polygon since Eagle layer '%s' (%d) was not mapped"
 msgstr ""
 "Αγνόηση ενός πολυγώνου αφού δεν ήταν χαρτογραφημένο το επίπεδο Eagle "
 "«%s» (%d)"
 
-#: pcbnew/plugins/eagle/eagle_plugin.cpp:1724
+#: pcbnew/plugins/eagle/eagle_plugin.cpp:1728
 #, c-format
 msgid "Ignoring a wire since Eagle layer '%s' (%d) was not mapped"
 msgstr ""
 "Αγνόηση ενός καλωδίου αφού δεν ήταν χαρτογραφημένο το επίπεδο Eagle «%s» (%d)"
 
-#: pcbnew/plugins/eagle/eagle_plugin.cpp:1896
+#: pcbnew/plugins/eagle/eagle_plugin.cpp:1900
 #, c-format
 msgid "Ignoring a text since Eagle layer '%s' (%d) was not mapped"
 msgstr ""
 "Αγνόηση ενός κειμένου αφού δεν ήταν χαρτογραφημένο το επίπεδο Eagle «%s» (%d)"
 
-#: pcbnew/plugins/eagle/eagle_plugin.cpp:2036
+#: pcbnew/plugins/eagle/eagle_plugin.cpp:2040
 #, c-format
 msgid "Ignoring a rectangle since Eagle layer '%s' (%d) was not mapped"
 msgstr ""
 "Αγνόηση ενός ορθογωνίου παραλληλογράμμου αφού δεν ήταν χαρτογραφημένο το "
 "επίπεδο Eagle «%s» (%d)"
 
-#: pcbnew/plugins/eagle/eagle_plugin.cpp:2221
+#: pcbnew/plugins/eagle/eagle_plugin.cpp:2225
 #, c-format
 msgid "Ignoring a circle since Eagle layer '%s' (%d) was not mapped"
 msgstr ""
@@ -32612,7 +32627,7 @@ msgid "Element token contains %d parameters."
 msgstr "Στοιχείο περιέχει %d παραμέτρους."
 
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:982
-#: pcbnew/plugins/kicad/kicad_plugin.cpp:2624
+#: pcbnew/plugins/kicad/kicad_plugin.cpp:2627
 #, c-format
 msgid "Insufficient permissions to delete folder '%s'."
 msgstr ""
@@ -32620,7 +32635,7 @@ msgstr ""
 "%s"
 
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:990
-#: pcbnew/plugins/kicad/kicad_plugin.cpp:2632
+#: pcbnew/plugins/kicad/kicad_plugin.cpp:2635
 #, c-format
 msgid "Library folder '%s' has unexpected sub-folders."
 msgstr "Ο φάκελος της βιβλιοθήκης \"%s\" έχει απροσδόκητους υποφακέλους."
@@ -32631,7 +32646,7 @@ msgid "Unexpected file '%s' found in library '%s'."
 msgstr "Μη αναμενόμενο αρχείο \"%s\" βρέθηκε στη διαδρομή βιβλιοθήκης \"%s\"."
 
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:1028
-#: pcbnew/plugins/kicad/kicad_plugin.cpp:2669
+#: pcbnew/plugins/kicad/kicad_plugin.cpp:2672
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:3239
 #, c-format
 msgid "Footprint library '%s' cannot be deleted."
@@ -32679,25 +32694,25 @@ msgstr "Αποθήκευση ούτως ή άλλως"
 msgid "unknown pad type: %d"
 msgstr "άγνωστος τύπος έδρας: %d"
 
-#: pcbnew/plugins/kicad/kicad_plugin.cpp:1883
+#: pcbnew/plugins/kicad/kicad_plugin.cpp:1886
 #, c-format
 msgid "unknown via type %d"
 msgstr "άγνωστος τύπος via %d"
 
-#: pcbnew/plugins/kicad/kicad_plugin.cpp:2072
+#: pcbnew/plugins/kicad/kicad_plugin.cpp:2075
 #, c-format
 msgid "unknown zone corner smoothing type %d"
 msgstr "άγνωστος τύπος εξομάλυνσης γωνίας ζώνης %d"
 
-#: pcbnew/plugins/kicad/kicad_plugin.cpp:2293
+#: pcbnew/plugins/kicad/kicad_plugin.cpp:2296
 msgid "Open cancelled by user."
 msgstr "Η επανασύνδεση του αποτυπώματος ακυρώθηκε από τον χρήστη."
 
-#: pcbnew/plugins/kicad/kicad_plugin.cpp:2342
+#: pcbnew/plugins/kicad/kicad_plugin.cpp:2345
 msgid "This file does not contain a PCB."
 msgstr "αυτό το αρχείο δεν περιέχει PCB"
 
-#: pcbnew/plugins/kicad/kicad_plugin.cpp:2492
+#: pcbnew/plugins/kicad/kicad_plugin.cpp:2495
 #, c-format
 msgid ""
 "Library '%s' does not exist.\n"
@@ -32706,28 +32721,28 @@ msgstr ""
 "Η βιβλιοθήκη \"%s\" δεν υπάρχει.\n"
 "Να δημιουργηθεί;"
 
-#: pcbnew/plugins/kicad/kicad_plugin.cpp:2496
+#: pcbnew/plugins/kicad/kicad_plugin.cpp:2499
 msgid "Library Not Found"
 msgstr "Η Βιβλιοθήκη Δεν Βρέθηκε"
 
-#: pcbnew/plugins/kicad/kicad_plugin.cpp:2522
+#: pcbnew/plugins/kicad/kicad_plugin.cpp:2525
 #, c-format
 msgid "Footprint file name '%s' is not valid."
 msgstr "Μη έγκυρο όνομα αρχείου αποτυπώματος \"%s\"."
 
-#: pcbnew/plugins/kicad/kicad_plugin.cpp:2528
+#: pcbnew/plugins/kicad/kicad_plugin.cpp:2531
 #, c-format
 msgid "Insufficient permissions to delete '%s'."
 msgstr ""
 "Απαιτούνται δικαιώματα εγγραφής για την αποθήκευση αρχείου\n"
 "%s"
 
-#: pcbnew/plugins/kicad/kicad_plugin.cpp:2599
+#: pcbnew/plugins/kicad/kicad_plugin.cpp:2602
 #, c-format
 msgid "Cannot overwrite library path '%s'."
 msgstr "Αδυναμία αντικατάστασης διαδρομής της βιβλιοθήκης \"%s\"."
 
-#: pcbnew/plugins/kicad/kicad_plugin.cpp:2651
+#: pcbnew/plugins/kicad/kicad_plugin.cpp:2654
 #, c-format
 msgid "Unexpected file '%s' found in library path '%s'."
 msgstr "Μη αναμενόμενο αρχείο \"%s\" βρέθηκε στη διαδρομή βιβλιοθήκης \"%s\"."
@@ -32810,12 +32825,12 @@ msgstr ""
 "γραμμή: %d\n"
 "θέση: %d"
 
-#: pcbnew/plugins/kicad/pcb_parser.cpp:3537
+#: pcbnew/plugins/kicad/pcb_parser.cpp:3536
 #, c-format
 msgid "Cannot handle footprint text type %s"
 msgstr "Αδυναμία χειρισμού κειμένου αποτυπώματος %s"
 
-#: pcbnew/plugins/kicad/pcb_parser.cpp:4130
+#: pcbnew/plugins/kicad/pcb_parser.cpp:4139
 #, c-format
 msgid ""
 "Invalid net ID in\n"
@@ -32827,7 +32842,7 @@ msgstr ""
 "γραμμή: %d\n"
 "θέση: %d"
 
-#: pcbnew/plugins/kicad/pcb_parser.cpp:4149
+#: pcbnew/plugins/kicad/pcb_parser.cpp:4158
 #, c-format
 msgid ""
 "Net name doesn't match ID in\n"
@@ -32839,8 +32854,8 @@ msgstr ""
 "γραμμή: %d\n"
 "θέση: %d"
 
-#: pcbnew/plugins/kicad/pcb_parser.cpp:4602
-#: pcbnew/plugins/kicad/pcb_parser.cpp:4680
+#: pcbnew/plugins/kicad/pcb_parser.cpp:4611
+#: pcbnew/plugins/kicad/pcb_parser.cpp:4689
 #, c-format
 msgid ""
 "Invalid net ID in\n"
@@ -32853,7 +32868,7 @@ msgstr ""
 "γραμμή: %d\n"
 "θέση: %d"
 
-#: pcbnew/plugins/kicad/pcb_parser.cpp:4774
+#: pcbnew/plugins/kicad/pcb_parser.cpp:4783
 #, c-format
 msgid ""
 "Invalid net ID in\n"
@@ -32866,7 +32881,7 @@ msgstr ""
 "γραμμή: %d\n"
 "θέση: %d"
 
-#: pcbnew/plugins/kicad/pcb_parser.cpp:4884
+#: pcbnew/plugins/kicad/pcb_parser.cpp:4893
 #, c-format
 msgid ""
 "Invalid net ID in\n"
@@ -32879,7 +32894,7 @@ msgstr ""
 "γραμμή: %d\n"
 "θέση: %d"
 
-#: pcbnew/plugins/kicad/pcb_parser.cpp:5003
+#: pcbnew/plugins/kicad/pcb_parser.cpp:5012
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:2488
 msgid ""
 "The legacy segment fill mode is no longer supported.\n"
@@ -32888,7 +32903,7 @@ msgstr ""
 "Ο παλαιός τρόπος γεμίσματος ζωνών υποστηρίζεται πλέον.\n"
 "Μετατροπή ζωνών σε πολυγωνικά γεμίσματα;"
 
-#: pcbnew/plugins/kicad/pcb_parser.cpp:5005
+#: pcbnew/plugins/kicad/pcb_parser.cpp:5014
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:2490
 msgid "Legacy Zone Warning"
 msgstr "Προειδοποίηση Ζώνης Παλαιότερου Τύπου"
@@ -33128,29 +33143,29 @@ msgstr "Ρυθμισμένο: "
 msgid "?"
 msgstr ";"
 
-#: pcbnew/router/pns_kicad_iface.cpp:453
+#: pcbnew/router/pns_kicad_iface.cpp:463
 msgid "existing track"
 msgstr "Όταν δημιουργούνται διάδρομοι"
 
-#: pcbnew/router/pns_kicad_iface.cpp:467 pcbnew/router/pns_kicad_iface.cpp:480
+#: pcbnew/router/pns_kicad_iface.cpp:477 pcbnew/router/pns_kicad_iface.cpp:490
 #, fuzzy
 msgid "board minimum width"
 msgstr "Ελάχιστο πλάτος:"
 
-#: pcbnew/router/pns_kicad_iface.cpp:476
+#: pcbnew/router/pns_kicad_iface.cpp:486
 msgid "netclass 'Default'"
 msgstr "netclass '%s'"
 
-#: pcbnew/router/pns_kicad_iface.cpp:478
+#: pcbnew/router/pns_kicad_iface.cpp:488
 msgid "user choice"
 msgstr "επιλογή χρήστη"
 
-#: pcbnew/router/pns_kicad_iface.cpp:1064
+#: pcbnew/router/pns_kicad_iface.cpp:1063
 #, c-format
 msgid "%s is malformed."
 msgstr "Το %s έχει λανθασμένη μορφή."
 
-#: pcbnew/router/pns_kicad_iface.cpp:1067
+#: pcbnew/router/pns_kicad_iface.cpp:1066
 msgid ""
 "This zone cannot be handled by the router.\n"
 "Please verify it is not a self-intersecting polygon."
@@ -33158,7 +33173,7 @@ msgstr ""
 "Το εργαλείο διαδρόμων δεν μπορεί να χειριστεί αυτή τη ζώνη.\n"
 "Επιβεβαιώστε ότι δεν είναι πολύγωνο που τέμνει τον εαυτό του."
 
-#: pcbnew/router/pns_kicad_iface.cpp:1669 pcbnew/router/router_tool.cpp:433
+#: pcbnew/router/pns_kicad_iface.cpp:1668 pcbnew/router/router_tool.cpp:433
 msgid "Interactive Router"
 msgstr "Διαδραστικός Δρομολογητής"
 
@@ -33425,11 +33440,11 @@ msgstr ""
 "Να αποθηκευτεί το καταγραφολόγιο συμβάντων\n"
 "του δρομολογητή για περιπτώσεις εκσφαλμάτωσης;"
 
-#: pcbnew/router/router_tool.cpp:828 pcbnew/router/router_tool.cpp:850
+#: pcbnew/router/router_tool.cpp:829 pcbnew/router/router_tool.cpp:851
 msgid "Show board setup"
 msgstr "Εμφάνιση διάταξης πλακέτας"
 
-#: pcbnew/router/router_tool.cpp:840
+#: pcbnew/router/router_tool.cpp:841
 msgid ""
 "Blind/buried vias must first be enabled in Board Setup > Design Rules > "
 "Constraints."
@@ -33437,63 +33452,63 @@ msgstr ""
 "Τα τυφλά/ενταφιασμένα via πρέπει να είναι ενεργοποιημένα στη Ρύθμιση "
 "Πλακέτας > Κανόνες Σχεδίασης > Περιορισμοί."
 
-#: pcbnew/router/router_tool.cpp:861
+#: pcbnew/router/router_tool.cpp:862
 msgid ""
 "Microvias must first be enabled in Board Setup > Design Rules > Constraints."
 msgstr ""
 "Τα μικρο-via πρέπει να είναι ενεργοποιημένα στη Ρύθμιση Πλακέτας > Κανόνες "
 "Σχεδίασης > Περιορισμοί."
 
-#: pcbnew/router/router_tool.cpp:997
+#: pcbnew/router/router_tool.cpp:998
 msgid "Tracks on Copper layers only."
 msgstr "Διάδρομοι μόνο σε επίπεδα Χαλκού."
 
-#: pcbnew/router/router_tool.cpp:1404 pcbnew/router/router_tool.cpp:1829
+#: pcbnew/router/router_tool.cpp:1405 pcbnew/router/router_tool.cpp:1851
 msgid "The selected item is locked."
 msgstr "Το επιλεγμένο αντικείμενο είναι κλειδωμένο."
 
-#: pcbnew/router/router_tool.cpp:1406
+#: pcbnew/router/router_tool.cpp:1407
 msgid "Drag Anyway"
 msgstr "Σύρσιμο ούτως ή άλλως"
 
-#: pcbnew/router/router_tool.cpp:1831 pcbnew/tools/pcb_actions.cpp:1357
+#: pcbnew/router/router_tool.cpp:1853 pcbnew/tools/pcb_actions.cpp:1357
 #: pcbnew/tools/pcb_actions.cpp:1363
 msgid "Break Track"
 msgstr "Διάσπαση Διαδρόμου"
 
-#: pcbnew/router/router_tool.cpp:1901
+#: pcbnew/router/router_tool.cpp:1923
 #, fuzzy, c-format
 msgid "Routing Diff Pair: %s"
 msgstr "Μικρο-ρύθμιση Απόκλισης Διαφορικού Ζεύγους"
 
-#: pcbnew/router/router_tool.cpp:1901
+#: pcbnew/router/router_tool.cpp:1923
 #, fuzzy, c-format
 msgid "Routing Track: %s"
 msgstr "Δρομολόγηση Ενός Διαδρόμου"
 
-#: pcbnew/router/router_tool.cpp:1907
+#: pcbnew/router/router_tool.cpp:1929
 #, c-format
 msgid "Net Class: %s"
 msgstr "Κλάση Δικτύου: %s"
 
-#: pcbnew/router/router_tool.cpp:1911
+#: pcbnew/router/router_tool.cpp:1933
 msgid "Routing Track"
 msgstr "Δρομολόγηση Ενός Διαδρόμου"
 
-#: pcbnew/router/router_tool.cpp:1911
+#: pcbnew/router/router_tool.cpp:1933
 msgid "(no net)"
 msgstr "(κανένα δίκτυο)"
 
-#: pcbnew/router/router_tool.cpp:1917
+#: pcbnew/router/router_tool.cpp:1939
 #, fuzzy, c-format
 msgid "Track Width: %s"
 msgstr "Πλάτος διαδρόμου"
 
-#: pcbnew/router/router_tool.cpp:1939
+#: pcbnew/router/router_tool.cpp:1961
 msgid "Diff Pair Gap"
 msgstr "Κενό Διαφορικού Ζεύγους"
 
-#: pcbnew/sel_layer.cpp:297
+#: pcbnew/sel_layer.cpp:340
 msgid "Warning: top and bottom layers are same."
 msgstr "Προειδοποίηση: Το πάνω και το κάτω επίπεδο είναι τα ίδια."
 
@@ -33953,56 +33968,76 @@ msgid "Thickness (mm)"
 msgstr "Πάχος"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:275
+#, fuzzy
+msgid "Thickness (inches)"
+msgstr "Πάχος"
+
+#: pcbnew/tools/drawing_stackup_table_tool.cpp:278
 msgid "Thickness (mils)"
 msgstr "Πάχος"
 
-#: pcbnew/tools/drawing_stackup_table_tool.cpp:288
+#: pcbnew/tools/drawing_stackup_table_tool.cpp:291
 msgid "Loss Tangent"
 msgstr "Εφ Απώλειας"
 
-#: pcbnew/tools/drawing_stackup_table_tool.cpp:352
+#: pcbnew/tools/drawing_stackup_table_tool.cpp:314
+#, fuzzy
+msgid "Dielectric"
+msgstr "Διηλεκτρικό %d"
+
+#: pcbnew/tools/drawing_stackup_table_tool.cpp:366
 msgid "Insert board stackup table"
 msgstr ""
 
-#: pcbnew/tools/drawing_stackup_table_tool.cpp:394
+#: pcbnew/tools/drawing_stackup_table_tool.cpp:408
 msgid "BOARD CHARACTERISTICS"
 msgstr ""
 
-#: pcbnew/tools/drawing_stackup_table_tool.cpp:410
+#: pcbnew/tools/drawing_stackup_table_tool.cpp:424
 msgid "Copper Layer Count: "
 msgstr "Αριθμός επιπέδων χαλκού: "
 
-#: pcbnew/tools/drawing_stackup_table_tool.cpp:419
+#: pcbnew/tools/drawing_stackup_table_tool.cpp:433
 msgid "Board overall dimensions: "
 msgstr "Σχεδίαση διάστασης "
 
-#: pcbnew/tools/drawing_stackup_table_tool.cpp:429
+#: pcbnew/tools/drawing_stackup_table_tool.cpp:443
 msgid "Min track/spacing: "
 msgstr "Ελάχιστη απόσταση πλέγματος: "
 
-#: pcbnew/tools/drawing_stackup_table_tool.cpp:439
+#: pcbnew/tools/drawing_stackup_table_tool.cpp:453
 msgid "Copper Finish: "
 msgstr "Τελείωμα χαλκού: "
 
-#: pcbnew/tools/drawing_stackup_table_tool.cpp:447
+#: pcbnew/tools/drawing_stackup_table_tool.cpp:461
 msgid "Castellated pads: "
 msgstr "Castellated pad "
 
-#: pcbnew/tools/drawing_stackup_table_tool.cpp:455
+#: pcbnew/tools/drawing_stackup_table_tool.cpp:469
 msgid "Board Thickness: "
 msgstr "Πάχος πλακέτας: "
 
-#: pcbnew/tools/drawing_stackup_table_tool.cpp:471
+#: pcbnew/tools/drawing_stackup_table_tool.cpp:485
 msgid "Min hole diameter: "
 msgstr "Διάμετρος τρύπας διάκενου: "
 
-#: pcbnew/tools/drawing_stackup_table_tool.cpp:481
+#: pcbnew/tools/drawing_stackup_table_tool.cpp:495
 msgid "Impedance Control: "
 msgstr "Έλεγχος Εμπέδησης "
 
-#: pcbnew/tools/drawing_stackup_table_tool.cpp:489
+#: pcbnew/tools/drawing_stackup_table_tool.cpp:503
 msgid "Plated Board Edge: "
 msgstr "Επιμεταλλωμένο όριο πλακέτας "
+
+#: pcbnew/tools/drawing_stackup_table_tool.cpp:511
+#, fuzzy
+msgid "Edge card connectors: "
+msgstr "Ακριανοί Σύνδεσμοι Καρτών:"
+
+#: pcbnew/tools/drawing_stackup_table_tool.cpp:519
+#, fuzzy
+msgid "Yes, Bevelled"
+msgstr "Ναι, λοξοτομημένο"
 
 #: pcbnew/tools/drawing_tool.cpp:80
 msgid "Select Via Size"
@@ -34124,32 +34159,32 @@ msgstr ""
 "Για ορισμένα από τα αρχεία του έργου δεν ήταν δυνατό να δημιουργηθούν "
 "αντίγραφα ασφαλείας."
 
-#: pcbnew/tools/edit_tool.cpp:1513
+#: pcbnew/tools/edit_tool.cpp:1524
 msgid "Rotate"
 msgstr "Περιστροφή"
 
-#: pcbnew/tools/edit_tool.cpp:1733 pcbnew/tools/pcb_actions.cpp:296
+#: pcbnew/tools/edit_tool.cpp:1744 pcbnew/tools/pcb_actions.cpp:296
 msgid "Change Side / Flip"
 msgstr "Αλλαγή μεγέθους Via και διάτρησης"
 
-#: pcbnew/tools/edit_tool.cpp:2087
+#: pcbnew/tools/edit_tool.cpp:2098
 msgid "Move exact"
 msgstr "Μετακίνηση ακριβείας"
 
-#: pcbnew/tools/edit_tool.cpp:2228
+#: pcbnew/tools/edit_tool.cpp:2239
 #, c-format
 msgid "Duplicated %d item(s)"
 msgstr "Αναπαράχθηκαν %d αντικείμενα"
 
-#: pcbnew/tools/edit_tool.cpp:2443
+#: pcbnew/tools/edit_tool.cpp:2454
 msgid "Select reference point for the copy..."
 msgstr "Επιλογή σημείου αναφοράς για το αντίγραφο..."
 
-#: pcbnew/tools/edit_tool.cpp:2444 pcbnew/tools/edit_tool.cpp:2458
+#: pcbnew/tools/edit_tool.cpp:2455 pcbnew/tools/edit_tool.cpp:2469
 msgid "Selection copied"
 msgstr "Επιλογή αντιγράφηκε"
 
-#: pcbnew/tools/edit_tool.cpp:2445
+#: pcbnew/tools/edit_tool.cpp:2456
 #, fuzzy
 msgid "Copy canceled"
 msgstr "Αντιγραφή ακυρώθηκε"
@@ -35907,6 +35942,10 @@ msgid "Show footprint references"
 msgstr "Εμφάνιση αναφορών των αποτυπωμάτων"
 
 #: pcbnew/widgets/appearance_controls.cpp:345
+msgid "Footprint Text"
+msgstr "Κείμενο Αποτυπώματος"
+
+#: pcbnew/widgets/appearance_controls.cpp:345
 msgid "Show all footprint text"
 msgstr "Εμφάνιση όλων των κειμένων του αποτυπώματος"
 
@@ -36653,6 +36692,56 @@ msgstr "Σχηματικό KiCad"
 #: resources/linux/mime/kicad-kicad.xml.in:25
 msgid "KiCad Printed Circuit Board"
 msgstr "Πλακέτα Τυπωμένου Κυκλώματος KiCad"
+
+#~ msgid "Graphic Shape"
+#~ msgstr "Στυλ Γραφικών"
+
+#~ msgid "Board Text"
+#~ msgstr "Κείμενο Πλακέτας"
+
+#~ msgid "Board Marker"
+#~ msgstr "Σημάδι Πλακέτας"
+
+#~ msgid "Aligned Dimension"
+#~ msgstr "Ευθυγραμμισμένη Διάσταση"
+
+#~ msgid "Orthogonal Dimension"
+#~ msgstr "Ορθογώνια Διάσταση"
+
+#~ msgid "Center Dimension"
+#~ msgstr "Κεντρική Διάσταση"
+
+#~ msgid "Schematic Marker"
+#~ msgstr "Σημάδι Σχηματικού"
+
+#~ msgid "Graphic Line"
+#~ msgstr "Γραμμή Γραφικών"
+
+#~ msgid "Schematic Text"
+#~ msgstr "Κείμενο Σχηματικού"
+
+#~ msgid "Schematic Field"
+#~ msgstr "Πεδίο Σχηματικού"
+
+#~ msgid "Schematic Symbol"
+#~ msgstr "Επεξεργασία συμβόλων σχηματικού"
+
+#~ msgid "Symbol Text"
+#~ msgstr "Κείμενο Συμβόλου"
+
+#~ msgid "Validate"
+#~ msgstr "Επικύρωση"
+
+#~ msgid "Component:"
+#~ msgstr "Εξάρτημα:"
+
+#, c-format
+#~ msgid "Remove single pad net %s."
+#~ msgstr "Αφαίρεση δικτύου μίας έδρας %s."
+
+#, c-format
+#~ msgid "Removed single pad net %s."
+#~ msgstr "Αφαίρεση δικτύου μίας έδρας %s."
 
 #~ msgid "Change to isometric perspective"
 #~ msgstr "Ενεργοποίηση ισομετρικής προβολής"
@@ -39810,10 +39899,6 @@ msgstr "Πλακέτα Τυπωμένου Κυκλώματος KiCad"
 #~ msgstr "Αδυναμία δημιουργίας "
 
 #, fuzzy
-#~ msgid " (%s)"
-#~ msgstr "Μετατόπιση (ίντσες)"
-
-#, fuzzy
 #~ msgid "min"
 #~ msgstr "in"
 
@@ -42637,9 +42722,6 @@ msgstr "Πλακέτα Τυπωμένου Κυκλώματος KiCad"
 
 #~ msgid "Leave sheet"
 #~ msgstr "Έξοδος από το φύλλο"
-
-#~ msgid "Footprint Editor - Create/edit footprints"
-#~ msgstr "Επεξεργαστής Αποτυπώματος - Δημιουργήστε/επεξεργαστείτε αποτυπώματα"
 
 #~ msgid "Run Pcbnew to layout printed circuit board"
 #~ msgstr "Εκτέλεση Pcbnew για σχεδίαση πλακέτας τυπωμένου κυκλώματος"
