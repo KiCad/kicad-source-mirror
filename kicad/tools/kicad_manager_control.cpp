@@ -24,6 +24,7 @@
 #include <kiway.h>
 #include <kicad_manager_frame.h>
 #include <confirm.h>
+#include <settings/settings_manager.h>
 #include <tool/selection.h>
 #include <tool/tool_event.h>
 #include <tools/kicad_manager_actions.h>
@@ -465,7 +466,8 @@ public:
         wxString   destDirPath = destDir.GetPathWithSep();
         wxUniChar  pathSep = wxFileName::GetPathSeparator();
 
-        if( destDirPath.StartsWith( m_projectDirPath + pathSep ) )
+        if( destDirPath.StartsWith( m_projectDirPath + pathSep )
+                || destDirPath.StartsWith( m_projectDirPath + PROJECT_BACKUPS_DIR_SUFFIX ) )
         {
             destDirPath.Replace( m_projectDirPath, m_newProjectDirPath, false );
             destDir.SetPath( destDirPath );

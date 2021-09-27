@@ -47,10 +47,6 @@
 #include <wildcards_and_files_ext.h>
 
 
-/// Project settings path will be <projectname> + this
-#define PROJECT_BACKUPS_DIR_SUFFIX wxT( "-backups" )
-
-
 SETTINGS_MANAGER::SETTINGS_MANAGER( bool aHeadless ) :
         m_headless( aHeadless ),
         m_kiway( nullptr ),
