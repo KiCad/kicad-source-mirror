@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-09-27 08:33-0700\n"
-"PO-Revision-Date: 2021-09-25 09:50+0200\n"
+"POT-Creation-Date: 2021-09-27 18:02+0200\n"
+"PO-Revision-Date: 2021-09-27 18:03+0200\n"
 "Last-Translator: \n"
 "Language-Team: jp-charras\n"
 "Language: fr_FR\n"
@@ -2626,6 +2626,7 @@ msgid "Revision:"
 msgstr "Révision:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:200
+#: eeschema/dialogs/dialog_netlist - new.cpp:385
 #: eeschema/dialogs/dialog_netlist.cpp:385
 msgid "Title:"
 msgstr "Titre:"
@@ -2730,6 +2731,7 @@ msgstr "Prévisualisation"
 #: eeschema/dialogs/dialog_annotate.cpp:93 eeschema/dialogs/dialog_bom.cpp:134
 #: eeschema/dialogs/dialog_change_symbols.cpp:156
 #: eeschema/dialogs/dialog_erc.cpp:80 eeschema/dialogs/dialog_erc.cpp:314
+#: eeschema/dialogs/dialog_netlist - new.cpp:269
 #: eeschema/dialogs/dialog_netlist.cpp:269
 #: eeschema/dialogs/dialog_plot_schematic.cpp:113
 #: eeschema/dialogs/dialog_print_using_printer.cpp:148
@@ -3629,7 +3631,7 @@ msgstr "Style de Ligne"
 #: eeschema/dialogs/dialog_line_wire_bus_properties.cpp:52
 #: eeschema/dialogs/dialog_line_wire_bus_properties.cpp:63
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:145
-#: eeschema/tools/sch_editor_control.cpp:1015
+#: eeschema/tools/sch_editor_control.cpp:1038
 msgid "Default"
 msgstr "Défaut"
 
@@ -4637,11 +4639,9 @@ msgid "Unable to find a PDF viewer for '%s'."
 msgstr "Impossible de trouver un visualisateur PDF pour '%s'."
 
 #: common/gestfich.cpp:196
-#, fuzzy, c-format
+#, c-format
 msgid "Problem while running the PDF viewer '%s'."
-msgstr ""
-"Problème en lançant le visualisateur PDF.\n"
-"La commande est '%s'."
+msgstr "Problème en lançant le visualisateur PDF '%s'."
 
 #: common/gestfich.cpp:299
 #, c-format
@@ -7565,7 +7565,8 @@ msgstr "Ajouter Générateur"
 msgid "Nickname '%s' already in use."
 msgstr "Un nom logique '%s' existe déjà."
 
-#: eeschema/dialogs/dialog_bom.cpp:420 eeschema/dialogs/dialog_netlist.cpp:683
+#: eeschema/dialogs/dialog_bom.cpp:420 eeschema/dialogs/dialog_netlist -
+#: new.cpp:709 eeschema/dialogs/dialog_netlist.cpp:683
 msgid "Generator File"
 msgstr "Fichier Générateur"
 
@@ -8568,9 +8569,8 @@ msgid "Electrical Rules Checker"
 msgstr "Contrôle des Règles Electriques"
 
 #: eeschema/dialogs/dialog_field_properties.cpp:131
-#, fuzzy
 msgid "Power symbol value field text cannot be changed."
-msgstr "(Le texte de la valeur des symboles  Power ne peut pas être modifié.)"
+msgstr "Le texte de la valeur des symboles  Power ne peut pas être modifié."
 
 #: eeschema/dialogs/dialog_field_properties.cpp:246
 msgid "Illegal reference designator value!"
@@ -8581,9 +8581,10 @@ msgid "Value may not be empty."
 msgstr "La valeur ne peut pas être vide."
 
 #: eeschema/dialogs/dialog_field_properties.cpp:340
-#, fuzzy
 msgid "Sheet filename can only be modified in Sheet Properties dialog."
-msgstr "Re-Remplir Zones après Dialogue Propriétés de Zone"
+msgstr ""
+"Le nom du fichier de feuille ne peut être modifié que dans le dialogue des "
+"propriétés de feuille."
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:31
 msgid "Other symbol fields"
@@ -9399,9 +9400,9 @@ msgid "Text:"
 msgstr "Texte:"
 
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:72
-#, fuzzy, c-format
+#, c-format
 msgid "(%s)"
-msgstr " (%s)"
+msgstr "(%s)"
 
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:93
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:233
@@ -9519,27 +9520,33 @@ msgstr "Accepter Nom"
 msgid "Migrate Buses"
 msgstr "Migration des Bus"
 
+#: eeschema/dialogs/dialog_netlist - new.cpp:268
 #: eeschema/dialogs/dialog_netlist.cpp:268
 #: eeschema/dialogs/dialog_netlist_base.h:69
 msgid "Export Netlist"
 msgstr "Exporter Netliste"
 
+#: eeschema/dialogs/dialog_netlist - new.cpp:300
 #: eeschema/dialogs/dialog_netlist.cpp:300
 msgid "Simulator requires a fully annotated schematic."
 msgstr "La simulation nécessite un schéma complètement numéroté."
 
+#: eeschema/dialogs/dialog_netlist - new.cpp:323
 #: eeschema/dialogs/dialog_netlist.cpp:323
 msgid "Reformat passive symbol values"
 msgstr "Reformater les valeurs des composants passifs"
 
+#: eeschema/dialogs/dialog_netlist - new.cpp:324
 #: eeschema/dialogs/dialog_netlist.cpp:324
 msgid "Reformat passive symbol values e.g. 1M -> 1Meg"
 msgstr "Reformater les valeurs des composants passifs, par exemple 1M-> 1Meg"
 
+#: eeschema/dialogs/dialog_netlist - new.cpp:329
 #: eeschema/dialogs/dialog_netlist.cpp:329
 msgid "External simulator command:"
 msgstr "Commande simulateur externe :"
 
+#: eeschema/dialogs/dialog_netlist - new.cpp:330
 #: eeschema/dialogs/dialog_netlist.cpp:330
 msgid ""
 "Enter the command line to run spice\n"
@@ -9550,38 +9557,46 @@ msgstr ""
 "Habituellement <path to spice binary> %I\n"
 "%I sera remplacé par le nom réel de la netliste spice</path>"
 
+#: eeschema/dialogs/dialog_netlist - new.cpp:344
 #: eeschema/dialogs/dialog_netlist.cpp:344
 msgid "Create Netlist and Run Simulator Command"
 msgstr "Créer la Netlist et Exécuter la commande de simulation"
 
+#: eeschema/dialogs/dialog_netlist - new.cpp:395
 #: eeschema/dialogs/dialog_netlist.cpp:395
 msgid "Netlist command:"
 msgstr "Commande netliste:"
 
+#: eeschema/dialogs/dialog_netlist - new.cpp:441
 #: eeschema/dialogs/dialog_netlist.cpp:441
 msgid "Save Netlist File"
 msgstr "Sauver Fichier Netliste"
 
+#: eeschema/dialogs/dialog_netlist - new.cpp:499
 #: eeschema/dialogs/dialog_netlist.cpp:474
 #, c-format
 msgid "%s Export"
 msgstr "Export %s"
 
+#: eeschema/dialogs/dialog_netlist - new.cpp:528
 #: eeschema/dialogs/dialog_netlist.cpp:503
 #: eeschema/netlist_exporters/netlist_generator.cpp:54
 msgid "Exporting netlist requires a fully annotated schematic."
 msgstr ""
 "L'exportation de la net liste nécessite un schéma complètement numéroté."
 
+#: eeschema/dialogs/dialog_netlist - new.cpp:652
 #: eeschema/dialogs/dialog_netlist.cpp:626
 msgid "This plugin already exists."
 msgstr "Ce plugin existe déjà."
 
+#: eeschema/dialogs/dialog_netlist - new.cpp:685
 #: eeschema/dialogs/dialog_netlist.cpp:659
 msgid "You must provide a netlist generator command string"
 msgstr ""
 "Vous devez fournir une ligne de commande pour le générateur de netliste"
 
+#: eeschema/dialogs/dialog_netlist - new.cpp:691
 #: eeschema/dialogs/dialog_netlist.cpp:665
 msgid "You must provide a netlist generator title"
 msgstr "Vous devez fournir un titre pour le générateur de netliste"
@@ -12706,6 +12721,7 @@ msgid "Bus Entry needed"
 msgstr "Entrée de Bus nécessaire"
 
 #: eeschema/fields_grid_table.cpp:135 eeschema/files-io.cpp:783
+#: eeschema/tools/sch_editor_control.cpp:101
 msgid "Schematic Files"
 msgstr "Fichiers Schématiques"
 
@@ -13053,15 +13069,13 @@ msgstr "Non"
 
 #: eeschema/lib_field.cpp:447 eeschema/lib_text.cpp:364
 #: eeschema/sch_field.cpp:505
-#, fuzzy
 msgid "H Justification"
-msgstr "Justification"
+msgstr "Justification H"
 
 #: eeschema/lib_field.cpp:456 eeschema/lib_text.cpp:373
 #: eeschema/sch_field.cpp:514
-#, fuzzy
 msgid "V Justification"
-msgstr "Justification"
+msgstr "Justification V"
 
 #: eeschema/lib_item.cpp:54 eeschema/lib_pin.cpp:1041 eeschema/sch_pin.cpp:184
 #: eeschema/sch_pin.cpp:204 eeschema/sch_text.cpp:759
@@ -16695,6 +16709,15 @@ msgstr "Activation Déplacement Symbole"
 msgid "Align Elements to Grid"
 msgstr "Aligner Eléments sur Grille"
 
+#: eeschema/tools/ee_actions.cpp:761
+msgid "Save Current Sheet Copy As..."
+msgstr "Sauver une Copie de la Feuille Courante Sous..."
+
+#: eeschema/tools/ee_actions.cpp:761
+msgid "Save a copy of the current sheet to another location or name"
+msgstr ""
+"Enregistrer une copie de la feuille active dans un autre emplacement ou nom"
+
 #: eeschema/tools/ee_inspection_tool.cpp:282
 #, c-format
 msgid ""
@@ -16897,44 +16920,44 @@ msgstr "Entrez le numéro de page pour le chemin hiérarchique de la feuille %s"
 msgid "Edit Sheet Page Number"
 msgstr "Editer Numéro de Page de la Feuille"
 
-#: eeschema/tools/sch_editor_control.cpp:489
+#: eeschema/tools/sch_editor_control.cpp:512
 msgid "Reached end of schematic."
 msgstr "Fin de la schématique atteinte."
 
-#: eeschema/tools/sch_editor_control.cpp:490
+#: eeschema/tools/sch_editor_control.cpp:513
 msgid "Reached end of sheet."
 msgstr "Fin de la feuille atteinte."
 
-#: eeschema/tools/sch_editor_control.cpp:494
+#: eeschema/tools/sch_editor_control.cpp:517
 msgid "Find again to wrap around to the start."
 msgstr "Rechercher à nouveau pour reprendre au début."
 
-#: eeschema/tools/sch_editor_control.cpp:882
+#: eeschema/tools/sch_editor_control.cpp:905
 msgid "Error: duplicate sub-sheet names found in current sheet."
 msgstr ""
 "Erreur :  noms de sous-feuilles dupliqués trouvés dans la feuille courante."
 
-#: eeschema/tools/sch_editor_control.cpp:973
+#: eeschema/tools/sch_editor_control.cpp:996
 msgid "Net must be labeled to assign a netclass."
 msgstr "Le net doit être étiqueté pour être attribué à une netclass."
 
-#: eeschema/tools/sch_editor_control.cpp:979
+#: eeschema/tools/sch_editor_control.cpp:1002
 msgid "Bus has no members to assign netclass to."
 msgstr "Le Bus n’a pas de membre à qui attribuer une netclasse."
 
-#: eeschema/tools/sch_editor_control.cpp:1012
+#: eeschema/tools/sch_editor_control.cpp:1035
 msgid "Netclasses"
 msgstr "Classes d'Equipots"
 
-#: eeschema/tools/sch_editor_control.cpp:1025
+#: eeschema/tools/sch_editor_control.cpp:1048
 msgid "Assign Netclass"
 msgstr "Assigner NetClasse"
 
-#: eeschema/tools/sch_editor_control.cpp:1026
+#: eeschema/tools/sch_editor_control.cpp:1049
 msgid "Select netclass:"
 msgstr "Sélection netclasse:"
 
-#: eeschema/tools/sch_editor_control.cpp:1620
+#: eeschema/tools/sch_editor_control.cpp:1643
 #, c-format
 msgid ""
 "The pasted sheet '%s'\n"
@@ -27377,17 +27400,14 @@ msgid "Clearance Outlines"
 msgstr "Contours d'Isolation"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:59
-#, fuzzy
 msgid "Show when routing"
 msgstr "Montrer en création de pistes"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:59
-#, fuzzy
 msgid "Show when routing w/ via clearance at end"
-msgstr "Montrer avec isolation via en extrémité"
+msgstr "Montrer en création de pistes avec via en extrémité"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:59
-#, fuzzy
 msgid "Show when routing and editing"
 msgstr "Montrer en création et édition de pistes"
 
@@ -27396,9 +27416,8 @@ msgid "Show always"
 msgstr "Montrer toujours"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:61
-#, fuzzy
 msgid "Track && Via Clearances"
-msgstr "Isolation Piste"
+msgstr "Isolation Pistes et Vias"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:63
 msgid ""
@@ -27414,9 +27433,8 @@ msgid "Show pad clearance"
 msgstr "Montrer isolation"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:76
-#, fuzzy
 msgid "Scroll cross-probed items into view"
-msgstr "Centrer la vue sur les éléments sélectionnés"
+msgstr "Zoom optimal sur éléments télé-sélectionnés"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:86
 msgid "Highlight nets when they are highlighted in the schematic editor"
@@ -29583,9 +29601,8 @@ msgid "Differential uncoupled length too long"
 msgstr "Longueur de Paire non couplée trop longue"
 
 #: pcbnew/drc/drc_item.cpp:206
-#, fuzzy
 msgid "Footprint type doesn't match footprint pads"
-msgstr "Éditeur de librairie - Créer et éditer les composants"
+msgstr "Le type d’empreinte ne correspond pas aux type de pads"
 
 #: pcbnew/drc/drc_item.cpp:327
 #, c-format
@@ -30326,19 +30343,19 @@ msgid "Footprint %s"
 msgstr "Empreinte %s"
 
 #: pcbnew/footprint.cpp:2091
-#, fuzzy, c-format
+#, c-format
 msgid "Expected \"Through hole\" type but set to \"%s\""
-msgstr "Pad traversant %s de %s"
+msgstr "Type \"Pad traversant\" attendu mais défini comme \"%s\""
 
 #: pcbnew/footprint.cpp:2095
 #, c-format
 msgid "Expected \"SMD\" type but set to \"%s\""
-msgstr ""
+msgstr "Type \"SMD\" attendu mais défini comme \"%s\""
 
 #: pcbnew/footprint.cpp:2099
 #, c-format
 msgid "Expected \"Other\" type but set to \"%s\""
-msgstr ""
+msgstr "Type \"Autre\" attendu mais défini comme \"%s\""
 
 #: pcbnew/footprint.cpp:2203 pcbnew/pad.cpp:1542 pcbnew/zone.cpp:1416
 msgid "Clearance Override"
@@ -34188,9 +34205,8 @@ msgid "Loss Tangent"
 msgstr "Tg Perte"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:314
-#, fuzzy
 msgid "Dielectric"
-msgstr "Diélectrique %d"
+msgstr "Diélectrique"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:366
 msgid "Insert board stackup table"
@@ -34237,14 +34253,12 @@ msgid "Plated Board Edge: "
 msgstr "Contour du PCB Métallisé: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:511
-#, fuzzy
 msgid "Edge card connectors: "
-msgstr "Connecteurs de bord de cartes:"
+msgstr "Connecteurs de bord de cartes: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:519
-#, fuzzy
 msgid "Yes, Bevelled"
-msgstr "Oui, biseauté"
+msgstr "Oui, Biseauté"
 
 #: pcbnew/tools/drawing_tool.cpp:80
 msgid "Select Via Size"
@@ -36782,6 +36796,11 @@ msgstr "Exécution de remplissage des polygones..."
 msgid "[INFO] load failed: input line too long\n"
 msgstr "[INFO] chargement échouée: ligne d’entrée trop longue\n"
 
+#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:5
+#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:12
+msgid "bitmap2component"
+msgstr "bitmap2component"
+
 #: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:9
 msgid "KiCad Image Converter"
 msgstr "Convertisseur d'Image KiCad"
@@ -36792,9 +36811,10 @@ msgstr ""
 "Créer un composant à partir d’une image bitmap pour une utilisation avec "
 "KiCad"
 
-#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:12
-msgid "bitmap2component"
-msgstr "bitmap2component"
+#: resources/linux/launchers/org.kicad.eeschema.desktop.in:5
+#: resources/linux/launchers/org.kicad.eeschema.desktop.in:13
+msgid "eeschema"
+msgstr "eeschema"
 
 #: resources/linux/launchers/org.kicad.eeschema.desktop.in:10
 msgid "KiCad Schematic Editor (Standalone)"
@@ -36808,9 +36828,10 @@ msgstr "Outil de Capture Schématique"
 msgid "Standalone schematic editor for KiCad schematics"
 msgstr "Editeur de schématique indépendant pour les schémas KiCad"
 
-#: resources/linux/launchers/org.kicad.eeschema.desktop.in:13
-msgid "eeschema"
-msgstr "eeschema"
+#: resources/linux/launchers/org.kicad.gerbview.desktop.in:5
+#: resources/linux/launchers/org.kicad.gerbview.desktop.in:13
+msgid "gerbview"
+msgstr "gerbview"
 
 #: resources/linux/launchers/org.kicad.gerbview.desktop.in:11
 msgid "Gerber File Viewer"
@@ -36820,9 +36841,9 @@ msgstr "Visionneuse de fichiers Gerber"
 msgid "View Gerber files"
 msgstr "Visualiser fichiers Gerber"
 
-#: resources/linux/launchers/org.kicad.gerbview.desktop.in:13
-msgid "gerbview"
-msgstr "gerbview"
+#: resources/linux/launchers/org.kicad.kicad.desktop.in:5
+msgid "kicad"
+msgstr "kicad"
 
 #: resources/linux/launchers/org.kicad.kicad.desktop.in:10
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:6
@@ -36837,6 +36858,10 @@ msgstr "Suite CAO Electronique"
 msgid "Suite of tools for schematic design and circuit board layout"
 msgstr "Suite d’outils pour la conception schématique et des circuits imprimés"
 
+#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:5
+msgid "pcbcalculator"
+msgstr "pcbcalculator"
+
 #: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:9
 msgid "KiCad PCB Calculator"
 msgstr "Calculateur pour PCB KiCad"
@@ -36844,6 +36869,11 @@ msgstr "Calculateur pour PCB KiCad"
 #: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:11
 msgid "Calculator for various electronics-related computations"
 msgstr "Calculatrice pour divers calculs liés à l’électronique"
+
+#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:5
+#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:13
+msgid "pcbnew"
+msgstr "pcbnew"
 
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:10
 msgid "KiCad PCB Editor (Standalone)"
@@ -36856,10 +36886,6 @@ msgstr "Éditeur de circuit imprimé"
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:12
 msgid "Standalone circuit board editor for KiCad boards"
 msgstr "Éditeur indépendant de circuits imprimés pour les C.I. KiCad"
-
-#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:13
-msgid "pcbnew"
-msgstr "pcbnew"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:13
 msgid "An EDA suite for schematic and circuit board design"
@@ -36917,19 +36943,16 @@ msgstr "Fichier Circuit Imprimé KiCad"
 #~ msgid "Validate"
 #~ msgstr "Validation"
 
-#, c-format
 #~ msgid ""
 #~ "Your footprint has plated through hole pads but its type is set to \"%s\""
 #~ msgstr ""
 #~ "Votre empreinte a des trous traversants, mais son type est défini comme "
 #~ "\"%s\""
 
-#, c-format
 #~ msgid "Your footprint has SMD pads but its type is set to \"%s\""
 #~ msgstr ""
 #~ "Votre empreinte a des pads CMS, mais son type est défini comme \"%s\""
 
-#, c-format
 #~ msgid ""
 #~ "Your footprint has no SMD or plated through hole pads but its type is set "
 #~ "to \"%s\""
@@ -36939,12 +36962,6 @@ msgstr "Fichier Circuit Imprimé KiCad"
 
 #~ msgid "Continue"
 #~ msgstr "Continuer"
-
-#~ msgid "kicad"
-#~ msgstr "kicad"
-
-#~ msgid "pcbcalculator"
-#~ msgstr "pcbcalculator"
 
 #~ msgid "Component:"
 #~ msgstr "Composant:"
@@ -44734,9 +44751,6 @@ msgstr "Fichier Circuit Imprimé KiCad"
 
 #~ msgid "Save only the current sheet"
 #~ msgstr "Sauver seulement la feuille active"
-
-#~ msgid "Save C&urrent Sheet As..."
-#~ msgstr "Sauver la Feuille Co&urante Sous..."
 
 #~ msgid "Print schematic sheet"
 #~ msgstr "Impression des feuilles de schéma"
