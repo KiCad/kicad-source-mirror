@@ -539,8 +539,10 @@ void EDA_TEXT::Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControl
                        FormatInternalUnits( GetTextWidth() ).c_str() );
 
     if( GetTextThickness() )
+    {
         aFormatter->Print( 0, " (thickness %s)",
                            FormatInternalUnits( GetTextThickness() ).c_str() );
+    }
 
     if( IsBold() )
         aFormatter->Print( 0, " bold" );
@@ -550,18 +552,16 @@ void EDA_TEXT::Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControl
 
     aFormatter->Print( 0, ")"); // (font
 
-    if( IsMirrored() ||
-        GetHorizJustify() != GR_TEXT_HJUSTIFY_CENTER ||
-        GetVertJustify() != GR_TEXT_VJUSTIFY_CENTER )
+    if( IsMirrored() || GetHorizJustify() != GR_TEXT_HJUSTIFY_CENTER
+                     || GetVertJustify() != GR_TEXT_VJUSTIFY_CENTER )
     {
         aFormatter->Print( 0, " (justify");
 
         if( GetHorizJustify() != GR_TEXT_HJUSTIFY_CENTER )
-            aFormatter->Print( 0,
-                               ( GetHorizJustify() == GR_TEXT_HJUSTIFY_LEFT ) ? " left" : " right" );
+            aFormatter->Print( 0, GetHorizJustify() == GR_TEXT_HJUSTIFY_LEFT ? " left" : " right" );
 
         if( GetVertJustify() != GR_TEXT_VJUSTIFY_CENTER )
-            aFormatter->Print( 0, (GetVertJustify() == GR_TEXT_VJUSTIFY_TOP) ? " top" : " bottom" );
+            aFormatter->Print( 0, GetVertJustify() == GR_TEXT_VJUSTIFY_TOP ? " top" : " bottom" );
 
         if( IsMirrored() )
             aFormatter->Print( 0, " mirror" );
