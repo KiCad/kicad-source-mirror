@@ -14,8 +14,8 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-09-27 08:33-0700\n"
-"PO-Revision-Date: 2021-09-27 13:41+0000\n"
-"Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
+"PO-Revision-Date: 2021-09-29 17:58+0000\n"
+"Last-Translator: Eric <spice2wolf@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -4011,7 +4011,6 @@ msgid "Pad"
 msgstr "焊盘"
 
 #: common/eda_item.cpp:254 common/eda_item.cpp:257
-#, fuzzy
 msgid "Graphic"
 msgstr "图形"
 
@@ -4047,12 +4046,10 @@ msgid "Target"
 msgstr "目标"
 
 #: common/eda_item.cpp:268
-#, fuzzy
 msgid "ItemList"
 msgstr "项目列表"
 
 #: common/eda_item.cpp:269
-#, fuzzy
 msgid "NetInfo"
 msgstr "网络信息"
 
@@ -4521,11 +4518,9 @@ msgid "Unable to find a PDF viewer for '%s'."
 msgstr "无法为 '%s' 找到一款 PDF 查看器。"
 
 #: common/gestfich.cpp:196
-#, fuzzy, c-format
+#, c-format
 msgid "Problem while running the PDF viewer '%s'."
-msgstr ""
-"运行 PDF 浏览器时出现问题。\n"
-"命令是 \"%s\"。"
+msgstr "运行 PDF 浏览器'%s'时出现问题。"
 
 #: common/gestfich.cpp:299
 #, c-format
@@ -8341,9 +8336,8 @@ msgid "Electrical Rules Checker"
 msgstr "电气规则检查 (ERC)"
 
 #: eeschema/dialogs/dialog_field_properties.cpp:131
-#, fuzzy
 msgid "Power symbol value field text cannot be changed."
-msgstr "(不能更改电源符号值字段文本。)"
+msgstr "不能更改电源符号值字段文本。"
 
 #: eeschema/dialogs/dialog_field_properties.cpp:246
 msgid "Illegal reference designator value!"
@@ -8354,9 +8348,8 @@ msgid "Value may not be empty."
 msgstr "值不能是空的。"
 
 #: eeschema/dialogs/dialog_field_properties.cpp:340
-#, fuzzy
 msgid "Sheet filename can only be modified in Sheet Properties dialog."
-msgstr "在区域属性会话框后重新填充区域"
+msgstr "图纸文件名只能在图纸属性对话框中修改。"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:31
 msgid "Other symbol fields"
@@ -9152,9 +9145,9 @@ msgid "Text:"
 msgstr "文本："
 
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:72
-#, fuzzy, c-format
+#, c-format
 msgid "(%s)"
-msgstr " (%s)"
+msgstr "(%s)"
 
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:93
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:233
@@ -12697,15 +12690,13 @@ msgstr "否"
 
 #: eeschema/lib_field.cpp:447 eeschema/lib_text.cpp:364
 #: eeschema/sch_field.cpp:505
-#, fuzzy
 msgid "H Justification"
-msgstr "齐行"
+msgstr "水平对齐"
 
 #: eeschema/lib_field.cpp:456 eeschema/lib_text.cpp:373
 #: eeschema/sch_field.cpp:514
-#, fuzzy
 msgid "V Justification"
-msgstr "齐行"
+msgstr "竖直对齐"
 
 #: eeschema/lib_item.cpp:54 eeschema/lib_pin.cpp:1041 eeschema/sch_pin.cpp:184
 #: eeschema/sch_pin.cpp:204 eeschema/sch_text.cpp:759
@@ -23496,9 +23487,8 @@ msgstr "制造属性"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:272
 #: pcbnew/footprint_libraries_utils.cpp:1130
-#, fuzzy
 msgid "Footprint type:"
-msgstr "封装名称："
+msgstr "封装类型："
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:276
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:179
@@ -26627,28 +26617,24 @@ msgid "Clearance Outlines"
 msgstr "间隙概要"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:59
-#, fuzzy
 msgid "Show when routing"
-msgstr "当创建新布线时显示"
+msgstr "布线时显示"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:59
-#, fuzzy
 msgid "Show when routing w/ via clearance at end"
-msgstr "在结束时显示过孔间隙"
+msgstr "通过末端过孔间隙布线时显示"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:59
-#, fuzzy
 msgid "Show when routing and editing"
-msgstr "当创建和编辑布线时显示"
+msgstr "布线和编辑时显示"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:59
 msgid "Show always"
 msgstr "总是显示"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:61
-#, fuzzy
 msgid "Track && Via Clearances"
-msgstr "布线间隙"
+msgstr "线路&过孔间隙"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:63
 msgid ""
@@ -26662,9 +26648,8 @@ msgid "Show pad clearance"
 msgstr "显示焊盘间隙"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:76
-#, fuzzy
 msgid "Scroll cross-probed items into view"
-msgstr "将被交叉探测项目居中显示"
+msgstr "将交叉探测的项目滚动到视图中"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:86
 msgid "Highlight nets when they are highlighted in the schematic editor"
@@ -28765,9 +28750,8 @@ msgid "Differential uncoupled length too long"
 msgstr "差分未耦合长度太长"
 
 #: pcbnew/drc/drc_item.cpp:206
-#, fuzzy
 msgid "Footprint type doesn't match footprint pads"
-msgstr "封装编辑 - 创建/编辑封装"
+msgstr "封装类型与封装焊盘不匹配"
 
 #: pcbnew/drc/drc_item.cpp:327
 #, c-format
@@ -29487,19 +29471,19 @@ msgid "Footprint %s"
 msgstr "封装 %s"
 
 #: pcbnew/footprint.cpp:2091
-#, fuzzy, c-format
+#, c-format
 msgid "Expected \"Through hole\" type but set to \"%s\""
-msgstr "%s 的通孔焊盘 %s"
+msgstr "预期的类型为 '通孔'，但被设为“%s”"
 
 #: pcbnew/footprint.cpp:2095
 #, c-format
 msgid "Expected \"SMD\" type but set to \"%s\""
-msgstr ""
+msgstr "预期的类型为“贴片”, 但被设为“%s”"
 
 #: pcbnew/footprint.cpp:2099
 #, c-format
 msgid "Expected \"Other\" type but set to \"%s\""
-msgstr ""
+msgstr "预期的类型为“其他”, 但被设为“%s”"
 
 #: pcbnew/footprint.cpp:2203 pcbnew/pad.cpp:1542 pcbnew/zone.cpp:1416
 msgid "Clearance Override"
@@ -33188,9 +33172,8 @@ msgid "Thickness (mm)"
 msgstr "粗细 (mm)"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:275
-#, fuzzy
 msgid "Thickness (inches)"
-msgstr "粗细 (mils)"
+msgstr "厚度（英寸）"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:278
 msgid "Thickness (mils)"
@@ -33201,9 +33184,8 @@ msgid "Loss Tangent"
 msgstr "Loss Tangent（损耗切线）"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:314
-#, fuzzy
 msgid "Dielectric"
-msgstr "电介质层 %d"
+msgstr "电介质"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:366
 msgid "Insert board stackup table"
@@ -33250,12 +33232,10 @@ msgid "Plated Board Edge: "
 msgstr "电镀板边： "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:511
-#, fuzzy
 msgid "Edge card connectors: "
-msgstr "边缘连接器："
+msgstr "边缘卡连接器： "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:519
-#, fuzzy
 msgid "Yes, Bevelled"
 msgstr "是，斜面"
 
