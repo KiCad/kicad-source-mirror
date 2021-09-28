@@ -442,36 +442,40 @@ void PCB_DRAW_PANEL_GAL::SyncLayersVisibility( const BOARD* aBoard )
 void PCB_DRAW_PANEL_GAL::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame,
                                           std::vector<MSG_PANEL_ITEM>& aList )
 {
-    BOARD* board = static_cast<PCB_BASE_FRAME*>( GetParentEDAFrame() )->GetBoard();
-    wxString txt;
-    int viasCount = 0;
-    int trackSegmentsCount = 0;
+    BOARD*        board = static_cast<PCB_BASE_FRAME*>( GetParentEDAFrame() )->GetBoard();
+    int           padCount = 0;
+    int           viaCount = 0;
+    int           trackSegmentCount = 0;
+    std::set<int> netCodes;
+    int           unconnected = board->GetConnectivity()->GetUnconnectedCount();
 
     for( PCB_TRACK* item : board->Tracks() )
     {
         if( item->Type() == PCB_VIA_T )
-            viasCount++;
+            viaCount++;
         else
-            trackSegmentsCount++;
+            trackSegmentCount++;
+
+        if( item->GetNetCode() > 0 )
+            netCodes.insert( item->GetNetCode() );
     }
 
-    txt.Printf( wxT( "%d" ), board->GetPadCount() );
-    aList.emplace_back( _( "Pads" ), txt );
+    for( FOOTPRINT* footprint : board->Footprints() )
+    {
+        for( PAD* pad : footprint->Pads() )
+        {
+            padCount++;
 
-    txt.Printf( wxT( "%d" ), viasCount );
-    aList.emplace_back( _( "Vias" ), txt );
+            if( pad->GetNetCode() > 0 )
+                netCodes.insert( pad->GetNetCode() );
+        }
+    }
 
-    txt.Printf( wxT( "%d" ), trackSegmentsCount );
-    aList.emplace_back( _( "Track Segments" ), txt );
-
-    txt.Printf( wxT( "%d" ), board->GetNodesCount() );
-    aList.emplace_back( _( "Nodes" ), txt );
-
-    txt.Printf( wxT( "%d" ), board->GetNetCount() - 1 /* don't include "No Net" in count */ );
-    aList.emplace_back( _( "Nets" ), txt );
-
-    txt.Printf( wxT( "%d" ), board->GetConnectivity()->GetUnconnectedCount() );
-    aList.emplace_back( _( "Unrouted" ), txt );
+    aList.emplace_back( _( "Pads" ), wxString::Format( "%d", padCount ) );
+    aList.emplace_back( _( "Vias" ), wxString::Format( "%d", viaCount ) );
+    aList.emplace_back( _( "Track Segments" ), wxString::Format( "%d", trackSegmentCount ) );
+    aList.emplace_back( _( "Nets" ), wxString::Format( "%d", (int) netCodes.size() ) );
+    aList.emplace_back( _( "Unrouted" ), wxString::Format( "%d", unconnected ) );
 }
 
 

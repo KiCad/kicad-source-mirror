@@ -1165,35 +1165,39 @@ EDA_RECT BOARD::ComputeBoundingBox( bool aBoardEdgesOnly ) const
 
 void BOARD::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList )
 {
-    wxString txt;
-    int      viasCount = 0;
-    int      trackSegmentsCount = 0;
+    int           padCount = 0;
+    int           viaCount = 0;
+    int           trackSegmentCount = 0;
+    std::set<int> netCodes;
+    int           unconnected = GetConnectivity()->GetUnconnectedCount();
 
     for( PCB_TRACK* item : m_tracks )
     {
         if( item->Type() == PCB_VIA_T )
-            viasCount++;
+            viaCount++;
         else
-            trackSegmentsCount++;
+            trackSegmentCount++;
+
+        if( item->GetNetCode() > 0 )
+            netCodes.insert( item->GetNetCode() );
     }
 
-    txt.Printf( wxT( "%d" ), GetPadCount() );
-    aList.emplace_back( _( "Pads" ), txt );
+    for( FOOTPRINT* footprint : Footprints() )
+    {
+        for( PAD* pad : footprint->Pads() )
+        {
+            padCount++;
 
-    txt.Printf( wxT( "%d" ), viasCount );
-    aList.emplace_back( _( "Vias" ), txt );
+            if( pad->GetNetCode() > 0 )
+                netCodes.insert( pad->GetNetCode() );
+        }
+    }
 
-    txt.Printf( wxT( "%d" ), trackSegmentsCount );
-    aList.emplace_back( _( "Track Segments" ), txt );
-
-    txt.Printf( wxT( "%d" ), GetNodesCount() );
-    aList.emplace_back( _( "Nodes" ), txt );
-
-    txt.Printf( wxT( "%d" ), m_NetInfo.GetNetCount() - 1 /* Don't include "No Net" in count */ );
-    aList.emplace_back( _( "Nets" ), txt );
-
-    txt.Printf( wxT( "%d" ), GetConnectivity()->GetUnconnectedCount() );
-    aList.emplace_back( _( "Unrouted" ), txt );
+    aList.emplace_back( _( "Pads" ), wxString::Format( "%d", padCount ) );
+    aList.emplace_back( _( "Vias" ), wxString::Format( "%d", viaCount ) );
+    aList.emplace_back( _( "Track Segments" ), wxString::Format( "%d", trackSegmentCount ) );
+    aList.emplace_back( _( "Nets" ), wxString::Format( "%d", (int) netCodes.size() ) );
+    aList.emplace_back( _( "Unrouted" ), wxString::Format( "%d", unconnected ) );
 }
 
 
@@ -1922,17 +1926,6 @@ const std::vector<PAD*> BOARD::GetPads() const
     }
 
     return allPads;
-}
-
-
-unsigned BOARD::GetPadCount() const
-{
-    unsigned retval = 0;
-
-    for( FOOTPRINT* footprint : Footprints() )
-        retval += footprint->Pads().size();
-
-    return retval;
 }
 
 

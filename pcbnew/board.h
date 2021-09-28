@@ -646,11 +646,6 @@ public:
     unsigned GetUnconnectedNetCount() const;
 
     /**
-     * @return the number of pads in board.
-     */
-    unsigned GetPadCount() const;
-
-    /**
      * Return a reference to a list of all the pads.
      *
      * The returned list is not sorted and contains pointers to PADS, but those pointers do
