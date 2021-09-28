@@ -40,13 +40,3 @@ void LaunchExternal( const wxString& aPath )
     wxLaunchDefaultApplication( path );
 #endif
 }
-
-
-void LaunchURL( const wxString& aUrl )
-{
-#ifdef __WXMAC__
-    wxExecute( wxString::Format( "open %s", aUrl ) );
-#else
-    wxLaunchDefaultApplication( aUrl );
-#endif
-}
