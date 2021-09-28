@@ -374,7 +374,8 @@ void SCH_EDIT_FRAME::setupUIConditions()
     auto hasElements =
             [ this ] ( const SELECTION& aSel )
             {
-                return !GetScreen()->Items().empty() || !SELECTION_CONDITIONS::Idle( aSel );
+                return GetScreen() &&
+                        ( !GetScreen()->Items().empty() || !SELECTION_CONDITIONS::Idle( aSel ) );
             };
 
 #define ENABLE( x ) ACTION_CONDITIONS().Enable( x )
@@ -422,7 +423,8 @@ void SCH_EDIT_FRAME::setupUIConditions()
     auto forceHVCond =
         [this] ( const SELECTION& )
         {
-            return eeconfig()->m_Drawing.hv_lines_only;
+            EESCHEMA_SETTINGS* cfg = eeconfig();
+            return cfg && cfg->m_Drawing.hv_lines_only;
         };
 
     auto remapSymbolsCondition =
@@ -1557,7 +1559,7 @@ bool SCH_EDIT_FRAME::IsContentModified() const
 bool SCH_EDIT_FRAME::GetShowAllPins() const
 {
     EESCHEMA_SETTINGS* cfg = eeconfig();
-    return cfg->m_Appearance.show_hidden_pins;
+    return cfg && cfg->m_Appearance.show_hidden_pins;
 }
 
 
