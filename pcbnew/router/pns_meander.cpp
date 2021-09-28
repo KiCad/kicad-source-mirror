@@ -42,13 +42,13 @@ const MEANDER_SETTINGS& MEANDERED_LINE::Settings() const
 }
 
 
-void MEANDERED_LINE::MeanderSegment( const SEG& aBase, int aBaseIndex )
+void MEANDERED_LINE::MeanderSegment( const SEG& aBase, bool aSide, int aBaseIndex )
 {
     double base_len = aBase.Length();
 
     SHAPE_LINE_CHAIN lc;
 
-    bool side = true;
+    bool side = aSide;
     VECTOR2D dir( aBase.B - aBase.A );
 
     if( !m_dual )
@@ -80,11 +80,13 @@ void MEANDERED_LINE::MeanderSegment( const SEG& aBase, int aBaseIndex )
             {
                 for( int i = 0; i < 2; i++ )
                 {
-                    if( m.Fit( MT_CHECK_START, aBase, m_last, i ) )
+                    bool checkSide = ( i == 0 ) ? side : !side;
+
+                    if( m.Fit( MT_CHECK_START, aBase, m_last, checkSide ) )
                     {
                         turning = true;
                         AddMeander( new MEANDER_SHAPE( m ) );
-                        side = !i;
+                        side = !checkSide;
                         started = true;
                         break;
                     }
@@ -96,12 +98,14 @@ void MEANDERED_LINE::MeanderSegment( const SEG& aBase, int aBaseIndex )
 
                     for( int i = 0; i < 2; i++ )
                     {
-                        if( m.Fit( MT_SINGLE, aBase, m_last, i ) )
+                        bool checkSide = ( i == 0 ) ? side : !side;
+
+                        if( m.Fit( MT_SINGLE, aBase, m_last, checkSide ) )
                         {
                             AddMeander( new MEANDER_SHAPE( m ) );
                             fail = false;
                             started = false;
-                            side = !i;
+                            side = !checkSide;
                             break;
                         }
                     }

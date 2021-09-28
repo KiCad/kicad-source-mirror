@@ -254,7 +254,7 @@ bool DP_MEANDER_PLACER::Move( const VECTOR2I& aP, ITEM* aEndItem )
             curIndexN = tunedN.NextShape( curIndexN );
         }
 
-        m_result.MeanderSegment( base );
+        m_result.MeanderSegment( base, base.Side( aP ) < 0 );
     }
 
     while( curIndexP < tunedP.PointCount() && curIndexP != -1 )

@@ -472,9 +472,10 @@ public:
      * Fit maximum amplitude meanders on a given segment and adds to the current line.
      *
      * @param aSeg the base segment to meander.
+     * @param aSide Side to start meandering the segment. True=left, False=Right
      * @param aBaseIndex index of the base segment in the original line.
      */
-    void MeanderSegment( const SEG& aSeg, int aBaseIndex = 0 );
+    void MeanderSegment( const SEG& aSeg, bool aSide, int aBaseIndex = 0 );
 
     /// @copydoc MEANDER_SHAPE::SetBaselineOffset()
     void SetBaselineOffset( int aOffset )
