@@ -32,11 +32,15 @@ WX_TEXT_ENTRY_DIALOG_BASE::WX_TEXT_ENTRY_DIALOG_BASE( wxWindow* parent, wxWindow
 
 	m_choiceLabel = new wxStaticText( this, wxID_ANY, _("MyLabel"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_choiceLabel->Wrap( -1 );
+	m_choiceLabel->Hide();
+
 	bSizer3->Add( m_choiceLabel, 2, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 
 	wxArrayString m_choiceChoices;
 	m_choice = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_choiceChoices, 0 );
 	m_choice->SetSelection( 0 );
+	m_choice->Hide();
+
 	bSizer3->Add( m_choice, 3, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 
 
