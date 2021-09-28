@@ -646,7 +646,7 @@ void DIALOG_LIB_EDIT_PIN_TABLE::OnDeleteRow( wxCommandEvent& event )
     for( auto pin : removedRow )
         m_pins.erase( std::find( m_pins.begin(), m_pins.end(), pin ) );
 
-    curRow = std::min( curRow, m_grid->GetRows() - 1 );
+    curRow = std::min( curRow, m_grid->GetNumberRows() - 1 );
     m_grid->GoToCell( curRow, m_grid->GetGridCursorCol() );
     m_grid->SetGridCursor( curRow, m_grid->GetGridCursorCol() );
     m_grid->SelectRow( curRow );
