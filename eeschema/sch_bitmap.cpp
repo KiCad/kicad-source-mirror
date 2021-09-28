@@ -198,12 +198,10 @@ BITMAPS SCH_BITMAP::GetMenuImage() const
 
 void SCH_BITMAP::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList )
 {
-    aList.push_back( MSG_PANEL_ITEM( _( "Bitmap" ), wxEmptyString ) );
+    aList.emplace_back( _( "Bitmap" ), wxEmptyString );
 
-    aList.push_back( MSG_PANEL_ITEM( _( "Width" ), MessageTextFromValue( aFrame->GetUserUnits(),
-                                                                         GetSize().x ) ) );
-    aList.push_back( MSG_PANEL_ITEM( _( "Height" ), MessageTextFromValue( aFrame->GetUserUnits(),
-                                                                          GetSize().y ) ) );
+    aList.emplace_back( _( "Width" ), MessageTextFromValue( aFrame->GetUserUnits(), GetSize().x ) );
+    aList.emplace_back( _( "Height" ), MessageTextFromValue( aFrame->GetUserUnits(), GetSize().y ) );
 }
 
 

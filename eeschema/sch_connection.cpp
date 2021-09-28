@@ -398,47 +398,40 @@ void SCH_CONNECTION::SetSuffix( const wxString& aSuffix )
 
 void SCH_CONNECTION::AppendInfoToMsgPanel( std::vector<MSG_PANEL_ITEM>& aList ) const
 {
-    wxString msg, group_name;
+    wxString msg, group_name, members;
     std::vector<wxString> group_members;
 
-    aList.push_back( MSG_PANEL_ITEM( _( "Connection Name" ), UnescapeString( Name() ) ) );
+    aList.emplace_back( _( "Connection Name" ), UnescapeString( Name() ) );
 
     // NOTE(JE) Disabling this for now, because net codes are generated in the netlist exporter
     // in order to avoid sort costs.  It may make sense to just tear out net codes from the
     // CONNECTION_GRAPH entirely in the future, as they are mostly only useful for netlist exports.
 #if 0
     if( !IsBus() )
-    {
-        msg.Printf( "%d", m_net_code );
-        aList.push_back( MSG_PANEL_ITEM( _( "Net Code" ), msg ) );
-    }
+        aList.emplace_back( _( "Net Code" ), wxString::Format( "%d", m_net_code ) );
 #endif
 
     if( auto alias = m_graph->GetBusAlias( m_name ) )
     {
         msg.Printf( _( "Bus Alias %s Members" ), m_name );
 
-        wxString members;
-
-        for( const auto& member : alias->Members() )
+        for( const wxString& member : alias->Members() )
             members << member << " ";
 
-        aList.push_back( MSG_PANEL_ITEM( msg, members ) );
+        aList.emplace_back( msg, members );
     }
     else if( NET_SETTINGS::ParseBusGroup( m_name, &group_name, &group_members ) )
     {
-        for( const auto& group_member : group_members )
+        for( const wxString& group_member : group_members )
         {
-            if( auto group_alias = m_graph->GetBusAlias( group_member ) )
+            if( std::shared_ptr<BUS_ALIAS> group_alias = m_graph->GetBusAlias( group_member ) )
             {
                 msg.Printf( _( "Bus Alias %s Members" ), group_alias->GetName() );
 
-                wxString members;
-
-                for( const auto& member : group_alias->Members() )
+                for( const wxString& member : group_alias->Members() )
                     members << member << " ";
 
-                aList.push_back( MSG_PANEL_ITEM( msg, members ) );
+                aList.emplace_back( msg, members );
             }
         }
     }
@@ -450,18 +443,14 @@ void SCH_CONNECTION::AppendInfoToMsgPanel( std::vector<MSG_PANEL_ITEM>& aList ) 
         return;
 
     if( IsBus() )
-    {
-        msg.Printf( "%d", m_bus_code );
-        aList.push_back( MSG_PANEL_ITEM( "Bus Code", msg ) );
-    }
+        aList.emplace_back( "Bus Code", wxString::Format( "%d", m_bus_code ) );
 
-    msg.Printf( "%d", m_subgraph_code );
-    aList.push_back( MSG_PANEL_ITEM( "Subgraph Code", msg ) );
+    aList.emplace_back( "Subgraph Code", wxString::Format( "%d", m_subgraph_code ) );
 
-    if( auto driver = Driver() )
+    if( SCH_ITEM* driver = Driver() )
     {
         msg.Printf( "%s at %p", driver->GetSelectMenuText( EDA_UNITS::MILLIMETRES ), driver );
-        aList.push_back( MSG_PANEL_ITEM( "Connection Source", msg ) );
+        aList.emplace_back( "Connection Source", msg );
     }
 #endif
 }

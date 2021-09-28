@@ -1036,30 +1036,24 @@ void LIB_PIN::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITE
 {
     LIB_ITEM::GetMsgPanelInfo( aFrame, aList );
 
-    aList.push_back( MSG_PANEL_ITEM( _( "Name" ), UnescapeString( GetShownName() ) ) );
-    aList.push_back( MSG_PANEL_ITEM( _( "Number" ), GetShownNumber() ) );
-    aList.push_back( MSG_PANEL_ITEM( _( "Type" ), ElectricalPinTypeGetText( m_type ) ) );
-    aList.push_back( MSG_PANEL_ITEM( _( "Style" ), PinShapeGetText( m_shape ) ) );
+    aList.emplace_back( _( "Name" ), UnescapeString( GetShownName() ) );
+    aList.emplace_back( _( "Number" ), GetShownNumber() );
+    aList.emplace_back( _( "Type" ), ElectricalPinTypeGetText( m_type ) );
+    aList.emplace_back( _( "Style" ), PinShapeGetText( m_shape ) );
 
-    wxString text = IsVisible() ? _( "Yes" ) : _( "No" );
-    aList.push_back( MSG_PANEL_ITEM( _( "Style" ), text ) );
+    aList.emplace_back( _( "Style" ), IsVisible() ? _( "Yes" ) : _( "No" ) );
 
     // Display pin length
-    text = StringFromValue( aFrame->GetUserUnits(), m_length );
-    aList.push_back( MSG_PANEL_ITEM( _( "Length" ), text ) );
+    aList.emplace_back( _( "Length" ), StringFromValue( aFrame->GetUserUnits(), m_length ) );
 
-    text = PinOrientationName( (unsigned) PinOrientationIndex( m_orientation ) );
-    aList.push_back( MSG_PANEL_ITEM( _( "Orientation" ), text ) );
+    int i = PinOrientationIndex( m_orientation );
+    aList.emplace_back( _( "Orientation" ), PinOrientationName( (unsigned) i ) );
 
     wxPoint pinpos = GetPosition();
-    pinpos.y = -pinpos.y;   // Display coord are top to bottom
-                            // lib items coord are bottom to top
+    pinpos.y = -pinpos.y;   // Display coords are top to bottom; lib item coords are bottom to top
 
-    text = MessageTextFromValue( aFrame->GetUserUnits(), pinpos.x );
-    aList.push_back( MSG_PANEL_ITEM( _( "Pos X" ), text ) );
-
-    text = MessageTextFromValue( aFrame->GetUserUnits(), pinpos.y );
-    aList.push_back( MSG_PANEL_ITEM( _( "Pos Y" ), text ) );
+    aList.emplace_back( _( "Pos X" ), MessageTextFromValue( aFrame->GetUserUnits(), pinpos.x ) );
+    aList.emplace_back( _( "Pos Y" ), MessageTextFromValue( aFrame->GetUserUnits(), pinpos.y ) );
 }
 
 

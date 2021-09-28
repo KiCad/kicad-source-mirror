@@ -423,19 +423,17 @@ void LIB_FIELD::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_I
 
     LIB_ITEM::GetMsgPanelInfo( aFrame, aList );
 
-    aList.push_back( MSG_PANEL_ITEM( _( "Field" ), GetName() ) );
+    aList.emplace_back( _( "Field" ), GetName() );
 
     // Don't use GetShownText() here; we want to show the user the variable references
-    aList.push_back( MSG_PANEL_ITEM( _( "Text" ), UnescapeString( GetText() ) ) );
+    aList.emplace_back( _( "Text" ), UnescapeString( GetText() ) );
 
-    msg = IsVisible() ? _( "Yes" ) : _( "No" );
-    aList.push_back( MSG_PANEL_ITEM( _( "Visible" ), msg ) );
+    aList.emplace_back( _( "Visible" ), IsVisible() ? _( "Yes" ) : _( "No" ) );
 
-    msg = GetTextStyleName();
-    aList.push_back( MSG_PANEL_ITEM( _( "Style" ), msg ) );
+    aList.emplace_back( _( "Style" ), GetTextStyleName() );
 
-    msg = MessageTextFromValue( aFrame->GetUserUnits(), GetTextWidth() );
-    aList.push_back( MSG_PANEL_ITEM( _( "Text Size" ), msg ) );
+    aList.emplace_back( _( "Text Size" ), MessageTextFromValue( aFrame->GetUserUnits(),
+                                                                GetTextWidth() ) );
 
     switch ( GetHorizJustify() )
     {
@@ -444,7 +442,7 @@ void LIB_FIELD::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_I
     case GR_TEXT_HJUSTIFY_RIGHT:  msg = _( "Right" );  break;
     }
 
-    aList.push_back( MSG_PANEL_ITEM( _( "H Justification" ), msg ) );
+    aList.emplace_back( _( "H Justification" ), msg );
 
     switch ( GetVertJustify() )
     {
@@ -453,7 +451,7 @@ void LIB_FIELD::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_I
     case GR_TEXT_VJUSTIFY_BOTTOM: msg = _( "Bottom" ); break;
     }
 
-    aList.push_back( MSG_PANEL_ITEM( _( "V Justification" ), msg ) );
+    aList.emplace_back( _( "V Justification" ), msg );
 }
 
 

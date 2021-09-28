@@ -786,23 +786,18 @@ void PCB_TRACK::GetMsgPanelInfoBase_Common( EDA_DRAW_FRAME* aFrame,
 
     aList.emplace_back( _( "NetClass" ), UnescapeString( GetNetClass()->GetName() ) );
 
-    #if 0   // Enable for debugging
+#if 0   // Enable for debugging
     if( GetBoard() )
-    {
-        // Display net code:
-        msg.Printf( wxT( "%d" ), GetNetCode() );
-        aList.emplace_back( _( "NetCode" ), msg );
-    }
+        aList.emplace_back( _( "NetCode" ), wxString::Format( wxT( "%d" ), GetNetCode() ) );
 
-    // Display the flags:
-    msg.Printf( wxT( "0x%08X" ), m_flags );
-    aList.emplace_back( wxT( "Flags" ), msg );
+    aList.emplace_back( wxT( "Flags" ), wxString::Format( wxT( "0x%08X" ), m_flags ) );
 
-    // Display start and end positions:
-    msg.Printf( wxT( "%d %d" ), m_Start.x, m_Start.y );
-    aList.push_back( MSG_PANEL_ITEM( wxT( "Start pos" ), msg ) );
-    msg.Printf( wxT( "%d %d" ), m_End.x, m_End.y );
-    aList.push_back( MSG_PANEL_ITEM( wxT( "End pos" ), msg ) );
+    aList.emplace_back( wxT( "Start pos" ), wxString::Format( wxT( "%d %d" ),
+                                                              m_Start.x,
+                                                              m_Start.y ) );
+    aList.emplace_back( wxT( "End pos" ), wxString::Format( wxT( "%d %d" ),
+                                                            m_End.x,
+                                                            m_End.y ) );
 #endif
 
     // Display the State member

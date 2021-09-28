@@ -162,8 +162,7 @@ const EDA_RECT SCH_MARKER::GetBoundingBox() const
 
 void SCH_MARKER::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList )
 {
-    aList.push_back( MSG_PANEL_ITEM( _( "Electrical Rule Check Error" ),
-                                     m_rcItem->GetErrorMessage() ) );
+    aList.emplace_back( _( "Electrical Rule Check Error" ), m_rcItem->GetErrorMessage() );
 }
 
 

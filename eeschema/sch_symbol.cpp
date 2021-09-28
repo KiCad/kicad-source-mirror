@@ -1373,20 +1373,17 @@ void SCH_SYMBOL::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_
     {
         if( m_part.get() != dummy() )
         {
-            aList.push_back( MSG_PANEL_ITEM( _( "Reference" ), GetRef( currentSheet ) ) );
+            aList.emplace_back( _( "Reference" ), GetRef( currentSheet ) );
 
             msg = m_part->IsPower() ? _( "Power symbol" ) : _( "Value" );
-
-            aList.push_back( MSG_PANEL_ITEM( msg, GetValue( currentSheet, true ) ) );
+            aList.emplace_back( msg, GetValue( currentSheet, true ) );
 
 #if 0       // Display symbol flags, for debug only
-            aList.push_back( MSG_PANEL_ITEM( _( "flags" ),
-                                             wxString::Format( "%X", GetEditFlags() ) ) );
+            aList.emplace_back( _( "flags" ), wxString::Format( "%X", GetEditFlags() ) );
 #endif
 
             // Display symbol reference in library and library
-            aList.push_back( MSG_PANEL_ITEM( _( "Name" ),
-                                             UnescapeString( GetLibId().GetLibItemName() ) ) );
+            aList.emplace_back( _( "Name" ), UnescapeString( GetLibId().GetLibItemName() ) );
 
             if( !m_part->IsRoot() )
             {
@@ -1397,15 +1394,15 @@ void SCH_SYMBOL::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_
                 if( parent )
                     msg = parent->GetName();
 
-                aList.push_back( MSG_PANEL_ITEM( _( "Alias of" ), UnescapeString( msg ) ) );
+                aList.emplace_back( _( "Alias of" ), UnescapeString( msg ) );
             }
             else if( !m_lib_id.GetLibNickname().empty() )
             {
-                aList.push_back( MSG_PANEL_ITEM( _( "Library" ), m_lib_id.GetLibNickname() ) );
+                aList.emplace_back( _( "Library" ), m_lib_id.GetLibNickname() );
             }
             else
             {
-                aList.push_back( MSG_PANEL_ITEM( _( "Library" ), _( "Undefined!!!" ) ) );
+                aList.emplace_back( _( "Library" ), _( "Undefined!!!" ) );
             }
 
             // Display the current associated footprint, if exists.
@@ -1414,32 +1411,28 @@ void SCH_SYMBOL::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_
             if( msg.IsEmpty() )
                 msg = _( "<Unknown>" );
 
-            aList.push_back( MSG_PANEL_ITEM( _( "Footprint" ), msg ) );
+            aList.emplace_back( _( "Footprint" ), msg );
 
             // Display description of the symbol, and keywords found in lib
-            aList.push_back( MSG_PANEL_ITEM( _( "Description" ), m_part->GetDescription(),
-                                             DARKCYAN ) );
-            aList.push_back( MSG_PANEL_ITEM( _( "Keywords" ), m_part->GetKeyWords() ) );
+            aList.emplace_back( _( "Description" ), m_part->GetDescription()  );
+            aList.emplace_back( _( "Keywords" ), m_part->GetKeyWords() );
         }
     }
     else
     {
-        aList.push_back( MSG_PANEL_ITEM( _( "Reference" ), GetRef( currentSheet ) ) );
+        aList.emplace_back( _( "Reference" ), GetRef( currentSheet ) );
 
-        aList.push_back( MSG_PANEL_ITEM( _( "Value" ), GetValue( currentSheet, true ) ) );
-        aList.push_back( MSG_PANEL_ITEM( _( "Name" ), GetLibId().GetLibItemName() ) );
+        aList.emplace_back( _( "Value" ), GetValue( currentSheet, true ) );
+        aList.emplace_back( _( "Name" ), GetLibId().GetLibItemName() );
 
         wxString libNickname = GetLibId().GetLibNickname();
 
         if( libNickname.empty() )
-        {
-            aList.push_back( MSG_PANEL_ITEM( _( "Library" ), _( "No library defined!" ) ) );
-        }
+            msg = _( "No library defined!" );
         else
-        {
             msg.Printf( _( "Symbol not found in %s!" ), libNickname );
-            aList.push_back( MSG_PANEL_ITEM( _( "Library" ), msg ) );
-        }
+
+        aList.emplace_back( _( "Library" ), msg );
     }
 }
 

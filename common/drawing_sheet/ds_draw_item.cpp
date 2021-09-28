@@ -111,24 +111,23 @@ void DS_DRAW_ITEM_BASE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame,
     switch( dataItem->GetType() )
     {
     case DS_DATA_ITEM::DS_SEGMENT:
-        aList.push_back( MSG_PANEL_ITEM( _( "Line" ), msg ) );
+        aList.emplace_back( _( "Line" ), wxEmptyString );
         break;
 
     case DS_DATA_ITEM::DS_RECT:
-        aList.push_back( MSG_PANEL_ITEM( _( "Rectangle" ), msg ) );
+        aList.emplace_back( _( "Rectangle" ), wxEmptyString );
         break;
 
     case DS_DATA_ITEM::DS_TEXT:
-        msg = static_cast<DS_DRAW_ITEM_TEXT*>( this )->GetShownText();
-        aList.push_back( MSG_PANEL_ITEM( _( "Text" ), msg ) );
+        aList.emplace_back( _( "Text" ), static_cast<DS_DRAW_ITEM_TEXT*>( this )->GetShownText() );
         break;
 
     case DS_DATA_ITEM::DS_POLYPOLYGON:
-        aList.push_back( MSG_PANEL_ITEM( _( "Imported Shape" ), msg ) );
+        aList.emplace_back( _( "Imported Shape" ), wxEmptyString );
         break;
 
     case DS_DATA_ITEM::DS_BITMAP:
-        aList.push_back( MSG_PANEL_ITEM( _( "Image" ), msg ) );
+        aList.emplace_back( _( "Image" ), wxEmptyString );
         break;
     }
 
@@ -139,21 +138,21 @@ void DS_DRAW_ITEM_BASE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame,
     default:               msg = _( "All Pages" );        break;
     }
 
-    aList.push_back( MSG_PANEL_ITEM( _( "First Page Option" ), msg ) );
+    aList.emplace_back( _( "First Page Option" ), msg );
 
     msg = MessageTextFromValue( EDA_UNITS::UNSCALED, dataItem->m_RepeatCount );
-    aList.push_back( MSG_PANEL_ITEM( _( "Repeat Count" ), msg ) );
+    aList.emplace_back( _( "Repeat Count" ), msg );
 
     msg = MessageTextFromValue( EDA_UNITS::UNSCALED, dataItem->m_IncrementLabel );
-    aList.push_back( MSG_PANEL_ITEM( _( "Repeat Label Increment" ), msg ) );
+    aList.emplace_back( _( "Repeat Label Increment" ), msg );
 
     msg.Printf( wxT( "(%s, %s)" ),
                 MessageTextFromValue( aFrame->GetUserUnits(), dataItem->m_IncrementVector.x ),
                 MessageTextFromValue( aFrame->GetUserUnits(), dataItem->m_IncrementVector.y ) );
 
-    aList.push_back( MSG_PANEL_ITEM( _( "Repeat Position Increment" ), msg ) );
+    aList.emplace_back( _( "Repeat Position Increment" ), msg );
 
-    aList.push_back( MSG_PANEL_ITEM( _( "Comment" ), dataItem->m_Info ) );
+    aList.emplace_back( _( "Comment" ), dataItem->m_Info );
 }
 
 

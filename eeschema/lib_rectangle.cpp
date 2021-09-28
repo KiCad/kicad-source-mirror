@@ -185,9 +185,7 @@ void LIB_RECTANGLE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PAN
 {
     LIB_ITEM::GetMsgPanelInfo( aFrame, aList );
 
-    wxString msg = MessageTextFromValue( aFrame->GetUserUnits(), m_Width );
-
-    aList.push_back( MSG_PANEL_ITEM( _( "Line Width" ), msg ) );
+    aList.emplace_back( _( "Line Width" ), MessageTextFromValue( aFrame->GetUserUnits(), m_Width ) );
 }
 
 

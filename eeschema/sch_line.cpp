@@ -881,14 +881,14 @@ void SCH_LINE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_IT
     default:         msg = _( "Graphical" ); break;
     }
 
-    aList.push_back( MSG_PANEL_ITEM( _( "Line Type" ), msg ) );
+    aList.emplace_back( _( "Line Type" ), msg );
 
     if( GetLineStyle() != GetEffectiveLineStyle() )
         msg = _( "from netclass" );
     else
         msg = GetLineStyleName( GetLineStyle() );
 
-    aList.push_back( MSG_PANEL_ITEM( _( "Line Style" ), msg ) );
+    aList.emplace_back( _( "Line Style" ), msg );
 
     SCH_CONNECTION* conn = dynamic_cast<SCH_EDIT_FRAME*>( aFrame ) ? Connection() : nullptr;
 
@@ -905,7 +905,7 @@ void SCH_LINE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_IT
             if( netSettings.m_NetClassAssignments.count( netname ) )
                 netclassName = netSettings.m_NetClassAssignments[ netname ];
 
-            aList.push_back( MSG_PANEL_ITEM( _( "Assigned Netclass" ), netclassName ) );
+            aList.emplace_back( _( "Assigned Netclass" ), netclassName );
         }
     }
 }

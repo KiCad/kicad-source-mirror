@@ -181,14 +181,14 @@ void SCH_PIN::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITE
 {
     wxString msg;
 
-    aList.push_back( MSG_PANEL_ITEM( _( "Type" ), _( "Pin" ) ) );
+    aList.emplace_back( _( "Type" ), _( "Pin" ) );
 
     if( m_libPin->GetUnit() == 0 )
         msg = _( "All" );
     else
         msg.Printf( wxT( "%d" ), m_libPin->GetUnit() );
 
-    aList.push_back( MSG_PANEL_ITEM( _( "Unit" ), msg ) );
+    aList.emplace_back( _( "Unit" ), msg );
 
     if( m_libPin->GetConvert() == LIB_ITEM::LIB_CONVERT::BASE )
         msg = _( "no" );
@@ -197,24 +197,19 @@ void SCH_PIN::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITE
     else
         msg = wxT( "?" );
 
-    aList.push_back( MSG_PANEL_ITEM( _( "Converted" ), msg ) );
+    aList.emplace_back( _( "Converted" ), msg );
 
-    aList.push_back( MSG_PANEL_ITEM( _( "Name" ), GetShownName() ) );
-    aList.push_back( MSG_PANEL_ITEM( _( "Number" ), GetShownNumber() ) );
-    aList.push_back( MSG_PANEL_ITEM( _( "Type" ), ElectricalPinTypeGetText( GetType() ) ) );
+    aList.emplace_back( _( "Name" ), GetShownName() );
+    aList.emplace_back( _( "Number" ), GetShownNumber() );
+    aList.emplace_back( _( "Type" ), ElectricalPinTypeGetText( GetType() ) );
+    aList.emplace_back( _( "Style" ), PinShapeGetText( GetShape() ) );
 
-    msg = PinShapeGetText( GetShape() );
-    aList.push_back( MSG_PANEL_ITEM( _( "Style" ), msg ) );
+    aList.emplace_back( _( "Visible" ), IsVisible() ? _( "Yes" ) : _( "No" ) );
 
-    msg = IsVisible() ? _( "Yes" ) : _( "No" );
-    aList.push_back( MSG_PANEL_ITEM( _( "Visible" ), msg ) );
+    aList.emplace_back( _( "Length" ), StringFromValue( aFrame->GetUserUnits(), GetLength() ) );
 
-    // Display pin length
-    msg = StringFromValue( aFrame->GetUserUnits(), GetLength() );
-    aList.push_back( MSG_PANEL_ITEM( _( "Length" ), msg ) );
-
-    msg = PinOrientationName( (unsigned) PinOrientationIndex( GetOrientation() ) );
-    aList.push_back( MSG_PANEL_ITEM( _( "Orientation" ), msg ) );
+    int i = PinOrientationIndex( GetOrientation() );
+    aList.emplace_back( _( "Orientation" ), PinOrientationName( (unsigned) i ) );
 
     SCH_EDIT_FRAME* schframe = dynamic_cast<SCH_EDIT_FRAME*>( aFrame );
     SCH_SHEET_PATH* currentSheet = schframe ? &schframe->GetCurrentSheet() : nullptr;
@@ -223,17 +218,13 @@ void SCH_PIN::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITE
     aList.emplace_back( symbol->GetRef( currentSheet ), symbol->GetValue( currentSheet, true ) );
 
 #if defined(DEBUG)
+    if( dynamic_cast<SCH_EDIT_FRAME*>( aFrame ) )
+    {
+        SCH_CONNECTION* conn = Connection();
 
-    SCH_EDIT_FRAME* frame = dynamic_cast<SCH_EDIT_FRAME*>( aFrame );
-
-    if( !frame )
-        return;
-
-    SCH_CONNECTION* conn = Connection();
-
-    if( conn )
-        conn->AppendInfoToMsgPanel( aList );
-
+        if( conn )
+            conn->AppendInfoToMsgPanel( aList );
+    }
 #endif
 
 }

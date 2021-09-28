@@ -51,14 +51,14 @@ void LIB_ITEM::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_IT
 {
     wxString msg;
 
-    aList.push_back( MSG_PANEL_ITEM( _( "Type" ), GetTypeName() ) );
+    aList.emplace_back( _( "Type" ), GetTypeName() );
 
     if( m_unit == 0 )
         msg = _( "All" );
     else
         msg.Printf( wxT( "%d" ), m_unit );
 
-    aList.push_back( MSG_PANEL_ITEM( _( "Unit" ), msg ) );
+    aList.emplace_back( _( "Unit" ), msg );
 
     if( m_convert == LIB_ITEM::LIB_CONVERT::BASE )
         msg = _( "no" );
@@ -67,7 +67,7 @@ void LIB_ITEM::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_IT
     else
         msg = wxT( "?" );
 
-    aList.push_back( MSG_PANEL_ITEM( _( "Converted" ), msg ) );
+    aList.emplace_back( _( "Converted" ), msg );
 }
 
 

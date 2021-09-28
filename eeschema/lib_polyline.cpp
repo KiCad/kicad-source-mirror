@@ -330,19 +330,17 @@ void LIB_POLYLINE::DeleteSegment( const wxPoint aPosition )
 
 void LIB_POLYLINE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList )
 {
-    wxString msg;
     EDA_RECT bBox = GetBoundingBox();
 
     LIB_ITEM::GetMsgPanelInfo( aFrame, aList );
 
-    msg = MessageTextFromValue( aFrame->GetUserUnits(), m_Width );
+    aList.emplace_back( _( "Line Width" ), MessageTextFromValue( aFrame->GetUserUnits(), m_Width ) );
 
-    aList.push_back( MSG_PANEL_ITEM( _( "Line Width" ), msg ) );
-
-    msg.Printf( wxT( "(%d, %d, %d, %d)" ), bBox.GetOrigin().x,
-                bBox.GetOrigin().y, bBox.GetEnd().x, bBox.GetEnd().y );
-
-    aList.push_back( MSG_PANEL_ITEM( _( "Bounding Box" ), msg ) );
+    aList.emplace_back( _( "Bounding Box" ), wxString::Format( wxT( "(%d, %d, %d, %d)" ),
+                                                               bBox.GetOrigin().x,
+                                                               bBox.GetOrigin().y,
+                                                               bBox.GetEnd().x,
+                                                               bBox.GetEnd().y ) );
 }
 
 

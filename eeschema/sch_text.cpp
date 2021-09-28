@@ -750,14 +750,11 @@ void SCH_TEXT::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_IT
     }
 
     // Don't use GetShownText() here; we want to show the user the variable references
-    aList.push_back( MSG_PANEL_ITEM( msg, UnescapeString( GetText() ) ) );
+    aList.emplace_back( msg, UnescapeString( GetText() ) );
 
     // Display electrical type if it is relevant
     if( Type() == SCH_GLOBAL_LABEL_T || Type() == SCH_HIER_LABEL_T || Type() == SCH_SHEET_PIN_T )
-    {
-        msg = getElectricalTypeLabel( GetShape() );
-        aList.push_back( MSG_PANEL_ITEM( _( "Type" ), msg ) );
-    }
+        aList.emplace_back( _( "Type" ), getElectricalTypeLabel( GetShape() ) );
 
     wxString textStyle[] = { _( "Normal" ), _( "Italic" ), _( "Bold" ), _( "Bold Italic" ) };
     int style = 0;
@@ -768,11 +765,10 @@ void SCH_TEXT::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_IT
     if( IsBold() )
         style += 2;
 
-    aList.push_back( MSG_PANEL_ITEM( _( "Style" ), textStyle[style] ) );
+    aList.emplace_back( _( "Style" ), textStyle[style] );
 
-    // Display text size (X or Y value, with are the same value in Eeschema)
-    msg = MessageTextFromValue( aFrame->GetUserUnits(), GetTextWidth() );
-    aList.push_back( MSG_PANEL_ITEM( _( "Text Size" ), msg ) );
+    aList.emplace_back( _( "Text Size" ), MessageTextFromValue( aFrame->GetUserUnits(),
+                                                                GetTextWidth() ) );
 
     switch( GetLabelSpinStyle() )
     {
@@ -783,7 +779,7 @@ void SCH_TEXT::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_IT
     default:                       msg = wxT( "???" );         break;
     }
 
-    aList.push_back( MSG_PANEL_ITEM( _( "Justification" ), msg ) );
+    aList.emplace_back( _( "Justification" ), msg );
 
     SCH_CONNECTION* conn = dynamic_cast<SCH_EDIT_FRAME*>( aFrame ) ? Connection() : nullptr;
 
@@ -799,7 +795,7 @@ void SCH_TEXT::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_IT
             if( netSettings.m_NetClassAssignments.count( netname ) )
             {
                 const wxString& netclassName = netSettings.m_NetClassAssignments[ netname ];
-                aList.push_back( MSG_PANEL_ITEM( _( "Assigned Netclass" ), netclassName ) );
+                aList.emplace_back( _( "Assigned Netclass" ), netclassName );
             }
         }
     }

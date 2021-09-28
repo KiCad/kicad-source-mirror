@@ -490,7 +490,7 @@ void SCH_BUS_ENTRY_BASE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame,
     case LAYER_BUS:  msg = _( "Bus" );  break;
     }
 
-    aList.push_back( MSG_PANEL_ITEM( _( "Bus Entry Type" ), msg ) );
+    aList.emplace_back( _( "Bus Entry Type" ), msg );
 
     SCH_CONNECTION* conn = dynamic_cast<SCH_EDIT_FRAME*>( aFrame ) ? Connection() : nullptr;
 
@@ -507,7 +507,7 @@ void SCH_BUS_ENTRY_BASE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame,
             if( netSettings.m_NetClassAssignments.count( netname ) )
                 netclassName = netSettings.m_NetClassAssignments[ netname ];
 
-            aList.push_back( MSG_PANEL_ITEM( _( "Assigned Netclass" ), netclassName ) );
+            aList.emplace_back( _( "Assigned Netclass" ), netclassName );
         }
     }
 }
