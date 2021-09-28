@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-09-27 08:33-0700\n"
-"PO-Revision-Date: 2021-09-24 19:44+0000\n"
+"PO-Revision-Date: 2021-09-29 17:58+0000\n"
 "Last-Translator: Wellington Terumi Uemura <wellingtonuemura@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "kicad/master-source/pt_BR/>\n"
@@ -1616,9 +1616,8 @@ msgid "The official KiCad website - "
 msgstr "Site oficial do KiCad - "
 
 #: common/dialog_about/AboutDialog_main.cpp:144
-#, fuzzy
 msgid "Developer website - "
-msgstr "Site de desenvolvimento no Launchpad - "
+msgstr "Site do desenvolvedor - "
 
 #: common/dialog_about/AboutDialog_main.cpp:149
 msgid "Official KiCad library repositories - "
@@ -1697,9 +1696,8 @@ msgstr "Sobre"
 #: common/dialog_about/dialog_about.cpp:123
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:84
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:81
-#, fuzzy
 msgid "Version"
-msgstr "Informações da Versão"
+msgstr "Versão"
 
 #: common/dialog_about/dialog_about.cpp:125
 msgid "Developers"
@@ -1710,9 +1708,8 @@ msgid "Doc Writers"
 msgstr "Documentação"
 
 #: common/dialog_about/dialog_about.cpp:130
-#, fuzzy
 msgid "Librarians"
-msgstr "Bibliotecas"
+msgstr "Bibliotecários"
 
 #: common/dialog_about/dialog_about.cpp:133
 msgid "Artists"
