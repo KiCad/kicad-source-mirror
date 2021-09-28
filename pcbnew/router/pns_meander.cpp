@@ -71,6 +71,25 @@ void MEANDERED_LINE::MeanderSegment( const SEG& aBase, bool aSide, int aBaseInde
         bool fail = false;
         double remaining = base_len - ( m_last - aBase.A ).EuclideanNorm();
 
+        auto addSingleIfFits = [&]()
+                               {
+                                   fail = true;
+
+                                   for( int i = 0; i < 2; i++ )
+                                   {
+                                       bool checkSide = ( i == 0 ) ? side : !side;
+
+                                       if( m.Fit( MT_SINGLE, aBase, m_last, checkSide ) )
+                                       {
+                                           AddMeander( new MEANDER_SHAPE( m ) );
+                                           fail = false;
+                                           started = false;
+                                           side = !checkSide;
+                                           break;
+                                       }
+                                   }
+                               };
+
         if( remaining < Settings( ).m_step )
             break;
 
@@ -93,23 +112,7 @@ void MEANDERED_LINE::MeanderSegment( const SEG& aBase, bool aSide, int aBaseInde
                 }
 
                 if( !turning )
-                {
-                    fail = true;
-
-                    for( int i = 0; i < 2; i++ )
-                    {
-                        bool checkSide = ( i == 0 ) ? side : !side;
-
-                        if( m.Fit( MT_SINGLE, aBase, m_last, checkSide ) )
-                        {
-                            AddMeander( new MEANDER_SHAPE( m ) );
-                            fail = false;
-                            started = false;
-                            side = !checkSide;
-                            break;
-                        }
-                    }
-                }
+                    addSingleIfFits();
             }
             else
             {
@@ -141,6 +144,10 @@ void MEANDERED_LINE::MeanderSegment( const SEG& aBase, bool aSide, int aBaseInde
 
             break;
 
+        }
+        else if( !turning && remaining > thr * 2.0 )
+        {
+            addSingleIfFits();
         }
         else
         {
