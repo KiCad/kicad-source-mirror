@@ -6,10 +6,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-09-27 08:33-0700\n"
-"PO-Revision-Date: 2021-09-22 15:26+0000\n"
+"PO-Revision-Date: 2021-09-29 17:58+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
-"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/master-"
-"source/pl/>\n"
+"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/"
+"master-source/pl/>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -4079,7 +4079,6 @@ msgid "Pad"
 msgstr "Pole lutownicze"
 
 #: common/eda_item.cpp:254 common/eda_item.cpp:257
-#, fuzzy
 msgid "Graphic"
 msgstr "Grafika"
 
@@ -4115,12 +4114,10 @@ msgid "Target"
 msgstr "Cel"
 
 #: common/eda_item.cpp:268
-#, fuzzy
 msgid "ItemList"
 msgstr "Lista elementów"
 
 #: common/eda_item.cpp:269
-#, fuzzy
 msgid "NetInfo"
 msgstr "Informacja o sieci"
 
@@ -4604,11 +4601,9 @@ msgid "Unable to find a PDF viewer for '%s'."
 msgstr "Nie można odnaleźć przeglądarki PDF dla '%s'."
 
 #: common/gestfich.cpp:196
-#, fuzzy, c-format
+#, c-format
 msgid "Problem while running the PDF viewer '%s'."
-msgstr ""
-"Wystąpił problem przy uruchomieniu przeglądarki PDF.\n"
-"Polecenie '%s'."
+msgstr "Wystąpił problem przy uruchomieniu przeglądarki PDF '%s'."
 
 #: common/gestfich.cpp:299
 #, c-format
@@ -8516,9 +8511,8 @@ msgid "Electrical Rules Checker"
 msgstr "Sprawdzanie poprawności elektrycznej (ERC)"
 
 #: eeschema/dialogs/dialog_field_properties.cpp:131
-#, fuzzy
 msgid "Power symbol value field text cannot be changed."
-msgstr "(Wartość portu zasilania nie może być modyfikowana.)"
+msgstr "Wartość portu zasilania nie może być zmieniana."
 
 #: eeschema/dialogs/dialog_field_properties.cpp:246
 msgid "Illegal reference designator value!"
@@ -8529,9 +8523,10 @@ msgid "Value may not be empty."
 msgstr "Wartość zmiennej nie może być pusta."
 
 #: eeschema/dialogs/dialog_field_properties.cpp:340
-#, fuzzy
 msgid "Sheet filename can only be modified in Sheet Properties dialog."
-msgstr "Ponownie wypełnij strefy po zamknięciu okna dialogowego"
+msgstr ""
+"Nazwę pliku arkusza można zmienić tylko w oknie dialogowym Właściwości "
+"arkusza."
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:31
 msgid "Other symbol fields"
@@ -9340,7 +9335,7 @@ msgstr "Tekst:"
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:72
 #, c-format
 msgid "(%s)"
-msgstr ""
+msgstr "(%s)"
 
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:93
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:233
@@ -12974,15 +12969,13 @@ msgstr "Nie"
 
 #: eeschema/lib_field.cpp:447 eeschema/lib_text.cpp:364
 #: eeschema/sch_field.cpp:505
-#, fuzzy
 msgid "H Justification"
-msgstr "Wyrównanie"
+msgstr "Wyrównanie w poziomie"
 
 #: eeschema/lib_field.cpp:456 eeschema/lib_text.cpp:373
 #: eeschema/sch_field.cpp:514
-#, fuzzy
 msgid "V Justification"
-msgstr "Wyrównanie"
+msgstr "Wyrównanie w pionie"
 
 #: eeschema/lib_item.cpp:54 eeschema/lib_pin.cpp:1041 eeschema/sch_pin.cpp:184
 #: eeschema/sch_pin.cpp:204 eeschema/sch_text.cpp:759
@@ -23985,9 +23978,8 @@ msgstr "Cechy fabrykacji"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:272
 #: pcbnew/footprint_libraries_utils.cpp:1130
-#, fuzzy
 msgid "Footprint type:"
-msgstr "Nazwa footprintu:"
+msgstr "Typ footprintu:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:276
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:179
@@ -27240,28 +27232,24 @@ msgid "Clearance Outlines"
 msgstr "Obrysy prześwitu"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:59
-#, fuzzy
 msgid "Show when routing"
-msgstr "Pokaż w trakcie tworzenia ścieżek"
+msgstr "Pokaż w trakcie trasowania"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:59
-#, fuzzy
 msgid "Show when routing w/ via clearance at end"
-msgstr "Pokaż z przelotką na końcu"
+msgstr "Pokaż podczas trasowania przelotką na końcu"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:59
-#, fuzzy
 msgid "Show when routing and editing"
-msgstr "Pokaż w trakcie tworzenia i edycji ścieżek"
+msgstr "Pokaż w trakcie trasowania i edycji ścieżek"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:59
 msgid "Show always"
 msgstr "Pokazuj zawsze"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:61
-#, fuzzy
 msgid "Track && Via Clearances"
-msgstr "Prześwit ścieżki"
+msgstr "Prześwity ścieżek i przelotek"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:63
 msgid ""
@@ -27277,7 +27265,6 @@ msgid "Show pad clearance"
 msgstr "Pokaż prześwit pola lutowniczego"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:76
-#, fuzzy
 msgid "Scroll cross-probed items into view"
 msgstr "Skoncentruj widok na elementach poddawanych próbie"
 
@@ -29455,7 +29442,7 @@ msgstr "Zbyt długa para różnicowa"
 
 #: pcbnew/drc/drc_item.cpp:206
 msgid "Footprint type doesn't match footprint pads"
-msgstr ""
+msgstr "Typ footprintu nie odpowiada polom footprintu"
 
 #: pcbnew/drc/drc_item.cpp:327
 #, c-format
@@ -30188,19 +30175,20 @@ msgid "Footprint %s"
 msgstr "Footprint %s"
 
 #: pcbnew/footprint.cpp:2091
-#, fuzzy, c-format
+#, c-format
 msgid "Expected \"Through hole\" type but set to \"%s\""
-msgstr "Pole lutownicze z otworem na wylot %s z %s"
+msgstr ""
+"Spodziewano typu \"Pole lutownicze z otworem na wylot\" ale ustawiono \"%s\""
 
 #: pcbnew/footprint.cpp:2095
 #, c-format
 msgid "Expected \"SMD\" type but set to \"%s\""
-msgstr ""
+msgstr "Spodziewano typu \"Pole lutownicze SMD\" ale ustawiono \"%s\""
 
 #: pcbnew/footprint.cpp:2099
 #, c-format
 msgid "Expected \"Other\" type but set to \"%s\""
-msgstr ""
+msgstr "Spodziewano typu \"Inny typ pola lutowniczego\" ale ustawiono \"%s\""
 
 #: pcbnew/footprint.cpp:2203 pcbnew/pad.cpp:1542 pcbnew/zone.cpp:1416
 msgid "Clearance Override"
@@ -34027,9 +34015,8 @@ msgid "Thickness (mm)"
 msgstr "Grubość (w mm)"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:275
-#, fuzzy
 msgid "Thickness (inches)"
-msgstr "Grubość (w milsach)"
+msgstr "Grubość (w calach)"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:278
 msgid "Thickness (mils)"
@@ -34040,9 +34027,8 @@ msgid "Loss Tangent"
 msgstr "Tangens strat"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:314
-#, fuzzy
 msgid "Dielectric"
-msgstr "Dielektryk %d"
+msgstr "Dielektryk"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:366
 msgid "Insert board stackup table"
@@ -34089,12 +34075,10 @@ msgid "Plated Board Edge: "
 msgstr "Pokrycie brzegu płytki: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:511
-#, fuzzy
 msgid "Edge card connectors: "
-msgstr "Złącza krawędziowe:"
+msgstr "Złącza krawędziowe: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:519
-#, fuzzy
 msgid "Yes, Bevelled"
 msgstr "Tak, fazowane"
 
