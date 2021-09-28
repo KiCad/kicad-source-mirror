@@ -4,10 +4,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-09-27 08:33-0700\n"
-"PO-Revision-Date: 2021-09-27 15:33+0000\n"
+"PO-Revision-Date: 2021-09-29 17:58+0000\n"
 "Last-Translator: Arnau Llovet Vidal <arnaullv@gmail.com>\n"
-"Language-Team: Catalan <https://hosted.weblate.org/projects/kicad/master-"
-"source/ca/>\n"
+"Language-Team: Catalan <https://hosted.weblate.org/projects/kicad/"
+"master-source/ca/>\n"
 "Language: ca\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -4098,9 +4098,8 @@ msgid "Pad"
 msgstr "Pad"
 
 #: common/eda_item.cpp:254 common/eda_item.cpp:257
-#, fuzzy
 msgid "Graphic"
-msgstr "Importa formes"
+msgstr "Gràfic"
 
 #: common/eda_item.cpp:258 common/eda_item.cpp:267
 #: pcbnew/tools/board_inspection_tool.cpp:381
@@ -4134,12 +4133,10 @@ msgid "Target"
 msgstr "Objectiu"
 
 #: common/eda_item.cpp:268
-#, fuzzy
 msgid "ItemList"
 msgstr "Llista d'elements"
 
 #: common/eda_item.cpp:269
-#, fuzzy
 msgid "NetInfo"
 msgstr "Informació de xarxa"
 
@@ -4426,27 +4423,20 @@ msgid "Vertical Justification"
 msgstr "Justificat vertical"
 
 #: common/env_vars.cpp:71
-#, fuzzy
 msgid ""
 "The base path of locally installed system footprint libraries (.pretty "
 "folders)."
 msgstr ""
-"<b>KISYSMOD</b> és el camí base de les biblioteques d'empremtes del sistema "
-"instal·lades localment (carpetes .pretty)."
+"El camí base de les biblioteques d'empremtes instal·lades localment ("
+"carpetes .pretty)."
 
 #: common/env_vars.cpp:74
-#, fuzzy
 msgid "The base path of system footprint 3D shapes (.3Dshapes folders)."
-msgstr ""
-"<b>KISYS3DMOD</b> és el camí base de les formes 3D del sistema empremtes "
-"(carpetes .3Dshapes)."
+msgstr "El camí base del sistema dels models 3D (carpetes .3Dshapes)."
 
 #: common/env_vars.cpp:76
-#, fuzzy
 msgid "The base path of the locally installed symbol libraries."
-msgstr ""
-"<b>KISYSMOD</b> és el camí base de les biblioteques d'empremtes del sistema "
-"instal·lades localment (carpetes .pretty)."
+msgstr "El camí base de les biblioteques d'empremtes instal·lades localment."
 
 #: common/env_vars.cpp:78
 msgid "A directory containing project templates installed with KiCad."
@@ -4454,13 +4444,12 @@ msgstr ""
 "La carpeta que conté les plantilles de projecte instal·lades per KiCad."
 
 #: common/env_vars.cpp:80
-#, fuzzy
 msgid ""
 "Optional. Can be defined if you want to create your own project templates "
 "folder."
 msgstr ""
-"<b>KICAD_PTEMPLATES</b> iés opcional i es pot utilitzar si voleu crear la "
-"vostra pròpia carpeta de plantilles de projectes."
+"Opcional. Pot definir-se si es vol crear una carpeta personal amb plantilles "
+"de projectes."
 
 #: common/env_vars.cpp:83
 msgid ""
@@ -4627,11 +4616,9 @@ msgid "Unable to find a PDF viewer for '%s'."
 msgstr "No es pot trobar un visualitzador PDF per '%s'."
 
 #: common/gestfich.cpp:196
-#, fuzzy, c-format
+#, c-format
 msgid "Problem while running the PDF viewer '%s'."
-msgstr ""
-"S'ha trobat un problema en executar el visor de PDFs.\n"
-"L'ordre és '%s'."
+msgstr "S'ha trobat un problema en executar el visor de PDFs '%s'."
 
 #: common/gestfich.cpp:299
 #, c-format
@@ -4657,9 +4644,10 @@ msgid "Cut"
 msgstr "Retalla"
 
 #: common/grid_tricks.cpp:278
-#, fuzzy
 msgid "Clear selected cells placing original contents on clipboard"
-msgstr "Copia les cel·les seleccionades al porta-retalls"
+msgstr ""
+"Neteja les cel·les seleccionades copiant el contingut original al porta-"
+"retalls"
 
 #: common/grid_tricks.cpp:279 common/tool/actions.cpp:159
 #: eeschema/tools/ee_actions.cpp:153
@@ -4786,6 +4774,9 @@ msgid ""
 "'%s'\n"
 "could not be loaded\n"
 msgstr ""
+"Error d'instal·lació fatal. El fitxer:\n"
+"'%s'\n"
+"no s'ha pogut carregar\n"
 
 #: common/kiway.cpp:301
 msgid "It is missing.\n"
@@ -5260,9 +5251,8 @@ msgid "Through vias"
 msgstr "Vies passants"
 
 #: common/layer_id.cpp:154
-#, fuzzy
 msgid "Bl/Buried vias"
-msgstr "Via cega o enterrada"
+msgstr "Vies cegues/enterrades"
 
 #: common/layer_id.cpp:155
 msgid "Micro-vias"
@@ -5295,38 +5285,32 @@ msgid "Ratsnest"
 msgstr "Embolic"
 
 #: common/layer_id.cpp:162
-#, fuzzy
 msgid "No-connects"
-msgstr "No connexions"
+msgstr "Sense connexions"
 
 #: common/layer_id.cpp:163
-#, fuzzy
 msgid "DRC warnings"
-msgstr "Advertències"
+msgstr "Advertències de DRC"
 
 #: common/layer_id.cpp:164
-#, fuzzy
 msgid "DRC errors"
-msgstr "Errors"
+msgstr "Errors de DRC"
 
 #: common/layer_id.cpp:165
-#, fuzzy
 msgid "DRC exclusions"
-msgstr "Elimina les seleccions"
+msgstr "Exclusions DRC"
 
 #: common/layer_id.cpp:166
-#, fuzzy
 msgid "DRC marker shadows"
-msgstr "Renderitza les ombres"
+msgstr "Ombres dels marcadors DRC"
 
 #: common/layer_id.cpp:167 pcbnew/widgets/appearance_controls.cpp:354
 msgid "Anchors"
 msgstr "Àncores"
 
 #: common/layer_id.cpp:172
-#, fuzzy
 msgid "Grid axes"
-msgstr "Ajusts"
+msgstr "Eixos de la quadrícula"
 
 #: common/lib_id.cpp:143
 msgid "Illegal character found in logical library name"
@@ -5359,11 +5343,11 @@ msgstr "Caràcter no reconegut: '%c'"
 
 #: common/libeval_compiler/libeval_compiler.cpp:827
 msgid "Unknown parent of function parameters"
-msgstr ""
+msgstr "Pare desconegut dels paràmetres de funció"
 
 #: common/libeval_compiler/libeval_compiler.cpp:846
 msgid "Unknown parent of property"
-msgstr ""
+msgstr "Pare desconegut de la propietat"
 
 #: common/libeval_compiler/libeval_compiler.cpp:869
 #: common/libeval_compiler/libeval_compiler.cpp:899
@@ -5377,7 +5361,7 @@ msgstr "Element no reconegut '%s'"
 #: common/libeval_compiler/libeval_compiler.cpp:978
 #, c-format
 msgid "Unrecognized property '%s'"
-msgstr ""
+msgstr "Propietat no reconeguda '%s'"
 
 #: common/libeval_compiler/libeval_compiler.cpp:912
 #, c-format
@@ -5385,19 +5369,19 @@ msgid "Unrecognized function '%s'"
 msgstr "Funció no reconeguda '%s'"
 
 #: common/libeval_compiler/libeval_compiler.cpp:1009
-#, fuzzy, c-format
+#, c-format
 msgid "Missing units for '%s'| (%s)"
-msgstr "Empremta %s en %s"
+msgstr "Falten les unitats de '%s'| (%s)"
 
 #: common/libeval_compiler/libeval_compiler.cpp:1126
 #, c-format
 msgid "Type mismatch between '%s' and %lf"
-msgstr ""
+msgstr "Error de tipus entre '%s' i %lf"
 
 #: common/libeval_compiler/libeval_compiler.cpp:1132
 #, c-format
 msgid "Type mismatch between %lf and '%s'"
-msgstr ""
+msgstr "Error de tipus entre %lf i '%s'"
 
 #: common/pgm_base.cpp:165
 msgid "No default editor found, you must choose one."
@@ -5412,28 +5396,29 @@ msgid "Select Preferred Editor"
 msgstr "Selecció de l'editor preferit"
 
 #: common/pgm_base.cpp:211
-#, fuzzy
 msgid "Environment variable HOME is empty.  Unable to continue."
-msgstr "El nom de la variable d'entorn no pot estar en blanc."
+msgstr "La variable d'entorn HOME no pot estar en blanc.  No es pot continuar."
 
 #: common/pgm_base.cpp:422
 msgid "This language is not supported by the operating system."
-msgstr ""
+msgstr "Aquest idioma no està suportat pel sistema operatiu."
 
 #: common/pgm_base.cpp:473 common/pgm_base.cpp:511
 msgid "The KiCad language file for this language is not installed."
-msgstr ""
+msgstr "El fitxer d'idioma de KiCad per aquest idioma no està instal·lat."
 
 #: common/plugins/altium/altium_parser.cpp:116
 msgid ""
 "Missing null byte at end of property list. Imported data might be malformed "
 "or missing."
 msgstr ""
+"Falta el byte nul al final de la llista de propietats. Les dades importades "
+"podrien estar mal formades o no estar presents."
 
 #: common/plugins/altium/altium_parser.cpp:247
 #, c-format
 msgid "Unit '%s' does not end with 'mil'."
-msgstr ""
+msgstr "La unitat '%s' no acaba en 'mil'."
 
 #: common/plugins/altium/altium_parser.cpp:255
 #, c-format
@@ -5448,7 +5433,7 @@ msgstr "No es pot obrir el fitxer '%s'"
 #: common/plugins/cadstar/cadstar_archive_parser.cpp:2349
 #: common/plugins/cadstar/cadstar_archive_parser.cpp:2648
 msgid "File import cancelled by user."
-msgstr ""
+msgstr "Importació del fitxer cancel·lada per l'usuari."
 
 #: common/plugins/cadstar/cadstar_archive_parser.cpp:2366
 #: common/plugins/cadstar/cadstar_archive_parser.cpp:2384
@@ -5456,32 +5441,34 @@ msgstr ""
 #: common/plugins/cadstar/cadstar_archive_parser.cpp:2406
 #: common/plugins/cadstar/cadstar_archive_parser.cpp:2412
 msgid "The selected file is not valid or might be corrupt!"
-msgstr ""
+msgstr "El fitxer seleccionat no és vàlid o podria estar corrupte!"
 
 #: common/plugins/cadstar/cadstar_archive_parser.cpp:2511
 #, c-format
 msgid "Unexpected number of points in '%s'. Found %d but expected %d."
 msgstr ""
+"S'ha trobat un nombre inesperat de punts a '%s'. Se n'han trobat %d però se "
+"n'esperaven %d."
 
 #: common/plugins/cadstar/cadstar_archive_parser.h:40
 #, c-format
 msgid "Missing node '%s' in '%s'"
-msgstr ""
+msgstr "Falta el node '%s' a '%s'"
 
 #: common/plugins/cadstar/cadstar_archive_parser.h:43
 #, c-format
 msgid "Unknown node '%s' in '%s'"
-msgstr ""
+msgstr "Node '%s' desconegut a '%s'"
 
 #: common/plugins/cadstar/cadstar_archive_parser.h:46
 #, c-format
 msgid "Missing Parameter '%s' in '%s'"
-msgstr ""
+msgstr "Falta el paràmetre '%s' a '%s'"
 
 #: common/plugins/cadstar/cadstar_archive_parser.h:49
 #, c-format
 msgid "Unknown Parameter '%s' in '%s'"
-msgstr ""
+msgstr "Paràmetre '%s' desconegut a '%s'"
 
 #: common/plugins/cadstar/cadstar_archive_parser.h:52
 #, c-format
@@ -5491,12 +5478,12 @@ msgstr "No es pot interpretar '%s' a '%s'"
 #: common/plugins/eagle/eagle_parser.cpp:120
 #, c-format
 msgid "Invalid size %lld: too large"
-msgstr ""
+msgstr "Mida no vàlida %lld: massa llarg"
 
 #: common/plugins/eagle/eagle_parser.cpp:281
 #, c-format
 msgid "Invalid Arc with radius %f and angle %f"
-msgstr ""
+msgstr "Arc invàlid amb radi %f i angle %f"
 
 #: common/project.cpp:310 common/project.cpp:315 pcbnew/pcb_base_frame.cpp:155
 #, fuzzy
@@ -5862,6 +5849,7 @@ msgstr "Exclou el marcador"
 #: common/tool/actions.cpp:259
 msgid "Mark current violation in Checker window as an exclusion"
 msgstr ""
+"Marca la infracció actual a la finestra de verificador com a una exclusió"
 
 #: common/tool/actions.cpp:270 kicad/pcm/dialogs/dialog_pcm_base.cpp:127
 msgid "Refresh"
@@ -5935,7 +5923,7 @@ msgstr "Clic"
 
 #: common/tool/actions.cpp:394
 msgid "Performs left mouse button click"
-msgstr ""
+msgstr "Executa clic del botó esquerre del ratolí"
 
 #: common/tool/actions.cpp:400
 msgid "Double-click"
@@ -5943,7 +5931,7 @@ msgstr "Doble clic"
 
 #: common/tool/actions.cpp:400
 msgid "Performs left mouse button double-click"
-msgstr ""
+msgstr "Executa doble clic del botó esquerre del ratolí"
 
 #: common/tool/actions.cpp:408
 msgid "Pin Library"
@@ -7499,14 +7487,12 @@ msgid "%s not found"
 msgstr "%s no trobat"
 
 #: eeschema/cross-probing.cpp:327
-#, fuzzy
 msgid "Selected net:"
-msgstr "Selecciona l'embolic"
+msgstr "Xarxa seleccionada:"
 
 #: eeschema/dialogs/dialog_annotate.cpp:87
-#, fuzzy
 msgid "Annotation Messages:"
-msgstr "Ordre d'anotació"
+msgstr "Missatges d'anotació:"
 
 #: eeschema/dialogs/dialog_annotate.cpp:92
 msgid "Annotate"
@@ -8653,10 +8639,9 @@ msgid "Electrical Rules Checker"
 msgstr "Comprovador de les regles elèctriques"
 
 #: eeschema/dialogs/dialog_field_properties.cpp:131
-#, fuzzy
 msgid "Power symbol value field text cannot be changed."
 msgstr ""
-"(No es pot modificar el text del camp del valor del símbol de l'alimentació.)"
+"El text del camp del valor del símbol de l'alimentació no es pot modificar."
 
 #: eeschema/dialogs/dialog_field_properties.cpp:246
 msgid "Illegal reference designator value!"
@@ -9486,7 +9471,7 @@ msgstr "Text:"
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:72
 #, fuzzy, c-format
 msgid "(%s)"
-msgstr " (%s):"
+msgstr "(%s):"
 
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:93
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:233
@@ -17868,9 +17853,9 @@ msgid "Cmp:"
 msgstr "Cmp:"
 
 #: gerbview/gerber_draw_item.cpp:1036
-#, fuzzy, c-format
+#, c-format
 msgid "%s (D%d) on layer %d: %s"
-msgstr "Via %s xarxa [%s] (%d) en les capes %s/%s"
+msgstr "%s (D%d) a la capa %d: %s"
 
 #: gerbview/gerber_file_image.cpp:340
 msgid "Image name"
@@ -18299,9 +18284,9 @@ msgid "Highlight Items of Component \"%s\""
 msgstr ""
 
 #: gerbview/tools/gerbview_selection_tool.cpp:78
-#, fuzzy, c-format
+#, c-format
 msgid "Highlight Items of Net \"%s\""
-msgstr "Ressalta la xarxa específica"
+msgstr "Remarca elements de la xarxa \"%s\""
 
 #: gerbview/tools/gerbview_selection_tool.cpp:88
 #, c-format
@@ -18309,9 +18294,9 @@ msgid "Highlight Aperture Type \"%s\""
 msgstr ""
 
 #: gerbview/tools/gerbview_selection_tool.cpp:96
-#, fuzzy, c-format
+#, c-format
 msgid "Highlight DCode D%d"
-msgstr "Ressalta la xarxa"
+msgstr "Realça DCode D%d"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:77
 #: gerbview/widgets/layer_widget.cpp:540
@@ -18628,9 +18613,9 @@ msgid "[no project loaded]"
 msgstr "No s'ha especificat cap empremta"
 
 #: kicad/kicad_manager_frame.cpp:690
-#, fuzzy, c-format
+#, c-format
 msgid "Project: %s"
-msgstr "Projecte nou"
+msgstr "Projecte: %s"
 
 #: kicad/kicad_manager_frame.cpp:734
 msgid "Restoring session"
@@ -18731,19 +18716,19 @@ msgid "Manage Repositores"
 msgstr ""
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:50
-#, fuzzy, c-format
+#, c-format
 msgid "Plugins (%d)"
-msgstr "Connectors"
+msgstr "Connectors (%d)"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:51
-#, fuzzy, c-format
+#, c-format
 msgid "Libraries (%d)"
-msgstr "Biblioteques"
+msgstr "Biblioteques (%d)"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:52
-#, fuzzy, c-format
+#, c-format
 msgid "Color themes (%d)"
-msgstr "Color"
+msgstr "Temes de color (%d)"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:79 kicad/pcm/dialogs/dialog_pcm.cpp:315
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:51
@@ -18992,11 +18977,9 @@ msgid "schema file '%s' not found"
 msgstr "No s'ha trobat el fitxer de recuperació «%s»."
 
 #: kicad/pcm/pcm.cpp:82
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading schema: %s"
-msgstr ""
-"S'ha produït un error en carregar el fitxer de l'esquemàtic «%s».\n"
-"%s"
+msgstr "S'ha produït un error en carregar l'esquemàtic: %s"
 
 #: kicad/pcm/pcm.cpp:108
 #, fuzzy, c-format
@@ -19106,11 +19089,13 @@ msgid "Downloading package url: '%s'"
 msgstr ""
 
 #: kicad/pcm/pcm_task_manager.cpp:170
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Failed to download url %s\n"
 "%s"
-msgstr "No s'ha pogut carregar «%s»"
+msgstr ""
+"No s'ha pogut descarregar l'url %s\n"
+"%s"
 
 #: kicad/pcm/pcm_task_manager.cpp:249
 msgid "Aborting package installation."
@@ -19142,9 +19127,9 @@ msgid ""
 msgstr ""
 
 #: kicad/pcm/pcm_task_manager.cpp:354
-#, fuzzy, c-format
+#, c-format
 msgid "Removing directory %s"
-msgstr "directori de configuració"
+msgstr "S'està traient la carpeta %s"
 
 #: kicad/pcm/pcm_task_manager.cpp:359
 #, fuzzy, c-format
@@ -21558,9 +21543,9 @@ msgid "Autoplacing components..."
 msgstr "Afegeix un component"
 
 #: pcbnew/autorouter/ar_autoplacer.cpp:940
-#, fuzzy, c-format
+#, c-format
 msgid "Autoplacing %s"
-msgstr "Posiciona automàticament els camps"
+msgstr "Auto-Emplaçament de %s"
 
 #: pcbnew/autorouter/autoplace_tool.cpp:68
 #, c-format
@@ -21690,9 +21675,9 @@ msgid "Locked"
 msgstr "Bloquejat"
 
 #: pcbnew/board_stackup_manager/board_stackup.cpp:307
-#, fuzzy, c-format
+#, c-format
 msgid "Dielectric %d"
-msgstr "Pèrdues del dielèctric"
+msgstr "Dielèctric %d"
 
 #: pcbnew/board_stackup_manager/board_stackup.cpp:528
 #, fuzzy
@@ -21807,14 +21792,14 @@ msgid "PrePreg"
 msgstr ""
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:188
-#, fuzzy, c-format
+#, c-format
 msgid "Enter board thickness in %s:"
-msgstr "gruix i amplada en mils"
+msgstr "Introdueix el gruix de la placa en %s:"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:193
-#, fuzzy, c-format
+#, c-format
 msgid "Enter expected board thickness (min value %s):"
-msgstr "gruix i amplada en mils"
+msgstr "Introdueix el gruix de la placa esperat (valor min %s):"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:197
 #, fuzzy
@@ -23939,19 +23924,19 @@ msgid "Tests Running..."
 msgstr "S'estan executant proves..."
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:105
-#, fuzzy, c-format
+#, c-format
 msgid "Violations (%d)"
-msgstr "Gir (graus)"
+msgstr "Infraccions (%d)"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:117
-#, fuzzy, c-format
+#, c-format
 msgid "Unconnected Items (%d)"
-msgstr "Ítems sense connectar"
+msgstr "Elements no connectats (%d)"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:129
-#, fuzzy, c-format
+#, c-format
 msgid "Schematic Parity (%d)"
-msgstr "Mida de l'esquemàtic"
+msgstr "Paritat de l'esquemàtic (%d)"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:192
 #: pcbnew/dialogs/dialog_footprint_checker_base.cpp:79
@@ -24114,9 +24099,9 @@ msgstr "Obre una empremta d'una biblioteca"
 
 #: pcbnew/dialogs/dialog_export_idf.cpp:161
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:120
-#, fuzzy, c-format
+#, c-format
 msgid "File %s already exists."
-msgstr "Aquest nom ja existeix i s'avorta"
+msgstr "El fitxer %s ja existeix."
 
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:21
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:22
@@ -34392,9 +34377,9 @@ msgid "Via: use netclass sizes"
 msgstr "Utilitza la mida de la classe de la xarxa"
 
 #: pcbnew/toolbars_pcb_editor.cpp:722
-#, fuzzy, c-format
+#, c-format
 msgid "Via: %s (%s)"
-msgstr "Valor %s de %s"
+msgstr "Via: %s (%s)"
 
 #: pcbnew/tools/board_editor_control.cpp:112
 msgid "Locking"
@@ -34440,9 +34425,8 @@ msgid "Path `%s` is read only."
 msgstr "La biblioteca «%s» només és de lectura"
 
 #: pcbnew/tools/board_editor_control.cpp:459
-#, fuzzy
 msgid "I/O Error"
-msgstr "Error"
+msgstr "Error d'E/S"
 
 #: pcbnew/tools/board_editor_control.cpp:547
 #, c-format
@@ -34459,12 +34443,11 @@ msgstr "%d ID duplicats substituïts.\n"
 #: pcbnew/tools/footprint_editor_control.cpp:579
 #, c-format
 msgid "%d potential problems repaired."
-msgstr ""
+msgstr "S'han reparat %d problemes potencials."
 
 #: pcbnew/tools/board_editor_control.cpp:626
-#, fuzzy
 msgid "No board problems found."
-msgstr "No hi ha en aquest moment cap placa editada"
+msgstr "No s'han trobat errors a la placa."
 
 #: pcbnew/tools/board_editor_control.cpp:637
 #, fuzzy
@@ -34498,14 +34481,13 @@ msgid "Duplicate zone"
 msgstr "Duplica la zona"
 
 #: pcbnew/tools/board_inspection_tool.cpp:59
-#, fuzzy
 msgid "Net Tools"
-msgstr "&Eines"
+msgstr "Eines de Xarxa"
 
 #: pcbnew/tools/board_inspection_tool.cpp:121
-#, fuzzy, c-format
+#, c-format
 msgid "[netclass %s]"
-msgstr "Utilitza els valors de la classe de xarxa"
+msgstr "[classe de xarxa %s]"
 
 #: pcbnew/tools/board_inspection_tool.cpp:132
 msgid "Report incomplete: could not compile custom design rules.  "
@@ -34561,9 +34543,8 @@ msgstr "Alleujament tèrmic"
 #: pcbnew/tools/board_inspection_tool.cpp:402
 #: pcbnew/tools/board_inspection_tool.cpp:421 pcbnew/zone.cpp:337
 #: pcbnew/zone.cpp:352 pcbnew/zone.cpp:500 pcbnew/zone.cpp:779
-#, fuzzy
 msgid "zone"
-msgstr "Afegeix zones"
+msgstr "zona"
 
 #: pcbnew/tools/board_inspection_tool.cpp:404
 #, c-format
@@ -34582,9 +34563,9 @@ msgstr ""
 
 #: pcbnew/tools/board_inspection_tool.cpp:434
 #: pcbnew/tools/board_inspection_tool.cpp:444
-#, fuzzy, c-format
+#, c-format
 msgid "Clearance: %s."
-msgstr "Marge de seguretat:"
+msgstr "Marge: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:469
 msgid "Items belong to the same net. Clearance is 0."
@@ -34614,9 +34595,8 @@ msgid "Select an item for a constraints resolution report."
 msgstr ""
 
 #: pcbnew/tools/board_inspection_tool.cpp:685
-#, fuzzy
 msgid "Constraints Report"
-msgstr "Informe de l'empremta"
+msgstr "Informe de restriccions"
 
 #: pcbnew/tools/board_inspection_tool.cpp:729
 #, fuzzy
@@ -34629,14 +34609,12 @@ msgid "Width constraints: min %s; opt %s; max %s."
 msgstr ""
 
 #: pcbnew/tools/board_inspection_tool.cpp:749
-#, fuzzy
 msgid "Via Diameter"
 msgstr "Diàmetre de la via"
 
 #: pcbnew/tools/board_inspection_tool.cpp:751
-#, fuzzy
 msgid "Via diameter resolution for:"
-msgstr "Diàmetre de la via:"
+msgstr "Resolució del diàmetre de la via per:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:762
 #, c-format
@@ -34673,9 +34651,8 @@ msgid "Hole constraint: min %s."
 msgstr ""
 
 #: pcbnew/tools/board_inspection_tool.cpp:816
-#, fuzzy
 msgid "Keepouts"
-msgstr "Prohibit el pas"
+msgstr "Àrees restringides"
 
 #: pcbnew/tools/board_inspection_tool.cpp:818
 #, fuzzy
@@ -34728,19 +34705,16 @@ msgid "Layer Name"
 msgstr "Nom de la taula"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:272
-#, fuzzy
 msgid "Thickness (mm)"
-msgstr "Gruix de la línia (mm)"
+msgstr "Grossor (mm)"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:275
-#, fuzzy
 msgid "Thickness (inches)"
-msgstr "Gruix de la línia (mm)"
+msgstr "Grossor (polzades)"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:278
-#, fuzzy
 msgid "Thickness (mils)"
-msgstr "Gruix de la línia (mm)"
+msgstr "Grossor (mils)"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:291
 #, fuzzy
@@ -34797,9 +34771,8 @@ msgid "Plated Board Edge: "
 msgstr "Vores de la placa amb bany: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:511
-#, fuzzy
 msgid "Edge card connectors: "
-msgstr "Connexió del pad:"
+msgstr "Connexió dels laterals de la targeta: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:519
 msgid "Yes, Bevelled"
