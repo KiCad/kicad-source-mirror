@@ -119,30 +119,8 @@ SCH_ITEM* SCH_EDITOR_CONTROL::FindSymbolAndItem( const wxString& aReference,
 
         if( crossProbingSettings.center_on_items )
         {
-            m_frame->FocusOnLocation( pos );
-
             if( crossProbingSettings.zoom_to_fit )
             {
-//#define COMP_1_TO_1_RATIO // Un-comment for normal KiCad full screen zoom cross-probe
-#ifdef COMP_1_TO_1_RATIO
-                // Pass "false" to only include visible fields of symbol in bbox calculations
-                EDA_RECT bbox       = symbol->GetBoundingBox( false );
-                wxSize   bbSize     = bbox.Inflate( bbox.GetWidth() * 0.2f ).GetSize();
-                VECTOR2D screenSize = getView()->GetViewport().GetSize();
-
-                // NOTE: The 1:1 here is using the default KiCad sizing, which adds a margin of 20%
-
-                screenSize.x = std::max( 10.0, screenSize.x );
-                screenSize.y = std::max( 10.0, screenSize.y );
-                double ratio = std::max(
-                        fabs( bbSize.x / screenSize.x ), fabs( bbSize.y / screenSize.y ) );
-
-                // Try not to zoom on every cross-probe; it gets very noisy
-                if( ratio < 0.5 || ratio > 1.0 )
-                    getView()->SetScale( getView()->GetScale() / ratio );
-#endif // COMP_1_TO_1_RATIO
-
-#ifndef COMP_1_TO_1_RATIO // Do the scaled zoom
                 EDA_RECT bbox       = symbol->GetBoundingBox();
                 wxSize   bbSize     = bbox.Inflate( bbox.GetWidth() * 0.2f ).GetSize();
                 VECTOR2D screenSize = getView()->GetViewport().GetSize();
@@ -247,8 +225,9 @@ SCH_ITEM* SCH_EDITOR_CONTROL::FindSymbolAndItem( const wxString& aReference,
                 // Try not to zoom on every cross-probe; it gets very noisy
                 if( ( ratio < 0.5 || ratio > 1.0 ) || alwaysZoom )
                     getView()->SetScale( getView()->GetScale() / ratio );
-#endif // ifndef COMP_1_TO_1_RATIO
             }
+
+            m_frame->FocusOnItem( symbol );
         }
     }
 
