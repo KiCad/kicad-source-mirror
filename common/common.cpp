@@ -42,6 +42,7 @@
 #include <wx/url.h>
 
 #include <pgm_base.h>
+#include <clocale>
 
 using KIGFX::COLOR4D;
 
@@ -59,16 +60,33 @@ COLOR4D        g_GhostColor;
 
 // When reading/writing files, we need to swtich to setlocale( LC_NUMERIC, "C" ).
 // Works fine to read/write files with floating point numbers.
-// We can call setlocale( LC_NUMERIC, "C" ) of wxLocale( "C", "C", "C", false )
+// We can call setlocale( LC_NUMERIC, "C" ) or wxLocale( "C", "C", "C", false )
 // wxWidgets discourage a direct call to setlocale
 // However, for us, calling wxLocale( "C", "C", "C", false ) has a unwanted effect:
-// The I18N translations are no longer active, because the English dixtionary is selected.
+// The I18N translations are no longer active, because the English dictionary is selected.
 // To read files, this is not a major issues, but the resul can differ
 // from using setlocale(xx, "C").
-// Previouly, we called setlocale( LC_NUMERIC, "C" )
-// The old code will be removed when calling wxLocale( "C", "C", "C", false )
-// is fully tested, and all issues fixed
-#define USE_WXLOCALE 1      /* 0 to call setlocale, 1 to call wxLocale */
+// Previouly, we used only setlocale( LC_NUMERIC, "C" )
+//
+// Known issues are
+// on MSW
+//    using setlocale( LC_NUMERIC, "C" ) generates an alert message in debug mode,
+//    and this message ("Decimal separator mismatch") must be disabled.
+//    But calling wxLocale( "C", "C", "C", false ) works fine
+// On unix:
+//    calling wxLocale( "C", "C", "C", false ) breaks env vars containing non ASCII7 chars.
+//    these env vars return a empty string from wxGetEnv() in many cases, and if such a
+//    var must be read after calling wxLocale( "C", "C", "C", false ), it looks like empty
+//
+// So use wxLocale on Windows and setlocale on unix
+
+
+// set USE_WXLOCALE 0 to use setlocale, 1 to use wxLocale:
+#if defined( _WIN32 )
+#define USE_WXLOCALE 1
+#else
+#define USE_WXLOCALE 0
+#endif
 
 // On Windows, when using setlocale, a wx alert is generated
 // in some cases (reading a bitmap for instance)
