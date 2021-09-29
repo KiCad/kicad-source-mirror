@@ -293,8 +293,42 @@ void PCB_BASE_FRAME::FocusOnItem( BOARD_ITEM* aItem, PCB_LAYER_ID aLayer )
         if( aLayer == UNDEFINED_LAYER )
             aLayer = aItem->GetLayer();
 
-        aItem->TransformShapeWithClearanceToPolygon( itemPoly, aLayer, 0, Millimeter2iu( 0.1 ),
-                                                     ERROR_INSIDE );
+        switch( aItem->Type() )
+        {
+        case     PCB_FOOTPRINT_T:
+            itemPoly = static_cast<FOOTPRINT*>( aItem )->GetBoundingHull();
+            break;
+
+        case     PCB_PAD_T:
+        case     PCB_SHAPE_T:
+        case     PCB_TEXT_T:
+        case     PCB_FP_TEXT_T:
+        case     PCB_FP_SHAPE_T:
+        case     PCB_FP_ZONE_T:
+        case     PCB_TRACE_T:
+        case     PCB_VIA_T:
+        case     PCB_ARC_T:
+        case     PCB_DIMENSION_T:
+        case     PCB_DIM_ALIGNED_T:
+        case     PCB_DIM_LEADER_T:
+        case     PCB_DIM_CENTER_T:
+        case     PCB_DIM_ORTHOGONAL_T:
+        case     PCB_ZONE_T:
+            aItem->TransformShapeWithClearanceToPolygon( itemPoly, aLayer, 0, Millimeter2iu( 0.1 ),
+                                                         ERROR_INSIDE );
+            break;
+
+        default:
+        {
+            BOX2I item_bbox = aItem->GetBoundingBox();
+            itemPoly.NewOutline();
+            itemPoly.Append( item_bbox.GetOrigin() );
+            itemPoly.Append( item_bbox.GetOrigin() + VECTOR2I( item_bbox.GetWidth(), 0 ) );
+            itemPoly.Append( item_bbox.GetOrigin() + VECTOR2I( 0, item_bbox.GetHeight() ) );
+            itemPoly.Append( item_bbox.GetOrigin() + VECTOR2I( item_bbox.GetWidth(), item_bbox.GetHeight() ) );
+            break;
+        }
+        }
 
         clippedPoly.BooleanIntersection( itemPoly, viewportPoly, SHAPE_POLY_SET::PM_FAST );
 
