@@ -50,6 +50,7 @@
 #include <tool/tool_event.h>
 #include <tool/tool_manager.h>
 #include <tools/ee_grid_helper.h>
+#include <tools/ee_point_editor.h>
 #include <tools/sch_line_wire_bus_tool.h>
 #include <trigo.h>
 #include <view/view.h>
@@ -348,7 +349,7 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
         if( evt->IsMouseDown( BUT_LEFT ) )
         {
             // Avoid triggering when running under other tools
-            if( m_frame->ToolStackIsEmpty() )
+            if( m_frame->ToolStackIsEmpty() && !m_toolMgr->GetTool<EE_POINT_EDITOR>()->HasPoint() )
             {
                 m_originalCursor = m_toolMgr->GetMousePosition();
                 m_disambiguateTimer.StartOnce( 500 );
@@ -386,6 +387,7 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
                                                                      LAYER_CONNECTABLE, nullptr );
 
                     if( m_frame->eeconfig()->m_Drawing.auto_start_wires
+                            && !m_toolMgr->GetTool<EE_POINT_EDITOR>()->HasPoint()
                             && collector[0]->IsPointClickableAnchor( (wxPoint) snappedCursorPos ) )
                     {
                         OPT_TOOL_EVENT newEvt;
@@ -621,6 +623,7 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
                                                                      LAYER_CONNECTABLE, nullptr );
 
                     if( m_frame->eeconfig()->m_Drawing.auto_start_wires
+                            && !m_toolMgr->GetTool<EE_POINT_EDITOR>()->HasPoint()
                             && collector[0]->IsPointClickableAnchor( (wxPoint) snappedCursorPos ) )
                     {
                         SCH_CONNECTION* connection = collector[0]->Connection();

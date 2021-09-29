@@ -30,6 +30,9 @@
 #include <tool/tool_event.h>
 #include <tool/tool_manager.h>
 #include <tool/selection.h>
+#include <tools/pl_point_editor.h>
+#include <tools/pl_selection_tool.h>
+#include <tools/pl_actions.h>
 #include <drawing_sheet/ds_data_item.h>
 #include <drawing_sheet/ds_data_model.h>
 #include <drawing_sheet/ds_draw_item.h>
@@ -37,8 +40,6 @@
 #include <math/util.h>      // for KiROUND
 
 #include "pl_editor_frame.h"
-#include "pl_selection_tool.h"
-#include "tools/pl_actions.h"
 
 /**
  * The maximum number of items in the clarify selection context menu.  The current
@@ -113,7 +114,7 @@ int PL_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
         if( evt->IsMouseDown( BUT_LEFT ) )
         {
             // Avoid triggering when running under other tools
-            if( m_frame->ToolStackIsEmpty() )
+            if( m_frame->ToolStackIsEmpty() && !m_toolMgr->GetTool<PL_POINT_EDITOR>()->HasPoint() )
             {
                 m_originalCursor = m_toolMgr->GetMousePosition();
                 m_disambiguateTimer.StartOnce( 500 );

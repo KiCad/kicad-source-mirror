@@ -52,15 +52,16 @@ using namespace std::placeholders;
 #include <pcbnew_settings.h>
 #include <tool/tool_event.h>
 #include <tool/tool_manager.h>
+#include <tools/tool_event_utils.h>
+#include <tools/pcb_point_editor.h>
+#include <tools/pcb_selection_tool.h>
+#include <tools/pcb_actions.h>
 #include <connectivity/connectivity_data.h>
 #include <footprint_viewer_frame.h>
 #include <id.h>
 #include <wx/event.h>
 #include <wx/timer.h>
 #include <wx/log.h>
-#include "tool_event_utils.h"
-#include "pcb_selection_tool.h"
-#include "pcb_actions.h"
 
 
 class SELECT_MENU : public ACTION_MENU
@@ -265,7 +266,7 @@ int PCB_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
         else if( evt->IsMouseDown( BUT_LEFT ) )
         {
             // Avoid triggering when running under other tools
-            if( m_frame->ToolStackIsEmpty() )
+            if( m_frame->ToolStackIsEmpty() && !m_toolMgr->GetTool<PCB_POINT_EDITOR>()->HasPoint() )
             {
                 m_originalCursor = m_toolMgr->GetMousePosition();
                 m_disambiguateTimer.StartOnce( 500 );
