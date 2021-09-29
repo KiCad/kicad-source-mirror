@@ -180,6 +180,7 @@ PANEL_FP_EDITOR_DEFAULTS::PANEL_FP_EDITOR_DEFAULTS( FOOTPRINT_EDIT_FRAME* aFrame
     m_graphicsGrid->SetDefaultRowSize( m_graphicsGrid->GetDefaultRowSize() + 4 );
 
     m_textItemsGrid->SetTable( new TEXT_ITEMS_GRID_TABLE(), true );
+    m_textItemsGrid->PushEventHandler( new GRID_TRICKS( m_textItemsGrid ) );
 
     wxGridCellAttr* attr = new wxGridCellAttr;
     attr->SetRenderer( new wxGridCellBoolRenderer() );
@@ -205,7 +206,8 @@ PANEL_FP_EDITOR_DEFAULTS::PANEL_FP_EDITOR_DEFAULTS( FOOTPRINT_EDIT_FRAME* aFrame
 
 PANEL_FP_EDITOR_DEFAULTS::~PANEL_FP_EDITOR_DEFAULTS()
 {
-    // destroy GRID_TRICKS before m_graphicsGrid.
+    // destroy GRID_TRICKS before grids.
+    m_textItemsGrid->PopEventHandler( true );
     m_graphicsGrid->PopEventHandler( true );
 }
 
