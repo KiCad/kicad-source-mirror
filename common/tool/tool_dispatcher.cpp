@@ -223,12 +223,12 @@ bool TOOL_DISPATCHER::handleMouseButton( wxEvent& aEvent, int aIndex, bool aMoti
 #ifdef __WXMAC__
             if( wxGetLocalTimeMillis() - st->downTimestamp > DragTimeThreshold )
                 st->dragging = true;
-#else
+#endif
             VECTOR2D offset = getView()->ToScreen( m_lastMousePos - st->dragOrigin, false );
 
             if( abs( offset.x ) > m_sysDragMinX || abs( offset.y ) > m_sysDragMinY )
                 st->dragging = true;
-#endif
+
         }
 
         if( st->dragging )
