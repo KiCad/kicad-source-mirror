@@ -167,6 +167,8 @@ wxString EscapeString( const wxString& aSource, ESCAPE_CONTEXT aContext )
                 converted += "{gt}";
             else if( c == ':' )
                 converted += "{colon}";
+            else if( c == '\"' )
+                converted += "{dblquote}";
             else if( c == '\n' || c == '\r' )
                 converted += "";    // drop
             else
