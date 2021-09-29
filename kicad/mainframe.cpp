@@ -40,6 +40,7 @@
 #include <build_version.h>
 #include <dialog_configure_paths.h>
 #include <dialog_edit_library_tables.h>
+#include <launch_ext.h>
 #include "pgm_kicad.h"
 #include "tree_project_frame.h"
 
@@ -536,21 +537,7 @@ void KICAD_MANAGER_FRAME::OnOpenFileInTextEditor( wxCommandEvent& event )
 void KICAD_MANAGER_FRAME::OnBrowseInFileExplorer( wxCommandEvent& event )
 {
     // open project directory in host OS's file explorer
-    wxString project_dir = Prj().GetProjectPath();
-
-#ifdef __WXMAC__
-    wxString msg;
-
-    // Quote in case there are spaces in the path.
-    msg.Printf( "open \"%s\"", project_dir );
-
-    system( msg.c_str() );
-#else
-    // Quote in case there are spaces in the path.
-    AddDelimiterString( project_dir );
-
-    wxLaunchDefaultApplication( project_dir );
-#endif
+    LaunchExternal( Prj().GetProjectPath() );
 }
 
 
