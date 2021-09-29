@@ -1325,6 +1325,19 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
         break;
     }
 
+    auto doTextAndLabelProps =
+            [&]( SCH_TEXT* aText )
+            {
+                DIALOG_TEXT_AND_LABEL_PROPERTIES dlg( m_frame, aText );
+
+                // Must be quasi modal for syntax help
+                if( dlg.ShowQuasiModal() == wxID_OK )
+                {
+                    m_toolMgr->PostEvent( EVENTS::SelectedItemsModified );
+                    m_frame->OnModify();
+                }
+            };
+
     switch( item->Type() )
     {
     case SCH_SYMBOL_T:
@@ -1435,24 +1448,18 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
     case SCH_LABEL_T:
     case SCH_GLOBAL_LABEL_T:
     case SCH_HIER_LABEL_T:
-    {
-        SCH_TEXT*                        text = static_cast<SCH_TEXT*>( item );
-        DIALOG_TEXT_AND_LABEL_PROPERTIES dlg( m_frame, text );
-
-        // Must be quasi modal for syntax help
-        if( dlg.ShowQuasiModal() == wxID_OK )
-        {
-            m_toolMgr->PostEvent( EVENTS::SelectedItemsModified );
-            m_frame->OnModify();
-        }
-    }
+        doTextAndLabelProps( static_cast<SCH_TEXT*>( item ) );
         break;
 
     case SCH_FIELD_T:
     {
         SCH_FIELD* field = static_cast<SCH_FIELD*>( item );
+        EDA_ITEM*  parent = field->GetParent();
 
-        editFieldText( field );
+        if( parent->Type() == SCH_GLOBAL_LABEL_T )
+            doTextAndLabelProps( static_cast<SCH_TEXT*>( parent ) );
+        else
+            editFieldText( field );
 
         if( !field->IsVisible() )
             clearSelection = true;
