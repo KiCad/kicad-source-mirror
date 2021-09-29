@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-01 11:31-0700\n"
-"PO-Revision-Date: 2021-09-27 13:41+0000\n"
+"PO-Revision-Date: 2021-09-29 17:58+0000\n"
 "Last-Translator: boonchai k. <kicadthai@gmail.com>\n"
 "Language-Team: Thai <https://hosted.weblate.org/projects/kicad/master-source/"
 "th/>\n"
@@ -109,7 +109,7 @@ msgstr "ระยะเลื่อน"
 
 #: 3d-viewer/3d_cache/dialogs/panel_preview_3d_model_base.cpp:156
 msgid "Opacity"
-msgstr "ความโปร่ง"
+msgstr "ความทึบแสง"
 
 #: 3d-viewer/3d_cache/dialogs/panel_preview_3d_model_base.cpp:171
 #: common/dialogs/dialog_page_settings_base.cpp:118
@@ -162,7 +162,7 @@ msgstr "สร้างโซน"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:754
 msgid "Simplifying copper layers polygons"
-msgstr "กำลังทำรูปหลายเหลี่ยมในชั้นทองแดงให้ง่าย"
+msgstr "กำลังทำรูปหลายเหลี่ยมในเลเยอร์ทองแดงให้ง่าย"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:833
 msgid "Simplify holes contours"
@@ -390,7 +390,7 @@ msgstr "ตัวบอร์ด:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:126
 msgid "Load Colors from Board Stackup"
-msgstr "อ่านค่าสีจากชั้นเรียงของบอร์ด"
+msgstr "อ่านค่าสีจากบอร์ดสแต็กอัพ"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_display_options_base.cpp:21
 msgid "3D Model Visibility"
@@ -410,23 +410,23 @@ msgstr "แสดงโมเดล3มิติเสมือน"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_display_options_base.cpp:36
 msgid "Board Layers"
-msgstr "ชั้นของบอร์ด"
+msgstr "เลเยอร์ของบอร์ด"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_display_options_base.cpp:38
 msgid "Show silkscreen layers"
-msgstr "แสดงชั้นซิลค์สกรีน"
+msgstr "แสดงเลเยอร์ซิลค์สกรีน"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_display_options_base.cpp:41
 msgid "Show solder mask layers"
-msgstr "แสดงชั้นโซลเดอร์มาสค์"
+msgstr "แสดงเลเยอร์โซลเดอร์มาสค์"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_display_options_base.cpp:44
 msgid "Show solder paste layers"
-msgstr "แสดงชั้นโซลเดอร์เพสท์"
+msgstr "แสดงเลเยอร์โซลเดอร์เพสท์"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_display_options_base.cpp:47
 msgid "Show adhesive layers"
-msgstr "แสดงชั้นกาว"
+msgstr "แสดงเลเยอร์กาว"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_display_options_base.cpp:54
 msgid "User Layers (not shown in realistic mode)"
@@ -2150,14 +2150,14 @@ msgstr "ชิ้นส่วนเหล่านี้จะถูกข้า
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:44
 msgid "Remember decision for this session."
-msgstr "จำการตัดสินใจสำหรับช่วงเวลานี้"
+msgstr "จำการตัดสินใจสำหรับเซสชั่นนี้"
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:45
 msgid ""
 "Remember the option selected for the remainder of this session.\n"
 "This dialog will not be shown again until KiCad is restarted."
 msgstr ""
-"จำการเลือกไว้สำหรับช่วงเวลาที่เหลือทั้งหมดตลอดเซสชั่น\n"
+"จำการเลือกไว้สำหรับช่วงเวลาที่เหลือทั้งหมดในเซสชั่นนี้\n"
 "กรอบสนทนานี้จะไม่ปรากฏอีก จนกว่าจะเริ่ม KiCad ใหม่"
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:55
@@ -2832,14 +2832,14 @@ msgid ""
 "If this does not match the system DPI scaling, the canvas will not match the "
 "window size and cursor position."
 msgstr ""
-"กำหนดอัตราส่วนบนผืนจอภาพ\n"
+"กำหนดอัตราส่วนบนผ้าใบ\n"
 "\n"
 "บนจอแสดงผล DPI สูงบางแพลตฟอร์ม KiCad ไม่สามารถระบุอัตราขยายที่ถูกต้อง "
 "ในกรณีนี้ คุณอาจต้องตั้งค่านี้เป็นค่าเพื่อให้ตรงกับการปรับขนาด DPI "
 "ของระบบของคุณ 2.0 เป็นค่าทั่วไป\n"
 "\n"
 "หากไม่ตรงกับการปรับขนาด DPI ของระบบ "
-"ผืนจอภาพจะไม่ตรงกับขนาดหน้าต่างและตำแหน่งเคอร์เซอร์"
+"ผ้าใบของจอภาพจะไม่ตรงกับขนาดหน้าต่างและตำแหน่งเคอร์เซอร์"
 
 #: common/dialogs/panel_common_settings.cpp:64
 msgid ""
@@ -2848,7 +2848,7 @@ msgid ""
 "On some platforms, the automatic value is incorrect and should be set "
 "manually."
 msgstr ""
-"ใช้ค่าอัตโนมัติสำหรับมาตราส่วนจอภาพ\n"
+"ใช้ค่าอัตโนมัติสำหรับอัตราส่วนผ้าใบ\n"
 "\n"
 "ในบางแพลตฟอร์ม ค่าอัตโนมัติไม่ถูกต้อง และควรตั้งค่าด้วยตนเอง"
 
@@ -2956,7 +2956,7 @@ msgstr "อัตโนมัติ"
 
 #: common/dialogs/panel_common_settings_base.cpp:172
 msgid "Canvas scale:"
-msgstr "อัตราผ้าใบ:"
+msgstr "อัตราส่วนผ้าใบ:"
 
 #: common/dialogs/panel_common_settings_base.cpp:183
 msgid "Show icons in menus"
@@ -3079,7 +3079,7 @@ msgstr "MB"
 
 #: common/dialogs/panel_common_settings_base.cpp:304
 msgid "Session"
-msgstr "วาระ"
+msgstr "เซสชั่น"
 
 #: common/dialogs/panel_common_settings_base.cpp:306
 msgid "Remember open files for next project launch"
@@ -3373,11 +3373,11 @@ msgstr "เส้นผ่าศูนย์กลางรูเจาะไม
 
 #: common/dialogs/panel_setup_netclasses.cpp:484
 msgid "Differential pair track width"
-msgstr "ขนาดแทร็กชนิดคู่ดิฟเฟอร์เรนเชียล"
+msgstr "ขนาดแทร็กชนิดคู่ดิฟแพร์"
 
 #: common/dialogs/panel_setup_netclasses.cpp:485
 msgid "Differential pair gap"
-msgstr "ช่องว่างระหว่างคู่ดิฟเฟอร์เรนเชียล"
+msgstr "ช่องว่างระหว่างคู่ดิฟแพร์"
 
 #: common/dialogs/panel_setup_netclasses.cpp:486
 msgid "Schematic wire thickness"
@@ -3955,15 +3955,15 @@ msgstr "มาร์คเกอร์บนบอร์ด"
 
 #: common/eda_item.cpp:261
 msgid "Aligned Dimension"
-msgstr "จัดเรียงค่ามิติ"
+msgstr "จัดเรียงวัดขนาด"
 
 #: common/eda_item.cpp:262
 msgid "Orthogonal Dimension"
-msgstr "ค่ามิติตามแนวทแยง"
+msgstr "วัดขนาดแนวทแยง"
 
 #: common/eda_item.cpp:263
 msgid "Center Dimension"
-msgstr "ค่ามิติอยู่กึ่งกลาง"
+msgstr "วัดขนาดอยู่กึ่งกลาง"
 
 #: common/eda_item.cpp:264 pcbnew/pcb_dimension.cpp:1041
 msgid "Leader"
@@ -4028,7 +4028,7 @@ msgstr "ป้ายชื่อส่วนกลาง"
 
 #: common/eda_item.cpp:281 eeschema/sch_text.cpp:728
 msgid "Hierarchical Label"
-msgstr "ป้ายชื่อลำดับชั้น"
+msgstr "ป้ายชื่อลำดับขั้น"
 
 #: common/eda_item.cpp:282
 msgid "Schematic Field"
@@ -4225,7 +4225,7 @@ msgstr "ความหนา"
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:189
 #: pcbnew/microwave/microwave_polygon.cpp:139
 msgid "Mirrored"
-msgstr "กลับกระจก"
+msgstr "กลับกระจกแล้ว"
 
 #: common/eda_text.cpp:679 eeschema/dialogs/dialog_lib_edit_pin_table.cpp:61
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:55
@@ -4918,7 +4918,7 @@ msgstr "ป้ายชื่อส่วนกลาง"
 #: common/layer_id.cpp:111
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:46
 msgid "Hierarchical labels"
-msgstr "ป้ายชื่อลำดับชั้น"
+msgstr "ป้ายชื่อลำดับขั้น"
 
 #: common/layer_id.cpp:112
 msgid "Pin numbers"
@@ -5125,7 +5125,7 @@ msgstr "รูเจาะไม่เคลือบ"
 #: pcbnew/widgets/appearance_controls.cpp:354
 #: pcbnew/widgets/appearance_controls.cpp:665
 msgid "Ratsnest"
-msgstr "รังหนู"
+msgstr "แร็ทเน็ต"
 
 #: common/layer_id.cpp:162
 msgid "No-connects"
@@ -5815,7 +5815,7 @@ msgstr "คุณสมบัติกริด…"
 
 #: common/tool/actions.cpp:479
 msgid "Set grid dimensions"
-msgstr "กำหนดมิติของกริด"
+msgstr "กำหนดวัดขนาดของกริด"
 
 #: common/tool/actions.cpp:484
 msgid "Use inches"
@@ -7146,12 +7146,12 @@ msgstr "เน็ต %s เชื่อมต่อกับบัสแบบ�
 #: eeschema/connection_graph.cpp:2877
 #, c-format
 msgid "Sheet pin %s has no matching hierarchical label inside the sheet"
-msgstr "ชีตพิน %s ไม่มีป้ายชื่อลําดับชั้นที่ตรงกันภายในแผ่นวงจร"
+msgstr "ชีตพิน %s ไม่มีป้ายชื่อลำดับขั้นที่ตรงกันภายในแผ่นวงจร"
 
 #: eeschema/connection_graph.cpp:2894
 #, c-format
 msgid "Hierarchical label %s has no matching sheet pin in the parent sheet"
-msgstr "ป้ายชื่อตามลําดับชั้น %s ไม่มีชีตพินที่ตรงกันในแผ่นวงจรต้นกำเนิด"
+msgstr "ป้ายชื่อตามลำดับขั้น %s ไม่มีชีตพินที่ตรงกันในแผ่นวงจรต้นกำเนิด"
 
 #: eeschema/cross-probing.cpp:265 pcbnew/cross-probing.cpp:171
 #, c-format
@@ -7981,7 +7981,7 @@ msgstr "คุณสมบัติป้ายชื่อแบบส่วน
 
 #: eeschema/dialogs/dialog_edit_label.cpp:105
 msgid "Hierarchical Label Properties"
-msgstr "คุณสมบัติป้ายชื่อลำดับชั้น"
+msgstr "คุณสมบัติป้ายชื่อลำดับขั้น"
 
 #: eeschema/dialogs/dialog_edit_label.cpp:106
 msgid "Label Properties"
@@ -7989,7 +7989,7 @@ msgstr "คุณสมบัติป้ายชื่อ"
 
 #: eeschema/dialogs/dialog_edit_label.cpp:107
 msgid "Hierarchical Sheet Pin Properties"
-msgstr "คุณสมบัติขาชีทชนิดลำดับชั้น"
+msgstr "คุณสมบัติขาชีทชนิดลำดับขั้น"
 
 #: eeschema/dialogs/dialog_edit_label.cpp:108
 #: pcbnew/dialogs/dialog_text_properties.cpp:93
@@ -9465,7 +9465,7 @@ msgstr "การส่งออกรายชื่อเน็ตต้อง
 
 #: eeschema/dialogs/dialog_netlist.cpp:634
 msgid "This plugin already exists."
-msgstr "ส่วนประกอบบี้มีอยู่แล้ว"
+msgstr "ปลั๊กอินนี้มีอยู่แล้ว"
 
 #: eeschema/dialogs/dialog_netlist.cpp:662
 msgid "Error. You must provide a command String"
@@ -10187,7 +10187,7 @@ msgid ""
 "portability across systems and platforms.  Using absolute paths can result "
 "in portability issues."
 msgstr ""
-"การใช้เส้นทางของชื่อไฟล์ชีตแบบสัมพันธ์ "
+"การใช้เส้นทางของชื่อไฟล์ชีตลำดับขั้น "
 "จะช่วยให้วงจรใช้งานข้ามระบบคอมพิวเตอร์ได้ง่าย \tการใช"
 "้เส้นทางแบบสมบูรณ์จะมีปัญหาเรื่องการเคลื่อนย้าย"
 
@@ -10284,7 +10284,7 @@ msgstr "ระต้องระบุไฟล์กับชีตวงจร
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:804
 msgid "Hierarchical path: "
-msgstr "เส้นทางลำดับชั้น: "
+msgstr "เส้นทางลำดับขั้น: "
 
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:117
 msgid "Border width:"
@@ -10304,7 +10304,7 @@ msgstr "หมายเลขหน้า:"
 
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:184
 msgid "Hierarchical path:"
-msgstr "เส้นทางลำดับชั้น:"
+msgstr "เส้นทางลำดับขั้น:"
 
 #: eeschema/dialogs/dialog_sheet_properties_base.h:79
 msgid "Sheet Properties"
@@ -10930,7 +10930,7 @@ msgstr "ความถี่พาหะ:"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:709
 msgid "Modulation index:"
-msgstr "มอดดูเลชั้นอินเด็กซ์:"
+msgstr "มอดดูเลชั่นอินเด็กซ์:"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:716
 #: pagelayout_editor/dialogs/dialog_design_inspector_base.cpp:36
@@ -11459,7 +11459,7 @@ msgstr "ขยายเต็มจอชิ้นส่วนที่ครอ
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:88
 #: pcbnew/dialogs/panel_display_options_base.cpp:84
 msgid "Highlight cross-probed nets"
-msgstr "เน้นสีเน็ตระหว่างครอสโพรบ"
+msgstr "เน้นสีเน็ตระหว่างครอส-โพรบ"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:90
 msgid "Highlight nets when they are highlighted in the PCB editor"
@@ -11623,7 +11623,7 @@ msgstr "แสดงพรีวิวฟุ้ทพรินท์ในตั
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:273
 msgid "Keep hierarchy navigator open"
-msgstr "ให้ฮิราคี่เนวิเกเตอร์เปิดไว้"
+msgstr "เปิดตัวนำทางลำดับขั้นค้างไว้"
 
 #: eeschema/dialogs/panel_eeschema_template_fieldnames.cpp:41
 msgid "Global field name templates:"
@@ -12175,7 +12175,7 @@ msgstr "เกิดความขัดแย้งระหว่างขา
 
 #: eeschema/erc_item.cpp:70
 msgid "Mismatch between hierarchical labels and sheet pins"
-msgstr "ไม่เข้ากัน ระหว่างป้ายชื่อฮิราคีและชีตพิน"
+msgstr "ไม่เข้ากัน ระหว่างป้ายชื่อลำดับขั้นและชีตพิน"
 
 #: eeschema/erc_item.cpp:74
 msgid "A pin with a \"no connection\" flag is connected"
@@ -12330,7 +12330,7 @@ msgstr "การเปลี่ยนแปลงไฟล์วงจรไม
 msgid ""
 "The entire schematic could not be loaded.  Errors occurred attempting to "
 "load hierarchical sheets."
-msgstr "ไม่สามารถโหลดวงจรได้ทั้งหมด\tเกิดข้อผิดพลาดขณะพยายามโหลดชีตแบบลำดับชั้น"
+msgstr "ไม่สามารถโหลดวงจรได้ทั้งหมด\tเกิดข้อผิดพลาดขณะพยายามโหลดชีตแบบลำดับขั้น"
 
 #: eeschema/files-io.cpp:410 eeschema/files-io.cpp:418
 #: eeschema/files-io.cpp:1186 eeschema/sheet.cpp:162
@@ -13733,7 +13733,7 @@ msgstr "ชื่อชีต"
 
 #: eeschema/sch_sheet.cpp:715
 msgid "Hierarchical Path"
-msgstr "เส้นทางแบบลําดับชั้น"
+msgstr "เส้นทางแบบลำดับขั้น"
 
 #: eeschema/sch_sheet.cpp:718
 msgid "File Name"
@@ -13742,7 +13742,7 @@ msgstr "ชื่อไฟล์"
 #: eeschema/sch_sheet.cpp:927
 #, c-format
 msgid "Hierarchical Sheet %s"
-msgstr "ชีตลําดับชั้น %s"
+msgstr "ชีตลำดับขั้น %s"
 
 #: eeschema/sch_sheet_path.cpp:57 include/board_item.h:378
 msgid "(Deleted Item)"
@@ -13751,7 +13751,7 @@ msgstr "(ชิ้นส่วนที่ถูกลบ)"
 #: eeschema/sch_sheet_pin.cpp:286
 #, c-format
 msgid "Hierarchical Sheet Pin %s"
-msgstr "ชีตพินแบบลำดับชั้น %s"
+msgstr "ชีตพินแบบลำดับขั้น %s"
 
 #: eeschema/sch_symbol.cpp:1372
 msgid "Power symbol"
@@ -13801,7 +13801,7 @@ msgstr "ป้ายชื่อ"
 
 #: eeschema/sch_text.cpp:729
 msgid "Hierarchical Sheet Pin"
-msgstr "ชีตพินแบบลำดับชั้น"
+msgstr "ชีตพินแบบลำดับขั้น"
 
 #: eeschema/sch_text.cpp:747
 msgid "Bold Italic"
@@ -13827,7 +13827,7 @@ msgstr "ป้ายชื่อส่วนกลาง '%s'"
 #: eeschema/sch_text.cpp:1637
 #, c-format
 msgid "Hierarchical Label '%s'"
-msgstr "ป้ายชื่อลําดับชั้น '%s'"
+msgstr "ป้ายชื่อลำดับขั้น '%s'"
 
 #: eeschema/sch_text.cpp:1653 pcbnew/dialogs/panel_setup_rules.cpp:471
 msgid "Syntax Help"
@@ -14188,7 +14188,7 @@ msgid ""
 "schematic hierarchy."
 msgstr ""
 "ไม่สามารถทำการเปลี่ยนแปลงชีต เนื่องจากชีตปลายทางมีชีต '%s' "
-"หรือชีตย่อยแผ่นใดแผ่นหนึ่งเป็น ต้นกำเนิดที่ใดที่หนึ่งในลำดับชั้นแบบแผน"
+"หรือชีตย่อยแผ่นใดแผ่นหนึ่งเป็น ต้นกำเนิดที่ใดที่หนึ่งในลำดับขั้นแบบแผน"
 
 #: eeschema/sheet.cpp:84
 #, c-format
@@ -14205,7 +14205,7 @@ msgstr ""
 msgid ""
 "The entire schematic could not be loaded.  Errors occurred attempting to "
 "load hierarchical sheet schematics."
-msgstr "ไม่สามารถโหลดวงจรทั้งหมด เกิดข้อผิดพลาดขณะพยายามโหลดวงจรชีตแบบลำดับชั้น"
+msgstr "ไม่สามารถโหลดวงจรทั้งหมด เกิดข้อผิดพลาดขณะพยายามโหลดวงจรชีตแบบลำดับขั้น"
 
 #: eeschema/sheet.cpp:150
 msgid "Schematic Load Error"
@@ -15560,11 +15560,11 @@ msgstr "เพิ่มป้ายชื่อเน็ต"
 
 #: eeschema/tools/ee_actions.cpp:317
 msgid "Add Hierarchical Label"
-msgstr "เพิ่มป้ายชื่อลำดับชั้น"
+msgstr "เพิ่มป้ายชื่อลำดับขั้น"
 
 #: eeschema/tools/ee_actions.cpp:317
 msgid "Add a hierarchical label"
-msgstr "เพิ่มป้ายชื่อลำดับชั้น"
+msgstr "เพิ่มป้ายชื่อลำดับขั้น"
 
 #: eeschema/tools/ee_actions.cpp:323
 msgid "Add Sheet"
@@ -15572,7 +15572,7 @@ msgstr "เพิ่มชึต"
 
 #: eeschema/tools/ee_actions.cpp:323
 msgid "Add a hierarchical sheet"
-msgstr "เพิ่มชีตแบบลําดับชั้น"
+msgstr "เพิ่มชีตแบบลำดับขั้น"
 
 #: eeschema/tools/ee_actions.cpp:328 eeschema/tools/ee_actions.cpp:333
 msgid "Import Sheet Pin"
@@ -15580,7 +15580,7 @@ msgstr "นำเข้าชีตพิน"
 
 #: eeschema/tools/ee_actions.cpp:328 eeschema/tools/ee_actions.cpp:333
 msgid "Import a hierarchical sheet pin"
-msgstr "นําเข้าชีตพินแบบลําดับชั้น"
+msgstr "นําเข้าชีตพินแบบลำดับขั้น"
 
 #: eeschema/tools/ee_actions.cpp:339
 msgid "Add Global Label"
@@ -15761,11 +15761,11 @@ msgstr "เปลี่ยนสิ่งที่มีอยู่เป็น
 
 #: eeschema/tools/ee_actions.cpp:473
 msgid "Change to Hierarchical Label"
-msgstr "เปลี่ยนเป็นป้ายกำกับลำดับชั้น"
+msgstr "เปลี่ยนเป็นป้ายกำกับลำดับขั้น"
 
 #: eeschema/tools/ee_actions.cpp:473
 msgid "Change existing item to a hierarchical label"
-msgstr "เปลี่ยนสิ่งที่มีอยู่เป็นป้ายชื่อตามลําดับชั้น"
+msgstr "เปลี่ยนสิ่งที่มีอยู่เป็นป้ายชื่อตามลำดับขั้น"
 
 #: eeschema/tools/ee_actions.cpp:478
 msgid "Change to Global Label"
@@ -16037,11 +16037,11 @@ msgstr "แสดงแผ่นงานต้นกำเนิดในตั
 
 #: eeschema/tools/ee_actions.cpp:667
 msgid "Hierarchy Navigator"
-msgstr "ตัวนําทางลําดับชั้น"
+msgstr "ตัวนําทางลำดับขั้น"
 
 #: eeschema/tools/ee_actions.cpp:667
 msgid "Show schematic sheet hierarchy"
-msgstr "แสดงลำดับชั้นของแผ่นวงจร"
+msgstr "แสดงลำดับขั้นของแผ่นวงจร"
 
 #: eeschema/tools/ee_actions.cpp:672
 msgid "Navigate to page"
@@ -16274,7 +16274,7 @@ msgstr "ไม่สามารถโหลดภาพจาก '%s'"
 #: eeschema/tools/sch_drawing_tools.cpp:643
 #: eeschema/tools/sch_drawing_tools.cpp:1149
 msgid "No new hierarchical labels found."
-msgstr "ไม่พบป้ายกำกับแบบลำดับชั้นใหม่"
+msgstr "ไม่พบป้ายกำกับแบบลำดับขั้นใหม่"
 
 #: eeschema/tools/sch_drawing_tools.cpp:728
 msgid "Junction location contains no joinable wires and/or pins."
@@ -16477,7 +16477,8 @@ msgstr "ข้อมูลรูเจาะ"
 msgid ""
 "Exported board does not have enough copper layers to handle selected inner "
 "layers"
-msgstr "บอร์ดที่ส่งออกมีชั้นทองแดงไม่เพียงพอที่จะจัดการกับชั้นภายในที่เลือก"
+msgstr ""
+"บอร์ดที่ส่งออกมีเลเยอร์ทองแดงไม่เพียงพอที่จะจัดการกับเลเยอร์ภายในที่เลือก"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:33
 msgid "Layer selection:"
@@ -16485,40 +16486,40 @@ msgstr "การเลือกเลเยอร์:"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:79
 msgid "Copper layers count:"
-msgstr "นับจำนวนชั้นทองแดง:"
+msgstr "นับจำนวนเลเยอร์ทองแดง:"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:83
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:84
 msgid "2 Layers"
-msgstr "2 ชั้น"
+msgstr "2 เลเยอร์"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:85
 msgid "4 Layers"
-msgstr "4 ชั้น"
+msgstr "4 เลเยอร์"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:86
 msgid "6 Layers"
-msgstr "6 ชั้น"
+msgstr "6 เลเยอร์"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:87
 msgid "8 Layers"
-msgstr "8 ชั้น"
+msgstr "8 เลเยอร์"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:88
 msgid "10 Layers"
-msgstr "10 ชั้น"
+msgstr "10 เลเยอร์"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:89
 msgid "12 Layers"
-msgstr "12 ชั้น"
+msgstr "12 เลเยอร์"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:90
 msgid "14 Layers"
-msgstr "14 ชั้น"
+msgstr "14 เลเยอร์"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:91
 msgid "16 Layers"
-msgstr "16 ชั้น"
+msgstr "16 เลเยอร์"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:103
 msgid "Store Choice"
@@ -16545,7 +16546,7 @@ msgstr "การเลือกเลเยอร์"
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:94
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:248
 msgid "Print mirrored"
-msgstr "พิมพ์กลับด้านกระจก"
+msgstr "พิมพ์กลับกระจก"
 
 #: gerbview/dialogs/dialog_print_gerbview.cpp:180
 #: pcbnew/dialogs/dialog_plot_base.cpp:54
@@ -16588,7 +16589,7 @@ msgstr "เลือกเลเยอร์: %s"
 #: pcbnew/tools/board_inspection_tool.cpp:482
 #: pcbnew/tools/board_inspection_tool.cpp:512 pcbnew/zone.cpp:614
 msgid "Layer"
-msgstr "ชั้น"
+msgstr "เลเยอร์"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:30
 msgid "Show D codes"
@@ -16724,19 +16725,19 @@ msgstr "ไฟล์เกอร์เบอร์ (.g* .lgr .pho)"
 
 #: gerbview/files.cpp:144
 msgid "Top layer (*.GTL)|*.GTL;*.gtl|"
-msgstr "ชั้นบนสุด (*.GTL)|*.GTL;*.gtl|"
+msgstr "เลเยอร์บนสุด (*.GTL)|*.GTL;*.gtl|"
 
 #: gerbview/files.cpp:145
 msgid "Bottom layer (*.GBL)|*.GBL;*.gbl|"
-msgstr "ชั้นล่าง (*.GBL)|*.GBL;*.gbl|"
+msgstr "เลเยอร์ล่าง (*.GBL)|*.GBL;*.gbl|"
 
 #: gerbview/files.cpp:146
 msgid "Bottom solder resist (*.GBS)|*.GBS;*.gbs|"
-msgstr "โซลเดอร์มาส์กด้านล่าง (*.GBS)|*.GBS;*.gbs|"
+msgstr "โซลเดอร์รีซิสด้านล่าง (*.GBS)|*.GBS;*.gbs|"
 
 #: gerbview/files.cpp:147
 msgid "Top solder resist (*.GTS)|*.GTS;*.gts|"
-msgstr "โซลเดอร์มาส์กด้านบน (*.GTS)|*.GTS;*.gts|"
+msgstr "โซลเดอร์รีซิสด้านบน (*.GTS)|*.GTS;*.gts|"
 
 #: gerbview/files.cpp:148
 msgid "Bottom overlay (*.GBO)|*.GBO;*.gbo|"
@@ -17591,7 +17592,7 @@ msgstr "โครงการ: %s"
 
 #: kicad/kicad_manager_frame.cpp:699
 msgid "Restoring session"
-msgstr "กําลังคืนค่าเซสชัน"
+msgstr "กําลังคืนค่าเซสชั่น"
 
 #: kicad/kicad_manager_frame.cpp:709
 #, c-format
@@ -19387,7 +19388,7 @@ msgstr "แพ็ดไม่เคลือบ: (ศก.-รูเจาะ)"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1967
 msgid "Board Classes"
-msgstr "ชั้นคุณภาพบอร์ด"
+msgstr "เลเยอร์คุณภาพบอร์ด"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.h:421
 #: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:10
@@ -19983,7 +19984,7 @@ msgstr "รูปหลายเหลี่ยม"
 
 #: pcbnew/board_item.cpp:83
 msgid "all copper layers"
-msgstr "ชั้นทองแดงทั้งหมด"
+msgstr "เลเยอร์ทองแดงทั้งหมด"
 
 #: pcbnew/board_item.cpp:97
 msgid "and others"
@@ -20092,7 +20093,7 @@ msgstr "วัสดุไดอิเล็กทริก"
 
 #: pcbnew/board_stackup_manager/panel_board_finish_base.cpp:20
 msgid "Has castellated pads"
-msgstr "มีแพ็ดที่ถูกล้อม"
+msgstr "มีคาสเทลเลตแพ็ด"
 
 #: pcbnew/board_stackup_manager/panel_board_finish_base.cpp:23
 msgid "Plated board edge"
@@ -20125,7 +20126,7 @@ msgstr "พรีเพก"
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:197
 #, c-format
 msgid "Layer '%s' (sublayer %d/%d)"
-msgstr "เลเยอร์ '%s' (ชั้นย่อย %d/%d)"
+msgstr "เลเยอร์ '%s' (เลเยอร์ย่อย %d/%d)"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:212
 msgid "Add Dielectric Layer"
@@ -20183,12 +20184,12 @@ msgstr "ความหนาของเลเยอร์คือ < 0 ต้�
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:501
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:276
 msgid "Copper layers:"
-msgstr "ชั้นทองแดง:"
+msgstr "เลเยอร์ทองแดง:"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:22
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:30
 msgid "Select the number of copper layers in the stackup"
-msgstr "เลือกจํานวนเลเยอร์ทองแดงในสแต็คอัพ"
+msgstr "เลือกจํานวนเลเยอร์ทองแดงในสแต็กอัพ"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:26
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:49
@@ -20964,7 +20965,7 @@ msgstr "นำเข้าการตั้งค่าจากบอร์ด
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:80
 msgid "Board Stackup"
-msgstr "บอร์ดสแต็คอัพ"
+msgstr "บอร์ดสแต็กอัพ"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:88
 msgid "Board Editor Layers"
@@ -20972,7 +20973,7 @@ msgstr "ตัวแก้ไขเลเยอร์ของบอร์ด"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:90
 msgid "Physical Stackup"
-msgstr "สแต็คอัพทางกายภาพ"
+msgstr "สแต็กอัพทางกายภาพ"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:93
 msgid "Board Finish"
@@ -21419,13 +21420,13 @@ msgstr "การแสดงเค้าโครง:"
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:61
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:111 pcbnew/zone.cpp:622
 msgid "Hatched"
-msgstr "เส้นตาข่าย"
+msgstr "แรเงาแล้ว"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:153
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:61
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:111
 msgid "Fully hatched"
-msgstr "ตาข่ายทึบ"
+msgstr "แรเงาทั้งหมด"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:162
 msgid "Corner smoothing:"
@@ -21525,17 +21526,17 @@ msgstr "การเติมแบบทึบ"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:298
 msgid "Hatch pattern"
-msgstr "รูปแบบการตีเส้น"
+msgstr "รูปแบบแรเงา"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:315
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:140
 msgid "Hatch width:"
-msgstr "ความกว้างเส้นตีทึบ:"
+msgstr "ความกว้างเส้นแรเงา:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:326
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:151
 msgid "Hatch gap:"
-msgstr "ช่องว่างเส้นตี:"
+msgstr "ช่องว่างเส้นแรเงา:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:337
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:162
@@ -21841,7 +21842,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_dimension_properties.cpp:280
 msgid "Change dimension properties"
-msgstr "เปลี่ยนคุณสมบัติการวัดมิติ"
+msgstr "เปลี่ยนคุณสมบัติการวัดขนาด"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:20
 msgid "Leader Format"
@@ -21870,12 +21871,12 @@ msgstr "เลเยอร์:"
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:67
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:87
 msgid "Dimension Format"
-msgstr "รูปแบบกำหนดมิติ"
+msgstr "รูปแบบวัดขนาด"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:96
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:102
 msgid "Measured value of this dimension"
-msgstr "ค่าที่วัดได้จากเครื่องมือมิติ"
+msgstr "ค่าที่วัดได้จากวัดขนาด"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:106
 msgid "Override value"
@@ -21900,12 +21901,12 @@ msgstr "หน่วย:"
 msgid ""
 "Units of this dimension (\"automatic\" to follow the units selected in the "
 "editor)"
-msgstr "หน่วยของมิติ (\"อัตโนมัติ\" เพื่อใช้หน่วยเดียวกับเครื่องมือแก้ไข)"
+msgstr "หน่วยวัดขนาด (\"อัตโนมัติ\" เพื่อใช้หน่วยเดียวกับเครื่องมือแก้ไข)"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:130
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:135
 msgid "Text to print before the dimension value"
-msgstr "ข้อความที่จะพิมพ์ก่อนค่ามิติ"
+msgstr "ข้อความพิมพ์ก่อนค่าวัดขนาด"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:139
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:108
@@ -21935,7 +21936,7 @@ msgstr "1234 (มม)"
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:155
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:160
 msgid "Text to print after the dimension value"
-msgstr "ข้อความที่จะพิมพ์หลังค่ามิติ"
+msgstr "ข้อความพิมพ์หลังค่าวัดขนาด"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:164
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:124
@@ -21991,7 +21992,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:210
 msgid "Dimension Text"
-msgstr "ข้อความมิติ"
+msgstr "ข้อความวัดขนาด"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:219
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:110
@@ -22049,16 +22050,16 @@ msgstr "180.0"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:301
 msgid "Keep aligned with dimension"
-msgstr "จัดให้สอดคล้องกับค่ามิติ"
+msgstr "จัดให้สอดคล้องกับค่าวัดขนาด"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:302
 msgid "Automatically set the text orientation to match the dimension lines"
-msgstr "ตั้งค่าการวางแนวข้อความโดยอัตโนมัติให้ตรงกับเส้นมิติ"
+msgstr "ตั้งค่าการวางแนวข้อความโดยอัตโนมัติให้ตรงกับเส้นวัดขนาด"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:307
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:190
 msgid "Mirror text"
-msgstr "สะท้อนข้อความ"
+msgstr "ข้อความกลับกระจก"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:311
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:140
@@ -22086,15 +22087,15 @@ msgstr "ด้วยตนเอง"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:329
 msgid "Choose how to position the text relative to the dimension line"
-msgstr "เลือกวิธีการจัดตําแหน่งข้อความให้สัมพันธ์กับเส้นมิติ"
+msgstr "เลือกวิธีการจัดตําแหน่งข้อความให้สัมพันธ์กับเส้นวัดขนาด"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:344
 msgid "Dimension Line"
-msgstr "เส้นมิติ"
+msgstr "เส้นวัดขนาด"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:353
 msgid "Thickness of the dimension lines"
-msgstr "ความหนาของเส้นมิติ"
+msgstr "ความหนาของเส้นวัดขนาด"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:367
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:135
@@ -22113,7 +22114,7 @@ msgstr "ช่องว่างระหว่างจุดที่วัด
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.h:120
 msgid "Dimension Properties"
-msgstr "คุณสมบัติมิติ"
+msgstr "คุณสมบัติวัดขนาด"
 
 #: pcbnew/dialogs/dialog_drc.cpp:85
 msgid "Run DRC"
@@ -22594,7 +22595,7 @@ msgstr "ขนาดหน้า SVG"
 
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:95
 msgid "Print the layer(s) horizontally mirrored"
-msgstr "พิมพ์เลเยอร์ที่ทำมิเรอร์ในแนวนอน"
+msgstr "พิมพ์เลเยอร์ที่กลับกระจกในแนวนอน"
 
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:99
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:254
@@ -23669,7 +23670,7 @@ msgstr "ตัดขอบ"
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:138
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:58
 msgid "Courtyards"
-msgstr "ลานบ้าน"
+msgstr "ลานสนาม"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:217
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:139
@@ -23927,7 +23928,7 @@ msgstr "กฎการออกแบบ"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:58
 msgid "Predefined track and via dimensions"
-msgstr "ขนาดแทร็กและเวียที่กำหนดไว้ล่วงหน้า"
+msgstr "ขนาดแทร็กและเวียที่กำหนดขนาดไว้ล่วงหน้า"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:61
 msgid "Solder mask/paste defaults"
@@ -24392,7 +24393,7 @@ msgstr "จํานวนมุม %d"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:915
 msgid "All copper layers"
-msgstr "ชั้นทองแดงทั้งหมด"
+msgstr "เลเยอร์ทองแดงทั้งหมด"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:916
 #, c-format
@@ -24491,7 +24492,7 @@ msgstr "คำเตือน: คุณสมบัติฮีทซิงค�
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1379
 msgid "Warning: Castellated property is for PTH pads."
-msgstr "คำเตือน:คุณสมบัติแคสเทลเลทใช้สำหรับแพ็ด PTH"
+msgstr "คำเตือน:คุณสมบัติคาสเทลเลตใช้สำหรับแพ็ด PTH"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1385
 msgid "Warning: BGA property is for SMD pads."
@@ -24797,8 +24798,8 @@ msgstr ""
 "ฟิดูเชียลส่วนกลางเป็น ฟิดูเชียลสำหรับทั้งกระดาน\n"
 "แพ็ดจุดทดสอบมีประโยชน์ในการระบุจุดทดสอบในไฟล์เกอร์เบอร์\n"
 "แผ่นฮีทซิงค์ระบุแผ่นระบายความร้อน\n"
-"Castellated ระบุ castellated ผ่านแผ่นรูบนขอบกระดาน\n"
-"คุณสมบัติเหล่านี้ระบุไว้ในไฟล์ Gerber X2"
+"คาสเทลเลตระบุ รูเจาะทะลุชนิดคาสเทลเลตบนขอบบอร์ด\n"
+"คุณสมบัติเหล่านี้ระบุไว้ในไฟล์เกอร์เบอร์ชนิด X2"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:563 pcbnew/pad.cpp:1460
 msgid "BGA pad"
@@ -25341,15 +25342,15 @@ msgstr "(%d การละเมิด DRC ที่พบ; %d ข้อยก�
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:447
 msgid "Select Fab Layers"
-msgstr "เลือกเลเยอร์ Fab"
+msgstr "เลือกเลเยอร์แฟ้บ"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:451
 msgid "Select all Copper Layers"
-msgstr "เลือกชั้นทองแดงทั้งหมด"
+msgstr "เลือกเลเยอร์ทองแดงทั้งหมด"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:455
 msgid "Deselect all Copper Layers"
-msgstr "ยกเลิกการเลือกชั้นทองแดงทั้งหมด"
+msgstr "ยกเลิกการเลือกเลเยอร์ทองแดงทั้งหมด"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:459
 msgid "Select all Layers"
@@ -25383,7 +25384,7 @@ msgstr "ช่องว่างเวียเท่ากับช่วงว
 
 #: pcbnew/dialogs/dialog_pns_diff_pair_dimensions_base.h:60
 msgid "Differential Pair Dimensions"
-msgstr "ขนาดคู่ดิฟเฟอเรนเชียล"
+msgstr "ขนาดคู่ดิฟแพร์"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings.cpp:79
 msgid "Single Track Length Tuning"
@@ -25391,19 +25392,19 @@ msgstr "การปรับความยาวแทร็กเดียว
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings.cpp:85
 msgid "Differential Pair Length Tuning"
-msgstr "การปรับความยาวคู่ดิฟเฟอเรนเชียล"
+msgstr "การปรับความยาวคู่ดิฟแพร์"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings.cpp:91
 msgid "Differential Pair Skew Tuning"
-msgstr "การปรับค่าลาดเอียงคู่ดิฟเฟอเรนเชียล"
+msgstr "การปรับค่าบิดเบือนคู่ดิฟแพร์"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings.cpp:93
 msgid "Target skew:"
-msgstr "เป้าหมายลาดเอียง:"
+msgstr "เป้าหมายบิดเบือน:"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:22
 msgid "Length / Skew"
-msgstr "ความยาว / เอียง"
+msgstr "ความยาว / บิดเบือน"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:30
 msgid "Tune from:"
@@ -25534,8 +25535,8 @@ msgid ""
 "When enabled, the router tries to move colliding traces behind solid "
 "obstacles (e.g. pads) instead of \"reflecting\" back the collision"
 msgstr ""
-"เมื่อเปิดใช้งาน เราเตอร์จะพยายามย้ายเทรส ที่ชนสิ่งกีดขวางของแข็ง (เช่น แพ็ด) "
-"แทนที่จะ \"สะท้อน\" กลับ"
+"เมื่อเปิดใช้งาน เร้าท์เตอร์จะพยายามย้ายแทร็ก ที่ชนสิ่งกีดขวางของแข็ง (เช่น "
+"แพ็ด) แทนที่จะ \"สะท้อน\" กลับ"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:61
 msgid "Remove redundant tracks"
@@ -25548,7 +25549,7 @@ msgid ""
 "Loop removal works locally (only between the start and end of the currently "
 "routed trace)."
 msgstr ""
-"ลบวงลูปขณะเราติั้ง (เช่น หากแทร็กใหม่เชื่อมต่อแบบเดียวกับที่มีอยู่แล้ว "
+"ลบวงลูปขณะเร้าต์ติ้ง (เช่น หากแทร็กใหม่เชื่อมต่อแบบเดียวกับที่มีอยู่แล้ว "
 "แทร็กเก่าจะถูกลบออก)\n"
 "การลบลูปจะทำงานในเครื่อง (ระหว่างจุดเริ่มต้นและจุดสิ้นสุดของการติดตามที่กำหนด"
 "เส้นทางในปัจจุบันเท่านั้น)"
@@ -25562,8 +25563,8 @@ msgid ""
 "When enabled, the router tries to break out pads/vias in a clean way, "
 "avoiding acute angles and jagged breakout traces."
 msgstr ""
-"เมื่อเปิดใช้งาน เราเตอร์จะพยายามแยกจาก แพ็ด/เวีย ด้วยวิธีสะอาด "
-"หลีกเลี่ยงมุมแหลมและแทร็กขรุขระ"
+"เมื่อเปิดใช้งาน,เร้าท์เตอร์จะพยายามแยกจาก แพ็ด/เวีย "
+"ด้วยวิธีสะอาด,หลีกเลี่ยงมุมแหลมและแทร็กขรุขระ"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:71
 msgid "Smooth dragged segments"
@@ -25574,7 +25575,7 @@ msgid ""
 "When enabled, the router attempts to merge several jagged segments into a "
 "single straight one (dragging mode)."
 msgstr ""
-"เมื่อเปิดใช้งาน เราเตอร์จะพยายามรวมส่วนที่ขรุขระหลายส่วนเป็นเส้นตรงเดียว "
+"เมื่อเปิดใช้งาน,เร้าท์เตอร์จะพยายามรวมส่วนที่ขรุขระหลายส่วนเป็นเส้นตรงเดียว "
 "(โหมดลาก)"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:76
@@ -25601,7 +25602,7 @@ msgid ""
 "will be optimized and re-routed when a segment is dragged.  When disabled, "
 "only the area near the segment being dragged will be optimized."
 msgstr ""
-"เมื่อเปิดใช้งาน ส่วนทั้งหมดของแทร็กที่ปรากฏบนหน้าจอจะได้รับการปรับให้เหมาะสม "
+"เมื่อเปิดใช้งาน,ส่วนทั้งหมดของแทร็กที่ปรากฏบนหน้าจอจะได้รับการปรับให้เหมาะสม "
 "และกำหนดเส้นทางใหม่เมื่อลาก ส่วนเมื่อปิดใช้งาน "
 "เฉพาะพื้นที่ใกล้ส่วนที่ถูกลากเท่านั้นที่จะได้รับการปรับให้เหมาะสม"
 
@@ -25632,7 +25633,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_pns_settings_base.h:65
 msgid "Interactive Router Settings"
-msgstr "การตั้งค่าเราเตอร์แบบโต้ตอบ"
+msgstr "การตั้งค่าเร้าท์เตอร์แบบโต้ตอบ"
 
 #: pcbnew/dialogs/dialog_position_relative.cpp:165
 msgid "Reset to the current distance from the reference position."
@@ -25794,7 +25795,7 @@ msgstr "ไม่มีฟุ้ทพรินท์ในบริเวณน
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:69
 msgid "Raise a DRC error if a footprint courtyard overlaps this area"
-msgstr "เพิ่มข้อผิดพลาด DRC หากฟุ้ทพรินท์คาบเกี่ยวกับพื้นที่นี้"
+msgstr "เพิ่มข้อผิดพลาด DRC หากลานสนามฟุ้ทพรินท์คาบเกี่ยวกับพื้นที่นี้"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:79
 msgid "Area name:"
@@ -26050,7 +26051,7 @@ msgstr "เลือกเท่านั้น"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.cpp:41
 msgid "Keep &outside layers"
-msgstr "เก็บเลเยอร์ชั้นนอก"
+msgstr "เก็บเลเยอร์ด้านนอก"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.h:58
 msgid "Remove Unused Pads"
@@ -26286,12 +26287,12 @@ msgstr "จับภาพเคอร์เซอร์เมื่อเมา
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:319
 msgid "Always show selected ratsnest"
-msgstr "แสดงเร็ทเน็ตที่เลือกเสมอ"
+msgstr "แสดงแร็ทเน็ตที่เลือกเสมอ"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:322
 #: pcbnew/tools/pcb_actions.cpp:794
 msgid "Show ratsnest with curved lines"
-msgstr "แสดงเร็ทเน็ตด้วยเส้นโค้ง"
+msgstr "แสดงแร็ทเน็ตด้วยเส้นโค้ง"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:329
 msgid "Track Editing"
@@ -26552,7 +26553,7 @@ msgstr "ปรับความยาว"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:151
 msgid "Include stackup height in track length calculations"
-msgstr "รวมความสูงของชั้นทับซ้อนในการคำนวณความยาวแทร็ก"
+msgstr "รวมความสูงของสแต็กอัพในการคำนวณความยาวแทร็ก"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:152
 msgid ""
@@ -26560,9 +26561,9 @@ msgid ""
 "length calculations for tracks with vias.  When disabled, via stackup height "
 "is ignored."
 msgstr ""
-"เมื่อเปิดใช้งาน "
-"ระยะระหว่างชั้นของทองแดงจะถูกรวมไปในการคำนวณความยาวแทร็กที่มีเวีย  ถ้าปิด "
-"ความสูงของชั้นที่ทับซ้อนของเวียจะไม่นำมาคิดรวมความยาวแทร็ก"
+"เมื่อเปิดใช้งาน, "
+"ระยะระหว่างเลเยอร์ของทองแดงจะถูกรวมไปในการคำนวณความยาวแทร็กที่มีเวีย  "
+"ถ้าปิด,ความสูงของสแต็กอัพของเวียจะไม่นำมาคิดรวมความยาวแทร็ก"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:189
 msgid "Minimum clearance:"
@@ -26622,7 +26623,7 @@ msgstr "ระยะห่างระหว่างชิ้นส่วนอ
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:421
 msgid "Use the Physical Stackup page to change the number of copper layers."
-msgstr "ใช้หน้าการทับซ้อนเลเยอร์ทางกายภาพ เพื่อเปลี่ยนจำนวนชั้นทองแดง"
+msgstr "ใช้หน้าสแต็กอัพทางกายภาพ เพื่อเปลี่ยนจำนวนเลเยอร์ทองแดง"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:434
 #, c-format
@@ -26679,7 +26680,8 @@ msgid ""
 "\n"
 "Continue and delete the extra inner copper layers from the current board?"
 msgstr ""
-"การตั้งค่าที่นำเข้ามีชั้นทองแดงน้อยกว่าบอร์ดปัจจุบัน (%i แทนที่จะเป็น %i)\n"
+"การตั้งค่าที่นำเข้ามีเลเยอร์ทองแดงน้อยกว่าบอร์ดปัจจุบัน (%i แทนที่จะเป็น %i)"
+"\n"
 "\n"
 "ดำเนินการต่อและลบเลเยอร์ทองแดงภายในพิเศษออกจากบอร์ดปัจจุบันหรือไม่?"
 
@@ -26701,7 +26703,7 @@ msgstr "เพิ่มเลเยอร์ผู้ใช้กําหนด
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:44
 msgid "If you want a courtyard layer for the front side of the board"
-msgstr "หากคุณต้องการชั้นลานสําหรับด้านหน้าของบอร์ด"
+msgstr "หากคุณต้องการเลเยอร์ลานสนามสําหรับด้านหน้าของบอร์ด"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:48
 msgid "CrtYd_Front"
@@ -26714,7 +26716,7 @@ msgstr "นอกบอร์ด, กำลังทดสอบ"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:60
 msgid "If you want a fabrication layer for the front side of the board"
-msgstr "ถ้าคุณต้องการชั้นการผลิตสำหรับด้านหน้าของบอร์ด"
+msgstr "หากคุณต้องการเลเยอร์การผลิตสำหรับด้านหน้าของบอร์ด"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:64
 msgid "Fab_Front"
@@ -26746,7 +26748,7 @@ msgstr "บนบอร์ด,ไม่ใช่ทองแดง"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:84
 msgid "If you want a solder paster layer for front side of the board"
-msgstr "หากคุณต้องการชั้นโซลเดอร์เพสต์สำหรับบอร์ดด้านหน้า"
+msgstr "หากคุณต้องการเลเยอร์โซลเดอร์เพสต์สำหรับบอร์ดด้านหน้า"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:88
 msgid "SoldP_Front"
@@ -26770,7 +26772,7 @@ msgstr "Mask_Front"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:120
 msgid "If you want a front copper layer"
-msgstr "ถ้าคุณต้องการชั้นทองแดงด้านหน้า"
+msgstr "หากคุณต้องการเลเยอร์ทองแดงด้านหน้า"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:124
 msgid "Front_layer"
@@ -26778,7 +26780,7 @@ msgstr "Front_layer"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:125
 msgid "Layer name of front (top) copper layer"
-msgstr "ชื่อชั้นทองแดงด้านหน้า (บน)"
+msgstr "ชื่อเลเยอร์ทองแดงด้านหน้า (บน)"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:129
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:143
@@ -26956,7 +26958,7 @@ msgid ""
 "Copper layer type for Freerouter and other external routers.\n"
 "Power plane layers are removed from Freerouter's layer menus."
 msgstr ""
-"ประเภทเลเยอร์ทองแดงสำหรับ Freerouter และเราเตอร์ภายนอกอื่นๆ\n"
+"ประเภทเลเยอร์ทองแดงสำหรับ Freerouter และเร้าท์เตอร์ภายนอกอื่นๆ\n"
 "เลเยอร์ระนาบพลังงานจะถูกลบออกจากเมนูเลเยอร์ของ Freerouter"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:140
@@ -27081,7 +27083,7 @@ msgstr "In30"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:558
 msgid "If you want a back copper layer"
-msgstr "หากคุณต้องการชั้นทองแดงด้านหลัง"
+msgstr "หากคุณต้องการเลเยอร์ทองแดงด้านหลัง"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:563
 msgid "Layer name of back (bottom) copper layer"
@@ -27089,7 +27091,7 @@ msgstr "ชื่อเลเยอร์ทองแดงด้านหลั
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:576
 msgid "If you want a solder mask layer for the back side of the board"
-msgstr "ถ้าคุณต้องการชั้นโซลเดอร์มาส์กสำหรับด้านหลังของบอร์ด"
+msgstr "หากคุณต้องการเลเยอร์โซลเดอร์มาส์กสำหรับด้านหลังของบอร์ด"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:580
 msgid "SoldM_Back"
@@ -27097,7 +27099,7 @@ msgstr "SoldM_Back"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:588
 msgid "If you want a silk screen layer for the back side of the board"
-msgstr "หากคุณต้องการชั้นซิลค์สกรีนสำหรับด้านหลังของบอร์ด"
+msgstr "หากคุณต้องการเลเยอร์ซิลค์สกรีนสำหรับด้านหลังของบอร์ด"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:592
 msgid "SilkS_Back"
@@ -27105,7 +27107,7 @@ msgstr "SilkS_Back"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:600
 msgid "If you want a solder paste layer for the back side of the board"
-msgstr "หากคุณต้องการชั้นโซลเดอร์เพสต์สำหรับเลเยอร์ด้านหลังของบอร์ด"
+msgstr "หากคุณต้องการเลเยอร์โซลเดอร์เพสต์สำหรับเลเยอร์ด้านหลังของบอร์ด"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:604
 msgid "SoldP_Back"
@@ -27113,7 +27115,7 @@ msgstr "SoldP_Back"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:612
 msgid "If you want an adhesive layer for the back side of the board"
-msgstr "หากคุณต้องการชั้นเลเยอร์กาวสำหรับด้านหลังของบอร์ด"
+msgstr "หากคุณต้องการเลเยอร์กาวสำหรับด้านหลังของบอร์ด"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:616
 msgid "Adhes_Back"
@@ -27121,7 +27123,7 @@ msgstr "Adhes_Back"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:624
 msgid "If you want a fabrication layer for the back side of the board"
-msgstr "หากคุณต้องการชั้นการผลิตสำหรับเลเยอร์ด้านหลังของบอร์ด"
+msgstr "หากคุณต้องการเลเยอร์การผลิตสำหรับด้านหลังของบอร์ด"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:628
 msgid "Fab_Back"
@@ -27129,7 +27131,7 @@ msgstr "Fab_Back"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:636
 msgid "If you want a courtyard layer for the back side of the board"
-msgstr "ถ้าคุณต้องการชั้นลานสำหรับด้านหลังของบอร์ด"
+msgstr "หากคุณต้องการเลเยอร์ลานสนามสำหรับด้านหลังของบอร์ด"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:640
 msgid "CrtYd_Back"
@@ -27137,7 +27139,7 @@ msgstr "CrtYd_Back"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:648
 msgid "If you want a board perimeter layer"
-msgstr "ถ้าคุณต้องการชั้นปริมณฑลของบอร์ด"
+msgstr "หากคุณต้องการเลเยอร์ปริมณฑลของบอร์ด"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:652
 msgid "Pcb_Edges"
@@ -27168,7 +27170,7 @@ msgstr "Eco2"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:690
 msgid "If you want a separate layer for comments or notes"
-msgstr "ถ้าคุณต้องการแยกชั้นสำหรับความคิดเห็นหรือหมายเหตุ"
+msgstr "หากคุณต้องการแยกเลเยอร์สำหรับความคิดเห็นหรือหมายเหตุ"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:694
 msgid "Comments"
@@ -27763,13 +27765,12 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:72
 msgid "Default properties for new dimension objects:"
-msgstr "ค่าคุณสมบัติปริยาย สําหรับวัตถุกำหนดขนาดใหม่:"
+msgstr "ค่าคุณสมบัติปริยาย สําหรับวัตถุวัดขนาดใหม่:"
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:89
 msgid ""
 "Default units for dimensions (\"automatic\" to follow the chosen UI units)"
-msgstr ""
-"หน่วยปริยายสำหรับกำหนดขนาดมิติ (\"อัตโนมัติ\" เพื่อตามหน่วย UI ที่เลือก)"
+msgstr "หน่วยปริยายสำหรับวัดขนาด (\"อัตโนมัติ\" เพื่อตามหน่วย UI ที่เลือก)"
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:96
 msgid "Text position:"
@@ -27777,7 +27778,7 @@ msgstr "ตําแหน่งข้อความ:"
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:104
 msgid "Where to position the dimension text relative to the dimension line"
-msgstr "ตําแหน่งที่จะวางข้อความมิติให้สัมพันธ์กับบรรทัดมิติ"
+msgstr "ตําแหน่งที่จะวางข้อความวัดขนาดให้สัมพันธ์กับเส้นวัดขนาด"
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:118
 msgid "Keep text aligned"
@@ -27785,7 +27786,7 @@ msgstr "จัดข้อความให้อยู่ในแนวเด
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:119
 msgid "When checked, dimension text will be kept aligned with dimension lines"
-msgstr "เมื่อเลือกแล้ว ข้อความมิติจะถูกจัดให้อยู่ในแนวเดียวกับเส้นมิติ"
+msgstr "เมื่อเลือกแล้ว ข้อความวัดขนาดจะถูกจัดให้อยู่ในแนวเดียวกับเส้นวัดขนาด"
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:131
 msgid "How many digits of precision to show"
@@ -27805,7 +27806,7 @@ msgstr "ไม่ได้กำหนดขนาดรูเจาะเวี
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias.cpp:273
 msgid "No differential pair gap defined."
-msgstr "ไม่มีการกําหนดช่องว่างของคู่ความแตกต่าง"
+msgstr "ไม่กําหนดช่องว่างของคู่ดิฟแพร์"
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:19
 msgid "Pre-defined track and via dimensions:"
@@ -27829,7 +27830,7 @@ msgstr "รูเจาะ"
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:140
 msgid "Differential Pairs"
-msgstr "คู่แตกต่าง"
+msgstr "ดิฟแพร์"
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:156
 msgid "Gap"
@@ -27858,16 +27859,16 @@ msgstr "เน็ตคลาส '%s'"
 #: pcbnew/drc/drc_engine.cpp:303
 #, c-format
 msgid "netclass '%s' (diff pair)"
-msgstr "เน็ตคลาส '%s' (คู่ดิฟฟ์)"
+msgstr "เน็ตคลาส '%s' (ดิฟแพร์)"
 
 #: pcbnew/drc/drc_engine.cpp:425
 msgid "keepout area"
-msgstr "พื้นที่หวงห้าม"
+msgstr "พื้นที่ปิดกั้น"
 
 #: pcbnew/drc/drc_engine.cpp:430
 #, c-format
 msgid "keepout area '%s'"
-msgstr "พื้นที่หวงห้าม '%s'"
+msgstr "พื้นที่ปิดกั้น '%s'"
 
 #: pcbnew/drc/drc_engine.cpp:702
 msgid "Tessellating copper zones..."
@@ -27891,7 +27892,7 @@ msgstr "ตรวจสอบ %s; ระยะห่าง: %s"
 #: pcbnew/drc/drc_engine.cpp:852
 #, c-format
 msgid "Checking %s; courtyard clearance: %s."
-msgstr "ตรวจสอบ %s; ระยะห่างจากลาน: %s"
+msgstr "ตรวจสอบ %s; ระยะห่างจากลานสนาม: %s"
 
 #: pcbnew/drc/drc_engine.cpp:859
 #, c-format
@@ -27920,7 +27921,7 @@ msgstr ""
 
 #: pcbnew/drc/drc_engine.cpp:930
 msgid "Keepout constraint not met."
-msgstr "ไม่พบข้อจำกัดพื้นที่หวงห้าม"
+msgstr "ไม่พบข้อจำกัดพื้นที่ปิดกั้น"
 
 #: pcbnew/drc/drc_engine.cpp:932
 msgid "Disallow constraint not met."
@@ -27928,7 +27929,7 @@ msgstr "ไม่พบข้อจำกัดที่ต้องห้าม
 
 #: pcbnew/drc/drc_engine.cpp:954
 msgid "Keepout layer(s) not matched."
-msgstr "เลเยอร์หวงห้ามไม่ตรงกัน"
+msgstr "เลเยอร์ปิดกั้นไม่ตรงกัน"
 
 #: pcbnew/drc/drc_engine.cpp:958 pcbnew/drc/drc_engine.cpp:979
 #, c-format
@@ -28003,7 +28004,7 @@ msgstr "ชิ้นส่วนไม่อนุญาต"
 
 #: pcbnew/drc/drc_item.cpp:61
 msgid "Text (or dimension) on Edge.Cuts layer"
-msgstr "ข้อความ (หรือมิติ) บนเลเยอร์ Edge.Cuts"
+msgstr "ข้อความ (หรือวัดขนาด) บนเลเยอร์ Edge.Cuts"
 
 #: pcbnew/drc/drc_item.cpp:65
 msgid "Clearance violation"
@@ -28127,7 +28128,7 @@ msgstr "ความยาวแทร็กอยู่นอกช่วง"
 
 #: pcbnew/drc/drc_item.cpp:189
 msgid "Skew between traces out of range"
-msgstr "รอยลาดเอียงระหว่างเทรสอยู่นอกช่วง"
+msgstr "บิดเบือนระหว่างแทร็กอยู่นอกช่วง"
 
 #: pcbnew/drc/drc_item.cpp:193
 msgid "Too many vias on a connection"
@@ -28135,7 +28136,7 @@ msgstr "จำนวนเวียมากเกินไปในหนึ่
 
 #: pcbnew/drc/drc_item.cpp:197
 msgid "Differential pair gap out of range"
-msgstr "ระยะระหว่างคู่แตกต่าง อยู่นอกช่วง"
+msgstr "ช่องว่างระหว่างคู่ดิฟแพร์ อยู่นอกช่วง"
 
 #: pcbnew/drc/drc_item.cpp:201
 msgid "Differential uncoupled length too long"
@@ -28323,7 +28324,7 @@ msgstr "กำลังตรวจสอบข้อกำหนดลานส
 
 #: pcbnew/drc/drc_test_provider_courtyard_clearance.cpp:90
 msgid "Gathering footprint courtyards..."
-msgstr "การรวมกันของลานสนามฟุ้ทพรินท์..."
+msgstr "การจับกลุ่มลานสนามฟุ้ทพรินท์..."
 
 #: pcbnew/drc/drc_test_provider_courtyard_clearance.cpp:151
 msgid "Checking footprints for overlapping courtyards..."
@@ -28355,7 +28356,7 @@ msgstr "ค่าจริง: %s)"
 
 #: pcbnew/drc/drc_test_provider_disallow.cpp:70
 msgid "Checking keepouts & disallow constraints..."
-msgstr "กำลังตรวจสอบบริเวณหวงห้ามและข้อจำกัดที่ไม่ยินยอม"
+msgstr "กำลังตรวจสอบการปิดกั้นและข้อจำกัดที่ไม่ยินยอม..."
 
 #: pcbnew/drc/drc_test_provider_edge_clearance.cpp:122
 msgid "Checking copper to board edge clearances..."
@@ -28445,7 +28446,8 @@ msgstr "(%s ความยาวสูงสุด: %s; ค่าจริง: 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:170
 #, c-format
 msgid "(%s max skew: %s; actual: %s; average net length: %s; actual: %s)"
-msgstr "(%s เอียงสูงสุด: %s; ค่าจริง: %s; ความยาวเน็ตเฉลี่ย: %s; ค่าจริง: %s)"
+msgstr ""
+"(%s บิดเบือนสูงสุด: %s; ค่าจริง: %s; ความยาวเน็ตเฉลี่ย: %s; ค่าจริง: %s)"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:199
 #, c-format
@@ -28643,8 +28645,8 @@ msgid ""
 "Board stackup settings not up to date\n"
 "Please fix the stackup"
 msgstr ""
-"การตั้งค่าชั้นทับซ้อนของบอร์ดไม่ทันสมัยล่าสุด\n"
-"กรุณาแก้ไข"
+"การตั้งสแต็กอัพของบอร์ดไม่ทันสมัยล่าสุด\n"
+"กรุณาแก้ไขสแต็กอัพ"
 
 #: pcbnew/files.cpp:144
 msgid "All KiCad Board Files"
@@ -28708,7 +28710,7 @@ msgstr ""
 "หากโซนบนบอร์ดนี้ได้รับการเติม การตั้งค่าระยะห่างจากขอบทองแดง "
 "(ดูการตั้งค่าบอร์ด>กฎการออกแบบ>ข้อจํากัด)\n"
 "ซึ่งอาจส่งผลให้มีการเติมที่แตกต่างจาก KiCad "
-"รุ่นก่อนหน้าที่ใช้ความหนาของเส้นของขอบเขตของบอร์ดบนชั้น Edge Cuts"
+"รุ่นก่อนหน้าที่ใช้ความหนาของเส้นของขอบเขตของบอร์ดบนเลเยอร์ Edge Cuts"
 
 #: pcbnew/files.cpp:547
 msgid "Edge Clearance Warning"
@@ -28884,7 +28886,7 @@ msgstr "ตัวแก้ไขฟุ้ทพรินท์ KiCad"
 
 #: pcbnew/footprint_edit_frame.cpp:205 pcbnew/zone_settings.cpp:219
 msgid "Inner layers"
-msgstr "เลเยอร์ชั้นใน"
+msgstr "เลเยอร์ภายใน"
 
 #: pcbnew/footprint_edit_frame.cpp:244 pcbnew/pcb_edit_frame.cpp:275
 msgid "Selection Filter"
@@ -29535,7 +29537,7 @@ msgstr "ขนาดสตับ:"
 
 #: pcbnew/microwave/microwave_footprint.cpp:69
 msgid "Arc Stub Radius Value:"
-msgstr "ค่ารัศมีต้นขั้วส่วนโค้ง:"
+msgstr "ค่ารัศมีสตับส่วนโค้ง:"
 
 #: pcbnew/microwave/microwave_footprint.cpp:80
 #: pcbnew/microwave/microwave_footprint.cpp:95
@@ -29805,7 +29807,7 @@ msgstr "โซนทองแดง '%s' ไม่มีแพ็ดเชื่
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:758
 #, c-format
 msgid "Copper zone on layer %s at (%s, %s) has no pads connected."
-msgstr "โซนทองแดงบนชั้น %s ที่ (%s, %s) ไม่มีแพ็ดเชื่อมต่อ"
+msgstr "โซนทองแดงบนเลเยอร์ %s ที่ (%s, %s) ไม่มีแพ็ดเชื่อมต่อ"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:826
 #, c-format
@@ -30141,7 +30143,7 @@ msgstr "เกิดข้อผิดพลาดในการโหลดไ
 
 #: pcbnew/pcb_dimension.cpp:299
 msgid "Dimension"
-msgstr "มิติ"
+msgstr "วัดขนาด"
 
 #: pcbnew/pcb_dimension.cpp:301
 msgid "Prefix"
@@ -30158,7 +30160,7 @@ msgstr "คำต่อท้าย"
 #: pcbnew/pcb_dimension.cpp:439
 #, c-format
 msgid "Dimension '%s' on %s"
-msgstr "มิติ '%s' บน %s"
+msgstr "วัดขนาด '%s' บน %s"
 
 #: pcbnew/pcb_edit_frame.cpp:190
 msgid "KiCad PCB Editor"
@@ -30243,11 +30245,11 @@ msgstr "ลานสนามของฟุ้ทพรินท์ไม่ใ
 
 #: pcbnew/pcb_expr_evaluator.cpp:511
 msgid "Footprint has no front courtyard."
-msgstr "ฟุ้ทพรินท์ไม่มีสนามลานด้านหน้า"
+msgstr "ฟุ้ทพรินท์ไม่มีลานสนามด้านหน้า"
 
 #: pcbnew/pcb_expr_evaluator.cpp:528
 msgid "Footprint has no back courtyard."
-msgstr "ฟุ้ทพรินท์ไม่มีสนามลานด้านหลัง"
+msgstr "ฟุ้ทพรินท์ไม่มีลานสนามด้านหลัง"
 
 #: pcbnew/pcb_expr_evaluator.cpp:1059
 msgid "must be mm, in, or mil"
@@ -30499,14 +30501,14 @@ msgid ""
 "Dimension found on an Altium layer (%d) with no KiCad equivalent. It has "
 "been moved to KiCad layer Eco1_User."
 msgstr ""
-"มิติข้อมูลที่พบในเลเยอร์ Altium (%d) ไม่มีเทียบเท่าใน KiCad "
+"วัดขนาดข้อมูลที่พบในเลเยอร์ Altium (%d) ไม่มีเทียบเท่าใน KiCad "
 "จะถูกย้ายไปที่เลเยอร์ Eco1_User"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1231
 #: pcbnew/plugins/altium/altium_pcb.cpp:1239
 #, c-format
 msgid "Ignored dimension of kind %d (not yet supported)."
-msgstr "ละเว้นมิติประเภท %d (ยังไม่รองรับ)"
+msgstr "ละเว้นวัดขนาดประเภท %d (ยังไม่รองรับ)"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1284
 msgid "No 3D-models will be imported."
@@ -30593,8 +30595,8 @@ msgid ""
 "Arc keepout found on an Altium layer (%d) with no KiCad equivalent. It has "
 "been moved to KiCad layer Eco1_User."
 msgstr ""
-"พบ Arc Keepout บนเลเยอร์ Altium (%d) ที่ไม่มี KiCad เทียบเท่า "
-"จุถูกย้ายไปที่เลเยอร์ Eco1_User"
+"พบปิดกั้นส่วนโค้งบน Altium เลเยอร์ (%d) ที่ไม่มี KiCad เทียบเท่า "
+"จะถูกย้ายไปที่เลเยอร์ Eco1_User"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1834
 #, c-format
@@ -30651,8 +30653,8 @@ msgid ""
 "Non-copper pad %s found on an Altium layer (%d) with no KiCad equivalent. It "
 "has been moved to KiCad layer Eco1_User."
 msgstr ""
-"แพ็ดที่ไม่ใช่ทองแดง %s พบในชั้นของ Altium (%d) KiCad ไม่มีเลเยอร์เทียบเท่า "
-"จะถูกย้ายไปยังชั้น Eco1_User"
+"แพ็ดที่ไม่ใช่ทองแดง %s พบในเลเยอร์ของ Altium (%d) KiCad ไม่มีเลเยอร์เทียบเท่"
+"า จะถูกย้ายไปยังเลเยอร์ Eco1_User"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2129
 #, c-format
@@ -30694,8 +30696,8 @@ msgid ""
 "Track keepout found on an Altium layer (%d) with no KiCad equivalent. It has "
 "been moved to KiCad layer Eco1_User."
 msgstr ""
-"Track Keepout พบในชั้นของ Altium (%d) KiCad ไม่มีเลเยอร์เทียบเท่า "
-"จะถูกย้ายไปยังชั้น Eco1_User"
+"ปิดกั้นแทร็กพบใน Altium เลเยอร์ (%d) KiCad ไม่มีเลเยอร์เทียบเท่า "
+"จะถูกย้ายไปยังเลเยอร์ Eco1_User"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2431
 #, c-format
@@ -30703,8 +30705,8 @@ msgid ""
 "Track found on an Altium layer (%d) with no KiCadequivalent. It has been "
 "moved to KiCad layer Eco1_User."
 msgstr ""
-"แทร็กพบในชั้นของ Altium (%d) KiCad ไม่มีเลเยอร์เทียบเท่า จะถูกย้ายไปยังชั้น "
-"Eco1_User"
+"แทร็กพบในเลเยอร์ของ Altium (%d) KiCad ไม่มีเลเยอร์เทียบเท่า "
+"จะถูกย้ายไปยังเลเยอร์ Eco1_User"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2472
 msgid "Loading text..."
@@ -30721,8 +30723,8 @@ msgid ""
 "Text found on an Altium layer (%d) with no KiCad equivalent. It has been "
 "moved to KiCad layer Eco1_User."
 msgstr ""
-"ข้อความพบในชั้นของ Altium (%d) KiCad ไม่มีเลเยอร์เทียบเท่า จะถูกย้ายไปยังชั้"
-"น Eco1_User"
+"ข้อความพบในเลเยอร์ของ Altium (%d) KiCad ไม่มีเลเยอร์เทียบเท่า "
+"จะถูกย้ายไปยังเลเยอร์ Eco1_User"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2657
 msgid "Loading rectangles..."
@@ -30734,8 +30736,8 @@ msgid ""
 "Fill found on an Altium layer (%d) with no KiCad equivalent. It has been "
 "moved to KiCad layer Eco1_User."
 msgstr ""
-"Fill พบในชั้นของ Altium (%d) KiCad ไม่มีเลเยอร์เทียบเท่า จะถูกย้ายไปยังชั้น "
-"Eco1_User"
+"Fill พบในเลเยอร์ของ Altium (%d) KiCad ไม่มีเลเยอร์เทียบเท่า "
+"จะถูกย้ายไปยังเลเยอร์ Eco1_User"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:87
 msgid ""
@@ -30753,7 +30755,7 @@ msgid ""
 "The CADSTAR design contains Trunk routing elements, which have no KiCad "
 "equivalent. These elements were not loaded."
 msgstr ""
-"งานออกแบบ CADSTAR มีส่วนที่เป็นก้อนเราติ้ง ซึ่งไม่มีเทียบเท่าใน KiCad "
+"งานออกแบบ CADSTAR มีส่วนที่เป็นก้อนเร้าต์ติ้ง ซึ่งไม่มีเทียบเท่าใน KiCad "
 "ส่วนเหล่านี้จะไม่นำเข้า"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:121
@@ -30811,7 +30813,7 @@ msgid ""
 "not imported."
 msgstr ""
 "พื้นที่ CADSTAR '%s' ในไลบรารีอุปกรณ์ '%s' ไม่มี KiCad เทียบเท่า "
-"พื้นที่นี้ไม่ใช่พื้นที่เฝ้าเส้นทางหรือเส้นทาง พื้นที่ไม่ถูกนําเข้า"
+"พื้นที่นี้ไม่ใช่พื้นที่ปิดกั้นแทร็กหรือเวีย พื้นที่นี้ไม่ถูกนําเข้า"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:931
 #, c-format
@@ -30854,8 +30856,8 @@ msgid ""
 "Dimension ID %s is an angled dimension, which has no KiCad equivalent. An "
 "aligned dimension was loaded instead."
 msgstr ""
-"รหัสมิติ %s เป็นมิติกำหนดมุมซึ่งไม่มีเทียบเท่าใน KiCad "
-"จะโหลดมิติที่จัดตําแหน่งแทน"
+"รหัสวัดขนาด %s เป็นวัดขนาดเชิงมุมซึ่งไม่มีเทียบเท่าใน KiCad "
+"จะโหลดวัดขนาดที่จัดตําแหน่งแทน"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1308
 #, c-format
@@ -30864,21 +30866,21 @@ msgid ""
 "are not yet supported in KiCad. The dimension object was imported with an "
 "internal dimension style instead."
 msgstr ""
-"รหัสมิติ %s มีลักษณะ 'ภายนอก' ใน CADSTAR "
-"ลักษณะมิติภายนอกยังไม่ได้รับการสนับสนุนใน KiCad "
-"วัตถุมิติจะนําเข้าด้วยลักษณะมิติภายในแทน"
+"รหัสวัดขนาด %s มีลักษณะ 'ภายนอก' ใน CADSTAR "
+"ลักษณะวัดขนาดภายนอกยังไม่ได้รับการสนับสนุนใน KiCad "
+"วัตถุวัดขนาดจะนําเข้าด้วยลักษณะวัดขนาดภายในแทน"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1364
 #, c-format
 msgid "Unexpected Dimension type (ID %s). This was not imported."
-msgstr "ชนิดมิติที่ไม่คาดคิด (ไอดี %s) ข้อมูลนี้ไม่ได้ถูกนําเข้า"
+msgstr "ชนิดวัดขนาดที่ไม่คาดคิด (ไอดี %s) ข้อมูลนี้ไม่ได้ถูกนําเข้า"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1499
 #, c-format
 msgid ""
 "Dimension %s is an angular dimension which has no KiCad equivalent. The "
 "object was not imported."
-msgstr "มิติข้อมูล %s เป็นมิติเชิงมุมที่ไม่มี KiCad เทียบเท่า วัตถุไม่ถูกนำเข้า"
+msgstr "วัดขนาด %s เป็นเชิงมุม ไม่มีเทียบเท่าใน KiCad วัตถุไม่ถูกนำเข้า"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1539
 #, c-format
@@ -30993,8 +30995,8 @@ msgid ""
 "with such name exists. The layer has been loaded but no copper zone was "
 "created."
 msgstr ""
-"เลเยอร์ CADSTAR '%s' ถูกกําหนดให้เป็นชั้นระนาบพลังงาน "
-"อย่างไรก็ตามไม่มีเน็ตที่มีชื่อดังกล่าว ดังนั้นชั้นจะถูกโหลด "
+"เลเยอร์ CADSTAR '%s' ถูกกําหนดให้เป็นเลเยอร์ระนาบพลังงาน "
+"อย่างไรก็ตามไม่มีเน็ตที่มีชื่อดังกล่าว ดังนั้นเลเยอร์จะถูกโหลด "
 "แต่ไม่มีการสร้างโซนทองแดง"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2020
@@ -31045,7 +31047,7 @@ msgid ""
 "The shape for '%s' is Hatch filled in CADSTAR, which has no KiCad "
 "equivalent. Using solid fill instead."
 msgstr ""
-"รูปร่างสําหรับ '%s' คือเติมด้วยตาข่ายภายใน CADSTAR ซึ่งไม่มี KiCad เทียบเท่า "
+"รูปร่างสําหรับ '%s' คือแรเงาภายใน CADSTAR ซึ่งไม่มี KiCad เทียบเท่า "
 "ใช้การเติมแบบทึบแทน"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3429
@@ -31055,9 +31057,9 @@ msgid ""
 "hatches (crosshatching) 90 degrees apart. The imported hatching is "
 "crosshatched."
 msgstr ""
-"รหัสการเติมตาข่าย CADSTAR '%s' มีการกําหนด %d ชนิด ภายใน KiCad "
-"รองรับการเติมตาข่าย 2 แบบ(การขีดไขว้) ห่างกัน 90 องศาเท่านั้น "
-"การเติมตาข่ายที่นําเข้า จะเป็นขีดไขว้เท่านั้น"
+"รหัสการแรเงาใน CADSTAR '%s' มีการกําหนด %d ชนิด ภายใน KiCad รองรับการแรเงา 2 "
+"แบบ(แรเงาขีดไขว้) ห่างกัน 90 องศาเท่านั้น การเติมแรเงาที่นําเข้า "
+"จะเป็นแรเงาขีดไขว้เท่านั้น"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3439
 #, c-format
@@ -31098,9 +31100,7 @@ msgstr ""
 msgid ""
 "Dimension ID %s uses a type of unit that is not supported in KiCad. "
 "Millimetres were applied instead."
-msgstr ""
-"รหัสมิติ %s ใช้หน่วยชนิดหนึ่งที่ไม่ได้รับการสนับสนุนใน KiCad "
-"มิลลิเมตรจะถูกนําไปใช้แทน"
+msgstr "รหัสวัดขนาด %s ใช้หน่วยที่ไม่สนับสนุนใน KiCad มิลลิเมตรจะถูกนําไปใช้แทน"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3752
 msgid ""
@@ -31286,7 +31286,7 @@ msgstr "ไม่พบแพ็ดกำหนดเอง '%s'"
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:2555
 #, c-format
 msgid "Expecting etch data to be on copper layer. Row found on layer '%s'"
-msgstr "คาดหวังข้อมูลการแกะสลักจะอยู่บนชั้นทองแดง แถวที่พบในเลเยอร์ '%s'"
+msgstr "คาดหวังข้อมูลการแกะสลักจะอยู่บนเลเยอร์ทองแดง แถวที่พบในเลเยอร์ '%s'"
 
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:91
 #, c-format
@@ -31673,7 +31673,7 @@ msgstr "ไม่รู้จักเลเยอร์ของ PCad %u"
 
 #: pcbnew/plugins/pcad/pcb.cpp:748
 msgid "KiCad only supports 32 signal layers."
-msgstr "KiCad รองรับเพียง 32 ชั้นสัญญาณเท่านั้น"
+msgstr "KiCad รองรับเพียง 32 เลเยอร์สัญญาณเท่านั้น"
 
 #: pcbnew/plugins/pcad/pcb_via.cpp:91
 msgid "Unable to find library section."
@@ -31765,7 +31765,7 @@ msgid ""
 "the nets belonging to a differential pair end with either N/P or +/-."
 msgstr ""
 "ไม่พบคู่ส่วนต่างสัญญาณดิฟแพร์ "
-"ตรวจสอบให้แน่ใจว่าชื่อเน็ตที่เป็นของคู่ส่วนต่างสิ้นสุดด้วย N / P หรือ +/-"
+"ตรวจสอบให้แน่ใจว่าชื่อเน็ตที่เป็นของคู่ดิฟแพร์สิ้นสุดด้วย N / P หรือ +/-"
 
 #: pcbnew/router/pns_diff_pair_placer.cpp:493
 msgid ""
@@ -31826,12 +31826,12 @@ msgid ""
 "This zone cannot be handled by the router.\n"
 "Please verify it is not a self-intersecting polygon."
 msgstr ""
-"เราเตอร์ไม่สามารถจัดการโซนนี้\n"
+"เร้าท์เตอร์ไม่สามารถจัดการโซนนี้\n"
 "โปรดตรวจสอบว่าไม่ใช่รูปหลายเหลี่ยมที่ตัดกันเอง"
 
 #: pcbnew/router/pns_kicad_iface.cpp:1649 pcbnew/router/router_tool.cpp:433
 msgid "Interactive Router"
-msgstr "เราเตอร์แบบโต้ตอบ"
+msgstr "เร้าท์เตอร์แบบโต้ตอบ"
 
 #: pcbnew/router/pns_meander_skew_placer.cpp:54
 msgid "Please select a differential pair trace you want to tune."
@@ -31843,20 +31843,20 @@ msgid ""
 "sure the names of the nets belonging to a differential pair end with either "
 "_N/_P or +/-."
 msgstr ""
-"ไม่พบเน็ตคู่ส่วนต่างดิฟแพร์สำหรับการจูนแบบลาดเอียง "
+"ไม่พบเน็ตคู่ส่วนต่างดิฟแพร์สำหรับการจูนแบบบิดเบือน "
 "ตรวจสอบให้แน่ใจว่าชื่อของเน็ตที่เป็นของคู่ดิฟแพร์ลงท้ายด้วย _N/_P หรือ +/-"
 
 #: pcbnew/router/pns_meander_skew_placer.cpp:163
 msgid "Too long: skew "
-msgstr "ยาวเกินไป: เอียง "
+msgstr "ยาวเกินไป: บิดเบือน "
 
 #: pcbnew/router/pns_meander_skew_placer.cpp:166
 msgid "Too short: skew "
-msgstr "สั้นเกินไป: เอียง "
+msgstr "สั้นเกินไป: บิดเบือน "
 
 #: pcbnew/router/pns_meander_skew_placer.cpp:169
 msgid "Tuned: skew "
-msgstr "ปรับแต่งแล้ว: เอียง "
+msgstr "ปรับแต่งแล้ว: บิดเบือน "
 
 #: pcbnew/router/pns_router.cpp:212
 msgid "Diff pair gap is less than board minimum clearance."
@@ -31939,7 +31939,7 @@ msgstr "เลือกเลเยอร์และวางเวียชน
 msgid ""
 "Select a layer, then add a through-hole via at the end of currently routed "
 "track."
-msgstr "เลือกเลเยอร์ จากนั้นเพิ่มเวียทะลุผ่านที่ส่วนท้ายแทร็กปัจจุบัน"
+msgstr "เลือกเลเยอร์,จากนั้นเพิ่มเวียทะลุผ่านที่ส่วนท้ายแทร็กปัจจุบัน"
 
 #: pcbnew/router/router_tool.cpp:130
 msgid "Select Layer and Place Blind/Buried Via..."
@@ -31950,7 +31950,7 @@ msgid ""
 "Select a layer, then add a blind or buried via at the end of currently "
 "routed track."
 msgstr ""
-"เลือกเลเยอร์ จากนั้นเพิ่มเวียชนิดตาบอดหรือฝัง ที่ตอนท้ายของลายเส้นปัจจุบัน"
+"เลือกเลเยอร์,จากนั้นเพิ่มเวียชนิดตาบอดหรือฝัง ที่ตอนท้ายของลายเส้นปัจจุบัน"
 
 #: pcbnew/router/router_tool.cpp:139
 msgid "Select Layer and Place Micro Via..."
@@ -31959,7 +31959,7 @@ msgstr "เลือกเลเยอร์และวางไมโครเ
 #: pcbnew/router/router_tool.cpp:140
 msgid ""
 "Select a layer, then add a micro via at the end of currently routed track."
-msgstr "เลือกเลเยอร์ จากนั้นเพิ่มไมโครเวียที่ตอนท้ายของลายเส้นปัจจุบัน"
+msgstr "เลือกเลเยอร์,จากนั้นเพิ่มไมโครเวียที่ตอนท้ายของลายเส้นปัจจุบัน"
 
 #: pcbnew/router/router_tool.cpp:147
 msgid "Custom Track/Via Size..."
@@ -32043,11 +32043,11 @@ msgstr "เลือกขนาดคู่ที่แตกต่างดิ
 
 #: pcbnew/router/router_tool.cpp:330
 msgid "Use differential pair dimensions from the net class"
-msgstr "ใช้มิติคู่ส่วนต่างดิฟแพร์จากเน็ตคลาส"
+msgstr "ใช้ขนาดคู่ส่วนต่างดิฟแพร์จากเน็ตคลาส"
 
 #: pcbnew/router/router_tool.cpp:335
 msgid "Specify custom differential pair dimensions"
-msgstr "ระบุมิติคู่ที่แตกต่างดิฟแพร์แบบกําหนดเอง"
+msgstr "ระบุขนาดคู่ดิฟแพร์แบบกําหนดเอง"
 
 #: pcbnew/router/router_tool.cpp:352
 #, c-format
@@ -32080,15 +32080,15 @@ msgstr ""
 
 #: pcbnew/router/router_tool.cpp:521
 msgid "Save router log"
-msgstr "บันทึกไฟล์ล็อกเราเตอร์"
+msgstr "บันทึกไฟล์ล็อกเร้าท์เตอร์"
 
 #: pcbnew/router/router_tool.cpp:521
 msgid ""
 "Would you like to save the router\n"
 "event log for debugging purposes?"
 msgstr ""
-"คุณต้องการบันทึกเราเตอร์\n"
-"บันทึกเหตุการณ์เพื่อวัตถุประสงค์ในการดีบัก?"
+"คุณต้องการบันทึกเหตุการณ์ของ\n"
+"เร้าท์เตอร์เพื่อวัตถุประสงค์ในการดีบัก?"
 
 #: pcbnew/router/router_tool.cpp:828 pcbnew/router/router_tool.cpp:850
 msgid "Show board setup"
@@ -32156,16 +32156,16 @@ msgstr ""
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:93
 msgid "Session file imported and merged OK."
-msgstr "ไฟล์เซสชันที่นำเข้าและรวมเข้าด้วยกันเรียบร้อย"
+msgstr "ไฟล์เซสชั่นที่นำเข้าและรวมเข้าด้วยกันเรียบร้อย"
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:166
 #, c-format
 msgid "Session file uses invalid layer id '%s'."
-msgstr "ไฟล์เซสชันใช้รหัสเลเยอร์ที่ไม่ถูกต้อง '%s'"
+msgstr "ไฟล์เซสชั่นใช้รหัสเลเยอร์ที่ไม่ถูกต้อง '%s'"
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:217
 msgid "Session via padstack has no shapes"
-msgstr "เซสชันเวียแพ็ดสแต็คไม่มีรูปร่าง"
+msgstr "เซสชั่นเวียแพ็ดสแต็กไม่มีรูปร่าง"
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:226
 #, c-format
@@ -32181,15 +32181,15 @@ msgstr "ไม่รองรับรูปร่างเวีย: %s"
 #: pcbnew/specctra_import_export/specctra_import.cpp:280
 #, c-format
 msgid "Session file uses invalid layer id \"%s\""
-msgstr "ไฟล์เซสชันใช้รหัสเลเยอร์ไม่ถูกต้อง \"%s\""
+msgstr "ไฟล์เซสชั่นใช้รหัสเลเยอร์ไม่ถูกต้อง \"%s\""
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:326
 msgid "Session file is missing the \"session\" section"
-msgstr "ไฟล์เซสชันไม่มีส่วน \"เซสชัน\""
+msgstr "ไฟล์เซสชั่นไม่มีส่วน \"เซสชั่น\""
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:329
 msgid "Session file is missing the \"routes\" section"
-msgstr "ไฟล์เซสชันไม่มีส่วน \"เส้นทาง\""
+msgstr "ไฟล์เซสชั่นไม่มีส่วน \"เส้นทาง\""
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:332
 msgid "Session file is missing the \"library_out\" section"
@@ -32277,7 +32277,7 @@ msgstr "ไม่ต้องนำหน้าเส้นทางด้วย
 
 #: pcbnew/tools/board_editor_control.cpp:380
 msgid "Merge Specctra Session file:"
-msgstr "รวมไฟล์เซสชัน Specctra:"
+msgstr "รวมไฟล์เซสชั่น Specctra:"
 
 #: pcbnew/tools/board_editor_control.cpp:403
 msgid "Specctra DSN File"
@@ -32532,15 +32532,15 @@ msgstr "ข้อจำกัดของรู: ขั้นต่ำ %s"
 
 #: pcbnew/tools/board_inspection_tool.cpp:748
 msgid "Keepouts"
-msgstr "บริเวณห้าม"
+msgstr "ปิดกั้น"
 
 #: pcbnew/tools/board_inspection_tool.cpp:750
 msgid "Keepout resolution for:"
-msgstr "ความละเอียดบริเวณห้ามสำหรับ:"
+msgstr "การแก้ปิดกั้นสำหรับ:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:765
 msgid "Report may be incomplete: some footprint courtyards are malformed."
-msgstr "รายงานอาจไม่สมบูรณ์: ฟุ้ทพรินท์บางแห่งมีรูปแบบไม่ถูกต้อง"
+msgstr "รายงานอาจไม่สมบูรณ์: ลานสนามของฟุ้ทพรินท์บางแห่งมีรูปแบบไม่ถูกต้อง"
 
 #: pcbnew/tools/board_inspection_tool.cpp:766
 msgid "Run DRC for a full analysis."
@@ -32596,11 +32596,11 @@ msgstr "คุณลักษณะของบอร์ด"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:406
 msgid "Copper Layer Count: "
-msgstr "จำนวนชั้นทองแดง: "
+msgstr "จำนวนเลเยอร์ทองแดง: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:415
 msgid "Board overall dimensions: "
-msgstr "ขนาดโดยรวมของบอร์ด: "
+msgstr "วัดขนาดโดยรวมของบอร์ด: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:425
 msgid "Min track/spacing: "
@@ -32660,7 +32660,7 @@ msgstr "วาดเส้นนำ"
 
 #: pcbnew/tools/drawing_tool.cpp:947
 msgid "Draw a dimension"
-msgstr "วาดมิติ"
+msgstr "วาดวัดขนาด"
 
 #: pcbnew/tools/drawing_tool.cpp:1154
 msgid "No graphic items found in file."
@@ -32930,27 +32930,27 @@ msgstr "เพิ่มตารางบอร์ดสแต็กอัพบ
 
 #: pcbnew/tools/pcb_actions.cpp:130
 msgid "Add Aligned Dimension"
-msgstr "เพิ่มมิติที่สอดคล้อง"
+msgstr "เพิ่มวัดขนาดที่จัดเรียงแล้ว"
 
 #: pcbnew/tools/pcb_actions.cpp:130
 msgid "Add an aligned linear dimension"
-msgstr "เพิ่มมิติเชิงเส้นตรง"
+msgstr "เพิ่มวัดขนาดเชิงเส้นตรง"
 
 #: pcbnew/tools/pcb_actions.cpp:135
 msgid "Add Center Dimension"
-msgstr "เพิ่มแสดงขนาดกึ่งกลาง"
+msgstr "เพิ่มวัดขนาดกึ่งกลาง"
 
 #: pcbnew/tools/pcb_actions.cpp:135
 msgid "Add a center dimension"
-msgstr "เพิ่มแสดงขนาดกึ่งกลาง"
+msgstr "เพิ่มวัดขนาดกึ่งกลาง"
 
 #: pcbnew/tools/pcb_actions.cpp:140
 msgid "Add Orthogonal Dimension"
-msgstr "เพิ่มแสดงขนาดมุมฉาก"
+msgstr "เพิ่มวัดขนาดมุมฉาก"
 
 #: pcbnew/tools/pcb_actions.cpp:140
 msgid "Add an orthogonal dimension"
-msgstr "เพิ่มแสดงขนาดมุมฉาก"
+msgstr "เพิ่มวัดขนาดมุมฉาก"
 
 #: pcbnew/tools/pcb_actions.cpp:145
 msgid "Add Leader"
@@ -32958,7 +32958,7 @@ msgstr "เพิ่มเส้นนำ"
 
 #: pcbnew/tools/pcb_actions.cpp:145
 msgid "Add a leader dimension"
-msgstr "เพิ่มเส้นนำแสดงขนาด"
+msgstr "เพิ่มเส้นนำวัดขนาด"
 
 #: pcbnew/tools/pcb_actions.cpp:156
 msgid "Add Filled Zone"
@@ -32982,7 +32982,7 @@ msgstr "เพิ่มพื้นที่กฎ"
 
 #: pcbnew/tools/pcb_actions.cpp:168
 msgid "Add a rule area (keepout)"
-msgstr "เพิ่มพื้นที่กฎ (บริเวณห้าม)"
+msgstr "เพิ่มพื้นที่กฎ (ปิดกั้น)"
 
 #: pcbnew/tools/pcb_actions.cpp:174
 msgid "Add a Zone Cutout"
@@ -33261,7 +33261,7 @@ msgstr "นำแพ็ดที่ไม่ได้ใช้ออก..."
 #: pcbnew/tools/pcb_actions.cpp:416
 msgid ""
 "Remove or restore the unconnected inner layers on through hole pads and vias"
-msgstr "ถอดหรือคืนค่าเลเยอร์ชั้นในที่ไม่ได้เชื่อมต่อกับแพ็ดและเวียเจาะทะลุ"
+msgstr "ถอดหรือคืนค่าเลเยอร์ภายในที่ไม่ได้เชื่อมต่อกับแพ็ดและเวียเจาะทะลุ"
 
 #: pcbnew/tools/pcb_actions.cpp:421
 msgid "Assign a different footprint from the library"
@@ -33329,19 +33329,19 @@ msgstr "สร้างช่องว่างของความยาวท
 
 #: pcbnew/tools/pcb_actions.cpp:473
 msgid "Add Microwave Stub"
-msgstr "เพิ่มต้นขั้วไมโครเวฟ"
+msgstr "เพิ่มสตับไมโครเวฟ"
 
 #: pcbnew/tools/pcb_actions.cpp:473
 msgid "Create stub of specified length for microwave applications"
-msgstr "สร้างต้นขั้วที่มีความยาวที่ระบุสําหรับการใช้งานไมโครเวฟ"
+msgstr "สร้างสตับที่มีความยาวที่ระบุสําหรับการใช้งานไมโครเวฟ"
 
 #: pcbnew/tools/pcb_actions.cpp:478
 msgid "Add Microwave Arc Stub"
-msgstr "เพิ่มต้นขั้วโค้งไมโครเวฟ"
+msgstr "เพิ่มสตับโค้งไมโครเวฟ"
 
 #: pcbnew/tools/pcb_actions.cpp:478
 msgid "Create stub (arc) of specified size for microwave applications"
-msgstr "สร้างต้นขั้ว(ส่วนโค้ง)มีขนาดที่ระบุสําหรับการใช้งานไมโครเวฟ"
+msgstr "สร้างสตับ(ส่วนโค้ง)มีขนาดที่ระบุสําหรับการใช้งานไมโครเวฟ"
 
 #: pcbnew/tools/pcb_actions.cpp:483
 msgid "Add Microwave Polygonal Shape"
@@ -33457,11 +33457,11 @@ msgstr "อ่านรายชื่อเน็ตและอัปเดต
 
 #: pcbnew/tools/pcb_actions.cpp:573
 msgid "Import Specctra Session..."
-msgstr "นําเข้าเซสชัน Specctra..."
+msgstr "นําเข้าเซสชั่น Specctra..."
 
 #: pcbnew/tools/pcb_actions.cpp:573
 msgid "Import routed Specctra session (*.ses) file"
-msgstr "นำเข้าไฟล์เซสชัน Specctra (*.ses)"
+msgstr "นำเข้าไฟล์เซสชั่น Specctra (*.ses)"
 
 #: pcbnew/tools/pcb_actions.cpp:578
 msgid "Export Specctra DSN..."
@@ -33469,7 +33469,7 @@ msgstr "ส่งออก Specctra DSN..."
 
 #: pcbnew/tools/pcb_actions.cpp:578
 msgid "Export Specctra DSN routing info"
-msgstr "ส่งออกข้อมูลเราติ้ง Specctra DSN"
+msgstr "ส่งออกข้อมูลเร้าต์ติ้ง Specctra DSN"
 
 #: pcbnew/tools/pcb_actions.cpp:583
 msgid "Gerbers (.gbr)..."
@@ -33689,7 +33689,7 @@ msgstr "ซ่อนเน็ต"
 
 #: pcbnew/tools/pcb_actions.cpp:739
 msgid "Hide the ratsnest for the selected net"
-msgstr "ซ่อนแรทเน็ตสำหรับเน็ตที่เลือก"
+msgstr "ซ่อนแร็ทเน็ตสำหรับเน็ตที่เลือก"
 
 #: pcbnew/tools/pcb_actions.cpp:743
 msgid "Show Net"
@@ -33697,7 +33697,7 @@ msgstr "แสดงเน็ต"
 
 #: pcbnew/tools/pcb_actions.cpp:743
 msgid "Show the ratsnest for the selected net"
-msgstr "แสดงแรทเน็ตสำหรับเน็ตที่เลือก"
+msgstr "แสดงแร็ทเน็ตสำหรับเน็ตที่เลือก"
 
 #: pcbnew/tools/pcb_actions.cpp:748
 msgid "Switch to Schematic Editor"
@@ -33709,11 +33709,11 @@ msgstr "เปิดวงจรใน Eeschema"
 
 #: pcbnew/tools/pcb_actions.cpp:757
 msgid "Local Ratsnest"
-msgstr "แรทเน็ตเฉพาะที่"
+msgstr "แร็ทเน็ตเฉพาะที่"
 
 #: pcbnew/tools/pcb_actions.cpp:757
 msgid "Toggle ratsnest display of selected item(s)"
-msgstr "สลับเปิดปิดการแสดงแรทเน็ตของชิ้นส่วนที่เลือก"
+msgstr "สลับเปิดปิดการแสดงแร็ทเน็ตของชิ้นส่วนที่เลือก"
 
 #: pcbnew/tools/pcb_actions.cpp:768
 msgid "Show the net inspector"
@@ -33737,15 +33737,15 @@ msgstr "มองบอร์ดจากฝั่งตรงข้าม"
 
 #: pcbnew/tools/pcb_actions.cpp:789
 msgid "Show Ratsnest"
-msgstr "แสดงแรทเน็ต"
+msgstr "แสดงแร็ทเน็ต"
 
 #: pcbnew/tools/pcb_actions.cpp:789
 msgid "Show board ratsnest"
-msgstr "แสดงแรทเน็ตบนบอร์ด"
+msgstr "แสดงแร็ทเน็ตบนบอร์ด"
 
 #: pcbnew/tools/pcb_actions.cpp:794
 msgid "Curved Ratsnest Lines"
-msgstr "เส้นแรทเน็ตโค้ง"
+msgstr "เส้นแร็ทเน็ตโค้ง"
 
 #: pcbnew/tools/pcb_actions.cpp:800
 msgid "Sketch Tracks"
@@ -33833,127 +33833,127 @@ msgstr "เปลี่ยนเป็นเลเยอร์อุปกรณ
 
 #: pcbnew/tools/pcb_actions.cpp:866
 msgid "Switch to Inner layer 1"
-msgstr "สลับไปยังเลเยอร์ชั้นใน 1"
+msgstr "สลับไปยังเลเยอร์ภายใน 1"
 
 #: pcbnew/tools/pcb_actions.cpp:872
 msgid "Switch to Inner layer 2"
-msgstr "สลับไปยังเลเยอร์ชั้นใน 2"
+msgstr "สลับไปยังเลเยอร์ภายใน 2"
 
 #: pcbnew/tools/pcb_actions.cpp:878
 msgid "Switch to Inner layer 3"
-msgstr "สลับไปยังเลเยอร์ชั้นใน 3"
+msgstr "สลับไปยังเลเยอร์ภายใน 3"
 
 #: pcbnew/tools/pcb_actions.cpp:884
 msgid "Switch to Inner layer 4"
-msgstr "สลับไปยังเลเยอร์ชั้นใน 4"
+msgstr "สลับไปยังเลเยอร์ภายใน 4"
 
 #: pcbnew/tools/pcb_actions.cpp:890
 msgid "Switch to Inner layer 5"
-msgstr "สลับไปยังเลเยอร์ชั้นใน 5"
+msgstr "สลับไปยังเลเยอร์ภายใน 5"
 
 #: pcbnew/tools/pcb_actions.cpp:896
 msgid "Switch to Inner layer 6"
-msgstr "สลับไปยังเลเยอร์ชั้นใน 6"
+msgstr "สลับไปยังเลเยอร์ภายใน 6"
 
 #: pcbnew/tools/pcb_actions.cpp:901
 msgid "Switch to Inner layer 7"
-msgstr "สลับไปยังเลเยอร์ชั้นใน 7"
+msgstr "สลับไปยังเลเยอร์ภายใน 7"
 
 #: pcbnew/tools/pcb_actions.cpp:906
 msgid "Switch to Inner layer 8"
-msgstr "สลับไปยังเลเยอร์ชั้นใน 8"
+msgstr "สลับไปยังเลเยอร์ภายใน 8"
 
 #: pcbnew/tools/pcb_actions.cpp:911
 msgid "Switch to Inner layer 9"
-msgstr "สลับไปยังเลเยอร์ชั้นใน 9"
+msgstr "สลับไปยังเลเยอร์ภายใน 9"
 
 #: pcbnew/tools/pcb_actions.cpp:916
 msgid "Switch to Inner layer 10"
-msgstr "สลับไปยังเลเยอร์ชั้นใน 10"
+msgstr "สลับไปยังเลเยอร์ภายใน 10"
 
 #: pcbnew/tools/pcb_actions.cpp:921
 msgid "Switch to Inner layer 11"
-msgstr "สลับไปยังเลเยอร์ชั้นใน 11"
+msgstr "สลับไปยังเลเยอร์ภายใน 11"
 
 #: pcbnew/tools/pcb_actions.cpp:926
 msgid "Switch to Inner layer 12"
-msgstr "สลับไปยังเลเยอร์ชั้นใน 12"
+msgstr "สลับไปยังเลเยอร์ภายใน 12"
 
 #: pcbnew/tools/pcb_actions.cpp:931
 msgid "Switch to Inner layer 13"
-msgstr "สลับไปยังเลเยอร์ชั้นใน 13"
+msgstr "สลับไปยังเลเยอร์ภายใน 13"
 
 #: pcbnew/tools/pcb_actions.cpp:936
 msgid "Switch to Inner layer 14"
-msgstr "สลับไปยังเลเยอร์ชั้นใน 14"
+msgstr "สลับไปยังเลเยอร์ภายใน 14"
 
 #: pcbnew/tools/pcb_actions.cpp:941
 msgid "Switch to Inner layer 15"
-msgstr "สลับไปยังเลเยอร์ชั้นใน 15"
+msgstr "สลับไปยังเลเยอร์ภายใน 15"
 
 #: pcbnew/tools/pcb_actions.cpp:946
 msgid "Switch to Inner layer 16"
-msgstr "สลับไปยังเลเยอร์ชั้นใน 16"
+msgstr "สลับไปยังเลเยอร์ภายใน 16"
 
 #: pcbnew/tools/pcb_actions.cpp:951
 msgid "Switch to Inner layer 17"
-msgstr "สลับไปยังเลเยอร์ชั้นใน 17"
+msgstr "สลับไปยังเลเยอร์ภายใน 17"
 
 #: pcbnew/tools/pcb_actions.cpp:956
 msgid "Switch to Inner layer 18"
-msgstr "สลับไปยังเลเยอร์ชั้นใน 18"
+msgstr "สลับไปยังเลเยอร์ภายใน 18"
 
 #: pcbnew/tools/pcb_actions.cpp:961
 msgid "Switch to Inner layer 19"
-msgstr "สลับไปยังเลเยอร์ชั้นใน 19"
+msgstr "สลับไปยังเลเยอร์ภายใน 19"
 
 #: pcbnew/tools/pcb_actions.cpp:966
 msgid "Switch to Inner layer 20"
-msgstr "สลับไปยังเลเยอร์ชั้นใน 20"
+msgstr "สลับไปยังเลเยอร์ภายใน 20"
 
 #: pcbnew/tools/pcb_actions.cpp:971
 msgid "Switch to Inner layer 21"
-msgstr "สลับไปยังเลเยอร์ชั้นใน 21"
+msgstr "สลับไปยังเลเยอร์ภายใน 21"
 
 #: pcbnew/tools/pcb_actions.cpp:976
 msgid "Switch to Inner layer 22"
-msgstr "สลับไปยังเลเยอร์ชั้นใน 22"
+msgstr "สลับไปยังเลเยอร์ภายใน 22"
 
 #: pcbnew/tools/pcb_actions.cpp:981
 msgid "Switch to Inner layer 23"
-msgstr "สลับไปยังเลเยอร์ชั้นใน 23"
+msgstr "สลับไปยังเลเยอร์ภายใน 23"
 
 #: pcbnew/tools/pcb_actions.cpp:986
 msgid "Switch to Inner layer 24"
-msgstr "สลับไปยังเลเยอร์ชั้นใน 24"
+msgstr "สลับไปยังเลเยอร์ภายใน 24"
 
 #: pcbnew/tools/pcb_actions.cpp:991
 msgid "Switch to Inner layer 25"
-msgstr "สลับไปยังเลเยอร์ชั้นใน 25"
+msgstr "สลับไปยังเลเยอร์ภายใน 25"
 
 #: pcbnew/tools/pcb_actions.cpp:996
 msgid "Switch to Inner layer 26"
-msgstr "สลับไปยังเลเยอร์ชั้นใน 26"
+msgstr "สลับไปยังเลเยอร์ภายใน 26"
 
 #: pcbnew/tools/pcb_actions.cpp:1001
 msgid "Switch to Inner layer 27"
-msgstr "สลับไปยังเลเยอร์ชั้นใน 27"
+msgstr "สลับไปยังเลเยอร์ภายใน 27"
 
 #: pcbnew/tools/pcb_actions.cpp:1006
 msgid "Switch to Inner layer 28"
-msgstr "สลับไปยังเลเยอร์ชั้นใน 28"
+msgstr "สลับไปยังเลเยอร์ภายใน 28"
 
 #: pcbnew/tools/pcb_actions.cpp:1011
 msgid "Switch to Inner layer 29"
-msgstr "สลับไปยังเลเยอร์ชั้นใน 29"
+msgstr "สลับไปยังเลเยอร์ภายใน 29"
 
 #: pcbnew/tools/pcb_actions.cpp:1016
 msgid "Switch to Inner layer 30"
-msgstr "สลับไปยังเลเยอร์ชั้นใน 30"
+msgstr "สลับไปยังเลเยอร์ภายใน 30"
 
 #: pcbnew/tools/pcb_actions.cpp:1022
 msgid "Switch to Copper (B.Cu) layer"
-msgstr "สลับไปยังชั้นทองแดง (B.Cu)"
+msgstr "สลับไปยังเลเยอร์ทองแดง (B.Cu)"
 
 #: pcbnew/tools/pcb_actions.cpp:1028
 msgid "Switch to Next Layer"
@@ -33973,7 +33973,7 @@ msgstr "สลับระหว่างเลเยอร์ในคู่เ
 
 #: pcbnew/tools/pcb_actions.cpp:1047
 msgid "Increase Layer Opacity"
-msgstr "เพิ่มสีความทึบของเลเยอร์"
+msgstr "เพิ่มความทึบของเลเยอร์"
 
 #: pcbnew/tools/pcb_actions.cpp:1047
 msgid "Make the current layer less transparent"
@@ -33981,7 +33981,7 @@ msgstr "ทําให้เลเยอร์ปัจจุบันโปร
 
 #: pcbnew/tools/pcb_actions.cpp:1054
 msgid "Decrease Layer Opacity"
-msgstr "ลดความทึบสีของเลเยอร์"
+msgstr "ลดความทึบของเลเยอร์"
 
 #: pcbnew/tools/pcb_actions.cpp:1054
 msgid "Make the current layer more transparent"
@@ -34002,9 +34002,7 @@ msgstr "แก้ปัญหาระยะห่าง..."
 #: pcbnew/tools/pcb_actions.cpp:1070
 msgid ""
 "Show clearance resolution for the active layer between two selected objects"
-msgstr ""
-"แสดงความละเอียดของระยะห่างสําหรับชั้นที่ใช้งานอยู่ระหว่างวัตถุที่เลือกสองวัตถ"
-"ุ"
+msgstr "แสดงความละเอียดระยะห่างบนเลเยอร์ใช้งาน ระหว่างวัตถุที่เลือกสองวัตถุ"
 
 #: pcbnew/tools/pcb_actions.cpp:1075
 msgid "Constraints Resolution..."
@@ -34144,7 +34142,7 @@ msgstr "เลือกฟุ้ทพรินท์และแทร็กท
 
 #: pcbnew/tools/pcb_actions.cpp:1234
 msgid "Items in Same Hierarchical Sheet"
-msgstr "ชิ้นส่วนในชีตลำดับชั้นเดียวกัน"
+msgstr "ชิ้นส่วนในชีตลำดับขั้นเดียวกัน"
 
 #: pcbnew/tools/pcb_actions.cpp:1235
 msgid "Selects all footprints and tracks in the same schematic sheet"
@@ -34224,39 +34222,39 @@ msgstr "ตั้งค่าเดินเส้นทองแดงแบบ
 
 #: pcbnew/tools/pcb_actions.cpp:1300
 msgid "Open Interactive Router settings"
-msgstr "เปิดการตั้งค่าเราเตอร์แบบโต้ตอบ"
+msgstr "เปิดการตั้งค่าเร้าท์เตอร์แบบโต้ตอบ"
 
 #: pcbnew/tools/pcb_actions.cpp:1305
 msgid "Differential Pair Dimensions..."
-msgstr "ขนาดคู่ที่แตกต่าง..."
+msgstr "วัดขนาดคู่ดิฟแพร์..."
 
 #: pcbnew/tools/pcb_actions.cpp:1305
 msgid "Open Differential Pair Dimension settings"
-msgstr "เปิดการตั้งค่ามิติคู่ส่วนต่างดิฟแพร์"
+msgstr "เปิดการตั้งค่าขนาดคู่ส่วนต่างดิฟแพร์"
 
 #: pcbnew/tools/pcb_actions.cpp:1310
 msgid "Router Highlight Mode"
-msgstr "เน้นสีในโหมดเราเตอร์"
+msgstr "เน้นสีในโหมดเร้าท์เตอร์"
 
 #: pcbnew/tools/pcb_actions.cpp:1310
 msgid "Switch router to highlight mode"
-msgstr "เปลี่ยนเราเตอร์เป็นโหมดเน้นสี"
+msgstr "เปลี่ยนเร้าท์เตอร์เป็นโหมดเน้นสี"
 
 #: pcbnew/tools/pcb_actions.cpp:1315
 msgid "Router Shove Mode"
-msgstr "โหมดผลักดันลายเส้น"
+msgstr "โหมดเร้าเตอร์ดันลายเส้น"
 
 #: pcbnew/tools/pcb_actions.cpp:1315
 msgid "Switch router to shove mode"
-msgstr "สลับเราเตอร์ไปเป็นโหมดผลักดัน"
+msgstr "เปลี่ยนเร้าท์เตอร์ไปเป็นโหมดผลักดัน"
 
 #: pcbnew/tools/pcb_actions.cpp:1320
 msgid "Router Walkaround Mode"
-msgstr "โหมดเราเตอร์เดินรอบๆ"
+msgstr "โหมดเร้าท์เตอร์เดินรอบๆ"
 
 #: pcbnew/tools/pcb_actions.cpp:1320
 msgid "Switch router to walkaround mode"
-msgstr "เปลี่ยนเราเตอร์เป็นโหมดเดินรอบๆ"
+msgstr "เปลี่ยนเร้าท์เตอร์เป็นโหมดเดินรอบๆ"
 
 #: pcbnew/tools/pcb_actions.cpp:1325
 msgid "Set Layer Pair..."
@@ -34276,7 +34274,7 @@ msgstr "ปรับแต่งความยาวของคู่แตก
 
 #: pcbnew/tools/pcb_actions.cpp:1346
 msgid "Tune skew of a differential pair"
-msgstr "ปรับความเอียงของคู่ดิฟเฟอเรนเชียล"
+msgstr "ปรับบิดเบือนของคู่ดิฟเฟอเรนเชียล"
 
 #: pcbnew/tools/pcb_actions.cpp:1355
 msgid "Undo Last Segment"
@@ -34652,11 +34650,11 @@ msgstr "เลือกแร็ทเน็ตเส้นอะไรที่
 
 #: pcbnew/widgets/appearance_controls.cpp:693
 msgid "Ratsnest lines are shown to items on all layers"
-msgstr "เส้นแร็ทเน็ตจะแสดงเป็นชิ้นส่วนในทุกชั้นเลเยอร์"
+msgstr "เส้นแร็ทเน็ตจะแสดงเป็นชิ้นส่วนในทุกเลเยอร์"
 
 #: pcbnew/widgets/appearance_controls.cpp:698
 msgid "Visible layers"
-msgstr "ชั้นที่มองเห็น"
+msgstr "เลเยอร์ที่มองเห็น"
 
 #: pcbnew/widgets/appearance_controls.cpp:700
 msgid "Ratsnest lines are shown to items on visible layers"
@@ -34713,15 +34711,15 @@ msgstr "แสดงหรือซ่อนเลเยอร์นี้"
 
 #: pcbnew/widgets/appearance_controls.cpp:1482
 msgid "Front copper layer"
-msgstr "ชั้นทองแดงด้านหน้า"
+msgstr "เลเยอร์ทองแดงด้านหน้า"
 
 #: pcbnew/widgets/appearance_controls.cpp:1483
 msgid "Back copper layer"
-msgstr "ชั้นทองแดงด้านหลัง"
+msgstr "เลเยอร์ทองแดงด้านหลัง"
 
 #: pcbnew/widgets/appearance_controls.cpp:1484
 msgid "Inner copper layer"
-msgstr "ชั้นทองแดงด้านใน"
+msgstr "เลเยอร์ทองแดงด้านใน"
 
 #: pcbnew/widgets/appearance_controls.cpp:1510
 msgid "Adhesive on board's front"
@@ -34987,7 +34985,7 @@ msgstr "พื้นที่กฎ"
 
 #: pcbnew/widgets/panel_selection_filter_base.cpp:63
 msgid "Dimensions"
-msgstr "มิติขนาด"
+msgstr "วัดขนาด"
 
 #: pcbnew/widgets/panel_selection_filter_base.cpp:67
 msgid "Other items"
