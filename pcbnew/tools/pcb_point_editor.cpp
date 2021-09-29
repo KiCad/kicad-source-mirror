@@ -260,7 +260,6 @@ std::shared_ptr<EDIT_POINTS> PCB_POINT_EDITOR::makePoints( EDA_ITEM* aItem )
         switch( pad->GetShape() )
         {
         case PAD_SHAPE::CIRCLE:
-            points->AddPoint( shapePos );
             points->AddPoint( wxPoint( shapePos.x + halfSize.x, shapePos.y ) );
             break;
 
@@ -1205,19 +1204,10 @@ void PCB_POINT_EDITOR::updateItem() const
         {
         case PAD_SHAPE::CIRCLE:
         {
-            wxPoint center = (wxPoint) m_editPoints->Point( CIRC_CENTER ).GetPosition();
-            wxPoint end = (wxPoint) m_editPoints->Point( CIRC_END ).GetPosition();
+            wxPoint end = (wxPoint) m_editPoints->Point( 0 ).GetPosition();
+            int     diameter = (int) EuclideanNorm( end - pad->GetPosition() ) * 2;
 
-            if( isModified( m_editPoints->Point( CIRC_CENTER ) ) )
-            {
-                wxPoint moveVector = center - pad->ShapePos();
-                pad->SetOffset( pad->GetOffset() + moveVector );
-            }
-            else
-            {
-                int diameter = (int) EuclideanNorm( end - center ) * 2;
-                pad->SetSize( wxSize( diameter, diameter ) );
-            }
+            pad->SetSize( wxSize( diameter, diameter ) );
         }
             break;
 
@@ -1644,7 +1634,7 @@ void PCB_POINT_EDITOR::updatePoints()
         {
         case PAD_SHAPE::CIRCLE:
         {
-            int target = locked ? 0 : 2;
+            int target = locked ? 0 : 1;
 
             // Careful; pad shape is mutable...
             if( int( m_editPoints->PointsSize() ) != target )
@@ -1657,14 +1647,12 @@ void PCB_POINT_EDITOR::updatePoints()
                 if( m_editPoints )
                     getView()->Add( m_editPoints.get() );
             }
-            else if( target == 2 )
+            else if( target == 1 )
             {
-                VECTOR2I vec = m_editPoints->Point( CIRC_END ).GetPosition()
-                                        - m_editPoints->Point( CIRC_CENTER ).GetPosition();
+                VECTOR2I vec = m_editPoints->Point( 0 ).GetPosition() - shapePos;
                 vec.Resize( halfSize.x );
 
-                m_editPoints->Point( CIRC_CENTER ).SetPosition( shapePos );
-                m_editPoints->Point( CIRC_END ).SetPosition( vec + shapePos );
+                m_editPoints->Point( 0 ).SetPosition( vec + shapePos );
             }
         }
             break;
