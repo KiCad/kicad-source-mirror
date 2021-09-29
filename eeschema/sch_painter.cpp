@@ -700,7 +700,7 @@ void SCH_PAINTER::draw( const LIB_FIELD *aField, int aLayer )
     if( aField->IsMoving() && m_schSettings.m_ShowUmbilicals )
     {
         m_gal->SetLineWidth( m_schSettings.m_outlineWidth );
-        m_gal->SetStrokeColor( COLOR4D( 0.0, 0.0, 1.0, 1.0 ) );
+        m_gal->SetStrokeColor( getRenderColor( aField, LAYER_SCHEMATIC_ANCHOR, drawingShadows ) );
         m_gal->DrawLine( textpos, wxPoint( 0, 0 ) );
     }
 }
@@ -1640,7 +1640,7 @@ void SCH_PAINTER::draw( const SCH_FIELD *aField, int aLayer )
         wxPoint parentPos = aField->GetParentPosition();
 
         m_gal->SetLineWidth( m_schSettings.m_outlineWidth );
-        m_gal->SetStrokeColor( COLOR4D( 0.0, 0.0, 1.0, 1.0 ) );
+        m_gal->SetStrokeColor( getRenderColor( aField, LAYER_SCHEMATIC_ANCHOR, drawingShadows ) );
         m_gal->DrawLine( textpos, parentPos );
     }
 }

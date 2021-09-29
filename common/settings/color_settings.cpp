@@ -71,6 +71,7 @@ COLOR_SETTINGS::COLOR_SETTINGS( const wxString& aFilename ) :
     wxASSERT( s_defaultTheme.count( y ) ); \
     m_params.emplace_back( new COLOR_MAP_PARAM( x, y, s_defaultTheme.at( y ), &m_colors ) );
 
+    CLR( "schematic.anchor",            LAYER_SCHEMATIC_ANCHOR       );
     CLR( "schematic.aux_items",         LAYER_SCHEMATIC_AUX_ITEMS    );
     CLR( "schematic.background",        LAYER_SCHEMATIC_BACKGROUND   );
     CLR( "schematic.brightened",        LAYER_BRIGHTENED             );
