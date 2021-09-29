@@ -29,14 +29,6 @@ void LaunchExternal( const wxString& aPath )
 #else
     wxString path( aPath );
 
-#if !wxCHECK_VERSION( 3, 1, 0 )
-    // Quote in case there are spaces in the path.
-    // Not needed on 3.1.4, but needed in 3.0 versions
-    // Moreover, on Linux, on 3.1.4 wx version, adding quotes breaks
-    // wxLaunchDefaultApplication
-    QuoteString( path );
-#endif
-
     wxLaunchDefaultApplication( path );
 #endif
 }
