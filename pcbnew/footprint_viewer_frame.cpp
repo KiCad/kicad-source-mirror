@@ -54,6 +54,7 @@
 #include <tools/pcb_control.h>
 #include <tools/pcb_picker_tool.h>
 #include <tools/pcb_selection_tool.h>
+#include <tools/board_editor_control.h>
 #include <wildcards_and_files_ext.h>
 #include <wx/listbox.h>
 #include <wx/srchctrl.h>
@@ -712,7 +713,15 @@ void FOOTPRINT_VIEWER_FRAME::AddFootprintToPCB( wxCommandEvent& aEvent )
             return;
         }
 
-        pcbframe->GetToolManager()->RunAction( PCB_ACTIONS::selectionClear, true );
+        TOOL_MANAGER*   toolMgr = pcbframe->GetToolManager();
+
+        if( toolMgr->GetTool<BOARD_EDITOR_CONTROL>()->PlacingFootprint() )
+        {
+            DisplayError( this, _( "Previous footprint placement still in progress." ) );
+            return;
+        }
+
+        toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
         BOARD_COMMIT commit( pcbframe );
 
         // Create the "new" footprint
@@ -748,7 +757,7 @@ void FOOTPRINT_VIEWER_FRAME::AddFootprintToPCB( wxCommandEvent& aEvent )
         commit.Push( wxT( "Insert footprint" ) );
 
         pcbframe->Raise();
-        pcbframe->GetToolManager()->RunAction( PCB_ACTIONS::placeFootprint, true, newFootprint );
+        toolMgr->RunAction( PCB_ACTIONS::placeFootprint, true, newFootprint );
 
         newFootprint->ClearFlags();
     }

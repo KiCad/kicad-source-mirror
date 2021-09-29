@@ -35,6 +35,7 @@
 #include <dialogs/dialog_text_entry.h>
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>
+#include <tools/board_editor_control.h>
 #include <board.h>
 #include <footprint.h>
 #include <board_commit.h>
@@ -869,6 +870,7 @@ bool FOOTPRINT_EDIT_FRAME::SaveFootprintToBoard( bool aAddNew )
     // update footprint in the current board,
     // not just add it to the board with total disregard for the netlist...
     PCB_EDIT_FRAME* pcbframe = (PCB_EDIT_FRAME*) Kiway().Player( FRAME_PCB_EDITOR, false );
+    TOOL_MANAGER*   toolMgr = pcbframe->GetToolManager();
 
     if( pcbframe == nullptr )       // happens when the board editor is not active (or closed)
     {
@@ -902,8 +904,14 @@ bool FOOTPRINT_EDIT_FRAME::SaveFootprintToBoard( bool aAddNew )
         return false;
     }
 
+    if( aAddNew && toolMgr->GetTool<BOARD_EDITOR_CONTROL>()->PlacingFootprint() )
+    {
+        DisplayError( this, _( "Previous footprint placement still in progress." ) );
+        return false;
+    }
+
     m_toolManager->RunAction( PCB_ACTIONS::selectionClear, true );
-    pcbframe->GetToolManager()->RunAction( PCB_ACTIONS::selectionClear, true );
+    toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
     BOARD_COMMIT commit( pcbframe );
 
     // Create a copy for the board, first using Clone() to keep existing Uuids, and then either
@@ -950,7 +958,7 @@ bool FOOTPRINT_EDIT_FRAME::SaveFootprintToBoard( bool aAddNew )
         commit.Push( wxT( "Insert footprint" ) );
 
         pcbframe->Raise();
-        pcbframe->GetToolManager()->RunAction( PCB_ACTIONS::placeFootprint, true, newFootprint );
+        toolMgr->RunAction( PCB_ACTIONS::placeFootprint, true, newFootprint );
     }
 
     newFootprint->ClearFlags();

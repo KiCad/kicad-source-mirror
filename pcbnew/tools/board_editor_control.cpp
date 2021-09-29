@@ -965,6 +965,7 @@ int BOARD_EDITOR_CONTROL::PlaceFootprint( const TOOL_EVENT& aEvent )
     // Prime the pump
     if( fp )
     {
+        m_placingFootprint = true;
         fp->SetPosition( wxPoint( cursorPos.x, cursorPos.y ) );
         m_toolMgr->RunAction( PCB_ACTIONS::selectItem, true, fp );
         m_toolMgr->RunAction( ACTIONS::refreshPreview );
@@ -1002,12 +1003,15 @@ int BOARD_EDITOR_CONTROL::PlaceFootprint( const TOOL_EVENT& aEvent )
                     }
 
                     fp = nullptr;
+                    m_placingFootprint = false;
                 };
 
         if( evt->IsCancelInteractive() )
         {
             if( fp )
+            {
                 cleanup();
+            }
             else
             {
                 m_frame->PopTool( tool );
@@ -1039,6 +1043,8 @@ int BOARD_EDITOR_CONTROL::PlaceFootprint( const TOOL_EVENT& aEvent )
 
                 if( fp == nullptr )
                     continue;
+
+                m_placingFootprint = true;
 
                 fp->SetLink( niluuid );
 
@@ -1072,6 +1078,7 @@ int BOARD_EDITOR_CONTROL::PlaceFootprint( const TOOL_EVENT& aEvent )
                 m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
                 commit.Push( _( "Place a footprint" ) );
                 fp = nullptr;  // to indicate that there is no footprint that we currently modify
+                m_placingFootprint = false;
             }
         }
         else if( evt->IsClick( BUT_RIGHT ) )
