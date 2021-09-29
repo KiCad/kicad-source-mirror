@@ -197,7 +197,7 @@ int PL_EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
             for( DS_DATA_ITEM* item : unique_peers )
                 moveItem( item, delta );
 
-            m_toolMgr->PostEvent( EVENTS::SelectedItemsModified );
+            m_toolMgr->PostEvent( EVENTS::SelectedItemsMoved );
         }
         //------------------------------------------------------------------------
         // Handle cancel
@@ -206,6 +206,17 @@ int PL_EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
         {
             if( m_moveInProgress )
             {
+                if( evt->IsActivate() )
+                {
+                    // Allowing other tools to activate during a move runs the risk of race
+                    // conditions in which we try to spool up both event loops at once.
+
+                    m_frame->ShowInfoBarMsg( _( "Press <ESC> to cancel move." ) );
+
+                    evt->SetPassEvent( false );
+                    continue;
+                }
+
                 evt->SetPassEvent( false );
                 restore_state = true;
             }
@@ -220,13 +231,26 @@ int PL_EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
             unselect = true;
             break;
         }
-        else if( evt->Category() == TC_COMMAND )
+        else if( evt->IsAction( &ACTIONS::doDelete ) )
         {
-            if( evt->IsAction( &ACTIONS::doDelete ) )
+            evt->SetPassEvent();
+            // Exit on a delete; there will no longer be anything to drag.
+            break;
+        }
+        else if( evt->IsAction( &ACTIONS::duplicate ) )
+        {
+            if( selection.Front()->IsNew() )
             {
-                // Exit on a remove operation; there is no further processing for removed items.
-                break;
+                // This doesn't really make sense; we'll just end up dragging a stack of
+                // objects so we ignore the duplicate and just carry on.
+                continue;
             }
+
+            // Move original back and exit.  The duplicate will run in its own loop.
+            restore_state = true;
+            unselect = false;
+            chain_commands = true;
+            break;
         }
         //------------------------------------------------------------------------
         // Handle context menu
@@ -243,7 +267,11 @@ int PL_EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
             break; // Finish
         }
         else
+        {
             evt->SetPassEvent();
+        }
+
+        controls->SetAutoPan( m_moveInProgress );
 
     } while( ( evt = Wait() ) ); //Should be assignment not equality test
 
@@ -259,13 +287,15 @@ int PL_EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
     for( EDA_ITEM* item : selection )
         item->ClearEditFlags();
 
-    if( unselect )
-        m_toolMgr->RunAction( PL_ACTIONS::clearSelection, true );
-
     if( restore_state )
         m_frame->RollbackFromUndo();
     else
         m_frame->OnModify();
+
+    if( unselect )
+        m_toolMgr->RunAction( PL_ACTIONS::clearSelection, true );
+    else
+        m_toolMgr->PostEvent( EVENTS::SelectedEvent );
 
     m_moveInProgress = false;
     m_frame->PopTool( tool );
