@@ -84,6 +84,8 @@ bool CONVERT_TOOL::Init()
                                                         SHAPE_T::ARC } )
                                 && P_S_C::SameLayer();
 
+    auto graphicToTrack = P_S_C::OnlyGraphicShapeTypes( { SHAPE_T::SEGMENT, SHAPE_T::ARC } );
+
     auto trackLines   = S_C::MoreThan( 1 ) && S_C::OnlyTypes( convertibleTracks )
                                 && P_S_C::SameLayer();
 
@@ -97,6 +99,7 @@ bool CONVERT_TOOL::Init()
 
     auto showConvert       = anyPolys || anyLines || lineToArc;
     auto canCreatePolyType = anyLines || anyPolys;
+    auto canCreateTracks   = anyPolys || graphicToTrack;
 
     m_menu->AddItem( PCB_ACTIONS::convertToPoly, canCreatePolyType );
     m_menu->AddItem( PCB_ACTIONS::convertToZone, canCreatePolyType );
@@ -106,7 +109,7 @@ bool CONVERT_TOOL::Init()
     // Currently the code exists, but tracks are not really existing in footprints
     // only segments on copper layers
     if( m_frame->IsType( FRAME_PCB_EDITOR ) )
-        m_menu->AddItem( PCB_ACTIONS::convertToTracks, anyPolys );
+        m_menu->AddItem( PCB_ACTIONS::convertToTracks, canCreateTracks );
 
     m_menu->AddItem( PCB_ACTIONS::convertToArc, lineToArc );
 
@@ -510,6 +513,8 @@ SHAPE_POLY_SET CONVERT_TOOL::extractPolygons( const std::deque<EDA_ITEM*>& aItem
 
 int CONVERT_TOOL::CreateLines( const TOOL_EVENT& aEvent )
 {
+    bool createTracks = aEvent.IsAction( &PCB_ACTIONS::convertToTracks );
+
     auto& selection = m_selectionTool->RequestSelection(
             []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, PCB_SELECTION_TOOL* sTool )
             {
@@ -523,9 +528,9 @@ int CONVERT_TOOL::CreateLines( const TOOL_EVENT& aEvent )
                     case PCB_FP_SHAPE_T:
                         switch( static_cast<PCB_SHAPE*>( item )->GetShape() )
                         {
+                        case SHAPE_T::SEGMENT:
+                        case SHAPE_T::ARC:
                         case SHAPE_T::POLY:
-                            break;
-
                         case SHAPE_T::RECT:
                             break;
 
@@ -616,16 +621,56 @@ int CONVERT_TOOL::CreateLines( const TOOL_EVENT& aEvent )
             };
 
     BOARD_COMMIT          commit( m_frame );
+    PCB_BASE_EDIT_FRAME*  frame       = getEditFrame<PCB_BASE_EDIT_FRAME>();
     FOOTPRINT_EDIT_FRAME* fpEditor    = dynamic_cast<FOOTPRINT_EDIT_FRAME*>( m_frame );
     FOOTPRINT*            footprint   = nullptr;
     PCB_LAYER_ID          targetLayer = m_frame->GetActiveLayer();
     PCB_LAYER_ID          copperLayer = UNSELECTED_LAYER;
+    BOARD_ITEM_CONTAINER* parent      = frame->GetModel();
 
     if( fpEditor )
         footprint = fpEditor->GetBoard()->GetFirstFootprint();
 
+    auto handleGraphicSeg =
+            [&]( EDA_ITEM* aItem )
+            {
+                if( aItem->Type() != PCB_SHAPE_T && aItem->Type() != PCB_FP_SHAPE_T )
+                    return false;
+
+                PCB_SHAPE* graphic = static_cast<PCB_SHAPE*>( aItem );
+
+                if( graphic->GetShape() == SHAPE_T::SEGMENT )
+                {
+                    PCB_TRACK* track = new PCB_TRACK( parent );
+
+                    track->SetLayer( targetLayer );
+                    track->SetStart( graphic->GetStart() );
+                    track->SetEnd( graphic->GetEnd() );
+                    commit.Add( track );
+
+                    return true;
+                }
+                else if( graphic->GetShape() == SHAPE_T::ARC )
+                {
+                    PCB_ARC* arc = new PCB_ARC( parent );
+
+                    arc->SetLayer( targetLayer );
+                    arc->SetStart( graphic->GetArcStart() );
+                    arc->SetEnd( graphic->GetArcEnd() );
+                    arc->SetMid( graphic->GetArcMid() );
+                    commit.Add( arc );
+
+                    return true;
+                }
+
+                return false;
+            };
+
     for( EDA_ITEM* item : selection )
     {
+        if( handleGraphicSeg( item ) )
+            continue;
+
         SHAPE_POLY_SET   polySet = getPolySet( item );
         std::vector<SEG> segs    = getSegList( polySet );
 
@@ -658,8 +703,7 @@ int CONVERT_TOOL::CreateLines( const TOOL_EVENT& aEvent )
         }
         else
         {
-            PCB_BASE_EDIT_FRAME*  frame  = getEditFrame<PCB_BASE_EDIT_FRAME>();
-            BOARD_ITEM_CONTAINER* parent = frame->GetModel();
+
 
             if( !IsCopperLayer( targetLayer ) )
             {
