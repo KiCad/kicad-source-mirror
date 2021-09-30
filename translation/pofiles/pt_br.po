@@ -11,8 +11,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-09-27 08:33-0700\n"
-"PO-Revision-Date: 2021-09-29 17:58+0000\n"
-"Last-Translator: Wellington Terumi Uemura <wellingtonuemura@gmail.com>\n"
+"PO-Revision-Date: 2021-10-01 07:18+0000\n"
+"Last-Translator: Augusto Fraga Giachero <afg@augustofg.net>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "kicad/master-source/pt_BR/>\n"
 "Language: pt_br\n"
@@ -1766,14 +1766,12 @@ msgid "Copy KiCad version info to the clipboard"
 msgstr "Copiar informações da versão do KiCad para a área de transferência"
 
 #: common/dialog_about/dialog_about_base.cpp:63
-#, fuzzy
 msgid "&Report Bug"
-msgstr "Ficheiro de relatório"
+msgstr "&Reportar um erro"
 
 #: common/dialog_about/dialog_about_base.cpp:64 common/tool/actions.cpp:652
-#, fuzzy
 msgid "Report a problem with KiCad"
-msgstr "Envolva-se com o KiCad"
+msgstr "Reportar um problema com o KiCad"
 
 #: common/dialog_about/dialog_about_base.cpp:89
 msgid "&OK"
@@ -1782,12 +1780,12 @@ msgstr "&OK"
 #: common/dialogs/dialog_HTML_reporter_base.h:48
 #, fuzzy
 msgid "Report"
-msgstr "Relatório de ERC"
+msgstr "Informe"
 
 #: common/dialogs/dialog_color_picker.cpp:94
 #, fuzzy
 msgid "Clear Color"
-msgstr "Cor do cobre"
+msgstr "Limpar Cor"
 
 #: common/dialogs/dialog_color_picker_base.cpp:31
 msgid "RGB"
@@ -1891,9 +1889,9 @@ msgstr ""
 "ou remova as variáveis de ambiente externas do seu sistema."
 
 #: common/dialogs/dialog_configure_paths.cpp:374
-#, fuzzy, c-format
+#, c-format
 msgid "The name %s is reserved, and cannot be used."
-msgstr "O nome %s é reservado e não pode ser usado aqui"
+msgstr "O nome %s é reservado e não pode ser usado."
 
 #: common/dialogs/dialog_configure_paths.cpp:517
 msgid "File Browser..."
@@ -2158,7 +2156,7 @@ msgstr "uma página"
 #: common/dialogs/dialog_grid_settings_base.cpp:67
 #, fuzzy
 msgid "Current Grid"
-msgstr "Corrente"
+msgstr "Grade atual"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:83
 msgid "User Defined Grid"
