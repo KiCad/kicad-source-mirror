@@ -20,8 +20,6 @@ DIALOG_CLEANUP_GRAPHICS_BASE::DIALOG_CLEANUP_GRAPHICS_BASE( wxWindow* parent, wx
 	bSizerUpper = new wxBoxSizer( wxVERTICAL );
 
 	m_createRectanglesOpt = new wxCheckBox( this, wxID_ANY, _("Merge lines into rectangles"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_createRectanglesOpt->SetToolTip( _("remove track segments connecting nodes belonging to different nets (short circuit)") );
-
 	bSizerUpper->Add( m_createRectanglesOpt, 0, wxALL, 5 );
 
 	m_deleteRedundantOpt = new wxCheckBox( this, wxID_ANY, _("Delete redundant graphics"), wxDefaultPosition, wxDefaultSize, 0 );
