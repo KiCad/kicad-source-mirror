@@ -9,13 +9,14 @@
 # Dominik Wernberger <dominik.wernberger@gmx.de>, 2021.
 # Flo082002 <flos6323@gmail.com>, 2021.
 # Benedikt Freisen <b.freisen@gmx.net>, 2021.
+# Mark Hämmerling <dev@markh.de>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-09-27 08:33-0700\n"
-"PO-Revision-Date: 2021-09-29 17:58+0000\n"
-"Last-Translator: Jonathan Haas <haasjona@gmail.com>\n"
+"PO-Revision-Date: 2021-10-01 07:18+0000\n"
+"Last-Translator: Mark Hämmerling <dev@markh.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
 "Language: de\n"
@@ -134,7 +135,7 @@ msgstr "Drehung"
 
 #: 3d-viewer/3d_cache/dialogs/panel_preview_3d_model_base.cpp:111
 msgid "Offset"
-msgstr "Offset"
+msgstr "Versatz"
 
 #: 3d-viewer/3d_cache/dialogs/panel_preview_3d_model_base.cpp:156
 msgid "Opacity"
@@ -3010,9 +3011,8 @@ msgid "Select Preferred PDF Viewer"
 msgstr "Bevorzugten PDF-Betrachter auswählen"
 
 #: common/dialogs/panel_common_settings_base.cpp:21
-#, fuzzy
 msgid "Antialiasing"
-msgstr "Antialiasing:"
+msgstr "Antialiasing"
 
 #: common/dialogs/panel_common_settings_base.cpp:30
 msgid "Accelerated graphics:"
@@ -4536,7 +4536,7 @@ msgstr "von %s : %s() Zeile %d"
 #: common/exceptions.cpp:76
 #, c-format
 msgid "%s in '%s', line %d, offset %d."
-msgstr "%s in \"%s\", Zeile %d, Offset %d."
+msgstr "%s in \"%s\", Zeile %d, Spalte %d."
 
 #: common/exceptions.cpp:90
 #, c-format
@@ -17631,7 +17631,7 @@ msgstr "Y-Ausrichtung"
 
 #: gerbview/gerber_file_image.cpp:384
 msgid "Image Justify Offset"
-msgstr "Bildausrichtungsoffset"
+msgstr "Bildausrichtungsversatz"
 
 #: gerbview/gerber_file_image_list.cpp:196
 #, c-format
@@ -18581,9 +18581,8 @@ msgid "Maintainer"
 msgstr "Maintainer"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:191
-#, fuzzy
 msgid "Resources"
-msgstr "Quellen tauschen"
+msgstr "Ressourcen"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:266
 msgid "Pick a package on the left panel to view it's description."
@@ -18594,9 +18593,8 @@ msgid "Package download url is not specified"
 msgstr "Paket-Download-URL ist nicht angegeben"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:343
-#, fuzzy
 msgid "Error downloading package"
-msgstr "Fehler beim Laden des Editors"
+msgstr "Fehler beim Herunterladen des Pakets"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:352
 #, fuzzy
@@ -18636,9 +18634,8 @@ msgid "Install package"
 msgstr "In Paket"
 
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:64
-#, fuzzy
 msgid "Show all versions"
-msgstr "Alle Vias zeigen"
+msgstr "Alle Versionen zeigen"
 
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:82
 #, fuzzy
@@ -18827,9 +18824,9 @@ msgid "Removing directory %s"
 msgstr "Verzeichnis %s wird entfernt"
 
 #: kicad/pcm/pcm_task_manager.cpp:359
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to remove directory %s"
-msgstr "Konnte Verzeichniss \"%s\" nicht erstellen"
+msgstr "Verzeichnis %s konnte nicht entfernt werden"
 
 #: kicad/pcm/pcm_task_manager.cpp:376
 #, c-format
@@ -18976,9 +18973,8 @@ msgid "Delete the files and their contents"
 msgstr "Das Verzeichnis und seinen Inhalt löschen"
 
 #: kicad/project_tree_pane.cpp:779
-#, fuzzy
 msgid "Move to Trash"
-msgstr "In Leiterbahnen umwandeln"
+msgstr "In Papierkorb verschieben"
 
 #: kicad/project_tree_pane.cpp:794
 msgid "Print the contents of the file"
@@ -19018,9 +19014,8 @@ msgid "Create new project from template"
 msgstr "Ein neues Projekt aus einer Vorlage erstellen"
 
 #: kicad/tools/kicad_manager_actions.cpp:52
-#, fuzzy
 msgid "Open Demo Project..."
-msgstr "Projekt öffnen..."
+msgstr "Demoprojekt öffnen..."
 
 #: kicad/tools/kicad_manager_actions.cpp:52
 #, fuzzy
@@ -19105,15 +19100,14 @@ msgid "Create New Project"
 msgstr "Neues Projekt erstellen"
 
 #: kicad/tools/kicad_manager_control.cpp:135
-#, fuzzy
 msgid ""
 "The selected folder is not empty.  It is recommended that you create "
 "projects in their own empty folder.\n"
 "\n"
 "Do you want to continue?"
 msgstr ""
-"Das gewählte Verzeichnis ist nicht leer. Es wird empfohlen das Sie Projekte "
-"in einem eigenen leeren Verzeichnis anlegen.\n"
+"Das gewählte Verzeichnis ist nicht leer. Es wird empfohlen, Projekte in "
+"einem eigenen leeren Verzeichnis anzulegen.\n"
 "\n"
 "Möchten Sie fortfahren?"
 
@@ -19160,9 +19154,9 @@ msgid "Open Existing Project"
 msgstr "Vorhandenes Projekt öffnen"
 
 #: kicad/tools/kicad_manager_control.cpp:495
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot copy folder '%s'."
-msgstr "Ordner \"%s\" konnte nicht kopiert werden."
+msgstr "Ordner \"%s\" kann nicht kopiert werden."
 
 #: kicad/tools/kicad_manager_control.cpp:538
 msgid "Save Project To"
@@ -22949,11 +22943,11 @@ msgstr "Abstand vertikal:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:67
 msgid "Horizontal offset:"
-msgstr "Offset horizontal:"
+msgstr "Horizontaler Versatz:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:78
 msgid "Vertical offset:"
-msgstr "Offset vertikal:"
+msgstr "Vertikaler Versatz:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:89
 msgid "Stagger:"
@@ -23802,14 +23796,14 @@ msgstr ""
 #: pcbnew/dialogs/dialog_export_svg.cpp:264 pcbnew/dialogs/dialog_plot.cpp:816
 #: pcbnew/exporters/gen_footprints_placefile.cpp:284
 #: pcbnew/exporters/gen_footprints_placefile.cpp:382
-#, fuzzy, c-format
+#, c-format
 msgid "Could not write plot files to folder '%s'."
-msgstr "Konnte die Plotdateien nicht in dem Verzeichnis \"%s\" anlegen."
+msgstr "Konnte die Plotdateien nicht im Ordner \"%s\" anlegen."
 
 #: pcbnew/dialogs/dialog_export_svg.cpp:291
-#, fuzzy, c-format
+#, c-format
 msgid "Exported '%s'."
-msgstr "Exportiert \"%s\"."
+msgstr "'%s' exportiert."
 
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:29
 msgid ""
@@ -23978,9 +23972,9 @@ msgid "Searching..."
 msgstr "Suchen..."
 
 #: pcbnew/dialogs/dialog_find.cpp:345
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' not found"
-msgstr "%s nicht gefunden"
+msgstr "\"%s\" nicht gefunden"
 
 #: pcbnew/dialogs/dialog_find.cpp:353
 msgid "No more items to show"
@@ -23991,9 +23985,9 @@ msgid "No hits"
 msgstr "Keine Treffer"
 
 #: pcbnew/dialogs/dialog_find.cpp:362
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' found"
-msgstr "%s gefunden"
+msgstr "\"%s\" gefunden"
 
 #: pcbnew/dialogs/dialog_find.cpp:365
 #, c-format
@@ -24098,13 +24092,13 @@ msgstr "Aufrecht"
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:62
 #: pcbnew/fp_text_grid_table.cpp:98
 msgid "X Offset"
-msgstr "X Offset"
+msgstr "X-Versatz"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:62
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:63
 #: pcbnew/fp_text_grid_table.cpp:99
 msgid "Y Offset"
-msgstr "Y Offset"
+msgstr "Y-Versatz"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:68
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:69
@@ -24165,9 +24159,8 @@ msgstr "Fertigungsattribute"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:272
 #: pcbnew/footprint_libraries_utils.cpp:1130
-#, fuzzy
 msgid "Footprint type:"
-msgstr "Footprintname:"
+msgstr "Footprint-Typ:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:276
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:179
@@ -24384,9 +24377,9 @@ msgid "Footprint must have a name."
 msgstr "Footprint muss einen Namen besitzen."
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:281
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint name may not contain '%s'."
-msgstr "Footprintname enthält nicht \"%s\"."
+msgstr "Footprint-Name darf kein \"%s\" enthalten."
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:61
 msgid "Unconstrained"
@@ -24397,9 +24390,8 @@ msgid "Footprint name:"
 msgstr "Footprintname:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:175
-#, fuzzy
 msgid "Component type:"
-msgstr "Komponente:"
+msgstr "Bauteil-Typ:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:215
 msgid "Set values to 0 to use netclass values."
@@ -24514,7 +24506,7 @@ msgstr ""
 "anschließend den <b>Ausgewählte Option hinzufügen</b> Button."
 
 #: pcbnew/dialogs/dialog_fp_plugin_options.cpp:62
-#, fuzzy, c-format
+#, c-format
 msgid "Options for Library '%s'"
 msgstr "Optionen für Bibliothek \"%s\""
 
@@ -24543,9 +24535,8 @@ msgid "CSV"
 msgstr "CSV"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:48
-#, fuzzy
 msgid "Gerber (experimental)"
-msgstr "Gerber (sehr experimentell)"
+msgstr "Gerber (experimentell)"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:50
 msgid "Format"
@@ -25475,7 +25466,6 @@ msgid "Select Netlist"
 msgstr "Wähle Netzliste"
 
 #: pcbnew/dialogs/dialog_netlist.cpp:143
-#, fuzzy
 msgid "Please choose a valid netlist file."
 msgstr "Bitte wählen Sie ein gültige Datei für die Netzliste."
 
@@ -26414,13 +26404,12 @@ msgstr ""
 "0 eingestellt. "
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:173
-#, fuzzy
 msgid ""
 "Most board houses expect 0 and use their constraints, especially for solder "
 "mask min width."
 msgstr ""
-"Erwarten Sie 0 und verwenden Sie deren Einschränkungen, insbesondere für die "
-"minimale Breite der Lötmaske."
+"Die meisten Platinenfertiger erwarten den Wert 0 und verwenden eigene Werte, "
+"insbesondere für die minimale Breite der Lötmaske."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:183
 msgid "Board setup"
@@ -26952,20 +26941,20 @@ msgstr "Von der Referenzposition auf den aktuellen Winkel zurücksetzen."
 #: pcbnew/dialogs/dialog_position_relative.cpp:170
 #: pcbnew/dialogs/dialog_position_relative_base.cpp:67
 msgid "Offset X:"
-msgstr "Offset X:"
+msgstr "Versatz X:"
 
 #: pcbnew/dialogs/dialog_position_relative.cpp:171
 #: pcbnew/dialogs/dialog_position_relative_base.cpp:84
 msgid "Offset Y:"
-msgstr "Offset Y:"
+msgstr "Versatz Y:"
 
 #: pcbnew/dialogs/dialog_position_relative.cpp:173
 msgid "Reset to the current X offset from the reference position."
-msgstr "Auf den aktuellen X-Offset von der Referenzposition zurücksetzen."
+msgstr "Auf den aktuellen X-Versatz von der Referenzposition zurücksetzen."
 
 #: pcbnew/dialogs/dialog_position_relative.cpp:174
 msgid "Reset to the current Y offset from the reference position."
-msgstr "Auf den aktuellen Y-Offset von der Referenzposition zurücksetzen."
+msgstr "Auf den aktuellen Y-Versatz von der Referenzposition zurücksetzen."
 
 #: pcbnew/dialogs/dialog_position_relative.cpp:240
 msgid "Reference location: grid origin"
@@ -27543,13 +27532,12 @@ msgstr ""
 "Footprints verschoben werden."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:83
-#, fuzzy
 msgid ""
 "Left click (and drag) actions depend on 2 modifier keys:\n"
 "Shift and Ctrl."
 msgstr ""
-"Linksklick- (und Zieh-) Aktionen hängen von 3 Modifizierertasten ab:\n"
-"Alt, Umschalt und Strg."
+"Linksklick- (und Zieh-) Aktionen hängen von 2 Modifizierertasten ab:\n"
+"Umschalt und Strg."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:97
 #: pcbnew/dialogs/panel_edit_options_base.cpp:168
@@ -27563,9 +27551,8 @@ msgstr "Element(e) auswählen."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:107
 #: pcbnew/dialogs/panel_edit_options_base.cpp:178
-#, fuzzy
 msgid "Long Click"
-msgstr "Klick"
+msgstr "Langer Klick"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:127
 msgid "Ctrl+Shift"
@@ -27778,9 +27765,8 @@ msgid "Unable to open file"
 msgstr "Konnte Datei nicht öffnen"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:389
-#, fuzzy
 msgid "Unknown error"
-msgstr "Unbekannte Methode"
+msgstr "Unbekannter Fehler"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model_base.cpp:38
 msgid "3D Model(s)"
@@ -28158,18 +28144,18 @@ msgid "Layer must have a name."
 msgstr "Lage muss einen Namen haben."
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:656
-#, fuzzy, c-format
+#, c-format
 msgid "%s are forbidden in layer names."
-msgstr "\"%s\" sind nicht zulässig in Lagennamen."
+msgstr "%s sind nicht zulässig in Lagennamen."
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:663
 msgid "Layer name \"signal\" is reserved."
 msgstr "\"signal\" ist ein reservierter Lagenname."
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:671
-#, fuzzy, c-format
+#, c-format
 msgid "Layer name '%s' already in use."
-msgstr "Lagenname \"%s\" wird bereits benutzt."
+msgstr "Lagenname \"%s\" wird bereits verwendet."
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:771
 #, c-format
@@ -28194,7 +28180,6 @@ msgid "All user-defined layers have already been added."
 msgstr "Alle benutzerdefinierten Lagen wurden bereits hinzugefügt."
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:817
-#, fuzzy
 msgid "Add User-defined Layer"
 msgstr "Benutzerdefinierte Lage hinzufügen"
 
@@ -28726,7 +28711,6 @@ msgid "User9"
 msgstr "Benutzer9"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:32
-#, fuzzy
 msgid ""
 "Use your board house's recommendations for solder mask clearance and minimum "
 "web width."
@@ -29450,9 +29434,9 @@ msgid "undefined"
 msgstr "nicht definiert"
 
 #: pcbnew/drc/drc_engine.cpp:902
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s %s: %s."
-msgstr "Überprüfe %s."
+msgstr "Überprüfe %s %s: %s."
 
 #: pcbnew/drc/drc_engine.cpp:918
 #, fuzzy, c-format
@@ -29498,9 +29482,9 @@ msgid "Unconditional rule applied."
 msgstr "Bedingungslose Regel angewendet."
 
 #: pcbnew/drc/drc_engine.cpp:1059
-#, fuzzy, c-format
+#, c-format
 msgid "Checking rule condition '%s'."
-msgstr "Regelbedingung \"%s\" wirt geprüfen."
+msgstr "Prüfe Regelbedingung \"%s\"."
 
 #: pcbnew/drc/drc_engine.cpp:1065
 msgid "Constraint applied."
@@ -29699,9 +29683,9 @@ msgid "Footprint type doesn't match footprint pads"
 msgstr "Footprinteditor - Footprints erstellen oder bearbeiten"
 
 #: pcbnew/drc/drc_item.cpp:327
-#, fuzzy, c-format
+#, c-format
 msgid "Rule: %s"
-msgstr "Regeln"
+msgstr "Regel: %s"
 
 #: pcbnew/drc/drc_item.cpp:329
 #, fuzzy
@@ -30254,7 +30238,7 @@ msgid "Printed circuit board"
 msgstr "Leiterplatte"
 
 #: pcbnew/files.cpp:348
-#, fuzzy, c-format
+#, c-format
 msgid "Recovery file '%s' not found."
 msgstr "Wiederherstellungsdatei \"%s\" wurde nicht gefunden."
 
@@ -30293,9 +30277,9 @@ msgid "Edge Clearance Warning"
 msgstr "Warnung Randabstand"
 
 #: pcbnew/files.cpp:580
-#, fuzzy, c-format
+#, c-format
 msgid "PCB '%s' is already open."
-msgstr "Datei \"%s\" ist bereits geöffnet."
+msgstr "Platine \"%s\" ist bereits geöffnet."
 
 #: pcbnew/files.cpp:588
 msgid "The current PCB has been modified.  Save changes?"
@@ -30316,11 +30300,9 @@ msgid "Error loading PCB '%s'."
 msgstr "Fehler beim Laden der Leiterplatte \"%s\"."
 
 #: pcbnew/files.cpp:727
-#, fuzzy, c-format
+#, c-format
 msgid "Memory exhausted loading PCB '%s'"
-msgstr ""
-"Fehler beim Einlesen der Platine:\n"
-"%s"
+msgstr "Speicher erschöpft beim Laden der Platine \"%s\""
 
 #: pcbnew/files.cpp:841
 #, c-format
@@ -30364,13 +30346,13 @@ msgstr ""
 "Konnte Temporärdatei \"%s\" nicht umbenennen."
 
 #: pcbnew/files.cpp:1151
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Board copied to:\n"
 "%s"
 msgstr ""
 "Platine kopiert nach:\n"
-"\"%s\""
+"%s"
 
 #: pcbnew/footprint.cpp:926 pcbnew/tools/pcb_control.cpp:1191
 msgid "Last Change"
@@ -30616,9 +30598,9 @@ msgid "Footprint exported to file '%s'."
 msgstr "Footprint wurde in die Datei \"%s\" exportiert."
 
 #: pcbnew/footprint_libraries_utils.cpp:462
-#, fuzzy, c-format
+#, c-format
 msgid "Library %s is read only."
-msgstr "Bibliothek \"%s\" ist schreibgeschützt."
+msgstr "Bibliothek %s ist schreibgeschützt."
 
 #: pcbnew/footprint_libraries_utils.cpp:468
 #, c-format
@@ -30997,9 +30979,9 @@ msgid "Footprint '%s' saved."
 msgstr "Footprint \"%s\" gespeichert."
 
 #: pcbnew/load_select_footprint.cpp:441
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint library '%s' saved as '%s'."
-msgstr "Die Footprintbibliothek \"%s\" wurde gespeichert als \"%s\"."
+msgstr "Footprintbibliothek \"%s\" wurde gespeichert als \"%s\"."
 
 #: pcbnew/menubar_footprint_editor.cpp:68
 #: pcbnew/menubar_footprint_editor.cpp:77
@@ -31266,17 +31248,17 @@ msgid "Cannot add %s (no footprint assigned)."
 msgstr "%s kann nicht hinzugefügt werden (kein Footprint zugewiesen)."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:150
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot add %s (footprint '%s' not found)."
-msgstr "%s kann nicht hinzugefügt werden (Footprint \"%s\" nicht gefunden)."
+msgstr "Kann %s nicht hinzufügen (Footprint \"%s\" nicht gefunden)."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:160
-#, fuzzy, c-format
+#, c-format
 msgid "Add %s (footprint '%s')."
 msgstr "%s hinzufügen (Footprint \"%s\")."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:184
-#, fuzzy, c-format
+#, c-format
 msgid "Added %s (footprint '%s')."
 msgstr "%s hinzugefügt (Footprint \"%s\")."
 
@@ -31286,9 +31268,9 @@ msgid "Cannot update %s (no footprint assigned)."
 msgstr "%s kann nicht aktualisiert werden (kein Footprint zugewiesen)."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:214
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot update %s (footprint '%s' not found)."
-msgstr "%s kann nicht aktualisiert werden (Footprint \"%s\" nicht gefunden)."
+msgstr "Kann %s nicht aktualisieren (Footprint \"%s\" nicht gefunden)."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:224
 #, c-format
@@ -31456,9 +31438,9 @@ msgid "Processing symbol '%s:%s'."
 msgstr "Verarbeite Symbol \"%s:%s\"."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:922
-#, fuzzy, c-format
+#, c-format
 msgid "Multiple footprints found for '%s'."
-msgstr "Mehrere Footprints für das Bauteil \"%s\" gefunden."
+msgstr "Mehrere Footprints für \"%s\" gefunden."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:952
 #, c-format
@@ -31500,17 +31482,17 @@ msgid "Cannot find component with ref '%s' in netlist."
 msgstr "Konnte in der Netzliste keine Komponente mit Ref \"%s\" finden."
 
 #: pcbnew/netlist_reader/kicad_netlist_reader.cpp:438
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Invalid footprint ID in\n"
 "file: '%s'\n"
 "line: %d\n"
 "offset: %d"
 msgstr ""
-"Unzulässige Footprint ID in\n"
+"Unzulässige Footprint-ID in\n"
 "Datei: \"%s\"\n"
 "Zeile: %d\n"
-"Offset: %d"
+"Spalte: %d"
 
 #: pcbnew/netlist_reader/legacy_netlist_reader.cpp:118
 msgid "Cannot parse time stamp in symbol section of netlist."
@@ -31584,7 +31566,7 @@ msgstr ""
 "\"%s\"."
 
 #: pcbnew/netlist_reader/netlist.cpp:205
-#, fuzzy, c-format
+#, c-format
 msgid "%s footprint ID '%s' is not valid."
 msgstr "%s Footprint ID \"%s\" ist ungültig."
 
@@ -31597,7 +31579,7 @@ msgstr ""
 "Footprintbibliothekstabelle gefunden werden."
 
 #: pcbnew/netlist_reader/netlist_reader.cpp:184
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Invalid footprint ID in\n"
 "file: '%s'\n"
@@ -31806,10 +31788,9 @@ msgid "New PCB file is unsaved"
 msgstr "Neue Platinendatei ist nicht gespeichert"
 
 #: pcbnew/pcb_edit_frame.cpp:870
-#, fuzzy, c-format
+#, c-format
 msgid "The auto save file '%s' could not be removed!"
-msgstr ""
-"Die automatisch gespeicherte Datei \"%s\" konnte nicht gelöscht werden!"
+msgstr "Die automatisch gespeicherte Datei \"%s\" konnte nicht gelöscht werden!"
 
 #: pcbnew/pcb_edit_frame.cpp:1113
 msgid "Board file is read only."
@@ -31847,9 +31828,9 @@ msgstr ""
 "dieses Problem an das KiCad-Team über das Menü Hilfe->Fehler melden."
 
 #: pcbnew/pcb_edit_frame.cpp:1500
-#, fuzzy, c-format
+#, c-format
 msgid "Schematic file '%s' not found."
-msgstr "Schaltplandatei \"%s\" wurde nicht gefunden."
+msgstr "Schaltplandatei \"%s\" nicht gefunden."
 
 #: pcbnew/pcb_edit_frame.cpp:1531
 msgid "Eeschema failed to load."
@@ -32168,14 +32149,12 @@ msgid "File not found: '%s'. 3D-model not imported."
 msgstr "Datei nicht gefunden: \"%s\". 3D-Modell nicht importiert."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1485
-#, fuzzy
 msgid "Loading nets..."
-msgstr "Lade..."
+msgstr "Lade Netze..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1506
-#, fuzzy
 msgid "Loading polygons..."
-msgstr "Ausfüllen von Polygonen..."
+msgstr "Lade Polygone..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1519
 #: pcbnew/plugins/altium/altium_pcb.cpp:1770
@@ -32188,19 +32167,18 @@ msgstr ""
 "Lage Eco1_User verschoben."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1641
-#, fuzzy
 msgid "Loading rules..."
-msgstr "Gerberdatei öffnen..."
+msgstr "Lade Regeln..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1673
 #, fuzzy
 msgid "Loading board regions..."
-msgstr "Gerberdatei öffnen..."
+msgstr "Lade Platinenbereiche..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1695
 #, fuzzy
 msgid "Loading zones..."
-msgstr "Lade..."
+msgstr "Lade Zonen..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1751
 #, c-format
@@ -32219,12 +32197,12 @@ msgstr "Polygonform vom Typ %d wird ignoriert (noch nicht unterstützt)."
 #: pcbnew/plugins/altium/altium_pcb.cpp:1819
 #, fuzzy
 msgid "Loading zone fills..."
-msgstr "Erstelle Füllung der Kupferflächen..."
+msgstr "Lade gefüllte Zonen..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1908
 #, fuzzy
 msgid "Loading arcs..."
-msgstr "Lade..."
+msgstr "Lade Bögen..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1969
 #, c-format
@@ -32247,7 +32225,7 @@ msgstr ""
 #: pcbnew/plugins/altium/altium_pcb.cpp:2065
 #, fuzzy
 msgid "Loading pads..."
-msgstr "Lade..."
+msgstr "Lade Pads..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2125
 #, fuzzy, c-format
@@ -32324,7 +32302,7 @@ msgstr "Nicht-Kupfer-Pad %s verwendet eine unbekannte Pad-Form."
 #: pcbnew/plugins/altium/altium_pcb.cpp:2475
 #, fuzzy
 msgid "Loading vias..."
-msgstr "Lade..."
+msgstr "Lade Vias..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2516
 #, c-format
@@ -32337,7 +32315,7 @@ msgstr ""
 #: pcbnew/plugins/altium/altium_pcb.cpp:2537
 #, fuzzy
 msgid "Loading tracks..."
-msgstr "Lade..."
+msgstr "Lade Leiterbahnen..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2585
 #, c-format
@@ -32358,9 +32336,8 @@ msgstr ""
 "KiCad-Lage Eco1_User verschoben."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2644
-#, fuzzy
 msgid "Loading text..."
-msgstr "Lade..."
+msgstr "Lade Text..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2655
 #, fuzzy, c-format
@@ -32379,9 +32356,8 @@ msgstr ""
 "Lage Eco1_User verschoben."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2829
-#, fuzzy
 msgid "Loading rectangles..."
-msgstr "Gerberdatei öffnen..."
+msgstr "Lade Rechtecke..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2849
 #, c-format
@@ -32805,7 +32781,7 @@ msgstr ""
 "Kupfergüsse davon betroffen sind."
 
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:377
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to read file '%s'"
 msgstr "Kann Datei \"%s\" nicht lesen"
 
@@ -32988,9 +32964,9 @@ msgstr "\"%s\" kann nicht in eine Ganzzahl konvertiert werden."
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:228
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:877
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:242
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint library '%s' not found."
-msgstr "Footprintbibliothek nicht gefunden."
+msgstr "Footprintbibliothek \"%s\" nicht gefunden."
 
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:282
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:300
@@ -33003,7 +32979,7 @@ msgstr "Bibliothek \"%s\" hat keinen Footprint \"%s\"."
 #: pcbnew/plugins/kicad/pcb_parser.cpp:831
 #, fuzzy, c-format
 msgid "Unknown token '%s'"
-msgstr "Unbekanntes Vorkommnis \"%s\""
+msgstr "Unbekanntes Token \"%s\""
 
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:354
 #, c-format
@@ -33032,9 +33008,9 @@ msgstr ""
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:1028
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:2672
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:3239
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint library '%s' cannot be deleted."
-msgstr "Die Footprintbibliothek \"%s\" konnte nicht gelöscht werden."
+msgstr "Footprintbibliothek \"%s\" kann nicht gelöscht werden."
 
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:172
 #, c-format
@@ -33047,11 +33023,9 @@ msgid "Footprint library '%s' is read only."
 msgstr "Footprintbibliothek \"%s\" ist schreibgeschützt."
 
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:216
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot rename temporary file '%s' to '%s'"
-msgstr ""
-"Konnte temporäre Datei \"%s\" nicht in Footprintbibliotheksdatei \"%s\" "
-"umbenennen"
+msgstr "Kann temporäre Datei \"%s\" nicht in \"%s\" umbenennen"
 
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:344
 #, c-format
@@ -33098,7 +33072,7 @@ msgid "This file does not contain a PCB."
 msgstr "Diese Datei enthält keine Leiterplatte."
 
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:2495
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Library '%s' does not exist.\n"
 "Would you like to create it?"
@@ -33207,7 +33181,7 @@ msgstr ""
 "Unzulässige Footprint-ID in\n"
 "Datei: \"%s\"\n"
 "Zeile: %d\n"
-"Offset: %d."
+"Spalte: %d."
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:3536
 #, c-format
@@ -33222,8 +33196,8 @@ msgid ""
 "line: %d offset: %d"
 msgstr ""
 "Unzulässige Netz-ID in\n"
-"Datei: \"%s\"\n"
-"Zeile: %d Offset: %d"
+"Datei: %s\n"
+"Zeile: %d Spalte: %d"
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:4158
 #, c-format
@@ -33233,8 +33207,8 @@ msgid ""
 "line: %d offset: %d"
 msgstr ""
 "Netzname passt nicht auf Netz-ID in\n"
-"Datei: \"%s\"\n"
-"Zeile: %d Offset: %d"
+"Datei: %s\n"
+"Zeile: %d Spalte: %d"
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:4611
 #: pcbnew/plugins/kicad/pcb_parser.cpp:4689
@@ -33248,7 +33222,7 @@ msgstr ""
 "Unzulässige Netz-ID in\n"
 "Datei: \"%s\"\n"
 "Zeile: %d\n"
-"Offset: %d."
+"Spalte: %d."
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:4783
 #, c-format
@@ -33261,7 +33235,7 @@ msgstr ""
 "Unzulässige Netz-ID in\n"
 "Datei: \"%s\"\n"
 "Zeile: %d\n"
-"Offset: %d"
+"Spalte: %d"
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:4893
 #, c-format
@@ -33344,8 +33318,7 @@ msgid ""
 "Invalid floating point number in file: '%s'\n"
 "line: %d, offset: %d"
 msgstr ""
-"Unzulässige Gleitkommazahl in\n"
-"Datei: \"%s\"\n"
+"Unzulässige Gleitkommazahl in Datei: \"%s\"\n"
 "Zeile: %d, Spalte: %d"
 
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:2833
@@ -33355,8 +33328,7 @@ msgid ""
 "Missing floating point number in file: '%s'\n"
 "line: %d, offset: %d"
 msgstr ""
-"Fehlende Gleitkommazahl in\n"
-"Datei: \"%s\"\n"
+"Fehlende Gleitkommazahl in Datei: \"%s\"\n"
 "Zeile: %d, Spalte: %d"
 
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:3014
