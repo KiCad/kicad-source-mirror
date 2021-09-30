@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-01 11:31-0700\n"
-"PO-Revision-Date: 2021-09-29 17:58+0000\n"
+"PO-Revision-Date: 2021-10-01 07:18+0000\n"
 "Last-Translator: boonchai k. <kicadthai@gmail.com>\n"
 "Language-Team: Thai <https://hosted.weblate.org/projects/kicad/master-source/"
 "th/>\n"
@@ -1309,6 +1309,7 @@ msgid "sq. mm"
 msgstr "ตร.มม."
 
 #: common/base_units.cpp:438
+#, fuzzy
 msgid "cu. mm"
 msgstr "cu. mm"
 
@@ -1338,6 +1339,7 @@ msgid "sq. mils"
 msgstr "ตร.มิล"
 
 #: common/base_units.cpp:452
+#, fuzzy
 msgid "cu. mils"
 msgstr "cu. มิล"
 
@@ -1350,6 +1352,7 @@ msgid "sq. in"
 msgstr "ตร.นิ้ว"
 
 #: common/base_units.cpp:466
+#, fuzzy
 msgid "cu. in"
 msgstr "cu.นิ้ว"
 
@@ -1479,7 +1482,7 @@ msgstr "ยกเลิก"
 #: common/confirm.cpp:228 gerbview/dialogs/dialog_select_one_pcb_layer.cpp:184
 #: pcbnew/microwave/microwave_polygon.cpp:129 pcbnew/router/router_tool.cpp:521
 msgid "OK"
-msgstr "OK"
+msgstr "ตกลง"
 
 #: common/confirm.cpp:285
 msgid "Info"
@@ -35159,7 +35162,7 @@ msgstr "gerbview"
 #: resources/linux/launchers/org.kicad.kicad.desktop.in:10
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:6
 msgid "KiCad"
-msgstr "KiCad"
+msgstr "คีแคด"
 
 #: resources/linux/launchers/org.kicad.kicad.desktop.in:11
 msgid "EDA Suite"
@@ -35191,7 +35194,7 @@ msgstr "เครื่องมือแก้ไขวงจรพิมพ์
 
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:13
 msgid "pcbnew"
-msgstr "Pcbnew"
+msgstr "พีซีบีนิว"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:13
 msgid "An EDA suite for schematic and circuit board design"
