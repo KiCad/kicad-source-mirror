@@ -223,20 +223,11 @@ void PANEL_EESCHEMA_COLOR_SETTINGS::onNewThemeSelected()
 }
 
 
-class SCH_BUS_WIRE_ENTRY_PREVIEW_ITEM : public SCH_BUS_WIRE_ENTRY
-{
-public:
-    SCH_BUS_WIRE_ENTRY_PREVIEW_ITEM() :
-            SCH_BUS_WIRE_ENTRY()
-    {
-        m_isDanglingStart = m_isDanglingEnd = false;
-    };
-};
-
-
 void PANEL_EESCHEMA_COLOR_SETTINGS::createPreviewItems()
 {
     KIGFX::VIEW* view = m_preview->GetView();
+
+    std::vector<DANGLING_END_ITEM> endPoints;
 
     m_page       = new PAGE_INFO( PAGE_INFO::Custom );
     m_titleBlock = new TITLE_BLOCK;
@@ -246,11 +237,11 @@ void PANEL_EESCHEMA_COLOR_SETTINGS::createPreviewItems()
     m_page->SetHeightMils( 5000 );
     m_page->SetWidthMils( 6000 );
 
-    m_drawingSheet = new DS_PROXY_VIEW_ITEM((int) IU_PER_MILS, m_page, nullptr, m_titleBlock );
+    m_drawingSheet = new DS_PROXY_VIEW_ITEM( (int) IU_PER_MILS, m_page, nullptr, m_titleBlock );
     m_drawingSheet->SetColorLayer( LAYER_SCHEMATIC_DRAWINGSHEET );
     view->Add( m_drawingSheet );
 
-    // NOTE: It would be nice to parse a schematic file here.
+    // TODO: It would be nice to parse a schematic file here.
     // This is created from the color_settings.sch file in demos folder
 
     auto addItem = [&]( EDA_ITEM* aItem )
@@ -276,7 +267,7 @@ void PANEL_EESCHEMA_COLOR_SETTINGS::createPreviewItems()
                 { LAYER_NOTES, { { 2950, 2300 }, { 2350, 2300 } } }
             };
 
-    for( const auto& line : lines )
+    for( const std::pair<SCH_LAYER_ID, std::pair<wxPoint, wxPoint>>& line : lines )
     {
         SCH_LINE* wire = new SCH_LINE;
         wire->SetLayer( line.first );
@@ -293,11 +284,11 @@ void PANEL_EESCHEMA_COLOR_SETTINGS::createPreviewItems()
     nc->SetPosition( MILS_POINT( 2525, 1300 ) );
     addItem( nc );
 
-    SCH_BUS_WIRE_ENTRY* e1 = new SCH_BUS_WIRE_ENTRY_PREVIEW_ITEM;
+    SCH_BUS_WIRE_ENTRY* e1 = new SCH_BUS_WIRE_ENTRY;
     e1->SetPosition( MILS_POINT( 1850, 1400 ) );
     addItem( e1 );
 
-    SCH_BUS_WIRE_ENTRY* e2 = new SCH_BUS_WIRE_ENTRY_PREVIEW_ITEM;
+    SCH_BUS_WIRE_ENTRY* e2 = new SCH_BUS_WIRE_ENTRY;
     e2->SetPosition( MILS_POINT( 1850, 2500 ) );
     addItem( e2 );
 
@@ -315,7 +306,7 @@ void PANEL_EESCHEMA_COLOR_SETTINGS::createPreviewItems()
     t3->SetIsDangling( false );
     addItem( t3 );
 
-    SCH_GLOBALLABEL* t4 = new SCH_GLOBALLABEL( MILS_POINT( 1750, 1400 ), wxT( "GLOBAL[3..0]" ) );
+    SCH_GLOBALLABEL* t4 = new SCH_GLOBALLABEL( MILS_POINT( 1750, 1400 ), wxT( "GLOBAL[0..3]" ) );
     t4->SetLabelSpinStyle( LABEL_SPIN_STYLE::SPIN::LEFT );
     t4->SetIsDangling( false );
     addItem( t4 );
@@ -331,6 +322,12 @@ void PANEL_EESCHEMA_COLOR_SETTINGS::createPreviewItems()
     t2->SetSelected();
 
     {
+        auto mapLibItemPosition =
+                []( const wxPoint& aLibPosition ) -> wxPoint
+                {
+                    return wxPoint( aLibPosition.x, -aLibPosition.y );
+                };
+
         LIB_SYMBOL* symbol = new LIB_SYMBOL( wxEmptyString );
         wxPoint p( 2625, -1600 );
 
@@ -365,35 +362,38 @@ void PANEL_EESCHEMA_COLOR_SETTINGS::createPreviewItems()
 
         LIB_PIN* pin = new LIB_PIN( symbol );
 
-        pin->SetPosition( MILS_POINT( p.x - 200, p.y + 100 ) );
+        pin->SetPosition( MILS_POINT( p.x - 300, p.y + 100 ) );
         pin->SetLength( Mils2iu( 100 ) );
-        pin->SetOrientation( PIN_LEFT );
+        pin->SetOrientation( PIN_RIGHT );
         pin->SetType( ELECTRICAL_PINTYPE::PT_INPUT );
         pin->SetNumber( wxT( "1" ) );
         pin->SetName( wxT( "-" ) );
 
+        endPoints.emplace_back( PIN_END, pin, mapLibItemPosition( pin->GetPosition() ) );
         symbol->AddDrawItem( pin );
 
         pin = new LIB_PIN( symbol );
 
-        pin->SetPosition( MILS_POINT( p.x - 200, p.y - 100 ) );
+        pin->SetPosition( MILS_POINT( p.x - 300, p.y - 100 ) );
         pin->SetLength( Mils2iu( 100 ) );
-        pin->SetOrientation( PIN_LEFT );
+        pin->SetOrientation( PIN_RIGHT );
         pin->SetType( ELECTRICAL_PINTYPE::PT_INPUT );
         pin->SetNumber( wxT( "2" ) );
         pin->SetName( wxT( "+" ) );
 
+        endPoints.emplace_back( PIN_END, pin, mapLibItemPosition( pin->GetPosition() ) );
         symbol->AddDrawItem( pin );
 
         pin = new LIB_PIN( symbol );
 
-        pin->SetPosition( MILS_POINT( p.x + 200, p.y ) );
+        pin->SetPosition( MILS_POINT( p.x + 300, p.y ) );
         pin->SetLength( Mils2iu( 100 ) );
-        pin->SetOrientation( PIN_RIGHT );
+        pin->SetOrientation( PIN_LEFT );
         pin->SetType( ELECTRICAL_PINTYPE::PT_OUTPUT );
         pin->SetNumber( wxT( "3" ) );
         pin->SetName( wxT( "OUT" ) );
 
+        endPoints.emplace_back( PIN_END, pin, mapLibItemPosition( pin->GetPosition() ) );
         symbol->AddDrawItem( pin );
 
         addItem( symbol );
@@ -408,6 +408,22 @@ void PANEL_EESCHEMA_COLOR_SETTINGS::createPreviewItems()
 
     SCH_SHEET_PIN* sp = new SCH_SHEET_PIN( s, MILS_POINT( 4500, 1500 ), wxT( "SHEET PIN" ) );
     addItem( sp );
+
+    for( EDA_ITEM* item : m_previewItems )
+    {
+        SCH_ITEM* sch_item = dynamic_cast<SCH_ITEM*>( item );
+
+        if( sch_item && sch_item->IsConnectable() )
+            sch_item->GetEndPoints( endPoints );
+    }
+
+    for( EDA_ITEM* item : m_previewItems )
+    {
+        SCH_ITEM* sch_item = dynamic_cast<SCH_ITEM*>( item );
+
+        if( sch_item && sch_item->IsConnectable() )
+            sch_item->UpdateDanglingState( endPoints, nullptr );
+    }
 
     zoomFitPreview();
 }

@@ -105,6 +105,8 @@ public:
 
     const COLOR4D& GetCursorColor() override { return m_layerColors[ LAYER_SCHEMATIC_CURSOR ]; }
 
+    bool   m_IsSymbolEditor;
+
     int    m_ShowUnit;                // Show all units if 0
     int    m_ShowConvert;             // Show all conversions if 0
 

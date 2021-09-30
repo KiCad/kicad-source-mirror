@@ -70,6 +70,7 @@ namespace KIGFX
 {
 
 SCH_RENDER_SETTINGS::SCH_RENDER_SETTINGS() :
+        m_IsSymbolEditor( false ),
         m_ShowUnit( 0 ),
         m_ShowConvert( 0 ),
         m_ShowHiddenText( true ),
@@ -783,11 +784,7 @@ void SCH_PAINTER::draw( LIB_PIN *aPin, int aLayer )
         return;
 
     bool drawingShadows = aLayer == LAYER_SELECTION_SHADOWS;
-#if 1
-    bool dangling = !m_schematic || aPin->HasFlag(IS_DANGLING );
-#else
-    bool dangling = aPin->HasFlag( IS_DANGLING );
-#endif
+    bool dangling = m_schSettings.m_IsSymbolEditor || aPin->HasFlag( IS_DANGLING );
 
     if( drawingShadows && !aPin->IsSelected() )
         return;
@@ -988,7 +985,7 @@ void SCH_PAINTER::draw( LIB_PIN *aPin, int aLayer )
     nameStrokeWidth = Clamp_Text_PenSize( nameStrokeWidth, aPin->GetNameTextSize(), false );
     numStrokeWidth = Clamp_Text_PenSize( numStrokeWidth, aPin->GetNumberTextSize(), false );
 
-    #define PIN_TEXT_MARGIN 4.0
+    int PIN_TEXT_MARGIN = KiROUND( 24 * m_schSettings.m_TextOffsetRatio );
 
     // Four locations around a pin where text can be drawn
     enum { INSIDE = 0, OUTSIDE, ABOVE, BELOW };
@@ -1810,13 +1807,12 @@ void SCH_PAINTER::draw( const SCH_NO_CONNECT *aNC, int aLayer )
 
 void SCH_PAINTER::draw( const SCH_BUS_ENTRY_BASE *aEntry, int aLayer )
 {
-    SCH_LINE line;
-    bool drawingShadows = aLayer == LAYER_SELECTION_SHADOWS;
+    SCH_LAYER_ID layer = aEntry->Type() == SCH_BUS_WIRE_ENTRY_T ? LAYER_WIRE : LAYER_BUS;
+    SCH_LINE     line( wxPoint(), layer );
+    bool         drawingShadows = aLayer == LAYER_SELECTION_SHADOWS;
 
     if( drawingShadows && !aEntry->IsSelected() )
         return;
-
-    line.SetLayer( aEntry->Type() == SCH_BUS_WIRE_ENTRY_T ? LAYER_WIRE : LAYER_BUS );
 
     if( aEntry->IsSelected() )
         line.SetSelected();
