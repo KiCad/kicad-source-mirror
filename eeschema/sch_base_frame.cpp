@@ -321,6 +321,8 @@ void SCH_BASE_FRAME::UpdateItem( EDA_ITEM* aItem, bool isAddOrDelete )
             GetCanvas()->GetView()->Update( parent, KIGFX::REPAINT );
     }
 
+    GetScreen()->Update( static_cast<SCH_ITEM*>( aItem ) );
+
     // Calling Refresh() here introduces a bi-stable state: when doing operations on a
     // large number of items if at some point the refresh timer times out and does a
     // refresh it will take long enough that the next item will also time out, and the
