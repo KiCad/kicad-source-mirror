@@ -206,6 +206,14 @@ int UnsavedChangesDialog( wxWindow* parent, const wxString& aMessage )
     // wxRichMessageDialog.
     return UnsavedChangesDialog( parent, aMessage, nullptr );
 #else
+    #ifdef _WIN32
+    // wxMessageDialog on windows invokes TaskDialogIndirect which is a native function for a dialog
+    // As a result it skips wxWidgets for modal management...and we don't parent frames properly
+    // among other things for Windows to do the right thing by default
+    // Disable all the windows manually to avoid being able to hit this dialog from the tool frame and kicad frame at the same time
+    wxWindowDisabler disable( true );
+    #endif
+
     wxMessageDialog dlg( parent, aMessage, _( "Save Changes?" ),
                          wxYES_NO | wxCANCEL | wxYES_DEFAULT | wxICON_WARNING | wxCENTER );
     dlg.SetExtendedMessage( _( "If you don't save, all your changes will be permanently lost." ) );
