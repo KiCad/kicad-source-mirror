@@ -6,7 +6,7 @@
 	# git config --add include.path $(pwd)/helpers/git/fixes_alias
 
 	fixes = "!f() { \
-		COMMIT_MSG=$(git log -1 --format=medium | tail -n +5 | sed -e 's/^    //'); \
+		COMMIT_MSG=$(git log -n1 --format=%B); \
 		git commit --amend -m \"${COMMIT_MSG}\n\nFixes https://gitlab.com/kicad/code/kicad/issues/$1\"; \
 	}; f"
 
