@@ -1191,7 +1191,7 @@ void SCH_GLOBALLABEL::UpdateIntersheetRefProps()
 
 void SCH_GLOBALLABEL::AutoplaceFields( SCH_SCREEN* aScreen, bool aManual )
 {
-    int margin = GetTextOffset();
+    int margin = GetTextOffset() * 2;
     int labelLen = GetBoundingBoxBase().GetSizeMax();
     int penOffset = GetPenWidth() / 2;
 
