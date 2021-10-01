@@ -1242,7 +1242,10 @@ bool SCH_EDIT_FRAME::AskToSaveChanges()
         {
             if( !HandleUnsavedChanges( this, _( "The current schematic has been modified.  "
                                                 "Save changes?" ),
-                                       [&]()->bool { return SaveProject(); } ) )
+                                       [&]() -> bool
+                                       {
+                                           return SaveProject();
+                                       } ) )
             {
                 return false;
             }

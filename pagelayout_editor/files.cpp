@@ -60,7 +60,10 @@ void PL_EDITOR_FRAME::OnFileHistory( wxCommandEvent& event )
         {
             if( !HandleUnsavedChanges( this, _( "The current drawing sheet has been modified. "
                                                 "Save changes?" ),
-                                       [&]()->bool { return saveCurrentPageLayout(); } ) )
+                                       [&]() -> bool
+                                       {
+                                           return saveCurrentPageLayout();
+                                       } ) )
             {
                 return;
             }
@@ -101,7 +104,10 @@ void PL_EDITOR_FRAME::Files_io( wxCommandEvent& event )
     {
         if( !HandleUnsavedChanges( this, _( "The current drawing sheet has been modified. "
                                             "Save changes?" ),
-                                   [&]()->bool { return saveCurrentPageLayout(); } ) )
+                                   [&]() -> bool
+                                   {
+                                       return saveCurrentPageLayout();
+                                   } ) )
         {
             return;
         }

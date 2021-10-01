@@ -586,7 +586,10 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
     if( IsContentModified() )
     {
         if( !HandleUnsavedChanges( this, _( "The current PCB has been modified.  Save changes?" ),
-            [&]()->bool { return SavePcbFile( GetBoard()->GetFileName() ); } ) )
+                                   [&]() -> bool
+                                   {
+                                       return SavePcbFile( GetBoard()->GetFileName() );
+                                   } ) )
         {
             return false;
         }

@@ -1202,7 +1202,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnClose( wxCloseEvent& event )
     if( m_dataModel->IsEdited() )
     {
         if( !HandleUnsavedChanges( this, _( "Save changes?" ),
-                                   [&]()->bool
+                                   [&]() -> bool
                                    {
                                        return TransferDataFromWindow();
                                    } ) )

@@ -1598,13 +1598,14 @@ bool SIM_PLOT_FRAME::canCloseWindow( wxCloseEvent& aEvent )
                 filename.SetFullName( Prj().GetProjectName() + wxT( ".wbk" ) );
         }
 
+        wxString fullFilename = filename.GetFullName();
         wxString msg = _( "Save changes to '%s' before closing?" );
 
-        return HandleUnsavedChanges( this, wxString::Format( msg, filename.GetFullName() ),
-                [&]()->bool
-                {
-                    return saveWorkbook( Prj().AbsolutePath( filename.GetFullName() ) );
-                } );
+        return HandleUnsavedChanges( this, wxString::Format( msg, fullFilename ),
+                                     [&]() -> bool
+                                     {
+                                         return saveWorkbook( Prj().AbsolutePath( fullFilename ) );
+                                     } );
     }
 
     return true;

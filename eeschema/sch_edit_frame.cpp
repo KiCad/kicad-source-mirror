@@ -654,7 +654,10 @@ bool SCH_EDIT_FRAME::canCloseWindow( wxCloseEvent& aEvent )
         wxString msg = _( "Save changes to '%s' before closing?" );
 
         if( !HandleUnsavedChanges( this, wxString::Format( msg, fileName.GetFullName() ),
-                                   [&]()->bool { return SaveProject(); } ) )
+                                   [&]() -> bool
+                                   {
+                                       return SaveProject();
+                                   } ) )
         {
             return false;
         }

@@ -259,9 +259,11 @@ bool SYMBOL_EDIT_FRAME::LoadSymbol( const LIB_ID& aLibId, int aUnit, int aConver
 
     if( GetScreen()->IsContentModified() && GetCurSymbol() )
     {
-        if( !HandleUnsavedChanges( this, _( "The current symbol has been modified.  "
-                                            "Save changes?" ),
-                                   [&]()->bool { return saveCurrentSymbol(); } ) )
+        if( !HandleUnsavedChanges( this, _( "The current symbol has been modified.  Save changes?" ),
+                                   [&]() -> bool
+                                   {
+                                       return saveCurrentSymbol();
+                                   } ) )
         {
             return false;
         }

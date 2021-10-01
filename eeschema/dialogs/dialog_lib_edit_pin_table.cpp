@@ -753,7 +753,7 @@ void DIALOG_LIB_EDIT_PIN_TABLE::OnClose( wxCloseEvent& event )
     if( m_dataModel->IsEdited() )
     {
         if( HandleUnsavedChanges( this, _( "Save changes?" ),
-                                  [&]()->bool
+                                  [&]() -> bool
                                   {
                                       if( TransferDataFromWindow() )
                                       {
