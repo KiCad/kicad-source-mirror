@@ -37,6 +37,7 @@
 #include <sch_edit_frame.h>
 #include <plotters/plotter.h>
 #include <bitmaps.h>
+#include <core/kicad_algo.h>
 #include <core/mirror.h>
 #include <kiway.h>
 #include <general.h>
@@ -51,7 +52,6 @@
 #include <eeschema_id.h>
 #include <tool/tool_manager.h>
 #include <tools/ee_actions.h>
-
 
 SCH_FIELD::SCH_FIELD( const wxPoint& aPos, int aFieldId, SCH_ITEM* aParent,
                       const wxString& aName ) :
@@ -531,18 +531,20 @@ void SCH_FIELD::DoHypertextMenu( EDA_DRAW_FRAME* aFrame )
             std::vector<wxString>        pageListCopy;
 
             pageListCopy.insert( pageListCopy.end(), it->second.begin(), it->second.end() );
-            std::sort( pageListCopy.begin(), pageListCopy.end() );
-
             if( !Schematic()->Settings().m_IntersheetRefsListOwnPage )
             {
                 wxString currentPage = Schematic()->CurrentSheet().GetPageNumber();
-                pageListCopy.erase( std::remove( pageListCopy.begin(),
-                                                 pageListCopy.end(),
-                                                 currentPage ), pageListCopy.end() );
+                alg::delete_matching( pageListCopy, currentPage );
 
                 if( pageListCopy.empty() )
                     return;
             }
+
+            std::sort( pageListCopy.begin(), pageListCopy.end(),
+                       []( const wxString& a, const wxString& b ) -> bool
+                       {
+                           return StrNumCmp( a, b, true ) < 0;
+                       } );
 
             for( const SCH_SHEET_PATH& sheet : Schematic()->GetSheets() )
             {

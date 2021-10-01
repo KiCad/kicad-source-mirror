@@ -25,8 +25,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <algorithm>
-
+#include <core/kicad_algo.h>
 #include <commit.h>
 #include <eda_item.h>
 #include <macros.h>
@@ -137,16 +136,6 @@ int COMMIT::GetStatus( EDA_ITEM* aItem )
 }
 
 
-template <class Container, class F>
-void eraseIf( Container& c, F&& f )
-{
-    c.erase( std::remove_if( c.begin(),
-                    c.end(),
-                    std::forward<F>( f ) ),
-            c.end() );
-}
-
-
 COMMIT& COMMIT::createModified( EDA_ITEM* aItem, EDA_ITEM* aCopy, int aExtraFlags )
 {
     EDA_ITEM* parent = parentObject( aItem );
@@ -171,10 +160,10 @@ void COMMIT::makeEntry( EDA_ITEM* aItem, CHANGE_TYPE aType, EDA_ITEM* aCopy )
 
     if( m_changedItems.find( aItem ) != m_changedItems.end() )
     {
-        eraseIf( m_changes, [aItem] ( const COMMIT_LINE& aEnt )
-        {
-            return aEnt.m_item == aItem;
-        } );
+        alg::delete_if( m_changes, [aItem]( const COMMIT_LINE& aEnt )
+                                   {
+                                       return aEnt.m_item == aItem;
+                                   } );
     }
 
     COMMIT_LINE ent;

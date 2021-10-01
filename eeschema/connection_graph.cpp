@@ -22,12 +22,12 @@
 
 #include <list>
 #include <thread>
-#include <algorithm>
 #include <future>
 #include <vector>
 #include <unordered_map>
 #include <profile.h>
 #include <common.h>
+#include <core/kicad_algo.h>
 #include <erc.h>
 #include <pin_type.h>
 #include <sch_bus_entry.h>
@@ -1054,7 +1054,7 @@ void CONNECTION_GRAPH::buildConnectionGraph()
                 wxLogTrace( ConnTrace, "%ld (%s) is weakly driven and not unique. Changing to %s.",
                             subgraph->m_code, name, new_name );
 
-                vec->erase( std::remove( vec->begin(), vec->end(), subgraph ), vec->end() );
+                alg::delete_matching( *vec, subgraph );
 
                 m_net_name_to_subgraphs_map[new_name].emplace_back( subgraph );
 
@@ -1307,12 +1307,10 @@ void CONNECTION_GRAPH::buildConnectionGraph()
     }
 
     // Absorbed subgraphs should no longer be considered
-    m_driver_subgraphs.erase( std::remove_if( m_driver_subgraphs.begin(), m_driver_subgraphs.end(),
-                              [&] ( const CONNECTION_SUBGRAPH* candidate ) -> bool
-                              {
-                                  return candidate->m_absorbed;
-                              } ),
-                              m_driver_subgraphs.end() );
+    alg::delete_if( m_driver_subgraphs, [&]( const CONNECTION_SUBGRAPH* candidate ) -> bool
+                                        {
+                                            return candidate->m_absorbed;
+                                        } );
 
     // Store global subgraphs for later reference
     std::vector<CONNECTION_SUBGRAPH*> global_subgraphs;
@@ -2031,7 +2029,7 @@ void CONNECTION_GRAPH::recacheSubgraphName( CONNECTION_SUBGRAPH* aSubgraph,
     if( it != m_net_name_to_subgraphs_map.end() )
     {
         std::vector<CONNECTION_SUBGRAPH*>& vec = it->second;
-        vec.erase( std::remove( vec.begin(), vec.end(), aSubgraph ), vec.end() );
+        alg::delete_matching( vec, aSubgraph );
     }
 
     wxLogTrace( ConnTrace, "recacheSubgraphName: %s => %s", aOldName,

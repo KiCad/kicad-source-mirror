@@ -25,7 +25,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <algorithm>
 #include <iterator>
 #include <drc/drc_rtree.h>
 #include <pcb_base_frame.h>
@@ -744,45 +743,25 @@ void BOARD::Remove( BOARD_ITEM* aBoardItem, REMOVE_MODE aRemoveMode )
     }
 
     case PCB_MARKER_T:
-        m_markers.erase( std::remove_if( m_markers.begin(), m_markers.end(),
-                                         [aBoardItem]( BOARD_ITEM* aItem )
-                                         {
-                                             return aItem == aBoardItem;
-                                         } ) );
+        alg::delete_matching( m_markers, aBoardItem );
         break;
 
     case PCB_GROUP_T:
-        m_groups.erase( std::remove_if( m_groups.begin(), m_groups.end(),
-                                        [aBoardItem]( BOARD_ITEM* aItem )
-                                        {
-                                            return aItem == aBoardItem;
-                                        } ) );
+        alg::delete_matching( m_groups, aBoardItem );
         break;
 
     case PCB_ZONE_T:
-        m_zones.erase( std::remove_if( m_zones.begin(), m_zones.end(),
-                                       [aBoardItem]( BOARD_ITEM* aItem )
-                                       {
-                                           return aItem == aBoardItem;
-                                       } ) );
+        alg::delete_matching( m_zones, aBoardItem );
         break;
 
     case PCB_FOOTPRINT_T:
-        m_footprints.erase( std::remove_if( m_footprints.begin(), m_footprints.end(),
-                                            [aBoardItem]( BOARD_ITEM* aItem )
-                                            {
-                                                return aItem == aBoardItem;
-                                            } ) );
+        alg::delete_matching( m_footprints, aBoardItem );
         break;
 
     case PCB_TRACE_T:
     case PCB_ARC_T:
     case PCB_VIA_T:
-        m_tracks.erase( std::remove_if( m_tracks.begin(), m_tracks.end(),
-                                        [aBoardItem]( BOARD_ITEM* aItem )
-                                        {
-                                            return aItem == aBoardItem;
-                                        } ) );
+        alg::delete_matching( m_tracks, aBoardItem );
         break;
 
     case PCB_DIM_ALIGNED_T:
@@ -792,11 +771,7 @@ void BOARD::Remove( BOARD_ITEM* aBoardItem, REMOVE_MODE aRemoveMode )
     case PCB_SHAPE_T:
     case PCB_TEXT_T:
     case PCB_TARGET_T:
-        m_drawings.erase( std::remove_if( m_drawings.begin(), m_drawings.end(),
-                                          [aBoardItem](BOARD_ITEM* aItem)
-                                          {
-                                              return aItem == aBoardItem;
-                                          } ) );
+        alg::delete_matching( m_drawings, aBoardItem );
         break;
 
     // other types may use linked list

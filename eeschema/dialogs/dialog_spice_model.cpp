@@ -27,6 +27,7 @@
 #include "dialog_spice_model.h"
 
 #include <sim/spice_value.h>
+#include <core/kicad_algo.h>
 #include <confirm.h>
 #include <project.h>
 #include <common.h>
@@ -311,21 +312,17 @@ bool DIALOG_SPICE_MODEL::TransferDataFromWindow()
 
             if( m_useSchFields )
             {
-                m_schfields->erase( std::remove_if( m_schfields->begin(), m_schfields->end(),
-                                                    [&]( const SCH_FIELD& f )
-                                                    {
-                                                        return f.GetName() == spiceField;
-                                                    } ),
-                                    m_schfields->end() );
+                alg::delete_if( *m_schfields, [&]( const SCH_FIELD& f )
+                                              {
+                                                  return f.GetName() == spiceField;
+                                              } );
             }
             else
             {
-                m_libfields->erase( std::remove_if( m_libfields->begin(), m_libfields->end(),
-                                                    [&]( const LIB_FIELD& f )
-                                                    {
-                                                        return f.GetName() == spiceField;
-                                                    } ),
-                                    m_libfields->end() );
+                alg::delete_if( *m_libfields, [&]( const LIB_FIELD& f )
+                                              {
+                                                  return f.GetName() == spiceField;
+                                              } );
             }
         }
     }

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2007-2008 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2004-2020 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2004-2021 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,16 +22,11 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file collector.h
- * @brief COLLECTOR class definition.
- */
-
 #ifndef COLLECTOR_H
 #define COLLECTOR_H
 
 #include <vector>
-
+#include <core/kicad_algo.h>
 #include <eda_item.h>    // SEARCH_RESULT
 #include <eda_rect.h>
 
@@ -124,12 +119,10 @@ public:
      */
     void Remove( const EDA_ITEM* aItem )
     {
-        m_list.erase( std::remove_if( m_list.begin(), m_list.end(),
-                                      [&aItem]( const EDA_ITEM* aCandidate )
-                                      {
-                                          return aCandidate == aItem;
-                                      } ),
-                      m_list.end() );
+        alg::delete_if( m_list, [&aItem]( const EDA_ITEM* aCandidate )
+                                {
+                                    return aCandidate == aItem;
+                                } );
     }
 
     /**

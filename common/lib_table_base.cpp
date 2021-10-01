@@ -292,10 +292,11 @@ std::vector<wxString> LIB_TABLE::GetLogicalLibs()
     }
 
     // We want to allow case-sensitive duplicates but sort by case-insensitive ordering
-    std::sort( ret.begin(), ret.end(), []( const wxString& lhs, const wxString& rhs )
-    {
-        return lhs.CmpNoCase( rhs ) < 0;
-    } );
+    std::sort( ret.begin(), ret.end(),
+            []( const wxString& lhs, const wxString& rhs )
+            {
+                return lhs.CmpNoCase( rhs ) < 0;
+            } );
 
     return ret;
 }

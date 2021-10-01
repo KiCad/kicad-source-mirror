@@ -24,9 +24,8 @@
  */
 
 #include <thread>
-#include <algorithm>
 #include <future>
-
+#include <core/kicad_algo.h>
 #include <advanced_config.h>
 #include <board.h>
 #include <board_design_settings.h>
@@ -284,12 +283,10 @@ bool ZONE_FILLER::Fill( std::vector<ZONE*>& aZones, bool aCheck, wxWindow* aPare
             }
         }
 
-        toFill.erase( std::remove_if( toFill.begin(), toFill.end(),
-                      [&] ( const std::pair<ZONE*, PCB_LAYER_ID> pair ) -> bool
-                      {
-                          return pair.first->GetFillFlag( pair.second );
-                      } ),
-                      toFill.end() );
+        alg::delete_if( toFill, [&]( const std::pair<ZONE*, PCB_LAYER_ID> pair ) -> bool
+                                {
+                                    return pair.first->GetFillFlag( pair.second );
+                                } );
 
         if( m_progressReporter && m_progressReporter->IsCancelled() )
             break;

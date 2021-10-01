@@ -22,12 +22,12 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <algorithm>
 #include <symbol_library.h>
 #include <dialog_choose_symbol.h>
 #include <eeschema_settings.h>
 #include <kiface_base.h>
 #include <sch_base_frame.h>
+#include <core/kicad_algo.h>
 #include <template_fieldnames.h>
 #include <widgets/footprint_preview_widget.h>
 #include <widgets/footprint_select_widget.h>
@@ -487,12 +487,10 @@ void DIALOG_CHOOSE_SYMBOL::OnFootprintSelected( wxCommandEvent& aEvent )
 {
     m_fp_override = aEvent.GetString();
 
-    m_field_edits.erase( std::remove_if( m_field_edits.begin(), m_field_edits.end(),
-                                         []( std::pair<int, wxString> const& i )
-                                         {
-                                             return i.first == FOOTPRINT_FIELD;
-                                         } ),
-                         m_field_edits.end() );
+    alg::delete_if( m_field_edits, []( std::pair<int, wxString> const& i )
+                                   {
+                                       return i.first == FOOTPRINT_FIELD;
+                                   } );
 
     m_field_edits.emplace_back( std::make_pair( FOOTPRINT_FIELD, m_fp_override ) );
 

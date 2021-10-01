@@ -1563,9 +1563,7 @@ void DIALOG_NET_INSPECTOR::buildNetsList()
         m_netsList->UnselectAll();
     }
 
-    prev_selected_netcodes.erase( std::remove( prev_selected_netcodes.begin(),
-                                               prev_selected_netcodes.end(), -1 ),
-                                  prev_selected_netcodes.end() );
+    alg::delete_matching( prev_selected_netcodes, -1 );
 
     m_frame->GetCanvas()->GetView()->GetPainter()->GetSettings()->SetHighlight( false );
 

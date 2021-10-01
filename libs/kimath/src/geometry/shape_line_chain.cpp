@@ -25,7 +25,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <algorithm>
 #include <limits.h>          // for INT_MAX
 #include <math.h>            // for hypot
 #include <map>

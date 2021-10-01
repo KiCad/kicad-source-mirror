@@ -66,7 +66,6 @@
 #include <symbol_editor_settings.h>
 #include <dialogs/dialog_text_and_label_properties.h>
 #include <core/kicad_algo.h>
-//#include <wx/filedlg.h>
 #include <wx/textdlg.h>
 
 

@@ -18,8 +18,6 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <algorithm>
-#include <common.h>
 #include <core/kicad_algo.h>
 #include "bus_alias.h"
 

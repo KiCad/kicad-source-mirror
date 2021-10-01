@@ -18,8 +18,6 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <algorithm>
-
 #include <core/kicad_algo.h>
 #include <dialog_update_symbol_fields.h>
 #include <lib_symbol.h>

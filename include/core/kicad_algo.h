@@ -153,6 +153,28 @@ bool within_wrapped_range( T __val, T __minval, T __maxval, T __wrap )
         return __val >= __minval || __val <= __maxval;
 }
 
+/**
+ * Covers for the horrifically named std::remove and std::remove_if (neither of which remove
+ * anything).
+ */
+/**
+ * @brief Deletes all values from \a __c which match \a __value.
+ */
+template <class _Container, typename _Value>
+void delete_matching( _Container& __c, _Value __value )
+{
+    __c.erase( std::remove( __c.begin(), __c.end(), __value ), __c.end() );
+}
+
+/**
+ * @brief Deletes all values from \a __c for which \a __f returns true.
+ */
+template <class _Container, class _Function>
+void delete_if( _Container& __c, _Function&& __f )
+{
+    __c.erase( std::remove_if( __c.begin(), __c.end(), std::forward<_Function>( __f ) ), __c.end() );
+}
+
 
 } // namespace alg
 
