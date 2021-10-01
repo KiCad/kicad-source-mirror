@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-09-27 08:33-0700\n"
-"PO-Revision-Date: 2021-09-09 18:20+0000\n"
+"PO-Revision-Date: 2021-10-01 07:18+0000\n"
 "Last-Translator: David Chen <d0123456789g@yahoo.com.tw>\n"
 "Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hant/>\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.8.1-dev\n"
+"X-Generator: Weblate 4.9-dev\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-Basepath: ../../../../../Downloads/kicad-master\n"
@@ -963,7 +963,7 @@ msgstr "切換貼片(SMD) 3D 模型"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:225
 msgid "Toggle 3D models for 'Other' type components"
-msgstr ""
+msgstr "切換給 \"其它\" 類別元件的 3D模型"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:230
 msgid "Show Model Bounding Boxes"
@@ -1183,7 +1183,7 @@ msgstr "建立封裝庫"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:900
 msgid "Error allocating memory for potrace bitmap"
-msgstr "為 potrace 點陣圖分配記憶體時出錯"
+msgstr "為 potrace 點陣圖分配記憶體時發生錯誤"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:927
 #: common/dialogs/wx_html_report_panel_base.cpp:41
@@ -1490,7 +1490,7 @@ msgstr "檔案儲存錯誤"
 
 #: common/confirm.cpp:162 common/confirm.cpp:168
 msgid "Interleaved saves may produce very unexpected results."
-msgstr ""
+msgstr "交錯的儲存將造成非預期的結果。"
 
 #: common/confirm.cpp:164 common/confirm.cpp:169 common/confirm.cpp:251
 #: gerbview/dialogs/dialog_select_one_pcb_layer.cpp:164
@@ -3028,7 +3028,7 @@ msgstr "套用動作腳本"
 
 #: common/dialogs/panel_common_settings_base.cpp:161
 msgid "(This workaround will improve some GTK HiDPI font scaling issues.)"
-msgstr ""
+msgstr "（這個暫時的解決方案會改進一些 GTK HiDPI 字型在縮放時發生的問題。）"
 
 #: common/dialogs/panel_common_settings_base.cpp:175
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:21
@@ -3100,7 +3100,7 @@ msgstr ""
 
 #: common/dialogs/panel_common_settings_base.cpp:236
 msgid "days"
-msgstr ""
+msgstr "天"
 
 #: common/dialogs/panel_common_settings_base.cpp:249
 msgid "Project Backup"
@@ -4375,7 +4375,7 @@ msgstr "可選的。如果要建立自己的工程模板資料夾，則可以定
 msgid ""
 "A directory containing 3rd party plugins, libraries and other downloadable "
 "content."
-msgstr ""
+msgstr "一個包含第三方外掛、庫和其它下載資料的目錄。"
 
 #: common/env_vars.cpp:86
 msgid ""
@@ -27046,9 +27046,8 @@ msgid "Path Substitutions"
 msgstr "路徑取代"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:222
-#, fuzzy
 msgid "Error: illegal or empty filename."
-msgstr "錯誤: 沒有 DXF 檔案名!"
+msgstr "錯誤：檔名不合法或是空的。"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:379
 #: pcbnew/microwave/microwave_polygon.cpp:224
@@ -33410,9 +33409,8 @@ msgid "Plated Board Edge: "
 msgstr "電鍍板邊： "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:511
-#, fuzzy
 msgid "Edge card connectors: "
-msgstr "邊緣聯結器："
+msgstr "邊緣聯結器： "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:519
 #, fuzzy
