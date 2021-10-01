@@ -266,7 +266,9 @@ int PCB_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
         else if( evt->IsMouseDown( BUT_LEFT ) )
         {
             // Avoid triggering when running under other tools
-            if( m_frame->ToolStackIsEmpty() && !m_toolMgr->GetTool<PCB_POINT_EDITOR>()->HasPoint() )
+            PCB_POINT_EDITOR *pt_tool = m_toolMgr->GetTool<PCB_POINT_EDITOR>();
+
+            if( m_frame->ToolStackIsEmpty() && pt_tool && !pt_tool->HasPoint() )
             {
                 m_originalCursor = m_toolMgr->GetMousePosition();
                 m_disambiguateTimer.StartOnce( 500 );

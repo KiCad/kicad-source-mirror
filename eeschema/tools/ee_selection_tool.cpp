@@ -349,7 +349,9 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
         if( evt->IsMouseDown( BUT_LEFT ) )
         {
             // Avoid triggering when running under other tools
-            if( m_frame->ToolStackIsEmpty() && !m_toolMgr->GetTool<EE_POINT_EDITOR>()->HasPoint() )
+            EE_POINT_EDITOR *pt_tool = m_toolMgr->GetTool<EE_POINT_EDITOR>();
+
+            if( m_frame->ToolStackIsEmpty() && pt_tool && !pt_tool->HasPoint() )
             {
                 m_originalCursor = m_toolMgr->GetMousePosition();
                 m_disambiguateTimer.StartOnce( 500 );
@@ -386,8 +388,10 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
                     VECTOR2I snappedCursorPos = grid.BestSnapAnchor( evt->Position(),
                                                                      LAYER_CONNECTABLE, nullptr );
 
+                    EE_POINT_EDITOR *pt_tool = m_toolMgr->GetTool<EE_POINT_EDITOR>();
+
                     if( m_frame->eeconfig()->m_Drawing.auto_start_wires
-                            && !m_toolMgr->GetTool<EE_POINT_EDITOR>()->HasPoint()
+                            && pt_tool && !pt_tool->HasPoint()
                             && collector[0]->IsPointClickableAnchor( (wxPoint) snappedCursorPos ) )
                     {
                         OPT_TOOL_EVENT newEvt;
@@ -622,8 +626,10 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
                     VECTOR2I snappedCursorPos = grid.BestSnapAnchor( evt->Position(),
                                                                      LAYER_CONNECTABLE, nullptr );
 
+                    EE_POINT_EDITOR *pt_tool = m_toolMgr->GetTool<EE_POINT_EDITOR>();
+
                     if( m_frame->eeconfig()->m_Drawing.auto_start_wires
-                            && !m_toolMgr->GetTool<EE_POINT_EDITOR>()->HasPoint()
+                            && pt_tool && !pt_tool->HasPoint()
                             && collector[0]->IsPointClickableAnchor( (wxPoint) snappedCursorPos ) )
                     {
                         SCH_CONNECTION* connection = collector[0]->Connection();
