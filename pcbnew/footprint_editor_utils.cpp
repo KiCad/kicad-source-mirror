@@ -100,9 +100,20 @@ void FOOTPRINT_EDIT_FRAME::LoadFootprintFromLibrary( LIB_ID aFPID )
     }
 
     m_treePane->GetLibTree()->ExpandLibId( aFPID );
-    m_treePane->GetLibTree()->CenterLibId( aFPID );
+
+    m_centerItemOnIdle = aFPID;
+    Bind( wxEVT_IDLE, &FOOTPRINT_EDIT_FRAME::centerItemIdleHandler, this );
+
     m_treePane->GetLibTree()->RefreshLibTree();        // update highlighting
 }
+
+
+void FOOTPRINT_EDIT_FRAME::centerItemIdleHandler( wxIdleEvent& aEvent )
+{
+    m_treePane->GetLibTree()->CenterLibId( m_centerItemOnIdle );
+    Unbind( wxEVT_IDLE, &FOOTPRINT_EDIT_FRAME::centerItemIdleHandler, this );
+}
+
 
 
 void FOOTPRINT_EDIT_FRAME::SelectLayer( wxCommandEvent& event )

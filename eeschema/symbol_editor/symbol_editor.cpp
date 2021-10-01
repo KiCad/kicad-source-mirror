@@ -270,7 +270,26 @@ bool SYMBOL_EDIT_FRAME::LoadSymbol( const LIB_ID& aLibId, int aUnit, int aConver
     }
 
     SelectActiveLibrary( aLibId.GetLibNickname() );
-    return LoadSymbolFromCurrentLib( aLibId.GetLibItemName(), aUnit, aConvert );
+
+    if( LoadSymbolFromCurrentLib( aLibId.GetLibItemName(), aUnit, aConvert ) )
+    {
+        m_treePane->GetLibTree()->SelectLibId( aLibId );
+        m_treePane->GetLibTree()->ExpandLibId( aLibId );
+
+        m_centerItemOnIdle = aLibId;
+        Bind( wxEVT_IDLE, &SYMBOL_EDIT_FRAME::centerItemIdleHandler, this );
+
+        return true;
+    }
+
+    return false;
+}
+
+
+void SYMBOL_EDIT_FRAME::centerItemIdleHandler( wxIdleEvent& aEvent )
+{
+    m_treePane->GetLibTree()->CenterLibId( m_centerItemOnIdle );
+    Unbind( wxEVT_IDLE, &SYMBOL_EDIT_FRAME::centerItemIdleHandler, this );
 }
 
 

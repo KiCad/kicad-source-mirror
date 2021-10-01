@@ -333,6 +333,8 @@ protected:
 
     void setupUIConditions() override;
 
+    void centerItemIdleHandler( wxIdleEvent& aEvent );
+
 protected:
     PCB_LAYER_BOX_SELECTOR*     m_selLayerBox;  // a combo box to display and select active layer
     FOOTPRINT_EDITOR_SETTINGS*  m_editorSettings;
@@ -341,6 +343,8 @@ private:
     friend struct PCB::IFACE;
 
     FOOTPRINT_TREE_PANE*        m_treePane;
+    LIB_ID                      m_centerItemOnIdle;
+
 
     wxObjectDataPtr<LIB_TREE_MODEL_ADAPTER> m_adapter;
 

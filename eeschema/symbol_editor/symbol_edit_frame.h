@@ -448,6 +448,8 @@ private:
     ///< the library that is currently modified.
     wxString getTargetLib() const;
 
+    void centerItemIdleHandler( wxIdleEvent& aEvent );
+
     /*
      * Return true when the operation has succeeded (all requested libraries have been saved
      * or none was selected and confirmed by OK).
@@ -534,6 +536,8 @@ private:
     SYMBOL_TREE_PANE*       m_treePane;          // symbol search tree widget
     SYMBOL_LIBRARY_MANAGER* m_libMgr;            // manager taking care of temporary modifications
     SYMBOL_EDITOR_SETTINGS* m_settings;          // Handle to the settings
+
+    LIB_ID                  m_centerItemOnIdle;
 
     // The unit number to edit and show
     int         m_unit;
