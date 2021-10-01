@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-09-27 08:33-0700\n"
-"PO-Revision-Date: 2021-09-27 13:41+0000\n"
+"PO-Revision-Date: 2021-10-01 07:18+0000\n"
 "Last-Translator: Ulices <ulicesah@gmail.com>\n"
 "Language-Team: Spanish (Mexico) <https://hosted.weblate.org/projects/kicad/"
 "master-source/es_MX/>\n"
@@ -4633,9 +4633,9 @@ msgid "Unable to find a PDF viewer for '%s'."
 msgstr "No se ha podido encontrar un visor de PDF para '%s'."
 
 #: common/gestfich.cpp:196
-#, fuzzy, c-format
+#, c-format
 msgid "Problem while running the PDF viewer '%s'."
-msgstr "Problemas al ejecutar el visor PDF"
+msgstr "Problemas al ejecutar el visor PDF \"%s\"."
 
 #: common/gestfich.cpp:299
 #, c-format
@@ -8542,11 +8542,10 @@ msgid "Electrical Rules Checker"
 msgstr "Control de las reglas eléctricas (ERC)"
 
 #: eeschema/dialogs/dialog_field_properties.cpp:131
-#, fuzzy
 msgid "Power symbol value field text cannot be changed."
 msgstr ""
-"(No puede modificarse el texto del campo del valor de un símbolo de "
-"alimentación.)"
+"No puede modificarse el texto del campo del valor de un símbolo de "
+"alimentación."
 
 #: eeschema/dialogs/dialog_field_properties.cpp:246
 msgid "Illegal reference designator value!"
@@ -8557,9 +8556,10 @@ msgid "Value may not be empty."
 msgstr "El valor no debe estar vacío."
 
 #: eeschema/dialogs/dialog_field_properties.cpp:340
-#, fuzzy
 msgid "Sheet filename can only be modified in Sheet Properties dialog."
-msgstr "Rellenar zonas después del diálogo de propiedades de zona"
+msgstr ""
+"El nombre de archivo de la hoja solo puede ser modificado en el diálogo de "
+"las Propiedades de la hoja."
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:31
 msgid "Other symbol fields"
@@ -9382,9 +9382,9 @@ msgid "Text:"
 msgstr "Texto:"
 
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:72
-#, fuzzy, c-format
+#, c-format
 msgid "(%s)"
-msgstr " (%s):"
+msgstr "(%s)"
 
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:93
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:233
@@ -18759,6 +18759,9 @@ msgid ""
 "may indicate a problem with the package, if the issue persists report this "
 "to repository maintainers."
 msgstr ""
+"El hash del archivo descargado del paquete %s no coincide con la entrada del "
+"repositorio. Esto puede indicar un problema con el paquete, si el problema "
+"persiste informe a los mantenedores del repositorio."
 
 #: kicad/pcm/pcm_task_manager.cpp:101
 #, fuzzy, c-format
@@ -28694,9 +28697,8 @@ msgstr ""
 "de la máscara de soldadura)."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:69
-#, fuzzy
 msgid "Solder mask minimum web width:"
-msgstr "Ancho mínimo de puente de máscara de soldadura:"
+msgstr "Ancho mínimo de puente de la máscara de soldadura:"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:71
 msgid ""
@@ -28788,7 +28790,6 @@ msgid "Check rule syntax"
 msgstr "Verificar reglas de sintaxis"
 
 #: pcbnew/dialogs/panel_setup_rules_help_md.h:2
-#, fuzzy
 msgid ""
 "### Top-level Clauses\n"
 "\n"
@@ -29019,20 +29020,21 @@ msgstr ""
 "\n"
 "### Tipos de requerimientos\n"
 "\n"
-" * annular_width\n"
+" * annular\\_width\n"
 " * clearance\n"
-" * courtyard_clearance\n"
+" * courtyard\\_clearance\n"
 " * diff\\_pair\\_gap\n"
 " * diff\\_pair\\_uncoupled\n"
 " * disallow\n"
-" * edge_clearance\n"
+" * edge\\_clearance\n"
 " * length\n"
-" * hole\n"
-" * hole_clearance\n"
+" * hole\\_clearance\n"
+" * hole\\_size\n"
 " * silk_clearance\n"
 " * skew\n"
-" * track_width\n"
-" * via_count\n"
+" * track\\_width\n"
+" * via\\_count\n"
+" * via\\_diameter\n"
 "\n"
 "\n"
 "<br><br>\n"
@@ -29086,8 +29088,8 @@ msgstr ""
 "\n"
 "Las reglas deberían ser ordenadas por especificidad.\n"
 "Las reglas posteriores tienen precedencia sobre las reglas anteriores;\n"
-"una vez que se encuentra una regla coincidente, no se comprobarán más "
-"reglas.\n"
+"una vez que se encuentra una regla coincidente, no se comprobarán más reglas."
+"\n"
 "\n"
 "Use Ctrl+/ para comentar o descomentar la(s) línea(s).\n"
 "<br><br><br>\n"
@@ -29122,8 +29124,8 @@ msgstr ""
 "<br><br>\n"
 "\n"
 "    A.inDiffPair('<net_name>')\n"
-"Verdadero si `A` tiene una red que es parte del par diferencial "
-"especificado.\n"
+"Verdadero si `A` tiene una red que es parte del par diferencial especificado."
+"\n"
 "`<net_name>` es el nombre base del par diferencial. Por ejemplo, "
 "`inDiffPair('CLK')`\n"
 "coincide con los elementos en las redes `CLK_P` y `CLK_N`.\n"
@@ -30367,19 +30369,20 @@ msgid "Footprint %s"
 msgstr "Huella %s"
 
 #: pcbnew/footprint.cpp:2091
-#, fuzzy, c-format
+#, c-format
 msgid "Expected \"Through hole\" type but set to \"%s\""
-msgstr "Pad de orificio pasante %s de %s"
+msgstr ""
+"Se esperaba el tipo \"Pad de orificio pasante\" pero se ha puesto \"%s\""
 
 #: pcbnew/footprint.cpp:2095
 #, c-format
 msgid "Expected \"SMD\" type but set to \"%s\""
-msgstr ""
+msgstr "Se esperaba el tipo \"SMD\" pero se ha puesto \"%s\""
 
 #: pcbnew/footprint.cpp:2099
 #, c-format
 msgid "Expected \"Other\" type but set to \"%s\""
-msgstr ""
+msgstr "Se esperaba el tipo \"Otro\" pero se ha puesto \"%s\""
 
 #: pcbnew/footprint.cpp:2203 pcbnew/pad.cpp:1542 pcbnew/zone.cpp:1416
 msgid "Clearance Override"
@@ -34306,9 +34309,8 @@ msgid "Plated Board Edge: "
 msgstr "Bordes de la placa revestidos: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:511
-#, fuzzy
 msgid "Edge card connectors: "
-msgstr "Conectores laterales de tarjeta:"
+msgstr "Conectores laterales de tarjeta: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:519
 #, fuzzy
