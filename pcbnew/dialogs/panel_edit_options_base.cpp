@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.9.0 Apr 22 2021)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -234,9 +234,25 @@ PANEL_EDIT_OPTIONS_BASE::PANEL_EDIT_OPTIONS_BASE( wxWindow* parent, wxWindowID i
 	bMargins->Add( bMiddleLeftSizer, 1, wxEXPAND|wxRIGHT, 5 );
 
 	m_optionsBook = new wxSimplebook( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
-	wxPanel* emptyPage;
-	emptyPage = new wxPanel( m_optionsBook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
-	m_optionsBook->AddPage( emptyPage, _("a page"), false );
+	wxPanel* fpPage;
+	fpPage = new wxPanel( m_optionsBook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	wxBoxSizer* bSizer10;
+	bSizer10 = new wxBoxSizer( wxVERTICAL );
+
+	wxStaticBoxSizer* sbSizerFpGraphics;
+	sbSizerFpGraphics = new wxStaticBoxSizer( new wxStaticBox( fpPage, wxID_ANY, _("Graphics Editing") ), wxVERTICAL );
+
+	m_cbFpGraphic45Mode = new wxCheckBox( sbSizerFpGraphics->GetStaticBox(), wxID_ANY, _("Limit actions to 45 degrees from start"), wxDefaultPosition, wxDefaultSize, 0 );
+	sbSizerFpGraphics->Add( m_cbFpGraphic45Mode, 0, wxALL, 5 );
+
+
+	bSizer10->Add( sbSizerFpGraphics, 1, wxEXPAND, 5 );
+
+
+	fpPage->SetSizer( bSizer10 );
+	fpPage->Layout();
+	bSizer10->Fit( fpPage );
+	m_optionsBook->AddPage( fpPage, _("a page"), false );
 	wxPanel* pcbPage;
 	pcbPage = new wxPanel( m_optionsBook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* pcbOptionsSizer;
@@ -342,6 +358,15 @@ PANEL_EDIT_OPTIONS_BASE::PANEL_EDIT_OPTIONS_BASE( wxWindow* parent, wxWindowID i
 
 
 	pcbOptionsSizer->Add( sbSizer41, 0, wxEXPAND|wxTOP, 5 );
+
+	wxStaticBoxSizer* sbSizerPcbGraphics;
+	sbSizerPcbGraphics = new wxStaticBoxSizer( new wxStaticBox( pcbPage, wxID_ANY, _("Graphics Editing") ), wxVERTICAL );
+
+	m_cbPcbGraphic45Mode = new wxCheckBox( sbSizerPcbGraphics->GetStaticBox(), wxID_ANY, _("Limit actions to 45 degrees from start"), wxDefaultPosition, wxDefaultSize, 0 );
+	sbSizerPcbGraphics->Add( m_cbPcbGraphic45Mode, 0, wxALL, 5 );
+
+
+	pcbOptionsSizer->Add( sbSizerPcbGraphics, 0, wxEXPAND|wxTOP, 5 );
 
 	wxStaticBoxSizer* sbSizer4;
 	sbSizer4 = new wxStaticBoxSizer( new wxStaticBox( pcbPage, wxID_ANY, _("Miscellaneous") ), wxVERTICAL );

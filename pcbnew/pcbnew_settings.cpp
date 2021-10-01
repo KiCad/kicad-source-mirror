@@ -67,7 +67,8 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS()
           m_FootprintWizard(),
           m_Display(),
           m_TrackDragAction( TRACK_DRAG_ACTION::DRAG ),
-          m_Use45DegreeLimit( false ),
+          m_PcbUse45DegreeLimit( false ),
+          m_FpeditUse45DegreeLimit( false ),
           m_FlipLeftRight( false ),
           m_PolarCoords( false ),
           m_RotationAngle( 900 ),
@@ -123,8 +124,11 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS()
             reinterpret_cast<int*>( &m_TrackDragAction ),
             static_cast<int>( TRACK_DRAG_ACTION::DRAG ) ) );
 
-    m_params.emplace_back( new PARAM<bool>( "editing.use_45_degree_limit",
-            &m_Use45DegreeLimit, false ) );
+    m_params.emplace_back( new PARAM<bool>( "editing.pcb_use_45_degree_limit",
+            &m_PcbUse45DegreeLimit, false ) );
+
+    m_params.emplace_back( new PARAM<bool>( "editing.fp_use_45_degree_limit",
+            &m_FpeditUse45DegreeLimit, false ) );
 
     m_params.emplace_back( new PARAM<bool>( "editing.auto_fill_zones",
             &m_AutoRefillZones, true ) );

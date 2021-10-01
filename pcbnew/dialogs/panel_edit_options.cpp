@@ -87,6 +87,8 @@ bool PANEL_EDIT_OPTIONS::TransferDataToWindow()
         m_showPageLimits->SetValue( m_frame->ShowPageLimits() );
         m_autoRefillZones->SetValue( general_opts.m_AutoRefillZones );
         m_allowFreePads->SetValue( general_opts.m_AllowFreePads );
+
+        m_cbPcbGraphic45Mode->SetValue( general_opts.m_PcbUse45DegreeLimit );
     }
     else if( dynamic_cast<FOOTPRINT_EDIT_FRAME*>( m_frame ) )
     {
@@ -94,9 +96,10 @@ bool PANEL_EDIT_OPTIONS::TransferDataToWindow()
 
         m_magneticPads->SetValue( mag_opts->pads == MAGNETIC_OPTIONS::CAPTURE_ALWAYS );
         m_magneticGraphics->SetValue( mag_opts->graphics );
+        m_cbFpGraphic45Mode->SetValue( general_opts.m_FpeditUse45DegreeLimit );
     }
 
-    return true;
+   return true;
 }
 
 
@@ -130,6 +133,8 @@ bool PANEL_EDIT_OPTIONS::TransferDataFromWindow()
             pcbnewSettings.m_TrackDragAction = TRACK_DRAG_ACTION::DRAG;
         else if( m_rbTrackDragFree->GetValue() )
             pcbnewSettings.m_TrackDragAction = TRACK_DRAG_ACTION::DRAG_FREE_ANGLE;
+
+        pcbnewSettings.m_PcbUse45DegreeLimit = m_cbPcbGraphic45Mode->GetValue();
     }
     else if( dynamic_cast<FOOTPRINT_EDIT_FRAME*>( m_frame ) )
     {
@@ -138,7 +143,10 @@ bool PANEL_EDIT_OPTIONS::TransferDataFromWindow()
         mag_opts->pads = m_magneticPads->GetValue() ? MAGNETIC_OPTIONS::CAPTURE_ALWAYS
                                                     : MAGNETIC_OPTIONS::NO_EFFECT;
         mag_opts->graphics = m_magneticGraphics->GetValue();
+
+        m_frame->Settings().m_FpeditUse45DegreeLimit = m_cbFpGraphic45Mode->GetValue();
     }
+
 
     // Apply changes to the GAL
     KIGFX::VIEW*                view = m_frame->GetCanvas()->GetView();

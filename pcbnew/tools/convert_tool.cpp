@@ -513,8 +513,6 @@ SHAPE_POLY_SET CONVERT_TOOL::extractPolygons( const std::deque<EDA_ITEM*>& aItem
 
 int CONVERT_TOOL::CreateLines( const TOOL_EVENT& aEvent )
 {
-    bool createTracks = aEvent.IsAction( &PCB_ACTIONS::convertToTracks );
-
     auto& selection = m_selectionTool->RequestSelection(
             []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, PCB_SELECTION_TOOL* sTool )
             {

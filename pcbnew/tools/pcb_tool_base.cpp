@@ -328,7 +328,10 @@ PCB_SELECTION& PCB_TOOL_BASE::selection()
 
 bool PCB_TOOL_BASE::Is45Limited() const
 {
-    return frame()->Settings().m_Use45DegreeLimit;
+    if( frame()->IsType( FRAME_PCB_EDITOR ) )
+        return frame()->Settings().m_PcbUse45DegreeLimit;
+    else
+        return frame()->Settings().m_FpeditUse45DegreeLimit;
 }
 
 

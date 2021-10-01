@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.9.0 Apr 22 2021)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -48,6 +48,7 @@ class PANEL_EDIT_OPTIONS_BASE : public wxPanel
 		wxStaticBoxSizer* m_mouseCmdsOSX;
 		wxStaticText* m_staticText1811;
 		wxSimplebook* m_optionsBook;
+		wxCheckBox* m_cbFpGraphic45Mode;
 		wxStaticText* m_staticText2;
 		wxChoice* m_magneticPadChoice;
 		wxStaticText* m_staticText21;
@@ -60,6 +61,7 @@ class PANEL_EDIT_OPTIONS_BASE : public wxPanel
 		wxRadioButton* m_rbTrackDragMove;
 		wxRadioButton* m_rbTrackDrag45;
 		wxRadioButton* m_rbTrackDragFree;
+		wxCheckBox* m_cbPcbGraphic45Mode;
 		wxCheckBox* m_showPageLimits;
 		wxCheckBox* m_autoRefillZones;
 

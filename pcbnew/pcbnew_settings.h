@@ -274,9 +274,11 @@ public:
 
     TRACK_DRAG_ACTION m_TrackDragAction;
 
-    bool m_Use45DegreeLimit;             // True to constrain tool actions to horizontal,
-                                         // vertical and 45º
-    bool m_FlipLeftRight;                // True: Flip footprints across Y axis
+    bool m_PcbUse45DegreeLimit;         // True to constrain tool actions to horizontal,
+                                        // vertical and 45deg in board editor
+    bool m_FpeditUse45DegreeLimit;      // True to constrain tool actions to horizontal,
+                                        // vertical and 45deg in footprint editor
+    bool m_FlipLeftRight;               // True: Flip footprints across Y axis
     // False: Flip footprints across X axis
 
     bool m_PolarCoords;

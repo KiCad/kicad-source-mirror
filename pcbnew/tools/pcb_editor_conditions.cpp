@@ -185,5 +185,8 @@ bool PCB_EDITOR_CONDITIONS::zoneDisplayModeFunc( const SELECTION& aSelection, PC
 
 bool PCB_EDITOR_CONDITIONS::get45degModeFunc( const SELECTION& aSelection, PCB_BASE_FRAME* aFrame )
 {
-    return aFrame->Settings().m_Use45DegreeLimit;
+    if( aFrame->IsType( FRAME_PCB_EDITOR ) )
+        return aFrame->Settings().m_PcbUse45DegreeLimit;
+    else
+        return aFrame->Settings().m_FpeditUse45DegreeLimit;
 }

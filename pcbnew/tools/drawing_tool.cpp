@@ -1376,8 +1376,10 @@ int DRAWING_TOOL::SetAnchor( const TOOL_EVENT& aEvent )
 
 int DRAWING_TOOL::ToggleLine45degMode( const TOOL_EVENT& toolEvent )
 {
-    m_frame->Settings().m_Use45DegreeLimit =
-            !m_frame->Settings().m_Use45DegreeLimit;
+    if( m_frame->IsType( FRAME_PCB_EDITOR ) )
+        m_frame->Settings().m_PcbUse45DegreeLimit = !m_frame->Settings().m_PcbUse45DegreeLimit;
+    else
+        m_frame->Settings().m_FpeditUse45DegreeLimit = !m_frame->Settings().m_FpeditUse45DegreeLimit;
 
     return 0;
 }
