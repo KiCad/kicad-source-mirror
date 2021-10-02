@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-09-27 08:33-0700\n"
-"PO-Revision-Date: 2021-10-01 07:18+0000\n"
+"PO-Revision-Date: 2021-10-03 23:55+0000\n"
 "Last-Translator: Ulices <ulicesah@gmail.com>\n"
 "Language-Team: Spanish (Mexico) <https://hosted.weblate.org/projects/kicad/"
 "master-source/es_MX/>\n"
@@ -29,9 +29,8 @@ msgstr ""
 "X-Poedit-SearchPath-0: .\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
-#, fuzzy
 msgid "All Files"
-msgstr "Todos los archivos"
+msgstr "Todos los Archivos"
 
 #: 3d-viewer/3d_cache/dialogs/dialog_select_3d_model.cpp:94
 #, c-format
