@@ -368,11 +368,17 @@ unsigned int LIB_TREE_MODEL_ADAPTER::GetChildren( const wxDataViewItem&   aItem,
 {
     const LIB_TREE_NODE* node = ( aItem.IsOk() ? ToNode( aItem ) : &m_tree );
 
-    if( node->m_Type != LIB_TREE_NODE::TYPE::LIBID
+    if( node->m_Type == LIB_TREE_NODE::TYPE::ROOT
+            || node->m_Type == LIB_TREE_NODE::LIB
             || ( m_show_units && node->m_Type == LIB_TREE_NODE::TYPE::LIBID ) )
+    {
         return IntoArray( *node, aChildren );
+    }
     else
+    {
         return 0;
+    }
+
 }
 
 

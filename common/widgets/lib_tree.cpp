@@ -271,8 +271,49 @@ void LIB_TREE::selectIfValid( const wxDataViewItem& aTreeId )
 
 void LIB_TREE::centerIfValid( const wxDataViewItem& aTreeId )
 {
+    /*
+     * This doesn't actually center because the wxWidgets API is poorly suited to that (and
+     * it might be too noisy as well).
+     *
+     * It does try to keep the given item a bit off the top or bottom of the window.
+     */
+
     if( aTreeId.IsOk() )
+    {
+        LIB_TREE_NODE* node = m_adapter->GetTreeNodeFor( aTreeId );
+        LIB_TREE_NODE* parent = node->m_Parent;
+        LIB_TREE_NODE* grandParent = parent ? parent->m_Parent : nullptr;
+
+        if( parent )
+        {
+            wxDataViewItemArray siblings;
+            m_adapter->GetChildren( wxDataViewItem( parent ), siblings );
+
+            int idx = siblings.Index( aTreeId );
+
+            if( idx + 5 < (int) siblings.GetCount() )
+            {
+                m_tree_ctrl->EnsureVisible( siblings.at( idx + 5 ) );
+            }
+            else if( grandParent )
+            {
+                wxDataViewItemArray parentsSiblings;
+                m_adapter->GetChildren( wxDataViewItem( grandParent ), parentsSiblings );
+
+                int p_idx = parentsSiblings.Index( wxDataViewItem( parent ) );
+
+                if( p_idx + 1 < (int) parentsSiblings.GetCount() )
+                    m_tree_ctrl->EnsureVisible( parentsSiblings.at( p_idx + 1 ) );
+            }
+
+            if( idx - 5 >= 0 )
+                m_tree_ctrl->EnsureVisible( siblings.at( idx - 5 ) );
+            else
+                m_tree_ctrl->EnsureVisible( wxDataViewItem( parent ) );
+        }
+
         m_tree_ctrl->EnsureVisible( aTreeId );
+    }
 }
 
 
@@ -303,7 +344,7 @@ LIB_TREE::STATE LIB_TREE::getState() const
     wxDataViewItemArray items;
     m_adapter->GetChildren( wxDataViewItem( nullptr ), items );
 
-    for( const auto& item : items )
+    for( const wxDataViewItem& item : items )
     {
         if( m_tree_ctrl->IsExpanded( item ) )
             state.expanded.push_back( item );
@@ -319,7 +360,7 @@ void LIB_TREE::setState( const STATE& aState )
 {
     m_tree_ctrl->Freeze();
 
-    for( const auto& item : aState.expanded )
+    for( const wxDataViewItem& item : aState.expanded )
         m_tree_ctrl->Expand( item );
 
     // wxDataViewCtrl cannot be frozen when a selection
