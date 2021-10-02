@@ -293,7 +293,7 @@ void LIB_TREE::centerIfValid( const wxDataViewItem& aTreeId )
 
             if( idx + 5 < (int) siblings.GetCount() )
             {
-                m_tree_ctrl->EnsureVisible( siblings.at( idx + 5 ) );
+                m_tree_ctrl->EnsureVisible( siblings.Item( idx + 5 ) );
             }
             else if( grandParent )
             {
@@ -303,11 +303,11 @@ void LIB_TREE::centerIfValid( const wxDataViewItem& aTreeId )
                 int p_idx = parentsSiblings.Index( wxDataViewItem( parent ) );
 
                 if( p_idx + 1 < (int) parentsSiblings.GetCount() )
-                    m_tree_ctrl->EnsureVisible( parentsSiblings.at( p_idx + 1 ) );
+                    m_tree_ctrl->EnsureVisible( parentsSiblings.Item( p_idx + 1 ) );
             }
 
             if( idx - 5 >= 0 )
-                m_tree_ctrl->EnsureVisible( siblings.at( idx - 5 ) );
+                m_tree_ctrl->EnsureVisible( siblings.Item( idx - 5 ) );
             else
                 m_tree_ctrl->EnsureVisible( wxDataViewItem( parent ) );
         }
