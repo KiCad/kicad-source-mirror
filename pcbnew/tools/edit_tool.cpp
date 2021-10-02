@@ -2049,6 +2049,9 @@ int EDIT_TOOL::MoveExact( const TOOL_EVENT& aEvent )
         // Make sure the rotation is from the right reference point
         selCenter += translation;
 
+        if( !frame()->GetDisplayOptions().m_DisplayInvertYAxis )
+            rotation *= -1.0;
+
         // When editing footprints, all items have the same parent
         if( IsFootprintEditor() )
             m_commit->Modify( selection.Front() );
