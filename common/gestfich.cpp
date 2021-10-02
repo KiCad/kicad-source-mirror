@@ -140,14 +140,7 @@ int ExecuteFile( const wxString& aEditorName, const wxString& aFileName, wxProce
             args[i++] = param.wc_str();
 
         if( !aFileName.IsEmpty() )
-        {
-            wxString name = aFileName;
-
-            // A quoted filename is incorrectly handled here, perhaps because wxExecute
-            // add quotes. So remove quotes if any (they also are illegal in filenames).
-            name.Replace( "\"", "" );
-            args[i++] = name.wc_str();
-        }
+            args[i++] = aFileName.wc_str();
 
         args[i] = nullptr;
 

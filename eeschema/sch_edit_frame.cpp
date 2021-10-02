@@ -984,8 +984,7 @@ void SCH_EDIT_FRAME::OnOpenPcbnew( wxCommandEvent& event )
 
         if( Kiface().IsSingle() )
         {
-            wxString filename = QuoteFullPath( boardfn );
-            ExecuteFile( PCBNEW_EXE, filename );
+            ExecuteFile( PCBNEW_EXE, boardfn.GetFullPath() );
         }
         else
         {
