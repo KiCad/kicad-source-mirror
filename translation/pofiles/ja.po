@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-09-27 08:33-0700\n"
-"PO-Revision-Date: 2021-10-01 07:18+0000\n"
+"PO-Revision-Date: 2021-10-03 23:55+0000\n"
 "Last-Translator: Tokita, Hiroshi <tokita.hiroshi@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -1312,12 +1312,12 @@ msgstr "ネガ"
 #: bitmap2component/bitmap2cmp_gui_base.cpp:182
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:526
 msgid "Front silk screen"
-msgstr "表面層シルクスクリーン"
+msgstr "表面シルクスクリーン"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:182
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:532
 msgid "Front solder mask"
-msgstr "表面層ハンダ マスク"
+msgstr "表面ハンダマスク"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:182
 msgid "User layer Eco1"
@@ -7376,7 +7376,7 @@ msgstr "アノテーション"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:37
 msgid "Entire schematic"
-msgstr "全回路図"
+msgstr "回路図全体"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:37
 msgid "Current sheet only"
@@ -10393,7 +10393,7 @@ msgstr "背景塗潰し:"
 
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:165
 msgid "Page number:"
-msgstr "パッド番号:"
+msgstr "ページ番号:"
 
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:184
 msgid "Hierarchical path:"
@@ -11535,22 +11535,22 @@ msgstr ""
 #: eeschema/dialogs/dialog_text_and_label_properties_base.cpp:120
 #: eeschema/sch_text.cpp:779
 msgid "Align right"
-msgstr "右寄せ"
+msgstr "右揃え"
 
 #: eeschema/dialogs/dialog_text_and_label_properties_base.cpp:120
 #: eeschema/sch_text.cpp:780
 msgid "Align bottom"
-msgstr "下寄せ"
+msgstr "下揃え"
 
 #: eeschema/dialogs/dialog_text_and_label_properties_base.cpp:120
 #: eeschema/sch_text.cpp:781
 msgid "Align left"
-msgstr "左寄せ"
+msgstr "左揃え"
 
 #: eeschema/dialogs/dialog_text_and_label_properties_base.cpp:120
 #: eeschema/sch_text.cpp:782
 msgid "Align top"
-msgstr "上寄せ"
+msgstr "上揃え"
 
 #: eeschema/dialogs/dialog_text_and_label_properties_base.cpp:122
 #: eeschema/sch_text.cpp:786
@@ -12441,7 +12441,7 @@ msgstr "与えられたシートの中でシート名が重複しています"
 
 #: eeschema/erc_item.cpp:50
 msgid "Pin not connected"
-msgstr "ピン未接続"
+msgstr "ピンが接続されていない"
 
 #: eeschema/erc_item.cpp:54
 msgid "Input pin not driven by any Output pins"
@@ -12457,19 +12457,19 @@ msgstr "ピン間の衝突問題"
 
 #: eeschema/erc_item.cpp:70
 msgid "Mismatch between hierarchical labels and sheet pins"
-msgstr "階層ラベルとシートピンのミスマッチ"
+msgstr "階層ラベルとシートピンの不一致"
 
 #: eeschema/erc_item.cpp:74
 msgid "A pin with a \"no connection\" flag is connected"
-msgstr "\"未接続\" フラグ付きピンが接続されています"
+msgstr "\"未接続\" フラグが付いたピンが接続されている"
 
 #: eeschema/erc_item.cpp:78
 msgid "Unconnected \"no connection\" flag"
-msgstr "接続されていない未接続フラグ"
+msgstr "未接続フラグが接続されていない"
 
 #: eeschema/erc_item.cpp:82
 msgid "Label not connected to anything"
-msgstr "ラベルがどこにも接続されていません"
+msgstr "ラベルがどこにも接続されていない"
 
 #: eeschema/erc_item.cpp:86
 msgid "Global label not connected anywhere else in the schematic"
@@ -21007,27 +21007,27 @@ msgstr "誘電体 %d"
 
 #: pcbnew/board_stackup_manager/board_stackup.cpp:528
 msgid "Top Silk Screen"
-msgstr "表面層シルクスクリーン"
+msgstr "表面シルクスクリーン"
 
 #: pcbnew/board_stackup_manager/board_stackup.cpp:536
 msgid "Top Solder Paste"
-msgstr "表面層ハンダ ペースト"
+msgstr "表面ハンダペースト"
 
 #: pcbnew/board_stackup_manager/board_stackup.cpp:544
 msgid "Top Solder Mask"
-msgstr "表面層ハンダ マスク"
+msgstr "表面ハンダマスク"
 
 #: pcbnew/board_stackup_manager/board_stackup.cpp:588
 msgid "Bottom Solder Mask"
-msgstr "裏面層ハンダ マスク"
+msgstr "裏面ハンダ マスク"
 
 #: pcbnew/board_stackup_manager/board_stackup.cpp:596
 msgid "Bottom Solder Paste"
-msgstr "裏面層ハンダ ペースト"
+msgstr "裏面ハンダ ペースト"
 
 #: pcbnew/board_stackup_manager/board_stackup.cpp:604
 msgid "Bottom Silk Screen"
-msgstr "裏面層シルクスクリーン"
+msgstr "裏面シルクスクリーン"
 
 #: pcbnew/board_stackup_manager/dialog_dielectric_list_manager.cpp:45
 msgid "Incorrect value for Epsilon R"
@@ -28823,7 +28823,7 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:72
 msgid "Default properties for new dimension objects:"
-msgstr "新しい寸法オブジェクトの既定プロパティ:"
+msgstr "新しい寸法線オブジェクトのデフォルト値:"
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:93
 msgid ""
