@@ -638,7 +638,7 @@ EDA_ITEM* PCB_SELECTION::GetTopLeftItem( bool onlyModules ) const
 }
 
 
-const KIGFX::VIEW_GROUP::ITEMS PCB_SELECTION::updateDrawList() const
+const std::vector<KIGFX::VIEW_ITEM*> PCB_SELECTION::updateDrawList() const
 {
     std::vector<VIEW_ITEM*> items;
 
