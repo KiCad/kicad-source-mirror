@@ -271,15 +271,14 @@ void PCB_BASE_FRAME::FocusOnItem( BOARD_ITEM* aItem, PCB_LAYER_ID aLayer )
         GetCanvas()->GetView()->Update( aItem );
         lastBrightenedItemID = aItem->m_Uuid;
 
-        // Focus on the object's location.  Prefer a visible part of the object to its anhcor
+        // Focus on the object's location.  Prefer a visible part of the object to its anchor
         // in order to keep from scrolling around.
 
         wxPoint        focusPt = aItem->GetFocusPosition();
         KIGFX::VIEW*   view = GetCanvas()->GetView();
         SHAPE_POLY_SET viewportPoly( view->GetViewport() );
-        wxWindow*      dialog = findDialog();
 
-        if( dialog )
+        for( wxWindow* dialog : findDialogs() )
         {
             wxPoint        dialogPos = GetCanvas()->ScreenToClient( dialog->GetScreenPosition() );
             SHAPE_POLY_SET dialogPoly( BOX2D( view->ToWorld( dialogPos, true ),
@@ -334,6 +333,10 @@ void PCB_BASE_FRAME::FocusOnItem( BOARD_ITEM* aItem, PCB_LAYER_ID aLayer )
 
         if( !clippedPoly.IsEmpty() )
             itemPoly = clippedPoly;
+
+        /*
+         * Perform a step-wise deflate to find the visual-center-of-mass
+         */
 
         BOX2I bbox = itemPoly.BBox();
         int   step = std::min( bbox.GetWidth(), bbox.GetHeight() ) / 10;

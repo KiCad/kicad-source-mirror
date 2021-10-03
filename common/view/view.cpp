@@ -603,39 +603,35 @@ void VIEW::SetCenter( const VECTOR2D& aCenter )
 }
 
 
-void VIEW::SetCenter( const VECTOR2D& aCenter, const BOX2D& occultingScreenRect )
+void VIEW::SetCenter( const VECTOR2D& aCenter, const std::vector<BOX2D>& obscuringScreenRects )
 {
-    VECTOR2D center( aCenter );
-    BOX2D screenRect( VECTOR2D( 0, 0 ), m_gal->GetScreenPixelSize() );
+    if( obscuringScreenRects.empty() )
+        return SetCenter( aCenter );
 
-    if( !screenRect.Intersects( occultingScreenRect ) )
+    BOX2D          screenRect( { 0, 0 }, m_gal->GetScreenPixelSize() );
+    SHAPE_POLY_SET unobscuredPoly( screenRect );
+    VECTOR2D       unobscuredCenter = screenRect.Centre();
+
+    for( const BOX2D& obscuringScreenRect : obscuringScreenRects )
     {
-        SetCenter( aCenter );
-        return;
+        SHAPE_POLY_SET obscuringPoly( obscuringScreenRect );
+        unobscuredPoly.BooleanSubtract( obscuringPoly, SHAPE_POLY_SET::PM_FAST );
     }
 
-    BOX2D  occultedRect  = screenRect.Intersect( occultingScreenRect );
-    double topExposed    = occultedRect.GetTop() - screenRect.GetTop();
-    double bottomExposed = screenRect.GetBottom() - occultedRect.GetBottom();
-    double leftExposed   = occultedRect.GetLeft() - screenRect.GetLeft();
-    double rightExposed  = screenRect.GetRight() - occultedRect.GetRight();
+    /*
+     * Perform a step-wise deflate to find the center of the largest unobscured area
+     */
 
-    if( std::max( topExposed, bottomExposed ) > std::max( leftExposed, rightExposed ) )
+    BOX2I bbox = unobscuredPoly.BBox();
+    int   step = std::min( bbox.GetWidth(), bbox.GetHeight() ) / 10;
+
+    while( !unobscuredPoly.IsEmpty() )
     {
-        if( topExposed > bottomExposed )
-            center.y += ToWorld( screenRect.GetHeight() / 2 - topExposed / 2 );
-        else
-            center.y -= ToWorld( screenRect.GetHeight() / 2 - bottomExposed / 2 );
-    }
-    else
-    {
-        if( leftExposed > rightExposed )
-            center.x += ToWorld( screenRect.GetWidth() / 2 - leftExposed / 2 );
-        else
-            center.x -= ToWorld( screenRect.GetWidth() / 2 - rightExposed / 2 );
+        unobscuredCenter = (wxPoint) unobscuredPoly.BBox().Centre();
+        unobscuredPoly.Deflate( step, 4 );
     }
 
-    SetCenter( center );
+    SetCenter( aCenter - ToWorld( unobscuredCenter - screenRect.Centre(), false ) );
 }
 
 

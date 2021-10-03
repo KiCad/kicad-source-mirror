@@ -836,15 +836,17 @@ void EDA_DRAW_FRAME::Zoom_Automatique( bool aWarpPointer )
 
 
 // Find the first child dialog.
-wxWindow* EDA_DRAW_FRAME::findDialog()
+std::vector<wxWindow*> EDA_DRAW_FRAME::findDialogs()
 {
+    std::vector<wxWindow*> dialogs;
+
     for( wxWindow* window : GetChildren() )
     {
         if( dynamic_cast<DIALOG_SHIM*>( window ) )
-            return window;
+            dialogs.push_back( window );
     }
 
-    return nullptr;
+    return dialogs;
 }
 
 
@@ -859,33 +861,25 @@ void EDA_DRAW_FRAME::FocusOnLocation( const wxPoint& aPos )
     if( !r.Contains( aPos ) )
         centerView = true;
 
-    // Center if we're behind an obscuring dialog, or within 10% of its edge
-    wxWindow* dialog = findDialog();
+    std::vector<BOX2D> dialogScreenRects;
 
-    if( dialog )
+    for( wxWindow* dialog : findDialogs() )
     {
-        wxRect dialogRect( GetCanvas()->ScreenToClient( dialog->GetScreenPosition() ),
-                           dialog->GetSize() );
-        dialogRect.Inflate( dialogRect.GetWidth() / 10 );
+        dialogScreenRects.emplace_back( GetCanvas()->ScreenToClient( dialog->GetScreenPosition() ),
+                                        dialog->GetSize() );
+    }
 
-        if( dialogRect.Contains( (wxPoint) GetCanvas()->GetView()->ToScreen( aPos ) ) )
+    // Center if we're behind an obscuring dialog, or within 10% of its edge
+    for( BOX2D rect : dialogScreenRects )
+    {
+        rect.Inflate( rect.GetWidth() / 10 );
+
+        if( rect.Contains( GetCanvas()->GetView()->ToScreen( aPos ) ) )
             centerView = true;
     }
 
     if( centerView )
-    {
-        // If a dialog partly obscures the window, then center on the uncovered area.
-        if( dialog )
-        {
-            BOX2D dialogRect( GetCanvas()->ScreenToClient( dialog->GetScreenPosition() ),
-                              dialog->GetSize() );
-            GetCanvas()->GetView()->SetCenter( aPos, dialogRect );
-        }
-        else
-        {
-            GetCanvas()->GetView()->SetCenter( aPos );
-        }
-    }
+        GetCanvas()->GetView()->SetCenter( aPos, dialogScreenRects );
 
     GetCanvas()->GetViewControls()->SetCrossHairCursorPosition( aPos );
 }

@@ -318,13 +318,13 @@ public:
     void SetCenter( const VECTOR2D& aCenter );
 
     /**
-     * Set the center point of the VIEW, attempting to avoid \a occultingScreenRect (for
+     * Set the center point of the VIEW, attempting to avoid \a obscuringScreenRects (for
      * instance, the screen rect of a modeless dialog in front of the VIEW).
      *
      * @param aCenter: the new center point, in world space coordinates.
-     * @param occultingScreenRect: the occulting rect, in screen space coordinates.
+     * @param obscuringScreenRects: the obscuring rects, in screen space coordinates.
      */
-    void SetCenter( const VECTOR2D& aCenter, const BOX2D& occultingScreenRect );
+    void SetCenter( const VECTOR2D& aCenter, const std::vector<BOX2D>& obscuringScreenRects );
 
     /**
      * Return the center point of this VIEW (in world space coordinates).

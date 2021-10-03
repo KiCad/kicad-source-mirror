@@ -462,7 +462,7 @@ protected:
 
     void setupUnits( APP_SETTINGS_BASE* aCfg );
 
-    wxWindow* findDialog();
+    std::vector<wxWindow*> findDialogs();
 
     /**
      * Determines the Canvas type to load (with prompt if required) and initializes m_canvasType
