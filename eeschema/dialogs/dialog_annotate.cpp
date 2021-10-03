@@ -29,7 +29,6 @@
 #include <dialog_annotate_base.h>
 #include <eeschema_settings.h>
 #include <kiface_base.h>
-#include <widgets/infobar.h>
 #include <wx_html_report_panel.h>
 #include <schematic.h>
 
@@ -81,6 +80,7 @@ DIALOG_ANNOTATE::DIALOG_ANNOTATE( SCH_EDIT_FRAME* parent, const wxString& messag
         m_infoBar->RemoveAllButtons();
         m_infoBar->ShowMessage( message );
 
+        m_rbScope->SetSelection( 0 );
         m_rbScope->Enable( false );
     }
 
@@ -110,14 +110,18 @@ DIALOG_ANNOTATE::~DIALOG_ANNOTATE()
     cfg->m_AnnotatePanel.sort_order = GetSortOrder();
     cfg->m_AnnotatePanel.method = GetAnnotateAlgo();
     cfg->m_AnnotatePanel.options = m_rbOptions->GetSelection();
-    cfg->m_AnnotatePanel.scope = m_rbScope->GetSelection();
+
+    if( m_rbScope->IsEnabled() )
+        cfg->m_AnnotatePanel.scope = m_rbScope->GetSelection();
+
     cfg->m_AnnotatePanel.messages_filter = m_MessageWindow->GetVisibleSeverities();
 
     // Get the "start annotation after" value from dialog and update project settings if changed
     int startNum = GetStartNumber();
     SCH_EDIT_FRAME* schFrame = dynamic_cast<SCH_EDIT_FRAME*>( m_parentFrame );
 
-    if( schFrame ) {
+    if( schFrame )
+    {
         SCHEMATIC_SETTINGS& projSettings = schFrame->Schematic().Settings();
 
         // If the user has updated the start annotation number then update the project file.
@@ -138,7 +142,9 @@ void DIALOG_ANNOTATE::InitValues()
     EESCHEMA_SETTINGS* cfg = static_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
     int option;
 
-    m_rbScope->SetSelection( cfg->m_AnnotatePanel.scope );
+    if( m_rbScope->IsEnabled() )
+        m_rbScope->SetSelection( cfg->m_AnnotatePanel.scope );
+
     m_rbOptions->SetSelection( cfg->m_AnnotatePanel.options );
 
     option = cfg->m_AnnotatePanel.sort_order;
