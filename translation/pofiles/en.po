@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-09-27 08:33-0700\n"
+"POT-Creation-Date: 2021-10-03 16:55-0700\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -1480,9 +1480,6 @@ msgstr "Paper"
 msgid "Title Block"
 msgstr "Title Block"
 
-msgid "Portrait"
-msgstr "Portrait"
-
 #, c-format
 msgid "Drawing sheet file '%s' not found."
 msgstr "Drawing sheet file '%s' not found."
@@ -1490,25 +1487,14 @@ msgstr "Drawing sheet file '%s' not found."
 msgid "the translation for paper size must preserve original spellings"
 msgstr "the translation for paper size must preserve original spellings"
 
+msgid "Portrait"
+msgstr "Portrait"
+
 msgid "Landscape"
 msgstr "Landscape"
 
 msgid "Select Drawing Sheet File"
 msgstr "Select Drawing Sheet File"
-
-#, c-format
-msgid ""
-"The drawing sheet file name has changed.\n"
-"Do you want to use the relative path:\n"
-"\"%s\"\n"
-"instead of\n"
-"\"%s\"?"
-msgstr ""
-"The drawing sheet file name has changed.\n"
-"Do you want to use the relative path:\n"
-"\"%s\"\n"
-"instead of\n"
-"\"%s\"?"
 
 msgid "dummy text"
 msgstr "dummy text"
@@ -1536,6 +1522,12 @@ msgstr "Custom paper width."
 
 msgid "Export to other sheets"
 msgstr "Export to other sheets"
+
+msgid "Drawing Sheet"
+msgstr "Drawing Sheet"
+
+msgid "File:"
+msgstr "File:"
 
 msgid "Title Block Parameters"
 msgstr "Title Block Parameters"
@@ -1589,12 +1581,6 @@ msgstr "Comment8:"
 
 msgid "Comment9:"
 msgstr "Comment9:"
-
-msgid "Drawing sheet file"
-msgstr "Drawing sheet file"
-
-msgid "Browse..."
-msgstr "Browse…"
 
 msgid ""
 "Finds the next available reference designator for any designators that "
@@ -3209,6 +3195,9 @@ msgstr "ERC warnings"
 msgid "ERC errors"
 msgstr "ERC errors"
 
+msgid "Anchors"
+msgstr "Anchors"
+
 msgid "Helper items"
 msgstr "Helper items"
 
@@ -3310,9 +3299,6 @@ msgstr "DRC exclusions"
 
 msgid "DRC marker shadows"
 msgstr "DRC marker shadows"
-
-msgid "Anchors"
-msgstr "Anchors"
 
 msgid "Grid axes"
 msgstr "Grid axes"
@@ -7943,36 +7929,36 @@ msgid "Left Click Mouse Commands"
 msgstr "Left Click Mouse Commands"
 
 msgid ""
-"Left click (and drag) actions depend on 3 modifier keys:\n"
-"Alt, Shift and Ctrl."
+"Left click (and drag) actions depend on 2 modifier keys:\n"
+"Shift and Ctrl."
 msgstr ""
-"Left click (and drag) actions depend on 3 modifier keys:\n"
-"Alt, Shift and Ctrl."
+"Left click (and drag) actions depend on 2 modifier keys:\n"
+"Shift and Ctrl."
 
-msgid "Add item(s) to selection."
-msgstr "Add item(s) to selection."
-
-msgid "Toggle selected state of item(s)."
-msgstr "Toggle selected state of item(s)."
-
-msgid "Alt+Shift"
-msgstr "Alt+Shift"
-
-msgid "Remove item(s) from selection."
-msgstr "Remove item(s) from selection."
+msgid "Long Click"
+msgstr "Long Click"
 
 msgid "Clarify selection from menu."
 msgstr "Clarify selection from menu."
 
+msgid "Add item(s) to selection."
+msgstr "Add item(s) to selection."
+
+msgid "Ctrl+Shift"
+msgstr "Ctrl+Shift"
+
+msgid "Remove item(s) from selection."
+msgstr "Remove item(s) from selection."
+
 msgid ""
 "Left click (and drag) actions depend on 3 modifier keys:\n"
-"Alt, Shift and Cmd."
+"Option, Shift and Cmd."
 msgstr ""
 "Left click (and drag) actions depend on 3 modifier keys:\n"
-"Alt, Shift and Cmd."
+"Option, Shift and Cmd."
 
-msgid "Cmd+Shift"
-msgstr "Cmd+Shift"
+msgid "Shift+Cmd"
+msgstr "Shift+Cmd"
 
 msgid "Symbol Field Automatic Placement"
 msgstr "Symbol Field Automatic Placement"
@@ -9035,9 +9021,6 @@ msgstr "[no schematic loaded]"
 #, c-format
 msgid "Highlighted net: %s"
 msgstr "Highlighted net: %s"
-
-msgid "File:"
-msgstr "File:"
 
 msgid "<root sheet>"
 msgstr "<root sheet>"
@@ -11505,6 +11488,12 @@ msgstr "Symbol Move Activate"
 msgid "Align Elements to Grid"
 msgstr "Align Elements to Grid"
 
+msgid "Save Current Sheet Copy As..."
+msgstr "Save Current Sheet Copy As..."
+
+msgid "Save a copy of the current sheet to another location or name"
+msgstr "Save a copy of the current sheet to another location or name"
+
 #, c-format
 msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%.3f, %.3f)</b> conflicts with "
@@ -12437,9 +12426,6 @@ msgstr "Show negative objects in this color"
 
 msgid "Show the (x,y) grid dots"
 msgstr "Show the (x,y) grid dots"
-
-msgid "Drawing Sheet"
-msgstr "Drawing Sheet"
 
 msgid "Show drawing sheet border and title block"
 msgstr "Show drawing sheet border and title block"
@@ -14408,24 +14394,6 @@ msgstr ""
 "\tR1 | R2 |...| Rn\tresistors in parallel\n"
 "\tR1 + (R2|R3)...\t\tany combination of the above\n"
 
-msgid "Write Data Failed"
-msgstr "Write Data Failed"
-
-msgid ""
-"No data filename to save modifications.\n"
-"Do you want to exit and abandon your changes?"
-msgstr ""
-"No data filename to save modifications.\n"
-"Do you want to exit and abandon your changes?"
-
-#, c-format
-msgid ""
-"Unable to write file '%s'\n"
-"Do you want to exit and abandon your changes?"
-msgstr ""
-"Unable to write file '%s'\n"
-"Do you want to exit and abandon your changes?"
-
 msgid "PCB Calculator data file"
 msgstr "PCB Calculator data file"
 
@@ -14450,6 +14418,24 @@ msgstr "Vref set to 0 !"
 
 msgid "Incorrect value for R1 R2"
 msgstr "Incorrect value for R1 R2"
+
+msgid "Write Data Failed"
+msgstr "Write Data Failed"
+
+msgid ""
+"No data filename to save modifications.\n"
+"Do you want to exit and abandon your changes?"
+msgstr ""
+"No data filename to save modifications.\n"
+"Do you want to exit and abandon your changes?"
+
+#, c-format
+msgid ""
+"Unable to write file '%s'\n"
+"Do you want to exit and abandon your changes?"
+msgstr ""
+"Unable to write file '%s'\n"
+"Do you want to exit and abandon your changes?"
 
 msgid ""
 "If you specify the maximum current, then the trace widths will be calculated "
@@ -14724,9 +14710,6 @@ msgstr "Vias"
 
 msgid "Track Segments"
 msgstr "Track Segments"
-
-msgid "Nodes"
-msgstr "Nodes"
 
 msgid "Nets"
 msgstr "Nets"
@@ -15687,13 +15670,6 @@ msgstr "Graphics cleanup"
 msgid "Merge lines into rectangles"
 msgstr "Merge lines into rectangles"
 
-msgid ""
-"remove track segments connecting nodes belonging to different nets (short "
-"circuit)"
-msgstr ""
-"remove track segments connecting nodes belonging to different nets (short "
-"circuit)"
-
 msgid "Delete redundant graphics"
 msgstr "Delete redundant graphics"
 
@@ -15708,6 +15684,13 @@ msgstr "Board cleanup"
 
 msgid "Delete &tracks connecting different nets"
 msgstr "Delete &tracks connecting different nets"
+
+msgid ""
+"remove track segments connecting nodes belonging to different nets (short "
+"circuit)"
+msgstr ""
+"remove track segments connecting nodes belonging to different nets (short "
+"circuit)"
 
 msgid "&Delete redundant vias"
 msgstr "&Delete redundant vias"
@@ -19292,37 +19275,20 @@ msgid ""
 msgstr ""
 "If checked, pads can be moved with respect to the rest of the footprint."
 
-msgid ""
-"Left click (and drag) actions depend on 2 modifier keys:\n"
-"Shift and Ctrl."
-msgstr ""
-"Left click (and drag) actions depend on 2 modifier keys:\n"
-"Shift and Ctrl."
-
 msgid "No modifier"
 msgstr "No modifier"
 
 msgid "Select item(s)."
 msgstr "Select item(s)."
 
-msgid "Long Click"
-msgstr "Long Click"
-
-msgid "Ctrl+Shift"
-msgstr "Ctrl+Shift"
-
 msgid "Highlight net (for pads or tracks)."
 msgstr "Highlight net (for pads or tracks)."
 
-msgid ""
-"Left click (and drag) actions depend on 3 modifier keys:\n"
-"Option, Shift and Cmd."
-msgstr ""
-"Left click (and drag) actions depend on 3 modifier keys:\n"
-"Option, Shift and Cmd."
+msgid "Graphics Editing"
+msgstr "Graphics Editing"
 
-msgid "Shift+Cmd"
-msgstr "Shift+Cmd"
+msgid "Limit actions to 45 degrees from start"
+msgstr "Limit actions to 45 degrees from start"
 
 msgid "Magnetic Points"
 msgstr "Magnetic Points"
@@ -21567,6 +21533,9 @@ msgid ""
 msgstr ""
 "Unable to find the footprint on the main board.\n"
 "Cannot save."
+
+msgid "Previous footprint placement still in progress."
+msgstr "Previous footprint placement still in progress."
 
 msgid "Save Footprint As"
 msgstr "Save Footprint As"
@@ -26377,6 +26346,52 @@ msgstr "KiCad Schematic"
 
 msgid "KiCad Printed Circuit Board"
 msgstr "KiCad Printed Circuit Board"
+
+#, c-format
+#~ msgid ""
+#~ "The drawing sheet file name has changed.\n"
+#~ "Do you want to use the relative path:\n"
+#~ "\"%s\"\n"
+#~ "instead of\n"
+#~ "\"%s\"?"
+#~ msgstr ""
+#~ "The drawing sheet file name has changed.\n"
+#~ "Do you want to use the relative path:\n"
+#~ "\"%s\"\n"
+#~ "instead of\n"
+#~ "\"%s\"?"
+
+#~ msgid "Drawing sheet file"
+#~ msgstr "Drawing sheet file"
+
+#~ msgid "Browse..."
+#~ msgstr "Browse…"
+
+#~ msgid ""
+#~ "Left click (and drag) actions depend on 3 modifier keys:\n"
+#~ "Alt, Shift and Ctrl."
+#~ msgstr ""
+#~ "Left click (and drag) actions depend on 3 modifier keys:\n"
+#~ "Alt, Shift and Ctrl."
+
+#~ msgid "Toggle selected state of item(s)."
+#~ msgstr "Toggle selected state of item(s)."
+
+#~ msgid "Alt+Shift"
+#~ msgstr "Alt+Shift"
+
+#~ msgid ""
+#~ "Left click (and drag) actions depend on 3 modifier keys:\n"
+#~ "Alt, Shift and Cmd."
+#~ msgstr ""
+#~ "Left click (and drag) actions depend on 3 modifier keys:\n"
+#~ "Alt, Shift and Cmd."
+
+#~ msgid "Cmd+Shift"
+#~ msgstr "Cmd+Shift"
+
+#~ msgid "Nodes"
+#~ msgstr "Nodes"
 
 #~ msgid "Graphic Shape"
 #~ msgstr "Graphic Shape"
