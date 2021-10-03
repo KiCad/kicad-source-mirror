@@ -61,8 +61,9 @@ struct VIEW_OVERLAY::COMMAND_LINE : public VIEW_OVERLAY::COMMAND
 struct VIEW_OVERLAY::COMMAND_RECTANGLE : public VIEW_OVERLAY::COMMAND
 {
     COMMAND_RECTANGLE( const VECTOR2D& aP0, const VECTOR2D& aP1 ) :
-        m_p0( aP0 ), m_p1( aP1 )
-    {}
+        m_p0( aP0 ),
+        m_p1( aP1 )
+    { }
 
     virtual void Execute( VIEW* aView ) const override
     {
@@ -78,7 +79,8 @@ struct VIEW_OVERLAY::COMMAND_CIRCLE : public VIEW_OVERLAY::COMMAND
 {
     COMMAND_CIRCLE( const VECTOR2D& aCenter, double aRadius ) :
         m_center(aCenter),
-        m_radius(aRadius) {}
+        m_radius(aRadius)
+    { }
 
     virtual void Execute( VIEW* aView ) const override
     {
@@ -114,7 +116,8 @@ struct VIEW_OVERLAY::COMMAND_ARC : public VIEW_OVERLAY::COMMAND
 struct VIEW_OVERLAY::COMMAND_POLYGON : public VIEW_OVERLAY::COMMAND
 {
     COMMAND_POLYGON( const std::deque<VECTOR2D>& aPointList ) :
-       m_pointList( aPointList ) {}
+        m_pointList( aPointList )
+    { }
 
     virtual void Execute( VIEW* aView ) const override
     {
@@ -128,7 +131,8 @@ struct VIEW_OVERLAY::COMMAND_POLYGON : public VIEW_OVERLAY::COMMAND
 struct VIEW_OVERLAY::COMMAND_POLY_POLYGON : public VIEW_OVERLAY::COMMAND
 {
     COMMAND_POLY_POLYGON( const SHAPE_POLY_SET& aPolySet ) :
-       m_polySet( aPolySet ) {}
+        m_polySet( aPolySet )
+    { }
 
     virtual void Execute( VIEW* aView ) const override
     {
@@ -161,7 +165,8 @@ struct VIEW_OVERLAY::COMMAND_POINT_POLYGON : public VIEW_OVERLAY::COMMAND
 struct VIEW_OVERLAY::COMMAND_SET_STROKE : public VIEW_OVERLAY::COMMAND
 {
     COMMAND_SET_STROKE( bool aIsStroke ) :
-        m_isStroke( aIsStroke ) {}
+        m_isStroke( aIsStroke )
+    { }
 
     virtual void Execute( VIEW* aView ) const override
     {
@@ -175,7 +180,8 @@ struct VIEW_OVERLAY::COMMAND_SET_STROKE : public VIEW_OVERLAY::COMMAND
 struct VIEW_OVERLAY::COMMAND_SET_FILL : public VIEW_OVERLAY::COMMAND
 {
     COMMAND_SET_FILL( bool aIsFill ) :
-        m_isFill(  aIsFill ) {}
+        m_isFill(  aIsFill )
+    { }
 
     virtual void Execute( VIEW* aView ) const override
     {
@@ -190,7 +196,8 @@ struct VIEW_OVERLAY::COMMAND_SET_COLOR : public VIEW_OVERLAY::COMMAND
 {
     COMMAND_SET_COLOR( bool aIsStroke, const COLOR4D& aColor ) :
         m_isStroke( aIsStroke ),
-        m_color( aColor ) {}
+        m_color( aColor )
+    { }
 
     virtual void Execute( VIEW* aView ) const override
     {
@@ -200,15 +207,16 @@ struct VIEW_OVERLAY::COMMAND_SET_COLOR : public VIEW_OVERLAY::COMMAND
             aView->GetGAL()->SetFillColor( m_color );
     }
 
-    bool m_isStroke;
-    COLOR4D m_color;
+    bool     m_isStroke;
+    COLOR4D  m_color;
 };
 
 
 struct VIEW_OVERLAY::COMMAND_SET_WIDTH : public VIEW_OVERLAY::COMMAND
 {
     COMMAND_SET_WIDTH( double aWidth ) :
-        m_width( aWidth ) {}
+        m_width( aWidth )
+    { }
 
     virtual void Execute( VIEW* aView ) const override
     {
@@ -222,7 +230,8 @@ struct VIEW_OVERLAY::COMMAND_SET_WIDTH : public VIEW_OVERLAY::COMMAND
 struct VIEW_OVERLAY::COMMAND_GLYPH_SIZE : public VIEW_OVERLAY::COMMAND
 {
     COMMAND_GLYPH_SIZE( const VECTOR2D aSize ) :
-        m_size( aSize ) {};
+        m_size( aSize )
+    { };
 
     virtual void Execute( VIEW* aView ) const override
     {
@@ -235,11 +244,11 @@ struct VIEW_OVERLAY::COMMAND_GLYPH_SIZE : public VIEW_OVERLAY::COMMAND
 
 struct VIEW_OVERLAY::COMMAND_BITMAP_TEXT : public VIEW_OVERLAY::COMMAND
 {
-    COMMAND_BITMAP_TEXT( const wxString& aText, const VECTOR2D& aPosition,
-                             double aRotationAngle ) :
+    COMMAND_BITMAP_TEXT( const wxString& aText, const VECTOR2D& aPosition, double aRotationAngle ) :
         m_text( aText ),
         m_pos( aPosition ),
-        m_angle (aRotationAngle) {};
+        m_angle (aRotationAngle)
+    { }
 
     virtual void Execute( VIEW* aView ) const override
     {
@@ -264,7 +273,7 @@ VIEW_OVERLAY::~VIEW_OVERLAY()
 
 void VIEW_OVERLAY::releaseCommands()
 {
-    for( auto cmd : m_commands )
+    for( VIEW_OVERLAY::COMMAND* cmd : m_commands )
         delete cmd;
 
     m_commands.clear();
@@ -288,7 +297,7 @@ const BOX2I VIEW_OVERLAY::ViewBBox() const
 
 void VIEW_OVERLAY::ViewDraw( int aLayer, VIEW* aView ) const
 {
-    for( const auto& cmd : m_commands )
+    for( const VIEW_OVERLAY::COMMAND* cmd : m_commands )
         cmd->Execute( aView );
 }
 
@@ -323,10 +332,9 @@ void VIEW_OVERLAY::Polyline( const SHAPE_LINE_CHAIN& aPolyLine )
 {
     SetIsStroke( true );
     SetIsFill( false );
+
     for( int i = 0; i < aPolyLine.SegmentCount(); i++ )
-    {
         Line( aPolyLine.CSegment( i ) );
-    }
 }
 
 
@@ -354,8 +362,8 @@ void VIEW_OVERLAY::Circle( const VECTOR2D& aCenterPoint, double aRadius )
 }
 
 
-void VIEW_OVERLAY::Arc( const VECTOR2D& aCenterPoint,
-                        double aRadius, double aStartAngle, double aEndAngle )
+void VIEW_OVERLAY::Arc( const VECTOR2D& aCenterPoint, double aRadius, double aStartAngle,
+                        double aEndAngle )
 {
     m_commands.push_back( new COMMAND_ARC( aCenterPoint, aRadius, aStartAngle, aEndAngle ) );
 }

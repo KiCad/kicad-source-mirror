@@ -51,22 +51,16 @@ public:
 
     /**
      * Return the number of stored items.
-     *
-     * @return Number of stored items.
      */
     virtual unsigned int GetSize() const;
 
     /**
      * Add an item to the group.
-     *
-     * @param aItem is the item to be added.
      */
     virtual void Add( VIEW_ITEM* aItem );
 
     /**
      * Remove an item from the group.
-     *
-     * @param aItem is the item to be removed.
      */
     virtual void Remove( VIEW_ITEM* aItem );
 
@@ -79,8 +73,6 @@ public:
 
     /**
      * Return the bounding box for all stored items covering all its layers.
-     *
-     * @return The current bounding box
      */
     virtual const BOX2I ViewBBox() const override;
 
@@ -102,8 +94,6 @@ public:
 
     /**
      * Set layer used to draw the group.
-     *
-     * @param aLayer is the layer used for drawing.
      */
     inline virtual void SetLayer( int aLayer )
     {
@@ -116,15 +106,11 @@ public:
     void FreeItems();
 
 protected:
-    typedef std::vector<VIEW_ITEM*> ITEMS;
+    virtual const std::vector<VIEW_ITEM*> updateDrawList() const;
 
-    virtual const ITEMS updateDrawList() const;
-
-    ///< Layer on which the group is drawn.
-    int m_layer;
-
-    ///< Container for storing VIEW_ITEMs.
-    ITEMS m_groupItems;
+protected:
+    int                     m_layer;
+    std::vector<VIEW_ITEM*> m_groupItems;
 };
 
 } // namespace KIGFX

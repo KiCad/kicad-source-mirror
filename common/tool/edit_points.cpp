@@ -53,14 +53,14 @@ EDIT_POINT* EDIT_POINTS::FindPoint( const VECTOR2I& aLocation, KIGFX::VIEW *aVie
 
     if( m_allowPoints )
     {
-        for( auto& point : m_points )
+        for( EDIT_POINT& point : m_points )
         {
             if( point.WithinPoint( aLocation, size ) )
                 return &point;
         }
     }
 
-    for( auto& line : m_lines )
+    for( EDIT_LINE& line : m_lines )
     {
         if( line.WithinPoint( aLocation, size ) )
             return &line;
@@ -244,8 +244,7 @@ const BOX2I EDIT_POINTS::ViewBBox() const
 
 void EDIT_POINTS::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
 {
-    auto gal = aView->GetGAL();
-
+    KIGFX::GAL*             gal = aView->GetGAL();
     KIGFX::RENDER_SETTINGS* settings = aView->GetPainter()->GetSettings();
     KIGFX::COLOR4D          drawColor = settings->GetLayerColor( LAYER_AUX_ITEMS );
 

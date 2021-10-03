@@ -90,13 +90,13 @@ int checkGlError( const std::string& aInfo, const char* aFile, int aLine, bool a
                 break;
 
             case GL_FRAMEBUFFER_UNSUPPORTED_EXT:
-                errorMsg = "The combination of internal formats of the attached images violates an "
-                           "implementation dependent set of restrictions.";
+                errorMsg = "The combination of internal formats of the attached images violates "
+                           "an implementation dependent set of restrictions.";
                 break;
 
             case GL_FRAMEBUFFER_INCOMPLETE_MULTISAMPLE_EXT:
-                errorMsg =
-                        "GL_RENDERBUFFER_SAMPLES is not the same for all attached render buffers.";
+                errorMsg = "GL_RENDERBUFFER_SAMPLES is not the same for all attached render "
+                           "buffers.";
                 break;
 
             case GL_FRAMEBUFFER_INCOMPLETE_LAYER_TARGETS_EXT:
@@ -140,16 +140,20 @@ int checkGlError( const std::string& aInfo, const char* aFile, int aLine, bool a
         if( aThrow )
         {
             wxLogTrace( traceGalOpenGlError, wxT( "Throwing exception for glGetError() '%s' "
-                                                  "in file '%s' on line %d." ), errorMsg,
-                        aFile, aLine );
+                                                  "in file '%s' on line %d." ),
+                        errorMsg,
+                        aFile,
+                        aLine );
+
             throw std::runtime_error( (const char*) errorMsg.char_str() );
         }
         else
         {
-            wxString msg;
+            wxString msg = wxString::Format( wxT( "glGetError() '%s' in file '%s' on line %d." ),
+                                             errorMsg,
+                                             aFile,
+                                             aLine );
 
-            msg.Printf( wxT( "glGetError() '%s' in file '%s' on line %d." ),
-                        errorMsg, aFile, aLine );
             DisplayErrorMessage( nullptr, "OpenGL Error", errorMsg );
         }
     }

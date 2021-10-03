@@ -646,13 +646,6 @@ public:
     }
 
     /**
-     * Add an item to a list of items that are going to be refreshed upon the next frame rendering.
-     *
-     * @param aItem is the item to be refreshed.
-     */
-    void MarkForUpdate( VIEW_ITEM* aItem );
-
-    /**
      * Iterate through the list of items that asked for updating and updates them.
      */
     void UpdateItems();
@@ -687,14 +680,6 @@ public:
     void UseDrawPriority( bool aFlag )
     {
         m_useDrawPriority = aFlag;
-    }
-
-    /**
-     * @return true if draw order is reversed
-     */
-    bool IsDrawOrderReversed() const
-    {
-        return m_reverseDrawOrder;
     }
 
     /**
@@ -831,40 +816,30 @@ protected:
     std::vector<EDA_ITEM *>            m_ownedItems;
 
     ///< Whether to use rendering order modifier or not.
-    bool m_enableOrderModifier;
+    bool                               m_enableOrderModifier;
 
     ///< The set of possible displayed layers and its properties.
-    std::vector<VIEW_LAYER> m_layers;
+    std::vector<VIEW_LAYER>            m_layers;
 
     ///< Sorted list of pointers to members of m_layers.
-    std::vector<VIEW_LAYER*> m_orderedLayers;
+    std::vector<VIEW_LAYER*>           m_orderedLayers;
 
     ///< Flat list of all items.
     std::shared_ptr<std::vector<VIEW_ITEM*>> m_allItems;
 
     ///< The set of layers that are displayed on the top.
-    std::set<unsigned int> m_topLayers;
+    std::set<unsigned int>             m_topLayers;
 
     ///< Center point of the VIEW (the point at which we are looking at).
-    VECTOR2D m_center;
+    VECTOR2D                           m_center;
 
-    ///< Scale of displayed VIEW_ITEMs.
-    double m_scale;
+    double                             m_scale;
+    BOX2D                              m_boundary;
+    double                             m_minScale;
+    double                             m_maxScale;
 
-    ///< View boundaries.
-    BOX2D m_boundary;
-
-    ///< Scale lower limit.
-    double m_minScale;
-
-    ///< Scale upper limit.
-    double m_maxScale;
-
-    ///< Horizontal flip flag.
-    bool m_mirrorX;
-
-    ///< Vertical flip flag.
-    bool m_mirrorY;
+    bool                               m_mirrorX;
+    bool                               m_mirrorY;
 
     ///< PAINTER contains information how do draw items.
     PAINTER* m_painter;

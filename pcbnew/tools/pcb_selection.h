@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2019 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2019-2021 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -33,7 +33,7 @@ class PCB_SELECTION : public SELECTION
 public:
     EDA_ITEM* GetTopLeftItem( bool aFootprintsOnly = false ) const override;
     
-    const KIGFX::VIEW_GROUP::ITEMS updateDrawList() const override;
+    const std::vector<KIGFX::VIEW_ITEM*> updateDrawList() const override;
 
     const LSET GetSelectionLayers();
 };

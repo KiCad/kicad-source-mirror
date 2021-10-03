@@ -39,6 +39,7 @@
 #include <memory>
 #include <stdexcept>
 #include <wx/log.h>
+#include <wx/debug.h>
 
 using namespace KIGFX;
 
@@ -171,10 +172,9 @@ unsigned int OPENGL_COMPOSITOR::CreateBuffer( VECTOR2U aDimensions )
 
     if( (int) usedBuffers() >= maxBuffers )
     {
-        throw std::runtime_error(
-                "Cannot create more framebuffers. OpenGL rendering "
-                "backend requires at least 3 framebuffers. You may try to update/change "
-                "your graphic drivers." );
+        throw std::runtime_error( "Cannot create more framebuffers. OpenGL rendering backend "
+                                  "requires at least 3 framebuffers. You may try to update/change "
+                                  "your graphic drivers." );
     }
 
     glGetIntegerv( GL_MAX_TEXTURE_SIZE, (GLint*) &maxTextureSize );
@@ -218,46 +218,35 @@ unsigned int OPENGL_COMPOSITOR::CreateBuffer( VECTOR2U aDimensions )
         {
         case GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT_EXT:
             throw std::runtime_error( "The framebuffer attachment points are incomplete." );
-            break;
 
         case GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT_EXT:
             throw std::runtime_error( "No images attached to the framebuffer." );
-            break;
 
         case GL_FRAMEBUFFER_INCOMPLETE_DRAW_BUFFER_EXT:
             throw std::runtime_error( "The framebuffer does not have at least one "
                                       "image attached to it." );
-            break;
 
         case GL_FRAMEBUFFER_INCOMPLETE_READ_BUFFER_EXT:
             throw std::runtime_error( "The framebuffer read buffer is incomplete." );
-            break;
 
         case GL_FRAMEBUFFER_UNSUPPORTED_EXT:
-            throw std::runtime_error(
-                    "The combination of internal formats of the attached "
-                    "images violates an implementation-dependent set of restrictions." );
-            break;
+            throw std::runtime_error( "The combination of internal formats of the attached "
+                                      "images violates an implementation-dependent set of "
+                                      "restrictions." );
 
         case GL_FRAMEBUFFER_INCOMPLETE_MULTISAMPLE_EXT:
             throw std::runtime_error( "GL_RENDERBUFFER_SAMPLES is not the same for "
                                       "all attached renderbuffers" );
-            break;
 
         case GL_FRAMEBUFFER_INCOMPLETE_LAYER_TARGETS_EXT:
             throw std::runtime_error( "Framebuffer incomplete layer targets errors." );
-            break;
 
         case GL_FRAMEBUFFER_INCOMPLETE_DIMENSIONS_EXT:
             throw std::runtime_error( "Framebuffer attachments have different dimensions" );
-            break;
 
         default:
             throw std::runtime_error( "Unknown error occurred when creating the framebuffer." );
-            break;
         }
-
-        return 0;
     }
 
     ClearBuffer( COLOR4D::BLACK );
@@ -275,15 +264,15 @@ unsigned int OPENGL_COMPOSITOR::CreateBuffer( VECTOR2U aDimensions )
 
 GLenum OPENGL_COMPOSITOR::GetBufferTexture( unsigned int aBufferHandle )
 {
-    assert( aBufferHandle > 0 && aBufferHandle <= usedBuffers() );
+    wxASSERT( aBufferHandle > 0 && aBufferHandle <= usedBuffers() );
     return m_buffers[aBufferHandle - 1].textureTarget;
 }
 
 
 void OPENGL_COMPOSITOR::SetBuffer( unsigned int aBufferHandle )
 {
-    assert( m_initialized );
-    assert( aBufferHandle <= usedBuffers() );
+    wxASSERT( m_initialized );
+    wxASSERT( aBufferHandle <= usedBuffers() );
 
     // Either unbind the FBO for direct rendering, or bind the one with target textures
     bindFb( aBufferHandle == DIRECT_RENDERING ? DIRECT_RENDERING : m_mainFbo );
@@ -307,7 +296,7 @@ void OPENGL_COMPOSITOR::SetBuffer( unsigned int aBufferHandle )
 
 void OPENGL_COMPOSITOR::ClearBuffer( const COLOR4D& aColor )
 {
-    assert( m_initialized );
+    wxASSERT( m_initialized );
 
     glClearColor( aColor.r, aColor.g, aColor.b, 0.0f );
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT );
@@ -334,9 +323,9 @@ void OPENGL_COMPOSITOR::DrawBuffer( unsigned int aBufferHandle )
 
 void OPENGL_COMPOSITOR::DrawBuffer( unsigned int aSourceHandle, unsigned int aDestHandle )
 {
-    assert( m_initialized );
-    assert( aSourceHandle != 0 && aSourceHandle <= usedBuffers() );
-    assert( aDestHandle <= usedBuffers() );
+    wxASSERT( m_initialized );
+    wxASSERT( aSourceHandle != 0 && aSourceHandle <= usedBuffers() );
+    wxASSERT( aDestHandle <= usedBuffers() );
 
     // Switch to the destination buffer and blit the scene
     SetBuffer( aDestHandle );
@@ -388,7 +377,7 @@ void OPENGL_COMPOSITOR::Present()
 void OPENGL_COMPOSITOR::bindFb( unsigned int aFb )
 {
     // Currently there are only 2 valid FBOs
-    assert( aFb == DIRECT_RENDERING || aFb == m_mainFbo );
+    wxASSERT( aFb == DIRECT_RENDERING || aFb == m_mainFbo );
 
     if( m_curFbo != aFb )
     {
@@ -401,14 +390,12 @@ void OPENGL_COMPOSITOR::bindFb( unsigned int aFb )
 
 void OPENGL_COMPOSITOR::clean()
 {
-    assert( m_initialized );
+    wxASSERT( m_initialized );
 
     bindFb( DIRECT_RENDERING );
 
-    for( OPENGL_BUFFERS::const_iterator it = m_buffers.begin(); it != m_buffers.end(); ++it )
-    {
-        glDeleteTextures( 1, &it->textureTarget );
-    }
+    for( const OPENGL_BUFFER& buffer : m_buffers )
+        glDeleteTextures( 1, &buffer.textureTarget );
 
     m_buffers.clear();
 
@@ -426,10 +413,8 @@ int OPENGL_COMPOSITOR::GetAntialiasSupersamplingFactor() const
 {
     switch ( m_currentAntialiasingMode )
     {
-    case OPENGL_ANTIALIASING_MODE::SUPERSAMPLING:
-        return 2;
-    default:
-        return 1;
+    case OPENGL_ANTIALIASING_MODE::SUPERSAMPLING: return 2;
+    default:                                      return 1;
     }
 }
 
@@ -438,6 +423,6 @@ VECTOR2D OPENGL_COMPOSITOR::GetAntialiasRenderingOffset() const
     switch( m_currentAntialiasingMode )
     {
     case OPENGL_ANTIALIASING_MODE::SUPERSAMPLING: return VECTOR2D( 0.5, -0.5 );
-    default: return VECTOR2D( 0, 0 );
+    default:                                      return VECTOR2D( 0, 0 );
     }
 }

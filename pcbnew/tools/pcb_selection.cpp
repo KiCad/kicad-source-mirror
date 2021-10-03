@@ -4,7 +4,7 @@
  * Copyright (C) 2013-2017 CERN
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  * @author Maciej Suminski <maciej.suminski@cern.ch>
- * Copyright (C) 2017 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2017-2021 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,8 +23,6 @@
  * or you may write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
-
-#include <limits>
 
 #include <functional>
 using namespace std::placeholders;
@@ -84,7 +82,7 @@ EDA_ITEM* PCB_SELECTION::GetTopLeftItem( bool aFootprintsOnly ) const
 }
 
 
-const KIGFX::VIEW_GROUP::ITEMS PCB_SELECTION::updateDrawList() const
+const std::vector<KIGFX::VIEW_ITEM*> PCB_SELECTION::updateDrawList() const
 {
     std::vector<VIEW_ITEM*> items;
 

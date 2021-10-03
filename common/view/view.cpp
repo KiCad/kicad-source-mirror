@@ -64,7 +64,7 @@ public:
         deleteGroups();
     }
 
-    int getFlags() const
+    int GetFlags() const
     {
         return m_flags;
     }
@@ -124,7 +124,7 @@ private:
         }
 
         // If there was no entry for the given layer - create one
-        GroupPair* newGroups = new GroupPair[m_groupsSize + 1];
+        std::pair<int, int>* newGroups = new std::pair<int, int>[m_groupsSize + 1];
 
         if( m_groupsSize > 0 )
         {
@@ -133,7 +133,7 @@ private:
         }
 
         m_groups = newGroups;
-        newGroups[m_groupsSize++] = GroupPair( aLayer, aGroup );
+        newGroups[m_groupsSize++] = { aLayer, aGroup };
     }
 
 
@@ -177,7 +177,8 @@ private:
             {
                 new_layer = aReorderMap.at( orig_layer );
             }
-            catch( const std::out_of_range& ) {}
+            catch( const std::out_of_range& )
+            {}
 
             m_groups[i].first = new_layer;
         }
@@ -226,22 +227,16 @@ private:
         return m_flags == VISIBLE;
     }
 
+    VIEW*                m_view;             ///< Current dynamic view the item is assigned to.
+    int                  m_flags;            ///< Visibility flags
+    int                  m_requiredUpdate;   ///< Flag required for updating
+    int                  m_drawPriority;     ///< Order to draw this item in a layer, lowest first
 
-    VIEW*   m_view;             ///< Current dynamic view the item is assigned to.
-    int     m_flags;            ///< Visibility flags
-    int     m_requiredUpdate;   ///< Flag required for updating
-    int     m_drawPriority;     ///< Order to draw this item in a layer, lowest first
+    std::pair<int, int>* m_groups;           ///< layer_number:group_id pairs for each layer the
+                                             ///< item occupies.
+    int                  m_groupsSize;
 
-    ///< Helper for storing cached items group ids
-    typedef std::pair<int, int> GroupPair;
-
-    ///< Indexes of cached GAL display lists corresponding to the item (for every layer it.
-    ///<  occupies)(in the std::pair "first" stores layer number, "second" stores group id).
-    GroupPair* m_groups;
-    int        m_groupsSize;
-
-    /// Stores layer numbers used by the item.
-    std::vector<int> m_layers;
+    std::vector<int>     m_layers;           /// Stores layer numbers used by the item.
 };
 
 
@@ -415,7 +410,7 @@ struct QUERY_VISITOR
 
     bool operator()( VIEW_ITEM* aItem )
     {
-        if( aItem->viewPrivData()->getFlags() & VISIBLE )
+        if( aItem->viewPrivData()->GetFlags() & VISIBLE )
             m_cont.push_back( VIEW::LAYER_ITEM_PAIR( aItem, m_layer ) );
 
         return true;
@@ -733,7 +728,7 @@ struct VIEW::UPDATE_COLOR_VISITOR
     {
         // Obtain the color that should be used for coloring the item
         const COLOR4D color = painter->GetSettings()->GetColor( aItem, layer );
-        int group = aItem->viewPrivData()->getGroup( layer );
+        int           group = aItem->viewPrivData()->getGroup( layer );
 
         if( group >= 0 )
             gal->ChangeGroupColor( group, color );
@@ -787,7 +782,7 @@ void VIEW::UpdateAllLayersColor()
             for( int i = 0; i < layers_count; ++i )
             {
                 const COLOR4D color = m_painter->GetSettings()->GetColor( item, layers[i] );
-                int group = viewData->getGroup( layers[i] );
+                int           group = viewData->getGroup( layers[i] );
 
                 if( group >= 0 )
                     m_gal->ChangeGroupColor( group, color );
@@ -946,8 +941,8 @@ struct VIEW::DRAW_ITEM_VISITOR
         wxCHECK( aItem->viewPrivData(), false );
 
         // Conditions that have to be fulfilled for an item to be drawn
-        bool drawCondition = aItem->viewPrivData()->isRenderable() &&
-                             aItem->ViewGetLOD( layer, view ) < view->m_scale;
+        bool drawCondition = aItem->viewPrivData()->isRenderable()
+                                    && aItem->ViewGetLOD( layer, view ) < view->m_scale;
         if( !drawCondition )
             return true;
 
@@ -962,15 +957,21 @@ struct VIEW::DRAW_ITEM_VISITOR
     void deferredDraw()
     {
         if( reverseDrawOrder )
+        {
             std::sort( drawItems.begin(), drawItems.end(),
-                       []( VIEW_ITEM* a, VIEW_ITEM* b ) -> bool {
+                       []( VIEW_ITEM* a, VIEW_ITEM* b ) -> bool
+                       {
                            return b->viewPrivData()->m_drawPriority < a->viewPrivData()->m_drawPriority;
                        });
+        }
         else
+        {
             std::sort( drawItems.begin(), drawItems.end(),
-                       []( VIEW_ITEM* a, VIEW_ITEM* b ) -> bool {
+                       []( VIEW_ITEM* a, VIEW_ITEM* b ) -> bool
+                       {
                            return a->viewPrivData()->m_drawPriority < b->viewPrivData()->m_drawPriority;
                        });
+        }
 
         for( VIEW_ITEM* item : drawItems )
             view->draw( item, layer );
@@ -1147,11 +1148,13 @@ void VIEW::Redraw()
     rect.Normalize();
     BOX2I recti( rect.GetPosition(), rect.GetSize() );
 
-    // The view rtree uses integer positions.  Large screens can overflow
-    // this size so in this case, simply set the rectangle to the full rtree
-    if( rect.GetWidth() > std::numeric_limits<int>::max() ||
-        rect.GetHeight() > std::numeric_limits<int>::max() )
+    // The view rtree uses integer positions.  Large screens can overflow this size so in
+    // this case, simply set the rectangle to the full rtree.
+    if( rect.GetWidth() > std::numeric_limits<int>::max()
+            || rect.GetHeight() > std::numeric_limits<int>::max() )
+    {
         recti.SetMaximum();
+    }
 
     redrawRect( recti );
 
@@ -1214,13 +1217,9 @@ void VIEW::invalidateItem( VIEW_ITEM* aItem, int aUpdateFlags )
         // updateLayers updates geometry too, so we do not have to update both of them at the
         // same time
         if( aUpdateFlags & LAYERS )
-        {
             updateLayers( aItem );
-        }
         else if( aUpdateFlags & GEOMETRY )
-        {
             updateBbox( aItem );
-        }
     }
 
     int layers[VIEW_MAX_LAYERS], layers_count;
@@ -1376,11 +1375,10 @@ bool VIEW::areRequiredLayersEnabled( int aLayerId ) const
 
     std::set<int>::const_iterator it, it_end;
 
-    for( it = m_layers.at( aLayerId ).requiredLayers.begin(),
-         it_end = m_layers.at( aLayerId ).requiredLayers.end(); it != it_end; ++it )
+    for( int layer : m_layers.at( aLayerId ).requiredLayers )
     {
         // That is enough if just one layer is not enabled
-        if( !m_layers.at( *it ).visible || !areRequiredLayersEnabled( *it ) )
+        if( !m_layers.at( layer ).visible || !areRequiredLayersEnabled( layer ) )
             return false;
     }
 

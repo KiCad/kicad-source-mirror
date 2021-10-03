@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013-2017 CERN
+ * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
@@ -171,7 +172,7 @@ public:
      */
     bool HasType( KICAD_T aType ) const;
 
-    virtual const VIEW_GROUP::ITEMS updateDrawList() const override;
+    virtual const std::vector<KIGFX::VIEW_ITEM*> updateDrawList() const override;
 
     bool HasReferencePoint() const
     {

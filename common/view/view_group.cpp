@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013 CERN
+ * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -31,7 +32,7 @@
  */
 
 #include <set>
-#include <algorithm>
+#include <core/kicad_algo.h>
 #include <view/view_group.h>
 #include <view/view.h>
 #include <painter.h>
@@ -61,14 +62,7 @@ void VIEW_GROUP::Add( VIEW_ITEM* aItem )
 
 void VIEW_GROUP::Remove( VIEW_ITEM* aItem )
 {
-    for( auto iter = m_groupItems.begin(); iter != m_groupItems.end(); ++iter )
-    {
-        if( aItem == *iter )
-        {
-            m_groupItems.erase( iter );
-            break;
-        }
-    }
+    alg::delete_matching( m_groupItems, aItem );
 }
 
 
@@ -102,7 +96,7 @@ const BOX2I VIEW_GROUP::ViewBBox() const
     {
         bb = m_groupItems[0]->ViewBBox();
 
-        for( auto item : m_groupItems )
+        for( VIEW_ITEM* item : m_groupItems )
             bb.Merge( item->ViewBBox() );
     }
 
@@ -204,7 +198,7 @@ void VIEW_GROUP::FreeItems()
 }
 
 
-const VIEW_GROUP::ITEMS VIEW_GROUP::updateDrawList() const
+const std::vector<VIEW_ITEM*> VIEW_GROUP::updateDrawList() const
 {
     return m_groupItems;
 }
