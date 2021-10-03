@@ -16,6 +16,7 @@ class UNIT_SELECTOR_LEN;
 class UNIT_SELECTOR_RESISTOR;
 class UNIT_SELECTOR_THICKNESS;
 
+#include "panel_regulator.h"
 #include "widgets/unit_selector.h"
 #include "kiway_player.h"
 #include <wx/string.h>
@@ -24,22 +25,22 @@ class UNIT_SELECTOR_THICKNESS;
 #include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
-#include <wx/stattext.h>
-#include <wx/choice.h>
-#include <wx/sizer.h>
+#include <wx/panel.h>
 #include <wx/bitmap.h>
 #include <wx/image.h>
 #include <wx/icon.h>
-#include <wx/statbmp.h>
-#include <wx/statbox.h>
-#include <wx/radiobut.h>
-#include <wx/textctrl.h>
-#include <wx/button.h>
-#include <wx/panel.h>
 #include <wx/radiobox.h>
+#include <wx/statbmp.h>
+#include <wx/sizer.h>
+#include <wx/stattext.h>
+#include <wx/textctrl.h>
+#include <wx/statbox.h>
+#include <wx/button.h>
 #include <wx/bmpbuttn.h>
 #include <wx/html/htmlwin.h>
 #include <wx/statline.h>
+#include <wx/radiobut.h>
+#include <wx/choice.h>
 #include <wx/grid.h>
 #include <wx/notebook.h>
 #include <wx/frame.h>
@@ -57,40 +58,7 @@ class PCB_CALCULATOR_FRAME_BASE : public KIWAY_PLAYER
 	protected:
 		wxMenuBar* m_menubar;
 		wxNotebook* m_Notebook;
-		wxPanel* m_panelRegulators;
-		wxStaticText* m_staticTextRegType;
-		wxChoice* m_choiceRegType;
-		wxStaticBitmap* m_bitmapRegul4pins;
-		wxStaticBitmap* m_bitmapRegul3pins;
-		wxStaticText* m_RegulFormula;
-		wxRadioButton* m_rbRegulR1;
-		wxStaticText* m_labelRegultR1;
-		wxTextCtrl* m_RegulR1Value;
-		wxStaticText* m_r1Units;
-		wxRadioButton* m_rbRegulR2;
-		wxStaticText* m_labelRegultR2;
-		wxTextCtrl* m_RegulR2Value;
-		wxStaticText* m_r2Units;
-		wxRadioButton* m_rbRegulVout;
-		wxStaticText* m_labelVout;
-		wxTextCtrl* m_RegulVoutValue;
-		wxStaticText* m_unitsVout;
-		wxStaticText* m_labelVRef;
-		wxTextCtrl* m_RegulVrefValue;
-		wxStaticText* m_unitsVref;
-		wxStaticText* m_RegulIadjTitle;
-		wxTextCtrl* m_RegulIadjValue;
-		wxStaticText* m_IadjUnitLabel;
-		wxButton* m_buttonCalculate;
-		wxButton* m_buttonRegulReset;
-		wxStaticText* m_RegulMessage;
-		wxChoice* m_choiceRegulatorSelector;
-		wxStaticText* m_staticTextRegFile;
-		wxTextCtrl* m_regulators_fileNameCtrl;
-		wxButton* m_buttonDataFile;
-		wxButton* m_buttonEditItem;
-		wxButton* m_buttonAddItem;
-		wxButton* m_buttonRemoveItem;
+		PANEL_REGULATOR* m_panelRegulators;
 		wxPanel* m_panelAttenuators;
 		wxRadioBox* m_AttenuatorsSelection;
 		wxStaticBitmap* m_attenuatorBitmap;
@@ -383,14 +351,6 @@ class PCB_CALCULATOR_FRAME_BASE : public KIWAY_PLAYER
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnClosePcbCalc( wxCloseEvent& event ) { event.Skip(); }
 		virtual void OnUpdateUI( wxUpdateUIEvent& event ) { event.Skip(); }
-		virtual void OnRegulTypeSelection( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnRegulatorCalcButtonClick( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnRegulatorResetButtonClick( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnRegulatorSelection( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnDataFileSelection( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnEditRegulator( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnAddRegulator( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnRemoveRegulator( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnAttenuatorSelection( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnCalculateAttenuator( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnESeriesSelection( wxCommandEvent& event ) { event.Skip(); }

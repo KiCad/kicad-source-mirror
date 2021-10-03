@@ -27,7 +27,7 @@
 
 #include "dialog_regulator_form_base.h"
 
-class PCB_CALCULATOR_FRAME;
+class PANEL_REGULATOR;
 class REGULATOR_DATA;
 
 
@@ -39,7 +39,7 @@ class REGULATOR_DATA;
 class DIALOG_REGULATOR_FORM : public DIALOG_REGULATOR_FORM_BASE
 {
 public:
-    DIALOG_REGULATOR_FORM( PCB_CALCULATOR_FRAME* parent, const wxString& aRegName )
+    DIALOG_REGULATOR_FORM( PANEL_REGULATOR* parent, const wxString& aRegName )
             : DIALOG_REGULATOR_FORM_BASE( parent )
     {
         m_textCtrlName->SetValue( aRegName );

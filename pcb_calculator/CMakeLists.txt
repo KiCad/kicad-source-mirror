@@ -18,7 +18,7 @@ set( PCB_CALCULATOR_SRCS
     pcb_calculator_frame.cpp
     pcb_calculator_settings.cpp
     datafile_read_write.cpp
-    regulators_funct.cpp
+    panel_regulator.cpp
     tracks_width_versus_current.cpp
     via.cpp
     transline_ident.cpp
@@ -36,6 +36,7 @@ set( PCB_CALCULATOR_SRCS
     dialogs/pcb_calculator_frame_base.cpp
     dialogs/dialog_regulator_form_base.cpp
     dialogs/dialog_regulator_form.cpp
+    dialogs/panel_regulator_base.cpp
     ../common/env_vars.cpp      # needed on MSW to avoid a link issue (a symbol not found)
     )
 

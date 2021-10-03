@@ -25,7 +25,6 @@
 #include "pcb_calculator_frame_base.h"
 
 #include "attenuators/attenuator_classes.h"
-#include "class_regulator_data.h"
 
 extern const wxString PcbCalcDataFileExt;
 
@@ -99,23 +98,6 @@ private:
     // Config read-write, virtual from EDA_BASE_FRAME
     void LoadSettings( APP_SETTINGS_BASE* aCfg ) override;
     void SaveSettings( APP_SETTINGS_BASE* aCfg ) override;
-
-    // R/W data files:
-    bool ReadDataFile();
-    bool WriteDataFile();
-
-    /**
-     * @return the full filename of the selected pcb_calculator data file
-     */
-    const wxString GetDataFilename();
-
-    /**
-     * Initialize the full filename of the selected pcb_calculator data file
-     * force the standard extension of the file (.pcbcalc).
-     *
-     * @param aFilename is the full filename, with or without extension.
-     */
-    void SetDataFilename( const wxString& aFilename );
 
     /**
      * Panel-specific initializers
@@ -298,6 +280,7 @@ private:
     void TransfAttenuatorResultsToPanel();
 
     // Regulators Panel
+#if 0
     void OnRegulatorCalcButtonClick( wxCommandEvent& event ) override;
     void OnRegulatorResetButtonClick( wxCommandEvent& event ) override;
     void OnRegulTypeSelection( wxCommandEvent& event ) override;
@@ -306,35 +289,10 @@ private:
     void OnAddRegulator( wxCommandEvent& event ) override;
     void OnEditRegulator( wxCommandEvent& event ) override;
     void OnRemoveRegulator( wxCommandEvent& event ) override;
+#endif
 
-    /**
-     * Update the regulator page dialog display.
-     *
-     * Enable the current regulator drawings and the formula used for calculations.
-     */
-    void RegulatorPageUpdate();
-
-    /**
-     * If m_lastSelectedRegulatorName is empty, just calls RegulatorPageUpdate()
-     */
-    void SelectLastSelectedRegulator();
-
-    void RegulatorsSolve();
-
-    /**
-     * Write regulators parameters in configuration.
-     *
-     * @param aCfg is the configuration settings.
-     */
-    void Regulators_WriteConfig( PCB_CALCULATOR_SETTINGS* aCfg );
-
-public:
-    REGULATOR_LIST m_RegulatorList;      // the list of known regulator
 
 private:
-    bool m_RegulatorListChanged; // Set when m_RegulatorList is modified and the corresponding file
-                                 // must be rewritten
-
     enum                         // Which dimension is controlling the track width / current
     {                            // calculations:
         TW_MASTER_CURRENT,       //   the maximum current,
@@ -350,8 +308,6 @@ private:
 
     ATTENUATOR*                   m_currAttenuator;
     std::vector<ATTENUATOR*>      m_attenuator_list;
-
-    wxString                      m_lastSelectedRegulatorName;
 
     wxBitmap*                     m_ccValueNamesBitmap;
     wxBitmap*                     m_ccValuesBitmap;

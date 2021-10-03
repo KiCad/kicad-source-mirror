@@ -35,6 +35,7 @@
 #include <pcb_calculator_datafile_lexer.h>
 #include <pcb_calculator_frame.h>
 #include <pgm_base.h>
+#include <panel_regulator.h>
 
 
 using namespace PCBCALC_DATA_T;
@@ -46,7 +47,7 @@ static const char* getTokenName( T aTok )
 }
 
 
-bool PCB_CALCULATOR_FRAME::ReadDataFile()
+bool PANEL_REGULATOR::ReadDataFile()
 {
     FILE* file = wxFopen( GetDataFilename(), wxT( "rt" ) );
 
@@ -79,13 +80,17 @@ bool PCB_CALCULATOR_FRAME::ReadDataFile()
         return false;
     }
 
+    m_choiceRegulatorSelector->Clear();
+    m_choiceRegulatorSelector->Append( m_RegulatorList.GetRegList() );
+    SelectLastSelectedRegulator();
+
     delete datafile;
 
     return true;
 }
 
 
-bool PCB_CALCULATOR_FRAME::WriteDataFile()
+bool PANEL_REGULATOR::WriteDataFile()
 {
     // Switch the locale to standard C (needed to read/write floating point numbers)
     LOCALE_IO   toggle;
@@ -94,7 +99,7 @@ bool PCB_CALCULATOR_FRAME::WriteDataFile()
 
     try
     {
-        FILE_OUTPUTFORMATTER    formatter( GetDataFilename() );
+        FILE_OUTPUTFORMATTER formatter( GetDataFilename() );
 
         int nestlevel = datafile->WriteHeader( &formatter );
 

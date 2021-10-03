@@ -22,7 +22,6 @@
 #include <geometry/shape_poly_set.h>
 #include <kiface_base.h>
 #include "attenuators/attenuator_classes.h"
-#include "class_regulator_data.h"
 #include "pcb_calculator_frame.h"
 #include "pcb_calculator_settings.h"
 
@@ -44,7 +43,6 @@ PCB_CALCULATOR_FRAME::PCB_CALCULATOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_currTransLine     = nullptr;
     m_currTransLineType = DEFAULT_TYPE;
     m_currAttenuator    = nullptr;
-    m_RegulatorListChanged = false;
     m_TWMode = TW_MASTER_CURRENT;
     m_TWNested = false;
 
@@ -76,16 +74,11 @@ PCB_CALCULATOR_FRAME::PCB_CALCULATOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     m_staticTextAttMsg->SetFont( KIUI::GetInfoFont( this ).Italic() );
 
-    m_IadjUnitLabel->SetLabel( wxT( "µA" ) );
-
     m_attZinUnit->SetLabel( wxT( "Ω" ) );
     m_attZoutUnit->SetLabel( wxT( "Ω" ) );
     m_attR1Unit->SetLabel( wxT( "Ω" ) );
     m_attR2Unit->SetLabel( wxT( "Ω" ) );
     m_attR3Unit->SetLabel( wxT( "Ω" ) );
-
-    m_r1Units->SetLabel( wxT( "kΩ" ) );
-    m_r2Units->SetLabel( wxT( "kΩ" ) );
 
     m_reqResUnits->SetLabel( wxT( "kΩ" ) );
     m_exclude1Units->SetLabel( wxT( "kΩ" ) );
@@ -108,7 +101,7 @@ PCB_CALCULATOR_FRAME::PCB_CALCULATOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     LoadSettings( config() );
 
-    ReadDataFile();
+    m_panelRegulators->ReadDataFile();
 
     TranslineTypeSelection( m_currTransLineType );
     m_TranslineSelection->SetSelection( m_currTransLineType );
@@ -125,9 +118,6 @@ PCB_CALCULATOR_FRAME::PCB_CALCULATOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     BoardClassesUpdateData( m_BoardClassesUnitsSelector->GetUnitScale() );
 
     ElectricalSpacingUpdateData( m_ElectricalSpacingUnitsSelector->GetUnitScale() );
-
-    m_choiceRegulatorSelector->Append( m_RegulatorList.GetRegList() );
-    SelectLastSelectedRegulator();
 
     // Give an icon
     wxIcon icon;
@@ -204,8 +194,6 @@ void PCB_CALCULATOR_FRAME::OnUpdateUI( wxUpdateUIEvent& event )
        	m_panelViaSize->Layout();
 
         m_attenuatorBitmap->SetBitmap( *m_currAttenuator->m_SchBitMap );
-       	m_bitmapRegul3pins->SetBitmap( KiBitmap( BITMAPS::regul_3pins ) );
-       	m_bitmapRegul4pins->SetBitmap( KiBitmap( BITMAPS::regul ) );
        	m_panelRegulators->Layout();
 
        	m_attenuatorBitmap->GetParent()->Layout();
@@ -245,12 +233,12 @@ void PCB_CALCULATOR_FRAME::OnUpdateUI( wxUpdateUIEvent& event )
 
 void PCB_CALCULATOR_FRAME::OnClosePcbCalc( wxCloseEvent& event )
 {
-    if( m_RegulatorListChanged )
+    if( m_panelRegulators->m_RegulatorListChanged )
     {
         wxString msg;
         wxString title = _( "Write Data Failed" );
 
-        if( GetDataFilename().IsEmpty() )
+        if( m_panelRegulators->GetDataFilename().IsEmpty() )
         {
             msg = _( "No data filename to save modifications.\n"
                      "Do you want to exit and abandon your changes?" );
@@ -260,11 +248,11 @@ void PCB_CALCULATOR_FRAME::OnClosePcbCalc( wxCloseEvent& event )
         }
         else
         {
-            if( !WriteDataFile() )
+            if( !m_panelRegulators->WriteDataFile() )
             {
                 msg.Printf( _( "Unable to write file '%s'\n"
                                "Do you want to exit and abandon your changes?"),
-                            GetDataFilename() );
+                            m_panelRegulators->GetDataFilename() );
 
                 if( wxMessageBox( msg, title, wxYES_NO | wxICON_ERROR ) == wxNO )
                     return;
@@ -292,21 +280,7 @@ void PCB_CALCULATOR_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
     m_BoardClassesUnitsSelector->SetSelection( cfg->m_BoardClassUnits );
 
     // Regul panel config:
-    m_RegulR1Value->SetValue( cfg->m_Regulators.r1 );
-    m_RegulR2Value->SetValue( cfg->m_Regulators.r2 );
-    m_RegulVrefValue->SetValue( cfg->m_Regulators.vref );
-    m_RegulVoutValue->SetValue( cfg->m_Regulators.vout );
-    SetDataFilename( cfg->m_Regulators.data_file );
-    m_lastSelectedRegulatorName = cfg->m_Regulators.selected_regulator;
-    m_choiceRegType->SetSelection( cfg->m_Regulators.type );
-
-    wxRadioButton* regprms[3] = { m_rbRegulR1, m_rbRegulR2, m_rbRegulVout };
-
-    if( cfg->m_Regulators.last_param >= 3 )
-        cfg->m_Regulators.last_param = 0;
-
-    for( int ii = 0; ii < 3; ii++ )
-        regprms[ii]->SetValue( cfg->m_Regulators.last_param == ii );
+    m_panelRegulators->LoadSettings( cfg );
 
     // Electrical panel config
     m_ElectricalSpacingUnitsSelector->SetSelection( cfg->m_Electrical.spacing_units );
@@ -341,7 +315,7 @@ void PCB_CALCULATOR_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
         cfg->m_Electrical.spacing_units = m_ElectricalSpacingUnitsSelector->GetSelection();
         cfg->m_Electrical.spacing_voltage = m_ElectricalSpacingVoltage->GetValue();
 
-        Regulators_WriteConfig( cfg );
+        m_panelRegulators->Regulators_WriteConfig( cfg );
     }
 
     writeTrackWidthConfig();
@@ -372,31 +346,5 @@ void PCB_CALCULATOR_FRAME::OnTranslineSynthetize( wxCommandEvent& event )
     {
         TransfDlgDataToTranslineParams();
         m_currTransLine->synthesize();
-    }
-}
-
-
-const wxString PCB_CALCULATOR_FRAME::GetDataFilename()
-{
-    if( m_regulators_fileNameCtrl->GetValue().IsEmpty() )
-        return wxEmptyString;
-
-    wxFileName fn( m_regulators_fileNameCtrl->GetValue() );
-    fn.SetExt( DataFileNameExt );
-    return fn.GetFullPath();
-}
-
-
-void PCB_CALCULATOR_FRAME::SetDataFilename( const wxString& aFilename )
-{
-    if( aFilename.IsEmpty() )
-    {
-        m_regulators_fileNameCtrl->SetValue( wxEmptyString );
-    }
-    else
-    {
-        wxFileName fn( aFilename );
-        fn.SetExt( DataFileNameExt );
-        m_regulators_fileNameCtrl->SetValue( fn.GetFullPath() );
     }
 }
