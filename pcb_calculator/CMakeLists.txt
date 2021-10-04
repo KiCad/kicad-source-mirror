@@ -20,7 +20,7 @@ set( PCB_CALCULATOR_SRCS
     panel_regulator.cpp
     panel_color_code.cpp
     tracks_width_versus_current.cpp
-    via.cpp
+    panel_via_size.cpp
     transline_ident.cpp
     widgets/unit_selector.cpp
     transline/transline.cpp
@@ -39,6 +39,7 @@ set( PCB_CALCULATOR_SRCS
     dialogs/panel_attenuators_base.cpp
     dialogs/panel_regulator_base.cpp
     dialogs/panel_color_code_base.cpp
+    dialogs/panel_via_size_base.cpp
     ../common/env_vars.cpp      # needed on MSW to avoid a link issue (a symbol not found)
     )
 

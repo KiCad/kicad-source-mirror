@@ -45,47 +45,66 @@
 #include <cmath>
 #include <wx/choicdlg.h>
 
-#include <kiface_base.h>
+//#include <kiface_base.h>
+#include <bitmaps.h>
 
 #include "attenuators/attenuator_classes.h"
 #include "common_data.h"
-#include "class_regulator_data.h"
-#include "pcb_calculator_frame.h"
+//#include "pcb_calculator_frame.h"
 #include "pcb_calculator_settings.h"
 #include "units_scales.h"
+#include "panel_via_size.h"
 
 extern double DoubleFromString( const wxString& TextValue );
 
-/**
- * Shows a list of current relative dielectric constant(Er)
- * and set the selected value in main dialog frame
- */
-void PCB_CALCULATOR_FRAME::OnViaEpsilonR_Button( wxCommandEvent& event )
+
+PANEL_VIA_SIZE::PANEL_VIA_SIZE( wxWindow* parent, wxWindowID id,
+                                const wxPoint& pos, const wxSize& size,
+                                long style, const wxString& name ) :
+        PANEL_VIA_SIZE_BASE( parent, id, pos, size, style, name )
 {
+    m_viaResistivityUnits->SetLabel( wxT( "Ω•m" ) );
+    m_viaTempUnits->SetLabel( wxT( "°C" ) );
+    m_viaResUnits->SetLabel( wxT( "Ω" ) );
+    m_viaThermalResUnits->SetLabel( wxT( "°C/W" ) );
+    m_viaReactanceUnits->SetLabel( wxT( "Ω" ) );
+
+    m_viaBitmap->SetBitmap( KiBitmap( BITMAPS::viacalc ) );
+}
+
+
+PANEL_VIA_SIZE::~PANEL_VIA_SIZE()
+{
+}
+
+
+void PANEL_VIA_SIZE::OnViaEpsilonR_Button( wxCommandEvent& event )
+{
+    //Shows a list of current relative dielectric constant(Er) and select a value.
     wxArrayString list = StandardRelativeDielectricConstantList();
 
-    wxString value = wxGetSingleChoice( wxEmptyString,
-            _("Relative Dielectric Constants"), list).BeforeFirst( ' ' );
+    wxString value = wxGetSingleChoice( wxEmptyString, _("Relative Dielectric Constants"),
+                                        list).BeforeFirst( ' ' );
+
     if( ! value.IsEmpty() )
         m_textCtrlPlatingPermittivity->SetValue( value );
 }
 
-/**
- * Shows a list of current Specific resistance list (rho)
- * and set the selected value in main dialog frame
- */
-void PCB_CALCULATOR_FRAME::OnViaRho_Button( wxCommandEvent& event )
+
+void PANEL_VIA_SIZE::OnViaRho_Button( wxCommandEvent& event )
 {
     wxArrayString list = StandardResistivityList();
 
+    // Shows a list of current Specific resistance list (rho) and select a value
     wxString value = wxGetSingleChoice( wxEmptyString,
             _("Electrical Resistivity in Ohm*m"), list).BeforeFirst( ' ' );
+
     if( ! value.IsEmpty() )
         m_textCtrlPlatingResistivity->SetValue( value );
 }
 
 
-void PCB_CALCULATOR_FRAME::onUpdateViaCalcErrorText( wxUpdateUIEvent& event )
+void PANEL_VIA_SIZE::onUpdateViaCalcErrorText( wxUpdateUIEvent& event )
 {
     // Update the Error message if a via has a external diameter
     // bigger than the clearance area diameter
@@ -99,7 +118,7 @@ void PCB_CALCULATOR_FRAME::onUpdateViaCalcErrorText( wxUpdateUIEvent& event )
 }
 
 
-void PCB_CALCULATOR_FRAME::OnViaResetButtonClick( wxCommandEvent& event )
+void PANEL_VIA_SIZE::OnViaResetButtonClick( wxCommandEvent& event )
 {
     #define DEFAULT_UNIT_SEL_MM 0
     #define DEFAULT_UNIT_SEL_OHM 0
@@ -124,61 +143,57 @@ void PCB_CALCULATOR_FRAME::OnViaResetButtonClick( wxCommandEvent& event )
 }
 
 
-void PCB_CALCULATOR_FRAME::initViaSizePanel()
+void PANEL_VIA_SIZE::LoadSettings( PCB_CALCULATOR_SETTINGS* aCfg )
 {
-    auto cfg = static_cast<PCB_CALCULATOR_SETTINGS*>( Kiface().KifaceSettings() );
+    m_textCtrlHoleDia->SetValue( aCfg->m_ViaSize.hole_diameter );
+    m_choiceHoleDia->SetSelection( aCfg->m_ViaSize.hole_diameter_units );
 
-    m_textCtrlHoleDia->SetValue( cfg->m_ViaSize.hole_diameter );
-    m_choiceHoleDia->SetSelection( cfg->m_ViaSize.hole_diameter_units );
+    m_textCtrlPlatingThickness->SetValue( aCfg->m_ViaSize.thickness );
+    m_choicePlatingThickness->SetSelection( aCfg->m_ViaSize.thickness_units );
 
-    m_textCtrlPlatingThickness->SetValue( cfg->m_ViaSize.thickness );
-    m_choicePlatingThickness->SetSelection( cfg->m_ViaSize.thickness_units );
+    m_textCtrlViaLength->SetValue( aCfg->m_ViaSize.length );
+    m_choiceViaLength->SetSelection( aCfg->m_ViaSize.length_units );
 
-    m_textCtrlViaLength->SetValue( cfg->m_ViaSize.length );
-    m_choiceViaLength->SetSelection( cfg->m_ViaSize.length_units );
+    m_textCtrlViaPadDia->SetValue( aCfg->m_ViaSize.pad_diameter );
+    m_choiceViaPadDia->SetSelection( aCfg->m_ViaSize.pad_diameter_units );
 
-    m_textCtrlViaPadDia->SetValue( cfg->m_ViaSize.pad_diameter );
-    m_choiceViaPadDia->SetSelection( cfg->m_ViaSize.pad_diameter_units );
+    m_textCtrlClearanceDia->SetValue( aCfg->m_ViaSize.clearance_diameter );
+    m_choiceClearanceDia->SetSelection( aCfg->m_ViaSize.clearance_diameter_units );
 
-    m_textCtrlClearanceDia->SetValue( cfg->m_ViaSize.clearance_diameter );
-    m_choiceClearanceDia->SetSelection( cfg->m_ViaSize.clearance_diameter_units );
+    m_textCtrlImpedance->SetValue( aCfg->m_ViaSize.characteristic_impedance );
+    m_choiceImpedance->SetSelection( aCfg->m_ViaSize.characteristic_impedance_units );
 
-    m_textCtrlImpedance->SetValue( cfg->m_ViaSize.characteristic_impedance );
-    m_choiceImpedance->SetSelection( cfg->m_ViaSize.characteristic_impedance_units );
-
-    m_textCtrlAppliedCurrent->SetValue( cfg->m_ViaSize.applied_current );
-    m_textCtrlPlatingResistivity->SetValue( cfg->m_ViaSize.plating_resistivity );
-    m_textCtrlPlatingPermittivity->SetValue( cfg->m_ViaSize.permittivity );
-    m_textCtrlTemperatureDiff->SetValue( cfg->m_ViaSize.temp_rise );
-    m_textCtrlRiseTime->SetValue( cfg->m_ViaSize.pulse_rise_time );
+    m_textCtrlAppliedCurrent->SetValue( aCfg->m_ViaSize.applied_current );
+    m_textCtrlPlatingResistivity->SetValue( aCfg->m_ViaSize.plating_resistivity );
+    m_textCtrlPlatingPermittivity->SetValue( aCfg->m_ViaSize.permittivity );
+    m_textCtrlTemperatureDiff->SetValue( aCfg->m_ViaSize.temp_rise );
+    m_textCtrlRiseTime->SetValue( aCfg->m_ViaSize.pulse_rise_time );
 }
 
 
-void PCB_CALCULATOR_FRAME::writeViaSizeConfig()
+void PANEL_VIA_SIZE::SaveSettings( PCB_CALCULATOR_SETTINGS* aCfg )
 {
-    auto cfg = static_cast<PCB_CALCULATOR_SETTINGS*>( Kiface().KifaceSettings() );
-
-    cfg->m_ViaSize.hole_diameter                  = m_textCtrlHoleDia->GetValue();
-    cfg->m_ViaSize.hole_diameter_units            = m_choiceHoleDia->GetSelection();
-    cfg->m_ViaSize.thickness                      = m_textCtrlPlatingThickness->GetValue();
-    cfg->m_ViaSize.thickness_units                = m_choicePlatingThickness->GetSelection();
-    cfg->m_ViaSize.length                         = m_textCtrlViaLength->GetValue();
-    cfg->m_ViaSize.length_units                   = m_choiceViaLength->GetSelection();
-    cfg->m_ViaSize.pad_diameter                   = m_textCtrlViaPadDia->GetValue();
-    cfg->m_ViaSize.pad_diameter_units             = m_choiceViaPadDia->GetSelection();
-    cfg->m_ViaSize.clearance_diameter             = m_textCtrlClearanceDia->GetValue();
-    cfg->m_ViaSize.clearance_diameter_units       = m_choiceClearanceDia->GetSelection();
-    cfg->m_ViaSize.characteristic_impedance       = m_textCtrlImpedance->GetValue();
-    cfg->m_ViaSize.characteristic_impedance_units = m_choiceImpedance->GetSelection();
-    cfg->m_ViaSize.applied_current                = m_textCtrlAppliedCurrent->GetValue();
-    cfg->m_ViaSize.plating_resistivity            = m_textCtrlPlatingResistivity->GetValue();
-    cfg->m_ViaSize.permittivity                   = m_textCtrlPlatingPermittivity->GetValue();
-    cfg->m_ViaSize.temp_rise                      = m_textCtrlTemperatureDiff->GetValue();
-    cfg->m_ViaSize.pulse_rise_time                = m_textCtrlRiseTime->GetValue();
+    aCfg->m_ViaSize.hole_diameter                  = m_textCtrlHoleDia->GetValue();
+    aCfg->m_ViaSize.hole_diameter_units            = m_choiceHoleDia->GetSelection();
+    aCfg->m_ViaSize.thickness                      = m_textCtrlPlatingThickness->GetValue();
+    aCfg->m_ViaSize.thickness_units                = m_choicePlatingThickness->GetSelection();
+    aCfg->m_ViaSize.length                         = m_textCtrlViaLength->GetValue();
+    aCfg->m_ViaSize.length_units                   = m_choiceViaLength->GetSelection();
+    aCfg->m_ViaSize.pad_diameter                   = m_textCtrlViaPadDia->GetValue();
+    aCfg->m_ViaSize.pad_diameter_units             = m_choiceViaPadDia->GetSelection();
+    aCfg->m_ViaSize.clearance_diameter             = m_textCtrlClearanceDia->GetValue();
+    aCfg->m_ViaSize.clearance_diameter_units       = m_choiceClearanceDia->GetSelection();
+    aCfg->m_ViaSize.characteristic_impedance       = m_textCtrlImpedance->GetValue();
+    aCfg->m_ViaSize.characteristic_impedance_units = m_choiceImpedance->GetSelection();
+    aCfg->m_ViaSize.applied_current                = m_textCtrlAppliedCurrent->GetValue();
+    aCfg->m_ViaSize.plating_resistivity            = m_textCtrlPlatingResistivity->GetValue();
+    aCfg->m_ViaSize.permittivity                   = m_textCtrlPlatingPermittivity->GetValue();
+    aCfg->m_ViaSize.temp_rise                      = m_textCtrlTemperatureDiff->GetValue();
+    aCfg->m_ViaSize.pulse_rise_time                = m_textCtrlRiseTime->GetValue();
 }
 
 
-void PCB_CALCULATOR_FRAME::OnViaCalculate( wxCommandEvent& event )
+void PANEL_VIA_SIZE::OnViaCalculate( wxCommandEvent& event )
 {
     // Load parameters
     double finishedHoleDia     = std::abs( DoubleFromString( m_textCtrlHoleDia->GetValue() ) );
@@ -244,7 +259,7 @@ void PCB_CALCULATOR_FRAME::OnViaCalculate( wxCommandEvent& event )
         thermalResistance, capacitance, timeDegradation, inductance, reactance );
 }
 
-void PCB_CALCULATOR_FRAME::VSDisplayValues( double aViaResistance, double aVoltageDrop,
+void PANEL_VIA_SIZE::VSDisplayValues( double aViaResistance, double aVoltageDrop,
         double aPowerLoss, double aEstimatedAmpacity, double aThermalResistance,
         double aCapacitance, double aTimeDegradation, double aInductance, double aReactance )
 {

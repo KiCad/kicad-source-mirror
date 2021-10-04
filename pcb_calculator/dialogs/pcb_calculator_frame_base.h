@@ -19,7 +19,7 @@ class UNIT_SELECTOR_THICKNESS;
 #include "panel_regulator.h"
 #include "panel_attenuators.h"
 #include "panel_color_code.h"
-#include "widgets/unit_selector.h"
+#include "panel_via_size.h"
 #include "kiway_player.h"
 #include <wx/string.h>
 #include <wx/menu.h>
@@ -174,71 +174,7 @@ class PCB_CALCULATOR_FRAME_BASE : public KIWAY_PLAYER
 		wxStaticText* m_left_message8;
 		wxStaticText* m_Message8;
 		wxButton* m_buttonTransLineReset;
-		wxPanel* m_panelViaSize;
-		wxStaticText* m_staticTextHoleDia;
-		wxTextCtrl* m_textCtrlHoleDia;
-		UNIT_SELECTOR_LEN* m_choiceHoleDia;
-		wxStaticText* m_staticTextPlatingThickness;
-		wxTextCtrl* m_textCtrlPlatingThickness;
-		UNIT_SELECTOR_LEN* m_choicePlatingThickness;
-		wxStaticText* m_staticTextViaLength;
-		wxTextCtrl* m_textCtrlViaLength;
-		UNIT_SELECTOR_LEN* m_choiceViaLength;
-		wxStaticText* m_staticTextViaPadDia;
-		wxTextCtrl* m_textCtrlViaPadDia;
-		UNIT_SELECTOR_LEN* m_choiceViaPadDia;
-		wxStaticText* m_staticTextClearanceDia;
-		wxTextCtrl* m_textCtrlClearanceDia;
-		UNIT_SELECTOR_LEN* m_choiceClearanceDia;
-		wxStaticText* m_staticTextImpedance;
-		wxTextCtrl* m_textCtrlImpedance;
-		UNIT_SELECTOR_RESISTOR* m_choiceImpedance;
-		wxStaticText* m_staticAppliedCurrent;
-		wxTextCtrl* m_textCtrlAppliedCurrent;
-		wxStaticText* m_staticTextAppliedCurrentUnits;
-		wxStaticText* m_staticTextResistivity;
-		wxTextCtrl* m_textCtrlPlatingResistivity;
-		wxButton* m_button_ResistivityVia;
-		wxStaticText* m_viaResistivityUnits;
-		wxStaticText* m_staticTextPermittivity;
-		wxTextCtrl* m_textCtrlPlatingPermittivity;
-		wxButton* m_button_Permittivity;
-		wxStaticText* m_staticTextTemperatureDiff;
-		wxTextCtrl* m_textCtrlTemperatureDiff;
-		wxStaticText* m_viaTempUnits;
-		wxStaticText* m_staticTextRiseTime;
-		wxTextCtrl* m_textCtrlRiseTime;
-		wxStaticText* m_staticTextRiseTimeUnits;
-		wxStaticText* m_staticTextWarning;
-		wxStaticText* m_staticTextArea11;
-		wxStaticText* m_ViaResistance;
-		wxStaticText* m_viaResUnits;
-		wxStaticText* m_staticText65111;
-		wxStaticText* m_ViaVoltageDrop;
-		wxStaticText* m_staticText8411;
-		wxStaticText* m_staticText66111;
-		wxStaticText* m_ViaPowerLoss;
-		wxStaticText* m_staticText8311;
-		wxStaticText* m_staticText79211;
-		wxStaticText* m_ViaThermalResistance;
-		wxStaticText* m_viaThermalResUnits;
-		wxStaticText* m_staticTextAmpacity;
-		wxStaticText* m_ViaAmpacity;
-		wxStaticText* m_staticTextAmpacityUnits;
-		wxStaticText* m_staticTextCapacitance;
-		wxStaticText* m_ViaCapacitance;
-		wxStaticText* m_staticTextCapacitanceUnits;
-		wxStaticText* m_staticTextRiseTimeOutput;
-		wxStaticText* m_RiseTimeOutput;
-		wxStaticText* m_staticTextRiseTimeOutputUnits;
-		wxStaticText* m_staticTextInductance;
-		wxStaticText* m_Inductance;
-		wxStaticText* m_staticTextInductanceUnits;
-		wxStaticText* m_staticTextReactance;
-		wxStaticText* m_Reactance;
-		wxStaticText* m_viaReactanceUnits;
-		wxStaticBitmap* m_viaBitmap;
-		wxButton* m_buttonViaReset;
+		PANEL_VIA_SIZE* m_panelViaSize;
 		wxPanel* m_panelTrackWidth;
 		wxStaticText* m_staticTextCurrent;
 		wxTextCtrl* m_TrackCurrentValue;
@@ -324,11 +260,6 @@ class PCB_CALCULATOR_FRAME_BASE : public KIWAY_PLAYER
 		virtual void OnTranslineAnalyse( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnTranslineSynthetize( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnTransLineResetButtonClick( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnViaCalculate( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnViaRho_Button( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnViaEpsilonR_Button( wxCommandEvent& event ) { event.Skip(); }
-		virtual void onUpdateViaCalcErrorText( wxUpdateUIEvent& event ) { event.Skip(); }
-		virtual void OnViaResetButtonClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnTWCalculateFromCurrent( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnTWParametersChanged( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnTWCalculateFromExtWidth( wxCommandEvent& event ) { event.Skip(); }

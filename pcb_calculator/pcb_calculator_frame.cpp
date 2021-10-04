@@ -72,13 +72,6 @@ PCB_CALCULATOR_FRAME::PCB_CALCULATOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_trackTempUnits->SetLabel( wxT( "°C" ) );
     m_resistivityUnits->SetLabel( wxT( "Ω•m" ) );
 
-    m_viaResistivityUnits->SetLabel( wxT( "Ω•m" ) );
-
-    m_viaTempUnits->SetLabel( wxT( "°C" ) );
-    m_viaResUnits->SetLabel( wxT( "Ω" ) );
-    m_viaThermalResUnits->SetLabel( wxT( "°C/W" ) );
-    m_viaReactanceUnits->SetLabel( wxT( "Ω" ) );
-
     m_extTrackResUnits->SetLabel( wxT( "Ω" ) );
     m_intTrackResUnits->SetLabel( wxT( "Ω" ) );
 
@@ -90,7 +83,6 @@ PCB_CALCULATOR_FRAME::PCB_CALCULATOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_TranslineSelection->SetSelection( m_currTransLineType );
 
     initTrackWidthPanel();
-    initViaSizePanel();
     initESeriesPanel();
 
     BoardClassesUpdateData( m_BoardClassesUnitsSelector->GetUnitScale() );
@@ -160,7 +152,6 @@ void PCB_CALCULATOR_FRAME::OnUpdateUI( wxUpdateUIEvent& event )
 
         m_panelAttenuators->UpdateUI();
 
-       	m_viaBitmap->SetBitmap( KiBitmap( BITMAPS::viacalc ) );
        	m_panelViaSize->Layout();
 
        	m_panelRegulators->Layout();
@@ -258,6 +249,8 @@ void PCB_CALCULATOR_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
 
     for( TRANSLINE_IDENT* transline : m_transline_list )
         transline->ReadConfig();
+
+    m_panelViaSize->LoadSettings( cfg );
 }
 
 
@@ -283,11 +276,11 @@ void PCB_CALCULATOR_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
         m_panelRegulators->Regulators_WriteConfig( cfg );
         m_panelAttenuators->SaveSettings( cfg );
         m_panelColorCode->SaveSettings( cfg );
+        m_panelViaSize->SaveSettings( cfg );
     }
 
     writeTrackWidthConfig();
 
-    writeViaSizeConfig();
 
     for( unsigned ii = 0; ii < m_transline_list.size(); ii++ )
         m_transline_list[ii]->WriteConfig();

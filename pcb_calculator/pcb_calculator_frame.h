@@ -104,7 +104,6 @@ private:
      */
     void initTrackWidthPanel();
     void initESeriesPanel();
-    void initViaSizePanel();
 
     /**
      * Called on calculate button and executes all E-series calculations
@@ -173,37 +172,6 @@ private:
      */
     void TWUpdateModeDisplay();
 
-    /**
-     * Write via size parameters in configuration.
-     */
-    void writeViaSizeConfig();
-
-    /**
-     * Called when the user changes any value in the via calculator.
-     */
-    void OnViaCalculate( wxCommandEvent& event ) override;
-
-    void OnViaEpsilonR_Button( wxCommandEvent& event ) override;
-
-    void OnViaRho_Button( wxCommandEvent& event ) override;
-
-    /**
-     * Update the Error message in via calculation panel.
-     */
-    void onUpdateViaCalcErrorText( wxUpdateUIEvent& event ) override;
-
-    /**
-     * Called when the user clicks the reset button; sets the parameters to their default values.
-     */
-    void OnViaResetButtonClick( wxCommandEvent& event ) override;
-
-    /**
-     * Display the results of the calculation.
-     */
-    void VSDisplayValues( double aViaResistance, double aVoltageDrop, double aPowerLoss,
-                          double aEstimatedAmpacity, double aThermalResistance,
-                          double aCapacitance, double aTimeDegradation, double aInductance,
-                          double aReactance );
 
     // Electrical spacing panel:
     void OnElectricalSpacingUnitsSelection( wxCommandEvent& event ) override;
