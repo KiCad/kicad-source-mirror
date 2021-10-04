@@ -6,10 +6,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-10-03 16:55-0700\n"
-"PO-Revision-Date: 2021-09-29 17:58+0000\n"
+"PO-Revision-Date: 2021-10-04 15:52+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
-"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/master-"
-"source/pl/>\n"
+"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/"
+"master-source/pl/>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -16584,14 +16584,12 @@ msgid "Align Elements to Grid"
 msgstr "Wyrównaj elementy do siatki"
 
 #: eeschema/tools/ee_actions.cpp:761
-#, fuzzy
 msgid "Save Current Sheet Copy As..."
-msgstr "Zapisz kopię jako..."
+msgstr "Zapisz kopię bieżącego arkusza jako..."
 
 #: eeschema/tools/ee_actions.cpp:761
-#, fuzzy
 msgid "Save a copy of the current sheet to another location or name"
-msgstr "Zapisuje kopię bieżącego dokumentu w innej lokalizacji"
+msgstr "Zapisuje kopię bieżącego arkusza w innej lokalizacji lub pod inną nazwą"
 
 #: eeschema/tools/ee_inspection_tool.cpp:282
 #, c-format
@@ -27324,16 +27322,13 @@ msgstr "Podświetl sieć (dla pól lutowniczych i ścieżek)."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:243
 #: pcbnew/dialogs/panel_edit_options_base.cpp:363
-#, fuzzy
 msgid "Graphics Editing"
-msgstr "Edycja ścieżek"
+msgstr "Edycja grafiki"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:245
 #: pcbnew/dialogs/panel_edit_options_base.cpp:365
-#, fuzzy
 msgid "Limit actions to 45 degrees from start"
-msgstr ""
-"Ogranicz akcje by korzystały z kąta 45 stopni wobec punktu początkowego"
+msgstr "Ogranicz akcje by korzystały z kąta 45 stopni wobec punktu początkowego"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:262
 msgid "Magnetic Points"
@@ -30373,7 +30368,7 @@ msgstr ""
 #: pcbnew/footprint_libraries_utils.cpp:906
 #: pcbnew/footprint_viewer_frame.cpp:720
 msgid "Previous footprint placement still in progress."
-msgstr ""
+msgstr "Poprzedni proces układania footprintów nadal trwa."
 
 #: pcbnew/footprint_libraries_utils.cpp:995
 msgid "Save Footprint As"
