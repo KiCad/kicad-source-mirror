@@ -10,10 +10,10 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-10-03 16:55-0700\n"
-"PO-Revision-Date: 2021-09-15 17:51+0000\n"
-"Last-Translator: Konstantin Baranovskiy <baranovskiykonstantin@gmail.com>\n"
-"Language-Team: Russian <https://hosted.weblate.org/projects/kicad/master-"
-"source/ru/>\n"
+"PO-Revision-Date: 2021-10-04 15:52+0000\n"
+"Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
+"Language-Team: Russian <https://hosted.weblate.org/projects/kicad/"
+"master-source/ru/>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -3151,7 +3151,7 @@ msgstr ""
 
 #: common/dialogs/panel_common_settings_base.cpp:236
 msgid "days"
-msgstr ""
+msgstr "дней"
 
 #: common/dialogs/panel_common_settings_base.cpp:249
 msgid "Project Backup"
@@ -4612,11 +4612,9 @@ msgid "Unable to find a PDF viewer for '%s'."
 msgstr "Не удалось найти PDF-просмотрщик для '%s'."
 
 #: common/gestfich.cpp:198
-#, fuzzy, c-format
+#, c-format
 msgid "Problem while running the PDF viewer '%s'."
-msgstr ""
-"Проблемы при запуске PDF-просмотрщика.\n"
-"Команда '%s'."
+msgstr "Проблемы при запуске PDF-просмотрщика '%s'."
 
 #: common/gestfich.cpp:301
 #, c-format
@@ -4764,14 +4762,14 @@ msgstr ""
 "Не удалось прочитать имя экземпляра и версию из kiface библиотеки '%s'."
 
 #: common/kiway.cpp:297
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Fatal Installation Bug. File:\n"
 "'%s'\n"
 "could not be loaded\n"
 msgstr ""
 "Неустранимая ошибка установки. Файл:\n"
-"\"%s\"\n"
+"'%s'\n"
 "не может быть загружен\n"
 
 #: common/kiway.cpp:301
@@ -8497,9 +8495,8 @@ msgid "Electrical Rules Checker"
 msgstr "Проверка электрических правил"
 
 #: eeschema/dialogs/dialog_field_properties.cpp:131
-#, fuzzy
 msgid "Power symbol value field text cannot be changed."
-msgstr "(Текст поля Значение символа питания нельзя изменить.)"
+msgstr "Текст поля Значение символа питания нельзя изменить."
 
 #: eeschema/dialogs/dialog_field_properties.cpp:246
 msgid "Illegal reference designator value!"
@@ -9314,9 +9311,9 @@ msgid "Text:"
 msgstr "Текст:"
 
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:72
-#, fuzzy, c-format
+#, c-format
 msgid "(%s)"
-msgstr " (%s)"
+msgstr "(%s)"
 
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:93
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:233
@@ -9788,9 +9785,8 @@ msgid "Plotted to '%s'.\n"
 msgstr "Начерчено в '%s'.\n"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:1177
-#, fuzzy
 msgid "Done"
-msgstr "Готово."
+msgstr "Готово"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:1249
 #, c-format
@@ -33857,9 +33853,8 @@ msgid "Thickness (mm)"
 msgstr "Толщина (мм)"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:275
-#, fuzzy
 msgid "Thickness (inches)"
-msgstr "Толщина (милы)"
+msgstr "Толщина (дюймов)"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:278
 msgid "Thickness (mils)"
@@ -33870,9 +33865,8 @@ msgid "Loss Tangent"
 msgstr "Танг.угла диэл.потерь"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:314
-#, fuzzy
 msgid "Dielectric"
-msgstr "Диэлектрик %d"
+msgstr "Диэлектрик"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:366
 msgid "Insert board stackup table"
