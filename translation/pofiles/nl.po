@@ -1,5 +1,5 @@
 # Seth Hillbrand <seth@kipro-pcb.com>, 2020, 2021.
-# ZbeeGin <zbeegin@op.pl>, 2020.
+# ZbeeGin <zbeegin@op.pl>, 2020, 2021.
 # Arend-Jan van Hilten <a.j.vanhilten@student.tudelft.nl>, 2021.
 # pimjansen98 <pimjansen1998@gmail.com>, 2021.
 # CJ van der Hoeven <KeesEnJoa@gmail.com>, 2021.
@@ -8,10 +8,10 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-10-03 16:55-0700\n"
-"PO-Revision-Date: 2021-09-27 13:41+0000\n"
-"Last-Translator: CJ van der Hoeven <KeesEnJoa@gmail.com>\n"
-"Language-Team: Dutch <https://hosted.weblate.org/projects/kicad/master-"
-"source/nl/>\n"
+"PO-Revision-Date: 2021-10-04 15:51+0000\n"
+"Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
+"Language-Team: Dutch <https://hosted.weblate.org/projects/kicad/"
+"master-source/nl/>\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -3136,7 +3136,7 @@ msgstr ""
 
 #: common/dialogs/panel_common_settings_base.cpp:236
 msgid "days"
-msgstr ""
+msgstr "dagen"
 
 #: common/dialogs/panel_common_settings_base.cpp:249
 msgid "Project Backup"
@@ -4599,11 +4599,9 @@ msgid "Unable to find a PDF viewer for '%s'."
 msgstr "Kan geen pdf-viewer vinden voor '%s'."
 
 #: common/gestfich.cpp:198
-#, fuzzy, c-format
+#, c-format
 msgid "Problem while running the PDF viewer '%s'."
-msgstr ""
-"Probleem bij het uitvoeren van de PDF-viewer.\n"
-"Commando is '%s'."
+msgstr "Probleem bij het uitvoeren van de PDF-viewer '%s'."
 
 #: common/gestfich.cpp:301
 #, c-format
@@ -4751,14 +4749,14 @@ msgstr ""
 "Kan instantie naam en versie symbool uit kiface bibliotheek '%s' niet lezen."
 
 #: common/kiway.cpp:297
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Fatal Installation Bug. File:\n"
 "'%s'\n"
 "could not be loaded\n"
 msgstr ""
 "Fatale installatiebug. Het dossier:\n"
-"\"%s\"\n"
+"'%s'\n"
 "kon niet worden geladen\n"
 
 #: common/kiway.cpp:301
@@ -9327,9 +9325,9 @@ msgid "Text:"
 msgstr "Tekst:"
 
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:72
-#, fuzzy, c-format
+#, c-format
 msgid "(%s)"
-msgstr "Beginwaarde X"
+msgstr "(%s)"
 
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:93
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:233
@@ -9803,9 +9801,8 @@ msgid "Plotted to '%s'.\n"
 msgstr "Plotbestand '%s' geschreven.\n"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:1177
-#, fuzzy
 msgid "Done"
-msgstr "Klaar."
+msgstr "Klaar"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:1249
 #, c-format
@@ -33768,9 +33765,8 @@ msgid "Thickness (mm)"
 msgstr "Dikte (mm)"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:275
-#, fuzzy
 msgid "Thickness (inches)"
-msgstr "Dikte (mils)"
+msgstr "Dikte (inch)"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:278
 msgid "Thickness (mils)"
@@ -33781,9 +33777,8 @@ msgid "Loss Tangent"
 msgstr "Verlies Tg"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:314
-#, fuzzy
 msgid "Dielectric"
-msgstr "Diëlektrisch %d"
+msgstr "Diëlektrisch"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:366
 msgid "Insert board stackup table"
@@ -33830,9 +33825,8 @@ msgid "Plated Board Edge: "
 msgstr "Vergulde board rand: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:511
-#, fuzzy
 msgid "Edge card connectors: "
-msgstr "Edge card connectoren:"
+msgstr "Edge card connectoren: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:519
 #, fuzzy
