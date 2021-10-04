@@ -102,7 +102,6 @@ private:
     /**
      * Panel-specific initializers
      */
-    void initTrackWidthPanel();
     void initESeriesPanel();
 
     /**
@@ -116,61 +115,6 @@ private:
      * @param event contains the radio button state.
      */
     void OnESeriesSelection( wxCommandEvent& event ) override;
-
-    /**
-     * Write track width parameters in configuration.
-     */
-    void writeTrackWidthConfig();
-
-    /**
-     * Update the calculations the user changes the general parameters.
-     */
-    void OnTWParametersChanged( wxCommandEvent& event ) override;
-
-    /**
-     * Update the calculations when the user changes the desired maximum current.
-     */
-    void OnTWCalculateFromCurrent( wxCommandEvent& event ) override;
-
-    /**
-     * Update the calculations when the user changes the desired external trace width.
-     */
-    void OnTWCalculateFromExtWidth( wxCommandEvent& event ) override;
-
-    /**
-     * Update the calculations when the user changes the desired internal trace width.
-     */
-    void OnTWCalculateFromIntWidth( wxCommandEvent& event ) override;
-
-    /**
-     * Update the calculations when the user clicks the reset button.
-     */
-    void OnTWResetButtonClick( wxCommandEvent& event ) override;
-
-    /**
-     * Calculate track width required based on given current and temperature rise.
-     */
-    double TWCalculateWidth( double aCurrent, double aThickness, double aDeltaT_C,
-                             bool aUseInternalLayer );
-
-    /**
-     * Calculate maximum current based on given width and temperature rise.
-     */
-    double TWCalculateCurrent( double aWidth, double aThickness, double aDeltaT_C,
-                               bool aUseInternalLayer );
-
-    /**
-     * Display the results of a calculation (including resulting values such
-     * as the resistance and power loss).
-     */
-    void TWDisplayValues( double aCurrent, double aExtWidth, double aIntWidth,
-                          double aExtThickness, double aIntThickness );
-
-    /**
-     * Update the fields to show whether the maximum current, external trace
-     * width, or internal trace width is currently the controlling parameter.
-     */
-    void TWUpdateModeDisplay();
 
 
     // Electrical spacing panel:
@@ -235,15 +179,6 @@ private:
     void TransfDlgDataToTranslineParams();
 
 private:
-    enum                         // Which dimension is controlling the track width / current
-    {                            // calculations:
-        TW_MASTER_CURRENT,       //   the maximum current,
-        TW_MASTER_EXT_WIDTH,     //   the external trace width,
-        TW_MASTER_INT_WIDTH      //   or the internal trace width?
-    } m_TWMode;
-
-    bool                          m_TWNested; // Used to stop events caused by setting the answers.
-
     enum TRANSLINE_TYPE_ID        m_currTransLineType;
     TRANSLINE*                    m_currTransLine;
     std::vector<TRANSLINE_IDENT*> m_transline_list;

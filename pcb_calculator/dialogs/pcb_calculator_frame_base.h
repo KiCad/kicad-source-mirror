@@ -14,12 +14,12 @@ class UNIT_SELECTOR_ANGLE;
 class UNIT_SELECTOR_FREQUENCY;
 class UNIT_SELECTOR_LEN;
 class UNIT_SELECTOR_RESISTOR;
-class UNIT_SELECTOR_THICKNESS;
 
 #include "panel_regulator.h"
 #include "panel_attenuators.h"
 #include "panel_color_code.h"
 #include "panel_via_size.h"
+#include "panel_track_width.h"
 #include "kiway_player.h"
 #include <wx/string.h>
 #include <wx/menu.h>
@@ -175,63 +175,7 @@ class PCB_CALCULATOR_FRAME_BASE : public KIWAY_PLAYER
 		wxStaticText* m_Message8;
 		wxButton* m_buttonTransLineReset;
 		PANEL_VIA_SIZE* m_panelViaSize;
-		wxPanel* m_panelTrackWidth;
-		wxStaticText* m_staticTextCurrent;
-		wxTextCtrl* m_TrackCurrentValue;
-		wxStaticText* m_staticText62;
-		wxStaticText* m_staticText63;
-		wxTextCtrl* m_TrackDeltaTValue;
-		wxStaticText* m_trackTempUnits;
-		wxStaticText* m_staticText66;
-		wxTextCtrl* m_TrackLengthValue;
-		UNIT_SELECTOR_LEN* m_TW_CuLength_choiceUnit;
-		wxStaticText* m_staticText103;
-		wxTextCtrl* m_TWResistivity;
-		wxStaticText* m_resistivityUnits;
-		wxHtmlWindow* m_htmlWinFormulas;
-		wxStaticText* m_staticTextExtWidth;
-		wxTextCtrl* m_ExtTrackWidthValue;
-		UNIT_SELECTOR_LEN* m_TW_ExtTrackWidth_choiceUnit;
-		wxStaticText* m_staticText65;
-		wxTextCtrl* m_ExtTrackThicknessValue;
-		UNIT_SELECTOR_THICKNESS* m_ExtTrackThicknessUnit;
-		wxStaticLine* m_staticline3;
-		wxStaticLine* m_staticline4;
-		wxStaticLine* m_staticline5;
-		wxStaticText* m_staticTextArea;
-		wxStaticText* m_ExtTrackAreaValue;
-		wxStaticText* m_extTrackAreaUnitLabel;
-		wxStaticText* m_staticText651;
-		wxStaticText* m_ExtTrackResistValue;
-		wxStaticText* m_extTrackResUnits;
-		wxStaticText* m_staticText661;
-		wxStaticText* m_ExtTrackVDropValue;
-		wxStaticText* m_staticText83;
-		wxStaticText* m_staticText79;
-		wxStaticText* m_ExtTrackLossValue;
-		wxStaticText* m_staticText791;
-		wxStaticText* m_staticTextIntWidth;
-		wxTextCtrl* m_IntTrackWidthValue;
-		UNIT_SELECTOR_LEN* m_TW_IntTrackWidth_choiceUnit;
-		wxStaticText* m_staticText652;
-		wxTextCtrl* m_IntTrackThicknessValue;
-		UNIT_SELECTOR_THICKNESS* m_IntTrackThicknessUnit;
-		wxStaticLine* m_staticline8;
-		wxStaticLine* m_staticline9;
-		wxStaticLine* m_staticline10;
-		wxStaticText* m_staticTextArea1;
-		wxStaticText* m_IntTrackAreaValue;
-		wxStaticText* m_intTrackAreaUnitLabel;
-		wxStaticText* m_staticText6511;
-		wxStaticText* m_IntTrackResistValue;
-		wxStaticText* m_intTrackResUnits;
-		wxStaticText* m_staticText6611;
-		wxStaticText* m_IntTrackVDropValue;
-		wxStaticText* m_staticText831;
-		wxStaticText* m_staticText792;
-		wxStaticText* m_IntTrackLossValue;
-		wxStaticText* m_staticText7911;
-		wxButton* m_buttonTrackWidthReset;
+		PANEL_TRACK_WIDTH* m_panelTrackWidth;
 		wxPanel* m_panelElectricalSpacing;
 		UNIT_SELECTOR_LEN* m_ElectricalSpacingUnitsSelector;
 		wxStaticLine* m_staticline2;
@@ -260,11 +204,6 @@ class PCB_CALCULATOR_FRAME_BASE : public KIWAY_PLAYER
 		virtual void OnTranslineAnalyse( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnTranslineSynthetize( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnTransLineResetButtonClick( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnTWCalculateFromCurrent( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnTWParametersChanged( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnTWCalculateFromExtWidth( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnTWCalculateFromIntWidth( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnTWResetButtonClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnElectricalSpacingUnitsSelection( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnElectricalSpacingRefresh( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnBoardClassesUnitsSelection( wxCommandEvent& event ) { event.Skip(); }

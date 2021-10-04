@@ -41,8 +41,6 @@ PCB_CALCULATOR_FRAME::PCB_CALCULATOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     SetKiway( this, aKiway );
     m_currTransLine     = nullptr;
     m_currTransLineType = DEFAULT_TYPE;
-    m_TWMode = TW_MASTER_CURRENT;
-    m_TWNested = false;
 
     SHAPE_POLY_SET dummy;   // A ugly trick to force the linker to include
                             // some methods in code and avoid link errors
@@ -69,12 +67,6 @@ PCB_CALCULATOR_FRAME::PCB_CALCULATOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     m_EpsilonR_label->SetLabel( wxT( "εr" ) );
 
-    m_trackTempUnits->SetLabel( wxT( "°C" ) );
-    m_resistivityUnits->SetLabel( wxT( "Ω•m" ) );
-
-    m_extTrackResUnits->SetLabel( wxT( "Ω" ) );
-    m_intTrackResUnits->SetLabel( wxT( "Ω" ) );
-
     LoadSettings( config() );
 
     m_panelRegulators->ReadDataFile();
@@ -82,7 +74,6 @@ PCB_CALCULATOR_FRAME::PCB_CALCULATOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     TranslineTypeSelection( m_currTransLineType );
     m_TranslineSelection->SetSelection( m_currTransLineType );
 
-    initTrackWidthPanel();
     initESeriesPanel();
 
     BoardClassesUpdateData( m_BoardClassesUnitsSelector->GetUnitScale() );
@@ -157,7 +148,7 @@ void PCB_CALCULATOR_FRAME::OnUpdateUI( wxUpdateUIEvent& event )
        	m_panelRegulators->Layout();
 
         m_panelESeriesHelp->Refresh();
-        m_htmlWinFormulas->Refresh();
+        //m_htmlWinFormulas->Refresh();
 
         // Until it's shown on screen the above won't work; but doing it anyway at least keeps
         // putting new OnUpdateUI events into the queue until it *is* shown on screen.
@@ -251,6 +242,8 @@ void PCB_CALCULATOR_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
         transline->ReadConfig();
 
     m_panelViaSize->LoadSettings( cfg );
+
+    m_panelTrackWidth->LoadSettings( cfg );
 }
 
 
@@ -277,9 +270,8 @@ void PCB_CALCULATOR_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
         m_panelAttenuators->SaveSettings( cfg );
         m_panelColorCode->SaveSettings( cfg );
         m_panelViaSize->SaveSettings( cfg );
+        m_panelTrackWidth->SaveSettings( cfg );
     }
-
-    writeTrackWidthConfig();
 
 
     for( unsigned ii = 0; ii < m_transline_list.size(); ii++ )
