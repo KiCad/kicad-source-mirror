@@ -90,11 +90,8 @@ PCB_CALCULATOR_FRAME::PCB_CALCULATOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_TranslineSelection->SetSelection( m_currTransLineType );
 
     initTrackWidthPanel();
-    initColorCodePanel();
     initViaSizePanel();
     initESeriesPanel();
-
-    ToleranceSelection( m_rbToleranceSelection->GetSelection() );
 
     BoardClassesUpdateData( m_BoardClassesUnitsSelector->GetUnitScale() );
 
@@ -132,11 +129,6 @@ PCB_CALCULATOR_FRAME::~PCB_CALCULATOR_FRAME()
     for( unsigned ii = 0; ii < m_transline_list.size(); ii++ )
         delete m_transline_list[ii];
 
-    delete m_ccValueNamesBitmap;
-    delete m_ccValuesBitmap;
-    delete m_ccMultipliersBitmap;
-    delete m_ccTolerancesBitmap;
-
     // This needed for OSX: avoids further OnDraw processing after this destructor and before
     // the native window is destroyed
     this->Freeze();
@@ -167,8 +159,6 @@ void PCB_CALCULATOR_FRAME::OnUpdateUI( wxUpdateUIEvent& event )
         }
 
         m_panelAttenuators->UpdateUI();
-
-        ToleranceSelection( m_rbToleranceSelection->GetSelection() );
 
        	m_viaBitmap->SetBitmap( KiBitmap( BITMAPS::viacalc ) );
        	m_panelViaSize->Layout();
@@ -251,7 +241,6 @@ void PCB_CALCULATOR_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
 
     m_currTransLineType = static_cast<TRANSLINE_TYPE_ID>( cfg->m_TransLine.type );
     m_Notebook->ChangeSelection( cfg->m_LastPage );
-    m_rbToleranceSelection->SetSelection( cfg->m_ColorCodeTolerance );
     m_BoardClassesUnitsSelector->SetSelection( cfg->m_BoardClassUnits );
 
     // Attenuators panel config:
@@ -259,6 +248,9 @@ void PCB_CALCULATOR_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
 
     // Regul panel config:
     m_panelRegulators->LoadSettings( cfg );
+
+    // color panel config:
+    m_panelColorCode->LoadSettings( cfg );
 
     // Electrical panel config
     m_ElectricalSpacingUnitsSelector->SetSelection( cfg->m_Electrical.spacing_units );
@@ -283,7 +275,6 @@ void PCB_CALCULATOR_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
     {
         cfg->m_LastPage = m_Notebook->GetSelection();
         cfg->m_TransLine.type = m_currTransLineType;
-        cfg->m_ColorCodeTolerance = m_rbToleranceSelection->GetSelection();
         cfg->m_BoardClassUnits = m_BoardClassesUnitsSelector->GetSelection();
 
         cfg->m_Electrical.spacing_units = m_ElectricalSpacingUnitsSelector->GetSelection();
@@ -291,6 +282,7 @@ void PCB_CALCULATOR_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
 
         m_panelRegulators->Regulators_WriteConfig( cfg );
         m_panelAttenuators->SaveSettings( cfg );
+        m_panelColorCode->SaveSettings( cfg );
     }
 
     writeTrackWidthConfig();

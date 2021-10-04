@@ -104,7 +104,6 @@ private:
      */
     void initTrackWidthPanel();
     void initESeriesPanel();
-    void initColorCodePanel();
     void initViaSizePanel();
 
     /**
@@ -267,10 +266,6 @@ private:
      */
     void TransfDlgDataToTranslineParams();
 
-    // Color Code panel
-    void OnToleranceSelection( wxCommandEvent& event ) override;
-    void ToleranceSelection( int aSelection );
-
 private:
     enum                         // Which dimension is controlling the track width / current
     {                            // calculations:
@@ -284,11 +279,6 @@ private:
     enum TRANSLINE_TYPE_ID        m_currTransLineType;
     TRANSLINE*                    m_currTransLine;
     std::vector<TRANSLINE_IDENT*> m_transline_list;
-
-    wxBitmap*                     m_ccValueNamesBitmap;
-    wxBitmap*                     m_ccValuesBitmap;
-    wxBitmap*                     m_ccMultipliersBitmap;
-    wxBitmap*                     m_ccTolerancesBitmap;
 
     int                           m_lastNotebookPage;
     bool                          m_macHack;

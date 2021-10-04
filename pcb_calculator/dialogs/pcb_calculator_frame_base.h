@@ -18,6 +18,7 @@ class UNIT_SELECTOR_THICKNESS;
 
 #include "panel_regulator.h"
 #include "panel_attenuators.h"
+#include "panel_color_code.h"
 #include "widgets/unit_selector.h"
 #include "kiway_player.h"
 #include <wx/string.h>
@@ -94,20 +95,7 @@ class PCB_CALCULATOR_FRAME_BASE : public KIWAY_PLAYER
 		wxStaticLine* m_staticline7;
 		wxButton* m_buttonEScalculate;
 		wxHtmlWindow* m_panelESeriesHelp;
-		wxPanel* m_panelColorCode;
-		wxRadioBox* m_rbToleranceSelection;
-		wxStaticText* m_staticText31;
-		wxStaticText* m_staticText34;
-		wxStaticText* m_staticText35;
-		wxStaticText* m_Band4Label;
-		wxStaticText* m_staticText37;
-		wxStaticText* m_staticText38;
-		wxStaticBitmap* m_Band1bitmap;
-		wxStaticBitmap* m_Band2bitmap;
-		wxStaticBitmap* m_Band3bitmap;
-		wxStaticBitmap* m_Band4bitmap;
-		wxStaticBitmap* m_Band_mult_bitmap;
-		wxStaticBitmap* m_Band_tol_bitmap;
+		PANEL_COLOR_CODE* m_panelColorCode;
 		wxPanel* m_panelTransline;
 		wxRadioBox* m_TranslineSelection;
 		wxStaticBitmap* m_translineBitmap;
@@ -329,7 +317,6 @@ class PCB_CALCULATOR_FRAME_BASE : public KIWAY_PLAYER
 		virtual void OnUpdateUI( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void OnESeriesSelection( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnCalculateESeries( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnToleranceSelection( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnTranslineSelection( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnTranslineEpsilonR_Button( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnTranslineTanD_Button( wxCommandEvent& event ) { event.Skip(); }

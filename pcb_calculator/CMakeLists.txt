@@ -10,7 +10,6 @@ include_directories(
 set( PCB_CALCULATOR_SRCS
     eserie.cpp
     board_classes_values.cpp
-    colorcode.cpp
     common_data.cpp
     electrical_spacing_values.cpp
     params_read_write.cpp
@@ -19,6 +18,7 @@ set( PCB_CALCULATOR_SRCS
     datafile_read_write.cpp
     panel_attenuators.cpp
     panel_regulator.cpp
+    panel_color_code.cpp
     tracks_width_versus_current.cpp
     via.cpp
     transline_ident.cpp
@@ -38,6 +38,7 @@ set( PCB_CALCULATOR_SRCS
     dialogs/dialog_regulator_form.cpp
     dialogs/panel_attenuators_base.cpp
     dialogs/panel_regulator_base.cpp
+    dialogs/panel_color_code_base.cpp
     ../common/env_vars.cpp      # needed on MSW to avoid a link issue (a symbol not found)
     )
 
