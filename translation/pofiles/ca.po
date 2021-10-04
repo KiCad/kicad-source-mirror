@@ -4,10 +4,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-10-03 16:55-0700\n"
-"PO-Revision-Date: 2021-09-29 17:58+0000\n"
+"PO-Revision-Date: 2021-10-04 15:51+0000\n"
 "Last-Translator: Arnau Llovet Vidal <arnaullv@gmail.com>\n"
-"Language-Team: Catalan <https://hosted.weblate.org/projects/kicad/master-"
-"source/ca/>\n"
+"Language-Team: Catalan <https://hosted.weblate.org/projects/kicad/"
+"master-source/ca/>\n"
 "Language: ca\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -2575,9 +2575,8 @@ msgstr "Exporta-ho als altres fulls"
 #: common/dialogs/dialog_page_settings_base.cpp:140
 #: gerbview/widgets/gerbview_layer_widget.cpp:100
 #: pcbnew/widgets/appearance_controls.cpp:355
-#, fuzzy
 msgid "Drawing Sheet"
-msgstr "Dibuix"
+msgstr "Fulla de dibuix"
 
 #: common/dialogs/dialog_page_settings_base.cpp:153 eeschema/sch_field.cpp:189
 #: pcbnew/dialogs/dialog_export_step_base.cpp:22
@@ -5472,11 +5471,8 @@ msgid "Invalid Arc with radius %f and angle %f"
 msgstr "Arc invàlid amb radi %f i angle %f"
 
 #: common/project.cpp:310 common/project.cpp:315 pcbnew/pcb_base_frame.cpp:155
-#, fuzzy
 msgid "Error loading project footprint library table."
-msgstr ""
-"S'ha produït un error quan s'intentava desar la peça a la biblioteca de "
-"símbols «%s»."
+msgstr "Error en carregar la taula de la biblioteca d'empremtes del projecte."
 
 #: common/project/project_archiver.cpp:52 kicad/pcm/pcm_task_manager.cpp:266
 msgid "Could not open archive file."
@@ -5952,29 +5948,24 @@ msgid "Pan Right"
 msgstr "Desplaça a la dreta"
 
 #: common/tool/actions.cpp:444
-#, fuzzy
 msgid "Switch to Fast Grid 1"
-msgstr "Canvia la quadrícula a la quadrícula ràpida 1"
+msgstr "Canvia a la quadrícula ràpida 1"
 
 #: common/tool/actions.cpp:449
-#, fuzzy
 msgid "Switch to Fast Grid 2"
-msgstr "Canvia la quadrícula a la quadrícula ràpida 2"
+msgstr "Canvia a la quadrícula ràpida 2"
 
 #: common/tool/actions.cpp:454
-#, fuzzy
 msgid "Switch to Next Grid"
-msgstr "Canvia a la següent capa"
+msgstr "Canvia a la següent quadrícula"
 
 #: common/tool/actions.cpp:458
-#, fuzzy
 msgid "Switch to Previous Grid"
-msgstr "Canvia a la capa prèvia"
+msgstr "Canvia a la quadrícula anterior"
 
 #: common/tool/actions.cpp:463
-#, fuzzy
 msgid "Set the grid origin point"
-msgstr "Estableix l'origen de la quadrícula"
+msgstr "Estableix el punt d'origen de la quadrícula"
 
 #: common/tool/actions.cpp:476
 msgid "Show Grid"
@@ -5982,16 +5973,15 @@ msgstr "Mostra la quadrícula"
 
 #: common/tool/actions.cpp:476
 msgid "Display grid dots or lines in the edit window"
-msgstr ""
+msgstr "Mostra els punts o línies de la quadrícula a la finestra d'edició"
 
 #: common/tool/actions.cpp:481
 msgid "Grid Properties..."
 msgstr "Propietats de la quadrícula..."
 
 #: common/tool/actions.cpp:481
-#, fuzzy
 msgid "Set grid dimensions"
-msgstr "Estableix l'origen de la quadrícula"
+msgstr "Estableix les mides de la quadrícula"
 
 #: common/tool/actions.cpp:486
 msgid "Use inches"
@@ -6036,13 +6026,12 @@ msgstr ""
 "pins"
 
 #: common/tool/actions.cpp:510
-#, fuzzy
 msgid "Polar Coordinates"
 msgstr "Coordenades polars"
 
 #: common/tool/actions.cpp:510
 msgid "Switch between polar and cartesian coordinate systems"
-msgstr ""
+msgstr "Canvia entre el sistema de coordenades polars i cartesianes"
 
 #: common/tool/actions.cpp:516
 msgid "Reset Local Coordinates"
@@ -6054,19 +6043,19 @@ msgstr "Mostra sempre el cursor"
 
 #: common/tool/actions.cpp:522
 msgid "Display crosshairs even in selection tool"
-msgstr ""
+msgstr "Mostra retícules fins hi tot a l'eina de selecció"
 
 #: common/tool/actions.cpp:527
 msgid "Full-Window Crosshairs"
-msgstr ""
+msgstr "Retícules en finestra sencera"
 
 #: common/tool/actions.cpp:527
 msgid "Switch display of full-window crosshairs"
-msgstr ""
+msgstr "Canvia a mostrar retícules en finestra sencera"
 
 #: common/tool/actions.cpp:533
 msgid "Single Layer View Mode"
-msgstr ""
+msgstr "Mode de vista d'una capa"
 
 #: common/tool/actions.cpp:533
 msgid "Toggle inactive layers between normal and dimmed"
@@ -6099,9 +6088,8 @@ msgstr "Mostra la finestra de la consola"
 
 #: common/tool/actions.cpp:568 eeschema/symbol_viewer_frame.cpp:101
 #: eeschema/symbol_viewer_frame.cpp:920
-#, fuzzy
 msgid "Symbol Library Browser"
-msgstr "Navegador de biblioteques"
+msgstr "Navegador de biblioteques de símbols"
 
 #: common/tool/actions.cpp:568
 msgid "Browse symbol libraries"
@@ -6123,9 +6111,8 @@ msgid "Footprint Library Browser"
 msgstr "Navegador de biblioteques d'empremtes"
 
 #: common/tool/actions.cpp:578
-#, fuzzy
 msgid "Browse footprint libraries"
-msgstr "Assistent per afegir biblioteques d'empremtes"
+msgstr "Navega biblioteques d'empremtes"
 
 #: common/tool/actions.cpp:583 kicad/tools/kicad_manager_actions.cpp:87
 #: pcbnew/footprint_edit_frame.cpp:804 pcbnew/footprint_edit_frame.cpp:925
@@ -6134,9 +6121,8 @@ msgid "Footprint Editor"
 msgstr "Editor d'empremtes"
 
 #: common/tool/actions.cpp:583
-#, fuzzy
 msgid "Create, delete and edit footprints"
-msgstr "Crea un component com a símbol d'alimentació"
+msgstr "Crea, esborra i edita empremtes"
 
 #: common/tool/actions.cpp:589
 msgid "Update PCB from Schematic..."
@@ -6181,13 +6167,12 @@ msgid "Edit the global and project footprint library lists"
 msgstr "Edita la taula de les biblioteques d'empremtes"
 
 #: common/tool/actions.cpp:621
-#, fuzzy
 msgid "Getting Started with KiCad"
-msgstr "I&ntroducció a KiCad"
+msgstr "Començant amb KiCad"
 
 #: common/tool/actions.cpp:622
 msgid "Open \"Getting Started in KiCad\" guide for beginners"
-msgstr ""
+msgstr "Obre \"Començant amb KiCad\", la guia per principiants"
 
 #: common/tool/actions.cpp:627
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:31
@@ -6197,7 +6182,7 @@ msgstr "Ajuda"
 
 #: common/tool/actions.cpp:628
 msgid "Open product documentation in a web browser"
-msgstr ""
+msgstr "Obre la documentació del producte al navegador web"
 
 #: common/tool/actions.cpp:634
 msgid "List Hotkeys..."
@@ -9455,9 +9440,9 @@ msgid "Text:"
 msgstr "Text:"
 
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:72
-#, fuzzy, c-format
+#, c-format
 msgid "(%s)"
-msgstr "(%s):"
+msgstr "(%s)"
 
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:93
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:233
