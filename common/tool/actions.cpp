@@ -530,14 +530,15 @@ TOOL_ACTION ACTIONS::toggleCursorStyle( "common.Control.toggleCursorStyle",
 TOOL_ACTION ACTIONS::highContrastMode( "common.Control.highContrastMode",
         AS_GLOBAL,
         0, LEGACY_HK_NAME( "Toggle High Contrast Mode" ),
-        _( "Single Layer View Mode" ), _( "Toggle inactive layers between normal and dimmed" ),
+        _( "Inactive Layer View Mode" ),
+        _( "Toggle inactive layers between normal and dimmed" ),
         BITMAPS::contrast_mode );
 
 TOOL_ACTION ACTIONS::highContrastModeCycle( "common.Control.highContrastModeCycle",
         AS_GLOBAL,
         'H', "",
-        _( "Single Layer View Mode (3-state)" ),
-        _( "Toggle inactive layers between normal, dimmed, and hidden" ),
+        _( "Inactive Layer View Mode (3-state)" ),
+        _( "Cycle inactive layers between normal, dimmed, and hidden" ),
         BITMAPS::contrast_mode );
 
 TOOL_ACTION ACTIONS::selectionTool( "common.InteractiveSelection.selectionTool",

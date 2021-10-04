@@ -64,7 +64,6 @@ class APPEARANCE_CONTROLS_BASE : public wxPanel
 		wxScrolledWindow* m_netclassScrolledWindow;
 		wxBoxSizer* m_netclassOuterSizer;
 		wxStaticText* m_presetsLabel;
-		wxStaticText* m_presetsHotkey;
 		wxChoice* m_cbLayerPresets;
 
 		// Virtual event handlers, overide them in your derived class

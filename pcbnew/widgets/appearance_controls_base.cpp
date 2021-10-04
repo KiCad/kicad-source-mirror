@@ -158,19 +158,9 @@ APPEARANCE_CONTROLS_BASE::APPEARANCE_CONTROLS_BASE( wxWindow* parent, wxWindowID
 	wxBoxSizer* bPresets;
 	bPresets = new wxBoxSizer( wxVERTICAL );
 
-	wxBoxSizer* bPresetsLabels;
-	bPresetsLabels = new wxBoxSizer( wxHORIZONTAL );
-
-	m_presetsLabel = new wxStaticText( this, wxID_ANY, _("Presets:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_presetsLabel = new wxStaticText( this, wxID_ANY, _("Presets (Ctrl+Tab):"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_presetsLabel->Wrap( -1 );
-	bPresetsLabels->Add( m_presetsLabel, 1, wxRIGHT|wxLEFT, 2 );
-
-	m_presetsHotkey = new wxStaticText( this, wxID_ANY, _("(Ctrl+Tab)"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_presetsHotkey->Wrap( -1 );
-	bPresetsLabels->Add( m_presetsHotkey, 0, wxRIGHT|wxLEFT, 2 );
-
-
-	bPresets->Add( bPresetsLabels, 1, wxEXPAND|wxTOP, 7 );
+	bPresets->Add( m_presetsLabel, 1, wxRIGHT|wxLEFT, 2 );
 
 	wxString m_cbLayerPresetsChoices[] = { _("All Layers"), _("(unsaved)") };
 	int m_cbLayerPresetsNChoices = sizeof( m_cbLayerPresetsChoices ) / sizeof( wxString );

@@ -431,7 +431,6 @@ APPEARANCE_CONTROLS::APPEARANCE_CONTROLS( PCB_BASE_FRAME* aParent, wxWindow* aFo
     m_windowLayers->SetFont( infoFont );
     m_windowObjects->SetFont( infoFont );
     m_presetsLabel->SetFont( infoFont );
-    m_presetsHotkey->SetFont( infoFont );
 
     createControls();
 
@@ -542,12 +541,12 @@ APPEARANCE_CONTROLS::APPEARANCE_CONTROLS( PCB_BASE_FRAME* aParent, wxWindow* aFo
     m_netsGrid->SetDefaultCellFont( font );
     m_netsGrid->SetDefaultRowSize( font.GetPixelSize().y + rowHeightPadding );
 
-    m_netsGrid->GetGridWindow()->Bind( wxEVT_MOTION,
-                                       &APPEARANCE_CONTROLS::OnNetGridMouseEvent, this );
+    m_netsGrid->GetGridWindow()->Bind( wxEVT_MOTION, &APPEARANCE_CONTROLS::OnNetGridMouseEvent,
+                                       this );
 
     // To handle middle click on color swatches
-    m_netsGrid->GetGridWindow()->Bind( wxEVT_MIDDLE_UP,
-                                       &APPEARANCE_CONTROLS::OnNetGridMouseEvent, this );
+    m_netsGrid->GetGridWindow()->Bind( wxEVT_MIDDLE_UP, &APPEARANCE_CONTROLS::OnNetGridMouseEvent,
+                                       this );
 
     m_netsGrid->ShowScrollbars( wxSHOW_SB_NEVER, wxSHOW_SB_DEFAULT );
     m_netclassScrolledWindow->ShowScrollbars( wxSHOW_SB_NEVER, wxSHOW_SB_DEFAULT );
@@ -575,6 +574,10 @@ APPEARANCE_CONTROLS::~APPEARANCE_CONTROLS()
 
 void APPEARANCE_CONTROLS::createControls()
 {
+    int      hotkey;
+    wxString msg;
+    wxFont   infoFont = KIUI::GetInfoFont( this );
+
     // Create layer display options
     m_paneLayerDisplayOptions = new WX_COLLAPSIBLE_PANE( m_panelLayers, wxID_ANY,
                                                          _( "Layer Display Options" ) );
@@ -586,34 +589,43 @@ void APPEARANCE_CONTROLS::createControls()
     wxBoxSizer* layerDisplayOptionsSizer;
     layerDisplayOptionsSizer = new wxBoxSizer( wxVERTICAL );
 
-    m_staticTextContrastModeTitle = new wxStaticText( layerDisplayPane, wxID_ANY,
-                                                      _( "Inactive layers:" ), wxDefaultPosition,
-                                                      wxDefaultSize, 0 );
-    m_staticTextContrastModeTitle->Wrap( -1 );
-    layerDisplayOptionsSizer->Add( m_staticTextContrastModeTitle, 0,
-                                   wxEXPAND | wxBOTTOM | wxLEFT, 2 );
+    hotkey = PCB_ACTIONS::highContrastModeCycle.GetHotKey();
+
+    if( hotkey )
+        msg = wxString::Format( _( "Inactive layers (%s):" ), KeyNameFromKeyCode( hotkey ) );
+    else
+        msg = _( "Inactive layers:" );
+
+    m_inactiveLayersLabel = new wxStaticText( layerDisplayPane, wxID_ANY, msg );
+    m_inactiveLayersLabel->SetFont( infoFont );
+    m_inactiveLayersLabel->Wrap( -1 );
+    layerDisplayOptionsSizer->Add( m_inactiveLayersLabel, 0, wxEXPAND | wxBOTTOM | wxLEFT, 2 );
 
     wxBoxSizer* contrastModeSizer;
     contrastModeSizer = new wxBoxSizer( wxHORIZONTAL );
 
     m_rbHighContrastNormal = new wxRadioButton( layerDisplayPane, wxID_ANY, _( "Normal" ),
                                                 wxDefaultPosition, wxDefaultSize, wxRB_GROUP );
+    m_rbHighContrastNormal->SetFont( infoFont );
     m_rbHighContrastNormal->SetValue( true );
     m_rbHighContrastNormal->SetToolTip( _( "Inactive layers will be shown in full color" ) );
 
-    contrastModeSizer->Add( m_rbHighContrastNormal, 0, wxRIGHT, 4 );
+    contrastModeSizer->Add( m_rbHighContrastNormal, 0, wxRIGHT, 5 );
+    contrastModeSizer->AddStretchSpacer();
 
-    m_rbHighContrastDim = new wxRadioButton( layerDisplayPane, wxID_ANY, _( "Dim" ),
-                                             wxDefaultPosition, wxDefaultSize, 0 );
+    m_rbHighContrastDim = new wxRadioButton( layerDisplayPane, wxID_ANY, _( "Dim" ) );
+    m_rbHighContrastDim->SetFont( infoFont );
     m_rbHighContrastDim->SetToolTip( _( "Inactive layers will be dimmed" ) );
 
-    contrastModeSizer->Add( m_rbHighContrastDim, 0, wxRIGHT | wxLEFT, 10 );
+    contrastModeSizer->Add( m_rbHighContrastDim, 0, wxRIGHT, 5 );
+    contrastModeSizer->AddStretchSpacer();
 
-    m_rbHighContrastOff = new wxRadioButton( layerDisplayPane, wxID_ANY, _( "Hide" ),
-                                             wxDefaultPosition, wxDefaultSize, 0 );
+    m_rbHighContrastOff = new wxRadioButton( layerDisplayPane, wxID_ANY, _( "Hide" ) );
+    m_rbHighContrastOff->SetFont( infoFont );
     m_rbHighContrastOff->SetToolTip( _( "Inactive layers will be hidden" ) );
 
     contrastModeSizer->Add( m_rbHighContrastOff, 0, 0, 5 );
+    contrastModeSizer->AddStretchSpacer();
 
     layerDisplayOptionsSizer->Add( contrastModeSizer, 0, wxEXPAND, 5 );
 
@@ -621,8 +633,8 @@ void APPEARANCE_CONTROLS::createControls()
                                                 wxDefaultSize, wxLI_HORIZONTAL );
     layerDisplayOptionsSizer->Add( m_layerDisplaySeparator, 0, wxEXPAND | wxTOP | wxBOTTOM, 5 );
 
-    m_cbFlipBoard = new wxCheckBox( layerDisplayPane, wxID_ANY, _( "Flip board view" ),
-                                    wxDefaultPosition, wxDefaultSize, 0 );
+    m_cbFlipBoard = new wxCheckBox( layerDisplayPane, wxID_ANY, _( "Flip board view" ) );
+    m_cbFlipBoard->SetFont( infoFont );
     layerDisplayOptionsSizer->Add( m_cbFlipBoard, 0, 0, 5 );
 
     layerDisplayPane->SetSizer( layerDisplayOptionsSizer );
@@ -652,8 +664,15 @@ void APPEARANCE_CONTROLS::createControls()
 
     //// Net color mode
 
-    m_txtNetDisplayTitle = new wxStaticText( netDisplayPane, wxID_ANY, _( "Net colors:" ),
-                                             wxDefaultPosition, wxDefaultSize, 0 );
+    hotkey = PCB_ACTIONS::netColorModeCycle.GetHotKey();
+
+    if( hotkey )
+        msg = wxString::Format( _( "Net colors (%s):" ), KeyNameFromKeyCode( hotkey ) );
+    else
+        msg = _( "Net colors:" );
+
+    m_txtNetDisplayTitle = new wxStaticText( netDisplayPane, wxID_ANY, msg );
+    m_txtNetDisplayTitle->SetFont( infoFont );
     m_txtNetDisplayTitle->Wrap( -1 );
     m_txtNetDisplayTitle->SetToolTip( _( "Choose when to show net and netclass colors" ) );
 
@@ -663,19 +682,22 @@ void APPEARANCE_CONTROLS::createControls()
 
     m_rbNetColorAll = new wxRadioButton( netDisplayPane, wxID_ANY, _( "All" ), wxDefaultPosition,
                                          wxDefaultSize, wxRB_GROUP );
+    m_rbNetColorAll->SetFont( infoFont );
     m_rbNetColorAll->SetToolTip( _( "Net and netclass colors are shown on all copper items" ) );
 
-    netColorSizer->Add( m_rbNetColorAll, 0, wxRIGHT, 10 );
+    netColorSizer->Add( m_rbNetColorAll, 0, wxRIGHT, 5 );
+    netColorSizer->AddStretchSpacer();
 
-    m_rbNetColorRatsnest = new wxRadioButton( netDisplayPane, wxID_ANY, _( "Ratsnest" ),
-                                              wxDefaultPosition, wxDefaultSize, 0 );
+    m_rbNetColorRatsnest = new wxRadioButton( netDisplayPane, wxID_ANY, _( "Ratsnest" ) );
+    m_rbNetColorRatsnest->SetFont( infoFont );
     m_rbNetColorRatsnest->SetValue( true );
     m_rbNetColorRatsnest->SetToolTip( _( "Net and netclass colors are shown on the ratsnest only" ) );
 
-    netColorSizer->Add( m_rbNetColorRatsnest, 0, wxRIGHT, 4 );
+    netColorSizer->Add( m_rbNetColorRatsnest, 0, wxRIGHT, 5 );
+    netColorSizer->AddStretchSpacer();
 
-    m_rbNetColorOff = new wxRadioButton( netDisplayPane, wxID_ANY, _( "None" ), wxDefaultPosition,
-                                         wxDefaultSize, 0 );
+    m_rbNetColorOff = new wxRadioButton( netDisplayPane, wxID_ANY, _( "None" ) );
+    m_rbNetColorOff->SetFont( infoFont );
     m_rbNetColorOff->SetToolTip( _( "Net and netclass colors are not shown" ) );
 
     netColorSizer->Add( m_rbNetColorOff, 0, 0, 5 );
@@ -684,27 +706,43 @@ void APPEARANCE_CONTROLS::createControls()
 
     //// Ratsnest display
 
-    m_txtRatsnestVisibility = new wxStaticText( netDisplayPane, wxID_ANY, _( "Ratsnest display:" ),
-                                                wxDefaultPosition, wxDefaultSize, 0 );
+    hotkey = PCB_ACTIONS::ratsnestModeCycle.GetHotKey();
+
+    if( hotkey )
+        msg = wxString::Format( _( "Ratsnest display (%s):" ), KeyNameFromKeyCode( hotkey ) );
+    else
+        msg = _( "Ratsnest display:" );
+
+    m_txtRatsnestVisibility = new wxStaticText( netDisplayPane, wxID_ANY, msg );
+    m_txtRatsnestVisibility->SetFont( infoFont );
     m_txtRatsnestVisibility->Wrap( -1 );
-    m_txtRatsnestVisibility->SetToolTip( _( "Choose what ratsnest lines to display" ) );
+    m_txtRatsnestVisibility->SetToolTip( _( "Choose which ratsnest lines to display" ) );
 
     netDisplayOptionsSizer->Add( m_txtRatsnestVisibility, 0, wxEXPAND | wxBOTTOM | wxLEFT, 2 );
 
     wxBoxSizer* ratsnestDisplayModeSizer = new wxBoxSizer( wxHORIZONTAL );
 
-    m_rbRatsnestAllLayers = new wxRadioButton( netDisplayPane, wxID_ANY, _( "All layers" ),
+    m_rbRatsnestAllLayers = new wxRadioButton( netDisplayPane, wxID_ANY, _( "All" ),
                                                wxDefaultPosition, wxDefaultSize, wxRB_GROUP );
-    m_rbRatsnestAllLayers->SetToolTip( _( "Ratsnest lines are shown to items on all layers" ) );
+    m_rbRatsnestAllLayers->SetFont( infoFont );
     m_rbRatsnestAllLayers->SetValue( true );
+    m_rbRatsnestAllLayers->SetToolTip( _( "Show ratsnest lines to items on all layers" ) );
 
-    ratsnestDisplayModeSizer->Add( m_rbRatsnestAllLayers, 0, wxRIGHT, 10 );
+    ratsnestDisplayModeSizer->Add( m_rbRatsnestAllLayers, 0, wxRIGHT, 5 );
+    ratsnestDisplayModeSizer->AddStretchSpacer();
 
-    m_rbRatsnestVisibleLayers = new wxRadioButton( netDisplayPane, wxID_ANY, _( "Visible layers" ),
-                                                   wxDefaultPosition, wxDefaultSize, 0 );
-    m_rbRatsnestVisibleLayers->SetToolTip( _( "Ratsnest lines are shown to items on visible layers" ) );
+    m_rbRatsnestVisLayers = new wxRadioButton( netDisplayPane, wxID_ANY, _( "Visible layers" ) );
+    m_rbRatsnestVisLayers->SetFont( infoFont );
+    m_rbRatsnestVisLayers->SetToolTip( _( "Show ratsnest lines to items on visible layers" ) );
 
-    ratsnestDisplayModeSizer->Add( m_rbRatsnestVisibleLayers, 0, wxRIGHT, 4 );
+    ratsnestDisplayModeSizer->Add( m_rbRatsnestVisLayers, 0, wxRIGHT, 5 );
+    ratsnestDisplayModeSizer->AddStretchSpacer();
+
+    m_rbRatsnestNone = new wxRadioButton( netDisplayPane, wxID_ANY, _( "None" ) );
+    m_rbRatsnestNone->SetFont( infoFont );
+    m_rbRatsnestNone->SetToolTip( _( "Hide all ratsnest lines" ) );
+
+    ratsnestDisplayModeSizer->Add( m_rbRatsnestNone, 0, 0, 5 );
 
     netDisplayOptionsSizer->Add( ratsnestDisplayModeSizer, 0, wxEXPAND | wxBOTTOM, 5 );
 
@@ -726,15 +764,13 @@ void APPEARANCE_CONTROLS::createControls()
                                        Thaw();
                                    } );
 
-    m_rbNetColorAll->Bind( wxEVT_RADIOBUTTON, &APPEARANCE_CONTROLS::onNetColorModeChanged, this );
-    m_rbNetColorOff->Bind( wxEVT_RADIOBUTTON, &APPEARANCE_CONTROLS::onNetColorModeChanged, this );
-    m_rbNetColorRatsnest->Bind( wxEVT_RADIOBUTTON,
-                                &APPEARANCE_CONTROLS::onNetColorModeChanged, this );
+    m_rbNetColorAll->Bind( wxEVT_RADIOBUTTON, &APPEARANCE_CONTROLS::onNetColorMode, this );
+    m_rbNetColorOff->Bind( wxEVT_RADIOBUTTON, &APPEARANCE_CONTROLS::onNetColorMode, this );
+    m_rbNetColorRatsnest->Bind( wxEVT_RADIOBUTTON, &APPEARANCE_CONTROLS::onNetColorMode, this );
 
-    m_rbRatsnestAllLayers->Bind( wxEVT_RADIOBUTTON,
-                                 &APPEARANCE_CONTROLS::onRatsnestModeChanged, this );
-    m_rbRatsnestVisibleLayers->Bind( wxEVT_RADIOBUTTON,
-                                     &APPEARANCE_CONTROLS::onRatsnestModeChanged, this );
+    m_rbRatsnestAllLayers->Bind( wxEVT_RADIOBUTTON, &APPEARANCE_CONTROLS::onRatsnestMode, this );
+    m_rbRatsnestVisLayers->Bind( wxEVT_RADIOBUTTON, &APPEARANCE_CONTROLS::onRatsnestMode, this );
+    m_rbRatsnestNone->Bind( wxEVT_RADIOBUTTON, &APPEARANCE_CONTROLS::onRatsnestMode, this );
 }
 
 
@@ -842,11 +878,11 @@ void APPEARANCE_CONTROLS::OnNetGridRightClick( wxGridEvent& event )
     wxString netName = m_netsGrid->GetCellValue( event.GetRow(), NET_GRID_TABLE::COL_LABEL );
     wxMenu menu;
 
-    menu.Append( new wxMenuItem( &menu, ID_SET_NET_COLOR,
-                                 _( "Set Net Color" ), wxEmptyString, wxITEM_NORMAL ) );
+    menu.Append( new wxMenuItem( &menu, ID_SET_NET_COLOR, _( "Set Net Color" ), wxEmptyString,
+                                 wxITEM_NORMAL ) );
     menu.Append( new wxMenuItem( &menu, ID_HIGHLIGHT_NET,
-                                 wxString::Format( _( "Highlight %s" ), netName ),
-                                 wxEmptyString, wxITEM_NORMAL ) );
+                                 wxString::Format( _( "Highlight %s" ), netName ), wxEmptyString,
+                                 wxITEM_NORMAL ) );
     menu.Append( new wxMenuItem( &menu, ID_SELECT_NET,
                                  wxString::Format( _( "Select Tracks and Vias in %s" ), netName ),
                                  wxEmptyString, wxITEM_NORMAL ) );
@@ -856,10 +892,10 @@ void APPEARANCE_CONTROLS::OnNetGridRightClick( wxGridEvent& event )
 
     menu.AppendSeparator();
 
-    menu.Append( new wxMenuItem( &menu, ID_SHOW_ALL_NETS,
-                                 _( "Show All Nets" ), wxEmptyString, wxITEM_NORMAL ) );
-    menu.Append( new wxMenuItem( &menu, ID_HIDE_OTHER_NETS,
-                                 _( "Hide All Other Nets" ), wxEmptyString, wxITEM_NORMAL ) );
+    menu.Append( new wxMenuItem( &menu, ID_SHOW_ALL_NETS, _( "Show All Nets" ), wxEmptyString,
+                                 wxITEM_NORMAL ) );
+    menu.Append( new wxMenuItem( &menu, ID_HIDE_OTHER_NETS, _( "Hide All Other Nets" ),
+                                 wxEmptyString, wxITEM_NORMAL ) );
 
     menu.Bind( wxEVT_COMMAND_MENU_SELECTED, &APPEARANCE_CONTROLS::onNetContextMenu, this );
 
@@ -1268,10 +1304,12 @@ void APPEARANCE_CONTROLS::UpdateDisplayOptions()
 
     if( !m_isFpEditor )
     {
-        if( options.m_RatsnestMode == RATSNEST_MODE::ALL )
+        if( !options.m_ShowGlobalRatsnest )
+            m_rbRatsnestNone->SetValue( true );
+        else if( options.m_RatsnestMode == RATSNEST_MODE::ALL )
             m_rbRatsnestAllLayers->SetValue( true );
         else
-            m_rbRatsnestVisibleLayers->SetValue( true );
+            m_rbRatsnestVisLayers->SetValue( true );
 
         wxASSERT( m_objectSettingsMap.count( LAYER_RATSNEST ) );
         APPEARANCE_SETTING* ratsnest = m_objectSettingsMap.at( LAYER_RATSNEST );
@@ -1598,7 +1636,8 @@ void APPEARANCE_CONTROLS::rebuildLayerContextMenu()
     m_layerContextMenu->AppendSeparator();
 
     AddMenuItem( m_layerContextMenu, ID_PRESET_FRONT_ASSEMBLY,
-                 _( "Show Only Front Assembly Layers" ), KiBitmap( BITMAPS::show_front_assembly_layers ) );
+                 _( "Show Only Front Assembly Layers" ),
+                 KiBitmap( BITMAPS::show_front_assembly_layers ) );
 
     AddMenuItem( m_layerContextMenu, ID_PRESET_FRONT, _( "Show Only Front Layers" ),
                  KiBitmap( BITMAPS::show_all_front_layers ) );
@@ -2644,7 +2683,7 @@ wxString APPEARANCE_CONTROLS::netclassNameFromEvent( wxEvent& aEvent )
 }
 
 
-void APPEARANCE_CONTROLS::onNetColorModeChanged( wxCommandEvent& aEvent )
+void APPEARANCE_CONTROLS::onNetColorMode( wxCommandEvent& aEvent )
 {
     PCB_DISPLAY_OPTIONS options = m_frame->GetDisplayOptions();
 
@@ -2661,14 +2700,24 @@ void APPEARANCE_CONTROLS::onNetColorModeChanged( wxCommandEvent& aEvent )
 }
 
 
-void APPEARANCE_CONTROLS::onRatsnestModeChanged( wxCommandEvent& aEvent )
+void APPEARANCE_CONTROLS::onRatsnestMode( wxCommandEvent& aEvent )
 {
     PCB_DISPLAY_OPTIONS options = m_frame->GetDisplayOptions();
 
     if( m_rbRatsnestAllLayers->GetValue() )
+    {
+        options.m_ShowGlobalRatsnest = true;
         options.m_RatsnestMode = RATSNEST_MODE::ALL;
-    else
+    }
+    else if( m_rbRatsnestVisLayers->GetValue() )
+    {
+        options.m_ShowGlobalRatsnest = true;
         options.m_RatsnestMode = RATSNEST_MODE::VISIBLE;
+    }
+    else
+    {
+        options.m_ShowGlobalRatsnest = false;
+    }
 
     m_frame->SetDisplayOptions( options );
     m_frame->GetCanvas()->RedrawRatsnest();

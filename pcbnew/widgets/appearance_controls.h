@@ -345,9 +345,9 @@ private:
 
     wxString netclassNameFromEvent( wxEvent& aEvent );
 
-    void onNetColorModeChanged( wxCommandEvent& aEvent );
+    void onNetColorMode( wxCommandEvent& aEvent );
 
-    void onRatsnestModeChanged( wxCommandEvent& aEvent );
+    void onRatsnestMode( wxCommandEvent& aEvent );
 
     void onNetclassContextMenu( wxCommandEvent& aEvent );
 
@@ -434,7 +434,7 @@ private:
 
     // Layer display options controls
     WX_COLLAPSIBLE_PANE* m_paneLayerDisplayOptions;
-    wxStaticText*        m_staticTextContrastModeTitle;
+    wxStaticText*        m_inactiveLayersLabel;
     wxRadioButton*       m_rbHighContrastNormal;
     wxRadioButton*       m_rbHighContrastDim;
     wxRadioButton*       m_rbHighContrastOff;
@@ -449,7 +449,8 @@ private:
     wxRadioButton*       m_rbNetColorOff;
     wxStaticText*        m_txtRatsnestVisibility;
     wxRadioButton*       m_rbRatsnestAllLayers;
-    wxRadioButton*       m_rbRatsnestVisibleLayers;
+    wxRadioButton*       m_rbRatsnestVisLayers;
+    wxRadioButton*       m_rbRatsnestNone;
 
     enum POPUP_ID
     {

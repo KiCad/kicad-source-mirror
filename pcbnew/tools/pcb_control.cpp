@@ -284,10 +284,9 @@ int PCB_CONTROL::HighContrastMode( const TOOL_EVENT& aEvent )
 {
     PCB_DISPLAY_OPTIONS opts = displayOptions();
 
-    opts.m_ContrastModeDisplay =
-            ( opts.m_ContrastModeDisplay == HIGH_CONTRAST_MODE::NORMAL ) ?
-            HIGH_CONTRAST_MODE::DIMMED :
-            HIGH_CONTRAST_MODE::NORMAL;
+    opts.m_ContrastModeDisplay = opts.m_ContrastModeDisplay == HIGH_CONTRAST_MODE::NORMAL
+                                        ? HIGH_CONTRAST_MODE::DIMMED
+                                        : HIGH_CONTRAST_MODE::NORMAL;
 
     m_frame->SetDisplayOptions( opts );
 
@@ -304,6 +303,47 @@ int PCB_CONTROL::HighContrastModeCycle( const TOOL_EVENT& aEvent )
     case HIGH_CONTRAST_MODE::NORMAL: opts.m_ContrastModeDisplay = HIGH_CONTRAST_MODE::DIMMED; break;
     case HIGH_CONTRAST_MODE::DIMMED: opts.m_ContrastModeDisplay = HIGH_CONTRAST_MODE::HIDDEN; break;
     case HIGH_CONTRAST_MODE::HIDDEN: opts.m_ContrastModeDisplay = HIGH_CONTRAST_MODE::NORMAL; break;
+    }
+
+    m_frame->SetDisplayOptions( opts );
+
+    return 0;
+}
+
+
+int PCB_CONTROL::NetColorModeCycle( const TOOL_EVENT& aEvent )
+{
+    PCB_DISPLAY_OPTIONS opts = displayOptions();
+
+    switch( opts.m_NetColorMode )
+    {
+    case NET_COLOR_MODE::ALL:      opts.m_NetColorMode = NET_COLOR_MODE::RATSNEST; break;
+    case NET_COLOR_MODE::RATSNEST: opts.m_NetColorMode = NET_COLOR_MODE::OFF;      break;
+    case NET_COLOR_MODE::OFF:      opts.m_NetColorMode = NET_COLOR_MODE::ALL;      break;
+    }
+
+    m_frame->SetDisplayOptions( opts );
+
+    return 0;
+}
+
+
+int PCB_CONTROL::RatsnestModeCycle( const TOOL_EVENT& aEvent )
+{
+    PCB_DISPLAY_OPTIONS opts = displayOptions();
+
+    if( !opts.m_ShowGlobalRatsnest )
+    {
+        opts.m_ShowGlobalRatsnest = true;
+        opts.m_RatsnestMode = RATSNEST_MODE::ALL;
+    }
+    else if( opts.m_RatsnestMode == RATSNEST_MODE::ALL )
+    {
+        opts.m_RatsnestMode = RATSNEST_MODE::VISIBLE;
+    }
+    else
+    {
+        opts.m_ShowGlobalRatsnest = false;
     }
 
     m_frame->SetDisplayOptions( opts );
@@ -1238,6 +1278,8 @@ void PCB_CONTROL::setTransitions()
     Go( &PCB_CONTROL::ZoneDisplayMode,       PCB_ACTIONS::zoneDisplayToggle.MakeEvent() );
     Go( &PCB_CONTROL::HighContrastMode,      ACTIONS::highContrastMode.MakeEvent() );
     Go( &PCB_CONTROL::HighContrastModeCycle, ACTIONS::highContrastModeCycle.MakeEvent() );
+    Go( &PCB_CONTROL::NetColorModeCycle,     PCB_ACTIONS::netColorModeCycle.MakeEvent() );
+    Go( &PCB_CONTROL::RatsnestModeCycle,     PCB_ACTIONS::ratsnestModeCycle.MakeEvent() );
     Go( &PCB_CONTROL::FlipPcbView,           PCB_ACTIONS::flipBoard.MakeEvent() );
 
     // Layer control

@@ -793,6 +793,16 @@ TOOL_ACTION PCB_ACTIONS::ratsnestLineMode( "pcbnew.Control.ratsnestLineMode",
         _( "Curved Ratsnest Lines" ), _( "Show ratsnest with curved lines" ),
         BITMAPS::curved_ratsnest );
 
+TOOL_ACTION PCB_ACTIONS::ratsnestModeCycle( "pcbnew.Control.ratsnestModeCycle",
+        AS_GLOBAL, 0, "",
+        _( "Ratsnest Mode (3-state)" ),
+        _( "Cycle between showing ratsnests for all layers, just visible layers, and none" ) );
+
+TOOL_ACTION PCB_ACTIONS::netColorModeCycle( "pcbnew.Control.netColorMode",
+        AS_GLOBAL, 0, "",
+        _( "Net Color Mode (3-state)" ),
+        _( "Cycle between using net and netclass colors for all nets, just ratsnests, and none" ) );
+
 TOOL_ACTION PCB_ACTIONS::trackDisplayMode( "pcbnew.Control.trackDisplayMode",
         AS_GLOBAL,
         'K', LEGACY_HK_NAME( "Track Display Mode" ),

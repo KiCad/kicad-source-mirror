@@ -237,6 +237,8 @@ public:
     // Display modes
     static TOOL_ACTION showRatsnest;
     static TOOL_ACTION ratsnestLineMode;
+    static TOOL_ACTION netColorModeCycle;
+    static TOOL_ACTION ratsnestModeCycle;
     static TOOL_ACTION trackDisplayMode;
     static TOOL_ACTION padDisplayMode;
     static TOOL_ACTION viaDisplayMode;
