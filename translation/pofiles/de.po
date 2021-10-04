@@ -15,10 +15,10 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-10-04 08:53-0700\n"
-"PO-Revision-Date: 2021-10-04 15:51+0000\n"
+"PO-Revision-Date: 2021-10-05 17:11+0000\n"
 "Last-Translator: Mark Hämmerling <dev@markh.de>\n"
-"Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
-"source/de/>\n"
+"Language-Team: German <https://hosted.weblate.org/projects/kicad/"
+"master-source/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -2163,11 +2163,11 @@ msgstr "Eine Seite"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:67
 msgid "Current Grid"
-msgstr "Aktueller Raster"
+msgstr "Aktuelles Raster"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:83
 msgid "User Defined Grid"
-msgstr "Benutzerdef. Raster"
+msgstr "Benutzerdefiniertes Raster"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:91
 msgid "Size X:"
@@ -2196,19 +2196,19 @@ msgstr "Raster 2:"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:173 common/tool/actions.cpp:469
 msgid "Reset Grid Origin"
-msgstr "Rasterursprung rücksetzen"
+msgstr "Rasterursprung zurücksetzen"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:176
 msgid "Reset Grid Sizes"
-msgstr "Rastergrößen zurücksetzen"
+msgstr "Rasterabstände zurücksetzen"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:178
 msgid "Resets the list of grid sizes to default values"
-msgstr "Liste von Rastergrößen auf die Standardwerte zurücksetzen"
+msgstr "Liste von Rasterabständen auf die Standardwerte zurücksetzen"
 
 #: common/dialogs/dialog_grid_settings_base.h:80
 msgid "Grid Settings"
-msgstr "Raster Einstellungen"
+msgstr "Raster-Einstellungen"
 
 #: common/dialogs/dialog_hotkey_list.cpp:34
 msgid "Hotkey List"
@@ -4739,11 +4739,11 @@ msgstr "Aus Auswahl entfernen"
 
 #: common/hotkey_store.cpp:49
 msgid "Ignore Grid Snaps"
-msgstr "Ignoriert Rasterfang"
+msgstr "Rasterfang ignorieren"
 
 #: common/hotkey_store.cpp:50
 msgid "Ignore Other Snaps"
-msgstr "Ignoriert andere Raster"
+msgstr "Andere Raster ignorieren"
 
 #: common/hotkey_store.cpp:57 common/tool/action_menu.cpp:227
 #: common/tool/actions.cpp:114
@@ -5332,7 +5332,7 @@ msgstr "DRC-Marker-Schatten"
 
 #: common/layer_id.cpp:173
 msgid "Grid axes"
-msgstr "Gitterachsen"
+msgstr "Rasterachsen"
 
 #: common/lib_id.cpp:143
 msgid "Illegal character found in logical library name"
@@ -6002,7 +6002,7 @@ msgstr "Springe zur vorherigen Schnellauswahl"
 
 #: common/tool/actions.cpp:463
 msgid "Set the grid origin point"
-msgstr "Rasterursprung setzen"
+msgstr "Rasterursprung festlegen"
 
 #: common/tool/actions.cpp:476
 msgid "Show Grid"
@@ -6010,7 +6010,7 @@ msgstr "Raster einblenden"
 
 #: common/tool/actions.cpp:476
 msgid "Display grid dots or lines in the edit window"
-msgstr "Anzeige von Rasterpunkten oder -linien im Bearbeitunsgfenster"
+msgstr "Anzeige von Rasterpunkten oder -linien im Bearbeitungsfenster"
 
 #: common/tool/actions.cpp:481
 msgid "Grid Properties..."
@@ -6018,7 +6018,7 @@ msgstr "Raster-Eigenschaften..."
 
 #: common/tool/actions.cpp:481
 msgid "Set grid dimensions"
-msgstr "Rastergröße setzen"
+msgstr "Rasterabstand setzen"
 
 #: common/tool/actions.cpp:486
 msgid "Use inches"
@@ -6304,12 +6304,12 @@ msgstr "An KiCad spenden"
 #: common/tool/grid_menu.cpp:93
 #, c-format
 msgid "Grid: %s (%s)"
-msgstr "Gitter: %s (%s)"
+msgstr "Raster: %s (%s)"
 
 #: common/tool/grid_menu.cpp:104
 #, c-format
 msgid "User grid: %s (%s)"
-msgstr "Benutzerspezifisches Raster: %s (%s)"
+msgstr "Benutzerdefiniertes Raster: %s (%s)"
 
 #: common/tool/zoom_menu.cpp:49
 #, c-format
@@ -6392,7 +6392,7 @@ msgstr "Rasteroptionen"
 
 #: common/widgets/gal_options_panel.cpp:108
 msgid "Dots"
-msgstr "Rasterpunkte"
+msgstr "Punkte"
 
 #: common/widgets/gal_options_panel.cpp:109
 msgid "Lines"
@@ -6404,11 +6404,11 @@ msgstr "Kleines Fadenkreuz"
 
 #: common/widgets/gal_options_panel.cpp:114
 msgid "Grid Style"
-msgstr "Rasterauswahl"
+msgstr "Rasterstil"
 
 #: common/widgets/gal_options_panel.cpp:126
 msgid "Grid thickness:"
-msgstr "Raster Stärke:"
+msgstr "Rasterdicke:"
 
 #: common/widgets/gal_options_panel.cpp:137
 #: common/widgets/gal_options_panel.cpp:153
@@ -6434,7 +6434,7 @@ msgstr "Immer"
 
 #: common/widgets/gal_options_panel.cpp:162
 msgid "When grid shown"
-msgstr "Wenn Gitter angezeigt wird"
+msgstr "Wenn Raster angezeigt wird"
 
 #: common/widgets/gal_options_panel.cpp:162
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:341
@@ -16698,7 +16698,7 @@ msgstr "Symbol verschieben aktivieren"
 
 #: eeschema/tools/ee_actions.cpp:755
 msgid "Align Elements to Grid"
-msgstr "Am Gitter ausrichten"
+msgstr "Am Raster ausrichten"
 
 #: eeschema/tools/ee_actions.cpp:761
 #, fuzzy
@@ -23021,7 +23021,7 @@ msgstr "Pad-Nummerierung überspringen:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:197
 msgid "Grid Array"
-msgstr "Raster Array"
+msgstr "Raster-Array"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:207
 msgid "Horizontal center:"
@@ -23629,7 +23629,7 @@ msgstr "* .emn"
 
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:34
 msgid "Grid reference point:"
-msgstr "Raster Referenzpunkt:"
+msgstr "Raster-Referenzpunkt:"
 
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:38
 msgid "Adjust automatically"
@@ -23712,7 +23712,7 @@ msgstr "Drill/Place-Datei-Ursprung"
 #: pcbnew/dialogs/dialog_export_step_base.cpp:41
 #: pcbnew/dialogs/panel_pcbnew_display_origin_base.cpp:23
 msgid "Grid origin"
-msgstr "Raster Ursprungspunkt"
+msgstr "Raster-Ursprungspunkt"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:44
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:44
@@ -24608,7 +24608,7 @@ msgstr "Ursprung der Drill/Place-Datei als Ursprung verwenden"
 
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:140
 msgid "Save the origin coordinates in the file"
-msgstr "Speichert den Rasterursprungspunkt in die Datei"
+msgstr "Raster-Ursprungspunkt in der Datei speichern"
 
 #: pcbnew/dialogs/dialog_gendrill.cpp:77
 msgid "Generate Drill File"
