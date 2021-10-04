@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-10-03 16:55-0700\n"
-"PO-Revision-Date: 2021-10-01 07:18+0000\n"
+"PO-Revision-Date: 2021-10-04 15:52+0000\n"
 "Last-Translator: Augusto Fraga Giachero <afg@augustofg.net>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "kicad/master-source/pt_BR/>\n"
@@ -1778,7 +1778,6 @@ msgid "&OK"
 msgstr "&OK"
 
 #: common/dialogs/dialog_HTML_reporter_base.h:48
-#, fuzzy
 msgid "Report"
 msgstr "Informe"
 
@@ -2154,7 +2153,6 @@ msgid "a page"
 msgstr "uma página"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:67
-#, fuzzy
 msgid "Current Grid"
 msgstr "Grade atual"
 
@@ -2317,9 +2315,8 @@ msgid "How would you like to configure KiCad?"
 msgstr "Como gostaria de configurar o KiCad?"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:34
-#, fuzzy
 msgid "Import settings from a previous version at:"
-msgstr "Importar configurações de versões anteriores (nada encontrado)"
+msgstr "Importar configurações de uma versão anterior em:"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:49
 #, fuzzy
@@ -3008,9 +3005,8 @@ msgid "Select Preferred PDF Viewer"
 msgstr "Selecione o Visualizador de PDF"
 
 #: common/dialogs/panel_common_settings_base.cpp:21
-#, fuzzy
 msgid "Antialiasing"
-msgstr "Anti Serrilhamento:"
+msgstr "Anti Serrilhamento"
 
 #: common/dialogs/panel_common_settings_base.cpp:30
 msgid "Accelerated graphics:"
@@ -3095,8 +3091,9 @@ msgid "Canvas scale:"
 msgstr "Escala da tela:"
 
 #: common/dialogs/panel_common_settings_base.cpp:158
+#, fuzzy
 msgid "Apply icon scaling to fonts"
-msgstr ""
+msgstr "Aplicar escala de ícones para fontes"
 
 #: common/dialogs/panel_common_settings_base.cpp:161
 msgid "(This workaround will improve some GTK HiDPI font scaling issues.)"
@@ -28838,9 +28835,8 @@ msgid "Path Substitutions"
 msgstr "Substituições de Locais de Ficheiros:"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:222
-#, fuzzy
 msgid "Error: illegal or empty filename."
-msgstr "Erro: Nenhum nome de arquivo DXF!"
+msgstr "Erro: Nome de arquivo inválido ou vazio."
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:379
 #: pcbnew/microwave/microwave_polygon.cpp:224
