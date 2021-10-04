@@ -31,7 +31,6 @@
 #include <project/project_file.h>
 #include <project/net_settings.h>
 #include <settings/settings_manager.h>
-#include <widgets/infobar.h>
 #include "dialog_schematic_setup.h"
 #include "panel_eeschema_template_fieldnames.h"
 #include <wx/treebook.h>
@@ -84,13 +83,21 @@ DIALOG_SCHEMATIC_SETUP::DIALOG_SCHEMATIC_SETUP( SCH_EDIT_FRAME* aFrame ) :
                          wxBookCtrlEventHandler( DIALOG_SCHEMATIC_SETUP::OnPageChange ), nullptr,
                          this );
 
+	finishDialogSettings();
+
     if( Prj().IsReadOnly() )
     {
-        m_infoBar->ShowMessage( _( "Project is missing or read-only. Changes will not be saved." ),
+        m_infoBar->ShowMessage( _( "Project is missing or read-only. "
+                                   "Settings will not be editable." ),
                                 wxICON_WARNING );
-    }
 
-    finishDialogSettings();
+        m_formatting->Disable();
+        m_fieldNameTemplates->Disable();
+        m_severities->Disable();
+        m_pinMap->Disable();
+        m_netclasses->Disable();
+        m_textVars->Disable();
+    }
 }
 
 

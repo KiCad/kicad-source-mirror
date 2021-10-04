@@ -36,7 +36,6 @@
 #include <project.h>
 #include <project/project_file.h>
 #include <settings/settings_manager.h>
-#include <widgets/infobar.h>
 #include <widgets/resettable_panel.h>
 #include <widgets/wx_progress_reporters.h>
 #include <wildcards_and_files_ext.h>
@@ -118,6 +117,22 @@ DIALOG_BOARD_SETUP::DIALOG_BOARD_SETUP( PCB_EDIT_FRAME* aFrame ) :
                          nullptr, this );
 
     finishDialogSettings();
+
+    if( Prj().IsReadOnly() )
+    {
+        m_infoBar->ShowMessage( _( "Project is missing or read-only. "
+                                   "Some settings will not be editable." ),
+                                wxICON_WARNING );
+
+        m_boardFinish->Disable();
+        m_maskAndPaste->Disable();
+        m_textAndGraphics->Disable();
+        m_textVars->Disable();
+        m_constraints->Disable();
+        m_tracksAndVias->Disable();
+        m_netclasses->Disable();
+        m_severities->Disable();
+    }
 }
 
 
@@ -132,20 +147,9 @@ DIALOG_BOARD_SETUP::~DIALOG_BOARD_SETUP()
 void DIALOG_BOARD_SETUP::OnPageChange( wxBookCtrlEvent& event )
 {
     if( event.GetSelection() == m_physicalStackupPage )
-    {
         m_physicalStackup->OnLayersOptionsChanged( m_layers->GetUILayerMask() );
-        m_infoBar->Dismiss();
-    }
     else if( event.GetSelection() == m_layerSetupPage )
-    {
         m_layers->SyncCopperLayers( m_physicalStackup->GetCopperLayerCount() );
-        m_infoBar->Dismiss();
-    }
-    else if( Prj().IsReadOnly() )
-    {
-        m_infoBar->ShowMessage(
-                _( "Project is missing or read-only. Changes will not be saved." ) );
-    }
 
 #ifdef __WXMAC__
     // Work around an OSX bug where the wxGrid children don't get placed correctly until
