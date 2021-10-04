@@ -15,10 +15,10 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-10-03 16:55-0700\n"
-"PO-Revision-Date: 2021-10-03 23:55+0000\n"
+"PO-Revision-Date: 2021-10-04 15:51+0000\n"
 "Last-Translator: Mark Hämmerling <dev@markh.de>\n"
-"Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
-"source/de/>\n"
+"Language-Team: German <https://hosted.weblate.org/projects/kicad/"
+"master-source/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -5818,7 +5818,7 @@ msgstr "Text suchen und ersetzen"
 
 #: common/tool/actions.cpp:220 pcbnew/dialogs/dialog_find_base.cpp:93
 msgid "Find Next"
-msgstr "Finde nächstes Element"
+msgstr "Nächstes Element suchen"
 
 #: common/tool/actions.cpp:220
 msgid "Find next match"
@@ -10235,7 +10235,7 @@ msgstr "Pin&namen und -nummern durchsuchen"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:95
 msgid "Search hidden fields"
-msgstr "Versteckte Felder durchsuchen"
+msgstr "&Versteckte Felder durchsuchen"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:98
 msgid "Search the current &sheet only"
@@ -23988,7 +23988,7 @@ msgstr "Groß-/Kleinschreibung beachten"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:52
 msgid "Wrap"
-msgstr "Am Ende von vorn beginnen"
+msgstr "Zyklische Suche"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:62
 msgid "Search footprint reference designators"
