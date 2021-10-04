@@ -22,8 +22,15 @@
 #include <array>
 
 #include <string_utils.h>
-#include "class_regulator_data.h"
 #include "pcb_calculator_frame.h"
+
+
+extern double DoubleFromString( const wxString& TextValue );
+
+/* If BENCHMARK is defined, any 4R E12 calculations will print its execution time to console
+ * My Hasswell Enthusiast reports 225 mSec what are reproducible within plusminus 2 percent
+ */
+//#define BENCHMARK
 
 #ifdef BENCHMARK
 #include <sys/time.h>
@@ -35,14 +42,14 @@
 wxString eseries_help =
 #include "eserie_help.h"
 
-eserie r;
+E_SERIE r;
 
 
-void eserie::Exclude( double aValue )
+void E_SERIE::Exclude( double aValue )
 {
     if( aValue ) // if there is a value to exclude other than a wire jumper
     {
-        for( r_data& i : luts[m_series] ) // then search it in the selected E-Serie lookup table
+        for( R_DATA& i : m_luts[m_series] ) // then search it in the selected E-Serie lookup table
         {
             if( i.e_value == aValue )     // if value to exclude found
                 i.e_use = false;          // disable its use
@@ -51,7 +58,7 @@ void eserie::Exclude( double aValue )
 }
 
 
-void eserie::simple_solution( uint32_t aSize )
+void E_SERIE::simple_solution( uint32_t aSize )
 {
     uint32_t i;
 
@@ -69,7 +76,7 @@ void eserie::simple_solution( uint32_t aSize )
 }
 
 
-void eserie::combine4( uint32_t aSize )
+void E_SERIE::combine4( uint32_t aSize )
 {
     uint32_t    i,j;
     double      tmp;
@@ -126,29 +133,29 @@ void eserie::combine4( uint32_t aSize )
 }
 
 
-void eserie::NewCalc( void )
+void E_SERIE::NewCalc( void )
 {
-    for( r_data& i : m_cmb_lut )
+    for( R_DATA& i : m_cmb_lut )
         i.e_use = false;                // before any calculation is done, assume that
 
-    for( r_data& i : m_results )
+    for( R_DATA& i : m_results )
         i.e_use = false;                // no combinations and no results are available
 
-    for( r_data& i : luts[m_series])
+    for( R_DATA& i : m_luts[m_series])
         i.e_use = true;                 // all selected E-values available
 }
 
 
-uint32_t eserie::combine2( void )
+uint32_t E_SERIE::combine2( void )
 {
     uint32_t    combi2R = 0;                // target index counts calculated 2R combinations
     std::string s;
 
-    for( const r_data& i : luts[m_series] ) // outer loop to sweep selected source lookup table
+    for( const R_DATA& i : m_luts[m_series] ) // outer loop to sweep selected source lookup table
     {
         if( i.e_use )
         {
-            for( const r_data& j : luts[m_series] ) // inner loop to combine values with itself
+            for( const R_DATA& j : m_luts[m_series] ) // inner loop to combine values with itself
             {
                 if( j.e_use )
                 {
@@ -173,7 +180,7 @@ uint32_t eserie::combine2( void )
 }
 
 
-void eserie::combine3( uint32_t aSize )
+void E_SERIE::combine3( uint32_t aSize )
 {
     uint32_t    j   = 0;
     double      tmp = 0; // avoid warning for being uninitialized
@@ -182,7 +189,7 @@ void eserie::combine3( uint32_t aSize )
     m_results[S3R].e_use   = false;                // disable 3R solution, until
     m_results[S3R].e_value = m_results[S2R].e_value; // 3R becomes better than 2R solution
 
-    for( const r_data& i : luts[m_series] )      // 3R  Outer loop to selected primary E serie LUT
+    for( const R_DATA& i : m_luts[m_series] )      // 3R  Outer loop to selected primary E serie LUT
     {
         if( i.e_use )                            // skip all excluded values
         {
@@ -227,7 +234,7 @@ void eserie::combine3( uint32_t aSize )
 }
 
 
-void eserie::Calculate( void )
+void E_SERIE::Calculate( void )
 {
     uint32_t no_of_2Rcombi = 0;
 
@@ -242,7 +249,7 @@ void eserie::Calculate( void )
 }
 
 
-void eserie::strip3( void )
+void E_SERIE::strip3( void )
 {
     std::string s;
 
@@ -261,7 +268,7 @@ void eserie::strip3( void )
 }
 
 
-void eserie::strip4( void )
+void E_SERIE::strip4( void )
 {
     std::string s;
 
@@ -302,9 +309,9 @@ void PCB_CALCULATOR_FRAME::OnCalculateESeries( wxCommandEvent& event )
     r.Exclude( 1000 * DoubleFromString( m_ResExclude2->GetValue()));
     r.Calculate();
 
-    fs = r.get_rslt()[S2R].e_name;               // show 2R solution formula string
+    fs = r.GetResults()[S2R].e_name;               // show 2R solution formula string
     m_ESeries_Sol2R->SetValue( fs );
-    error = reqr + r.get_rslt()[S2R].e_value;    // absolute value of solution
+    error = reqr + r.GetResults()[S2R].e_value;    // absolute value of solution
     error = ( reqr / error - 1 ) * 100;          // error in percent
 
     if( error )
@@ -321,9 +328,9 @@ void PCB_CALCULATOR_FRAME::OnCalculateESeries( wxCommandEvent& event )
 
     m_ESeriesError2R->SetValue( es );            // anyway show 2R error string
 
-    if( r.get_rslt()[S3R].e_use )                // if 3R solution available
+    if( r.GetResults()[S3R].e_use )                // if 3R solution available
     {
-        err3 = reqr + r.get_rslt()[S3R].e_value; // calculate the 3R
+        err3 = reqr + r.GetResults()[S3R].e_value; // calculate the 3R
         err3 = ( reqr / err3 - 1 ) * 100;        // error in percent
 
         if( err3 )
@@ -339,7 +346,7 @@ void PCB_CALCULATOR_FRAME::OnCalculateESeries( wxCommandEvent& event )
         }
 
         m_ESeriesError3R->SetValue( es );         // show 3R error string
-        fs = r.get_rslt()[S3R].e_name;
+        fs = r.GetResults()[S3R].e_name;
         m_ESeries_Sol3R->SetValue( fs );         // show 3R formula string
     }
     else                                         // nothing better than 2R found
@@ -351,11 +358,11 @@ void PCB_CALCULATOR_FRAME::OnCalculateESeries( wxCommandEvent& event )
 
     fs = wxEmptyString;
 
-    if( r.get_rslt()[S4R].e_use )                 // show 4R solution if available
+    if( r.GetResults()[S4R].e_use )                 // show 4R solution if available
     {
-        fs = r.get_rslt()[S4R].e_name;
+        fs = r.GetResults()[S4R].e_name;
 
-        error = reqr + r.get_rslt()[S4R].e_value; // absolute value of solution
+        error = reqr + r.GetResults()[S4R].e_value; // absolute value of solution
         error = ( reqr / error - 1 ) * 100;       // error in percent
 
         if( error )
